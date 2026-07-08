@@ -1,0 +1,17 @@
+{
+  "contract_version": "day_context_v0",
+  "meta": {
+    "target_date": "2026-05-03",
+    "locale": "ru",
+    "insight_depth_tier": "free"
+  },
+  "layers": {
+    "fusion": {
+      "date": "2026-05-03",
+      "scores": {},
+      "rhythm_context": {},
+      "recommendations": [],
+      "encouragement": ""
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "default": [
+    {"product_id": "lite_birth_chart"},
+    {"product_id": "full_report"}
+  ]
+}

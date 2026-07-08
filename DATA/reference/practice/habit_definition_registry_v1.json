@@ -1,0 +1,209 @@
+{
+  "contract_version": "habit_definition_registry_v1",
+  "domain": "practice",
+  "version": "1.0.0",
+  "status": "draft",
+  "description": "C1.2 Habit Definition registry — recurrence patterns linked to C1.1 practice definitions. No content, variants, or UI.",
+  "habit_definitions": {
+    "daily_breathing": {
+      "code": "daily_breathing",
+      "title": "Daily breathing",
+      "linked_practice_definition_code": "breathing",
+      "habit_category": "wellness",
+      "frequency_type": "daily",
+      "minimum_completion_rule": {
+        "sessions_required": 1,
+        "period": "day",
+        "minimum_duration_minutes": 3
+      },
+      "recommended_duration_range": { "min_minutes": 3, "max_minutes": 10 },
+      "compatible_paths": ["discipline", "energy", "body", "clarity"],
+      "compatible_stages": ["seeker", "observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "produces_signals": ["practice_completed", "habit_streak_confirmed"],
+      "difficulty_level": "beginner",
+      "failure_tolerance": "flexible",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "evening_reflection": {
+      "code": "evening_reflection",
+      "title": "Evening reflection",
+      "linked_practice_definition_code": "reflection",
+      "habit_category": "reflection",
+      "frequency_type": "daily",
+      "minimum_completion_rule": {
+        "sessions_required": 1,
+        "period": "day",
+        "minimum_duration_minutes": 5
+      },
+      "recommended_duration_range": { "min_minutes": 5, "max_minutes": 15 },
+      "compatible_paths": ["clarity", "relationships", "healing", "spirituality"],
+      "compatible_stages": ["observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "produces_signals": ["practice_completed", "habit_streak_confirmed"],
+      "difficulty_level": "beginner",
+      "failure_tolerance": "flexible",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "morning_planning": {
+      "code": "morning_planning",
+      "title": "Morning planning",
+      "linked_practice_definition_code": "planning",
+      "habit_category": "planning",
+      "frequency_type": "daily",
+      "minimum_completion_rule": {
+        "sessions_required": 1,
+        "period": "day",
+        "minimum_duration_minutes": 5
+      },
+      "recommended_duration_range": { "min_minutes": 5, "max_minutes": 15 },
+      "compatible_paths": ["clarity", "purpose", "discipline"],
+      "compatible_stages": ["observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "produces_signals": ["practice_completed", "habit_streak_confirmed"],
+      "difficulty_level": "beginner",
+      "failure_tolerance": "strict",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "daily_gratitude": {
+      "code": "daily_gratitude",
+      "title": "Daily gratitude",
+      "linked_practice_definition_code": "gratitude",
+      "habit_category": "wellness",
+      "frequency_type": "daily",
+      "minimum_completion_rule": {
+        "sessions_required": 1,
+        "period": "day",
+        "minimum_duration_minutes": 2
+      },
+      "recommended_duration_range": { "min_minutes": 2, "max_minutes": 10 },
+      "compatible_paths": ["relationships", "healing", "spirituality", "clarity"],
+      "compatible_stages": ["seeker", "observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "produces_signals": ["practice_completed", "habit_streak_confirmed"],
+      "difficulty_level": "beginner",
+      "failure_tolerance": "flexible",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "body_activation": {
+      "code": "body_activation",
+      "title": "Body activation",
+      "linked_practice_definition_code": "body_activation",
+      "habit_category": "body",
+      "frequency_type": "daily",
+      "minimum_completion_rule": {
+        "sessions_required": 1,
+        "period": "day",
+        "minimum_duration_minutes": 5
+      },
+      "recommended_duration_range": { "min_minutes": 5, "max_minutes": 20 },
+      "compatible_paths": ["body", "energy", "discipline"],
+      "compatible_stages": ["seeker", "observer", "practitioner", "explorer", "architect"],
+      "produces_signals": ["practice_completed", "habit_streak_confirmed"],
+      "difficulty_level": "intermediate",
+      "failure_tolerance": "flexible",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "attention_training": {
+      "code": "attention_training",
+      "title": "Attention training",
+      "linked_practice_definition_code": "attention_training",
+      "habit_category": "focus",
+      "frequency_type": "daily",
+      "minimum_completion_rule": {
+        "sessions_required": 1,
+        "period": "day",
+        "minimum_duration_minutes": 3
+      },
+      "recommended_duration_range": { "min_minutes": 3, "max_minutes": 15 },
+      "compatible_paths": ["discipline", "clarity", "energy"],
+      "compatible_stages": ["observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "produces_signals": ["practice_completed", "habit_streak_confirmed"],
+      "difficulty_level": "intermediate",
+      "failure_tolerance": "strict",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "meditation_minutes": {
+      "code": "meditation_minutes",
+      "title": "Meditation minutes",
+      "linked_practice_definition_code": "meditation",
+      "habit_category": "wellness",
+      "frequency_type": "daily",
+      "minimum_completion_rule": {
+        "sessions_required": 1,
+        "period": "day",
+        "minimum_duration_minutes": 5
+      },
+      "recommended_duration_range": { "min_minutes": 5, "max_minutes": 30 },
+      "compatible_paths": ["discipline", "clarity", "spirituality", "healing"],
+      "compatible_stages": ["seeker", "observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "produces_signals": ["practice_completed", "habit_streak_confirmed"],
+      "difficulty_level": "intermediate",
+      "failure_tolerance": "flexible",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "self_observation_check": {
+      "code": "self_observation_check",
+      "title": "Self observation check",
+      "linked_practice_definition_code": "self_observation",
+      "habit_category": "reflection",
+      "frequency_type": "daily",
+      "minimum_completion_rule": {
+        "sessions_required": 1,
+        "period": "day",
+        "minimum_duration_minutes": 3
+      },
+      "recommended_duration_range": { "min_minutes": 3, "max_minutes": 10 },
+      "compatible_paths": ["clarity", "healing", "relationships"],
+      "compatible_stages": ["observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "produces_signals": ["practice_completed", "habit_streak_confirmed"],
+      "difficulty_level": "intermediate",
+      "failure_tolerance": "flexible",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "journaling_streak": {
+      "code": "journaling_streak",
+      "title": "Journaling streak",
+      "linked_practice_definition_code": "journaling",
+      "habit_category": "reflection",
+      "frequency_type": "weekly",
+      "minimum_completion_rule": {
+        "sessions_required": 3,
+        "period": "week",
+        "minimum_duration_minutes": 5
+      },
+      "recommended_duration_range": { "min_minutes": 5, "max_minutes": 25 },
+      "compatible_paths": ["clarity", "creativity", "relationships", "purpose"],
+      "compatible_stages": ["seeker", "observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "produces_signals": ["practice_completed", "habit_streak_confirmed"],
+      "difficulty_level": "intermediate",
+      "failure_tolerance": "flexible",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "visualization_practice": {
+      "code": "visualization_practice",
+      "title": "Visualization practice",
+      "linked_practice_definition_code": "visualization",
+      "habit_category": "focus",
+      "frequency_type": "custom",
+      "minimum_completion_rule": {
+        "sessions_required": 2,
+        "period": "week",
+        "minimum_duration_minutes": 5
+      },
+      "recommended_duration_range": { "min_minutes": 5, "max_minutes": 15 },
+      "compatible_paths": ["clarity", "purpose", "creativity", "spirituality"],
+      "compatible_stages": ["observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "produces_signals": ["practice_completed", "habit_streak_confirmed"],
+      "difficulty_level": "advanced",
+      "failure_tolerance": "flexible",
+      "status": "active",
+      "version": "1.0.0"
+    }
+  }
+}

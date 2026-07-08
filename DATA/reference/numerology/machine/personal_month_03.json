@@ -1,0 +1,21 @@
+{
+  "contract_version": "reference_machine_contract_v1",
+  "domain": "numerology",
+  "entity_code": "numerology.personal_month.3",
+  "entity_type": "PersonalMonth",
+  "version": "0.1.0",
+  "status": "draft",
+  "machine_contract": {
+    "vector": {
+      "action_reflection": 0.25,
+      "expansion_consolidation": 0.7,
+      "self_others": 0.45,
+      "structure_flow": -0.45
+    },
+    "tempo": "steady",
+    "risk": "low",
+    "risk_modifier": 0.04,
+    "emotional_load": "neutral",
+    "confidence": 0.95
+  }
+}

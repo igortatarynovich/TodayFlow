@@ -1,0 +1,96 @@
+[
+  {
+    "spread_id": "clarity_triad",
+    "title": "Clarity Triad",
+    "description": "Three-card spread framing past influence, current pattern, and actionable focus.",
+    "card_count": 3,
+    "positions": [
+      {
+        "position_id": "past",
+        "title": "Origin",
+        "prompt": "What shaped the current situation?",
+        "human_text": "Origin: What shaped the current situation? This card reveals the roots and influences that led to where you are now."
+      },
+      {
+        "position_id": "present",
+        "title": "Pattern",
+        "prompt": "What is manifesting right now?",
+        "human_text": "Pattern: What is manifesting right now? This card shows what's currently active in your life and how it's unfolding."
+      },
+      {
+        "position_id": "action",
+        "title": "Integration",
+        "prompt": "What supports the next step?",
+        "human_text": "Integration: What supports the next step? This card guides you toward actionable focus and practical movement forward."
+      }
+    ],
+    "human_text": "The Clarity Triad is a three-card spread that helps you understand how past influences shaped your current situation, what pattern is manifesting now, and what supports your next step. Draw three cards to reveal the journey from origin to integration."
+  },
+  {
+    "spread_id": "alignment_cross",
+    "title": "Alignment Cross",
+    "description": "Four-card check-in (Mind · Heart · Body · Integration).",
+    "card_count": 4,
+    "positions": [
+      {
+        "position_id": "mind",
+        "title": "Mind",
+        "prompt": "How is the mental pattern influencing the situation?",
+        "human_text": "Mind: How is the mental pattern influencing the situation? This card reveals what your thoughts and mental patterns are bringing to the current moment."
+      },
+      {
+        "position_id": "heart",
+        "title": "Heart",
+        "prompt": "How are emotions coloring perception?",
+        "human_text": "Heart: How are emotions coloring perception? This card shows how your feelings are shaping your understanding and experience."
+      },
+      {
+        "position_id": "body",
+        "title": "Body",
+        "prompt": "What does the body or energy say?",
+        "human_text": "Body: What does the body or energy say? This card reflects physical sensations, energy levels, and what your body is communicating."
+      },
+      {
+        "position_id": "integration",
+        "title": "Integration",
+        "prompt": "How do you combine the signals into action?",
+        "human_text": "Integration: How do you combine the signals into action? This card shows how to bring together mind, heart, and body into coherent action."
+      }
+    ],
+    "human_text": "The Alignment Cross is a four-card check-in that connects mind, heart, body, and integration. Draw four cards to see how your thoughts, emotions, physical state, and ability to integrate are aligning in the current moment."
+  },
+  {
+    "spread_id": "career_compass",
+    "title": "Career Compass",
+    "description": "Four cards that reveal momentum, friction, leverage, and an actionable next step.",
+    "card_count": 4,
+    "positions": [
+      {
+        "position_id": "pulse",
+        "title": "Momentum",
+        "prompt": "What sets the tone of your work life right now?",
+        "human_text": "Momentum: What sets the tone of your work life right now? This card reveals the driving force and energy in your career at this moment."
+      },
+      {
+        "position_id": "blocker",
+        "title": "Friction",
+        "prompt": "Where do you feel the drag or resistance?",
+        "human_text": "Friction: Where do you feel the drag or resistance? This card shows what's slowing you down or creating obstacles in your work."
+      },
+      {
+        "position_id": "leverage",
+        "title": "Leverage",
+        "prompt": "What deserves amplification to steer the storyline?",
+        "human_text": "Leverage: What deserves amplification to steer the storyline? This card points to your strengths and opportunities that can create the most impact."
+      },
+      {
+        "position_id": "next_step",
+        "title": "Next step",
+        "prompt": "Which practical move delivers outsized momentum?",
+        "human_text": "Next step: Which practical move delivers outsized momentum? This card guides you toward the most effective action you can take right now."
+      }
+    ],
+    "human_text": "The Career Compass uses four cards to map your professional landscape: momentum (what's driving you), friction (what's holding you back), leverage (your greatest strengths), and the next step (the most effective action). Draw four cards to navigate your career path with clarity."
+  }
+]
+

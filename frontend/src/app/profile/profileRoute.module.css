@@ -1,0 +1,97 @@
+.profileRouteShell {
+  min-height: 100vh;
+  background: var(--tf-page, #f3efe8);
+  color: var(--tf-ink, #1a1510);
+  font-family: var(--tf-font-body, "Inter", system-ui, sans-serif);
+}
+
+.profileRouteSection {
+  padding: 0.35rem var(--tf-shell-gutter, 1.25rem) 2.5rem;
+  box-sizing: border-box;
+}
+
+.profileRouteContainer {
+  width: 100%;
+  max-width: var(--tf-shell-max, 52rem);
+  margin: 0 auto;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.profileRouteContainerWide {
+  max-width: 760px;
+}
+
+.profileRouteStack {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.loadingTitle {
+  margin: 0.35rem 0 0;
+  font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
+  font-size: var(--tf-type-section-size, 1.25rem);
+  font-weight: var(--tf-type-section-weight, 600);
+  color: var(--tf-ink, #1a1510);
+}
+
+.loadingLead {
+  margin: 0.6rem 0 0;
+  font-size: var(--tf-type-body-size, 0.9375rem);
+  line-height: 1.55;
+  color: var(--tf-ink-soft, #5b4630);
+  max-width: 42rem;
+}
+
+.loadingStatus {
+  margin: 0.95rem 0 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.loadingStatusText {
+  margin: 0;
+  font-size: var(--tf-type-body-size, 0.9375rem);
+  font-weight: 700;
+  color: var(--tf-ink-soft, #5b4630);
+}
+
+.loadingSteps {
+  margin: 0.9rem 0 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.loadingStep {
+  border-radius: 999px;
+  padding: 0.46rem 0.7rem;
+  border: 1px solid rgba(201, 168, 115, 0.24);
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--tf-ink-soft, #5b4630);
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 700;
+}
+
+.authShell {
+  text-align: center;
+  padding-top: 1.4rem;
+}
+
+.authTitle {
+  margin: 0 0 1rem;
+  font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
+  font-size: var(--tf-type-section-size, 1.25rem);
+  font-weight: var(--tf-type-section-weight, 600);
+}
+
+.authLead {
+  margin: 0 0 1.5rem;
+  font-size: var(--tf-type-body-size, 0.9375rem);
+  line-height: 1.55;
+  color: var(--tf-ink-soft, #5b4630);
+}
+
+.noticeSpaced {
+  margin-bottom: 0.75rem;
+}

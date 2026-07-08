@@ -1,0 +1,2527 @@
+.page {
+  --profile-content-width: 820px;
+  --profile-layer-gap: 16px;
+  --profile-section-padding: 24px;
+  --profile-card-gap: 14px;
+  --profile-gutter: 16px;
+
+  /*
+   * Typography — Foundation §5 aliases (DS-10). Legacy names kept for v0 CSS volume.
+   * XL · hero name · L section · M insight · Body · Caption · Micro
+   */
+  --profile-type-xl: clamp(var(--tf-type-hero-size), 5vw, 2.35rem);
+  --profile-type-l: var(--tf-type-section-size);
+  --profile-type-m: 1rem;
+  --profile-type-body: var(--tf-type-body-size);
+  --profile-type-caption: var(--tf-type-caption-lg-size);
+  --profile-type-micro: var(--tf-type-caption-size);
+  --profile-type-kicker-size: var(--tf-type-caption-lg-size);
+  --profile-type-body-size: var(--tf-type-body-size);
+
+  /* Colors — 4 roles */
+  --profile-color-primary: var(--tf-ink);
+  --profile-color-secondary: var(--tf-ink-soft);
+  --profile-color-secondary-muted: rgba(107, 83, 68, 0.58);
+  --profile-color-accent: var(--tf-accent-numerology);
+  --profile-color-accent-green: #5b6b48;
+
+  width: 100%;
+  max-width: var(--profile-content-width);
+  margin: 0 auto;
+  padding: 0 var(--profile-gutter) 3.5rem;
+  box-sizing: border-box;
+  background: #f3efe8;
+}
+
+.profileStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--profile-layer-gap);
+}
+
+/* —— Card system (Figma mockup) —— */
+.profileCard {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 1.25rem 1.15rem 1.35rem;
+  border-radius: 22px;
+  background: rgba(255, 253, 249, 0.94);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.85) inset,
+    0 14px 40px rgba(91, 67, 35, 0.07);
+  border: 1px solid rgba(107, 83, 68, 0.08);
+  overflow: hidden;
+}
+
+.profileCardLabel {
+  margin: 0 0 0.85rem;
+  font-size: var(--profile-type-micro);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--profile-color-secondary-muted);
+}
+
+.profileGrid2 {
+  display: grid;
+  gap: 14px;
+  width: 100%;
+}
+
+@media (min-width: 720px) {
+  .profileGrid2 {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+}
+
+.profileMetaPills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.45rem;
+  margin-top: 0.65rem;
+}
+
+.profileMetaPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(255, 253, 249, 0.88);
+  border: 1px solid rgba(107, 83, 68, 0.12);
+  font-size: var(--profile-type-caption);
+  font-weight: 600;
+  color: var(--profile-color-secondary);
+}
+
+.profileMetaPillAccent {
+  color: var(--profile-color-accent);
+}
+
+.profileCardCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.85rem;
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: var(--profile-type-caption);
+  font-weight: 600;
+  color: var(--profile-color-secondary);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.profileCardCta:hover {
+  color: var(--profile-color-primary);
+}
+
+.profileCardCtaArrow {
+  font-size: 0.9em;
+  opacity: 0.7;
+}
+
+.profileHeroCard {
+  padding: 1.35rem 1.2rem 1.5rem;
+  text-align: center;
+  isolation: isolate;
+}
+
+.profileHeroCard.heroSceneNeutral {
+  background:
+    radial-gradient(ellipse 88% 58% at 78% 22%, rgba(201, 168, 115, 0.12) 0%, transparent 58%),
+    rgba(255, 253, 249, 0.94);
+}
+
+.profileHeroCard.heroSceneFire {
+  background:
+    radial-gradient(ellipse 86% 56% at 78% 22%, rgba(232, 140, 90, 0.14) 0%, transparent 58%),
+    rgba(255, 253, 249, 0.94);
+}
+
+.profileHeroCard.heroSceneEarth {
+  background:
+    radial-gradient(ellipse 84% 54% at 78% 22%, rgba(120, 130, 80, 0.14) 0%, transparent 58%),
+    rgba(255, 253, 249, 0.94);
+}
+
+.profileHeroCard.heroSceneAir {
+  background:
+    radial-gradient(ellipse 88% 56% at 78% 22%, rgba(160, 190, 230, 0.14) 0%, transparent 58%),
+    rgba(255, 253, 249, 0.94);
+}
+
+.profileHeroCard.heroSceneWater {
+  background:
+    radial-gradient(ellipse 82% 54% at 78% 22%, rgba(90, 130, 190, 0.14) 0%, transparent 58%),
+    rgba(255, 253, 249, 0.94);
+}
+
+.profileLifeCardLove .dualityLove,
+.profileLifeCardMoney .dualityMoney {
+  min-height: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.profileLifeCardLove .dualityLoveOrbitDecor,
+.profileLifeCardMoney .dualityMoneyAxis {
+  display: none;
+}
+
+.profileHeroCardLayout {
+  display: grid;
+  gap: 1rem;
+  align-items: center;
+}
+
+.profileHeroCardCopy {
+  min-width: 0;
+}
+
+.profileHeroCardVisual {
+  display: flex;
+  justify-content: center;
+}
+
+.profileHeroIntro {
+  margin: 0.75rem 0 0;
+  font-size: var(--profile-type-body);
+  line-height: 1.55;
+  color: var(--profile-color-secondary);
+  max-width: 28rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.profileHeroDeepLink {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.profileHeroDeepBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  max-width: 22rem;
+  padding: 0.85rem 1.15rem;
+  border: 1px solid rgba(107, 83, 68, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 251, 243, 0.92);
+  font-size: var(--profile-type-body);
+  font-weight: 600;
+  color: var(--profile-color-primary);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.profileHeroDeepBtn:hover {
+  background: #fffefb;
+  border-color: rgba(107, 83, 68, 0.24);
+}
+
+@media (min-width: 720px) {
+  .profileHeroCardLayout {
+    grid-template-columns: 1fr min(42%, 15.5rem);
+    text-align: left;
+  }
+
+  .profileHeroCard {
+    text-align: left;
+  }
+
+  .profileMetaPills {
+    justify-content: flex-start;
+  }
+
+  .profileHeroIntro {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .profileHeroDeepLink {
+    justify-content: flex-start;
+  }
+
+  .profileHeroCardVisual {
+    justify-content: flex-end;
+  }
+}
+
+.profileStatementCard {
+  padding: 1.15rem 1.2rem 1.25rem;
+}
+
+.profileNumbersCard {
+  min-height: 18rem;
+  text-align: center;
+}
+
+.profileNumbersOrbitCompact {
+  position: relative;
+  width: min(100%, 11rem);
+  height: 11rem;
+  margin: 0 auto;
+}
+
+.profileNumbersOrbitCompactRing {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  border-radius: 50%;
+  border: 1px solid rgba(141, 112, 180, 0.16);
+  pointer-events: none;
+}
+
+.profileNumbersOrbitCompactRingOuter {
+  width: 10.5rem;
+  height: 10.5rem;
+}
+
+.profileNumbersOrbitCompactRingInner {
+  width: 8.25rem;
+  height: 8.25rem;
+  border-style: dashed;
+  opacity: 0.55;
+}
+
+.profileNumbersOrbitCompactCore {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: 6.5rem;
+  height: 6.5rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 38% 32%, #fff 0%, #f0e8ff 52%, #ebe0d0 100%);
+  box-shadow:
+    0 0 0 1px rgba(141, 112, 180, 0.28),
+    0 0 24px rgba(141, 112, 180, 0.18);
+}
+
+.profileNumbersOrbitCompactValue {
+  font-size: calc(var(--profile-type-xl) * 1.2);
+  font-weight: 800;
+  color: var(--profile-color-accent);
+  line-height: 1;
+}
+
+.profileNumbersOrbitSatellite {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  width: 4.5rem;
+  text-align: center;
+}
+
+.profileNumbersOrbitSatelliteTop {
+  top: 0;
+  left: 50%;
+  translate: -50% 0;
+}
+
+.profileNumbersOrbitSatelliteLeft {
+  left: -0.15rem;
+  top: 50%;
+  translate: 0 -50%;
+}
+
+.profileNumbersOrbitSatelliteRight {
+  right: -0.15rem;
+  top: 50%;
+  translate: 0 -50%;
+}
+
+.profileNumbersOrbitSatelliteDot {
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 40% 35%, #fff 0%, rgba(237, 228, 255, 0.92) 100%);
+  box-shadow: 0 0 0 1px rgba(141, 112, 180, 0.18);
+  font-size: var(--profile-type-caption);
+  font-weight: 800;
+  color: var(--profile-color-accent);
+}
+
+.profileNumbersOrbitSatelliteLabel {
+  font-size: 0.58rem;
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--profile-color-secondary-muted);
+}
+
+.profileNameCardHero {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.profileNameCardGlyph {
+  width: 2.85rem;
+  height: 2.85rem;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: var(--profile-color-secondary);
+  background: rgba(255, 253, 249, 0.82);
+  box-shadow: inset 0 0 0 1px rgba(107, 83, 68, 0.12);
+}
+
+.profileNameCardTitle {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--profile-color-primary);
+  line-height: 1.1;
+}
+
+.profileNameCardKeywords {
+  margin: 0.35rem 0 0;
+  font-size: var(--profile-type-caption);
+  font-weight: 600;
+  color: var(--profile-color-secondary-muted);
+}
+
+.profileNameCardList {
+  list-style: none;
+  margin: 0.85rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.profileNameCardItem {
+  display: grid;
+  grid-template-columns: 1.1rem 1fr;
+  gap: 0.55rem;
+  align-items: start;
+  font-size: var(--profile-type-body);
+  line-height: 1.45;
+  color: var(--profile-color-secondary);
+}
+
+.profileNameCardBullet {
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-top: 0.45rem;
+  border-radius: 50%;
+  background: rgba(107, 83, 68, 0.35);
+}
+
+.profileActionGrid {
+  display: grid;
+  gap: 14px;
+}
+
+@media (min-width: 720px) {
+  .profileActionGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+}
+
+.profileActionCard {
+  min-height: 14rem;
+}
+
+.profileActionCardGreen {
+  background:
+    linear-gradient(145deg, rgba(248, 252, 242, 0.98) 0%, rgba(255, 253, 249, 0.94) 100%);
+}
+
+.profileActionCardToday {
+  background:
+    linear-gradient(160deg, rgba(255, 253, 249, 0.96) 0%, rgba(242, 247, 234, 0.55) 100%);
+}
+
+.profileActionSteps {
+  list-style: none;
+  margin: 0.85rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.profileActionStep {
+  display: grid;
+  grid-template-columns: 1.35rem 1fr;
+  gap: 0.65rem;
+  align-items: start;
+}
+
+.profileActionStepNum {
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: var(--profile-type-micro);
+  font-weight: 800;
+  color: var(--profile-color-accent-green);
+  background: rgba(120, 140, 90, 0.12);
+  border: 1px solid rgba(120, 140, 90, 0.28);
+}
+
+.profileActionStepText {
+  font-size: var(--profile-type-body);
+  line-height: 1.5;
+  color: var(--profile-color-secondary);
+}
+
+.profileActionTodayText {
+  margin: 0.55rem 0 0;
+  font-size: var(--profile-type-body);
+  line-height: 1.55;
+  color: var(--profile-color-secondary);
+}
+
+.profileLifeCardLove {
+  background:
+    linear-gradient(145deg, rgba(255, 248, 252, 0.98) 0%, rgba(255, 253, 249, 0.94) 100%);
+  border-color: rgba(220, 160, 175, 0.14);
+}
+
+.profileLifeCardMoney {
+  background:
+    linear-gradient(145deg, rgba(255, 253, 246, 0.98) 0%, rgba(255, 251, 235, 0.92) 100%);
+  border-color: rgba(201, 168, 115, 0.16);
+}
+
+.profilePortalCard {
+  display: grid;
+  gap: 1.25rem;
+  padding: 0;
+  min-height: clamp(14rem, 30vh, 18rem);
+  border-radius: 22px;
+  overflow: hidden;
+  text-decoration: none;
+  background: #12101c;
+  border: 1px solid rgba(250, 248, 245, 0.08);
+  box-shadow: 0 18px 48px rgba(18, 16, 28, 0.28);
+}
+
+@media (min-width: 720px) {
+  .profilePortalCard {
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: stretch;
+  }
+}
+
+.profilePortalVisual {
+  position: relative;
+  min-height: 10rem;
+}
+
+.profilePortalContent {
+  position: relative;
+  z-index: 3;
+  padding: 1.35rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.profilePortalFeatures {
+  position: relative;
+  z-index: 3;
+  margin: 0;
+  padding: 1.35rem 1.2rem;
+  list-style: none;
+  display: grid;
+  gap: 0.75rem;
+  align-content: center;
+  border-top: 1px solid rgba(250, 248, 245, 0.08);
+}
+
+@media (min-width: 720px) {
+  .profilePortalFeatures {
+    border-top: none;
+    border-left: 1px solid rgba(250, 248, 245, 0.08);
+  }
+}
+
+.profilePortalFeature {
+  display: grid;
+  grid-template-columns: 1.1rem 1fr;
+  gap: 0.55rem;
+  align-items: start;
+  font-size: var(--profile-type-caption);
+  line-height: 1.45;
+  color: rgba(250, 248, 245, 0.72);
+}
+
+.profilePortalFeatureDot {
+  width: 0.35rem;
+  height: 0.35rem;
+  margin-top: 0.4rem;
+  border-radius: 50%;
+  background: rgba(210, 195, 255, 0.55);
+}
+
+.profilePortalBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  margin-top: 1rem;
+  padding: 0.7rem 1.1rem;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #6b5b8a 0%, #4a3270 100%);
+  font-size: var(--profile-type-caption);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #faf8f5;
+}
+
+.profilePortalCard:hover .profilePortalBtn {
+  filter: brightness(1.06);
+}
+
+.profileV0Route:global(.orbit-hero-content-block) {
+  padding-left: 0;
+  padding-right: 0;
+  background: transparent;
+}
+
+.profileV0RouteContainer {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* —— Portrait section band (MP-1 · PROFILE_SCREEN_MASTER §A) —— */
+.portraitSectionBand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--profile-stack-gap, 2.5rem);
+}
+
+.portraitBandHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0 var(--profile-section-padding);
+}
+
+.portraitKicker {
+  margin: 0;
+  font-size: var(--profile-type-kicker-size, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--profile-accent-twilight, #4a3270);
+}
+
+.portraitLead {
+  margin: 0;
+  max-width: 36rem;
+  font-size: var(--profile-type-body-size, 0.9375rem);
+  line-height: 1.55;
+  color: var(--profile-ink-soft, #5b4630);
+}
+
+/* —— Hero · Scene —— */
+.heroScene {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto auto auto;
+  align-items: stretch;
+  gap: 0.75rem;
+  padding: 0.25rem var(--profile-section-padding) var(--profile-section-padding);
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+  text-align: center;
+  background: transparent;
+  box-shadow: none;
+  isolation: isolate;
+}
+
+.heroScene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.heroSceneNeutral::before {
+  background:
+    radial-gradient(ellipse 88% 58% at 50% 36%, rgba(201, 168, 115, 0.16) 0%, transparent 62%),
+    radial-gradient(ellipse 70% 42% at 50% 92%, rgba(180, 160, 200, 0.08) 0%, transparent 55%);
+}
+
+.heroSceneFire::before {
+  background:
+    radial-gradient(ellipse 86% 56% at 50% 34%, rgba(232, 140, 90, 0.2) 0%, transparent 62%),
+    radial-gradient(ellipse 65% 40% at 50% 90%, rgba(180, 90, 60, 0.1) 0%, transparent 52%);
+}
+
+.heroSceneEarth::before {
+  background:
+    radial-gradient(ellipse 84% 54% at 50% 36%, rgba(120, 130, 80, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 68% 42% at 50% 92%, rgba(160, 140, 90, 0.12) 0%, transparent 52%);
+}
+
+.heroSceneAir::before {
+  background:
+    radial-gradient(ellipse 88% 56% at 50% 35%, rgba(160, 190, 230, 0.17) 0%, transparent 62%),
+    radial-gradient(ellipse 70% 40% at 50% 92%, rgba(200, 210, 220, 0.08) 0%, transparent 52%);
+}
+
+.heroSceneWater::before {
+  background:
+    radial-gradient(ellipse 82% 54% at 50% 34%, rgba(90, 130, 190, 0.16) 0%, transparent 60%),
+    radial-gradient(ellipse 66% 42% at 50% 90%, rgba(120, 90, 160, 0.12) 0%, transparent 52%);
+}
+
+.heroSceneTop,
+.heroSceneCenter,
+.heroSceneBottom {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.heroSceneTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 1.75rem;
+}
+
+.heroSceneKicker {
+  margin: 0;
+  font-size: var(--profile-type-micro);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--profile-color-secondary-muted);
+  text-align: left;
+}
+
+.heroSceneCenter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 0.25rem 0;
+}
+
+.heroSceneBottom {
+  max-width: 26rem;
+  margin: 0 auto;
+  padding-bottom: 0.25rem;
+}
+
+.heroEmblemObject {
+  position: relative;
+  width: min(62vw, 15.5rem);
+  height: min(62vw, 15.5rem);
+  display: grid;
+  place-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.heroEmblemGlow {
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 45%, rgba(141, 112, 180, 0.22) 0%, transparent 68%);
+  filter: blur(10px);
+  pointer-events: none;
+}
+
+.heroOrbitOuter,
+.heroOrbitMid,
+.heroOrbitInner,
+.heroOrbitCore {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.heroOrbitOuter {
+  inset: 0;
+  border: 1px solid rgba(91, 67, 35, 0.16);
+  box-shadow: 0 0 24px rgba(141, 112, 180, 0.08);
+}
+
+.heroOrbitMid {
+  inset: 11%;
+  border: 1px solid rgba(141, 112, 180, 0.2);
+}
+
+.heroOrbitInner {
+  inset: 22%;
+  border: 1px dashed rgba(91, 67, 35, 0.12);
+  opacity: 0.85;
+}
+
+.heroOrbitCore {
+  inset: 32%;
+  background: radial-gradient(circle at 50% 45%, rgba(255, 253, 249, 0.82) 0%, transparent 72%);
+  box-shadow: 0 0 20px rgba(141, 112, 180, 0.12);
+}
+
+.heroSymbolFrame {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #5b4630;
+}
+
+.heroArchetypeTitle {
+  margin: 0;
+  font-size: var(--profile-type-xl);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--profile-color-primary);
+  line-height: 1.05;
+}
+
+.heroIdentityLine {
+  margin: 0.35rem 0 0;
+  font-size: var(--profile-type-body);
+  font-weight: 600;
+  color: var(--profile-color-secondary);
+}
+
+.heroMetaLine {
+  margin: 0.25rem 0 0;
+  font-size: var(--profile-type-caption);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--profile-color-secondary-muted);
+}
+
+.heroTensionLine {
+  margin: 0.35rem 0 0;
+  font-size: var(--profile-type-body);
+  line-height: 1.45;
+  color: var(--profile-color-secondary);
+}
+
+.heroLifeTheme {
+  margin: 0.45rem 0 0;
+  font-size: var(--profile-type-body);
+  line-height: 1.45;
+  color: var(--profile-color-secondary);
+}
+
+.heroTagline {
+  margin: 0;
+  font-size: var(--profile-type-m);
+  line-height: 1.5;
+  font-weight: 500;
+  font-style: normal;
+  color: var(--profile-color-primary);
+}
+
+.heroQualityMarks {
+  list-style: none;
+  margin: 0.85rem 0 0;
+  padding: 0.85rem 0 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem 0.75rem;
+  border-top: 1px solid rgba(91, 67, 35, 0.08);
+}
+
+.heroQualityMark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.heroQualityMarkDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(91, 67, 35, 0.4);
+  margin-bottom: 0.1rem;
+  box-shadow: 0 6px 0 -2px rgba(91, 67, 35, 0.08);
+}
+
+.heroQualityTitle {
+  font-size: var(--profile-type-caption);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--profile-color-secondary);
+}
+
+.heroQualitySub {
+  font-size: var(--profile-type-body);
+  line-height: 1.45;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--profile-color-secondary-muted);
+  text-align: center;
+}
+
+.heroPillar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.heroPillarNumber {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #4a3270;
+  line-height: 1;
+}
+
+.heroPillarArchetype {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #5b4630;
+}
+
+.heroPillarLabel {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a89880;
+}
+
+.heroDigest {
+  margin: 0.35rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #64748b;
+  max-width: 18rem;
+}
+
+.topBarGhost {
+  flex-shrink: 0;
+  padding: 0.35rem 0.65rem;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 253, 249, 0.55);
+  backdrop-filter: blur(8px);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #6b5344;
+  cursor: pointer;
+}
+
+.levelsWhisper {
+  position: relative;
+  z-index: 3;
+  margin: 0 auto;
+  padding-bottom: 1.5rem;
+  text-align: center;
+  font-size: 0.7rem;
+  color: #b5a48f;
+}
+
+.levelsDot {
+  margin: 0 0.35rem;
+  opacity: 0.5;
+}
+
+.heroScrollHint {
+  height: 1.5rem;
+}
+
+/* —— Why · Statement (редакционная цитата) —— */
+.statement {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 1rem 0 1.15rem;
+  background: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  text-align: left;
+}
+
+.statement::before {
+  content: "";
+  position: absolute;
+  inset: 0 -0.35rem;
+  background: linear-gradient(105deg, rgba(201, 168, 115, 0.07) 0%, transparent 62%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.statementBody {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: 0.15rem 0 0.15rem 1.15rem;
+  border-left: 3px solid rgba(91, 74, 114, 0.35);
+}
+
+.statementHeading {
+  margin: 0;
+  font-size: var(--profile-type-micro);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--profile-color-secondary-muted);
+  line-height: 1.45;
+}
+
+.statementPhrase {
+  margin: 0.75rem 0 0;
+  padding: 0;
+  max-width: 34em;
+  font-size: var(--profile-type-m);
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0;
+  color: var(--profile-color-primary);
+}
+
+.statementInsights {
+  list-style: none;
+  margin: 0.65rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  max-width: 34em;
+}
+
+.statementInsightItem {
+  margin: 0;
+  padding-left: 0.85rem;
+  border-left: 2px solid rgba(107, 83, 68, 0.22);
+  font-size: var(--profile-type-body);
+  line-height: 1.5;
+  color: var(--profile-color-secondary);
+}
+
+.statementNote {
+  margin: 0.65rem 0 0;
+  max-width: 32em;
+  font-size: var(--profile-type-body);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--profile-color-secondary-muted);
+}
+
+.layerDivider {
+  width: 3.5rem;
+  height: 2px;
+  margin: 0 0 var(--profile-section-padding);
+  background: linear-gradient(90deg, transparent, rgba(107, 83, 68, 0.28), transparent);
+}
+
+/* —— Life · Duality —— */
+.lifeDualitySection {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.lifeDualityTitle {
+  margin: 0 0 var(--profile-section-padding);
+  padding: 0;
+  font-size: var(--profile-type-micro);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--profile-color-secondary-muted);
+}
+
+.lifeDualityScene {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: var(--profile-section-padding) 0 0.25rem;
+  background:
+    radial-gradient(ellipse 88% 58% at 22% 42%, rgba(255, 225, 235, 0.14) 0%, transparent 58%),
+    radial-gradient(ellipse 88% 58% at 78% 52%, rgba(235, 228, 215, 0.16) 0%, transparent 58%);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.lifeDualityTrack {
+  display: grid;
+  gap: 28px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  align-items: stretch;
+}
+
+.lifeDualityPanel {
+  min-width: 0;
+  width: 100%;
+  display: flex;
+}
+
+.dualityLove,
+.dualityMoney {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 20rem;
+  padding: 1.5rem 1.15rem 1.35rem;
+  border: none;
+  box-shadow: none;
+  overflow: visible;
+}
+
+/* —— Love · мягкий мир —— */
+.dualityLove {
+  text-align: center;
+  background:
+    radial-gradient(circle at 28% 18%, rgba(255, 210, 225, 0.22) 0%, transparent 42%),
+    radial-gradient(circle at 72% 78%, rgba(255, 235, 245, 0.18) 0%, transparent 48%);
+  border-radius: 0;
+}
+
+.dualityLoveOrbitDecor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.dualityLoveOrbitDecor::before,
+.dualityLoveOrbitDecor::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(220, 160, 175, 0.18);
+}
+
+.dualityLoveOrbitDecor::before {
+  width: 4.5rem;
+  height: 4.5rem;
+  top: 10%;
+  left: 6%;
+  opacity: 0.65;
+}
+
+.dualityLoveOrbitDecor::after {
+  width: 3rem;
+  height: 3rem;
+  bottom: 14%;
+  right: 8%;
+  opacity: 0.5;
+  border-color: rgba(220, 160, 175, 0.12);
+}
+
+.dualityLoveSymbol {
+  position: relative;
+  z-index: 1;
+  width: 7.5rem;
+  height: 7.5rem;
+  margin: 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%, #fff 0%, rgba(255, 215, 230, 0.45) 100%);
+  box-shadow: 0 0 28px rgba(220, 150, 170, 0.15);
+}
+
+.dualityLoveLabel {
+  position: relative;
+  z-index: 1;
+  margin: 0.85rem 0 0;
+  font-size: var(--profile-type-caption);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--profile-color-secondary-muted);
+}
+
+.dualityLoveTitle {
+  position: relative;
+  z-index: 1;
+  margin: 0.35rem 0 0;
+  font-size: var(--profile-type-l);
+  font-weight: 700;
+  color: var(--profile-color-primary);
+  letter-spacing: -0.02em;
+}
+
+.dualityLoveMain {
+  position: relative;
+  z-index: 1;
+  margin: 0.55rem auto 0;
+  max-width: 15rem;
+  font-size: var(--profile-type-m);
+  line-height: 1.5;
+  font-weight: 500;
+  font-style: normal;
+  color: var(--profile-color-primary);
+}
+
+.dualityLoveSignals {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 15rem;
+  margin: 0.65rem auto 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.dualityLoveSignal,
+.dualityLoveSignalMuted {
+  margin: 0;
+  font-size: var(--profile-type-body);
+  line-height: 1.5;
+  text-align: center;
+  color: var(--profile-color-secondary);
+}
+
+.dualityLoveSignalMuted {
+  color: var(--profile-color-secondary-muted);
+}
+
+.dualityLoveSignalLabel {
+  font-style: normal;
+  font-weight: 700;
+  font-size: var(--profile-type-caption);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--profile-color-secondary);
+}
+
+.dualityLoveExpand {
+  display: none;
+}
+
+.dualityFacetRow {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  max-width: 15.5rem;
+  margin: 0.65rem auto 0;
+}
+
+.dualityFacetBtn {
+  margin: 0;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  font-size: var(--profile-type-caption);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  color: var(--profile-color-secondary);
+}
+
+.dualityFacetBtnLove {
+  border-color: rgba(107, 83, 68, 0.14);
+}
+
+.dualityFacetBtnMoney {
+  border-color: rgba(107, 83, 68, 0.14);
+}
+
+.dualityFacetBtnActive.dualityFacetBtnLove,
+.dualityFacetBtnActive.dualityFacetBtnMoney {
+  border-color: rgba(107, 83, 68, 0.32);
+  box-shadow: 0 0 0 2px rgba(107, 83, 68, 0.06);
+}
+
+.dualityDetailCaption {
+  margin: 0;
+  font-size: var(--profile-type-caption);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--profile-color-secondary);
+}
+
+.dualityDetailBody {
+  margin: 0.45rem 0 0;
+  font-size: var(--profile-type-body);
+  line-height: 1.5;
+  color: var(--profile-color-secondary);
+  font-weight: 400;
+}
+
+.dualityDetailPanel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 16rem;
+  margin: 0.75rem auto 0;
+  padding: 0.65rem 0 0.65rem 0.85rem;
+  border-left: 1px solid rgba(107, 83, 68, 0.2);
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.dualityDetailPanelLove,
+.dualityDetailPanelMoney {
+  border-left-color: rgba(107, 83, 68, 0.22);
+}
+
+/* —— Money · структурный мир —— */
+.dualityMoney {
+  text-align: center;
+  align-items: stretch;
+  background-color: transparent;
+  background-image:
+    linear-gradient(rgba(107, 83, 68, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(107, 83, 68, 0.045) 1px, transparent 1px);
+  background-size: 16px 16px;
+  border-radius: 0;
+  border-left: 2px solid rgba(107, 83, 68, 0.22);
+}
+
+.dualityMoneyAxis {
+  position: absolute;
+  top: 1.25rem;
+  bottom: 1.25rem;
+  left: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, rgba(107, 83, 68, 0.45), rgba(107, 83, 68, 0.08));
+  pointer-events: none;
+  z-index: 0;
+}
+
+.dualityMoneySymbol {
+  position: relative;
+  z-index: 1;
+  width: 6.75rem;
+  height: 6.75rem;
+  margin: 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  background: linear-gradient(145deg, #fff 0%, rgba(235, 228, 215, 0.92) 100%);
+  box-shadow: inset 0 0 0 1px rgba(107, 83, 68, 0.2);
+}
+
+.dualityMoneyLabel {
+  position: relative;
+  z-index: 1;
+  margin: 0.75rem 0 0;
+  font-size: var(--profile-type-caption);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--profile-color-secondary-muted);
+}
+
+.dualityMoneyTitle {
+  position: relative;
+  z-index: 1;
+  margin: 0.35rem 0 0;
+  font-size: var(--profile-type-l);
+  font-weight: 700;
+  color: var(--profile-color-primary);
+  letter-spacing: -0.02em;
+}
+
+.dualityMoneyMain {
+  position: relative;
+  z-index: 1;
+  margin: 0.55rem auto 0;
+  max-width: 15rem;
+  font-size: var(--profile-type-m);
+  line-height: 1.5;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--profile-color-primary);
+}
+
+.dualityMoneySignals {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 15rem;
+  margin: 0.75rem auto 0;
+  display: grid;
+  gap: 0.45rem;
+  text-align: left;
+}
+
+.dualityMoneySignal {
+  margin: 0;
+  padding-left: 0.55rem;
+  border-left: 2px solid rgba(107, 83, 68, 0.14);
+  font-size: var(--profile-type-body);
+  line-height: 1.5;
+  color: var(--profile-color-secondary);
+}
+
+.dualityMoneySignalLabel {
+  font-weight: 700;
+  font-size: var(--profile-type-caption);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--profile-color-secondary);
+}
+
+.dualityMoneyExpand {
+  display: none;
+}
+
+.dualityLove .cardCtaLink,
+.dualityMoney .cardCtaLink {
+  position: relative;
+  z-index: 1;
+  margin-top: 0.85rem;
+  padding-top: 0;
+}
+
+@media (min-width: 720px) {
+  .lifeDualityTrack {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dualityLove,
+  .dualityMoney {
+    min-height: 24rem;
+  }
+}
+
+@media (max-width: 719px) {
+  .lifeDualityTrack {
+    display: flex;
+    gap: var(--profile-section-padding);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 0 0.75rem;
+    scrollbar-width: none;
+    align-items: stretch;
+  }
+
+  .lifeDualityTrack::-webkit-scrollbar {
+    display: none;
+  }
+
+  .lifeDualityPanel {
+    flex: 0 0 86vw;
+    max-width: 86vw;
+    scroll-snap-align: start;
+  }
+
+  .dualityLove,
+  .dualityMoney {
+    min-height: 21rem;
+  }
+}
+
+/* —— Action · Compass —— */
+.compassAction {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-height: clamp(380px, 42vh, 460px);
+  padding: var(--profile-section-padding);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+  background:
+    linear-gradient(105deg, rgba(242, 247, 234, 0.35) 0%, transparent 42%),
+    radial-gradient(ellipse 55% 70% at 12% 50%, rgba(200, 220, 170, 0.14) 0%, transparent 62%),
+    linear-gradient(to bottom, rgba(255, 253, 249, 0.4) 0%, transparent 100%);
+}
+
+.compassActionInner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  align-items: center;
+  min-height: calc(clamp(380px, 42vh, 460px) - var(--profile-section-padding) * 2);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.compassVisual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 11rem;
+}
+
+.compassVisualSvg {
+  width: min(100%, 15rem);
+  height: auto;
+  max-height: 15rem;
+}
+
+.compassContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex: 1;
+  min-height: 0;
+}
+
+.compassLabel {
+  margin: 0;
+  font-size: var(--profile-type-micro);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--profile-color-accent-green);
+}
+
+.compassTitle {
+  margin: 0.45rem 0 0;
+  font-size: var(--profile-type-l);
+  font-weight: 700;
+  color: var(--profile-color-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.compassMain {
+  margin: 0.5rem 0 0;
+  font-size: var(--profile-type-m);
+  line-height: 1.5;
+  font-weight: 500;
+  color: var(--profile-color-primary);
+  max-width: 22rem;
+}
+
+.compassRouteMarkers {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0 0 0 0.15rem;
+  width: 100%;
+  max-width: 22rem;
+  display: grid;
+  gap: 0.7rem;
+  position: relative;
+}
+
+.compassRouteMarkers::before {
+  content: "";
+  position: absolute;
+  left: 0.52rem;
+  top: 0.65rem;
+  bottom: 0.65rem;
+  width: 1px;
+  background: linear-gradient(to bottom, rgba(120, 140, 90, 0.4), rgba(120, 140, 90, 0.08));
+  pointer-events: none;
+}
+
+.compassRouteMarker {
+  display: grid;
+  grid-template-columns: 1.15rem 1fr;
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.compassTodayStep {
+  width: 100%;
+  max-width: 22rem;
+  margin-top: 1.1rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid rgba(120, 140, 90, 0.18);
+  box-sizing: border-box;
+}
+
+.compassMarkerNode {
+  width: 1.05rem;
+  height: 1.05rem;
+  margin-top: 0.1rem;
+  border-radius: 50%;
+  border: 2px solid rgba(120, 140, 90, 0.45);
+  background: #fffefb;
+  display: grid;
+  place-items: center;
+  font-size: var(--profile-type-micro);
+  font-weight: 800;
+  color: var(--profile-color-accent-green);
+  line-height: 1;
+  box-shadow: 0 0 0 3px rgba(120, 140, 90, 0.08);
+}
+
+.compassMarkerText {
+  font-size: var(--profile-type-body);
+  line-height: 1.5;
+  color: var(--profile-color-secondary);
+}
+
+.compassTodayLabel {
+  margin: 0;
+  font-size: var(--profile-type-caption);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--profile-color-accent-green);
+}
+
+.compassTodayText {
+  margin: 0.35rem 0 0;
+  font-size: var(--profile-type-body);
+  line-height: 1.5;
+  font-weight: 500;
+  color: var(--profile-color-secondary);
+}
+
+@media (min-width: 720px) {
+  .compassActionInner {
+    grid-template-columns: 40% 60%;
+    gap: 2rem;
+  }
+
+  .compassVisual {
+    min-height: 14rem;
+    justify-content: flex-start;
+    padding-left: 0.25rem;
+  }
+
+  .compassVisualSvg {
+    width: min(100%, 13.5rem);
+    max-height: 13.5rem;
+  }
+
+  .compassContent {
+    padding-right: 0.5rem;
+    min-height: 100%;
+  }
+}
+
+/* —— Zones —— */
+.zoneInsight {
+  margin-bottom: 1.75rem;
+}
+
+.zoneGrowth {
+  display: grid;
+  gap: 0.85rem;
+  margin-bottom: 2.25rem;
+}
+
+.zoneDiscovery {
+  display: grid;
+  gap: 1rem;
+}
+
+/* —— Card 1: углубляет Hero —— */
+.cardInsight {
+  padding: 1.4rem 1.3rem 1.25rem;
+  border-radius: 28px;
+  background: rgba(255, 253, 249, 0.88);
+  box-shadow: 0 14px 48px rgba(91, 67, 35, 0.06);
+}
+
+.insightKicker {
+  margin: 0 0 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9a8468;
+}
+
+.insightLead {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #475569;
+}
+
+/* —— Block types (PROFILE_SCREEN_MASTER §2) —— */
+.blockInsight {
+  margin-bottom: 0.85rem;
+}
+
+.blockAction {
+  border-left: 3px solid #8f6b3a;
+  padding-left: 1rem;
+}
+
+.blockPortal {
+  display: block;
+}
+
+/* —— Card 1 · Кто я —— */
+.whoArchetype {
+  margin: 0 0 0.75rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1a1510;
+  letter-spacing: -0.02em;
+}
+
+.traitRow {
+  margin-bottom: 0.65rem;
+}
+
+.traitRowLabel {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9a8468;
+}
+
+.traitChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.traitChip {
+  padding: 0.3rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(143, 107, 58, 0.12);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #5b4630;
+  line-height: 1.25;
+}
+
+.traitChipWatch {
+  background: rgba(180, 120, 100, 0.14);
+  color: #6b5344;
+}
+
+.whoPortrait {
+  margin: 0.75rem 0 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: #64748b;
+}
+
+/* —— Insight lines (Love / Money / Name) —— */
+.insightLines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.insightLine {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.insightLineLabel {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9a8468;
+}
+
+.insightLineValue {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: #334155;
+}
+
+.actionLead {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: #475569;
+  font-weight: 500;
+}
+
+/* —— Numbers · Monument —— */
+.numbersMonument {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: calc(var(--profile-section-padding) + 0.5rem) var(--profile-section-padding) 2rem;
+  border: none;
+  border-top: 1px solid rgba(141, 112, 180, 0.18);
+  border-radius: 0;
+  overflow: visible;
+  text-align: center;
+  min-height: clamp(20rem, 48vh, 32rem);
+  background:
+    radial-gradient(ellipse 92% 68% at 50% 28%, rgba(248, 242, 255, 0.72) 0%, transparent 58%),
+    radial-gradient(ellipse 70% 45% at 50% 88%, rgba(235, 228, 215, 0.35) 0%, transparent 52%);
+  box-shadow: none;
+}
+
+.numbersMonument::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  transform: translate(-50%, -50%);
+  width: min(88%, 26rem);
+  height: min(72%, 20rem);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(141, 112, 180, 0.08) 0%, transparent 68%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.numbersMonumentInner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.numbersMonumentLabel {
+  margin: 0 0 1rem;
+  font-size: var(--profile-type-micro);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--profile-color-secondary-muted);
+}
+
+.numbersMonumentCore {
+  position: relative;
+  width: min(100%, 26rem);
+  min-height: 15.5rem;
+  margin: 0 auto;
+  padding: 2.5rem 1rem 3.75rem;
+  display: grid;
+  place-items: center;
+}
+
+.numbersMonumentOrbitOuter,
+.numbersMonumentOrbitMid,
+.numbersMonumentOrbitInner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  border-radius: 50%;
+  pointer-events: none;
+  border: 1px solid rgba(141, 112, 180, 0.14);
+}
+
+.numbersMonumentOrbitOuter {
+  width: 13.5rem;
+  height: 13.5rem;
+  opacity: 0.55;
+}
+
+.numbersMonumentOrbitMid {
+  width: 11.25rem;
+  height: 11.25rem;
+  opacity: 0.7;
+}
+
+.numbersMonumentOrbitInner {
+  width: 9.25rem;
+  height: 9.25rem;
+  border-style: dashed;
+  opacity: 0.45;
+}
+
+.numbersMonumentRingBtn {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: default;
+  border-radius: 50%;
+}
+
+.numbersMonumentRingBtn:not(:disabled) {
+  cursor: pointer;
+}
+
+.numbersMonumentRingBtn:not(:disabled):focus-visible {
+  outline: 2px solid rgba(141, 112, 180, 0.45);
+  outline-offset: 4px;
+}
+
+.numbersMonumentRing {
+  position: relative;
+  width: 8.75rem;
+  height: 8.75rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 38% 32%, #fff 0%, #f0e8ff 52%, #ebe0d0 100%);
+  box-shadow:
+    0 0 0 1px rgba(141, 112, 180, 0.28),
+    0 0 32px rgba(141, 112, 180, 0.22),
+    0 0 64px rgba(141, 112, 180, 0.1);
+}
+
+.numbersMonumentRingBtn:not(:disabled) .numbersMonumentRing {
+  transition: box-shadow 0.2s ease;
+}
+
+.numbersMonumentRingBtn:not(:disabled):hover .numbersMonumentRing,
+.numbersMonumentRingBtn[aria-expanded="true"] .numbersMonumentRing {
+  box-shadow:
+    0 0 0 1px rgba(141, 112, 180, 0.42),
+    0 0 36px rgba(141, 112, 180, 0.28),
+    0 0 72px rgba(141, 112, 180, 0.14);
+}
+
+.numbersMonumentValue {
+  font-size: calc(var(--profile-type-xl) * 1.45);
+  font-weight: 800;
+  color: var(--profile-color-accent);
+  line-height: 1;
+  letter-spacing: -0.06em;
+  text-shadow: 0 0 28px rgba(91, 74, 114, 0.22);
+}
+
+.numbersMonumentCaption {
+  margin: 0.75rem 0 0;
+  font-size: var(--profile-type-body);
+  font-weight: 600;
+  color: var(--profile-color-secondary);
+  letter-spacing: 0;
+}
+
+.numbersMonumentBlurb {
+  margin: 0.35rem auto 0;
+  max-width: 20rem;
+  font-size: var(--profile-type-body);
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--profile-color-secondary-muted);
+}
+
+.numbersSatelliteField {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.numbersSatellite {
+  position: absolute;
+  width: 6.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  pointer-events: auto;
+  text-align: center;
+  color: inherit;
+}
+
+.numbersSatellite:focus-visible {
+  outline: 2px solid rgba(141, 112, 180, 0.4);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.numbersSatelliteActive .numbersSatelliteOrbit {
+  box-shadow:
+    0 0 0 1px rgba(141, 112, 180, 0.38),
+    0 0 16px rgba(141, 112, 180, 0.22);
+}
+
+.numbersSatelliteKind {
+  font-size: var(--profile-type-caption);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--profile-color-secondary-muted);
+  line-height: 1.25;
+}
+
+.numbersSatelliteLeft {
+  left: -0.25rem;
+  top: 50%;
+  translate: 0 -50%;
+}
+
+.numbersSatelliteRight {
+  right: -0.25rem;
+  top: 50%;
+  translate: 0 -50%;
+}
+
+.numbersSatelliteBottomRight {
+  right: 10%;
+  bottom: -0.25rem;
+  translate: 0 0;
+}
+
+.numbersSatelliteOrbit {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 40% 35%, #fff 0%, rgba(237, 228, 255, 0.92) 100%);
+  box-shadow:
+    0 0 0 1px rgba(141, 112, 180, 0.2),
+    0 0 12px rgba(141, 112, 180, 0.12);
+}
+
+.numbersSatelliteDigit {
+  font-size: var(--profile-type-body);
+  font-weight: 800;
+  color: var(--profile-color-accent);
+  line-height: 1;
+}
+
+.numbersSatelliteCaption {
+  margin: 0;
+  font-size: var(--profile-type-body);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--profile-color-secondary);
+  line-height: 1.35;
+  text-align: center;
+}
+
+.numbersDetailPanel {
+  width: 100%;
+  max-width: 24rem;
+  margin: 1rem auto 0;
+  padding: 0.75rem 0 0.75rem 0.9rem;
+  border-left: 1px solid rgba(91, 74, 114, 0.28);
+  box-sizing: border-box;
+  text-align: left;
+  background: rgba(248, 242, 255, 0.28);
+}
+
+.numbersDetailCaption {
+  margin: 0;
+  font-size: var(--profile-type-caption);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--profile-color-secondary);
+}
+
+.numbersDetailInsight,
+.numbersDetailBody {
+  margin: 0.45rem 0 0;
+  font-size: var(--profile-type-body);
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--profile-color-secondary);
+}
+
+/* —— Name · Name code (вспомогательный слой) —— */
+.nameCodeBlock {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0.25rem 0 0;
+}
+
+.nameCodeRule {
+  width: 100%;
+  height: 1px;
+  margin: 0 0 1rem;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(107, 83, 68, 0.22) 12%,
+    rgba(107, 83, 68, 0.22) 88%,
+    transparent 100%
+  );
+}
+
+.nameCodeInner {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0 0.25rem;
+}
+
+.nameCodeLabel {
+  margin: 0 0 0.65rem;
+  font-size: var(--profile-type-caption);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--profile-color-secondary-muted);
+}
+
+.nameCodeHero {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.85rem;
+  align-items: center;
+  max-width: 24rem;
+}
+
+.nameCodeGlyph {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 4px;
+  display: grid;
+  place-items: center;
+  font-size: var(--profile-type-l);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--profile-color-secondary);
+  background: rgba(255, 253, 249, 0.72);
+  box-shadow: inset 0 0 0 1px rgba(107, 83, 68, 0.14);
+}
+
+.nameCodeHeadline {
+  min-width: 0;
+  text-align: left;
+}
+
+.nameCodeTitle {
+  margin: 0;
+  font-size: var(--profile-type-body);
+  font-weight: 700;
+  color: var(--profile-color-primary);
+  letter-spacing: 0;
+}
+
+.nameCodeMeaning {
+  margin: 0;
+  font-size: var(--profile-type-m);
+  line-height: 1.5;
+  font-weight: 500;
+  color: var(--profile-color-primary);
+}
+
+.nameCodeQualities {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+  max-width: 24rem;
+}
+
+.nameCodeQuality {
+  margin: 0;
+  padding: 0;
+  font-size: var(--profile-type-body);
+  line-height: 1.45;
+  color: var(--profile-color-secondary-muted);
+}
+
+.nameCodeFacetRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.65rem 0 0;
+  max-width: 24rem;
+}
+
+.nameCodeFacetBtn {
+  margin: 0;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid rgba(107, 83, 68, 0.16);
+  border-radius: 999px;
+  background: transparent;
+  font-size: var(--profile-type-caption);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--profile-color-secondary);
+  cursor: pointer;
+}
+
+.nameCodeFacetBtnActive {
+  border-color: rgba(107, 83, 68, 0.32);
+  background: rgba(255, 253, 249, 0.65);
+}
+
+.nameCodeDetailPanel {
+  width: 100%;
+  max-width: 24rem;
+  margin: 0.75rem 0 0;
+  padding: 0.65rem 0 0.65rem 0.85rem;
+  border-left: 1px solid rgba(107, 83, 68, 0.2);
+  box-sizing: border-box;
+  text-align: left;
+  background: transparent;
+}
+
+.nameCodeDetailCaption {
+  margin: 0;
+  font-size: var(--profile-type-caption);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--profile-color-secondary);
+}
+
+.nameCodeDetailBody {
+  margin: 0.4rem 0 0;
+  font-size: var(--profile-type-body);
+  line-height: 1.5;
+  color: var(--profile-color-secondary);
+}
+
+.nameCodeBlock .cardCtaLink {
+  margin-top: 0.65rem;
+}
+
+@media (max-width: 719px) {
+  .numbersMonumentCore {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: 0;
+    padding-bottom: 0;
+  }
+
+  .numbersSatelliteField {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.85rem 1.1rem;
+    margin-top: 1rem;
+    width: 100%;
+  }
+
+  .numbersSatellite {
+    position: static;
+    translate: none;
+    width: 6rem;
+  }
+
+  .nameCodeHero {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+}
+
+/* —— Growth: Love soft / Money structured —— */
+.cardShell {
+  position: relative;
+}
+
+.cardLabel {
+  margin: 0 0 0.55rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #b5a48f;
+}
+
+.cardBody {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.cardExpand {
+  margin-top: 0.7rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid rgba(191, 151, 95, 0.12);
+}
+
+.cardCtaLink {
+  margin-top: 0.6rem;
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: var(--profile-type-caption);
+  font-weight: 600;
+  color: var(--profile-color-secondary);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cardGrowth {
+  padding: 1.1rem 1.15rem;
+  border-radius: 0;
+  background: transparent;
+  border-bottom: 1px solid rgba(191, 151, 95, 0.1);
+}
+
+.cardGrowthLove {
+  padding: 1.35rem 1.25rem;
+  border-radius: 32px 36px 28px 32px;
+  background: linear-gradient(145deg, rgba(255, 248, 252, 0.95) 0%, rgba(252, 240, 245, 0.9) 100%);
+  box-shadow: 0 8px 32px rgba(180, 120, 140, 0.08);
+  border: none;
+}
+
+.cardGrowthLove::before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(220, 160, 180, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cardGrowthMoney {
+  padding: 1.35rem 1.25rem;
+  border-radius: 12px;
+  background: rgba(255, 253, 249, 0.92);
+  box-shadow: none;
+  border: 1px solid rgba(107, 83, 68, 0.12);
+  background-image:
+    linear-gradient(rgba(107, 83, 68, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(107, 83, 68, 0.04) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.cardGrowthMoney::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 1.25rem;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(107, 83, 68, 0.35), transparent);
+  pointer-events: none;
+}
+
+.growthLead {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.62;
+  color: #475569;
+}
+
+.cardDiscovery {
+  padding: 0.75rem 0;
+  background: transparent;
+}
+
+.discoveryLead {
+  margin: 0;
+  font-size: 0.86rem;
+  color: #64748b;
+  line-height: 1.55;
+}
+
+.expandBlock {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.expandLine {
+  margin: 0;
+  font-size: var(--profile-type-body);
+  line-height: 1.5;
+  color: var(--profile-color-secondary);
+}
+
+.expandLineLabel {
+  font-weight: 700;
+  color: #8f7756;
+}
+
+/* —— Portal · переход в следующий слой —— */
+.atlasCover {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  min-height: clamp(12rem, 28vh, 17rem);
+  border-radius: 0;
+  overflow: hidden;
+  text-decoration: none;
+  background: #12101c;
+  box-shadow: none;
+  border-top: 1px solid rgba(250, 248, 245, 0.08);
+  border-bottom: 1px solid rgba(10, 8, 16, 0.6);
+}
+
+.atlasCover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 28% 88% at 50% 50%, rgba(210, 195, 255, 0.16) 0%, transparent 72%),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 0%, transparent 18%, transparent 82%, rgba(0, 0, 0, 0.35) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.atlasPortalSlit {
+  position: absolute;
+  left: 50%;
+  top: 12%;
+  bottom: 12%;
+  width: 1px;
+  translate: -50% 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(250, 248, 245, 0.12) 18%,
+    rgba(250, 248, 245, 0.42) 50%,
+    rgba(250, 248, 245, 0.12) 82%,
+    transparent 100%
+  );
+  box-shadow: 0 0 24px rgba(210, 195, 255, 0.22);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.atlasVignette {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(10, 8, 16, 0.72) 0%, transparent 22%, transparent 78%, rgba(10, 8, 16, 0.72) 100%),
+    radial-gradient(ellipse 90% 80% at 50% 50%, transparent 0%, rgba(10, 8, 16, 0.45) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.atlasCoverInner {
+  position: relative;
+  z-index: 3;
+  padding: var(--profile-section-padding);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(12rem, 28vh, 17rem);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.atlasCoverKicker {
+  margin: 0;
+  font-size: var(--profile-type-micro);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(250, 248, 245, 0.42);
+}
+
+.atlasCoverTitle {
+  margin: 0.55rem 0 0;
+  font-size: var(--profile-type-l);
+  font-weight: 700;
+  color: #faf8f5;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.atlasCoverSub {
+  margin: 0.5rem 0 0;
+  font-size: var(--profile-type-body);
+  line-height: 1.5;
+  color: rgba(250, 248, 245, 0.62);
+  max-width: 18rem;
+}
+
+.atlasCoverAction {
+  margin-top: 1.15rem;
+  font-size: var(--profile-type-caption);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 253, 249, 0.88);
+}
+
+.atlasCover:hover .atlasCoverAction {
+  color: #fff;
+}
+
+.atlasCover:hover .atlasPortalSlit {
+  box-shadow: 0 0 32px rgba(210, 195, 255, 0.32);
+}
+
+/* Dev · тест «только формы» — NEXT_PUBLIC_PROFILE_SHAPE_AUDIT=1 или class в DevTools */
+.pageShapeAudit :is(
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  li,
+  button,
+  a,
+  span,
+  blockquote,
+  label
+) {
+  color: transparent !important;
+  text-shadow: none !important;
+}
+
+.pageShapeAudit :is(button, a) {
+  -webkit-text-fill-color: transparent;
+}

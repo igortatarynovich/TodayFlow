@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://todayflow.app/schemas/reference_machine_contract_v1.json",
+  "title": "TodayFlow Reference Machine Contract v1",
+  "description": "Machine-only reference record for DayModel aggregation. No Content Contract fields. See docs/DAYMODEL_INPUT_CONTRACT.md and docs/schemas/REFERENCE_MACHINE_CONTRACT_V1.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "domain",
+    "entity_code",
+    "version",
+    "status",
+    "machine_contract"
+  ],
+  "properties": {
+    "contract_version": {
+      "type": "string",
+      "const": "reference_machine_contract_v1"
+    },
+    "domain": {
+      "type": "string",
+      "enum": ["tarot", "numerology", "astrology", "emotional_state"]
+    },
+    "entity_code": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z0-9][a-z0-9._-]*$"
+    },
+    "entity_type": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "review", "active", "deprecated", "archived"]
+    },
+    "source_type": {
+      "type": "string",
+      "enum": ["system", "expert", "ai_assisted"]
+    },
+    "valid_from": {
+      "type": "string",
+      "format": "date"
+    },
+    "machine_contract": {
+      "type": "object"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "domain": { "enum": ["tarot", "numerology", "astrology"] }
+        },
+        "required": ["domain"]
+      },
+      "then": {
+        "properties": {
+          "machine_contract": { "$ref": "#/$defs/daymodel_source_machine_contract" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "domain": { "const": "emotional_state" } },
+        "required": ["domain"]
+      },
+      "then": {
+        "properties": {
+          "machine_contract": { "$ref": "#/$defs/emotional_state_machine_contract" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "vector_axes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "action_reflection",
+        "expansion_consolidation",
+        "self_others",
+        "structure_flow"
+      ],
+      "properties": {
+        "action_reflection": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "expansion_consolidation": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "self_others": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "structure_flow": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        }
+      }
+    },
+    "tempo_enum": {
+      "type": "string",
+      "enum": ["slow", "steady", "dynamic", "fast"]
+    },
+    "risk_level_enum": {
+      "type": "string",
+      "enum": ["low", "medium", "high"]
+    },
+    "emotional_load_enum": {
+      "type": "string",
+      "enum": ["calm", "neutral", "intense"]
+    },
+    "confidence_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "risk_modifier_score": {
+      "type": "number",
+      "minimum": -1,
+      "maximum": 1
+    },
+    "daymodel_source_machine_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "vector",
+        "tempo",
+        "risk",
+        "risk_modifier",
+        "emotional_load",
+        "confidence"
+      ],
+      "properties": {
+        "vector": { "$ref": "#/$defs/vector_axes" },
+        "tempo": { "$ref": "#/$defs/tempo_enum" },
+        "risk": { "$ref": "#/$defs/risk_level_enum" },
+        "risk_modifier": { "$ref": "#/$defs/risk_modifier_score" },
+        "emotional_load": { "$ref": "#/$defs/emotional_load_enum" },
+        "confidence": { "$ref": "#/$defs/confidence_score" }
+      }
+    },
+    "emotional_state_machine_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["emotional_load", "risk_modifier", "confidence"],
+      "properties": {
+        "emotional_load": { "$ref": "#/$defs/emotional_load_enum" },
+        "tempo_cap": { "$ref": "#/$defs/tempo_enum" },
+        "energy_band": {
+          "type": "string",
+          "enum": ["low", "medium", "high"]
+        },
+        "stress_band": {
+          "type": "string",
+          "enum": ["low", "medium", "high"]
+        },
+        "risk_modifier": { "$ref": "#/$defs/risk_modifier_score" },
+        "confidence": { "$ref": "#/$defs/confidence_score" }
+      }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "spheres": {
+    "love": { "score": 74 },
+    "work": { "score": 70 },
+    "money": { "score": 66 },
+    "energy": {
+      "score": 72,
+      "insight": "Энергия — про сон, нагрузку и эмоциональный фон.",
+      "reason": "Тело просит стабильности, не скачков."
+    }
+  },
+  "narrative": {
+    "guide": {
+      "generation_id": "gen-obs-growth",
+      "payload": {
+        "headline": "Проживать день через устойчивость и понятный ритм",
+        "subline": "Без резких рывков."
+      }
+    },
+    "spheres": {
+      "payload": {
+        "body_insight": "Энергия — про сон, нагрузку и эмоциональный фон.",
+        "state_reason": "Тело просит ровный ритм — сон и вода важнее обещаний."
+      }
+    }
+  },
+  "morning_ritual": {
+    "daily_horoscope": {
+      "spine": {
+        "best_mode": "Проживать день через устойчивость.",
+        "first_move": "Сделай один шаг до обеда.",
+        "main_risk": "Распыление."
+      },
+      "scenarios": [
+        { "slug": "love", "focus": "Честный контакт", "summary": "Прямой разговор." },
+        { "slug": "career", "focus": "Один вектор", "summary": "Завершение линии." },
+        { "slug": "family", "focus": "Спокойный ритм", "summary": "Без контроля." }
+      ]
+    }
+  },
+  "fusion": { "scores": { "energy": 70 }, "encouragement": "Ровный день." },
+  "fallback_context": { "locale": "ru", "progress": {} }
+}

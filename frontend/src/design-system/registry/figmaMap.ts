@@ -1,0 +1,123 @@
+/**
+ * Figma TodayFlow — Product UI → code mapping.
+ * Source frame: TodayFlow_DesignSystem (file WxwGUutaPRKpLKEvAICEEC)
+ */
+
+export const DS_FIGMA_MAP = {
+  typography: {
+    "Display XL": "DsDisplayTitle size=xl",
+    "Display L": "DsDisplayTitle size=lg",
+    "H1 Headline": "DsHeadline",
+    "H2 Title": "DsTitle",
+    "H3 Subtitle": "DsSubtitle",
+    "Body L/M/S": "DsBody size=lg|md|sm",
+    Caption: "DsCaption",
+    "Mono UI": "DsBody + .mono",
+  },
+  colors: {
+    "bg--cream-*": "--tf-page, --tf-page-cream, --tf-cream-300/400",
+    "accent--gold-*": "--tf-accent-gold, --tf-accent-gold-200/600",
+    "ink--*": "--tf-ink, --tf-ink-soft, --tf-ink-100",
+    "semantic--*": "--tf-semantic-success|alert|error",
+  },
+  cards: {
+    "card--standard": "DsCard variant=standard",
+    "card--glass": "DsCard variant=glass",
+    "card--orbital": "DsCard variant=orbital",
+    "card--feature": "DsCard variant=feature",
+    "card--nox": "DsCard variant=dark",
+  },
+  buttons: {
+    "button--primary": "DsButton variant=primary",
+    "button--secondary": "DsButton variant=secondary",
+    "button--ghost": "DsButton variant=ghost",
+    "button--icon": "DsButton variant=icon",
+    "button--destructive": "DsButton variant=destructive",
+    "cta-button": "DsButton size=block",
+  },
+  forms: {
+    "input--text": "DsTextField",
+    "input--search": "DsSearchField",
+    "input--chip": "DsChipField",
+  },
+  tags: {
+    classifier: "DsClassifier",
+    tag: "DsTag",
+    pill: "DsPill",
+  },
+  navigation: {
+    "nav__web-sidebar": "DsAppSidebar + appNavConfig primary (5)",
+    "nav__ios-tabbar": "DsMobileTabBar + appNavConfig primary (5)",
+    "nav__android-bottom": "DsMobileTabBar variant=android",
+    "nav__nox-tabbar": "DsMobileTabBar variant=nox",
+    "navbar (web-landing)": "ProductWebGuestNav + appNavConfig guest (3)",
+  },
+  icons: {
+    "icon/sun": "IconSun · nav Сегодня",
+    "icon/map": "IconMap · nav Моя карта",
+    "icon/users": "IconUsers · nav Совместимость",
+    "icon/wallet-cards": "IconWalletCards · nav Таро",
+    "icon/activity": "IconActivity · nav Практики",
+    "orbital/ring-*": "DsOrbitalViz",
+    "number/1-9": "numerology display",
+    "zodiac/zodiaccard-*": "zodiac glyphs",
+    "moon/moon-card-*": "moon phases",
+  },
+  orbitals: {
+    "orbital-node / hero": "DsOrbitalViz",
+    "theme-viz": "DsThemeViz",
+    "hero-orbital-card": "DsThemePanel",
+  },
+  mobile: {
+    "ritual-gates-section": "DsRitualGateSection",
+    "tarot-gate": "DsRitualGate kind=tarot",
+    "number-gate": "DsRitualGate kind=number",
+    "pulse-card": "DsPulseCard",
+    "insight-card": "DsInsightRow",
+  },
+  web: {
+    "feature-card": "DsFeatureTile",
+    "card-tarot|lunar|numerology": "DsInsightTile",
+    "preview-panel": "DsThemePanel variant=marketing",
+    timeline: "DsTimeline",
+    "weekly-bars": "DsWeeklyBars",
+    "streak-ring": "DsStreakRing",
+  },
+  layouts: {
+    "web-landing": "DsMarketingPage (5:4)",
+    "web-auth": "AuthWebScreen + AuthWebFormScreen (55:554)",
+    "web-onboarding": "OnboardingWebScreen (29:777) + value-first guest flow",
+    "web-today-foundation": "TodayWebDashboard layout=composition (40:273)",
+    "web-today-personalized": "TodayWebDashboard + TodayPersonalizedProductSection (46:5)",
+    "web-today-evening": "TodayEveningProductClose in composition (46:194)",
+    "web-today-full": "TodayWebDashboard layout=full (49:4)",
+    "web-profile": "ProfileWebScreen + ProfileV2SystemScreen (38:7 legacy · 154:2 v2)",
+    "profile-v2-system": "ProfileV2SystemScreen + ProductWebAppShell (154:2)",
+    "web-compatibility-hub": "CompatibilityWebScreen + CompatibilityWebHub (40:4)",
+    "web-compatibility-result": "CompatibilityWebScreen + CompatibilityWebResult (40:151)",
+    /** @deprecated archive — light hub 55:449 */
+    "web-tarot-hub-light": "archive · web-tarot-hub (55:449)",
+    "web-tarot-hub": "TarotHubMain + TarotShell (122:8)",
+    "web-tarot-question": "TarotQuestionMain + TarotShell (122:161)",
+    "web-tarot-spread-ritual": "spread ritual + TarotShell (122:297)",
+    "web-tarot-result": "TarotWebResult + TarotShell (122:412)",
+    "draft-tarot-dark-shell": "archive · draft-tarot-dark-shell (65:2)",
+    "web-practices": "PracticesWebScreen + PracticesV2SystemScreen (162:1522)",
+    "practices-v2-system": "PracticesV2SystemScreen + ProductWebAppShell (162:1522)",
+    "web-practice-session": "PracticeSessionWebScreen (163:1862 detail flow)",
+    "ios-today-foundation": "DsMobileShell (16:5)",
+  },
+  productComponents: {
+    "practice/row": "DsPracticeRow (102:8)",
+    "practice/program-card": "PracticesWebProgramCard",
+    "ritual/gate": "DsRitualGate (102:35)",
+    "tarot/spread-option": "TarotWebHub spread row (102:26)",
+    "milestone/card": "DsTimeline event row (102:32)",
+    "compat/score": "CompatibilityWebResult score (91:246)",
+    "empty-state": "DsEmptyState (91:249)",
+    "loading/skeleton": "DsSkeleton (91:250)",
+    "error/banner": "DsErrorBanner (91:251)",
+  },
+} as const;
+
+export type DsFigmaCategory = keyof typeof DS_FIGMA_MAP;

@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "version": "v1.0",
+    "description": "TodayFlow Auto Insights v1.0 — автоматические выводы системы на основе данных трекера и дневника. Ключевая магия: 'меня видят'.",
+    "created_at": "2026-01-25"
+  },
+  "insights": [
+    {
+      "id": "insight.001",
+      "user_id": "user.example",
+      "date": "2026-01-27",
+      "type": "streak",
+      "insight_text": "Ты держишь фокус уже 3 дня подряд — это меняет ритм.",
+      "data_points": {
+        "streak_days": 3,
+        "practice_id": "practice.001",
+        "completion_rate": 1.0
+      },
+      "created_at": "2026-01-27T08:00:00Z"
+    },
+    {
+      "id": "insight.002",
+      "user_id": "user.example",
+      "date": "2026-01-28",
+      "type": "pattern",
+      "insight_text": "Сопротивление снижается, когда ты не торопишься.",
+      "data_points": {
+        "pattern": "slowing_down",
+        "days_with_pause": 5,
+        "state_improvement": 0.3
+      },
+      "created_at": "2026-01-28T08:00:00Z"
+    },
+    {
+      "id": "insight.003",
+      "user_id": "user.example",
+      "date": "2026-01-29",
+      "type": "shift",
+      "insight_text": "Ты чаще выбираешь паузу, чем раньше.",
+      "data_points": {
+        "practice_id": "practice.001",
+        "frequency_increase": 0.4,
+        "baseline_days": 7
+      },
+      "created_at": "2026-01-29T08:00:00Z"
+    }
+  ]
+}

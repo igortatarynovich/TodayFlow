@@ -1,0 +1,107 @@
+/**
+ * Surface B · Insight — TODAYFLOW_FOUNDATION_UI §4
+ */
+
+.surface {
+  padding: var(--tf-surface-insight-pad-y, 22px) var(--tf-surface-insight-pad-x, 21px);
+  border-radius: var(--tf-surface-insight-radius, 28px);
+  background: var(--tf-surface-insight-bg, rgba(255, 253, 249, 0.88));
+  box-shadow: var(--tf-surface-insight-shadow, 0 14px 48px rgba(91, 67, 35, 0.06));
+  border: 1px solid rgba(201, 168, 115, 0.18);
+  box-sizing: border-box;
+}
+
+.warm {
+  border-color: rgba(201, 168, 115, 0.32);
+  background: rgba(255, 251, 243, 0.96);
+}
+
+.love {
+  background: var(--tf-insight-love-bg, linear-gradient(145deg, rgba(255, 248, 246, 0.94), rgba(255, 253, 249, 0.88)));
+}
+
+.money {
+  background-image:
+    linear-gradient(rgba(107, 83, 68, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(107, 83, 68, 0.04) 1px, transparent 1px);
+  background-size: 18px 18px;
+  background-color: rgba(255, 253, 249, 0.9);
+}
+
+.eyebrow {
+  margin: 0 0 0.55rem;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.body {
+  margin: 0;
+  font-size: var(--tf-type-body-size, 0.9375rem);
+  line-height: 1.55;
+  color: var(--tf-ink-soft, #5b4630);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.linkAccent {
+  color: var(--tf-accent-action, #8f6b3a);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.compact {
+  padding: 0.9rem;
+  border-radius: 16px;
+  box-shadow: none;
+}
+
+.statLabel {
+  margin: 0;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.statValue {
+  margin: 0.35rem 0 0;
+  font-size: var(--tf-type-body-size, 0.9375rem);
+  font-weight: 700;
+  color: var(--tf-ink, #1a1510);
+}
+
+.statHint {
+  margin: 0.35rem 0 0;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  line-height: 1.6;
+  color: var(--tf-body, #475569);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
+  font-size: var(--tf-type-section-size, 1.25rem);
+  font-weight: var(--tf-type-section-weight, 600);
+  color: var(--tf-ink, #1a1510);
+}
+
+.sectionLead {
+  margin: 0.45rem 0 0;
+  font-size: var(--tf-type-body-size, 0.9375rem);
+  line-height: 1.55;
+  color: var(--tf-body, #475569);
+}
+
+.linkAccent:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

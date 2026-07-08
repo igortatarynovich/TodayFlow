@@ -1,0 +1,28 @@
+[
+  {
+    "id": "solar_radiance",
+    "title": "Solar Radiance",
+    "intention": "Confidence + clear expression",
+    "axes": ["A1", "A4"],
+    "mantra": "Om Ram Ravaye Namaha",
+    "pronunciation": "om rahm rah-vah-yay nah-mah-hah",
+    "breath_count": 9,
+    "guidance": "Положи ладони на солнечное сплетение, дыши тепло, произноси на выдохе.",
+    "stones": ["citrine", "sunstone"],
+    "best_for_phases": ["waxing_crescent", "full"],
+    "notes": "Подходит, когда Meaning Block говорит о проявленности и ownership."
+  },
+  {
+    "id": "lunar_soften",
+    "title": "Lunar Soften",
+    "intention": "Эмоциональная регуляция и принятие",
+    "axes": ["A2", "A6"],
+    "mantra": "So Hum",
+    "pronunciation": "со хом",
+    "breath_count": 16,
+    "guidance": "На вдохе мысленно произноси ‘So’, на выдохе ‘Hum’. Позволяй плечам опускаться.",
+    "stones": ["moonstone", "pearl"],
+    "best_for_phases": ["waning_crescent", "new"],
+    "notes": "Используем в Context callouts, когда Lite подчёркивает эмоциональную защиту."
+  }
+]

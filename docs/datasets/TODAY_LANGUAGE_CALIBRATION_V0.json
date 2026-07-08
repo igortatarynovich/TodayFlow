@@ -1,0 +1,3276 @@
+{
+  "schema_version": "0.5",
+  "dataset_id": "TODAY_LANGUAGE_CALIBRATION_V0",
+  "status": "IN_PROGRESS",
+  "target_count": {
+    "min": 100,
+    "max": 200
+  },
+  "milestone_before_code": {
+    "bad_min": 30,
+    "good_min": 30,
+    "from_api_live": true,
+    "note": "60+ api_live with editorial_decision + core_scene + anchor_types; TL-1 only after TL-0C.4 anchor analysis"
+  },
+  "canon_ref": "../TODAY_LANGUAGE_V1.md",
+  "anti_patterns_ref": "../TODAY_LANGUAGE_ANTI_PATTERNS_V0.md",
+  "strong_patterns_ref": "../TODAY_LANGUAGE_STRONG_PATTERNS_V0.md",
+  "editorial_decisions": {
+    "keep": "Оставить как есть — форма и сцена достаточны для показа",
+    "rewrite": "Идея / core_scene рабочие, исполнение слабое — нужна правка (text_improved)",
+    "reject": "Выкинуть полностью — нет спасаемой сцены или это rubric/musor",
+    "exemplar": "Образец для библиотеки генерации — эталон формы и драматургии",
+    "borderline": "Сцена или слабая зацепка есть, но недостаточно для keep — hypothesis bucket scene_only"
+  },
+  "core_scenes": {
+    "_note": "Нормализованные сцены. После 60+ разметок — основа генерации Today, важнее отдельных фраз.",
+    "catalog": [
+      {
+        "id": "delayed_message",
+        "label_ru": "Сообщение, когда перестали ждать",
+        "strong_pattern_id": "SP-001"
+      },
+      {
+        "id": "postponed_conversation",
+        "label_ru": "Разговор, который откладывали",
+        "strong_pattern_id": "SP-003"
+      },
+      {
+        "id": "reassessing_decision",
+        "label_ru": "Старое решение выглядит иначе",
+        "strong_pattern_id": "SP-007"
+      },
+      {
+        "id": "recurring_topic",
+        "label_ru": "Возвращение к старой / «закрытой» теме",
+        "strong_pattern_id": "SP-003"
+      },
+      {
+        "id": "unexpected_offer",
+        "label_ru": "Предложение, которое обычно проигнорировали бы",
+        "strong_pattern_id": "SP-006"
+      },
+      {
+        "id": "unresolved_conflict",
+        "label_ru": "Незакрытый конфликт / недосказанность",
+        "strong_pattern_id": "SP-003"
+      },
+      {
+        "id": "inner_conflict_logic_vs_feeling",
+        "label_ru": "Логика vs ощущение — внутренний спор",
+        "strong_pattern_id": "SP-002"
+      },
+      {
+        "id": "self_promise_procrastination",
+        "label_ru": "Обещания себе, откладываемые снова и снова",
+        "strong_pattern_id": "SP-004"
+      },
+      {
+        "id": "exhausted_explaining",
+        "label_ru": "Устал объяснять одному и тому же человеку",
+        "strong_pattern_id": "SP-005"
+      },
+      {
+        "id": "random_phrase_as_sign",
+        "label_ru": "Ответ через случайную фразу / мимоходный контакт",
+        "strong_pattern_id": "SP-006"
+      },
+      {
+        "id": "agreeing_against_self",
+        "label_ru": "Снова соглашаюсь на неудобное ради мира",
+        "strong_pattern_id": "SP-005"
+      },
+      {
+        "id": "small_no_regains_control",
+        "label_ru": "Маленькое «нет» возвращает контроль",
+        "strong_pattern_id": "SP-004"
+      },
+      {
+        "id": "conversation_fear_of_answer",
+        "label_ru": "Страх услышать ответ сильнее разговора",
+        "strong_pattern_id": "SP-008"
+      },
+      {
+        "id": "control_overreach",
+        "label_ru": "Давлю на ситуацию — она сопротивляется",
+        "strong_pattern_id": "SP-002"
+      },
+      {
+        "id": "domain_rubric_leak",
+        "label_ru": "Рубрика домена вместо прогноза",
+        "anti_pattern_id": "AP-005"
+      },
+      {
+        "id": "pseudo_clarity",
+        "label_ru": "Обещание прояснения без образа",
+        "anti_pattern_id": "AP-001"
+      },
+      {
+        "id": "none",
+        "label_ru": "Нет узнаваемой сцены",
+        "strong_pattern_id": null
+      }
+    ]
+  },
+  "scene_categories": {
+    "communication": [
+      "message",
+      "call",
+      "conversation",
+      "conflict",
+      "confession"
+    ],
+    "work": [
+      "decision",
+      "offer",
+      "money",
+      "client",
+      "project"
+    ],
+    "relationships": [
+      "expectations",
+      "grievances",
+      "returning_person",
+      "support"
+    ],
+    "inner_world": [
+      "doubts",
+      "fatigue",
+      "motivation",
+      "choice"
+    ],
+    "coincidences": [
+      "signs",
+      "unexpected_meetings",
+      "synchronicity"
+    ]
+  },
+  "emotional_hooks": [
+    "hope",
+    "curiosity",
+    "relief",
+    "anticipation",
+    "recognition",
+    "inspiration"
+  ],
+  "writing_rules": [
+    "RULE_001",
+    "RULE_002",
+    "RULE_003"
+  ],
+  "entry_schema_v2": {
+    "id": "cal-NNN",
+    "corpus_id": "corp-XXXX | null — ссылка на TODAY_LANGUAGE_CORPUS_V0.json",
+    "source": "editorial_seed | api_live | canon_v1",
+    "surface": "guide.headline | day_layer | … | null",
+    "text": "string — исходная фраза",
+    "score": "1-10",
+    "reason": "string",
+    "editorial_decision": "keep | rewrite | reject | exemplar",
+    "anti_pattern_id": "AP-XXX | null",
+    "strong_pattern_id": "SP-XXX | null",
+    "core_scene": "id from core_scenes.catalog | null",
+    "text_improved": "string | null — обязателен для rewrite; опционален для reject",
+    "scene_category": "legacy optional — communication | work | …",
+    "scene_subcategory": "legacy optional",
+    "emotional_hooks": "legacy optional",
+    "rules_failed": "legacy optional",
+    "rules_passed": "legacy optional",
+    "api_metadata": {
+      "generation_log_id": "optional",
+      "module": "optional",
+      "date": "optional"
+    },
+    "stake_type": "id from stake_types.catalog | null",
+    "batch": "TL-0C.3_batch_N optional",
+    "anchor_types": "id[] from anchor_types.catalog — v0.5 (AT-001…AT-006)",
+    "internal_pattern_ids": "id[] from internal_patterns.catalog — v0.1 (IP-001…IP-008); AT-006 subtyping for H3",
+    "hypothesis_bucket": "no_anchor | scene_only | object_no_stake | null — batch_4 experiment",
+    "recognition_research": {
+      "tension_id": "editorial cluster e.g. unresolved_pressure | null — RAT component",
+      "pattern_id": "IP-001…008 slug | null — RAT component",
+      "life_object": "string | null — RAT component e.g. «разговор»",
+      "recognition_score": "1-5 baseline (ablation step 0) | null",
+      "ablation_scores": {
+        "after_object_strip": "1-5 | null — step 1",
+        "after_pattern_strip": "1-5 | null — step 2",
+        "after_tension_strip": "1-5 | null — step 3",
+        "after_neighbor_pattern_swap": "1-5 | null — step 4",
+        "after_neighbor_tension_swap": "1-5 | null — step 5"
+      },
+      "recognition_loss_reason": "life_object_loss | pattern_form_loss | tension_loss | bundle_loss | specificity_loss | temporal_context_loss | causality_loss | null",
+      "dominant_loss_component": "object | pattern | tension | bundle | null — per-case RAT read"
+    }
+  },
+  "recognition_ablation_aggregate": {
+    "note": "filled after 30-40 strong cases — avg delta recognition per component",
+    "n_cases": null,
+    "avg_delta_object_pct": null,
+    "avg_delta_pattern_pct": null,
+    "avg_delta_tension_pct": null,
+    "suggested_stack_variant": "A | B | C | D | E | null"
+  },
+  "recognition_relevance_map": {
+    "open_hypotheses": [
+      "Platform Layer Gate C18+: new layer only if observable phenomenon cannot be explained by current stack (v2.5)",
+      "Stop condition AR-010: layer before observable phenomenon — gate question before new stack",
+      "AR-009 Knowledge as Asset Illusion: high ROI ≠ store; Reusability axis; platform vs feature knowledge",
+      "Discovery fork OPEN until prod Intent Records — no Validation Protocol (v2.2)",
+      "Post-PR2: Discovery Watchlist observation only — not engine, not canon tier",
+      "Fork review at >=50-100 completed IR + weeks history + contradiction events",
+      "RRM is recognition tier of KIP — not the whole policy",
+      "Do not score discovery_relevance via RAT editorial at T0",
+      "Post-AR-004: Acquisition Cost + Observability + Knowledge ROI — AR-008; Reusability — AR-009; KIP sign-off only after observability + reusability maps"
+    ],
+    "status": "hypothesis",
+    "knowledge_investment_economics": {
+      "status": "hypothesis",
+      "value_axes": ["decision_relevance", "recognition_relevance", "discovery_relevance"],
+      "cost_axis": "acquisition_cost",
+      "feasibility_axis": "observability",
+      "process_fit_axis": "reusability",
+      "knowledge_roi_question": "Is the knowledge worth the cost to acquire and maintain?",
+      "reusability_question": "How many processes can use this knowledge repeatedly?",
+      "investment_policy_hypothesis": "C17 ∩ RRM ∩ Observability ∩ Reusability",
+      "platform_vs_feature": "High ROI with single consumer may be feature knowledge — not PIM infrastructure",
+      "consumer_catalog": ["guidance", "DRE", "reflection", "planning", "prioritization", "future_retrieval"],
+      "acquisition_cost_tiers": ["low", "medium", "high"],
+      "observability_tiers": ["low", "medium", "high"],
+      "reusability_tiers": ["low", "medium", "high", "uncertain"],
+      "knowledge_roi_tiers": ["low", "high", "uncertain"],
+      "ar009_knowledge_as_asset_illusion": {
+        "id": "AR-009",
+        "risk": "High ROI implies permanent PIM storage",
+        "parallel_chain": ["scene → good text", "anchor → good text", "pattern → recognition source", "high ROI → store"],
+        "mitigation": "Reusability map before KIP; PIM for processes not assets"
+      },
+      "post_n40_sequence": [
+        "RRM correlation survivor → knowledge_type_class",
+        "Observability map by knowledge_type_class",
+        "Knowledge ROI editorial sketch",
+        "Reusability map — platform vs feature knowledge",
+        "KIP sign-off"
+      ]
+    },
+    "knowledge_type_class_catalog": [
+      {"id": "behavioral_pattern", "label_en": "Behavioral Pattern", "label_ru": "Поведенческий паттерн", "recognition_hypothesis": "high"},
+      {"id": "repeated_decision", "label_en": "Repeated Decision", "label_ru": "Повторяющееся решение", "recognition_hypothesis": "medium_high"},
+      {"id": "social_dynamic", "label_en": "Social Dynamic", "label_ru": "Социальная динамика", "recognition_hypothesis": "medium_high"},
+      {"id": "work_habit", "label_en": "Work Habit", "label_ru": "Рабочая привычка", "recognition_hypothesis": "low"},
+      {"id": "preference", "label_en": "Preference", "label_ru": "Предпочтение", "recognition_hypothesis": "low"},
+      {"id": "life_object", "label_en": "Life Object", "label_ru": "Жизненный объект", "recognition_hypothesis": "text_class_dependent"},
+      {"id": "emotional_tendency", "label_en": "Emotional Tendency", "label_ru": "Эмоциональная склонность", "recognition_hypothesis": "medium"},
+      {"id": "recurring_conflict", "label_en": "Recurring Conflict", "label_ru": "Повторяющийся конфликт", "recognition_hypothesis": "high"}
+    ],
+    "knowledge_type_catalog": [
+      {"id": "behavioral_cycles", "label_ru": "Поведенческие циклы", "knowledge_type_class": "behavioral_pattern", "recognition_relevance_tier": "very_high", "discovery_relevance_tier": "medium"},
+      {"id": "ambiguity_avoidance", "label_ru": "Избегание неопределённого outcome", "knowledge_type_class": "behavioral_pattern", "recognition_relevance_tier": "medium", "discovery_relevance_tier": "very_high"},
+      {"id": "open_loops", "label_ru": "Незавершённости", "knowledge_type_class": "recurring_conflict", "recognition_relevance_tier": "high"},
+      {"id": "recurring_decisions", "label_ru": "Повторяющиеся решения", "knowledge_type_class": "repeated_decision", "recognition_relevance_tier": "high"},
+      {"id": "domestic_preferences", "label_ru": "Бытовые предпочтения", "knowledge_type_class": "preference", "recognition_relevance_tier": "low"},
+      {"id": "static_profile_facts", "label_ru": "Статические факты профиля", "knowledge_type_class": "work_habit", "recognition_relevance_tier": "very_low"}
+    ],
+    "acquisition_path_hypothesis": "Signal → Candidate Knowledge Type → Value (C17 + recognition + discovery) → Observability + Reusability + acquisition_cost → Knowledge ROI → KIP → PIM | drop | feature-scoped",
+    "entry_fields": "recognition_relevance · discovery_relevance (optional hyp) · decision_relevance_hint · acquisition_cost · observability · knowledge_roi_hint · reusability · consumer_affinity[] · platform_knowledge_hint",
+    "entries": [
+      {"knowledge_type": "overcommitment", "label_ru": "Часто берёт на себя больше, чем успевает", "knowledge_type_class": "behavioral_pattern", "recognition_relevance": "very_high", "discovery_relevance": "medium", "decision_relevance_hint": "high", "acquisition_cost": "high", "observability": "medium", "knowledge_roi_hint": "uncertain", "reusability": "high", "consumer_affinity": ["guidance", "DRE", "planning", "prioritization"], "platform_knowledge_hint": true},
+      {"knowledge_type": "recurring_overload", "label_ru": "Часто перегружается", "knowledge_type_class": "behavioral_pattern", "recognition_relevance": "high", "decision_relevance_hint": "high", "acquisition_cost": "medium", "observability": "high", "knowledge_roi_hint": "high", "reusability": "high", "consumer_affinity": ["guidance", "DRE", "reflection", "planning", "prioritization", "future_retrieval"], "platform_knowledge_hint": true},
+      {"knowledge_type": "postpones_ambiguous_outcome_tasks", "label_ru": "Откладывает задачи с неопределённым результатом", "knowledge_type_class": "behavioral_pattern", "recognition_relevance": "medium", "discovery_relevance": "very_high", "decision_relevance_hint": "medium", "acquisition_cost": "high", "observability": "medium", "knowledge_roi_hint": "uncertain"},
+      {"knowledge_type": "deadline_overestimation", "label_ru": "Переоценивает сроки", "knowledge_type_class": "behavioral_pattern", "recognition_relevance": "high", "discovery_relevance": "high", "decision_relevance_hint": "high", "acquisition_cost": "medium", "observability": "medium", "knowledge_roi_hint": "uncertain"},
+      {"knowledge_type": "waiting_for_reply", "label_ru": "Ждёт ответа дольше, чем нужно", "knowledge_type_class": "social_dynamic", "recognition_relevance": "very_high", "decision_relevance_hint": "medium", "acquisition_cost": "high", "observability": "low", "knowledge_roi_hint": "uncertain", "reusability": "uncertain", "consumer_affinity": ["DRE"], "platform_knowledge_hint": false},
+      {"knowledge_type": "prefers_quiet_work", "label_ru": "Любит работать в тишине", "knowledge_type_class": "preference", "recognition_relevance": "low", "decision_relevance_hint": "medium", "acquisition_cost": "low", "observability": "high", "knowledge_roi_hint": "low", "reusability": "low", "consumer_affinity": [], "platform_knowledge_hint": false},
+      {"knowledge_type": "works_with_music", "label_ru": "Любит работать под музыку", "knowledge_type_class": "preference", "recognition_relevance": "low", "decision_relevance_hint": "low", "acquisition_cost": "low", "observability": "high", "knowledge_roi_hint": "low", "reusability": "low", "consumer_affinity": [], "platform_knowledge_hint": false},
+      {"knowledge_type": "morning_meetings", "label_ru": "Предпочитает утренние встречи", "knowledge_type_class": "work_habit", "recognition_relevance": "low", "decision_relevance_hint": "medium", "acquisition_cost": "low", "observability": "high", "knowledge_roi_hint": "low"},
+      {"knowledge_type": "uses_notion", "label_ru": "Использует Notion", "knowledge_type_class": "work_habit", "recognition_relevance": "low", "decision_relevance_hint": "low", "acquisition_cost": "low", "observability": "high", "knowledge_roi_hint": "low"},
+      {"knowledge_type": "morning_vs_evening", "label_ru": "Предпочитает утро вечеру", "knowledge_type_class": "preference", "recognition_relevance": "low", "decision_relevance_hint": "low", "acquisition_cost": "low", "observability": "high", "knowledge_roi_hint": "low"},
+      {"knowledge_type": "postpones_hard_conversations", "label_ru": "Часто откладывает неприятные разговоры", "knowledge_type_class": "recurring_conflict", "recognition_relevance": "high", "decision_relevance_hint": "medium", "acquisition_cost": "high", "observability": "medium", "knowledge_roi_hint": "uncertain"},
+      {"knowledge_type": "conflict_avoidance", "label_ru": "Избегание конфликта", "knowledge_type_class": "recurring_conflict", "recognition_relevance": "high", "decision_relevance_hint": "high", "acquisition_cost": "high", "observability": "low", "knowledge_roi_hint": "uncertain"},
+      {"knowledge_type": "unfinished_commitments", "label_ru": "Незавершённые обязательства", "knowledge_type_class": "recurring_conflict", "recognition_relevance": "high", "decision_relevance_hint": "high", "acquisition_cost": "medium", "observability": "medium", "knowledge_roi_hint": "uncertain"},
+      {"knowledge_type": "coffee_habits", "label_ru": "Кофе / бытовые привычки", "knowledge_type_class": "preference", "recognition_relevance": "near_zero", "decision_relevance_hint": "low", "acquisition_cost": "low", "observability": "high", "knowledge_roi_hint": "low"}
+    ]
+  },
+  "recognition_research_tension_catalog": [
+    {"id": "overload_pressure", "note": "overcommitment · self_pressure · deferred_closure cluster"},
+    {"id": "waiting_release", "note": "pending · cannot let go"},
+    {"id": "stuck_transition", "note": "stuck · cannot move"},
+    {"id": "fatigue_body", "note": "bodily depletion"}
+  ],
+  "entries": [
+    {
+      "id": "cal-001",
+      "corpus_id": null,
+      "source": "editorial_seed",
+      "surface": null,
+      "text": "Вас ждут большие перемены.",
+      "score": 1,
+      "reason": "Нет сцены, нет эмоции, подходит любому человеку в любой день.",
+      "editorial_decision": "reject",
+      "anti_pattern_id": "AP-003",
+      "strong_pattern_id": null,
+      "core_scene": "none",
+      "text_improved": "То, что ещё месяц назад казалось окончательным решением, сегодня может начать выглядеть иначе. Не удивляйтесь, если появится желание пересмотреть планы, договорённости или направление, в котором вы двигались последнее время.",
+      "scene_category": "inner_world",
+      "scene_subcategory": "choice",
+      "emotional_hooks": [
+        "recognition",
+        "curiosity"
+      ],
+      "rules_failed": [
+        "RULE_001",
+        "RULE_002",
+        "RULE_003"
+      ],
+      "rules_passed": [],
+      "anchor_types": []
+    },
+    {
+      "id": "cal-002",
+      "corpus_id": null,
+      "source": "editorial_seed",
+      "surface": null,
+      "text": "Если в последнее время вы чувствовали, что топчетесь на месте, сегодня может появиться возможность посмотреть на ситуацию под другим углом.",
+      "score": 8,
+      "reason": "Есть узнаваемое состояние и конкретный триггер — пересмотр ситуации.",
+      "editorial_decision": "keep",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-007",
+      "core_scene": "reassessing_decision",
+      "text_improved": null,
+      "scene_category": "inner_world",
+      "scene_subcategory": "motivation",
+      "emotional_hooks": [
+        "hope",
+        "recognition"
+      ],
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002",
+        "RULE_003"
+      ],
+      "anchor_types": []
+    },
+    {
+      "id": "cal-003",
+      "corpus_id": null,
+      "source": "editorial_seed",
+      "surface": null,
+      "text": "Не удивляйтесь, если человек, от которого вы давно ждали ответа, неожиданно напомнит о себе именно тогда, когда вы уже перестали об этом думать.",
+      "score": 9,
+      "reason": "Моментальная визуализация: ожидание, отпускание, неожиданный контакт.",
+      "editorial_decision": "exemplar",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-001",
+      "core_scene": "delayed_message",
+      "text_improved": null,
+      "scene_category": "relationships",
+      "scene_subcategory": "returning_person",
+      "emotional_hooks": [
+        "anticipation",
+        "recognition",
+        "curiosity"
+      ],
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002",
+        "RULE_003"
+      ],
+      "anchor_types": []
+    },
+    {
+      "id": "cal-004",
+      "corpus_id": null,
+      "source": "editorial_seed",
+      "surface": null,
+      "text": "Сегодня вы можете открыть холодильник и понять, что вам пора меняться.",
+      "score": 2,
+      "reason": "Сцена формально есть, но неузнаваема и абсурдна — не «да, такое бывает».",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-001",
+      "strong_pattern_id": "SP-004",
+      "core_scene": "self_promise_procrastination",
+      "text_improved": "Если вы снова откладываете одно и то же решение «на понедельник», сегодня может быть проще заметить, что откладывание уже стало привычкой — и выбрать один маленький шаг, который реально сделаете до вечера.",
+      "scene_category": "inner_world",
+      "scene_subcategory": "choice",
+      "emotional_hooks": [],
+      "rules_failed": [
+        "RULE_002",
+        "RULE_003"
+      ],
+      "rules_passed": [
+        "RULE_001"
+      ],
+      "notes": "Контрпример: RULE_001 alone недостаточен.",
+      "anchor_types": []
+    },
+    {
+      "id": "cal-005",
+      "corpus_id": null,
+      "source": "canon_v1",
+      "surface": null,
+      "text": "Пришло время отпустить прошлое и открыть новую главу.",
+      "score": 2,
+      "reason": "Универсальная цитата — подходит любому в любой день; нет конкретной ситуации.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-008",
+      "strong_pattern_id": "SP-005",
+      "core_scene": "recurring_topic",
+      "text_improved": "Вы можете поймать себя на мысли, что продолжаете возвращаться к ситуации, которая давно должна была остаться позади. Сегодня хороший момент перестать искать в ней новые ответы и освободить место для следующего шага.",
+      "scene_category": "inner_world",
+      "scene_subcategory": "choice",
+      "emotional_hooks": [],
+      "rules_failed": [
+        "RULE_001",
+        "RULE_002",
+        "RULE_003"
+      ],
+      "rules_passed": [],
+      "anchor_types": []
+    },
+    {
+      "id": "cal-006",
+      "corpus_id": null,
+      "source": "canon_v1",
+      "surface": null,
+      "text": "Сегодня Вселенная будет подталкивать вас к переменам.",
+      "score": 2,
+      "reason": "Шаблон эзотерики без конкретики — нет триггера, через что придут перемены.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-007",
+      "strong_pattern_id": "SP-006",
+      "core_scene": "unexpected_offer",
+      "text_improved": "Сегодня Вселенная может несколько раз намекнуть вам, что пора выходить из привычного сценария — через неожиданный разговор, новую идею или предложение, которое вы обычно бы проигнорировали.",
+      "scene_category": "coincidences",
+      "scene_subcategory": "signs",
+      "emotional_hooks": [],
+      "rules_failed": [
+        "RULE_001",
+        "RULE_002",
+        "RULE_003"
+      ],
+      "rules_passed": [],
+      "anchor_types": []
+    },
+    {
+      "id": "cal-007",
+      "corpus_id": null,
+      "source": "canon_v1",
+      "surface": null,
+      "text": "Сегодня может появиться ощущение, что старый способ решать вопрос больше не работает.",
+      "score": 3,
+      "reason": "Абстракция без жизненного контекста — непонятно, какой вопрос и какой способ.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-001",
+      "strong_pattern_id": "SP-005",
+      "core_scene": "recurring_topic",
+      "text_improved": "Если вы снова мысленно возвращаетесь к одному и тому же разговору, пытаясь придумать другой исход, возможно, пришло время перестать переписывать прошлое и направить энергию туда, где ещё можно что-то изменить.",
+      "scene_category": "communication",
+      "scene_subcategory": "conversation",
+      "emotional_hooks": [],
+      "rules_failed": [
+        "RULE_001",
+        "RULE_002",
+        "RULE_003"
+      ],
+      "rules_passed": [],
+      "anchor_types": []
+    },
+    {
+      "id": "cal-008",
+      "corpus_id": null,
+      "source": "canon_v1",
+      "surface": null,
+      "text": "Доверяйте своей интуиции.",
+      "score": 1,
+      "reason": "Пустая универсальная цитата; нет сцены, узнавания, эмоции.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-006",
+      "strong_pattern_id": "SP-002",
+      "core_scene": "inner_conflict_logic_vs_feeling",
+      "text_improved": "Если сегодня логика говорит одно, а внутреннее ощущение продолжает тянуть в другую сторону — не спешите игнорировать этот сигнал.",
+      "scene_category": "inner_world",
+      "scene_subcategory": "doubts",
+      "emotional_hooks": [],
+      "rules_failed": [
+        "RULE_001",
+        "RULE_002",
+        "RULE_003"
+      ],
+      "rules_passed": [],
+      "anchor_types": []
+    },
+    {
+      "id": "cal-009",
+      "corpus_id": null,
+      "source": "canon_v1",
+      "surface": null,
+      "text": "Отпустите контроль.",
+      "score": 1,
+      "reason": "Императив без контекста; не вызывает узнавания.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-006",
+      "strong_pattern_id": "SP-002",
+      "core_scene": "control_overreach",
+      "text_improved": "Чем сильнее вы пытаетесь удержать ситуацию под контролем, тем больше она может сопротивляться. Иногда самый быстрый путь вперёд начинается с того, что вы перестаёте давить.",
+      "scene_category": "inner_world",
+      "scene_subcategory": "choice",
+      "emotional_hooks": [],
+      "rules_failed": [
+        "RULE_001",
+        "RULE_002",
+        "RULE_003"
+      ],
+      "rules_passed": [],
+      "anchor_types": []
+    },
+    {
+      "id": "cal-010",
+      "corpus_id": null,
+      "source": "canon_v1",
+      "surface": null,
+      "text": "Сегодня вы можете получить ответ на вопрос, который давно откладывали. Не обязательно в виде озарения — иногда Вселенная говорит через случайную фразу, сообщение или разговор, который сначала покажется незначительным.",
+      "score": 9,
+      "reason": "Сцена, узнавание, эмоция (любопытство, надежда); конкретные каналы ответа.",
+      "editorial_decision": "exemplar",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-006",
+      "core_scene": "random_phrase_as_sign",
+      "text_improved": null,
+      "scene_category": "coincidences",
+      "scene_subcategory": "signs",
+      "emotional_hooks": [
+        "hope",
+        "curiosity",
+        "anticipation"
+      ],
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002",
+        "RULE_003"
+      ],
+      "anchor_types": []
+    },
+    {
+      "id": "cal-011",
+      "corpus_id": null,
+      "source": "canon_v1",
+      "surface": null,
+      "text": "Сегодня будет проще заметить, какие обещания вы постоянно даёте себе и откладываете уже не первую неделю.",
+      "score": 8,
+      "reason": "Узнаваемая внутренняя сцена — список обещаний себе, прокрастинация.",
+      "editorial_decision": "exemplar",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-004",
+      "core_scene": "self_promise_procrastination",
+      "text_improved": null,
+      "scene_category": "inner_world",
+      "scene_subcategory": "motivation",
+      "emotional_hooks": [
+        "recognition"
+      ],
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002",
+        "RULE_003"
+      ],
+      "anchor_types": []
+    },
+    {
+      "id": "cal-012",
+      "corpus_id": null,
+      "source": "canon_v1",
+      "surface": null,
+      "text": "Кто-то может снова поднять тему, которую вы считали давно закрытой.",
+      "score": 8,
+      "reason": "Социальная сцена — незакрытый разговор, узнавание.",
+      "editorial_decision": "exemplar",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-003",
+      "core_scene": "recurring_topic",
+      "text_improved": null,
+      "scene_category": "communication",
+      "scene_subcategory": "conflict",
+      "emotional_hooks": [
+        "recognition",
+        "curiosity"
+      ],
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002",
+        "RULE_003"
+      ],
+      "anchor_types": []
+    },
+    {
+      "id": "cal-013",
+      "corpus_id": null,
+      "source": "canon_v1",
+      "surface": null,
+      "text": "Вы можете неожиданно поймать себя на том, что устали объяснять очевидные вещи одному и тому же человеку.",
+      "score": 9,
+      "reason": "Точная micro-scene; сильное узнавание и эмоция (облегчение от осознания).",
+      "editorial_decision": "exemplar",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-005",
+      "core_scene": "exhausted_explaining",
+      "text_improved": null,
+      "scene_category": "communication",
+      "scene_subcategory": "conversation",
+      "emotional_hooks": [
+        "recognition",
+        "relief"
+      ],
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002",
+        "RULE_003"
+      ],
+      "anchor_types": []
+    },
+    {
+      "id": "cal-014",
+      "corpus_id": null,
+      "source": "canon_v1",
+      "surface": null,
+      "text": "Вам нужно работать над собой.",
+      "score": 1,
+      "reason": "Нет сцены; звучит как нравоучение.",
+      "editorial_decision": "reject",
+      "anti_pattern_id": "AP-003",
+      "strong_pattern_id": null,
+      "core_scene": "none",
+      "text_improved": "Сегодня может быть проще заметить один паттерн, который повторяется уже не первую неделю — и выбрать одно маленькое действие, чтобы его чуть сдвинуть.",
+      "scene_category": "none",
+      "scene_subcategory": null,
+      "emotional_hooks": [],
+      "rules_failed": [
+        "RULE_001",
+        "RULE_002",
+        "RULE_003"
+      ],
+      "rules_passed": [],
+      "anchor_types": []
+    },
+    {
+      "id": "cal-015",
+      "corpus_id": null,
+      "source": "canon_v1",
+      "surface": null,
+      "text": "Ожидается трансформация внутреннего состояния.",
+      "score": 1,
+      "reason": "Системный/абстрактный язык; нет жизненной сцены.",
+      "editorial_decision": "reject",
+      "anti_pattern_id": "AP-007",
+      "strong_pattern_id": null,
+      "core_scene": "none",
+      "text_improved": null,
+      "scene_category": "none",
+      "scene_subcategory": null,
+      "emotional_hooks": [],
+      "rules_failed": [
+        "RULE_001",
+        "RULE_002",
+        "RULE_003"
+      ],
+      "rules_passed": [],
+      "anchor_types": []
+    },
+    {
+      "id": "cal-016",
+      "corpus_id": null,
+      "source": "editorial_seed",
+      "surface": null,
+      "text": "Сегодня может появиться желание сделать шаг к разговору.",
+      "score": 4,
+      "reason": "Идея разговора рабочая (SP-003), но исполнение — AP-004: нет ставки, с кем, о чём, почему сегодня.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-004",
+      "strong_pattern_id": "SP-003",
+      "core_scene": "postponed_conversation",
+      "text_improved": "Сегодня может состояться разговор, который вы давно откладывали — не обязательно «большой», но тот, после которого станет чуть легче дышать.",
+      "scene_category": "communication",
+      "scene_subcategory": "conversation",
+      "emotional_hooks": [
+        "anticipation"
+      ],
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": [
+        "RULE_003"
+      ],
+      "anchor_types": []
+    },
+    {
+      "id": "cal-017",
+      "corpus_id": null,
+      "source": "editorial_seed",
+      "surface": "contract.domains.general",
+      "text": "Смысл и коммуникация станут ключевыми темами дня.",
+      "score": 2,
+      "reason": "Рубрика домена (AP-005), не прогноз; нет сцены и драматургии.",
+      "editorial_decision": "reject",
+      "anti_pattern_id": "AP-005",
+      "strong_pattern_id": null,
+      "core_scene": "domain_rubric_leak",
+      "text_improved": null,
+      "scene_category": "none",
+      "scene_subcategory": null,
+      "emotional_hooks": [],
+      "rules_failed": [
+        "RULE_001",
+        "RULE_002",
+        "RULE_003"
+      ],
+      "rules_passed": [],
+      "anchor_types": []
+    },
+    {
+      "id": "cal-018",
+      "corpus_id": null,
+      "source": "editorial_seed",
+      "surface": null,
+      "text": "Кто-то может написать вам именно тогда, когда вы уже решили, что ответа не будет.",
+      "score": 10,
+      "reason": "Эталон SP-001: ожидание, отпускание, delayed_message; ставка и интрига без лишних слов.",
+      "editorial_decision": "exemplar",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-001",
+      "core_scene": "delayed_message",
+      "text_improved": null,
+      "scene_category": "communication",
+      "scene_subcategory": "message",
+      "emotional_hooks": [
+        "anticipation",
+        "recognition",
+        "curiosity"
+      ],
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002",
+        "RULE_003"
+      ],
+      "anchor_types": [],
+      "recognition_research": {
+        "tension_id": "waiting_release",
+        "pattern_id": "released_expectation_contact",
+        "life_object": "ответ / сообщение",
+        "recognition_score": 5,
+        "ablation_survivor": "context_bundle",
+        "recognition_loss_reason": "pattern_form_loss",
+        "rat_ref": "../TODAY_RAT_VALIDATION_V0.json#cal-018",
+        "rat_status": "pilot_complete"
+      }
+    },
+    {
+      "id": "cal-019",
+      "corpus_id": "corp-2116",
+      "source": "api_live",
+      "surface": "day_engine_brief.do_hint",
+      "text": "Смысл и коммуникация",
+      "score": 1,
+      "reason": "Чистая рубрика домена (AP-005); не user-facing прогноз. TL-0B: no_scene, likely_good=false — совпадает.",
+      "editorial_decision": "reject",
+      "anti_pattern_id": "AP-005",
+      "strong_pattern_id": null,
+      "core_scene": "none",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_1",
+      "rules_failed": [
+        "RULE_001",
+        "RULE_002",
+        "RULE_003"
+      ],
+      "rules_passed": [],
+      "stake_type": "none",
+      "anchor_types": []
+    },
+    {
+      "id": "cal-020",
+      "corpus_id": "corp-2703",
+      "source": "api_live",
+      "surface": "energy_line",
+      "text": "Энергия дня поддерживает устойчивость и понимание.",
+      "score": 2,
+      "reason": "Красивый туман (AP-007): абстрактные сущности без триггера и образа.",
+      "editorial_decision": "reject",
+      "anti_pattern_id": "AP-007",
+      "strong_pattern_id": null,
+      "core_scene": "none",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_1",
+      "rules_failed": [
+        "RULE_001",
+        "RULE_002",
+        "RULE_003"
+      ],
+      "rules_passed": [],
+      "stake_type": "none",
+      "anchor_types": []
+    },
+    {
+      "id": "cal-021",
+      "corpus_id": "corp-0007",
+      "source": "api_live",
+      "surface": "headline",
+      "text": "Igor: сегодня день лучше раскрывается через смысл и коммуникацию, а не через резкость.",
+      "score": 2,
+      "reason": "Рубрика + персонализация вместо сцены (AP-005). Internal domain label в headline.",
+      "editorial_decision": "reject",
+      "anti_pattern_id": "AP-005",
+      "strong_pattern_id": null,
+      "core_scene": "domain_rubric_leak",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_1",
+      "rules_failed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "rules_passed": [],
+      "stake_type": "none",
+      "anchor_types": []
+    },
+    {
+      "id": "cal-022",
+      "corpus_id": "corp-2303",
+      "source": "api_live",
+      "surface": "profile_prism",
+      "text": "Стабилизация через повторяемость, смысл и коммуникация — твои ключевые темы дня.",
+      "score": 2,
+      "reason": "Ключевые темы дня = assembler rubric (AP-005), не жизненная драматургия.",
+      "editorial_decision": "reject",
+      "anti_pattern_id": "AP-005",
+      "strong_pattern_id": null,
+      "core_scene": "domain_rubric_leak",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_1",
+      "rules_failed": [
+        "RULE_001",
+        "RULE_002",
+        "RULE_003"
+      ],
+      "rules_passed": [],
+      "stake_type": "none",
+      "anchor_types": []
+    },
+    {
+      "id": "cal-023",
+      "corpus_id": "corp-0743",
+      "source": "api_live",
+      "surface": "personal_insight_body",
+      "text": "Когда мы делимся своими чувствами, это помогает наладить контакт с окружающими. Если ты чувствуешь себя изолированным, возможно, стоит сделать шаг навстречу и начать разговор. Простое общение может значительно улучшить атмосферу.",
+      "score": 3,
+      "reason": "Универсальная мудрость (AP-003). TL-0B likely_good=true — ложноположительный: trigger+emotion без ставки и сцены.",
+      "editorial_decision": "reject",
+      "anti_pattern_id": "AP-003",
+      "strong_pattern_id": null,
+      "core_scene": "none",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_1",
+      "rules_failed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "rules_passed": [
+        "RULE_003"
+      ],
+      "notes": "Показательный likely_good false positive.",
+      "stake_type": "none",
+      "anchor_types": [
+        "AT-006"
+      ],
+      "internal_pattern_ids": [
+        "IP-008"
+      ]
+    },
+    {
+      "id": "cal-024",
+      "corpus_id": "corp-0097",
+      "source": "api_live",
+      "surface": "scenario_tie_ins.love",
+      "text": "В любви сделай шаг к прямому разговору, чтобы избежать догадок и создать атмосферу доверия.",
+      "score": 4,
+      "reason": "AP-004: likely_good=true, has_trigger, но нет ставки — с кем, о чём, почему сегодня. Идея разговора (SP-003) рабочая.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-004",
+      "strong_pattern_id": "SP-003",
+      "core_scene": "postponed_conversation",
+      "text_improved": "Если вы уже неделю обходите одну тему намёками, сегодня может быть проще задать один прямой вопрос — не «большой разговор», а фразу, после которой не нужно угадывать.",
+      "batch": "TL-0C.3_batch_1",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": [
+        "RULE_003"
+      ],
+      "stake_type": "repeated_avoidance",
+      "anchor_types": [
+        "AT-004",
+        "AT-005"
+      ]
+    },
+    {
+      "id": "cal-025",
+      "corpus_id": "corp-0095",
+      "source": "api_live",
+      "surface": "scenario_tie_ins.love",
+      "text": "В любви сделай шаг к открытому разговору, чтобы установить доверие и ясность в отношениях.",
+      "score": 4,
+      "reason": "Тот же AP-004 + likely_good trap. «В любви» + императив без postponed/stakes.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-004",
+      "strong_pattern_id": "SP-003",
+      "core_scene": "postponed_conversation",
+      "text_improved": "Сегодня может всплыть разговор, который вы откладывали, потому что боялись испортить лёгкость в отношениях — иногда достаточно одной честной реплики, не «откровенного разговора».",
+      "batch": "TL-0C.3_batch_1",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": [
+        "RULE_003"
+      ],
+      "stake_type": "fear_of_answer",
+      "anchor_types": [
+        "AT-004",
+        "AT-005"
+      ]
+    },
+    {
+      "id": "cal-026",
+      "corpus_id": "corp-1634",
+      "source": "api_live",
+      "surface": "mini_decision_caption",
+      "text": "Сделай шаг к откровенному разговору с близким человеком.",
+      "score": 3,
+      "reason": "AP-004 + AP-006: голый императив; likely_good=true при нулевой ставке.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-004",
+      "strong_pattern_id": "SP-003",
+      "core_scene": "postponed_conversation",
+      "text_improved": "Если с близким человеком вы уже давно обходите одну тему, сегодня может хватить короткого «мне важно это обсудить» — без подготовленной речи.",
+      "batch": "TL-0C.3_batch_1",
+      "rules_failed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "rules_passed": [],
+      "stake_type": "repeated_avoidance",
+      "anchor_types": [
+        "AT-004",
+        "AT-005"
+      ]
+    },
+    {
+      "id": "cal-027",
+      "corpus_id": "corp-0343",
+      "source": "api_live",
+      "surface": "thesis_reminder",
+      "text": "День предлагает возможность углубить понимание себя и своих отношений, обращая внимание на влияние мыслей и чувств на взаимодействие с окружающими.",
+      "score": 3,
+      "reason": "Псевдособытие (AP-001): «углубить понимание» без образа. emotional_hook=true, no_scene=true.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-001",
+      "strong_pattern_id": "SP-005",
+      "core_scene": "pseudo_clarity",
+      "text_improved": "Вы можете заметить, как одна и та же мысль с утра возвращается в разговорах — не как конфликт, а как тема, которую вы всё ещё не назвали вслух.",
+      "batch": "TL-0C.3_batch_1",
+      "rules_failed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "rules_passed": [
+        "RULE_003"
+      ],
+      "stake_type": "emotional_cost",
+      "anchor_types": []
+    },
+    {
+      "id": "cal-028",
+      "corpus_id": "corp-0116",
+      "source": "api_live",
+      "surface": "scenarios.summary",
+      "text": "В отношениях сегодня особенно важно открыто поговорить о своих чувствах. Возможно, стоит инициировать разговор, который давно назрел, но ты его откладывал.",
+      "score": 5,
+      "reason": "Первая часть — AP-002/004; вторая — SP-003 (назрел/откладывал). Score 5: идея есть, исполнение смешанное.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-004",
+      "strong_pattern_id": "SP-003",
+      "core_scene": "postponed_conversation",
+      "text_improved": "Разговор, который давно назрел, но вы откладывали, может наконец стать проще — не потому что «пора быть открытыми», а потому что устали держать это в голове.",
+      "batch": "TL-0C.3_batch_1",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": [
+        "RULE_002",
+        "RULE_003"
+      ],
+      "stake_type": "repeated_avoidance",
+      "anchor_types": [
+        "AT-001",
+        "AT-004",
+        "AT-006"
+      ],
+      "internal_pattern_ids": [
+        "IP-001"
+      ]
+    },
+    {
+      "id": "cal-029",
+      "corpus_id": "corp-0204",
+      "source": "api_live",
+      "surface": "scenarios.focus",
+      "text": "Выбери задачу, которая требует твоего внимания, и не распыляйся на множество мелочей. Например, подготовь отчет, который уже давно откладывал.",
+      "score": 8,
+      "reason": "SP-004: конкретный объект (отчёт) + откладывание. Редкий api_live с узнаваемой сценой.",
+      "editorial_decision": "exemplar",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-004",
+      "core_scene": "self_promise_procrastination",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_1",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002",
+        "RULE_003"
+      ],
+      "stake_type": "repeated_avoidance",
+      "anchor_types": [
+        "AT-003",
+        "AT-004",
+        "AT-006"
+      ],
+      "internal_pattern_ids": [
+        "IP-001",
+        "IP-002"
+      ]
+    },
+    {
+      "id": "cal-030",
+      "corpus_id": "corp-0272",
+      "source": "api_live",
+      "surface": "where_conflict",
+      "text": "Главное натяжение возникает из-за усталости: стремление к движению может столкнуться с перегрузом задач и реактивными решениями.",
+      "score": 7,
+      "reason": "Узнаваемый конфликт дня (усталость vs перегруз) — не рубрика. Нет персональной stakes, но сцена есть.",
+      "editorial_decision": "keep",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-002",
+      "core_scene": "inner_conflict_logic_vs_feeling",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_1",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "stake_type": "overload_cost",
+      "anchor_types": [
+        "AT-001",
+        "AT-002",
+        "AT-006"
+      ],
+      "internal_pattern_ids": [
+        "IP-002",
+        "IP-007",
+        "IP-006"
+      ]
+    },
+    {
+      "id": "cal-031",
+      "corpus_id": "corp-0242",
+      "source": "api_live",
+      "surface": "thesis_reminder",
+      "text": "Выбор одного приоритета поможет вам избежать перегрузки и достичь ясности в действиях.",
+      "score": 6,
+      "reason": "Сцена перегруза узнаваема; формулировка ещё близка к AP-001 («ясность»). На грани keep/rewrite — оставляем keep для проверки schema.",
+      "editorial_decision": "keep",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-004",
+      "core_scene": "self_promise_procrastination",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_1",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "stake_type": "overload_cost",
+      "anchor_types": [
+        "AT-004",
+        "AT-006"
+      ],
+      "internal_pattern_ids": [
+        "IP-002"
+      ]
+    },
+    {
+      "id": "cal-032",
+      "corpus_id": "corp-0767",
+      "source": "api_live",
+      "surface": "personal_insight_body",
+      "text": "Когда ты чувствуешь усталость, важно не замыкаться в себе. Делая шаг к общению, ты не только укрепляешь связи, но и можешь получить поддержку. Попробуй найти время для откровенного разговора — это может снять напряжение и улучшить атмосферу.",
+      "score": 6,
+      "reason": "Первая часть — сцена (усталость → изоляция). Финал скатывается в AP-004. likely_good=true — спорно; keep как borderline.",
+      "editorial_decision": "keep",
+      "anti_pattern_id": "AP-004",
+      "strong_pattern_id": "SP-003",
+      "core_scene": "unresolved_conflict",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_1",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002",
+        "RULE_003"
+      ],
+      "notes": "Borderline: можно было rewrite — оставлен keep для калибровки границы.",
+      "stake_type": "emotional_cost",
+      "anchor_types": [
+        "AT-001",
+        "AT-006",
+        "AT-005"
+      ],
+      "internal_pattern_ids": [
+        "IP-007",
+        "IP-008"
+      ]
+    },
+    {
+      "id": "cal-033",
+      "corpus_id": "corp-0764",
+      "source": "api_live",
+      "surface": "personal_insight_body",
+      "text": "Когда ты фокусируешься на одном деле, это помогает избежать перегрузок и сохранить энергию. Попробуй выделить время для разговора с близкими — это укрепит связи и придаст уверенности.",
+      "score": 5,
+      "reason": "Перегруз + один фокус — ok; хвост «разговор / уверенность» без stakes (AP-002). Потенциальный keep на грани rewrite.",
+      "editorial_decision": "keep",
+      "anti_pattern_id": "AP-002",
+      "strong_pattern_id": "SP-004",
+      "core_scene": "self_promise_procrastination",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_1",
+      "rules_failed": [
+        "RULE_003"
+      ],
+      "rules_passed": [
+        "RULE_001"
+      ],
+      "stake_type": "overload_cost",
+      "anchor_types": [
+        "AT-004",
+        "AT-006",
+        "AT-005"
+      ],
+      "internal_pattern_ids": [
+        "IP-002"
+      ]
+    },
+    {
+      "id": "cal-034",
+      "corpus_id": "corp-0091",
+      "source": "api_live",
+      "surface": "scenario_tie_ins.love",
+      "text": "В любви постарайся привнести лёгкость, чтобы углубить эмоциональную связь с партнёром и сделать ваши разговоры более вдохновляющими.",
+      "score": 4,
+      "reason": "likely_good=true, но AP-002: эмоция («вдохновляющие») без истории и ставки. core_scene есть, stake нет.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-002",
+      "strong_pattern_id": "SP-003",
+      "core_scene": "postponed_conversation",
+      "stake_type": "relationship_tension",
+      "text_improved": "Если с партнёром вы уже неделю говорите «всё нормально», обходя одну тему, сегодня может хватить одной лёгкой, но честной фразы — не «большого разговора».",
+      "batch": "TL-0C.3_batch_2",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": [
+        "RULE_003"
+      ],
+      "anchor_types": [
+        "AT-005",
+        "AT-001"
+      ]
+    },
+    {
+      "id": "cal-035",
+      "corpus_id": "corp-1826",
+      "source": "api_live",
+      "surface": "mini_decision_caption",
+      "text": "Сегодня сделай шаг к откровенному разговору с близкими.",
+      "score": 3,
+      "reason": "AP-004 + likely_good. postponed_conversation без «с кем / о чём / почему сегодня».",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-004",
+      "strong_pattern_id": "SP-003",
+      "core_scene": "postponed_conversation",
+      "stake_type": "repeated_avoidance",
+      "text_improved": "Если с близкими вы уже давно обходите одну тему, сегодня может хватить короткого «мне важно это обсудить» — без подготовленной речи.",
+      "batch": "TL-0C.3_batch_2",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": [],
+      "anchor_types": [
+        "AT-004",
+        "AT-005"
+      ]
+    },
+    {
+      "id": "cal-036",
+      "corpus_id": "corp-0094",
+      "source": "api_live",
+      "surface": "scenario_tie_ins.love",
+      "text": "В любви сделай шаг к открытой беседе, чтобы избежать догадок и создать атмосферу доверия.",
+      "score": 4,
+      "reason": "AP-004: «избежать догадок» — идея SP-003, но императив без цены молчания.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-004",
+      "strong_pattern_id": "SP-003",
+      "core_scene": "postponed_conversation",
+      "stake_type": "repeated_avoidance",
+      "text_improved": "Если вы уже устали угадывать, что партнёр имел в виду, сегодня может быть проще один прямой вопрос — не «открытую беседу», а одну фразу.",
+      "batch": "TL-0C.3_batch_2",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": [],
+      "anchor_types": [
+        "AT-004",
+        "AT-005",
+        "AT-006"
+      ],
+      "internal_pattern_ids": [
+        "IP-003"
+      ]
+    },
+    {
+      "id": "cal-037",
+      "corpus_id": "corp-1501",
+      "source": "api_live",
+      "surface": "scenario_tie_ins.love",
+      "text": "Проведите откровенный разговор с партнером, чтобы углубить понимание и сблизиться.",
+      "score": 4,
+      "reason": "has_trigger, core_scene implied, score 4 — нет истории откладывания и страха.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-004",
+      "strong_pattern_id": "SP-003",
+      "core_scene": "postponed_conversation",
+      "stake_type": "relationship_tension",
+      "text_improved": "Тема, которую вы с партнёром снова откладываете «на выходные», может наконец всплыть — не обязательно как большой разговор, а как одна честная реплика.",
+      "batch": "TL-0C.3_batch_2",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": [],
+      "anchor_types": [
+        "AT-001",
+        "AT-004",
+        "AT-005"
+      ]
+    },
+    {
+      "id": "cal-038",
+      "corpus_id": "corp-2478",
+      "source": "api_live",
+      "surface": "scenario_tie_ins.love",
+      "text": "Удели время для откровенного разговора с партнером, чтобы углубить понимание и снять напряжение.",
+      "score": 4,
+      "reason": "«Снять напряжение» — stakes hint, но форма AP-004 (откровенный разговор как checkbox).",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-004",
+      "strong_pattern_id": "SP-003",
+      "core_scene": "unresolved_conflict",
+      "stake_type": "relationship_tension",
+      "text_improved": "Если напряжение с партнёром копится уже несколько дней, сегодня может быть про одну конкретную фразу — не про «откровенный разговор» целиком.",
+      "batch": "TL-0C.3_batch_2",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": [],
+      "anchor_types": [
+        "AT-001",
+        "AT-004",
+        "AT-005",
+        "AT-002"
+      ]
+    },
+    {
+      "id": "cal-039",
+      "corpus_id": "corp-0043",
+      "source": "api_live",
+      "surface": "scenario_tie_ins.family",
+      "text": "Будь более открытым с родными, простые разговоры могут значительно улучшить атмосферу в доме.",
+      "score": 4,
+      "reason": "trigger без stakes; family surface. Идея контакта ok, форма — императив AP-006.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-004",
+      "strong_pattern_id": "SP-003",
+      "core_scene": "unresolved_conflict",
+      "stake_type": "emotional_cost",
+      "text_improved": "Если дома уже несколько дней «всё нормально», но вы чувствуете дистанцию, сегодня может хватить одного короткого разговора — не «быть открытым», а сказать, что вас беспокоит.",
+      "batch": "TL-0C.3_batch_2",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": [],
+      "anchor_types": [
+        "AT-001",
+        "AT-005"
+      ]
+    },
+    {
+      "id": "cal-040",
+      "corpus_id": "corp-0759",
+      "source": "api_live",
+      "surface": "personal_insight_body",
+      "text": "Когда ты открываешься окружающим, это помогает не только им, но и тебе. Эмоциональная гармония, которую ты ищешь, может быть достигнута через искренние разговоры. Сегодня удели время для откровенного общения — это может принести тебе облегчение и понимание.",
+      "score": 4,
+      "reason": "likely_good=true; AP-002 + AP-004 в хвосте. «Эмоциональная гармония» без сцены изоляции.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-002",
+      "strong_pattern_id": "SP-003",
+      "core_scene": "unresolved_conflict",
+      "stake_type": "emotional_cost",
+      "text_improved": "Если ты уже несколько дней держишь в себе одну мысль, сегодня может стать легче после одного короткого сообщения близкому — не «откровенного общения», а одной честной строки.",
+      "batch": "TL-0C.3_batch_2",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": [
+        "RULE_003"
+      ],
+      "anchor_types": []
+    },
+    {
+      "id": "cal-041",
+      "corpus_id": "corp-0110",
+      "source": "api_live",
+      "surface": "scenario_tie_ins.love",
+      "text": "В отношениях постарайся выделить время для откровенного разговора, это поможет углубить понимание.",
+      "score": 4,
+      "reason": "AP-001 «углубить понимание» + AP-004. core_scene ok, stake none.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-001",
+      "strong_pattern_id": "SP-003",
+      "core_scene": "postponed_conversation",
+      "stake_type": "repeated_avoidance",
+      "text_improved": "Разговор, который вы с партнёром уже откладываете, может наконец стать проще — не потому что «пора быть открытыми», а потому что устали крутить это в голове.",
+      "batch": "TL-0C.3_batch_2",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": [],
+      "anchor_types": [
+        "AT-001",
+        "AT-004",
+        "AT-005"
+      ]
+    },
+    {
+      "id": "cal-042",
+      "corpus_id": "corp-1691",
+      "source": "api_live",
+      "surface": "personal_insight_body",
+      "text": "Сегодня важно не замыкаться в себе. Откровенные разговоры с близкими могут помочь снять напряжение и углубить понимание. Постарайся быть более открытым — это создаст гармонию в отношениях.",
+      "score": 4,
+      "reason": "Первая часть — сцена замыкания; дальше AP-004/AP-002 без конкретики.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-004",
+      "strong_pattern_id": "SP-003",
+      "core_scene": "unresolved_conflict",
+      "stake_type": "emotional_cost",
+      "text_improved": "Если ты уже чувствуешь, что замыкаешься и близкие это замечают, сегодня может хватить одной фразы «мне сейчас непросто» — без длинного объяснения.",
+      "batch": "TL-0C.3_batch_2",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": [],
+      "anchor_types": [
+        "AT-006",
+        "AT-001"
+      ],
+      "internal_pattern_ids": [
+        "IP-008"
+      ]
+    },
+    {
+      "id": "cal-043",
+      "corpus_id": "corp-0080",
+      "source": "api_live",
+      "surface": "scenario_tie_ins.love",
+      "text": "В любви важно строить отношения на открытом диалоге, а не на догадках — это создаст надежность и комфорт.",
+      "score": 3,
+      "reason": "AP-002: эмоция (надёжность, комфорт) без сцены. no_scene=true — идея догадок = SP-003.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-002",
+      "strong_pattern_id": "SP-003",
+      "core_scene": "postponed_conversation",
+      "stake_type": "repeated_avoidance",
+      "text_improved": "Если вы снова догадываетесь, что партнёр имел в виду, вместо того чтобы спросить, сегодня может быть про один прямой вопрос — не про «открытый диалог» вообще.",
+      "batch": "TL-0C.3_batch_2",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": [
+        "RULE_003"
+      ],
+      "anchor_types": [
+        "AT-006",
+        "AT-005"
+      ],
+      "internal_pattern_ids": [
+        "IP-003"
+      ]
+    },
+    {
+      "id": "cal-044",
+      "corpus_id": "corp-1730",
+      "source": "api_live",
+      "surface": "context_for_next_surfaces",
+      "text": "Сегодня важно сосредоточиться на том, чтобы делиться своими мыслями и чувствами с окружающими. Это поможет укрепить связи и избежать изоляции. Рассмотрите возможность откровенного разговора в отношениях и уделите внимание практическим аспектам в работе.",
+      "score": 4,
+      "reason": "likely_good=true; смесь AP-001 + AP-004 + work rubric. «Избежать изоляции» — stake hint без сцены.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-001",
+      "strong_pattern_id": "SP-003",
+      "core_scene": "unresolved_conflict",
+      "stake_type": "emotional_cost",
+      "text_improved": "Если ты уже чувствуешь дистанцию и откладываешь один разговор, сегодня может быть про одно сообщение или одну фразу — не про «делиться чувствами» вообще.",
+      "batch": "TL-0C.3_batch_2",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": [],
+      "anchor_types": [
+        "AT-006"
+      ],
+      "internal_pattern_ids": []
+    },
+    {
+      "id": "cal-045",
+      "corpus_id": "corp-0099",
+      "source": "api_live",
+      "surface": "scenario_tie_ins.love",
+      "text": "В любви старайся избегать догадок и стремись к прямому общению, чтобы создать атмосферу доверия и спокойствия.",
+      "score": 3,
+      "reason": "AP-002 emotional_hook + no_scene. «Догадки» — core SP-003, stake none.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-002",
+      "strong_pattern_id": "SP-003",
+      "core_scene": "postponed_conversation",
+      "stake_type": "repeated_avoidance",
+      "text_improved": "Если вы уже несколько дней читаете между строк вместо того, чтобы спросить напрямую, сегодня может быть про один вопрос — не про «атмосферу доверия».",
+      "batch": "TL-0C.3_batch_2",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": [
+        "RULE_003"
+      ],
+      "anchor_types": [
+        "AT-006",
+        "AT-005"
+      ],
+      "internal_pattern_ids": [
+        "IP-003"
+      ]
+    },
+    {
+      "id": "cal-046",
+      "corpus_id": "corp-1635",
+      "source": "api_live",
+      "surface": "mini_decision_caption",
+      "text": "Сделай шаг к откровенному разговору с близким.",
+      "score": 3,
+      "reason": "Классический AP-004 caption; likely_good=false но частый в api_live.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-004",
+      "strong_pattern_id": "SP-003",
+      "core_scene": "postponed_conversation",
+      "stake_type": "repeated_avoidance",
+      "text_improved": "Если с близким человеком вы уже давно обходите одну тему, сегодня может хватить короткого «мне важно это обсудить» — без подготовленной речи.",
+      "batch": "TL-0C.3_batch_2",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": [],
+      "anchor_types": [
+        "AT-004",
+        "AT-005"
+      ]
+    },
+    {
+      "id": "cal-047",
+      "corpus_id": "corp-0397",
+      "source": "api_live",
+      "surface": "mini_decision_caption",
+      "text": "Добавьте откровенный разговор в свои планы на день.",
+      "score": 3,
+      "reason": "AP-004: разговор как пункт календаря, zero stakes.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-004",
+      "strong_pattern_id": "SP-003",
+      "core_scene": "postponed_conversation",
+      "stake_type": "missed_opportunity",
+      "text_improved": "Если разговор уже неделю стоит «в голове, но не в календаре», сегодня может быть день одной короткой реплики — не «откровенного разговора» на вечер.",
+      "batch": "TL-0C.3_batch_2",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": [],
+      "anchor_types": [
+        "AT-004",
+        "AT-001"
+      ]
+    },
+    {
+      "id": "cal-048",
+      "corpus_id": "corp-1699",
+      "source": "api_live",
+      "surface": "personal_insight_body",
+      "text": "Сегодня важно обратить внимание на свои эмоции и мысли, чтобы лучше понять, как они влияют на ваши отношения. Откровенные разговоры могут помочь снять напряжение и углубить понимание с близкими. Не забывайте, что открытость создает атмосферу доверия и поддержки.",
+      "score": 3,
+      "reason": "AP-001 «понять эмоции» + AP-004 хвост. Три абзаца банальности, одна спасаемая идея — tension.",
+      "editorial_decision": "rewrite",
+      "anti_pattern_id": "AP-001",
+      "strong_pattern_id": "SP-003",
+      "core_scene": "pseudo_clarity",
+      "stake_type": "relationship_tension",
+      "text_improved": "Если напряжение с близкими копится, а вы всё анализируете «в голове», сегодня может быть про одну фразу вслух — не про «откровенные разговоры» вообще.",
+      "batch": "TL-0C.3_batch_2",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": [],
+      "anchor_types": []
+    },
+    {
+      "id": "cal-049",
+      "corpus_id": "corp-0939",
+      "surface": "avoid_hints[2]",
+      "text": "Не дави на себя фразой «надо собраться», вместо этого заверши одну задачу.",
+      "score": 9,
+      "editorial_decision": "exemplar",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-004",
+      "core_scene": "self_promise_procrastination",
+      "stake_type": "emotional_cost",
+      "reason": "Короткая узнаваемая сцена: самодавление vs одно завершённое дело. Без эзотерики, с микро-ставкой (давление «надо собраться»).",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_3",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "anchor_types": [
+        "AT-003",
+        "AT-004",
+        "AT-006"
+      ],
+      "internal_pattern_ids": [
+        "IP-004"
+      ]
+    },
+    {
+      "id": "cal-050",
+      "corpus_id": "corp-0053",
+      "surface": "risk_detail",
+      "text": "Будь внимателен, чтобы не принимать чужие приоритеты за свои. Это может привести к усталости и недовольству.",
+      "score": 8,
+      "editorial_decision": "exemplar",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-005",
+      "core_scene": "agreeing_against_self",
+      "stake_type": "self_betrayal",
+      "reason": "Узнаваемая work/social сцена + последствие (усталость). Не love, не рубрика.",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_3",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "anchor_types": [
+        "AT-002",
+        "AT-006"
+      ],
+      "internal_pattern_ids": [
+        "IP-004"
+      ]
+    },
+    {
+      "id": "cal-051",
+      "corpus_id": "corp-0844",
+      "surface": "scenario_tie_ins.career",
+      "text": "На работе сосредоточься на одной внятной задаче: так ты сможешь проявить свою силу и ответственность, а не просто реагировать на чужие приоритеты.",
+      "score": 8,
+      "editorial_decision": "exemplar",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-004",
+      "core_scene": "self_promise_procrastination",
+      "stake_type": "overload_cost",
+      "reason": "Work/focus: одна задача vs реактивность. Сцена без «откровенного разговора».",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_3",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "anchor_types": [
+        "AT-003",
+        "AT-004",
+        "AT-006"
+      ],
+      "internal_pattern_ids": [
+        "IP-002",
+        "IP-004"
+      ]
+    },
+    {
+      "id": "cal-052",
+      "corpus_id": "corp-0842",
+      "surface": "scenarios[3].summary",
+      "text": "На работе сегодня вы можете столкнуться с множественными задачами, но сосредоточившись на одной, вы сможете добиться значительного прогресса. Подготовьте презентацию или отчет, который хотите завершить к концу дня. Это придаст вам уверенности и ясности.",
+      "score": 8,
+      "editorial_decision": "exemplar",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-004",
+      "core_scene": "self_promise_procrastination",
+      "stake_type": "missed_opportunity",
+      "reason": "Конкретный объект (презентация/отчёт) + дедлайн «к концу дня». Редкий api_live с scene+object; хвост про «уверенность» слабее, но core ok.",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_3",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "anchor_types": [
+        "AT-003",
+        "AT-004"
+      ]
+    },
+    {
+      "id": "cal-053",
+      "corpus_id": "corp-1843",
+      "surface": "scenarios[4].summary",
+      "text": "Сегодня стоит проанализировать свои финансовые приоритеты. Возможно, пришло время пересмотреть бюджет или запланировать крупную покупку. Одно осознанное решение может изменить вашу финансовую ситуацию.",
+      "score": 7,
+      "editorial_decision": "exemplar",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-007",
+      "core_scene": "reassessing_decision",
+      "stake_type": "missed_opportunity",
+      "reason": "Money/reassessing — не love. Лёгкая stakes («одно решение»), без эзотерики.",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_3",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "anchor_types": [
+        "AT-003",
+        "AT-004"
+      ]
+    },
+    {
+      "id": "cal-054",
+      "corpus_id": "corp-0898",
+      "surface": "why_layers[2]",
+      "text": "Настроение «усталость» требует внимания к телесным ощущениям в выборе приоритета.",
+      "score": 7,
+      "editorial_decision": "keep",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-004",
+      "core_scene": "self_promise_procrastination",
+      "stake_type": "overload_cost",
+      "reason": "Body/focus — рационально, коротко. Ставка мягкая (тело → приоритет), но допустимо для keep.",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_3",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "anchor_types": [
+        "AT-004",
+        "AT-006"
+      ],
+      "internal_pattern_ids": [
+        "IP-007"
+      ]
+    },
+    {
+      "id": "cal-055",
+      "corpus_id": "corp-1040",
+      "surface": "subline",
+      "text": "Не спеши реагировать на все внешние сигналы. Один приоритет поможет сосредоточиться и избежать перегрузки.",
+      "score": 7,
+      "editorial_decision": "keep",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-004",
+      "core_scene": "self_promise_procrastination",
+      "stake_type": "overload_cost",
+      "reason": "Overload/focus — узнаваемая реактивность. Без love, без рубрики.",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_3",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "anchor_types": [
+        "AT-004",
+        "AT-006"
+      ],
+      "internal_pattern_ids": [
+        "IP-002"
+      ]
+    },
+    {
+      "id": "cal-056",
+      "corpus_id": "corp-2806",
+      "surface": "thesis_reminder",
+      "text": "Этот день не требует размаха, он становится яснее, если выбрать один приоритет.",
+      "score": 8,
+      "editorial_decision": "keep",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-004",
+      "core_scene": "self_promise_procrastination",
+      "stake_type": "none",
+      "reason": "Короткая рабочая формула overload. Ставка слабая, но текст допустим — верхняя граница «простого» keep.",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_3",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "anchor_types": [
+        "AT-004"
+      ]
+    },
+    {
+      "id": "cal-057",
+      "corpus_id": "corp-1152",
+      "surface": "scenarios[4].focus",
+      "text": "Определи один финансовый приоритет и сосредоточься на его реализации, откладывая другие идеи на потом.",
+      "score": 7,
+      "editorial_decision": "keep",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-004",
+      "core_scene": "self_promise_procrastination",
+      "stake_type": "none",
+      "reason": "Money/focus — сцена есть, stakes лёгкие. Не AP-001 «прояснение».",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_3",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "anchor_types": [
+        "AT-003",
+        "AT-004"
+      ]
+    },
+    {
+      "id": "cal-058",
+      "corpus_id": "corp-1507",
+      "surface": "scenarios[4].summary",
+      "text": "Проверь свои финансы и составь план расходов на ближайшее время. Избегай импульсивных покупок.",
+      "score": 7,
+      "editorial_decision": "keep",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-004",
+      "core_scene": "self_promise_procrastination",
+      "stake_type": "missed_opportunity",
+      "reason": "Практичный money surface. Импульсивные покупки = лёгкая stakes.",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_3",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "anchor_types": [
+        "AT-003",
+        "AT-004"
+      ]
+    },
+    {
+      "id": "cal-059",
+      "corpus_id": "corp-0067",
+      "surface": "scene[1]",
+      "text": "В домашних делах возможно, что привычные задачи требуют больше времени, чем вы ожидали, из-за мелких недочетов.",
+      "score": 7,
+      "editorial_decision": "keep",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-005",
+      "core_scene": "recurring_topic",
+      "stake_type": "none",
+      "reason": "Бытовая micro-scene — не love/разговор. Узнаваемо без сильной stakes.",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_3",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "anchor_types": [
+        "AT-001"
+      ]
+    },
+    {
+      "id": "cal-060",
+      "corpus_id": "corp-0586",
+      "surface": "risk_detail",
+      "text": "Избегай попыток угодить всем сразу. Это может привести к перегрузке и путанице.",
+      "score": 7,
+      "editorial_decision": "keep",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-005",
+      "core_scene": "agreeing_against_self",
+      "stake_type": "overload_cost",
+      "reason": "Social/work overload — коротко, с последствием.",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_3",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "anchor_types": [
+        "AT-002",
+        "AT-006"
+      ],
+      "internal_pattern_ids": [
+        "IP-002",
+        "IP-004"
+      ]
+    },
+    {
+      "id": "cal-061",
+      "corpus_id": "corp-1939",
+      "surface": "why_astrological_layers[1].detail",
+      "text": "Сегодняшний день не требует размаха, лучше сосредоточиться на одном приоритете и избегать хаоса.",
+      "score": 7,
+      "editorial_decision": "keep",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-004",
+      "core_scene": "self_promise_procrastination",
+      "stake_type": "overload_cost",
+      "reason": "Focus/overload variant. Допустим keep; не exemplar из-за generic «избегать хаоса».",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_3",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "anchor_types": [
+        "AT-004",
+        "AT-006"
+      ],
+      "internal_pattern_ids": [
+        "IP-002"
+      ]
+    },
+    {
+      "id": "cal-062",
+      "corpus_id": "corp-0575",
+      "surface": "scenarios[4].focus",
+      "text": "Избегай импульсивных покупок и сосредоточься на планировании бюджета.",
+      "score": 6,
+      "editorial_decision": "keep",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-004",
+      "core_scene": "self_promise_procrastination",
+      "stake_type": "missed_opportunity",
+      "reason": "Короткий money keep — score 6, граница допустимого без rewrite.",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_3",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "anchor_types": [
+        "AT-003",
+        "AT-004"
+      ]
+    },
+    {
+      "id": "cal-063",
+      "corpus_id": "corp-1173",
+      "surface": "scenarios[2].focus",
+      "text": "Организуйте совместное времяпрепровождение, выбрав одно занятие, которое сплотит всю семью.",
+      "score": 6,
+      "editorial_decision": "keep",
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-004",
+      "core_scene": "self_promise_procrastination",
+      "stake_type": "none",
+      "reason": "Family без «откровенного разговора». Слабая stakes, но сцена (одно занятие) — borderline keep для gate.",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.3_batch_3",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "anchor_types": [
+        "AT-004",
+        "AT-005"
+      ]
+    },
+    {
+      "id": "cal-064",
+      "corpus_id": "corp-0068",
+      "hypothesis_bucket": "no_anchor",
+      "editorial_decision": "reject",
+      "score": 2,
+      "anti_pattern_id": "AP-002",
+      "strong_pattern_id": null,
+      "core_scene": "none",
+      "stake_type": "none",
+      "anchor_types": [],
+      "reason": "Универсальный баланс — нет сцены, объекта, действия. Нет точки зацепки.",
+      "text": "В каждой сфере жизни старайся находить баланс между идеями и практическими действиями.",
+      "surface": "thesis_reminder",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.4_batch_4",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": []
+    },
+    {
+      "id": "cal-065",
+      "corpus_id": "corp-0081",
+      "hypothesis_bucket": "no_anchor",
+      "editorial_decision": "reject",
+      "score": 2,
+      "anti_pattern_id": "AP-001",
+      "strong_pattern_id": null,
+      "core_scene": "none",
+      "stake_type": "none",
+      "anchor_types": [],
+      "reason": "«Ясность и открытость в любви» — туман без сцены и объекта.",
+      "text": "В любви выбирай открытость и ясность, чтобы избежать недоразумений и создать пространство для близости.",
+      "surface": "scenario_tie_ins.love",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.4_batch_4",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": []
+    },
+    {
+      "id": "cal-066",
+      "corpus_id": "corp-0102",
+      "hypothesis_bucket": "no_anchor",
+      "editorial_decision": "reject",
+      "score": 2,
+      "anti_pattern_id": "AP-001",
+      "strong_pattern_id": null,
+      "core_scene": "none",
+      "stake_type": "none",
+      "anchor_types": [],
+      "reason": "Повтор AP-001: доверие/ясность без зацепки.",
+      "text": "В любви стремись к открытости и ясности, чтобы избежать недопонимания и создать доверие.",
+      "surface": "scenario_tie_ins.love",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.4_batch_4",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": []
+    },
+    {
+      "id": "cal-067",
+      "corpus_id": "corp-0565",
+      "hypothesis_bucket": "no_anchor",
+      "editorial_decision": "reject",
+      "score": 3,
+      "anti_pattern_id": "AP-001",
+      "strong_pattern_id": null,
+      "core_scene": "pseudo_clarity",
+      "stake_type": "none",
+      "anchor_types": [],
+      "reason": "«Прояснить приоритеты» без объекта или действия — пустая точка зацепки.",
+      "text": "Игорь, сегодня важно прояснить приоритеты.",
+      "surface": "personal_insight_title",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.4_batch_4",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": []
+    },
+    {
+      "id": "cal-068",
+      "corpus_id": "corp-2270",
+      "hypothesis_bucket": "no_anchor",
+      "editorial_decision": "reject",
+      "score": 2,
+      "anti_pattern_id": "AP-001",
+      "strong_pattern_id": null,
+      "core_scene": "none",
+      "stake_type": "none",
+      "anchor_types": [],
+      "reason": "Укрепление связей + прояснение мыслей — нет конкретики.",
+      "text": "Сосредоточьтесь на укреплении связей и прояснении мыслей.",
+      "surface": "life_now_weekly",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.4_batch_4",
+      "rules_failed": [
+        "RULE_001"
+      ],
+      "rules_passed": []
+    },
+    {
+      "id": "cal-069",
+      "corpus_id": "corp-0044",
+      "hypothesis_bucket": "scene_only",
+      "editorial_decision": "borderline",
+      "score": 5,
+      "anti_pattern_id": "AP-004",
+      "strong_pattern_id": null,
+      "core_scene": "postponed_conversation",
+      "stake_type": "none",
+      "anchor_types": [
+        "AT-001",
+        "AT-005"
+      ],
+      "reason": "Сцена (родные, разговоры) есть, stakes и object нет — типичный likely_good trap.",
+      "text": "Будь более открытым с родными, простые разговоры могут существенно улучшить атмосферу в доме.",
+      "surface": "scenario_tie_ins.family",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.4_batch_4",
+      "rules_failed": [
+        "RULE_003"
+      ],
+      "rules_passed": [
+        "RULE_002"
+      ]
+    },
+    {
+      "id": "cal-070",
+      "corpus_id": "corp-0065",
+      "hypothesis_bucket": "scene_only",
+      "editorial_decision": "borderline",
+      "score": 5,
+      "anti_pattern_id": "AP-004",
+      "strong_pattern_id": null,
+      "core_scene": "unresolved_conflict",
+      "stake_type": "none",
+      "anchor_types": [
+        "AT-001",
+        "AT-005"
+      ],
+      "reason": "Отношения/понимание — сцена слабая, без объекта и ставки.",
+      "text": "В ваших отношениях важно не только глубокое понимание, но и легкость общения, что поможет укрепить связь с партнером.",
+      "surface": "scenario_tie_ins.love",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.4_batch_4",
+      "rules_failed": [
+        "RULE_003"
+      ],
+      "rules_passed": [
+        "RULE_002"
+      ]
+    },
+    {
+      "id": "cal-071",
+      "corpus_id": "corp-0071",
+      "hypothesis_bucket": "scene_only",
+      "editorial_decision": "borderline",
+      "score": 5,
+      "anti_pattern_id": "AP-001",
+      "strong_pattern_id": null,
+      "core_scene": "self_promise_procrastination",
+      "stake_type": "none",
+      "anchor_types": [
+        "AT-001"
+      ],
+      "reason": "Карьера/роль — сцена work, но «ясные цели» без объекта или решения.",
+      "text": "В карьере действуй через ясные цели и понимание своей роли, это поможет тебе проявить свою силу и избежать перегрузок.",
+      "surface": "scenario_tie_ins.career",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.4_batch_4",
+      "rules_failed": [
+        "RULE_003"
+      ],
+      "rules_passed": [
+        "RULE_002"
+      ]
+    },
+    {
+      "id": "cal-072",
+      "corpus_id": "corp-0159",
+      "hypothesis_bucket": "scene_only",
+      "editorial_decision": "borderline",
+      "score": 4,
+      "anti_pattern_id": "AP-002",
+      "strong_pattern_id": null,
+      "core_scene": "recurring_topic",
+      "stake_type": "none",
+      "anchor_types": [
+        "AT-001"
+      ],
+      "reason": "Гармония семья/работа — намёк на сферы, но нет зацепки.",
+      "text": "Важно не забывать о гармонии в семье и на работе.",
+      "surface": "thesis_reminder",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.4_batch_4",
+      "rules_failed": [
+        "RULE_003"
+      ],
+      "rules_passed": [
+        "RULE_002"
+      ]
+    },
+    {
+      "id": "cal-073",
+      "corpus_id": "corp-0047",
+      "hypothesis_bucket": "scene_only",
+      "editorial_decision": "borderline",
+      "score": 5,
+      "anti_pattern_id": "AP-004",
+      "strong_pattern_id": null,
+      "core_scene": "postponed_conversation",
+      "stake_type": "none",
+      "anchor_types": [
+        "AT-001",
+        "AT-005"
+      ],
+      "reason": "Семья/открытость — relationship scene без stakes и object.",
+      "text": "Будь более открытым с родными, чтобы укрепить эмоциональную связь в семье.",
+      "surface": "scenario_tie_ins.family",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.4_batch_4",
+      "rules_failed": [
+        "RULE_003"
+      ],
+      "rules_passed": [
+        "RULE_002"
+      ]
+    },
+    {
+      "id": "cal-074",
+      "corpus_id": "corp-0223",
+      "hypothesis_bucket": "object_no_stake",
+      "editorial_decision": "keep",
+      "score": 7,
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-004",
+      "core_scene": "self_promise_procrastination",
+      "stake_type": "none",
+      "anchor_types": [
+        "AT-003",
+        "AT-004",
+        "AT-006"
+      ],
+      "reason": "Отчёт/встреча + первый шаг. Ставки нет, object+action достаточны.",
+      "text": "Выбери одну задачу, которая важна именно для тебя, и сделай первый шаг. Это может быть подготовка к важной встрече или написание отчета.",
+      "surface": "scenarios[0].focus",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.4_batch_4",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "internal_pattern_ids": [
+        "IP-001"
+      ]
+    },
+    {
+      "id": "cal-075",
+      "corpus_id": "corp-0841",
+      "hypothesis_bucket": "object_no_stake",
+      "editorial_decision": "keep",
+      "score": 7,
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-004",
+      "core_scene": "self_promise_procrastination",
+      "stake_type": "none",
+      "anchor_types": [
+        "AT-003",
+        "AT-004"
+      ],
+      "reason": "Презентация + материалы — конкретный work object, без stake.",
+      "text": "На работе сделай первый шаг в выполнении одного важного задания, например, собери необходимые материалы для презентации.",
+      "surface": "scenarios[3].focus",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.4_batch_4",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ]
+    },
+    {
+      "id": "cal-076",
+      "corpus_id": "corp-0217",
+      "hypothesis_bucket": "object_no_stake",
+      "editorial_decision": "keep",
+      "score": 7,
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-004",
+      "core_scene": "self_promise_procrastination",
+      "stake_type": "none",
+      "anchor_types": [
+        "AT-003",
+        "AT-004"
+      ],
+      "reason": "Одна задача + слот 20 мин — короткий action anchor, stake none.",
+      "text": "Выбери одну задачу и доведи её до конца в одном слоте 20 минут.",
+      "surface": "one_concrete_move",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.4_batch_4",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ]
+    },
+    {
+      "id": "cal-077",
+      "corpus_id": "corp-2213",
+      "hypothesis_bucket": "object_no_stake",
+      "editorial_decision": "keep",
+      "score": 6,
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-004",
+      "core_scene": "self_promise_procrastination",
+      "stake_type": "none",
+      "anchor_types": [
+        "AT-003",
+        "AT-004",
+        "AT-006"
+      ],
+      "reason": "«Задача уже начата» — узнавание + object + finish action. Хвост «ясность» слабее.",
+      "text": "Сосредоточься на одной задаче, которая уже начата, и доведи её до конца без переключений. Это поможет сохранить ясность и устойчивость.",
+      "surface": "what_works",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.4_batch_4",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "internal_pattern_ids": [
+        "IP-001"
+      ]
+    },
+    {
+      "id": "cal-078",
+      "corpus_id": "corp-0051",
+      "hypothesis_bucket": "object_no_stake",
+      "editorial_decision": "keep",
+      "score": 6,
+      "anti_pattern_id": null,
+      "strong_pattern_id": "SP-004",
+      "core_scene": "self_promise_procrastination",
+      "stake_type": "none",
+      "anchor_types": [
+        "AT-003",
+        "AT-006"
+      ],
+      "reason": "«Слишком много задач» — object overload без явной stake; допустим keep.",
+      "text": "Будь внимателен к тому, чтобы не брать на себя слишком много задач одновременно. Это может отвлечь от главного.",
+      "surface": "risk_detail",
+      "source": "api_live",
+      "text_improved": null,
+      "batch": "TL-0C.4_batch_4",
+      "rules_failed": [],
+      "rules_passed": [
+        "RULE_001",
+        "RULE_002"
+      ],
+      "internal_pattern_ids": [
+        "IP-002"
+      ]
+    }
+  ],
+  "stats": {
+    "total": 78,
+    "from_api_live": 60,
+    "editorial_decision": {
+      "reject": 14,
+      "keep": 20,
+      "exemplar": 12,
+      "rewrite": 27,
+      "borderline": 5
+    },
+    "stake_type": {
+      "none": 24,
+      "repeated_avoidance": 10,
+      "fear_of_answer": 1,
+      "emotional_cost": 7,
+      "overload_cost": 8,
+      "relationship_tension": 4,
+      "missed_opportunity": 5,
+      "self_betrayal": 1
+    },
+    "core_scene": {
+      "none": 10,
+      "reassessing_decision": 2,
+      "delayed_message": 2,
+      "self_promise_procrastination": 22,
+      "recurring_topic": 5,
+      "unexpected_offer": 1,
+      "inner_conflict_logic_vs_feeling": 2,
+      "control_overreach": 1,
+      "random_phrase_as_sign": 1,
+      "exhausted_explaining": 1,
+      "postponed_conversation": 16,
+      "domain_rubric_leak": 3,
+      "pseudo_clarity": 3,
+      "unresolved_conflict": 7,
+      "agreeing_against_self": 2
+    },
+    "tl_0c_3_batch_1": {
+      "date": "2026-06-23",
+      "source": "api_live only",
+      "count": 15,
+      "editorial_decision": {
+        "reject": 5,
+        "rewrite": 5,
+        "keep": 4,
+        "exemplar": 1
+      },
+      "core_scene": {
+        "none": 3,
+        "domain_rubric_leak": 2,
+        "postponed_conversation": 4,
+        "pseudo_clarity": 1,
+        "self_promise_procrastination": 3,
+        "inner_conflict_logic_vs_feeling": 1,
+        "unresolved_conflict": 1
+      },
+      "notes": "none+domain_rubric_leak=5/15 reject bucket. 10/15 have named core_scene — api_live чаще без сцены в reject, реже в keep/exemplar."
+    },
+    "tl_0c_3_batch_2": {
+      "date": "2026-06-23",
+      "source": "api_live only",
+      "count": 15,
+      "editorial_decision": {
+        "rewrite": 15
+      },
+      "core_scene": {
+        "postponed_conversation": 9,
+        "unresolved_conflict": 5,
+        "pseudo_clarity": 1
+      },
+      "stake_type": {
+        "relationship_tension": 4,
+        "repeated_avoidance": 6,
+        "emotional_cost": 4,
+        "missed_opportunity": 1
+      },
+      "notes": "Rewrite-only batch for correction library. All have text_improved + stake_type."
+    },
+    "tl_0c_3_batch_3": {
+      "date": "2026-06-23",
+      "source": "api_live only",
+      "count": 15,
+      "editorial_decision": {
+        "exemplar": 5,
+        "keep": 10
+      },
+      "core_scene": {
+        "self_promise_procrastination": 11,
+        "agreeing_against_self": 2,
+        "reassessing_decision": 1,
+        "recurring_topic": 1
+      },
+      "stake_type": {
+        "emotional_cost": 1,
+        "self_betrayal": 1,
+        "overload_cost": 5,
+        "missed_opportunity": 4,
+        "none": 4
+      },
+      "score_range": "6-9",
+      "notes": "Upper bound quality: keep/exemplar only, core_scene != none. 4 stake_type=none acceptable without strong stake.",
+      "anchor_types": {
+        "AT-003": 7,
+        "AT-004": 12,
+        "AT-006": 7,
+        "AT-002": 2,
+        "AT-001": 1,
+        "AT-005": 1
+      },
+      "anchor_count": {
+        "3": 2,
+        "2": 11,
+        "1": 2
+      }
+    },
+    "tl_0c_4_batch_4": {
+      "date": "2026-06-23",
+      "source": "api_live only",
+      "count": 15,
+      "purpose": "anchor hypothesis test — not filler for TL-1",
+      "editorial_decision": {
+        "reject": 5,
+        "borderline": 5,
+        "keep": 5
+      },
+      "hypothesis_bucket": {
+        "no_anchor": 5,
+        "scene_only": 5,
+        "object_no_stake": 5
+      },
+      "anchor_types": {
+        "AT-001": 5,
+        "AT-005": 3,
+        "AT-003": 5,
+        "AT-004": 4,
+        "AT-006": 3
+      },
+      "stake_type": {
+        "none": 15
+      },
+      "notes": "5 reject no_anchor · 5 borderline scene_only · 5 keep object_no_stake. All stake_type=none in keep+borderline buckets.",
+      "anchor_count": {
+        "0": 5,
+        "2": 6,
+        "1": 2,
+        "3": 2
+      },
+      "avg_anchors_by_decision": {
+        "reject": 0.0,
+        "borderline": 1.6,
+        "keep": 2.4
+      }
+    },
+    "tl_0c_4_anchor_matrix": {
+      "_note": "Expected pattern to validate after editorial sign-off",
+      "reject": {
+        "scene": false,
+        "stake": false,
+        "object": false,
+        "action": false
+      },
+      "borderline": {
+        "scene": true,
+        "stake": false,
+        "object": false,
+        "action": false
+      },
+      "keep_object_no_stake": {
+        "scene": "optional",
+        "stake": false,
+        "object": true,
+        "action": "often"
+      }
+    },
+    "tl_0c_3_progress": {
+      "api_live_total": 60,
+      "rewrite": 20,
+      "reject": 10,
+      "borderline": 5,
+      "keep": 19,
+      "exemplar": 6,
+      "milestone_60_reached": true,
+      "tl_1_blocked_until": "anchor analysis sign-off (TL-0C.4)"
+    },
+    "notes": "Schema v0.5. AT-001…AT-006. batch_3+batch_4 anchor_types tagged. TL-1 blocked pending gate hypothesis validation.",
+    "tl_0c_4_gate_hypothesis_check": {
+      "reject_avg_anchors": 0.0,
+      "borderline_avg_anchors": 1.6,
+      "keep_avg_anchors": 2.4,
+      "matches_hypothesis": "reject=0, borderline≈1, keep≥2 — pending editorial sign-off"
+    },
+    "tl_0c_4_hypothesis_validation": {
+      "date": "2026-06-23",
+      "n_api_live": 60,
+      "anchor_count_x_decision": {
+        "0": {
+          "reject": 9,
+          "rewrite": 3,
+          "borderline": 0,
+          "keep": 0,
+          "exemplar": 0
+        },
+        "1": {
+          "reject": 1,
+          "rewrite": 1,
+          "borderline": 2,
+          "keep": 2,
+          "exemplar": 0
+        },
+        "2": {
+          "reject": 0,
+          "rewrite": 11,
+          "borderline": 3,
+          "keep": 12,
+          "exemplar": 3
+        },
+        "3+": {
+          "reject": 0,
+          "rewrite": 5,
+          "borderline": 0,
+          "keep": 5,
+          "exemplar": 3
+        }
+      },
+      "anchor_type_rates": {
+        "AT-001": {
+          "n": 16,
+          "reject_pct": 0.0,
+          "keep_pct": 18.8,
+          "rewrite_pct": 50.0,
+          "borderline_pct": 31.2
+        },
+        "AT-002": {
+          "n": 4,
+          "reject_pct": 0.0,
+          "keep_pct": 75.0,
+          "rewrite_pct": 25.0,
+          "borderline_pct": 0.0
+        },
+        "AT-003": {
+          "n": 13,
+          "reject_pct": 0.0,
+          "keep_pct": 100.0,
+          "rewrite_pct": 0.0,
+          "borderline_pct": 0.0
+        },
+        "AT-004": {
+          "n": 30,
+          "reject_pct": 0.0,
+          "keep_pct": 63.3,
+          "rewrite_pct": 36.7,
+          "borderline_pct": 0.0
+        },
+        "AT-005": {
+          "n": 19,
+          "reject_pct": 0.0,
+          "keep_pct": 15.8,
+          "rewrite_pct": 68.4,
+          "borderline_pct": 15.8
+        },
+        "AT-006": {
+          "n": 22,
+          "reject_pct": 4.5,
+          "keep_pct": 68.2,
+          "rewrite_pct": 27.3,
+          "borderline_pct": 0.0
+        }
+      },
+      "top_combinations": [
+        {
+          "combo": "AT-003 + AT-004",
+          "count": 7,
+          "by_decision": {}
+        },
+        {
+          "combo": "AT-004 + AT-005",
+          "count": 6,
+          "by_decision": {}
+        },
+        {
+          "combo": "AT-003 + AT-004 + AT-006",
+          "count": 5,
+          "by_decision": {}
+        },
+        {
+          "combo": "AT-001 + AT-005",
+          "count": 5,
+          "by_decision": {}
+        },
+        {
+          "combo": "AT-004 + AT-006",
+          "count": 4,
+          "by_decision": {}
+        },
+        {
+          "combo": "AT-004 + AT-005 + AT-006",
+          "count": 2,
+          "by_decision": {}
+        },
+        {
+          "combo": "AT-001 + AT-004 + AT-005",
+          "count": 2,
+          "by_decision": {}
+        },
+        {
+          "combo": "AT-005 + AT-006",
+          "count": 2,
+          "by_decision": {}
+        },
+        {
+          "combo": "AT-002 + AT-006",
+          "count": 2,
+          "by_decision": {}
+        },
+        {
+          "combo": "AT-001 + AT-004 + AT-006",
+          "count": 1,
+          "by_decision": {}
+        },
+        {
+          "combo": "AT-001 + AT-002 + AT-006",
+          "count": 1,
+          "by_decision": {}
+        },
+        {
+          "combo": "AT-001 + AT-005 + AT-006",
+          "count": 1,
+          "by_decision": {}
+        }
+      ],
+      "hypothesis_0_1_2_strict_accuracy": 56.7,
+      "hypothesis_violations": [
+        {
+          "id": "cal-027",
+          "anchors": 0,
+          "decision": "rewrite",
+          "note": "expected reject"
+        },
+        {
+          "id": "cal-040",
+          "anchors": 0,
+          "decision": "rewrite",
+          "note": "expected reject"
+        },
+        {
+          "id": "cal-048",
+          "anchors": 0,
+          "decision": "rewrite",
+          "note": "expected reject"
+        },
+        {
+          "id": "cal-056",
+          "anchors": 1,
+          "decision": "keep",
+          "note": "1 anchor but keep/exemplar"
+        },
+        {
+          "id": "cal-059",
+          "anchors": 1,
+          "decision": "keep",
+          "note": "1 anchor but keep/exemplar"
+        }
+      ],
+      "findings": {
+        "AT-006": {
+          "n": 22,
+          "reject_pct": 4.5,
+          "keep_pct": 68.2,
+          "rewrite_pct": 27.3,
+          "borderline_pct": 0.0
+        },
+        "rewrite_with_2plus_anchors": 16,
+        "reject_with_0_anchors": 9,
+        "reject_total": 10
+      },
+      "anchor_utility_matrix": {
+        "AT-001": {
+          "n": 16,
+          "exemplar_pct": 0.0,
+          "keep_pct": 18.8,
+          "rewrite_trap_pct": 50.0,
+          "reject_pct": 0.0,
+          "borderline_pct": 31.2,
+          "class": "structural"
+        },
+        "AT-002": {
+          "n": 4,
+          "exemplar_pct": 25.0,
+          "keep_pct": 75.0,
+          "rewrite_trap_pct": 25.0,
+          "reject_pct": 0.0,
+          "borderline_pct": 0.0,
+          "class": "psychological"
+        },
+        "AT-003": {
+          "n": 13,
+          "exemplar_pct": 38.5,
+          "keep_pct": 100.0,
+          "rewrite_trap_pct": 0.0,
+          "reject_pct": 0.0,
+          "borderline_pct": 0.0,
+          "class": "structural"
+        },
+        "AT-004": {
+          "n": 30,
+          "exemplar_pct": 16.7,
+          "keep_pct": 63.3,
+          "rewrite_trap_pct": 36.7,
+          "reject_pct": 0.0,
+          "borderline_pct": 0.0,
+          "class": "transitional"
+        },
+        "AT-005": {
+          "n": 19,
+          "exemplar_pct": 0.0,
+          "keep_pct": 15.8,
+          "rewrite_trap_pct": 68.4,
+          "reject_pct": 0.0,
+          "borderline_pct": 15.8,
+          "class": "structural"
+        },
+        "AT-006": {
+          "n": 22,
+          "exemplar_pct": 18.2,
+          "keep_pct": 68.2,
+          "rewrite_trap_pct": 27.3,
+          "reject_pct": 4.5,
+          "borderline_pct": 0.0,
+          "class": "psychological"
+        }
+      },
+      "anchor_classes": {
+        "structural": [
+          "AT-001",
+          "AT-003",
+          "AT-005"
+        ],
+        "psychological": [
+          "AT-002",
+          "AT-006"
+        ],
+        "transitional": [
+          "AT-004"
+        ]
+      },
+      "class_combo_matrix": {
+        "S+T": {
+          "n": 16,
+          "keep_exemplar_pct": 50.0,
+          "rewrite_trap_pct": 50.0,
+          "reject_pct": 0.0,
+          "exemplar_pct": 12.5
+        },
+        "none": {
+          "n": 12,
+          "keep_exemplar_pct": 0.0,
+          "rewrite_trap_pct": 25.0,
+          "reject_pct": 75.0,
+          "exemplar_pct": 0.0
+        },
+        "S+P+T": {
+          "n": 9,
+          "keep_exemplar_pct": 66.7,
+          "rewrite_trap_pct": 33.3,
+          "reject_pct": 0.0,
+          "exemplar_pct": 33.3
+        },
+        "S": {
+          "n": 8,
+          "keep_exemplar_pct": 12.5,
+          "rewrite_trap_pct": 25.0,
+          "reject_pct": 0.0,
+          "exemplar_pct": 0.0
+        },
+        "S+P": {
+          "n": 6,
+          "keep_exemplar_pct": 50.0,
+          "rewrite_trap_pct": 50.0,
+          "reject_pct": 0.0,
+          "exemplar_pct": 0.0
+        },
+        "P": {
+          "n": 4,
+          "keep_exemplar_pct": 50.0,
+          "rewrite_trap_pct": 25.0,
+          "reject_pct": 25.0,
+          "exemplar_pct": 25.0
+        },
+        "P+T": {
+          "n": 4,
+          "keep_exemplar_pct": 100.0,
+          "rewrite_trap_pct": 0.0,
+          "reject_pct": 0.0,
+          "exemplar_pct": 0.0
+        },
+        "T": {
+          "n": 1,
+          "keep_exemplar_pct": 100.0,
+          "rewrite_trap_pct": 0.0,
+          "reject_pct": 0.0,
+          "exemplar_pct": 0.0
+        }
+      },
+      "hypothesis_h2": {
+        "hypothesis": "AT-006 as primary recognition carrier; S+P quality signal vs S+T trap",
+        "structural_plus_psychological": {
+          "label": "S+P",
+          "n": 15,
+          "keep_exemplar_pct": 60.0,
+          "rewrite_trap_pct": 40.0,
+          "exemplar_pct": 20.0
+        },
+        "structural_plus_transitional_no_psych": {
+          "label": "S+T (no psych)",
+          "n": 16,
+          "keep_exemplar_pct": 50.0,
+          "rewrite_trap_pct": 50.0,
+          "exemplar_pct": 12.5
+        },
+        "AT-006_only_entries": {
+          "label": "AT-006 alone",
+          "n": 2,
+          "keep_exemplar_pct": 0.0,
+          "rewrite_trap_pct": 50.0,
+          "exemplar_pct": 0.0
+        },
+        "AT-006_with_AT-003": {
+          "label": "AT-003+AT-006",
+          "n": 6,
+          "keep_exemplar_pct": 100.0,
+          "rewrite_trap_pct": 0.0,
+          "exemplar_pct": 50.0
+        }
+      },
+      "trap_combo_AT-004_AT-005": {
+        "n": 11,
+        "rewrite_pct": 81.8,
+        "keep_exemplar_pct": 18.2,
+        "without_psychological": 8,
+        "without_AT-003_or_AT-006": 9,
+        "note": "AI banality formula: decision + relationship without internal/object"
+      }
+    },
+    "tl_0c_status": {
+      "dataset_expansion": "PAUSED",
+      "tl_1": "BLOCKED",
+      "h4_status": "SUPPORTED_WITH_LIMITATION",
+      "h5_language_status": "CANDIDATE",
+      "next_artifact": "RAT phase 2: text_class→survivor clustering n=30-40 (not global winner)",
+      "rat_validation_ref": "../TODAY_RAT_VALIDATION_V0.md",
+      "rat_pilot_n": 23,
+      "rat_pilot_n_phase_1": 19,
+      "rat_phase_2_status": "ACTIVE",
+      "rat_phase_2_deliverable": "phase_2_class_matrix in TODAY_RAT_VALIDATION_V0.json",
+      "rat_pilot_status": "PHASE_2_CLUSTERING",
+      "rat_north_star_v3": "Which knowledge deserves PIM? RRM vs C17 two-axis curation",
+      "rat_preliminary_survivor_pct": {
+        "pattern_form": 58,
+        "object_frame": 16,
+        "context_bundle": 16,
+        "life_object": 11
+      },
+      "rat_ipl_implication": "NOT_CONFIRMED — four mechanism classes; cal-018 context_bundle blocks IPL-as-source",
+      "rat_candidate_outcome": "Multimodal Recognition Retrieval — not IPL; not canon until n=40",
+      "architectural_risk_ar003": "False Universal Survivor — one recognition unit for all strong texts",
+      "h4_validation_ref": "../TODAY_H4_VALIDATION_V0.md",
+      "h5_language_ref": "../TODAY_SELF_VERIFICATION_V0.md",
+      "ipl_engine_order": "PR2 ∥ RAT phase 2 → H5 → stack decision (not IPL-first) → TL-1",
+      "north_star_question": "For which text classes does which recognition unit dominate? (v2 post AR-003)",
+      "recognition_source_hypotheses": ["tension", "pattern", "life_object", "context_bundle"],
+      "ipl_h6_claim": "Pattern Selection layer exists (recognition structure)",
+      "ipl_h7_claim": "Recognition Ablation Test — what can be removed first without losing recognition; track loss reason",
+      "ipl_h7_not": "Not a tension test — ablation study; may yield Object Layer not IPL",
+      "architectural_risk_ar001": "Premature PIM → Tension → DRE without Pattern Selection",
+      "internal_patterns_ref": "../TODAY_INTERNAL_PATTERNS_V0.md"
+    },
+    "internal_patterns_v0": {
+      "procrastination": {
+        "n": 4,
+        "keep_pct": 75.0,
+        "rewrite_pct": 25.0,
+        "exemplar_pct": 25.0
+      },
+      "overload": {
+        "n": 9,
+        "keep_pct": 100.0,
+        "rewrite_pct": 0.0,
+        "exemplar_pct": 22.2
+      },
+      "avoidance": {
+        "n": 3,
+        "keep_pct": 0.0,
+        "rewrite_pct": 100.0,
+        "exemplar_pct": 0.0
+      },
+      "self_pressure": {
+        "n": 4,
+        "keep_pct": 100.0,
+        "rewrite_pct": 0.0,
+        "exemplar_pct": 75.0
+      },
+      "indecision": {
+        "n": 1,
+        "keep_pct": 100.0,
+        "rewrite_pct": 0.0,
+        "exemplar_pct": 0.0
+      },
+      "fatigue": {
+        "n": 3,
+        "keep_pct": 100.0,
+        "rewrite_pct": 0.0,
+        "exemplar_pct": 0.0
+      },
+      "isolation": {
+        "n": 3,
+        "keep_pct": 33.3,
+        "rewrite_pct": 33.3,
+        "exemplar_pct": 0.0
+      }
+    }
+  },
+  "stake_types": {
+    "_note": "Legacy sub-hypothesis. AT-002 (Stake Anchor) — усилитель; none ≠ нет анкоров — см. TODAY_ANCHOR_TYPES_V0.",
+    "catalog": [
+      {
+        "id": "none",
+        "label_ru": "Ставки нет"
+      },
+      {
+        "id": "fear_of_answer",
+        "label_ru": "Страх услышать ответ"
+      },
+      {
+        "id": "waiting_too_long",
+        "label_ru": "Слишком долго ждали"
+      },
+      {
+        "id": "repeated_avoidance",
+        "label_ru": "Снова избегаете / обходите тему"
+      },
+      {
+        "id": "emotional_cost",
+        "label_ru": "Эмоциональная цена молчания или уступки"
+      },
+      {
+        "id": "missed_opportunity",
+        "label_ru": "Можно упустить шанс"
+      },
+      {
+        "id": "relationship_tension",
+        "label_ru": "Напряжение в отношениях"
+      },
+      {
+        "id": "overload_cost",
+        "label_ru": "Цена перегруза / распыления"
+      },
+      {
+        "id": "self_betrayal",
+        "label_ru": "Снова против себя"
+      }
+    ]
+  },
+  "anchor_types_ref": "../TODAY_ANCHOR_TYPES_V0.md",
+  "anchor_types": {
+    "_note": "TODAY_ANCHOR_TYPES_V0. Достаточно 1 сильного анкора; 2+ → keep candidate. stake (AT-002) — усилитель.",
+    "gate_hypothesis": {
+      "anchor_count_0": "reject",
+      "anchor_count_1": "borderline",
+      "anchor_count_2_plus": "keep_candidate",
+      "strong_AT-001_or_AT-002": "exemplar_candidate",
+      "status": "REFUTED_COUNT_ONLY",
+      "strict_accuracy_pct": 56.7,
+      "refined_candidate": {
+        "reject": "anchor_count == 0",
+        "strong_keep": "AT-003 in anchors OR AT-006 in anchors",
+        "rewrite_trap": "AT-005 in anchors AND AT-004 in anchors AND not (AT-003 or AT-006)",
+        "note": "Validate on next calibration batch before TL-1 code"
+      },
+      "h2": "Structural+Psychological vs Structural+Transitional — validate before TL-1"
+    },
+    "catalog": [
+      {
+        "id": "AT-001",
+        "label_ru": "Scene Anchor",
+        "description": "Конкретная узнаваемая ситуация",
+        "anchor_class": "structural"
+      },
+      {
+        "id": "AT-002",
+        "label_ru": "Stake Anchor",
+        "description": "Цена бездействия или напряжение",
+        "anchor_class": "psychological"
+      },
+      {
+        "id": "AT-003",
+        "label_ru": "Object Anchor",
+        "description": "Конкретный объект: отчёт, задача, встреча, бюджет…",
+        "anchor_class": "structural"
+      },
+      {
+        "id": "AT-004",
+        "label_ru": "Decision Anchor",
+        "description": "Конкретное решение или действие",
+        "anchor_class": "transitional"
+      },
+      {
+        "id": "AT-005",
+        "label_ru": "Relationship Anchor",
+        "description": "Конкретный человек или связь",
+        "anchor_class": "structural"
+      },
+      {
+        "id": "AT-006",
+        "label_ru": "Internal Anchor",
+        "description": "Внутреннее узнаваемое: обещание себе, откладывание, перегруз…",
+        "anchor_class": "psychological"
+      }
+    ],
+    "anchor_classes": {
+      "structural": {
+        "ids": [
+          "AT-001",
+          "AT-003",
+          "AT-005"
+        ],
+        "role": "Создают сцену / объект / связь"
+      },
+      "psychological": {
+        "ids": [
+          "AT-002",
+          "AT-006"
+        ],
+        "role": "Создают узнавание / ставку"
+      },
+      "transitional": {
+        "ids": [
+          "AT-004"
+        ],
+        "role": "Двигают текст — решение / действие"
+      }
+    }
+  },
+  "internal_patterns_ref": "../TODAY_INTERNAL_PATTERNS_V0.md",
+  "internal_patterns": {
+    "_note": "H3 narrowed; H4 Observable Pattern — priority validation. Pause bulk dataset + TL-1.",
+    "hypothesis_h3": {
+      "status": "TENTATIVE_NARROW",
+      "claim": "Some internal patterns (not all AT-006) are strong recognition sources",
+      "architecture_candidate": "observable internal pattern → scene → action"
+    },
+    "catalog": [
+      {
+        "id": "IP-001",
+        "slug": "procrastination",
+        "n": 4,
+        "keep_pct": 75.0,
+        "rewrite_pct": 25.0,
+        "exemplar_pct": 25.0,
+        "entry_ids": [
+          "cal-028",
+          "cal-029",
+          "cal-074",
+          "cal-077"
+        ],
+        "pattern_class": "R",
+        "observable": true
+      },
+      {
+        "id": "IP-002",
+        "slug": "overload",
+        "n": 9,
+        "keep_pct": 100.0,
+        "rewrite_pct": 0.0,
+        "exemplar_pct": 22.2,
+        "entry_ids": [
+          "cal-029",
+          "cal-030",
+          "cal-031",
+          "cal-033",
+          "cal-051",
+          "cal-055",
+          "cal-060",
+          "cal-061",
+          "cal-078"
+        ],
+        "pattern_class": "R",
+        "observable": true
+      },
+      {
+        "id": "IP-003",
+        "slug": "avoidance",
+        "n": 3,
+        "keep_pct": 0.0,
+        "rewrite_pct": 100.0,
+        "exemplar_pct": 0.0,
+        "entry_ids": [
+          "cal-036",
+          "cal-043",
+          "cal-045"
+        ],
+        "pattern_class": "G",
+        "observable": false
+      },
+      {
+        "id": "IP-004",
+        "slug": "self_pressure",
+        "n": 4,
+        "keep_pct": 100.0,
+        "rewrite_pct": 0.0,
+        "exemplar_pct": 75.0,
+        "entry_ids": [
+          "cal-049",
+          "cal-050",
+          "cal-051",
+          "cal-060"
+        ],
+        "pattern_class": "R",
+        "observable": true
+      },
+      {
+        "id": "IP-005",
+        "slug": "rumination",
+        "n": 0,
+        "pattern_class": "pending"
+      },
+      {
+        "id": "IP-006",
+        "slug": "indecision",
+        "n": 1,
+        "keep_pct": 100.0,
+        "rewrite_pct": 0.0,
+        "exemplar_pct": 0.0,
+        "entry_ids": [
+          "cal-030"
+        ],
+        "pattern_class": "pending"
+      },
+      {
+        "id": "IP-007",
+        "slug": "fatigue",
+        "n": 3,
+        "keep_pct": 100.0,
+        "rewrite_pct": 0.0,
+        "exemplar_pct": 0.0,
+        "entry_ids": [
+          "cal-030",
+          "cal-032",
+          "cal-054"
+        ],
+        "pattern_class": "R",
+        "observable": true
+      },
+      {
+        "id": "IP-008",
+        "slug": "isolation",
+        "n": 3,
+        "keep_pct": 33.3,
+        "rewrite_pct": 33.3,
+        "exemplar_pct": 0.0,
+        "entry_ids": [
+          "cal-023",
+          "cal-032",
+          "cal-042"
+        ],
+        "pattern_class": "G",
+        "observable": false
+      }
+    ],
+    "recognition_class": [
+      "IP-001",
+      "IP-002",
+      "IP-004",
+      "IP-007"
+    ],
+    "pending": [
+      "IP-005",
+      "IP-006"
+    ],
+    "hypothesis_h4": {
+      "status": "SUPPORTED_WITH_LIMITATION",
+      "claim": "Class R patterns work because observable without interpretation; Class G require psychological analysis",
+      "class_R": {
+        "ids": [
+          "IP-001",
+          "IP-002",
+          "IP-004",
+          "IP-007"
+        ],
+        "observable_test": "Could say this literally happened yesterday"
+      },
+      "class_G": {
+        "ids": [
+          "IP-003",
+          "IP-008"
+        ],
+        "examples_lexical": [
+          "openness",
+          "trust",
+          "closeness",
+          "avoidance as label"
+        ]
+      },
+      "next_step": "Targeted pair validation — not IP-005 bulk, not TL-1",
+      "validation_set": "../datasets/TODAY_H4_VALIDATION_V0.json",
+      "editorial_sign_off": "2026-06-23"
+    },
+    "pattern_classes": {
+      "R": {
+        "label": "Recognition",
+        "description": "High keep; immediate recognition; observable"
+      },
+      "G": {
+        "label": "Generic",
+        "description": "Psychological words; low recognition; interpretive"
+      },
+      "pending": {
+        "label": "Insufficient data",
+        "description": "Do not generalize"
+      }
+    },
+    "generic_class": [
+      "IP-003",
+      "IP-008"
+    ],
+    "hypothesis_h5_language": {
+      "ref": "../TODAY_SELF_VERIFICATION_V0.md",
+      "name": "Self-Verification Hypothesis",
+      "status": "CANDIDATE",
+      "claim": "Text works when user can self-verify without accepting author interpretation",
+      "unifies": [
+        "internal_patterns_class_R",
+        "core_scenes",
+        "anchor_types"
+      ],
+      "h4_relation": "observable_behavior is one verification_type under H5",
+      "note": "Distinct from IPL-H5 lens independence in TODAY_INTERNAL_PATTERNS_V0.md"
+    }
+  }
+}

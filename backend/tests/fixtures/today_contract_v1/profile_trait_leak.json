@@ -1,0 +1,53 @@
+{
+  "spheres": {
+    "love": { "score": 70, "insight": "В близости честный контакт полезнее красивой картинки." },
+    "work": {
+      "score": 75,
+      "insight": "Игорь отлично проявляет себя в профессиях связанных с коммуникацией и переговорами.",
+      "todayHeadline": "Тон близости и контакта",
+      "watch": "Не форсируй контакт."
+    },
+    "money": { "score": 65, "insight": "Пауза перед тратой полезна." },
+    "energy": { "score": 72 }
+  },
+  "narrative": {
+    "guide": { "generation_id": "gen-profile-leak", "payload": { "headline": "День про ясность" } },
+    "spheres": {
+      "payload": {
+        "work_insight": "Игорь отлично проявляет себя в профессиях связанных с коммуникацией.",
+        "family_support": "Семья и дом — поддержка и ясность.",
+        "family_risk": "Семья и дом — поддержка и ясность."
+      }
+    }
+  },
+  "morning_ritual": {
+    "daily_horoscope": {
+      "spine": {
+        "best_mode": "Держи одну линию.",
+        "first_move": "Сделай один короткий шаг по работе до обеда.",
+        "main_risk": "Распыление и импульсивные реакции."
+      },
+      "scenarios": [
+        {
+          "slug": "career",
+          "focus": "Завершение линии",
+          "summary": "Сегодня важно не распыляться и держать один понятный вектор."
+        },
+        {
+          "slug": "family",
+          "focus": "Тёплая поддержка",
+          "summary": "Один разговор без давления."
+        }
+      ]
+    },
+    "daily_recommendations": {
+      "what_to_do": "Закрой одну задачу до обеда.",
+      "what_to_avoid": "Импульсивные траты."
+    }
+  },
+  "fusion": {
+    "scores": { "energy": 70, "emotional_balance": 68, "focus": 72 },
+    "encouragement": "Ровный день."
+  },
+  "fallback_context": { "locale": "ru", "progress": {} }
+}

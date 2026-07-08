@@ -1,0 +1,58 @@
+[
+  {
+    "phase_id": "new",
+    "name": "New Moon",
+    "themes": "Quiet reset, clarifying motives, committing to internal alignment.",
+    "guidance": "Slow down and reset. Listen to your body and choose one clear intention instead of many goals.",
+    "human_text": "This is a good moment for a quiet reset: clarify your motives and commit to internal alignment. Slow down and reset. Listen to your body and choose one clear intention instead of many goals."
+  },
+  {
+    "phase_id": "waxing_crescent",
+    "name": "Waxing Crescent",
+    "themes": "Take first micro-actions, share drafts, invite accountability.",
+    "guidance": "Take small first steps, but don't rush to show everything yet. Let ideas grow before sharing widely.",
+    "human_text": "Time for first micro-actions: share drafts and invite accountability. Take small first steps, but don't rush to show everything yet. Let ideas grow before sharing widely."
+  },
+  {
+    "phase_id": "first_quarter",
+    "name": "First Quarter",
+    "themes": "Hit resistance that demands refinement or firmer commitment.",
+    "guidance": "Notice what feels difficult or blocked. Decide whether to adjust your approach or commit more fully.",
+    "human_text": "You may hit resistance that demands refinement or firmer commitment. Notice what feels difficult or blocked. Decide whether to adjust your approach or commit more fully."
+  },
+  {
+    "phase_id": "waxing_gibbous",
+    "name": "Waxing Gibbous",
+    "themes": "Fine-tuning strategy, securing resources, aligning collaborators.",
+    "guidance": "Check details, expectations, and resources. Make sure everything is ready before presenting results.",
+    "human_text": "This is a good moment to check details: agreements, timelines, and resources. Fine-tune your strategy, secure resources, and align collaborators. Better to refine than rush to publish."
+  },
+  {
+    "phase_id": "full",
+    "name": "Full Moon",
+    "themes": "Insight arrives; truths are revealed; emotional tides peak.",
+    "guidance": "Share what you've reached, acknowledge emotions, and release what no longer fits your path.",
+    "human_text": "Insight arrives; truths are revealed; emotional tides peak. Share what you've reached, acknowledge emotions, and release what no longer fits your path."
+  },
+  {
+    "phase_id": "waning_gibbous",
+    "name": "Waning Gibbous",
+    "themes": "Harvest, integration, and teaching from what surfaced.",
+    "guidance": "Reflect on what worked. Write down lessons and thank people who supported you.",
+    "human_text": "Harvest, integration, and learning from what has surfaced. Reflect on what worked. Write down lessons and thank people who supported you."
+  },
+  {
+    "phase_id": "last_quarter",
+    "name": "Last Quarter",
+    "themes": "Release, restructure, simplify commitments.",
+    "guidance": "Let go of unnecessary tasks and commitments. Simplify plans and remove what drains energy.",
+    "human_text": "Release, restructure, simplify commitments. Let go of unnecessary tasks and commitments. Simplify plans and remove what drains energy."
+  },
+  {
+    "phase_id": "waning_crescent",
+    "name": "Waning Crescent",
+    "themes": "Restoration, dreams, and gestating the next cycle.",
+    "guidance": "Rest more, reduce input, and avoid major decisions. Pay attention to subtle physical and emotional signals.",
+    "human_text": "Restoration, dreams, and gestating the next cycle. Rest more, reduce input, and avoid major decisions. Pay attention to subtle physical and emotional signals."
+  }
+]

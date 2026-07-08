@@ -1,0 +1,141 @@
+{
+  "contract_version": "symbolic_commerce_link_registry_v1",
+  "domain": "symbolic_commerce",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "D1.5 Symbolic Commerce Link registry — SKU references to D1.1 assets only.",
+  "symbolic_commerce_links": {
+    "link_amethyst_stone_v1": {
+      "contract_version": "symbolic_commerce_link_v1",
+      "link_id": "link_amethyst_stone_v1",
+      "sku_ref": "sku.amethyst.stone.v1",
+      "asset_code": "amethyst",
+      "product_type": "physical_stone",
+      "link_mode": "references",
+      "status": "active",
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "link_obsidian_stone_v1": {
+      "contract_version": "symbolic_commerce_link_v1",
+      "link_id": "link_obsidian_stone_v1",
+      "sku_ref": "sku.obsidian.stone.v1",
+      "asset_code": "obsidian",
+      "product_type": "physical_stone",
+      "link_mode": "references",
+      "status": "active",
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "link_quartz_stone_v1": {
+      "contract_version": "symbolic_commerce_link_v1",
+      "link_id": "link_quartz_stone_v1",
+      "sku_ref": "sku.quartz.stone.v1",
+      "asset_code": "quartz",
+      "product_type": "physical_stone",
+      "link_mode": "references",
+      "status": "active",
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "link_rose_quartz_stone_v1": {
+      "contract_version": "symbolic_commerce_link_v1",
+      "link_id": "link_rose_quartz_stone_v1",
+      "sku_ref": "sku.rose_quartz.stone.v1",
+      "asset_code": "rose_quartz",
+      "product_type": "physical_stone",
+      "link_mode": "references",
+      "status": "active",
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "link_moonstone_stone_v1": {
+      "contract_version": "symbolic_commerce_link_v1",
+      "link_id": "link_moonstone_stone_v1",
+      "sku_ref": "sku.moonstone.stone.v1",
+      "asset_code": "moonstone",
+      "product_type": "physical_stone",
+      "link_mode": "references",
+      "status": "active",
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "link_white_candle_v1": {
+      "contract_version": "symbolic_commerce_link_v1",
+      "link_id": "link_white_candle_v1",
+      "sku_ref": "sku.white_candle.ritual.v1",
+      "asset_code": "white_candle",
+      "product_type": "ritual_candle",
+      "link_mode": "references",
+      "status": "active",
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "link_black_candle_v1": {
+      "contract_version": "symbolic_commerce_link_v1",
+      "link_id": "link_black_candle_v1",
+      "sku_ref": "sku.black_candle.ritual.v1",
+      "asset_code": "black_candle",
+      "product_type": "ritual_candle",
+      "link_mode": "references",
+      "status": "active",
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "link_gold_candle_v1": {
+      "contract_version": "symbolic_commerce_link_v1",
+      "link_id": "link_gold_candle_v1",
+      "sku_ref": "sku.gold_candle.ritual.v1",
+      "asset_code": "gold_candle",
+      "product_type": "ritual_candle",
+      "link_mode": "references",
+      "status": "active",
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "link_fool_tarot_v1": {
+      "contract_version": "symbolic_commerce_link_v1",
+      "link_id": "link_fool_tarot_v1",
+      "sku_ref": "sku.fool.major_arcana.v1",
+      "asset_code": "fool",
+      "product_type": "tarot_deck",
+      "link_mode": "references",
+      "status": "active",
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "link_hermit_tarot_v1": {
+      "contract_version": "symbolic_commerce_link_v1",
+      "link_id": "link_hermit_tarot_v1",
+      "sku_ref": "sku.hermit.major_arcana.v1",
+      "asset_code": "hermit",
+      "product_type": "tarot_deck",
+      "link_mode": "references",
+      "status": "active",
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "link_amethyst_bracelet_v1": {
+      "contract_version": "symbolic_commerce_link_v1",
+      "link_id": "link_amethyst_bracelet_v1",
+      "sku_ref": "sku.amethyst.bracelet.v1",
+      "asset_code": "amethyst",
+      "product_type": "bracelet",
+      "link_mode": "references",
+      "status": "active",
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "link_reflection_kit_v1": {
+      "contract_version": "symbolic_commerce_link_v1",
+      "link_id": "link_reflection_kit_v1",
+      "sku_ref": "sku.reflection.practice_kit.v1",
+      "asset_code": "white_candle",
+      "product_type": "practice_kit",
+      "link_mode": "references",
+      "status": "active",
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    }
+  }
+}

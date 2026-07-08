@@ -1,0 +1,95 @@
+.thread {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+.turn {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.turnPractitioner {
+  padding: 1rem 1.05rem 1.05rem;
+  border-radius: 18px 18px 18px 6px;
+  background: linear-gradient(165deg, rgba(255, 252, 246, 0.98), rgba(255, 255, 255, 0.94));
+  border: 1px solid rgba(201, 168, 115, 0.22);
+  box-shadow: 0 8px 24px rgba(125, 100, 63, 0.07);
+}
+
+.turnUser {
+  padding: 0.15rem 0 0.15rem 0.35rem;
+}
+
+.role {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #9a8468;
+}
+
+.message {
+  margin: 0.35rem 0 0;
+  display: grid;
+  gap: 0.55rem;
+  color: #1a1510;
+  line-height: 1.55;
+}
+
+.message :where(h1, h2, h3) {
+  margin: 0;
+  font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
+  font-weight: 600;
+  line-height: 1.15;
+  color: #1a1510;
+}
+
+.message :where(p) {
+  margin: 0;
+  color: #475569;
+}
+
+.response {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.deepen {
+  margin-top: 0.15rem;
+}
+
+.deepenToggle {
+  appearance: none;
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #8f6e43;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.deepenPanel {
+  margin-top: 0.65rem;
+  padding-top: 0.65rem;
+  border-top: 1px dashed rgba(201, 168, 115, 0.35);
+  display: grid;
+  gap: 0.75rem;
+}
+
+.continuity {
+  padding: 0.75rem 0.95rem;
+  border-radius: 14px;
+  background: rgba(255, 247, 235, 0.72);
+  border: 1px solid rgba(201, 168, 115, 0.18);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #5c4426;
+}

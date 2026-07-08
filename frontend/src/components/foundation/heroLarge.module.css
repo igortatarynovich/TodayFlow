@@ -1,0 +1,231 @@
+/**
+ * Hero Large — TODAYFLOW_FOUNDATION_UI §1.1
+ * Code-first SoT (Figma optional).
+ */
+
+.heroLarge {
+  position: relative;
+  margin: 0 calc(-1 * var(--tf-shell-gutter, 1.25rem));
+  min-height: min(var(--tf-hero-large-min-h, 88dvh), 720px);
+  padding: 3.5rem var(--tf-shell-gutter, 1.5rem) 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 0 0 var(--tf-hero-large-radius-bottom, 36px) var(--tf-hero-large-radius-bottom, 36px);
+  background:
+    radial-gradient(ellipse 82% 58% at 18% 0%, rgba(74, 50, 112, 0.11) 0%, transparent 58%),
+    radial-gradient(ellipse 68% 52% at 88% 6%, rgba(198, 166, 119, 0.2) 0%, transparent 54%),
+    linear-gradient(180deg, rgba(255, 253, 249, 0.72) 0%, var(--tf-page, #f3efe8) 100%);
+}
+
+.heroLargeFlush {
+  margin-inline: 0;
+}
+
+.geometry {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.fade {
+  position: absolute;
+  inset: auto 0 0;
+  height: 45%;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent 0%, var(--tf-page, #f3efe8) 92%);
+}
+
+.topBar {
+  position: absolute;
+  top: 0.85rem;
+  left: var(--tf-shell-gutter, 1.5rem);
+  right: var(--tf-shell-gutter, 1.5rem);
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.kicker {
+  margin: 0;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.topAction {
+  padding: 0.25rem 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 600;
+  color: var(--tf-caption, #9a8468);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--tf-hero-large-inner-max, 21rem);
+}
+
+.symbol {
+  width: var(--tf-symbol-xl, 120px);
+  height: var(--tf-symbol-xl, 120px);
+  margin-bottom: 1.35rem;
+  color: var(--tf-ink-soft, #5b4630);
+}
+
+.pillars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.pillar {
+  margin: 0;
+  padding: 0.38rem 0.78rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid rgba(74, 50, 112, 0.14);
+  color: var(--tf-accent-numerology, #4a3270);
+  font-size: var(--tf-type-caption-size, 0.625rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pillarAccent {
+  background: rgba(74, 50, 112, 0.1);
+  border-color: rgba(74, 50, 112, 0.26);
+}
+
+.sectionLabel {
+  margin: 0 0 0.35rem;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
+  font-size: var(--tf-type-hero-size, 2.0625rem);
+  font-weight: var(--tf-type-hero-weight, 700);
+  line-height: var(--tf-type-hero-line, 1.08);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--tf-ink, #1a1510);
+}
+
+.meta {
+  margin: 0.55rem 0 0;
+  font-size: var(--tf-type-body-size, 0.9375rem);
+  line-height: 1.5;
+  color: var(--tf-ink-soft, #5b4630);
+}
+
+.digest {
+  margin: 1.15rem 0 0;
+  padding: 1rem 1.05rem;
+  max-width: var(--tf-shell-readable, 36rem);
+  border-radius: 18px;
+  border-left: 3px solid var(--tf-accent-twilight, #4a3270);
+  background: rgba(255, 255, 255, 0.68);
+  font-size: var(--tf-type-body-size, 0.9375rem);
+  line-height: 1.62;
+  color: var(--tf-ink-soft, #5b4630);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.poetic {
+  margin: 0.65rem 0 0;
+  font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
+  font-size: 1.05rem;
+  line-height: 1.45;
+  color: var(--tf-ink-soft, #5b4630);
+}
+
+.traits {
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.trait {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+}
+
+.traitLabel {
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.traitText {
+  font-size: var(--tf-type-body-size, 0.9375rem);
+  line-height: 1.5;
+  color: var(--tf-ink-soft, #5b4630);
+}
+
+/* Teaser insight strip — Surface A companion (DS-3 prep) */
+.insightBand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.chip {
+  padding: 0.38rem 0.72rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(201, 168, 115, 0.28);
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 600;
+  color: var(--tf-ink-soft, #5b4630);
+}
+
+.anchorList {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--tf-ink-soft, #5b4630);
+}
+
+.anchorItem {
+  font-size: var(--tf-type-body-size, 0.9375rem);
+  line-height: 1.55;
+  margin-bottom: 0.35rem;
+}

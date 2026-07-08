@@ -1,0 +1,24 @@
+{
+  "meta": {
+    "version": "v1.0",
+    "description": "TodayFlow Weekly Integration v1.0 — недельная интеграция. Не отчёт, не разбор. Один абзац, собранный из данных.",
+    "created_at": "2026-01-25"
+  },
+  "weekly_integrations": [
+    {
+      "week_start": "2026-01-20",
+      "week_end": "2026-01-26",
+      "user_id": "user.example",
+      "integration_text": "За эту неделю ты чаще всего сталкивался с перегрузом задач. И всё же ты удерживал паузу перед реакцией. Это формирует новый ритм.",
+      "data_points": {
+        "most_common_state": "overload",
+        "most_common_trigger": "deadline",
+        "practices_held": ["practice.001", "practice.004"],
+        "completion_rate": 0.85,
+        "where_held": "pause_before_reaction",
+        "where_released": "task_switching"
+      },
+      "created_at": "2026-01-27T08:00:00Z"
+    }
+  ]
+}

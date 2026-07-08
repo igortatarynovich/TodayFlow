@@ -1,0 +1,523 @@
+[
+  {
+    "id": "clarity_triad",
+    "title": "Clarity Triad",
+    "description": "Three-card spread that frames past influence, current pattern, and actionable focus.",
+    "positions": [
+      {
+        "id": "past",
+        "title": "Origin",
+        "prompt": "Что сформировало текущую ситуацию?",
+        "axes": ["A1", "A4"]
+      },
+      {
+        "id": "present",
+        "title": "Pattern",
+        "prompt": "Что проявляется прямо сейчас?",
+        "axes": ["A2", "A5"]
+      },
+      {
+        "id": "action",
+        "title": "Integration",
+        "prompt": "Что поддержит следующий шаг?",
+        "axes": ["A3", "A6"]
+      }
+    ]
+  },
+  {
+    "id": "alignment_cross",
+    "title": "Alignment Cross",
+    "description": "Four-card check-in (Mind · Heart · Body · Integration).",
+    "positions": [
+      {
+        "id": "mind",
+        "title": "Mind",
+        "prompt": "Как мыслительный паттерн влияет на ситуацию?",
+        "axes": ["A4", "A7"]
+      },
+      {
+        "id": "heart",
+        "title": "Heart",
+        "prompt": "Как эмоции окрашивают восприятие?",
+        "axes": ["A2", "A6"]
+      },
+      {
+        "id": "body",
+        "title": "Body",
+        "prompt": "Что говорит тело/энергия?",
+        "axes": ["A1", "A3"]
+      },
+      {
+        "id": "integration",
+        "title": "Integration",
+        "prompt": "Как объединить сигналы в действие?",
+        "axes": ["A5", "A8"]
+      }
+    ]
+  },
+  {
+    "id": "career_compass",
+    "title": "Career Compass",
+    "description": "Guides momentum, friction, leverage, and next action for work chapters.",
+    "positions": [
+      {
+        "id": "pulse",
+        "title": "Momentum",
+        "prompt": "Что задаёт тон вашей текущей карьеры прямо сейчас?",
+        "axes": ["A3", "A4"]
+      },
+      {
+        "id": "blocker",
+        "title": "Friction",
+        "prompt": "Где ощущается застой или сопротивление?",
+        "axes": ["A5", "A7"]
+      },
+      {
+        "id": "leverage",
+        "title": "Leverage",
+        "prompt": "Что стоит усилить, чтобы повернуть сюжет?",
+        "axes": ["A1", "A6"]
+      },
+      {
+        "id": "next_step",
+        "title": "Next step",
+        "prompt": "Какой практический шаг даст максимум отдачи?",
+        "axes": ["A2", "A4"]
+      }
+    ]
+  },
+  {
+    "id": "relationship_mirror",
+    "title": "Relationship Mirror",
+    "description": "Maps how you, the other, the current dynamic, and the bridge to closeness behave.",
+    "positions": [
+      {
+        "id": "self",
+        "title": "You",
+        "prompt": "Какой сигнал вы посылаете партнёру сейчас?",
+        "axes": ["A2", "A6"]
+      },
+      {
+        "id": "other",
+        "title": "Other",
+        "prompt": "Что отражает партнёр/другая сторона?",
+        "axes": ["A1", "A5"]
+      },
+      {
+        "id": "dynamic",
+        "title": "Dynamic",
+        "prompt": "Как выглядит пространство между вами?",
+        "axes": ["A3", "A7"]
+      },
+      {
+        "id": "bridge",
+        "title": "Bridge",
+        "prompt": "Какой мост восстановит близость и доверие?",
+        "axes": ["A4", "A6"]
+      }
+    ]
+  },
+  {
+    "id": "past_present_future",
+    "title": "Past-Present-Future",
+    "description": "Classic three-card spread: What was, what is, what will be.",
+    "positions": [
+      {
+        "id": "past",
+        "title": "Past",
+        "prompt": "Что из прошлого влияет на текущую ситуацию?",
+        "axes": ["A1", "A4"]
+      },
+      {
+        "id": "present",
+        "title": "Present",
+        "prompt": "Что происходит прямо сейчас?",
+        "axes": ["A2", "A5"]
+      },
+      {
+        "id": "future",
+        "title": "Future",
+        "prompt": "Какое направление открывается впереди?",
+        "axes": ["A3", "A6"]
+      }
+    ]
+  },
+  {
+    "id": "situation_action_outcome",
+    "title": "Situation-Action-Outcome",
+    "description": "Understanding current situation, possible actions, and potential outcomes.",
+    "positions": [
+      {
+        "id": "situation",
+        "title": "Situation",
+        "prompt": "Какова текущая ситуация?",
+        "axes": ["A2", "A4"]
+      },
+      {
+        "id": "action",
+        "title": "Action",
+        "prompt": "Какое действие стоит предпринять?",
+        "axes": ["A1", "A3"]
+      },
+      {
+        "id": "outcome",
+        "title": "Outcome",
+        "prompt": "Какой результат возможен?",
+        "axes": ["A5", "A6"]
+      }
+    ]
+  },
+  {
+    "id": "choice",
+    "title": "Choice",
+    "description": "Two paths: exploring different options and their implications.",
+    "positions": [
+      {
+        "id": "path_one",
+        "title": "Первый путь",
+        "prompt": "Что открывает первый вариант?",
+        "axes": ["A1", "A3"]
+      },
+      {
+        "id": "path_two",
+        "title": "Второй путь",
+        "prompt": "Что открывает второй вариант?",
+        "axes": ["A2", "A4"]
+      }
+    ]
+  },
+  {
+    "id": "one_card",
+    "title": "Одна карта",
+    "description": "Короткий фокус на один узел вопроса.",
+    "positions": [
+      {
+        "id": "focus",
+        "title": "Фокус",
+        "prompt": "На что сейчас важно посмотреть в связи с твоим вопросом?",
+        "axes": ["A2", "A5"]
+      }
+    ]
+  },
+  {
+    "id": "three_cards",
+    "title": "Три карты",
+    "description": "Прошлое, настоящее и возможное развитие ситуации.",
+    "positions": [
+      {
+        "id": "past_line",
+        "title": "Что привело к ситуации",
+        "prompt": "Какие корни и предпосылки сформировали текущий узел?",
+        "axes": ["A1", "A4"]
+      },
+      {
+        "id": "present_line",
+        "title": "Что происходит сейчас",
+        "prompt": "Что активно в динамике прямо сейчас?",
+        "axes": ["A2", "A5"]
+      },
+      {
+        "id": "future_line",
+        "title": "Куда всё может пойти",
+        "prompt": "Какое направление развития наиболее вероятно при текущем выборе?",
+        "axes": ["A3", "A6"]
+      }
+    ]
+  },
+  {
+    "id": "guidance_yes_no",
+    "title": "Да / Нет — что влияет",
+    "description": "Не готовое «да/нет», а разбор сил, которые поддерживают и тормозят решение.",
+    "positions": [
+      {
+        "id": "supports",
+        "title": "Что поддерживает ситуацию",
+        "prompt": "Какие факторы, чувства или обстоятельства работают «за»?",
+        "axes": ["A3", "A6"]
+      },
+      {
+        "id": "blocks",
+        "title": "Что мешает или тормозит",
+        "prompt": "Где сопротивление, страх или размытость?",
+        "axes": ["A5", "A7"]
+      },
+      {
+        "id": "nuance",
+        "title": "Нюанс и зона неопределённости",
+        "prompt": "Где ответ не может быть жёстким без потери правды?",
+        "axes": ["A2", "A4"]
+      }
+    ]
+  },
+  {
+    "id": "guidance_what_happening",
+    "title": "Что происходит?",
+    "description": "Когда картина расплывчата и много эмоций.",
+    "positions": [
+      {
+        "id": "charge",
+        "title": "Что цепляет",
+        "prompt": "Почему это тема задевает именно сейчас?",
+        "axes": ["A2", "A6"]
+      },
+      {
+        "id": "reality_layer",
+        "title": "Что видно и что может быть под поверхностью",
+        "prompt": "Где факты, а где додумывание?",
+        "axes": ["A4", "A7"]
+      },
+      {
+        "id": "blind_spot",
+        "title": "Где легко себя обманывать",
+        "prompt": "Какую правду проще не замечать?",
+        "axes": ["A1", "A5"]
+      }
+    ]
+  },
+  {
+    "id": "guidance_choice_two",
+    "title": "Выбор между двумя вариантами",
+    "description": "Шесть позиций для сравнения двух путей.",
+    "positions": [
+      {
+        "id": "a_gives",
+        "title": "Вариант A — что он даёт",
+        "prompt": "Какой ресурс, облегчение или перспективу даёт первый вариант?",
+        "axes": ["A1", "A3"]
+      },
+      {
+        "id": "a_risk",
+        "title": "Вариант A — риск",
+        "prompt": "Что может дорого стоить в первом варианте?",
+        "axes": ["A5", "A7"]
+      },
+      {
+        "id": "b_gives",
+        "title": "Вариант B — что он даёт",
+        "prompt": "Что открывает второй вариант?",
+        "axes": ["A2", "A4"]
+      },
+      {
+        "id": "b_risk",
+        "title": "Вариант B — риск",
+        "prompt": "Где второй вариант уязвим?",
+        "axes": ["A6", "A8"]
+      },
+      {
+        "id": "weights",
+        "title": "Что важно учитывать",
+        "prompt": "Какие ценности и ограничения нельзя игнорировать?",
+        "axes": ["A3", "A6"]
+      },
+      {
+        "id": "best_step",
+        "title": "Лучший следующий шаг",
+        "prompt": "Что сделать в реальности в ближайшие дни?",
+        "axes": ["A4", "A7"]
+      }
+    ]
+  },
+  {
+    "id": "guidance_relationship_five",
+    "title": "Отношения",
+    "description": "Динамика между двумя людьми и практический фокус действия.",
+    "positions": [
+      {
+        "id": "what_user_feels",
+        "title": "Что ты чувствуешь",
+        "prompt": "Какая эмоциональная правда у тебя сейчас?",
+        "axes": ["A2", "A6"]
+      },
+      {
+        "id": "what_other_feels",
+        "title": "Что чувствует другой человек",
+        "prompt": "Как может выглядеть позиция другого человека извне?",
+        "axes": ["A1", "A5"]
+      },
+      {
+        "id": "between_you",
+        "title": "Что между вами",
+        "prompt": "Какая связка, дистанция или напряжение формирует поле между вами?",
+        "axes": ["A3", "A7"]
+      },
+      {
+        "id": "risk",
+        "title": "Где риск",
+        "prompt": "Где можно потерять ясность, границы или уважение к себе?",
+        "axes": ["A5", "A8"]
+      },
+      {
+        "id": "best_action",
+        "title": "Что лучше сделать",
+        "prompt": "Какой шаг сейчас добавляет честность и управляемость?",
+        "axes": ["A4", "A6"]
+      }
+    ]
+  },
+  {
+    "id": "guidance_sexual_five",
+    "title": "Сексуальная динамика",
+    "description": "Желание, дистанция и честность в контакте.",
+    "positions": [
+      {
+        "id": "pull",
+        "title": "Что тебя тянет",
+        "prompt": "Где притяжение и что оно для тебя значит?",
+        "axes": ["A2", "A5"]
+      },
+      {
+        "id": "stop",
+        "title": "Что тебя останавливает",
+        "prompt": "Какие страхи, табу или сигналы безопасности включаются?",
+        "axes": ["A4", "A7"]
+      },
+      {
+        "id": "tension",
+        "title": "Где есть напряжение",
+        "prompt": "Где конфликт между хотеть и можно?",
+        "axes": ["A3", "A6"]
+      },
+      {
+        "id": "honesty",
+        "title": "Что стоит признать честно",
+        "prompt": "Какая правда снимает лишнюю игру?",
+        "axes": ["A1", "A8"]
+      },
+      {
+        "id": "move",
+        "title": "Как лучше действовать",
+        "prompt": "Что уважает и тело, и границы?",
+        "axes": ["A5", "A6"]
+      }
+    ]
+  },
+  {
+    "id": "guidance_inner_conflict",
+    "title": "Внутренний конфликт",
+    "description": "Когда части тебя хотят разного.",
+    "positions": [
+      {
+        "id": "want",
+        "title": "Чего ты хочешь",
+        "prompt": "Какая часть тебя тянет вперёд?",
+        "axes": ["A2", "A4"]
+      },
+      {
+        "id": "fear",
+        "title": "Чего ты боишься",
+        "prompt": "Чего ты опасаешься потерять или получить?",
+        "axes": ["A5", "A7"]
+      },
+      {
+        "id": "suppress",
+        "title": "Что подавляешь",
+        "prompt": "Что ты не позволяешь себе признать вслух?",
+        "axes": ["A3", "A6"]
+      },
+      {
+        "id": "if_stay",
+        "title": "Что будет, если ничего не менять",
+        "prompt": "Куда заведёт инерция?",
+        "axes": ["A1", "A8"]
+      },
+      {
+        "id": "unstick",
+        "title": "Что поможет выйти из застревания",
+        "prompt": "Какой маленький шаг возвращает выбор?",
+        "axes": ["A4", "A6"]
+      }
+    ]
+  },
+  {
+    "id": "guidance_work_money",
+    "title": "Работа и деньги",
+    "description": "Практический разбор решений по ресурсу и карьере.",
+    "positions": [
+      {
+        "id": "ground_truth",
+        "title": "Где сейчас реальная ситуация",
+        "prompt": "Что подтверждается фактами и договорённостями?",
+        "axes": ["A3", "A4"]
+      },
+      {
+        "id": "illusion_fear",
+        "title": "Где иллюзия или страх",
+        "prompt": "Где картину подкрашивает тревога или завышенные ожидания?",
+        "axes": ["A5", "A7"]
+      },
+      {
+        "id": "can_work",
+        "title": "Что может сработать",
+        "prompt": "Где есть реальный рычаг?",
+        "axes": ["A1", "A6"]
+      },
+      {
+        "id": "can_harm",
+        "title": "Что может навредить",
+        "prompt": "Где риск переоценить себя или недооценить последствия?",
+        "axes": ["A2", "A8"]
+      },
+      {
+        "id": "practical_step",
+        "title": "Следующий практический шаг",
+        "prompt": "Что можно сделать на этой неделе измеримо?",
+        "axes": ["A4", "A7"]
+      }
+    ]
+  },
+  {
+    "id": "guidance_deep_eight",
+    "title": "Глубокий разбор",
+    "description": "Восемь позиций для сложной ситуации.",
+    "positions": [
+      {
+        "id": "essence",
+        "title": "Суть ситуации",
+        "prompt": "В чём ядро запроса?",
+        "axes": ["A2", "A5"]
+      },
+      {
+        "id": "your_role",
+        "title": "Твоя роль",
+        "prompt": "Как ты участвуешь в сценарии?",
+        "axes": ["A4", "A6"]
+      },
+      {
+        "id": "other_role",
+        "title": "Роль другого человека или внешнего фактора",
+        "prompt": "Что приходит извне и как это давит или поддерживает?",
+        "axes": ["A1", "A7"]
+      },
+      {
+        "id": "hidden",
+        "title": "Что скрыто",
+        "prompt": "Что пока неочевидно, но влияет?",
+        "axes": ["A3", "A8"]
+      },
+      {
+        "id": "main_risk",
+        "title": "Главный риск",
+        "prompt": "Где цена ошибки выше всего?",
+        "axes": ["A5", "A7"]
+      },
+      {
+        "id": "main_chance",
+        "title": "Главная возможность",
+        "prompt": "Где окно для роста или ясности?",
+        "axes": ["A6", "A4"]
+      },
+      {
+        "id": "advice",
+        "title": "Совет",
+        "prompt": "Какая установка помогает держать баланс?",
+        "axes": ["A2", "A3"]
+      },
+      {
+        "id": "next_move",
+        "title": "Следующий шаг",
+        "prompt": "Что сделать первым в реальности?",
+        "axes": ["A4", "A7"]
+      }
+    ]
+  }
+]

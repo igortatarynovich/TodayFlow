@@ -1,0 +1,48 @@
+[
+  {
+    "forecast_id": "waxing_crescent.A1",
+    "phase": "waxing_crescent",
+    "axis": "A1",
+    "title": "Start small",
+    "summary": "Momentum is building, but it's early. Focus on one small move that proves you're in motion—even if the plan isn't perfect yet.",
+    "cta": "Say one sentence you want to be able to say by Friday: \"This week I…\".",
+    "human_text": "Start small this week. Momentum is building, but it's early. Focus on one small move that proves you're in motion—even if the plan isn't perfect yet. Say one sentence you want to be able to say by Friday: \"This week I…\"."
+  },
+  {
+    "forecast_id": "waxing_crescent.A2",
+    "phase": "waxing_crescent",
+    "axis": "A2",
+    "title": "Name what you feel",
+    "summary": "Feelings get heavier when they stay unspoken. If something is bothering you, name it early and simply—before it turns into pressure.",
+    "cta": "Record a 30-second voice note: \"By Friday, I want to feel…\".",
+    "human_text": "Name what you feel this week. Feelings get heavier when they stay unspoken. If something is bothering you, name it early and simply—before it turns into pressure. Record a 30-second voice note: \"By Friday, I want to feel…\"."
+  },
+  {
+    "forecast_id": "full.A6",
+    "phase": "full",
+    "axis": "A6",
+    "title": "Relationship reality check",
+    "summary": "This phase puts relationships in focus. Notice where you want more closeness—and where you need clearer boundaries.",
+    "cta": "Choose one conversation and say: \"Here's what matters to me.\"",
+    "human_text": "This week brings a relationship reality check. This phase puts relationships in focus. Notice where you want more closeness—and where you need clearer boundaries. Choose one conversation and say: \"Here's what matters to me.\""
+  },
+  {
+    "forecast_id": "waning_gibbous.A4",
+    "phase": "waning_gibbous",
+    "axis": "A4",
+    "title": "Keep what worked",
+    "summary": "This is a good moment to reflect and keep the useful parts. Writing it down helps you repeat success instead of starting from zero next cycle.",
+    "cta": "Write three things you want to repeat next cycle.",
+    "human_text": "Keep what worked this week. This is a good moment to reflect and keep the useful parts. Writing it down helps you repeat success instead of starting from zero next cycle. Write three things you want to repeat next cycle."
+  },
+  {
+    "forecast_id": "waning_crescent.any",
+    "phase": "waning_crescent",
+    "axis": "any",
+    "title": "Slow down on purpose",
+    "summary": "Reduce input and lower the pressure. Rest more, move slower, and listen to what your body is asking for.",
+    "cta": "Pick one day with no big decisions—just observe.",
+    "human_text": "Slow down on purpose this week. Reduce input and lower the pressure. Rest more, move slower, and listen to what your body is asking for. Pick one day with no big decisions—just observe."
+  }
+]
+

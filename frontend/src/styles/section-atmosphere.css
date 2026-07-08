@@ -1,0 +1,261 @@
+/**
+ * Product atmosphere system — one shell (nav, typography, rhythm), per-section mood.
+ * Set on <html data-atmosphere="…"> via SectionAtmosphereBridge.
+ */
+
+/* —— Shared product language —— */
+:root {
+  --product-radius-panel: 26px;
+  --product-radius-chip: 18px;
+  --product-radius-hero: 28px;
+  --product-content-max: 640px;
+  --product-content-wide: 1080px;
+  --product-eyebrow-size: 0.68rem;
+  --product-eyebrow-tracking: 0.12em;
+
+  /* Default (warm cream) section tokens */
+  --section-page-bg: var(--todayflow-cream-page);
+  --section-page-gradient: none;
+  --section-text: var(--orbit-color-ink);
+  --section-text-muted: var(--orbit-color-muted);
+  --section-accent: var(--orbit-color-secondary-accent);
+  --section-accent-soft: rgba(214, 142, 122, 0.14);
+  --section-panel-bg: rgba(255, 255, 255, 0.94);
+  --section-panel-border: rgba(214, 142, 122, 0.26);
+  --section-glow-a: rgba(243, 198, 180, 0.35);
+  --section-glow-b: rgba(214, 142, 122, 0.18);
+  --section-nav-bg: rgba(250, 248, 245, 0.88);
+  --section-nav-border: rgba(229, 224, 216, 0.35);
+  --section-nav-ink: var(--orbit-color-ink);
+  --section-footer-bg: var(--orbit-color-mist);
+  --section-footer-border: var(--orbit-color-border-light);
+  --section-footer-ink: var(--orbit-color-slate);
+  --section-cta-gradient: var(--todayflow-gradient-cta);
+}
+
+/* Utility: pages that opt into section tokens */
+.todayflow-section {
+  min-height: 100vh;
+  color: var(--section-text);
+  background: var(--section-page-gradient, var(--section-page-bg));
+}
+
+/* Content column inherits atmosphere between nav and footer */
+.tf-content {
+  background: var(--section-page-gradient, var(--section-page-bg));
+  transition: background 320ms ease;
+}
+
+/* —— Home: editorial landing, soft parchment —— */
+html[data-atmosphere="home"] {
+  --section-page-bg: #f3efe8;
+  --section-page-gradient:
+    radial-gradient(ellipse 80% 50% at 12% 0%, rgba(243, 198, 180, 0.22), transparent 58%),
+    radial-gradient(ellipse 60% 40% at 88% 4%, rgba(230, 200, 170, 0.14), transparent 55%),
+    #f3efe8;
+  --section-glow-a: rgba(243, 198, 180, 0.28);
+}
+
+/* —— Today: morning warmth, peach wash —— */
+html[data-atmosphere="today"] {
+  --section-page-bg: #f9f3ee;
+  --section-page-gradient:
+    radial-gradient(ellipse 90% 55% at 6% -4%, rgba(243, 198, 180, 0.32), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 94% 2%, rgba(255, 220, 200, 0.2), transparent 55%),
+    #f9f3ee;
+  --section-accent-soft: rgba(243, 198, 180, 0.2);
+}
+
+/* —— Flow: calendar rhythm, sage undertone —— */
+html[data-atmosphere="flow"] {
+  --section-page-bg: #f7f2ea;
+  --section-page-gradient:
+    radial-gradient(ellipse 85% 50% at 10% -6%, rgba(220, 200, 175, 0.24), transparent 58%),
+    radial-gradient(ellipse 65% 42% at 90% 0%, rgba(200, 185, 165, 0.16), transparent 55%),
+    #f7f2ea;
+  --section-accent: #8f6e43;
+  --section-accent-soft: rgba(143, 110, 67, 0.12);
+}
+
+/* —— Profile: editorial neutral, paper —— */
+html[data-atmosphere="profile"] {
+  --section-page-bg: #f6f5f2;
+  --section-page-gradient:
+    radial-gradient(ellipse 75% 48% at 50% -8%, rgba(230, 225, 218, 0.45), transparent 60%),
+    #f6f5f2;
+  --section-text: #1a1510;
+  --section-text-muted: #6a6258;
+  --section-panel-border: rgba(180, 170, 155, 0.22);
+}
+
+/* —— Compatibility: warm gold accent —— */
+html[data-atmosphere="compatibility"] {
+  --section-page-bg: #f6f5f2;
+  --section-page-gradient:
+    radial-gradient(ellipse 80% 50% at 15% -5%, rgba(210, 180, 120, 0.2), transparent 58%),
+    radial-gradient(ellipse 60% 40% at 85% 3%, rgba(214, 142, 122, 0.12), transparent 55%),
+    #f6f5f2;
+  --section-accent: #a67c3a;
+  --section-accent-soft: rgba(210, 180, 120, 0.16);
+}
+
+/* —— Practices: calm studio, same warm family —— */
+html[data-atmosphere="practices"] {
+  --section-page-bg: #faf9f7;
+  --section-page-gradient:
+    radial-gradient(ellipse 70% 45% at 20% -4%, rgba(243, 230, 220, 0.35), transparent 58%),
+    #faf9f7;
+  --section-text: var(--orbit-color-primary-accent);
+  --section-text-muted: var(--orbit-color-muted);
+}
+
+/* —— Tarot: ritual void, gold accent —— */
+html[data-atmosphere="tarot"] {
+  --section-page-bg: #07080c;
+  --section-page-gradient:
+    radial-gradient(ellipse 80% 50% at 12% -8%, rgba(90, 80, 130, 0.18), transparent 58%),
+    radial-gradient(ellipse 65% 42% at 88% 0%, rgba(201, 169, 98, 0.08), transparent 55%),
+    radial-gradient(ellipse 50% 35% at 50% 100%, rgba(40, 45, 65, 0.2), transparent 60%),
+    linear-gradient(180deg, #0c0d12 0%, #07080c 100%);
+  --section-text: #ece8e0;
+  --section-text-muted: rgba(210, 202, 188, 0.72);
+  --section-accent: #d4b878;
+  --section-accent-soft: rgba(210, 180, 120, 0.14);
+  --section-panel-bg: rgba(24, 28, 38, 0.72);
+  --section-panel-border: rgba(255, 255, 255, 0.08);
+  --section-glow-a: rgba(140, 120, 200, 0.22);
+  --section-glow-b: rgba(180, 130, 90, 0.12);
+  --section-nav-bg: rgba(10, 12, 16, 0.94);
+  --section-nav-border: rgba(255, 255, 255, 0.08);
+  --section-nav-ink: rgba(236, 232, 224, 0.94);
+  --section-footer-bg: #0d0f14;
+  --section-footer-border: rgba(255, 255, 255, 0.08);
+  --section-footer-ink: rgba(190, 182, 168, 0.72);
+  --section-cta-gradient: linear-gradient(145deg, #e8d4a8 0%, #c9a962 45%, #b8944f 100%);
+
+  /* Tarot module aliases */
+  --tarot-void: #07080c;
+  --tarot-bg: #0c0d12;
+  --tarot-surface: var(--section-panel-bg);
+  --tarot-surface-strong: rgba(22, 24, 32, 0.92);
+  --tarot-border: var(--section-panel-border);
+  --tarot-border-gold: rgba(201, 169, 98, 0.32);
+  --tarot-gold: #c9a962;
+  --tarot-gold-soft: rgba(201, 169, 98, 0.1);
+  --tarot-text: #f4f0e8;
+  --tarot-muted: rgba(185, 178, 165, 0.72);
+  --tarot-glow: rgba(100, 90, 140, 0.18);
+}
+
+/* —— Nav adapts to section —— */
+.orbit-nav {
+  background: var(--section-nav-bg);
+  border-bottom-color: var(--section-nav-border);
+}
+
+html[data-atmosphere="tarot"] .orbit-nav {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+}
+
+html[data-atmosphere="tarot"] .orbit-nav__logo,
+html[data-atmosphere="tarot"] .orbit-nav__link {
+  color: var(--section-nav-ink);
+}
+
+html[data-atmosphere="tarot"] .orbit-nav__link:hover {
+  color: #f5f1ea;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+html[data-atmosphere="tarot"] .orbit-nav__link--active {
+  color: var(--tarot-gold);
+}
+
+html[data-atmosphere="tarot"] .orbit-nav__link--active::after {
+  background: var(--tarot-gold);
+  opacity: 0.85;
+}
+
+html[data-atmosphere="tarot"] .orbit-nav__mobile-toggle span {
+  background: rgba(236, 232, 224, 0.92);
+}
+
+html[data-atmosphere="tarot"] .orbit-nav__profile-menu,
+html[data-atmosphere="tarot"] .orbit-nav__dropdown-menu {
+  background: rgba(22, 26, 34, 0.98);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+html[data-atmosphere="tarot"] .orbit-nav__profile-item,
+html[data-atmosphere="tarot"] .orbit-nav__dropdown-item {
+  color: rgba(230, 224, 212, 0.9);
+}
+
+html[data-atmosphere="tarot"] .orbit-nav__profile-item:hover,
+html[data-atmosphere="tarot"] .orbit-nav__dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #f5f1ea;
+}
+
+/* —— Footer adapts —— */
+.orbit-footer {
+  background: var(--section-footer-bg);
+  border-top-color: var(--section-footer-border);
+  color: var(--section-footer-ink);
+  transition: background 320ms ease, color 320ms ease, border-color 320ms ease;
+}
+
+html[data-atmosphere="tarot"] .orbit-footer__column-title,
+html[data-atmosphere="tarot"] .orbit-footer__cta-title {
+  color: rgba(230, 224, 212, 0.88);
+}
+
+html[data-atmosphere="tarot"] .orbit-footer__link {
+  color: rgba(190, 182, 168, 0.78);
+}
+
+html[data-atmosphere="tarot"] .orbit-footer__link:hover {
+  color: rgba(230, 220, 200, 0.95);
+}
+
+html[data-atmosphere="tarot"] .orbit-footer__newsletter-input {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #ece8e0;
+}
+
+html[data-atmosphere="tarot"] .orbit-footer .orbit-button-primary {
+  background: var(--section-cta-gradient);
+  color: #1a1410;
+  border-color: transparent;
+}
+
+/* Warm sections: serene decor only where class is present */
+html[data-atmosphere="tarot"] .orbit-button-secondary {
+  border-color: rgba(255, 255, 255, 0.16);
+  color: var(--section-text-muted);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+html[data-atmosphere="tarot"] .orbit-button-secondary:hover {
+  color: var(--section-text);
+  border-color: rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+html[data-atmosphere="flow"] .todayflow-serene::before {
+  background:
+    radial-gradient(ellipse 70% 45% at 8% 0%, rgba(200, 185, 165, 0.28), transparent 58%),
+    radial-gradient(ellipse 55% 38% at 92% 6%, rgba(143, 110, 67, 0.12), transparent 55%);
+}
+
+html[data-atmosphere="compatibility"] .todayflow-serene::before {
+  background:
+    radial-gradient(ellipse 75% 48% at 12% -4%, rgba(210, 180, 120, 0.26), transparent 58%),
+    radial-gradient(ellipse 60% 40% at 88% 4%, rgba(214, 142, 122, 0.14), transparent 55%);
+}
+
+html[data-atmosphere="tarot"] .todayflow-serene::before,
+html[data-atmosphere="tarot"] .todayflow-serene::after {
+  display: none;
+}

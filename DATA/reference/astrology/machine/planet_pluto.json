@@ -1,0 +1,21 @@
+{
+  "contract_version": "reference_machine_contract_v1",
+  "domain": "astrology",
+  "entity_code": "astrology.planet.pluto",
+  "entity_type": "Planet",
+  "version": "0.1.0",
+  "status": "draft",
+  "machine_contract": {
+    "vector": {
+      "action_reflection": 0.25,
+      "expansion_consolidation": 0.2,
+      "self_others": 0.15,
+      "structure_flow": 0.65
+    },
+    "tempo": "slow",
+    "risk": "high",
+    "risk_modifier": 0.55,
+    "emotional_load": "intense",
+    "confidence": 0.85
+  }
+}

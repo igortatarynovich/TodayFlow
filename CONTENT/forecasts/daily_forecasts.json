@@ -1,0 +1,402 @@
+[
+  {
+    "id": "forecast-2026-01-20-ru",
+    "date": "2026-01-20",
+    "locale": "ru",
+    "published": true,
+    "tags": ["work", "slowing_down"],
+    "blocks": {
+      "theme": "Сегодня легко захотеть ускориться — дел много, голова уже кружится.",
+      "notice": [
+        "Ты можешь заметить желание отвечать быстрее, чем успел подумать.",
+        "Напряжение в плечах или челюсти часто идёт рядом с ощущением «всё срочно»."
+      ],
+      "scene": [
+        "Сообщения сыпятся, список дел не кончается, дорога до работы или до кухни — единственная пауза.",
+        "Важно: не всё сегодня обязано быть закрыто."
+      ],
+      "micro_action": "Пауза 30 секунд. Глоток воды. Одно письмо — и отложи остальное."
+    },
+    "markers": {
+      "body": ["shoulders", "tension"],
+      "social": ["message", "deadline"],
+      "domestic": ["to_do", "road"],
+      "micro_action": ["pause_30_sec", "water", "one_email"]
+    }
+  },
+  {
+    "id": "forecast-2026-01-20-en",
+    "date": "2026-01-20",
+    "locale": "en",
+    "published": true,
+    "tags": ["work", "slowing_down"],
+    "blocks": {
+      "theme": "Today you may feel the urge to speed up — lots to do, head already spinning.",
+      "notice": [
+        "You might notice wanting to reply faster than you've had time to think.",
+        "Tension in shoulders or jaw often goes with the feeling that \"everything is urgent\"."
+      ],
+      "scene": [
+        "Messages pile up, the to-do list never ends, the commute or walk to the kitchen is the only pause.",
+        "Not everything today has to be closed."
+      ],
+      "micro_action": "Pause 30 seconds. A sip of water. One email — then set the rest aside."
+    },
+    "markers": {
+      "body": ["shoulders", "tension"],
+      "social": ["message", "deadline"],
+      "domestic": ["to_do", "commute"],
+      "micro_action": ["pause_30_sec", "water", "one_email"]
+    }
+  },
+  {
+    "id": "forecast-2026-01-21-ru",
+    "date": "2026-01-21",
+    "locale": "ru",
+    "published": true,
+    "tags": ["relationship", "boundaries"],
+    "blocks": {
+      "theme": "День, когда хочется либо всем угодить, либо всех оттолкнуть.",
+      "notice": [
+        "Обрати внимание на тон в переписке — своё раздражение легко приписать другому.",
+        "Игнор или долгое ожидание ответа могут усилить тревогу."
+      ],
+      "scene": [
+        "Кухня, утренний кофе, список дел — и среди всего этого одно сообщение, которое «задело».",
+        "Границы не обязательно объяснять. Иногда достаточно «сейчас не могу»."
+      ],
+      "micro_action": "Выбери один разговор и скажи: «Вот что для меня важно»."
+    },
+    "markers": {
+      "body": ["tension", "calm"],
+      "social": ["tone", "waiting_reply", "boundary"],
+      "domestic": ["kitchen", "list"],
+      "micro_action": ["one_conversation_matters"]
+    }
+  },
+  {
+    "id": "forecast-2026-01-21-en",
+    "date": "2026-01-21",
+    "locale": "en",
+    "published": true,
+    "tags": ["relationship", "boundaries"],
+    "blocks": {
+      "theme": "A day when you may want either to please everyone or to push everyone away.",
+      "notice": [
+        "Notice the tone in messages — it's easy to blame the other for your own irritability.",
+        "Being ignored or waiting long for a reply can amplify anxiety."
+      ],
+      "scene": [
+        "Kitchen, morning coffee, to-do list — and in the middle of it, one message that \"hit\".",
+        "You don't have to explain boundaries. Sometimes \"I can't right now\" is enough."
+      ],
+      "micro_action": "Choose one conversation and say: \"Here's what matters to me.\""
+    },
+    "markers": {
+      "body": ["tension", "calm"],
+      "social": ["tone", "waiting_reply", "boundary"],
+      "domestic": ["kitchen", "list"],
+      "micro_action": ["one_conversation_matters"]
+    }
+  },
+  {
+    "id": "forecast-2026-01-22-ru",
+    "date": "2026-01-22",
+    "locale": "ru",
+    "published": true,
+    "tags": ["body", "rest"],
+    "blocks": {
+      "theme": "Раздражение без причины чаще всего из-за усталости, а не из-за людей.",
+      "notice": [
+        "Сон, аппетит, тяга к кофе — сигналы, что тело просит передышку.",
+        "Голова «не варит» — не значит, что ты что-то делаешь не так."
+      ],
+      "scene": [
+        "Дорога, покупки, рабочий стол — всё как обычно, но внутренне хочется замедлиться.",
+        "Сегодня можно не закрывать всё. Один день без больших решений — только наблюдать."
+      ],
+      "micro_action": "Три глубоких вдоха. Пять минут тишины. Или один день без крупных решений."
+    },
+    "markers": {
+      "body": ["sleep", "appetite", "head", "rest"],
+      "social": ["silence"],
+      "domestic": ["road", "purchases", "desk"],
+      "micro_action": ["three_breaths", "five_minutes_quiet", "one_day_no_decisions"]
+    }
+  },
+  {
+    "id": "forecast-2026-01-22-en",
+    "date": "2026-01-22",
+    "locale": "en",
+    "published": true,
+    "tags": ["body", "rest"],
+    "blocks": {
+      "theme": "Irritation for no clear reason is often fatigue, not other people.",
+      "notice": [
+        "Sleep, appetite, craving for coffee — signs the body is asking for a break.",
+        "Your head \"not working\" doesn't mean you're doing something wrong."
+      ],
+      "scene": [
+        "Commute, errands, desk — everything as usual, but inside you want to slow down.",
+        "Today you don't have to close everything. One day with no big decisions — just observe."
+      ],
+      "micro_action": "Three deep breaths. Five minutes of silence. Or one day with no big decisions."
+    },
+    "markers": {
+      "body": ["sleep", "appetite", "head", "rest"],
+      "social": ["silence"],
+      "domestic": ["commute", "purchases", "desk"],
+      "micro_action": ["three_breaths", "five_minutes_quiet", "one_day_no_decisions"]
+    }
+  },
+  {
+    "id": "forecast-2026-01-23-ru",
+    "date": "2026-01-23",
+    "locale": "ru",
+    "published": true,
+    "tags": ["work", "focus"],
+    "blocks": {
+      "theme": "Желание всё ускорить появляется, когда нет ощущения контроля.",
+      "notice": [
+        "Дедлайны и входящие создают ощущение, что «надо быстрее».",
+        "Напряжение в плечах или челюсти — частый спутник такого дня."
+      ],
+      "scene": [
+        "Окно, стол, список дел. Одно письмо, одно дело — и отложи остальное на завтра.",
+        "Фокус на том, что реально в твоей власти. Остальное — позже."
+      ],
+      "micro_action": "Убери одну задачу из списка. Одно письмо — и стоп."
+    },
+    "markers": {
+      "body": ["shoulders", "tension"],
+      "social": ["deadline", "message"],
+      "domestic": ["desk", "list", "window"],
+      "micro_action": ["remove_one_task", "one_email"]
+    }
+  },
+  {
+    "id": "forecast-2026-01-23-en",
+    "date": "2026-01-23",
+    "locale": "en",
+    "published": true,
+    "tags": ["work", "focus"],
+    "blocks": {
+      "theme": "The urge to speed up appears when there's no sense of control.",
+      "notice": [
+        "Deadlines and inbox create the feeling that \"you have to go faster\".",
+        "Tension in shoulders or jaw often comes with a day like this."
+      ],
+      "scene": [
+        "Window, desk, to-do list. One email, one task — then set the rest aside for tomorrow.",
+        "Focus on what's actually in your control. The rest — later."
+      ],
+      "micro_action": "Remove one task from the list. One email — then stop."
+    },
+    "markers": {
+      "body": ["shoulders", "tension"],
+      "social": ["deadline", "message"],
+      "domestic": ["desk", "list", "window"],
+      "micro_action": ["remove_one_task", "one_email"]
+    }
+  },
+  {
+    "id": "forecast-2026-01-24-ru",
+    "date": "2026-01-24",
+    "locale": "ru",
+    "published": true,
+    "tags": ["reflection", "clarity"],
+    "blocks": {
+      "theme": "Хороший момент зафиксировать, что сработало — и повторить это завтра.",
+      "notice": [
+        "К концу дня голова может быть тяжёлой, но пара ясных мыслей уже есть.",
+        "Тон в разговорах или переписке подсказывает, где ты был честен, а где — нет."
+      ],
+      "scene": [
+        "Вечер, кухня или диван. Список дел закрыт не полностью — и это нормально.",
+        "Три вещи, которые хочешь повторить в следующем цикле. Записать и отложить."
+      ],
+      "micro_action": "Записать три вещи, которые хочешь повторить завтра."
+    },
+    "markers": {
+      "body": ["head", "rest"],
+      "social": ["tone", "feedback"],
+      "domestic": ["kitchen", "list", "evening_routine"],
+      "micro_action": ["write_three_things"]
+    }
+  },
+  {
+    "id": "forecast-2026-01-24-en",
+    "date": "2026-01-24",
+    "locale": "en",
+    "published": true,
+    "tags": ["reflection", "clarity"],
+    "blocks": {
+      "theme": "A good moment to note what worked — and repeat it tomorrow.",
+      "notice": [
+        "By evening your head may feel heavy, but a few clear thoughts are already there.",
+        "The tone in conversations or messages shows where you were honest and where not."
+      ],
+      "scene": [
+        "Evening, kitchen or couch. The to-do list isn't fully done — and that's ok.",
+        "Three things you want to repeat in the next cycle. Write them down and set aside."
+      ],
+      "micro_action": "Write down three things you want to repeat tomorrow."
+    },
+    "markers": {
+      "body": ["head", "rest"],
+      "social": ["tone", "feedback"],
+      "domestic": ["kitchen", "list", "evening_routine"],
+      "micro_action": ["write_three_things"]
+    }
+  },
+  {
+    "id": "forecast-2026-01-25-ru",
+    "date": "2026-01-25",
+    "locale": "ru",
+    "published": true,
+    "tags": ["connection", "letting_go"],
+    "blocks": {
+      "theme": "Иногда мы злимся не потому что не согласны, а потому что не успели подумать.",
+      "notice": [
+        "Ожидание ответа, игнор или резкий тон — всё это может усилить реакцию.",
+        "Аппетит, сон и усталость влияют на то, как мы читаем других."
+      ],
+      "scene": [
+        "Сообщения, дорога, утренняя рутина. Один разговор или одна переписка «зацепила».",
+        "Не всё сегодня нужно закрывать. Один разговор — сказать, что важно, и отпустить."
+      ],
+      "micro_action": "Один разговор: «Вот что для меня важно». Остальное — не сегодня."
+    },
+    "markers": {
+      "body": ["appetite", "sleep", "tired"],
+      "social": ["waiting_reply", "ignore", "tone"],
+      "domestic": ["road", "morning_routine"],
+      "micro_action": ["one_conversation_matters"]
+    }
+  },
+  {
+    "id": "forecast-2026-01-25-en",
+    "date": "2026-01-25",
+    "locale": "en",
+    "published": true,
+    "tags": ["connection", "letting_go"],
+    "blocks": {
+      "theme": "Sometimes we get angry not because we disagree, but because we haven't had time to think.",
+      "notice": [
+        "Waiting for a reply, being ignored, or a sharp tone — all can amplify your reaction.",
+        "Appetite, sleep, and fatigue affect how we read others."
+      ],
+      "scene": [
+        "Messages, commute, morning routine. One conversation or thread \"got\" you.",
+        "Not everything has to be closed today. One conversation — say what matters, then let go."
+      ],
+      "micro_action": "One conversation: \"Here's what matters to me.\" The rest — not today."
+    },
+    "markers": {
+      "body": ["appetite", "sleep", "tired"],
+      "social": ["waiting_reply", "ignore", "tone"],
+      "domestic": ["commute", "morning_routine"],
+      "micro_action": ["one_conversation_matters"]
+    }
+  },
+  {
+    "id": "forecast-2026-01-26-ru",
+    "date": "2026-01-26",
+    "locale": "ru",
+    "published": true,
+    "tags": ["money", "focus"],
+    "blocks": {
+      "theme": "День, когда хочется всё успеть — и легко распылиться.",
+      "notice": [
+        "Покупки, список дел, дедлайны — создают ощущение, что «надо быстрее».",
+        "Голова и плечи могут быть напряжены. Пауза и вода часто помогают."
+      ],
+      "scene": [
+        "Дорога, магазин, рабочий стол. Много входящего — и один чёткий шаг.",
+        "Фокус на том, что в твоей власти. Одна задача — убрать, отложить или сделать."
+      ],
+      "micro_action": "Пауза 30 секунд. Глоток воды. Выбрать одно дело и остальное отложить."
+    },
+    "markers": {
+      "body": ["head", "shoulders", "tension"],
+      "social": ["deadline"],
+      "domestic": ["road", "purchases", "desk", "list"],
+      "micro_action": ["pause_30_sec", "water", "remove_one_task"]
+    }
+  },
+  {
+    "id": "forecast-2026-01-26-en",
+    "date": "2026-01-26",
+    "locale": "en",
+    "published": true,
+    "tags": ["money", "focus"],
+    "blocks": {
+      "theme": "A day when you want to get everything done — and it's easy to scatter.",
+      "notice": [
+        "Errands, to-do list, deadlines — create the feeling that \"you have to go faster\".",
+        "Head and shoulders may be tense. A pause and water often help."
+      ],
+      "scene": [
+        "Commute, store, desk. Lots coming in — and one clear step.",
+        "Focus on what's in your control. One task — drop, defer, or do."
+      ],
+      "micro_action": "Pause 30 seconds. A sip of water. Pick one thing and set the rest aside."
+    },
+    "markers": {
+      "body": ["head", "shoulders", "tension"],
+      "social": ["deadline"],
+      "domestic": ["commute", "purchases", "desk", "list"],
+      "micro_action": ["pause_30_sec", "water", "remove_one_task"]
+    }
+  },
+  {
+    "id": "forecast-2026-01-27-ru",
+    "date": "2026-01-27",
+    "locale": "ru",
+    "published": true,
+    "tags": ["rest", "reflection"],
+    "blocks": {
+      "theme": "Снизить напор и дать себе передышку — не слабость, а выбор.",
+      "notice": [
+        "Сон, аппетит, тяга к тишине — тело подсказывает, что пора замедлиться.",
+        "Окно, кухня, вечерняя рутина — места, где можно просто наблюдать."
+      ],
+      "scene": [
+        "Список дел не обязан быть закрыт. Один день без больших решений — только наблюдать.",
+        "Три вещи, которые хочешь повторить. Записать и отпустить остальное."
+      ],
+      "micro_action": "Один день без крупных решений. Пять минут тишины. Записать три вещи."
+    },
+    "markers": {
+      "body": ["sleep", "appetite", "rest"],
+      "social": ["silence"],
+      "domestic": ["window", "kitchen", "list", "evening_routine"],
+      "micro_action": ["one_day_no_decisions", "five_minutes_quiet", "write_three_things"]
+    }
+  },
+  {
+    "id": "forecast-2026-01-27-en",
+    "date": "2026-01-27",
+    "locale": "en",
+    "published": true,
+    "tags": ["rest", "reflection"],
+    "blocks": {
+      "theme": "Lowering the pressure and giving yourself a break — not weakness, but choice.",
+      "notice": [
+        "Sleep, appetite, craving for quiet — the body signals it's time to slow down.",
+        "Window, kitchen, evening routine — places where you can just observe."
+      ],
+      "scene": [
+        "The to-do list doesn't have to be done. One day with no big decisions — just observe.",
+        "Three things you want to repeat. Write them down and let the rest go."
+      ],
+      "micro_action": "One day with no big decisions. Five minutes of silence. Write three things."
+    },
+    "markers": {
+      "body": ["sleep", "appetite", "rest"],
+      "social": ["silence"],
+      "domestic": ["window", "kitchen", "list", "evening_routine"],
+      "micro_action": ["one_day_no_decisions", "five_minutes_quiet", "write_three_things"]
+    }
+  }
+]

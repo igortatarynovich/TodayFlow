@@ -1,0 +1,521 @@
+.root {
+  --ce-stack: 2.25rem;
+  --ce-radius: 24px;
+  --ce-radius-md: 18px;
+  --ce-border: rgba(166, 124, 58, 0.22);
+  --ce-ink: #1a1512;
+  --ce-body: #3d3228;
+  --ce-muted: #6b7280;
+  --ce-accent: #8f6b3a;
+  --ce-gold: #c9a873;
+  --ce-surface: rgba(255, 255, 255, 0.96);
+  --ce-warm: rgba(255, 251, 245, 0.98);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--ce-stack);
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 0.35rem 1.15rem 1.25rem;
+  border-radius: var(--ce-radius);
+  border: 1px solid var(--ce-border);
+  background:
+    radial-gradient(900px 320px at 85% -10%, rgba(234, 211, 163, 0.32), transparent 55%),
+    radial-gradient(600px 240px at 5% 100%, rgba(212, 176, 105, 0.18), transparent 50%),
+    linear-gradient(180deg, var(--ce-warm) 0%, var(--ce-surface) 100%);
+  box-shadow: 0 16px 48px rgba(91, 67, 35, 0.1);
+}
+
+.heroOrbits {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.orbitA,
+.orbitB {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 168, 115, 0.35);
+}
+
+.orbitA {
+  width: 220px;
+  height: 220px;
+  top: -40px;
+  right: -30px;
+  animation: ceOrbitSpin 28s linear infinite;
+}
+
+.orbitB {
+  width: 160px;
+  height: 160px;
+  bottom: -20px;
+  right: 80px;
+  animation: ceOrbitSpin 22s linear infinite reverse;
+}
+
+.orbitCore {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  top: 42%;
+  right: 18%;
+  background: radial-gradient(circle, #e8c88a 0%, #c9a873 100%);
+  box-shadow: 0 0 24px rgba(201, 168, 115, 0.55);
+  animation: ceCorePulse 3s ease-in-out infinite;
+}
+
+.orbitA::after,
+.orbitB::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(201, 168, 115, 0.75);
+  top: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@keyframes ceOrbitSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ceCorePulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  max-width: 36rem;
+}
+
+.heroEyebrow {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ce-accent);
+}
+
+.heroTitle {
+  margin: 0.65rem 0 0;
+  font-size: clamp(1.85rem, 5.5vw, 2.5rem);
+  font-weight: 750;
+  line-height: 1.15;
+  color: var(--ce-ink);
+  letter-spacing: -0.025em;
+}
+
+.heroLead {
+  margin: 0.9rem 0 0;
+  max-width: 34rem;
+  font-size: 1.02rem;
+  line-height: 1.72;
+  color: var(--ce-body);
+}
+
+.heroActions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.85rem;
+}
+
+.heroBtnPrimary {
+  font-size: 1rem !important;
+  padding: 0.75rem 1.25rem !important;
+}
+
+.heroBtnSecondary {
+  font-size: 0.9375rem !important;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 750;
+  color: var(--ce-ink);
+  letter-spacing: -0.01em;
+}
+
+.sectionLead {
+  margin: -0.35rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--ce-muted);
+}
+
+.scenarioGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0.9rem;
+}
+
+.scenarioCardWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.scenarioPass {
+  align-self: flex-start;
+  border: none;
+  background: transparent;
+  color: #8b7355;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.35rem;
+  cursor: pointer;
+  opacity: 0.82;
+}
+
+.scenarioPass:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.scenarioCard {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.2rem 1.1rem 1.15rem;
+  border-radius: var(--ce-radius-md);
+  border: 1px solid rgba(201, 168, 115, 0.32);
+  text-decoration: none;
+  color: inherit;
+  min-height: 148px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.scenarioCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(91, 67, 35, 0.12);
+}
+
+.scenarioEmoji {
+  font-size: 1.55rem;
+  line-height: 1;
+}
+
+.scenarioTitle {
+  margin: 0.2rem 0 0;
+  font-size: 1.02rem;
+  font-weight: 750;
+  color: var(--ce-ink);
+}
+
+.scenarioHook {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--ce-muted);
+}
+
+.scenarioFx {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.scenarioCard:hover .scenarioFx {
+  opacity: 1;
+}
+
+/* Per-scenario backgrounds + hover FX */
+.tone_romantic {
+  background: linear-gradient(145deg, rgba(255, 241, 246, 0.98) 0%, rgba(255, 255, 255, 0.96) 100%);
+}
+
+.tone_domestic {
+  background: linear-gradient(145deg, rgba(255, 248, 235, 0.98) 0%, rgba(255, 255, 255, 0.96) 100%);
+}
+
+.tone_office {
+  background: linear-gradient(145deg, rgba(248, 250, 252, 0.98) 0%, rgba(255, 255, 255, 0.96) 100%);
+}
+
+.tone_dramatic {
+  background: linear-gradient(145deg, rgba(241, 245, 249, 0.98) 0%, rgba(255, 255, 255, 0.96) 100%);
+}
+
+.tone_vacation {
+  background: linear-gradient(145deg, rgba(240, 249, 255, 0.98) 0%, rgba(255, 255, 255, 0.96) 100%);
+}
+
+.tone_playful {
+  background: linear-gradient(145deg, rgba(255, 251, 235, 0.98) 0%, rgba(255, 255, 255, 0.96) 100%);
+}
+
+.tone_calm {
+  background: linear-gradient(145deg, rgba(240, 253, 244, 0.6) 0%, rgba(255, 255, 255, 0.96) 100%);
+}
+
+.skin_living_together:hover .scenarioFx {
+  opacity: 1;
+  background: radial-gradient(circle at 88% 20%, rgba(255, 255, 255, 0.9) 0%, transparent 45%);
+}
+
+.skin_living_together:hover .scenarioFx::before {
+  content: "☕";
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  font-size: 1.1rem;
+  animation: ceMugPop 0.4s ease;
+}
+
+.skin_office:hover .scenarioFx::before {
+  content: "📄";
+  position: absolute;
+  top: 8px;
+  right: 18px;
+  font-size: 0.85rem;
+  animation: cePaperFall 0.9s ease infinite;
+}
+
+.skin_apocalypse:hover .scenarioFx {
+  background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.12), transparent);
+  animation: ceWind 0.6s ease;
+}
+
+.skin_vacation:hover .scenarioFx::before {
+  content: "✈️";
+  position: absolute;
+  top: 14px;
+  right: 10px;
+  font-size: 1rem;
+  animation: cePlaneFly 1.2s ease infinite;
+}
+
+.skin_partner_in_crime:hover {
+  animation: ceWink 0.5s ease;
+}
+
+.skin_partner_in_crime:hover .scenarioFx::before {
+  content: "😉";
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
+  font-size: 1.1rem;
+}
+
+@keyframes ceMugPop {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes cePaperFall {
+  0% {
+    transform: translateY(-8px) rotate(-8deg);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(28px) rotate(12deg);
+    opacity: 0;
+  }
+}
+
+@keyframes ceWind {
+  from {
+    transform: translateX(-8px);
+  }
+  to {
+    transform: translateX(8px);
+  }
+}
+
+@keyframes cePlaneFly {
+  0% {
+    transform: translate(12px, 6px);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate(-6px, -4px);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-18px, 2px);
+    opacity: 0.3;
+  }
+}
+
+@keyframes ceWink {
+  0%,
+  100% {
+    transform: translateY(-3px) rotate(0deg);
+  }
+  40% {
+    transform: translateY(-3px) rotate(-0.6deg);
+  }
+}
+
+.playfulGrid {
+  margin-top: 0.25rem;
+}
+
+.playfulCard {
+  border-style: dashed;
+  border-width: 1.5px;
+  min-height: 156px;
+}
+
+.playfulBadge {
+  margin-top: auto;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #9a6700;
+  letter-spacing: 0.02em;
+}
+
+.skin_after_wine:hover .scenarioFx::before {
+  content: "🍷";
+  position: absolute;
+  bottom: 12px;
+  right: 14px;
+  font-size: 1.1rem;
+  animation: ceMugPop 0.5s ease;
+}
+
+.skin_home_renovation:hover .scenarioFx::before {
+  content: "🔨";
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 1rem;
+  animation: cePaperFall 0.8s ease infinite;
+}
+
+.skin_best_friends:hover {
+  animation: ceWink 0.45s ease;
+}
+
+.skin_rule_breaker:hover .scenarioFx::before {
+  content: "🚨";
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  font-size: 1rem;
+  animation: ceMugPop 0.45s ease;
+}
+
+.readingGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.75rem;
+}
+
+.readingCard {
+  display: block;
+  padding: 1rem 1.05rem;
+  border-radius: var(--ce-radius-md);
+  border: 1px solid rgba(201, 168, 115, 0.28);
+  background: rgba(255, 255, 255, 0.92);
+  text-decoration: none;
+  color: var(--ce-body);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  font-weight: 600;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.readingCard:hover {
+  background: rgba(255, 251, 245, 0.98);
+  border-color: rgba(201, 168, 115, 0.5);
+}
+
+.pairPicker {
+  padding: 1.25rem 1.35rem;
+  border-radius: var(--ce-radius);
+  border: 1px dashed rgba(201, 168, 115, 0.55);
+  background: rgba(255, 253, 249, 0.92);
+}
+
+.pairPickerTitle {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ce-ink);
+}
+
+.pairPickerLead {
+  margin: 0.45rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--ce-body);
+}
+
+.pairPickerForm {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.pairPickerRow {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.pairPickerLabel {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--ce-accent);
+}
+
+@media (max-width: 520px) {
+  .hero {
+    padding: 1.65rem 1.2rem;
+    min-height: auto;
+  }
+
+  .orbitA,
+  .orbitB {
+    opacity: 0.5;
+  }
+
+  .scenarioGrid,
+  .readingGrid {
+    grid-template-columns: 1fr;
+  }
+}

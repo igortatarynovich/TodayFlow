@@ -1,0 +1,59 @@
+[
+  {
+    "event_id": "venus_ingress_gemini",
+    "event_type": "ingress",
+    "planet": "Venus",
+    "sign": "Gemini",
+    "description": "Venus enters Gemini — relationships crave curiosity and breathable rhythm.",
+    "human_text": "Venus enters Gemini, bringing curiosity and breathable rhythm to relationships. This is a time when connections benefit from light conversation and space to explore."
+  },
+  {
+    "event_id": "mars_square_saturn",
+    "event_type": "aspect",
+    "planets": ["Mars", "Saturn"],
+    "aspect": "square",
+    "description": "Mars in Libra squares Saturn in Capricorn — tension between pace and structure surfaces.",
+    "human_text": "Mars in Libra squares Saturn in Capricorn, creating tension between pace and structure. This aspect highlights where speed meets limits and where assertiveness meets responsibility."
+  },
+  {
+    "event_id": "mercury_station_direct",
+    "event_type": "station",
+    "planet": "Mercury",
+    "direction": "direct",
+    "description": "Mercury stations direct — communication and planning gradually reorganize.",
+    "human_text": "Mercury stations direct, which means communication and planning gradually reorganize. Things that felt stuck begin to move forward again."
+  },
+  {
+    "event_id": "sun_conjunct_pluto",
+    "event_type": "aspect",
+    "planets": ["Sun", "Pluto"],
+    "aspect": "conjunction",
+    "description": "The Sun–Pluto conjunction highlights truth and emotional honesty.",
+    "human_text": "The Sun–Pluto conjunction highlights truth and emotional honesty. This is a time when what's real comes to the surface, whether you're ready or not."
+  },
+  {
+    "event_id": "mercury_retrograde_window_q1",
+    "event_type": "retrograde_window",
+    "planet": "Mercury",
+    "signs": ["Capricorn", "Sagittarius"],
+    "description": "Mercury retraces Capricorn ↔ Sagittarius degrees — edits beat launches. Slow the flow so clarity can catch up.",
+    "human_text": "Mercury retraces Capricorn and Sagittarius degrees. This retrograde window favors edits over launches—slow the flow so clarity can catch up with action."
+  },
+  {
+    "event_id": "mars_retrograde_window_summer",
+    "event_type": "retrograde_window",
+    "planet": "Mars",
+    "signs": ["Leo", "Cancer"],
+    "description": "Mars backs through Leo into Cancer — assertiveness meets emotional reality. Rehearse before sprinting.",
+    "human_text": "Mars backs through Leo into Cancer during the summer retrograde window. Assertiveness meets emotional reality—rehearse before sprinting, and let feelings guide action."
+  },
+  {
+    "event_id": "venus_star_point_window",
+    "event_type": "star_point",
+    "planet": "Venus",
+    "sign": "Aries",
+    "description": "The Venus Star Point in Aries resets relational storylines. Showcase what devotion looks like now.",
+    "human_text": "The Venus Star Point in Aries resets relational storylines. This is a time to showcase what devotion looks like now, and to align relationships with current values."
+  }
+]
+

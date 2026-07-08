@@ -1,0 +1,67 @@
+{
+  "contract_version": "today_day_v1",
+  "core_message": {
+    "title": "x",
+    "text": "x",
+    "risk": "x",
+    "best_move": "x"
+  },
+  "spheres": [
+    {
+      "id": "work",
+      "title": "Работа",
+      "score": 50,
+      "status": "neutral",
+      "why": "x",
+      "do": "x",
+      "avoid": "x",
+      "question": "x"
+    },
+    {
+      "id": "love",
+      "title": "Отношения",
+      "score": 50,
+      "status": "neutral",
+      "why": "x",
+      "do": "x",
+      "avoid": "x",
+      "question": "x"
+    }
+  ],
+  "action_options": [
+    {
+      "id": "a",
+      "title": "a",
+      "why": "a",
+      "estimated_minutes": 5,
+      "creates": "focus_session"
+    },
+    {
+      "id": "b",
+      "title": "b",
+      "why": "b",
+      "estimated_minutes": 5,
+      "creates": "focus_session"
+    },
+    {
+      "id": "c",
+      "title": "c",
+      "why": "c",
+      "estimated_minutes": 5,
+      "creates": "focus_session"
+    }
+  ],
+  "support": {
+    "recommended": "none",
+    "title": "x",
+    "reason": "x",
+    "cta": "x"
+  },
+  "feedback_questions": [
+    {
+      "id": "accuracy",
+      "question": "Q?",
+      "options": ["a", "b"]
+    }
+  ]
+}

@@ -1,0 +1,795 @@
+/**
+ * Product Page Standard v1 — layout grids.
+ * Every in-app screen uses these slots; do not invent per-page grids.
+ * Tokens: productV2Surface.module.css (type, surfaces, gap).
+ */
+
+.pageHeader {
+  composes: surfaceGlass from "./productV2Surface.module.css";
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.datePill {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.datePill svg {
+  width: 1rem;
+  height: 1rem;
+  color: #8b6a3e;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.centerState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 40vh;
+}
+
+.loginGate {
+  composes: surfacePanel from "./productV2Surface.module.css";
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 28rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/** Hub / link lists — 1 col mobile, 2 col tablet+ */
+.gridHub {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.hubCard {
+  composes: surfacePanel from "./productV2Surface.module.css";
+  display: block;
+  padding: 1.25rem 1.75rem;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s ease;
+}
+
+.hubCard:hover {
+  border-color: #8b6a3e;
+}
+
+.hubCardPrimary {
+  border-color: #c9a96e;
+  background: linear-gradient(180deg, #fffaf2 0%, #fff 100%);
+}
+
+.hubCardTitle {
+  margin: 0 0 0.375rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.hubCardDesc {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #5a5450;
+}
+
+/** Insight row — Today-style 3-up */
+.gridInsights {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+
+/** Generic 2-up content */
+.grid2 {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+
+.panel {
+  composes: surfacePanel from "./productV2Surface.module.css";
+}
+
+.formStack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.fieldLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.fieldInput,
+.fieldTextarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid #e8e2d6;
+  background: #fff;
+  font: inherit;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--tf-ink);
+}
+
+.fieldTextarea {
+  resize: vertical;
+  min-height: 5rem;
+}
+
+.fieldRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.footerLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.875rem;
+}
+
+.footerLink {
+  color: #8b6a3e;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.insightList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.insightCard {
+  composes: surfacePanel from "./productV2Surface.module.css";
+  border-width: 2px;
+}
+
+.insightCardLow {
+  border-color: #e8a54b;
+}
+
+.insightCardMedium {
+  border-color: #8b6a3e;
+}
+
+.insightCardHigh {
+  border-color: #5a8f5a;
+}
+
+.insightMeta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.insightType {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.insightBody {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  color: var(--tf-ink);
+}
+
+.insightData {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background: #f7f4ee;
+  font-size: 0.875rem;
+  color: #5a5450;
+}
+
+.emptyState {
+  composes: surfacePanel from "./productV2Surface.module.css";
+  text-align: center;
+  color: #5a5450;
+}
+
+/* —— Shared nav / sub-pages —— */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+}
+
+.textLink {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--tf-caption);
+  text-decoration: none;
+}
+
+.textLink:hover {
+  color: var(--tf-ink);
+}
+
+.bodyMtXs {
+  margin-top: 0.35rem;
+}
+
+.bodyMtSm {
+  margin-top: 0.45rem;
+}
+
+.bodyMtMd {
+  margin-top: 0.55rem;
+}
+
+.bodyMtLg {
+  margin-top: 0.75rem;
+}
+
+.bodyMbMd {
+  margin-bottom: 1rem;
+}
+
+.bodyItalic {
+  font-style: italic;
+}
+
+.flexRowCenter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.subPageRoot {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.compositionSlot,
+.ritualSlot {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  width: 100%;
+  min-width: 0;
+}
+
+/* —— Compatibility hub —— */
+.modeSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.modeCard {
+  composes: surfacePanel from "./productV2Surface.module.css";
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 8.5rem;
+  padding: 1.25rem;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modeCard:hover {
+  border-color: #c9a96e;
+}
+
+.modeCardActive {
+  border-color: #8b6a3e;
+  box-shadow: 0 0 0 1px #8b6a3e;
+}
+
+.modeCardActive::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  border-radius: 1.75rem 0 0 1.75rem;
+  background: linear-gradient(180deg, #8b6a3e, #c9a96e);
+}
+
+.modeIcon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.modeTitle {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.modeHint {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: #5a5450;
+}
+
+.pairPicker {
+  composes: surfacePanel from "./productV2Surface.module.css";
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.75rem;
+}
+
+.pairRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.pairSlot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 9rem;
+}
+
+.pairAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 1rem;
+  border: 1px dashed #e8e2d6;
+  background: #f7f4ee;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #8b6a3e;
+}
+
+.pairAvatarFilled {
+  border-style: solid;
+  background: linear-gradient(135deg, #d4b896, #8b6a3e);
+  color: #fff;
+}
+
+.pairSelect {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid #e8e2d6;
+  background: #fff;
+  font: inherit;
+  font-size: 0.875rem;
+}
+
+.pairConnector {
+  font-size: 1.25rem;
+  color: var(--tf-caption);
+}
+
+.manageLink {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #8b6a3e;
+  text-decoration: none;
+}
+
+/* —— Tarot hub —— */
+.questionCard {
+  composes: surfacePanel from "./productV2Surface.module.css";
+  display: flex;
+  align-items: stretch;
+  min-height: 4.5rem;
+  padding: 0;
+  overflow: hidden;
+}
+
+.questionInput {
+  width: 100%;
+  min-height: 4.5rem;
+  padding: 1.25rem 1.75rem;
+  border: none;
+  background: transparent;
+  resize: vertical;
+  font: inherit;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--tf-ink);
+}
+
+.questionInput:focus {
+  outline: none;
+}
+
+.questionInput::placeholder {
+  color: var(--tf-caption);
+}
+
+.domainChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+}
+
+.domainChip {
+  composes: chip from "./productV2Surface.module.css";
+  cursor: pointer;
+  border: 1px solid #e8e2d6;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.domainChipActive {
+  background: var(--tf-ink);
+  border-color: var(--tf-ink);
+  color: #fdfbf7;
+}
+
+.spreadSection {
+  composes: surfacePanel from "./productV2Surface.module.css";
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.75rem;
+}
+
+.spreadList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.spreadOption {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1.25rem;
+  border-radius: 1.125rem;
+  background: #fff;
+  border: 1px solid #e8e2d6;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.spreadOption:hover {
+  border-color: #8b6a3e;
+}
+
+.spreadOptionButton {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.spreadOptionSelected {
+  border-color: #8b6a3e;
+  box-shadow: 0 0 0 1px #8b6a3e;
+}
+
+.spreadCount {
+  font-family: var(--tf-font-display);
+  font-size: 2.5rem;
+  line-height: 1;
+  color: #8b6a3e;
+  min-width: 2rem;
+}
+
+.spreadTitle {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.spreadRecommended {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8b6a3e;
+}
+
+.cardOfDayHint {
+  margin: 0;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--tf-caption);
+}
+
+/* —— Today dashboard —— */
+.heroCard {
+  composes: surfaceHeroDark from "./productV2Surface.module.css";
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 17.5rem;
+}
+
+.heroOrbital {
+  position: relative;
+  min-height: 12rem;
+  background: radial-gradient(circle at 30% 40%, rgba(201, 169, 110, 0.12), transparent 60%);
+}
+
+.heroOrbital :global([class*="orbitViz"]) {
+  min-height: 12rem;
+}
+
+.heroCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2.3125rem;
+}
+
+.heroTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+}
+
+.heroTag {
+  padding: 0.5rem 0.875rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.dashboardInsightCard {
+  composes: surfacePanel from "./productV2Surface.module.css";
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 18rem;
+  padding: 1.75rem;
+}
+
+.insightVisual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 9rem;
+  border-radius: 1.125rem;
+  background: #f7f4ee;
+}
+
+.insightGlyph {
+  font-family: var(--tf-font-display);
+  font-size: 3rem;
+  color: #8b6a3e;
+}
+
+.insightNumber {
+  font-family: var(--tf-font-display);
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  line-height: 1;
+  color: #8b6a3e;
+}
+
+.moonVisual {
+  width: 6.25rem;
+  height: 6.25rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff 0%, #888 45%, #1a1714 46%);
+}
+
+.insightCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.insightTitle {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: 1.125rem;
+  line-height: 1.25;
+  color: var(--tf-ink);
+}
+
+.practicesSection {
+  composes: surfacePanel from "./productV2Surface.module.css";
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.75rem;
+}
+
+.practicesIntro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.practicesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.practiceCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 6.125rem;
+  padding: 1.25rem;
+  border-radius: 1.125rem;
+  border: 1px solid #e8e2d6;
+  background: #fff;
+}
+
+.practiceTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.practiceCheck {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid rgba(42, 37, 32, 0.15);
+  background: #fff;
+}
+
+.practiceCheckDone {
+  border-color: #8b6a3e;
+  background: #8b6a3e;
+  box-shadow: inset 0 0 0 2px #fff;
+}
+
+.practiceDuration {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--tf-caption);
+}
+
+.practiceName {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--tf-ink);
+}
+
+.scoreHero {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.scoreValue {
+  font-family: var(--tf-font-display);
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  line-height: 1;
+  color: #8b6a3e;
+}
+
+/** Bridge legacy orbit-card until pages migrate inner markup */
+.legacyHost :global(.orbit-card) {
+  border-radius: 1.75rem;
+  border: 1px solid #e8e2d6;
+  background: #fff;
+  box-shadow: 0 18px 28px rgba(42, 37, 32, 0.06);
+}
+
+@media (min-width: 48rem) {
+  .pageHeader {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .gridHub {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grid2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .modeGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .heroCard {
+    grid-template-columns: minmax(12rem, 20rem) 1fr;
+  }
+
+  .heroOrbital {
+    min-height: 17.5rem;
+  }
+
+  .practicesGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .gridInsights {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .practicesGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 47.99rem) {
+  .hubCard,
+  .panel,
+  .loginGate,
+  .insightCard,
+  .emptyState {
+    padding: 1.25rem;
+  }
+
+  .modeGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .modeCard,
+  .pairPicker {
+    padding: 1.25rem;
+  }
+
+  .spreadSection,
+  .questionCard {
+    padding: 1.25rem;
+  }
+
+  .heroCopy,
+  .dashboardInsightCard,
+  .practicesSection {
+    padding: 1.25rem;
+  }
+}

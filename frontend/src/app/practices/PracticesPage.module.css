@@ -1,0 +1,153 @@
+.page {
+  min-height: 100vh;
+  color: var(--section-text);
+  background: transparent;
+}
+
+.shell {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--orbit-space-3xl) var(--orbit-space-xl);
+}
+
+.title {
+  margin-bottom: var(--orbit-space-md);
+  color: var(--section-text);
+}
+
+.subtitle {
+  color: var(--section-text-muted);
+  margin-bottom: var(--orbit-space-2xl);
+  line-height: 1.7;
+}
+
+.stepRow {
+  display: flex;
+  gap: var(--orbit-space-sm);
+  margin-bottom: var(--orbit-space-xl);
+  flex-wrap: wrap;
+}
+
+.stepBadge {
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: var(--orbit-text-soft);
+  font-weight: 500;
+  background: rgba(243, 230, 220, 0.65);
+  color: var(--orbit-color-slate);
+  border: 1px solid rgba(214, 142, 122, 0.2);
+}
+
+.stepBadgeActive {
+  background: var(--orbit-color-primary-accent);
+  color: #fffaf6;
+  border-color: transparent;
+}
+
+.muted {
+  color: var(--section-text-muted);
+}
+
+.panel {
+  padding: var(--orbit-space-lg);
+  background: var(--section-panel-bg);
+  border-radius: var(--product-radius-chip);
+  border: 1px solid var(--section-panel-border);
+  margin-bottom: var(--orbit-space-lg);
+  box-shadow: var(--orbit-shadow-card);
+}
+
+.chip {
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(214, 142, 122, 0.35);
+  background: #fff;
+  color: var(--orbit-color-ink);
+  cursor: pointer;
+}
+
+.chipActive {
+  background: var(--orbit-color-primary-accent);
+  color: #fffaf6;
+  border-color: transparent;
+}
+
+.loaderWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}
+
+.errorBox {
+  padding: var(--orbit-space-md);
+  background: rgba(254, 236, 232, 0.9);
+  border-radius: 8px;
+  color: #9a3412;
+  margin-bottom: var(--orbit-space-lg);
+  border: 1px solid rgba(214, 142, 122, 0.25);
+}
+
+.hintBox {
+  padding: var(--orbit-space-md);
+  background: rgba(255, 248, 236, 0.92);
+  border-radius: 8px;
+  margin-bottom: var(--orbit-space-lg);
+  border: 1px solid rgba(214, 142, 122, 0.2);
+}
+
+.emptyPanel {
+  padding: var(--orbit-space-lg);
+  border: 1px dashed rgba(214, 142, 122, 0.35);
+  border-radius: 12px;
+  background: var(--section-panel-bg);
+}
+
+.practiceCard {
+  padding: var(--orbit-space-lg);
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid var(--section-panel-border);
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 58vh;
+}
+
+.errorBanner {
+  padding: 0.875rem 1rem;
+  border-radius: 0.75rem;
+  background: rgba(254, 236, 232, 0.92);
+  border: 1px solid rgba(214, 142, 122, 0.25);
+  color: #9a3412;
+  font-size: 0.875rem;
+}
+
+.catalogToolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.catalogBackButton {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.875rem;
+  border: 1px solid var(--tf-cream-border, rgba(214, 142, 122, 0.35));
+  border-radius: 999px;
+  background: #fff;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--tf-ink, var(--orbit-color-ink));
+  cursor: pointer;
+}
+
+.catalogToolbarHint {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--section-text-muted, var(--tf-caption));
+}

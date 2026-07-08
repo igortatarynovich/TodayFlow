@@ -1,0 +1,82 @@
+{
+  "contract_version": "attachment_style_registry_v1",
+  "domain": "psychology",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Attachment style machine reference (Bowlby/Ainsworth public-domain concepts). Not user diagnosis — engine bias only. Editorial sign-off 2026-07-03: registry active.",
+  "source": {
+    "name": "Attachment theory (Bowlby; Ainsworth et al.)",
+    "license": "public_domain_concept",
+    "note": "Conceptual labels only; no proprietary instrument items (e.g. ECR-R)."
+  },
+  "attachment_styles": {
+    "secure": {
+      "code": "secure",
+      "label_ru": "Надёжная привязанность",
+      "label_en": "Secure attachment",
+      "summary_ru": "Комфорт с близостью и автономией; конфликт воспринимается как решаемый.",
+      "summary_en": "Comfort with closeness and autonomy; conflict feels workable.",
+      "deep_block_bias": {
+        "emotions": 0.18,
+        "communication": 0.22,
+        "conflicts": 0.20,
+        "sexuality": 0.18,
+        "long_term": 0.22
+      },
+      "relationship_signals": ["repair_orientation", "contact_need"],
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "anxious": {
+      "code": "anxious",
+      "label_ru": "Тревожная привязанность",
+      "label_en": "Anxious-preoccupied attachment",
+      "summary_ru": "Повышенная чувствительность к дистанции; важны подтверждения и ясность контакта.",
+      "summary_en": "Heightened sensitivity to distance; reassurance and contact clarity matter.",
+      "deep_block_bias": {
+        "emotions": 0.28,
+        "communication": 0.26,
+        "conflicts": 0.22,
+        "sexuality": 0.12,
+        "long_term": 0.12
+      },
+      "relationship_signals": ["contact_need", "boundary_tuning"],
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "dismissive_avoidant": {
+      "code": "dismissive_avoidant",
+      "label_ru": "Избегающая привязанность",
+      "label_en": "Dismissive-avoidant attachment",
+      "summary_ru": "Приоритет автономии; эмоциональная близость может ощущаться как давление.",
+      "summary_en": "Autonomy-first; emotional closeness may feel like pressure.",
+      "deep_block_bias": {
+        "emotions": 0.14,
+        "communication": 0.20,
+        "conflicts": 0.24,
+        "sexuality": 0.22,
+        "long_term": 0.20
+      },
+      "relationship_signals": ["boundary_tuning", "measured_pace"],
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "fearful_avoidant": {
+      "code": "fearful_avoidant",
+      "label_ru": "Дезорганизованная / тревожно-избегающая",
+      "label_en": "Fearful-avoidant attachment",
+      "summary_ru": "Одновременный запрос близости и страх уязвимости; циклы сближения и отступления.",
+      "summary_en": "Simultaneous pull toward closeness and fear of vulnerability; approach–withdraw cycles.",
+      "deep_block_bias": {
+        "emotions": 0.26,
+        "communication": 0.24,
+        "conflicts": 0.26,
+        "sexuality": 0.12,
+        "long_term": 0.12
+      },
+      "relationship_signals": ["conflict_theme_live", "nuanced_fit"],
+      "status": "active",
+      "version": "1.0.0"
+    }
+  }
+}

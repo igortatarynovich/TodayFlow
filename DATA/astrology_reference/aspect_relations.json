@@ -1,0 +1,72 @@
+[
+  {
+    "id": "sun_moon",
+    "left": "sun",
+    "right": "moon",
+    "axes": ["A2", "A6"],
+    "modulators": ["M1"],
+    "section": "EP",
+    "summary_key": "aspects.sun_moon.summary",
+    "integration_key": "aspects.sun_moon.integration"
+  },
+  {
+    "id": "sun_saturn",
+    "left": "sun",
+    "right": "saturn",
+    "axes": ["A4", "A5"],
+    "modulators": ["M1", "M4"],
+    "section": "CAR",
+    "summary_key": "aspects.sun_saturn.summary",
+    "integration_key": "aspects.sun_saturn.integration"
+  },
+  {
+    "id": "sun_mars",
+    "left": "sun",
+    "right": "mars",
+    "axes": ["A5", "A7"],
+    "modulators": ["M2"],
+    "section": "CAR",
+    "summary_key": "aspects.sun_mars.summary",
+    "integration_key": "aspects.sun_mars.integration"
+  },
+  {
+    "id": "moon_saturn",
+    "left": "moon",
+    "right": "saturn",
+    "axes": ["A2", "A4"],
+    "modulators": ["M1", "M3"],
+    "section": "REL",
+    "summary_key": "aspects.moon_saturn.summary",
+    "integration_key": "aspects.moon_saturn.integration"
+  },
+  {
+    "id": "moon_venus",
+    "left": "moon",
+    "right": "venus",
+    "axes": ["A2", "A6"],
+    "modulators": ["M2"],
+    "section": "REL",
+    "summary_key": "aspects.moon_venus.summary",
+    "integration_key": "aspects.moon_venus.integration"
+  },
+  {
+    "id": "mercury_saturn",
+    "left": "mercury",
+    "right": "saturn",
+    "axes": ["A3", "A4"],
+    "modulators": ["M3"],
+    "section": "CAR",
+    "summary_key": "aspects.mercury_saturn.summary",
+    "integration_key": "aspects.mercury_saturn.integration"
+  },
+  {
+    "id": "venus_mars",
+    "left": "venus",
+    "right": "mars",
+    "axes": ["A5", "A6"],
+    "modulators": ["M2"],
+    "section": "REL",
+    "summary_key": "aspects.venus_mars.summary",
+    "integration_key": "aspects.venus_mars.integration"
+  }
+]

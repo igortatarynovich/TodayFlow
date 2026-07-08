@@ -1,0 +1,106 @@
+{
+  "contract_version": "day_context_v0",
+  "meta": {
+    "target_date": "2026-05-03",
+    "locale": "ru",
+    "insight_depth_tier": "pro",
+    "depth_level": "normal",
+    "policy_version": "clean-info-v1",
+    "voice_profile": "live-clean-supportive-v1",
+    "profile_snapshot_id": 42,
+    "ritual_context_fingerprint": "cafebabe0000000000000001"
+  },
+  "layers": {
+    "ritual": {
+      "tarot_main_id": 17,
+      "tarot_name_ru": "Звезда",
+      "numerology_value": "3",
+      "mood": "спокойное",
+      "head_topic": "работа",
+      "day_events": ["фокус: работа"]
+    },
+    "fusion": {
+      "date": "2026-05-03",
+      "scores": {
+        "energy": 55,
+        "emotional_balance": 60,
+        "focus": 50
+      },
+      "cycle_context": {},
+      "activity_context": {},
+      "rhythm_context": {
+        "goals": [{ "title": "Три тренировки", "scope": "week", "completed": false }],
+        "habits": [
+          {
+            "name": "Прогулка",
+            "category": "здоровье",
+            "frequency": "daily",
+            "completed_today": false
+          }
+        ],
+        "ascetics": [],
+        "diary": { "has_entry_today": false, "entries_last_7_days": 2 }
+      },
+      "recommendations": ["Короткий шаг до обеда"],
+      "encouragement": "Ровный темп — хватит одного осознанного шага."
+    },
+    "user_core": {
+      "is_ready": true,
+      "astro": { "sun_sign": "Leo" },
+      "learning": { "summary": "Пользователь ценит конкретику." }
+    },
+    "daily_foundation": null,
+    "behavior_patterns": null,
+    "history": null,
+    "intent": null,
+    "health_signals": null,
+    "visible_profile": {
+      "contract_version": "visible_profile_slice_v0",
+      "locale_hint": "ru",
+      "display_name": "Тест",
+      "sun_sign": "Leo",
+      "recent_self_reported_mood": "спокойное"
+    },
+    "internal_profile": {
+      "contract_version": "internal_profile_slice_v0",
+      "usage": "Системный слой",
+      "app_rhythm_scores": { "energy": 55, "focus": 50 }
+    },
+    "day_model": {
+      "contract_version": "day_model_v0",
+      "locale_hint": "ru",
+      "scales": {
+        "direction": "transition",
+        "energy_0_100": 55,
+        "emotions": "stable",
+        "action_type": "continue",
+        "tempo": "steady",
+        "sources_blob": "Звезда | 3"
+      },
+      "vector": { "direction": "transition", "summary": "Держи одну ясную нить дня." },
+      "tension": { "summary": "Источники в основном согласованы.", "signals": ["aligned"] },
+      "opportunity": { "summary": "Один ограниченный шаг сегодня.", "intent_echo": null },
+      "risk": { "summary": "Параллельные «надо» вместо одной доведённой линии." },
+      "tempo": { "label": "steady", "summary": "Ресурс 55/100 — темп «steady»." },
+      "strategy": { "summary": "Стратегия дня.", "one_focus": "Фокус" },
+      "gate": { "vector_defined": false, "tension_defined": true, "risk_defined": true }
+    },
+    "profile_selector": {
+      "task": "today_summary",
+      "topic": "general",
+      "current_mode": "neutral",
+      "relevant_profile": { "topic": "general" },
+      "recent_signals": ["ritual_mood:спокойное"],
+      "generation_rules": {
+        "tone": "supportive",
+        "depth": "medium",
+        "max_actions": 2,
+        "must_include": [],
+        "must_avoid": ["overconfident claims without caveats"]
+      },
+      "module_refs_used": [],
+      "overall_confidence": "medium",
+      "debug_trace": { "selector_rules_version": "profile-selector-v0" }
+    }
+  }
+}

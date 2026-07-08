@@ -1,0 +1,21 @@
+{
+  "contract_version": "reference_machine_contract_v1",
+  "domain": "tarot",
+  "entity_code": "tarot.major.07",
+  "version": "1.0.0",
+  "status": "draft",
+  "machine_contract": {
+    "vector": {
+      "action_reflection": 0.8,
+      "expansion_consolidation": 0.3,
+      "self_others": -0.2,
+      "structure_flow": 0.7
+    },
+    "tempo": "fast",
+    "risk": "medium",
+    "risk_modifier": 0.2,
+    "emotional_load": "intense",
+    "confidence": 0.75
+  },
+  "advice": "Content must not live on machine record root."
+}

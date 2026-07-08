@@ -1,0 +1,23 @@
+[
+  {
+    "check_in_id": "emotional_pressure_release",
+    "prompt": "How are you holding emotions right now? Where does your body feel most dense?",
+    "steps": [
+      "Name the emotion or shade (for example, \"static tension\").",
+      "Identify who this feeling is currently directed toward."
+    ],
+    "cta": "Take three cycles of So Hum breathing to ground the sensation.",
+    "human_text": "Check in with your emotions: How are you holding them right now? Where does your body feel most dense? Name the emotion or shade (for example, \"static tension\"). Identify who this feeling is currently directed toward. Then take three cycles of So Hum breathing to ground the sensation."
+  },
+  {
+    "check_in_id": "clarity_commitment",
+    "prompt": "What do you want to feel after today?",
+    "steps": [
+      "Write one sentence: \"I want … because …\".",
+      "Notice whether your body resists this intention."
+    ],
+    "cta": "Walk briskly for five minutes and repeat Om Ram three times on the exhale.",
+    "human_text": "Check in with clarity and commitment: What do you want to feel after today? Write one sentence: \"I want … because …\". Notice whether your body resists this intention. Then walk briskly for five minutes and repeat Om Ram three times on the exhale."
+  }
+]
+

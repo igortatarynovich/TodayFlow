@@ -1,0 +1,902 @@
+.pageRoot {
+  width: 100%;
+  min-width: 0;
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: minmax(8.5rem, 11rem) minmax(0, 1fr);
+  gap: clamp(1.5rem, 3vw, 3.5rem);
+  width: 100%;
+  align-items: start;
+}
+
+.depthNav {
+  position: sticky;
+  top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.125rem;
+  padding: 1.125rem 0;
+}
+
+.depthRail {
+  position: absolute;
+  left: 0.9375rem;
+  top: 2rem;
+  width: 2px;
+  height: 32rem;
+  background: linear-gradient(180deg, #8b6a3e 0%, #c9a96e 42%, #d4b896 100%);
+  pointer-events: none;
+}
+
+.depthNavInner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2.125rem;
+}
+
+.depthStep {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: 0.875rem;
+  align-items: start;
+  text-decoration: none;
+  color: inherit;
+}
+
+.depthStepBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 1rem;
+  border: 1px solid #c9a96e;
+  background: #fff;
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #8b6a3e;
+  box-shadow: 0 10px 13px rgba(42, 37, 32, 0.08);
+}
+
+.depthStepBadgeActive {
+  background: #2a2520;
+  border-color: #2a2520;
+  color: #fdfbf7;
+}
+
+.depthStepTitle {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+  color: var(--tf-ink);
+}
+
+.depthStepHint {
+  margin: 0.1875rem 0 0;
+  font-size: 0.6875rem;
+  line-height: 1.45;
+  color: #9a9490;
+}
+
+.mainColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+}
+
+.heroCard,
+.sideCard {
+  padding: 2.3125rem;
+  border-radius: 2rem;
+  border: 1px solid #e8e2d6;
+  background: #fff;
+  box-shadow: 0 24px 35px rgba(42, 37, 32, 0.08);
+}
+
+.heroEyebrow {
+  margin: 0 0 1rem;
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: #8b6a3e;
+}
+
+.heroTitle {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--tf-ink);
+}
+
+.heroQuote {
+  margin: 1.25rem 0 0;
+  font-family: var(--tf-font-display);
+  font-size: clamp(1.25rem, 2.5vw, 2.125rem);
+  line-height: 1.2;
+  font-style: italic;
+  color: #5a5450;
+}
+
+.heroPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  margin-top: 1.5rem;
+}
+
+.heroPill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.5rem 0.875rem;
+  border-radius: 999px;
+  border: 1px solid #e8e2d6;
+  background: #f7f4ee;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #5a5450;
+}
+
+.sideCard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.awarenessRow {
+  display: grid;
+  grid-template-columns: 9.25rem minmax(0, 1fr);
+  gap: 1.375rem;
+  align-items: center;
+}
+
+.awarenessRing {
+  position: relative;
+  width: 9.25rem;
+  height: 9.25rem;
+  border-radius: 50%;
+  background: conic-gradient(#8b6a3e 0 var(--awareness-deg, 245deg), #ede8de var(--awareness-deg, 245deg) 100%);
+  box-shadow: 0 0 0 1px #2a2520;
+}
+
+.awarenessRingInner {
+  position: absolute;
+  inset: 1.125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #fff;
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  font-size: 1.875rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.sideEyebrow {
+  margin: 0;
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: #8b6a3e;
+}
+
+.sideBody {
+  margin: 0.5rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: #5a5450;
+}
+
+.anchorBlock {
+  padding: 0.9375rem 1.0625rem;
+  border-radius: 1.125rem;
+  border: 1px solid #e8e2d6;
+  background: #f7f4ee;
+}
+
+.anchorTitle {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--tf-ink);
+}
+
+.anchorBody {
+  margin: 0.25rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: #5a5450;
+}
+
+.zone {
+  scroll-margin-top: 1.5rem;
+  padding: 1.75rem;
+  border-radius: 1.75rem;
+  border: 1px solid #e8e2d6;
+  background: #fff;
+  box-shadow: 0 18px 28px rgba(42, 37, 32, 0.06);
+}
+
+.zoneHeader {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 1.5rem;
+  align-items: start;
+  margin-bottom: 1.5rem;
+}
+
+.zoneStep {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: 3rem;
+  line-height: 1;
+  color: rgba(42, 37, 32, 0.12);
+}
+
+.zoneTitle {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--tf-ink);
+}
+
+.zoneLead {
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #5a5450;
+  max-width: 42rem;
+}
+
+.liveChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2rem;
+  padding: 0 0.875rem;
+  border-radius: 999px;
+  border: 1px solid #e8e2d6;
+  background: #ede8de;
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  font-size: 0.75rem;
+  color: #5a5450;
+  white-space: nowrap;
+}
+
+.liveDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 0.25rem;
+  background: #4f6647;
+  box-shadow: 0 0 0 6px rgba(79, 102, 71, 0.16);
+}
+
+.factGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.factCard {
+  min-height: 10.5rem;
+  padding: 1.1875rem;
+  border-radius: 1.125rem;
+  border: 1px solid #e8e2d6;
+  background: #f7f4ee;
+}
+
+.factLabel {
+  margin: 0;
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8b6a3e;
+}
+
+.factValue {
+  margin: 1rem 0 0;
+  font-family: var(--tf-font-display);
+  font-size: 1.375rem;
+  line-height: 1.2;
+  color: var(--tf-ink);
+}
+
+.factHint {
+  margin: 0.75rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: #5a5450;
+}
+
+.progressBar {
+  margin-top: 1rem;
+  height: 0.5625rem;
+  border-radius: 999px;
+  background: #ede8de;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #8b6a3e, #c9a96e);
+}
+
+.characterGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.characterPanel {
+  padding: 1.25rem;
+  border-radius: 1.125rem;
+  border: 1px solid #e8e2d6;
+  background: #f7f4ee;
+}
+
+.characterPanelTitle {
+  margin: 0 0 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--tf-ink);
+}
+
+.bulletList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.bulletItem {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: #5a5450;
+}
+
+.bulletMark {
+  flex-shrink: 0;
+  color: #8b6a3e;
+}
+
+.bulletMarkMuted {
+  color: #c97a5a;
+}
+
+.decisionBlock {
+  margin-top: 1rem;
+  padding: 1.25rem;
+  border-radius: 1.125rem;
+  border: 1px solid #e8e2d6;
+  background: #fff;
+}
+
+.missionCard {
+  padding: 1.5rem;
+  border-radius: 1.125rem;
+  border: 1px solid #e8e2d6;
+  background: linear-gradient(135deg, #f7f4ee 0%, #fff 100%);
+}
+
+.missionText {
+  margin: 0.75rem 0 0;
+  font-family: var(--tf-font-display);
+  font-size: 1.5rem;
+  line-height: 1.35;
+  color: var(--tf-ink);
+}
+
+.sphereGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.875rem;
+  margin-top: 1rem;
+}
+
+.sphereCard {
+  border-radius: 1.375rem;
+  border: 1px solid #e8e2d6;
+  background: #fff;
+  min-height: 5.5rem;
+  overflow: hidden;
+}
+
+.sphereSummary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 1.125rem 1.125rem 1rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.sphereSummary::-webkit-details-marker {
+  display: none;
+}
+
+.sphereSummaryMain {
+  flex: 1;
+  min-width: 0;
+}
+
+.sphereChevron {
+  color: #8b6a3e;
+  font-size: 1.125rem;
+  line-height: 1;
+  margin-top: 0.125rem;
+}
+
+.sphereTitle {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #2a2520;
+}
+
+.sphereNeedLine {
+  margin: 0.5rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: #5a5450;
+}
+
+.sphereProgressTrack {
+  margin-top: 0.625rem;
+  height: 0.5625rem;
+  border-radius: 999px;
+  background: #ede8de;
+  overflow: hidden;
+}
+
+.sphereProgressFill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #8b6a3e 0%, #c9a96e 100%);
+}
+
+.sphereDetails {
+  padding: 0 1.125rem 1.125rem;
+  border-top: 1px solid #f0ebe3;
+}
+
+.sphereDetailLabel {
+  margin: 0.75rem 0 0.25rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9a9490;
+}
+
+.sphereDetailLabel:first-child {
+  margin-top: 0.875rem;
+}
+
+.sphereBody {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: #2a2520;
+}
+
+.sphereMeta {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: #5a5450;
+}
+
+.myDaysPanel {
+  padding: 1.125rem 1.1875rem;
+  border-radius: 1.5rem;
+  border: 1px solid #e8e2d6;
+  background: #f7f4ee;
+}
+
+.myDaysPanelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.125rem;
+}
+
+.myDaysPanelEyebrow {
+  margin: 0;
+  font-family: var(--tf-font-mono, "IBM Plex Mono", monospace);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #9a9490;
+}
+
+.myDaysPanelLink {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #8b6a3e;
+  text-decoration: none;
+}
+
+.myDaysPanelLink:hover {
+  text-decoration: underline;
+}
+
+.myDaysWeekGrid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.myDaysWeekCell {
+  min-height: 5.25rem;
+  padding: 0.9375rem 0.5rem 0.75rem;
+  border-radius: 1rem;
+  border: 1px solid #e8e2d6;
+  background: #fff;
+  text-align: center;
+}
+
+.myDaysWeekLabel {
+  margin: 0;
+  font-family: var(--tf-font-mono, "IBM Plex Mono", monospace);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #2a2520;
+}
+
+.myDaysWeekMark {
+  margin: 0.75rem 0 0;
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+.myDaysWeekMarkClosed {
+  color: #4f6647;
+}
+
+.myDaysWeekMarkOpen {
+  color: #c8c2ba;
+}
+
+.historyStack {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.125rem;
+}
+
+.historyStackWide {
+  grid-column: 1 / -1;
+}
+
+.skyZone {
+  background: #2a2520;
+  border-color: #2a2520;
+  color: #fdfbf7;
+}
+
+.skyZone .zoneStep,
+.skyZone .zoneTitle {
+  color: rgba(253, 251, 247, 0.2);
+}
+
+.skyZone .zoneTitle {
+  color: #fdfbf7;
+}
+
+.skyZone .zoneLead {
+  color: rgba(253, 251, 247, 0.72);
+}
+
+.skyContent {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.skyLayout {
+  padding: 1.35rem;
+  border-radius: 2rem;
+  background:
+    radial-gradient(120% 80% at 100% 0%, rgba(201, 169, 110, 0.18) 0%, rgba(201, 169, 110, 0) 34%),
+    linear-gradient(180deg, #1a1714 0%, #231e1b 100%);
+  border: 1px solid #3a342e;
+}
+
+.skyHeaderMeta {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.skyLiveChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.875rem;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 184, 150, 0.3);
+  background: rgba(253, 251, 247, 0.06);
+  font-family: var(--tf-font-mono, "IBM Plex Mono", monospace);
+  font-size: 0.75rem;
+  color: #fdfbf7;
+}
+
+.skyLiveDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: #4f6647;
+  box-shadow: 0 0 0 6px rgba(79, 102, 71, 0.16);
+}
+
+.skyGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.625rem;
+}
+
+.skyWheelPanel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  border-radius: 2rem;
+  border: 1px solid rgba(212, 184, 150, 0.28);
+  background: rgba(253, 251, 247, 0.04);
+}
+
+.skyWheelFrame {
+  width: min(100%, 420px);
+  aspect-ratio: 1;
+}
+
+.skyWheelFrame :global(svg) {
+  width: 100%;
+  height: auto;
+}
+
+.skyAside {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.skyAspectStack {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.skyAspectCard {
+  padding: 1.125rem 1.0625rem;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(212, 184, 150, 0.22);
+  background: rgba(253, 251, 247, 0.04);
+}
+
+.skyAspectTitle {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #fdfbf7;
+}
+
+.skyAspectBody {
+  margin: 0.5rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: #c8c2ba;
+}
+
+.skyHouseGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.625rem;
+}
+
+.skyHouseCard {
+  padding: 1rem 0.875rem 0.8125rem;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(212, 184, 150, 0.22);
+  background: rgba(253, 251, 247, 0.04);
+}
+
+.skyHouseRoman {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #fdfbf7;
+}
+
+.skyHouseKeyword {
+  margin: 0.5rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: #c8c2ba;
+}
+
+.skyFootnote {
+  margin: 0;
+  padding: 1rem;
+  border-radius: 1.25rem;
+  border: 1px dashed rgba(212, 184, 150, 0.36);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: #c8c2ba;
+}
+
+.skyEmpty {
+  display: grid;
+  gap: 1rem;
+  justify-items: start;
+}
+
+.skyReloadBtn {
+  border: 1px solid rgba(212, 184, 150, 0.35);
+  background: rgba(253, 251, 247, 0.08);
+  color: #fdfbf7;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.skyError {
+  margin: 0.75rem 0 0;
+  font-size: 0.8125rem;
+  color: #fca5a5;
+}
+
+.topMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
+}
+
+.birthDataBtn {
+  margin-left: auto;
+  border: none;
+  background: transparent;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #8b6a3e;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+@media (min-width: 40rem) {
+  .factGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .characterGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sphereGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .historyStack {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 56.25rem) {
+  .heroGrid {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  }
+}
+
+@media (min-width: 64rem) {
+  .factGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .sphereGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .skyGrid {
+    grid-template-columns: minmax(280px, 470px) minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 47.99rem) {
+  .shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .depthNav {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0;
+  }
+
+  .depthRail {
+    display: none;
+  }
+
+  .depthNavInner {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .depthStep {
+    grid-template-columns: 2rem minmax(0, 1fr);
+    min-width: 9rem;
+  }
+
+  .zoneHeader {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .awarenessRow {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+  }
+
+  .myDaysWeekGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .skyGrid,
+  .skyHouseGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .heroCard,
+  .sideCard,
+  .zone {
+    padding: 1.25rem;
+  }
+
+  .zoneTitle {
+    font-size: clamp(2rem, 8vw, 3rem);
+  }
+}
+
+@media (min-width: 48rem) and (max-width: 63.99rem) {
+  .myDaysWeekGrid {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+}

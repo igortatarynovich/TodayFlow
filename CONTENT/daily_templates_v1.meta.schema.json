@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Daily Template Meta Schema",
+  "description": "Мета-схема для daily-шаблонов",
+  "type": "object",
+  "required": ["paragraph_id", "version", "slot"],
+  "properties": {
+    "paragraph_id": {
+      "type": "string",
+      "pattern": "^DAILY\\.[A-Z_]+\\.[0-9]{3}$",
+      "description": "Идентификатор ключа (например, DAILY.DIGEST.001)"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Версия шаблона (например, 1.0.0)"
+    },
+    "slot": {
+      "type": "string",
+      "enum": ["digest", "focus", "warning", "win", "affirmation", "prompt", "practice_intro", "practice_steps", "pattern_today"],
+      "description": "Тип слота"
+    },
+    "theme": {
+      "type": "string",
+      "enum": ["calm", "energy", "boundaries", "love", "money", "work", "selfworth", "change", "clarity"],
+      "description": "Тематика контента"
+    },
+    "tone": {
+      "type": "string",
+      "enum": ["calm", "direct", "gentle", "motivating"],
+      "description": "Тон подачи"
+    },
+    "length": {
+      "type": "string",
+      "enum": ["xs", "s", "m"],
+      "description": "Длина текста: xs (до 20 слов), s (20-40), m (40-60)"
+    },
+    "time": {
+      "type": "string",
+      "enum": ["morning", "day", "evening", "any"],
+      "description": "Время дня"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Теги для селекции (anxiety, procrastination, conflict, и т.д.)"
+    },
+    "pattern_cluster": {
+      "type": ["string", "null"],
+      "description": "Для pattern_today - ссылка на кластер паттернов (A1-A7 или тематический)"
+    },
+    "lite_allowed": {
+      "type": "boolean",
+      "description": "Всегда true для daily"
+    }
+  },
+  "additionalProperties": false
+}
+

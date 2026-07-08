@@ -1,0 +1,73 @@
+{
+  "spheres": {
+    "love": {
+      "score": 75,
+      "todayHeadline": "Близость",
+      "todayDetail": "Честный контакт.",
+      "insight": "Одна ясная фраза полезнее молчания.",
+      "watch": "Не дави на ответ."
+    },
+    "work": {
+      "score": 68,
+      "todayHeadline": "Работа",
+      "todayDetail": "Один вектор.",
+      "insight": "Завершение важнее старта.",
+      "watch": "Не бери новые задачи."
+    },
+    "money": {
+      "score": 64,
+      "todayHeadline": "Деньги",
+      "todayDetail": "Границы.",
+      "insight": "Пауза перед тратой.",
+      "watch": "Импульс — риск."
+    },
+    "energy": {
+      "score": 72,
+      "todayHeadline": "Темп",
+      "insight": "Ровный ритм."
+    }
+  },
+  "narrative": {
+    "guide": {
+      "generation_id": "gen-missing-action-001",
+      "payload": {
+        "headline": "День про ясность"
+      }
+    },
+    "spheres": {
+      "payload": {}
+    }
+  },
+  "morning_ritual": {
+    "daily_horoscope": {
+      "spine": {
+        "best_mode": "Держи одну линию.",
+        "main_risk": "Распыление."
+      },
+      "scenarios": [
+        {
+          "slug": "love",
+          "focus": "Честный контакт",
+          "summary": "Прямой разговор."
+        },
+        {
+          "slug": "family",
+          "focus": "Поддержка дома",
+          "summary": "Тёплый контакт без давления."
+        }
+      ]
+    },
+    "daily_recommendations": {},
+    "decision_engine": {
+      "actions": []
+    }
+  },
+  "fusion": {
+    "scores": { "energy": 68, "emotional_balance": 66, "focus": 67 },
+    "encouragement": "Ровный день."
+  },
+  "fallback_context": {
+    "locale": "ru",
+    "progress": {}
+  }
+}

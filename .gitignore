@@ -1,0 +1,40 @@
+# Secrets / env
+.env
+.env.*
+!.env*.example
+
+# Node / Next
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+npm-debug.log*
+
+# Python
+.venv/
+.venv*/
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+coverage.xml
+
+# iOS / Xcode
+ios/**/build/
+**/DerivedData/
+**/xcuserdata/
+*.xcuserstate
+Pods/
+
+# Android
+android/**/build/
+.gradle/
+local.properties
+
+# OS / editor / local
+.DS_Store
+.cursor/
+
+# DB / local data
+pgdata/
+docs/datasets/raw/*.jsonl

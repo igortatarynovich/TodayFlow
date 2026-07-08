@@ -1,0 +1,131 @@
+{
+  "contract_version": "compact_user_model_v1",
+  "as_of": "2026-07-03",
+  "generated_at": "2026-07-03T12:00:00",
+  "identity": {
+    "facts": {
+      "birth_date": "1990-02-14",
+      "birth_time_known": true,
+      "timezone_name": "Europe/Moscow",
+      "stated_goals": ["финансовая ясность", "устойчивый ритм"],
+      "declared_habits": ["вечерняя рефлексия"]
+    },
+    "display_name": "Igor",
+    "sun_sign": "Aquarius",
+    "moon_sign": "Pisces",
+    "rising_sign": "Virgo",
+    "life_path": 7,
+    "archetype": "Sage",
+    "summary": "Ты лучше всего раскрываешься там, где есть понимание смысла.",
+    "strengths": ["системное мышление", "спокойствие под давлением"],
+    "constraints": ["перегруз задачами"],
+    "motivation_style": {
+      "directness": "direct",
+      "depth": "short"
+    },
+    "life_rhythm": {
+      "peak_hours_local": [18, 19, 20, 21],
+      "weekly_cycle": "evening_person",
+      "best_window_label": "18:00–22:00"
+    }
+  },
+  "current_state": {
+    "local_date": "2026-07-03",
+    "mood_energy": {
+      "mood_id": "tired",
+      "energy_level": "low",
+      "captured_at": "2026-07-03T08:15:00"
+    },
+    "dominant_tension": "workload vs need for rest",
+    "stage": null,
+    "risks": ["overcommitting today"],
+    "opportunities": ["evening focus window"],
+    "mood_id": "tired",
+    "focus_topic_id": "work"
+  },
+  "active_themes": [
+    {
+      "id": "discipline",
+      "weight": 0.88,
+      "stability": "stable",
+      "window_days": 30,
+      "linked_areas": ["work", "body"],
+      "source": "meaning_surface_patterns_v0"
+    },
+    {
+      "id": "work_focus",
+      "weight": 0.71,
+      "stability": "stable",
+      "window_days": 30,
+      "linked_areas": ["work"],
+      "source": "meaning_surface_patterns_v0"
+    },
+    {
+      "id": "financial_clarity",
+      "weight": 0.65,
+      "stability": "hypothesis_heavy",
+      "window_days": 60,
+      "linked_areas": ["money"],
+      "source": "inferred_knowledge_v0"
+    }
+  ],
+  "behavioral_patterns": {
+    "works": ["evening_reflection", "short_focus_sessions", "2-min actions"],
+    "does_not_work": ["morning-heavy routines"],
+    "hints": ["returns after skip within 48h with evening nudge"],
+    "evidence_strength": "strong",
+    "window_days": 28,
+    "total_events": 84
+  },
+  "recommendations": {
+    "primary": {
+      "id": "rec-breath-before-work",
+      "text": "2-min breath before one work task (20 min block)",
+      "timing_hint": "before next focus block",
+      "measurable": "one completed 20 min block",
+      "source": "day_context",
+      "evidence_atom_ids": ["timing.practice_optimal_window.v1"],
+      "knowledge_type_gate": "pattern"
+    },
+    "alternates": [
+      {
+        "id": "rec-defer-message",
+        "text": "Defer non-urgent message until tomorrow 10:00",
+        "timing_hint": "tomorrow 10:00",
+        "measurable": "message still unsent until window",
+        "source": "day_model",
+        "evidence_atom_ids": [],
+        "knowledge_type_gate": "pattern"
+      }
+    ]
+  },
+  "confidence": {
+    "overall": 0.78,
+    "by_domain": {
+      "identity": 0.82,
+      "themes": 0.75,
+      "timing": 0.85,
+      "recommendations": 0.7
+    },
+    "uncertainty_flags": ["money_theme_needs_confirm"],
+    "delta_30d": 0.26,
+    "meaning_events_28d": 84
+  },
+  "knowledge_atoms_top_k": [
+    {
+      "knowledge_id": "profile-identity-summary",
+      "contract_version": "profile_identity_v0",
+      "knowledge_type": "fact",
+      "data_class": "identity",
+      "domain": "identity",
+      "claim": "profile_identity:summary",
+      "claim_summary": "Ты лучше всего раскрываешься там, где есть понимание смысла.",
+      "confidence": 0.72,
+      "evidence_count": 1,
+      "confirmation_required": false,
+      "decision_relevance": "high",
+      "stability": "stable"
+    }
+  ],
+  "interpretation_instances_top_k": []
+}

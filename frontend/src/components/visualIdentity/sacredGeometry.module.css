@@ -1,0 +1,25 @@
+.backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.svg {
+  width: 100%;
+  height: 100%;
+  opacity: 0.55;
+}
+
+.soft .svg {
+  opacity: 0.55;
+}
+
+.strong .svg {
+  opacity: 0.72;
+}
+
+.dark .svg {
+  opacity: 0.85;
+}

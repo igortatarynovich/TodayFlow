@@ -1,0 +1,20 @@
+{
+  "products": [
+    {
+      "id": "lite_birth_chart",
+      "title_key": "catalog.products.lite_birth_chart.title",
+      "summary_key": "catalog.products.lite_birth_chart.summary",
+      "cta": "catalog.cta.free",
+      "link": "/birth-chart",
+      "access": "free"
+    },
+    {
+      "id": "full_report",
+      "title_key": "catalog.products.full_report.title",
+      "summary_key": "catalog.products.full_report.summary",
+      "cta": "catalog.cta.unlock",
+      "link": "/reports/full",
+      "access": "paid"
+    }
+  ]
+}

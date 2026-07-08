@@ -1,0 +1,1233 @@
+{
+  "schema_version": "0.2",
+  "updated": "2026-06-23",
+  "status": "IN_PROGRESS",
+  "phase": "2_text_class_clustering",
+  "north_star_v1_refuted": "Single universal recognition unit (AR-003)",
+  "north_star_v2": "For which text classes does which recognition unit dominate?",
+  "north_star_v3": "Which knowledge deserves a place in PIM? (Decision vs Recognition Relevance — RRM)",
+  "north_star_v4": "Knowledge ROI: value (C17 + RRM) vs acquisition cost vs observability — platform memory economics",
+  "north_star_v5": "Platform vs feature knowledge — Reusability: which knowledge is PIM infrastructure vs single-consumer feature cache?",
+  "rrm_hypothesis": {
+    "status": "hypothesis",
+    "not_for": ["text_generation", "pattern_selection", "IPL", "object_layer"],
+    "for": "PIM knowledge curation before DRE",
+    "pairs_with": "C17 decision_relevance",
+    "ar004_knowledge_density_illusion": {
+      "id": "AR-004",
+      "risk": "More facts about a person → better recognition",
+      "hypothesis": "100 low-recognition atoms may be less useful than 10 high-recognition atoms",
+      "example_low_recognition": ["prefers_quiet_work", "morning_meetings", "uses_notion"]
+    },
+    "phase_2_entry_fields": ["linked_knowledge_types", "knowledge_type_class"],
+    "n40_primary_question": "Which knowledge type classes most often stand behind survivors? (Not: which survivor won)",
+    "post_n40_gate": {
+      "do_not": ["Turn RRM into acquisition policy immediately after n=40", "High ROI implies permanent PIM storage"],
+      "sequence": [
+        "RRM correlation: survivor → knowledge_type_class",
+        "Knowledge Observability map by class",
+        "Knowledge ROI sketch (value ÷ acquisition cost)",
+        "Reusability map — platform vs feature knowledge",
+        "KIP / acquisition policy sign-off"
+      ],
+      "investment_policy_hypothesis": "C17 ∩ RRM ∩ Observability ∩ Reusability"
+    },
+    "ar009_knowledge_as_asset_illusion": {
+      "id": "AR-009",
+      "risk": "High ROI implies knowledge should be stored in PIM permanently",
+      "parallel_chain": ["scene → good text", "anchor → good text", "pattern → recognition source", "high ROI → store"],
+      "pim_purpose": "Support future processes — not store valuable assets",
+      "example_uncertain_store": "waiting_for_reply — high recognition · uncertain reusability (DRE only?)"
+    },
+    "ar008_high_recognition_high_cost": {
+      "id": "AR-008",
+      "risk": "Collect all high-recognition knowledge without acquisition cost / observability",
+      "example_high_cost_high_rec": ["waiting_for_reply", "postpones_hard_conversations", "overcommitment"]
+    },
+    "phase_2_step": "Correlate text_class + survivor + recognition_mechanism + knowledge_type_class before stack decision",
+    "correlation_sketch": [
+      {"text_class": "delayed_message", "survivor": "context_bundle", "mechanism": "narrative_recognition", "linked_knowledge_types": ["waiting_for_reply"], "knowledge_type_class": ["social_dynamic", "recurring_conflict"]},
+      {"text_class": "focus", "survivor": "object_frame", "mechanism": "object_recognition", "linked_knowledge_types": ["overcommitment"], "knowledge_type_class": ["life_object"]},
+      {"text_class": "procrastination", "survivor": "pattern_form", "mechanism": "pattern_recognition", "linked_knowledge_types": ["postpones_hard_conversations", "deadline_overestimation"], "knowledge_type_class": ["behavioral_pattern"]},
+      {"text_class": "overload", "survivor": "pattern_form", "mechanism": "pattern_recognition", "linked_knowledge_types": ["overcommitment"], "knowledge_type_class": ["behavioral_pattern"]}
+    ]
+  },
+  "knowledge_type_class_catalog": [
+    {"id": "behavioral_pattern", "label_en": "Behavioral Pattern", "label_ru": "Поведенческий паттерн", "recognition_hypothesis": "high"},
+    {"id": "repeated_decision", "label_en": "Repeated Decision", "label_ru": "Повторяющееся решение", "recognition_hypothesis": "medium_high"},
+    {"id": "social_dynamic", "label_en": "Social Dynamic", "label_ru": "Социальная динамика", "recognition_hypothesis": "medium_high"},
+    {"id": "work_habit", "label_en": "Work Habit", "label_ru": "Рабочая привычка", "recognition_hypothesis": "low"},
+    {"id": "preference", "label_en": "Preference", "label_ru": "Предпочтение", "recognition_hypothesis": "low"},
+    {"id": "life_object", "label_en": "Life Object", "label_ru": "Жизненный объект", "recognition_hypothesis": "text_class_dependent"},
+    {"id": "emotional_tendency", "label_en": "Emotional Tendency", "label_ru": "Эмоциональная склонность", "recognition_hypothesis": "medium"},
+    {"id": "recurring_conflict", "label_en": "Recurring Conflict", "label_ru": "Повторяющийся конфликт", "recognition_hypothesis": "high"}
+  ],
+  "survivor_to_knowledge_type_class_hypothesis": [
+    {"survivor": "pattern_form", "knowledge_type_classes": ["behavioral_pattern"], "status": "hypothesis"},
+    {"survivor": "context_bundle", "knowledge_type_classes": ["social_dynamic", "recurring_conflict"], "status": "hypothesis"},
+    {"survivor": "object_frame", "knowledge_type_classes": ["life_object"], "status": "hypothesis"},
+    {"survivor": "life_object", "knowledge_type_classes": ["life_object"], "status": "hypothesis"}
+  ],
+  "class_level_recognition_hypotheses": [
+    "Preferences rarely drive recognition",
+    "Behavioral patterns often drive recognition",
+    "Recurring conflict often drives recognition",
+    "Life objects work only in certain text_class"
+  ],
+  "architectural_risk_ar003": "False Universal Survivor — assuming one unit for all strong texts",
+  "pilot_editorial_sign_off": "2026-06-23 — four competing mechanisms; 42% non-pattern not noise; IPL not confirmed",
+  "candidate_outcome_post_n40": "Multimodal Recognition Retrieval (Pattern · Object · Context Bundle) — not canon",
+  "expected_n40_share_ranges": {
+    "pattern_form": "45-60",
+    "context_bundle": "20-30",
+    "object_frame": "10-20",
+    "life_object": "5-15"
+  },
+  "phase_2_text_class_hypothesis": [
+    {
+      "text_class": "delayed_message",
+      "expected_survivor": "context_bundle"
+    },
+    {
+      "text_class": "relationship_waiting",
+      "expected_survivor": "context_bundle"
+    },
+    {
+      "text_class": "postponed_conversation",
+      "expected_survivor": "pattern_form"
+    },
+    {
+      "text_class": "overload",
+      "expected_survivor": "pattern_form"
+    },
+    {
+      "text_class": "self_pressure",
+      "expected_survivor": "pattern_form"
+    },
+    {
+      "text_class": "focus",
+      "expected_survivor": "object_frame"
+    },
+    {
+      "text_class": "procrastination",
+      "expected_survivor": "pattern_form"
+    },
+    {
+      "text_class": "work_task",
+      "expected_survivor": "life_object"
+    }
+  ],
+  "parent_doc": "../TODAY_RAT_VALIDATION_V0.md",
+  "north_star": "What survives last when strong text is ablated?",
+  "n_cases": 23,
+  "loss_reason_vocab": {
+    "note": "Open vocabulary — append new ids as RAT discovers them",
+    "catalog": [
+      {
+        "id": "specificity_loss",
+        "label_ru": "Потеря конкретности"
+      },
+      {
+        "id": "emotional_hit_loss",
+        "label_ru": "Потеря эмоционального попадания"
+      },
+      {
+        "id": "life_object_loss",
+        "label_ru": "Потеря жизненного объекта"
+      },
+      {
+        "id": "temporal_context_loss",
+        "label_ru": "Потеря временного контекста"
+      },
+      {
+        "id": "narrative_loss",
+        "label_ru": "Потеря мини-истории"
+      },
+      {
+        "id": "causality_loss",
+        "label_ru": "Потеря причинности"
+      },
+      {
+        "id": "pattern_form_loss",
+        "label_ru": "Потеря узнаваемой закономерности"
+      },
+      {
+        "id": "tension_loss",
+        "label_ru": "Потеря внутреннего напряжения"
+      },
+      {
+        "id": "bundle_loss",
+        "label_ru": "Распад связки факторов"
+      }
+    ]
+  },
+  "survivor_types": [
+    {
+      "id": "pattern_form",
+      "label_ru": "Узнаваемая закономерность / форма"
+    },
+    {
+      "id": "object_frame",
+      "label_ru": "Рамка объекта («один приоритет», не абстрактный совет)"
+    },
+    {
+      "id": "life_object",
+      "label_ru": "Конкретный жизненный объект / сцена"
+    },
+    {
+      "id": "context_bundle",
+      "label_ru": "Связка object + time + pattern"
+    },
+    {
+      "id": "tension",
+      "label_ru": "Абстрактное внутреннее давление"
+    },
+    {
+      "id": "dre_only",
+      "label_ru": "Объяснение дня без узнавания"
+    }
+  ],
+  "aggregate_preliminary": {
+    "note": "Directional editorial pilot — not sign-off",
+    "survivor_counts": {
+      "pattern_form": 11,
+      "object_frame": 3,
+      "context_bundle": 3,
+      "life_object": 2
+    },
+    "survivor_shares_pct": {
+      "pattern_form": 58,
+      "object_frame": 16,
+      "context_bundle": 16,
+      "life_object": 11
+    },
+    "loss_reason_frequency": {
+      "pattern_form_loss": 8,
+      "specificity_loss": 7,
+      "temporal_context_loss": 5,
+      "life_object_loss": 4,
+      "narrative_loss": 3,
+      "emotional_hit_loss": 2,
+      "causality_loss": 2,
+      "tension_loss": 1
+    },
+    "ipl_engine_implication": "NOT_CONFIRMED — pattern_form ~58%, not 70-80%; mixed survivors",
+    "object_layer_implication": "PARTIAL_SIGNAL — object_frame wins in overload/focus subset (cal-055-057)"
+  },
+  "entries": [
+    {
+      "cal_id": "cal-018",
+      "source": "editorial_seed",
+      "text": "Кто-то может написать вам именно тогда, когда вы уже решили, что ответа не будет.",
+      "core_scene": "delayed_message",
+      "recognition_score": 5,
+      "ablations": [
+        {
+          "step": 1,
+          "label": "temporal / narrative strip",
+          "text": "Кто-то может написать вам сегодня.",
+          "recognition_score": 2,
+          "loss_reasons": [
+            "temporal_context_loss",
+            "narrative_loss"
+          ],
+          "note": "Теряется не только время — теряется история ожидания"
+        },
+        {
+          "step": 2,
+          "label": "expectation object strip",
+          "text": "Вы можете неожиданно получить то, чего давно ждали.",
+          "recognition_score": 3,
+          "loss_reasons": [
+            "life_object_loss",
+            "specificity_loss"
+          ]
+        },
+        {
+          "step": 3,
+          "label": "release-decision strip",
+          "text": "Кто-то может написать вам после долгого ожидания.",
+          "recognition_score": 3,
+          "loss_reasons": [
+            "pattern_form_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "context_bundle",
+      "survivor_detail": "отпустил ожидание → контакт",
+      "tension_id": "waiting_release",
+      "text_class": "delayed_message",
+      "phase": 1,
+      "recognition_mechanism": "narrative_recognition",
+      "recognition_mechanism_why": "узнаю момент: уже отпустил ожидание — и тогда приходит контакт",
+      "linked_knowledge_types": ["waiting_for_reply"],
+      "knowledge_type_class": ["social_dynamic", "recurring_conflict"]
+    },
+    {
+      "cal_id": "cal-003",
+      "source": "editorial_seed",
+      "text": "Не удивляйтесь, если человек, от которого вы давно ждали ответа, неожиданно напомнит о себе именно тогда, когда вы уже перестали об этом думать.",
+      "core_scene": "delayed_message",
+      "recognition_score": 5,
+      "ablations": [
+        {
+          "step": 1,
+          "label": "temporal / release strip",
+          "text": "Человек, от которого вы ждали ответа, может неожиданно напомнить о себе.",
+          "recognition_score": 3,
+          "loss_reasons": [
+            "pattern_form_loss",
+            "narrative_loss"
+          ]
+        },
+        {
+          "step": 2,
+          "label": "person object strip",
+          "text": "Кто-то может неожиданно напомнить о себе, когда вы перестали ждать.",
+          "recognition_score": 4,
+          "loss_reasons": [
+            "life_object_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "context_bundle",
+      "survivor_detail": "давно ждали → перестали → контакт",
+      "tension_id": "waiting_release",
+      "text_class": "delayed_message",
+      "phase": 1,
+      "recognition_mechanism": "narrative_recognition",
+      "recognition_mechanism_why": "узнаю историю: долго ждал → перестал думать → человек вернулся",
+      "linked_knowledge_types": ["waiting_for_reply"],
+      "knowledge_type_class": ["social_dynamic", "recurring_conflict"]
+    },
+    {
+      "cal_id": "cal-010",
+      "source": "canon_v1",
+      "text": "Сегодня вы можете получить ответ на вопрос, который давно откладывали. Не обязательно в виде озарения — иногда Вселенная говорит через случайную фразу, сообщение или разговор, который сначала покажется незначительным.",
+      "core_scene": "random_phrase_as_sign",
+      "recognition_score": 4,
+      "ablations": [
+        {
+          "step": 1,
+          "label": "channels strip",
+          "text": "Сегодня вы можете получить ответ на вопрос, который давно откладывали.",
+          "recognition_score": 4,
+          "loss_reasons": []
+        },
+        {
+          "step": 2,
+          "label": "delay pattern strip",
+          "text": "Сегодня вы можете получить ответ на важный для вас вопрос.",
+          "recognition_score": 2,
+          "loss_reasons": [
+            "pattern_form_loss",
+            "specificity_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "context_bundle",
+      "survivor_detail": "давно откладывали + канал ответа",
+      "tension_id": "waiting_release",
+      "text_class": "delayed_answer",
+      "phase": 1,
+      "recognition_mechanism": "pattern_recognition",
+      "recognition_mechanism_why": "узнаю отложенный вопрос и ожидание ответа через знакомые каналы"
+    },
+    {
+      "cal_id": "cal-011",
+      "source": "canon_v1",
+      "text": "Сегодня будет проще заметить, какие обещания вы постоянно даёте себе и откладываете уже не первую неделю.",
+      "core_scene": "self_promise_procrastination",
+      "recognition_score": 4,
+      "ablations": [
+        {
+          "step": 1,
+          "label": "temporal strip",
+          "text": "Сегодня будет проще заметить, какие обещания вы постоянно даёте себе и откладываете.",
+          "recognition_score": 3,
+          "loss_reasons": [
+            "temporal_context_loss"
+          ]
+        },
+        {
+          "step": 2,
+          "label": "self-promise pattern strip",
+          "text": "Сегодня будет проще заметить, что откладываете важные дела.",
+          "recognition_score": 2,
+          "loss_reasons": [
+            "pattern_form_loss",
+            "specificity_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "pattern_form",
+      "survivor_detail": "обещания себе + откладывание + «не первую неделю»",
+      "tension_id": "overload_pressure",
+      "text_class": "procrastination",
+      "phase": 1,
+      "recognition_mechanism": "pattern_recognition",
+      "recognition_mechanism_why": "узнаю список обещаний себе, которые снова откладываю"
+    },
+    {
+      "cal_id": "cal-012",
+      "source": "canon_v1",
+      "text": "Кто-то может снова поднять тему, которую вы считали давно закрытой.",
+      "core_scene": "recurring_topic",
+      "recognition_score": 4,
+      "ablations": [
+        {
+          "step": 1,
+          "label": "closed-loop strip",
+          "text": "Кто-то может снова поднять знакомую тему.",
+          "recognition_score": 2,
+          "loss_reasons": [
+            "life_object_loss",
+            "pattern_form_loss"
+          ]
+        },
+        {
+          "step": 2,
+          "label": "social actor strip",
+          "text": "Тема, которую вы считали закрытой, может снова всплыть.",
+          "recognition_score": 3,
+          "loss_reasons": [
+            "specificity_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "life_object",
+      "survivor_detail": "тема, которую считали закрытой",
+      "tension_id": "stuck_transition",
+      "text_class": "postponed_conversation",
+      "phase": 1,
+      "recognition_mechanism": "object_recognition",
+      "recognition_mechanism_why": "узнаю «ту самую» тему, которую считал закрытой"
+    },
+    {
+      "cal_id": "cal-013",
+      "source": "canon_v1",
+      "text": "Вы можете неожиданно поймать себя на том, что устали объяснять очевидные вещи одному и тому же человеку.",
+      "core_scene": "exhausted_explaining",
+      "recognition_score": 5,
+      "ablations": [
+        {
+          "step": 1,
+          "label": "relationship specificity strip",
+          "text": "Вы можете поймать себя на том, что устали объяснять очевидные вещи.",
+          "recognition_score": 3,
+          "loss_reasons": [
+            "life_object_loss",
+            "specificity_loss"
+          ]
+        },
+        {
+          "step": 2,
+          "label": "micro-behavior strip",
+          "text": "Вы можете устать от повторяющихся разговоров.",
+          "recognition_score": 2,
+          "loss_reasons": [
+            "pattern_form_loss",
+            "emotional_hit_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "pattern_form",
+      "survivor_detail": "устали объяснять одному и тому же",
+      "tension_id": "overload_pressure",
+      "text_class": "exhausted_explaining",
+      "phase": 1,
+      "recognition_mechanism": "pattern_recognition",
+      "recognition_mechanism_why": "узнаю себя в повторном объяснении одному человеку"
+    },
+    {
+      "cal_id": "cal-029",
+      "source": "api_live",
+      "text": "Выбери задачу, которая требует твоего внимания, и не распыляйся на множество мелочей. Например, подготовь отчет, который уже давно откладывал.",
+      "core_scene": "self_promise_procrastination",
+      "recognition_score": 4,
+      "ablations": [
+        {
+          "step": 1,
+          "label": "object strip (отчёт)",
+          "text": "Выбери задачу, которая требует твоего внимания, и не распыляйся на множество мелочей.",
+          "recognition_score": 3,
+          "loss_reasons": [
+            "life_object_loss"
+          ]
+        },
+        {
+          "step": 2,
+          "label": "delay pattern strip",
+          "text": "Выбери задачу, которая требует твоего внимания. Например, подготовь отчет.",
+          "recognition_score": 2,
+          "loss_reasons": [
+            "pattern_form_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "pattern_form",
+      "survivor_detail": "давно откладывал — не «отчёт» как объект",
+      "tension_id": "overload_pressure",
+      "hypothesis_confirmed": "object strip hurts less than delay-pattern strip",
+      "text_class": "procrastination",
+      "phase": 1,
+      "recognition_mechanism": "pattern_recognition",
+      "recognition_mechanism_why": "узнаю привычку откладывать — сильнее чем конкретный отчёт"
+    },
+    {
+      "cal_id": "cal-049",
+      "source": "api_live",
+      "text": "Не дави на себя фразой «надо собраться», вместо этого заверши одну задачу.",
+      "core_scene": "self_promise_procrastination",
+      "recognition_score": 4,
+      "ablations": [
+        {
+          "step": 1,
+          "label": "quoted self-talk strip",
+          "text": "Не дави на себя, вместо этого заверши одну задачу.",
+          "recognition_score": 2,
+          "loss_reasons": [
+            "pattern_form_loss",
+            "emotional_hit_loss"
+          ]
+        },
+        {
+          "step": 2,
+          "label": "one-task strip",
+          "text": "Не дави на себя фразой «надо собраться».",
+          "recognition_score": 3,
+          "loss_reasons": [
+            "causality_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "pattern_form",
+      "survivor_detail": "«надо собраться» vs одна завершённая задача",
+      "tension_id": "overload_pressure",
+      "text_class": "self_pressure",
+      "phase": 1,
+      "recognition_mechanism": "state_recognition",
+      "recognition_mechanism_why": "узнаю внутреннюю фразу «надо собраться» и давление на себя"
+    },
+    {
+      "cal_id": "cal-050",
+      "source": "api_live",
+      "text": "Будь внимателен, чтобы не принимать чужие приоритеты за свои. Это может привести к усталости и недовольству.",
+      "core_scene": "agreeing_against_self",
+      "recognition_score": 4,
+      "ablations": [
+        {
+          "step": 1,
+          "label": "consequence strip",
+          "text": "Будь внимателен, чтобы не принимать чужие приоритеты за свои.",
+          "recognition_score": 4,
+          "loss_reasons": []
+        },
+        {
+          "step": 2,
+          "label": "pattern strip",
+          "text": "Будь внимателен к тому, чьи задачи вы берёте на себя.",
+          "recognition_score": 2,
+          "loss_reasons": [
+            "pattern_form_loss",
+            "specificity_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "pattern_form",
+      "survivor_detail": "чужие приоритеты за свои",
+      "tension_id": "overload_pressure",
+      "text_class": "overload",
+      "phase": 1,
+      "recognition_mechanism": "pattern_recognition",
+      "recognition_mechanism_why": "узнаю, что беру чужие приоритеты за свои"
+    },
+    {
+      "cal_id": "cal-051",
+      "source": "api_live",
+      "text": "На работе сосредоточься на одной внятной задаче: так ты сможешь проявить свою силу и ответственность, а не просто реагировать на чужие приоритеты.",
+      "core_scene": "self_promise_procrastination",
+      "recognition_score": 4,
+      "ablations": [
+        {
+          "step": 1,
+          "label": "reactivity contrast strip",
+          "text": "На работе сосредоточься на одной внятной задаче.",
+          "recognition_score": 3,
+          "loss_reasons": [
+            "pattern_form_loss"
+          ]
+        },
+        {
+          "step": 2,
+          "label": "one-task frame strip",
+          "text": "На работе не просто реагируй на чужие приоритеты.",
+          "recognition_score": 3,
+          "loss_reasons": [
+            "specificity_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "pattern_form",
+      "survivor_detail": "одна задача vs реактивность на чужие приоритеты",
+      "tension_id": "overload_pressure",
+      "text_class": "overload",
+      "phase": 1,
+      "recognition_mechanism": "pattern_recognition",
+      "recognition_mechanism_why": "узнаю реактивность на чужие задачи vs одна своя"
+    },
+    {
+      "cal_id": "cal-052",
+      "source": "api_live",
+      "text": "На работе сегодня вы можете столкнуться с множественными задачами, но сосредоточившись на одной, вы сможете добиться значительного прогресса. Подготовьте презентацию или отчет, который хотите завершить к концу дня.",
+      "core_scene": "self_promise_procrastination",
+      "recognition_score": 4,
+      "ablations": [
+        {
+          "step": 1,
+          "label": "deadline + object strip",
+          "text": "На работе сегодня вы можете столкнуться с множественными задачами, но сосредоточившись на одной, вы сможете добиться значительного прогресса.",
+          "recognition_score": 3,
+          "loss_reasons": [
+            "life_object_loss",
+            "temporal_context_loss"
+          ]
+        },
+        {
+          "step": 2,
+          "label": "one-focus strip",
+          "text": "Подготовьте презентацию или отчет, который хотите завершить к концу дня.",
+          "recognition_score": 3,
+          "loss_reasons": [
+            "pattern_form_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "context_bundle",
+      "survivor_detail": "одна задача + конкретный объект + дедлайн",
+      "tension_id": "overload_pressure",
+      "text_class": "work_execution",
+      "phase": 1,
+      "recognition_mechanism": "object_recognition",
+      "recognition_mechanism_why": "узнаю связку: много задач + один отчёт к концу дня"
+    },
+    {
+      "cal_id": "cal-053",
+      "source": "api_live",
+      "text": "Сегодня стоит проанализировать свои финансовые приоритеты. Возможно, пришло время пересмотреть бюджет или запланировать крупную покупку. Одно осознанное решение может изменить вашу финансовую ситуацию.",
+      "core_scene": "reassessing_decision",
+      "recognition_score": 3,
+      "ablations": [
+        {
+          "step": 1,
+          "label": "concrete options strip",
+          "text": "Сегодня стоит проанализировать свои финансовые приоритеты. Одно осознанное решение может многое изменить.",
+          "recognition_score": 2,
+          "loss_reasons": [
+            "life_object_loss",
+            "specificity_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "pattern_form",
+      "survivor_detail": "одно осознанное решение (weak exemplar)",
+      "tension_id": "stuck_transition",
+      "text_class": "reassessing_decision",
+      "phase": 1,
+      "recognition_mechanism": "pattern_recognition",
+      "recognition_mechanism_why": "узнаю момент «одного решения», которое сдвинет ситуацию"
+    },
+    {
+      "cal_id": "cal-054",
+      "source": "api_live",
+      "text": "Настроение «усталость» требует внимания к телесным ощущениям в выборе приоритета.",
+      "core_scene": "self_promise_procrastination",
+      "recognition_score": 3,
+      "ablations": [
+        {
+          "step": 1,
+          "label": "body link strip",
+          "text": "При усталости важно правильно выбрать приоритет.",
+          "recognition_score": 2,
+          "loss_reasons": [
+            "pattern_form_loss",
+            "emotional_hit_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "pattern_form",
+      "survivor_detail": "усталость → тело → приоритет",
+      "tension_id": "fatigue_body",
+      "text_class": "fatigue",
+      "phase": 1,
+      "recognition_mechanism": "state_recognition",
+      "recognition_mechanism_why": "узнаю телесную усталость как фильтр для приоритета"
+    },
+    {
+      "cal_id": "cal-055",
+      "source": "api_live",
+      "text": "Не спеши реагировать на все внешние сигналы. Один приоритет поможет сосредоточиться и избежать перегрузки.",
+      "core_scene": "self_promise_procrastination",
+      "recognition_score": 4,
+      "ablations": [
+        {
+          "step": 1,
+          "label": "object frame strip",
+          "text": "Не спеши реагировать на все внешние сигналы. Сосредоточься, чтобы избежать перегрузки.",
+          "recognition_score": 2,
+          "loss_reasons": [
+            "life_object_loss",
+            "specificity_loss"
+          ]
+        },
+        {
+          "step": 2,
+          "label": "reactivity strip",
+          "text": "Один приоритет поможет избежать перегрузки.",
+          "recognition_score": 3,
+          "loss_reasons": [
+            "pattern_form_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "object_frame",
+      "survivor_detail": "один приоритет — не abstract overload advice",
+      "tension_id": "overload_pressure",
+      "hypothesis_confirmed": "object frame wins over generic overload",
+      "text_class": "focus",
+      "phase": 1,
+      "recognition_mechanism": "object_recognition",
+      "recognition_mechanism_why": "узнаю рамку «один приоритет» против реактивности"
+    },
+    {
+      "cal_id": "cal-056",
+      "source": "api_live",
+      "text": "Этот день не требует размаха, он становится яснее, если выбрать один приоритет.",
+      "core_scene": "self_promise_procrastination",
+      "recognition_score": 4,
+      "ablations": [
+        {
+          "step": 1,
+          "label": "object frame strip",
+          "text": "Этот день не требует размаха, он становится яснее, если сфокусироваться.",
+          "recognition_score": 2,
+          "loss_reasons": [
+            "life_object_loss",
+            "specificity_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "object_frame",
+      "survivor_detail": "один приоритет",
+      "tension_id": "overload_pressure",
+      "text_class": "focus",
+      "phase": 1,
+      "recognition_mechanism": "object_recognition",
+      "recognition_mechanism_why": "узнаю формулу дня через один приоритет, не размах"
+    },
+    {
+      "cal_id": "cal-057",
+      "source": "api_live",
+      "text": "Определи один финансовый приоритет и сосредоточься на его реализации, откладывая другие идеи на потом.",
+      "core_scene": "self_promise_procrastination",
+      "recognition_score": 3,
+      "ablations": [
+        {
+          "step": 1,
+          "label": "object frame strip",
+          "text": "Сосредоточься на главном финансовом решении, откладывая остальное.",
+          "recognition_score": 2,
+          "loss_reasons": [
+            "life_object_loss",
+            "specificity_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "object_frame",
+      "survivor_detail": "один финансовый приоритет",
+      "tension_id": "overload_pressure",
+      "text_class": "focus",
+      "phase": 1,
+      "recognition_mechanism": "object_recognition",
+      "recognition_mechanism_why": "узнаю «один финансовый приоритет» как узкую рамку"
+    },
+    {
+      "cal_id": "cal-058",
+      "source": "api_live",
+      "text": "Проверь свои финансы и составь план расходов на ближайшее время. Избегай импульсивных покупок.",
+      "core_scene": "self_promise_procrastination",
+      "recognition_score": 3,
+      "ablations": [
+        {
+          "step": 1,
+          "label": "impulse object strip",
+          "text": "Проверь свои финансы и составь план расходов на ближайшее время.",
+          "recognition_score": 2,
+          "loss_reasons": [
+            "life_object_loss",
+            "specificity_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "life_object",
+      "survivor_detail": "импульсивные покупки как узнаваемый объект",
+      "tension_id": "stuck_transition",
+      "text_class": "money_habit",
+      "phase": 1,
+      "recognition_mechanism": "object_recognition",
+      "recognition_mechanism_why": "узнаю импульсивные покупки как свой триггер"
+    },
+    {
+      "cal_id": "cal-059",
+      "source": "api_live",
+      "text": "В домашних делах возможно, что привычные задачи требуют больше времени, чем вы ожидали, из-за мелких недочетов.",
+      "core_scene": "recurring_topic",
+      "recognition_score": 3,
+      "ablations": [
+        {
+          "step": 1,
+          "label": "micro-scene strip",
+          "text": "Домашние дела могут занять больше времени, чем вы планировали.",
+          "recognition_score": 2,
+          "loss_reasons": [
+            "life_object_loss",
+            "specificity_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "life_object",
+      "survivor_detail": "привычные задачи + мелкие недочёты",
+      "tension_id": "overload_pressure",
+      "text_class": "household_micro",
+      "phase": 1,
+      "recognition_mechanism": "object_recognition",
+      "recognition_mechanism_why": "узнаю бытовую сцену: привычные дела + мелкие сбои"
+    },
+    {
+      "cal_id": "cal-060",
+      "source": "api_live",
+      "text": "Избегай попыток угодить всем сразу. Это может привести к перегрузке и путанице.",
+      "core_scene": "agreeing_against_self",
+      "recognition_score": 4,
+      "ablations": [
+        {
+          "step": 1,
+          "label": "pattern strip",
+          "text": "Избегай перегрузки и путаницы сегодня.",
+          "recognition_score": 2,
+          "loss_reasons": [
+            "pattern_form_loss",
+            "tension_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "pattern_form",
+      "survivor_detail": "угодить всем сразу",
+      "tension_id": "overload_pressure",
+      "text_class": "overload",
+      "phase": 1,
+      "recognition_mechanism": "pattern_recognition",
+      "recognition_mechanism_why": "узнаю привычку угождать всем и перегружаться"
+    },
+    {
+      "cal_id": "cal-031",
+      "phase": 2,
+      "source": "api_live",
+      "text": "Выбор одного приоритета поможет вам избежать перегрузки и достичь ясности в действиях.",
+      "core_scene": "self_promise_procrastination",
+      "text_class": "focus",
+      "recognition_score": 3,
+      "recognition_mechanism": "object_recognition",
+      "recognition_mechanism_why": "узнаю «один приоритет» как узкую рамку против перегруза",
+      "ablations": [
+        {
+          "step": 1,
+          "label": "object frame strip",
+          "text": "Сфокусируйтесь, чтобы избежать перегрузки и достичь ясности.",
+          "recognition_score": 2,
+          "loss_reasons": [
+            "life_object_loss",
+            "specificity_loss"
+          ]
+        },
+        {
+          "step": 2,
+          "label": "overload state strip",
+          "text": "Выбор одного приоритета поможет вам сегодня.",
+          "recognition_score": 2,
+          "loss_reasons": [
+            "pattern_form_loss",
+            "specificity_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "object_frame",
+      "survivor_detail": "один приоритет",
+      "tension_id": "overload_pressure"
+    },
+    {
+      "cal_id": "cal-061",
+      "phase": 2,
+      "source": "api_live",
+      "text": "Сегодняшний день не требует размаха, лучше сосредоточиться на одном приоритете и избегать хаоса.",
+      "core_scene": "self_promise_procrastination",
+      "text_class": "focus",
+      "recognition_score": 3,
+      "recognition_mechanism": "object_recognition",
+      "recognition_mechanism_why": "узнаю «один приоритет» + «не размах» как формулу перегруженного дня",
+      "ablations": [
+        {
+          "step": 1,
+          "label": "object frame strip",
+          "text": "Сегодня лучше сосредоточиться и избегать хаоса.",
+          "recognition_score": 2,
+          "loss_reasons": [
+            "life_object_loss",
+            "specificity_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "object_frame",
+      "survivor_detail": "один приоритет",
+      "tension_id": "overload_pressure"
+    },
+    {
+      "cal_id": "cal-076",
+      "phase": 2,
+      "source": "api_live",
+      "text": "Выбери одну задачу и доведи её до конца в одном слоте 20 минут.",
+      "core_scene": "self_promise_procrastination",
+      "text_class": "work_execution",
+      "recognition_score": 4,
+      "recognition_mechanism": "object_recognition",
+      "recognition_mechanism_why": "узнаю конкретную рамку: одна задача + ограниченный слот времени",
+      "ablations": [
+        {
+          "step": 1,
+          "label": "time slot strip",
+          "text": "Выбери одну задачу и доведи её до конца.",
+          "recognition_score": 3,
+          "loss_reasons": [
+            "temporal_context_loss"
+          ]
+        },
+        {
+          "step": 2,
+          "label": "one-task strip",
+          "text": "Доведи важное дело до конца в одном слоте 20 минут.",
+          "recognition_score": 2,
+          "loss_reasons": [
+            "life_object_loss",
+            "specificity_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "object_frame",
+      "survivor_detail": "одна задача + слот 20 минут",
+      "tension_id": "overload_pressure"
+    },
+    {
+      "cal_id": "cal-028-improved",
+      "phase": 2,
+      "source": "api_live_rewrite",
+      "text": "Разговор, который давно назрел, но вы откладывали, может наконец стать проще — не потому что «пора быть открытыми», а потому что устали держать это в голове.",
+      "core_scene": "postponed_conversation",
+      "text_class": "postponed_conversation",
+      "recognition_score": 4,
+      "recognition_mechanism": "state_recognition",
+      "recognition_mechanism_why": "узнаю усталость держать разговор в голове — сильнее чем «назрел»",
+      "ablations": [
+        {
+          "step": 1,
+          "label": "mental load strip",
+          "text": "Разговор, который вы откладывали, может наконец стать проще.",
+          "recognition_score": 3,
+          "loss_reasons": [
+            "pattern_form_loss",
+            "pattern_form_loss"
+          ]
+        },
+        {
+          "step": 2,
+          "label": "delay pattern strip",
+          "text": "Устали держать что-то в голове — сегодня может стать легче.",
+          "recognition_score": 2,
+          "loss_reasons": [
+            "life_object_loss",
+            "specificity_loss"
+          ]
+        }
+      ],
+      "ablation_survivor": "pattern_form",
+      "survivor_detail": "откладывали + устали держать в голове",
+      "tension_id": "stuck_transition",
+      "linked_cal_id": "cal-028"
+    }
+  ],
+  "n_cases_pilot": 19,
+  "recognition_mechanism_catalog": [
+    {
+      "id": "pattern_recognition",
+      "label_ru": "Узнаю повторяющуюся закономерность",
+      "example": "снова откладываешь отчёт"
+    },
+    {
+      "id": "object_recognition",
+      "label_ru": "Узнаю конкретный объект или рамку",
+      "example": "отчёт · один приоритет · дедлайн"
+    },
+    {
+      "id": "narrative_recognition",
+      "label_ru": "Узнаю мини-историю / поворот",
+      "example": "перестал ждать → получил ответ"
+    },
+    {
+      "id": "state_recognition",
+      "label_ru": "Узнаю состояние тела/давления",
+      "example": "перегруз · усталость · «надо собраться»"
+    }
+  ],
+  "n_cases_phase_2_added": 4,
+  "phase_2_class_matrix": [
+    {
+      "text_class": "delayed_message",
+      "n_cases": 2,
+      "cal_ids": [
+        "cal-018",
+        "cal-003"
+      ],
+      "dominant_survivor": "context_bundle",
+      "dominant_recognition_mechanism": "narrative_recognition",
+      "survivor_distribution": {
+        "context_bundle": 2
+      },
+      "mechanism_distribution": {
+        "narrative_recognition": 2
+      },
+      "confidence": "high",
+      "engineering_note": "2/2 context_bundle + narrative_recognition — corpus has only 2 core_scene=delayed_message; expand api_live"
+    },
+    {
+      "text_class": "focus",
+      "n_cases": 5,
+      "cal_ids": [
+        "cal-055",
+        "cal-056",
+        "cal-057",
+        "cal-031",
+        "cal-061"
+      ],
+      "dominant_survivor": "object_frame",
+      "dominant_recognition_mechanism": "object_recognition",
+      "survivor_distribution": {
+        "object_frame": 5
+      },
+      "mechanism_distribution": {
+        "object_recognition": 5
+      },
+      "confidence": "high",
+      "engineering_note": "object_frame repeating on cal-055–057, 031, 061 — first class-specific winner candidate"
+    },
+    {
+      "text_class": "procrastination",
+      "n_cases": 2,
+      "cal_ids": [
+        "cal-011",
+        "cal-029"
+      ],
+      "dominant_survivor": "pattern_form",
+      "dominant_recognition_mechanism": "pattern_recognition",
+      "survivor_distribution": {
+        "pattern_form": 2
+      },
+      "mechanism_distribution": {
+        "pattern_recognition": 2
+      },
+      "confidence": "high",
+      "engineering_note": null
+    },
+    {
+      "text_class": "overload",
+      "n_cases": 3,
+      "cal_ids": [
+        "cal-050",
+        "cal-051",
+        "cal-060"
+      ],
+      "dominant_survivor": "pattern_form",
+      "dominant_recognition_mechanism": "pattern_recognition",
+      "survivor_distribution": {
+        "pattern_form": 3
+      },
+      "mechanism_distribution": {
+        "pattern_recognition": 3
+      },
+      "confidence": "high",
+      "engineering_note": null
+    },
+    {
+      "text_class": "postponed_conversation",
+      "n_cases": 2,
+      "cal_ids": [
+        "cal-012",
+        "cal-028-improved"
+      ],
+      "dominant_survivor": "life_object",
+      "dominant_recognition_mechanism": "object_recognition",
+      "survivor_distribution": {
+        "life_object": 1,
+        "pattern_form": 1
+      },
+      "mechanism_distribution": {
+        "object_recognition": 1,
+        "state_recognition": 1
+      },
+      "confidence": "low",
+      "engineering_note": "mixed survivors (life_object vs pattern_form) — low confidence"
+    },
+    {
+      "text_class": "work_execution",
+      "n_cases": 2,
+      "cal_ids": [
+        "cal-052",
+        "cal-076"
+      ],
+      "dominant_survivor": "context_bundle",
+      "dominant_recognition_mechanism": "object_recognition",
+      "survivor_distribution": {
+        "context_bundle": 1,
+        "object_frame": 1
+      },
+      "mechanism_distribution": {
+        "object_recognition": 2
+      },
+      "confidence": "low",
+      "engineering_note": null
+    },
+    {
+      "text_class": "self_pressure",
+      "n_cases": 1,
+      "cal_ids": [
+        "cal-049"
+      ],
+      "dominant_survivor": "pattern_form",
+      "dominant_recognition_mechanism": "state_recognition",
+      "survivor_distribution": {
+        "pattern_form": 1
+      },
+      "mechanism_distribution": {
+        "state_recognition": 1
+      },
+      "confidence": "low",
+      "engineering_note": null
+    },
+    {
+      "text_class": "fatigue",
+      "n_cases": 1,
+      "cal_ids": [
+        "cal-054"
+      ],
+      "dominant_survivor": "pattern_form",
+      "dominant_recognition_mechanism": "state_recognition",
+      "survivor_distribution": {
+        "pattern_form": 1
+      },
+      "mechanism_distribution": {
+        "state_recognition": 1
+      },
+      "confidence": "low",
+      "engineering_note": null
+    },
+    {
+      "text_class": "delayed_answer",
+      "n_cases": 1,
+      "cal_ids": [
+        "cal-010"
+      ],
+      "dominant_survivor": "context_bundle",
+      "dominant_recognition_mechanism": "pattern_recognition",
+      "survivor_distribution": {
+        "context_bundle": 1
+      },
+      "mechanism_distribution": {
+        "pattern_recognition": 1
+      },
+      "confidence": "low",
+      "engineering_note": null
+    },
+    {
+      "text_class": "exhausted_explaining",
+      "n_cases": 1,
+      "cal_ids": [
+        "cal-013"
+      ],
+      "dominant_survivor": "pattern_form",
+      "dominant_recognition_mechanism": "pattern_recognition",
+      "survivor_distribution": {
+        "pattern_form": 1
+      },
+      "mechanism_distribution": {
+        "pattern_recognition": 1
+      },
+      "confidence": "low",
+      "engineering_note": null
+    },
+    {
+      "text_class": "household_micro",
+      "n_cases": 1,
+      "cal_ids": [
+        "cal-059"
+      ],
+      "dominant_survivor": "life_object",
+      "dominant_recognition_mechanism": "object_recognition",
+      "survivor_distribution": {
+        "life_object": 1
+      },
+      "mechanism_distribution": {
+        "object_recognition": 1
+      },
+      "confidence": "low",
+      "engineering_note": null
+    },
+    {
+      "text_class": "money_habit",
+      "n_cases": 1,
+      "cal_ids": [
+        "cal-058"
+      ],
+      "dominant_survivor": "life_object",
+      "dominant_recognition_mechanism": "object_recognition",
+      "survivor_distribution": {
+        "life_object": 1
+      },
+      "mechanism_distribution": {
+        "object_recognition": 1
+      },
+      "confidence": "low",
+      "engineering_note": null
+    },
+    {
+      "text_class": "reassessing_decision",
+      "n_cases": 1,
+      "cal_ids": [
+        "cal-053"
+      ],
+      "dominant_survivor": "pattern_form",
+      "dominant_recognition_mechanism": "pattern_recognition",
+      "survivor_distribution": {
+        "pattern_form": 1
+      },
+      "mechanism_distribution": {
+        "pattern_recognition": 1
+      },
+      "confidence": "low",
+      "engineering_note": null
+    }
+  ],
+  "phase_2_deliverable": {
+    "format": "text_class | dominant_survivor | dominant_mechanism | confidence",
+    "status": "IN_PROGRESS",
+    "target_n": "30-40",
+    "no_new_layers": "Use Pattern · Object · Context Bundle · Life Object only — no new entities"
+  }
+}

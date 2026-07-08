@@ -1,0 +1,30 @@
+/* Премиум-обёртка для экрана совместимости (паритет с Profile / Today) */
+.compat-page {
+  --compat-gold: rgba(191, 151, 95, 0.28);
+}
+
+.compat-page .compat-premium-hero,
+.compat-page .compat-premium-surface {
+  background: linear-gradient(135deg, rgba(255, 253, 249, 0.97) 0%, rgba(252, 246, 236, 0.95) 100%);
+  border: 1px solid var(--compat-gold);
+  box-shadow: 0 14px 38px rgba(80, 60, 40, 0.07);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.compat-page .compat-premium-hero:hover,
+.compat-page .compat-premium-surface:hover {
+  box-shadow: 0 18px 48px rgba(80, 60, 40, 0.1);
+}
+
+/* Два основных блока (пара / разбор) — как сетка Today на десктопе */
+.compat-today-pair-grid {
+  display: grid;
+  gap: var(--todayflow-stack-gap-relaxed);
+  align-items: start;
+}
+
+@media (min-width: 960px) {
+  .compat-today-pair-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
+  }
+}

@@ -1,0 +1,760 @@
+{
+  "contract_version": "symbolic_asset_definition_registry_v1",
+  "domain": "symbolic",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "D1.1 Symbolic Asset Definition registry — canonical objects only (not meanings or associations).",
+  "symbolic_asset_definitions": {
+    "amethyst": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "amethyst",
+      "asset_name": "Amethyst",
+      "asset_category": "stone",
+      "theme_codes": [
+        "clarity",
+        "spirituality"
+      ],
+      "category_code": "stone",
+      "status": "active",
+      "symbolic_family": "mineral",
+      "cultural_origin": "universal",
+      "symbolic_type": "physical_object",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "obsidian": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "obsidian",
+      "asset_name": "Obsidian",
+      "asset_category": "stone",
+      "theme_codes": [
+        "protection",
+        "grounding"
+      ],
+      "category_code": "stone",
+      "status": "active",
+      "symbolic_family": "mineral",
+      "cultural_origin": "universal",
+      "symbolic_type": "physical_object",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "quartz": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "quartz",
+      "asset_name": "Quartz",
+      "asset_category": "stone",
+      "theme_codes": [
+        "clarity",
+        "energy"
+      ],
+      "category_code": "stone",
+      "status": "active",
+      "symbolic_family": "mineral",
+      "cultural_origin": "universal",
+      "symbolic_type": "physical_object",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "citrine": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "citrine",
+      "asset_name": "Citrine",
+      "asset_category": "stone",
+      "theme_codes": [
+        "energy",
+        "illumination"
+      ],
+      "category_code": "stone",
+      "status": "active",
+      "symbolic_family": "mineral",
+      "cultural_origin": "universal",
+      "symbolic_type": "physical_object",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "moonstone": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "moonstone",
+      "asset_name": "Moonstone",
+      "asset_category": "stone",
+      "theme_codes": [
+        "spirituality",
+        "recovery"
+      ],
+      "category_code": "stone",
+      "status": "active",
+      "symbolic_family": "mineral",
+      "cultural_origin": "universal",
+      "symbolic_type": "physical_object",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "tiger_eye": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "tiger_eye",
+      "asset_name": "Tiger Eye",
+      "asset_category": "stone",
+      "theme_codes": [
+        "focus",
+        "grounding"
+      ],
+      "category_code": "stone",
+      "status": "active",
+      "symbolic_family": "mineral",
+      "cultural_origin": "universal",
+      "symbolic_type": "physical_object",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "labradorite": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "labradorite",
+      "asset_name": "Labradorite",
+      "asset_category": "stone",
+      "theme_codes": [
+        "transformation",
+        "protection"
+      ],
+      "category_code": "stone",
+      "status": "active",
+      "symbolic_family": "mineral",
+      "cultural_origin": "universal",
+      "symbolic_type": "physical_object",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "rose_quartz": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "rose_quartz",
+      "asset_name": "Rose Quartz",
+      "asset_category": "stone",
+      "theme_codes": [
+        "relationships",
+        "healing"
+      ],
+      "category_code": "stone",
+      "status": "active",
+      "symbolic_family": "mineral",
+      "cultural_origin": "universal",
+      "symbolic_type": "physical_object",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "fool": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "fool",
+      "asset_name": "The Fool",
+      "asset_category": "tarot_card",
+      "theme_codes": [
+        "spirituality"
+      ],
+      "category_code": "tarot_card",
+      "status": "active",
+      "symbolic_family": "major_arcana",
+      "cultural_origin": "tarot_tradition",
+      "symbolic_type": "card",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "magician": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "magician",
+      "asset_name": "The Magician",
+      "asset_category": "tarot_card",
+      "theme_codes": [
+        "spirituality"
+      ],
+      "category_code": "tarot_card",
+      "status": "active",
+      "symbolic_family": "major_arcana",
+      "cultural_origin": "tarot_tradition",
+      "symbolic_type": "card",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "high_priestess": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "high_priestess",
+      "asset_name": "The High Priestess",
+      "asset_category": "tarot_card",
+      "theme_codes": [
+        "spirituality"
+      ],
+      "category_code": "tarot_card",
+      "status": "active",
+      "symbolic_family": "major_arcana",
+      "cultural_origin": "tarot_tradition",
+      "symbolic_type": "card",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "emperor": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "emperor",
+      "asset_name": "The Emperor",
+      "asset_category": "tarot_card",
+      "theme_codes": [
+        "spirituality"
+      ],
+      "category_code": "tarot_card",
+      "status": "active",
+      "symbolic_family": "major_arcana",
+      "cultural_origin": "tarot_tradition",
+      "symbolic_type": "card",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "hermit": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "hermit",
+      "asset_name": "The Hermit",
+      "asset_category": "tarot_card",
+      "theme_codes": [
+        "spirituality"
+      ],
+      "category_code": "tarot_card",
+      "status": "active",
+      "symbolic_family": "major_arcana",
+      "cultural_origin": "tarot_tradition",
+      "symbolic_type": "card",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "star": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "star",
+      "asset_name": "The Star",
+      "asset_category": "tarot_card",
+      "theme_codes": [
+        "spirituality"
+      ],
+      "category_code": "tarot_card",
+      "status": "active",
+      "symbolic_family": "major_arcana",
+      "cultural_origin": "tarot_tradition",
+      "symbolic_type": "card",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "moon": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "moon",
+      "asset_name": "The Moon",
+      "asset_category": "tarot_card",
+      "theme_codes": [
+        "spirituality"
+      ],
+      "category_code": "tarot_card",
+      "status": "active",
+      "symbolic_family": "major_arcana",
+      "cultural_origin": "tarot_tradition",
+      "symbolic_type": "card",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "sun": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "sun",
+      "asset_name": "The Sun",
+      "asset_category": "tarot_card",
+      "theme_codes": [
+        "spirituality"
+      ],
+      "category_code": "tarot_card",
+      "status": "active",
+      "symbolic_family": "major_arcana",
+      "cultural_origin": "tarot_tradition",
+      "symbolic_type": "card",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "world": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "world",
+      "asset_name": "The World",
+      "asset_category": "tarot_card",
+      "theme_codes": [
+        "spirituality"
+      ],
+      "category_code": "tarot_card",
+      "status": "active",
+      "symbolic_family": "major_arcana",
+      "cultural_origin": "tarot_tradition",
+      "symbolic_type": "card",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "white_candle": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "white_candle",
+      "asset_name": "White Candle",
+      "asset_category": "candle",
+      "theme_codes": [
+        "clarity",
+        "illumination"
+      ],
+      "category_code": "candle",
+      "status": "active",
+      "symbolic_family": "ritual_object",
+      "cultural_origin": "western_esoteric",
+      "symbolic_type": "flame",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "black_candle": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "black_candle",
+      "asset_name": "Black Candle",
+      "asset_category": "candle",
+      "theme_codes": [
+        "protection",
+        "grounding"
+      ],
+      "category_code": "candle",
+      "status": "active",
+      "symbolic_family": "ritual_object",
+      "cultural_origin": "western_esoteric",
+      "symbolic_type": "flame",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "gold_candle": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "gold_candle",
+      "asset_name": "Gold Candle",
+      "asset_category": "candle",
+      "theme_codes": [
+        "illumination",
+        "purpose"
+      ],
+      "category_code": "candle",
+      "status": "active",
+      "symbolic_family": "ritual_object",
+      "cultural_origin": "western_esoteric",
+      "symbolic_type": "flame",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "blue_candle": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "blue_candle",
+      "asset_name": "Blue Candle",
+      "asset_category": "candle",
+      "theme_codes": [
+        "clarity",
+        "spirituality"
+      ],
+      "category_code": "candle",
+      "status": "active",
+      "symbolic_family": "ritual_object",
+      "cultural_origin": "western_esoteric",
+      "symbolic_type": "flame",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "explorer": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "explorer",
+      "asset_name": "Explorer",
+      "asset_category": "archetype",
+      "theme_codes": [
+        "action",
+        "purpose"
+      ],
+      "category_code": "archetype",
+      "status": "active",
+      "symbolic_family": "mythic_figure",
+      "cultural_origin": "cross_cultural",
+      "symbolic_type": "archetype_figure",
+      "visibility_tier": "soft",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "guardian": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "guardian",
+      "asset_name": "Guardian",
+      "asset_category": "archetype",
+      "theme_codes": [
+        "protection",
+        "boundary"
+      ],
+      "category_code": "archetype",
+      "status": "active",
+      "symbolic_family": "mythic_figure",
+      "cultural_origin": "cross_cultural",
+      "symbolic_type": "archetype_figure",
+      "visibility_tier": "soft",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "creator": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "creator",
+      "asset_name": "Creator",
+      "asset_category": "archetype",
+      "theme_codes": [
+        "creativity",
+        "purpose"
+      ],
+      "category_code": "archetype",
+      "status": "active",
+      "symbolic_family": "mythic_figure",
+      "cultural_origin": "cross_cultural",
+      "symbolic_type": "archetype_figure",
+      "visibility_tier": "soft",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "healer": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "healer",
+      "asset_name": "Healer",
+      "asset_category": "archetype",
+      "theme_codes": [
+        "healing",
+        "relationships"
+      ],
+      "category_code": "archetype",
+      "status": "active",
+      "symbolic_family": "mythic_figure",
+      "cultural_origin": "cross_cultural",
+      "symbolic_type": "archetype_figure",
+      "visibility_tier": "soft",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "sage": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "sage",
+      "asset_name": "Sage",
+      "asset_category": "archetype",
+      "theme_codes": [
+        "clarity",
+        "spirituality"
+      ],
+      "category_code": "archetype",
+      "status": "active",
+      "symbolic_family": "mythic_figure",
+      "cultural_origin": "cross_cultural",
+      "symbolic_type": "archetype_figure",
+      "visibility_tier": "soft",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "warrior": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "warrior",
+      "asset_name": "Warrior",
+      "asset_category": "archetype",
+      "theme_codes": [
+        "discipline",
+        "action"
+      ],
+      "category_code": "archetype",
+      "status": "active",
+      "symbolic_family": "mythic_figure",
+      "cultural_origin": "cross_cultural",
+      "symbolic_type": "archetype_figure",
+      "visibility_tier": "soft",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "spiral": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "spiral",
+      "asset_name": "Spiral",
+      "asset_category": "symbol",
+      "theme_codes": [
+        "transformation",
+        "spirituality"
+      ],
+      "category_code": "symbol",
+      "status": "active",
+      "symbolic_family": "geometric_glyph",
+      "cultural_origin": "cross_cultural",
+      "symbolic_type": "glyph",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "key": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "key",
+      "asset_name": "Key",
+      "asset_category": "symbol",
+      "theme_codes": [
+        "clarity",
+        "purpose"
+      ],
+      "category_code": "symbol",
+      "status": "active",
+      "symbolic_family": "geometric_glyph",
+      "cultural_origin": "cross_cultural",
+      "symbolic_type": "glyph",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "tree_of_life": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "tree_of_life",
+      "asset_name": "Tree of Life",
+      "asset_category": "symbol",
+      "theme_codes": [
+        "structure",
+        "spirituality"
+      ],
+      "category_code": "symbol",
+      "status": "active",
+      "symbolic_family": "geometric_glyph",
+      "cultural_origin": "cross_cultural",
+      "symbolic_type": "glyph",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "phoenix": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "phoenix",
+      "asset_name": "Phoenix",
+      "asset_category": "symbol",
+      "theme_codes": [
+        "transformation",
+        "energy"
+      ],
+      "category_code": "symbol",
+      "status": "active",
+      "symbolic_family": "geometric_glyph",
+      "cultural_origin": "cross_cultural",
+      "symbolic_type": "glyph",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "compass": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "compass",
+      "asset_name": "Compass",
+      "asset_category": "symbol",
+      "theme_codes": [
+        "purpose",
+        "focus"
+      ],
+      "category_code": "symbol",
+      "status": "active",
+      "symbolic_family": "geometric_glyph",
+      "cultural_origin": "cross_cultural",
+      "symbolic_type": "glyph",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "black": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "black",
+      "asset_name": "Black",
+      "asset_category": "color",
+      "theme_codes": [
+        "structure",
+        "grounding"
+      ],
+      "category_code": "color",
+      "status": "active",
+      "symbolic_family": "chromatic",
+      "cultural_origin": "universal",
+      "symbolic_type": "hue",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "gold": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "gold",
+      "asset_name": "Gold",
+      "asset_category": "color",
+      "theme_codes": [
+        "illumination",
+        "purpose"
+      ],
+      "category_code": "color",
+      "status": "active",
+      "symbolic_family": "chromatic",
+      "cultural_origin": "universal",
+      "symbolic_type": "hue",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "silver": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "silver",
+      "asset_name": "Silver",
+      "asset_category": "color",
+      "theme_codes": [
+        "clarity",
+        "spirituality"
+      ],
+      "category_code": "color",
+      "status": "active",
+      "symbolic_family": "chromatic",
+      "cultural_origin": "universal",
+      "symbolic_type": "hue",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "white": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "white",
+      "asset_name": "White",
+      "asset_category": "color",
+      "theme_codes": [
+        "clarity",
+        "illumination"
+      ],
+      "category_code": "color",
+      "status": "active",
+      "symbolic_family": "chromatic",
+      "cultural_origin": "universal",
+      "symbolic_type": "hue",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "fire": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "fire",
+      "asset_name": "Fire",
+      "asset_category": "element",
+      "theme_codes": [
+        "energy",
+        "action"
+      ],
+      "category_code": "element",
+      "status": "active",
+      "symbolic_family": "classical_element",
+      "cultural_origin": "western_esoteric",
+      "symbolic_type": "element",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "water": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "water",
+      "asset_name": "Water",
+      "asset_category": "element",
+      "theme_codes": [
+        "recovery",
+        "relationships"
+      ],
+      "category_code": "element",
+      "status": "active",
+      "symbolic_family": "classical_element",
+      "cultural_origin": "western_esoteric",
+      "symbolic_type": "element",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "earth": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "earth",
+      "asset_name": "Earth",
+      "asset_category": "element",
+      "theme_codes": [
+        "grounding",
+        "structure"
+      ],
+      "category_code": "element",
+      "status": "active",
+      "symbolic_family": "classical_element",
+      "cultural_origin": "western_esoteric",
+      "symbolic_type": "element",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    },
+    "air": {
+      "contract_version": "symbolic_asset_definition_v1",
+      "asset_code": "air",
+      "asset_name": "Air",
+      "asset_category": "element",
+      "theme_codes": [
+        "clarity",
+        "focus"
+      ],
+      "category_code": "element",
+      "status": "active",
+      "symbolic_family": "classical_element",
+      "cultural_origin": "western_esoteric",
+      "symbolic_type": "element",
+      "visibility_tier": "reference",
+      "commerce_eligible": false,
+      "version": "1.0.0",
+      "created_at": "2026-06-01T12:00:00Z"
+    }
+  }
+}

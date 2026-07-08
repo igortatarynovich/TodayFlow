@@ -1,0 +1,20 @@
+{
+  "columns": [
+    {
+      "slug": "personality",
+      "href": null,
+      "title_key": "catalog.nav.personality.title",
+      "description_key": "catalog.nav.personality.description",
+      "sections": [
+        {
+          "slug": "core_profile",
+          "title_key": "catalog.nav.personality.core",
+          "items": [
+            {"product_id": "lite_birth_chart"},
+            {"product_id": "full_report"}
+          ]
+        }
+      ]
+    }
+  ]
+}

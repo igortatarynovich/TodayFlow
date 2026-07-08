@@ -1,0 +1,1081 @@
+{
+  "schema_version": "0.1",
+  "dataset_id": "TODAY_LANGUAGE_PATTERNS_V0",
+  "status": "TL-0C.1_0C.2_MACHINE_DRAFT",
+  "generated_at": "2026-06-23T09:56:32.495532+00:00",
+  "canon_ref": "docs/TODAY_LANGUAGE_V1.md",
+  "calibration_ref": "docs/TODAY_LANGUAGE_CALIBRATION_V0.md",
+  "method": {
+    "scope": "generation_log phrases only (api_live)",
+    "narrative_filter": "excludes pattern_hint, tarot card lines, bare personalization",
+    "not_scores": "anti/strong clusters are heuristics for editorial review, not TL-1 gate",
+    "next_step": "TL-0C.1 editorial: validate 10-20 anti-patterns; TL-0C.2: why-it-works notes"
+  },
+  "stats": {
+    "corpus_generation_log_total": 2082,
+    "api_live_narrative_phrases": 2023,
+    "typed_anti_hits": 1165,
+    "unique_bad_skeletons": 1094,
+    "strong_candidates_ge_6": 398,
+    "stakes_ge_2": 2
+  },
+  "tl_0c_1_anti_patterns_by_type": [
+    {
+      "type_id": "Z_untyped_weak",
+      "label": "Слабое без явного шаблона (no_scene / too_generic)",
+      "count": 811,
+      "share_of_api_live": 0.4009,
+      "examples": [
+        {
+          "id": "corp-0023",
+          "text": "Акцентируйте внимание на глубоких размышлениях и коммуникации в ваших отношениях и профессиональной жизни.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0040",
+          "text": "Боль сужает восприятие до одного сигнала, поэтому важно ставить чёткие границы.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0041",
+          "text": "Боль сужает восприятие до одного сигнала.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0052",
+          "text": "Будь внимателен к тому, чтобы не отвлекаться на второстепенные дела, которые могут увести тебя от главного.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0054",
+          "text": "Будь прямолинеен в общении.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "type_id": "C_emotion_without_scene",
+      "label": "Подмена конкретики эмоцией — эмоция есть, сцены нет",
+      "count": 179,
+      "share_of_api_live": 0.0885,
+      "examples": [
+        {
+          "id": "corp-0042",
+          "text": "Будь более открытым с близкими, делая простые шаги к улучшению общения.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0080",
+          "text": "В любви важно строить отношения на открытом диалоге, а не на догадках — это создаст надежность и комфорт.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0094",
+          "text": "В любви сделай шаг к открытой беседе, чтобы избежать догадок и создать атмосферу доверия.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0096",
+          "text": "В любви сделай шаг к открытости: поговори с партнером о своих чувствах, чтобы избежать недопонимания.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0099",
+          "text": "В любви старайся избегать догадок и стремись к прямому общению, чтобы создать атмосферу доверия и спокойствия.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "type_id": "A_pseudo_concreteness",
+      "label": "Псевдоконкретика — сцена вроде есть, человек ничего не видит",
+      "count": 87,
+      "share_of_api_live": 0.043,
+      "examples": [
+        {
+          "id": "corp-0069",
+          "text": "В карьере важно сосредоточиться на ясной роли и ответственности, что позволит вам реализовать свои амбиции и использовать свои сильные стороны.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0169",
+          "text": "Ваши текущие приоритеты в жизни могут требовать внимания и анализа. Углубление в сферы работы, любви и финансов поможет вам лучше понять свои потребности и действия. Используйте информацию, чтобы принимать более обоснованные решения.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0247",
+          "text": "Выбор приоритета: сегодня важно сосредоточиться на главном",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0343",
+          "text": "День предлагает возможность углубить понимание себя и своих отношений, обращая внимание на влияние мыслей и чувств на взаимодействие с окружающими.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0527",
+          "text": "Запиши свои мысли в дневник, чтобы прояснить чувства",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "type_id": "B_universal_wisdom",
+      "label": "Универсальная мудрость — подходит любому человеку",
+      "count": 49,
+      "share_of_api_live": 0.0242,
+      "examples": [
+        {
+          "id": "corp-0650",
+          "text": "Как ты можешь лучше организовать свое время и ресурсы сегодня?",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0742",
+          "text": "Когда мы делимся своими чувствами и мыслями, это укрепляет связи и создает атмосферу доверия. Постарайся сегодня найти время для откровенного разговора с теми, кто тебе близок.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0743",
+          "text": "Когда мы делимся своими чувствами, это помогает наладить контакт с окружающими. Если ты чувствуешь себя изолированным, возможно, стоит сделать шаг навстречу и начать разговор. Простое общение может значительно улучшить атмосферу.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-1413",
+          "text": "Почему важно быть открытым?",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-1428",
+          "text": "Приглашаю вас подвести итоги дня. Как вы себя чувствуете? Что было важным для вас сегодня?",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "type_id": "D_fake_concreteness",
+      "label": "Фальшивая конкретика — «разговор/сообщение», но всё ещё универсально",
+      "count": 39,
+      "share_of_api_live": 0.0193,
+      "examples": [
+        {
+          "id": "corp-0095",
+          "text": "В любви сделай шаг к открытому разговору, чтобы установить доверие и ясность в отношениях.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0097",
+          "text": "В любви сделай шаг к прямому разговору, чтобы избежать догадок и создать атмосферу доверия.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0397",
+          "text": "Добавьте откровенный разговор в свои планы на день.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0541",
+          "text": "Запланируй один важный разговор сегодня.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0542",
+          "text": "Запланируй откровенный разговор с кем-то из близких.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    }
+  ],
+  "tl_0c_1_top_20_bad_skeletons": [
+    {
+      "skeleton": "не требует размаха. он становится яснее, если выбрать один приоритет, не хвататься за все подряд…",
+      "count": 5,
+      "anti_types_seen": [
+        "B_universal_wisdom"
+      ],
+      "examples": [
+        {
+          "id": "corp-2809",
+          "text": "Этот день не требует размаха. Он становится яснее, если выбрать один приоритет, не хвататься за все подряд и не жить в режиме мгновенного ответа на каждый сигнал.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "skeleton": "не начинай новую крупную инициативу с нуля",
+      "count": 3,
+      "anti_types_seen": [
+        "Z_untyped_weak"
+      ],
+      "examples": [
+        {
+          "id": "corp-0961",
+          "text": "Не начинай новую крупную инициативу 'с нуля'.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0963",
+          "text": "Не начинай новую крупную инициативу «с нуля».",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0967",
+          "text": "Не начинай новую крупную инициативу с нуля.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "skeleton": "важно [сосредоточ] на том, чтобы делиться своими мыслями и [чувств] с окружающими, что поможет у…",
+      "count": 3,
+      "anti_types_seen": [
+        "A_pseudo_concreteness"
+      ],
+      "examples": [
+        {
+          "id": "corp-1724",
+          "text": "Сегодня важно сосредоточиться на том, чтобы делиться своими мыслями и чувствами с окружающими, что поможет укрепить связи. Выберите один приоритет, чтобы избежать перегрузки и не терять свой ритм.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "skeleton": "[сосредоточ] на одной [задач]",
+      "count": 3,
+      "anti_types_seen": [
+        "Z_untyped_weak"
+      ],
+      "examples": [
+        {
+          "id": "corp-2197",
+          "text": "Сосредоточиться на одной задаче",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-2210",
+          "text": "Сосредоточься на одной задаче",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-2217",
+          "text": "Сосредоточься на одной задаче.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "skeleton": "запиши три вещи, за которые ты благодарен",
+      "count": 2,
+      "anti_types_seen": [
+        "Z_untyped_weak"
+      ],
+      "examples": [
+        {
+          "id": "corp-0529",
+          "text": "Запиши три вещи, за которые ты благодарен сегодня.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0530",
+          "text": "Запиши три вещи, за которые ты благодарен.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "skeleton": "не дави на себя фразой надо собраться",
+      "count": 2,
+      "anti_types_seen": [
+        "Z_untyped_weak"
+      ],
+      "examples": [
+        {
+          "id": "corp-0934",
+          "text": "Не дави на себя фразой 'надо собраться'.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-0941",
+          "text": "Не дави на себя фразой «надо собраться».",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "skeleton": "определи один главный приоритет на день",
+      "count": 2,
+      "anti_types_seen": [
+        "Z_untyped_weak"
+      ],
+      "examples": [
+        {
+          "id": "corp-1147",
+          "text": "Определи один главный приоритет на день",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-1148",
+          "text": "Определи один главный приоритет на день.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "skeleton": "сделай шаг к откровенному [разговор] с близкими",
+      "count": 2,
+      "anti_types_seen": [
+        "D_fake_concreteness"
+      ],
+      "examples": [
+        {
+          "id": "corp-1636",
+          "text": "Сделай шаг к откровенному разговору с близкими.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-1826",
+          "text": "Сегодня сделай шаг к откровенному разговору с близкими.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "skeleton": "сделай шаг к укреплению связи с близкими",
+      "count": 2,
+      "anti_types_seen": [
+        "C_emotion_without_scene"
+      ],
+      "examples": [
+        {
+          "id": "corp-1640",
+          "text": "Сделай шаг к укреплению связи с близкими.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-1828",
+          "text": "Сегодня сделай шаг к укреплению связи с близкими.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "skeleton": "важно [сосредоточ] на том, чтобы делиться своими мыслями и [чувств] с окружающими, чтобы укрепит…",
+      "count": 2,
+      "anti_types_seen": [
+        "A_pseudo_concreteness"
+      ],
+      "examples": [
+        {
+          "id": "corp-1727",
+          "text": "Сегодня важно сосредоточиться на том, чтобы делиться своими мыслями и чувствами с окружающими, чтобы укрепить связи и избежать изоляции. Постарайся быть открытым в общении с близкими и коллегами.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "skeleton": "важно [сосредоточ] на том, чтобы делиться своими мыслями и [чувств] с окружающими. это поможет у…",
+      "count": 2,
+      "anti_types_seen": [
+        "A_pseudo_concreteness"
+      ],
+      "examples": [
+        {
+          "id": "corp-1729",
+          "text": "Сегодня важно сосредоточиться на том, чтобы делиться своими мыслями и чувствами с окружающими. Это поможет укрепить связи и избежать изоляции.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "skeleton": "[сосредоточ] на коммуникации",
+      "count": 2,
+      "anti_types_seen": [
+        "Z_untyped_weak"
+      ],
+      "examples": [
+        {
+          "id": "corp-1836",
+          "text": "Сегодня сосредоточьтесь на коммуникации.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-2262",
+          "text": "Сосредоточьтесь на коммуникации.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "skeleton": "стоит [сосредоточ] на том, чтобы делиться своими мыслями и [чувств] с окружающими. это поможет у…",
+      "count": 2,
+      "anti_types_seen": [
+        "A_pseudo_concreteness"
+      ],
+      "examples": [
+        {
+          "id": "corp-1846",
+          "text": "Сегодня стоит сосредоточиться на том, чтобы делиться своими мыслями и чувствами с окружающими. Это поможет укрепить связи и избежать изоляции.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "skeleton": "шний день предлагает [сосредоточ] на одном приоритете, чтобы избежать хаоса и неопределенности. …",
+      "count": 2,
+      "anti_types_seen": [
+        "A_pseudo_concreteness"
+      ],
+      "examples": [
+        {
+          "id": "corp-1975",
+          "text": "Сегодняшний день предлагает сосредоточиться на одном приоритете, чтобы избежать хаоса и неопределенности. Прямота и ясность помогут сделать взаимодействия более успешными.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "skeleton": "[финансов] решения с [практическ] точки зрения, избегая идеализации",
+      "count": 2,
+      "anti_types_seen": [
+        "Z_untyped_weak"
+      ],
+      "examples": [
+        {
+          "id": "corp-2100",
+          "text": "Смотри на финансовые решения с практической точки зрения, избегая идеализации.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-2108",
+          "text": "Смотрите на финансовые решения с практической точки зрения, избегая идеализации.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "skeleton": "[финансов] решения с [практическ] точки зрения, не позволяя идеям затмить реальную картину",
+      "count": 2,
+      "anti_types_seen": [
+        "Z_untyped_weak"
+      ],
+      "examples": [
+        {
+          "id": "corp-2103",
+          "text": "Смотри на финансовые решения с практической точки зрения, не позволяя идеям затмить реальную картину.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-2110",
+          "text": "Смотрите на финансовые решения с практической точки зрения, не позволяя идеям затмить реальную картину.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "skeleton": "[финансов] решения с [практическ] точки зрения, чтобы избежать ненужных рисков",
+      "count": 2,
+      "anti_types_seen": [
+        "Z_untyped_weak"
+      ],
+      "examples": [
+        {
+          "id": "corp-2104",
+          "text": "Смотри на финансовые решения с практической точки зрения, чтобы избежать ненужных рисков.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-2112",
+          "text": "Смотрите на финансовые решения с практической точки зрения, чтобы избежать ненужных рисков.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "skeleton": "[финансов] решения с [практическ] точки зрения",
+      "count": 2,
+      "anti_types_seen": [
+        "Z_untyped_weak"
+      ],
+      "examples": [
+        {
+          "id": "corp-2106",
+          "text": "Смотри на финансовые решения с практической точки зрения.",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-2115",
+          "text": "Смотрите на финансовые решения с практической точки зрения.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "skeleton": "солнце в квадрате с марсом",
+      "count": 2,
+      "anti_types_seen": [
+        "Z_untyped_weak"
+      ],
+      "examples": [
+        {
+          "id": "corp-2170",
+          "text": "Солнце в квадрате с Марсом",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-2171",
+          "text": "Солнце в квадрате с Марсом.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    },
+    {
+      "skeleton": "[сосредоточ] на главном",
+      "count": 2,
+      "anti_types_seen": [
+        "Z_untyped_weak"
+      ],
+      "examples": [
+        {
+          "id": "corp-2202",
+          "text": "Сосредоточься на главном",
+          "surface": null,
+          "module": null
+        },
+        {
+          "id": "corp-2204",
+          "text": "Сосредоточься на главном.",
+          "surface": null,
+          "module": null
+        }
+      ]
+    }
+  ],
+  "tl_0c_2_top_20_strong_candidates": [
+    {
+      "id": "corp-0116",
+      "text": "В отношениях сегодня особенно важно открыто поговорить о своих чувствах. Возможно, стоит инициировать разговор, который давно назрел, но ты его откладывал.",
+      "strong_score": 12,
+      "stakes_markers": 2,
+      "why_hypothesis": [
+        "trigger_event",
+        "recognizable_scene",
+        "stakes_hypothesis"
+      ],
+      "tags": {
+        "no_scene": false,
+        "too_generic": false,
+        "abstract": false,
+        "has_scene": true,
+        "has_trigger": true,
+        "emotional_hook": false,
+        "likely_good": false
+      },
+      "surface": null,
+      "module": null
+    },
+    {
+      "id": "corp-0204",
+      "text": "Выбери задачу, которая требует твоего внимания, и не распыляйся на множество мелочей. Например, подготовь отчет, который уже давно откладывал.",
+      "strong_score": 10,
+      "stakes_markers": 2,
+      "why_hypothesis": [
+        "recognizable_scene",
+        "stakes_hypothesis"
+      ],
+      "tags": {
+        "no_scene": false,
+        "too_generic": false,
+        "abstract": false,
+        "has_scene": true,
+        "has_trigger": false,
+        "emotional_hook": false,
+        "likely_good": false
+      },
+      "surface": null,
+      "module": null
+    },
+    {
+      "id": "corp-0223",
+      "text": "Выбери одну задачу, которая важна именно для тебя, и сделай первый шаг. Это может быть подготовка к важной встрече или написание отчета.",
+      "strong_score": 10,
+      "stakes_markers": 0,
+      "why_hypothesis": [
+        "trigger_event",
+        "emotional_hook",
+        "recognizable_scene"
+      ],
+      "tags": {
+        "no_scene": false,
+        "too_generic": false,
+        "abstract": false,
+        "has_scene": true,
+        "has_trigger": true,
+        "emotional_hook": true,
+        "likely_good": true
+      },
+      "surface": null,
+      "module": null
+    },
+    {
+      "id": "corp-0544",
+      "text": "Запланируйте вечер с душевным разговором. Задай вопросы, которые помогут узнать его или её лучше, и поделись своими чувствами.",
+      "strong_score": 10,
+      "stakes_markers": 0,
+      "why_hypothesis": [
+        "trigger_event",
+        "emotional_hook",
+        "recognizable_scene"
+      ],
+      "tags": {
+        "no_scene": false,
+        "too_generic": false,
+        "abstract": false,
+        "has_scene": true,
+        "has_trigger": true,
+        "emotional_hook": true,
+        "likely_good": true
+      },
+      "surface": null,
+      "module": null
+    },
+    {
+      "id": "corp-0759",
+      "text": "Когда ты открываешься окружающим, это помогает не только им, но и тебе. Эмоциональная гармония, которую ты ищешь, может быть достигнута через искренние разговоры. Сегодня удели время для откровенного общения — это может принести тебе облегчение и понимание.",
+      "strong_score": 10,
+      "stakes_markers": 0,
+      "why_hypothesis": [
+        "trigger_event",
+        "emotional_hook",
+        "recognizable_scene"
+      ],
+      "tags": {
+        "no_scene": false,
+        "too_generic": false,
+        "abstract": false,
+        "has_scene": true,
+        "has_trigger": true,
+        "emotional_hook": true,
+        "likely_good": true
+      },
+      "surface": null,
+      "module": null
+    },
+    {
+      "id": "corp-0767",
+      "text": "Когда ты чувствуешь усталость, важно не замыкаться в себе. Делая шаг к общению, ты не только укрепляешь связи, но и можешь получить поддержку. Попробуй найти время для откровенного разговора — это может снять напряжение и улучшить атмосферу.",
+      "strong_score": 10,
+      "stakes_markers": 0,
+      "why_hypothesis": [
+        "trigger_event",
+        "emotional_hook",
+        "recognizable_scene"
+      ],
+      "tags": {
+        "no_scene": false,
+        "too_generic": false,
+        "abstract": false,
+        "has_scene": true,
+        "has_trigger": true,
+        "emotional_hook": true,
+        "likely_good": true
+      },
+      "surface": null,
+      "module": null
+    },
+    {
+      "id": "corp-1433",
+      "text": "Приглашаю тебя завершить день ритуалом: запиши короткую запись в дневник, сделай минимальный шаг по аскезе и ответь на вопрос дня. Это поможет тебе настроиться на завтрашний день.",
+      "strong_score": 10,
+      "stakes_markers": 0,
+      "why_hypothesis": [
+        "trigger_event",
+        "emotional_hook",
+        "recognizable_scene"
+      ],
+      "tags": {
+        "no_scene": false,
+        "too_generic": false,
+        "abstract": false,
+        "has_scene": true,
+        "has_trigger": true,
+        "emotional_hook": true,
+        "likely_good": true
+      },
+      "surface": null,
+      "module": null
+    },
+    {
+      "id": "corp-1544",
+      "text": "Рассмотри возможность записать свои мысли в дневник или ответить на вопрос дня — это поможет тебе настроиться на завтрашний фокус.",
+      "strong_score": 10,
+      "stakes_markers": 0,
+      "why_hypothesis": [
+        "trigger_event",
+        "emotional_hook",
+        "recognizable_scene"
+      ],
+      "tags": {
+        "no_scene": false,
+        "too_generic": false,
+        "abstract": false,
+        "has_scene": true,
+        "has_trigger": true,
+        "emotional_hook": true,
+        "likely_good": true
+      },
+      "surface": null,
+      "module": null
+    },
+    {
+      "id": "corp-1551",
+      "text": "Реально сработает выбор одной задачи, которая уже начата, и её завершение в спокойном темпе без переключений.",
+      "strong_score": 10,
+      "stakes_markers": 0,
+      "why_hypothesis": [
+        "trigger_event",
+        "emotional_hook",
+        "recognizable_scene"
+      ],
+      "tags": {
+        "no_scene": false,
+        "too_generic": false,
+        "abstract": false,
+        "has_scene": true,
+        "has_trigger": true,
+        "emotional_hook": true,
+        "likely_good": true
+      },
+      "surface": null,
+      "module": null
+    },
+    {
+      "id": "corp-1648",
+      "text": "Сделайте шаг навстречу родным, поделитесь своими мыслями, чтобы улучшить атмосферу в доме.",
+      "strong_score": 10,
+      "stakes_markers": 0,
+      "why_hypothesis": [
+        "trigger_event",
+        "emotional_hook",
+        "recognizable_scene"
+      ],
+      "tags": {
+        "no_scene": false,
+        "too_generic": false,
+        "abstract": false,
+        "has_scene": true,
+        "has_trigger": true,
+        "emotional_hook": true,
+        "likely_good": true
+      },
+      "surface": null,
+      "module": null
+    },
+    {
+      "id": "corp-1698",
+      "text": "Сегодня важно не упустить из виду свою естественную манеру двигаться через устойчивость. Когда ты придерживаешься ясного ритма, твои решения становятся более точными, а дела не расползаются в разные стороны. Прямота в общении также создаст ощущение надежности.",
+      "strong_score": 10,
+      "stakes_markers": 0,
+      "why_hypothesis": [
+        "trigger_event",
+        "emotional_hook",
+        "recognizable_scene"
+      ],
+      "tags": {
+        "no_scene": false,
+        "too_generic": false,
+        "abstract": false,
+        "has_scene": true,
+        "has_trigger": true,
+        "emotional_hook": true,
+        "likely_good": true
+      },
+      "surface": null,
+      "module": null
+    },
+    {
+      "id": "corp-1701",
+      "text": "Сегодня важно поддерживать устойчивый ритм и не спешить с решениями. Углубляй свои связи через открытость и честность. В следующих экранах мы рассмотрим, как это отразится на разных сферах твоей жизни.",
+      "strong_score": 10,
+      "stakes_markers": 0,
+      "why_hypothesis": [
+        "trigger_event",
+        "emotional_hook",
+        "recognizable_scene"
+      ],
+      "tags": {
+        "no_scene": false,
+        "too_generic": false,
+        "abstract": false,
+        "has_scene": true,
+        "has_trigger": true,
+        "emotional_hook": true,
+        "likely_good": true
+      },
+      "surface": null,
+      "module": null
+    },
+    {
+      "id": "corp-1824",
+      "text": "Сегодня реально сработает выбор одной задачи, которая уже начата, и её завершение в спокойном темпе без переключений.",
+      "strong_score": 10,
+      "stakes_markers": 0,
+      "why_hypothesis": [
+        "trigger_event",
+        "emotional_hook",
+        "recognizable_scene"
+      ],
+      "tags": {
+        "no_scene": false,
+        "too_generic": false,
+        "abstract": false,
+        "has_scene": true,
+        "has_trigger": true,
+        "emotional_hook": true,
+        "likely_good": true
+      },
+      "surface": null,
+      "module": null
+    },
+    {
+      "id": "corp-1923",
+      "text": "Сегодняшний день был насыщен возможностями для ясных решений и общения. Как вы себя чувствовали в этом ритме?",
+      "strong_score": 10,
+      "stakes_markers": 0,
+      "why_hypothesis": [
+        "trigger_event",
+        "emotional_hook",
+        "recognizable_scene"
+      ],
+      "tags": {
+        "no_scene": false,
+        "too_generic": false,
+        "abstract": false,
+        "has_scene": true,
+        "has_trigger": true,
+        "emotional_hook": true,
+        "likely_good": true
+      },
+      "surface": null,
+      "module": null
+    },
+    {
+      "id": "corp-1933",
+      "text": "Сегодняшний день был ровным, и ты сделал шаги к укреплению своих связей. Возможно, ты уделил время для откровенных разговоров с близкими?",
+      "strong_score": 10,
+      "stakes_markers": 0,
+      "why_hypothesis": [
+        "trigger_event",
+        "emotional_hook",
+        "recognizable_scene"
+      ],
+      "tags": {
+        "no_scene": false,
+        "too_generic": false,
+        "abstract": false,
+        "has_scene": true,
+        "has_trigger": true,
+        "emotional_hook": true,
+        "likely_good": true
+      },
+      "surface": null,
+      "module": null
+    },
+    {
+      "id": "corp-1941",
+      "text": "Сегодняшний день открывает возможности для более глубокого понимания своих потребностей и приоритетов. Обрати внимание на то, как твои решения влияют на эмоциональный фон, особенно в отношениях и в работе. Ясность в намерениях поможет избежать лишнего напряжения и стресса.",
+      "strong_score": 10,
+      "stakes_markers": 0,
+      "why_hypothesis": [
+        "trigger_event",
+        "emotional_hook",
+        "recognizable_scene"
+      ],
+      "tags": {
+        "no_scene": false,
+        "too_generic": false,
+        "abstract": false,
+        "has_scene": true,
+        "has_trigger": true,
+        "emotional_hook": true,
+        "likely_good": true
+      },
+      "surface": null,
+      "module": null
+    },
+    {
+      "id": "corp-2003",
+      "text": "Сегодняшний день требует ясного фокуса. Определи одну задачу, которая наиболее важна, и сделай первый шаг к её решению.",
+      "strong_score": 10,
+      "stakes_markers": 0,
+      "why_hypothesis": [
+        "trigger_event",
+        "emotional_hook",
+        "recognizable_scene"
+      ],
+      "tags": {
+        "no_scene": false,
+        "too_generic": false,
+        "abstract": false,
+        "has_scene": true,
+        "has_trigger": true,
+        "emotional_hook": true,
+        "likely_good": true
+      },
+      "surface": null,
+      "module": null
+    },
+    {
+      "id": "corp-2531",
+      "text": "Финансовые вопросы требуют вашего внимания, но избегайте импульсивных решений. Уделите время, чтобы проанализировать свои расходы и составить бюджет. Возможно, стоит сделать первый шаг к долгосрочному финансовому плану.",
+      "strong_score": 10,
+      "stakes_markers": 0,
+      "why_hypothesis": [
+        "trigger_event",
+        "emotional_hook",
+        "recognizable_scene"
+      ],
+      "tags": {
+        "no_scene": false,
+        "too_generic": false,
+        "abstract": false,
+        "has_scene": true,
+        "has_trigger": true,
+        "emotional_hook": true,
+        "likely_good": true
+      },
+      "surface": null,
+      "module": null
+    },
+    {
+      "id": "corp-2535",
+      "text": "Финансовые решения лучше принимать осознанно. Избегай спонтанных трат и сосредоточься на планировании бюджета. Если есть возможность пересмотреть свои расходы, сделай это сегодня.",
+      "strong_score": 10,
+      "stakes_markers": 0,
+      "why_hypothesis": [
+        "trigger_event",
+        "emotional_hook",
+        "recognizable_scene"
+      ],
+      "tags": {
+        "no_scene": false,
+        "too_generic": false,
+        "abstract": false,
+        "has_scene": true,
+        "has_trigger": true,
+        "emotional_hook": true,
+        "likely_good": true
+      },
+      "surface": null,
+      "module": null
+    },
+    {
+      "id": "corp-2604",
+      "text": "Человек может сломаться, открыв несколько задач одновременно и не доведя ни одну до конца, что вызовет ощущение беспокойства и неэффективности.",
+      "strong_score": 10,
+      "stakes_markers": 0,
+      "why_hypothesis": [
+        "trigger_event",
+        "emotional_hook",
+        "recognizable_scene"
+      ],
+      "tags": {
+        "no_scene": false,
+        "too_generic": false,
+        "abstract": false,
+        "has_scene": true,
+        "has_trigger": true,
+        "emotional_hook": true,
+        "likely_good": true
+      },
+      "surface": null,
+      "module": null
+    }
+  ],
+  "tl_0c_2_stakes_rich_sample": [
+    {
+      "id": "corp-0116",
+      "text": "В отношениях сегодня особенно важно открыто поговорить о своих чувствах. Возможно, стоит инициировать разговор, который давно назрел, но ты его откладывал.",
+      "surface": null,
+      "module": null
+    },
+    {
+      "id": "corp-0204",
+      "text": "Выбери задачу, которая требует твоего внимания, и не распыляйся на множество мелочей. Например, подготовь отчет, который уже давно откладывал.",
+      "surface": null,
+      "module": null
+    }
+  ],
+  "rule_hypotheses": [
+    {
+      "rule_id": "RULE_004",
+      "status": "CALIBRATION_HYPOTHESIS",
+      "name": "Ставка",
+      "definition": "В хорошей фразе что-то поставлено на кон — причина, напряжение, интерес.",
+      "weak_example": "Сегодня возможен разговор.",
+      "strong_example": "Сегодня может состояться разговор, который вы давно откладывали из-за опасения услышать ответ.",
+      "evidence_in_corpus": {
+        "phrases_with_stakes_markers_ge_2": 2,
+        "likely_good_with_stakes": 0
+      }
+    }
+  ]
+}

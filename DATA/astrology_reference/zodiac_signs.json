@@ -1,0 +1,134 @@
+[
+  {
+    "id": "aries",
+    "name": "Aries",
+    "start": "03-21",
+    "end": "04-19",
+    "element": "fire",
+    "modality": "cardinal",
+    "rulers": ["Mars"],
+    "themes": ["initiation", "courage", "impulse"],
+    "stones": ["carnelian", "diamond"]
+  },
+  {
+    "id": "taurus",
+    "name": "Taurus",
+    "start": "04-20",
+    "end": "05-20",
+    "element": "earth",
+    "modality": "fixed",
+    "rulers": ["Venus"],
+    "themes": ["stability", "sensory", "patience"],
+    "stones": ["emerald", "rose_quartz"]
+  },
+  {
+    "id": "gemini",
+    "name": "Gemini",
+    "start": "05-21",
+    "end": "06-20",
+    "element": "air",
+    "modality": "mutable",
+    "rulers": ["Mercury"],
+    "themes": ["communication", "curiosity", "adaptability"],
+    "stones": ["agate", "citrine"]
+  },
+  {
+    "id": "cancer",
+    "name": "Cancer",
+    "start": "06-21",
+    "end": "07-22",
+    "element": "water",
+    "modality": "cardinal",
+    "rulers": ["Moon"],
+    "themes": ["nurturing", "protection", "intuition"],
+    "stones": ["moonstone", "pearl"]
+  },
+  {
+    "id": "leo",
+    "name": "Leo",
+    "start": "07-23",
+    "end": "08-22",
+    "element": "fire",
+    "modality": "fixed",
+    "rulers": ["Sun"],
+    "themes": ["expression", "confidence", "generosity"],
+    "stones": ["sunstone", "peridot"]
+  },
+  {
+    "id": "virgo",
+    "name": "Virgo",
+    "start": "08-23",
+    "end": "09-22",
+    "element": "earth",
+    "modality": "mutable",
+    "rulers": ["Mercury"],
+    "themes": ["analysis", "craft", "service"],
+    "stones": ["sapphire", "amazonite"]
+  },
+  {
+    "id": "libra",
+    "name": "Libra",
+    "start": "09-23",
+    "end": "10-22",
+    "element": "air",
+    "modality": "cardinal",
+    "rulers": ["Venus"],
+    "themes": ["balance", "aesthetics", "diplomacy"],
+    "stones": ["opal", "lapis_lazuli"]
+  },
+  {
+    "id": "scorpio",
+    "name": "Scorpio",
+    "start": "10-23",
+    "end": "11-21",
+    "element": "water",
+    "modality": "fixed",
+    "rulers": ["Mars", "Pluto"],
+    "themes": ["depth", "transformation", "intensity"],
+    "stones": ["obsidian", "malachite"]
+  },
+  {
+    "id": "sagittarius",
+    "name": "Sagittarius",
+    "start": "11-22",
+    "end": "12-21",
+    "element": "fire",
+    "modality": "mutable",
+    "rulers": ["Jupiter"],
+    "themes": ["exploration", "belief", "optimism"],
+    "stones": ["turquoise", "topaz"]
+  },
+  {
+    "id": "capricorn",
+    "name": "Capricorn",
+    "start": "12-22",
+    "end": "01-19",
+    "element": "earth",
+    "modality": "cardinal",
+    "rulers": ["Saturn"],
+    "themes": ["structure", "responsibility", "long_term"],
+    "stones": ["garnet", "onyx"]
+  },
+  {
+    "id": "aquarius",
+    "name": "Aquarius",
+    "start": "01-20",
+    "end": "02-18",
+    "element": "air",
+    "modality": "fixed",
+    "rulers": ["Saturn", "Uranus"],
+    "themes": ["innovation", "community", "independence"],
+    "stones": ["amethyst", "hematite"]
+  },
+  {
+    "id": "pisces",
+    "name": "Pisces",
+    "start": "02-19",
+    "end": "03-20",
+    "element": "water",
+    "modality": "mutable",
+    "rulers": ["Jupiter", "Neptune"],
+    "themes": ["empathy", "imagination", "surrender"],
+    "stones": ["aquamarine", "fluorite"]
+  }
+]

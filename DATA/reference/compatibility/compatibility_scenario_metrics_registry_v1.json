@@ -1,0 +1,519 @@
+{
+  "contract_version": "compatibility_scenario_metrics_registry_v1",
+  "domain": "compatibility",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Scenario-scoped metric blends, hero weights, funnel domains.",
+  "scenario_blends": {
+    "love": {
+      "attraction": {
+        "attraction": 0.52,
+        "sexuality": 0.28,
+        "stability": 0.12,
+        "conflicts": 0.08
+      },
+      "stability": {
+        "stability": 0.48,
+        "attraction": 0.28,
+        "conflicts": 0.24
+      },
+      "conflicts": {
+        "conflicts": 0.42,
+        "stability": 0.32,
+        "attraction": 0.26
+      },
+      "sexuality": {
+        "sexuality": 0.5,
+        "attraction": 0.32,
+        "conflicts": 0.18
+      }
+    },
+    "sex": {
+      "sexuality": {
+        "sexuality": 0.58,
+        "attraction": 0.28,
+        "conflicts": 0.1,
+        "stability": 0.04
+      },
+      "attraction": {
+        "attraction": 0.45,
+        "sexuality": 0.4,
+        "stability": 0.1,
+        "conflicts": 0.05
+      },
+      "conflicts": {
+        "conflicts": 0.38,
+        "sexuality": 0.32,
+        "attraction": 0.2,
+        "stability": 0.1
+      },
+      "stability": {
+        "stability": 0.44,
+        "sexuality": 0.26,
+        "attraction": 0.2,
+        "conflicts": 0.1
+      }
+    },
+    "office": {
+      "stability": {
+        "stability": 0.52,
+        "conflicts": 0.28,
+        "attraction": 0.12,
+        "sexuality": 0.08
+      },
+      "conflicts": {
+        "conflicts": 0.5,
+        "stability": 0.3,
+        "attraction": 0.12,
+        "sexuality": 0.08
+      },
+      "attraction": {
+        "stability": 0.35,
+        "attraction": 0.3,
+        "conflicts": 0.25,
+        "sexuality": 0.1
+      },
+      "sexuality": {
+        "attraction": 0.38,
+        "stability": 0.32,
+        "conflicts": 0.2,
+        "sexuality": 0.1
+      }
+    },
+    "living_together": {
+      "stability": {
+        "stability": 0.5,
+        "conflicts": 0.28,
+        "attraction": 0.14,
+        "sexuality": 0.08
+      },
+      "conflicts": {
+        "conflicts": 0.46,
+        "stability": 0.34,
+        "attraction": 0.12,
+        "sexuality": 0.08
+      },
+      "attraction": {
+        "attraction": 0.36,
+        "stability": 0.36,
+        "sexuality": 0.18,
+        "conflicts": 0.1
+      },
+      "sexuality": {
+        "sexuality": 0.34,
+        "stability": 0.34,
+        "attraction": 0.22,
+        "conflicts": 0.1
+      }
+    },
+    "vacation": {
+      "attraction": {
+        "attraction": 0.46,
+        "sexuality": 0.26,
+        "stability": 0.16,
+        "conflicts": 0.12
+      },
+      "stability": {
+        "stability": 0.4,
+        "conflicts": 0.3,
+        "attraction": 0.2,
+        "sexuality": 0.1
+      },
+      "conflicts": {
+        "conflicts": 0.44,
+        "stability": 0.28,
+        "attraction": 0.18,
+        "sexuality": 0.1
+      },
+      "sexuality": {
+        "sexuality": 0.42,
+        "attraction": 0.38,
+        "stability": 0.12,
+        "conflicts": 0.08
+      }
+    },
+    "money_together": {
+      "stability": {
+        "stability": 0.55,
+        "conflicts": 0.25,
+        "attraction": 0.12,
+        "sexuality": 0.08
+      },
+      "conflicts": {
+        "conflicts": 0.48,
+        "stability": 0.32,
+        "attraction": 0.12,
+        "sexuality": 0.08
+      },
+      "attraction": {
+        "stability": 0.38,
+        "attraction": 0.32,
+        "conflicts": 0.22,
+        "sexuality": 0.08
+      },
+      "sexuality": {
+        "stability": 0.42,
+        "sexuality": 0.22,
+        "attraction": 0.24,
+        "conflicts": 0.12
+      }
+    },
+    "parenting": {
+      "stability": {
+        "stability": 0.54,
+        "conflicts": 0.28,
+        "attraction": 0.12,
+        "sexuality": 0.06
+      },
+      "conflicts": {
+        "conflicts": 0.46,
+        "stability": 0.36,
+        "attraction": 0.12,
+        "sexuality": 0.06
+      },
+      "attraction": {
+        "stability": 0.38,
+        "attraction": 0.34,
+        "conflicts": 0.2,
+        "sexuality": 0.08
+      },
+      "sexuality": {
+        "stability": 0.36,
+        "sexuality": 0.28,
+        "attraction": 0.24,
+        "conflicts": 0.12
+      }
+    },
+    "conflict_style": {
+      "conflicts": {
+        "conflicts": 0.56,
+        "stability": 0.26,
+        "attraction": 0.12,
+        "sexuality": 0.06
+      },
+      "stability": {
+        "conflicts": 0.38,
+        "stability": 0.4,
+        "attraction": 0.14,
+        "sexuality": 0.08
+      },
+      "attraction": {
+        "attraction": 0.4,
+        "conflicts": 0.3,
+        "stability": 0.22,
+        "sexuality": 0.08
+      },
+      "sexuality": {
+        "sexuality": 0.36,
+        "attraction": 0.34,
+        "conflicts": 0.22,
+        "stability": 0.08
+      }
+    },
+    "apocalypse": {
+      "stability": {
+        "stability": 0.5,
+        "conflicts": 0.3,
+        "attraction": 0.12,
+        "sexuality": 0.08
+      },
+      "conflicts": {
+        "conflicts": 0.52,
+        "stability": 0.28,
+        "attraction": 0.12,
+        "sexuality": 0.08
+      },
+      "attraction": {
+        "stability": 0.34,
+        "conflicts": 0.32,
+        "attraction": 0.24,
+        "sexuality": 0.1
+      },
+      "sexuality": {
+        "stability": 0.38,
+        "conflicts": 0.28,
+        "sexuality": 0.2,
+        "attraction": 0.14
+      }
+    },
+    "partner_in_crime": {
+      "attraction": {
+        "attraction": 0.48,
+        "sexuality": 0.3,
+        "conflicts": 0.14,
+        "stability": 0.08
+      },
+      "stability": {
+        "stability": 0.36,
+        "conflicts": 0.32,
+        "attraction": 0.22,
+        "sexuality": 0.1
+      },
+      "conflicts": {
+        "conflicts": 0.44,
+        "attraction": 0.32,
+        "stability": 0.16,
+        "sexuality": 0.08
+      },
+      "sexuality": {
+        "sexuality": 0.4,
+        "attraction": 0.38,
+        "conflicts": 0.14,
+        "stability": 0.08
+      }
+    },
+    "after_wine": {
+      "attraction": {
+        "attraction": 0.5,
+        "sexuality": 0.32,
+        "conflicts": 0.12,
+        "stability": 0.06
+      },
+      "conflicts": {
+        "conflicts": 0.46,
+        "attraction": 0.3,
+        "sexuality": 0.16,
+        "stability": 0.08
+      },
+      "stability": {
+        "stability": 0.38,
+        "attraction": 0.34,
+        "sexuality": 0.18,
+        "conflicts": 0.1
+      },
+      "sexuality": {
+        "sexuality": 0.48,
+        "attraction": 0.36,
+        "conflicts": 0.1,
+        "stability": 0.06
+      }
+    },
+    "home_renovation": {
+      "conflicts": {
+        "conflicts": 0.5,
+        "stability": 0.3,
+        "attraction": 0.12,
+        "sexuality": 0.08
+      },
+      "stability": {
+        "stability": 0.52,
+        "conflicts": 0.28,
+        "attraction": 0.12,
+        "sexuality": 0.08
+      },
+      "attraction": {
+        "attraction": 0.36,
+        "stability": 0.34,
+        "conflicts": 0.22,
+        "sexuality": 0.08
+      },
+      "sexuality": {
+        "conflicts": 0.34,
+        "stability": 0.34,
+        "sexuality": 0.2,
+        "attraction": 0.12
+      }
+    },
+    "best_friends": {
+      "stability": {
+        "stability": 0.48,
+        "attraction": 0.32,
+        "conflicts": 0.14,
+        "sexuality": 0.06
+      },
+      "attraction": {
+        "attraction": 0.46,
+        "stability": 0.3,
+        "conflicts": 0.16,
+        "sexuality": 0.08
+      },
+      "conflicts": {
+        "conflicts": 0.42,
+        "stability": 0.32,
+        "attraction": 0.18,
+        "sexuality": 0.08
+      },
+      "sexuality": {
+        "conflicts": 0.38,
+        "stability": 0.36,
+        "attraction": 0.18,
+        "sexuality": 0.08
+      }
+    },
+    "rule_breaker": {
+      "conflicts": {
+        "conflicts": 0.48,
+        "stability": 0.28,
+        "attraction": 0.16,
+        "sexuality": 0.08
+      },
+      "stability": {
+        "stability": 0.44,
+        "conflicts": 0.32,
+        "attraction": 0.16,
+        "sexuality": 0.08
+      },
+      "attraction": {
+        "attraction": 0.42,
+        "conflicts": 0.3,
+        "stability": 0.18,
+        "sexuality": 0.1
+      },
+      "sexuality": {
+        "sexuality": 0.38,
+        "attraction": 0.36,
+        "conflicts": 0.18,
+        "stability": 0.08
+      }
+    }
+  },
+  "scenario_hero_weights": {
+    "love": {
+      "attraction": 0.34,
+      "stability": 0.26,
+      "conflicts": 0.2,
+      "sexuality": 0.2
+    },
+    "sex": {
+      "sexuality": 0.4,
+      "attraction": 0.3,
+      "conflicts": 0.15,
+      "stability": 0.15
+    },
+    "office": {
+      "stability": 0.38,
+      "conflicts": 0.34,
+      "attraction": 0.18,
+      "sexuality": 0.1
+    },
+    "living_together": {
+      "stability": 0.36,
+      "conflicts": 0.3,
+      "attraction": 0.2,
+      "sexuality": 0.14
+    },
+    "vacation": {
+      "attraction": 0.32,
+      "conflicts": 0.28,
+      "stability": 0.22,
+      "sexuality": 0.18
+    },
+    "money_together": {
+      "stability": 0.42,
+      "conflicts": 0.32,
+      "attraction": 0.16,
+      "sexuality": 0.1
+    },
+    "parenting": {
+      "stability": 0.4,
+      "conflicts": 0.32,
+      "attraction": 0.18,
+      "sexuality": 0.1
+    },
+    "conflict_style": {
+      "conflicts": 0.42,
+      "stability": 0.28,
+      "attraction": 0.18,
+      "sexuality": 0.12
+    },
+    "apocalypse": {
+      "stability": 0.36,
+      "conflicts": 0.36,
+      "attraction": 0.16,
+      "sexuality": 0.12
+    },
+    "partner_in_crime": {
+      "attraction": 0.36,
+      "conflicts": 0.28,
+      "sexuality": 0.22,
+      "stability": 0.14
+    },
+    "after_wine": {
+      "attraction": 0.34,
+      "sexuality": 0.3,
+      "conflicts": 0.24,
+      "stability": 0.12
+    },
+    "home_renovation": {
+      "conflicts": 0.36,
+      "stability": 0.34,
+      "attraction": 0.18,
+      "sexuality": 0.12
+    },
+    "best_friends": {
+      "stability": 0.38,
+      "attraction": 0.34,
+      "conflicts": 0.2,
+      "sexuality": 0.08
+    },
+    "rule_breaker": {
+      "conflicts": 0.34,
+      "stability": 0.3,
+      "attraction": 0.24,
+      "sexuality": 0.12
+    }
+  },
+  "scenario_funnel_domains": {
+    "love": [
+      "love",
+      "sex",
+      "emotional",
+      "conflicts"
+    ],
+    "sex": [
+      "sex",
+      "love",
+      "emotional",
+      "conflicts"
+    ],
+    "office": [
+      "work_live",
+      "conflicts",
+      "money",
+      "emotional"
+    ],
+    "living_together": [
+      "family",
+      "conflicts",
+      "money",
+      "love"
+    ],
+    "vacation": [
+      "love",
+      "emotional",
+      "conflicts",
+      "work_live"
+    ],
+    "money_together": [
+      "money",
+      "conflicts",
+      "family",
+      "love"
+    ],
+    "parenting": [
+      "children",
+      "family",
+      "conflicts",
+      "emotional"
+    ],
+    "conflict_style": [
+      "conflicts",
+      "emotional",
+      "love",
+      "sex"
+    ],
+    "apocalypse": [
+      "conflicts",
+      "emotional",
+      "love",
+      "family"
+    ],
+    "business": [
+      "work_live",
+      "money",
+      "conflicts",
+      "emotional"
+    ]
+  },
+  "default_scenario_id": "love"
+}

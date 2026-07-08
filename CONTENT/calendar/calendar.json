@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "version": "v1.0",
+    "description": "TodayFlow Calendar v1.0 — календарные дни с типами, прогнозами и практиками. Связывает day_type → forecast_type → recommended_practice.",
+    "created_at": "2026-01-25"
+  },
+  "calendar_days": [
+    {
+      "date": "2026-01-25",
+      "locale": "ru",
+      "day_type": "overload",
+      "forecast_type": "workday_focus",
+      "forecast_id": null,
+      "recommended_practice_id": "practice.001",
+      "focus": "Сегодня может быть много задач. Важно не ускоряться.",
+      "layers": ["L1", "L2"],
+      "tags": ["work", "focus"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "date": "2026-01-26",
+      "locale": "ru",
+      "day_type": "waiting",
+      "forecast_type": "relationships_interaction",
+      "forecast_id": null,
+      "recommended_practice_id": "practice.013",
+      "focus": "День ожидания ответов. Пауза перед реакцией поможет.",
+      "layers": ["L1", "L2"],
+      "tags": ["relationship", "boundaries"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "date": "2026-01-27",
+      "locale": "ru",
+      "day_type": "completion",
+      "forecast_type": "integration_reflection",
+      "forecast_id": null,
+      "recommended_practice_id": null,
+      "focus": "День завершения циклов. Время для интеграции опыта.",
+      "layers": ["L2", "L3"],
+      "tags": ["reflection"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    }
+  ]
+}

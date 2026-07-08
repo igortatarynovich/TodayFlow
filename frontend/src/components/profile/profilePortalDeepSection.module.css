@@ -1,0 +1,120 @@
+.root {
+  display: block;
+  margin: 0;
+  border-radius: 0;
+  overflow: hidden;
+  border-top: 1px solid rgba(250, 248, 245, 0.08);
+  border-bottom: 1px solid rgba(10, 8, 16, 0.6);
+}
+
+.summary {
+  position: relative;
+  list-style: none;
+  cursor: pointer;
+  min-height: clamp(12rem, 28vh, 17rem);
+  background: #12101c;
+  color: #faf8f5;
+  overflow: hidden;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.slit {
+  position: absolute;
+  left: 50%;
+  top: 12%;
+  bottom: 12%;
+  width: 1px;
+  translate: -50% 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(250, 248, 245, 0.12) 18%,
+    rgba(250, 248, 245, 0.42) 50%,
+    rgba(250, 248, 245, 0.12) 82%,
+    transparent 100%
+  );
+  box-shadow: 0 0 24px rgba(210, 195, 255, 0.22);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(10, 8, 16, 0.72) 0%, transparent 22%, transparent 78%, rgba(10, 8, 16, 0.72) 100%),
+    radial-gradient(ellipse 90% 80% at 50% 50%, transparent 0%, rgba(10, 8, 16, 0.45) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.summary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 28% 88% at 50% 50%, rgba(210, 195, 255, 0.16) 0%, transparent 72%),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 0%, transparent 18%, transparent 82%, rgba(0, 0, 0, 0.35) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.inner {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(12rem, 28vh, 17rem);
+  padding: 2rem 1.25rem;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.kicker {
+  margin: 0;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(250, 248, 245, 0.45);
+}
+
+.title {
+  margin: 0.5rem 0 0;
+  font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
+  font-size: clamp(1.35rem, 4vw, 1.625rem);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.sub {
+  margin: 0.5rem 0 0;
+  max-width: 18rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: rgba(250, 248, 245, 0.62);
+}
+
+.cta {
+  display: inline-block;
+  margin-top: 1.25rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.summary:hover .cta {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.body {
+  padding: 1rem 0 0;
+  background: var(--tf-page-bg, #f3efe8);
+}

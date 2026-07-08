@@ -1,0 +1,382 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://todayflow.app/schemas/compact_user_model_v1.json",
+  "title": "TodayFlow Compact User Model v1 (UMTS-1 target contract)",
+  "description": "North-star CUM export for Context Selection, UI, and Gate. Canon: USER_MODEL_TARGET_STATE.md §3. Read path v0 (UMTS-2) is a partial implementation — see compact_user_model_v0.schema.json. evolution.* is schema-reserved; REST export forbidden until EVOLUTION_CALCULATION_CONTRACT.md active (ECC §0).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "as_of",
+    "generated_at",
+    "identity",
+    "current_state",
+    "active_themes",
+    "behavioral_patterns",
+    "recommendations",
+    "confidence"
+  ],
+  "properties": {
+    "contract_version": {
+      "type": "string",
+      "const": "compact_user_model_v1"
+    },
+    "as_of": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "Reference local date for current_state and theme windows."
+    },
+    "generated_at": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Server generation timestamp (ISO-8601)."
+    },
+    "identity": { "$ref": "#/$defs/identity" },
+    "current_state": { "$ref": "#/$defs/current_state" },
+    "active_themes": {
+      "type": "array",
+      "maxItems": 5,
+      "items": { "$ref": "#/$defs/theme" }
+    },
+    "behavioral_patterns": { "$ref": "#/$defs/behavioral_patterns" },
+    "recommendations": { "$ref": "#/$defs/recommendations" },
+    "confidence": { "$ref": "#/$defs/confidence" },
+    "evolution": {
+      "description": "UMTS §2 output #5 — Personal Path. Internal/schema only until ECC active + UEM-2; must not appear in public REST until then.",
+      "$ref": "#/$defs/evolution"
+    },
+    "knowledge_atoms_top_k": {
+      "description": "UMTS-2 read slice — top-K Knowledge Atoms for surfaces and confirm UX (not full UKM store).",
+      "type": "array",
+      "maxItems": 30,
+      "items": { "$ref": "#/$defs/knowledge_atom_read_slice" }
+    },
+    "interpretation_instances_top_k": {
+      "description": "UMTS-2 read slice — pending interpretation instances for confirm surfaces.",
+      "type": "array",
+      "maxItems": 10,
+      "items": { "$ref": "#/$defs/interpretation_instance_read_slice" }
+    }
+  },
+  "$defs": {
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "UMTS §3.1 — stable identity (who the person is).",
+      "properties": {
+        "facts": { "$ref": "#/$defs/identity_facts" },
+        "display_name": { "type": ["string", "null"], "maxLength": 120 },
+        "sun_sign": { "type": ["string", "null"], "maxLength": 32 },
+        "moon_sign": { "type": ["string", "null"], "maxLength": 32 },
+        "rising_sign": { "type": ["string", "null"], "maxLength": 32 },
+        "life_path": { "type": ["integer", "null"], "minimum": 1, "maximum": 33 },
+        "archetype": { "type": ["string", "null"], "maxLength": 64 },
+        "summary": { "type": ["string", "null"], "maxLength": 480 },
+        "strengths": {
+          "type": "array",
+          "maxItems": 8,
+          "items": { "type": "string", "maxLength": 200 }
+        },
+        "constraints": {
+          "type": "array",
+          "maxItems": 8,
+          "items": { "type": "string", "maxLength": 200 }
+        },
+        "motivation_style": { "$ref": "#/$defs/motivation_style" },
+        "life_rhythm": { "$ref": "#/$defs/life_rhythm" }
+      }
+    },
+    "identity_facts": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Declared and confirmed facts — birth, goals, habits (KASP A/B, fact atoms).",
+      "properties": {
+        "birth_date": { "type": ["string", "null"], "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+        "birth_time_known": { "type": ["boolean", "null"] },
+        "timezone_name": { "type": ["string", "null"], "maxLength": 64 },
+        "stated_goals": {
+          "type": "array",
+          "maxItems": 5,
+          "items": { "type": "string", "maxLength": 120 }
+        },
+        "declared_habits": {
+          "type": "array",
+          "maxItems": 8,
+          "items": { "type": "string", "maxLength": 120 }
+        }
+      }
+    },
+    "motivation_style": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "directness": {
+          "type": "string",
+          "enum": ["direct", "gentle", "mixed", "unknown"]
+        },
+        "depth": {
+          "type": "string",
+          "enum": ["short", "deep", "mixed", "unknown"]
+        }
+      }
+    },
+    "life_rhythm": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "peak_hours_local": {
+          "type": "array",
+          "maxItems": 4,
+          "items": { "type": "integer", "minimum": 0, "maximum": 23 }
+        },
+        "weekly_cycle": {
+          "type": ["string", "null"],
+          "maxLength": 64,
+          "description": "e.g. weekday_focus, weekend_reset, evening_person"
+        },
+        "best_window_label": {
+          "type": ["string", "null"],
+          "maxLength": 64,
+          "description": "Human-readable peak window, e.g. 18:00–22:00"
+        }
+      }
+    },
+    "current_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "UMTS §3.2 — what is happening now (daily).",
+      "properties": {
+        "local_date": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "mood_energy": { "$ref": "#/$defs/mood_energy" },
+        "dominant_tension": { "type": ["string", "null"], "maxLength": 200 },
+        "stage": {
+          "type": ["string", "null"],
+          "maxLength": 64,
+          "description": "Micro-life phase when signal exists (L3, weak)."
+        },
+        "risks": {
+          "type": "array",
+          "maxItems": 3,
+          "items": { "type": "string", "maxLength": 160 }
+        },
+        "opportunities": {
+          "type": "array",
+          "maxItems": 3,
+          "items": { "type": "string", "maxLength": 160 }
+        },
+        "mood_id": { "type": ["string", "null"], "maxLength": 64 },
+        "mood_captured_at": { "type": ["string", "null"] },
+        "focus_topic_id": { "type": ["string", "null"], "maxLength": 64 },
+        "focus_captured_at": { "type": ["string", "null"] },
+        "day_promise_text": { "type": ["string", "null"], "maxLength": 240 },
+        "day_promise_captured_at": { "type": ["string", "null"] },
+        "day_focus_outcome": { "type": ["string", "null"], "maxLength": 32 },
+        "day_focus_outcome_captured_at": { "type": ["string", "null"] }
+      }
+    },
+    "mood_energy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mood_id": { "type": ["string", "null"], "maxLength": 64 },
+        "energy_level": {
+          "type": ["string", "null"],
+          "enum": ["low", "medium", "high", null]
+        },
+        "captured_at": { "type": ["string", "null"] }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "weight": { "type": "number", "minimum": 0, "maximum": 1 },
+        "stability": {
+          "type": "string",
+          "enum": ["emerging", "stable", "decaying", "hypothesis_heavy"]
+        },
+        "window_days": { "type": "integer", "minimum": 1, "maximum": 365 },
+        "linked_areas": {
+          "type": "array",
+          "maxItems": 5,
+          "items": { "type": "string", "maxLength": 32 }
+        },
+        "source": { "type": "string", "maxLength": 64 }
+      }
+    },
+    "behavioral_patterns": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "UMTS §3.4 — what actually works for this user.",
+      "properties": {
+        "works": {
+          "type": "array",
+          "maxItems": 8,
+          "items": { "type": "string", "maxLength": 120 }
+        },
+        "does_not_work": {
+          "type": "array",
+          "maxItems": 8,
+          "items": { "type": "string", "maxLength": 120 }
+        },
+        "hints": {
+          "type": "array",
+          "maxItems": 5,
+          "items": { "type": "string", "maxLength": 200 }
+        },
+        "evidence_strength": {
+          "type": "string",
+          "enum": ["none", "weak", "medium", "strong"]
+        },
+        "window_days": { "type": "integer", "minimum": 1 },
+        "total_events": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "recommendations": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "UMTS §3.5 — 1 primary + up to 2 alternates.",
+      "required": ["primary"],
+      "properties": {
+        "primary": { "$ref": "#/$defs/recommendation_item" },
+        "alternates": {
+          "type": "array",
+          "maxItems": 2,
+          "items": { "$ref": "#/$defs/recommendation_item" }
+        }
+      }
+    },
+    "recommendation_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "text"],
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "text": { "type": "string", "maxLength": 280 },
+        "timing_hint": { "type": ["string", "null"], "maxLength": 120 },
+        "measurable": { "type": ["string", "null"], "maxLength": 120 },
+        "source": {
+          "type": "string",
+          "enum": [
+            "day_context",
+            "behavioral_pattern",
+            "day_model",
+            "template",
+            "unknown"
+          ]
+        },
+        "evidence_atom_ids": {
+          "type": "array",
+          "maxItems": 5,
+          "items": { "type": "string", "maxLength": 80 }
+        },
+        "knowledge_type_gate": {
+          "type": "string",
+          "enum": ["fact", "pattern", "hypothesis_blocked"],
+          "description": "hypothesis_blocked — must not surface as primary rec."
+        }
+      }
+    },
+    "confidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "UMTS §3.6 — system certainty and learning delta.",
+      "required": ["overall"],
+      "properties": {
+        "overall": { "type": "number", "minimum": 0, "maximum": 1 },
+        "by_domain": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "identity": { "type": "number", "minimum": 0, "maximum": 1 },
+            "themes": { "type": "number", "minimum": 0, "maximum": 1 },
+            "timing": { "type": "number", "minimum": 0, "maximum": 1 },
+            "recommendations": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        },
+        "uncertainty_flags": {
+          "type": "array",
+          "items": { "type": "string", "maxLength": 64 }
+        },
+        "delta_30d": {
+          "type": ["number", "null"],
+          "minimum": -1,
+          "maximum": 1,
+          "description": "Change in overall confidence vs 30 days ago."
+        },
+        "meaning_events_28d": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "evolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "ECC — internal Personal Path slice. Not for public REST until ECC active.",
+      "properties": {
+        "stage": {
+          "type": "string",
+          "enum": ["seeker", "explorer", "practitioner", "integrator", "guide", "master"]
+        },
+        "evolution_score": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000
+        }
+      }
+    },
+    "knowledge_atom_read_slice": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Export subset of UKM atom for surfaces — not full USER_KNOWLEDGE_MODEL store row.",
+      "required": ["knowledge_id"],
+      "properties": {
+        "knowledge_id": { "type": "string", "maxLength": 80 },
+        "contract_version": { "type": "string", "maxLength": 48 },
+        "knowledge_type": {
+          "type": "string",
+          "enum": ["fact", "pattern", "hypothesis"]
+        },
+        "data_class": {
+          "type": "string",
+          "enum": ["explicit", "behavioral", "inferred", "identity"]
+        },
+        "domain": { "type": "string", "maxLength": 32 },
+        "claim": { "type": "string", "maxLength": 120 },
+        "claim_summary": { "type": "string", "maxLength": 240 },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "evidence_count": { "type": "integer", "minimum": 0 },
+        "last_confirmed_at": { "type": ["string", "null"] },
+        "confirmation_required": { "type": "boolean" },
+        "decision_relevance": {
+          "type": "string",
+          "enum": ["very_low", "low", "medium", "high", "very_high"]
+        },
+        "stability": {
+          "type": "string",
+          "enum": ["observation", "weak", "stable", "decaying"]
+        }
+      }
+    },
+    "interpretation_instance_read_slice": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "instance_id": { "type": "string", "maxLength": 80 },
+        "interpretation_ref_id": { "type": "string", "maxLength": 80 },
+        "level": { "type": "string", "maxLength": 16 },
+        "summary": { "type": "string", "maxLength": 240 },
+        "dominant_meaning": { "type": ["string", "null"], "maxLength": 120 },
+        "confirmation_required": { "type": "boolean" },
+        "evidence_count": { "type": "integer", "minimum": 0 },
+        "user_verdict": {
+          "type": ["string", "null"],
+          "enum": ["confirm", "partial", "reject", null]
+        }
+      }
+    }
+  }
+}

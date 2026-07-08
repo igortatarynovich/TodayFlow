@@ -1,0 +1,21 @@
+{
+  "contract_version": "reference_machine_contract_v1",
+  "domain": "numerology",
+  "entity_code": "numerology.personal_day.template",
+  "version": "1.0.0",
+  "status": "draft",
+  "machine_contract": {
+    "vector": {
+      "action_reflection": 0.2,
+      "expansion_consolidation": 0.1,
+      "self_others": -0.1,
+      "structure_flow": 0.0
+    },
+    "tempo": "dynamic",
+    "risk": "medium",
+    "risk_modifier": 0.0,
+    "emotional_load": "neutral",
+    "confidence": 0.85,
+    "keywords": ["forbidden", "content", "leak"]
+  }
+}

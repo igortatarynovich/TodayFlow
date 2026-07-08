@@ -1,0 +1,3 @@
+# Used by scripts/validate_today_day_contract.py, validate_day_context_contract.py,
+# validate_reference_machine_contract.py, and CI.
+jsonschema>=4.22.0,<5

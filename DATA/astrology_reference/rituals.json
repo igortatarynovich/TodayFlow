@@ -1,0 +1,32 @@
+[
+  {
+    "id": "grounding_salt_bath",
+    "title": "Grounding Salt Bath",
+    "duration_minutes": 20,
+    "intention": "Снять эмоциональное напряжение, вернуться в тело",
+    "axes": ["A2", "A4"],
+    "ingredients": ["sea_salt", "lavender", "cedar"],
+    "instructions": [
+      "Подготовь воду температурой 37-38°C",
+      "Добавь 2 горсти морской соли и несколько капель лаванды",
+      "Сядь в тишине, наблюдай за дыханием, проговаривай намерение"],
+    "pair_with": ["lunar_soften"],
+    "best_for_phases": ["waning_gibbous", "last_quarter"],
+    "notes": "Можно рекомендовать после Meaning Block о переработке/overthinking." 
+  },
+  {
+    "id": "solar_walk_intent",
+    "title": "Solar Walk Intent",
+    "duration_minutes": 15,
+    "intention": "Возвращение мотивации и ясности",
+    "axes": ["A1", "A7"],
+    "ingredients": ["journal", "comfortable_shoes"],
+    "instructions": [
+      "Пройди 5 минут быстрым шагом, считай вдохи",
+      "Остановись, запиши одну цель, которую поддерживаешь сегодня",
+      "Повтори манту ‘Om Ram’ 3 раза, почувствуй тепло в груди"],
+    "pair_with": ["solar_radiance"],
+    "best_for_phases": ["waxing_crescent", "first_quarter"],
+    "notes": "Сочетается с Tarot Flow рекомендациями о действии." 
+  }
+]

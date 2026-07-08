@@ -1,0 +1,147 @@
+[
+  {
+    "id": "conjunction",
+    "name": "Conjunction",
+    "angle": 0,
+    "orb": 8,
+    "polarity": "neutral",
+    "tension_level": "intense focus",
+    "keywords": [
+      "merge",
+      "spotlight",
+      "fusion"
+    ],
+    "description": "Two bodies operate as one frequency, amplifying the theme. Needs conscious differentiation to avoid overwhelm."
+  },
+  {
+    "id": "sextile",
+    "name": "Sextile",
+    "angle": 60,
+    "orb": 4,
+    "polarity": "supportive",
+    "tension_level": "gentle activation",
+    "keywords": [
+      "cooperation",
+      "opportunity",
+      "ease"
+    ],
+    "description": "Opens doors for collaboration and experimentation. Benefits grow when the individual participates actively."
+  },
+  {
+    "id": "square",
+    "name": "Square",
+    "angle": 90,
+    "orb": 6,
+    "polarity": "challenging",
+    "tension_level": "high friction",
+    "keywords": [
+      "conflict",
+      "pressure",
+      "growth"
+    ],
+    "description": "Creates productive tension that demands restructuring. Without awareness it repeats as stress loops."
+  },
+  {
+    "id": "trine",
+    "name": "Trine",
+    "angle": 120,
+    "orb": 6,
+    "polarity": "supportive",
+    "tension_level": "flow state",
+    "keywords": [
+      "talent",
+      "stability",
+      "inheritance"
+    ],
+    "description": "Natural flow of energy that can be trusted. Needs direction to avoid complacency."
+  },
+  {
+    "id": "opposition",
+    "name": "Opposition",
+    "angle": 180,
+    "orb": 8,
+    "polarity": "polarizing",
+    "tension_level": "dynamic tug-of-war",
+    "keywords": [
+      "mirror",
+      "integration",
+      "projection"
+    ],
+    "description": "Reveals duality that must be balanced. Often projected into relationships until owned internally."
+  },
+  {
+    "id": "quintile",
+    "angle": 72,
+    "orb": 2.0,
+    "keywords": [
+      "creativity",
+      "talent",
+      "expression",
+      "artistic"
+    ],
+    "tension_level": "neutral",
+    "polarity": "neutral",
+    "description": "Quintile aspect - creative potential and talent expression",
+    "name": "Quintile"
+  },
+  {
+    "id": "biquintile",
+    "angle": 144,
+    "orb": 2.0,
+    "keywords": [
+      "creativity",
+      "harmony",
+      "refinement",
+      "artistic"
+    ],
+    "tension_level": "neutral",
+    "polarity": "neutral",
+    "description": "Biquintile aspect - refined creative expression and harmony",
+    "name": "Biquintile"
+  },
+  {
+    "id": "semisquare",
+    "angle": 45,
+    "orb": 2.0,
+    "keywords": [
+      "friction",
+      "adjustment",
+      "minor tension",
+      "restlessness"
+    ],
+    "tension_level": "low",
+    "polarity": "challenging",
+    "description": "Semisquare aspect - minor friction requiring adjustment",
+    "name": "Semisquare"
+  },
+  {
+    "id": "sesquiquadrate",
+    "angle": 135,
+    "orb": 2.0,
+    "keywords": [
+      "irritation",
+      "adjustment",
+      "minor conflict",
+      "restlessness"
+    ],
+    "tension_level": "low",
+    "polarity": "challenging",
+    "description": "Sesquiquadrate aspect - minor irritation requiring adjustment",
+    "name": "Sesquiquadrate"
+  },
+  {
+    "id": "semisextile",
+    "angle": 30,
+    "orb": 2.0,
+    "keywords": [
+      "opportunity",
+      "potential",
+      "minor support",
+      "connection"
+    ],
+    "tension_level": "neutral",
+    "polarity": "neutral",
+    "description": "Semisextile aspect - minor supportive opportunity",
+    "name": "Semisextile"
+  }
+]

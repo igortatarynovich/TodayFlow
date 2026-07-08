@@ -1,0 +1,247 @@
+{
+  "contract_version": "evolution_product_effects_registry_v1",
+  "domain": "evolution",
+  "version": "1.0.0",
+  "status": "draft",
+  "description": "B1.5 — What each evolution stage changes in the product/system. Reference only; no runtime, API, or UI.",
+  "stage_product_effects": {
+    "seeker": {
+      "stage_code": "seeker",
+      "user_facing_summary": "Orientation mode: short guidance, no deep personalization, commerce off.",
+      "intelligence_effects": {
+        "context_slice_depth": "minimal",
+        "memory_window_days": 7,
+        "prompt_tone": "exploratory",
+        "answer_length": "short",
+        "interpretation_level_max": "L1",
+        "personalization_depth": "minimal",
+        "active_knowledge_cap": 0
+      },
+      "engine_effects": {
+        "llm_budget_tier": "none",
+        "max_context_lines": 0,
+        "llm_model_tier": "cheap",
+        "max_tokens_cap": "low"
+      },
+      "unlock_effects": {
+        "path_themes_max_active": 1,
+        "cycle_lengths_available": [7],
+        "practice_pack_tier": "starter",
+        "calendar_insight_tier": "none",
+        "goal_system_tier": "none",
+        "share_features": false
+      },
+      "commerce_effects": {
+        "commerce_visibility": "none",
+        "symbolic_asset_tier": "none",
+        "themed_suggestions": false
+      },
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "observer": {
+      "stage_code": "observer",
+      "user_facing_summary": "Reflection mode: first patterns, minimal LLM context, gentle prompts.",
+      "intelligence_effects": {
+        "context_slice_depth": "basic",
+        "memory_window_days": 14,
+        "prompt_tone": "exploratory",
+        "answer_length": "short",
+        "interpretation_level_max": "L2",
+        "personalization_depth": "basic",
+        "active_knowledge_cap": 1
+      },
+      "engine_effects": {
+        "llm_budget_tier": "low",
+        "max_context_lines": 1,
+        "llm_model_tier": "cheap",
+        "max_tokens_cap": "low"
+      },
+      "unlock_effects": {
+        "path_themes_max_active": 1,
+        "cycle_lengths_available": [7, 21],
+        "practice_pack_tier": "starter",
+        "calendar_insight_tier": "none",
+        "goal_system_tier": "basic",
+        "share_features": false
+      },
+      "commerce_effects": {
+        "commerce_visibility": "none",
+        "symbolic_asset_tier": "none",
+        "themed_suggestions": false
+      },
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "practitioner": {
+      "stage_code": "practitioner",
+      "user_facing_summary": "Rhythm mode: regular practice support, standard depth, soft themed commerce.",
+      "intelligence_effects": {
+        "context_slice_depth": "standard",
+        "memory_window_days": 30,
+        "prompt_tone": "balanced",
+        "answer_length": "normal",
+        "interpretation_level_max": "L2",
+        "personalization_depth": "standard",
+        "active_knowledge_cap": 2
+      },
+      "engine_effects": {
+        "llm_budget_tier": "low",
+        "max_context_lines": 2,
+        "llm_model_tier": "standard",
+        "max_tokens_cap": "medium"
+      },
+      "unlock_effects": {
+        "path_themes_max_active": 2,
+        "cycle_lengths_available": [7, 21, 30],
+        "practice_pack_tier": "core",
+        "calendar_insight_tier": "basic",
+        "goal_system_tier": "standard",
+        "share_features": false
+      },
+      "commerce_effects": {
+        "commerce_visibility": "soft",
+        "symbolic_asset_tier": "soft",
+        "themed_suggestions": true
+      },
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "explorer": {
+      "stage_code": "explorer",
+      "user_facing_summary": "Experiment mode: multiple paths, theme-aware copy, deeper context.",
+      "intelligence_effects": {
+        "context_slice_depth": "standard",
+        "memory_window_days": 60,
+        "prompt_tone": "balanced",
+        "answer_length": "normal",
+        "interpretation_level_max": "L3",
+        "personalization_depth": "standard",
+        "active_knowledge_cap": 3
+      },
+      "engine_effects": {
+        "llm_budget_tier": "medium",
+        "max_context_lines": 3,
+        "llm_model_tier": "standard",
+        "max_tokens_cap": "medium"
+      },
+      "unlock_effects": {
+        "path_themes_max_active": 3,
+        "cycle_lengths_available": [7, 21, 30, 90],
+        "practice_pack_tier": "core",
+        "calendar_insight_tier": "standard",
+        "goal_system_tier": "standard",
+        "share_features": false
+      },
+      "commerce_effects": {
+        "commerce_visibility": "soft",
+        "symbolic_asset_tier": "themed",
+        "themed_suggestions": true
+      },
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "architect": {
+      "stage_code": "architect",
+      "user_facing_summary": "System mode: habit/goal integration, rich context, long-cycle patterns in copy.",
+      "intelligence_effects": {
+        "context_slice_depth": "enhanced",
+        "memory_window_days": 90,
+        "prompt_tone": "concise",
+        "answer_length": "deep",
+        "interpretation_level_max": "L3",
+        "personalization_depth": "enhanced",
+        "active_knowledge_cap": 4
+      },
+      "engine_effects": {
+        "llm_budget_tier": "medium",
+        "max_context_lines": 4,
+        "llm_model_tier": "standard",
+        "max_tokens_cap": "high"
+      },
+      "unlock_effects": {
+        "path_themes_max_active": 4,
+        "cycle_lengths_available": [7, 21, 30, 90],
+        "practice_pack_tier": "advanced",
+        "calendar_insight_tier": "full",
+        "goal_system_tier": "advanced",
+        "share_features": true
+      },
+      "commerce_effects": {
+        "commerce_visibility": "soft",
+        "symbolic_asset_tier": "themed",
+        "themed_suggestions": true
+      },
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "mentor": {
+      "stage_code": "mentor",
+      "user_facing_summary": "Transmission mode: confirmed patterns drive narrative; premium LLM budget; full commerce match.",
+      "intelligence_effects": {
+        "context_slice_depth": "expert",
+        "memory_window_days": 180,
+        "prompt_tone": "concise",
+        "answer_length": "deep",
+        "interpretation_level_max": "L4",
+        "personalization_depth": "expert",
+        "active_knowledge_cap": 5
+      },
+      "engine_effects": {
+        "llm_budget_tier": "high",
+        "max_context_lines": 5,
+        "llm_model_tier": "premium",
+        "max_tokens_cap": "high"
+      },
+      "unlock_effects": {
+        "path_themes_max_active": 5,
+        "cycle_lengths_available": [7, 21, 30, 90],
+        "practice_pack_tier": "full",
+        "calendar_insight_tier": "full",
+        "goal_system_tier": "advanced",
+        "share_features": true
+      },
+      "commerce_effects": {
+        "commerce_visibility": "full",
+        "symbolic_asset_tier": "full",
+        "themed_suggestions": true
+      },
+      "status": "draft",
+      "version": "1.0.0"
+    },
+    "master": {
+      "stage_code": "master",
+      "user_facing_summary": "Maturity mode: long-horizon PEG-aware guidance, maximum depth and stage-native commerce.",
+      "intelligence_effects": {
+        "context_slice_depth": "full",
+        "memory_window_days": 365,
+        "prompt_tone": "concise",
+        "answer_length": "deep",
+        "interpretation_level_max": "L4",
+        "personalization_depth": "full",
+        "active_knowledge_cap": 5
+      },
+      "engine_effects": {
+        "llm_budget_tier": "high",
+        "max_context_lines": 5,
+        "llm_model_tier": "premium",
+        "max_tokens_cap": "high"
+      },
+      "unlock_effects": {
+        "path_themes_max_active": 6,
+        "cycle_lengths_available": [7, 21, 30, 90],
+        "practice_pack_tier": "full",
+        "calendar_insight_tier": "full",
+        "goal_system_tier": "advanced",
+        "share_features": true
+      },
+      "commerce_effects": {
+        "commerce_visibility": "full",
+        "symbolic_asset_tier": "full",
+        "themed_suggestions": true
+      },
+      "status": "draft",
+      "version": "1.0.0"
+    }
+  }
+}

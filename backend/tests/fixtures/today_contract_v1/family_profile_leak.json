@@ -1,0 +1,49 @@
+{
+  "spheres": {
+    "love": { "score": 70 },
+    "work": { "score": 68 },
+    "money": { "score": 65 },
+    "energy": { "score": 72 }
+  },
+  "narrative": {
+    "guide": {
+      "generation_id": "gen-family-profile",
+      "payload": {
+        "headline": "Проживать день через устойчивость и последовательность.",
+        "subline": "Без резких скачков."
+      }
+    },
+    "spheres": {
+      "payload": {
+        "body_insight": "Проживать день через устойчивость и последовательность.",
+        "family_insight": "В семье Игорь стремится к гармонии и пониманию. Он заботится о близких и ценит тёплую атмосферу.",
+        "family_support": "В семье Игорь стремится к гармонии и пониманию. Он заботится о близких."
+      }
+    }
+  },
+  "morning_ritual": {
+    "daily_horoscope": {
+      "spine": {
+        "best_mode": "Проживать день через устойчивость.",
+        "first_move": "Сделай один шаг по дому до обеда.",
+        "main_risk": "Контроль и спешка в семейных темах."
+      },
+      "scenarios": [
+        {
+          "slug": "family",
+          "focus": "Спокойный ритм дома",
+          "summary": "Один разговор без давления."
+        }
+      ]
+    },
+    "daily_recommendations": {
+      "what_to_do": "Сделай один бытовой шаг.",
+      "what_to_avoid": "Спешка в семейных разговорах."
+    }
+  },
+  "fusion": {
+    "scores": { "energy": 70, "emotional_balance": 68, "focus": 70 },
+    "encouragement": "Ровный день."
+  },
+  "fallback_context": { "locale": "ru", "progress": {} }
+}

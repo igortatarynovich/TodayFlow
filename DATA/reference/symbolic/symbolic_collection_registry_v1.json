@@ -1,0 +1,426 @@
+{
+  "contract_version": "symbolic_collection_registry_v1",
+  "domain": "symbolic",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "D1.3 Symbolic Collection registry — curated asset groupings only (not shop bundles).",
+  "symbolic_collections": {
+    "clarity_path_symbols": {
+      "contract_version": "symbolic_collection_v1",
+      "collection_code": "clarity_path_symbols",
+      "title": "Clarity Path Symbols",
+      "collection_type": "path",
+      "asset_codes": [
+        "amethyst",
+        "high_priestess",
+        "blue_candle",
+        "labradorite"
+      ],
+      "primary_theme_codes": [
+        "clarity",
+        "focus"
+      ],
+      "association_refs": [
+        "assoc_amethyst_path_clarity",
+        "assoc_high_priestess_path_clarity",
+        "assoc_blue_candle_path_clarity"
+      ],
+      "compatible_contexts": [
+        "path:clarity"
+      ],
+      "visibility_tier": "none",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "discipline_path_symbols": {
+      "contract_version": "symbolic_collection_v1",
+      "collection_code": "discipline_path_symbols",
+      "title": "Discipline Path Symbols",
+      "collection_type": "path",
+      "asset_codes": [
+        "obsidian",
+        "emperor",
+        "magician",
+        "black_candle"
+      ],
+      "primary_theme_codes": [
+        "discipline",
+        "structure"
+      ],
+      "association_refs": [
+        "assoc_obsidian_path_discipline",
+        "assoc_emperor_path_discipline",
+        "assoc_magician_path_discipline"
+      ],
+      "compatible_contexts": [
+        "path:discipline"
+      ],
+      "visibility_tier": "none",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "purpose_path_symbols": {
+      "contract_version": "symbolic_collection_v1",
+      "collection_code": "purpose_path_symbols",
+      "title": "Purpose Path Symbols",
+      "collection_type": "path",
+      "asset_codes": [
+        "labradorite",
+        "world",
+        "compass",
+        "star"
+      ],
+      "primary_theme_codes": [
+        "purpose",
+        "spirituality"
+      ],
+      "association_refs": [
+        "assoc_labradorite_path_purpose",
+        "assoc_world_path_purpose",
+        "assoc_compass_path_purpose"
+      ],
+      "compatible_contexts": [
+        "path:purpose"
+      ],
+      "visibility_tier": "none",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "energy_path_symbols": {
+      "contract_version": "symbolic_collection_v1",
+      "collection_code": "energy_path_symbols",
+      "title": "Energy Path Symbols",
+      "collection_type": "path",
+      "asset_codes": [
+        "quartz",
+        "citrine",
+        "fire",
+        "sun"
+      ],
+      "primary_theme_codes": [
+        "energy",
+        "action"
+      ],
+      "association_refs": [
+        "assoc_quartz_path_energy",
+        "assoc_citrine_path_wealth"
+      ],
+      "compatible_contexts": [
+        "path:energy"
+      ],
+      "visibility_tier": "none",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "explorer_stage_symbols": {
+      "contract_version": "symbolic_collection_v1",
+      "collection_code": "explorer_stage_symbols",
+      "title": "Explorer Stage Symbols",
+      "collection_type": "stage",
+      "asset_codes": [
+        "compass",
+        "explorer",
+        "fool",
+        "phoenix"
+      ],
+      "primary_theme_codes": [
+        "action",
+        "purpose"
+      ],
+      "association_refs": [
+        "assoc_compass_stage_explorer",
+        "assoc_explorer_stage_explorer",
+        "assoc_fool_stage_seeker"
+      ],
+      "compatible_contexts": [
+        "stage:explorer"
+      ],
+      "visibility_tier": "none",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "architect_stage_symbols": {
+      "contract_version": "symbolic_collection_v1",
+      "collection_code": "architect_stage_symbols",
+      "title": "Architect Stage Symbols",
+      "collection_type": "stage",
+      "asset_codes": [
+        "emperor",
+        "key",
+        "tree_of_life",
+        "gold"
+      ],
+      "primary_theme_codes": [
+        "structure",
+        "discipline"
+      ],
+      "association_refs": [
+        "assoc_emperor_stage_architect",
+        "assoc_key_practice_planning"
+      ],
+      "compatible_contexts": [
+        "stage:architect"
+      ],
+      "visibility_tier": "none",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "mentor_stage_symbols": {
+      "contract_version": "symbolic_collection_v1",
+      "collection_code": "mentor_stage_symbols",
+      "title": "Mentor Stage Symbols",
+      "collection_type": "stage",
+      "asset_codes": [
+        "sage",
+        "hermit",
+        "high_priestess",
+        "moon"
+      ],
+      "primary_theme_codes": [
+        "spirituality",
+        "clarity"
+      ],
+      "association_refs": [
+        "assoc_sage_stage_mentor",
+        "assoc_hermit_stage_observer",
+        "assoc_high_priestess_stage_observer"
+      ],
+      "compatible_contexts": [
+        "stage:mentor"
+      ],
+      "visibility_tier": "none",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "recovery_cycle_symbols": {
+      "contract_version": "symbolic_collection_v1",
+      "collection_code": "recovery_cycle_symbols",
+      "title": "Recovery Cycle Symbols",
+      "collection_type": "cycle",
+      "asset_codes": [
+        "phoenix",
+        "white_candle",
+        "healer",
+        "water"
+      ],
+      "primary_theme_codes": [
+        "recovery",
+        "healing"
+      ],
+      "association_refs": [
+        "assoc_phoenix_cycle_seven_day",
+        "assoc_white_candle_practice_reflection"
+      ],
+      "compatible_contexts": [
+        "cycle:seven_day_energy_reset"
+      ],
+      "visibility_tier": "none",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "discipline_cycle_symbols": {
+      "contract_version": "symbolic_collection_v1",
+      "collection_code": "discipline_cycle_symbols",
+      "title": "Discipline Cycle Symbols",
+      "collection_type": "cycle",
+      "asset_codes": [
+        "obsidian",
+        "black_candle",
+        "warrior",
+        "earth"
+      ],
+      "primary_theme_codes": [
+        "discipline",
+        "grounding"
+      ],
+      "association_refs": [
+        "assoc_obsidian_cycle_twenty_one",
+        "assoc_obsidian_path_discipline"
+      ],
+      "compatible_contexts": [
+        "cycle:twenty_one_day_discipline_cycle"
+      ],
+      "visibility_tier": "none",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "clarity_cycle_symbols": {
+      "contract_version": "symbolic_collection_v1",
+      "collection_code": "clarity_cycle_symbols",
+      "title": "Clarity Cycle Symbols",
+      "collection_type": "cycle",
+      "asset_codes": [
+        "amethyst",
+        "blue_candle",
+        "hermit",
+        "air"
+      ],
+      "primary_theme_codes": [
+        "clarity",
+        "focus"
+      ],
+      "association_refs": [
+        "assoc_amethyst_cycle_thirty_day",
+        "assoc_amethyst_path_clarity"
+      ],
+      "compatible_contexts": [
+        "cycle:thirty_day_clarity_cycle"
+      ],
+      "visibility_tier": "none",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "recovery_rhythm_symbols": {
+      "contract_version": "symbolic_collection_v1",
+      "collection_code": "recovery_rhythm_symbols",
+      "title": "Recovery Rhythm Symbols",
+      "collection_type": "rhythm",
+      "asset_codes": [
+        "healer",
+        "moonstone",
+        "water",
+        "rose_quartz"
+      ],
+      "primary_theme_codes": [
+        "recovery",
+        "healing"
+      ],
+      "association_refs": [
+        "assoc_healer_rhythm_recovery",
+        "assoc_moonstone_rhythm_energy"
+      ],
+      "compatible_contexts": [
+        "rhythm:recovery_day_pattern"
+      ],
+      "visibility_tier": "none",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "reflection_rhythm_symbols": {
+      "contract_version": "symbolic_collection_v1",
+      "collection_code": "reflection_rhythm_symbols",
+      "title": "Reflection Rhythm Symbols",
+      "collection_type": "rhythm",
+      "asset_codes": [
+        "hermit",
+        "white_candle",
+        "moon",
+        "blue_candle"
+      ],
+      "primary_theme_codes": [
+        "clarity",
+        "integration"
+      ],
+      "association_refs": [
+        "assoc_hermit_rhythm_reflection",
+        "assoc_blue_candle_rhythm_reflection"
+      ],
+      "compatible_contexts": [
+        "rhythm:reflection_timing_pattern"
+      ],
+      "visibility_tier": "none",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "reflection_practice_symbols": {
+      "contract_version": "symbolic_collection_v1",
+      "collection_code": "reflection_practice_symbols",
+      "title": "Reflection Practice Symbols",
+      "collection_type": "practice",
+      "asset_codes": [
+        "white_candle",
+        "hermit",
+        "moon",
+        "tree_of_life"
+      ],
+      "primary_theme_codes": [
+        "clarity",
+        "integration"
+      ],
+      "association_refs": [
+        "assoc_white_candle_practice_reflection",
+        "assoc_moon_practice_journaling"
+      ],
+      "compatible_contexts": [
+        "practice:reflection"
+      ],
+      "visibility_tier": "none",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "meditation_practice_symbols": {
+      "contract_version": "symbolic_collection_v1",
+      "collection_code": "meditation_practice_symbols",
+      "title": "Meditation Practice Symbols",
+      "collection_type": "practice",
+      "asset_codes": [
+        "black_candle",
+        "tree_of_life",
+        "sage",
+        "silver"
+      ],
+      "primary_theme_codes": [
+        "spirituality",
+        "grounding"
+      ],
+      "association_refs": [
+        "assoc_black_candle_practice_meditation",
+        "assoc_tree_of_life_practice_meditation"
+      ],
+      "compatible_contexts": [
+        "practice:meditation"
+      ],
+      "visibility_tier": "none",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "slow_tempo_grounding_symbols": {
+      "contract_version": "symbolic_collection_v1",
+      "collection_code": "slow_tempo_grounding_symbols",
+      "title": "Slow Tempo Grounding Symbols",
+      "collection_type": "theme",
+      "asset_codes": [
+        "earth",
+        "obsidian",
+        "black_candle",
+        "spiral"
+      ],
+      "primary_theme_codes": [
+        "grounding",
+        "recovery"
+      ],
+      "association_refs": [
+        "assoc_earth_tempo_slow_down",
+        "assoc_obsidian_risk_overpressure"
+      ],
+      "compatible_contexts": [],
+      "visibility_tier": "none",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "protection_theme_symbols": {
+      "contract_version": "symbolic_collection_v1",
+      "collection_code": "protection_theme_symbols",
+      "title": "Protection Theme Symbols",
+      "collection_type": "theme",
+      "asset_codes": [
+        "obsidian",
+        "black",
+        "warrior",
+        "guardian"
+      ],
+      "primary_theme_codes": [
+        "protection",
+        "boundary"
+      ],
+      "association_refs": [
+        "assoc_obsidian_path_discipline",
+        "assoc_guardian_path_relationships"
+      ],
+      "compatible_contexts": [],
+      "visibility_tier": "none",
+      "status": "active",
+      "version": "1.0.0"
+    }
+  }
+}

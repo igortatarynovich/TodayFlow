@@ -1,0 +1,15 @@
+/* Global layout overrides for /profile editorial — not a CSS module */
+
+.profile-editorial-route.orbit-hero-content-block {
+  padding-left: 0;
+  padding-right: 0;
+  background: transparent;
+}
+
+.profile-editorial-route-container {
+  display: block;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}

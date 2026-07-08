@@ -1,0 +1,12 @@
+[
+  "message",
+  "tone",
+  "ignore",
+  "deadline",
+  "waiting_reply",
+  "meeting",
+  "call",
+  "silence",
+  "feedback",
+  "boundary"
+]

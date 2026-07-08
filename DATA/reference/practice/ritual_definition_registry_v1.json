@@ -1,0 +1,346 @@
+{
+  "contract_version": "ritual_definition_registry_v1",
+  "domain": "practice",
+  "version": "1.0.0",
+  "status": "draft",
+  "description": "C1.5 Ritual Definition registry — repeatable containers of practice/habit/ascetic components. No UI, prompts, or user state.",
+  "ritual_definitions": {
+    "morning_grounding_ritual": {
+      "code": "morning_grounding_ritual",
+      "title": "Morning grounding ritual",
+      "ritual_category": "morning",
+      "description": "Ordered morning block combining breath, gratitude, and phone boundary.",
+      "components": [
+        {
+          "component_type": "practice",
+          "component_code": "breathing",
+          "required": true,
+          "order": 1,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "habit",
+          "component_code": "daily_gratitude",
+          "required": true,
+          "order": 2,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "ascetic",
+          "component_code": "morning_no_phone",
+          "required": false,
+          "order": 3,
+          "minimum_required_for_completion": false
+        }
+      ],
+      "component_count": 3,
+      "sequence_type": "ordered",
+      "recommended_frequency": "daily",
+      "minimum_completion_rule": {
+        "components_required": 2,
+        "period": "day"
+      },
+      "compatible_paths": ["discipline", "energy", "clarity"],
+      "compatible_stages": ["seeker", "observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "suggested_duration_range": { "min_minutes": 5, "max_minutes": 15 },
+      "produces_signals": ["practice_completed", "ritual_streak_confirmed"],
+      "difficulty_level": "beginner",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "evening_reflection_ritual": {
+      "code": "evening_reflection_ritual",
+      "title": "Evening reflection ritual",
+      "ritual_category": "evening",
+      "description": "Evening closure block combining reflection practice and journaling habit.",
+      "components": [
+        {
+          "component_type": "practice",
+          "component_code": "reflection",
+          "required": true,
+          "order": 1,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "habit",
+          "component_code": "evening_reflection",
+          "required": true,
+          "order": 2,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "practice",
+          "component_code": "journaling",
+          "required": false,
+          "order": 3,
+          "minimum_required_for_completion": false
+        }
+      ],
+      "component_count": 3,
+      "sequence_type": "ordered",
+      "recommended_frequency": "daily",
+      "minimum_completion_rule": {
+        "components_required": 2,
+        "period": "day"
+      },
+      "compatible_paths": ["clarity", "healing", "relationships", "spirituality"],
+      "compatible_stages": ["observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "suggested_duration_range": { "min_minutes": 8, "max_minutes": 25 },
+      "produces_signals": ["practice_completed", "ritual_streak_confirmed"],
+      "difficulty_level": "beginner",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "focus_start_ritual": {
+      "code": "focus_start_ritual",
+      "title": "Focus start ritual",
+      "ritual_category": "focus",
+      "description": "Pre-work focus block with attention training and single-task constraint.",
+      "components": [
+        {
+          "component_type": "practice",
+          "component_code": "attention_training",
+          "required": true,
+          "order": 1,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "habit",
+          "component_code": "morning_planning",
+          "required": true,
+          "order": 2,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "ascetic",
+          "component_code": "no_multitasking",
+          "required": false,
+          "order": 3,
+          "minimum_required_for_completion": false
+        }
+      ],
+      "component_count": 3,
+      "sequence_type": "ordered",
+      "recommended_frequency": "daily",
+      "minimum_completion_rule": {
+        "components_required": 2,
+        "period": "day"
+      },
+      "compatible_paths": ["discipline", "clarity", "purpose"],
+      "compatible_stages": ["practitioner", "explorer", "architect", "mentor", "master"],
+      "suggested_duration_range": { "min_minutes": 5, "max_minutes": 20 },
+      "produces_signals": ["practice_completed", "ritual_streak_confirmed"],
+      "difficulty_level": "intermediate",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "recovery_evening_ritual": {
+      "code": "recovery_evening_ritual",
+      "title": "Recovery evening ritual",
+      "ritual_category": "recovery",
+      "description": "Evening recovery block pairing somatic activation with early sleep boundary.",
+      "components": [
+        {
+          "component_type": "practice",
+          "component_code": "body_activation",
+          "required": true,
+          "order": 1,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "ascetic",
+          "component_code": "early_sleep_window",
+          "required": true,
+          "order": 2,
+          "minimum_required_for_completion": true
+        }
+      ],
+      "component_count": 2,
+      "sequence_type": "ordered",
+      "recommended_frequency": "daily",
+      "minimum_completion_rule": {
+        "components_required": 2,
+        "period": "day"
+      },
+      "compatible_paths": ["body", "energy", "healing"],
+      "compatible_stages": ["seeker", "observer", "practitioner", "explorer", "architect"],
+      "suggested_duration_range": { "min_minutes": 10, "max_minutes": 30 },
+      "produces_signals": ["practice_completed", "ritual_streak_confirmed"],
+      "difficulty_level": "beginner",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "discipline_reset_ritual": {
+      "code": "discipline_reset_ritual",
+      "title": "Discipline reset ritual",
+      "ritual_category": "discipline",
+      "description": "Flexible discipline reset combining breath and meditation habits.",
+      "components": [
+        {
+          "component_type": "practice",
+          "component_code": "breathing",
+          "required": true,
+          "order": null,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "habit",
+          "component_code": "meditation_minutes",
+          "required": true,
+          "order": null,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "habit",
+          "component_code": "daily_breathing",
+          "required": false,
+          "order": null,
+          "minimum_required_for_completion": false
+        }
+      ],
+      "component_count": 3,
+      "sequence_type": "flexible",
+      "recommended_frequency": "daily",
+      "minimum_completion_rule": {
+        "components_required": 2,
+        "period": "day"
+      },
+      "compatible_paths": ["discipline", "energy", "spirituality"],
+      "compatible_stages": ["practitioner", "explorer", "architect", "mentor", "master"],
+      "suggested_duration_range": { "min_minutes": 8, "max_minutes": 25 },
+      "produces_signals": ["practice_completed", "ritual_streak_confirmed"],
+      "difficulty_level": "intermediate",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "clarity_journaling_ritual": {
+      "code": "clarity_journaling_ritual",
+      "title": "Clarity journaling ritual",
+      "ritual_category": "reflection",
+      "description": "Reflection block centered on journaling practice and weekly journaling habit.",
+      "components": [
+        {
+          "component_type": "practice",
+          "component_code": "journaling",
+          "required": true,
+          "order": 1,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "habit",
+          "component_code": "journaling_streak",
+          "required": false,
+          "order": 2,
+          "minimum_required_for_completion": false
+        },
+        {
+          "component_type": "practice",
+          "component_code": "self_observation",
+          "required": false,
+          "order": 3,
+          "minimum_required_for_completion": false
+        }
+      ],
+      "component_count": 3,
+      "sequence_type": "ordered",
+      "recommended_frequency": "weekly",
+      "minimum_completion_rule": {
+        "components_required": 1,
+        "period": "week"
+      },
+      "compatible_paths": ["clarity", "creativity", "purpose"],
+      "compatible_stages": ["observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "suggested_duration_range": { "min_minutes": 10, "max_minutes": 30 },
+      "produces_signals": ["practice_completed", "ritual_streak_confirmed"],
+      "difficulty_level": "intermediate",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "body_energy_ritual": {
+      "code": "body_energy_ritual",
+      "title": "Body energy ritual",
+      "ritual_category": "recovery",
+      "description": "Body-energy block linking somatic practice and daily body activation habit.",
+      "components": [
+        {
+          "component_type": "practice",
+          "component_code": "body_activation",
+          "required": true,
+          "order": 1,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "habit",
+          "component_code": "body_activation",
+          "required": true,
+          "order": 2,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "practice",
+          "component_code": "breathing",
+          "required": false,
+          "order": 3,
+          "minimum_required_for_completion": false
+        }
+      ],
+      "component_count": 3,
+      "sequence_type": "ordered",
+      "recommended_frequency": "daily",
+      "minimum_completion_rule": {
+        "components_required": 2,
+        "period": "day"
+      },
+      "compatible_paths": ["body", "energy", "discipline"],
+      "compatible_stages": ["seeker", "observer", "practitioner", "explorer", "architect"],
+      "suggested_duration_range": { "min_minutes": 10, "max_minutes": 25 },
+      "produces_signals": ["practice_completed", "ritual_streak_confirmed"],
+      "difficulty_level": "beginner",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "no_phone_evening_ritual": {
+      "code": "no_phone_evening_ritual",
+      "title": "No phone evening ritual",
+      "ritual_category": "evening",
+      "description": "Evening digital boundary block combining ascetic rules with brief reflection.",
+      "components": [
+        {
+          "component_type": "ascetic",
+          "component_code": "no_social_media_evening",
+          "required": true,
+          "order": 1,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "ascetic",
+          "component_code": "no_late_night_scrolling",
+          "required": true,
+          "order": 2,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "practice",
+          "component_code": "reflection",
+          "required": false,
+          "order": 3,
+          "minimum_required_for_completion": false
+        }
+      ],
+      "component_count": 3,
+      "sequence_type": "ordered",
+      "recommended_frequency": "daily",
+      "minimum_completion_rule": {
+        "components_required": 2,
+        "period": "day"
+      },
+      "compatible_paths": ["discipline", "clarity", "energy"],
+      "compatible_stages": ["observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "suggested_duration_range": { "min_minutes": 5, "max_minutes": 15 },
+      "produces_signals": ["practice_completed", "ritual_streak_confirmed"],
+      "difficulty_level": "beginner",
+      "status": "active",
+      "version": "1.0.0"
+    }
+  }
+}

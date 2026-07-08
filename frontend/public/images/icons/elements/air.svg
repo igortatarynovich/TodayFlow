@@ -1,0 +1,9 @@
+<svg width="56" height="56" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>Air</title>
+  <g stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 10h16"/>
+    <path d="M8 14h12"/>
+    <path d="M6 18h16"/>
+    <path d="M20 10l2-2M20 18l2 2"/>
+  </g>
+</svg>

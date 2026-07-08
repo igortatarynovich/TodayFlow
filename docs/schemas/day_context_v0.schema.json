@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://todayflow.app/schemas/day_context_v0.json",
+  "title": "TodayFlow DayContext v0 (engine input)",
+  "description": "Logical day pack for narrative and explainability. See docs/DAY_CONTEXT_V0.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "meta", "layers"],
+  "properties": {
+    "contract_version": {
+      "type": "string",
+      "const": "day_context_v0"
+    },
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_date", "locale", "insight_depth_tier"],
+      "properties": {
+        "target_date": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "locale": { "type": "string", "minLength": 1, "maxLength": 32 },
+        "insight_depth_tier": {
+          "type": "string",
+          "enum": ["free", "pro", "premium"]
+        },
+        "depth_level": {
+          "type": "string",
+          "enum": ["quick", "normal", "deep"],
+          "description": "DE-8: narrative depth for one LLM call (not subscription tier)."
+        },
+        "policy_version": { "type": "string", "maxLength": 64 },
+        "voice_profile": { "type": "string", "maxLength": 64 },
+        "profile_snapshot_id": { "type": ["integer", "null"] },
+        "ritual_context_fingerprint": { "type": "string", "maxLength": 64 }
+      }
+    },
+    "layers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fusion", "user_core"],
+      "properties": {
+        "ritual": { "$ref": "#/$defs/ritual_layer" },
+        "fusion": { "$ref": "#/$defs/fusion_layer" },
+        "user_core": { "type": "object", "additionalProperties": true },
+        "daily_foundation": { "type": ["object", "null"] },
+        "behavior_patterns": { "type": ["object", "null"] },
+        "history": { "type": ["object", "null"] },
+        "intent": { "type": ["object", "null"] },
+        "health_signals": { "type": ["object", "null"] },
+        "visible_profile": {
+          "description": "User-facing facts only (name, intentions, ritual mood, Flow goals); see profile_prompt_slices_v0.",
+          "type": ["object", "null"],
+          "additionalProperties": true
+        },
+        "internal_profile": {
+          "description": "Aggregates for LLM (learning excerpts, meaning_events hints, scores); not verbatim UX.",
+          "type": ["object", "null"],
+          "additionalProperties": true
+        },
+        "day_model": {
+          "description": "Deterministic DayModel v0 (§10 DAY_ENGINE): vector, tension, opportunity, risk, tempo, strategy.",
+          "type": "object",
+          "additionalProperties": true
+        },
+        "guide_decision": {
+          "description": "Deterministic guide_decision_v0: server-side day decision merged into narrative guide (headline, core_message, do/avoid).",
+          "type": "object",
+          "additionalProperties": true
+        },
+        "profile_selector": {
+          "description": "Profile Selector v0 output (task, topic, mode, relevant_profile, generation_rules). See docs/PROFILE_ENGINE_AND_SELECTOR.md.",
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    }
+  },
+  "$defs": {
+    "ritual_layer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tarot_main_id": { "type": "integer", "minimum": 1 },
+        "tarot_name_ru": { "type": "string", "maxLength": 160 },
+        "numerology_value": { "type": "string", "maxLength": 24 },
+        "mood": { "type": "string", "maxLength": 80 },
+        "head_topic": { "type": "string", "maxLength": 120 },
+        "day_events": {
+          "type": "array",
+          "maxItems": 30,
+          "items": { "type": "string", "maxLength": 240 }
+        }
+      }
+    },
+    "fusion_layer": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["date", "scores", "rhythm_context", "recommendations", "encouragement"],
+      "properties": {
+        "date": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+        "scores": { "type": "object" },
+        "cycle_context": { "type": "object" },
+        "activity_context": { "type": "object" },
+        "rhythm_context": { "$ref": "#/$defs/rhythm_context" },
+        "recommendations": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "encouragement": { "type": "string" }
+      }
+    },
+    "rhythm_context": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "goals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "title": { "type": "string" },
+              "scope": { "type": "string" },
+              "completed": { "type": "boolean" }
+            }
+          }
+        },
+        "habits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "name": { "type": "string" },
+              "category": { "type": ["string", "null"] },
+              "frequency": { "type": "string" },
+              "completed_today": { "type": "boolean" }
+            }
+          }
+        },
+        "ascetics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "title": { "type": "string" },
+              "streak_days": { "type": "integer" },
+              "completed_today": { "type": "boolean" }
+            }
+          }
+        },
+        "diary": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "has_entry_today": { "type": "boolean" },
+            "entries_last_7_days": { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    }
+  }
+}

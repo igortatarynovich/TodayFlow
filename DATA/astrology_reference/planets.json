@@ -1,0 +1,122 @@
+[
+  {
+    "id": "sun",
+    "name": "Sun",
+    "type": "luminary",
+    "keywords": ["identity", "vitality", "expression"],
+    "psychology": "Represents core self, conscious will, and the way we radiate presence.",
+    "rulerships": ["leo"],
+    "exaltation": "aries",
+    "detriment": "aquarius",
+    "fall": "libra",
+    "stones": ["sunstone", "citrine"]
+  },
+  {
+    "id": "moon",
+    "name": "Moon",
+    "type": "luminary",
+    "keywords": ["emotion", "instinct", "memory"],
+    "psychology": "Describes feeling body, habits, and need for safety.",
+    "rulerships": ["cancer"],
+    "exaltation": "taurus",
+    "detriment": "capricorn",
+    "fall": "scorpio",
+    "stones": ["moonstone", "pearl"]
+  },
+  {
+    "id": "mercury",
+    "name": "Mercury",
+    "type": "planet",
+    "keywords": ["communication", "analysis", "movement"],
+    "psychology": "Translates perception into language and coordinates cognition.",
+    "rulerships": ["gemini", "virgo"],
+    "exaltation": "virgo",
+    "detriment": "sagittarius",
+    "fall": "pisces",
+    "stones": ["agate", "hematite"]
+  },
+  {
+    "id": "venus",
+    "name": "Venus",
+    "type": "planet",
+    "keywords": ["attraction", "values", "harmony"],
+    "psychology": "Shows how we connect, give/receive, and evaluate pleasure.",
+    "rulerships": ["taurus", "libra"],
+    "exaltation": "pisces",
+    "detriment": "scorpio",
+    "fall": "virgo",
+    "stones": ["rose_quartz", "emerald"]
+  },
+  {
+    "id": "mars",
+    "name": "Mars",
+    "type": "planet",
+    "keywords": ["drive", "assertion", "heat"],
+    "psychology": "Describes how we pursue goals and defend boundaries.",
+    "rulerships": ["aries", "scorpio"],
+    "exaltation": "capricorn",
+    "detriment": "libra",
+    "fall": "cancer",
+    "stones": ["carnelian", "bloodstone"]
+  },
+  {
+    "id": "jupiter",
+    "name": "Jupiter",
+    "type": "planet",
+    "keywords": ["expansion", "meaning", "support"],
+    "psychology": "Signals faith, worldview, and how we experience growth.",
+    "rulerships": ["sagittarius", "pisces"],
+    "exaltation": "cancer",
+    "detriment": "gemini",
+    "fall": "capricorn",
+    "stones": ["turquoise", "amethyst"]
+  },
+  {
+    "id": "saturn",
+    "name": "Saturn",
+    "type": "planet",
+    "keywords": ["structure", "discipline", "limits"],
+    "psychology": "Defines responsibility, mastery tests, and long-term pacing.",
+    "rulerships": ["capricorn", "aquarius"],
+    "exaltation": "libra",
+    "detriment": "cancer",
+    "fall": "aries",
+    "stones": ["onyx", "obsidian"]
+  },
+  {
+    "id": "uranus",
+    "name": "Uranus",
+    "type": "outer",
+    "keywords": ["innovation", "liberation", "disruption"],
+    "psychology": "Marks where we seek freedom, experiment, and break patterns.",
+    "rulerships": ["aquarius"],
+    "exaltation": "scorpio",
+    "detriment": "leo",
+    "fall": "taurus",
+    "stones": ["labradorite", "fluorite"]
+  },
+  {
+    "id": "neptune",
+    "name": "Neptune",
+    "type": "outer",
+    "keywords": ["imagination", "dissolution", "idealism"],
+    "psychology": "Reveals sensitivity to collective moods and transcendence.",
+    "rulerships": ["pisces"],
+    "exaltation": "cancer",
+    "detriment": "virgo",
+    "fall": "capricorn",
+    "stones": ["aquamarine", "iolite"]
+  },
+  {
+    "id": "pluto",
+    "name": "Pluto",
+    "type": "outer",
+    "keywords": ["power", "transformation", "shadow"],
+    "psychology": "Points to deep metamorphosis and intensity triggers.",
+    "rulerships": ["scorpio"],
+    "exaltation": "leo",
+    "detriment": "taurus",
+    "fall": "aquarius",
+    "stones": ["obsidian", "garnet"]
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "event": {
+    "title_template": "{planet} {event}",
+    "meta": {
+      "sign": "Sign: {sign}",
+      "aspect": "Aspect: {aspect}"
+    }
+  },
+  "window": {
+    "defaultTitle": "{planet} {type}",
+    "range": "{start} → {end}",
+    "meta": "{status} · {range}",
+    "status": {
+      "active": "Active now",
+      "upcoming": "Upcoming",
+      "past": "Past"
+    }
+  }
+}
+

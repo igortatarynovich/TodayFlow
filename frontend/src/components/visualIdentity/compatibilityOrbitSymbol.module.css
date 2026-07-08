@@ -1,0 +1,5 @@
+.root {
+  display: block;
+  flex-shrink: 0;
+  color: var(--tf-ink-soft, #5b4630);
+}

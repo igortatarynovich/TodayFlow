@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://todayflow.app/schemas/today_day_v1.json",
+  "title": "TodayFlow Today day payload (post-ritual)",
+  "description": "Canonical contract today_day_v1. See docs/TODAY_PERSONALIZATION_CORE.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "core_message",
+    "spheres",
+    "action_options",
+    "support",
+    "feedback_questions"
+  ],
+  "properties": {
+    "contract_version": {
+      "type": "string",
+      "const": "today_day_v1"
+    },
+    "core_message": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "text", "risk", "best_move"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1 },
+        "text": { "type": "string", "minLength": 1 },
+        "risk": { "type": "string", "minLength": 1 },
+        "best_move": { "type": "string", "minLength": 1 }
+      }
+    },
+    "spheres": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": { "$ref": "#/$defs/sphere" },
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "required": ["id"],
+            "properties": { "id": { "const": "work" } }
+          }
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["id"],
+            "properties": { "id": { "const": "love" } }
+          }
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["id"],
+            "properties": { "id": { "const": "money" } }
+          }
+        }
+      ]
+    },
+    "action_options": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": { "$ref": "#/$defs/action_option" }
+    },
+    "support": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recommended", "title", "reason", "cta"],
+      "properties": {
+        "recommended": {
+          "type": "string",
+          "enum": ["practice", "goal", "habit", "ascetic", "none"]
+        },
+        "title": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 },
+        "cta": { "type": "string", "minLength": 1 }
+      }
+    },
+    "feedback_questions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": { "$ref": "#/$defs/feedback_question" }
+    }
+  },
+  "$defs": {
+    "sphere": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "score", "status", "why", "do", "avoid", "question"],
+      "properties": {
+        "id": { "type": "string", "enum": ["work", "love", "money"] },
+        "title": { "type": "string", "minLength": 1 },
+        "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "status": { "type": "string", "enum": ["strong", "weak", "neutral"] },
+        "why": { "type": "string", "minLength": 1 },
+        "do": { "type": "string", "minLength": 1 },
+        "avoid": { "type": "string", "minLength": 1 },
+        "question": { "type": "string", "minLength": 1 }
+      }
+    },
+    "action_option": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "why", "estimated_minutes", "creates"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "why": { "type": "string", "minLength": 1 },
+        "estimated_minutes": { "type": "integer", "minimum": 1 },
+        "creates": {
+          "type": "string",
+          "enum": ["focus_session"],
+          "description": "Extend enum in schema when new product flows ship."
+        }
+      }
+    },
+    "feedback_question": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "question", "options"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "pattern": "^[a-z0-9_]+$" },
+        "question": { "type": "string", "minLength": 1 },
+        "options": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

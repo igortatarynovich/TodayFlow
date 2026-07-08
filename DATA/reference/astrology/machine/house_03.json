@@ -1,0 +1,21 @@
+{
+  "contract_version": "reference_machine_contract_v1",
+  "domain": "astrology",
+  "entity_code": "astrology.house.03",
+  "entity_type": "House",
+  "version": "0.1.0",
+  "status": "draft",
+  "machine_contract": {
+    "vector": {
+      "action_reflection": 0.25,
+      "expansion_consolidation": 0.25,
+      "self_others": 0.5,
+      "structure_flow": -0.3
+    },
+    "tempo": "dynamic",
+    "risk": "low",
+    "risk_modifier": 0.05,
+    "emotional_load": "neutral",
+    "confidence": 0.86
+  }
+}

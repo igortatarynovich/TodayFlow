@@ -1,0 +1,155 @@
+.page {
+  min-height: 100dvh;
+  background: var(--tf-page, #f3efe8);
+}
+
+.shell {
+  max-width: 36rem;
+  margin: 0 auto;
+  padding: 1.25rem 1.25rem 2.5rem;
+}
+
+.shellWide {
+  max-width: 52rem;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: 0.85rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--tf-caption, #9a8468);
+  text-decoration: none;
+}
+
+.kicker {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.title {
+  margin: 0.55rem 0 0;
+  font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
+  font-size: clamp(1.65rem, 7vw, 2.1rem);
+  line-height: 1.12;
+  color: var(--tf-ink, #1a1510);
+}
+
+.lead {
+  margin: 0.75rem 0 0;
+  line-height: 1.55;
+  color: var(--tf-body, #475569);
+}
+
+.body {
+  margin-top: 1.25rem;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.field {
+  width: 100%;
+  padding: 0.85rem 0.95rem;
+  border-radius: 14px;
+  border: 1px solid rgba(201, 168, 115, 0.28);
+  background: rgba(255, 253, 249, 0.96);
+  font: inherit;
+  color: var(--tf-ink, #1a1510);
+}
+
+.field:focus {
+  outline: 2px solid rgba(166, 124, 58, 0.35);
+  outline-offset: 2px;
+}
+
+.error {
+  margin: 0;
+  color: #b45309;
+  font-size: 0.875rem;
+}
+
+.ctaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.35rem;
+}
+
+.previewCard {
+  padding: 1rem 1.05rem;
+  border-radius: 18px;
+  background: rgba(255, 253, 249, 0.92);
+  border: 1px solid rgba(201, 168, 115, 0.22);
+}
+
+.previewMeta {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.previewInsight {
+  margin: 0.65rem 0 0;
+  line-height: 1.55;
+  color: var(--tf-ink-soft, #5b4630);
+}
+
+.hint {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--tf-caption, #9a8468);
+}
+
+.previewIntro {
+  margin: 0;
+  line-height: 1.55;
+  color: var(--tf-body, #475569);
+}
+
+.previewClosing {
+  margin: 1.15rem 0 0;
+  line-height: 1.55;
+  color: var(--tf-ink-soft, #5b4630);
+  font-weight: 500;
+}
+
+.recognitionList {
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.recognitionItem {
+  padding: 0.95rem 1rem;
+  border-radius: 16px;
+  background: rgba(255, 253, 249, 0.92);
+  border: 1px solid rgba(201, 168, 115, 0.18);
+}
+
+.recognitionTitle {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--tf-ink, #1a1510);
+}
+
+.recognitionMark {
+  margin-right: 0.35rem;
+  color: var(--tf-caption, #9a8468);
+}
+
+.recognitionBody {
+  margin: 0.45rem 0 0;
+  line-height: 1.55;
+  color: var(--tf-body, #475569);
+}

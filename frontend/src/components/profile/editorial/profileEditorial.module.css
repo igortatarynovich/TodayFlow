@@ -1,0 +1,1289 @@
+/**
+ * Profile · Editorial layout
+ * Mobile-first app column · foundation tokens · no card grid
+ * Ref: Co-Star (journal), Headspace (restraint), TodayFlow FOUNDATION_UI
+ */
+
+.shell {
+  --pe-gutter: var(--tf-shell-gutter, 1.25rem);
+  --pe-max: var(--tf-shell-max, 52rem);
+  --pe-gap: var(--tf-shell-gap, 2.5rem);
+
+  width: 100%;
+  max-width: var(--pe-max);
+  margin: 0 auto;
+  padding: 0 var(--pe-gutter) 3rem;
+  box-sizing: border-box;
+  color: var(--tf-ink, #1a1510);
+  font-family: var(--tf-font-body, "Inter", system-ui, sans-serif);
+  font-size: var(--tf-type-body-size, 0.9375rem);
+  line-height: var(--tf-type-body-line, 1.55);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pe-gap);
+}
+
+/* —— Hero (Surface A) —— */
+.hero {
+  position: relative;
+  margin: 0 calc(-1 * var(--pe-gutter));
+  padding: 2.75rem var(--pe-gutter) 2.5rem;
+  min-height: min(72dvh, 34rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, rgba(255, 253, 249, 0.4) 0%, var(--tf-page, #f3efe8) 55%);
+  border-radius: 0 0 var(--tf-hero-large-radius-bottom, 36px) var(--tf-hero-large-radius-bottom, 36px);
+}
+
+.heroTop {
+  position: absolute;
+  top: 0.75rem;
+  left: var(--pe-gutter);
+  right: var(--pe-gutter);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.kicker {
+  margin: 0;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.textBtn {
+  padding: 0.25rem 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 600;
+  color: var(--tf-caption, #9a8468);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.symbol {
+  width: var(--tf-symbol-l, 80px);
+  height: var(--tf-symbol-l, 80px);
+  margin-bottom: 1.25rem;
+  color: var(--tf-ink-soft, #5b4630);
+}
+
+.archetype {
+  margin: 0;
+  font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
+  font-size: clamp(2rem, 9vw, var(--tf-type-display-size, 2.5rem));
+  font-weight: var(--tf-type-hero-weight, 700);
+  line-height: var(--tf-type-hero-line, 1.08);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--tf-ink, #1a1510);
+}
+
+.subtitle {
+  margin: 0.5rem 0 0;
+  font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
+  font-size: var(--tf-type-section-size, 1.25rem);
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--tf-accent-numerology, #4a3270);
+}
+
+.meta {
+  margin: 1rem 0 0;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.intro {
+  margin: 1.15rem 0 0;
+  max-width: var(--tf-shell-readable, 36rem);
+  color: var(--tf-body, #475569);
+}
+
+.midGrid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 56.25rem) {
+  .midGrid {
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .lifeGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  .lifeGrid .tintLove,
+  .lifeGrid .tintMoney {
+    margin: 0;
+    border-radius: var(--tf-surface-insight-radius, 28px);
+  }
+}
+
+.traits {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 1.25rem 0 0;
+  border-top: 1px solid rgba(154, 132, 104, 0.2);
+  display: grid;
+  gap: 0.85rem;
+}
+
+.trait {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.traitLabel {
+  font-size: var(--tf-type-caption-size, 0.625rem);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.traitText {
+  color: var(--tf-body, #475569);
+}
+
+/* —— Statement (Why) —— */
+.statement {
+  margin: 0;
+  padding-left: 1rem;
+  border-left: 3px solid var(--tf-accent-numerology, #4a3270);
+}
+
+.statementTitle {
+  margin: 0;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.statementLead {
+  margin: 0.75rem 0 0;
+  font-size: var(--tf-type-section-size, 1.25rem);
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--tf-ink, #1a1510);
+}
+
+.statementNote {
+  margin: 0.75rem 0 0;
+  color: var(--tf-body, #475569);
+}
+
+/* —— Section block —— */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sectionLabel {
+  margin: 0;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
+  font-size: var(--tf-type-section-size, 1.25rem);
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--tf-ink, #1a1510);
+}
+
+.sectionLead {
+  margin: 0;
+  color: var(--tf-body, #475569);
+}
+
+/* —— Мои дни (Profile min) —— */
+.myDays {
+  padding: 1.25rem 1.15rem;
+  border-radius: var(--tf-surface-portal-radius, 24px);
+  background: var(--tf-surface-insight-bg, rgba(255, 253, 249, 0.88));
+  box-shadow: var(--tf-surface-insight-shadow, 0 14px 48px rgba(91, 67, 35, 0.06));
+  border: 1px solid rgba(201, 168, 115, 0.2);
+}
+
+.myDaysList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.myDaysItem {
+  padding: 0.85rem 0.9rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(201, 168, 115, 0.16);
+}
+
+.myDaysDate {
+  margin: 0;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.myDaysFocus,
+.myDaysOutcome {
+  margin: 0.45rem 0 0;
+  line-height: 1.55;
+  color: var(--tf-ink-soft, #5b4630);
+}
+
+.myDaysFieldLabel {
+  display: block;
+  margin-bottom: 0.15rem;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.myDaysCta {
+  align-self: flex-start;
+  margin-top: 0.35rem;
+  text-decoration: none;
+}
+
+/* —— Portrait section band (MP-1 · PROFILE_SCREEN_MASTER §A) —— */
+.portraitSectionBand {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.portraitBandHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.portraitKicker {
+  margin: 0;
+  font-size: var(--profile-type-kicker-size, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--profile-accent-twilight, #4a3270);
+}
+
+.portraitLead {
+  margin: 0;
+  max-width: 36rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--profile-ink-soft, #5b4630);
+}
+
+/* —— Social Mirror (Name entity removed · PROFILE_SCREEN_MASTER §3.5) —— */
+.socialMirror {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.socialMirrorLead {
+  margin: 0;
+  padding-left: 1rem;
+  border-left: 3px solid var(--profile-accent-twilight, #4a3270);
+  font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--profile-ink-soft, #5b4630);
+}
+
+.socialMirrorLead p {
+  margin: 0;
+}
+
+.socialMirrorList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.socialMirrorItem {
+  padding-left: 1rem;
+  border-left: 1px solid rgba(154, 132, 104, 0.25);
+  line-height: 1.55;
+  color: var(--tf-body, #475569);
+}
+
+.socialMirrorFacets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.socialMirrorFacetBtn {
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(154, 132, 104, 0.35);
+  background: rgba(255, 253, 249, 0.9);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--profile-ink-soft, #5b4630);
+  cursor: pointer;
+}
+
+.socialMirrorFacetBtnActive {
+  border-color: var(--profile-accent-twilight, #4a3270);
+  background: rgba(74, 50, 112, 0.08);
+  color: var(--profile-accent-twilight, #4a3270);
+}
+
+.socialMirrorDetail {
+  padding: 0.85rem 1rem;
+  border-radius: 16px;
+  background: rgba(255, 253, 249, 0.92);
+  border: 1px solid rgba(201, 168, 115, 0.2);
+}
+
+.socialMirrorDetailLabel {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.socialMirrorDetailBody {
+  margin: 0.45rem 0 0;
+  line-height: 1.55;
+  color: var(--tf-body, #475569);
+}
+
+/* —— Living Maps section band (MP-1 · PROFILE_SCREEN_MASTER §7) —— */
+.livingMapsSectionBand {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.sectionDivider {
+  height: 1px;
+  margin: 0.25rem 0 0.5rem;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(166, 124, 58, 0.35) 12%,
+    rgba(74, 50, 112, 0.28) 50%,
+    rgba(166, 124, 58, 0.35) 88%,
+    transparent 100%
+  );
+}
+
+.livingMapsBandHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.livingMapsKicker {
+  margin: 0;
+  font-size: var(--profile-type-kicker-size, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--profile-accent-twilight, #4a3270);
+}
+
+.livingMapsLead {
+  margin: 0;
+  max-width: 36rem;
+  font-size: var(--profile-type-body-size, 0.9375rem);
+  line-height: 1.55;
+  color: var(--profile-ink-soft, #5b4630);
+}
+
+/* —— Maps preview (launch seed) —— */
+.mapsPreview {
+  padding: 1.15rem 1.1rem;
+  border-radius: var(--tf-surface-portal-radius, 24px);
+  background: linear-gradient(
+    145deg,
+    rgba(248, 242, 255, 0.55) 0%,
+    rgba(255, 253, 249, 0.92) 55%,
+    rgba(243, 239, 232, 0.85) 100%
+  );
+  border: 1px solid rgba(166, 124, 58, 0.18);
+  box-shadow: var(--tf-surface-insight-shadow, 0 14px 48px rgba(91, 67, 35, 0.05));
+}
+
+.mapsSeedStrip,
+.mapsSeedStripEmpty {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.15rem;
+}
+
+.mapsSeedDot {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.mapsSeedDotGhost {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 999px;
+  border: 1px dashed rgba(201, 168, 115, 0.35);
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.mapsSeedDotDone {
+  background: #6b8f5a;
+  box-shadow: 0 0 0 2px rgba(107, 143, 90, 0.22);
+}
+
+.mapsSeedDotPartial {
+  background: #c9a873;
+  box-shadow: 0 0 0 2px rgba(201, 168, 115, 0.22);
+}
+
+.mapsSeedDotNotDone {
+  background: #9a8468;
+  box-shadow: 0 0 0 2px rgba(154, 132, 104, 0.18);
+}
+
+.mapsLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mapsLegendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  color: var(--tf-caption, #9a8468);
+}
+
+.mapsExplore {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1.1rem;
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(166, 124, 58, 0.14);
+}
+
+.mapsExploreLink {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: #5b4335;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(91, 67, 53, 0.25);
+}
+
+.mapsExploreLink:hover {
+  color: #352515;
+  border-bottom-color: rgba(53, 37, 21, 0.45);
+}
+
+.mapsExploreGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  gap: 0.55rem;
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(166, 124, 58, 0.14);
+}
+
+.mapsExploreCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.65rem 0.7rem;
+  border-radius: 12px;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(166, 124, 58, 0.16);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.mapsExploreCard:hover {
+  border-color: rgba(91, 67, 53, 0.35);
+  background: rgba(255, 253, 249, 0.95);
+}
+
+.mapsExploreCardPrimary {
+  grid-column: 1 / -1;
+  background: linear-gradient(145deg, rgba(248, 242, 255, 0.65), rgba(255, 253, 249, 0.92));
+  border-color: rgba(74, 50, 112, 0.22);
+}
+
+.mapsExploreCardTitle {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #352515;
+}
+
+.mapsExploreCardDesc {
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: #7c6241;
+}
+
+.profileMapHeatmapStack {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 0.35rem;
+}
+
+.profileMapHeatmapRow {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.75rem 0.65rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(166, 124, 58, 0.12);
+}
+
+.profileMapHeatmapRowHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.profileMapHeatmapRowTitle {
+  margin: 0;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.profileMapHeatmapOpenLink {
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 600;
+  color: #5b4335;
+  text-decoration: none;
+}
+
+.profileMapHeatmapOpenLink:hover {
+  text-decoration: underline;
+}
+
+.profileMapHeatmapGrid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.3rem;
+  max-width: 560px;
+}
+
+.profileMapHeatmapCell {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 5px;
+  border: 1px solid rgba(166, 124, 58, 0.12);
+  padding: 0;
+  cursor: default;
+}
+
+.profileMapHeatmapCell:not(:disabled) {
+  cursor: pointer;
+}
+
+.profileMapHeatmapCellSelected {
+  outline: 2px solid rgba(91, 67, 53, 0.65);
+  outline-offset: 1px;
+}
+
+.profileMapHeatmapStory {
+  margin: 0;
+  padding: 0.55rem 0.65rem;
+  border-radius: 10px;
+  background: rgba(74, 50, 112, 0.05);
+  border-left: 3px solid rgba(74, 50, 112, 0.35);
+  color: var(--tf-ink-soft, #5b4630);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.profileHabitWeaveMeta {
+  margin: 0.15rem 0 0;
+  font-size: 0.75rem;
+  color: var(--tf-caption, #9a8468);
+}
+
+.profileHabitWeaveSectionTitle {
+  margin: 0;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.sectionSubtitle {
+  margin: 0.15rem 0 0;
+  font-size: 0.95rem;
+  color: #7c6241;
+  font-weight: 500;
+}
+
+/* —— Numbers · Surface N —— */
+.numbersMonument {
+  padding: 1.75rem 1.5rem 1.85rem;
+  border-radius: var(--tf-surface-number-radius, 32px);
+  background: linear-gradient(
+    155deg,
+    rgba(248, 242, 255, 0.92) 0%,
+    rgba(255, 253, 249, 0.96) 48%,
+    rgba(243, 239, 232, 0.88) 100%
+  );
+  box-shadow: var(--tf-surface-insight-shadow, 0 14px 48px rgba(91, 67, 35, 0.06));
+}
+
+.numOrbitStage {
+  position: relative;
+  width: min(100%, 20rem);
+  height: 13.5rem;
+  margin: 0.75rem auto 0;
+}
+
+.numOrbitRingOuter,
+.numOrbitRingInner {
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  translate: -50% -50%;
+  border-radius: 50%;
+  border: 1px solid rgba(74, 50, 112, 0.18);
+  pointer-events: none;
+}
+
+.numOrbitRingOuter {
+  width: 12.5rem;
+  height: 12.5rem;
+}
+
+.numOrbitRingInner {
+  width: 9.5rem;
+  height: 9.5rem;
+  border-style: dashed;
+  opacity: 0.55;
+}
+
+.numOrbitCore {
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  translate: -50% -50%;
+  z-index: 2;
+  width: 6.25rem;
+  height: 6.25rem;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+  cursor: pointer;
+  background: radial-gradient(circle at 38% 32%, #fff 0%, #ede4ff 55%, #ebe0d0 100%);
+  box-shadow:
+    0 0 0 1px rgba(74, 50, 112, 0.28),
+    0 0 32px rgba(74, 50, 112, 0.2);
+  color: var(--tf-accent-numerology, #4a3270);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.numOrbitCoreValue {
+  font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
+  font-size: 2.35rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.numOrbitCoreLabel {
+  font-size: var(--tf-type-caption-size, 0.625rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.numOrbitNode {
+  position: absolute;
+  z-index: 2;
+  width: 5.25rem;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: center;
+  color: var(--tf-accent-numerology, #4a3270);
+}
+
+.numOrbitNodeValue {
+  display: grid;
+  place-items: center;
+  width: 2.65rem;
+  height: 2.65rem;
+  margin: 0 auto;
+  border-radius: 50%;
+  font-size: var(--tf-type-body-size, 0.9375rem);
+  font-weight: 800;
+  background: radial-gradient(circle at 40% 35%, #fff 0%, #f0e8ff 100%);
+  box-shadow: 0 0 0 1px rgba(74, 50, 112, 0.22);
+}
+
+.numOrbitNodeCaption {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.58rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.numOrbitNodeTop {
+  top: 0;
+  left: 50%;
+  translate: -50% 0;
+}
+
+.numOrbitNodeLeft {
+  left: 0;
+  top: 54%;
+  translate: 0 -50%;
+}
+
+.numOrbitNodeRight {
+  right: 0;
+  top: 54%;
+  translate: 0 -50%;
+}
+
+.numOrbitNodeActive .numOrbitNodeValue,
+.numOrbitCore.numOrbitNodeActive {
+  box-shadow:
+    0 0 0 2px rgba(74, 50, 112, 0.38),
+    0 0 20px rgba(74, 50, 112, 0.22);
+}
+
+.numbersPathTitle {
+  margin: 1.15rem 0 0;
+  font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
+  font-size: var(--tf-type-section-size, 1.25rem);
+  font-weight: 600;
+  text-align: center;
+  color: var(--tf-ink, #1a1510);
+}
+
+.numbersCoreInsight {
+  margin: 0.65rem 0 0;
+  text-align: center;
+  font-size: var(--tf-type-body-size, 0.9375rem);
+  line-height: 1.55;
+  color: var(--tf-ink, #1a1510);
+  font-weight: 500;
+}
+
+.numbersMeaningPanel {
+  margin-top: 1.25rem;
+  padding: 1rem 1rem 1rem 1.1rem;
+  border-left: 3px solid var(--tf-accent-numerology, #4a3270);
+  background: rgba(255, 253, 249, 0.72);
+  border-radius: 0 12px 12px 0;
+}
+
+.numbersMeaningKicker {
+  margin: 0;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.numbersMeaningDigit {
+  margin-right: 0.45rem;
+  font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--tf-accent-numerology, #4a3270);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.numbersMeaningBody {
+  margin: 0.55rem 0 0;
+  font-size: var(--tf-type-body-size, 0.9375rem);
+  line-height: 1.55;
+  color: var(--tf-body, #475569);
+}
+
+.numbersPatternBtn {
+  display: block;
+  width: 100%;
+  margin-top: 1.15rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(74, 50, 112, 0.2);
+  border-radius: 999px;
+  background: rgba(255, 253, 249, 0.9);
+  font: inherit;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tf-accent-numerology, #4a3270);
+  cursor: pointer;
+}
+
+.numbersPatternList {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.numbersPatternItem {
+  padding: 0.85rem 0 0.85rem 0.9rem;
+  border-left: 2px solid rgba(74, 50, 112, 0.22);
+}
+
+.numbersPatternTitle {
+  margin: 0;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tf-accent-numerology, #4a3270);
+}
+
+.numbersPatternBody {
+  margin: 0.4rem 0 0;
+  font-size: var(--tf-type-body-size, 0.9375rem);
+  line-height: 1.55;
+  color: var(--tf-body, #475569);
+}
+
+/* —— Name —— */
+.nameDisplay {
+  margin: 0;
+  font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.obsList {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.obsItem {
+  padding-left: 0.85rem;
+  border-left: 1px solid rgba(154, 132, 104, 0.35);
+  color: var(--tf-body, #475569);
+}
+
+/* —— Life areas (full-bleed tint) —— */
+.tintLove,
+.tintMoney {
+  margin: 0 calc(-1 * var(--pe-gutter));
+  padding: 1.75rem var(--pe-gutter);
+  box-sizing: border-box;
+}
+
+.tintLove {
+  background: linear-gradient(180deg, rgba(255, 240, 245, 0.65) 0%, rgba(255, 253, 249, 0) 100%);
+}
+
+.tintMoney {
+  background: linear-gradient(180deg, rgba(255, 248, 235, 0.75) 0%, rgba(255, 253, 249, 0) 100%);
+}
+
+.signal {
+  margin: 0;
+  color: var(--tf-body, #475569);
+}
+
+.signal strong {
+  display: block;
+  margin-bottom: 0.15rem;
+  font-size: var(--tf-type-caption-size, 0.625rem);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.signals {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+/* —— Compass (Surface C) —— */
+.compass {
+  padding-left: 1rem;
+  border-left: var(--tf-surface-action-bar, 3px) solid var(--tf-accent-action, #8f6b3a);
+}
+
+.steps {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: 1.25rem 1fr;
+  gap: 0.65rem;
+  align-items: baseline;
+  color: var(--tf-body, #475569);
+}
+
+.stepNum {
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 700;
+  color: var(--tf-accent-action, #8f6b3a);
+}
+
+.today {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(154, 132, 104, 0.2);
+}
+
+.todayLabel {
+  margin: 0;
+  font-size: var(--tf-type-caption-size, 0.625rem);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.todayText {
+  margin: 0.35rem 0 0;
+  color: var(--tf-ink, #1a1510);
+  font-weight: 500;
+}
+
+/* —— Expand / link —— */
+.linkBtn {
+  align-self: flex-start;
+  margin-top: 0.35rem;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 600;
+  color: var(--tf-ink-soft, #5b4630);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.detail {
+  margin-top: 0.75rem;
+  padding-left: 0.85rem;
+  border-left: 1px solid rgba(154, 132, 104, 0.25);
+  color: var(--tf-body, #475569);
+}
+
+/* —— Portal (Surface D) —— */
+.portal {
+  display: block;
+  margin: 0 calc(-1 * var(--pe-gutter));
+  padding: 2rem var(--pe-gutter);
+  min-height: var(--tf-surface-portal-min-h, 14.5rem);
+  box-sizing: border-box;
+  text-decoration: none;
+  background: var(--tf-surface-portal-bg, linear-gradient(155deg, #12101c 0%, #0f1419 100%));
+  border-radius: var(--tf-surface-portal-radius, 24px) var(--tf-surface-portal-radius, 24px) 0 0;
+  color: var(--tf-on-dark, #faf8f5);
+}
+
+.portalKicker {
+  margin: 0;
+  font-size: var(--tf-type-caption-size, 0.625rem);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(250, 248, 245, 0.45);
+}
+
+.portalTitle {
+  margin: 0.5rem 0 0;
+  font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
+  font-size: var(--tf-type-portal-title-size, 1.625rem);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.portalSub {
+  margin: 0.5rem 0 0;
+  max-width: 18rem;
+  font-size: var(--tf-type-body-size, 0.9375rem);
+  line-height: 1.5;
+  color: rgba(250, 248, 245, 0.62);
+}
+
+.portalCta {
+  display: inline-block;
+  margin-top: 1.25rem;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tf-on-dark, #faf8f5);
+}
+
+.portal:hover .portalCta {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.portalButton {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  text-align: inherit;
+}
+
+/* —— Launch min (Blueprint §6) —— */
+.launchStack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.launchIdentity {
+  padding: 1.35rem 1.15rem 1.25rem;
+  border-radius: var(--tf-surface-portal-radius, 24px);
+  background: linear-gradient(180deg, rgba(255, 253, 249, 0.96) 0%, rgba(243, 239, 232, 0.72) 100%);
+  border: 1px solid rgba(201, 168, 115, 0.2);
+}
+
+.launchIdentityTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.launchIdentityName {
+  margin: 0.65rem 0 0;
+  font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
+  font-size: clamp(1.65rem, 7vw, 2.15rem);
+  font-weight: 700;
+  line-height: 1.12;
+  color: var(--tf-ink, #1a1510);
+}
+
+.launchIdentityMeta {
+  margin: 0.45rem 0 0;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.launchIdentityLine {
+  margin: 0.85rem 0 0;
+  max-width: var(--tf-shell-readable, 36rem);
+  line-height: 1.55;
+  color: var(--tf-body, #475569);
+}
+
+.launchCard {
+  padding: 1.15rem 1.1rem;
+  border-radius: var(--tf-surface-portal-radius, 24px);
+  background: var(--tf-surface-insight-bg, rgba(255, 253, 249, 0.88));
+  border: 1px solid rgba(201, 168, 115, 0.18);
+  box-shadow: var(--tf-surface-insight-shadow, 0 14px 48px rgba(91, 67, 35, 0.05));
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.chartTeaserList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.chartTeaserItem {
+  padding: 0.75rem 0.85rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(201, 168, 115, 0.14);
+}
+
+.chartTeaserLabel {
+  margin: 0;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.chartTeaserBody {
+  margin: 0.35rem 0 0;
+  line-height: 1.55;
+  color: var(--tf-ink-soft, #5b4630);
+}
+
+.compatList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.compatRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(201, 168, 115, 0.14);
+  text-decoration: none;
+  color: inherit;
+}
+
+.compatName {
+  font-weight: 600;
+  color: var(--tf-ink, #1a1510);
+}
+
+.compatArrow {
+  color: var(--tf-caption, #9a8468);
+  font-size: 0.875rem;
+}
+
+.launchCtaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.launchCta {
+  align-self: flex-start;
+  text-decoration: none;
+}
+
+.launchTodayCta {
+  align-self: stretch;
+  text-align: center;
+  text-decoration: none;
+  margin-top: 0.35rem;
+}
+
+.deepLayers {
+  border-radius: var(--tf-surface-portal-radius, 24px);
+  border: 1px solid rgba(201, 168, 115, 0.16);
+  background: rgba(255, 253, 249, 0.55);
+  overflow: hidden;
+}
+
+.deepLayersSummary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem 1.1rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.deepLayersSummary::-webkit-details-marker {
+  display: none;
+}
+
+.deepLayersTitle {
+  font-size: var(--tf-type-body-size, 0.9375rem);
+  line-height: 1.5;
+  color: var(--tf-body, #475569);
+}
+
+.deepLayersBody {
+  padding: 0 1.1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--pe-gap, 2rem);
+}
+
+@media (min-width: 48rem) {
+  .shell {
+    padding-top: 0.5rem;
+  }
+
+  .hero {
+    min-height: min(64dvh, 30rem);
+  }
+}

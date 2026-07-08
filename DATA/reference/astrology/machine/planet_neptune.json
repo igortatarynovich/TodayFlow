@@ -1,0 +1,21 @@
+{
+  "contract_version": "reference_machine_contract_v1",
+  "domain": "astrology",
+  "entity_code": "astrology.planet.neptune",
+  "entity_type": "Planet",
+  "version": "0.1.0",
+  "status": "draft",
+  "machine_contract": {
+    "vector": {
+      "action_reflection": -0.45,
+      "expansion_consolidation": 0.4,
+      "self_others": 0.35,
+      "structure_flow": -0.55
+    },
+    "tempo": "steady",
+    "risk": "medium",
+    "risk_modifier": 0.25,
+    "emotional_load": "calm",
+    "confidence": 0.83
+  }
+}

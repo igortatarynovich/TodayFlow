@@ -1,0 +1,602 @@
+{
+  "contract_version": "day_content_registry_v1",
+  "domain": "day",
+  "version": "0.1.0",
+  "status": "draft",
+  "description": "P1.3 day content seed texts for day_model_interpretation_v1 mapping. Atomic fragments only — no UI assembly.",
+  "locale_default": "en",
+  "keys": {
+    "day.strategy.act": {
+      "key": "day.strategy.act",
+      "slot": "headline",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Take one clear step today.",
+      "text_medium": "A good day for direct action. Choose one move and follow through without overloading the schedule.",
+      "tone": "direct",
+      "max_chars": 60,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.strategy.reflect": {
+      "key": "day.strategy.reflect",
+      "slot": "headline",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Make room to think before acting.",
+      "text_medium": "Step back and review what matters. Reflection now can prevent rushed decisions later.",
+      "tone": "soft",
+      "max_chars": 60,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.strategy.stabilize": {
+      "key": "day.strategy.stabilize",
+      "slot": "headline",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Keep things steady and predictable.",
+      "text_medium": "Prioritize consistency over novelty. Small, reliable steps matter more than big shifts.",
+      "tone": "neutral",
+      "max_chars": 60,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.strategy.simplify": {
+      "key": "day.strategy.simplify",
+      "slot": "headline",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Reduce scope and clear clutter.",
+      "text_medium": "Cut one layer of complexity. Fewer open threads make progress easier to see.",
+      "tone": "direct",
+      "max_chars": 60,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.strategy.connect": {
+      "key": "day.strategy.connect",
+      "slot": "headline",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Reach out and coordinate with others.",
+      "text_medium": "Conversations and alignment can move things forward. Ask, listen, and confirm next steps.",
+      "tone": "neutral",
+      "max_chars": 60,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.strategy.plan": {
+      "key": "day.strategy.plan",
+      "slot": "headline",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Outline priorities before you execute.",
+      "text_medium": "Structure the day first: list what matters, sequence it, then work the plan.",
+      "tone": "direct",
+      "max_chars": 60,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.strategy.recover": {
+      "key": "day.strategy.recover",
+      "slot": "headline",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Protect energy and pace yourself.",
+      "text_medium": "Recovery is productive today. Rest, simplify demands, and avoid unnecessary strain.",
+      "tone": "soft",
+      "max_chars": 60,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.strategy.decide": {
+      "key": "day.strategy.decide",
+      "slot": "headline",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Choose direction with calm focus.",
+      "text_medium": "A fitting window for decisions. Pick a direction, accept trade-offs, and avoid dramatizing the choice.",
+      "tone": "neutral",
+      "max_chars": 60,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.strategy.observe": {
+      "key": "day.strategy.observe",
+      "slot": "headline",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Notice patterns without forcing change.",
+      "text_medium": "Watch how the day unfolds. Collect information before committing to a next move.",
+      "tone": "soft",
+      "max_chars": 60,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.opportunity.action_window": {
+      "key": "day.opportunity.action_window",
+      "slot": "guidance",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "There is room for purposeful action.",
+      "text_medium": "Conditions support taking initiative. Act while keeping scope intentional.",
+      "tone": "direct",
+      "max_chars": 60,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.opportunity.planning_window": {
+      "key": "day.opportunity.planning_window",
+      "slot": "guidance",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Good timing for structure and sequencing.",
+      "text_medium": "Use this window to organize tasks, timelines, and dependencies.",
+      "tone": "neutral",
+      "max_chars": 60,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.opportunity.recovery_window": {
+      "key": "day.opportunity.recovery_window",
+      "slot": "guidance",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Space for rest and reset is available.",
+      "text_medium": "Lower intensity where you can. Recovery now supports steadier days ahead.",
+      "tone": "soft",
+      "max_chars": 60,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.opportunity.communication_window": {
+      "key": "day.opportunity.communication_window",
+      "slot": "guidance",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Dialogue can clarify next steps.",
+      "text_medium": "Check in with people who affect your priorities. Short, clear exchanges help.",
+      "tone": "neutral",
+      "max_chars": 60,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.opportunity.learning_window": {
+      "key": "day.opportunity.learning_window",
+      "slot": "guidance",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "A useful day for study and review.",
+      "text_medium": "Read, reflect, or practice. Knowledge gained now can inform later choices.",
+      "tone": "neutral",
+      "max_chars": 60,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.opportunity.completion_window": {
+      "key": "day.opportunity.completion_window",
+      "slot": "guidance",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Favorable for finishing open items.",
+      "text_medium": "Close loops and deliver what is already in motion before starting new work.",
+      "tone": "direct",
+      "max_chars": 60,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.risk.overpressure": {
+      "key": "day.risk.overpressure",
+      "slot": "risk_warning",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Watch for pushing too hard.",
+      "text_medium": "Intensity can slip into overcontrol or harsh self-demand. Ease pressure where possible.",
+      "tone": "soft",
+      "max_chars": 55,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.risk.avoidance": {
+      "key": "day.risk.avoidance",
+      "slot": "risk_warning",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Postponement may cost momentum.",
+      "text_medium": "Delay can feel safer but may leave important tasks unsettled. Name one small start.",
+      "tone": "neutral",
+      "max_chars": 55,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.risk.conflict": {
+      "key": "day.risk.conflict",
+      "slot": "risk_warning",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Tension may rise under strain.",
+      "text_medium": "Frustration is easier to trigger today. Slow responses and clarify expectations early.",
+      "tone": "soft",
+      "max_chars": 55,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.risk.scattered_focus": {
+      "key": "day.risk.scattered_focus",
+      "slot": "risk_warning",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Attention may fragment easily.",
+      "text_medium": "Many pulls compete for focus. Pick one lane and return to it when you drift.",
+      "tone": "neutral",
+      "max_chars": 55,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.risk.emotional_overload": {
+      "key": "day.risk.emotional_overload",
+      "slot": "risk_warning",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Emotional load may run high.",
+      "text_medium": "Feelings can feel amplified. Reduce stimulus and give yourself margin.",
+      "tone": "soft",
+      "max_chars": 55,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.risk.stagnation": {
+      "key": "day.risk.stagnation",
+      "slot": "risk_warning",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Inertia can settle in if unaddressed.",
+      "text_medium": "Little movement feels comfortable but can stall progress. One modest action breaks the pause.",
+      "tone": "neutral",
+      "max_chars": 55,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.risk.impulsivity": {
+      "key": "day.risk.impulsivity",
+      "slot": "risk_warning",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Quick moves may skip needed checks.",
+      "text_medium": "Speed helps until it skips review. Pause briefly before irreversible choices.",
+      "tone": "direct",
+      "max_chars": 55,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.tempo.slow_down": {
+      "key": "day.tempo.slow_down",
+      "slot": "tempo_hint",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Lower the pace; avoid forcing speed.",
+      "text_medium": "Move deliberately. Rushing today adds friction more than it saves time.",
+      "tone": "soft",
+      "max_chars": 55,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.tempo.keep_steady": {
+      "key": "day.tempo.keep_steady",
+      "slot": "tempo_hint",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Maintain an even, sustainable rhythm.",
+      "text_medium": "Neither rush nor stall. Steady pacing keeps energy and focus aligned.",
+      "tone": "neutral",
+      "max_chars": 55,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.tempo.move": {
+      "key": "day.tempo.move",
+      "slot": "tempo_hint",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Keep things in motion at a workable pace.",
+      "text_medium": "Forward progress fits today. Advance tasks without turning speed into pressure.",
+      "tone": "direct",
+      "max_chars": 55,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.tempo.accelerate": {
+      "key": "day.tempo.accelerate",
+      "slot": "tempo_hint",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Pick up pace where clarity already exists.",
+      "text_medium": "When the path is clear, move faster. Do not accelerate uncertain work.",
+      "tone": "direct",
+      "max_chars": 55,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.action_mode.plan": {
+      "key": "day.action_mode.plan",
+      "slot": "action_hint",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Define steps before committing effort.",
+      "text_medium": "Break work into ordered steps. Planning now reduces rework later.",
+      "tone": "neutral",
+      "max_chars": 55,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.action_mode.execute": {
+      "key": "day.action_mode.execute",
+      "slot": "action_hint",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Do the work you already chose.",
+      "text_medium": "Implementation is the priority. Follow the plan and finish visible pieces.",
+      "tone": "direct",
+      "max_chars": 55,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.action_mode.adapt": {
+      "key": "day.action_mode.adapt",
+      "slot": "action_hint",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Adjust as conditions shift.",
+      "text_medium": "Flexibility beats rigid plans today. Update approach when new information appears.",
+      "tone": "neutral",
+      "max_chars": 55,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.action_mode.pause": {
+      "key": "day.action_mode.pause",
+      "slot": "action_hint",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Hold action until clarity returns.",
+      "text_medium": "Waiting is active today. Use the pause to reduce noise, not to avoid deciding forever.",
+      "tone": "soft",
+      "max_chars": 55,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.reflection.none": {
+      "key": "day.reflection.none",
+      "slot": "reflection_hint",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "No reflection cue needed today.",
+      "text_medium": "Action and structure carry the day. Skip extra introspection unless something pulls you.",
+      "tone": "neutral",
+      "max_chars": 55,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.reflection.light": {
+      "key": "day.reflection.light",
+      "slot": "reflection_hint",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "A brief check-in may help.",
+      "text_medium": "Ask what is working and what is not. Keep it short and practical.",
+      "tone": "soft",
+      "max_chars": 55,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.reflection.deep": {
+      "key": "day.reflection.deep",
+      "slot": "reflection_hint",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Allow time for deeper review.",
+      "text_medium": "Step back and examine patterns, motives, and priorities. Depth today supports wiser next steps.",
+      "tone": "soft",
+      "max_chars": 55,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.pressure.low": {
+      "key": "day.pressure.low",
+      "slot": "guidance",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Keep expectations modest.",
+      "text_medium": "Do not add unnecessary urgency. Moderate demands protect focus and energy.",
+      "tone": "soft",
+      "max_chars": 55,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.pressure.medium": {
+      "key": "day.pressure.medium",
+      "slot": "guidance",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Balanced urgency is enough.",
+      "text_medium": "A steady push works; avoid spikes of stress or slack that swing the day.",
+      "tone": "neutral",
+      "max_chars": 55,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.pressure.high": {
+      "key": "day.pressure.high",
+      "slot": "guidance",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "You can push with intent today.",
+      "text_medium": "Higher drive is available. Channel it into clear priorities, not scattered effort.",
+      "tone": "direct",
+      "max_chars": 55,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    },
+    "day.mapping.degraded": {
+      "key": "day.mapping.degraded",
+      "slot": "headline",
+      "status": "draft",
+      "locale": "en",
+      "text_short": "Signal is partial; use general guidance.",
+      "text_medium": "Some inputs were incomplete. Treat suggestions as broad direction, not precise instruction.",
+      "tone": "neutral",
+      "max_chars": 60,
+      "forbidden_claims": [
+        "outcome_guarantee",
+        "medical_advice",
+        "financial_advice"
+      ],
+      "version": "0.1.0"
+    }
+  }
+}

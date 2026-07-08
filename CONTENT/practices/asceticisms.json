@@ -1,0 +1,310 @@
+{
+  "meta": {
+    "version": "v1.1",
+    "description": "TodayFlow Asceticisms v1.1 — осознанные ограничения для подтверждения контроля. 20 аскез.",
+    "total_asceticisms": 20,
+    "created_at": "2026-01-25"
+  },
+  "asceticisms": [
+    {
+      "id": "asceticism.001",
+      "title": "Без прокрутки утром",
+      "description": "Не открывать соцсети первые 30 минут после пробуждения.",
+      "duration": {
+        "type": "daily",
+        "period_days": null
+      },
+      "measurement": "boolean",
+      "context": [],
+      "forecast_types": [],
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "asceticism.002",
+      "title": "Одно уведомление",
+      "description": "Проверять сообщения только в заранее выбранное время.",
+      "duration": {
+        "type": "daily",
+        "period_days": null
+      },
+      "measurement": "boolean",
+      "context": [],
+      "forecast_types": [],
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "asceticism.003",
+      "title": "Одна задача за раз",
+      "description": "Не переключаться между задачами минимум 25 минут.",
+      "duration": {
+        "type": "daily",
+        "period_days": null
+      },
+      "measurement": "boolean",
+      "context": [],
+      "forecast_types": [],
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "asceticism.004",
+      "title": "Тишина фоном",
+      "description": "Один час без музыки, подкастов и видео.",
+      "duration": {
+        "type": "daily",
+        "period_days": null
+      },
+      "measurement": "boolean",
+      "context": [],
+      "forecast_types": [],
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "asceticism.005",
+      "title": "Экранная пауза",
+      "description": "Не смотреть в экран за 30 минут до сна.",
+      "duration": {
+        "type": "daily",
+        "period_days": null
+      },
+      "measurement": "boolean",
+      "context": [],
+      "forecast_types": [],
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "asceticism.006",
+      "title": "Пауза перед ответом",
+      "description": "Делать паузу 10 секунд перед любым эмоциональным ответом.",
+      "duration": {
+        "type": "daily",
+        "period_days": null
+      },
+      "measurement": "boolean",
+      "context": [],
+      "forecast_types": [],
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "asceticism.007",
+      "title": "Без оправданий",
+      "description": "В течение дня не объяснять свои решения, если не просят.",
+      "duration": {
+        "type": "daily",
+        "period_days": null
+      },
+      "measurement": "boolean",
+      "context": [],
+      "forecast_types": [],
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "asceticism.008",
+      "title": "Без мгновенного «да»",
+      "description": "Не соглашаться сразу — брать время на ответ.",
+      "duration": {
+        "type": "daily",
+        "period_days": null
+      },
+      "measurement": "boolean",
+      "context": [],
+      "forecast_types": [],
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "asceticism.009",
+      "title": "Один конфликт — ноль эскалаций",
+      "description": "Не усиливать напряжение, если оно возникло.",
+      "duration": {
+        "type": "daily",
+        "period_days": null
+      },
+      "measurement": "boolean",
+      "context": [],
+      "forecast_types": [],
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "asceticism.010",
+      "title": "Без внутреннего диалога вслух",
+      "description": "Не проговаривать раздражение словами.",
+      "duration": {
+        "type": "daily",
+        "period_days": null
+      },
+      "measurement": "boolean",
+      "context": [],
+      "forecast_types": [],
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "asceticism.011",
+      "title": "Осознанная ходьба",
+      "description": "5 минут идти, ощущая шаги и тело.",
+      "duration": {
+        "type": "daily",
+        "period_days": null
+      },
+      "measurement": "boolean",
+      "context": [],
+      "forecast_types": [],
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "asceticism.012",
+      "title": "Вода до реакции",
+      "description": "Сделать глоток воды перед сложным решением.",
+      "duration": {
+        "type": "daily",
+        "period_days": null
+      },
+      "measurement": "boolean",
+      "context": [],
+      "forecast_types": [],
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "asceticism.013",
+      "title": "Выпрямленная спина",
+      "description": "Следить за осанкой в течение 10 минут.",
+      "duration": {
+        "type": "daily",
+        "period_days": null
+      },
+      "measurement": "boolean",
+      "context": [],
+      "forecast_types": [],
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "asceticism.014",
+      "title": "Медленный приём пищи",
+      "description": "Есть без экрана хотя бы один приём пищи.",
+      "duration": {
+        "type": "daily",
+        "period_days": null
+      },
+      "measurement": "boolean",
+      "context": [],
+      "forecast_types": [],
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "asceticism.015",
+      "title": "Растяжение вместо напряжения",
+      "description": "При первом сигнале усталости — потянуться.",
+      "duration": {
+        "type": "daily",
+        "period_days": null
+      },
+      "measurement": "boolean",
+      "context": [],
+      "forecast_types": [],
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "asceticism.016",
+      "title": "Один отказ",
+      "description": "Осознанно отказаться от одной необязательной активности.",
+      "duration": {
+        "type": "daily",
+        "period_days": null
+      },
+      "measurement": "boolean",
+      "context": [],
+      "forecast_types": [],
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "asceticism.017",
+      "title": "Минимум слов",
+      "description": "Сократить сообщения до сути, без лишнего.",
+      "duration": {
+        "type": "daily",
+        "period_days": null
+      },
+      "measurement": "boolean",
+      "context": [],
+      "forecast_types": [],
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "asceticism.018",
+      "title": "Без сравнения",
+      "description": "В течение дня не сравнивать себя с другими.",
+      "duration": {
+        "type": "daily",
+        "period_days": null
+      },
+      "measurement": "boolean",
+      "context": [],
+      "forecast_types": [],
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "asceticism.019",
+      "title": "Закрыть один хвост",
+      "description": "Завершить одно зависшее дело.",
+      "duration": {
+        "type": "daily",
+        "period_days": null
+      },
+      "measurement": "boolean",
+      "context": [],
+      "forecast_types": [],
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "asceticism.020",
+      "title": "Ничего не улучшать",
+      "description": "Один день не оптимизировать и не переделывать.",
+      "duration": {
+        "type": "daily",
+        "period_days": null
+      },
+      "measurement": "boolean",
+      "context": [],
+      "forecast_types": [],
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    }
+  ]
+}

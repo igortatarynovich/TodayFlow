@@ -1,0 +1,48 @@
+{
+  "contract_version": "evolution_score_contract_v1",
+  "domain": "evolution",
+  "ecc_version": "1.0.0",
+  "version": "1.0.0",
+  "status": "draft",
+  "description": "B1.4 ECC integration — read-only Evolution Score calculation. Internal only; no API exposure; no promotion.",
+  "weights": {
+    "practice": 0.25,
+    "goal": 0.2,
+    "rhythm": 0.2,
+    "reflection": 0.15,
+    "profile_quality": 0.1,
+    "account_age_floor": 0.1
+  },
+  "bucket_targets": {
+    "practice": 5,
+    "goal": 3,
+    "rhythm": 4,
+    "reflection": 5,
+    "profile_quality": 3
+  },
+  "signal_bucket_mapping": {
+    "practice_completed": "practice",
+    "habit_streak_confirmed": "practice",
+    "goal_milestone_reached": "goal",
+    "weekly_goal_completed": "goal",
+    "ritual_streak_confirmed": "rhythm",
+    "cycle_completed": "rhythm",
+    "evening_reflection_confirmed": "reflection",
+    "confirmed_pattern": "profile_quality"
+  },
+  "excluded_signal_types": [],
+  "forbidden_input_patterns": [
+    "achievement",
+    "commerce",
+    "login",
+    "tarot",
+    "purchase",
+    "subscription",
+    "llm",
+    "reward",
+    "badge"
+  ],
+  "period_score_multiplier": 100,
+  "max_evolution_score": 1000,
+  "min_evolution_score": 0
+}

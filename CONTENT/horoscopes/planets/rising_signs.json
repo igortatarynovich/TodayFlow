@@ -1,0 +1,14 @@
+[
+  { "signId": "aries", "title": "Aries Rising", "ruTitle": "Асцендент в Овне", "bullets": ["быстрый", "прямой", "сразу в действии"] },
+  { "signId": "taurus", "title": "Taurus Rising", "ruTitle": "Асцендент в Тельце", "bullets": ["спокойный", "устойчивый", "не спешит"] },
+  { "signId": "gemini", "title": "Gemini Rising", "ruTitle": "Асцендент в Близнецах", "bullets": ["легкий", "разговорчивый", "быстрый контакт"] },
+  { "signId": "cancer", "title": "Cancer Rising", "ruTitle": "Асцендент в Раке", "bullets": ["осторожный", "мягкий", "сначала наблюдает"] },
+  { "signId": "leo", "title": "Leo Rising", "ruTitle": "Асцендент во Льве", "bullets": ["заметный", "уверенный", "притягивает внимание"] },
+  { "signId": "virgo", "title": "Virgo Rising", "ruTitle": "Асцендент в Деве", "bullets": ["аккуратный", "собранный", "сдержанный"] },
+  { "signId": "libra", "title": "Libra Rising", "ruTitle": "Асцендент в Весах", "bullets": ["приятный", "гармоничный", "располагает"] },
+  { "signId": "scorpio", "title": "Scorpio Rising", "ruTitle": "Асцендент в Скорпионе", "bullets": ["закрытый", "сильный", "считывает других"] },
+  { "signId": "sagittarius", "title": "Sagittarius Rising", "ruTitle": "Асцендент в Стрельце", "bullets": ["открытый", "живой", "про движение"] },
+  { "signId": "capricorn", "title": "Capricorn Rising", "ruTitle": "Асцендент в Козероге", "bullets": ["серьезный", "сдержанный", "взрослый с первого контакта"] },
+  { "signId": "aquarius", "title": "Aquarius Rising", "ruTitle": "Асцендент в Водолее", "bullets": ["необычный", "немного отстраненный", "не как все"] },
+  { "signId": "pisces", "title": "Pisces Rising", "ruTitle": "Асцендент в Рыбах", "bullets": ["мягкий", "чувствительный", "немного не здесь"] }
+]

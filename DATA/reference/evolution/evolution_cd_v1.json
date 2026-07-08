@@ -1,0 +1,338 @@
+{
+  "contract_version": "evolution_cd_v1",
+  "domain": "evolution",
+  "version": "1.0.0",
+  "status": "draft",
+  "description": "B1.1 Evolution Engine CD — stages, path themes, stage gates. No runtime, no user state.",
+  "evolution_stages": {
+    "seeker": {
+      "code": "seeker",
+      "order": 1,
+      "title": "Seeker",
+      "short_description": "Starting the path; looking for direction.",
+      "core_question": "Where do I begin?",
+      "allowed_depth": "minimal",
+      "max_context_lines": 0,
+      "llm_budget_tier": "none",
+      "commerce_visibility": "none",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "observer": {
+      "code": "observer",
+      "order": 2,
+      "title": "Observer",
+      "short_description": "Learning to notice self and reactions.",
+      "core_question": "What do I actually notice about myself?",
+      "allowed_depth": "basic",
+      "max_context_lines": 1,
+      "llm_budget_tier": "low",
+      "commerce_visibility": "none",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "practitioner": {
+      "code": "practitioner",
+      "order": 3,
+      "title": "Practitioner",
+      "short_description": "Taking regular action; building rhythm.",
+      "core_question": "What can I repeat consistently?",
+      "allowed_depth": "standard",
+      "max_context_lines": 2,
+      "llm_budget_tier": "low",
+      "commerce_visibility": "soft",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "explorer": {
+      "code": "explorer",
+      "order": 4,
+      "title": "Explorer",
+      "short_description": "Testing practices and path themes.",
+      "core_question": "What else works for me?",
+      "allowed_depth": "standard",
+      "max_context_lines": 3,
+      "llm_budget_tier": "medium",
+      "commerce_visibility": "soft",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "architect": {
+      "code": "architect",
+      "order": 5,
+      "title": "Architect",
+      "short_description": "Building a stable personal system.",
+      "core_question": "How do my habits and goals fit together?",
+      "allowed_depth": "enhanced",
+      "max_context_lines": 4,
+      "llm_budget_tier": "medium",
+      "commerce_visibility": "soft",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "mentor": {
+      "code": "mentor",
+      "order": 6,
+      "title": "Mentor",
+      "short_description": "Can share experience with others.",
+      "core_question": "What pattern is worth passing on?",
+      "allowed_depth": "expert",
+      "max_context_lines": 5,
+      "llm_budget_tier": "high",
+      "commerce_visibility": "full",
+      "status": "draft",
+      "version": "1.0.0"
+    },
+    "master": {
+      "code": "master",
+      "order": 7,
+      "title": "Master",
+      "short_description": "Mature inner system and long cycles.",
+      "core_question": "What sustains transformation over years?",
+      "allowed_depth": "full",
+      "max_context_lines": 5,
+      "llm_budget_tier": "high",
+      "commerce_visibility": "full",
+      "status": "draft",
+      "version": "1.0.0"
+    }
+  },
+  "evolution_path_themes": {
+    "discipline": {
+      "code": "discipline",
+      "title": "Discipline",
+      "domain": "behavior",
+      "description": "Habits, ascetics, and daily rhythm.",
+      "compatible_stages": ["seeker", "observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "suggested_cycle_lengths": [7, 21, 30],
+      "allowed_progression_signal_types": [
+        "practice_completed",
+        "habit_streak_confirmed",
+        "cycle_completed",
+        "confirmed_pattern"
+      ],
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "clarity": {
+      "code": "clarity",
+      "title": "Clarity",
+      "domain": "life_area",
+      "description": "Focus, decisions, and mental clarity.",
+      "compatible_stages": ["observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "suggested_cycle_lengths": [7, 21],
+      "allowed_progression_signal_types": [
+        "evening_reflection_confirmed",
+        "goal_milestone_reached",
+        "confirmed_pattern"
+      ],
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "energy": {
+      "code": "energy",
+      "title": "Energy",
+      "domain": "energy",
+      "description": "Vitality, cycles, and body resource.",
+      "compatible_stages": ["seeker", "observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "suggested_cycle_lengths": [7, 21, 30],
+      "allowed_progression_signal_types": [
+        "practice_completed",
+        "cycle_completed",
+        "confirmed_pattern"
+      ],
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "relationships": {
+      "code": "relationships",
+      "title": "Relationships",
+      "domain": "relationship",
+      "description": "Connection, communication, and boundaries.",
+      "compatible_stages": ["observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "suggested_cycle_lengths": [21, 30, 90],
+      "allowed_progression_signal_types": [
+        "evening_reflection_confirmed",
+        "goal_milestone_reached",
+        "confirmed_pattern"
+      ],
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "body": {
+      "code": "body",
+      "title": "Body",
+      "domain": "energy",
+      "description": "Physical rhythm, rest, and somatic awareness.",
+      "compatible_stages": ["seeker", "observer", "practitioner", "explorer", "architect"],
+      "suggested_cycle_lengths": [7, 21, 30],
+      "allowed_progression_signal_types": [
+        "practice_completed",
+        "habit_streak_confirmed",
+        "cycle_completed"
+      ],
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "purpose": {
+      "code": "purpose",
+      "title": "Purpose",
+      "domain": "life_area",
+      "description": "Meaning, direction, and long-term goals.",
+      "compatible_stages": ["practitioner", "explorer", "architect", "mentor", "master"],
+      "suggested_cycle_lengths": [30, 90],
+      "allowed_progression_signal_types": [
+        "goal_milestone_reached",
+        "weekly_goal_completed",
+        "confirmed_pattern"
+      ],
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "wealth": {
+      "code": "wealth",
+      "title": "Wealth",
+      "domain": "money",
+      "description": "Money habits, structure, and resource stewardship.",
+      "compatible_stages": ["explorer", "architect", "mentor", "master"],
+      "suggested_cycle_lengths": [30, 90],
+      "allowed_progression_signal_types": [
+        "goal_milestone_reached",
+        "confirmed_pattern"
+      ],
+      "status": "draft",
+      "version": "1.0.0"
+    },
+    "creativity": {
+      "code": "creativity",
+      "title": "Creativity",
+      "domain": "life_area",
+      "description": "Creative expression and experimentation.",
+      "compatible_stages": ["observer", "practitioner", "explorer", "architect", "mentor"],
+      "suggested_cycle_lengths": [7, 21, 30],
+      "allowed_progression_signal_types": [
+        "practice_completed",
+        "evening_reflection_confirmed",
+        "confirmed_pattern"
+      ],
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "healing": {
+      "code": "healing",
+      "title": "Healing",
+      "domain": "life_area",
+      "description": "Recovery, gentleness, and emotional repair.",
+      "compatible_stages": ["seeker", "observer", "practitioner", "explorer"],
+      "suggested_cycle_lengths": [21, 30, 90],
+      "allowed_progression_signal_types": [
+        "evening_reflection_confirmed",
+        "ritual_streak_confirmed",
+        "confirmed_pattern"
+      ],
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "spirituality": {
+      "code": "spirituality",
+      "title": "Spirituality",
+      "domain": "life_area",
+      "description": "Inner life, ritual depth, and meaning beyond utility.",
+      "compatible_stages": ["observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "suggested_cycle_lengths": [21, 30, 90],
+      "allowed_progression_signal_types": [
+        "ritual_streak_confirmed",
+        "evening_reflection_confirmed",
+        "confirmed_pattern"
+      ],
+      "status": "draft",
+      "version": "1.0.0"
+    }
+  },
+  "stage_gates": [
+    {
+      "gate_id": "gate-seeker-observer-v1",
+      "from_stage": "seeker",
+      "to_stage": "observer",
+      "required_signal_types": ["ritual_streak_confirmed", "evening_reflection_confirmed"],
+      "minimum_confirmed_patterns": 0,
+      "minimum_completed_cycles": 0,
+      "minimum_reflection_events": 3,
+      "minimum_active_days": 7,
+      "minimum_confidence": 0.4,
+      "manual_review_required": false,
+      "status": "active",
+      "version": "1.0.0"
+    },
+    {
+      "gate_id": "gate-observer-practitioner-v1",
+      "from_stage": "observer",
+      "to_stage": "practitioner",
+      "required_signal_types": ["habit_streak_confirmed", "practice_completed"],
+      "minimum_confirmed_patterns": 1,
+      "minimum_completed_cycles": 1,
+      "minimum_reflection_events": 7,
+      "minimum_active_days": 14,
+      "minimum_confidence": 0.5,
+      "manual_review_required": false,
+      "status": "active",
+      "version": "1.0.0"
+    },
+    {
+      "gate_id": "gate-practitioner-explorer-v1",
+      "from_stage": "practitioner",
+      "to_stage": "explorer",
+      "required_signal_types": ["practice_completed", "cycle_completed"],
+      "minimum_confirmed_patterns": 2,
+      "minimum_completed_cycles": 2,
+      "minimum_reflection_events": 10,
+      "minimum_active_days": 30,
+      "minimum_confidence": 0.55,
+      "manual_review_required": false,
+      "status": "active",
+      "version": "1.0.0"
+    },
+    {
+      "gate_id": "gate-explorer-architect-v1",
+      "from_stage": "explorer",
+      "to_stage": "architect",
+      "required_signal_types": ["goal_milestone_reached", "confirmed_pattern"],
+      "minimum_confirmed_patterns": 3,
+      "minimum_completed_cycles": 2,
+      "minimum_reflection_events": 15,
+      "minimum_active_days": 60,
+      "minimum_confidence": 0.6,
+      "manual_review_required": false,
+      "status": "active",
+      "version": "1.0.0"
+    },
+    {
+      "gate_id": "gate-architect-mentor-v1",
+      "from_stage": "architect",
+      "to_stage": "mentor",
+      "required_signal_types": ["confirmed_pattern", "weekly_goal_completed"],
+      "minimum_confirmed_patterns": 5,
+      "minimum_completed_cycles": 3,
+      "minimum_reflection_events": 21,
+      "minimum_active_days": 120,
+      "minimum_confidence": 0.7,
+      "manual_review_required": true,
+      "status": "draft",
+      "version": "1.0.0"
+    },
+    {
+      "gate_id": "gate-mentor-master-v1",
+      "from_stage": "mentor",
+      "to_stage": "master",
+      "required_signal_types": ["confirmed_pattern", "cycle_completed"],
+      "minimum_confirmed_patterns": 7,
+      "minimum_completed_cycles": 4,
+      "minimum_reflection_events": 30,
+      "minimum_active_days": 180,
+      "minimum_confidence": 0.75,
+      "manual_review_required": true,
+      "status": "draft",
+      "version": "1.0.0"
+    }
+  ]
+}

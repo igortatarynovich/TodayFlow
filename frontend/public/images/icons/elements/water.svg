@@ -1,0 +1,8 @@
+<svg width="56" height="56" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>Water</title>
+  <g stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/>
+    <path d="M6 17c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/>
+    <path d="M14 8v12"/>
+  </g>
+</svg>

@@ -1,0 +1,178 @@
+[
+  {
+    "id": 0,
+    "name": "The Fool",
+    "keywords": ["beginnings", "trust", "risk"],
+    "upright": "Leap of faith, curiosity, willingness to reset even without guarantees.",
+    "reversed": "Impulsivity, refusing to ground plans, or naively repeating cycles.",
+    "correspondences": { "element": "air", "planet": "uranus", "axes": ["A7", "A4"] }
+  },
+  {
+    "id": 1,
+    "name": "The Magician",
+    "keywords": ["agency", "communication", "focus"],
+    "upright": "Channeling intent into action; coordination between mind, body, speech.",
+    "reversed": "Scattered energy, manipulation, or doubting your tools.",
+    "correspondences": { "element": "air", "planet": "mercury", "axes": ["A3", "A1"] }
+  },
+  {
+    "id": 2,
+    "name": "The High Priestess",
+    "keywords": ["intuition", "stillness", "mystery"],
+    "upright": "Staying with the unknown, processing information beneath the surface.",
+    "reversed": "Withholding truth, ignoring intuition, or emotional shutdown.",
+    "correspondences": { "element": "water", "planet": "moon", "axes": ["A2", "A7"] }
+  },
+  {
+    "id": 3,
+    "name": "The Empress",
+    "keywords": ["nurture", "creation", "abundance"],
+    "upright": "Somatic safety, relational generosity, bringing ideas into form.",
+    "reversed": "Over-caregiving, depletion, or creative stagnation.",
+    "correspondences": { "element": "earth", "planet": "venus", "axes": ["A6", "A4"] }
+  },
+  {
+    "id": 4,
+    "name": "The Emperor",
+    "keywords": ["structure", "authority", "boundaries"],
+    "upright": "Owning responsibility and building systems that protect growth.",
+    "reversed": "Rigidity, dominance, or rejecting accountability.",
+    "correspondences": { "element": "fire", "planet": "mars", "axes": ["A1", "A5"] }
+  },
+  {
+    "id": 5,
+    "name": "The Hierophant",
+    "keywords": ["tradition", "teaching", "alignment"],
+    "upright": "Learning from lineage, defining values, agreeing on shared language.",
+    "reversed": "Dogma, hollow conformity, resisting your own philosophy.",
+    "correspondences": { "element": "earth", "planet": "venus", "axes": ["A3", "A4"] }
+  },
+  {
+    "id": 6,
+    "name": "The Lovers",
+    "keywords": ["choice", "union", "alignment"],
+    "upright": "Choosing with full awareness, integrating dualities, transparent bonding.",
+    "reversed": "Decision paralysis, fractured priorities, misaligned agreements.",
+    "correspondences": { "element": "air", "planet": "mercury", "axes": ["A6", "A2"] }
+  },
+  {
+    "id": 7,
+    "name": "The Chariot",
+    "keywords": ["momentum", "direction", "victory"],
+    "upright": "Harnessed willpower, emotional regulation in motion, disciplined progress.",
+    "reversed": "Burnout, forced speed, or lack of integration between desire and action.",
+    "correspondences": { "element": "water", "planet": "moon", "axes": ["A2", "A5"] }
+  },
+  {
+    "id": 8,
+    "name": "Strength",
+    "keywords": ["courage", "compassion", "somatic trust"],
+    "upright": "Soft power, listening to the body, transforming instinct through care.",
+    "reversed": "Force, self-doubt, or suppressing emotion instead of meeting it.",
+    "correspondences": { "element": "fire", "planet": "sun", "axes": ["A1", "A2"] }
+  },
+  {
+    "id": 9,
+    "name": "The Hermit",
+    "keywords": ["reflection", "wisdom", "solitude"],
+    "upright": "Intentional retreat, processing experience, guiding from integrity.",
+    "reversed": "Isolation, avoidance, or over-intellectualizing feelings.",
+    "correspondences": { "element": "earth", "planet": "mercury", "axes": ["A3", "A7"] }
+  },
+  {
+    "id": 10,
+    "name": "Wheel of Fortune",
+    "keywords": ["cycles", "turning point", "fate"],
+    "upright": "Accepting change, adaptive optimism, tracking repeating lessons.",
+    "reversed": "Clinging to control, blaming luck, ignoring feedback loops.",
+    "correspondences": { "element": "fire", "planet": "jupiter", "axes": ["A4", "A7"] }
+  },
+  {
+    "id": 11,
+    "name": "Justice",
+    "keywords": ["truth", "ethics", "balance"],
+    "upright": "Clear agreements, lawful consequences, integrating logic with compassion.",
+    "reversed": "Bias, withholding facts, or weaponizing fairness.",
+    "correspondences": { "element": "air", "planet": "venus", "axes": ["A3", "A6"] }
+  },
+  {
+    "id": 12,
+    "name": "The Hanged One",
+    "keywords": ["surrender", "reframe", "pause"],
+    "upright": "Yielding to process, seeing from another angle, gestation period.",
+    "reversed": "Stagnation, martyrdom, or refusing to release control.",
+    "correspondences": { "element": "water", "planet": "neptune", "axes": ["A2", "A3"] }
+  },
+  {
+    "id": 13,
+    "name": "Death",
+    "keywords": ["transition", "closure", "rebirth"],
+    "upright": "Honoring endings, composting the past, making room for authenticity.",
+    "reversed": "Attachment to decay, fear of transformation, unresolved grief.",
+    "correspondences": { "element": "water", "planet": "pluto", "axes": ["A5", "A2"] }
+  },
+  {
+    "id": 14,
+    "name": "Temperance",
+    "keywords": ["integration", "moderation", "healing"],
+    "upright": "Mixing elements intentionally, pacing change, somatic regulation.",
+    "reversed": "Extremes, imbalance, or skipping the integration phase.",
+    "correspondences": { "element": "fire", "planet": "jupiter", "axes": ["A4", "A2"] }
+  },
+  {
+    "id": 15,
+    "name": "The Devil",
+    "keywords": ["attachment", "shadow", "compulsion"],
+    "upright": "Naming patterns that own you, conscious rebellion, transmuting shame.",
+    "reversed": "Breaking chains, detoxing, or denial of addictive cycles.",
+    "correspondences": { "element": "earth", "planet": "saturn", "axes": ["A5", "A6"] }
+  },
+  {
+    "id": 16,
+    "name": "The Tower",
+    "keywords": ["upheaval", "truth", "liberation"],
+    "upright": "Rapid dismantling of false structures, necessary course correction.",
+    "reversed": "Avoiding the inevitable, prolonged instability, suppressed emotion erupting later.",
+    "correspondences": { "element": "fire", "planet": "mars", "axes": ["A4", "A1"] }
+  },
+  {
+    "id": 17,
+    "name": "The Star",
+    "keywords": ["hope", "repair", "vision"],
+    "upright": "Post-crisis healing, reconnecting to purpose, generosity seeded in truth.",
+    "reversed": "Cynicism, depletion, or spiritual bypassing.",
+    "correspondences": { "element": "air", "planet": "uranus", "axes": ["A7", "A3"] }
+  },
+  {
+    "id": 18,
+    "name": "The Moon",
+    "keywords": ["mystery", "emotion", "dreams"],
+    "upright": "Navigating liminal states, intuition, subconscious material surfacing.",
+    "reversed": "Fog, projection, or drowning in unprocessed feelings.",
+    "correspondences": { "element": "water", "planet": "moon", "axes": ["A2", "A6"] }
+  },
+  {
+    "id": 19,
+    "name": "The Sun",
+    "keywords": ["clarity", "vitality", "joy"],
+    "upright": "Confidence, transparency, life-affirming action.",
+    "reversed": "Ego burns, comparison, or performative brightness that hides fatigue.",
+    "correspondences": { "element": "fire", "planet": "sun", "axes": ["A1", "A4"] }
+  },
+  {
+    "id": 20,
+    "name": "Judgement",
+    "keywords": ["awakening", "assessment", "calling"],
+    "upright": "Integrating past cycles, honest review, definitive decision making.",
+    "reversed": "Self-criticism, stagnation, or ignoring the wake-up call.",
+    "correspondences": { "element": "fire", "planet": "pluto", "axes": ["A5", "A3"] }
+  },
+  {
+    "id": 21,
+    "name": "The World",
+    "keywords": ["completion", "wholeness", "integration"],
+    "upright": "Synthesis, graduation, and joyful closure with lessons embodied.",
+    "reversed": "Delayed completion, loose ends, or struggling to release identity tied to the journey.",
+    "correspondences": { "element": "earth", "planet": "saturn", "axes": ["A4", "A7"] }
+  }
+]

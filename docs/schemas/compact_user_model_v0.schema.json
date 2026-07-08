@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://todayflow.app/schemas/compact_user_model_v0.json",
+  "title": "TodayFlow Compact User Model v0 (UMTS-2 read slice)",
+  "description": "PIM read path for Profile, Today, Tarot, Compatibility. Partial implementation of UMTS-1 target — see compact_user_model_v1.schema.json. See USER_MODEL_TARGET_STATE.md §3.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "as_of",
+    "generated_at",
+    "identity",
+    "current_state",
+    "active_themes",
+    "behavioral_patterns",
+    "recommendations",
+    "knowledge_atoms_top_k",
+    "confidence"
+  ],
+  "properties": {
+    "contract_version": {
+      "type": "string",
+      "const": "compact_user_model_v0"
+    },
+    "as_of": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "generated_at": { "type": "string", "minLength": 1 },
+    "identity": { "$ref": "#/$defs/identity" },
+    "current_state": { "type": "object" },
+    "active_themes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/theme" }
+    },
+    "behavioral_patterns": { "$ref": "#/$defs/behavioral_patterns" },
+    "recommendations": { "$ref": "#/$defs/recommendations" },
+    "knowledge_atoms_top_k": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/knowledge_atom" }
+    },
+    "interpretation_instances_top_k": {
+      "description": "UMTS-2 read slice — pending ILR instances for confirm chips.",
+      "type": "array",
+      "maxItems": 10,
+      "items": { "$ref": "#/$defs/interpretation_instance_read_slice" }
+    },
+    "relationship_insights_top_k": {
+      "description": "Confirmed attachment lens insights for Profile.",
+      "type": "array",
+      "maxItems": 5,
+      "items": { "$ref": "#/$defs/relationship_insight_read_slice" }
+    },
+    "confidence": { "type": "object" }
+  },
+  "$defs": {
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "facts": { "$ref": "#/$defs/identity_facts" },
+        "display_name": { "type": ["string", "null"] },
+        "sun_sign": { "type": ["string", "null"] },
+        "moon_sign": { "type": ["string", "null"] },
+        "rising_sign": { "type": ["string", "null"] },
+        "life_path": { "type": ["integer", "null"] },
+        "archetype": { "type": ["string", "null"] },
+        "summary": { "type": ["string", "null"] },
+        "strengths": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "constraints": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "identity_facts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "birth_date": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+        "birth_time_known": { "type": "boolean" },
+        "timezone_name": { "type": "string", "maxLength": 64 }
+      }
+    },
+    "recommendations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary"],
+      "properties": {
+        "primary": { "$ref": "#/$defs/recommendation_item" },
+        "alternates": {
+          "type": "array",
+          "maxItems": 2,
+          "items": { "$ref": "#/$defs/recommendation_item" }
+        }
+      }
+    },
+    "recommendation_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "text"],
+      "properties": {
+        "id": { "type": "string" },
+        "text": { "type": "string" },
+        "timing_hint": { "type": ["string", "null"] },
+        "measurable": { "type": ["string", "null"] },
+        "source": { "type": "string" },
+        "evidence_atom_ids": { "type": "array", "items": { "type": "string" } },
+        "knowledge_type_gate": { "type": "string" }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string" },
+        "weight": { "type": "number" },
+        "stability": { "type": "string" },
+        "source": { "type": "string" }
+      }
+    },
+    "behavioral_patterns": {
+      "type": "object",
+      "properties": {
+        "works": { "type": "array", "items": { "type": "string" } },
+        "does_not_work": { "type": "array", "items": { "type": "string" } },
+        "hints": { "type": "array", "items": { "type": "string" } },
+        "window_days": { "type": "integer" },
+        "total_events": { "type": "integer" }
+      }
+    },
+    "knowledge_atom": {
+      "type": "object",
+      "properties": {
+        "knowledge_id": { "type": "string" },
+        "contract_version": { "type": "string" },
+        "knowledge_type": { "type": "string" },
+        "data_class": { "type": "string" },
+        "claim": { "type": "string" },
+        "claim_summary": { "type": "string" },
+        "confidence": { "type": "number" },
+        "evidence_count": { "type": "integer" },
+        "last_confirmed_at": { "type": "string" },
+        "confirmation_required": { "type": "boolean" }
+      }
+    },
+    "interpretation_instance_read_slice": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "instance_id": { "type": ["string", "null"], "maxLength": 80 },
+        "interpretation_ref_id": { "type": ["string", "null"], "maxLength": 80 },
+        "level": { "type": ["string", "null"], "maxLength": 16 },
+        "summary": { "type": ["string", "null"], "maxLength": 200 },
+        "dominant_meaning": { "type": ["string", "null"], "maxLength": 120 },
+        "confirmation_required": { "type": "boolean" },
+        "evidence_count": { "type": "integer", "minimum": 0 },
+        "user_verdict": {
+          "type": ["string", "null"],
+          "enum": ["confirm", "partial", "reject", null]
+        }
+      }
+    },
+    "relationship_insight_read_slice": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "knowledge_id": { "type": ["string", "null"], "maxLength": 80 },
+        "kind": { "type": ["string", "null"], "maxLength": 32 },
+        "label": { "type": ["string", "null"], "maxLength": 120 },
+        "summary": { "type": ["string", "null"], "maxLength": 240 },
+        "domain": { "type": ["string", "null"], "maxLength": 32 },
+        "confirmed_at": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

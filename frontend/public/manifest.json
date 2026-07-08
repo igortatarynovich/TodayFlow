@@ -1,0 +1,58 @@
+{
+  "name": "TodayFlow - Эра самопознания",
+  "short_name": "TodayFlow",
+  "description": "Понимай себя. Живи осознанно. Персонализированные астрологические инсайты для самопознания и личностного роста.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/images/hero-meditation.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["lifestyle", "productivity", "health"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Дневной прогноз",
+      "short_name": "Прогноз",
+      "description": "Открыть дневной прогноз",
+      "url": "/dashboard/daily",
+      "icons": [
+        {
+          "src": "/icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Практики",
+      "short_name": "Практики",
+      "description": "Открыть практики",
+      "url": "/practices",
+      "icons": [
+        {
+          "src": "/icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Дневник",
+      "short_name": "Дневник",
+      "description": "Открыть дневник",
+      "url": "/journal",
+      "icons": [
+        {
+          "src": "/icons/icon-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
+}

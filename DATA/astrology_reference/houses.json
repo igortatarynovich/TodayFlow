@@ -1,0 +1,110 @@
+[
+  {
+    "id": 1,
+    "name": "First House",
+    "keywords": ["identity", "appearance", "approach"],
+    "life_domain": "Self & embodiment",
+    "axes": ["A1", "A7"],
+    "modulators": [],
+    "description": "Sets tone for how a person introduces themselves to the world; rising sign filter for all experiences."
+  },
+  {
+    "id": 2,
+    "name": "Second House",
+    "keywords": ["resources", "values", "stability"],
+    "life_domain": "Money & security",
+    "axes": ["A4", "A7"],
+    "modulators": ["M4"],
+    "description": "Reveals relationship to personal assets, skill cultivation, and sense of worth."
+  },
+  {
+    "id": 3,
+    "name": "Third House",
+    "keywords": ["communication", "learning", "local ties"],
+    "life_domain": "Thinking & expression",
+    "axes": ["A3"],
+    "modulators": ["M2"],
+    "description": "Describes everyday mental habits, sibling dynamics, and short-range logistics."
+  },
+  {
+    "id": 4,
+    "name": "Fourth House",
+    "keywords": ["roots", "family", "inner base"],
+    "life_domain": "Emotional foundations",
+    "axes": ["A2", "A6"],
+    "modulators": ["M1"],
+    "description": "Shows private life, ancestry, and what feels like ‘home’." 
+  },
+  {
+    "id": 5,
+    "name": "Fifth House",
+    "keywords": ["creativity", "romance", "play"],
+    "life_domain": "Self-expression",
+    "axes": ["A1", "A7"],
+    "modulators": ["M2"],
+    "description": "Governs joyful risk-taking, personal projects, and matters of the heart." 
+  },
+  {
+    "id": 6,
+    "name": "Sixth House",
+    "keywords": ["work", "health", "service"],
+    "life_domain": "Daily systems",
+    "axes": ["A3", "A5"],
+    "modulators": ["M2", "M4"],
+    "description": "Tracks routines, employment atmosphere, and body-mind maintenance." 
+  },
+  {
+    "id": 7,
+    "name": "Seventh House",
+    "keywords": ["partnership", "mirrors", "contracts"],
+    "life_domain": "Relationships",
+    "axes": ["A6"],
+    "modulators": ["M1"],
+    "description": "What we project onto others, how we negotiate commitments, and the qualities we seek." 
+  },
+  {
+    "id": 8,
+    "name": "Eighth House",
+    "keywords": ["merging", "inheritance", "shadow"],
+    "life_domain": "Shared resources",
+    "axes": ["A5", "A2"],
+    "modulators": ["M1", "M3"],
+    "description": "Deals with intimacy, collective assets, and psychological regeneration." 
+  },
+  {
+    "id": 9,
+    "name": "Ninth House",
+    "keywords": ["belief", "travel", "meaning"],
+    "life_domain": "Philosophy & expansion",
+    "axes": ["A4", "A7"],
+    "modulators": ["M3"],
+    "description": "Reflects search for truth, higher learning, and big horizon choices." 
+  },
+  {
+    "id": 10,
+    "name": "Tenth House",
+    "keywords": ["career", "legacy", "visibility"],
+    "life_domain": "Responsibility",
+    "axes": ["A5", "A4"],
+    "modulators": ["M4"],
+    "description": "Signals public roles, authority patterns, and vocational destiny." 
+  },
+  {
+    "id": 11,
+    "name": "Eleventh House",
+    "keywords": ["community", "networks", "future"],
+    "life_domain": "Collective participation",
+    "axes": ["A6", "A4"],
+    "modulators": ["M2"],
+    "description": "Covers friendships, causes, and how we plug into the social field." 
+  },
+  {
+    "id": 12,
+    "name": "Twelfth House",
+    "keywords": ["retreat", "closure", "mystery"],
+    "life_domain": "Inner worlds",
+    "axes": ["A2", "A3"],
+    "modulators": ["M1", "M3"],
+    "description": "Speaks to unconscious patterns, solitude, and where we surrender control." 
+  }
+]

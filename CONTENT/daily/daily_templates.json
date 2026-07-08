@@ -1,0 +1,86 @@
+[
+  {
+    "template_id": "DAILY.AFFIRMATION.001",
+    "type": "AFFIRMATION",
+    "category": "affirmation",
+    "text": "You are allowed to take up space.",
+    "human_text": "You are allowed to take up space. Your presence matters, and your needs are valid."
+  },
+  {
+    "template_id": "DAILY.AFFIRMATION.002",
+    "type": "AFFIRMATION",
+    "category": "affirmation",
+    "text": "Your boundaries are valid, even if others don't understand them.",
+    "human_text": "Your boundaries are valid, even if others don't understand them. You don't need permission to protect your energy."
+  },
+  {
+    "template_id": "DAILY.DIGEST.001",
+    "type": "DIGEST",
+    "category": "daily_digest",
+    "text": "Today brings opportunities for clarity and alignment.",
+    "human_text": "Today brings opportunities for clarity and alignment. Pay attention to moments when things feel right, and trust your ability to recognize them."
+  },
+  {
+    "template_id": "DAILY.FOCUS.001",
+    "type": "FOCUS",
+    "category": "daily_focus",
+    "text": "Focus on what you can control today.",
+    "human_text": "Focus on what you can control today. Let go of what's outside your influence, and direct your energy toward actions that matter."
+  },
+  {
+    "template_id": "DAILY.PATTERN_TODAY.EP.001",
+    "type": "PATTERN_TODAY",
+    "category": "emotional_pattern",
+    "pattern": "EP",
+    "text": "Notice how your emotions are moving today.",
+    "human_text": "Notice how your emotions are moving today. Pay attention to what triggers them and how they flow through you."
+  },
+  {
+    "template_id": "DAILY.PATTERN_TODAY.RL.001",
+    "type": "PATTERN_TODAY",
+    "category": "relationship_pattern",
+    "pattern": "RL",
+    "text": "Observe the dynamics in your relationships today.",
+    "human_text": "Observe the dynamics in your relationships today. Notice what feels supportive and what asks for your attention."
+  },
+  {
+    "template_id": "DAILY.PRACTICE.breathing.001",
+    "type": "PRACTICE",
+    "category": "breathing",
+    "practice_type": "breathing",
+    "text": "Take three deep breaths to ground yourself.",
+    "instructions": "Breathe in for four counts, hold for four, exhale for four.",
+    "human_text": "Take three deep breaths to ground yourself. Breathe in for four counts, hold for four, and exhale for four. This simple practice can help you reconnect with your body and calm your mind."
+  },
+  {
+    "template_id": "DAILY.PRACTICE.meditation.001",
+    "type": "PRACTICE",
+    "category": "meditation",
+    "practice_type": "meditation",
+    "text": "Spend five minutes in quiet observation.",
+    "instructions": "Find a comfortable position, close your eyes, and observe your thoughts without judgment.",
+    "human_text": "Spend five minutes in quiet observation. Find a comfortable position, close your eyes, and observe your thoughts without judgment. This practice helps you create space between yourself and your reactions."
+  },
+  {
+    "template_id": "DAILY.PROMPT.001",
+    "type": "PROMPT",
+    "category": "reflection_prompt",
+    "text": "What is one thing you're grateful for today?",
+    "human_text": "What is one thing you're grateful for today? Take a moment to reflect on this question and notice how it feels to identify something positive."
+  },
+  {
+    "template_id": "DAILY.WARNING.001",
+    "type": "WARNING",
+    "category": "daily_warning",
+    "text": "Be mindful of overcommitting today.",
+    "human_text": "Be mindful of overcommitting today. You may feel pulled in multiple directions, but remember that saying no is a form of self-care."
+  },
+  {
+    "template_id": "DAILY.WIN.001",
+    "type": "WIN",
+    "category": "daily_win",
+    "text": "Celebrate the small wins today.",
+    "human_text": "Celebrate the small wins today. Every step forward, no matter how small, is worth acknowledging and honoring."
+  }
+]
+

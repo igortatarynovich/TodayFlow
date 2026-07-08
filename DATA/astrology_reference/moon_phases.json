@@ -1,0 +1,66 @@
+[
+  {
+    "id": "new",
+    "name": "New Moon",
+    "degree_range": "0°-44°",
+    "keywords": ["seed", "intention", "rest"],
+    "themes": "Quiet reset, clarifying motives, committing to internal alignment.",
+    "guidance": "Lower output, listen to body, set one hypothesis rather than a dozen goals."
+  },
+  {
+    "id": "waxing_crescent",
+    "name": "Waxing Crescent",
+    "degree_range": "45°-89°",
+    "keywords": ["initiate", "momentum", "courage"],
+    "themes": "Take first micro-actions, share drafts, invite accountability.",
+    "guidance": "Protect fragile ideas from overexposure while still moving forward."
+  },
+  {
+    "id": "first_quarter",
+    "name": "First Quarter",
+    "degree_range": "90°-134°",
+    "keywords": ["decision", "challenge", "adjust"],
+    "themes": "Hit resistance that demands refinement or firmer commitment.",
+    "guidance": "Name the friction honestly; choose to course-correct or double down."
+  },
+  {
+    "id": "waxing_gibbous",
+    "name": "Waxing Gibbous",
+    "degree_range": "135°-179°",
+    "keywords": ["refine", "prepare", "anticipate"],
+    "themes": "Fine-tuning strategy, securing resources, aligning collaborators.",
+    "guidance": "Audit systems and expectations; set the stage for visibility."
+  },
+  {
+    "id": "full",
+    "name": "Full Moon",
+    "degree_range": "180°-224°",
+    "keywords": ["culmination", "illumination", "release"],
+    "themes": "Insight arrives; truths are revealed; emotional tides peak.",
+    "guidance": "Share outcomes, celebrate learning, let go of what cannot travel forward."
+  },
+  {
+    "id": "waning_gibbous",
+    "name": "Waning Gibbous",
+    "degree_range": "225°-269°",
+    "keywords": ["harvest", "teach", "process"],
+    "themes": "Integrate, document, distribute wisdom gained during the build.",
+    "guidance": "Create templates, mentor others, and metabolize feedback."
+  },
+  {
+    "id": "last_quarter",
+    "name": "Last Quarter",
+    "degree_range": "270°-314°",
+    "keywords": ["release", "pivot", "forgive"],
+    "themes": "Discern what stays, what goes, and what needs closure.",
+    "guidance": "Simplify obligations, resolve tension, and secure energetic boundaries."
+  },
+  {
+    "id": "waning_crescent",
+    "name": "Waning Crescent",
+    "degree_range": "315°-359°",
+    "keywords": ["surrender", "rest", "gestate"],
+    "themes": "Deep recovery, dreamwork, preparing quietly for the next cycle.",
+    "guidance": "Downshift commitments, focus on sleep and somatic repair."
+  }
+]

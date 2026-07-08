@@ -1,0 +1,20 @@
+{
+  "contract_version": "reference_machine_contract_v1",
+  "domain": "tarot",
+  "entity_code": "tarot.major.10",
+  "version": "0.1.0",
+  "status": "draft",
+  "machine_contract": {
+    "vector": {
+      "action_reflection": 0.22,
+      "expansion_consolidation": 0.52,
+      "self_others": 0.0,
+      "structure_flow": -0.55
+    },
+    "tempo": "dynamic",
+    "risk": "medium",
+    "risk_modifier": 0.28,
+    "emotional_load": "neutral",
+    "confidence": 0.68
+  }
+}

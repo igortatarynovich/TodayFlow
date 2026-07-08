@@ -1,0 +1,21 @@
+{
+  "contract_version": "reference_machine_contract_v1",
+  "domain": "numerology",
+  "entity_code": "numerology.core.1",
+  "entity_type": "CoreNumber",
+  "version": "0.1.0",
+  "status": "draft",
+  "machine_contract": {
+    "vector": {
+      "action_reflection": 0.75,
+      "expansion_consolidation": 0.55,
+      "self_others": 0.2,
+      "structure_flow": -0.5
+    },
+    "tempo": "dynamic",
+    "risk": "medium",
+    "risk_modifier": 0.25,
+    "emotional_load": "neutral",
+    "confidence": 1.0
+  }
+}

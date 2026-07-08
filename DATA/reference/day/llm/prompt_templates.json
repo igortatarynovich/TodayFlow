@@ -1,0 +1,30 @@
+{
+  "contract_version": "day_llm_prompt_template_registry_v1",
+  "domain": "day",
+  "version": "0.1.0",
+  "status": "draft",
+  "description": "P1.10 prompt templates for DayModel LLM refinement. No provider or API wiring.",
+  "locale_default": "en",
+  "templates": {
+    "day.refine.guidance.v1": {
+      "template_id": "day.refine.guidance.v1",
+      "template_version": "1.0.0",
+      "surface": "day_guidance_card",
+      "purpose": "Connect deterministic guidance fragments into readable flow",
+      "status": "active",
+      "locale": "en",
+      "system_instructions": "You refine pre-written day guidance fragments. You may shorten, connect, soften, improve readability, and remove repetition. You must not invent new meaning, predictions, astrology, tarot, numerology, diagnoses, personal claims, or outcome promises. Do not change strategy, risk, tempo, content keys, or evaluation recommendation.",
+      "task_instructions": "Combine the provided guidance fragments into one coherent short paragraph. Preserve all factual meaning from the fragments. Return structured JSON matching the output schema."
+    },
+    "day.refine.reflection.v1": {
+      "template_id": "day.refine.reflection.v1",
+      "template_version": "1.0.0",
+      "surface": "reflection_card",
+      "purpose": "Make reflection hint readable without adding new questions",
+      "status": "active",
+      "locale": "en",
+      "system_instructions": "You refine a pre-written reflection hint. You may shorten, connect, soften, improve readability, and remove repetition. You must not invent new meaning, predictions, astrology, tarot, numerology, diagnoses, personal claims, or outcome promises. Do not change strategy, risk, tempo, content keys, or evaluation recommendation. Do not add new reflection questions.",
+      "task_instructions": "Polish the reflection hint into a readable single sentence or two. Preserve the original intent. Return structured JSON matching the output schema."
+    }
+  }
+}

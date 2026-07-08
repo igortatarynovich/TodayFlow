@@ -1,0 +1,365 @@
+{
+  "contract_version": "cycle_definition_registry_v1",
+  "domain": "practice",
+  "version": "1.0.0",
+  "status": "draft",
+  "description": "C1.6 Cycle Definition registry — bounded temporal programs bundling C1.1–C1.5 entities. No user progress, UI, or commerce.",
+  "cycle_definitions": {
+    "seven_day_energy_reset": {
+      "code": "seven_day_energy_reset",
+      "title": "Seven day energy reset",
+      "cycle_category": "energy",
+      "description": "Short energy reset program combining somatic ritual, body habit, and weekly energy goal.",
+      "duration_days": 7,
+      "primary_path_theme": "energy",
+      "components": [
+        {
+          "component_type": "ritual",
+          "component_code": "body_energy_ritual",
+          "required": true,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "habit",
+          "component_code": "body_activation",
+          "required": true,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "goal",
+          "component_code": "energy_balance_week",
+          "required": true,
+          "minimum_required_for_completion": true
+        }
+      ],
+      "component_count": 3,
+      "minimum_completion_rule": {
+        "minimum_active_days": 5,
+        "minimum_components_completed": 3,
+        "period": "cycle"
+      },
+      "compatible_paths": ["energy", "body", "healing"],
+      "compatible_stages": ["seeker", "observer", "practitioner", "explorer", "architect"],
+      "produces_signals": ["cycle_completed"],
+      "difficulty_level": "beginner",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "twenty_one_day_discipline_cycle": {
+      "code": "twenty_one_day_discipline_cycle",
+      "title": "Twenty-one day discipline cycle",
+      "cycle_category": "discipline",
+      "description": "Discipline arc weaving breath habits, reset ritual, and weekly rhythm goal across three weeks.",
+      "duration_days": 21,
+      "primary_path_theme": "discipline",
+      "components": [
+        {
+          "component_type": "habit",
+          "component_code": "daily_breathing",
+          "required": true,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "ritual",
+          "component_code": "discipline_reset_ritual",
+          "required": true,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "goal",
+          "component_code": "weekly_discipline_rhythm",
+          "required": true,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "ascetic",
+          "component_code": "no_multitasking",
+          "required": false,
+          "minimum_required_for_completion": false
+        }
+      ],
+      "component_count": 4,
+      "minimum_completion_rule": {
+        "minimum_active_days": 14,
+        "minimum_components_completed": 3,
+        "period": "cycle"
+      },
+      "compatible_paths": ["discipline", "energy", "body"],
+      "compatible_stages": ["practitioner", "explorer", "architect", "mentor", "master"],
+      "produces_signals": ["cycle_completed"],
+      "difficulty_level": "intermediate",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "twenty_one_day_reflection_cycle": {
+      "code": "twenty_one_day_reflection_cycle",
+      "title": "Twenty-one day reflection cycle",
+      "cycle_category": "reflection",
+      "description": "Reflection-focused program with evening ritual, reflection practice, and weekly closure goal.",
+      "duration_days": 21,
+      "primary_path_theme": "clarity",
+      "components": [
+        {
+          "component_type": "ritual",
+          "component_code": "evening_reflection_ritual",
+          "required": true,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "practice",
+          "component_code": "reflection",
+          "required": true,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "goal",
+          "component_code": "weekly_reflection_closure",
+          "required": true,
+          "minimum_required_for_completion": true
+        }
+      ],
+      "component_count": 3,
+      "minimum_completion_rule": {
+        "minimum_active_days": 12,
+        "minimum_components_completed": 3,
+        "period": "cycle"
+      },
+      "compatible_paths": ["clarity", "healing", "relationships"],
+      "compatible_stages": ["observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "produces_signals": ["cycle_completed"],
+      "difficulty_level": "beginner",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "twenty_one_day_habit_building_cycle": {
+      "code": "twenty_one_day_habit_building_cycle",
+      "title": "Twenty-one day habit building cycle",
+      "cycle_category": "growth",
+      "description": "Habit-building arc combining morning ritual, meditation and gratitude habits, and consistency milestone.",
+      "duration_days": 21,
+      "primary_path_theme": "discipline",
+      "components": [
+        {
+          "component_type": "ritual",
+          "component_code": "morning_grounding_ritual",
+          "required": true,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "habit",
+          "component_code": "meditation_minutes",
+          "required": true,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "habit",
+          "component_code": "daily_gratitude",
+          "required": true,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "goal",
+          "component_code": "habit_consistency_milestone",
+          "required": false,
+          "minimum_required_for_completion": false
+        }
+      ],
+      "component_count": 4,
+      "minimum_completion_rule": {
+        "minimum_active_days": 15,
+        "minimum_components_completed": 3,
+        "period": "cycle"
+      },
+      "compatible_paths": ["discipline", "energy", "spirituality"],
+      "compatible_stages": ["practitioner", "explorer", "architect", "mentor", "master"],
+      "produces_signals": ["cycle_completed"],
+      "difficulty_level": "intermediate",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "thirty_day_clarity_cycle": {
+      "code": "thirty_day_clarity_cycle",
+      "title": "Thirty day clarity cycle",
+      "cycle_category": "clarity",
+      "description": "Month-long clarity program with journaling ritual, planning habit, and weekly clarity theme goal.",
+      "duration_days": 30,
+      "primary_path_theme": "clarity",
+      "components": [
+        {
+          "component_type": "ritual",
+          "component_code": "clarity_journaling_ritual",
+          "required": true,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "habit",
+          "component_code": "morning_planning",
+          "required": true,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "goal",
+          "component_code": "weekly_clarity_theme",
+          "required": true,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "practice",
+          "component_code": "self_observation",
+          "required": false,
+          "minimum_required_for_completion": false
+        }
+      ],
+      "component_count": 4,
+      "minimum_completion_rule": {
+        "minimum_active_days": 21,
+        "minimum_components_completed": 3,
+        "period": "cycle"
+      },
+      "compatible_paths": ["clarity", "purpose", "creativity"],
+      "compatible_stages": ["observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "produces_signals": ["cycle_completed"],
+      "difficulty_level": "intermediate",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "thirty_day_purpose_arc": {
+      "code": "thirty_day_purpose_arc",
+      "title": "Thirty day purpose arc",
+      "cycle_category": "purpose",
+      "description": "Purpose arc linking focus ritual, visualization practice, and direction milestone across one month.",
+      "duration_days": 30,
+      "primary_path_theme": "purpose",
+      "components": [
+        {
+          "component_type": "ritual",
+          "component_code": "focus_start_ritual",
+          "required": true,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "practice",
+          "component_code": "visualization",
+          "required": true,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "goal",
+          "component_code": "purpose_direction_milestone",
+          "required": true,
+          "minimum_required_for_completion": true
+        }
+      ],
+      "component_count": 3,
+      "minimum_completion_rule": {
+        "minimum_active_days": 20,
+        "minimum_components_completed": 3,
+        "period": "cycle"
+      },
+      "compatible_paths": ["purpose", "clarity", "creativity"],
+      "compatible_stages": ["explorer", "architect", "mentor", "master"],
+      "produces_signals": ["cycle_completed"],
+      "difficulty_level": "advanced",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "ninety_day_architect_cycle": {
+      "code": "ninety_day_architect_cycle",
+      "title": "Ninety day architect cycle",
+      "cycle_category": "growth",
+      "description": "Long-horizon architect program bundling system review goal, discipline and reflection rituals, and core habits.",
+      "duration_days": 90,
+      "primary_path_theme": "purpose",
+      "components": [
+        {
+          "component_type": "goal",
+          "component_code": "architect_system_review",
+          "required": true,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "ritual",
+          "component_code": "discipline_reset_ritual",
+          "required": true,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "ritual",
+          "component_code": "evening_reflection_ritual",
+          "required": true,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "habit",
+          "component_code": "self_observation_check",
+          "required": false,
+          "minimum_required_for_completion": false
+        },
+        {
+          "component_type": "goal",
+          "component_code": "habit_consistency_milestone",
+          "required": false,
+          "minimum_required_for_completion": false
+        }
+      ],
+      "component_count": 5,
+      "minimum_completion_rule": {
+        "minimum_active_days": 60,
+        "minimum_components_completed": 3,
+        "period": "cycle"
+      },
+      "compatible_paths": ["purpose", "discipline", "clarity"],
+      "compatible_stages": ["architect", "mentor", "master"],
+      "produces_signals": ["cycle_completed"],
+      "difficulty_level": "advanced",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "twenty_one_day_digital_boundary_cycle": {
+      "code": "twenty_one_day_digital_boundary_cycle",
+      "title": "Twenty-one day digital boundary cycle",
+      "cycle_category": "digital",
+      "description": "Digital boundary program combining evening phone ritual, digital ascetics, and focus sprint goal.",
+      "duration_days": 21,
+      "primary_path_theme": "discipline",
+      "components": [
+        {
+          "component_type": "ritual",
+          "component_code": "no_phone_evening_ritual",
+          "required": true,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "ascetic",
+          "component_code": "no_social_media_evening",
+          "required": true,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "ascetic",
+          "component_code": "morning_no_phone",
+          "required": true,
+          "minimum_required_for_completion": true
+        },
+        {
+          "component_type": "goal",
+          "component_code": "focus_sprint_week",
+          "required": false,
+          "minimum_required_for_completion": false
+        }
+      ],
+      "component_count": 4,
+      "minimum_completion_rule": {
+        "minimum_active_days": 14,
+        "minimum_components_completed": 3,
+        "period": "cycle"
+      },
+      "compatible_paths": ["discipline", "clarity", "energy"],
+      "compatible_stages": ["observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "produces_signals": ["cycle_completed"],
+      "difficulty_level": "intermediate",
+      "status": "active",
+      "version": "1.0.0"
+    }
+  }
+}

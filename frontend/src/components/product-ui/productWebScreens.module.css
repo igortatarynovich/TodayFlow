@@ -1,0 +1,2974 @@
+.pageHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-bottom: 2rem;
+}
+
+.profilePageTitle {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: 1.625rem;
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--tf-ink);
+}
+
+.profilePageSubtitle {
+  margin: 0.75rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--tf-caption);
+}
+
+.profileDateLabel {
+  margin: 0;
+  font-size: 0.875rem;
+  color: rgba(42, 37, 32, 0.5);
+  white-space: nowrap;
+}
+
+.identityPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.identityPill {
+  display: inline-flex;
+  align-items: center;
+  height: 2rem;
+  padding: 0 1rem;
+  border-radius: 999px;
+  background: var(--tf-accent-gold);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.profileWebStack {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  width: 100%;
+}
+
+.profileHero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  min-height: 17.5rem;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  background: #fdfbf7;
+  text-align: center;
+}
+
+.profileHeroOrbital {
+  width: 7.5rem;
+  height: 7.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profileHeroOrbital :global([class*="themeViz"]) {
+  min-height: 7.5rem;
+  width: 7.5rem;
+}
+
+.profileHeroOrbital :global([class*="themeRing"]:nth-child(1)) {
+  width: 7.5rem;
+  height: 7.5rem;
+}
+
+.profileHeroOrbital :global([class*="themeRing"]:nth-child(2)) {
+  width: 5.625rem;
+  height: 5.625rem;
+}
+
+.profileHeroOrbital :global([class*="themeRing"]:nth-child(3)) {
+  width: 3.75rem;
+  height: 3.75rem;
+}
+
+.profileHeroOrbital :global([class*="themeCore"]) {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.profileHeroQuote {
+  max-width: 30rem;
+  margin: 0;
+  padding-left: 1rem;
+  border-left: 2px solid var(--tf-accent-gold);
+  font-family: var(--tf-font-display);
+  font-size: 1.0625rem;
+  line-height: 1.45;
+  font-style: italic;
+  color: var(--tf-ink);
+  text-align: left;
+}
+
+.profileSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.profileSectionLead {
+  max-width: 37.5rem;
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--tf-ink);
+}
+
+.balanceGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.balanceCard {
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  background: #f9f6f0;
+  border-top: 4px solid var(--tf-accent-gold);
+  min-height: 10rem;
+}
+
+.balanceCardDrain {
+  border-top-color: rgba(42, 37, 32, 0.5);
+}
+
+.balanceDotMuted {
+  background: rgba(42, 37, 32, 0.45);
+}
+
+.balanceCardTitle {
+  margin: 0 0 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--tf-ink);
+}
+
+.balanceList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.balanceItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--tf-ink-soft, #475569);
+}
+
+.balanceDot {
+  flex-shrink: 0;
+  width: 0.25rem;
+  height: 0.25rem;
+  margin-top: 0.45rem;
+  border-radius: 50%;
+  background: var(--tf-accent-gold);
+}
+
+.sphereGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.sphereTile {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-height: 5rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(42, 37, 32, 0.1);
+  background: #fff;
+}
+
+.sphereIcon {
+  display: inline-flex;
+  width: 1rem;
+  height: 1rem;
+  color: var(--tf-accent-gold);
+}
+
+.sphereIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.sphereCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.sphereTitle {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.sphereHint {
+  margin: 0;
+  font-size: 0.625rem;
+  line-height: 1.35;
+  color: rgba(42, 37, 32, 0.5);
+}
+
+.myDaysHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+
+.myDaysEyebrow {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tf-accent-gold);
+}
+
+.myDaysLink {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--tf-accent-gold);
+  text-decoration: none;
+}
+
+.myDaysLink:hover {
+  text-decoration: underline;
+}
+
+.myDaysHeatmap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.myDaysCell {
+  width: 2.125rem;
+  height: 2.125rem;
+  border-radius: 0.25rem;
+  background: var(--tf-accent-gold);
+}
+
+.profileRailPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.profileRailTitle {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tf-accent-gold);
+}
+
+.profileRailList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.profileRailRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.875rem 0;
+  border-bottom: 1px solid rgba(42, 37, 32, 0.1);
+}
+
+.profileRailRow:last-child {
+  border-bottom: none;
+}
+
+.profileRailLeft {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.profileRailIcon {
+  display: inline-flex;
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--tf-accent-gold);
+}
+
+.profileRailIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.profileRailLabel {
+  font-size: 0.8125rem;
+  color: rgba(42, 37, 32, 0.5);
+}
+
+.profileRailValue {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.profileRailHint {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--tf-caption);
+}
+
+.profileDeepSummary {
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--tf-accent-gold-600, #8f7756);
+}
+
+.compatResultRoot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+.compatTabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.compatTab {
+  padding: 0 0 0.75rem;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--tf-caption);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.compatTabActive {
+  color: var(--tf-ink);
+  border-bottom-color: var(--tf-accent-gold);
+}
+
+.compatHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  text-align: center;
+}
+
+.avatarGroup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: #f9f6f0;
+  box-shadow: inset 0 0 0 1px rgba(201, 169, 110, 0.35);
+  font-family: var(--tf-font-display);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--tf-ink);
+}
+
+.avatarOverlap {
+  margin-left: -1rem;
+}
+
+.compatScore {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: 4rem;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--tf-ink);
+}
+
+.compatScenario {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--tf-caption);
+}
+
+.compatPairLine {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.compatMetaChips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.compatMetaChip {
+  display: inline-flex;
+  align-items: center;
+  height: 1.875rem;
+  padding: 0 0.75rem;
+  border-radius: 999px;
+  background: #f9f6f0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.compatBlocks {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+}
+
+.compatBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.compatBlockWorks {
+  padding-left: 1.5rem;
+  border-left: 2px solid var(--tf-accent-gold);
+}
+
+.compatBlockInset {
+  padding: 2rem;
+  border-radius: var(--tf-ds-radius-lg);
+  background: #f9f6f0;
+}
+
+.compatFrictionTag {
+  display: inline-flex;
+  align-items: center;
+  height: 1.875rem;
+  padding: 0 0.75rem;
+  border-radius: 999px;
+  background: rgba(196, 84, 74, 0.1);
+  border: 1px solid rgba(196, 84, 74, 0.25);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #a94438;
+}
+
+.compatNextStep {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--tf-ink);
+}
+
+.compatLearningDetails {
+  width: 100%;
+}
+
+.compatLearningSummary,
+.compatDeepSummary {
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--tf-accent-gold-600, #8f7756);
+}
+
+.compatActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.compatActionSecondary,
+.compatActionPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.9375rem;
+  padding: 0 1.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(42, 37, 32, 0.12);
+  background: transparent;
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+  cursor: pointer;
+}
+
+.compatActionPrimary {
+  border-color: var(--tf-surface-dark, #2a2520);
+  background: var(--tf-surface-dark, #2a2520);
+  color: #fdfbf7;
+}
+
+.compatActionSecondary:hover,
+.compatActionPrimary:hover {
+  opacity: 0.92;
+}
+
+.compatBlockDark {
+  padding: 2rem;
+  border-radius: var(--tf-ds-radius-lg);
+  background: var(--tf-surface-dark);
+  color: var(--tf-on-dark);
+}
+
+.compatBullets {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.compatBullet {
+  position: relative;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--tf-ink);
+}
+
+.compatBullet::before {
+  content: "•";
+  position: absolute;
+  left: -1rem;
+}
+
+.compatBlockDark .compatBullet {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.compatTagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.compatPotential {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.compatPotentialValue {
+  margin: 0.25rem 0 0;
+  font-family: var(--tf-font-display);
+  font-size: clamp(1.75rem, 4vw, 2.625rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+.compatPotentialIcon {
+  font-size: 2.5rem;
+  line-height: 1;
+  opacity: 0.85;
+}
+
+.compatRailScore {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.compatScoreRing {
+  --ce-score-pct: 50;
+  position: relative;
+  width: 7.5rem;
+  height: 7.5rem;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--tf-accent-gold) calc(var(--ce-score-pct) * 1%),
+    rgba(201, 169, 110, 0.15) 0
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.compatScoreRingInner {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  background: var(--tf-surface, #fdfbf7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--tf-ink);
+}
+
+.compatMetricList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.compatMetricRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.compatMetricHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.compatMetricTrack {
+  height: 0.375rem;
+  border-radius: 999px;
+  background: rgba(42, 37, 32, 0.08);
+  overflow: hidden;
+}
+
+.compatMetricFill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--tf-accent-gold);
+  transition: width 0.45s ease;
+}
+
+.profileDeepWrap {
+  margin-top: 1rem;
+}
+
+/* —— Compatibility hub (40:4) —— */
+
+.compatHubStack {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  width: 100%;
+  max-width: 45rem;
+}
+
+.compatHubIntro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.compatHubTitle {
+  margin: 0;
+  font-size: clamp(1.75rem, 3vw, 2.625rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--tf-ink);
+}
+
+.compatHubLead {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--tf-caption);
+}
+
+.compatModeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.compatModeCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 6.25rem;
+  padding: 1rem;
+  border: 1px solid var(--tf-border-subtle, rgba(42, 37, 32, 0.1));
+  border-radius: var(--tf-ds-radius-lg);
+  background: var(--tf-surface, #fdfbf7);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.compatModeCardActive::before {
+  content: "";
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--tf-accent-gold);
+}
+
+.compatModeCard:hover {
+  border-color: var(--tf-accent-gold);
+}
+
+.compatModeCardActive {
+  border-color: var(--tf-accent-gold);
+  box-shadow: 0 0 0 1px var(--tf-accent-gold);
+}
+
+.compatModeIcon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.compatModeTitle {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--tf-ink);
+}
+
+.compatModeHint {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--tf-caption);
+}
+
+.compatPairPicker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.25rem;
+  border-radius: var(--tf-ds-radius-xl);
+  background: #f9f6f0;
+}
+
+.compatPairRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.compatPairSlot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 8.75rem;
+}
+
+.compatPairAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  border: 2px dashed rgba(42, 37, 32, 0.15);
+  background: var(--tf-surface, #fff);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--tf-ink);
+}
+
+.compatPairAvatarFilled {
+  border-style: solid;
+  border-color: var(--tf-accent-gold);
+}
+
+.compatPairSelect {
+  width: 100%;
+  max-width: 10rem;
+  padding: 0.375rem 0.5rem;
+  border-radius: var(--tf-ds-radius-md);
+  border: 1px solid rgba(42, 37, 32, 0.12);
+  background: #fff;
+  font: inherit;
+  font-size: 0.8125rem;
+}
+
+.compatPairConnector {
+  font-size: 1.25rem;
+  color: var(--tf-accent-gold);
+}
+
+.compatHistoryList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.compatHistoryRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(42, 37, 32, 0.08);
+}
+
+.compatHistoryRow:last-child {
+  border-bottom: none;
+}
+
+.compatHistoryMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.compatHistoryLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.compatHistoryDate {
+  font-size: 0.75rem;
+  color: var(--tf-caption);
+}
+
+.compatHistoryBadge {
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--tf-ds-radius-pill);
+  background: #f9f6f0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--tf-ink);
+}
+
+.compatRailQuote {
+  margin: 1rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  font-style: italic;
+  color: var(--tf-caption);
+}
+
+/* —— Tarot result (29:692) —— */
+
+.tarotWebRoot {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  width: 100%;
+  color: var(--tf-ink);
+}
+
+.tarotWebBack {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--tf-caption);
+  text-decoration: none;
+}
+
+.tarotWebBack:hover {
+  color: var(--tf-ink);
+}
+
+.tarotWebLayout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  min-width: 0;
+  width: 100%;
+}
+
+.tarotWebCards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.tarotWebStory {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-width: 0;
+}
+
+.tarotWebTopicChip {
+  display: inline-flex;
+  align-items: center;
+  height: 2rem;
+  padding: 0 1rem;
+  border-radius: 999px;
+  background: var(--tf-surface-warm);
+  border: 1px solid var(--tf-cream-border);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--tf-accent-gold);
+}
+
+.tarotWebCardSlot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tarotWebCardImageWrap {
+  position: relative;
+  border-radius: var(--tf-ds-radius-md);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+}
+
+.tarotWebCardFace {
+  width: 13.75rem;
+  max-width: 100%;
+  aspect-ratio: 192 / 320;
+  border-radius: var(--tf-ds-radius-md);
+  border: 1px solid var(--tf-cream-border);
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+}
+
+.tarotWebCardPlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  border-radius: inherit;
+  background: linear-gradient(145deg, var(--tf-surface-warm) 0%, #fff 100%);
+  border: 1px solid var(--tf-cream-border);
+  text-align: center;
+}
+
+.tarotWebCardPlaceholderName {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--tf-ink);
+}
+
+.tarotWebCardLabel {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--tf-caption);
+  text-align: center;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.tarotWebQuestion {
+  margin: 0;
+  padding: 1.5rem;
+  border-radius: var(--tf-ds-radius-lg);
+  background: #fff;
+  border: 1px solid var(--tf-cream-border);
+  font-size: 1rem;
+  line-height: 1.55;
+  font-style: italic;
+  color: var(--tf-ink);
+}
+
+.tarotWebVerdict {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: clamp(1.75rem, 4vw, 2.375rem);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--tf-ink);
+}
+
+.tarotWebVerdictSub {
+  margin: 0.5rem 0 0;
+  font-family: var(--tf-font-display);
+  font-size: 1.375rem;
+  font-weight: 400;
+  color: var(--tf-caption);
+}
+
+.tarotWebInsightGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.tarotWebInsightRow {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--tf-ds-radius-lg);
+  background: #fff;
+  border: 1px solid var(--tf-cream-border);
+  min-width: 0;
+}
+
+.tarotWebInsightLabel {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--tf-accent-gold);
+}
+
+.tarotWebActionBox {
+  padding: 2rem;
+  border-radius: var(--tf-ds-radius-lg);
+  background: var(--tf-surface-warm);
+  border: 1px solid var(--tf-cream-border);
+  color: var(--tf-ink);
+}
+
+.tarotWebChipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.tarotWebChip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.375rem;
+  padding: 0 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--tf-cream-border);
+  background: #fff;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.tarotWebChip:hover {
+  border-color: var(--tf-accent-gold);
+  background: var(--tf-surface-warm);
+}
+
+.tarotWebActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.tarotWebLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  width: 100%;
+}
+
+.tarotWebError {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.tarotWebErrorTitle {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: 1.75rem;
+  font-weight: 400;
+  color: var(--tf-ink);
+}
+
+/* —— Today dashboard (5:181 / 46:5 / 49:4) —— */
+
+.todayWebRoot {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  width: 100%;
+  max-width: 50rem;
+}
+
+.todayPageHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.todayGreeting {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--tf-ink);
+}
+
+.todayGreetingLead {
+  margin: 0.5rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--tf-caption);
+}
+
+.todayDatePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  background: #f9f6f0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+  white-space: nowrap;
+}
+
+.todayDatePill svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--tf-accent-gold);
+}
+
+.todayHeroCard {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 17.5rem;
+  border-radius: var(--tf-ds-radius-2xl);
+  background: var(--tf-surface-dark);
+  color: var(--tf-on-dark);
+  overflow: hidden;
+}
+
+.todayHeroOrbital {
+  position: relative;
+  min-height: 12rem;
+  background: radial-gradient(circle at 30% 40%, rgba(201, 169, 110, 0.12), transparent 60%);
+}
+
+.todayHeroOrbital :global([class*="orbitViz"]) {
+  min-height: 12rem;
+}
+
+.todayHeroCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem 2.5rem 2.5rem;
+}
+
+.todayHeroEyebrow {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tf-accent-gold);
+}
+
+.todayHeroTitle {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: clamp(1.75rem, 4vw, 2.375rem);
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.todayHeroTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.todayHeroTag {
+  padding: 0.25rem 0.625rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.todayHeroBody {
+  margin: 0;
+  max-width: 25rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.todayInsightsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.todayInsightCard {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 22rem;
+  padding: 1.5rem;
+  border-radius: var(--tf-ds-radius-xl);
+  border: 1px solid rgba(42, 37, 32, 0.08);
+  background: #fff;
+}
+
+.todayInsightLabel {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tf-caption);
+}
+
+.todayInsightVisual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 10rem;
+  border-radius: var(--tf-ds-radius-lg);
+  background: #f9f6f0;
+}
+
+.todayInsightGlyph {
+  font-family: var(--tf-font-display);
+  font-size: 3rem;
+  color: var(--tf-accent-gold);
+}
+
+.todayInsightNumber {
+  font-family: var(--tf-font-display);
+  font-size: clamp(4rem, 10vw, 7.5rem);
+  line-height: 1;
+  color: var(--tf-accent-gold);
+}
+
+.todayMoonVisual {
+  width: 6.25rem;
+  height: 6.25rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff 0%, #888 45%, #1a1714 46%);
+}
+
+.todayInsightCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.todayInsightTitle {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: 1.125rem;
+  line-height: 1.25;
+  color: var(--tf-ink);
+}
+
+.todayInsightBody {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--tf-caption);
+}
+
+.todayPracticesSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.todayPracticesIntro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.todayPracticesTitle {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: 1.625rem;
+  font-weight: 400;
+  color: var(--tf-ink);
+}
+
+.todayPracticesLead {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--tf-caption);
+}
+
+.todayPracticesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.todayPracticeCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 6.125rem;
+  padding: 1.25rem;
+  border-radius: var(--tf-ds-radius-lg);
+  border: 1px solid rgba(42, 37, 32, 0.08);
+  background: #fff;
+}
+
+.todayPracticeTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.todayPracticeCheck {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid rgba(42, 37, 32, 0.15);
+  background: #fff;
+}
+
+.todayPracticeCheckDone {
+  border-color: var(--tf-accent-gold);
+  background: var(--tf-accent-gold);
+  box-shadow: inset 0 0 0 2px #fff;
+}
+
+.todayPracticeDuration {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--tf-caption);
+}
+
+.todayPracticeName {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--tf-ink);
+}
+
+.todayCompositionSlot {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.todayRailPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.todayRailEyebrow {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tf-accent-gold);
+}
+
+.todayStreakBlock {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.todayStreakValue {
+  font-family: var(--tf-font-display);
+  font-size: 3.875rem;
+  line-height: 1;
+  color: var(--tf-ink);
+}
+
+.todayStreakUnit {
+  padding-bottom: 0.35rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--tf-caption);
+}
+
+.todayWeeklyRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.todayWeeklyCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.todayWeeklyDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--tf-accent-gold);
+}
+
+.todayWeeklyLabel {
+  font-size: 0.75rem;
+  color: var(--tf-caption);
+}
+
+.todayTimelineList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.todayTimelineItem {
+  display: grid;
+  grid-template-columns: 0.75rem 1fr;
+  gap: 1rem;
+  min-height: 3rem;
+}
+
+.todayTimelineTrack {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.todayTimelineDot {
+  width: 0.375rem;
+  height: 0.375rem;
+  margin-top: 0.35rem;
+  border-radius: 50%;
+  background: rgba(42, 37, 32, 0.2);
+}
+
+.todayTimelineDotActive {
+  background: var(--tf-accent-gold);
+  box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.2);
+}
+
+.todayTimelineLine {
+  position: absolute;
+  top: 0.75rem;
+  width: 1px;
+  height: calc(100% - 0.25rem);
+  background: rgba(42, 37, 32, 0.12);
+}
+
+.todayTimelineContent {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 1rem;
+}
+
+.todayTimelineTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.todayTimelineTime {
+  font-size: 0.8125rem;
+  color: var(--tf-caption);
+  white-space: nowrap;
+}
+
+/* —— Onboarding (29:777) —— */
+
+.onboardingWebFrame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100dvh;
+  padding: 4rem 1.5rem 2rem;
+  background: var(--tf-page, #fdfbf7);
+}
+
+.onboardingWebLogo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 4rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--tf-ink);
+  text-decoration: none;
+}
+
+.onboardingWebCard {
+  width: min(100%, 35rem);
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.onboardingWebProgress {
+  display: grid;
+  gap: 0.5rem;
+  height: 0.25rem;
+}
+
+.onboardingWebProgressStep {
+  border-radius: 999px;
+  background: rgba(42, 37, 32, 0.08);
+}
+
+.onboardingWebProgressStepActive {
+  background: var(--tf-accent-gold);
+}
+
+.onboardingWebTitle {
+  margin: 0;
+  font-size: clamp(1.75rem, 4vw, 2.375rem);
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
+  color: var(--tf-ink);
+}
+
+.onboardingWebLead {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  text-align: center;
+  color: var(--tf-caption);
+}
+
+.onboardingWebFooter {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--tf-caption);
+}
+
+/* —— Auth (55:554) —— */
+.authWebFrame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100dvh;
+  padding: 2.5rem 1.5rem 3rem;
+  background: var(--tf-page, #fdfbf7);
+}
+
+.authWebMarketingNav {
+  width: min(100%, 72rem);
+  margin: 0 auto 1.5rem;
+  align-self: stretch;
+}
+
+.authWebLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+  min-height: 50vh;
+}
+
+.authWebHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: min(100%, 36rem);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.authWebTabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.authWebTab {
+  min-width: 7.5rem;
+  height: 2.375rem;
+  padding: 0 1.25rem;
+  border-radius: 999px;
+  border: 1px solid var(--tf-cream-border);
+  background: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+  cursor: pointer;
+}
+
+.authWebTabActive {
+  background: var(--tf-ink);
+  border-color: var(--tf-ink);
+  color: #fff;
+}
+
+.authWebTitle {
+  margin: 0.5rem 0 0;
+  font-family: var(--tf-font-display);
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 400;
+  color: var(--tf-ink);
+  opacity: 0;
+  transform: translateY(1rem);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.authWebLead {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--tf-caption);
+  opacity: 0;
+  transform: translateY(1rem);
+  transition: opacity 0.6s ease 0.1s, transform 0.6s ease 0.1s;
+}
+
+.authWebProductLine {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--tf-accent-gold);
+  opacity: 0;
+  transform: translateY(1rem);
+  transition: opacity 0.6s ease 0.15s, transform 0.6s ease 0.15s;
+}
+
+.authWebReveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.authWebGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  width: min(100%, 61rem);
+  opacity: 0;
+  transform: translateY(1.25rem);
+  transition: opacity 0.7s ease 0.2s, transform 0.7s ease 0.2s;
+}
+
+.authWebGridVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.authWebPanel {
+  padding: 1.5rem;
+  border-radius: 1rem;
+  background: #fff;
+  border: 1px solid var(--tf-cream-border);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+}
+
+.authWebPanelEyebrow {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tf-accent-gold);
+}
+
+.authWebPanelTitle {
+  margin: 0.45rem 0 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.authWebPanelBody {
+  margin: 0.75rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--tf-caption);
+}
+
+.authWebChip {
+  display: inline-flex;
+  align-items: center;
+  height: 1.75rem;
+  padding: 0 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--tf-cream-border);
+  background: var(--tf-surface-warm);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--tf-accent-gold);
+}
+
+.authWebPointList {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.authWebPoint {
+  padding: 0.95rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--tf-cream-border);
+  background: var(--tf-surface-warm);
+}
+
+.authWebPointTitle {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.authWebPointBody {
+  margin: 0.35rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--tf-caption);
+}
+
+/* Practice session (55:111 detail) */
+.practiceSessionRoot {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.practiceSessionBack {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--tf-caption);
+  text-decoration: none;
+}
+
+.practiceSessionBack:hover {
+  color: var(--tf-ink);
+}
+
+.practiceSessionLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+}
+
+.practiceSessionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.practiceSessionTitle {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 400;
+  color: var(--tf-ink);
+}
+
+.practiceSessionSubtitle {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--tf-caption);
+}
+
+.practiceSessionMetaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--tf-cream-border);
+}
+
+.practiceSessionMetaLabel {
+  margin: 0 0 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--tf-caption);
+}
+
+.practiceSessionMetaValue {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.practiceSessionMetaSuccess {
+  color: #15803d;
+}
+
+.practiceSessionMetaAccent {
+  color: var(--tf-accent-gold);
+}
+
+.practiceSessionCard {
+  padding: 1.5rem;
+  border-radius: 1rem;
+  background: #fff;
+  border: 1px solid var(--tf-cream-border);
+}
+
+.practiceSessionHighlight {
+  padding: 1rem 1.25rem;
+  border-radius: 0.875rem;
+  background: var(--tf-surface-warm);
+  border: 1px solid var(--tf-cream-border);
+  margin-bottom: 1.5rem;
+}
+
+.practiceSessionHighlightText {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--tf-ink);
+}
+
+.practiceSessionSectionTitle {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.practiceSessionStepList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.practiceSessionStepCard {
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: #fff;
+  border: 1px solid var(--tf-cream-border);
+}
+
+.practiceSessionStepHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+}
+
+.practiceSessionStepBadge {
+  min-width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: var(--tf-ink);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.practiceSessionStepTitle {
+  margin: 0 0 0.25rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.practiceSessionStepBody {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--tf-caption);
+}
+
+.practiceSessionTagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.practiceSessionTag {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background: var(--tf-surface-warm);
+  font-size: 0.75rem;
+  color: var(--tf-caption);
+}
+
+.practiceSessionProgress {
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: var(--tf-surface-warm);
+  border: 1px solid var(--tf-cream-border);
+  margin-bottom: 1.5rem;
+}
+
+.practiceSessionProgressBar {
+  width: 100%;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: rgba(42, 37, 32, 0.08);
+  overflow: hidden;
+}
+
+.practiceSessionProgressFill {
+  height: 100%;
+  background: var(--tf-accent-gold);
+  transition: width 0.3s ease;
+}
+
+.practiceSessionEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.practiceSessionEmptyTitle {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: 1.5rem;
+  color: var(--tf-ink);
+}
+
+.practiceSessionActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--tf-cream-border);
+}
+
+.practiceSessionCompletion {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--tf-accent-gold);
+}
+
+@media (min-width: 48rem) {
+  .authWebGrid {
+    grid-template-columns: minmax(0, 0.95fr) minmax(18rem, 0.85fr);
+    align-items: start;
+  }
+}
+
+.authWebFormLayout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: min(100%, 28rem);
+  opacity: 0;
+  transform: translateY(1.25rem);
+  transition: opacity 0.7s ease 0.15s, transform 0.7s ease 0.15s;
+}
+
+.authWebFormHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.authWebFormLayout .authWebTitle,
+.authWebFormLayout .authWebLead {
+  opacity: 1;
+  transform: none;
+}
+
+.authWebFormLayout.authWebGridVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.authWebSuccessIcon {
+  display: block;
+  margin: 0 auto 1.25rem;
+  color: var(--tf-accent-gold);
+}
+
+.authWebFormField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin-bottom: 1.25rem;
+}
+
+.authWebFormLabel {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.authWebFormInput {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border-radius: 0.875rem;
+  border: 1px solid var(--tf-cream-border);
+  background: #fff;
+  font: inherit;
+  font-size: 0.9375rem;
+  color: var(--tf-ink);
+}
+
+.authWebFormInput:focus {
+  outline: 2px solid rgba(166, 124, 58, 0.35);
+  outline-offset: 2px;
+}
+
+.authWebFormHint {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--tf-caption);
+}
+
+.authWebFormActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.authWebFormFooterLink {
+  display: block;
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--tf-accent-gold);
+  text-decoration: none;
+}
+
+@media (min-width: 48rem) {
+  .todayHeroCard {
+    grid-template-columns: minmax(12rem, 20rem) 1fr;
+  }
+
+  .todayHeroOrbital {
+    min-height: 17.5rem;
+  }
+
+  .todayInsightsGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .todayPracticesGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .todayPracticesGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 48rem) {
+  .balanceGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sphereGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .tarotWebLayout {
+    grid-template-columns: minmax(10rem, 12rem) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+@media (min-width: 64rem) {
+  .sphereGrid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+/* —— Practices web (Figma 55:111) —— */
+.practicesWebContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+}
+
+/* —— Practices wizard (Figma 55:111 steps 1–2) —— */
+.practicesWizardSteps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.practicesWizardStep {
+  display: inline-flex;
+  align-items: center;
+  height: 2rem;
+  padding: 0 0.875rem;
+  border-radius: 999px;
+  border: 1px solid var(--tf-cream-border);
+  background: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--tf-caption);
+}
+
+.practicesWizardStepActive {
+  background: var(--tf-ink);
+  border-color: var(--tf-ink);
+  color: #fff;
+}
+
+.practicesWizardSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.practicesWizardPrompt {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--tf-ink);
+}
+
+.practicesWizardHeading {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: 1.375rem;
+  font-weight: 400;
+  color: var(--tf-ink);
+}
+
+.practicesWizardToolbar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.practicesWizardBack {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.875rem;
+  border: 1px solid var(--tf-cream-border);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+  cursor: pointer;
+}
+
+.practicesGoalGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+}
+
+.practicesGoalCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid var(--tf-cream-border);
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.practicesGoalCard:hover {
+  border-color: var(--tf-accent-gold);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.practicesGoalIcon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.practicesGoalTitle {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.practicesGoalBody {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--tf-caption);
+}
+
+.practicesSelectedGoalCard {
+  padding: 1.25rem 1.5rem;
+  border-radius: 1rem;
+  background: var(--tf-surface-warm);
+  border: 1px solid var(--tf-cream-border);
+}
+
+.practicesSelectedGoalHead {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.practicesDirectionGrid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+}
+
+.practicesDirectionCard {
+  min-height: 3.5rem;
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+  border: 1px solid var(--tf-cream-border);
+  background: #fff;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--tf-ink);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.practicesDirectionCard:hover {
+  border-color: var(--tf-accent-gold);
+  background: var(--tf-surface-warm);
+}
+
+.practicesRailSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.practicesRailEyebrow {
+  margin: 0;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tf-accent-gold);
+}
+
+.practicesRailStats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: center;
+  text-align: center;
+}
+
+.practicesRailStatMain {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.practicesRailStatSub {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--tf-caption);
+}
+
+/* —— Practices catalog (Figma 55:111 main) —— */
+.practicesCatalogRoot {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+}
+
+.practicesTodayCard {
+  padding: 1.5rem;
+  border-radius: 1rem;
+  background: #fff;
+  border: 1px solid var(--tf-cream-border);
+}
+
+.practicesTodayHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.practicesTodayEyebrow {
+  margin: 0;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tf-accent-gold);
+}
+
+.practicesTodayProgress {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--tf-caption);
+}
+
+.practicesTodayList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.practicesTodayRow {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--tf-cream-border);
+}
+
+.practicesTodayRow:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.practicesTodayRowDone .practicesTodayTitle {
+  color: var(--tf-caption);
+  text-decoration: line-through;
+}
+
+.practicesCategoryPill {
+  display: inline-flex;
+  align-items: center;
+  height: 1.5rem;
+  padding: 0 0.625rem;
+  border-radius: 999px;
+  background: var(--tf-surface-warm);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+  white-space: nowrap;
+}
+
+.practicesTodayTitle {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--tf-ink);
+}
+
+.practicesTodayDuration {
+  font-size: 0.8125rem;
+  color: var(--tf-caption);
+  white-space: nowrap;
+}
+
+.practicesTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.practicesTab {
+  display: inline-flex;
+  align-items: center;
+  height: 2rem;
+  padding: 0 1rem;
+  border: 1px solid var(--tf-cream-border);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--tf-ink);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.practicesTab:hover {
+  border-color: var(--tf-accent-gold);
+}
+
+.practicesTabActive {
+  background: var(--tf-ink);
+  border-color: var(--tf-ink);
+  color: #fff;
+}
+
+.practicesProgramGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+}
+
+.practicesProgramCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 1rem;
+  background: #fff;
+  border: 1px solid var(--tf-cream-border);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.practicesProgramCard:hover {
+  border-color: var(--tf-accent-gold);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.practicesProgramHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.practicesProgramTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 0;
+}
+
+.practicesProgramIconSvg {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  color: var(--tf-accent-gold);
+}
+
+.practicesProgramTitle {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.practicesProgramDuration {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--tf-caption);
+  white-space: nowrap;
+}
+
+.practicesProgramBody {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--tf-caption);
+}
+
+.practicesProgramMeta {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--tf-accent-gold);
+}
+
+/* —— Tarot hub web (Figma 55:449) —— */
+.tarotHubContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+}
+
+.tarotHubHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.tarotHubTitle {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--tf-ink);
+}
+
+.tarotHubSubtitle {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--tf-caption);
+}
+
+.tarotQuestionCard {
+  display: flex;
+  align-items: stretch;
+  min-height: 4.5rem;
+  padding: 0;
+  border-radius: 1rem;
+  background: #fff;
+  border: 1px solid var(--tf-cream-border);
+  overflow: hidden;
+}
+
+.tarotQuestionInput {
+  width: 100%;
+  min-height: 4.5rem;
+  padding: 1.25rem 1.5rem;
+  border: none;
+  background: transparent;
+  resize: vertical;
+  font: inherit;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--tf-ink);
+}
+
+.tarotQuestionInput:focus {
+  outline: none;
+}
+
+.tarotQuestionInput::placeholder {
+  color: var(--tf-caption);
+}
+
+.tarotQuestionPlaceholder {
+  font-size: 0.9375rem;
+  color: var(--tf-caption);
+}
+
+.tarotDomainChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tarotDomainChip {
+  display: inline-flex;
+  align-items: center;
+  height: 1.875rem;
+  padding: 0 1rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: var(--tf-surface-warm);
+  font-size: 0.8125rem;
+  color: var(--tf-ink);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.tarotDomainChipActive {
+  background: var(--tf-ink);
+  border-color: var(--tf-ink);
+  color: #fff;
+}
+
+.tarotSpreadSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tarotSpreadList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.tarotSpreadOption {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1.25rem 1.5rem;
+  border-radius: 1rem;
+  background: #fff;
+  border: 1px solid var(--tf-cream-border);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s ease;
+}
+
+.tarotSpreadOption:hover {
+  border-color: var(--tf-accent-gold);
+}
+
+.tarotSpreadOptionButton {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.tarotSpreadOptionSelected {
+  border-color: var(--tf-accent-gold);
+  box-shadow: 0 0 0 1px var(--tf-accent-gold);
+}
+
+.tarotSpreadRecommended {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--tf-accent-gold);
+}
+
+.tarotSpreadCount {
+  font-family: var(--tf-font-display);
+  font-size: 2.5rem;
+  line-height: 1;
+  color: var(--tf-accent-gold);
+  min-width: 2rem;
+}
+
+.tarotSpreadTitle {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.tarotCardOfDayHint {
+  margin: 0;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--tf-caption);
+}
+
+.tarotHubRailSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tarotHistoryList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.tarotHistoryItem p {
+  margin: 0.25rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--tf-ink);
+}
+
+.tarotHistoryMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--tf-caption);
+}
+
+.tarotLastQuestion {
+  padding: 1.5rem;
+  border-radius: 1rem;
+  background: #fff;
+  border: 1px solid var(--tf-cream-border);
+}
+
+.tarotLastQuestionText {
+  margin: 0.75rem 0;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--tf-ink);
+}
+
+.tarotLastQuestionLink {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--tf-accent-gold);
+  text-decoration: none;
+}
+
+/* —— Tarot dark theme (Figma 29:692 — result + ritual) —— */
+.productWebFrame[data-theme="dark"] .tarotWebRoot {
+  color: rgba(245, 242, 237, 0.92);
+}
+
+.productWebFrame[data-theme="dark"] .tarotWebStory {
+  min-width: 0;
+}
+
+.productWebFrame[data-theme="dark"] .tarotWebVerdict,
+.productWebFrame[data-theme="dark"] .tarotWebVerdictSub {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.productWebFrame[data-theme="dark"] .tarotWebQuestion {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.productWebFrame[data-theme="dark"] .tarotWebInsightRow p {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.productWebFrame[data-theme="dark"] .tarotWebBack {
+  color: rgba(245, 242, 237, 0.42);
+}
+
+.productWebFrame[data-theme="dark"] .tarotWebBack:hover {
+  color: rgba(245, 242, 237, 0.88);
+}
+
+.productWebFrame[data-theme="dark"] .tarotWebTopicChip {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: rgba(212, 175, 55, 0.3);
+  color: #d4af37;
+}
+
+.productWebFrame[data-theme="dark"] .tarotWebCardLabel {
+  color: rgba(245, 242, 237, 0.42);
+}
+
+.productWebFrame[data-theme="dark"] .tarotWebQuestion {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #f5f2ed;
+  backdrop-filter: blur(10px);
+}
+
+.productWebFrame[data-theme="dark"] .tarotWebVerdict {
+  color: #f5f2ed;
+}
+
+.productWebFrame[data-theme="dark"] .tarotWebVerdictSub {
+  color: #d4af37;
+}
+
+.productWebFrame[data-theme="dark"] .tarotWebInsightRow {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #f5f2ed;
+}
+
+.productWebFrame[data-theme="dark"] .tarotWebInsightLabel {
+  color: #d4af37;
+}
+
+.productWebFrame[data-theme="dark"] .tarotWebActionBox {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: rgba(212, 175, 55, 0.3);
+  color: #f5f2ed;
+}
+
+.productWebFrame[data-theme="dark"] .tarotWebChip {
+  background: transparent;
+  border-color: rgba(212, 175, 55, 0.3);
+  color: #f5f2ed;
+}
+
+.productWebFrame[data-theme="dark"] .tarotWebChip:hover {
+  background: rgba(212, 175, 55, 0.08);
+  border-color: rgba(212, 175, 55, 0.45);
+}
+
+.productWebFrame[data-theme="dark"] .tarotWebCardPlaceholder {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.productWebFrame[data-theme="dark"] .tarotWebCardPlaceholderName {
+  color: rgba(245, 242, 237, 0.88);
+}
+
+.productWebFrame[data-theme="dark"] .tarotWebStory {
+  color: rgba(245, 242, 237, 0.88);
+}
+
+.productWebFrame[data-theme="dark"] .tarotWebStory :global([class*="DsBody"]) {
+  color: rgba(245, 242, 237, 0.88);
+}
+
+.productWebFrame[data-theme="dark"] .tarotWebStory :global([class*="DsEyebrow"]) {
+  color: #d4af37;
+}
+
+/* —— Tarot spread ritual (inside dark shell) —— */
+.tarotRitualContent {
+  display: grid;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.tarotRitualIntro {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.tarotRitualEyebrow {
+  margin: 0;
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #d4af37;
+}
+
+.tarotRitualTitle {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 400;
+  line-height: 1.15;
+  color: #f5f2ed;
+}
+
+.tarotRitualLead {
+  margin: 0;
+  max-width: 42rem;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: rgba(245, 242, 237, 0.72);
+}
+
+.tarotRitualQuestion {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: rgba(245, 242, 237, 0.88);
+  font-style: italic;
+}
+
+.tarotRitualLayout {
+  display: grid;
+  gap: 1rem;
+  align-items: start;
+}
+
+@media (min-width: 57.5rem) {
+  .tarotRitualLayout {
+    grid-template-columns: minmax(16rem, 18rem) minmax(0, 1fr);
+  }
+}
+
+.tarotRitualSide {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1.15rem;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tarotRitualDeck {
+  min-width: 0;
+  padding: 1.15rem;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.tarotRitualAnchor {
+  display: grid;
+  gap: 0.55rem;
+  justify-items: center;
+  padding: 0.85rem;
+  border-radius: 0.875rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.tarotRitualActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.tarotRitualLoader {
+  min-height: 20rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tarotRefineSection {
+  display: grid;
+  gap: 0.85rem;
+}

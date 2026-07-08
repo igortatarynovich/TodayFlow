@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://todayflow.app/schemas/meaning_event_learning_payloads_v0.json",
+  "title": "Meaning Event Learning Payloads v0",
+  "description": "Typed payloads for compatibility attachment lens and ILR confirm events (POST /meaning/events).",
+  "oneOf": [
+    { "$ref": "#/$defs/compatibility_attachment_confirm" },
+    { "$ref": "#/$defs/interpretation_instance_confirm" },
+    { "$ref": "#/$defs/profile_atom_correction" }
+  ],
+  "$defs": {
+    "compatibility_attachment_confirm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["surface", "attachment_style_code", "label", "summary", "echo", "verdict"],
+      "properties": {
+        "surface": { "type": "string" },
+        "attachment_style_code": { "type": "string", "maxLength": 64 },
+        "label": { "type": "string", "maxLength": 120 },
+        "summary": { "type": "string", "maxLength": 240 },
+        "echo": { "type": "string", "enum": ["yes", "partial", "no"] },
+        "verdict": { "type": "string", "enum": ["confirm", "partial", "reject"] },
+        "knowledge_id": { "type": "string", "maxLength": 80 },
+        "scenario_id": { "type": ["string", "null"], "maxLength": 80 }
+      }
+    },
+    "interpretation_instance_confirm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["surface", "instance_id", "correction", "verdict"],
+      "properties": {
+        "surface": { "type": "string" },
+        "instance_id": { "type": "string", "maxLength": 80 },
+        "interpretation_ref_id": { "type": ["string", "null"], "maxLength": 80 },
+        "correction": { "type": "string", "enum": ["confirm", "partial", "reject"] },
+        "verdict": { "type": "string", "enum": ["confirm", "partial", "reject"] },
+        "summary": { "type": ["string", "null"], "maxLength": 240 },
+        "scenario_id": { "type": ["string", "null"], "maxLength": 80 }
+      }
+    },
+    "profile_atom_correction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["knowledge_id", "correction"],
+      "properties": {
+        "knowledge_id": { "type": "string", "maxLength": 80 },
+        "correction": { "type": "string", "enum": ["confirm", "partial", "reject"] },
+        "claim_summary": { "type": ["string", "null"], "maxLength": 240 },
+        "surface": { "type": ["string", "null"] },
+        "attachment_style_code": { "type": ["string", "null"], "maxLength": 64 }
+      }
+    }
+  }
+}

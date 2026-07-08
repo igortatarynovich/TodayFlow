@@ -1,0 +1,75 @@
+{
+  "spheres": {
+    "love": {
+      "score": 80,
+      "todayHeadline": "Близость в фокусе",
+      "todayDetail": "День про честный контакт.",
+      "insight": "Скажи прямо, что для тебя важно.",
+      "watch": "Не угадывай — говори.",
+      "reason": "Чек-ин и гороскоп про открытость."
+    },
+    "work": {
+      "score": 65,
+      "todayHeadline": "Рабочий вектор",
+      "todayDetail": "Один приоритет.",
+      "insight": "Завершение лучше старта.",
+      "watch": "Не бери всё на себя.",
+      "reason": "Фокус на завершении."
+    },
+    "money": {
+      "score": 62,
+      "todayHeadline": "Деньги",
+      "todayDetail": "Границы важны.",
+      "insight": "Пауза перед тратой.",
+      "watch": "Импульс — риск.",
+      "reason": "Финансовый импульс отмечен."
+    },
+    "energy": {
+      "score": 70,
+      "insight": "Ровный ритм без скачков.",
+      "reason": "Тело просит стабильности."
+    }
+  },
+  "narrative": {
+    "guide": {
+      "generation_id": "gen-missing-family-001",
+      "payload": {
+        "headline": "День про близость и ясность"
+      }
+    },
+    "spheres": {
+      "payload": {
+        "love_insight": "В паре лучше сказать, чем молчать."
+      }
+    }
+  },
+  "morning_ritual": {
+    "daily_horoscope": {
+      "spine": {
+        "best_mode": "Держи одну линию.",
+        "first_move": "Один шаг по работе.",
+        "main_risk": "Распыление."
+      },
+      "scenarios": [
+        {
+          "slug": "love",
+          "title": "Любовь",
+          "focus": "Честный контакт",
+          "summary": "Прямой разговор."
+        }
+      ]
+    },
+    "daily_recommendations": {
+      "what_to_do": "Один шаг до обеда.",
+      "what_to_avoid": "Импульсивные траты."
+    }
+  },
+  "fusion": {
+    "scores": { "energy": 70, "emotional_balance": 65, "focus": 68 },
+    "encouragement": "Стабильный день."
+  },
+  "fallback_context": {
+    "locale": "ru",
+    "progress": {}
+  }
+}

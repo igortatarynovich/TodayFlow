@@ -1,0 +1,484 @@
+{
+  "contract_version": "interpretation_rule_registry_v1",
+  "domain": "interpretation",
+  "version": "1.0.0",
+  "status": "active",
+  "description": "Behavior interpretation rules (ILR v0) — machine contract, no LLM.",
+  "interpretation_rules": {
+    "beh.mood_selected.low_energy.v1": {
+      "interpretation_ref_id": "beh.mood_selected.low_energy.v1",
+      "taxonomy": "emotional",
+      "level": "L2",
+      "trigger_event_type": "mood_selected",
+      "trigger_payload_key": "mood_id",
+      "trigger_payload_values": [
+        "drained",
+        "exhausted",
+        "low",
+        "sleepy",
+        "tired"
+      ],
+      "trigger_payload_key_secondary": null,
+      "trigger_payload_values_secondary": null,
+      "min_signal_count": 2,
+      "summary_dominant": "В ритуале часто отмечаешь низкий ресурс — это может быть сигнал про темп и восстановление.",
+      "candidate_meanings": [
+        {
+          "code": "energy_depletion",
+          "label": "Похоже, день часто начинается с нехватки ресурса",
+          "prior_weight": 0.34
+        },
+        {
+          "code": "recovery_need",
+          "label": "Тело просит более мягкий темп и восстановление",
+          "prior_weight": 0.33
+        },
+        {
+          "code": "overload_signal",
+          "label": "Нагрузка может накапливаться быстрее, чем успеваешь отдыхать",
+          "prior_weight": 0.33
+        }
+      ],
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "beh.mood_selected.calm.v1": {
+      "interpretation_ref_id": "beh.mood_selected.calm.v1",
+      "taxonomy": "emotional",
+      "level": "L2",
+      "trigger_event_type": "mood_selected",
+      "trigger_payload_key": "mood_id",
+      "trigger_payload_values": [
+        "calm",
+        "grounded",
+        "neutral",
+        "ok",
+        "steady"
+      ],
+      "trigger_payload_key_secondary": null,
+      "trigger_payload_values_secondary": null,
+      "min_signal_count": 2,
+      "summary_dominant": "Спокойное состояние в ритуале повторяется — возможно, тебе подходит размеренный ритм.",
+      "candidate_meanings": [
+        {
+          "code": "baseline_stability",
+          "label": "Есть опора на спокойный базовый фон",
+          "prior_weight": 0.36
+        },
+        {
+          "code": "measured_pace",
+          "label": "Комфортнее двигаться размеренно, без резких рывков",
+          "prior_weight": 0.32
+        },
+        {
+          "code": "low_dramatization",
+          "label": "Меньше склонности раздувать мелкие колебания",
+          "prior_weight": 0.32
+        }
+      ],
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "beh.head_topic.work.v1": {
+      "interpretation_ref_id": "beh.head_topic.work.v1",
+      "taxonomy": "career",
+      "level": "L3",
+      "trigger_event_type": "head_topic_selected",
+      "trigger_payload_key": "topic_id",
+      "trigger_payload_values": [
+        "business",
+        "career",
+        "job",
+        "money_career",
+        "work"
+      ],
+      "trigger_payload_key_secondary": null,
+      "trigger_payload_values_secondary": null,
+      "min_signal_count": 2,
+      "summary_dominant": "Тема работы часто задаёт фокус дня — возможно, сейчас важна ясность в делах.",
+      "candidate_meanings": [
+        {
+          "code": "work_focus",
+          "label": "Работа и задачи часто в центре внимания дня",
+          "prior_weight": 0.35
+        },
+        {
+          "code": "structure_seeking",
+          "label": "Может быть запрос на ясность и структуру в делах",
+          "prior_weight": 0.33
+        },
+        {
+          "code": "pressure_awareness",
+          "label": "Давление дедлайнов заметнее обычного",
+          "prior_weight": 0.32
+        }
+      ],
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "beh.head_topic.relationship.v1": {
+      "interpretation_ref_id": "beh.head_topic.relationship.v1",
+      "taxonomy": "relationship",
+      "level": "L3",
+      "trigger_event_type": "head_topic_selected",
+      "trigger_payload_key": "topic_id",
+      "trigger_payload_values": [
+        "family",
+        "love",
+        "partner",
+        "relationship"
+      ],
+      "trigger_payload_key_secondary": null,
+      "trigger_payload_values_secondary": null,
+      "min_signal_count": 2,
+      "summary_dominant": "Отношения часто задают фокус дня — возможно, сейчас важен живой контакт.",
+      "candidate_meanings": [
+        {
+          "code": "connection_focus",
+          "label": "Отношения и близость часто в фокусе дня",
+          "prior_weight": 0.36
+        },
+        {
+          "code": "contact_need",
+          "label": "Может быть потребность в тёплом контакте или ясности",
+          "prior_weight": 0.32
+        },
+        {
+          "code": "boundary_tuning",
+          "label": "Важно не терять себя в чужих ожиданиях",
+          "prior_weight": 0.32
+        }
+      ],
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "beh.focus_started.v1": {
+      "interpretation_ref_id": "beh.focus_started.v1",
+      "taxonomy": "behavior",
+      "level": "L2",
+      "trigger_event_type": "focus_started",
+      "trigger_payload_key": null,
+      "trigger_payload_values": null,
+      "trigger_payload_key_secondary": null,
+      "trigger_payload_values_secondary": null,
+      "min_signal_count": 3,
+      "summary_dominant": "Регулярно отмечаешь старт фокуса — короткие сессии могут быть твоим рабочим ритмом.",
+      "candidate_meanings": [
+        {
+          "code": "action_orientation",
+          "label": "Полезно переводить день в конкретный шаг",
+          "prior_weight": 0.34
+        },
+        {
+          "code": "short_focus_fit",
+          "label": "Короткие фокус-сессии могут работать лучше длинных",
+          "prior_weight": 0.33
+        },
+        {
+          "code": "commitment_signal",
+          "label": "Обещание дня для тебя — не формальность",
+          "prior_weight": 0.33
+        }
+      ],
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "beh.evening_reflection.v1": {
+      "interpretation_ref_id": "beh.evening_reflection.v1",
+      "taxonomy": "rhythm",
+      "level": "L2",
+      "trigger_event_type": "evening_reflection_submitted",
+      "trigger_payload_key": null,
+      "trigger_payload_values": null,
+      "trigger_payload_key_secondary": null,
+      "trigger_payload_values_secondary": null,
+      "min_signal_count": 2,
+      "summary_dominant": "Вечерняя рефлексия повторяется — это может быть твой способ собирать день.",
+      "candidate_meanings": [
+        {
+          "code": "closure_habit",
+          "label": "Закрытие дня помогает удерживать ясность",
+          "prior_weight": 0.35
+        },
+        {
+          "code": "evening_processing",
+          "label": "Вечером проще осмысливать, чем утром",
+          "prior_weight": 0.33
+        },
+        {
+          "code": "continuity_need",
+          "label": "Важна связь между утренним намерением и итогом",
+          "prior_weight": 0.32
+        }
+      ],
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "beh.tarot_ritual.v1": {
+      "interpretation_ref_id": "beh.tarot_ritual.v1",
+      "taxonomy": "learning",
+      "level": "L2",
+      "trigger_event_type": "tarot_selected",
+      "trigger_payload_key": null,
+      "trigger_payload_values": null,
+      "trigger_payload_key_secondary": null,
+      "trigger_payload_values_secondary": null,
+      "min_signal_count": 3,
+      "summary_dominant": "Ритуал карты дня повторяется — символический слой может быть для тебя рабочей опорой.",
+      "candidate_meanings": [
+        {
+          "code": "symbolic_mirror",
+          "label": "Символический слой дня помогает увидеть контекст",
+          "prior_weight": 0.34
+        },
+        {
+          "code": "ritual_anchor",
+          "label": "Ритуал карты задаёт опору перед действиями",
+          "prior_weight": 0.33
+        },
+        {
+          "code": "meaning_seeking",
+          "label": "Важно не только «что делать», но и «зачем сейчас»",
+          "prior_weight": 0.33
+        }
+      ],
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "beh.compat_echo_yes.v1": {
+      "interpretation_ref_id": "beh.compat_echo_yes.v1",
+      "taxonomy": "relationship",
+      "level": "L3",
+      "trigger_event_type": "compatibility_echo",
+      "trigger_payload_key": "echo",
+      "trigger_payload_values": [
+        "yes"
+      ],
+      "trigger_payload_key_secondary": null,
+      "trigger_payload_values_secondary": null,
+      "min_signal_count": 2,
+      "summary_dominant": "В совместимости часто отмечаешь «точно» — разбор, похоже, попадает в актуальный контекст.",
+      "candidate_meanings": [
+        {
+          "code": "reading_resonates",
+          "label": "Разбор совместимости часто попадает в живой контекст",
+          "prior_weight": 0.36
+        },
+        {
+          "code": "relationship_clarity",
+          "label": "Важно понимать динамику пары, а не только общий процент",
+          "prior_weight": 0.32
+        },
+        {
+          "code": "conflict_awareness",
+          "label": "Темы напряжения и ресурса в отношениях сейчас значимы",
+          "prior_weight": 0.32
+        }
+      ],
+      "status": "active",
+      "version": "1.0.0",
+      "spawn_hypothesis_ids": ["attachment_lens:v0"]
+    },
+    "beh.compat_echo_no.v1": {
+      "interpretation_ref_id": "beh.compat_echo_no.v1",
+      "taxonomy": "relationship",
+      "level": "L3",
+      "trigger_event_type": "compatibility_echo",
+      "trigger_payload_key": "echo",
+      "trigger_payload_values": [
+        "no"
+      ],
+      "trigger_payload_key_secondary": null,
+      "trigger_payload_values_secondary": null,
+      "min_signal_count": 2,
+      "summary_dominant": "Блоки совместимости иногда отмечаешь как «мимо» — возможно, нужен другой угол или глубина.",
+      "candidate_meanings": [
+        {
+          "code": "copy_mismatch",
+          "label": "Обобщённые формулировки могут не совпадать с реальной парой",
+          "prior_weight": 0.35
+        },
+        {
+          "code": "context_shift",
+          "label": "Ситуация могла измениться быстрее, чем текст разбора",
+          "prior_weight": 0.33
+        },
+        {
+          "code": "needs_deeper_lens",
+          "label": "Может быть запрос на другой угол или более точный сценарий",
+          "prior_weight": 0.32
+        }
+      ],
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "beh.compat_echo_partial.v1": {
+      "interpretation_ref_id": "beh.compat_echo_partial.v1",
+      "taxonomy": "relationship",
+      "level": "L2",
+      "trigger_event_type": "compatibility_echo",
+      "trigger_payload_key": "echo",
+      "trigger_payload_values": [
+        "partial"
+      ],
+      "trigger_payload_key_secondary": null,
+      "trigger_payload_values_secondary": null,
+      "min_signal_count": 2,
+      "summary_dominant": "«Частично» в совместимости повторяется — ты пробуешь разбор, не фиксируя вывод сразу.",
+      "candidate_meanings": [
+        {
+          "code": "nuanced_fit",
+          "label": "Часть разбора узнаётся, часть — нет: это нормальный режим исследования",
+          "prior_weight": 0.35
+        },
+        {
+          "code": "selective_resonance",
+          "label": "Попадание зависит от конкретного блока или темы",
+          "prior_weight": 0.33
+        },
+        {
+          "code": "exploring_not_decided",
+          "label": "Смысл ещё не зафиксирован — идёт пробное чтение",
+          "prior_weight": 0.32
+        }
+      ],
+      "status": "active",
+      "version": "1.0.0",
+      "spawn_hypothesis_ids": ["attachment_lens:v0"]
+    },
+    "beh.compat_echo_conflicts_yes.v1": {
+      "interpretation_ref_id": "beh.compat_echo_conflicts_yes.v1",
+      "taxonomy": "relationship",
+      "level": "L3",
+      "trigger_event_type": "compatibility_echo",
+      "trigger_payload_key": "block_key",
+      "trigger_payload_values": [
+        "conflicts"
+      ],
+      "trigger_payload_key_secondary": "echo",
+      "trigger_payload_values_secondary": [
+        "yes"
+      ],
+      "min_signal_count": 2,
+      "summary_dominant": "Блок «конфликты» часто отмечаешь как точный — тема напряжения сейчас на виду.",
+      "candidate_meanings": [
+        {
+          "code": "conflict_theme_live",
+          "label": "Тема конфликтов и триггеров сейчас особенно жива",
+          "prior_weight": 0.36
+        },
+        {
+          "code": "repair_orientation",
+          "label": "Может быть запрос на ясные правила и восстановление контакта",
+          "prior_weight": 0.32
+        },
+        {
+          "code": "pattern_naming",
+          "label": "Важно назвать повторяющийся сценарий ссоры, а не только эмоцию",
+          "prior_weight": 0.32
+        }
+      ],
+      "status": "active",
+      "version": "1.0.0",
+      "spawn_hypothesis_ids": ["attachment_lens:v0"]
+    },
+    "beh.compat_echo_communication_yes.v1": {
+      "interpretation_ref_id": "beh.compat_echo_communication_yes.v1",
+      "taxonomy": "relationship",
+      "level": "L3",
+      "trigger_event_type": "compatibility_echo",
+      "trigger_payload_key": "block_key",
+      "trigger_payload_values": [
+        "communication"
+      ],
+      "trigger_payload_key_secondary": "echo",
+      "trigger_payload_values_secondary": [
+        "yes"
+      ],
+      "min_signal_count": 2,
+      "summary_dominant": "Блок «общение» часто отмечаешь как точный — контакт и ясность сейчас на виду.",
+      "candidate_meanings": [
+        {
+          "code": "contact_clarity",
+          "label": "Важно, как вы слышите друг друга и договариваетесь",
+          "prior_weight": 0.36
+        },
+        {
+          "code": "repair_orientation",
+          "label": "Может быть запрос на восстановление контакта после недопонимания",
+          "prior_weight": 0.32
+        },
+        {
+          "code": "attachment_signal",
+          "label": "Паттерн привязанности может проявляться через стиль общения",
+          "prior_weight": 0.32
+        }
+      ],
+      "status": "active",
+      "version": "1.0.0",
+      "spawn_hypothesis_ids": ["attachment_lens:v0"]
+    },
+    "beh.compat_scenario_switch.v1": {
+      "interpretation_ref_id": "beh.compat_scenario_switch.v1",
+      "taxonomy": "interest",
+      "level": "L2",
+      "trigger_event_type": "compatibility_scenario_switch",
+      "trigger_payload_key": null,
+      "trigger_payload_values": null,
+      "trigger_payload_key_secondary": null,
+      "trigger_payload_values_secondary": null,
+      "min_signal_count": 2,
+      "summary_dominant": "Переключаешь сценарии совместимости — возможно, ищешь более точный контекст пары.",
+      "candidate_meanings": [
+        {
+          "code": "multi_lens_exploration",
+          "label": "Интересно смотреть на пару через разные жизненные контексты",
+          "prior_weight": 0.35
+        },
+        {
+          "code": "scenario_comparison",
+          "label": "Сравниваешь сценарии, чтобы найти более точный ракурс",
+          "prior_weight": 0.33
+        },
+        {
+          "code": "curiosity_driven",
+          "label": "Исследование ради ясности, а не ради одного процента",
+          "prior_weight": 0.32
+        }
+      ],
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "beh.compat_deep_open.v1": {
+      "interpretation_ref_id": "beh.compat_deep_open.v1",
+      "taxonomy": "learning",
+      "level": "L2",
+      "trigger_event_type": "compatibility_deep_open",
+      "trigger_payload_key": null,
+      "trigger_payload_values": null,
+      "trigger_payload_key_secondary": null,
+      "trigger_payload_values_secondary": null,
+      "min_signal_count": 2,
+      "summary_dominant": "Регулярно открываешь глубокий разбор — тебе важна структура, а не только процент.",
+      "candidate_meanings": [
+        {
+          "code": "depth_preference",
+          "label": "Headline недостаточно — нужен развёрнутый разбор",
+          "prior_weight": 0.35
+        },
+        {
+          "code": "structured_reflection",
+          "label": "Удобнее думать о паре блоками, а не одним абзацем",
+          "prior_weight": 0.33
+        },
+        {
+          "code": "serious_mode_fit",
+          "label": "Серьёзный режим совместимости тебе ближе игровому",
+          "prior_weight": 0.32
+        }
+      ],
+      "status": "active",
+      "version": "1.0.0"
+    }
+  }
+}

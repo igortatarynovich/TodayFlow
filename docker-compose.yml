@@ -1,0 +1,63 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: todayflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  astro:
+    build:
+      context: .
+      dockerfile: astro/Dockerfile
+      args:
+        # 1 = --trusted-host для PyPI (сети с SSL inspection, см. backend/Dockerfile)
+        PIP_TRUSTED_HOSTS: ${PIP_TRUSTED_HOSTS:-0}
+    ports:
+      - "8081:8081"
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+      args:
+        PIP_TRUSTED_HOSTS: ${PIP_TRUSTED_HOSTS:-0}
+    # External APIs (OpenAI) need working DNS; Docker Desktop / some VPNs break default resolver.
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    environment:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@postgres:5432/todayflow
+      ASTRO_SERVICE_URL: http://astro:8081
+      CONTENT_DIR: "/CONTENT"
+      CONTENT_VERSION: "1.0.0"
+      I18N_VERSION: "1.0.0"
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      LLM_PROVIDER: ${LLM_PROVIDER:-openai}
+      LLM_DEFAULT_MODEL: ${LLM_DEFAULT_MODEL:-gpt-5.5}
+      GUIDANCE_LLM_MODEL: ${GUIDANCE_LLM_MODEL:-gpt-5.5}
+    volumes:
+      - ./CONTENT:/CONTENT
+    depends_on:
+      - postgres
+      - astro
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8080
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+
+volumes:
+  pgdata: {}

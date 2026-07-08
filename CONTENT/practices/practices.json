@@ -1,0 +1,2610 @@
+{
+  "meta": {
+    "version": "v1.4",
+    "description": "TodayFlow Practices v1.4 — универсальные микро-действия для закрепления объяснений. 130 практик (100 базовых + 30 аффирмаций).",
+    "total_practices": 130,
+    "created_at": "2026-01-25"
+  },
+  "practices": [
+    {
+      "id": "practice.001",
+      "type": "micro",
+      "title": "Пауза",
+      "instruction": "Остановись на 30 секунд. Ничего не делай. Просто не продолжай движение.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": ["work", "relationship"],
+      "forecast_types": ["daily_grounded", "workday_focus", "relationships_interaction"],
+      "layers": ["L1", "L2", "L3"],
+      "triggers": ["overload", "rush", "deadline"],
+      "emotions": ["tension", "irritability"],
+      "reactions": ["rush", "snap"],
+      "tone": "calm",
+      "tags": ["work", "focus"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.002",
+      "type": "body",
+      "title": "Опора",
+      "instruction": "Поставь обе стопы на пол. Почувствуй поверхность под ними. Этого достаточно.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": ["work", "body"],
+      "forecast_types": ["daily_grounded", "workday_focus", "body_state"],
+      "layers": ["L1", "L2"],
+      "triggers": ["uncertainty", "overload"],
+      "emotions": ["tension", "anxiety"],
+      "reactions": ["freeze", "scatter"],
+      "tone": "calm",
+      "tags": ["work", "body"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.003",
+      "type": "observation",
+      "title": "Назвать",
+      "instruction": "Мысленно скажи: «Сейчас это ощущается так». Не объясняй. Не исправляй.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": ["work", "relationship", "body"],
+      "forecast_types": ["daily_grounded", "body_state", "relationships_interaction"],
+      "layers": ["L1", "L2", "L3"],
+      "triggers": ["uncertainty", "conflict"],
+      "emotions": ["tension", "confusion"],
+      "reactions": ["overthink", "freeze"],
+      "tone": "calm",
+      "tags": ["clarity"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.004",
+      "type": "micro",
+      "title": "Отложить",
+      "instruction": "Разреши себе не отвечать прямо сейчас. Даже если ответ уже сформулирован.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": ["work", "relationship"],
+      "forecast_types": ["daily_grounded", "workday_focus", "relationships_interaction"],
+      "layers": ["L1", "L2"],
+      "triggers": ["deadline", "conflict", "pressure"],
+      "emotions": ["tension", "irritability"],
+      "reactions": ["rush", "snap"],
+      "tone": "calm",
+      "tags": ["work", "boundaries"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.005",
+      "type": "body",
+      "title": "Выдох",
+      "instruction": "Сделай длинный выдох. Короче вдох — длиннее выдох. Один раз.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": ["work", "body"],
+      "forecast_types": ["daily_grounded", "workday_focus", "body_state"],
+      "layers": ["L1", "L2"],
+      "triggers": ["overload", "pressure"],
+      "emotions": ["tension", "anxiety"],
+      "reactions": ["rush", "freeze"],
+      "tone": "calm",
+      "tags": ["work", "body", "rest"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.006",
+      "type": "observation",
+      "title": "Замечание",
+      "instruction": "Обрати внимание, что именно вызывает напряжение: действие, ожидание или мысль.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": ["work", "relationship"],
+      "forecast_types": ["daily_grounded", "workday_focus", "relationships_interaction"],
+      "layers": ["L2", "L3"],
+      "triggers": ["overload", "waiting", "uncertainty"],
+      "emotions": ["tension", "irritability"],
+      "reactions": ["overthink", "rush"],
+      "tone": "calm",
+      "tags": ["work", "clarity"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.007",
+      "type": "micro",
+      "title": "Один шаг",
+      "instruction": "Выбери одно маленькое действие. Только одно. Остальное подождёт.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": ["work"],
+      "forecast_types": ["daily_grounded", "workday_focus", "decision_choice"],
+      "layers": ["L1", "L2"],
+      "triggers": ["overload", "uncertainty"],
+      "emotions": ["tension", "confusion"],
+      "reactions": ["freeze", "scatter"],
+      "tone": "calm",
+      "tags": ["work", "focus"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.008",
+      "type": "body",
+      "title": "Расслабить плечи",
+      "instruction": "Опусти плечи. Даже если через секунду они поднимутся снова — этого достаточно.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": ["work", "body"],
+      "forecast_types": ["daily_grounded", "workday_focus", "body_state"],
+      "layers": ["L1", "L2"],
+      "triggers": ["overload", "pressure"],
+      "emotions": ["tension"],
+      "reactions": ["rush", "freeze"],
+      "tone": "calm",
+      "tags": ["work", "body", "rest"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.009",
+      "type": "observation",
+      "title": "Без оценки",
+      "instruction": "Заметь своё состояние, не называя его хорошим или плохим.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": ["work", "relationship", "body"],
+      "forecast_types": ["daily_grounded", "body_state", "relationships_interaction"],
+      "layers": ["L2", "L3"],
+      "triggers": ["uncertainty", "comparison"],
+      "emotions": ["tension", "confusion"],
+      "reactions": ["overthink", "freeze"],
+      "tone": "calm",
+      "tags": ["clarity"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.010",
+      "type": "micro",
+      "title": "Не ускоряться",
+      "instruction": "Поймай момент, где хочется сделать быстрее. И сознательно замедлись.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": ["work"],
+      "forecast_types": ["daily_grounded", "workday_focus"],
+      "layers": ["L1", "L2"],
+      "triggers": ["overload", "deadline"],
+      "emotions": ["tension"],
+      "reactions": ["rush"],
+      "tone": "calm",
+      "tags": ["work", "focus"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.011",
+      "type": "body",
+      "title": "Контакт",
+      "instruction": "Положи ладонь на стол, колени или грудь. Почувствуй тепло.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": ["work", "body"],
+      "forecast_types": ["daily_grounded", "body_state"],
+      "layers": ["L1", "L2"],
+      "triggers": ["uncertainty", "isolation"],
+      "emotions": ["tension", "numbness"],
+      "reactions": ["freeze", "withdraw"],
+      "tone": "calm",
+      "tags": ["body", "connection"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.012",
+      "type": "observation",
+      "title": "Где внимание",
+      "instruction": "Отметь, где сейчас твоё внимание — в теле, в голове или снаружи.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": ["work", "body"],
+      "forecast_types": ["daily_grounded", "workday_focus", "body_state"],
+      "layers": ["L2", "L3"],
+      "triggers": ["overload", "scatter"],
+      "emotions": ["tension", "confusion"],
+      "reactions": ["scatter", "overthink"],
+      "tone": "calm",
+      "tags": ["work", "focus", "clarity"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.013",
+      "type": "micro",
+      "title": "Пауза перед словом",
+      "instruction": "Сделай короткую паузу перед тем, как что-то сказать или написать.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": ["work", "relationship"],
+      "forecast_types": ["daily_grounded", "workday_focus", "relationships_interaction"],
+      "layers": ["L1", "L2"],
+      "triggers": ["conflict", "pressure"],
+      "emotions": ["tension", "irritability"],
+      "reactions": ["rush", "snap"],
+      "tone": "calm",
+      "tags": ["work", "relationship", "boundaries"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.014",
+      "type": "body",
+      "title": "Смена положения",
+      "instruction": "Измени положение тела: встань, сядь иначе, повернись.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": ["work", "body"],
+      "forecast_types": ["daily_grounded", "workday_focus", "body_state"],
+      "layers": ["L1", "L2"],
+      "triggers": ["overload", "stuck"],
+      "emotions": ["tension", "numbness"],
+      "reactions": ["freeze", "stuck"],
+      "tone": "calm",
+      "tags": ["work", "body"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.015",
+      "type": "observation",
+      "title": "Сейчас",
+      "instruction": "Спроси себя: «Что происходит прямо сейчас, а не в целом?»",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": ["work", "relationship"],
+      "forecast_types": ["daily_grounded", "workday_focus"],
+      "layers": ["L2", "L3"],
+      "triggers": ["overload", "uncertainty"],
+      "emotions": ["tension", "confusion"],
+      "reactions": ["overthink", "scatter"],
+      "tone": "calm",
+      "tags": ["work", "clarity"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.016",
+      "type": "micro",
+      "title": "Разрешение",
+      "instruction": "Разреши себе не понимать, что с этим делать.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": ["work", "relationship"],
+      "forecast_types": ["daily_grounded", "decision_choice"],
+      "layers": ["L2", "L3"],
+      "triggers": ["uncertainty", "decision"],
+      "emotions": ["tension", "confusion"],
+      "reactions": ["freeze", "overthink"],
+      "tone": "calm",
+      "tags": ["clarity"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.017",
+      "type": "body",
+      "title": "Дыхание без контроля",
+      "instruction": "Просто заметь дыхание. Не меняй его.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": ["work", "body"],
+      "forecast_types": ["daily_grounded", "body_state"],
+      "layers": ["L1", "L2"],
+      "triggers": ["overload", "pressure"],
+      "emotions": ["tension", "anxiety"],
+      "reactions": ["rush", "freeze"],
+      "tone": "calm",
+      "tags": ["body", "rest"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.018",
+      "type": "observation",
+      "title": "Малый фокус",
+      "instruction": "Выбери один объект рядом и удерживай внимание на нём 10 секунд.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": ["work"],
+      "forecast_types": ["daily_grounded", "workday_focus"],
+      "layers": ["L1", "L2"],
+      "triggers": ["overload", "scatter"],
+      "emotions": ["tension", "confusion"],
+      "reactions": ["scatter", "overthink"],
+      "tone": "calm",
+      "tags": ["work", "focus"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.019",
+      "type": "micro",
+      "title": "Стоп-мысль",
+      "instruction": "Если мысль повторяется — мягко скажи «достаточно» и вернись в тело.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": ["work", "relationship"],
+      "forecast_types": ["daily_grounded", "workday_focus"],
+      "layers": ["L2", "L3"],
+      "triggers": ["overload", "waiting"],
+      "emotions": ["tension", "irritability"],
+      "reactions": ["overthink", "rush"],
+      "tone": "calm",
+      "tags": ["work", "focus"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.020",
+      "type": "body",
+      "title": "Устойчивость",
+      "instruction": "Почувствуй спину. Как будто она слегка опирается на воздух позади.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": ["work", "body"],
+      "forecast_types": ["daily_grounded", "workday_focus", "body_state"],
+      "layers": ["L1", "L2"],
+      "triggers": ["uncertainty", "overload"],
+      "emotions": ["tension", "anxiety"],
+      "reactions": ["freeze", "scatter"],
+      "tone": "calm",
+      "tags": ["work", "body"],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.021",
+      "type": "affirmation",
+      "title": "Допустимо",
+      "instruction": "«Мне допустимо быть в этом состоянии».",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.022",
+      "type": "affirmation",
+      "title": "Без спешки",
+      "instruction": "«Мне не обязательно решать это прямо сейчас».",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.023",
+      "type": "affirmation",
+      "title": "Достаточно",
+      "instruction": "«Того, что я уже делаю, сейчас достаточно».",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.024",
+      "type": "observation",
+      "title": "Сигнал",
+      "instruction": "Отметь, что именно в теле первым реагирует на напряжение.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.025",
+      "type": "micro",
+      "title": "Завершение",
+      "instruction": "Скажи мысленно: «На сейчас — всё». И закрой этот момент.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.026",
+      "type": "micro",
+      "title": "Не отвечать сразу",
+      "instruction": "Если есть возможность — не отвечай немедленно. Даже пауза в минуту уже меняет ощущение.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.027",
+      "type": "observation",
+      "title": "Где спешка",
+      "instruction": "Заметь, в каком месте возникает желание ускориться. Не исправляй его.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.028",
+      "type": "body",
+      "title": "Микро-движение",
+      "instruction": "Сделай маленькое движение: поверни шею, разомни пальцы, сменись в пространстве.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.029",
+      "type": "micro",
+      "title": "Одно сообщение",
+      "instruction": "Если нужно написать — напиши только одно предложение. Без пояснений.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.030",
+      "type": "observation",
+      "title": "Чужое или своё",
+      "instruction": "Спроси себя: это моё напряжение или я его подхватил?",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.031",
+      "type": "body",
+      "title": "Тяжесть",
+      "instruction": "Позволь телу стать чуть тяжелее. Как будто оно опускается вниз.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.032",
+      "type": "micro",
+      "title": "Сузить задачу",
+      "instruction": "Уменьши текущую задачу до минимального возможного шага.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.033",
+      "type": "observation",
+      "title": "Ожидание",
+      "instruction": "Заметь, что именно ты сейчас ждёшь: ответа, ясности или окончания.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.034",
+      "type": "body",
+      "title": "Контакт со стулом",
+      "instruction": "Почувствуй, как стул держит тебя. Тело можно не удерживать самому.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.035",
+      "type": "micro",
+      "title": "Не доказывать",
+      "instruction": "Разреши себе не объяснять и не доказывать свою точку зрения.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.036",
+      "type": "observation",
+      "title": "Реакция тела",
+      "instruction": "Отметь первую телесную реакцию, прежде чем появляется мысль.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.037",
+      "type": "body",
+      "title": "Замедленный выдох",
+      "instruction": "Сделай выдох чуть медленнее обычного. Один раз.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.038",
+      "type": "micro",
+      "title": "Отпустить контроль",
+      "instruction": "Найди один элемент, который можно сейчас не контролировать.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.039",
+      "type": "observation",
+      "title": "Контекст",
+      "instruction": "Посмотри на ситуацию как на эпизод, а не как на характеристику дня.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.040",
+      "type": "body",
+      "title": "Распустить живот",
+      "instruction": "Позволь животу быть мягким. Даже на пару секунд.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.041",
+      "type": "micro",
+      "title": "Пауза в диалоге",
+      "instruction": "Если разговор продолжается — сделай паузу перед следующим ответом.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.042",
+      "type": "observation",
+      "title": "Что известно",
+      "instruction": "Отметь, что тебе уже известно в этой ситуации. Без догадок.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.043",
+      "type": "body",
+      "title": "Смена фокуса",
+      "instruction": "Переведи взгляд на что-то неподвижное вокруг.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.044",
+      "type": "micro",
+      "title": "Не решать всё",
+      "instruction": "Выбери, что сегодня можно не решать.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.045",
+      "type": "observation",
+      "title": "Повтор",
+      "instruction": "Заметь, повторяется ли это состояние или это разовый момент.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.046",
+      "type": "body",
+      "title": "Опора на спину",
+      "instruction": "Почувствуй спину как основную опору, а не плечи.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.047",
+      "type": "micro",
+      "title": "Отложить вывод",
+      "instruction": "Не делай выводов о себе или других прямо сейчас.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.048",
+      "type": "observation",
+      "title": "Внутри / снаружи",
+      "instruction": "Отметь, где больше напряжения — внутри или из-за внешних факторов.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.049",
+      "type": "body",
+      "title": "Дыхание через нос",
+      "instruction": "Сделай несколько спокойных вдохов через нос, не углубляя дыхание.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.050",
+      "type": "micro",
+      "title": "Закрыть петлю",
+      "instruction": "Мысленно отметь: «Этот момент завершён», даже если ситуация продолжается.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.051",
+      "type": "micro",
+      "title": "Отложить выбор",
+      "instruction": "Разреши себе не выбирать сейчас. Выбор может подождать.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.052",
+      "type": "observation",
+      "title": "Где давление",
+      "instruction": "Заметь, откуда идёт давление: изнутри или снаружи.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.053",
+      "type": "body",
+      "title": "Стопы на полу",
+      "instruction": "Обрати внимание на стопы. Почувствуй контакт с полом.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.054",
+      "type": "micro",
+      "title": "Сузить альтернативы",
+      "instruction": "Сократи варианты до двух. Больше не нужно.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.055",
+      "type": "observation",
+      "title": "Не вся картина",
+      "instruction": "Отметь, что сейчас видна только часть ситуации.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.056",
+      "type": "body",
+      "title": "Снять челюсть",
+      "instruction": "Разомкни зубы. Пусть челюсть станет мягче.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.057",
+      "type": "micro",
+      "title": "Ничего не делать",
+      "instruction": "Разреши себе минуту без действий и решений.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.058",
+      "type": "observation",
+      "title": "Чужие ожидания",
+      "instruction": "Заметь, чьи ожидания ты сейчас учитываешь.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.059",
+      "type": "body",
+      "title": "Медленное моргание",
+      "instruction": "Медленно моргни несколько раз, не ускоряясь.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.060",
+      "type": "micro",
+      "title": "Минимальное «нет»",
+      "instruction": "Найди форму отказа без объяснений и оправданий.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.061",
+      "type": "observation",
+      "title": "Цена выбора",
+      "instruction": "Отметь, что у любого варианта есть цена. Это нормально.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.062",
+      "type": "body",
+      "title": "Плечи вниз",
+      "instruction": "Позволь плечам опуститься чуть ниже обычного.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.063",
+      "type": "micro",
+      "title": "Перерыв между мыслями",
+      "instruction": "Сделай паузу между двумя мыслями. Не заполняй её.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.064",
+      "type": "observation",
+      "title": "Фон дня",
+      "instruction": "Спроси себя: это фон дня или конкретное событие?",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.065",
+      "type": "body",
+      "title": "Ритм шагов",
+      "instruction": "Если идёшь — обрати внимание на ритм шагов.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.066",
+      "type": "micro",
+      "title": "Не сейчас",
+      "instruction": "Разреши себе формулировку «не сейчас» вместо решения.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.067",
+      "type": "observation",
+      "title": "Повторяющийся мотив",
+      "instruction": "Заметь, знакомо ли тебе это состояние по прошлым дням.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.068",
+      "type": "body",
+      "title": "Опора на выдох",
+      "instruction": "Сделай акцент на выдохе, не меняя вдох.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.069",
+      "type": "micro",
+      "title": "Граница времени",
+      "instruction": "Определи, сколько времени ты готов уделить этому сегодня.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.070",
+      "type": "observation",
+      "title": "Реальная угроза",
+      "instruction": "Отдели реальную угрозу от предполагаемой.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.071",
+      "type": "body",
+      "title": "Пауза в движении",
+      "instruction": "Остановись на секунду в середине движения.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.072",
+      "type": "micro",
+      "title": "Один критерий",
+      "instruction": "Выбери один критерий для решения. Остальные временно отбрось.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.073",
+      "type": "observation",
+      "title": "Эмоция без истории",
+      "instruction": "Заметь эмоцию, не объясняя, откуда она.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.074",
+      "type": "body",
+      "title": "Тепло ладоней",
+      "instruction": "Обрати внимание на тепло в ладонях или его отсутствие.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.075",
+      "type": "micro",
+      "title": "Закрыть тему на сегодня",
+      "instruction": "Разреши себе вернуться к этому завтра.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.076",
+      "type": "micro",
+      "title": "Пауза перед тратой",
+      "instruction": "Сделай паузу на один вдох перед покупкой или оплатой.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.077",
+      "type": "observation",
+      "title": "Чувство «хватит»",
+      "instruction": "Заметь, ощущение «хватит» или «не хватит» прямо сейчас.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.078",
+      "type": "body",
+      "title": "Контакт с поверхностью",
+      "instruction": "Почувствуй, чем тело соприкасается с поверхностью.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.079",
+      "type": "micro",
+      "title": "Малый шаг с деньгами",
+      "instruction": "Сделай одно маленькое действие вместо большого плана.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.080",
+      "type": "observation",
+      "title": "Контроль или безопасность",
+      "instruction": "Отметь, что ты сейчас ищешь: контроль или безопасность.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.081",
+      "type": "body",
+      "title": "Дыхание без счета",
+      "instruction": "Дыши, не считая вдохи и выдохи.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.082",
+      "type": "micro",
+      "title": "Зафиксировать итог",
+      "instruction": "Сформулируй одним предложением, что сегодня уже сделано.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.083",
+      "type": "observation",
+      "title": "Закрытый гештальт",
+      "instruction": "Заметь, что сегодня можно считать завершённым.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.084",
+      "type": "body",
+      "title": "Расслабить живот",
+      "instruction": "Позволь животу быть мягким, без втягивания.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.085",
+      "type": "micro",
+      "title": "Мини-итог дня",
+      "instruction": "Назови одну вещь, которая сегодня прояснилась.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.086",
+      "type": "observation",
+      "title": "Повторяющийся сценарий",
+      "instruction": "Отметь, повторяется ли эта ситуация в похожем виде.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.087",
+      "type": "body",
+      "title": "Перенос веса",
+      "instruction": "Медленно перенеси вес тела с одной стороны на другую.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.088",
+      "type": "micro",
+      "title": "Упростить ожидания",
+      "instruction": "Сократи ожидания от себя на сегодня.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.089",
+      "type": "observation",
+      "title": "Реальный ресурс",
+      "instruction": "Заметь, какой ресурс у тебя есть прямо сейчас.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.090",
+      "type": "body",
+      "title": "Температура воздуха",
+      "instruction": "Обрати внимание на температуру вокруг.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.091",
+      "type": "micro",
+      "title": "Закрыть вкладку",
+      "instruction": "Закрой одну вкладку, задачу или тему.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.092",
+      "type": "observation",
+      "title": "Не весь путь",
+      "instruction": "Отметь, что сейчас виден не весь путь — и это нормально.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.093",
+      "type": "body",
+      "title": "Микро-движение",
+      "instruction": "Сделай едва заметное движение телом.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.094",
+      "type": "micro",
+      "title": "Снижение планки",
+      "instruction": "Позволь себе сделать меньше, чем планировал.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.095",
+      "type": "observation",
+      "title": "День как этап",
+      "instruction": "Посмотри на день как на этап, а не результат.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.096",
+      "type": "body",
+      "title": "Опора в спине",
+      "instruction": "Заметь опору спины: стул, стену, воздух.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.097",
+      "type": "micro",
+      "title": "Оставить как есть",
+      "instruction": "Разреши ситуации побыть без изменений.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.098",
+      "type": "observation",
+      "title": "Достаточно ли ясно",
+      "instruction": "Спроси себя, достаточно ли сейчас ясности для шага.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.099",
+      "type": "body",
+      "title": "Медленный поворот головы",
+      "instruction": "Медленно поверни голову в стороны.",
+      "duration": {
+        "min": 30,
+        "max": 120
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.100",
+      "type": "micro",
+      "title": "Завершить день",
+      "instruction": "Отметь для себя: этот день можно считать завершённым.",
+      "duration": {
+        "min": 30,
+        "max": 90
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.101",
+      "type": "affirmation",
+      "title": "Я удерживаю фокус даже в шуме.",
+      "instruction": "Я удерживаю фокус даже в шуме.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.102",
+      "type": "affirmation",
+      "title": "Я выбираю действовать, а не метаться.",
+      "instruction": "Я выбираю действовать, а не метаться.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.103",
+      "type": "affirmation",
+      "title": "Я влияю на ход событий через",
+      "instruction": "Я влияю на ход событий через свои решения.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.104",
+      "type": "affirmation",
+      "title": "Я направляю внимание туда, где мне",
+      "instruction": "Я направляю внимание туда, где мне важно.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.105",
+      "type": "affirmation",
+      "title": "Я не тороплюсь — и от",
+      "instruction": "Я не тороплюсь — и от этого выигрываю.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.106",
+      "type": "affirmation",
+      "title": "Я сохраняю ясность, когда другие теряют",
+      "instruction": "Я сохраняю ясность, когда другие теряют контроль.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.107",
+      "type": "affirmation",
+      "title": "Я позволяю лишнему отойти на второй",
+      "instruction": "Я позволяю лишнему отойти на второй план.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.108",
+      "type": "affirmation",
+      "title": "Я делаю ровно столько, сколько действительно",
+      "instruction": "Я делаю ровно столько, сколько действительно нужно.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.109",
+      "type": "affirmation",
+      "title": "Я не расплескиваю энергию на ненужные",
+      "instruction": "Я не расплескиваю энергию на ненужные реакции.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.110",
+      "type": "affirmation",
+      "title": "Я выбираю спокойствие как форму силы.",
+      "instruction": "Я выбираю спокойствие как форму силы.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.111",
+      "type": "affirmation",
+      "title": "Я слышу себя прежде, чем реагировать.",
+      "instruction": "Я слышу себя прежде, чем реагировать.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.112",
+      "type": "affirmation",
+      "title": "Я управляю тем, на что трачу",
+      "instruction": "Я управляю тем, на что трачу внимание.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.113",
+      "type": "affirmation",
+      "title": "Я доверяю своему внутреннему ощущению момента.",
+      "instruction": "Я доверяю своему внутреннему ощущению момента.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.114",
+      "type": "affirmation",
+      "title": "Я могу не спешить и всё",
+      "instruction": "Я могу не спешить и всё равно успевать.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.115",
+      "type": "affirmation",
+      "title": "Я выбираю точность вместо суеты.",
+      "instruction": "Я выбираю точность вместо суеты.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.116",
+      "type": "affirmation",
+      "title": "Я остаюсь собранным даже при неопределённости.",
+      "instruction": "Я остаюсь собранным даже при неопределённости.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.117",
+      "type": "affirmation",
+      "title": "Я не обязан отвечать сразу, чтобы",
+      "instruction": "Я не обязан отвечать сразу, чтобы быть уверенным.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.118",
+      "type": "affirmation",
+      "title": "Я направляю усилия туда, где есть",
+      "instruction": "Я направляю усилия туда, где есть отдача.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.119",
+      "type": "affirmation",
+      "title": "Я удерживаю баланс между действием и",
+      "instruction": "Я удерживаю баланс между действием и паузой.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.120",
+      "type": "affirmation",
+      "title": "Я выбираю ясность вместо лишних мыслей.",
+      "instruction": "Я выбираю ясность вместо лишних мыслей.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.121",
+      "type": "affirmation",
+      "title": "Я спокойно отказываюсь от того, что",
+      "instruction": "Я спокойно отказываюсь от того, что мне не подходит.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.122",
+      "type": "affirmation",
+      "title": "Я не вовлекаюсь в лишние разговоры",
+      "instruction": "Я не вовлекаюсь в лишние разговоры и ожидания.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.123",
+      "type": "affirmation",
+      "title": "Я сохраняю контроль над своим ритмом.",
+      "instruction": "Я сохраняю контроль над своим ритмом.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.124",
+      "type": "affirmation",
+      "title": "Я действую из устойчивости, а не",
+      "instruction": "Я действую из устойчивости, а не из напряжения.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.125",
+      "type": "affirmation",
+      "title": "Я позволяю событиям выстраиваться без давления.",
+      "instruction": "Я позволяю событиям выстраиваться без давления.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.126",
+      "type": "affirmation",
+      "title": "Я не усложняю то, что может",
+      "instruction": "Я не усложняю то, что может быть простым.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.127",
+      "type": "affirmation",
+      "title": "Я выбираю присутствие вместо рассеянности.",
+      "instruction": "Я выбираю присутствие вместо рассеянности.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.128",
+      "type": "affirmation",
+      "title": "Я удерживаю направление, даже если путь",
+      "instruction": "Я удерживаю направление, даже если путь меняется.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.129",
+      "type": "affirmation",
+      "title": "Я доверяю своему темпу.",
+      "instruction": "Я доверяю своему темпу.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    },
+    {
+      "id": "practice.130",
+      "type": "affirmation",
+      "title": "Я спокойно двигаюсь к нужному результату.",
+      "instruction": "Я спокойно двигаюсь к нужному результату.",
+      "duration": {
+        "min": 10,
+        "max": 30
+      },
+      "context": [],
+      "forecast_types": [],
+      "layers": [],
+      "triggers": [],
+      "emotions": [],
+      "reactions": [],
+      "tone": "calm",
+      "tags": [],
+      "created_at": "2026-01-25",
+      "updated_at": "2026-01-25"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "contract_version": "reference_machine_contract_v1",
+  "domain": "astrology",
+  "entity_code": "astrology.planet.saturn",
+  "entity_type": "Planet",
+  "version": "0.1.0",
+  "status": "draft",
+  "machine_contract": {
+    "vector": {
+      "action_reflection": 0.1,
+      "expansion_consolidation": -0.4,
+      "self_others": -0.1,
+      "structure_flow": 0.9
+    },
+    "tempo": "slow",
+    "risk": "medium",
+    "risk_modifier": 0.3,
+    "emotional_load": "neutral",
+    "confidence": 0.92
+  }
+}

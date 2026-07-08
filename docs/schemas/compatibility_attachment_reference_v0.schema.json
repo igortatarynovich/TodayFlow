@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://todayflow.app/schemas/compatibility_attachment_reference_v0.json",
+  "title": "Compatibility Attachment Reference v0",
+  "description": "Reference CD slice on compatibility dynamics/compare responses. Hypothesis-only — not user diagnosis.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "deep_block_order",
+    "attachment_style_hints",
+    "trigger_blocks",
+    "reference_status"
+  ],
+  "properties": {
+    "contract_version": {
+      "type": "string",
+      "const": "compatibility_attachment_reference_v0"
+    },
+    "deep_block_order": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["emotions", "communication", "conflicts", "sexuality", "long_term"]
+      }
+    },
+    "attachment_style_hints": {
+      "type": "array",
+      "maxItems": 3,
+      "items": { "$ref": "#/$defs/attachment_style_hint" }
+    },
+    "trigger_blocks": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["emotions", "communication", "conflicts", "sexuality", "long_term"]
+      }
+    },
+    "reference_status": {
+      "type": "string",
+      "enum": ["draft", "review", "active"]
+    }
+  },
+  "$defs": {
+    "attachment_style_hint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "label", "summary"],
+      "properties": {
+        "code": { "type": "string", "maxLength": 64 },
+        "label": { "type": "string", "maxLength": 120 },
+        "summary": { "type": "string", "maxLength": 240 },
+        "score": { "type": "number" },
+        "evidence_blocks": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "confirmation_required": { "type": "boolean" },
+        "knowledge_type": { "type": "string", "const": "hypothesis" },
+        "source": { "type": "string" }
+      }
+    }
+  }
+}

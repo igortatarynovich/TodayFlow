@@ -1,0 +1,383 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0 1.25rem 1.5rem;
+}
+
+.sectionWebEmbed {
+  padding: 0;
+  gap: 1.75rem;
+  width: 100%;
+  max-width: none;
+}
+
+.sectionWebEmbed .synthesisCard {
+  padding: 1.75rem;
+  border-radius: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--tf-surface-dark, #2a2520);
+  box-shadow: 0 24px 35px rgba(42, 37, 32, 0.12);
+}
+
+.sectionWebEmbed .synthesisKicker {
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  font-size: 0.6875rem;
+  letter-spacing: 0.11em;
+  color: var(--tf-accent-gold, #c9a96e);
+}
+
+.sectionWebEmbed .glanceTile,
+.sectionWebEmbed .productCard {
+  padding: 1.75rem;
+  border-radius: 1.75rem;
+  border: 1px solid #e8e2d6;
+  background: #fff;
+  box-shadow: 0 18px 28px rgba(42, 37, 32, 0.06);
+}
+
+.sectionWebEmbed .cardEyebrow,
+.sectionWebEmbed .glanceTileLabel {
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  font-size: 0.6875rem;
+  letter-spacing: 0.11em;
+  color: #8b6a3e;
+}
+
+.sectionWebEmbed .cardTitle,
+.sectionWebEmbed .glanceTileValue {
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+}
+
+.sectionWebEmbed .chip {
+  min-height: 2rem;
+  padding: 0.5rem 0.875rem;
+  border-color: #e8e2d6;
+  background: #f7f4ee;
+}
+
+.sectionWebEmbed .chipActive {
+  border-color: #8b6a3e;
+  background: rgba(139, 106, 62, 0.12);
+}
+
+.sectionWebEmbed .bridges {
+  padding: 0.5rem 0 0;
+}
+
+@media (min-width: 48rem) {
+  .sectionWebEmbed .glanceRow {
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .sectionWebEmbed {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .sectionWebEmbed .synthesisCard,
+  .sectionWebEmbed .glanceRow {
+    grid-column: 1 / -1;
+  }
+
+  .sectionWebEmbed .bridges {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 47.99rem) {
+  .sectionWebEmbed .synthesisCard,
+  .sectionWebEmbed .glanceTile,
+  .sectionWebEmbed .productCard {
+    padding: 1.25rem;
+  }
+}
+
+.synthesisCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 11.25rem;
+  padding: 1.5rem;
+  border-radius: 28px;
+  background: var(--tdp-dark, #1a1714);
+  box-shadow: var(--tdp-shadow-md);
+}
+
+.synthesisKicker {
+  margin: 0;
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tdp-accent, #c9a96e);
+}
+
+.synthesisText {
+  margin: 0;
+  font-family: var(--tdp-font-display, "Instrument Serif", Georgia, serif);
+  font-size: 1.125rem;
+  line-height: 1.4;
+  color: #fff;
+}
+
+.synthesisTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.synthesisTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.375rem 0.625rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: var(--tdp-accent, #c9a96e);
+}
+
+.glanceRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.glanceTile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: var(--tdp-shadow-sm);
+}
+
+.glanceTileLabel {
+  margin: 0;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--tdp-accent, #c9a96e);
+}
+
+.glanceTileValue {
+  margin: 0;
+  font-family: var(--tdp-font-display, "Instrument Serif", Georgia, serif);
+  font-size: 1.25rem;
+  line-height: 1.2;
+  color: var(--tdp-ink, #2a2520);
+}
+
+.productCard {
+  padding: 1.5rem;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: var(--tdp-shadow-sm);
+}
+
+.cardEyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tdp-accent, #c9a96e);
+}
+
+.cardTitle {
+  margin: 0;
+  font-family: var(--tdp-font-display, "Instrument Serif", Georgia, serif);
+  font-size: 1.5rem;
+  line-height: 1.2;
+  color: var(--tdp-ink, #2a2520);
+}
+
+.focusGroups {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.focusGroupLabel {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--tdp-muted, #9a9490);
+}
+
+.focusLine {
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--tdp-ink, #2a2520);
+}
+
+.cardDivider {
+  height: 1px;
+  margin: 1rem 0;
+  background: rgba(42, 37, 32, 0.08);
+}
+
+.mainStepText {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--tdp-ink, #2a2520);
+}
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.chip {
+  padding: 0.5rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(42, 37, 32, 0.1);
+  background: transparent;
+  font: inherit;
+  font-size: 0.8125rem;
+  color: var(--tdp-ink, #2a2520);
+  cursor: pointer;
+}
+
+.chipActive {
+  composes: chip;
+  border-color: var(--tdp-accent, #c9a96e);
+  background: var(--tdp-accent-soft, rgba(201, 169, 110, 0.14));
+}
+
+.customGoalRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--tdp-muted, #9a9490);
+  cursor: pointer;
+}
+
+.customGoalForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding-top: 1rem;
+}
+
+.goalInput {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border-radius: 12px;
+  border: 1px solid rgba(42, 37, 32, 0.12);
+  font: inherit;
+  font-size: 0.875rem;
+}
+
+.practicesHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.practicesProgress {
+  margin: 0;
+  font-size: 0.5625rem;
+  font-weight: 600;
+  color: var(--tdp-muted, #9a9490);
+}
+
+.practiceRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3.5rem;
+}
+
+.practiceRowDivider {
+  height: 1px;
+  background: rgba(42, 37, 32, 0.08);
+}
+
+.practiceCheck {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 999px;
+  border: 1.5px solid rgba(42, 37, 32, 0.15);
+  background: transparent;
+}
+
+.practiceCheckDone {
+  composes: practiceCheck;
+  border-color: var(--tdp-accent, #c9a96e);
+  background: var(--tdp-accent-soft, rgba(201, 169, 110, 0.14));
+}
+
+.practiceBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.practiceTitle {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--tdp-ink, #2a2520);
+}
+
+.practiceMeta {
+  margin: 0.125rem 0 0;
+  font-size: 0.6875rem;
+  color: var(--tdp-accent, #c9a96e);
+}
+
+.practiceMetaMuted {
+  composes: practiceMeta;
+  color: var(--tdp-muted, #9a9490);
+}
+
+.practiceQuote {
+  margin: 0;
+  font-family: var(--tdp-font-display, "Instrument Serif", Georgia, serif);
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--tdp-ink, #2a2520);
+}
+
+.practiceAction {
+  margin-top: 0.35rem;
+  align-self: flex-start;
+}
+
+.bridges {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem 0 2.5rem;
+}
+
+.bridgeLink {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--tdp-muted, #9a9490);
+  text-decoration: none;
+}
+
+.bridgeLink:hover {
+  color: var(--tdp-ink, #2a2520);
+}

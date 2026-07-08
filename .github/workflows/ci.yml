@@ -1,0 +1,339 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  today-contract-schema:
+    name: Today day JSON Schema (today_day_v1)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install contract validation deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scripts/requirements-contract-validation.txt
+
+      - name: Validate schema + fixtures
+        run: python scripts/validate_today_day_contract.py
+
+  day-context-schema:
+    name: DayContext JSON Schema (day_context_v0)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install contract validation deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scripts/requirements-contract-validation.txt
+
+      - name: Validate DayContext schema + fixtures
+        run: python scripts/validate_day_context_contract.py
+
+  reference-machine-contract-schema:
+    name: Reference Machine Contract JSON Schema (v1)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install contract validation deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scripts/requirements-contract-validation.txt
+
+      - name: Validate Reference Machine Contract schema + fixtures
+        run: python scripts/validate_reference_machine_contract.py
+
+  compact-user-model-schema:
+    name: Compact User Model JSON Schema (v0 + v1)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install contract validation deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scripts/requirements-contract-validation.txt
+
+      - name: Validate CUM schema + fixtures
+        run: python scripts/validate_compact_user_model_contract.py
+
+  backend-critical-lint:
+    name: Backend Critical Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Run critical ruff checks
+        working-directory: ./backend
+        run: ruff check src tests --select F821,F822,F823,E9
+
+  backend-tests:
+    name: Backend Tests
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        working-directory: ./backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+      
+      - name: Run tests
+        working-directory: ./backend
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+          TODAYFLOW_DATA_DIR: ${{ github.workspace }}/DATA
+        run: |
+          pytest tests/ -v --cov=todayflow_backend --cov-report=xml --cov-report=term --cov-fail-under=25
+
+  backend-smoke:
+    name: Backend smoke (pytest -m smoke)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Run smoke tests
+        working-directory: ./backend
+        env:
+          TODAYFLOW_DATA_DIR: ${{ github.workspace }}/DATA
+          # Отдельная SQLite БД без сервиса Postgres — быстрый gate для маркера smoke
+          DATABASE_URL: sqlite:///./.ci_smoke.db
+          # Явно без LLM: smoke не должен тянуть внешние вызовы из секретов runner
+          OPENAI_API_KEY: ""
+        run: |
+          pytest tests/ -m smoke -q --tb=short --no-cov
+
+  frontend-tests:
+    name: Frontend Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python (E2E API)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install backend dependencies (E2E API)
+        working-directory: ./backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Start E2E API server
+        working-directory: ./backend
+        env:
+          DATABASE_URL: sqlite:///${{ github.workspace }}/.ci_e2e_frontend_api.db
+          TODAYFLOW_DATA_DIR: ${{ github.workspace }}/DATA
+          OPENAI_API_KEY: ""
+        run: |
+          nohup uvicorn todayflow_backend.main:app --host 127.0.0.1 --port 8080 > /tmp/e2e-api.log 2>&1 &
+          echo $! > /tmp/e2e-api.pid
+          for i in $(seq 1 90); do
+            curl -sf http://127.0.0.1:8080/openapi.json > /dev/null && exit 0
+            sleep 1
+          done
+          echo "API did not become ready"; cat /tmp/e2e-api.log; exit 1
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+      
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+      
+      - name: Run linter
+        working-directory: ./frontend
+        run: npm run lint
+
+      - name: Run copy policy tests
+        working-directory: ./frontend
+        run: npm test -- userFacingCopyPolicy
+      
+      - name: Run tests
+        working-directory: ./frontend
+        run: npm test -- --coverage --watchAll=false
+      
+      - name: Build
+        working-directory: ./frontend
+        env:
+          NEXT_PUBLIC_API_BASE_URL: http://127.0.0.1:8080
+        run: npm run build
+
+      - name: Install Playwright (Chromium)
+        working-directory: ./frontend
+        run: npx playwright install --with-deps chromium
+
+      - name: E2E (Playwright)
+        working-directory: ./frontend
+        env:
+          PLAYWRIGHT_API_BASE_URL: http://127.0.0.1:8080
+        run: npm run test:e2e
+
+      - name: Stop E2E API server
+        if: always()
+        run: |
+          if [ -f /tmp/e2e-api.pid ]; then kill "$(cat /tmp/e2e-api.pid)" 2>/dev/null || true; fi
+
+  validate-i18n:
+    name: Validate i18n
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || true
+      
+      - name: Validate i18n files
+        run: |
+          python scripts/validate_i18n.py
+
+  ios-copy-policy:
+    name: iOS Copy Policy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run iOS copy policy check
+        run: python3 scripts/check_ios_user_facing_copy_policy.py
+
+  ios-build:
+    name: iOS Build
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app
+
+      - name: Build iOS app
+        working-directory: ./ios/TodayFlow
+        run: |
+          xcodebuild \
+            -project TodayFlow.xcodeproj \
+            -scheme TodayFlow \
+            -destination "generic/platform=iOS Simulator" \
+            -configuration Debug \
+            build
+
+  ios-test:
+    name: iOS XCTest Smoke
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app
+
+      - name: Run iOS smoke tests
+        working-directory: ./ios/TodayFlow
+        run: |
+          SIMULATOR_NAME=$(xcrun simctl list devices available | rg "iPhone" | sed -E 's/^[[:space:]]*([^()]+)[[:space:]]+\(.*/\1/' | awk 'NR==1 { print; exit }')
+          if [ -z "$SIMULATOR_NAME" ]; then
+            echo "No available iPhone simulator found"
+            exit 1
+          fi
+
+          echo "Using simulator: $SIMULATOR_NAME"
+          xcodebuild \
+            -project TodayFlow.xcodeproj \
+            -scheme TodayFlow \
+            -destination "platform=iOS Simulator,name=$SIMULATOR_NAME" \
+            test
+

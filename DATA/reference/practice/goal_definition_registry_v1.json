@@ -1,0 +1,199 @@
+{
+  "contract_version": "goal_definition_registry_v1",
+  "domain": "practice",
+  "version": "1.0.0",
+  "status": "draft",
+  "description": "C1.3 Goal Definition registry — desired outcomes (not practice, habit, or cycle). No content, UI, or runtime instances.",
+  "goal_definitions": {
+    "weekly_clarity_theme": {
+      "code": "weekly_clarity_theme",
+      "title": "Weekly clarity theme",
+      "goal_type": "weekly",
+      "goal_category": "clarity",
+      "description": "Close the weekly clarity theme with verified evidence of focus and decision follow-through.",
+      "target_metric": {
+        "metric_type": "theme_closed",
+        "target_value": 1,
+        "unit": "weeks"
+      },
+      "horizon": "week",
+      "compatible_paths": ["clarity", "purpose"],
+      "compatible_stages": ["observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "produces_signals": ["weekly_goal_completed"],
+      "difficulty_level": "beginner",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "weekly_discipline_rhythm": {
+      "code": "weekly_discipline_rhythm",
+      "title": "Weekly discipline rhythm",
+      "goal_type": "weekly",
+      "goal_category": "discipline",
+      "description": "Sustain active practice days across the week to establish a repeatable rhythm.",
+      "target_metric": {
+        "metric_type": "active_days",
+        "target_value": 5,
+        "unit": "days"
+      },
+      "horizon": "week",
+      "compatible_paths": ["discipline", "energy", "body"],
+      "compatible_stages": ["observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "produces_signals": ["weekly_goal_completed"],
+      "difficulty_level": "intermediate",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "weekly_reflection_closure": {
+      "code": "weekly_reflection_closure",
+      "title": "Weekly reflection closure",
+      "goal_type": "weekly",
+      "goal_category": "wellbeing",
+      "description": "Complete the weekly reflection arc with intentional closure and pattern review.",
+      "target_metric": {
+        "metric_type": "review_completed",
+        "target_value": 1,
+        "unit": "weeks"
+      },
+      "horizon": "week",
+      "compatible_paths": ["clarity", "healing", "relationships"],
+      "compatible_stages": ["observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "produces_signals": ["weekly_goal_completed"],
+      "difficulty_level": "beginner",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "habit_consistency_milestone": {
+      "code": "habit_consistency_milestone",
+      "title": "Habit consistency milestone",
+      "goal_type": "milestone",
+      "goal_category": "discipline",
+      "description": "Reach a verified habit consistency threshold over a bounded window.",
+      "target_metric": {
+        "metric_type": "habit_streak_days",
+        "target_value": 21,
+        "unit": "days"
+      },
+      "horizon": "month",
+      "compatible_paths": ["discipline", "body", "energy"],
+      "compatible_stages": ["practitioner", "explorer", "architect", "mentor", "master"],
+      "produces_signals": ["goal_milestone_reached"],
+      "difficulty_level": "intermediate",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "purpose_direction_milestone": {
+      "code": "purpose_direction_milestone",
+      "title": "Purpose direction milestone",
+      "goal_type": "long_horizon",
+      "goal_category": "purpose",
+      "description": "Establish and verify a durable direction statement aligned with long-horizon purpose work.",
+      "target_metric": {
+        "metric_type": "intention_set",
+        "target_value": 1,
+        "unit": "count"
+      },
+      "horizon": "quarter",
+      "compatible_paths": ["purpose", "clarity"],
+      "compatible_stages": ["explorer", "architect", "mentor", "master"],
+      "produces_signals": ["goal_milestone_reached"],
+      "difficulty_level": "advanced",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "relationship_focus_week": {
+      "code": "relationship_focus_week",
+      "title": "Relationship focus week",
+      "goal_type": "weekly",
+      "goal_category": "relationships",
+      "description": "Complete a weekly relationship focus with verified connection or boundary actions.",
+      "target_metric": {
+        "metric_type": "sessions_completed",
+        "target_value": 3,
+        "unit": "sessions"
+      },
+      "horizon": "week",
+      "compatible_paths": ["relationships", "healing"],
+      "compatible_stages": ["observer", "practitioner", "explorer", "architect", "mentor", "master"],
+      "produces_signals": ["weekly_goal_completed"],
+      "difficulty_level": "beginner",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "body_restoration_milestone": {
+      "code": "body_restoration_milestone",
+      "title": "Body restoration milestone",
+      "goal_type": "milestone",
+      "goal_category": "body",
+      "description": "Restore body rhythm through sustained somatic and rest practices over a bounded window.",
+      "target_metric": {
+        "metric_type": "active_days",
+        "target_value": 14,
+        "unit": "days"
+      },
+      "horizon": "month",
+      "compatible_paths": ["body", "energy", "healing"],
+      "compatible_stages": ["seeker", "observer", "practitioner", "explorer", "architect"],
+      "produces_signals": ["goal_milestone_reached"],
+      "difficulty_level": "intermediate",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "focus_sprint_week": {
+      "code": "focus_sprint_week",
+      "title": "Focus sprint week",
+      "goal_type": "weekly",
+      "goal_category": "focus",
+      "description": "Complete a bounded focus sprint with verified attention-training or planning sessions.",
+      "target_metric": {
+        "metric_type": "sessions_completed",
+        "target_value": 5,
+        "unit": "sessions"
+      },
+      "horizon": "week",
+      "compatible_paths": ["clarity", "discipline", "energy"],
+      "compatible_stages": ["practitioner", "explorer", "architect", "mentor", "master"],
+      "produces_signals": ["weekly_goal_completed"],
+      "difficulty_level": "intermediate",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "architect_system_review": {
+      "code": "architect_system_review",
+      "title": "Architect system review",
+      "goal_type": "long_horizon",
+      "goal_category": "growth",
+      "description": "Review and stabilize the personal practice system across habits, goals, and path alignment.",
+      "target_metric": {
+        "metric_type": "review_completed",
+        "target_value": 1,
+        "unit": "count"
+      },
+      "horizon": "year",
+      "compatible_paths": ["purpose", "discipline", "clarity"],
+      "compatible_stages": ["architect", "mentor", "master"],
+      "produces_signals": ["goal_milestone_reached"],
+      "difficulty_level": "advanced",
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "energy_balance_week": {
+      "code": "energy_balance_week",
+      "title": "Energy balance week",
+      "goal_type": "weekly",
+      "goal_category": "energy",
+      "description": "Balance energy expenditure and recovery across the week with verified body and rest evidence.",
+      "target_metric": {
+        "metric_type": "active_days",
+        "target_value": 4,
+        "unit": "days"
+      },
+      "horizon": "week",
+      "compatible_paths": ["energy", "body", "healing"],
+      "compatible_stages": ["seeker", "observer", "practitioner", "explorer", "architect"],
+      "produces_signals": ["weekly_goal_completed"],
+      "difficulty_level": "beginner",
+      "status": "active",
+      "version": "1.0.0"
+    }
+  }
+}

@@ -1,0 +1,301 @@
+.pageShell {
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 3rem) clamp(1.125rem, 3.5vw, 2rem) clamp(3.5rem, 8vw, 5.5rem);
+  box-sizing: border-box;
+  color: var(--tf-ink, var(--orbit-color-primary-accent, #2d241c));
+}
+
+.sceneStack {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.35rem, 3vw, 2rem);
+}
+
+.sceneHeader {
+  position: relative;
+  min-height: clamp(19rem, 70dvh, 34rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(1.75rem, 5vw, 3rem) 0 clamp(1.5rem, 4vw, 2.5rem);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.sceneHeader::after {
+  content: "";
+  position: absolute;
+  right: clamp(0rem, 7vw, 4rem);
+  top: clamp(2.25rem, 12vw, 5rem);
+  width: clamp(5.75rem, 18vw, 9.5rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid rgba(154, 132, 104, 0.22);
+  box-shadow:
+    inset 0 0 0 18px rgba(255, 253, 249, 0.45),
+    0 0 0 1px rgba(214, 142, 122, 0.08);
+  opacity: 0.68;
+  pointer-events: none;
+}
+
+.sceneHeaderInner {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+}
+
+.caption {
+  margin: 0;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  color: var(--tf-caption, var(--todayflow-text-eyebrow-color, #9a7a68));
+}
+
+.title {
+  margin: 0.75rem 0 0;
+  font-family: var(--tf-font-display, var(--orbit-font-display, "Playfair Display", Georgia, serif));
+  font-size: clamp(2.45rem, 8vw, 4.35rem);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: 0;
+  color: var(--tf-ink, var(--orbit-color-primary-accent, #2d241c));
+}
+
+.lead {
+  margin: 1rem 0 0;
+  max-width: 600px;
+  font-family: var(--tf-font-display, var(--orbit-font-display, "Playfair Display", Georgia, serif));
+  font-size: clamp(1.25rem, 2.8vw, 1.65rem);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: 0;
+  color: var(--tf-ink-soft, #5b4630);
+}
+
+.markerRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  margin-top: 1.25rem;
+}
+
+.marker {
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.marker strong {
+  color: var(--tf-ink-soft, #5b4630);
+}
+
+.actionObject {
+  position: relative;
+  min-height: 190px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  padding: clamp(1.6rem, 4vw, 2.4rem);
+  border: 1px solid rgba(214, 142, 122, 0.24);
+  border-left: 4px solid var(--tf-accent-action, var(--todayflow-terracotta, #d68e7a));
+  border-radius: 18px;
+  background: linear-gradient(155deg, rgba(255, 253, 249, 0.98) 0%, rgba(255, 244, 236, 0.9) 100%);
+  box-shadow: 0 16px 42px rgba(120, 72, 58, 0.1);
+  box-sizing: border-box;
+}
+
+.actionTitle {
+  margin: 0;
+  max-width: 680px;
+  font-family: var(--tf-font-display, var(--orbit-font-display, "Playfair Display", Georgia, serif));
+  font-size: clamp(1.75rem, 4.5vw, 2.6rem);
+  font-weight: 650;
+  line-height: 1.1;
+  letter-spacing: 0;
+  color: var(--tf-ink, #1a1510);
+}
+
+.actionBody {
+  margin: 0;
+  max-width: 620px;
+  color: var(--tf-body, #5c5046);
+  font-size: var(--tf-type-body-size, 0.9375rem);
+  line-height: 1.6;
+}
+
+.actionControls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.progressLine {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  padding: 0.15rem 0;
+  border-bottom: 1px solid rgba(154, 132, 104, 0.18);
+}
+
+.progressDot {
+  width: 0.68rem;
+  height: 0.68rem;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  border: 2px solid rgba(122, 98, 61, 0.48);
+  box-sizing: border-box;
+}
+
+.progressDotActive {
+  border-color: var(--tf-accent-action, #8f6b3a);
+  background: var(--tf-accent-action, #8f6b3a);
+  box-shadow: 0 0 0 4px rgba(214, 142, 122, 0.14);
+}
+
+.progressText {
+  margin: 0;
+  color: var(--tf-ink-soft, #5b4630);
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.progressSub {
+  margin: 0;
+  color: var(--tf-caption, #9a8468);
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.disclosure {
+  border-bottom: 1px solid rgba(154, 132, 104, 0.18);
+}
+
+.disclosureSummary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  cursor: pointer;
+  color: var(--tf-ink-soft, #5b4630);
+  font-weight: 700;
+  list-style: none;
+}
+
+.disclosureSummary::-webkit-details-marker {
+  display: none;
+}
+
+.disclosureSummary::after {
+  content: "+";
+  color: var(--tf-caption, #9a8468);
+  font-weight: 700;
+}
+
+.disclosure[open] .disclosureSummary::after {
+  content: "-";
+}
+
+.disclosureBody {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0 0 1rem;
+  color: var(--tf-body, #5c5046);
+  line-height: 1.55;
+}
+
+.disclosureBody p {
+  margin: 0;
+}
+
+.portalPreview {
+  margin-top: clamp(1.25rem, 3.5vw, 2.25rem);
+  padding-top: clamp(1.75rem, 5vw, 3rem);
+  border-top: 1px solid rgba(154, 132, 104, 0.18);
+}
+
+.portalSurface {
+  display: grid;
+  gap: 0.9rem;
+  padding: clamp(1.1rem, 3vw, 1.6rem) 0;
+}
+
+.portalFacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.portalFact {
+  color: var(--tf-body, #5c5046);
+  font-size: var(--tf-type-body-size, 0.9375rem);
+}
+
+.portalFact strong {
+  color: var(--tf-ink, #1a1510);
+}
+
+.portalLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 1rem;
+}
+
+.portalLink {
+  color: var(--tf-ink-soft, #5b4630);
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.textarea {
+  width: min(100%, 34rem);
+  min-height: 5rem;
+  resize: vertical;
+  border: 1px solid rgba(214, 142, 122, 0.28);
+  border-radius: 10px;
+  padding: 0.85rem 0.95rem;
+  box-sizing: border-box;
+  background: rgba(255, 253, 249, 0.92);
+  color: var(--tf-ink, #1a1510);
+  font: inherit;
+}
+
+@media (max-width: 640px) {
+  .pageShell {
+    padding-top: 2rem;
+  }
+
+  .sceneHeader {
+    min-height: 62dvh;
+  }
+
+  .sceneHeader::after {
+    right: -0.5rem;
+    top: 2.5rem;
+    opacity: 0.42;
+  }
+
+  .actionObject {
+    min-height: 180px;
+  }
+}

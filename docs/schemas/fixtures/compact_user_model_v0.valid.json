@@ -1,0 +1,68 @@
+{
+  "contract_version": "compact_user_model_v0",
+  "as_of": "2026-07-03",
+  "generated_at": "2026-07-03T12:00:00",
+  "identity": {
+    "display_name": "Igor",
+    "sun_sign": "Aquarius",
+    "moon_sign": "Pisces",
+    "rising_sign": "Virgo",
+    "life_path": 7,
+    "archetype": "Sage",
+    "summary": "Ты лучше всего раскрываешься там, где есть понимание смысла.",
+    "strengths": ["системное мышление", "спокойствие под давлением"],
+    "constraints": ["перегруз задачами"]
+  },
+  "current_state": {
+    "local_date": "2026-07-03",
+    "mood_id": "calm"
+  },
+  "active_themes": [
+    { "id": "discipline", "weight": 0.62, "stability": "stable", "source": "meaning_surface_patterns_v0" }
+  ],
+  "behavioral_patterns": {
+    "works": ["evening_reflection"],
+    "does_not_work": ["morning_overload"],
+    "hints": [],
+    "window_days": 28,
+    "total_events": 12
+  },
+  "recommendations": {
+    "primary": {
+      "id": "rec-today-checkin",
+      "text": "Отметь настроение и фокус в Today — так система точнее подскажет следующий шаг.",
+      "timing_hint": "утром или днём",
+      "measurable": "check-in выполнен",
+      "source": "template",
+      "evidence_atom_ids": [],
+      "knowledge_type_gate": "fact"
+    },
+    "alternates": []
+  },
+  "knowledge_atoms_top_k": [
+    {
+      "knowledge_id": "profile-identity-summary",
+      "contract_version": "profile_identity_v0",
+      "knowledge_type": "fact",
+      "data_class": "identity",
+      "claim": "profile_identity:summary",
+      "claim_summary": "Ты лучше всего раскрываешься там, где есть понимание смысла.",
+      "confidence": 0.72,
+      "evidence_count": 1,
+      "confirmation_required": false
+    }
+  ],
+  "interpretation_instances_top_k": [],
+  "confidence": {
+    "overall": 0.6,
+    "by_domain": {
+      "identity": 0.65,
+      "themes": 0.48,
+      "timing": 0.55,
+      "recommendations": 0.6
+    },
+    "uncertainty_flags": [],
+    "delta_30d": null,
+    "meaning_events_28d": 12
+  }
+}

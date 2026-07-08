@@ -1,0 +1,18 @@
+[
+  {
+    "source_section": "Emotional Patterns",
+    "target_section": "Relationships",
+    "id": "ep_to_rel_conflict",
+    "trigger_axes": ["A2", "A6"],
+    "tease": "То, как ты перерабатываешь эмоции, напрямую окрашивает конфликты — Full покажет, где это проявляется в отношениях.",
+    "full_promise": "Мы разберём, какие границы/ритмы помогают из EP динамики не утягивать партнёра."
+  },
+  {
+    "source_section": "Emotional Patterns",
+    "target_section": "Money & Security",
+    "id": "ep_to_fin_control",
+    "trigger_axes": ["A1", "A5"],
+    "tease": "Когда внутри много напряжения, контроль над ресурсами растёт. Full объяснит, как чувства → деньги.",
+    "full_promise": "Покажем, какие финансовые паттерны связаны с текущим эмоциональным baseline."
+  }
+]

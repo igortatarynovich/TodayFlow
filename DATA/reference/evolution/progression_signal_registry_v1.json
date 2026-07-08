@@ -1,0 +1,97 @@
+{
+  "contract_version": "progression_signal_registry_v1",
+  "domain": "evolution",
+  "version": "1.0.0",
+  "status": "draft",
+  "description": "B1.3 Progression Signal registry — verified events that may feed stage gate eligibility. No promotion.",
+  "signal_types": {
+    "practice_completed": {
+      "code": "practice_completed",
+      "title": "Practice completed",
+      "source_engine": "practice",
+      "description": "User completed a tracked practice session.",
+      "feeds_gate_eligibility": true,
+      "feeds_stage_directly": false,
+      "min_confidence_for_gate": 0.5,
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "habit_streak_confirmed": {
+      "code": "habit_streak_confirmed",
+      "title": "Habit streak confirmed",
+      "source_engine": "practice",
+      "description": "Habit streak reached confirmation threshold.",
+      "feeds_gate_eligibility": true,
+      "feeds_stage_directly": false,
+      "min_confidence_for_gate": 0.55,
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "goal_milestone_reached": {
+      "code": "goal_milestone_reached",
+      "title": "Goal milestone reached",
+      "source_engine": "goal",
+      "description": "User reached a verified goal milestone.",
+      "feeds_gate_eligibility": true,
+      "feeds_stage_directly": false,
+      "min_confidence_for_gate": 0.6,
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "evening_reflection_confirmed": {
+      "code": "evening_reflection_confirmed",
+      "title": "Evening reflection confirmed",
+      "source_engine": "ritual",
+      "description": "Evening reflection or journal entry confirmed.",
+      "feeds_gate_eligibility": true,
+      "feeds_stage_directly": false,
+      "min_confidence_for_gate": 0.45,
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "cycle_completed": {
+      "code": "cycle_completed",
+      "title": "Cycle completed",
+      "source_engine": "calendar",
+      "description": "Path or calendar cycle completed.",
+      "feeds_gate_eligibility": true,
+      "feeds_stage_directly": false,
+      "min_confidence_for_gate": 0.6,
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "confirmed_pattern": {
+      "code": "confirmed_pattern",
+      "title": "Confirmed pattern",
+      "source_engine": "pattern",
+      "description": "Behavioral pattern confirmed from evidence.",
+      "feeds_gate_eligibility": true,
+      "feeds_stage_directly": false,
+      "min_confidence_for_gate": 0.65,
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "ritual_streak_confirmed": {
+      "code": "ritual_streak_confirmed",
+      "title": "Ritual streak confirmed",
+      "source_engine": "ritual",
+      "description": "Morning or evening ritual streak confirmed.",
+      "feeds_gate_eligibility": true,
+      "feeds_stage_directly": false,
+      "min_confidence_for_gate": 0.5,
+      "status": "active",
+      "version": "1.0.0"
+    },
+    "weekly_goal_completed": {
+      "code": "weekly_goal_completed",
+      "title": "Weekly goal completed",
+      "source_engine": "goal",
+      "description": "Weekly goal window completed with evidence.",
+      "feeds_gate_eligibility": true,
+      "feeds_stage_directly": false,
+      "min_confidence_for_gate": 0.55,
+      "status": "active",
+      "version": "1.0.0"
+    }
+  }
+}

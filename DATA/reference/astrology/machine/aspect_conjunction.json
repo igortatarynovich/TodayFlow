@@ -1,0 +1,21 @@
+{
+  "contract_version": "reference_machine_contract_v1",
+  "domain": "astrology",
+  "entity_code": "astrology.aspect.conjunction",
+  "entity_type": "Aspect",
+  "version": "0.1.0",
+  "status": "draft",
+  "machine_contract": {
+    "vector": {
+      "action_reflection": 0.35,
+      "expansion_consolidation": 0.5,
+      "self_others": 0.2,
+      "structure_flow": 0.1
+    },
+    "tempo": "dynamic",
+    "risk": "medium",
+    "risk_modifier": 0.25,
+    "emotional_load": "intense",
+    "confidence": 0.8
+  }
+}

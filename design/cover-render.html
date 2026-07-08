@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #111; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+  #cover {
+    width: 1920px; height: 1200px; position: relative; overflow: hidden;
+    background: linear-gradient(165deg, #FFFCF9 0%, #FDFBF8 45%, #F7F2EA 100%);
+  }
+  .glow-warm { position:absolute; width:1000px; height:800px; left:60px; top:-120px;
+    background:radial-gradient(ellipse, rgba(255,249,245,0.9) 0%, transparent 68%); filter:blur(48px); }
+  .glow-violet { position:absolute; width:860px; height:740px; right:-100px; bottom:-140px;
+    background:radial-gradient(ellipse, rgba(74,50,112,0.14) 0%, transparent 70%); filter:blur(56px); }
+  .glow-gold { position:absolute; width:780px; height:780px; left:570px; top:210px;
+    background:radial-gradient(circle, rgba(196,165,116,0.22) 0%, transparent 62%); filter:blur(36px); }
+  svg.main { position:absolute; inset:0; width:100%; height:100%; }
+  .sys {
+    position:absolute; width:128px; height:128px; margin:-64px 0 0 -64px;
+    border-radius:50%; background:linear-gradient(145deg, #FFFFFF 0%, #FFF8F2 100%);
+    border:2px solid rgba(232,224,212,1);
+    box-shadow: 0 16px 40px rgba(91,67,35,0.12), 0 4px 12px rgba(26,21,16,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .sys svg { width:64px; height:64px; }
+  .sys-inner { width:96px; height:96px; margin:-48px 0 0 -48px;
+    border-color:rgba(196,165,116,0.55);
+    box-shadow: 0 10px 28px rgba(91,67,35,0.10), inset 0 1px 0 rgba(255,255,255,0.85); }
+  .sys-inner svg { width:48px; height:48px; }
+  .sys g { stroke:#5B4630; stroke-width:2.2; fill:none; }
+</style>
+</head>
+<body>
+<div id="cover">
+  <div class="glow-warm"></div><div class="glow-violet"></div><div class="glow-gold"></div>
+  <svg class="main" viewBox="0 0 1920 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g stroke="#1A1510" stroke-opacity="0.035" stroke-width="1">
+      <path d="M80 0V1200M160 0V1200M240 0V1200M320 0V1200M400 0V1200M480 0V1200M560 0V1200M640 0V1200M720 0V1200M800 0V1200M880 0V1200M960 0V1200M1040 0V1200M1120 0V1200M1200 0V1200M1280 0V1200M1360 0V1200M1440 0V1200M1520 0V1200M1600 0V1200M1680 0V1200M1760 0V1200M1840 0V1200"/>
+      <path d="M0 80H1920M0 160H1920M0 240H1920M0 320H1920M0 400H1920M0 480H1920M0 560H1920M0 640H1920M0 720H1920M0 800H1920M0 880H1920M0 960H1920M0 1040H1920M0 1120H1920"/>
+    </g>
+    <g stroke="#5B4630" fill="none">
+      <circle cx="960" cy="620" r="540" stroke-opacity="0.09" stroke-width="2"/>
+      <circle cx="960" cy="620" r="440" stroke-opacity="0.13" stroke-width="2" stroke-dasharray="10 14"/>
+      <circle cx="960" cy="620" r="340" stroke-opacity="0.17" stroke-width="2" stroke-dasharray="8 12"/>
+      <circle cx="960" cy="620" r="260" stroke-opacity="0.22" stroke-width="2.5"/>
+    </g>
+    <!-- convergence from each symbol to center -->
+    <g stroke="#8F6B3A" stroke-width="2.5" stroke-opacity="0.38" stroke-dasharray="8 12" stroke-linecap="round">
+      <line x1="960" y1="188" x2="960" y2="620"/>
+      <line x1="1262" y1="358" x2="960" y2="620"/>
+      <line x1="1432" y1="662" x2="960" y2="620"/>
+      <line x1="1212" y1="942" x2="960" y2="620"/>
+      <line x1="878" y1="1052" x2="960" y2="620"/>
+      <line x1="648" y1="802" x2="960" y2="620"/>
+      <line x1="538" y1="482" x2="960" y2="620"/>
+      <line x1="738" y1="302" x2="960" y2="620"/>
+      <line x1="618" y1="608" x2="960" y2="620"/>
+      <line x1="1318" y1="608" x2="960" y2="620"/>
+    </g>
+    <g fill="#8F6B3A">
+      <circle cx="960" cy="320" r="7" fill-opacity="0.5"/><circle cx="960" cy="470" r="6" fill-opacity="0.55"/><circle cx="960" cy="560" r="5" fill-opacity="0.6"/>
+      <circle cx="1130" cy="420" r="7" fill-opacity="0.5"/><circle cx="1045" cy="510" r="6" fill-opacity="0.55"/>
+      <circle cx="1290" cy="570" r="7" fill-opacity="0.5"/><circle cx="1185" cy="640" r="6" fill-opacity="0.55"/>
+      <circle cx="1110" cy="810" r="7" fill-opacity="0.5"/><circle cx="1035" cy="710" r="6" fill-opacity="0.55"/>
+      <circle cx="830" cy="910" r="7" fill-opacity="0.5"/><circle cx="905" cy="790" r="6" fill-opacity="0.55"/>
+      <circle cx="730" cy="710" r="7" fill-opacity="0.5"/><circle cx="810" cy="650" r="6" fill-opacity="0.55"/>
+      <circle cx="670" cy="470" r="7" fill-opacity="0.5"/><circle cx="750" cy="530" r="6" fill-opacity="0.55"/>
+      <circle cx="820" cy="370" r="7" fill-opacity="0.5"/><circle cx="890" cy="450" r="6" fill-opacity="0.55"/>
+      <circle cx="720" cy="608" r="7" fill-opacity="0.5"/><circle cx="1160" cy="608" r="7" fill-opacity="0.5"/>
+    </g>
+    <g transform="translate(960 620)">
+      <circle r="188" fill="url(#halo)" />
+      <circle r="178" stroke="#8F6B3A" stroke-opacity="0.4" stroke-width="3" fill="none"/>
+      <ellipse rx="220" ry="130" transform="rotate(-22)" stroke="#4A3270" stroke-opacity="0.32" stroke-width="2.5" stroke-dasharray="10 12" fill="none"/>
+      <ellipse rx="185" ry="105" transform="rotate(20)" stroke="#4A3270" stroke-opacity="0.24" stroke-width="2" stroke-dasharray="8 10" fill="none"/>
+      <ellipse rx="98" ry="136" fill="url(#irisGrad)" filter="url(#portalShadow)"/>
+      <g stroke="#C4A574" stroke-opacity="0.65" stroke-width="2">
+        <line x1="-48" y1="-24" x2="0" y2="0"/><line x1="48" y1="-18" x2="0" y2="0"/>
+        <line x1="-36" y1="42" x2="0" y2="0"/><line x1="42" y1="48" x2="0" y2="0"/>
+        <line x1="-62" y1="12" x2="-36" y2="42"/><line x1="58" y1="-6" x2="42" y2="48"/>
+        <line x1="-48" y1="-24" x2="48" y2="-18"/><line x1="-36" y1="42" x2="42" y2="48"/>
+      </g>
+      <g fill="#FAF8F5">
+        <circle cx="-48" cy="-24" r="6" fill-opacity="0.9"/><circle cx="48" cy="-18" r="6" fill-opacity="0.9"/>
+        <circle cx="-36" cy="42" r="6" fill-opacity="0.9"/><circle cx="42" cy="48" r="6" fill-opacity="0.9"/>
+        <circle cx="-62" cy="12" r="5" fill-opacity="0.75"/><circle cx="58" cy="-6" r="5" fill-opacity="0.75"/>
+        <circle r="9" fill-opacity="0.95"/>
+      </g>
+      <rect x="-2.5" y="-62" width="5" height="124" rx="2.5" fill="#D4B88A" filter="url(#slitGlow)"/>
+      <circle r="26" fill="#FAF8F5" fill-opacity="0.42" filter="url(#bloom)"/>
+    </g>
+    <defs>
+      <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#C4A574" stop-opacity="0.12"/>
+        <stop offset="100%" stop-color="#C4A574" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="irisGrad" cx="50%" cy="42%" r="58%">
+        <stop offset="0%" stop-color="#6B4E96" stop-opacity="0.8"/>
+        <stop offset="40%" stop-color="#252038" stop-opacity="0.92"/>
+        <stop offset="100%" stop-color="#12101C" stop-opacity="0.4"/>
+      </radialGradient>
+      <filter id="portalShadow" x="-80%" y="-80%" width="260%" height="260%">
+        <feDropShadow dx="0" dy="18" stdDeviation="28" flood-color="#4A3270" flood-opacity="0.32"/>
+      </filter>
+      <filter id="slitGlow" x="-300%" y="-50%" width="700%" height="200%">
+        <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#D4B88A" flood-opacity="0.95"/>
+      </filter>
+      <filter id="bloom" x="-120%" y="-120%" width="340%" height="340%">
+        <feGaussianBlur stdDeviation="10"/>
+      </filter>
+    </defs>
+  </svg>
+  <!-- OUTER 10 -->
+  <div class="sys" style="left:960px;top:188px"><svg viewBox="0 0 56 56"><g><circle cx="28" cy="28" r="12"/><circle cx="28" cy="28" r="4"/></g></svg></div>
+  <div class="sys" style="left:1262px;top:358px"><svg viewBox="0 0 56 56"><g><path d="M34 18a12 12 0 1 0 0 20a10 10 0 1 1 0-20"/></g></svg></div>
+  <div class="sys" style="left:1432px;top:662px"><svg viewBox="0 0 56 56"><g><circle cx="28" cy="28" r="16"/><path d="M28 12v4M28 40v4M12 28h4M40 28h4M17.5 17.5l2.8 2.8M35.7 35.7l2.8 2.8M38.5 17.5l-2.8 2.8M20.3 35.7l-2.8 2.8"/></g></svg></div>
+  <div class="sys" style="left:1212px;top:942px"><svg viewBox="0 0 56 56"><g><rect x="16" y="10" width="24" height="36" rx="4"/><path d="M28 22l3 6h-6l3-6z"/><circle cx="28" cy="34" r="2"/></g></svg></div>
+  <div class="sys" style="left:878px;top:1052px"><svg viewBox="0 0 56 56"><g stroke-linecap="round"><path d="M22 14h8l-10 28h12" stroke-width="2.4"/></g></svg></div>
+  <div class="sys" style="left:648px;top:802px"><svg viewBox="0 0 56 56"><g><path d="M28 40c-8-6-14-11-14-18a8 8 0 0 1 14-4a8 8 0 0 1 14 4c0 7-6 12-14 18z"/></g></svg></div>
+  <div class="sys" style="left:538px;top:482px"><svg viewBox="0 0 56 56"><g stroke-linecap="round"><path d="M18 28c0-6 5-10 10-10s6 4 6 10-3 10-6 10 3 4 6 4 10-4 10-10"/></g></svg></div>
+  <div class="sys" style="left:738px;top:302px"><svg viewBox="0 0 56 56"><g stroke-linecap="round"><circle cx="24" cy="24" r="8"/><path d="M30 30l8 8M28 14v4M28 38v4M14 28h4M38 28h4"/></g></svg></div>
+  <div class="sys" style="left:618px;top:608px"><svg viewBox="0 0 56 56"><g><polygon points="28,14 38,40 18,40"/></g></svg></div>
+  <div class="sys" style="left:1318px;top:608px"><svg viewBox="0 0 56 56"><g><circle cx="28" cy="28" r="14"/><circle cx="28" cy="28" r="6"/><circle cx="28" cy="28" r="2.5" fill="#5B4630" stroke="none"/></g></svg></div>
+  <!-- INNER 6 -->
+  <div class="sys sys-inner" style="left:1088px;top:408px"><svg viewBox="0 0 56 56"><g><circle cx="28" cy="24" r="10"/><path d="M28 34v10M24 42h8"/></g></svg></div>
+  <div class="sys sys-inner" style="left:1152px;top:568px"><svg viewBox="0 0 56 56"><g stroke-linecap="round"><circle cx="24" cy="32" r="10"/><path d="M32 24 42 14M38 14h4v4"/></g></svg></div>
+  <div class="sys sys-inner" style="left:1058px;top:728px"><svg viewBox="0 0 28 28"><g stroke-width="2" stroke-linecap="round"><path d="M8 20c0-4 2-8 6-10M20 20c0-4-2-8-6-10"/><path d="M14 10V6M11 8h6"/></g></svg></div>
+  <div class="sys sys-inner" style="left:878px;top:768px"><svg viewBox="0 0 28 28"><g stroke-width="2" stroke-linecap="round"><path d="M6 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/><path d="M6 17c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/><path d="M14 8v12"/></g></svg></div>
+  <div class="sys sys-inner" style="left:788px;top:568px"><svg viewBox="0 0 56 56"><g stroke-linecap="round"><path d="M16 38V18l12-6 12 6v20"/><path d="M22 32h12M28 26v12"/></g></svg></div>
+  <div class="sys sys-inner" style="left:848px;top:408px"><svg viewBox="0 0 56 56"><g><circle cx="28" cy="30" r="10"/><path d="M14 30c0-10 28-10 28 0"/></g></svg></div>
+</div>
+</body>
+</html>

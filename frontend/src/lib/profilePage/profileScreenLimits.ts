@@ -1,0 +1,27 @@
+/** Canon: docs/PROFILE_SCREEN_MASTER.md — enforce in build + UI */
+
+export const PROFILE_LIMITS = {
+  heroTagline: 110,
+  heroIntro: 220,
+  heroQualityTitle: 16,
+  heroQualitySubtitle: 42,
+  whyArchetypeOnly: 280,
+  numberBlurb: 80,
+  numbersExpandLine: 220,
+  numbersInsight: 240,
+  numbersTogether: 200,
+  nameMeaning: 160,
+  nameDetail: 240,
+  socialMirrorLead: 160,
+  socialMirrorLine: 120,
+  whyInsightLine: 200,
+  sphereMain: 88,
+  sphereLine: 72,
+  insightLine: 72,
+  movementTitle: 48,
+  movementMain: 160,
+  movementRule: 56,
+  movementRecommendation: 160,
+  sphereExpandDetail: 220,
+  portalSub: 72,
+} as const;

@@ -1,0 +1,21 @@
+{
+  "contract_version": "reference_machine_contract_v1",
+  "domain": "astrology",
+  "entity_code": "astrology.sign.libra",
+  "entity_type": "ZodiacSign",
+  "version": "0.1.0",
+  "status": "draft",
+  "machine_contract": {
+    "vector": {
+      "action_reflection": -0.1,
+      "expansion_consolidation": 0.2,
+      "self_others": 0.75,
+      "structure_flow": 0.15
+    },
+    "tempo": "steady",
+    "risk": "low",
+    "risk_modifier": -0.05,
+    "emotional_load": "calm",
+    "confidence": 0.89
+  }
+}

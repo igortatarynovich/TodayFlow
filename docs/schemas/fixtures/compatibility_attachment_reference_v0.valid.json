@@ -1,0 +1,18 @@
+{
+  "contract_version": "compatibility_attachment_reference_v0",
+  "deep_block_order": ["communication", "conflicts", "emotions", "sexuality", "long_term"],
+  "attachment_style_hints": [
+    {
+      "code": "anxious",
+      "label": "Тревожный",
+      "summary": "Может быть важно заранее прояснять ожидания и сигналы близости.",
+      "score": 0.42,
+      "evidence_blocks": ["communication", "conflicts"],
+      "confirmation_required": true,
+      "knowledge_type": "hypothesis",
+      "source": "compatibility_attachment_reference_v0"
+    }
+  ],
+  "trigger_blocks": ["communication", "conflicts"],
+  "reference_status": "active"
+}

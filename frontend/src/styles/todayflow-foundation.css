@@ -1,0 +1,189 @@
+/**
+ * TodayFlow Foundation UI — draft tokens.
+ * Canon: docs/TODAYFLOW_FOUNDATION_UI.md
+ * Sign-off in Figma before wiring all screens; Profile may import partially.
+ * DS components: frontend/src/design-system/ (import via `@/design-system`)
+ */
+
+:root {
+  /* —— Colors (§6) —— */
+  /* Product UI (Figma TodayFlow – Product UI) */
+  --tf-page: #fdfbf7;
+  --tf-page-cream: #f7f4ee;
+  --tf-cream-300: #ede8de;
+  --tf-cream-400: #e2d9c8;
+  --tf-cream-border: #e8e2d6;
+  --tf-ink: #2a2520;
+  --tf-ink-muted: #4a4540;
+  --tf-ink-soft: #9a9490;
+  --tf-ink-100: #e8e2d6;
+  --tf-body: #5c534c;
+  --tf-caption: #9a9490;
+  --tf-accent-gold: #c9a96e;
+  --tf-accent-gold-soft: #e8d0a5;
+  --tf-accent-gold-200: #d4b896;
+  --tf-accent-gold-600: #8b6a3e;
+  --tf-accent-gold-wash: #f9f4e8;
+  --tf-surface-dark: #1a1714;
+  --tf-surface-dark-elevated: #2a2520;
+  --tf-surface-warm: #f5f0e8;
+  --tf-border-subtle: rgba(42, 37, 32, 0.06);
+  --tf-semantic-success: #4f6647;
+  --tf-semantic-alert: #d4964b;
+  --tf-semantic-error: #a65a4f;
+  --tf-accent-numerology: #4a3270;
+  --tf-accent-action: #8f6b3a;
+  --tf-on-dark: #faf8f5;
+  --tf-on-hero: var(--tf-ink);
+
+  /* —— Typography (§5) —— */
+  --tf-font-display: "Instrument Serif", "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  --tf-font-body: "Manrope", "Inter", system-ui, sans-serif;
+
+  --tf-type-display-size: 2.5rem;
+  --tf-type-display-line: 1.15;
+  --tf-type-display-weight: 600;
+
+  --tf-type-hero-size: 2.0625rem; /* 33px */
+  --tf-type-hero-line: 1.08;
+  --tf-type-hero-weight: 700;
+
+  --tf-type-section-size: 1.25rem; /* 20px */
+  --tf-type-section-line: 1.2;
+  --tf-type-section-weight: 600;
+
+  --tf-type-portal-title-size: 1.625rem; /* 26px */
+  --tf-type-body-size: 0.9375rem; /* 15px */
+  --tf-type-body-line: 1.55;
+  --tf-type-caption-size: 0.625rem; /* 10px */
+  --tf-type-caption-lg-size: 0.6875rem; /* 11px */
+  --tf-type-label-size: 0.75rem; /* 12px */
+  --tf-type-h3-size: 1.125rem; /* 18px */
+  --tf-type-h2-size: 1.25rem; /* 20px */
+  --tf-type-h1-size: 1.625rem; /* 26px */
+  --tf-type-display-l-size: 3rem; /* 48px */
+  --tf-type-display-xl-size: 3.5rem; /* 56px */
+
+  /* —— Hero heights (§1) —— */
+  --tf-hero-large-min-h: 88dvh;
+  --tf-hero-large-inner-max: 21rem;
+  --tf-hero-large-radius-bottom: 36px;
+  --tf-hero-large-symbol: 120px;
+  --tf-hero-large-pillar-icon: 24px;
+  --tf-hero-large-lp-digit: 2rem;
+
+  --tf-hero-medium-min-h: 52dvh;
+  --tf-hero-medium-symbol: 80px;
+
+  --tf-hero-small-h: 200px;
+  --tf-hero-small-symbol: 48px;
+
+  /* —— Symbol slots (§2) —— */
+  --tf-symbol-xl: 120px;
+  --tf-symbol-l: 80px;
+  --tf-symbol-m: 48px;
+  --tf-symbol-s: 24px;
+
+  /* —— Surfaces (§4) —— */
+  --tf-surface-insight-bg: rgba(255, 253, 249, 0.88);
+  --tf-surface-insight-radius: 28px;
+  --tf-surface-insight-shadow: 0 14px 48px rgba(91, 67, 35, 0.06);
+  --tf-surface-insight-pad-y: 22px;
+  --tf-surface-insight-pad-x: 21px;
+
+  --tf-surface-action-bar: 3px;
+  --tf-surface-portal-min-h: 14.5rem;
+  --tf-surface-portal-radius: 24px;
+  --tf-surface-portal-bg: linear-gradient(
+    155deg,
+    #12101c 0%,
+    #252038 38%,
+    #1a2838 72%,
+    #0f1419 100%
+  );
+
+  --tf-surface-number-radius: 32px;
+  --tf-surface-number-ring: 7.5rem;
+
+  /* —— Geometry (§3) —— */
+  --tf-geo-stroke: 1px;
+  --tf-geo-opacity-soft: 0.08;
+  --tf-geo-opacity-medium: 0.14;
+  --tf-geo-opacity-strong: 0.26;
+  --tf-geo-grid-size: 20px;
+
+  /* —— Layout shell (§10) — mobile-first · uses width on desktop —— */
+  --tf-shell-max: 52rem; /* 832px — product column, NOT phone-only */
+  --tf-shell-gutter: clamp(1.25rem, 4vw, 2rem);
+  --tf-shell-gap: clamp(2rem, 5vw, 2.75rem);
+  --tf-shell-readable: 36rem; /* long prose inside shell */
+  --tf-breakpoint-md: 48rem;
+  --tf-breakpoint-lg: 56.25rem; /* 900px — 2-col profile bands */
+
+  /* —— Motion (DS-4 · parity iOS TodayFlowTheme.Motion) —— */
+  --tf-motion-micro: 150ms;
+  --tf-motion-reveal: 280ms;
+  --tf-motion-card: 320ms;
+  --tf-motion-page: 420ms;
+  --tf-motion-stagger: 45ms;
+  --tf-motion-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --tf-motion-ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+
+  /* —— Design System · Product Web (Figma web-landing / web-dashboard) —— */
+  --tf-ds-page-max: 90rem;
+  --tf-ds-sidebar-w: 15rem;
+  --tf-ds-rail-w: 17.5rem;
+  --tf-ds-nav-h: 6rem;
+  --tf-ds-radius-xs: 0.375rem;
+  --tf-ds-radius-sm: 0.75rem;
+  --tf-ds-radius-md: 1rem;
+  --tf-ds-radius-lg: 1.25rem;
+  --tf-ds-radius-xl: 2rem;
+  --tf-ds-radius-2xl: 2.5rem;
+  --tf-ds-radius-pill: 100px;
+  --tf-ds-space-section: clamp(4rem, 8vw, 7.5rem);
+  --tf-ds-space-gutter: clamp(1.25rem, 5vw, 5rem);
+  --tf-ds-space-stack: 2rem;
+  --tf-ds-space-stack-lg: 2.5rem;
+  --tf-ds-border-gold: rgba(201, 169, 110, 0.2);
+  --tf-ds-border-ink: rgba(42, 37, 32, 0.08);
+  --tf-ds-glass: rgba(255, 255, 255, 0.5);
+  --tf-ds-glass-on-dark: rgba(255, 255, 255, 0.08);
+  --tf-ds-shadow-soft: 0 12px 20px rgba(42, 37, 32, 0.03);
+  --tf-ds-shadow-card: 0 8px 24px rgba(42, 37, 32, 0.04);
+  --tf-ds-shadow-gold: 0 8px 24px rgba(201, 169, 110, 0.35);
+  --tf-ds-breakpoint-app: 64rem;
+  --tf-ds-space-1: 0.25rem;
+  --tf-ds-space-2: 0.5rem;
+  --tf-ds-space-3: 0.75rem;
+  --tf-ds-space-4: 1rem;
+  --tf-ds-space-5: 1.25rem;
+  --tf-ds-space-6: 1.5rem;
+  --tf-ds-space-8: 2rem;
+  --tf-ds-space-10: 2.5rem;
+  --tf-ds-space-12: 3rem;
+  --tf-ds-space-16: 4rem;
+  --tf-ds-space-20: 5rem;
+  --tf-ds-mobile-max: 24.375rem;
+}
+
+/* Global shell — any product screen */
+.tf-shell {
+  width: 100%;
+  max-width: var(--tf-shell-max);
+  margin-inline: auto;
+  padding-inline: var(--tf-shell-gutter);
+  box-sizing: border-box;
+}
+
+.tf-shell-grid-2 {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 56.25rem) {
+  .tf-shell-grid-2 {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+}

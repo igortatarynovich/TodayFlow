@@ -1,0 +1,21 @@
+{
+  "contract_version": "reference_machine_contract_v1",
+  "domain": "numerology",
+  "entity_code": "numerology.master.33",
+  "entity_type": "MasterNumber",
+  "version": "0.1.0",
+  "status": "draft",
+  "machine_contract": {
+    "vector": {
+      "action_reflection": -0.3,
+      "expansion_consolidation": 0.4,
+      "self_others": 0.8,
+      "structure_flow": 0.3
+    },
+    "tempo": "steady",
+    "risk": "low",
+    "risk_modifier": 0.1,
+    "emotional_load": "calm",
+    "confidence": 0.95
+  }
+}

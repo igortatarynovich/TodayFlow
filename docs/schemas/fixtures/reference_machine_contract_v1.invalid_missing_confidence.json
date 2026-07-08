@@ -1,0 +1,19 @@
+{
+  "contract_version": "reference_machine_contract_v1",
+  "domain": "astrology",
+  "entity_code": "astro.signal.foundation.spine",
+  "version": "1.0.0",
+  "status": "draft",
+  "machine_contract": {
+    "vector": {
+      "action_reflection": 0.1,
+      "expansion_consolidation": -0.5,
+      "self_others": 0.0,
+      "structure_flow": 0.6
+    },
+    "tempo": "steady",
+    "risk": "medium",
+    "risk_modifier": 0.1,
+    "emotional_load": "neutral"
+  }
+}

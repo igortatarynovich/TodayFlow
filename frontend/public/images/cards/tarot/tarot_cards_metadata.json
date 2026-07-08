@@ -1,0 +1,1210 @@
+{
+  "version": 1,
+  "description": "Метаданные колоды для LLM и сервисов; deck_index совпадает с tarotCardFaceSrc() (0…77). Поле energy — грубая окраска тона карты для промптов: soft_positive | bright_positive | fertile | structured | neutral | relational | dynamic | reflective | liminal | tense | grounding | shadow | disruptive | transformative | integrating.",
+  "cards": [
+    {
+      "deck_index": 0,
+      "id": "fool",
+      "name_ru": "Шут",
+      "name_en": "The Fool",
+      "type": "major",
+      "keywords": [
+        "начало",
+        "доверие",
+        "риск"
+      ],
+      "energy": "soft_positive",
+      "asset_path": "Major Arcana/0.png"
+    },
+    {
+      "deck_index": 1,
+      "id": "magician",
+      "name_ru": "Маг",
+      "name_en": "The Magician",
+      "type": "major",
+      "keywords": [
+        "намерение",
+        "речь",
+        "фокус"
+      ],
+      "energy": "dynamic",
+      "asset_path": "Major Arcana/1.png"
+    },
+    {
+      "deck_index": 2,
+      "id": "high_priestess",
+      "name_ru": "Верховная Жрица",
+      "name_en": "The High Priestess",
+      "type": "major",
+      "keywords": [
+        "интуиция",
+        "тишина",
+        "тайна"
+      ],
+      "energy": "reflective",
+      "asset_path": "Major Arcana/2.png"
+    },
+    {
+      "deck_index": 3,
+      "id": "empress",
+      "name_ru": "Императрица",
+      "name_en": "The Empress",
+      "type": "major",
+      "keywords": [
+        "забота",
+        "творение",
+        "изобилие"
+      ],
+      "energy": "fertile",
+      "asset_path": "Major Arcana/3.png"
+    },
+    {
+      "deck_index": 4,
+      "id": "emperor",
+      "name_ru": "Император",
+      "name_en": "The Emperor",
+      "type": "major",
+      "keywords": [
+        "структура",
+        "границы",
+        "ответственность"
+      ],
+      "energy": "structured",
+      "asset_path": "Major Arcana/4.png"
+    },
+    {
+      "deck_index": 5,
+      "id": "hierophant",
+      "name_ru": "Иерофант",
+      "name_en": "The Hierophant",
+      "type": "major",
+      "keywords": [
+        "традиция",
+        "учение",
+        "ценности"
+      ],
+      "energy": "neutral",
+      "asset_path": "Major Arcana/5.png"
+    },
+    {
+      "deck_index": 6,
+      "id": "lovers",
+      "name_ru": "Влюблённые",
+      "name_en": "The Lovers",
+      "type": "major",
+      "keywords": [
+        "выбор",
+        "союз",
+        "согласование"
+      ],
+      "energy": "relational",
+      "asset_path": "Major Arcana/6.png"
+    },
+    {
+      "deck_index": 7,
+      "id": "chariot",
+      "name_ru": "Колесница",
+      "name_en": "The Chariot",
+      "type": "major",
+      "keywords": [
+        "воля",
+        "направление",
+        "движение"
+      ],
+      "energy": "dynamic",
+      "asset_path": "Major Arcana/7.png"
+    },
+    {
+      "deck_index": 8,
+      "id": "strength",
+      "name_ru": "Сила",
+      "name_en": "Strength",
+      "type": "major",
+      "keywords": [
+        "мужество",
+        "нежность",
+        "тело"
+      ],
+      "energy": "soft_positive",
+      "asset_path": "Major Arcana/8.png"
+    },
+    {
+      "deck_index": 9,
+      "id": "hermit",
+      "name_ru": "Отшельник",
+      "name_en": "The Hermit",
+      "type": "major",
+      "keywords": [
+        "размышление",
+        "мудрость",
+        "уединение"
+      ],
+      "energy": "reflective",
+      "asset_path": "Major Arcana/9.png"
+    },
+    {
+      "deck_index": 10,
+      "id": "wheel_of_fortune",
+      "name_ru": "Колесо Фортуны",
+      "name_en": "Wheel of Fortune",
+      "type": "major",
+      "keywords": [
+        "циклы",
+        "поворот",
+        "случайность"
+      ],
+      "energy": "liminal",
+      "asset_path": "Major Arcana/10.png"
+    },
+    {
+      "deck_index": 11,
+      "id": "justice",
+      "name_ru": "Справедливость",
+      "name_en": "Justice",
+      "type": "major",
+      "keywords": [
+        "правда",
+        "баланс",
+        "последствия"
+      ],
+      "energy": "neutral",
+      "asset_path": "Major Arcana/11.png"
+    },
+    {
+      "deck_index": 12,
+      "id": "hanged_one",
+      "name_ru": "Повешенный",
+      "name_en": "The Hanged One",
+      "type": "major",
+      "keywords": [
+        "пауза",
+        "угол",
+        "отпускание"
+      ],
+      "energy": "reflective",
+      "asset_path": "Major Arcana/12.png"
+    },
+    {
+      "deck_index": 13,
+      "id": "death",
+      "name_ru": "Смерть",
+      "name_en": "Death",
+      "type": "major",
+      "keywords": [
+        "завершение",
+        "переход",
+        "обновление"
+      ],
+      "energy": "transformative",
+      "asset_path": "Major Arcana/13.png"
+    },
+    {
+      "deck_index": 14,
+      "id": "temperance",
+      "name_ru": "Умеренность",
+      "name_en": "Temperance",
+      "type": "major",
+      "keywords": [
+        "смешение",
+        "умеренность",
+        "исцеление"
+      ],
+      "energy": "integrating",
+      "asset_path": "Major Arcana/14.png"
+    },
+    {
+      "deck_index": 15,
+      "id": "devil",
+      "name_ru": "Дьявол",
+      "name_en": "The Devil",
+      "type": "major",
+      "keywords": [
+        "зависимость",
+        "тень",
+        "соблазн"
+      ],
+      "energy": "shadow",
+      "asset_path": "Major Arcana/15.png"
+    },
+    {
+      "deck_index": 16,
+      "id": "tower",
+      "name_ru": "Башня",
+      "name_en": "The Tower",
+      "type": "major",
+      "keywords": [
+        "потрясение",
+        "правда",
+        "разрушение"
+      ],
+      "energy": "disruptive",
+      "asset_path": "Major Arcana/16.png"
+    },
+    {
+      "deck_index": 17,
+      "id": "star",
+      "name_ru": "Звезда",
+      "name_en": "The Star",
+      "type": "major",
+      "keywords": [
+        "надежда",
+        "вдохновение",
+        "восстановление"
+      ],
+      "energy": "soft_positive",
+      "asset_path": "Major Arcana/17.png"
+    },
+    {
+      "deck_index": 18,
+      "id": "moon",
+      "name_ru": "Луна",
+      "name_en": "The Moon",
+      "type": "major",
+      "keywords": [
+        "туман",
+        "интуиция",
+        "страх"
+      ],
+      "energy": "liminal",
+      "asset_path": "Major Arcana/18.png"
+    },
+    {
+      "deck_index": 19,
+      "id": "sun",
+      "name_ru": "Солнце",
+      "name_en": "The Sun",
+      "type": "major",
+      "keywords": [
+        "ясность",
+        "радость",
+        "жизнь"
+      ],
+      "energy": "bright_positive",
+      "asset_path": "Major Arcana/19.png"
+    },
+    {
+      "deck_index": 20,
+      "id": "judgement",
+      "name_ru": "Суд",
+      "name_en": "Judgement",
+      "type": "major",
+      "keywords": [
+        "пробуждение",
+        "итог",
+        "призвание"
+      ],
+      "energy": "transformative",
+      "asset_path": "Major Arcana/20.png"
+    },
+    {
+      "deck_index": 21,
+      "id": "world",
+      "name_ru": "Мир",
+      "name_en": "The World",
+      "type": "major",
+      "keywords": [
+        "целостность",
+        "завершение",
+        "путь"
+      ],
+      "energy": "integrating",
+      "asset_path": "Major Arcana/21.png"
+    },
+    {
+      "deck_index": 22,
+      "id": "wands_ace",
+      "name_ru": "Туз жезлов",
+      "name_en": "Ace of Wands",
+      "type": "minor",
+      "suit": "wands",
+      "rank": "ace",
+      "keywords": [
+        "инициатива",
+        "воля",
+        "потенциал"
+      ],
+      "energy": "dynamic",
+      "asset_path": "Suit of Wands/1.png"
+    },
+    {
+      "deck_index": 23,
+      "id": "wands_2",
+      "name_ru": "Двойка жезлов",
+      "name_en": "Two of Wands",
+      "type": "minor",
+      "suit": "wands",
+      "rank": "2",
+      "keywords": [
+        "инициатива",
+        "воля",
+        "баланс"
+      ],
+      "energy": "dynamic",
+      "asset_path": "Suit of Wands/2.png"
+    },
+    {
+      "deck_index": 24,
+      "id": "wands_3",
+      "name_ru": "Тройка жезлов",
+      "name_en": "Three of Wands",
+      "type": "minor",
+      "suit": "wands",
+      "rank": "3",
+      "keywords": [
+        "инициатива",
+        "воля",
+        "рост"
+      ],
+      "energy": "dynamic",
+      "asset_path": "Suit of Wands/3.png"
+    },
+    {
+      "deck_index": 25,
+      "id": "wands_4",
+      "name_ru": "Четвёрка жезлов",
+      "name_en": "Four of Wands",
+      "type": "minor",
+      "suit": "wands",
+      "rank": "4",
+      "keywords": [
+        "инициатива",
+        "воля",
+        "опора"
+      ],
+      "energy": "dynamic",
+      "asset_path": "Suit of Wands/4.png"
+    },
+    {
+      "deck_index": 26,
+      "id": "wands_5",
+      "name_ru": "Пятёрка жезлов",
+      "name_en": "Five of Wands",
+      "type": "minor",
+      "suit": "wands",
+      "rank": "5",
+      "keywords": [
+        "инициатива",
+        "воля",
+        "напряжение"
+      ],
+      "energy": "dynamic",
+      "asset_path": "Suit of Wands/5.png"
+    },
+    {
+      "deck_index": 27,
+      "id": "wands_6",
+      "name_ru": "Шестёрка жезлов",
+      "name_en": "Six of Wands",
+      "type": "minor",
+      "suit": "wands",
+      "rank": "6",
+      "keywords": [
+        "инициатива",
+        "воля",
+        "гармония"
+      ],
+      "energy": "dynamic",
+      "asset_path": "Suit of Wands/6.png"
+    },
+    {
+      "deck_index": 28,
+      "id": "wands_7",
+      "name_ru": "Семёрка жезлов",
+      "name_en": "Seven of Wands",
+      "type": "minor",
+      "suit": "wands",
+      "rank": "7",
+      "keywords": [
+        "инициатива",
+        "воля",
+        "выбор"
+      ],
+      "energy": "dynamic",
+      "asset_path": "Suit of Wands/7.png"
+    },
+    {
+      "deck_index": 29,
+      "id": "wands_8",
+      "name_ru": "Восьмёрка жезлов",
+      "name_en": "Eight of Wands",
+      "type": "minor",
+      "suit": "wands",
+      "rank": "8",
+      "keywords": [
+        "инициатива",
+        "воля",
+        "движение"
+      ],
+      "energy": "dynamic",
+      "asset_path": "Suit of Wands/8.png"
+    },
+    {
+      "deck_index": 30,
+      "id": "wands_9",
+      "name_ru": "Девятка жезлов",
+      "name_en": "Nine of Wands",
+      "type": "minor",
+      "suit": "wands",
+      "rank": "9",
+      "keywords": [
+        "инициатива",
+        "воля",
+        "граница"
+      ],
+      "energy": "dynamic",
+      "asset_path": "Suit of Wands/9.png"
+    },
+    {
+      "deck_index": 31,
+      "id": "wands_10",
+      "name_ru": "Десятка жезлов",
+      "name_en": "Ten of Wands",
+      "type": "minor",
+      "suit": "wands",
+      "rank": "10",
+      "keywords": [
+        "инициатива",
+        "воля",
+        "итог"
+      ],
+      "energy": "dynamic",
+      "asset_path": "Suit of Wands/10.png"
+    },
+    {
+      "deck_index": 32,
+      "id": "wands_page",
+      "name_ru": "Паж жезлов",
+      "name_en": "Page of Wands",
+      "type": "minor",
+      "suit": "wands",
+      "rank": "page",
+      "keywords": [
+        "инициатива",
+        "воля",
+        "новости"
+      ],
+      "energy": "dynamic",
+      "asset_path": "Suit of Wands/11.png"
+    },
+    {
+      "deck_index": 33,
+      "id": "wands_knight",
+      "name_ru": "Рыцарь жезлов",
+      "name_en": "Knight of Wands",
+      "type": "minor",
+      "suit": "wands",
+      "rank": "knight",
+      "keywords": [
+        "инициатива",
+        "воля",
+        "скорость"
+      ],
+      "energy": "dynamic",
+      "asset_path": "Suit of Wands/12.png"
+    },
+    {
+      "deck_index": 34,
+      "id": "wands_queen",
+      "name_ru": "Королева жезлов",
+      "name_en": "Queen of Wands",
+      "type": "minor",
+      "suit": "wands",
+      "rank": "queen",
+      "keywords": [
+        "инициатива",
+        "воля",
+        "забота"
+      ],
+      "energy": "dynamic",
+      "asset_path": "Suit of Wands/13.png"
+    },
+    {
+      "deck_index": 35,
+      "id": "wands_king",
+      "name_ru": "Король жезлов",
+      "name_en": "King of Wands",
+      "type": "minor",
+      "suit": "wands",
+      "rank": "king",
+      "keywords": [
+        "инициатива",
+        "воля",
+        "мастерство"
+      ],
+      "energy": "dynamic",
+      "asset_path": "Suit of Wands/14.png"
+    },
+    {
+      "deck_index": 36,
+      "id": "cups_ace",
+      "name_ru": "Туз кубков",
+      "name_en": "Ace of Cups",
+      "type": "minor",
+      "suit": "cups",
+      "rank": "ace",
+      "keywords": [
+        "чувства",
+        "связь",
+        "потенциал"
+      ],
+      "energy": "soft_positive",
+      "asset_path": "Suit of Cups/1.png"
+    },
+    {
+      "deck_index": 37,
+      "id": "cups_2",
+      "name_ru": "Двойка кубков",
+      "name_en": "Two of Cups",
+      "type": "minor",
+      "suit": "cups",
+      "rank": "2",
+      "keywords": [
+        "чувства",
+        "связь",
+        "баланс"
+      ],
+      "energy": "soft_positive",
+      "asset_path": "Suit of Cups/2.png"
+    },
+    {
+      "deck_index": 38,
+      "id": "cups_3",
+      "name_ru": "Тройка кубков",
+      "name_en": "Three of Cups",
+      "type": "minor",
+      "suit": "cups",
+      "rank": "3",
+      "keywords": [
+        "чувства",
+        "связь",
+        "рост"
+      ],
+      "energy": "soft_positive",
+      "asset_path": "Suit of Cups/3.png"
+    },
+    {
+      "deck_index": 39,
+      "id": "cups_4",
+      "name_ru": "Четвёрка кубков",
+      "name_en": "Four of Cups",
+      "type": "minor",
+      "suit": "cups",
+      "rank": "4",
+      "keywords": [
+        "чувства",
+        "связь",
+        "опора"
+      ],
+      "energy": "soft_positive",
+      "asset_path": "Suit of Cups/4.png"
+    },
+    {
+      "deck_index": 40,
+      "id": "cups_5",
+      "name_ru": "Пятёрка кубков",
+      "name_en": "Five of Cups",
+      "type": "minor",
+      "suit": "cups",
+      "rank": "5",
+      "keywords": [
+        "чувства",
+        "связь",
+        "напряжение"
+      ],
+      "energy": "soft_positive",
+      "asset_path": "Suit of Cups/5.png"
+    },
+    {
+      "deck_index": 41,
+      "id": "cups_6",
+      "name_ru": "Шестёрка кубков",
+      "name_en": "Six of Cups",
+      "type": "minor",
+      "suit": "cups",
+      "rank": "6",
+      "keywords": [
+        "чувства",
+        "связь",
+        "гармония"
+      ],
+      "energy": "soft_positive",
+      "asset_path": "Suit of Cups/6.png"
+    },
+    {
+      "deck_index": 42,
+      "id": "cups_7",
+      "name_ru": "Семёрка кубков",
+      "name_en": "Seven of Cups",
+      "type": "minor",
+      "suit": "cups",
+      "rank": "7",
+      "keywords": [
+        "чувства",
+        "связь",
+        "выбор"
+      ],
+      "energy": "soft_positive",
+      "asset_path": "Suit of Cups/7.png"
+    },
+    {
+      "deck_index": 43,
+      "id": "cups_8",
+      "name_ru": "Восьмёрка кубков",
+      "name_en": "Eight of Cups",
+      "type": "minor",
+      "suit": "cups",
+      "rank": "8",
+      "keywords": [
+        "чувства",
+        "связь",
+        "движение"
+      ],
+      "energy": "soft_positive",
+      "asset_path": "Suit of Cups/8.png"
+    },
+    {
+      "deck_index": 44,
+      "id": "cups_9",
+      "name_ru": "Девятка кубков",
+      "name_en": "Nine of Cups",
+      "type": "minor",
+      "suit": "cups",
+      "rank": "9",
+      "keywords": [
+        "чувства",
+        "связь",
+        "граница"
+      ],
+      "energy": "soft_positive",
+      "asset_path": "Suit of Cups/9.png"
+    },
+    {
+      "deck_index": 45,
+      "id": "cups_10",
+      "name_ru": "Десятка кубков",
+      "name_en": "Ten of Cups",
+      "type": "minor",
+      "suit": "cups",
+      "rank": "10",
+      "keywords": [
+        "чувства",
+        "связь",
+        "итог"
+      ],
+      "energy": "soft_positive",
+      "asset_path": "Suit of Cups/10.png"
+    },
+    {
+      "deck_index": 46,
+      "id": "cups_page",
+      "name_ru": "Паж кубков",
+      "name_en": "Page of Cups",
+      "type": "minor",
+      "suit": "cups",
+      "rank": "page",
+      "keywords": [
+        "чувства",
+        "связь",
+        "новости"
+      ],
+      "energy": "soft_positive",
+      "asset_path": "Suit of Cups/11.png"
+    },
+    {
+      "deck_index": 47,
+      "id": "cups_knight",
+      "name_ru": "Рыцарь кубков",
+      "name_en": "Knight of Cups",
+      "type": "minor",
+      "suit": "cups",
+      "rank": "knight",
+      "keywords": [
+        "чувства",
+        "связь",
+        "скорость"
+      ],
+      "energy": "soft_positive",
+      "asset_path": "Suit of Cups/12.png"
+    },
+    {
+      "deck_index": 48,
+      "id": "cups_queen",
+      "name_ru": "Королева кубков",
+      "name_en": "Queen of Cups",
+      "type": "minor",
+      "suit": "cups",
+      "rank": "queen",
+      "keywords": [
+        "чувства",
+        "связь",
+        "забота"
+      ],
+      "energy": "soft_positive",
+      "asset_path": "Suit of Cups/13.png"
+    },
+    {
+      "deck_index": 49,
+      "id": "cups_king",
+      "name_ru": "Король кубков",
+      "name_en": "King of Cups",
+      "type": "minor",
+      "suit": "cups",
+      "rank": "king",
+      "keywords": [
+        "чувства",
+        "связь",
+        "мастерство"
+      ],
+      "energy": "soft_positive",
+      "asset_path": "Suit of Cups/14.png"
+    },
+    {
+      "deck_index": 50,
+      "id": "swords_ace",
+      "name_ru": "Туз мечей",
+      "name_en": "Ace of Swords",
+      "type": "minor",
+      "suit": "swords",
+      "rank": "ace",
+      "keywords": [
+        "мысль",
+        "конфликт",
+        "потенциал"
+      ],
+      "energy": "tense",
+      "asset_path": "Suit of Swords/1.png"
+    },
+    {
+      "deck_index": 51,
+      "id": "swords_2",
+      "name_ru": "Двойка мечей",
+      "name_en": "Two of Swords",
+      "type": "minor",
+      "suit": "swords",
+      "rank": "2",
+      "keywords": [
+        "мысль",
+        "конфликт",
+        "баланс"
+      ],
+      "energy": "tense",
+      "asset_path": "Suit of Swords/2.png"
+    },
+    {
+      "deck_index": 52,
+      "id": "swords_3",
+      "name_ru": "Тройка мечей",
+      "name_en": "Three of Swords",
+      "type": "minor",
+      "suit": "swords",
+      "rank": "3",
+      "keywords": [
+        "мысль",
+        "конфликт",
+        "рост"
+      ],
+      "energy": "tense",
+      "asset_path": "Suit of Swords/3.png"
+    },
+    {
+      "deck_index": 53,
+      "id": "swords_4",
+      "name_ru": "Четвёрка мечей",
+      "name_en": "Four of Swords",
+      "type": "minor",
+      "suit": "swords",
+      "rank": "4",
+      "keywords": [
+        "мысль",
+        "конфликт",
+        "опора"
+      ],
+      "energy": "tense",
+      "asset_path": "Suit of Swords/4.png"
+    },
+    {
+      "deck_index": 54,
+      "id": "swords_5",
+      "name_ru": "Пятёрка мечей",
+      "name_en": "Five of Swords",
+      "type": "minor",
+      "suit": "swords",
+      "rank": "5",
+      "keywords": [
+        "мысль",
+        "конфликт",
+        "напряжение"
+      ],
+      "energy": "tense",
+      "asset_path": "Suit of Swords/5.png"
+    },
+    {
+      "deck_index": 55,
+      "id": "swords_6",
+      "name_ru": "Шестёрка мечей",
+      "name_en": "Six of Swords",
+      "type": "minor",
+      "suit": "swords",
+      "rank": "6",
+      "keywords": [
+        "мысль",
+        "конфликт",
+        "гармония"
+      ],
+      "energy": "tense",
+      "asset_path": "Suit of Swords/6.png"
+    },
+    {
+      "deck_index": 56,
+      "id": "swords_7",
+      "name_ru": "Семёрка мечей",
+      "name_en": "Seven of Swords",
+      "type": "minor",
+      "suit": "swords",
+      "rank": "7",
+      "keywords": [
+        "мысль",
+        "конфликт",
+        "выбор"
+      ],
+      "energy": "tense",
+      "asset_path": "Suit of Swords/7.png"
+    },
+    {
+      "deck_index": 57,
+      "id": "swords_8",
+      "name_ru": "Восьмёрка мечей",
+      "name_en": "Eight of Swords",
+      "type": "minor",
+      "suit": "swords",
+      "rank": "8",
+      "keywords": [
+        "мысль",
+        "конфликт",
+        "движение"
+      ],
+      "energy": "tense",
+      "asset_path": "Suit of Swords/8.png"
+    },
+    {
+      "deck_index": 58,
+      "id": "swords_9",
+      "name_ru": "Девятка мечей",
+      "name_en": "Nine of Swords",
+      "type": "minor",
+      "suit": "swords",
+      "rank": "9",
+      "keywords": [
+        "мысль",
+        "конфликт",
+        "граница"
+      ],
+      "energy": "tense",
+      "asset_path": "Suit of Swords/9.png"
+    },
+    {
+      "deck_index": 59,
+      "id": "swords_10",
+      "name_ru": "Десятка мечей",
+      "name_en": "Ten of Swords",
+      "type": "minor",
+      "suit": "swords",
+      "rank": "10",
+      "keywords": [
+        "мысль",
+        "конфликт",
+        "итог"
+      ],
+      "energy": "tense",
+      "asset_path": "Suit of Swords/10.png"
+    },
+    {
+      "deck_index": 60,
+      "id": "swords_page",
+      "name_ru": "Паж мечей",
+      "name_en": "Page of Swords",
+      "type": "minor",
+      "suit": "swords",
+      "rank": "page",
+      "keywords": [
+        "мысль",
+        "конфликт",
+        "новости"
+      ],
+      "energy": "tense",
+      "asset_path": "Suit of Swords/11.png"
+    },
+    {
+      "deck_index": 61,
+      "id": "swords_knight",
+      "name_ru": "Рыцарь мечей",
+      "name_en": "Knight of Swords",
+      "type": "minor",
+      "suit": "swords",
+      "rank": "knight",
+      "keywords": [
+        "мысль",
+        "конфликт",
+        "скорость"
+      ],
+      "energy": "tense",
+      "asset_path": "Suit of Swords/12.png"
+    },
+    {
+      "deck_index": 62,
+      "id": "swords_queen",
+      "name_ru": "Королева мечей",
+      "name_en": "Queen of Swords",
+      "type": "minor",
+      "suit": "swords",
+      "rank": "queen",
+      "keywords": [
+        "мысль",
+        "конфликт",
+        "забота"
+      ],
+      "energy": "tense",
+      "asset_path": "Suit of Swords/13.png"
+    },
+    {
+      "deck_index": 63,
+      "id": "swords_king",
+      "name_ru": "Король мечей",
+      "name_en": "King of Swords",
+      "type": "minor",
+      "suit": "swords",
+      "rank": "king",
+      "keywords": [
+        "мысль",
+        "конфликт",
+        "мастерство"
+      ],
+      "energy": "tense",
+      "asset_path": "Suit of Swords/14.png"
+    },
+    {
+      "deck_index": 64,
+      "id": "pentacles_ace",
+      "name_ru": "Туз пентаклей",
+      "name_en": "Ace of Pentacles",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": "ace",
+      "keywords": [
+        "материя",
+        "работа",
+        "потенциал"
+      ],
+      "energy": "grounding",
+      "asset_path": "Suit of Pentacles/1.png"
+    },
+    {
+      "deck_index": 65,
+      "id": "pentacles_2",
+      "name_ru": "Двойка пентаклей",
+      "name_en": "Two of Pentacles",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": "2",
+      "keywords": [
+        "материя",
+        "работа",
+        "баланс"
+      ],
+      "energy": "grounding",
+      "asset_path": "Suit of Pentacles/2.png"
+    },
+    {
+      "deck_index": 66,
+      "id": "pentacles_3",
+      "name_ru": "Тройка пентаклей",
+      "name_en": "Three of Pentacles",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": "3",
+      "keywords": [
+        "материя",
+        "работа",
+        "рост"
+      ],
+      "energy": "grounding",
+      "asset_path": "Suit of Pentacles/3.png"
+    },
+    {
+      "deck_index": 67,
+      "id": "pentacles_4",
+      "name_ru": "Четвёрка пентаклей",
+      "name_en": "Four of Pentacles",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": "4",
+      "keywords": [
+        "материя",
+        "работа",
+        "опора"
+      ],
+      "energy": "grounding",
+      "asset_path": "Suit of Pentacles/4.png"
+    },
+    {
+      "deck_index": 68,
+      "id": "pentacles_5",
+      "name_ru": "Пятёрка пентаклей",
+      "name_en": "Five of Pentacles",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": "5",
+      "keywords": [
+        "материя",
+        "работа",
+        "напряжение"
+      ],
+      "energy": "grounding",
+      "asset_path": "Suit of Pentacles/5.png"
+    },
+    {
+      "deck_index": 69,
+      "id": "pentacles_6",
+      "name_ru": "Шестёрка пентаклей",
+      "name_en": "Six of Pentacles",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": "6",
+      "keywords": [
+        "материя",
+        "работа",
+        "гармония"
+      ],
+      "energy": "grounding",
+      "asset_path": "Suit of Pentacles/6.png"
+    },
+    {
+      "deck_index": 70,
+      "id": "pentacles_7",
+      "name_ru": "Семёрка пентаклей",
+      "name_en": "Seven of Pentacles",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": "7",
+      "keywords": [
+        "материя",
+        "работа",
+        "выбор"
+      ],
+      "energy": "grounding",
+      "asset_path": "Suit of Pentacles/7.png"
+    },
+    {
+      "deck_index": 71,
+      "id": "pentacles_8",
+      "name_ru": "Восьмёрка пентаклей",
+      "name_en": "Eight of Pentacles",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": "8",
+      "keywords": [
+        "материя",
+        "работа",
+        "движение"
+      ],
+      "energy": "grounding",
+      "asset_path": "Suit of Pentacles/8.png"
+    },
+    {
+      "deck_index": 72,
+      "id": "pentacles_9",
+      "name_ru": "Девятка пентаклей",
+      "name_en": "Nine of Pentacles",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": "9",
+      "keywords": [
+        "материя",
+        "работа",
+        "граница"
+      ],
+      "energy": "grounding",
+      "asset_path": "Suit of Pentacles/9.png"
+    },
+    {
+      "deck_index": 73,
+      "id": "pentacles_10",
+      "name_ru": "Десятка пентаклей",
+      "name_en": "Ten of Pentacles",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": "10",
+      "keywords": [
+        "материя",
+        "работа",
+        "итог"
+      ],
+      "energy": "grounding",
+      "asset_path": "Suit of Pentacles/10.png"
+    },
+    {
+      "deck_index": 74,
+      "id": "pentacles_page",
+      "name_ru": "Паж пентаклей",
+      "name_en": "Page of Pentacles",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": "page",
+      "keywords": [
+        "материя",
+        "работа",
+        "новости"
+      ],
+      "energy": "grounding",
+      "asset_path": "Suit of Pentacles/11.png"
+    },
+    {
+      "deck_index": 75,
+      "id": "pentacles_knight",
+      "name_ru": "Рыцарь пентаклей",
+      "name_en": "Knight of Pentacles",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": "knight",
+      "keywords": [
+        "материя",
+        "работа",
+        "скорость"
+      ],
+      "energy": "grounding",
+      "asset_path": "Suit of Pentacles/12.png"
+    },
+    {
+      "deck_index": 76,
+      "id": "pentacles_queen",
+      "name_ru": "Королева пентаклей",
+      "name_en": "Queen of Pentacles",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": "queen",
+      "keywords": [
+        "материя",
+        "работа",
+        "забота"
+      ],
+      "energy": "grounding",
+      "asset_path": "Suit of Pentacles/13.png"
+    },
+    {
+      "deck_index": 77,
+      "id": "pentacles_king",
+      "name_ru": "Король пентаклей",
+      "name_en": "King of Pentacles",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": "king",
+      "keywords": [
+        "материя",
+        "работа",
+        "мастерство"
+      ],
+      "energy": "grounding",
+      "asset_path": "Suit of Pentacles/14.png"
+    }
+  ]
+}

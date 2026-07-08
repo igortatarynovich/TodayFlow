@@ -1,0 +1,133 @@
+/**
+ * Hero Medium — TODAYFLOW_FOUNDATION_UI §1.2
+ * Today theme · Calendar month headers.
+ */
+
+.heroMedium {
+  position: relative;
+  min-height: min(var(--tf-hero-medium-min-h, 52dvh), 420px);
+  padding: 2.75rem var(--tf-shell-gutter, 1.25rem) 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse 78% 54% at 14% 0%, rgba(74, 50, 112, 0.09) 0%, transparent 58%),
+    radial-gradient(ellipse 62% 48% at 90% 8%, rgba(198, 166, 119, 0.16) 0%, transparent 52%),
+    linear-gradient(180deg, rgba(255, 253, 249, 0.82) 0%, var(--tf-page-cream, #fff9f5) 100%);
+}
+
+.heroMediumEmbedded {
+  min-height: auto;
+  padding: 1.35rem 1.35rem 1.15rem;
+  background: transparent;
+}
+
+.geometry {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.72;
+}
+
+.fade {
+  position: absolute;
+  inset: auto 0 0;
+  height: 40%;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent 0%, var(--tf-page-cream, #fff9f5) 92%);
+}
+
+.heroMediumEmbedded .fade {
+  display: none;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--tf-shell-readable, 36rem);
+}
+
+.symbol {
+  width: var(--tf-hero-medium-symbol, 80px);
+  height: var(--tf-hero-medium-symbol, 80px);
+  margin-bottom: 1rem;
+  color: var(--tf-ink-soft, #5b4630);
+}
+
+.kicker {
+  margin: 0 0 0.65rem;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
+  font-size: var(--tf-type-section-size, 1.625rem);
+  font-weight: var(--tf-type-section-weight, 600);
+  line-height: var(--tf-type-section-line, 1.2);
+  letter-spacing: -0.015em;
+  color: var(--tf-ink, #1a1510);
+  max-width: 38ch;
+}
+
+.subline {
+  margin: 0.45rem 0 0;
+  font-size: var(--tf-type-body-size, 0.9375rem);
+  line-height: var(--tf-type-body-line, 1.55);
+  color: var(--tf-body, #475569);
+  font-weight: 500;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.loading {
+  margin: 0;
+  font-size: var(--tf-type-body-size, 0.9375rem);
+  line-height: 1.5;
+  color: var(--tf-body, #475569);
+  max-width: 36ch;
+}
+
+.pillars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+}
+
+.pillar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0.32rem 0.68rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(74, 50, 112, 0.12);
+  color: var(--tf-accent-numerology, #4a3270);
+  font-size: var(--tf-type-caption-size, 0.625rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pillarIcon {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: var(--tf-hero-large-pillar-icon, 20px);
+  height: var(--tf-hero-large-pillar-icon, 20px);
+  align-items: center;
+  justify-content: center;
+}

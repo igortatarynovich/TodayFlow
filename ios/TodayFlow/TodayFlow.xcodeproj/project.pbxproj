@@ -1,0 +1,912 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000000000000000000011 /* TodayFlowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000001 /* TodayFlowApp.swift */; };
+		A10000000000000000000013 /* TodayFlowStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000003 /* TodayFlowStore.swift */; };
+		A10000000000000000000014 /* DailyFocus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000004 /* DailyFocus.swift */; };
+		A10000000000000000000015 /* Ritual.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000005 /* Ritual.swift */; };
+		A10000000000000000000016 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000006 /* UserProfile.swift */; };
+		A10000000000000000000017 /* TodayFlowTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000007 /* TodayFlowTheme.swift */; };
+		A10000000000000000000018 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000008 /* TodayView.swift */; };
+		A10000000000000000000019 /* RitualsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000009 /* RitualsView.swift */; };
+		A1000000000000000000001A /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000000A /* ProfileView.swift */; };
+		A1000000000000000000001B /* Resources/Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000000B /* Resources/Assets.xcassets */; };
+		A1000000000000000000001C /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000000D /* AppConfig.swift */; };
+		A1000000000000000000001E /* TarotModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000000F /* TarotModels.swift */; };
+		A1000000000000000000001F /* TarotClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000010 /* TarotClient.swift */; };
+		A1000000000000000000002A /* TarotExperience.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000002B /* TarotExperience.swift */; };
+		A1000000000000000000002C /* ExploreHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000002D /* ExploreHubView.swift */; };
+		A10000000000000000000046 /* PracticeModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000040 /* PracticeModels.swift */; };
+		A10000000000000000000047 /* PracticesClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000054 /* PracticesClient.swift */; };
+		A10000000000000000000048 /* PracticesExperience.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000042 /* PracticesExperience.swift */; };
+		A10000000000000000000451 /* PracticeCatalogContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000450 /* PracticeCatalogContent.swift */; };
+		A10000000000000000000453 /* PracticesWizardHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000452 /* PracticesWizardHubView.swift */; };
+		A10000000000000000000091 /* TodayFlowSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000090 /* TodayFlowSmokeTests.swift */; };
+		A1000000000000000000009D /* ProfileSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000009C /* ProfileSummaryView.swift */; };
+		A1000000000000000000009F /* MeaningRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000009E /* MeaningRuntime.swift */; };
+		A100000000000000000000A1 /* TodayExperienceLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000A0 /* TodayExperienceLayout.swift */; };
+		A100000000000000000000E1 /* TodayRitualFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000E0 /* TodayRitualFlowView.swift */; };
+		A10000000000000000000429 /* TodayCompositionSurfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000428 /* TodayCompositionSurfaceView.swift */; };
+		A10000000000000000000103 /* TodayRitualMockupViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000102 /* TodayRitualMockupViews.swift */; };
+		A100000000000000000000F1 /* TodayRitualCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000F0 /* TodayRitualCopy.swift */; };
+		A10000000000000000000291 /* TodayExperienceChromeCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000290 /* TodayExperienceChromeCopy.swift */; };
+		A100000000000000000000C0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000B9 /* ContentView.swift */; };
+		A100000000000000000000C1 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000BA /* AuthView.swift */; };
+		A100000000000000000000C2 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000BB /* OnboardingView.swift */; };
+		A100000000000000000000C3 /* QuestionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000BC /* QuestionsView.swift */; };
+		A10000000000000000000275 /* GuidanceViewChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000274 /* GuidanceViewChrome.swift */; };
+		A10000000000000000000280 /* FlowTrackerChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000281 /* FlowTrackerChrome.swift */; };
+		A10000000000000000000295 /* FlowPracticesMainTabChromeCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000294 /* FlowPracticesMainTabChromeCopy.swift */; };
+		A10000000000000000000301 /* GuidanceResultChromeCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000300 /* GuidanceResultChromeCopy.swift */; };
+		A10000000000000000000303 /* GuidanceSafetyKeywords.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000302 /* GuidanceSafetyKeywords.swift */; };
+		A10000000000000000000305 /* TarotSpreadResultChromeCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000304 /* TarotSpreadResultChromeCopy.swift */; };
+		A10000000000000000000311 /* TarotQuestionFlowCanon.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000310 /* TarotQuestionFlowCanon.swift */; };
+		A10000000000000000000313 /* TarotQuestionFlowSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000312 /* TarotQuestionFlowSession.swift */; };
+		A10000000000000000000315 /* TarotQuestionFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000314 /* TarotQuestionFlowView.swift */; };
+		A10000000000000000000317 /* TarotJourneyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000316 /* TarotJourneyStore.swift */; };
+		A10000000000000000000321 /* ProfileQuickMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000320 /* ProfileQuickMapView.swift */; };
+		A10000000000000000000401 /* TodayDayLocalStores.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000400 /* TodayDayLocalStores.swift */; };
+		A10000000000000000000403 /* MapsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000402 /* MapsModels.swift */; };
+		A10000000000000000000405 /* MapHeatmapGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000404 /* MapHeatmapGridView.swift */; };
+		A10000000000000000000407 /* MoodMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000406 /* MoodMapView.swift */; };
+		A10000000000000000000409 /* EnergyMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000408 /* EnergyMapView.swift */; };
+		A1000000000000000000040B /* PromiseMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000040A /* PromiseMapView.swift */; };
+		A1000000000000000000040D /* ProfileMapsPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000040C /* ProfileMapsPreviewView.swift */; };
+		A1000000000000000000040F /* ProfileCumInsightsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000040E /* ProfileCumInsightsSection.swift */; };
+		A10000000000000000000415 /* ProfileLivingMapsSectionBand.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000414 /* ProfileLivingMapsSectionBand.swift */; };
+		A10000000000000000000419 /* ProfilePortraitSectionBand.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000418 /* ProfilePortraitSectionBand.swift */; };
+		A10000000000000000000421 /* TodayFirstTodayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000420 /* TodayFirstTodayState.swift */; };
+		A10000000000000000000423 /* ProfileFirstDayTeaserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000422 /* ProfileFirstDayTeaserView.swift */; };
+		A10000000000000000000417 /* ProfilePortalDeepSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000416 /* ProfilePortalDeepSection.swift */; };
+		A10000000000000000000427 /* HeroLargeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000426 /* HeroLargeView.swift */; };
+		A10000000000000000000411 /* MapsHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000410 /* MapsHubView.swift */; };
+		A10000000000000000000413 /* P1MapsViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000412 /* P1MapsViews.swift */; };
+		A10000000000000000000331 /* PimInterpretationConfirmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000330 /* PimInterpretationConfirmView.swift */; };
+		A10000000000000000000333 /* ProfileKnowledgeConfirmSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000332 /* ProfileKnowledgeConfirmSection.swift */; };
+		A10000000000000000000335 /* TodayInferredHypothesisStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000334 /* TodayInferredHypothesisStrip.swift */; };
+		A10000000000000000000425 /* CompatibilityAttachmentLensChipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000424 /* CompatibilityAttachmentLensChipView.swift */; };
+		A10000000000000000000433 /* ProfileRelationshipInsightsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000432 /* ProfileRelationshipInsightsSection.swift */; };
+		A10000000000000000000435 /* ArchetypeSymbolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000434 /* ArchetypeSymbolView.swift */; };
+		A10000000000000000000437 /* HeroMediumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000436 /* HeroMediumView.swift */; };
+		A10000000000000000000439 /* HeroSmallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000438 /* HeroSmallView.swift */; };
+		A10000000000000000000441 /* PlanetSymbolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000440 /* PlanetSymbolView.swift */; };
+		A10000000000000000000443 /* FoundationGeometryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000442 /* FoundationGeometryView.swift */; };
+		A10000000000000000000445 /* ZodiacSymbolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000444 /* ZodiacSymbolView.swift */; };
+		A10000000000000000000447 /* ElementSymbolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000446 /* ElementSymbolView.swift */; };
+		A10000000000000000000431 /* ProfileMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000430 /* ProfileMotion.swift */; };
+		A10000000000000000000429 /* CompatibilityIlrInstanceChipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000428 /* CompatibilityIlrInstanceChipView.swift */; };
+		A1000000000000000000042B /* ProfileInterpretationInstanceSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1000000000000000000042A /* ProfileInterpretationInstanceSection.swift */; };
+		A10000000000000000000337 /* ProfileChartFullMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000336 /* ProfileChartFullMapView.swift */; };
+		A10000000000000000000339 /* ProfileHouseCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000338 /* ProfileHouseCopy.swift */; };
+		A100000000000000000000C4 /* CompatibilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000BD /* CompatibilityView.swift */; };
+		A100000000000000000000D9 /* CompatibilityExplorationSurface.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000DA /* CompatibilityExplorationSurface.swift */; };
+		A100000000000000000000C5 /* TodayFlowAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000BE /* TodayFlowAPIClient.swift */; };
+		A100000000000000000000C6 /* TodayFlowPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000BF /* TodayFlowPersistence.swift */; };
+		A100000000000000000000C7 /* AuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000D0 /* AuthSession.swift */; };
+		A100000000000000000000C8 /* BirthProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000D2 /* BirthProfile.swift */; };
+		A100000000000000000000C9 /* TodayCycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000D3 /* TodayCycle.swift */; };
+		A100000000000000000000CA /* TodayFlowBootstrapPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000D4 /* TodayFlowBootstrapPayload.swift */; };
+		A100000000000000000000CB /* FusionIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000D5 /* FusionIndex.swift */; };
+		A100000000000000000000CC /* InteractiveSurfaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000D6 /* InteractiveSurfaces.swift */; };
+		A100000000000000000000CD /* TrackerModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000D7 /* TrackerModels.swift */; };
+		A100000000000000000000CE /* TodayDashboardModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000000000000000000D8 /* TodayDashboardModels.swift */; };
+		A10000000000000000000101 /* TrackerHabitTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000100 /* TrackerHabitTemplates.swift */; };
+		A10000000000000000000105 /* TodayRitualSignals.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000104 /* TodayRitualSignals.swift */; };
+		A10000000000000000000273 /* TodayRitualCueSanitizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000272 /* TodayRitualCueSanitizer.swift */; };
+		A10000000000000000000107 /* TodayTarotTodayRu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000106 /* TodayTarotTodayRu.swift */; };
+		A10000000000000000000109 /* today_tarot_today_ru.json in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000108 /* today_tarot_today_ru.json */; };
+		A10000000000000000000111 /* TodayVisualMotifs.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000110 /* TodayVisualMotifs.swift */; };
+		A10000000000000000000114 /* TodayTarotDeckImageURLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000115 /* TodayTarotDeckImageURLs.swift */; };
+		A10000000000000000000113 /* NatalChartWheelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000112 /* NatalChartWheelView.swift */; };
+		A10000000000000000000123 /* TodayRitualEntryIllustration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000122 /* TodayRitualEntryIllustration.swift */; };
+		A10000000000000000000231 /* RitualDesertEntryVectorHero.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000230 /* RitualDesertEntryVectorHero.swift */; };
+		A10000000000000000000233 /* TodayGuideActionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000232 /* TodayGuideActionable.swift */; };
+		A10000000000000000000242 /* TodayDayLogicCallout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000241 /* TodayDayLogicCallout.swift */; };
+		A10000000000000000000251 /* TodayPersonalDayRhythm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000250 /* TodayPersonalDayRhythm.swift */; };
+		A10000000000000000000125 /* today-ritual-entry in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000124 /* today-ritual-entry */; };
+		A10000000000000000000261 /* TodayRitualStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000260 /* TodayRitualStateMachine.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A10000000000000000000001 /* TodayFlowApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayFlowApp.swift; sourceTree = "<group>"; };
+		A10000000000000000000003 /* TodayFlowStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayFlowStore.swift; sourceTree = "<group>"; };
+		A10000000000000000000004 /* DailyFocus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyFocus.swift; sourceTree = "<group>"; };
+		A10000000000000000000005 /* Ritual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ritual.swift; sourceTree = "<group>"; };
+		A10000000000000000000006 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		A10000000000000000000007 /* TodayFlowTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayFlowTheme.swift; sourceTree = "<group>"; };
+		A10000000000000000000008 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
+		A10000000000000000000009 /* RitualsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RitualsView.swift; sourceTree = "<group>"; };
+		A1000000000000000000000A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		A1000000000000000000000B /* Resources/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Resources/Assets.xcassets; sourceTree = "<group>"; };
+		A1000000000000000000000C /* TodayFlow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodayFlow.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1000000000000000000000D /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
+		A1000000000000000000000F /* TarotModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TarotModels.swift; sourceTree = "<group>"; };
+		A10000000000000000000010 /* TarotClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TarotClient.swift; sourceTree = "<group>"; };
+		A1000000000000000000002B /* TarotExperience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TarotExperience.swift; sourceTree = "<group>"; };
+		A1000000000000000000002D /* ExploreHubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreHubView.swift; sourceTree = "<group>"; };
+		A10000000000000000000040 /* PracticeModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeModels.swift; sourceTree = "<group>"; };
+		A10000000000000000000042 /* PracticesExperience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticesExperience.swift; sourceTree = "<group>"; };
+		A10000000000000000000450 /* PracticeCatalogContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeCatalogContent.swift; sourceTree = "<group>"; };
+		A10000000000000000000452 /* PracticesWizardHubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticesWizardHubView.swift; sourceTree = "<group>"; };
+		A10000000000000000000054 /* PracticesClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticesClient.swift; sourceTree = "<group>"; };
+		A10000000000000000000090 /* TodayFlowSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayFlowSmokeTests.swift; sourceTree = "<group>"; };
+		A10000000000000000000092 /* TodayFlowTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TodayFlowTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1000000000000000000009C /* ProfileSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSummaryView.swift; sourceTree = "<group>"; };
+		A10000000000000000000320 /* ProfileQuickMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileQuickMapView.swift; sourceTree = "<group>"; };
+		A10000000000000000000400 /* TodayDayLocalStores.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayDayLocalStores.swift; sourceTree = "<group>"; };
+		A10000000000000000000402 /* MapsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapsModels.swift; sourceTree = "<group>"; };
+		A10000000000000000000404 /* MapHeatmapGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapHeatmapGridView.swift; sourceTree = "<group>"; };
+		A10000000000000000000406 /* MoodMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodMapView.swift; sourceTree = "<group>"; };
+		A10000000000000000000408 /* EnergyMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyMapView.swift; sourceTree = "<group>"; };
+		A1000000000000000000040A /* PromiseMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromiseMapView.swift; sourceTree = "<group>"; };
+		A1000000000000000000040C /* ProfileMapsPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMapsPreviewView.swift; sourceTree = "<group>"; };
+		A1000000000000000000040E /* ProfileCumInsightsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCumInsightsSection.swift; sourceTree = "<group>"; };
+		A10000000000000000000414 /* ProfileLivingMapsSectionBand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileLivingMapsSectionBand.swift; sourceTree = "<group>"; };
+		A10000000000000000000418 /* ProfilePortraitSectionBand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePortraitSectionBand.swift; sourceTree = "<group>"; };
+		A10000000000000000000420 /* TodayFirstTodayState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayFirstTodayState.swift; sourceTree = "<group>"; };
+		A10000000000000000000422 /* ProfileFirstDayTeaserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFirstDayTeaserView.swift; sourceTree = "<group>"; };
+		A10000000000000000000416 /* ProfilePortalDeepSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePortalDeepSection.swift; sourceTree = "<group>"; };
+		A10000000000000000000426 /* HeroLargeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroLargeView.swift; sourceTree = "<group>"; };
+		A10000000000000000000410 /* MapsHubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapsHubView.swift; sourceTree = "<group>"; };
+		A10000000000000000000412 /* P1MapsViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = P1MapsViews.swift; sourceTree = "<group>"; };
+		A10000000000000000000330 /* PimInterpretationConfirmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PimInterpretationConfirmView.swift; sourceTree = "<group>"; };
+		A10000000000000000000332 /* ProfileKnowledgeConfirmSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileKnowledgeConfirmSection.swift; sourceTree = "<group>"; };
+		A10000000000000000000334 /* TodayInferredHypothesisStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayInferredHypothesisStrip.swift; sourceTree = "<group>"; };
+		A10000000000000000000424 /* CompatibilityAttachmentLensChipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilityAttachmentLensChipView.swift; sourceTree = "<group>"; };
+		A10000000000000000000432 /* ProfileRelationshipInsightsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRelationshipInsightsSection.swift; sourceTree = "<group>"; };
+		A10000000000000000000434 /* ArchetypeSymbolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchetypeSymbolView.swift; sourceTree = "<group>"; };
+		A10000000000000000000436 /* HeroMediumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroMediumView.swift; sourceTree = "<group>"; };
+		A10000000000000000000438 /* HeroSmallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroSmallView.swift; sourceTree = "<group>"; };
+		A10000000000000000000440 /* PlanetSymbolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetSymbolView.swift; sourceTree = "<group>"; };
+		A10000000000000000000442 /* FoundationGeometryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundationGeometryView.swift; sourceTree = "<group>"; };
+		A10000000000000000000444 /* ZodiacSymbolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZodiacSymbolView.swift; sourceTree = "<group>"; };
+		A10000000000000000000446 /* ElementSymbolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementSymbolView.swift; sourceTree = "<group>"; };
+		A10000000000000000000430 /* ProfileMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileMotion.swift; sourceTree = "<group>"; };
+		A10000000000000000000428 /* CompatibilityIlrInstanceChipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilityIlrInstanceChipView.swift; sourceTree = "<group>"; };
+		A1000000000000000000042A /* ProfileInterpretationInstanceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInterpretationInstanceSection.swift; sourceTree = "<group>"; };
+		A10000000000000000000336 /* ProfileChartFullMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileChartFullMapView.swift; sourceTree = "<group>"; };
+		A10000000000000000000338 /* ProfileHouseCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHouseCopy.swift; sourceTree = "<group>"; };
+		A1000000000000000000009E /* MeaningRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeaningRuntime.swift; sourceTree = "<group>"; };
+		A100000000000000000000A0 /* TodayExperienceLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayExperienceLayout.swift; sourceTree = "<group>"; };
+		A100000000000000000000E0 /* TodayRitualFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayRitualFlowView.swift; sourceTree = "<group>"; };
+		A10000000000000000000428 /* TodayCompositionSurfaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayCompositionSurfaceView.swift; sourceTree = "<group>"; };
+		A10000000000000000000102 /* TodayRitualMockupViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayRitualMockupViews.swift; sourceTree = "<group>"; };
+		A100000000000000000000F0 /* TodayRitualCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayRitualCopy.swift; sourceTree = "<group>"; };
+		A10000000000000000000290 /* TodayExperienceChromeCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayExperienceChromeCopy.swift; sourceTree = "<group>"; };
+		A100000000000000000000B9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A100000000000000000000BA /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		A100000000000000000000BB /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		A100000000000000000000BC /* QuestionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsView.swift; sourceTree = "<group>"; };
+		A10000000000000000000274 /* GuidanceViewChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidanceViewChrome.swift; sourceTree = "<group>"; };
+		A10000000000000000000281 /* FlowTrackerChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowTrackerChrome.swift; sourceTree = "<group>"; };
+		A10000000000000000000294 /* FlowPracticesMainTabChromeCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowPracticesMainTabChromeCopy.swift; sourceTree = "<group>"; };
+		A10000000000000000000300 /* GuidanceResultChromeCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidanceResultChromeCopy.swift; sourceTree = "<group>"; };
+		A10000000000000000000302 /* GuidanceSafetyKeywords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidanceSafetyKeywords.swift; sourceTree = "<group>"; };
+		A10000000000000000000304 /* TarotSpreadResultChromeCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TarotSpreadResultChromeCopy.swift; sourceTree = "<group>"; };
+		A10000000000000000000310 /* TarotQuestionFlowCanon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TarotQuestionFlowCanon.swift; sourceTree = "<group>"; };
+		A10000000000000000000312 /* TarotQuestionFlowSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TarotQuestionFlowSession.swift; sourceTree = "<group>"; };
+		A10000000000000000000314 /* TarotQuestionFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TarotQuestionFlowView.swift; sourceTree = "<group>"; };
+		A10000000000000000000316 /* TarotJourneyStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TarotJourneyStore.swift; sourceTree = "<group>"; };
+		A100000000000000000000BD /* CompatibilityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilityView.swift; sourceTree = "<group>"; };
+		A100000000000000000000DA /* CompatibilityExplorationSurface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilityExplorationSurface.swift; sourceTree = "<group>"; };
+		A100000000000000000000BE /* TodayFlowAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayFlowAPIClient.swift; sourceTree = "<group>"; };
+		A100000000000000000000BF /* TodayFlowPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayFlowPersistence.swift; sourceTree = "<group>"; };
+		A100000000000000000000D0 /* AuthSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthSession.swift; sourceTree = "<group>"; };
+		A100000000000000000000D2 /* BirthProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthProfile.swift; sourceTree = "<group>"; };
+		A100000000000000000000D3 /* TodayCycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayCycle.swift; sourceTree = "<group>"; };
+		A100000000000000000000D4 /* TodayFlowBootstrapPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayFlowBootstrapPayload.swift; sourceTree = "<group>"; };
+		A100000000000000000000D5 /* FusionIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FusionIndex.swift; sourceTree = "<group>"; };
+		A100000000000000000000D6 /* InteractiveSurfaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractiveSurfaces.swift; sourceTree = "<group>"; };
+		A100000000000000000000D7 /* TrackerModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerModels.swift; sourceTree = "<group>"; };
+		A100000000000000000000D8 /* TodayDashboardModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayDashboardModels.swift; sourceTree = "<group>"; };
+		A10000000000000000000100 /* TrackerHabitTemplates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerHabitTemplates.swift; sourceTree = "<group>"; };
+		A10000000000000000000104 /* TodayRitualSignals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayRitualSignals.swift; sourceTree = "<group>"; };
+		A10000000000000000000272 /* TodayRitualCueSanitizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayRitualCueSanitizer.swift; sourceTree = "<group>"; };
+		A10000000000000000000106 /* TodayTarotTodayRu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayTarotTodayRu.swift; sourceTree = "<group>"; };
+		A10000000000000000000108 /* today_tarot_today_ru.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Resources/today_tarot_today_ru.json; sourceTree = "<group>"; };
+		A10000000000000000000110 /* TodayVisualMotifs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayVisualMotifs.swift; sourceTree = "<group>"; };
+		A10000000000000000000115 /* TodayTarotDeckImageURLs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayTarotDeckImageURLs.swift; sourceTree = "<group>"; };
+		A10000000000000000000112 /* NatalChartWheelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NatalChartWheelView.swift; sourceTree = "<group>"; };
+		A10000000000000000000122 /* TodayRitualEntryIllustration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayRitualEntryIllustration.swift; sourceTree = "<group>"; };
+		A10000000000000000000230 /* RitualDesertEntryVectorHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RitualDesertEntryVectorHero.swift; sourceTree = "<group>"; };
+		A10000000000000000000232 /* TodayGuideActionable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayGuideActionable.swift; sourceTree = "<group>"; };
+		A10000000000000000000241 /* TodayDayLogicCallout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayDayLogicCallout.swift; sourceTree = "<group>"; };
+		A10000000000000000000250 /* TodayPersonalDayRhythm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayPersonalDayRhythm.swift; sourceTree = "<group>"; };
+		A10000000000000000000124 /* today-ritual-entry */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources/today-ritual-entry; sourceTree = "<group>"; };
+		A10000000000000000000260 /* TodayRitualStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayRitualStateMachine.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A10000000000000000000021 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A10000000000000000000093 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A10000000000000000000031 = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000032 /* TodayFlow */,
+				A10000000000000000000033 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A10000000000000000000032 /* TodayFlow */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000034 /* App */,
+				A10000000000000000000035 /* Models */,
+				A10000000000000000000038 /* Services */,
+				A10000000000000000000036 /* Views */,
+				A10000000000000000000094 /* TodayFlowTests */,
+				A10000000000000000000037 /* Design */,
+				A1000000000000000000000B /* Resources/Assets.xcassets */,
+				A10000000000000000000108 /* today_tarot_today_ru.json */,
+				A10000000000000000000124 /* today-ritual-entry */,
+			);
+			path = TodayFlow;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000033 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A1000000000000000000000C /* TodayFlow.app */,
+				A10000000000000000000092 /* TodayFlowTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000034 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000001 /* TodayFlowApp.swift */,
+				A100000000000000000000B9 /* ContentView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000035 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000003 /* TodayFlowStore.swift */,
+				A100000000000000000000D0 /* AuthSession.swift */,
+				A100000000000000000000D2 /* BirthProfile.swift */,
+				A100000000000000000000D3 /* TodayCycle.swift */,
+				A100000000000000000000D4 /* TodayFlowBootstrapPayload.swift */,
+				A100000000000000000000D5 /* FusionIndex.swift */,
+				A100000000000000000000D6 /* InteractiveSurfaces.swift */,
+				A10000000000000000000004 /* DailyFocus.swift */,
+				A10000000000000000000005 /* Ritual.swift */,
+				A10000000000000000000006 /* UserProfile.swift */,
+				A100000000000000000000D7 /* TrackerModels.swift */,
+				A10000000000000000000100 /* TrackerHabitTemplates.swift */,
+				A100000000000000000000D8 /* TodayDashboardModels.swift */,
+				A10000000000000000000400 /* TodayDayLocalStores.swift */,
+				A10000000000000000000402 /* MapsModels.swift */,
+				A1000000000000000000000F /* TarotModels.swift */,
+				A10000000000000000000040 /* PracticeModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000036 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000008 /* TodayView.swift */,
+				A10000000000000000000009 /* RitualsView.swift */,
+				A1000000000000000000000A /* ProfileView.swift */,
+				A10000000000000000000320 /* ProfileQuickMapView.swift */,
+				A1000000000000000000040C /* ProfileMapsPreviewView.swift */,
+				A1000000000000000000040E /* ProfileCumInsightsSection.swift */,
+				A10000000000000000000414 /* ProfileLivingMapsSectionBand.swift */,
+				A10000000000000000000418 /* ProfilePortraitSectionBand.swift */,
+				A10000000000000000000422 /* ProfileFirstDayTeaserView.swift */,
+				A10000000000000000000416 /* ProfilePortalDeepSection.swift */,
+				A10000000000000000000410 /* MapsHubView.swift */,
+				A10000000000000000000412 /* P1MapsViews.swift */,
+				A10000000000000000000404 /* MapHeatmapGridView.swift */,
+				A10000000000000000000406 /* MoodMapView.swift */,
+				A10000000000000000000408 /* EnergyMapView.swift */,
+				A1000000000000000000040A /* PromiseMapView.swift */,
+				A10000000000000000000330 /* PimInterpretationConfirmView.swift */,
+				A10000000000000000000332 /* ProfileKnowledgeConfirmSection.swift */,
+				A10000000000000000000334 /* TodayInferredHypothesisStrip.swift */,
+				A10000000000000000000424 /* CompatibilityAttachmentLensChipView.swift */,
+				A10000000000000000000432 /* ProfileRelationshipInsightsSection.swift */,
+				A10000000000000000000428 /* CompatibilityIlrInstanceChipView.swift */,
+				A1000000000000000000042A /* ProfileInterpretationInstanceSection.swift */,
+				A10000000000000000000336 /* ProfileChartFullMapView.swift */,
+				A10000000000000000000338 /* ProfileHouseCopy.swift */,
+				A100000000000000000000BA /* AuthView.swift */,
+				A100000000000000000000BB /* OnboardingView.swift */,
+				A100000000000000000000BC /* QuestionsView.swift */,
+				A10000000000000000000274 /* GuidanceViewChrome.swift */,
+				A10000000000000000000281 /* FlowTrackerChrome.swift */,
+				A100000000000000000000BD /* CompatibilityView.swift */,
+				A100000000000000000000DA /* CompatibilityExplorationSurface.swift */,
+				A1000000000000000000002B /* TarotExperience.swift */,
+				A10000000000000000000314 /* TarotQuestionFlowView.swift */,
+				A1000000000000000000002D /* ExploreHubView.swift */,
+				A10000000000000000000042 /* PracticesExperience.swift */,
+				A10000000000000000000452 /* PracticesWizardHubView.swift */,
+				A1000000000000000000009C /* ProfileSummaryView.swift */,
+				A100000000000000000000A0 /* TodayExperienceLayout.swift */,
+				A100000000000000000000E0 /* TodayRitualFlowView.swift */,
+				A10000000000000000000428 /* TodayCompositionSurfaceView.swift */,
+				A10000000000000000000241 /* TodayDayLogicCallout.swift */,
+				A10000000000000000000102 /* TodayRitualMockupViews.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000037 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000007 /* TodayFlowTheme.swift */,
+				A10000000000000000000110 /* TodayVisualMotifs.swift */,
+				A10000000000000000000112 /* NatalChartWheelView.swift */,
+				A100000000000000000000F0 /* TodayRitualCopy.swift */,
+				A10000000000000000000290 /* TodayExperienceChromeCopy.swift */,
+				A10000000000000000000294 /* FlowPracticesMainTabChromeCopy.swift */,
+				A10000000000000000000450 /* PracticeCatalogContent.swift */,
+				A10000000000000000000300 /* GuidanceResultChromeCopy.swift */,
+				A10000000000000000000302 /* GuidanceSafetyKeywords.swift */,
+				A10000000000000000000304 /* TarotSpreadResultChromeCopy.swift */,
+				A10000000000000000000310 /* TarotQuestionFlowCanon.swift */,
+				A10000000000000000000250 /* TodayPersonalDayRhythm.swift */,
+				A10000000000000000000122 /* TodayRitualEntryIllustration.swift */,
+				A10000000000000000000230 /* RitualDesertEntryVectorHero.swift */,
+				A10000000000000000000426 /* HeroLargeView.swift */,
+				A10000000000000000000436 /* HeroMediumView.swift */,
+				A10000000000000000000438 /* HeroSmallView.swift */,
+				A10000000000000000000440 /* PlanetSymbolView.swift */,
+				A10000000000000000000442 /* FoundationGeometryView.swift */,
+				A10000000000000000000444 /* ZodiacSymbolView.swift */,
+				A10000000000000000000446 /* ElementSymbolView.swift */,
+				A10000000000000000000434 /* ArchetypeSymbolView.swift */,
+				A10000000000000000000430 /* ProfileMotion.swift */,
+				A10000000000000000000104 /* TodayRitualSignals.swift */,
+				A10000000000000000000272 /* TodayRitualCueSanitizer.swift */,
+				A10000000000000000000260 /* TodayRitualStateMachine.swift */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000038 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A1000000000000000000000D /* AppConfig.swift */,
+				A10000000000000000000010 /* TarotClient.swift */,
+				A10000000000000000000106 /* TodayTarotTodayRu.swift */,
+				A10000000000000000000115 /* TodayTarotDeckImageURLs.swift */,
+				A10000000000000000000054 /* PracticesClient.swift */,
+				A100000000000000000000BE /* TodayFlowAPIClient.swift */,
+				A100000000000000000000BF /* TodayFlowPersistence.swift */,
+				A10000000000000000000420 /* TodayFirstTodayState.swift */,
+				A1000000000000000000009E /* MeaningRuntime.swift */,
+				A10000000000000000000312 /* TarotQuestionFlowSession.swift */,
+				A10000000000000000000316 /* TarotJourneyStore.swift */,
+				A10000000000000000000232 /* TodayGuideActionable.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000094 /* TodayFlowTests */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000090 /* TodayFlowSmokeTests.swift */,
+			);
+			path = TodayFlowTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A10000000000000000000041 /* TodayFlow */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A10000000000000000000051 /* Build configuration list for PBXNativeTarget "TodayFlow" */;
+			buildPhases = (
+				A10000000000000000000022 /* Sources */,
+				A10000000000000000000021 /* Frameworks */,
+				A10000000000000000000023 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TodayFlow;
+			productName = TodayFlow;
+			productReference = A1000000000000000000000C /* TodayFlow.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A10000000000000000000095 /* TodayFlowTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1000000000000000000009B /* Build configuration list for PBXNativeTarget "TodayFlowTests" */;
+			buildPhases = (
+				A10000000000000000000096 /* Sources */,
+				A10000000000000000000093 /* Frameworks */,
+				A10000000000000000000097 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A10000000000000000000270 /* PBXTargetDependency */,
+			);
+			name = TodayFlowTests;
+			productName = TodayFlowTests;
+			productReference = A10000000000000000000092 /* TodayFlowTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A10000000000000000000061 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 2640;
+				TargetAttributes = {
+					A10000000000000000000041 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					A10000000000000000000095 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+				};
+			};
+			buildConfigurationList = A10000000000000000000052 /* Build configuration list for PBXProject "TodayFlow" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A10000000000000000000031;
+			productRefGroup = A10000000000000000000033 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A10000000000000000000041 /* TodayFlow */,
+				A10000000000000000000095 /* TodayFlowTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A10000000000000000000023 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1000000000000000000001B /* Resources/Assets.xcassets in Resources */,
+				A10000000000000000000109 /* today_tarot_today_ru.json in Resources */,
+				A10000000000000000000125 /* today-ritual-entry in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A10000000000000000000097 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A10000000000000000000022 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A100000000000000000000C0 /* ContentView.swift in Sources */,
+				A100000000000000000000C1 /* AuthView.swift in Sources */,
+				A100000000000000000000C2 /* OnboardingView.swift in Sources */,
+				A100000000000000000000C3 /* QuestionsView.swift in Sources */,
+				A10000000000000000000275 /* GuidanceViewChrome.swift in Sources */,
+				A10000000000000000000280 /* FlowTrackerChrome.swift in Sources */,
+				A100000000000000000000C4 /* CompatibilityView.swift in Sources */,
+				A100000000000000000000D9 /* CompatibilityExplorationSurface.swift in Sources */,
+				A100000000000000000000C5 /* TodayFlowAPIClient.swift in Sources */,
+				A100000000000000000000C6 /* TodayFlowPersistence.swift in Sources */,
+				A100000000000000000000C7 /* AuthSession.swift in Sources */,
+				A100000000000000000000C8 /* BirthProfile.swift in Sources */,
+				A100000000000000000000C9 /* TodayCycle.swift in Sources */,
+				A100000000000000000000CA /* TodayFlowBootstrapPayload.swift in Sources */,
+				A100000000000000000000CB /* FusionIndex.swift in Sources */,
+				A100000000000000000000CC /* InteractiveSurfaces.swift in Sources */,
+				A100000000000000000000CD /* TrackerModels.swift in Sources */,
+				A100000000000000000000CE /* TodayDashboardModels.swift in Sources */,
+				A10000000000000000000101 /* TrackerHabitTemplates.swift in Sources */,
+				A10000000000000000000014 /* DailyFocus.swift in Sources */,
+				A1000000000000000000001A /* ProfileView.swift in Sources */,
+				A10000000000000000000321 /* ProfileQuickMapView.swift in Sources */,
+				A10000000000000000000401 /* TodayDayLocalStores.swift in Sources */,
+				A10000000000000000000403 /* MapsModels.swift in Sources */,
+				A10000000000000000000405 /* MapHeatmapGridView.swift in Sources */,
+				A10000000000000000000407 /* MoodMapView.swift in Sources */,
+				A10000000000000000000409 /* EnergyMapView.swift in Sources */,
+				A1000000000000000000040B /* PromiseMapView.swift in Sources */,
+				A1000000000000000000040D /* ProfileMapsPreviewView.swift in Sources */,
+				A1000000000000000000040F /* ProfileCumInsightsSection.swift in Sources */,
+				A10000000000000000000415 /* ProfileLivingMapsSectionBand.swift in Sources */,
+				A10000000000000000000419 /* ProfilePortraitSectionBand.swift in Sources */,
+				A10000000000000000000423 /* ProfileFirstDayTeaserView.swift in Sources */,
+				A10000000000000000000421 /* TodayFirstTodayState.swift in Sources */,
+				A10000000000000000000417 /* ProfilePortalDeepSection.swift in Sources */,
+				A10000000000000000000427 /* HeroLargeView.swift in Sources */,
+				A10000000000000000000435 /* ArchetypeSymbolView.swift in Sources */,
+				A10000000000000000000437 /* HeroMediumView.swift in Sources */,
+				A10000000000000000000439 /* HeroSmallView.swift in Sources */,
+				A10000000000000000000441 /* PlanetSymbolView.swift in Sources */,
+				A10000000000000000000443 /* FoundationGeometryView.swift in Sources */,
+				A10000000000000000000445 /* ZodiacSymbolView.swift in Sources */,
+				A10000000000000000000447 /* ElementSymbolView.swift in Sources */,
+				A10000000000000000000431 /* ProfileMotion.swift in Sources */,
+				A10000000000000000000411 /* MapsHubView.swift in Sources */,
+				A10000000000000000000413 /* P1MapsViews.swift in Sources */,
+				A10000000000000000000331 /* PimInterpretationConfirmView.swift in Sources */,
+				A10000000000000000000333 /* ProfileKnowledgeConfirmSection.swift in Sources */,
+				A10000000000000000000335 /* TodayInferredHypothesisStrip.swift in Sources */,
+				A10000000000000000000425 /* CompatibilityAttachmentLensChipView.swift in Sources */,
+				A10000000000000000000433 /* ProfileRelationshipInsightsSection.swift in Sources */,
+				A10000000000000000000429 /* CompatibilityIlrInstanceChipView.swift in Sources */,
+				A1000000000000000000042B /* ProfileInterpretationInstanceSection.swift in Sources */,
+				A10000000000000000000337 /* ProfileChartFullMapView.swift in Sources */,
+				A10000000000000000000339 /* ProfileHouseCopy.swift in Sources */,
+				A10000000000000000000015 /* Ritual.swift in Sources */,
+				A10000000000000000000019 /* RitualsView.swift in Sources */,
+				A10000000000000000000017 /* TodayFlowTheme.swift in Sources */,
+				A10000000000000000000011 /* TodayFlowApp.swift in Sources */,
+				A10000000000000000000013 /* TodayFlowStore.swift in Sources */,
+				A10000000000000000000018 /* TodayView.swift in Sources */,
+				A10000000000000000000016 /* UserProfile.swift in Sources */,
+				A1000000000000000000001C /* AppConfig.swift in Sources */,
+				A1000000000000000000001E /* TarotModels.swift in Sources */,
+				A1000000000000000000001F /* TarotClient.swift in Sources */,
+				A1000000000000000000002A /* TarotExperience.swift in Sources */,
+				A1000000000000000000002C /* ExploreHubView.swift in Sources */,
+				A10000000000000000000046 /* PracticeModels.swift in Sources */,
+				A10000000000000000000047 /* PracticesClient.swift in Sources */,
+				A10000000000000000000048 /* PracticesExperience.swift in Sources */,
+				A10000000000000000000451 /* PracticeCatalogContent.swift in Sources */,
+				A10000000000000000000453 /* PracticesWizardHubView.swift in Sources */,
+				A1000000000000000000009D /* ProfileSummaryView.swift in Sources */,
+				A1000000000000000000009F /* MeaningRuntime.swift in Sources */,
+				A100000000000000000000A1 /* TodayExperienceLayout.swift in Sources */,
+				A100000000000000000000E1 /* TodayRitualFlowView.swift in Sources */,
+				A10000000000000000000429 /* TodayCompositionSurfaceView.swift in Sources */,
+				A10000000000000000000242 /* TodayDayLogicCallout.swift in Sources */,
+				A10000000000000000000103 /* TodayRitualMockupViews.swift in Sources */,
+				A100000000000000000000F1 /* TodayRitualCopy.swift in Sources */,
+				A10000000000000000000291 /* TodayExperienceChromeCopy.swift in Sources */,
+				A10000000000000000000295 /* FlowPracticesMainTabChromeCopy.swift in Sources */,
+				A10000000000000000000301 /* GuidanceResultChromeCopy.swift in Sources */,
+				A10000000000000000000303 /* GuidanceSafetyKeywords.swift in Sources */,
+				A10000000000000000000305 /* TarotSpreadResultChromeCopy.swift in Sources */,
+				A10000000000000000000311 /* TarotQuestionFlowCanon.swift in Sources */,
+				A10000000000000000000313 /* TarotQuestionFlowSession.swift in Sources */,
+				A10000000000000000000315 /* TarotQuestionFlowView.swift in Sources */,
+				A10000000000000000000317 /* TarotJourneyStore.swift in Sources */,
+				A10000000000000000000251 /* TodayPersonalDayRhythm.swift in Sources */,
+				A10000000000000000000123 /* TodayRitualEntryIllustration.swift in Sources */,
+				A10000000000000000000231 /* RitualDesertEntryVectorHero.swift in Sources */,
+				A10000000000000000000105 /* TodayRitualSignals.swift in Sources */,
+				A10000000000000000000273 /* TodayRitualCueSanitizer.swift in Sources */,
+				A10000000000000000000261 /* TodayRitualStateMachine.swift in Sources */,
+				A10000000000000000000107 /* TodayTarotTodayRu.swift in Sources */,
+				A10000000000000000000114 /* TodayTarotDeckImageURLs.swift in Sources */,
+				A10000000000000000000111 /* TodayVisualMotifs.swift in Sources */,
+				A10000000000000000000113 /* NatalChartWheelView.swift in Sources */,
+				A10000000000000000000233 /* TodayGuideActionable.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A10000000000000000000096 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000091 /* TodayFlowSmokeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXContainerItemProxy section */
+		A10000000000000000000269 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A10000000000000000000061 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A10000000000000000000041 /* TodayFlow */;
+			remoteInfo = TodayFlow;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXTargetDependency section */
+		A10000000000000000000270 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A10000000000000000000041 /* TodayFlow */;
+			targetProxy = A10000000000000000000269 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		A10000000000000000000071 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A10000000000000000000072 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A10000000000000000000073 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"TodayFlow/Preview Content\"";
+				DEVELOPMENT_TEAM = C5R3FB793N;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_API_BASE_URL = "http://127.0.0.1:8080";
+				INFOPLIST_KEY_ASTRO_SERVICE_URL = "http://127.0.0.1:8081";
+				INFOPLIST_KEY_CFBundleDisplayName = TodayFlow;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_WEB_BASE_URL = "http://127.0.0.1:3000";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.todayflow.ios;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		A10000000000000000000074 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"TodayFlow/Preview Content\"";
+				DEVELOPMENT_TEAM = C5R3FB793N;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_API_BASE_URL = "http://127.0.0.1:8080";
+				INFOPLIST_KEY_ASTRO_SERVICE_URL = "http://127.0.0.1:8081";
+				INFOPLIST_KEY_CFBundleDisplayName = TodayFlow;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_WEB_BASE_URL = "http://127.0.0.1:3000";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.todayflow.ios;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		A10000000000000000000099 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-undefined",
+					dynamic_lookup,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.todayflow.iosTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TodayFlow.app/TodayFlow";
+			};
+			name = Debug;
+		};
+		A1000000000000000000009A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-undefined",
+					dynamic_lookup,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.todayflow.iosTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TodayFlow.app/TodayFlow";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A10000000000000000000051 /* Build configuration list for PBXNativeTarget "TodayFlow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000000000000000000073 /* Debug */,
+				A10000000000000000000074 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A10000000000000000000052 /* Build configuration list for PBXProject "TodayFlow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000000000000000000071 /* Debug */,
+				A10000000000000000000072 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1000000000000000000009B /* Build configuration list for PBXNativeTarget "TodayFlowTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000000000000000000099 /* Debug */,
+				A1000000000000000000009A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A10000000000000000000061 /* Project object */;
+}
