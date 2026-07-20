@@ -274,6 +274,8 @@ export type CoreProfile = {
   } | null;
   profile_contract_v1?: {
     contract_version: string;
+    status?: "ready" | "forming" | "partial" | string;
+    forming_message?: string | null;
     identity_core: string;
     strengths: string[];
     growth_zones: string[];
@@ -282,6 +284,20 @@ export type CoreProfile = {
     decision_style: string;
     recurring_patterns: string[];
     living_changes?: string | null;
+    life_mission?: string | null;
+    helps?: string[];
+    life_spheres?: Record<
+      string,
+      {
+        how?: string;
+        need?: string;
+        risk?: string;
+        turns_on?: string;
+        turns_off?: string;
+        helps?: string;
+      }
+    >;
+    generation_meta?: Record<string, unknown> | null;
     profile_snapshot_version?: string | null;
   } | null;
   daily_interpretation?: {
@@ -766,8 +782,10 @@ export type TarotCard = {
 
 export type TarotDailyDraw = {
   date: string;
-  card: TarotCard;
-  orientation: string;
+  /** not_selected = identity must not be shown; selected = card fields present */
+  selection_status?: "not_selected" | "selected" | string;
+  card?: TarotCard | null;
+  orientation?: string | null;
   mantra?: Mantra | null;
   ritual?: Ritual | null;
 };

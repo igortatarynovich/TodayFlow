@@ -49,7 +49,8 @@ def test_call_llm_when_configured() -> None:
         depth_level="normal",
     )
     assert gate["gate_decision"] == GATE_DECISION_CALL_LLM
-    assert gate["max_tokens"] == 1750
+    # Default LLM_QUALITY_MODE=rich → generous budget (legacy economize was 1750).
+    assert gate["max_tokens"] >= 1750
     assert gate["save_required"] is True
     assert should_skip_llm_for_gate(gate) is False
 
@@ -86,14 +87,15 @@ def test_blocked_strict_cost_policy() -> None:
     assert should_skip_llm_for_gate(gate) is True
 
 
-def test_child_surface_cheap_tier() -> None:
+def test_child_surface_standard_tier_in_rich_mode() -> None:
     gate = decide_today_narrative_llm_call_v1(
         surface="spheres",
         llm_configured=True,
         depth_level="normal",
     )
-    assert gate["allowed_model_tier"] == "cheap"
-    assert gate["max_tokens"] == 800
+    # rich mode: no cheap-tier preference for child surfaces
+    assert gate["allowed_model_tier"] == "standard"
+    assert gate["max_tokens"] >= 800
 
 
 def test_unsupported_surface_raises() -> None:

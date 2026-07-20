@@ -215,7 +215,7 @@ export default function AccountSettingsPage() {
                 />
               </label>
               <label>
-                {t("account.lastName", "Last name")}
+                {t("account.lastName", "Фамилия (необязательно)")}
                 <input
                   type="text"
                   value={form.last_name || ""}

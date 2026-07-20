@@ -66,7 +66,16 @@ import { parseCoreMessageFromGuide } from "@/components/today/todayGuideActionab
 import type { TrackerEntityKind } from "@/app/tracking/calendar/trackerEntityCatalog";
 import { flushMeaningOutbox, getCachedMeaningRings, refreshMeaningRings } from "@/lib/meaningRuntime";
 import { useMeaningRuntime } from "@/hooks/useMeaningRuntime";
-import { fetchTodayContractV1, buildFallbackTodayContract, type TodayContractV1 } from "@/lib/todayContract";
+import {
+  fetchTodayContractV1,
+  buildFallbackTodayContract,
+  refreshTodayStory,
+  type TodayContractV1,
+} from "@/lib/todayContract";
+import {
+  shouldRefreshStoryAfterReveal,
+  type DaySymbolPublicView,
+} from "@/lib/daySymbolReveal";
 import {
   dayStoryHeadline,
   dayStoryLeadParagraph,
@@ -124,10 +133,30 @@ export default function TodayPage() {
   const [loading, setLoading] = useState(true);
   const [todayData, setTodayData] = useState<TodayCycleData | null>(null);
   const [todayContract, setTodayContract] = useState<TodayContractV1 | null>(null);
+  const [dayStoryUpdating, setDayStoryUpdating] = useState(false);
+  const dayStoryRefreshInFlight = useRef(false);
   const dayStorySingleVoice = useMemo(
     () => usesDayStorySingleVoice(todayContract),
     [todayContract],
   );
+
+  const onSymbolRevealResult = useCallback(async (view: DaySymbolPublicView) => {
+    if (!shouldRefreshStoryAfterReveal(view)) return;
+    if (dayStoryRefreshInFlight.current) return;
+    dayStoryRefreshInFlight.current = true;
+    setDayStoryUpdating(true);
+    try {
+      const result = await refreshTodayStory({ localDate: view.local_date });
+      if (result.contract) {
+        setTodayContract(result.contract);
+      }
+    } catch {
+      /* keep previous story; symbols already shown; do not pretend story matches new symbols */
+    } finally {
+      dayStoryRefreshInFlight.current = false;
+      setDayStoryUpdating(false);
+    }
+  }, []);
   const [morningRitualData, setMorningRitualData] = useState<MorningRitualData | null>(null);
   const [fusionData, setFusionData] = useState<FusionResponse | null>(null);
   const [quickPractice, setQuickPractice] = useState<PracticeResponse | null>(null);
@@ -1281,6 +1310,8 @@ export default function TodayPage() {
             colorLine={colorLineResolved}
             stoneLine={stoneLineResolved}
             coreProfile={coreProfile}
+            dayStoryUpdating={dayStoryUpdating}
+            onSymbolRevealResult={onSymbolRevealResult}
             onVisible={firstTodayMode ? onFirstTodayVisible : onExperienceSurfaceVisible}
           />
         ) : todayExperienceMode && todayContract ? (
@@ -1353,6 +1384,8 @@ export default function TodayPage() {
             onRitualSpineComplete={onRitualSpineComplete}
             coreLoopViabilityMode={coreLoopViabilityMode}
             todayContract={todayContract}
+            dayStoryUpdating={dayStoryUpdating}
+            onSymbolRevealResult={onSymbolRevealResult}
             narrativeGenerationIds={{
               guide: guideGenerationId,
               day_layer: dayLayerGenerationId,

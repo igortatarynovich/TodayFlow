@@ -35,6 +35,8 @@ from todayflow_backend.api import (
     morning_ritual,
     natal_chart,
     day_flow,
+    day_symbols,
+    guest_claim,
     habits,
     learning,
     meaning,
@@ -44,6 +46,8 @@ from todayflow_backend.api import push_notifications
 
 router = APIRouter()
 router.include_router(auth.router)
+router.include_router(day_symbols.router)
+router.include_router(guest_claim.router)
 router.include_router(payments.router)
 router.include_router(subscriptions.router)
 router.include_router(questions.router)

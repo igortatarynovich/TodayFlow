@@ -139,13 +139,32 @@ class NumerologyService:
         finally:
             session.close()
 
-    def daily_number(self, *, reference_date: date | None = None, locale: str | None = None) -> api_models.NumerologyDailyInsight:
+    def daily_number(
+        self,
+        *,
+        reference_date: date | None = None,
+        locale: str | None = None,
+        reveal: bool = True,
+    ) -> api_models.NumerologyDailyInsight:
+        """Calendar day number.
+
+        Module GET should call with ``reveal=False`` so the value is not
+        returned before the intended user reveal action. Today morning may
+        still request ``reveal=True`` until server-side ritual ack lands.
+        """
         target = reference_date or date.today()
+        if not reveal:
+            return api_models.NumerologyDailyInsight(
+                date=target.isoformat(),
+                selection_status="not_selected",
+                number=None,
+            )
         digits = [int(ch) for ch in target.strftime("%Y%m%d")]
         total = sum(digits)
         number = self._build_number("life_path", total, locale=locale)
         return api_models.NumerologyDailyInsight(
             date=target.isoformat(),
+            selection_status="selected",
             number=number,
         )
 

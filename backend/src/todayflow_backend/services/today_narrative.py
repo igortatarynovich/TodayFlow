@@ -64,6 +64,15 @@ from todayflow_backend.services.guide_narrative_funnel_v0 import (
     run_guide_narrative_funnel_v0,
     slim_funnel_interpretation_for_child,
 )
+from todayflow_backend.services.llm_quality_policy_v1 import (
+    funnel_step_max_tokens,
+    quality_policy_snapshot,
+    user_json_char_budget,
+)
+from todayflow_backend.services.surface_disclosure_funnel_v0 import (
+    run_surface_disclosure_funnel_v0,
+    surface_funnel_openai_json_adapter,
+)
 from todayflow_backend.services.guide_contract_v2 import (
     attach_guide_contract_v2,
     guide_funnel_core_is_llm_locked,
@@ -99,7 +108,7 @@ def _ordered_life_area_entries(la: dict[str, Any]) -> list[tuple[str, Any]]:
 
 
 MODULE = "today_narrative"
-PROMPT_VER = "today-narrative-v17"
+PROMPT_VER = "today-narrative-v18"
 # Записи кэша без `prompt_label` в input_payload — до добавления версии в ключ (старее v13).
 _LEGACY_NARRATIVE_CACHE_PROMPT_LABEL = "today-narrative-v12"
 # O2: явный primary в HTTP-ответе guide (см. `primary_narrative_anchor` в orchestration-логе).
@@ -3255,12 +3264,9 @@ def _openai_json(
         return None
 
     dl = _normalize_depth_level(depth_level)
-    if dl == "quick":
-        temperature, max_tokens = 0.48, 950
-    elif dl == "deep":
-        temperature, max_tokens = 0.54, 2100
-    else:
-        temperature, max_tokens = 0.52, 1750
+    # Defaults follow LLM_QUALITY_MODE (rich = generous; economize = legacy tight caps).
+    temperature = 0.48 if dl == "quick" else (0.54 if dl == "deep" else 0.52)
+    max_tokens = funnel_step_max_tokens(dl)
     if isinstance(max_tokens_override, int) and max_tokens_override > 0:
         max_tokens = max_tokens_override
 
@@ -3742,6 +3748,7 @@ def build_today_narrative(
     input_payload["amll_gate"] = amll_gate
     input_payload["gate_decision"] = amll_gate.get("gate_decision")
     input_payload["amll_skip_llm"] = skip_llm
+    input_payload["llm_quality_policy"] = quality_policy_snapshot()
 
     def _call_narrative_llm(system: str, user: str) -> dict[str, Any] | None:
         if skip_llm:
@@ -3810,7 +3817,7 @@ def build_today_narrative(
             _attach_profile_slices(guide_user, layers_dc)
             _attach_profile_selector(guide_user, layers_dc)
             _attach_day_history_to_llm_pack(guide_user, layers_dc)
-            user_prompt = json.dumps(guide_user, ensure_ascii=False)[:14000]
+            user_prompt = json.dumps(guide_user, ensure_ascii=False)[: user_json_char_budget()]
             guide_user_prompt_for_retry = user_prompt
             funnel_ok = False
             if llm_configured and not skip_llm:
@@ -4141,8 +4148,21 @@ def build_today_narrative(
             _attach_day_history_to_llm_pack(day_layer_pack, layers_dc)
             _attach_day_logic_slices(day_layer_pack, layers_dc=layers_dc, day_engine_brief=day_engine_brief)
             _attach_funnel_chain_to_child_pack(day_layer_pack, funnel_chain)
-            user_prompt = json.dumps(day_layer_pack, ensure_ascii=False)[:12000]
-            payload = _call_narrative_llm(system_prompt, user_prompt)
+            user_prompt = json.dumps(day_layer_pack, ensure_ascii=False)[: user_json_char_budget()]
+            payload = None
+            if llm_configured and not skip_llm:
+                funnel_payload, funnel_meta = run_surface_disclosure_funnel_v0(
+                    "day_layer",
+                    surface_funnel_openai_json_adapter,
+                    locale_value=locale_value,
+                    depth_norm=depth_norm,
+                    user_pack=day_layer_pack,
+                )
+                input_payload["disclosure_funnel"] = funnel_meta
+                if isinstance(funnel_payload, dict) and funnel_payload.get("nudge_message"):
+                    payload = funnel_payload
+            if payload is None:
+                payload = _call_narrative_llm(system_prompt, user_prompt)
             if isinstance(payload, dict):
                 payload = _finalize_day_layer_payload_o8(payload, day_engine_brief=day_engine_brief)
             if (
@@ -4185,8 +4205,21 @@ def build_today_narrative(
             _attach_day_history_to_llm_pack(spheres_pack, layers_dc)
             _attach_day_logic_slices(spheres_pack, layers_dc=layers_dc, day_engine_brief=day_engine_brief)
             _attach_funnel_chain_to_child_pack(spheres_pack, funnel_chain)
-            user_prompt = json.dumps(spheres_pack, ensure_ascii=False)[:12000]
-            payload = _call_narrative_llm(system_prompt, user_prompt)
+            user_prompt = json.dumps(spheres_pack, ensure_ascii=False)[: user_json_char_budget()]
+            payload = None
+            if llm_configured and not skip_llm:
+                funnel_payload, funnel_meta = run_surface_disclosure_funnel_v0(
+                    "spheres",
+                    surface_funnel_openai_json_adapter,
+                    locale_value=locale_value,
+                    depth_norm=depth_norm,
+                    user_pack=spheres_pack,
+                )
+                input_payload["disclosure_funnel"] = funnel_meta
+                if isinstance(funnel_payload, dict) and funnel_payload.get("page_intro"):
+                    payload = funnel_payload
+            if payload is None:
+                payload = _call_narrative_llm(system_prompt, user_prompt)
             spheres_rhythm_ctx: dict[str, Any] = {}
             if isinstance(fusion_for_prompt, dict):
                 _rc_sp = fusion_for_prompt.get("rhythm_context")
@@ -4222,8 +4255,21 @@ def build_today_narrative(
             _attach_day_history_to_llm_pack(evening_pack, layers_dc)
             _attach_day_logic_slices(evening_pack, layers_dc=layers_dc, day_engine_brief=day_engine_brief)
             _attach_funnel_chain_to_child_pack(evening_pack, funnel_chain)
-            user_prompt = json.dumps(evening_pack, ensure_ascii=False)[:12000]
-            payload = _call_narrative_llm(system_prompt, user_prompt)
+            user_prompt = json.dumps(evening_pack, ensure_ascii=False)[: user_json_char_budget()]
+            payload = None
+            if llm_configured and not skip_llm:
+                funnel_payload, funnel_meta = run_surface_disclosure_funnel_v0(
+                    "evening",
+                    surface_funnel_openai_json_adapter,
+                    locale_value=locale_value,
+                    depth_norm=depth_norm,
+                    user_pack=evening_pack,
+                )
+                input_payload["disclosure_funnel"] = funnel_meta
+                if isinstance(funnel_payload, dict) and funnel_payload.get("panel_intro"):
+                    payload = funnel_payload
+            if payload is None:
+                payload = _call_narrative_llm(system_prompt, user_prompt)
             if (
                 not skip_llm
                 and payload
@@ -4257,8 +4303,21 @@ def build_today_narrative(
             _attach_day_history_to_llm_pack(deepen_pack, layers_dc)
             _attach_day_logic_slices(deepen_pack, layers_dc=layers_dc, day_engine_brief=day_engine_brief)
             _attach_funnel_chain_to_child_pack(deepen_pack, funnel_chain)
-            user_prompt = json.dumps(deepen_pack, ensure_ascii=False)[:14000]
-            payload = _call_narrative_llm(system_prompt, user_prompt)
+            user_prompt = json.dumps(deepen_pack, ensure_ascii=False)[: user_json_char_budget()]
+            payload = None
+            if llm_configured and not skip_llm:
+                funnel_payload, funnel_meta = run_surface_disclosure_funnel_v0(
+                    "deepen",
+                    surface_funnel_openai_json_adapter,
+                    locale_value=locale_value,
+                    depth_norm=depth_norm,
+                    user_pack=deepen_pack,
+                )
+                input_payload["disclosure_funnel"] = funnel_meta
+                if isinstance(funnel_payload, dict) and funnel_payload.get("body"):
+                    payload = funnel_payload
+            if payload is None:
+                payload = _call_narrative_llm(system_prompt, user_prompt)
             if (
                 not skip_llm
                 and payload

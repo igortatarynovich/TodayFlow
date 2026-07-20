@@ -11,6 +11,7 @@ import s from "@/components/product-ui/productWebScreens.module.css";
 import { useAuth } from "@/lib/useAuth";
 import { buildAuthHref, getSafeAuthMode, getSafeRedirectTarget, resolveTargetAfterAuthSession } from "@/lib/authRedirect";
 import { beginAuthSession } from "@/lib/authSession";
+import { prepareGuestClaimBeforeAuth } from "@/lib/claimGuestProfile";
 import { t } from "@/lib/i18n";
 
 function isAuthSuccessMessage(message: string | null): boolean {
@@ -143,6 +144,12 @@ function AuthPageContent() {
       setShowContent(true);
     }
   }, [authLoading, isAuthenticated]);
+
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated && mode === "signup") {
+      void prepareGuestClaimBeforeAuth();
+    }
+  }, [authLoading, isAuthenticated, mode]);
 
   const validateForm = (): boolean => {
     const newErrors: ValidationError[] = [];

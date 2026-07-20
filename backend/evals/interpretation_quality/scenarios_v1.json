@@ -1,0 +1,4159 @@
+{
+  "version": "interpretation_quality_eval_v1",
+  "created": "2026-07-20",
+  "scenario_count": 100,
+  "rubric": {
+    "criteria": [
+      "personal",
+      "natural",
+      "specific",
+      "no_cliche",
+      "no_repeat",
+      "no_hallucination",
+      "logical_coherence",
+      "mood_link",
+      "goals_link",
+      "card_influence_ok",
+      "number_influence_ok",
+      "shippable",
+      "length_ok",
+      "tone_ok",
+      "language_ok",
+      "continuity_ok"
+    ],
+    "kpi_primary": "shippable_without_regen_pct",
+    "score_scale": "1-5 per criterion; shippable = all >=3 and no_hallucination>=4"
+  },
+  "models_to_compare": [
+    "deepseek-ai/DeepSeek-V4-Pro",
+    "moonshotai/Kimi-K2.6"
+  ],
+  "blind_protocol": "outputs labeled A/B randomly per scenario; judge without model names",
+  "scenarios": [
+    {
+      "id": "iq-001",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "anxious_mood",
+        "no_goals",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "anxious",
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-002",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "anxious_mood",
+        "no_goals",
+        "card_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "anxious",
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_01",
+      "number": null,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-003",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "anxious_mood",
+        "no_goals",
+        "number_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "anxious",
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-004",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "anxious_mood",
+        "no_goals",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "anxious",
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 22,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-005",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "anxious_mood",
+        "has_goals",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "anxious",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-006",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "anxious_mood",
+        "has_goals",
+        "card_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "anxious",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_01",
+      "number": null,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-007",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "anxious_mood",
+        "has_goals",
+        "number_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "anxious",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-008",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "anxious_mood",
+        "has_goals",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "anxious",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 22,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-009",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "anxious_mood",
+        "conflicting_goals",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "anxious",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-010",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "anxious_mood",
+        "conflicting_goals",
+        "card_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "anxious",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_01",
+      "number": null,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-011",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "anxious_mood",
+        "conflicting_goals",
+        "number_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "anxious",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-012",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "anxious_mood",
+        "conflicting_goals",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "anxious",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 22,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-013",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "tired_mood",
+        "no_goals",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "tired",
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-014",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "tired_mood",
+        "no_goals",
+        "card_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "tired",
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_01",
+      "number": null,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-015",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "tired_mood",
+        "no_goals",
+        "number_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "tired",
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-016",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "tired_mood",
+        "no_goals",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "tired",
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 22,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-017",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "tired_mood",
+        "has_goals",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "tired",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-018",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "tired_mood",
+        "has_goals",
+        "card_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "tired",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_01",
+      "number": null,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-019",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "tired_mood",
+        "has_goals",
+        "number_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "tired",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-020",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "tired_mood",
+        "has_goals",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "tired",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 22,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-021",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "tired_mood",
+        "conflicting_goals",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "tired",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-022",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "tired_mood",
+        "conflicting_goals",
+        "card_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "tired",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_01",
+      "number": null,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-023",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "tired_mood",
+        "conflicting_goals",
+        "number_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "tired",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-024",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "tired_mood",
+        "conflicting_goals",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "tired",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 22,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-025",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "positive_mood",
+        "no_goals",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "calm",
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-026",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "positive_mood",
+        "no_goals",
+        "card_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "calm",
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_01",
+      "number": null,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-027",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "positive_mood",
+        "no_goals",
+        "number_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "calm",
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-028",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "positive_mood",
+        "no_goals",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "calm",
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 22,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-029",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "positive_mood",
+        "has_goals",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "calm",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-030",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "positive_mood",
+        "has_goals",
+        "card_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "calm",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_01",
+      "number": null,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-031",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "positive_mood",
+        "has_goals",
+        "number_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "calm",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-032",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "positive_mood",
+        "has_goals",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "calm",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 22,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-033",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "positive_mood",
+        "conflicting_goals",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "calm",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-034",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "positive_mood",
+        "conflicting_goals",
+        "card_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "calm",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_01",
+      "number": null,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-035",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "positive_mood",
+        "conflicting_goals",
+        "number_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "calm",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-036",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "positive_mood",
+        "conflicting_goals",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "calm",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 22,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-037",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "no_mood",
+        "no_goals",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": null,
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-038",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "no_mood",
+        "no_goals",
+        "card_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": null,
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_01",
+      "number": null,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-039",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "no_mood",
+        "no_goals",
+        "number_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": null,
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-040",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "no_mood",
+        "no_goals",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": null,
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 22,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-041",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "no_mood",
+        "has_goals",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": null,
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-042",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "no_mood",
+        "has_goals",
+        "card_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": null,
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_01",
+      "number": null,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-043",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "no_mood",
+        "has_goals",
+        "number_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": null,
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-044",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "no_mood",
+        "has_goals",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": null,
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 22,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-045",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "no_mood",
+        "conflicting_goals",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": null,
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-046",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "no_mood",
+        "conflicting_goals",
+        "card_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": null,
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_01",
+      "number": null,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-047",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "no_mood",
+        "conflicting_goals",
+        "number_only"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": null,
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-048",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "new_user",
+        "no_mood",
+        "conflicting_goals",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": null,
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 22,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-049",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "anxious_mood",
+        "no_goals",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "anxious",
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-050",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "anxious_mood",
+        "no_goals",
+        "card_only"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "anxious",
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_01",
+      "number": null,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-051",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "anxious_mood",
+        "no_goals",
+        "number_only"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "anxious",
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-052",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "anxious_mood",
+        "no_goals",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "anxious",
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 22,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-053",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "anxious_mood",
+        "has_goals",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "anxious",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-054",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "anxious_mood",
+        "has_goals",
+        "card_only"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "anxious",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_01",
+      "number": null,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-055",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "anxious_mood",
+        "has_goals",
+        "number_only"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "anxious",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-056",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "anxious_mood",
+        "has_goals",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "anxious",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 22,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-057",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "anxious_mood",
+        "conflicting_goals",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "anxious",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-058",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "anxious_mood",
+        "conflicting_goals",
+        "card_only"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "anxious",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_01",
+      "number": null,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-059",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "anxious_mood",
+        "conflicting_goals",
+        "number_only"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "anxious",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-060",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "anxious_mood",
+        "conflicting_goals",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "anxious",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 22,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-061",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "tired_mood",
+        "no_goals",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "tired",
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-062",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "tired_mood",
+        "no_goals",
+        "card_only"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "tired",
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_01",
+      "number": null,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-063",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "tired_mood",
+        "no_goals",
+        "number_only"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "tired",
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-064",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "tired_mood",
+        "no_goals",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "tired",
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 22,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-065",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "tired_mood",
+        "has_goals",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "tired",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-066",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "tired_mood",
+        "has_goals",
+        "card_only"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "tired",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_01",
+      "number": null,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-067",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "tired_mood",
+        "has_goals",
+        "number_only"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "tired",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-068",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "tired_mood",
+        "has_goals",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "tired",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 22,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-069",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "tired_mood",
+        "conflicting_goals",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "tired",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-070",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "tired_mood",
+        "conflicting_goals",
+        "card_only"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "tired",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_01",
+      "number": null,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-071",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "tired_mood",
+        "conflicting_goals",
+        "number_only"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "tired",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-072",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "tired_mood",
+        "conflicting_goals",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "tired",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 22,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-073",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "same_card_different_users",
+        "new_user"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "driven",
+      "goals": [
+        "сделать один важный звонок"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-21",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_00",
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-074",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "same_number_different_users",
+        "new_user"
+      ],
+      "profile": {
+        "kind": "new_user",
+        "fields": {}
+      },
+      "mood": "hopeful",
+      "goals": [
+        "дочитать отчёт"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Warsaw",
+      "local_date": "2026-07-21",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 7,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-075",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "same_card_different_users",
+        "almost_empty"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "driven",
+      "goals": [
+        "сделать один важный звонок"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-21",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_00",
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-076",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "same_number_different_users",
+        "almost_empty"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": "hopeful",
+      "goals": [
+        "дочитать отчёт"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Warsaw",
+      "local_date": "2026-07-21",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 7,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-077",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "same_card_different_users",
+        "full"
+      ],
+      "profile": {
+        "kind": "full",
+        "fields": {
+          "name": "Игорь",
+          "sun": "Leo",
+          "moon": "Cancer",
+          "asc": "Virgo",
+          "life_path": 7
+        }
+      },
+      "mood": "driven",
+      "goals": [
+        "сделать один важный звонок"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-21",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_00",
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-078",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "same_number_different_users",
+        "full"
+      ],
+      "profile": {
+        "kind": "full",
+        "fields": {
+          "name": "Игорь",
+          "sun": "Leo",
+          "moon": "Cancer",
+          "asc": "Virgo",
+          "life_path": 7
+        }
+      },
+      "mood": "hopeful",
+      "goals": [
+        "дочитать отчёт"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Warsaw",
+      "local_date": "2026-07-21",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 7,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-079",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "same_card_different_users",
+        "contradictory_onboarding"
+      ],
+      "profile": {
+        "kind": "contradictory_onboarding",
+        "fields": {
+          "name": "Maja",
+          "sun": "Aries",
+          "self_pace": "slow",
+          "intent": "aggressive growth"
+        }
+      },
+      "mood": "driven",
+      "goals": [
+        "сделать один важный звонок"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-21",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "major_00",
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-080",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "same_number_different_users",
+        "contradictory_onboarding"
+      ],
+      "profile": {
+        "kind": "contradictory_onboarding",
+        "fields": {
+          "name": "Maja",
+          "sun": "Aries",
+          "self_pace": "slow",
+          "intent": "aggressive growth"
+        }
+      },
+      "mood": "hopeful",
+      "goals": [
+        "дочитать отчёт"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Warsaw",
+      "local_date": "2026-07-21",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 7,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-081",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "locale_tz",
+        "en",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "full",
+        "fields": {
+          "name": "Игорь",
+          "sun": "Leo",
+          "moon": "Cancer",
+          "asc": "Virgo",
+          "life_path": 7
+        }
+      },
+      "mood": "calm",
+      "goals": [
+        "focus on one thing"
+      ],
+      "locale": "en",
+      "timezone": "America/New_York",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ok",
+        "goal_note": "work"
+      }
+    },
+    {
+      "id": "iq-082",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "locale_tz",
+        "en",
+        "card_only"
+      ],
+      "profile": {
+        "kind": "full",
+        "fields": {
+          "name": "Игорь",
+          "sun": "Leo",
+          "moon": "Cancer",
+          "asc": "Virgo",
+          "life_path": 7
+        }
+      },
+      "mood": "calm",
+      "goals": [
+        "focus on one thing"
+      ],
+      "locale": "en",
+      "timezone": "America/New_York",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "cups_02",
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ok",
+        "goal_note": "work"
+      }
+    },
+    {
+      "id": "iq-083",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "locale_tz",
+        "en",
+        "number_only"
+      ],
+      "profile": {
+        "kind": "full",
+        "fields": {
+          "name": "Игорь",
+          "sun": "Leo",
+          "moon": "Cancer",
+          "asc": "Virgo",
+          "life_path": 7
+        }
+      },
+      "mood": "calm",
+      "goals": [
+        "focus on one thing"
+      ],
+      "locale": "en",
+      "timezone": "America/New_York",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ok",
+        "goal_note": "work"
+      }
+    },
+    {
+      "id": "iq-084",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "locale_tz",
+        "en",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "full",
+        "fields": {
+          "name": "Игорь",
+          "sun": "Leo",
+          "moon": "Cancer",
+          "asc": "Virgo",
+          "life_path": 7
+        }
+      },
+      "mood": "calm",
+      "goals": [
+        "focus on one thing"
+      ],
+      "locale": "en",
+      "timezone": "America/New_York",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "cups_02",
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ok",
+        "goal_note": "work"
+      }
+    },
+    {
+      "id": "iq-085",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "locale_tz",
+        "pl",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "full",
+        "fields": {
+          "name": "Игорь",
+          "sun": "Leo",
+          "moon": "Cancer",
+          "asc": "Virgo",
+          "life_path": 7
+        }
+      },
+      "mood": "calm",
+      "goals": [
+        "focus on one thing"
+      ],
+      "locale": "pl",
+      "timezone": "Europe/Warsaw",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ok",
+        "goal_note": "work"
+      }
+    },
+    {
+      "id": "iq-086",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "locale_tz",
+        "pl",
+        "card_only"
+      ],
+      "profile": {
+        "kind": "full",
+        "fields": {
+          "name": "Игорь",
+          "sun": "Leo",
+          "moon": "Cancer",
+          "asc": "Virgo",
+          "life_path": 7
+        }
+      },
+      "mood": "calm",
+      "goals": [
+        "focus on one thing"
+      ],
+      "locale": "pl",
+      "timezone": "Europe/Warsaw",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "cups_02",
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ok",
+        "goal_note": "work"
+      }
+    },
+    {
+      "id": "iq-087",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "locale_tz",
+        "pl",
+        "number_only"
+      ],
+      "profile": {
+        "kind": "full",
+        "fields": {
+          "name": "Игорь",
+          "sun": "Leo",
+          "moon": "Cancer",
+          "asc": "Virgo",
+          "life_path": 7
+        }
+      },
+      "mood": "calm",
+      "goals": [
+        "focus on one thing"
+      ],
+      "locale": "pl",
+      "timezone": "Europe/Warsaw",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ok",
+        "goal_note": "work"
+      }
+    },
+    {
+      "id": "iq-088",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "locale_tz",
+        "pl",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "full",
+        "fields": {
+          "name": "Игорь",
+          "sun": "Leo",
+          "moon": "Cancer",
+          "asc": "Virgo",
+          "life_path": 7
+        }
+      },
+      "mood": "calm",
+      "goals": [
+        "focus on one thing"
+      ],
+      "locale": "pl",
+      "timezone": "Europe/Warsaw",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "cups_02",
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ok",
+        "goal_note": "work"
+      }
+    },
+    {
+      "id": "iq-089",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "locale_tz",
+        "ru",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "full",
+        "fields": {
+          "name": "Игорь",
+          "sun": "Leo",
+          "moon": "Cancer",
+          "asc": "Virgo",
+          "life_path": 7
+        }
+      },
+      "mood": "calm",
+      "goals": [
+        "focus on one thing"
+      ],
+      "locale": "ru",
+      "timezone": "Asia/Tokyo",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ok",
+        "goal_note": "work"
+      }
+    },
+    {
+      "id": "iq-090",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "locale_tz",
+        "ru",
+        "card_only"
+      ],
+      "profile": {
+        "kind": "full",
+        "fields": {
+          "name": "Игорь",
+          "sun": "Leo",
+          "moon": "Cancer",
+          "asc": "Virgo",
+          "life_path": 7
+        }
+      },
+      "mood": "calm",
+      "goals": [
+        "focus on one thing"
+      ],
+      "locale": "ru",
+      "timezone": "Asia/Tokyo",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": false,
+        "label": "card_only"
+      },
+      "card_id": "cups_02",
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ok",
+        "goal_note": "work"
+      }
+    },
+    {
+      "id": "iq-091",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "locale_tz",
+        "ru",
+        "number_only"
+      ],
+      "profile": {
+        "kind": "full",
+        "fields": {
+          "name": "Игорь",
+          "sun": "Leo",
+          "moon": "Cancer",
+          "asc": "Virgo",
+          "life_path": 7
+        }
+      },
+      "mood": "calm",
+      "goals": [
+        "focus on one thing"
+      ],
+      "locale": "ru",
+      "timezone": "Asia/Tokyo",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ok",
+        "goal_note": "work"
+      }
+    },
+    {
+      "id": "iq-092",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "locale_tz",
+        "ru",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "full",
+        "fields": {
+          "name": "Игорь",
+          "sun": "Leo",
+          "moon": "Cancer",
+          "asc": "Virgo",
+          "life_path": 7
+        }
+      },
+      "mood": "calm",
+      "goals": [
+        "focus on one thing"
+      ],
+      "locale": "ru",
+      "timezone": "Asia/Tokyo",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "cups_02",
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ok",
+        "goal_note": "work"
+      }
+    },
+    {
+      "id": "iq-093",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "repeating_days"
+      ],
+      "profile": {
+        "kind": "full",
+        "fields": {
+          "name": "Игорь",
+          "sun": "Leo",
+          "moon": "Cancer",
+          "asc": "Virgo",
+          "life_path": 7
+        }
+      },
+      "mood": "tired",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-18",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 1,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      },
+      "note": "same mood/goals/symbols across days — text must not be copy-paste"
+    },
+    {
+      "id": "iq-094",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "repeating_days"
+      ],
+      "profile": {
+        "kind": "full",
+        "fields": {
+          "name": "Игорь",
+          "sun": "Leo",
+          "moon": "Cancer",
+          "asc": "Virgo",
+          "life_path": 7
+        }
+      },
+      "mood": "tired",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-19",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 1,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      },
+      "note": "same mood/goals/symbols across days — text must not be copy-paste"
+    },
+    {
+      "id": "iq-095",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "repeating_days"
+      ],
+      "profile": {
+        "kind": "full",
+        "fields": {
+          "name": "Игорь",
+          "sun": "Leo",
+          "moon": "Cancer",
+          "asc": "Virgo",
+          "life_path": 7
+        }
+      },
+      "mood": "tired",
+      "goals": [
+        "закончить презентацию"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 1,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      },
+      "note": "same mood/goals/symbols across days — text must not be copy-paste"
+    },
+    {
+      "id": "iq-096",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "positive_mood",
+        "full_profile",
+        "card_and_number"
+      ],
+      "profile": {
+        "kind": "full",
+        "fields": {
+          "name": "Игорь",
+          "sun": "Leo",
+          "moon": "Cancer",
+          "asc": "Virgo",
+          "life_path": 7
+        }
+      },
+      "mood": "hopeful",
+      "goals": [
+        "встреча с другом"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "major_01",
+      "number": 22,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-097",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "almost_empty",
+        "no_goals",
+        "nothing_revealed"
+      ],
+      "profile": {
+        "kind": "almost_empty",
+        "fields": {
+          "name": "Анна"
+        }
+      },
+      "mood": null,
+      "goals": [],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": false,
+        "number": false,
+        "label": "nothing_revealed"
+      },
+      "card_id": null,
+      "number": null,
+      "user_input": {
+        "style": "short",
+        "mood_note": "",
+        "goal_note": ""
+      }
+    },
+    {
+      "id": "iq-098",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "long_user_input",
+        "conflicting_goals"
+      ],
+      "profile": {
+        "kind": "full",
+        "fields": {
+          "name": "Игорь",
+          "sun": "Leo",
+          "moon": "Cancer",
+          "asc": "Virgo",
+          "life_path": 7
+        }
+      },
+      "mood": "anxious",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "ru",
+      "timezone": "Europe/Moscow",
+      "local_date": "2026-07-20",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "cups_02",
+      "number": 7,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    },
+    {
+      "id": "iq-099",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "pad_coverage",
+        "tired"
+      ],
+      "profile": {
+        "kind": "full",
+        "fields": {
+          "name": "Игорь",
+          "sun": "Leo",
+          "moon": "Cancer",
+          "asc": "Virgo",
+          "life_path": 7
+        }
+      },
+      "mood": "tired",
+      "goals": [
+        "не срываться на близких",
+        "успеть к дедлайну"
+      ],
+      "locale": "pl",
+      "timezone": "America/New_York",
+      "local_date": "2026-07-22",
+      "reveal": {
+        "card": false,
+        "number": true,
+        "label": "number_only"
+      },
+      "card_id": null,
+      "number": 9,
+      "user_input": {
+        "style": "short",
+        "mood_note": "ок",
+        "goal_note": "работа"
+      }
+    },
+    {
+      "id": "iq-100",
+      "surface": "day_story",
+      "blocks_to_score": [
+        "day_story",
+        "card",
+        "number",
+        "evening",
+        "continuity"
+      ],
+      "group": [
+        "pad_coverage",
+        "driven"
+      ],
+      "profile": {
+        "kind": "contradictory_onboarding",
+        "fields": {
+          "name": "Maja",
+          "sun": "Aries",
+          "self_pace": "slow",
+          "intent": "aggressive growth"
+        }
+      },
+      "mood": "driven",
+      "goals": [
+        "спать лучше",
+        "бегать 3 раза",
+        "закрыть долги"
+      ],
+      "locale": "ru",
+      "timezone": "Asia/Tokyo",
+      "local_date": "2026-07-22",
+      "reveal": {
+        "card": true,
+        "number": true,
+        "label": "card_and_number"
+      },
+      "card_id": "swords_10",
+      "number": 22,
+      "user_input": {
+        "style": "long",
+        "mood_note": "Сегодня очень тяжело после разговора с начальником, всё валится из рук и я не понимаю с чего начать, хотя дедлайн завтра вечером.",
+        "goal_note": "Нужно и закрыть задачу, и не разругаться дома, и ещё найти час на спорт — всё сразу."
+      }
+    }
+  ]
+}

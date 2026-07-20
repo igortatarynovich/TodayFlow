@@ -217,25 +217,51 @@ function mergeProfileContractIntoQuickMap(
   base: ProfileQuickMapViewModel,
   contract?: CoreProfile["profile_contract_v1"] | null,
 ): ProfileQuickMapViewModel {
-  if (!contract?.identity_core?.trim()) return base;
+  const status = String(contract?.status || "").trim().toLowerCase();
+  const portraitReady = status === "ready" && Boolean(contract?.identity_core?.trim());
+  const portraitPartial =
+    (status === "partial" || status === "forming") && Boolean(contract?.identity_core?.trim());
 
-  const identitySummary = contract.identity_core.trim();
+  // Forming with no LLM text yet → do not fall back to taxonomy/template portrait copy.
+  if (!portraitReady && !portraitPartial) {
+    if (status === "forming" || status === "partial" || !contract) {
+      return {
+        ...base,
+        identitySummary: null,
+        strengthens: [],
+        drains: [],
+        decisionStyle: null,
+        perceivedAs: [],
+        frameworkLead: null,
+        lifeMission: null,
+        thriveAreas: [],
+      };
+    }
+    return base;
+  }
+
+  const identitySummary = (contract?.identity_core || "").trim();
+  // Ready: prefer contract, allow non-overlapping base tags. Partial: contract-only (no silent mix-in).
+  const allowBaseMix = portraitReady;
   const strengthens = excludeOverlapping(
-    mergeBullets(4, ...contract.strengths, ...base.strengthens),
+    mergeBullets(4, ...(contract?.strengths ?? []), ...(allowBaseMix ? base.strengthens : [])),
     [identitySummary, base.frameworkLead].filter(Boolean) as string[],
   );
   const drains = excludeOverlapping(
-    mergeBullets(4, ...contract.growth_zones, ...base.drains),
+    mergeBullets(4, ...(contract?.growth_zones ?? []), ...(allowBaseMix ? base.drains : [])),
     [identitySummary].filter(Boolean) as string[],
   );
-  const decisionStyle = contract.decision_style?.trim() || base.decisionStyle;
+  const decisionStyle = contract?.decision_style?.trim() || (allowBaseMix ? base.decisionStyle : null);
   const perceivedAs = excludeOverlapping(
-    mergeBullets(5, ...contract.recurring_patterns, ...base.perceivedAs),
+    mergeBullets(5, ...(contract?.recurring_patterns ?? []), ...(allowBaseMix ? base.perceivedAs : [])),
     [identitySummary, decisionStyle].filter(Boolean) as string[],
   );
-  const frameworkLead =
-    contract.living_changes?.trim() ||
-    base.frameworkLead;
+  const frameworkLead = contract?.living_changes?.trim() || (allowBaseMix ? base.frameworkLead : null);
+  const lifeMission = contract?.life_mission?.trim() || (allowBaseMix ? base.lifeMission : null);
+  const thriveAreas = excludeOverlapping(
+    mergeBullets(4, ...(contract?.helps ?? []), ...(allowBaseMix ? base.thriveAreas : [])),
+    [identitySummary, decisionStyle].filter(Boolean) as string[],
+  );
 
   return {
     ...base,
@@ -245,6 +271,8 @@ function mergeProfileContractIntoQuickMap(
     decisionStyle,
     perceivedAs,
     frameworkLead,
+    lifeMission,
+    thriveAreas,
   };
 }
 

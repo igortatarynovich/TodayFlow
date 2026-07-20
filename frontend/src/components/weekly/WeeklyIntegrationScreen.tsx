@@ -145,14 +145,16 @@ export default function WeeklyIntegrationScreen() {
             disabled={generating}
             style={{ padding: "0.75rem 2rem", fontSize: "1rem", background: "#667eea", color: "white", border: "none", borderRadius: "4px", cursor: generating ? "not-allowed" : "pointer", opacity: generating ? 0.6 : 1 }}
           >
-            {generating ? "Генерация..." : "Сгенерировать"}
+            {generating ? "Собираем неделю…" : "Собрать итог недели"}
           </button>
         </div>
 
         {!integration ? (
           <div style={{ background: "#f9f9f9", padding: "3rem", borderRadius: "8px", textAlign: "center", color: "#666" }}>
-            <p>Нет интеграции за эту неделю.</p>
-            <p style={{ marginTop: "0.5rem", fontSize: "0.9rem" }}>Нажми &quot;Сгенерировать&quot; и отметь хотя бы 2-3 дня недели.</p>
+            <p>Итога за эту неделю ещё нет.</p>
+            <p style={{ marginTop: "0.5rem", fontSize: "0.9rem" }}>
+              Отметь хотя бы 2–3 дня и собери короткий итог — что держало ритм.
+            </p>
           </div>
         ) : (
           <div style={{ background: "#fff", padding: "3rem", borderRadius: "12px", border: "2px solid #667eea", boxShadow: "0 4px 12px rgba(102, 126, 234, 0.1)" }}>

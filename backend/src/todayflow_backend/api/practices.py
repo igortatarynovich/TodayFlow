@@ -2102,13 +2102,26 @@ def get_personalized_practices(
             except Exception:
                 pass
             
-            # Получаем карту дня
+            # Card-of-day only if already revealed in SoT (no assign on GET path).
             tarot_card = None
             try:
+                from datetime import date as date_cls
+                from todayflow_backend.services import day_symbol_state_v1 as day_symbols
                 from todayflow_backend.services.tarot import TarotService
+
                 tarot_service = TarotService()
-                tarot_draw = tarot_service.get_daily_draw(user)
-                tarot_card = tarot_draw.card if tarot_draw else None
+                day = date_cls.today()
+                row = day_symbols.get_state_row(
+                    db,
+                    owner_key=day_symbols.owner_key_for_user(user.id),
+                    local_date=day,
+                )
+                view = day_symbols.public_view(
+                    row, local_date=day, tarot_service=tarot_service
+                )
+                card = view.get("card") or {}
+                if card.get("revealed") and card.get("id") is not None:
+                    tarot_card = tarot_service.get_card_by_id(int(card["id"]))
             except Exception:
                 pass
             

@@ -9,6 +9,12 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
+from todayflow_backend.services.llm_quality_policy_v1 import (
+    context_depth_for_surface as _policy_context_depth,
+    max_tokens_for_surface as _policy_max_tokens,
+    model_tier_for_surface as _policy_model_tier,
+)
+
 TodayNarrativeSurface = Literal["guide", "day_layer", "spheres", "evening", "deepen"]
 
 TODAY_NARRATIVE_LLM_GATE_V1_CONTRACT = "today_narrative_llm_gate_v1"
@@ -62,6 +68,7 @@ DEFAULT_COST_POLICY = {
     "llm_calls_allowed": True,
 }
 
+# Legacy economize table (kept for import/compat). Live budgets come from llm_quality_policy_v1.
 MAX_TOKENS_BY_SURFACE: dict[str, dict[str, int]] = {
     "guide": {"quick": 950, "normal": 1750, "deep": 2100},
     "day_layer": {"quick": 700, "normal": 1200, "deep": 1500},
@@ -120,27 +127,15 @@ def _normalize_cost_policy(raw: dict[str, Any] | None) -> dict[str, Any]:
 
 
 def _max_tokens_for_surface(surface: str, depth_level: str) -> int:
-    depth = depth_level if depth_level in ("quick", "normal", "deep") else "normal"
-    table = MAX_TOKENS_BY_SURFACE.get(surface) or MAX_TOKENS_BY_SURFACE["guide"]
-    return int(table.get(depth) or table["normal"])
+    return _policy_max_tokens(surface, depth_level)
 
 
 def _model_tier_for_surface(surface: str, depth_level: str) -> str:
-    if surface in ("spheres", "evening"):
-        return MODEL_TIER_CHEAP
-    if surface == "deepen" and depth_level == "quick":
-        return MODEL_TIER_CHEAP
-    return MODEL_TIER_STANDARD
+    return _policy_model_tier(surface, depth_level)
 
 
 def _context_depth_for_surface(surface: str, user_context: dict[str, Any]) -> str:
-    if not user_context.get("has_day_context"):
-        return CONTEXT_DEPTH_MINIMAL
-    if surface == "guide":
-        return CONTEXT_DEPTH_STANDARD
-    if int(user_context.get("behavior_event_count") or 0) >= 3:
-        return CONTEXT_DEPTH_STANDARD
-    return CONTEXT_DEPTH_MINIMAL
+    return _policy_context_depth(surface, user_context)
 
 
 def _gate_result(

@@ -776,6 +776,109 @@ async def get_today_contract(
     return TodayContractV1Response(**contract)
 
 
+class TodayStoryRefreshPayload(BaseModel):
+    local_date: Optional[str] = None
+    timezone: str = "UTC"
+    force: bool = False
+
+
+class TodayStoryRefreshResponse(BaseModel):
+    rebuilt: bool
+    story_status: str
+    story_refresh_required: bool
+    story_fingerprint: str | None = None
+    generation_id: str = ""
+    contract: TodayContractV1Response | None = None
+    error: str | None = None
+
+
+@router.post("/story/refresh", response_model=TodayStoryRefreshResponse)
+async def refresh_today_story(
+    request: Request,
+    payload: TodayStoryRefreshPayload | None = None,
+    user: User = Depends(require_user),
+    db=Depends(get_session),
+    numerology_service: NumerologyService = Depends(get_numerology_service),
+    core_profile_service: CoreProfileService = Depends(get_core_profile_service),
+    orchestrator: InterpretationOrchestrator = Depends(get_interpretation_orchestrator),
+) -> TodayStoryRefreshResponse:
+    """Rebuild day_story when fingerprint is stale. Never called inside symbol reveal."""
+    from todayflow_backend.services import day_symbol_state_v1 as day_symbols
+    from todayflow_backend.services.day_story_refresh_v1 import refresh_day_story_for_user
+    from todayflow_backend.services.day_story_v1 import day_story_to_today_contract_v1
+    from todayflow_backend.services.day_story_wire_v1 import build_day_story_record_for_refresh
+    from todayflow_backend.services.today_contract_assembler_v1 import validate_today_contract_v1
+
+    body = payload or TodayStoryRefreshPayload()
+    locale = request_locale(request)
+    day = day_symbols.resolve_local_date(local_date=body.local_date, timezone_name=body.timezone)
+    target_date = day.isoformat()
+
+    # Fresh morning payloads (revealed symbols) — bust short process cache for this user/date.
+    invalidate_morning_cache_for_user(user.id)
+    morning = await get_morning_ritual_cached(
+        request=request,
+        target_date=target_date,
+        user=user,
+        db=db,
+        numerology_service=numerology_service,
+        core_profile_service=core_profile_service,
+        orchestrator=orchestrator,
+    )
+    fusion = get_daily_fusion_index(target_date=target_date, current_user=user, db=db)
+    core_profile = core_profile_service.build(db, user)
+    fusion_dump = fusion.model_dump()
+
+    def _build(db_sess, **kwargs):
+        return build_day_story_record_for_refresh(
+            db_sess,
+            user=kwargs["user"],
+            target_date=kwargs["target_date"],
+            locale=kwargs["locale"],
+            morning=morning,
+            fusion_dump=fusion_dump,
+            core_profile=core_profile,
+            force_rebuild=kwargs.get("force_rebuild", True),
+            expected_fingerprint=kwargs.get("expected_fingerprint"),
+            fingerprint_payload=kwargs.get("fingerprint_payload"),
+            timezone_name=body.timezone,
+        )
+
+    result = refresh_day_story_for_user(
+        db,
+        user=user,
+        local_date=day,
+        timezone_name=body.timezone,
+        locale=locale,
+        build_fn=_build,
+        force=bool(body.force),
+    )
+    story = result.get("story")
+    contract_model = None
+    if isinstance(story, dict):
+        contract = day_story_to_today_contract_v1(
+            story,
+            generation_id=str(result.get("generation_id") or ""),
+            progress={
+                "story_status": result.get("story_status"),
+                "story_refresh_required": result.get("story_refresh_required"),
+                "story_fingerprint": result.get("story_fingerprint"),
+            },
+        )
+        errors = validate_today_contract_v1(contract)
+        if not errors:
+            contract_model = TodayContractV1Response(**contract)
+    return TodayStoryRefreshResponse(
+        rebuilt=bool(result.get("rebuilt")),
+        story_status=str(result.get("story_status") or "unknown"),
+        story_refresh_required=bool(result.get("story_refresh_required")),
+        story_fingerprint=result.get("story_fingerprint"),
+        generation_id=str(result.get("generation_id") or ""),
+        contract=contract_model,
+        error=result.get("error"),
+    )
+
+
 @router.post("/narrative", response_model=TodayNarrativeResponse)
 def post_today_narrative(
     request: Request,

@@ -34,12 +34,63 @@ class TarotService:
         self.mantras = astrology_ref.mantras()
         self.rituals = astrology_ref.rituals()
 
-    def get_daily_draw(self, user: db_models.User, *, locale: str | None = None) -> api_models.TarotDailyDraw:
-        # For public user (id=0), generate without saving to DB
+    def not_selected_daily_draw(self, *, draw_date: date | None = None) -> api_models.TarotDailyDraw:
+        """Gate payload: no card name/id/image-identifying fields before user action."""
+        target = draw_date or date.today()
+        return api_models.TarotDailyDraw(
+            date=target.isoformat(),
+            selection_status="not_selected",
+            card=None,
+            orientation=None,
+            mantra=None,
+            ritual=None,
+        )
+
+    def get_daily_draw(
+        self,
+        user: db_models.User,
+        *,
+        locale: str | None = None,
+        assign_if_missing: bool = True,
+    ) -> api_models.TarotDailyDraw:
+        """Internal / Today morning path may assign.
+
+        Tarot module public GET must use ``assign_if_missing=False`` so identity
+        is not created or returned before an explicit reveal/select.
+        """
+        # Public guest: never return identity from module endpoints.
         if user.id == 0:
-            return self._generate_public_daily_draw(date.today(), locale=locale)
-        draw = self._ensure_draw_for_date(user, date.today())
+            if assign_if_missing:
+                # Legacy callers that still want a deterministic public draw
+                # (e.g. morning-adjacent tooling). Prefer not_selected for modules.
+                return self._generate_public_daily_draw(date.today(), locale=locale)
+            return self.not_selected_daily_draw()
+        if assign_if_missing:
+            draw = self._ensure_draw_for_date(user, date.today())
+            return self._to_model(draw, locale=locale)
+        session = SessionLocal()
+        try:
+            draw = (
+                session.query(db_models.TarotDraw)
+                .filter_by(user_id=user.id, draw_date=date.today())
+                .order_by(db_models.TarotDraw.created_at.desc())
+                .first()
+            )
+        finally:
+            session.close()
+        if not draw:
+            return self.not_selected_daily_draw()
         return self._to_model(draw, locale=locale)
+
+    def reveal_daily_draw(self, user: db_models.User, *, locale: str | None = None) -> api_models.TarotDailyDraw:
+        """Explicit user action: assign (if needed) and return selected card identity."""
+        if user.id == 0:
+            # Guests cannot persist; still do not expose via public GET — use Today ritual.
+            return self.not_selected_daily_draw()
+        draw = self._ensure_draw_for_date(user, date.today())
+        model = self._to_model(draw, locale=locale)
+        model.selection_status = "selected"
+        return model
 
     def get_card_by_id(self, card_id: int, *, locale: str | None = None) -> api_models.TarotCard | None:
         """Return a single major arcana card from reference data (for library / SEO pages)."""
@@ -59,7 +110,8 @@ class TarotService:
     def get_history(
         self, user: db_models.User, limit: int = 30, *, locale: str | None = None
     ) -> api_models.TarotHistoryResponse:
-        today = self._ensure_draw_for_date(user, date.today())
+        # Do not auto-create today's draw — that would spoil card-of-day before select.
+        today = self.get_daily_draw(user, locale=locale, assign_if_missing=False)
         session = SessionLocal()
         try:
             draws = (
@@ -75,7 +127,7 @@ class TarotService:
         streak = self._calculate_streak(draws, date.today())
         history_models = [self._to_model(draw, locale=locale) for draw in draws]
         return api_models.TarotHistoryResponse(
-            today=self._to_model(today, locale=locale), history=history_models, streak_days=streak
+            today=today, history=history_models, streak_days=streak
         )
 
     def generate_spread(
@@ -476,6 +528,7 @@ class TarotService:
         
         return api_models.TarotDailyDraw(
             date=draw_date.isoformat(),
+            selection_status="selected",
             card=card_model,
             orientation=orientation,
             mantra=api_models.Mantra(**mantra_dict) if mantra_dict else None,
@@ -516,6 +569,7 @@ class TarotService:
         
         return api_models.TarotDailyDraw(
             date=draw.draw_date.isoformat(),
+            selection_status="selected",
             card=api_models.TarotCard(**card_data),
             orientation=draw.orientation,
             mantra=api_models.Mantra(**mantra_dict) if mantra_dict else None,

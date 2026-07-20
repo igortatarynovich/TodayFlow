@@ -117,7 +117,9 @@ export function TarotHistory({
                 Нет карт, соответствующих фильтрам
               </p>
             ) : (
-              filteredHistory.map((draw, idx) => (
+              filteredHistory
+                .filter((draw): draw is TarotDailyDraw & { card: NonNullable<TarotDailyDraw["card"]> } => Boolean(draw.card))
+                .map((draw, idx) => (
                 <div key={idx} style={{ 
                   padding: "var(--orbit-space-md)",
                   border: "1px solid var(--orbit-color-border)",

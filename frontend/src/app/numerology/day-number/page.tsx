@@ -4,18 +4,19 @@ import Link from "next/link";
 import { ProductPageScreen } from "@/components/product-ui/ProductPageScreen";
 import pl from "@/design-system/layouts/productPageLayout.module.css";
 import { useState, useEffect } from "react";
-import { getJson } from "@/lib/api";
+import { getJson, postJson } from "@/lib/api";
 import { useAuth } from "@/lib/useAuth";
 
 type NumerologyDailyInsight = {
   date: string;
+  selection_status?: string;
   number: {
     title: string;
     value: number;
     reduced_value: number;
     is_master: boolean;
     summary: string;
-  };
+  } | null;
 };
 
 type NumerologyExplanation = {
@@ -46,14 +47,10 @@ export default function NumerologyDayNumberPage() {
       try {
         setLoading(true);
         setError(null);
+        // GET is gated (not_selected) — no number identity before reveal.
         const daily = await getJson<NumerologyDailyInsight>("/numerology/daily");
         setData(daily);
-        if (isAuthenticated) {
-          const detailed = await getJson<NumerologyExplanation>("/numerology/daily/explain").catch(() => null);
-          setExplain(detailed);
-        } else {
-          setExplain(null);
-        }
+        setExplain(null);
       } catch (err) {
         console.error("Failed to load day number", err);
         setError("Не удалось загрузить число дня");
@@ -64,6 +61,21 @@ export default function NumerologyDayNumberPage() {
 
     loadDayNumber();
   }, [isAuthenticated]);
+
+  const handleReveal = async () => {
+    try {
+      const daily = await postJson<NumerologyDailyInsight>("/numerology/daily/reveal", {});
+      setData(daily);
+      setRevealed(true);
+      if (isAuthenticated) {
+        const detailed = await getJson<NumerologyExplanation>("/numerology/daily/explain").catch(() => null);
+        setExplain(detailed);
+      }
+    } catch (err) {
+      console.error("Failed to reveal day number", err);
+      setError("Не удалось открыть число дня");
+    }
+  };
 
   if (loading) {
     return (
@@ -88,7 +100,7 @@ export default function NumerologyDayNumberPage() {
     );
   }
 
-  const dayNumber = data.number.value || data.number.reduced_value;
+  const dayNumber = data.number?.value || data.number?.reduced_value;
 
   return (
     <ProductPageScreen
@@ -124,13 +136,13 @@ export default function NumerologyDayNumberPage() {
                 >
                   <div style={{ fontSize: "5rem", fontWeight: 600, color: "#0f172a", lineHeight: 1 }}>
                     {dayNumber}
-                    {data.number.is_master && <span style={{ fontSize: "2rem", verticalAlign: "super" }}>★</span>}
+                    {data.number?.is_master && <span style={{ fontSize: "2rem", verticalAlign: "super" }}>★</span>}
                   </div>
                 </div>
               ) : (
                 <button
                   type="button"
-                  onClick={() => setRevealed(true)}
+                  onClick={() => void handleReveal()}
                   style={{
                     width: "min(100%, 280px)",
                     aspectRatio: "1 / 1",
@@ -159,11 +171,11 @@ export default function NumerologyDayNumberPage() {
               )}
 
               <p className="orbit-body" style={{ fontSize: "1.125rem", lineHeight: 1.7, color: "#334155", marginBottom: 0 }}>
-                {revealed ? data.number.title : "Сегодняшний ритм ещё не открыт"}
+                {revealed ? (data.number?.title || "Ритм дня") : "Сегодняшний ритм ещё не открыт"}
               </p>
               <p className="orbit-body-sm" style={{ color: "#64748b", lineHeight: 1.6, maxWidth: "32rem", margin: 0 }}>
                 {revealed
-                  ? data.number.summary
+                  ? data.number?.summary || ""
                   : "Сначала открой число дня, потом считай, что оно усиливает и чего сегодня лучше не перегружать."}
               </p>
             </div>

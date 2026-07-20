@@ -10,13 +10,15 @@ interface TarotFavoritesProps {
 
 export function TarotFavorites({ history, favorites }: TarotFavoritesProps) {
   const favoriteCards = history
-    .filter(draw => favorites.includes(draw.card.id))
+    .filter((draw): draw is TarotDailyDraw & { card: NonNullable<TarotDailyDraw["card"]> } =>
+      Boolean(draw.card && favorites.includes(draw.card.id)),
+    )
     .reduce((acc, draw) => {
-      if (!acc.find(c => c.card.id === draw.card.id)) {
+      if (!acc.find((c) => c.card.id === draw.card.id)) {
         acc.push(draw);
       }
       return acc;
-    }, [] as TarotDailyDraw[]);
+    }, [] as Array<TarotDailyDraw & { card: NonNullable<TarotDailyDraw["card"]> }>);
 
   if (favoriteCards.length === 0) return null;
 

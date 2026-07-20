@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { DsButton } from "@/design-system";
 import { postJson } from "@/lib/api";
 import { buildAuthHref } from "@/lib/authRedirect";
-import { claimGuestProfileAfterAuth } from "@/lib/claimGuestProfile";
+import { claimGuestProfileAfterAuth, prepareGuestClaimBeforeAuth } from "@/lib/claimGuestProfile";
 import { beginAuthSession } from "@/lib/authSession";
 import {
   hasGuestPreview,
@@ -39,7 +39,9 @@ function OnboardingSavePageInner() {
   useEffect(() => {
     if (!hasGuestPreview()) {
       router.replace(VALUE_FIRST_PATHS.welcome);
+      return;
     }
+    void prepareGuestClaimBeforeAuth();
   }, [router]);
 
   const onSubmit = async (event: FormEvent) => {
@@ -53,6 +55,7 @@ function OnboardingSavePageInner() {
     setError(null);
     try {
       patchGuestProfileDraft({ save_ready_at: new Date().toISOString() });
+      await prepareGuestClaimBeforeAuth();
       const response = await postJson<EmailSignupResponse>("/auth/email-signup", { email: trimmed });
 
       if (response.token) {

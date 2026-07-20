@@ -175,7 +175,7 @@ export function ProfileSetupSection({
             </label>
             {!isOnboarding ? (
               <label>
-                Фамилия
+                Фамилия <span style={{ fontWeight: 500, color: "#8a7a66" }}>(необязательно)</span>
                 <input type="text" value={setupForm.last_name || ""} onChange={(e) => onFieldChange("last_name", e.target.value)} disabled={isBuilding} />
               </label>
             ) : null}

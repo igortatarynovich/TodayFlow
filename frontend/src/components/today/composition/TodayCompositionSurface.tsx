@@ -47,6 +47,8 @@ import {
   type TodayCompositionVariant,
 } from "@/lib/todayCompositionZones";
 import { useMeaningRuntime } from "@/hooks/useMeaningRuntime";
+import { useAuth } from "@/lib/useAuth";
+import { revealDayCard, revealDayNumber, type DaySymbolPublicView } from "@/lib/daySymbolReveal";
 import { TodayDayDialogueMorning } from "@/components/today/composition/TodayDayDialogueMorning";
 import { ConversationThread } from "@/components/conversation/ConversationThread";
 import { ConversationTurn } from "@/components/conversation/ConversationTurn";
@@ -99,6 +101,9 @@ type Props = {
   onDayClosed?: () => void;
   /** When true, chrome is provided by TodayWebDashboard; only ritual/personalized blocks render. */
   embeddedInWebDashboard?: boolean;
+  /** Day story is being rebuilt after symbol reveal — do not treat old text as updated. */
+  dayStoryUpdating?: boolean;
+  onSymbolRevealResult?: (view: DaySymbolPublicView) => void;
 };
 
 function useReduceMotion(): boolean {
@@ -140,6 +145,7 @@ export function TodayCompositionSurface(props: Props) {
   const variant = props.variant ?? "default";
   const isFirstToday = variant === "firstToday";
   const { trackMeaningEvent } = useMeaningRuntime();
+  const { isAuthenticated } = useAuth();
   const reduceMotion = useReduceMotion();
 
   const [eveningMode, setEveningMode] = useState(false);
@@ -523,6 +529,16 @@ export function TodayCompositionSurface(props: Props) {
     (id: number) => {
       setTarotPendingId(id);
       persistEngagement({ tarotPickedId: id });
+      void revealDayCard({
+        cardId: id,
+        isAuthenticated,
+        source: "today_ritual",
+        idempotencyKey: `tarot_reveal:${dateISO}:${id}`,
+      })
+        .then((view) => props.onSymbolRevealResult?.(view))
+        .catch(() => {
+          /* local engagement still tracks pick; server SoT retries on continue */
+        });
       trackMeaningEvent({
         event_type: "tarot_selected",
         event_source: "today",
@@ -531,7 +547,7 @@ export function TodayCompositionSurface(props: Props) {
         refreshRings: false,
       });
     },
-    [dateISO, persistEngagement, trackMeaningEvent],
+    [dateISO, isAuthenticated, persistEngagement, props.onSymbolRevealResult, trackMeaningEvent],
   );
 
   const onTarotRevealed = useCallback(
@@ -580,14 +596,23 @@ export function TodayCompositionSurface(props: Props) {
   const onNumberComplete = useCallback(() => {
     persistEngagement({ numberConfirmed: true });
     setRitualPickOpen(null);
+    void revealDayNumber({
+      isAuthenticated,
+      source: "today_ritual",
+      idempotencyKey: `number_reveal:${dateISO}`,
+    })
+      .then((view) => props.onSymbolRevealResult?.(view))
+      .catch(() => {
+        /* local ack kept; server SoT can retry */
+      });
     trackMeaningEvent({
       event_type: "number_selected",
       event_source: "today",
       local_date: dateISO,
-      payload: { numerology_value: props.numerologyValue, surface: "today_day_story_v3", experience_inline: true },
+      payload: { surface: "today_day_story_v3", experience_inline: true },
       refreshRings: false,
     });
-  }, [dateISO, persistEngagement, props.numerologyValue, trackMeaningEvent]);
+  }, [dateISO, isAuthenticated, persistEngagement, props.onSymbolRevealResult, trackMeaningEvent]);
 
   const onInterpretationConfirm = useCallback(
     (
@@ -841,7 +866,13 @@ export function TodayCompositionSurface(props: Props) {
       data-testid="today-zone-pulse"
     >
       <p className={styles.pulseLabel}>{story.pulseLabel}</p>
-      <p className={styles.pulseText}>{pulseDisplay}</p>
+      {props.dayStoryUpdating ? (
+        <p className={styles.pulseText} data-testid="today-day-story-updating" aria-live="polite">
+          Обновляем описание дня…
+        </p>
+      ) : (
+        <p className={styles.pulseText}>{pulseDisplay}</p>
+      )}
       {story.ritualUnlockHint && !story.personalizedReady ? (
         <p className={styles.ritualUnlockHint}>{story.ritualUnlockHint}</p>
       ) : null}

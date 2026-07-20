@@ -114,7 +114,7 @@ export function TodayPersonalizedProductSection({
     >
       <article className={styles.synthesisCard} data-testid="today-entity-synthesis">
         <div>
-          <p className={styles.synthesisKicker}>Твой день сформирован</p>
+          <p className={styles.synthesisKicker}>Сегодня для тебя</p>
           <p className={styles.synthesisText}>{story.pulse}</p>
         </div>
         {synthesisTags.length > 0 ? (
@@ -128,30 +128,44 @@ export function TodayPersonalizedProductSection({
         ) : null}
       </article>
 
-      {(story.glance.supported.length > 0 || story.glance.helpful.length > 0) && (
+      {(story.glance.supported.length > 0 || story.glance.helpful.length > 0 || story.sphereFocus.cards.length > 0) && (
         <div className={styles.glanceRow} data-testid="today-zone-glance-personal">
           {story.glance.supported[0] ? (
             <article className={styles.glanceTile}>
-              <p className={styles.glanceTileLabel}>Поддержано</p>
+              <p className={styles.glanceTileLabel}>Сегодня сильнее</p>
               <p className={styles.glanceTileValue}>{story.glance.supported[0].sphere}</p>
+            </article>
+          ) : story.sphereFocus.cards.find((c) => c.role === "peak") ? (
+            <article className={styles.glanceTile}>
+              <p className={styles.glanceTileLabel}>Сегодня сильнее</p>
+              <p className={styles.glanceTileValue}>
+                {story.sphereFocus.cards.find((c) => c.role === "peak")!.headline}
+              </p>
             </article>
           ) : null}
           {story.glance.helpful[0] ? (
             <article className={styles.glanceTile}>
-              <p className={styles.glanceTileLabel}>Требует внимания</p>
+              <p className={styles.glanceTileLabel}>Быть осторожнее</p>
               <p className={styles.glanceTileValue}>{story.glance.helpful[0].sphere}</p>
+            </article>
+          ) : story.sphereFocus.cards.find((c) => c.role === "caution") ? (
+            <article className={styles.glanceTile}>
+              <p className={styles.glanceTileLabel}>Быть осторожнее</p>
+              <p className={styles.glanceTileValue}>
+                {story.sphereFocus.cards.find((c) => c.role === "caution")!.headline}
+              </p>
             </article>
           ) : null}
         </div>
       )}
 
       <article className={styles.productCard} data-testid="today-zone-focus-card">
-        <p className={styles.cardEyebrow}>Фокус дня</p>
+        <p className={styles.cardEyebrow}>Как прожить день</p>
         <h2 className={styles.cardTitle}>{focusTitle}</h2>
         <div className={styles.focusGroups}>
           {shouldLines.length > 0 ? (
             <div>
-              <p className={styles.focusGroupLabel}>Стоит:</p>
+              <p className={styles.focusGroupLabel}>Чего ждать:</p>
               {shouldLines.map((line) => (
                 <p key={line} className={styles.focusLine}>
                   {line}
@@ -161,7 +175,7 @@ export function TodayPersonalizedProductSection({
           ) : null}
           {avoidLines.length > 0 ? (
             <div>
-              <p className={styles.focusGroupLabel}>Лучше избегать:</p>
+              <p className={styles.focusGroupLabel}>Чего не ждать / где осторожнее:</p>
               {avoidLines.map((line) => (
                 <p key={line} className={styles.focusLine}>
                   {line}
@@ -171,9 +185,33 @@ export function TodayPersonalizedProductSection({
           ) : null}
         </div>
         <div className={styles.cardDivider} />
-        <p className={styles.cardEyebrow}>Главный шаг</p>
+        <p className={styles.cardEyebrow}>Что сделать сегодня</p>
         <p className={styles.mainStepText}>{contract.primary_action}</p>
       </article>
+
+      {story.sphereFocus.cards.length > 0 ? (
+        <article className={styles.productCard} data-testid="today-zone-sphere-rotation">
+          <p className={styles.cardEyebrow}>Сферы сегодня</p>
+          <h2 className={styles.cardTitle}>Где день даёт опору — и где тянет</h2>
+          <div className={styles.focusGroups}>
+            {story.sphereFocus.cards.map((card) => (
+              <div key={card.id}>
+                <p className={styles.focusGroupLabel}>
+                  {card.role === "peak" ? "Сильнее сегодня" : "Слабее / осторожнее"}
+                </p>
+                <p className={styles.focusLine}>
+                  → {card.headline}
+                  {card.body ? `: ${firstSentence(card.body)}` : ""}
+                </p>
+                {card.releaseLine ? <p className={styles.focusLine}>→ {card.releaseLine}</p> : null}
+              </div>
+            ))}
+            {story.sphereFocus.neutralNote ? (
+              <p className={styles.focusLine}>{story.sphereFocus.neutralNote}</p>
+            ) : null}
+          </div>
+        </article>
+      ) : null}
 
       <article className={styles.productCard} data-testid="today-zone-promise">
         <p className={styles.cardEyebrow}>Намерение дня</p>

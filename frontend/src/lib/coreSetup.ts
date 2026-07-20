@@ -66,6 +66,15 @@ export function mergeCoreSetupFormFromAccount(
   profile: { first_name?: string | null; last_name?: string | null; gender?: string | null } | null,
   core: CoreProfile | null,
 ): CoreSetupPayload {
+  const nextLocation = (core?.astro?.location_name || "").trim();
+  const prevLocation = (prev.location_name || "").trim();
+  // Keep resolved coords when the place label did not change (do not wipe on hydrate).
+  const samePlace =
+    Boolean(nextLocation) &&
+    Boolean(prevLocation) &&
+    nextLocation.toLowerCase() === prevLocation.toLowerCase() &&
+    typeof prev.latitude === "number" &&
+    typeof prev.longitude === "number";
   return {
     ...prev,
     first_name: profile?.first_name || core?.person?.first_name || "",
@@ -74,9 +83,9 @@ export function mergeCoreSetupFormFromAccount(
     birth_date: core?.astro?.birth_date || "",
     birth_time: core?.astro?.birth_time || "",
     time_unknown: core?.astro?.time_unknown || false,
-    location_name: core?.astro?.location_name || "",
-    latitude: null,
-    longitude: null,
+    location_name: nextLocation,
+    latitude: samePlace ? prev.latitude : null,
+    longitude: samePlace ? prev.longitude : null,
     gender: profile?.gender || core?.person?.gender || prev.gender || "unspecified",
   };
 }

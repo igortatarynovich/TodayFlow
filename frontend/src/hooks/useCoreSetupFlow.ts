@@ -49,7 +49,36 @@ export function useCoreSetupFlow(options: UseCoreSetupFlowOptions = {}) {
 
   const hydrateSetupForm = useCallback(
     (profile: UserSettings | null, core: CoreProfile | null) => {
-      setSetupForm((prev) => mergeCoreSetupFormFromAccount(prev, profile, core));
+      setSetupForm((prev) => {
+        const next = mergeCoreSetupFormFromAccount(prev, profile, core);
+        // Re-resolve coords when place is known but lat/lng were wiped on hydrate.
+        const place = (next.location_name || "").trim();
+        if (
+          place.length >= 2 &&
+          (typeof next.latitude !== "number" || typeof next.longitude !== "number")
+        ) {
+          void getJson<{ latitude?: number; longitude?: number; local_name?: string; name?: string }>(
+            `/astro/geocode?q=${encodeURIComponent(place)}`,
+          )
+            .then((hit) => {
+              if (typeof hit?.latitude !== "number" || typeof hit?.longitude !== "number") return;
+              setSetupForm((current) => {
+                if ((current.location_name || "").trim().toLowerCase() !== place.toLowerCase()) {
+                  return current;
+                }
+                return {
+                  ...current,
+                  latitude: hit.latitude!,
+                  longitude: hit.longitude!,
+                };
+              });
+            })
+            .catch(() => {
+              /* suggest/lookup soft-fail — user can re-pick city */
+            });
+        }
+        return next;
+      });
     },
     [],
   );

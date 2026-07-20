@@ -203,9 +203,17 @@ class TarotCard(BaseModel):
 
 
 class TarotDailyDraw(BaseModel):
+    """Daily card draw.
+
+    ``selection_status=not_selected`` means identity must not be shown yet
+    (card/orientation/mantra/ritual omitted). Reveal via POST /tarot/daily/reveal
+    or Today ritual ack — module GETs must not auto-assign identity.
+    """
+
     date: str
-    card: TarotCard
-    orientation: str
+    selection_status: str = "selected"  # not_selected | selected
+    card: TarotCard | None = None
+    orientation: str | None = None
     mantra: Mantra | None = None
     ritual: Ritual | None = None
 
@@ -506,7 +514,8 @@ class NumerologyProfile(BaseModel):
 
 class NumerologyDailyInsight(BaseModel):
     date: str
-    number: NumerologyNumber
+    selection_status: str = "selected"  # not_selected | selected
+    number: NumerologyNumber | None = None
 
 
 class CalcStep(BaseModel):

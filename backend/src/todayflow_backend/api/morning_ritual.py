@@ -198,60 +198,65 @@ async def get_morning_ritual(
     target_date_obj = date.fromisoformat(target_date) if isinstance(target_date, str) else target_date
     
     locale = request_locale(request)
-    
-    # Получаем карту таро дня
-    tarot_service = TarotService()
-    daily_draw = tarot_service.get_daily_draw(user, locale=locale)
-    if not daily_draw or not daily_draw.card:
-        raise HTTPException(status_code=404, detail="Карта дня не найдена")
+
+    # Unified reveal SoT — GET never assigns card/number identity.
+    from todayflow_backend.services import day_symbol_state_v1 as day_symbols
+
+    owner_key = day_symbols.owner_key_for_user(user.id)
+    symbol_row = day_symbols.get_state_row(db, owner_key=owner_key, local_date=target_date_obj)
+    symbol_view = day_symbols.public_view(
+        symbol_row, local_date=target_date_obj, timezone_name="UTC"
+    )
+    card_revealed = bool((symbol_view.get("card") or {}).get("revealed"))
+    number_revealed = bool((symbol_view.get("number") or {}).get("revealed"))
+    tarot_card_payload = day_symbols.redacted_tarot_card_dict(symbol_view)
+    numerology_number_payload = day_symbols.redacted_numerology_dict(symbol_view)
     
     # Проверяем подписку для персонализации
     from todayflow_backend.api.practices import get_subscription_level
     subscription_level = get_subscription_level(user, db)
     is_paid = subscription_level in ["lite", "pro"] or user.is_paid
     core_profile = core_profile_service.build(db, user)
-    
-    # Объясняем карту таро через ИИ только вне fast_mode.
-    if is_paid and not fast_mode:
+
+    tarot_explanation: dict = {"status": "not_revealed", "personalized": False}
+    if card_revealed and is_paid and not fast_mode:
         tarot_explanation = explain_tarot_card(
             user=user,
             db=db,
-            card_name=daily_draw.card.name,
-            orientation=daily_draw.orientation or "upright",
-            target_date=target_date
+            card_name=str(tarot_card_payload.get("name") or ""),
+            orientation=str(tarot_card_payload.get("orientation") or "upright"),
+            target_date=target_date,
         )
-    else:
-        # Бесплатное объяснение - базовое описание карты
+    elif card_revealed:
         tarot_explanation = {
-            "summary": daily_draw.card.upright if daily_draw.orientation == "upright" else daily_draw.card.reversed,
-            "keywords": daily_draw.card.keywords or [],
+            "summary": tarot_card_payload.get("meaning") or "",
+            "keywords": tarot_card_payload.get("keywords") or [],
             "personalized": False,
         }
-    
-    # Получаем число дня
-    daily_insight = numerology_service.daily_number(reference_date=target_date_obj, locale=locale)
-    if not daily_insight or not daily_insight.number:
-        raise HTTPException(status_code=404, detail="Число дня не найдено")
-    
-    # Объясняем число дня через ИИ только вне fast_mode.
-    if is_paid and not fast_mode:
+
+    numerology_explanation: dict = {"status": "not_revealed", "personalized": False}
+    if number_revealed and is_paid and not fast_mode:
         numerology_explanation = explain_numerology_number(
             user=user,
             db=db,
-            number=daily_insight.number.value or daily_insight.number.reduced_value,
+            number=numerology_number_payload.get("value")
+            or numerology_number_payload.get("reduced_value"),
             number_type="day",
-            target_date=target_date
+            target_date=target_date,
         )
-    else:
-        # Бесплатное объяснение - базовое описание числа
+    elif number_revealed:
         numerology_explanation = {
-            "summary": daily_insight.number.summary or "",
-            "title": daily_insight.number.title or "",
+            "summary": numerology_number_payload.get("summary") or "",
+            "title": numerology_number_payload.get("title") or "",
             "personalized": False,
         }
     
-    # Получаем данные о небесных событиях после числа дня (нужен personal_day для символов)
-    personal_day_value = daily_insight.number.value or daily_insight.number.reduced_value
+    # Celestial personal_day only after number reveal (no indirect spoil).
+    personal_day_value = (
+        numerology_number_payload.get("value") or numerology_number_payload.get("reduced_value")
+        if number_revealed
+        else None
+    )
 
     # Получаем общую рекомендацию по дню (что делать, что не делать)
     # Только для платных пользователей
@@ -270,9 +275,14 @@ async def get_morning_ritual(
         daily_recommendations = sanitize_daily_recommendations_payload(daily_recommendations)
     consistency = orchestrator.build_daily_guidance(
         core_profile=core_profile,
-        numerology={
-            "dayNumber": daily_insight.number.value or daily_insight.number.reduced_value
-        },
+        numerology=(
+            {
+                "dayNumber": numerology_number_payload.get("value")
+                or numerology_number_payload.get("reduced_value")
+            }
+            if number_revealed
+            else None
+        ),
         needs=daily_recommendations.get("key_focus") if isinstance(daily_recommendations, dict) else None,
     )
     
@@ -295,10 +305,14 @@ async def get_morning_ritual(
         target_date=target_date_obj,
         locale=locale,
         db=db,
-        numerology_number={
-            "value": daily_insight.number.value,
-            "reduced_value": daily_insight.number.reduced_value,
-        },
+        numerology_number=(
+            {
+                "value": numerology_number_payload.get("value"),
+                "reduced_value": numerology_number_payload.get("reduced_value"),
+            }
+            if number_revealed
+            else {"value": None, "reduced_value": None}
+        ),
         core_profile=core_profile,
         daily_forecast_summary=daily_forecast_summary,
         daily_recommendations=daily_recommendations,
@@ -353,19 +367,9 @@ async def get_morning_ritual(
     
     return MorningRitualResponse(
         date=target_date,
-        tarot_card={
-            "id": daily_draw.card.id,
-            "name": daily_draw.card.name,
-            "orientation": daily_draw.orientation,
-            "meaning": daily_draw.card.upright if daily_draw.orientation == "upright" else daily_draw.card.reversed,
-        },
+        tarot_card=tarot_card_payload,
         tarot_explanation=tarot_explanation,
-        numerology_number={
-            "value": daily_insight.number.value,
-            "reduced_value": daily_insight.number.reduced_value,
-            "title": daily_insight.number.title,
-            "summary": daily_insight.number.summary,
-        },
+        numerology_number=numerology_number_payload,
         numerology_explanation=numerology_explanation,
         daily_forecast_link=f"/forecasts/{target_date}",
         daily_forecast_summary=daily_forecast_summary,
@@ -469,12 +473,12 @@ async def _get_daily_recommendations(
                 else:
                     prompt_parts.append("Полной натальной карты нет.")
 
+                # Symbols once as raw values only — do not also pass catalog
+                # day_meaning (double-weights the same number into do/avoid).
                 if user_context.get("numerology"):
                     numerology = user_context["numerology"]
-                    if numerology.get("day_number"):
+                    if numerology.get("day_number") is not None:
                         prompt_parts.append(f"Число дня: {numerology['day_number']}")
-                    if numerology.get("day_meaning"):
-                        prompt_parts.append(f"Смысл числа дня: {numerology['day_meaning']}")
 
                 if user_context.get("tarot_card"):
                     tarot = user_context["tarot_card"]

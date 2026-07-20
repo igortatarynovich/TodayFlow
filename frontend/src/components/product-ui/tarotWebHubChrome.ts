@@ -22,7 +22,11 @@ export function tarotWebHubChromeBundle(locale: FlowPracticesChromeLocale): Taro
 
   return {
     pageTitle: tr("tarot.hub.pageTitle", "Таро", "Tarot"),
-    pageSubtitle: tr("tarot.hub.pageSubtitle", "Новый угол зрения на вопрос.", "A fresh angle on your question."),
+    pageSubtitle: tr(
+      "tarot.hub.pageSubtitle",
+      "Свежий взгляд на то, что сейчас важно.",
+      "A clear look at what matters right now.",
+    ),
     historyTitle: tr("tarot.hub.historyTitle", "История раскладов", "Reading history"),
     historyEmpty: tr(
       "tarot.hub.historyEmpty",

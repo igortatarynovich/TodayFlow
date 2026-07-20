@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from todayflow_backend.services.llm_quality_policy_v1 import profile_slice_clips
 
 _VISIBLE_VER = "visible_profile_slice_v0"
 _INTERNAL_VER = "internal_profile_slice_v0"
@@ -19,6 +20,10 @@ def _clip(s: str, n: int) -> str:
     if len(t) <= n:
         return t
     return t[: n - 1].rstrip() + "…"
+
+
+def _clips() -> dict[str, int]:
+    return profile_slice_clips()
 
 
 def _focus_areas_from_core(core_profile: dict[str, Any] | None, max_n: int = 5) -> list[str]:
@@ -65,7 +70,7 @@ def _goal_titles_from_fusion(fusion: dict[str, Any] | None, max_n: int = 3) -> l
             continue
         t = str(g.get("title") or "").strip()
         if t and t not in titles:
-            titles.append(_clip(t, 120))
+            titles.append(_clip(t, _clips()["goal_title"]))
         if len(titles) >= max_n:
             break
     return titles
@@ -122,26 +127,27 @@ def build_visible_profile_slice_v0(
     ):
         return None
 
+    c = _clips()
     out: dict[str, Any] = {
         "contract_version": _VISIBLE_VER,
         "locale_hint": "en" if en else "ru",
     }
     if display_name:
-        out["display_name"] = _clip(display_name, 80)
+        out["display_name"] = _clip(display_name, c["display_name"])
     if birth_date:
         out["birth_date"] = birth_date[:32]
     if sun_sign:
-        out["sun_sign"] = _clip(sun_sign, 48)
+        out["sun_sign"] = _clip(sun_sign, c["sun_sign"])
     if focus_areas:
         out["focus_areas"] = focus_areas
     if morning_intention:
-        out["current_intention_or_goal_text"] = _clip(morning_intention, 400)
+        out["current_intention_or_goal_text"] = _clip(morning_intention, c["intention"])
     if morning_focus:
-        out["morning_focus_label"] = _clip(morning_focus, 100)
+        out["morning_focus_label"] = _clip(morning_focus, c["morning_focus"])
     if head_topic:
-        out["head_topic_after_ritual"] = _clip(head_topic, 120)
+        out["head_topic_after_ritual"] = _clip(head_topic, c["head_topic"])
     if mood:
-        out["recent_self_reported_mood"] = _clip(mood, 80)
+        out["recent_self_reported_mood"] = _clip(mood, c["mood"])
     if rhythm_goals:
         out["active_rhythm_goal_titles"] = rhythm_goals
     return out
@@ -162,15 +168,16 @@ def build_internal_profile_slice_v0(
         lc = living.get("learning_context") if isinstance(living.get("learning_context"), dict) else {}
         learning = lc
         if learning:
-            summary = _clip(str(learning.get("summary") or ""), 480)
+            c = _clips()
+            summary = _clip(str(learning.get("summary") or ""), c["learning_summary"])
             qm = learning.get("quality_memory") if isinstance(learning.get("quality_memory"), dict) else {}
             weak = qm.get("weak_patterns") if isinstance(qm.get("weak_patterns"), list) else []
             best = qm.get("best_patterns") if isinstance(qm.get("best_patterns"), list) else []
             learning_slim = {
                 "summary_excerpt": summary or None,
                 "quality_memory": {
-                    "weak_patterns": [_clip(str(x), 160) for x in weak[:3] if str(x).strip()],
-                    "best_patterns": [_clip(str(x), 160) for x in best[:3] if str(x).strip()],
+                    "weak_patterns": [_clip(str(x), c["weak_or_best"]) for x in weak[:3] if str(x).strip()],
+                    "best_patterns": [_clip(str(x), c["weak_or_best"]) for x in best[:3] if str(x).strip()],
                 },
             }
             if not learning_slim["quality_memory"]["weak_patterns"]:
@@ -190,7 +197,9 @@ def build_internal_profile_slice_v0(
             "window_start": behavior_patterns.get("window_start"),
             "window_end": behavior_patterns.get("window_end"),
             "total_events": behavior_patterns.get("total_events"),
-            "pattern_hints": [_clip(str(h), 220) for h in (hints if isinstance(hints, list) else [])[:5]],
+            "pattern_hints": [
+                _clip(str(h), _clips()["pattern_hint"]) for h in (hints if isinstance(hints, list) else [])[:5]
+            ],
         }
         tags = behavior_patterns.get("tags")
         if isinstance(tags, dict):

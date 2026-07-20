@@ -124,7 +124,9 @@ export function CityAutocompleteInput({
                 key={`${item.name}-${item.country}`}
                 type="button"
                 onClick={() => {
-                  onChange(item.display_name || item.local_name || item.name);
+                  // Persist a clean place label (not bilingual "Город / City, Country").
+                  const label = (item.local_name || item.name || "").trim();
+                  onChange(label);
                   onSelect(item);
                   setOpen(false);
                 }}

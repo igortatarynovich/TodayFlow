@@ -16,12 +16,15 @@ import re
 from time import perf_counter
 from typing import Any, Callable
 
-from todayflow_backend.core.config import settings
 from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_plain,
     get_openai_compatible_client,
     is_llm_chat_configured,
     resolve_default_chat_model,
+)
+from todayflow_backend.services.llm_quality_policy_v1 import (
+    funnel_step_max_tokens,
+    user_json_char_budget,
 )
 
 logger = logging.getLogger(__name__)
@@ -75,12 +78,7 @@ def _openai_json_funnel(
     dl = (depth_level or "normal").strip().lower()
     if dl not in ("quick", "normal", "deep"):
         dl = "normal"
-    if dl == "quick":
-        temperature, max_tokens = 0.45, 720
-    elif dl == "deep":
-        temperature, max_tokens = 0.52, 1600
-    else:
-        temperature, max_tokens = 0.5, 1200
+    temperature = 0.45 if dl == "quick" else (0.52 if dl == "deep" else 0.5)
 
     content = chat_completion_plain(
         client,
@@ -90,7 +88,7 @@ def _openai_json_funnel(
             {"role": "user", "content": user},
         ],
         temperature=temperature,
-        max_tokens=max_tokens,
+        max_tokens=funnel_step_max_tokens(dl),
     )
     if not content:
         return None
@@ -344,7 +342,7 @@ def _build_step1_user_json(guide_user: dict[str, Any], *, foundation: dict[str, 
         "intent": guide_user.get("intent"),
         "user_core_excerpt": _user_core_excerpt(guide_user.get("user_core") if isinstance(guide_user.get("user_core"), dict) else None),
     }
-    return json.dumps(pack, ensure_ascii=False)[:12000]
+    return json.dumps(pack, ensure_ascii=False)[: user_json_char_budget()]
 
 
 def _build_step3_user_json(
@@ -363,7 +361,7 @@ def _build_step3_user_json(
             guide_user.get("user_core") if isinstance(guide_user.get("user_core"), dict) else None
         ),
     }
-    return json.dumps(pack, ensure_ascii=False)[:12000]
+    return json.dumps(pack, ensure_ascii=False)[: user_json_char_budget()]
 
 
 def _build_step2_user_json(
@@ -389,7 +387,7 @@ def _build_step2_user_json(
         "user_core_excerpt": _user_core_excerpt(guide_user.get("user_core") if isinstance(guide_user.get("user_core"), dict) else None),
         "fusion": {"rhythm_context": rc if isinstance(rc, dict) else {}},
     }
-    return json.dumps(pack, ensure_ascii=False)[:12000]
+    return json.dumps(pack, ensure_ascii=False)[: user_json_char_budget()]
 
 
 def _interpretation_ok(d: dict[str, Any] | None) -> bool:

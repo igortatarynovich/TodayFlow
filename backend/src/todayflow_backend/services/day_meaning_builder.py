@@ -219,14 +219,31 @@ class DayMeaningBuilder:
             return None
         
         try:
-            daily_draw = self.tarot_service.get_daily_draw(user, locale=locale)
-            if daily_draw and daily_draw.card:
+            from todayflow_backend.db.session import SessionLocal
+            from todayflow_backend.services import day_symbol_state_v1 as day_symbols
+
+            db = SessionLocal()
+            try:
+                day = target_date
+                row = day_symbols.get_state_row(
+                    db,
+                    owner_key=day_symbols.owner_key_for_user(user.id),
+                    local_date=day,
+                )
+                view = day_symbols.public_view(
+                    row, local_date=day, tarot_service=self.tarot_service
+                )
+                card = view.get("card") or {}
+                if not card.get("revealed"):
+                    return None
                 return {
-                    "card_id": daily_draw.card.id,
-                    "name": daily_draw.card.name,
-                    "orientation": daily_draw.card.orientation,
-                    "keywords": daily_draw.card.keywords or [],
+                    "card_id": card.get("id"),
+                    "name": card.get("name"),
+                    "orientation": card.get("orientation"),
+                    "keywords": card.get("keywords") or [],
                 }
+            finally:
+                db.close()
         except Exception:
             pass
         

@@ -1,4 +1,9 @@
-import { buildProfileLifeSpheresFromChart, buildProfileLifeSpheresFromProfileData, chartHouseNarrativeLine } from "@/lib/profilePage/profileLifeSpheres";
+import {
+  buildProfileLifeSpheresFromChart,
+  buildProfileLifeSpheresFromProfileData,
+  buildProfileLifeSpheresFromProfileDataLegacy,
+  chartHouseNarrativeLine,
+} from "@/lib/profilePage/profileLifeSpheres";
 import type { NatalChartPreview } from "@/components/profile/profilePanelTypes";
 
 describe("chartHouseNarrativeLine", () => {
@@ -116,8 +121,21 @@ describe("buildProfileLifeSpheresFromChart", () => {
 });
 
 describe("buildProfileLifeSpheresFromProfileData", () => {
-  it("maps core life_areas into sphere how lines when chart is empty", () => {
+  it("does not fill spheres from chart/templates without a ready LLM contract", () => {
     const spheres = buildProfileLifeSpheresFromProfileData(null, {
+      interpretation: {
+        life_areas: {
+          love: "Тепло и доверие важнее скорости.",
+        },
+      },
+    } as never);
+    expect(spheres).toEqual([]);
+  });
+});
+
+describe("buildProfileLifeSpheresFromProfileDataLegacy", () => {
+  it("maps core life_areas into sphere how lines when chart is empty", () => {
+    const spheres = buildProfileLifeSpheresFromProfileDataLegacy(null, {
       interpretation: {
         life_areas: {
           love: "Тепло и доверие важнее скорости.",

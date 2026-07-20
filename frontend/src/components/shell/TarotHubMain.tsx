@@ -1,13 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { TAROT_HUB_SPREADS } from "@/components/shell/tarotShellStepper";
 import s from "@/components/shell/tarotShell.module.css";
-import { getJson } from "@/lib/api";
-import { useAuth } from "@/lib/useAuth";
 import {
   buildTarotRitualHref,
   composeTarotQuestion,
@@ -18,25 +15,14 @@ import {
   patchTarotQuestionSession,
   readTarotQuestionSession,
 } from "@/lib/tarotQuestionSession";
-import type { TarotDailyDraw } from "@/lib/types";
-import { tarotCardFaceSrc } from "@/lib/tarotCardAssets";
 
+/**
+ * Tarot entry — must not fetch or display card-of-day identity.
+ * Card of day is chosen/revealed only in the Today ritual.
+ */
 export function TarotHubMain() {
   const router = useRouter();
-  const { isAuthenticated } = useAuth();
-  const [cardOfDay, setCardOfDay] = useState<TarotDailyDraw | null>(null);
   const [selectedSpreadId, setSelectedSpreadId] = useState<string | null>(null);
-
-  useEffect(() => {
-    const endpoint = isAuthenticated ? "/tarot/daily" : "/tarot/daily/public";
-    void getJson<TarotDailyDraw>(endpoint)
-      .then(setCardOfDay)
-      .catch(() => setCardOfDay(null));
-  }, [isAuthenticated]);
-
-  const cardName = cardOfDay?.card?.name ?? "Звезда XVII";
-  const cardId = cardOfDay?.card?.id ?? 17;
-  const cardSrc = tarotCardFaceSrc(cardId);
 
   const continueHref = useMemo(() => {
     const session = readTarotQuestionSession();
@@ -66,21 +52,21 @@ export function TarotHubMain() {
   return (
     <>
       <header className={s.hubHeader}>
-        <p className={s.hubEyebrow}>Tarot / Immersive Hub</p>
+        <p className={s.hubEyebrow}>Таро</p>
         <div className={s.hubPills}>
-          <span className={s.hubPill}>☾ Тёмный режим</span>
+          <span className={s.hubPill}>Ритуал ясности</span>
           <span className={s.hubPill}>3 расклада</span>
-          <span className={s.hubPill}>Сегодня: {cardName}</span>
+          <span className={s.hubPill}>Карта дня — в «Сегодня»</span>
         </div>
       </header>
 
       <section className={s.hubHeroRow}>
         <div className={s.hubHeroCard}>
-          <h1 className={s.hubHeroTitle}>Задайте вопрос дню.</h1>
+          <h1 className={s.hubHeroTitle}>Спроси день о том, что важно.</h1>
           <p className={s.hubHeroLead}>
-            Таро в TodayFlow — это не предсказание, а ритуал ясности. Выберите расклад,
-            сформулируйте намерение и получите историю, которая связывает сегодняшний контекст с
-            вашим следующим шагом.
+            Не прогноз «что будет», а зеркало: где ты сейчас, что мешает и какой следующий шаг
+            выглядит честнее. Выбери формат, сформулируй вопрос — и получи историю, которая
+            связывается с твоим днём.
           </p>
           <div className={s.hubHeroActions}>
             <Link href="/tarot/question" className={s.hubBtnPrimary}>
@@ -95,11 +81,11 @@ export function TarotHubMain() {
         <Link
           href="/tarot/question?spread=three_cards"
           className={s.hubRitualCard}
-          aria-label={recommended?.title ?? "Recommended ritual"}
+          aria-label={recommended?.title ?? "Три карты"}
         >
           <div className={s.hubRitualCardImage} aria-hidden />
           <div className={s.hubRitualOverlay}>
-            <p className={s.hubRitualEyebrow}>Recommended ritual</p>
+            <p className={s.hubRitualEyebrow}>Хороший старт</p>
             <p className={s.hubRitualTitle}>Три карты: контекст · тень · действие</p>
           </div>
         </Link>
@@ -109,7 +95,7 @@ export function TarotHubMain() {
         <div className={s.hubSpreadPanel}>
           <div className={s.hubSpreadHeader}>
             <div>
-              <p className={s.hubRitualEyebrow}>Выберите формат</p>
+              <p className={s.hubRitualEyebrow}>Выбери формат</p>
               <h2 className={s.hubSpreadTitle}>Расклады для решения</h2>
             </div>
             <span className={s.hubPill}>4–7 мин</span>
@@ -132,33 +118,24 @@ export function TarotHubMain() {
           </div>
         </div>
 
-        <div className={s.hubCodPanel}>
+        <div className={s.hubCodPanel} data-testid="tarot-hub-card-of-day-locked">
           <p className={s.hubRitualEyebrow}>Карта дня</p>
           <div className={s.hubCodGrid}>
-            <div className={s.hubCodImage}>
-              {cardSrc ? (
-                <Image
-                  src={cardSrc}
-                  alt={cardName}
-                  fill
-                  sizes="115px"
-                  style={{ objectFit: "contain" }}
-                />
-              ) : null}
-            </div>
+            <div className={s.hubCodImage} aria-hidden />
             <div>
-              <h3 className={s.hubCodName}>{cardName}</h3>
+              <h3 className={s.hubCodName}>Ещё не выбрана</h3>
               <p className={s.hubCodText}>
-                {cardOfDay?.card?.keywords?.[0]
-                  ? `Фокус дня — «${cardOfDay.card.keywords[0]}».`
-                  : "Доверие к тихому курсу. Сегодня ясность появляется не через контроль, а через мягкое возвращение к себе."}
+                Карта дня открывается только в ритуале «Сегодня» — здесь её нет заранее, чтобы не
+                спойлерить день.
               </p>
             </div>
           </div>
           <div className={s.hubStarterBox}>
-            <p className={s.hubStarterEyebrow}>Вопрос для старта</p>
+            <p className={s.hubStarterEyebrow}>Куда дальше</p>
             <p className={s.hubStarterText}>
-              Какой следующий шаг сделает сегодняшний день честнее и легче?
+              <Link href="/today" className={s.hubBtnSecondary} style={{ display: "inline-flex" }}>
+                Открыть «Сегодня»
+              </Link>
             </p>
           </div>
         </div>

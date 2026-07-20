@@ -5,7 +5,7 @@ import Link from "next/link";
 import { LoadingSpinner } from "@/components/orbit";
 import { CardVisual } from "@/components/tarot/CardVisual";
 import { useAuth } from "@/lib/useAuth";
-import { getJson } from "@/lib/api";
+import { getJson, postJson } from "@/lib/api";
 import { useToastContext } from "@/components/ToastProvider";
 import { t } from "@/lib/i18n";
 import { buildTarotDeepenHref } from "@/lib/buildTarotDeepenHref";
@@ -28,8 +28,12 @@ function splitTextToParagraphs(value?: string | null) {
     .filter(Boolean);
 }
 
+function hasSelectedCard(draw: TarotDailyDraw | null | undefined): draw is TarotDailyDraw & { card: NonNullable<TarotDailyDraw["card"]> } {
+  return Boolean(draw?.card && (draw.selection_status ?? "selected") === "selected");
+}
+
 function buildCardFocus(card: TarotDailyDraw | null) {
-  if (!card) return null;
+  if (!hasSelectedCard(card)) return null;
 
   const topKeyword = card.card.keywords?.[0];
   const mantraTitle = card.mantra?.title;
@@ -53,7 +57,7 @@ function buildCardFocus(card: TarotDailyDraw | null) {
 }
 
 function buildCardCare(card: TarotDailyDraw | null) {
-  if (!card) return null;
+  if (!hasSelectedCard(card)) return null;
 
   if (card.orientation === "reversed") {
     return "Без резких выводов из усталости — сначала тело и дыхание.";
@@ -111,11 +115,15 @@ function CardOfDayContent() {
       try {
         if (isAuthenticated) {
           const [cardData, practice] = await Promise.all([
+            // May be not_selected — never auto-assign via GET.
             getJson<TarotDailyDraw>("/tarot/daily").catch(() => null),
             getJson<{ id: string; title: string; duration_minutes?: number }>("/practices/current").catch(() => null),
           ]);
 
           setTarotCard(cardData);
+          if (hasSelectedCard(cardData)) {
+            setRevealed(true);
+          }
 
           const tasks: DailyTask[] = [];
           if (practice) {
@@ -138,8 +146,8 @@ function CardOfDayContent() {
           });
           setDailyTasks(tasks);
         } else {
-          const cardData = await getJson<TarotDailyDraw>("/tarot/daily/public").catch(() => null);
-          setTarotCard(cardData);
+          // Guests: do not load card identity from Tarot module — Today ritual only.
+          setTarotCard({ date: new Date().toISOString().slice(0, 10), selection_status: "not_selected", card: null });
         }
       } catch (err) {
         console.error("Failed to load card of day", err);
@@ -152,6 +160,21 @@ function CardOfDayContent() {
 
     bootstrap();
   }, [isAuthenticated, toast]);
+
+  const handleReveal = async () => {
+    if (!isAuthenticated) {
+      toast.error(t("dashboard.errors.authRequired", "Откройте карту дня в ритуале «Сегодня»"));
+      return;
+    }
+    try {
+      const revealedDraw = await postJson<TarotDailyDraw>("/tarot/daily/reveal", {});
+      setTarotCard(revealedDraw);
+      setRevealed(true);
+    } catch (err) {
+      console.error("Failed to reveal card of day", err);
+      toast.error(t("dashboard.errors.failedToLoadCard", "Не удалось открыть карту дня"));
+    }
+  };
 
   useEffect(() => {
     if (!revealed) {
@@ -218,7 +241,7 @@ function CardOfDayContent() {
   const effectiveCard = revealed ? tarotCard : null;
   const keywords = effectiveCard?.card?.keywords?.slice(0, 3) ?? [];
   const interpretationParagraphs = useMemo(() => {
-    if (!tarotCard || !revealed) return [];
+    if (!hasSelectedCard(tarotCard) || !revealed) return [];
     const source =
       tarotCard.orientation === "reversed" && tarotCard.card.reversed
         ? tarotCard.card.reversed
@@ -400,7 +423,7 @@ function CardOfDayContent() {
                       ) : (
                         <button
                           type="button"
-                          onClick={() => setRevealed(true)}
+                          onClick={() => void handleReveal()}
                           style={{
                             width: "100%",
                             minHeight: "364px",

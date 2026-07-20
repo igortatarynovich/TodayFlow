@@ -65,7 +65,15 @@ class Settings(BaseSettings):
     gemini_model: str = "gemini-2.5-flash"  # GEMINI_MODEL — chat-модель для LLM_PROVIDER=gemini
     gemini_base_url: str = "https://generativelanguage.googleapis.com/v1beta/openai/"  # GEMINI_BASE_URL
     gemini_max_tokens: int = 4096  # GEMINI_MAX_TOKENS — Gemini 2.5 резервирует budget на thinking
-    llm_provider: str = "openai"  # LLM_PROVIDER — openai | gemini (какой ключ использовать по умолчанию)
+    # Nebius Token Factory (OpenAI-compatible): https://docs.tokenfactory.nebius.com/
+    nebius_api_key: str | None = None  # NEBIUS_API_KEY
+    nebius_base_url: str = "https://api.tokenfactory.nebius.com/v1/"  # NEBIUS_BASE_URL
+    nebius_model: str = "deepseek-ai/DeepSeek-V4-Pro"  # NEBIUS_MODEL — id модели в Token Factory
+    llm_provider: str = "openai"  # LLM_PROVIDER — openai | gemini | nebius
+    # LLM_QUALITY_MODE:
+    #   economize — legacy: tight max_tokens, cheap tiers, clipped context (AMLL cost control);
+    #   rich — quality-first: full context, multi-step funnels, generous max_tokens, no cheap-tier preference.
+    llm_quality_mode: str = "rich"
     # TODAY_NARRATIVE_QUALITY_MODE: strict — post-hoc copy gates + brief-alignment retry;
     # trust_llm — только shape/locale для UI; тон и контекст задаются промптом, без template fallback по «конкретности».
     today_narrative_quality_mode: str = "trust_llm"

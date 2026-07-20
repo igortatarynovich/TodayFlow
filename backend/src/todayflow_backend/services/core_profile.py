@@ -6,16 +6,21 @@ from copy import deepcopy
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta, timezone
 from hashlib import sha1
+import threading
 import time as time_module
 from typing import Any
 
 from sqlalchemy.orm import Session
 
 from todayflow_backend.services.profile_contract_v1 import (
+    PROFILE_CONTRACT_PROMPT_VER,
     PROFILE_CONTRACT_V1,
+    PROFILE_STATUS_FORMING,
+    PROFILE_STATUS_PARTIAL,
     build_profile_portrait_v1,
     profile_contract_from_legacy_interpretation,
 )
+from todayflow_backend.services.profile_disclosure_funnel_v0 import profile_prompt_versions
 from todayflow_backend.services.learning import get_learning_service
 from todayflow_backend.data.astrology import sign_for_date
 from todayflow_backend.db import models as db_models
@@ -27,11 +32,36 @@ _CANONICAL_USER_GENDERS = frozenset({"female", "male", "unspecified"})
 class CoreProfileService:
     """Builds stable profile context from natal + numerology data."""
 
-    profile_version: str = "core-v2"
+    profile_version: str = "core-v3"
     cache_ttl_seconds: int = 900
+    forming_retry_seconds: int = 300
 
     def __post_init__(self) -> None:
         self._cache: dict[str, tuple[float, dict[str, Any]]] = {}
+        self._gen_locks: dict[str, threading.Lock] = {}
+        self._gen_locks_guard = threading.Lock()
+        self._llm_call_counter = 0
+        self._llm_call_counter_lock = threading.Lock()
+
+    def _lock_for_hash(self, profile_hash: str) -> threading.Lock:
+        with self._gen_locks_guard:
+            lock = self._gen_locks.get(profile_hash)
+            if lock is None:
+                lock = threading.Lock()
+                self._gen_locks[profile_hash] = lock
+            return lock
+
+    def reset_llm_call_counter(self) -> None:
+        with self._llm_call_counter_lock:
+            self._llm_call_counter = 0
+
+    def get_llm_call_counter(self) -> int:
+        with self._llm_call_counter_lock:
+            return self._llm_call_counter
+
+    def _bump_llm_call_counter(self, n: int = 1) -> None:
+        with self._llm_call_counter_lock:
+            self._llm_call_counter += max(0, int(n))
 
     def _attach_natal_summary(
         self,
@@ -68,6 +98,23 @@ class CoreProfileService:
             "gender": gender,
         }
 
+    def _snapshot_is_reusable(self, snapshot: dict[str, Any] | None, *, now: float) -> bool:
+        if not isinstance(snapshot, dict):
+            return False
+        contract = snapshot.get("profile_contract_v1")
+        if not isinstance(contract, dict):
+            return False
+        status = str(contract.get("status") or "").strip().lower()
+        if status in (PROFILE_STATUS_FORMING, PROFILE_STATUS_PARTIAL):
+            generated_at = str(snapshot.get("generated_at") or "")
+            try:
+                ts = datetime.fromisoformat(generated_at.replace("Z", "+00:00")).timestamp()
+            except ValueError:
+                return False
+            # Cooldown: do not hammer LLM on every page open while forming.
+            return (now - ts) < float(self.forming_retry_seconds)
+        return True
+
     def build(self, db: Session, user: db_models.User, astro_profile_id: int | None = None) -> dict[str, Any]:
         # Явная загрузка настроек: при переиспользовании одной DB-сессии (pytest / TestClient)
         # связь user.settings может не отражать только что закоммиченный PUT /account/profile.
@@ -87,92 +134,116 @@ class CoreProfileService:
         astro_context = self._build_astro_context(astro_profile)
         numerology_context = self._build_numerology_context(numerology_profile)
         profile_hash = self._build_profile_hash(settings, astro_context, numerology_context)
-        snapshot = self._load_snapshot(db, user.id, profile_hash)
-        if snapshot is not None:
-            cached_payload = self._normalize_payload_contract(deepcopy(snapshot))
-            cached_payload["astro"]["relation"] = astro_context.get("relation")
-            cached_payload["profiles"] = profiles_context
-            cached_payload["living"] = living_context
-            self._cache[cache_key] = (now + self.cache_ttl_seconds, deepcopy(cached_payload))
-            self._prune_cache(now)
-            return self._attach_natal_summary(db, cached_payload, astro_profile, settings)
 
-        baseline = self._build_baseline(astro_context, numerology_context)
-        missing_fields = self._build_missing_fields(settings, astro_context, numerology_context)
-        is_ready = len(missing_fields) == 0
+        lock = self._lock_for_hash(profile_hash)
+        with lock:
+            # Re-check memory cache inside lock (parallel openers coalesce).
+            cached = self._cache.get(cache_key)
+            if cached and cached[0] > now:
+                return self._attach_natal_summary(db, deepcopy(cached[1]), astro_profile, settings)
 
-        person_pub = self._person_public(settings, user)
-        generated_at = datetime.now(timezone.utc).isoformat()
-        locale = (person_pub.get("locale") or "ru").strip()[:32] or "ru"
+            snapshot = self._load_snapshot(db, user.id, profile_hash)
+            if snapshot is not None and self._snapshot_is_reusable(snapshot, now=now):
+                cached_payload = self._normalize_payload_contract(deepcopy(snapshot))
+                if isinstance(cached_payload.get("astro"), dict):
+                    cached_payload["astro"]["relation"] = astro_context.get("relation")
+                cached_payload["profiles"] = profiles_context
+                cached_payload["living"] = living_context
+                self._cache[cache_key] = (now + self.cache_ttl_seconds, deepcopy(cached_payload))
+                self._prune_cache(now)
+                return self._attach_natal_summary(db, cached_payload, astro_profile, settings)
 
-        profile_input = {
-            "profile_version": self.profile_version,
-            "generated_at": generated_at,
-            "is_ready": is_ready,
-            "missing_fields": missing_fields,
-            "profile_hash": profile_hash,
-            "person": person_pub,
-            "astro": astro_context,
-            "numerology": numerology_context,
-            "baseline": baseline,
-            "profiles": profiles_context,
-        }
-        contract, interpretation, daily_interpretation, used_fallback = build_profile_portrait_v1(
-            profile_input=profile_input,
-            living=living_context,
-            locale=locale,
-        )
-        try:
-            learning = get_learning_service()
-            pv = learning.get_or_create_prompt_version(
-                db,
-                module="profile_contract_v1",
-                version="profile-contract-v1",
-                prompt_kind="system",
-                prompt_text="profile_contract_v1",
-                label="profile_contract_v1",
-                metadata={"contract": PROFILE_CONTRACT_V1},
-            )
-            learning.log_generation(
-                db,
-                module="profile_contract_v1",
-                surface="profile_contract",
-                user_id=user.id,
-                prompt_version_id=pv.id,
+            baseline = self._build_baseline(astro_context, numerology_context)
+            missing_fields = self._build_missing_fields(settings, astro_context, numerology_context)
+            is_ready = len(missing_fields) == 0
+
+            person_pub = self._person_public(settings, user)
+            generated_at = datetime.now(timezone.utc).isoformat()
+            locale = (person_pub.get("locale") or "ru").strip()[:32] or "ru"
+
+            profile_input = {
+                "profile_version": self.profile_version,
+                "generated_at": generated_at,
+                "is_ready": is_ready,
+                "missing_fields": missing_fields,
+                "profile_hash": profile_hash,
+                "person": person_pub,
+                "astro": astro_context,
+                "numerology": numerology_context,
+                "baseline": baseline,
+                "profiles": profiles_context,
+            }
+            contract, interpretation, daily_interpretation, used_fallback = build_profile_portrait_v1(
+                profile_input=profile_input,
+                living=living_context,
                 locale=locale,
-                input_payload={"profile_hash": profile_hash, "contract": PROFILE_CONTRACT_V1},
-                normalized_response=contract,
-                status="success" if not used_fallback else "fallback",
-                used_fallback=used_fallback,
             )
-        except Exception:
-            pass
+            steps = []
+            gm = contract.get("generation_meta") if isinstance(contract, dict) else None
+            if isinstance(gm, dict) and isinstance(gm.get("steps"), list):
+                steps = gm["steps"]
+            self._bump_llm_call_counter(len(steps) if steps else (0 if used_fallback else 1))
 
-        profile_payload = {
-            "profile_version": self.profile_version,
-            "generated_at": generated_at,
-            "is_ready": is_ready,
-            "missing_fields": missing_fields,
-            "profile_hash": profile_hash,
-            "person": person_pub,
-            "astro": astro_context,
-            "numerology": numerology_context,
-            "baseline": baseline,
-            "profiles": profiles_context,
-            "profile_contract_v1": contract,
-            "interpretation": interpretation,
-            "daily_interpretation": daily_interpretation,
-            "living": living_context,
-        }
-        self._save_snapshot(
-            db=db,
-            user_id=user.id,
-            profile_hash=profile_hash,
-            payload=profile_payload,
-        )
-        self._cache[cache_key] = (now + self.cache_ttl_seconds, deepcopy(profile_payload))
-        self._prune_cache(now)
-        return self._attach_natal_summary(db, deepcopy(profile_payload), astro_profile, settings)
+            try:
+                learning = get_learning_service()
+                pv = learning.get_or_create_prompt_version(
+                    db,
+                    module="profile_contract_v1",
+                    version=PROFILE_CONTRACT_PROMPT_VER,
+                    prompt_kind="system",
+                    prompt_text="profile_disclosure_funnel_v0",
+                    label="profile_contract_v1",
+                    metadata={
+                        "contract": PROFILE_CONTRACT_V1,
+                        "prompt_ver": PROFILE_CONTRACT_PROMPT_VER,
+                        "prompt_versions": profile_prompt_versions(),
+                    },
+                )
+                learning.log_generation(
+                    db,
+                    module="profile_contract_v1",
+                    surface="profile_contract",
+                    user_id=user.id,
+                    prompt_version_id=pv.id,
+                    locale=locale,
+                    input_payload={
+                        "profile_hash": profile_hash,
+                        "contract": PROFILE_CONTRACT_V1,
+                        "prompt_versions": profile_prompt_versions(),
+                        "generation_meta": gm if isinstance(gm, dict) else {},
+                    },
+                    normalized_response=contract,
+                    status="success" if not used_fallback else "forming",
+                    used_fallback=used_fallback,
+                )
+            except Exception:
+                pass
+
+            profile_payload = {
+                "profile_version": self.profile_version,
+                "generated_at": generated_at,
+                "is_ready": is_ready,
+                "missing_fields": missing_fields,
+                "profile_hash": profile_hash,
+                "person": person_pub,
+                "astro": astro_context,
+                "numerology": numerology_context,
+                "baseline": baseline,
+                "profiles": profiles_context,
+                "profile_contract_v1": contract,
+                "interpretation": interpretation,
+                "daily_interpretation": daily_interpretation,
+                "living": living_context,
+            }
+            self._save_snapshot(
+                db=db,
+                user_id=user.id,
+                profile_hash=profile_hash,
+                payload=profile_payload,
+            )
+            self._cache[cache_key] = (now + self.cache_ttl_seconds, deepcopy(profile_payload))
+            self._prune_cache(now)
+            return self._attach_natal_summary(db, deepcopy(profile_payload), astro_profile, settings)
 
     def _cache_key(
         self,
@@ -625,6 +696,11 @@ class CoreProfileService:
                 str(astro_context.get("sun_sign") or ""),
                 str(numerology_context.get("life_path") or ""),
                 str(numerology_context.get("expression") or ""),
+                # Bust snapshot cache when portrait prompt/contract evolves.
+                PROFILE_CONTRACT_PROMPT_VER,
+                self.profile_version,
+                # Per-prompt version invalidation (any of 4 steps).
+                "|".join(f"{k}={v}" for k, v in sorted(profile_prompt_versions().items())),
             ]
         )
         return sha1(raw.encode("utf-8")).hexdigest()

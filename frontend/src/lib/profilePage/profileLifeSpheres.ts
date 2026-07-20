@@ -13,7 +13,21 @@ import {
   getVenusInSignEntry,
 } from "@/lib/zodiacKnowledge";
 import { getPlanetSignId } from "./buildProfilePlanetaryData";
+import { isProfilePortraitForming, PROFILE_PORTRAIT_FORMING_MESSAGE } from "./profilePortraitForming";
 import { withLifeSphereHowFrame } from "./profileSphereCopy";
+
+/** Chrome labels only — not user-facing portrait copy. */
+const SPHERE_CHROME: Record<string, { title: string; accent: string }> = {
+  love: { title: "Любовь", accent: "#d16a8d" },
+  sex: { title: "Секс и сексуальность", accent: "#b45309" },
+  money: { title: "Деньги", accent: "#8a6f49" },
+  work: { title: "Работа и реализация", accent: "#6d5bd0" },
+  family: { title: "Семья и дом", accent: "#0f9d7a" },
+  kids: { title: "Дети и родительство", accent: "#0ea5e9" },
+  body: { title: "Тело и энергия", accent: "#16a34a" },
+  friends: { title: "Дружба и окружение", accent: "#a855f7" },
+  decisions: { title: "Решения и дисциплина", accent: "#64748b" },
+};
 
 const HOW_MAX = 520;
 
@@ -46,10 +60,11 @@ function joinHow(pieces: Array<string | null | undefined>): string | null {
 }
 
 function sphereHow(apiLine: string | undefined, defaultParagraph: string, chart: string | null, sphereId: string): string {
-  if (chart) return withLifeSphereHowFrame(sphereId, chart);
+  // Live LLM/API copy wins; chart is enrichment only when portrait text is absent.
   const api = (apiLine || "").trim();
-  const raw = api || defaultParagraph;
-  return withLifeSphereHowFrame(sphereId, raw);
+  if (api) return withLifeSphereHowFrame(sphereId, api);
+  if (chart) return withLifeSphereHowFrame(sphereId, chart);
+  return withLifeSphereHowFrame(sphereId, defaultParagraph);
 }
 
 export type BuildProfileLifeSpheresFromChartInput = {
@@ -96,12 +111,96 @@ function planetNarrativeLine(label: string, entry?: PlanetInSignEntry | null): s
   return `${label}: ${bullet}`;
 }
 
-/** Life spheres for Profile Quick Map from core interpretation + natal preview slices. */
+type ContractSphere = NonNullable<NonNullable<CoreProfile["profile_contract_v1"]>["life_spheres"]>[string];
+
+function applyContractSphereOverlay(
+  spheres: ProfileLifeSphere[],
+  contractSpheres: NonNullable<CoreProfile["profile_contract_v1"]>["life_spheres"] | undefined,
+): ProfileLifeSphere[] {
+  if (!contractSpheres || typeof contractSpheres !== "object") return spheres;
+  return spheres.map((sphere) => {
+    const live = contractSpheres[sphere.id] as ContractSphere | undefined;
+    if (!live || typeof live !== "object") return sphere;
+    const how = (live.how || "").trim();
+    const need = (live.need || "").trim();
+    const risk = (live.risk || "").trim();
+    const turnsOn = (live.turns_on || "").trim();
+    const turnsOff = (live.turns_off || "").trim();
+    const helps = (live.helps || "").trim();
+    return {
+      ...sphere,
+      how: how ? withLifeSphereHowFrame(sphere.id, how) : sphere.how,
+      need: need || sphere.need,
+      risk: risk || sphere.risk,
+      turnsOn: turnsOn || sphere.turnsOn,
+      turnsOff: turnsOff || sphere.turnsOff,
+      helps: helps || sphere.helps,
+    };
+  });
+}
+
+function buildSpheresFromContractOnly(
+  contractSpheres: NonNullable<CoreProfile["profile_contract_v1"]>["life_spheres"],
+): ProfileLifeSphere[] {
+  const out: ProfileLifeSphere[] = [];
+  for (const [id, chrome] of Object.entries(SPHERE_CHROME)) {
+    const live = contractSpheres?.[id];
+    if (!live || typeof live !== "object") continue;
+    const how = (live.how || "").trim();
+    const need = (live.need || "").trim();
+    const risk = (live.risk || "").trim();
+    const turnsOn = (live.turns_on || "").trim();
+    const turnsOff = (live.turns_off || "").trim();
+    const helps = (live.helps || "").trim();
+    if (!how || !need || !risk || !turnsOn || !turnsOff || !helps) continue;
+    out.push({
+      id,
+      title: chrome.title,
+      accent: chrome.accent,
+      how: withLifeSphereHowFrame(id, how),
+      need,
+      risk,
+      turnsOn,
+      turnsOff,
+      helps,
+      inSystem: "",
+    });
+  }
+  return out;
+}
+
+/**
+ * Life spheres for Profile V2.
+ * Ready portrait → only LLM contract spheres (no chart/template silent fill).
+ * Forming/partial → empty list; UI shows forming state.
+ */
 export function buildProfileLifeSpheresFromProfileData(
   preview: NatalChartPreview | null,
   core: CoreProfile | null,
 ): ProfileLifeSphere[] {
+  void preview;
+  if (isProfilePortraitForming(core)) {
+    return [];
+  }
+  const contractSpheres = core?.profile_contract_v1?.life_spheres;
+  if (!contractSpheres || typeof contractSpheres !== "object") {
+    return [];
+  }
+  const fromContract = buildSpheresFromContractOnly(contractSpheres);
+  if (fromContract.length >= 9) {
+    return fromContract;
+  }
+  // Incomplete contract → do not mix with hardcoded DEFAULTS.
+  return [];
+}
+
+/** @deprecated chart/template path kept for legacy tests only — not used by Profile V2. */
+export function buildProfileLifeSpheresFromProfileDataLegacy(
+  preview: NatalChartPreview | null,
+  core: CoreProfile | null,
+): ProfileLifeSphere[] {
   const la = core?.interpretation?.life_areas;
+  const contractSpheres = core?.profile_contract_v1?.life_spheres;
   const sun = getSunInSignEntry(getPlanetSignId(preview, "Sun", core?.astro?.sun_sign));
   const moon = getMoonInSignEntry(getPlanetSignId(preview, "Moon"));
   const venus = getVenusInSignEntry(getPlanetSignId(preview, "Venus"));
@@ -111,18 +210,18 @@ export function buildProfileLifeSpheresFromProfileData(
   const jupiter = getJupiterInSignEntry(getPlanetSignId(preview, "Jupiter"));
   const pluto = getPlutoInSignEntry(getPlanetSignId(preview, "Pluto"));
 
-  return buildProfileLifeSpheresFromChart({
+  const base = buildProfileLifeSpheresFromChart({
     preview,
-    love: la?.love ?? "",
-    career: la?.career ?? "",
-    money: la?.money ?? "",
-    family: la?.family ?? "",
-    sex: la?.sex,
+    love: (contractSpheres?.love?.how || la?.love || "").trim(),
+    career: (contractSpheres?.work?.how || la?.career || "").trim(),
+    money: (contractSpheres?.money?.how || la?.money || "").trim(),
+    family: (contractSpheres?.family?.how || la?.family || "").trim(),
+    sex: contractSpheres?.sex?.how || la?.sex,
     sexPracticalTips: core?.interpretation?.sex_practical_tips,
-    kids: la?.kids,
-    body: la?.body,
-    friends: la?.friends,
-    decisions: la?.decisions,
+    kids: contractSpheres?.kids?.how || la?.kids,
+    body: contractSpheres?.body?.how || la?.body,
+    friends: contractSpheres?.friends?.how || la?.friends,
+    decisions: contractSpheres?.decisions?.how || la?.decisions,
     sunLine: planetNarrativeLine("Солнце", sun),
     moonLine: planetNarrativeLine("Луна", moon),
     venusLine: planetNarrativeLine("Венера", venus),
@@ -132,7 +231,11 @@ export function buildProfileLifeSpheresFromProfileData(
     jupiterLine: planetNarrativeLine("Юпитер", jupiter),
     plutoLine: planetNarrativeLine("Плутон", pluto),
   });
+
+  return applyContractSphereOverlay(base, contractSpheres);
 }
+
+export { PROFILE_PORTRAIT_FORMING_MESSAGE };
 
 export function buildProfileLifeSpheresFromChart(input: BuildProfileLifeSpheresFromChartInput): ProfileLifeSphere[] {
   const h = (n: number) => chartHousePortraitLine(input.preview, n);

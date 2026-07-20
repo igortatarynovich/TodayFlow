@@ -1,4 +1,4 @@
-import { getJson } from "@/lib/api";
+import { getJson, postJson } from "@/lib/api";
 import { buildFirstTodayPackage } from "@/lib/firstTodayPackage";
 import { readOnboardingContext } from "@/lib/onboardingContext";
 import type { CoreProfile } from "@/lib/types";
@@ -92,4 +92,40 @@ export function isTodayContractFallback(contract: TodayContractV1 | null | undef
 export async function fetchTodayContractV1(targetDate?: string): Promise<TodayContractV1> {
   const qs = targetDate ? `?target_date=${encodeURIComponent(targetDate)}` : "";
   return getJson<TodayContractV1>(`/today/contract${qs}`);
+}
+
+export type TodayStoryRefreshResult = {
+  rebuilt: boolean;
+  story_status: string;
+  story_refresh_required: boolean;
+  story_fingerprint?: string | null;
+  generation_id?: string;
+  contract?: TodayContractV1 | null;
+  error?: string | null;
+};
+
+/** Rebuild day_story when fingerprint is stale after reveal/mood/goals. */
+export async function refreshTodayStory(input?: {
+  localDate?: string;
+  timezone?: string;
+  force?: boolean;
+}): Promise<TodayStoryRefreshResult> {
+  let timezone = input?.timezone;
+  if (!timezone) {
+    try {
+      timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+    } catch {
+      timezone = "UTC";
+    }
+  }
+  return postJson<TodayStoryRefreshResult>("/today/story/refresh", {
+    local_date: input?.localDate,
+    timezone,
+    force: Boolean(input?.force),
+  });
+}
+
+export function isTodayStoryStale(contract: TodayContractV1 | null | undefined): boolean {
+  const p = contract?.progress || {};
+  return p.story_refresh_required === true || p.story_status === "stale";
 }

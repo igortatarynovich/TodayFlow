@@ -18,6 +18,9 @@ import {
 } from "@/components/profile/v2/profileV2SystemCopy";
 import type { ProfileV2LiveContext } from "@/lib/profilePage/buildProfileV2LiveContext";
 import {
+  profilePortraitFormingMessage,
+} from "@/lib/profilePage/profilePortraitForming";
+import {
   profileV2SphereCardLine,
   profileV2SphereProgressPercent,
 } from "@/lib/profilePage/profileV2SpherePresentation";
@@ -36,6 +39,8 @@ export type ProfileV2SystemScreenProps = {
   livingObservation?: string | null;
   notices?: ReactNode;
   onOpenBirthData: () => void;
+  portraitForming?: boolean;
+  portraitFormingMessage?: string | null;
 };
 
 function zoneDomId(zone: ProfileV2ZoneId): string {
@@ -67,10 +72,15 @@ export function ProfileV2SystemScreen({
   livingObservation,
   notices,
   onOpenBirthData,
+  portraitForming = false,
+  portraitFormingMessage: portraitFormingMessageProp = null,
 }: ProfileV2SystemScreenProps) {
   const [activeZone, setActiveZone] = useState<ProfileV2ZoneId>("facts");
 
-  const quote = buildProfileHeroQuote(model.archetype, model.identitySummary);
+  const quote = portraitForming
+    ? null
+    : buildProfileHeroQuote(model.archetype, model.identitySummary);
+  const formingMessage = portraitFormingMessageProp?.trim() || profilePortraitFormingMessage(null);
   const astroFacts = buildAstroFactsLine(model.frameworkAnchors);
   const helps = live.helps.length ? live.helps : model.thriveAreas.slice(0, 3);
   const awarenessPercent = live.awarenessPercent;
@@ -120,6 +130,12 @@ export function ProfileV2SystemScreen({
             Данные рождения
           </button>
         </div>
+
+        {portraitForming ? (
+          <div className={styles.zone} data-testid="profile-portrait-forming" role="status">
+            <p className={styles.zoneLead}>{formingMessage}</p>
+          </div>
+        ) : null}
 
         <section className={styles.heroGrid} aria-label="Профиль">
           <article className={styles.heroCard}>
@@ -180,7 +196,9 @@ export function ProfileV2SystemScreen({
             <article className={styles.factCard}>
               <p className={styles.factLabel}>{PROFILE_V2_COPY.zones.facts.cards.archetype}</p>
               <p className={styles.factValue}>{model.archetype}</p>
-              <p className={styles.factHint}>{model.identitySummary ?? "Видит связи, когда остальные видят события."}</p>
+              {model.identitySummary ? (
+                <p className={styles.factHint}>{model.identitySummary}</p>
+              ) : null}
             </article>
             <article className={styles.factCard}>
               <p className={styles.factLabel}>{PROFILE_V2_COPY.zones.facts.cards.astro}</p>
@@ -266,6 +284,27 @@ export function ProfileV2SystemScreen({
             <article className={styles.decisionBlock}>
               <p className={styles.characterPanelTitle}>{PROFILE_V2_COPY.zones.character.decisions}</p>
               <p className={styles.factHint}>{model.decisionStyle}</p>
+            </article>
+          ) : null}
+          {model.perceivedAs.length ? (
+            <article className={styles.characterPanel} style={{ marginTop: "1rem" }}>
+              <p className={styles.characterPanelTitle}>Повторяющиеся паттерны</p>
+              <ul className={styles.bulletList}>
+                {model.perceivedAs.map((item) => (
+                  <li key={item} className={styles.bulletItem}>
+                    <span className={`${styles.bulletMark} ${styles.bulletMarkMuted}`.trim()} aria-hidden>
+                      ◦
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ) : null}
+          {model.frameworkLead ? (
+            <article className={styles.decisionBlock} style={{ marginTop: "1rem" }}>
+              <p className={styles.characterPanelTitle}>Что меняется сейчас</p>
+              <p className={styles.factHint}>{model.frameworkLead}</p>
             </article>
           ) : null}
         </section>

@@ -69,13 +69,12 @@ async def get_public_daily_tarot_draw(
     request: Request,
     tarot_service: TarotService = Depends(get_tarot_service),
 ) -> models.TarotDailyDraw:
-    """Return general daily card/mantra/ritual combo (not personalized, for public access)."""
-    from datetime import date
-    from todayflow_backend.db.models import User
-    
-    # Create a temporary user with fixed ID for deterministic public draws
-    public_user = User(id=0, email="public@todayflow.app")
-    return tarot_service.get_daily_draw(public_user, locale=request_locale(request))
+    """Public module endpoint — never exposes card-of-day identity before Today ritual.
+
+    Guests must choose/reveal the card in the Today flow; Tarot hub must not spoil it.
+    """
+    _ = request
+    return tarot_service.not_selected_daily_draw()
 
 
 @router.get("/cards/{card_id}", response_model=models.TarotCard)
@@ -96,9 +95,81 @@ async def get_daily_tarot_draw(
     request: Request,
     tarot_service: TarotService = Depends(get_tarot_service),
     user=Depends(require_user),
+    db=Depends(get_session),
 ) -> models.TarotDailyDraw:
-    """Return the deterministic card/mantra/ritual combo for today."""
-    return tarot_service.get_daily_draw(user, locale=request_locale(request))
+    """Return today's card only if already revealed in unified SoT; else ``not_selected``."""
+    from todayflow_backend.services import day_symbol_state_v1 as day_symbols
+
+    _ = request
+    day = day_symbols.resolve_local_date(local_date=None, timezone_name="UTC")
+    row = day_symbols.get_state_row(
+        db, owner_key=day_symbols.owner_key_for_user(user.id), local_date=day
+    )
+    view = day_symbols.public_view(row, local_date=day, timezone_name="UTC", tarot_service=tarot_service)
+    card = view.get("card") or {}
+    if not card.get("revealed") or card.get("id") is None:
+        return tarot_service.not_selected_daily_draw(draw_date=day)
+    return models.TarotDailyDraw(
+        date=day.isoformat(),
+        selection_status="selected",
+        card=tarot_service.get_card_by_id(int(card["id"])),
+        orientation=card.get("orientation") or "upright",
+        mantra=None,
+        ritual=None,
+    )
+
+
+class TarotDailyRevealPayload(BaseModel):
+    card_id: int | None = None
+    orientation: str = "upright"
+    local_date: str | None = None
+    timezone: str = "UTC"
+    reveal_source: str = "tarot_module"
+    idempotency_key: str | None = None
+
+
+@router.post("/daily/reveal", response_model=models.TarotDailyDraw)
+async def reveal_daily_tarot_draw(
+    request: Request,
+    payload: TarotDailyRevealPayload | None = None,
+    tarot_service: TarotService = Depends(get_tarot_service),
+    user=Depends(require_user),
+    db=Depends(get_session),
+) -> models.TarotDailyDraw:
+    """Explicit reveal/select — delegates to unified day symbol SoT when card_id provided."""
+    from todayflow_backend.services import day_symbol_state_v1 as day_symbols
+
+    body = payload or TarotDailyRevealPayload()
+    day = day_symbols.resolve_local_date(local_date=body.local_date, timezone_name=body.timezone)
+    if body.card_id is None:
+        # Legacy path: assign seeded card then mark revealed in SoT
+        legacy = tarot_service.reveal_daily_draw(user, locale=request_locale(request))
+        if legacy.card is None:
+            return legacy
+        body.card_id = int(legacy.card.id)
+        body.orientation = legacy.orientation or "upright"
+    key = (body.idempotency_key or f"tarot_module:{user.id}:{day.isoformat()}:{body.card_id}").strip()
+    view = day_symbols.reveal_card(
+        db,
+        owner_key=day_symbols.owner_key_for_user(user.id),
+        local_date=day,
+        timezone_name=body.timezone,
+        card_id=int(body.card_id),
+        orientation=body.orientation,
+        reveal_source=body.reveal_source,
+        idempotency_key=key,
+        user_id=int(user.id),
+        tarot_service=tarot_service,
+    )
+    card = view.get("card") or {}
+    return models.TarotDailyDraw(
+        date=day.isoformat(),
+        selection_status="selected",
+        card=tarot_service.get_card_by_id(int(card["id"])) if card.get("id") is not None else None,
+        orientation=card.get("orientation") or "upright",
+        mantra=None,
+        ritual=None,
+    )
 
 
 @router.get("/daily/explain", response_model=dict)
@@ -118,12 +189,14 @@ async def explain_daily_tarot_card(
     
     target_date = date or date_class.today().isoformat()
     
-    # Получаем карту дня
+    # Only explain after reveal — do not auto-assign via GET.
     tarot_service = get_tarot_service()
-    daily_draw = tarot_service.get_daily_draw(user, locale=request_locale(request))
+    daily_draw = tarot_service.get_daily_draw(
+        user, locale=request_locale(request), assign_if_missing=False
+    )
     
-    if not daily_draw or not daily_draw.card:
-        raise HTTPException(status_code=404, detail="Карта дня не найдена")
+    if not daily_draw or not daily_draw.card or daily_draw.selection_status != "selected":
+        raise HTTPException(status_code=409, detail="card_of_day_not_selected")
     
     # Объясняем через ИИ
     explanation = explain_tarot_card(

@@ -25,6 +25,8 @@ import type { FusionResponse } from "@/components/today/todayPageUtils";
 import type { MeaningRingsResponse } from "@/lib/types";
 import type { WeeklyGoal } from "@/components/today/todayPageUtils";
 import { useMeaningRuntime } from "@/hooks/useMeaningRuntime";
+import { useAuth } from "@/lib/useAuth";
+import { revealDayCard, revealDayNumber, type DaySymbolPublicView } from "@/lib/daySymbolReveal";
 import type { TodayRitualNarrativePayload } from "@/lib/todayNarrativeApi";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import {
@@ -233,10 +235,13 @@ type Props = {
   coreLoopViabilityMode?: boolean;
   /** P0.1 wire — domain lenses из GET /today/contract. */
   todayContract?: TodayContractV1 | null;
+  dayStoryUpdating?: boolean;
+  onSymbolRevealResult?: (view: DaySymbolPublicView) => void;
 };
 
 export function TodayRitualFlow(props: Props) {
   const { trackMeaningEvent } = useMeaningRuntime();
+  const { isAuthenticated } = useAuth();
   const singleVoice = usesDayStorySingleVoice(props.todayContract);
   const guideNarrativeLoading = singleVoice ? false : props.guideNarrativeLoading;
   const guideNarrativePayload = singleVoice ? null : props.guideNarrativePayload;
@@ -821,6 +826,14 @@ export function TodayRitualFlow(props: Props) {
     (id: number) => {
       setTarotMeaningOpen(false);
       setTarotMainId(id);
+      void revealDayCard({
+        cardId: id,
+        isAuthenticated,
+        source: "today_ritual_flow",
+        idempotencyKey: `tarot_reveal:${dateISO}:${id}`,
+      })
+        .then((view) => props.onSymbolRevealResult?.(view))
+        .catch(() => undefined);
       const gid = props.narrativeGenerationIds?.guide ?? null;
       trackMeaningEvent({
         event_type: "tarot_selected",
@@ -828,7 +841,7 @@ export function TodayRitualFlow(props: Props) {
         payload: withOptionalGuideGenerationId({ role: "main", card_index: id }, gid),
       });
     },
-    [props.narrativeGenerationIds?.guide, trackMeaningEvent],
+    [dateISO, isAuthenticated, props.narrativeGenerationIds?.guide, props.onSymbolRevealResult, trackMeaningEvent],
   );
 
   const onDrawTarot = useCallback(() => {
@@ -877,6 +890,13 @@ export function TodayRitualFlow(props: Props) {
     const out = applyTodayRitualSpineReducer({ type: "revealedNumber" }, snap);
     if (!out) return;
     setNumberRevealed(out.after.numberRevealed);
+    void revealDayNumber({
+      isAuthenticated,
+      source: "today_ritual_flow",
+      idempotencyKey: `number_reveal:${dateISO}`,
+    })
+      .then((view) => props.onSymbolRevealResult?.(view))
+      .catch(() => undefined);
     if (out.effects.scrollToAnchorId) scrollToRitualSpineDomAnchor(out.effects.scrollToAnchorId);
     executeRitualSpineAnalytics(out.effects.analyticsHint, {
       numerologyValue: props.numerologyValue,
@@ -891,8 +911,11 @@ export function TodayRitualFlow(props: Props) {
     mood,
     checkInSubmitted,
     guideNarrativeLoading,
+    dateISO,
+    isAuthenticated,
     props.narrativeGenerationIds?.guide,
     props.numerologyValue,
+    props.onSymbolRevealResult,
     trackMeaningEvent,
   ]);
 
@@ -1392,6 +1415,15 @@ export function TodayRitualFlow(props: Props) {
                     </p>
                   ) : null}
                 </div>
+              ) : props.dayStoryUpdating ? (
+                <p
+                  className="orbit-body-sm"
+                  data-testid="today-day-story-updating"
+                  aria-live="polite"
+                  style={{ margin: 0, color: "#7a623d", lineHeight: 1.55, ...ritualTextWrap }}
+                >
+                  Обновляем описание дня…
+                </p>
               ) : coreMessageParagraphs.length > 0 ? (
                 <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
                   {coreMessageParagraphs.map((para, i) => (

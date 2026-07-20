@@ -1,7 +1,8 @@
-"""Profile Contract v1 — single editorial portrait for Profile (canonical artifact).
+"""Profile Contract v1 — editorial portrait for Profile (canonical artifact).
 
-One LLM call (or deterministic fallback) → identity, strengths, styles, living patterns.
-Backward compat: maps to legacy `interpretation` + `daily_interpretation`.
+Quality-first path: multi-request disclosure funnel
+(identity → styles → patterns/mission/helps → life_spheres).
+Legacy path: one LLM call. Deterministic fallback when LLM unavailable.
 
 Canon: SCREEN_CONTRACTS_V1 §4 · PROFILE_SCREEN_MASTER · PIM via generation_logs.
 """
@@ -19,37 +20,43 @@ from todayflow_backend.core.llm_openai_compatible import (
     resolve_default_chat_model,
     resolve_max_tokens,
 )
+from todayflow_backend.services.llm_quality_policy_v1 import (
+    funnel_step_max_tokens,
+    prefer_multi_step_funnels,
+    user_json_char_budget,
+)
+from todayflow_backend.services.profile_contract_quality_v1 import validate_profile_contract_strict
+from todayflow_backend.services.profile_disclosure_funnel_v0 import (
+    SPHERE_FIELDS,
+    SPHERE_IDS,
+    profile_prompt_versions,
+    run_profile_disclosure_funnel_v0,
+)
 
 PROFILE_CONTRACT_V1 = "profile_contract_v1"
-PROFILE_CONTRACT_PROMPT_VER = "profile-contract-v1"
+PROFILE_CONTRACT_PROMPT_VER = "profile-contract-v3"
+PROFILE_STATUS_READY = "ready"
+PROFILE_STATUS_FORMING = "forming"
+PROFILE_STATUS_PARTIAL = "partial"
+FORMING_MESSAGE_RU = "Портрет ещё формируется — живые тексты появятся после генерации."
+FORMING_MESSAGE_EN = "Portrait is still forming — live copy will appear after generation."
 
 _PROFILE_SYS_RU = """Ты пишешь **единый портрет человека** для TodayFlow (русский язык).
 
 Вход — JSON с ядром профиля: имя, знак, нумерология, baseline, living (сигналы, инсайты).
 
 Задача: **одна связная карта личности** — без штампов, без «вселенная/поток», без паспорта знака как единственного смысла.
+Все текстовые блоки должны быть живыми и персональными — не общие шаблоны.
 
-Поля (каждое — свой ракурс, без дословных повторов):
-- identity_core — 2–3 предложения: кто этот человек в жизни, не только знак
-- strengths — ≥3 конкретных сильных сторон (короткие фразы)
-- growth_zones — ≥3 зон внимания (не stigma, без морали)
-- relationship_style — как строит близость, границы, конфликт
-- money_style — отношение к деньгам, риск, ценность
-- decision_style — как выбирает, что тормозит, что ускоряет
-- recurring_patterns — ≥1 повторяющийся паттерн из living/signals (или честная нейтральная формулировка если данных мало)
-- living_changes — что меняется сейчас (1–2 предложения) или null если активности мало
+Поля:
+- identity_core, strengths (≥3), growth_zones (≥3)
+- relationship_style, money_style, decision_style
+- recurring_patterns (≥1), living_changes (или null)
+- life_mission, helps (≥2)
+- life_spheres: love/sex/money/work/family/kids/body/friends/decisions —
+  у каждой how/need/risk/turns_on/turns_off/helps
 
-Верни только JSON:
-{
-  "identity_core": "string",
-  "strengths": ["string","string","string"],
-  "growth_zones": ["string","string","string"],
-  "relationship_style": "string",
-  "money_style": "string",
-  "decision_style": "string",
-  "recurring_patterns": ["string"],
-  "living_changes": "string|null"
-}
+Верни только JSON с этими полями.
 """
 
 
@@ -90,16 +97,38 @@ def validate_profile_contract_v1(payload: dict[str, Any]) -> list[str]:
     return errors
 
 
+def _normalize_life_spheres(raw: Any) -> dict[str, dict[str, str]]:
+    src = raw if isinstance(raw, dict) else {}
+    out: dict[str, dict[str, str]] = {}
+    for sid in SPHERE_IDS:
+        row = src.get(sid) if isinstance(src.get(sid), dict) else {}
+        normalized = {
+            field: _clip(row.get(field), 420 if field == "how" else 280)
+            for field in SPHERE_FIELDS
+        }
+        if any(normalized.values()):
+            out[sid] = normalized
+    return out
+
+
 def _normalize_profile_contract(raw: dict[str, Any], *, profile_snapshot_version: str = "") -> dict[str, Any]:
     strengths = raw.get("strengths") if isinstance(raw.get("strengths"), list) else []
     growth = raw.get("growth_zones") if isinstance(raw.get("growth_zones"), list) else []
     patterns = raw.get("recurring_patterns") if isinstance(raw.get("recurring_patterns"), list) else []
+    helps = raw.get("helps") if isinstance(raw.get("helps"), list) else []
     living_changes = raw.get("living_changes")
     if living_changes is not None:
         living_changes = _clip(str(living_changes), 480) or None
 
+    status = str(raw.get("status") or PROFILE_STATUS_READY).strip().lower()
+    if status not in (PROFILE_STATUS_READY, PROFILE_STATUS_FORMING, PROFILE_STATUS_PARTIAL):
+        status = PROFILE_STATUS_READY
+    gen_meta = raw.get("generation_meta") if isinstance(raw.get("generation_meta"), dict) else {}
+
     return {
         "contract_version": PROFILE_CONTRACT_V1,
+        "status": status,
+        "forming_message": _clip(raw.get("forming_message"), 240) or None,
         "identity_core": _clip(raw.get("identity_core"), 720),
         "strengths": [_clip(str(x), 200) for x in strengths if str(x).strip()][:6],
         "growth_zones": [_clip(str(x), 200) for x in growth if str(x).strip()][:6],
@@ -108,6 +137,10 @@ def _normalize_profile_contract(raw: dict[str, Any], *, profile_snapshot_version
         "decision_style": _clip(raw.get("decision_style"), 520),
         "recurring_patterns": [_clip(str(x), 240) for x in patterns if str(x).strip()][:4],
         "living_changes": living_changes,
+        "life_mission": _clip(raw.get("life_mission"), 420) or None,
+        "helps": [_clip(str(x), 220) for x in helps if str(x).strip()][:5],
+        "life_spheres": _normalize_life_spheres(raw.get("life_spheres")),
+        "generation_meta": gen_meta,
         "profile_snapshot_version": profile_snapshot_version or PROFILE_CONTRACT_PROMPT_VER,
     }
 
@@ -139,9 +172,9 @@ def enrich_profile_contract_living(
             hints.append("Несколько дней подряд день закрывается с ощущением «не дотянул» — стоит смягчить план.")
         if not hints and summary:
             hints.append(_clip(summary.split(".")[0], 240))
-        if not hints:
-            hints.append("Пока мало данных — паттерны проявятся после нескольких дней в приложении.")
-        out["recurring_patterns"] = hints[:3]
+        # No invented soft templates — empty stays empty until living data or LLM fills it.
+        if hints:
+            out["recurring_patterns"] = hints[:3]
 
     if not out.get("living_changes"):
         parts: list[str] = []
@@ -162,16 +195,29 @@ def profile_contract_to_legacy_interpretation(contract: dict[str, Any]) -> dict[
     """Map profile_contract_v1 → legacy interpretation shape for Today/clients."""
     strengths = contract.get("strengths") if isinstance(contract.get("strengths"), list) else []
     growth = contract.get("growth_zones") if isinstance(contract.get("growth_zones"), list) else []
+    spheres = contract.get("life_spheres") if isinstance(contract.get("life_spheres"), dict) else {}
+
+    def _how(sid: str, fallback: str = "") -> str:
+        row = spheres.get(sid) if isinstance(spheres.get(sid), dict) else {}
+        return str(row.get("how") or "").strip() or fallback
+
     return {
         "identity": contract.get("identity_core") or "",
         "strengths": strengths,
         "watchouts": growth,
+        "life_mission": contract.get("life_mission") or "",
+        "helps": contract.get("helps") if isinstance(contract.get("helps"), list) else [],
+        "life_spheres": spheres,
         "life_areas": {
-            "love": contract.get("relationship_style") or "",
-            "career": contract.get("decision_style") or "",
-            "money": contract.get("money_style") or "",
-            "family": contract.get("relationship_style") or "",
-            "decisions": contract.get("decision_style") or "",
+            "love": _how("love", str(contract.get("relationship_style") or "")),
+            "career": _how("work", str(contract.get("decision_style") or "")),
+            "money": _how("money", str(contract.get("money_style") or "")),
+            "family": _how("family", str(contract.get("relationship_style") or "")),
+            "sex": _how("sex"),
+            "kids": _how("kids"),
+            "body": _how("body"),
+            "friends": _how("friends"),
+            "decisions": _how("decisions", str(contract.get("decision_style") or "")),
         },
     }
 
@@ -198,23 +244,65 @@ def profile_contract_from_legacy_interpretation(
     living: dict[str, Any] | None = None,
     profile_snapshot_version: str = "legacy-map",
 ) -> dict[str, Any]:
-    """Derive contract from old snapshot interpretation (no LLM)."""
-    interp = interpretation if isinstance(interpretation, dict) else {}
-    la = interp.get("life_areas") if isinstance(interp.get("life_areas"), dict) else {}
-    strengths = interp.get("strengths") if isinstance(interp.get("strengths"), list) else []
-    watchouts = interp.get("watchouts") if isinstance(interp.get("watchouts"), list) else []
-    raw = {
-        "identity_core": interp.get("identity") or "",
-        "strengths": strengths or ["Устойчивость", "Внимание к деталям", "Способность доводить начатое"],
-        "growth_zones": watchouts or ["Распыление", "Импульсивные решения", "Уход от прямого разговора"],
-        "relationship_style": la.get("love") or "",
-        "money_style": la.get("money") or "",
-        "decision_style": la.get("decisions") or la.get("career") or "",
+    """Legacy snapshots without contract → forming state (no invented portrait copy)."""
+    _ = interpretation, living
+    return build_profile_contract_forming_v1(
+        locale="ru",
+        reason="legacy_snapshot_without_contract",
+        profile_snapshot_version=profile_snapshot_version,
+    )
+
+
+def build_profile_contract_forming_v1(
+    *,
+    locale: str = "ru",
+    reason: str = "awaiting_generation",
+    generation_meta: dict[str, Any] | None = None,
+    partial: dict[str, Any] | None = None,
+    profile_snapshot_version: str = "",
+) -> dict[str, Any]:
+    """Neutral forming state — never invent rich template portrait text."""
+    en = (locale or "").lower().startswith("en")
+    base: dict[str, Any] = {
+        "status": PROFILE_STATUS_PARTIAL if partial else PROFILE_STATUS_FORMING,
+        "forming_message": FORMING_MESSAGE_EN if en else FORMING_MESSAGE_RU,
+        "identity_core": "",
+        "strengths": [],
+        "growth_zones": [],
+        "relationship_style": "",
+        "money_style": "",
+        "decision_style": "",
         "recurring_patterns": [],
         "living_changes": None,
+        "life_mission": None,
+        "helps": [],
+        "life_spheres": {},
+        "generation_meta": {
+            **(generation_meta or {}),
+            "forming_reason": reason,
+            "prompt_versions": profile_prompt_versions(),
+            "validation": {"ok": False, "all_errors": [reason]},
+        },
     }
-    contract = _normalize_profile_contract(raw, profile_snapshot_version=profile_snapshot_version)
-    return enrich_profile_contract_living(contract, living=living)
+    if isinstance(partial, dict):
+        for key in (
+            "identity_core",
+            "strengths",
+            "growth_zones",
+            "relationship_style",
+            "money_style",
+            "decision_style",
+            "recurring_patterns",
+            "living_changes",
+            "life_mission",
+            "helps",
+            "life_spheres",
+        ):
+            if key in partial and partial[key] not in (None, "", [], {}):
+                base[key] = partial[key]
+    return _normalize_profile_contract(
+        base, profile_snapshot_version=profile_snapshot_version or PROFILE_CONTRACT_PROMPT_VER
+    )
 
 
 def build_profile_contract_fallback_v1(
@@ -222,60 +310,84 @@ def build_profile_contract_fallback_v1(
     *,
     living: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    baseline = profile_input.get("baseline") if isinstance(profile_input.get("baseline"), dict) else {}
-    astro = profile_input.get("astro") if isinstance(profile_input.get("astro"), dict) else {}
+    """Back-compat alias — forming only, no fake-live scaffold."""
+    locale = "ru"
     person = profile_input.get("person") if isinstance(profile_input.get("person"), dict) else {}
-    name = str(person.get("display_name") or person.get("first_name") or "Вы").strip()
-    sign = str(astro.get("sun_sign") or astro.get("label") or "ваш знак").strip()
-    archetype = str(baseline.get("archetype") or "свой ритм").strip()
-    raw = {
-        "identity_core": (
-            f"{name}, у вас свой устойчивый ритм ({archetype}). "
-            f"Знак {sign} задаёт тон, но важнее то, как вы распределяете внимание в реальной жизни."
-        ),
-        "strengths": [
-            "Способность держать линию, когда появляется ясный приоритет",
-            "Внимание к людям и контексту",
-            "Умение замечать, что реально работает",
-        ],
-        "growth_zones": [
-            "Распыление на второй приоритет без времени",
-            "Уход в контроль, когда темп ускоряется",
-            "Откладывание прямого разговора",
-        ],
-        "relationship_style": "Близость строите через честность и предсказуемость — важно не угадывать, а говорить прямо.",
-        "money_style": "Деньги для вас — про ценность и спокойствие: лучше один ясный шаг, чем импульсивное обещание.",
-        "decision_style": "Решения созревают, когда есть факт и один критерий — тормозит лишний шум, ускоряет конкретный дедлайн.",
-        "recurring_patterns": [],
-        "living_changes": None,
+    if str(person.get("locale") or "").lower().startswith("en"):
+        locale = "en"
+    _ = living
+    return build_profile_contract_forming_v1(locale=locale, reason="fallback_forming")
+
+
+def call_profile_contract_llm_v1(
+    user_json: dict[str, Any],
+    *,
+    locale: str = "ru",
+) -> tuple[dict[str, Any] | None, dict[str, Any]]:
+    """Returns (normalized_contract_or_none, generation_meta)."""
+    meta: dict[str, Any] = {
+        "prompt_versions": profile_prompt_versions(),
+        "locale": locale,
+        "model": resolve_default_chat_model() if is_llm_chat_configured() else None,
     }
-    contract = _normalize_profile_contract(raw)
-    return enrich_profile_contract_living(contract, living=living)
-
-
-def call_profile_contract_llm_v1(user_json: dict[str, Any], *, locale: str = "ru") -> dict[str, Any] | None:
     if not is_llm_chat_configured():
-        return None
+        meta["reason"] = "llm_not_configured"
+        return None, meta
+
+    if prefer_multi_step_funnels():
+        merged, funnel_meta = run_profile_disclosure_funnel_v0(user_json, locale=locale)
+        meta.update(funnel_meta)
+        if merged is None:
+            return None, meta
+        status = PROFILE_STATUS_PARTIAL if funnel_meta.get("partial") else PROFILE_STATUS_READY
+        contract = _normalize_profile_contract({**merged, "status": status})
+        if funnel_meta.get("partial") or funnel_meta.get("failed"):
+            meta["validation"] = {"ok": False, "all_errors": [funnel_meta.get("reason") or "partial"]}
+            return contract, meta
+        report = validate_profile_contract_strict(contract)
+        meta["validation"] = report
+        if not report["ok"]:
+            return None, meta
+        contract["status"] = PROFILE_STATUS_READY
+        contract["generation_meta"] = {
+            "prompt_versions": funnel_meta.get("prompt_versions") or profile_prompt_versions(),
+            "model": funnel_meta.get("model"),
+            "provider": funnel_meta.get("provider"),
+            "locale": locale,
+            "steps": funnel_meta.get("steps"),
+            "completed_steps": funnel_meta.get("completed_steps"),
+            "validation": report,
+        }
+        return contract, meta
+
     client = get_openai_compatible_client()
     if client is None:
-        return None
-    system = _PROFILE_SYS_RU if locale.lower().startswith("ru") else _PROFILE_SYS_RU
+        meta["reason"] = "client_unavailable"
+        return None, meta
     content = chat_completion_plain(
         client,
         model=resolve_default_chat_model(),
         messages=[
-            {"role": "system", "content": system},
-            {"role": "user", "content": json.dumps(user_json, ensure_ascii=False)[:10000]},
+            {"role": "system", "content": _PROFILE_SYS_RU},
+            {"role": "user", "content": json.dumps(user_json, ensure_ascii=False)[: user_json_char_budget()]},
         ],
         temperature=0.48,
-        max_tokens=resolve_max_tokens(1600),
+        max_tokens=resolve_max_tokens(funnel_step_max_tokens("deep")),
     )
     if not content:
-        return None
+        meta["reason"] = "empty_completion"
+        return None, meta
     parsed = _parse_json_content(content)
     if not parsed:
-        return None
-    return _normalize_profile_contract(parsed)
+        meta["reason"] = "json_parse_failed"
+        return None, meta
+    contract = _normalize_profile_contract({**parsed, "status": PROFILE_STATUS_READY})
+    report = validate_profile_contract_strict(contract)
+    meta["validation"] = report
+    if not report["ok"]:
+        return None, meta
+    contract["generation_meta"] = {**meta, "path": "oneshot"}
+    return contract, meta
 
 
 def build_profile_portrait_v1(
@@ -284,10 +396,7 @@ def build_profile_portrait_v1(
     living: dict[str, Any] | None,
     locale: str = "ru",
 ) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], bool]:
-    """
-    Returns (profile_contract_v1, interpretation, daily_interpretation, used_fallback).
-    Single artifact path with legacy shim.
-    """
+    """Returns (contract, interpretation, daily_interpretation, used_forming_fallback)."""
     llm_pack = {
         "person": profile_input.get("person"),
         "astro": profile_input.get("astro"),
@@ -295,16 +404,43 @@ def build_profile_portrait_v1(
         "baseline": profile_input.get("baseline"),
         "living": living,
         "locale": locale,
+        "profile_hash": profile_input.get("profile_hash"),
     }
-    contract = call_profile_contract_llm_v1(llm_pack, locale=locale)
-    used_fallback = contract is None
+    contract, gen_meta = call_profile_contract_llm_v1(llm_pack, locale=locale)
+    used_fallback = False
     if contract is None:
-        contract = build_profile_contract_fallback_v1(profile_input, living=living)
+        used_fallback = True
+        contract = build_profile_contract_forming_v1(
+            locale=locale,
+            reason=str(gen_meta.get("reason") or "generation_failed"),
+            generation_meta=gen_meta,
+        )
+    elif contract.get("status") == PROFILE_STATUS_PARTIAL:
+        used_fallback = True
+        contract = build_profile_contract_forming_v1(
+            locale=locale,
+            reason=str(gen_meta.get("reason") or "partial"),
+            generation_meta=gen_meta,
+            partial=contract,
+        )
     else:
-        contract = enrich_profile_contract_living(contract, living=living)
-        if validate_profile_contract_v1(contract):
-            contract = build_profile_contract_fallback_v1(profile_input, living=living)
-            used_fallback = True
+        enriched = enrich_profile_contract_living(contract, living=living)
+        report = validate_profile_contract_strict(enriched)
+        if report["ok"]:
+            contract = enriched
+            contract["status"] = PROFILE_STATUS_READY
+            gm = contract.get("generation_meta") if isinstance(contract.get("generation_meta"), dict) else {}
+            contract["generation_meta"] = {**gm, "validation": report}
+        else:
+            pre = validate_profile_contract_strict(contract)
+            if not pre["ok"]:
+                used_fallback = True
+                contract = build_profile_contract_forming_v1(
+                    locale=locale,
+                    reason="validation_failed",
+                    generation_meta={**gen_meta, "validation": pre},
+                    partial=contract,
+                )
 
     interpretation = profile_contract_to_legacy_interpretation(contract)
     daily = profile_contract_to_daily_interpretation(contract)

@@ -37,16 +37,15 @@ def auth_token(client: TestClient, test_user: User) -> str:
 
 @pytest.mark.smoke
 def test_get_public_daily_tarot_draw(client: TestClient):
-    """Test getting public daily tarot draw (no auth required)."""
+    """Public daily endpoint must not spoil card-of-day identity."""
     response = client.get("/tarot/daily/public")
     assert response.status_code == 200
     data = response.json()
     
     assert "date" in data
-    assert "card" in data
-    assert "orientation" in data
-    assert data["card"]["id"] is not None
-    assert data["card"]["name"] is not None
+    assert data["selection_status"] == "not_selected"
+    assert data.get("card") is None
+    assert data.get("orientation") is None
 
 
 @pytest.mark.smoke
@@ -74,17 +73,22 @@ def test_get_daily_tarot_draw_requires_auth(client: TestClient):
 
 
 def test_get_daily_tarot_draw_authenticated(client: TestClient, test_user: User, auth_token: str):
-    """Test getting daily tarot draw for authenticated user."""
+    """GET is gated; reveal assigns identity."""
     headers = {"Authorization": f"Bearer {auth_token}"}
     response = client.get("/tarot/daily", headers=headers)
     assert response.status_code == 200
     data = response.json()
     
     assert "date" in data
-    assert "card" in data
-    assert "orientation" in data
-    assert data["card"]["id"] is not None
-    assert data["card"]["name"] is not None
+    assert data["selection_status"] == "not_selected"
+    assert data.get("card") is None
+
+    revealed = client.post("/tarot/daily/reveal", headers=headers)
+    assert revealed.status_code == 200
+    selected = revealed.json()
+    assert selected["selection_status"] == "selected"
+    assert selected["card"]["id"] is not None
+    assert selected["card"]["name"] is not None
 
 
 def test_daily_draw_is_deterministic(client: TestClient, test_user: User, auth_token: str, db_session: Session):
@@ -92,7 +96,7 @@ def test_daily_draw_is_deterministic(client: TestClient, test_user: User, auth_t
     headers = {"Authorization": f"Bearer {auth_token}"}
     
     # First request
-    response1 = client.get("/tarot/daily", headers=headers)
+    response1 = client.post("/tarot/daily/reveal", headers=headers)
     assert response1.status_code == 200
     data1 = response1.json()
     card_id_1 = data1["card"]["id"]

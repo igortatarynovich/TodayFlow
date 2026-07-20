@@ -15,6 +15,7 @@ from todayflow_backend.services.day_model_v1_content_renderer import (
     REQUIRED_RENDER_SURFACES,
 )
 from todayflow_backend.services.day_model_v1_interpreter import LOW_CONFIDENCE_THRESHOLD
+from todayflow_backend.services.llm_quality_policy_v1 import is_rich_quality_mode
 
 DAY_CONTENT_LLM_GATE_V1_CONTRACT = "day_content_llm_gate_v1"
 
@@ -97,6 +98,16 @@ MAX_TOKENS_BY_SURFACE = {
     "action_card": 96,
     "tempo_card": 96,
     "reflection_card": 128,
+}
+
+# Quality-first budgets for DayModel refine surfaces (LLM_QUALITY_MODE=rich).
+RICH_MAX_TOKENS_BY_SURFACE = {
+    "today_hero": 256,
+    "day_guidance_card": 1200,
+    "risk_card": 400,
+    "action_card": 400,
+    "tempo_card": 400,
+    "reflection_card": 800,
 }
 
 
@@ -236,6 +247,10 @@ def _call_llm_result(
 
 
 def _max_tokens_for_surface(surface: str, cost_policy: dict[str, Any]) -> int:
+    if is_rich_quality_mode():
+        surface_cap = RICH_MAX_TOKENS_BY_SURFACE.get(surface, 800)
+        budget = int(cost_policy.get("max_tokens_budget", 4096))
+        return min(surface_cap, max(budget, surface_cap))
     surface_cap = MAX_TOKENS_BY_SURFACE.get(surface, 128)
     budget = int(cost_policy.get("max_tokens_budget", 512))
     return min(surface_cap, budget)

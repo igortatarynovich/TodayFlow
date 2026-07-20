@@ -21,12 +21,14 @@ export function DailyCardPreview({ isAuthenticated = false, compact = false }: D
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [moon, tarot] = await Promise.all([
-          getJson<MoonPhaseResponse>("/celestial/moon-phase").catch(() => null),
-          getJson<TarotDailyDraw>("/tarot/daily/public").catch(() => null),
-        ]);
+        // Do not fetch card-of-day identity here — public daily is gated not_selected.
+        const moon = await getJson<MoonPhaseResponse>("/celestial/moon-phase").catch(() => null);
         setMoonPhase(moon);
-        setTarotCard(tarot);
+        setTarotCard({
+          date: new Date().toISOString().slice(0, 10),
+          selection_status: "not_selected",
+          card: null,
+        });
       } catch (err) {
         console.error("Error fetching daily card:", err);
       } finally {

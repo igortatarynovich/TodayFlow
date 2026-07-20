@@ -69,6 +69,10 @@ import {
 import { buildProfileFrameworkCards } from "@/lib/profilePage/buildProfileFrameworkCards";
 import { buildProfileLivingObservation } from "@/lib/profileMapsPreview";
 import { buildProfileLifeSpheresFromProfileData } from "@/lib/profilePage/profileLifeSpheres";
+import {
+  isProfilePortraitForming,
+  profilePortraitFormingMessage,
+} from "@/lib/profilePage/profilePortraitForming";
 import { buildProfileV2LiveContext } from "@/lib/profilePage/buildProfileV2LiveContext";
 import { fetchProfileMorningRitualToday } from "@/lib/profilePage/fetchProfileMorningRitualToday";
 import type { MorningRitualData } from "@/components/today/todayPageUtils";
@@ -497,7 +501,7 @@ function ProfileHubPageInner() {
               onLocationSelect={(item) =>
                 setSetupForm((prev) => ({
                   ...prev,
-                  location_name: item.display_name || item.local_name || item.name,
+                  location_name: (item.local_name || item.name || "").trim(),
                   latitude: item.latitude,
                   longitude: item.longitude,
                 }))
@@ -534,6 +538,8 @@ function ProfileHubPageInner() {
                   cum={compactUserModel}
                   onOpenBirthData={() => setForceSetup(true)}
                   lifeSpheres={profileLifeSpheres}
+                  portraitForming={isProfilePortraitForming(coreProfile)}
+                  portraitFormingMessage={profilePortraitFormingMessage(coreProfile)}
                   deepExpanded={deepChartExpanded}
                   livingObservation={livingObservation}
                   deep={{

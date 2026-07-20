@@ -16,7 +16,10 @@ from todayflow_backend.core.llm_openai_compatible import (
 )
 from todayflow_backend.db import models as db_models
 from todayflow_backend.db.models import User
-from todayflow_backend.services.day_narrative_brief_v0 import build_day_narrative_brief_v0
+from todayflow_backend.services.day_narrative_brief_v0 import (
+    build_day_narrative_brief_v0,
+    slim_day_engine_brief_for_story_llm,
+)
 from todayflow_backend.services.day_story_v1 import (
     DAY_STORY_PROMPT_VER,
     DAY_STORY_V1_CONTRACT,
@@ -53,15 +56,24 @@ def _ritual_from_morning_and_connection(
     morning: MorningRitualResponse,
     dc_row: db_models.DayConnection | None,
 ) -> dict[str, Any]:
-    ritual: dict[str, Any] = {}
+    """Only revealed card/number from morning payloads (already redacted by SoT)."""
+    from todayflow_backend.services.day_symbol_state_v1 import ritual_context_from_symbol_view
+
+    # Morning payloads are redacted views; rebuild a mini view for ritual_context.
     tarot = morning.tarot_card if isinstance(morning.tarot_card, dict) else {}
-    if tarot.get("id") is not None:
-        ritual["tarot_main_id"] = tarot.get("id")
-    if tarot.get("name"):
-        ritual["tarot_name_ru"] = tarot.get("name")
     num = morning.numerology_number if isinstance(morning.numerology_number, dict) else {}
-    if num.get("value") is not None:
-        ritual["numerology_value"] = num.get("value")
+    mini_view = {
+        "card": {
+            "revealed": tarot.get("selection_status") == "selected" or tarot.get("status") in ("revealed", "ready"),
+            "id": tarot.get("id"),
+            "name": tarot.get("name"),
+        },
+        "number": {
+            "revealed": num.get("selection_status") == "selected" or num.get("status") in ("revealed", "ready"),
+            "reduced_value": num.get("reduced_value") if num.get("value") is None else num.get("value"),
+        },
+    }
+    ritual = ritual_context_from_symbol_view(mini_view)
     if dc_row is not None and dc_row.morning_focus:
         ritual["head_topic"] = dc_row.morning_focus
     return _normalize_ritual_context(ritual)
@@ -72,9 +84,12 @@ def _load_cached_day_story(
     *,
     user_id: int,
     target_date: date,
-    ritual_fp: str,
-    snapshot_id: int | None,
-) -> tuple[dict[str, Any], int] | None:
+    day_story_fingerprint: str | None = None,
+    ritual_fp: str | None = None,
+    snapshot_id: int | None = None,
+    any_for_date: bool = False,
+) -> tuple[dict[str, Any], int, str | None] | None:
+    """Returns (story, generation_log_id, fingerprint) or None."""
     q = (
         db.query(db_models.GenerationLog)
         .filter(
@@ -85,17 +100,22 @@ def _load_cached_day_story(
         )
         .order_by(db_models.GenerationLog.created_at.desc())
     )
-    if snapshot_id is not None:
+    if snapshot_id is not None and not any_for_date:
         q = q.filter(db_models.GenerationLog.core_profile_snapshot_id == snapshot_id)
-    for row in q.limit(12):
+    for row in q.limit(20):
         ip = row.input_payload if isinstance(row.input_payload, dict) else {}
         if str(ip.get("target_date") or "") != target_date.isoformat():
             continue
-        if ritual_fp and str(ip.get("ritual_context_fingerprint") or "") != ritual_fp:
-            continue
+        stored_fp = str(ip.get("day_story_fingerprint") or "") or None
+        if not any_for_date:
+            if day_story_fingerprint:
+                if stored_fp != day_story_fingerprint:
+                    continue
+            elif ritual_fp and str(ip.get("ritual_context_fingerprint") or "") != ritual_fp:
+                continue
         nr = row.normalized_response if isinstance(row.normalized_response, dict) else None
         if nr and nr.get("contract_version") == DAY_STORY_V1_CONTRACT:
-            return nr, int(row.id)
+            return nr, int(row.id), stored_fp
     return None
 
 
@@ -110,13 +130,35 @@ def _build_day_story_record(
     ritual_norm: dict[str, Any],
     color: str = "",
     stone: str = "",
+    force_rebuild: bool = False,
+    expected_fingerprint: str | None = None,
+    fingerprint_payload: dict[str, Any] | None = None,
+    timezone_name: str = "UTC",
+    commit_story_state: bool = True,
 ) -> tuple[dict[str, Any], int, bool]:
     """Load cached day_story or build via LLM/fallback. Returns (story, generation_log_id, used_fallback)."""
+    from todayflow_backend.services.day_story_fingerprint_v1 import (
+        compute_expected_day_story_fingerprint,
+    )
+    from todayflow_backend.services.day_story_refresh_v1 import ensure_story_state
+    from todayflow_backend.services.day_symbol_state_v1 import owner_key_for_user
+
     learning = get_learning_service()
     locale_value = (locale or "ru").strip()[:32] or "ru"
     insight_tier = get_insight_depth_tier(user, db)
     snapshot_id = _latest_snapshot_id(db, user.id)
     ritual_fp = _ritual_context_fingerprint(ritual_norm)
+    owner_key = owner_key_for_user(user.id)
+
+    if expected_fingerprint is None or fingerprint_payload is None:
+        expected_fingerprint, fingerprint_payload = compute_expected_day_story_fingerprint(
+            db,
+            user_id=int(user.id),
+            owner_key=owner_key,
+            local_date=target_date,
+            timezone_name=timezone_name,
+            locale=locale_value,
+        )
 
     dc_row = (
         db.query(db_models.DayConnection)
@@ -157,24 +199,62 @@ def _build_day_story_record(
         else {}
     )
 
-    cached = _load_cached_day_story(
-        db,
-        user_id=user.id,
-        target_date=target_date,
-        ritual_fp=ritual_fp,
-        snapshot_id=snapshot_id,
-    )
+    cached = None
+    if not force_rebuild:
+        cached = _load_cached_day_story(
+            db,
+            user_id=user.id,
+            target_date=target_date,
+            day_story_fingerprint=expected_fingerprint,
+            ritual_fp=ritual_fp,
+            snapshot_id=snapshot_id,
+            any_for_date=False,
+        )
     used_fallback = False
     gen_id: int
     started = perf_counter()
 
     if cached is not None:
-        story, gen_id = cached
+        story, gen_id, _ = cached
         used_fallback = False
+        if commit_story_state:
+            state = ensure_story_state(
+                db,
+                owner_key=owner_key,
+                local_date=target_date,
+                timezone_name=timezone_name,
+                locale=locale_value,
+                user_id=int(user.id),
+            )
+            if state.fingerprint == expected_fingerprint:
+                state.expected_fingerprint = expected_fingerprint
+                state.stale = False
+                state.last_generation_log_id = gen_id
+                db.add(state)
+                db.commit()
     else:
+        # Guard: unrevealed symbols must not appear in LLM input.
+        safe_ritual = {
+            k: v
+            for k, v in (ritual_norm or {}).items()
+            if k
+            in (
+                "tarot_main_id",
+                "tarot_name_ru",
+                "numerology_value",
+                "head_topic",
+                "mood",
+            )
+            and v not in (None, "", [])
+        }
+        story_brief = slim_day_engine_brief_for_story_llm(
+            day_engine_brief,
+            ritual_has_card=bool(safe_ritual.get("tarot_main_id") or safe_ritual.get("tarot_name_ru")),
+            ritual_has_number=safe_ritual.get("numerology_value") is not None,
+        )
         llm_input = build_day_story_llm_input(
-            day_engine_brief=day_engine_brief,
-            ritual_context=ritual_norm,
+            day_engine_brief=story_brief,
+            ritual_context=safe_ritual,
             user_core_slim=user_core,
             intent_slice=intent_slice,
             behavior_patterns=behavior_patterns,
@@ -185,6 +265,7 @@ def _build_day_story_record(
         )
         llm_input["insight_depth_tier"] = insight_tier
         llm_input["daily_foundation"] = foundation
+        llm_input["day_story_fingerprint"] = expected_fingerprint
         today_scores = scores_raw if isinstance(scores_raw, dict) else {}
         history_slice = build_history_layer_v0(
             db,
@@ -231,6 +312,8 @@ def _build_day_story_record(
             "insight_depth_tier": insight_tier,
             "ritual_context_fingerprint": ritual_fp,
             "intent_context_fingerprint": intent_fp,
+            "day_story_fingerprint": expected_fingerprint,
+            "day_story_fingerprint_payload": fingerprint_payload,
             "day_engine_brief_contract": day_engine_brief.get("contract_version"),
             "contract": DAY_STORY_V1_CONTRACT,
             "prompt_version": DAY_STORY_PROMPT_VER,
@@ -255,6 +338,21 @@ def _build_day_story_record(
             duration_ms=int((perf_counter() - started) * 1000),
         )
         gen_id = gen.id
+        if commit_story_state:
+            state = ensure_story_state(
+                db,
+                owner_key=owner_key,
+                local_date=target_date,
+                timezone_name=timezone_name,
+                locale=locale_value,
+                user_id=int(user.id),
+            )
+            state.fingerprint = expected_fingerprint
+            state.expected_fingerprint = expected_fingerprint
+            state.stale = False
+            state.last_generation_log_id = gen_id
+            db.add(state)
+            db.commit()
 
     return story, gen_id, used_fallback
 
@@ -268,12 +366,27 @@ def build_day_story_v1_wire(
     morning: MorningRitualResponse,
     fusion_dump: dict[str, Any],
     core_profile: dict[str, Any],
+    timezone_name: str = "UTC",
+    allow_rebuild_on_miss: bool = True,
 ) -> tuple[dict[str, Any], dict[str, Any], int]:
     """
     Build day_story_v1 and today_contract_v1 from one narrative source.
 
+    GET path: serve matching fingerprint cache, or last story if stale (no silent rebuild),
+    or first-time build when missing and allow_rebuild_on_miss.
+
     Returns (contract, legacy_narrative_surfaces, generation_log_id).
     """
+    from todayflow_backend.services.day_story_fingerprint_v1 import (
+        compute_expected_day_story_fingerprint,
+    )
+    from todayflow_backend.services.day_story_refresh_v1 import (
+        ensure_story_state,
+        load_story_by_log_id,
+        story_progress_meta,
+    )
+    from todayflow_backend.services.day_symbol_state_v1 import owner_key_for_user
+
     dc_row = (
         db.query(db_models.DayConnection)
         .filter(
@@ -286,8 +399,142 @@ def build_day_story_v1_wire(
     recs = morning.daily_recommendations if isinstance(morning.daily_recommendations, dict) else {}
     color = str(recs.get("lucky_color") or "") if recs else ""
     stone = str(recs.get("lucky_stone") or "") if recs else ""
+    locale_value = (locale or "ru").strip()[:32] or "ru"
+    owner_key = owner_key_for_user(user.id)
+    expected_fp, fp_payload = compute_expected_day_story_fingerprint(
+        db,
+        user_id=int(user.id),
+        owner_key=owner_key,
+        local_date=target_date,
+        timezone_name=timezone_name,
+        locale=locale_value,
+    )
+    ritual_fp = _ritual_context_fingerprint(ritual_norm)
+    snapshot_id = _latest_snapshot_id(db, user.id)
 
-    story, gen_id, _ = _build_day_story_record(
+    matched = _load_cached_day_story(
+        db,
+        user_id=user.id,
+        target_date=target_date,
+        day_story_fingerprint=expected_fp,
+        ritual_fp=ritual_fp,
+        snapshot_id=snapshot_id,
+        any_for_date=False,
+    )
+    story: dict[str, Any] | None = None
+    gen_id = 0
+    if matched is not None:
+        story, gen_id, _ = matched
+        state = ensure_story_state(
+            db,
+            owner_key=owner_key,
+            local_date=target_date,
+            timezone_name=timezone_name,
+            locale=locale_value,
+            user_id=int(user.id),
+        )
+        state.fingerprint = expected_fp
+        state.expected_fingerprint = expected_fp
+        state.stale = False
+        state.last_generation_log_id = gen_id
+        db.add(state)
+        db.commit()
+    else:
+        # Stale path: return last valid story without rebuilding on GET.
+        state = ensure_story_state(
+            db,
+            owner_key=owner_key,
+            local_date=target_date,
+            timezone_name=timezone_name,
+            locale=locale_value,
+            user_id=int(user.id),
+        )
+        state.expected_fingerprint = expected_fp
+        if state.fingerprint and state.fingerprint != expected_fp:
+            state.stale = True
+        db.add(state)
+        db.commit()
+        last = load_story_by_log_id(db, state.last_generation_log_id)
+        if last is None:
+            any_row = _load_cached_day_story(
+                db,
+                user_id=user.id,
+                target_date=target_date,
+                any_for_date=True,
+            )
+            if any_row is not None:
+                last, gen_id, _ = any_row
+                state.last_generation_log_id = gen_id
+                state.stale = True
+                db.add(state)
+                db.commit()
+        else:
+            gen_id = int(state.last_generation_log_id or 0)
+        if last is not None:
+            story = last
+        elif allow_rebuild_on_miss:
+            story, gen_id, _ = _build_day_story_record(
+                db,
+                user=user,
+                target_date=target_date,
+                locale=locale_value,
+                fusion_dump=fusion_dump,
+                core_profile=core_profile,
+                ritual_norm=ritual_norm,
+                color=color,
+                stone=stone,
+                force_rebuild=False,
+                expected_fingerprint=expected_fp,
+                fingerprint_payload=fp_payload,
+                timezone_name=timezone_name,
+            )
+        else:
+            raise ValueError("day_story_missing")
+
+    assert story is not None
+    progress = story_progress_meta(db, owner_key=owner_key, local_date=target_date)
+    contract = day_story_to_today_contract_v1(
+        story,
+        generation_id=str(gen_id),
+        progress=progress,
+    )
+    contract_errors = validate_today_contract_v1(contract)
+    if contract_errors:
+        logger.error("today_contract_v1 from day_story failed validation: %s", contract_errors)
+        raise ValueError(f"today_contract_v1 invalid: {contract_errors}")
+
+    narrative = day_story_to_legacy_narrative(story, generation_id=str(gen_id))
+    return contract, narrative, gen_id
+
+
+def build_day_story_record_for_refresh(
+    db: Session,
+    *,
+    user: User,
+    target_date: date,
+    locale: str,
+    morning: MorningRitualResponse,
+    fusion_dump: dict[str, Any],
+    core_profile: dict[str, Any],
+    force_rebuild: bool = True,
+    expected_fingerprint: str | None = None,
+    fingerprint_payload: dict[str, Any] | None = None,
+    timezone_name: str = "UTC",
+) -> tuple[dict[str, Any], int, bool]:
+    """Explicit rebuild entry used by POST /today/story/refresh."""
+    dc_row = (
+        db.query(db_models.DayConnection)
+        .filter(
+            db_models.DayConnection.user_id == user.id,
+            db_models.DayConnection.date == target_date,
+        )
+        .first()
+    )
+    ritual_norm = _ritual_from_morning_and_connection(morning, dc_row)
+    recs = morning.daily_recommendations if isinstance(morning.daily_recommendations, dict) else {}
+    color = str(recs.get("lucky_color") or "") if recs else ""
+    stone = str(recs.get("lucky_stone") or "") if recs else ""
+    return _build_day_story_record(
         db,
         user=user,
         target_date=target_date,
@@ -297,20 +544,12 @@ def build_day_story_v1_wire(
         ritual_norm=ritual_norm,
         color=color,
         stone=stone,
+        force_rebuild=force_rebuild,
+        expected_fingerprint=expected_fingerprint,
+        fingerprint_payload=fingerprint_payload,
+        timezone_name=timezone_name,
+        commit_story_state=False,
     )
-
-    contract = day_story_to_today_contract_v1(
-        story,
-        generation_id=str(gen_id),
-        progress={},
-    )
-    contract_errors = validate_today_contract_v1(contract)
-    if contract_errors:
-        logger.error("today_contract_v1 from day_story failed validation: %s", contract_errors)
-        raise ValueError(f"today_contract_v1 invalid: {contract_errors}")
-
-    narrative = day_story_to_legacy_narrative(story, generation_id=str(gen_id))
-    return contract, narrative, gen_id
 
 
 def resolve_narrative_surface_via_day_story_v1(
@@ -368,9 +607,10 @@ def resolve_narrative_surface_via_day_story_v1(
             target_date=target_date,
             ritual_fp=ritual_fp,
             snapshot_id=snapshot_id,
+            any_for_date=True,
         )
         if cached is not None:
-            story, gen_id = cached
+            story, gen_id, _ = cached
         elif build_if_missing and surface_norm == "guide":
             story, gen_id, used_fallback = _build_day_story_record(
                 db,

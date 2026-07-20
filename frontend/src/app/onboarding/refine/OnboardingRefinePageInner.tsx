@@ -103,7 +103,7 @@ export default function OnboardingRefinePageInner() {
             setError(null);
           }}
           onSelect={(item) => {
-            setLocationName(item.display_name || item.local_name || item.name);
+            setLocationName((item.local_name || item.name || "").trim());
             setLatitude(item.latitude);
             setLongitude(item.longitude);
             setError(null);

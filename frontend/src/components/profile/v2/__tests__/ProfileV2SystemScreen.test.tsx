@@ -6,7 +6,7 @@ import { buildProfileV2LiveContext } from "@/lib/profilePage/buildProfileV2LiveC
 const baseModel: ProfileQuickMapViewModel = {
   pageLabel: "Карта личности",
   archetype: "Исследователь",
-  identitySummary: "Видит связи, когда остальные видят события.",
+  identitySummary: "Держит смысл через ясный фокус и прямой контакт.",
   strengthens: ["ясная система", "глубокий анализ"],
   drains: ["спешка", "хаос"],
   decisionStyle: "Сначала тело, потом структура.",

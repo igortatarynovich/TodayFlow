@@ -1092,6 +1092,156 @@ class PushDispatchLog(Base):
     __table_args__ = (UniqueConstraint("user_id", "dispatch_date", "kind", name="uq_push_dispatch_user_date_kind"),)
 
 
+class DaySymbolState(Base):
+    """Server SoT for card-of-day and day-number reveal (independent statuses).
+
+    owner_key: ``u:{user_id}`` or ``g:{guest_session_id}``.
+    Identity fields may be generated early but MUST NOT be returned until status is revealed/ready.
+    """
+
+    __tablename__ = "day_symbol_states"
+
+    id = Column(Integer, primary_key=True)
+    owner_key = Column(String(96), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=True)
+    guest_session_id = Column(String(64), nullable=True)
+    local_date = Column(Date, nullable=False)
+    timezone_name = Column(String(64), nullable=False, default="UTC")
+
+    card_status = Column(String(32), nullable=False, default="not_revealed")
+    card_id = Column(String(32), nullable=True)
+    card_orientation = Column(String(16), nullable=True)
+    card_generated_at = Column(DateTime, nullable=True)
+    card_revealed_at = Column(DateTime, nullable=True)
+    card_reveal_source = Column(String(64), nullable=True)
+    card_idempotency_key = Column(String(128), nullable=True)
+
+    number_status = Column(String(32), nullable=False, default="not_revealed")
+    number_value = Column(Integer, nullable=True)
+    number_reduced = Column(Integer, nullable=True)
+    number_is_master = Column(Boolean, nullable=False, default=False)
+    number_title = Column(String(120), nullable=True)
+    number_summary = Column(Text, nullable=True)
+    number_generated_at = Column(DateTime, nullable=True)
+    number_revealed_at = Column(DateTime, nullable=True)
+    number_reveal_source = Column(String(64), nullable=True)
+    number_idempotency_key = Column(String(128), nullable=True)
+
+    created_at = Column(DateTime, default=utc_naive_now)
+    updated_at = Column(DateTime, default=utc_naive_now, onupdate=utc_naive_now)
+
+    __table_args__ = (
+        UniqueConstraint("owner_key", "local_date", name="uq_day_symbol_owner_date"),
+        UniqueConstraint("card_idempotency_key", name="uq_day_symbol_card_idem"),
+        UniqueConstraint("number_idempotency_key", name="uq_day_symbol_number_idem"),
+    )
+
+
+class DayStoryState(Base):
+    """Server SoT for day_story freshness vs fingerprint (rebuild after reveal/mood/goals).
+
+    owner_key mirrors DaySymbolState: ``u:{user_id}`` or ``g:{guest_session_id}``.
+    """
+
+    __tablename__ = "day_story_states"
+
+    id = Column(Integer, primary_key=True)
+    owner_key = Column(String(96), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=True)
+    guest_session_id = Column(String(64), nullable=True)
+    local_date = Column(Date, nullable=False)
+    timezone_name = Column(String(64), nullable=False, default="UTC")
+    locale = Column(String(16), nullable=False, default="ru")
+
+    # Last successfully persisted story fingerprint (matches GenerationLog.input_payload).
+    fingerprint = Column(String(64), nullable=True)
+    # Current expected fingerprint from live inputs (symbols/mood/goals/…).
+    expected_fingerprint = Column(String(64), nullable=True)
+    stale = Column(Boolean, nullable=False, default=False)
+    # Bumped on every input change that invalidates story; used to drop stale LLM races.
+    generation_seq = Column(Integer, nullable=False, default=0)
+    last_generation_log_id = Column(Integer, ForeignKey("generation_logs.id", ondelete="SET NULL"), nullable=True)
+
+    created_at = Column(DateTime, default=utc_naive_now)
+    updated_at = Column(DateTime, default=utc_naive_now, onupdate=utc_naive_now)
+
+    __table_args__ = (UniqueConstraint("owner_key", "local_date", name="uq_day_story_owner_date"),)
+
+
+class GuestSession(Base):
+    """Server-side guest identity for value-first funnel + protected claim."""
+
+    __tablename__ = "guest_sessions"
+
+    id = Column(Integer, primary_key=True)
+    guest_session_id = Column(String(64), nullable=False, unique=True)
+    # Secret bound to browser/device; hashed at rest. Required for progress writes.
+    session_secret_hash = Column(String(128), nullable=False)
+    locale = Column(String(16), nullable=True)
+    timezone_name = Column(String(64), nullable=True)
+    # Short-lived claim token (hashed); issued only for auth completion flow.
+    claim_token_hash = Column(String(128), nullable=True)
+    claim_token_expires_at = Column(DateTime, nullable=True)
+    claim_nonce = Column(String(64), nullable=True)
+    claimed_at = Column(DateTime, nullable=True)
+    claimed_user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    # After claim, guest session can no longer mutate user data.
+    sealed = Column(Boolean, nullable=False, default=False)
+    created_at = Column(DateTime, default=utc_naive_now)
+    updated_at = Column(DateTime, default=utc_naive_now, onupdate=utc_naive_now)
+
+
+class GuestDaySnapshot(Base):
+    """Server SoT for guest Today progress (mood/goals/onboarding/story…) before claim."""
+
+    __tablename__ = "guest_day_snapshots"
+
+    id = Column(Integer, primary_key=True)
+    guest_session_id = Column(String(64), nullable=False)
+    local_date = Column(Date, nullable=False)
+    timezone_name = Column(String(64), nullable=False, default="UTC")
+    locale = Column(String(16), nullable=False, default="ru")
+
+    mood = Column(JSON, nullable=True)  # {mood, mood_scale, morning_mood_id, …}
+    goals = Column(JSON, nullable=True)  # {day_goal, goals:[]}
+    onboarding = Column(JSON, nullable=True)  # {intent_theme, reality_state, …}
+    first_result = Column(JSON, nullable=True)  # First Today package / contract snapshot
+    ritual = Column(JSON, nullable=True)  # RitualPersistedState
+    today_state = Column(JSON, nullable=True)  # DayEngagementState + partial Today
+    day_story = Column(JSON, nullable=True)  # story payload if generated for guest
+    story_fingerprint = Column(String(64), nullable=True)
+    story_status = Column(String(32), nullable=True)
+    profile_draft = Column(JSON, nullable=True)  # guest profile draft fields (non-secret)
+
+    created_at = Column(DateTime, default=utc_naive_now)
+    updated_at = Column(DateTime, default=utc_naive_now, onupdate=utc_naive_now)
+
+    __table_args__ = (UniqueConstraint("guest_session_id", "local_date", name="uq_guest_day_session_date"),)
+
+
+class GuestClaimRecord(Base):
+    """Idempotent claim audit: guest_session_id + target_user_id."""
+
+    __tablename__ = "guest_claim_records"
+
+    id = Column(Integer, primary_key=True)
+    guest_session_id = Column(String(64), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    local_date = Column(Date, nullable=True)
+    claim_status = Column(String(32), nullable=False, default="completed")
+    transferred_blocks = Column(JSON, nullable=False, default=list)
+    conflicts = Column(JSON, nullable=False, default=list)
+    story_status = Column(String(32), nullable=True)
+    story_refresh_required = Column(Boolean, nullable=False, default=False)
+    redirect_target = Column(String(256), nullable=False, default="/today?first=1")
+    result_payload = Column(JSON, nullable=True)
+    created_at = Column(DateTime, default=utc_naive_now)
+
+    __table_args__ = (
+        UniqueConstraint("guest_session_id", "user_id", name="uq_guest_claim_session_user"),
+    )
+
+
 class MeaningEvent(Base):
     """Unified event stream for Meaning Rings scoring."""
 

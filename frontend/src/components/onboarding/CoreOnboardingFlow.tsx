@@ -144,7 +144,7 @@ export function CoreOnboardingFlow() {
           onLocationSelect={(item) =>
             setSetupForm((prev) => ({
               ...prev,
-              location_name: item.display_name || item.local_name || item.name,
+              location_name: (item.local_name || item.name || "").trim(),
               latitude: item.latitude,
               longitude: item.longitude,
             }))

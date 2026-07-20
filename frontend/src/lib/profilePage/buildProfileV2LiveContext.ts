@@ -122,16 +122,18 @@ function formatUpdatedLabel(iso: string | null | undefined): { updatedAtIso: str
 function buildHelps(
   cum: CompactUserModel | null,
   thriveAreas: string[],
+  contractHelps: string[] = [],
 ): string[] {
   return uniqueStrings(
     [
+      ...contractHelps,
       cum?.recommendations?.primary?.text,
       ...(cum?.behavioral_patterns?.hints ?? []),
       ...(cum?.behavioral_patterns?.works ?? []),
       ...(cum?.recommendations?.alternates?.map((alt) => alt.text) ?? []),
       ...thriveAreas,
     ],
-    3,
+    4,
   );
 }
 
@@ -170,11 +172,22 @@ export function buildProfileV2LiveContext(input: {
   const stoneCardTitle = dailyAnchors.stoneName
     ? `Камень дня · ${dailyAnchors.stoneName.toLowerCase()}`
     : "Камень дня";
+  const livingChanges = input.coreProfile?.profile_contract_v1?.living_changes?.trim() ?? null;
+  const contractHelps = input.coreProfile?.profile_contract_v1?.helps ?? [];
+
+  const forming =
+    String(input.coreProfile?.profile_contract_v1?.status || "").toLowerCase() === "forming" ||
+    String(input.coreProfile?.profile_contract_v1?.status || "").toLowerCase() === "partial";
+  const formingMsg =
+    input.coreProfile?.profile_contract_v1?.forming_message?.trim() ||
+    "Портрет ещё формируется — живые тексты появятся после генерации.";
+
   const stoneCardBody =
     dailyAnchors.stoneStory ??
-    input.identitySummary ??
+    (!forming ? input.identitySummary : null) ??
     input.coreProfile?.living?.summary ??
-    "Помогает держать фокус без внутренней спешки.";
+    (!forming ? livingChanges : null) ??
+    (forming ? formingMsg : "");
 
   const supportParts = uniqueStrings(
     [dailyAnchors.colorName, dailyAnchors.totemName, dailyAnchors.planetName],
@@ -186,10 +199,12 @@ export function buildProfileV2LiveContext(input: {
 
   const supportsCardBody =
     input.cum?.recommendations?.primary?.text ??
+    (!forming ? livingChanges : null) ??
     input.coreProfile?.living?.summary ??
-    input.decisionStyle ??
+    (!forming ? input.decisionStyle : null) ??
     input.cum?.current_state?.day_promise_text ??
-    "Медленное планирование и один сложный разговор до 14:00.";
+    (!forming ? contractHelps[0] : null) ??
+    (forming ? formingMsg : "");
 
   return {
     awarenessPercent,
@@ -201,7 +216,7 @@ export function buildProfileV2LiveContext(input: {
     stoneCardBody,
     supportsCardTitle,
     supportsCardBody,
-    helps: buildHelps(input.cum, input.thriveAreas ?? []),
+    helps: buildHelps(input.cum, input.thriveAreas ?? [], contractHelps),
     elementLabel: buildElementLabel(input.coreProfile),
   };
 }

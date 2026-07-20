@@ -175,3 +175,37 @@ def build_day_narrative_brief_v0(
         "tempo_hint": tempo,
         "energy_score_hint": en_score,
     }
+
+
+def slim_day_engine_brief_for_story_llm(
+    brief: dict[str, Any] | None,
+    *,
+    ritual_has_card: bool,
+    ritual_has_number: bool,
+) -> dict[str, Any]:
+    """Drop card/number prose from brief when ritual_context already carries them (anti double-weight)."""
+    if not isinstance(brief, dict):
+        return {}
+    out = dict(brief)
+    if ritual_has_card:
+        out["thread_card"] = None
+    if ritual_has_number:
+        out["thread_number"] = None
+    anchor = str(out.get("anchor_summary") or "")
+    if ritual_has_card:
+        anchor = re.sub(
+            r"(Карта дня[^.]*\.|Day card[^.]*\.|You picked a day card[^.]*\.)\s*",
+            "",
+            anchor,
+            flags=re.I,
+        )
+    if ritual_has_number:
+        anchor = re.sub(
+            r"(Число дня[^.]*\.|Day number[^.]*\.)\s*",
+            "",
+            anchor,
+            flags=re.I,
+        )
+    out["anchor_summary"] = _clip(re.sub(r"\s+", " ", anchor).strip(), 520)
+    out["symbol_source"] = "ritual_context_only"
+    return out

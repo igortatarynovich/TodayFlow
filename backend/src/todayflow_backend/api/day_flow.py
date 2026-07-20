@@ -116,7 +116,10 @@ async def get_day_flow(
     numerology = None
     numerology_service = get_numerology_service()
     try:
-        daily_insight = numerology_service.daily_number(reference_date=target_date_obj, locale=locale)
+        # Module-adjacent day-flow must not spoil day number before ritual reveal.
+        daily_insight = numerology_service.daily_number(
+            reference_date=target_date_obj, locale=locale, reveal=False
+        )
         if daily_insight and daily_insight.number:
             numerology = {
                 "dayNumber": daily_insight.number.value or daily_insight.number.reduced_value,
@@ -153,11 +156,18 @@ async def get_day_flow(
         try:
             from todayflow_backend.services.tarot import TarotService
             tarot_service = TarotService()
-            daily_draw = tarot_service.get_daily_draw(user, locale=locale)
-            if daily_draw and daily_draw.card:
+            # Do not assign/spoil card-of-day via day-flow; only return if already revealed.
+            daily_draw = tarot_service.get_daily_draw(
+                user, locale=locale, assign_if_missing=False
+            )
+            if (
+                daily_draw
+                and daily_draw.selection_status == "selected"
+                and daily_draw.card
+            ):
                 tarot_card = {
                     "name": daily_draw.card.name,
-                    "orientation": daily_draw.card.orientation,
+                    "orientation": daily_draw.orientation,
                 }
         except Exception:
             pass

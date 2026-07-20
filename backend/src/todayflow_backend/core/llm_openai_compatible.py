@@ -17,11 +17,17 @@ def is_gemini_configured() -> bool:
     return bool((settings.gemini_api_key or "").strip())
 
 
+def is_nebius_configured() -> bool:
+    return bool((settings.nebius_api_key or "").strip())
+
+
 def is_llm_chat_configured() -> bool:
     provider = (settings.llm_provider or "openai").strip().lower()
     if provider == "gemini":
         return is_gemini_configured()
-    key = (settings.llm_chat_api_key or settings.openai_api_key or "").strip()
+    if provider == "nebius":
+        return is_nebius_configured()
+    key = (settings.llm_chat_api_key or settings.openai_api_key or settings.nebius_api_key or "").strip()
     return bool(key)
 
 
@@ -34,8 +40,20 @@ def _resolve_llm_credentials() -> tuple[str, str] | None:
             return None
         return key, settings.gemini_base_url.rstrip("/")
 
+    if provider == "nebius":
+        key = (settings.nebius_api_key or "").strip()
+        if not key:
+            return None
+        base = (settings.nebius_base_url or "https://api.tokenfactory.nebius.com/v1/").strip()
+        return key, base.rstrip("/")
+
     key = (settings.llm_chat_api_key or settings.openai_api_key or "").strip()
     if not key:
+        # Convenience: NEBIUS_API_KEY alone + OPENAI_BASE_URL pointing at Token Factory.
+        nebius_key = (settings.nebius_api_key or "").strip()
+        base_hint = (settings.openai_base_url or "").strip().lower()
+        if nebius_key and "nebius" in base_hint:
+            return nebius_key, settings.openai_base_url.strip().rstrip("/")
         return None
     base = (settings.openai_base_url or "").strip()
     return key, base.rstrip("/") if base else ""
@@ -73,6 +91,12 @@ def resolve_default_chat_model() -> str:
     provider = (settings.llm_provider or "openai").strip().lower()
     if provider == "gemini":
         return settings.gemini_model
+    if provider == "nebius":
+        # Explicit LLM_DEFAULT_MODEL wins when operator overrides the Nebius catalog id.
+        override = (settings.llm_default_model or "").strip()
+        if override and override not in ("gpt-4o-mini", "gpt-5.5"):
+            return override
+        return settings.nebius_model
     return settings.llm_default_model
 
 
@@ -80,6 +104,11 @@ def resolve_guidance_chat_model() -> str:
     provider = (settings.llm_provider or "openai").strip().lower()
     if provider == "gemini":
         return settings.gemini_model
+    if provider == "nebius":
+        override = (settings.guidance_llm_model or "").strip()
+        if override and override not in ("gpt-4o-mini", "gpt-5.5"):
+            return override
+        return settings.nebius_model
     return settings.guidance_llm_model
 
 
@@ -95,6 +124,10 @@ def resolve_max_tokens(requested: int, *, model: str | None = None) -> int:
     if _uses_max_completion_tokens(mid):
         # GPT-5 / o-series: reasoning tokens входят в max_completion_tokens.
         return max(requested + 4096, 8192)
+    if mid.startswith("moonshotai/kimi") or "/kimi" in mid:
+        # Kimi often spends a large share of the budget on hidden reasoning before content;
+        # truncated JSON is common below ~3.5–4k completion tokens for rich day_story contracts.
+        return max(requested * 2 + 800, 4000)
     return requested
 
 
