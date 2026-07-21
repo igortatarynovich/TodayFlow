@@ -1,0 +1,124 @@
+[
+  {
+    "case_no": 1,
+    "scenario_id": "cq-001",
+    "tier": "registered",
+    "label": "Registered / same signs (Aries×Aries)",
+    "quality_ok": true,
+    "latency_ms": 18749,
+    "errors": [],
+    "json": "case_01_cq-001_registered.json",
+    "md": "case_01_cq-001_registered.md",
+    "headline": "Два Овна: искра, которая либо разжигает костёр, либо сжигает всё дотла"
+  },
+  {
+    "case_no": 2,
+    "scenario_id": "cq-005",
+    "tier": "registered",
+    "label": "Registered / hard pair (Aries×Cancer)",
+    "quality_ok": true,
+    "latency_ms": 13885,
+    "errors": [],
+    "json": "case_02_cq-005_registered.json",
+    "md": "case_02_cq-005_registered.md",
+    "headline": "Столкновение инициативы и чувствительности."
+  },
+  {
+    "case_no": 3,
+    "scenario_id": "cq-010",
+    "tier": "registered",
+    "label": "Registered / zodiac diverse",
+    "quality_ok": true,
+    "latency_ms": 14811,
+    "errors": [],
+    "json": "case_03_cq-010_registered.json",
+    "md": "case_03_cq-010_registered.md",
+    "headline": "Тёплый дом, который иногда штормит"
+  },
+  {
+    "case_no": 4,
+    "scenario_id": "cq-021",
+    "tier": "registered",
+    "label": "Registered / birth dates + question (stored, not answered as premium)",
+    "quality_ok": true,
+    "latency_ms": 21883,
+    "errors": [],
+    "json": "case_04_cq-021_registered.json",
+    "md": "case_04_cq-021_registered.md",
+    "headline": "Ты — искра, он — очаг. Вам предстоит договориться о темпе."
+  },
+  {
+    "case_no": 5,
+    "scenario_id": "cq-025",
+    "tier": "registered",
+    "label": "Registered / birth dates",
+    "quality_ok": false,
+    "latency_ms": 29220,
+    "errors": [
+      "schema:('attraction',):String should have at most 420 characters"
+    ],
+    "json": "case_05_cq-025_registered.json",
+    "md": "case_05_cq-025_registered.md",
+    "headline": "Столкновение огня и скалы"
+  },
+  {
+    "case_no": 6,
+    "scenario_id": "cq-042",
+    "tier": "registered",
+    "label": "Registered / one profile",
+    "quality_ok": true,
+    "latency_ms": 14046,
+    "errors": [],
+    "json": "case_06_cq-042_registered.json",
+    "md": "case_06_cq-042_registered.md",
+    "headline": "Спокойная гавань, где всё по полочкам"
+  },
+  {
+    "case_no": 7,
+    "scenario_id": "cq-061",
+    "tier": "registered",
+    "label": "Registered / two profiles",
+    "quality_ok": true,
+    "latency_ms": 10296,
+    "errors": [],
+    "json": "case_07_cq-061_registered.json",
+    "md": "case_07_cq-061_registered.md",
+    "headline": "Спор как способ быть вместе"
+  },
+  {
+    "case_no": 8,
+    "scenario_id": "cq-041",
+    "tier": "premium",
+    "label": "Premium / question + missing goals",
+    "quality_ok": true,
+    "latency_ms": 11475,
+    "errors": [],
+    "json": "case_08_cq-041_premium.json",
+    "md": "case_08_cq-041_premium.md",
+    "headline": "зависит"
+  },
+  {
+    "case_no": 9,
+    "scenario_id": "cq-063",
+    "tier": "premium",
+    "label": "Premium / two profiles + continue?",
+    "quality_ok": true,
+    "latency_ms": 15868,
+    "errors": [],
+    "json": "case_09_cq-063_premium.json",
+    "md": "case_09_cq-063_premium.md",
+    "headline": "зависит"
+  },
+  {
+    "case_no": 10,
+    "scenario_id": "cq-064",
+    "tier": "registered",
+    "label": "Complex incomplete / missing partner closeness",
+    "quality_ok": true,
+    "latency_ms": 28254,
+    "errors": [],
+    "json": "case_10_cq-064_registered.json",
+    "md": "case_10_cq-064_registered.md",
+    "headline": "Тихая гавань, которую вы оба строите по чертежам"
+  }
+]
