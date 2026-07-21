@@ -1,13 +1,15 @@
 # Profile · `life_spheres` Deterministic Projector Spec (v0)
 
-**Status:** SoT for code + tests · **no UI rewrite · no LLM wording**  
+**Status:** SoT for **eligibility · evidence · traits/cues kitchen · A/B baseline** · **not** long-term SoT for final user copy  
 **Passport:** [PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md)  
+**User-copy target:** [PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md](./PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md)  
 **Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md)  
 **Date:** 2026-07-21  
 **projection_version:** `life_spheres_projector_v0.2` (D1 traits · D2 scored buckets)
 
-> Executable ruleset. If a rule is not in this document, implementation must not invent it.  
-> Product lock: natal-presence · deterministic-first · independent of patterns.
+> Executable ruleset for foundations → traits/buckets → optional projector prose (A/B).  
+> **Pivot:** do not grow planet×sign×sphere×field tables as the product content engine.  
+> Prefer `sphere_cues` → `profile.spheres.synthesis.v1`. Independent of patterns.
 
 ---
 
@@ -33,7 +35,8 @@ identity → styles
        → [patterns IFF patterns_generation_allowed]   # shipped gate; unchanged
        → spheres IFF spheres_projection_allowed       # NEW; independent of patterns outcome
 
-spheres content authority = deterministic projector(foundations)
+spheres content authority (target) = synthesis(cues from foundations)
+projector(foundations) = A/B baseline + trait/cue source, not final SoT
 legacy profile.spheres.v1 = NOT content authority (see Prompt Registry)
 ```
 

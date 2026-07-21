@@ -4,13 +4,16 @@
 **Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md)  
 **Template:** [PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](./PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md)  
 **Related:** patterns gate (shipped, unchanged) · [PROFILE_E2E_PROMPT_REGISTRY.md](./PROFILE_E2E_PROMPT_REGISTRY.md) P4 · [PROFILE_CONTENT_CANON_V1.md](../PROFILE_CONTENT_CANON_V1.md) §7.1A  
-**Executable ruleset:** [PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md)  
+**Executable ruleset (evidence / cues):** [PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md)  
+**Synthesis passport (user copy):** [PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md](./PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md)  
 **Quality review:** [PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md](./PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md)  
 **Date:** 2026-07-21
 
-> **Product lock:** spheres = **natal-presence**, **deterministic-first**.  
-> Not depth-only. Not a continuation of patterns.  
-> Patterns gate stays as shipped. Current funnel stop after patterns skip is **accidental control-flow coupling**, not target architecture.
+> **Product lock (pivoted):** spheres = **natal-presence**, independent of patterns.  
+> Deterministic layer = eligibility · source selection · `sphere_cues` · house gate · validation.  
+> **User-facing text** = `profile.spheres.synthesis.v1` on prepared cues (not raw planet=sign homework).  
+> Projector `v0.2` remains A/B baseline and cue/trait kitchen — **not** long-term SoT for final copy.  
+> Patterns gate stays as shipped. Funnel stop after patterns skip is **accidental coupling**, not target architecture.
 
 ---
 
@@ -21,8 +24,9 @@
 | What are spheres? | Базовая карта проявлений личности в ключевых сферах жизни |
 | What are patterns? | Подтверждённые повторения во времени (отдельная сущность) |
 | Eligibility source | Natal/foundation inputs + stable identity/styles — **independent of patterns** |
-| Content engine | Deterministic projection first |
-| LLM | Optional wording layer only; never eligibility; never sole content source |
+| Content engine | Deterministic evidence → **LLM sphere synthesis** → validation |
+| Deterministic | Eligibility, cues, house gate, schema/ban checks — not final prose tables as product |
+| LLM | Synthesis of practical manifestation map; never eligibility; never invent from empty cues |
 | Ready coupling | Patterns and spheres must **not** jointly define a single global ready |
 
 ---
@@ -38,12 +42,12 @@
 | `min_source_depth` | `birth_data_only` **для права блока существовать**, при наличии достаточных natal/foundation inputs (см. §4). Longitudinal depth **не** повышает eligibility |
 | `forbidden_sources` | См. §3 |
 | `insufficient_when` | Нет минимальных natal/foundation inputs для **конкретных** утверждений (см. §4–§5). Отсутствие patterns / living **не** insufficient |
-| `generation_required` | **`no`** для содержания (deterministic projection). LLM wording: `conditional` / later, only if a separate wording passport proves necessity |
-| `generation_gate` | `spheres_projection_allowed(foundations)` — true when §4 minimum inputs present. **Does not read** `patterns_generation_allowed`. Patterns ineligible/skipped **must not** close this gate |
+| `generation_required` | **`yes`** for user-facing fields — [synthesis passport](./PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md). Projector may still emit for A/B / fallback experiments but is not target authority |
+| `generation_gate` | `spheres_projection_allowed(foundations)` **and** non-empty `sphere_cues` per sphere. **Does not read** `patterns_generation_allowed`. Patterns ineligible/skipped **must not** close this gate |
 | `allowed_claims` | См. §6 |
 | `forbidden_claims` | См. §6 |
-| `prompt_id` | Target: `—` (deterministic). Current prod `profile.spheres.v1` = **legacy**, not target content authority |
-| `expected_response` | См. §5 deterministic contract |
+| `prompt_id` | Target: `profile.spheres.synthesis.v1`. Legacy `profile.spheres.v1` = not content authority. Projector = baseline / kitchen |
+| `expected_response` | См. synthesis passport §2–§4; projector contract retained for A/B |
 | `acceptance_criteria` | См. §5.3 |
 | `on_reject` | Omit only fields/spheres that fail acceptance; do not invent; do not block unrelated blocks (identity/styles/patterns). Partial sphere map allowed when house-sensitive claims lack birth time |
 | `snapshot_fields` | `life_spheres` (+ optional kitchen: `sphere_projection_version`, `sphere_evidence`, `sphere_claim_depth` per field) |

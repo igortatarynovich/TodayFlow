@@ -2,7 +2,7 @@
 
 **Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md)  
 **Block passport:** [PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](./PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md)  
-**life_spheres:** [PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md) · [PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md)  
+**life_spheres:** [PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md) · [PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md](./PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md) · [PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md)  
 **Date:** 2026-07-21 · **Source:** code + eval packs
 
 > Unique-knowledge verdicts are **hypotheses** until production-faithful packs prove them.
@@ -95,9 +95,26 @@ Passport target: [PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](./PROFILE_E2E_BLOCK_PA
 | Snapshot | `life_spheres` (today only if LLM step runs) |
 | UI | Direction sphere cards; FE chart/DEFAULTS can compete (**dual source debt**) |
 | Quality gates | identity echo into how; duplicate hows |
-| **Target content** | Deterministic projector — [PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md) |
-| **Future LLM** | Optional **wording layer only**; requires a **separate wording passport** + gate after projection exists. Must not set eligibility or invent claims |
-| **Unique knowledge?** | Legacy LLM step is **not** the unique-knowledge path. Unique knowledge = ruleset projection from natal + identity + styles |
+| **Target content** | **Superseded** by P4b synthesis — projector kept as A/B baseline / cue kitchen |
+| **Future LLM** | See P4b (not a thin wording layer on projector prose) |
+| **Unique knowledge?** | Legacy LLM step is **not** the unique-knowledge path |
+
+---
+
+## P4b · `profile.spheres.synthesis.v1` — **TARGET content authority**
+
+| Field | Content |
+|-------|---------|
+| prompt_id | `profile.spheres.synthesis.v1` |
+| version | `1.0.0` |
+| **Status** | Passport + registry + eval harness; **not production-wired yet** |
+| Passport | [PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md](./PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md) |
+| Trigger (target) | after identity/styles; IFF `spheres_projection_allowed` **and** non-empty `sphere_cues`; **independent of patterns** |
+| Input | identity slice · relevant_style · prepared `sphere_cues` · optional house_cues |
+| Expected | one sphere × how/need/risk/turns_on/turns_off/helps |
+| Deterministic owns | eligibility · cue selection · house gate · JSON/ban validation |
+| Must not | raw planet=sign as sole homework; invent without cues; patterns dependence |
+| Eval | `run_life_spheres_synthesis_eval_v0.py` |
 
 ---
 
@@ -132,7 +149,8 @@ Required for E2E: extend capture (eval or publisher) before blaming the model.
 | identity | who in life | sign passport |
 | styles | decision/relationship/money angles | paraphrase identity |
 | patterns | evidence-backed repeats | invent from birth-only |
-| spheres (legacy LLM) | — | do not use as SoT; projector owns content |
-| spheres (projector) | sphere-specific how/need from foundations | copy identity into every how; depend on patterns |
+| spheres (legacy LLM) | — | do not use as SoT |
+| spheres (cues) | prepared semantic facts from natal/styles | raw planet=sign dumps |
+| spheres (synthesis) | practical manifestation map per field question | identity/style paste; kitchen astrology; generic filler |
 
-Next: implement projector v0.1 + Case A proof that spheres publish without patterns.
+Next: wire synthesis into funnel after Case A/B + UI checklist; keep projector for A/B until then.

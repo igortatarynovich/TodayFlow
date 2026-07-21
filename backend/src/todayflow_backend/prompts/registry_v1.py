@@ -9,7 +9,11 @@ from __future__ import annotations
 
 from typing import Any, Callable
 
-from todayflow_backend.prompts import day_disclosure_v1, profile_disclosure_v1
+from todayflow_backend.prompts import (
+    day_disclosure_v1,
+    profile_disclosure_v1,
+    profile_spheres_synthesis_v1,
+)
 
 PROMPT_REGISTRY_CONTRACT = "prompt_registry_v1"
 PROMPT_REGISTRY_VERSION = "1.0.0"
@@ -108,6 +112,13 @@ _REGISTRY: dict[str, dict[str, Any]] = {
         "surface": "profile",
         "step": "spheres",
         "builder": profile_disclosure_v1.spheres_system,
+    },
+    # Per-sphere synthesis on prepared cues (target content authority for life_spheres)
+    "profile.spheres.synthesis.v1": {
+        "version": "1.0.0",
+        "surface": "profile",
+        "step": "spheres_synthesis",
+        "builder": profile_spheres_synthesis_v1.synthesis_system,
     },
 }
 

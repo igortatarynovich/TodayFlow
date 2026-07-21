@@ -1,0 +1,26 @@
+{
+  "version": "life_spheres_synthesis_eval_v0",
+  "prompt_id": "profile.spheres.synthesis.v1",
+  "dry_run": false,
+  "repeats": 2,
+  "cases_total": 8,
+  "cases_pass": 6,
+  "contrasts": [
+    {
+      "pair": "same_sun_different_venus",
+      "a": "lsq-01",
+      "b": "lsq-02",
+      "love_how_jaccard": 0.068,
+      "pass": true
+    },
+    {
+      "pair": "same_natal_different_styles",
+      "a": "lsq-03",
+      "b": "lsq-04",
+      "love_how_jaccard": 0.214,
+      "pass": true
+    }
+  ],
+  "contrasts_pass": 2,
+  "created_at": "20260721T151429Z"
+}

@@ -1,19 +1,25 @@
 # Profile · `life_spheres` Quality Review V0
 
-**Status:** SoT after D1+D2 · quality gate **PASS** (merge decision unlocked for PR #2 engineering criteria below)  
+**Status:** Projector D1+D2 quality **PASS** as baseline · **architectural pivot** to synthesis-on-cues (see below)  
 **Date:** 2026-07-21  
 **Passport:** [PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md)  
-**Projector:** [PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md) · `life_spheres_projector_v0.2`  
-**Harness:** `backend/evals/profile_quality/run_life_spheres_quality_pack_v0.py`  
+**Synthesis:** [PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md](./PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md)  
+**Projector:** [PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md) · `life_spheres_projector_v0.2` (A/B, not final copy SoT)  
+**Harness (projector):** `backend/evals/profile_quality/run_life_spheres_quality_pack_v0.py`  
+**Harness (synthesis):** `backend/evals/profile_quality/run_life_spheres_synthesis_eval_v0.py`  
 **Cases:** `backend/evals/profile_quality/life_spheres_quality_cases_v0.json`  
-**Latest run:** `backend/evals/profile_quality/runs/life_spheres_quality_20260721T151047Z/`
+**Latest projector run:** `…/life_spheres_quality_20260721T151047Z/`  
+**Latest synthesis run:** `…/life_spheres_synthesis_20260721T151429Z/` (8/8 after validator FP fix)
 
 > Goal: prove love / money / decisions produce **grounded, distinct, useful** user meaning — not only a valid JSON object.  
-> No class `MODEL`. Weak text ⇒ architectural defect class.
+> No class `MODEL`. Weak text ⇒ architectural defect class (prompt / cues / validation).  
+> **Do not** grow more projector field rules as the main fix path — fix **what we ask** the model.
 
 ---
 
 ## 0. Verdict (current)
+
+### 0A · Projector baseline (kept)
 
 | Question | Result |
 |----------|--------|
@@ -24,11 +30,21 @@
 | Partial styles omit | **PASS** (lsq-07) |
 | Sign-only `how` specificity | **PASS** |
 | cases_pass ≥ 6/8 | **PASS — 8/8** |
-| Expand to 6 more spheres | Still **gated** on product decision; quality blocker for the three is cleared |
-| life_mission / character_helps / LLM wording | Still **frozen** |
 
-**Automated pack summary (run `20260721T151047Z`):**  
-cases_pass **8/8** · comparisons_pass **2/2** · total_defects **0**.
+**Projector pack (`20260721T151047Z`):** cases_pass **8/8** · comparisons_pass **2/2**.
+
+### 0B · Synthesis pivot (target content)
+
+| Question | Result |
+|----------|--------|
+| Prompt asks for 6 distinct field jobs | **Locked** in `profile.spheres.synthesis.v1` |
+| Prepared `sphere_cues` (not raw planet=sign) | **PASS** dry-run 8/8 |
+| LLM synthesis validation | **PASS 8/8** (`20260721T151429Z` + revalidate) |
+| Contrast profiles diverge | **PASS** 2/2 |
+| Not a projector clone | **PASS** (mean Jaccard ≈ 0.02) |
+| Lexical repeat stability | Weak (~0.12–0.30) — paraphrase OK; do not “fix” with more gates |
+| Funnel / UI wire | **Not yet** |
+| Expand to 6 more spheres / life_mission / Character helps | Still **frozen** |
 
 ---
 
