@@ -208,11 +208,7 @@ export function TodayPersonalizedProductSection({
               <span className={styles.practiceCheck} aria-hidden />
               <div className={styles.practiceBody}>
                 <p className={styles.practiceTitle}>{tool.title}</p>
-                {tool.href ? (
-                  <Link href={tool.href} className={styles.practiceAction}>
-                    Открыть
-                  </Link>
-                ) : null}
+                {tool.detail ? <p className={styles.practiceMeta}>{tool.detail}</p> : null}
               </div>
             </div>
           ))}
