@@ -1,0 +1,257 @@
+{
+  "version": "profile_quality_eval_v1",
+  "created": "2026-07-21",
+  "scenario_count": 10,
+  "locale_primary": "ru",
+  "rubric": {
+    "criteria": [
+      "specificity",
+      "natural_ru",
+      "no_repetition",
+      "no_hallucination",
+      "source_depth_match",
+      "balanced_strengths_and_drains",
+      "practical_takeaway",
+      "shippable_without_regen"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "pq-001",
+      "group": "birth_data_only",
+      "label": "Birth only — Aries / life path 1",
+      "tier": "base",
+      "locale": "ru",
+      "birth_date": "1991-04-12",
+      "birth_time": null,
+      "birth_place": null,
+      "person": {"first_name": "Аня", "gender": null},
+      "astro": {"sun_sign": "aries", "element": "fire", "modality": "cardinal"},
+      "numerology": {"life_path": 1, "expression": 5},
+      "baseline": {"archetype_seed": "initiator", "element_focus": "fire", "rhythm_style": "fast_start"},
+      "onboarding": null,
+      "living": null,
+      "checkin_days": 0,
+      "longitudinal_days": 0,
+      "user_question": null,
+      "missing_or_hidden": ["birth_time", "birth_place", "onboarding", "checkins", "gender"]
+    },
+    {
+      "id": "pq-002",
+      "group": "birth_data_only",
+      "label": "Birth only — Capricorn / life path 8",
+      "tier": "base",
+      "locale": "ru",
+      "birth_date": "1988-01-05",
+      "person": {"first_name": "Игорь", "gender": "male"},
+      "astro": {"sun_sign": "capricorn", "element": "earth", "modality": "cardinal"},
+      "numerology": {"life_path": 8, "expression": 4},
+      "baseline": {"archetype_seed": "builder", "element_focus": "earth", "rhythm_style": "steady"},
+      "onboarding": null,
+      "living": null,
+      "checkin_days": 0,
+      "longitudinal_days": 0,
+      "user_question": null,
+      "missing_or_hidden": ["onboarding", "checkins"]
+    },
+    {
+      "id": "pq-003",
+      "group": "onboarding_answers",
+      "label": "Onboarding — anxious + career intent",
+      "tier": "base",
+      "locale": "ru",
+      "birth_date": "1994-07-22",
+      "person": {"first_name": "Мария", "gender": "female"},
+      "astro": {"sun_sign": "cancer", "element": "water", "modality": "cardinal"},
+      "numerology": {"life_path": 3},
+      "baseline": {"archetype_seed": "caretaker", "element_focus": "water", "rhythm_style": "cyclic"},
+      "onboarding": {
+        "intent_theme": "career",
+        "reality_state": "anxious",
+        "self_notes": ["хочу ясности в решениях", "устаю от чужих ожиданий"]
+      },
+      "living": null,
+      "checkin_days": 0,
+      "longitudinal_days": 0,
+      "user_question": null,
+      "missing_or_hidden": ["checkins"]
+    },
+    {
+      "id": "pq-004",
+      "group": "onboarding_answers",
+      "label": "Onboarding — relationship + stuck",
+      "tier": "base",
+      "locale": "ru",
+      "birth_date": "1990-11-03",
+      "person": {"first_name": "Саша", "gender": null},
+      "astro": {"sun_sign": "scorpio", "element": "water", "modality": "fixed"},
+      "numerology": {"life_path": 7},
+      "baseline": {"archetype_seed": "seeker", "element_focus": "water", "rhythm_style": "deep_focus"},
+      "onboarding": {
+        "intent_theme": "relationship",
+        "reality_state": "stuck",
+        "self_notes": ["сложно просить о помощи", "нужна близость без потери себя"]
+      },
+      "living": null,
+      "checkin_days": 0,
+      "longitudinal_days": 0,
+      "user_question": null,
+      "missing_or_hidden": ["gender", "checkins"]
+    },
+    {
+      "id": "pq-005",
+      "group": "partial_profile",
+      "label": "Partial — birth + name only sparse living",
+      "tier": "base",
+      "locale": "ru",
+      "birth_date": "1996-09-09",
+      "person": {"first_name": "Лена", "gender": "female"},
+      "astro": {"sun_sign": "virgo", "element": "earth", "modality": "mutable"},
+      "numerology": {"life_path": 6},
+      "baseline": {"archetype_seed": "analyst", "element_focus": "earth", "rhythm_style": "detail"},
+      "onboarding": {"intent_theme": "self", "reality_state": "ok"},
+      "living": {
+        "summary": "Пока мало дней в приложении — сигналов почти нет.",
+        "signals": [],
+        "insights": []
+      },
+      "checkin_days": 1,
+      "longitudinal_days": 1,
+      "user_question": null,
+      "missing_or_hidden": ["rich_checkins"]
+    },
+    {
+      "id": "pq-006",
+      "group": "partial_profile",
+      "label": "Partial — onboarding incomplete fields",
+      "tier": "base",
+      "locale": "ru",
+      "birth_date": "1993-03-18",
+      "person": {"first_name": "Дима", "gender": "male"},
+      "astro": {"sun_sign": "pisces", "element": "water", "modality": "mutable"},
+      "numerology": {"life_path": 2},
+      "baseline": {"archetype_seed": "empath", "element_focus": "water", "rhythm_style": "adaptive"},
+      "onboarding": {"intent_theme": "money", "reality_state": null, "self_notes": []},
+      "living": null,
+      "checkin_days": 0,
+      "longitudinal_days": 0,
+      "user_question": null,
+      "missing_or_hidden": ["reality_state", "checkins"]
+    },
+    {
+      "id": "pq-007",
+      "group": "checkin_history",
+      "label": "Check-ins — overload + postponed talks",
+      "tier": "extended",
+      "locale": "ru",
+      "birth_date": "1989-05-20",
+      "person": {"first_name": "Катя", "gender": "female"},
+      "astro": {"sun_sign": "taurus", "element": "earth", "modality": "fixed"},
+      "numerology": {"life_path": 4},
+      "baseline": {"archetype_seed": "stabilizer", "element_focus": "earth", "rhythm_style": "slow_build"},
+      "onboarding": {"intent_theme": "work_life", "reality_state": "tired"},
+      "living": {
+        "summary": "Часто отмечаете перегруз к вечеру; сложные разговоры откладываются.",
+        "signals": [
+          {"day": "2026-07-14", "mood": "tired", "note": "не стала писать коллеге"},
+          {"day": "2026-07-15", "mood": "ok", "note": "сделала дела по списку"},
+          {"day": "2026-07-16", "mood": "anxious", "note": "разговор с партнёром перенесла"},
+          {"day": "2026-07-17", "mood": "tired", "note": "вечером пустой"},
+          {"day": "2026-07-18", "mood": "focused", "note": "закрыла один важный таск"}
+        ],
+        "insights": ["откладывание сложных разговоров", "восстановление через порядок"]
+      },
+      "checkin_days": 8,
+      "longitudinal_days": 10,
+      "user_question": null,
+      "missing_or_hidden": []
+    },
+    {
+      "id": "pq-008",
+      "group": "checkin_history",
+      "label": "Check-ins — high drive + crash weekends",
+      "tier": "extended",
+      "locale": "ru",
+      "birth_date": "1992-08-08",
+      "person": {"first_name": "Никита", "gender": "male"},
+      "astro": {"sun_sign": "leo", "element": "fire", "modality": "fixed"},
+      "numerology": {"life_path": 9},
+      "baseline": {"archetype_seed": "performer", "element_focus": "fire", "rhythm_style": "burst"},
+      "onboarding": {"intent_theme": "career", "reality_state": "ambitious"},
+      "living": {
+        "summary": "Будни на максимуме, выходные — откат и раздражение.",
+        "signals": [
+          {"day": "2026-07-13", "mood": "energized", "note": "закрыл презентацию"},
+          {"day": "2026-07-14", "mood": "energized", "note": "ещё один дедлайн"},
+          {"day": "2026-07-15", "mood": "irritated", "note": "сорвался на мелочи"},
+          {"day": "2026-07-16", "mood": "low", "note": "проспал, ничего не хотел"},
+          {"day": "2026-07-17", "mood": "low", "note": "избегал планов"},
+          {"day": "2026-07-18", "mood": "ok", "note": "вернулся в ритм"}
+        ],
+        "insights": ["burst → crash", "отдых воспринимается как слабость"]
+      },
+      "checkin_days": 12,
+      "longitudinal_days": 14,
+      "user_question": null,
+      "missing_or_hidden": []
+    },
+    {
+      "id": "pq-009",
+      "group": "contradictory",
+      "label": "Contradictory self-report vs check-ins",
+      "tier": "extended",
+      "locale": "ru",
+      "birth_date": "1995-12-01",
+      "person": {"first_name": "Оля", "gender": "female"},
+      "astro": {"sun_sign": "sagittarius", "element": "fire", "modality": "mutable"},
+      "numerology": {"life_path": 5},
+      "baseline": {"archetype_seed": "explorer", "element_focus": "fire", "rhythm_style": "variable"},
+      "onboarding": {
+        "intent_theme": "freedom",
+        "reality_state": "fine",
+        "self_notes": ["я легко адаптируюсь", "мне не нужна рутина", "я спокойна в неопределённости"]
+      },
+      "living": {
+        "summary": "На словах — лёгкость; в днях — тревога без плана и срывы при смене планов.",
+        "signals": [
+          {"day": "2026-07-12", "mood": "anxious", "note": "отменились планы — весь день мимо"},
+          {"day": "2026-07-13", "mood": "anxious", "note": "нужен был чёткий список"},
+          {"day": "2026-07-14", "mood": "irritated", "note": "хаос в календаре"},
+          {"day": "2026-07-15", "mood": "ok", "note": "когда расписала день — легче"}
+        ],
+        "insights": ["слова про свободу vs потребность в каркасе"]
+      },
+      "checkin_days": 6,
+      "longitudinal_days": 9,
+      "user_question": null,
+      "missing_or_hidden": [],
+      "tags": ["contradictory"]
+    },
+    {
+      "id": "pq-010",
+      "group": "premium_question",
+      "label": "Premium — overload vs loss of interest",
+      "tier": "premium",
+      "locale": "ru",
+      "birth_date": "1991-06-15",
+      "person": {"first_name": "Артём", "gender": "male"},
+      "astro": {"sun_sign": "gemini", "element": "air", "modality": "mutable"},
+      "numerology": {"life_path": 11},
+      "baseline": {"archetype_seed": "connector", "element_focus": "air", "rhythm_style": "multi_track"},
+      "onboarding": {"intent_theme": "career", "reality_state": "overwhelmed"},
+      "living": {
+        "summary": "Много стартов, мало завершений; к вечеру пустота.",
+        "signals": [
+          {"day": "2026-07-15", "mood": "scattered", "note": "открыл 4 задачи — ни одну не закрыл"},
+          {"day": "2026-07-16", "mood": "tired", "note": "не хочется даже любимый проект"},
+          {"day": "2026-07-17", "mood": "anxious", "note": "кажется, что потерял интерес"}
+        ],
+        "insights": ["перегруз маскируется под «мне уже не интересно»"]
+      },
+      "checkin_days": 9,
+      "longitudinal_days": 11,
+      "user_question": "Как отличить усталость от потери интереса к работе — и что делать на этой неделе?",
+      "missing_or_hidden": []
+    }
+  ]
+}

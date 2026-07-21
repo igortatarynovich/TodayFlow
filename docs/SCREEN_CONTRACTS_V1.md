@@ -189,6 +189,8 @@ today_contract_v1:
 **Screen job:** живая база знаний (не snapshot, не паспорт знака/числа).  
 **Ценность Calendar** проявляется здесь — что **меняется** во времени.
 
+**C3 — контент и глубина:** [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) — типы данных, `source_depth`, base/extended/premium, запрет LLM на чужих read path, review packs.
+
 ### 4.1 Mandatory elements
 
 | # | Element | `profile_element_id` | Что пользователь получает |

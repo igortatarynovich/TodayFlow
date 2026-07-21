@@ -55,6 +55,10 @@
 
 Новая сущность · экран · функция · текст — **сразу** через оба закона. К законам **не возвращаемся**.
 
+**Personal Model (уже канон, не третий закон):** экраны — проекции единой модели; модули не пересобирают личность.  
+SoT: [TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md) · [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) · [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md).  
+Соблюдение в коде: [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md).
+
 ---
 
 ## §1 · Закон невидимого механизма *(CLOSED — не обсуждаем, применяем везде)*
@@ -273,6 +277,7 @@ Profile              ←── composes ──→          Portrait · DaysTimel
 | E7 | Deprecate entity → пометка в каталоге; не `DailyThemeV2` |
 | E8 | **§1 Invisible Mechanism (CLOSED)** — dual Internal/External; 4 user knowledges only |
 | E9 | **§2 Positive Definition (CLOSED)** — ценность для пользователя; без ограничений и отличий от других |
+| E10 | **Personal Model projection** — модуль читает Snapshot/CUM; не пересобирает личность (см. Product Model + code compliance audit) |
 
 ---
 
@@ -1178,6 +1183,7 @@ Code gaps: [WEB_LAUNCH_EXECUTION_PLAN.md](./status/WEB_LAUNCH_EXECUTION_PLAN.md)
 | 2026-07-01 | **v0.6.0** — wave 1 entity queue complete · `EveningClose` 🟢 |
 | 2026-07-01 | **v0.5.9** — `ContinuityRecall` spec 🟢 |
 | 2026-07-01 | **v0.5.8** — §2 canonical form · **два базовых закона** |
+| 2026-07-21 | **v0.5.9** — Personal Model pointer (не новый закон) · E10 · link code compliance audit; откат ошибочного «§3 CLOSED» |
 | 2026-07-01 | **v0.5.7** — **Positive Definition CLOSED** · E9 |
 | 2026-07-01 | **v0.5.6** — `PracticeRecommendation` spec 🟢 |
 | 2026-07-01 | **v0.5.5** — `DailySymbols` spec 🟢 · wave 1: color + stone |

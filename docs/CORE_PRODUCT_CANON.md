@@ -1,6 +1,6 @@
 # TodayFlow Core Product Canon
 
-Last updated: 2026-06-23
+Last updated: 2026-07-21
 Status: Canonical working document
 Owner: Product + Engineering
 
@@ -189,9 +189,12 @@ Important:
 
 Modules such as tarot, compatibility, growth layers, and profile remain implementation layers, not the user's mental model.
 
-## 4. Personalization Rule
+## 4. Personalization Rule *(Personal Model — уже канон)*
 
-All personal content must go through the same core profile.
+**SoT (не дублировать новым «принципом»):**  
+[TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md) · [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) · [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md).
+
+All personal content must go through the same Personal Model / core profile snapshot.
 
 If the profile exists, any module must interpret through it:
 - horoscope
@@ -200,23 +203,14 @@ If the profile exists, any module must interpret through it:
 - forecasts
 - daily guidance
 
-Examples:
-- "Through your life path number this influence becomes stronger"
-- "In your chart this is expressed through the 7th house"
-- "For your profile this card points more to relationship dynamics than career pressure"
+Modules answer domain questions for an **already known** person; they do not rebuild personality from birth/sign alone when a snapshot exists.
 
 Additional personalization rule:
 - the profile is not static onboarding data only;
 - it is a living interpretation base that is updated through behavior and daily signals;
 - `Today`, weekly state maps, monthly state maps, and future learning layers must all enrich the same user understanding model.
-- this must eventually include an LLM learning layer that accumulates:
-  - user answers;
-  - journal entries;
-  - explicit questions and intents;
-  - route choices;
-  - feedback on answers;
-  - repeated emotional and decision patterns;
-- the goal of this layer is not generic memory, but a gradually improving psychotype and response model for the person.
+
+**Code compliance (канон → факт → fix):** [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md).
 
 ## 5. Multi-Profile Rule
 

@@ -38,3 +38,6 @@ local.properties
 # DB / local data
 pgdata/
 docs/datasets/raw/*.jsonl
+
+# Generated packaging metadata
+*.egg-info/

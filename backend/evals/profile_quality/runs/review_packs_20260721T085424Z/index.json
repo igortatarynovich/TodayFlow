@@ -1,0 +1,151 @@
+[
+  {
+    "case_no": 1,
+    "scenario_id": "pq-001",
+    "tier": "base",
+    "source_depth": "birth_data_only",
+    "quality_ok": false,
+    "latency_ms": 22884,
+    "completed_steps": [
+      "identity",
+      "styles"
+    ],
+    "mode": "funnel",
+    "json": "case_01_pq-001_base.json",
+    "md": "case_01_pq-001_base.md"
+  },
+  {
+    "case_no": 2,
+    "scenario_id": "pq-002",
+    "tier": "base",
+    "source_depth": "birth_data_only",
+    "quality_ok": false,
+    "latency_ms": 22868,
+    "completed_steps": [
+      "identity",
+      "styles"
+    ],
+    "mode": "funnel",
+    "json": "case_02_pq-002_base.json",
+    "md": "case_02_pq-002_base.md"
+  },
+  {
+    "case_no": 3,
+    "scenario_id": "pq-003",
+    "tier": "base",
+    "source_depth": "onboarding_answers",
+    "quality_ok": true,
+    "latency_ms": 120596,
+    "completed_steps": [
+      "identity",
+      "styles",
+      "patterns"
+    ],
+    "mode": "funnel",
+    "json": "case_03_pq-003_base.json",
+    "md": "case_03_pq-003_base.md"
+  },
+  {
+    "case_no": 4,
+    "scenario_id": "pq-004",
+    "tier": "base",
+    "source_depth": "onboarding_answers",
+    "quality_ok": true,
+    "latency_ms": 132051,
+    "completed_steps": [
+      "identity",
+      "styles",
+      "patterns"
+    ],
+    "mode": "funnel",
+    "json": "case_04_pq-004_base.json",
+    "md": "case_04_pq-004_base.md"
+  },
+  {
+    "case_no": 5,
+    "scenario_id": "pq-005",
+    "tier": "base",
+    "source_depth": "onboarding_answers",
+    "quality_ok": false,
+    "latency_ms": 23304,
+    "completed_steps": [
+      "identity",
+      "styles"
+    ],
+    "mode": "funnel",
+    "json": "case_05_pq-005_base.json",
+    "md": "case_05_pq-005_base.md"
+  },
+  {
+    "case_no": 6,
+    "scenario_id": "pq-006",
+    "tier": "base",
+    "source_depth": "onboarding_answers",
+    "quality_ok": true,
+    "latency_ms": 107089,
+    "completed_steps": [
+      "identity",
+      "styles",
+      "patterns"
+    ],
+    "mode": "funnel",
+    "json": "case_06_pq-006_base.json",
+    "md": "case_06_pq-006_base.md"
+  },
+  {
+    "case_no": 7,
+    "scenario_id": "pq-007",
+    "tier": "extended",
+    "source_depth": "profile_plus_checkins",
+    "quality_ok": true,
+    "latency_ms": 130631,
+    "completed_steps": [
+      "identity",
+      "styles",
+      "patterns"
+    ],
+    "mode": "funnel",
+    "json": "case_07_pq-007_extended.json",
+    "md": "case_07_pq-007_extended.md"
+  },
+  {
+    "case_no": 8,
+    "scenario_id": "pq-008",
+    "tier": "extended",
+    "source_depth": "longitudinal_profile",
+    "quality_ok": true,
+    "latency_ms": 112953,
+    "completed_steps": [
+      "identity",
+      "styles",
+      "patterns"
+    ],
+    "mode": "funnel",
+    "json": "case_08_pq-008_extended.json",
+    "md": "case_08_pq-008_extended.md"
+  },
+  {
+    "case_no": 9,
+    "scenario_id": "pq-009",
+    "tier": "extended",
+    "source_depth": "profile_plus_checkins",
+    "quality_ok": false,
+    "latency_ms": 0,
+    "completed_steps": null,
+    "mode": "oneshot",
+    "json": "case_09_pq-009_extended.json",
+    "md": "case_09_pq-009_extended.md"
+  },
+  {
+    "case_no": 10,
+    "scenario_id": "pq-010",
+    "tier": "premium",
+    "source_depth": "profile_plus_checkins",
+    "quality_ok": false,
+    "latency_ms": null,
+    "completed_steps": null,
+    "mode": "timeout_aborted",
+    "json": "case_10_pq-010_premium.json",
+    "md": "case_10_pq-010_premium.md"
+  }
+]

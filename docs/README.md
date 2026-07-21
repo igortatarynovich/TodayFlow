@@ -6,7 +6,9 @@
 
 | Слой | Документ |
 |------|----------|
-| **Product Build Map (№1 — product SoT)** | [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md) — entities · **§Закон невидимого механизма** |
+| **Полный пользовательский путь (аудит + целевой канон)** | [audits/FULL_USER_PATH_CANON_V1.md](./audits/FULL_USER_PATH_CANON_V1.md) — лендинг → привычка D30 · противоречия X* · реестр генераций |
+| **Product Build Map (№1 — product SoT)** | [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md) — entities · **два базовых закона** · Personal Model pointer |
+| **Personal Model ↔ code** | [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md) — канон → факт → нарушение → минимальный fix |
 | Product Model (reference) | [TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md) — §4 content model |
 | Launch gaps / DoD / code | [status/WEB_LAUNCH_EXECUTION_PLAN.md](./status/WEB_LAUNCH_EXECUTION_PLAN.md) |
 | Launch UX feel (reference) | [status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md](./status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md) |
@@ -60,7 +62,7 @@
 При расхождении приоритет (сверху вниз):
 
 0. [TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md) — **модель продукта** (Personal Model, projections)
-1. [PERSONAL_INTELLIGENCE_MODEL_V1.md](./PERSONAL_INTELLIGENCE_MODEL_V1.md)
+1. [PERSONAL_INTELLIGENCE_MODEL_V1.md](./PERSONAL_INTELLIGENCE_MODEL_V1.md) · [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md)
 2. [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md)
 3. [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) (для Today UX)
 4. [CORE_PRODUCT_CANON.md](./CORE_PRODUCT_CANON.md)

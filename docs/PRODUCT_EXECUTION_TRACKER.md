@@ -1,6 +1,6 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-07-20
+Last updated: 2026-07-21
 Owner: Product + Engineering
 Status: Active working document
 
@@ -1689,6 +1689,8 @@ Historical note:
 - 2026-07-20 | Today / Story | **day_story fingerprint rebuild** | **DONE** | `day_story_states` · fingerprint v1 · reveal → `story_refresh_required` (no LLM) · `POST /today/story/refresh` + lock · FE updating state · tests `test_day_story_rebuild_v1.py` · **next:** deploy · full guest claim · HTTP/e2e matrix
 - 2026-07-20 | Auth / Guest | **full guest claim** | **DONE** | `guest_sessions` + `guest_day_snapshots` + claim token · `POST /today/guest/*` · atomic claim · conflict canon · FE sync/claim · tests `test_guest_claim_full_v1.py` · **next:** interpretation quality audit
 - 2026-07-20 | Today / Quality | **interpretation quality audit** | **IN_PROGRESS** | Doc [INTERPRETATION_QUALITY_AUDIT_2026-07-20.md](./audits/INTERPRETATION_QUALITY_AUDIT_2026-07-20.md) · generation map · IQ-001/002 dual-influence fixes · `day-story-v1.1` · eval 100 + blind harness · pilot n=4 both schema OK (DeepSeek ~41s / Kimi ~22s, Kimi needs ≥4k tokens) · backend redeployed · **next:** human blind score 20→100 · EN/PL prompts · FE hardcode gates · consistency evaluator
+- 2026-07-21 | Product / Canon | **Full user path canon v1** | **IN_PROGRESS** | Doc [FULL_USER_PATH_CANON_V1.md](./audits/FULL_USER_PATH_CANON_V1.md) · audit docs↔BE↔FE↔iOS · target journey landing→D30 · contradictions X1–X15 · generation registry · **no UI/code edits yet** · **next:** product accept X* → update FIRST_DAY / TODAY_SCREEN / blueprint → then implementation
+- 2026-07-21 | Product / Canon | **§3 Canonical Personal Knowledge Principle** | **CLOSED** | Core law #3: personality interpreted once → Canonical Profile Snapshot; modules only add domain context · [BUILD_MAP §3](./TODAYFLOW_PRODUCT_BUILD_MAP.md) · [CORE §4](./CORE_PRODUCT_CANON.md) · PIM §5.0 · Profile Content §2 · E10 · **next:** enforce read-path (no portrait LLM in Today/Compat/Tarot); prompt contracts bind Snapshot fields; X16 in full-path audit
 - 2026-07-01 | Product | **Launch Scope Freeze** | **ACTIVE** | Epic 1–4 only; Figma → code → 10×7d field; [WEB_LAUNCH_PRODUCT_BLUEPRINT.md](./status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md)
 - 2026-07-01 | Product | **TodayFlow Product Model v0.2** | **FROZEN** | Living model, Lifecycle, laws; doc №1 — no launch-scope edits until user test.
 - 2026-06-22 | Engineering | P0.2 Today Experience (web) | PAUSED | Gate до ACCEPTED канона — снят 2026-06-23.

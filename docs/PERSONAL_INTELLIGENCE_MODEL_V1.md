@@ -303,10 +303,13 @@ User / PIM
 |-----------|--------|
 | `Today → OpenAI` (или любой external LLM) **напрямую** | LLM не знает пользователя; тупик без накопления PIM |
 | `Experience → LLM` без PIM read | Нет learning asset |
+| `Experience → LLM` с пересборкой личности из birth/sign при наличии Snapshot | Personal Model / PIL — модули читают Snapshot, не rediscovery |
 | `Tarot / Astrology API → UI` как центр продукта | Это signal sources, не мозг |
 | Prompt с full profile / full reference | Token waste; нет PIM slice |
 | Ответ LLM → UI без Evaluation + Request Record | AMLL violation |
 | Trait в UI как **fact** без confidence | R20 / UKM |
+
+**Code gap vs this section:** [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md).
 
 ### 5.2 Обязательная цепочка
 
@@ -403,3 +406,4 @@ Today Canon      →  Experience spec Layer 4
 | 2026-06-23 | v1.3 — C15 Contradiction Event; re-evaluation; living model vs archive |
 | 2026-06-23 | v1.4 — C16 Temporal Identity; change_nature; historical atoms |
 | 2026-06-23 | v1.5 — C17 Decision Relevance; CUM ranking by relevance |
+| 2026-07-21 | v1.6 — link Personal Model code compliance audit (no new principle) |

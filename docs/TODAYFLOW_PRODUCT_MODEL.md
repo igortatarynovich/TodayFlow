@@ -570,6 +570,9 @@ Copy gate: [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md) §
 Spec gate: [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md) §2.  
 **Два закона** (§5.6 + §5.7) — автоматически для каждой новой сущности и экрана. К законам **не возвращаемся**.
 
+Personal Model как единственный источник персонализации — § выше в этом документе + [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md).  
+Разрыв с кодом: [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md).
+
 ### 5.8 Закон историй *(Maps language · ACTIVE)*
 
 **Статус:** **ACTIVE** 2026-07-02. Связан с §4.10 · [EXPLAIN_MEANING_NOT_MECHANISM.md](./EXPLAIN_MEANING_NOT_MECHANISM.md).
@@ -689,6 +692,7 @@ Launch filter:
 | Date | Version | Change |
 |------|---------|--------|
 | 2026-07-01 | 0.4.8 | §5.7 canonical · **два базовых закона** §5.6+§5.7 |
+| 2026-07-21 | 0.4.9 | Убран ошибочный «третий закон»; Stories остаётся §5.8; link code compliance |
 | 2026-07-01 | 0.4.7 | §5.7 **CLOSED** — Positive Definition |
 | 2026-07-01 | 0.4.6 | §5.6 **CLOSED** — 4 user knowledges · dual Internal/External per entity |
 | 2026-07-01 | 0.4.5 | §5.6 Закон невидимого механизма |

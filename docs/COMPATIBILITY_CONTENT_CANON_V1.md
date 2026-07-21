@@ -8,6 +8,10 @@
 **Роль:** продуктовый контракт слоёв Guest / Registered / Premium, глубина данных (`source_depth`), голос RU и quality bar.  
 Не инфраструктура генерации (C1). Не обрезание одного LLM-ответа под тариф.
 
+**Personal Model:** Compatibility анализирует взаимодействие Snapshot A × Snapshot B (или честный shallow `source_depth`).  
+Не строить психопортрет из дат/знаков при наличии Snapshot.  
+Code gap: [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md).
+
 ---
 
 ## 0. Принцип freemium

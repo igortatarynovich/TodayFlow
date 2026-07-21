@@ -1,0 +1,116 @@
+{
+  "case_no": 9,
+  "case_title": "Case 09 — Contradictory self-report vs check-ins",
+  "scenario_id": "pq-009",
+  "label": "Contradictory self-report vs check-ins",
+  "inputs": {
+    "access_tier": "extended",
+    "source_depth": "profile_plus_checkins",
+    "honesty_line": "Видны первые тенденции из ваших отметок. Это ещё не полный долгосрочный портрет.",
+    "person": {
+      "first_name": "Оля",
+      "gender": "female"
+    },
+    "birth_date": "1995-12-01",
+    "astro": {
+      "sun_sign": "sagittarius",
+      "element": "fire",
+      "modality": "mutable"
+    },
+    "numerology": {
+      "life_path": 5
+    },
+    "baseline": {
+      "archetype_seed": "explorer",
+      "element_focus": "fire",
+      "rhythm_style": "variable"
+    },
+    "onboarding": {
+      "intent_theme": "freedom",
+      "reality_state": "fine",
+      "self_notes": [
+        "я легко адаптируюсь",
+        "мне не нужна рутина",
+        "я спокойна в неопределённости"
+      ]
+    },
+    "living": {
+      "summary": "На словах — лёгкость; в днях — тревога без плана и срывы при смене планов.",
+      "signals": [
+        {
+          "day": "2026-07-12",
+          "mood": "anxious",
+          "note": "отменились планы — весь день мимо"
+        },
+        {
+          "day": "2026-07-13",
+          "mood": "anxious",
+          "note": "нужен был чёткий список"
+        },
+        {
+          "day": "2026-07-14",
+          "mood": "irritated",
+          "note": "хаос в календаре"
+        },
+        {
+          "day": "2026-07-15",
+          "mood": "ok",
+          "note": "когда расписала день — легче"
+        }
+      ],
+      "insights": [
+        "слова про свободу vs потребность в каркасе"
+      ]
+    },
+    "user_question": null,
+    "missing_or_hidden": [],
+    "locale": "ru",
+    "generation_mode_note": "oneshot_fallback_after_funnel_timeouts"
+  },
+  "prompt": {
+    "mode": "oneshot_profile_contract_v1",
+    "system_prompt": "Ты пишешь **единый портрет человека** для TodayFlow (русский язык).\n\nВход — JSON с ядром профиля: имя, знак, нумерология, baseline, living (сигналы, инсайты).\n\nЗадача: **одна связная карта личности** — без штампов, без «вселенная/поток», без паспорта знака как единственного смысла.\nВсе текстовые блоки должны быть живыми и персональными — не общие шаблоны.\n\nПоля:\n- identity_core, strengths (≥3), growth_zones (≥3)\n- relationship_style, money_style, decision_style\n- recurring_patterns (≥1), living_changes (или null)\n- life_mission, helps (≥2)\n- life_spheres: love/sex/money/work/family/kids/body/friends/decisions —\n  у каждой how/need/risk/turns_on/turns_off/helps\n\nВерни только JSON с этими полями.\n\n\nЧестность данных: Видны первые тенденции из ваших отметок. Это ещё не полный долгосрочный портрет.\n",
+    "user_prompt": "{\"person\": {\"first_name\": \"Оля\", \"gender\": \"female\"}, \"astro\": {\"sun_sign\": \"sagittarius\", \"element\": \"fire\", \"modality\": \"mutable\"}, \"numerology\": {\"life_path\": 5}, \"baseline\": {\"archetype_seed\": \"explorer\", \"element_focus\": \"fire\", \"rhythm_style\": \"variable\"}, \"living\": {\"summary\": \"На словах — лёгкость; в днях — тревога без плана и срывы при смене планов.\", \"signals\": [{\"day\": \"2026-07-12\", \"mood\": \"anxious\", \"note\": \"отменились планы — весь день мимо\"}, {\"day\": \"2026-07-13\", \"mood\": \"anxious\", \"note\": \"нужен был чёткий список\"}, {\"day\": \"2026-07-14\", \"mood\": \"irritated\", \"note\": \"хаос в календаре\"}, {\"day\": \"2026-07-15\", \"mood\": \"ok\", \"note\": \"когда расписала день — легче\"}], \"insights\": [\"слова про свободу vs потребность в каркасе\"], \"onboarding\": {\"intent_theme\": \"freedom\", \"reality_state\": \"fine\", \"self_notes\": [\"я легко адаптируюсь\", \"мне не нужна рутина\", \"я спокойна в неопределённости\"]}}, \"locale\": \"ru\", \"source_depth\": \"profile_plus_checkins\", \"user_question\": null}",
+    "model": "gpt-4o-mini",
+    "generation_params": {
+      "temperature": 0.48,
+      "max_tokens": 2200
+    }
+  },
+  "raw_model_response": null,
+  "final_product": {
+    "parsed_contract_current": null,
+    "user_facing": {
+      "honesty_line": "Видны первые тенденции из ваших отметок. Это ещё не полный долгосрочный портрет.",
+      "identity_core": null,
+      "strengths": null,
+      "growth_zones": null,
+      "premium": null
+    },
+    "validation": {
+      "ok": false,
+      "errors": []
+    },
+    "postprocess_changes": [
+      "oneshot_not_4step_funnel"
+    ],
+    "fallback": true,
+    "retry": false
+  },
+  "tech": {
+    "latency_ms": 0,
+    "quality_ok": false,
+    "fallback": true,
+    "mode": "oneshot",
+    "note": "Cases 9–10 finished via oneshot after 4-step funnel stalled on ReadTimeout"
+  },
+  "human_review_template": {
+    "liked": "",
+    "sounds_bad": "",
+    "repeats": "",
+    "feels_invented": "",
+    "missing": "",
+    "shippable": "да | после правок | нет",
+    "score_1_to_10": null
+  }
+}
