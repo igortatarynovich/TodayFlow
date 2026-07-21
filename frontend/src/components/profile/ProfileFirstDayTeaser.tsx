@@ -7,7 +7,6 @@ import {
   HeroLargeInsightPanel,
   heroLargeStyles,
 } from "@/components/foundation/HeroLarge";
-import { ProfileLivingMapsSection } from "@/components/profile/ProfileLivingMapsSection";
 import { ProfilePortraitSection } from "@/components/profile/ProfilePortraitSection";
 import { PROFILE_QUICK_MAP_COPY as portalCopy } from "@/components/profile/quickMap/profileQuickMapCopy";
 import type { ProfileV0ViewModel } from "@/lib/profilePage/buildProfileV0Data";
@@ -64,7 +63,7 @@ export function ProfileFirstDayTeaser({
       <ProfilePortraitSection variant="editorial">
         <HeroLarge
           symbolSeed={header.archetypeLabel}
-          kicker="Портрет · день 1"
+          kicker="Портрет"
           title={header.archetypeLabel}
           metaLine={identityParts.length ? identityParts.join(" · ") : null}
           digest={teaserLine}
@@ -73,7 +72,7 @@ export function ProfileFirstDayTeaser({
         />
 
         {startChips.length ? (
-          <HeroLargeInsightPanel eyebrow="Твой старт сегодня">
+          <HeroLargeInsightPanel eyebrow="Твой старт">
             <HeroLargeChipRow items={startChips} />
           </HeroLargeInsightPanel>
         ) : null}
@@ -91,8 +90,6 @@ export function ProfileFirstDayTeaser({
           </HeroLargeInsightPanel>
         ) : null}
       </ProfilePortraitSection>
-
-      <ProfileLivingMapsSection variant="editorial" showMyDays />
 
       <button
         type="button"

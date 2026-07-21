@@ -34,19 +34,19 @@ def depth_honesty_line(depth: ProfileSourceDepth, *, locale: str = "ru") -> str:
     ru = not (locale or "ru").lower().startswith("en")
     if depth == "longitudinal_profile":
         return (
-            "Разбор опирается на ваши ответы и повторяющиеся дни — не только на дату рождения."
+            "Разбор опирается на ответы и повторяющиеся дни — не только на дату рождения."
             if ru
             else "This uses your answers and recurring days — not birth data alone."
         )
     if depth == "profile_plus_checkins":
         return (
-            "Видны первые тенденции из ваших отметок. Это ещё не полный долгосрочный портрет."
+            "Из отметок уже читаются первые тенденции. Это ещё не полный долгосрочный портрет."
             if ru
             else "Early tendencies from your check-ins — not a full long-term portrait."
         )
     if depth == "onboarding_answers":
         return (
-            "Часть формулировок опирается на ваши ответы при старте. Поведение «в жизни» ещё не проверено днями."
+            "Часть формулировок опирается на ответы при старте. Поведение «в жизни» ещё не проверено днями."
             if ru
             else "Part of this uses your onboarding answers — real-life patterns are not confirmed yet."
         )

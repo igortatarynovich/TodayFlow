@@ -9,6 +9,12 @@
 > **Explain meaning, never explain internal decisioning.**  
 > *(RU: Объясняй смысл для человека — никогда механизм принятия решения.)*
 
+**Companion (platform):**
+
+> **Интерфейс показывает не максимум данных, а максимум понимания.**  
+> Kitchen holds full chart, weights, conflicts, confidence, trace. UI shows only what improves self-understanding.  
+> See [PR4_PROFILE_CANON.md](./PR4_PROFILE_CANON.md) (Profile natal) · umbrella [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md).
+
 **Жёсткое правило:**
 
 > **System reasoning never becomes product content.**  
@@ -63,19 +69,22 @@ selection trace · rank · score · confidence · signal · pattern candidate ·
 
 ## 2. Запрещённые формулировки (продуктовый ban list)
 
-### 2.1 «Система / алгоритм / мы определили»
+### 2.1 «Система / алгоритм / мы / ИИ» (продукт не субъект)
+
+Расширение Voice Canon §0 — **запрет во всём продукте**:
 
 | ❌ Запрещено | Почему |
 |-------------|--------|
-| «Система знает тебя на 60%.» | CRM-ощущение · mechanism |
-| «Система считает, что…» | Алгоритм вместо self-discovery |
-| «Мы определили, что…» | Платформа как судья |
-| «Алгоритм обнаружил…» | Разрушает магию |
-| «На основе твоих данных система решила…» | Audit language |
+| «Мы знаем / уже видим / определили / выяснили…» | продукт как герой |
+| «Система знает / видит / считает / не может…» | mechanism · CRM |
+| «ИИ / модель / алгоритм считает…» | ломает self-discovery |
+| «На основе анализа мы…» | кухня |
+| «Система знает тебя на 60%.» | KPI mechanism |
 | «Система рекомендует…» | → интерпретация или приглашение |
 | «Потому что AI так решил» | No meaning |
 
-**Замена:** второе лицо · факт · интерпретация · наблюдение · приглашение — **без субъекта «система»**.
+**Замена:** факт или результат как субъект · второе лицо к пользователю · без «мы/система/ИИ».  
+См. [TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md) §0.
 
 ### 2.2 Технический прогресс (Profile · Gamification · Evolution)
 

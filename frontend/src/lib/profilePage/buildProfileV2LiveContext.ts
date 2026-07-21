@@ -1,4 +1,3 @@
-import type { MorningRitualData } from "@/components/today/todayPageUtils";
 import { formatDelta30dLabel } from "@/lib/profileCumInsights";
 import type { CompactUserModel, CoreProfile } from "@/lib/types";
 import { elementRuName } from "@/lib/zodiacKnowledge";
@@ -7,33 +6,25 @@ import { getLocale } from "@/lib/i18n";
 
 export type ObservationAccuracyLevel = "initial" | "forming" | "stable";
 
-export type ProfileV2DailyAnchors = {
-  stoneName: string | null;
-  stoneStory: string | null;
-  colorName: string | null;
-  totemName: string | null;
-  totemEmoji: string | null;
-  planetName: string | null;
-  line: string;
-};
+/** Aligns with backend profile_content_v1.source_depth (client mirror for Evidence UI). */
+export type ProfileSourceDepth =
+  | "birth_data_only"
+  | "onboarding_answers"
+  | "profile_plus_checkins"
+  | "longitudinal_profile";
 
 export type ProfileV2LiveContext = {
   /** Qualitative maturity of personal observations — never a fabricated precise %. */
   observationAccuracyLevel: ObservationAccuracyLevel;
   observationAccuracyLabel: string;
-  /** Only when CUM confidence.overall is present; otherwise null. */
-  awarenessPercent: number | null;
-  awarenessDeltaLabel: string | null;
-  updatedAtIso: string | null;
-  /** Empty when no real generated_at — never browser "now". */
-  updatedLabel: string;
-  hasStoneCard: boolean;
-  hasSupportsCard: boolean;
-  dailyAnchors: ProfileV2DailyAnchors;
-  stoneCardTitle: string;
-  stoneCardBody: string;
-  supportsCardTitle: string;
-  supportsCardBody: string;
+  sourceDepth: ProfileSourceDepth;
+  /** Evidence title — why the portrait holds. */
+  evidenceTitle: string;
+  /** Honesty line from source_depth. */
+  evidenceBody: string;
+  /** What would strengthen the portrait (no day agenda). */
+  evidenceNextStep: string | null;
+  /** Stable helps only (contract + thrive) — never day recommendations. */
   helps: string[];
   elementLabel: string | null;
 };
@@ -44,53 +35,50 @@ const ACCURACY_LABELS: Record<ObservationAccuracyLevel, string> = {
   stable: "устойчивая",
 };
 
-function uniqueStrings(items: Array<string | null | undefined>, max: number): string[] {
-  const seen = new Set<string>();
-  const out: string[] = [];
-  for (const item of items) {
-    const trimmed = item?.trim();
-    if (!trimmed) continue;
-    const key = trimmed.toLowerCase();
-    if (seen.has(key)) continue;
-    seen.add(key);
-    out.push(trimmed);
-    if (out.length >= max) break;
-  }
-  return out;
-}
+const DEPTH_HONESTY: Record<ProfileSourceDepth, string> = {
+  birth_data_only:
+    "По данным рождения виден общий портрет. Этого недостаточно, чтобы утверждать, как вы реально ведёте себя в стрессе.",
+  onboarding_answers:
+    "Часть формулировок опирается на ответы при старте. Поведение «в жизни» ещё не проверено днями.",
+  profile_plus_checkins:
+    "Из отметок уже читаются первые тенденции. Это ещё не полный долгосрочный портрет.",
+  longitudinal_profile:
+    "Разбор опирается на ответы и повторяющиеся дни — не только на дату рождения.",
+};
 
-function resolvePlanetName(morningRitual: MorningRitualData | null): string | null {
-  return morningRitual?.celestial_events?.personal_transits?.[0]?.title?.trim() ?? null;
-}
+const DEPTH_NEXT: Record<ProfileSourceDepth, string | null> = {
+  birth_data_only: "Ответы при старте и закрытые дни уточняют, что из портрета подтверждается.",
+  onboarding_answers: "Закрытые дни и отметки покажут, какие формулировки держатся в жизни.",
+  profile_plus_checkins: "Ещё несколько недель наблюдений укрепят повторяющиеся паттерны.",
+  longitudinal_profile: null,
+};
 
-export function buildProfileV2DailyAnchors(morningRitual: MorningRitualData | null): ProfileV2DailyAnchors {
-  const symbols = morningRitual?.celestial_events?.daily_symbols;
-  const stoneName = symbols?.stone?.name?.trim() ?? null;
-  const stoneStory = symbols?.stone?.story_ru?.trim() ?? null;
-  const colorName = symbols?.color?.name?.trim() ?? null;
-  const totemName = symbols?.totem?.name?.trim() ?? null;
-  const totemEmoji = symbols?.totem?.emoji?.trim() ?? null;
-  const planetName = resolvePlanetName(morningRitual);
-
-  const parts = uniqueStrings(
-    [
-      stoneName,
-      colorName,
-      totemEmoji && totemName ? `${totemEmoji} ${totemName}` : totemName,
-      planetName,
-    ],
-    4,
+export function resolveProfileSourceDepth(input: {
+  coreProfile: CoreProfile | null;
+  cum: CompactUserModel | null;
+  localClosedDays?: number;
+}): ProfileSourceDepth {
+  const hasBirth = Boolean(
+    input.coreProfile?.astro?.profile_id ||
+      input.coreProfile?.astro?.sun_sign ||
+      input.coreProfile?.astro?.birth_date ||
+      input.coreProfile?.numerology?.birth_date,
+  );
+  const checkinDays =
+    (typeof input.coreProfile?.living?.signal_profile?.signals_days === "number"
+      ? input.coreProfile.living.signal_profile.signals_days
+      : 0) + (input.localClosedDays ?? 0);
+  const longitudinalDays = checkinDays;
+  const hasOnboarding = Boolean(
+    input.coreProfile?.profile_contract_v1?.identity_core ||
+      input.coreProfile?.baseline?.archetype_seed,
   );
 
-  return {
-    stoneName,
-    stoneStory,
-    colorName,
-    totemName,
-    totemEmoji,
-    planetName,
-    line: parts.length ? parts.join(" · ") : "",
-  };
+  if (longitudinalDays >= 14 && checkinDays >= 7) return "longitudinal_profile";
+  if (checkinDays >= 3 || longitudinalDays >= 7) return "profile_plus_checkins";
+  if (hasOnboarding) return "onboarding_answers";
+  if (hasBirth) return "birth_data_only";
+  return "birth_data_only";
 }
 
 /** @deprecated Prefer resolveObservationAccuracy — kept for callers that need a 0–100 from real confidence only. */
@@ -132,45 +120,8 @@ export function resolveObservationAccuracy(input: {
   return { level, label: ACCURACY_LABELS[level], percent: null };
 }
 
-function formatUpdatedLabel(iso: string | null | undefined): { updatedAtIso: string | null; updatedLabel: string } {
-  if (!iso) {
-    return { updatedAtIso: null, updatedLabel: "" };
-  }
-
-  const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) {
-    return { updatedAtIso: null, updatedLabel: "" };
-  }
-
-  const todayIso = new Date().toISOString().split("T")[0];
-  const dateIso = date.toISOString().split("T")[0];
-  const time = new Intl.DateTimeFormat("ru-RU", { hour: "2-digit", minute: "2-digit" }).format(date);
-
-  if (dateIso === todayIso) {
-    return { updatedAtIso: iso, updatedLabel: `обновлено сегодня, ${time}` };
-  }
-
-  const dayMonth = new Intl.DateTimeFormat("ru-RU", { day: "numeric", month: "short" }).format(date);
-  return { updatedAtIso: iso, updatedLabel: `обновлено ${dayMonth}, ${time}` };
-}
-
-function buildHelps(
-  cum: CompactUserModel | null,
-  thriveAreas: string[],
-  contractHelps: string[] = [],
-): string[] {
-  return filterProfileCopyList(
-    [
-      ...contractHelps,
-      cum?.recommendations?.primary?.text,
-      ...(cum?.behavioral_patterns?.hints ?? []),
-      ...(cum?.behavioral_patterns?.works ?? []),
-      ...(cum?.recommendations?.alternates?.map((alt) => alt.text) ?? []),
-      ...thriveAreas,
-    ],
-    4,
-    getLocale(),
-  );
+function buildStableHelps(thriveAreas: string[], contractHelps: string[] = []): string[] {
+  return filterProfileCopyList([...contractHelps, ...thriveAreas], 4, getLocale());
 }
 
 function buildElementLabel(coreProfile: CoreProfile | null): string | null {
@@ -184,56 +135,38 @@ function buildElementLabel(coreProfile: CoreProfile | null): string | null {
   return null;
 }
 
+function evidenceTitleFor(depth: ProfileSourceDepth, level: ObservationAccuracyLevel): string {
+  if (depth === "longitudinal_profile" || level === "stable") {
+    return "На чём держится портрет";
+  }
+  if (depth === "profile_plus_checkins" || level === "forming") {
+    return "Портрет ещё уточняется";
+  }
+  return "Пока общий портрет";
+}
+
 export function buildProfileV2LiveContext(input: {
   coreProfile: CoreProfile | null;
   cum: CompactUserModel | null;
-  morningRitual: MorningRitualData | null;
   thriveAreas?: string[];
-  decisionStyle?: string | null;
-  identitySummary?: string | null;
   localClosedDays?: number;
 }): ProfileV2LiveContext {
-  const dailyAnchors = buildProfileV2DailyAnchors(input.morningRitual);
   const accuracy = resolveObservationAccuracy(input);
-  const awarenessDeltaLabel = formatDelta30dLabel(input.cum?.confidence?.delta_30d);
-
-  // Only real timestamps — never fabricate "now" from log id presence.
-  const updatedSource = input.cum?.generated_at ?? input.coreProfile?.generated_at ?? null;
-  const { updatedAtIso, updatedLabel } = formatUpdatedLabel(updatedSource);
-
-  const hasStoneCard = Boolean(dailyAnchors.stoneName && dailyAnchors.stoneStory);
-  const stoneCardTitle = hasStoneCard
-    ? `Камень дня · ${dailyAnchors.stoneName!.toLowerCase()}`
-    : "";
-  const stoneCardBody = hasStoneCard ? dailyAnchors.stoneStory! : "";
-
-  const supportParts = uniqueStrings(
-    [dailyAnchors.colorName, dailyAnchors.totemName, dailyAnchors.planetName],
-    3,
-  );
-  const hasSupportsCard = supportParts.length > 0;
-  const supportsCardTitle = hasSupportsCard
-    ? `Опоры · ${supportParts.join(" · ").toLowerCase()}`
-    : "";
-  const supportsCardBody = hasSupportsCard ? supportParts.join(" · ") : "";
-
+  const sourceDepth = resolveProfileSourceDepth(input);
   const contractHelps = input.coreProfile?.profile_contract_v1?.helps ?? [];
+  const delta = formatDelta30dLabel(input.cum?.confidence?.delta_30d);
+  const nextBase = DEPTH_NEXT[sourceDepth];
+  const evidenceNextStep =
+    nextBase && delta ? `${nextBase} (${delta})` : nextBase;
 
   return {
     observationAccuracyLevel: accuracy.level,
     observationAccuracyLabel: accuracy.label,
-    awarenessPercent: accuracy.percent,
-    awarenessDeltaLabel,
-    updatedAtIso,
-    updatedLabel,
-    hasStoneCard,
-    hasSupportsCard,
-    dailyAnchors,
-    stoneCardTitle,
-    stoneCardBody,
-    supportsCardTitle,
-    supportsCardBody,
-    helps: buildHelps(input.cum, input.thriveAreas ?? [], contractHelps),
+    sourceDepth,
+    evidenceTitle: evidenceTitleFor(sourceDepth, accuracy.level),
+    evidenceBody: DEPTH_HONESTY[sourceDepth],
+    evidenceNextStep,
+    helps: buildStableHelps(input.thriveAreas ?? [], contractHelps),
     elementLabel: buildElementLabel(input.coreProfile),
   };
 }

@@ -129,7 +129,6 @@ struct ProfileView: View {
                     if showProfileTeaser {
                         ProfileFirstDayTeaserView(
                             coreProfile: store.coreProfile,
-                            store: store,
                             onOpenFullPortrait: {
                                 TodayFirstTodayState.markProfileDepthUnlocked()
                                 showProfileTeaser = false
@@ -156,7 +155,6 @@ struct ProfileView: View {
                             }
                         },
                         onReloadNatal: { await loadNatalChart(force: true) },
-                        onOpenToday: nil,
                         onOpenRhythm: {
                             onOpenProfileSummaryRoute?(.calendar)
                         }
@@ -187,12 +185,6 @@ struct ProfileView: View {
                     VStack(alignment: .leading, spacing: 18) {
                         if let living = store.coreProfile?.living {
                             ProfilePulseSection(living: living)
-                        }
-                        if let todayCycle = store.todayCycle {
-                            ProfileTodayMirrorSection(cycle: todayCycle)
-                        }
-                        if !store.fusionHistory.isEmpty {
-                            ProfileRhythmCalendarSection(history: store.fusionHistory)
                         }
                     }
                     .id(ProfileHubAnchor.pulse.rawValue)

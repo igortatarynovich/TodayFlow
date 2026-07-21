@@ -15,6 +15,12 @@
 
 **Umbrella:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) — любой вывод = источник → расчёт → интерпретация → практика → текст; иначе не production.
 
+**Understanding progress** *(глубина · missing data · trial · подписка — см. [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](./UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md)):*
+
+> Прогресс = рост качества понимания пользователя, не число открытых функций.  
+> Нет «пустого» Profile; подписка меняет глубину, не наличие; trial — полноценный опыт.  
+> Голос: TodayFlow не говорит о себе ([TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md) §0).
+
 **Production App Shell (закрыт):** [PR2_APP_SHELL.md](./PR2_APP_SHELL.md) — единая инфраструктура UI (sidebar · main · optional data-rail · shared states). К shell не возвращаемся, кроме багфиксов. Запрет filler-rail / reserved empty column / per-section shells — канон.
 
 **Следующий execution slice:** [PR3_TODAY_PRODUCTION_SURFACE.md](./PR3_TODAY_PRODUCTION_SURFACE.md) — сначала `day_story_v1` (evidence / confidence / limitations / claim map / trace), затем контракт независимых блоков Today, затем surface. Не с Figma.

@@ -20,6 +20,10 @@ from todayflow_backend.core.llm_openai_compatible import (
     resolve_default_chat_model,
 )
 from todayflow_backend.prompts.registry_v1 import get_prompt
+from todayflow_backend.services.profile_capture_session_v0 import (
+    get_profile_capture_session,
+    profile_capture_enabled,
+)
 from todayflow_backend.services.llm_quality_policy_v1 import (
     funnel_step_max_tokens,
     prefer_multi_step_funnels,
@@ -77,12 +81,19 @@ def _parse_json_content(raw: str) -> dict[str, Any] | None:
         return None
 
 
-def _call(system: str, user: str, *, depth_level: str = "normal", temperature: float = 0.48) -> dict[str, Any] | None:
+def _call(
+    system: str,
+    user: str,
+    *,
+    depth_level: str = "normal",
+    temperature: float = 0.48,
+) -> tuple[dict[str, Any] | None, str | None]:
+    """Returns (parsed_dict_or_none, raw_content_or_none). Behavior unchanged when capture off."""
     if not is_llm_chat_configured():
-        return None
+        return None, None
     client = get_openai_compatible_client()
     if client is None:
-        return None
+        return None, None
     content = chat_completion_plain(
         client,
         model=resolve_default_chat_model(),
@@ -94,8 +105,89 @@ def _call(system: str, user: str, *, depth_level: str = "normal", temperature: f
         max_tokens=funnel_step_max_tokens(depth_level),
     )
     if not content:
-        return None
-    return _parse_json_content(content)
+        return None, None
+    return _parse_json_content(content), content
+
+
+def _step_name_from_prompt_id(prompt_id: str) -> str:
+    if "identity" in prompt_id:
+        return "identity"
+    if "styles" in prompt_id:
+        return "styles"
+    if "patterns" in prompt_id:
+        return "patterns"
+    if "spheres" in prompt_id:
+        return "spheres"
+    return prompt_id
+
+
+def _call_with_retry(
+    *,
+    prompt_id: str,
+    locale: str,
+    user_payload: dict[str, Any],
+    depth_level: str,
+    ok_fn: Any,
+    temperature: float = 0.48,
+) -> tuple[dict[str, Any] | None, dict[str, Any]]:
+    system, ver = get_prompt(prompt_id, locale=locale)
+    user = json.dumps(user_payload, ensure_ascii=False)[: user_json_char_budget()]
+    max_tokens = funnel_step_max_tokens(depth_level)
+    model = resolve_default_chat_model()
+    step_meta: dict[str, Any] = {
+        "prompt_id": prompt_id,
+        "prompt_version": ver,
+        "model": model,
+        "temperature": temperature,
+        "max_tokens": max_tokens,
+        "attempts": 0,
+        "ms": 0,
+        "ok": False,
+    }
+    t0 = perf_counter()
+    result: dict[str, Any] | None = None
+    capture = get_profile_capture_session() if profile_capture_enabled() else None
+    step_name = _step_name_from_prompt_id(prompt_id)
+    for attempt in range(2):
+        step_meta["attempts"] = attempt + 1
+        attempt_t0 = perf_counter()
+        parsed, raw = _call(system, user, depth_level=depth_level, temperature=temperature)
+        ok = bool(ok_fn(parsed))
+        validation = {
+            "ok": ok,
+            "validator": getattr(ok_fn, "__name__", "ok_fn"),
+            "reject_reason": None if ok else "step_schema_failed",
+        }
+        if capture is not None:
+            capture.record_step_attempt(
+                step_name,
+                prompt_id=prompt_id,
+                prompt_version=ver,
+                system_prompt=system,
+                user_prompt=user,
+                model_request={
+                    "model": model,
+                    "temperature": temperature,
+                    "max_tokens": max_tokens,
+                    "depth_level": depth_level,
+                    "messages": [
+                        {"role": "system", "chars": len(system)},
+                        {"role": "user", "chars": len(user)},
+                    ],
+                },
+                raw_response=raw,
+                parsed_response=parsed,
+                validation_result=validation,
+                attempt_index=attempt + 1,
+                ms=int((perf_counter() - attempt_t0) * 1000),
+            )
+        if ok:
+            result = parsed
+            step_meta["ok"] = True
+            break
+        result = None
+    step_meta["ms"] = int((perf_counter() - t0) * 1000)
+    return result, step_meta
 
 
 def _identity_ok(d: dict[str, Any] | None) -> bool:
@@ -156,42 +248,6 @@ def _spheres_ok(d: dict[str, Any] | None) -> bool:
     return True
 
 
-def _call_with_retry(
-    *,
-    prompt_id: str,
-    locale: str,
-    user_payload: dict[str, Any],
-    depth_level: str,
-    ok_fn: Any,
-    temperature: float = 0.48,
-) -> tuple[dict[str, Any] | None, dict[str, Any]]:
-    system, ver = get_prompt(prompt_id, locale=locale)
-    user = json.dumps(user_payload, ensure_ascii=False)[: user_json_char_budget()]
-    max_tokens = funnel_step_max_tokens(depth_level)
-    model = resolve_default_chat_model()
-    step_meta: dict[str, Any] = {
-        "prompt_id": prompt_id,
-        "prompt_version": ver,
-        "model": model,
-        "temperature": temperature,
-        "max_tokens": max_tokens,
-        "attempts": 0,
-        "ms": 0,
-        "ok": False,
-    }
-    t0 = perf_counter()
-    result: dict[str, Any] | None = None
-    for attempt in range(2):
-        step_meta["attempts"] = attempt + 1
-        result = _call(system, user, depth_level=depth_level, temperature=temperature)
-        if ok_fn(result):
-            step_meta["ok"] = True
-            break
-        result = None
-    step_meta["ms"] = int((perf_counter() - t0) * 1000)
-    return result, step_meta
-
-
 def build_shared_profile_input(user_json: dict[str, Any]) -> dict[str, Any]:
     """One normalized pack for all funnel steps (no drift between requests)."""
     return {
@@ -241,6 +297,18 @@ def run_profile_disclosure_funnel_v0(
         "sun_sign": (shared.get("astro") or {}).get("sun_sign") if isinstance(shared.get("astro"), dict) else None,
         "life_path": (shared.get("numerology") or {}).get("life_path") if isinstance(shared.get("numerology"), dict) else None,
     }
+    if profile_capture_enabled():
+        capture = get_profile_capture_session()
+        if capture is not None and capture.pack.get("inputs") is None:
+            # CLI usually pre-fills inputs; do not overwrite source_depth / missing_fields.
+            capture.set_inputs(
+                inputs=dict(shared),
+                calculated_facts={
+                    "astro": shared.get("astro"),
+                    "numerology": shared.get("numerology"),
+                    "baseline": shared.get("baseline"),
+                },
+            )
 
     r1, m1 = _call_with_retry(
         prompt_id="profile.identity.v1",

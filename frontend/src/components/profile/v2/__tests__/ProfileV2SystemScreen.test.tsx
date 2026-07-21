@@ -1,6 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import { ProfileV2DepthRail } from "@/components/profile/v2/ProfileV2DepthRail";
 import { ProfileV2SystemScreen } from "@/components/profile/v2/ProfileV2SystemScreen";
+import {
+  PROFILE_V2_COPY,
+  PROFILE_V2_DEPTH_NAV,
+  PROFILE_V2_FORBIDDEN_LEXICON,
+} from "@/components/profile/v2/profileV2SystemCopy";
 import type { ProfileQuickMapViewModel } from "@/lib/profilePage/buildProfileQuickMapData";
 import { buildProfileV2LiveContext } from "@/lib/profilePage/buildProfileV2LiveContext";
 
@@ -11,7 +16,7 @@ const baseModel: ProfileQuickMapViewModel = {
   strengthens: ["ясная система", "глубокий анализ"],
   drains: ["спешка", "хаос"],
   decisionStyle: "Сначала тело, потом структура.",
-  perceivedAs: ["лабрадорит", "оливковый"],
+  perceivedAs: ["нужна ясность", "держит фокус"],
   thriveAreas: ["точность", "глубина", "ритм"],
   lifeMission: "Собрать ясность в систему, которая помогает другим.",
   frameworkTitle: "Почему система так решила",
@@ -24,24 +29,16 @@ const baseModel: ProfileQuickMapViewModel = {
 };
 
 const live = buildProfileV2LiveContext({
-  coreProfile: null,
-  cum: { confidence: { overall: 0.68 } } as never,
-  morningRitual: {
-    celestial_events: {
-      daily_symbols: {
-        stone: { name: "Лабрадорит", story_ru: "Держит фокус." },
-        color: { name: "Оливковый" },
-        totem: { name: "Сова", emoji: "🦉" },
-      },
-      personal_transits: [{ title: "Меркурий" }],
-    },
+  coreProfile: {
+    astro: { sun_sign: "Virgo" },
+    baseline: { archetype_seed: "explorer" },
   } as never,
+  cum: { confidence: { overall: 0.68 } } as never,
   thriveAreas: baseModel.thriveAreas,
-  identitySummary: baseModel.identitySummary,
 });
 
 describe("ProfileV2SystemScreen", () => {
-  it("keeps a single page heading and soft zone labels in main", () => {
+  it("keeps a single page heading and PR-4 origin zones", () => {
     render(
       <ProfileV2SystemScreen
         model={baseModel}
@@ -60,31 +57,41 @@ describe("ProfileV2SystemScreen", () => {
     expect(screen.getByTestId("profile-v2-system")).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 1, name: "Твой личный профиль" })).toBeInTheDocument();
     expect(screen.queryAllByRole("heading", { level: 1 })).toHaveLength(1);
-    // Zone titles are labels, not competing page headings.
-    expect(document.getElementById("profile-v2-facts-title")?.tagName).toBe("P");
+    expect(document.getElementById("profile-v2-identity-title")).toHaveTextContent("Идентичность");
     expect(document.getElementById("profile-v2-character-title")).toHaveTextContent("Характер");
     expect(document.getElementById("profile-v2-direction-title")).toHaveTextContent("Направление");
-    expect(document.getElementById("profile-v2-history-title")).toHaveTextContent("Наблюдения");
-    expect(document.getElementById("profile-v2-sky-title")).toHaveTextContent("Небо");
+    expect(document.getElementById("profile-v2-evidence-title")).toHaveTextContent("Обоснование");
+    expect(document.getElementById("profile-v2-sources-title")).toHaveTextContent("Источники");
     expect(screen.getByTestId("profile-v2-sky-section")).toBeInTheDocument();
+    expect(screen.getByTestId("profile-v2-evidence")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-depth-jump")).toBeInTheDocument();
-    expect(screen.getByText(/Мои дни · последняя неделя/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Мои дни/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Камень дня/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Главный шаг/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/68%/)).not.toBeInTheDocument();
     expect(screen.getByText("Исследователь")).toBeInTheDocument();
     expect(screen.getByText("ясная система")).toBeInTheDocument();
-    expect(screen.getAllByText(/лабрадорит/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/68%/).length).toBeGreaterThan(0);
-    expect(screen.getByText(/Точность наблюдений/i)).toBeInTheDocument();
+    expect(screen.getByText(/Карты и наблюдения/i)).toBeInTheDocument();
   });
 
   it("puts the depth ladder in the right rail component", () => {
     render(<ProfileV2DepthRail />);
     const rail = screen.getByTestId("profile-v2-depth-rail");
     expect(rail).toBeInTheDocument();
-    expect(rail).toHaveTextContent("Факты");
+    expect(rail).toHaveTextContent("Идентичность");
     expect(rail).toHaveTextContent("Характер");
     expect(rail).toHaveTextContent("Направление");
-    expect(rail).toHaveTextContent("Наблюдения");
-    expect(rail).toHaveTextContent("Небо");
+    expect(rail).toHaveTextContent("Обоснование");
+    expect(rail).toHaveTextContent("Источники");
     expect(rail.querySelectorAll("a[href^='#profile-v2-']")).toHaveLength(5);
+  });
+});
+
+describe("PROFILE_V2_COPY lexicon gate", () => {
+  it("forbids day-state words in production Profile V2 copy", () => {
+    const blob = JSON.stringify({ PROFILE_V2_COPY, PROFILE_V2_DEPTH_NAV });
+    for (const token of PROFILE_V2_FORBIDDEN_LEXICON) {
+      expect(blob).not.toContain(token);
+    }
   });
 });

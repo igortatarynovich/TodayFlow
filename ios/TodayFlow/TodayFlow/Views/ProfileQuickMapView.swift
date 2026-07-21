@@ -394,24 +394,15 @@ struct ProfileQuickMapView: View {
     let natalError: String?
     let onOpenBirthData: () -> Void
     let onReloadNatal: () async -> Void
-    var onOpenToday: (() -> Void)?
+    var onOpenToday: (() -> Void)? = nil
     var onOpenRhythm: (() -> Void)?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 28) {
             portraitSection
             ProfileRelationshipInsightsSection(store: store)
-            ProfileCumInsightsSection(store: store)
-            livingMapsSection
+            mapsCtaSection
             deepSection
-            if let onOpenToday {
-                Button(action: onOpenToday) {
-                    Text(ProfileQuickMapCopy.todayLink)
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(TodayFlowTheme.sunset)
-            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -626,26 +617,27 @@ struct ProfileQuickMapView: View {
         }
     }
 
-    private var livingMapsSection: some View {
+    private var mapsCtaSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            ProfileMapsPreviewView(store: store, onOpenRhythm: onOpenRhythm, showSectionBand: true)
-            if let observation = coreProfile?.living?.summary?.trimmingCharacters(in: .whitespacesAndNewlines),
-               !observation.isEmpty {
-                Text(observation)
-                    .font(.footnote)
-                    .foregroundStyle(TodayFlowTheme.ink.opacity(0.82))
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 10)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(TodayFlowTheme.twilight.opacity(0.06))
-                    .overlay(alignment: .leading) {
-                        Rectangle()
-                            .fill(TodayFlowTheme.twilight)
-                            .frame(width: 3)
-                    }
-                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            Text("Карты и наблюдения")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(TodayFlowTheme.secondaryInk)
+            Text("Как жизнь меняется со временем — отдельно от профиля.")
+                .font(.footnote)
+                .foregroundStyle(TodayFlowTheme.ink.opacity(0.72))
+                .fixedSize(horizontal: false, vertical: true)
+            if let onOpenRhythm {
+                Button(action: onOpenRhythm) {
+                    Text("Открыть карты")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
             }
         }
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.white.opacity(0.66))
+        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 
     private var deepSection: some View {

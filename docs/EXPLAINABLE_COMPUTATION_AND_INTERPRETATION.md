@@ -5,7 +5,7 @@
 **Владелец:** Product + Architecture + Engineering + Content  
 
 **Дочерние каноны:**  
-[PRODUCT_TRUTH_FIRST.md](./PRODUCT_TRUTH_FIRST.md) · [EXPLAINABLE_INTERPRETATION.md](./EXPLAINABLE_INTERPRETATION.md) · [EXPLAIN_MEANING_NOT_MECHANISM.md](./EXPLAIN_MEANING_NOT_MECHANISM.md) · [rfc/RFC_DAILY_STATE_V0.md](./rfc/RFC_DAILY_STATE_V0.md) · [content/TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md)
+[PRODUCT_TRUTH_FIRST.md](./PRODUCT_TRUTH_FIRST.md) · [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](./UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md) · [EXPLAINABLE_INTERPRETATION.md](./EXPLAINABLE_INTERPRETATION.md) · [EXPLAIN_MEANING_NOT_MECHANISM.md](./EXPLAIN_MEANING_NOT_MECHANISM.md) · [rfc/RFC_DAILY_STATE_V0.md](./rfc/RFC_DAILY_STATE_V0.md) · [content/TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md)
 
 ---
 
@@ -311,6 +311,7 @@
 ```text
 EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md   ← этот документ (umbrella)
         ├── PRODUCT_TRUTH_FIRST.md               UI / данные / fallback
+        ├── UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md  глубина · missing · trial · подписка
         ├── EXPLAINABLE_INTERPRETATION.md        тексты · паттерны · 4 проверки
         ├── EXPLAIN_MEANING_NOT_MECHANISM.md     что видно пользователю
         ├── RFC_DAILY_STATE_V0.md                SoT дня

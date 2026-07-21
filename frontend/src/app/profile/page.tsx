@@ -71,15 +71,12 @@ import {
   buildProfileQuickMapViewModel,
 } from "@/lib/profilePage/buildProfileQuickMapData";
 import { buildProfileFrameworkCards } from "@/lib/profilePage/buildProfileFrameworkCards";
-import { buildProfileLivingObservation } from "@/lib/profileMapsPreview";
 import { buildProfileLifeSpheresFromProfileData } from "@/lib/profilePage/profileLifeSpheres";
 import {
   isProfilePortraitForming,
   profilePortraitFormingMessage,
 } from "@/lib/profilePage/profilePortraitForming";
 import { buildProfileV2LiveContext } from "@/lib/profilePage/buildProfileV2LiveContext";
-import { fetchProfileMorningRitualToday } from "@/lib/profilePage/fetchProfileMorningRitualToday";
-import type { MorningRitualData } from "@/components/today/todayPageUtils";
 import { listClosedDayContinuityRecords } from "@/lib/todayDayContinuity";
 import type { NatalChartPreview } from "@/components/profile/profilePanelTypes";
 import {
@@ -124,7 +121,6 @@ function ProfileHubPageInner() {
   const [journeyChecked, setJourneyChecked] = useState(false);
   const [coreProfile, setCoreProfile] = useState<CoreProfile | null>(null);
   const [compactUserModel, setCompactUserModel] = useState<CompactUserModel | null>(null);
-  const [morningRitual, setMorningRitual] = useState<MorningRitualData | null>(null);
   const [astroProfiles, setAstroProfiles] = useState<AstroProfile[]>([]);
   const [forceSetup, setForceSetup] = useState(false);
   const [focusArea, setFocusArea] = useState<string | null>(null);
@@ -231,11 +227,10 @@ function ProfileHubPageInner() {
     Promise.all([
       fetchCoreProfileCached().catch(() => null),
       fetchCompactUserModelCached().catch(() => null),
-      fetchProfileMorningRitualToday().catch(() => null),
       getJson<UserSettings>("/account/profile").catch(() => null),
       getJson<AstroProfilesResponse>("/account/astro-data").catch(() => null),
     ])
-      .then(async ([core, cum, ritual, profile, astroData]) => {
+      .then(async ([core, cum, profile, astroData]) => {
         const safeProfiles = Array.isArray(astroData?.profiles) ? astroData.profiles : [];
         const hasAstroBase = safeProfiles.length > 0 || Boolean(core?.astro?.profile_id);
         let nextCore = core;
@@ -261,7 +256,6 @@ function ProfileHubPageInner() {
         }
         setCoreProfile(nextCore);
         setCompactUserModel(cum);
-        setMorningRitual(ritual);
         setAstroProfiles(safeProfiles);
         hydrateSetupForm(profile, nextCore);
         if ((nextCore?.is_ready || hasAstroBase) && !forceSetup) {
@@ -429,18 +423,11 @@ function ProfileHubPageInner() {
     compactUserModel,
     coreProfile?.profile_contract_v1,
   );
-  const livingObservation = buildProfileLivingObservation({
-    livingSummary: coreProfile?.living?.summary,
-    cum: compactUserModel,
-  });
   const profileLifeSpheres = buildProfileLifeSpheresFromProfileData(natalPreview, coreProfile);
   const profileV2Live = buildProfileV2LiveContext({
     coreProfile,
     cum: compactUserModel,
-    morningRitual,
     thriveAreas: profileQuickMapModel.thriveAreas,
-    decisionStyle: profileQuickMapModel.decisionStyle,
-    identitySummary: profileQuickMapModel.identitySummary,
     localClosedDays: listClosedDayContinuityRecords(21).length,
   });
 
@@ -542,13 +529,11 @@ function ProfileHubPageInner() {
                   model={profileQuickMapModel}
                   live={profileV2Live}
                   identityPills={buildProfileIdentityPills(profileQuickMapModel.frameworkAnchors, coreProfile)}
-                  cum={compactUserModel}
                   onOpenBirthData={() => setForceSetup(true)}
                   lifeSpheres={profileLifeSpheres}
                   portraitForming={isProfilePortraitForming(coreProfile)}
                   portraitFormingMessage={profilePortraitFormingMessage(coreProfile)}
                   deepExpanded={deepChartExpanded}
-                  livingObservation={livingObservation}
                   deep={{
                     natalPreview,
                     coreNumerology: coreProfile?.numerology,
@@ -589,8 +574,8 @@ function ProfileHubPageInner() {
                           data-testid="profile-first-today-notice"
                         >
                           <SurfaceInsightBody>
-                            Сначала открой первый Today — там главный ориентир дня. Потом возвращайся сюда за накопленным
-                            контекстом.
+                            Сначала открой первый Today — там главный ориентир дня. Потом возвращайся сюда за портретом
+                            личности.
                           </SurfaceInsightBody>
                           <SurfaceInsightActions>
                             <Link href={FIRST_TODAY_PATH} className="orbit-button orbit-button-primary orbit-button-sm">

@@ -1,30 +1,21 @@
 "use client";
 
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
+import Link from "next/link";
 import { ProfileChartSection } from "@/components/profile/ProfileChartSection";
-import { ProfileCumInsightsBlock } from "@/components/profile/ProfileCumInsightsBlock";
 import type { ProfileLifeSphere } from "@/components/profile/ProfileLifeSection";
-import { ProfileLivingMapsSection } from "@/components/profile/ProfileLivingMapsSection";
 import { ProfilePortalDeepSection } from "@/components/profile/ProfilePortalDeepSection";
-import { ProfileRelationshipInsightsBlock } from "@/components/profile/ProfileRelationshipInsightsBlock";
 import type { ProfileQuickMapDeepProps, ProfileQuickMapScreenProps } from "@/components/profile/quickMap/ProfileQuickMapScreen";
 import { ProfileV2MobileDepthJump } from "@/components/profile/v2/ProfileV2DepthRail";
-import { ProfileV2MyDays } from "@/components/profile/v2/ProfileV2MyDays";
 import { ProfileV2SkySection } from "@/components/profile/v2/ProfileV2SkySection";
 import {
   PROFILE_V2_COPY,
   type ProfileV2ZoneId,
 } from "@/components/profile/v2/profileV2SystemCopy";
 import type { ProfileV2LiveContext } from "@/lib/profilePage/buildProfileV2LiveContext";
-import {
-  profilePortraitFormingMessage,
-} from "@/lib/profilePage/profilePortraitForming";
-import {
-  profileV2SphereCardLine,
-  profileV2SphereProgressPercent,
-} from "@/lib/profilePage/profileV2SpherePresentation";
+import { profilePortraitFormingMessage } from "@/lib/profilePage/profilePortraitForming";
+import { profileV2SphereCardLine } from "@/lib/profilePage/profileV2SpherePresentation";
 import { buildProfileHeroQuote } from "@/lib/product-ui/profileWebFigmaHelpers";
-import type { CompactUserModel } from "@/lib/types";
 import styles from "@/components/profile/v2/profileV2System.module.css";
 
 export type ProfileV2SystemScreenProps = {
@@ -32,10 +23,8 @@ export type ProfileV2SystemScreenProps = {
   live: ProfileV2LiveContext;
   identityPills?: string[];
   lifeSpheres?: ProfileLifeSphere[];
-  cum?: CompactUserModel | null;
   deepExpanded?: boolean;
   deep?: ProfileQuickMapDeepProps | null;
-  livingObservation?: string | null;
   notices?: ReactNode;
   onOpenBirthData: () => void;
   portraitForming?: boolean;
@@ -73,10 +62,8 @@ export function ProfileV2SystemScreen({
   live,
   identityPills = [],
   lifeSpheres,
-  cum,
   deepExpanded = false,
   deep,
-  livingObservation,
   notices,
   onOpenBirthData,
   portraitForming = false,
@@ -88,20 +75,10 @@ export function ProfileV2SystemScreen({
   const formingMessage = portraitFormingMessageProp?.trim() || profilePortraitFormingMessage(null);
   const astroFacts = buildAstroFactsLine(model.frameworkAnchors);
   const helps = live.helps.length ? live.helps : model.thriveAreas.slice(0, 3);
-  const accuracyRingPercent =
-    live.awarenessPercent ??
-    (live.observationAccuracyLevel === "stable"
-      ? 72
-      : live.observationAccuracyLevel === "forming"
-        ? 40
-        : 18);
-  const awarenessDeg = `${Math.round((accuracyRingPercent / 100) * 360)}deg`;
-  const accuracyDisplay = live.observationAccuracyLabel;
   const heroPills = [
     ...identityPills,
     ...(live.elementLabel ? [live.elementLabel] : []),
   ];
-  const hasDailyAnchors = Boolean(live.dailyAnchors.line);
 
   return (
     <div className={styles.pageRoot} data-testid="profile-v2-system">
@@ -115,7 +92,6 @@ export function ProfileV2SystemScreen({
             <span className={styles.liveDot} aria-hidden />
             {PROFILE_V2_COPY.liveBadge}
           </span>
-          {live.updatedLabel ? <span className={styles.liveChip}>{live.updatedLabel}</span> : null}
           <button type="button" className={styles.birthDataBtn} onClick={onOpenBirthData}>
             Данные рождения
           </button>
@@ -143,57 +119,25 @@ export function ProfileV2SystemScreen({
             ) : null}
           </article>
 
-          <aside className={styles.sideCard}>
-            <div className={styles.awarenessRow}>
-              <div
-                className={styles.awarenessRing}
-                style={{ "--awareness-deg": awarenessDeg } as CSSProperties}
-                aria-hidden
-              >
-                <div className={styles.awarenessRingInner}>
-                  {live.awarenessPercent != null ? `${live.awarenessPercent}%` : accuracyDisplay}
-                </div>
-              </div>
-              <div>
-                <p className={styles.sideEyebrow}>{PROFILE_V2_COPY.awarenessTitle}</p>
-                <p className={styles.sideBody}>
-                  {live.awarenessPercent != null
-                    ? PROFILE_V2_COPY.awarenessLead
-                    : `Сейчас: ${accuracyDisplay}. ${PROFILE_V2_COPY.awarenessLead}`}
-                </p>
-              </div>
-            </div>
-            {live.hasStoneCard ? (
-              <div className={styles.anchorBlock}>
-                <p className={styles.anchorTitle}>{live.stoneCardTitle}</p>
-                <p className={styles.anchorBody}>{live.stoneCardBody}</p>
-              </div>
-            ) : null}
-            {live.hasSupportsCard ? (
-              <div className={styles.anchorBlock}>
-                <p className={styles.anchorTitle}>{live.supportsCardTitle}</p>
-                <p className={styles.anchorBody}>{live.supportsCardBody}</p>
-              </div>
-            ) : null}
+          <aside className={styles.sideCard} data-testid="profile-v2-evidence-aside">
+            <p className={styles.sideEyebrow}>{live.evidenceTitle}</p>
+            <p className={styles.sideBody}>{live.evidenceBody}</p>
+            <p className={styles.factHint}>
+              {PROFILE_V2_COPY.zones.evidence.levelPrefix}: {live.observationAccuracyLabel}
+            </p>
           </aside>
         </section>
 
-        <section id={zoneDomId("facts")} className={styles.zone} aria-labelledby="profile-v2-facts-title">
+        <section id={zoneDomId("identity")} className={styles.zone} aria-labelledby="profile-v2-identity-title">
           <header className={styles.zoneHeader}>
             <div>
-              <ZoneLabel id="profile-v2-facts-title" title={PROFILE_V2_COPY.zones.facts.title} />
-              <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.facts.lead}</p>
+              <ZoneLabel id="profile-v2-identity-title" title={PROFILE_V2_COPY.zones.identity.title} />
+              <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.identity.lead}</p>
             </div>
-            {live.updatedLabel ? (
-              <span className={styles.liveChip}>
-                <span className={styles.liveDot} aria-hidden />
-                {live.updatedLabel.replace(PROFILE_V2_COPY.updatedPrefix, "обновлено")}
-              </span>
-            ) : null}
           </header>
           <div className={styles.factGrid}>
             <article className={styles.factCard}>
-              <p className={styles.factLabel}>{PROFILE_V2_COPY.zones.facts.cards.archetype}</p>
+              <p className={styles.factLabel}>{PROFILE_V2_COPY.zones.identity.cards.archetype}</p>
               <p className={styles.factValue}>{model.archetype}</p>
               {model.identitySummary ? (
                 <p className={styles.factHint}>{model.identitySummary}</p>
@@ -201,18 +145,9 @@ export function ProfileV2SystemScreen({
             </article>
             {astroFacts ? (
               <article className={styles.factCard}>
-                <p className={styles.factLabel}>{PROFILE_V2_COPY.zones.facts.cards.astro}</p>
+                <p className={styles.factLabel}>{PROFILE_V2_COPY.zones.identity.cards.astro}</p>
                 <p className={styles.factValue}>{astroFacts}</p>
-                <p className={styles.factHint}>{PROFILE_V2_COPY.zones.facts.astroHint}</p>
-              </article>
-            ) : null}
-            {hasDailyAnchors ? (
-              <article className={styles.factCard}>
-                <p className={styles.factLabel}>{PROFILE_V2_COPY.zones.facts.cards.anchors}</p>
-                <p className={styles.factValue}>{live.dailyAnchors.line}</p>
-                <p className={styles.factHint}>
-                  Сегодняшние опоры · <a href="/today">Открыть день</a>
-                </p>
+                <p className={styles.factHint}>{PROFILE_V2_COPY.zones.identity.astroHint}</p>
               </article>
             ) : null}
           </div>
@@ -280,7 +215,7 @@ export function ProfileV2SystemScreen({
           ) : null}
           {model.perceivedAs.length ? (
             <article className={styles.characterPanel} style={{ marginTop: "1rem" }}>
-              <p className={styles.characterPanelTitle}>Повторяющиеся паттерны</p>
+              <p className={styles.characterPanelTitle}>{PROFILE_V2_COPY.zones.character.patterns}</p>
               <ul className={styles.bulletList}>
                 {model.perceivedAs.map((item) => (
                   <li key={item} className={styles.bulletItem}>
@@ -295,7 +230,7 @@ export function ProfileV2SystemScreen({
           ) : null}
           {model.frameworkLead ? (
             <article className={styles.decisionBlock} style={{ marginTop: "1rem" }}>
-              <p className={styles.characterPanelTitle}>Что меняется сейчас</p>
+              <p className={styles.characterPanelTitle}>{PROFILE_V2_COPY.zones.character.forming}</p>
               <p className={styles.factHint}>{model.frameworkLead}</p>
             </article>
           ) : null}
@@ -316,68 +251,68 @@ export function ProfileV2SystemScreen({
           ) : null}
           {lifeSpheres?.length ? (
             <div className={styles.sphereGrid}>
-              {lifeSpheres.map((sphere) => {
-                const progress = profileV2SphereProgressPercent(sphere.id, accuracyRingPercent);
-                return (
-                  <details key={sphere.id} className={styles.sphereCard}>
-                    <summary className={styles.sphereSummary}>
-                      <div className={styles.sphereSummaryMain}>
-                        <p className={styles.sphereTitle}>{sphere.title}</p>
-                        <p className={styles.sphereNeedLine}>{profileV2SphereCardLine(sphere)}</p>
-                        <div className={styles.sphereProgressTrack} aria-hidden>
-                          <span className={styles.sphereProgressFill} style={{ width: `${progress}%` }} />
-                        </div>
-                      </div>
-                      <span className={styles.sphereChevron} aria-hidden>
-                        ›
-                      </span>
-                    </summary>
-                    <div className={styles.sphereDetails}>
-                      <p className={styles.sphereDetailLabel}>Как проявляется</p>
-                      <p className={styles.sphereBody}>{sphere.how}</p>
-                      <p className={styles.sphereDetailLabel}>Нужно</p>
-                      <p className={styles.sphereMeta}>{sphere.need}</p>
-                      <p className={styles.sphereDetailLabel}>Риск</p>
-                      <p className={styles.sphereMeta}>{sphere.risk}</p>
-                      <p className={styles.sphereDetailLabel}>Включает</p>
-                      <p className={styles.sphereMeta}>{sphere.turnsOn}</p>
+              {lifeSpheres.map((sphere) => (
+                <details key={sphere.id} className={styles.sphereCard}>
+                  <summary className={styles.sphereSummary}>
+                    <div className={styles.sphereSummaryMain}>
+                      <p className={styles.sphereTitle}>{sphere.title}</p>
+                      <p className={styles.sphereNeedLine}>{profileV2SphereCardLine(sphere)}</p>
                     </div>
-                  </details>
-                );
-              })}
+                    <span className={styles.sphereChevron} aria-hidden>
+                      ›
+                    </span>
+                  </summary>
+                  <div className={styles.sphereDetails}>
+                    <p className={styles.sphereDetailLabel}>Как проявляется</p>
+                    <p className={styles.sphereBody}>{sphere.how}</p>
+                    <p className={styles.sphereDetailLabel}>Нужно</p>
+                    <p className={styles.sphereMeta}>{sphere.need}</p>
+                    <p className={styles.sphereDetailLabel}>Риск</p>
+                    <p className={styles.sphereMeta}>{sphere.risk}</p>
+                    <p className={styles.sphereDetailLabel}>Включает</p>
+                    <p className={styles.sphereMeta}>{sphere.turnsOn}</p>
+                  </div>
+                </details>
+              ))}
             </div>
           ) : null}
         </section>
 
-        <section id={zoneDomId("history")} className={styles.zone} aria-labelledby="profile-v2-history-title">
+        <section id={zoneDomId("evidence")} className={styles.zone} aria-labelledby="profile-v2-evidence-title">
           <header className={styles.zoneHeader}>
             <div>
-              <ZoneLabel id="profile-v2-history-title" title={PROFILE_V2_COPY.zones.history.title} />
-              <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.history.lead}</p>
+              <ZoneLabel id="profile-v2-evidence-title" title={PROFILE_V2_COPY.zones.evidence.title} />
+              <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.evidence.lead}</p>
             </div>
           </header>
-          <div className={styles.historyStack}>
-            <ProfileV2MyDays />
-            <ProfileLivingMapsSection variant="quickMap" livingObservation={livingObservation} />
-            <div className={styles.historyStackWide}>
-              <ProfileRelationshipInsightsBlock cum={cum} />
-            </div>
-            <div className={styles.historyStackWide}>
-              <ProfileCumInsightsBlock cum={cum} />
-            </div>
-          </div>
+          <article className={styles.decisionBlock} data-testid="profile-v2-evidence">
+            <p className={styles.characterPanelTitle}>{live.evidenceTitle}</p>
+            <p className={styles.factHint}>{live.evidenceBody}</p>
+            {live.evidenceNextStep ? (
+              <>
+                <p className={styles.characterPanelTitle} style={{ marginTop: "0.85rem" }}>
+                  {PROFILE_V2_COPY.zones.evidence.nextLabel}
+                </p>
+                <p className={styles.factHint}>{live.evidenceNextStep}</p>
+              </>
+            ) : null}
+          </article>
+          <p className={styles.zoneLead} style={{ marginTop: "1rem" }}>
+            {PROFILE_V2_COPY.mapsCtaHint}{" "}
+            <Link href="/maps/mood">{PROFILE_V2_COPY.mapsCta}</Link>
+          </p>
         </section>
 
         {deep ? (
           <section
-            id={zoneDomId("sky")}
+            id={zoneDomId("sources")}
             className={`${styles.zone} ${styles.skyZone}`.trim()}
-            aria-labelledby="profile-v2-sky-title"
+            aria-labelledby="profile-v2-sources-title"
           >
             <header className={styles.zoneHeader}>
               <div>
-                <ZoneLabel id="profile-v2-sky-title" title={PROFILE_V2_COPY.zones.sky.title} />
-                <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.sky.lead}</p>
+                <ZoneLabel id="profile-v2-sources-title" title={PROFILE_V2_COPY.zones.sources.title} />
+                <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.sources.lead}</p>
               </div>
             </header>
             <div className={styles.skyContent}>
@@ -385,9 +320,13 @@ export function ProfileV2SystemScreen({
                 natalPreview={deep.natalPreview}
                 previewError={deep.previewError}
                 onReloadPreview={deep.onReloadPreview}
-                updatedLabel={live.updatedLabel}
+                frameworkAnchors={model.frameworkAnchors}
+                frameworkCards={model.frameworkCards}
               />
               <ProfilePortalDeepSection defaultOpen={false}>
+                <p className={styles.zoneLead} style={{ marginBottom: "0.75rem" }}>
+                  {PROFILE_V2_COPY.zones.sources.exploreHint}
+                </p>
                 <ProfileChartSection
                   natalPreview={deep.natalPreview}
                   coreNumerology={deep.coreNumerology}
@@ -399,7 +338,7 @@ export function ProfileV2SystemScreen({
               </ProfilePortalDeepSection>
             </div>
             <p className={styles.zoneLead} style={{ marginTop: "1rem" }}>
-              {PROFILE_V2_COPY.zones.sky.updatedNote}
+              {PROFILE_V2_COPY.zones.sources.updatedNote}
             </p>
           </section>
         ) : null}

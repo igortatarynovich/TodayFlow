@@ -425,6 +425,11 @@ def build_profile_portrait_v1(
     locale: str = "ru",
 ) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], bool]:
     """Returns (contract, interpretation, daily_interpretation, used_forming_fallback)."""
+    from todayflow_backend.services.profile_capture_session_v0 import (
+        get_profile_capture_session,
+        profile_capture_enabled,
+    )
+
     llm_pack = {
         "person": profile_input.get("person"),
         "astro": profile_input.get("astro"),
@@ -435,6 +440,10 @@ def build_profile_portrait_v1(
         "profile_hash": profile_input.get("profile_hash"),
     }
     contract, gen_meta = call_profile_contract_llm_v1(llm_pack, locale=locale)
+    before_quality = dict(contract) if isinstance(contract, dict) else None
+    quality_report: dict[str, Any] | None = (
+        gen_meta.get("validation") if isinstance(gen_meta.get("validation"), dict) else None
+    )
     used_fallback = False
     if contract is not None and not contract_matches_locale(contract, locale):
         gen_meta = {**gen_meta, "reason": "locale_language_mismatch", "rejected_locale": locale}
@@ -457,6 +466,7 @@ def build_profile_portrait_v1(
     else:
         enriched = enrich_profile_contract_living(contract, living=living)
         report = validate_profile_contract_strict(enriched)
+        quality_report = report
         if report["ok"]:
             contract = enriched
             contract["status"] = PROFILE_STATUS_READY
@@ -464,6 +474,7 @@ def build_profile_portrait_v1(
             contract["generation_meta"] = {**gm, "validation": report}
         else:
             pre = validate_profile_contract_strict(contract)
+            quality_report = pre
             if not pre["ok"]:
                 used_fallback = True
                 contract = build_profile_contract_forming_v1(
@@ -473,6 +484,22 @@ def build_profile_portrait_v1(
                     partial=contract,
                 )
 
+    if profile_capture_enabled():
+        capture = get_profile_capture_session()
+        if capture is not None:
+            capture.record_quality(
+                before=before_quality,
+                validation=quality_report,
+                after=contract if isinstance(contract, dict) else None,
+                forming_fallback=used_fallback,
+                generation_meta=gen_meta if isinstance(gen_meta, dict) else None,
+            )
+            capture.record_legacy(interpretation=None, daily=None)
+
     interpretation = profile_contract_to_legacy_interpretation(contract)
     daily = profile_contract_to_daily_interpretation(contract)
+    if profile_capture_enabled():
+        capture = get_profile_capture_session()
+        if capture is not None:
+            capture.record_legacy(interpretation=interpretation, daily=daily)
     return contract, interpretation, daily, used_fallback

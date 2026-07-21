@@ -278,6 +278,40 @@ class CoreProfileService:
                 profile_payload["snapshot_id"] = snapshot_id
 
             try:
+                from todayflow_backend.services.profile_capture_session_v0 import (
+                    get_profile_capture_session,
+                    profile_capture_enabled,
+                )
+
+                if profile_capture_enabled():
+                    capture = get_profile_capture_session()
+                    if capture is not None:
+                        if capture.pack.get("inputs") is None:
+                            capture.set_inputs(
+                                inputs={
+                                    "person": person_pub,
+                                    "astro": astro_context,
+                                    "numerology": numerology_context,
+                                    "baseline": baseline,
+                                    "living": living_context,
+                                    "locale": locale,
+                                    "profile_hash": profile_hash,
+                                },
+                                calculated_facts={
+                                    "astro": astro_context,
+                                    "numerology": numerology_context,
+                                    "baseline": baseline,
+                                },
+                                missing_fields=list(missing_fields or []),
+                            )
+                        capture.record_snapshot(
+                            profile_payload,
+                            persisted=snapshot_id is not None,
+                        )
+            except Exception:
+                pass
+
+            try:
                 learning = get_learning_service()
                 pv = learning.get_or_create_prompt_version(
                     db,
@@ -317,7 +351,20 @@ class CoreProfileService:
 
             self._cache[cache_key] = (now + self.cache_ttl_seconds, deepcopy(profile_payload))
             self._prune_cache(now)
-            return self._attach_natal_summary(db, deepcopy(profile_payload), astro_profile, settings)
+            get_body = self._attach_natal_summary(db, deepcopy(profile_payload), astro_profile, settings)
+            try:
+                from todayflow_backend.services.profile_capture_session_v0 import (
+                    get_profile_capture_session,
+                    profile_capture_enabled,
+                )
+
+                if profile_capture_enabled():
+                    capture = get_profile_capture_session()
+                    if capture is not None:
+                        capture.record_get_response(get_body)
+            except Exception:
+                pass
+            return get_body
 
     def _cache_key(
         self,

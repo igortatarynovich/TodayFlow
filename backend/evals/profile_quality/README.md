@@ -21,3 +21,18 @@ Latest salvage run: `runs/review_packs_20260721T085424Z/` (01–08 funnel partia
 ## Method
 
 Same as Compatibility: scorecard for technical defects; humans score value & natural RU.
+
+---
+
+## Production-faithful capture (forensic SoT)
+
+Do **not** use `run_review_packs_v1.py` for degradation forensics. Use:
+
+```bash
+python evals/profile_quality/run_production_capture_v0.py --cases A,B
+```
+
+- Same production funnel (4 steps, retry, quality validator, portrait builder)
+- Sidecar pack: prompts/raw/parse/validation/snapshot/GET/QuickMap/visible_blocks
+- Off by default; optional `--redact`
+- Spec: `docs/audits/PROFILE_PRODUCTION_CAPTURE_PACK.md`

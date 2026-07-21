@@ -1,33 +1,13 @@
 import {
-  buildProfileV2DailyAnchors,
   buildProfileV2LiveContext,
   resolveObservationAccuracy,
+  resolveProfileSourceDepth,
   resolveProfileV2AwarenessPercent,
 } from "../buildProfileV2LiveContext";
-import type { MorningRitualData } from "@/components/today/todayPageUtils";
 import type { CompactUserModel, CoreProfile } from "@/lib/types";
 
-const morningRitual = {
-  celestial_events: {
-    daily_symbols: {
-      stone: { name: "Лабрадорит", story_ru: "Держит фокус без спешки." },
-      color: { name: "Оливковый" },
-      totem: { name: "Сова", emoji: "🦉", story_ru: "Наблюдение." },
-    },
-    personal_transits: [{ title: "Меркурий" }],
-  },
-} as MorningRitualData;
-
 describe("buildProfileV2LiveContext", () => {
-  it("builds daily anchors from morning ritual API shape", () => {
-    const anchors = buildProfileV2DailyAnchors(morningRitual);
-    expect(anchors.stoneName).toBe("Лабрадорит");
-    expect(anchors.line).toContain("Лабрадорит");
-    expect(anchors.line).toContain("Оливковый");
-    expect(anchors.line).toContain("Меркурий");
-  });
-
-  it("prefers CUM confidence for awareness percent", () => {
+  it("prefers CUM confidence for awareness percent helper", () => {
     const cum = { confidence: { overall: 0.68 } } as CompactUserModel;
     expect(
       resolveProfileV2AwarenessPercent({ cum, coreProfile: null, localClosedDays: 0 }),
@@ -61,7 +41,29 @@ describe("buildProfileV2LiveContext", () => {
     ).toBe("initial");
   });
 
-  it("uses stone story only when stone data exists — no identity fallback", () => {
+  it("resolves source_depth ladder from birth and check-ins", () => {
+    expect(
+      resolveProfileSourceDepth({
+        coreProfile: { astro: { sun_sign: "Virgo" } } as CoreProfile,
+        cum: null,
+        localClosedDays: 0,
+      }),
+    ).toBe("birth_data_only");
+
+    expect(
+      resolveProfileSourceDepth({
+        coreProfile: {
+          astro: { sun_sign: "Virgo" },
+          baseline: { archetype_seed: "explorer" },
+          living: { signal_profile: { signals_days: 4 } },
+        } as CoreProfile,
+        cum: null,
+        localClosedDays: 0,
+      }),
+    ).toBe("profile_plus_checkins");
+  });
+
+  it("builds Evidence without day anchors or day recommendations", () => {
     const cum = {
       generated_at: "2026-07-07T07:14:00.000Z",
       confidence: { overall: 0.68, delta_30d: 0.03 },
@@ -70,50 +72,45 @@ describe("buildProfileV2LiveContext", () => {
     } as CompactUserModel;
 
     const live = buildProfileV2LiveContext({
-      coreProfile: { generated_at: "2026-07-06T10:00:00.000Z" } as CoreProfile,
+      coreProfile: {
+        generated_at: "2026-07-06T10:00:00.000Z",
+        astro: { sun_sign: "Virgo", sun_element: "earth" },
+        profile_contract_v1: {
+          contract_version: "v1",
+          identity_core: "Ясный фокус",
+          strengths: [],
+          growth_zones: [],
+          relationship_style: "",
+          money_style: "",
+          decision_style: "",
+          recurring_patterns: [],
+          helps: ["ритм без спешки"],
+        },
+      } as CoreProfile,
       cum,
-      morningRitual,
-      thriveAreas: ["ритм"],
-      identitySummary: "Видит связи раньше событий.",
+      thriveAreas: ["глубина"],
     });
 
-    expect(live.awarenessPercent).toBe(68);
-    expect(live.observationAccuracyLevel).toBe("stable");
-    expect(live.awarenessDeltaLabel).toBe("+3 за 30 дн");
-    expect(live.hasStoneCard).toBe(true);
-    expect(live.stoneCardTitle).toContain("лабрадорит");
-    expect(live.stoneCardBody).toBe("Держит фокус без спешки.");
-    expect(live.hasSupportsCard).toBe(true);
-    expect(live.supportsCardBody).toContain("Оливковый");
-    expect(live.helps).toEqual(["Один сложный разговор до 14:00.", "точность", "глубина", "ритм"]);
-    expect(live.updatedLabel).toContain("обновлено");
+    expect(live.sourceDepth).toBe("onboarding_answers");
+    expect(live.evidenceBody).toContain("ответы при старте");
+    expect(live.evidenceTitle).toBeTruthy();
+    expect(live.helps).toEqual(["ритм без спешки", "глубина"]);
+    expect(live.helps.join(" ")).not.toContain("разговор");
+    expect(live.elementLabel).toContain("Стихия");
+    expect(live).not.toHaveProperty("hasStoneCard");
+    expect(live).not.toHaveProperty("dailyAnchors");
+    expect(live).not.toHaveProperty("updatedLabel");
   });
 
-  it("hides stone card and fake updated label when data is missing", () => {
+  it("keeps evidence honest when data is missing", () => {
     const live = buildProfileV2LiveContext({
       coreProfile: null,
       cum: null,
-      morningRitual: null,
-      identitySummary: "Не должен попасть в камень дня.",
     });
 
-    expect(live.hasStoneCard).toBe(false);
-    expect(live.stoneCardBody).toBe("");
-    expect(live.hasSupportsCard).toBe(false);
-    expect(live.updatedLabel).toBe("");
-    expect(live.awarenessPercent).toBeNull();
+    expect(live.sourceDepth).toBe("birth_data_only");
     expect(live.observationAccuracyLabel).toBe("начальная");
-  });
-
-  it("uses personal_transits[0] only for planet anchor", () => {
-    const anchors = buildProfileV2DailyAnchors({
-      celestial_events: {
-        daily_symbols: { stone: { name: "X" }, color: { name: "Y" }, totem: { name: "Z", emoji: "🦉" } },
-        personal_transits: [],
-        retrogrades: [{ planet_ru: "Меркурий" }],
-      },
-    } as MorningRitualData);
-    expect(anchors.planetName).toBeNull();
-    expect(anchors.line).not.toContain("Меркурий");
+    expect(live.helps).toEqual([]);
+    expect(live.evidenceNextStep).toBeTruthy();
   });
 });

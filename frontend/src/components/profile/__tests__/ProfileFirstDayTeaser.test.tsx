@@ -23,7 +23,7 @@ const baseModel: ProfileV0ViewModel = {
 };
 
 describe("ProfileFirstDayTeaser", () => {
-  it("renders portrait band, living maps section, and portal CTA", async () => {
+  it("renders portrait band and portal CTA without Maps or day trackers", () => {
     render(
       <ProfileFirstDayTeaser
         model={baseModel}
@@ -38,8 +38,10 @@ describe("ProfileFirstDayTeaser", () => {
     expect(screen.getByText("Кто я")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Sage" })).toBeInTheDocument();
     expect(screen.queryByText("Victoria")).not.toBeInTheDocument();
-    expect(screen.getByTestId("profile-living-maps-section")).toBeInTheDocument();
-    expect(await screen.findByTestId("profile-maps-preview")).toBeInTheDocument();
+    expect(screen.queryByTestId("profile-living-maps-section")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("profile-maps-preview")).not.toBeInTheDocument();
+    expect(screen.queryByText(/Мои дни/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/сегодня/i)).not.toBeInTheDocument();
     expect(screen.getByTestId("profile-first-day-portal")).toBeInTheDocument();
     expect(screen.getByText("Следующий уровень")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Вернуться в Today" })).toHaveAttribute("href", "/today");

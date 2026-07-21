@@ -2,9 +2,7 @@ import SwiftUI
 
 struct ProfileFirstDayTeaserView: View {
     let coreProfile: CoreProfileResponse?
-    let store: TodayFlowStore
     let onOpenFullPortrait: () -> Void
-    var onOpenToday: (() -> Void)?
 
     private var archetype: String {
         coreProfile?.baseline.archetypeSeed?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
@@ -32,21 +30,7 @@ struct ProfileFirstDayTeaserView: View {
 
             teaserHeroCard
 
-            ProfileLivingMapsSectionBand()
-
-            ProfileMapsPreviewView(store: store, showSectionBand: false)
-
-            ProfileMyDaysTeaserSection()
-
             portalButton
-
-            if let onOpenToday {
-                Button(action: onOpenToday) {
-                    Text("Вернуться в Today")
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.bordered)
-            }
         }
         .accessibilityIdentifier("profile-first-day-teaser")
     }
@@ -60,7 +44,7 @@ struct ProfileFirstDayTeaserView: View {
             HeroLargeView(
                 symbolSeed: archetype,
                 title: archetype,
-                kicker: "Портрет · день 1",
+                kicker: "Портрет",
                 metaLine: identityLine,
                 digest: teaserLine,
                 edgeToEdge: false
@@ -100,23 +84,6 @@ struct ProfileFirstDayTeaserView: View {
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier("profile-first-day-portal")
-    }
-}
-
-private struct ProfileMyDaysTeaserSection: View {
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Мои дни")
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(TodayFlowTheme.secondaryInk)
-            Text("Заверши день в Today — здесь появятся фокус и итог последних дней.")
-                .font(.footnote)
-                .foregroundStyle(TodayFlowTheme.ink.opacity(0.78))
-        }
-        .padding(14)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white.opacity(0.66))
-        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 }
 

@@ -1,12 +1,14 @@
 # Profile · Screen Master
 
-**Статус:** **CANON** — единственная спецификация экрана Profile для дизайна, разработки и QA.  
-**Версия:** 2.2 (2026-07-02).  
-**Код:** `frontend/src/components/profile/v0/` · лимиты `frontend/src/lib/profilePage/profileScreenLimits.ts`
+**Статус:** **CANON** для visual/layout legacy v0; **production IA** — [PR4_PROFILE_CANON.md](./PR4_PROFILE_CANON.md) (2026-07-21).  
+**Umbrella:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) — platform production gate; при конфликте с этим Screen Master побеждает umbrella.  
+**Версия:** 2.3 (2026-07-21).  
+**Код:** `frontend/src/components/profile/v0/` · production V2 `frontend/src/components/profile/v2/` · лимиты `frontend/src/lib/profilePage/profileScreenLimits.ts`
 
-**Production route (2026-07-06):** default `/profile` → **`ProfileWebScreen`** shell + **`ProfileQuickMapScreen`** (`HeroLarge` + Foundation surfaces + `ProfileWebMyDays`). Legacy: `?view=v0` → `ProfileV0Screen`. Superseded thin shell: `ProfileWebQuickMap` (deprecated). QA: [status/PROFILE_FOUNDATION_QA.md](./status/PROFILE_FOUNDATION_QA.md).
+**Production route (2026-07-21):** default `/profile` → **`ProfileWebScreen`** shell + **`ProfileV2SystemScreen`** (Identity · Interpretation · Evidence · Deep Sources). Legacy: `?view=v0` → `ProfileV0Screen`. Superseded: `ProfileQuickMapScreen` / `ProfileWebMyDays` as Profile home. QA: [status/PROFILE_FOUNDATION_QA.md](./status/PROFILE_FOUNDATION_QA.md).
 
-**Цель:** две половины личности — **портрет** («Кто я») и **живая история** («Как меняется моя жизнь» · Maps). Не CRM, не лендинг, не Excel-трекеры.
+**Цель (production):** Profile отвечает только на **«Кто я»** — константы личности + объяснимое Evidence.  
+**Не** день (Today), **не** недельные карты/трекеры (Maps/Tracking). Живая история живёт на `/maps/*` и `/tracking/*`; на Profile — максимум тонкая CTA.
 
 **Onboarding (v2):** Profile **не** первый экран после signup и **не** host для core setup. Сбор birth data — `/onboarding/core` ([FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md)). Profile показываем как «твой портрет» **после** First Today или по depth CTA.
 
@@ -65,7 +67,7 @@
 | `--profile-type-l` | **L** | Love / Money / Compass / Portal titles |
 | `--profile-type-m` | **M** | главный вывод слоя (Why phrase, Love/Money main, Compass main, Hero tagline) |
 | `--profile-type-body` | **Body** | весь остальной текст · detail panels |
-| `--profile-type-caption` | **Caption** | Важно, Спутник, Сегодня, Имя, signal labels |
+| `--profile-type-caption` | **Caption** | Важно, Спутник, Имя, signal labels (без слова «Сегодня» на production Profile) |
 | `--profile-type-micro` | **Micro** | Карта личности, Почему именно…, Мои числа |
 
 **Colors:**
@@ -94,26 +96,27 @@
 | Navbar | fixed сверху | то же |
 | Hero | **65–70vh** | **75vh**, контент по центру; Why/Numbers peek на первом экране |
 
-**Порядок (7 слоёв Portrait + Living Maps + Portal):**
+**Порядок (production V2 — PR-4):** Identity → Interpretation → Evidence → Deep Sources (collapsed).  
+**Legacy v0 scroll (ниже)** retained for `?view=v0` visual work only — **do not** re-home Living Maps on production Profile.
 
-**A · Кто я** *(Portrait — почти не меняется)*
+**A · Кто я** *(Portrait — почти не меняется)* — v0
 
 1. Hero — кто ты  
 2. Why — почему сформировался профиль  
 3. Core Pattern — что тобой движет  
 4. Social Mirror — как тебя видят другие  
 5. Life layer — Love + Money (desktop 2 col · mobile swipe)  
-6. Action layer — Compass  
+6. Action layer — Compass *(без обязательного «Сегодня»)*  
 
-**B · Как меняется моя жизнь** *(Living Maps — §7)*
+**B · Depth**
 
-7. Living Maps — heatmaps · journeys · timelines · share *(не трекеры)*  
+7. Portal / Sources — collapsed natal · «Исследовать глубже»
 
-**C · Depth**
+**C · Maps home (не Profile)**
 
-8. Portal — карта личности · collapsed natal / sources  
+Living Maps / My Days / week rhythm → `/maps/*`, `/tracking/*` ([PR4_PROFILE_CANON.md](./PR4_PROFILE_CANON.md)).
 
-**Не на скролле:** Compatibility · Today · **Name entity (removed)**.
+**Не на скролле Profile:** Compatibility hub · day state · week heatmaps · **Name entity (removed)**.
 
 ---
 
@@ -210,7 +213,8 @@
 
 **Роль:** кульминация — «Как двигаться дальше?» Маршрут, не card с советами.
 
-**Layout:** `.compassAction` · min-height **380–460px** · desktop **40/60** · `overflow: visible` · «Сегодня» — **целое предложение**, без обрезки UI/data.
+**Layout:** `.compassAction` · min-height **380–460px** · desktop **40/60** · `overflow: visible`.  
+**PR-4:** не требовать слово «Сегодня» в Compass; day action copy принадлежит Today.
 
 ---
 
@@ -226,20 +230,26 @@
 
 ## 7. Living Maps · «Как меняется моя жизнь»
 
-**Роль:** вторая половина Profile и TodayFlow — **живая история**, не трекеры и не статистика.  
-**Канон:** [TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md) §4.10 · §5.8 · [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) §3.3.
+> **PR-4 supersede (2026-07-21):** Maps **не** вторая половина Profile scroll.  
+> Home: `/maps/*` · `/tracking/*`. Profile may link with a thin CTA only.  
+> Full visual/entity notes below remain for Maps surfaces — not for mounting on `/profile`.
 
-**JTBD:** *Каким становится моя жизнь?* — узоры, которые **рисуются сами** из Today.
+**Роль:** **живая история** TodayFlow (не трекеры и не статистика) — на Maps/Tracking, не на Profile.  
+**Канон IA:** [PR4_PROFILE_CANON.md](./PR4_PROFILE_CANON.md) · product model [TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md) §4.10 · §5.8 · [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) §3.3 *(Maps product; Profile home retracted)*.
 
-### 7.1 Связь Today · Profile · PIM
+**JTBD:** *Каким становится моя жизнь?* — узоры из Today на Maps/Tracking.
+
+### 7.1 Связь Today · Maps · PIM · Profile
 
 | Источник | Что даёт Maps |
 |----------|----------------|
 | **Today** | +1 точка за действие дня (карта · число · mood · energy · practice · promise · evening) |
-| **Profile** | дом карт · drill-down · living observations · share |
+| **Maps / Tracking** | дом карт · drill-down · living observations · share |
+| **Profile** | Snapshot «кто я»; тонкая CTA на карты — без heatmaps на скролле |
 | **PIM** | atoms · temporal patterns → **story render** (mechanism скрыт) |
 
-**Запрещено:** отдельный nav «Трекеры» · экран «заполни статистику» · % completion в UI.
+**Запрещено на Profile:** My Days · Living Maps preview · mood/energy grids · day stone/supports.  
+**Запрещено на Maps:** отдельный nav «Трекеры» · экран «заполни статистику» · % completion в UI.
 
 ### 7.2 Visual entity model *(Maps)*
 

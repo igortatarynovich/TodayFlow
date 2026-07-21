@@ -2,10 +2,13 @@
 
 **Статус:** принято для аудита и контракта (до переключения production generation).  
 **Версия:** 1.0 (2026-07-21).  
-**Связь:** [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) §4 · код `profile_content_v1` · текущая генерация `profile_contract_v1` / `profile_disclosure_funnel_v0` · голос [content/TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md).  
+**Связь:** [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) §4 · код `profile_content_v1` · текущая генерация `profile_contract_v1` / `profile_disclosure_funnel_v0` · голос [content/TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md) · **surface IA** [PR4_PROFILE_CANON.md](./PR4_PROFILE_CANON.md).  
+**Umbrella (выше модуля):** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) — при конфликте с Content/PR-4 побеждает umbrella.  
 **Метод оценки:** как Compatibility — вход → полный prompt → raw → final → ручная оценка + Voice rubric.
 
 Профиль — источник персонализации для Today, Compatibility, Tarot и рекомендаций. Качество здесь важнее большинства отдельных модулей.
+
+**UI origin layers (PR-4):** Identity ↔ факты/расчёты · Interpretation ↔ §4.1–4.2 contract · Evidence ↔ `source_depth` + honesty · Deep Sources ↔ natal attach. Day/week UI не входит в content contract Profile. Каждый блок — полная umbrella-цепочка; PR-4 не ослабляет platform gate.
 
 **Personal Model (уже канон):** личность → Snapshot этим конвейером; модули читают Snapshot.  
 Соблюдение в коде: [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md).
@@ -46,7 +49,7 @@
 - Generation logs / prompt versions
 
 ### 1.5 Что видит пользователь
-- Profile V2: факты · характер · направление (сферы) · живая история · небо
+- Profile V2 (PR-4): Identity · Interpretation · Evidence · Deep Sources (collapsed natal) — **без** day symbols / Living Maps на скролле
 - Контракт: `identity_core`, strengths, growth_zones, styles, patterns, life_spheres, …
 
 ### 1.6 Что читают другие модули
@@ -318,3 +321,5 @@ Profile refresh «создал новый snapshot» учитывается от
 | 2026-07-21 | Reference Rate hardened (memory, not availability); Longitudinal Validation reserved after C3 |
 | 2026-07-21 | Stage exit criteria: C3 / Telemetry / Reference Rate-as-tool; Longitudinal = hypothesis test |
 | 2026-07-21 | §7.4 reserved: hypothesis falsifiers after first real-user weeks (not active yet) |
+| 2026-07-21 | Link PR-4 surface layers (Identity/Interpretation/Evidence/Deep Sources); UI day/week out of Profile |
+| 2026-07-21 | Umbrella parent explicit: EXPLAINABLE_COMPUTATION wins over Content/PR-4 on conflict |
