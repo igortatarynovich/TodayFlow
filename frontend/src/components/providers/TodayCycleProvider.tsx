@@ -36,13 +36,15 @@ export type TodayCycleContextValue = {
 const TodayCycleContext = createContext<TodayCycleContextValue | null>(null);
 
 export function TodayCycleProvider({ children }: { children: ReactNode }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, profile } = useAuth();
+  const userId = profile?.user_id ?? null;
   const [cycle, setCycleState] = useState<TodayCycleData | null>(null);
   const [loading, setLoading] = useState(false);
   const [todayHeavyLayersPending, setTodayHeavyLayersPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inFlightRef = useRef<Promise<TodayCycleData | null> | null>(null);
   const fullFetchGenerationRef = useRef(0);
+  const activeUserIdRef = useRef<number | null>(null);
 
   const setCycle = useCallback((data: TodayCycleData) => {
     setCycleState(normalizeTodayPayload(data));
@@ -66,6 +68,7 @@ export function TodayCycleProvider({ children }: { children: ReactNode }) {
 
       const run = (async (): Promise<TodayCycleData | null> => {
         const fetchGeneration = ++fullFetchGenerationRef.current;
+        const fetchUserId = userId;
         try {
           setLoading(true);
           setError(null);
@@ -79,7 +82,9 @@ export function TodayCycleProvider({ children }: { children: ReactNode }) {
             ]);
             firstPaint = assembleTodayCycleFromProgressive(openingRaw, bundleRaw);
             if (firstPaint) {
-              setCycleState(firstPaint);
+              if (fetchGeneration === fullFetchGenerationRef.current && activeUserIdRef.current === fetchUserId) {
+                setCycleState(firstPaint);
+              }
             } else {
               firstPaint = null;
             }
@@ -90,9 +95,11 @@ export function TodayCycleProvider({ children }: { children: ReactNode }) {
           if (!firstPaint) {
             const raw = await getJson<TodayCycleData>("/today");
             const data = normalizeTodayPayload(raw);
-            setCycleState(data);
-            setError(null);
-            setTodayHeavyLayersPending(false);
+            if (fetchGeneration === fullFetchGenerationRef.current && activeUserIdRef.current === fetchUserId) {
+              setCycleState(data);
+              setError(null);
+              setTodayHeavyLayersPending(false);
+            }
             return data;
           }
 
@@ -102,12 +109,14 @@ export function TodayCycleProvider({ children }: { children: ReactNode }) {
           void getJson<TodayCycleData>("/today")
             .then((fullRaw) => {
               if (fetchGeneration !== fullFetchGenerationRef.current) return;
+              if (activeUserIdRef.current !== fetchUserId) return;
               setCycleState(normalizeTodayPayload(fullRaw));
               setError(null);
               setTodayHeavyLayersPending(false);
             })
             .catch((e) => {
               if (fetchGeneration !== fullFetchGenerationRef.current) return;
+              if (activeUserIdRef.current !== fetchUserId) return;
               const msg = e instanceof Error ? e.message : "today_full_load_failed";
               setError(msg);
               setTodayHeavyLayersPending(false);
@@ -134,19 +143,29 @@ export function TodayCycleProvider({ children }: { children: ReactNode }) {
 
       return run;
     },
-    [isAuthenticated],
+    [isAuthenticated, userId],
   );
 
   useEffect(() => {
     if (!isAuthenticated) {
+      activeUserIdRef.current = null;
       setCycleState(null);
       setError(null);
       setTodayHeavyLayersPending(false);
       inFlightRef.current = null;
+      fullFetchGenerationRef.current += 1;
       return;
     }
-    void refetchToday();
-  }, [isAuthenticated, refetchToday]);
+    if (activeUserIdRef.current !== userId) {
+      activeUserIdRef.current = userId;
+      setCycleState(null);
+      setError(null);
+      setTodayHeavyLayersPending(false);
+      inFlightRef.current = null;
+      fullFetchGenerationRef.current += 1;
+    }
+    void refetchToday({ force: true });
+  }, [isAuthenticated, userId, refetchToday]);
 
   /** После полуночи кэш по вчерашней дате: обновляем при возврате на вкладку / из bfcache. */
   useEffect(() => {

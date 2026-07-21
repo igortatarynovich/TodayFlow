@@ -19,6 +19,9 @@ export type NatalChartPreview = {
   positions: Record<string, { longitude?: number; sign?: string; house?: number; degree?: number }>;
   houses: Array<{ house: number; cusp_longitude?: number; sign?: string; degree?: number }>;
   ascendant?: { longitude?: number; sign?: string; degree?: number };
+  mode?: string;
+  time_unknown?: boolean;
+  ascendant_precision?: string;
   aspects?: {
     callouts?: AspectCallout[];
   };

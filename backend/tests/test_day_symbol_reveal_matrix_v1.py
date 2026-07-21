@@ -235,3 +235,67 @@ def test_tarot_service_public_still_gated() -> None:
     )
     assert gated.selection_status == "not_selected"
     assert gated.card is None
+
+
+def test_two_users_same_idempotency_key_stay_isolated() -> None:
+    """P0 regression: shared client keys must not leak reveal across owners."""
+    db = _session()
+    day = date(2026, 7, 21)
+    shared_card_key = "tarot_reveal:2026-07-21:0"
+    shared_num_key = "number_reveal:2026-07-21"
+
+    a_key = symbols.owner_key_for_user(101)
+    b_key = symbols.owner_key_for_user(202)
+
+    a_card = symbols.reveal_card(
+        db,
+        owner_key=a_key,
+        local_date=day,
+        timezone_name="UTC",
+        card_id=0,
+        reveal_source="a",
+        idempotency_key=shared_card_key,
+        user_id=101,
+    )
+    b_card = symbols.reveal_card(
+        db,
+        owner_key=b_key,
+        local_date=day,
+        timezone_name="UTC",
+        card_id=5,
+        reveal_source="b",
+        idempotency_key=shared_card_key,
+        user_id=202,
+    )
+    assert a_card["card"]["id"] == 0
+    assert b_card["card"]["id"] == 5
+
+    a_num = symbols.reveal_number(
+        db,
+        owner_key=a_key,
+        local_date=day,
+        timezone_name="UTC",
+        reveal_source="a",
+        idempotency_key=shared_num_key,
+        user_id=101,
+    )
+    b_num = symbols.reveal_number(
+        db,
+        owner_key=b_key,
+        local_date=day,
+        timezone_name="UTC",
+        reveal_source="b",
+        idempotency_key=shared_num_key,
+        user_id=202,
+    )
+    assert a_num["number"]["revealed"] is True
+    assert b_num["number"]["revealed"] is True
+    # Each owner has their own row — not a copy of the other owner's public_view owner identity.
+    assert db.query(DaySymbolState).filter(DaySymbolState.owner_key == a_key).count() == 1
+    assert db.query(DaySymbolState).filter(DaySymbolState.owner_key == b_key).count() == 1
+    a_row = symbols.get_state_row(db, owner_key=a_key, local_date=day)
+    b_row = symbols.get_state_row(db, owner_key=b_key, local_date=day)
+    assert a_row is not None and b_row is not None
+    assert a_row.id != b_row.id
+    assert a_row.card_id == "0"
+    assert b_row.card_id == "5"

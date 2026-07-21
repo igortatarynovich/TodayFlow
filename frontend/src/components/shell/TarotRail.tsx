@@ -6,32 +6,32 @@ import s from "@/components/shell/tarotShell.module.css";
 
 export type TarotRailProps = {
   activeStep: TarotShellStep;
-  focusTag?: string;
-  riskTag?: string;
-  practiceTag?: string;
+  /** Only pass when sourced from real day context — never invent defaults. */
+  focusTag?: string | null;
+  riskTag?: string | null;
+  practiceTag?: string | null;
 };
 
 export function TarotRail({
   activeStep,
-  focusTag = "мягкость",
-  riskTag = "контроль",
-  practiceTag = "дыхание",
+  focusTag = null,
+  riskTag = null,
+  practiceTag = null,
 }: TarotRailProps) {
-  const activeIndex = activeStep >= 0 ? activeStep : -1;
+  // Hub (/tarot): no rail content until the user starts a spread.
+  if (activeStep < 0) {
+    return null;
+  }
+
+  const activeIndex = activeStep;
+  const dayTags = [
+    focusTag?.trim() ? { label: "Фокус", value: focusTag.trim() } : null,
+    riskTag?.trim() ? { label: "Риск", value: riskTag.trim() } : null,
+    practiceTag?.trim() ? { label: "Практика", value: practiceTag.trim() } : null,
+  ].filter((item): item is { label: string; value: string } => Boolean(item));
 
   return (
     <div className={s.railStack}>
-      <section className={s.railPanel} aria-labelledby="tarot-rail-gate">
-        <div className={s.railGateOrb} aria-hidden />
-        <h2 id="tarot-rail-gate" className={s.railPanelTitle}>
-          Ritual gate
-        </h2>
-        <p className={s.railBody}>
-          Перед раскладом система собирает контекст дня: намерение, энергию, личные якоря и
-          последний вечерний отклик.
-        </p>
-      </section>
-
       <section className={s.railPanel} aria-labelledby="tarot-rail-path">
         <h2 id="tarot-rail-path" className={s.railEyebrow}>
           Путь расклада
@@ -55,25 +55,21 @@ export function TarotRail({
         </ol>
       </section>
 
-      <section className={s.railPanel} aria-labelledby="tarot-rail-day">
-        <h2 id="tarot-rail-day" className={s.railEyebrow}>
-          Связи дня
-        </h2>
-        <ul className={s.railTags}>
-          <li>
-            <span className={s.railTagLabel}>Фокус</span>
-            <span className={s.railTagValue}>{focusTag}</span>
-          </li>
-          <li>
-            <span className={s.railTagLabel}>Риск</span>
-            <span className={s.railTagValue}>{riskTag}</span>
-          </li>
-          <li>
-            <span className={s.railTagLabel}>Практика</span>
-            <span className={s.railTagValue}>{practiceTag}</span>
-          </li>
-        </ul>
-      </section>
+      {dayTags.length > 0 ? (
+        <section className={s.railPanel} aria-labelledby="tarot-rail-day">
+          <h2 id="tarot-rail-day" className={s.railEyebrow}>
+            Связи дня
+          </h2>
+          <ul className={s.railTags}>
+            {dayTags.map((tag) => (
+              <li key={tag.label}>
+                <span className={s.railTagLabel}>{tag.label}</span>
+                <span className={s.railTagValue}>{tag.value}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
     </div>
   );
 }

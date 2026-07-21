@@ -183,4 +183,34 @@ export const ARCHETYPE_LABEL_RU: Partial<Record<ArchetypeSlug, string>> = {
   catalyst: "Катализатор",
 };
 
+export const ARCHETYPE_LABEL_EN: Partial<Record<ArchetypeSlug, string>> = {
+  sage: "Sage",
+  explorer: "Explorer",
+  architect: "Architect",
+  harmonizer: "Harmonizer",
+  observer: "Observer",
+  creator: "Creator",
+  strategist: "Strategist",
+  seeker: "Seeker",
+  mentor: "Mentor",
+  guardian: "Guardian",
+  visionary: "Visionary",
+  catalyst: "Catalyst",
+};
+
+/** User-facing archetype label; machine seed stays English in the API. */
+export function archetypeDisplayLabel(
+  seed: string | null | undefined,
+  locale: string = "ru",
+  fallback = "Личный архетип",
+): string {
+  const raw = (seed || "").trim();
+  if (!raw) return fallback;
+  const slug = resolveArchetypeSlug(raw);
+  if (slug === "unknown") return raw;
+  const isEn = locale.toLowerCase().startsWith("en");
+  if (isEn) return ARCHETYPE_LABEL_EN[slug] || raw;
+  return ARCHETYPE_LABEL_RU[slug] || raw;
+}
+
 export const STRENGTH_TRAIT_ICONS = ["🏹", "💡", "🧭", "✨", "🌿"] as const;

@@ -58,6 +58,16 @@ export function getOrCreateGuestSessionId(): string {
   return id;
 }
 
+/** Drop guest session id after successful claim / account switch. */
+export function clearGuestSessionId(): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.removeItem(GUEST_SESSION_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
 export function guestSessionHeaders(): Record<string, string> {
   const id = getOrCreateGuestSessionId();
   return id ? { "X-Guest-Session-Id": id } : {};

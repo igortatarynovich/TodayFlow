@@ -51,5 +51,8 @@ describe("PracticesV2SystemScreen", () => {
     expect(screen.getByText("Тихий фокус")).toBeInTheDocument();
     expect(screen.getByText("Библиотека практик")).toBeInTheDocument();
     expect(screen.getByText("Дыхание 4-7-8")).toBeInTheDocument();
+    expect(
+      screen.getByText(/Заверши первую практику — здесь появится твой недельный ритм/),
+    ).toBeInTheDocument();
   });
 });

@@ -1201,6 +1201,8 @@ async def _prepare_birth_data(
             latitude=astro_profile.latitude if astro_profile.latitude is not None else 0.0,
             longitude=astro_profile.longitude if astro_profile.longitude is not None else 0.0,
         ) if astro_profile.latitude is not None and astro_profile.longitude is not None else None,
+        timezone_name=getattr(astro_profile, "timezone_name", None),
+        timezone_offset_minutes=getattr(astro_profile, "timezone_offset_minutes", None),
     )
     
     # Calculate natal chart if coordinates available
@@ -1485,8 +1487,17 @@ def _format_natal_chart_for_response(natal_chart: astro.ChartResponse) -> dict:
                 "degree": house_data.get("degree"),
             })
 
-    # Равные дома от ASC, если куспиды не пришли из движка (иначе фронт и кеш теряют сетку 1–12).
-    if not houses_list and ascendant and ascendant.get("longitude") is not None:
+    # Равные дома от ASC только для точной карты — иначе фейковый ASC размножает ложные дома.
+    chart_mode = str(getattr(natal_chart, "mode", "") or "").strip().lower()
+    meta = natal_chart.metadata or {}
+    time_unknown = chart_mode == "unknown_time" or bool(meta.get("time_unknown"))
+    if time_unknown:
+        ascendant = None
+        mc = None
+        ic = None
+        descendant = None
+        houses_list = []
+    elif not houses_list and ascendant and ascendant.get("longitude") is not None:
         try:
             base = float(ascendant["longitude"]) % 360.0
         except (TypeError, ValueError):
@@ -1514,5 +1525,9 @@ def _format_natal_chart_for_response(natal_chart: astro.ChartResponse) -> dict:
         "mc": mc,
         "ic": ic,
         "descendant": descendant,
-        "metadata": natal_chart.metadata or {}
+        "mode": chart_mode or ("unknown_time" if time_unknown else "precise"),
+        "time_unknown": time_unknown,
+        "ascendant_precision": meta.get("ascendant_precision")
+        or ("unavailable" if time_unknown else "exact"),
+        "metadata": meta,
     }

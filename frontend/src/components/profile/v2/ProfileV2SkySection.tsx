@@ -29,9 +29,9 @@ export type ProfileV2SkySectionProps = {
   updatedLabel: string;
 };
 
-function formatNatalChipTime(updatedLabel: string): string {
+function formatNatalChipTime(updatedLabel: string): string | null {
   const match = updatedLabel.match(/(\d{1,2}:\d{2})/);
-  return match?.[1] ?? new Intl.DateTimeFormat("ru-RU", { hour: "2-digit", minute: "2-digit" }).format(new Date());
+  return match?.[1] ?? null;
 }
 
 function pickSkyAspects(callouts: AspectCallout[] | undefined, limit = 3): AspectCallout[] {
@@ -55,7 +55,14 @@ export function ProfileV2SkySection({
   updatedLabel,
 }: ProfileV2SkySectionProps) {
   const aspects = pickSkyAspects(natalPreview?.aspects?.callouts);
-  const natalChip = `натальная · ${formatNatalChipTime(updatedLabel)}`;
+  const natalTime = formatNatalChipTime(updatedLabel);
+  const natalChip = natalTime ? `натальная · ${natalTime}` : "натальная";
+  const hasAsc =
+    Boolean(natalPreview) &&
+    !natalPreview?.time_unknown &&
+    natalPreview?.mode !== "unknown_time" &&
+    natalPreview?.ascendant_precision !== "unavailable" &&
+    (natalPreview?.ascendant?.longitude != null || natalPreview?.ascendant?.degree != null);
 
   return (
     <div className={styles.skyLayout} data-testid="profile-v2-sky-section">
@@ -89,13 +96,22 @@ export function ProfileV2SkySection({
                   },
                   {} as Record<string, { sign?: string; degree?: number; cusp_longitude?: number }>,
                 )}
-                ascendant={natalPreview.ascendant?.longitude || natalPreview.ascendant?.degree || 0}
+                ascendant={hasAsc ? natalPreview.ascendant?.longitude || natalPreview.ascendant?.degree || 0 : 0}
                 aspects={aspects}
               />
             </div>
           </div>
 
           <div className={styles.skyAside}>
+            {!hasAsc ? (
+              <article className={styles.skyAspectCard}>
+                <p className={styles.skyAspectTitle}>Асцендент</p>
+                <p className={styles.skyAspectBody}>
+                  Без точного времени рождения асцендент и дома не показываем — иначе это была бы выдумка. Добавь время
+                  в данные рождения.
+                </p>
+              </article>
+            ) : null}
             {aspects.length ? (
               <div className={styles.skyAspectStack}>
                 {aspects.map((aspect) => (
@@ -128,8 +144,8 @@ export function ProfileV2SkySection({
             </div>
 
             <p className={styles.skyFootnote}>
-              L1 collapsed / L4 deep: на общем scroll виден смысл, а планеты, дома и натальные акценты раскрываются
-              только здесь — внутри уровня 05.
+              На общем экране виден смысл, а планеты, дома и натальные акценты раскрываются только здесь — внутри
+              уровня 05.
             </p>
           </div>
         </div>

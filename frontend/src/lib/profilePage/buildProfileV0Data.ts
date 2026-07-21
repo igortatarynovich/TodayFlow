@@ -1,5 +1,6 @@
 import type { CoreProfile } from "@/lib/types";
 import { PROFILE_CHART_DEEP_PATH } from "@/lib/profileRoutes";
+import { archetypeDisplayLabel } from "@/lib/visualIdentity/registry";
 import type { Element } from "@/lib/zodiac-utils";
 import { buildProfileV0TaxonomySlots } from "./buildProfileV0TaxonomyLayers";
 import type {
@@ -133,7 +134,9 @@ export function buildProfileV0ViewModel({
 
   const profileLabel =
     auditProfileLabel ||
-    [displayName, core?.baseline?.archetype_seed, core?.numerology?.life_path].filter(Boolean).join(" / ");
+    [displayName, archetypeDisplayLabel(core?.baseline?.archetype_seed, "ru", ""), core?.numerology?.life_path]
+      .filter(Boolean)
+      .join(" / ");
 
   const coverage = buildProfileInsightCoverageReport(profileLabel, slots);
 

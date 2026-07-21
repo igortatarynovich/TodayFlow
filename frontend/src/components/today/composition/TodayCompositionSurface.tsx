@@ -533,7 +533,7 @@ export function TodayCompositionSurface(props: Props) {
         cardId: id,
         isAuthenticated,
         source: "today_ritual",
-        idempotencyKey: `tarot_reveal:${dateISO}:${id}`,
+        idempotencyKey: `tarot_reveal:${dateISO}:${id}:${isAuthenticated ? "u" : "g"}`,
       })
         .then((view) => props.onSymbolRevealResult?.(view))
         .catch(() => {
@@ -599,7 +599,7 @@ export function TodayCompositionSurface(props: Props) {
     void revealDayNumber({
       isAuthenticated,
       source: "today_ritual",
-      idempotencyKey: `number_reveal:${dateISO}`,
+      idempotencyKey: `number_reveal:${dateISO}:${isAuthenticated ? "u" : "g"}`,
     })
       .then((view) => props.onSymbolRevealResult?.(view))
       .catch(() => {

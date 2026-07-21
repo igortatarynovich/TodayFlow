@@ -1,5 +1,6 @@
 import type { CoreProfile } from "@/lib/types";
 import { lifePathPoeticTitle } from "@/lib/visualIdentity/lifePathTitles";
+import { archetypeDisplayLabel } from "@/lib/visualIdentity/registry";
 import {
   getLifePathEntry,
   getNameNumberEntry,
@@ -177,7 +178,7 @@ export function deriveMetaFromTaxonomy(core: CoreProfile | null, displayName: st
     displayName,
     sunSign: sunSign || null,
     sunSignDisplay: sunSignDisplayName(sunSign || null),
-    archetypeLabel: core?.baseline?.archetype_seed?.trim() || "Личный архетип",
+    archetypeLabel: archetypeDisplayLabel(core?.baseline?.archetype_seed),
     element: resolveElement(sunSign || null, core?.astro?.sun_element),
     lifePath,
     metaLine: [sunSignDisplayName(sunSign || null), lifePath != null ? `Число пути ${lifePath}` : null].filter(Boolean).join(" · ") || null,

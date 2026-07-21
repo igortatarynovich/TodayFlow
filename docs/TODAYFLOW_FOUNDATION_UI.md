@@ -27,6 +27,8 @@
 
 **Порядок:** Foundation UI (Figma) → Profile снова → Today.
 
+**Product Truth First:** визуал не опережает продукт. Нет backend-источника / нет реальных данных — нет заполненного production-блока. Канон: [PRODUCT_TRUTH_FIRST.md](./PRODUCT_TRUTH_FIRST.md).
+
 ---
 
 ## 1. Hero System

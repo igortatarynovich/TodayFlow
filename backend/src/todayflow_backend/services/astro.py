@@ -31,6 +31,11 @@ class AstroService:
         payload: dict = {"birth": birth}
         if coordinates:
             payload["coordinates"] = coordinates
+        # Also expose TZ at request root for engines that read ChartRequest.timezone_*
+        if birth.get("timezone_name"):
+            payload["timezone_name"] = birth.get("timezone_name")
+        if birth.get("timezone_offset_minutes") is not None:
+            payload["timezone_offset_minutes"] = birth.get("timezone_offset_minutes")
         response = await self._client.post("/chart", json=payload)
         response.raise_for_status()
         return ChartResponse.model_validate(response.json())

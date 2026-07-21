@@ -1,5 +1,6 @@
 "use client";
 
+import { resolveCacheUserScope } from "@/lib/cacheUserScope";
 import {
   postTodayNarrative,
   type TodayGuideRitualContext,
@@ -8,7 +9,8 @@ import {
   type TodayNarrativeSurface,
 } from "@/lib/todayNarrativeApi";
 
-const CACHE_PREFIX = "todayflow.today_narrative.v1";
+const CACHE_PREFIX = "todayflow.today_narrative.v2";
+const LEGACY_CACHE_PREFIX = "todayflow.today_narrative.v1";
 
 type NarrativeRequestBody = Parameters<typeof postTodayNarrative>[0];
 
@@ -34,13 +36,14 @@ export function ritualContextFingerprint(
   ].join("|");
 }
 
-/** Client cache key aligned with backend stable narrative cache (date/surface/parent/topic/depth/ritual). */
+/** Client cache key: user-scoped + date/surface/parent/topic/depth/ritual. */
 export function buildTodayNarrativeCacheKey(body: NarrativeRequestBody): string {
   const parent = body.parent_generation_id ?? -1;
   const topic = (body.deepen_topic ?? "").trim().toLowerCase();
   const depth = body.depth_level ?? "";
   const ritual = ritualContextFingerprint(body.ritual_context);
-  return `${body.target_date}|${body.surface}|${parent}|${topic}|${depth}|${ritual}`;
+  const scope = resolveCacheUserScope();
+  return `${scope}|${body.target_date}|${body.surface}|${parent}|${topic}|${depth}|${ritual}`;
 }
 
 function storageKey(cacheKey: string): string {
@@ -92,10 +95,11 @@ export function writeTodayNarrativeCache(
 export function clearTodayNarrativeCache(targetDate?: string): void {
   inFlight.clear();
   if (typeof window === "undefined") return;
+  const prefixes = [CACHE_PREFIX, LEGACY_CACHE_PREFIX];
   if (targetDate) {
     for (let i = window.sessionStorage.length - 1; i >= 0; i -= 1) {
       const key = window.sessionStorage.key(i);
-      if (key?.startsWith(CACHE_PREFIX) && key.includes(targetDate)) {
+      if (key && prefixes.some((p) => key.startsWith(p)) && key.includes(targetDate)) {
         window.sessionStorage.removeItem(key);
       }
     }
@@ -103,7 +107,7 @@ export function clearTodayNarrativeCache(targetDate?: string): void {
   }
   for (let i = window.sessionStorage.length - 1; i >= 0; i -= 1) {
     const key = window.sessionStorage.key(i);
-    if (key?.startsWith(CACHE_PREFIX)) window.sessionStorage.removeItem(key);
+    if (key && prefixes.some((p) => key.startsWith(p))) window.sessionStorage.removeItem(key);
   }
 }
 

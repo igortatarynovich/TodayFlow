@@ -1,8 +1,9 @@
 "use client";
 
 import type { CoreProfile } from "@/lib/types";
+import { resolveCacheUserScope } from "@/lib/cacheUserScope";
 
-const PREFIX = "todayflow_core_profile:v1";
+const PREFIX = "todayflow_core_profile:v2";
 
 export const CORE_PROFILE_UPDATED_EVENT = "todayflow:core-profile-updated";
 
@@ -12,8 +13,9 @@ export type CoreProfileUpdatedDetail = {
 };
 
 export function cacheKeyForCoreProfile(astroProfileId: number | null | undefined): string {
-  if (astroProfileId == null) return `${PREFIX}:default`;
-  return `${PREFIX}:astro:${astroProfileId}`;
+  const scope = resolveCacheUserScope();
+  if (astroProfileId == null) return `${PREFIX}:${scope}:default`;
+  return `${PREFIX}:${scope}:astro:${astroProfileId}`;
 }
 
 function isPlausibleCoreProfile(value: unknown): value is CoreProfile {
@@ -72,7 +74,8 @@ export function clearCoreProfileCache(): void {
   try {
     for (let i = sessionStorage.length - 1; i >= 0; i -= 1) {
       const key = sessionStorage.key(i);
-      if (key?.startsWith(PREFIX)) {
+      // Clear v1 (legacy unscoped) and v2.
+      if (key?.startsWith("todayflow_core_profile:")) {
         sessionStorage.removeItem(key);
       }
     }

@@ -1132,8 +1132,9 @@ class DaySymbolState(Base):
 
     __table_args__ = (
         UniqueConstraint("owner_key", "local_date", name="uq_day_symbol_owner_date"),
-        UniqueConstraint("card_idempotency_key", name="uq_day_symbol_card_idem"),
-        UniqueConstraint("number_idempotency_key", name="uq_day_symbol_number_idem"),
+        # Idempotency is per-owner — never reuse another user's reveal via a shared client key.
+        UniqueConstraint("owner_key", "card_idempotency_key", name="uq_day_symbol_owner_card_idem"),
+        UniqueConstraint("owner_key", "number_idempotency_key", name="uq_day_symbol_owner_number_idem"),
     )
 
 

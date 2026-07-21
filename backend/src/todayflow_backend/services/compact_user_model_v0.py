@@ -239,6 +239,38 @@ def _behavioral_from_patterns(patterns: dict[str, Any] | None) -> dict[str, Any]
     }
 
 
+_WORKS_LABEL_RU: dict[str, str] = {
+    "short_focus_sessions": "короткие сессии фокуса",
+    "evening_reflection": "вечерняя фиксация дня",
+    "asks_guidance_questions": "вопросы в подсказках",
+    "completes_today_practices": "завершённые практики дня",
+    "tarot_deepen_from_today": "углубление через таро",
+    "day_promise_habit": "обещание дня",
+}
+
+
+def format_behavioral_work_label(work_id: str) -> str:
+    """Human RU label for CUM behavioral works — never expose raw machine ids in UI copy."""
+    raw = (work_id or "").strip()
+    if not raw:
+        return ""
+    mapped = _WORKS_LABEL_RU.get(raw)
+    if mapped:
+        return mapped
+    if raw.startswith("ritual_mood:"):
+        mood = raw.split(":", 1)[1].replace("_", " ").strip()
+        return f"ритуал настроения «{mood}»" if mood else "ритуал настроения"
+    if raw.startswith("ritual_proximity:"):
+        choice = raw.split(":", 1)[1].replace("_", " ").strip()
+        return f"близость в ритуале «{choice}»" if choice else "близость в ритуале"
+    if raw.startswith("honest_step:"):
+        step = raw.split(":", 1)[1].replace("_", " ").strip()
+        return f"честный шаг «{step}»" if step else "честный шаг"
+    if ":" in raw:
+        return raw.split(":", 1)[1].replace("_", " ").strip() or raw
+    return raw.replace("_", " ")
+
+
 def _sign_from_natal_summary_rows(natal_summary: dict[str, Any], body: str) -> str | None:
     for key in ("luminaries", "personal_planets"):
         rows = natal_summary.get(key)
@@ -335,10 +367,11 @@ def _recommendations_v1_slice(
     works = behavioral.get("works") if isinstance(behavioral.get("works"), list) else []
     if works and isinstance(works[0], str) and works[0].strip():
         slug = works[0].strip().replace(" ", "_")[:48]
+        label = format_behavioral_work_label(works[0].strip())
         return {
             "primary": {
                 "id": f"rec-pattern-{slug}",
-                "text": f"Продолжи то, что уже работает: {works[0].strip()[:200]}.",
+                "text": f"Продолжи то, что уже работает: {label}.",
                 "timing_hint": None,
                 "measurable": "одно подтверждённое действие",
                 "source": "behavioral_pattern",
@@ -352,10 +385,11 @@ def _recommendations_v1_slice(
     if active_themes and isinstance(active_themes[0], dict):
         theme_id = str(active_themes[0].get("id") or "").strip() or None
     if theme_id:
+        theme_label = theme_id.replace("_", " ")
         return {
             "primary": {
                 "id": f"rec-theme-{theme_id[:48]}",
-                "text": f"Сфокусируй день на теме «{theme_id.replace('_', ' ')}» — один конкретный шаг.",
+                "text": f"Сфокусируй день на теме «{theme_label}» — один конкретный шаг.",
                 "timing_hint": "сегодня",
                 "measurable": "один завершённый шаг",
                 "source": "day_context",

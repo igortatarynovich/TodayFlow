@@ -8,9 +8,12 @@ from typing import List, Literal, Optional
 
 class BirthData(BaseModel):
     date: str  # ISO YYYY-MM-DD
-    time: Optional[str] = None  # HH:MM, optional
+    time: Optional[str] = None  # HH:MM local civil time at birth place, optional
     # Optional at wire level: backend/iOS often send date+time+coordinates only; engine uses coordinates for houses.
     location: str = ""
+    # IANA name preferred; offset used as fallback when name missing/invalid.
+    timezone_name: Optional[str] = None
+    timezone_offset_minutes: Optional[int] = None
 
 
 class Coordinates(BaseModel):
@@ -21,6 +24,8 @@ class Coordinates(BaseModel):
 class ChartRequest(BaseModel):
     birth: BirthData
     coordinates: Coordinates | None = None
+    timezone_name: Optional[str] = None
+    timezone_offset_minutes: Optional[int] = None
 
 
 PlanetBody = Literal[

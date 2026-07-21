@@ -2,6 +2,10 @@ import type { MorningRitualData } from "@/components/today/todayPageUtils";
 import { formatDelta30dLabel } from "@/lib/profileCumInsights";
 import type { CompactUserModel, CoreProfile } from "@/lib/types";
 import { elementRuName } from "@/lib/zodiacKnowledge";
+import { filterProfileCopyList } from "@/lib/profilePage/profileCopySafety";
+import { getLocale } from "@/lib/i18n";
+
+export type ObservationAccuracyLevel = "initial" | "forming" | "stable";
 
 export type ProfileV2DailyAnchors = {
   stoneName: string | null;
@@ -14,10 +18,17 @@ export type ProfileV2DailyAnchors = {
 };
 
 export type ProfileV2LiveContext = {
-  awarenessPercent: number;
+  /** Qualitative maturity of personal observations — never a fabricated precise %. */
+  observationAccuracyLevel: ObservationAccuracyLevel;
+  observationAccuracyLabel: string;
+  /** Only when CUM confidence.overall is present; otherwise null. */
+  awarenessPercent: number | null;
   awarenessDeltaLabel: string | null;
   updatedAtIso: string | null;
+  /** Empty when no real generated_at — never browser "now". */
   updatedLabel: string;
+  hasStoneCard: boolean;
+  hasSupportsCard: boolean;
   dailyAnchors: ProfileV2DailyAnchors;
   stoneCardTitle: string;
   stoneCardBody: string;
@@ -25,6 +36,12 @@ export type ProfileV2LiveContext = {
   supportsCardBody: string;
   helps: string[];
   elementLabel: string | null;
+};
+
+const ACCURACY_LABELS: Record<ObservationAccuracyLevel, string> = {
+  initial: "начальная",
+  forming: "формируется",
+  stable: "устойчивая",
 };
 
 function uniqueStrings(items: Array<string | null | undefined>, max: number): string[] {
@@ -72,39 +89,57 @@ export function buildProfileV2DailyAnchors(morningRitual: MorningRitualData | nu
     totemName,
     totemEmoji,
     planetName,
-    line: parts.length ? parts.join(" · ") : "—",
+    line: parts.length ? parts.join(" · ") : "",
   };
 }
 
+/** @deprecated Prefer resolveObservationAccuracy — kept for callers that need a 0–100 from real confidence only. */
 export function resolveProfileV2AwarenessPercent(input: {
   cum: CompactUserModel | null;
   coreProfile: CoreProfile | null;
   localClosedDays?: number;
-}): number {
+}): number | null {
   const overall = input.cum?.confidence?.overall;
   if (typeof overall === "number" && !Number.isNaN(overall)) {
     return Math.round(Math.max(0, Math.min(1, overall)) * 100);
   }
+  return null;
+}
 
-  const signalsDays = input.coreProfile?.living?.signal_profile?.signals_days;
-  if (typeof signalsDays === "number" && signalsDays > 0) {
-    return Math.min(99, Math.max(15, Math.round((signalsDays / 14) * 100)));
+export function resolveObservationAccuracy(input: {
+  cum: CompactUserModel | null;
+  coreProfile: CoreProfile | null;
+  localClosedDays?: number;
+}): { level: ObservationAccuracyLevel; label: string; percent: number | null } {
+  const overall = input.cum?.confidence?.overall;
+  if (typeof overall === "number" && !Number.isNaN(overall)) {
+    const clamped = Math.max(0, Math.min(1, overall));
+    const percent = Math.round(clamped * 100);
+    const level: ObservationAccuracyLevel =
+      clamped >= 0.6 ? "stable" : clamped >= 0.3 ? "forming" : "initial";
+    return { level, label: ACCURACY_LABELS[level], percent };
   }
 
+  const signalsDays = input.coreProfile?.living?.signal_profile?.signals_days;
   const filled = input.localClosedDays ?? 0;
-  return Math.min(99, Math.max(12, Math.round((filled / 21) * 100)));
+  const evidence =
+    (typeof signalsDays === "number" && signalsDays > 0 ? signalsDays : 0) + filled;
+
+  let level: ObservationAccuracyLevel = "initial";
+  if (evidence >= 10) level = "stable";
+  else if (evidence >= 3) level = "forming";
+
+  return { level, label: ACCURACY_LABELS[level], percent: null };
 }
 
 function formatUpdatedLabel(iso: string | null | undefined): { updatedAtIso: string | null; updatedLabel: string } {
   if (!iso) {
-    const time = new Intl.DateTimeFormat("ru-RU", { hour: "2-digit", minute: "2-digit" }).format(new Date());
-    return { updatedAtIso: null, updatedLabel: `обновлено сегодня, ${time}` };
+    return { updatedAtIso: null, updatedLabel: "" };
   }
 
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) {
-    const time = new Intl.DateTimeFormat("ru-RU", { hour: "2-digit", minute: "2-digit" }).format(new Date());
-    return { updatedAtIso: null, updatedLabel: `обновлено сегодня, ${time}` };
+    return { updatedAtIso: null, updatedLabel: "" };
   }
 
   const todayIso = new Date().toISOString().split("T")[0];
@@ -124,7 +159,7 @@ function buildHelps(
   thriveAreas: string[],
   contractHelps: string[] = [],
 ): string[] {
-  return uniqueStrings(
+  return filterProfileCopyList(
     [
       ...contractHelps,
       cum?.recommendations?.primary?.text,
@@ -134,6 +169,7 @@ function buildHelps(
       ...thriveAreas,
     ],
     4,
+    getLocale(),
   );
 }
 
@@ -158,59 +194,40 @@ export function buildProfileV2LiveContext(input: {
   localClosedDays?: number;
 }): ProfileV2LiveContext {
   const dailyAnchors = buildProfileV2DailyAnchors(input.morningRitual);
-  const awarenessPercent = resolveProfileV2AwarenessPercent(input);
+  const accuracy = resolveObservationAccuracy(input);
   const awarenessDeltaLabel = formatDelta30dLabel(input.cum?.confidence?.delta_30d);
 
-  const updatedSource =
-    input.cum?.generated_at ??
-    input.coreProfile?.generated_at ??
-    input.morningRitual?.daily_horoscope_generation_log_id != null
-      ? new Date().toISOString()
-      : null;
+  // Only real timestamps — never fabricate "now" from log id presence.
+  const updatedSource = input.cum?.generated_at ?? input.coreProfile?.generated_at ?? null;
   const { updatedAtIso, updatedLabel } = formatUpdatedLabel(updatedSource);
 
-  const stoneCardTitle = dailyAnchors.stoneName
-    ? `Камень дня · ${dailyAnchors.stoneName.toLowerCase()}`
-    : "Камень дня";
-  const livingChanges = input.coreProfile?.profile_contract_v1?.living_changes?.trim() ?? null;
-  const contractHelps = input.coreProfile?.profile_contract_v1?.helps ?? [];
-
-  const forming =
-    String(input.coreProfile?.profile_contract_v1?.status || "").toLowerCase() === "forming" ||
-    String(input.coreProfile?.profile_contract_v1?.status || "").toLowerCase() === "partial";
-  const formingMsg =
-    input.coreProfile?.profile_contract_v1?.forming_message?.trim() ||
-    "Портрет ещё формируется — живые тексты появятся после генерации.";
-
-  const stoneCardBody =
-    dailyAnchors.stoneStory ??
-    (!forming ? input.identitySummary : null) ??
-    input.coreProfile?.living?.summary ??
-    (!forming ? livingChanges : null) ??
-    (forming ? formingMsg : "");
+  const hasStoneCard = Boolean(dailyAnchors.stoneName && dailyAnchors.stoneStory);
+  const stoneCardTitle = hasStoneCard
+    ? `Камень дня · ${dailyAnchors.stoneName!.toLowerCase()}`
+    : "";
+  const stoneCardBody = hasStoneCard ? dailyAnchors.stoneStory! : "";
 
   const supportParts = uniqueStrings(
     [dailyAnchors.colorName, dailyAnchors.totemName, dailyAnchors.planetName],
     3,
   );
-  const supportsCardTitle = supportParts.length
+  const hasSupportsCard = supportParts.length > 0;
+  const supportsCardTitle = hasSupportsCard
     ? `Опоры · ${supportParts.join(" · ").toLowerCase()}`
-    : "Опоры дня";
+    : "";
+  const supportsCardBody = hasSupportsCard ? supportParts.join(" · ") : "";
 
-  const supportsCardBody =
-    input.cum?.recommendations?.primary?.text ??
-    (!forming ? livingChanges : null) ??
-    input.coreProfile?.living?.summary ??
-    (!forming ? input.decisionStyle : null) ??
-    input.cum?.current_state?.day_promise_text ??
-    (!forming ? contractHelps[0] : null) ??
-    (forming ? formingMsg : "");
+  const contractHelps = input.coreProfile?.profile_contract_v1?.helps ?? [];
 
   return {
-    awarenessPercent,
+    observationAccuracyLevel: accuracy.level,
+    observationAccuracyLabel: accuracy.label,
+    awarenessPercent: accuracy.percent,
     awarenessDeltaLabel,
     updatedAtIso,
     updatedLabel,
+    hasStoneCard,
+    hasSupportsCard,
     dailyAnchors,
     stoneCardTitle,
     stoneCardBody,

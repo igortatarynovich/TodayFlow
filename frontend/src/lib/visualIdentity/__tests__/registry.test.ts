@@ -1,4 +1,15 @@
-import { resolveArchetypeSlug, archetypeAssetPath, planetAssetPath, resolvePlanetSlug, zodiacAssetPath, elementAssetPath, resolveElementSlug, ARCHETYPE_SLUGS, VISUAL_ASSET_MODE } from "../registry";
+import {
+  resolveArchetypeSlug,
+  archetypeAssetPath,
+  archetypeDisplayLabel,
+  planetAssetPath,
+  resolvePlanetSlug,
+  zodiacAssetPath,
+  elementAssetPath,
+  resolveElementSlug,
+  ARCHETYPE_SLUGS,
+  VISUAL_ASSET_MODE,
+} from "../registry";
 
 describe("visualIdentity registry", () => {
   it("uses asset mode for profile symbols (DS-1 lite)", () => {
@@ -12,6 +23,13 @@ describe("visualIdentity registry", () => {
     expect(resolveArchetypeSlug("Seeker")).toBe("seeker");
     expect(resolveArchetypeSlug("Alchemist")).toBe("catalyst");
     expect(resolveArchetypeSlug("")).toBe("unknown");
+  });
+
+  it("localizes archetype display labels by locale", () => {
+    expect(archetypeDisplayLabel("Sage")).toBe("Мудрец");
+    expect(archetypeDisplayLabel("Sage", "en")).toBe("Sage");
+    expect(archetypeDisplayLabel("Architect", "ru")).toBe("Архитектор");
+    expect(archetypeDisplayLabel("")).toBe("Личный архетип");
   });
 
   it("maps all 12 named archetypes to public SVG paths", () => {

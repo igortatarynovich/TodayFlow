@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Tuple
+from zoneinfo import ZoneInfo
 
 import swisseph as swe
 
@@ -51,8 +52,8 @@ class AstroEngine:
             swe.set_ephe_path(ephe_path)
 
     def compute_chart(self, payload: models.ChartRequest) -> models.ChartResponse:
-        birth_dt, precise = self._parse_birth_datetime(payload.birth.date, payload.birth.time)
-        julian_day = self._julian_day(birth_dt)
+        birth_dt_utc, precise = self._parse_birth_datetime_utc(payload)
+        julian_day = self._julian_day(birth_dt_utc)
 
         rising, houses, cusp_longitudes = self._resolve_rising_and_houses(julian_day, precise, payload)
 
@@ -91,15 +92,18 @@ class AstroEngine:
             if li:
                 positions.append(self._with_house(li, cusp_longitudes))
 
-        positions.append(
-            rising.model_copy(update={"house": 1}) if cusp_longitudes else rising
-        )
+        # Honest ASC: only when birth time is known and houses computed.
+        if rising is not None and cusp_longitudes:
+            positions.append(rising.model_copy(update={"house": 1}))
 
         meta: dict = {
             "location": payload.birth.location,
             "coordinates": payload.coordinates.model_dump() if payload.coordinates else None,
             "house_system": "Placidus" if cusp_longitudes else None,
             "bodies": [p.body for p in positions],
+            "time_unknown": not precise,
+            "ascendant_precision": "exact" if (precise and cusp_longitudes) else "unavailable",
+            "timezone_name": self._resolve_timezone_name(payload),
         }
         meta = {k: v for k, v in meta.items() if v is not None}
 
@@ -154,18 +158,14 @@ class AstroEngine:
         julian_day: float,
         precise: bool,
         payload: models.ChartRequest,
-    ) -> Tuple[models.PlanetPosition, dict, list[float] | None]:
+    ) -> Tuple[models.PlanetPosition | None, dict, list[float] | None]:
         coordinates = payload.coordinates
         if precise and coordinates:
             asc, houses, cusps = self._compute_houses(julian_day, coordinates.latitude, coordinates.longitude)
             if asc and cusps:
                 return asc, houses, cusps
-        seed = self._seed_from_datetime(payload.birth.date, payload.birth.time)
-        sign_idx = (seed + 7) % 12
-        sign = ZODIAC[sign_idx]
-        deg = float(seed % 30)
-        lon = (sign_idx * 30.0 + deg) % 360.0
-        return models.PlanetPosition(body="rising", sign=sign, degree=deg, longitude=lon), {}, None
+        # No fabricated ASC when birth time is unknown or houses cannot be computed.
+        return None, {}, None
 
     def _compute_houses(
         self, julian_day: float, latitude: float, longitude: float
@@ -212,7 +212,20 @@ class AstroEngine:
         degree = normalized % 30
         return ZODIAC[index], degree
 
-    def _parse_birth_datetime(self, date_str: str, time_str: str | None) -> Tuple[datetime, bool]:
+    def _resolve_timezone_name(self, payload: models.ChartRequest) -> str | None:
+        for candidate in (
+            payload.timezone_name,
+            payload.birth.timezone_name,
+        ):
+            name = (candidate or "").strip()
+            if name:
+                return name
+        return None
+
+    def _parse_birth_datetime_utc(self, payload: models.ChartRequest) -> Tuple[datetime, bool]:
+        """Return (UTC naive datetime for Swiss Ephemeris, precise_time_flag)."""
+        date_str = payload.birth.date
+        time_str = payload.birth.time
         precise = bool(time_str and str(time_str).strip())
         if precise:
             raw = str(time_str).strip()
@@ -220,38 +233,45 @@ class AstroEngine:
             try:
                 h = int(parts[0])
                 m = int(parts[1]) if len(parts) > 1 else 0
-                value = f"{date_str}T{h:02d}:{m:02d}"
+                s = int(float(parts[2])) if len(parts) > 2 else 0
             except (ValueError, IndexError):
-                value = f"{date_str}T12:00"
+                h, m, s = 12, 0, 0
                 precise = False
         else:
-            value = f"{date_str}T12:00"
-        fmt = "%Y-%m-%dT%H:%M"
+            h, m, s = 12, 0, 0
+
         try:
-            dt = datetime.strptime(value, fmt)
-        except ValueError:
-            dt = datetime.now(timezone.utc).replace(tzinfo=None)
-            precise = False
-        return dt, precise
+            local_naive = datetime(int(date_str[0:4]), int(date_str[5:7]), int(date_str[8:10]), h, m, s)
+        except (ValueError, TypeError, IndexError):
+            return datetime.now(timezone.utc).replace(tzinfo=None), False
+
+        if not precise:
+            # Midday UT for planetary positions when time is unknown — no houses/ASC.
+            return local_naive.replace(tzinfo=None), False
+
+        tz_name = self._resolve_timezone_name(payload)
+        if tz_name:
+            try:
+                tz = ZoneInfo(tz_name)
+                local_aware = local_naive.replace(tzinfo=tz)
+                return local_aware.astimezone(timezone.utc).replace(tzinfo=None), True
+            except Exception:
+                pass
+
+        offset = payload.timezone_offset_minutes
+        if offset is None:
+            offset = payload.birth.timezone_offset_minutes
+        if offset is not None:
+            try:
+                delta = timedelta(minutes=int(offset))
+                return (local_naive - delta).replace(tzinfo=None), True
+            except (TypeError, ValueError):
+                pass
+
+        # Last resort: treat civil clock as UT (legacy behavior) but still mark precise
+        # only when time was provided — houses still need coordinates.
+        return local_naive.replace(tzinfo=None), True
 
     def _julian_day(self, dt: datetime) -> float:
-        decimal_hours = dt.hour + dt.minute / 60.0
+        decimal_hours = dt.hour + dt.minute / 60.0 + dt.second / 3600.0
         return swe.julday(dt.year, dt.month, dt.day, decimal_hours)
-
-    def _seed_from_datetime(self, date_str: str, time_str: str | None) -> int:
-        if time_str:
-            raw = str(time_str).strip()
-            parts = raw.split(":")
-            try:
-                h = int(parts[0])
-                m = int(parts[1]) if len(parts) > 1 else 0
-                compact = f"{date_str}T{h:02d}:{m:02d}"
-            except (ValueError, IndexError):
-                compact = f"{date_str}T00:00"
-        else:
-            compact = f"{date_str}T00:00"
-        try:
-            dt = datetime.strptime(compact, "%Y-%m-%dT%H:%M")
-        except ValueError:
-            dt = datetime.now(timezone.utc).replace(tzinfo=None)
-        return dt.day + dt.month * 3 + dt.year

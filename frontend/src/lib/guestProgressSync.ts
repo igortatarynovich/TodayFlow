@@ -2,6 +2,7 @@
 
 import { getLocale } from "@/lib/i18n";
 import {
+  clearGuestSessionId,
   getOrCreateGuestSessionId,
   guestSessionHeaders,
 } from "@/lib/daySymbolReveal";
@@ -56,6 +57,22 @@ export function getStoredClaimToken(): string {
 export function clearStoredClaimToken() {
   if (typeof window === "undefined") return;
   sessionStorage.removeItem(CLAIM_TOKEN_KEY);
+}
+
+export function clearGuestSessionSecret() {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.removeItem(SECRET_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
+/** Clear all guest claim credentials after a successful transfer. */
+export function clearGuestClaimCredentials() {
+  clearStoredClaimToken();
+  clearGuestSessionSecret();
+  clearGuestSessionId();
 }
 
 async function guestFetch<T>(path: string, init?: RequestInit): Promise<T> {

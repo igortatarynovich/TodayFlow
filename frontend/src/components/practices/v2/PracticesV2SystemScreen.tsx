@@ -63,12 +63,16 @@ export type PracticesV2SystemScreenProps = {
     minutes: number | null;
     steps: number | null;
     href: string;
+    /** Distinguishes personalized / in-progress / catalog fallback — never hide as personal. */
+    recommendationSource?: "personalized" | "current" | "catalog_fallback";
   } | null;
   programCards: PracticesV2ProgramCard[];
   quickItems: PracticesV2QuickItem[];
   live: PracticesV2LiveContext;
   monthLabel: string;
   emptyLibraryMessage?: string | null;
+  catalogFailed?: boolean;
+  onRetryCatalog?: () => void;
 };
 
 export function PracticesV2SystemScreen({
@@ -95,8 +99,20 @@ export function PracticesV2SystemScreen({
   live,
   monthLabel,
   emptyLibraryMessage,
+  catalogFailed = false,
+  onRetryCatalog,
 }: PracticesV2SystemScreenProps) {
   const copy = practicesV2Copy(locale);
+  const hasProgressHistory =
+    (progressSummary?.totalCompleted ?? 0) > 0 || live.streakDays > 0 || live.weeklyPercent > 0;
+  const practiceEyebrow =
+    practiceOfDay?.recommendationSource === "personalized"
+      ? copy.practiceOfDayEyebrowPersonalized
+      : practiceOfDay?.recommendationSource === "current"
+        ? copy.practiceOfDayEyebrowContinue
+        : practiceOfDay?.recommendationSource === "catalog_fallback"
+          ? copy.practiceOfDayEyebrowFallback
+          : copy.practiceOfDayEyebrow;
   const ringStyle = {
     "--ring-deg": `${Math.round((live.weeklyPercent / 100) * 360)}deg`,
   } as CSSProperties;
@@ -146,7 +162,7 @@ export function PracticesV2SystemScreen({
         {practiceOfDay ? (
           <Link href={practiceOfDay.href} className={styles.practiceOfDayCard}>
             <div className={styles.practiceOfDayGlow} aria-hidden />
-            <p className={styles.practiceOfDayEyebrow}>{copy.practiceOfDayEyebrow}</p>
+            <p className={styles.practiceOfDayEyebrow}>{practiceEyebrow}</p>
             <h2 className={styles.practiceOfDayTitle}>{practiceOfDay.title}</h2>
             <p className={styles.practiceOfDayBody}>{practiceOfDay.description}</p>
             <div className={styles.practiceOfDayStats}>
@@ -195,7 +211,16 @@ export function PracticesV2SystemScreen({
             })}
           </nav>
 
-          {programCards.length > 0 ? (
+          {catalogFailed ? (
+            <div className={styles.emptyState} role="alert">
+              <p>{copy.catalogLoadFailed}</p>
+              {onRetryCatalog ? (
+                <button type="button" className={styles.heroPrimaryBtn} onClick={onRetryCatalog}>
+                  Повторить
+                </button>
+              ) : null}
+            </div>
+          ) : programCards.length > 0 ? (
             <div className={styles.programGrid}>
               {programCards.map((card) => (
                 <Link
@@ -220,30 +245,34 @@ export function PracticesV2SystemScreen({
             <p className={styles.emptyState}>{emptyLibraryMessage ?? "—"}</p>
           )}
 
-          <div className={styles.sectionHead}>
-            <h3 className={styles.sectionTitle}>{copy.quickEntryTitle}</h3>
-            <Link href={heroSecondaryHref} className={styles.sectionLink}>
-              {copy.allPrograms}
-            </Link>
-          </div>
-
-          <div className={styles.quickList}>
-            {quickItems.map((item) => (
-              <div key={item.id} className={styles.quickRow}>
-                <div className={styles.quickIcon} aria-hidden>
-                  {item.iconGlyph}
-                </div>
-                <div className={styles.quickText}>
-                  <p className={styles.quickTitle}>{item.title}</p>
-                  <p className={styles.quickSubtitle}>{item.subtitle}</p>
-                </div>
-                <span className={styles.quickDuration}>{item.durationLabel}</span>
-                <Link href={item.href} className={styles.quickOpenBtn}>
-                  {copy.openCta}
+          {quickItems.length > 0 ? (
+            <>
+              <div className={styles.sectionHead}>
+                <h3 className={styles.sectionTitle}>{copy.quickEntryTitle}</h3>
+                <Link href={heroSecondaryHref} className={styles.sectionLink}>
+                  {copy.allPrograms}
                 </Link>
               </div>
-            ))}
-          </div>
+
+              <div className={styles.quickList}>
+                {quickItems.map((item) => (
+                  <div key={item.id} className={styles.quickRow}>
+                    <div className={styles.quickIcon} aria-hidden>
+                      {item.iconGlyph}
+                    </div>
+                    <div className={styles.quickText}>
+                      <p className={styles.quickTitle}>{item.title}</p>
+                      <p className={styles.quickSubtitle}>{item.subtitle}</p>
+                    </div>
+                    <span className={styles.quickDuration}>{item.durationLabel}</span>
+                    <Link href={item.href} className={styles.quickOpenBtn}>
+                      {copy.openCta}
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : null}
         </section>
 
         <aside className={`${v2.surfacePanel} ${styles.progressPanel}`} aria-labelledby="practices-v2-progress">
@@ -251,88 +280,94 @@ export function PracticesV2SystemScreen({
             <h2 id="practices-v2-progress" className={styles.progressTitle}>
               {copy.progressTitle}
             </h2>
-            <span className={styles.progressMonth}>{monthLabel}</span>
+            {hasProgressHistory ? <span className={styles.progressMonth}>{monthLabel}</span> : null}
           </div>
 
-          <div className={styles.rhythmCard}>
-            <div className={styles.rhythmHead}>
-              <h3 className={styles.rhythmTitle}>{copy.weeklyRhythm}</h3>
-              <span className={styles.rhythmPercent}>{live.weeklyPercent}%</span>
-            </div>
-            <div className={styles.rhythmRingWrap}>
-              <div className={styles.rhythmRing} style={ringStyle}>
-                <div className={styles.rhythmRingInner}>
-                  <p className={styles.rhythmStreakValue}>{live.streakDays}</p>
-                  <p className={styles.rhythmStreakLabel}>{copy.streakDaysLabel}</p>
+          {!hasProgressHistory ? (
+            <p className={styles.emptyState}>{copy.firstPracticeProgressHint}</p>
+          ) : (
+            <>
+              <div className={styles.rhythmCard}>
+                <div className={styles.rhythmHead}>
+                  <h3 className={styles.rhythmTitle}>{copy.weeklyRhythm}</h3>
+                  <span className={styles.rhythmPercent}>{live.weeklyPercent}%</span>
+                </div>
+                <div className={styles.rhythmRingWrap}>
+                  <div className={styles.rhythmRing} style={ringStyle}>
+                    <div className={styles.rhythmRingInner}>
+                      <p className={styles.rhythmStreakValue}>{live.streakDays}</p>
+                      <p className={styles.rhythmStreakLabel}>{copy.streakDaysLabel}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.weekdayRow}>
+                  {live.weekCells.map((cell) => (
+                    <span
+                      key={cell.dateISO}
+                      className={`${styles.weekdayPill} ${cell.closed ? styles.weekdayPillActive : ""}`.trim()}
+                    >
+                      {cell.weekdayLabel}
+                    </span>
+                  ))}
                 </div>
               </div>
-            </div>
-            <div className={styles.weekdayRow}>
-              {live.weekCells.map((cell) => (
-                <span
-                  key={cell.dateISO}
-                  className={`${styles.weekdayPill} ${cell.closed ? styles.weekdayPillActive : ""}`.trim()}
-                >
-                  {cell.weekdayLabel}
-                </span>
-              ))}
-            </div>
-          </div>
 
-          {showGuestProgressHint ? (
-            <p className={styles.guestProgressHint}>{copy.guestProgressHint}</p>
-          ) : null}
+              {showGuestProgressHint ? (
+                <p className={styles.guestProgressHint}>{copy.guestProgressHint}</p>
+              ) : null}
 
-          {progressSummary ? (
-            <>
-              <dl className={styles.progressStats}>
-                <div className={styles.progressStat}>
-                  <dt>{copy.totalCompletedLabel}</dt>
-                  <dd>{progressSummary.totalCompleted}</dd>
-                </div>
-                <div className={styles.progressStat}>
-                  <dt>{copy.personalizedCompletedLabel}</dt>
-                  <dd>{progressSummary.personalizedCompleted}</dd>
-                </div>
-                <div className={styles.progressStat}>
-                  <dt>{copy.longestStreakLabel}</dt>
-                  <dd>{progressSummary.longestStreakDays}</dd>
-                </div>
-                <div className={styles.progressStat}>
-                  <dt>{copy.weeksActiveLabel}</dt>
-                  <dd>{progressSummary.weeksActive}</dd>
-                </div>
-                {limitsRemaining != null ? (
-                  <div className={styles.progressStat}>
-                    <dt>{copy.limitsRemainingLabel}</dt>
-                    <dd>{limitsRemaining}</dd>
-                  </div>
-                ) : null}
-              </dl>
+              {progressSummary ? (
+                <>
+                  <dl className={styles.progressStats}>
+                    <div className={styles.progressStat}>
+                      <dt>{copy.totalCompletedLabel}</dt>
+                      <dd>{progressSummary.totalCompleted}</dd>
+                    </div>
+                    <div className={styles.progressStat}>
+                      <dt>{copy.personalizedCompletedLabel}</dt>
+                      <dd>{progressSummary.personalizedCompleted}</dd>
+                    </div>
+                    <div className={styles.progressStat}>
+                      <dt>{copy.longestStreakLabel}</dt>
+                      <dd>{progressSummary.longestStreakDays}</dd>
+                    </div>
+                    <div className={styles.progressStat}>
+                      <dt>{copy.weeksActiveLabel}</dt>
+                      <dd>{progressSummary.weeksActive}</dd>
+                    </div>
+                    {limitsRemaining != null ? (
+                      <div className={styles.progressStat}>
+                        <dt>{copy.limitsRemainingLabel}</dt>
+                        <dd>{limitsRemaining}</dd>
+                      </div>
+                    ) : null}
+                  </dl>
 
-              {progressSummary.byCategory.length > 0 ? (
-                <div className={styles.categoryBreakdown}>
-                  <h3 className={styles.categoryBreakdownTitle}>{copy.byCategoryTitle}</h3>
-                  <ul className={styles.categoryBreakdownList}>
-                    {progressSummary.byCategory.map((row) => (
-                      <li key={row.categoryId} className={styles.categoryBreakdownRow}>
-                        <div className={styles.categoryBreakdownMeta}>
-                          <span className={styles.categoryBreakdownLabel}>{row.label}</span>
-                          <span className={styles.categoryBreakdownCount}>{row.totalCompleted}</span>
-                        </div>
-                        <div className={styles.categoryBreakdownTrack}>
-                          <div
-                            className={styles.categoryBreakdownFill}
-                            style={{ width: `${row.sharePercent}%` }}
-                          />
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                  {progressSummary.byCategory.length > 0 ? (
+                    <div className={styles.categoryBreakdown}>
+                      <h3 className={styles.categoryBreakdownTitle}>{copy.byCategoryTitle}</h3>
+                      <ul className={styles.categoryBreakdownList}>
+                        {progressSummary.byCategory.map((row) => (
+                          <li key={row.categoryId} className={styles.categoryBreakdownRow}>
+                            <div className={styles.categoryBreakdownMeta}>
+                              <span className={styles.categoryBreakdownLabel}>{row.label}</span>
+                              <span className={styles.categoryBreakdownCount}>{row.totalCompleted}</span>
+                            </div>
+                            <div className={styles.categoryBreakdownTrack}>
+                              <div
+                                className={styles.categoryBreakdownFill}
+                                style={{ width: `${row.sharePercent}%` }}
+                              />
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                </>
               ) : null}
             </>
-          ) : null}
+          )}
         </aside>
       </div>
     </div>

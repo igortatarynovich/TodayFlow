@@ -50,6 +50,35 @@ app.add_middleware(
     expose_headers=["*"],
 )
 
+# Personalized responses must never be shared via CDN/proxy caches.
+_PERSONALIZED_PREFIXES = (
+    "/today",
+    "/account",
+    "/natal-chart",
+    "/morning-ritual",
+    "/tracking",
+    "/meaning",
+    "/auth/me",
+    "/day-symbols",
+)
+
+
+@app.middleware("http")
+async def personalize_cache_control(request: Request, call_next):
+    response = await call_next(request)
+    path = request.url.path or ""
+    auth = request.headers.get("authorization") or ""
+    cookie = request.headers.get("cookie") or ""
+    is_personalized = any(path == p or path.startswith(p + "/") for p in _PERSONALIZED_PREFIXES)
+    has_credentials = auth.lower().startswith("bearer ") or bool(cookie.strip())
+    if is_personalized or has_credentials:
+        response.headers["Cache-Control"] = "private, no-store, max-age=0"
+        response.headers["Pragma"] = "no-cache"
+        vary = response.headers.get("Vary")
+        extra = "Authorization, Cookie, Accept-Language"
+        response.headers["Vary"] = f"{vary}, {extra}" if vary else extra
+    return response
+
 app.include_router(router)
 
 

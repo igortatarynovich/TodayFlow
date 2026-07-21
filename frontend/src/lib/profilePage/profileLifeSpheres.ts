@@ -14,6 +14,7 @@ import {
 } from "@/lib/zodiacKnowledge";
 import { getPlanetSignId } from "./buildProfilePlanetaryData";
 import { isProfilePortraitForming, PROFILE_PORTRAIT_FORMING_MESSAGE } from "./profilePortraitForming";
+import { profileContractMatchesLocale } from "./profileCopySafety";
 import { withLifeSphereHowFrame } from "./profileSphereCopy";
 
 /** Chrome labels only — not user-facing portrait copy. */
@@ -182,7 +183,13 @@ export function buildProfileLifeSpheresFromProfileData(
   if (isProfilePortraitForming(core)) {
     return [];
   }
-  const contractSpheres = core?.profile_contract_v1?.life_spheres;
+  const contract = core?.profile_contract_v1;
+  // Wrong-language portrait (e.g. EN contract on RU UI) → RU chart/template spheres, not English LLM.
+  if (!profileContractMatchesLocale(contract)) {
+    const withoutContract = core ? { ...core, profile_contract_v1: undefined } : null;
+    return buildProfileLifeSpheresFromProfileDataLegacy(preview, withoutContract);
+  }
+  const contractSpheres = contract?.life_spheres;
   if (!contractSpheres || typeof contractSpheres !== "object") {
     return [];
   }
@@ -278,7 +285,7 @@ export function buildProfileLifeSpheresFromChart(input: BuildProfileLifeSpheresF
       turnsOn: "Спокойные разговоры, совпадение по смыслу, мягкая устойчивость партнёра.",
       turnsOff: "Пассивная агрессия, обесценивание, хаотичные послания без действия.",
       helps: "Короткие договорённости и один честный шаг за раз — не «про всё сразу».",
-      inSystem: "В Today и Guidance — границы; в Compatibility — стиль близости. На карте: 7 дом, Венера, Луна.",
+      inSystem: "В «Я сегодня» и подсказках — границы; в Совместимости — стиль близости. На карте: 7 дом, Венера, Луна.",
     },
     {
       id: "sex",
@@ -298,7 +305,7 @@ export function buildProfileLifeSpheresFromChart(input: BuildProfileLifeSpheresF
               "Поза на боку с зрительным контактом часто снижает давление, когда важны и страсть, и чувство безопасности.",
               "После отказа партнёра не проверяй «ещё раз» в тот же вечер — спроси, когда вернуться к теме.",
             ],
-      inSystem: "Guidance и Compatibility; на карте: 8 дом, Плутон, Венера, Марс.",
+      inSystem: "Подсказки и Совместимость; на карте: 8 дом, Плутон, Венера, Марс.",
     },
     {
       id: "money",
@@ -310,7 +317,7 @@ export function buildProfileLifeSpheresFromChart(input: BuildProfileLifeSpheresF
       turnsOn: "Простые цифры, малые регулярные шаги, честный учёт без морализаторства.",
       turnsOff: "Сравнение с другими, стыд за запросы, хаос во взаиморасчётах.",
       helps: "Один финансовый фокус на неделю и фиксация «что сработало».",
-      inSystem: "Today и Guidance; на карте: 2 и 8 дома, Юпитер, Сатурн.",
+      inSystem: "«Я сегодня» и подсказки; на карте: 2 и 8 дома, Юпитер, Сатурн.",
     },
     {
       id: "work",
@@ -322,7 +329,7 @@ export function buildProfileLifeSpheresFromChart(input: BuildProfileLifeSpheresF
       turnsOn: "Ясная постановка задач, обратная связь и возможность доводить до конца.",
       turnsOff: "Размытые ожидания, вечная срочность, отсутствие восстановления.",
       helps: "Один главный результат в день и защищённые окна без созвонов.",
-      inSystem: "Today и Guidance; на карте: 10 дом, Солнце, Сатурн.",
+      inSystem: "«Я сегодня» и подсказки; на карте: 10 дом, Солнце, Сатурн.",
     },
     {
       id: "family",
@@ -334,7 +341,7 @@ export function buildProfileLifeSpheresFromChart(input: BuildProfileLifeSpheresF
       turnsOn: "Тёплый быт без лишней суеты, честные распределения обязанностей.",
       turnsOff: "Недосказанность, скрытые ожидания, хронический аврал.",
       helps: "Одна договорённость на неделю и короткие чек-ины «как мы сейчас».",
-      inSystem: "Today и Compatibility; на карте: 4 дом, Луна.",
+      inSystem: "«Я сегодня» и Совместимость; на карте: 4 дом, Луна.",
     },
     {
       id: "kids",
@@ -346,7 +353,7 @@ export function buildProfileLifeSpheresFromChart(input: BuildProfileLifeSpheresF
       turnsOn: "Малые ритуалы, последовательность, юмор и опора на партнёра/сеть.",
       turnsOff: "Сравнение с «идеальными» семьями, хаос без границ.",
       helps: "Один устойчивый ритуал и реалистичный план на день.",
-      inSystem: "Guidance и Compatibility; на карте: 5 дом, Луна.",
+      inSystem: "Подсказки и Совместимость; на карте: 5 дом, Луна.",
     },
     {
       id: "body",
@@ -358,7 +365,7 @@ export function buildProfileLifeSpheresFromChart(input: BuildProfileLifeSpheresF
       turnsOn: "Мягкий режим, прогулки, вода, предсказуемый вечер.",
       turnsOff: "Нерегулярный сон, перегруз стимулами, стыд за отдых.",
       helps: "Один якорь тела в день (сон / еда / движение) без идеала.",
-      inSystem: "Today и Flow; на карте: 6 дом, Марс, Луна, Сатурн.",
+      inSystem: "«Я сегодня» и Практики; на карте: 6 дом, Марс, Луна, Сатурн.",
     },
     {
       id: "friends",
@@ -370,7 +377,7 @@ export function buildProfileLifeSpheresFromChart(input: BuildProfileLifeSpheresF
       turnsOn: "Малые группы, общие интересы, уважение к границам.",
       turnsOff: "Сплетни, пассивная агрессия, вечное «надо» в соцсетях.",
       helps: "Один осознанный контакт в неделю вместо размытого «надо всем ответить».",
-      inSystem: "Guidance; на карте: 11 дом, Меркурий.",
+      inSystem: "Подсказки; на карте: 11 дом, Меркурий.",
     },
     {
       id: "decisions",
@@ -382,7 +389,7 @@ export function buildProfileLifeSpheresFromChart(input: BuildProfileLifeSpheresF
       turnsOn: "Малые дедлайны, чек-листы на один шаг, внешняя подотчётность.",
       turnsOff: "Размытые цели, многозадачность, вечное «потом».",
       helps: "Правило «один следующий шаг» и фиксация результата в конце дня.",
-      inSystem: "Today, Flow и Guidance; на карте: 9 дом, Сатурн, Меркурий.",
+      inSystem: "«Я сегодня», Практики и подсказки; на карте: 9 дом, Сатурн, Меркурий.",
     },
   ];
 }

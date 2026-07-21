@@ -26,7 +26,14 @@ export function TarotHubMain() {
 
   const continueHref = useMemo(() => {
     const session = readTarotQuestionSession();
-    if (!session?.spreadId) return "/tarot/question";
+    if (!session) return null;
+    const hasProgress =
+      Boolean(session.spreadId) ||
+      Boolean(session.concernDomain) ||
+      Boolean(session.customQuestion?.trim()) ||
+      Boolean(session.refinementId);
+    if (!hasProgress) return null;
+    if (!session.spreadId) return "/tarot/question";
     const question = composeTarotQuestion({
       concernDomain: session.concernDomain,
       refinementId: session.refinementId,
@@ -68,11 +75,13 @@ export function TarotHubMain() {
           </p>
           <div className={s.hubHeroActions}>
             <Link href="/tarot/question" className={s.hubBtnPrimary}>
-              Начать расклад
+              Задать вопрос
             </Link>
-            <Link href={continueHref} className={s.hubBtnSecondary}>
-              Продолжить прошлый вопрос
-            </Link>
+            {continueHref ? (
+              <Link href={continueHref} className={s.hubBtnSecondary}>
+                Продолжить прошлый вопрос
+              </Link>
+            ) : null}
           </div>
         </div>
 

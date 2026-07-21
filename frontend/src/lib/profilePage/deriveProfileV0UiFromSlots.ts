@@ -1,4 +1,5 @@
 import type { CoreProfile } from "@/lib/types";
+import { archetypeDisplayLabel } from "@/lib/visualIdentity/registry";
 import { getLifePathEntry, getNameNumberEntry } from "@/lib/zodiacKnowledge";
 import type { ProfileV0NumberGuide } from "./buildProfileV0Data";
 import type {
@@ -73,7 +74,7 @@ export function deriveWhoFromSlots(
   core: CoreProfile | null,
   slots: ProfileTaxonomyInsightSlot[],
 ): ProfileV0WhoCard | null {
-  const archetypeLabel = core?.baseline?.archetype_seed?.trim() || "Личный архетип";
+  const archetypeLabel = archetypeDisplayLabel(core?.baseline?.archetype_seed);
   const whyInsights = ["formation", "helps", "breaks"]
     .map((id) => slotText(slots, "why", id))
     .filter((t): t is string => Boolean(t));

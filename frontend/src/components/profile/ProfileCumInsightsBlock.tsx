@@ -12,6 +12,7 @@ import {
   shouldShowCumInsights,
   uncertaintyFlagMessage,
 } from "@/lib/profileCumInsights";
+import { isUsableProfileCopy } from "@/lib/profilePage/profileCopySafety";
 import type { CompactUserModel, CompactUserModelConfidenceHistory } from "@/lib/types";
 import styles from "./quickMap/profileQuickMap.module.css";
 
@@ -48,7 +49,8 @@ export function ProfileCumInsightsBlock({ cum }: Props) {
   const sparkline = buildConfidenceSparklineCells(history?.points ?? []);
   const domains = cumDomainRows(cum);
   const primary = cum.recommendations?.primary;
-  const alternates = cum.recommendations?.alternates ?? [];
+  const primaryText = isUsableProfileCopy(primary?.text) ? primary?.text : null;
+  const alternates = (cum.recommendations?.alternates ?? []).filter((alt) => isUsableProfileCopy(alt.text));
   const flags = cum.confidence?.uncertainty_flags ?? [];
 
   return (
@@ -102,11 +104,11 @@ export function ProfileCumInsightsBlock({ cum }: Props) {
         </div>
       ) : null}
 
-      {primary?.text ? (
+      {primaryText ? (
         <article className={styles.cumInsightsRecPrimary}>
           <p className={styles.cumInsightsRecLabel}>Главный шаг</p>
-          <p className={styles.cumInsightsRecText}>{primary.text}</p>
-          {primary.timing_hint ? <p className={styles.cumInsightsRecMeta}>{primary.timing_hint}</p> : null}
+          <p className={styles.cumInsightsRecText}>{primaryText}</p>
+          {primary?.timing_hint ? <p className={styles.cumInsightsRecMeta}>{primary.timing_hint}</p> : null}
         </article>
       ) : null}
 

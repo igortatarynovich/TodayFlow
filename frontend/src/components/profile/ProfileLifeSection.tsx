@@ -26,7 +26,7 @@ export function ProfileLifeSection({ spheres }: ProfileLifeSectionProps) {
     <ProfileExpandableSection
       id="profile-life-spheres"
       title="Сферы жизни"
-      subtitle="Постоянные паттерны: как ты устроен, что нужно, где риск. Текст «как» для сферы при наличии карты может собираться из нескольких домов и планет — не дубль Personal Map. В Today, Guidance и Compatibility учитываются те же темы."
+      subtitle="Постоянные паттерны: как ты устроен, что нужно, где риск. Текст «как» для сферы при наличии карты может собираться из нескольких домов и планет — не дубль личной карты. В «Я сегодня», подсказках и Совместимости учитываются те же темы."
       defaultOpen
     >
       <div style={{ display: "grid", gap: "0.85rem" }}>
@@ -107,7 +107,7 @@ export function ProfileLifeSection({ spheres }: ProfileLifeSectionProps) {
                 }}
               >
                 <p className="orbit-body-xs" style={{ margin: 0, color: "#8f7756", fontWeight: 700 }}>
-                  Что учтём в Today / Guidance / Compatibility
+                  Что учтём в «Я сегодня» / подсказках / Совместимости
                 </p>
                 <p className="orbit-body-xs" style={{ margin: "0.35rem 0 0", color: "#475569", lineHeight: 1.65 }}>
                   {s.inSystem}

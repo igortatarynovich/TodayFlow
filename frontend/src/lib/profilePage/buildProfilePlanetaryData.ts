@@ -269,6 +269,14 @@ export function getPlanetSignId(
 }
 
 export function getRisingSignId(natalPreview: NatalChartPreview | null) {
+  if (!natalPreview) return null;
+  if (
+    natalPreview.time_unknown ||
+    natalPreview.mode === "unknown_time" ||
+    natalPreview.ascendant_precision === "unavailable"
+  ) {
+    return null;
+  }
   const h1 = ensureTwelveProfileHouses(natalPreview).find((h) => h.house === 1);
   let id = resolveZodiacSignId(h1?.sign, h1?.cusp_longitude ?? null);
   if (id) return id;
@@ -290,9 +298,11 @@ export function resolveMcSignLabel(preview: NatalChartPreview | null): string | 
 }
 
 export function buildRisingOverviewHint(entry: PlanetInSignEntry | undefined, hasAscendantData: boolean) {
+  if (!hasAscendantData) {
+    return "Асцендент появится, когда в профиле будет надёжное время рождения.";
+  }
   if (entry?.bullets?.[0]) return entry.bullets[0];
-  if (hasAscendantData) return "Показывает первый импульс, стиль контакта и то, как ты входишь в новые процессы.";
-  return "Обычно становится точнее, если в профиле есть надёжное время рождения.";
+  return "Показывает первый импульс, стиль контакта и то, как ты входишь в новые процессы.";
 }
 
 function planetHouse(natalPreview: NatalChartPreview | null, planet: "Sun" | "Moon" | "Venus" | "Mars" | "Mercury" | "Jupiter" | "Saturn" | "Uranus" | "Neptune" | "Pluto") {

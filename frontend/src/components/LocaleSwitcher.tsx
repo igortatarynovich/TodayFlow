@@ -2,13 +2,33 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { getJson, putJson, postJson } from "@/lib/api";
 import { getLocale, setLocale } from "@/lib/i18n";
+import { publishCoreProfileUpdate } from "@/lib/coreProfileCacheStorage";
+import type { CoreProfile, UserSettings } from "@/lib/types";
 
 const LOCALE_STORAGE_KEY = "todayflow_locale_v2";
 const SUPPORTED_LOCALES = [
   { value: "ru", label: "RU" },
   { value: "en", label: "EN" },
 ];
+
+async function syncLocaleToAccount(next: string): Promise<void> {
+  try {
+    await putJson<UserSettings>("/account/profile", { locale: next });
+  } catch {
+    /* guest / offline */
+  }
+}
+
+async function refreshPortraitForLocale(): Promise<void> {
+  try {
+    const profile = await postJson<CoreProfile>("/account/core-profile/refresh", {});
+    if (profile) publishCoreProfileUpdate(profile);
+  } catch {
+    /* refresh is best-effort; UI filters still hide wrong-language copy */
+  }
+}
 
 export default function LocaleSwitcher() {
   const router = useRouter();
@@ -30,6 +50,19 @@ export default function LocaleSwitcher() {
         setLocaleState(stored);
         router.refresh();
       }
+      void (async () => {
+        try {
+          const settings = await getJson<UserSettings>("/account/profile");
+          if (settings && settings.locale !== stored) {
+            await syncLocaleToAccount(stored);
+            if (stored === "ru" && String(settings.locale || "").toLowerCase().startsWith("en")) {
+              await refreshPortraitForLocale();
+            }
+          }
+        } catch {
+          /* not authenticated */
+        }
+      })();
       return;
     }
     // Product default: Russian (do not auto-pick browser English).
@@ -37,6 +70,7 @@ export default function LocaleSwitcher() {
     setLocale(fallback);
     setLocaleState(fallback);
     window.localStorage.setItem(LOCALE_STORAGE_KEY, fallback);
+    void syncLocaleToAccount(fallback);
     if (fallback !== locale) {
       router.refresh();
     }
@@ -49,7 +83,11 @@ export default function LocaleSwitcher() {
     if (typeof window !== "undefined") {
       window.localStorage.setItem(LOCALE_STORAGE_KEY, next);
     }
-    router.refresh();
+    void (async () => {
+      await syncLocaleToAccount(next);
+      await refreshPortraitForLocale();
+      router.refresh();
+    })();
   };
 
   return (

@@ -18,6 +18,8 @@ class BirthData(BaseModel):
     time: str | None = None
     location: str
     coordinates: Coordinates | None = None
+    timezone_name: Optional[str] = None
+    timezone_offset_minutes: Optional[int] = None
 
 
 class BirthIntakePayload(BaseModel):

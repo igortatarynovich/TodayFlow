@@ -1,14 +1,44 @@
 // Service Worker для TodayFlow PWA
-const CACHE_NAME = 'todayflow-v1';
-const RUNTIME_CACHE = 'todayflow-runtime-v1';
+const CACHE_NAME = 'todayflow-v2';
+const RUNTIME_CACHE = 'todayflow-runtime-v2';
 
-// Ресурсы для кеширования при установке
+// Only static marketing/shell URLs — never personalized app surfaces.
 const PRECACHE_URLS = [
   '/',
-  '/dashboard',
-  '/practices',
-  '/journal'
 ];
+
+const NEVER_CACHE_PATH_PREFIXES = [
+  '/today',
+  '/profile',
+  '/account',
+  '/onboarding',
+  '/auth',
+  '/login',
+  '/signup',
+  '/compatibility',
+  '/practices',
+  '/journal',
+  '/tracking',
+  '/maps',
+  '/morning-ritual',
+  '/natal-chart',
+  '/weekly',
+  '/habits',
+  '/challenges',
+  '/questions',
+  '/api/',
+  '/_next/',
+];
+
+function shouldBypassCache(request, url) {
+  if (request.method !== 'GET') return true;
+  if (url.origin !== self.location.origin) return true;
+  if (request.headers.has('Authorization')) return true;
+  if (url.searchParams.has('_rsc')) return true;
+  return NEVER_CACHE_PATH_PREFIXES.some(
+    (prefix) => url.pathname === prefix || url.pathname.startsWith(prefix + '/') || url.pathname.startsWith(prefix)
+  );
+}
 
 // Установка Service Worker
 self.addEventListener('install', (event) => {
@@ -27,7 +57,7 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
-        return Promise.all(
+      return Promise.all(
         cacheNames
           .filter((cacheName) => {
             return cacheName !== CACHE_NAME && cacheName !== RUNTIME_CACHE;
@@ -41,51 +71,36 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Перехват запросов (Network First стратегия)
+// Перехват запросов (Network First; personalized routes are network-only)
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // Пропускаем не-GET, сторонние домены, API и служебные Next.js-запросы.
-  if (
-    event.request.method !== 'GET' ||
-    url.origin !== self.location.origin ||
-    url.pathname.startsWith('/api/') ||
-    url.pathname.startsWith('/_next/') ||
-    url.searchParams.has('_rsc')
-  ) {
+  if (shouldBypassCache(event.request, url)) {
     return;
   }
 
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        // Клонируем ответ для кеша
         const responseToCache = response.clone();
-        
-        // Кешируем успешные ответы (только GET запросы, не API)
-        if (response.status === 200 && event.request.method === 'GET' && !event.request.url.includes('/api/')) {
+        if (response.status === 200 && event.request.method === 'GET') {
           caches.open(RUNTIME_CACHE).then((cache) => {
-            cache.put(event.request, responseToCache).catch(() => {
-              // Игнорируем ошибки кеширования
-            });
+            cache.put(event.request, responseToCache).catch(() => {});
           });
         }
-        
         return response;
       })
       .catch(async () => {
-        // Если сеть недоступна, пытаемся получить из кеша
         const cachedResponse = await caches.match(event.request);
         if (cachedResponse) {
           return cachedResponse;
         }
-        
-        // Если это навигационный запрос и нет в кеше, возвращаем базовую страницу
+
         if (event.request.mode === 'navigate') {
           const cached = await caches.match('/');
           if (cached) return cached;
         }
-        
+
         return new Response('Офлайн режим', {
           status: 503,
           statusText: 'Service Unavailable',
@@ -97,7 +112,6 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// Обработка сообщений от клиента
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();

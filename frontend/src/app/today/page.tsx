@@ -1166,9 +1166,12 @@ export default function TodayPage() {
   const monthGoalCount = weeklyGoals.filter((goal) => goal.scope === "month").length;
   const serverEnergyScore =
     todayData.morning?.decision_engine?.hero?.energy_score ?? fusionData?.scores?.energy ?? undefined;
-  const energyScore = serverEnergyScore ?? 50;
   const energyScoreIsPlaceholder = serverEnergyScore === undefined;
-  const energySummary = buildDayEnergySummary(energyScore);
+  // Never invent 50 as a real energy score in production UI.
+  const energyScore = serverEnergyScore ?? 0;
+  const energySummary = energyScoreIsPlaceholder
+    ? { score: 0, label: "", guidance: "" }
+    : buildDayEnergySummary(energyScore);
   const actionPlan = buildTodayActionPlan({
     todayData,
     quickPractice,
@@ -1186,7 +1189,7 @@ export default function TodayPage() {
   const guideHeadline =
     spineAxis ||
     (forecastText ? (forecastText.split(/[.!?]\s/)[0]?.trim() || forecastText.slice(0, 140)) : "") ||
-    energySummary.guidance;
+    (energyScoreIsPlaceholder ? "" : energySummary.guidance);
   const guideSubline =
     firstMoveLine ||
     (forecastText && forecastText !== guideHeadline ? forecastText.slice(0, 280) : "") ||

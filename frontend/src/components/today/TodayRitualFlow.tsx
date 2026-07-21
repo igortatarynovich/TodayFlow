@@ -830,7 +830,7 @@ export function TodayRitualFlow(props: Props) {
         cardId: id,
         isAuthenticated,
         source: "today_ritual_flow",
-        idempotencyKey: `tarot_reveal:${dateISO}:${id}`,
+        idempotencyKey: `tarot_reveal:${dateISO}:${id}:u`,
       })
         .then((view) => props.onSymbolRevealResult?.(view))
         .catch(() => undefined);
@@ -893,7 +893,7 @@ export function TodayRitualFlow(props: Props) {
     void revealDayNumber({
       isAuthenticated,
       source: "today_ritual_flow",
-      idempotencyKey: `number_reveal:${dateISO}`,
+      idempotencyKey: `number_reveal:${dateISO}:u`,
     })
       .then((view) => props.onSymbolRevealResult?.(view))
       .catch(() => undefined);

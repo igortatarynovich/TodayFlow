@@ -158,6 +158,8 @@ User opens Today
 
 **Владелец:** Daily Engine · **Тип:** SN (+ RT inputs) · **Контракт:** [DAY_CONTEXT_V0.md](./DAY_CONTEXT_V0.md) · **Сборщик:** `build_day_context_v0`.
 
+**Phase N (planned):** эволюция к единому **DailyState** как SoT дня; цвет/камень/аромат/практика — только через Recommendation Engine. Канон: [DAILY_INTERPRETATION_ENGINE_PHASE.md](./DAILY_INTERPRETATION_ENGINE_PHASE.md).
+
 ### Берёт (read-only)
 
 | Вход | Тип | Источник |

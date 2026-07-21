@@ -38,7 +38,7 @@ export function ProfilePulseSection({ living }: { living: Living | null | undefi
     return (
       <ProfileSurfacePanel eyebrow="Живой слой" panelClass="living">
         <p className="orbit-body-sm" style={{ margin: 0, color: "#0f172a", fontWeight: 700, lineHeight: 1.65 }}>
-          Сейчас система знает твою карту рождения. Живой слой появится, когда накопятся ответы и действия в Today, Guidance и вечерней фиксации.
+          Сейчас система знает твою карту рождения. Живой слой появится, когда накопятся ответы и действия в «Я сегодня», подсказках и вечерней фиксации.
         </p>
         <div style={{ marginTop: "0.85rem" }}>
           <Link href="/today" className="orbit-button orbit-button-primary orbit-button-sm" style={{ textDecoration: "none" }}>

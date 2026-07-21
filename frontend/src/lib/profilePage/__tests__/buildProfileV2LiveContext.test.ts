@@ -1,6 +1,7 @@
 import {
   buildProfileV2DailyAnchors,
   buildProfileV2LiveContext,
+  resolveObservationAccuracy,
   resolveProfileV2AwarenessPercent,
 } from "../buildProfileV2LiveContext";
 import type { MorningRitualData } from "@/components/today/todayPageUtils";
@@ -33,7 +34,34 @@ describe("buildProfileV2LiveContext", () => {
     ).toBe(68);
   });
 
-  it("uses stone story and CUM recommendation in live cards", () => {
+  it("does not fabricate awareness percent without CUM confidence", () => {
+    expect(
+      resolveProfileV2AwarenessPercent({
+        cum: null,
+        coreProfile: { living: { signal_profile: { signals_days: 5 } } } as CoreProfile,
+        localClosedDays: 3,
+      }),
+    ).toBeNull();
+  });
+
+  it("maps evidence to qualitative observation accuracy levels", () => {
+    expect(
+      resolveObservationAccuracy({
+        cum: { confidence: { overall: 0.68 } } as CompactUserModel,
+        coreProfile: null,
+      }).level,
+    ).toBe("stable");
+
+    expect(
+      resolveObservationAccuracy({
+        cum: null,
+        coreProfile: null,
+        localClosedDays: 0,
+      }).level,
+    ).toBe("initial");
+  });
+
+  it("uses stone story only when stone data exists — no identity fallback", () => {
     const cum = {
       generated_at: "2026-07-07T07:14:00.000Z",
       confidence: { overall: 0.68, delta_30d: 0.03 },
@@ -50,11 +78,31 @@ describe("buildProfileV2LiveContext", () => {
     });
 
     expect(live.awarenessPercent).toBe(68);
+    expect(live.observationAccuracyLevel).toBe("stable");
     expect(live.awarenessDeltaLabel).toBe("+3 за 30 дн");
+    expect(live.hasStoneCard).toBe(true);
     expect(live.stoneCardTitle).toContain("лабрадорит");
     expect(live.stoneCardBody).toBe("Держит фокус без спешки.");
-    expect(live.supportsCardBody).toBe("Один сложный разговор до 14:00.");
-    expect(live.helps).toEqual(["Один сложный разговор до 14:00.", "точность", "глубина"]);
+    expect(live.hasSupportsCard).toBe(true);
+    expect(live.supportsCardBody).toContain("Оливковый");
+    expect(live.helps).toEqual(["Один сложный разговор до 14:00.", "точность", "глубина", "ритм"]);
+    expect(live.updatedLabel).toContain("обновлено");
+  });
+
+  it("hides stone card and fake updated label when data is missing", () => {
+    const live = buildProfileV2LiveContext({
+      coreProfile: null,
+      cum: null,
+      morningRitual: null,
+      identitySummary: "Не должен попасть в камень дня.",
+    });
+
+    expect(live.hasStoneCard).toBe(false);
+    expect(live.stoneCardBody).toBe("");
+    expect(live.hasSupportsCard).toBe(false);
+    expect(live.updatedLabel).toBe("");
+    expect(live.awarenessPercent).toBeNull();
+    expect(live.observationAccuracyLabel).toBe("начальная");
   });
 
   it("uses personal_transits[0] only for planet anchor", () => {

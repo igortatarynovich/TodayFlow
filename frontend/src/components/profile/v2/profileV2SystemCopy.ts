@@ -4,19 +4,19 @@ export const PROFILE_V2_DEPTH_NAV = [
   { id: "facts", step: "01", title: "ФАКТЫ", hint: "30 секунд: якоря" },
   { id: "character", step: "02", title: "ХАРАКТЕР", hint: "как я устроен" },
   { id: "direction", step: "03", title: "НАПРАВЛЕНИЕ", hint: "куда расти" },
-  { id: "history", step: "04", title: "ЖИВАЯ ИСТОРИЯ", hint: "temporal layer" },
+  { id: "history", step: "04", title: "НАБЛЮДЕНИЯ", hint: "как меняется день за днём" },
   { id: "sky", step: "05", title: "НЕБО", hint: "источник глубины" },
 ] as const;
 
 export type ProfileV2ZoneId = (typeof PROFILE_V2_DEPTH_NAV)[number]["id"];
 
 export const PROFILE_V2_COPY = {
-  heroEyebrow: "PROFILE V2 · ОДНА ВЕРТИКАЛЬНАЯ ЛЕСТНИЦА РАСКРЫТИЯ",
-  heroTitle: "Профиль как живая карта",
-  liveBadge: "живая карта",
+  heroEyebrow: "ПРОФИЛЬ",
+  heroTitle: "Твой личный профиль",
+  liveBadge: "личный профиль",
   updatedPrefix: "обновлено сегодня",
-  awarenessTitle: "УРОВЕНЬ ОСОЗНАННОСТИ",
-  awarenessLead: "Растёт с закрытыми днями, обещаниями и вечерним завершением.",
+  awarenessTitle: "ТОЧНОСТЬ ЛИЧНЫХ НАБЛЮДЕНИЙ",
+  awarenessLead: "Растёт с закрытыми днями и накопленной историей — без выдуманных процентов.",
   stonePrefix: "Камень дня",
   supportsPrefix: "Опоры",
   zones: {
@@ -26,7 +26,7 @@ export const PROFILE_V2_COPY = {
       cards: {
         archetype: "АРХЕТИП",
         astro: "АСТРО-ФАКТЫ",
-        awareness: "ОСОЗНАННОСТЬ",
+        awareness: "ТОЧНОСТЬ НАБЛЮДЕНИЙ",
         anchors: "ОПОРЫ ДНЯ",
       },
       astroHint: "Солнце, Луна, ASC, стихия, дата рождения.",
@@ -46,7 +46,7 @@ export const PROFILE_V2_COPY = {
       missionLabel: "Главная задача",
     },
     history: {
-      title: "Живая история",
+      title: "Наблюдения",
       lead: "Тепловые карты, динамика и «Мои дни» — как меняется состояние.",
     },
     sky: {

@@ -4,6 +4,7 @@ import { Suspense, useEffect, useMemo, useState } from "react";
 import { enrichCircleItemsWithAstroProfiles } from "@/lib/accountAstroMeta";
 import {
   CORE_PROFILE_UPDATED_EVENT,
+  publishCoreProfileUpdate,
   type CoreProfileUpdatedDetail,
 } from "@/lib/coreProfileCacheStorage";
 import { fetchCoreProfileCached } from "@/lib/coreProfileCache";
@@ -17,6 +18,8 @@ import {
   readFirstTodayState,
   FIRST_TODAY_PATH,
 } from "@/lib/firstTodayState";
+import { getLocale } from "@/lib/i18n";
+import { profileContractMatchesLocale } from "@/lib/profilePage/profileCopySafety";
 import {
   hasOnboardingIntentRecorded,
   hasOnboardingRealityRecorded,
@@ -30,7 +33,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { LoadingSpinner } from "@/components/orbit";
 import { useAuth } from "@/lib/useAuth";
-import { getJson } from "@/lib/api";
+import { getJson, postJson, putJson } from "@/lib/api";
 import type { AstroProfile, CoreProfile, CompactUserModel, UserSettings } from "@/lib/types";
 import {
   buildQuickCompatibilityRoute,
@@ -111,10 +114,10 @@ function ProfileLoadingScreen() {
             </p>
             <div className={routeStyles.loadingStatus}>
               <LoadingSpinner size="sm" />
-              <p className={routeStyles.loadingStatusText}>Собираем стабильное состояние Profile</p>
+              <p className={routeStyles.loadingStatusText}>Собираем стабильное состояние профиля</p>
             </div>
             <div className={routeStyles.loadingSteps}>
-              {["Проверяем данные", "Собираем карту и слои жизни", "Готовим готовый экран Profile"].map((step) => (
+              {["Проверяем данные", "Собираем карту и слои жизни", "Готовим готовый экран профиля"].map((step) => (
                 <div key={step} className={routeStyles.loadingStep}>
                   {step}
                 </div>
@@ -252,12 +255,33 @@ function ProfileHubPageInner() {
       .then(async ([core, cum, ritual, profile, astroData]) => {
         const safeProfiles = Array.isArray(astroData?.profiles) ? astroData.profiles : [];
         const hasAstroBase = safeProfiles.length > 0 || Boolean(core?.astro?.profile_id);
-        setCoreProfile(core);
+        let nextCore = core;
+        const uiLocale = getLocale();
+        // UI is RU but stored portrait/settings are EN → sync locale and republish portrait once.
+        if (
+          nextCore &&
+          !uiLocale.toLowerCase().startsWith("en") &&
+          !profileContractMatchesLocale(nextCore.profile_contract_v1, uiLocale)
+        ) {
+          try {
+            if (profile && String(profile.locale || "").toLowerCase().startsWith("en")) {
+              await putJson<UserSettings>("/account/profile", { locale: uiLocale });
+            }
+            const refreshed = await postJson<CoreProfile>("/account/core-profile/refresh", {});
+            if (refreshed) {
+              nextCore = refreshed;
+              publishCoreProfileUpdate(refreshed);
+            }
+          } catch {
+            /* display filters still hide EN copy */
+          }
+        }
+        setCoreProfile(nextCore);
         setCompactUserModel(cum);
         setMorningRitual(ritual);
         setAstroProfiles(safeProfiles);
-        hydrateSetupForm(profile, core);
-        if ((core?.is_ready || hasAstroBase) && !forceSetup) {
+        hydrateSetupForm(profile, nextCore);
+        if ((nextCore?.is_ready || hasAstroBase) && !forceSetup) {
           await loadNatalPreview();
         }
       })
@@ -373,9 +397,10 @@ function ProfileHubPageInner() {
   const lifePathLayer = getLifePathEntry(lifePath);
   const sunLayer = getSunInSignEntry(getPlanetSignId(natalPreview, "Sun", coreProfile?.astro?.sun_sign));
   const moonLayer = getMoonInSignEntry(getPlanetSignId(natalPreview, "Moon"));
-  const risingLayer = getRisingSignEntry(getRisingSignId(natalPreview));
-  const risingSign = risingLayer?.ruTitle || (natalPreview?.ascendant?.sign ? layerSignLabel(risingLayer, natalPreview.ascendant.sign) : null);
-  const risingHint = buildRisingOverviewHint(risingLayer, Boolean(natalPreview?.ascendant?.sign || natalPreview?.ascendant?.longitude != null));
+  const risingSignId = getRisingSignId(natalPreview);
+  const risingLayer = risingSignId ? getRisingSignEntry(risingSignId) : undefined;
+  const risingSign = risingLayer?.ruTitle || null;
+  const risingHint = buildRisingOverviewHint(risingLayer, Boolean(risingSignId));
 
   const moonNarrativeLine = moonLayer?.bullets?.[0]?.trim() || "";
 

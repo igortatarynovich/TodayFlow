@@ -6,6 +6,7 @@ import { ENERGY_MAP_STORAGE_PREFIX } from "@/lib/energyMapStorage";
 import { GUEST_PROFILE_SESSION_KEY } from "@/lib/guestProfileDraft";
 import { clearMeaningSessionCaches } from "@/lib/meaningRuntime";
 import { DAY_CONTINUITY_STORAGE_PREFIX } from "@/lib/todayDayContinuity";
+import { clearTodayNarrativeCache } from "@/lib/todayNarrativeCache";
 import { RITUAL_STORAGE_PREFIX } from "@/lib/todayRitualPersisted";
 
 export const AUTH_TOKEN_KEY = "todayflow_token";
@@ -25,8 +26,10 @@ const LOCAL_STORAGE_PREFIXES = [
 ];
 
 const SESSION_STORAGE_PREFIXES = [
-  "todayflow_core_profile:v1",
-  "todayflow.compact_user_model.v0",
+  "todayflow_core_profile:",
+  "todayflow.compact_user_model.",
+  "todayflow.cum_confidence_history.",
+  "todayflow.today_narrative.",
   `${RITUAL_STORAGE_PREFIX}.`,
   "todayflow:tarot-question-flow:v1",
   "todayflow_guidance_compat_prefill_v1",
@@ -49,6 +52,7 @@ function removeStorageByPrefix(storage: Storage, prefixes: string[]): void {
 export function clearAuthenticatedUserCaches(): void {
   clearCoreProfileCache();
   clearCompactUserModelCache();
+  clearTodayNarrativeCache();
   clearMeaningSessionCaches();
   removeStorageByPrefix(localStorage, LOCAL_STORAGE_PREFIXES);
   removeStorageByPrefix(sessionStorage, SESSION_STORAGE_PREFIXES);

@@ -283,8 +283,8 @@ export function ProfileSetupSection({
         <h2 className={surfaceInsightStyles.sectionTitle}>Что появится после сборки</h2>
         <div style={{ marginTop: "0.9rem", display: "grid", gap: "0.7rem" }}>
           <SetupStatCard label="Карта жизни" value="Дома и главные сферы" hint="Где отношения, дом, реализация и деньги складываются в одну картину." />
-          <SetupStatCard label="Число пути" value="Личное число пути" hint="Используется в Today, прогнозах и общем жизненном тоне." />
-          <SetupStatCard label="Маршруты" value="Today, Таро, Compatibility" hint="Все основные экраны начинают работать как единый личный маршрут." />
+          <SetupStatCard label="Число пути" value="Личное число пути" hint="Используется в «Я сегодня», прогнозах и общем жизненном тоне." />
+          <SetupStatCard label="Маршруты" value="Я сегодня, Таро, Совместимость" hint="Все основные экраны начинают работать как единый личный маршрут." />
         </div>
       </SurfaceInsight>
     </div>

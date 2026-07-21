@@ -57,11 +57,11 @@ describe("ProfileV2SystemScreen", () => {
     );
 
     expect(screen.getByTestId("profile-v2-system")).toBeInTheDocument();
-    expect(screen.getByText("Профиль как живая карта")).toBeInTheDocument();
+    expect(screen.getByText("Твой личный профиль")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Факты" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Характер" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Направление" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Живая история" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Наблюдения" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Небо" })).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-sky-section")).toBeInTheDocument();
     expect(screen.getByText("МОИ ДНИ · ПОСЛЕДНЯЯ НЕДЕЛЯ")).toBeInTheDocument();
@@ -69,5 +69,6 @@ describe("ProfileV2SystemScreen", () => {
     expect(screen.getByText("ясная система")).toBeInTheDocument();
     expect(screen.getAllByText(/лабрадорит/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/68%/).length).toBeGreaterThan(0);
+    expect(screen.getByText(/ТОЧНОСТЬ ЛИЧНЫХ НАБЛЮДЕНИЙ/i)).toBeInTheDocument();
   });
 });

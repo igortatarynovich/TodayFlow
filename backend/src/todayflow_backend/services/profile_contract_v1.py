@@ -41,6 +41,34 @@ PROFILE_STATUS_PARTIAL = "partial"
 FORMING_MESSAGE_RU = "Портрет ещё формируется — живые тексты появятся после генерации."
 FORMING_MESSAGE_EN = "Portrait is still forming — live copy will appear after generation."
 
+_LATIN_RE = re.compile(r"[A-Za-z]")
+_CYR_RE = re.compile(r"[А-Яа-яЁё]")
+
+
+def _text_is_mostly_latin(text: str) -> bool:
+    t = (text or "").strip()
+    if len(t) < 24:
+        return False
+    latin = len(_LATIN_RE.findall(t))
+    cyr = len(_CYR_RE.findall(t))
+    letters = latin + cyr
+    if letters < 16:
+        return False
+    return (cyr / letters) < 0.12 and (latin / letters) > 0.55
+
+
+def contract_matches_locale(contract: dict[str, Any] | None, locale: str) -> bool:
+    """Reject EN prose when locale is RU (and vice versa for identity_core)."""
+    if not isinstance(contract, dict):
+        return False
+    core = str(contract.get("identity_core") or "").strip()
+    if not core:
+        return False
+    loc = (locale or "ru").lower()
+    if loc.startswith("en"):
+        return not (len(_CYR_RE.findall(core)) / max(1, len(_LATIN_RE.findall(core)) + len(_CYR_RE.findall(core))) > 0.5)
+    return not _text_is_mostly_latin(core)
+
 _PROFILE_SYS_RU = """Ты пишешь **единый портрет человека** для TodayFlow (русский язык).
 
 Вход — JSON с ядром профиля: имя, знак, нумерология, baseline, living (сигналы, инсайты).
@@ -408,6 +436,9 @@ def build_profile_portrait_v1(
     }
     contract, gen_meta = call_profile_contract_llm_v1(llm_pack, locale=locale)
     used_fallback = False
+    if contract is not None and not contract_matches_locale(contract, locale):
+        gen_meta = {**gen_meta, "reason": "locale_language_mismatch", "rejected_locale": locale}
+        contract = None
     if contract is None:
         used_fallback = True
         contract = build_profile_contract_forming_v1(

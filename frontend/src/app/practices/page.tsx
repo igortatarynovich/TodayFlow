@@ -73,6 +73,7 @@ export default function PracticesPage() {
   const [sequences, setSequences] = useState<PracticeCatalogItem[]>([]);
   const [shortAlternatives, setShortAlternatives] = useState<PracticeCatalogItem[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [catalogStatus, setCatalogStatus] = useState<"loaded" | "empty" | "failed">("loaded");
   const [catalogTab, setCatalogTab] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -86,39 +87,81 @@ export default function PracticesPage() {
           ? `?category=${encodeURIComponent(catalogTab)}`
           : "";
 
-      const [allPractices, current, categoriesResp, shortAltResp] = await Promise.all([
-        getJson<PracticeCatalogItem[]>(`/practices${categoryParam || "/"}`).catch(() => []),
-        getJson<PracticeCatalogItem>("/practices/current").catch(() => null),
-        getJson<{ categories: PracticeCategoryOption[] }>("/practices/categories/list").catch(() => ({
-          categories: [],
-        })),
-        getJson<PracticeCatalogItem[]>("/practices/short-alternatives").catch(() => []),
+      const catalogResult = await getJson<PracticeCatalogItem[]>(`/practices${categoryParam || "/"}`)
+        .then((data) => ({ ok: true as const, data }))
+        .catch((err) => {
+          console.error("Practices catalog failed", err);
+          return { ok: false as const, data: [] as PracticeCatalogItem[] };
+        });
+
+      const [currentResult, categoriesResult, shortAltResult] = await Promise.all([
+        getJson<PracticeCatalogItem>("/practices/current")
+          .then((data) => ({ ok: true as const, data }))
+          .catch((err) => {
+            console.error("Practices current failed", err);
+            return { ok: false as const, data: null as PracticeCatalogItem | null };
+          }),
+        getJson<{ categories: PracticeCategoryOption[] }>("/practices/categories/list")
+          .then((data) => ({ ok: true as const, data }))
+          .catch((err) => {
+            console.error("Practices categories failed", err);
+            return { ok: false as const, data: { categories: [] as PracticeCategoryOption[] } };
+          }),
+        getJson<PracticeCatalogItem[]>("/practices/short-alternatives")
+          .then((data) => ({ ok: true as const, data }))
+          .catch((err) => {
+            console.error("Practices short-alternatives failed", err);
+            return { ok: false as const, data: [] as PracticeCatalogItem[] };
+          }),
       ]);
 
-      const catalogPool = isAuthenticated
-        ? allPractices
-        : allPractices.filter((practice) => isGuestPracticeAllowed(practice));
+      if (!catalogResult.ok) {
+        setCatalogStatus("failed");
+        setPractices([]);
+        setCurrentPractice(null);
+        setError(v2Copy.catalogLoadFailed);
+      } else {
+        const catalogPool = isAuthenticated
+          ? catalogResult.data
+          : catalogResult.data.filter((practice) => isGuestPracticeAllowed(practice));
 
-      const sorted = [...catalogPool].sort((a, b) => {
-        if (a.is_personalized !== b.is_personalized) return a.is_personalized ? -1 : 1;
-        return a.title.localeCompare(b.title, sortLocale);
-      });
+        const sorted = [...catalogPool].sort((a, b) => {
+          if (a.is_personalized !== b.is_personalized) return a.is_personalized ? -1 : 1;
+          return a.title.localeCompare(b.title, sortLocale);
+        });
 
-      setPractices(sorted);
-      setCurrentPractice(current ?? sorted[0] ?? null);
-      setCategories(categoriesResp.categories ?? []);
+        setPractices(sorted);
+        setCatalogStatus(sorted.length === 0 ? "empty" : "loaded");
+        // Never promote catalog[0] into "current" — that looks personal when it isn't.
+        setCurrentPractice(currentResult.data);
+        setError(null);
+      }
+
+      setCategories(categoriesResult.data.categories ?? []);
       setShortAlternatives(
         isAuthenticated
-          ? shortAltResp
-          : shortAltResp.filter((practice) => isGuestPracticeAllowed(practice)),
+          ? shortAltResult.data
+          : shortAltResult.data.filter((practice) => isGuestPracticeAllowed(practice)),
       );
 
       if (isAuthenticated) {
         const [progressResp, historyResp, limitsResp, sequencesResp] = await Promise.all([
-          getJson<PracticeProgressResponse>("/practices/progress").catch(() => null),
-          getJson<PracticeHistoryResponse>("/practices/history?limit=100").catch(() => null),
-          getJson<PracticeLimitsSnapshot>("/practices/limits").catch(() => null),
-          getJson<PracticeCatalogItem[]>("/practices/sequences").catch(() => []),
+          getJson<PracticeProgressResponse>("/practices/progress").catch((err) => {
+            console.error("Practices progress failed", err);
+            return null;
+          }),
+          getJson<PracticeHistoryResponse>("/practices/history?limit=100").catch((err) => {
+            console.error("Practices history failed", err);
+            return null;
+          }),
+          getJson<PracticeLimitsSnapshot>("/practices/limits").catch((err) => {
+            console.error("Practices limits failed", err);
+            return null;
+          }),
+          getJson<PracticeCatalogItem[]>("/practices/sequences").catch((err) => {
+            console.error("Practices sequences failed", err);
+            return [];
+          }),
         ]);
         setProgress(progressResp);
         setHistory(historyResp);
@@ -132,11 +175,12 @@ export default function PracticesPage() {
       }
     } catch (err) {
       console.error("Error loading practices:", err);
+      setCatalogStatus("failed");
       setError(pc.practicesCatalogLoadError);
     } finally {
       setLoading(false);
     }
-  }, [catalogTab, isAuthenticated, sortLocale, pc.practicesCatalogLoadError]);
+  }, [catalogTab, isAuthenticated, sortLocale, pc.practicesCatalogLoadError, v2Copy.catalogLoadFailed]);
 
   useEffect(() => {
     void loadPractices();
@@ -188,14 +232,30 @@ export default function PracticesPage() {
   }, [programCards, shortAlternatives, filteredPractices, v2Copy.minutesShort, locale]);
 
   const practiceOfDay = useMemo(() => {
-    const practice = currentPractice ?? filteredPractices[0] ?? practices[0];
-    if (!practice) return null;
+    if (currentPractice) {
+      const recommendationSource: "personalized" | "current" = currentPractice.is_personalized
+        ? "personalized"
+        : "current";
+      return {
+        title: currentPractice.title,
+        description:
+          currentPractice.personalized_reason?.trim() || currentPractice.description,
+        minutes: currentPractice.duration_minutes ?? null,
+        steps: practiceStepsCount(currentPractice),
+        href: `/practices/${currentPractice.id}`,
+        recommendationSource,
+      };
+    }
+
+    const fallback = filteredPractices[0] ?? practices[0];
+    if (!fallback) return null;
     return {
-      title: practice.title,
-      description: practice.personalized_reason?.trim() || practice.description,
-      minutes: practice.duration_minutes ?? null,
-      steps: practiceStepsCount(practice),
-      href: `/practices/${practice.id}`,
+      title: fallback.title,
+      description: fallback.description,
+      minutes: fallback.duration_minutes ?? null,
+      steps: practiceStepsCount(fallback),
+      href: `/practices/${fallback.id}`,
+      recommendationSource: "catalog_fallback" as const,
     };
   }, [currentPractice, filteredPractices, practices]);
 
@@ -205,9 +265,13 @@ export default function PracticesPage() {
     ? `${practiceOfDay.minutes} ${v2Copy.minutesShort.toUpperCase()}`
     : null;
   const heroBody =
-    currentPractice?.personalized_reason?.trim() ||
-    currentPractice?.description?.trim() ||
-    v2Copy.heroBodyFallback;
+    practiceOfDay?.recommendationSource === "catalog_fallback"
+      ? "Рекомендуем начать с этой практики — она из каталога, не персональная подборка."
+      : currentPractice?.personalized_reason?.trim() ||
+        currentPractice?.description?.trim() ||
+        v2Copy.heroBodyFallback;
+
+  const activeProgramsCount = sequences.length > 0 ? sequences.length : null;
 
   const live = useMemo(
     () =>
@@ -255,10 +319,16 @@ export default function PracticesPage() {
       subtitle={pc.practicesCatalogPageSubtitle}
       coreProfile={coreProfile}
       displayName={displayName}
-      activePractices={filteredPractices.length}
+      activePractices={activeProgramsCount ?? 0}
       streakDays={live.streakDays}
+      showProgressRail={(progress?.total_completed ?? 0) > 0 || live.streakDays > 0}
+      weeklyRhythm={
+        (progress?.total_completed ?? 0) > 0
+          ? live.weekCells.map((cell) => (cell.closed ? 1 : 0.15))
+          : []
+      }
     >
-      {error ? (
+      {error && catalogStatus !== "failed" ? (
         <div className={styles.errorBanner} role="alert">
           {error}
         </div>
@@ -286,6 +356,8 @@ export default function PracticesPage() {
         limitsRemaining={limits?.remaining_this_week ?? null}
         showGuestProgressHint={!isAuthenticated}
         emptyLibraryMessage={pc.practicesCatalogEmptyFilter}
+        catalogFailed={catalogStatus === "failed"}
+        onRetryCatalog={() => void loadPractices()}
       />
     </PracticesWebScreen>
   );

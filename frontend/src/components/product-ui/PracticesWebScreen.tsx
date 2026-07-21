@@ -27,6 +27,8 @@ export type PracticesWebScreenProps = {
   activePractices?: number;
   bestStreakDays?: number;
   weeklyRhythm?: number[];
+  /** When false, hide decorative zero-progress rail (honest empty state). */
+  showProgressRail?: boolean;
   rail?: ReactNode;
   /** Figma 162:1522 — dashboard layout, wide main, no classic header/rail. */
   variant?: "default" | "v2";
@@ -43,7 +45,8 @@ export function PracticesWebScreen({
   streakDays = 0,
   activePractices = 0,
   bestStreakDays = 0,
-  weeklyRhythm = [0.4, 0.6, 0.2, 0.9, 0.5, 0.7, 0.3],
+  weeklyRhythm = [],
+  showProgressRail = true,
   rail,
   variant = "default",
   children,
@@ -60,7 +63,38 @@ export function PracticesWebScreen({
   const isV2 = variant === "v2";
 
   const shellConfig = useMemo((): ProductWebShellConfig => {
-    // Always keep the product 3-column grid (left nav · center · right rail).
+    const defaultRail =
+      showProgressRail && (streakDays > 0 || weeklyRhythm.length > 0) ? (
+        <>
+          <section className={s.practicesRailSection} aria-labelledby="practices-streak">
+            <h2 id="practices-streak" className={s.practicesRailEyebrow}>
+              {pc.practicesRailMyStreak}
+            </h2>
+            <DsStreakRing days={streakDays} label="" />
+            <div className={s.practicesRailStats}>
+              {activePractices > 0 ? (
+                <p className={s.practicesRailStatMain}>
+                  {pc.practicesRailActiveCount} {activePractices}
+                </p>
+              ) : null}
+              {bestStreakDays > 0 ? (
+                <p className={s.practicesRailStatSub}>
+                  {pc.practicesRailBestStreak} {bestStreakDays} {bestStreakSuffix}
+                </p>
+              ) : null}
+            </div>
+          </section>
+          {weeklyRhythm.length > 0 ? (
+            <section className={s.practicesRailSection} aria-labelledby="practices-weekly">
+              <h2 id="practices-weekly" className={s.practicesRailEyebrow}>
+                {pc.practicesRailWeeklyRhythm}
+              </h2>
+              <DsWeeklyBars values={weeklyRhythm} />
+            </section>
+          ) : null}
+        </>
+      ) : null;
+
     return {
       testId: "practices-web-screen",
       displayName,
@@ -68,33 +102,7 @@ export function PracticesWebScreen({
       coreProfile,
       mainWide: true,
       fullMain: false,
-      rail:
-        rail ?? (
-          <>
-            <section className={s.practicesRailSection} aria-labelledby="practices-streak">
-              <h2 id="practices-streak" className={s.practicesRailEyebrow}>
-                {pc.practicesRailMyStreak}
-              </h2>
-              <DsStreakRing days={streakDays} label="" />
-              <div className={s.practicesRailStats}>
-                <p className={s.practicesRailStatMain}>
-                  {pc.practicesRailActiveCount} {activePractices}
-                </p>
-                {bestStreakDays > 0 ? (
-                  <p className={s.practicesRailStatSub}>
-                    {pc.practicesRailBestStreak} {bestStreakDays} {bestStreakSuffix}
-                  </p>
-                ) : null}
-              </div>
-            </section>
-            <section className={s.practicesRailSection} aria-labelledby="practices-weekly">
-              <h2 id="practices-weekly" className={s.practicesRailEyebrow}>
-                {pc.practicesRailWeeklyRhythm}
-              </h2>
-              <DsWeeklyBars values={weeklyRhythm} />
-            </section>
-          </>
-        ),
+      rail: rail ?? defaultRail,
     };
   }, [
     activePractices,
@@ -109,6 +117,7 @@ export function PracticesWebScreen({
     pc.practicesRailWeeklyRhythm,
     profileMeta,
     rail,
+    showProgressRail,
     streakDays,
     weeklyRhythm,
   ]);

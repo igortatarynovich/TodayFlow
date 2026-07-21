@@ -1,4 +1,5 @@
 import type { CoreProfile } from "@/lib/types";
+import { zodiacRuName } from "@/lib/zodiacKnowledge";
 
 export function productWebUserInitial(
   profile?: CoreProfile | null,
@@ -26,7 +27,7 @@ export function productWebProfileMeta(
 ): string | null {
   const parts = [
     profile?.numerology?.life_path != null ? `Путь ${profile.numerology.life_path}` : null,
-    profile?.astro?.sun_sign ? `Солнце ${profile.astro.sun_sign}` : null,
+    profile?.astro?.sun_sign ? `Солнце ${zodiacRuName(profile.astro.sun_sign)}` : null,
     ...extras,
   ].filter(Boolean) as string[];
   return parts.length > 0 ? parts.join(" · ") : null;

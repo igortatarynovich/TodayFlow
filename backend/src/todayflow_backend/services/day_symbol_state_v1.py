@@ -266,10 +266,13 @@ def reveal_card(
     if card is None:
         raise ValueError("unknown_tarot_card")
 
-    # Idempotency: same key returns existing reveal
+    # Idempotency: same key returns existing reveal for THIS owner only.
     by_idem = (
         db.query(db_models.DaySymbolState)
-        .filter(db_models.DaySymbolState.card_idempotency_key == key)
+        .filter(
+            db_models.DaySymbolState.owner_key == owner_key,
+            db_models.DaySymbolState.card_idempotency_key == key,
+        )
         .first()
     )
     if by_idem is not None:
@@ -304,11 +307,18 @@ def reveal_card(
         db.rollback()
         again = (
             db.query(db_models.DaySymbolState)
-            .filter(db_models.DaySymbolState.card_idempotency_key == key)
+            .filter(
+                db_models.DaySymbolState.owner_key == owner_key,
+                db_models.DaySymbolState.card_idempotency_key == key,
+            )
             .first()
         )
         if again:
             return public_view(again, local_date=again.local_date, timezone_name=again.timezone_name, tarot_service=svc)
+        # Concurrent first reveal for this owner/day may race on uq_day_symbol_owner_date.
+        existing = get_state_row(db, owner_key=owner_key, local_date=local_date)
+        if existing is not None and is_card_revealed(existing):
+            return public_view(existing, local_date=local_date, timezone_name=timezone_name, tarot_service=svc)
         raise
     return public_view(row, local_date=local_date, timezone_name=timezone_name, tarot_service=svc)
 
@@ -332,7 +342,10 @@ def reveal_number(
 
     by_idem = (
         db.query(db_models.DaySymbolState)
-        .filter(db_models.DaySymbolState.number_idempotency_key == key)
+        .filter(
+            db_models.DaySymbolState.owner_key == owner_key,
+            db_models.DaySymbolState.number_idempotency_key == key,
+        )
         .first()
     )
     if by_idem is not None:
@@ -378,11 +391,17 @@ def reveal_number(
         db.rollback()
         again = (
             db.query(db_models.DaySymbolState)
-            .filter(db_models.DaySymbolState.number_idempotency_key == key)
+            .filter(
+                db_models.DaySymbolState.owner_key == owner_key,
+                db_models.DaySymbolState.number_idempotency_key == key,
+            )
             .first()
         )
         if again:
             return public_view(again, local_date=again.local_date, timezone_name=again.timezone_name)
+        existing = get_state_row(db, owner_key=owner_key, local_date=local_date)
+        if existing is not None and is_number_revealed(existing):
+            return public_view(existing, local_date=local_date, timezone_name=timezone_name)
         raise
     return public_view(row, local_date=local_date, timezone_name=timezone_name)
 

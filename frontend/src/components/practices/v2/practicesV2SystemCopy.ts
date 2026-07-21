@@ -10,8 +10,13 @@ export type PracticesV2Copy = {
   heroPrimaryCta: string;
   heroSecondaryCta: string;
   practiceOfDayEyebrow: string;
+  practiceOfDayEyebrowPersonalized: string;
+  practiceOfDayEyebrowContinue: string;
+  practiceOfDayEyebrowFallback: string;
   practiceOfDayMinutes: string;
   practiceOfDaySteps: string;
+  firstPracticeProgressHint: string;
+  catalogLoadFailed: string;
   libraryTitle: string;
   viewHistory: string;
   quickEntryTitle: string;
@@ -43,8 +48,13 @@ export const PRACTICES_V2_COPY: Record<PracticesV2Locale, PracticesV2Copy> = {
     heroPrimaryCta: "Начать практику",
     heroSecondaryCta: "Смотреть все практики",
     practiceOfDayEyebrow: "ПРАКТИКА ДНЯ",
+    practiceOfDayEyebrowPersonalized: "ТВОЯ ПРАКТИКА ДНЯ",
+    practiceOfDayEyebrowContinue: "ПРОДОЛЖИТЬ ПРАКТИКУ",
+    practiceOfDayEyebrowFallback: "С ЧЕГО НАЧАТЬ",
     practiceOfDayMinutes: "МИНУТ",
     practiceOfDaySteps: "ШАГА",
+    firstPracticeProgressHint: "Заверши первую практику — здесь появится твой недельный ритм.",
+    catalogLoadFailed: "Не удалось загрузить каталог. Повтори попытку.",
     libraryTitle: "Библиотека практик",
     viewHistory: "История и статистика",
     quickEntryTitle: "Быстрый вход",
@@ -74,8 +84,13 @@ export const PRACTICES_V2_COPY: Record<PracticesV2Locale, PracticesV2Copy> = {
     heroPrimaryCta: "Start practice",
     heroSecondaryCta: "Browse all practices",
     practiceOfDayEyebrow: "PRACTICE OF THE DAY",
+    practiceOfDayEyebrowPersonalized: "YOUR PRACTICE TODAY",
+    practiceOfDayEyebrowContinue: "CONTINUE PRACTICE",
+    practiceOfDayEyebrowFallback: "WHERE TO START",
     practiceOfDayMinutes: "MINUTES",
     practiceOfDaySteps: "STEPS",
+    firstPracticeProgressHint: "Complete your first practice — your weekly rhythm will appear here.",
+    catalogLoadFailed: "Could not load the catalog. Please try again.",
     libraryTitle: "Practice library",
     viewHistory: "History and stats",
     quickEntryTitle: "Quick entry",
@@ -87,11 +102,11 @@ export const PRACTICES_V2_COPY: Record<PracticesV2Locale, PracticesV2Copy> = {
     totalCompletedLabel: "Completed",
     longestStreakLabel: "Best streak",
     weeksActiveLabel: "Active weeks",
+    tabAll: "All",
+    minutesShort: "min",
     limitsRemainingLabel: "Personalized left this week",
     personalizedCompletedLabel: "Personalized",
     byCategoryTitle: "By category",
-    tabAll: "All",
-    minutesShort: "min",
     guestProgressHint: "Sign in to see streak and completion history.",
   },
 };

@@ -3,9 +3,17 @@ import type { ProfileTaxonomyInsightSlot } from "./profileInsightTypes";
 import type { CompactUserModel, CoreProfile } from "@/lib/types";
 import { profileCopyToBullets, profileCopyToTags } from "./profileCopyBullets";
 import { textsOverlap } from "./profileContentLedger";
+import { archetypeDisplayLabel } from "@/lib/visualIdentity/registry";
 import { zodiacRuName } from "@/lib/zodiacKnowledge";
 import { collectProfileV0UiStrings } from "./profileV0UiStringsAudit";
+import { formatCumThemeLabel } from "./cumThemeLabels";
 import { PROFILE_SPHERE_THRIVE_TAGS } from "./profileSphereCopy";
+import {
+  filterProfileCopyList,
+  isUsableProfileCopy,
+  profileContractMatchesLocale,
+} from "./profileCopySafety";
+import { getLocale } from "@/lib/i18n";
 
 export type ProfileFrameworkAnchor = {
   id: string;
@@ -217,6 +225,12 @@ function mergeProfileContractIntoQuickMap(
   base: ProfileQuickMapViewModel,
   contract?: CoreProfile["profile_contract_v1"] | null,
 ): ProfileQuickMapViewModel {
+  const locale = getLocale();
+  if (!profileContractMatchesLocale(contract, locale)) {
+    // Wrong-language or empty portrait — keep taxonomy / CUM layers, never paint EN on RU UI.
+    return base;
+  }
+
   const status = String(contract?.status || "").trim().toLowerCase();
   const portraitReady = status === "ready" && Boolean(contract?.identity_core?.trim());
   const portraitPartial =
@@ -243,36 +257,43 @@ function mergeProfileContractIntoQuickMap(
   const identitySummary = (contract?.identity_core || "").trim();
   // Ready: prefer contract, allow non-overlapping base tags. Partial: contract-only (no silent mix-in).
   const allowBaseMix = portraitReady;
-  const strengthens = excludeOverlapping(
-    mergeBullets(4, ...(contract?.strengths ?? []), ...(allowBaseMix ? base.strengthens : [])),
-    [identitySummary, base.frameworkLead].filter(Boolean) as string[],
+  const strengthens = filterProfileCopyList(
+    [...(contract?.strengths ?? []), ...(allowBaseMix ? base.strengthens : [])],
+    4,
+    locale,
   );
-  const drains = excludeOverlapping(
-    mergeBullets(4, ...(contract?.growth_zones ?? []), ...(allowBaseMix ? base.drains : [])),
-    [identitySummary].filter(Boolean) as string[],
+  const drains = filterProfileCopyList(
+    [...(contract?.growth_zones ?? []), ...(allowBaseMix ? base.drains : [])],
+    4,
+    locale,
   );
-  const decisionStyle = contract?.decision_style?.trim() || (allowBaseMix ? base.decisionStyle : null);
-  const perceivedAs = excludeOverlapping(
-    mergeBullets(5, ...(contract?.recurring_patterns ?? []), ...(allowBaseMix ? base.perceivedAs : [])),
-    [identitySummary, decisionStyle].filter(Boolean) as string[],
+  const decisionStyleRaw = contract?.decision_style?.trim() || (allowBaseMix ? base.decisionStyle : null);
+  const decisionStyle = isUsableProfileCopy(decisionStyleRaw, locale) ? decisionStyleRaw : null;
+  const perceivedAs = filterProfileCopyList(
+    [...(contract?.recurring_patterns ?? []), ...(allowBaseMix ? base.perceivedAs : [])],
+    5,
+    locale,
   );
-  const frameworkLead = contract?.living_changes?.trim() || (allowBaseMix ? base.frameworkLead : null);
-  const lifeMission = contract?.life_mission?.trim() || (allowBaseMix ? base.lifeMission : null);
-  const thriveAreas = excludeOverlapping(
-    mergeBullets(4, ...(contract?.helps ?? []), ...(allowBaseMix ? base.thriveAreas : [])),
-    [identitySummary, decisionStyle].filter(Boolean) as string[],
+  const frameworkLeadRaw = contract?.living_changes?.trim() || (allowBaseMix ? base.frameworkLead : null);
+  const frameworkLead = isUsableProfileCopy(frameworkLeadRaw, locale) ? frameworkLeadRaw : null;
+  const lifeMissionRaw = contract?.life_mission?.trim() || (allowBaseMix ? base.lifeMission : null);
+  const lifeMission = isUsableProfileCopy(lifeMissionRaw, locale) ? lifeMissionRaw : null;
+  const thriveAreas = filterProfileCopyList(
+    [...(contract?.helps ?? []), ...(allowBaseMix ? base.thriveAreas : [])],
+    4,
+    locale,
   );
 
   return {
     ...base,
-    identitySummary,
-    strengthens,
-    drains,
-    decisionStyle,
-    perceivedAs,
-    frameworkLead,
-    lifeMission,
-    thriveAreas,
+    identitySummary: isUsableProfileCopy(identitySummary, locale) ? identitySummary : base.identitySummary,
+    strengthens: strengthens.length ? strengthens : base.strengthens,
+    drains: drains.length ? drains : base.drains,
+    decisionStyle: decisionStyle ?? base.decisionStyle,
+    perceivedAs: perceivedAs.length ? perceivedAs : base.perceivedAs,
+    frameworkLead: frameworkLead ?? base.frameworkLead,
+    lifeMission: lifeMission ?? base.lifeMission,
+    thriveAreas: thriveAreas.length ? thriveAreas : base.thriveAreas,
   };
 }
 
@@ -292,29 +313,36 @@ function mergeCumIntoQuickMap(
   const identityStrengths = identity.strengths ?? [];
   const identityConstraints = identity.constraints ?? [];
 
-  const strengthens = excludeOverlapping(
-    mergeBullets(4, ...patternWorks, ...identityStrengths, ...base.strengthens, ...atomSummaries.slice(0, 2)),
-    [base.identitySummary, ...base.frameworkCards.map((card) => card.body)].filter(Boolean) as string[],
+  const strengthens = filterProfileCopyList(
+    [...patternWorks, ...identityStrengths, ...base.strengthens, ...atomSummaries.slice(0, 2)],
+    4,
   );
-  const drains = excludeOverlapping(
-    mergeBullets(4, ...patternAvoid, ...identityConstraints, ...base.drains),
-    [base.identitySummary].filter(Boolean) as string[],
+  const drains = filterProfileCopyList(
+    [...patternAvoid, ...identityConstraints, ...base.drains],
+    4,
   );
 
-  const archetype = base.archetype?.trim() || identity.archetype?.trim() || base.archetype;
-  const identitySummary = base.identitySummary ?? identity.summary?.trim() ?? null;
+  const archetypeRaw = base.archetype?.trim() || identity.archetype?.trim() || "";
+  const archetype = archetypeRaw ? archetypeDisplayLabel(archetypeRaw) : base.archetype;
+  const identitySummaryRaw = base.identitySummary ?? identity.summary?.trim() ?? null;
+  const identitySummary = isUsableProfileCopy(identitySummaryRaw) ? identitySummaryRaw : base.identitySummary;
 
   return {
     ...base,
     archetype,
     identitySummary,
-    strengthens,
-    drains,
+    strengthens: strengthens.length ? strengthens : base.strengthens,
+    drains: drains.length ? drains : base.drains,
     frameworkAnchors: enrichFrameworkAnchorsFromIdentity(base.frameworkAnchors, identity),
-    perceivedAs: base.perceivedAs.length ? base.perceivedAs : atomSummaries.slice(0, 5),
+    perceivedAs: base.perceivedAs.length
+      ? base.perceivedAs
+      : filterProfileCopyList(atomSummaries.slice(0, 5), 5),
     thriveAreas: base.thriveAreas.length
       ? base.thriveAreas
-      : profileCopyToTags(cum.active_themes?.map((theme) => theme.id) ?? [], 5),
+      : profileCopyToTags(
+          (cum.active_themes ?? []).map((theme) => formatCumThemeLabel(theme.id)).filter(Boolean),
+          5,
+        ),
   };
 }
 

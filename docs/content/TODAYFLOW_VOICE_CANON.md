@@ -3,7 +3,7 @@
 **Статус:** архитектурный канон контента (не copywriter guide).  
 **Версия:** 1.1 (2026-07-21).  
 **Источник:** живые удачные кейсы Compatibility / Profile review packs — узнаваемый авторский тон продукта.  
-**Связь:** [COMPATIBILITY_CONTENT_CANON_V1.md](../COMPATIBILITY_CONTENT_CANON_V1.md) · [PROFILE_CONTENT_CANON_V1.md](../PROFILE_CONTENT_CANON_V1.md)
+**Связь:** [COMPATIBILITY_CONTENT_CANON_V1.md](../COMPATIBILITY_CONTENT_CANON_V1.md) · [PROFILE_CONTENT_CANON_V1.md](../PROFILE_CONTENT_CANON_V1.md) · [EXPLAINABLE_INTERPRETATION.md](../EXPLAINABLE_INTERPRETATION.md) *(практичность · конкретность · авторский язык; без гороскопных ярлыков сфер)*
 
 Это слой **как продукт говорит**, рядом с контрактами слоёв и `source_depth`.  
 Сохраняем **принципы**, не фиксируем конкретные обороты как шаблоны. Exemplars ниже — ориентиры, а не копипаст.

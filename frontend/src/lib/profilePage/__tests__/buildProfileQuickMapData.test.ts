@@ -39,11 +39,11 @@ describe("buildProfileQuickMapViewModel", () => {
       }),
     );
 
-    expect(quickMap.archetype).toBe("Sage");
+    expect(quickMap.archetype).toBe("Мудрец");
     expect(quickMap.identitySummary).toBeTruthy();
     expect(quickMap.strengthens.length).toBeGreaterThan(0);
     expect(quickMap.frameworkAnchors.map((item) => item.label)).toEqual(
-      expect.arrayContaining(["Солнце в Водолей", "Архетип Sage", "Число пути 7"]),
+      expect.arrayContaining(["Солнце в Водолей", "Архетип Мудрец", "Число пути 7"]),
     );
     expect(quickMap.frameworkCards.some((card) => card.id === "sun")).toBe(true);
   });
@@ -82,7 +82,7 @@ describe("buildProfileQuickMapViewModel", () => {
       },
     );
 
-    expect(quickMap.archetype).toBe("Sage");
+    expect(quickMap.archetype).toBe("Мудрец");
     expect(quickMap.strengthens[0]).toBe("ясность структуры");
     expect(quickMap.drains[0]).toBe("хаос без правил");
   });
@@ -124,8 +124,10 @@ describe("buildProfileQuickMapViewModel", () => {
       },
     );
 
-    expect(quickMap.strengthens[0]).toBe("evening_reflection");
-    expect(quickMap.drains[0]).toBe("morning_overload");
+    // Machine CUM tokens must not surface as user-facing strengthens.
+    expect(quickMap.strengthens).not.toContain("evening_reflection");
+    expect(quickMap.drains).not.toContain("morning_overload");
+    expect(quickMap.strengthens[0]).toBe("спокойствие под давлением");
   });
 
   it("adds moon and rising anchors from CUM identity when missing", () => {

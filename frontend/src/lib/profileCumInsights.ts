@@ -9,7 +9,7 @@ export type ConfidenceSparklineCell = {
 const UNCERTAINTY_FLAG_RU: Record<string, string> = {
   low_meaning_events: "Мало событий за период — выводы предварительные.",
   no_active_knowledge_atoms: "Пока нет подтверждённых паттернов.",
-  no_explicit_state_today: "Отметь настроение в Today — точность вырастет.",
+  no_explicit_state_today: "Отметь настроение в «Я сегодня» — точность вырастет.",
 };
 
 export function formatConfidencePercent(overall: number | null | undefined): string {

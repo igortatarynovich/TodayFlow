@@ -83,12 +83,20 @@ export function ProfileV2SystemScreen({
   const formingMessage = portraitFormingMessageProp?.trim() || profilePortraitFormingMessage(null);
   const astroFacts = buildAstroFactsLine(model.frameworkAnchors);
   const helps = live.helps.length ? live.helps : model.thriveAreas.slice(0, 3);
-  const awarenessPercent = live.awarenessPercent;
-  const awarenessDeg = `${Math.round((awarenessPercent / 100) * 360)}deg`;
+  const accuracyRingPercent =
+    live.awarenessPercent ??
+    (live.observationAccuracyLevel === "stable"
+      ? 72
+      : live.observationAccuracyLevel === "forming"
+        ? 40
+        : 18);
+  const awarenessDeg = `${Math.round((accuracyRingPercent / 100) * 360)}deg`;
+  const accuracyDisplay = live.observationAccuracyLabel;
   const heroPills = [
     ...identityPills,
     ...(live.elementLabel ? [live.elementLabel] : []),
   ];
+  const hasDailyAnchors = Boolean(live.dailyAnchors.line);
 
   return (
     <div className={styles.pageRoot}>
@@ -125,7 +133,7 @@ export function ProfileV2SystemScreen({
             <span className={styles.liveDot} aria-hidden />
             {PROFILE_V2_COPY.liveBadge}
           </span>
-          <span className={styles.liveChip}>{live.updatedLabel}</span>
+          {live.updatedLabel ? <span className={styles.liveChip}>{live.updatedLabel}</span> : null}
           <button type="button" className={styles.birthDataBtn} onClick={onOpenBirthData}>
             Данные рождения
           </button>
@@ -160,21 +168,31 @@ export function ProfileV2SystemScreen({
                 style={{ "--awareness-deg": awarenessDeg } as CSSProperties}
                 aria-hidden
               >
-                <div className={styles.awarenessRingInner}>{awarenessPercent}%</div>
+                <div className={styles.awarenessRingInner}>
+                  {live.awarenessPercent != null ? `${live.awarenessPercent}%` : accuracyDisplay}
+                </div>
               </div>
               <div>
                 <p className={styles.sideEyebrow}>{PROFILE_V2_COPY.awarenessTitle}</p>
-                <p className={styles.sideBody}>{PROFILE_V2_COPY.awarenessLead}</p>
+                <p className={styles.sideBody}>
+                  {live.awarenessPercent != null
+                    ? PROFILE_V2_COPY.awarenessLead
+                    : `Сейчас: ${accuracyDisplay}. ${PROFILE_V2_COPY.awarenessLead}`}
+                </p>
               </div>
             </div>
-            <div className={styles.anchorBlock}>
-              <p className={styles.anchorTitle}>{live.stoneCardTitle}</p>
-              <p className={styles.anchorBody}>{live.stoneCardBody}</p>
-            </div>
-            <div className={styles.anchorBlock}>
-              <p className={styles.anchorTitle}>{live.supportsCardTitle}</p>
-              <p className={styles.anchorBody}>{live.supportsCardBody}</p>
-            </div>
+            {live.hasStoneCard ? (
+              <div className={styles.anchorBlock}>
+                <p className={styles.anchorTitle}>{live.stoneCardTitle}</p>
+                <p className={styles.anchorBody}>{live.stoneCardBody}</p>
+              </div>
+            ) : null}
+            {live.hasSupportsCard ? (
+              <div className={styles.anchorBlock}>
+                <p className={styles.anchorTitle}>{live.supportsCardTitle}</p>
+                <p className={styles.anchorBody}>{live.supportsCardBody}</p>
+              </div>
+            ) : null}
           </aside>
         </section>
 
@@ -187,10 +205,12 @@ export function ProfileV2SystemScreen({
               </h3>
               <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.facts.lead}</p>
             </div>
-            <span className={styles.liveChip}>
-              <span className={styles.liveDot} aria-hidden />
-              {live.updatedLabel.replace(PROFILE_V2_COPY.updatedPrefix, "обновлено")}
-            </span>
+            {live.updatedLabel ? (
+              <span className={styles.liveChip}>
+                <span className={styles.liveDot} aria-hidden />
+                {live.updatedLabel.replace(PROFILE_V2_COPY.updatedPrefix, "обновлено")}
+              </span>
+            ) : null}
           </header>
           <div className={styles.factGrid}>
             <article className={styles.factCard}>
@@ -200,26 +220,22 @@ export function ProfileV2SystemScreen({
                 <p className={styles.factHint}>{model.identitySummary}</p>
               ) : null}
             </article>
-            <article className={styles.factCard}>
-              <p className={styles.factLabel}>{PROFILE_V2_COPY.zones.facts.cards.astro}</p>
-              <p className={styles.factValue}>{astroFacts || "—"}</p>
-              <p className={styles.factHint}>{PROFILE_V2_COPY.zones.facts.astroHint}</p>
-            </article>
-            <article className={styles.factCard}>
-              <p className={styles.factLabel}>{PROFILE_V2_COPY.zones.facts.cards.awareness}</p>
-              <p className={styles.factValue}>
-                {awarenessPercent}%
-                {live.awarenessDeltaLabel ? ` · ${live.awarenessDeltaLabel.replace(" за 30 дн", "")}` : ""}
-              </p>
-              <div className={styles.progressBar} aria-hidden>
-                <div className={styles.progressFill} style={{ width: `${awarenessPercent}%` }} />
-              </div>
-            </article>
-            <article className={styles.factCard}>
-              <p className={styles.factLabel}>{PROFILE_V2_COPY.zones.facts.cards.anchors}</p>
-              <p className={styles.factValue}>{live.dailyAnchors.line}</p>
-              <p className={styles.factHint}>{PROFILE_V2_COPY.zones.facts.anchorsHint}</p>
-            </article>
+            {astroFacts ? (
+              <article className={styles.factCard}>
+                <p className={styles.factLabel}>{PROFILE_V2_COPY.zones.facts.cards.astro}</p>
+                <p className={styles.factValue}>{astroFacts}</p>
+                <p className={styles.factHint}>{PROFILE_V2_COPY.zones.facts.astroHint}</p>
+              </article>
+            ) : null}
+            {hasDailyAnchors ? (
+              <article className={styles.factCard}>
+                <p className={styles.factLabel}>{PROFILE_V2_COPY.zones.facts.cards.anchors}</p>
+                <p className={styles.factValue}>{live.dailyAnchors.line}</p>
+                <p className={styles.factHint}>
+                  Сегодняшние опоры · <a href="/today">Открыть день</a>
+                </p>
+              </article>
+            ) : null}
           </div>
         </section>
 
@@ -328,7 +344,7 @@ export function ProfileV2SystemScreen({
           {lifeSpheres?.length ? (
             <div className={styles.sphereGrid}>
               {lifeSpheres.map((sphere) => {
-                const progress = profileV2SphereProgressPercent(sphere.id, awarenessPercent);
+                const progress = profileV2SphereProgressPercent(sphere.id, accuracyRingPercent);
                 return (
                   <details key={sphere.id} className={styles.sphereCard}>
                     <summary className={styles.sphereSummary}>

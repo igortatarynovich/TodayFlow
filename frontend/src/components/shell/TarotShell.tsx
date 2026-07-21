@@ -17,12 +17,13 @@ export function TarotShell({ children }: TarotShellProps) {
   const activeStep = tarotShellStepFromPath(pathname);
 
   const shellConfig = useMemo((): ProductWebShellConfig => {
+    const rail = activeStep < 0 ? null : <TarotRail activeStep={activeStep} />;
     return {
       testId: "tarot-immersive-shell",
       theme: "dark",
       mainWide: true,
       fullMain: false,
-      rail: <TarotRail activeStep={activeStep} />,
+      rail,
     };
   }, [activeStep]);
 
