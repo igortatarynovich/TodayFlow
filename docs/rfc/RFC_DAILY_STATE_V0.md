@@ -1,9 +1,14 @@
 # RFC — DailyState v0
 
-**Статус:** DRAFT — следующий артефакт Phase N (не implementation)  
+**STATUS: DEFERRED — not an approved implementation phase**
+
+Не следующий артефакт после Profile. Не kickoff реализации.  
+См. [PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md) · [DAILY_INTERPRETATION_ENGINE_PHASE.md](../DAILY_INTERPRETATION_ENGINE_PHASE.md) (тоже DEFERRED).
+
+**Бывший статус:** DRAFT — артефакт Phase N  
 **Фаза:** [DAILY_INTERPRETATION_ENGINE_PHASE.md](../DAILY_INTERPRETATION_ENGINE_PHASE.md)  
 **Канон:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md) · [DAY_CONTEXT_V0.md](../DAY_CONTEXT_V0.md) · [EXPLAINABLE_INTERPRETATION.md](../EXPLAINABLE_INTERPRETATION.md)  
-**Запрещено до принятия RFC:** production UI, независимые генераторы символов дня, советы «по сферам» без цепочки обоснования
+**Запрещено до отдельного доказанного кейса после разбора Today:** production UI на DailyState, независимые генераторы символов дня, советы «по сферам» без цепочки обоснования
 
 ---
 

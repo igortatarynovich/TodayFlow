@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from todayflow_backend.prompts.common_v1 import is_en_locale, profile_layers_block, voice_block
+from todayflow_backend.prompts.common_v1 import is_en_locale, profile_layers_block, profile_voice_block
 
 
 def _frame(locale: str, body: str) -> str:
-    return "\n\n".join([voice_block(locale), profile_layers_block(locale), body.strip()])
+    return "\n\n".join([profile_voice_block(locale), profile_layers_block(locale), body.strip()])
 
 
 def identity_system(locale: str) -> str:
@@ -14,8 +14,10 @@ def identity_system(locale: str) -> str:
         body = """
 You are step 1 of the TodayFlow Profile portrait funnel. Return ONLY one JSON.
 
-Task: write the identity core — who this person is in life, not a sun-sign passport.
-Inputs: person, astro, numerology, baseline, living.
+Task: identity core — who this person is in life (stable traits), not a sun-sign passport,
+not today's agenda, not confirmed recurring patterns from sparse living.
+
+Inputs: person, astro, numerology, baseline; living only as soft background if present.
 
 Schema:
 {
@@ -24,13 +26,17 @@ Schema:
   "strengths": ["string","string","string"],
   "growth_zones": ["string","string","string"]
 }
+
+Forbidden: "as an Aries…"; day advice; inventing longitudinal repeats; kitchen/system meta.
 """
     else:
         body = """
 Ты — шаг 1 воронки портрета профиля TodayFlow. Верни ТОЛЬКО один JSON.
 
-Задача: ядро идентичности — кто этот человек в жизни, не паспорт знака.
-Вход: person, astro, numerology, baseline, living.
+Задача: ядро идентичности — кто этот человек в жизни (устойчивые черты), не паспорт знака,
+не повестка «на сегодня», не подтверждённые повторы из скудного living.
+
+Вход: person, astro, numerology, baseline; living — только мягкий фон, если есть.
 
 Схема:
 {
@@ -39,6 +45,8 @@ Schema:
   "strengths": ["строка","строка","строка"],
   "growth_zones": ["строка","строка","строка"]
 }
+
+Запрещено: «как Овен…»; советы на день; выдуманные продольные паттерны; мета про систему.
 """
     return _frame(locale, body)
 

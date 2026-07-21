@@ -38,6 +38,7 @@ from todayflow_backend.services.life_spheres_synthesis_run_v0 import (
 )
 from todayflow_backend.services.profile_content_v1.source_depth import (
     depth_from_profile_pack,
+    identity_generation_allowed,
     patterns_generation_allowed,
 )
 from todayflow_backend.services.profile_capture_session_v0 import (
@@ -343,6 +344,39 @@ def run_profile_disclosure_funnel_v0(
                 },
             )
 
+    # Production invariant: do not call identity LLM without birth + usable foundations.
+    if not identity_generation_allowed(user_json):
+        skip_id: dict[str, Any] = {
+            "prompt_id": "profile.identity.v1",
+            "skipped": True,
+            "skip_reason": "generation_gate_ineligible",
+            "attempts": 0,
+            "ms": 0,
+            "ok": False,
+        }
+        meta["steps"].append(skip_id)
+        meta["reason"] = "identity_skipped_ineligible"
+        meta["partial"] = True
+        if profile_capture_enabled():
+            capture = get_profile_capture_session()
+            if capture is not None:
+                bel = capture.pack.get("block_eligibility")
+                if isinstance(bel, dict) and isinstance(bel.get("identity"), dict):
+                    bel["identity"]["may_generate"] = False
+                    bel["identity"]["reason"] = (
+                        "birth_date + sun_sign/baseline/life_path required for identity"
+                    )
+                capture.mark_step_ran("identity", ran=False)
+        return None, meta
+
+    if profile_capture_enabled():
+        capture = get_profile_capture_session()
+        if capture is not None:
+            bel = capture.pack.get("block_eligibility")
+            if isinstance(bel, dict) and isinstance(bel.get("identity"), dict):
+                bel["identity"]["may_generate"] = True
+                bel["identity"]["reason"] = "birth_date + usable astro/baseline/numerology"
+
     r1, m1 = _call_with_retry(
         prompt_id="profile.identity.v1",
         locale=locale,
@@ -351,6 +385,10 @@ def run_profile_disclosure_funnel_v0(
         ok_fn=_identity_ok,
     )
     meta["steps"].append(m1)
+    if profile_capture_enabled():
+        capture = get_profile_capture_session()
+        if capture is not None:
+            capture.mark_step_ran("identity", ran=bool(r1))
     if not r1:
         meta["reason"] = "identity_failed"
         return None, meta

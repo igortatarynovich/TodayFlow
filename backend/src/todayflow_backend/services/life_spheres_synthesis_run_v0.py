@@ -31,6 +31,7 @@ from todayflow_backend.services.life_spheres_projector_v0 import (
 )
 from todayflow_backend.services.life_spheres_synthesis_validate_v0 import (
     SPHERE_FIELDS,
+    jaccard,
     validate_sphere_synthesis_v0,
 )
 from todayflow_backend.services.llm_quality_policy_v1 import funnel_step_max_tokens
@@ -223,6 +224,22 @@ def synthesize_life_spheres_v0(
             meta["spheres_omitted"].append({"id": sid, "reason": "synthesis_validation_failed"})
             meta["per_sphere"][sid] = per
             # Explicit: do NOT call project_life_spheres_v0 for user-facing fill.
+
+    # Cross-sphere meaning collapse (love/money/decisions how must stay distinct).
+    ids = list(life_spheres.keys())
+    cross: list[dict[str, Any]] = []
+    for i, a in enumerate(ids):
+        for b in ids[i + 1 :]:
+            ja = jaccard(life_spheres[a].get("how", ""), life_spheres[b].get("how", ""))
+            cross.append({"a": a, "b": b, "how_jaccard": round(ja, 3)})
+            if ja >= 0.55:
+                meta.setdefault("defects", []).append(
+                    {
+                        "class": "VALIDATION",
+                        "note": f"cross_sphere_how_collapse {a}≈{b} jaccard={ja:.2f}",
+                    }
+                )
+    meta["cross_sphere_how"] = cross
 
     meta["ms"] = int((perf_counter() - t0) * 1000)
     meta["ok"] = bool(life_spheres)

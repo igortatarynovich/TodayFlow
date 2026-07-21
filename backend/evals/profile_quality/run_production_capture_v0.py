@@ -57,6 +57,13 @@ CASE_ALIASES = {
     "case-b": "pq-007",
     "birth-only": "pq-001",
     "longitudinal": "pq-007",
+    # life_spheres Freeze captures (block passport)
+    "spheres-A": "spheres-freeze-A",
+    "spheres-B": "spheres-freeze-B",
+    "spheres-C": "spheres-freeze-C",
+    "SA": "spheres-freeze-A",
+    "SB": "spheres-freeze-B",
+    "SC": "spheres-freeze-C",
 }
 
 DEFAULT_CASES = ("pq-001", "pq-007")
@@ -78,6 +85,11 @@ def _scenario_to_profile_input(sc: dict[str, Any]) -> tuple[dict[str, Any], dict
     person.setdefault("locale", sc.get("locale") or "ru")
     if sc.get("birth_date"):
         person.setdefault("birth_date", sc["birth_date"])
+    if sc.get("birth_time") is not None:
+        person.setdefault("birth_time", sc.get("birth_time"))
+    if "time_unknown" in sc or sc.get("birth_time") in (None, ""):
+        person.setdefault("time_unknown", True if sc.get("birth_time") in (None, "") else bool(sc.get("time_unknown")))
+    natal = sc.get("natal") if isinstance(sc.get("natal"), dict) else {}
     profile_input = {
         "profile_version": "capture_v0",
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -86,6 +98,7 @@ def _scenario_to_profile_input(sc: dict[str, Any]) -> tuple[dict[str, Any], dict
         "profile_hash": f"capture-{sc['id']}",
         "person": person,
         "astro": sc.get("astro") or {},
+        "natal": natal,
         "numerology": sc.get("numerology") or {},
         "baseline": sc.get("baseline") or {},
         "profiles": {},
@@ -122,6 +135,8 @@ def _assemble_snapshot_like_payload(
 
 
 def _resolve_node_bin() -> str | None:
+    import shutil
+
     candidates = [
         os.environ.get("NODE_BIN"),
         "node",
@@ -129,17 +144,21 @@ def _resolve_node_bin() -> str | None:
         "/usr/bin/node",
     ]
     # Cursor/server node (dev hosts without system node)
-    cursor_nodes = sorted(Path("/root/.cursor-server/bin").glob("linux-*/**/node"))
-    candidates.extend(str(p) for p in cursor_nodes[-3:])
+    cursor_root = Path("/root/.cursor-server/bin")
+    if cursor_root.is_dir():
+        cursor_nodes = sorted(cursor_root.glob("linux-*/**/node"))
+        candidates.extend(str(p) for p in cursor_nodes[-3:])
     for c in candidates:
         if not c:
             continue
-        path = Path(c) if c.startswith("/") else None
-        if path and path.is_file() and os.access(path, os.X_OK):
-            return str(path)
-        # bare name — let subprocess resolve via PATH
-        if not str(c).startswith("/"):
-            return c
+        if str(c).startswith("/"):
+            path = Path(c)
+            if path.is_file() and os.access(path, os.X_OK):
+                return str(path)
+            continue
+        resolved = shutil.which(str(c))
+        if resolved:
+            return resolved
     return None
 
 
@@ -206,6 +225,7 @@ def run_case(
                 "scenario_id": case_id,
                 "person": profile_input.get("person"),
                 "astro": profile_input.get("astro"),
+                "natal": profile_input.get("natal"),
                 "numerology": profile_input.get("numerology"),
                 "baseline": profile_input.get("baseline"),
                 "living": living,
@@ -217,6 +237,7 @@ def run_case(
             },
             calculated_facts={
                 "astro": profile_input.get("astro"),
+                "natal": profile_input.get("natal"),
                 "numerology": profile_input.get("numerology"),
                 "baseline": profile_input.get("baseline"),
             },

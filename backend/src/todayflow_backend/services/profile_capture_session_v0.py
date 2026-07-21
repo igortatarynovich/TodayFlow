@@ -140,7 +140,7 @@ class ProfileCaptureSession:
         self.pack["block_eligibility"] = {
             "identity": {
                 "may_generate": True,
-                "reason": "general portrait allowed from birth/baseline",
+                "reason": "birth_date + sun_sign/baseline/life_path (refined at funnel gate)",
                 "min_source_depth": "birth_data_only",
                 "ran": None,
             },

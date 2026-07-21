@@ -1,16 +1,16 @@
 # Profile E2E — Prompt Passport: `profile.spheres.synthesis.v1`
 
-**Status:** active passport · eval harness green · **wired in production funnel** (`synthesize_life_spheres_v0`)  
+**Status:** subordinate prompt passport · **wired** (`synthesize_life_spheres_v0`)  
 **Date:** 2026-07-21  
-**Block:** `life_spheres` · [PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md)  
+**Block canon (SoT):** [PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md) — **APPROVED**  
 **Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md)  
-**Code:** `prompts/profile_spheres_synthesis_v1.py` · `services/life_spheres_cues_v0.py` · `services/life_spheres_synthesis_validate_v0.py`  
-**Eval:** `evals/profile_quality/run_life_spheres_synthesis_eval_v0.py` · run `life_spheres_synthesis_20260721T151429Z`
+**Code:** `prompts/profile_spheres_synthesis_v1.py` · cues / `life_spheres_synthesis_validate_v0.py`  
+**Eval:** `evals/profile_quality/run_life_spheres_synthesis_eval_v0.py`
 
-> **Pivot:** проблема качества — не «модели нельзя доверять», а **плохо определённая задача**.  
-> Deterministic слой выбирает evidence и `sphere_cues`.  
-> **Пользовательский текст** создаёт synthesis prompt.  
-> Legacy `profile.spheres.v1` (funnel step 4) и projector `v0.2` as final copy — **not** target content authority.
+> **Не отдельный блок.** Этот документ = prompt + field contract для LLM.  
+> Eligibility / Snapshot / UI / Freeze = block passport.  
+> Deterministic: evidence → `sphere_cues`. LLM: user-facing six fields.  
+> Legacy `profile.spheres.v1` и projector phrase tables as published copy — **forbidden**.
 
 ---
 

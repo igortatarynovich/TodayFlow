@@ -146,6 +146,38 @@ def test_economize_skips_profile_funnel(monkeypatch) -> None:
     assert meta["reason"] == "quality_mode_economize"
 
 
+def test_identity_skipped_without_birth_foundations(monkeypatch) -> None:
+    """GENERATION_GATE: identity LLM must not run without birth + usable facts."""
+    monkeypatch.setattr(settings, "llm_quality_mode", "rich")
+    monkeypatch.setattr(funnel, "is_llm_chat_configured", lambda: True)
+    monkeypatch.setattr(funnel, "prefer_multi_step_funnels", lambda: True)
+    calls: list[str] = []
+
+    def fake_call(*_a, **_k):
+        calls.append("called")
+        return None, None
+
+    monkeypatch.setattr(funnel, "_call", fake_call)
+    merged, meta = funnel.run_profile_disclosure_funnel_v0(
+        {"person": {"display_name": "Гость"}, "astro": {}, "living": None},
+        locale="ru",
+    )
+    assert calls == []
+    assert merged is None
+    assert meta["reason"] == "identity_skipped_ineligible"
+    assert meta["steps"][0].get("skipped") is True
+    assert meta["steps"][0].get("skip_reason") == "generation_gate_ineligible"
+
+
+def test_identity_system_uses_profile_voice_not_day_chain() -> None:
+    from todayflow_backend.prompts import profile_disclosure_v1 as prompts
+
+    system = prompts.identity_system("ru")
+    assert "чего ждать" not in system
+    assert "сферы сегодня" not in system
+    assert "не повестка" in system.lower() or "устойчив" in system.lower()
+
+
 def test_patterns_failed_still_synthesizes_spheres(monkeypatch) -> None:
     monkeypatch.setattr(settings, "llm_quality_mode", "rich")
     monkeypatch.setattr(funnel, "is_llm_chat_configured", lambda: True)

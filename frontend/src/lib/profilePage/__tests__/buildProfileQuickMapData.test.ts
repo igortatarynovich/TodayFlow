@@ -178,3 +178,46 @@ describe("profileCopyToBullets", () => {
     ]);
   });
 });
+
+describe("identity contract-only surfaces", () => {
+  it("does not mix taxonomy into strengthens/drains when contract lists exist", () => {
+    const v0 = buildProfileV0ViewModel({
+      core: IGOR_SAGE_7_FIXTURE,
+      displayName: "Igor",
+    });
+    const framework = buildProfileChartFrameworkInput({
+      sunSignDisplay: "Водолей",
+      risingSign: "Дева",
+      mcSign: "Близнецы",
+      lifePath: 7,
+      archetypeLabel: "Sage",
+      chartCards: [],
+    });
+    const base = buildProfileQuickMapViewModel(v0, framework);
+    expect(base.strengthens.length).toBeGreaterThan(0);
+
+    const withContract = buildProfileQuickMapViewModel(v0, framework, null, {
+      status: "ready",
+      identity_core: "Держит смысл через ясный фокус и прямой контакт.",
+      strengths: ["Фокус до конца", "Честный контакт", "Системный шаг"],
+      growth_zones: ["Распыление", "Жёсткий контроль", "Откладывание разговора"],
+    } as never);
+
+    expect(withContract.identitySummary).toBe(
+      "Держит смысл через ясный фокус и прямой контакт.",
+    );
+    expect(withContract.strengthens).toEqual([
+      "Фокус до конца",
+      "Честный контакт",
+      "Системный шаг",
+    ]);
+    expect(withContract.drains).toEqual([
+      "Распыление",
+      "Жёсткий контроль",
+      "Откладывание разговора",
+    ]);
+    for (const item of base.strengthens) {
+      expect(withContract.strengthens).not.toContain(item);
+    }
+  });
+});

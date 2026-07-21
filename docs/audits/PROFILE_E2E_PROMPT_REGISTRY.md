@@ -28,19 +28,21 @@
 |-------|---------|
 | prompt_id | `profile.identity.v1` |
 | version | `1.0.0` (`registry_v1.py`) |
+| **Block passport** | [PROFILE_E2E_BLOCK_PASSPORT_IDENTITY.md](./PROFILE_E2E_BLOCK_PASSPORT_IDENTITY.md) **APPROVED** |
 | Call site | `profile_disclosure_funnel_v0` step identity |
-| Trigger | `publish_portrait=True` + rich quality mode |
+| Trigger | `publish_portrait=True` + rich quality mode **and** `identity_generation_allowed` |
+| Gate | birth_date + (sun_sign \| baseline seed \| life_path); else skip LLM |
 | Input schema | shared: person, astro, numerology, baseline, living, locale, profile_hash |
-| System | `identity_system(locale)` + frame |
+| System | `identity_system(locale)` + **profile_voice** (no Today day-chain) + profile_layers |
 | User | `{ shared, step: "identity" }` |
 | Model params | policy-driven (eval: DeepSeek-V4-Pro, temp ~0.48, max_tokens 3200) |
 | Expected JSON | `profile_funnel_identity_v0`: identity_core, strengths[3], growth_zones[3] |
 | Parser | JSON extract + step validator (≥20 char identity, 3+3) |
 | Retry | 1 on parse/schema fail |
-| Fallback | step fail → funnel fail → forming shell |
-| Forbidden claims | sun-sign passport only; Voice bans |
+| Fallback | gate skip / step fail → forming shell; **no taxonomy as portrait** |
+| Forbidden claims | sun-sign passport; day agenda; longitudinal invent; Voice bans |
 | Snapshot fields | `identity_core`, `strengths`, `growth_zones` |
-| UI projections | Hero quote, Character strengthens/drains (via QuickMap), Evidence |
+| UI projections | Hero quote · Character strengthens/drains — **contract-only** |
 | **Unique knowledge?** | Yes if real synthesis; else sign cliché |
 
 ---
@@ -107,8 +109,9 @@ Passport target: [PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](./PROFILE_E2E_BLOCK_PA
 |-------|---------|
 | prompt_id | `profile.spheres.synthesis.v1` |
 | version | `1.0.0` |
-| **Status** | **Production-wired** via `life_spheres_synthesis_run_v0` in profile funnel |
-| Passport | [PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md](./PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md) |
+| **Status** | **Production-wired** · Freeze **PASS** |
+| Block passport | [PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md) |
+| Prompt passport | [PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md](./PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md) |
 | Trigger | after identity/styles; IFF `spheres_projection_allowed` **and** non-empty `sphere_cues`; **independent of patterns** |
 | Input | identity slice · relevant_style · prepared `sphere_cues` · optional house_cues |
 | Expected | one sphere × how/need/risk/turns_on/turns_off/helps |

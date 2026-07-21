@@ -1,7 +1,7 @@
 {
   "version": "profile_quality_eval_v1",
   "created": "2026-07-21",
-  "scenario_count": 10,
+  "scenario_count": 13,
   "locale_primary": "ru",
   "rubric": {
     "criteria": [
@@ -252,6 +252,80 @@
       "longitudinal_days": 11,
       "user_question": "Как отличить усталость от потери интереса к работе — и что делать на этой неделе?",
       "missing_or_hidden": []
+    },
+    {
+      "id": "spheres-freeze-A",
+      "group": "life_spheres_freeze",
+      "label": "Spheres Freeze A — full allowable natal (sign/planet), unknown time, no living",
+      "tier": "base",
+      "locale": "ru",
+      "birth_date": "1990-08-05",
+      "birth_time": null,
+      "person": {"first_name": "Лера", "gender": "female"},
+      "astro": {"sun_sign": "leo", "element": "fire", "modality": "fixed"},
+      "natal": {
+        "sun_sign": "Leo",
+        "moon_sign": "Cancer",
+        "venus_sign": "Cancer",
+        "mars_sign": "Virgo",
+        "mercury_sign": "Leo",
+        "jupiter_sign": "Cancer",
+        "saturn_sign": "Capricorn",
+        "houses_available": false,
+        "houses": {}
+      },
+      "numerology": {"life_path": 5},
+      "baseline": {"archetype_seed": "caretaker", "element_focus": "fire", "rhythm_style": "warm_pace"},
+      "onboarding": null,
+      "living": null,
+      "checkin_days": 0,
+      "longitudinal_days": 0,
+      "user_question": null,
+      "missing_or_hidden": ["birth_time", "birth_place", "onboarding", "checkins"]
+    },
+    {
+      "id": "spheres-freeze-B",
+      "group": "life_spheres_freeze",
+      "label": "Spheres Freeze B — limited natal (sun only), unknown time, no living",
+      "tier": "base",
+      "locale": "ru",
+      "birth_date": "1991-04-12",
+      "birth_time": null,
+      "person": {"first_name": "Аня", "gender": null},
+      "astro": {"sun_sign": "aries", "element": "fire", "modality": "cardinal"},
+      "natal": {
+        "sun_sign": "aries",
+        "houses_available": false,
+        "houses": {}
+      },
+      "numerology": {"life_path": 1, "expression": 5},
+      "baseline": {"archetype_seed": "initiator", "element_focus": "fire", "rhythm_style": "fast_start"},
+      "onboarding": null,
+      "living": null,
+      "checkin_days": 0,
+      "longitudinal_days": 0,
+      "user_question": null,
+      "missing_or_hidden": ["birth_time", "birth_place", "onboarding", "checkins", "gender", "personal_planets"]
+    },
+    {
+      "id": "spheres-freeze-C",
+      "group": "life_spheres_freeze",
+      "label": "Spheres Freeze C — gate closed (no sun_sign; identity may still run via life_path)",
+      "tier": "base",
+      "locale": "ru",
+      "birth_date": "1993-02-02",
+      "birth_time": null,
+      "person": {"first_name": "Кира", "gender": "female"},
+      "astro": {},
+      "natal": {},
+      "numerology": {"life_path": 4},
+      "baseline": {"archetype_seed": "builder", "element_focus": "earth", "rhythm_style": "steady"},
+      "onboarding": null,
+      "living": null,
+      "checkin_days": 0,
+      "longitudinal_days": 0,
+      "user_question": null,
+      "missing_or_hidden": ["sun_sign", "birth_time", "birth_place", "onboarding", "checkins"]
     }
   ]
 }

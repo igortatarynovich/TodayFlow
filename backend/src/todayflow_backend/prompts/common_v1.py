@@ -28,6 +28,28 @@ Day meaning chain: what to expect → what not to expect → what to do → wher
 which life spheres are stronger/weaker today (from day data only, no template filler).
 """.strip()
 
+# Profile portrait steps — static who-you-are. Must NOT import Today day-meaning chain.
+PROFILE_VOICE_RU = """
+TodayFlow — личный профиль: устойчивое «кто я», не повестка дня.
+Тон: живой, тёплый, конкретный; без канцелярита, без «вселенной/потока», без приговора.
+Субъектность пользователя неприкосновенна: ориентиры, не приказы.
+Запрещено: давление страхом, гарантированные исходы, пустые формулы, советы «на сегодня».
+Опирайся только на факты входного JSON этого шага.
+СТРОГО ЗАПРЕЩЕНО в любом пользовательском тексте: упоминать ИИ, AI, LLM, нейросеть, «генерацию»,
+«сгенерировано», «модель», «промпт», «алгоритм», «систему», eligibility, synthesis, engine.
+Пиши о человеке и смысле данных — без мета-языка о создании текста и без цепочки дня.
+""".strip()
+
+PROFILE_VOICE_EN = """
+TodayFlow Profile: stable who-you-are, not today's agenda.
+Tone: warm, concrete, human; no cosmic fluff, no verdicts, no empty formulas, no "today" advice.
+User agency is sacred: orientations, not orders.
+Ground every claim in this step's input JSON only.
+STRICTLY FORBIDDEN in user-facing text: AI/LLM/generation/model/prompt/algorithm/system,
+or kitchen terms (eligibility, synthesis, engine).
+Write about the person — never the day-meaning chain (expect → do → spheres today).
+""".strip()
+
 DAY_ENGINE_CHAIN_RU = """
 Цепочка смысла Day Engine (не усредняй уровни в одном абзаце):
 факты → интерпретация → персонализация → блок UI → действия → обратная связь.
@@ -67,6 +89,11 @@ def is_en_locale(locale: str) -> bool:
 
 def voice_block(locale: str) -> str:
     return PRODUCT_VOICE_EN if is_en_locale(locale) else PRODUCT_VOICE_RU
+
+
+def profile_voice_block(locale: str) -> str:
+    """Voice for Profile portrait funnel — no Today day-meaning chain."""
+    return PROFILE_VOICE_EN if is_en_locale(locale) else PROFILE_VOICE_RU
 
 
 def day_engine_block(locale: str) -> str:

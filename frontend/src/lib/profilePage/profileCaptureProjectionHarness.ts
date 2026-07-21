@@ -14,11 +14,14 @@ import {
   type ProfileQuickMapViewModel,
 } from "./buildProfileQuickMapData";
 import { buildProfileV2LiveContext } from "./buildProfileV2LiveContext";
+import { buildProfileLifeSpheresFromProfileData } from "./profileLifeSpheres";
 
 export type CaptureVisibleBlocks = {
   identity: string[];
   character: string[];
   direction: string[];
+  /** Contract life_spheres as shown on Profile V2 Direction cards. */
+  life_spheres: string[];
   evidence: string[];
   sources: string[];
 };
@@ -41,6 +44,16 @@ function collectVisibleBlocks(
   core: CoreProfile,
 ): CaptureVisibleBlocks {
   const contract = core.profile_contract_v1;
+  const sphereCards = buildProfileLifeSpheresFromProfileData(null, core);
+  const lifeSphereLines = sphereCards.flatMap((s) => [
+    `${s.id}:${s.title}`,
+    s.how,
+    s.need,
+    s.risk,
+    s.turnsOn,
+    s.turnsOff,
+    s.helps,
+  ]);
   return {
     identity: [
       quick.archetype,
@@ -61,7 +74,9 @@ function collectVisibleBlocks(
         ? contract.recurring_patterns.map(String)
         : []),
       ...(contract?.living_changes ? [String(contract.living_changes)] : []),
+      ...lifeSphereLines,
     ].filter((x): x is string => Boolean(x?.trim())),
+    life_spheres: lifeSphereLines.filter((x): x is string => Boolean(x?.trim())),
     evidence: [live.evidenceTitle, live.evidenceBody, live.evidenceNextStep, live.sourceDepth]
       .filter((x): x is string => Boolean(x && String(x).trim())),
     sources: [
@@ -108,6 +123,36 @@ function findDivergences(
         class: "UI_GATE",
         note: "pattern present in contract but not visible in QuickMap strings",
       });
+    }
+  }
+  const spheres = contract?.life_spheres;
+  if (spheres && typeof spheres === "object") {
+    const uiSpheres = buildProfileLifeSpheresFromProfileData(null, core);
+    const uiBlob = JSON.stringify(uiSpheres);
+    for (const [sid, row] of Object.entries(spheres)) {
+      if (!row || typeof row !== "object") continue;
+      const need = String((row as { need?: string }).need || "").trim();
+      if (!need) continue;
+      const shown = uiSpheres.some((s) => s.id === sid);
+      if (!shown) {
+        out.push({
+          claim: `${sid}.need`,
+          from: `API.life_spheres.${sid}`,
+          to: "Direction.life_spheres",
+          class: "UI_GATE",
+          note: "sphere in contract but omitted from Profile V2 Direction cards",
+        });
+        continue;
+      }
+      if (!uiBlob.includes(need.slice(0, Math.min(40, need.length)))) {
+        out.push({
+          claim: need.slice(0, 120),
+          from: `API.life_spheres.${sid}.need`,
+          to: "Direction.life_spheres",
+          class: "PROJECTION",
+          note: "sphere need missing from UI projection",
+        });
+      }
     }
   }
   return out;

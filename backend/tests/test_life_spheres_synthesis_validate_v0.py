@@ -49,3 +49,14 @@ def test_regulyarnost_does_not_trigger_longitudinal_ban():
         sphere_cues=["легче наращивать ценность регулярными шагами", "стабильность базы"],
     )
     assert v["checks"]["no_longitudinal"] is True
+
+
+def test_day_language_rejected():
+    v = validate_sphere_synthesis_v0(
+        _row(helps="Сделай один спокойный шаг сегодня и запиши результат."),
+        identity_core="Держит смысл через тёплый контакт и ясную заботу о близких.",
+        relevant_style="Близость через тёплые слова и предсказуемый темп без давления.",
+        sphere_cues=["спокойное присутствие", "тепло и мягкий темп", "выполнять обещанное"],
+    )
+    assert v["checks"]["no_day_language"] is False
+    assert any(d.get("class") == "VALIDATION" and "day" in d.get("note", "") for d in v["defects"])

@@ -24,8 +24,18 @@ _SYSTEM_RES = (
     re.compile(r"\bалгоритм\w*\b"),
     re.compile(r"\bsnapshot\b"),
     re.compile(r"\bprojector\b"),
+    re.compile(r"\beligibility\b"),
+    re.compile(r"\bsynthesis\b"),
+    re.compile(r"\bengine\b"),
     re.compile(r"воронк"),
     re.compile(r"недостаточно данных"),
+)
+_DAY_RES = (
+    re.compile(r"\bсегодня\b"),
+    re.compile(r"на сегодня"),
+    re.compile(r"чего ждать"),
+    re.compile(r"сферы сегодня"),
+    re.compile(r"\btoday\b"),
 )
 _LONGITUDINAL_RES = (
     re.compile(r"\bрегулярно\b"),
@@ -110,7 +120,12 @@ def validate_sphere_synthesis_v0(
     system_ok = not any(r.search(blob_all) for r in _SYSTEM_RES)
     checks["voice"] = system_ok
     if not system_ok:
-        defects.append({"class": "VOICE", "note": "system/LLM language in output"})
+        defects.append({"class": "VALIDATION", "note": "system/kitchen language in output"})
+
+    day_ok = not any(r.search(blob_all) for r in _DAY_RES)
+    checks["no_day_language"] = day_ok
+    if not day_ok:
+        defects.append({"class": "VALIDATION", "note": "day agenda language in static sphere copy"})
 
     long_ok = not any(r.search(blob_all) for r in _LONGITUDINAL_RES)
     checks["no_longitudinal"] = long_ok
