@@ -4,6 +4,7 @@
  */
 
 import type { DomainLensV1, TodayContractDomainId, TodayContractV1 } from "@/lib/todayContract";
+import { isDomainLensPresent } from "@/lib/todayContract";
 
 export type TodayNarrativeManifestation = {
   domainId: TodayContractDomainId;
@@ -145,8 +146,9 @@ function formatManifestationLine(domainId: TodayContractDomainId, body: string, 
 }
 
 function pickCaution(contract: TodayContractV1): string | undefined {
-  const risks = DOMAIN_ORDER.map((id) => stripTodayLead(contract.domains[id].risk)).filter(Boolean);
-  const manifestations = DOMAIN_ORDER.map((id) => pickManifestationBody(contract.domains[id], id));
+  const presentIds = DOMAIN_ORDER.filter((id) => isDomainLensPresent(contract.domains[id]));
+  const risks = presentIds.map((id) => stripTodayLead(contract.domains[id].risk)).filter(Boolean);
+  const manifestations = presentIds.map((id) => pickManifestationBody(contract.domains[id], id));
   for (const risk of risks) {
     const norm = normSpace(risk).toLowerCase();
     const duplicated = manifestations.some((m) => normSpace(m).toLowerCase().includes(norm.slice(0, 24)));
@@ -162,6 +164,7 @@ export function buildTodayNarrativeV1(contract: TodayContractV1): TodayNarrative
   const manifestations: TodayNarrativeManifestation[] = [];
 
   DOMAIN_ORDER.forEach((domainId, index) => {
+    if (!isDomainLensPresent(contract.domains[domainId])) return;
     const body = pickManifestationBody(contract.domains[domainId], domainId);
     if (!body) return;
     const line = formatManifestationLine(domainId, body, index);

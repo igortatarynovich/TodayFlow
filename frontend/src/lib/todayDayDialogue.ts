@@ -96,23 +96,22 @@ export const TODAY_FOCUS_TOPICS: TodayFocusTopic[] = [
   { id: "other", label: "Другое" },
 ];
 
-export const TODAY_PROMISE_SUGGESTIONS: TodayPromiseSuggestion[] = [
-  { id: "one_talk", text: "Сегодня я завершу один разговор." },
-  { id: "no_rush", text: "Сегодня я перестану торопиться." },
-  { id: "no_anxious_decisions", text: "Сегодня я не буду принимать решений в тревоге." },
-  { id: "hour_self", text: "Сегодня я выделю час себе." },
-  { id: "one_task", text: "Сегодня я завершу одно начатое дело." },
-];
+/** Legacy static chips — do not surface in production UI (empty affirmation formulas). */
+export const TODAY_PROMISE_SUGGESTIONS: TodayPromiseSuggestion[] = [];
 
-function asTodayPromiseSentence(raw: string): string {
+function asSoftIntention(raw: string): string {
   const t = raw.replace(/\s+/g, " ").trim();
   if (!t) return "";
+  // Keep observational; avoid forcing «Сегодня я…» affirmation template.
   if (/^сегодня/i.test(t)) return t.endsWith(".") ? t : `${t}.`;
-  const lower = t.charAt(0).toLowerCase() + t.slice(1);
-  return `Сегодня я ${lower}${lower.endsWith(".") ? "" : "."}`;
+  const sentence = t.charAt(0).toUpperCase() + t.slice(1);
+  return sentence.endsWith(".") ? sentence : `${sentence}.`;
 }
 
-/** Up to 3 human promise chips — static first, then focus/contract if distinct. */
+/**
+ * Intentions only from the day's computed action — never a canned affirmation list.
+ * Empty when there is nothing real to offer (user can write their own).
+ */
 export function buildTodayPromiseSuggestions(input: {
   primaryAction?: string | null;
   focusTopicId?: string | null;
@@ -130,23 +129,10 @@ export function buildTodayPromiseSuggestions(input: {
     out.push({ id, text: normalized.length <= 140 ? normalized : `${normalized.slice(0, 137)}…` });
   };
 
-  for (const fallback of TODAY_PROMISE_SUGGESTIONS) {
-    if (out.length >= 3) break;
-    push(fallback.id, fallback.text);
-  }
-
-  const focus = focusTopicLabel(input.focusTopicId ?? null);
-  if (focus && out.length < 3) {
-    push("focus_lens", `Сегодня в фокусе «${focus.toLowerCase()}» — один честный шаг.`);
-  }
-
   const primary = input.primaryAction?.trim();
-  if (primary && out.length < 3) push("contract_primary", asTodayPromiseSentence(primary));
+  if (primary) push("contract_primary", asSoftIntention(primary));
 
-  const development = input.developmentPoint?.trim();
-  if (development && out.length < 3) push("development_point", asTodayPromiseSentence(development));
-
-  return out.slice(0, 3);
+  return out.slice(0, 1);
 }
 
 export const TODAY_EVENING_HIGHLIGHTS: TodayEveningHighlight[] = [

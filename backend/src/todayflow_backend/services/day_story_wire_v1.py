@@ -31,6 +31,9 @@ from todayflow_backend.services.day_story_v1 import (
     day_story_to_today_contract_v1,
     validate_day_story_v1,
 )
+from todayflow_backend.services.day_story_interpretation_v1 import (
+    build_day_story_interpretation_v1,
+)
 from todayflow_backend.services.history_layer_v0 import build_history_layer_v0
 from todayflow_backend.services.insight_depth import get_insight_depth_tier
 from todayflow_backend.services.intent_slice_v0 import build_intent_layer_v0
@@ -116,8 +119,16 @@ def _load_cached_day_story(
                     continue
             elif ritual_fp and str(ip.get("ritual_context_fingerprint") or "") != ritual_fp:
                 continue
+        # Literary editor bump must not keep serving checklist-era prose.
+        if str(ip.get("prompt_version") or "") != DAY_STORY_PROMPT_VER:
+            continue
         nr = row.normalized_response if isinstance(row.normalized_response, dict) else None
         if nr and nr.get("contract_version") == DAY_STORY_V1_CONTRACT:
+            from todayflow_backend.services.day_story_phrase_gate_v1 import day_story_passes_phrase_gate
+
+            ok_phrase, _hits = day_story_passes_phrase_gate(nr)
+            if not ok_phrase:
+                continue
             return nr, int(row.id), stored_fp
     return None
 
@@ -258,6 +269,16 @@ def _build_day_story_record(
             ritual_has_card=bool(safe_ritual.get("tarot_main_id") or safe_ritual.get("tarot_name_ru")),
             ritual_has_number=safe_ritual.get("numerology_value") is not None,
         )
+        interpretation = build_day_story_interpretation_v1(
+            day_engine_brief=day_engine_brief,
+            ritual_context=safe_ritual,
+            intent_slice=intent_slice,
+            rhythm_context=rhythm_context,
+            color=color,
+            stone=stone,
+            fingerprint=expected_fingerprint,
+            locale=locale_value,
+        )
         llm_input = build_day_story_llm_input(
             day_engine_brief=story_brief,
             ritual_context=safe_ritual,
@@ -268,6 +289,7 @@ def _build_day_story_record(
             color=color,
             stone=stone,
             locale=locale_value,
+            interpretation=interpretation,
         )
         llm_input["insight_depth_tier"] = insight_tier
         llm_input["daily_foundation"] = foundation
@@ -285,7 +307,9 @@ def _build_day_story_record(
         # P0: GET /today/contract must not block on Nebius. Prefer deterministic story;
         # LLM remaining available via force_rebuild / refresh paths later.
         if force_rebuild and is_llm_chat_configured():
-            story = call_day_story_llm_v1(llm_input, locale=locale_value)
+            story = call_day_story_llm_v1(
+                llm_input, locale=locale_value, interpretation=interpretation
+            )
             used_fallback = story is None
         else:
             story = None
@@ -296,6 +320,10 @@ def _build_day_story_record(
                 color=color,
                 stone=stone,
                 locale=locale_value,
+                interpretation=interpretation,
+                fingerprint=expected_fingerprint,
+                ritual_context=safe_ritual,
+                intent_slice=intent_slice,
             )
 
         story_errors = validate_day_story_v1(story)
@@ -306,6 +334,10 @@ def _build_day_story_record(
                 color=color,
                 stone=stone,
                 locale=locale_value,
+                interpretation=interpretation,
+                fingerprint=expected_fingerprint,
+                ritual_context=safe_ritual,
+                intent_slice=intent_slice,
             )
             used_fallback = True
 

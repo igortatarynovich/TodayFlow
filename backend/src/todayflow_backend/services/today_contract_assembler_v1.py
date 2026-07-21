@@ -578,7 +578,10 @@ def validate_today_contract_v1(contract: dict[str, Any]) -> list[str]:
         if not isinstance(lens, dict):
             errors.append(f"domains.{domain_id} missing")
             continue
-        extra = set(lens.keys()) - DOMAIN_LENS_SLOTS
+        if str(lens.get("evidence_status") or "") == "absent":
+            # PR-3: absent domain is honest empty — no invented copy required.
+            continue
+        extra = set(lens.keys()) - DOMAIN_LENS_SLOTS - {"evidence_status"}
         if extra:
             errors.append(f"domains.{domain_id} has extra keys: {sorted(extra)}")
         for slot in DOMAIN_LENS_SLOTS:

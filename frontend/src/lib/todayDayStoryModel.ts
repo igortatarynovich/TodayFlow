@@ -1,6 +1,7 @@
 import type { MorningRitualData } from "@/components/today/todayPageUtils";
 import { getTodayTarotCardRu } from "@/components/today/todayTarotCardsRu";
 import type { TodayContractV1 } from "@/lib/todayContract";
+import { isDomainLensPresent } from "@/lib/todayContract";
 import type { DayEngagementState } from "@/lib/todayDayEngagement";
 import { isLowEnergyMood } from "@/lib/todayDayDialogue";
 import {
@@ -95,11 +96,15 @@ function buildGlanceCards(
   const supportedComment =
     peak?.body != null
       ? firstSentence(peak.body)
-      : firstSentence(contract.domains.relationships.opportunity ?? "");
+      : isDomainLensPresent(contract.domains.relationships)
+        ? firstSentence(contract.domains.relationships.opportunity ?? "")
+        : "";
   const helpfulComment =
     caution?.body != null
       ? firstSentence(caution.body)
-      : firstSentence(contract.domains.money_work.risk ?? "");
+      : isDomainLensPresent(contract.domains.money_work)
+        ? firstSentence(contract.domains.money_work.risk ?? "")
+        : "";
 
   return {
     supported: supportedComment

@@ -329,6 +329,8 @@ def dedupe_cross_domain_lenses(
             lens = out.get(domain_id)
             if not isinstance(lens, dict):
                 continue
+            if str(lens.get("evidence_status") or "") == "absent":
+                continue
             text = str(lens.get(slot) or "")
             fb = fallbacks_by_domain.get(domain_id, {})
             for prev_domain, prev_text in seen.items():
@@ -350,7 +352,12 @@ def separate_growth_from_period(period: str, growth: str, growth_fallback: str) 
     return g
 
 
-def apply_text_quality_gate_to_contract(contract: dict[str, Any], fallbacks_by_domain: dict[str, dict[str, str]]) -> dict[str, Any]:
+def apply_text_quality_gate_to_contract(
+    contract: dict[str, Any],
+    fallbacks_by_domain: dict[str, dict[str, str]],
+    *,
+    skip_absent_domains: bool = False,
+) -> dict[str, Any]:
     """Normalize all user-facing strings to short Today navigation copy."""
     meta_fb = fallbacks_by_domain.get("_meta", {})
     out = dict(contract)
@@ -382,12 +389,22 @@ def apply_text_quality_gate_to_contract(contract: dict[str, Any], fallbacks_by_d
         for domain_id, lens in domains.items():
             if not isinstance(lens, dict):
                 continue
+            if skip_absent_domains and str(lens.get("evidence_status") or "") == "absent":
+                new_domains[domain_id] = {
+                    "status": "",
+                    "opportunity": "",
+                    "risk": "",
+                    "action": "",
+                    "evidence_status": "absent",
+                }
+                continue
             fb = fallbacks_by_domain.get(domain_id, {})
             normalized = {
                 "status": normalize_domain_status(domain_id, str(lens.get("status") or ""), fb.get("status", "")),
                 "opportunity": normalize_opportunity_risk(str(lens.get("opportunity") or ""), fb.get("opportunity", "")),
                 "risk": normalize_opportunity_risk(str(lens.get("risk") or ""), fb.get("risk", "")),
                 "action": normalize_action(str(lens.get("action") or ""), fb.get("action", "")),
+                "evidence_status": str(lens.get("evidence_status") or "present"),
             }
             new_domains[domain_id] = dedupe_domain_lens_slots(normalized, fallbacks=fb)
         out["domains"] = dedupe_cross_domain_lenses(new_domains, fallbacks_by_domain)
@@ -421,6 +438,8 @@ def validate_today_contract_text_quality_v1(contract: dict[str, Any]) -> list[st
     for domain_id, lens in domains.items():
         if not isinstance(lens, dict):
             continue
+        if str(lens.get("evidence_status") or "") == "absent":
+            continue
         status = str(lens.get("status") or "")
         if is_profile_trait_text(status):
             errors.append(f"domains.{domain_id}.status reads as profile trait")
@@ -441,12 +460,12 @@ def validate_today_contract_text_quality_v1(contract: dict[str, Any]) -> list[st
             if len(str(lens.get(slot) or "")) > MAX_STATUS_CHARS:
                 errors.append(f"domains.{domain_id}.{slot} too long")
 
-    # Cross-domain: same slot should not read as copy-paste
+    # Cross-domain: same slot should not read as copy-paste (skip absent)
     for slot in ("status", "opportunity", "risk", "action"):
         texts: list[tuple[str, str]] = []
         for domain_id in DOMAIN_ORDER:
             lens = domains.get(domain_id)
-            if isinstance(lens, dict):
+            if isinstance(lens, dict) and str(lens.get("evidence_status") or "") != "absent":
                 texts.append((domain_id, str(lens.get(slot) or "")))
         for i, (d1, t1) in enumerate(texts):
             for j, (d2, t2) in enumerate(texts):

@@ -1,6 +1,7 @@
 /** RU user-facing filter — hide raw EN engine / metadata leaks in Today synthesis. */
 
 import type { TodayContractV1 } from "@/lib/todayContract";
+import { isDomainLensPresent } from "@/lib/todayContract";
 import { buildTodayNarrativeV1, splitPeriodNarrative } from "@/lib/todayNarrativeFromContract";
 import {
   dayStoryHeadline,
@@ -51,7 +52,9 @@ function capitalizeFirst(text: string): string {
 
 function pickDomainHeadline(contract: TodayContractV1): string | null {
   for (const id of ["money_work", "relationships", "family"] as const) {
-    const opp = contract.domains[id].opportunity?.trim();
+    const domain = contract.domains[id];
+    if (!isDomainLensPresent(domain)) continue;
+    const opp = domain.opportunity?.trim();
     if (!opp || opp.length < 18 || !isRuUserFacingText(opp)) continue;
     const clean = opp.replace(/^сегодня\s+/i, "").replace(/[.!?]+$/, "").trim();
     if (!clean) continue;

@@ -41,7 +41,7 @@ Goals / promises / ascetics: **user-authored contracts** в tracking API — о�
 
 | generator | endpoint / wire | inputs | calculation (code) | prompt / fn | output schema | trace | violations | remediation |
 |-----------|-----------------|--------|--------------------|-------------|---------------|-------|------------|-------------|
-| **day_story_v1** | `GET /today/contract` · morning ritual wire · `day_story_wire_v1.build_day_story_v1_wire` | day_engine_brief, ritual (card/number), user_core_slim, intent, behavior, rhythm, color/stone | почти нет до LLM; symbols/ritual отдельно | day_story prompt (`DAY_STORY_PROMPT_VER` internal) | theme, direction, story, do/avoid, domains{relationships,money_work,family}, talisman, practice_recommendation, … | generation_id partial; **нет** source_inputs / evidence / confidence / limitations / fingerprint | LLM invents почти весь день; domains всегда заполнены; пустые формулы банятся в prompt без runtime gate | (1) structured interpretation before prose (2) domains only with evidence (3) full trace + phrase validator |
+| **day_story_v1** | `GET /today/contract` · morning ritual wire · `day_story_wire_v1.build_day_story_v1_wire` | day_engine_brief, ritual (card/number), user_core_slim, intent, behavior, rhythm, color/stone | **`day_story_interpretation_v1`** (evidence + derived_claims + domain presence) before prose | day_story prompt (`DAY_STORY_PROMPT_VER` = day-story-v1.2) | theme, direction, story, do/avoid, **sparse domains**, talisman, practice_recommendation, **`trace`** | **trace:** source_inputs, evidence, derived_claims, confidence, limitations, calculation_version, fingerprint, domains_present/absent | mitigated: domains only with evidence; empty-formula **phrase gate**; fallback stamped `used_fallback`; FE `isDomainLensPresent` | Composition Surface polish; optional soft “почему” from meaning claims |
 | **profile_contract_v1** | CoreProfile publish path · `profile_contract_v1` | person, astro signs, numerology, baseline, living | enrich living patterns детерминированно; rich text — LLM | profile contract prompts + `generation_meta` | identity_core, strengths, growth_zones, styles, life_spheres×9, status forming/ready | generation_meta (prompt/model/validation); **нет** evidence per claim / confidence / limitations / fingerprint | claims без связи к natal/numerology atoms; forming не раскрывает gaps | (1) claim→evidence map (2) per-domain confidence (3) honest forming limitations |
 | **compatibility_content_v1** | enrichment job · `compatibility_content_v1/generate_v1.generate_content_v1` | signs, dates, profiles, source_depth, score_hint | static template score / quick_reading; depth resolve | PROMPT_VERSION + publish_gate | Registered/Premium content surfaces | prompt_version, source_depth, publish_gate; **нет** source_inputs evidence map / confidence / fingerprint | LLM prose без claim→profile fact map; limitations только через gate | (1) evidence map (2) confidence by source_depth (3) expose limitations in product surface |
 
@@ -79,7 +79,7 @@ Goals / promises / ascetics: **user-authored contracts** в tracking API — о�
 
 | surface | file | issue | source | violation | remediation | Pri |
 |---------|------|-------|--------|-----------|-------------|-----|
-| Today spheres | `lib/todayDaySphereFocus.ts` | client advice when contract fields empty | local fallback | sphere menu / invented practice | hide cards without contract evidence | P1 |
+| Today spheres | `lib/todayDaySphereFocus.ts` | client advice when contract fields empty | **mitigated:** skip `evidence_status=absent` / empty lens | sphere menu / invented practice | keep gate; no catalog fill | P1 mitigated |
 | Today energy | `app/today/page.tsx` · utils | residual energy paths / decisions | server ?? 0 after PR-1; watch other call sites | placeholder as signal | never drive UI from invented score | P1 |
 | Today strengthen | `lib/todayCompositionModel.ts` / day story model | invented strengthen tools | local | advice without DailyState | only link practices/goals from API ids | P1 |
 | Practices hero | `app/practices/page.tsx` | catalog_fallback still shown (labeled) | catalog | general as day practice | prefer empty + CTA choose; keep label if shown | P1 |
@@ -109,11 +109,11 @@ Copy into PR description:
 
 ## Remediation backlog (execution order)
 
-1. **P0 day_story_v1** — interpretation+evidence before prose; domain partial; full trace; phrase validator.  
+1. **P0 day_story_v1** — **mitigated (2026-07-21):** interpretation+evidence before prose; domain partial; full trace; phrase validator; FE hide absent domains. Remaining: Composition Surface polish. See [PR3_TODAY_PRODUCTION_SURFACE.md](../PR3_TODAY_PRODUCTION_SURFACE.md).  
 2. **P0 profile_contract_v1** — claim evidence map + limitations in forming.  
 3. **P0 compatibility_content_v1** — evidence by source_depth + product-visible limitations.  
 4. **P1 symbol explainers + daily_recommendations** — catalog meaning in → cite out.  
-5. **P1 FE** — remove sphere/strengthen invent; practices empty honesty.  
+5. **P1 FE** — sphere absent-domain hide **done**; remaining: strengthen invent + practices empty honesty.  
 6. **P1 tarot_answer evidence map**.  
 7. **P2** — stamp versions on template/CUM; align reports or keep offline.
 

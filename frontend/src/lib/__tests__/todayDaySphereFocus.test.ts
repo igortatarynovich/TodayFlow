@@ -37,7 +37,8 @@ describe("buildTodaySphereFocus", () => {
     expect(focus.cards.length).toBeLessThanOrEqual(3);
     expect(focus.cards.some((c) => c.role === "peak")).toBe(true);
     expect(focus.cards.some((c) => c.role === "caution")).toBe(true);
-    expect(focus.neutralNote).toMatch(/нейтральн/i);
+    expect(focus.neutralNote).toBe("");
+    expect(focus.cards.some((c) => /опирайся|сегодня сильнее/i.test(c.body))).toBe(false);
   });
 
   it("does not duplicate domain between peak cards", () => {
@@ -45,5 +46,36 @@ describe("buildTodaySphereFocus", () => {
     const peaks = focus.cards.filter((c) => c.role === "peak");
     const ids = peaks.map((c) => c.id);
     expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it("skips domains marked evidence_status absent", () => {
+    const contract: TodayContractV1 = {
+      ...baseContract,
+      domains: {
+        relationships: {
+          ...baseContract.domains.relationships,
+          evidence_status: "absent",
+          status: "",
+          opportunity: "",
+          risk: "",
+          action: "",
+        },
+        money_work: {
+          ...baseContract.domains.money_work,
+          evidence_status: "present",
+        },
+        family: {
+          ...baseContract.domains.family,
+          evidence_status: "absent",
+          status: "",
+          opportunity: "",
+          risk: "",
+          action: "",
+        },
+      },
+    };
+    const focus = buildTodaySphereFocus(contract);
+    expect(focus.cards.every((c) => c.id.includes("money_work"))).toBe(true);
+    expect(focus.cards.some((c) => /relationships|family/.test(c.id))).toBe(false);
   });
 });

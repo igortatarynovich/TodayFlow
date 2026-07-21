@@ -1,31 +1,31 @@
-"""RU fallback templates for today_contract_v1 assembler — short Today navigation copy."""
+"""RU fallback templates for today_contract_v1 — literary observations, not command lists."""
 
 from __future__ import annotations
 
 TODAY_CONTRACT_FALLBACKS_V1_LOCALE = "ru"
 
 # --- Meta: Period = что происходит; Growth = что развивать ---
-PERIOD_FALLBACK = "День лучше подходит для последовательных действий, чем для резких изменений."
-DEVELOPMENT_POINT_FALLBACK = "Тренируй способность не ускоряться только из тревоги — день просит ровный темп."
-PRIMARY_ACTION_FALLBACK = "Выбери один короткий шаг и сделай его до обеда."
+PERIOD_FALLBACK = "День скорее про последовательные шаги, чем про резкие развороты."
+DEVELOPMENT_POINT_FALLBACK = "Тревога любит ускорять — сегодня полезнее замечать, где темп можно оставить ровным."
+PRIMARY_ACTION_FALLBACK = "Если успеешь закрыть одну важную вещь до обеда, остаток дня обычно идёт легче."
 
 # --- Relationships: контакт и честность ---
-RELATIONSHIPS_OPPORTUNITY_FALLBACK = "Прямой разговор сегодня снижает угадывание и напряжение."
-RELATIONSHIPS_RISK_FALLBACK = "Сегодня не строй дистанцию молчанием — лучше одна ясная фраза."
-RELATIONSHIPS_ACTION_FALLBACK = "Скажи прямо одну вещь, которую обычно обходишь в разговоре."
-RELATIONSHIPS_STATUS_FALLBACK = "Сегодня в отношениях важнее честный контакт, чем красивая картинка."
+RELATIONSHIPS_OPPORTUNITY_FALLBACK = "Иногда одно короткое ясное сообщение меняет больше длинного разговора."
+RELATIONSHIPS_RISK_FALLBACK = "Молчаливая дистанция сегодня легко раздувает угадывание — одна честная фраза обычно дешевле."
+RELATIONSHIPS_ACTION_FALLBACK = "Если что-то давно обходится стороной, сегодня уместна одна прямая фраза без драмы."
+RELATIONSHIPS_STATUS_FALLBACK = "В отношениях сегодня важнее честный контакт, чем красивая картинка."
 
 # --- Money / work: решения и вектор ---
-MONEY_WORK_OPPORTUNITY_FALLBACK = "Один приоритет до обеда сегодня даёт ясность в деньгах и задачах."
-MONEY_WORK_RISK_FALLBACK = "Сегодня не подписывайся на новые обязательства из импульса."
-MONEY_WORK_ACTION_FALLBACK = "Выбери одну задачу и доведи её до видимого результата до вечера."
-MONEY_WORK_STATUS_FALLBACK = "Сегодня в работе и деньгах важен один вектор и ясное решение."
+MONEY_WORK_OPPORTUNITY_FALLBACK = "Один ясный приоритет до обеда даёт больше ясности, чем попытка разгрести всё сразу."
+MONEY_WORK_RISK_FALLBACK = "Новые обещания из импульса сегодня легко превращаются в шум."
+MONEY_WORK_ACTION_FALLBACK = "Одна задача до видимого результата к вечеру обычно стоит дороже десяти начатых."
+MONEY_WORK_STATUS_FALLBACK = "В работе и деньгах сегодня важен один вектор, а не десять параллельных входов."
 
 # --- Family: атмосфера дома (never profile personality) ---
-FAMILY_OPPORTUNITY_FALLBACK = "Сегодня в семье помогает тёплое присутствие, а не скорость решений."
-FAMILY_RISK_FALLBACK = "Сегодня не тащи контроль на близких, если тема не горит."
-FAMILY_ACTION_FALLBACK = "Сделай один бытовой шаг, который сделает дом спокойнее."
-FAMILY_STATUS_FALLBACK = "Сегодня дома полезнее создавать спокойный ритм, чем пытаться решить всё сразу."
+FAMILY_OPPORTUNITY_FALLBACK = "Дома сегодня больше помогает тёплое присутствие, чем скорость решений."
+FAMILY_RISK_FALLBACK = "Контроль над близкими, если тема не горит, сегодня скорее добавляет шума."
+FAMILY_ACTION_FALLBACK = "Один спокойный бытовой жест часто делает дом заметно легче."
+FAMILY_STATUS_FALLBACK = "Дома полезнее спокойный ритм, чем попытка решить всё сразу."
 
 DOMAIN_FALLBACKS_V1: dict[str, dict[str, str]] = {
     "relationships": {

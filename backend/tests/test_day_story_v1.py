@@ -1,4 +1,4 @@
-"""Tests for day_story_v1 — single canonical Today narrative artifact."""
+"""Tests for day_story_v1 — single canonical Today narrative artifact + PR-3 trace."""
 
 from __future__ import annotations
 
@@ -6,6 +6,13 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
+from todayflow_backend.services.day_story_interpretation_v1 import (
+    build_day_story_interpretation_v1,
+)
+from todayflow_backend.services.day_story_phrase_gate_v1 import (
+    day_story_passes_phrase_gate,
+    find_empty_formula_hits,
+)
 from todayflow_backend.services.day_story_v1 import (
     DAY_STORY_V1_CONTRACT,
     build_day_story_fallback_v1,
@@ -16,144 +23,91 @@ from todayflow_backend.services.day_story_v1 import (
 
 
 def _sample_story() -> dict:
-    return {
-        "contract_version": DAY_STORY_V1_CONTRACT,
-        "theme": "Один ясный шаг вместо распыления",
-        "direction": "Сегодня лучше держать один вектор и не брать лишние обещания.",
-        "story": (
-            "День просит последовательности: стержень дня поддерживает один приоритет. "
-            "Карта и число подсказывают не форсировать темп. "
-            "Если замечаешь импульс взять вторую задачу — это сигнал замедлиться."
-        ),
-        "do": [
-            "Выбери одну задачу и доведи до видимого результата",
-            "Скажи прямо одну вещь в разговоре",
-            "Сделай короткую паузу после главного шага",
-        ],
-        "avoid": [
-            "Не подписывайся на новые обязательства из импульса",
-            "Не распыляйся на второй приоритет",
-            "Не форсируй темп из тревоги",
-        ],
-        "advantage": "Один приоритет до обеда даёт ясность.",
-        "abstain": "Сегодня не стоит брать второй фронт без времени.",
-        "today_move": "Выбери одну задачу и доведи её до видимого результата до вечера.",
-        "global_period": "День последовательных действий, не резких поворотов.",
-        "development_point": "Замечать, когда тревога подталкивает ускориться без причины.",
-        "primary_action": "Выбери одну задачу и доведи её до видимого результата до вечера.",
-        "domains": {
-            "relationships": {
-                "status": "Сегодня в отношениях важнее честный контакт.",
-                "opportunity": "Прямой разговор снижает угадывание.",
-                "risk": "Молчание может нарастить дистанцию.",
-                "action": "Скажи прямо одну вещь, которую обычно обходишь.",
-            },
-            "money_work": {
-                "status": "Сегодня в работе важен один вектор.",
-                "opportunity": "Один приоритет до обеда даёт ясность.",
-                "risk": "Импульсные решения могут размыть фокус.",
-                "action": "Доведи одну задачу до видимого результата.",
-            },
-            "family": {
-                "status": "Сегодня дома полезнее спокойный ритм.",
-                "opportunity": "Тёплое присутствие важнее скорости.",
-                "risk": "Контроль может нагреть атмосферу.",
-                "action": "Сделай один бытовой шаг для спокойствия дома.",
-            },
+    story = build_day_story_fallback_v1(
+        day_engine_brief={
+            "anchor_summary": "Сегодня — один ясный шаг вместо распыления.",
+            "do_hint": "Выбери одну задачу и доведи до видимого результата",
+            "avoid_hint": "Не подписывайся на новые обязательства из импульса",
+            "tempo_hint": "Держи ровный темп.",
+            "thread_head_topic": "career",
         },
-        "talisman": {"color": "лазурь", "stone": "сапфир", "note": "Носи как якорь спокойного темпа."},
-        "practice_recommendation": {"kind": "none", "text": "", "reason": ""},
-        "evening_closure": "Коротко отметь, что получилось — без самооценки.",
-        "symbolic_note": "",
-    }
+        color="лазурь",
+        stone="сапфир",
+        ritual_context={"head_topic": "career", "mood": "calm"},
+        intent_slice={"what_matters_line": "закрыть один рабочий приоритет"},
+        fingerprint="fp-test",
+    )
+    return story
 
 
-def test_validate_day_story_v1_green_on_sample():
+def test_interpretation_marks_domain_from_head_topic():
+    interp = build_day_story_interpretation_v1(
+        day_engine_brief={"anchor_summary": "Ось дня.", "do_hint": "Шаг.", "avoid_hint": "Не спеши."},
+        ritual_context={"head_topic": "love"},
+    )
+    assert "relationships" in interp["domains_present"]
+    assert "family" in interp["domains_absent"]
+    assert interp["evidence"]
+    assert interp["derived_claims"]
+    assert interp["confidence"] is not None
+    assert interp["limitations"]
+
+
+def test_interpretation_no_domains_without_topic():
+    interp = build_day_story_interpretation_v1(
+        day_engine_brief={"anchor_summary": "Ось дня.", "do_hint": "Шаг.", "avoid_hint": "Не спеши."},
+        ritual_context={},
+    )
+    assert interp["domains_present"] == []
+    assert set(interp["domains_absent"]) == {"relationships", "money_work", "family"}
+
+
+def test_validate_day_story_v1_green_on_fallback():
     assert validate_day_story_v1(_sample_story()) == []
 
 
-def test_build_day_story_fallback_v1_has_required_fields():
-    brief = {
-        "anchor_summary": "Сегодня — один приоритет.",
-        "do_hint": "Сделай один шаг.",
-        "avoid_hint": "Не распыляйся.",
-        "tempo_hint": "Держи ровный темп.",
-    }
-    story = build_day_story_fallback_v1(day_engine_brief=brief, color="синий", stone="сапфир")
+def test_build_day_story_fallback_has_trace_and_partial_domains():
+    story = _sample_story()
     assert story["contract_version"] == DAY_STORY_V1_CONTRACT
-    assert validate_day_story_v1(story) == []
+    assert "trace" in story
+    assert story["trace"]["evidence"]
+    assert story["trace"]["derived_claims"]
+    assert story["trace"]["calculation_version"]
+    assert "money_work" in story["domains"]
+    assert "family" not in story["domains"] or story["domains"].get("family", {}).get("evidence_status") != "present"
 
 
-def test_day_story_to_today_contract_v1_validates():
+def test_day_story_to_today_contract_marks_absent_domains():
     contract = day_story_to_today_contract_v1(_sample_story(), generation_id="42", progress={})
     assert contract["contract_version"] == "today_contract_v1"
     assert contract["generation_id"] == "42"
-    assert contract["global_context"]["period"]
-    assert contract["domains"]["family"]["action"]
+    assert contract["domains"]["money_work"].get("evidence_status") == "present"
+    assert contract["domains"]["family"].get("evidence_status") == "absent"
+    assert contract["domains"]["family"]["status"] == ""
+    assert contract["day_story"]["trace"]["confidence"] is not None
+    assert "story_limitations" in contract["progress"]
 
 
 def test_day_story_to_legacy_narrative_derives_surfaces():
-    narrative = day_story_to_legacy_narrative(_sample_story(), generation_id="42")
-    assert narrative["guide"]["payload"]["headline"] == _sample_story()["theme"]
-    assert narrative["spheres"]["payload"]["page_intro"] == _sample_story()["story"]
-    assert narrative["day_layer"]["payload"]["nudge_message"] == _sample_story()["today_move"]
+    story = _sample_story()
+    narrative = day_story_to_legacy_narrative(story, generation_id="42")
+    assert narrative["guide"]["payload"]["headline"] == story["theme"]
+    assert narrative["spheres"]["payload"]["page_intro"] == story["story"]
+    assert narrative["day_layer"]["payload"]["nudge_message"] == story["today_move"]
     assert narrative["evening"]["payload"]["panel_intro"]
 
 
-def test_build_day_story_v1_wire_uses_fallback_without_llm():
-    from datetime import date
+def test_phrase_gate_rejects_empty_formulas():
+    bad = _sample_story()
+    bad["story"] = "Сегодня лучше довериться потоку и выбрать главное."
+    ok, hits = day_story_passes_phrase_gate(bad)
+    assert not ok
+    assert hits
+    assert find_empty_formula_hits(bad)
 
-    from todayflow_backend.services.day_story_wire_v1 import build_day_story_v1_wire
 
-    user = MagicMock()
-    user.id = 1
-    db = MagicMock()
-    db.query.return_value.filter.return_value.first.return_value = None
-    db.query.return_value.filter.return_value.order_by.return_value.limit.return_value = []
-
-    morning = MagicMock()
-    morning.tarot_card = {"id": 1, "name": "Маг"}
-    morning.numerology_number = {"value": 3}
-    morning.daily_recommendations = {}
-
-    with patch(
-        "todayflow_backend.services.day_story_wire_v1._load_foundation_from_logs",
-        return_value={"spine": {"axis": "Один вектор"}},
-    ), patch(
-        "todayflow_backend.services.day_story_wire_v1._latest_snapshot_id",
-        return_value=None,
-    ), patch(
-        "todayflow_backend.services.day_story_wire_v1.build_meaning_surface_patterns_v0",
-        return_value={"total_events": 0},
-    ), patch(
-        "todayflow_backend.services.day_story_wire_v1.get_insight_depth_tier",
-        return_value="free",
-    ), patch(
-        "todayflow_backend.services.day_story_wire_v1.call_day_story_llm_v1",
-        return_value=None,
-    ), patch(
-        "todayflow_backend.services.day_story_wire_v1.get_learning_service"
-    ) as mock_learning:
-        svc = MagicMock()
-        mock_learning.return_value = svc
-        pv = MagicMock()
-        pv.id = 7
-        svc.get_or_create_prompt_version.return_value = pv
-        gen = MagicMock()
-        gen.id = 99
-        svc.log_generation.return_value = gen
-
-        contract, narrative, gen_id = build_day_story_v1_wire(
-            db,
-            user=user,
-            target_date=date(2026, 6, 22),
-            locale="ru",
-            morning=morning,
-            fusion_dump={"scores": {}, "rhythm_context": {}},
-            core_profile={},
-        )
-
-    assert gen_id == 99
-    assert contract["contract_version"] == "today_contract_v1"
-    assert contract["primary_action"]
-    assert narrative["guide"]["payload"]["day_story_source"] == DAY_STORY_V1_CONTRACT
+def test_validate_rejects_empty_formula_story():
+    bad = _sample_story()
+    bad["theme"] = "Довериться потоку"
+    errors = validate_day_story_v1(bad)
+    assert any("empty_formula" in e for e in errors)

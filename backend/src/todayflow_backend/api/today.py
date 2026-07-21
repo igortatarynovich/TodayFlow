@@ -680,10 +680,11 @@ class TodayNarrativeResponse(BaseModel):
 
 
 class DomainLensContractV1(BaseModel):
-    status: str
-    opportunity: str
-    risk: str
-    action: str
+    status: str = ""
+    opportunity: str = ""
+    risk: str = ""
+    action: str = ""
+    evidence_status: str = "present"
 
 
 class TodayContractDomainsV1(BaseModel):
@@ -713,6 +714,7 @@ class TodayContractDayStoryV1(BaseModel):
     talisman: dict[str, Any] = Field(default_factory=dict)
     practice_recommendation: dict[str, Any] = Field(default_factory=dict)
     symbolic_note: str = ""
+    trace: dict[str, Any] = Field(default_factory=dict)
 
 
 class TodayContractV1Response(BaseModel):

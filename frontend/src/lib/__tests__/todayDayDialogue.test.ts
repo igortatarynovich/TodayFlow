@@ -1,23 +1,23 @@
 import { buildTodayPromiseSuggestions } from "@/lib/todayDayDialogue";
 
 describe("buildTodayPromiseSuggestions", () => {
-  it("prefers human static chips first, then focus when room", () => {
+  it("offers at most one intention from primary action — never canned affirmations", () => {
     const suggestions = buildTodayPromiseSuggestions({
-      primaryAction: "Закрыть одну задачу до обеда",
+      primaryAction: "Если успеешь, закрой одну задачу до обеда",
       focusTopicId: "work",
       developmentPoint: "Замедлиться и услышать себя",
     });
 
-    expect(suggestions).toHaveLength(3);
-    expect(suggestions[0]?.id).toBe("one_talk");
-    expect(suggestions[0]?.text).toMatch(/завершу один разговор/i);
-    expect(suggestions[1]?.id).toBe("no_rush");
-    expect(suggestions[2]?.id).toBe("no_anxious_decisions");
+    expect(suggestions).toHaveLength(1);
+    expect(suggestions[0]?.id).toBe("contract_primary");
+    expect(suggestions[0]?.text).toMatch(/закрой одну задачу|успеешь/i);
+    expect(suggestions.some((s) => /завершу один разговор|перестану торопиться/i.test(s.text))).toBe(
+      false,
+    );
   });
 
-  it("falls back to static chips when contract fields are empty", () => {
+  it("returns empty when there is no computed action", () => {
     const suggestions = buildTodayPromiseSuggestions({});
-    expect(suggestions.length).toBeGreaterThan(0);
-    expect(suggestions.length).toBeLessThanOrEqual(3);
+    expect(suggestions).toEqual([]);
   });
 });

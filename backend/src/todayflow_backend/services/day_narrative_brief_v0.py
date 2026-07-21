@@ -101,9 +101,9 @@ def build_day_narrative_brief_v0(
     if card:
         parts.append(
             _clip(
-                f"Карта дня — «{card}»: символ, который ты выбрала в ритуале; держи его в голове при шагах дня."
+                f"Карта дня — «{card}»: символ из ритуала, который мягко окрашивает сегодняшние шаги."
                 if not en
-                else f"Day card — «{card}»: the symbol you picked in the ritual; keep it in mind for your steps.",
+                else f"Day card — «{card}»: the ritual symbol that quietly colors today’s steps.",
                 320,
             )
         )
@@ -116,27 +116,27 @@ def build_day_narrative_brief_v0(
     if num:
         parts.append(
             _clip(
-                f"Число дня — {num}: задаёт ритм «коротких циклов»; не распыляйся на десять параллельных входов."
+                f"Число дня — {num}: ритм коротких циклов; десять параллельных входов сегодня скорее шумят, чем помогают."
                 if not en
-                else f"Day number — {num}: short cycles; avoid ten parallel pushes.",
+                else f"Day number — {num}: short cycles; ten parallel pushes usually add noise.",
                 260,
             )
         )
     if mood:
         parts.append(
             _clip(
-                f"Настроение в чек-ине: «{mood}» — тон дня лучше подстроить под это, без самообмана."
+                f"Настроение в чек-ине: «{mood}» — тон дня честнее держать рядом с этим, без самообмана."
                 if not en
-                else f"Mood from check-in: «{mood}» — keep the day’s tone aligned, without pretending.",
+                else f"Mood from check-in: «{mood}» — the day’s tone is clearer when it stays honest.",
                 220,
             )
         )
     if head_topic:
         parts.append(
             _clip(
-                f"Тема «в голове»: {head_topic} — учитывай при выборе приоритетного шага."
+                f"Тема «в голове»: {head_topic} — она уже намекает, куда уйдёт главный вес дня."
                 if not en
-                else f"Head topic: {head_topic} — weigh it when you pick your main step.",
+                else f"Head topic: {head_topic} — it already hints where the day’s weight will land.",
                 200,
             )
         )
@@ -145,23 +145,49 @@ def build_day_narrative_brief_v0(
 
     if not parts:
         parts.append(
-            "Сегодня опирайся на ось дня из гороскопа и на один завершённый шаг — без лишнего героизма."
+            "День проще держать вокруг одной ясной оси и одного завершённого шага — без лишнего героизма."
             if not en
-            else "Lean on the day’s spine from the forecast and one finished step — no extra heroics."
+            else "The day is easier around one clear spine and one finished step — no extra heroics."
         )
 
     anchor = " ".join(parts)
     anchor = _clip(re.sub(r"\s+", " ", anchor), 520)
 
-    do_hint = _clip(first_move or axis or ("One clear step today." if en else "Один ясный шаг сегодня."), 280)
-    avoid_hint = _clip(dne or main_risk or ("Do not add new promises without time." if en else "Не брать новые обещания без времени."), 280)
+    do_hint = _clip(
+        first_move
+        or axis
+        or ("One clear step today usually beats a long list." if en else "Один ясный шаг сегодня обычно стоит дороже длинного списка."),
+        280,
+    )
+    avoid_hint = _clip(
+        dne
+        or main_risk
+        or (
+            "New promises without time tend to turn into noise."
+            if en
+            else "Новые обещания без времени сегодня легко превращаются в шум."
+        ),
+        280,
+    )
 
     if 40 <= en_score <= 65:
-        tempo = "Energy around mid — steady pace, no sharp pivots." if en else "Ресурс около среднего — темп спокойный, без резких разворотов."
+        tempo = (
+            "Energy around mid — a steady pace fits better than sharp pivots."
+            if en
+            else "Ресурс около среднего — спокойный темп подходит лучше резких разворотов."
+        )
     elif en_score < 40:
-        tempo = "Energy is below mid — shorten the must-do list to one main item." if en else "Ресурс ниже середины — сократи список «надо» и оставь одно главное."
+        tempo = (
+            "Energy is below mid — a shorter must-do list leaves more room to breathe."
+            if en
+            else "Ресурс ниже середины — короткий список «надо» оставляет больше воздуха."
+        )
     else:
-        tempo = "Energy is above mid — you can move, but do not trade clarity for speed." if en else "Ресурс выше середины — можно двигаться, но не разменивай ясность на скорость."
+        tempo = (
+            "Energy is above mid — movement is fine if clarity stays ahead of speed."
+            if en
+            else "Ресурс выше середины — движение уместно, пока ясность остаётся впереди скорости."
+        )
 
     return {
         "contract_version": "day_narrative_brief_v0",

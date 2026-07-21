@@ -1,5 +1,6 @@
 import type { MorningRitualData } from "@/components/today/todayPageUtils";
 import type { TodayContractV1, TodayContractDomainId } from "@/lib/todayContract";
+import { isDomainLensPresent } from "@/lib/todayContract";
 import { buildTodayNarrativeV1 } from "@/lib/todayNarrativeFromContract";
 import {
   buildCentralDayThought,
@@ -178,6 +179,7 @@ function buildSupported(contract: TodayContractV1, registry: TextRegistry): Toda
   const items: TodaySphereItem[] = [];
   for (const id of DOMAIN_ORDER) {
     const domain = contract.domains[id];
+    if (!isDomainLensPresent(domain)) continue;
     const comment = registry.claim(domain.opportunity?.trim() || domain.status?.trim());
     if (!comment) continue;
     items.push({ id, sphere: DOMAIN_SPHERE_LABEL[id], comment });
@@ -188,7 +190,9 @@ function buildSupported(contract: TodayContractV1, registry: TextRegistry): Toda
 function buildCaution(contract: TodayContractV1, registry: TextRegistry): TodayCautionItem[] {
   const items: TodayCautionItem[] = [];
   for (const id of DOMAIN_ORDER) {
-    const risk = registry.claim(contract.domains[id].risk?.trim());
+    const domain = contract.domains[id];
+    if (!isDomainLensPresent(domain)) continue;
+    const risk = registry.claim(domain.risk?.trim());
     if (!risk) continue;
     items.push({ id, area: DOMAIN_SPHERE_LABEL[id], comment: risk });
   }

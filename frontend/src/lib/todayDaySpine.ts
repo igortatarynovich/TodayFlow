@@ -6,6 +6,7 @@
 import { getTodayTarotCardRu } from "@/components/today/todayTarotCardsRu";
 import type { MorningRitualData } from "@/components/today/todayPageUtils";
 import type { TodayContractV1 } from "@/lib/todayContract";
+import { isDomainLensPresent } from "@/lib/todayContract";
 import { focusTopicLabel, moodLabelRu } from "@/lib/todayDayDialogue";
 import { colorGuideSkyStory, resolveTodayDayColorGuide } from "@/lib/todayDayColorGuide";
 import { dayStoryHeadline, dayStoryPulseLine, hasAuthoritativeDayStory } from "@/lib/todayContractMapper";
@@ -183,7 +184,9 @@ function buildPulseFacet(input: {
   }
 
   for (const id of ["money_work", "relationships", "family"] as const) {
-    const opp = input.contract.domains[id].opportunity?.trim();
+    const domain = input.contract.domains[id];
+    if (!isDomainLensPresent(domain)) continue;
+    const opp = domain.opportunity?.trim();
     if (!opp || !isRuUserFacingText(opp)) continue;
     const clean = stripTodayLead(opp);
     candidates.push(`На практике это может проявиться так: ${clean.charAt(0).toLowerCase() + clean.slice(1)}.`);

@@ -10,12 +10,26 @@ export type DomainLensV1 = {
   opportunity: string;
   risk: string;
   action: string;
+  /** PR-3: absent = no personal signal; do not treat empty copy as a domain claim. */
+  evidence_status?: "present" | "absent" | string;
 };
 
 export type TodayContractDomainsV1 = {
   relationships: DomainLensV1;
   money_work: DomainLensV1;
   family: DomainLensV1;
+};
+
+export type TodayContractDayStoryTraceV1 = {
+  calculation_version?: string;
+  confidence?: number;
+  limitations?: string[];
+  evidence?: unknown[];
+  derived_claims?: unknown[];
+  domains_present?: string[];
+  domains_absent?: string[];
+  fingerprint?: string;
+  used_fallback?: boolean;
 };
 
 export type TodayContractDayStoryV1 = {
@@ -31,6 +45,8 @@ export type TodayContractDayStoryV1 = {
   talisman?: { color?: string; stone?: string; note?: string };
   practice_recommendation?: { kind?: string; text?: string; reason?: string };
   symbolic_note?: string;
+  /** Kitchen trace — not required for display; used for honesty / future UI. */
+  trace?: TodayContractDayStoryTraceV1;
 };
 
 export type TodayContractV1 = {
@@ -45,6 +61,18 @@ export type TodayContractV1 = {
 };
 
 export type TodayContractDomainId = keyof TodayContractDomainsV1;
+
+/** PR-3: domain is showable only with present evidence and non-empty copy. */
+export function isDomainLensPresent(lens: DomainLensV1 | null | undefined): boolean {
+  if (!lens) return false;
+  if (String(lens.evidence_status || "present") === "absent") return false;
+  return Boolean(
+    (lens.status || "").trim() ||
+      (lens.opportunity || "").trim() ||
+      (lens.risk || "").trim() ||
+      (lens.action || "").trim(),
+  );
+}
 
 function contractFromFirstTodayPackage(
   pkg: ReturnType<typeof buildFirstTodayPackage>,

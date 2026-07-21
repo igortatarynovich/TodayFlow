@@ -1,9 +1,28 @@
 # TodayFlow Voice Canon
 
 **Статус:** архитектурный канон контента (не copywriter guide).  
-**Версия:** 1.1 (2026-07-21).  
+**Версия:** 1.2 (2026-07-21).  
 **Источник:** живые удачные кейсы Compatibility / Profile review packs — узнаваемый авторский тон продукта.  
-**Связь:** [COMPATIBILITY_CONTENT_CANON_V1.md](../COMPATIBILITY_CONTENT_CANON_V1.md) · [PROFILE_CONTENT_CANON_V1.md](../PROFILE_CONTENT_CANON_V1.md) · [EXPLAINABLE_INTERPRETATION.md](../EXPLAINABLE_INTERPRETATION.md) *(практичность · конкретность · авторский язык; без гороскопных ярлыков сфер)*
+**Связь:** [COMPATIBILITY_CONTENT_CANON_V1.md](../COMPATIBILITY_CONTENT_CANON_V1.md) · [PROFILE_CONTENT_CANON_V1.md](../PROFILE_CONTENT_CANON_V1.md) · [EXPLAINABLE_INTERPRETATION.md](../EXPLAINABLE_INTERPRETATION.md) · [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md)
+
+---
+
+## 0. Today — literary editor (обязательно)
+
+Последний LLM-слой **не пишет прогноз**. Он **редактирует уже вычисленный смысл**.
+
+| Роль | Делает | Не делает |
+|------|--------|-----------|
+| Движок / DailyState / contract | факты, выводы, ограничения | — |
+| LLM / Voice | красивый человеческий абзац | новый смысл, сферы «от себя», клише |
+
+**Запрет UI/copy-шаблонов (FE тоже):**  
+«Сегодня сильнее…» · «Опирайся на это…» · «Зона риска…» · «Направить внимание…» · стрелочные чек-листы из одного смысла пять раз · аффирмации «Сегодня я завершу один разговор» без связи с днём.
+
+**Хорошо:** сцена + ритм предложений + один практический акцент.  
+**Плохо:** список команд и микро-блоки телеграм-бота.
+
+Промпт day_story: `day-story-v1.2-literary-editor`. FE: `todayLiteraryReading` — одна склейка прозы без дублей.
 
 Это слой **как продукт говорит**, рядом с контрактами слоёв и `source_depth`.  
 Сохраняем **принципы**, не фиксируем конкретные обороты как шаблоны. Exemplars ниже — ориентиры, а не копипаст.
