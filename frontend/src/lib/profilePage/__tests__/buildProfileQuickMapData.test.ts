@@ -179,6 +179,65 @@ describe("profileCopyToBullets", () => {
   });
 });
 
+describe("character_patterns contract-only surfaces", () => {
+  it("does not invent perceivedAs from taxonomy when recurring_patterns empty", () => {
+    const v0 = buildProfileV0ViewModel({
+      core: IGOR_SAGE_7_FIXTURE,
+      displayName: "Igor",
+    });
+    const framework = buildProfileChartFrameworkInput({
+      sunSignDisplay: "Водолей",
+      risingSign: "Дева",
+      mcSign: "Близнецы",
+      lifePath: 7,
+      archetypeLabel: "Sage",
+      chartCards: [],
+    });
+    const base = buildProfileQuickMapViewModel(v0, framework);
+    expect(base.perceivedAs.length).toBeGreaterThan(0);
+
+    const withEmptyPatterns = buildProfileQuickMapViewModel(v0, framework, null, {
+      status: "partial",
+      identity_core: "Держит смысл через ясный фокус и прямой контакт с реальностью рядом.",
+      strengths: ["Фокус", "Контакт", "Доведение"],
+      growth_zones: ["Распыление", "Контроль", "Откладывание"],
+      recurring_patterns: [],
+    } as never);
+
+    expect(withEmptyPatterns.perceivedAs).toEqual([]);
+  });
+
+  it("surfaces contract recurring_patterns in perceivedAs", () => {
+    const v0 = buildProfileV0ViewModel({
+      core: IGOR_SAGE_7_FIXTURE,
+      displayName: "Igor",
+    });
+    const framework = buildProfileChartFrameworkInput({
+      sunSignDisplay: "Водолей",
+      risingSign: "Дева",
+      mcSign: "Близнецы",
+      lifePath: 7,
+      archetypeLabel: "Sage",
+      chartCards: [],
+    });
+    const withPatterns = buildProfileQuickMapViewModel(v0, framework, null, {
+      status: "ready",
+      identity_core: "Держит смысл через ясный фокус и прямой контакт с реальностью рядом.",
+      strengths: ["Фокус", "Контакт", "Доведение"],
+      growth_zones: ["Распыление", "Контроль", "Откладывание"],
+      recurring_patterns: [
+        "Откладывание сложных разговоров до лучшего момента",
+        "Восстановление через порядок и список дел",
+      ],
+    } as never);
+
+    expect(withPatterns.perceivedAs).toEqual([
+      "Откладывание сложных разговоров до лучшего момента",
+      "Восстановление через порядок и список дел",
+    ]);
+  });
+});
+
 describe("identity contract-only surfaces", () => {
   it("does not mix taxonomy into strengthens/drains when contract lists exist", () => {
     const v0 = buildProfileV0ViewModel({

@@ -459,11 +459,19 @@ def run_profile_disclosure_funnel_v0(
             ok_fn=_patterns_ok,
         )
         meta["steps"].append(m3)
+        if profile_capture_enabled():
+            capture = get_profile_capture_session()
+            if capture is not None:
+                bel = capture.pack.get("block_eligibility")
+                if isinstance(bel, dict) and isinstance(bel.get("patterns"), dict):
+                    bel["patterns"]["may_generate"] = True
+                capture.mark_step_ran("patterns", ran=bool(r3))
         if r3:
             meta["completed_steps"].append("patterns")
         else:
             meta["reason"] = "patterns_failed"
             meta["partial"] = True
+            meta["patterns_omitted"] = True
 
     # Spheres synthesis (love/money/decisions) — independent of patterns outcome.
     # Legacy profile.spheres.v1 and projector phrase tables are NOT content authority.

@@ -262,11 +262,8 @@ function mergeProfileContractIntoQuickMap(
   const allowBaseMix = portraitReady;
   const decisionStyleRaw = contract?.decision_style?.trim() || (allowBaseMix ? base.decisionStyle : null);
   const decisionStyle = isUsableProfileCopy(decisionStyleRaw, locale) ? decisionStyleRaw : null;
-  const perceivedAs = filterProfileCopyList(
-    [...(contract?.recurring_patterns ?? []), ...(allowBaseMix ? base.perceivedAs : [])],
-    5,
-    locale,
-  );
+  // character_patterns passport: confirmed repeats = contract only (never taxonomy mix-in).
+  const perceivedAs = filterProfileCopyList([...(contract?.recurring_patterns ?? [])], 5, locale);
   const frameworkLeadRaw = contract?.living_changes?.trim() || (allowBaseMix ? base.frameworkLead : null);
   const frameworkLead = isUsableProfileCopy(frameworkLeadRaw, locale) ? frameworkLeadRaw : null;
   const lifeMissionRaw = contract?.life_mission?.trim() || (allowBaseMix ? base.lifeMission : null);
@@ -283,7 +280,7 @@ function mergeProfileContractIntoQuickMap(
     strengthens: contractStrengths,
     drains: contractDrains,
     decisionStyle: decisionStyle ?? (allowBaseMix ? base.decisionStyle : null),
-    perceivedAs: perceivedAs.length ? perceivedAs : allowBaseMix ? base.perceivedAs : [],
+    perceivedAs,
     frameworkLead: frameworkLead ?? (allowBaseMix ? base.frameworkLead : null),
     lifeMission: lifeMission ?? (allowBaseMix ? base.lifeMission : null),
     thriveAreas: thriveAreas.length ? thriveAreas : allowBaseMix ? base.thriveAreas : [],

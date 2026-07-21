@@ -114,16 +114,27 @@ function findDivergences(
   for (const p of patterns) {
     const text = String(p || "").trim();
     if (!text) continue;
-    const blob = JSON.stringify(quick);
-    if (!blob.includes(text.slice(0, 48))) {
+    const shown = (quick.perceivedAs || []).some(
+      (item) => item.includes(text.slice(0, Math.min(40, text.length))) || text.includes(item.slice(0, 40)),
+    );
+    if (!shown) {
       out.push({
         claim: text.slice(0, 120),
         from: "API.recurring_patterns",
-        to: "QuickMap",
+        to: "Character.perceivedAs",
         class: "UI_GATE",
-        note: "pattern present in contract but not visible in QuickMap strings",
+        note: "pattern present in contract but not visible in Character patterns list",
       });
     }
+  }
+  if (patterns.length === 0 && (quick.perceivedAs || []).length > 0) {
+    out.push({
+      claim: (quick.perceivedAs || [])[0]?.slice(0, 120) || "perceivedAs",
+      from: "API.recurring_patterns=[]",
+      to: "Character.perceivedAs",
+      class: "PROJECTION",
+      note: "taxonomy/base patterns shown while contract has no confirmed recurring_patterns",
+    });
   }
   const spheres = contract?.life_spheres;
   if (spheres && typeof spheres === "object") {
@@ -167,10 +178,10 @@ export function projectCoreProfileForCapture(core: CoreProfile): {
   const displayName =
     (core.person?.first_name as string | undefined) ||
     (core.person?.display_name as string | undefined) ||
-    null;
+    "";
   const v0 = buildProfileV0ViewModel({
     core,
-    displayName: displayName || undefined,
+    displayName,
   });
   const sun = sunDisplay(core);
   const lifePath = core.numerology?.life_path ?? null;

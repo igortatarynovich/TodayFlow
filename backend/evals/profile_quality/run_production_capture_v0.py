@@ -64,6 +64,12 @@ CASE_ALIASES = {
     "SA": "spheres-freeze-A",
     "SB": "spheres-freeze-B",
     "SC": "spheres-freeze-C",
+    "patterns-A": "patterns-freeze-A",
+    "patterns-B": "patterns-freeze-B",
+    "patterns-C": "patterns-freeze-C",
+    "PA": "patterns-freeze-A",
+    "PB": "patterns-freeze-B",
+    "PC": "patterns-freeze-C",
 }
 
 DEFAULT_CASES = ("pq-001", "pq-007")
@@ -245,21 +251,6 @@ def run_case(
             missing_fields=list(sc.get("missing_or_hidden") or []),
             allowed_claims=allowed,
         )
-        # Formal defect seed (known architectural conflict) — capture proves/disproves.
-        if depth == "birth_data_only":
-            session.add_defect(
-                "invariant_patterns_schema_vs_source_depth",
-                "patterns step is invoked and RESPONSE_SCHEMA/_patterns_ok require "
-                "recurring_patterns + living_changes even when source_depth=birth_data_only. "
-                "Correct design: do not generate the block — not 'ask model not to invent'.",
-                cls="GENERATION_GATE",
-            )
-            session.add_defect(
-                "invariant_patterns_required_fields_without_evidence",
-                "step validator requires filled recurring_patterns/living_changes without evidence.",
-                cls="RESPONSE_SCHEMA",
-            )
-
         contract, interpretation, daily, used_fallback = build_profile_portrait_v1(
             profile_input=profile_input,
             living=living,

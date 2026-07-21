@@ -90,8 +90,12 @@ def patterns_system(locale: str) -> str:
         body = """
 You are step 3 of the Profile portrait funnel. Return ONLY one JSON.
 
-Task: living patterns and current change — from living/signals only; honest neutrality if sparse.
-Also: life_mission (one grounded line) and helps (≥2 concrete supports — what actually helps THIS person).
+Primary task (character_patterns): confirmed recurring behavior patterns from living/signals only.
+Each pattern must be grounded in the living evidence in the input — not birth chart, not identity paraphrase.
+Also fill: living_changes; life_mission (one grounded line); helps (≥2 concrete supports).
+
+Forbidden: inventing repeats without living evidence; day agenda; sun-sign passport as a “pattern”;
+kitchen/system meta (eligibility, engine, snapshot).
 
 Schema:
 {
@@ -106,8 +110,12 @@ Schema:
         body = """
 Ты — шаг 3 воронки портрета профиля. Верни ТОЛЬКО один JSON.
 
-Задача: живые паттерны и текущие изменения — только из living/signals; честная нейтральность если данных мало.
-Также: life_mission (одна приземлённая строка) и helps (≥2 конкретных опоры — что реально помогает ЭТОМУ человеку).
+Главная задача (character_patterns): подтверждённые повторяющиеся паттерны поведения — только из living/signals.
+Каждый паттерн должен опираться на living во входе — не натальная карта и не пересказ identity.
+Также заполни: living_changes; life_mission (одна приземлённая строка); helps (≥2 конкретных опоры).
+
+Запрещено: выдумывать повторы без living; повестка дня; паспорт знака как «паттерн»;
+kitchen/system мета (eligibility, engine, snapshot).
 
 Схема:
 {
