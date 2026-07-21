@@ -123,15 +123,19 @@ def score_field(
     if not grounded:
         defects.append({"class": "RULESET", "note": f"{sphere_id}.{field}: no rule/source evidence attached"})
 
-    # Specificity — style quote in need/risk/on/off/helps; how must go beyond sign boilerplate
+    # Specificity — style quote in need/risk/on/off/helps; how must use trait (not boilerplate)
     if field == "how":
-        boilerplate = "задаёт тон проявления" in blob or "sets a base tone" in blob or "colors how this area" in blob
-        has_planet = any(e.startswith("planet:") for e in evidence)
-        has_house = any(e.startswith("house:") for e in evidence)
-        # Planet×sign name alone with fixed boilerplate = weak specificity (architectural RULESET)
-        specific = has_planet and (has_house or not boilerplate)
-        if has_planet and boilerplate and not has_house:
-            checks["specificity"] = False
+        boilerplate = (
+            "задаёт тон проявления" in blob
+            or "задает тон проявления" in blob
+            or "sets a base tone" in blob
+            or "colors how this area" in blob
+        )
+        has_trait = any(str(e).startswith("trait:") for e in evidence)
+        has_planet = any(str(e).startswith("planet:") for e in evidence)
+        specific = has_trait and has_planet and not boilerplate and len(_tokens(text)) >= 8
+        checks["specificity"] = specific
+        if boilerplate:
             defects.append(
                 {
                     "class": "RULESET",
@@ -141,17 +145,18 @@ def score_field(
                     ),
                 }
             )
-        else:
-            checks["specificity"] = specific
-            if not specific:
-                defects.append(
-                    {
-                        "class": "RULESET",
-                        "note": f"{sphere_id}.how: interchangeable for most users (weak personal binding)",
-                    }
-                )
+        elif not specific:
+            defects.append(
+                {
+                    "class": "RULESET",
+                    "note": f"{sphere_id}.how: interchangeable for most users (weak personal binding)",
+                }
+            )
     else:
         specific = _style_quote_present(text, style) or len(_tokens(text) - _tokens(style)) >= 3
+        # risk/on/off may be bucket templates: personalization is the scored bucket from style.
+        if not specific and field in ("risk", "turns_on", "turns_off"):
+            specific = any(str(e).startswith("bucket:") for e in evidence) and len(_tokens(text)) >= 4
         checks["specificity"] = specific
         if not specific:
             defects.append(

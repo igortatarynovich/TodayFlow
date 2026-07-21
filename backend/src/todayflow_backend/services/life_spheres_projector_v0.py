@@ -1,7 +1,7 @@
-"""Deterministic life_spheres projector v0.1 (love · money · decisions).
+"""Deterministic life_spheres projector v0.2 (love · money · decisions).
 
 SoT: docs/audits/PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md
-Independent of patterns. No LLM.
+D1: planet×sign traits · D2: scored style buckets · independent of patterns · no LLM.
 """
 
 from __future__ import annotations
@@ -11,7 +11,11 @@ import json
 import re
 from typing import Any
 
-PROJECTION_VERSION = "life_spheres_projector_v0.1"
+from todayflow_backend.services.life_spheres_style_buckets_v0 import classify_style_scored
+from todayflow_backend.services.life_spheres_traits_v0 import resolve_sphere_trait
+
+PROJECTION_VERSION = "life_spheres_projector_v0.2"
+SPHERES_SOURCE = "deterministic_projector_v0_2"
 SLICE_SPHERE_IDS = ("love", "money", "decisions")
 SPHERE_FIELDS = ("how", "need", "risk", "turns_on", "turns_off", "helps")
 
@@ -41,22 +45,12 @@ _GENERIC_RU = (
     "просто доверьтесь",
     "гармония во всём",
 )
-
-# Keyword → class for style lenses (v0.1).
-_STYLE_BUCKETS: dict[str, tuple[str, ...]] = {
-    "clarity": ("ясн", "прям", "честн", "говор", "clarity", "honest", "direct"),
-    "pace": ("темп", "медлен", "быстр", "ритм", "pace", "slow", "fast"),
-    "care": ("забот", "тепл", "поддерж", "care", "warm", "support"),
-    "autonomy": ("автоном", "пространств", "границ", "сам", "autonomy", "space", "boundar"),
-    "depth": ("глубин", "смысл", "близк", "depth", "intim"),
-    "structure": ("структур", "порядок", "правил", "учёт", "structure", "order", "rule"),
-    "growth": ("рост", "шаг", "развит", "growth", "grow"),
-    "security": ("безопас", "устойчив", "стабил", "security", "stable"),
-    "exchange": ("обмен", "ценност", "value", "exchange"),
-    "speed": ("быстр", "сразу", "speed", "quick"),
-    "consensus": ("соглас", "вместе", "consensus", "align"),
-    "analysis": ("анализ", "критер", "взвес", "analysis", "criteria"),
-}
+_BOILERPLATE_MARKERS = (
+    "задаёт тон проявления",
+    "задает тон проявления",
+    "sets a base tone",
+    "colors how this area",
+)
 
 
 def _norm(text: str) -> str:
@@ -88,15 +82,6 @@ def _style_quote(style: str, max_len: int = 40) -> str:
     if not t:
         return ""
     return _clip(t, max_len)
-
-
-def _classify_style(style: str, preferred: tuple[str, ...]) -> str:
-    n = _norm(style)
-    for cls in preferred:
-        keys = _STYLE_BUCKETS.get(cls) or ()
-        if any(k in n for k in keys):
-            return cls
-    return "general"
 
 
 def _token_set(text: str) -> set[str]:
@@ -181,37 +166,6 @@ def build_sphere_foundations_v0(
         "baseline": shared.get("baseline") if isinstance(shared.get("baseline"), dict) else {},
         "numerology": shared.get("numerology") if isinstance(shared.get("numerology"), dict) else {},
     }
-
-
-def _planet_line(natal: dict[str, Any], *planets: str, locale: str) -> tuple[str, str | None]:
-    bullets = natal.get("planet_bullets") if isinstance(natal.get("planet_bullets"), dict) else {}
-    en = locale.lower().startswith("en")
-    labels = {
-        "sun": ("Солнце", "Sun"),
-        "moon": ("Луна", "Moon"),
-        "venus": ("Венера", "Venus"),
-        "mars": ("Марс", "Mars"),
-        "mercury": ("Меркурий", "Mercury"),
-        "jupiter": ("Юпитер", "Jupiter"),
-        "saturn": ("Сатурн", "Saturn"),
-    }
-    for p in planets:
-        key = f"{p}_sign"
-        sign = str(natal.get(key) or "").strip()
-        bl = bullets.get(p)
-        if isinstance(bl, list) and bl and str(bl[0]).strip():
-            return _clip(str(bl[0]).strip(), 180), p
-        if sign:
-            label = labels.get(p, (p, p))[1 if en else 0]
-            if en:
-                return _clip(f"{label} in {sign} colors how this area shows up.", 180), p
-            return _clip(f"{label} в знаке {sign} задаёт тон проявления в этой сфере.", 180), p
-    sun = str(natal.get("sun_sign") or "").strip()
-    if sun:
-        if en:
-            return _clip(f"Sun in {sun} sets a base tone for how this area shows.", 180), "sun"
-        return _clip(f"Солнце в знаке {sun} задаёт базовый тон проявления в этой сфере.", 180), "sun"
-    return "", None
 
 
 def _house_line(natal: dict[str, Any], n: int) -> str | None:
@@ -335,7 +289,7 @@ def _templates_money(cls: str, style: str, *, en: bool) -> dict[str, str]:
                 "risk": "Stretching too far or stalling with no next move.",
                 "turns_on": "A small measurable expansion.",
                 "turns_off": "All-or-nothing bets.",
-                "helps": "One growth action with a cap — then review.",
+                "helps": "One growth step with a spend cap — then a short review.",
             },
             "general": {
                 "need": f"With money you need a stance that matches «{q}».",
@@ -366,7 +320,7 @@ def _templates_money(cls: str, style: str, *, en: bool) -> dict[str, str]:
                 "risk": "Перерастяжение или полный застой без следующего хода.",
                 "turns_on": "Малое измеримое расширение.",
                 "turns_off": "Ставки «всё или ничего».",
-                "helps": "Одно действие роста с потолком — затем разбор.",
+                "helps": "Один шаг роста с потолком — затем короткий разбор.",
             },
             "exchange": {
                 "need": f"В деньгах нужен честный обмен ценности — в духе «{q}».",
@@ -485,6 +439,8 @@ def validate_projected_row(
         return "longitudinal_leak"
     if not locale.lower().startswith("en") and any(g in blob for g in _GENERIC_RU):
         return "generic_phrase"
+    if any(m in blob for m in _BOILERPLATE_MARKERS):
+        return "how_boilerplate"
     return None
 
 
@@ -501,50 +457,49 @@ def _build_sphere(
     evidence: list[str] = []
     claim_depth = "sign_plus_styles" if natal.get("houses_available") else "sign_only"
     style = ""
+    bucket_meta: dict[str, Any] = {}
+    trait_meta: dict[str, Any] = {}
 
     if sid == "love":
-        style = str(styles.get("relationship_style") or "").strip()
-        if len(style) < 12:
-            return None, {"omit_reason": "style_missing", "evidence": []}
-        evidence.append("style:relationship_style")
-        planet, planet_id = _planet_line(natal, "venus", "sun", locale=locale)
-        if not planet:
-            return None, {"omit_reason": "planet_missing", "evidence": evidence}
-        if planet_id:
-            evidence.append(f"planet:{planet_id}")
-            evidence.append("rule:love.how.planet")
-        house = _house_line(natal, 7)
-        if house:
-            evidence.append("house:7")
-            evidence.append("rule:love.how.house7")
-            claim_depth = "houses_plus_styles"
-        lead = "В любви" if not en else "In love"
-        how = _join(
-            f"{lead}: {planet}",
-            (f"В партнёрском поле: {house}" if not en else f"In the partnership field: {house}") if house else None,
-        )
-        cls = _classify_style(style, ("clarity", "pace", "autonomy", "care", "depth"))
-        t = _templates_love(cls, style, en=en)
-        evidence.extend(
-            [
-                "rule:love.need.from_style",
-                "rule:love.risk.from_style",
-                "rule:love.on.from_style",
-                "rule:love.off.from_style",
-                "rule:love.helps.from_style",
-            ]
-        )
+        style_key = "relationship_style"
+        house_n = 7
+        house_rule = "rule:love.how.house7"
+        tmpl = _templates_love
     elif sid == "money":
-        style = str(styles.get("money_style") or "").strip()
-        if len(style) < 12:
-            return None, {"omit_reason": "style_missing", "evidence": []}
-        evidence.append("style:money_style")
-        planet, planet_id = _planet_line(natal, "jupiter", "saturn", "sun", locale=locale)
-        if not planet:
-            return None, {"omit_reason": "planet_missing", "evidence": evidence}
-        if planet_id:
-            evidence.append(f"planet:{planet_id}")
-            evidence.append("rule:money.how.planet")
+        style_key = "money_style"
+        house_n = None  # multi
+        house_rule = None
+        tmpl = _templates_money
+    elif sid == "decisions":
+        style_key = "decision_style"
+        house_n = 9
+        house_rule = "rule:decisions.how.house9"
+        tmpl = _templates_decisions
+    else:
+        return None, {"omit_reason": "not_in_slice_v0_1", "evidence": []}
+
+    style = str(styles.get(style_key) or "").strip()
+    if len(style) < 12:
+        return None, {"omit_reason": "style_missing", "evidence": []}
+    evidence.append(f"style:{style_key}")
+
+    trait = resolve_sphere_trait(sid, natal, locale=locale)
+    if trait is None:
+        return None, {"omit_reason": "trait_unsupported", "evidence": evidence}
+    trait_meta = {
+        "trait_rule_id": trait["trait_rule_id"],
+        "planet": trait["planet"],
+        "sign": trait.get("sign"),
+        "source": trait.get("source"),
+    }
+    evidence.append(f"planet:{trait['planet']}")
+    if trait.get("sign"):
+        evidence.append(f"sign:{trait['sign']}")
+    evidence.append(trait["trait_rule_id"])
+    evidence.append(f"rule:{sid}.how.trait")
+
+    how = trait["text"]
+    if sid == "money":
         h2 = _house_line(natal, 2)
         h8 = _house_line(natal, 8)
         house_bits = []
@@ -558,53 +513,35 @@ def _build_sphere(
             house_bits.append(h8)
         if house_bits:
             claim_depth = "houses_plus_styles"
-        lead = "В деньгах" if not en else "With money"
-        how = _join(f"{lead}: {planet}", " ".join(house_bits) if house_bits else None)
-        cls = _classify_style(style, ("structure", "security", "growth", "exchange"))
-        t = _templates_money(cls, style, en=en)
-        evidence.extend(
-            [
-                "rule:money.need.from_style",
-                "rule:money.risk.from_style",
-                "rule:money.on.from_style",
-                "rule:money.off.from_style",
-                "rule:money.helps.from_style",
-            ]
-        )
-    elif sid == "decisions":
-        style = str(styles.get("decision_style") or "").strip()
-        if len(style) < 12:
-            return None, {"omit_reason": "style_missing", "evidence": []}
-        evidence.append("style:decision_style")
-        planet, planet_id = _planet_line(natal, "saturn", "mercury", "sun", locale=locale)
-        if not planet:
-            return None, {"omit_reason": "planet_missing", "evidence": evidence}
-        if planet_id:
-            evidence.append(f"planet:{planet_id}")
-            evidence.append("rule:decisions.how.planet")
-        house = _house_line(natal, 9)
-        if house:
-            evidence.append("house:9")
-            evidence.append("rule:decisions.how.house9")
-            claim_depth = "houses_plus_styles"
-        lead = "В решениях" if not en else "In decisions"
-        how = _join(
-            f"{lead}: {planet}",
-            (f"В поле выбора: {house}" if not en else f"In the choice field: {house}") if house else None,
-        )
-        cls = _classify_style(style, ("structure", "analysis", "speed", "consensus"))
-        t = _templates_decisions(cls, style, en=en)
-        evidence.extend(
-            [
-                "rule:decisions.need.from_style",
-                "rule:decisions.risk.from_style",
-                "rule:decisions.on.from_style",
-                "rule:decisions.off.from_style",
-                "rule:decisions.helps.from_style",
-            ]
-        )
+            how = _join(how, " ".join(house_bits))
     else:
-        return None, {"omit_reason": "not_in_slice_v0_1", "evidence": []}
+        house = _house_line(natal, house_n) if house_n else None
+        if house and house_rule:
+            evidence.append(f"house:{house_n}")
+            evidence.append(house_rule)
+            claim_depth = "houses_plus_styles"
+            prefix = (
+                ("В партнёрском поле: " if sid == "love" else "В поле выбора: ")
+                if not en
+                else ("In the partnership field: " if sid == "love" else "In the choice field: ")
+            )
+            how = _join(how, f"{prefix}{house}")
+
+    bucket_meta = classify_style_scored(style, domain=sid)
+    cls = str(bucket_meta.get("primary") or "general")
+    evidence.append(f"bucket:{cls}")
+    if bucket_meta.get("secondary"):
+        evidence.append(f"bucket_secondary:{bucket_meta['secondary']}")
+    evidence.extend(
+        [
+            f"rule:{sid}.need.from_style",
+            f"rule:{sid}.risk.from_style",
+            f"rule:{sid}.on.from_style",
+            f"rule:{sid}.off.from_style",
+            f"rule:{sid}.helps.from_style",
+        ]
+    )
+    t = tmpl(cls, style, en=en)
 
     row = {
         "how": _clip(how, _FIELD_MAX["how"]),
@@ -625,7 +562,13 @@ def _build_sphere(
     if reject:
         return None, {"omit_reason": reject, "evidence": evidence}
 
-    return row, {"claim_depth": claim_depth, "evidence": evidence, "style_class": cls}
+    return row, {
+        "claim_depth": claim_depth,
+        "evidence": evidence,
+        "style_class": cls,
+        "style_bucket": bucket_meta,
+        "trait": trait_meta,
+    }
 
 
 def _fingerprint(foundations: dict[str, Any], life_spheres: dict[str, Any], meta_per: dict[str, Any]) -> str:
@@ -638,10 +581,17 @@ def _fingerprint(foundations: dict[str, Any], life_spheres: dict[str, Any], meta
         if str(styles.get(k) or "").strip()
     }
     rule_ids: list[str] = []
+    trait_ids: list[str] = []
     for sid, info in meta_per.items():
         for e in info.get("evidence") or []:
-            if str(e).startswith("rule:"):
-                rule_ids.append(str(e))
+            es = str(e)
+            if es.startswith("rule:") or es.startswith("trait:"):
+                rule_ids.append(es)
+            if es.startswith("trait:"):
+                trait_ids.append(es)
+        tr = info.get("trait") if isinstance(info.get("trait"), dict) else {}
+        if tr.get("trait_rule_id"):
+            trait_ids.append(str(tr["trait_rule_id"]))
     houses_used: dict[str, str] = {}
     for sid, info in meta_per.items():
         for e in info.get("evidence") or []:
@@ -665,6 +615,7 @@ def _fingerprint(foundations: dict[str, Any], life_spheres: dict[str, Any], meta
                 "houses_used": houses_used,
             },
             "rule_ids": sorted(set(rule_ids)),
+            "trait_rule_ids": sorted(set(trait_ids)),
         },
         "life_spheres": life_spheres,
     }
@@ -693,7 +644,7 @@ def project_life_spheres_v0(foundations: dict[str, Any]) -> tuple[dict[str, dict
             "spheres_omitted": omitted
             + [{"id": sid, "reason": "gate_closed"} for sid in SLICE_SPHERE_IDS],
             "per_sphere": {},
-            "spheres_source": "deterministic_projector_v0_1",
+            "spheres_source": SPHERES_SOURCE,
         }
 
     life_spheres: dict[str, dict[str, str]] = {}
@@ -750,6 +701,8 @@ def project_life_spheres_v0(foundations: dict[str, Any]) -> tuple[dict[str, dict
             "claim_depth": info.get("claim_depth"),
             "evidence": info.get("evidence") or [],
             "style_class": info.get("style_class"),
+            "style_bucket": info.get("style_bucket"),
+            "trait": info.get("trait"),
         }
 
     meta = {
@@ -758,6 +711,6 @@ def project_life_spheres_v0(foundations: dict[str, Any]) -> tuple[dict[str, dict
         "spheres_projected": sorted(life_spheres.keys()),
         "spheres_omitted": omitted,
         "per_sphere": per_sphere,
-        "spheres_source": "deterministic_projector_v0_1",
+        "spheres_source": SPHERES_SOURCE,
     }
     return life_spheres, meta

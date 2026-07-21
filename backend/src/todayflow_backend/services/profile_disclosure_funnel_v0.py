@@ -28,6 +28,7 @@ from todayflow_backend.services.llm_quality_policy_v1 import (
 )
 from todayflow_backend.services.life_spheres_projector_v0 import (
     PROJECTION_VERSION,
+    SPHERES_SOURCE,
     build_sphere_foundations_v0,
     project_life_spheres_v0,
     spheres_projection_allowed,
@@ -430,7 +431,7 @@ def run_profile_disclosure_funnel_v0(
         step_spheres: dict[str, Any] = {
             "prompt_id": None,
             "projector": PROJECTION_VERSION,
-            "spheres_source": "deterministic_projector_v0_1",
+            "spheres_source": SPHERES_SOURCE,
             "attempts": 0,
             "ms": int((perf_counter() - t_sph0) * 1000),
             "ok": bool(life_spheres),
@@ -441,7 +442,7 @@ def run_profile_disclosure_funnel_v0(
             },
         }
         meta["steps"].append(step_spheres)
-        meta["spheres_source"] = "deterministic_projector_v0_1"
+        meta["spheres_source"] = SPHERES_SOURCE
         meta["life_spheres_meta"] = spheres_proj_meta
         if life_spheres:
             meta["completed_steps"].append("spheres")

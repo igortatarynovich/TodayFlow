@@ -1,240 +1,137 @@
 # Profile · `life_spheres` Quality Review V0
 
-**Status:** SoT after PR-2 · **do not expand to 6 more spheres until RULESET defects below are addressed**  
+**Status:** SoT after D1+D2 · quality gate **PASS** (merge decision unlocked for PR #2 engineering criteria below)  
 **Date:** 2026-07-21  
 **Passport:** [PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md)  
-**Projector:** [PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md) · `life_spheres_projector_v0.1`  
+**Projector:** [PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md) · `life_spheres_projector_v0.2`  
 **Harness:** `backend/evals/profile_quality/run_life_spheres_quality_pack_v0.py`  
 **Cases:** `backend/evals/profile_quality/life_spheres_quality_cases_v0.json`  
-**Latest run:** `backend/evals/profile_quality/runs/life_spheres_quality_20260721T145313Z/`
+**Latest run:** `backend/evals/profile_quality/runs/life_spheres_quality_20260721T151047Z/`
 
 > Goal: prove love / money / decisions produce **grounded, distinct, useful** user meaning — not only a valid JSON object.  
 > No class `MODEL`. Weak text ⇒ architectural defect class.
 
 ---
 
-## 0. Verdict
+## 0. Verdict (current)
 
 | Question | Result |
 |----------|--------|
-| Funnel decoupling / gate / partial Snapshot (PR-2 engineering) | **Hold** — out of scope to re-litigate here |
-| Contrast sensitivity (styles & Venus/Moon change outputs) | **Supported** — pair comparisons pass |
-| Honesty without birth time | **Supported** — no house/ASC leaks on sign-only cases |
-| Partial styles omit correctly | **Supported** — lsq-07 money/decisions omitted |
-| User-facing quality of `how` without houses | **Fail (RULESET)** — planet-in-sign **boilerplate** (“задаёт тон проявления”); only sign label changes |
-| Style-lens fields (need/risk/on/off/helps) | **Mostly useful** when class matches; class misfires under keyword collisions |
-| Ready to expand to 6 more spheres | **No** — fix `how` trait rules + bucket priority first |
-| Ready for life_mission / character_helps | **No** — separate passports after spheres quality holds |
+| D1 planet×sign traits (no boilerplate `how`) | **PASS** |
+| D2 scored style buckets (lsq-01 care, lsq-08 speed) | **PASS** |
+| Contrast sensitivity | **PASS** — comparisons 2/2 |
+| Honesty without birth time | **PASS** |
+| Partial styles omit | **PASS** (lsq-07) |
+| Sign-only `how` specificity | **PASS** |
+| cases_pass ≥ 6/8 | **PASS — 8/8** |
+| Expand to 6 more spheres | Still **gated** on product decision; quality blocker for the three is cleared |
+| life_mission / character_helps / LLM wording | Still **frozen** |
 
-**Automated pack summary (run `20260721T145313Z`):** cases_pass **1/8** (only houses-enriched lsq-05 fully passes specificity) · comparisons_pass **2/2** · defects **23** (dominated by `how` boilerplate RULESET).
-
----
-
-## 1. Block purpose (per sphere)
-
-| Sphere | User must understand | Differs from identity | Differs from styles | Forbidden at birth-only / no houses |
-|--------|----------------------|----------------------|---------------------|-------------------------------------|
-| **love** | How closeness shows; what is needed; where it breaks; one support move | Identity = who overall; love = manifestation **in intimacy** | Style = lens; love fields = situation map | House-precise partnership claims; “регулярно…” from living |
-| **money** | How value/resource shows; risk; one focus | Not a second biography | Not a copy of `money_style` alone | House 2/8 claims without houses; longitudinal money habits as fact |
-| **decisions** | How choosing works; hygiene; one next move | Not life mission | Not a paste of `decision_style` | Confirmed decision “patterns” without history |
-
-**Field roles (evaluate separately, never as one blob):**
-
-| Field | User value |
-|-------|------------|
-| `how` | Concrete manifestation cue (natal color + locus) |
-| `need` | What support looks like here |
-| `risk` | Where it breaks here |
-| `turns_on` / `turns_off` | Engage / shut-down triggers |
-| `helps` | One doable move in this sphere |
+**Automated pack summary (run `20260721T151047Z`):**  
+cases_pass **8/8** · comparisons_pass **2/2** · total_defects **0**.
 
 ---
 
-## 2. Quality criteria
+## 1. What changed since first review (v0.1 → v0.2)
 
-| Criterion | Pass condition |
-|-----------|----------------|
-| **Grounding** | Field tied to evidence (`rule:` / `planet:` / `house:` / `style:`) |
-| **Specificity** | Not interchangeable across users; `how` must not be pure boilerplate |
-| **Distinctness** | Spheres ≠ each other; ≠ `identity_core` |
-| **Usefulness** | `helps` actionable; `need` concrete support (not cosmic filler) |
-| **Internal coherence** | need≠risk; on≠off; style class not fighting its own risk blindly without note |
-| **Voice** | About the person — not system/funnel/LLM |
-| **Honesty** | No houses/ASC without `houses_available`; no longitudinal claims |
+| Defect | Class | Fix |
+|--------|-------|-----|
+| D1 `how` boilerplate «задаёт тон проявления» | `RULESET` | `life_spheres_traits_v0` — sphere×planet×sign manifestation traits; unsupported → omit |
+| D2 first-match keyword buckets | `RULESET` | `life_spheres_style_buckets_v0` — weighted cues + conflict negatives + primary/secondary + score trace |
 
-Defect classes allowed: `BLOCK_PURPOSE` · `INPUT` · `RULESET` · `RESPONSE_SCHEMA` · `VALIDATION` · `PROJECTION` · `UI_GATE` · `VOICE`.
+**Regression tests:** `backend/tests/test_life_spheres_d1_d2_v0.py` (lsq-01 care, lsq-08 speed, traits, omit, fingerprint bump, comparisons).
 
 ---
 
-## 3. Contrast matrix (8 cases)
+## 2. Block purpose (unchanged)
 
-| ID | Contrast | Intent |
-|----|----------|--------|
-| lsq-01 / lsq-02 | Same Sun Leo; different Venus/Moon + styles | Love (and others) must diverge |
-| lsq-03 / lsq-04 | Same natal Capricorn stack; different styles only | Style lens must move need/risk/on/off/helps |
-| lsq-05 | Houses available | `how` enriched; evidence lists houses |
-| lsq-06 | No birth time | Sign-only honesty |
-| lsq-07 | Incomplete styles | Emit love only; omit money/decisions |
-| lsq-08 | Identity slow vs styles fast | Must not fake harmony; expose ruleset bias |
+| Sphere | User must understand | Differs from identity / styles |
+|--------|----------------------|--------------------------------|
+| love | How closeness shows; need; break; one support | Manifestation in intimacy ≠ who / ≠ style paste |
+| money | Value/resource manifestation; risk; one focus | Not biography; not raw money_style |
+| decisions | How choosing works; hygiene step | Not life mission; not raw decision_style |
 
 ---
 
-## 4. Case reviews
+## 3. Quality criteria (unchanged)
 
-### lsq-01 — soft closeness (Leo · Venus/Moon Cancer)
+Grounding · Specificity · Distinctness · Usefulness · Internal coherence · Voice · Honesty  
 
-| Sphere | Foundations that mattered | Rule IDs (sample) | Output (compressed) | Quality | Defects |
-|--------|---------------------------|-------------------|---------------------|---------|---------|
-| love | Venus Cancer · relationship_style (тёплые/темп) | `love.how.planet`, `love.*.from_style` | how: boilerplate Venus Cancer; need: pace class; helps: граница темпа | **FAIL** | `RULESET` how boilerplate; style_class=`pace` overweights «темп» vs care/warmth (`RULESET` bucket priority) |
-| money | Jupiter Cancer · security style | `money.how.planet`, `money.*.from_style` | security need/helps useful | **FAIL** | `RULESET` how boilerplate |
-| decisions | Saturn Capricorn · consensus-ish style | `decisions.*` | analysis class (keyword) | **FAIL** | `RULESET` how boilerplate; class may misread «согласование» |
-
-**Snapshot / API:** partial `life_spheres` with 3 keys · fingerprint stable.  
-**UI:** FE may prefix love how with «В отношениях» (`PROJECTION` chrome — not inventing claims). Money chrome «В реализации» is a **naming mismatch** for money sphere (`PROJECTION` / copy debt).
+Defect classes: `BLOCK_PURPOSE` · `INPUT` · `RULESET` · `RESPONSE_SCHEMA` · `VALIDATION` · `PROJECTION` · `UI_GATE` · `VOICE`.
 
 ---
 
-### lsq-02 — autonomy pace (Leo · Venus Aries · Moon Aquarius)
+## 4. Case results (`20260721T151047Z`)
 
-| Sphere | Influencing inputs | Quality | Defects |
-|--------|--------------------|---------|---------|
-| love | Venus Aries · clarity/autonomy style | FAIL | `RULESET` how boilerplate |
-| money | Jupiter Sag · growth style | FAIL | how boilerplate; helps wording borderline |
-| decisions | Saturn Cap · speed style | FAIL | how boilerplate; how **identical** to lsq-01 decisions (same Saturn Capricorn) |
+| ID | Contrast | Result | Notes |
+|----|----------|--------|-------|
+| lsq-01 | soft closeness | **PASS** | love `style_class=care` (not pace); Venus Cancer trait how |
+| lsq-02 | autonomy pace | **PASS** | Venus Aries trait ≠ lsq-01 how; decisions `speed` |
+| lsq-03 / lsq-04 | same natal, different styles | **PASS** | need/helps diverge; comparison green |
+| lsq-05 | houses | **PASS** | traits + house weave; claim_depth houses_plus_styles |
+| lsq-06 | no birth time | **PASS** | no house markers; traits still specific |
+| lsq-07 | incomplete styles | **PASS** | love emit; money/decisions omit |
+| lsq-08 | contradiction | **PASS** | decisions `speed` (not analysis); styles win without inventing longitudinal claims |
 
-**Compare lsq-01 vs lsq-02:** **PASS** for sensitivity — love/money need/risk/on/off/helps all differ.  
-**Residual RULESET:** `decisions.how` unchanged (same Saturn sign) and love/money `how` jaccard ≈ 0.8 (template skeleton dominates).
+### Sample claim traces
 
----
+**lsq-01 love.how**  
+Foundations: Venus Cancer · relationship_style (тёплые/предсказуемость/мягкий темп)  
+Rules: `trait:love.venus.cancer` · `bucket:care` · `rule:love.*.from_style`  
+Output: эмоциональная безопасность / знакомый ритм / забота в мелочах — not boilerplate.
 
-### lsq-03 / lsq-04 — same natal, different styles
-
-| Check | Result |
-|-------|--------|
-| need/risk/on/off/helps move with styles | **PASS** (comparison) |
-| `how` moves with styles | **FAIL expected** — `how` natal-led; identical across pair when planets unchanged |
-| decisions on lsq-04 | need shifts; risk/on/off/helps **stuck** on analysis templates despite speed-ish wording in lsq-03 vs analysis in lsq-04 — lsq-03 decisions class=`analysis` because style contains «критерий» (`RULESET` keyword collision) |
-
----
-
-### lsq-05 — houses available — **PASS**
-
-| Sphere | claim_depth | Evidence houses | Notes |
-|--------|-------------|-----------------|-------|
-| love | houses_plus_styles | `house:7` | how includes partnership description — specificity OK |
-| money | houses_plus_styles | `house:2`, `house:8` | how carries exchange locus |
-| decisions | houses_plus_styles | `house:9` | how carries choice locus |
-
-**Proof:** enriching `how` with real house text clears the boilerplate specificity gate. Confirms defect is **missing trait content for sign-only path**, not “spheres impossible without houses”.
-
----
-
-### lsq-06 — no birth time — honesty OK, specificity FAIL
-
-- No house/ASC markers in fields → **Honesty PASS**.  
-- All three `how` still boilerplate → **RULESET FAIL** (same as other sign-only cases).  
-- Style fields remain usable.
-
----
-
-### lsq-07 — incomplete styles
-
-| Sphere | Result |
-|--------|--------|
-| love | Emitted (relationship_style present) — how still boilerplate FAIL |
-| money / decisions | **omit** `style_missing` — **correct architecture** (no invent from identity) |
-
-Gate still opens (one style enough). Partial map is valid product state.
-
----
-
-### lsq-08 — contradictory foundations
-
-| Observation | Class |
-|-------------|-------|
-| Projector follows **styles** (pace/growth/…) and ignores identity “slow/silence” tension | `RULESET` / `BLOCK_PURPOSE` — no contradiction policy in v0.1 |
-| Style «скорость важнее долгого **анализа**» → class `analysis` not `speed` | `RULESET` — keyword priority / substring collision |
-| User gets a fast-style sphere map that fights identity without acknowledgment | Product honesty gap — not longitudinal; still a coherence debt |
+**lsq-08 decisions**  
+Style: «скорость важнее долгого анализа»  
+Bucket scores: speed↑ analysis↓ (conflict cues) → primary=`speed`  
+Evidence includes `bucket:speed` and negative analysis hits in meta.
 
 ---
 
 ## 5. Cross-cutting proofs
 
-### 5.1 What works
+### Works
 
-1. **Independence from patterns** — quality pack uses foundations only (no patterns step).  
-2. **Style sensitivity** — need/risk/on/off/helps change when styles change (lsq-03/04).  
-3. **Natal sensitivity on planet labels** — Venus/Jupiter signs appear in `how`.  
-4. **Honesty** — sign-only cases do not claim houses.  
-5. **Omit discipline** — missing styles → omit sphere.  
-6. **Houses path** — full quality pass when house descriptions exist (lsq-05).  
-7. **Grounding meta** — evidence/rule_ids present per sphere.  
-8. **Distinctness vs identity** — no identity_echo failures in this pack.  
-9. **Sphere-to-sphere field collapse** — need/helps differ across love/money/decisions when styles differ.
+1. No boilerplate `how` on sign-only path.  
+2. Style scoring resists keyword traps.  
+3. Trait + bucket traces in `per_sphere` / evidence.  
+4. Fingerprint includes projection_version + trait_rule_ids.  
+5. Omit on unsupported trait (no fake personal promise).  
+6. Comparisons remain green.  
+7. Honesty / identity-echo clean on this pack.
 
-### 5.2 Confirmed defects (must fix before expanding spheres)
+### Remaining non-blocking debts
 
-| ID | Class | Why architecture produced weak text | Fix direction |
-|----|-------|-------------------------------------|---------------|
-| D1 | `RULESET` | `_planet_line` emits fixed sentence «задаёт тон проявления»; only `{Planet, sign}` vary → `how` interchangeable | Planet×sign trait table (or require `planet_bullets`) before emit; forbid boilerplate-only `how` |
-| D2 | `RULESET` | Style buckets are first-match keyword lists; «темп», «анализ», «критер» steal class from stronger cues | Priority / scoring buckets; multi-label with primary; tests on lsq-01 & lsq-08 |
-| D3 | `RULESET` | `how` ignores styles entirely → same natal ⇒ identical how across users with different styles | Optional short style clause in `how` **after** natal trait (still sphere-specific) |
-| D4 | `RULESET` | No identity↔styles contradiction policy | Either hedge `how`/`risk` or kitchen flag; do not silently pick styles only |
-| D5 | `PROJECTION` | FE frames money `how` as «В реализации» | Align chrome with money sphere (copy), not claim rewrite |
-| D6 | `RULESET` | Without houses, pack almost never “passes” specificity — product over-promises natal-presence richness | Either ship traits for sign-only or mark `how` claim_depth visibly thinner in UI later |
-
-**Not defects:** comparisons proving outputs move with foundations; patterns gate; partial omit.
+| ID | Class | Note |
+|----|-------|------|
+| R1 | `PROJECTION` | FE money chrome «В реализации» — copy mismatch, not claim invent |
+| R2 | `UI_GATE` | Global ready / forming banner not block-level yet |
+| R3 | `RULESET` | Identity↔styles contradiction still unresolved as product policy (lsq-08 follows styles; acceptable for v0.2 presence) |
+| R4 | Capture | Production-faithful Case A/B + UI checklist on PR #2 still to close before merge |
 
 ---
 
-## 6. Field-level synthesis
+## 6. Merge gate for PR #2
 
-| Field | Grounding | Specificity | Usefulness | Notes |
-|-------|-----------|-------------|------------|-------|
-| how | planet/house evidence OK | **Weak** sign-only | descriptive | Primary blocker |
-| need | style rules OK | OK via style quote | OK as support need | Class misfire affects content |
-| risk | style rules OK | OK | OK | |
-| turns_on/off | style rules OK | mostly OK | OK | occasional weak binding |
-| helps | style rules OK | OK | mostly OK | keep verb-led templates |
+| Criterion | Status |
+|-----------|--------|
+| cases_pass ≥ 6/8 | **8/8** |
+| comparisons_pass = 2/2 | **2/2** |
+| sign-only how specificity | **PASS** |
+| no new honesty / identity-echo | **PASS** |
+| lsq-01 / lsq-08 classification | **care / speed** |
+| SoT updated to new run | **this doc** |
+| Production-faithful Case A/B + UI test plan on PR | **still open** — required before merge |
 
----
-
-## 7. Snapshot → API → UI
-
-| Layer | Status |
-|-------|--------|
-| Projector output | Partial map + `life_spheres_meta` (fingerprint, evidence) |
-| Snapshot normalize | Keeps non-empty sphere keys only — OK |
-| API | Same contract fields on partial portrait shell — OK for PR-2 |
-| UI | Partial spheres render when present (PR-2 FE); forming banner may still show (global ready not split) — `UI_GATE` debt, not sphere invent |
-| QuickMap | Must not invent longitudinal patterns — unchanged |
+**Frozen until after merge + separate decisions:** remaining six spheres · life_mission · character_helps · LLM wording · spheres prompt.
 
 ---
 
-## 8. Decision gate (what next)
-
-```text
-IF D1 (how traits) + D2 (bucket priority) fixed
-  AND quality pack cases_pass ≥ 6/8 without houses requirement
-  AND comparisons still pass
-THEN expand projector to next spheres (work/family/…)
-ELSE do not expand; do not start life_mission / character_helps passports for presence coupling
-```
-
-**Immediate next engineering slice (after this review):** ruleset patch for D1+D2 only — re-run this pack — update this document changelog.  
-**Still out of scope:** remaining six spheres, mission, helps[], Screen Master redesign.
-
----
-
-## 9. How to re-run
+## 7. Re-run
 
 ```bash
 cd backend
 .venv/bin/python evals/profile_quality/run_life_spheres_quality_pack_v0.py
-# writes evals/profile_quality/runs/life_spheres_quality_<ts>/pack.{json,md}
 ```
-
-Author updates this SoT from the newest run when ruleset changes.
 
 ---
 
@@ -242,4 +139,5 @@ Author updates this SoT from the newest run when ruleset changes.
 
 | Date | Change |
 |------|--------|
-| 2026-07-21 | Initial quality review from pack run `20260721T145313Z`; verdict = do not expand spheres until how traits + buckets fixed |
+| 2026-07-21 | Initial review from `20260721T145313Z` — fail (how boilerplate); do not expand |
+| 2026-07-21 | D1+D2 → `v0.2`; run `20260721T151047Z` — **8/8 PASS**; merge blocked only on remaining PR test-plan Case A/B/UI |

@@ -1,7 +1,7 @@
 {
   "version": "life_spheres_quality_cases_v0",
   "created": "2026-07-21",
-  "projection_version": "life_spheres_projector_v0.1",
+  "projection_version": "life_spheres_projector_v0.2",
   "spheres_in_scope": ["love", "money", "decisions"],
   "purpose": "Contrastive foundations to prove useful, grounded, distinct sphere claims — not only schema validity.",
   "cases": [

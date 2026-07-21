@@ -6,6 +6,7 @@ from typing import Any
 
 from todayflow_backend.core.config import settings
 from todayflow_backend.services import profile_disclosure_funnel_v0 as funnel
+from todayflow_backend.services.life_spheres_projector_v0 import SPHERES_SOURCE
 from todayflow_backend.services.profile_contract_v1 import (
     PROFILE_CONTRACT_PROMPT_VER,
     _normalize_profile_contract,
@@ -91,7 +92,7 @@ def test_profile_funnel_patterns_then_deterministic_spheres(monkeypatch) -> None
     )
     assert meta["partial"] is True  # slice ≠ global ready
     assert meta["completed_steps"] == ["identity", "styles", "patterns", "spheres"]
-    assert meta.get("spheres_source") == "deterministic_projector_v0_1"
+    assert meta.get("spheres_source") == SPHERES_SOURCE
     assert len(responses) == 0  # no LLM spheres call
     assert merged is not None
     assert merged["life_mission"]
@@ -185,7 +186,7 @@ def test_patterns_skipped_when_birth_only_projects_spheres(monkeypatch) -> None:
     assert merged.get("recurring_patterns") == []
     assert merged.get("living_changes") is None
     assert set(merged.get("life_spheres") or {}) == {"love", "money", "decisions"}
-    assert meta.get("spheres_source") == "deterministic_projector_v0_1"
+    assert meta.get("spheres_source") == SPHERES_SOURCE
     proj = meta["steps"][3]
-    assert proj.get("spheres_source") == "deterministic_projector_v0_1"
+    assert proj.get("spheres_source") == SPHERES_SOURCE
     assert proj.get("ok") is True

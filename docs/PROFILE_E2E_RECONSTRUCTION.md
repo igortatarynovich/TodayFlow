@@ -98,7 +98,7 @@ Production-faithful pack должен это **доказать** (eligibility +
 | 0b | Block passport template | [audits/PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](./audits/PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md) | **v0** |
 | 0c | Block passport · `life_spheres` | [audits/PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./audits/PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md) | **draft** — natal-presence · deterministic-first · independent of patterns |
 | 0d | Deterministic projector spec · `life_spheres` | [audits/PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./audits/PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md) | **v0.1 SoT** — foundations, gate, PR-2 love/money/decisions |
-| 0e | Quality review · love/money/decisions | [audits/PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md](./audits/PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md) | **v0** — contrast pack; **do not expand spheres** until D1/D2 RULESET fixed |
+| 0e | Quality review · love/money/decisions | [audits/PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md](./audits/PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md) | **v0.2 gate PASS** (8/8) — Case A/B+UI on PR still required before merge |
 | 1 | Pipeline map (registration → UI + alt paths) | [audits/PROFILE_E2E_PIPELINE_MAP.md](./audits/PROFILE_E2E_PIPELINE_MAP.md) | **v0** |
 | 2 | Prompt registry (passports) | [audits/PROFILE_E2E_PROMPT_REGISTRY.md](./audits/PROFILE_E2E_PROMPT_REGISTRY.md) | **v0 — align to block passport** |
 | 3 | Block map (every surface block) | [audits/PROFILE_E2E_BLOCK_MAP.md](./audits/PROFILE_E2E_BLOCK_MAP.md) | **v0 — current reality** |

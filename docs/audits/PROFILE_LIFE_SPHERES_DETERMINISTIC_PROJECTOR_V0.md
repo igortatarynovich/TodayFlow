@@ -4,7 +4,7 @@
 **Passport:** [PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md)  
 **Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md)  
 **Date:** 2026-07-21  
-**projection_version:** `life_spheres_projector_v0.1`
+**projection_version:** `life_spheres_projector_v0.2` (D1 traits · D2 scored buckets)
 
 > Executable ruleset. If a rule is not in this document, implementation must not invent it.  
 > Product lock: natal-presence · deterministic-first · independent of patterns.
@@ -463,3 +463,4 @@ Same foundations + version ⇒ same fingerprint (byte-stable canonical JSON).
 |------|--------|
 | 2026-07-21 | v0.1 spec: foundations, gate, 9-sphere matrix, PR-2 love/money/decisions rules, validation, fingerprint |
 | 2026-07-21 | Quality review SoT: [PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md](./PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md) — sign-only `how` boilerplate = blocking RULESET |
+| 2026-07-21 | v0.2: D1 planet×sign traits (`life_spheres_traits_v0`) · D2 scored buckets (`life_spheres_style_buckets_v0`); quality pack 8/8 |

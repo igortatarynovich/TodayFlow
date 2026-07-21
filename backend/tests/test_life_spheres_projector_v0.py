@@ -9,6 +9,8 @@ from todayflow_backend.services.life_spheres_projector_v0 import (
     spheres_projection_allowed,
 )
 
+assert PROJECTION_VERSION.startswith("life_spheres_projector_v0.2")
+
 
 def _foundations(**overrides):
     base = {
@@ -68,6 +70,9 @@ def test_projector_love_money_decisions_sign_only() -> None:
             assert len(row[field]) >= 20, f"{sid}.{field}"
         assert "доме" not in row["how"].lower()
         assert "асцендент" not in row["how"].lower()
+        assert "задаёт тон" not in row["how"].lower()
+        trait = meta["per_sphere"][sid]["trait"]
+        assert str(trait["trait_rule_id"]).startswith("trait:")
     # Stable fingerprint
     _, meta2 = project_life_spheres_v0(f)
     assert meta["fingerprint"] == meta2["fingerprint"]
