@@ -452,10 +452,6 @@ function ProfileHubPageInner() {
   const showProfileTeaser =
     !WEB_LAUNCH_MIN_PROFILE && isProfileQuickMap && hasCompletedFirstToday() && !profileDepthUnlocked;
   const onboardingCtx = readOnboardingContext();
-  const profileDepthRail = useMemo(
-    () => (showProfileQuickMap ? <ProfileV2DepthRail /> : undefined),
-    [showProfileQuickMap],
-  );
 
   return (
     <ProfileWebScreen
@@ -471,7 +467,7 @@ function ProfileHubPageInner() {
       railAnchors={
         showProfileQuickMap ? [] : buildProfileRailAnchors(profileQuickMapModel.frameworkAnchors)
       }
-      rail={profileDepthRail}
+      rail={showProfileQuickMap ? <ProfileV2DepthRail /> : undefined}
       compatibilityHref={hasRomanticCompatibilityPair ? romanticCompatibilityRoute.href : "/compatibility"}
     >
       <div
