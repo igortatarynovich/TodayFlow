@@ -102,6 +102,8 @@
 **Consistency ≠ Naturalness.**  
 Naturalness = «не звучит как робот». Consistency = «узнаваемость продукта между модулями и прогонами».
 
+Долгосрочно Consistency — один из главных показателей продукта: через год Today · Profile · Compatibility · Tarot должны ощущаться как **один интеллект**, а не четыре сервиса. (См. также Longitudinal Validation в Profile canon §7.3 — Consistency across time.)
+
 Если появляется особенно удачная фраза / структура / переход — **перенести принцип + пример** в этот файл (раздел Exemplars), не оставлять только в JSON кейса.
 
 Голос общий для Profile, Today, Compatibility, Tarot и будущих рекомендаций — один авторский слой, а не разные промпты.
