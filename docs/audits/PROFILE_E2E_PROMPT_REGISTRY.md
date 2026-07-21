@@ -66,8 +66,8 @@
 |-------|---------|
 | prompt_id | `profile.patterns.v1` |
 | version | `1.1.0` |
-| Trigger (current) | after styles — **always**, even if living is null |
-| Trigger (**target**) | only if `generation_gate` open: longitudinal / living evidence (`allowed_claims.recurring_patterns`) |
+| Trigger (current) | after styles — **only if** `patterns_generation_allowed(pack)` (`source_depth` ≥ `profile_plus_checkins`) |
+| Trigger (**gate**) | else: skip LLM · `reason=patterns_skipped_ineligible` · `recurring_patterns=[]` · spheres not started |
 | Input | shared + identity + styles |
 | System | patterns from **living/signals only**; mission + helps; text asks honesty if sparse |
 | Expected | recurring_patterns[], living_changes, life_mission, helps[≥2] |

@@ -180,6 +180,12 @@ class ProfileCaptureSession:
                     f"(source_depth={self.pack.get('source_depth')})",
                     cls="GENERATION_GATE",
                 )
+            elif not ran and may is False:
+                gm = self.pack.get("generation_metadata")
+                if not isinstance(gm, dict):
+                    gm = {}
+                    self.pack["generation_metadata"] = gm
+                gm[f"{step}_gate"] = "skipped_ineligible"
 
     def record_step_attempt(
         self,

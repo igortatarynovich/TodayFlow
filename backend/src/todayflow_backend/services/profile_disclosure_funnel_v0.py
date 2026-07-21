@@ -20,14 +20,18 @@ from todayflow_backend.core.llm_openai_compatible import (
     resolve_default_chat_model,
 )
 from todayflow_backend.prompts.registry_v1 import get_prompt
-from todayflow_backend.services.profile_capture_session_v0 import (
-    get_profile_capture_session,
-    profile_capture_enabled,
-)
 from todayflow_backend.services.llm_quality_policy_v1 import (
     funnel_step_max_tokens,
     prefer_multi_step_funnels,
     user_json_char_budget,
+)
+from todayflow_backend.services.profile_content_v1.source_depth import (
+    depth_from_profile_pack,
+    patterns_generation_allowed,
+)
+from todayflow_backend.services.profile_capture_session_v0 import (
+    get_profile_capture_session,
+    profile_capture_enabled,
 )
 
 logger = logging.getLogger(__name__)
@@ -342,6 +346,54 @@ def run_profile_disclosure_funnel_v0(
         return merged, meta
     meta["completed_steps"].append("styles")
 
+    # Production invariant: do not call patterns LLM without longitudinal eligibility.
+    if not patterns_generation_allowed(user_json):
+        depth = depth_from_profile_pack(user_json)
+        skip_meta: dict[str, Any] = {
+            "prompt_id": "profile.patterns.v1",
+            "skipped": True,
+            "skip_reason": "generation_gate_ineligible",
+            "source_depth": depth,
+            "attempts": 0,
+            "ms": 0,
+            "ok": False,
+        }
+        meta["steps"].append(skip_meta)
+        meta["reason"] = "patterns_skipped_ineligible"
+        meta["partial"] = True
+        meta["patterns_omitted"] = True
+        if profile_capture_enabled():
+            capture = get_profile_capture_session()
+            if capture is not None:
+                from todayflow_backend.services.profile_content_v1.architecture import (
+                    classify_allowed_claims,
+                )
+
+                if capture.pack.get("source_depth") is None:
+                    capture.set_inputs(
+                        inputs=dict(shared),
+                        calculated_facts={
+                            "astro": shared.get("astro"),
+                            "numerology": shared.get("numerology"),
+                            "baseline": shared.get("baseline"),
+                        },
+                        source_depth=depth,
+                        allowed_claims=classify_allowed_claims(depth),
+                    )
+                # Explicit: step did not run (eligibility closed).
+                capture.mark_step_ran("patterns", ran=False)
+        merged = {
+            "identity_core": r1.get("identity_core"),
+            "strengths": r1.get("strengths"),
+            "growth_zones": r1.get("growth_zones"),
+            "relationship_style": r2.get("relationship_style"),
+            "money_style": r2.get("money_style"),
+            "decision_style": r2.get("decision_style"),
+            "recurring_patterns": [],
+            "living_changes": None,
+        }
+        return merged, meta
+
     r3, m3 = _call_with_retry(
         prompt_id="profile.patterns.v1",
         locale=locale,
@@ -360,6 +412,8 @@ def run_profile_disclosure_funnel_v0(
             "relationship_style": r2.get("relationship_style"),
             "money_style": r2.get("money_style"),
             "decision_style": r2.get("decision_style"),
+            "recurring_patterns": [],
+            "living_changes": None,
         }
         return merged, meta
     meta["completed_steps"].append("patterns")

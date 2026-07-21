@@ -24,6 +24,39 @@ def _sphere_row(tag: str) -> dict[str, str]:
     }
 
 
+def _living_eligible() -> dict[str, Any]:
+    """Enough check-in signal for patterns generation_gate."""
+    return {
+        "summary": "Часто отмечаете перегруз к вечеру; сложные разговоры откладываются.",
+        "signals": [
+            {"day": "2026-07-14", "mood": "tired", "note": "не стала писать коллеге"},
+            {"day": "2026-07-15", "mood": "ok", "note": "сделала дела по списку"},
+            {"day": "2026-07-16", "mood": "anxious", "note": "разговор перенесла"},
+        ],
+        "signal_profile": {"signals_days": 8},
+        "insights": ["откладывание сложных разговоров"],
+    }
+
+
+def _fake_call_factory(responses: list[Any]):
+    def fake_call(
+        system: str,
+        user: str,
+        *,
+        depth_level: str = "normal",
+        temperature: float = 0.48,
+    ) -> tuple[dict[str, Any] | None, str | None]:
+        assert system
+        assert user
+        assert temperature >= 0
+        parsed = responses.pop(0) if responses else None
+        if parsed is None:
+            return None, None
+        return parsed, "{}"
+
+    return fake_call
+
+
 def test_profile_funnel_four_steps(monkeypatch) -> None:
     monkeypatch.setattr(settings, "llm_quality_mode", "rich")
     monkeypatch.setattr(funnel, "is_llm_chat_configured", lambda: True)
@@ -60,27 +93,19 @@ def test_profile_funnel_four_steps(monkeypatch) -> None:
         },
     ]
 
-    def fake_call(
-        system: str,
-        user: str,
-        *,
-        depth_level: str = "normal",
-        temperature: float = 0.48,
-    ) -> dict[str, Any] | None:
-        assert system
-        assert user
-        assert temperature >= 0
-        return responses.pop(0)
-
-    monkeypatch.setattr(funnel, "_call", fake_call)
+    monkeypatch.setattr(funnel, "_call", _fake_call_factory(responses))
     merged, meta = funnel.run_profile_disclosure_funnel_v0(
-        {"person": {"display_name": "Игорь"}, "astro": {"sun_sign": "Leo"}},
+        {
+            "person": {"display_name": "Игорь"},
+            "astro": {"sun_sign": "Leo"},
+            "living": _living_eligible(),
+        },
         locale="ru",
     )
     assert meta["failed"] is False
     assert meta["completed_steps"] == ["identity", "styles", "patterns", "spheres"]
     assert len(meta["steps"]) == 4
-    assert all(s.get("prompt_version") for s in meta["steps"])
+    assert all(s.get("prompt_version") or s.get("skipped") for s in meta["steps"])
     assert merged is not None
     assert merged["life_mission"]
     assert len(merged["life_spheres"]) == 9
@@ -122,18 +147,13 @@ def test_partial_failure_keeps_prior_steps(monkeypatch) -> None:
         None,
     ]
 
-    def fake_call(
-        system: str,
-        user: str,
-        *,
-        depth_level: str = "normal",
-        temperature: float = 0.48,
-    ) -> dict[str, Any] | None:
-        return responses.pop(0) if responses else None
-
-    monkeypatch.setattr(funnel, "_call", fake_call)
+    monkeypatch.setattr(funnel, "_call", _fake_call_factory(responses))
     merged, meta = funnel.run_profile_disclosure_funnel_v0(
-        {"person": {"display_name": "Игорь"}},
+        {
+            "person": {"display_name": "Игорь"},
+            "astro": {"sun_sign": "Leo"},
+            "living": _living_eligible(),
+        },
         locale="ru",
     )
     assert meta["failed"] is True
@@ -144,3 +164,61 @@ def test_partial_failure_keeps_prior_steps(monkeypatch) -> None:
     assert merged["identity_core"]
     assert merged["relationship_style"]
     assert "life_mission" not in merged or not merged.get("life_mission")
+
+
+def test_patterns_skipped_when_birth_only(monkeypatch) -> None:
+    """GENERATION_GATE: birth_data_only must not call profile.patterns.v1."""
+    monkeypatch.setattr(settings, "llm_quality_mode", "rich")
+    monkeypatch.setattr(funnel, "is_llm_chat_configured", lambda: True)
+    monkeypatch.setattr(funnel, "prefer_multi_step_funnels", lambda: True)
+    calls: list[str] = []
+    responses = [
+        {
+            "contract_version": funnel.IDENTITY_CONTRACT,
+            "identity_core": "Человек держит смысл через ясный фокус и живой контакт.",
+            "strengths": ["Фокус", "Контакт", "Доведение"],
+            "growth_zones": ["Распыление", "Контроль", "Откладывание"],
+        },
+        {
+            "contract_version": funnel.STYLES_CONTRACT,
+            "relationship_style": "Близость через прямые слова и предсказуемость.",
+            "money_style": "Деньги как ценность и спокойный шаг без импульса.",
+            "decision_style": "Решения через один критерий и короткий дедлайн.",
+        },
+    ]
+
+    def fake_call(
+        system: str,
+        user: str,
+        *,
+        depth_level: str = "normal",
+        temperature: float = 0.48,
+    ) -> tuple[dict[str, Any] | None, str | None]:
+        calls.append(user[:80])
+        parsed = responses.pop(0)
+        return parsed, "{}"
+
+    monkeypatch.setattr(funnel, "_call", fake_call)
+    merged, meta = funnel.run_profile_disclosure_funnel_v0(
+        {
+            "person": {"first_name": "Аня"},
+            "astro": {"sun_sign": "aries"},
+            "numerology": {"life_path": 1},
+            "baseline": {"archetype_seed": "initiator"},
+            "living": None,
+        },
+        locale="ru",
+    )
+    assert len(calls) == 2  # identity + styles only
+    assert meta["reason"] == "patterns_skipped_ineligible"
+    assert meta["patterns_omitted"] is True
+    assert meta["partial"] is True
+    assert meta["completed_steps"] == ["identity", "styles"]
+    skip = meta["steps"][2]
+    assert skip.get("skipped") is True
+    assert skip.get("skip_reason") == "generation_gate_ineligible"
+    assert merged is not None
+    assert merged["relationship_style"]
+    assert merged.get("recurring_patterns") == []
+    assert merged.get("living_changes") is None
+    assert "life_spheres" not in merged or not merged.get("life_spheres")

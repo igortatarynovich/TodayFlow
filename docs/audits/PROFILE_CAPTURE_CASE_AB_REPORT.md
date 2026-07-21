@@ -128,28 +128,19 @@ B: eligibility ALLOWS patterns → living facts IN prompt → patterns IN raw/Sn
 
 ## First narrow implementation slice (from evidence)
 
-**Do not** rewrite prompts or hide UI ad hoc.
-
-**Slice 1 — `GENERATION_GATE` for patterns only:**
+**Status: IMPLEMENTED** — `patterns_generation_allowed` gate in `profile_disclosure_funnel_v0`.
 
 ```text
-if not classify_allowed_claims(depth).recurring_patterns:
-    skip profile.patterns.v1 (and do not require recurring_patterns / living_changes)
+if not patterns_generation_allowed(user_json):  # classify_allowed_claims(depth).recurring_patterns
+    skip profile.patterns.v1 (no LLM call)
+    Snapshot / merge: recurring_patterns=[], living_changes=null
+    reason=patterns_skipped_ineligible · partial=true
+    spheres not started (same as prior patterns_failed stop — spheres code unchanged)
 ```
 
-Consequences to design in the same slice (minimal):
+Regression: Case A path → patterns attempts=0, may_generate=false, ran=false.  
+Case B path unchanged when living/check-ins make depth ≥ profile_plus_checkins.
 
-- Funnel continues or stops cleanly without forcing fake patterns (decide: skip patterns → still attempt spheres? or mark patterns omitted and continue with styles-only contract — needs passport decision).
-- `_patterns_ok` / strict quality must not demand confirmed patterns when step was skipped.
-- Case A regression: patterns attempts=0, may_generate=false, ran=false, no `GENERATION_GATE` defect.
-
-**Out of slice:** spheres redesign, Today-frame removal, Screen Master, trial/sub, production HTTP timeout change.
-
-**Follow-ups (later):**
-
-1. Capture assemble: set `living.signal_profile.signals_days` from scenario for FE depth fidelity.  
-2. Eval-only timeout already in capture CLI (120s) — keep separate from production 12s.  
-3. Audit spheres uniqueness after gate fix.
 
 ---
 
@@ -158,3 +149,4 @@ Consequences to design in the same slice (minimal):
 | Date | Change |
 |------|--------|
 | 2026-07-21 | Case A/B packs analyzed; comparative report; slice = patterns generation gate |
+| 2026-07-21 | **IMPLEMENTED** production GENERATION_GATE: skip patterns when ineligible |

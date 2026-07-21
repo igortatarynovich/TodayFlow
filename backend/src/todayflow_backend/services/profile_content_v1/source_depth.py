@@ -64,3 +64,45 @@ def depth_from_scenario(sc: dict[str, Any]) -> ProfileSourceDepth:
         checkin_days=int(sc.get("checkin_days") or 0),
         longitudinal_days=int(sc.get("longitudinal_days") or 0),
     )
+
+
+def depth_from_profile_pack(user_json: dict[str, Any] | None) -> ProfileSourceDepth:
+    """Resolve source_depth from the portrait LLM pack (shared funnel input)."""
+    pack = user_json if isinstance(user_json, dict) else {}
+    person = pack.get("person") if isinstance(pack.get("person"), dict) else {}
+    astro = pack.get("astro") if isinstance(pack.get("astro"), dict) else {}
+    numerology = pack.get("numerology") if isinstance(pack.get("numerology"), dict) else {}
+    living = pack.get("living") if isinstance(pack.get("living"), dict) else {}
+    onboarding = living.get("onboarding") if isinstance(living.get("onboarding"), dict) else pack.get("onboarding")
+
+    has_birth = bool(
+        person.get("birth_date")
+        or astro.get("birth_date")
+        or astro.get("sun_sign")
+        or numerology.get("birth_date")
+        or numerology.get("life_path") is not None
+    )
+    has_onboarding = bool(onboarding)
+
+    signal = living.get("signal_profile") if isinstance(living.get("signal_profile"), dict) else {}
+    checkin_days = int(signal.get("signals_days") or 0)
+    if checkin_days <= 0:
+        signals = living.get("signals")
+        if isinstance(signals, list):
+            checkin_days = len(signals)
+    longitudinal_days = int(signal.get("longitudinal_days") or living.get("longitudinal_days") or checkin_days or 0)
+
+    return resolve_profile_source_depth(
+        has_birth=has_birth,
+        has_onboarding=has_onboarding,
+        checkin_days=checkin_days,
+        longitudinal_days=longitudinal_days,
+    )
+
+
+def patterns_generation_allowed(user_json: dict[str, Any] | None) -> bool:
+    """Production invariant: recurring_patterns LLM step only with longitudinal evidence."""
+    from todayflow_backend.services.profile_content_v1.architecture import classify_allowed_claims
+
+    depth = depth_from_profile_pack(user_json)
+    return bool(classify_allowed_claims(depth).get("recurring_patterns"))
