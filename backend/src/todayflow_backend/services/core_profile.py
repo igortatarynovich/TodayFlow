@@ -121,10 +121,10 @@ class CoreProfileService:
         user: db_models.User,
         astro_profile_id: int | None = None,
     ) -> dict[str, Any]:
-        """Side surfaces (Compatibility personalized strip) must not trigger portrait LLM.
+        """Read-path only: memory/snapshot or deterministic baseline shell.
 
-        Returns memory/snapshot cache when present; otherwise a deterministic baseline shell
-        (astro/numerology/baseline only). Full `build()` remains the path for Profile / Today.
+        Never runs portrait LLM. All GET / side modules must use this (or ``build()``
+        without ``publish_portrait``).
         """
         settings = (
             db.query(db_models.UserSettings).filter(db_models.UserSettings.user_id == user.id).first()
@@ -174,7 +174,33 @@ class CoreProfileService:
         }
         return self._attach_natal_summary(db, shell, astro_profile, settings)
 
-    def build(self, db: Session, user: db_models.User, astro_profile_id: int | None = None) -> dict[str, Any]:
+    def build(
+        self,
+        db: Session,
+        user: db_models.User,
+        astro_profile_id: int | None = None,
+        *,
+        publish_portrait: bool = False,
+    ) -> dict[str, Any]:
+        """Default = read-path (no portrait LLM). Publisher must pass ``publish_portrait=True``.
+
+        Portrait LLM runs only for explicit publish (core-setup, birth-fact save, POST refresh).
+        Ordinary page views must never create a new personality interpretation.
+
+        Naming debt (P2): prefer ``get_or_baseline`` / ``publish_snapshot`` — ``build`` sounds
+        like generation and historically caused LLM-on-read. See Experience wiring P1 audit.
+        """
+        if not publish_portrait:
+            return self.build_cached_or_baseline(db, user, astro_profile_id=astro_profile_id)
+
+        return self._publish_portrait(db, user, astro_profile_id=astro_profile_id)
+
+    def _publish_portrait(
+        self,
+        db: Session,
+        user: db_models.User,
+        astro_profile_id: int | None = None,
+    ) -> dict[str, Any]:
         # Явная загрузка настроек: при переиспользовании одной DB-сессии (pytest / TestClient)
         # связь user.settings может не отражать только что закоммиченный PUT /account/profile.
         settings = (
@@ -186,9 +212,6 @@ class CoreProfileService:
         living_context, living_cache_marker = self._build_living_context(db, user.id)
         cache_key = self._cache_key(user.id, settings, astro_profile, numerology_profile, profiles_context, living_cache_marker)
         now = time_module.time()
-        cached = self._cache.get(cache_key)
-        if cached and cached[0] > now:
-            return self._attach_natal_summary(db, deepcopy(cached[1]), astro_profile, settings)
 
         astro_context = self._build_astro_context(astro_profile)
         numerology_context = self._build_numerology_context(numerology_profile)
@@ -196,22 +219,8 @@ class CoreProfileService:
 
         lock = self._lock_for_hash(profile_hash)
         with lock:
-            # Re-check memory cache inside lock (parallel openers coalesce).
-            cached = self._cache.get(cache_key)
-            if cached and cached[0] > now:
-                return self._attach_natal_summary(db, deepcopy(cached[1]), astro_profile, settings)
-
-            snapshot = self._load_snapshot(db, user.id, profile_hash)
-            if snapshot is not None and self._snapshot_is_reusable(snapshot, now=now):
-                cached_payload = self._normalize_payload_contract(deepcopy(snapshot))
-                if isinstance(cached_payload.get("astro"), dict):
-                    cached_payload["astro"]["relation"] = astro_context.get("relation")
-                cached_payload["profiles"] = profiles_context
-                cached_payload["living"] = living_context
-                self._cache[cache_key] = (now + self.cache_ttl_seconds, deepcopy(cached_payload))
-                self._prune_cache(now)
-                return self._attach_natal_summary(db, cached_payload, astro_profile, settings)
-
+            # Publisher always regenerates portrait for current hash (explicit refresh / fact change).
+            # Parallel publishers coalesce under the same hash lock.
             baseline = self._build_baseline(astro_context, numerology_context)
             missing_fields = self._build_missing_fields(settings, astro_context, numerology_context)
             is_ready = len(missing_fields) == 0
@@ -243,6 +252,31 @@ class CoreProfileService:
                 steps = gm["steps"]
             self._bump_llm_call_counter(len(steps) if steps else (0 if used_fallback else 1))
 
+            profile_payload = {
+                "profile_version": self.profile_version,
+                "generated_at": generated_at,
+                "is_ready": is_ready,
+                "missing_fields": missing_fields,
+                "profile_hash": profile_hash,
+                "person": person_pub,
+                "astro": astro_context,
+                "numerology": numerology_context,
+                "baseline": baseline,
+                "profiles": profiles_context,
+                "profile_contract_v1": contract,
+                "interpretation": interpretation,
+                "daily_interpretation": daily_interpretation,
+                "living": living_context,
+            }
+            snapshot_id = self._save_snapshot(
+                db=db,
+                user_id=user.id,
+                profile_hash=profile_hash,
+                payload=profile_payload,
+            )
+            if snapshot_id is not None:
+                profile_payload["snapshot_id"] = snapshot_id
+
             try:
                 learning = get_learning_service()
                 pv = learning.get_or_create_prompt_version(
@@ -263,10 +297,13 @@ class CoreProfileService:
                     module="profile_contract_v1",
                     surface="profile_contract",
                     user_id=user.id,
+                    core_profile_snapshot_id=snapshot_id,
                     prompt_version_id=pv.id,
                     locale=locale,
                     input_payload={
                         "profile_hash": profile_hash,
+                        "profile_version": self.profile_version,
+                        "generated_from_snapshot": True,
                         "contract": PROFILE_CONTRACT_V1,
                         "prompt_versions": profile_prompt_versions(),
                         "generation_meta": gm if isinstance(gm, dict) else {},
@@ -278,28 +315,6 @@ class CoreProfileService:
             except Exception:
                 pass
 
-            profile_payload = {
-                "profile_version": self.profile_version,
-                "generated_at": generated_at,
-                "is_ready": is_ready,
-                "missing_fields": missing_fields,
-                "profile_hash": profile_hash,
-                "person": person_pub,
-                "astro": astro_context,
-                "numerology": numerology_context,
-                "baseline": baseline,
-                "profiles": profiles_context,
-                "profile_contract_v1": contract,
-                "interpretation": interpretation,
-                "daily_interpretation": daily_interpretation,
-                "living": living_context,
-            }
-            self._save_snapshot(
-                db=db,
-                user_id=user.id,
-                profile_hash=profile_hash,
-                payload=profile_payload,
-            )
             self._cache[cache_key] = (now + self.cache_ttl_seconds, deepcopy(profile_payload))
             self._prune_cache(now)
             return self._attach_natal_summary(db, deepcopy(profile_payload), astro_profile, settings)
@@ -781,6 +796,8 @@ class CoreProfileService:
             payload["generated_at"] = record.updated_at.isoformat()
         if "profile_version" not in payload:
             payload["profile_version"] = record.profile_version or self.profile_version
+        payload["profile_hash"] = record.profile_hash or profile_hash
+        payload["snapshot_id"] = record.id
         return self._normalize_payload_contract(payload)
 
     def _save_snapshot(
@@ -790,7 +807,7 @@ class CoreProfileService:
         user_id: int,
         profile_hash: str,
         payload: dict[str, Any],
-    ) -> None:
+    ) -> int | None:
         existing = (
             db.query(db_models.CoreProfileSnapshot)
             .filter(
@@ -804,7 +821,8 @@ class CoreProfileService:
             existing.payload = deepcopy(payload)
             db.add(existing)
             db.commit()
-            return
+            db.refresh(existing)
+            return int(existing.id)
 
         snapshot = db_models.CoreProfileSnapshot(
             user_id=user_id,
@@ -814,6 +832,8 @@ class CoreProfileService:
         )
         db.add(snapshot)
         db.commit()
+        db.refresh(snapshot)
+        return int(snapshot.id)
 
     @staticmethod
     def _extract_reduced_value(item: Any) -> int | None:

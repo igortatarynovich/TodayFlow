@@ -13,6 +13,7 @@ from datetime import date, time
 from todayflow_backend.api.auth import get_optional_user, require_user
 from todayflow_backend.api.learning_contracts import CompatibilityAttachmentReferenceV0
 from todayflow_backend.db.session import get_session
+from todayflow_backend.db import models as db_models
 from todayflow_backend.db.models import AstroProfile, CachedCompatibility, Subscription, User, utc_naive_now
 from todayflow_backend.data.astrology import lookup_sign_metadata
 from todayflow_backend.services.chinese_horoscope import get_chinese_horoscope_service
@@ -32,6 +33,10 @@ from todayflow_backend.services.children_charts import ChildrenChartsService
 from todayflow_backend.services.group_compatibility import GroupCompatibilityService, get_group_compatibility_service
 from todayflow_backend.services.lite_reports import LiteReportService, get_lite_report_service
 from todayflow_backend.services.core_profile import CoreProfileService, get_core_profile_service
+from todayflow_backend.services.experience_contract_assembler_v0 import (
+    assemble_experience_slice,
+    slice_log_fields,
+)
 from todayflow_backend.services.mapping import InternalModelMapper
 from todayflow_backend.services.interpretation_orchestrator import (
     InterpretationOrchestrator,
@@ -115,6 +120,107 @@ _MODE_DIMENSION_META: dict[str, dict[str, tuple[str, int, str]]] = {
         "long_term": ("Рост через время", 4, "Здесь видно, помогает ли связь развиваться через возраст и этапы, а не только удерживать порядок."),
     },
 }
+
+
+def _life_path_from_personal_model(
+    db: Session,
+    *,
+    user_id: int,
+    astro_profile: AstroProfile,
+    core_profile: dict[str, Any] | None = None,
+) -> int | None:
+    """Read life_path via Experience Contract (primary) or numerology store — not a private formula."""
+    if (
+        core_profile
+        and isinstance(core_profile, dict)
+        and astro_profile.is_primary
+    ):
+        slice_lp = assemble_experience_slice(
+            core_profile, experience_id="compatibility"
+        ).get("life_path")
+        if isinstance(slice_lp, int):
+            return slice_lp
+        if isinstance(slice_lp, dict):
+            for key in ("reduced_value", "value", "number"):
+                if isinstance(slice_lp.get(key), int):
+                    return int(slice_lp[key])
+        try:
+            if slice_lp is not None and str(slice_lp).strip().isdigit():
+                return int(str(slice_lp).strip())
+        except (TypeError, ValueError):
+            pass
+
+    row = (
+        db.query(db_models.NumerologyProfileRecord)
+        .filter(
+            db_models.NumerologyProfileRecord.user_id == user_id,
+            db_models.NumerologyProfileRecord.birth_date == astro_profile.birth_date,
+        )
+        .order_by(db_models.NumerologyProfileRecord.created_at.desc())
+        .first()
+    )
+    if row is not None and isinstance(row.data, dict):
+        life = row.data.get("life_path")
+        if isinstance(life, int):
+            return life
+        if isinstance(life, dict):
+            for key in ("reduced_value", "value", "number"):
+                if isinstance(life.get(key), int):
+                    return int(life[key])
+    return None
+
+
+def _compat_personalized_from_experience_slice(
+    core_profile: dict[str, Any],
+    *,
+    consistency: dict[str, Any],
+    to_display: str,
+    static_payload: dict[str, Any],
+    el_rel: Any,
+    rh_rel: Any,
+    locale: str,
+) -> dict[str, Any]:
+    """Compatibility personalization reads personality only via ExperienceSlice."""
+    experience_slice = assemble_experience_slice(core_profile, experience_id="compatibility")
+    user_sun = experience_slice.get("sun_sign")
+    personal_focus = _compatibility_personal_focus_phrase(
+        consistency.get("focus"), locale=locale
+    )
+    decision = experience_slice.get("decision_style")
+    if isinstance(decision, str) and decision.strip() and not personal_focus:
+        personal_focus = decision.strip()[:160]
+    out: dict[str, Any] = {
+        # Snapshot-gated readiness — shell without snapshot is not "profile ready".
+        "profile_ready": bool(experience_slice.get("generated_from_snapshot")),
+        "profile_hash": experience_slice.get("profile_hash"),
+        "headline": translate("compat.personalized.headline", locale=locale).format(
+            focus=personal_focus
+        ),
+        "hint": _compatibility_personal_hint(user_sun, to_display, locale=locale),
+        "focus": personal_focus,
+        "do_focus": _compatibility_clean_personal_line(
+            consistency.get("do_focus"),
+            fallback=_quick_sign_strongest_text(
+                static_payload["score"], el_rel, locale=locale
+            ),
+            locale=locale,
+        ),
+        "avoid_focus": _compatibility_clean_personal_line(
+            consistency.get("avoid_focus"),
+            fallback=_quick_sign_friction_text(
+                static_payload["score"], rh_rel, locale=locale
+            ),
+            locale=locale,
+        ),
+        "decision_style": experience_slice.get("decision_style"),
+        "conflict_style": experience_slice.get("conflict_style"),
+        "communication_style": experience_slice.get("communication_style"),
+        "motivation": experience_slice.get("motivation"),
+        "energy_source": experience_slice.get("energy_source"),
+        "life_path": experience_slice.get("life_path"),
+        **slice_log_fields(experience_slice),
+    }
+    return out
 
 
 class CompatibilityRequest(BaseModel):
@@ -293,25 +399,17 @@ def signs_compatibility(
                 numerology=None,
                 needs="love",
             )
-            user_sun = (core_profile.get("astro") or {}).get("sun_sign")
-            personal_focus = _compatibility_personal_focus_phrase(consistency.get("focus"), locale=effective_locale)
-            personalized = {
-                "profile_ready": core_profile.get("is_ready"),
-                "profile_hash": core_profile.get("profile_hash"),
-                "headline": translate("compat.personalized.headline", locale=effective_locale).format(focus=personal_focus),
-                "hint": _compatibility_personal_hint(user_sun, to_display, locale=effective_locale),
-                "focus": personal_focus,
-                "do_focus": _compatibility_clean_personal_line(
-                    consistency.get("do_focus"),
-                    fallback=_quick_sign_strongest_text(static_payload["score"], el_rel, locale=effective_locale),
-                    locale=effective_locale,
-                ),
-                "avoid_focus": _compatibility_clean_personal_line(
-                    consistency.get("avoid_focus"),
-                    fallback=_quick_sign_friction_text(static_payload["score"], rh_rel, locale=effective_locale),
-                    locale=effective_locale,
-                ),
-            }
+            personalized = _compat_personalized_from_experience_slice(
+                core_profile if isinstance(core_profile, dict) else {},
+                consistency=consistency.model_dump()
+                if hasattr(consistency, "model_dump")
+                else (consistency if isinstance(consistency, dict) else {}),
+                to_display=to_display,
+                static_payload=static_payload,
+                el_rel=el_rel,
+                rh_rel=rh_rel,
+                locale=effective_locale,
+            )
         except Exception:
             personalized = None
 
@@ -559,25 +657,17 @@ def compatibility_dynamics(
                 numerology=None,
                 needs="love",
             )
-            user_sun = (core_profile.get("astro") or {}).get("sun_sign")
-            personal_focus = _compatibility_personal_focus_phrase(consistency.get("focus"), locale=effective_locale)
-            personalized = {
-                "profile_ready": core_profile.get("is_ready"),
-                "profile_hash": core_profile.get("profile_hash"),
-                "headline": translate("compat.personalized.headline", locale=effective_locale).format(focus=personal_focus),
-                "hint": _compatibility_personal_hint(user_sun, to_display, locale=effective_locale),
-                "focus": personal_focus,
-                "do_focus": _compatibility_clean_personal_line(
-                    consistency.get("do_focus"),
-                    fallback=_quick_sign_strongest_text(static_payload["score"], el_rel, locale=effective_locale),
-                    locale=effective_locale,
-                ),
-                "avoid_focus": _compatibility_clean_personal_line(
-                    consistency.get("avoid_focus"),
-                    fallback=_quick_sign_friction_text(static_payload["score"], rh_rel, locale=effective_locale),
-                    locale=effective_locale,
-                ),
-            }
+            personalized = _compat_personalized_from_experience_slice(
+                core_profile if isinstance(core_profile, dict) else {},
+                consistency=consistency.model_dump()
+                if hasattr(consistency, "model_dump")
+                else (consistency if isinstance(consistency, dict) else {}),
+                to_display=to_display,
+                static_payload=static_payload,
+                el_rel=el_rel,
+                rh_rel=rh_rel,
+                locale=effective_locale,
+            )
         except Exception as exc:
             log_compat(
                 "generation",
@@ -1714,12 +1804,23 @@ async def compare_profiles(
     horoscopes_2 = await _get_all_horoscopes_for_profile(profile_2, db)
     
     # Вычисляем быстрый, но уже структурированный слой совместимости
+    core_for_lp = None
+    try:
+        core_for_lp = get_core_profile_service().build_cached_or_baseline(db, user)
+    except Exception:
+        core_for_lp = None
     compatibility_results = compatibility_engine.build_quick_payload(
         profile_1=profile_1,
         profile_2=profile_2,
         horoscopes_1=horoscopes_1,
         horoscopes_2=horoscopes_2,
         relation_mode=request.relation_mode,
+        life_path_1=_life_path_from_personal_model(
+            db, user_id=user.id, astro_profile=profile_1, core_profile=core_for_lp
+        ),
+        life_path_2=_life_path_from_personal_model(
+            db, user_id=user.id, astro_profile=profile_2, core_profile=core_for_lp
+        ),
     ).model_dump()
     compatibility_results = _apply_relation_mode_surface(
         compatibility_results,
@@ -2045,6 +2146,11 @@ async def calculate_synastry(
     # Calculate synastry
     synastry_report = await synastry_service.calculate_synastry(chart1, chart2, locale=locale)
 
+    core_for_lp = None
+    try:
+        core_for_lp = get_core_profile_service().build_cached_or_baseline(db, user)
+    except Exception:
+        core_for_lp = None
     response_payload = compatibility_engine.build_deep_payload(
         profile_1=profile_1,
         profile_2=profile_2,
@@ -2052,6 +2158,12 @@ async def calculate_synastry(
         chart2=chart2,
         synastry_report=synastry_report,
         relation_mode=request_data.relation_mode,
+        life_path_1=_life_path_from_personal_model(
+            db, user_id=user.id, astro_profile=profile_1, core_profile=core_for_lp
+        ),
+        life_path_2=_life_path_from_personal_model(
+            db, user_id=user.id, astro_profile=profile_2, core_profile=core_for_lp
+        ),
     )
     response_payload = await _enrich_deep_relation_mode(
         response_payload=response_payload,

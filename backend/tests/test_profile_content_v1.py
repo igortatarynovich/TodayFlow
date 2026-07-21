@@ -7,6 +7,8 @@ from pathlib import Path
 
 from todayflow_backend.services.profile_content_v1.architecture import (
     LLM_ON_READ_RISK_CALLERS,
+    PORTRAIT_PUBLISHERS,
+    SAFE_SNAPSHOT_CALLERS,
     classify_allowed_claims,
 )
 from todayflow_backend.services.profile_content_v1.banned_phrases import (
@@ -72,7 +74,10 @@ def test_banned_always():
 
 
 def test_architecture_lists_nonempty():
-    assert len(LLM_ON_READ_RISK_CALLERS) >= 3
+    # P0 closed: no remaining LLM-on-read callers; publishers + safe readers documented.
+    assert LLM_ON_READ_RISK_CALLERS == ()
+    assert len(SAFE_SNAPSHOT_CALLERS) >= 3
+    assert len(PORTRAIT_PUBLISHERS) >= 1
     claims = classify_allowed_claims("birth_data_only")
     assert claims["recurring_patterns"] is False
 

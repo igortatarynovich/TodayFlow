@@ -460,7 +460,7 @@ def guidance_reading_clarify(
     if str(payload.selected_cards[0].card_id) not in tarot_service.card_map:
         raise HTTPException(status_code=400, detail=f"Неизвестный card_id: {payload.selected_cards[0].card_id}.")
 
-    core_profile = core_profile_service.build(db, user)
+    core_profile = core_profile_service.build_cached_or_baseline(db, user)
     hub_lane_hint = lane if lane in JTBD_LANES else None
     response = question_service.answer(
         clarify_q,
@@ -683,7 +683,7 @@ def guidance_reading(
         if str(pick.card_id) not in tarot_service.card_map:
             raise HTTPException(status_code=400, detail=f"Неизвестный card_id: {pick.card_id}.")
 
-    core_profile = core_profile_service.build(db, user)
+    core_profile = core_profile_service.build_cached_or_baseline(db, user)
     preferred_lane = payload.preferred_lane if payload.preferred_lane in JTBD_LANES else None
     hub_lane_hint = payload.hub_lane_hint if payload.hub_lane_hint in JTBD_LANES else None
 
@@ -878,7 +878,7 @@ def answer_question(
     if len(question) < 3:
         raise HTTPException(status_code=400, detail="Question is too short.")
 
-    core_profile = core_profile_service.build(db, user) if user is not None else None
+    core_profile = core_profile_service.build_cached_or_baseline(db, user) if user is not None else None
     preferred_lane = payload.preferred_lane if payload.preferred_lane in JTBD_LANES else None
     hub_lane_hint = payload.hub_lane_hint if payload.hub_lane_hint in JTBD_LANES else None
     response = question_service.answer(
@@ -938,7 +938,7 @@ def answer_decision(
     if len(question) < 3:
         raise HTTPException(status_code=400, detail="Question is too short.")
 
-    core_profile = core_profile_service.build(db, user) if user is not None else None
+    core_profile = core_profile_service.build_cached_or_baseline(db, user) if user is not None else None
     response = question_service.decision_answer(
         question,
         option_a=payload.option_a,

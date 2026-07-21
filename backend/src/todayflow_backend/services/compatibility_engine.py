@@ -34,6 +34,9 @@ class CompatibilityEngineService:
         horoscopes_1: Dict[str, Any],
         horoscopes_2: Dict[str, Any],
         relation_mode: str | None = None,
+        *,
+        life_path_1: int | None = None,
+        life_path_2: int | None = None,
     ) -> models.EnrichedCompatibilityResponse:
         astro_1 = horoscopes_1.get("astrology") or {}
         astro_2 = horoscopes_2.get("astrology") or {}
@@ -48,10 +51,13 @@ class CompatibilityEngineService:
         quick_aspects: List[Dict[str, Any]] = []
         dimensions: List[models.CompatibilityDimension] = []
 
+        lp1 = self._resolve_life_path(profile_1.birth_date, preferred=life_path_1)
+        lp2 = self._resolve_life_path(profile_2.birth_date, preferred=life_path_2)
+
         attraction = self._score_sign_pair(sun_1, sun_2, base=52)
         emotional = self._score_sign_pair(moon_1, moon_2, base=54)
         communication = self._score_sign_pair(rising_1 or sun_1, rising_2 or sun_2, base=50)
-        stability = self._score_life_path_pair(profile_1.birth_date, profile_2.birth_date)
+        stability = self._score_life_path_pair(lp1, lp2)
         long_term = int(round((attraction + emotional + stability) / 3))
 
         if sun_1 and sun_2:
@@ -68,7 +74,7 @@ class CompatibilityEngineService:
             })
         quick_aspects.append({
             "type": "Числа пути",
-            "description": self._build_life_path_text(profile_1.birth_date, profile_2.birth_date),
+            "description": self._build_life_path_text(lp1, lp2),
             "score": self._to_ten_scale(stability),
         })
 
@@ -82,7 +88,10 @@ class CompatibilityEngineService:
 
         overall = int(round(sum(item.score for item in dimensions) / len(dimensions)))
         resolved_mode = self._resolve_relationship_mode(profile_1, profile_2, relation_mode)
-        knowledge = self._build_knowledge_context(sun_1, sun_2, profile_1.birth_date, profile_2.birth_date, resolved_mode)
+        knowledge = self._build_knowledge_context(
+            sun_1, sun_2, profile_1.birth_date, profile_2.birth_date, resolved_mode,
+            life_path_1=lp1, life_path_2=lp2,
+        )
 
         deep_dive = models.CompatibilityDeepDive(
             relationship_archetype=self._relationship_archetype(overall, attraction, emotional, stability),
@@ -117,6 +126,9 @@ class CompatibilityEngineService:
         chart2: Any,
         synastry_report: models.SynastryReport,
         relation_mode: str | None = None,
+        *,
+        life_path_1: int | None = None,
+        life_path_2: int | None = None,
     ) -> models.EnrichedCompatibilityResponse:
         positions_1 = {item.get("body"): item for item in chart1.positions if isinstance(item, dict) and item.get("body")}
         positions_2 = {item.get("body"): item for item in chart2.positions if isinstance(item, dict) and item.get("body")}
@@ -137,7 +149,13 @@ class CompatibilityEngineService:
         emotional = self._score_from_markers(emotional_markers, synastry_report.house_overlays, {4, 7}, base=50)
         communication = self._score_from_markers(communication_markers, synastry_report.house_overlays, {3, 9}, base=48)
         stability = self._score_from_markers(stability_markers, synastry_report.house_overlays, {4, 7, 10}, base=50)
-        long_term = self._mix_scores(stability, self._score_life_path_pair(profile_1.birth_date, profile_2.birth_date), synastry_report.compatibility_summary.overall_score)
+        lp1 = self._resolve_life_path(profile_1.birth_date, preferred=life_path_1)
+        lp2 = self._resolve_life_path(profile_2.birth_date, preferred=life_path_2)
+        long_term = self._mix_scores(
+            stability,
+            self._score_life_path_pair(lp1, lp2),
+            synastry_report.compatibility_summary.overall_score,
+        )
 
         dimension_markers = {
             "attraction": attraction_markers,
@@ -184,7 +202,10 @@ class CompatibilityEngineService:
             })
 
         resolved_mode = self._resolve_relationship_mode(profile_1, profile_2, relation_mode)
-        knowledge = self._build_knowledge_context(sign_sun_1, sign_sun_2, profile_1.birth_date, profile_2.birth_date, resolved_mode)
+        knowledge = self._build_knowledge_context(
+            sign_sun_1, sign_sun_2, profile_1.birth_date, profile_2.birth_date, resolved_mode,
+            life_path_1=lp1, life_path_2=lp2,
+        )
         strengths = synastry_report.compatibility_summary.strengths[:] + self._placement_meanings(positions_1, positions_2)
         challenges = synastry_report.compatibility_summary.triggers[:] + self._challenge_meanings(dimension_markers)
         if not challenges:
@@ -236,9 +257,7 @@ class CompatibilityEngineService:
             score += 6
         return max(35, min(92, score))
 
-    def _score_life_path_pair(self, birth_date_1: date, birth_date_2: date) -> int:
-        life_1 = self._life_path_value(birth_date_1)
-        life_2 = self._life_path_value(birth_date_2)
+    def _score_life_path_pair(self, life_1: int | None, life_2: int | None) -> int:
         if not life_1 or not life_2:
             return 55
         diff = abs(life_1 - life_2)
@@ -320,6 +339,9 @@ class CompatibilityEngineService:
         birth_date_1: date,
         birth_date_2: date,
         relation_mode: str,
+        *,
+        life_path_1: int | None = None,
+        life_path_2: int | None = None,
     ) -> models.CompatibilityKnowledgeContext:
         mode_record = astrology_ref.lookup_relationship_mode(relation_mode) or {}
         themes: List[str] = []
@@ -333,6 +355,8 @@ class CompatibilityEngineService:
             themes.extend(sign_2.get("themes") or [])
             rulers.extend(sign_2.get("rulers") or [])
             stones.extend(sign_2.get("stones") or [])
+        lp1 = self._resolve_life_path(birth_date_1, preferred=life_path_1)
+        lp2 = self._resolve_life_path(birth_date_2, preferred=life_path_2)
         return models.CompatibilityKnowledgeContext(
             relationship_mode=relation_mode,
             mode_title=mode_record.get("title"),
@@ -343,7 +367,7 @@ class CompatibilityEngineService:
             rulers=self._unique(rulers)[:4],
             themes=self._unique(themes)[:6],
             stones=self._unique(stones)[:6],
-            life_path_pair=self._build_life_path_text(birth_date_1, birth_date_2),
+            life_path_pair=self._build_life_path_text(lp1, lp2),
         )
 
     def _relationship_aspect_text(self, aspect: models.SynastryAspect) -> str | None:
@@ -423,18 +447,24 @@ class CompatibilityEngineService:
     def _build_moon_pair_text(self, sign_1: Dict[str, Any], sign_2: Dict[str, Any]) -> str:
         return f"Лунный слой показывает {self._element_text(sign_1, sign_2)}. Это влияет на то, как быстро вы чувствуете безопасность, отклик и желание закрыться от мира вместе."
 
-    def _build_life_path_text(self, birth_date_1: date, birth_date_2: date) -> str:
-        life_1 = self._life_path_value(birth_date_1)
-        life_2 = self._life_path_value(birth_date_2)
+    def _build_life_path_text(self, life_1: int | None, life_2: int | None) -> str:
         if not life_1 or not life_2:
             return "Нумерологический слой пока неполный, но его можно использовать как дополнительную настройку пары."
         if life_1 == life_2:
             return f"Числа пути {life_1} и {life_2} дают похожий ритм задач и облегчают чувство «мы идем в одну сторону»."
         return f"Числа пути {life_1} и {life_2} добавляют паре разницу в темпе и приоритетах. Это не минус, но требует большей ясности в ожиданиях."
 
-    def _life_path_value(self, value: date) -> int | None:
+    def _resolve_life_path(self, birth_date: date | None, *, preferred: int | None = None) -> int | None:
+        """Prefer Snapshot/numerology-store value; else shared NumerologyService (Profile SoT)."""
+        if preferred is not None:
+            try:
+                return int(preferred)
+            except (TypeError, ValueError):
+                pass
+        if birth_date is None:
+            return None
         try:
-            result = self.numerology_service.life_path_calc(value.isoformat())
+            result = self.numerology_service.life_path_calc(birth_date.isoformat())
         except Exception:
             return None
         output = result.output or {}

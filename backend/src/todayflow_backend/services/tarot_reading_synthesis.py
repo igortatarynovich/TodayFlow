@@ -738,23 +738,48 @@ def _compose_card_context_reading(
     )
 
 
+def _profile_lens_from_experience_slice(
+    experience_slice: dict | None,
+) -> tuple[str | None, bool]:
+    """Use ExperienceSlice personality fields — never assemble from raw Snapshot here."""
+    if not isinstance(experience_slice, dict):
+        return None, False
+    for key in ("decision_style", "identity_line", "motivation", "communication_style"):
+        raw = experience_slice.get(key)
+        if isinstance(raw, str) and raw.strip():
+            return raw.strip()[:280], True
+    return None, False
+
+
 def compose_question_first_reading(
     spread: models.TarotSpreadResult,
     *,
     question: str | None = None,
     concern_domain: str | None = None,
     consistency: dict | None = None,
+    experience_slice: dict | None = None,
     core_profile: dict | None = None,
 ) -> models.TarotSpreadReading:
+    del consistency  # orchestrator consistency is not Experience Contract SoI
+    del core_profile  # Personal Model enters only via experience_slice
     cards = spread.cards or []
     theme = _detect_theme(question, concern_domain)
     intent = _detect_intent(question, theme)
     card_insights = _build_card_insights(cards)
     bundle = _bundle_for_intent(intent)
 
-    return _compose_card_context_reading(
+    reading = _compose_card_context_reading(
         question=question,
         cards=cards,
         card_insights=card_insights,
         bundle=bundle,
     )
+    lens, applied = _profile_lens_from_experience_slice(experience_slice)
+    if applied and lens:
+        reading.profile_lens = lens
+        reading.profile_lens_applied = True
+        # Fold decision style into attention so synthesis input is observably slice-dependent.
+        attention = (reading.insight_attention or "").strip()
+        prefix = f"Учитывая твой стиль решений: {lens}"
+        reading.insight_attention = f"{prefix}. {attention}".strip() if attention else prefix
+    return reading

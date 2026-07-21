@@ -557,15 +557,37 @@ class LearningService:
         error_message: str | None = None,
         duration_ms: int | None = None,
     ) -> models.GenerationLog:
+        enriched_payload = dict(input_payload or {})
+        snap_id = core_profile_snapshot_id
+        if snap_id is None and enriched_payload.get("core_profile_snapshot_id") is not None:
+            try:
+                snap_id = int(enriched_payload["core_profile_snapshot_id"])
+            except (TypeError, ValueError):
+                snap_id = None
+        if snap_id is not None:
+            snap = (
+                db.query(models.CoreProfileSnapshot)
+                .filter(models.CoreProfileSnapshot.id == snap_id)
+                .first()
+            )
+            if snap is not None:
+                enriched_payload["core_profile_snapshot_id"] = snap.id
+                enriched_payload["profile_hash"] = snap.profile_hash
+                enriched_payload["profile_version"] = snap.profile_version
+                enriched_payload["generated_from_snapshot"] = True
+            else:
+                enriched_payload.setdefault("core_profile_snapshot_id", snap_id)
+                enriched_payload.setdefault("generated_from_snapshot", True)
+
         generation = models.GenerationLog(
             user_id=user_id,
-            core_profile_snapshot_id=core_profile_snapshot_id,
+            core_profile_snapshot_id=snap_id,
             prompt_version_id=prompt_version_id,
             module=module,
             surface=surface,
             model=model,
             locale=locale,
-            input_payload=input_payload,
+            input_payload=enriched_payload or None,
             system_prompt=system_prompt,
             user_prompt=user_prompt,
             raw_response=raw_response,

@@ -11,6 +11,10 @@ from todayflow_backend.i18n import request_locale
 from todayflow_backend.services.tarot import TarotService, get_tarot_service
 from todayflow_backend.db.session import get_session
 from todayflow_backend.services.core_profile import CoreProfileService, get_core_profile_service
+from todayflow_backend.services.experience_contract_assembler_v0 import (
+    assemble_experience_slice,
+    slice_log_fields,
+)
 from todayflow_backend.services.interpretation_orchestrator import (
     InterpretationOrchestrator,
     get_interpretation_orchestrator,
@@ -265,7 +269,16 @@ async def generate_tarot_spread_with_context(
         locale=request_locale(request),
         selected_cards=payload.selected_cards,
     )
-    core_profile = core_profile_service.build(db, user)
+    core_profile = core_profile_service.build_cached_or_baseline(db, user)
+    core_payload = (
+        core_profile.model_dump() if hasattr(core_profile, "model_dump") else core_profile
+    )
+    snapshot_id = None
+    if isinstance(core_payload, dict) and core_payload.get("snapshot_id") is not None:
+        try:
+            snapshot_id = int(core_payload["snapshot_id"])
+        except (TypeError, ValueError):
+            snapshot_id = None
 
     needs = _spread_needs(payload.spread_id, payload.concern_domain)
     consistency = orchestrator.build_daily_guidance(
@@ -273,27 +286,39 @@ async def generate_tarot_spread_with_context(
         numerology=None,
         needs=needs,
     )
+    experience_slice = assemble_experience_slice(
+        core_payload if isinstance(core_payload, dict) else None,
+        experience_id="tarot",
+    )
     reading, tarot_answer = compose_tarot_answer_v1(
         spread,
         question=payload.question,
         concern_domain=payload.concern_domain,
         consistency=consistency.model_dump() if hasattr(consistency, "model_dump") else consistency,
-        core_profile=core_profile.model_dump() if hasattr(core_profile, "model_dump") else core_profile,
+        experience_slice=experience_slice,
     )
     generation_log_id: int | None = None
     try:
+        from todayflow_backend.services.snapshot_provenance_v1 import merge_snapshot_provenance
+
         gen = get_learning_service().log_generation(
             db,
             module="tarot_answer_v1",
             surface="tarot_answer",
             user_id=user.id,
-            input_payload={
-                "spread_id": spread.spread_id,
-                "question": payload.question,
-                "concern_domain": payload.concern_domain,
-                "card_ids": [c.card.id for c in spread.cards],
-                "contract": TAROT_ANSWER_V1_CONTRACT,
-            },
+            core_profile_snapshot_id=snapshot_id,
+            input_payload=merge_snapshot_provenance(
+                {
+                    "spread_id": spread.spread_id,
+                    "question": payload.question,
+                    "concern_domain": payload.concern_domain,
+                    "card_ids": [c.card.id for c in spread.cards],
+                    "contract": TAROT_ANSWER_V1_CONTRACT,
+                    **slice_log_fields(experience_slice),
+                },
+                core_payload if isinstance(core_payload, dict) else None,
+                snapshot_id=snapshot_id,
+            ),
             normalized_response=tarot_answer,
             status="success",
             used_fallback=True,

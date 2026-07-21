@@ -66,6 +66,7 @@ def compose_tarot_answer_v1(
     question: str | None = None,
     concern_domain: str | None = None,
     consistency: dict | None = None,
+    experience_slice: dict | None = None,
     core_profile: dict | None = None,
     generation_id: str | None = None,
 ) -> tuple[models.TarotSpreadReading, dict[str, Any]]:
@@ -75,6 +76,7 @@ def compose_tarot_answer_v1(
         question=question,
         concern_domain=concern_domain,
         consistency=consistency,
+        experience_slice=experience_slice,
         core_profile=core_profile,
     )
     answer = tarot_reading_to_answer_v1(

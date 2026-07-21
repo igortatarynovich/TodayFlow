@@ -37,8 +37,11 @@ from todayflow_backend.services.intent_slice_v0 import build_intent_layer_v0
 from todayflow_backend.services.learning import get_learning_service
 from todayflow_backend.services.meaning_surface_patterns import build_meaning_surface_patterns_v0
 from todayflow_backend.services.today_contract_assembler_v1 import validate_today_contract_v1
+from todayflow_backend.services.experience_contract_assembler_v0 import (
+    assemble_experience_slice,
+    slice_log_fields,
+)
 from todayflow_backend.services.today_narrative import (
-    _core_context_for_narrative,
     _intent_context_fingerprint,
     _latest_snapshot_id,
     _load_foundation_from_logs,
@@ -192,7 +195,10 @@ def _build_day_story_record(
     behavior_patterns = build_meaning_surface_patterns_v0(
         db, user_id=user.id, reference_date=target_date, window_days=28
     )
-    user_core = _core_context_for_narrative(core_profile, locale=locale_value)
+    user_core = assemble_experience_slice(
+        core_profile if isinstance(core_profile, dict) else None,
+        experience_id="today",
+    )
     rhythm_context = (
         fusion_dump.get("rhythm_context")
         if isinstance(fusion_dump.get("rhythm_context"), dict)
@@ -324,6 +330,7 @@ def _build_day_story_record(
             "contract": DAY_STORY_V1_CONTRACT,
             "prompt_version": DAY_STORY_PROMPT_VER,
             "llm_input_keys": sorted(llm_input.keys()),
+            **slice_log_fields(user_core),
         }
         gen = learning.log_generation(
             db,

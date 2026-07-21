@@ -48,12 +48,15 @@ def build_day_context_v0(
     """
     # Lazy import avoids circular import: today_narrative may import this module.
     from todayflow_backend.services.day_model_v0 import build_day_model_v0
+    from todayflow_backend.services.experience_contract_assembler_v0 import (
+        assemble_experience_slice,
+    )
     from todayflow_backend.services.guide_decision_v0 import build_guide_decision_v0
     from todayflow_backend.services.profile_prompt_slices_v0 import (
         build_internal_profile_slice_v0,
         build_visible_profile_slice_v0,
     )
-    from todayflow_backend.services.today_narrative import _core_context_for_narrative, _normalize_ritual_context
+    from todayflow_backend.services.today_narrative import _normalize_ritual_context
 
     tier = (insight_depth_tier or "free").strip().lower()
     if tier not in ("free", "pro", "premium"):
@@ -77,7 +80,11 @@ def build_day_context_v0(
     fusion["date"] = str(fusion.get("date") or target_date.isoformat())
 
     ritual = _normalize_ritual_context(ritual_context)
-    user_core = _core_context_for_narrative(core_profile, locale=loc)
+    experience_slice = assemble_experience_slice(
+        core_profile if isinstance(core_profile, dict) else None,
+        experience_id="today",
+    )
+    user_core = experience_slice
 
     bp = behavior_patterns if isinstance(behavior_patterns, dict) and behavior_patterns else None
     intent = intent_slice if isinstance(intent_slice, dict) and intent_slice.get("contract_version") else None
@@ -87,6 +94,7 @@ def build_day_context_v0(
     layers: dict[str, Any] = {
         "fusion": fusion,
         "user_core": user_core,
+        "experience_slice": experience_slice,
         "daily_foundation": daily_foundation if isinstance(daily_foundation, dict) else None,
         "behavior_patterns": bp,
         "history": hist,
@@ -97,16 +105,16 @@ def build_day_context_v0(
         layers["ritual"] = ritual
 
     vp = build_visible_profile_slice_v0(
-        core_profile=core_profile if isinstance(core_profile, dict) else None,
+        experience_slice=experience_slice,
         intent_slice=intent,
         ritual=ritual if ritual else None,
         fusion_layer=fusion,
         locale=loc,
     )
     ip = build_internal_profile_slice_v0(
-        core_profile=core_profile if isinstance(core_profile, dict) else None,
         behavior_patterns=bp,
         fusion_layer=fusion,
+        source_profile_version=experience_slice.get("profile_version"),
     )
     if vp is not None:
         layers["visible_profile"] = vp

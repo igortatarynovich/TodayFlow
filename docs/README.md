@@ -8,7 +8,7 @@
 |------|----------|
 | **Полный пользовательский путь (аудит + целевой канон)** | [audits/FULL_USER_PATH_CANON_V1.md](./audits/FULL_USER_PATH_CANON_V1.md) — лендинг → привычка D30 · противоречия X* · реестр генераций |
 | **Product Build Map (№1 — product SoT)** | [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md) — entities · **два базовых закона** · Personal Model pointer |
-| **Personal Model ↔ code** | [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md) — канон → факт → нарушение → минимальный fix |
+| **Personal Model ↔ code** | [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md) — P0 read-path · [P1 Experience wiring](./audits/PERSONAL_MODEL_EXPERIENCE_WIRING_P1_2026-07-21.md) |
 | Product Model (reference) | [TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md) — §4 content model |
 | Launch gaps / DoD / code | [status/WEB_LAUNCH_EXECUTION_PLAN.md](./status/WEB_LAUNCH_EXECUTION_PLAN.md) |
 | Launch UX feel (reference) | [status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md](./status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md) |

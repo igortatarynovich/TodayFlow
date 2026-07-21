@@ -162,7 +162,7 @@ User opens Today
 
 | Вход | Тип | Источник |
 |------|-----|----------|
-| CoreProfile (сжатый) | SN | `user_core` / `_core_context_for_narrative` |
+| CoreProfile → ExperienceSlice(today) | SN | `user_core` / `experience_contract_assembler_v0` |
 | Profile Selector slice | SN | `layers.profile_selector` |
 | Active goals / habits / ascetics | RT+SN | `fusion.rhythm_context` |
 | Card of day / number of day | RT+SN | ritual, morning_ritual persist |

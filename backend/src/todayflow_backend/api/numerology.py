@@ -274,7 +274,7 @@ def explain_daily_numerology(
         number_type="day",
         target_date=target_date,
     )
-    core_profile = core_profile_service.build(db, user)
+    core_profile = core_profile_service.build_cached_or_baseline(db, user)
     consistency = orchestrator.build_daily_guidance(
         core_profile=core_profile,
         numerology={"dayNumber": daily_insight.number.value or daily_insight.number.reduced_value},

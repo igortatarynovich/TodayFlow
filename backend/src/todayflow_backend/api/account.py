@@ -240,6 +240,7 @@ class CoreProfileResponse(BaseModel):
     profile_contract_v1: dict | None = None
     living: dict | None = None
     natal_summary: dict | None = None  # сжатое текстовое резюме карты для персонализации (без сырых координат)
+    snapshot_id: int | None = None  # CoreProfileSnapshot.id when loaded from published snapshot
 
 
 class CompactUserModelIdentity(BaseModel):
@@ -513,7 +514,7 @@ def get_profile_selector_preview(
     service: CoreProfileService = Depends(get_core_profile_service),
 ) -> dict[str, Any]:
     """Отладочный срез Profile Selector v0 (без полного fusion дня). Не для продуктового UI."""
-    core = service.build(db, user)
+    core = service.build_cached_or_baseline(db, user)
     locale = (request_locale() or "ru").strip()[:32] or "ru"
     surf = _parse_enum_param("surface", (surface or "today").strip(), ProfilePromptSurface)
     inp = ProfileContextSelectorInput(
@@ -546,7 +547,21 @@ def get_core_profile(
     db: Session = Depends(get_session),
     service: CoreProfileService = Depends(get_core_profile_service),
 ) -> CoreProfileResponse:
-    return CoreProfileResponse(**service.build(db, user, astro_profile_id=astro_profile_id))
+    """Read-path: snapshot or baseline shell. Never runs portrait LLM."""
+    return CoreProfileResponse(**service.build_cached_or_baseline(db, user, astro_profile_id=astro_profile_id))
+
+
+@router.post("/core-profile/refresh", response_model=CoreProfileResponse)
+def refresh_core_profile(
+    astro_profile_id: Optional[int] = None,
+    user: db_models.User = Depends(require_user),
+    db: Session = Depends(get_session),
+    service: CoreProfileService = Depends(get_core_profile_service),
+) -> CoreProfileResponse:
+    """Explicit portrait publisher — only path that may run portrait LLM on demand."""
+    return CoreProfileResponse(
+        **service.build(db, user, astro_profile_id=astro_profile_id, publish_portrait=True)
+    )
 
 
 @router.get("/compact-user-model", response_model=CompactUserModelResponse)
@@ -559,7 +574,7 @@ def get_compact_user_model(
 ) -> CompactUserModelResponse:
     """PIM read path — single CUM slice for Today, Tarot, Compatibility, Profile."""
     ref = local_date or date.today()
-    core = service.build(db, user)
+    core = service.build_cached_or_baseline(db, user)
     payload = build_compact_user_model_v0(
         db,
         user_id=user.id,
@@ -594,7 +609,7 @@ def get_profile_summary(
     db: Session = Depends(get_session),
     service: CoreProfileService = Depends(get_core_profile_service),
 ) -> ProfileSummaryResponse:
-    core = service.build(db, user)
+    core = service.build_cached_or_baseline(db, user)
     astro = core.get("astro") or {}
     numerology = core.get("numerology") or {}
     baseline = core.get("baseline") or {}
@@ -635,7 +650,7 @@ def get_profile_build_status(
     db: Session = Depends(get_session),
     service: CoreProfileService = Depends(get_core_profile_service),
 ) -> ProfileBuildStatusResponse:
-    core = service.build(db, user)
+    core = service.build_cached_or_baseline(db, user)
     profile_hash = str(core.get("profile_hash") or "")
     has_snapshot = False
     if profile_hash:
@@ -726,9 +741,11 @@ def _astro_profile_save_response(
     db: Session,
     user: db_models.User,
 ) -> AstroProfileSaveResponse:
-    """Для основного профиля — тот же контекст, что GET /core-profile без query; для вторичного — с astro_profile_id как у GET с этим id."""
+    """После сохранения фактов — единственный publisher портрета (не GET)."""
     astro_profile_id = None if profile.is_primary else profile.id
-    core = core_profile_service.build(db, user, astro_profile_id=astro_profile_id)
+    core = core_profile_service.build(
+        db, user, astro_profile_id=astro_profile_id, publish_portrait=True
+    )
     merged = {**_astro_profile_to_dict(profile), "core_profile": CoreProfileResponse(**core)}
     return AstroProfileSaveResponse(**merged)
 
@@ -1063,7 +1080,9 @@ async def upsert_core_setup(
 
     _bump_morning_ritual_cache(user.id)
 
-    core = core_profile_service.build(db, user, astro_profile_id=primary.id)
+    core = core_profile_service.build(
+        db, user, astro_profile_id=primary.id, publish_portrait=True
+    )
     return CoreSetupResponse(
         status="ok",
         core_profile=CoreProfileResponse(**core),

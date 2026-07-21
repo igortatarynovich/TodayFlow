@@ -75,7 +75,9 @@ async def get_natal_chart(
         "cached": from_cache
     }
     
-    core_profile = core_profile_service.build(db, user, astro_profile_id=astro_profile.id)
+    core_profile = core_profile_service.build_cached_or_baseline(
+        db, user, astro_profile_id=astro_profile.id
+    )
 
     # Добавляем интерпретации если запрошено
     if include_interpretations:

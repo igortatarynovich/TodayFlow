@@ -1051,7 +1051,7 @@ def post_today_narrative(
         raise HTTPException(status_code=400, detail=f"surface must be one of {sorted(allowed)}")
     fusion = get_daily_fusion_index(target_date=td, current_user=user, db=db)
     fusion_dump = fusion.model_dump()
-    core_profile = core_profile_service.build(db, user)
+    core_profile = core_profile_service.build_cached_or_baseline(db, user)
     insight_tier = get_insight_depth_tier(user, db)
     ritual_dict: dict[str, Any] | None = None
     if body.ritual_context is not None:

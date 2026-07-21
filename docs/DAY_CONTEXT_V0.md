@@ -36,7 +36,7 @@
 | tarot (+ ритуал) | `ritual` | `RitualContextRequest` после `_normalize_ritual_context` (может быть `{}`). |
 | numerology / mood / тема «в голове» | ↑ внутри `ritual` | `numerology_value`, `mood`, опционально `head_topic` (id чипа, до 120 символов), `day_events`. |
 | astrology + стержень дня | `daily_foundation` | Логи модуля `daily_foundation` (`spine`, сценарии, prism). |
-| user_profile | `user_core` | `_core_context_for_narrative(core_profile)` — не полный raw `core_profile`. |
+| user_profile | `user_core` / `experience_slice` | `assemble_experience_slice(..., experience_id="today")` — не полный raw `core_profile`. |
 | profile selector (промпт-гейт) | `profile_selector` | `select_profile_context` в `profile_engine/selector.py`; см. [DAY_CONTEXT_V0.md](./DAY_CONTEXT_V0.md). |
 | rhythm (+ дневник-факты) | `fusion.rhythm_context` | `_build_rhythm_context` в `tracking.py`; также scores / encouragement / recommendations. |
 | behavior_patterns | `behavior_patterns` | Агрегаты `meaning_events` за скользящее окно (`meaning_surface_patterns_v0`), см. `build_meaning_surface_patterns_v0` + DE-5. |

@@ -56,7 +56,7 @@ async def get_day_flow(
     if user:
         try:
             core_profile_service = get_core_profile_service()
-            core_profile = core_profile_service.build(db, user)
+            core_profile = core_profile_service.build_cached_or_baseline(db, user)
         except Exception:
             core_profile = None
 

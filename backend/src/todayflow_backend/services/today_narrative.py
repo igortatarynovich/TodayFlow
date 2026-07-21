@@ -37,6 +37,7 @@ from todayflow_backend.services.generation_orchestrator import (
 from todayflow_backend.profile_engine.selector import narrative_surface_to_selector_params
 from todayflow_backend.services.day_model_v0 import build_day_model_v0
 from todayflow_backend.services.day_narrative_brief_v0 import build_day_narrative_brief_v0
+from todayflow_backend.services.experience_contract_assembler_v0 import assemble_experience_slice
 from todayflow_backend.services.profile_prompt_slices_v0 import build_internal_profile_slice_v0
 from todayflow_backend.services.learning import get_learning_service
 from todayflow_backend.services.ritual_cue_sanitize import (
@@ -79,33 +80,6 @@ from todayflow_backend.services.guide_contract_v2 import (
 )
 
 logger = logging.getLogger(__name__)
-
-# Порядок отдачи life_areas в компактный контекст для LLM (PM-1: девять сфер + запас под расширения).
-_LIFE_AREA_CONTEXT_ORDER = (
-    "love",
-    "career",
-    "money",
-    "family",
-    "sex",
-    "kids",
-    "body",
-    "friends",
-    "decisions",
-)
-
-
-def _ordered_life_area_entries(la: dict[str, Any]) -> list[tuple[str, Any]]:
-    seen: set[str] = set()
-    out: list[tuple[str, Any]] = []
-    for k in _LIFE_AREA_CONTEXT_ORDER:
-        if k in la:
-            out.append((k, la[k]))
-            seen.add(k)
-    for k, v in la.items():
-        if k not in seen:
-            out.append((k, v))
-    return out
-
 
 MODULE = "today_narrative"
 PROMPT_VER = "today-narrative-v18"
@@ -575,223 +549,6 @@ def _truncate_narrative_text(value: str, max_len: int) -> str:
     if len(s) <= max_len:
         return s
     return s[: max_len - 1].rstrip() + "…"
-
-
-_ZODIAC_EN_RU: dict[str, str] = {
-    "aries": "Овен",
-    "taurus": "Телец",
-    "gemini": "Близнецы",
-    "cancer": "Рак",
-    "leo": "Лев",
-    "virgo": "Дева",
-    "libra": "Весы",
-    "scorpio": "Скорпион",
-    "sagittarius": "Стрелец",
-    "capricorn": "Козерог",
-    "aquarius": "Водолей",
-    "pisces": "Рыбы",
-}
-
-
-def _localize_zodiac_label(value: str | None, *, locale: str) -> str | None:
-    if not value or not isinstance(value, str):
-        return None
-    t = value.strip()
-    if not t:
-        return None
-    if _is_en_locale(locale):
-        return t
-    return _ZODIAC_EN_RU.get(t.lower(), t)
-
-
-def _slim_signal_profile_for_llm(sp: dict[str, Any] | None) -> dict[str, Any]:
-    """Без длинных ответов пользователя в dominant_focus — они раздувают промпт и ломают тон."""
-    if not isinstance(sp, dict):
-        return {}
-    out: dict[str, Any] = {}
-    for k in (
-        "signals_days",
-        "closure_state",
-        "clarity_state",
-        "ritual_feedback_yes_days",
-        "ritual_feedback_no_days",
-        "unclear_decision_days",
-    ):
-        if k in sp and sp[k] is not None:
-            out[k] = sp[k]
-    df = sp.get("dominant_focus")
-    if isinstance(df, str) and df.strip():
-        out["dominant_focus_excerpt"] = _truncate_narrative_text(df, 160)
-    return out
-
-
-def _core_context_for_narrative(core_profile: dict[str, Any] | None, *, locale: str = "ru") -> dict[str, Any]:
-    """Компактное «ядро» для LLM: интерпретации, нумерология, астрология, живой слой и learning.
-
-    Полный натальный расчёт (дома, аспекты) в CoreProfileService пока не сериализуется в этот объект;
-    сюда попадает то, что уже собрано в core_profile (interpretation, daily_interpretation, living).
-    """
-    if not core_profile or not isinstance(core_profile, dict):
-        return {"_note": "core_profile_unavailable"}
-
-    interpretation = core_profile.get("interpretation") if isinstance(core_profile.get("interpretation"), dict) else {}
-    daily_interpretation = (
-        core_profile.get("daily_interpretation") if isinstance(core_profile.get("daily_interpretation"), dict) else {}
-    )
-    living = core_profile.get("living") if isinstance(core_profile.get("living"), dict) else {}
-    learning = living.get("learning_context") if isinstance(living.get("learning_context"), dict) else {}
-
-    def prune_interpretation(interp: dict[str, Any]) -> dict[str, Any]:
-        out: dict[str, Any] = {}
-        if isinstance(interp.get("identity"), str):
-            out["identity"] = _truncate_narrative_text(interp["identity"], 520)
-        for key in ("strengths", "watchouts"):
-            arr = interp.get(key)
-            if isinstance(arr, list):
-                out[key] = [_truncate_narrative_text(str(x), 220) for x in arr[:6]]
-        la = interp.get("life_areas")
-        if isinstance(la, dict):
-            out["life_areas"] = {
-                str(k): _truncate_narrative_text(str(v), 360)
-                for k, v in _ordered_life_area_entries(la)[:12]
-            }
-        return out
-
-    def prune_daily(d: dict[str, Any]) -> dict[str, Any]:
-        lenses = d.get("daily_lenses")
-        if not isinstance(lenses, dict):
-            return {}
-        return {
-            "daily_lenses": {
-                str(k): _truncate_narrative_text(str(v), 300) for k, v in list(lenses.items())[:8]
-            }
-        }
-
-    astro = core_profile.get("astro") if isinstance(core_profile.get("astro"), dict) else {}
-    astro_slim = {
-        k: astro.get(k)
-        for k in (
-            "sun_sign",
-            "sun_element",
-            "sun_modality",
-            "birth_date",
-            "location_name",
-            "time_unknown",
-            "label",
-            "relation",
-        )
-    }
-    ss = astro_slim.get("sun_sign")
-    if isinstance(ss, str) and ss.strip():
-        astro_slim["sun_sign"] = _localize_zodiac_label(ss, locale=locale) or ss
-
-    num = core_profile.get("numerology") if isinstance(core_profile.get("numerology"), dict) else {}
-    num_slim: dict[str, Any] = {
-        k: num.get(k)
-        for k in (
-            "life_path",
-            "expression",
-            "soul_urge",
-            "personality",
-            "is_master_life_path",
-            "birth_date",
-        )
-    }
-    if num.get("full_name"):
-        num_slim["name_on_chart"] = _truncate_narrative_text(str(num["full_name"]), 96)
-
-    insights_out: list[dict[str, Any]] = []
-    for ins in (living.get("recent_insights") or [])[:4]:
-        if isinstance(ins, dict):
-            insights_out.append(
-                {
-                    "date": ins.get("date"),
-                    "type": ins.get("type"),
-                    "text": _truncate_narrative_text(str(ins.get("text") or ""), 240),
-                }
-            )
-
-    learning_slim: dict[str, Any] = {}
-    if learning:
-        qm = learning.get("quality_memory")
-        if isinstance(qm, dict):
-            qm = {
-                "best_patterns": (qm.get("best_patterns") or [])[:2],
-                "weak_patterns": (qm.get("weak_patterns") or [])[:2],
-            }
-        learning_slim = {
-            "summary": _truncate_narrative_text(str(learning.get("summary") or ""), 640),
-            "response_style": learning.get("response_style"),
-            "support_style": learning.get("support_style"),
-            "dominant_lanes": (learning.get("dominant_lanes") or [])[:5],
-            "dominant_diary_topics": (learning.get("dominant_diary_topics") or [])[:5],
-            "signal_bias": learning.get("signal_bias"),
-            "stats": learning.get("stats"),
-            "quality_memory": qm,
-        }
-        msp = learning.get("meaning_surface_patterns")
-        if isinstance(msp, dict) and msp.get("total_events"):
-            tags = msp.get("tags") if isinstance(msp.get("tags"), dict) else {}
-            learning_slim["today_surface_patterns"] = {
-                "window_days": msp.get("window_days"),
-                "total_events": msp.get("total_events"),
-                "pattern_hints": (msp.get("pattern_hints") or [])[:5],
-                "by_event_type": (msp.get("by_event_type") or [])[:8],
-                "top_mood_ids": (tags.get("top_mood_ids") or [])[:3] if isinstance(tags, dict) else [],
-                "top_sphere_ids": (tags.get("top_sphere_ids") or [])[:3] if isinstance(tags, dict) else [],
-                "ritual_proximity": tags.get("ritual_proximity") if isinstance(tags, dict) else None,
-                "top_honest_step_ids": (tags.get("top_honest_step_ids") or [])[:3]
-                if isinstance(tags, dict)
-                else [],
-                "day_promise_sets": tags.get("day_promise_sets") if isinstance(tags, dict) else 0,
-                "top_guidance_lanes": (tags.get("top_guidance_lanes") or [])[:3]
-                if isinstance(tags, dict)
-                else [],
-                "top_guidance_themes": (tags.get("top_guidance_themes") or [])[:5]
-                if isinstance(tags, dict)
-                else [],
-            }
-
-    weekly = living.get("weekly_state")
-    weekly_slim = None
-    if isinstance(weekly, dict):
-        weekly_slim = {
-            "week_start": weekly.get("week_start"),
-            "integration_text": _truncate_narrative_text(str(weekly.get("integration_text") or ""), 420),
-            "dominant_question_focus": weekly.get("dominant_question_focus"),
-        }
-
-    person = core_profile.get("person") if isinstance(core_profile.get("person"), dict) else {}
-    person_slim = {
-        k: person.get(k) for k in ("first_name", "display_name", "locale") if person.get(k) is not None
-    }
-
-    natal_raw = core_profile.get("natal_summary")
-    natal_chart: dict[str, Any] = (
-        natal_raw if isinstance(natal_raw, dict) else {"available": False, "reason": "not_in_profile"}
-    )
-
-    return {
-        "profile_version": core_profile.get("profile_version"),
-        "is_ready": core_profile.get("is_ready"),
-        "missing_fields": (core_profile.get("missing_fields") or [])[:12]
-        if isinstance(core_profile.get("missing_fields"), list)
-        else [],
-        "person": person_slim,
-        "baseline": core_profile.get("baseline") if isinstance(core_profile.get("baseline"), dict) else {},
-        "astro": astro_slim,
-        "numerology": num_slim,
-        "natal_chart": natal_chart,
-        "interpretation": prune_interpretation(interpretation) if interpretation else {},
-        "daily_interpretation": prune_daily(daily_interpretation) if daily_interpretation else {},
-        "living_summary": _truncate_narrative_text(str(living.get("summary") or ""), 720),
-        "signal_profile": _slim_signal_profile_for_llm(
-            living.get("signal_profile") if isinstance(living.get("signal_profile"), dict) else None
-        ),
-        "recent_insights": insights_out,
-        "weekly_snapshot": weekly_slim,
-        "learning": learning_slim,
-    }
 
 
 _PLANET_RU: dict[str, str] = {
@@ -3346,10 +3103,14 @@ def _day_model_snapshot_for_guide(
             db, user_id=user_id, reference_date=target_date, window_days=28
         )
     fu = fusion_dump if isinstance(fusion_dump, dict) else {}
+    today_slice = assemble_experience_slice(
+        core_profile if isinstance(core_profile, dict) else None,
+        experience_id="today",
+    )
     ip = build_internal_profile_slice_v0(
-        core_profile=core_profile if isinstance(core_profile, dict) else None,
         behavior_patterns=bp,
         fusion_layer=fu,
+        source_profile_version=today_slice.get("profile_version"),
     )
     hist = build_history_layer_v0(
         db,
@@ -3770,7 +3531,10 @@ def build_today_narrative(
         user_core = (
             uc_layer
             if isinstance(uc_layer, dict)
-            else _core_context_for_narrative(core_profile, locale=locale_value)
+            else assemble_experience_slice(
+                core_profile if isinstance(core_profile, dict) else None,
+                experience_id="today",
+            )
         )
         fu_layer = layers_dc.get("fusion")
         fusion_for_prompt = fu_layer if isinstance(fu_layer, dict) else fusion_dump
