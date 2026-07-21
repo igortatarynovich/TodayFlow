@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Literal, Optional
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 CONTENT_CONTRACT_VERSION = "compatibility_content_v1"
 
@@ -12,6 +12,10 @@ SourceDepth = Literal["zodiac_only", "birth_dates", "profile_enriched", "two_pro
 Confidence = Literal["low", "medium", "high"]
 Verdict = Literal["да", "скорее да", "зависит", "скорее нет", "нет"]
 Tier = Literal["guest", "registered", "premium"]
+
+# 0 is treated as missing/invalid — never a real compatibility score.
+SCORE_MIN = 20
+SCORE_MAX = 95
 
 
 def _nonempty(v: str) -> str:
@@ -21,23 +25,40 @@ def _nonempty(v: str) -> str:
     return s
 
 
+def _valid_score(v: int) -> int:
+    if v is None:
+        raise ValueError("score_missing")
+    n = int(v)
+    if n == 0:
+        raise ValueError("score_zero_invalid")
+    if n < SCORE_MIN or n > SCORE_MAX:
+        raise ValueError(f"score_out_of_range:{n}")
+    return n
+
+
 class ContentBaseV1(BaseModel):
     contract_version: str = CONTENT_CONTRACT_VERSION
     tier: Tier
     source_depth: SourceDepth
     locale: str = "ru"
     headline: str = Field(..., min_length=8, max_length=160)
-    score: int = Field(..., ge=0, le=100)
+    score: int = Field(..., ge=SCORE_MIN, le=SCORE_MAX)
     summary: str = Field(..., min_length=40, max_length=900)
-    attraction: str = Field(..., min_length=20, max_length=420)
-    main_risk: str = Field(..., min_length=20, max_length=420)
-    practical_advice: str = Field(..., min_length=20, max_length=420)
+    # Soft ceiling 480; prompt asks ≤400 — reduces flaky near-limit truncations.
+    attraction: str = Field(..., min_length=20, max_length=480)
+    main_risk: str = Field(..., min_length=20, max_length=480)
+    practical_advice: str = Field(..., min_length=20, max_length=480)
     confidence: Confidence = "medium"
 
     @field_validator("headline", "summary", "attraction", "main_risk", "practical_advice")
     @classmethod
     def _strip_required(cls, v: str) -> str:
         return _nonempty(v)
+
+    @field_validator("score")
+    @classmethod
+    def _score_ok(cls, v: int) -> int:
+        return _valid_score(v)
 
 
 class GuestContentV1(ContentBaseV1):
@@ -80,7 +101,7 @@ class RegisteredContentV1(ContentBaseV1):
 
 
 class PremiumContentV1(BaseModel):
-    """Decision tool — useful, not merely longer."""
+    """Decision tool — useful, not merely longer. No UI score field."""
 
     contract_version: str = CONTENT_CONTRACT_VERSION
     tier: Literal["premium"] = "premium"
@@ -93,10 +114,11 @@ class PremiumContentV1(BaseModel):
     how: str = Field(..., min_length=20, max_length=500)
     what_to_say: str = Field(..., min_length=20, max_length=420)
     focus_now: str = Field(..., min_length=20, max_length=420)
-    next_step: str = Field(..., min_length=15, max_length=320)
+    next_step: str = Field(..., min_length=15, max_length=400)
     direct_answer: Optional[str] = Field(None, max_length=700)
     confidence: Confidence = "medium"
-    score: Optional[int] = Field(None, ge=0, le=100)
+    # Optional legacy; 0 / present with soft verdicts is rejected in validators.
+    score: Optional[int] = Field(None, ge=SCORE_MIN, le=SCORE_MAX)
 
     @field_validator(
         "verdict_reason",
@@ -110,3 +132,10 @@ class PremiumContentV1(BaseModel):
     @classmethod
     def _strip_premium(cls, v: str) -> str:
         return _nonempty(v)
+
+    @model_validator(mode="before")
+    @classmethod
+    def _drop_zero_score(cls, data: Any) -> Any:
+        if isinstance(data, dict) and data.get("score") in (0, "0"):
+            data = {**data, "score": None}
+        return data

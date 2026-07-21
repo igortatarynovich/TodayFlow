@@ -213,3 +213,4 @@ compatibility_content_v1:
 |------|-----------|
 | 2026-07-21 | v1.0 — C2 content canon: layers, source_depth, voice, eval, rollout |
 | 2026-07-21 | v1.1 — код `compatibility_content_v1`, eval 80, flag `COMPATIBILITY_CONTENT_V1` (default off) |
+| 2026-07-21 | prompt **v1.1** patch: score 20–95 / no score on premium; publish gate rejects invalid; registered≠verdict; birth_dates honesty; zodiac hedges; no gender hacks |

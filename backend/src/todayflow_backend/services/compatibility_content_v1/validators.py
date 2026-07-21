@@ -7,8 +7,12 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from todayflow_backend.services.compatibility_content_v1.banned_phrases import find_banned_hits
+from todayflow_backend.services.compatibility_content_v1.banned_phrases import (
+    find_banned_hits,
+    find_registered_premium_leaks,
+)
 from todayflow_backend.services.compatibility_content_v1.contracts import (
+    SCORE_MIN,
     GuestContentV1,
     PremiumContentV1,
     RegisteredContentV1,
@@ -103,9 +107,12 @@ def validate_registered_dict(data: dict[str, Any]) -> tuple[RegisteredContentV1 
         errors.append("locale:expected_cyrillic")
     hits = find_banned_hits(blob, locale=model.locale)
     errors.extend(f"banned:{h}" for h in hits)
+    errors.extend(find_registered_premium_leaks(blob))
     # summary should not equal emotions
     if model.summary.strip()[:80] == model.emotions.strip()[:80]:
         errors.append("repetition:summary_equals_emotions")
+    if model.score < SCORE_MIN:
+        errors.append(f"score:too_low:{model.score}")
     if errors:
         return model, errors
     return model, []
@@ -113,8 +120,12 @@ def validate_registered_dict(data: dict[str, Any]) -> tuple[RegisteredContentV1 
 
 def validate_premium_dict(data: dict[str, Any]) -> tuple[PremiumContentV1 | None, list[str]]:
     errors: list[str] = []
+    # Normalize: strip score=0 before schema (treated as absent).
+    payload = dict(data or {})
+    if payload.get("score") in (0, "0"):
+        payload["score"] = None
     try:
-        model = PremiumContentV1.model_validate(data)
+        model = PremiumContentV1.model_validate(payload)
     except ValidationError as exc:
         return None, [f"schema:{e['loc']}:{e['msg']}" for e in exc.errors()]
 
@@ -135,6 +146,10 @@ def validate_premium_dict(data: dict[str, Any]) -> tuple[PremiumContentV1 | None
         x in model.verdict_reason.lower() for x in ("обязательно продолж", "идеальная пара", "всё будет хорошо")
     ):
         errors.append("contradiction:verdict_vs_reason")
+
+    # Soft verdicts must not ship with a numeric score implying certainty.
+    if model.score is not None and model.verdict == "зависит":
+        errors.append("contradiction:soft_verdict_with_score")
 
     if errors:
         return model, errors

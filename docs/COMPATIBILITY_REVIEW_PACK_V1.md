@@ -45,3 +45,16 @@ python /path/to/run_review_packs_v1.py --batch first10
 ## Критерий решения
 
 Production enrichment на content v1 — только после ручной оценки (≥ эти 10, затем расширение) и сравнения с текущим baseline. Флаг: `COMPATIBILITY_CONTENT_V1`.
+
+## Prompt v1.1 (после первого human review, 8/10)
+
+Точечный patch без переписывания системы:
+
+1. score 20–95; `0` invalid; premium без score  
+2. `publish_gate` — invalid не становится user-facing  
+3. registered не даёт verdict «продолжать/нет»  
+4. без гендерных «он(а)»  
+5. zodiac hedges + честный birth_dates honesty  
+
+Повторный прогон тех же 10 IDs: `run_review_packs_v1.py --batch first10`  
+(смотри `runs/review_packs_*` с `prompt_version=compatibility_content_prompt_v1.1`).

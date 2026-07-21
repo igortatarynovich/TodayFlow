@@ -163,6 +163,10 @@ def generate_content_v1(
     parsed.setdefault("tier", tier)
     parsed.setdefault("source_depth", depth)
     parsed.setdefault("locale", locale)
+    if tier == "premium":
+        # Premium UI does not show score; drop 0 / stray scores before validate.
+        if parsed.get("score") in (0, "0", None):
+            parsed.pop("score", None)
 
     known: set[str] = set()
     if parsed.get("source_depth") in ("profile_enriched", "two_profiles") or input_payload.get("profile_a"):
@@ -170,10 +174,16 @@ def generate_content_v1(
     if parsed.get("source_depth") == "two_profiles" or input_payload.get("profile_b"):
         known.add("profile_b")
 
+    from todayflow_backend.services.compatibility_content_v1.publish_gate import evaluate_publish
+
     quality = run_quality_suite(tier=tier, content=parsed, known_facts=known)
+    gate = evaluate_publish(tier=tier, content=parsed, known_facts=known)
     return {
         **quality,
-        "content": parsed,
+        "content": parsed if gate["publish_allowed"] else parsed,
+        "publish_allowed": gate["publish_allowed"],
+        "publish_decision": gate["decision"],
+        "user_facing": gate.get("user_facing"),
         "prompt_version": PROMPT_VERSION,
-        "raw": None,
+        "raw": (raw or "")[:4000] if not quality.get("ok") else None,
     }

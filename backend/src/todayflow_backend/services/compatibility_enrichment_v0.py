@@ -2,7 +2,9 @@
 
 C2 note: registered LLM still uses the legacy pipeline by default.
 When COMPATIBILITY_CONTENT_V1=1 *and* offline eval beats baseline, switch
-enrichment to compatibility_content_v1.generate_content_v1 (registered tier).
+enrichment to compatibility_content_v1.generate_content_v1 (registered tier)
+and only complete_job when publish_gate.evaluate_publish(...).publish_allowed.
+Invalid contracts → keep baseline + enrichment_failed (or one controlled retry).
 Do not enable that switch casually — see docs/COMPATIBILITY_CONTENT_CANON_V1.md.
 """
 

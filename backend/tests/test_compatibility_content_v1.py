@@ -228,6 +228,90 @@ def test_content_v1_flag_default_off(monkeypatch):
     assert content_v1_enabled() is True
 
 
+def test_score_zero_invalid_for_registered():
+    data = {
+        "tier": "registered",
+        "source_depth": "zodiac_only",
+        "locale": "ru",
+        "headline": "Темп важнее ярлыка совместимости",
+        "score": 0,
+        "summary": "Короткий обзор пары без пересказа блоков ниже — про темп и восстановление после паузы.",
+        "attraction": "Тянет через общий юмор и вечера без плана, когда оба отпускают контроль.",
+        "emotions": "Близость у вас включается после дела, не до: сначала решили быт, потом тепло.",
+        "communication": "Один говорит фактами, второй — настроением; без перевода ссора звучит громче смысла.",
+        "conflict": "Срыв начинается с молчания в переписке; чините через короткий звонок, не через длинный разбор.",
+        "strengths": "Вы быстро собираетесь в кризис — поездка, ремонт, дедлайн — и это склеивает пару.",
+        "vulnerable_spot": "Уязвимо место — обида «меня не выбрали», если планы меняются в последний момент.",
+        "what_helps": "Помогает заранее назвать окно на разговор и не решать важное в голоде и спешке.",
+        "main_risk": "Риск — копить претензии до взрыва из‑за «потом обсудим».",
+        "practical_advice": "На этой неделе зафиксируйте один вечер без телефонов на 40 минут.",
+        "confidence": "medium",
+    }
+    model, errs = validate_registered_dict(data)
+    assert model is None
+    assert any("score" in e for e in errs)
+
+
+def test_registered_premium_leak_caught():
+    from todayflow_backend.services.compatibility_content_v1.banned_phrases import (
+        find_registered_premium_leaks,
+    )
+
+    hits = find_registered_premium_leaks(
+        "Спроси про встречи. Если разрыв большой, продолжать смысла нет."
+    )
+    assert hits
+
+
+def test_gender_hack_banned():
+    hits = find_banned_hits("Когда он(а) молчит, спросите спокойно.")
+    assert any("gender_hack" in h for h in hits)
+
+
+def test_bez_isterik_not_banned():
+    hits = find_banned_hits("Оба говорят по делу, без истерик, ценят конструктив.")
+    assert "истерик" not in hits
+    assert "истеричка" not in hits
+
+
+def test_birth_dates_honesty_no_false_numbers():
+    from todayflow_backend.services.compatibility_content_v1.source_depth import depth_honesty_line
+
+    line = depth_honesty_line("birth_dates", locale="ru")
+    assert "базов" not in line.lower()
+    assert "дат" in line.lower()
+
+
+def test_publish_gate_blocks_invalid():
+    from todayflow_backend.services.compatibility_content_v1.publish_gate import evaluate_publish
+
+    gate = evaluate_publish(
+        tier="registered",
+        content={"tier": "registered", "score": 0, "summary": "x"},
+        attempt=2,
+        max_attempts=2,
+    )
+    assert gate["publish_allowed"] is False
+    assert gate["user_facing"] is None
+    assert gate["decision"] == "reject_keep_baseline"
+
+
+def test_prompt_version_v11():
+    from todayflow_backend.services.compatibility_content_v1.prompts_v1 import PROMPT_VERSION
+
+    assert PROMPT_VERSION == "compatibility_content_prompt_v1.1"
+    from todayflow_backend.services.compatibility_content_v1.prompts_v1 import (
+        system_prompt_registered_v1,
+        system_prompt_premium_v1,
+    )
+
+    reg = system_prompt_registered_v1(source_depth="zodiac_only")
+    assert "продолжать смысла нет" in reg or "ГРАНИЦА С PREMIUM" in reg
+    assert "20 до 95" in reg or "20 до 95" in reg.replace("—", "-")
+    prem = system_prompt_premium_v1(source_depth="profile_enriched")
+    assert "score НЕ возвращай" in prem or "Поле score НЕ" in prem
+
+
 def test_maybe_replace_guest_surface(monkeypatch):
     from todayflow_backend.core import config as cfg
     from todayflow_backend.services.compatibility_content_v1.apply_guest_v1 import (

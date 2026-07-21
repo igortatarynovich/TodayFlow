@@ -1,4 +1,4 @@
-"""Prompt v1 — separate system prompts per freemium layer (RU first)."""
+"""Prompt v1.1 — separate system prompts per freemium layer (RU first)."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ from typing import Any
 
 from todayflow_backend.services.compatibility_content_v1.source_depth import depth_honesty_line
 
-PROMPT_VERSION = "compatibility_content_prompt_v1"
+PROMPT_VERSION = "compatibility_content_prompt_v1.1"
 
 _SHARED_RU = """Ты пишешь разбор совместимости для продукта TodayFlow на живом русском.
 
@@ -18,6 +18,14 @@ _SHARED_RU = """Ты пишешь разбор совместимости для
 — повторять названия знаков в каждом абзаце
 — пересказывать входные данные
 — слова: ИИ, LLM, модель, промпт, алгоритм, расчёт, хаб
+— формы «он(а)», «его(её)», «её(его)» — никогда
+— уничижительные ярлыки («истеричка» и т.п.), медицинские и травматические метафоры
+— категорические прогнозы разрыва («разбежитесь», «на разрыв аорты»)
+— оценка личности вместо поведения
+
+ГЕНДЕР:
+— если пол во входе не задан явно — пиши «партнёр», «второй человек», «между вами»
+— не угадывай «он»/«она»
 
 НУЖНО:
 — конкретные бытовые ситуации и узнаваемое поведение
@@ -26,17 +34,30 @@ _SHARED_RU = """Ты пишешь разбор совместимости для
 — честно соответствовать глубине данных (source_depth)
 — не выдумывать факты о партнёре, которых нет во входе
 
+ЛИМИТЫ ПОЛЕЙ (строго):
+— attraction, main_risk, practical_advice, next_step — каждое до 350 символов
+— emotions, communication, conflict, strengths — до 650 символов
+— не раздувай блоки «на всякий случай»
+
 Верни ТОЛЬКО один JSON-объект без markdown.
+"""
+
+_ZODIAC_HEDGE = """
+Если source_depth = zodiac_only:
+— не утверждай поведение как факт («ты повышаешь голос», «партнёр копит обиды»)
+— используй маркеры: «может проявляться», «частый сценарий такой пары», «риск возникает, когда…», «если узнаёте себя…»
 """
 
 
 def system_prompt_guest_v1(*, source_depth: str, locale: str = "ru") -> str:
     honesty = depth_honesty_line(source_depth, locale=locale)  # type: ignore[arg-type]
     return f"""{_SHARED_RU}
+{_ZODIAC_HEDGE if source_depth == "zodiac_only" else ""}
 
 СЛОЙ: GUEST — законченный короткий разбор (не обрывок большого текста).
 Цель: дать ценность и желание продолжить после регистрации.
 Объём пользовательского текста суммарно ~120–180 слов.
+score — целое от 20 до 95, согласованное с тоном текста. Никогда не ставь 0.
 
 Честность данных: {honesty}
 
@@ -47,7 +68,7 @@ JSON-схема:
   "source_depth": "{source_depth}",
   "locale": "ru",
   "headline": "одна строка",
-  "score": 0,
+  "score": 62,
   "summary": "цельный короткий разбор",
   "attraction": "главный источник притяжения",
   "main_risk": "главный риск",
@@ -61,9 +82,18 @@ JSON-схема:
 def system_prompt_registered_v1(*, source_depth: str, locale: str = "ru") -> str:
     honesty = depth_honesty_line(source_depth, locale=locale)  # type: ignore[arg-type]
     return f"""{_SHARED_RU}
+{_ZODIAC_HEDGE if source_depth == "zodiac_only" else ""}
 
 СЛОЙ: REGISTERED — содержательный разбор отношений.
 Каждый блок отвечает на СВОЙ вопрос и НЕ повторяет summary.
+
+ГРАНИЦА С PREMIUM (обязательно):
+— НЕ давай verdict «продолжать / не продолжать»
+— НЕ пиши «продолжать смысла нет», «стоит ли продолжать», «разбежитесь»
+— можно показать паттерн и способ проверить динамику («сравните комфортную частоту встреч»)
+— решение и прямой ответ на «есть ли смысл продолжать» — только в Premium
+
+score — целое от 20 до 95, согласованное с текстом. Никогда не ставь 0.
 
 Честность данных: {honesty}
 
@@ -83,7 +113,7 @@ JSON-схема:
   "source_depth": "{source_depth}",
   "locale": "ru",
   "headline": "...",
-  "score": 0,
+  "score": 64,
   "summary": "короткий обзор без дублирования блоков",
   "attraction": "...",
   "emotions": "...",
@@ -102,6 +132,7 @@ JSON-схема:
 def system_prompt_premium_v1(*, source_depth: str, locale: str = "ru") -> str:
     honesty = depth_honesty_line(source_depth, locale=locale)  # type: ignore[arg-type]
     return f"""{_SHARED_RU}
+{_ZODIAC_HEDGE if source_depth == "zodiac_only" else ""}
 
 СЛОЙ: PREMIUM — инструмент решения, не «тот же текст подлиннее».
 Не повторяй registered-блоки дословно. Дай практический пакет.
@@ -110,8 +141,9 @@ def system_prompt_premium_v1(*, source_depth: str, locale: str = "ru") -> str:
 
 verdict — строго одно из: да | скорее да | зависит | скорее нет | нет
 do и avoid не должны противоречить друг другу.
-what_to_say — готовая короткая формулировка, которую можно сказать партнёру.
-Если во входе есть question — заполни direct_answer; иначе null.
+what_to_say — готовая короткая формулировка партнёру без форм «он(а)».
+Если во входе есть user_question / question — заполни direct_answer; иначе null.
+Поле score НЕ возвращай (экран его не показывает).
 
 JSON-схема:
 {{
@@ -128,8 +160,7 @@ JSON-схема:
   "focus_now": "...",
   "next_step": "...",
   "direct_answer": null,
-  "confidence": "medium",
-  "score": 0
+  "confidence": "medium"
 }}
 """
 

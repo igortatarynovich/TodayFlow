@@ -42,10 +42,11 @@ def depth_honesty_line(depth: SourceDepth, *, locale: str = "ru") -> str:
             else "Part of this uses your profile; we stay cautious about the partner."
         )
     if depth == "birth_dates":
+        # v1.1: do not claim life-path numbers until they are computed into the prompt.
         return (
-            "Здесь учтены даты и базовые числа — это глубже знаков, но ещё не полный профиль."
+            "Учтены знаки, определённые по датам рождения. Для более глубокого разбора нужны дополнительные данные."
             if ru
-            else "Birth dates and core numbers add depth beyond signs alone."
+            else "Signs are derived from birth dates. Deeper reading needs more profile data."
         )
     return (
         "По знакам видна общая динамика, но этого недостаточно, чтобы судить о реальном поведении в конфликте."

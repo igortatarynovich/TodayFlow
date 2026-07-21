@@ -36,6 +36,9 @@ from todayflow_backend.services.compatibility_content_v1.prompts_v1 import (  # 
     system_prompt_premium_v1,
     system_prompt_registered_v1,
 )
+from todayflow_backend.services.compatibility_content_v1.publish_gate import (  # noqa: E402
+    evaluate_publish,
+)
 from todayflow_backend.services.compatibility_content_v1.quality_checks import (  # noqa: E402
     run_quality_suite,
 )
@@ -89,7 +92,7 @@ def _expected_schema(tier: str) -> dict[str, Any]:
         base.update(
             {
                 "headline": "string",
-                "score": "0-100",
+                "score": "20-95",
                 "summary": "string",
                 "attraction": "string",
                 "main_risk": "string",
@@ -101,7 +104,7 @@ def _expected_schema(tier: str) -> dict[str, Any]:
         base.update(
             {
                 "headline": "string",
-                "score": "0-100",
+                "score": "20-95",
                 "summary": "string",
                 "attraction": "string",
                 "emotions": "string",
@@ -126,7 +129,6 @@ def _expected_schema(tier: str) -> dict[str, Any]:
                 "focus_now": "string",
                 "next_step": "string",
                 "direct_answer": "string|null",
-                "score": "0-100|null",
             }
         )
     return base
@@ -327,11 +329,49 @@ def run_one(sc: dict[str, Any], tier: str, label: str, case_no: int) -> dict[str
             tech["fallback"] = True
 
     honesty = depth_honesty_line(depth, locale=locale)  # type: ignore[arg-type]
+    known_facts: set[str] = set()
+    if payload.get("profile_a"):
+        known_facts.add("profile_a")
+    if payload.get("profile_b"):
+        known_facts.add("profile_b")
+
+    if parsed and tier == "premium" and "score" in parsed:
+        # Premium UI does not show score (v1.1).
+        parsed = {k: v for k, v in parsed.items() if k != "score"}
+        quality = run_quality_suite(tier=tier, content=parsed, known_facts=known_facts)
+        tech["validation_errors"] = quality.get("errors") or []
+        tech["quality_ok"] = quality.get("ok")
+        tech["fingerprint"] = quality.get("fingerprint")
+        tech["postprocess"] = ["stripped_premium_score"]
+
+    gate = evaluate_publish(tier=tier, content=parsed, known_facts=known_facts)
+    tech["publish_allowed"] = gate["publish_allowed"]
+    tech["publish_decision"] = gate["decision"]
+
     postprocess_notes: list[str] = []
     if parsed and tech["validation_errors"]:
-        postprocess_notes.append("validators_flagged_but_content_kept_for_review")
+        postprocess_notes.append("validators_flagged")
+    if not gate["publish_allowed"]:
+        postprocess_notes.append(
+            "production_gate:invalid_not_shown — keep baseline / enrichment_failed or retry"
+        )
     if not parsed:
         postprocess_notes.append("no_parse_ui_would_fallback_to_baseline")
+
+    # Review packs still include parsed text for human scoring, but mark production gate.
+    user_facing = (
+        _user_facing(tier, parsed, honesty)
+        if parsed
+        else {"error": "no_parsed_content", "honesty_line": honesty}
+    )
+    if not gate["publish_allowed"]:
+        user_facing = {
+            "production_publish_allowed": False,
+            "production_decision": gate["decision"],
+            "production_user_facing": None,
+            "review_only_parsed_preview": user_facing,
+            "errors": gate.get("errors"),
+        }
 
     pack = {
         "case_no": case_no,
@@ -361,11 +401,13 @@ def run_one(sc: dict[str, Any], tier: str, label: str, case_no: int) -> dict[str
                 "ok": tech["quality_ok"],
                 "errors": tech["validation_errors"],
             },
-            "user_facing": _user_facing(tier, parsed, honesty),
+            "publish_allowed": gate["publish_allowed"],
+            "publish_decision": gate["decision"],
+            "user_facing": user_facing,
             "locked_by_tier": _locked_for_tier(tier),
             "postprocess_changes": postprocess_notes,
             "retry": tech["retry"],
-            "fallback": tech["fallback"],
+            "fallback": tech["fallback"] or (not gate["publish_allowed"]),
         },
         "tech": tech,
         "human_review_template": {
