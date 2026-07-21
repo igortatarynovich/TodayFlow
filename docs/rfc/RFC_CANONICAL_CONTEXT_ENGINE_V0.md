@@ -1,14 +1,23 @@
 # RFC — Canonical Context Engine v0 (P5)
 
-**Status:** DRAFT · ready for first-slice implementation  
-**Date:** 2026-07-21  
-**Stage after:** life_spheres synthesis wire (`ad7b919`)  
-**Canon:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md) · [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md)  
-**Related:** [DAY_CONTEXT_V0.md](../DAY_CONTEXT_V0.md) · [RFC_DAILY_STATE_V0.md](./RFC_DAILY_STATE_V0.md) · [PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md](../audits/PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md) · [PERSONAL_INTELLIGENCE_LAYER.md](../PERSONAL_INTELLIGENCE_LAYER.md)  
-**First slice passport:** [CONTEXT_ENGINE_P5_FIRST_SLICE.md](../audits/CONTEXT_ENGINE_P5_FIRST_SLICE.md)
+**Status:** STOPPED — do not implement further slices  
+**Stopped:** 2026-07-21  
+**Reason:** Not proven to improve answer quality, speed up delivery, or advance MVP. Premature infrastructure.  
+**Canon gate:** [PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md) § «Архитектура только с доказанной пользой»
 
-> Stop thinking only in `life_spheres`.  
-> Spheres proved the pattern. P5 makes it **product infrastructure**.
+**What remains in code:** thin `question_id` ↔ sphere mapping + ContextPack adapter **already used** by spheres synthesis (`context_engine_v0`). Do not expand.  
+**What is cancelled:** P5.2 FactAtoms · P5.3 living/patterns migration · P5.4 Today · new registries · new abstractions · “product-wide Context Engine”.
+
+Historical draft below is retained for context only — **not a backlog to execute**.
+
+---
+
+<details>
+<summary>Archived draft (do not implement)</summary>
+
+**Original date:** 2026-07-21  
+**Stage after:** life_spheres synthesis wire (`ad7b919`)  
+**Related:** [DAY_CONTEXT_V0.md](../DAY_CONTEXT_V0.md) · [RFC_DAILY_STATE_V0.md](./RFC_DAILY_STATE_V0.md) · [PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md](../audits/PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md)
 
 ---
 
@@ -216,3 +225,6 @@ See [CONTEXT_ENGINE_P5_FIRST_SLICE.md](../audits/CONTEXT_ENGINE_P5_FIRST_SLICE.m
 | Date | Change |
 |------|--------|
 | 2026-07-21 | RFC opened after spheres synthesis wire; product formula promoted to engine |
+| 2026-07-21 | **STOPPED** — premature vs product screens; keep only in-use thin mapping |
+
+</details>

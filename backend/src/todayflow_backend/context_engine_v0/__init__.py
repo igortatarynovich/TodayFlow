@@ -1,7 +1,7 @@
-"""Canonical Context Engine v0 (P5).
+"""Thin question→ContextPack helpers used by spheres synthesis.
 
-RFC: docs/rfc/RFC_CANONICAL_CONTEXT_ENGINE_V0.md
-First slice: docs/audits/CONTEXT_ENGINE_P5_FIRST_SLICE.md
+P5 product-wide Context Engine is STOPPED (see RFC). Do not expand this package
+into FactAtoms / Today / new registries without a proven quality or DRY case.
 """
 
 from todayflow_backend.context_engine_v0.build_context_pack_v0 import (

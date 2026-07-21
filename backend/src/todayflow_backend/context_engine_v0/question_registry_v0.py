@@ -1,6 +1,6 @@
-"""Question → relevant fact selectors (P5.1 — three profile questions).
+"""Question → sphere mapping for profile spheres synthesis (three questions).
 
-SoT: docs/audits/CONTEXT_ENGINE_P5_FIRST_SLICE.md
+Frozen helper — not a product-wide registry to grow.
 """
 
 from __future__ import annotations

@@ -35,7 +35,7 @@ Later: birth foundations + accumulated living data + current question → sharpe
 | Model | Synthesize practical personal copy | Guess planets/signs or invent living history |
 
 `life_spheres` is the first concrete instance: Venus/Moon/Mars/7H cues + identity + relationship_style → love synthesis (etc.).  
-**Next stage:** [RFC_CANONICAL_CONTEXT_ENGINE_V0.md](../rfc/RFC_CANONICAL_CONTEXT_ENGINE_V0.md) · [CONTEXT_ENGINE_P5_FIRST_SLICE.md](./CONTEXT_ENGINE_P5_FIRST_SLICE.md) — question→facts Context Engine for the whole product.
+Thin `question_id` mapping used by synthesis stays; **P5 Context Engine is STOPPED** ([RFC](../rfc/RFC_CANONICAL_CONTEXT_ENGINE_V0.md)) — next work is product screens, not platform layers.
 
 Lexical repeat stability (Jaccard ~0.12–0.30) with stable facts/structure is **acceptable** — semantic stability, not verbatim clone.
 

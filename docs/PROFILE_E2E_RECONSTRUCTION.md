@@ -100,7 +100,7 @@ Production-faithful pack должен это **доказать** (eligibility +
 | 0d | Deterministic projector · cues kitchen | [audits/PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./audits/PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md) | A/B + cue/trait kitchen — **not** user-copy SoT |
 | 0e | Quality review · love/money/decisions | [audits/PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md](./audits/PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md) | projector baseline + synthesis wire Case A/B |
 | 0f | Spheres synthesis passport | [audits/PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md](./audits/PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md) | **wired** — cues → prompt → validate → Snapshot |
-| 0g | **P5 Canonical Context Engine** | [rfc/RFC_CANONICAL_CONTEXT_ENGINE_V0.md](./rfc/RFC_CANONICAL_CONTEXT_ENGINE_V0.md) · [audits/CONTEXT_ENGINE_P5_FIRST_SLICE.md](./audits/CONTEXT_ENGINE_P5_FIRST_SLICE.md) | **first slice** — question registry + ContextPack |
+| 0g | P5 Canonical Context Engine | [rfc/RFC_CANONICAL_CONTEXT_ENGINE_V0.md](./rfc/RFC_CANONICAL_CONTEXT_ENGINE_V0.md) · [audits/CONTEXT_ENGINE_P5_FIRST_SLICE.md](./audits/CONTEXT_ENGINE_P5_FIRST_SLICE.md) | **STOPPED** — keep thin in-use mapping only; no further slices |
 | 1 | Pipeline map (registration → UI + alt paths) | [audits/PROFILE_E2E_PIPELINE_MAP.md](./audits/PROFILE_E2E_PIPELINE_MAP.md) | **v0** |
 | 2 | Prompt registry (passports) | [audits/PROFILE_E2E_PROMPT_REGISTRY.md](./audits/PROFILE_E2E_PROMPT_REGISTRY.md) | **v0 — align to block passport** |
 | 3 | Block map (every surface block) | [audits/PROFILE_E2E_BLOCK_MAP.md](./audits/PROFILE_E2E_BLOCK_MAP.md) | **v0 — current reality** |
