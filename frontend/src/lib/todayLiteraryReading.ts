@@ -102,7 +102,6 @@ export function buildTodayLiteraryReading(
   const closeRaw = [
     clean(dayStory?.today_move),
     clean(contract.primary_action),
-    clean(dayStory?.primary_action as string | undefined),
   ].find((t) => t && isRuUserFacingText(t) && distinctEnough(t, used));
 
   const close = closeRaw ? softenCommandLead(firstParagraph(closeRaw, 1)) : null;
