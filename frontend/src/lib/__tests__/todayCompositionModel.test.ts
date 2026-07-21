@@ -58,16 +58,40 @@ describe("buildTodayCompositionViewModel", () => {
     expect(vm.influences.some((i) => i.kind === "tarot")).toBe(true);
     expect(vm.influences.some((i) => i.kind === "moon")).toBe(true);
     expect(vm.supported.length).toBeGreaterThan(0);
-    expect(vm.strengthen).toHaveLength(5);
+    // PR-3: no invent without day_story.practice_recommendation
+    expect(vm.strengthen).toHaveLength(0);
     expect(vm.actions).toHaveLength(4);
     expect(vm.growthArc.length).toBeGreaterThan(0);
-
-    const allPractice = vm.strengthen.find((t) => t.id === "practice")?.title ?? "";
-    const allIntention = vm.strengthen.find((t) => t.id === "intention")?.title ?? "";
-    expect(allPractice.toLowerCase()).not.toBe(allIntention.toLowerCase());
   });
 
-  it("adjusts affirmation when user picks tarot", () => {
+  it("emits a single strengthen tool from practice_recommendation only", () => {
+    const vm = buildTodayCompositionViewModel({
+      contract: {
+        ...sampleContract,
+        day_story: {
+          contract_version: "day_story_v1",
+          theme: "Ясность",
+          practice_recommendation: {
+            kind: "practice",
+            text: "Закрыть одну задачу до обеда без переключений.",
+            reason: "Один завершённый результат сегодня важнее пяти начатых.",
+          },
+        },
+      },
+      cardName: "Сила",
+      cardMeaning: null,
+      numerologyValue: "4",
+      numerologyMeaning: null,
+      morningRitualData: null,
+    });
+
+    expect(vm.strengthen).toHaveLength(1);
+    expect(vm.strengthen[0]?.id).toBe("practice");
+    expect(vm.strengthen[0]?.title).toMatch(/одну задачу/i);
+    expect(vm.strengthen[0]?.detail).toMatch(/завершённый результат/i);
+  });
+
+  it("does not invent affirmation when practice_recommendation is absent", () => {
     const vm = buildTodayCompositionViewModel({
       contract: sampleContract,
       cardName: "Сила",
@@ -96,12 +120,11 @@ describe("buildTodayCompositionViewModel", () => {
       numberResonance: null,
     });
 
-    const affirmation = adjusted.strengthen.find((t) => t.id === "affirmation");
-    expect(affirmation?.title).toMatch(/Отшельник/);
+    expect(adjusted.strengthen.find((t) => t.id === "affirmation")).toBeUndefined();
   });
 
-  it("overlays catalog practice onto strengthen practice card", () => {
-    const vm = buildTodayCompositionViewModel({
+  it("overlays catalog practice only onto an existing day_story practice tool", () => {
+    const empty = buildTodayCompositionViewModel({
       contract: sampleContract,
       cardName: "Сила",
       cardMeaning: null,
@@ -109,8 +132,35 @@ describe("buildTodayCompositionViewModel", () => {
       numerologyMeaning: null,
       morningRitualData: null,
     });
+    expect(
+      applyRecommendedPracticeToStrengthen(empty.strengthen, {
+        id: "breath-3",
+        title: "Дыхание 4-7-8",
+        description: "Успокоить нервную систему перед решением.",
+        duration_minutes: 5,
+      }),
+    ).toHaveLength(0);
 
-    const merged = applyRecommendedPracticeToStrengthen(vm.strengthen, {
+    const withRec = buildTodayCompositionViewModel({
+      contract: {
+        ...sampleContract,
+        day_story: {
+          contract_version: "day_story_v1",
+          practice_recommendation: {
+            kind: "practice",
+            text: "Короткая пауза перед ответом.",
+            reason: "Точность важнее скорости.",
+          },
+        },
+      },
+      cardName: "Сила",
+      cardMeaning: null,
+      numerologyValue: "4",
+      numerologyMeaning: null,
+      morningRitualData: null,
+    });
+
+    const merged = applyRecommendedPracticeToStrengthen(withRec.strengthen, {
       id: "breath-3",
       title: "Дыхание 4-7-8",
       description: "Успокоить нервную систему перед решением.",

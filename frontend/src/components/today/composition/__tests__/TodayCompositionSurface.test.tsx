@@ -113,7 +113,8 @@ describe("TodayCompositionSurface", () => {
     expect(screen.getByTestId("today-zone-ritual-gates")).toBeInTheDocument();
     expect(screen.getByTestId("today-ritual-tarot-gate")).toBeInTheDocument();
     expect(screen.queryByTestId("today-zone-why-story")).not.toBeInTheDocument();
-    expect(screen.getByTestId("today-zone-strengthen")).toBeInTheDocument();
+    // PR-3: no strengthen invent without practice_recommendation
+    expect(screen.queryByTestId("today-zone-strengthen")).not.toBeInTheDocument();
   });
 
   it("hides continuity on firstToday variant", () => {
@@ -148,7 +149,7 @@ describe("TodayCompositionSurface", () => {
     expect(screen.getByTestId("today-evening-open")).toHaveTextContent("Закрыть день");
   });
 
-  it("opens tarot pick overlay from ritual gate and shows strengthen preview before personalized", async () => {
+  it("opens tarot pick overlay from ritual gate without inventing strengthen", async () => {
     const user = userEvent.setup();
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
 
@@ -157,12 +158,11 @@ describe("TodayCompositionSurface", () => {
     expect(screen.getByTestId("today-ritual-tarot-overlay")).toBeInTheDocument();
     expect(screen.getByTestId("today-ritual-tarot-pick")).toBeInTheDocument();
     expect(screen.getByText(RITUAL_COPY.experiencePickCardEyebrow)).toBeInTheDocument();
-    expect(screen.getByTestId("today-zone-strengthen")).toBeInTheDocument();
-    expect(screen.getByText("Откроется после ритуала")).toBeInTheDocument();
+    expect(screen.queryByTestId("today-zone-strengthen")).not.toBeInTheDocument();
     expect(screen.queryByTestId("today-zone-actions")).not.toBeInTheDocument();
   });
 
-  it("shows personalized blocks when ritual complete in storage", () => {
+  it("shows personalized reading when ritual complete without empty strengthen", () => {
     window.localStorage.setItem(
       "todayflow.day_engagement.v1.2026-06-23",
       JSON.stringify({
@@ -180,9 +180,52 @@ describe("TodayCompositionSurface", () => {
 
     expect(screen.queryByTestId("today-zone-ritual-gates")).not.toBeInTheDocument();
     expect(screen.getByTestId("today-zone-personal")).toBeInTheDocument();
-    expect(screen.getByTestId("today-zone-strengthen")).toBeInTheDocument();
+    expect(screen.queryByTestId("today-zone-strengthen")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("today-soft-why")).not.toBeInTheDocument();
     expect(screen.getByTestId("today-entity-synthesis")).toBeInTheDocument();
     expect(screen.queryByText("Энергия дня")).not.toBeInTheDocument();
+  });
+
+  it("shows strengthen and soft why when day_story supplies recommendation and claims", () => {
+    window.localStorage.setItem(
+      "todayflow.day_engagement.v1.2026-06-23",
+      JSON.stringify({
+        tarotPickedName: "Сила",
+        tarotPickedId: 8,
+        numberConfirmed: true,
+        dayGoal: null,
+        practiceStarted: false,
+        affirmationRead: false,
+        todayOpened: true,
+      }),
+    );
+
+    const contractWithStory: TodayContractV1 = {
+      ...sampleContract,
+      day_story: {
+        contract_version: "day_story_v1",
+        theme: "Ясность",
+        story: "Сегодня день коротких договорённостей и одной ясной линии.",
+        practice_recommendation: {
+          kind: "practice",
+          text: "Закрыть одну задачу до обеда.",
+          reason: "Один результат важнее пяти начатых.",
+        },
+        trace: {
+          derived_claims: [
+            { id: "claim.day_axis", kind: "axis", text: "День держится на одной ясной линии." },
+          ],
+        },
+      },
+    };
+
+    render(
+      <TodayCompositionSurface {...baseProps} contract={contractWithStory} variant="default" />,
+    );
+
+    expect(screen.getByTestId("today-zone-strengthen")).toBeInTheDocument();
+    expect(screen.getByTestId("today-tool-practice")).toBeInTheDocument();
+    expect(screen.getByTestId("today-soft-why")).toHaveTextContent(/ясной линии/i);
   });
 
   it("opens promise form when ritual complete", async () => {
@@ -204,7 +247,7 @@ describe("TodayCompositionSurface", () => {
     const user = userEvent.setup();
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
 
-    await user.click(screen.getByText("+ Своя цель…"));
+    await user.click(screen.getByTestId("today-zone-promise-open"));
     expect(screen.getByTestId("today-entity-daily-goal")).toBeInTheDocument();
   });
 

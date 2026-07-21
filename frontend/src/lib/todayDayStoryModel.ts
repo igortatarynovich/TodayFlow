@@ -150,61 +150,13 @@ function buildStrengthenLinked(
   },
 ): TodayStrengthenTool[] {
   if (!input.ritualComplete) return [];
-
-  const card = input.cardName && input.cardName !== "—" ? input.cardName : "карту дня";
-  const cardRu = input.cardId != null ? getTodayTarotCardRu(input.cardId) : undefined;
-  const cardShort = cardRu?.focusRu ?? "внутреннюю опору";
-  const theme = input.thesis.replace(/^Сегодня[:\s—-]*/i, "").replace(/[.!?]+$/, "").trim().toLowerCase();
-  const risk = input.weakLabel?.toLowerCase() ?? "лишнюю срочность";
-  const isHermit = card && /отшельник/i.test(card);
-
-  return tools
-    .filter((tool) => !(input.lowEnergy && tool.id === "asceticism"))
-    .map((tool) => {
-      switch (tool.id) {
-        case "practice":
-          return {
-            ...tool,
-            title: input.lowEnergy ? "5 минут тишины" : isHermit ? "7 минут тишины" : tool.title,
-            detail: input.lowEnergy
-              ? "Сегодня лучше мягкая пауза, без активной нагрузки."
-              : isHermit
-                ? "Перед первым важным разговором — короткая пауза, чтобы услышать себя."
-                : `Практика поддерживает «${card}» — ${cardShort.replace(/[.!?]+$/, "").toLowerCase()}.`,
-            duration: input.lowEnergy ? "5 мин" : isHermit ? "7 мин" : tool.duration,
-          };
-        case "affirmation":
-          return {
-            ...tool,
-            title: isHermit ? "Я слышу себя яснее, когда перестаю спешить." : tool.title,
-            detail: `Фраза дня поддерживает главную мысль — ${theme.slice(0, 80)}.`,
-          };
-        case "meditation":
-          return { ...tool, detail: `Медитация помогает пройти день спокойнее — без ${risk}.` };
-        case "asceticism":
-          return { ...tool, detail: `Аскеза снимает напряжение: ${risk}.` };
-        case "intention":
-          return {
-            ...tool,
-            detail:
-              input.numerologyValue && input.numerologyValue !== "—"
-                ? `Число ${input.numerologyValue} поддерживает это намерение — разбирай задачи до причины, а не формально.`
-                : "Намерение связывает тему дня с одним конкретным шагом к вечеру.",
-          };
-        default:
-          return tool;
-      }
-    });
+  // PR-3: keep API-backed copy; do not invent titles from card/theme.
+  return tools.filter((tool) => !(input.lowEnergy && tool.id === "asceticism"));
 }
 
 function buildStrengthenPreview(tools: TodayStrengthenTool[]): TodayStrengthenTool[] {
-  return tools.map((tool) => ({
-    ...tool,
-    detail:
-      tool.id === "practice"
-        ? "Откроется после выбора карты и числа — под твой символ и ритм дня."
-        : tool.detail,
-  }));
+  // Show recommendation copy as-is before ritual; do not invent lock fillers.
+  return tools;
 }
 
 function buildRitualTransformBanner(input: {

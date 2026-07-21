@@ -125,6 +125,22 @@
   color: #fff;
 }
 
+.softWhy {
+  margin: 0.85rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.softWhyLabel {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
 .readingParagraph {
   margin: 0;
   font-size: 0.95rem;

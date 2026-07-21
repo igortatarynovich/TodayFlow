@@ -1,6 +1,6 @@
 import type { TodayContractV1 } from "@/lib/todayContract";
 import type { TodayDayStoryViewModel } from "@/lib/todayDayStoryModel";
-import { buildTodayLiteraryReading } from "@/lib/todayLiteraryReading";
+import { buildTodayLiteraryReading, pickSoftWhyLine } from "@/lib/todayLiteraryReading";
 
 const contract: TodayContractV1 = {
   contract_version: "today_contract_v1",
@@ -38,6 +38,26 @@ const contract: TodayContractV1 = {
     advantage: "Короткий контакт с близким человеком сегодня работает лучше долгих объяснений.",
     abstain: "Домашние обязательства лучше не раздувать — минимум без чувства вины.",
     today_move: "Если успеешь закрыть одну важную вещь до обеда, остаток дня пойдёт легче.",
+    practice_recommendation: {
+      kind: "practice",
+      text: "Две минуты тишины перед ответом.",
+      reason: "Пауза сохраняет точность в коротких договорённостях.",
+    },
+    trace: {
+      derived_claims: [
+        {
+          id: "claim.day_axis",
+          kind: "axis",
+          text: "День держится на коротких договорённостях, а не на длинных объяснениях.",
+        },
+        {
+          id: "claim.day_card",
+          kind: "symbol",
+          text: "Карта дня учтена как дополнение: Отшельник",
+        },
+      ],
+      limitations: ["Сфера «family» без личного сигнала сегодня — блок отсутствует."],
+    },
   },
 };
 
@@ -71,8 +91,32 @@ describe("buildTodayLiteraryReading", () => {
     const reading = buildTodayLiteraryReading(story, contract);
     expect(reading.opening).toMatch(/точностью|сообщение/i);
     expect(reading.opening).not.toMatch(/опирайся|сегодня сильнее|направить внимание/i);
-    const blob = [reading.opening, reading.lean, reading.ease, reading.close].join(" ");
+    const blob = [reading.opening, reading.why, reading.lean, reading.ease, reading.close].join(" ");
     expect(blob).not.toMatch(/→/);
     expect(reading.close).toBeTruthy();
+  });
+
+  it("uses meaning-facing derived_claims for soft why, never kitchen limitations", () => {
+    const reading = buildTodayLiteraryReading(story, contract);
+    expect(reading.why).toMatch(/коротких договорённостях/i);
+    expect(reading.why).not.toMatch(/учтена как|блок отсутствует|limitations/i);
+    expect(pickSoftWhyLine(contract)).toMatch(/коротких договорённостях/i);
+  });
+
+  it("hides soft why when derived_claims are absent (no reason/advantage fallback)", () => {
+    const noClaims: TodayContractV1 = {
+      ...contract,
+      day_story: {
+        ...contract.day_story!,
+        practice_recommendation: {
+          kind: "practice",
+          text: "Две минуты тишины перед ответом.",
+          reason: "Пауза сохраняет точность в коротких договорённостях.",
+        },
+        trace: { derived_claims: [], limitations: ["kitchen only"] },
+      },
+    };
+    expect(pickSoftWhyLine(noClaims)).toBeNull();
+    expect(buildTodayLiteraryReading(story, noClaims).why).toBeNull();
   });
 });

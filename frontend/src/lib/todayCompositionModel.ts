@@ -199,64 +199,37 @@ function buildCaution(contract: TodayContractV1, registry: TextRegistry): TodayC
   return items.slice(0, 3);
 }
 
-function buildAffirmation(themeHeadline: string, cardName: string | null): string {
-  const essence = themeHeadline.replace(/^Сегодня[:\s—-]*/i, "").replace(/[.!?]+$/, "");
-  if (cardName && cardName !== "—") {
-    return `Сегодня я держу ритм — ${essence.toLowerCase()}, опираясь на «${cardName}».`;
-  }
-  return `Сегодня я двигаюсь в своём ритме — ${essence.toLowerCase()}.`;
-}
+const PRACTICE_KIND_TO_TOOL: Record<
+  string,
+  { id: TodayStrengthenTool["id"]; label: string }
+> = {
+  practice: { id: "practice", label: "Практика дня" },
+  affirmation: { id: "affirmation", label: "Аффирмация дня" },
+  ascetic: { id: "asceticism", label: "Аскеза дня" },
+  promise: { id: "intention", label: "Шаг дня" },
+};
 
-function buildStrengthen(
-  contract: TodayContractV1,
-  registry: TextRegistry,
-  themeHeadline: string,
-  cardName: string | null,
-  numberValue: string | null,
-  caution: TodayCautionItem[],
-): TodayStrengthenTool[] {
-  const growth = registry.claim(contract.personal_growth.development_point?.trim());
-  const firstRisk = caution[0]?.comment.replace(/[.!?]+$/, "") ?? null;
+/**
+ * PR-3 honesty: strengthen only from day_story.practice_recommendation.
+ * No five-tool invent, no hardcoded silence/urgency fallbacks.
+ */
+function buildStrengthen(contract: TodayContractV1): TodayStrengthenTool[] {
+  const rec = contract.day_story?.practice_recommendation;
+  if (!rec) return [];
+  const kind = String(rec.kind || "none").trim().toLowerCase();
+  if (kind === "none") return [];
+  const mapped = PRACTICE_KIND_TO_TOOL[kind];
+  const text = (rec.text || "").trim();
+  if (!mapped || !text || !isRuUserFacingText(text)) return [];
 
-  const practiceTitle = growth ? firstSentence(growth) : "Пять минут тишины без экрана.";
-  const affirmation = buildAffirmation(themeHeadline, cardName);
-
+  const reason = (rec.reason || "").trim();
   return [
     {
-      id: "practice",
-      label: "Практика дня",
-      title: practiceTitle,
-      detail: "Небольшое действие, которое лучше всего соответствует сегодняшнему состоянию.",
-      duration: "5 мин",
-    },
-    {
-      id: "affirmation",
-      label: "Аффирмация дня",
-      title: affirmation,
-      detail: "Прочитай вслух или сохрани как якорь.",
-    },
-    {
-      id: "meditation",
-      label: "Медитация дня",
-      title: "Три минуты спокойного дыхания",
-      detail: growth
-        ? `Сфокусируйся на одной мысли: ${firstSentence(growth).replace(/[.!?]+$/, "")}.`
-        : "Следи за вдохом и выдохом — без задач и экрана.",
-      duration: "3 мин",
-    },
-    {
-      id: "asceticism",
-      label: "Аскеза дня",
-      title: firstRisk ? `Сегодня без ${firstRisk.toLowerCase()}` : "Сегодня без лишней срочности",
-      detail: "Небольшое осознанное ограничение, подходящее именно этому дню.",
-    },
-    {
-      id: "intention",
-      label: "Намерение дня",
-      title:
-        registry.claim(contract.primary_action?.trim()) ??
-        "Один понятный шаг, который захочется завершить к вечеру.",
-      detail: numberValue && numberValue !== "—" ? `Число ${numberValue} поддерживает это намерение.` : "Зафиксируй или прими предложенное.",
+      id: mapped.id,
+      label: mapped.label,
+      title: firstSentence(text),
+      detail: reason && isRuUserFacingText(reason) ? firstSentence(reason) : "",
+      duration: mapped.id === "practice" ? "5 мин" : undefined,
     },
   ];
 }
@@ -315,15 +288,14 @@ export function applyEngagementToViewModel(
 
   const cardName = engagement.tarotPickedName ?? vm.influences.find((i) => i.kind === "tarot")?.title ?? null;
   const strengthen = vm.strengthen.map((tool) => {
-    if (tool.id === "affirmation" && cardName) {
+    if (tool.id === "affirmation" && cardName && tool.title) {
       return {
         ...tool,
-        title: buildAffirmation(vm.hero.themeHeadline, cardName),
-        detail: "Ты выбрал карту — аффирмация подстроилась под неё.",
+        detail: tool.detail || "Ты выбрал карту — аффирмация остаётся из истории дня.",
       };
     }
     if (tool.id === "practice" && engagement.practiceStarted) {
-      return { ...tool, detail: "Практика запущена — вернись к ней в течение дня." };
+      return { ...tool, detail: tool.detail || "Практика запущена — вернись к ней в течение дня." };
     }
     if (tool.id === "intention" && engagement.dayGoal) {
       return { ...tool, title: engagement.dayGoal, detail: "Твоя цель на сегодня." };
@@ -349,13 +321,14 @@ export function applyEngagementToViewModel(
   };
 }
 
-/** Overlay catalog practice from GET /practices/current onto the strengthen practice card. */
+/** Overlay catalog practice only onto an existing day_story practice tool — never invent the slot. */
 export function applyRecommendedPracticeToStrengthen(
   tools: TodayStrengthenTool[],
   practice: { id: string; title: string; description: string; duration_minutes?: number } | null | undefined,
   options?: { lowEnergy?: boolean },
 ): TodayStrengthenTool[] {
   if (!practice?.title?.trim()) return tools;
+  if (!tools.some((tool) => tool.id === "practice")) return tools;
 
   return tools.map((tool) => {
     if (tool.id !== "practice") return tool;
@@ -396,14 +369,7 @@ export function buildTodayCompositionViewModel(input: {
   const whyInfluences = influences.filter((i) => i.detail || i.kind === "moon");
   const supported = buildSupported(input.contract, registry);
   const caution = buildCaution(input.contract, registry);
-  const strengthen = buildStrengthen(
-    input.contract,
-    registry,
-    themeHeadline,
-    input.cardName,
-    input.numerologyValue,
-    caution,
-  );
+  const strengthen = buildStrengthen(input.contract);
 
   const focusTitle =
     registry.claim(input.contract.primary_action?.trim()) ??

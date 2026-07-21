@@ -3,7 +3,7 @@
  * Meaning comes from backend; this only selects and lightly shapes prose.
  */
 
-import type { TodayContractV1 } from "@/lib/todayContract";
+import type { TodayContractDayStoryTraceClaimV1, TodayContractV1 } from "@/lib/todayContract";
 import { isDomainLensPresent } from "@/lib/todayContract";
 import type { TodayDayStoryViewModel } from "@/lib/todayDayStoryModel";
 import { isRuUserFacingText } from "@/lib/todaySynthesisTextPolicy";
@@ -11,6 +11,11 @@ import { isRuUserFacingText } from "@/lib/todaySynthesisTextPolicy";
 export type TodayLiteraryReading = {
   /** Opening observation (2–5 sentences preferred). */
   opening: string;
+  /**
+   * Soft “почему это важно сегодня” — meaning-facing claim only.
+   * Never from kitchen limitations / confidence / fingerprint.
+   */
+  why: string | null;
   /** Where the day leans — one short paragraph, optional. */
   lean: string | null;
   /** Where to go gently — one short paragraph, optional. */
@@ -18,6 +23,16 @@ export type TodayLiteraryReading = {
   /** One practical close, human sentence — not a command chip. */
   close: string | null;
 };
+
+/** Claim kinds safe for user-facing soft why (not kitchen). */
+const MEANING_CLAIM_KINDS = new Set([
+  "axis",
+  "action",
+  "risk",
+  "domain_focus",
+  "tempo",
+  "observation",
+]);
 
 function clean(text: string | null | undefined): string {
   return (text ?? "").replace(/\s+/g, " ").trim();
@@ -53,6 +68,35 @@ function softenCommandLead(text: string): string {
   return t.replace(/^выбери\s+/i, "Если получится — ").replace(/^сделай\s+/i, "Имеет смысл ");
 }
 
+function isKitchenClaimText(text: string): boolean {
+  return /учтена как|не упоминать|чек-ин|fingerprint|calculation_version|evidence_id|source_inputs/i.test(
+    text,
+  );
+}
+
+function meaningClaimLine(claim: TodayContractDayStoryTraceClaimV1): string {
+  const kind = String(claim.kind || "observation").trim().toLowerCase();
+  if (!MEANING_CLAIM_KINDS.has(kind)) return "";
+  if (kind === "symbol" || kind === "mood") return "";
+  const text = clean(claim.text);
+  if (!text || !isRuUserFacingText(text) || isKitchenClaimText(text)) return "";
+  return text;
+}
+
+/**
+ * Soft why only from meaning-facing derived_claims.
+ * No fallback to practice_recommendation.reason / advantage / limitations —
+ * if claims are absent, the Why block disappears.
+ */
+export function pickSoftWhyLine(contract: TodayContractV1, used: string[] = []): string | null {
+  const claims = contract.day_story?.trace?.derived_claims ?? [];
+  for (const claim of claims) {
+    const line = meaningClaimLine(claim);
+    if (line && distinctEnough(line, used)) return firstParagraph(line, 2);
+  }
+  return null;
+}
+
 export function buildTodayLiteraryReading(
   story: TodayDayStoryViewModel,
   contract: TodayContractV1,
@@ -72,6 +116,9 @@ export function buildTodayLiteraryReading(
     opening = firstParagraph(opening, 5);
     used.push(opening);
   }
+
+  const why = pickSoftWhyLine(contract, used);
+  if (why) used.push(why);
 
   const peak = story.sphereFocus.cards.find((c) => c.role === "peak");
   const leanRaw = [
@@ -106,5 +153,5 @@ export function buildTodayLiteraryReading(
 
   const close = closeRaw ? softenCommandLead(firstParagraph(closeRaw, 1)) : null;
 
-  return { opening, lean, ease, close };
+  return { opening, why, lean, ease, close };
 }

@@ -20,12 +20,20 @@ export type TodayContractDomainsV1 = {
   family: DomainLensV1;
 };
 
+export type TodayContractDayStoryTraceClaimV1 = {
+  id?: string;
+  kind?: string;
+  text?: string;
+  domain?: string | null;
+  evidence_ids?: string[];
+};
+
 export type TodayContractDayStoryTraceV1 = {
   calculation_version?: string;
   confidence?: number;
   limitations?: string[];
   evidence?: unknown[];
-  derived_claims?: unknown[];
+  derived_claims?: TodayContractDayStoryTraceClaimV1[];
   domains_present?: string[];
   domains_absent?: string[];
   fingerprint?: string;

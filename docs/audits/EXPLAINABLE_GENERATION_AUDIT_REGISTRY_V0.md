@@ -81,7 +81,7 @@ Goals / promises / ascetics: **user-authored contracts** в tracking API — о�
 |---------|------|-------|--------|-----------|-------------|-----|
 | Today spheres | `lib/todayDaySphereFocus.ts` | client advice when contract fields empty | **mitigated:** skip `evidence_status=absent` / empty lens | sphere menu / invented practice | keep gate; no catalog fill | P1 mitigated |
 | Today energy | `app/today/page.tsx` · utils | residual energy paths / decisions | server ?? 0 after PR-1; watch other call sites | placeholder as signal | never drive UI from invented score | P1 |
-| Today strengthen | `lib/todayCompositionModel.ts` / day story model | invented strengthen tools | local | advice without DailyState | only link practices/goals from API ids | P1 |
+| Today strengthen | `lib/todayCompositionModel.ts` | invented strengthen tools | **mitigated:** only `practice_recommendation`; catalog overlay requires existing practice slot | advice without DailyState | keep gate | P1 mitigated |
 | Practices hero | `app/practices/page.tsx` | catalog_fallback still shown (labeled) | catalog | general as day practice | prefer empty + CTA choose; keep label if shown | P1 |
 | Profile live cards | `buildProfileV2LiveContext.ts` | fixed in PR-1 (stone/supports/awareness) | morning / CUM | was identity→stone | keep tests; no regress | mitigated |
 | Tarot rail tags | `TarotRail.tsx` | fixed in PR-1 | was hardcoded | fake personal tags | keep null until DailyState | mitigated |

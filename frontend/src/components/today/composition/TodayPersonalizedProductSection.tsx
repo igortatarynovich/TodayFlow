@@ -59,12 +59,6 @@ export function TodayPersonalizedProductSection({
   const compatibility = buildTodayCompatibilityHook(coreProfile);
   const reading = buildTodayLiteraryReading(story, contract);
 
-  const synthesisTags = [
-    story.tarotImpact ? { id: "tarot", label: story.tarotImpact.title } : null,
-    story.skyCards[0] ? { id: story.skyCards[0].id, label: story.skyCards[0].title } : null,
-    story.numberImpact ? { id: "number", label: story.numberImpact.title } : null,
-  ].filter(Boolean) as Array<{ id: string; label: string }>;
-
   const completedCount = (practiceCompleted ? 1 : 0) + (affirmationRead ? 1 : 0);
   const totalTools = strengthenTools.length;
 
@@ -86,16 +80,13 @@ export function TodayPersonalizedProductSection({
         <div>
           <p className={styles.synthesisKicker}>{themeLine || "Сегодня"}</p>
           {reading.opening ? <p className={styles.synthesisText}>{reading.opening}</p> : null}
+          {reading.why ? (
+            <p className={styles.softWhy} data-testid="today-soft-why">
+              <span className={styles.softWhyLabel}>Почему это важно сегодня</span>
+              {reading.why}
+            </p>
+          ) : null}
         </div>
-        {synthesisTags.length > 0 ? (
-          <div className={styles.synthesisTags}>
-            {synthesisTags.map((tag) => (
-              <span key={tag.id} className={styles.synthesisTag}>
-                {tag.label}
-              </span>
-            ))}
-          </div>
-        ) : null}
       </article>
 
       {(reading.lean || reading.ease || reading.close) && (
@@ -152,9 +143,11 @@ export function TodayPersonalizedProductSection({
         <article className={styles.productCard} data-testid="today-zone-strengthen">
           <div className={styles.practicesHeader}>
             <p className={styles.cardEyebrow}>На сегодня</p>
-            <p className={styles.practicesProgress}>
-              {completedCount} из {totalTools}
-            </p>
+            {totalTools > 1 ? (
+              <p className={styles.practicesProgress}>
+                {completedCount} из {totalTools}
+              </p>
+            ) : null}
           </div>
 
           {practiceTool ? (
