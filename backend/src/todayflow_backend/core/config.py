@@ -3,11 +3,28 @@
 import os
 from pathlib import Path
 
+from typing import Annotated
+
 from pydantic import field_validator
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
+
+# backend/src/todayflow_backend/core/config.py → repo root TodayFlow/
+_REPO_ROOT = Path(__file__).resolve().parents[4]
+_ENV_CANDIDATES = (
+    _REPO_ROOT / ".env",
+    Path.cwd() / ".env",
+    Path(".env"),
+)
 
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        # Repo-root .env first (Nebius / LLM live there); cwd .env as fallback for local overrides.
+        env_file=tuple(str(p) for p in _ENV_CANDIDATES if p.is_file()) or (".env",),
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
     environment: str = "development"
     database_url: str = "postgresql+psycopg://postgres:postgres@postgres:5432/todayflow"
     # Локальный dev / pytest: тот же порт, что в compose (`8081:8081`). В контейнере backend
@@ -41,7 +58,7 @@ class Settings(BaseSettings):
     i18n_version: str = "1.0.0"
     paragraph_templates_path: Path = Path(os.getenv("CONTENT_DIR", Path(__file__).resolve().parents[4] / "CONTENT")) / "paragraph_templates_v1.jsonl"
     paragraph_templates_meta_path: Path = Path(os.getenv("CONTENT_DIR", Path(__file__).resolve().parents[4] / "CONTENT")) / "paragraph_templates_v1.meta.jsonl"
-    allowed_origins: list[str] = [
+    allowed_origins: Annotated[list[str], NoDecode] = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "http://localhost:3001",
@@ -51,9 +68,23 @@ class Settings(BaseSettings):
     @field_validator("allowed_origins", mode="before")
     @classmethod
     def parse_allowed_origins(cls, value: object) -> object:
+        if isinstance(value, list):
+            return [str(item).strip() for item in value if str(item).strip()]
         if isinstance(value, str):
-            return [item.strip() for item in value.split(",") if item.strip()]
+            raw = value.strip()
+            if raw.startswith("["):
+                import json
+
+                try:
+                    parsed = json.loads(raw)
+                    if isinstance(parsed, list):
+                        return [str(item).strip() for item in parsed if str(item).strip()]
+                except json.JSONDecodeError:
+                    inner = raw.strip("[]")
+                    return [item.strip().strip("'\"") for item in inner.split(",") if item.strip()]
+            return [item.strip() for item in raw.split(",") if item.strip()]
         return value
+
     openai_api_key: str | None = None  # OPENAI_API_KEY — ключ для OpenAI-совместимого chat API
     # Свой инференс (vLLM, LiteLLM, Azure OpenAI через прокси и т.д.): тот же протокол, другой host.
     openai_base_url: str | None = None  # OPENAI_BASE_URL — базовый URL без завершающего /
@@ -91,9 +122,6 @@ class Settings(BaseSettings):
     push_dispatch_secret: str | None = None
     # Optional FCM legacy server key for HTTP API (v1 JSON credentials preferred later)
     fcm_server_key: str | None = None
-
-    class Config:
-        env_file = ".env"
 
 
 settings = Settings()
