@@ -96,9 +96,11 @@ Production-faithful pack должен это **доказать** (eligibility +
 |---|----------|------|--------|
 | 0 | Architecture principle + defect classes | this doc | **canon** |
 | 0b | Block passport template | [audits/PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](./audits/PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md) | **v0** |
-| 0c | Block passport · `life_spheres` | [audits/PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./audits/PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md) | **draft** — natal-presence · deterministic-first · independent of patterns |
-| 0d | Deterministic projector spec · `life_spheres` | [audits/PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./audits/PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md) | **v0.1 SoT** — foundations, gate, PR-2 love/money/decisions |
-| 0e | Quality review · love/money/decisions | [audits/PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md](./audits/PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md) | **v0.2 gate PASS** (8/8) — Case A/B+UI on PR still required before merge |
+| 0c | Block passport · `life_spheres` | [audits/PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./audits/PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md) | natal-presence · synthesis content · independent of patterns |
+| 0d | Deterministic projector · cues kitchen | [audits/PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./audits/PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md) | A/B + cue/trait kitchen — **not** user-copy SoT |
+| 0e | Quality review · love/money/decisions | [audits/PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md](./audits/PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md) | projector baseline + synthesis wire Case A/B |
+| 0f | Spheres synthesis passport | [audits/PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md](./audits/PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md) | **wired** — cues → prompt → validate → Snapshot |
+| 0g | **P5 Canonical Context Engine** | [rfc/RFC_CANONICAL_CONTEXT_ENGINE_V0.md](./rfc/RFC_CANONICAL_CONTEXT_ENGINE_V0.md) · [audits/CONTEXT_ENGINE_P5_FIRST_SLICE.md](./audits/CONTEXT_ENGINE_P5_FIRST_SLICE.md) | **first slice** — question registry + ContextPack |
 | 1 | Pipeline map (registration → UI + alt paths) | [audits/PROFILE_E2E_PIPELINE_MAP.md](./audits/PROFILE_E2E_PIPELINE_MAP.md) | **v0** |
 | 2 | Prompt registry (passports) | [audits/PROFILE_E2E_PROMPT_REGISTRY.md](./audits/PROFILE_E2E_PROMPT_REGISTRY.md) | **v0 — align to block passport** |
 | 3 | Block map (every surface block) | [audits/PROFILE_E2E_BLOCK_MAP.md](./audits/PROFILE_E2E_BLOCK_MAP.md) | **v0 — current reality** |

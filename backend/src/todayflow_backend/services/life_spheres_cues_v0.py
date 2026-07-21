@@ -8,40 +8,27 @@ from __future__ import annotations
 
 from typing import Any
 
+from todayflow_backend.context_engine_v0.question_registry_v0 import QUESTION_SPECS
 from todayflow_backend.services.life_spheres_traits_v0 import (
     normalize_sign,
     resolve_sphere_trait,
 )
 
-SPHERE_CONTRACTS: dict[str, dict[str, str]] = {
-    "love": {
-        "sphere_name": "Любовь",
-        "user_question": "Как базовые особенности проявляются в близости и любви?",
-        "user_value": (
-            "Понять, как ты входишь в близость, какое условие тебе нужно, "
-            "где возникает напряжение и какой один шаг помогает"
-        ),
-        "style_key": "relationship_style",
-    },
-    "money": {
-        "sphere_name": "Деньги",
-        "user_question": "Как базовые особенности проявляются в деньгах и чувстве ценности?",
-        "user_value": (
-            "Понять, как ты обращаешься с ресурсом, где риск, "
-            "и какой один практический фокус помогает"
-        ),
-        "style_key": "money_style",
-    },
-    "decisions": {
-        "sphere_name": "Решения",
-        "user_question": "Как базовые особенности проявляются в решениях и дисциплине выбора?",
-        "user_value": (
-            "Понять, как ты выбираешь, где застреваешь, "
-            "и какой один шаг гигиены решения помогает"
-        ),
-        "style_key": "decision_style",
-    },
-}
+# Derived from P5 question registry (single SoT for question/value/style_key).
+_SPHERE_NAMES = {"love": "Любовь", "money": "Деньги", "decisions": "Решения"}
+SPHERE_CONTRACTS: dict[str, dict[str, str]] = {}
+for _qid, _spec in QUESTION_SPECS.items():
+    _sid = str(_spec.get("sphere_id") or "")
+    if not _sid:
+        continue
+    SPHERE_CONTRACTS[_sid] = {
+        "sphere_name": _SPHERE_NAMES.get(_sid, _sid),
+        "user_question": str(_spec.get("user_question") or ""),
+        "user_value": str(_spec.get("user_value") or ""),
+        "style_key": str(_spec.get("style_key") or ""),
+        "question_id": _qid,
+    }
+del _qid, _spec, _sid
 
 # Short behavioral cues (RU). Selected by sphere × anchor planet × sign.
 # Not user-facing final copy — synthesis input only.

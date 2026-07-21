@@ -21,7 +21,10 @@ from todayflow_backend.prompts.profile_spheres_synthesis_v1 import (
     format_synthesis_user_message,
 )
 from todayflow_backend.prompts.registry_v1 import get_prompt
-from todayflow_backend.services.life_spheres_cues_v0 import build_sphere_cues
+from todayflow_backend.context_engine_v0.build_context_pack_v0 import (
+    build_context_pack_for_sphere,
+    context_pack_to_synthesis_input,
+)
 from todayflow_backend.services.life_spheres_projector_v0 import (
     SLICE_SPHERE_IDS,
     spheres_projection_allowed,
@@ -127,17 +130,23 @@ def synthesize_life_spheres_v0(
     life_spheres: dict[str, dict[str, str]] = {}
 
     for sid in SLICE_SPHERE_IDS:
-        pack = build_sphere_cues(sid, foundations)
+        ctx = build_context_pack_for_sphere(sid, foundations)
+        pack = context_pack_to_synthesis_input(ctx) if ctx.get("ok") else ctx
+        kitchen = pack.get("kitchen") if isinstance(pack.get("kitchen"), dict) else {}
         per: dict[str, Any] = {
             "sphere_id": sid,
-            "cues_ok": bool(pack.get("ok")),
+            "question_id": ctx.get("question_id") or kitchen.get("question_id"),
+            "cues_ok": bool(ctx.get("ok")),
             "cue_ids": [c.get("id") for c in (pack.get("sphere_cues") or [])],
-            "kitchen": pack.get("kitchen"),
+            "fact_ids": list(ctx.get("fact_ids") or kitchen.get("fact_ids") or []),
+            "context_fingerprint": ctx.get("fingerprint") or kitchen.get("context_fingerprint"),
+            "context_version": ctx.get("context_version") or kitchen.get("context_version"),
+            "kitchen": kitchen,
             "attempts": 0,
             "ok": False,
         }
-        if not pack.get("ok"):
-            reason = str(pack.get("reason") or "cues_empty")
+        if not ctx.get("ok"):
+            reason = str(ctx.get("reason") or pack.get("reason") or "cues_empty")
             per["omit_reason"] = reason
             meta["spheres_omitted"].append({"id": sid, "reason": reason})
             meta["per_sphere"][sid] = per
@@ -179,7 +188,10 @@ def synthesize_life_spheres_v0(
                         "temperature": temperature,
                         "max_tokens": max_tokens,
                         "sphere_id": sid,
+                        "question_id": per.get("question_id"),
                         "cue_ids": per["cue_ids"],
+                        "fact_ids": per.get("fact_ids"),
+                        "context_fingerprint": per.get("context_fingerprint"),
                     },
                     raw_response=raw,
                     parsed_response=parsed,
@@ -187,6 +199,7 @@ def synthesize_life_spheres_v0(
                         "ok": bool(validation.get("ok")),
                         "validator": "validate_sphere_synthesis_v0",
                         "sphere_id": sid,
+                        "question_id": per.get("question_id"),
                         "checks": validation.get("checks"),
                         "reject_reason": None if validation.get("ok") else "synthesis_validation_failed",
                         "defects": last_defects[:12],

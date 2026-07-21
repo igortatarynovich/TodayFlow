@@ -34,8 +34,8 @@ Later: birth foundations + accumulated living data + current question → sharpe
 | Prompt | State the user question + required transformation | Ask the model to “read the chart” |
 | Model | Synthesize practical personal copy | Guess planets/signs or invent living history |
 
-`life_spheres` in this slice is the first concrete instance: Venus/Moon/Mars/7H cues + identity + relationship_style → love synthesis (etc.).  
-**Next artifact (not this commit):** canonical question→facts map reusable across Profile, Today, compatibility, free-form questions.
+`life_spheres` is the first concrete instance: Venus/Moon/Mars/7H cues + identity + relationship_style → love synthesis (etc.).  
+**Next stage:** [RFC_CANONICAL_CONTEXT_ENGINE_V0.md](../rfc/RFC_CANONICAL_CONTEXT_ENGINE_V0.md) · [CONTEXT_ENGINE_P5_FIRST_SLICE.md](./CONTEXT_ENGINE_P5_FIRST_SLICE.md) — question→facts Context Engine for the whole product.
 
 Lexical repeat stability (Jaccard ~0.12–0.30) with stable facts/structure is **acceptable** — semantic stability, not verbatim clone.
 
