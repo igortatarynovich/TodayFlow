@@ -79,9 +79,18 @@
 
 ---
 
+## Draft passports
+
+| Block | Path | Product lock |
+|-------|------|--------------|
+| `life_spheres` | [PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md) | natal-presence · deterministic-first · **not** patterns continuation |
+
+---
+
 ## Changelog
 
 | Date | Change |
 |------|--------|
 | 2026-07-21 | Template opened with stage architecture principle |
 | 2026-07-21 | generation_gate = eligibility before prompt (mandatory) |
+| 2026-07-21 | Link draft passport `life_spheres` |

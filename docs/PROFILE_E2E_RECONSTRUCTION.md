@@ -96,6 +96,7 @@ Production-faithful pack должен это **доказать** (eligibility +
 |---|----------|------|--------|
 | 0 | Architecture principle + defect classes | this doc | **canon** |
 | 0b | Block passport template | [audits/PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](./audits/PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md) | **v0** |
+| 0c | Block passport · `life_spheres` | [audits/PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./audits/PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md) | **draft** — natal-presence · deterministic-first · independent of patterns |
 | 1 | Pipeline map (registration → UI + alt paths) | [audits/PROFILE_E2E_PIPELINE_MAP.md](./audits/PROFILE_E2E_PIPELINE_MAP.md) | **v0** |
 | 2 | Prompt registry (passports) | [audits/PROFILE_E2E_PROMPT_REGISTRY.md](./audits/PROFILE_E2E_PROMPT_REGISTRY.md) | **v0 — align to block passport** |
 | 3 | Block map (every surface block) | [audits/PROFILE_E2E_BLOCK_MAP.md](./audits/PROFILE_E2E_BLOCK_MAP.md) | **v0 — current reality** |
