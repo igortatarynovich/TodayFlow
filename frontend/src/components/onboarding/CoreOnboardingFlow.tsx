@@ -88,19 +88,18 @@ export function CoreOnboardingFlow() {
 
   if (!isAuthenticated) {
     const loginHref = buildAuthHref("login", ONBOARDING_CORE_PATH);
-    const signupHref = buildAuthHref("signup", ONBOARDING_CORE_PATH);
     return (
       <OnboardingWebScreen
         step={1}
-        title="Сначала войди в аккаунт"
-        lead="Чтобы собрать персональный день, нужен аккаунт. Регистрация занимает минуту — birth data мы спросим на следующем шаге."
+        title="Сначала собери свой Today"
+        lead="Мы мягко спросим имя и дату рождения, покажем первый разбор — и попросим email, чтобы сохранить. Без парольной регистрации."
       >
-        <div style={{ display: "flex", gap: "0.65rem", justifyContent: "center", flexWrap: "wrap" }}>
-          <Link href={signupHref} className="orbit-button orbit-button-primary">
-            Создать аккаунт
+        <div style={{ display: "grid", gap: "0.85rem", justifyItems: "center" }}>
+          <Link href={buildAuthHref("signup", ONBOARDING_CORE_PATH)} className="orbit-button orbit-button-primary">
+            Создать мой Today
           </Link>
-          <Link href={loginHref} className="orbit-button orbit-button-secondary">
-            Войти
+          <Link href={loginHref} className="orbit-body-sm" style={{ color: "#78716c", textDecoration: "underline" }}>
+            Уже есть аккаунт? Войти
           </Link>
         </div>
       </OnboardingWebScreen>

@@ -6,6 +6,10 @@ import type { CompatibilityExplorationModel } from "@/lib/buildCompatibilityExpl
 import type { GuidanceCompatibilityPrefillInput } from "@/lib/guidanceCompatibilityPrefill";
 import { stashGuidanceCompatibilityPrefill } from "@/lib/guidanceCompatibilityPrefill";
 import { CompatibilityFunnelSection, type CompatibilityFunnelArtifact } from "@/components/compatibility/CompatibilityFunnelSection";
+import {
+  CompatibilityAccessDisclosure,
+  type CompatibilityAccessDisclosureMeta,
+} from "@/components/compatibility/CompatibilityAccessDisclosure";
 import { dimensionsSectionTitle } from "@/lib/compatibilityScenarioMetrics";
 import { HeroSmall } from "@/components/foundation/HeroSmall";
 import { compatibilityScenarioSymbol } from "@/lib/compatibilityHeroSymbol";
@@ -16,6 +20,7 @@ type CompatibilityExplorationResultProps = {
   model: CompatibilityExplorationModel;
   personalizedSlot?: ReactNode;
   funnelArtifact?: CompatibilityFunnelArtifact | null;
+  accessDisclosure?: CompatibilityAccessDisclosureMeta | null;
   guidancePrefill?: GuidanceCompatibilityPrefillInput | null;
   onGuidanceClick?: () => void;
   onRefresh?: () => void;
@@ -66,6 +71,7 @@ export function CompatibilityExplorationResult({
   model,
   personalizedSlot,
   funnelArtifact,
+  accessDisclosure,
   guidancePrefill,
   onGuidanceClick,
   onRefresh,
@@ -200,16 +206,19 @@ export function CompatibilityExplorationResult({
 
           {personalizedSlot ? <section className={styles.personalized}>{personalizedSlot}</section> : null}
 
+          <CompatibilityAccessDisclosure access={accessDisclosure} />
+
           {funnelArtifact ? <CompatibilityFunnelSection artifact={funnelArtifact} /> : null}
 
-          {!deepOpen ? (
+          {!deepOpen && accessDisclosure?.tier !== "guest" ? (
             <div className={styles.deepCta}>
               <button type="button" className="orbit-button orbit-button-primary" onClick={openDeep}>
                 Посмотреть глубже
               </button>
               <p className={styles.deepCtaHint}>Длинный разбор — только если захочешь копать дальше.</p>
             </div>
-          ) : (
+          ) : null}
+          {deepOpen && accessDisclosure?.tier !== "guest" ? (
             <section className={styles.deepJournal}>
               <h3 className={styles.blockTitle}>Глубокий разбор</h3>
               <div className={styles.deepStack}>
@@ -258,7 +267,7 @@ export function CompatibilityExplorationResult({
                 </div>
               ) : null}
             </section>
-          )}
+          ) : null}
         </>
       )}
 

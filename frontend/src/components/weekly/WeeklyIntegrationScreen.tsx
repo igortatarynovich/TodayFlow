@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useAuth } from "@/lib/useAuth";
-import { LoadingSpinner } from "@/components/orbit";
 import { getJson, postJson } from "@/lib/api";
 import { useToast } from "@/components/ToastProvider";
 import { formatWeeklyRhythmStoryLine } from "@/components/today/flowPracticesMainTabChrome";
+import { ProductPageScreen } from "@/components/product-ui/ProductPageScreen";
+import pl from "@/design-system/layouts/productPageLayout.module.css";
 
 type WeeklyIntegration = {
   week_start: string;
@@ -96,35 +98,51 @@ export default function WeeklyIntegrationScreen() {
 
   if (authLoading || loading) {
     return (
-      <main className="orbit-page">
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "50vh" }}>
-          <LoadingSpinner size="lg" />
-        </div>
-      </main>
+      <ProductPageScreen
+        testId="weekly-integration-page"
+        title="Недельная интеграция"
+        loading
+        loadingLabel="Загрузка…"
+        railTitle="Неделя"
+        railHint="Короткий итог: что повторялось и куда держать фокус."
+      />
     );
   }
 
   if (!isAuthenticated) {
     return (
-      <main className="orbit-page">
-          <div style={{ padding: "2rem", textAlign: "center" }}>
-          <p>Войдите, чтобы видеть недельную интеграцию</p>
-          </div>
-        </main>
-      );
+      <ProductPageScreen
+        testId="weekly-integration-page"
+        title="Недельная интеграция"
+        subtitle="Короткий итог недели: что повторялось и на чём лучше держать фокус дальше."
+        railTitle="Доступ"
+        railHint="Сначала собери свой Today — потом итоги недели сохранятся в аккаунте."
+      >
+        <div style={{ display: "grid", gap: "0.85rem", justifyItems: "start" }}>
+          <Link href="/onboarding/welcome?fresh=1" className="orbit-button orbit-button-primary">
+            Создать мой Today
+          </Link>
+          <Link href="/auth?mode=login&redirect=/weekly/integration" className="orbit-body-sm" style={{ color: "#78716c", textDecoration: "underline" }}>
+            Уже есть аккаунт? Войти
+          </Link>
+        </div>
+      </ProductPageScreen>
+    );
   }
 
   return (
-    <main className="orbit-page">
-      <div style={{ maxWidth: "800px", margin: "0 auto", padding: "2rem" }}>
-        <h1 style={{ fontSize: "2rem", marginBottom: "1rem" }}>Недельная интеграция</h1>
-        <p style={{ color: "#666", marginBottom: "2rem", lineHeight: "1.6", fontSize: "1.05rem" }}>
-          Короткий итог недели: что повторялось и на чем лучше держать фокус дальше.
-        </p>
+    <ProductPageScreen
+      testId="weekly-integration-page"
+      title="Недельная интеграция"
+      subtitle="Короткий итог недели: что повторялось и на чём лучше держать фокус дальше."
+      railTitle="Неделя"
+      railHint="Собери итог после 2–3 отмеченных дней — ритм станет яснее."
+      contentClassName={pl.content}
+    >
         <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginBottom: "1.25rem" }}>
-          <a href="/weekly" className="orbit-button orbit-button-secondary" style={{ textDecoration: "none" }}>
+          <Link href="/weekly" className="orbit-button orbit-button-secondary" style={{ textDecoration: "none" }}>
             ← Вернуться к недельному фокусу
-          </a>
+          </Link>
         </div>
 
         <div style={{ marginBottom: "2rem", display: "flex", gap: "1rem", alignItems: "flex-end" }}>
@@ -212,7 +230,6 @@ export default function WeeklyIntegrationScreen() {
             </div>
           </div>
         )}
-      </div>
-    </main>
+    </ProductPageScreen>
   );
 }

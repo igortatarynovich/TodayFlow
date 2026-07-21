@@ -12,7 +12,7 @@ describe("auth session storage", () => {
   });
 
   it("clears user-scoped caches but keeps locale", () => {
-    window.localStorage.setItem("todayflow_locale", "ru");
+    window.localStorage.setItem("todayflow_locale_v2", "ru");
     window.localStorage.setItem("todayflow_token", "old");
     window.localStorage.setItem("todayflow_meaning_rings_cache_v1", "{}");
     window.localStorage.setItem("todayflow.day_engagement.v1.2026-07-03", "{}");
@@ -21,7 +21,7 @@ describe("auth session storage", () => {
 
     clearAuthenticatedUserCaches();
 
-    expect(window.localStorage.getItem("todayflow_locale")).toBe("ru");
+    expect(window.localStorage.getItem("todayflow_locale_v2")).toBe("ru");
     expect(window.localStorage.getItem("todayflow_meaning_rings_cache_v1")).toBeNull();
     expect(window.localStorage.getItem("todayflow.day_engagement.v1.2026-07-03")).toBeNull();
     expect(window.sessionStorage.getItem("todayflow_core_profile:v1:default")).toBeNull();

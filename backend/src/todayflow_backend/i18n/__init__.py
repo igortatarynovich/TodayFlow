@@ -10,7 +10,7 @@ from typing import Dict, List, Set
 
 from fastapi import Request
 
-DEFAULT_LOCALE = os.getenv("TODAYFLOW_LOCALE", "en")
+DEFAULT_LOCALE = os.getenv("TODAYFLOW_LOCALE", "ru")
 
 
 def _content_root() -> Path:
@@ -90,7 +90,9 @@ def _available_locales() -> Set[str]:
 def _pick_locale(candidate: str | None) -> str:
     if candidate and candidate in _available_locales():
         return candidate
-    return "en"
+    if DEFAULT_LOCALE in _available_locales():
+        return DEFAULT_LOCALE
+    return "ru" if "ru" in _available_locales() else "en"
 
 
 def locale_from_accept_language(header_value: str | None) -> str | None:

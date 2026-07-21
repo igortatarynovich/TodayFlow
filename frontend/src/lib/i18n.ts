@@ -8,7 +8,8 @@ const catalogs: Record<string, Catalog> = {
   ru: ruCatalog
 };
 
-const FALLBACK_LOCALE = "en";
+/** Product default is Russian; English remains available via LocaleSwitcher. */
+const FALLBACK_LOCALE = "ru";
 const runtimeLocale = process.env.NEXT_PUBLIC_APP_LOCALE ?? FALLBACK_LOCALE;
 let activeLocale = catalogs[runtimeLocale] ? runtimeLocale : FALLBACK_LOCALE;
 
@@ -22,23 +23,40 @@ const applyParams = (template: string, params?: Record<string, string | number>)
   );
 };
 
-const LOCALE_STORAGE_KEY = "todayflow_locale";
+/** v2: reset stale EN prefs from earlier English-default builds. */
+const LOCALE_STORAGE_KEY = "todayflow_locale_v2";
+
+function readStoredLocale(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const stored = window.localStorage.getItem(LOCALE_STORAGE_KEY);
+    if (stored && catalogs[stored]) return stored;
+  } catch {
+    // ignore storage errors
+  }
+  return null;
+}
 
 export function getLocale(): string {
+  const stored = readStoredLocale();
+  if (stored) return stored;
   return activeLocale;
 }
 
 /** Client: prefer persisted locale (LocaleSwitcher) before module default. */
 export function resolveClientLocale(): string {
-  if (typeof window !== "undefined") {
-    const stored = window.localStorage.getItem(LOCALE_STORAGE_KEY);
-    if (stored && catalogs[stored]) return stored;
-  }
   return getLocale();
 }
 
 export function setLocale(nextLocale: string): void {
   activeLocale = catalogs[nextLocale] ? nextLocale : FALLBACK_LOCALE;
+  if (typeof window !== "undefined") {
+    try {
+      window.localStorage.setItem(LOCALE_STORAGE_KEY, activeLocale);
+    } catch {
+      // ignore
+    }
+  }
 }
 
 export function t(
@@ -47,13 +65,14 @@ export function t(
   params?: Record<string, string | number>,
   locale?: string
 ): string {
-  const selectedLocale = locale ?? activeLocale;
+  const selectedLocale = locale ?? getLocale();
   const catalog = catalogs[selectedLocale] ?? catalogs[FALLBACK_LOCALE];
-  const fallbackCatalog = catalogs[FALLBACK_LOCALE];
+  // Prefer RU catalog, then explicit defaultValue (often Russian inline copy), then EN, then key.
+  const enCatalog = catalogs.en;
   const template =
     catalog[key] ??
-    (selectedLocale !== FALLBACK_LOCALE ? fallbackCatalog[key] : undefined) ??
     defaultValue ??
+    (selectedLocale !== "en" ? enCatalog?.[key] : undefined) ??
     key;
   return applyParams(template, params);
 }

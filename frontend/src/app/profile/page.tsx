@@ -44,6 +44,7 @@ import { parseProfileView, PROFILE_CHART_SECTION_ID, PROFILE_LIFE_SPHERES_SECTIO
 import { ProfileV0Screen } from "@/components/profile/v0/ProfileV0Screen";
 import { ProfileV2SystemScreen } from "@/components/profile/v2/ProfileV2SystemScreen";
 import { ProfileWebScreen } from "@/components/product-ui/ProfileWebScreen";
+import { ProductPageScreen } from "@/components/product-ui/ProductPageScreen";
 import { productWebProfileMeta } from "@/lib/productWebUser";
 import {
   buildProfileIdentityPills,
@@ -338,23 +339,22 @@ function ProfileHubPageInner() {
 
   if (!isAuthenticated) {
     return (
-      <main className={`todayflow-shell ${routeStyles.profileRouteShell}`}>
-        <section className={routeStyles.profileRouteSection}>
-          <div className={`${routeStyles.profileRouteContainer} ${routeStyles.profileRouteContainerWide} ${routeStyles.authShell}`}>
-            <h1 className={routeStyles.authTitle}>Профиль</h1>
-            <p className={routeStyles.authLead}>
-              Профиль и Today открываются после регистрации. Сначала попробуй Таро, совместимость или практики — или
-              создай свой Today.
-            </p>
-            <Link href={VALUE_FIRST_PATHS.welcome} className="orbit-button orbit-button-primary">
-              Создать мой Today
-            </Link>
-            <Link href="/auth" className="orbit-button orbit-button-secondary" style={{ marginTop: "0.75rem" }}>
-              Войти
-            </Link>
-          </div>
-        </section>
-      </main>
+      <ProductPageScreen
+        testId="profile-guest-gate"
+        title="Профиль"
+        subtitle="Профиль и Today открываются после мягкой регистрации: имя, дата рождения, первый разбор — и email, чтобы сохранить."
+        railTitle="Как это работает"
+        railHint="Мы спросим только нужное, покажем ценность, затем попросим email для сохранения."
+      >
+        <div style={{ display: "grid", gap: "0.85rem", justifyItems: "start" }}>
+          <Link href={`${VALUE_FIRST_PATHS.welcome}?fresh=1`} className="orbit-button orbit-button-primary">
+            Создать мой Today
+          </Link>
+          <Link href="/auth?mode=login" className="orbit-body-sm" style={{ color: "#78716c", textDecoration: "underline" }}>
+            Уже есть аккаунт? Войти
+          </Link>
+        </div>
+      </ProductPageScreen>
     );
   }
 

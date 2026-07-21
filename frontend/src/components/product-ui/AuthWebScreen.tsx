@@ -13,6 +13,8 @@ export type AuthWebScreenProps = {
   onSelectSignup: () => void;
   loginTabLabel: string;
   signupTabLabel: string;
+  /** Login-only: hide password-signup tab; signup CTA goes to soft onboarding. */
+  loginOnly?: boolean;
   headline: string;
   lead: string;
   productLine?: string;
@@ -29,6 +31,7 @@ export function AuthWebScreen({
   onSelectSignup,
   loginTabLabel,
   signupTabLabel,
+  loginOnly = false,
   headline,
   lead,
   productLine,
@@ -62,22 +65,28 @@ export function AuthWebScreen({
       )}
 
       <header className={s.authWebHeader}>
-        <div className={s.authWebTabs}>
-          <button
-            type="button"
-            className={`${s.authWebTab} ${mode === "login" ? s.authWebTabActive : ""}`}
-            onClick={onSelectLogin}
-          >
-            {loginTabLabel}
-          </button>
-          <button
-            type="button"
-            className={`${s.authWebTab} ${mode === "signup" ? s.authWebTabActive : ""}`}
-            onClick={onSelectSignup}
-          >
-            {signupTabLabel}
-          </button>
-        </div>
+        {loginOnly ? (
+          <div className={s.authWebTabs}>
+            <span className={`${s.authWebTab} ${s.authWebTabActive}`}>{loginTabLabel}</span>
+          </div>
+        ) : (
+          <div className={s.authWebTabs}>
+            <button
+              type="button"
+              className={`${s.authWebTab} ${mode === "login" ? s.authWebTabActive : ""}`}
+              onClick={onSelectLogin}
+            >
+              {loginTabLabel}
+            </button>
+            <button
+              type="button"
+              className={`${s.authWebTab} ${mode === "signup" ? s.authWebTabActive : ""}`}
+              onClick={onSelectSignup}
+            >
+              {signupTabLabel}
+            </button>
+          </div>
+        )}
         <h1 className={`${s.authWebTitle} ${visible ? s.authWebReveal : ""}`}>{headline}</h1>
         <p className={`${s.authWebLead} ${visible ? s.authWebReveal : ""}`}>{lead}</p>
         {productLine ? (

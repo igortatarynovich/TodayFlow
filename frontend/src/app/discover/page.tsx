@@ -125,7 +125,7 @@ function DiscoverContent() {
         <DsButton href="/today" variant="secondary" size="sm">
           Я сегодня
         </DsButton>
-        <DsButton href="/tarot/card-of-the-day" variant="secondary" size="sm">
+        <DsButton href="/today" variant="secondary" size="sm">
           Карта дня
         </DsButton>
       </div>

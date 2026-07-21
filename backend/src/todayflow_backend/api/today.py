@@ -757,21 +757,136 @@ async def get_today_contract(
         orchestrator=orchestrator,
     )
     fusion = get_daily_fusion_index(target_date=target_date, current_user=user, db=db)
-    core_profile = core_profile_service.build(db, user)
+    # Side surface: do not trigger portrait LLM on Today first paint.
+    core_profile = core_profile_service.build_cached_or_baseline(db, user)
 
+    fusion_dump = fusion.model_dump()
     try:
-        contract, _, _ = build_day_story_v1_wire(
+        contract, gen_log_id, _ = build_day_story_v1_wire(
             db,
             user=user,
             target_date=target_date_obj,
             locale=locale,
             morning=morning,
-            fusion_dump=fusion.model_dump(),
+            fusion_dump=fusion_dump,
             core_profile=core_profile,
         )
     except ValueError as exc:
         logger.error("GET /today/contract assembly failed: %s", exc)
         raise HTTPException(status_code=500, detail="today_contract_v1 assembly failed") from exc
+
+    # C1: enqueue background enrichment when story is missing/stale/fallback — never wait here.
+    try:
+        from todayflow_backend.services.day_story_fingerprint_v1 import (
+            compute_expected_day_story_fingerprint,
+        )
+        from todayflow_backend.services.day_story_refresh_v1 import ensure_story_state, story_progress_meta
+        from todayflow_backend.services.day_story_wire_v1 import _ritual_from_morning_and_connection
+        from todayflow_backend.services.day_symbol_state_v1 import owner_key_for_user
+        from todayflow_backend.services.generation_jobs_v0 import lifecycle_payload
+        from todayflow_backend.services.today_story_enrichment_v0 import enqueue_today_story_enrichment
+        from todayflow_backend.db import models as db_models
+
+        owner_key = owner_key_for_user(user.id)
+        expected_fp, _ = compute_expected_day_story_fingerprint(
+            db,
+            user_id=int(user.id),
+            owner_key=owner_key,
+            local_date=target_date_obj,
+            timezone_name="UTC",
+            locale=locale,
+        )
+        state = ensure_story_state(
+            db,
+            owner_key=owner_key,
+            local_date=target_date_obj,
+            timezone_name="UTC",
+            locale=locale,
+            user_id=int(user.id),
+        )
+        state.expected_fingerprint = expected_fp
+        if state.fingerprint and state.fingerprint != expected_fp:
+            state.stale = True
+        db.add(state)
+        db.commit()
+        progress = story_progress_meta(db, owner_key=owner_key, local_date=target_date_obj)
+        from todayflow_backend.services.generation_jobs_v0 import get_job_by_key
+
+        idem = f"today_story:{int(user.id)}:{target_date_obj.isoformat()}:{expected_fp}"
+        existing_job = get_job_by_key(db, idem)
+        # Enrich when missing enriched result for this fingerprint, or story is stale.
+        needs_enrich = True
+        if existing_job is not None and existing_job.status == "enriched" and existing_job.result_payload:
+            needs_enrich = False
+        elif bool(progress.get("story_refresh_required")) or bool(state.stale):
+            needs_enrich = True
+        lifecycle = lifecycle_payload(
+            status="baseline_ready",
+            fingerprint=expected_fp,
+            source="template",
+            is_fully_personal=False,
+        )
+        if not needs_enrich and existing_job is not None:
+            lifecycle = lifecycle_payload(
+                status="enriched",
+                job_id=existing_job.id,
+                fingerprint=expected_fp,
+                source="llm",
+                is_fully_personal=True,
+            )
+            if isinstance(existing_job.result_payload, dict) and isinstance(
+                existing_job.result_payload.get("contract"), dict
+            ):
+                contract = existing_job.result_payload["contract"]
+        elif needs_enrich:
+            dc_row = (
+                db.query(db_models.DayConnection)
+                .filter(
+                    db_models.DayConnection.user_id == user.id,
+                    db_models.DayConnection.date == target_date_obj,
+                )
+                .first()
+            )
+            ritual_norm = _ritual_from_morning_and_connection(morning, dc_row)
+            recs = morning.daily_recommendations if isinstance(morning.daily_recommendations, dict) else {}
+            job = enqueue_today_story_enrichment(
+                db,
+                user_id=int(user.id),
+                local_date=target_date_obj,
+                fingerprint=expected_fp,
+                locale=locale,
+                timezone_name="UTC",
+                ritual_norm=ritual_norm,
+                fusion_dump=fusion_dump,
+                color=str(recs.get("lucky_color") or "") if recs else "",
+                stone=str(recs.get("lucky_stone") or "") if recs else "",
+            )
+            if job.status == "enriched":
+                lifecycle = lifecycle_payload(
+                    status="enriched",
+                    job_id=job.id,
+                    fingerprint=expected_fp,
+                    source="llm",
+                    is_fully_personal=True,
+                )
+                if isinstance(job.result_payload, dict) and isinstance(job.result_payload.get("contract"), dict):
+                    contract = job.result_payload["contract"]
+            else:
+                lifecycle = lifecycle_payload(
+                    status="enrichment_pending"
+                    if job.status != "enrichment_failed"
+                    else "enrichment_failed",
+                    job_id=job.id,
+                    fingerprint=expected_fp,
+                    source="template",
+                    is_fully_personal=False,
+                    error=job.error_message,
+                )
+        progress = {**(contract.get("progress") or {}), **progress, "generation_lifecycle": lifecycle}
+        contract["progress"] = progress
+        _ = gen_log_id
+    except Exception as enrich_exc:
+        logger.warning("today contract enrichment enqueue skipped: %s", enrich_exc)
 
     return TodayContractV1Response(**contract)
 
@@ -790,6 +905,37 @@ class TodayStoryRefreshResponse(BaseModel):
     generation_id: str = ""
     contract: TodayContractV1Response | None = None
     error: str | None = None
+    generation_lifecycle: dict[str, Any] | None = None
+
+
+class TodayGenerationJobResponse(BaseModel):
+    job: dict[str, Any]
+    contract: TodayContractV1Response | None = None
+
+
+@router.get("/jobs/{job_id}", response_model=TodayGenerationJobResponse)
+def get_today_generation_job(
+    job_id: int,
+    user: User = Depends(require_user),
+    db=Depends(get_session),
+) -> TodayGenerationJobResponse:
+    from todayflow_backend.db.models import GenerationJob
+    from todayflow_backend.services.generation_jobs_v0 import job_to_public
+
+    job = db.query(GenerationJob).filter(GenerationJob.id == job_id).first()
+    if job is None or job.module != "today":
+        raise HTTPException(status_code=404, detail="job_not_found")
+    if job.user_id != user.id:
+        raise HTTPException(status_code=403, detail="job_forbidden")
+    contract = None
+    if job.status == "enriched" and isinstance(job.result_payload, dict):
+        raw = job.result_payload.get("contract")
+        if isinstance(raw, dict):
+            try:
+                contract = TodayContractV1Response(**raw)
+            except Exception:
+                contract = None
+    return TodayGenerationJobResponse(job=job_to_public(job), contract=contract)
 
 
 @router.post("/story/refresh", response_model=TodayStoryRefreshResponse)
@@ -826,7 +972,7 @@ async def refresh_today_story(
         orchestrator=orchestrator,
     )
     fusion = get_daily_fusion_index(target_date=target_date, current_user=user, db=db)
-    core_profile = core_profile_service.build(db, user)
+    core_profile = core_profile_service.build_cached_or_baseline(db, user)
     fusion_dump = fusion.model_dump()
 
     def _build(db_sess, **kwargs):
@@ -1136,7 +1282,7 @@ async def get_today_cycle(
     )
     core_profile = None
     try:
-        core_profile = core_profile_service.build(db, user)
+        core_profile = core_profile_service.build_cached_or_baseline(db, user)
     except Exception as e:
         logger.warning("Failed to build core profile in /today: %s", e, exc_info=True)
 

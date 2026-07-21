@@ -96,8 +96,9 @@ const SERVICES: Service[] = [
     name: "Карта дня",
     description: "Таро карта дня и программа",
     icon: "🃏",
-    path: "/tarot/card-of-the-day",
+    path: "/today",
     category: "daily",
+    requiresAuth: true,
   },
   {
     id: "tarot",

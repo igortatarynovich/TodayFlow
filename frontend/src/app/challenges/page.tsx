@@ -184,7 +184,7 @@ export default function ChallengesPage() {
           <p className={c.joinBody}>
             Зарегистрируйся, чтобы участвовать в марафонах и отслеживать свой прогресс.
           </p>
-          <Link href="/auth" className={`${c.cta} ${c.ctaPrimary}`} style={{ width: "auto", paddingInline: "2rem" }}>
+          <Link href="/onboarding/welcome?fresh=1" className={`${c.cta} ${c.ctaPrimary}`} style={{ width: "auto", paddingInline: "2rem" }}>
             Начать
           </Link>
         </section>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { ProductWebGuestNav } from "@/components/product-ui/ProductWebGuestNav";
 import { IconOrbitalGlyph } from "@/design-system";
+import { guestSignupHref } from "@/lib/guestAccessStore";
 import { t } from "@/lib/i18n";
 import s from "@/components/product-ui/productWebScreens.module.css";
 
@@ -34,7 +35,7 @@ export function OnboardingWebScreen({
       {showGuestNav ? (
         <div className={s.authWebMarketingNav}>
           <ProductWebGuestNav
-            ctaHref="/auth?mode=signup"
+            ctaHref={guestSignupHref()}
             ctaLabel={t("onboarding.nav.cta", "Создать мой Today")}
           />
         </div>

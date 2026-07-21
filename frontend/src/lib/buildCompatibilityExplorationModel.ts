@@ -126,13 +126,16 @@ function buildPlayfulExploration(
   const ps = opts.productSurface;
   const mainThought = stripIronyPrefix(ps.score_tagline);
 
-  const dimensions: ExplorationDimension[] = skin.dimensionLabels.map((d) => ({
-    id: d.key,
-    emoji: d.emoji,
-    label: d.label,
-    score: ps.subscores[d.key],
-    quip: playfulDimensionQuip(skin.id, d.key, ps.subscores[d.key]),
-  }));
+  const dimensions: ExplorationDimension[] = skin.dimensionLabels.map((d) => {
+    const score = Number(ps.subscores?.[d.key] ?? 0) || 0;
+    return {
+      id: d.key,
+      emoji: d.emoji,
+      label: d.label,
+      score,
+      quip: playfulDimensionQuip(skin.id, d.key, score),
+    };
+  });
 
   const narrative = filterCompatibilityParagraphs(ps.overview_paragraphs, 1);
   const topDim = [...dimensions].sort((a, b) => b.score - a.score)[0];
@@ -175,7 +178,7 @@ function buildSeriousExploration(
     id: d.key,
     emoji: d.emoji,
     label: d.label,
-    score: ps.subscores[d.key],
+    score: Number(ps.subscores?.[d.key] ?? 0) || 0,
   }));
 
   const strengthBlock = ps.blocks.find((b) => b.key === "attraction") || ps.blocks[0];
@@ -185,6 +188,8 @@ function buildSeriousExploration(
     [...ps.blocks.map((b) => b.action), ...(ps.scenarios.flatMap((g) => g.bullets) || [])],
     3,
   );
+  // Guest teaser surfaces strip actions — don't invent fallback tips.
+  const teaserSurface = ps.blocks.length <= 1 && !(ps.scenarios?.length);
 
   return {
     scenarioId: skin.id,
@@ -202,8 +207,12 @@ function buildSeriousExploration(
     narrative: filterCompatibilityParagraphs(ps.overview_paragraphs, 3),
     strongestResource: strengthBlock?.takeaway || "Есть зона, где контакт даётся естественнее — опирайтесь на неё.",
     mainRisk: conflictBlock?.risk || conflictBlock?.takeaway || "Главный риск — повторяющийся сценарий без проговаривания.",
-    tips: tips.length ? tips : ["Проясняйте ожидания заранее.", "Договаривайтесь о ролях в стрессе.", "Возвращайтесь к разговору, не к молчанию."],
-    deepSections: buildScenarioDeepSectionsFromBlocks(skin, ps.blocks),
+    tips: tips.length
+      ? tips
+      : teaserSurface
+        ? []
+        : ["Проясняйте ожидания заранее.", "Договаривайтесь о ролях в стрессе.", "Возвращайтесь к разговору, не к молчанию."],
+    deepSections: teaserSurface ? [] : buildScenarioDeepSectionsFromBlocks(skin, ps.blocks),
     continuationScenarios: buildContinuation(skin),
     roles: ps.roles,
     scenarioGroups: ps.scenarios,

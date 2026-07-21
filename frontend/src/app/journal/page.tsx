@@ -338,7 +338,7 @@ function JournalPageContent() {
               <p className="orbit-body-sm" style={{ marginBottom: "var(--orbit-space-md)", textAlign: "center" }}>
                 Чтобы сохранить и видеть повторы — создай профиль.
               </p>
-              <Link href="/auth" className="orbit-button orbit-button-primary" style={{ width: "100%" }}>
+              <Link href="/onboarding/welcome?fresh=1" className="orbit-button orbit-button-primary" style={{ width: "100%" }}>
                 Создать профиль →
               </Link>
             </div>

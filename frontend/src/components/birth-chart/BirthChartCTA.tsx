@@ -28,7 +28,7 @@ export function BirthChartCTA({ showResults, isAuthenticated }: BirthChartCTAPro
         </>
       ) : (
         <>
-          <Link href="/auth" className="orbit-button orbit-button-primary orbit-button-large">
+          <Link href="/onboarding/welcome?fresh=1" className="orbit-button orbit-button-primary orbit-button-large">
             Зарегистрироваться
           </Link>
           <p className="orbit-cta-subtext">

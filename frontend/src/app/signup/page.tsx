@@ -1,20 +1,18 @@
 import { redirect } from "next/navigation";
+import { VALUE_FIRST_PATHS } from "@/lib/guestProfileDraft";
 
+/** Alias → canonical soft registration only (no password signup). */
 export default function SignupAliasPage({
   searchParams,
 }: {
   searchParams?: Record<string, string | string[] | undefined>;
 }) {
   const query = new URLSearchParams();
-  query.set("mode", "signup");
-  Object.entries(searchParams || {}).forEach(([key, value]) => {
-    if (key === "mode") return;
-    if (Array.isArray(value)) {
-      value.forEach((v) => query.append(key, v));
-    } else if (typeof value === "string") {
-      query.set(key, value);
-    }
-  });
+  query.set("fresh", "1");
+  const redirectParam = searchParams?.redirect;
+  if (typeof redirectParam === "string" && redirectParam.startsWith("/") && !redirectParam.startsWith("//")) {
+    query.set("redirect", redirectParam);
+  }
   const suffix = query.toString();
-  redirect(suffix ? `/auth?${suffix}` : "/auth");
+  redirect(suffix ? `${VALUE_FIRST_PATHS.welcome}?${suffix}` : `${VALUE_FIRST_PATHS.welcome}?fresh=1`);
 }

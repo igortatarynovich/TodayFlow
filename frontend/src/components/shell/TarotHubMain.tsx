@@ -17,8 +17,8 @@ import {
 } from "@/lib/tarotQuestionSession";
 
 /**
- * Tarot entry — must not fetch or display card-of-day identity.
- * Card of day is chosen/revealed only in the Today ritual.
+ * Таро — только расклады и вопросы.
+ * Карта дня и число дня живут исключительно в ритуале «Сегодня».
  */
 export function TarotHubMain() {
   const router = useRouter();
@@ -55,18 +55,16 @@ export function TarotHubMain() {
         <p className={s.hubEyebrow}>Таро</p>
         <div className={s.hubPills}>
           <span className={s.hubPill}>Ритуал ясности</span>
-          <span className={s.hubPill}>3 расклада</span>
-          <span className={s.hubPill}>Карта дня — в «Сегодня»</span>
+          <span className={s.hubPill}>Вопрос → расклад → шаг</span>
         </div>
       </header>
 
       <section className={s.hubHeroRow}>
         <div className={s.hubHeroCard}>
-          <h1 className={s.hubHeroTitle}>Спроси день о том, что важно.</h1>
+          <h1 className={s.hubHeroTitle}>Спроси о том, что сейчас важно.</h1>
           <p className={s.hubHeroLead}>
             Не прогноз «что будет», а зеркало: где ты сейчас, что мешает и какой следующий шаг
-            выглядит честнее. Выбери формат, сформулируй вопрос — и получи историю, которая
-            связывается с твоим днём.
+            выглядит честнее. Карта дня открывается только в «Сегодня» — здесь только твой вопрос.
           </p>
           <div className={s.hubHeroActions}>
             <Link href="/tarot/question" className={s.hubBtnPrimary}>
@@ -92,7 +90,7 @@ export function TarotHubMain() {
       </section>
 
       <section className={s.hubBottomRow}>
-        <div className={s.hubSpreadPanel}>
+        <div className={s.hubSpreadPanel} style={{ gridColumn: "1 / -1" }}>
           <div className={s.hubSpreadHeader}>
             <div>
               <p className={s.hubRitualEyebrow}>Выбери формат</p>
@@ -115,28 +113,6 @@ export function TarotHubMain() {
                 </div>
               </button>
             ))}
-          </div>
-        </div>
-
-        <div className={s.hubCodPanel} data-testid="tarot-hub-card-of-day-locked">
-          <p className={s.hubRitualEyebrow}>Карта дня</p>
-          <div className={s.hubCodGrid}>
-            <div className={s.hubCodImage} aria-hidden />
-            <div>
-              <h3 className={s.hubCodName}>Ещё не выбрана</h3>
-              <p className={s.hubCodText}>
-                Карта дня открывается только в ритуале «Сегодня» — здесь её нет заранее, чтобы не
-                спойлерить день.
-              </p>
-            </div>
-          </div>
-          <div className={s.hubStarterBox}>
-            <p className={s.hubStarterEyebrow}>Куда дальше</p>
-            <p className={s.hubStarterText}>
-              <Link href="/today" className={s.hubBtnSecondary} style={{ display: "inline-flex" }}>
-                Открыть «Сегодня»
-              </Link>
-            </p>
           </div>
         </div>
       </section>

@@ -1,5 +1,6 @@
-import { TarotCardOfDayScreen } from "@/components/tarot/TarotCardOfDayScreen";
+import { redirect } from "next/navigation";
 
+/** Карта дня живёт только в ритуале «Сегодня». */
 export default function TarotCardOfDayPage() {
-  return <TarotCardOfDayScreen />;
+  redirect("/today");
 }

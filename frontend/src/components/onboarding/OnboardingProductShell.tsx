@@ -4,23 +4,26 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { DsButton } from "@/design-system";
 import { OnboardingWebScreen } from "@/components/product-ui/OnboardingWebScreen";
+import { guestSignupHref } from "@/lib/guestAccessStore";
 
 export type OnboardingAuthGateProps = {
   title: string;
   body: string;
   loginHref: string;
-  signupHref: string;
+  /** Ignored — registration is always the soft onboarding canon. */
+  signupHref?: string;
 };
 
-export function OnboardingAuthGate({ title, body, loginHref, signupHref }: OnboardingAuthGateProps) {
+/** Single registration CTA (soft Today) + login for returning users. */
+export function OnboardingAuthGate({ title, body, loginHref }: OnboardingAuthGateProps) {
   return (
     <OnboardingWebScreen step={1} title={title} lead={body}>
-      <div style={{ display: "flex", gap: "0.65rem", justifyContent: "center", flexWrap: "wrap" }}>
-        <Link href={signupHref}>
-          <DsButton variant="primary">Создать аккаунт</DsButton>
+      <div style={{ display: "grid", gap: "0.85rem", justifyItems: "center" }}>
+        <Link href={guestSignupHref()}>
+          <DsButton variant="primary">Создать мой Today</DsButton>
         </Link>
-        <Link href={loginHref}>
-          <DsButton variant="secondary">Войти</DsButton>
+        <Link href={loginHref} className="orbit-body-sm" style={{ color: "#78716c", textDecoration: "underline" }}>
+          Уже есть аккаунт? Войти
         </Link>
       </div>
     </OnboardingWebScreen>

@@ -246,16 +246,26 @@ function CompatibilityLayerSelector({
     <section className="compat-desktop-card">
       <p className="compat-hero-eyebrow">С чего начать</p>
       <h2 className="compat-section-title" style={{ margin: "0.35rem 0 0.65rem" }}>
-        Входы в совместимость
+        Разбор пары по слоям
       </h2>
       <p className="orbit-body-xs compat-desktop-muted" style={{ margin: "0 0 0.85rem", maxWidth: "42rem" }}>
-        Десктопный разбор динамики пары, быстрый ориентир по знакам или датам — бесплатно. Полный расчёт — из сохранённых профилей.
+        Без аккаунта — короткий ориентир. После регистрации — эмоции, общение и где ломаетесь.
+        С подпиской — да/нет, что делать, чего не делать и как.
       </p>
+      <div style={{ marginBottom: "1rem" }}>
+        <Link
+          href="/compatibility/analyze"
+          className="orbit-button orbit-button-primary orbit-button-sm"
+          style={{ textDecoration: "none" }}
+        >
+          Собрать разбор по знакам
+        </Link>
+      </div>
       <div className="todayflow-layer-grid">
         {COMPATIBILITY_LAYER_CARDS.map((card) => {
           const locked = card.requiresAuth && !isAuthenticated;
           const highlighted = emphasizeProfiles && card.id === "profiles";
-          const href = locked ? "/auth?redirect=/compatibility" : card.href;
+          const href = locked ? "/onboarding/welcome?fresh=1" : card.href;
           return (
             <Link
               key={card.id}
@@ -278,7 +288,7 @@ function CompatibilityLayerSelector({
                 {card.title}
               </p>
               <p className="orbit-body-xs" style={{ margin: "0.55rem 0 0", color: locked ? "#9a6700" : "#7c5a33", fontWeight: 700 }}>
-                {locked ? "Войди, чтобы открыть" : card.cta}
+                {locked ? "Создать мой Today" : card.cta}
               </p>
             </Link>
           );
@@ -1185,7 +1195,13 @@ export default function CompatibilityPage() {
   }
 
   if (!profiles.length || profiles.length < 2) {
-    return compatWebShell(renderCompatHub(), { rail: <CompatibilityWebHubRail locale={compatLocale} /> });
+    return compatWebShell(
+      <>
+        <CompatibilityLayerSelector isAuthenticated emphasizeProfiles />
+        {renderCompatHub()}
+      </>,
+      { rail: <CompatibilityWebHubRail locale={compatLocale} /> },
+    );
   }
 
   return compatWebShell(renderCompatHub(), { rail: <CompatibilityWebHubRail locale={compatLocale} /> });

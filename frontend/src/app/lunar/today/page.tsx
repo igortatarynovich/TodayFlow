@@ -135,7 +135,7 @@ export default function LunarTodayPage() {
       <section>
         <h2 className={v2.sectionTitle}>Также интересно</h2>
         <div className={pl.gridHub} style={{ marginTop: "0.75rem" }}>
-          <Link href="/tarot/card-of-the-day" className={pl.hubCard}>
+          <Link href="/today" className={pl.hubCard}>
             <DsBody size="sm">Карта таро дня</DsBody>
           </Link>
           <Link href="/horoscope/today" className={pl.hubCard}>

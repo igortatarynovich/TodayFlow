@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
-import { COMPATIBILITY_GENERATION_LIVE } from "@/lib/compatibilityDynamicsMode";
+import { COMPATIBILITY_GENERATION_LLM } from "@/lib/compatibilityDynamicsMode";
 import type { GuidanceCompatibilityPrefillInput } from "@/lib/guidanceCompatibilityPrefill";
 import { stashGuidanceCompatibilityPrefill } from "@/lib/guidanceCompatibilityPrefill";
 import type { SignCompatProductSurface } from "./CompatibilityDynamicsSurface";
@@ -166,7 +166,7 @@ export function CompatibilityDesktopWireframe({
             {generationSource ? (
               <div className="compat-hero-badge-row">
                 <span className="compat-source-pill">
-                  {generationSource === COMPATIBILITY_GENERATION_LIVE ? "Живой текст" : "Шаблон"}
+                  {generationSource === COMPATIBILITY_GENERATION_LLM ? "Живой текст" : "Шаблон"}
                 </span>
               </div>
             ) : null}

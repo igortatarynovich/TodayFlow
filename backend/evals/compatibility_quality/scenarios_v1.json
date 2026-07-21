@@ -1,0 +1,2349 @@
+{
+  "version": "compatibility_quality_eval_v1",
+  "created": "2026-07-21",
+  "scenario_count": 80,
+  "locale_primary": "ru",
+  "locale_later": [
+    "pl",
+    "en"
+  ],
+  "rubric": {
+    "criteria": [
+      "specificity",
+      "natural_ru",
+      "no_repetition",
+      "usefulness",
+      "source_depth_match",
+      "block_coherence",
+      "practical_advice_quality",
+      "shippable_without_regen"
+    ],
+    "structural_checks": [
+      "stable_sense_same_input",
+      "no_template_collapse",
+      "guest_ne_registered",
+      "premium_ne_registered",
+      "do_avoid_consistent",
+      "verdict_supported",
+      "no_fabricated_partner_facts",
+      "missing_data_not_masked"
+    ],
+    "score_scale": "1-5 per criterion; shippable = all >=3 and no hallucination",
+    "kpi_primary": "shippable_without_regen_pct",
+    "manual_review_min": 30
+  },
+  "prompt_version": "compatibility_content_prompt_v1",
+  "contract_version": "compatibility_content_v1",
+  "scenarios": [
+    {
+      "id": "cq-001",
+      "group": "zodiac_only",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered"
+      ],
+      "tags": [
+        "zodiac",
+        "same_sign"
+      ],
+      "source_depth": "zodiac_only",
+      "from_sign": "aries",
+      "to_sign": "aries",
+      "relationship_context": "just_met",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-002",
+      "group": "zodiac_only",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered"
+      ],
+      "tags": [
+        "zodiac",
+        "same_sign"
+      ],
+      "source_depth": "zodiac_only",
+      "from_sign": "virgo",
+      "to_sign": "virgo",
+      "relationship_context": "mutual_attraction",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-003",
+      "group": "zodiac_only",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered"
+      ],
+      "tags": [
+        "zodiac",
+        "same_sign"
+      ],
+      "source_depth": "zodiac_only",
+      "from_sign": "scorpio",
+      "to_sign": "scorpio",
+      "relationship_context": "in_relationship",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-004",
+      "group": "zodiac_only",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered"
+      ],
+      "tags": [
+        "zodiac",
+        "same_sign"
+      ],
+      "source_depth": "zodiac_only",
+      "from_sign": "pisces",
+      "to_sign": "pisces",
+      "relationship_context": "unclear",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-005",
+      "group": "zodiac_only",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered"
+      ],
+      "tags": [
+        "zodiac",
+        "hard_pair"
+      ],
+      "source_depth": "zodiac_only",
+      "from_sign": "aries",
+      "to_sign": "cancer",
+      "relationship_context": "conflict_distance",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-006",
+      "group": "zodiac_only",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered"
+      ],
+      "tags": [
+        "zodiac",
+        "hard_pair"
+      ],
+      "source_depth": "zodiac_only",
+      "from_sign": "leo",
+      "to_sign": "taurus",
+      "relationship_context": "split_but_pull",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-007",
+      "group": "zodiac_only",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered"
+      ],
+      "tags": [
+        "zodiac",
+        "hard_pair"
+      ],
+      "source_depth": "zodiac_only",
+      "from_sign": "aquarius",
+      "to_sign": "scorpio",
+      "relationship_context": "just_met",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-008",
+      "group": "zodiac_only",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered"
+      ],
+      "tags": [
+        "zodiac",
+        "hard_pair"
+      ],
+      "source_depth": "zodiac_only",
+      "from_sign": "gemini",
+      "to_sign": "capricorn",
+      "relationship_context": "mutual_attraction",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-009",
+      "group": "zodiac_only",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered"
+      ],
+      "tags": [
+        "zodiac",
+        "hard_pair"
+      ],
+      "source_depth": "zodiac_only",
+      "from_sign": "sagittarius",
+      "to_sign": "virgo",
+      "relationship_context": "in_relationship",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-010",
+      "group": "zodiac_only",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered"
+      ],
+      "tags": [
+        "zodiac",
+        "hard_pair"
+      ],
+      "source_depth": "zodiac_only",
+      "from_sign": "libra",
+      "to_sign": "cancer",
+      "relationship_context": "unclear",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-011",
+      "group": "zodiac_only",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered"
+      ],
+      "tags": [
+        "zodiac"
+      ],
+      "source_depth": "zodiac_only",
+      "from_sign": "taurus",
+      "to_sign": "sagittarius",
+      "relationship_context": "conflict_distance",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-012",
+      "group": "zodiac_only",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered"
+      ],
+      "tags": [
+        "zodiac"
+      ],
+      "source_depth": "zodiac_only",
+      "from_sign": "gemini",
+      "to_sign": "taurus",
+      "relationship_context": "split_but_pull",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-013",
+      "group": "zodiac_only",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered"
+      ],
+      "tags": [
+        "zodiac"
+      ],
+      "source_depth": "zodiac_only",
+      "from_sign": "leo",
+      "to_sign": "pisces",
+      "relationship_context": "just_met",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-014",
+      "group": "zodiac_only",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered"
+      ],
+      "tags": [
+        "zodiac"
+      ],
+      "source_depth": "zodiac_only",
+      "from_sign": "virgo",
+      "to_sign": "leo",
+      "relationship_context": "mutual_attraction",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-015",
+      "group": "zodiac_only",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered"
+      ],
+      "tags": [
+        "zodiac"
+      ],
+      "source_depth": "zodiac_only",
+      "from_sign": "libra",
+      "to_sign": "capricorn",
+      "relationship_context": "in_relationship",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-016",
+      "group": "zodiac_only",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered"
+      ],
+      "tags": [
+        "zodiac"
+      ],
+      "source_depth": "zodiac_only",
+      "from_sign": "scorpio",
+      "to_sign": "gemini",
+      "relationship_context": "unclear",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-017",
+      "group": "zodiac_only",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered"
+      ],
+      "tags": [
+        "zodiac"
+      ],
+      "source_depth": "zodiac_only",
+      "from_sign": "sagittarius",
+      "to_sign": "scorpio",
+      "relationship_context": "conflict_distance",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-018",
+      "group": "zodiac_only",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered"
+      ],
+      "tags": [
+        "zodiac"
+      ],
+      "source_depth": "zodiac_only",
+      "from_sign": "capricorn",
+      "to_sign": "aries",
+      "relationship_context": "split_but_pull",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-019",
+      "group": "zodiac_only",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered"
+      ],
+      "tags": [
+        "zodiac"
+      ],
+      "source_depth": "zodiac_only",
+      "from_sign": "aquarius",
+      "to_sign": "virgo",
+      "relationship_context": "just_met",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-020",
+      "group": "zodiac_only",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered"
+      ],
+      "tags": [
+        "zodiac"
+      ],
+      "source_depth": "zodiac_only",
+      "from_sign": "pisces",
+      "to_sign": "aquarius",
+      "relationship_context": "mutual_attraction",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-021",
+      "group": "birth_dates",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "birth_dates",
+        "user_question"
+      ],
+      "source_depth": "birth_dates",
+      "from_sign": "aries",
+      "to_sign": "taurus",
+      "relationship_context": "just_met",
+      "birth_date_1": "1990-03-21",
+      "birth_date_2": "1992-07-15",
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": "Стоит ли съезжаться в этом году?",
+      "missing_fields": []
+    },
+    {
+      "id": "cq-022",
+      "group": "birth_dates",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "birth_dates"
+      ],
+      "source_depth": "birth_dates",
+      "from_sign": "taurus",
+      "to_sign": "leo",
+      "relationship_context": "mutual_attraction",
+      "birth_date_1": "1988-11-02",
+      "birth_date_2": "1995-01-10",
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-023",
+      "group": "birth_dates",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "birth_dates"
+      ],
+      "source_depth": "birth_dates",
+      "from_sign": "gemini",
+      "to_sign": "scorpio",
+      "relationship_context": "in_relationship",
+      "birth_date_1": "1993-05-05",
+      "birth_date_2": "1993-05-05",
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-024",
+      "group": "birth_dates",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "birth_dates"
+      ],
+      "source_depth": "birth_dates",
+      "from_sign": "cancer",
+      "to_sign": "aquarius",
+      "relationship_context": "unclear",
+      "birth_date_1": "1985-12-25",
+      "birth_date_2": "2000-06-01",
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-025",
+      "group": "birth_dates",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "birth_dates"
+      ],
+      "source_depth": "birth_dates",
+      "from_sign": "leo",
+      "to_sign": "taurus",
+      "relationship_context": "conflict_distance",
+      "birth_date_1": "1991-08-18",
+      "birth_date_2": "1989-02-28",
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-026",
+      "group": "birth_dates",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "birth_dates",
+        "user_question"
+      ],
+      "source_depth": "birth_dates",
+      "from_sign": "virgo",
+      "to_sign": "leo",
+      "relationship_context": "split_but_pull",
+      "birth_date_1": "1996-09-09",
+      "birth_date_2": "1994-04-12",
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": "Стоит ли съезжаться в этом году?",
+      "missing_fields": []
+    },
+    {
+      "id": "cq-027",
+      "group": "birth_dates",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "birth_dates"
+      ],
+      "source_depth": "birth_dates",
+      "from_sign": "libra",
+      "to_sign": "scorpio",
+      "relationship_context": "just_met",
+      "birth_date_1": "1987-10-31",
+      "birth_date_2": "1998-03-08",
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-028",
+      "group": "birth_dates",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "birth_dates"
+      ],
+      "source_depth": "birth_dates",
+      "from_sign": "scorpio",
+      "to_sign": "aquarius",
+      "relationship_context": "mutual_attraction",
+      "birth_date_1": "1999-01-15",
+      "birth_date_2": "1990-07-22",
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-029",
+      "group": "birth_dates",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "birth_dates"
+      ],
+      "source_depth": "birth_dates",
+      "from_sign": "sagittarius",
+      "to_sign": "taurus",
+      "relationship_context": "in_relationship",
+      "birth_date_1": "1984-04-03",
+      "birth_date_2": "1997-11-19",
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-030",
+      "group": "birth_dates",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "birth_dates"
+      ],
+      "source_depth": "birth_dates",
+      "from_sign": "capricorn",
+      "to_sign": "leo",
+      "relationship_context": "unclear",
+      "birth_date_1": "1992-06-14",
+      "birth_date_2": "1992-12-01",
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-031",
+      "group": "birth_dates",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "birth_dates",
+        "user_question"
+      ],
+      "source_depth": "birth_dates",
+      "from_sign": "aquarius",
+      "to_sign": "scorpio",
+      "relationship_context": "conflict_distance",
+      "birth_date_1": "1986-02-14",
+      "birth_date_2": "1991-09-23",
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": "Стоит ли съезжаться в этом году?",
+      "missing_fields": []
+    },
+    {
+      "id": "cq-032",
+      "group": "birth_dates",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "birth_dates"
+      ],
+      "source_depth": "birth_dates",
+      "from_sign": "pisces",
+      "to_sign": "aquarius",
+      "relationship_context": "split_but_pull",
+      "birth_date_1": "1994-07-07",
+      "birth_date_2": "1988-08-08",
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-033",
+      "group": "birth_dates",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "birth_dates"
+      ],
+      "source_depth": "birth_dates",
+      "from_sign": "aries",
+      "to_sign": "taurus",
+      "relationship_context": "just_met",
+      "birth_date_1": "2001-03-01",
+      "birth_date_2": "1995-10-10",
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-034",
+      "group": "birth_dates",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "birth_dates"
+      ],
+      "source_depth": "birth_dates",
+      "from_sign": "taurus",
+      "to_sign": "leo",
+      "relationship_context": "mutual_attraction",
+      "birth_date_1": "1989-05-20",
+      "birth_date_2": "1996-01-30",
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-035",
+      "group": "birth_dates",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "birth_dates"
+      ],
+      "source_depth": "birth_dates",
+      "from_sign": "gemini",
+      "to_sign": "scorpio",
+      "relationship_context": "in_relationship",
+      "birth_date_1": "1997-12-12",
+      "birth_date_2": "1993-06-06",
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-036",
+      "group": "birth_dates",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "birth_dates",
+        "user_question"
+      ],
+      "source_depth": "birth_dates",
+      "from_sign": "cancer",
+      "to_sign": "aquarius",
+      "relationship_context": "unclear",
+      "birth_date_1": "1990-09-15",
+      "birth_date_2": "1985-03-11",
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": "Стоит ли съезжаться в этом году?",
+      "missing_fields": []
+    },
+    {
+      "id": "cq-037",
+      "group": "birth_dates",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "birth_dates"
+      ],
+      "source_depth": "birth_dates",
+      "from_sign": "leo",
+      "to_sign": "taurus",
+      "relationship_context": "conflict_distance",
+      "birth_date_1": "1998-04-22",
+      "birth_date_2": "1991-11-05",
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-038",
+      "group": "birth_dates",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "birth_dates"
+      ],
+      "source_depth": "birth_dates",
+      "from_sign": "virgo",
+      "to_sign": "leo",
+      "relationship_context": "split_but_pull",
+      "birth_date_1": "1983-08-30",
+      "birth_date_2": "1999-02-17",
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-039",
+      "group": "birth_dates",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "birth_dates"
+      ],
+      "source_depth": "birth_dates",
+      "from_sign": "libra",
+      "to_sign": "scorpio",
+      "relationship_context": "just_met",
+      "birth_date_1": "1995-10-25",
+      "birth_date_2": "1990-05-09",
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-040",
+      "group": "birth_dates",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "birth_dates"
+      ],
+      "source_depth": "birth_dates",
+      "from_sign": "scorpio",
+      "to_sign": "aquarius",
+      "relationship_context": "mutual_attraction",
+      "birth_date_1": "1992-01-08",
+      "birth_date_2": "1994-07-28",
+      "profile_a": null,
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-041",
+      "group": "profile_enriched",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "one_profile",
+        "direct_style",
+        "missing_data",
+        "user_question"
+      ],
+      "source_depth": "profile_enriched",
+      "from_sign": "aries",
+      "to_sign": "leo",
+      "relationship_context": "just_met",
+      "birth_date_1": "1991-04-12",
+      "birth_date_2": "1993-09-03",
+      "profile_a": {
+        "communication_style": "прямой",
+        "conflict_reaction": "уходит в спор",
+        "closeness_need": "высокая"
+      },
+      "profile_b": null,
+      "user_question": "Как поговорить о ревности без скандала?",
+      "missing_fields": [
+        "goals"
+      ]
+    },
+    {
+      "id": "cq-042",
+      "group": "profile_enriched",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "one_profile"
+      ],
+      "source_depth": "profile_enriched",
+      "from_sign": "taurus",
+      "to_sign": "virgo",
+      "relationship_context": "mutual_attraction",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": {
+        "communication_style": "мягкий",
+        "conflict_reaction": "замолкает",
+        "closeness_need": "средняя",
+        "goals": [
+          "свобода"
+        ]
+      },
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-043",
+      "group": "profile_enriched",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "one_profile"
+      ],
+      "source_depth": "profile_enriched",
+      "from_sign": "gemini",
+      "to_sign": "libra",
+      "relationship_context": "in_relationship",
+      "birth_date_1": "1991-04-12",
+      "birth_date_2": "1993-09-03",
+      "profile_a": {
+        "communication_style": "шутливый",
+        "conflict_reaction": "обесценивает",
+        "closeness_need": "низкая",
+        "goals": [
+          "карьера"
+        ]
+      },
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-044",
+      "group": "profile_enriched",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "one_profile"
+      ],
+      "source_depth": "profile_enriched",
+      "from_sign": "cancer",
+      "to_sign": "scorpio",
+      "relationship_context": "unclear",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": {
+        "communication_style": "аналитичный",
+        "conflict_reaction": "ищет решение",
+        "closeness_need": "высокая",
+        "goals": [
+          "семья"
+        ]
+      },
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-045",
+      "group": "profile_enriched",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "one_profile",
+        "user_question"
+      ],
+      "source_depth": "profile_enriched",
+      "from_sign": "leo",
+      "to_sign": "sagittarius",
+      "relationship_context": "conflict_distance",
+      "birth_date_1": "1991-04-12",
+      "birth_date_2": "1993-09-03",
+      "profile_a": {
+        "communication_style": "импульсивный",
+        "conflict_reaction": "взрывается",
+        "closeness_need": "средняя",
+        "goals": [
+          "приключения"
+        ]
+      },
+      "profile_b": null,
+      "user_question": "Как поговорить о ревности без скандала?",
+      "missing_fields": []
+    },
+    {
+      "id": "cq-046",
+      "group": "profile_enriched",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "one_profile"
+      ],
+      "source_depth": "profile_enriched",
+      "from_sign": "virgo",
+      "to_sign": "capricorn",
+      "relationship_context": "split_but_pull",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": {
+        "communication_style": "прямой",
+        "conflict_reaction": "уходит в спор",
+        "closeness_need": "высокая",
+        "goals": [
+          "стабильность"
+        ]
+      },
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-047",
+      "group": "profile_enriched",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "one_profile"
+      ],
+      "source_depth": "profile_enriched",
+      "from_sign": "libra",
+      "to_sign": "aquarius",
+      "relationship_context": "just_met",
+      "birth_date_1": "1991-04-12",
+      "birth_date_2": "1993-09-03",
+      "profile_a": {
+        "communication_style": "мягкий",
+        "conflict_reaction": "замолкает",
+        "closeness_need": "средняя",
+        "goals": [
+          "свобода"
+        ]
+      },
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-048",
+      "group": "profile_enriched",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "one_profile",
+        "missing_data"
+      ],
+      "source_depth": "profile_enriched",
+      "from_sign": "scorpio",
+      "to_sign": "pisces",
+      "relationship_context": "mutual_attraction",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": {
+        "communication_style": "шутливый",
+        "conflict_reaction": "обесценивает",
+        "closeness_need": "низкая"
+      },
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": [
+        "goals"
+      ]
+    },
+    {
+      "id": "cq-049",
+      "group": "profile_enriched",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "one_profile",
+        "user_question"
+      ],
+      "source_depth": "profile_enriched",
+      "from_sign": "sagittarius",
+      "to_sign": "aries",
+      "relationship_context": "in_relationship",
+      "birth_date_1": "1991-04-12",
+      "birth_date_2": "1993-09-03",
+      "profile_a": {
+        "communication_style": "аналитичный",
+        "conflict_reaction": "ищет решение",
+        "closeness_need": "высокая",
+        "goals": [
+          "семья"
+        ]
+      },
+      "profile_b": null,
+      "user_question": "Как поговорить о ревности без скандала?",
+      "missing_fields": []
+    },
+    {
+      "id": "cq-050",
+      "group": "profile_enriched",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "one_profile"
+      ],
+      "source_depth": "profile_enriched",
+      "from_sign": "capricorn",
+      "to_sign": "taurus",
+      "relationship_context": "unclear",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": {
+        "communication_style": "импульсивный",
+        "conflict_reaction": "взрывается",
+        "closeness_need": "средняя",
+        "goals": [
+          "приключения"
+        ]
+      },
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-051",
+      "group": "profile_enriched",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "one_profile",
+        "direct_style"
+      ],
+      "source_depth": "profile_enriched",
+      "from_sign": "aquarius",
+      "to_sign": "gemini",
+      "relationship_context": "conflict_distance",
+      "birth_date_1": "1991-04-12",
+      "birth_date_2": "1993-09-03",
+      "profile_a": {
+        "communication_style": "прямой",
+        "conflict_reaction": "уходит в спор",
+        "closeness_need": "высокая",
+        "goals": [
+          "стабильность"
+        ]
+      },
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-052",
+      "group": "profile_enriched",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "one_profile"
+      ],
+      "source_depth": "profile_enriched",
+      "from_sign": "pisces",
+      "to_sign": "cancer",
+      "relationship_context": "split_but_pull",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": {
+        "communication_style": "мягкий",
+        "conflict_reaction": "замолкает",
+        "closeness_need": "средняя",
+        "goals": [
+          "свобода"
+        ]
+      },
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-053",
+      "group": "profile_enriched",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "one_profile",
+        "user_question"
+      ],
+      "source_depth": "profile_enriched",
+      "from_sign": "aries",
+      "to_sign": "leo",
+      "relationship_context": "just_met",
+      "birth_date_1": "1991-04-12",
+      "birth_date_2": "1993-09-03",
+      "profile_a": {
+        "communication_style": "шутливый",
+        "conflict_reaction": "обесценивает",
+        "closeness_need": "низкая",
+        "goals": [
+          "карьера"
+        ]
+      },
+      "profile_b": null,
+      "user_question": "Как поговорить о ревности без скандала?",
+      "missing_fields": []
+    },
+    {
+      "id": "cq-054",
+      "group": "profile_enriched",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "one_profile"
+      ],
+      "source_depth": "profile_enriched",
+      "from_sign": "taurus",
+      "to_sign": "virgo",
+      "relationship_context": "mutual_attraction",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": {
+        "communication_style": "аналитичный",
+        "conflict_reaction": "ищет решение",
+        "closeness_need": "высокая",
+        "goals": [
+          "семья"
+        ]
+      },
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-055",
+      "group": "profile_enriched",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "one_profile",
+        "missing_data"
+      ],
+      "source_depth": "profile_enriched",
+      "from_sign": "gemini",
+      "to_sign": "libra",
+      "relationship_context": "in_relationship",
+      "birth_date_1": "1991-04-12",
+      "birth_date_2": "1993-09-03",
+      "profile_a": {
+        "communication_style": "импульсивный",
+        "conflict_reaction": "взрывается",
+        "closeness_need": "средняя"
+      },
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": [
+        "goals"
+      ]
+    },
+    {
+      "id": "cq-056",
+      "group": "profile_enriched",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "one_profile"
+      ],
+      "source_depth": "profile_enriched",
+      "from_sign": "cancer",
+      "to_sign": "scorpio",
+      "relationship_context": "unclear",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": {
+        "communication_style": "прямой",
+        "conflict_reaction": "уходит в спор",
+        "closeness_need": "высокая",
+        "goals": [
+          "стабильность"
+        ]
+      },
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-057",
+      "group": "profile_enriched",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "one_profile",
+        "user_question"
+      ],
+      "source_depth": "profile_enriched",
+      "from_sign": "leo",
+      "to_sign": "sagittarius",
+      "relationship_context": "conflict_distance",
+      "birth_date_1": "1991-04-12",
+      "birth_date_2": "1993-09-03",
+      "profile_a": {
+        "communication_style": "мягкий",
+        "conflict_reaction": "замолкает",
+        "closeness_need": "средняя",
+        "goals": [
+          "свобода"
+        ]
+      },
+      "profile_b": null,
+      "user_question": "Как поговорить о ревности без скандала?",
+      "missing_fields": []
+    },
+    {
+      "id": "cq-058",
+      "group": "profile_enriched",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "one_profile"
+      ],
+      "source_depth": "profile_enriched",
+      "from_sign": "virgo",
+      "to_sign": "capricorn",
+      "relationship_context": "split_but_pull",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": {
+        "communication_style": "шутливый",
+        "conflict_reaction": "обесценивает",
+        "closeness_need": "низкая",
+        "goals": [
+          "карьера"
+        ]
+      },
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-059",
+      "group": "profile_enriched",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "one_profile"
+      ],
+      "source_depth": "profile_enriched",
+      "from_sign": "libra",
+      "to_sign": "aquarius",
+      "relationship_context": "just_met",
+      "birth_date_1": "1991-04-12",
+      "birth_date_2": "1993-09-03",
+      "profile_a": {
+        "communication_style": "аналитичный",
+        "conflict_reaction": "ищет решение",
+        "closeness_need": "высокая",
+        "goals": [
+          "семья"
+        ]
+      },
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-060",
+      "group": "profile_enriched",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "one_profile"
+      ],
+      "source_depth": "profile_enriched",
+      "from_sign": "scorpio",
+      "to_sign": "pisces",
+      "relationship_context": "mutual_attraction",
+      "birth_date_1": null,
+      "birth_date_2": null,
+      "profile_a": {
+        "communication_style": "импульсивный",
+        "conflict_reaction": "взрывается",
+        "closeness_need": "средняя",
+        "goals": [
+          "приключения"
+        ]
+      },
+      "profile_b": null,
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-061",
+      "group": "two_profiles",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "two_profiles",
+        "user_question",
+        "similar_profiles",
+        "similar_conflict"
+      ],
+      "source_depth": "two_profiles",
+      "from_sign": "aries",
+      "to_sign": "libra",
+      "relationship_context": "just_met",
+      "birth_date_1": "1990-01-15",
+      "birth_date_2": "1992-08-20",
+      "profile_a": {
+        "communication_style": "прямой",
+        "conflict_reaction": "уходит в спор",
+        "closeness_need": "высокая",
+        "goals": [
+          "стабильность"
+        ]
+      },
+      "profile_b": {
+        "communication_style": "прямой",
+        "conflict_reaction": "уходит в спор",
+        "closeness_need": "низкая",
+        "goals": [
+          "карьера"
+        ]
+      },
+      "user_question": "Есть ли смысл продолжать после трёх месяцев пауз?",
+      "missing_fields": []
+    },
+    {
+      "id": "cq-062",
+      "group": "two_profiles",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "two_profiles",
+        "similar_profiles",
+        "similar_conflict"
+      ],
+      "source_depth": "two_profiles",
+      "from_sign": "taurus",
+      "to_sign": "scorpio",
+      "relationship_context": "mutual_attraction",
+      "birth_date_1": "1990-01-15",
+      "birth_date_2": "1992-08-20",
+      "profile_a": {
+        "communication_style": "мягкий",
+        "conflict_reaction": "замолкает",
+        "closeness_need": "средняя",
+        "goals": [
+          "свобода"
+        ]
+      },
+      "profile_b": {
+        "communication_style": "мягкий",
+        "conflict_reaction": "замолкает",
+        "closeness_need": "высокая",
+        "goals": [
+          "семья"
+        ]
+      },
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-063",
+      "group": "two_profiles",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "two_profiles",
+        "similar_profiles",
+        "similar_conflict"
+      ],
+      "source_depth": "two_profiles",
+      "from_sign": "gemini",
+      "to_sign": "sagittarius",
+      "relationship_context": "in_relationship",
+      "birth_date_1": "1990-01-15",
+      "birth_date_2": "1992-08-20",
+      "profile_a": {
+        "communication_style": "шутливый",
+        "conflict_reaction": "обесценивает",
+        "closeness_need": "низкая",
+        "goals": [
+          "карьера"
+        ]
+      },
+      "profile_b": {
+        "communication_style": "шутливый",
+        "conflict_reaction": "обесценивает",
+        "closeness_need": "средняя",
+        "goals": [
+          "приключения"
+        ]
+      },
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-064",
+      "group": "two_profiles",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "two_profiles",
+        "missing_data",
+        "user_question",
+        "similar_profiles",
+        "similar_conflict"
+      ],
+      "source_depth": "two_profiles",
+      "from_sign": "cancer",
+      "to_sign": "capricorn",
+      "relationship_context": "unclear",
+      "birth_date_1": "1990-01-15",
+      "birth_date_2": "1992-08-20",
+      "profile_a": {
+        "communication_style": "аналитичный",
+        "conflict_reaction": "ищет решение",
+        "closeness_need": "высокая",
+        "goals": [
+          "семья"
+        ]
+      },
+      "profile_b": {
+        "communication_style": "аналитичный",
+        "conflict_reaction": "ищет решение",
+        "goals": [
+          "стабильность"
+        ]
+      },
+      "user_question": "Есть ли смысл продолжать после трёх месяцев пауз?",
+      "missing_fields": [
+        "profile_b.closeness_need"
+      ]
+    },
+    {
+      "id": "cq-065",
+      "group": "two_profiles",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "two_profiles",
+        "opposite_styles",
+        "conflict_mismatch"
+      ],
+      "source_depth": "two_profiles",
+      "from_sign": "leo",
+      "to_sign": "aquarius",
+      "relationship_context": "conflict_distance",
+      "birth_date_1": "1990-01-15",
+      "birth_date_2": "1992-08-20",
+      "profile_a": {
+        "communication_style": "импульсивный",
+        "conflict_reaction": "взрывается",
+        "closeness_need": "средняя",
+        "goals": [
+          "приключения"
+        ]
+      },
+      "profile_b": {
+        "communication_style": "мягкий",
+        "conflict_reaction": "замолкает",
+        "closeness_need": "средняя",
+        "goals": [
+          "свобода"
+        ]
+      },
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-066",
+      "group": "two_profiles",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "two_profiles",
+        "opposite_styles",
+        "conflict_mismatch"
+      ],
+      "source_depth": "two_profiles",
+      "from_sign": "virgo",
+      "to_sign": "pisces",
+      "relationship_context": "split_but_pull",
+      "birth_date_1": "1990-01-15",
+      "birth_date_2": "1992-08-20",
+      "profile_a": {
+        "communication_style": "прямой",
+        "conflict_reaction": "уходит в спор",
+        "closeness_need": "высокая",
+        "goals": [
+          "стабильность"
+        ]
+      },
+      "profile_b": {
+        "communication_style": "шутливый",
+        "conflict_reaction": "обесценивает",
+        "closeness_need": "низкая",
+        "goals": [
+          "карьера"
+        ]
+      },
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-067",
+      "group": "two_profiles",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "two_profiles",
+        "opposite_styles",
+        "conflict_mismatch",
+        "user_question"
+      ],
+      "source_depth": "two_profiles",
+      "from_sign": "libra",
+      "to_sign": "aries",
+      "relationship_context": "just_met",
+      "birth_date_1": "1990-01-15",
+      "birth_date_2": "1992-08-20",
+      "profile_a": {
+        "communication_style": "мягкий",
+        "conflict_reaction": "замолкает",
+        "closeness_need": "средняя",
+        "goals": [
+          "свобода"
+        ]
+      },
+      "profile_b": {
+        "communication_style": "аналитичный",
+        "conflict_reaction": "ищет решение",
+        "closeness_need": "высокая",
+        "goals": [
+          "семья"
+        ]
+      },
+      "user_question": "Есть ли смысл продолжать после трёх месяцев пауз?",
+      "missing_fields": []
+    },
+    {
+      "id": "cq-068",
+      "group": "two_profiles",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "two_profiles",
+        "opposite_styles",
+        "conflict_mismatch"
+      ],
+      "source_depth": "two_profiles",
+      "from_sign": "scorpio",
+      "to_sign": "taurus",
+      "relationship_context": "mutual_attraction",
+      "birth_date_1": "1990-01-15",
+      "birth_date_2": "1992-08-20",
+      "profile_a": {
+        "communication_style": "шутливый",
+        "conflict_reaction": "обесценивает",
+        "closeness_need": "низкая",
+        "goals": [
+          "карьера"
+        ]
+      },
+      "profile_b": {
+        "communication_style": "импульсивный",
+        "conflict_reaction": "взрывается",
+        "closeness_need": "средняя",
+        "goals": [
+          "приключения"
+        ]
+      },
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-069",
+      "group": "two_profiles",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "two_profiles",
+        "opposite_styles",
+        "conflict_mismatch"
+      ],
+      "source_depth": "two_profiles",
+      "from_sign": "sagittarius",
+      "to_sign": "gemini",
+      "relationship_context": "in_relationship",
+      "birth_date_1": "1990-01-15",
+      "birth_date_2": "1992-08-20",
+      "profile_a": {
+        "communication_style": "аналитичный",
+        "conflict_reaction": "ищет решение",
+        "closeness_need": "высокая",
+        "goals": [
+          "семья"
+        ]
+      },
+      "profile_b": {
+        "communication_style": "прямой",
+        "conflict_reaction": "уходит в спор",
+        "closeness_need": "высокая",
+        "goals": [
+          "стабильность"
+        ]
+      },
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-070",
+      "group": "two_profiles",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "two_profiles",
+        "opposite_styles",
+        "conflict_mismatch",
+        "user_question"
+      ],
+      "source_depth": "two_profiles",
+      "from_sign": "capricorn",
+      "to_sign": "cancer",
+      "relationship_context": "unclear",
+      "birth_date_1": "1990-01-15",
+      "birth_date_2": "1992-08-20",
+      "profile_a": {
+        "communication_style": "импульсивный",
+        "conflict_reaction": "взрывается",
+        "closeness_need": "средняя",
+        "goals": [
+          "приключения"
+        ]
+      },
+      "profile_b": {
+        "communication_style": "мягкий",
+        "conflict_reaction": "замолкает",
+        "closeness_need": "средняя",
+        "goals": [
+          "свобода"
+        ]
+      },
+      "user_question": "Есть ли смысл продолжать после трёх месяцев пауз?",
+      "missing_fields": []
+    },
+    {
+      "id": "cq-071",
+      "group": "two_profiles",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "two_profiles",
+        "opposite_styles",
+        "conflict_mismatch"
+      ],
+      "source_depth": "two_profiles",
+      "from_sign": "aquarius",
+      "to_sign": "leo",
+      "relationship_context": "conflict_distance",
+      "birth_date_1": "1990-01-15",
+      "birth_date_2": "1992-08-20",
+      "profile_a": {
+        "communication_style": "прямой",
+        "conflict_reaction": "уходит в спор",
+        "closeness_need": "высокая",
+        "goals": [
+          "стабильность"
+        ]
+      },
+      "profile_b": {
+        "communication_style": "шутливый",
+        "conflict_reaction": "обесценивает",
+        "closeness_need": "низкая",
+        "goals": [
+          "карьера"
+        ]
+      },
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-072",
+      "group": "two_profiles",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "two_profiles",
+        "opposite_styles",
+        "conflict_mismatch"
+      ],
+      "source_depth": "two_profiles",
+      "from_sign": "pisces",
+      "to_sign": "virgo",
+      "relationship_context": "split_but_pull",
+      "birth_date_1": "1990-01-15",
+      "birth_date_2": "1992-08-20",
+      "profile_a": {
+        "communication_style": "мягкий",
+        "conflict_reaction": "замолкает",
+        "closeness_need": "средняя",
+        "goals": [
+          "свобода"
+        ]
+      },
+      "profile_b": {
+        "communication_style": "аналитичный",
+        "conflict_reaction": "ищет решение",
+        "closeness_need": "высокая",
+        "goals": [
+          "семья"
+        ]
+      },
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-073",
+      "group": "two_profiles",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "two_profiles",
+        "opposite_styles",
+        "conflict_mismatch",
+        "user_question"
+      ],
+      "source_depth": "two_profiles",
+      "from_sign": "aries",
+      "to_sign": "libra",
+      "relationship_context": "just_met",
+      "birth_date_1": "1990-01-15",
+      "birth_date_2": "1992-08-20",
+      "profile_a": {
+        "communication_style": "шутливый",
+        "conflict_reaction": "обесценивает",
+        "closeness_need": "низкая",
+        "goals": [
+          "карьера"
+        ]
+      },
+      "profile_b": {
+        "communication_style": "импульсивный",
+        "conflict_reaction": "взрывается",
+        "closeness_need": "средняя",
+        "goals": [
+          "приключения"
+        ]
+      },
+      "user_question": "Есть ли смысл продолжать после трёх месяцев пауз?",
+      "missing_fields": []
+    },
+    {
+      "id": "cq-074",
+      "group": "two_profiles",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "two_profiles",
+        "opposite_styles",
+        "conflict_mismatch"
+      ],
+      "source_depth": "two_profiles",
+      "from_sign": "taurus",
+      "to_sign": "scorpio",
+      "relationship_context": "mutual_attraction",
+      "birth_date_1": "1990-01-15",
+      "birth_date_2": "1992-08-20",
+      "profile_a": {
+        "communication_style": "аналитичный",
+        "conflict_reaction": "ищет решение",
+        "closeness_need": "высокая",
+        "goals": [
+          "семья"
+        ]
+      },
+      "profile_b": {
+        "communication_style": "прямой",
+        "conflict_reaction": "уходит в спор",
+        "closeness_need": "высокая",
+        "goals": [
+          "стабильность"
+        ]
+      },
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-075",
+      "group": "two_profiles",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "two_profiles",
+        "opposite_styles",
+        "conflict_mismatch"
+      ],
+      "source_depth": "two_profiles",
+      "from_sign": "gemini",
+      "to_sign": "sagittarius",
+      "relationship_context": "in_relationship",
+      "birth_date_1": "1990-01-15",
+      "birth_date_2": "1992-08-20",
+      "profile_a": {
+        "communication_style": "импульсивный",
+        "conflict_reaction": "взрывается",
+        "closeness_need": "средняя",
+        "goals": [
+          "приключения"
+        ]
+      },
+      "profile_b": {
+        "communication_style": "мягкий",
+        "conflict_reaction": "замолкает",
+        "closeness_need": "средняя",
+        "goals": [
+          "свобода"
+        ]
+      },
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-076",
+      "group": "two_profiles",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "two_profiles",
+        "opposite_styles",
+        "conflict_mismatch",
+        "user_question"
+      ],
+      "source_depth": "two_profiles",
+      "from_sign": "cancer",
+      "to_sign": "capricorn",
+      "relationship_context": "unclear",
+      "birth_date_1": "1990-01-15",
+      "birth_date_2": "1992-08-20",
+      "profile_a": {
+        "communication_style": "прямой",
+        "conflict_reaction": "уходит в спор",
+        "closeness_need": "высокая",
+        "goals": [
+          "стабильность"
+        ]
+      },
+      "profile_b": {
+        "communication_style": "шутливый",
+        "conflict_reaction": "обесценивает",
+        "closeness_need": "низкая",
+        "goals": [
+          "карьера"
+        ]
+      },
+      "user_question": "Есть ли смысл продолжать после трёх месяцев пауз?",
+      "missing_fields": []
+    },
+    {
+      "id": "cq-077",
+      "group": "two_profiles",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "two_profiles",
+        "opposite_styles",
+        "conflict_mismatch"
+      ],
+      "source_depth": "two_profiles",
+      "from_sign": "leo",
+      "to_sign": "aquarius",
+      "relationship_context": "conflict_distance",
+      "birth_date_1": "1990-01-15",
+      "birth_date_2": "1992-08-20",
+      "profile_a": {
+        "communication_style": "мягкий",
+        "conflict_reaction": "замолкает",
+        "closeness_need": "средняя",
+        "goals": [
+          "свобода"
+        ]
+      },
+      "profile_b": {
+        "communication_style": "аналитичный",
+        "conflict_reaction": "ищет решение",
+        "closeness_need": "высокая",
+        "goals": [
+          "семья"
+        ]
+      },
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-078",
+      "group": "two_profiles",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "two_profiles",
+        "opposite_styles",
+        "conflict_mismatch"
+      ],
+      "source_depth": "two_profiles",
+      "from_sign": "virgo",
+      "to_sign": "pisces",
+      "relationship_context": "split_but_pull",
+      "birth_date_1": "1990-01-15",
+      "birth_date_2": "1992-08-20",
+      "profile_a": {
+        "communication_style": "шутливый",
+        "conflict_reaction": "обесценивает",
+        "closeness_need": "низкая",
+        "goals": [
+          "карьера"
+        ]
+      },
+      "profile_b": {
+        "communication_style": "импульсивный",
+        "conflict_reaction": "взрывается",
+        "closeness_need": "средняя",
+        "goals": [
+          "приключения"
+        ]
+      },
+      "user_question": null,
+      "missing_fields": []
+    },
+    {
+      "id": "cq-079",
+      "group": "two_profiles",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "two_profiles",
+        "opposite_styles",
+        "conflict_mismatch",
+        "user_question"
+      ],
+      "source_depth": "two_profiles",
+      "from_sign": "libra",
+      "to_sign": "aries",
+      "relationship_context": "just_met",
+      "birth_date_1": "1990-01-15",
+      "birth_date_2": "1992-08-20",
+      "profile_a": {
+        "communication_style": "аналитичный",
+        "conflict_reaction": "ищет решение",
+        "closeness_need": "высокая",
+        "goals": [
+          "семья"
+        ]
+      },
+      "profile_b": {
+        "communication_style": "прямой",
+        "conflict_reaction": "уходит в спор",
+        "closeness_need": "высокая",
+        "goals": [
+          "стабильность"
+        ]
+      },
+      "user_question": "Есть ли смысл продолжать после трёх месяцев пауз?",
+      "missing_fields": []
+    },
+    {
+      "id": "cq-080",
+      "group": "two_profiles",
+      "locale": "ru",
+      "tiers_to_score": [
+        "guest",
+        "registered",
+        "premium"
+      ],
+      "tags": [
+        "two_profiles",
+        "opposite_styles",
+        "conflict_mismatch"
+      ],
+      "source_depth": "two_profiles",
+      "from_sign": "scorpio",
+      "to_sign": "taurus",
+      "relationship_context": "mutual_attraction",
+      "birth_date_1": "1990-01-15",
+      "birth_date_2": "1992-08-20",
+      "profile_a": {
+        "communication_style": "импульсивный",
+        "conflict_reaction": "взрывается",
+        "closeness_need": "средняя",
+        "goals": [
+          "приключения"
+        ]
+      },
+      "profile_b": {
+        "communication_style": "мягкий",
+        "conflict_reaction": "замолкает",
+        "closeness_need": "средняя",
+        "goals": [
+          "свобода"
+        ]
+      },
+      "user_question": null,
+      "missing_fields": []
+    }
+  ]
+}

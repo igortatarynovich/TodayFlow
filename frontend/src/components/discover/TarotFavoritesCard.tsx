@@ -36,7 +36,7 @@ export function TarotFavoritesCard({ count }: TarotFavoritesCardProps) {
         Карты, которые резонируют с тобой
       </p>
       <Link
-        href="/tarot/card-of-the-day"
+        href="/tarot"
         className="orbit-button orbit-button-secondary orbit-button-xs"
         style={{
           display: "inline-block",

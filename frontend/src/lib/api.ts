@@ -104,9 +104,16 @@ async function performRequest<T>(path: string, options: RequestInit | undefined,
         if (contentType?.includes("application/json")) {
           details = await res.json();
           if (details && typeof details === "object" && "detail" in details) {
-            message = String(details.detail || message);
+            const detail = (details as { detail?: unknown }).detail;
+            if (typeof detail === "string") {
+              message = detail || message;
+            } else if (detail && typeof detail === "object" && "message" in detail) {
+              message = String((detail as { message?: unknown }).message || message);
+            } else {
+              message = String(detail || message);
+            }
           } else if (details && typeof details === "object" && "message" in details) {
-            message = String(details.message || message);
+            message = String((details as { message?: unknown }).message || message);
           }
         } else {
           const text = await res.text();
@@ -175,9 +182,10 @@ export async function putJson<T>(path: string, body: unknown): Promise<T> {
   });
 }
 
-export async function getJson<T>(path: string): Promise<T> {
+export async function getJson<T>(path: string, init?: RequestInit): Promise<T> {
   return request<T>(path, {
-    method: "GET"
+    method: "GET",
+    ...init,
   });
 }
 

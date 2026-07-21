@@ -54,16 +54,15 @@ export function ProfileWebScreen({
   const isV2 = variant === "v2";
 
   const shellConfig = useMemo((): ProductWebShellConfig => {
+    // Always keep the product 3-column grid (left nav · center · right rail).
     return {
       testId: "profile-web-screen",
       displayName,
       profileMeta,
       coreProfile,
-      mainWide: isV2,
-      fullMain: isV2,
-      rail: isV2
-        ? undefined
-        : (
+      mainWide: true,
+      fullMain: false,
+      rail: (
         <>
           {railAnchors.length > 0 ? (
             <section className={s.profileRailPanel} aria-labelledby="profile-rail-anchors">
@@ -82,7 +81,14 @@ export function ProfileWebScreen({
                 ))}
               </ul>
             </section>
-          ) : null}
+          ) : (
+            <section className={s.profileRailPanel} aria-labelledby="profile-rail-hint">
+              <h2 id="profile-rail-hint" className={s.profileRailTitle}>
+                {chrome.railAnchorsTitle}
+              </h2>
+              <p className={s.profileRailHint}>{resolvedSubtitle}</p>
+            </section>
+          )}
           {compatibilityHref ? (
             <section className={s.profileRailPanel} aria-labelledby="profile-rail-links">
               <h2 id="profile-rail-links" className={s.profileRailTitle}>
@@ -95,7 +101,7 @@ export function ProfileWebScreen({
             </section>
           ) : null}
         </>
-        ),
+      ),
     };
   }, [
     chrome.railAnchorsTitle,
@@ -105,9 +111,9 @@ export function ProfileWebScreen({
     compatibilityHref,
     coreProfile,
     displayName,
-    isV2,
     profileMeta,
     railAnchors,
+    resolvedSubtitle,
   ]);
 
   return (

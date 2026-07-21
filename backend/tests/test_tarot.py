@@ -83,7 +83,14 @@ def test_get_daily_tarot_draw_authenticated(client: TestClient, test_user: User,
     assert data["selection_status"] == "not_selected"
     assert data.get("card") is None
 
-    revealed = client.post("/tarot/daily/reveal", headers=headers)
+    blocked = client.post("/tarot/daily/reveal", headers=headers, json={"reveal_source": "tarot_module"})
+    assert blocked.status_code == 403
+
+    revealed = client.post(
+        "/tarot/daily/reveal",
+        headers=headers,
+        json={"reveal_source": "ritual"},
+    )
     assert revealed.status_code == 200
     selected = revealed.json()
     assert selected["selection_status"] == "selected"
@@ -95,8 +102,12 @@ def test_daily_draw_is_deterministic(client: TestClient, test_user: User, auth_t
     """Test that daily draw is deterministic (same card for same date)."""
     headers = {"Authorization": f"Bearer {auth_token}"}
     
-    # First request
-    response1 = client.post("/tarot/daily/reveal", headers=headers)
+    # First request — only Today ritual may reveal
+    response1 = client.post(
+        "/tarot/daily/reveal",
+        headers=headers,
+        json={"reveal_source": "ritual"},
+    )
     assert response1.status_code == 200
     data1 = response1.json()
     card_id_1 = data1["card"]["id"]

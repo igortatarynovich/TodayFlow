@@ -196,7 +196,7 @@ export default function PracticeDetailPage() {
       >
         <div className={s.practiceSessionEmpty}>
           <h2 className={s.practiceSessionEmptyTitle}>{pc.practiceDetailAuthOnlyTitle}</h2>
-          <Link href="/auth">
+          <Link href="/onboarding/welcome?fresh=1">
             <DsButton variant="primary">{pc.practiceDetailSignUpCta}</DsButton>
           </Link>
         </div>

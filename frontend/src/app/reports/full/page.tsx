@@ -202,9 +202,11 @@ export default function FullReportPage() {
         subtitle={t("full.hero.auth.description")}
         contentClassName={`${pl.content} ${pl.legacyHost}`}
       >
-        <div style={{ display: "flex", gap: "var(--orbit-space-md)", flexWrap: "wrap" }}>
-          <Link href="/auth?mode=signup"><DsButton variant="primary">{t("dashboard.auth.signup")}</DsButton></Link>
-          <Link href="/auth?mode=login"><DsButton variant="secondary">{t("dashboard.auth.login")}</DsButton></Link>
+        <div style={{ display: "grid", gap: "0.85rem", justifyItems: "start" }}>
+          <Link href="/onboarding/welcome?fresh=1"><DsButton variant="primary">Создать мой Today</DsButton></Link>
+          <Link href="/auth?mode=login" className="orbit-body-sm" style={{ color: "#78716c", textDecoration: "underline" }}>
+            {t("dashboard.auth.login")}
+          </Link>
         </div>
       </ProductPageScreen>
     );

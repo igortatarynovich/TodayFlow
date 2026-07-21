@@ -136,10 +136,16 @@ async def reveal_daily_tarot_draw(
     user=Depends(require_user),
     db=Depends(get_session),
 ) -> models.TarotDailyDraw:
-    """Explicit reveal/select — delegates to unified day symbol SoT when card_id provided."""
+    """Reveal card-of-day — only from Today ritual (not Tarot module)."""
     from todayflow_backend.services import day_symbol_state_v1 as day_symbols
 
     body = payload or TarotDailyRevealPayload()
+    source = (body.reveal_source or "").strip().lower()
+    if source not in {"today", "today_ritual", "morning_ritual", "day_ritual", "ritual"}:
+        raise HTTPException(
+            status_code=403,
+            detail="card_of_day_only_in_today",
+        )
     day = day_symbols.resolve_local_date(local_date=body.local_date, timezone_name=body.timezone)
     if body.card_id is None:
         # Legacy path: assign seeded card then mark revealed in SoT

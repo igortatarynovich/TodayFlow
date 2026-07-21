@@ -11,6 +11,12 @@ import type { SignCompatProductSurface } from "@/components/compatibility/Compat
 import { getScenarioSkin, resolveScenarioId } from "@/lib/compatibilityScenarioSkins";
 import { postJson } from "@/lib/api";
 import { COMPATIBILITY_GENERATION_LIVE } from "@/lib/compatibilityDynamicsMode";
+import {
+  lifecycleStatusLabel,
+  parseGenerationLifecycle,
+  type GenerationLifecycle,
+} from "@/lib/generationLifecycle";
+import { pollCompatibilityJob, retryCompatibilityJob } from "@/lib/pollGenerationJob";
 import { stripCompatibilityDisplayGarbage } from "@/lib/compatibilityCopySanitize";
 import {
   buildCompatibilityDeepOpenEvent,
@@ -60,6 +66,23 @@ type DynamicsResponse = {
   relationship_context?: string | null;
   funnel_artifact?: CompatibilityFunnelArtifact | null;
   attachment_reference?: Record<string, unknown> | null;
+  access_disclosure?: {
+    tier?: string;
+    locked_layers?: string[];
+    upsell?: {
+      title?: string;
+      body?: string;
+      cta_register?: string;
+      cta_subscribe?: string;
+    } | null;
+    guidance?: {
+      yes_no?: { answer?: string; framing?: string };
+      do?: string[];
+      dont?: string[];
+      how?: string[];
+    } | null;
+  } | null;
+  generation_lifecycle?: GenerationLifecycle | null;
 };
 
 export default function CompatibilityAnalyzePage() {
@@ -100,6 +123,8 @@ function CompatibilityAnalyzeContent() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<DynamicsResponse | null>(null);
+  const [lifecycle, setLifecycle] = useState<GenerationLifecycle | null>(null);
+  const enrichAbortRef = useRef<AbortController | null>(null);
   const [limitBlocked, setLimitBlocked] = useState(false);
   const deepOpenTracked = useRef(false);
 
@@ -254,9 +279,18 @@ function CompatibilityAnalyzeContent() {
     async (mode: "quick" | "precise") => {
       setBusy(true);
       setError(null);
+      enrichAbortRef.current?.abort();
+      enrichAbortRef.current = new AbortController();
+      const signal = enrichAbortRef.current.signal;
       try {
         const data = await postJson<DynamicsResponse>("/compatibility/dynamics", buildPayload(mode));
         setResult(data);
+        const lc = parseGenerationLifecycle(data.generation_lifecycle) ?? {
+          status: "baseline_ready" as const,
+          source: data.generation_source || "template",
+          is_fully_personal: false,
+        };
+        setLifecycle(lc);
         if (!isAuthenticated) {
           tryConsumeGuestCompatibility(buildCompatCheckKey(mode));
         }
@@ -275,12 +309,40 @@ function CompatibilityAnalyzeContent() {
             from_sign: data.from_sign,
             to_sign: data.to_sign,
             score: data.score,
+            lifecycle: lc.status,
           },
         });
+        // First paint done — enrich in background without blocking UI.
+        setBusy(false);
+        if (
+          isAuthenticated &&
+          lc.status === "enrichment_pending" &&
+          typeof lc.job_id === "number"
+        ) {
+          void pollCompatibilityJob(lc.job_id, { signal }).then((polled) => {
+            if (!polled || signal.aborted) return;
+            setLifecycle(polled.lifecycle);
+            if (polled.lifecycle.status === "enriched" && polled.product_surface) {
+              setResult((prev) =>
+                prev
+                  ? {
+                      ...prev,
+                      product_surface: polled.product_surface as DynamicsResponse["product_surface"],
+                      generation_source: polled.generation_source ?? "llm",
+                      score: typeof polled.score === "number" ? polled.score : prev.score,
+                      access_disclosure:
+                        (polled.access_disclosure as DynamicsResponse["access_disclosure"]) ??
+                        prev.access_disclosure,
+                      generation_lifecycle: polled.lifecycle,
+                    }
+                  : prev,
+              );
+            }
+          });
+        }
       } catch (e: unknown) {
         const msg = e instanceof Error ? e.message : "Не удалось загрузить разбор.";
         setError(msg);
-      } finally {
         setBusy(false);
       }
     },
@@ -575,6 +637,53 @@ function CompatibilityAnalyzeContent() {
                 {error}
               </p>
             ) : null}
+            {lifecycle ? (
+              <p
+                className="orbit-body-sm"
+                data-testid="compat-lifecycle-status"
+                style={{ margin: "0.75rem 0 0", color: "#5e4222" }}
+              >
+                {lifecycleStatusLabel(lifecycle.status)}
+                {lifecycle.status === "enrichment_failed" && typeof lifecycle.job_id === "number" ? (
+                  <>
+                    {" "}
+                    <button
+                      type="button"
+                      className="orbit-button orbit-button-ghost"
+                      onClick={() => {
+                        const id = lifecycle.job_id;
+                        if (typeof id !== "number") return;
+                        void retryCompatibilityJob(id).then((next) => {
+                          if (!next) return;
+                          setLifecycle(next);
+                          if (next.status === "enrichment_pending") {
+                            void pollCompatibilityJob(id).then((polled) => {
+                              if (!polled) return;
+                              setLifecycle(polled.lifecycle);
+                              if (polled.lifecycle.status === "enriched" && polled.product_surface) {
+                                setResult((prev) =>
+                                  prev
+                                    ? {
+                                        ...prev,
+                                        product_surface:
+                                          polled.product_surface as DynamicsResponse["product_surface"],
+                                        generation_source: polled.generation_source ?? "llm",
+                                        generation_lifecycle: polled.lifecycle,
+                                      }
+                                    : prev,
+                                );
+                              }
+                            });
+                          }
+                        });
+                      }}
+                    >
+                      Повторить
+                    </button>
+                  </>
+                ) : null}
+              </p>
+            ) : null}
           </div>
 
           {result && explorationModel ? (
@@ -582,6 +691,7 @@ function CompatibilityAnalyzeContent() {
               model={explorationModel}
               personalizedSlot={personalizedSlot}
               funnelArtifact={result.funnel_artifact ?? null}
+              accessDisclosure={result.access_disclosure ?? null}
               guidancePrefill={guidancePrefill}
               onScenarioSwitch={handleScenarioSwitch}
               onDeepOpen={handleDeepOpen}

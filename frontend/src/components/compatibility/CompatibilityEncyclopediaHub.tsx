@@ -130,7 +130,7 @@ export function CompatibilityEncyclopediaHub({
               {explorePairLabel}
             </button>
           ) : (
-            <Link href="/auth?redirect=/compatibility" className={`orbit-button orbit-button-primary ${styles.heroBtnPrimary}`} style={{ textDecoration: "none" }}>
+            <Link href="/onboarding/welcome?fresh=1" className={`orbit-button orbit-button-primary ${styles.heroBtnPrimary}`} style={{ textDecoration: "none" }}>
               {explorePairLabel}
             </Link>
           )}

@@ -6,11 +6,25 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from contextlib import contextmanager
+from contextvars import ContextVar
+from typing import Any, Iterator
 
 from todayflow_backend.core.config import settings
 
 logger = logging.getLogger(__name__)
+
+_llm_operation_ctx: ContextVar[str] = ContextVar("llm_operation", default="sync")
+
+
+@contextmanager
+def llm_operation(operation: str) -> Iterator[None]:
+    """Scope LLM client policy (sync vs background) for nested calls."""
+    token = _llm_operation_ctx.set((operation or "sync").strip().lower() or "sync")
+    try:
+        yield
+    finally:
+        _llm_operation_ctx.reset(token)
 
 
 def is_gemini_configured() -> bool:
@@ -59,8 +73,14 @@ def _resolve_llm_credentials() -> tuple[str, str] | None:
     return key, base.rstrip("/") if base else ""
 
 
-def get_openai_compatible_client() -> Any | None:
-    """Собирает `openai.OpenAI` с опциональным `base_url` для своего провайдера."""
+def get_openai_compatible_client(*, operation: str | None = None) -> Any | None:
+    """Собирает `openai.OpenAI` с опциональным `base_url` для своего провайдера.
+
+    operation:
+      sync — read-path / accidental calls: short timeout, no SDK retries
+      background — enrichment jobs: longer timeout, still no SDK retries
+        (job-level attempt_count owns retries)
+    """
     creds = _resolve_llm_credentials()
     if creds is None:
         return None
@@ -69,7 +89,15 @@ def get_openai_compatible_client() -> Any | None:
     except ImportError:
         return None
     key, base_url = creds
-    kw: dict[str, Any] = {"api_key": key}
+    # SDK default retries (2) multiply each ReadTimeout into multi-minute hangs — stay off.
+    # Job runners may re-attempt via GenerationJob.max_attempts instead.
+    op = (operation or _llm_operation_ctx.get() or "sync").strip().lower()
+    base_timeout = float(getattr(settings, "llm_http_timeout_seconds", 12.0) or 12.0)
+    if op == "background":
+        timeout_s = float(getattr(settings, "llm_background_timeout_seconds", 45.0) or 45.0)
+    else:
+        timeout_s = base_timeout
+    kw: dict[str, Any] = {"api_key": key, "timeout": timeout_s, "max_retries": 0}
     if base_url:
         kw["base_url"] = base_url
     return openai.OpenAI(**kw)
@@ -84,7 +112,13 @@ def get_gemini_compatible_client() -> Any | None:
         import openai
     except ImportError:
         return None
-    return openai.OpenAI(api_key=key, base_url=settings.gemini_base_url.rstrip("/"))
+    timeout_s = float(getattr(settings, "llm_http_timeout_seconds", 22.0) or 22.0)
+    return openai.OpenAI(
+        api_key=key,
+        base_url=settings.gemini_base_url.rstrip("/"),
+        timeout=timeout_s,
+        max_retries=0,
+    )
 
 
 def resolve_default_chat_model() -> str:

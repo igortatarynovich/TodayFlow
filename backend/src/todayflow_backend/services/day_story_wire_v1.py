@@ -276,8 +276,14 @@ def _build_day_story_record(
         if history_slice:
             llm_input["day_history"] = history_slice
 
-        story = call_day_story_llm_v1(llm_input, locale=locale_value)
-        used_fallback = story is None
+        # P0: GET /today/contract must not block on Nebius. Prefer deterministic story;
+        # LLM remaining available via force_rebuild / refresh paths later.
+        if force_rebuild and is_llm_chat_configured():
+            story = call_day_story_llm_v1(llm_input, locale=locale_value)
+            used_fallback = story is None
+        else:
+            story = None
+            used_fallback = True
         if story is None:
             story = build_day_story_fallback_v1(
                 day_engine_brief=day_engine_brief,

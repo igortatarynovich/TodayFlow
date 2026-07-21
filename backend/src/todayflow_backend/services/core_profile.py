@@ -115,6 +115,65 @@ class CoreProfileService:
             return (now - ts) < float(self.forming_retry_seconds)
         return True
 
+    def build_cached_or_baseline(
+        self,
+        db: Session,
+        user: db_models.User,
+        astro_profile_id: int | None = None,
+    ) -> dict[str, Any]:
+        """Side surfaces (Compatibility personalized strip) must not trigger portrait LLM.
+
+        Returns memory/snapshot cache when present; otherwise a deterministic baseline shell
+        (astro/numerology/baseline only). Full `build()` remains the path for Profile / Today.
+        """
+        settings = (
+            db.query(db_models.UserSettings).filter(db_models.UserSettings.user_id == user.id).first()
+        )
+        astro_profile = self._resolve_astro_profile(db, user.id, astro_profile_id)
+        numerology_profile = self._resolve_numerology_profile(db, user.id, settings, astro_profile)
+        profiles_context = self._build_profiles_context(db, user.id, astro_profile.id if astro_profile else None)
+        living_context, living_cache_marker = self._build_living_context(db, user.id)
+        cache_key = self._cache_key(
+            user.id, settings, astro_profile, numerology_profile, profiles_context, living_cache_marker
+        )
+        now = time_module.time()
+        cached = self._cache.get(cache_key)
+        if cached and cached[0] > now:
+            return self._attach_natal_summary(db, deepcopy(cached[1]), astro_profile, settings)
+
+        astro_context = self._build_astro_context(astro_profile)
+        numerology_context = self._build_numerology_context(numerology_profile)
+        profile_hash = self._build_profile_hash(settings, astro_context, numerology_context)
+
+        snapshot = self._load_snapshot(db, user.id, profile_hash)
+        if snapshot is not None and self._snapshot_is_reusable(snapshot, now=now):
+            cached_payload = self._normalize_payload_contract(deepcopy(snapshot))
+            if isinstance(cached_payload.get("astro"), dict):
+                cached_payload["astro"]["relation"] = astro_context.get("relation")
+            cached_payload["profiles"] = profiles_context
+            cached_payload["living"] = living_context
+            self._cache[cache_key] = (now + self.cache_ttl_seconds, deepcopy(cached_payload))
+            self._prune_cache(now)
+            return self._attach_natal_summary(db, cached_payload, astro_profile, settings)
+
+        baseline = self._build_baseline(astro_context, numerology_context)
+        missing_fields = self._build_missing_fields(settings, astro_context, numerology_context)
+        person_pub = self._person_public(settings, user)
+        shell = {
+            "profile_version": self.profile_version,
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "is_ready": len(missing_fields) == 0,
+            "missing_fields": missing_fields,
+            "profile_hash": profile_hash,
+            "person": person_pub,
+            "astro": astro_context,
+            "numerology": numerology_context,
+            "baseline": baseline,
+            "profiles": profiles_context,
+            "living": living_context,
+        }
+        return self._attach_natal_summary(db, shell, astro_profile, settings)
+
     def build(self, db: Session, user: db_models.User, astro_profile_id: int | None = None) -> dict[str, Any]:
         # Явная загрузка настроек: при переиспользовании одной DB-сессии (pytest / TestClient)
         # связь user.settings может не отражать только что закоммиченный PUT /account/profile.

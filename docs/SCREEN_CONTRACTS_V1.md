@@ -231,6 +231,8 @@ profile_contract_v1:
 
 **Screen job:** понимание отношений (L1 рынок). Серьёзный и вирусный формат — **один контракт**, разный tone.
 
+**Контент-слои Guest / Registered / Premium (C2):** см. [COMPATIBILITY_CONTENT_CANON_V1.md](./COMPATIBILITY_CONTENT_CANON_V1.md) — отдельные контракты, `source_depth`, RU voice. Не путать с freemium truncate в `compatibility_access_v0`.
+
 ### 5.1 Mandatory elements (result surface)
 
 | # | Element | `compat_element_id` | Что пользователь получает |

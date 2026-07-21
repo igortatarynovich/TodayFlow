@@ -30,7 +30,7 @@ export function OnboardingScreen4({ state }: OnboardingScreen4Props) {
           {state.hookMessage}
         </p>
         <Link
-          href="/auth"
+          href="/onboarding/welcome?fresh=1"
           className="orbit-button orbit-button-primary"
           style={{
             fontSize: "1rem",

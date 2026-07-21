@@ -88,7 +88,7 @@ export default function TarotCardPage() {
         contentClassName={`${pl.content} ${pl.legacyHost}`}
       >
         <section className={pl.panel} style={{ textAlign: "center" }}>
-          <Link href="/tarot/card-of-the-day">
+          <Link href="/today">
             <DsButton variant="secondary">Вернуться к таро</DsButton>
           </Link>
         </section>
@@ -164,7 +164,7 @@ export default function TarotCardPage() {
               Разобраться с вопросом
             </p>
           </Link>
-          <Link href="/tarot/card-of-the-day" className="orbit-card orbit-card-link" style={{ padding: "var(--orbit-space-lg)", textAlign: "center", textDecoration: "none" }}>
+          <Link href="/today" className="orbit-card orbit-card-link" style={{ padding: "var(--orbit-space-lg)", textAlign: "center", textDecoration: "none" }}>
             <p className="orbit-body-sm" style={{ margin: 0, color: "#0f172a" }}>
               Карта дня
             </p>

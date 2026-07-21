@@ -70,6 +70,11 @@ class Settings(BaseSettings):
     nebius_base_url: str = "https://api.tokenfactory.nebius.com/v1/"  # NEBIUS_BASE_URL
     nebius_model: str = "deepseek-ai/DeepSeek-V4-Pro"  # NEBIUS_MODEL — id модели в Token Factory
     llm_provider: str = "openai"  # LLM_PROVIDER — openai | gemini | nebius
+    # Hard HTTP timeout for OpenAI-compatible clients (Nebius/OpenAI/Gemini proxy).
+    # Prevents Compatibility / Today from hanging the product UI when the provider stalls.
+    # Sync/read path: short. Background jobs use llm_background_timeout_seconds.
+    llm_http_timeout_seconds: float = 12.0  # LLM_HTTP_TIMEOUT_SECONDS
+    llm_background_timeout_seconds: float = 45.0  # LLM_BACKGROUND_TIMEOUT_SECONDS
     # LLM_QUALITY_MODE:
     #   economize — legacy: tight max_tokens, cheap tiers, clipped context (AMLL cost control);
     #   rich — quality-first: full context, multi-step funnels, generous max_tokens, no cheap-tier preference.
@@ -77,6 +82,9 @@ class Settings(BaseSettings):
     # TODAY_NARRATIVE_QUALITY_MODE: strict — post-hoc copy gates + brief-alignment retry;
     # trust_llm — только shape/locale для UI; тон и контекст задаются промптом, без template fallback по «конкретности».
     today_narrative_quality_mode: str = "trust_llm"
+    # COMPATIBILITY_CONTENT_V1 — C2 content contracts (guest finished / registered / premium).
+    # Off until evaluation set beats legacy truncation + LLM baseline. Do not enable in prod early.
+    compatibility_content_v1: bool = False  # COMPATIBILITY_CONTENT_V1=1 to enable
 
     # Push: optional cron secret for POST /internal/push/run-due (set in production)
     push_dispatch_secret: str | None = None

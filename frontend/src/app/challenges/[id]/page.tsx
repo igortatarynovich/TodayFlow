@@ -312,7 +312,7 @@ export default function ChallengeDetailPage() {
 
         <div style={{ display: "flex", gap: "var(--orbit-space-md)", flexWrap: "wrap", marginBottom: "var(--orbit-space-xl)" }}>
           {!isAuthenticated ? (
-            <Link href="/auth" className="orbit-button orbit-button-primary">
+            <Link href="/onboarding/welcome?fresh=1" className="orbit-button orbit-button-primary">
               Зарегистрироваться для участия
             </Link>
           ) : isParticipating ? (

@@ -9,9 +9,9 @@ import { LoadingSpinner } from "@/components/orbit";
 import { AuthWebScreen } from "@/components/product-ui/AuthWebScreen";
 import s from "@/components/product-ui/productWebScreens.module.css";
 import { useAuth } from "@/lib/useAuth";
-import { buildAuthHref, getSafeAuthMode, getSafeRedirectTarget, resolveTargetAfterAuthSession } from "@/lib/authRedirect";
+import { buildAuthHref, getSafeRedirectTarget, resolveTargetAfterAuthSession } from "@/lib/authRedirect";
 import { beginAuthSession } from "@/lib/authSession";
-import { prepareGuestClaimBeforeAuth } from "@/lib/claimGuestProfile";
+import { guestSignupHref } from "@/lib/guestAccessStore";
 import { t } from "@/lib/i18n";
 
 function isAuthSuccessMessage(message: string | null): boolean {
@@ -109,29 +109,30 @@ function AuthPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isAuthenticated, isLoading: authLoading } = useAuth();
-  const [mode, setMode] = useState<"login" | "signup">("login");
+  const mode = "login" as const;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [acceptTerms, setAcceptTerms] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [errors, setErrors] = useState<ValidationError[]>([]);
   const [loading, setLoading] = useState(false);
   const [showContent, setShowContent] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [redirectTarget, setRedirectTarget] = useState("/today");
   const [postAuthTarget, setPostAuthTarget] = useState("/today");
-  const authHref = (nextMode: "login" | "signup") => buildAuthHref(nextMode, redirectTarget);
+  const softSignupHref = guestSignupHref();
   const redirectContext = getRedirectContext(redirectTarget);
 
   useEffect(() => {
     const redirectParam = searchParams?.get("redirect");
     const modeParam = searchParams?.get("mode");
-    setRedirectTarget(getSafeRedirectTarget(redirectParam));
-    setPostAuthTarget(getSafeRedirectTarget(redirectParam));
-    setMode(getSafeAuthMode(modeParam));
-  }, [searchParams]);
+    const safeRedirect = getSafeRedirectTarget(redirectParam);
+    setRedirectTarget(safeRedirect);
+    setPostAuthTarget(safeRedirect);
+    // Password signup retired — send new users into soft onboarding.
+    if (modeParam === "signup") {
+      router.replace(buildAuthHref("signup", redirectParam));
+    }
+  }, [searchParams, router]);
 
   useEffect(() => {
     if (!authLoading && isAuthenticated) {
@@ -145,81 +146,16 @@ function AuthPageContent() {
     }
   }, [authLoading, isAuthenticated]);
 
-  useEffect(() => {
-    if (!authLoading && !isAuthenticated && mode === "signup") {
-      void prepareGuestClaimBeforeAuth();
-    }
-  }, [authLoading, isAuthenticated, mode]);
-
-  const validateForm = (): boolean => {
-    const newErrors: ValidationError[] = [];
-
-    // Email validation
-    if (!email) {
-      newErrors.push({ field: "email", message: t("auth.errors.emailRequired", "Email обязателен") });
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        newErrors.push({ field: "email", message: t("auth.errors.invalidEmail", "Введите корректный email") });
-    }
-
-    // Password validation
-    if (!password) {
-      newErrors.push({ field: "password", message: t("auth.errors.passwordRequired", "Пароль обязателен") });
-    } else if (password.length < 8) {
-      newErrors.push({ field: "password", message: t("auth.errors.passwordMinLength", "Пароль должен содержать минимум 8 символов") });
-    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
-      newErrors.push({
-        field: "password",
-        message: t("auth.errors.passwordComplexity", "Пароль должен содержать заглавные и строчные буквы, а также цифры"),
-      });
-    }
-
-    // Confirm password validation (only for signup)
-    if (mode === "signup") {
-      if (!confirmPassword) {
-        newErrors.push({ field: "confirmPassword", message: t("auth.errors.confirmPasswordRequired", "Подтвердите пароль") });
-      } else if (password !== confirmPassword) {
-        newErrors.push({ field: "confirmPassword", message: t("auth.errors.passwordsDoNotMatch", "Пароли не совпадают") });
-      }
-
-      // Terms validation
-      if (!acceptTerms) {
-        newErrors.push({ field: "acceptTerms", message: t("auth.errors.termsRequired", "Необходимо согласие с условиями использования") });
-      }
-    }
-
-    setErrors(newErrors);
-    return newErrors.length === 0;
-  };
-
   const getFieldError = (fieldName: string): string | undefined => {
     return errors.find(e => e.field === fieldName)?.message;
   };
-
-  const passwordStrength = (): { strength: "weak" | "medium" | "strong"; text: string } => {
-    if (!password) return { strength: "weak", text: "" };
-    if (password.length < 8) return { strength: "weak", text: t("auth.password.strength.weak", "Слабый") };
-    const hasUpper = /[A-Z]/.test(password);
-    const hasLower = /[a-z]/.test(password);
-    const hasNumber = /\d/.test(password);
-    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-    const score = [hasUpper, hasLower, hasNumber, hasSpecial].filter(Boolean).length;
-    if (score <= 2) return { strength: "weak", text: t("auth.password.strength.weak", "Слабый") };
-    if (score === 3) return { strength: "medium", text: t("auth.password.strength.medium", "Средний") };
-    return { strength: "strong", text: t("auth.password.strength.strong", "Сильный") };
-  };
-
-  const strength = passwordStrength();
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setMessage(null);
     setErrors([]);
 
-    if (mode === "signup" && !validateForm()) {
-      return;
-    }
-
-    if (mode === "login" && (!email || !password)) {
+    if (!email || !password) {
       setErrors([{ field: "general", message: t("auth.errors.fillAllFields", "Заполните все поля") }]);
       return;
     }
@@ -227,22 +163,13 @@ function AuthPageContent() {
     setLoading(true);
     try {
       const fallbackTarget = getSafeRedirectTarget(redirectTarget);
-      if (mode === "signup") {
-        const response = await postJson<{ token: string }>("/auth/signup", { email, password });
-        beginAuthSession(response.token);
-        const target = await resolveTargetAfterAuthSession(fallbackTarget);
-        setPostAuthTarget(target);
-        setMessage(t("auth.toast.signupNext", "Аккаунт создан. Открываем следующий шаг."));
-      } else {
-        const response = await postJson<LoginResponse>("/auth/login", { email, password });
-        beginAuthSession(response.token);
-        const target = await resolveTargetAfterAuthSession(fallbackTarget);
-        setPostAuthTarget(target);
-        setMessage(t("auth.toast.loginNext", "Вход выполнен. Открываем следующий шаг."));
-      }
+      const response = await postJson<LoginResponse>("/auth/login", { email, password });
+      beginAuthSession(response.token);
+      const target = await resolveTargetAfterAuthSession(fallbackTarget);
+      setPostAuthTarget(target);
+      setMessage(t("auth.toast.loginNext", "Вход выполнен. Открываем следующий шаг."));
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : mode === "signup" ? t("auth.signup.error", "Ошибка регистрации") : t("auth.login.error", "Ошибка входа");
+      const errorMessage = err instanceof Error ? err.message : t("auth.login.error", "Ошибка входа");
       setMessage(errorMessage);
       const lower = errorMessage.toLowerCase();
       if (
@@ -273,35 +200,18 @@ function AuthPageContent() {
     return <AuthWebScreen mode={mode} onSelectLogin={() => {}} onSelectSignup={() => {}} loginTabLabel="" signupTabLabel="" headline="" lead="" loading />;
   }
 
-  const switchToLogin = () => {
-    setMode("login");
-    router.replace(authHref("login"));
-    setErrors([]);
-    setMessage(null);
-  };
-
-  const switchToSignup = () => {
-    setMode("signup");
-    router.replace(authHref("signup"));
-    setErrors([]);
-    setMessage(null);
-  };
-
   return (
     <AuthWebScreen
       mode={mode}
-      onSelectLogin={switchToLogin}
-      onSelectSignup={switchToSignup}
+      onSelectLogin={() => {}}
+      onSelectSignup={() => router.push(softSignupHref)}
       loginTabLabel={t("auth.page.tab.login", "Вход")}
-      signupTabLabel={t("auth.page.tab.signup", "Регистрация")}
-      headline={mode === "login" ? t("auth.page.headline.login", "Войти в аккаунт") : t("auth.page.headline.signup", "Создать аккаунт")}
-      lead={
-        mode === "login"
-          ? t("auth.page.sub.login", "Вход без потери прогресса и данных.")
-          : t("auth.page.sub.signup", "Создай аккаунт, чтобы запустить персональный контур TodayFlow.")
-      }
+      signupTabLabel={t("auth.page.tab.signup", "Создать мой Today")}
+      loginOnly
+      headline={t("auth.page.headline.login", "Войти в аккаунт")}
+      lead={t("auth.page.sub.login", "Вход без потери прогресса и данных.")}
       productLine={t("auth.page.productLine", "Один вход для Today, Flow, Guidance, Compatibility и Profile.")}
-      guestNavCtaHref={authHref("signup")}
+      guestNavCtaHref={softSignupHref}
       guestNavCtaLabel={t("auth.page.navCta", "Создать мой Today")}
       visible={showContent}
     >
@@ -400,14 +310,10 @@ function AuthPageContent() {
                     value={password}
                     onChange={(e) => {
                       setPassword(e.target.value);
-                      setErrors(errors.filter((e) => e.field !== "password"));
+                      setErrors(errors.filter((errItem) => errItem.field !== "password"));
                     }}
                     className={getFieldError("password") ? "orbit-form-input orbit-form-input-error" : "orbit-form-input"}
-                    placeholder={
-                      mode === "signup"
-                        ? t("auth.form.passwordPlaceholder.signup", "Минимум 8 символов")
-                        : t("auth.form.passwordPlaceholder.login", "Введите пароль")
-                    }
+                    placeholder={t("auth.form.passwordPlaceholder.login", "Введите пароль")}
                     required
                     disabled={loading}
                   />
@@ -431,48 +337,6 @@ function AuthPageContent() {
                     {showPassword ? "👁️" : "👁️‍🗨️"}
                   </button>
                 </div>
-                {mode === "signup" && password && (
-                  <div style={{ marginTop: "var(--orbit-space-xs)" }}>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "var(--orbit-space-xs)",
-                        marginBottom: "4px",
-                      }}
-                    >
-                      <div
-                        style={{
-                          flex: 1,
-                          height: "4px",
-                          background:
-                            strength.strength === "weak"
-                              ? "var(--orbit-color-coral)"
-                              : strength.strength === "medium"
-                                ? "var(--orbit-color-highlight)"
-                                : "var(--orbit-color-success)",
-                          borderRadius: "2px",
-                        }}
-                      />
-                      <span
-                        style={{
-                          fontSize: "0.75rem",
-                          color:
-                            strength.strength === "weak"
-                              ? "var(--orbit-color-coral)"
-                              : strength.strength === "medium"
-                                ? "var(--orbit-color-highlight)"
-                                : "var(--orbit-color-success)",
-                        }}
-                      >
-                        {strength.text}
-                      </span>
-                    </div>
-                    <p className="orbit-body-xs orbit-text-muted" style={{ marginTop: "4px" }}>
-                      {t("auth.form.passwordHint", "Используй заглавные и строчные буквы, цифры")}
-                    </p>
-                  </div>
-                )}
                 {getFieldError("password") && (
                   <p className="orbit-form-error" style={{ marginTop: "var(--orbit-space-xs)", fontSize: "0.875rem" }}>
                     {getFieldError("password")}
@@ -480,95 +344,6 @@ function AuthPageContent() {
                 )}
               </div>
 
-              {/* Confirm Password Field (only for signup) */}
-              {mode === "signup" && (
-                <div style={{ marginBottom: "var(--orbit-space-lg)" }}>
-                  <label className="orbit-form-label" htmlFor="confirmPassword">
-                    {t("auth.errors.confirmPassword", "Подтвердите пароль")}
-                  </label>
-                  <div style={{ position: "relative" }}>
-                    <input
-                      id="confirmPassword"
-                      type={showConfirmPassword ? "text" : "password"}
-                      value={confirmPassword}
-                      onChange={(e) => {
-                        setConfirmPassword(e.target.value);
-                        setErrors(errors.filter((e) => e.field !== "confirmPassword"));
-                      }}
-                      className={getFieldError("confirmPassword") ? "orbit-form-input orbit-form-input-error" : "orbit-form-input"}
-                      placeholder={t("auth.form.confirmPlaceholder", "Повторите пароль")}
-                      required
-                      disabled={loading}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      style={{
-                        position: "absolute",
-                        right: "var(--orbit-space-sm)",
-                        top: "50%",
-                        transform: "translateY(-50%)",
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        color: "var(--orbit-color-slate)",
-                        fontSize: "0.875rem",
-                        padding: "4px",
-                      }}
-                      tabIndex={-1}
-                    >
-                      {showConfirmPassword ? "👁️" : "👁️‍🗨️"}
-                    </button>
-                  </div>
-                  {getFieldError("confirmPassword") && (
-                    <p className="orbit-form-error" style={{ marginTop: "var(--orbit-space-xs)", fontSize: "0.875rem" }}>
-                      {getFieldError("confirmPassword")}
-                    </p>
-                  )}
-                </div>
-              )}
-
-              {/* Terms Checkbox (only for signup) */}
-              {mode === "signup" && (
-                <div style={{ marginBottom: "var(--orbit-space-lg)" }}>
-                  <label
-                    style={{
-                      display: "flex",
-                      alignItems: "flex-start",
-                      gap: "var(--orbit-space-sm)",
-                      cursor: "pointer",
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={acceptTerms}
-                      onChange={(e) => {
-                        setAcceptTerms(e.target.checked);
-                        setErrors(errors.filter((e) => e.field !== "acceptTerms"));
-                      }}
-                      style={{ marginTop: "4px", cursor: "pointer" }}
-                      disabled={loading}
-                    />
-                    <span className="orbit-body-xs orbit-text-muted" style={{ lineHeight: 1.5 }}>
-                      {t("auth.form.termsAgree", "Я согласен с")}{" "}
-                      <Link href="/terms" className="orbit-link-subtle" target="_blank">
-                        {t("auth.form.termsLink", "условиями использования")}
-                      </Link>{" "}
-                      {t("auth.form.termsAnd", "и")}{" "}
-                      <Link href="/privacy" className="orbit-link-subtle" target="_blank">
-                        {t("auth.form.privacyLink", "политикой конфиденциальности")}
-                      </Link>
-                    </span>
-                  </label>
-                  {getFieldError("acceptTerms") && (
-                    <p className="orbit-form-error" style={{ marginTop: "var(--orbit-space-xs)", fontSize: "0.875rem" }}>
-                      {getFieldError("acceptTerms")}
-                    </p>
-                  )}
-                </div>
-              )}
-
-              {/* General Error */}
               {getFieldError("general") && (
                 <div style={{ marginBottom: "var(--orbit-space-md)", padding: "var(--orbit-space-sm)", background: "rgba(244, 165, 160, 0.1)", borderRadius: "var(--orbit-radius-sm)", border: "1px solid var(--orbit-color-coral)" }}>
                   <p className="orbit-body-sm" style={{ color: "var(--orbit-color-coral)", margin: 0 }}>
@@ -577,7 +352,6 @@ function AuthPageContent() {
                 </div>
               )}
 
-              {/* Success/Error Message */}
               {message && (
                 <div
                   style={{
@@ -602,7 +376,6 @@ function AuthPageContent() {
                 </div>
               )}
 
-              {/* Submit Button */}
               <button
                 type="submit"
                 className="orbit-button orbit-button-primary"
@@ -612,55 +385,31 @@ function AuthPageContent() {
                 {loading ? (
                   <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "var(--orbit-space-xs)" }}>
                     <LoadingSpinner size="sm" />
-                    {mode === "signup" ? t("auth.form.pending.signup", "Регистрация…") : t("auth.form.pending.login", "Вход…")}
+                    {t("auth.form.pending.login", "Вход…")}
                   </span>
-                ) : mode === "signup" ? (
-                  t("auth.form.submit.signup", "Зарегистрироваться")
                 ) : (
                   t("auth.form.submit.login", "Войти")
                 )}
               </button>
 
-              {mode === "login" ? (
-                <div style={{ marginTop: "var(--orbit-space-md)", textAlign: "center" }}>
-                  <Link
-                    href={redirectTarget === "/today" ? "/auth/forgot-password" : `/auth/forgot-password?redirect=${encodeURIComponent(redirectTarget)}`}
-                    className="orbit-link"
-                  >
-                    {t("auth.form.forgotPassword", "Забыли пароль?")}
-                  </Link>
-                </div>
-              ) : null}
+              <div style={{ marginTop: "var(--orbit-space-md)", textAlign: "center" }}>
+                <Link
+                  href={redirectTarget === "/today" ? "/auth/forgot-password" : `/auth/forgot-password?redirect=${encodeURIComponent(redirectTarget)}`}
+                  className="orbit-link"
+                >
+                  {t("auth.form.forgotPassword", "Забыли пароль?")}
+                </Link>
+              </div>
 
-              {mode === "login" ? <OAuthButtons /> : null}
+              <OAuthButtons />
             </form>
 
-            {/* Switch Mode Link */}
             <div style={{ marginTop: "var(--orbit-space-lg)", textAlign: "center" }}>
               <p className="orbit-body-sm orbit-text-muted">
-                {mode === "login" ? (
-                  <>
-                    {t("auth.switch.noAccount", "Нет аккаунта?")}{" "}
-                    <button
-                      type="button"
-                      onClick={switchToSignup}
-                      style={{ background: "none", border: "none", cursor: "pointer", padding: 0, color: "var(--orbit-color-primary)", textDecoration: "underline" }}
-                    >
-                      {t("auth.switch.register", "Зарегистрируйся")}
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    {t("auth.switch.hasAccount", "Уже есть аккаунт?")}{" "}
-                    <button
-                      type="button"
-                      onClick={switchToLogin}
-                      style={{ background: "none", border: "none", cursor: "pointer", padding: 0, color: "var(--orbit-color-primary)", textDecoration: "underline" }}
-                    >
-                      {t("auth.switch.logIn", "Войди")}
-                    </button>
-                  </>
-                )}
+                {t("auth.switch.noAccount", "Нет аккаунта?")}{" "}
+                <Link href={softSignupHref} className="orbit-link">
+                  {t("auth.page.navCta", "Создать мой Today")}
+                </Link>
               </p>
             </div>
           </div>

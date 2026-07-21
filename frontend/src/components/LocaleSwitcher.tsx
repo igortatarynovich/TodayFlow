@@ -4,16 +4,15 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getLocale, setLocale } from "@/lib/i18n";
 
-const LOCALE_STORAGE_KEY = "todayflow_locale";
+const LOCALE_STORAGE_KEY = "todayflow_locale_v2";
 const SUPPORTED_LOCALES = [
+  { value: "ru", label: "RU" },
   { value: "en", label: "EN" },
-  { value: "ru", label: "RU" }
 ];
 
 export default function LocaleSwitcher() {
   const router = useRouter();
   const [locale, setLocaleState] = useState(getLocale());
-
   const initializedRef = useRef(false);
 
   useEffect(() => {
@@ -25,7 +24,7 @@ export default function LocaleSwitcher() {
       return;
     }
     const stored = window.localStorage.getItem(LOCALE_STORAGE_KEY);
-    if (stored) {
+    if (stored === "ru" || stored === "en") {
       if (stored !== locale) {
         setLocale(stored);
         setLocaleState(stored);
@@ -33,14 +32,14 @@ export default function LocaleSwitcher() {
       }
       return;
     }
-    const browserLang = window.navigator.language?.split("-")[0] ?? "";
-    const fallback = SUPPORTED_LOCALES.some((opt) => opt.value === browserLang) ? browserLang : getLocale();
+    // Product default: Russian (do not auto-pick browser English).
+    const fallback = "ru";
+    setLocale(fallback);
+    setLocaleState(fallback);
+    window.localStorage.setItem(LOCALE_STORAGE_KEY, fallback);
     if (fallback !== locale) {
-      setLocale(fallback);
-      setLocaleState(fallback);
       router.refresh();
     }
-    window.localStorage.setItem(LOCALE_STORAGE_KEY, fallback);
   }, [locale, router]);
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

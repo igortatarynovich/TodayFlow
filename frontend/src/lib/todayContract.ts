@@ -91,7 +91,19 @@ export function isTodayContractFallback(contract: TodayContractV1 | null | undef
 
 export async function fetchTodayContractV1(targetDate?: string): Promise<TodayContractV1> {
   const qs = targetDate ? `?target_date=${encodeURIComponent(targetDate)}` : "";
-  return getJson<TodayContractV1>(`/today/contract${qs}`);
+  // Hard client budget: if contract LLM stalls, Today must paint via fallback — not hang forever.
+  const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+  const timer =
+    controller && typeof window !== "undefined"
+      ? window.setTimeout(() => controller.abort(), 12_000)
+      : null;
+  try {
+    return await getJson<TodayContractV1>(`/today/contract${qs}`, {
+      signal: controller?.signal,
+    });
+  } finally {
+    if (timer != null) window.clearTimeout(timer);
+  }
 }
 
 export type TodayStoryRefreshResult = {

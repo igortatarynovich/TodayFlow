@@ -77,7 +77,7 @@ export function TarotWebHub({
   submitDisabled,
   submitLabel,
   cardOfDayHint,
-  cardOfDayHref = "/tarot/card-of-the-day",
+  cardOfDayHref = "/today",
   history = [],
   lastQuestion,
   flowContent,

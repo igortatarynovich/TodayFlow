@@ -179,6 +179,12 @@ def numerology_daily_reveal(
 
     _ = request_locale(request)
     body = payload or NumerologyDailyRevealPayload()
+    source = (body.reveal_source or "").strip().lower()
+    if source not in {"today", "today_ritual", "morning_ritual", "day_ritual", "ritual"}:
+        raise HTTPException(
+            status_code=403,
+            detail="day_number_only_in_today",
+        )
     day = day_symbols.resolve_local_date(local_date=body.local_date, timezone_name=body.timezone)
     guest_id = (x_guest_session_id or "").strip()
     if user is not None:

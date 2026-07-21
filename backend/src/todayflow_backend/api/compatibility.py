@@ -67,6 +67,12 @@ from todayflow_backend.services.compatibility_scenario_tone import (
     resolve_scenario_format,
 )
 from todayflow_backend.services.compatibility_learning_context import build_compatibility_learning_context
+from todayflow_backend.services.compatibility_access_v0 import (
+    apply_paragraph_gate,
+    resolve_compat_access_tier,
+    shape_product_surface_for_tier,
+)
+from todayflow_backend.services.compatibility_observability_v0 import log_compat, new_compat_request_id
 from todayflow_backend.services.compatibility_attachment_knowledge_v0 import (
     ensure_attachment_lens_hypotheses_v0,
 )
@@ -161,9 +167,11 @@ class SignCompatibilityResponse(BaseModel):
     product_surface: SignCompatibilityProductSurface
     generation_source: Optional[str] = None
     pair_dynamics: Optional[dict] = None
-    content_locale: str = "en"
+    content_locale: str = "ru"
     funnel_artifact: Optional[CompatibilityFunnelArtifact] = None
     attachment_reference: CompatibilityAttachmentReferenceV0 | None = None
+    access_disclosure: Optional[dict] = None
+    generation_lifecycle: Optional[dict] = None
 
 
 class CompatibilityDynamicsRequest(BaseModel):
@@ -171,6 +179,7 @@ class CompatibilityDynamicsRequest(BaseModel):
     from_sign: Optional[str] = None
     to_sign: Optional[str] = None
     relationship_context: Optional[str] = None
+    # template = baseline only; llm = baseline + async enrichment (never blocks read path)
     generation: Literal["template", "llm"] = "llm"
     name_1: Optional[str] = None
     name_2: Optional[str] = None
@@ -229,7 +238,13 @@ def signs_compatibility(
     from_meta = lookup_sign_metadata(from_sign)
     to_meta = lookup_sign_metadata(to_sign)
     if not from_meta or not to_meta:
-        raise HTTPException(status_code=400, detail="invalid_sign_pair")
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "code": "invalid_sign_pair",
+                "message": "Не удалось распознать пару знаков. Выберите оба знака из списка.",
+            },
+        )
 
     from_display = localized_sign_name(from_meta["id"], locale=effective_locale)
     to_display = localized_sign_name(to_meta["id"], locale=effective_locale)
@@ -268,33 +283,37 @@ def signs_compatibility(
     )
     paid = _is_paid_user(user, db)
     personalized = None
+    access_tier_signs = resolve_compat_access_tier(user, db)
 
-    if include_personalized and user is not None:
-        core_profile = core_profile_service.build(db, user)
-        consistency = orchestrator.build_daily_guidance(
-            core_profile=core_profile,
-            numerology=None,
-            needs="love",
-        )
-        user_sun = (core_profile.get("astro") or {}).get("sun_sign")
-        personal_focus = _compatibility_personal_focus_phrase(consistency.get("focus"), locale=effective_locale)
-        personalized = {
-            "profile_ready": core_profile.get("is_ready"),
-            "profile_hash": core_profile.get("profile_hash"),
-            "headline": translate("compat.personalized.headline", locale=effective_locale).format(focus=personal_focus),
-            "hint": _compatibility_personal_hint(user_sun, to_display, locale=effective_locale),
-            "focus": personal_focus,
-            "do_focus": _compatibility_clean_personal_line(
-                consistency.get("do_focus"),
-                fallback=_quick_sign_strongest_text(static_payload["score"], el_rel, locale=effective_locale),
-                locale=effective_locale,
-            ),
-            "avoid_focus": _compatibility_clean_personal_line(
-                consistency.get("avoid_focus"),
-                fallback=_quick_sign_friction_text(static_payload["score"], rh_rel, locale=effective_locale),
-                locale=effective_locale,
-            ),
-        }
+    if include_personalized and user is not None and access_tier_signs != "guest":
+        try:
+            core_profile = core_profile_service.build_cached_or_baseline(db, user)
+            consistency = orchestrator.build_daily_guidance(
+                core_profile=core_profile,
+                numerology=None,
+                needs="love",
+            )
+            user_sun = (core_profile.get("astro") or {}).get("sun_sign")
+            personal_focus = _compatibility_personal_focus_phrase(consistency.get("focus"), locale=effective_locale)
+            personalized = {
+                "profile_ready": core_profile.get("is_ready"),
+                "profile_hash": core_profile.get("profile_hash"),
+                "headline": translate("compat.personalized.headline", locale=effective_locale).format(focus=personal_focus),
+                "hint": _compatibility_personal_hint(user_sun, to_display, locale=effective_locale),
+                "focus": personal_focus,
+                "do_focus": _compatibility_clean_personal_line(
+                    consistency.get("do_focus"),
+                    fallback=_quick_sign_strongest_text(static_payload["score"], el_rel, locale=effective_locale),
+                    locale=effective_locale,
+                ),
+                "avoid_focus": _compatibility_clean_personal_line(
+                    consistency.get("avoid_focus"),
+                    fallback=_quick_sign_friction_text(static_payload["score"], rh_rel, locale=effective_locale),
+                    locale=effective_locale,
+                ),
+            }
+        except Exception:
+            personalized = None
 
     pair_dyn_for_funnel = build_pair_dynamics(
         user1_label=translate("compat.label.you", locale=effective_locale),
@@ -323,6 +342,35 @@ def signs_compatibility(
         llm_base_model=None,
     )
 
+    product_surface, access_disclosure = shape_product_surface_for_tier(
+        product_surface,
+        tier=access_tier_signs,
+        overall_score=static_payload["score"],
+        locale=effective_locale,
+    )
+    from todayflow_backend.services.compatibility_content_v1.apply_guest_v1 import (
+        maybe_replace_guest_surface,
+    )
+
+    product_surface, _content_v1, access_disclosure = maybe_replace_guest_surface(
+        product_surface,
+        tier=access_tier_signs,
+        from_sign=from_meta["id"],
+        to_sign=to_meta["id"],
+        relationship_context=ctx_norm,
+        locale=effective_locale,
+        score=int(static_payload["score"]),
+        has_birth_dates=False,
+        access_disclosure=access_disclosure,
+    )
+    free_paragraphs, full_paragraphs = apply_paragraph_gate(
+        list(static_payload["paragraphs"] or []),
+        tier=access_tier_signs,
+    )
+    if access_tier_signs == "guest":
+        personalized = None
+        funnel_artifact = None
+
     return SignCompatibilityResponse(
         from_sign=from_meta["id"],
         to_sign=to_meta["id"],
@@ -333,14 +381,15 @@ def signs_compatibility(
         score=static_payload["score"],
         summary=static_payload["summary"],
         quick_reading=static_payload["quick_reading"],
-        free_paragraphs=static_payload["paragraphs"][:3],
-        full_paragraphs=static_payload["paragraphs"] if paid else static_payload["paragraphs"][:3],
-        is_paid=paid,
+        free_paragraphs=free_paragraphs,
+        full_paragraphs=full_paragraphs,
+        is_paid=paid or access_tier_signs == "paid",
         content_id=static_payload["content_id"],
         personalized=personalized,
         relationship_context=ctx_norm if relationship_context else None,
         product_surface=product_surface,
         generation_source="template",
+        access_disclosure=access_disclosure,
         pair_dynamics=pair_dyn_for_funnel,
         content_locale=effective_locale,
         funnel_artifact=funnel_artifact,
@@ -357,23 +406,61 @@ def compatibility_dynamics(
     orchestrator: InterpretationOrchestrator = Depends(get_interpretation_orchestrator),
 ) -> SignCompatibilityResponse:
     """Разбор динамики пары: быстрый (знаки) или точный (даты рождения), опционально LLM-текст."""
+    request_id = new_compat_request_id()
+    access_tier = resolve_compat_access_tier(user, db)
+    log_compat(
+        "request",
+        request_id=request_id,
+        mode=body.mode,
+        generation=body.generation,
+        tier=access_tier,
+        user_id=user.id if user is not None else None,
+        from_sign=body.from_sign,
+        to_sign=body.to_sign,
+        has_dates=bool(body.birth_date_1 and body.birth_date_2),
+    )
+
     if body.mode == "precise":
         if body.birth_date_1 is None or body.birth_date_2 is None:
-            raise HTTPException(status_code=400, detail="birth_dates_required")
+            raise HTTPException(
+                status_code=422,
+                detail={
+                    "code": "birth_dates_required",
+                    "message": "Добавьте обе даты рождения, чтобы построить совместимость.",
+                },
+            )
         r1 = resolve_sign_meta_for_date(body.birth_date_1)
         r2 = resolve_sign_meta_for_date(body.birth_date_2)
         if not r1 or not r2:
-            raise HTTPException(status_code=400, detail="invalid_birth_dates")
+            raise HTTPException(
+                status_code=422,
+                detail={
+                    "code": "invalid_birth_dates",
+                    "message": "Проверьте даты рождения — по ним не удалось определить знаки.",
+                },
+            )
         from_meta = lookup_sign_metadata(str(r1.get("id", "")))
         to_meta = lookup_sign_metadata(str(r2.get("id", "")))
     else:
         if not body.from_sign or not body.to_sign:
-            raise HTTPException(status_code=400, detail="signs_required")
+            raise HTTPException(
+                status_code=422,
+                detail={
+                    "code": "signs_required",
+                    "message": "Добавьте второй знак, чтобы построить совместимость.",
+                },
+            )
         from_meta = lookup_sign_metadata(body.from_sign)
         to_meta = lookup_sign_metadata(body.to_sign)
 
     if not from_meta or not to_meta:
-        raise HTTPException(status_code=400, detail="invalid_sign_pair")
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "code": "invalid_sign_pair",
+                "message": "Не удалось распознать пару знаков. Выберите оба знака из списка.",
+            },
+        )
 
     effective_locale = request_locale(http_request, preferred=body.locale)
     loc = effective_locale
@@ -462,83 +549,161 @@ def compatibility_dynamics(
 
     paid = _is_paid_user(user, db)
     personalized = None
-    if body.include_personalized and user is not None:
-        core_profile = core_profile_service.build(db, user)
-        consistency = orchestrator.build_daily_guidance(
-            core_profile=core_profile,
-            numerology=None,
-            needs="love",
-        )
-        user_sun = (core_profile.get("astro") or {}).get("sun_sign")
-        personal_focus = _compatibility_personal_focus_phrase(consistency.get("focus"), locale=effective_locale)
-        personalized = {
-            "profile_ready": core_profile.get("is_ready"),
-            "profile_hash": core_profile.get("profile_hash"),
-            "headline": translate("compat.personalized.headline", locale=effective_locale).format(focus=personal_focus),
-            "hint": _compatibility_personal_hint(user_sun, to_display, locale=effective_locale),
-            "focus": personal_focus,
-            "do_focus": _compatibility_clean_personal_line(
-                consistency.get("do_focus"),
-                fallback=_quick_sign_strongest_text(static_payload["score"], el_rel, locale=effective_locale),
-                locale=effective_locale,
-            ),
-            "avoid_focus": _compatibility_clean_personal_line(
-                consistency.get("avoid_focus"),
-                fallback=_quick_sign_friction_text(static_payload["score"], rh_rel, locale=effective_locale),
-                locale=effective_locale,
-            ),
-        }
+    # build_daily_guidance is deterministic. Never call core_profile.build() here — it can
+    # trigger portrait LLM (~12–25s) and make Compatibility look crashed.
+    if body.include_personalized and user is not None and access_tier != "guest":
+        try:
+            core_profile = core_profile_service.build_cached_or_baseline(db, user)
+            consistency = orchestrator.build_daily_guidance(
+                core_profile=core_profile,
+                numerology=None,
+                needs="love",
+            )
+            user_sun = (core_profile.get("astro") or {}).get("sun_sign")
+            personal_focus = _compatibility_personal_focus_phrase(consistency.get("focus"), locale=effective_locale)
+            personalized = {
+                "profile_ready": core_profile.get("is_ready"),
+                "profile_hash": core_profile.get("profile_hash"),
+                "headline": translate("compat.personalized.headline", locale=effective_locale).format(focus=personal_focus),
+                "hint": _compatibility_personal_hint(user_sun, to_display, locale=effective_locale),
+                "focus": personal_focus,
+                "do_focus": _compatibility_clean_personal_line(
+                    consistency.get("do_focus"),
+                    fallback=_quick_sign_strongest_text(static_payload["score"], el_rel, locale=effective_locale),
+                    locale=effective_locale,
+                ),
+                "avoid_focus": _compatibility_clean_personal_line(
+                    consistency.get("avoid_focus"),
+                    fallback=_quick_sign_friction_text(static_payload["score"], rh_rel, locale=effective_locale),
+                    locale=effective_locale,
+                ),
+            }
+        except Exception as exc:
+            log_compat(
+                "generation",
+                request_id=request_id,
+                layer="personalized",
+                error=str(exc)[:300],
+                tier=access_tier,
+            )
+            personalized = None
 
     td = (str(personalized.get("do_focus", "")).strip() if personalized else "") or None
     ta = (str(personalized.get("avoid_focus", "")).strip() if personalized else "") or None
     tf = (str(personalized.get("focus", "")).strip() if personalized else "") or None
 
-    base_llm = None
-    if body.generation == "llm" and scenario_tone.tone_mode != "playful":
-        base_llm = generate_llm_base_model(
-            pair_display=f"{from_display} × {to_display}",
-            user1_label=user1_label,
-            user2_label=user2_label,
-            relationship_context=ctx_norm,
-            pair_dynamics=pair_dyn,
-            signals=signals,
-            element_relation=el_rel,
-            rhythm_relation=rh_rel,
-            today_do=td,
-            today_avoid=ta,
-            today_focus=tf,
-            locale=effective_locale,
-            scenario_tone=scenario_tone,
-            scenario_context=scenario_context,
-            compatibility_learning=compat_learning,
-        )
+    # C1: read path is always deterministic baseline. LLM runs only as a background job.
+    from todayflow_backend.services.generation_jobs_v0 import (
+        enqueue_or_reuse,
+        job_to_public,
+        lifecycle_payload,
+        make_fingerprint,
+        schedule_job_runner,
+    )
 
-    if body.generation == "llm":
-        product_surface, gen_src, _ = run_compatibility_dynamics_pipeline(
+    base_llm = None
+    product_surface = template_surface
+    product_surface.score_tagline = apply_scenario_tone_to_template_tagline(
+        product_surface.score_tagline, scenario_tone, locale=effective_locale
+    )
+    gen_src = "template"
+    generation_lifecycle = lifecycle_payload(
+        status="baseline_ready",
+        source="template",
+        is_fully_personal=False,
+    )
+
+    want_enrich = (
+        body.generation == "llm"
+        and access_tier in ("registered", "paid")
+        and scenario_tone.tone_mode != "playful"
+    )
+    if body.generation == "llm" and access_tier == "guest":
+        log_compat("generation", request_id=request_id, skipped="guest_teaser_no_llm", tier=access_tier)
+
+    if want_enrich:
+        fingerprint = make_fingerprint(
+            "compat_dyn",
+            body.mode,
+            from_meta["id"],
+            to_meta["id"],
+            ctx_norm,
+            effective_locale,
+            scenario_tone.format_id,
+            body.topic_id,
+            body.reading_id,
+            body.series_id,
+            access_tier,
+        )
+        idem = f"compatibility:{from_meta['id']}:{to_meta['id']}:{access_tier}:{fingerprint}"
+        job_req = {
+            "mode": body.mode,
+            "from_sign": from_meta["id"],
+            "to_sign": to_meta["id"],
+            "relationship_context": ctx_norm,
+            "locale": effective_locale,
+            "name_1": body.name_1,
+            "name_2": body.name_2,
+            "block_feedback": fb_clean or None,
+            "topic_id": body.topic_id,
+            "reading_id": body.reading_id,
+            "series_id": body.series_id,
+            "format_id": body.format_id,
+            "today_do": td,
+            "today_avoid": ta,
+            "today_focus": tf,
+        }
+        job, _created = enqueue_or_reuse(
             db,
-            template_surface=template_surface,
-            pair_display=f"{from_display} × {to_display}",
-            user1_label=user1_label,
-            user2_label=user2_label,
-            relationship_context=ctx_norm,
-            pair_dynamics=pair_dyn,
-            signals=signals,
-            element_relation=el_rel,
-            rhythm_relation=rh_rel,
-            block_feedback=fb_clean or None,
+            idempotency_key=idem,
+            fingerprint=fingerprint,
+            module="compatibility",
+            surface="dynamics_registered",
             user_id=user.id if user is not None else None,
-            locale=effective_locale,
-            base_model_layer=base_llm.model_dump() if base_llm else None,
-            scenario_tone=scenario_tone,
-            scenario_context=scenario_context,
-            compatibility_learning=compat_learning,
+            request_payload=job_req,
+            baseline_payload={
+                "score": static_payload["score"],
+                "from_sign": from_meta["id"],
+                "to_sign": to_meta["id"],
+            },
         )
-    else:
-        product_surface = template_surface
-        product_surface.score_tagline = apply_scenario_tone_to_template_tagline(
-            product_surface.score_tagline, scenario_tone, locale=effective_locale
-        )
-        gen_src = "template"
+        if job.status == "enriched" and isinstance(job.result_payload, dict):
+            generation_lifecycle = job_to_public(job)
+            gen_src = "llm"
+            # Prefer cached enriched surface; still apply encyclopedia below on a copy.
+            try:
+                cached_ps = job.result_payload.get("product_surface")
+                if isinstance(cached_ps, dict):
+                    product_surface = SignCompatibilityProductSurface.model_validate(cached_ps)
+            except Exception:
+                gen_src = "template"
+                generation_lifecycle = lifecycle_payload(
+                    status="baseline_ready",
+                    job_id=job.id,
+                    fingerprint=fingerprint,
+                    source="template",
+                    is_fully_personal=False,
+                )
+        else:
+            generation_lifecycle = {
+                **job_to_public(job),
+                "status": "enrichment_pending"
+                if job.status != "enrichment_failed"
+                else "enrichment_failed",
+            }
+            if job.status != "enrichment_failed":
+                from todayflow_backend.services.compatibility_enrichment_v0 import (
+                    run_compatibility_enrichment_job,
+                )
+
+                schedule_job_runner(job.id, run_compatibility_enrichment_job)
+            log_compat(
+                "generation",
+                request_id=request_id,
+                queued_job_id=job.id,
+                status=generation_lifecycle.get("status"),
+                tier=access_tier,
+            )
 
     apply_encyclopedia_to_product_surface(product_surface, encyclopedia_selection)
 
@@ -608,6 +773,48 @@ def compatibility_dynamics(
 
     _ensure_attachment_lens_for_user(db, user, attachment_reference)
 
+    product_surface, access_disclosure = shape_product_surface_for_tier(
+        product_surface,
+        tier=access_tier,
+        overall_score=display_score,
+        locale=effective_locale,
+    )
+    from todayflow_backend.services.compatibility_content_v1.apply_guest_v1 import (
+        maybe_replace_guest_surface,
+    )
+
+    product_surface, _content_v1, access_disclosure = maybe_replace_guest_surface(
+        product_surface,
+        tier=access_tier,
+        from_sign=from_meta["id"],
+        to_sign=to_meta["id"],
+        relationship_context=ctx_norm,
+        locale=effective_locale,
+        score=int(display_score),
+        has_birth_dates=(body.mode or "").strip().lower() == "precise",
+        access_disclosure=access_disclosure,
+    )
+    free_paragraphs, full_paragraphs = apply_paragraph_gate(
+        list(static_payload["paragraphs"] or []),
+        tier=access_tier,
+    )
+    # Guests never get personalized Today-alignment copy.
+    if access_tier == "guest":
+        personalized = None
+        funnel_artifact = None
+
+    log_compat(
+        "response",
+        request_id=request_id,
+        tier=access_tier,
+        source=gen_src,
+        score=display_score,
+        blocks=len(product_surface.blocks),
+        locale=effective_locale,
+        lifecycle=generation_lifecycle.get("status"),
+        job_id=generation_lifecycle.get("job_id"),
+    )
+
     return SignCompatibilityResponse(
         from_sign=from_meta["id"],
         to_sign=to_meta["id"],
@@ -618,9 +825,9 @@ def compatibility_dynamics(
         score=display_score,
         summary=static_payload["summary"],
         quick_reading=static_payload["quick_reading"],
-        free_paragraphs=static_payload["paragraphs"][:3],
-        full_paragraphs=static_payload["paragraphs"] if paid else static_payload["paragraphs"][:3],
-        is_paid=paid,
+        free_paragraphs=free_paragraphs,
+        full_paragraphs=full_paragraphs,
+        is_paid=paid or access_tier == "paid",
         content_id=static_payload["content_id"],
         personalized=personalized,
         relationship_context=ctx_norm if body.relationship_context else None,
@@ -630,7 +837,166 @@ def compatibility_dynamics(
         content_locale=effective_locale,
         funnel_artifact=funnel_artifact,
         attachment_reference=attachment_reference,
+        access_disclosure=access_disclosure,
+        generation_lifecycle=generation_lifecycle,
     )
+
+
+class CompatibilityJobResponse(BaseModel):
+    job: dict
+    product_surface: Optional[SignCompatibilityProductSurface] = None
+    generation_source: Optional[str] = None
+    score: Optional[int] = None
+    summary: Optional[str] = None
+    access_disclosure: Optional[dict] = None
+
+
+@router.get("/dynamics/jobs/{job_id}", response_model=CompatibilityJobResponse)
+def get_compatibility_dynamics_job(
+    job_id: int,
+    user: Optional[User] = Depends(get_optional_user),
+    db: Session = Depends(get_session),
+) -> CompatibilityJobResponse:
+    from todayflow_backend.db.models import GenerationJob
+    from todayflow_backend.services.generation_jobs_v0 import job_to_public
+
+    job = db.query(GenerationJob).filter(GenerationJob.id == job_id).first()
+    if job is None or job.module != "compatibility":
+        raise HTTPException(status_code=404, detail="job_not_found")
+    if job.user_id is not None and (user is None or user.id != job.user_id):
+        raise HTTPException(status_code=403, detail="job_forbidden")
+    public = job_to_public(job)
+    surface = None
+    score = None
+    summary = None
+    disclosure = None
+    gen_src = None
+    if job.status == "enriched" and isinstance(job.result_payload, dict):
+        try:
+            ps = job.result_payload.get("product_surface")
+            if isinstance(ps, dict):
+                surface = SignCompatibilityProductSurface.model_validate(ps)
+            score = job.result_payload.get("score")
+            summary = job.result_payload.get("summary")
+            disclosure = job.result_payload.get("access_disclosure")
+            gen_src = job.result_payload.get("generation_source") or "llm"
+        except Exception:
+            surface = None
+    return CompatibilityJobResponse(
+        job=public,
+        product_surface=surface,
+        generation_source=gen_src,
+        score=score,
+        summary=summary,
+        access_disclosure=disclosure,
+    )
+
+
+@router.post("/dynamics/jobs/{job_id}/retry", response_model=CompatibilityJobResponse)
+def retry_compatibility_dynamics_job(
+    job_id: int,
+    user: User = Depends(require_user),
+    db: Session = Depends(get_session),
+) -> CompatibilityJobResponse:
+    from todayflow_backend.db.models import GenerationJob
+    from todayflow_backend.services.compatibility_enrichment_v0 import run_compatibility_enrichment_job
+    from todayflow_backend.services.generation_jobs_v0 import job_to_public, schedule_job_runner
+
+    job = db.query(GenerationJob).filter(GenerationJob.id == job_id).first()
+    if job is None or job.module != "compatibility":
+        raise HTTPException(status_code=404, detail="job_not_found")
+    if job.user_id != user.id:
+        raise HTTPException(status_code=403, detail="job_forbidden")
+    if job.status not in ("enrichment_failed", "stale", "enrichment_pending"):
+        raise HTTPException(status_code=409, detail="job_not_retryable")
+    job.status = "enrichment_pending"
+    job.error_message = None
+    job.locked_at = None
+    job.attempt_count = 0
+    job.updated_at = utc_naive_now()
+    db.add(job)
+    db.commit()
+    db.refresh(job)
+    schedule_job_runner(job.id, run_compatibility_enrichment_job)
+    return CompatibilityJobResponse(job=job_to_public(job))
+
+
+class CompatibilityPremiumRequest(BaseModel):
+    from_sign: str
+    to_sign: str
+    relationship_context: Optional[str] = None
+    locale: Optional[str] = None
+    question: Optional[str] = None
+
+
+@router.post("/dynamics/premium", response_model=CompatibilityJobResponse)
+def enqueue_compatibility_premium(
+    http_request: Request,
+    body: CompatibilityPremiumRequest,
+    user: User = Depends(require_user),
+    db: Session = Depends(get_session),
+) -> CompatibilityJobResponse:
+    """Paid-only: enqueue premium guidance pack on explicit user request (never pre-generated)."""
+    from todayflow_backend.services.generation_jobs_v0 import (
+        enqueue_or_reuse,
+        job_to_public,
+        make_fingerprint,
+        schedule_job_runner,
+    )
+
+    tier = resolve_compat_access_tier(user, db)
+    if tier != "paid":
+        raise HTTPException(
+            status_code=402,
+            detail={
+                "code": "premium_required",
+                "message": "Премиум-разбор доступен по подписке и только по запросу.",
+            },
+        )
+    from_meta = lookup_sign_metadata(body.from_sign)
+    to_meta = lookup_sign_metadata(body.to_sign)
+    if not from_meta or not to_meta:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "code": "invalid_sign_pair",
+                "message": "Не удалось распознать пару знаков.",
+            },
+        )
+    locale = request_locale(http_request, preferred=body.locale)
+    ctx = normalize_relationship_context(body.relationship_context)
+    fingerprint = make_fingerprint(
+        "compat_premium",
+        from_meta["id"],
+        to_meta["id"],
+        ctx,
+        locale,
+        (body.question or "").strip()[:200],
+    )
+    idem = f"compatibility_premium:{user.id}:{from_meta['id']}:{to_meta['id']}:{fingerprint}"
+    job, _ = enqueue_or_reuse(
+        db,
+        idempotency_key=idem,
+        fingerprint=fingerprint,
+        module="compatibility",
+        surface="premium_guidance",
+        user_id=user.id,
+        request_payload={
+            "from_sign": from_meta["id"],
+            "to_sign": to_meta["id"],
+            "relationship_context": ctx,
+            "locale": locale,
+            "question": (body.question or "").strip() or None,
+            "kind": "premium_guidance",
+        },
+    )
+    if job.status != "enriched":
+        from todayflow_backend.services.compatibility_premium_enrichment_v0 import (
+            run_compatibility_premium_job,
+        )
+
+        schedule_job_runner(job.id, run_compatibility_premium_job)
+    return CompatibilityJobResponse(job=job_to_public(job))
 
 
 def _funnel_today_alignment_from_personalized(

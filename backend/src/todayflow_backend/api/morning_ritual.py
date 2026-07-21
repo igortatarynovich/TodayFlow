@@ -216,7 +216,9 @@ async def get_morning_ritual(
     from todayflow_backend.api.practices import get_subscription_level
     subscription_level = get_subscription_level(user, db)
     is_paid = subscription_level in ["lite", "pro"] or user.is_paid
-    core_profile = core_profile_service.build(db, user)
+    # Never block Today/morning first paint on portrait LLM — use cache/snapshot/baseline.
+    # Full portrait generation stays on Profile (`CoreProfileService.build`).
+    core_profile = core_profile_service.build_cached_or_baseline(db, user)
 
     tarot_explanation: dict = {"status": "not_revealed", "personalized": False}
     if card_revealed and is_paid and not fast_mode:
@@ -960,174 +962,27 @@ async def _get_daily_horoscope(
     user_prompt = None
     model_id = None
 
-    try:
-        from todayflow_backend.core.config import settings
-        from todayflow_backend.core.llm_openai_compatible import (
-            chat_completion_plain,
-            get_openai_compatible_client,
-            is_llm_chat_configured,
-            resolve_default_chat_model,
-            resolve_max_tokens,
-        )
-
-        if not is_llm_chat_configured():
-            generation = learning_service.log_generation(
-                db,
-                module="daily_foundation",
-                surface="daily_foundation",
-                user_id=user.id,
-                core_profile_snapshot_id=latest_snapshot.id if latest_snapshot else None,
-                prompt_version_id=prompt_version.id,
-                model=None,
-                locale=locale,
-                input_payload={"target_date": target_date.isoformat()},
-                system_prompt=DAILY_HOROSCOPE_PROMPT,
-                user_prompt=None,
-                normalized_response=fallback,
-                status="fallback",
-                used_fallback=True,
-                duration_ms=int((perf_counter() - started_at) * 1000),
-            )
-            return sanitize_daily_horoscope_payload(fallback), generation.id
-
-        import json
-        import re
-
-        client = get_openai_compatible_client()
-        if client is None:
-            raise RuntimeError("llm_client_unavailable")
-        model_id = resolve_default_chat_model()
-
-        interpretation = (core_profile or {}).get("interpretation") or {}
-        daily_interpretation = (core_profile or {}).get("daily_interpretation") or {}
-        astro = (core_profile or {}).get("astro") or {}
-        numerology = (core_profile or {}).get("numerology") or {}
-        baseline = (core_profile or {}).get("baseline") or {}
-        person = (core_profile or {}).get("person") or {}
-
-        prompt_parts = [
-            f"Дата: {target_date.isoformat()}",
-            f"Локаль: {locale}",
-            "=== ПРОФИЛЬ ===",
-            f"Имя: {person.get('first_name') or person.get('display_name') or 'не указано'}",
-            f"Знак: {astro.get('sun_sign') or 'не определен'}",
-            f"Элемент: {astro.get('sun_element') or 'не определен'}",
-            f"Модальность: {astro.get('sun_modality') or 'не определена'}",
-            f"Число пути: {numerology.get('life_path') or 'не определено'}",
-            f"Архетип: {baseline.get('archetype_seed') or 'не определен'}",
-            f"Ритм: {baseline.get('rhythm_style') or 'не определен'}",
-            f"Фокус: {baseline.get('element_focus') or 'не определен'}",
-            "",
-            "=== ИНТЕРПРЕТАЦИЯ ПРОФИЛЯ ===",
-            f"Identity: {interpretation.get('identity') or ''}",
-            f"Daily general lens: {(daily_interpretation.get('daily_lenses') or {}).get('general') or ''}",
-            f"Daily love lens: {(daily_interpretation.get('daily_lenses') or {}).get('love') or ''}",
-            f"Daily family lens: {(daily_interpretation.get('daily_lenses') or {}).get('family') or ''}",
-            f"Daily career lens: {(daily_interpretation.get('daily_lenses') or {}).get('career') or ''}",
-            f"Daily money lens: {(daily_interpretation.get('daily_lenses') or {}).get('money') or ''}",
-            f"Love: {(interpretation.get('life_areas') or {}).get('love') or ''}",
-            f"Career: {(interpretation.get('life_areas') or {}).get('career') or ''}",
-            f"Money: {(interpretation.get('life_areas') or {}).get('money') or ''}",
-            f"Family: {(interpretation.get('life_areas') or {}).get('family') or ''}",
-            f"Sex: {(interpretation.get('life_areas') or {}).get('sex') or ''}",
-            f"Kids: {(interpretation.get('life_areas') or {}).get('kids') or ''}",
-            f"Body: {(interpretation.get('life_areas') or {}).get('body') or ''}",
-            f"Friends: {(interpretation.get('life_areas') or {}).get('friends') or ''}",
-            f"Decisions: {(interpretation.get('life_areas') or {}).get('decisions') or ''}",
-            "",
-            "=== КОНТЕКСТ ДНЯ ===",
-            f"Общий summary дня: {(daily_forecast_summary or {}).get('summary') or ''}",
-            f"Ключевая тема дня: {(daily_forecast_summary or {}).get('key_theme') or 'general'}",
-            f"Что сделать: {(daily_recommendations or {}).get('what_to_do') or ''}",
-            f"Чего избегать: {(daily_recommendations or {}).get('what_to_avoid') or ''}",
-            f"Deterministic focus: {(consistency or {}).get('focus') or ''}",
-            f"Deterministic do_focus: {(consistency or {}).get('do_focus') or ''}",
-            f"Deterministic avoid_focus: {(consistency or {}).get('avoid_focus') or ''}",
-            f"Deterministic tone: {(consistency or {}).get('tone') or ''}",
-            "",
-            "Собери день как персональный стержень по сценариям. Не пересказывай профиль буквально: покажи, как именно база этого профиля формирует сегодняшний день.",
-            "Сначала выдели backbone дня: главную ось, главный риск, лучший режим проживания дня, первый ход и зону, куда сегодня лучше не заходить.",
-            f"Базовый системный каркас дня, от которого нельзя отходить слишком далеко: {deterministic_spine}",
-            "Верни только JSON.",
-        ]
-        user_prompt = "\n".join(prompt_parts)
-
-        raw = chat_completion_plain(
-            client,
-            model=model_id,
-            messages=[
-                {"role": "system", "content": DAILY_HOROSCOPE_PROMPT},
-                {"role": "user", "content": user_prompt},
-            ],
-            temperature=0.7,
-            max_tokens=resolve_max_tokens(1200),
-        )
-        content = (raw or "").strip()
-        match = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", content)
-        if match:
-            content = match.group(1).strip()
-        payload = json.loads(content)
-        if _is_valid_horoscope_payload(payload):
-            payload["spine"] = _merge_spine_with_deterministic(payload.get("spine"), deterministic_spine)
-            payload = sanitize_daily_horoscope_payload(payload)
-            generation = learning_service.log_generation(
-                db,
-                module="daily_foundation",
-                surface="daily_foundation",
-                user_id=user.id,
-                core_profile_snapshot_id=latest_snapshot.id if latest_snapshot else None,
-                prompt_version_id=prompt_version.id,
-                model=model_id,
-                locale=locale,
-                input_payload={"target_date": target_date.isoformat()},
-                system_prompt=DAILY_HOROSCOPE_PROMPT,
-                user_prompt=user_prompt,
-                raw_response=content,
-                normalized_response=payload,
-                status="success",
-                used_fallback=False,
-                duration_ms=int((perf_counter() - started_at) * 1000),
-            )
-            return payload, generation.id
-        generation = learning_service.log_generation(
-            db,
-            module="daily_foundation",
-            surface="daily_foundation",
-            user_id=user.id,
-            core_profile_snapshot_id=latest_snapshot.id if latest_snapshot else None,
-            prompt_version_id=prompt_version.id,
-            model=model_id,
-            locale=locale,
-            input_payload={"target_date": target_date.isoformat()},
-            system_prompt=DAILY_HOROSCOPE_PROMPT,
-            user_prompt=user_prompt,
-            raw_response=content,
-            normalized_response=fallback,
-            status="fallback",
-            used_fallback=True,
-            duration_ms=int((perf_counter() - started_at) * 1000),
-        )
-        return sanitize_daily_horoscope_payload(fallback), generation.id
-    except Exception as error:
-        generation = learning_service.log_generation(
-            db,
-            module="daily_foundation",
-            surface="daily_foundation",
-            user_id=user.id,
-            core_profile_snapshot_id=latest_snapshot.id if latest_snapshot else None,
-            prompt_version_id=prompt_version.id,
-            model=model_id if user_prompt else None,
-            locale=locale,
-            input_payload={"target_date": target_date.isoformat()},
-            system_prompt=DAILY_HOROSCOPE_PROMPT,
-            user_prompt=user_prompt,
-            normalized_response=fallback,
-            status="error",
-            used_fallback=True,
-            error_message=str(error),
-            duration_ms=int((perf_counter() - started_at) * 1000),
-        )
-        return sanitize_daily_horoscope_payload(fallback), generation.id
+    # P0: Today first paint must not wait on Nebius for daily_foundation.
+    # Serve deterministic spine immediately; LLM enrichment can be re-enabled later
+    # (or filled by a background job) without blocking /morning-ritual and /today/bundle.
+    generation = learning_service.log_generation(
+        db,
+        module="daily_foundation",
+        surface="daily_foundation",
+        user_id=user.id,
+        core_profile_snapshot_id=latest_snapshot.id if latest_snapshot else None,
+        prompt_version_id=prompt_version.id,
+        model=None,
+        locale=locale,
+        input_payload={"target_date": target_date.isoformat(), "skip_llm": "today_first_paint_p0"},
+        system_prompt=DAILY_HOROSCOPE_PROMPT,
+        user_prompt=None,
+        normalized_response=fallback,
+        status="fallback",
+        used_fallback=True,
+        duration_ms=int((perf_counter() - started_at) * 1000),
+    )
+    return sanitize_daily_horoscope_payload(fallback), generation.id
 
 
 def _spine_best_mode(

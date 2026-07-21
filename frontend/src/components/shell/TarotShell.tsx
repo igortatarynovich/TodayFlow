@@ -20,6 +20,8 @@ export function TarotShell({ children }: TarotShellProps) {
     return {
       testId: "tarot-immersive-shell",
       theme: "dark",
+      mainWide: true,
+      fullMain: false,
       rail: <TarotRail activeStep={activeStep} />,
     };
   }, [activeStep]);

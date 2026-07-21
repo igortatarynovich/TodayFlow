@@ -322,7 +322,7 @@ export function TodayMorningSection({
                           </>
                         ) : null}
                         <Link
-                          href="/tarot/card-of-the-day"
+                          href="/today"
                           className="orbit-button orbit-button-secondary orbit-button-sm"
                           style={{
                             marginTop: "0.35rem",
@@ -525,7 +525,7 @@ export function TodayMorningSection({
                     <button type="button" className="orbit-button orbit-button-secondary orbit-button-sm" onClick={onRefreshMorningBlock} disabled={refreshingMorning}>
                       {refreshingMorning ? RITUAL_COPY.morningRefreshingShort : RITUAL_COPY.morningRefreshBlockCta}
                     </button>
-                    <Link href="/tarot/card-of-the-day" className="orbit-button orbit-button-secondary orbit-button-sm" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                    <Link href="/today" className="orbit-button orbit-button-secondary orbit-button-sm" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
                       {RITUAL_COPY.morningTarotRevealCta}
                     </Link>
                   </div>

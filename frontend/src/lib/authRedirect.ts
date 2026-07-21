@@ -8,6 +8,7 @@ import {
   hasCompletedFirstToday,
 } from "@/lib/firstTodayState";
 import { ONBOARDING_CORE_PATH } from "@/lib/coreSetup";
+import { guestSignupHref } from "@/lib/guestAccessStore";
 
 export type AuthMode = "login" | "signup";
 
@@ -24,15 +25,29 @@ export function getSafeRedirectTarget(value: string | null | undefined): string 
 }
 
 export function getSafeAuthMode(value: string | null | undefined): AuthMode {
+  // Password signup is retired — only soft onboarding registers new users.
   return value === "signup" ? "signup" : "login";
 }
 
+/**
+ * Login → `/auth` (returning users only).
+ * Signup → canonical soft flow (`/onboarding/welcome`) — never the password form.
+ */
 export function buildAuthHref(mode: AuthMode = "login", redirect?: string | null): string {
+  if (mode === "signup") {
+    const safeRedirect = getSafeRedirectTarget(redirect);
+    if (safeRedirect && safeRedirect !== "/profile") {
+      const base = guestSignupHref();
+      const join = base.includes("?") ? "&" : "?";
+      return `${base}${join}redirect=${encodeURIComponent(safeRedirect)}`;
+    }
+    return guestSignupHref();
+  }
   const safeRedirect = getSafeRedirectTarget(redirect);
   if (safeRedirect === "/profile") {
-    return `/auth?mode=${mode}`;
+    return `/auth?mode=login`;
   }
-  return `/auth?mode=${mode}&redirect=${encodeURIComponent(safeRedirect)}`;
+  return `/auth?mode=login&redirect=${encodeURIComponent(safeRedirect)}`;
 }
 
 /** Client-only: next route after core profile is ready (onboarding → First Today → Profile). */

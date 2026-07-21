@@ -409,6 +409,28 @@ export default function TodayPage() {
           }
           setTodayData(normalized);
           setTodayContract(contractPayload);
+          // C1: baseline first; poll enrichment without blocking paint.
+          const lcRaw = (contractPayload?.progress as Record<string, unknown> | undefined)
+            ?.generation_lifecycle;
+          const jobId =
+            lcRaw && typeof lcRaw === "object" && typeof (lcRaw as { job_id?: unknown }).job_id === "number"
+              ? (lcRaw as { job_id: number }).job_id
+              : null;
+          const lcStatus =
+            lcRaw && typeof lcRaw === "object"
+              ? String((lcRaw as { status?: unknown }).status || "")
+              : "";
+          if (jobId != null && (lcStatus === "enrichment_pending" || lcStatus === "stale")) {
+            setDayStoryUpdating(true);
+            void import("@/lib/pollGenerationJob").then(({ pollTodayJob }) =>
+              pollTodayJob(jobId).then((polled) => {
+                if (polled?.lifecycle.status === "enriched" && polled.contract) {
+                  setTodayContract(polled.contract as typeof contractPayload);
+                }
+                setDayStoryUpdating(false);
+              }),
+            );
+          }
           setCoreProfile(core);
           if (core) {
             writeCoreProfileToCache(core, core.astro?.profile_id ?? null);

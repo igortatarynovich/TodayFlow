@@ -60,41 +60,41 @@ export function PracticesWebScreen({
   const isV2 = variant === "v2";
 
   const shellConfig = useMemo((): ProductWebShellConfig => {
+    // Always keep the product 3-column grid (left nav · center · right rail).
     return {
       testId: "practices-web-screen",
       displayName,
       profileMeta,
       coreProfile,
-      mainWide: isV2,
-      fullMain: isV2,
-      rail: isV2
-        ? undefined
-        : rail ?? (
-            <>
-              <section className={s.practicesRailSection} aria-labelledby="practices-streak">
-                <h2 id="practices-streak" className={s.practicesRailEyebrow}>
-                  {pc.practicesRailMyStreak}
-                </h2>
-                <DsStreakRing days={streakDays} label="" />
-                <div className={s.practicesRailStats}>
-                  <p className={s.practicesRailStatMain}>
-                    {pc.practicesRailActiveCount} {activePractices}
+      mainWide: true,
+      fullMain: false,
+      rail:
+        rail ?? (
+          <>
+            <section className={s.practicesRailSection} aria-labelledby="practices-streak">
+              <h2 id="practices-streak" className={s.practicesRailEyebrow}>
+                {pc.practicesRailMyStreak}
+              </h2>
+              <DsStreakRing days={streakDays} label="" />
+              <div className={s.practicesRailStats}>
+                <p className={s.practicesRailStatMain}>
+                  {pc.practicesRailActiveCount} {activePractices}
+                </p>
+                {bestStreakDays > 0 ? (
+                  <p className={s.practicesRailStatSub}>
+                    {pc.practicesRailBestStreak} {bestStreakDays} {bestStreakSuffix}
                   </p>
-                  {bestStreakDays > 0 ? (
-                    <p className={s.practicesRailStatSub}>
-                      {pc.practicesRailBestStreak} {bestStreakDays} {bestStreakSuffix}
-                    </p>
-                  ) : null}
-                </div>
-              </section>
-              <section className={s.practicesRailSection} aria-labelledby="practices-weekly">
-                <h2 id="practices-weekly" className={s.practicesRailEyebrow}>
-                  {pc.practicesRailWeeklyRhythm}
-                </h2>
-                <DsWeeklyBars values={weeklyRhythm} />
-              </section>
-            </>
-          ),
+                ) : null}
+              </div>
+            </section>
+            <section className={s.practicesRailSection} aria-labelledby="practices-weekly">
+              <h2 id="practices-weekly" className={s.practicesRailEyebrow}>
+                {pc.practicesRailWeeklyRhythm}
+              </h2>
+              <DsWeeklyBars values={weeklyRhythm} />
+            </section>
+          </>
+        ),
     };
   }, [
     activePractices,

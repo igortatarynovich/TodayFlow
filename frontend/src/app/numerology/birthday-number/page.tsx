@@ -131,7 +131,7 @@ export default function BirthdayNumberPage() {
                   {isSaved ? "Сохранено" : "Сохранить"}
                 </button>
               ) : (
-                <Link href="/auth" className="orbit-button orbit-button-primary" style={{ textDecoration: "none" }}>
+                <Link href="/onboarding/welcome?fresh=1" className="orbit-button orbit-button-primary" style={{ textDecoration: "none" }}>
                   Войти, чтобы сохранить
                 </Link>
               )}

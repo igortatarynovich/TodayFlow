@@ -90,19 +90,26 @@ export function ProductPageScreen({
       displayName,
       profileMeta,
       coreProfile,
+      // Always reserve the right rail column — never collapse to a 2-column product page.
       rail:
         rail ??
         (railTitle || railHint ? (
-          <DsRailPanel title={railTitle ?? ""}>
+          <DsRailPanel title={railTitle ?? title}>
             {railHint ? (
               <DsBody size="sm" muted>
                 {railHint}
               </DsBody>
             ) : null}
           </DsRailPanel>
-        ) : undefined),
+        ) : (
+          <DsRailPanel title={title}>
+            <DsBody size="sm" muted>
+              {subtitle ?? ""}
+            </DsBody>
+          </DsRailPanel>
+        )),
     };
-  }, [coreProfile, displayName, mainWide, profileMeta, rail, railHint, railTitle, testId]);
+  }, [coreProfile, displayName, mainWide, profileMeta, rail, railHint, railTitle, subtitle, testId, title]);
 
   const body = (() => {
     if (loading) {

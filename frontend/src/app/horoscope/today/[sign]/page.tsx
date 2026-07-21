@@ -210,7 +210,7 @@ export default function HoroscopeTodaySignPage() {
           <Link href="/lunar/today" className={pl.hubCard}>
             <DsBody size="sm">Луна сегодня</DsBody>
           </Link>
-          <Link href="/tarot/card-of-the-day" className={pl.hubCard}>
+          <Link href="/today" className={pl.hubCard}>
             <DsBody size="sm">Карта таро дня</DsBody>
           </Link>
         </div>

@@ -1282,3 +1282,33 @@ class UserActiveKnowledge(Base):
     __table_args__ = (
         UniqueConstraint("user_id", "knowledge_id", name="uq_user_active_knowledge"),
     )
+
+
+class GenerationJob(Base):
+    """Durable non-blocking enrichment job (baseline first, LLM later).
+
+    Status canon: baseline_ready | enrichment_pending | enriched | enrichment_failed | stale
+    """
+
+    __tablename__ = "generation_jobs"
+
+    id = Column(Integer, primary_key=True)
+    idempotency_key = Column(String(255), nullable=False, unique=True)
+    fingerprint = Column(String(64), nullable=False)
+    module = Column(String(64), nullable=False)
+    surface = Column(String(64), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=True)
+    status = Column(String(32), nullable=False, default="enrichment_pending")
+    attempt_count = Column(Integer, nullable=False, default=0)
+    max_attempts = Column(Integer, nullable=False, default=2)
+    request_payload = Column(JSON, nullable=True)
+    result_payload = Column(JSON, nullable=True)
+    baseline_payload = Column(JSON, nullable=True)
+    error_message = Column(Text, nullable=True)
+    generation_log_id = Column(Integer, ForeignKey("generation_logs.id", ondelete="SET NULL"), nullable=True)
+    locked_at = Column(DateTime, nullable=True)
+    started_at = Column(DateTime, nullable=True)
+    finished_at = Column(DateTime, nullable=True)
+    expires_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=utc_naive_now)
+    updated_at = Column(DateTime, default=utc_naive_now, onupdate=utc_naive_now)

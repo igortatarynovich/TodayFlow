@@ -154,21 +154,37 @@ export function CompatibilityWebHub({
 
       {!isAuthenticated ? (
         <section className={pl.pairPicker}>
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: "center", display: "grid", gap: "0.55rem" }}>
             <DsBody size="sm" muted>
-              {chrome.hubLoginHint}
+              Сначала собери свой Today — имя, дата, первый разбор и email для сохранения.
             </DsBody>
           </div>
-          <DsButton href="/auth?redirect=/compatibility">{chrome.hubLoginCta}</DsButton>
+          <div style={{ display: "grid", gap: "0.55rem", justifyItems: "center" }}>
+            <DsButton href="/onboarding/welcome?fresh=1">Создать мой Today</DsButton>
+            <DsButton href="/auth?mode=login&redirect=/compatibility" variant="ghost">
+              Уже есть аккаунт? Войти
+            </DsButton>
+          </div>
         </section>
       ) : profiles.length < 2 ? (
         <section className={pl.pairPicker}>
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: "center", display: "grid", gap: "0.65rem" }}>
             <DsBody size="sm" muted>
               {chrome.hubNeedSecondHint}
             </DsBody>
+            <DsBody size="sm" muted>
+              Пока можно собрать разбор по знакам или датам — без второго профиля.
+            </DsBody>
           </div>
-          <DsButton href="/account/profiles">{chrome.hubAddPersonCta}</DsButton>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.55rem", justifyContent: "center" }}>
+            <DsButton href="/compatibility/analyze">Разбор по знакам</DsButton>
+            <DsButton href="/compatibility/birthdates" variant="secondary">
+              По датам
+            </DsButton>
+            <DsButton href="/account/profiles" variant="secondary">
+              {chrome.hubAddPersonCta}
+            </DsButton>
+          </div>
         </section>
       ) : (
         <section className={pl.pairPicker} aria-labelledby="compat-hub-pair">

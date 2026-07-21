@@ -79,7 +79,7 @@ function NumerologyDailyExplainContent() {
       <ProductPageScreen testId="numerology-daily-explain-page" title="Объяснение числа дня" contentClassName={`${pl.content} ${pl.legacyHost}`}>
         <section className={pl.panel} style={{ textAlign: "center" }}>
           <h1 className="orbit-display-sm">{error || "Ошибка загрузки"}</h1>
-          <Link href="/numerology/day-number" className={pl.textLink}>
+          <Link href="/today" className={pl.textLink}>
             Вернуться к числу дня
           </Link>
         </section>
@@ -100,7 +100,7 @@ function NumerologyDailyExplainContent() {
           margin: "0 auto",
           padding: "0 var(--orbit-space-xl)"
         }}>
-          <Link href="/numerology/day-number" className="orbit-body-sm" style={{
+          <Link href="/today" className="orbit-body-sm" style={{
             color: "var(--orbit-color-primary)",
             textDecoration: "none",
             display: "inline-block",
