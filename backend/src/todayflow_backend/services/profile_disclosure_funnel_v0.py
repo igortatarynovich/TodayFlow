@@ -1,7 +1,8 @@
-"""Profile portrait multi-request funnel (identity → styles → patterns → spheres).
+"""Profile portrait funnel (identity → styles → patterns? → deterministic spheres).
 
-Shared normalized input for all steps. Per-step retry once. Partial merge on failure.
-Generation meta carries prompt versions / model / tokens / timings.
+Shared normalized input for LLM steps. Patterns gated by longitudinal eligibility.
+Spheres: life_spheres_projector_v0 (natal-presence), independent of patterns outcome.
+Legacy profile.spheres.v1 is not called. Global ready still requires full contract elsewhere.
 """
 
 from __future__ import annotations
@@ -24,6 +25,12 @@ from todayflow_backend.services.llm_quality_policy_v1 import (
     funnel_step_max_tokens,
     prefer_multi_step_funnels,
     user_json_char_budget,
+)
+from todayflow_backend.services.life_spheres_projector_v0 import (
+    PROJECTION_VERSION,
+    build_sphere_foundations_v0,
+    project_life_spheres_v0,
+    spheres_projection_allowed,
 )
 from todayflow_backend.services.profile_content_v1.source_depth import (
     depth_from_profile_pack,
@@ -347,6 +354,8 @@ def run_profile_disclosure_funnel_v0(
     meta["completed_steps"].append("styles")
 
     # Production invariant: do not call patterns LLM without longitudinal eligibility.
+    # Skipped/failed patterns must NOT stop spheres (natal-presence projector).
+    r3: dict[str, Any] | None = None
     if not patterns_generation_allowed(user_json):
         depth = depth_from_profile_pack(user_json)
         skip_meta: dict[str, Any] = {
@@ -380,88 +389,118 @@ def run_profile_disclosure_funnel_v0(
                         source_depth=depth,
                         allowed_claims=classify_allowed_claims(depth),
                     )
-                # Explicit: step did not run (eligibility closed).
                 capture.mark_step_ran("patterns", ran=False)
-        merged = {
-            "identity_core": r1.get("identity_core"),
-            "strengths": r1.get("strengths"),
-            "growth_zones": r1.get("growth_zones"),
-            "relationship_style": r2.get("relationship_style"),
-            "money_style": r2.get("money_style"),
-            "decision_style": r2.get("decision_style"),
-            "recurring_patterns": [],
-            "living_changes": None,
-        }
-        return merged, meta
+    else:
+        r3, m3 = _call_with_retry(
+            prompt_id="profile.patterns.v1",
+            locale=locale,
+            user_payload={"shared": shared, "identity": r1, "styles": r2, "step": "patterns"},
+            depth_level="deep",
+            ok_fn=_patterns_ok,
+        )
+        meta["steps"].append(m3)
+        if r3:
+            meta["completed_steps"].append("patterns")
+        else:
+            meta["reason"] = "patterns_failed"
+            meta["partial"] = True
 
-    r3, m3 = _call_with_retry(
-        prompt_id="profile.patterns.v1",
-        locale=locale,
-        user_payload={"shared": shared, "identity": r1, "styles": r2, "step": "patterns"},
-        depth_level="deep",
-        ok_fn=_patterns_ok,
-    )
-    meta["steps"].append(m3)
-    if not r3:
-        meta["reason"] = "patterns_failed"
+    # Deterministic spheres (PR-2 slice) — independent of patterns outcome.
+    # Legacy profile.spheres.v1 is not content authority (not called).
+    foundations = build_sphere_foundations_v0(shared=shared, identity=r1, styles=r2)
+    spheres_ok_gate = spheres_projection_allowed(foundations)
+    if profile_capture_enabled():
+        capture = get_profile_capture_session()
+        if capture is not None:
+            bel = capture.pack.get("block_eligibility")
+            if isinstance(bel, dict) and isinstance(bel.get("spheres"), dict):
+                bel["spheres"]["may_generate"] = spheres_ok_gate
+                bel["spheres"]["reason"] = (
+                    "natal-presence foundations allow deterministic sphere projection"
+                    if spheres_ok_gate
+                    else "insufficient natal/identity/styles foundations for spheres"
+                )
+                bel["spheres"]["min_source_depth"] = "birth_data_only"
+
+    life_spheres: dict[str, Any] = {}
+    spheres_proj_meta: dict[str, Any] = {}
+    t_sph0 = perf_counter()
+    if spheres_ok_gate:
+        life_spheres, spheres_proj_meta = project_life_spheres_v0(foundations)
+        step_spheres: dict[str, Any] = {
+            "prompt_id": None,
+            "projector": PROJECTION_VERSION,
+            "spheres_source": "deterministic_projector_v0_1",
+            "attempts": 0,
+            "ms": int((perf_counter() - t_sph0) * 1000),
+            "ok": bool(life_spheres),
+            "projection": {
+                "spheres_projected": spheres_proj_meta.get("spheres_projected"),
+                "spheres_omitted": spheres_proj_meta.get("spheres_omitted"),
+                "fingerprint": spheres_proj_meta.get("fingerprint"),
+            },
+        }
+        meta["steps"].append(step_spheres)
+        meta["spheres_source"] = "deterministic_projector_v0_1"
+        meta["life_spheres_meta"] = spheres_proj_meta
+        if life_spheres:
+            meta["completed_steps"].append("spheres")
+            if profile_capture_enabled():
+                capture = get_profile_capture_session()
+                if capture is not None:
+                    capture.mark_step_ran("spheres", ran=True)
+        else:
+            meta["spheres_omitted"] = True
+            if not meta.get("reason"):
+                meta["reason"] = "spheres_projection_empty"
+            meta["partial"] = True
+            if profile_capture_enabled():
+                capture = get_profile_capture_session()
+                if capture is not None:
+                    capture.mark_step_ran("spheres", ran=False)
+    else:
+        meta["steps"].append(
+            {
+                "prompt_id": None,
+                "projector": PROJECTION_VERSION,
+                "skipped": True,
+                "skip_reason": "spheres_projection_gate_ineligible",
+                "attempts": 0,
+                "ms": 0,
+                "ok": False,
+            }
+        )
+        meta["spheres_omitted"] = True
         meta["partial"] = True
-        merged = {
-            "identity_core": r1.get("identity_core"),
-            "strengths": r1.get("strengths"),
-            "growth_zones": r1.get("growth_zones"),
-            "relationship_style": r2.get("relationship_style"),
-            "money_style": r2.get("money_style"),
-            "decision_style": r2.get("decision_style"),
-            "recurring_patterns": [],
-            "living_changes": None,
-        }
-        return merged, meta
-    meta["completed_steps"].append("patterns")
+        if not meta.get("reason"):
+            meta["reason"] = "spheres_projection_gate_ineligible"
+        if profile_capture_enabled():
+            capture = get_profile_capture_session()
+            if capture is not None:
+                capture.mark_step_ran("spheres", ran=False)
 
-    r4, m4 = _call_with_retry(
-        prompt_id="profile.spheres.v1",
-        locale=locale,
-        user_payload={
-            "shared": shared,
-            "identity": r1,
-            "styles": r2,
-            "patterns": r3,
-            "step": "spheres",
-        },
-        depth_level="deep",
-        ok_fn=_spheres_ok,
-    )
-    meta["steps"].append(m4)
-    if not r4:
-        meta["reason"] = "spheres_failed"
-        meta["partial"] = True
-        merged = {
-            "identity_core": r1.get("identity_core"),
-            "strengths": r1.get("strengths"),
-            "growth_zones": r1.get("growth_zones"),
-            "relationship_style": r2.get("relationship_style"),
-            "money_style": r2.get("money_style"),
-            "decision_style": r2.get("decision_style"),
-            "recurring_patterns": r3.get("recurring_patterns"),
-            "living_changes": r3.get("living_changes"),
-            "life_mission": r3.get("life_mission"),
-            "helps": r3.get("helps"),
-        }
-        return merged, meta
-    meta["completed_steps"].append("spheres")
+    # Global ready still requires full 9 spheres + patterns bundle — not redesigned in PR-2.
+    # v0.1 always returns partial once identity/styles ran (slice spheres ≠ ready contract).
+    meta["partial"] = True
+    meta["failed"] = True
+    if not meta.get("reason"):
+        meta["reason"] = "spheres_slice_partial_v0_1"
 
-    meta["failed"] = False
-    merged = {
+    merged: dict[str, Any] = {
         "identity_core": r1.get("identity_core"),
         "strengths": r1.get("strengths"),
         "growth_zones": r1.get("growth_zones"),
         "relationship_style": r2.get("relationship_style"),
         "money_style": r2.get("money_style"),
         "decision_style": r2.get("decision_style"),
-        "recurring_patterns": r3.get("recurring_patterns"),
-        "living_changes": r3.get("living_changes"),
-        "life_mission": r3.get("life_mission"),
-        "helps": r3.get("helps"),
-        "life_spheres": r4.get("life_spheres"),
+        "recurring_patterns": (r3.get("recurring_patterns") if r3 else []) or [],
+        "living_changes": r3.get("living_changes") if r3 else None,
     }
+    if r3:
+        merged["life_mission"] = r3.get("life_mission")
+        merged["helps"] = r3.get("helps")
+    if life_spheres:
+        merged["life_spheres"] = life_spheres
+        if spheres_proj_meta:
+            merged["life_spheres_meta"] = spheres_proj_meta
     return merged, meta

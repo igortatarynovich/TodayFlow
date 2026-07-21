@@ -1,4 +1,4 @@
-"""Profile disclosure funnel — 4 LLM steps without live network."""
+"""Profile disclosure funnel — identity/styles/patterns + deterministic spheres."""
 
 from __future__ import annotations
 
@@ -11,17 +11,6 @@ from todayflow_backend.services.profile_contract_v1 import (
     _normalize_profile_contract,
     profile_contract_to_legacy_interpretation,
 )
-
-
-def _sphere_row(tag: str) -> dict[str, str]:
-    return {
-        "how": f"{tag} how manifests in daily life with a clear situation.",
-        "need": f"{tag} needs clarity and one honest boundary.",
-        "risk": f"{tag} risk is overloading without a pause.",
-        "turns_on": f"{tag} turns on with calm structure.",
-        "turns_off": f"{tag} turns off with vague pressure.",
-        "helps": f"{tag} helps with one small step.",
-    }
 
 
 def _living_eligible() -> dict[str, Any]:
@@ -57,66 +46,63 @@ def _fake_call_factory(responses: list[Any]):
     return fake_call
 
 
-def test_profile_funnel_four_steps(monkeypatch) -> None:
+def _identity() -> dict[str, Any]:
+    return {
+        "contract_version": funnel.IDENTITY_CONTRACT,
+        "identity_core": "Человек держит смысл через ясный фокус и живой контакт.",
+        "strengths": ["Фокус", "Контакт", "Доведение"],
+        "growth_zones": ["Распыление", "Контроль", "Откладывание"],
+    }
+
+
+def _styles() -> dict[str, Any]:
+    return {
+        "contract_version": funnel.STYLES_CONTRACT,
+        "relationship_style": "Близость через прямые слова и предсказуемость.",
+        "money_style": "Деньги как ценность и спокойный шаг без импульса.",
+        "decision_style": "Решения через один критерий и короткий дедлайн.",
+    }
+
+
+def _patterns() -> dict[str, Any]:
+    return {
+        "contract_version": funnel.PATTERNS_CONTRACT,
+        "recurring_patterns": ["Часто берёт второй приоритет без слота."],
+        "living_changes": "Сейчас усиливается запрос на один главный фокус и меньше параллельных обещаний.",
+        "life_mission": "Удерживать свой ритм и не растворяться в чужих задачах.",
+        "helps": ["Один фокус на день", "Пауза перед новым да"],
+    }
+
+
+def test_profile_funnel_patterns_then_deterministic_spheres(monkeypatch) -> None:
     monkeypatch.setattr(settings, "llm_quality_mode", "rich")
     monkeypatch.setattr(funnel, "is_llm_chat_configured", lambda: True)
     monkeypatch.setattr(funnel, "prefer_multi_step_funnels", lambda: True)
-    responses = [
-        {
-            "contract_version": funnel.IDENTITY_CONTRACT,
-            "identity_core": "Человек держит смысл через ясный фокус и живой контакт.",
-            "strengths": ["Фокус", "Контакт", "Доведение"],
-            "growth_zones": ["Распыление", "Контроль", "Откладывание"],
-        },
-        {
-            "contract_version": funnel.STYLES_CONTRACT,
-            "relationship_style": "Близость через прямые слова и предсказуемость.",
-            "money_style": "Деньги как ценность и спокойный шаг без импульса.",
-            "decision_style": "Решения через один критерий и короткий дедлайн.",
-        },
-        {
-            "contract_version": funnel.PATTERNS_CONTRACT,
-            "recurring_patterns": ["Часто берёт второй приоритет без слота."],
-            "living_changes": "Сейчас усиливается запрос на один главный фокус и меньше параллельных обещаний.",
-            "life_mission": "Удерживать свой ритм и не растворяться в чужих задачах.",
-            "helps": ["Один фокус на день", "Пауза перед новым да"],
-        },
-        {
-            "contract_version": funnel.SPHERES_CONTRACT,
-            "life_spheres": {
-                sid: {
-                    **_sphere_row(sid),
-                    "how": f"В сфере {sid} проявляется сценарий с глаголом и границей #{i}.",
-                }
-                for i, sid in enumerate(funnel.SPHERE_IDS)
-            },
-        },
-    ]
+    responses = [_identity(), _styles(), _patterns()]
 
     monkeypatch.setattr(funnel, "_call", _fake_call_factory(responses))
     merged, meta = funnel.run_profile_disclosure_funnel_v0(
         {
-            "person": {"display_name": "Игорь"},
+            "person": {"display_name": "Игорь", "birth_date": "1990-01-01"},
             "astro": {"sun_sign": "Leo"},
             "living": _living_eligible(),
         },
         locale="ru",
     )
-    assert meta["failed"] is False
+    assert meta["partial"] is True  # slice ≠ global ready
     assert meta["completed_steps"] == ["identity", "styles", "patterns", "spheres"]
-    assert len(meta["steps"]) == 4
-    assert all(s.get("prompt_version") or s.get("skipped") for s in meta["steps"])
+    assert meta.get("spheres_source") == "deterministic_projector_v0_1"
+    assert len(responses) == 0  # no LLM spheres call
     assert merged is not None
     assert merged["life_mission"]
-    assert len(merged["life_spheres"]) == 9
+    assert set(merged["life_spheres"].keys()) == {"love", "money", "decisions"}
 
     contract = _normalize_profile_contract(merged)
     assert contract["profile_snapshot_version"] == PROFILE_CONTRACT_PROMPT_VER
     assert contract["life_spheres"]["love"]["need"]
     legacy = profile_contract_to_legacy_interpretation(contract)
-    assert "love" in legacy["life_areas"]["love"]
-    assert "work" in legacy["life_areas"]["career"]
-    assert legacy["life_areas"]["love"].startswith("В сфере love")
+    assert "любв" in legacy["life_areas"]["love"].lower()
+    assert len(legacy["life_areas"]["love"]) >= 20
 
 
 def test_economize_skips_profile_funnel(monkeypatch) -> None:
@@ -126,66 +112,43 @@ def test_economize_skips_profile_funnel(monkeypatch) -> None:
     assert meta["reason"] == "quality_mode_economize"
 
 
-def test_partial_failure_keeps_prior_steps(monkeypatch) -> None:
+def test_patterns_failed_still_projects_spheres(monkeypatch) -> None:
     monkeypatch.setattr(settings, "llm_quality_mode", "rich")
     monkeypatch.setattr(funnel, "is_llm_chat_configured", lambda: True)
     monkeypatch.setattr(funnel, "prefer_multi_step_funnels", lambda: True)
     responses: list[dict[str, Any] | None] = [
-        {
-            "contract_version": funnel.IDENTITY_CONTRACT,
-            "identity_core": "Человек держит смысл через ясный фокус и живой контакт.",
-            "strengths": ["Фокус", "Контакт", "Доведение"],
-            "growth_zones": ["Распыление", "Контроль", "Откладывание"],
-        },
-        {
-            "contract_version": funnel.STYLES_CONTRACT,
-            "relationship_style": "Близость через прямые слова и предсказуемость.",
-            "money_style": "Деньги как ценность и спокойный шаг без импульса.",
-            "decision_style": "Решения через один критерий и короткий дедлайн.",
-        },
-        None,  # patterns fail (also retry → second None)
+        _identity(),
+        _styles(),
+        None,  # patterns fail (+ retry)
         None,
     ]
 
     monkeypatch.setattr(funnel, "_call", _fake_call_factory(responses))
     merged, meta = funnel.run_profile_disclosure_funnel_v0(
         {
-            "person": {"display_name": "Игорь"},
+            "person": {"display_name": "Игорь", "birth_date": "1990-01-01"},
             "astro": {"sun_sign": "Leo"},
             "living": _living_eligible(),
         },
         locale="ru",
     )
-    assert meta["failed"] is True
     assert meta["partial"] is True
     assert meta["reason"] == "patterns_failed"
-    assert meta["completed_steps"] == ["identity", "styles"]
+    assert "spheres" in meta["completed_steps"]
     assert merged is not None
     assert merged["identity_core"]
     assert merged["relationship_style"]
-    assert "life_mission" not in merged or not merged.get("life_mission")
+    assert set(merged.get("life_spheres") or {}) == {"love", "money", "decisions"}
+    assert merged.get("recurring_patterns") == []
 
 
-def test_patterns_skipped_when_birth_only(monkeypatch) -> None:
-    """GENERATION_GATE: birth_data_only must not call profile.patterns.v1."""
+def test_patterns_skipped_when_birth_only_projects_spheres(monkeypatch) -> None:
+    """GENERATION_GATE patterns skip must not block deterministic spheres."""
     monkeypatch.setattr(settings, "llm_quality_mode", "rich")
     monkeypatch.setattr(funnel, "is_llm_chat_configured", lambda: True)
     monkeypatch.setattr(funnel, "prefer_multi_step_funnels", lambda: True)
     calls: list[str] = []
-    responses = [
-        {
-            "contract_version": funnel.IDENTITY_CONTRACT,
-            "identity_core": "Человек держит смысл через ясный фокус и живой контакт.",
-            "strengths": ["Фокус", "Контакт", "Доведение"],
-            "growth_zones": ["Распыление", "Контроль", "Откладывание"],
-        },
-        {
-            "contract_version": funnel.STYLES_CONTRACT,
-            "relationship_style": "Близость через прямые слова и предсказуемость.",
-            "money_style": "Деньги как ценность и спокойный шаг без импульса.",
-            "decision_style": "Решения через один критерий и короткий дедлайн.",
-        },
-    ]
+    responses = [_identity(), _styles()]
 
     def fake_call(
         system: str,
@@ -201,7 +164,7 @@ def test_patterns_skipped_when_birth_only(monkeypatch) -> None:
     monkeypatch.setattr(funnel, "_call", fake_call)
     merged, meta = funnel.run_profile_disclosure_funnel_v0(
         {
-            "person": {"first_name": "Аня"},
+            "person": {"first_name": "Аня", "birth_date": "1992-03-04"},
             "astro": {"sun_sign": "aries"},
             "numerology": {"life_path": 1},
             "baseline": {"archetype_seed": "initiator"},
@@ -209,11 +172,11 @@ def test_patterns_skipped_when_birth_only(monkeypatch) -> None:
         },
         locale="ru",
     )
-    assert len(calls) == 2  # identity + styles only
+    assert len(calls) == 2  # identity + styles only (no patterns, no LLM spheres)
     assert meta["reason"] == "patterns_skipped_ineligible"
     assert meta["patterns_omitted"] is True
     assert meta["partial"] is True
-    assert meta["completed_steps"] == ["identity", "styles"]
+    assert meta["completed_steps"] == ["identity", "styles", "spheres"]
     skip = meta["steps"][2]
     assert skip.get("skipped") is True
     assert skip.get("skip_reason") == "generation_gate_ineligible"
@@ -221,4 +184,8 @@ def test_patterns_skipped_when_birth_only(monkeypatch) -> None:
     assert merged["relationship_style"]
     assert merged.get("recurring_patterns") == []
     assert merged.get("living_changes") is None
-    assert "life_spheres" not in merged or not merged.get("life_spheres")
+    assert set(merged.get("life_spheres") or {}) == {"love", "money", "decisions"}
+    assert meta.get("spheres_source") == "deterministic_projector_v0_1"
+    proj = meta["steps"][3]
+    assert proj.get("spheres_source") == "deterministic_projector_v0_1"
+    assert proj.get("ok") is True

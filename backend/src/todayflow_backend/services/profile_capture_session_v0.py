@@ -162,7 +162,7 @@ class ProfileCaptureSession:
             },
             "spheres": {
                 "may_generate": True,
-                "reason": "spheres eligibility open until passport decides otherwise",
+                "reason": "natal-presence; refined after styles via spheres_projection_allowed",
                 "min_source_depth": "birth_data_only",
                 "ran": None,
             },

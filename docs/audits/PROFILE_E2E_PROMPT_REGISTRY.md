@@ -2,6 +2,7 @@
 
 **Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md)  
 **Block passport:** [PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](./PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md)  
+**life_spheres:** [PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md) · [PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md)  
 **Date:** 2026-07-21 · **Source:** code + eval packs
 
 > Unique-knowledge verdicts are **hypotheses** until production-faithful packs prove them.
@@ -67,7 +68,8 @@
 | prompt_id | `profile.patterns.v1` |
 | version | `1.1.0` |
 | Trigger (current) | after styles — **only if** `patterns_generation_allowed(pack)` (`source_depth` ≥ `profile_plus_checkins`) |
-| Trigger (**gate**) | else: skip LLM · `reason=patterns_skipped_ineligible` · `recurring_patterns=[]` · spheres not started |
+| Trigger (**gate**) | else: skip LLM · `reason=patterns_skipped_ineligible` · `recurring_patterns=[]` |
+| **Debt (spheres coupling)** | Current funnel still **stops** after patterns skip/fail → spheres never start. Confirmed `GENERATION_GATE` defect on spheres control-flow (patterns gate itself is correct and stays). Target: continue to spheres / projector independently |
 | Input | shared + identity + styles |
 | System | patterns from **living/signals only**; mission + helps; text asks honesty if sparse |
 | Expected | recurring_patterns[], living_changes, life_mission, helps[≥2] |
@@ -80,19 +82,22 @@ Passport target: [PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](./PROFILE_E2E_BLOCK_PA
 
 ---
 
-## P4 · `profile.spheres.v1`
+## P4 · `profile.spheres.v1` — **LEGACY (not target content authority)**
 
 | Field | Content |
 |-------|---------|
 | prompt_id | `profile.spheres.v1` |
 | version | `1.0.0` |
-| Trigger | after patterns |
-| Expected | 9 spheres × how/need/risk/turns_on/turns_off/helps |
+| **Status** | **Legacy debt.** Must not be treated as target content authority for `life_spheres` |
+| Trigger (current code) | after patterns success only — **accidental coupling**; see Case A report |
+| Expected (legacy) | 9 spheres × how/need/risk/turns_on/turns_off/helps |
 | Eval gap | review runner **skips** this step |
-| Snapshot | `life_spheres` |
-| UI | Direction sphere cards (also natal house taxonomy can compete) |
+| Snapshot | `life_spheres` (today only if LLM step runs) |
+| UI | Direction sphere cards; FE chart/DEFAULTS can compete (**dual source debt**) |
 | Quality gates | identity echo into how; duplicate hows |
-| **Unique knowledge?** | **Suspect** — candidate for deterministic projection from natal+contract |
+| **Target content** | Deterministic projector — [PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md) |
+| **Future LLM** | Optional **wording layer only**; requires a **separate wording passport** + gate after projection exists. Must not set eligibility or invent claims |
+| **Unique knowledge?** | Legacy LLM step is **not** the unique-knowledge path. Unique knowledge = ruleset projection from natal + identity + styles |
 
 ---
 
@@ -127,6 +132,7 @@ Required for E2E: extend capture (eval or publisher) before blaming the model.
 | identity | who in life | sign passport |
 | styles | decision/relationship/money angles | paraphrase identity |
 | patterns | evidence-backed repeats | invent from birth-only |
-| spheres | sphere-specific how/need | copy identity into every how |
+| spheres (legacy LLM) | — | do not use as SoT; projector owns content |
+| spheres (projector) | sphere-specific how/need from foundations | copy identity into every how; depend on patterns |
 
-Next: run production-faithful pack and score this matrix per case.
+Next: implement projector v0.1 + Case A proof that spheres publish without patterns.

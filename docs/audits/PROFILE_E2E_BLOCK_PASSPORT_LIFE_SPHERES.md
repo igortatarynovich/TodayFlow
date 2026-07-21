@@ -4,6 +4,7 @@
 **Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md)  
 **Template:** [PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](./PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md)  
 **Related:** patterns gate (shipped, unchanged) · [PROFILE_E2E_PROMPT_REGISTRY.md](./PROFILE_E2E_PROMPT_REGISTRY.md) P4 · [PROFILE_CONTENT_CANON_V1.md](../PROFILE_CONTENT_CANON_V1.md) §7.1A  
+**Executable ruleset:** [PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md)  
 **Date:** 2026-07-21
 
 > **Product lock:** spheres = **natal-presence**, **deterministic-first**.  
@@ -346,3 +347,4 @@ Forbidden outcome: free LLM fills 9×6 to satisfy schema while patterns were the
 | Date | Change |
 |------|--------|
 | 2026-07-21 | Draft opened: natal-presence · deterministic-first · independent of patterns; mission/helps collateral noted |
+| 2026-07-21 | Linked deterministic projector spec v0.1 (executable ruleset) |
