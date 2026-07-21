@@ -107,9 +107,9 @@ Passport target: [PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](./PROFILE_E2E_BLOCK_PA
 |-------|---------|
 | prompt_id | `profile.spheres.synthesis.v1` |
 | version | `1.0.0` |
-| **Status** | Passport + registry + eval harness; **not production-wired yet** |
+| **Status** | **Production-wired** via `life_spheres_synthesis_run_v0` in profile funnel |
 | Passport | [PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md](./PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md) |
-| Trigger (target) | after identity/styles; IFF `spheres_projection_allowed` **and** non-empty `sphere_cues`; **independent of patterns** |
+| Trigger | after identity/styles; IFF `spheres_projection_allowed` **and** non-empty `sphere_cues`; **independent of patterns** |
 | Input | identity slice · relevant_style · prepared `sphere_cues` · optional house_cues |
 | Expected | one sphere × how/need/risk/turns_on/turns_off/helps |
 | Deterministic owns | eligibility · cue selection · house gate · JSON/ban validation |

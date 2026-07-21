@@ -1,7 +1,8 @@
-"""Profile portrait funnel (identity → styles → patterns? → deterministic spheres).
+"""Profile portrait funnel (identity → styles → patterns? → spheres synthesis).
 
 Shared normalized input for LLM steps. Patterns gated by longitudinal eligibility.
-Spheres: life_spheres_projector_v0 (natal-presence), independent of patterns outcome.
+Spheres: profile.spheres.synthesis.v1 on prepared cues (natal-presence gate),
+independent of patterns outcome. Fail/omit — never projector phrase tables as copy.
 Legacy profile.spheres.v1 is not called. Global ready still requires full contract elsewhere.
 """
 
@@ -27,11 +28,13 @@ from todayflow_backend.services.llm_quality_policy_v1 import (
     user_json_char_budget,
 )
 from todayflow_backend.services.life_spheres_projector_v0 import (
-    PROJECTION_VERSION,
-    SPHERES_SOURCE,
     build_sphere_foundations_v0,
-    project_life_spheres_v0,
     spheres_projection_allowed,
+)
+from todayflow_backend.services.life_spheres_synthesis_run_v0 import (
+    SPHERES_SOURCE,
+    SYNTHESIS_VERSION,
+    synthesize_life_spheres_v0,
 )
 from todayflow_backend.services.profile_content_v1.source_depth import (
     depth_from_profile_pack,
@@ -67,7 +70,7 @@ PROMPT_IDS = (
     "profile.identity.v1",
     "profile.styles.v1",
     "profile.patterns.v1",
-    "profile.spheres.v1",
+    "profile.spheres.synthesis.v1",
 )
 
 
@@ -262,10 +265,28 @@ def _spheres_ok(d: dict[str, Any] | None) -> bool:
 
 def build_shared_profile_input(user_json: dict[str, Any]) -> dict[str, Any]:
     """One normalized pack for all funnel steps (no drift between requests)."""
+    natal = user_json.get("natal") if isinstance(user_json.get("natal"), dict) else {}
+    # Prefer explicit natal; optionally lift planet signs from natal_summary.personal_planets.
+    summary = user_json.get("natal_summary") if isinstance(user_json.get("natal_summary"), dict) else {}
+    if not natal.get("venus_sign") and isinstance(summary.get("personal_planets"), list):
+        lifted: dict[str, Any] = dict(natal)
+        for row in summary["personal_planets"]:
+            if not isinstance(row, dict):
+                continue
+            body = str(row.get("body") or row.get("planet") or "").strip().lower()
+            sign = row.get("sign")
+            if body and sign and not lifted.get(f"{body}_sign"):
+                lifted[f"{body}_sign"] = sign
+        if summary.get("houses_available") is not None:
+            lifted.setdefault("houses_available", bool(summary.get("houses_available")))
+        if isinstance(summary.get("houses"), dict):
+            lifted.setdefault("houses", summary["houses"])
+        natal = lifted
     return {
         "contract_version": "profile_funnel_shared_input_v0",
         "person": user_json.get("person"),
         "astro": user_json.get("astro"),
+        "natal": natal,
         "numerology": user_json.get("numerology"),
         "baseline": user_json.get("baseline"),
         "living": user_json.get("living"),
@@ -355,7 +376,7 @@ def run_profile_disclosure_funnel_v0(
     meta["completed_steps"].append("styles")
 
     # Production invariant: do not call patterns LLM without longitudinal eligibility.
-    # Skipped/failed patterns must NOT stop spheres (natal-presence projector).
+    # Skipped/failed patterns must NOT stop spheres (natal-presence synthesis).
     r3: dict[str, Any] | None = None
     if not patterns_generation_allowed(user_json):
         depth = depth_from_profile_pack(user_json)
@@ -406,8 +427,8 @@ def run_profile_disclosure_funnel_v0(
             meta["reason"] = "patterns_failed"
             meta["partial"] = True
 
-    # Deterministic spheres (PR-2 slice) — independent of patterns outcome.
-    # Legacy profile.spheres.v1 is not content authority (not called).
+    # Spheres synthesis (love/money/decisions) — independent of patterns outcome.
+    # Legacy profile.spheres.v1 and projector phrase tables are NOT content authority.
     foundations = build_sphere_foundations_v0(shared=shared, identity=r1, styles=r2)
     spheres_ok_gate = spheres_projection_allowed(foundations)
     if profile_capture_enabled():
@@ -417,33 +438,44 @@ def run_profile_disclosure_funnel_v0(
             if isinstance(bel, dict) and isinstance(bel.get("spheres"), dict):
                 bel["spheres"]["may_generate"] = spheres_ok_gate
                 bel["spheres"]["reason"] = (
-                    "natal-presence foundations allow deterministic sphere projection"
+                    "natal-presence foundations allow sphere synthesis on prepared cues"
                     if spheres_ok_gate
                     else "insufficient natal/identity/styles foundations for spheres"
                 )
                 bel["spheres"]["min_source_depth"] = "birth_data_only"
 
     life_spheres: dict[str, Any] = {}
-    spheres_proj_meta: dict[str, Any] = {}
-    t_sph0 = perf_counter()
+    spheres_meta: dict[str, Any] = {}
     if spheres_ok_gate:
-        life_spheres, spheres_proj_meta = project_life_spheres_v0(foundations)
+        life_spheres, spheres_meta = synthesize_life_spheres_v0(foundations)
         step_spheres: dict[str, Any] = {
-            "prompt_id": None,
-            "projector": PROJECTION_VERSION,
+            "prompt_id": "profile.spheres.synthesis.v1",
+            "synthesis_version": SYNTHESIS_VERSION,
             "spheres_source": SPHERES_SOURCE,
-            "attempts": 0,
-            "ms": int((perf_counter() - t_sph0) * 1000),
+            "attempts": sum(
+                int((spheres_meta.get("per_sphere") or {}).get(sid, {}).get("attempts") or 0)
+                for sid in ("love", "money", "decisions")
+            ),
+            "ms": spheres_meta.get("ms"),
             "ok": bool(life_spheres),
-            "projection": {
-                "spheres_projected": spheres_proj_meta.get("spheres_projected"),
-                "spheres_omitted": spheres_proj_meta.get("spheres_omitted"),
-                "fingerprint": spheres_proj_meta.get("fingerprint"),
+            "synthesis": {
+                "spheres_projected": spheres_meta.get("spheres_projected"),
+                "spheres_omitted": spheres_meta.get("spheres_omitted"),
+                "per_sphere": {
+                    sid: {
+                        "ok": info.get("ok"),
+                        "cues_ok": info.get("cues_ok"),
+                        "cue_ids": info.get("cue_ids"),
+                        "omit_reason": info.get("omit_reason"),
+                        "attempts": info.get("attempts"),
+                    }
+                    for sid, info in (spheres_meta.get("per_sphere") or {}).items()
+                },
             },
         }
         meta["steps"].append(step_spheres)
         meta["spheres_source"] = SPHERES_SOURCE
-        meta["life_spheres_meta"] = spheres_proj_meta
+        meta["life_spheres_meta"] = spheres_meta
         if life_spheres:
             meta["completed_steps"].append("spheres")
             if profile_capture_enabled():
@@ -453,7 +485,7 @@ def run_profile_disclosure_funnel_v0(
         else:
             meta["spheres_omitted"] = True
             if not meta.get("reason"):
-                meta["reason"] = "spheres_projection_empty"
+                meta["reason"] = "spheres_synthesis_empty"
             meta["partial"] = True
             if profile_capture_enabled():
                 capture = get_profile_capture_session()
@@ -462,8 +494,8 @@ def run_profile_disclosure_funnel_v0(
     else:
         meta["steps"].append(
             {
-                "prompt_id": None,
-                "projector": PROJECTION_VERSION,
+                "prompt_id": "profile.spheres.synthesis.v1",
+                "synthesis_version": SYNTHESIS_VERSION,
                 "skipped": True,
                 "skip_reason": "spheres_projection_gate_ineligible",
                 "attempts": 0,
@@ -480,12 +512,12 @@ def run_profile_disclosure_funnel_v0(
             if capture is not None:
                 capture.mark_step_ran("spheres", ran=False)
 
-    # Global ready still requires full 9 spheres + patterns bundle — not redesigned in PR-2.
-    # v0.1 always returns partial once identity/styles ran (slice spheres ≠ ready contract).
+    # Global ready still requires full 9 spheres + patterns bundle — not redesigned here.
+    # Slice synthesis always returns partial once identity/styles ran.
     meta["partial"] = True
     meta["failed"] = True
     if not meta.get("reason"):
-        meta["reason"] = "spheres_slice_partial_v0_1"
+        meta["reason"] = "spheres_slice_partial_synthesis_v1"
 
     merged: dict[str, Any] = {
         "identity_core": r1.get("identity_core"),
@@ -502,6 +534,6 @@ def run_profile_disclosure_funnel_v0(
         merged["helps"] = r3.get("helps")
     if life_spheres:
         merged["life_spheres"] = life_spheres
-        if spheres_proj_meta:
-            merged["life_spheres_meta"] = spheres_proj_meta
+        if spheres_meta:
+            merged["life_spheres_meta"] = spheres_meta
     return merged, meta

@@ -1,4 +1,4 @@
-"""Profile disclosure funnel — identity/styles/patterns + deterministic spheres."""
+"""Profile disclosure funnel — identity/styles/patterns + spheres synthesis."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ from typing import Any
 
 from todayflow_backend.core.config import settings
 from todayflow_backend.services import profile_disclosure_funnel_v0 as funnel
-from todayflow_backend.services.life_spheres_projector_v0 import SPHERES_SOURCE
+from todayflow_backend.services.life_spheres_synthesis_run_v0 import SPHERES_SOURCE
 from todayflow_backend.services.profile_contract_v1 import (
     PROFILE_CONTRACT_PROMPT_VER,
     _normalize_profile_contract,
@@ -75,10 +75,42 @@ def _patterns() -> dict[str, Any]:
     }
 
 
-def test_profile_funnel_patterns_then_deterministic_spheres(monkeypatch) -> None:
+def _sphere_row(tag: str) -> dict[str, str]:
+    return {
+        "how": f"В сфере {tag} ты действуешь через ясный шаг и проверяемый контакт с реальностью рядом.",
+        "need": f"Тебе нужно условие устойчивости в {tag}, где темп не форсируют без твоей опоры.",
+        "risk": f"Сила в {tag} может превратиться в застревание, если молчать о дискомфорте слишком долго.",
+        "turns_on": f"Включает участие в {tag} конкретная ясность и выполненное обещание.",
+        "turns_off": f"Выключает в {tag} давление на скорость и непредсказуемые исчезновения.",
+        "helps": f"Назови один критерий для {tag} вслух и зафиксируй ближайший шаг на сегодня.",
+    }
+
+
+def _fake_synthesis_ok(foundations: dict[str, Any]) -> tuple[dict[str, dict[str, str]], dict[str, Any]]:
+    spheres = {
+        "love": _sphere_row("love"),
+        "money": _sphere_row("money"),
+        "decisions": _sphere_row("decisions"),
+    }
+    meta = {
+        "synthesis_version": "life_spheres_synthesis_v1.0.0",
+        "spheres_source": SPHERES_SOURCE,
+        "prompt_id": "profile.spheres.synthesis.v1",
+        "spheres_projected": ["love", "money", "decisions"],
+        "spheres_omitted": [],
+        "per_sphere": {sid: {"ok": True, "cues_ok": True, "attempts": 1} for sid in spheres},
+        "ms": 1,
+        "ok": True,
+        "gate": True,
+    }
+    return spheres, meta
+
+
+def test_profile_funnel_patterns_then_synthesis_spheres(monkeypatch) -> None:
     monkeypatch.setattr(settings, "llm_quality_mode", "rich")
     monkeypatch.setattr(funnel, "is_llm_chat_configured", lambda: True)
     monkeypatch.setattr(funnel, "prefer_multi_step_funnels", lambda: True)
+    monkeypatch.setattr(funnel, "synthesize_life_spheres_v0", _fake_synthesis_ok)
     responses = [_identity(), _styles(), _patterns()]
 
     monkeypatch.setattr(funnel, "_call", _fake_call_factory(responses))
@@ -93,7 +125,7 @@ def test_profile_funnel_patterns_then_deterministic_spheres(monkeypatch) -> None
     assert meta["partial"] is True  # slice ≠ global ready
     assert meta["completed_steps"] == ["identity", "styles", "patterns", "spheres"]
     assert meta.get("spheres_source") == SPHERES_SOURCE
-    assert len(responses) == 0  # no LLM spheres call
+    assert len(responses) == 0  # identity/styles/patterns only; synthesis mocked
     assert merged is not None
     assert merged["life_mission"]
     assert set(merged["life_spheres"].keys()) == {"love", "money", "decisions"}
@@ -102,7 +134,8 @@ def test_profile_funnel_patterns_then_deterministic_spheres(monkeypatch) -> None
     assert contract["profile_snapshot_version"] == PROFILE_CONTRACT_PROMPT_VER
     assert contract["life_spheres"]["love"]["need"]
     legacy = profile_contract_to_legacy_interpretation(contract)
-    assert "любв" in legacy["life_areas"]["love"].lower()
+    love_legacy = legacy["life_areas"]["love"].lower()
+    assert "love" in love_legacy or "близ" in love_legacy or "сфер" in love_legacy
     assert len(legacy["life_areas"]["love"]) >= 20
 
 
@@ -113,10 +146,11 @@ def test_economize_skips_profile_funnel(monkeypatch) -> None:
     assert meta["reason"] == "quality_mode_economize"
 
 
-def test_patterns_failed_still_projects_spheres(monkeypatch) -> None:
+def test_patterns_failed_still_synthesizes_spheres(monkeypatch) -> None:
     monkeypatch.setattr(settings, "llm_quality_mode", "rich")
     monkeypatch.setattr(funnel, "is_llm_chat_configured", lambda: True)
     monkeypatch.setattr(funnel, "prefer_multi_step_funnels", lambda: True)
+    monkeypatch.setattr(funnel, "synthesize_life_spheres_v0", _fake_synthesis_ok)
     responses: list[dict[str, Any] | None] = [
         _identity(),
         _styles(),
@@ -143,11 +177,12 @@ def test_patterns_failed_still_projects_spheres(monkeypatch) -> None:
     assert merged.get("recurring_patterns") == []
 
 
-def test_patterns_skipped_when_birth_only_projects_spheres(monkeypatch) -> None:
-    """GENERATION_GATE patterns skip must not block deterministic spheres."""
+def test_patterns_skipped_when_birth_only_synthesizes_spheres(monkeypatch) -> None:
+    """GENERATION_GATE patterns skip must not block sphere synthesis."""
     monkeypatch.setattr(settings, "llm_quality_mode", "rich")
     monkeypatch.setattr(funnel, "is_llm_chat_configured", lambda: True)
     monkeypatch.setattr(funnel, "prefer_multi_step_funnels", lambda: True)
+    monkeypatch.setattr(funnel, "synthesize_life_spheres_v0", _fake_synthesis_ok)
     calls: list[str] = []
     responses = [_identity(), _styles()]
 
@@ -173,7 +208,7 @@ def test_patterns_skipped_when_birth_only_projects_spheres(monkeypatch) -> None:
         },
         locale="ru",
     )
-    assert len(calls) == 2  # identity + styles only (no patterns, no LLM spheres)
+    assert len(calls) == 2  # identity + styles only (no patterns)
     assert meta["reason"] == "patterns_skipped_ineligible"
     assert meta["patterns_omitted"] is True
     assert meta["partial"] is True
@@ -187,6 +222,51 @@ def test_patterns_skipped_when_birth_only_projects_spheres(monkeypatch) -> None:
     assert merged.get("living_changes") is None
     assert set(merged.get("life_spheres") or {}) == {"love", "money", "decisions"}
     assert meta.get("spheres_source") == SPHERES_SOURCE
-    proj = meta["steps"][3]
-    assert proj.get("spheres_source") == SPHERES_SOURCE
-    assert proj.get("ok") is True
+    syn = meta["steps"][3]
+    assert syn.get("spheres_source") == SPHERES_SOURCE
+    assert syn.get("prompt_id") == "profile.spheres.synthesis.v1"
+    assert syn.get("ok") is True
+
+
+def test_synthesis_fail_does_not_fallback_to_projector(monkeypatch) -> None:
+    """Validator/LLM fail ⇒ omit spheres; never fill from projector tables."""
+    monkeypatch.setattr(settings, "llm_quality_mode", "rich")
+    monkeypatch.setattr(funnel, "is_llm_chat_configured", lambda: True)
+    monkeypatch.setattr(funnel, "prefer_multi_step_funnels", lambda: True)
+
+    def empty_synthesis(foundations: dict[str, Any]) -> tuple[dict, dict]:
+        return {}, {
+            "spheres_source": SPHERES_SOURCE,
+            "ok": False,
+            "spheres_projected": [],
+            "spheres_omitted": [
+                {"id": "love", "reason": "synthesis_validation_failed"},
+                {"id": "money", "reason": "synthesis_validation_failed"},
+                {"id": "decisions", "reason": "synthesis_validation_failed"},
+            ],
+            "per_sphere": {},
+            "ms": 1,
+            "gate": True,
+        }
+
+    monkeypatch.setattr(funnel, "synthesize_life_spheres_v0", empty_synthesis)
+    monkeypatch.setattr(funnel, "_call", _fake_call_factory([_identity(), _styles()]))
+    merged, meta = funnel.run_profile_disclosure_funnel_v0(
+        {
+            "person": {"first_name": "Аня", "birth_date": "1992-03-04"},
+            "astro": {"sun_sign": "aries", "venus_sign": "Taurus"},
+            "living": None,
+        },
+        locale="ru",
+    )
+    assert merged is not None
+    assert not merged.get("life_spheres")
+    assert meta.get("spheres_omitted") is True
+    assert meta.get("spheres_source") == SPHERES_SOURCE
+    assert "deterministic_projector" not in json_dumps_safe(meta)
+
+
+def json_dumps_safe(obj: Any) -> str:
+    import json
+
+    return json.dumps(obj, ensure_ascii=False, default=str)

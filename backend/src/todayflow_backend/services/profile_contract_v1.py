@@ -433,6 +433,8 @@ def build_profile_portrait_v1(
     llm_pack = {
         "person": profile_input.get("person"),
         "astro": profile_input.get("astro"),
+        "natal": profile_input.get("natal"),
+        "natal_summary": profile_input.get("natal_summary"),
         "numerology": profile_input.get("numerology"),
         "baseline": profile_input.get("baseline"),
         "living": living,

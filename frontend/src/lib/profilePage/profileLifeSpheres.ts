@@ -172,7 +172,7 @@ function buildSpheresFromContractOnly(
 
 /**
  * Life spheres for Profile V2.
- * Snapshot contract spheres only (deterministic projector or legacy) — no chart/DEFAULTS fill.
+ * Snapshot contract spheres only (validated synthesis or legacy) — no chart/DEFAULTS fill.
  * Partial maps (e.g. love/money/decisions) are valid; patterns not required.
  */
 export function buildProfileLifeSpheresFromProfileData(
@@ -202,7 +202,7 @@ export function buildProfileLifeSpheresFromProfileData(
     return [];
   }
   const fromContract = buildSpheresFromContractOnly(contractSpheres);
-  // Partial projection OK (PR-2 slice). Never pad with FE DEFAULTS.
+  // Partial synthesis OK (love/money/decisions slice). Never pad with FE DEFAULTS.
   return fromContract;
 }
 

@@ -94,7 +94,7 @@ def test_prompt_version_change_invalidates_hash() -> None:
     h1 = svc._build_profile_hash(None, {"birth_date": "1990-01-01", "sun_sign": "Leo"}, {"life_path": 7})
     versions = profile_prompt_versions()
     # Mutate registry version via monkeypatch on profile_prompt_versions
-    bumped = {**versions, "profile.spheres.v1": "9.9.9"}
+    bumped = {**versions, "profile.spheres.synthesis.v1": "9.9.9"}
 
     import todayflow_backend.services.core_profile as cp
 

@@ -1,6 +1,6 @@
 # Profile E2E — Prompt Passport: `profile.spheres.synthesis.v1`
 
-**Status:** active passport · eval harness green on 8 contrast cases (revalidated) · **not yet wired to production funnel**  
+**Status:** active passport · eval harness green · **wired in production funnel** (`synthesize_life_spheres_v0`)  
 **Date:** 2026-07-21  
 **Block:** `life_spheres` · [PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md)  
 **Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md)  
@@ -161,7 +161,8 @@ Forbidden: free fill to satisfy schema; silent projector overwrite presented as 
 | Contrast lsq-03 vs lsq-04 love (same natal, styles) | **PASS** (Jaccard 0.21) |
 | vs projector near-clone | **none** (mean Jaccard ≈ 0.02) |
 | Repeat lexical stability (2 runs) | Low Jaccard (~0.12–0.30) — paraphrase variance; meaning holds in spot checks; not a reason to return to projector tables |
-| Funnel wiring | **blocked** until Case A/B + UI checklist on PR #2 |
+| Funnel wiring | **shipped** in `profile_disclosure_funnel_v0` — fail/omit, no projector copy fallback |
+| Case A/B production capture | required proof after this wire |
 
 ---
 

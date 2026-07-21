@@ -43,7 +43,9 @@
 | Contrast profiles diverge | **PASS** 2/2 |
 | Not a projector clone | **PASS** (mean Jaccard ≈ 0.02) |
 | Lexical repeat stability | Weak (~0.12–0.30) — paraphrase OK; do not “fix” with more gates |
-| Funnel / UI wire | **Not yet** |
+| Funnel wire (`synthesize_life_spheres_v0`) | **Shipped** — Case A/B packs `capture_synthesis_ab_20260721T153457Z` |
+| Fail ⇒ omit (no projector boilerplate) | **PASS** (unit + funnel test) |
+| Snapshot partial + GET | **PASS** (A/B) |
 | Expand to 6 more spheres / life_mission / Character helps | Still **frozen** |
 
 ---

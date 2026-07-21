@@ -24,9 +24,9 @@
 | What are spheres? | Базовая карта проявлений личности в ключевых сферах жизни |
 | What are patterns? | Подтверждённые повторения во времени (отдельная сущность) |
 | Eligibility source | Natal/foundation inputs + stable identity/styles — **independent of patterns** |
-| Content engine | Deterministic evidence → **LLM sphere synthesis** → validation |
+| Content engine | Deterministic evidence → **LLM sphere synthesis** → validation → Snapshot (**wired**) |
 | Deterministic | Eligibility, cues, house gate, schema/ban checks — not final prose tables as product |
-| LLM | Synthesis of practical manifestation map; never eligibility; never invent from empty cues |
+| LLM | Synthesis of practical manifestation map; never eligibility; never invent from empty cues; fail ⇒ omit (no projector boilerplate) |
 | Ready coupling | Patterns and spheres must **not** jointly define a single global ready |
 
 ---
