@@ -84,6 +84,7 @@ class Settings(BaseSettings):
     today_narrative_quality_mode: str = "trust_llm"
     # COMPATIBILITY_CONTENT_V1 — C2 content contracts (guest finished / registered / premium).
     # Off until evaluation set beats legacy truncation + LLM baseline. Do not enable in prod early.
+    # Guest+registered content v1.1 (publish_gate in enrichment). Premium not via this flag.
     compatibility_content_v1: bool = False  # COMPATIBILITY_CONTENT_V1=1 to enable
 
     # Push: optional cron secret for POST /internal/push/run-due (set in production)

@@ -2,8 +2,8 @@
 
 **Статус:** принято для аудита и контракта (до переключения production generation).  
 **Версия:** 1.0 (2026-07-21).  
-**Связь:** [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) §4 · код `profile_content_v1` · текущая генерация `profile_contract_v1` / `profile_disclosure_funnel_v0`.  
-**Метод оценки:** как Compatibility — вход → полный prompt → raw → final → ручная оценка.
+**Связь:** [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) §4 · код `profile_content_v1` · текущая генерация `profile_contract_v1` / `profile_disclosure_funnel_v0` · голос [content/TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md).  
+**Метод оценки:** как Compatibility — вход → полный prompt → raw → final → ручная оценка + Voice rubric.
 
 Профиль — источник персонализации для Today, Compatibility, Tarot и рекомендаций. Качество здесь важнее большинства отдельных модулей.
 

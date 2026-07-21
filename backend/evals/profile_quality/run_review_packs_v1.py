@@ -32,6 +32,7 @@ from todayflow_backend.services.llm_quality_policy_v1 import (  # noqa: E402
 )
 from todayflow_backend.services.profile_content_v1.architecture import (  # noqa: E402
     LLM_ON_READ_RISK_CALLERS,
+    PORTRAIT_PUBLISHERS,
     SAFE_SNAPSHOT_CALLERS,
     classify_allowed_claims,
 )
@@ -296,6 +297,7 @@ def run_one(sc: dict[str, Any], case_no: int) -> dict[str, Any]:
         "architecture_note": {
             "llm_on_read_risk_callers": list(LLM_ON_READ_RISK_CALLERS),
             "safe_snapshot_callers": list(SAFE_SNAPSHOT_CALLERS),
+            "portrait_publishers": list(PORTRAIT_PUBLISHERS),
         },
     }
 
@@ -332,6 +334,16 @@ def run_one(sc: dict[str, Any], case_no: int) -> dict[str, Any]:
                 "missing": "",
                 "shippable": "да | после правок | нет",
                 "score_1_to_10": None,
+                "scores": {
+                    "naturalness": None,
+                    "personalization": None,
+                    "practical_value": None,
+                    "honesty": None,
+                    "todayflow_voice": None,
+                    "memorability": None,
+                },
+                "voice_exemplar_to_canon": "",
+                "voice_canon_ref": "docs/content/TODAYFLOW_VOICE_CANON.md",
             },
         }
 
@@ -445,6 +457,16 @@ def run_one(sc: dict[str, Any], case_no: int) -> dict[str, Any]:
             "missing": "",
             "shippable": "да | после правок | нет",
             "score_1_to_10": None,
+            "scores": {
+                "naturalness": None,
+                "personalization": None,
+                "practical_value": None,
+                "honesty": None,
+                "todayflow_voice": None,
+                "memorability": None,
+            },
+            "voice_exemplar_to_canon": "",
+            "voice_canon_ref": "docs/content/TODAYFLOW_VOICE_CANON.md",
         },
     }
     return pack
@@ -523,6 +545,16 @@ def pack_to_markdown(pack: dict[str, Any]) -> str:
         "* Можно ли показывать: да / после правок / нет",
         "* Оценка: 1–10",
         "",
+        "### Voice (TodayFlow)",
+        "",
+        "* Naturalness: /10",
+        "* Personalization: /10",
+        "* Practical value: /10",
+        "* Honesty: /10",
+        "* TodayFlow Voice: /10",
+        "* Memorability: /10",
+        "* Удачная фраза/структура → перенести принцип в `docs/content/TODAYFLOW_VOICE_CANON.md`:",
+        "",
     ]
     return "\n".join(lines)
 
@@ -572,11 +604,14 @@ def main() -> int:
             [
                 "# Architecture note (from packs)",
                 "",
-                "LLM-on-read risk callers:",
-                *[f"- {x}" for x in LLM_ON_READ_RISK_CALLERS],
+                "LLM-on-read risk callers (should be empty after P0):",
+                *([f"- {x}" for x in LLM_ON_READ_RISK_CALLERS] or ["- (none)"]),
                 "",
                 "Safe snapshot callers:",
                 *[f"- {x}" for x in SAFE_SNAPSHOT_CALLERS],
+                "",
+                "Portrait publishers only:",
+                *[f"- {x}" for x in PORTRAIT_PUBLISHERS],
                 "",
             ]
         ),

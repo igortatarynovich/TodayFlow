@@ -45,6 +45,8 @@ services:
       NEBIUS_API_KEY: ${NEBIUS_API_KEY:-}
       NEBIUS_BASE_URL: ${NEBIUS_BASE_URL:-https://api.tokenfactory.nebius.com/v1/}
       NEBIUS_MODEL: ${NEBIUS_MODEL:-deepseek-ai/DeepSeek-V4-Pro}
+      # Guest+registered content v1.1 after human review; premium still not wide-enabled.
+      COMPATIBILITY_CONTENT_V1: ${COMPATIBILITY_CONTENT_V1:-1}
     volumes:
       - ./CONTENT:/CONTENT
     depends_on:

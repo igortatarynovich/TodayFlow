@@ -652,6 +652,9 @@ def compatibility_dynamics(
             "today_do": td,
             "today_avoid": ta,
             "today_focus": tf,
+            # For content_v1 source_depth / honesty (enrichment worker).
+            "birth_date_1": body.birth_date_1.isoformat() if body.birth_date_1 else None,
+            "birth_date_2": body.birth_date_2.isoformat() if body.birth_date_2 else None,
         }
         job, _created = enqueue_or_reuse(
             db,

@@ -312,6 +312,264 @@ def test_prompt_version_v11():
     assert "score НЕ возвращай" in prem or "Поле score НЕ" in prem
 
 
+def test_enrichment_uses_content_v1_when_flag_on(monkeypatch):
+    """Production worker must call generate_content_v1 + publish_gate when flag on."""
+    from todayflow_backend.core import config as cfg
+    from todayflow_backend.services import compatibility_enrichment_v0 as enrich
+
+    calls: list[str] = []
+
+    class _Job:
+        id = 1
+        fingerprint = "fp"
+        user_id = 7
+        attempt_count = 1
+        max_attempts = 2
+        request_payload = {
+            "from_sign": "aries",
+            "to_sign": "leo",
+            "locale": "ru",
+            "relationship_context": "just_met",
+            "name_1": "A",
+            "name_2": "B",
+        }
+        result_payload = None
+        status = "enrichment_pending"
+        locked_at = None
+        error_message = None
+
+    job = _Job()
+    monkeypatch.setattr(cfg.settings, "compatibility_content_v1", True)
+    monkeypatch.setattr(enrich, "claim_job", lambda db, jid: job)
+    monkeypatch.setattr(enrich, "get_job", lambda db, jid: job)
+    monkeypatch.setattr(
+        enrich,
+        "_rebuild_template_surface",
+        lambda payload, locale: (
+            type("S", (), {"subscores": type("Sub", (), {"model_dump": lambda self: {}})()})(),
+            {"score": 70, "paragraphs": [], "quick_reading": {}, "summary": "s"},
+            {"id": "aries", "element": "fire", "modality": "cardinal"},
+            {"id": "leo", "element": "fire", "modality": "fixed"},
+            "Овен",
+            "Лев",
+            "el",
+            "rh",
+            "just_met",
+        ),
+    )
+    monkeypatch.setattr(enrich, "build_pair_dynamics", lambda **kw: {})
+    monkeypatch.setattr(
+        enrich,
+        "resolve_compat_access_tier",
+        lambda user, db: "registered",
+    )
+
+    class _U:
+        id = 7
+
+    monkeypatch.setattr(
+        enrich,
+        "run_with_db",
+        lambda fn: fn(type("DB", (), {"query": lambda *a, **k: type("Q", (), {"filter": lambda *a, **k: type("F", (), {"first": lambda: _U()})()})()})()),
+    )
+
+    valid = {
+        "contract_version": "compatibility_content_v1",
+        "tier": "registered",
+        "source_depth": "zodiac_only",
+        "locale": "ru",
+        "headline": "Два стартовых пистолета в одной комнате",
+        "score": 72,
+        "summary": "Оба быстро включаются, но кто уступит — уже при выборе фильма. Это не приговор, а ритм пары.",
+        "attraction": "Тянет общая скорость: идеи вспыхивают сразу, и хочется проверить их вместе сегодня же вечером.",
+        "emotions": "Близость проявляется через совместный азарт и быстрые решения, а не через долгие разговоры о чувствах.",
+        "communication": "Разговор идёт прямо и коротко; паузы могут читаться как отказ, хотя это просто переключение темы.",
+        "conflict": "Спор часто начинается с пустяка и за десять минут уходит в совсем другую тему, если никто не ставит стоп.",
+        "strengths": "Легко запускать общее дело и не застревать в долгих согласованиях перед первым шагом.",
+        "vulnerable_spot": "Оба могут давить темпом и ждать уступки, не замечая, что второй уже устал спорить.",
+        "what_helps": "Перед решением договориться, кто сегодня ведёт, а кто поддерживает — хотя бы на один вечер.",
+        "main_risk": "Гонка за лидерством в мелочах съедает тепло быстрее, чем большой конфликт.",
+        "practical_advice": "На ближайшие дни выберите одного «капитана вечера» и не оспаривайте мелкий выбор.",
+        "honesty_line": "Это общий рисунок по знакам, не портрет ваших характеров.",
+    }
+
+    def _fake_gen(**kwargs):
+        calls.append("generate_content_v1")
+        return {
+            "ok": True,
+            "content": valid,
+            "publish_allowed": True,
+            "prompt_version": "compatibility_content_prompt_v1.1",
+        }
+
+    completed: list[dict] = []
+
+    def _complete(db, j, *, expected_fingerprint, result_payload):
+        calls.append("complete")
+        completed.append(result_payload)
+        j.status = "enriched"
+        j.result_payload = result_payload
+        return j
+
+    monkeypatch.setattr(
+        "todayflow_backend.services.compatibility_content_v1.generate_v1.generate_content_v1",
+        _fake_gen,
+    )
+    # Patch where enrichment imports at runtime
+    import todayflow_backend.services.compatibility_content_v1.generate_v1 as gen_mod
+
+    monkeypatch.setattr(gen_mod, "generate_content_v1", _fake_gen)
+    monkeypatch.setattr(enrich, "complete_job_if_fresh", _complete)
+    monkeypatch.setattr(enrich, "mark_job_failed", lambda db, j, e: (_ for _ in ()).throw(AssertionError(e)))
+
+    class _LlmCtx:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+    monkeypatch.setattr(
+        "todayflow_backend.core.llm_openai_compatible.llm_operation",
+        lambda *a, **k: _LlmCtx(),
+    )
+    monkeypatch.setattr(
+        "todayflow_backend.db.models.User",
+        _U,
+        raising=False,
+    )
+
+    # Simpler: patch the query path inside _run by stubbing User lookup via payload-only tier
+    def _run_db(fn):
+        class _DB:
+            def query(self, model):
+                class _Q:
+                    def filter(self, *a, **k):
+                        return self
+
+                    def first(self):
+                        return None
+
+                return _Q()
+
+            def add(self, obj):
+                return None
+
+            def commit(self):
+                return None
+
+        fn(_DB())
+
+    monkeypatch.setattr(enrich, "run_with_db", _run_db)
+    # Without user, tier stays registered
+    job.user_id = None
+    enrich.run_compatibility_enrichment_job(1)
+    assert "generate_content_v1" in calls
+    assert "complete" in calls
+    assert completed and completed[0]["generation_source"] == "content_v1"
+    assert completed[0]["publish_allowed"] is True
+
+
+def test_enrichment_gate_keeps_baseline_on_invalid(monkeypatch):
+    from todayflow_backend.core import config as cfg
+    from todayflow_backend.services import compatibility_enrichment_v0 as enrich
+
+    class _Job:
+        id = 2
+        fingerprint = "fp2"
+        user_id = None
+        attempt_count = 2
+        max_attempts = 2
+        request_payload = {
+            "from_sign": "aries",
+            "to_sign": "cancer",
+            "locale": "ru",
+            "relationship_context": "just_met",
+        }
+        result_payload = None
+        status = "enrichment_pending"
+        locked_at = None
+        error_message = None
+
+    job = _Job()
+    failed: list[str] = []
+    monkeypatch.setattr(cfg.settings, "compatibility_content_v1", True)
+    monkeypatch.setattr(enrich, "claim_job", lambda db, jid: job)
+    monkeypatch.setattr(enrich, "get_job", lambda db, jid: job)
+    monkeypatch.setattr(
+        enrich,
+        "_rebuild_template_surface",
+        lambda payload, locale: (
+            type("S", (), {"subscores": type("Sub", (), {"model_dump": lambda self: {}})()})(),
+            {"score": 55, "paragraphs": [], "quick_reading": {}, "summary": "s"},
+            {"id": "aries", "element": "fire", "modality": "cardinal"},
+            {"id": "cancer", "element": "water", "modality": "cardinal"},
+            "Овен",
+            "Рак",
+            "el",
+            "rh",
+            "just_met",
+        ),
+    )
+    monkeypatch.setattr(enrich, "build_pair_dynamics", lambda **kw: {})
+
+    def _run_db(fn):
+        class _DB:
+            def add(self, obj):
+                return None
+
+            def commit(self):
+                return None
+
+        fn(_DB())
+
+    monkeypatch.setattr(enrich, "run_with_db", _run_db)
+
+    import todayflow_backend.services.compatibility_content_v1.generate_v1 as gen_mod
+
+    monkeypatch.setattr(
+        gen_mod,
+        "generate_content_v1",
+        lambda **kw: {
+            "ok": False,
+            "content": {"tier": "registered", "score": 0, "summary": "x"},
+            "errors": ["score_out_of_range"],
+            "prompt_version": "compatibility_content_prompt_v1.1",
+        },
+    )
+
+    def _fail(db, j, e):
+        failed.append(e)
+        j.status = "enrichment_failed"
+        return j
+
+    monkeypatch.setattr(enrich, "mark_job_failed", _fail)
+    monkeypatch.setattr(
+        enrich,
+        "complete_job_if_fresh",
+        lambda *a, **k: (_ for _ in ()).throw(AssertionError("must not complete")),
+    )
+
+    class _LlmCtx:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+    monkeypatch.setattr(
+        "todayflow_backend.core.llm_openai_compatible.llm_operation",
+        lambda *a, **k: _LlmCtx(),
+    )
+
+    enrich.run_compatibility_enrichment_job(2)
+    assert failed
+    assert "content_v1_publish_rejected" in failed[0]
+    assert job.result_payload is not None
+    assert job.result_payload.get("kept_baseline") is True
+    assert job.result_payload.get("product_surface") is None
+
+
 def test_maybe_replace_guest_surface(monkeypatch):
     from todayflow_backend.core import config as cfg
     from todayflow_backend.services.compatibility_content_v1.apply_guest_v1 import (

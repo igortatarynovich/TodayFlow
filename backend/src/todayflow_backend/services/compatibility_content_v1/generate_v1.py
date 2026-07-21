@@ -1,7 +1,8 @@
-"""Offline / flagged LLM generation for content v1 contracts.
+"""LLM generation for content v1 contracts (guest / registered / premium).
 
-Production enrichment stays on legacy pipeline until COMPATIBILITY_CONTENT_V1
-is enabled AND eval baseline beats current.
+Production: when COMPATIBILITY_CONTENT_V1=1, registered enrichment uses this
+module + publish_gate (see compatibility_enrichment_v0). Guest uses sync
+guest baseline / maybe_replace_guest_surface. Premium stays off wide rollout.
 """
 
 from __future__ import annotations

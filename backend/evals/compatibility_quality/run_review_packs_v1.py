@@ -418,6 +418,16 @@ def run_one(sc: dict[str, Any], tier: str, label: str, case_no: int) -> dict[str
             "missing": "",
             "shippable": "да | после правок | нет",
             "score_1_to_10": None,
+            "scores": {
+                "naturalness": None,
+                "personalization": None,
+                "practical_value": None,
+                "honesty": None,
+                "todayflow_voice": None,
+                "memorability": None,
+            },
+            "voice_exemplar_to_canon": "",
+            "voice_canon_ref": "docs/content/TODAYFLOW_VOICE_CANON.md",
         },
     }
     return pack
@@ -489,6 +499,16 @@ def pack_to_markdown(pack: dict[str, Any]) -> str:
         "* Чего не хватает:",
         "* Можно ли показывать пользователю: да / после правок / нет",
         "* Оценка: 1–10",
+        "",
+        "### Voice (TodayFlow)",
+        "",
+        "* Naturalness: /10",
+        "* Personalization: /10",
+        "* Practical value: /10",
+        "* Honesty: /10",
+        "* TodayFlow Voice: /10",
+        "* Memorability: /10",
+        "* Удачная фраза/структура → перенести принцип в `docs/content/TODAYFLOW_VOICE_CANON.md`:",
         "",
     ]
     return "\n".join(lines)

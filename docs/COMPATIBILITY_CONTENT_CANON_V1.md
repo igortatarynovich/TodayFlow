@@ -1,9 +1,9 @@
 # Compatibility Content Canon v1
 
-**Статус:** принято для C2 (контент до переключения production enrichment).  
-**Версия:** 1.0 (2026-07-21).  
+**Статус:** guest + registered approved under feature flag (human review v1.1). Premium — не широко.  
+**Версия:** 1.1 (2026-07-21).  
 **Владелец:** Product + Content + Engineering.  
-**Связь:** [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) §5 · freemium access `compatibility_access_v0` · jobs C1 · код `compatibility_content_v1`.
+**Связь:** [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) §5 · freemium access `compatibility_access_v0` · jobs C1 · код `compatibility_content_v1` · голос [content/TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md).
 
 **Роль:** продуктовый контракт слоёв Guest / Registered / Premium, глубина данных (`source_depth`), голос RU и quality bar.  
 Не инфраструктура генерации (C1). Не обрезание одного LLM-ответа под тариф.
@@ -23,7 +23,7 @@ Code gap: [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./audits/PERSONA
 | Один промпт → shape_for_tier | **Запрещено для v1-контента.** Каждый слой — свой prompt + schema. |
 | Текст глубже данных | **Запрещено.** `source_depth` ограничивает формулировки. |
 
-Production enrichment переключается на v1 **только** после сравнения с текущим baseline на evaluation set.
+**Rollout (2026-07-21):** Guest + Registered — `COMPATIBILITY_CONTENT_V1=1` (publish_gate в `compatibility_enrichment_v0`). Premium — не включать широко до ≥5 реальных вопросов. Промпт не трогать до пользовательских данных; следующий контроль — telemetry.
 
 ---
 
@@ -181,7 +181,7 @@ compatibility_content_v1:
 
 Обязательные включения: одинаковые знаки; «сложные» пары; похожие / противоположные стили; missing data; вопрос пользователя; эталон **RU**.
 
-Рубрика: конкретность · естественность · отсутствие повторов · полезность · соответствие `source_depth` · согласованность блоков · качество совета · готовность к показу без регенерации.
+Рубрика: конкретность · естественность · отсутствие повторов · полезность · соответствие `source_depth` · согласованность блоков · качество совета · готовность к показу · **TodayFlow Voice** / Memorability (см. [TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md)).
 
 ---
 
@@ -194,7 +194,8 @@ compatibility_content_v1:
 5. Прогон модели (offline)  
 6. Ручная оценка ≥30 ответов  
 7. Правки дефектов  
-8. **Тогда** `COMPATIBILITY_CONTENT_V1=1` на enrichment  
+8. ✅ Human review v1.1 → guest/registered under flag; publish_gate in enrichment worker  
+9. Next: publish/fallback telemetry · regen rate · save · block opens · user confirm/reject (не ещё один synthetic pack)  
 
 ---
 
@@ -206,8 +207,10 @@ compatibility_content_v1:
 - [x] `source_depth` + honesty lines в коде  
 - [x] Banned phrases + structural quality checks  
 - [x] Evaluation set 80 кейсов + offline guest baseline runner  
-- [ ] Ручная оценка ≥30 LLM-ответов + сравнение с legacy  
-- [ ] Production enrichment на v1 только после сравнения (`COMPATIBILITY_CONTENT_V1=1`)
+- [x] Ручная оценка первого пакета (10) + prompt v1.1; guest/registered approved under flag  
+- [x] Production enrichment на v1 + publish_gate (`compatibility_enrichment_v0` when flag on)  
+- [ ] Premium wide enable only after ≥5 real-user questions  
+- [ ] Telemetry: publish/fallback, regen, save, opens, confirm/reject  
 
 ---
 
@@ -218,3 +221,4 @@ compatibility_content_v1:
 | 2026-07-21 | v1.0 — C2 content canon: layers, source_depth, voice, eval, rollout |
 | 2026-07-21 | v1.1 — код `compatibility_content_v1`, eval 80, flag `COMPATIBILITY_CONTENT_V1` (default off) |
 | 2026-07-21 | prompt **v1.1** patch: score 20–95 / no score on premium; publish gate rejects invalid; registered≠verdict; birth_dates honesty; zodiac hedges; no gender hacks |
+| 2026-07-21 | guest+registered approved; publish_gate wired into enrichment worker; Voice Canon |

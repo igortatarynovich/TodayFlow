@@ -1,4 +1,9 @@
-"""Feature flag — content v1 is off until eval beats legacy baseline."""
+"""Feature flag for Compatibility content v1.1.
+
+Human review approved guest + registered under this flag.
+Premium remains excluded from wide enable (separate premium job / path).
+Set COMPATIBILITY_CONTENT_V1=1 to turn on.
+"""
 
 from __future__ import annotations
 
