@@ -109,7 +109,7 @@ describe("buildProfileV2LiveContext", () => {
     });
 
     expect(live.sourceDepth).toBe("birth_data_only");
-    expect(live.observationAccuracyLabel).toBe("начальная");
+    expect(live.observationAccuracyLabel).toBe("первые контуры");
     expect(live.helps).toEqual([]);
     expect(live.evidenceNextStep).toBeTruthy();
   });

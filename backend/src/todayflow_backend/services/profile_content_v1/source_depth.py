@@ -34,26 +34,26 @@ def depth_honesty_line(depth: ProfileSourceDepth, *, locale: str = "ru") -> str:
     ru = not (locale or "ru").lower().startswith("en")
     if depth == "longitudinal_profile":
         return (
-            "Разбор опирается на ответы и повторяющиеся дни — не только на дату рождения."
+            "Портрет опирается на ваши ответы и повторяющиеся дни — не только на дату рождения."
             if ru
-            else "This uses your answers and recurring days — not birth data alone."
+            else "The portrait draws on your answers and recurring days — not birth data alone."
         )
     if depth == "profile_plus_checkins":
         return (
-            "Из отметок уже читаются первые тенденции. Это ещё не полный долгосрочный портрет."
+            "По отметкам уже видны первые тенденции. С накоплением дней закономерности вашей жизни становятся яснее."
             if ru
-            else "Early tendencies from your check-ins — not a full long-term portrait."
+            else "Early tendencies already show in your check-ins. More days make your life patterns clearer."
         )
     if depth == "onboarding_answers":
         return (
-            "Часть формулировок опирается на ответы при старте. Поведение «в жизни» ещё не проверено днями."
+            "Часть формулировок опирается на ваши ответы при старте. Закрытые дни покажут, что из этого держится в жизни."
             if ru
-            else "Part of this uses your onboarding answers — real-life patterns are not confirmed yet."
+            else "Some lines draw on your onboarding answers. Closed days will show what holds in real life."
         )
     return (
-        "По данным рождения виден общий портрет. Этого недостаточно, чтобы утверждать, как вы реально ведёте себя в стрессе."
+        "Портрет по дате рождения показывает общие черты. Повторяющиеся жизненные закономерности проявляются со временем."
         if ru
-        else "Birth data shows a general portrait — not enough to claim how you act under stress."
+        else "A birth-date portrait shows general traits. Recurring life patterns appear over time."
     )
 
 

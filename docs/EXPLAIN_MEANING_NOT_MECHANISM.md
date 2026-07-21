@@ -25,6 +25,12 @@
 > Пользователь **никогда** не должен чувствовать, что его **анализирует алгоритм**.  
 > Режим продукта — **«я изучаю себя»**, не **«меня оценивает система»**.
 
+**Расширение (весь TodayFlow):** [TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md) §0.05–§0.06 —
+
+> Ни один пользовательский текст не описывает состояние системы.  
+> Текст описывает человека, смысл данных или ценность следующего шага.  
+> CTA несёт ценность действия, не факт пустоты («добавьте время, чтобы открыть ASC»).
+
 **Umbrella:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) — кухня обязана существовать; этот документ задаёт, что из неё **не** становится user-facing механизмом.
 
 **Связь:** [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) · [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md) §0.1 · [INTERPRETATION_LAYER_AND_REFERENCE.md](./INTERPRETATION_LAYER_AND_REFERENCE.md) · [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) §3 · [EXPLAINABLE_INTERPRETATION.md](./EXPLAINABLE_INTERPRETATION.md).

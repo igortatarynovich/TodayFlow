@@ -1,7 +1,7 @@
 import type { CoreProfile } from "@/lib/types";
 
 export const PROFILE_PORTRAIT_FORMING_MESSAGE =
-  "Портрет ещё формируется — живые тексты появятся после генерации.";
+  "Живые формулировки портрета ещё появляются. Уже доступны факты рождения и базовые сигнатуры.";
 
 export function isProfilePortraitForming(core: CoreProfile | null | undefined): boolean {
   const contract = core?.profile_contract_v1;

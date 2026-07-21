@@ -22,7 +22,7 @@ export const PROFILE_V2_COPY = {
   zones: {
     identity: {
       title: "Идентичность",
-      lead: "Факты и расчёты, которые формируют ядро — без дневного состояния.",
+      lead: "Ядро личности: факты рождения и устойчивые сигнатуры — без дневного состояния.",
       cards: {
         archetype: "Архетип",
         astro: "Базовые сигнатуры",
@@ -46,9 +46,9 @@ export const PROFILE_V2_COPY = {
     },
     evidence: {
       title: "Обоснование",
-      lead: "Почему портрет звучит так — и чего ещё не хватает для уверенности.",
-      nextLabel: "Что уточнит портрет",
-      levelPrefix: "Зрелость наблюдений",
+      lead: "Почему портрет звучит так — и что ещё может стать яснее.",
+      nextLabel: "Что откроет больше ясности",
+      levelPrefix: "Насколько уже видны повторы",
     },
     sources: {
       title: "Источники",
@@ -60,11 +60,17 @@ export const PROFILE_V2_COPY = {
   },
 } as const;
 
-/** Forbidden day-state lexicon on production Profile V2 copy. */
+/** Forbidden day-state and system-status lexicon on production Profile V2 copy. */
 export const PROFILE_V2_FORBIDDEN_LEXICON = [
   "Сегодня",
   "сегодня",
   "Камень дня",
   "Опоры дня",
   "опоры дня",
+  "Недостаточно данных",
+  "недостаточно данных",
+  "Профиль готов",
+  "профиль сформирован",
+  "Мы рассчитали",
+  "Нам не хватает",
 ] as const;

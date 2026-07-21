@@ -39,7 +39,9 @@ def test_source_depth_ladder():
 
 def test_birth_honesty_no_behaviour_claim():
     line = depth_honesty_line("birth_data_only", locale="ru")
-    assert "недостаточно" in line.lower() or "общего" in line.lower() or "общий" in line.lower()
+    assert "проявляются со временем" in line.lower() or "общие черты" in line.lower()
+    assert "недостаточно данных" not in line.lower()
+    assert "нам не" not in line.lower()
 
 
 def test_base_contract_requires_fields():

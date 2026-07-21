@@ -12,7 +12,7 @@ const baseModel: ProfileQuickMapViewModel = {
   perceivedAs: ["спокойный", "умный"],
   thriveAreas: ["Карьера", "Аналитика"],
   lifeMission: "Научиться не только понимать мир, но и воплощать идеи.",
-  frameworkTitle: "Почему система так решила",
+  frameworkTitle: "Почему портрет сложился так",
   frameworkLead: "Архетип, знак и число пути складываются в один сценарий.",
   frameworkAnchors: [{ id: "sun", label: "Солнце в Водолее" }],
   frameworkCards: [
@@ -46,7 +46,7 @@ describe("ProfileQuickMapScreen", () => {
     expect(screen.getByRole("heading", { name: "Sage" })).toBeInTheDocument();
     expect(screen.getByText("Что тебя усиливает")).toBeInTheDocument();
     expect(screen.getByText("понятные правила")).toBeInTheDocument();
-    expect(screen.getByText("Почему система так решила")).toBeInTheDocument();
+    expect(screen.getByText("Почему портрет сложился так")).toBeInTheDocument();
     expect(screen.getByText("Следующий уровень")).toBeInTheDocument();
     expect(screen.getByText("Карта личности")).toBeInTheDocument();
     expect(screen.getByTestId("profile-portal-deep")).toBeInTheDocument();

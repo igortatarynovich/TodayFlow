@@ -180,7 +180,7 @@ export function buildProfileQuickMapViewModel(
       perceivedAs,
       thriveAreas,
       lifeMission,
-      frameworkTitle: "Почему система так решила",
+      frameworkTitle: "Почему портрет сложился так",
       frameworkLead,
       frameworkAnchors,
       frameworkCards: framework.cards,

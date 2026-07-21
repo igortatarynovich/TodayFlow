@@ -19,7 +19,7 @@
 | `forbidden_sources` | Что нельзя подмешивать (Today, CUM day, taxonomy-as-fact, …) |
 | `insufficient_when` | При каких пробелах данных блок **нельзя** строить |
 | `generation_required` | `yes` / `no` / `conditional` — нужна ли LLM |
-| `generation_gate` | Условие **запуска** генерации (код/предикат); если false — step не вызывается |
+| `generation_gate` | Условие **запуска** генерации; если false — step не вызывается. **Обязателен до промпта:** «имеет ли блок право существовать для этого пользователя?» |
 | `allowed_claims` | Какие утверждения допустимы |
 | `forbidden_claims` | Что нельзя утверждать (даже «осторожно») |
 | `prompt_id` | Промпт (или `—` если только calc) |
@@ -84,3 +84,4 @@
 | Date | Change |
 |------|--------|
 | 2026-07-21 | Template opened with stage architecture principle |
+| 2026-07-21 | generation_gate = eligibility before prompt (mandatory) |
