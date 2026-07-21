@@ -31,10 +31,12 @@ const env = {
   PROFILE_CAPTURE_FE_OUT: outFile,
 };
 
+const jestBin = path.join(frontendRoot, "node_modules", "jest", "bin", "jest.js");
+const nodeBin = process.execPath;
 const result = spawnSync(
-  "npx",
+  nodeBin,
   [
-    "jest",
+    jestBin,
     "--runInBand",
     "--testPathPattern=profileCaptureProjection.cli",
     "--forceExit",
@@ -51,6 +53,7 @@ if (!fs.existsSync(outFile)) {
     JSON.stringify({
       error: "fe_projection_no_output",
       status: result.status,
+      error_spawn: result.error ? String(result.error) : null,
       stderr: (result.stderr || "").slice(-2500),
       stdout: (result.stdout || "").slice(-2500),
     }),

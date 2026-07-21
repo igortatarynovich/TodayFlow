@@ -5,7 +5,7 @@
 import fs from "fs";
 import path from "path";
 import type { CoreProfile } from "@/lib/types";
-import { projectCoreProfileForCapture } from "./profileCaptureProjectionHarness";
+import { projectCoreProfileForCapture } from "../profileCaptureProjectionHarness";
 
 const packPath = process.env.PROFILE_CAPTURE_PACK;
 const outPath = process.env.PROFILE_CAPTURE_FE_OUT;

@@ -101,6 +101,7 @@ Production-faithful pack должен это **доказать** (eligibility +
 | 3 | Block map (every surface block) | [audits/PROFILE_E2E_BLOCK_MAP.md](./audits/PROFILE_E2E_BLOCK_MAP.md) | **v0 — current reality** |
 | 4 | Sample pack through full pipeline | [audits/PROFILE_E2E_SAMPLE_PACK.md](./audits/PROFILE_E2E_SAMPLE_PACK.md) | **v0 — existing eval + gaps** |
 | 4b | Production-faithful capture harness | [audits/PROFILE_PRODUCTION_CAPTURE_PACK.md](./audits/PROFILE_PRODUCTION_CAPTURE_PACK.md) | **IMPLEMENTATION** |
+| 4c | Case A/B capture report | [audits/PROFILE_CAPTURE_CASE_AB_REPORT.md](./audits/PROFILE_CAPTURE_CASE_AB_REPORT.md) | **v0 — packs run** |
 | 5 | Degradation points (architectural classes only) | capture packs + maps | **v0** |
 | 6 | Missing-data matrix · trial/free/sub content plan | Understanding Progress canon + block map | partial |
 | 7 | Target architecture + Screen Master rewrite | *later* | not started |

@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -29,6 +30,12 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[2]
 REPO = ROOT.parent
 sys.path.insert(0, str(ROOT / "src"))
+
+# Eval/capture-only HTTP budget for DeepSeek multi-step funnel.
+# Does NOT change production Settings defaults — only process env for this CLI.
+# Override with LLM_HTTP_TIMEOUT_SECONDS / LLM_BACKGROUND_TIMEOUT_SECONDS if needed.
+os.environ.setdefault("LLM_HTTP_TIMEOUT_SECONDS", "120")
+os.environ.setdefault("LLM_BACKGROUND_TIMEOUT_SECONDS", "180")
 
 from todayflow_backend.services.profile_capture_session_v0 import (  # noqa: E402
     profile_capture_session,
@@ -114,23 +121,53 @@ def _assemble_snapshot_like_payload(
     }
 
 
+def _resolve_node_bin() -> str | None:
+    candidates = [
+        os.environ.get("NODE_BIN"),
+        "node",
+        "/usr/local/bin/node",
+        "/usr/bin/node",
+    ]
+    # Cursor/server node (dev hosts without system node)
+    cursor_nodes = sorted(Path("/root/.cursor-server/bin").glob("linux-*/**/node"))
+    candidates.extend(str(p) for p in cursor_nodes[-3:])
+    for c in candidates:
+        if not c:
+            continue
+        path = Path(c) if c.startswith("/") else None
+        if path and path.is_file() and os.access(path, os.X_OK):
+            return str(path)
+        # bare name — let subprocess resolve via PATH
+        if not str(c).startswith("/"):
+            return c
+    return None
+
+
 def _run_fe_projection(pack_path: Path, *, skip: bool) -> dict[str, Any] | None:
     if skip:
         return None
     script = REPO / "frontend" / "scripts" / "run_profile_capture_projection.mjs"
     if not script.is_file():
         return {"error": "fe_harness_missing", "path": str(script)}
+    node = _resolve_node_bin()
+    if not node:
+        return {"error": "node_not_found"}
+    env = {
+        **os.environ,
+        "PATH": f"{REPO / 'frontend' / 'node_modules' / '.bin'}:{os.environ.get('PATH', '')}",
+    }
     try:
         proc = subprocess.run(
-            ["node", str(script), str(pack_path)],
+            [node, str(script), str(pack_path)],
             cwd=str(REPO / "frontend"),
             capture_output=True,
             text=True,
-            timeout=120,
+            timeout=180,
             check=False,
+            env=env,
         )
     except FileNotFoundError:
-        return {"error": "node_not_found"}
+        return {"error": "node_not_found", "node": node}
     except subprocess.TimeoutExpired:
         return {"error": "fe_projection_timeout"}
     if proc.returncode != 0:

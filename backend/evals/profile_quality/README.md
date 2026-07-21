@@ -35,4 +35,6 @@ python evals/profile_quality/run_production_capture_v0.py --cases A,B
 - Same production funnel (4 steps, retry, quality validator, portrait builder)
 - Sidecar pack: prompts/raw/parse/validation/snapshot/GET/QuickMap/visible_blocks
 - Off by default; optional `--redact`
+- **Eval-only** default HTTP timeout 120s via process env (does not change production Settings defaults)
 - Spec: `docs/audits/PROFILE_PRODUCTION_CAPTURE_PACK.md`
+- Case A/B report: `docs/audits/PROFILE_CAPTURE_CASE_AB_REPORT.md`

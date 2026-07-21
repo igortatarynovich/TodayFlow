@@ -41,3 +41,7 @@ docs/datasets/raw/*.jsonl
 
 # Generated packaging metadata
 *.egg-info/
+
+# Profile capture sidecars may contain prompts/PII — keep local unless redacted
+backend/evals/profile_quality/runs/capture_*/
+
