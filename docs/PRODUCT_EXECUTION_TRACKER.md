@@ -1697,6 +1697,7 @@ Historical note:
 - 2026-07-21 | Product / Metric | **Reference Rate (hardened)** | **RESERVED** | Prior knowledge impossible from current input alone · **in use** when comparable across modules (Today vs Tarot) and drives decisions · [PROFILE §7.2](./PROFILE_CONTENT_CANON_V1.md)
 - 2026-07-21 | Product / Roadmap | **Longitudinal Validation** | **RESERVED (after C3, not C4)** | **Hypothesis:** model changes only with enough confirmed facts — not regen/prompt drift · [PROFILE §7.3](./PROFILE_CONTENT_CANON_V1.md) · exit criteria for C3/Telemetry in §7
 - 2026-07-21 | Product / Roadmap | **Stage exit criteria (C3→Telemetry→RR→LV)** | **CANON** | Order frozen · C3: 4-step / unique knowledge / no section echo / prior as knowledge source · Telemetry: reads·confirm·regen·fallback·RR trend · [PROFILE §7](./PROFILE_CONTENT_CANON_V1.md)
+- 2026-07-21 | Product / Roadmap | **Hypothesis falsifiers** | **RESERVED (after first real-user weeks)** | When to reject RR / Longitudinal / Consistency hypotheses · not engineering DoD · [PROFILE §7.4](./PROFILE_CONTENT_CANON_V1.md) · do not formalize yet
 - 2026-07-01 | Product | **Launch Scope Freeze** | **ACTIVE** | Epic 1–4 only; Figma → code → 10×7d field; [WEB_LAUNCH_PRODUCT_BLUEPRINT.md](./status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md)
 - 2026-07-01 | Product | **TodayFlow Product Model v0.2** | **FROZEN** | Living model, Lifecycle, laws; doc №1 — no launch-scope edits until user test.
 - 2026-06-22 | Engineering | P0.2 Today Experience (web) | PAUSED | Gate до ACCEPTED канона — снят 2026-06-23.

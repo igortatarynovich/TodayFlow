@@ -289,6 +289,26 @@ Profile refresh «создал новый snapshot» учитывается от
 
 ---
 
+## 7.4 Reserved: критерии пересмотра гипотез *(не сейчас)*
+
+§7 отвечает: «когда этап закрыт?».  
+После **первых недель** работы с реальными пользователями и telemetry понадобится соседний раздел:
+
+> При каких наблюдениях мы признаём, что гипотеза оказалась неверной?
+
+Это **продуктовые фальсификаторы**, не инженерные exit criteria.  
+**Не формализовать и не применять до появления полевых данных.** Черновик кандидатов (заполнить/сузить позже):
+
+| Наблюдение | Возможный вывод |
+|-------------|-----------------|
+| Reference Rate растёт, а удержание и пользовательские подтверждения — нет | Само по себе использование накопленных знаний не создаёт ценности |
+| Longitudinal почти никогда не двигает модель | Порог фактов слишком высокий или модель слишком инертна |
+| Consistency высокая, но Today и Tarot воспринимаются как одно и то же по смыслу | «Единый интеллект» скатился в повторение, а не в согласованную персонализацию |
+
+Статус: **RESERVED** — активировать после первых недель real-user telemetry; до этого решения только по §7 exit + данные, не по ощущению текста.
+
+---
+
 ## 8. Changelog
 
 | Дата | Изменение |
@@ -297,3 +317,4 @@ Profile refresh «создал новый snapshot» учитывается от
 | 2026-07-21 | C3 audit lens: 4-step justification · knowledge accumulation · section usefulness · Reference Rate |
 | 2026-07-21 | Reference Rate hardened (memory, not availability); Longitudinal Validation reserved after C3 |
 | 2026-07-21 | Stage exit criteria: C3 / Telemetry / Reference Rate-as-tool; Longitudinal = hypothesis test |
+| 2026-07-21 | §7.4 reserved: hypothesis falsifiers after first real-user weeks (not active yet) |
