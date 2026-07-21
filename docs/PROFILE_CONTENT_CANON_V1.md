@@ -166,7 +166,7 @@ UI: без технических терминов — короткая honesty 
 1. Канон + pipeline audit — ✅  
 2. Контракты + source_depth в коде  
 3. Review runner на **текущей** воронке (baseline качества)  
-4. Ручная оценка ≥10  
+4. Ручная оценка ≥10 (после C2 publish_gate + Snapshot fixes — воспроизводимо)  
 5. Prompt / contract patch (как Compatibility v1.1)  
 6. Вынести LLM с read path → jobs  
 7. Подключить snapshot-only для Today / Compat / Tarot  
@@ -176,8 +176,69 @@ UI: без технических терминов — короткая honesty 
 
 ---
 
+## 7.1 Линза ручного аудита C3 (приоритет ≠ язык)
+
+Русский язык вторичен. Смотреть три вопроса:
+
+### A. Зачем четыре LLM-шага?
+
+Текущая воронка: identity → styles → patterns → spheres (до 4 sync вызовов).  
+Гипотеза аудита: часть шагов историческая.
+
+| Вопрос | Если да |
+|--------|---------|
+| portrait + patterns — одна задача? | Один проход → меньше latency / cost / drift |
+| spheres — детерминированная постобработка? | Убрать LLM-шаг |
+| Каждый шаг читает один Snapshot разными промптами? | Схлопнуть или явно развести контракты |
+
+P0-симптом уже виден в incomplete review packs: один портрет = десятки минут / timeout.
+
+### B. Накопление знаний
+
+Ищет не красивый текст, а:
+
+> использует ли профиль уже известные знания?
+
+Новый Snapshot «с нуля» при том же fingerprint / без учёта prior snapshot → **P0**.  
+Модуль может добавить domain-контекст; не должен переписывать character arc.
+
+### C. Практическая полезность разделов
+
+Каждый блок отвечает на **свой** вопрос пользователя:
+
+| Поле (пример) | Отдельный вопрос |
+|---------------|------------------|
+| `emotional_style` | Как проживаю эмоции? |
+| `decision_style` | Как принимаю решения? |
+| `energy_sources` | Откуда беру энергию? |
+
+Главный дефект ожидания: одна мысль разными словами между блоками.
+
+Приоритет кейсов review: **03, 04, 07, 08**, затем остальные.
+
+---
+
+## 7.2 Product metric (после telemetry): Reference Rate
+
+Не техническое качество — проверка Personal Model в поведении продукта.
+
+**Reference Rate** = доля генераций, которые опираются на уже существующий Profile Snapshot, а не только на вход текущего запроса.
+
+Примеры событий:
+- Today использовал snapshot — да / нет  
+- Compatibility использовал snapshot — да / нет  
+- Tarot использовал snapshot — да / нет  
+- Profile refresh — создал новый snapshot (отдельно от «прочитал»)
+
+Низкий Reference Rate через недели = Product Model на бумаге, модули живут изолированно.
+
+Связь с C2 telemetry: publish/fallback · regen · save · opens · confirm/reject · **+ Reference Rate**.
+
+---
+
 ## 8. Changelog
 
 | Дата | Изменение |
 |------|-----------|
 | 2026-07-21 | v1.0 — C3 canon: data types, pipeline audit, layers, source_depth, architecture, eval |
+| 2026-07-21 | C3 audit lens: 4-step justification · knowledge accumulation · section usefulness · Reference Rate |

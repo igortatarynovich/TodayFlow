@@ -425,6 +425,7 @@ def run_one(sc: dict[str, Any], tier: str, label: str, case_no: int) -> dict[str
                 "honesty": None,
                 "todayflow_voice": None,
                 "memorability": None,
+                "consistency": None,
             },
             "voice_exemplar_to_canon": "",
             "voice_canon_ref": "docs/content/TODAYFLOW_VOICE_CANON.md",
@@ -508,6 +509,7 @@ def pack_to_markdown(pack: dict[str, Any]) -> str:
         "* Honesty: /10",
         "* TodayFlow Voice: /10",
         "* Memorability: /10",
+        "* Consistency: /10 (без логотипа — один продукт с другими кейсами/модулями?)",
         "* Удачная фраза/структура → перенести принцип в `docs/content/TODAYFLOW_VOICE_CANON.md`:",
         "",
     ]

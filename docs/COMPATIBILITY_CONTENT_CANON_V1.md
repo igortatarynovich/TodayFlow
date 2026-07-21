@@ -1,6 +1,6 @@
 # Compatibility Content Canon v1
 
-**Статус:** guest + registered approved under feature flag (human review v1.1). Premium — не широко.  
+**Статус:** C2 engineering-closed для guest + registered under flag (publish_gate в production). Premium — не широко.  
 **Версия:** 1.1 (2026-07-21).  
 **Владелец:** Product + Content + Engineering.  
 **Связь:** [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) §5 · freemium access `compatibility_access_v0` · jobs C1 · код `compatibility_content_v1` · голос [content/TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md).
@@ -23,7 +23,8 @@ Code gap: [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./audits/PERSONA
 | Один промпт → shape_for_tier | **Запрещено для v1-контента.** Каждый слой — свой prompt + schema. |
 | Текст глубже данных | **Запрещено.** `source_depth` ограничивает формулировки. |
 
-**Rollout (2026-07-21):** Guest + Registered — `COMPATIBILITY_CONTENT_V1=1` (publish_gate в `compatibility_enrichment_v0`). Premium — не включать широко до ≥5 реальных вопросов. Промпт не трогать до пользовательских данных; следующий контроль — telemetry.
+**Rollout (2026-07-21):** Guest + Registered — `COMPATIBILITY_CONTENT_V1=1` (publish_gate в `compatibility_enrichment_v0`). Premium — не включать широко до ≥5 реальных вопросов. Промпт не трогать до пользовательских данных.  
+**Следующий контроль:** telemetry (publish/fallback · regen · save · opens · confirm/reject) + позже **Reference Rate** (доля генераций с опорой на Profile Snapshot) — см. [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) §7.2.
 
 ---
 
