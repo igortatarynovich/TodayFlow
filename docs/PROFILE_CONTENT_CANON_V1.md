@@ -174,6 +174,29 @@ UI: без технических терминов — короткая honesty 
 
 Флаг (позже): `PROFILE_CONTENT_V1` — default off.
 
+Порядок этапов **не переставлять:** C3 → Telemetry → Reference Rate as decision tool → Longitudinal Validation.
+
+### Критерии закрытия этапов
+
+**C3 закрыт**, когда можно честно ответить:
+
+1. Нужны ли действительно четыре LLM-шага?
+2. Каждый ли шаг производит **уникальное** знание?
+3. Нет ли повторения одних и тех же выводов между разделами Profile?
+4. Используется ли prior snapshot как **источник знаний**, а не только как входной контекст?
+
+**Telemetry закрыт**, когда есть не просто события, а ответы на продуктовые вопросы:
+
+1. Какие разделы реально читают?
+2. Какие подтверждают пользователи?
+3. Где происходит regeneration?
+4. Где чаще всего fallback?
+5. Как меняется Reference Rate?
+
+**Reference Rate используется**, когда его можно **сравнивать между модулями** (например Today высокий, Tarot низкий) и это влияет на решения — не «красивая метрика», а инструмент приоритизации wiring / prompts / allowlists.
+
+**Longitudinal Validation** — см. §7.3: проверка гипотезы, не фича-эпик.
+
 ---
 
 ## 7.1 Линза ручного аудита C3 (приоритет ≠ язык)
@@ -243,21 +266,26 @@ Profile refresh «создал новый snapshot» учитывается от
 
 ## 7.3 Reserved after C3: Longitudinal Validation *(не C4)*
 
-После стабильного Profile — следующий этап **не** «ещё один content pack», а проверка изменения модели во времени.
+Не фича и не content epic. **Проверка гипотезы** после стабильного Profile.
 
-**Вопрос:** меняется ли человек в продукте так, как должна меняться его модель?
+**Гипотеза (канон — не менять без явного product decision):**
 
-Пример:
+> Персональная модель должна изменяться только при накоплении достаточного количества  
+> новых подтверждённых фактов, а не из-за повторной генерации или изменения промпта.
+
+Если через полгода формулировка остаётся неизменной — архитектура выдержала проверку временем.
+
+Пример сценария:
 - Неделя 1: Profile — «обычно долго принимает решения».
 - Через 3 месяца: ежедневные факты показывают быстрые решения.
-- Snapshot **должен** сдвинуться — потому что накопилось достаточно фактов, не потому что LLM придумала новую историю.
+- Snapshot **должен** сдвинуться от evidence — не от новой истории LLM / нового prompt id.
 
-Критерии (зарезервировать в дорожной карте):
-- изменение Snapshot связано с evidence / Experiences, не с drift промпта;
-- отсутствие изменения при стабильном поведении — тоже валидный исход;
-- Voice Consistency сохраняется across time, не только across modules.
+Критерии проверки:
+- изменение Snapshot связано с evidence / Experiences, не с drift промпта и не с regen;
+- отсутствие изменения при стабильном поведении — валидный исход;
+- Voice Consistency across time, не только across modules.
 
-Статус: **RESERVED** — планировать после закрытия C3 audit lens + Snapshot-on-read; не начинать как C4 content epic.
+Статус: **RESERVED** — после закрытия C3 (§7 exit) + Snapshot-on-read; не начинать как C4.
 
 ---
 
@@ -268,3 +296,4 @@ Profile refresh «создал новый snapshot» учитывается от
 | 2026-07-21 | v1.0 — C3 canon: data types, pipeline audit, layers, source_depth, architecture, eval |
 | 2026-07-21 | C3 audit lens: 4-step justification · knowledge accumulation · section usefulness · Reference Rate |
 | 2026-07-21 | Reference Rate hardened (memory, not availability); Longitudinal Validation reserved after C3 |
+| 2026-07-21 | Stage exit criteria: C3 / Telemetry / Reference Rate-as-tool; Longitudinal = hypothesis test |
