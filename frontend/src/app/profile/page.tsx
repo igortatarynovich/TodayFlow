@@ -44,6 +44,7 @@ import { ProfileSetupSection } from "@/components/profile/ProfileSetupSection";
 import { parseProfileSection } from "@/components/profile/profileSections";
 import { parseProfileView, PROFILE_CHART_SECTION_ID, PROFILE_LIFE_SPHERES_SECTION_ID } from "@/lib/profileRoutes";
 import { ProfileV0Screen } from "@/components/profile/v0/ProfileV0Screen";
+import { ProfileV2DepthRail } from "@/components/profile/v2/ProfileV2DepthRail";
 import { ProfileV2SystemScreen } from "@/components/profile/v2/ProfileV2SystemScreen";
 import { ProfileWebScreen } from "@/components/product-ui/ProfileWebScreen";
 import { ProductPageScreen } from "@/components/product-ui/ProductPageScreen";
@@ -451,6 +452,10 @@ function ProfileHubPageInner() {
   const showProfileTeaser =
     !WEB_LAUNCH_MIN_PROFILE && isProfileQuickMap && hasCompletedFirstToday() && !profileDepthUnlocked;
   const onboardingCtx = readOnboardingContext();
+  const profileDepthRail = useMemo(
+    () => (showProfileQuickMap ? <ProfileV2DepthRail /> : undefined),
+    [showProfileQuickMap],
+  );
 
   return (
     <ProfileWebScreen
@@ -466,6 +471,7 @@ function ProfileHubPageInner() {
       railAnchors={
         showProfileQuickMap ? [] : buildProfileRailAnchors(profileQuickMapModel.frameworkAnchors)
       }
+      rail={profileDepthRail}
       compatibilityHref={hasRomanticCompatibilityPair ? romanticCompatibilityRoute.href : "/compatibility"}
     >
       <div

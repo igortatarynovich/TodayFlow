@@ -21,7 +21,7 @@ export function ProfileV2MyDays() {
     <section className={styles.myDaysPanel} aria-labelledby="profile-v2-my-days-title">
       <div className={styles.myDaysPanelHeader}>
         <p id="profile-v2-my-days-title" className={styles.myDaysPanelEyebrow}>
-          МОИ ДНИ · ПОСЛЕДНЯЯ НЕДЕЛЯ
+          Мои дни · последняя неделя
         </p>
         <Link href="/today" className={styles.myDaysPanelLink}>
           Открыть Today →

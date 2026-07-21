@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import { ProfileV2DepthRail } from "@/components/profile/v2/ProfileV2DepthRail";
 import { ProfileV2SystemScreen } from "@/components/profile/v2/ProfileV2SystemScreen";
 import type { ProfileQuickMapViewModel } from "@/lib/profilePage/buildProfileQuickMapData";
 import { buildProfileV2LiveContext } from "@/lib/profilePage/buildProfileV2LiveContext";
@@ -40,7 +41,7 @@ const live = buildProfileV2LiveContext({
 });
 
 describe("ProfileV2SystemScreen", () => {
-  it("renders five-zone disclosure ladder from Figma profile-v2-system", () => {
+  it("keeps a single page heading and soft zone labels in main", () => {
     render(
       <ProfileV2SystemScreen
         model={baseModel}
@@ -57,18 +58,33 @@ describe("ProfileV2SystemScreen", () => {
     );
 
     expect(screen.getByTestId("profile-v2-system")).toBeInTheDocument();
-    expect(screen.getByText("Твой личный профиль")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Факты" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Характер" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Направление" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Наблюдения" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Небо" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "Твой личный профиль" })).toBeInTheDocument();
+    expect(screen.queryAllByRole("heading", { level: 1 })).toHaveLength(1);
+    // Zone titles are labels, not competing page headings.
+    expect(document.getElementById("profile-v2-facts-title")?.tagName).toBe("P");
+    expect(document.getElementById("profile-v2-character-title")).toHaveTextContent("Характер");
+    expect(document.getElementById("profile-v2-direction-title")).toHaveTextContent("Направление");
+    expect(document.getElementById("profile-v2-history-title")).toHaveTextContent("Наблюдения");
+    expect(document.getElementById("profile-v2-sky-title")).toHaveTextContent("Небо");
     expect(screen.getByTestId("profile-v2-sky-section")).toBeInTheDocument();
-    expect(screen.getByText("МОИ ДНИ · ПОСЛЕДНЯЯ НЕДЕЛЯ")).toBeInTheDocument();
+    expect(screen.getByTestId("profile-v2-depth-jump")).toBeInTheDocument();
+    expect(screen.getByText(/Мои дни · последняя неделя/i)).toBeInTheDocument();
     expect(screen.getByText("Исследователь")).toBeInTheDocument();
     expect(screen.getByText("ясная система")).toBeInTheDocument();
     expect(screen.getAllByText(/лабрадорит/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/68%/).length).toBeGreaterThan(0);
-    expect(screen.getByText(/ТОЧНОСТЬ ЛИЧНЫХ НАБЛЮДЕНИЙ/i)).toBeInTheDocument();
+    expect(screen.getByText(/Точность наблюдений/i)).toBeInTheDocument();
+  });
+
+  it("puts the depth ladder in the right rail component", () => {
+    render(<ProfileV2DepthRail />);
+    const rail = screen.getByTestId("profile-v2-depth-rail");
+    expect(rail).toBeInTheDocument();
+    expect(rail).toHaveTextContent("Факты");
+    expect(rail).toHaveTextContent("Характер");
+    expect(rail).toHaveTextContent("Направление");
+    expect(rail).toHaveTextContent("Наблюдения");
+    expect(rail).toHaveTextContent("Небо");
+    expect(rail.querySelectorAll("a[href^='#profile-v2-']")).toHaveLength(5);
   });
 });

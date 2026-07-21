@@ -109,11 +109,11 @@ export function ProfileMapsPreviewBlock({
         </p>
       ) : null}
       {showSectionLabel ? (
-        <h2 className={titleClass}>{copy.title}</h2>
+        <p className={titleClass}>{copy.title}</p>
       ) : (
-        <h3 id="profile-maps-preview" className={titleClass}>
+        <p id="profile-maps-preview" className={titleClass}>
           {copy.title}
-        </h3>
+        </p>
       )}
       <p className={subtitleClass}>{copy.focusMapTitle}</p>
       <p className={leadClass}>

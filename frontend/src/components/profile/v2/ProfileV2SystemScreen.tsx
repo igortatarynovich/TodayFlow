@@ -1,7 +1,6 @@
 "use client";
 
 import type { CSSProperties, ReactNode } from "react";
-import { useState } from "react";
 import { ProfileChartSection } from "@/components/profile/ProfileChartSection";
 import { ProfileCumInsightsBlock } from "@/components/profile/ProfileCumInsightsBlock";
 import type { ProfileLifeSphere } from "@/components/profile/ProfileLifeSection";
@@ -9,11 +8,11 @@ import { ProfileLivingMapsSection } from "@/components/profile/ProfileLivingMaps
 import { ProfilePortalDeepSection } from "@/components/profile/ProfilePortalDeepSection";
 import { ProfileRelationshipInsightsBlock } from "@/components/profile/ProfileRelationshipInsightsBlock";
 import type { ProfileQuickMapDeepProps, ProfileQuickMapScreenProps } from "@/components/profile/quickMap/ProfileQuickMapScreen";
+import { ProfileV2MobileDepthJump } from "@/components/profile/v2/ProfileV2DepthRail";
 import { ProfileV2MyDays } from "@/components/profile/v2/ProfileV2MyDays";
 import { ProfileV2SkySection } from "@/components/profile/v2/ProfileV2SkySection";
 import {
   PROFILE_V2_COPY,
-  PROFILE_V2_DEPTH_NAV,
   type ProfileV2ZoneId,
 } from "@/components/profile/v2/profileV2SystemCopy";
 import type { ProfileV2LiveContext } from "@/lib/profilePage/buildProfileV2LiveContext";
@@ -61,6 +60,14 @@ function buildAstroFactsLine(anchors: ProfileQuickMapScreenProps["model"]["frame
     .join(" · ");
 }
 
+function ZoneLabel({ id, title }: { id: string; title: string }) {
+  return (
+    <p id={id} className={styles.zoneLabel}>
+      {title}
+    </p>
+  );
+}
+
 export function ProfileV2SystemScreen({
   model,
   live,
@@ -75,8 +82,6 @@ export function ProfileV2SystemScreen({
   portraitForming = false,
   portraitFormingMessage: portraitFormingMessageProp = null,
 }: ProfileV2SystemScreenProps) {
-  const [activeZone, setActiveZone] = useState<ProfileV2ZoneId>("facts");
-
   const quote = portraitForming
     ? null
     : buildProfileHeroQuote(model.archetype, model.identitySummary);
@@ -99,31 +104,8 @@ export function ProfileV2SystemScreen({
   const hasDailyAnchors = Boolean(live.dailyAnchors.line);
 
   return (
-    <div className={styles.pageRoot}>
-      <div className={styles.shell} data-testid="profile-v2-system">
-      <nav className={styles.depthNav} aria-label="Глубина профиля">
-        <div className={styles.depthNavInner}>
-          <div className={styles.depthRail} aria-hidden />
-          {PROFILE_V2_DEPTH_NAV.map((item) => (
-            <a
-              key={item.id}
-              href={`#${zoneDomId(item.id)}`}
-              className={styles.depthStep}
-              onClick={() => setActiveZone(item.id)}
-            >
-              <span
-                className={`${styles.depthStepBadge} ${activeZone === item.id ? styles.depthStepBadgeActive : ""}`.trim()}
-              >
-                {item.step}
-              </span>
-              <span>
-                <p className={styles.depthStepTitle}>{item.title}</p>
-                <p className={styles.depthStepHint}>{item.hint}</p>
-              </span>
-            </a>
-          ))}
-        </div>
-      </nav>
+    <div className={styles.pageRoot} data-testid="profile-v2-system">
+      <ProfileV2MobileDepthJump />
 
       <div className={styles.mainColumn}>
         {notices}
@@ -148,7 +130,7 @@ export function ProfileV2SystemScreen({
         <section className={styles.heroGrid} aria-label="Профиль">
           <article className={styles.heroCard}>
             <p className={styles.heroEyebrow}>{PROFILE_V2_COPY.heroEyebrow}</p>
-            <h2 className={styles.heroTitle}>{PROFILE_V2_COPY.heroTitle}</h2>
+            <h1 className={styles.heroTitle}>{PROFILE_V2_COPY.heroTitle}</h1>
             {quote ? <blockquote className={styles.heroQuote}>{quote}</blockquote> : null}
             {heroPills.length ? (
               <div className={styles.heroPills}>
@@ -198,11 +180,8 @@ export function ProfileV2SystemScreen({
 
         <section id={zoneDomId("facts")} className={styles.zone} aria-labelledby="profile-v2-facts-title">
           <header className={styles.zoneHeader}>
-            <p className={styles.zoneStep}>01</p>
             <div>
-              <h3 id="profile-v2-facts-title" className={styles.zoneTitle}>
-                {PROFILE_V2_COPY.zones.facts.title}
-              </h3>
+              <ZoneLabel id="profile-v2-facts-title" title={PROFILE_V2_COPY.zones.facts.title} />
               <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.facts.lead}</p>
             </div>
             {live.updatedLabel ? (
@@ -241,11 +220,8 @@ export function ProfileV2SystemScreen({
 
         <section id={zoneDomId("character")} className={styles.zone} aria-labelledby="profile-v2-character-title">
           <header className={styles.zoneHeader}>
-            <p className={styles.zoneStep}>02</p>
             <div>
-              <h3 id="profile-v2-character-title" className={styles.zoneTitle}>
-                {PROFILE_V2_COPY.zones.character.title}
-              </h3>
+              <ZoneLabel id="profile-v2-character-title" title={PROFILE_V2_COPY.zones.character.title} />
               <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.character.lead}</p>
             </div>
           </header>
@@ -327,11 +303,8 @@ export function ProfileV2SystemScreen({
 
         <section id={zoneDomId("direction")} className={styles.zone} aria-labelledby="profile-v2-direction-title">
           <header className={styles.zoneHeader}>
-            <p className={styles.zoneStep}>03</p>
             <div>
-              <h3 id="profile-v2-direction-title" className={styles.zoneTitle}>
-                {PROFILE_V2_COPY.zones.direction.title}
-              </h3>
+              <ZoneLabel id="profile-v2-direction-title" title={PROFILE_V2_COPY.zones.direction.title} />
               <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.direction.lead}</p>
             </div>
           </header>
@@ -378,11 +351,8 @@ export function ProfileV2SystemScreen({
 
         <section id={zoneDomId("history")} className={styles.zone} aria-labelledby="profile-v2-history-title">
           <header className={styles.zoneHeader}>
-            <p className={styles.zoneStep}>04</p>
             <div>
-              <h3 id="profile-v2-history-title" className={styles.zoneTitle}>
-                {PROFILE_V2_COPY.zones.history.title}
-              </h3>
+              <ZoneLabel id="profile-v2-history-title" title={PROFILE_V2_COPY.zones.history.title} />
               <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.history.lead}</p>
             </div>
           </header>
@@ -405,11 +375,8 @@ export function ProfileV2SystemScreen({
             aria-labelledby="profile-v2-sky-title"
           >
             <header className={styles.zoneHeader}>
-              <p className={styles.zoneStep}>05</p>
               <div>
-                <h3 id="profile-v2-sky-title" className={styles.zoneTitle}>
-                  {PROFILE_V2_COPY.zones.sky.title}
-                </h3>
+                <ZoneLabel id="profile-v2-sky-title" title={PROFILE_V2_COPY.zones.sky.title} />
                 <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.sky.lead}</p>
               </div>
             </header>
@@ -437,7 +404,6 @@ export function ProfileV2SystemScreen({
           </section>
         ) : null}
       </div>
-    </div>
     </div>
   );
 }

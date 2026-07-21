@@ -20,9 +20,11 @@ export type ProfileWebScreenProps = {
   subtitle?: string;
   identityPills?: string[];
   railAnchors?: ProfileRailAnchor[];
+  /** Custom right-rail content (e.g. Profile v2 depth nav). Wins over railAnchors. */
+  rail?: ReactNode;
   /** @deprecated PR-2: compat link alone must not keep the rail column. Ignored. */
   compatibilityHref?: string | null;
-  /** v2: Figma profile-v2-system — hero + depth ladder inside main; hide classic header. */
+  /** v2: Figma profile-v2-system — content in main; depth nav in shell rail. */
   variant?: "default" | "v2";
   children: ReactNode;
 };
@@ -36,6 +38,7 @@ export function ProfileWebScreen({
   subtitle,
   identityPills = [],
   railAnchors = [],
+  rail,
   variant = "default",
   children,
 }: ProfileWebScreenProps) {
@@ -51,22 +54,14 @@ export function ProfileWebScreen({
   }).format(new Date());
 
   const isV2 = variant === "v2";
-  const hasAnchors = railAnchors.length > 0;
 
   const shellConfig = useMemo((): ProductWebShellConfig => {
-    return {
-      testId: "profile-web-screen",
-      displayName,
-      profileMeta,
-      coreProfile,
-      mainWide: true,
-      fullMain: false,
-      // PR-2: rail only when map anchors exist — no subtitle filler, no links-only column.
-      rail: hasAnchors ? (
+    const anchorsRail =
+      railAnchors.length > 0 ? (
         <section className={s.profileRailPanel} aria-labelledby="profile-rail-anchors">
-          <h2 id="profile-rail-anchors" className={s.profileRailTitle}>
+          <p id="profile-rail-anchors" className={s.profileRailTitle}>
             {chrome.railAnchorsTitle}
-          </h2>
+          </p>
           <ul className={s.profileRailList}>
             {railAnchors.map((item) => (
               <li key={item.id} className={s.profileRailRow}>
@@ -79,14 +74,24 @@ export function ProfileWebScreen({
             ))}
           </ul>
         </section>
-      ) : undefined,
+      ) : undefined;
+
+    return {
+      testId: "profile-web-screen",
+      displayName,
+      profileMeta,
+      coreProfile,
+      mainWide: true,
+      fullMain: false,
+      // PR-2: rail only with real content — depth nav (v2) or map anchors.
+      rail: rail ?? anchorsRail,
     };
   }, [
     chrome.railAnchorsTitle,
     coreProfile,
     displayName,
-    hasAnchors,
     profileMeta,
+    rail,
     railAnchors,
   ]);
 

@@ -1,87 +1,9 @@
 .pageRoot {
   width: 100%;
   min-width: 0;
-}
-
-.shell {
-  display: grid;
-  grid-template-columns: minmax(8.5rem, 11rem) minmax(0, 1fr);
-  gap: clamp(1.5rem, 3vw, 3.5rem);
-  width: 100%;
-  align-items: start;
-}
-
-.depthNav {
-  position: sticky;
-  top: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 2.125rem;
-  padding: 1.125rem 0;
-}
-
-.depthRail {
-  position: absolute;
-  left: 0.9375rem;
-  top: 2rem;
-  width: 2px;
-  height: 32rem;
-  background: linear-gradient(180deg, #8b6a3e 0%, #c9a96e 42%, #d4b896 100%);
-  pointer-events: none;
-}
-
-.depthNavInner {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 2.125rem;
-}
-
-.depthStep {
-  display: grid;
-  grid-template-columns: 2rem minmax(0, 1fr);
-  gap: 0.875rem;
-  align-items: start;
-  text-decoration: none;
-  color: inherit;
-}
-
-.depthStepBadge {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 1rem;
-  border: 1px solid #c9a96e;
-  background: #fff;
-  font-family: var(--tf-font-mono, ui-monospace, monospace);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  color: #8b6a3e;
-  box-shadow: 0 10px 13px rgba(42, 37, 32, 0.08);
-}
-
-.depthStepBadgeActive {
-  background: #2a2520;
-  border-color: #2a2520;
-  color: #fdfbf7;
-}
-
-.depthStepTitle {
-  margin: 0;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.075em;
-  text-transform: uppercase;
-  color: var(--tf-ink);
-}
-
-.depthStepHint {
-  margin: 0.1875rem 0 0;
-  font-size: 0.6875rem;
-  line-height: 1.45;
-  color: #9a9490;
+  gap: 1rem;
 }
 
 .mainColumn {
@@ -90,6 +12,125 @@
   gap: 1.75rem;
   min-width: 0;
   max-width: 100%;
+}
+
+/* Right-rail depth nav (ProductWebAppShell .appRail) */
+.railDepthNav {
+  position: sticky;
+  top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.railDepthEyebrow {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tf-accent-gold, #8b6a3e);
+}
+
+.railDepthList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.railDepthStep {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  gap: 0.625rem;
+  align-items: start;
+  text-decoration: none;
+  color: inherit;
+  padding: 0.25rem 0;
+}
+
+.railDepthBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.875rem;
+  border: 1px solid #c9a96e;
+  background: #fff;
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: #8b6a3e;
+}
+
+.railDepthStepActive .railDepthBadge {
+  background: #2a2520;
+  border-color: #2a2520;
+  color: #fdfbf7;
+}
+
+.railDepthCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.railDepthTitle {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--tf-ink);
+}
+
+.railDepthHint {
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  color: #9a9490;
+}
+
+.railDepthStepActive .railDepthTitle {
+  color: #2a2520;
+}
+
+/* Narrow viewports: shell rail is hidden — compact chips only */
+.mobileDepthJump {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0.125rem 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.mobileDepthJump::-webkit-scrollbar {
+  display: none;
+}
+
+.mobileDepthChip {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid #e8e2d6;
+  background: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #5a5450;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+@media (min-width: 64rem) {
+  .mobileDepthJump {
+    display: none;
+  }
 }
 
 .heroGrid {
@@ -120,17 +161,17 @@
 .heroTitle {
   margin: 0;
   font-family: var(--tf-font-display);
-  font-size: clamp(2rem, 4vw, 4rem);
-  line-height: 1;
-  letter-spacing: -0.03em;
+  font-size: clamp(1.375rem, 2.2vw, 1.75rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
   color: var(--tf-ink);
 }
 
 .heroQuote {
-  margin: 1.25rem 0 0;
+  margin: 1rem 0 0;
   font-family: var(--tf-font-display);
-  font-size: clamp(1.25rem, 2.5vw, 2.125rem);
-  line-height: 1.2;
+  font-size: clamp(1rem, 1.6vw, 1.125rem);
+  line-height: 1.35;
   font-style: italic;
   color: #5a5450;
 }
@@ -186,7 +227,7 @@
   border-radius: 50%;
   background: #fff;
   font-family: var(--tf-font-mono, ui-monospace, monospace);
-  font-size: 1.875rem;
+  font-size: 1.125rem;
   font-weight: 600;
   color: var(--tf-ink);
 }
@@ -239,35 +280,29 @@
 }
 
 .zoneHeader {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 1.5rem;
-  align-items: start;
-  margin-bottom: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
 }
 
-.zoneStep {
+.zoneLabel {
   margin: 0;
-  font-family: var(--tf-font-display);
-  font-size: 3rem;
-  line-height: 1;
-  color: rgba(42, 37, 32, 0.12);
-}
-
-.zoneTitle {
-  margin: 0;
-  font-family: var(--tf-font-display);
-  font-size: 3rem;
-  line-height: 1;
-  color: var(--tf-ink);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8b6a3e;
 }
 
 .zoneLead {
-  margin: 0.25rem 0 0;
+  margin: 0.35rem 0 0;
   font-size: 0.875rem;
   line-height: 1.5;
   color: #5a5450;
-  max-width: 42rem;
+  max-width: 40rem;
 }
 
 .liveChip {
@@ -318,10 +353,10 @@
 }
 
 .factValue {
-  margin: 1rem 0 0;
+  margin: 0.75rem 0 0;
   font-family: var(--tf-font-display);
-  font-size: 1.375rem;
-  line-height: 1.2;
+  font-size: 1.125rem;
+  line-height: 1.3;
   color: var(--tf-ink);
 }
 
@@ -408,10 +443,9 @@
 }
 
 .missionText {
-  margin: 0.75rem 0 0;
-  font-family: var(--tf-font-display);
-  font-size: 1.5rem;
-  line-height: 1.35;
+  margin: 0.5rem 0 0;
+  font-size: 1rem;
+  line-height: 1.45;
   color: var(--tf-ink);
 }
 
@@ -606,13 +640,8 @@
   color: #fdfbf7;
 }
 
-.skyZone .zoneStep,
-.skyZone .zoneTitle {
-  color: rgba(253, 251, 247, 0.2);
-}
-
-.skyZone .zoneTitle {
-  color: #fdfbf7;
+.skyZone .zoneLabel {
+  color: #c9a96e;
 }
 
 .skyZone .zoneLead {
@@ -839,35 +868,8 @@
 }
 
 @media (max-width: 47.99rem) {
-  .shell {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .depthNav {
-    position: static;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    padding: 0;
-  }
-
-  .depthRail {
-    display: none;
-  }
-
-  .depthNavInner {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-
-  .depthStep {
-    grid-template-columns: 2rem minmax(0, 1fr);
-    min-width: 9rem;
-  }
-
   .zoneHeader {
-    grid-template-columns: minmax(0, 1fr);
+    flex-direction: column;
   }
 
   .awarenessRow {
@@ -888,10 +890,6 @@
   .sideCard,
   .zone {
     padding: 1.25rem;
-  }
-
-  .zoneTitle {
-    font-size: clamp(2rem, 8vw, 3rem);
   }
 }
 

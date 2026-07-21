@@ -18,9 +18,9 @@ export function ProfileRelationshipInsightsBlock({ cum }: Props) {
       aria-labelledby="profile-relationship-insights-title"
     >
       <p className={styles.quickMapSectionLabel}>Отношения</p>
-      <h2 id="profile-relationship-insights-title" className={styles.quickMapSectionTitle}>
+      <p id="profile-relationship-insights-title" className={styles.quickMapSectionTitle}>
         Ты подтвердил
-      </h2>
+      </p>
       <div style={{ display: "flex", flexDirection: "column", gap: "0.65rem", marginTop: "0.55rem" }}>
         {insights.map((item) => (
           <article key={item.knowledge_id ?? item.label} className={styles.quickMapCard}>
