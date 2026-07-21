@@ -93,7 +93,7 @@ export function PracticesWebScreen({
             </section>
           ) : null}
         </>
-      ) : null;
+      ) : undefined;
 
     return {
       testId: "practices-web-screen",
@@ -102,7 +102,7 @@ export function PracticesWebScreen({
       coreProfile,
       mainWide: true,
       fullMain: false,
-      rail: rail ?? defaultRail,
+      rail: rail !== undefined ? rail : defaultRail,
     };
   }, [
     activePractices,

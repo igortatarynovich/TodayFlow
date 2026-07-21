@@ -88,13 +88,8 @@ export function TarotWebHub({
   const resolvedSubmitLabel = submitLabel ?? hub.submitLabel;
 
   const shellConfig = useMemo((): ProductWebShellConfig => {
-    return {
-      testId: "tarot-web-hub",
-      mainWide: true,
-      displayName,
-      profileMeta,
-      coreProfile,
-      rail: (
+    const rail =
+      history.length > 0 || lastQuestion ? (
         <>
           {history.length > 0 ? (
             <section className={s.tarotHubRailSection} aria-labelledby="tarot-history">
@@ -113,19 +108,7 @@ export function TarotWebHub({
                 ))}
               </ul>
             </section>
-          ) : (
-            <section className={s.tarotHubRailSection} aria-labelledby="tarot-history-empty">
-              <h2 id="tarot-history-empty" className={v2.eyebrow}>
-                {hub.historyTitle}
-              </h2>
-              <DsBody size="sm" muted>
-                {hub.historyEmpty}
-              </DsBody>
-              <Link href="/tarot/journey" className={s.tarotLastQuestionLink}>
-                {hub.historyOpenLink}
-              </Link>
-            </section>
-          )}
+          ) : null}
           {lastQuestion ? (
             <section className={s.tarotLastQuestion} aria-label={hub.lastQuestionLabel}>
               <p className={v2.eyebrow}>{hub.lastQuestionLabel}</p>
@@ -136,9 +119,26 @@ export function TarotWebHub({
             </section>
           ) : null}
         </>
-      ),
+      ) : undefined;
+
+    return {
+      testId: "tarot-web-hub",
+      mainWide: true,
+      displayName,
+      profileMeta,
+      coreProfile,
+      rail,
     };
-  }, [coreProfile, displayName, history, hub.historyEmpty, hub.historyOpenLink, hub.historyTitle, hub.lastQuestionLabel, hub.openLink, lastQuestion, profileMeta]);
+  }, [
+    coreProfile,
+    displayName,
+    history,
+    hub.historyTitle,
+    hub.lastQuestionLabel,
+    hub.openLink,
+    lastQuestion,
+    profileMeta,
+  ]);
 
   return (
     <>

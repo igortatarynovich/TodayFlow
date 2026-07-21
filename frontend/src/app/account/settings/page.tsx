@@ -176,8 +176,6 @@ export default function AccountSettingsPage() {
       testId="account-settings-page"
       title={t("settings.page.title", "Настройки аккаунта")}
       subtitle={t("settings.page.subtitle", "Управляй своими персональными данными и настройками")}
-      railTitle={t("settings.orientation.meta.account", "Account")}
-      railHint={t("settings.session.lead", "Выйти из аккаунта на этом устройстве. Локальные данные сессии будут очищены.")}
       contentClassName={`${pl.content} ${pl.legacyHost}`}
     >
       {/* Profile Settings */}

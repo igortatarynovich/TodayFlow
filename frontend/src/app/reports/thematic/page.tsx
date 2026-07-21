@@ -35,7 +35,6 @@ export default function ThematicReportsPage() {
       testId="thematic-reports-page"
       title="Тематические разборы"
       subtitle="Фокусированные разборы по конкретным темам жизни"
-      railHint={thematicCatalogStepLabel(THEMATIC_REPORTS.length)}
       contentClassName={`${pl.content} ${pl.legacyHost}`}
     >
       <div

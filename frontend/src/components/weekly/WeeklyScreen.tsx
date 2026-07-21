@@ -318,8 +318,8 @@ function WeeklyContent() {
         "dashboard.weekly.description",
         "Обзор недели: главное за период и понятные шаги на ближайшие дни.",
       )}
-      railTitle={t("dashboard.weekly.title", "Недельный фокус")}
-      railHint={weeklyGuidance ?? t("dashboard.weekly.description", "Обзор недели: главное за период и понятные шаги на ближайшие дни.")}
+      railTitle={weeklyGuidance ? t("dashboard.weekly.title", "Недельный фокус") : undefined}
+      railHint={weeklyGuidance ?? undefined}
       contentClassName={`${pl.content} ${pl.legacyHost}`}
     >
       <section className="orbit-hero-content-block">

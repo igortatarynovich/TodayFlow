@@ -236,8 +236,6 @@ export default function ProfilesPage() {
       eyebrow="Profile Circle"
       title="Круг людей"
       subtitle={profilesIntro}
-      railTitle="Круг людей"
-      railHint="Добавляй близких для совместимости и сравнений. Основной профиль — твой."
       contentClassName={`${pl.content} ${pl.legacyHost}`}
     >
           <div className={pl.panel}>

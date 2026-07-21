@@ -1,14 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
-import { DsBody, DsButton, DsEyebrow, DsRailPanel } from "@/design-system";
+import { useMemo } from "react";
+import { DsBody, DsButton, DsEyebrow } from "@/design-system";
 import {
   compatibilityWebChromeBundle,
   type CompatWebModeSpec,
 } from "@/components/product-ui/compatibilityWebChrome";
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
-import { readRelationshipMapCircles, type RelationshipCircleRecord } from "@/lib/relationshipMapStore";
 import { getLocale } from "@/lib/i18n";
 import s from "@/components/product-ui/productWebScreens.module.css";
 import pl from "@/design-system/layouts/productPageLayout.module.css";
@@ -35,69 +34,8 @@ function initialFromName(name: string): string {
   return trimmed ? trimmed.charAt(0).toUpperCase() : "+";
 }
 
-function formatHistoryDate(iso: string, locale: FlowPracticesChromeLocale): string {
-  try {
-    return new Intl.DateTimeFormat(locale === "ru" ? "ru-RU" : "en-US", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    }).format(new Date(iso));
-  } catch {
-    return iso;
-  }
-}
+export { useCompatibilityHubRail, CompatibilityWebHubRail } from "@/components/product-ui/CompatibilityWebHubRail";
 
-export function CompatibilityWebHubRail({ locale }: { locale?: FlowPracticesChromeLocale }) {
-  const resolvedLocale: FlowPracticesChromeLocale =
-    locale ?? (getLocale() === "ru" ? "ru" : "en");
-  const chrome = useMemo(() => compatibilityWebChromeBundle(resolvedLocale), [resolvedLocale]);
-  const [history, setHistory] = useState<RelationshipCircleRecord[]>([]);
-
-  useEffect(() => {
-    setHistory(readRelationshipMapCircles().slice(0, 4));
-  }, []);
-
-  return (
-    <>
-      <DsRailPanel title={chrome.railReadTitle}>
-        <ul className={s.balanceList}>
-          <li className={s.balanceItem}>
-            <span className={s.balanceDot} aria-hidden />
-            {chrome.railReadWorks}
-          </li>
-          <li className={s.balanceItem}>
-            <span className={s.balanceDot} aria-hidden />
-            {chrome.railReadFriction}
-          </li>
-          <li className={s.balanceItem}>
-            <span className={s.balanceDot} aria-hidden />
-            {chrome.railReadStep}
-          </li>
-        </ul>
-      </DsRailPanel>
-      <DsRailPanel title={chrome.railHistoryTitle}>
-        {history.length ? (
-          <ul className={s.compatHistoryList}>
-            {history.map((row) => (
-              <li key={row.id} className={s.compatHistoryRow}>
-                <div className={s.compatHistoryMeta}>
-                  <span className={s.compatHistoryLabel}>{row.pairLine ?? row.label}</span>
-                  <span className={s.compatHistoryDate}>{formatHistoryDate(row.lastSeenAt, resolvedLocale)}</span>
-                </div>
-                {row.theme ? <span className={s.compatHistoryBadge}>{row.theme}</span> : null}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <DsBody size="sm" muted>
-            {chrome.railHistoryEmpty}
-          </DsBody>
-        )}
-        <p className={s.compatRailQuote}>{chrome.railQuote}</p>
-      </DsRailPanel>
-    </>
-  );
-}
 
 export function CompatibilityWebHub({
   locale,

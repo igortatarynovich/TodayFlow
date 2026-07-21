@@ -41,12 +41,13 @@ export function DsAppShell({
   /** Page draws its own internal columns (profile v2): main spans both tracks. */
   fullMain?: boolean;
 }) {
+  const hasRail = Boolean(rail) && !fullMain;
   return (
     <div className={l.appShell} data-testid={testId}>
       {sidebar}
-      <div className={l.appBody}>
+      <div className={`${l.appBody} ${hasRail ? l.appBodyWithRail : ""}`.trim()}>
         <div className={`${l.appMain} ${fullMain ? l.appMainFull : ""}`.trim()}>{main}</div>
-        {rail ? <aside className={l.appRail}>{rail}</aside> : null}
+        {hasRail ? <aside className={l.appRail}>{rail}</aside> : null}
       </div>
     </div>
   );

@@ -7,7 +7,6 @@ import { buildOnboardingRitualContext, readOnboardingContext, todayDayKey } from
 import { GuestFirstTodayScreen } from "@/components/onboarding/valueFirst/GuestFirstTodayScreen";
 import { hasGuestPreview, readGuestProfileDraft } from "@/lib/guestProfileDraft";
 import { markFirstTodayCompleted } from "@/lib/firstTodayState";
-import { LoadingSpinner } from "@/components/orbit";
 import { getJson, postJson, putJson } from "@/lib/api";
 import {
   CORE_PROFILE_UPDATED_EVENT,
@@ -23,6 +22,7 @@ import {
 } from "@/lib/todayNarrativeDepthUi";
 import { TodayNarrativeDepthControl } from "@/components/today/TodayNarrativeDepthControl";
 import { TodayWebDashboard } from "@/components/product-ui/TodayWebDashboard";
+import { ProductPageScreen } from "@/components/product-ui/ProductPageScreen";
 import {
   buildTodayWebPractices,
   buildTodayWebStreak,
@@ -1087,14 +1087,13 @@ export default function TodayPage() {
   // infinite "building your day" spinner and never reach the guest/auth branches below.
   if (authLoading || (isAuthenticated && (loading || awaitingInitialLoad || contractPending))) {
     return (
-      <main className="orbit-page todayflow-serene todayflow-unified-screen" style={{ background: "#f7f2ea", minHeight: "100dvh" }}>
-        <div className="todayflow-stack" style={{ alignItems: "center", justifyContent: "center", minHeight: "50vh" }}>
-          <LoadingSpinner size="lg" />
-          <p className="orbit-body-sm" style={{ margin: "0.75rem 0 0", color: "#5e4222" }}>
-            {authLoading ? RITUAL_COPY.todayPageLoadingSession : RITUAL_COPY.todayPageLoadingDay}
-          </p>
-        </div>
-      </main>
+      <ProductPageScreen
+        testId="today-loading"
+        title="Сегодня"
+        loading
+        loadingLabel={authLoading ? RITUAL_COPY.todayPageLoadingSession : RITUAL_COPY.todayPageLoadingDay}
+        hideDatePill
+      />
     );
   }
 
@@ -1106,29 +1105,31 @@ export default function TodayPage() {
 
   if (!isAuthenticated) {
     return (
-      <main className="orbit-page todayflow-serene" style={{ background: "#FAF9F7", minHeight: "100dvh" }}>
-        <div style={{ padding: "2rem", textAlign: "center" }}>
-          <p>{RITUAL_COPY.todayPageAuthRequired}</p>
-        </div>
-      </main>
+      <ProductPageScreen
+        testId="today-guest-gate"
+        title="Сегодня"
+        guest={{
+          message: RITUAL_COPY.todayPageAuthRequired,
+          ctaHref: "/auth?mode=login",
+          ctaLabel: "Войти",
+        }}
+        hideDatePill
+      />
     );
   }
 
   if (error || !todayData || !todayContract) {
     return (
-      <main className="orbit-page todayflow-serene" style={{ background: "#FAF9F7", minHeight: "100dvh" }}>
-        <div style={{ padding: "2rem", textAlign: "center" }}>
-          <p style={{ color: "#d32f2f" }}>{error || RITUAL_COPY.todayPageDataMissing}</p>
-          <button
-            type="button"
-            onClick={() => void loadToday({ force: true })}
-            className="orbit-button orbit-button-primary"
-            style={{ marginTop: "1rem" }}
-          >
-            {RITUAL_COPY.todayPageRetryCta}
-          </button>
-        </div>
-      </main>
+      <ProductPageScreen
+        testId="today-error"
+        title="Сегодня"
+        error={{
+          message: error || RITUAL_COPY.todayPageDataMissing,
+          retryLabel: RITUAL_COPY.todayPageRetryCta,
+          onRetry: () => void loadToday({ force: true }),
+        }}
+        hideDatePill
+      />
     );
   }
 

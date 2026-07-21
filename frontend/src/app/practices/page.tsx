@@ -324,7 +324,7 @@ export default function PracticesPage() {
       showProgressRail={(progress?.total_completed ?? 0) > 0 || live.streakDays > 0}
       weeklyRhythm={
         (progress?.total_completed ?? 0) > 0
-          ? live.weekCells.map((cell) => (cell.closed ? 1 : 0.15))
+          ? live.weekCells.map((cell) => (cell.closed ? 1 : 0))
           : []
       }
     >

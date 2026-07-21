@@ -116,12 +116,6 @@ export default function InsightsPage() {
       testId="tracking-insights-page"
       title={fc.trackingInsightsPageTitle}
       subtitle={fc.trackingInsightsPageLead}
-      railTitle={locale === "ru" ? "Автоинсайты" : "Auto insights"}
-      railHint={
-        locale === "ru"
-          ? "Паттерны из дневника, ритуалов и трекеров — с уровнем уверенности."
-          : "Patterns from diary, rituals, and trackers — with confidence level."
-      }
     >
       <div className={pl.fieldRow}>
         <div style={{ flex: "1 1 12rem", maxWidth: "20rem" }}>

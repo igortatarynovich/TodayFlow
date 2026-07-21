@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import type { ReactNode } from "react";
 import { useMemo } from "react";
 import { ProductWebShellConfigBridge, type ProductWebShellConfig } from "@/components/product-ui/productWebShellConfig";
@@ -21,6 +20,7 @@ export type ProfileWebScreenProps = {
   subtitle?: string;
   identityPills?: string[];
   railAnchors?: ProfileRailAnchor[];
+  /** @deprecated PR-2: compat link alone must not keep the rail column. Ignored. */
   compatibilityHref?: string | null;
   /** v2: Figma profile-v2-system — hero + depth ladder inside main; hide classic header. */
   variant?: "default" | "v2";
@@ -36,7 +36,6 @@ export function ProfileWebScreen({
   subtitle,
   identityPills = [],
   railAnchors = [],
-  compatibilityHref,
   variant = "default",
   children,
 }: ProfileWebScreenProps) {
@@ -52,9 +51,9 @@ export function ProfileWebScreen({
   }).format(new Date());
 
   const isV2 = variant === "v2";
+  const hasAnchors = railAnchors.length > 0;
 
   const shellConfig = useMemo((): ProductWebShellConfig => {
-    // Always keep the product 3-column grid (left nav · center · right rail).
     return {
       testId: "profile-web-screen",
       displayName,
@@ -62,58 +61,33 @@ export function ProfileWebScreen({
       coreProfile,
       mainWide: true,
       fullMain: false,
-      rail: (
-        <>
-          {railAnchors.length > 0 ? (
-            <section className={s.profileRailPanel} aria-labelledby="profile-rail-anchors">
-              <h2 id="profile-rail-anchors" className={s.profileRailTitle}>
-                {chrome.railAnchorsTitle}
-              </h2>
-              <ul className={s.profileRailList}>
-                {railAnchors.map((item) => (
-                  <li key={item.id} className={s.profileRailRow}>
-                    <span className={s.profileRailLeft}>
-                      <span className={s.profileRailIcon}>{item.icon}</span>
-                      <span className={s.profileRailLabel}>{item.label}</span>
-                    </span>
-                    <span className={s.profileRailValue}>{item.value}</span>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ) : (
-            <section className={s.profileRailPanel} aria-labelledby="profile-rail-hint">
-              <h2 id="profile-rail-hint" className={s.profileRailTitle}>
-                {chrome.railAnchorsTitle}
-              </h2>
-              <p className={s.profileRailHint}>{resolvedSubtitle}</p>
-            </section>
-          )}
-          {compatibilityHref ? (
-            <section className={s.profileRailPanel} aria-labelledby="profile-rail-links">
-              <h2 id="profile-rail-links" className={s.profileRailTitle}>
-                {chrome.railLinksTitle}
-              </h2>
-              <p className={s.profileRailHint}>{chrome.railLinksHint}</p>
-              <Link href={compatibilityHref} className={l.railLink}>
-                {chrome.railCompatibilityLink}
-              </Link>
-            </section>
-          ) : null}
-        </>
-      ),
+      // PR-2: rail only when map anchors exist — no subtitle filler, no links-only column.
+      rail: hasAnchors ? (
+        <section className={s.profileRailPanel} aria-labelledby="profile-rail-anchors">
+          <h2 id="profile-rail-anchors" className={s.profileRailTitle}>
+            {chrome.railAnchorsTitle}
+          </h2>
+          <ul className={s.profileRailList}>
+            {railAnchors.map((item) => (
+              <li key={item.id} className={s.profileRailRow}>
+                <span className={s.profileRailLeft}>
+                  <span className={s.profileRailIcon}>{item.icon}</span>
+                  <span className={s.profileRailLabel}>{item.label}</span>
+                </span>
+                <span className={s.profileRailValue}>{item.value}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : undefined,
     };
   }, [
     chrome.railAnchorsTitle,
-    chrome.railCompatibilityLink,
-    chrome.railLinksHint,
-    chrome.railLinksTitle,
-    compatibilityHref,
     coreProfile,
     displayName,
+    hasAnchors,
     profileMeta,
     railAnchors,
-    resolvedSubtitle,
   ]);
 
   return (
@@ -131,9 +105,9 @@ export function ProfileWebScreen({
                   </span>
                 ))}
               </div>
-            ) : !identityPills.length ? (
+            ) : (
               <p className={s.profilePageSubtitle}>{resolvedSubtitle}</p>
-            ) : null}
+            )}
           </div>
           <p className={s.profileDateLabel}>
             {chrome.todayPrefix} {todayLabel}

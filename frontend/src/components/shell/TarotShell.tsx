@@ -17,7 +17,7 @@ export function TarotShell({ children }: TarotShellProps) {
   const activeStep = tarotShellStepFromPath(pathname);
 
   const shellConfig = useMemo((): ProductWebShellConfig => {
-    const rail = activeStep < 0 ? null : <TarotRail activeStep={activeStep} />;
+    const rail = activeStep < 0 ? undefined : <TarotRail activeStep={activeStep} />;
     return {
       testId: "tarot-immersive-shell",
       theme: "dark",

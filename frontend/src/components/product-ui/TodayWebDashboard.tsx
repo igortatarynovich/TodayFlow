@@ -46,7 +46,7 @@ export type TodayWebDashboardProps = {
   numerologyMeaning?: string | null;
   practices?: TodayWebPractice[];
   timelineEvents?: TodayWebTimelineEvent[];
-  weeklyActivity?: number[];
+  weeklyActivity?: number[] | null;
   streakDays?: number;
   coreProfile?: CoreProfile | null;
   locale?: FlowPracticesChromeLocale;
@@ -79,46 +79,50 @@ function TodayWebRail({
         </section>
       ) : null}
 
-      <section className={s.todayRailPanel} aria-labelledby="today-rail-weekly">
-        <h2 id="today-rail-weekly" className={v2.eyebrow}>
-          {chrome.railWeeklyTitle}
-        </h2>
-        <div className={s.todayWeeklyRow}>
-          {chrome.weekdayLabels.map((label, index) => {
-            const level = weeklyActivity[index] ?? 0.2;
-            return (
-              <div key={`${label}-${index}`} className={s.todayWeeklyCell}>
-                <span
-                  className={s.todayWeeklyDot}
-                  style={{ opacity: 0.35 + level * 0.65, transform: `scale(${0.85 + level * 0.35})` }}
-                  aria-hidden
-                />
-                <span className={s.todayWeeklyLabel}>{label}</span>
-              </div>
-            );
-          })}
-        </div>
-      </section>
+      {weeklyActivity.length > 0 ? (
+        <section className={s.todayRailPanel} aria-labelledby="today-rail-weekly">
+          <h2 id="today-rail-weekly" className={v2.eyebrow}>
+            {chrome.railWeeklyTitle}
+          </h2>
+          <div className={s.todayWeeklyRow}>
+            {chrome.weekdayLabels.map((label, index) => {
+              const level = weeklyActivity[index] ?? 0;
+              return (
+                <div key={`${label}-${index}`} className={s.todayWeeklyCell}>
+                  <span
+                    className={s.todayWeeklyDot}
+                    style={{ opacity: 0.35 + level * 0.65, transform: `scale(${0.85 + level * 0.35})` }}
+                    aria-hidden
+                  />
+                  <span className={s.todayWeeklyLabel}>{label}</span>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      ) : null}
 
-      <section className={s.todayRailPanel} aria-labelledby="today-rail-timeline">
-        <h2 id="today-rail-timeline" className={v2.eyebrow}>
-          {chrome.railTimelineTitle}
-        </h2>
-        <ol className={s.todayTimelineList}>
-          {timelineEvents.map((event, index) => (
-            <li key={`${event.time}-${event.title}`} className={s.todayTimelineItem}>
-              <span className={s.todayTimelineTrack} aria-hidden>
-                <span className={`${s.todayTimelineDot} ${event.active ? s.todayTimelineDotActive : ""}`.trim()} />
-                {index < timelineEvents.length - 1 ? <span className={s.todayTimelineLine} /> : null}
-              </span>
-              <span className={s.todayTimelineContent}>
-                <span className={s.todayTimelineTitle}>{event.title}</span>
-                <span className={s.todayTimelineTime}>{event.time}</span>
-              </span>
-            </li>
-          ))}
-        </ol>
-      </section>
+      {timelineEvents.length > 0 ? (
+        <section className={s.todayRailPanel} aria-labelledby="today-rail-timeline">
+          <h2 id="today-rail-timeline" className={v2.eyebrow}>
+            {chrome.railTimelineTitle}
+          </h2>
+          <ol className={s.todayTimelineList}>
+            {timelineEvents.map((event, index) => (
+              <li key={`${event.time}-${event.title}`} className={s.todayTimelineItem}>
+                <span className={s.todayTimelineTrack} aria-hidden>
+                  <span className={`${s.todayTimelineDot} ${event.active ? s.todayTimelineDotActive : ""}`.trim()} />
+                  {index < timelineEvents.length - 1 ? <span className={s.todayTimelineLine} /> : null}
+                </span>
+                <span className={s.todayTimelineContent}>
+                  <span className={s.todayTimelineTitle}>{event.title}</span>
+                  <span className={s.todayTimelineTime}>{event.time}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+        </section>
+      ) : null}
     </>
   );
 }
@@ -269,9 +273,12 @@ export function TodayWebDashboard({
     locale ?? (getLocale() === "ru" ? "ru" : "en");
   const chrome = useMemo(() => todayWebDashboardChromeBundle(resolvedLocale), [resolvedLocale]);
 
-  const resolvedTimeline = timelineEvents ?? chrome.fallbackTimeline;
-  const resolvedWeekly = weeklyActivity ?? [0.35, 0.45, 0.55, 0.5, 0.65, 0.6, 0.75];
-  const resolvedPractices = practices ?? chrome.fallbackPractices;
+  // PR-2: never invent timeline / weekly / practices for the rail or overview.
+  const resolvedTimeline = timelineEvents ?? [];
+  const resolvedWeekly = weeklyActivity ?? [];
+  const resolvedPractices = practices ?? [];
+  const hasContextRail =
+    streakDays > 0 || resolvedWeekly.length > 0 || resolvedTimeline.length > 0;
 
   const showOverview = layout === "full" || layout === "overview";
   const showComposition = layout === "full" || layout === "composition" || layout === "ritual";
@@ -284,16 +291,25 @@ export function TodayWebDashboard({
       profileMeta,
       coreProfile,
       mainWide: true,
-      rail: (
+      rail: hasContextRail ? (
         <TodayWebRail
           chrome={chrome}
           timelineEvents={resolvedTimeline}
           weeklyActivity={resolvedWeekly}
           streakDays={streakDays}
         />
-      ),
+      ) : undefined,
     };
-  }, [chrome, coreProfile, displayName, profileMeta, resolvedTimeline, resolvedWeekly, streakDays]);
+  }, [
+    chrome,
+    coreProfile,
+    displayName,
+    hasContextRail,
+    profileMeta,
+    resolvedTimeline,
+    resolvedWeekly,
+    streakDays,
+  ]);
 
   return (
     <>

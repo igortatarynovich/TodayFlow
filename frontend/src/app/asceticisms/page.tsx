@@ -167,8 +167,6 @@ export default function AsceticismsPage() {
       testId="asceticisms-page"
       title="Аскезы"
       subtitle="Осознанные ограничения для подтверждения контроля. Выбери цель, и мы подберём аскезу, которая поможет её достичь."
-      railTitle="Аскезы"
-      railHint="Короткий путь: цель → аскеза → карта отметок."
       contentClassName={pl.content}
     >
       {step === "goal" ? (

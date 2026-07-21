@@ -130,8 +130,6 @@ export default function AccountReportsPage() {
       testId="account-reports-page"
       title="История разборов"
       subtitle="Просматривайте все ваши разборы и скачивайте PDF"
-      railTitle={t("reports.history.rail.section", "Отчёты")}
-      railHint={t("reports.history.rail.meta", "История")}
       contentClassName={`${pl.content} ${pl.legacyHost}`}
     >
       <div style={{ marginBottom: "1rem" }}>

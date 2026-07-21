@@ -3,12 +3,15 @@
 /**
  * Product Page Standard v1 — единая обёртка для всех in-app экранов.
  *
- * Anatomy (always):
+ * Anatomy:
  *   ProductWebShellLayout (sidebar + identity)
  *     └─ productWebContentV2 (max-width canvas)
- *         └─ pageRoot (vertical gap 1.75rem)
- *             ├─ pageHeader (surfaceGlass) — title, subtitle, date chip
- *             └─ content — screen-specific blocks (panels, grids)
+ *         └─ pageRoot
+ *             ├─ pageHeader — title, subtitle, date chip (optional)
+ *             └─ content — screen-specific blocks
+ *
+ * PR-2: context rail only when `rail` or (`railTitle` + real `railHint`) is set.
+ * Never echo title/subtitle into an empty rail for layout symmetry.
  *
  * Do NOT: orbit-page, custom hero images, per-page font sizes, DsPageHeader on product routes.
  * DO: productV2Surface tokens + productPageLayout grids + DsButton/DsRailPanel.
@@ -16,8 +19,12 @@
 import type { ReactNode } from "react";
 import { useMemo } from "react";
 import { DsBody, DsButton, DsRailPanel, IconCalendar } from "@/design-system";
-import { LoadingSpinner } from "@/components/orbit";
 import { ProductWebShellConfigBridge, type ProductWebShellConfig } from "@/components/product-ui/productWebShellConfig";
+import {
+  ProductShellEmpty,
+  ProductShellError,
+  ProductShellLoading,
+} from "@/components/product-ui/ProductShellStates";
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
 import { getLocale } from "@/lib/i18n";
 import type { CoreProfile } from "@/lib/types";
@@ -31,6 +38,12 @@ export type ProductPageGuestState = {
   ctaLabel?: string;
 };
 
+export type ProductPageErrorState = {
+  message: string;
+  retryLabel?: string;
+  onRetry?: () => void;
+};
+
 export type ProductPageScreenProps = {
   testId?: string;
   title: string;
@@ -40,7 +53,9 @@ export type ProductPageScreenProps = {
   profileMeta?: string | null;
   coreProfile?: CoreProfile | null;
   locale?: FlowPracticesChromeLocale;
+  /** Real context rail only — omit when empty. */
   rail?: ReactNode;
+  /** Optional titled rail panel; requires non-empty railHint (no title-only filler). */
   railTitle?: string;
   railHint?: string;
   hideHeader?: boolean;
@@ -50,8 +65,29 @@ export type ProductPageScreenProps = {
   loading?: boolean;
   loadingLabel?: string;
   guest?: ProductPageGuestState;
+  error?: ProductPageErrorState;
+  empty?: { message: string; action?: ReactNode };
   children?: ReactNode;
 };
+
+function resolveOptionalRail(
+  rail: ReactNode | undefined,
+  railTitle: string | undefined,
+  railHint: string | undefined,
+): ReactNode | undefined {
+  if (rail != null) return rail;
+  const hint = typeof railHint === "string" ? railHint.trim() : "";
+  if (railTitle && hint) {
+    return (
+      <DsRailPanel title={railTitle}>
+        <DsBody size="sm" muted>
+          {hint}
+        </DsBody>
+      </DsRailPanel>
+    );
+  }
+  return undefined;
+}
 
 export function ProductPageScreen({
   testId = "product-page-screen",
@@ -72,6 +108,8 @@ export function ProductPageScreen({
   loading = false,
   loadingLabel,
   guest,
+  error,
+  empty,
   children,
 }: ProductPageScreenProps) {
   const resolvedLocale: FlowPracticesChromeLocale =
@@ -83,6 +121,8 @@ export function ProductPageScreen({
     month: "long",
   }).format(new Date());
 
+  const resolvedRail = resolveOptionalRail(rail, railTitle, railHint);
+
   const shellConfig = useMemo((): ProductWebShellConfig => {
     return {
       testId,
@@ -90,35 +130,13 @@ export function ProductPageScreen({
       displayName,
       profileMeta,
       coreProfile,
-      // Always reserve the right rail column — never collapse to a 2-column product page.
-      rail:
-        rail ??
-        (railTitle || railHint ? (
-          <DsRailPanel title={railTitle ?? title}>
-            {railHint ? (
-              <DsBody size="sm" muted>
-                {railHint}
-              </DsBody>
-            ) : null}
-          </DsRailPanel>
-        ) : (
-          <DsRailPanel title={title}>
-            <DsBody size="sm" muted>
-              {subtitle ?? ""}
-            </DsBody>
-          </DsRailPanel>
-        )),
+      rail: resolvedRail,
     };
-  }, [coreProfile, displayName, mainWide, profileMeta, rail, railHint, railTitle, subtitle, testId, title]);
+  }, [coreProfile, displayName, mainWide, profileMeta, resolvedRail, testId]);
 
   const body = (() => {
     if (loading) {
-      return (
-        <div className={pl.centerState}>
-          <LoadingSpinner size="lg" />
-          {loadingLabel ? <p className={v2.bodyLead}>{loadingLabel}</p> : null}
-        </div>
-      );
+      return <ProductShellLoading label={loadingLabel} />;
     }
 
     if (guest) {
@@ -131,6 +149,20 @@ export function ProductPageScreen({
           ) : null}
         </div>
       );
+    }
+
+    if (error) {
+      return (
+        <ProductShellError
+          message={error.message}
+          retryLabel={error.retryLabel}
+          onRetry={error.onRetry}
+        />
+      );
+    }
+
+    if (empty) {
+      return <ProductShellEmpty message={empty.message} action={empty.action} />;
     }
 
     return (

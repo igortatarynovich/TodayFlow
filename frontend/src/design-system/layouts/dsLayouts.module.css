@@ -123,12 +123,10 @@
 }
 
 /*
- * Unified page grid: rail(nav) — content — rail. The nav rail is the sidebar
- * (sibling of .appBody). Inside .appBody we keep two tracks so the CENTER column
- * width is identical whether or not a page supplies right-rail content: the
- * right-rail track is always reserved at >=64rem (empty = empty space). Pages
- * that draw their own internal columns (profile v2) opt into .appMainFull and
- * span both tracks.
+ * Unified page grid: sidebar (sibling) · main · optional context rail.
+ * PR-2: right rail track exists only when the page supplies real rail content
+ * (.appBodyWithRail). Empty columns are not reserved for layout symmetry.
+ * Pages that draw their own internal columns use .appMainFull (fullMain).
  */
 .appBody {
   flex: 1;
@@ -298,19 +296,17 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  /* Reserve the right-rail track on every in-app page so the center column
-     lands at the same x-position regardless of rail content. */
-  .appBody {
+  /* Two-track main+rail only when the page opted into .appBodyWithRail. */
+  .appBodyWithRail {
     grid-template-columns: minmax(0, 1fr) var(--tf-ds-rail-w);
   }
 
-  /* Self-managed wide pages (profile v2) draw their own right column, so main
-     spans both tracks instead of leaving an empty reserved rail beside it. */
+  /* Self-managed wide pages draw their own columns; main spans the body. */
   .appMainFull {
     grid-column: 1 / -1;
   }
 
-  .appRail {
+  .appBodyWithRail .appRail {
     display: flex;
   }
 

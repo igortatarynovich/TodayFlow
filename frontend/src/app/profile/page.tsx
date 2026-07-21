@@ -31,7 +31,6 @@ import { ProfileFirstDayTeaser } from "@/components/profile/ProfileFirstDayTease
 import { useCoreSetupFlow } from "@/hooks/useCoreSetupFlow";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { LoadingSpinner } from "@/components/orbit";
 import { useAuth } from "@/lib/useAuth";
 import { getJson, postJson, putJson } from "@/lib/api";
 import type { AstroProfile, CoreProfile, CompactUserModel, UserSettings } from "@/lib/types";
@@ -103,30 +102,13 @@ type AstroProfilesResponse = {
 
 function ProfileLoadingScreen() {
   return (
-    <main className={`todayflow-shell ${routeStyles.profileRouteShell}`} data-testid="profile-loading">
-      <section className={routeStyles.profileRouteSection}>
-        <div className={`${routeStyles.profileRouteContainer} ${routeStyles.profileRouteContainerWide}`}>
-          <SurfaceInsight eyebrow="Профиль" data-testid="profile-loading-panel">
-            <h1 className={routeStyles.loadingTitle}>Открываем карту жизни</h1>
-            <p className={routeStyles.loadingLead}>
-              Готовим личную карту и ключевые подсказки, чтобы ты сразу видел(а): что происходит, на что опереться и
-              куда идти дальше.
-            </p>
-            <div className={routeStyles.loadingStatus}>
-              <LoadingSpinner size="sm" />
-              <p className={routeStyles.loadingStatusText}>Собираем стабильное состояние профиля</p>
-            </div>
-            <div className={routeStyles.loadingSteps}>
-              {["Проверяем данные", "Собираем карту и слои жизни", "Готовим готовый экран профиля"].map((step) => (
-                <div key={step} className={routeStyles.loadingStep}>
-                  {step}
-                </div>
-              ))}
-            </div>
-          </SurfaceInsight>
-        </div>
-      </section>
-    </main>
+    <ProductPageScreen
+      testId="profile-loading"
+      title="Профиль"
+      loading
+      loadingLabel="Собираем стабильное состояние профиля"
+      hideDatePill
+    />
   );
 }
 
@@ -367,8 +349,6 @@ function ProfileHubPageInner() {
         testId="profile-guest-gate"
         title="Профиль"
         subtitle="Профиль и Today открываются после мягкой регистрации: имя, дата рождения, первый разбор — и email, чтобы сохранить."
-        railTitle="Как это работает"
-        railHint="Мы спросим только нужное, покажем ценность, затем попросим email для сохранения."
       >
         <div style={{ display: "grid", gap: "0.85rem", justifyItems: "start" }}>
           <Link href={`${VALUE_FIRST_PATHS.welcome}?fresh=1`} className="orbit-button orbit-button-primary">

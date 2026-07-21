@@ -31,32 +31,31 @@ export function buildTodayWebTimeline(morning?: MorningRitualData | null): DsTim
     timeIndex += 1;
   }
 
-  if (events.length > 0) return events;
-
-  const lunarName = celestial?.lunar_phase?.name?.trim();
-  return [
-    { time: "Утро", title: lunarName || "Начало дня", active: true },
-    { time: "День", title: "Фокус и действия" },
-    { time: "Вечер", title: "Рефлексия дня" },
-  ];
+  // PR-2: no generic Утро/День/Вечер filler when sky data is absent.
+  return events;
 }
 
+/**
+ * Weekly rhythm for Today rail. Returns null when there is no real per-day signal
+ * (PR-2: no synthetic wave bars).
+ */
 export function buildTodayWebWeeklyActivity(input: {
   dailySteps: Array<{ done: boolean }>;
   fusion?: FusionResponse | null;
-}): number[] {
-  const todayRatio =
-    input.dailySteps.length > 0
-      ? input.dailySteps.filter((step) => step.done).length / input.dailySteps.length
-      : 0;
-  const diaryEntries = input.fusion?.rhythm_context?.diary?.entries_last_7_days ?? 0;
-  const baseline = Math.min(diaryEntries / 7, 1) * 0.65;
-
-  return Array.from({ length: 7 }, (_, index) => {
-    if (index === 6) return todayRatio;
-    const wave = ((index % 3) + 1) * 0.08;
-    return Math.min(1, Math.max(0.12, baseline + wave));
-  });
+}): number[] | null {
+  const steps = input.dailySteps;
+  if (steps.length >= 7) {
+    return steps.slice(-7).map((step) => (step.done ? 1 : 0));
+  }
+  if (steps.length > 0) {
+    const padded = Array.from({ length: 7 }, (_, index) => {
+      const step = steps[index];
+      return step ? (step.done ? 1 : 0) : 0;
+    });
+    // Only surface when at least one real done step exists.
+    return padded.some((v) => v > 0) ? padded : null;
+  }
+  return null;
 }
 
 export function buildTodayWebStreak(todayData: TodayCycleData): number {

@@ -155,8 +155,6 @@ export default function CompatibilityPage() {
         eyebrow="По сохранённым профилям"
         title="Совместимость"
         subtitle="Нужны минимум два профиля."
-        railTitle="Совместимость"
-        railHint="Добавь второй профиль в круг людей, чтобы сравнить карты."
         contentClassName={pl.content}
       >
         <nav className={pl.toolbar} aria-label="Навигация">
@@ -183,8 +181,6 @@ export default function CompatibilityPage() {
       eyebrow="По сохранённым профилям"
       title="Совместимость"
       subtitle="Два профиля — расчёт ниже."
-      railTitle="Совместимость"
-      railHint="Сравнение по сохранённым профилям из круга людей."
       contentClassName={`${pl.content} ${pl.legacyHost}`}
     >
       <nav className={pl.toolbar} aria-label="Навигация">

@@ -165,8 +165,6 @@ function AccountSubscriptionsContent() {
       testId="account-subscriptions-page"
       title="Управление подписками"
       subtitle="Управляйте своими подписками и просматривайте историю платежей"
-      railTitle={t("subscriptions.account.rail.section", "Подписки")}
-      railHint={t("subscriptions.account.rail.activeMeta", "Активные")}
       contentClassName={`${pl.content} ${pl.legacyHost}`}
     >
       {subscriptions && subscriptions.subscriptions.length > 0 ? (

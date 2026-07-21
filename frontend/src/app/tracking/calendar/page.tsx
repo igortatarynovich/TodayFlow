@@ -326,12 +326,6 @@ function CalendarTrackerPageContent() {
       eyebrow={flowChrome.trackingCalendarPageEyebrow}
       title={flowChrome.trackingCalendarPageTitle}
       subtitle={flowChrome.trackingCalendarPageIntro}
-      railTitle={flowLocale === "ru" ? "Календарь практик" : "Practice calendar"}
-      railHint={
-        flowLocale === "ru"
-          ? "Цели, привычки и аскезы на одной шкале — отметки прямо в календаре."
-          : "Goals, habits, and ascetics on one timeline — mark progress in the calendar."
-      }
       contentClassName={`${pl.content} ${pl.legacyHost}`}
     >
       {calendarData ? (

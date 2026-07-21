@@ -119,12 +119,6 @@ export default function ProgressTrackerHubPage() {
       eyebrow={fc.trackingProgressHubEyebrow}
       title={fc.trackingProgressHubTitle}
       subtitle={fc.trackingProgressHubIntro}
-      railTitle={locale === "ru" ? "Карты и трекеры" : "Maps & trackers"}
-      railHint={
-        locale === "ru"
-          ? "Выбери карту — календарь, привычки, аскезы и персональные карты дня."
-          : "Pick a map — calendar, habits, ascetics, and personal day maps."
-      }
     >
       <div className={pl.gridHub}>
         {cards.map((card) => (

@@ -124,12 +124,6 @@ export default function ObservationDiaryPage() {
       testId="tracking-diary-page"
       title={fc.diaryTitle}
       subtitle={fc.trackingDiaryPageIntro}
-      railTitle={locale === "ru" ? "Дневник наблюдений" : "Observation diary"}
-      railHint={
-        locale === "ru"
-          ? "Три коротких поля — что заметил, где было сложно, что оказалось легче."
-          : "Three short fields — noticed, hardest, easier than expected."
-      }
     >
       <div className={pl.fieldRow}>
         <div style={{ flex: "1 1 12rem", maxWidth: "20rem" }}>

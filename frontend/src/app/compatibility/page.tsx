@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { CompatibilityWebScreen } from "@/components/product-ui/CompatibilityWebScreen";
 import {
   CompatibilityWebHub,
-  CompatibilityWebHubRail,
+  useCompatibilityHubRail,
   type CompatWebModeId,
 } from "@/components/product-ui/CompatibilityWebHub";
 import {
@@ -656,6 +656,7 @@ export default function CompatibilityPage() {
   const { isAuthenticated, isLoading: authLoading } = useAuth();
   const { trackMeaningEvent } = useMeaningRuntime();
   const compatLocale: FlowPracticesChromeLocale = getLocale() === "ru" ? "ru" : "en";
+  const hubRail = useCompatibilityHubRail(compatLocale);
   const compatChrome = useMemo(() => compatibilityWebChromeBundle(compatLocale), [compatLocale]);
 
   const [profiles, setProfiles] = useState<AstroProfile[]>([]);
@@ -919,7 +920,6 @@ export default function CompatibilityPage() {
     options?: {
       title?: string;
       subtitle?: string;
-      railHint?: string;
       rail?: ReactNode;
       hideHeader?: boolean;
       contentClassName?: string;
@@ -928,7 +928,6 @@ export default function CompatibilityPage() {
     <CompatibilityWebScreen
       title={options?.title}
       subtitle={options?.subtitle}
-      railHint={options?.railHint}
       rail={options?.rail}
       hideHeader={options?.hideHeader}
       contentClassName={options?.contentClassName}
@@ -1124,7 +1123,7 @@ export default function CompatibilityPage() {
       <>
         <CompatibilityLayerSelector isAuthenticated={false} />
       </>,
-      { rail: <CompatibilityWebHubRail locale={compatLocale} /> },
+      { rail: hubRail ?? undefined },
     );
   }
 
@@ -1200,10 +1199,10 @@ export default function CompatibilityPage() {
         <CompatibilityLayerSelector isAuthenticated emphasizeProfiles />
         {renderCompatHub()}
       </>,
-      { rail: <CompatibilityWebHubRail locale={compatLocale} /> },
+      { rail: hubRail ?? undefined },
     );
   }
 
-  return compatWebShell(renderCompatHub(), { rail: <CompatibilityWebHubRail locale={compatLocale} /> });
+  return compatWebShell(renderCompatHub(), { rail: hubRail ?? undefined });
 
 }

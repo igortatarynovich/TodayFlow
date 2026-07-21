@@ -103,8 +103,6 @@ export default function WeeklyIntegrationScreen() {
         title="Недельная интеграция"
         loading
         loadingLabel="Загрузка…"
-        railTitle="Неделя"
-        railHint="Короткий итог: что повторялось и куда держать фокус."
       />
     );
   }
@@ -115,8 +113,6 @@ export default function WeeklyIntegrationScreen() {
         testId="weekly-integration-page"
         title="Недельная интеграция"
         subtitle="Короткий итог недели: что повторялось и на чём лучше держать фокус дальше."
-        railTitle="Доступ"
-        railHint="Сначала собери свой Today — потом итоги недели сохранятся в аккаунте."
       >
         <div style={{ display: "grid", gap: "0.85rem", justifyItems: "start" }}>
           <Link href="/onboarding/welcome?fresh=1" className="orbit-button orbit-button-primary">
@@ -135,8 +131,6 @@ export default function WeeklyIntegrationScreen() {
       testId="weekly-integration-page"
       title="Недельная интеграция"
       subtitle="Короткий итог недели: что повторялось и на чём лучше держать фокус дальше."
-      railTitle="Неделя"
-      railHint="Собери итог после 2–3 отмеченных дней — ритм станет яснее."
       contentClassName={pl.content}
     >
         <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginBottom: "1.25rem" }}>

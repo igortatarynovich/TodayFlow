@@ -318,3 +318,15 @@ EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md   ← этот документ (u
 ```
 
 При конфликте локального модуля с этим документом — **побеждает этот канон**.
+
+---
+
+## Quality gate (не новый принцип)
+
+Сквозной реестр генераторов и projection:
+
+**[audits/EXPLAINABLE_GENERATION_AUDIT_REGISTRY_V0.md](./audits/EXPLAINABLE_GENERATION_AUDIT_REGISTRY_V0.md)**
+
+Формат строки: `generator → inputs → calculation → prompt → output schema → trace → violations → remediation`.
+
+Новый endpoint / prompt / UI-блок с генерацией **не мержится** без обновления реестра (`pass` / `mitigated` / `waive`+owner).

@@ -15,11 +15,15 @@ export type ProductWebShellConfig = {
   displayName?: string | null;
   profileMeta?: string | null;
   coreProfile?: CoreProfile | null;
+  /**
+   * Context rail — only when the screen has real session/action/state content.
+   * Omit or leave undefined to use a single-track main (PR-2: no empty column).
+   */
   rail?: ReactNode;
   sidebar?: ReactNode;
   theme?: "light" | "dark";
   mainWide?: boolean;
-  /** Page draws its own internal columns (profile v2): main spans both grid tracks. */
+  /** Page draws its own internal columns: main spans the body; do not also set rail. */
   fullMain?: boolean;
 };
 

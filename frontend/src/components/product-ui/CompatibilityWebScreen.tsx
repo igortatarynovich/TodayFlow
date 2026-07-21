@@ -2,7 +2,6 @@
 
 import type { ReactNode } from "react";
 import { useMemo } from "react";
-import { DsBody, DsRailPanel } from "@/design-system";
 import { ProductPageScreen } from "@/components/product-ui/ProductPageScreen";
 import { compatibilityWebChromeBundle } from "@/components/product-ui/compatibilityWebChrome";
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
@@ -17,7 +16,7 @@ export type CompatibilityWebScreenProps = {
   locale?: FlowPracticesChromeLocale;
   title?: string;
   subtitle?: string;
-  railHint?: string;
+  /** Real context rail only — omit when empty (PR-2). */
   rail?: ReactNode;
   hideHeader?: boolean;
   contentClassName?: string;
@@ -31,7 +30,6 @@ export function CompatibilityWebScreen({
   locale,
   title,
   subtitle,
-  railHint,
   rail,
   hideHeader = false,
   contentClassName,
@@ -42,16 +40,6 @@ export function CompatibilityWebScreen({
   const chrome = useMemo(() => compatibilityWebChromeBundle(resolvedLocale), [resolvedLocale]);
   const resolvedTitle = title ?? chrome.pageTitle;
   const resolvedSubtitle = subtitle ?? chrome.pageSubtitle;
-  const resolvedRailHint = railHint ?? chrome.railHint;
-
-  const resolvedRail =
-    rail ?? (
-      <DsRailPanel title={chrome.railReadTitle}>
-        <DsBody size="sm" muted>
-          {resolvedRailHint}
-        </DsBody>
-      </DsRailPanel>
-    );
 
   return (
     <ProductPageScreen
@@ -62,7 +50,7 @@ export function CompatibilityWebScreen({
       profileMeta={profileMeta}
       coreProfile={coreProfile}
       locale={resolvedLocale}
-      rail={resolvedRail}
+      rail={rail}
       hideHeader={hideHeader}
       contentClassName={contentClassName ?? pl.content}
     >
