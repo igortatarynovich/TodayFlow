@@ -462,3 +462,4 @@ Same foundations + version ⇒ same fingerprint (byte-stable canonical JSON).
 | Date | Change |
 |------|--------|
 | 2026-07-21 | v0.1 spec: foundations, gate, 9-sphere matrix, PR-2 love/money/decisions rules, validation, fingerprint |
+| 2026-07-21 | Quality review SoT: [PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md](./PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md) — sign-only `how` boilerplate = blocking RULESET |

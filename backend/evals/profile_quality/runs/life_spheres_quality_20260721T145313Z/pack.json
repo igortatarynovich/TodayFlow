@@ -1,0 +1,4329 @@
+{
+  "manifest": {
+    "pack": "life_spheres_quality_v0",
+    "created_at": "20260721T145313Z",
+    "projection_version": "life_spheres_projector_v0.1",
+    "cases_file": "life_spheres_quality_cases_v0.json",
+    "criteria": [
+      "grounding",
+      "specificity",
+      "distinctness",
+      "usefulness",
+      "internal_coherence",
+      "voice",
+      "honesty"
+    ],
+    "defect_classes": [
+      "BLOCK_PURPOSE",
+      "INPUT",
+      "RULESET",
+      "RESPONSE_SCHEMA",
+      "VALIDATION",
+      "PROJECTION",
+      "UI_GATE",
+      "VOICE"
+    ]
+  },
+  "cases": [
+    {
+      "id": "lsq-01",
+      "contrast": "same_sun_different_venus_moon",
+      "label": "Sun Leo · Venus Cancer · Moon Cancer — soft closeness",
+      "intent": "Same Sun as lsq-02; Venus/Moon differ → love must diverge",
+      "gate_allowed": true,
+      "projection_version": "life_spheres_projector_v0.1",
+      "fingerprint": "sha256:6c02934be2e5d5024306deea2238aef1ccd6afabcd3d8b4b24f0037fc542bcca",
+      "spheres_projected": [
+        "decisions",
+        "love",
+        "money"
+      ],
+      "spheres_omitted": [
+        {
+          "id": "sex",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "work",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "family",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "kids",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "body",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "friends",
+          "reason": "not_in_slice_v0_1"
+        }
+      ],
+      "spheres": {
+        "love": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в любви и близости?",
+            "must_differ_from": "identity_core (who) and relationship_style (lens) — sphere = manifestation map",
+            "user_value": "Понять, как входит в близость, что нужно, где ломается, один практический шаг"
+          },
+          "claim_depth": "sign_only",
+          "style_class": "pace",
+          "rule_ids": [
+            "rule:love.how.planet",
+            "rule:love.need.from_style",
+            "rule:love.risk.from_style",
+            "rule:love.on.from_style",
+            "rule:love.off.from_style",
+            "rule:love.helps.from_style"
+          ],
+          "evidence": [
+            "style:relationship_style",
+            "planet:venus",
+            "rule:love.how.planet",
+            "rule:love.need.from_style",
+            "rule:love.risk.from_style",
+            "rule:love.on.from_style",
+            "rule:love.off.from_style",
+            "rule:love.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Близость через тёплые слова, предсказуемость и право на мягкий темп без давления.",
+            "planets_in_evidence": [
+              "planet:venus"
+            ],
+            "houses_in_evidence": [],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В любви: Венера в знаке Cancer задаёт тон проявления в этой сфере.",
+            "need": "В любви нужен свой темп — в духе «Близость через тёплые слова, предсказуе…».",
+            "risk": "Слишком быстрый заход в близость или замирание при чужом ритме.",
+            "turns_on": "Ритм, в котором можно быть без спектакля.",
+            "turns_off": "Резкие требования и хаотичная доступность.",
+            "helps": "Назови одну границу темпа до следующего глубокого разговора."
+          },
+          "snapshot_row": {
+            "how": "В любви: Венера в знаке Cancer задаёт тон проявления в этой сфере.",
+            "need": "В любви нужен свой темп — в духе «Близость через тёплые слова, предсказуе…».",
+            "risk": "Слишком быстрый заход в близость или замирание при чужом ритме.",
+            "turns_on": "Ритм, в котором можно быть без спектакля.",
+            "turns_off": "Резкие требования и хаотичная доступность.",
+            "helps": "Назови одну границу темпа до следующего глубокого разговора."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В любви: Венера в знаке Cancer задаёт тон проявления в этой сфере.",
+              "checks": {
+                "grounding": true,
+                "specificity": false,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "love.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+                }
+              ]
+            },
+            "need": {
+              "field": "need",
+              "text": "В любви нужен свой темп — в духе «Близость через тёплые слова, предсказуе…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Слишком быстрый заход в близость или замирание при чужом ритме.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Ритм, в котором можно быть без спектакля.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Резкие требования и хаотичная доступность.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Назови одну границу темпа до следующего глубокого разговора.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE withLifeSphereHowFrame may prefix «В отношениях» (PROJECTION chrome, not claim invent)",
+          "quality_result": "fail",
+          "defects": [
+            {
+              "class": "RULESET",
+              "note": "love.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+            }
+          ]
+        },
+        "money": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в деньгах и ценности?",
+            "must_differ_from": "identity_core and money_style — sphere = resource manifestation",
+            "user_value": "Опора: правила ценности, риск, один денежный фокус"
+          },
+          "claim_depth": "sign_only",
+          "style_class": "security",
+          "rule_ids": [
+            "rule:money.how.planet",
+            "rule:money.need.from_style",
+            "rule:money.risk.from_style",
+            "rule:money.on.from_style",
+            "rule:money.off.from_style",
+            "rule:money.helps.from_style"
+          ],
+          "evidence": [
+            "style:money_style",
+            "planet:jupiter",
+            "rule:money.how.planet",
+            "rule:money.need.from_style",
+            "rule:money.risk.from_style",
+            "rule:money.on.from_style",
+            "rule:money.off.from_style",
+            "rule:money.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Деньги как спокойная безопасность: малые регулярные шаги и понятный запас.",
+            "planets_in_evidence": [
+              "planet:jupiter"
+            ],
+            "houses_in_evidence": [],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В деньгах: Юпитер в знаке Cancer задаёт тон проявления в этой сфере.",
+            "need": "В деньгах нужно ощущение безопасности под ресурсом — в духе «Деньги как спокойная безопасность: малы…».",
+            "risk": "Траты от тревоги или отказ от любого движения.",
+            "turns_on": "Видимый запас и честные пределы.",
+            "turns_off": "Сравнение с другими и внезапные дыры в плане.",
+            "helps": "Назови одну цифру безопасности и держи её неделю."
+          },
+          "snapshot_row": {
+            "how": "В деньгах: Юпитер в знаке Cancer задаёт тон проявления в этой сфере.",
+            "need": "В деньгах нужно ощущение безопасности под ресурсом — в духе «Деньги как спокойная безопасность: малы…».",
+            "risk": "Траты от тревоги или отказ от любого движения.",
+            "turns_on": "Видимый запас и честные пределы.",
+            "turns_off": "Сравнение с другими и внезапные дыры в плане.",
+            "helps": "Назови одну цифру безопасности и держи её неделю."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В деньгах: Юпитер в знаке Cancer задаёт тон проявления в этой сфере.",
+              "checks": {
+                "grounding": true,
+                "specificity": false,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "money.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+                }
+              ]
+            },
+            "need": {
+              "field": "need",
+              "text": "В деньгах нужно ощущение безопасности под ресурсом — в духе «Деньги как спокойная безопасность: малы…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Траты от тревоги или отказ от любого движения.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Видимый запас и честные пределы.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Сравнение с другими и внезапные дыры в плане.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Назови одну цифру безопасности и держи её неделю.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE may prefix «В реализации» for money how",
+          "quality_result": "fail",
+          "defects": [
+            {
+              "class": "RULESET",
+              "note": "money.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+            }
+          ]
+        },
+        "decisions": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в решениях и дисциплине?",
+            "must_differ_from": "identity_core and decision_style — sphere = decision hygiene in life",
+            "user_value": "Понятный способ выбирать и один hygiene-шаг"
+          },
+          "claim_depth": "sign_only",
+          "style_class": "analysis",
+          "rule_ids": [
+            "rule:decisions.how.planet",
+            "rule:decisions.need.from_style",
+            "rule:decisions.risk.from_style",
+            "rule:decisions.on.from_style",
+            "rule:decisions.off.from_style",
+            "rule:decisions.helps.from_style"
+          ],
+          "evidence": [
+            "style:decision_style",
+            "planet:saturn",
+            "rule:decisions.how.planet",
+            "rule:decisions.need.from_style",
+            "rule:decisions.risk.from_style",
+            "rule:decisions.on.from_style",
+            "rule:decisions.off.from_style",
+            "rule:decisions.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Решения через согласование с близкими, но с одним своим финальным критерием.",
+            "planets_in_evidence": [
+              "planet:saturn"
+            ],
+            "houses_in_evidence": [],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В решениях: Сатурн в знаке Capricorn задаёт тон проявления в этой сфере.",
+            "need": "В решениях нужен достаточный разбор без зависания — в духе «Решения через согласование с близкими,…».",
+            "risk": "Переанализ мимо полезного окна.",
+            "turns_on": "Короткая проверка фактов и затем выбор.",
+            "turns_off": "Новые данные без слота на решение.",
+            "helps": "Ограничь исследование одним заходом; в конце — решение."
+          },
+          "snapshot_row": {
+            "how": "В решениях: Сатурн в знаке Capricorn задаёт тон проявления в этой сфере.",
+            "need": "В решениях нужен достаточный разбор без зависания — в духе «Решения через согласование с близкими,…».",
+            "risk": "Переанализ мимо полезного окна.",
+            "turns_on": "Короткая проверка фактов и затем выбор.",
+            "turns_off": "Новые данные без слота на решение.",
+            "helps": "Ограничь исследование одним заходом; в конце — решение."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В решениях: Сатурн в знаке Capricorn задаёт тон проявления в этой сфере.",
+              "checks": {
+                "grounding": true,
+                "specificity": false,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "decisions.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+                }
+              ]
+            },
+            "need": {
+              "field": "need",
+              "text": "В решениях нужен достаточный разбор без зависания — в духе «Решения через согласование с близкими,…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Переанализ мимо полезного окна.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Короткая проверка фактов и затем выбор.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Новые данные без слота на решение.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Ограничь исследование одним заходом; в конце — решение.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE maps fields 1:1 when contract present; partial map OK",
+          "quality_result": "fail",
+          "defects": [
+            {
+              "class": "RULESET",
+              "note": "decisions.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+            }
+          ]
+        }
+      },
+      "defects": [
+        {
+          "class": "RULESET",
+          "note": "love.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+        },
+        {
+          "class": "RULESET",
+          "note": "money.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+        },
+        {
+          "class": "RULESET",
+          "note": "decisions.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+        }
+      ],
+      "case_pass": false
+    },
+    {
+      "id": "lsq-02",
+      "contrast": "same_sun_different_venus_moon",
+      "label": "Sun Leo · Venus Aries · Moon Aquarius — autonomy pace",
+      "intent": "Pair with lsq-01: love/money/decisions must not collapse to same Leo sun filler",
+      "gate_allowed": true,
+      "projection_version": "life_spheres_projector_v0.1",
+      "fingerprint": "sha256:192686dec4d74763a3965a8a6e4c078da5dc485506a8d59964b01de12b17dd2d",
+      "spheres_projected": [
+        "decisions",
+        "love",
+        "money"
+      ],
+      "spheres_omitted": [
+        {
+          "id": "sex",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "work",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "family",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "kids",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "body",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "friends",
+          "reason": "not_in_slice_v0_1"
+        }
+      ],
+      "spheres": {
+        "love": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в любви и близости?",
+            "must_differ_from": "identity_core (who) and relationship_style (lens) — sphere = manifestation map",
+            "user_value": "Понять, как входит в близость, что нужно, где ломается, один практический шаг"
+          },
+          "claim_depth": "sign_only",
+          "style_class": "clarity",
+          "rule_ids": [
+            "rule:love.how.planet",
+            "rule:love.need.from_style",
+            "rule:love.risk.from_style",
+            "rule:love.on.from_style",
+            "rule:love.off.from_style",
+            "rule:love.helps.from_style"
+          ],
+          "evidence": [
+            "style:relationship_style",
+            "planet:venus",
+            "rule:love.how.planet",
+            "rule:love.need.from_style",
+            "rule:love.risk.from_style",
+            "rule:love.on.from_style",
+            "rule:love.off.from_style",
+            "rule:love.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Близость через прямые слова, быстрый темп и уважение к автономии без проверок.",
+            "planets_in_evidence": [
+              "planet:venus"
+            ],
+            "houses_in_evidence": [],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В любви: Венера в знаке Aries задаёт тон проявления в этой сфере.",
+            "need": "В любви нужна ясность и предсказуемый контакт — в духе «Близость через прямые слова, быстрый те…».",
+            "risk": "Точка слома — ожидание, что другой угадает без слов.",
+            "turns_on": "Спокойный прямой разговор и совпадение по темпу близости.",
+            "turns_off": "Намёки, двойные сигналы и давление без следующего шага.",
+            "helps": "Одна короткая честная договорённость на неделю — не разбор «всего сразу»."
+          },
+          "snapshot_row": {
+            "how": "В любви: Венера в знаке Aries задаёт тон проявления в этой сфере.",
+            "need": "В любви нужна ясность и предсказуемый контакт — в духе «Близость через прямые слова, быстрый те…».",
+            "risk": "Точка слома — ожидание, что другой угадает без слов.",
+            "turns_on": "Спокойный прямой разговор и совпадение по темпу близости.",
+            "turns_off": "Намёки, двойные сигналы и давление без следующего шага.",
+            "helps": "Одна короткая честная договорённость на неделю — не разбор «всего сразу»."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В любви: Венера в знаке Aries задаёт тон проявления в этой сфере.",
+              "checks": {
+                "grounding": true,
+                "specificity": false,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "love.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+                }
+              ]
+            },
+            "need": {
+              "field": "need",
+              "text": "В любви нужна ясность и предсказуемый контакт — в духе «Близость через прямые слова, быстрый те…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Точка слома — ожидание, что другой угадает без слов.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Спокойный прямой разговор и совпадение по темпу близости.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Намёки, двойные сигналы и давление без следующего шага.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Одна короткая честная договорённость на неделю — не разбор «всего сразу».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE withLifeSphereHowFrame may prefix «В отношениях» (PROJECTION chrome, not claim invent)",
+          "quality_result": "fail",
+          "defects": [
+            {
+              "class": "RULESET",
+              "note": "love.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+            }
+          ]
+        },
+        "money": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в деньгах и ценности?",
+            "must_differ_from": "identity_core and money_style — sphere = resource manifestation",
+            "user_value": "Опора: правила ценности, риск, один денежный фокус"
+          },
+          "claim_depth": "sign_only",
+          "style_class": "growth",
+          "rule_ids": [
+            "rule:money.how.planet",
+            "rule:money.need.from_style",
+            "rule:money.risk.from_style",
+            "rule:money.on.from_style",
+            "rule:money.off.from_style",
+            "rule:money.helps.from_style"
+          ],
+          "evidence": [
+            "style:money_style",
+            "planet:jupiter",
+            "rule:money.how.planet",
+            "rule:money.need.from_style",
+            "rule:money.risk.from_style",
+            "rule:money.on.from_style",
+            "rule:money.off.from_style",
+            "rule:money.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Деньги как рост: один смелый шаг с потолком, без стыда за запрос.",
+            "planets_in_evidence": [
+              "planet:jupiter"
+            ],
+            "houses_in_evidence": [],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В деньгах: Юпитер в знаке Sagittarius задаёт тон проявления в этой сфере.",
+            "need": "В деньгах нужен шаг роста без импульса — в духе «Деньги как рост: один смелый шаг с пото…».",
+            "risk": "Перерастяжение или полный застой без следующего хода.",
+            "turns_on": "Малое измеримое расширение.",
+            "turns_off": "Ставки «всё или ничего».",
+            "helps": "Одно действие роста с потолком — затем разбор."
+          },
+          "snapshot_row": {
+            "how": "В деньгах: Юпитер в знаке Sagittarius задаёт тон проявления в этой сфере.",
+            "need": "В деньгах нужен шаг роста без импульса — в духе «Деньги как рост: один смелый шаг с пото…».",
+            "risk": "Перерастяжение или полный застой без следующего хода.",
+            "turns_on": "Малое измеримое расширение.",
+            "turns_off": "Ставки «всё или ничего».",
+            "helps": "Одно действие роста с потолком — затем разбор."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В деньгах: Юпитер в знаке Sagittarius задаёт тон проявления в этой сфере.",
+              "checks": {
+                "grounding": true,
+                "specificity": false,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "money.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+                }
+              ]
+            },
+            "need": {
+              "field": "need",
+              "text": "В деньгах нужен шаг роста без импульса — в духе «Деньги как рост: один смелый шаг с пото…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Перерастяжение или полный застой без следующего хода.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Малое измеримое расширение.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Ставки «всё или ничего».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Одно действие роста с потолком — затем разбор.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": false
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "money.helps lacks actionable support"
+                }
+              ]
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE may prefix «В реализации» for money how",
+          "quality_result": "fail",
+          "defects": [
+            {
+              "class": "RULESET",
+              "note": "money.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+            },
+            {
+              "class": "RULESET",
+              "note": "money.helps lacks actionable support"
+            }
+          ]
+        },
+        "decisions": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в решениях и дисциплине?",
+            "must_differ_from": "identity_core and decision_style — sphere = decision hygiene in life",
+            "user_value": "Понятный способ выбирать и один hygiene-шаг"
+          },
+          "claim_depth": "sign_only",
+          "style_class": "speed",
+          "rule_ids": [
+            "rule:decisions.how.planet",
+            "rule:decisions.need.from_style",
+            "rule:decisions.risk.from_style",
+            "rule:decisions.on.from_style",
+            "rule:decisions.off.from_style",
+            "rule:decisions.helps.from_style"
+          ],
+          "evidence": [
+            "style:decision_style",
+            "planet:saturn",
+            "rule:decisions.how.planet",
+            "rule:decisions.need.from_style",
+            "rule:decisions.risk.from_style",
+            "rule:decisions.on.from_style",
+            "rule:decisions.off.from_style",
+            "rule:decisions.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Решения быстро и честно: ясное да/нет и дата короткого пересмотра.",
+            "planets_in_evidence": [
+              "planet:saturn"
+            ],
+            "houses_in_evidence": [],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В решениях: Сатурн в знаке Capricorn задаёт тон проявления в этой сфере.",
+            "need": "В решениях нужен быстрый честный выбор — в духе «Решения быстро и честно: ясное да/нет и…».",
+            "risk": "Скорость без точки пересмотра.",
+            "turns_on": "Ясное да/нет с датой проверки.",
+            "turns_off": "Чужая навязанная срочность.",
+            "helps": "Реши один раз; поставь один пересмотр, не десять."
+          },
+          "snapshot_row": {
+            "how": "В решениях: Сатурн в знаке Capricorn задаёт тон проявления в этой сфере.",
+            "need": "В решениях нужен быстрый честный выбор — в духе «Решения быстро и честно: ясное да/нет и…».",
+            "risk": "Скорость без точки пересмотра.",
+            "turns_on": "Ясное да/нет с датой проверки.",
+            "turns_off": "Чужая навязанная срочность.",
+            "helps": "Реши один раз; поставь один пересмотр, не десять."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В решениях: Сатурн в знаке Capricorn задаёт тон проявления в этой сфере.",
+              "checks": {
+                "grounding": true,
+                "specificity": false,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "decisions.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+                }
+              ]
+            },
+            "need": {
+              "field": "need",
+              "text": "В решениях нужен быстрый честный выбор — в духе «Решения быстро и честно: ясное да/нет и…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Скорость без точки пересмотра.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Ясное да/нет с датой проверки.",
+              "checks": {
+                "grounding": true,
+                "specificity": false,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "decisions.turns_on: interchangeable for most users (weak personal binding)"
+                }
+              ]
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Чужая навязанная срочность.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Реши один раз; поставь один пересмотр, не десять.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE maps fields 1:1 when contract present; partial map OK",
+          "quality_result": "fail",
+          "defects": [
+            {
+              "class": "RULESET",
+              "note": "decisions.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+            },
+            {
+              "class": "RULESET",
+              "note": "decisions.turns_on: interchangeable for most users (weak personal binding)"
+            }
+          ]
+        }
+      },
+      "defects": [
+        {
+          "class": "RULESET",
+          "note": "love.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+        },
+        {
+          "class": "RULESET",
+          "note": "money.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+        },
+        {
+          "class": "RULESET",
+          "note": "money.helps lacks actionable support"
+        },
+        {
+          "class": "RULESET",
+          "note": "decisions.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+        },
+        {
+          "class": "RULESET",
+          "note": "decisions.turns_on: interchangeable for most users (weak personal binding)"
+        }
+      ],
+      "case_pass": false
+    },
+    {
+      "id": "lsq-03",
+      "contrast": "same_natal_different_styles",
+      "label": "Fixed natal · clarity/structure styles",
+      "intent": "Same natal as lsq-04; only styles change → style lens must drive need/risk/on/off/helps",
+      "gate_allowed": true,
+      "projection_version": "life_spheres_projector_v0.1",
+      "fingerprint": "sha256:95b3b0a1262f4e7db71959e924cbc3d1de4066edfbd9cb956ae9e9a9ea605563",
+      "spheres_projected": [
+        "decisions",
+        "love",
+        "money"
+      ],
+      "spheres_omitted": [
+        {
+          "id": "sex",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "work",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "family",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "kids",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "body",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "friends",
+          "reason": "not_in_slice_v0_1"
+        }
+      ],
+      "spheres": {
+        "love": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в любви и близости?",
+            "must_differ_from": "identity_core (who) and relationship_style (lens) — sphere = manifestation map",
+            "user_value": "Понять, как входит в близость, что нужно, где ломается, один практический шаг"
+          },
+          "claim_depth": "sign_only",
+          "style_class": "clarity",
+          "rule_ids": [
+            "rule:love.how.planet",
+            "rule:love.need.from_style",
+            "rule:love.risk.from_style",
+            "rule:love.on.from_style",
+            "rule:love.off.from_style",
+            "rule:love.helps.from_style"
+          ],
+          "evidence": [
+            "style:relationship_style",
+            "planet:venus",
+            "rule:love.how.planet",
+            "rule:love.need.from_style",
+            "rule:love.risk.from_style",
+            "rule:love.on.from_style",
+            "rule:love.off.from_style",
+            "rule:love.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Близость через честный разговор и ясные договорённости без намёков.",
+            "planets_in_evidence": [
+              "planet:venus"
+            ],
+            "houses_in_evidence": [],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В любви: Венера в знаке Aquarius задаёт тон проявления в этой сфере.",
+            "need": "В любви нужна ясность и предсказуемый контакт — в духе «Близость через честный разговор и ясные…».",
+            "risk": "Точка слома — ожидание, что другой угадает без слов.",
+            "turns_on": "Спокойный прямой разговор и совпадение по темпу близости.",
+            "turns_off": "Намёки, двойные сигналы и давление без следующего шага.",
+            "helps": "Одна короткая честная договорённость на неделю — не разбор «всего сразу»."
+          },
+          "snapshot_row": {
+            "how": "В любви: Венера в знаке Aquarius задаёт тон проявления в этой сфере.",
+            "need": "В любви нужна ясность и предсказуемый контакт — в духе «Близость через честный разговор и ясные…».",
+            "risk": "Точка слома — ожидание, что другой угадает без слов.",
+            "turns_on": "Спокойный прямой разговор и совпадение по темпу близости.",
+            "turns_off": "Намёки, двойные сигналы и давление без следующего шага.",
+            "helps": "Одна короткая честная договорённость на неделю — не разбор «всего сразу»."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В любви: Венера в знаке Aquarius задаёт тон проявления в этой сфере.",
+              "checks": {
+                "grounding": true,
+                "specificity": false,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "love.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+                }
+              ]
+            },
+            "need": {
+              "field": "need",
+              "text": "В любви нужна ясность и предсказуемый контакт — в духе «Близость через честный разговор и ясные…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Точка слома — ожидание, что другой угадает без слов.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Спокойный прямой разговор и совпадение по темпу близости.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Намёки, двойные сигналы и давление без следующего шага.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Одна короткая честная договорённость на неделю — не разбор «всего сразу».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE withLifeSphereHowFrame may prefix «В отношениях» (PROJECTION chrome, not claim invent)",
+          "quality_result": "fail",
+          "defects": [
+            {
+              "class": "RULESET",
+              "note": "love.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+            }
+          ]
+        },
+        "money": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в деньгах и ценности?",
+            "must_differ_from": "identity_core and money_style — sphere = resource manifestation",
+            "user_value": "Опора: правила ценности, риск, один денежный фокус"
+          },
+          "claim_depth": "sign_only",
+          "style_class": "structure",
+          "rule_ids": [
+            "rule:money.how.planet",
+            "rule:money.need.from_style",
+            "rule:money.risk.from_style",
+            "rule:money.on.from_style",
+            "rule:money.off.from_style",
+            "rule:money.helps.from_style"
+          ],
+          "evidence": [
+            "style:money_style",
+            "planet:jupiter",
+            "rule:money.how.planet",
+            "rule:money.need.from_style",
+            "rule:money.risk.from_style",
+            "rule:money.on.from_style",
+            "rule:money.off.from_style",
+            "rule:money.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Деньги через структуру: учёт, правила ценности времени, без импульса.",
+            "planets_in_evidence": [
+              "planet:jupiter"
+            ],
+            "houses_in_evidence": [],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В деньгах: Юпитер в знаке Taurus задаёт тон проявления в этой сфере.",
+            "need": "В деньгах нужны простые правила ценности — в духе «Деньги через структуру: учёт, правила ц…».",
+            "risk": "Хаос в учёте или зажим контроля до остановки действий.",
+            "turns_on": "Понятные цифры и маленькие регулярные шаги.",
+            "turns_off": "Стыд за запросы и туман во взаиморасчётах.",
+            "helps": "Один денежный фокус на неделю и запись «что сработало»."
+          },
+          "snapshot_row": {
+            "how": "В деньгах: Юпитер в знаке Taurus задаёт тон проявления в этой сфере.",
+            "need": "В деньгах нужны простые правила ценности — в духе «Деньги через структуру: учёт, правила ц…».",
+            "risk": "Хаос в учёте или зажим контроля до остановки действий.",
+            "turns_on": "Понятные цифры и маленькие регулярные шаги.",
+            "turns_off": "Стыд за запросы и туман во взаиморасчётах.",
+            "helps": "Один денежный фокус на неделю и запись «что сработало»."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В деньгах: Юпитер в знаке Taurus задаёт тон проявления в этой сфере.",
+              "checks": {
+                "grounding": true,
+                "specificity": false,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "money.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+                }
+              ]
+            },
+            "need": {
+              "field": "need",
+              "text": "В деньгах нужны простые правила ценности — в духе «Деньги через структуру: учёт, правила ц…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Хаос в учёте или зажим контроля до остановки действий.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Понятные цифры и маленькие регулярные шаги.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Стыд за запросы и туман во взаиморасчётах.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Один денежный фокус на неделю и запись «что сработало».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE may prefix «В реализации» for money how",
+          "quality_result": "fail",
+          "defects": [
+            {
+              "class": "RULESET",
+              "note": "money.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+            }
+          ]
+        },
+        "decisions": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в решениях и дисциплине?",
+            "must_differ_from": "identity_core and decision_style — sphere = decision hygiene in life",
+            "user_value": "Понятный способ выбирать и один hygiene-шаг"
+          },
+          "claim_depth": "sign_only",
+          "style_class": "analysis",
+          "rule_ids": [
+            "rule:decisions.how.planet",
+            "rule:decisions.need.from_style",
+            "rule:decisions.risk.from_style",
+            "rule:decisions.on.from_style",
+            "rule:decisions.off.from_style",
+            "rule:decisions.helps.from_style"
+          ],
+          "evidence": [
+            "style:decision_style",
+            "planet:saturn",
+            "rule:decisions.how.planet",
+            "rule:decisions.need.from_style",
+            "rule:decisions.risk.from_style",
+            "rule:decisions.on.from_style",
+            "rule:decisions.off.from_style",
+            "rule:decisions.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Решения через один критерий, короткий дедлайн и письменную рамку.",
+            "planets_in_evidence": [
+              "planet:saturn"
+            ],
+            "houses_in_evidence": [],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В решениях: Сатурн в знаке Sagittarius задаёт тон проявления в этой сфере.",
+            "need": "В решениях нужен достаточный разбор без зависания — в духе «Решения через один критерий, короткий д…».",
+            "risk": "Переанализ мимо полезного окна.",
+            "turns_on": "Короткая проверка фактов и затем выбор.",
+            "turns_off": "Новые данные без слота на решение.",
+            "helps": "Ограничь исследование одним заходом; в конце — решение."
+          },
+          "snapshot_row": {
+            "how": "В решениях: Сатурн в знаке Sagittarius задаёт тон проявления в этой сфере.",
+            "need": "В решениях нужен достаточный разбор без зависания — в духе «Решения через один критерий, короткий д…».",
+            "risk": "Переанализ мимо полезного окна.",
+            "turns_on": "Короткая проверка фактов и затем выбор.",
+            "turns_off": "Новые данные без слота на решение.",
+            "helps": "Ограничь исследование одним заходом; в конце — решение."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В решениях: Сатурн в знаке Sagittarius задаёт тон проявления в этой сфере.",
+              "checks": {
+                "grounding": true,
+                "specificity": false,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "decisions.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+                }
+              ]
+            },
+            "need": {
+              "field": "need",
+              "text": "В решениях нужен достаточный разбор без зависания — в духе «Решения через один критерий, короткий д…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Переанализ мимо полезного окна.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Короткая проверка фактов и затем выбор.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Новые данные без слота на решение.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Ограничь исследование одним заходом; в конце — решение.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE maps fields 1:1 when contract present; partial map OK",
+          "quality_result": "fail",
+          "defects": [
+            {
+              "class": "RULESET",
+              "note": "decisions.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+            }
+          ]
+        }
+      },
+      "defects": [
+        {
+          "class": "RULESET",
+          "note": "love.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+        },
+        {
+          "class": "RULESET",
+          "note": "money.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+        },
+        {
+          "class": "RULESET",
+          "note": "decisions.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+        }
+      ],
+      "case_pass": false
+    },
+    {
+      "id": "lsq-04",
+      "contrast": "same_natal_different_styles",
+      "label": "Fixed natal · depth/security/analysis styles",
+      "intent": "Pair with lsq-03: prove style sensitivity without natal drift",
+      "gate_allowed": true,
+      "projection_version": "life_spheres_projector_v0.1",
+      "fingerprint": "sha256:fdadd21a9fd038d89121bc531bf3dbba6af078cd5b71cc04d98430f54a1380ac",
+      "spheres_projected": [
+        "decisions",
+        "love",
+        "money"
+      ],
+      "spheres_omitted": [
+        {
+          "id": "sex",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "work",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "family",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "kids",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "body",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "friends",
+          "reason": "not_in_slice_v0_1"
+        }
+      ],
+      "spheres": {
+        "love": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в любви и близости?",
+            "must_differ_from": "identity_core (who) and relationship_style (lens) — sphere = manifestation map",
+            "user_value": "Понять, как входит в близость, что нужно, где ломается, один практический шаг"
+          },
+          "claim_depth": "sign_only",
+          "style_class": "pace",
+          "rule_ids": [
+            "rule:love.how.planet",
+            "rule:love.need.from_style",
+            "rule:love.risk.from_style",
+            "rule:love.on.from_style",
+            "rule:love.off.from_style",
+            "rule:love.helps.from_style"
+          ],
+          "evidence": [
+            "style:relationship_style",
+            "planet:venus",
+            "rule:love.how.planet",
+            "rule:love.need.from_style",
+            "rule:love.risk.from_style",
+            "rule:love.on.from_style",
+            "rule:love.off.from_style",
+            "rule:love.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Близость через глубину смысла и медленное раскрытие, без спектакля интенсивности.",
+            "planets_in_evidence": [
+              "planet:venus"
+            ],
+            "houses_in_evidence": [],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В любви: Венера в знаке Aquarius задаёт тон проявления в этой сфере.",
+            "need": "В любви нужен свой темп — в духе «Близость через глубину смысла и медленн…».",
+            "risk": "Слишком быстрый заход в близость или замирание при чужом ритме.",
+            "turns_on": "Ритм, в котором можно быть без спектакля.",
+            "turns_off": "Резкие требования и хаотичная доступность.",
+            "helps": "Назови одну границу темпа до следующего глубокого разговора."
+          },
+          "snapshot_row": {
+            "how": "В любви: Венера в знаке Aquarius задаёт тон проявления в этой сфере.",
+            "need": "В любви нужен свой темп — в духе «Близость через глубину смысла и медленн…».",
+            "risk": "Слишком быстрый заход в близость или замирание при чужом ритме.",
+            "turns_on": "Ритм, в котором можно быть без спектакля.",
+            "turns_off": "Резкие требования и хаотичная доступность.",
+            "helps": "Назови одну границу темпа до следующего глубокого разговора."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В любви: Венера в знаке Aquarius задаёт тон проявления в этой сфере.",
+              "checks": {
+                "grounding": true,
+                "specificity": false,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "love.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+                }
+              ]
+            },
+            "need": {
+              "field": "need",
+              "text": "В любви нужен свой темп — в духе «Близость через глубину смысла и медленн…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Слишком быстрый заход в близость или замирание при чужом ритме.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Ритм, в котором можно быть без спектакля.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Резкие требования и хаотичная доступность.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Назови одну границу темпа до следующего глубокого разговора.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE withLifeSphereHowFrame may prefix «В отношениях» (PROJECTION chrome, not claim invent)",
+          "quality_result": "fail",
+          "defects": [
+            {
+              "class": "RULESET",
+              "note": "love.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+            }
+          ]
+        },
+        "money": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в деньгах и ценности?",
+            "must_differ_from": "identity_core and money_style — sphere = resource manifestation",
+            "user_value": "Опора: правила ценности, риск, один денежный фокус"
+          },
+          "claim_depth": "sign_only",
+          "style_class": "security",
+          "rule_ids": [
+            "rule:money.how.planet",
+            "rule:money.need.from_style",
+            "rule:money.risk.from_style",
+            "rule:money.on.from_style",
+            "rule:money.off.from_style",
+            "rule:money.helps.from_style"
+          ],
+          "evidence": [
+            "style:money_style",
+            "planet:jupiter",
+            "rule:money.how.planet",
+            "rule:money.need.from_style",
+            "rule:money.risk.from_style",
+            "rule:money.on.from_style",
+            "rule:money.off.from_style",
+            "rule:money.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Деньги как чувство безопасности: видимый запас и честные пределы трат.",
+            "planets_in_evidence": [
+              "planet:jupiter"
+            ],
+            "houses_in_evidence": [],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В деньгах: Юпитер в знаке Taurus задаёт тон проявления в этой сфере.",
+            "need": "В деньгах нужно ощущение безопасности под ресурсом — в духе «Деньги как чувство безопасности: видимы…».",
+            "risk": "Траты от тревоги или отказ от любого движения.",
+            "turns_on": "Видимый запас и честные пределы.",
+            "turns_off": "Сравнение с другими и внезапные дыры в плане.",
+            "helps": "Назови одну цифру безопасности и держи её неделю."
+          },
+          "snapshot_row": {
+            "how": "В деньгах: Юпитер в знаке Taurus задаёт тон проявления в этой сфере.",
+            "need": "В деньгах нужно ощущение безопасности под ресурсом — в духе «Деньги как чувство безопасности: видимы…».",
+            "risk": "Траты от тревоги или отказ от любого движения.",
+            "turns_on": "Видимый запас и честные пределы.",
+            "turns_off": "Сравнение с другими и внезапные дыры в плане.",
+            "helps": "Назови одну цифру безопасности и держи её неделю."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В деньгах: Юпитер в знаке Taurus задаёт тон проявления в этой сфере.",
+              "checks": {
+                "grounding": true,
+                "specificity": false,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "money.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+                }
+              ]
+            },
+            "need": {
+              "field": "need",
+              "text": "В деньгах нужно ощущение безопасности под ресурсом — в духе «Деньги как чувство безопасности: видимы…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Траты от тревоги или отказ от любого движения.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Видимый запас и честные пределы.",
+              "checks": {
+                "grounding": true,
+                "specificity": false,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "money.turns_on: interchangeable for most users (weak personal binding)"
+                }
+              ]
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Сравнение с другими и внезапные дыры в плане.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Назови одну цифру безопасности и держи её неделю.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE may prefix «В реализации» for money how",
+          "quality_result": "fail",
+          "defects": [
+            {
+              "class": "RULESET",
+              "note": "money.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+            },
+            {
+              "class": "RULESET",
+              "note": "money.turns_on: interchangeable for most users (weak personal binding)"
+            }
+          ]
+        },
+        "decisions": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в решениях и дисциплине?",
+            "must_differ_from": "identity_core and decision_style — sphere = decision hygiene in life",
+            "user_value": "Понятный способ выбирать и один hygiene-шаг"
+          },
+          "claim_depth": "sign_only",
+          "style_class": "analysis",
+          "rule_ids": [
+            "rule:decisions.how.planet",
+            "rule:decisions.need.from_style",
+            "rule:decisions.risk.from_style",
+            "rule:decisions.on.from_style",
+            "rule:decisions.off.from_style",
+            "rule:decisions.helps.from_style"
+          ],
+          "evidence": [
+            "style:decision_style",
+            "planet:saturn",
+            "rule:decisions.how.planet",
+            "rule:decisions.need.from_style",
+            "rule:decisions.risk.from_style",
+            "rule:decisions.on.from_style",
+            "rule:decisions.off.from_style",
+            "rule:decisions.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Решения через короткий анализ фактов без зависания в бесконечных данных.",
+            "planets_in_evidence": [
+              "planet:saturn"
+            ],
+            "houses_in_evidence": [],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В решениях: Сатурн в знаке Sagittarius задаёт тон проявления в этой сфере.",
+            "need": "В решениях нужен достаточный разбор без зависания — в духе «Решения через короткий анализ фактов бе…».",
+            "risk": "Переанализ мимо полезного окна.",
+            "turns_on": "Короткая проверка фактов и затем выбор.",
+            "turns_off": "Новые данные без слота на решение.",
+            "helps": "Ограничь исследование одним заходом; в конце — решение."
+          },
+          "snapshot_row": {
+            "how": "В решениях: Сатурн в знаке Sagittarius задаёт тон проявления в этой сфере.",
+            "need": "В решениях нужен достаточный разбор без зависания — в духе «Решения через короткий анализ фактов бе…».",
+            "risk": "Переанализ мимо полезного окна.",
+            "turns_on": "Короткая проверка фактов и затем выбор.",
+            "turns_off": "Новые данные без слота на решение.",
+            "helps": "Ограничь исследование одним заходом; в конце — решение."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В решениях: Сатурн в знаке Sagittarius задаёт тон проявления в этой сфере.",
+              "checks": {
+                "grounding": true,
+                "specificity": false,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "decisions.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+                }
+              ]
+            },
+            "need": {
+              "field": "need",
+              "text": "В решениях нужен достаточный разбор без зависания — в духе «Решения через короткий анализ фактов бе…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Переанализ мимо полезного окна.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Короткая проверка фактов и затем выбор.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Новые данные без слота на решение.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Ограничь исследование одним заходом; в конце — решение.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE maps fields 1:1 when contract present; partial map OK",
+          "quality_result": "fail",
+          "defects": [
+            {
+              "class": "RULESET",
+              "note": "decisions.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+            }
+          ]
+        }
+      },
+      "defects": [
+        {
+          "class": "RULESET",
+          "note": "love.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+        },
+        {
+          "class": "RULESET",
+          "note": "money.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+        },
+        {
+          "class": "RULESET",
+          "note": "money.turns_on: interchangeable for most users (weak personal binding)"
+        },
+        {
+          "class": "RULESET",
+          "note": "decisions.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+        }
+      ],
+      "case_pass": false
+    },
+    {
+      "id": "lsq-05",
+      "contrast": "houses_available",
+      "label": "Full houses enrich how (time known)",
+      "intent": "House fragments must appear in evidence and how; no house claims without text",
+      "gate_allowed": true,
+      "projection_version": "life_spheres_projector_v0.1",
+      "fingerprint": "sha256:1f3e331ea1b28541a98e401f5cb4e5128868d80e74d5d820f3243434b4cac9ee",
+      "spheres_projected": [
+        "decisions",
+        "love",
+        "money"
+      ],
+      "spheres_omitted": [
+        {
+          "id": "sex",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "work",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "family",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "kids",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "body",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "friends",
+          "reason": "not_in_slice_v0_1"
+        }
+      ],
+      "spheres": {
+        "love": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в любви и близости?",
+            "must_differ_from": "identity_core (who) and relationship_style (lens) — sphere = manifestation map",
+            "user_value": "Понять, как входит в близость, что нужно, где ломается, один практический шаг"
+          },
+          "claim_depth": "houses_plus_styles",
+          "style_class": "clarity",
+          "rule_ids": [
+            "rule:love.how.planet",
+            "rule:love.how.house7",
+            "rule:love.need.from_style",
+            "rule:love.risk.from_style",
+            "rule:love.on.from_style",
+            "rule:love.off.from_style",
+            "rule:love.helps.from_style"
+          ],
+          "evidence": [
+            "style:relationship_style",
+            "planet:venus",
+            "rule:love.how.planet",
+            "house:7",
+            "rule:love.how.house7",
+            "rule:love.need.from_style",
+            "rule:love.risk.from_style",
+            "rule:love.on.from_style",
+            "rule:love.off.from_style",
+            "rule:love.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Близость через прямые слова и равный темп разговора.",
+            "planets_in_evidence": [
+              "planet:venus"
+            ],
+            "houses_in_evidence": [
+              "house:7"
+            ],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В любви: Венера в знаке Aquarius задаёт тон проявления в этой сфере. В партнёрском поле: Партнёрство строится на равном разговоре и совпадении темпа.",
+            "need": "В любви нужна ясность и предсказуемый контакт — в духе «Близость через прямые слова и равный те…».",
+            "risk": "Точка слома — ожидание, что другой угадает без слов.",
+            "turns_on": "Спокойный прямой разговор и совпадение по темпу близости.",
+            "turns_off": "Намёки, двойные сигналы и давление без следующего шага.",
+            "helps": "Одна короткая честная договорённость на неделю — не разбор «всего сразу»."
+          },
+          "snapshot_row": {
+            "how": "В любви: Венера в знаке Aquarius задаёт тон проявления в этой сфере. В партнёрском поле: Партнёрство строится на равном разговоре и совпадении темпа.",
+            "need": "В любви нужна ясность и предсказуемый контакт — в духе «Близость через прямые слова и равный те…».",
+            "risk": "Точка слома — ожидание, что другой угадает без слов.",
+            "turns_on": "Спокойный прямой разговор и совпадение по темпу близости.",
+            "turns_off": "Намёки, двойные сигналы и давление без следующего шага.",
+            "helps": "Одна короткая честная договорённость на неделю — не разбор «всего сразу»."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В любви: Венера в знаке Aquarius задаёт тон проявления в этой сфере. В партнёрском поле: Партнёрство строится на равном разговоре и совпадении темпа.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "need": {
+              "field": "need",
+              "text": "В любви нужна ясность и предсказуемый контакт — в духе «Близость через прямые слова и равный те…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Точка слома — ожидание, что другой угадает без слов.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Спокойный прямой разговор и совпадение по темпу близости.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Намёки, двойные сигналы и давление без следующего шага.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Одна короткая честная договорённость на неделю — не разбор «всего сразу».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE withLifeSphereHowFrame may prefix «В отношениях» (PROJECTION chrome, not claim invent)",
+          "quality_result": "pass",
+          "defects": []
+        },
+        "money": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в деньгах и ценности?",
+            "must_differ_from": "identity_core and money_style — sphere = resource manifestation",
+            "user_value": "Опора: правила ценности, риск, один денежный фокус"
+          },
+          "claim_depth": "houses_plus_styles",
+          "style_class": "exchange",
+          "rule_ids": [
+            "rule:money.how.planet",
+            "rule:money.how.house2",
+            "rule:money.how.house8",
+            "rule:money.need.from_style",
+            "rule:money.risk.from_style",
+            "rule:money.on.from_style",
+            "rule:money.off.from_style",
+            "rule:money.helps.from_style"
+          ],
+          "evidence": [
+            "style:money_style",
+            "planet:jupiter",
+            "rule:money.how.planet",
+            "house:2",
+            "rule:money.how.house2",
+            "house:8",
+            "rule:money.how.house8",
+            "rule:money.need.from_style",
+            "rule:money.risk.from_style",
+            "rule:money.on.from_style",
+            "rule:money.off.from_style",
+            "rule:money.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Деньги как честный обмен ценности: прозрачная цена и вклад.",
+            "planets_in_evidence": [
+              "planet:jupiter"
+            ],
+            "houses_in_evidence": [
+              "house:2",
+              "house:8"
+            ],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В деньгах: Юпитер в знаке Libra задаёт тон проявления в этой сфере. Ресурс растёт, когда вклад и цена названы без тумана. Общие обязательства требуют ясных границ обмена.",
+            "need": "В деньгах нужен честный обмен ценности — в духе «Деньги как честный обмен ценности: проз…».",
+            "risk": "Отдавать больше, чем готовы, или обесценивать свой вклад.",
+            "turns_on": "Прозрачные договорённости о цене и вкладе.",
+            "turns_off": "Размытые «потом рассчитаемся».",
+            "helps": "Одна ясная договорённость о цене до следующего обмена."
+          },
+          "snapshot_row": {
+            "how": "В деньгах: Юпитер в знаке Libra задаёт тон проявления в этой сфере. Ресурс растёт, когда вклад и цена названы без тумана. Общие обязательства требуют ясных границ обмена.",
+            "need": "В деньгах нужен честный обмен ценности — в духе «Деньги как честный обмен ценности: проз…».",
+            "risk": "Отдавать больше, чем готовы, или обесценивать свой вклад.",
+            "turns_on": "Прозрачные договорённости о цене и вкладе.",
+            "turns_off": "Размытые «потом рассчитаемся».",
+            "helps": "Одна ясная договорённость о цене до следующего обмена."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В деньгах: Юпитер в знаке Libra задаёт тон проявления в этой сфере. Ресурс растёт, когда вклад и цена названы без тумана. Общие обязательства требуют ясных границ обмена.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "need": {
+              "field": "need",
+              "text": "В деньгах нужен честный обмен ценности — в духе «Деньги как честный обмен ценности: проз…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Отдавать больше, чем готовы, или обесценивать свой вклад.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Прозрачные договорённости о цене и вкладе.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Размытые «потом рассчитаемся».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Одна ясная договорённость о цене до следующего обмена.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE may prefix «В реализации» for money how",
+          "quality_result": "pass",
+          "defects": []
+        },
+        "decisions": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в решениях и дисциплине?",
+            "must_differ_from": "identity_core and decision_style — sphere = decision hygiene in life",
+            "user_value": "Понятный способ выбирать и один hygiene-шаг"
+          },
+          "claim_depth": "houses_plus_styles",
+          "style_class": "consensus",
+          "rule_ids": [
+            "rule:decisions.how.planet",
+            "rule:decisions.how.house9",
+            "rule:decisions.need.from_style",
+            "rule:decisions.risk.from_style",
+            "rule:decisions.on.from_style",
+            "rule:decisions.off.from_style",
+            "rule:decisions.helps.from_style"
+          ],
+          "evidence": [
+            "style:decision_style",
+            "planet:saturn",
+            "rule:decisions.how.planet",
+            "house:9",
+            "rule:decisions.how.house9",
+            "rule:decisions.need.from_style",
+            "rule:decisions.risk.from_style",
+            "rule:decisions.on.from_style",
+            "rule:decisions.off.from_style",
+            "rule:decisions.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Решения вместе собрать два мнения, затем назвать свой финальный ход.",
+            "planets_in_evidence": [
+              "planet:saturn"
+            ],
+            "houses_in_evidence": [
+              "house:9"
+            ],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В решениях: Сатурн в знаке Aquarius задаёт тон проявления в этой сфере. В поле выбора: Выбор держится на смысле и праве сказать своё решение вслух.",
+            "need": "В решениях нужно согласование без растворения — в духе «Решения вместе собрать два мнения, зате…».",
+            "risk": "Ждать всех и потерять свой критерий.",
+            "turns_on": "Короткий круг мнений и свой финальный ход.",
+            "turns_off": "Бесконечные совещания без владельца решения.",
+            "helps": "Собери два мнения, назови своё решение и следующий шаг."
+          },
+          "snapshot_row": {
+            "how": "В решениях: Сатурн в знаке Aquarius задаёт тон проявления в этой сфере. В поле выбора: Выбор держится на смысле и праве сказать своё решение вслух.",
+            "need": "В решениях нужно согласование без растворения — в духе «Решения вместе собрать два мнения, зате…».",
+            "risk": "Ждать всех и потерять свой критерий.",
+            "turns_on": "Короткий круг мнений и свой финальный ход.",
+            "turns_off": "Бесконечные совещания без владельца решения.",
+            "helps": "Собери два мнения, назови своё решение и следующий шаг."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В решениях: Сатурн в знаке Aquarius задаёт тон проявления в этой сфере. В поле выбора: Выбор держится на смысле и праве сказать своё решение вслух.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "need": {
+              "field": "need",
+              "text": "В решениях нужно согласование без растворения — в духе «Решения вместе собрать два мнения, зате…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Ждать всех и потерять свой критерий.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Короткий круг мнений и свой финальный ход.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Бесконечные совещания без владельца решения.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Собери два мнения, назови своё решение и следующий шаг.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE maps fields 1:1 when contract present; partial map OK",
+          "quality_result": "pass",
+          "defects": []
+        }
+      },
+      "defects": [],
+      "case_pass": true
+    },
+    {
+      "id": "lsq-06",
+      "contrast": "no_birth_time",
+      "label": "Sign-only · no houses — honesty",
+      "intent": "Must not mention houses/ASC; still emit useful sign_plus_styles map",
+      "gate_allowed": true,
+      "projection_version": "life_spheres_projector_v0.1",
+      "fingerprint": "sha256:38d132627a4a76427e4d3c4a8857aca684e8717c2c435f9373533187ee114946",
+      "spheres_projected": [
+        "decisions",
+        "love",
+        "money"
+      ],
+      "spheres_omitted": [
+        {
+          "id": "sex",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "work",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "family",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "kids",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "body",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "friends",
+          "reason": "not_in_slice_v0_1"
+        }
+      ],
+      "spheres": {
+        "love": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в любви и близости?",
+            "must_differ_from": "identity_core (who) and relationship_style (lens) — sphere = manifestation map",
+            "user_value": "Понять, как входит в близость, что нужно, где ломается, один практический шаг"
+          },
+          "claim_depth": "sign_only",
+          "style_class": "clarity",
+          "rule_ids": [
+            "rule:love.how.planet",
+            "rule:love.need.from_style",
+            "rule:love.risk.from_style",
+            "rule:love.on.from_style",
+            "rule:love.off.from_style",
+            "rule:love.helps.from_style"
+          ],
+          "evidence": [
+            "style:relationship_style",
+            "planet:venus",
+            "rule:love.how.planet",
+            "rule:love.need.from_style",
+            "rule:love.risk.from_style",
+            "rule:love.on.from_style",
+            "rule:love.off.from_style",
+            "rule:love.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Близость через предсказуемый ритм контакта и честные границы.",
+            "planets_in_evidence": [
+              "planet:venus"
+            ],
+            "houses_in_evidence": [],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В любви: Венера в знаке Libra задаёт тон проявления в этой сфере.",
+            "need": "В любви нужна ясность и предсказуемый контакт — в духе «Близость через предсказуемый ритм конта…».",
+            "risk": "Точка слома — ожидание, что другой угадает без слов.",
+            "turns_on": "Спокойный прямой разговор и совпадение по темпу близости.",
+            "turns_off": "Намёки, двойные сигналы и давление без следующего шага.",
+            "helps": "Одна короткая честная договорённость на неделю — не разбор «всего сразу»."
+          },
+          "snapshot_row": {
+            "how": "В любви: Венера в знаке Libra задаёт тон проявления в этой сфере.",
+            "need": "В любви нужна ясность и предсказуемый контакт — в духе «Близость через предсказуемый ритм конта…».",
+            "risk": "Точка слома — ожидание, что другой угадает без слов.",
+            "turns_on": "Спокойный прямой разговор и совпадение по темпу близости.",
+            "turns_off": "Намёки, двойные сигналы и давление без следующего шага.",
+            "helps": "Одна короткая честная договорённость на неделю — не разбор «всего сразу»."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В любви: Венера в знаке Libra задаёт тон проявления в этой сфере.",
+              "checks": {
+                "grounding": true,
+                "specificity": false,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "love.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+                }
+              ]
+            },
+            "need": {
+              "field": "need",
+              "text": "В любви нужна ясность и предсказуемый контакт — в духе «Близость через предсказуемый ритм конта…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Точка слома — ожидание, что другой угадает без слов.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Спокойный прямой разговор и совпадение по темпу близости.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Намёки, двойные сигналы и давление без следующего шага.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Одна короткая честная договорённость на неделю — не разбор «всего сразу».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE withLifeSphereHowFrame may prefix «В отношениях» (PROJECTION chrome, not claim invent)",
+          "quality_result": "fail",
+          "defects": [
+            {
+              "class": "RULESET",
+              "note": "love.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+            }
+          ]
+        },
+        "money": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в деньгах и ценности?",
+            "must_differ_from": "identity_core and money_style — sphere = resource manifestation",
+            "user_value": "Опора: правила ценности, риск, один денежный фокус"
+          },
+          "claim_depth": "sign_only",
+          "style_class": "structure",
+          "rule_ids": [
+            "rule:money.how.planet",
+            "rule:money.need.from_style",
+            "rule:money.risk.from_style",
+            "rule:money.on.from_style",
+            "rule:money.off.from_style",
+            "rule:money.helps.from_style"
+          ],
+          "evidence": [
+            "style:money_style",
+            "planet:jupiter",
+            "rule:money.how.planet",
+            "rule:money.need.from_style",
+            "rule:money.risk.from_style",
+            "rule:money.on.from_style",
+            "rule:money.off.from_style",
+            "rule:money.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Деньги через устойчивый порядок: регулярность важнее рывка.",
+            "planets_in_evidence": [
+              "planet:jupiter"
+            ],
+            "houses_in_evidence": [],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В деньгах: Юпитер в знаке Sagittarius задаёт тон проявления в этой сфере.",
+            "need": "В деньгах нужны простые правила ценности — в духе «Деньги через устойчивый порядок: регуля…».",
+            "risk": "Хаос в учёте или зажим контроля до остановки действий.",
+            "turns_on": "Понятные цифры и маленькие регулярные шаги.",
+            "turns_off": "Стыд за запросы и туман во взаиморасчётах.",
+            "helps": "Один денежный фокус на неделю и запись «что сработало»."
+          },
+          "snapshot_row": {
+            "how": "В деньгах: Юпитер в знаке Sagittarius задаёт тон проявления в этой сфере.",
+            "need": "В деньгах нужны простые правила ценности — в духе «Деньги через устойчивый порядок: регуля…».",
+            "risk": "Хаос в учёте или зажим контроля до остановки действий.",
+            "turns_on": "Понятные цифры и маленькие регулярные шаги.",
+            "turns_off": "Стыд за запросы и туман во взаиморасчётах.",
+            "helps": "Один денежный фокус на неделю и запись «что сработало»."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В деньгах: Юпитер в знаке Sagittarius задаёт тон проявления в этой сфере.",
+              "checks": {
+                "grounding": true,
+                "specificity": false,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "money.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+                }
+              ]
+            },
+            "need": {
+              "field": "need",
+              "text": "В деньгах нужны простые правила ценности — в духе «Деньги через устойчивый порядок: регуля…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Хаос в учёте или зажим контроля до остановки действий.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Понятные цифры и маленькие регулярные шаги.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Стыд за запросы и туман во взаиморасчётах.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Один денежный фокус на неделю и запись «что сработало».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE may prefix «В реализации» for money how",
+          "quality_result": "fail",
+          "defects": [
+            {
+              "class": "RULESET",
+              "note": "money.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+            }
+          ]
+        },
+        "decisions": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в решениях и дисциплине?",
+            "must_differ_from": "identity_core and decision_style — sphere = decision hygiene in life",
+            "user_value": "Понятный способ выбирать и один hygiene-шаг"
+          },
+          "claim_depth": "sign_only",
+          "style_class": "structure",
+          "rule_ids": [
+            "rule:decisions.how.planet",
+            "rule:decisions.need.from_style",
+            "rule:decisions.risk.from_style",
+            "rule:decisions.on.from_style",
+            "rule:decisions.off.from_style",
+            "rule:decisions.helps.from_style"
+          ],
+          "evidence": [
+            "style:decision_style",
+            "planet:saturn",
+            "rule:decisions.how.planet",
+            "rule:decisions.need.from_style",
+            "rule:decisions.risk.from_style",
+            "rule:decisions.on.from_style",
+            "rule:decisions.off.from_style",
+            "rule:decisions.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Решения через структуру: критерии сначала, выбор потом.",
+            "planets_in_evidence": [
+              "planet:saturn"
+            ],
+            "houses_in_evidence": [],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В решениях: Сатурн в знаке Pisces задаёт тон проявления в этой сфере.",
+            "need": "В решениях нужна ясная рамка — в духе «Решения через структуру: критерии снача…».",
+            "risk": "Бесконечные варианты без закрытия.",
+            "turns_on": "Один критерий и короткий дедлайн.",
+            "turns_off": "Открытые вкладки непринятых выборов.",
+            "helps": "Запиши три критерия, выбери ход, поставь таймбокс."
+          },
+          "snapshot_row": {
+            "how": "В решениях: Сатурн в знаке Pisces задаёт тон проявления в этой сфере.",
+            "need": "В решениях нужна ясная рамка — в духе «Решения через структуру: критерии снача…».",
+            "risk": "Бесконечные варианты без закрытия.",
+            "turns_on": "Один критерий и короткий дедлайн.",
+            "turns_off": "Открытые вкладки непринятых выборов.",
+            "helps": "Запиши три критерия, выбери ход, поставь таймбокс."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В решениях: Сатурн в знаке Pisces задаёт тон проявления в этой сфере.",
+              "checks": {
+                "grounding": true,
+                "specificity": false,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "decisions.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+                }
+              ]
+            },
+            "need": {
+              "field": "need",
+              "text": "В решениях нужна ясная рамка — в духе «Решения через структуру: критерии снача…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Бесконечные варианты без закрытия.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Один критерий и короткий дедлайн.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Открытые вкладки непринятых выборов.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Запиши три критерия, выбери ход, поставь таймбокс.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE maps fields 1:1 when contract present; partial map OK",
+          "quality_result": "fail",
+          "defects": [
+            {
+              "class": "RULESET",
+              "note": "decisions.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+            }
+          ]
+        }
+      },
+      "defects": [
+        {
+          "class": "RULESET",
+          "note": "love.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+        },
+        {
+          "class": "RULESET",
+          "note": "money.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+        },
+        {
+          "class": "RULESET",
+          "note": "decisions.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+        }
+      ],
+      "case_pass": false
+    },
+    {
+      "id": "lsq-07",
+      "contrast": "incomplete_styles",
+      "label": "Only relationship_style present",
+      "intent": "Partial map: love may emit; money/decisions omit — not invent from identity",
+      "gate_allowed": true,
+      "projection_version": "life_spheres_projector_v0.1",
+      "fingerprint": "sha256:2acb59b88ab1812952314ef8cd6c3d8b14315b973cf3ef7d8d7aa11e81221979",
+      "spheres_projected": [
+        "love"
+      ],
+      "spheres_omitted": [
+        {
+          "id": "sex",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "work",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "family",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "kids",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "body",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "friends",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "money",
+          "reason": "style_missing"
+        },
+        {
+          "id": "decisions",
+          "reason": "style_missing"
+        }
+      ],
+      "spheres": {
+        "love": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в любви и близости?",
+            "must_differ_from": "identity_core (who) and relationship_style (lens) — sphere = manifestation map",
+            "user_value": "Понять, как входит в близость, что нужно, где ломается, один практический шаг"
+          },
+          "claim_depth": "sign_only",
+          "style_class": "clarity",
+          "rule_ids": [
+            "rule:love.how.planet",
+            "rule:love.need.from_style",
+            "rule:love.risk.from_style",
+            "rule:love.on.from_style",
+            "rule:love.off.from_style",
+            "rule:love.helps.from_style"
+          ],
+          "evidence": [
+            "style:relationship_style",
+            "planet:venus",
+            "rule:love.how.planet",
+            "rule:love.need.from_style",
+            "rule:love.risk.from_style",
+            "rule:love.on.from_style",
+            "rule:love.off.from_style",
+            "rule:love.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Близость через тёплую поддержку и право сказать о своих чувствах прямо.",
+            "planets_in_evidence": [
+              "planet:venus"
+            ],
+            "houses_in_evidence": [],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В любви: Венера в знаке Taurus задаёт тон проявления в этой сфере.",
+            "need": "В любви нужна ясность и предсказуемый контакт — в духе «Близость через тёплую поддержку и право…».",
+            "risk": "Точка слома — ожидание, что другой угадает без слов.",
+            "turns_on": "Спокойный прямой разговор и совпадение по темпу близости.",
+            "turns_off": "Намёки, двойные сигналы и давление без следующего шага.",
+            "helps": "Одна короткая честная договорённость на неделю — не разбор «всего сразу»."
+          },
+          "snapshot_row": {
+            "how": "В любви: Венера в знаке Taurus задаёт тон проявления в этой сфере.",
+            "need": "В любви нужна ясность и предсказуемый контакт — в духе «Близость через тёплую поддержку и право…».",
+            "risk": "Точка слома — ожидание, что другой угадает без слов.",
+            "turns_on": "Спокойный прямой разговор и совпадение по темпу близости.",
+            "turns_off": "Намёки, двойные сигналы и давление без следующего шага.",
+            "helps": "Одна короткая честная договорённость на неделю — не разбор «всего сразу»."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В любви: Венера в знаке Taurus задаёт тон проявления в этой сфере.",
+              "checks": {
+                "grounding": true,
+                "specificity": false,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "love.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+                }
+              ]
+            },
+            "need": {
+              "field": "need",
+              "text": "В любви нужна ясность и предсказуемый контакт — в духе «Близость через тёплую поддержку и право…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Точка слома — ожидание, что другой угадает без слов.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Спокойный прямой разговор и совпадение по темпу близости.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Намёки, двойные сигналы и давление без следующего шага.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Одна короткая честная договорённость на неделю — не разбор «всего сразу».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE withLifeSphereHowFrame may prefix «В отношениях» (PROJECTION chrome, not claim invent)",
+          "quality_result": "fail",
+          "defects": [
+            {
+              "class": "RULESET",
+              "note": "love.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+            }
+          ]
+        },
+        "money": {
+          "emitted": false,
+          "omit_reason": "style_missing",
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в деньгах и ценности?",
+            "must_differ_from": "identity_core and money_style — sphere = resource manifestation",
+            "user_value": "Опора: правила ценности, риск, один денежный фокус"
+          },
+          "expected_omit": true,
+          "quality_result": "pass_omit",
+          "defects": [],
+          "fields": {}
+        },
+        "decisions": {
+          "emitted": false,
+          "omit_reason": "style_missing",
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в решениях и дисциплине?",
+            "must_differ_from": "identity_core and decision_style — sphere = decision hygiene in life",
+            "user_value": "Понятный способ выбирать и один hygiene-шаг"
+          },
+          "expected_omit": true,
+          "quality_result": "pass_omit",
+          "defects": [],
+          "fields": {}
+        }
+      },
+      "defects": [
+        {
+          "class": "RULESET",
+          "note": "love.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+        }
+      ],
+      "case_pass": false
+    },
+    {
+      "id": "lsq-08",
+      "contrast": "contradictory_foundations",
+      "label": "Identity slow/care · styles speed/impulse tension",
+      "intent": "Surface coherence risk: ruleset must not invent fake harmony; detect weak coherence",
+      "gate_allowed": true,
+      "projection_version": "life_spheres_projector_v0.1",
+      "fingerprint": "sha256:8940a9d75f2cd41a9197ede9629d5f0e3be55ffd46d81db73efcf223cad15908",
+      "spheres_projected": [
+        "decisions",
+        "love",
+        "money"
+      ],
+      "spheres_omitted": [
+        {
+          "id": "sex",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "work",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "family",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "kids",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "body",
+          "reason": "not_in_slice_v0_1"
+        },
+        {
+          "id": "friends",
+          "reason": "not_in_slice_v0_1"
+        }
+      ],
+      "spheres": {
+        "love": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в любви и близости?",
+            "must_differ_from": "identity_core (who) and relationship_style (lens) — sphere = manifestation map",
+            "user_value": "Понять, как входит в близость, что нужно, где ломается, один практический шаг"
+          },
+          "claim_depth": "sign_only",
+          "style_class": "pace",
+          "rule_ids": [
+            "rule:love.how.planet",
+            "rule:love.need.from_style",
+            "rule:love.risk.from_style",
+            "rule:love.on.from_style",
+            "rule:love.off.from_style",
+            "rule:love.helps.from_style"
+          ],
+          "evidence": [
+            "style:relationship_style",
+            "planet:venus",
+            "rule:love.how.planet",
+            "rule:love.need.from_style",
+            "rule:love.risk.from_style",
+            "rule:love.on.from_style",
+            "rule:love.off.from_style",
+            "rule:love.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Близость через быстрый темп, сразу к действию и сильную инициативу без долгих пауз.",
+            "planets_in_evidence": [
+              "planet:venus"
+            ],
+            "houses_in_evidence": [],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В любви: Венера в знаке Leo задаёт тон проявления в этой сфере.",
+            "need": "В любви нужен свой темп — в духе «Близость через быстрый темп, сразу к де…».",
+            "risk": "Слишком быстрый заход в близость или замирание при чужом ритме.",
+            "turns_on": "Ритм, в котором можно быть без спектакля.",
+            "turns_off": "Резкие требования и хаотичная доступность.",
+            "helps": "Назови одну границу темпа до следующего глубокого разговора."
+          },
+          "snapshot_row": {
+            "how": "В любви: Венера в знаке Leo задаёт тон проявления в этой сфере.",
+            "need": "В любви нужен свой темп — в духе «Близость через быстрый темп, сразу к де…».",
+            "risk": "Слишком быстрый заход в близость или замирание при чужом ритме.",
+            "turns_on": "Ритм, в котором можно быть без спектакля.",
+            "turns_off": "Резкие требования и хаотичная доступность.",
+            "helps": "Назови одну границу темпа до следующего глубокого разговора."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В любви: Венера в знаке Leo задаёт тон проявления в этой сфере.",
+              "checks": {
+                "grounding": true,
+                "specificity": false,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "love.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+                }
+              ]
+            },
+            "need": {
+              "field": "need",
+              "text": "В любви нужен свой темп — в духе «Близость через быстрый темп, сразу к де…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Слишком быстрый заход в близость или замирание при чужом ритме.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Ритм, в котором можно быть без спектакля.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Резкие требования и хаотичная доступность.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Назови одну границу темпа до следующего глубокого разговора.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE withLifeSphereHowFrame may prefix «В отношениях» (PROJECTION chrome, not claim invent)",
+          "quality_result": "fail",
+          "defects": [
+            {
+              "class": "RULESET",
+              "note": "love.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+            }
+          ]
+        },
+        "money": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в деньгах и ценности?",
+            "must_differ_from": "identity_core and money_style — sphere = resource manifestation",
+            "user_value": "Опора: правила ценности, риск, один денежный фокус"
+          },
+          "claim_depth": "sign_only",
+          "style_class": "growth",
+          "rule_ids": [
+            "rule:money.how.planet",
+            "rule:money.need.from_style",
+            "rule:money.risk.from_style",
+            "rule:money.on.from_style",
+            "rule:money.off.from_style",
+            "rule:money.helps.from_style"
+          ],
+          "evidence": [
+            "style:money_style",
+            "planet:jupiter",
+            "rule:money.how.planet",
+            "rule:money.need.from_style",
+            "rule:money.risk.from_style",
+            "rule:money.on.from_style",
+            "rule:money.off.from_style",
+            "rule:money.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Деньги через смелый рост и готовность рисковать ради расширения.",
+            "planets_in_evidence": [
+              "planet:jupiter"
+            ],
+            "houses_in_evidence": [],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В деньгах: Юпитер в знаке Aries задаёт тон проявления в этой сфере.",
+            "need": "В деньгах нужен шаг роста без импульса — в духе «Деньги через смелый рост и готовность р…».",
+            "risk": "Перерастяжение или полный застой без следующего хода.",
+            "turns_on": "Малое измеримое расширение.",
+            "turns_off": "Ставки «всё или ничего».",
+            "helps": "Одно действие роста с потолком — затем разбор."
+          },
+          "snapshot_row": {
+            "how": "В деньгах: Юпитер в знаке Aries задаёт тон проявления в этой сфере.",
+            "need": "В деньгах нужен шаг роста без импульса — в духе «Деньги через смелый рост и готовность р…».",
+            "risk": "Перерастяжение или полный застой без следующего хода.",
+            "turns_on": "Малое измеримое расширение.",
+            "turns_off": "Ставки «всё или ничего».",
+            "helps": "Одно действие роста с потолком — затем разбор."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В деньгах: Юпитер в знаке Aries задаёт тон проявления в этой сфере.",
+              "checks": {
+                "grounding": true,
+                "specificity": false,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "money.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+                }
+              ]
+            },
+            "need": {
+              "field": "need",
+              "text": "В деньгах нужен шаг роста без импульса — в духе «Деньги через смелый рост и готовность р…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Перерастяжение или полный застой без следующего хода.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Малое измеримое расширение.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Ставки «всё или ничего».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Одно действие роста с потолком — затем разбор.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": false
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "money.helps lacks actionable support"
+                }
+              ]
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE may prefix «В реализации» for money how",
+          "quality_result": "fail",
+          "defects": [
+            {
+              "class": "RULESET",
+              "note": "money.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+            },
+            {
+              "class": "RULESET",
+              "note": "money.helps lacks actionable support"
+            }
+          ]
+        },
+        "decisions": {
+          "emitted": true,
+          "purpose": {
+            "user_question": "Как базовые особенности проявляются в решениях и дисциплине?",
+            "must_differ_from": "identity_core and decision_style — sphere = decision hygiene in life",
+            "user_value": "Понятный способ выбирать и один hygiene-шаг"
+          },
+          "claim_depth": "sign_only",
+          "style_class": "analysis",
+          "rule_ids": [
+            "rule:decisions.how.planet",
+            "rule:decisions.need.from_style",
+            "rule:decisions.risk.from_style",
+            "rule:decisions.on.from_style",
+            "rule:decisions.off.from_style",
+            "rule:decisions.helps.from_style"
+          ],
+          "evidence": [
+            "style:decision_style",
+            "planet:saturn",
+            "rule:decisions.how.planet",
+            "rule:decisions.need.from_style",
+            "rule:decisions.risk.from_style",
+            "rule:decisions.on.from_style",
+            "rule:decisions.off.from_style",
+            "rule:decisions.helps.from_style"
+          ],
+          "influencing_inputs": {
+            "style": "Решения сразу: скорость важнее долгого анализа.",
+            "planets_in_evidence": [
+              "planet:saturn"
+            ],
+            "houses_in_evidence": [],
+            "identity_used_as_how": false
+          },
+          "output": {
+            "how": "В решениях: Сатурн в знаке Sagittarius задаёт тон проявления в этой сфере.",
+            "need": "В решениях нужен достаточный разбор без зависания — в духе «Решения сразу: скорость важнее долгого…».",
+            "risk": "Переанализ мимо полезного окна.",
+            "turns_on": "Короткая проверка фактов и затем выбор.",
+            "turns_off": "Новые данные без слота на решение.",
+            "helps": "Ограничь исследование одним заходом; в конце — решение."
+          },
+          "snapshot_row": {
+            "how": "В решениях: Сатурн в знаке Sagittarius задаёт тон проявления в этой сфере.",
+            "need": "В решениях нужен достаточный разбор без зависания — в духе «Решения сразу: скорость важнее долгого…».",
+            "risk": "Переанализ мимо полезного окна.",
+            "turns_on": "Короткая проверка фактов и затем выбор.",
+            "turns_off": "Новые данные без слота на решение.",
+            "helps": "Ограничь исследование одним заходом; в конце — решение."
+          },
+          "fields": {
+            "how": {
+              "field": "how",
+              "text": "В решениях: Сатурн в знаке Sagittarius задаёт тон проявления в этой сфере.",
+              "checks": {
+                "grounding": true,
+                "specificity": false,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": false,
+              "defects": [
+                {
+                  "class": "RULESET",
+                  "note": "decisions.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+                }
+              ]
+            },
+            "need": {
+              "field": "need",
+              "text": "В решениях нужен достаточный разбор без зависания — в духе «Решения сразу: скорость важнее долгого…».",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "risk": {
+              "field": "risk",
+              "text": "Переанализ мимо полезного окна.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_on": {
+              "field": "turns_on",
+              "text": "Короткая проверка фактов и затем выбор.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "turns_off": {
+              "field": "turns_off",
+              "text": "Новые данные без слота на решение.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            },
+            "helps": {
+              "field": "helps",
+              "text": "Ограничь исследование одним заходом; в конце — решение.",
+              "checks": {
+                "grounding": true,
+                "specificity": true,
+                "distinct_identity": true,
+                "distinct_spheres": true,
+                "honesty_houses": true,
+                "honesty_longitudinal": true,
+                "voice": true,
+                "usefulness": true
+              },
+              "pass": true,
+              "defects": []
+            }
+          },
+          "coherence": {
+            "pass": true,
+            "defects": []
+          },
+          "ui_projection_note": "FE maps fields 1:1 when contract present; partial map OK",
+          "quality_result": "fail",
+          "defects": [
+            {
+              "class": "RULESET",
+              "note": "decisions.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+            }
+          ]
+        }
+      },
+      "defects": [
+        {
+          "class": "RULESET",
+          "note": "love.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+        },
+        {
+          "class": "RULESET",
+          "note": "money.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+        },
+        {
+          "class": "RULESET",
+          "note": "money.helps lacks actionable support"
+        },
+        {
+          "class": "RULESET",
+          "note": "decisions.how uses planet-in-sign boilerplate without trait content (only sign label changes — weak personal binding)"
+        }
+      ],
+      "case_pass": false
+    }
+  ],
+  "comparisons": [
+    {
+      "pair": [
+        "lsq-01",
+        "lsq-02"
+      ],
+      "expect": "love_emphasis",
+      "diffs": {
+        "love": {
+          "comparable": true,
+          "fields_differ": {
+            "how": true,
+            "need": true,
+            "risk": true,
+            "turns_on": true,
+            "turns_off": true,
+            "helps": true
+          },
+          "any_differ": true,
+          "how_jaccard": 0.8,
+          "need_jaccard": 0.312
+        },
+        "money": {
+          "comparable": true,
+          "fields_differ": {
+            "how": true,
+            "need": true,
+            "risk": true,
+            "turns_on": true,
+            "turns_off": true,
+            "helps": true
+          },
+          "any_differ": true,
+          "how_jaccard": 0.8,
+          "need_jaccard": 0.19
+        },
+        "decisions": {
+          "comparable": true,
+          "fields_differ": {
+            "how": false,
+            "need": true,
+            "risk": true,
+            "turns_on": true,
+            "turns_off": true,
+            "helps": true
+          },
+          "any_differ": true,
+          "how_jaccard": 1.0,
+          "need_jaccard": 0.222
+        }
+      },
+      "pass": true,
+      "notes": [],
+      "defects": []
+    },
+    {
+      "pair": [
+        "lsq-03",
+        "lsq-04"
+      ],
+      "expect": "styles_all",
+      "diffs": {
+        "love": {
+          "comparable": true,
+          "fields_differ": {
+            "how": false,
+            "need": true,
+            "risk": true,
+            "turns_on": true,
+            "turns_off": true,
+            "helps": true
+          },
+          "any_differ": true,
+          "how_jaccard": 1.0,
+          "need_jaccard": 0.235
+        },
+        "money": {
+          "comparable": true,
+          "fields_differ": {
+            "how": false,
+            "need": true,
+            "risk": true,
+            "turns_on": true,
+            "turns_off": true,
+            "helps": true
+          },
+          "any_differ": true,
+          "how_jaccard": 1.0,
+          "need_jaccard": 0.167
+        },
+        "decisions": {
+          "comparable": true,
+          "fields_differ": {
+            "how": false,
+            "need": true,
+            "risk": false,
+            "turns_on": false,
+            "turns_off": false,
+            "helps": false
+          },
+          "any_differ": true,
+          "how_jaccard": 1.0,
+          "need_jaccard": 0.714
+        }
+      },
+      "pass": true,
+      "notes": [],
+      "defects": []
+    }
+  ],
+  "collapse_checks": [],
+  "summary": {
+    "case_count": 8,
+    "cases_pass": 1,
+    "cases_fail": 7,
+    "comparison_pass": 2,
+    "total_defects": 23
+  }
+}

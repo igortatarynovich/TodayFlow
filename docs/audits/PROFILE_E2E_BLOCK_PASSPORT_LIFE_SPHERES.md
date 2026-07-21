@@ -5,6 +5,7 @@
 **Template:** [PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](./PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md)  
 **Related:** patterns gate (shipped, unchanged) · [PROFILE_E2E_PROMPT_REGISTRY.md](./PROFILE_E2E_PROMPT_REGISTRY.md) P4 · [PROFILE_CONTENT_CANON_V1.md](../PROFILE_CONTENT_CANON_V1.md) §7.1A  
 **Executable ruleset:** [PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md)  
+**Quality review:** [PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md](./PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md)  
 **Date:** 2026-07-21
 
 > **Product lock:** spheres = **natal-presence**, **deterministic-first**.  
