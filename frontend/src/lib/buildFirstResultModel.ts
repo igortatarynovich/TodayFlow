@@ -1,4 +1,5 @@
 import { buildNameInsight, type NameInsightModel } from "@/lib/interpretation/buildNameInsight";
+import { limitationsFromNatalFacts } from "@/lib/natalFacts";
 import type { GuestProfileDraft } from "@/lib/guestProfileDraft";
 import {
   buildDimensionWhyExplanation,
@@ -52,8 +53,9 @@ export type FirstResultModel = {
   closingMessage: string;
   refineHint: string;
   nameInsight: NameInsightModel | null;
-  firstTodayCtaLabel: string;
+  saveCtaLabel: string;
   refineCtaLabel: string;
+  limitationsLabels: string[];
   audit: RecognitionSelectionAudit;
 };
 
@@ -159,12 +161,13 @@ export function buildFirstResultModel(
         }
       : null,
     closingMessage:
-      "Это начало. Сегодня можно прожить первый день — и уже завтра карта станет глубже.",
+      "Это начало узнавания. Сохрани профиль через email — карта останется с тобой. Уточнить время и место можно сейчас или позже.",
     refineHint:
-      "Можно сразу начать день или минуту уделить уточнению карты — Луна и восход добавят точности.",
+      "Без точного времени Асцендент и дома ещё закрыты. Уточнение добавит глубину — сохранение закрепит основу.",
     nameInsight: buildNameInsight(displayName),
-    firstTodayCtaLabel: "Начнём первый день",
-    refineCtaLabel: "Уточнить карту",
+    saveCtaLabel: "Сохранить профиль",
+    refineCtaLabel: "Уточнить время и место",
+    limitationsLabels: limitationsFromNatalFacts(draft.natal_facts),
     audit,
   };
 }

@@ -353,6 +353,8 @@ class CoreSetupPayload(BaseModel):
     longitude: Optional[float] = None
     notes: Optional[str] = None
     gender: Optional[str] = None  # 'female', 'male', 'unspecified'
+    # Optional precomputed natal_facts contract payload (guest preview → claim).
+    natal_facts: Optional[dict[str, Any]] = None
 
 
 class CoreSetupResponse(BaseModel):
@@ -774,8 +776,9 @@ def _get_max_profiles(user: db_models.User, db: Session) -> int:
     if user.is_paid:
         return 5
     
-    # Бесплатный план: только 1 профиль
-    return 1
+    # Free: allow a small circle so Intake 1A (two people) + Scenario 2 (add profile)
+    # can bind without a paid plan. Deeper circle stays on lite_plus / pro.
+    return 3
 
 
 def _get_primary_profile(user: db_models.User, db: Session) -> db_models.AstroProfile | None:
@@ -1091,6 +1094,26 @@ async def upsert_core_setup(
     await try_warm_natal_chart_cache_for_profile(
         db, primary, geocoder, locale, astro_service=astro_service
     )
+
+    if isinstance(payload.natal_facts, dict) and payload.natal_facts.get("contract_version"):
+        from todayflow_backend.services.natal_facts_contract_v1 import (
+            persist_natal_facts_on_profile,
+            validate_natal_facts,
+        )
+
+        mode = "full" if (
+            not payload.time_unknown
+            and payload.birth_time
+            and latitude is not None
+            and longitude is not None
+        ) else "date_only"
+        try:
+            facts = validate_natal_facts(payload.natal_facts, expected_mode=mode)
+            persist_natal_facts_on_profile(db, primary.id, facts)
+            db.commit()
+        except Exception:
+            # Claim must not fail if guest facts payload is malformed.
+            pass
 
     _bump_morning_ritual_cache(user.id)
 

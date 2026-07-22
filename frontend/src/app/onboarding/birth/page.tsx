@@ -11,6 +11,7 @@ import {
   readGuestProfileDraft,
   VALUE_FIRST_PATHS,
 } from "@/lib/guestProfileDraft";
+import type { NatalFactsApiResponse } from "@/lib/natalFacts";
 import { sunSignFromIsoDate } from "@/lib/sunSignFromDate";
 import { ValueFirstOnboardingShell } from "@/components/onboarding/valueFirst/ValueFirstOnboardingShell";
 import { VALUE_FIRST_COPY as copy } from "@/components/onboarding/valueFirst/valueFirstOnboardingCopy";
@@ -47,6 +48,7 @@ export default function OnboardingBirthPage() {
     setLoading(true);
     setError(null);
     try {
+      const draft = readGuestProfileDraft();
       const sunSign = sunSignFromIsoDate(birthDate);
       let lifePath: number | null = null;
       try {
@@ -55,10 +57,33 @@ export default function OnboardingBirthPage() {
       } catch {
         lifePath = null;
       }
+
+      let natalFacts = null;
+      let resolvedSun = sunSign;
+      try {
+        const nf = await postJson<NatalFactsApiResponse>("/profile/natal-facts", {
+          birth_date: birthDate,
+          birth_time: draft?.time_unknown === false ? draft.birth_time : null,
+          time_unknown: draft?.time_unknown ?? true,
+          location_name: draft?.location_name,
+          latitude: draft?.latitude,
+          longitude: draft?.longitude,
+          display_name: draft?.first_name || null,
+        });
+        natalFacts = nf.natal_facts;
+        const sunFromFacts = natalFacts?.planets?.find((p) => p.id === "sun")?.sign;
+        if (sunFromFacts) {
+          resolvedSun = sunFromFacts.charAt(0).toUpperCase() + sunFromFacts.slice(1);
+        }
+      } catch {
+        natalFacts = null;
+      }
+
       patchGuestProfileDraft({
         birth_date: birthDate,
-        sun_sign: sunSign,
+        sun_sign: resolvedSun,
         life_path: lifePath,
+        natal_facts: natalFacts,
       });
       router.push(VALUE_FIRST_PATHS.preview);
     } catch {

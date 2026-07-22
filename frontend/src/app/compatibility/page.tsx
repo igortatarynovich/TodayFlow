@@ -209,21 +209,21 @@ type CompatibilityLayerCard = {
 
 const COMPATIBILITY_LAYER_CARDS: CompatibilityLayerCard[] = [
   {
-    id: "dynamics",
-    title: "Разбор динамики",
-    href: "/compatibility/analyze",
+    id: "birthdates",
+    title: "Персональная совместимость двух людей",
+    href: "/compatibility/birthdates",
     cta: "Открыть",
   },
   {
     id: "signs",
-    title: "По знакам",
+    title: "По знакам (игра)",
     href: "/compatibility/signs",
     cta: "Открыть",
   },
   {
-    id: "birthdates",
-    title: "По датам",
-    href: "/compatibility/birthdates",
+    id: "dynamics",
+    title: "Разбор динамики",
+    href: "/compatibility/analyze",
     cta: "Открыть",
   },
   {

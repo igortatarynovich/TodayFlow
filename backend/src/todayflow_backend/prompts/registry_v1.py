@@ -11,6 +11,7 @@ from typing import Any, Callable
 
 from todayflow_backend.prompts import (
     day_disclosure_v1,
+    natal_facts_v1,
     profile_disclosure_v1,
     profile_spheres_synthesis_v1,
 )
@@ -119,6 +120,13 @@ _REGISTRY: dict[str, dict[str, Any]] = {
         "surface": "profile",
         "step": "spheres_synthesis",
         "builder": profile_spheres_synthesis_v1.synthesis_system,
+    },
+    # Generation Contract: natal_facts (LLM structured chart JSON)
+    "profile.natal_facts.v1": {
+        "version": "1.0.0",
+        "surface": "profile",
+        "step": "natal_facts",
+        "builder": natal_facts_v1.natal_facts_system,
     },
 }
 

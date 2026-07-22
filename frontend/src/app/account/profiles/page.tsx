@@ -12,6 +12,10 @@ import { publishCoreProfileUpdate } from "@/lib/coreProfileCacheStorage";
 import type { AstroProfile, AstroProfileSaveResponse } from "@/lib/types";
 import { useToast } from "@/components/ToastProvider";
 import {
+  BirthProfileIntakeFields,
+  type BirthProfileIntakeValues,
+} from "@/components/intake/BirthProfileIntakeFields";
+import {
   buildPairCompatibilityRoute,
   buildQuickCompatibilityRoute,
   normalizeProfilesForCompatibility,
@@ -24,13 +28,8 @@ type ProfilesResponse = {
   can_create_more: boolean;
 };
 
-type CreateProfileForm = {
-  label: string;
+type CreateProfileForm = BirthProfileIntakeValues & {
   relation: "self" | "partner" | "child" | "close_person";
-  birth_date: string;
-  birth_time: string;
-  time_unknown: boolean;
-  location_name: string;
   is_primary: boolean;
 };
 
@@ -39,8 +38,10 @@ const EMPTY_FORM: CreateProfileForm = {
   relation: "close_person",
   birth_date: "",
   birth_time: "",
-  time_unknown: false,
+  time_unknown: true,
   location_name: "",
+  latitude: null,
+  longitude: null,
   is_primary: false,
 };
 
@@ -176,8 +177,12 @@ export default function ProfilesPage() {
       return;
     }
 
-    if (!form.label.trim() || !form.birth_date || !form.location_name.trim()) {
-      toast.error("Заполни название, дату и место рождения");
+    if (!form.label.trim() || !form.birth_date) {
+      toast.error("Нужны название и дата рождения");
+      return;
+    }
+    if (!form.time_unknown && form.birth_time && !form.location_name.trim()) {
+      toast.error("С известным временем нужно место рождения — иначе Асцендент и дома не откроются");
       return;
     }
 
@@ -188,12 +193,28 @@ export default function ProfilesPage() {
         birth_date: form.birth_date,
         birth_time: form.time_unknown ? null : form.birth_time || null,
         time_unknown: form.time_unknown,
-        location_name: form.location_name.trim(),
+        location_name: form.location_name.trim() || null,
+        latitude: form.latitude,
+        longitude: form.longitude,
         relation: profiles.length === 0 ? "self" : form.relation,
         is_primary: profiles.length === 0 ? true : form.is_primary,
       });
       if (saved.core_profile) {
         publishCoreProfileUpdate(saved.core_profile, saved.core_profile.astro?.profile_id ?? saved.id);
+      }
+      // Best-effort natal_facts for the new profile (authenticated Scenario 2).
+      try {
+        await postJson("/profile/natal-facts", {
+          birth_date: form.birth_date,
+          birth_time: form.time_unknown ? null : form.birth_time || null,
+          time_unknown: form.time_unknown,
+          location_name: form.location_name.trim() || null,
+          latitude: form.latitude,
+          longitude: form.longitude,
+          display_name: form.label.trim(),
+        });
+      } catch {
+        /* facts refresh is optional on create */
       }
       setProfiles((prev) => {
         const existed = prev.some((p) => p.id === saved.id);
@@ -459,16 +480,16 @@ export default function ProfilesPage() {
                 </div>
               ) : (
                 <form onSubmit={handleCreate} style={{ display: "grid", gap: "0.75rem", marginTop: "0.95rem" }}>
-                  <label style={{ display: "grid", gap: "0.3rem" }}>
-                    <span className="orbit-body-sm" style={{ color: "#6a5132", fontWeight: 600 }}>Название профиля</span>
-                    <input
-                      type="text"
-                      value={form.label}
-                      onChange={(event) => setForm((prev) => ({ ...prev, label: event.target.value }))}
-                      placeholder="Например: Аня, Друг, Коллега, Папа"
-                      className="orbit-input"
-                    />
-                  </label>
+                  <BirthProfileIntakeFields
+                    values={form}
+                    onChange={(next) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        ...next,
+                      }))
+                    }
+                    labelPlaceholder="Например: Аня, Друг, Коллега, Папа"
+                  />
                   <label style={{ display: "grid", gap: "0.3rem" }}>
                     <span className="orbit-body-sm" style={{ color: "#6a5132", fontWeight: 600 }}>Роль в круге</span>
                     <select
@@ -488,44 +509,6 @@ export default function ProfilesPage() {
                       <option value="close_person">Близкий человек</option>
                     </select>
                   </label>
-                  <label style={{ display: "grid", gap: "0.3rem" }}>
-                    <span className="orbit-body-sm" style={{ color: "#6a5132", fontWeight: 600 }}>Дата рождения</span>
-                    <input
-                      type="date"
-                      value={form.birth_date}
-                      onChange={(event) => setForm((prev) => ({ ...prev, birth_date: event.target.value }))}
-                      className="orbit-input"
-                    />
-                  </label>
-                  <label style={{ display: "grid", gap: "0.3rem" }}>
-                    <span className="orbit-body-sm" style={{ color: "#6a5132", fontWeight: 600 }}>Место рождения</span>
-                    <input
-                      type="text"
-                      value={form.location_name}
-                      onChange={(event) => setForm((prev) => ({ ...prev, location_name: event.target.value }))}
-                      placeholder="Город, страна"
-                      className="orbit-input"
-                    />
-                  </label>
-                  <label style={{ display: "flex", alignItems: "center", gap: "0.55rem" }}>
-                    <input
-                      type="checkbox"
-                      checked={form.time_unknown}
-                      onChange={(event) => setForm((prev) => ({ ...prev, time_unknown: event.target.checked, birth_time: event.target.checked ? "" : prev.birth_time }))}
-                    />
-                    <span className="orbit-body-sm" style={{ color: "#5f4930" }}>Время рождения неизвестно</span>
-                  </label>
-                  {!form.time_unknown ? (
-                    <label style={{ display: "grid", gap: "0.3rem" }}>
-                      <span className="orbit-body-sm" style={{ color: "#6a5132", fontWeight: 600 }}>Время рождения</span>
-                      <input
-                        type="time"
-                        value={form.birth_time}
-                        onChange={(event) => setForm((prev) => ({ ...prev, birth_time: event.target.value }))}
-                        className="orbit-input"
-                      />
-                    </label>
-                  ) : null}
                   {profiles.length > 0 ? (
                     <label style={{ display: "flex", alignItems: "center", gap: "0.55rem" }}>
                       <input

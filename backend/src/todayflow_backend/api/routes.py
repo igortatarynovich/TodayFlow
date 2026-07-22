@@ -34,6 +34,7 @@ from todayflow_backend.api import (
     calendar,
     morning_ritual,
     natal_chart,
+    natal_facts,
     day_flow,
     day_symbols,
     guest_claim,
@@ -78,6 +79,7 @@ router.include_router(generate.router)
 router.include_router(calendar.router)
 router.include_router(morning_ritual.router)
 router.include_router(natal_chart.router)
+router.include_router(natal_facts.router)
 router.include_router(day_flow.router)
 router.include_router(day_connection.router)
 router.include_router(today.router)

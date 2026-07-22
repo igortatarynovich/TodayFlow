@@ -24,14 +24,14 @@ def _build_password_reset_message(to_email: str, reset_url: str) -> EmailMessage
     return msg
 
 
-def send_welcome_email(to_email: str, magic_url: str, temp_password: str) -> bool:
-    """Send onboarding welcome email with magic link and temporary password."""
+def send_welcome_email(to_email: str, magic_url: str) -> bool:
+    """Send onboarding welcome email with magic link only (no plaintext password)."""
     if not settings.smtp_host:
         logger.warning(
             "SMTP host is not configured; welcome email was not sent for %s (magic link logged at INFO)",
             to_email,
         )
-        logger.info("Dev welcome login for %s — magic: %s password: %s", to_email, magic_url, temp_password)
+        logger.info("Dev welcome login for %s — magic: %s", to_email, magic_url)
         return False
 
     msg = EmailMessage()
@@ -41,10 +41,7 @@ def send_welcome_email(to_email: str, magic_url: str, temp_password: str) -> boo
     msg.set_content(
         "Твоя персональная карта в TodayFlow почти готова.\n\n"
         f"Войти одним нажатием:\n{magic_url}\n\n"
-        "Или войди вручную:\n"
-        f"Логин: {to_email}\n"
-        f"Пароль: {temp_password}\n\n"
-        "Пока ты подтверждаешь почту, мы уже собираем твой профиль и первый Today.\n\n"
+        "После входа можно задать пароль в настройках аккаунта.\n\n"
         "Если это были не ты — просто проигнорируй письмо."
     )
     try:

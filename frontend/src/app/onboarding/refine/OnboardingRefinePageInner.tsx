@@ -64,9 +64,9 @@ export default function OnboardingRefinePageInner() {
       }
     }
 
-    const nextPath = afterSave ? VALUE_FIRST_PATHS.save : VALUE_FIRST_PATHS.firstToday;
+    const nextPath = afterSave ? VALUE_FIRST_PATHS.save : VALUE_FIRST_PATHS.save;
     if (!afterSave) {
-      patchGuestProfileDraft({ first_today_started_at: new Date().toISOString() });
+      patchGuestProfileDraft({ save_ready_at: new Date().toISOString() });
     }
     router.push(nextPath);
   };

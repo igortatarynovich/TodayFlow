@@ -35,8 +35,8 @@ describe("first result model", () => {
     expect(model.audit.candidateCount).toBeGreaterThan(10);
     expect(model.closingMessage).toMatch(/начало|первый день/i);
     expect(model.nameInsight?.tiles.length).toBeGreaterThanOrEqual(2);
-    expect(model.firstTodayCtaLabel).toMatch(/первый день/i);
-    expect(model.refineCtaLabel).toMatch(/карту/i);
+    expect(model.saveCtaLabel).toMatch(/сохранить/i);
+    expect(model.refineCtaLabel).toMatch(/время/i);
   });
 
   it("uses distinct why explanations per visible card", () => {

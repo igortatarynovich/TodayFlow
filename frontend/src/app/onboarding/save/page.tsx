@@ -14,6 +14,7 @@ import {
   readGuestProfileDraft,
   VALUE_FIRST_PATHS,
 } from "@/lib/guestProfileDraft";
+import { hasGuestCompatPair, patchGuestCompatPair } from "@/lib/guestCompatPair";
 import { ValueFirstOnboardingShell } from "@/components/onboarding/valueFirst/ValueFirstOnboardingShell";
 import { VALUE_FIRST_COPY as copy } from "@/components/onboarding/valueFirst/valueFirstOnboardingCopy";
 import styles from "@/components/onboarding/valueFirst/valueFirstOnboarding.module.css";
@@ -24,7 +25,6 @@ type EmailSignupResponse = {
   pending_email_confirmation?: boolean;
   email_sent?: boolean;
   token?: string;
-  dev_temp_password?: string;
   dev_magic_url?: string;
 };
 
@@ -34,10 +34,10 @@ function OnboardingSavePageInner() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [pendingEmail, setPendingEmail] = useState<string | null>(null);
-  const [devAccess, setDevAccess] = useState<{ password?: string; magicUrl?: string } | null>(null);
+  const [devMagicUrl, setDevMagicUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!hasGuestPreview()) {
+    if (!hasGuestPreview() && !hasGuestCompatPair()) {
       router.replace(VALUE_FIRST_PATHS.welcome);
       return;
     }
@@ -55,6 +55,7 @@ function OnboardingSavePageInner() {
     setError(null);
     try {
       patchGuestProfileDraft({ save_ready_at: new Date().toISOString() });
+      patchGuestCompatPair({ save_ready_at: new Date().toISOString() });
       await prepareGuestClaimBeforeAuth();
       const response = await postJson<EmailSignupResponse>("/auth/email-signup", { email: trimmed });
 
@@ -68,11 +69,11 @@ function OnboardingSavePageInner() {
           } else if (claim.status === "needs_refine") {
             claimTarget = claim.refinePath;
           } else {
-            claimTarget = VALUE_FIRST_PATHS.firstToday;
+            claimTarget = "/profile";
           }
         } catch {
           // Profile claim can fail independently; auth still valid for magic link retry.
-          claimTarget = VALUE_FIRST_PATHS.firstToday;
+          claimTarget = "/profile";
         }
         if (claimTarget) {
           router.replace(claimTarget);
@@ -81,11 +82,8 @@ function OnboardingSavePageInner() {
       }
 
       setPendingEmail(trimmed);
-      if (response.dev_temp_password || response.dev_magic_url) {
-        setDevAccess({
-          password: response.dev_temp_password,
-          magicUrl: response.dev_magic_url,
-        });
+      if (response.dev_magic_url) {
+        setDevMagicUrl(response.dev_magic_url);
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : "Не удалось сохранить.";
@@ -112,17 +110,12 @@ function OnboardingSavePageInner() {
       >
         <p className={styles.previewIntro}>{copy.save.pendingBody(pendingEmail)}</p>
         <p className={styles.hint}>{copy.save.pendingHint}</p>
-        {devAccess?.magicUrl ? (
+        {devMagicUrl ? (
           <div className={styles.ctaRow}>
-            <Link href={devAccess.magicUrl}>
+            <Link href={devMagicUrl}>
               <DsButton variant="primary">Открыть (dev magic link)</DsButton>
             </Link>
           </div>
-        ) : null}
-        {devAccess?.password ? (
-          <p className={styles.hint}>
-            Dev: временный пароль — <code>{devAccess.password}</code>
-          </p>
         ) : null}
       </ValueFirstOnboardingShell>
     );

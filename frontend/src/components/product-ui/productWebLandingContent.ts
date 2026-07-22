@@ -6,9 +6,10 @@ export const PRODUCT_WEB_LANDING_HERO = {
   titleLead: "Интересно, что",
   titleTail: "сегодня для тебя?",
   subtitle:
-    "TodayFlow — персональный ориентир на день: тема, фокус, практика и память о вчера. Сначала попробуй бесплатно — потом собери свой Today.",
-  primaryCta: "Создать мой Today",
-  secondaryCta: "Войти",
+    "Собери свой профиль по дате рождения — и открой персональный день, совместимость и практики. Можно начать с профиля или сразу проверить пару.",
+  primaryCta: "Построить мой профиль",
+  secondaryCta: "Совместимость",
+  loginCta: "Войти",
 } as const;
 
 export const PRODUCT_WEB_LANDING_ORBIT_NODES = [
@@ -50,7 +51,7 @@ export const PRODUCT_WEB_LANDING_GUEST_TRIALS = [
 export const PRODUCT_WEB_LANDING_GUEST_SECTION = {
   eyebrow: "Без регистрации",
   title: "Попробуй сейчас",
-  lead: "Today и профиль откроются после регистрации. До этого — три инструмента, чтобы почувствовать продукт.",
+  lead: "Игровая совместимость, Таро и практики — сразу. Полный профиль и Today — после сохранения через email.",
 } as const;
 
 /** После регистрации — обещание Today (статичное превью, без персональных данных). */
@@ -90,9 +91,9 @@ export const PRODUCT_WEB_LANDING_TESTIMONIALS = {
 } as const;
 
 export const PRODUCT_WEB_LANDING_FINAL = {
-  title: "Завтра утром TodayFlow вспомнит сегодня.",
-  subtitle: "Создай свой Today — тема, фокус и история дня начнут складываться с первого утра.",
-  cta: "Создать мой Today",
+  title: "Начни с себя — сохрани профиль.",
+  subtitle: "Дата рождения создаёт основу. Время и место откроют Асцендент и дома. Email закрепит результат в аккаунте.",
+  cta: "Построить мой профиль",
 } as const;
 
 export const PRODUCT_WEB_LANDING_FOOTER = {

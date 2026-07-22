@@ -49,10 +49,11 @@ const preview: FirstResultModel = {
     body: "Сегодня особенно полезно помнить: понимаешь больше, чем говоришь.",
     whyExplanation: "На это указывают Водолей и число пути 7.",
   },
-  closingMessage: "Это начало. Сегодня можно прожить первый день — и уже завтра карта станет глубже.",
-  refineHint: "Можно сразу начать день или минуту уделить уточнению карты.",
-  firstTodayCtaLabel: "Начнём первый день",
-  refineCtaLabel: "Уточнить карту",
+  closingMessage: "Это начало узнавания. Сохрани профиль через email.",
+  refineHint: "Без точного времени Асцендент и дома ещё закрыты.",
+  saveCtaLabel: "Сохранить профиль",
+  refineCtaLabel: "Уточнить время и место",
+  limitationsLabels: ["Асцендент", "Дома"],
   audit: { candidateCount: 20, selectedIds: ["1"], selections: [] },
 };
 
@@ -65,15 +66,18 @@ describe("FirstResultScreen", () => {
     render(
       <FirstResultScreen
         preview={preview}
-        firstTodayHref="/today?first=1"
-        refineHref="/onboarding/refine"
+        saveHref="/onboarding/save"
+        refineHref="/onboarding/refine?after=save"
       />,
     );
 
     expect(screen.getByTestId("first-result-screen")).toBeInTheDocument();
     expect(screen.getByTestId("conversation-turn-preview_recognition")).toBeInTheDocument();
-    expect(screen.getByTestId("onboarding-preview-first-today")).toHaveAttribute("href", "/today?first=1");
-    expect(screen.getByTestId("onboarding-preview-refine")).toHaveAttribute("href", "/onboarding/refine");
+    expect(screen.getByTestId("onboarding-preview-save")).toHaveAttribute("href", "/onboarding/save");
+    expect(screen.getByTestId("onboarding-preview-refine")).toHaveAttribute(
+      "href",
+      "/onboarding/refine?after=save",
+    );
     expect(screen.getByText(/это начало/i)).toBeInTheDocument();
 
     fireEvent.click(screen.getAllByRole("button", { name: "Почему?" })[0]);
@@ -87,8 +91,8 @@ describe("FirstResultScreen", () => {
     render(
       <FirstResultScreen
         preview={preview}
-        firstTodayHref="/today?first=1"
-        refineHref="/onboarding/refine"
+        saveHref="/onboarding/save"
+        refineHref="/onboarding/refine?after=save"
       />,
     );
 

@@ -6,6 +6,11 @@ import {
   readGuestProfileDraft,
   type GuestProfileDraft,
 } from "@/lib/guestProfileDraft";
+import {
+  clearGuestCompatPair,
+  readGuestCompatPair,
+  type GuestCompatPersonDraft,
+} from "@/lib/guestCompatPair";
 import type { CoreSetupResponse } from "@/lib/coreSetup";
 import { FIRST_TODAY_PATH } from "@/lib/firstTodayState";
 import { hasOnboardingIntent, hasOnboardingReality, saveIntentTheme, saveRealityState } from "@/lib/onboardingContext";
@@ -17,6 +22,7 @@ import {
 } from "@/lib/guestProgressSync";
 import { refreshTodayStory } from "@/lib/todayContract";
 import type { CoreProfile } from "@/lib/types";
+import type { AstroProfileSaveResponse } from "@/lib/types";
 
 export type ClaimGuestProfileResult =
   | { status: "ready"; profilePath: string; storyRefreshRequired?: boolean }
@@ -27,6 +33,71 @@ export type ClaimGuestProfileResult =
 export function canClaimGuestProfile(draft: GuestProfileDraft | null = readGuestProfileDraft()): boolean {
   // Name is optional (name numerology only). Birth date is the hard minimum.
   return Boolean(draft?.birth_date?.trim());
+}
+
+async function createAstroFromCompatPerson(
+  person: GuestCompatPersonDraft,
+  opts: { relation: string; is_primary: boolean },
+): Promise<number | null> {
+  try {
+    const saved = await postJson<AstroProfileSaveResponse>("/account/astro-data", {
+      label: person.label.trim() || "Профиль",
+      relation: opts.relation,
+      birth_date: person.birth_date,
+      birth_time: person.time_unknown ? null : person.birth_time || null,
+      time_unknown: person.time_unknown,
+      location_name: person.location_name,
+      latitude: person.latitude,
+      longitude: person.longitude,
+      is_primary: opts.is_primary,
+    });
+    return saved.id;
+  } catch {
+    return null;
+  }
+}
+
+/** Bind two durable drafts from 1A personal compatibility after auth. */
+export async function claimGuestCompatPairAfterAuth(opts?: {
+  /** When primary was already created via core-setup / existing account. */
+  skipPrimary?: boolean;
+}): Promise<{
+  profile_a_id: number | null;
+  profile_b_id: number | null;
+} | null> {
+  const pair = readGuestCompatPair();
+  if (!pair) return null;
+
+  const skipPrimary = Boolean(opts?.skipPrimary) || (await userAlreadyHasReadyProfile());
+  let profileA: number | null = null;
+  let profileB: number | null = null;
+
+  if (!skipPrimary) {
+    profileA = await createAstroFromCompatPerson(pair.person_a, {
+      relation: "self",
+      is_primary: true,
+    });
+  } else {
+    // Do not recreate person_a as a duplicate of the bound primary (1B).
+    profileA = null;
+  }
+
+  profileB = await createAstroFromCompatPerson(pair.person_b, {
+    relation: "partner",
+    is_primary: false,
+  });
+
+  // Pure 1A path with existing account: also store person_a as close_person.
+  if (skipPrimary && opts?.skipPrimary !== true) {
+    // Existing account before this claim — keep both people as circle profiles.
+    profileA = await createAstroFromCompatPerson(pair.person_a, {
+      relation: "close_person",
+      is_primary: false,
+    });
+  }
+
+  clearGuestCompatPair();
+  return { profile_a_id: profileA, profile_b_id: profileB };
 }
 
 /** Call before navigating to auth — syncs progress + issues claim token. */
@@ -86,18 +157,32 @@ async function claimDayProgressOnly(): Promise<ClaimGuestProfileResult> {
 
 export async function claimGuestProfileAfterAuth(): Promise<ClaimGuestProfileResult> {
   const draft = readGuestProfileDraft();
+  const compatPair = readGuestCompatPair();
+
   if (!canClaimGuestProfile(draft) || !draft) {
+    if (compatPair) {
+      try {
+        await prepareGuestClaimBeforeAuth();
+        await claimGuestCompatPairAfterAuth();
+        return { status: "ready", profilePath: "/account/profiles" };
+      } catch {
+        return { status: "no_draft" };
+      }
+    }
     const result = await claimDayProgressOnly();
     return result.status === "ready" ? result : { status: "no_draft" };
   }
 
-  if (!draft.location_name?.trim()) {
-    await prepareGuestClaimBeforeAuth();
-    return { status: "needs_refine", refinePath: "/onboarding/refine?after=save" };
-  }
-
+  // Location is optional when time is unknown — soft missing, not a bind blocker.
   // Existing account must not be silently overwritten by a stale guest draft.
   if (await userAlreadyHasReadyProfile()) {
+    if (compatPair) {
+      try {
+        await claimGuestCompatPairAfterAuth();
+      } catch {
+        /* best-effort */
+      }
+    }
     return claimDayProgressOnly();
   }
 
@@ -112,11 +197,23 @@ export async function claimGuestProfileAfterAuth(): Promise<ClaimGuestProfileRes
   const response = await postJson<CoreSetupResponse>("/account/core-setup", payload);
   publishCoreProfileUpdate(response.core_profile);
 
-  let redirect = FIRST_TODAY_PATH;
+  // 1A dual drafts: bind partner (person_b); primary already from core-setup.
+  if (compatPair) {
+    try {
+      await claimGuestCompatPairAfterAuth({ skipPrimary: true });
+    } catch {
+      /* primary claim already succeeded */
+    }
+  }
+
+  const PROFILE_PATH = "/profile";
+  let redirect = PROFILE_PATH;
   let storyRefreshRequired = false;
   try {
-    const dayClaim = await claimGuestSessionAfterAuth({ redirectTarget: FIRST_TODAY_PATH });
-    redirect = dayClaim.redirect_target || FIRST_TODAY_PATH;
+    const dayClaim = await claimGuestSessionAfterAuth({ redirectTarget: PROFILE_PATH });
+    // Prefer Profile V2 when core is ready; First Today is optional after bind.
+    const coreReady = Boolean(response.core_profile?.is_ready);
+    redirect = coreReady ? PROFILE_PATH : dayClaim.redirect_target || PROFILE_PATH;
     storyRefreshRequired = Boolean(dayClaim.story_refresh_required);
     if (storyRefreshRequired) {
       try {
