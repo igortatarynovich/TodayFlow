@@ -10,6 +10,7 @@ from todayflow_backend.services.profile_disclosure_funnel_v0 import SPHERE_FIELD
 PROFILE_CONTRACT_QUALITY_V1 = "profile_contract_quality_v1"
 
 REQUIRED_TOP_LEVEL = (
+    "recognition_line",
     "identity_core",
     "strengths",
     "growth_zones",
@@ -87,6 +88,9 @@ def validate_required_fields(contract: dict[str, Any]) -> list[str]:
 
     if len(str(contract.get("identity_core") or "").strip()) < 20:
         errors.append("identity_core_short")
+    from todayflow_backend.services.profile_contract_v1 import validate_recognition_line
+
+    errors.extend(validate_recognition_line(str(contract.get("recognition_line") or ""), require=True))
     for key in ("strengths", "growth_zones"):
         items = contract.get(key)
         if not isinstance(items, list) or len(items) < 3:

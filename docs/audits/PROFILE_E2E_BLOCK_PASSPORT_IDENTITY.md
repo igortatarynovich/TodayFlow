@@ -22,15 +22,15 @@
 | `min_source_depth` | `birth_data_only` при наличии `birth_date` + usable sun/baseline |
 | `forbidden_sources` | Today day chain · CUM day themes · raw check-in lists as «patterns» · taxonomy slots as substitute for LLM when contract exists |
 | `insufficient_when` | нет `birth_date` / нет минимальных astro+baseline фактов для портрета → step **не** вызывается; UI forming / birth CTA |
-| `generation_required` | `yes` for `identity_core`, `strengths[3]`, `growth_zones[3]` |
+| `generation_required` | `yes` for `recognition_line`, `identity_core`, `strengths[3]`, `growth_zones[3]` |
 | `generation_gate` | `identity_generation_allowed(pack)` — birth_date + (sun_sign or baseline seed). **До** промпта |
 | `allowed_claims` | Кто человек в жизни; 3 опоры; 3 зоны напряжения/роста. Языковая вариативность OK |
 | `forbidden_claims` | Паспорт знака («вы Овен, поэтому…»); советы «сегодня»; подтверждённые recurring patterns; гарантии; мета про ИИ/систему; пустые формулы |
 | `prompt_id` | `profile.identity.v1` |
-| `expected_response` | `profile_funnel_identity_v0`: `identity_core` ≥20 chars; `strengths`≥3; `growth_zones`≥3 |
+| `expected_response` | `profile_funnel_identity_v0`: `recognition_line` ≤120 (no day/advice/archetype name); `identity_core` ≥20 chars; `strengths`≥3; `growth_zones`≥3 |
 | `acceptance_criteria` | `_identity_ok` + Voice §0 (человек, не система) + не day agenda + не sun-sign cliché as sole content |
 | `on_reject` | retry 1 → funnel fail → forming shell; **не** подставлять taxonomy как «готовый портрет» |
-| `snapshot_fields` | `identity_core`, `strengths`, `growth_zones` (внутри `profile_contract_v1`) |
+| `snapshot_fields` | `recognition_line`, `identity_core`, `strengths`, `growth_zones` (внутри `profile_contract_v1`) |
 | `ui_surfaces` | Hero quote · Character strengthens · Character drains · (identitySummary feed) |
 | `appear_when` | contract `ready`/`partial` with non-empty `identity_core`; иначе forming / omit quote |
 | `access_tier` | trial / free (static who-you-are) |

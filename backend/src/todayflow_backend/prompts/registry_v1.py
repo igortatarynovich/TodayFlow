@@ -90,7 +90,7 @@ _REGISTRY: dict[str, dict[str, Any]] = {
     },
     # Profile disclosure layers
     "profile.identity.v1": {
-        "version": "1.0.0",
+        "version": "1.1.0",
         "surface": "profile",
         "step": "identity",
         "builder": profile_disclosure_v1.identity_system,

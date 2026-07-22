@@ -50,6 +50,7 @@ def _fake_call_factory(responses: list[Any]):
 def _identity() -> dict[str, Any]:
     return {
         "contract_version": funnel.IDENTITY_CONTRACT,
+        "recognition_line": "Ты первым видишь структуру там, где остальные пока видят только хаос.",
         "identity_core": "Человек держит смысл через ясный фокус и живой контакт.",
         "strengths": ["Фокус", "Контакт", "Доведение"],
         "growth_zones": ["Распыление", "Контроль", "Откладывание"],

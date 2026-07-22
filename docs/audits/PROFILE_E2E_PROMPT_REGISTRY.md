@@ -27,7 +27,7 @@
 | Field | Content |
 |-------|---------|
 | prompt_id | `profile.identity.v1` |
-| version | `1.0.0` (`registry_v1.py`) |
+| version | `1.1.0` (`registry_v1.py`) — adds `recognition_line` |
 | **Block passport** | [PROFILE_E2E_BLOCK_PASSPORT_IDENTITY.md](./PROFILE_E2E_BLOCK_PASSPORT_IDENTITY.md) **APPROVED** |
 | Call site | `profile_disclosure_funnel_v0` step identity |
 | Trigger | `publish_portrait=True` + rich quality mode **and** `identity_generation_allowed` |
@@ -36,13 +36,13 @@
 | System | `identity_system(locale)` + **profile_voice** (no Today day-chain) + profile_layers |
 | User | `{ shared, step: "identity" }` |
 | Model params | policy-driven (eval: DeepSeek-V4-Pro, temp ~0.48, max_tokens 3200) |
-| Expected JSON | `profile_funnel_identity_v0`: identity_core, strengths[3], growth_zones[3] |
-| Parser | JSON extract + step validator (≥20 char identity, 3+3) |
+| Expected JSON | `profile_funnel_identity_v0`: recognition_line (≤120), identity_core, strengths[3], growth_zones[3] |
+| Parser | JSON extract + step validator (recognition_line + ≥20 char identity, 3+3) |
 | Retry | 1 on parse/schema fail |
-| Fallback | gate skip / step fail → forming shell; **no taxonomy as portrait** |
-| Forbidden claims | sun-sign passport; day agenda; longitudinal invent; Voice bans |
-| Snapshot fields | `identity_core`, `strengths`, `growth_zones` |
-| UI projections | Hero quote · Character strengthens/drains — **contract-only** |
+| Fallback | gate skip / step fail → forming shell; **no taxonomy as portrait**; old snaps: compress identity_core → recognition_line |
+| Forbidden claims | sun-sign passport; day agenda; longitudinal invent; Voice bans; archetype name inside recognition_line |
+| Snapshot fields | `recognition_line`, `identity_core`, `strengths`, `growth_zones` |
+| UI projections | Hero quote · Character strengthens/drains — **contract-only** (recognition_line not wired to UI yet) |
 | **Unique knowledge?** | Yes if real synthesis; else sign cliché |
 
 ---

@@ -2,9 +2,11 @@
 
 **Status:** ACTIVE — сквозной этап (не UI redesign)  
 **Started:** 2026-07-21  
+**Product surface SoT:** [PROFILE_PRODUCT_SURFACE_CANON.md](./PROFILE_PRODUCT_SURFACE_CANON.md) — **выше** inventory Freeze-матрицы для смысла скролла  
 **Parent canons:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) · [PR4_PROFILE_CANON.md](./PR4_PROFILE_CANON.md) · [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](./UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md) · [TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md)
 
-> **Запрет на этом этапе:** рисовать новый экран · переписывать промпты «на глаз» · чинить тексты без доказанной точки в цепочке · объяснять брак фразой «модель выдумала».
+> **Запрет на этом этапе:** рисовать новый экран · переписывать промпты «на глаз» · чинить тексты без доказанной точки в цепочке · объяснять брак фразой «модель выдумала».  
+> **Пауза (2026-07-21):** следующий Freeze-блок (`character_decisions`) и косметика V2 — пока не закрыт Product Surface Canon §5 (путешествие: узнал себя → понял почему). Pipeline passports = механизм под шаги, не цель экрана.
 
 ---
 

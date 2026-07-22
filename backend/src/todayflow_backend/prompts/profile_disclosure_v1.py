@@ -22,12 +22,14 @@ Inputs: person, astro, numerology, baseline; living only as soft background if p
 Schema:
 {
   "contract_version": "profile_funnel_identity_v0",
+  "recognition_line": "string — ONE recognition phrase, ≤120 chars; who they are in action; not advice; do not repeat the archetype label",
   "identity_core": "string — 2–3 sentences",
   "strengths": ["string","string","string"],
   "growth_zones": ["string","string","string"]
 }
 
-Forbidden: "as an Aries…"; day advice; inventing longitudinal repeats; kitchen/system meta.
+Forbidden: "as an Aries…"; day advice; inventing longitudinal repeats; kitchen/system meta;
+repeating archetype name inside recognition_line.
 """
     else:
         body = """
@@ -41,12 +43,14 @@ Forbidden: "as an Aries…"; day advice; inventing longitudinal repeats; kitchen
 Схема:
 {
   "contract_version": "profile_funnel_identity_v0",
-  "identity_core": "string — 2–3 предложения",
+  "recognition_line": "строка — ОДНА фраза-узнавание, ≤120 символов; поведение, не совет; не повторяй имя архетипа",
+  "identity_core": "строка — 2–3 предложения",
   "strengths": ["строка","строка","строка"],
   "growth_zones": ["строка","строка","строка"]
 }
 
-Запрещено: «как Овен…»; советы на день; выдуманные продольные паттерны; мета про систему.
+Запрещено: «как Овен…»; советы на день; выдуманные продольные паттерны; мета про систему;
+повторять имя архетипа внутри recognition_line.
 """
     return _frame(locale, body)
 
@@ -92,9 +96,11 @@ You are step 3 of the Profile portrait funnel. Return ONLY one JSON.
 
 Primary task (character_patterns): confirmed recurring behavior patterns from living/signals only.
 Each pattern must be grounded in the living evidence in the input — not birth chart, not identity paraphrase.
-Also fill: living_changes; life_mission (one grounded line); helps (≥2 concrete supports).
+Also fill: living_changes;
+life_mission (one direction line grounded in living — not sun-sign destiny / taxonomy filler);
+helps (≥2 concrete supports the person already uses — grounded in living, not birth/taxonomy filler).
 
-Forbidden: inventing repeats without living evidence; day agenda; sun-sign passport as a “pattern”;
+Forbidden: inventing repeats, mission, or helps without living evidence; day agenda; sun-sign passport as a “pattern”;
 kitchen/system meta (eligibility, engine, snapshot).
 
 Schema:
@@ -112,9 +118,11 @@ Schema:
 
 Главная задача (character_patterns): подтверждённые повторяющиеся паттерны поведения — только из living/signals.
 Каждый паттерн должен опираться на living во входе — не натальная карта и не пересказ identity.
-Также заполни: living_changes; life_mission (одна приземлённая строка); helps (≥2 конкретных опоры).
+Также заполни: living_changes;
+life_mission (одна строка направления из living — не судьба по знаку / taxonomy filler);
+helps (≥2 конкретных опоры, которые человек уже использует — из living, не birth/taxonomy filler).
 
-Запрещено: выдумывать повторы без living; повестка дня; паспорт знака как «паттерн»;
+Запрещено: выдумывать повторы, миссию или опоры без living; повестка дня; паспорт знака как «паттерн»;
 kitchen/system мета (eligibility, engine, snapshot).
 
 Схема:

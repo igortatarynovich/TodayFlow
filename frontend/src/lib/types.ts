@@ -276,6 +276,8 @@ export type CoreProfile = {
     contract_version: string;
     status?: "ready" | "forming" | "partial" | string;
     forming_message?: string | null;
+    /** Step-1 share line (≤120). Optional on old snapshots; normalize may fallback. */
+    recognition_line?: string;
     identity_core: string;
     strengths: string[];
     growth_zones: string[];

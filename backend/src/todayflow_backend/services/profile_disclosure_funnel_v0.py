@@ -213,6 +213,10 @@ def _identity_ok(d: dict[str, Any] | None) -> bool:
         return False
     if len(str(d.get("identity_core") or "").strip()) < 20:
         return False
+    from todayflow_backend.services.profile_contract_v1 import validate_recognition_line
+
+    if validate_recognition_line(str(d.get("recognition_line") or ""), require=True):
+        return False
     for key in ("strengths", "growth_zones"):
         items = d.get(key)
         if not isinstance(items, list) or len(items) < 3:
@@ -406,6 +410,7 @@ def run_profile_disclosure_funnel_v0(
         meta["reason"] = "styles_failed"
         meta["partial"] = True
         merged = {
+            "recognition_line": r1.get("recognition_line"),
             "identity_core": r1.get("identity_core"),
             "strengths": r1.get("strengths"),
             "growth_zones": r1.get("growth_zones"),
@@ -566,6 +571,7 @@ def run_profile_disclosure_funnel_v0(
         meta["reason"] = "spheres_slice_partial_synthesis_v1"
 
     merged: dict[str, Any] = {
+        "recognition_line": r1.get("recognition_line"),
         "identity_core": r1.get("identity_core"),
         "strengths": r1.get("strengths"),
         "growth_zones": r1.get("growth_zones"),
