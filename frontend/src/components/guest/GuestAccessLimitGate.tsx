@@ -19,7 +19,7 @@ export function GuestAccessLimitGate({
   title,
   body,
   signupHref = guestSignupHref(),
-  signupLabel = "Создать мой Today",
+  signupLabel = "Построить мой профиль",
   secondaryHref,
   secondaryLabel,
   testId = "guest-access-limit-gate",

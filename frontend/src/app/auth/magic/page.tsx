@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { postJson } from "@/lib/api";
 import { claimGuestProfileAfterAuth } from "@/lib/claimGuestProfile";
 import { beginAuthSession } from "@/lib/authSession";
-import { VALUE_FIRST_PATHS } from "@/lib/guestProfileDraft";
 import { LoadingSpinner } from "@/components/orbit";
 
 type MagicLoginResponse = {
@@ -32,14 +31,14 @@ function MagicLoginInner() {
 
         const claim = await claimGuestProfileAfterAuth();
         if (claim.status === "ready") {
-          router.replace("/today?first=1");
+          router.replace(claim.profilePath);
           return;
         }
         if (claim.status === "needs_refine") {
           router.replace(claim.refinePath);
           return;
         }
-        router.replace(VALUE_FIRST_PATHS.firstToday);
+        router.replace("/profile");
       } catch (err) {
         setError(err instanceof Error ? err.message : "Не удалось войти по ссылке.");
       }

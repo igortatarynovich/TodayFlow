@@ -265,7 +265,7 @@ function CompatibilityLayerSelector({
         {COMPATIBILITY_LAYER_CARDS.map((card) => {
           const locked = card.requiresAuth && !isAuthenticated;
           const highlighted = emphasizeProfiles && card.id === "profiles";
-          const href = locked ? "/onboarding/welcome?fresh=1" : card.href;
+          const href = locked ? "/compatibility/birthdates" : card.href;
           return (
             <Link
               key={card.id}
@@ -288,7 +288,7 @@ function CompatibilityLayerSelector({
                 {card.title}
               </p>
               <p className="orbit-body-xs" style={{ margin: "0.55rem 0 0", color: locked ? "#9a6700" : "#7c5a33", fontWeight: 700 }}>
-                {locked ? "Создать мой Today" : card.cta}
+                {locked ? "Проверить пару по датам" : card.cta}
               </p>
             </Link>
           );

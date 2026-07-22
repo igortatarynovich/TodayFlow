@@ -1,17 +1,18 @@
 # First Day & Onboarding — продуктовый контракт
 
-**Статус:** **ACCEPTED** — канон **guest → signup → onboarding → First Today** (маршруты, данные, PIM, DoD).  
-**Версия:** 2.0 (2026-06-23).  
+**Статус:** **PARTIAL / superseded for first-entry route** — канон First *Today package* (Theme→Action→Progress) остаётся; маршрут первого входа = [FULL_USER_PATH_CANON_V1](./audits/FULL_USER_PATH_CANON_V1.md) (Preview→Save→Claim→**Profile**).  
+**Версия:** 2.1 (маршрут A–E, 2026-07-22).  
 **Владелец:** Product + Engineering.
 
-**Web launch (2026-07-01):** маршрут guest `/demo/today`, auth-first и landing demo — **superseded**. Источник истины: [status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md](./status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md) (UX) + [status/WEB_LAUNCH_EXECUTION_PLAN.md](./status/WEB_LAUNCH_EXECUTION_PLAN.md) (работы, код).
+**Web launch (2026-07-01):** маршрут guest `/demo/today`, auth-first и landing demo — **superseded**.  
+**A–E (2026-07-22):** обязательный First Today до email — **superseded**; post-claim default = Profile.
 
-**Scope:** полный user journey до первого персонального Today + First Day Package.  
-**Не входит:** реализация экранов (см. §13 Execution backlog), новые API без обоснования, C1.7 / causal graph.
+**Scope:** First Today Package и вечерний цикл *после* того, как пользователь уже на Profile (или явно открыл Today).  
+**Не входит:** переопределение маршрута A–E; новые API без обоснования.
 
-**Связь:** [CORE_PRODUCT_CANON.md](./CORE_PRODUCT_CANON.md) · [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) · [TODAY_PRODUCT_MODEL.md](./TODAY_PRODUCT_MODEL.md) · [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md) · [KNOWLEDGE_ACQUISITION_AND_SIGNAL_POLICY.md](./KNOWLEDGE_ACQUISITION_AND_SIGNAL_POLICY.md) (канал A) · [INTENT_MODEL_V1.md](./INTENT_MODEL_V1.md) · [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md).
+**Связь:** [audits/FULL_USER_PATH_CANON_V1.md](./audits/FULL_USER_PATH_CANON_V1.md) (SoT маршрута) · [CORE_PRODUCT_CANON.md](./CORE_PRODUCT_CANON.md) · [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) · [TODAY_PRODUCT_MODEL.md](./TODAY_PRODUCT_MODEL.md) · [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md) · [KNOWLEDGE_ACQUISITION_AND_SIGNAL_POLICY.md](./KNOWLEDGE_ACQUISITION_AND_SIGNAL_POLICY.md) (канал A) · [INTENT_MODEL_V1.md](./INTENT_MODEL_V1.md) · [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md).
 
-**Главное решение (v2):** **Profile — не onboarding.** Profile = кабинет / карта личности **после** первого payoff (First Today). Первый экран после signup — **быстрый путь к личному Today**, не `/profile?setup=core`.
+**Маршрут после A–E (SoT):** Landing → Welcome → Birth → Preview → Save → Claim → **Profile** (не обязательный First Today до email). Детали — FULL_USER_PATH §1–§4.
 
 ---
 

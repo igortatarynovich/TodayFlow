@@ -6,13 +6,14 @@
 
 | Слой | Документ |
 |------|----------|
-| **Product Availability Matrix (отправная точка)** | [PRODUCT_AVAILABILITY_MATRIX.md](./PRODUCT_AVAILABILITY_MATRIX.md) — данные × экраны × блоки · **freeze Profile/Today до APPROVED** |
+| **Полный пользовательский путь (SoT маршрута)** | [audits/FULL_USER_PATH_CANON_V1.md](./audits/FULL_USER_PATH_CANON_V1.md) — Landing→Preview→Save→Claim→Profile · A–E |
+| **User Journey (pointer)** | [USER_JOURNEY_CANON.md](./USER_JOURNEY_CANON.md) → FULL_USER_PATH |
+| **Product Availability Matrix** | [PRODUCT_AVAILABILITY_MATRIX.md](./PRODUCT_AVAILABILITY_MATRIX.md) — данные × экраны × блоки |
 | **Data Intake (ровно 2 способа ввода)** | [PRODUCT_DATA_INTAKE.md](./PRODUCT_DATA_INTAKE.md) — публичный preview→email · добавить профиль · единая модель профиля |
-| **Capability Contracts (уровни данных → API)** | [PRODUCT_CAPABILITY_CONTRACTS.md](./PRODUCT_CAPABILITY_CONTRACTS.md) — оркестратор · L1/L2/L3 · allowed_output · без «мы считаем астрологию» |
-| **Generation Contracts (ядро продукта)** | [PRODUCT_GENERATION_CONTRACTS.md](./PRODUCT_GENERATION_CONTRACTS.md) — Contract (schemas · Execution/Quality Rules · deps) ⊕ Implementations (промпты = IP) |
-| **Data Providers (астро + гео)** | [PRODUCT_DATA_PROVIDERS.md](./PRODUCT_DATA_PROVIDERS.md) — внешний natal API · своя geo-БД · смена поставщика без смены промптов |
-| **Полный пользовательский путь (аудит + целевой канон)** | [audits/FULL_USER_PATH_CANON_V1.md](./audits/FULL_USER_PATH_CANON_V1.md) — лендинг → привычка D30 · противоречия X* · реестр генераций |
-| **Product Build Map (№1 — product SoT)** | [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md) — entities · **два базовых закона** · Personal Model pointer |
+| **Capability Contracts (уровни данных → API)** | [PRODUCT_CAPABILITY_CONTRACTS.md](./PRODUCT_CAPABILITY_CONTRACTS.md) — оркестратор · L1/L2/L3 · allowed_output |
+| **Generation Contracts (ядро генерации)** | [PRODUCT_GENERATION_CONTRACTS.md](./PRODUCT_GENERATION_CONTRACTS.md) — Contract ⊕ Implementations (промпты = IP) |
+| **Data Providers (астро + гео)** | [PRODUCT_DATA_PROVIDERS.md](./PRODUCT_DATA_PROVIDERS.md) — MVP: LLM natal_facts · geo thin |
+| **Product Build Map** | [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md) — entities · Personal Model pointer |
 | **Personal Model ↔ code** | [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md) — P0 read-path · [P1 Experience wiring](./audits/PERSONAL_MODEL_EXPERIENCE_WIRING_P1_2026-07-21.md) |
 | Product Model (reference) | [TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md) — §4 content model |
 | Launch gaps / DoD / code | [status/WEB_LAUNCH_EXECUTION_PLAN.md](./status/WEB_LAUNCH_EXECUTION_PLAN.md) |
@@ -66,12 +67,13 @@
 
 При расхождении приоритет (сверху вниз):
 
-0. [TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md) — **модель продукта** (Personal Model, projections)
-1. [PERSONAL_INTELLIGENCE_MODEL_V1.md](./PERSONAL_INTELLIGENCE_MODEL_V1.md) · [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md)
-2. [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md)
-3. [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) (для Today UX)
-4. [CORE_PRODUCT_CANON.md](./CORE_PRODUCT_CANON.md)
-5. [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md)
+0. [audits/FULL_USER_PATH_CANON_V1.md](./audits/FULL_USER_PATH_CANON_V1.md) — **путь пользователя** (после A–E)
+1. [TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md) — модель продукта (Personal Model, projections)
+2. [PERSONAL_INTELLIGENCE_MODEL_V1.md](./PERSONAL_INTELLIGENCE_MODEL_V1.md) · [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md)
+3. [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md)
+4. [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) (для Today UX)
+5. [CORE_PRODUCT_CANON.md](./CORE_PRODUCT_CANON.md)
+6. [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md)
 
 ## Правило записи (обязательно)
 

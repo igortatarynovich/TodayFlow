@@ -3,7 +3,7 @@
 **Статус:** DRAFT TARGET — **gate перед любыми изменениями Profile / Today**  
 **Роль:** отправная точка продукта. API · генерация · UI — **следствия** этой таблицы, не наоборот.  
 **Владелец:** Product  
-**Связь:** [PRODUCT_DATA_INTAKE.md](./PRODUCT_DATA_INTAKE.md) · [PRODUCT_CAPABILITY_CONTRACTS.md](./PRODUCT_CAPABILITY_CONTRACTS.md) · [PRODUCT_GENERATION_CONTRACTS.md](./PRODUCT_GENERATION_CONTRACTS.md) (**ядро генерации**) · Understanding Progress · Compat · Voice  
+**Связь:** [audits/FULL_USER_PATH_CANON_V1.md](./audits/FULL_USER_PATH_CANON_V1.md) · [PRODUCT_DATA_INTAKE.md](./PRODUCT_DATA_INTAKE.md) · [PRODUCT_CAPABILITY_CONTRACTS.md](./PRODUCT_CAPABILITY_CONTRACTS.md) · [PRODUCT_GENERATION_CONTRACTS.md](./PRODUCT_GENERATION_CONTRACTS.md) (**ядро генерации**) · Understanding Progress · Compat · Voice  
 
 
 **Не путать:** это не архитектурный engine/registry и не очередной «канон пайплайна». Это матрица **состояний пользователя → доступность**.

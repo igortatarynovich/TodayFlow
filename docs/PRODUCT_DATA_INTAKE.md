@@ -2,7 +2,7 @@
 
 **Статус:** TARGET DRAFT — продуктовая фиксация  
 **Роль:** единственный канон **как данные попадают в систему**. Не пайплайн, не UI-рефактор.  
-**Связь:** [PRODUCT_AVAILABILITY_MATRIX.md](./PRODUCT_AVAILABILITY_MATRIX.md) (слой 0) · [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](./UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md) · Compat content  
+**Связь:** [audits/FULL_USER_PATH_CANON_V1.md](./audits/FULL_USER_PATH_CANON_V1.md) · [PRODUCT_AVAILABILITY_MATRIX.md](./PRODUCT_AVAILABILITY_MATRIX.md) (слой 0) · [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](./UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md) · Compat content  
 **Правило:** отдельных анкет для Profile / Compatibility / Natal / Today **нет**. Все поверхности читают **сохранённые профили**.
 
 ---
@@ -207,7 +207,7 @@ CTA: **Добавить профиль**
 | Auth compat по profile ids | ✅ `profile_id_1/2` | Ок для сценария 2 |
 | Добавить профиль | ✅ `POST /account/astro-data` | Ближе всего к сценарию 2 |
 | 1B preview → email → bind | Частично: guest draft → `/onboarding/save` → email-signup → claim → core-setup | Есть воронка «себя», не унифицирована с 1A |
-| Не слать пароль в email | Есть temp password + magic в email-signup | TARGET: только confirm + set-password |
+| Не слать пароль в email | Magic only; plaintext temp password убран | **SHIPPED A–E** |
 | Профиль до account_id | Guest draft / guest session; durable AstroProfile обычно после auth | Нужна модель «профиль до аккаунта» или claim-bind |
 | Единая анкета | Отдельные формы Profile / Compat / Numerology / Reports | Запрет новых; deprecate extras |
 

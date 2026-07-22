@@ -106,7 +106,7 @@ function OnboardingSavePageInner() {
         turnId="save_pending"
         title={copy.save.pendingTitle}
         lead={copy.save.pendingLead}
-        backHref={`${VALUE_FIRST_PATHS.refine}?after=save`}
+        backHref={VALUE_FIRST_PATHS.preview}
       >
         <p className={styles.previewIntro}>{copy.save.pendingBody(pendingEmail)}</p>
         <p className={styles.hint}>{copy.save.pendingHint}</p>
@@ -127,7 +127,7 @@ function OnboardingSavePageInner() {
       turnId="save_invite"
       title={copy.save.title}
       lead={copy.save.lead}
-      backHref={`${VALUE_FIRST_PATHS.refine}?after=save`}
+      backHref={VALUE_FIRST_PATHS.preview}
     >
       {draft?.first_name ? (
         <p className={styles.previewIntro}>{copy.save.personalIntro(draft.first_name)}</p>
