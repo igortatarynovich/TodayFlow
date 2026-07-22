@@ -316,7 +316,7 @@ def generate_natal_facts(
         "prompt_version": version,
         "available_input": available_input,
     }
-    client = get_openai_compatible_client()
+    client = get_openai_compatible_client(operation="background")
     model = resolve_default_chat_model()
     raw = chat_completion_text(
         client,
