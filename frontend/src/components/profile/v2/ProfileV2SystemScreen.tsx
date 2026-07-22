@@ -12,6 +12,7 @@ import {
   PROFILE_V2_COPY,
   type ProfileV2ZoneId,
 } from "@/components/profile/v2/profileV2SystemCopy";
+import { ArchetypeSymbol } from "@/components/visualIdentity/ArchetypeSymbol";
 import type { ProfileV2LiveContext } from "@/lib/profilePage/buildProfileV2LiveContext";
 import { profilePortraitFormingMessage } from "@/lib/profilePage/profilePortraitForming";
 import { profileV2SphereCardLine } from "@/lib/profilePage/profileV2SpherePresentation";
@@ -35,20 +36,6 @@ function zoneDomId(zone: ProfileV2ZoneId): string {
   return `profile-v2-${zone}`;
 }
 
-function buildAstroFactsLine(anchors: ProfileQuickMapScreenProps["model"]["frameworkAnchors"]): string {
-  const sun = anchors.find((item) => item.id === "sun")?.label.replace(/^солнце\s*/i, "") ?? "";
-  const moon = anchors.find((item) => item.id === "moon")?.label.replace(/^луна\s*/i, "") ?? "";
-  if (sun && moon) {
-    const sunSign = sun.replace(/\s*в\s*/i, " · ").trim();
-    const moonSign = moon.replace(/\s*в\s*/i, " · ").trim();
-    return `${sunSign} · ${moonSign}`.replace(/·\s*·/g, "·").trim();
-  }
-  return anchors
-    .slice(0, 2)
-    .map((item) => item.label)
-    .join(" · ");
-}
-
 function ZoneLabel({ id, title }: { id: string; title: string }) {
   return (
     <p id={id} className={styles.zoneLabel}>
@@ -69,12 +56,29 @@ export function ProfileV2SystemScreen({
   portraitForming = false,
   portraitFormingMessage: portraitFormingMessageProp = null,
 }: ProfileV2SystemScreenProps) {
-  const quote = portraitForming
-    ? null
-    : buildProfileHeroQuote(model.archetype, model.identitySummary);
+  const journey = live.journey;
   const formingMessage = portraitFormingMessageProp?.trim() || profilePortraitFormingMessage(null);
-  const astroFacts = buildAstroFactsLine(model.frameworkAnchors);
-  const helps = live.helps.length ? live.helps : model.thriveAreas.slice(0, 3);
+  const helps = live.helps;
+
+  const recognitionName = journey.recognitionName || model.archetype || null;
+  const recognitionLine = portraitForming
+    ? null
+    : journey.recognitionLine || buildProfileHeroQuote(model.archetype, model.identitySummary);
+  const symbolSeed = journey.archetypeSeed || model.archetype || null;
+
+  const whySelected = journey.whySelectedBy;
+  const whyInfluenced = journey.whyInfluencedBy;
+  const hasWhy =
+    whySelected.length > 0 ||
+    whyInfluenced.length > 0 ||
+    Boolean(journey.whyHonesty) ||
+    Boolean(live.evidenceBody);
+  const node = journey.node;
+  const effortVector = journey.effortVector;
+  const bridgeLine = journey.bridgeLine;
+  const showCharacterMore =
+    Boolean(model.strengthens.length || model.drains.length || helps.length || model.decisionStyle || model.perceivedAs.length);
+
   const heroPills = [
     ...identityPills,
     ...(live.elementLabel ? [live.elementLabel] : []),
@@ -103,11 +107,35 @@ export function ProfileV2SystemScreen({
           </div>
         ) : null}
 
-        <section className={styles.heroGrid} aria-label="Профиль">
-          <article className={styles.heroCard}>
+        <section
+          id={zoneDomId("recognition")}
+          className={styles.journeyHero}
+          aria-labelledby="profile-v2-recognition-title"
+          data-testid="profile-v2-recognition"
+        >
+          <div className={styles.journeyHeroVisual} aria-hidden={symbolSeed ? undefined : true}>
+            {symbolSeed ? (
+              <div className={styles.journeySymbolFrame}>
+                <ArchetypeSymbol seed={symbolSeed} size={112} stroke="#5b4630" />
+              </div>
+            ) : null}
+          </div>
+          <div className={styles.journeyHeroCopy}>
             <p className={styles.heroEyebrow}>{PROFILE_V2_COPY.heroEyebrow}</p>
-            <h1 className={styles.heroTitle}>{PROFILE_V2_COPY.heroTitle}</h1>
-            {quote ? <blockquote className={styles.heroQuote}>{quote}</blockquote> : null}
+            {recognitionName ? (
+              <h1 id="profile-v2-recognition-title" className={styles.journeyHeroTitle}>
+                {recognitionName}
+              </h1>
+            ) : (
+              <h1 id="profile-v2-recognition-title" className={styles.journeyHeroTitle}>
+                {PROFILE_V2_COPY.zones.recognition.title}
+              </h1>
+            )}
+            {recognitionLine ? (
+              <p className={styles.journeyRecognitionLine} data-testid="profile-v2-recognition-line">
+                {recognitionLine}
+              </p>
+            ) : null}
             {heroPills.length ? (
               <div className={styles.heroPills}>
                 {heroPills.map((pill) => (
@@ -117,58 +145,251 @@ export function ProfileV2SystemScreen({
                 ))}
               </div>
             ) : null}
-          </article>
-
-          <aside className={styles.sideCard} data-testid="profile-v2-evidence-aside">
-            <p className={styles.sideEyebrow}>{live.evidenceTitle}</p>
-            <p className={styles.sideBody}>{live.evidenceBody}</p>
-            <p className={styles.factHint}>
-              {PROFILE_V2_COPY.zones.evidence.levelPrefix}: {live.observationAccuracyLabel}
-            </p>
-          </aside>
+          </div>
         </section>
 
-        <section id={zoneDomId("identity")} className={styles.zone} aria-labelledby="profile-v2-identity-title">
-          <header className={styles.zoneHeader}>
-            <div>
-              <ZoneLabel id="profile-v2-identity-title" title={PROFILE_V2_COPY.zones.identity.title} />
-              <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.identity.lead}</p>
-            </div>
-          </header>
-          <div className={styles.factGrid}>
-            <article className={styles.factCard}>
-              <p className={styles.factLabel}>{PROFILE_V2_COPY.zones.identity.cards.archetype}</p>
-              <p className={styles.factValue}>{model.archetype}</p>
-              {model.identitySummary ? (
-                <p className={styles.factHint}>{model.identitySummary}</p>
+        {hasWhy ? (
+          <section
+            id={zoneDomId("why")}
+            className={styles.zone}
+            aria-labelledby="profile-v2-why-title"
+            data-testid="profile-v2-why"
+          >
+            <header className={styles.zoneHeader}>
+              <div>
+                <ZoneLabel
+                  id="profile-v2-why-title"
+                  title={journey.whyTitle || PROFILE_V2_COPY.zones.why.title}
+                />
+              </div>
+            </header>
+
+            {whySelected.length ? (
+              <div className={styles.whyBlock}>
+                <p className={styles.whyBlockLabel}>{PROFILE_V2_COPY.zones.why.selectedLabel}</p>
+                <ul className={styles.whyList}>
+                  {whySelected.map((row) => (
+                    <li key={row.id} className={styles.whyItemSelected}>
+                      {row.label}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
+            {whyInfluenced.length ? (
+              <div className={styles.whyBlock}>
+                <p className={styles.whyBlockLabel}>{PROFILE_V2_COPY.zones.why.influencedLabel}</p>
+                <ul className={styles.whyList}>
+                  {whyInfluenced.map((row) => (
+                    <li key={row.id} className={styles.whyItemInfluenced}>
+                      {row.label}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
+            <article className={styles.decisionBlock} data-testid="profile-v2-evidence">
+              <p className={styles.characterPanelTitle}>
+                {journey.whyHonesty
+                  ? PROFILE_V2_COPY.zones.why.honestyFallbackTitle
+                  : live.evidenceTitle}
+              </p>
+              <p className={styles.factHint}>{journey.whyHonesty || live.evidenceBody}</p>
+              <p className={styles.factHint} style={{ marginTop: "0.5rem" }}>
+                {PROFILE_V2_COPY.zones.evidence.levelPrefix}: {live.observationAccuracyLabel}
+              </p>
+              {live.evidenceNextStep ? (
+                <>
+                  <p className={styles.characterPanelTitle} style={{ marginTop: "0.85rem" }}>
+                    {PROFILE_V2_COPY.zones.evidence.nextLabel}
+                  </p>
+                  <p className={styles.factHint}>{live.evidenceNextStep}</p>
+                </>
               ) : null}
             </article>
-            {astroFacts ? (
-              <article className={styles.factCard}>
-                <p className={styles.factLabel}>{PROFILE_V2_COPY.zones.identity.cards.astro}</p>
-                <p className={styles.factValue}>{astroFacts}</p>
-                <p className={styles.factHint}>{PROFILE_V2_COPY.zones.identity.astroHint}</p>
+          </section>
+        ) : null}
+
+        {node ? (
+          <section
+            id={zoneDomId("insight")}
+            className={styles.zone}
+            aria-labelledby="profile-v2-insight-title"
+            data-testid="profile-v2-insight"
+          >
+            <header className={styles.zoneHeader}>
+              <div>
+                <ZoneLabel id="profile-v2-insight-title" title={PROFILE_V2_COPY.zones.insight.title} />
+              </div>
+            </header>
+            <article className={styles.insightCard}>
+              <p className={styles.insightKind}>{node.kind}</p>
+              <h2 className={styles.insightTitle}>{node.title}</h2>
+              <p className={styles.insightBody}>{node.insight}</p>
+              {node.groundedOn.length ? (
+                <div className={styles.insightMeta}>
+                  <p className={styles.whyBlockLabel}>{PROFILE_V2_COPY.zones.insight.groundedLabel}</p>
+                  <ul className={styles.whyList}>
+                    {node.groundedOn.map((g) => (
+                      <li key={g.id || g.label} className={styles.whyItemInfluenced}>
+                        {g.label}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+              {node.help ? (
+                <div className={styles.insightMeta}>
+                  <p className={styles.whyBlockLabel}>{PROFILE_V2_COPY.zones.insight.helpLabel}</p>
+                  <p className={styles.factHint}>{node.help}</p>
+                </div>
+              ) : null}
+              {node.livingEvidence.length ? (
+                <div className={styles.insightMeta} data-testid="profile-v2-living-adjacent">
+                  <p className={styles.whyBlockLabel}>{PROFILE_V2_COPY.zones.insight.livingLabel}</p>
+                  <p className={styles.livingNote}>{PROFILE_V2_COPY.zones.insight.livingNote}</p>
+                  <ul className={styles.livingQuotes}>
+                    {node.livingEvidence.map((q) => (
+                      <li key={q} className={styles.livingQuote}>
+                        «{q}»
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </article>
+          </section>
+        ) : null}
+
+        {effortVector ? (
+          <section
+            id={zoneDomId("effort")}
+            className={styles.zone}
+            aria-labelledby="profile-v2-effort-title"
+            data-testid="profile-v2-effort"
+          >
+            <header className={styles.zoneHeader}>
+              <div>
+                <ZoneLabel id="profile-v2-effort-title" title={PROFILE_V2_COPY.zones.effort.title} />
+                <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.effort.lead}</p>
+              </div>
+            </header>
+            <p className={styles.effortVector}>{effortVector}</p>
+          </section>
+        ) : null}
+
+        {bridgeLine ? (
+          <section
+            id={zoneDomId("bridge")}
+            className={styles.zone}
+            aria-labelledby="profile-v2-bridge-title"
+            data-testid="profile-v2-bridge"
+          >
+            <header className={styles.zoneHeader}>
+              <div>
+                <ZoneLabel id="profile-v2-bridge-title" title={PROFILE_V2_COPY.zones.bridge.title} />
+                <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.bridge.lead}</p>
+              </div>
+            </header>
+            <p className={styles.bridgeLine}>{bridgeLine}</p>
+            <Link href="/today" className={styles.bridgeCta}>
+              {PROFILE_V2_COPY.zones.bridge.cta}
+              <span aria-hidden> →</span>
+            </Link>
+          </section>
+        ) : null}
+
+        {model.lifeMission || lifeSpheres?.length ? (
+          <section className={styles.zone} data-testid="profile-v2-direction-fold">
+            {model.lifeMission ? (
+              <article className={styles.missionCard}>
+                <p className={styles.factLabel}>{PROFILE_V2_COPY.zones.direction.missionLabel}</p>
+                <p className={styles.missionText}>{model.lifeMission}</p>
               </article>
             ) : null}
-          </div>
-        </section>
+            {lifeSpheres?.length ? (
+              <div className={styles.sphereGrid}>
+                {lifeSpheres.map((sphere) => (
+                  <details key={sphere.id} className={styles.sphereCard}>
+                    <summary className={styles.sphereSummary}>
+                      <div className={styles.sphereSummaryMain}>
+                        <p className={styles.sphereTitle}>{sphere.title}</p>
+                        <p className={styles.sphereNeedLine}>{profileV2SphereCardLine(sphere)}</p>
+                      </div>
+                      <span className={styles.sphereChevron} aria-hidden>
+                        ›
+                      </span>
+                    </summary>
+                    <div className={styles.sphereDetails}>
+                      <p className={styles.sphereDetailLabel}>Как проявляется</p>
+                      <p className={styles.sphereBody}>{sphere.how}</p>
+                      <p className={styles.sphereDetailLabel}>Нужно</p>
+                      <p className={styles.sphereMeta}>{sphere.need}</p>
+                      <p className={styles.sphereDetailLabel}>Риск</p>
+                      <p className={styles.sphereMeta}>{sphere.risk}</p>
+                      <p className={styles.sphereDetailLabel}>Включает</p>
+                      <p className={styles.sphereMeta}>{sphere.turnsOn}</p>
+                    </div>
+                  </details>
+                ))}
+              </div>
+            ) : null}
+          </section>
+        ) : null}
 
-        <section id={zoneDomId("character")} className={styles.zone} aria-labelledby="profile-v2-character-title">
-          <header className={styles.zoneHeader}>
-            <div>
-              <ZoneLabel id="profile-v2-character-title" title={PROFILE_V2_COPY.zones.character.title} />
-              <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.character.lead}</p>
+        {showCharacterMore ? (
+          <details className={styles.characterMore} data-testid="profile-v2-character-more">
+            <summary className={styles.characterMoreSummary}>
+              {PROFILE_V2_COPY.zones.characterMore.title}
+            </summary>
+            <div className={styles.characterGrid}>
+              {model.strengthens.length ? (
+                <article className={styles.characterPanel}>
+                  <p className={styles.characterPanelTitle}>
+                    {PROFILE_V2_COPY.zones.characterMore.strengthens}
+                  </p>
+                  <ul className={styles.bulletList}>
+                    {model.strengthens.map((item) => (
+                      <li key={item} className={styles.bulletItem}>
+                        <span className={styles.bulletMark} aria-hidden>
+                          ✓
+                        </span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              ) : null}
+              {model.drains.length ? (
+                <article className={styles.characterPanel}>
+                  <p className={styles.characterPanelTitle}>
+                    {PROFILE_V2_COPY.zones.characterMore.drains}
+                  </p>
+                  <ul className={styles.bulletList}>
+                    {model.drains.map((item) => (
+                      <li key={item} className={styles.bulletItem}>
+                        <span className={`${styles.bulletMark} ${styles.bulletMarkMuted}`.trim()} aria-hidden>
+                          •
+                        </span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              ) : null}
             </div>
-          </header>
-          <div className={styles.characterGrid}>
-            {model.strengthens.length ? (
-              <article className={styles.characterPanel}>
-                <p className={styles.characterPanelTitle}>{PROFILE_V2_COPY.zones.character.strengthens}</p>
+            {helps.length ? (
+              <article className={styles.characterPanel} style={{ marginTop: "1rem" }}>
+                <p className={styles.characterPanelTitle}>
+                  {PROFILE_V2_COPY.zones.characterMore.helps}
+                </p>
                 <ul className={styles.bulletList}>
-                  {model.strengthens.map((item) => (
+                  {helps.map((item) => (
                     <li key={item} className={styles.bulletItem}>
                       <span className={styles.bulletMark} aria-hidden>
-                        ✓
+                        ◆
                       </span>
                       {item}
                     </li>
@@ -176,14 +397,24 @@ export function ProfileV2SystemScreen({
                 </ul>
               </article>
             ) : null}
-            {model.drains.length ? (
-              <article className={styles.characterPanel}>
-                <p className={styles.characterPanelTitle}>{PROFILE_V2_COPY.zones.character.drains}</p>
+            {model.decisionStyle ? (
+              <article className={styles.decisionBlock}>
+                <p className={styles.characterPanelTitle}>
+                  {PROFILE_V2_COPY.zones.characterMore.decisions}
+                </p>
+                <p className={styles.factHint}>{model.decisionStyle}</p>
+              </article>
+            ) : null}
+            {model.perceivedAs.length && !node ? (
+              <article className={styles.characterPanel} style={{ marginTop: "1rem" }}>
+                <p className={styles.characterPanelTitle}>
+                  {PROFILE_V2_COPY.zones.characterMore.patterns}
+                </p>
                 <ul className={styles.bulletList}>
-                  {model.drains.map((item) => (
+                  {model.perceivedAs.map((item) => (
                     <li key={item} className={styles.bulletItem}>
                       <span className={`${styles.bulletMark} ${styles.bulletMarkMuted}`.trim()} aria-hidden>
-                        •
+                        ◦
                       </span>
                       {item}
                     </li>
@@ -191,117 +422,13 @@ export function ProfileV2SystemScreen({
                 </ul>
               </article>
             ) : null}
-          </div>
-          {helps.length ? (
-            <article className={styles.characterPanel} style={{ marginTop: "1rem" }}>
-              <p className={styles.characterPanelTitle}>{PROFILE_V2_COPY.zones.character.helps}</p>
-              <ul className={styles.bulletList}>
-                {helps.map((item) => (
-                  <li key={item} className={styles.bulletItem}>
-                    <span className={styles.bulletMark} aria-hidden>
-                      ◆
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </article>
-          ) : null}
-          {model.decisionStyle ? (
-            <article className={styles.decisionBlock}>
-              <p className={styles.characterPanelTitle}>{PROFILE_V2_COPY.zones.character.decisions}</p>
-              <p className={styles.factHint}>{model.decisionStyle}</p>
-            </article>
-          ) : null}
-          {model.perceivedAs.length ? (
-            <article className={styles.characterPanel} style={{ marginTop: "1rem" }}>
-              <p className={styles.characterPanelTitle}>{PROFILE_V2_COPY.zones.character.patterns}</p>
-              <ul className={styles.bulletList}>
-                {model.perceivedAs.map((item) => (
-                  <li key={item} className={styles.bulletItem}>
-                    <span className={`${styles.bulletMark} ${styles.bulletMarkMuted}`.trim()} aria-hidden>
-                      ◦
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </article>
-          ) : null}
-          {model.frameworkLead ? (
-            <article className={styles.decisionBlock} style={{ marginTop: "1rem" }}>
-              <p className={styles.characterPanelTitle}>{PROFILE_V2_COPY.zones.character.forming}</p>
-              <p className={styles.factHint}>{model.frameworkLead}</p>
-            </article>
-          ) : null}
-        </section>
+          </details>
+        ) : null}
 
-        <section id={zoneDomId("direction")} className={styles.zone} aria-labelledby="profile-v2-direction-title">
-          <header className={styles.zoneHeader}>
-            <div>
-              <ZoneLabel id="profile-v2-direction-title" title={PROFILE_V2_COPY.zones.direction.title} />
-              <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.direction.lead}</p>
-            </div>
-          </header>
-          {model.lifeMission ? (
-            <article className={styles.missionCard}>
-              <p className={styles.factLabel}>{PROFILE_V2_COPY.zones.direction.missionLabel}</p>
-              <p className={styles.missionText}>{model.lifeMission}</p>
-            </article>
-          ) : null}
-          {lifeSpheres?.length ? (
-            <div className={styles.sphereGrid}>
-              {lifeSpheres.map((sphere) => (
-                <details key={sphere.id} className={styles.sphereCard}>
-                  <summary className={styles.sphereSummary}>
-                    <div className={styles.sphereSummaryMain}>
-                      <p className={styles.sphereTitle}>{sphere.title}</p>
-                      <p className={styles.sphereNeedLine}>{profileV2SphereCardLine(sphere)}</p>
-                    </div>
-                    <span className={styles.sphereChevron} aria-hidden>
-                      ›
-                    </span>
-                  </summary>
-                  <div className={styles.sphereDetails}>
-                    <p className={styles.sphereDetailLabel}>Как проявляется</p>
-                    <p className={styles.sphereBody}>{sphere.how}</p>
-                    <p className={styles.sphereDetailLabel}>Нужно</p>
-                    <p className={styles.sphereMeta}>{sphere.need}</p>
-                    <p className={styles.sphereDetailLabel}>Риск</p>
-                    <p className={styles.sphereMeta}>{sphere.risk}</p>
-                    <p className={styles.sphereDetailLabel}>Включает</p>
-                    <p className={styles.sphereMeta}>{sphere.turnsOn}</p>
-                  </div>
-                </details>
-              ))}
-            </div>
-          ) : null}
-        </section>
-
-        <section id={zoneDomId("evidence")} className={styles.zone} aria-labelledby="profile-v2-evidence-title">
-          <header className={styles.zoneHeader}>
-            <div>
-              <ZoneLabel id="profile-v2-evidence-title" title={PROFILE_V2_COPY.zones.evidence.title} />
-              <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.evidence.lead}</p>
-            </div>
-          </header>
-          <article className={styles.decisionBlock} data-testid="profile-v2-evidence">
-            <p className={styles.characterPanelTitle}>{live.evidenceTitle}</p>
-            <p className={styles.factHint}>{live.evidenceBody}</p>
-            {live.evidenceNextStep ? (
-              <>
-                <p className={styles.characterPanelTitle} style={{ marginTop: "0.85rem" }}>
-                  {PROFILE_V2_COPY.zones.evidence.nextLabel}
-                </p>
-                <p className={styles.factHint}>{live.evidenceNextStep}</p>
-              </>
-            ) : null}
-          </article>
-          <p className={styles.zoneLead} style={{ marginTop: "1rem" }}>
-            {PROFILE_V2_COPY.mapsCtaHint}{" "}
-            <Link href="/maps/mood">{PROFILE_V2_COPY.mapsCta}</Link>
-          </p>
-        </section>
+        <p className={styles.zoneLead}>
+          {PROFILE_V2_COPY.mapsCtaHint}{" "}
+          <Link href="/maps/mood">{PROFILE_V2_COPY.mapsCta}</Link>
+        </p>
 
         {deep ? (
           <section

@@ -28,17 +28,57 @@ const baseModel: ProfileQuickMapViewModel = {
   frameworkCards: [],
 };
 
+const journeyCore = {
+  astro: { sun_sign: "Virgo" },
+  baseline: { archetype_seed: "explorer" },
+  profile_contract_v1: {
+    contract_version: "v1",
+    recognition_line: "Ты первым видишь структуру.",
+    identity_core: "Длинное ядро.",
+    strengths: ["ясная система"],
+    growth_zones: ["спешка"],
+    relationship_style: "",
+    money_style: "",
+    decision_style: "Сначала тело.",
+    recurring_patterns: ["нужна ясность"],
+    helps: ["тишина перед решением"],
+  },
+  portrait_why_v0: {
+    title: "Почему портрет такой",
+    selected_by: [{ id: "lp", class: "selected_by", label: "Число пути 7 → Исследователь" }],
+    portrait_influenced_by: [{ id: "sun", class: "portrait_influenced_by", label: "Солнце в Деве" }],
+    honesty_line: "Повторы проявятся со временем.",
+  },
+  insight_nodes_v0: {
+    nodes: [
+      {
+        id: "n1",
+        kind: "tension",
+        title: "Ясность vs скорость",
+        insight: "Сила в точности.",
+        grounded_on: [{ label: "Рост: спешка" }],
+        help: "Один тихий проход перед решением.",
+        living_evidence: ["опять поторопился"],
+      },
+    ],
+  },
+  effort_vector_v0: {
+    effort_vector: "Один тихий проход перед решением.",
+  },
+  bridge_line_v0: {
+    bridge_line: "Особенность уже ясна. Today продолжает путь.",
+    leads_to: "today",
+  },
+} as never;
+
 const live = buildProfileV2LiveContext({
-  coreProfile: {
-    astro: { sun_sign: "Virgo" },
-    baseline: { archetype_seed: "explorer" },
-  } as never,
+  coreProfile: journeyCore,
   cum: { confidence: { overall: 0.68 } } as never,
   thriveAreas: baseModel.thriveAreas,
 });
 
 describe("ProfileV2SystemScreen", () => {
-  it("keeps a single page heading and PR-4 origin zones", () => {
+  it("renders journey Steps 1–5 and demotes equal character cards", () => {
     render(
       <ProfileV2SystemScreen
         model={baseModel}
@@ -55,35 +95,68 @@ describe("ProfileV2SystemScreen", () => {
     );
 
     expect(screen.getByTestId("profile-v2-system")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 1, name: "Твой личный профиль" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: /Исследователь/i })).toBeInTheDocument();
     expect(screen.queryAllByRole("heading", { level: 1 })).toHaveLength(1);
-    expect(document.getElementById("profile-v2-identity-title")).toHaveTextContent("Идентичность");
-    expect(document.getElementById("profile-v2-character-title")).toHaveTextContent("Характер");
-    expect(document.getElementById("profile-v2-direction-title")).toHaveTextContent("Направление");
-    expect(document.getElementById("profile-v2-evidence-title")).toHaveTextContent("Обоснование");
+    expect(screen.getByTestId("profile-v2-recognition-line")).toHaveTextContent("структуру");
+    expect(screen.getByTestId("profile-v2-why")).toHaveTextContent("Число пути 7");
+    expect(screen.getByTestId("profile-v2-insight")).toHaveTextContent("Ясность vs скорость");
+    expect(screen.getByTestId("profile-v2-living-adjacent")).toHaveTextContent(
+      "не доказательство",
+    );
+    expect(screen.getByTestId("profile-v2-effort")).toHaveTextContent("тихий проход");
+    expect(screen.getByTestId("profile-v2-bridge")).toHaveTextContent("Открыть Today");
+    expect(screen.getByRole("link", { name: /Открыть Today/i })).toHaveAttribute("href", "/today");
+    expect(screen.getByTestId("profile-v2-character-more")).toBeInTheDocument();
     expect(document.getElementById("profile-v2-sources-title")).toHaveTextContent("Источники");
-    expect(screen.getByTestId("profile-v2-sky-section")).toBeInTheDocument();
-    expect(screen.getByTestId("profile-v2-evidence")).toBeInTheDocument();
-    expect(screen.getByTestId("profile-v2-depth-jump")).toBeInTheDocument();
-    expect(screen.queryByText(/Мои дни/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Твой личный профиль/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Камень дня/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/Главный шаг/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/68%/)).not.toBeInTheDocument();
-    expect(screen.getByText("Исследователь")).toBeInTheDocument();
-    expect(screen.getByText("ясная система")).toBeInTheDocument();
-    expect(screen.getByText(/Карты и наблюдения/i)).toBeInTheDocument();
+  });
+
+  it("omits effort and bridge when projections are null", () => {
+    const sparseLive = buildProfileV2LiveContext({
+      coreProfile: {
+        astro: { sun_sign: "Virgo" },
+        baseline: { archetype_seed: "explorer" },
+        profile_contract_v1: {
+          contract_version: "v1",
+          recognition_line: "Ты первым видишь структуру.",
+          identity_core: "Ядро.",
+          strengths: [],
+          growth_zones: [],
+          relationship_style: "",
+          money_style: "",
+          decision_style: "",
+          recurring_patterns: [],
+        },
+      } as never,
+      cum: null,
+    });
+
+    render(
+      <ProfileV2SystemScreen
+        model={baseModel}
+        live={sparseLive}
+        onOpenBirthData={() => {}}
+      />,
+    );
+
+    expect(screen.getByTestId("profile-v2-recognition-line")).toBeInTheDocument();
+    expect(screen.queryByTestId("profile-v2-insight")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("profile-v2-effort")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("profile-v2-bridge")).not.toBeInTheDocument();
   });
 
   it("puts the depth ladder in the right rail component", () => {
     render(<ProfileV2DepthRail />);
     const rail = screen.getByTestId("profile-v2-depth-rail");
     expect(rail).toBeInTheDocument();
-    expect(rail).toHaveTextContent("Идентичность");
-    expect(rail).toHaveTextContent("Характер");
-    expect(rail).toHaveTextContent("Направление");
-    expect(rail).toHaveTextContent("Обоснование");
+    expect(rail).toHaveTextContent("Узнавание");
+    expect(rail).toHaveTextContent("Узел");
+    expect(rail).toHaveTextContent("Усилие");
+    expect(rail).toHaveTextContent("Дальше");
     expect(rail).toHaveTextContent("Источники");
-    expect(rail.querySelectorAll("a[href^='#profile-v2-']")).toHaveLength(5);
+    expect(rail.querySelectorAll("a[href^='#profile-v2-']")).toHaveLength(6);
   });
 });
 

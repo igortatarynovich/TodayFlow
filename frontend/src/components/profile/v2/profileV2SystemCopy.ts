@@ -1,52 +1,63 @@
-/** Profile v2 — PR-4 origin layers (Identity · Interpretation · Evidence · Sources).
- *  Platform gate: docs/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md (umbrella wins on conflict).
- *  Surface IA: docs/PR4_PROFILE_CANON.md — applies umbrella; does not invent a separate gate.
+/** Profile v2 — journey Steps 1–5 (above Freeze inventory).
+ *  Platform gate: docs/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md
+ *  Journey SoT: docs/PROFILE_PRODUCT_JOURNEY_FORMS_V1.md · PRODUCT_BLOCK_SIX_QUESTIONS.md
  */
 
 export const PROFILE_V2_DEPTH_NAV = [
-  { id: "identity", step: "01", title: "Идентичность", hint: "Что не меняется" },
-  { id: "character", step: "02", title: "Характер", hint: "Как устроен" },
-  { id: "direction", step: "03", title: "Направление", hint: "Куда расти" },
-  { id: "evidence", step: "04", title: "Обоснование", hint: "Почему так" },
-  { id: "sources", step: "05", title: "Источники", hint: "Натал и числа" },
+  { id: "recognition", step: "01", title: "Узнавание", hint: "Кто ты" },
+  { id: "why", step: "02", title: "Почему так", hint: "Откуда портрет" },
+  { id: "insight", step: "03", title: "Узел", hint: "Главный сдвиг" },
+  { id: "effort", step: "04", title: "Усилие", hint: "Один вектор" },
+  { id: "bridge", step: "05", title: "Дальше", hint: "Зачем Today" },
+  { id: "sources", step: "06", title: "Источники", hint: "Натал и числа" },
 ] as const;
 
 export type ProfileV2ZoneId = (typeof PROFILE_V2_DEPTH_NAV)[number]["id"];
 
 export const PROFILE_V2_COPY = {
   heroEyebrow: "Профиль",
-  heroTitle: "Твой личный профиль",
   liveBadge: "Личный профиль",
   mapsCta: "Карты и наблюдения",
   mapsCtaHint: "Как жизнь меняется со временем — отдельно от профиля.",
   zones: {
-    identity: {
-      title: "Идентичность",
-      lead: "Ядро личности: факты рождения и устойчивые сигнатуры — без дневного состояния.",
-      cards: {
-        archetype: "Архетип",
-        astro: "Базовые сигнатуры",
-      },
-      astroHint: "Солнце, Луна, ASC, стихия, число пути.",
+    recognition: {
+      title: "Узнавание",
+      lead: "Одно имя и одна фраза, в которой себя узнаёшь.",
     },
-    character: {
-      title: "Характер",
-      lead: "Сильные стороны, что забирает силу, и как принимаешь решения.",
+    why: {
+      title: "Почему портрет такой",
+      selectedLabel: "Что выбрало архетип",
+      influencedLabel: "Что влияет на портрет",
+      honestyFallbackTitle: "На чём держится",
+    },
+    insight: {
+      title: "Главный узел",
+      groundedLabel: "На чём стоит",
+      helpLabel: "Что помогает",
+      livingLabel: "Рядом из жизни",
+      livingNote: "Контекст из отметок — не доказательство этого узла.",
+    },
+    effort: {
+      title: "Вектор усилия",
+      lead: "Одно действие из выбранного узла — не план дня.",
+    },
+    bridge: {
+      title: "Зачем открыть Today",
+      cta: "Открыть Today",
+      lead: "Продолжение пути, не второй совет «что делать».",
+    },
+    characterMore: {
+      title: "Ещё о характере",
       strengthens: "Сильные стороны",
       drains: "Что забирает силу",
       helps: "Внутренние опоры",
       decisions: "Как принимаешь решения",
       patterns: "Повторяющиеся паттерны",
-      forming: "Как это складывается",
     },
     direction: {
-      title: "Направление",
-      lead: "Главная задача и сферы — куда расти и что поддерживать.",
       missionLabel: "Главная задача",
     },
     evidence: {
-      title: "Обоснование",
-      lead: "Почему портрет звучит так — и что ещё может стать яснее.",
       nextLabel: "Что откроет больше ясности",
       levelPrefix: "Насколько уже видны повторы",
     },

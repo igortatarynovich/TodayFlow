@@ -333,7 +333,7 @@ export type CoreProfile = {
   } | null;
   /**
    * Step-3 story nodes (read-path only). Projects existing Snapshot strings —
-   * not a second recurring_patterns schema. UI not wired yet.
+   * not a second recurring_patterns schema.
    */
   insight_nodes_v0?: {
     projection_version?: string;

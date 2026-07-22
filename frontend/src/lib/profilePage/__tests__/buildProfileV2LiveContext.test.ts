@@ -94,12 +94,15 @@ describe("buildProfileV2LiveContext", () => {
     expect(live.sourceDepth).toBe("onboarding_answers");
     expect(live.evidenceBody).toContain("ответы при старте");
     expect(live.evidenceTitle).toBeTruthy();
-    expect(live.helps).toEqual(["ритм без спешки", "глубина"]);
+    expect(live.helps).toEqual(["ритм без спешки"]);
+    expect(live.helps.join(" ")).not.toContain("глубина");
     expect(live.helps.join(" ")).not.toContain("разговор");
     expect(live.elementLabel).toContain("Стихия");
     expect(live).not.toHaveProperty("hasStoneCard");
     expect(live).not.toHaveProperty("dailyAnchors");
     expect(live).not.toHaveProperty("updatedLabel");
+    expect(live.journey).toBeDefined();
+    expect(live.journey.hasJourneySurface).toBe(false);
   });
 
   it("keeps evidence honest when data is missing", () => {

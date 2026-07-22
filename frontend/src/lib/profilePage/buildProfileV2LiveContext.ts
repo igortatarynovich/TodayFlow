@@ -1,6 +1,10 @@
 import { formatDelta30dLabel } from "@/lib/profileCumInsights";
 import type { CompactUserModel, CoreProfile } from "@/lib/types";
 import { elementRuName } from "@/lib/zodiacKnowledge";
+import {
+  buildProfileJourneyProjection,
+  type ProfileJourneyProjection,
+} from "@/lib/profilePage/buildProfileJourneyProjection";
 import { filterProfileCopyList } from "@/lib/profilePage/profileCopySafety";
 import { getLocale } from "@/lib/i18n";
 
@@ -27,6 +31,8 @@ export type ProfileV2LiveContext = {
   /** Stable helps only (contract + thrive) — never day recommendations. */
   helps: string[];
   elementLabel: string | null;
+  /** Journey Steps 1–5 — read-path projections mapped for UI. */
+  journey: ProfileJourneyProjection;
 };
 
 const ACCURACY_LABELS: Record<ObservationAccuracyLevel, string> = {
@@ -123,8 +129,9 @@ export function resolveObservationAccuracy(input: {
   return { level, label: ACCURACY_LABELS[level], percent: null };
 }
 
-function buildStableHelps(thriveAreas: string[], contractHelps: string[] = []): string[] {
-  return filterProfileCopyList([...contractHelps, ...thriveAreas], 4, getLocale());
+/** character_helps passport: contract helps only — never taxonomy thriveAreas mix-in. */
+function buildStableHelps(_thriveAreas: string[], contractHelps: string[] = []): string[] {
+  return filterProfileCopyList([...(contractHelps ?? [])], 4, getLocale());
 }
 
 function buildElementLabel(coreProfile: CoreProfile | null): string | null {
@@ -171,5 +178,6 @@ export function buildProfileV2LiveContext(input: {
     evidenceNextStep,
     helps: buildStableHelps(input.thriveAreas ?? [], contractHelps),
     elementLabel: buildElementLabel(input.coreProfile),
+    journey: buildProfileJourneyProjection(input.coreProfile),
   };
 }

@@ -24,6 +24,8 @@ export type CaptureVisibleBlocks = {
   life_spheres: string[];
   evidence: string[];
   sources: string[];
+  /** Journey Steps 1–5 as projected to Profile V2 UI. */
+  journey: string[];
 };
 
 export type CaptureFrontendProjection = {
@@ -54,9 +56,12 @@ function collectVisibleBlocks(
     s.turnsOff,
     s.helps,
   ]);
+  const j = live.journey;
   return {
     identity: [
       quick.archetype,
+      j.recognitionName,
+      j.recognitionLine,
       quick.identitySummary,
       ...(quick.frameworkAnchors?.map((a) => a.label) ?? []),
     ].filter((x): x is string => Boolean(x?.trim())),
@@ -86,6 +91,18 @@ function collectVisibleBlocks(
       core.astro?.time_unknown === false ? "birth_time:known" : "birth_time:unknown_or_missing",
       core.astro?.location_name ? `location:${core.astro.location_name}` : "location:missing",
     ].filter((x): x is string => Boolean(x?.trim())),
+    journey: [
+      j.recognitionName,
+      j.recognitionLine,
+      ...j.whySelectedBy.map((r) => r.label),
+      ...j.whyInfluencedBy.map((r) => r.label),
+      j.whyHonesty,
+      j.node?.title,
+      j.node?.insight,
+      j.node?.help,
+      j.effortVector,
+      j.bridgeLine,
+    ].filter((x): x is string => Boolean(x && String(x).trim())),
   };
 }
 

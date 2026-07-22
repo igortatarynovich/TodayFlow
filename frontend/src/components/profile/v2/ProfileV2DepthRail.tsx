@@ -13,7 +13,7 @@ function zoneDomId(zone: ProfileV2ZoneId): string {
 
 /** Right-rail section jump for Profile v2 — keeps the main column for content. */
 export function ProfileV2DepthRail() {
-  const [activeZone, setActiveZone] = useState<ProfileV2ZoneId>("identity");
+  const [activeZone, setActiveZone] = useState<ProfileV2ZoneId>("recognition");
 
   useEffect(() => {
     const nodes = PROFILE_V2_DEPTH_NAV.map((item) => document.getElementById(zoneDomId(item.id))).filter(

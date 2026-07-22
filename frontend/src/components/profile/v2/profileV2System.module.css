@@ -847,9 +847,236 @@
   }
 }
 
+/* Journey Steps 1–5 (above Freeze card wall) */
+.journeyHero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: center;
+  padding: 2rem;
+  border-radius: 2rem;
+  border: 1px solid #e8e2d6;
+  background: linear-gradient(165deg, #fdfbf7 0%, #f3ebe0 55%, #efe6d8 100%);
+  box-shadow: 0 24px 35px rgba(42, 37, 32, 0.08);
+}
+
+.journeyHeroVisual {
+  display: flex;
+  justify-content: center;
+}
+
+.journeySymbolFrame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 8.5rem;
+  height: 8.5rem;
+  border-radius: 50%;
+  border: 1px solid #d8c9b0;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.journeyHeroCopy {
+  min-width: 0;
+}
+
+.journeyHeroTitle {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--tf-ink);
+  text-transform: uppercase;
+}
+
+.journeyRecognitionLine {
+  margin: 0.85rem 0 0;
+  font-family: var(--tf-font-display);
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  line-height: 1.35;
+  color: #5a5450;
+}
+
+.whyBlock {
+  margin-bottom: 1.25rem;
+}
+
+.whyBlockLabel {
+  margin: 0 0 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8b6a3e;
+}
+
+.whyList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.whyItemSelected,
+.whyItemInfluenced {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  border-radius: 0.875rem;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: var(--tf-ink);
+}
+
+.whyItemSelected {
+  border: 1px solid #c9a96e;
+  background: #fff9ef;
+  font-weight: 600;
+}
+
+.whyItemInfluenced {
+  border: 1px solid #e8e2d6;
+  background: #fff;
+}
+
+.insightCard {
+  padding: 1.5rem;
+  border-radius: 1.25rem;
+  border: 1px solid #e8e2d6;
+  background: #fff;
+  box-shadow: 0 12px 24px rgba(42, 37, 32, 0.06);
+}
+
+.insightKind {
+  margin: 0 0 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8b6a3e;
+}
+
+.insightTitle {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  line-height: 1.2;
+  color: var(--tf-ink);
+}
+
+.insightBody {
+  margin: 0.75rem 0 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #5a5450;
+}
+
+.insightMeta {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid #efe8dc;
+}
+
+.livingNote {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: #9a9490;
+}
+
+.livingQuotes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.livingQuote {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  font-style: italic;
+  color: #5a5450;
+}
+
+.effortVector {
+  margin: 0;
+  padding: 1.25rem 1.5rem;
+  border-radius: 1.25rem;
+  border: 1px solid #2a2520;
+  background: #2a2520;
+  color: #fdfbf7;
+  font-family: var(--tf-font-display);
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  line-height: 1.35;
+}
+
+.bridgeLine {
+  margin: 0 0 1.25rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #5a5450;
+}
+
+.bridgeCta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid #2a2520;
+  background: #fff;
+  color: #2a2520;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.bridgeCta:hover {
+  background: #2a2520;
+  color: #fdfbf7;
+}
+
+.characterMore {
+  padding: 1rem 1.25rem;
+  border-radius: 1.25rem;
+  border: 1px solid #e8e2d6;
+  background: #faf8f4;
+}
+
+.characterMoreSummary {
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #5a5450;
+  list-style: none;
+}
+
+.characterMoreSummary::-webkit-details-marker {
+  display: none;
+}
+
+.characterMore[open] .characterMoreSummary {
+  margin-bottom: 1rem;
+}
+
 @media (min-width: 56.25rem) {
   .heroGrid {
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  }
+
+  .journeyHero {
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: 2rem;
+    padding: 2.3125rem;
+  }
+
+  .journeyHeroVisual {
+    justify-content: flex-start;
   }
 }
 
