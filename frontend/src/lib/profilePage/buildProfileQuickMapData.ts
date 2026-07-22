@@ -266,13 +266,11 @@ function mergeProfileContractIntoQuickMap(
   const perceivedAs = filterProfileCopyList([...(contract?.recurring_patterns ?? [])], 5, locale);
   const frameworkLeadRaw = contract?.living_changes?.trim() || (allowBaseMix ? base.frameworkLead : null);
   const frameworkLead = isUsableProfileCopy(frameworkLeadRaw, locale) ? frameworkLeadRaw : null;
-  const lifeMissionRaw = contract?.life_mission?.trim() || (allowBaseMix ? base.lifeMission : null);
+  // direction_mission passport: contract life_mission only (never taxonomy lifeTheme).
+  const lifeMissionRaw = (contract?.life_mission || "").trim();
   const lifeMission = isUsableProfileCopy(lifeMissionRaw, locale) ? lifeMissionRaw : null;
-  const thriveAreas = filterProfileCopyList(
-    [...(contract?.helps ?? []), ...(allowBaseMix ? base.thriveAreas : [])],
-    4,
-    locale,
-  );
+  // character_helps passport: contract helps only (never taxonomy thriveAreas).
+  const thriveAreas = filterProfileCopyList([...(contract?.helps ?? [])], 4, locale);
 
   return {
     ...base,
@@ -282,8 +280,8 @@ function mergeProfileContractIntoQuickMap(
     decisionStyle: decisionStyle ?? (allowBaseMix ? base.decisionStyle : null),
     perceivedAs,
     frameworkLead: frameworkLead ?? (allowBaseMix ? base.frameworkLead : null),
-    lifeMission: lifeMission ?? (allowBaseMix ? base.lifeMission : null),
-    thriveAreas: thriveAreas.length ? thriveAreas : allowBaseMix ? base.thriveAreas : [],
+    lifeMission,
+    thriveAreas,
   };
 }
 

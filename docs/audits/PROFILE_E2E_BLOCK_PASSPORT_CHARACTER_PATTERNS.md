@@ -74,8 +74,8 @@ Capture: `block_eligibility.patterns.may_generate` vs `ran`.
 | Check | Status |
 |-------|--------|
 | Passport approved | **PASS** |
-| Eligibility before LLM | shipped — re-prove in captures |
-| Capture A omit / B show / C sparse | *in progress* |
-| FE contract-only patterns | *in progress* |
-| Quality must not require patterns when omitted | *in progress* |
-| Overall | **FAIL** until proofs |
+| Eligibility before LLM | **PASS** A/C skip · B run |
+| Capture A omit / B show / C omit | **PASS** — [PROFILE_CAPTURE_CHARACTER_PATTERNS_FREEZE_ABC.md](./PROFILE_CAPTURE_CHARACTER_PATTERNS_FREEZE_ABC.md) |
+| FE contract-only patterns | **PASS** (`perceivedAs` = contract only) |
+| Quality must not invent when omitted | **PASS** A/C `perceivedAs=[]` |
+| Overall | **PASS** |

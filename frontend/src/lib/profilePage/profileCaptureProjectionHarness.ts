@@ -69,15 +69,13 @@ function collectVisibleBlocks(
       ...quick.strengthens,
       ...quick.drains,
       quick.decisionStyle,
+      ...(quick.perceivedAs || []),
+      ...(live.helps || []),
       ...(contract?.relationship_style ? [String(contract.relationship_style)] : []),
       ...(contract?.money_style ? [String(contract.money_style)] : []),
     ].filter((x): x is string => Boolean(x?.trim())),
     direction: [
       quick.lifeMission,
-      ...quick.thriveAreas,
-      ...(Array.isArray(contract?.recurring_patterns)
-        ? contract.recurring_patterns.map(String)
-        : []),
       ...(contract?.living_changes ? [String(contract.living_changes)] : []),
       ...lifeSphereLines,
     ].filter((x): x is string => Boolean(x?.trim())),
@@ -151,6 +149,64 @@ function findDivergences(
       to: "Character.perceivedAs",
       class: "PROJECTION",
       note: "taxonomy/base patterns shown while contract has no confirmed recurring_patterns",
+    });
+  }
+  const helps = Array.isArray(contract?.helps) ? contract.helps : [];
+  for (const h of helps) {
+    const text = String(h || "").trim();
+    if (!text) continue;
+    const shown = (quick.thriveAreas || []).some(
+      (item) => item.includes(text.slice(0, Math.min(40, text.length))) || text.includes(item.slice(0, 40)),
+    );
+    if (!shown) {
+      out.push({
+        claim: text.slice(0, 120),
+        from: "API.helps",
+        to: "Character.helps/thriveAreas",
+        class: "UI_GATE",
+        note: "help present in contract but not visible in Character helps list",
+      });
+    }
+  }
+  if (helps.length === 0 && (quick.thriveAreas || []).length > 0) {
+    out.push({
+      claim: (quick.thriveAreas || [])[0]?.slice(0, 120) || "thriveAreas",
+      from: "API.helps=[]",
+      to: "Character.helps",
+      class: "PROJECTION",
+      note: "taxonomy thriveAreas shown while contract has no helps",
+    });
+  }
+  const mission = String(contract?.life_mission || "").trim();
+  const uiMission = String(quick.lifeMission || "").trim();
+  if (mission && uiMission) {
+    const overlap =
+      mission.includes(uiMission.slice(0, Math.min(40, uiMission.length))) ||
+      uiMission.includes(mission.slice(0, Math.min(40, mission.length)));
+    if (!overlap) {
+      out.push({
+        claim: mission.slice(0, 120),
+        from: "API.life_mission",
+        to: "Direction.lifeMission",
+        class: "PROJECTION",
+        note: "life_mission rewritten or replaced by taxonomy",
+      });
+    }
+  } else if (mission && !uiMission) {
+    out.push({
+      claim: mission.slice(0, 120),
+      from: "API.life_mission",
+      to: "Direction.lifeMission",
+      class: "UI_GATE",
+      note: "mission present in contract but omitted from Direction",
+    });
+  } else if (!mission && uiMission) {
+    out.push({
+      claim: uiMission.slice(0, 120),
+      from: "API.life_mission=empty",
+      to: "Direction.lifeMission",
+      class: "PROJECTION",
+      note: "taxonomy mission shown while contract has no life_mission",
     });
   }
   const spheres = contract?.life_spheres;

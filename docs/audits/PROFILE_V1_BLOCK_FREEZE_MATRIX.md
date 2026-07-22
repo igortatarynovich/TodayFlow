@@ -53,11 +53,11 @@ Nav-only (`ProfileV2MobileDepthJump` / depth rail) — не content-блоки F
 | `identity_astro` | MISSING | MISSING | PASS | n/a | 1.1 | **FAIL** | Calc |
 | `character_strengthens` | via `identity` | **PASS** Case A | **PASS** contract-only | via `identity` | — | **PASS** | Covered by `identity` unit |
 | `character_drains` | via `identity` | **PASS** Case A | **PASS** contract-only | via `identity` | — | **PASS** | same |
-| `character_helps` | MISSING | partial B | FAIL coupling | patterns gate | 1 · 2 · 3 | **FAIL** | Packaged in patterns step |
+| `character_helps` | **APPROVED** | **PASS** A/B/C (shared packs) | **PASS** contract-only | **PASS** = patterns gate | — | **PASS** | [PROFILE_CAPTURE_CHARACTER_HELPS_FREEZE_ABC.md](./PROFILE_CAPTURE_CHARACTER_HELPS_FREEZE_ABC.md) |
 | `character_decisions` | MISSING | partial A/B | partial | styles always-on | 1 · 3 | **FAIL** | styles passport TBD |
-| `character_patterns` | template only | PASS gate + B | PASS B / omit A | **PASS** gate shipped | 1.1 approve · 3 · 5 | **FAIL** | Closest to PASS after identity |
+| `character_patterns` | **APPROVED** | **PASS** A/B/C Freeze packs | **PASS** | **PASS** living gate | — | **PASS** | [PROFILE_CAPTURE_CHARACTER_PATTERNS_FREEZE_ABC.md](./PROFILE_CAPTURE_CHARACTER_PATTERNS_FREEZE_ABC.md) |
 | `character_forming` | MISSING | MISSING | FAIL purpose | — | 1 · 5 · `BLOCK_PURPOSE` | **FAIL** | Label «как складывается» ← `living_changes` |
-| `direction_mission` | MISSING | partial B | partial | patterns gate | 1 · 2 · 3 | **FAIL** | Accidental patterns packaging |
+| `direction_mission` | **APPROVED** | **PASS** A/B/C (shared packs) | **PASS** contract-only | **PASS** = patterns gate | — | **PASS** | [PROFILE_CAPTURE_DIRECTION_MISSION_FREEZE_ABC.md](./PROFILE_CAPTURE_DIRECTION_MISSION_FREEZE_ABC.md) |
 | `life_spheres` | **APPROVED** | **PASS** A/B/C Freeze packs | **PASS** | **PASS** independent of patterns | — | **PASS** | [PROFILE_CAPTURE_LIFE_SPHERES_FREEZE_ABC.md](./PROFILE_CAPTURE_LIFE_SPHERES_FREEZE_ABC.md) |
 | `evidence_zone` | MISSING | FAIL | FAIL | n/a | 1 · 4 · 5 | **FAIL** | Dup aside + Maps CTA |
 | `sources_sky` | MISSING | MISSING | partial | n/a | 1.1 · 5 | **FAIL** | Calc / natal |
@@ -73,9 +73,12 @@ Legend: PASS only with proven 4 proofs. Remaining FAIL rows still block Profile 
 |------|-------|-------|
 | 1 | `identity` | hero_quote · strengthens · drains |
 | 2 | `life_spheres` | love · money · decisions synthesis |
-| *next* | `character_patterns` | birth vs longitudinal boundary (recommended) |
+| 3 | `character_patterns` | birth vs longitudinal boundary |
+| 4 | `character_helps` | same gate · contract-only UI |
+| 5 | `direction_mission` | same gate · contract-only Direction |
+| *paused* | `character_decisions` | **PAUSED** — journey SoT first: [PROFILE_PRODUCT_SURFACE_CANON.md](../PROFILE_PRODUCT_SURFACE_CANON.md) |
 
-Do not start next block until current Overall = **PASS** or omit from production.
+Do not start next Freeze block until Product Surface Canon §5 DoD (Steps 1–2 human metrics). Freeze PASS ≠ «меня поняли / понятно почему».
 
 ---
 
@@ -85,7 +88,10 @@ Do not start next block until current Overall = **PASS** or omit from production
 |------|-------|--------|--------|
 | 2026-07-21 | `identity` | Passport · gate · profile voice · FE contract-only · Case A 4 proofs | **PASS** — [PROFILE_CAPTURE_IDENTITY_FREEZE_A.md](./PROFILE_CAPTURE_IDENTITY_FREEZE_A.md) |
 | 2026-07-21 | `life_spheres` | Canonical passport · A/B/C captures · FE visible spheres · day/kitchen bans | **PASS** — [PROFILE_CAPTURE_LIFE_SPHERES_FREEZE_ABC.md](./PROFILE_CAPTURE_LIFE_SPHERES_FREEZE_ABC.md) |
-| *next* | `character_patterns` | Not started | — |
+| 2026-07-21 | `character_patterns` | Living gate · prompt · FE contract-only · A/B/C proofs | **PASS** — [PROFILE_CAPTURE_CHARACTER_PATTERNS_FREEZE_ABC.md](./PROFILE_CAPTURE_CHARACTER_PATTERNS_FREEZE_ABC.md) |
+| 2026-07-21 | `character_helps` | Shared patterns gate · FE contract-only · A/B/C proofs | **PASS** — [PROFILE_CAPTURE_CHARACTER_HELPS_FREEZE_ABC.md](./PROFILE_CAPTURE_CHARACTER_HELPS_FREEZE_ABC.md) |
+| 2026-07-21 | `direction_mission` | Shared patterns gate · FE contract-only · A/B/C proofs | **PASS** — [PROFILE_CAPTURE_DIRECTION_MISSION_FREEZE_ABC.md](./PROFILE_CAPTURE_DIRECTION_MISSION_FREEZE_ABC.md) |
+| *paused* | `character_decisions` | Paused for journey Steps 1–2 (узнал себя · понял почему) | — |
 
 ### Generation / content units
 
@@ -93,3 +99,6 @@ Do not start next block until current Overall = **PASS** or omit from production
 |------------|---------|
 | **`identity`** | **PASS** |
 | **`life_spheres`** | **PASS** |
+| **`character_patterns`** | **PASS** |
+| **`character_helps`** | **PASS** |
+| **`direction_mission`** | **PASS** |
