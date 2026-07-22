@@ -27,6 +27,8 @@ Today / Compatibility / Tarot
 
 Продуктовый код **не** считает эфемериды сам. Он передаёт birth data в контракт **`natal_facts`** (executor = LLM) и сохраняет JSON.
 
+**Swiss / local AstroEngine:** legacy read-path only. **Не SoT** продукта и не источник для Generation Contracts. Новый UI / новые промпты читают только validated `natal_facts` (+ catalog keys).
+
 ---
 
 ## 1. Факты карты = LLM (не отдельный API)

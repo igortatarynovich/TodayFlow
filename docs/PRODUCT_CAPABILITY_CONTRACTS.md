@@ -1,8 +1,8 @@
 # Product Capability Contracts
 
-**Статус:** TARGET DRAFT — **контракты ответа API по уровню данных**  
+**Статус:** TARGET DRAFT — **контракты ответа API по уровню данных** · слоты экрана Profile — [PRODUCT_AVAILABILITY_MATRIX](./PRODUCT_AVAILABILITY_MATRIX.md) **APPROVED §3.1**  
 **Роль:** сначала уровни доступных данных и контракт ответа; Profile / Today / Compatibility **потребляют** один структурированный результат.  
-**Связь:** [PRODUCT_GENERATION_CONTRACTS.md](./PRODUCT_GENERATION_CONTRACTS.md) (**ядро: контракты генерации**) · [PRODUCT_DATA_PROVIDERS.md](./PRODUCT_DATA_PROVIDERS.md) · [PRODUCT_AVAILABILITY_MATRIX.md](./PRODUCT_AVAILABILITY_MATRIX.md) · [PRODUCT_DATA_INTAKE.md](./PRODUCT_DATA_INTAKE.md) · Explainable Computation  
+**Связь:** [PRODUCT_AVAILABILITY_MATRIX.md](./PRODUCT_AVAILABILITY_MATRIX.md) · [PRODUCT_GENERATION_CONTRACTS.md](./PRODUCT_GENERATION_CONTRACTS.md) (**ядро: контракты генерации**) · [PRODUCT_DATA_PROVIDERS.md](./PRODUCT_DATA_PROVIDERS.md) · [PRODUCT_DATA_INTAKE.md](./PRODUCT_DATA_INTAKE.md) · Explainable Computation  
 
 
 

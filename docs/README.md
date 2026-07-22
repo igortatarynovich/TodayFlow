@@ -8,7 +8,7 @@
 |------|----------|
 | **Полный пользовательский путь (SoT маршрута)** | [audits/FULL_USER_PATH_CANON_V1.md](./audits/FULL_USER_PATH_CANON_V1.md) — Landing→Preview→Save→Claim→Profile · A–E |
 | **User Journey (pointer)** | [USER_JOURNEY_CANON.md](./USER_JOURNEY_CANON.md) → FULL_USER_PATH |
-| **Product Availability Matrix** | [PRODUCT_AVAILABILITY_MATRIX.md](./PRODUCT_AVAILABILITY_MATRIX.md) — данные × экраны × блоки |
+| **Product Availability Matrix** | [PRODUCT_AVAILABILITY_MATRIX.md](./PRODUCT_AVAILABILITY_MATRIX.md) — **APPROVED (Profile)** · данные × экраны × слоты 3.1 · gate UI |
 | **Data Intake (ровно 2 способа ввода)** | [PRODUCT_DATA_INTAKE.md](./PRODUCT_DATA_INTAKE.md) — публичный preview→email · добавить профиль · единая модель профиля |
 | **Capability Contracts (уровни данных → API)** | [PRODUCT_CAPABILITY_CONTRACTS.md](./PRODUCT_CAPABILITY_CONTRACTS.md) — оркестратор · L1/L2/L3 · allowed_output |
 | **Generation Contracts (ядро генерации)** | [PRODUCT_GENERATION_CONTRACTS.md](./PRODUCT_GENERATION_CONTRACTS.md) — Contract ⊕ Implementations (промпты = IP) |

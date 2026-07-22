@@ -1,8 +1,8 @@
 # Product Generation Contracts
 
-**Статус:** TARGET DRAFT — **ядро продукта**  
+**Статус:** TARGET DRAFT — **контракты генерации** · Profile UI slots **APPROVED** в [PRODUCT_AVAILABILITY_MATRIX.md](./PRODUCT_AVAILABILITY_MATRIX.md) §3.1  
 **Роль:** два связанных актива — **Contract** (продуктовая спецификация) и **Implementations** (промпты под модели = IP).  
-**Связь:** [PRODUCT_CAPABILITY_CONTRACTS.md](./PRODUCT_CAPABILITY_CONTRACTS.md) · [PRODUCT_DATA_PROVIDERS.md](./PRODUCT_DATA_PROVIDERS.md) · [PRODUCT_AVAILABILITY_MATRIX.md](./PRODUCT_AVAILABILITY_MATRIX.md) · Voice · Explainable Computation  
+**Связь:** [PRODUCT_AVAILABILITY_MATRIX.md](./PRODUCT_AVAILABILITY_MATRIX.md) (**gate экрана**) · [PRODUCT_CAPABILITY_CONTRACTS.md](./PRODUCT_CAPABILITY_CONTRACTS.md) · [PRODUCT_DATA_PROVIDERS.md](./PRODUCT_DATA_PROVIDERS.md) · Voice · Explainable Computation  
 **Код:** `prompts/registry_v1.py` хранит implementations · [PRODUCT_PROMPT_LIBRARY.md](./PRODUCT_PROMPT_LIBRARY.md) = pointer сюда
 
 ---
@@ -129,55 +129,113 @@ optional:
 
 ## Пример: `personality`
 
-### Input Schema (черновик)
+**UI binding:** слоты [PRODUCT_AVAILABILITY_MATRIX](./PRODUCT_AVAILABILITY_MATRIX.md) §3.1 Profile.  
+Поля Output Schema = то, что UI имеет право положить в слот; `null` / omit = Hide when.
+
+### Input Schema
 
 ```json
 {
-  "available_input": { "display_name": "string|null", "birth_date": "date", … },
+  "available_input": {
+    "display_name": "string|null",
+    "birth_date": "date",
+    "birth_time": "string|null",
+    "birth_place": "string|null",
+    "latitude": "number|null",
+    "longitude": "number|null",
+    "timezone_at_birth": "string|null"
+  },
   "calculated_facts": {
     "sun_sign": "required",
+    "sun_element": "optional",
     "moon_sign": "optional",
     "life_path": "optional",
     "ascendant": "optional",
-    "houses": "optional"
+    "houses": "optional",
+    "aspects": "optional",
+    "planets": "optional"
   },
   "unavailable_facts": "object"
 }
 ```
 
-### Output Schema (черновик)
+Facts SoT: контракт **`natal_facts`** (LLM JSON). Интерпретация **не** пересчитывает ASC/дома.
+
+### Output Schema (слоты матрицы 3.1)
 
 ```json
 {
   "identity_summary": "string|null",
+  "sun_sign_meaning": "string|null",
+  "element_expression": "string|null",
+  "numerology_core": "string|null",
   "emotional_style": "string|null",
+  "decision_style": "string|null",
   "relationship_style": "string|null",
-  "strengths": "string[]",
-  "blind_spots": "string[]",
-  "limitations": "string"
+  "work_and_realization": "string|null",
+  "money_patterns": "string|null",
+  "home_and_security": "string|null",
+  "strengths": ["string"],
+  "core_strengths": ["string"],
+  "internal_tensions": ["string"],
+  "growth_zones": ["string"],
+  "blind_spots": ["string"],
+  "chart_dominants": ["string"],
+  "important_aspects": ["string"],
+  "limitations": "string|null",
+  "claims": [
+    {
+      "field": "string",
+      "claim": "string",
+      "source_fact_ids": ["string"],
+      "confidence": "high|medium|low",
+      "availability": "available|partial|unavailable"
+    }
+  ]
 }
 ```
+
+| Output field | Слот матрицы 3.1 | Free | Trial/Paid |
+|--------------|------------------|------|------------|
+| `identity_summary` | Узнавание | ✅ | ✅ |
+| `sun_sign_meaning` · `element_expression` · `numerology_core` | Солнце · стихия · numerology | ✅ | ✅ |
+| `emotional_style` · `decision_style` · `relationship_style` | Стили | ✅ | ✅ |
+| `work_and_realization` · `money_patterns` · `home_and_security` | Работа / деньги / дом | ✅ если facts; house-based только full natal | ✅ |
+| `strengths` · `core_strengths` | Сильные стороны | ✅ | ✅ |
+| `internal_tensions` · `growth_zones` · `blind_spots` | Напряжения / рост (список) | ✅ краткий | ✅ deep |
+| `limitations` | Limitations + CTA | ✅ | ✅ |
+| deep `helps` | → contract `growth`, не personality | ❌ | ✅ |
 
 ### Execution Rules
 
 - Использовать только ключи из `calculated_facts`.  
-- Не использовать `houses` / `ascendant`, если их нет или они в `unavailable_facts`.  
-- Недостаточно оснований для поля → `null` / пустой массив по схеме.  
-- Не вызывать контракт, если нет минимума Input Schema (напр. нет `sun_sign` и нет date facts).
+- Не использовать `houses` / `ascendant` / MC, если их нет или они в `unavailable_facts`.  
+- Недостаточно оснований для поля → `null` / пустой массив.  
+- Не вызывать контракт без минимума (нет date-level facts / нет `sun_sign`).  
+- House-based формулировки запрещены при `natal_facts.mode != full`.
 
 ### Quality Rules
 
 - Не противоречить переданным фактам.  
 - Не повторять одно и то же разными словами в соседних полях.  
 - Не ссылаться на missing data как на известное.  
-- Voice: о человеке, не о системе.
+- Voice: о человеке, не о системе.  
+- Каждый существенный claim желательно с `source_fact_ids` (в `claims[]` или inline).
 
 ### Dependencies
 
 ```yaml
 requires: [natal_facts]
-optional: [name_numerology, natal_chart]
+optional: [name_numerology, natal_chart, base_astrology]
 ```
+
+Отдельные слоты имени / ASC-структуры:
+
+| Слот 3.1 | contract_id |
+|----------|-------------|
+| Нумерология имени | `name_numerology` |
+| Структура карты (ASC/дома/MC) | `natal_chart` |
+| Что помогает (L3) | `growth` |
 
 ### Implementations (IP)
 
@@ -188,6 +246,8 @@ optional: [name_numerology, natal_chart]
 
 Каноническая форма текста: факты → unavailable → allowed fields → null.  
 Качество формулировок — актив; смена модели = новая Implementation, не новый Contract.
+
+**CODE Δ:** production Snapshot ещё пишется legacy `profile.identity|styles|patterns` — adapter до wiring по 3.1; не наращивать как SoT.
 
 ---
 

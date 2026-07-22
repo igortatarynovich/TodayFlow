@@ -1096,19 +1096,59 @@ async def upsert_core_setup(
     )
 
     if isinstance(payload.natal_facts, dict) and payload.natal_facts.get("contract_version"):
+        from todayflow_backend.services.capability_resolver_v0 import (
+            merge_unavailable_into_facts,
+            resolve_capability,
+        )
+        from todayflow_backend.services.insight_depth import get_insight_depth_tier
         from todayflow_backend.services.natal_facts_contract_v1 import (
             persist_natal_facts_on_profile,
             validate_natal_facts,
         )
+        from todayflow_backend.services.profile_matrix_adapter_v0 import resolve_access_tier
+        from todayflow_backend.services.subscription_level import get_subscription_snapshot
 
-        mode = "full" if (
-            not payload.time_unknown
-            and payload.birth_time
-            and latitude is not None
-            and longitude is not None
-        ) else "date_only"
+        snap = get_subscription_snapshot(user, db)
+        access = resolve_access_tier(
+            insight_depth_tier=get_insight_depth_tier(user, db),
+            subscription_status=snap.subscription_status,
+            billing_level=snap.level,
+        )
+        display_name = (
+            " ".join(
+                part
+                for part in (
+                    (payload.first_name or "").strip(),
+                    (payload.last_name or "").strip(),
+                )
+                if part
+            )
+            or None
+        )
+        cap = resolve_capability(
+            birth_date=payload.birth_date,
+            birth_time=payload.birth_time,
+            time_unknown=payload.time_unknown,
+            latitude=latitude,
+            longitude=longitude,
+            location_name=location_name or None,
+            timezone_name=payload.timezone_name,
+            display_name=display_name,
+            access=access,
+        )
+        mode = "full" if cap["mode"] == "full" else "date_only"
+        structure_reason = None
+        for u in cap.get("unavailable_facts") or []:
+            if isinstance(u, dict) and u.get("key") == "ascendant":
+                structure_reason = str(u.get("reason") or "") or None
+                break
         try:
-            facts = validate_natal_facts(payload.natal_facts, expected_mode=mode)
+            facts = validate_natal_facts(
+                payload.natal_facts,
+                expected_mode=mode,
+                structure_unavailable_reason=structure_reason,
+            )
+            facts = merge_unavailable_into_facts(facts, cap)
             persist_natal_facts_on_profile(db, primary.id, facts)
             db.commit()
         except Exception:

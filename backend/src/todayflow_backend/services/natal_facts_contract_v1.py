@@ -48,12 +48,26 @@ def resolve_natal_facts_mode(
     time_unknown: bool,
     latitude: float | None,
     longitude: float | None,
+    birth_date: date | str | None = None,
 ) -> str:
-    if time_unknown or not birth_time:
-        return "date_only"
-    if latitude is None or longitude is None:
-        return "date_only"
-    return "full"
+    """Delegate to Capability Resolver (Availability Matrix)."""
+    from todayflow_backend.services.capability_resolver_v0 import resolve_natal_mode
+
+    if birth_date is None:
+        # Legacy callers only need angles eligibility (date already validated upstream).
+        if time_unknown or not birth_time or latitude is None or longitude is None:
+            return "date_only"
+        return "full"
+    mode = resolve_natal_mode(
+        birth_date=birth_date,
+        birth_time=birth_time,
+        time_unknown=time_unknown,
+        latitude=latitude,
+        longitude=longitude,
+    )
+    if mode == "full":
+        return "full"
+    return "date_only"
 
 
 def sun_sign_from_date(birth: date) -> str:
@@ -138,7 +152,12 @@ def _angle_or_none(raw: Any, *, allow: bool) -> dict[str, Any] | None:
     return {"sign": sign, "degree": degree, "absolute_longitude": abs_lon}
 
 
-def validate_natal_facts(payload: dict[str, Any], *, expected_mode: str) -> dict[str, Any]:
+def validate_natal_facts(
+    payload: dict[str, Any],
+    *,
+    expected_mode: str,
+    structure_unavailable_reason: str | None = None,
+) -> dict[str, Any]:
     """Normalize and enforce Execution Rules (no ASC/houses without full mode)."""
     mode = expected_mode if expected_mode in ("date_only", "full") else "date_only"
     allow_angles = mode == "full"
@@ -206,9 +225,15 @@ def validate_natal_facts(payload: dict[str, Any], *, expected_mode: str) -> dict
             )
 
     if not allow_angles:
+        reason = structure_unavailable_reason or "birth_time_or_place_missing"
         for key in ("ascendant", "mc", "ic", "descendant", "houses"):
             if not any(u["key"] == key for u in unavailable):
-                unavailable.append({"key": key, "reason": "birth_time_or_place_missing"})
+                unavailable.append({"key": key, "reason": reason})
+            else:
+                # Prefer precise resolver reason over generic LLM wording.
+                for u in unavailable:
+                    if u["key"] == key and reason != "birth_time_or_place_missing":
+                        u["reason"] = reason
 
     calc_id = str(payload.get("calculation_id") or "").strip()
     if not calc_id:
@@ -237,8 +262,22 @@ def validate_natal_facts(payload: dict[str, Any], *, expected_mode: str) -> dict
     }
 
 
-def date_only_fallback(birth: date) -> dict[str, Any]:
+def _structure_reason_from_capability(capability: dict[str, Any] | None) -> str | None:
+    if not capability:
+        return None
+    for u in capability.get("unavailable_facts") or []:
+        if isinstance(u, dict) and u.get("key") == "ascendant":
+            return str(u.get("reason") or "") or None
+    return None
+
+
+def date_only_fallback(
+    birth: date,
+    *,
+    structure_unavailable_reason: str | None = None,
+) -> dict[str, Any]:
     sun = sun_sign_from_date(birth)
+    reason = structure_unavailable_reason or "birth_time_or_place_missing"
     return validate_natal_facts(
         {
             "provider": "deterministic_fallback",
@@ -251,11 +290,12 @@ def date_only_fallback(birth: date) -> dict[str, Any]:
             "aspects": [],
             "unavailable_facts": [
                 {"key": "moon", "reason": "requires_llm_or_time"},
-                {"key": "ascendant", "reason": "birth_time_or_place_missing"},
-                {"key": "houses", "reason": "birth_time_or_place_missing"},
+                {"key": "ascendant", "reason": reason},
+                {"key": "houses", "reason": reason},
             ],
         },
         expected_mode="date_only",
+        structure_unavailable_reason=reason,
     )
 
 
@@ -269,36 +309,47 @@ def build_available_input(
     longitude: float | None = None,
     timezone_name: str | None = None,
     display_name: str | None = None,
+    access: str = "free",
 ) -> dict[str, Any]:
-    mode = resolve_natal_facts_mode(
+    """Build available_input via Capability Resolver (mode + honesty fields)."""
+    from todayflow_backend.services.capability_resolver_v0 import resolve_capability
+
+    cap = resolve_capability(
+        birth_date=birth_date,
         birth_time=birth_time,
         time_unknown=time_unknown,
+        location_name=location_name,
         latitude=latitude,
         longitude=longitude,
+        timezone_name=timezone_name,
+        display_name=display_name,
+        access=access,  # type: ignore[arg-type]
     )
-    time_str: str | None = None
-    if isinstance(birth_time, time):
-        time_str = birth_time.strftime("%H:%M:%S")
-    elif birth_time:
-        time_str = str(birth_time)
-    return {
-        "display_name": (display_name or "").strip() or None,
-        "birth_date": birth_date.isoformat(),
-        "birth_time": None if time_unknown else time_str,
-        "time_unknown": time_unknown,
-        "location_name": (location_name or "").strip() or None,
-        "latitude": latitude,
-        "longitude": longitude,
-        "timezone_name": timezone_name,
-        "mode": mode,
+    available = dict(cap["available_input"])
+    # Preserve resolver pack for callers (API / generate) without leaking into LLM payload keys.
+    available["_capability"] = {
+        "resolver_version": cap["resolver_version"],
+        "access": cap["access"],
+        "mode": cap["mode"],
+        "has_name": cap["has_name"],
+        "has_time": cap["has_time"],
+        "has_place": cap["has_place"],
+        "unavailable_facts": cap["unavailable_facts"],
+        "profile_slots": cap["profile_slots"],
+        "layers": cap["layers"],
+        "user_messages": cap["user_messages"],
     }
+    return available
 
 
 def generate_natal_facts(
     *,
     available_input: dict[str, Any],
     locale: str = "ru",
+    capability: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
+    from todayflow_backend.services.capability_resolver_v0 import merge_unavailable_into_facts
+
     mode = str(available_input.get("mode") or "date_only")
     birth_raw = available_input.get("birth_date")
     try:
@@ -306,15 +357,26 @@ def generate_natal_facts(
     except (TypeError, ValueError) as exc:
         raise ValueError("birth_date required as YYYY-MM-DD") from exc
 
+    cap = capability or (
+        available_input.get("_capability")
+        if isinstance(available_input.get("_capability"), dict)
+        else None
+    )
+    structure_reason = _structure_reason_from_capability(cap)
+
+    # Strip internal capability pack before LLM / persistence of available_input echo.
+    llm_input = {k: v for k, v in available_input.items() if not str(k).startswith("_")}
+
     if not is_llm_chat_configured():
         logger.info("natal_facts: LLM not configured — deterministic sun fallback")
-        return date_only_fallback(birth)
+        facts = date_only_fallback(birth, structure_unavailable_reason=structure_reason)
+        return merge_unavailable_into_facts(facts, cap) if cap else facts
 
     system, version = get_prompt(PROMPT_ID, locale=locale)
     user_payload = {
         "contract_id": "natal_facts",
         "prompt_version": version,
-        "available_input": available_input,
+        "available_input": llm_input,
     }
     client = get_openai_compatible_client(operation="background")
     model = resolve_default_chat_model()
@@ -332,13 +394,20 @@ def generate_natal_facts(
     parsed = _parse_json_object(raw or "")
     if not parsed:
         logger.warning("natal_facts: empty/invalid LLM JSON — fallback")
-        return date_only_fallback(birth)
+        facts = date_only_fallback(birth, structure_unavailable_reason=structure_reason)
+        return merge_unavailable_into_facts(facts, cap) if cap else facts
 
-    facts = validate_natal_facts(parsed, expected_mode=mode)
+    facts = validate_natal_facts(
+        parsed,
+        expected_mode=mode,
+        structure_unavailable_reason=structure_reason,
+    )
     if not any(p.get("id") == "sun" for p in facts["planets"]):
         facts["planets"].insert(0, {"id": "sun", "sign": sun_sign_from_date(birth), "degree": 15.0})
     facts["prompt_id"] = PROMPT_ID
     facts["prompt_version"] = version
+    if cap:
+        facts = merge_unavailable_into_facts(facts, cap)
     return facts
 
 
@@ -372,12 +441,24 @@ def natal_facts_to_cache_rows(facts: dict[str, Any]) -> tuple[list[dict[str, Any
     for h in facts.get("houses") or []:
         if isinstance(h, dict) and h.get("house") is not None:
             houses[str(h["house"])] = h
+    capability = facts.get("capability") if isinstance(facts.get("capability"), dict) else None
     meta = {
         "source": "natal_facts_contract",
         "natal_facts": facts,
         "mode": facts.get("mode"),
         "provider": facts.get("provider"),
         "calculation_id": facts.get("calculation_id"),
+        "provenance": {
+            "contract_version": facts.get("contract_version"),
+            "provider": facts.get("provider"),
+            "provider_version": facts.get("provider_version"),
+            "prompt_id": facts.get("prompt_id"),
+            "prompt_version": facts.get("prompt_version"),
+            "calculation_id": facts.get("calculation_id"),
+            "resolver_version": (capability or {}).get("resolver_version"),
+            "access": (capability or {}).get("access"),
+        },
+        "capability": capability,
     }
     return positions, houses, meta
 
