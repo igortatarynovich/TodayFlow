@@ -1,0 +1,68 @@
+---
+description: TodayFlow Product Truth First — working logic/data/API before UI; no fake personalization
+alwaysApply: true
+---
+
+# Product Truth First
+
+**Канон:** [docs/PRODUCT_TRUTH_FIRST.md](../../docs/PRODUCT_TRUTH_FIRST.md)  
+**Umbrella:** [docs/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../../docs/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md)  
+**Depth / missing / sub:** [docs/UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](../../docs/UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md)
+
+> Сначала рабочая логика, данные и API. Потом интерфейс. Дизайн отображает построенный продукт, а не изображает будущий.
+>
+> Прогресс = рост качества понимания. Нет «пустого» Profile — «что отсутствует · что откроется · CTA с ценностью». Подписка меняет глубину, не наличие. Trial — целостный опыт.
+> **TodayFlow не говорит о себе** и **не описывает состояние системы** — только человека, смысл данных и ценность шага ([TODAYFLOW_VOICE_CANON.md](../../docs/content/TODAYFLOW_VOICE_CANON.md) §0–§0.06).
+
+## Жёсткие правила
+
+1. **Нет backend-источника — нет блока** в production UI.
+2. **Нет реальных данных** — честное empty/partial + одно действие **с ценностью** («добавьте время, чтобы открыть ASC»), не «недостаточно данных» / «система не знает». [UNDERSTANDING_PROGRESS…](../../docs/UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md) · Voice §0.05–§0.06.3. **Fallback ≠ персональный расчёт.** Пометить как общий вариант или скрыть.
+4. **Запрещены фикции:** проценты, графики, теги, история, «обновлено», рекомендации без источника.
+5. **Цепочка функции:** модель → вычисление/генерация → API-контракт → состояния → UI. Не наоборот.
+6. **Макеты** — только из подтверждённого реестра возможностей в коде.
+7. **Будущее** — в docs/прототипе; не в рабочем интерфейсе.
+8. **Архитектура только с доказанной пользой:** новый engine/registry/abstraction — только если доказано лучшее качество ответа **или** меньше дублирования в рабочих потоках. Иначе не создавать. Приоритет — экран за экраном (зачем → данные → prompt → quality → wire → UI). См. [PRODUCT_TRUTH_FIRST.md](../../docs/PRODUCT_TRUTH_FIRST.md) и правило `architecture-must-prove-value`.
+
+## Обязательный паспорт UI-блока
+
+Перед реализацией или правкой блока агент указывает:
+
+| Поле | Вопрос |
+|------|--------|
+| Source | endpoint или локальный достоверный источник |
+| Contract field | поле ответа / модели |
+| Appear when | условие появления |
+| States | loading / ready / empty / partial / error |
+| User action | что может сделать пользователь |
+| No data | что показываем при отсутствии данных |
+
+**Нет паспорта — блок не реализуется.**
+
+## Антипаттерны (запрет)
+
+```text
+❌ current ?? catalog[0] как «практика дня» без метки fallback
+❌ energy = server ?? 50 в production
+❌ «обновлено сегодня» = Date.now() без generated_at
+❌ дефолтные теги / нулевые графики / пустая история как контент
+❌ .catch(() => []) без различия failed vs empty
+```
+
+```text
+✅ нет данных → EmptyState + одна CTA
+✅ fallback → «С чего начать» / catalog_fallback, не «твоя практика»
+✅ нет timestamp → не показывать badge обновления
+✅ API fail → «Не удалось загрузить» + Повторить
+```
+
+## Scope
+
+Web + iOS production surfaces. Не отменяет Personal Model / Projection; уточняет: **проекция показывает только то, что уже вычисляется и отдаётся.**
+
+## After Profile Freeze → Today (screen-first)
+
+Текущий slice: Profile v1 Freeze. После Freeze — продуктовая реконструкция **экрана Today**, не DailyState / Recommendation Engine заранее.  
+[DAILY_INTERPRETATION_ENGINE_PHASE.md](../../docs/DAILY_INTERPRETATION_ENGINE_PHASE.md) · [RFC_DAILY_STATE_V0.md](../../docs/rfc/RFC_DAILY_STATE_V0.md) — **DEFERRED**, не approved implementation phase.
+
+Не добавлять независимые «камень/цвет/талисман дня» как отдельные вычисления. Советы дня — только из уже рабочих источников Today с цепочкой обоснования, до отдельного доказанного слоя.

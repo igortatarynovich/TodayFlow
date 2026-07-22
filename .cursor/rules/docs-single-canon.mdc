@@ -1,0 +1,75 @@
+---
+description: Single-canon documentation — find before write; extend existing docs; soft gate for new MAP/REGISTRY/PASSPORT/CANON
+alwaysApply: true
+---
+
+# Docs — Single Canon
+
+**Entry point:** [docs/README.md](../../docs/README.md)  
+**Agent entry:** [AGENTS.md](../../AGENTS.md)  
+**Inventory:** [docs/DOCUMENTATION_INVENTORY.md](../../docs/DOCUMENTATION_INVENTORY.md)
+
+This file is the **only** place that defines how agents and humans change documentation. Product/runtime rules stay in their canons and other `.cursor/rules/*`.
+
+## Find before write
+
+Before creating **any** new file under `docs/`:
+
+1. Read [docs/README.md](../../docs/README.md) — which of the five entry sections owns the topic?
+2. Search `docs/**/*.md` for the topic keywords.
+3. Check [docs/DOCUMENTATION_INVENTORY.md](../../docs/DOCUMENTATION_INVENTORY.md).
+
+If a document already covers the topic → **update that document**. Do not add `_V2`, parallel maps, or a second SoT.
+
+## One entry point
+
+All living docs are reached **only** through the five sections in `docs/README.md`:
+
+1. Product Map  
+2. Technical Architecture  
+3. Generation Registry  
+4. Implementation Status  
+5. Screen Maps  
+
+Do not advertise a separate “main product SoT” outside that index. Until consolidated files exist (PR-2+), README points at the **interim** authorities listed there.
+
+## Soft gate for new MAP / REGISTRY / PASSPORT / CANON
+
+New files whose names suggest a parallel authority (`*MAP*`, `*REGISTRY*`, `*PASSPORT*`, `*CANON*`, dated compliance audits that restate architecture) are **discouraged**, not auto-blocked.
+
+Allowed **only when** an existing document in the right section **cannot** be extended without becoming unreadable or mixing unrelated concerns.
+
+In that case the PR description **must** state:
+
+1. Which existing document was considered  
+2. Why it could not be updated  
+3. Which README section owns the new file  
+4. That [DOCUMENTATION_INVENTORY.md](../../docs/DOCUMENTATION_INVENTORY.md) was updated in the same PR  
+
+Audits may record **gaps and links** to canon. They must not become a second architecture narrative.
+
+## Code before docs
+
+1. Prefer reading and changing **code / API / prompts in repo**.  
+2. Update the existing canon to match reality.  
+3. Do not invent target architecture docs for unwired systems.
+
+## Inventory before delete
+
+Do not archive or delete docs until the inventory row is reviewed: unique decisions must be merged into an entry-section document first.
+
+## Anti-patterns
+
+```text
+❌ New "product SoT" beside docs/README.md
+❌ Block passport / pipeline map / prompt registry that duplicates an existing registry or reconstruction doc
+❌ Audit that redefines architecture instead of listing deltas
+❌ Docs-only PR that adds principles without a code or contract change
+```
+
+```text
+✅ Extend TODAYFLOW_PRODUCT_MODEL / screen canon / prompt registry in place
+✅ Point README section at one interim authority
+✅ Inventory row updated when docs are added or retired
+✅ PR explains why a rare new MAP/REGISTRY/PASSPORT/CANON was unavoidable
+```
