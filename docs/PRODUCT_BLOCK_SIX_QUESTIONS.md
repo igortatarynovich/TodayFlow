@@ -60,10 +60,16 @@
 | **portrait_why_v0** | Снять «случайный AI» | selected_by ≠ influenced_by — честное происхождение имени vs расширение | life_path→archetype helper · sun/element/rhythm · natal angles when time | детерминизм; omit ASC/MC без времени | Сразу после узнавания: «откуда вывод» | → инсайт (новое) |
 | **insight_nodes_v0** | От узнавания к закономерности | Один узел (trap/tension), не три списка | Snapshot strings + living notes; grounded_on = факты | living quotes = *adjacent context*, не proof-link v0; patterns gate | После «почему»: новое «не замечал» | → усилие |
 | **effort_vector_v0** | Нужен следующий шаг после осознания | Только направление из выбранного node.help | `nodes[0].help` only | null если нет safe help / help≈insight; no LLM | После узла: действие, не ещё описание | → практика (bridge) |
-| **bridge_line** *(delta #5)* | Переход из статического портрета в жизнь | Ценность следующего наблюдения / Today — не day-forecast | выбранный node + effort + depth honesty | не прогноз «завтра»; Voice CTA value | Конец Profile-пути | → Today / наблюдения |
+| **bridge_line** | Объяснить, **зачем открыть Today сейчас** | Только логика продолжения пути — не совет и не day-forecast | kind выбранного node (+ living context flag) | детерминизм; не дублирует effort_vector; без императива | Конец Profile-пути | → Today |
+
+Цепочка (линейная, проверяемая):
+
+```text
+recognition_line → portrait_why → insight_node → effort_vector → bridge_line → Today
+```
 
 Если `effort_vector` не добавляет нового действия относительно узла — блока нет (`null`).  
-Если `bridge_line` = пустой CTA без ценности — блока нет.
+Если `bridge_line` отвечает на «что делать» или пустой CTA — блока нет / переписать.
 
 ---
 

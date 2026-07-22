@@ -286,7 +286,7 @@ Target-поля смысла (сжать из identity / Content Canon): имя 
 | 7b | Mechanism delta #2 `portrait_why_v0` | **SHIPPED** `5133e82` (+ shared archetype helper) |
 | 7c | Mechanism delta #3 `insight_nodes_v0` | **SHIPPED** `aa27720` |
 | 7d | Mechanism delta #4 `effort_vector_v0` | **SHIPPED** `efd7141` |
-| 7e | Mechanism delta #5 `bridge_line_v0` | **IN CODE** (path → Today; Six Questions) |
+| 7e | Mechanism delta #5 `bridge_line_v0` | **IN CODE** v0.2 — «зачем Today», не «что делать» |
 | 7f | Six Questions product SoT | [PRODUCT_BLOCK_SIX_QUESTIONS.md](./PRODUCT_BLOCK_SIX_QUESTIONS.md) |
 | 8 | UI journey surface | waiting — после deltas |
 

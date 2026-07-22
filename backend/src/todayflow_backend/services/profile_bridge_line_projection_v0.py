@@ -1,27 +1,58 @@
 """Deterministic Profile Step-5 bridge_line (journey «хочу возвращаться»).
 
 SoT: docs/PROFILE_PRODUCT_JOURNEY_FORMS_V1.md § Шаг 5
-     docs/PRODUCT_BLOCK_SIX_QUESTIONS.md — bridge = path transition, not empty CTA
-Source: selected insight node (+ whether living context exists). Not day forecast.
+     docs/PRODUCT_BLOCK_SIX_QUESTIONS.md
+
+Answers ONLY: «Почему теперь имеет смысл открыть Today?»
+Does NOT answer «что делать?» — that is effort_vector_v0.
+Not motivation, not day forecast, not a second recommendation.
+
 Read-path only. No LLM. No Snapshot fields.
 """
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
-PROJECTION_VERSION = "profile_bridge_line_v0.1"
+PROJECTION_VERSION = "profile_bridge_line_v0.2"
 
-# Kind-based bridges — value of next action, not «tomorrow will…».
+# Why Today continues the path — no imperative action (that belongs to effort_vector).
 _BRIDGE_TENSION_RU = (
-    "Наблюдения за несколько дней откроют, что у вас реально повторяется "
-    "— не как теория, а как ваш ритм."
+    "Особенность уже ясна на уровне портрета. "
+    "Today показывает, как она проявляется в конкретном дне — не как теория."
 )
 _BRIDGE_REPEAT_RU = (
-    "Отметь в Today следующий момент, где может повториться эта ловушка "
-    "— так станет видно, удалось ли её изменить."
+    "Повтор уже назван. "
+    "Today — следующий экран пути: там видно, как эта ловушка проявляется сегодня "
+    "и сдвигается ли она."
 )
 _CTA_TODAY = "today"
+
+_ACTION_VERB_RE = re.compile(
+    r"^(отметь|сделай|начни|добавь|открой|запиши|проверь|выбери)\b",
+    re.I,
+)
+
+
+def _looks_like_effort_or_action(text: str) -> bool:
+    """Guard: bridge must not read as a second effort_vector."""
+    t = (text or "").strip()
+    if not t:
+        return False
+    if _ACTION_VERB_RE.search(t):
+        return True
+    return False
+
+
+def _near_duplicate(a: str | None, b: str | None) -> bool:
+    na = re.sub(r"\s+", " ", (a or "").strip().lower())
+    nb = re.sub(r"\s+", " ", (b or "").strip().lower())
+    if not na or not nb:
+        return False
+    if na == nb:
+        return True
+    return len(na) >= 24 and (na in nb or nb in na)
 
 
 def project_bridge_line_v0(
@@ -29,10 +60,11 @@ def project_bridge_line_v0(
     insight_nodes: dict[str, Any] | None,
     effort_vector: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Logical exit from static portrait into daily practice."""
-    _ = effort_vector  # available for future: tighten copy when vector present; not required for v0
+    """Why open Today now — path continuity after Profile insight."""
     pack = insight_nodes if isinstance(insight_nodes, dict) else {}
     nodes = pack.get("nodes") if isinstance(pack.get("nodes"), list) else []
+    effort = effort_vector if isinstance(effort_vector, dict) else {}
+    effort_text = str(effort.get("effort_vector") or "").strip() or None
 
     empty = {
         "projection_version": PROJECTION_VERSION,
@@ -43,14 +75,15 @@ def project_bridge_line_v0(
         "source_fields": [],
         "rules": {
             "no_llm": True,
-            "not_empty_cta": True,
+            "answers_why_open_today_only": True,
+            "forbid_effort_vector_duplicate": True,
             "forbid_day_forecast": True,
+            "forbid_imperative_action": True,
             "path_transition_not_marketing": True,
         },
     }
 
     if not nodes or not isinstance(nodes[0], dict):
-        # No Step-3 node → no Profile→practice bridge from this journey slice.
         return empty
 
     node = nodes[0]
@@ -68,6 +101,15 @@ def project_bridge_line_v0(
     else:
         return empty
 
+    # Safety: never ship a bridge that is action-advice or restates effort_vector.
+    if _looks_like_effort_or_action(line) or _near_duplicate(line, effort_text):
+        return {
+            **empty,
+            "source_node_id": node_id,
+            "node_kind": kind,
+            "source_fields": source_fields,
+        }
+
     return {
         "projection_version": PROJECTION_VERSION,
         "bridge_line": line,
@@ -78,11 +120,14 @@ def project_bridge_line_v0(
         "source_fields": source_fields,
         "rules": {
             "no_llm": True,
-            "not_empty_cta": True,
+            "answers_why_open_today_only": True,
+            "forbid_effort_vector_duplicate": True,
             "forbid_day_forecast": True,
+            "forbid_imperative_action": True,
             "path_transition_not_marketing": True,
             "six_questions": {
-                "why": "exit static portrait into lived practice",
+                "why": "why Today naturally continues this portrait now",
+                "not": "what to do (that is effort_vector)",
                 "leads_to": "today",
             },
         },
