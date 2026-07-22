@@ -6,6 +6,11 @@
 
 | Слой | Документ |
 |------|----------|
+| **Product Availability Matrix (отправная точка)** | [PRODUCT_AVAILABILITY_MATRIX.md](./PRODUCT_AVAILABILITY_MATRIX.md) — данные × экраны × блоки · **freeze Profile/Today до APPROVED** |
+| **Data Intake (ровно 2 способа ввода)** | [PRODUCT_DATA_INTAKE.md](./PRODUCT_DATA_INTAKE.md) — публичный preview→email · добавить профиль · единая модель профиля |
+| **Capability Contracts (уровни данных → API)** | [PRODUCT_CAPABILITY_CONTRACTS.md](./PRODUCT_CAPABILITY_CONTRACTS.md) — оркестратор · L1/L2/L3 · allowed_output · без «мы считаем астрологию» |
+| **Generation Contracts (ядро продукта)** | [PRODUCT_GENERATION_CONTRACTS.md](./PRODUCT_GENERATION_CONTRACTS.md) — Contract (schemas · Execution/Quality Rules · deps) ⊕ Implementations (промпты = IP) |
+| **Data Providers (астро + гео)** | [PRODUCT_DATA_PROVIDERS.md](./PRODUCT_DATA_PROVIDERS.md) — внешний natal API · своя geo-БД · смена поставщика без смены промптов |
 | **Полный пользовательский путь (аудит + целевой канон)** | [audits/FULL_USER_PATH_CANON_V1.md](./audits/FULL_USER_PATH_CANON_V1.md) — лендинг → привычка D30 · противоречия X* · реестр генераций |
 | **Product Build Map (№1 — product SoT)** | [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md) — entities · **два базовых закона** · Personal Model pointer |
 | **Personal Model ↔ code** | [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md) — P0 read-path · [P1 Experience wiring](./audits/PERSONAL_MODEL_EXPERIENCE_WIRING_P1_2026-07-21.md) |

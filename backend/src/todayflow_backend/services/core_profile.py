@@ -177,7 +177,7 @@ class CoreProfileService:
         shell = {
             "profile_version": self.profile_version,
             "generated_at": datetime.now(timezone.utc).isoformat(),
-            "is_ready": len(missing_fields) == 0,
+            "is_ready": len(self._hard_missing_fields(missing_fields)) == 0,
             "missing_fields": missing_fields,
             "profile_hash": profile_hash,
             "person": person_pub,
@@ -238,7 +238,7 @@ class CoreProfileService:
             # Parallel publishers coalesce under the same hash lock.
             baseline = self._build_baseline(astro_context, numerology_context)
             missing_fields = self._build_missing_fields(settings, astro_context, numerology_context)
-            is_ready = len(missing_fields) == 0
+            is_ready = len(self._hard_missing_fields(missing_fields)) == 0
 
             person_pub = self._person_public(settings, user)
             generated_at = datetime.now(timezone.utc).isoformat()
@@ -793,21 +793,40 @@ class CoreProfileService:
         astro_context: dict[str, Any],
         numerology_context: dict[str, Any],
     ) -> list[str]:
+        """Hard blockers for base profile + soft unlock layers.
+
+        Hard (blocks ``is_ready``): birth date, life path.
+        Soft (listed for CTA, does not block readiness): name numerology, gender,
+        birth time, place when time is known.
+        """
         missing: list[str] = []
-        if not settings or not settings.first_name:
+        if not astro_context.get("birth_date"):
+            missing.append("astro_birth_date")
+        if numerology_context.get("life_path") is None:
+            missing.append("numerology_life_path")
+
+        # Soft unlocks — depth layers, not readiness.
+        if not settings or not str(settings.first_name or "").strip():
             missing.append("first_name")
         g = ""
         if settings and getattr(settings, "gender", None):
             g = str(settings.gender).strip().lower()
         if g not in _CANONICAL_USER_GENDERS:
             missing.append("gender")
-        if not astro_context.get("birth_date"):
-            missing.append("astro_birth_date")
-        if not astro_context.get("location_name"):
+
+        time_unknown = bool(astro_context.get("time_unknown"))
+        birth_time = astro_context.get("birth_time")
+        time_known = bool(birth_time) and not time_unknown
+        if not time_known:
+            missing.append("astro_birth_time")
+        elif not astro_context.get("location_name"):
+            # Place only matters for houses/ASC when time is present.
             missing.append("astro_location_name")
-        if numerology_context.get("life_path") is None:
-            missing.append("numerology_life_path")
         return missing
+
+    def _hard_missing_fields(self, missing_fields: list[str]) -> list[str]:
+        hard = {"astro_birth_date", "numerology_life_path"}
+        return [field for field in missing_fields if field in hard]
 
     def _build_profile_hash(
         self,

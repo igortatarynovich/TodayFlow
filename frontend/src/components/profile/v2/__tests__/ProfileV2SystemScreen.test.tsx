@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { ProfileV2DepthRail } from "@/components/profile/v2/ProfileV2DepthRail";
+import userEvent from "@testing-library/user-event";
 import { ProfileV2SystemScreen } from "@/components/profile/v2/ProfileV2SystemScreen";
 import {
   PROFILE_V2_COPY,
@@ -36,10 +36,10 @@ const journeyCore = {
     recognition_line: "Ты первым видишь структуру.",
     identity_core: "Длинное ядро.",
     strengths: ["ясная система"],
-    growth_zones: ["спешка"],
-    relationship_style: "",
+    growth_zones: ["спешка ломает точность"],
+    relationship_style: "Сначала доверие, потом открытость.",
     money_style: "",
-    decision_style: "Сначала тело.",
+    decision_style: "Сначала тело, потом структура.",
     recurring_patterns: ["нужна ясность"],
     helps: ["тишина перед решением"],
   },
@@ -55,7 +55,7 @@ const journeyCore = {
         id: "n1",
         kind: "tension",
         title: "Ясность vs скорость",
-        insight: "Сила в точности.",
+        insight: "Сила в точности, но спешка всё сбивает.",
         grounded_on: [{ label: "Рост: спешка" }],
         help: "Один тихий проход перед решением.",
         living_evidence: ["опять поторопился"],
@@ -78,11 +78,13 @@ const live = buildProfileV2LiveContext({
 });
 
 describe("ProfileV2SystemScreen", () => {
-  it("renders journey Steps 1–5 and demotes equal character cards", () => {
+  it("renders Pattern-style first screen and hides kitchen / depth nav", async () => {
+    const user = userEvent.setup();
     render(
       <ProfileV2SystemScreen
         model={baseModel}
         live={live}
+        coreProfile={journeyCore}
         identityPills={["☉ Дева", "☽ Рыбы"]}
         onOpenBirthData={() => {}}
         deep={{
@@ -95,25 +97,37 @@ describe("ProfileV2SystemScreen", () => {
     );
 
     expect(screen.getByTestId("profile-v2-system")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 1, name: /Исследователь/i })).toBeInTheDocument();
-    expect(screen.queryAllByRole("heading", { level: 1 })).toHaveLength(1);
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("структуру");
     expect(screen.getByTestId("profile-v2-recognition-line")).toHaveTextContent("структуру");
-    expect(screen.getByTestId("profile-v2-why")).toHaveTextContent("Число пути 7");
-    expect(screen.getByTestId("profile-v2-insight")).toHaveTextContent("Ясность vs скорость");
-    expect(screen.getByTestId("profile-v2-living-adjacent")).toHaveTextContent(
-      "не доказательство",
-    );
-    expect(screen.getByTestId("profile-v2-effort")).toHaveTextContent("тихий проход");
-    expect(screen.getByTestId("profile-v2-bridge")).toHaveTextContent("Открыть Today");
+    expect(screen.getByTestId("profile-v2-archetype-label")).toHaveTextContent(/Исследователь/i);
+
+    expect(screen.getByTestId("profile-v2-traits")).toBeInTheDocument();
+    expect(screen.getByTestId("profile-v2-trait-decisions")).toHaveTextContent("тело");
+    expect(screen.getByTestId("profile-v2-trait-intimacy")).toHaveTextContent("доверие");
+    expect(screen.getByTestId("profile-v2-trait-self_friction")).toHaveTextContent("спешка");
+
+    expect(screen.getByTestId("profile-v2-contradiction")).toHaveTextContent("Ясность vs скорость");
+    expect(screen.getByTestId("profile-v2-helps")).toHaveTextContent("тихий проход");
+
+    expect(screen.queryByTestId("profile-v2-why")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("profile-v2-depth-jump")).not.toBeInTheDocument();
+    expect(screen.queryByText(/Почему портрет такой/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/не доказательство/i)).not.toBeInTheDocument();
+    expect(screen.queryByTestId("profile-v2-full")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("profile-v2-character-more")).not.toBeInTheDocument();
+
     expect(screen.getByRole("link", { name: /Открыть Today/i })).toHaveAttribute("href", "/today");
+    await user.click(screen.getByTestId("profile-v2-open-full"));
+    expect(await screen.findByTestId("profile-v2-full")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-character-more")).toBeInTheDocument();
-    expect(document.getElementById("profile-v2-sources-title")).toHaveTextContent("Источники");
+    expect(document.getElementById("profile-v2-sources-title")).toHaveTextContent("Основа карты");
+
     expect(screen.queryByText(/Твой личный профиль/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Камень дня/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/68%/)).not.toBeInTheDocument();
   });
 
-  it("omits effort and bridge when projections are null", () => {
+  it("omits contradiction and helps when projections are null", () => {
     const sparseLive = buildProfileV2LiveContext({
       coreProfile: {
         astro: { sun_sign: "Virgo" },
@@ -135,28 +149,32 @@ describe("ProfileV2SystemScreen", () => {
 
     render(
       <ProfileV2SystemScreen
-        model={baseModel}
+        model={{ ...baseModel, decisionStyle: null, drains: [], strengthens: [], perceivedAs: [], lifeMission: null }}
         live={sparseLive}
+        coreProfile={{
+          astro: { sun_sign: "Virgo" },
+          baseline: { archetype_seed: "explorer" },
+          profile_contract_v1: {
+            contract_version: "v1",
+            recognition_line: "Ты первым видишь структуру.",
+            identity_core: "Ядро.",
+            strengths: [],
+            growth_zones: [],
+            relationship_style: "",
+            money_style: "",
+            decision_style: "",
+            recurring_patterns: [],
+          },
+        } as never}
         onOpenBirthData={() => {}}
       />,
     );
 
     expect(screen.getByTestId("profile-v2-recognition-line")).toBeInTheDocument();
-    expect(screen.queryByTestId("profile-v2-insight")).not.toBeInTheDocument();
-    expect(screen.queryByTestId("profile-v2-effort")).not.toBeInTheDocument();
-    expect(screen.queryByTestId("profile-v2-bridge")).not.toBeInTheDocument();
-  });
-
-  it("puts the depth ladder in the right rail component", () => {
-    render(<ProfileV2DepthRail />);
-    const rail = screen.getByTestId("profile-v2-depth-rail");
-    expect(rail).toBeInTheDocument();
-    expect(rail).toHaveTextContent("Узнавание");
-    expect(rail).toHaveTextContent("Узел");
-    expect(rail).toHaveTextContent("Усилие");
-    expect(rail).toHaveTextContent("Дальше");
-    expect(rail).toHaveTextContent("Источники");
-    expect(rail.querySelectorAll("a[href^='#profile-v2-']")).toHaveLength(6);
+    expect(screen.queryByTestId("profile-v2-traits")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("profile-v2-contradiction")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("profile-v2-helps")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("profile-v2-open-full")).not.toBeInTheDocument();
   });
 });
 

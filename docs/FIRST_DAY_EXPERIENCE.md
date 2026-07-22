@@ -96,7 +96,9 @@ flowchart LR
 
 ## 3. Signup — что собираем (и что не собираем)
 
-**На signup только account + legal + attribution.** Birth data — **только** в `/onboarding/core`.
+**На signup только account + legal + attribution.**  
+**Intake SoT (TARGET):** [PRODUCT_DATA_INTAKE.md](./PRODUCT_DATA_INTAKE.md) — ровно 2 способа (публичный 1A/1B → email · авторизованный «добавить профиль»).  
+Исторический путь `/onboarding/core` — кандидат на слияние в 1B/2, не отдельный третий сценарий.
 
 | Поле | Обязательно | Зачем | Хранение |
 |------|-------------|-------|----------|

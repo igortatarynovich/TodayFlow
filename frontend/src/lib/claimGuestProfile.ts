@@ -25,7 +25,8 @@ export type ClaimGuestProfileResult =
   | { status: "claiming" };
 
 export function canClaimGuestProfile(draft: GuestProfileDraft | null = readGuestProfileDraft()): boolean {
-  return Boolean(draft?.first_name?.trim() && draft.birth_date?.trim());
+  // Name is optional (name numerology only). Birth date is the hard minimum.
+  return Boolean(draft?.birth_date?.trim());
 }
 
 /** Call before navigating to auth — syncs progress + issues claim token. */

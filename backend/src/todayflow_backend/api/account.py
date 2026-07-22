@@ -339,7 +339,7 @@ class CumConfidenceHistoryResponse(BaseModel):
 
 
 class CoreSetupPayload(BaseModel):
-    first_name: str
+    first_name: Optional[str] = None
     last_name: Optional[str] = None
     label: str = "Я"
     birth_date: date
@@ -347,7 +347,8 @@ class CoreSetupPayload(BaseModel):
     time_unknown: bool = False
     timezone_offset_minutes: Optional[int] = None
     timezone_name: Optional[str] = None
-    location_name: str
+    # Optional unless birth time is known — place only unlocks ASC/houses with time.
+    location_name: Optional[str] = None
     latitude: Optional[float] = None
     longitude: Optional[float] = None
     notes: Optional[str] = None
@@ -946,7 +947,7 @@ async def upsert_core_setup(
     locale = request_locale(request)
     settings = _settings_or_create(db, user)
 
-    settings.first_name = payload.first_name.strip()
+    settings.first_name = (payload.first_name or "").strip() or None
     settings.last_name = (payload.last_name or "").strip() or None
     if payload.gender is not None:
         normalized_g = _normalize_gender_value(payload.gender, locale=locale)
@@ -962,12 +963,26 @@ async def upsert_core_setup(
         settings.gender = normalized_g
     db.add(settings)
 
-    latitude, longitude = _resolve_coordinates(
-        geocoder,
-        payload.location_name,
-        payload.latitude,
-        payload.longitude,
-    )
+    time_known = bool(payload.birth_time) and not payload.time_unknown
+    location_name = (payload.location_name or "").strip()
+    if time_known and not location_name:
+        raise HTTPException(
+            status_code=400,
+            detail=translate(
+                "account.errors.placeRequiredWithTime",
+                locale=locale,
+                default="Birth place is required when birth time is known — otherwise Ascendant and houses cannot be calculated.",
+            ),
+        )
+
+    latitude, longitude = (None, None)
+    if location_name:
+        latitude, longitude = _resolve_coordinates(
+            geocoder,
+            location_name,
+            payload.latitude,
+            payload.longitude,
+        )
 
     primary = _get_primary_profile(user, db)
     if primary is None:
@@ -980,7 +995,7 @@ async def upsert_core_setup(
             time_unknown=payload.time_unknown,
             timezone_offset_minutes=payload.timezone_offset_minutes,
             timezone_name=payload.timezone_name,
-            location_name=payload.location_name.strip(),
+            location_name=location_name or None,
             latitude=latitude,
             longitude=longitude,
             notes=payload.notes,
@@ -995,7 +1010,7 @@ async def upsert_core_setup(
             payload.time_unknown,
             payload.timezone_offset_minutes,
             payload.timezone_name,
-            payload.location_name.strip(),
+            location_name,
             latitude,
             longitude,
         )
@@ -1020,7 +1035,7 @@ async def upsert_core_setup(
         primary.time_unknown = payload.time_unknown
         primary.timezone_offset_minutes = payload.timezone_offset_minutes
         primary.timezone_name = payload.timezone_name
-        primary.location_name = payload.location_name.strip()
+        primary.location_name = location_name or None
         primary.latitude = latitude
         primary.longitude = longitude
         primary.notes = payload.notes
@@ -1043,34 +1058,33 @@ async def upsert_core_setup(
     db.refresh(primary)
 
     full_name = " ".join([settings.first_name or "", settings.last_name or ""]).strip()
-    if not full_name:
+    try:
+        if full_name:
+            try:
+                numerology_profile = numerology_service.compute_profile(
+                    full_name=full_name,
+                    birth_date=payload.birth_date.isoformat(),
+                    locale=locale,
+                )
+            except NumerologyError as exc:
+                if exc.code != "invalidName":
+                    raise
+                fallback_name = _normalize_numerology_name(full_name)
+                numerology_profile = numerology_service.compute_profile(
+                    full_name=fallback_name or "",
+                    birth_date=payload.birth_date.isoformat(),
+                    locale=locale,
+                )
+        else:
+            numerology_profile = numerology_service.compute_profile(
+                full_name="",
+                birth_date=payload.birth_date.isoformat(),
+                locale=locale,
+            )
+    except NumerologyError:
         raise HTTPException(
             status_code=400,
-            detail=translate("account.errors.missingName", locale=locale, default="First name is required for numerology."),
-        )
-
-    try:
-        numerology_profile = numerology_service.compute_profile(
-            full_name=full_name,
-            birth_date=payload.birth_date.isoformat(),
-            locale=locale,
-        )
-    except NumerologyError as exc:
-        if exc.code != "invalidName":
-            raise HTTPException(
-                status_code=400,
-                detail=translate("numerology.errors.invalidBirthDate", locale=locale, default="Invalid birth date."),
-            )
-        fallback_name = _normalize_numerology_name(full_name)
-        if not fallback_name:
-            raise HTTPException(
-                status_code=400,
-                detail=translate("account.errors.missingName", locale=locale, default="First name is required for numerology."),
-            )
-        numerology_profile = numerology_service.compute_profile(
-            full_name=fallback_name,
-            birth_date=payload.birth_date.isoformat(),
-            locale=locale,
+            detail=translate("numerology.errors.invalidBirthDate", locale=locale, default="Invalid birth date."),
         )
     numerology_service.save_profile(user.id, numerology_profile, locale=locale)
 

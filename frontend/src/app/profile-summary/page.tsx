@@ -13,9 +13,10 @@ import { flushMeaningOutbox, getCachedMeaningRings, refreshMeaningRings } from "
 
 const MISSING_CORE_FIELD_LABEL_RU: Record<string, string> = {
   gender: "обращение в текстах на «ты»",
-  first_name: "имя",
+  first_name: "полное имя (нумерология имени)",
   astro_birth_date: "дата рождения",
-  astro_location_name: "место рождения",
+  astro_birth_time: "время рождения (Асцендент и дома)",
+  astro_location_name: "место рождения (для домов при известном времени)",
   numerology_life_path: "число жизненного пути (нумерология)",
 };
 
@@ -83,7 +84,7 @@ export default function ProfileSummaryPage() {
         testId="profile-summary-page"
         title="Сводка профиля"
         loading
-        loadingLabel="Готовим краткую сводку профиля…"
+        loadingLabel="Загрузка…"
       />
     );
   }
@@ -179,7 +180,7 @@ export default function ProfileSummaryPage() {
         </p>
         {summary.missing_fields?.length ? (
           <p className="orbit-body-xs" style={{ marginTop: "0.5rem", color: "#6b7280" }}>
-            Для большей точности еще полезно заполнить: {missingCoreFieldsSummaryRu(summary.missing_fields)}.
+            Следующий слой откроется, если добавить: {missingCoreFieldsSummaryRu(summary.missing_fields)}.
           </p>
         ) : null}
       </section>

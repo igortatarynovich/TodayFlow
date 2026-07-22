@@ -44,7 +44,6 @@ import { ProfileSetupSection } from "@/components/profile/ProfileSetupSection";
 import { parseProfileSection } from "@/components/profile/profileSections";
 import { parseProfileView, PROFILE_CHART_SECTION_ID, PROFILE_LIFE_SPHERES_SECTION_ID } from "@/lib/profileRoutes";
 import { ProfileV0Screen } from "@/components/profile/v0/ProfileV0Screen";
-import { ProfileV2DepthRail } from "@/components/profile/v2/ProfileV2DepthRail";
 import { ProfileV2SystemScreen } from "@/components/profile/v2/ProfileV2SystemScreen";
 import { ProfileWebScreen } from "@/components/product-ui/ProfileWebScreen";
 import { ProductPageScreen } from "@/components/product-ui/ProductPageScreen";
@@ -104,7 +103,7 @@ function ProfileLoadingScreen() {
       testId="profile-loading"
       title="Профиль"
       loading
-      loadingLabel="Собираем стабильное состояние профиля"
+      loadingLabel="Загрузка…"
       hideDatePill
     />
   );
@@ -454,7 +453,7 @@ function ProfileHubPageInner() {
       railAnchors={
         showProfileQuickMap ? [] : buildProfileRailAnchors(profileQuickMapModel.frameworkAnchors)
       }
-      rail={showProfileQuickMap ? <ProfileV2DepthRail /> : undefined}
+      rail={undefined}
       compatibilityHref={hasRomanticCompatibilityPair ? romanticCompatibilityRoute.href : "/compatibility"}
     >
       <div
@@ -528,6 +527,7 @@ function ProfileHubPageInner() {
                 <ProfileV2SystemScreen
                   model={profileQuickMapModel}
                   live={profileV2Live}
+                  coreProfile={coreProfile}
                   identityPills={buildProfileIdentityPills(profileQuickMapModel.frameworkAnchors, coreProfile)}
                   onOpenBirthData={() => setForceSetup(true)}
                   lifeSpheres={profileLifeSpheres}

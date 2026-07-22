@@ -1066,9 +1066,9 @@ export type NumerologyProfile = {
   name: string;
   birth_date: string;
   life_path: NumerologyNumber;
-  expression: NumerologyNumber;
-  soul_urge: NumerologyNumber;
-  personality: NumerologyNumber;
+  expression?: NumerologyNumber | null;
+  soul_urge?: NumerologyNumber | null;
+  personality?: NumerologyNumber | null;
 };
 
 export type NumerologyDailyInsight = {
