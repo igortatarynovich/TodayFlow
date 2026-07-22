@@ -302,6 +302,35 @@ export type CoreProfile = {
     generation_meta?: Record<string, unknown> | null;
     profile_snapshot_version?: string | null;
   } | null;
+  /**
+   * Step-2 why checklist (read-path only). Not stored in Snapshot.
+   * selected_by = life_path→archetype; portrait_influenced_by = sun/element/rhythm/…
+   */
+  portrait_why_v0?: {
+    projection_version?: string;
+    title?: string;
+    selected_by?: Array<{
+      id?: string;
+      class?: "selected_by" | string;
+      life_path?: number | null;
+      archetype_seed?: string | null;
+      label?: string;
+      fact_keys?: string[];
+    }>;
+    portrait_influenced_by?: Array<{
+      id?: string;
+      class?: "portrait_influenced_by" | string;
+      label?: string;
+      value?: string | null;
+      fact_keys?: string[];
+    }>;
+    omitted?: Array<{ id?: string; reason?: string; opens?: string }>;
+    honesty_line?: string | null;
+    rules?: {
+      archetype_selected_only_by?: string;
+      forbid_sun_as_archetype_cause?: boolean;
+    };
+  } | null;
   daily_interpretation?: {
     daily_lenses?: {
       general?: string;

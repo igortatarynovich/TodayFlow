@@ -72,13 +72,15 @@ class CoreProfileService:
     ) -> dict[str, Any]:
         """Подмешивает сжатое астро-резюме при отдаче (не кладём в снапшот — карта может появиться позже)."""
         from todayflow_backend.services.natal_chart_summary import build_natal_chart_summary_for_core
+        from todayflow_backend.services.profile_portrait_why_projection_v0 import attach_portrait_why_v0
 
         locale = (settings.locale if settings else None) or "ru"
         aid = astro_profile.id if astro_profile else None
         payload["natal_summary"] = build_natal_chart_summary_for_core(
             db, astro_profile_id=aid, locale=locale
         )
-        return payload
+        # Step-2 why checklist — ephemeral read projection; never persisted in Snapshot.
+        return attach_portrait_why_v0(payload)
 
     @staticmethod
     def _person_public(

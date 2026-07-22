@@ -281,8 +281,9 @@ Target-поля смысла (сжать из identity / Content Canon): имя 
 |---|------|--------|
 | 1–5 | Locked forms Steps 1–5 + samples Case A/C | **DONE** · sign-off YES |
 | 6 | Product review / sample corrections | **DONE** 2026-07-22 |
-| 7a | Mechanism delta #1 `recognition_line` | **IN CODE** |
-| 7b | Mechanism deltas #2–5 (selected_by/influenced_by · node · effort · bridge) | **NEXT** |
+| 7a | Mechanism delta #1 `recognition_line` | **SHIPPED** `7d6e7bc` |
+| 7b | Mechanism delta #2 `portrait_why_v0` (selected_by / influenced_by) | **IN CODE** (read-path; no Snapshot) |
+| 7c | Mechanism deltas #3–5 (node · effort · bridge) | **NEXT** |
 | 8 | UI journey surface | waiting — после deltas |
 
 Пауза: Freeze `character_decisions` · новые Freeze-строки · UI.
