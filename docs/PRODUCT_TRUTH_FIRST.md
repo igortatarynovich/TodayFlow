@@ -15,6 +15,8 @@
 
 **Umbrella:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) — любой вывод = источник → расчёт → интерпретация → практика → текст; иначе не production.
 
+**Качество блока (Six Questions):** [PRODUCT_BLOCK_SIX_QUESTIONS.md](./PRODUCT_BLOCK_SIX_QUESTIONS.md) — зачем · почему эта info · откуда · почему доверять · почему здесь · к чему ведёт. Нет ответа → убрать или переработать.
+
 **Understanding progress** *(глубина · missing data · trial · подписка — см. [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](./UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md)):*
 
 > Прогресс = рост качества понимания пользователя, не число открытых функций.  

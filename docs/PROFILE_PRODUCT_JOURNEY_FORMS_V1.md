@@ -331,8 +331,8 @@ Patterns/helps LLM: только если `patterns_generation_allowed`. Ина�
 | 1 | `recognition_line` — отдельное поле identity contract | Шаг 1 | **SHIPPED** `7d6e7bc` (Snapshot field; UI not wired) |
 | 2 | Проекция Шага 2: `selected_by` vs `portrait_influenced_by` | без ложной причинности label | **SHIPPED** `5133e82` — `portrait_why_v0` read-path; shared `profile_baseline_archetype_v0` |
 | 3 | Node projection: insight → grounded_on → help → living evidence | Шаг 3 | **SHIPPED** `aa27720` — `insight_nodes_v0`; living quotes = adjacent context, not proof link |
-| 4 | `effort_vector` из выбранного node only | Шаг 4 | **IN CODE** — `effort_vector_v0` from `nodes[0].help`; null if no safe help; no life_mission/Today |
-| 5 | `bridge_line` (+ CTA Today) | Шаг 5; без day-forecast | waiting |
+| 4 | `effort_vector` из выбранного node only | Шаг 4 | **SHIPPED** `efd7141` — `effort_vector_v0` from `nodes[0].help`; null if no safe help |
+| 5 | `bridge_line` — переход в практику, не пустой CTA | Шаг 5 | **IN CODE** — `bridge_line_v0` from selected node kind → Today; no day-forecast |
 
 Пауза: `character_decisions` · новые Freeze-строки · UI journey surface.
 

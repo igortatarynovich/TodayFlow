@@ -362,6 +362,17 @@ export type CoreProfile = {
     source_fields?: string[];
     rules?: Record<string, unknown>;
   } | null;
+  /** Step-5 path bridge to Today (read-path only). Not an empty CTA / day forecast. */
+  bridge_line_v0?: {
+    projection_version?: string;
+    bridge_line?: string | null;
+    cta?: string | null;
+    leads_to?: string | null;
+    source_node_id?: string | null;
+    node_kind?: string | null;
+    source_fields?: string[];
+    rules?: Record<string, unknown>;
+  } | null;
   daily_interpretation?: {
     daily_lenses?: {
       general?: string;

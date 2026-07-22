@@ -1,7 +1,9 @@
 # Profile E2E — Block Passport Template
 
 **Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md)  
-**Rule:** нет заполненного паспорта → блока ещё не существует (не проектировать UI/prompt).
+**Product quality (above this template):** [PRODUCT_BLOCK_SIX_QUESTIONS.md](../PRODUCT_BLOCK_SIX_QUESTIONS.md) — зачем · почему эта info · откуда · доверие · почему здесь · к чему ведёт.  
+**Rule:** нет заполненного паспорта → блока ещё не существует (не проектировать UI/prompt).  
+**Rule:** нет убедительных Six Questions → блок не production, даже если gate/schema PASS.
 
 > Качество результата — ответственность цепочки ниже. Категории «модель выдумала» **нет**.
 

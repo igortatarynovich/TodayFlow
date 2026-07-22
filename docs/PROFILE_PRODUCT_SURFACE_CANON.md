@@ -4,7 +4,7 @@
 **Version:** 1.3 (2026-07-22)  
 **Locked forms:** [PROFILE_PRODUCT_JOURNEY_FORMS_V1.md](./PROFILE_PRODUCT_JOURNEY_FORMS_V1.md) — **product sign-off YES** (samples corrected); next = mechanism deltas only  
 **Overrides:** cosmetic V2 polish · next Freeze rows as screen goal · equal-card document as «done»  
-**Parents:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) · [PR4_PROFILE_CANON.md](./PR4_PROFILE_CANON.md) · [content/TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md)  
+**Parents:** [PRODUCT_BLOCK_SIX_QUESTIONS.md](./PRODUCT_BLOCK_SIX_QUESTIONS.md) · [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) · [PR4_PROFILE_CANON.md](./PR4_PROFILE_CANON.md) · [content/TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md)  
 **Mechanism (ниже продукта):** [PROFILE_E2E_RECONSTRUCTION.md](./PROFILE_E2E_RECONSTRUCTION.md) · [audits/PROFILE_V1_BLOCK_FREEZE_MATRIX.md](./audits/PROFILE_V1_BLOCK_FREEZE_MATRIX.md) · [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) §0.3
 
 ---
@@ -15,11 +15,12 @@
 > Это управляемое путешествие человека:  
 > **узнал себя → понял почему → обнаружил закономерности → понял, куда прикладывать усилия → захотел возвращаться.**
 
-Любой слой, блок, промпт, поле Snapshot или UI-зона проверяются одним вопросом:
+Любой слой, блок, промпт, поле Snapshot или UI-зона проверяются:
 
-> **Добавляет ли это новый этап путешествия — или только повторяет уже сказанное?**
+1. **Six Questions** — [PRODUCT_BLOCK_SIX_QUESTIONS.md](./PRODUCT_BLOCK_SIX_QUESTIONS.md)  
+2. **Новая ценность пути:** добавляет ли новый этап — или только повторяет уже сказанное?
 
-Если только повторяет — **не улучшать. Удалить или объединить.**
+Если только повторяет или нет ответа на Six Questions — **не улучшать. Удалить или объединить.**
 
 Именно отсутствие этого уровня (путешествие человека) было причиной большинства предыдущих циклов: архитектура оптимизировала сущности системы, а не продукт, который человек покупает своим вниманием.
 
@@ -284,8 +285,9 @@ Target-поля смысла (сжать из identity / Content Canon): имя 
 | 7a | Mechanism delta #1 `recognition_line` | **SHIPPED** `7d6e7bc` |
 | 7b | Mechanism delta #2 `portrait_why_v0` | **SHIPPED** `5133e82` (+ shared archetype helper) |
 | 7c | Mechanism delta #3 `insight_nodes_v0` | **SHIPPED** `aa27720` |
-| 7d | Mechanism delta #4 `effort_vector_v0` | **IN CODE** (from selected node.help only) |
-| 7e | Mechanism delta #5 `bridge_line` | **NEXT** |
+| 7d | Mechanism delta #4 `effort_vector_v0` | **SHIPPED** `efd7141` |
+| 7e | Mechanism delta #5 `bridge_line_v0` | **IN CODE** (path → Today; Six Questions) |
+| 7f | Six Questions product SoT | [PRODUCT_BLOCK_SIX_QUESTIONS.md](./PRODUCT_BLOCK_SIX_QUESTIONS.md) |
 | 8 | UI journey surface | waiting — после deltas |
 
 Пауза: Freeze `character_decisions` · новые Freeze-строки · UI.
