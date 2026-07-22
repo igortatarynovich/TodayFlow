@@ -172,6 +172,9 @@ def project_insight_nodes_v0(
             "max_nodes_first_release": _MAX_NODES_FIRST_RELEASE,
             "no_per_node_causal_trace": True,
             "living_evidence_requires_signal_notes": True,
+            # v0: nearby living context only — NOT proven evidence for this specific pattern.
+            # UI must not label quotes as «это уже проявлялось так» without a linked match.
+            "living_evidence_is_adjacent_context_not_proof": True,
             "snapshot_materials_unchanged": True,
             "not_a_second_patterns_schema": True,
         },

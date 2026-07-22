@@ -283,8 +283,9 @@ Target-поля смысла (сжать из identity / Content Canon): имя 
 | 6 | Product review / sample corrections | **DONE** 2026-07-22 |
 | 7a | Mechanism delta #1 `recognition_line` | **SHIPPED** `7d6e7bc` |
 | 7b | Mechanism delta #2 `portrait_why_v0` | **SHIPPED** `5133e82` (+ shared archetype helper) |
-| 7c | Mechanism delta #3 `insight_nodes_v0` | **IN CODE** (read-path; reuses Snapshot string arrays) |
-| 7d | Mechanism deltas #4–5 (effort · bridge) | **NEXT** |
+| 7c | Mechanism delta #3 `insight_nodes_v0` | **SHIPPED** `aa27720` |
+| 7d | Mechanism delta #4 `effort_vector_v0` | **IN CODE** (from selected node.help only) |
+| 7e | Mechanism delta #5 `bridge_line` | **NEXT** |
 | 8 | UI journey surface | waiting — после deltas |
 
 Пауза: Freeze `character_decisions` · новые Freeze-строки · UI.

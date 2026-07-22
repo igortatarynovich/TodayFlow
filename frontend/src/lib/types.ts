@@ -349,6 +349,19 @@ export type CoreProfile = {
     }>;
     rules?: Record<string, unknown>;
   } | null;
+  /**
+   * Step-4 effort vector (read-path only). Derived from insight_nodes_v0.nodes[0].help.
+   * Null when no safe help — never invents from life_mission / Today / astrology.
+   */
+  effort_vector_v0?: {
+    projection_version?: string;
+    effort_vector?: string | null;
+    source_node_id?: string | null;
+    node_kind?: string | null;
+    role?: string | null;
+    source_fields?: string[];
+    rules?: Record<string, unknown>;
+  } | null;
   daily_interpretation?: {
     daily_lenses?: {
       general?: string;

@@ -72,6 +72,9 @@ class CoreProfileService:
     ) -> dict[str, Any]:
         """Подмешивает сжатое астро-резюме при отдаче (не кладём в снапшот — карта может появиться позже)."""
         from todayflow_backend.services.natal_chart_summary import build_natal_chart_summary_for_core
+        from todayflow_backend.services.profile_effort_vector_projection_v0 import (
+            attach_effort_vector_v0,
+        )
         from todayflow_backend.services.profile_insight_nodes_projection_v0 import (
             attach_insight_nodes_v0,
         )
@@ -82,8 +85,10 @@ class CoreProfileService:
         payload["natal_summary"] = build_natal_chart_summary_for_core(
             db, astro_profile_id=aid, locale=locale
         )
-        # Step-2 / Step-3 — ephemeral read projections; never persisted in Snapshot.
-        return attach_insight_nodes_v0(attach_portrait_why_v0(payload))
+        # Step-2 / Step-3 / Step-4 — ephemeral read projections; never persisted in Snapshot.
+        return attach_effort_vector_v0(
+            attach_insight_nodes_v0(attach_portrait_why_v0(payload))
+        )
 
     @staticmethod
     def _person_public(
