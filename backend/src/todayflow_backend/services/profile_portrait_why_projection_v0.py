@@ -10,6 +10,7 @@ from __future__ import annotations
 from typing import Any
 
 from todayflow_backend.services.natal_chart_personalization import _sign_label_prepositional
+from todayflow_backend.services.profile_baseline_archetype_v0 import archetype_seed_from_life_path
 
 PROJECTION_VERSION = "profile_portrait_why_v0.1"
 TITLE_RU = "Почему портрет звучит именно так"
@@ -32,26 +33,6 @@ _ELEMENT_LABEL_RU: dict[str, str] = {
     "air": "воздух",
     "water": "вода",
 }
-
-# Must match CoreProfileService._build_baseline life_path buckets.
-_LIFE_PATH_ARCHETYPE: dict[int, str] = {}
-for _lp in (1, 8, 22):
-    _LIFE_PATH_ARCHETYPE[_lp] = "Architect"
-for _lp in (2, 6, 11):
-    _LIFE_PATH_ARCHETYPE[_lp] = "Harmonizer"
-for _lp in (3, 5, 21):
-    _LIFE_PATH_ARCHETYPE[_lp] = "Explorer"
-for _lp in (4, 7, 9, 33):
-    _LIFE_PATH_ARCHETYPE[_lp] = "Sage"
-
-
-def archetype_seed_from_life_path(life_path: Any) -> str:
-    """Same mapping as CoreProfileService._build_baseline (default Observer)."""
-    try:
-        lp = int(life_path)
-    except (TypeError, ValueError):
-        return "Observer"
-    return _LIFE_PATH_ARCHETYPE.get(lp, "Observer")
 
 
 def _archetype_label_ru(seed: str | None) -> str:

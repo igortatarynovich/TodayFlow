@@ -72,6 +72,9 @@ class CoreProfileService:
     ) -> dict[str, Any]:
         """Подмешивает сжатое астро-резюме при отдаче (не кладём в снапшот — карта может появиться позже)."""
         from todayflow_backend.services.natal_chart_summary import build_natal_chart_summary_for_core
+        from todayflow_backend.services.profile_insight_nodes_projection_v0 import (
+            attach_insight_nodes_v0,
+        )
         from todayflow_backend.services.profile_portrait_why_projection_v0 import attach_portrait_why_v0
 
         locale = (settings.locale if settings else None) or "ru"
@@ -79,8 +82,8 @@ class CoreProfileService:
         payload["natal_summary"] = build_natal_chart_summary_for_core(
             db, astro_profile_id=aid, locale=locale
         )
-        # Step-2 why checklist — ephemeral read projection; never persisted in Snapshot.
-        return attach_portrait_why_v0(payload)
+        # Step-2 / Step-3 — ephemeral read projections; never persisted in Snapshot.
+        return attach_insight_nodes_v0(attach_portrait_why_v0(payload))
 
     @staticmethod
     def _person_public(
@@ -544,18 +547,12 @@ class CoreProfileService:
                 "mutable": "Гибкость и мягкая перенастройка",
             }.get(modality_key, "Ритм через базовые микро-шаги")
 
-        archetype = "Observer"
-        if life_path in {1, 8, 22}:
-            archetype = "Architect"
-        elif life_path in {2, 6, 11}:
-            archetype = "Harmonizer"
-        elif life_path in {3, 5, 21}:
-            archetype = "Explorer"
-        elif life_path in {4, 7, 9, 33}:
-            archetype = "Sage"
+        from todayflow_backend.services.profile_baseline_archetype_v0 import (
+            archetype_seed_from_life_path,
+        )
 
         return {
-            "archetype_seed": archetype,
+            "archetype_seed": archetype_seed_from_life_path(life_path),
             "element_focus": element_focus,
             "rhythm_style": rhythm_style,
         }

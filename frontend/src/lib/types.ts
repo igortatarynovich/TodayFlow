@@ -331,6 +331,24 @@ export type CoreProfile = {
       forbid_sun_as_archetype_cause?: boolean;
     };
   } | null;
+  /**
+   * Step-3 story nodes (read-path only). Projects existing Snapshot strings —
+   * not a second recurring_patterns schema. UI not wired yet.
+   */
+  insight_nodes_v0?: {
+    projection_version?: string;
+    nodes?: Array<{
+      id?: string;
+      kind?: "tension" | "repeat" | "strength" | string;
+      title?: string;
+      insight?: string;
+      grounded_on?: Array<{ id?: string; label?: string; fact_keys?: string[]; role?: string }>;
+      help?: string | null;
+      living_evidence?: string[];
+      source_fields?: string[];
+    }>;
+    rules?: Record<string, unknown>;
+  } | null;
   daily_interpretation?: {
     daily_lenses?: {
       general?: string;

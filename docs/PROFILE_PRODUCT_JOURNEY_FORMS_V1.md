@@ -329,8 +329,8 @@ Patterns/helps LLM: только если `patterns_generation_allowed`. Ина�
 | # | Delta | Why | Status |
 |---|-------|-----|--------|
 | 1 | `recognition_line` — отдельное поле identity contract | Шаг 1 | **SHIPPED** `7d6e7bc` (Snapshot field; UI not wired) |
-| 2 | Проекция Шага 2: `selected_by` vs `portrait_influenced_by` | без ложной причинности label | **IN CODE** — `portrait_why_v0` read-path only (no Snapshot fields); `profile_portrait_why_projection_v0.py` |
-| 3 | Node projection: insight → anchors → help → living evidence | Шаг 3; слот «На что опирается вывод» | waiting |
+| 2 | Проекция Шага 2: `selected_by` vs `portrait_influenced_by` | без ложной причинности label | **SHIPPED** `5133e82` — `portrait_why_v0` read-path; shared `profile_baseline_archetype_v0` |
+| 3 | Node projection: insight → grounded_on → help → living evidence | Шаг 3 | **IN CODE** — `insight_nodes_v0` read-path; materials = existing `recurring_patterns` / `growth_zones` / `helps` / `living.signals` (no second patterns schema) |
 | 4 | `effort_vector` из node projection + validator | Шаг 4; без отдельного LLM-вызова | waiting |
 | 5 | `bridge_line` (+ CTA Today) | Шаг 5; без day-forecast | waiting |
 

@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 from todayflow_backend.services.core_profile import CoreProfileService
+from todayflow_backend.services.profile_baseline_archetype_v0 import archetype_seed_from_life_path
 from todayflow_backend.services.profile_portrait_why_projection_v0 import (
     PROJECTION_VERSION,
     TITLE_RU,
-    archetype_seed_from_life_path,
     attach_portrait_why_v0,
     project_portrait_why_v0,
 )
