@@ -2,7 +2,7 @@
 
 import styles from "./profileAtmosphere.module.css";
 
-export type ProfileAtmosphereMotif = "why" | "insight" | "effort" | "bridge" | "natal";
+export type ProfileAtmosphereMotif = "why" | "insight" | "effort" | "bridge" | "natal" | "today";
 
 export type ProfileAtmosphereProps = {
   motif: ProfileAtmosphereMotif;

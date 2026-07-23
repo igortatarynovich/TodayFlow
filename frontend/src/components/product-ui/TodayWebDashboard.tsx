@@ -316,9 +316,14 @@ export function TodayWebDashboard({
       <ProductWebShellConfigBridge config={shellConfig} />
       <div className={l.productWebContentV2}>
         <div className={v2.pageRoot}>
-          <header className={pl.pageHeader}>
+          <header className={`${pl.pageHeader} ${layout === "composition" ? pl.pageHeaderQuiet : ""}`.trim()}>
             <div>
-              <h1 className={v2.displayTitle}>{todayWebGreeting(chrome, displayName)}</h1>
+              {layout === "composition" ? (
+                <p className={v2.eyebrow}>Сегодня</p>
+              ) : null}
+              <h1 className={layout === "composition" ? v2.sectionTitle : v2.displayTitle}>
+                {todayWebGreeting(chrome, displayName)}
+              </h1>
               {greetingLine ? <p className={v2.bodyLead}>{greetingLine}</p> : null}
             </div>
             <p className={`${v2.chip} ${pl.datePill}`}>

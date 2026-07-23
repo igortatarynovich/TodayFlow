@@ -40,9 +40,22 @@ export const TODAY_COMPOSITION_COPY = {
   practiceStarted: "Практика запущена",
   practiceComplete: "Завершить практику",
   practiceCompleted: "Практика выполнена",
-  readAffirmation: "Сохранить аффirmацию",
+  readAffirmation: "Сохранить аффирмацию",
   themeLabel: "Главная тема дня",
   ritualSpineTitle: "Твой ритуал дня",
   ritualSpineLead: "Два шага — и Today соберёт рекомендации под тебя.",
   contextPanelTitle: "Контекст дня",
+  /** Journey scene chrome — same family as Profile. */
+  journey: {
+    dayTitle: "Суть дня",
+    dayLead: "Одна тема, в которой день уже звучит.",
+    openTitle: "Открыть день",
+    openLead: "Карта и число — и история соберётся под тебя.",
+    readingTitle: "История дня",
+    readingLead: "Как этот день уже говорит с тобой.",
+    moveTitle: "Твой ход",
+    moveLead: "Одно направление и то, что помогает удержать его.",
+    bridgeTitle: "Продолжение",
+    bridgeLead: "День связан с картой личности и темами, которые можно углубить.",
+  },
 } as const;

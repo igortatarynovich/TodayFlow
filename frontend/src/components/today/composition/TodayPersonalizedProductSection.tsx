@@ -1,7 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { profileMotionStaggerDelay, profileMotionStyles, useProfileMotionInView } from "@/components/foundation/ProfileMotion";
+import {
+  profileMotionStaggerDelay,
+  profileMotionStyles,
+  useProfileMotionInView,
+} from "@/components/foundation/ProfileMotion";
+import { ProfileAtmosphere } from "@/components/profile/v2/ProfileAtmosphere";
 import type { TodayPromiseSuggestion } from "@/lib/todayDayDialogue";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import type { TodayStrengthenTool } from "@/lib/todayCompositionModel";
@@ -72,6 +77,12 @@ export function TodayPersonalizedProductSection({
     contract.global_context?.period?.trim() ||
     story.hero.themeHeadline;
 
+  const hasMoveBody =
+    Boolean(dayGoal) ||
+    goalDraftOpen ||
+    strengthenTools.length > 0 ||
+    Boolean(reading.lean || reading.ease || reading.close);
+
   const motion = useProfileMotionInView<HTMLElement>(40);
 
   return (
@@ -81,156 +92,192 @@ export function TodayPersonalizedProductSection({
       style={motion.style}
       data-testid="today-zone-personal"
     >
-      <article
-        className={`${styles.synthesisCard} ${profileMotionStyles.staggerItem}`}
-        style={profileMotionStaggerDelay(0, 60)}
-        data-testid="today-entity-synthesis"
-      >
-        <div>
-          <p className={styles.synthesisKicker}>{themeLine || "Сегодня"}</p>
-          {reading.opening ? <p className={styles.synthesisText}>{reading.opening}</p> : null}
-          {reading.why ? (
-            <p className={styles.softWhy} data-testid="today-soft-why">
-              <span className={styles.softWhyLabel}>Почему это важно сегодня</span>
-              {reading.why}
-            </p>
-          ) : null}
-        </div>
-      </article>
+      <div className={styles.journeyScene} data-testid="today-zone-reading">
+        <ProfileAtmosphere motif="today" />
+        <header className={styles.journeySceneHeader}>
+          <p className={styles.journeyStepIndex}>
+            <span className={styles.journeyStepBadge}>3</span>
+            <span>{copy.journey.readingTitle}</span>
+          </p>
+          <p className={styles.journeySceneLead}>{copy.journey.readingLead}</p>
+        </header>
 
-      {(reading.lean || reading.ease || reading.close) && (
-        <article className={styles.productCard} data-testid="today-zone-focus-card">
-          {reading.lean ? <p className={styles.readingParagraph}>{reading.lean}</p> : null}
-          {reading.ease ? <p className={styles.readingParagraph}>{reading.ease}</p> : null}
-          {reading.close ? (
-            <p className={`${styles.readingParagraph} ${styles.readingClose}`.trim()}>{reading.close}</p>
-          ) : null}
-        </article>
-      )}
-
-      {(dayGoal || goalDraftOpen) && (
-        <article className={styles.productCard} data-testid="today-zone-promise">
-          <p className={styles.cardEyebrow}>Если хочется зафиксировать</p>
-          {dayGoal && !goalDraftOpen ? (
-            <p className={styles.readingParagraph} data-testid="today-promise-active">
-              {dayGoal}
-            </p>
-          ) : null}
-          {goalDraftOpen ? (
-            <div className={styles.customGoalForm} data-testid="today-entity-daily-goal">
-              <input
-                id="day-goal-input-product"
-                className={styles.goalInput}
-                value={goalDraft}
-                onChange={(event) => onGoalDraftChange(event.target.value)}
-                maxLength={200}
-                placeholder="Своими словами — из того, что уже звучит в дне"
-              />
-              <button type="button" className="orbit-button orbit-button-primary" onClick={onSaveGoal}>
-                {copy.goalSave}
-              </button>
-            </div>
-          ) : (
-            <button type="button" className={styles.customGoalRow} onClick={onOpenGoalDraft}>
-              {dayGoal ? "Изменить своими словами…" : "+ Своими словами…"}
-            </button>
-          )}
-        </article>
-      )}
-      {!dayGoal && !goalDraftOpen ? (
-        <button
-          type="button"
-          className={styles.customGoalRow}
-          data-testid="today-zone-promise-open"
-          onClick={onOpenGoalDraft}
+        <article
+          className={`${styles.synthesisCard} ${profileMotionStyles.staggerItem}`}
+          style={profileMotionStaggerDelay(0, 60)}
+          data-testid="today-entity-synthesis"
         >
-          + Если хочется — своими словами
-        </button>
-      ) : null}
-
-      {strengthenTools.length > 0 ? (
-        <article className={styles.productCard} data-testid="today-zone-strengthen">
-          <div className={styles.practicesHeader}>
-            <p className={styles.cardEyebrow}>На сегодня</p>
-            {totalTools > 1 ? (
-              <p className={styles.practicesProgress}>
-                {completedCount} из {totalTools}
+          <div>
+            <p className={styles.synthesisKicker}>{themeLine || "Сегодня"}</p>
+            {reading.opening ? <p className={styles.synthesisText}>{reading.opening}</p> : null}
+            {reading.why ? (
+              <p className={styles.softWhy} data-testid="today-soft-why">
+                <span className={styles.softWhyLabel}>Почему это важно сегодня</span>
+                {reading.why}
               </p>
             ) : null}
           </div>
+        </article>
 
-          {practiceTool ? (
-            <>
-              <div className={styles.practiceRow}>
-                <span
-                  className={practiceCompleted ? styles.practiceCheckDone : styles.practiceCheck}
-                  aria-hidden
-                />
-                <div className={styles.practiceBody}>
-                  <p className={styles.practiceTitle}>{practiceTool.title}</p>
-                  {practiceTool.duration ? <p className={styles.practiceMeta}>{practiceTool.duration}</p> : null}
-                  {!practiceCompleted ? (
-                    <button
-                      type="button"
-                      className={`orbit-button orbit-button-secondary ${styles.practiceAction}`}
-                      data-testid="today-tool-practice"
-                      disabled={practiceCompleting}
-                      onClick={() => void onPracticeAction()}
-                    >
-                      {practiceStarted ? copy.practiceComplete : copy.practiceStart}
-                    </button>
-                  ) : (
-                    <p className={styles.practiceMeta}>{copy.practiceCompleted}</p>
-                  )}
+        {(reading.lean || reading.ease || reading.close) && (
+          <article className={styles.productCard} data-testid="today-zone-focus-card">
+            {reading.lean ? <p className={styles.readingParagraph}>{reading.lean}</p> : null}
+            {reading.ease ? <p className={styles.readingParagraph}>{reading.ease}</p> : null}
+            {reading.close ? (
+              <p className={`${styles.readingParagraph} ${styles.readingClose}`.trim()}>{reading.close}</p>
+            ) : null}
+          </article>
+        )}
+      </div>
+
+      {hasMoveBody ? (
+        <div className={styles.journeyScene} data-testid="today-zone-move">
+          <ProfileAtmosphere motif="effort" />
+          <header className={styles.journeySceneHeader}>
+            <p className={styles.journeyStepIndex}>
+              <span className={styles.journeyStepBadge}>4</span>
+              <span>{copy.journey.moveTitle}</span>
+            </p>
+            <p className={styles.journeySceneLead}>{copy.journey.moveLead}</p>
+          </header>
+
+          {(dayGoal || goalDraftOpen) && (
+            <article className={styles.productCard} data-testid="today-zone-promise">
+              <p className={styles.cardEyebrow}>Если хочется зафиксировать</p>
+              {dayGoal && !goalDraftOpen ? (
+                <p className={styles.readingParagraph} data-testid="today-promise-active">
+                  {dayGoal}
+                </p>
+              ) : null}
+              {goalDraftOpen ? (
+                <div className={styles.customGoalForm} data-testid="today-entity-daily-goal">
+                  <input
+                    id="day-goal-input-product"
+                    className={styles.goalInput}
+                    value={goalDraft}
+                    onChange={(event) => onGoalDraftChange(event.target.value)}
+                    maxLength={200}
+                    placeholder="Своими словами — из того, что уже звучит в дне"
+                  />
+                  <button type="button" className="orbit-button orbit-button-primary" onClick={onSaveGoal}>
+                    {copy.goalSave}
+                  </button>
                 </div>
-              </div>
-            </>
+              ) : (
+                <button type="button" className={styles.customGoalRow} onClick={onOpenGoalDraft}>
+                  {dayGoal ? "Изменить своими словами…" : "+ Своими словами…"}
+                </button>
+              )}
+            </article>
+          )}
+          {!dayGoal && !goalDraftOpen ? (
+            <button
+              type="button"
+              className={styles.customGoalRow}
+              data-testid="today-zone-promise-open"
+              onClick={onOpenGoalDraft}
+            >
+              + Если хочется — своими словами
+            </button>
           ) : null}
 
-          {affirmationTool ? (
-            <div className={styles.practiceRow}>
-              <span className={affirmationRead ? styles.practiceCheckDone : styles.practiceCheck} aria-hidden />
-              <div className={styles.practiceBody}>
-                <p className={styles.practiceTitle}>{affirmationTool.title}</p>
-                {!affirmationRead ? (
-                  <button
-                    type="button"
-                    className={`orbit-button orbit-button-secondary ${styles.practiceAction}`}
-                    onClick={onAffirmationRead}
-                  >
-                    {copy.readAffirmation}
-                  </button>
+          {strengthenTools.length > 0 ? (
+            <article className={styles.productCard} data-testid="today-zone-strengthen">
+              <div className={styles.practicesHeader}>
+                <p className={styles.cardEyebrow}>На сегодня</p>
+                {totalTools > 1 ? (
+                  <p className={styles.practicesProgress}>
+                    {completedCount} из {totalTools}
+                  </p>
                 ) : null}
               </div>
-            </div>
-          ) : null}
 
-          {otherTools.map((tool) => (
-            <div key={tool.id} className={styles.practiceRow}>
-              <span className={styles.practiceCheck} aria-hidden />
-              <div className={styles.practiceBody}>
-                <p className={styles.practiceTitle}>{tool.title}</p>
-                {tool.detail ? <p className={styles.practiceMeta}>{tool.detail}</p> : null}
-              </div>
-            </div>
-          ))}
-        </article>
+              {practiceTool ? (
+                <div className={styles.practiceRow}>
+                  <span
+                    className={practiceCompleted ? styles.practiceCheckDone : styles.practiceCheck}
+                    aria-hidden
+                  />
+                  <div className={styles.practiceBody}>
+                    <p className={styles.practiceTitle}>{practiceTool.title}</p>
+                    {practiceTool.duration ? <p className={styles.practiceMeta}>{practiceTool.duration}</p> : null}
+                    {!practiceCompleted ? (
+                      <button
+                        type="button"
+                        className={`orbit-button orbit-button-secondary ${styles.practiceAction}`}
+                        data-testid="today-tool-practice"
+                        disabled={practiceCompleting}
+                        onClick={() => void onPracticeAction()}
+                      >
+                        {practiceStarted ? copy.practiceComplete : copy.practiceStart}
+                      </button>
+                    ) : (
+                      <p className={styles.practiceMeta}>{copy.practiceCompleted}</p>
+                    )}
+                  </div>
+                </div>
+              ) : null}
+
+              {affirmationTool ? (
+                <div className={styles.practiceRow}>
+                  <span className={affirmationRead ? styles.practiceCheckDone : styles.practiceCheck} aria-hidden />
+                  <div className={styles.practiceBody}>
+                    <p className={styles.practiceTitle}>{affirmationTool.title}</p>
+                    {!affirmationRead ? (
+                      <button
+                        type="button"
+                        className={`orbit-button orbit-button-secondary ${styles.practiceAction}`}
+                        onClick={onAffirmationRead}
+                      >
+                        {copy.readAffirmation}
+                      </button>
+                    ) : null}
+                  </div>
+                </div>
+              ) : null}
+
+              {otherTools.map((tool) => (
+                <div key={tool.id} className={styles.practiceRow}>
+                  <span className={styles.practiceCheck} aria-hidden />
+                  <div className={styles.practiceBody}>
+                    <p className={styles.practiceTitle}>{tool.title}</p>
+                    {tool.detail ? <p className={styles.practiceMeta}>{tool.detail}</p> : null}
+                  </div>
+                </div>
+              ))}
+            </article>
+          ) : null}
+        </div>
       ) : null}
 
-      <nav className={styles.bridges} aria-label="Связанные разделы" data-testid="today-zone-bridges">
-        <Link href={compatibility.href} className={styles.bridgeLink}>
-          → {compatibility.hasSavedPerson ? "Совместимость с партнёром" : "Проверить совместимость"}
-        </Link>
-        {tarotDeepenHref ? (
-          <Link href={tarotDeepenHref} className={styles.bridgeLink} data-testid="today-tarot-deepen">
-            → Исследовать тему: Таро
+      <div className={`${styles.journeyScene} ${styles.bridgeScene}`} data-testid="today-zone-bridges-wrap">
+        <ProfileAtmosphere motif="bridge" />
+        <header className={styles.journeySceneHeader}>
+          <p className={styles.journeyStepIndex}>
+            <span className={styles.journeyStepBadge}>5</span>
+            <span>{copy.journey.bridgeTitle}</span>
+          </p>
+          <p className={styles.journeySceneLead}>{copy.journey.bridgeLead}</p>
+        </header>
+        <nav className={styles.bridges} aria-label="Связанные разделы" data-testid="today-zone-bridges">
+          <Link href="/profile" className={styles.bridgeCta}>
+            Открыть карту личности
+            <span aria-hidden> →</span>
           </Link>
-        ) : (
-          <Link href="/tarot" className={styles.bridgeLink}>
-            → Исследовать тему: Таро
+          <Link href={compatibility.href} className={styles.bridgeLink}>
+            → {compatibility.hasSavedPerson ? "Совместимость с партнёром" : "Проверить совместимость"}
           </Link>
-        )}
-      </nav>
+          {tarotDeepenHref ? (
+            <Link href={tarotDeepenHref} className={styles.bridgeLink} data-testid="today-tarot-deepen">
+              → Исследовать тему: Таро
+            </Link>
+          ) : (
+            <Link href="/tarot" className={styles.bridgeLink}>
+              → Исследовать тему: Таро
+            </Link>
+          )}
+        </nav>
+      </div>
     </section>
   );
 }

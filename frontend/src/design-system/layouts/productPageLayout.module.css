@@ -11,6 +11,16 @@
   gap: 0.75rem;
 }
 
+.pageHeaderQuiet {
+  gap: 0.55rem;
+  padding-block: 0.35rem;
+}
+
+.pageHeaderQuiet :global(.displayTitle),
+.pageHeaderQuiet h1 {
+  margin: 0.15rem 0 0;
+}
+
 .datePill {
   align-self: flex-start;
   display: inline-flex;

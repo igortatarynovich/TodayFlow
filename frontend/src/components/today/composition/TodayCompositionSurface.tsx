@@ -910,11 +910,19 @@ export function TodayCompositionSurface(props: Props) {
 
   const heroSection = zones.hero ? (
     useProductFoundation ? (
-      <section className={styles.themeDarkHero} data-testid="today-zone-hero">
+      <section
+        className={`${styles.themeDarkHero} ${story.personalizedReady ? styles.themeDarkHeroCompact : ""}`.trim()}
+        data-testid="today-zone-hero"
+        aria-labelledby="today-day-theme-title"
+      >
         <div className={styles.themeDarkAtmosphere} aria-hidden>
           <SacredGeometryBackdrop emphasis="soft" preset="today" />
         </div>
         <div className={`${styles.themeDarkContent} ${profileMotionStyles.heroEnter}`}>
+          <p className={styles.journeyStepIndex}>
+            <span className={styles.journeyStepBadge}>1</span>
+            <span>{copy.journey.dayTitle}</span>
+          </p>
           {themeLoading ? (
             <p className={styles.themeDarkLoading}>{copy.loadingDay}</p>
           ) : (
@@ -924,10 +932,17 @@ export function TodayCompositionSurface(props: Props) {
                 narrativeRequestFailed={props.guideNarrativeRequestFailed}
               />
               <p className={styles.themeDarkKicker}>{copy.themeLabel}</p>
-              <h2 className={styles.themeDarkTitle} data-testid="today-entity-daily-theme">
+              <h2
+                id="today-day-theme-title"
+                className={styles.themeDarkTitle}
+                data-testid="today-entity-daily-theme"
+              >
                 {story.hero.centralThought}
               </h2>
               {story.hero.themeShort ? <p className={styles.themeDarkSubline}>{story.hero.themeShort}</p> : null}
+              {!story.personalizedReady && copy.journey.dayLead ? (
+                <p className={styles.themeDarkLead}>{copy.journey.dayLead}</p>
+              ) : null}
             </>
           )}
         </div>
@@ -1013,30 +1028,39 @@ export function TodayCompositionSurface(props: Props) {
 
   const ritualGateSection =
     useProductFoundation && showRitualSpine ? (
-      <DsRitualGateSection testId="today-zone-ritual-gates">
-        {zones.ritualTarot && !engagement.tarotPickedName ? (
-          <DsRitualGate
-            kind="tarot"
-            step="Шаг 1"
-            title={copy.ritualTarotPendingTitle}
-            body={copy.ritualTarotPendingBody}
-            cta={copy.ritualTarotOpenCta}
-            testId="today-ritual-tarot-gate"
-            onClick={() => setRitualPickOpen("tarot")}
-          />
-        ) : null}
-        {zones.ritualNumber && engagement.tarotPickedName && !engagement.numberConfirmed ? (
-          <DsRitualGate
-            kind="number"
-            step="Шаг 2"
-            title={copy.ritualNumberPendingTitle}
-            body={copy.ritualNumberPendingBody}
-            cta={copy.ritualNumberOpenCta}
-            testId="today-ritual-number-gate"
-            onClick={() => setRitualPickOpen("number")}
-          />
-        ) : null}
-      </DsRitualGateSection>
+      <div className={styles.journeyScene} data-testid="today-zone-open-day">
+        <header className={styles.journeySceneHeader}>
+          <p className={styles.journeyStepIndex}>
+            <span className={styles.journeyStepBadge}>2</span>
+            <span>{copy.journey.openTitle}</span>
+          </p>
+          <p className={styles.journeySceneLead}>{copy.journey.openLead}</p>
+        </header>
+        <DsRitualGateSection testId="today-zone-ritual-gates">
+          {zones.ritualTarot && !engagement.tarotPickedName ? (
+            <DsRitualGate
+              kind="tarot"
+              step="Шаг 1"
+              title={copy.ritualTarotPendingTitle}
+              body={copy.ritualTarotPendingBody}
+              cta={copy.ritualTarotOpenCta}
+              testId="today-ritual-tarot-gate"
+              onClick={() => setRitualPickOpen("tarot")}
+            />
+          ) : null}
+          {zones.ritualNumber && engagement.tarotPickedName && !engagement.numberConfirmed ? (
+            <DsRitualGate
+              kind="number"
+              step="Шаг 2"
+              title={copy.ritualNumberPendingTitle}
+              body={copy.ritualNumberPendingBody}
+              cta={copy.ritualNumberOpenCta}
+              testId="today-ritual-number-gate"
+              onClick={() => setRitualPickOpen("number")}
+            />
+          ) : null}
+        </DsRitualGateSection>
+      </div>
     ) : null;
 
   const ritualSpineStages = showRitualSpine ? (
@@ -1097,13 +1121,16 @@ export function TodayCompositionSurface(props: Props) {
     </ConversationThread>
   ) : (
     <div className={styles.foundationStack} data-testid="today-zone-foundation">
+      {/* Dashboard owns greeting chrome when embedded; day hero still leads the story. */}
       {!embeddedInWebDashboard ? topRowSection : null}
       {!embeddedInWebDashboard ? greetingSection : null}
+
+      {heroSection}
+
       {!story.personalizedReady ? (
         <>
-          {!embeddedInWebDashboard ? pulseSection : null}
-          {!embeddedInWebDashboard ? glanceSection : null}
-          {!embeddedInWebDashboard ? heroSection : null}
+          {pulseSection}
+          {glanceSection}
           {ritualGateSection}
           {ritualTarotImpactStage}
           {morningDialogue}

@@ -118,6 +118,16 @@ describe("TodayCompositionSurface", () => {
     expect(screen.queryByTestId("today-zone-strengthen")).not.toBeInTheDocument();
   });
 
+  it("keeps day hero and pulse when embedded in web dashboard", () => {
+    render(<TodayCompositionSurface {...baseProps} variant="default" embeddedInWebDashboard />);
+
+    expect(screen.queryByTestId("today-zone-greeting")).not.toBeInTheDocument();
+    expect(screen.getByTestId("today-zone-hero")).toBeInTheDocument();
+    expect(screen.getByTestId("today-zone-pulse")).toBeInTheDocument();
+    expect(screen.getByTestId("today-zone-ritual-gates")).toBeInTheDocument();
+    expect(screen.getByText(/Суть дня/i)).toBeInTheDocument();
+  });
+
   it("hides continuity on firstToday variant", () => {
     seedPreviousDayContinuity({
       dateISO: "2026-06-22",
