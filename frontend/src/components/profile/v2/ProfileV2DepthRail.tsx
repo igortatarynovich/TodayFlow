@@ -17,11 +17,22 @@ const ALL_NAV_IDS: ProfileV2ZoneId[] = [
   ...PROFILE_V2_EXPLORE_NAV.map((i) => i.id),
 ];
 
+function scrollToZone(zone: ProfileV2ZoneId) {
+  const el = document.getElementById(zoneDomId(zone));
+  if (!el) return;
+  const reduce =
+    typeof window !== "undefined" &&
+    window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+  el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+}
+
 /** Right-rail journey jump — Explore/natal after the five steps. */
 export function ProfileV2DepthRail() {
   const [activeZone, setActiveZone] = useState<ProfileV2ZoneId>("recognition");
 
   useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") return;
+
     const nodes = ALL_NAV_IDS.map((id) => document.getElementById(zoneDomId(id))).filter(
       (node): node is HTMLElement => Boolean(node),
     );
@@ -46,7 +57,7 @@ export function ProfileV2DepthRail() {
 
   return (
     <nav className={styles.railDepthNav} aria-label="Путешествие профиля" data-testid="profile-v2-depth-rail">
-      <p className={styles.railDepthEyebrow}>Твоя история</p>
+      <p className={styles.railDepthEyebrow}>Твоя история в 5 шагах</p>
       <ol className={styles.railDepthList}>
         {PROFILE_V2_DEPTH_NAV.map((item) => {
           const active = activeZone === item.id;
@@ -56,7 +67,11 @@ export function ProfileV2DepthRail() {
                 href={`#${zoneDomId(item.id)}`}
                 className={`${styles.railDepthStep} ${active ? styles.railDepthStepActive : ""}`.trim()}
                 aria-current={active ? "true" : undefined}
-                onClick={() => setActiveZone(item.id)}
+                onClick={(event) => {
+                  event.preventDefault();
+                  setActiveZone(item.id);
+                  scrollToZone(item.id);
+                }}
               >
                 <span className={styles.railDepthBadge}>{item.step}</span>
                 <span className={styles.railDepthCopy}>
@@ -79,7 +94,11 @@ export function ProfileV2DepthRail() {
                   href={`#${zoneDomId(item.id)}`}
                   className={`${styles.railDepthStep} ${active ? styles.railDepthStepActive : ""}`.trim()}
                   aria-current={active ? "true" : undefined}
-                  onClick={() => setActiveZone(item.id)}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setActiveZone(item.id);
+                    scrollToZone(item.id);
+                  }}
                 >
                   <span className={styles.railDepthCopy}>
                     <span className={styles.railDepthTitle}>{item.title}</span>
@@ -100,11 +119,26 @@ export function ProfileV2MobileDepthJump() {
   return (
     <nav className={styles.mobileDepthJump} aria-label="Путешествие профиля" data-testid="profile-v2-depth-jump">
       {PROFILE_V2_DEPTH_NAV.map((item) => (
-        <a key={item.id} href={`#${zoneDomId(item.id)}`} className={styles.mobileDepthChip}>
+        <a
+          key={item.id}
+          href={`#${zoneDomId(item.id)}`}
+          className={styles.mobileDepthChip}
+          onClick={(event) => {
+            event.preventDefault();
+            scrollToZone(item.id);
+          }}
+        >
           {item.title}
         </a>
       ))}
-      <a href={`#${zoneDomId("explore")}`} className={styles.mobileDepthChip}>
+      <a
+        href={`#${zoneDomId("explore")}`}
+        className={styles.mobileDepthChip}
+        onClick={(event) => {
+          event.preventDefault();
+          scrollToZone("explore");
+        }}
+      >
         Детали
       </a>
     </nav>

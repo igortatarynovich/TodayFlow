@@ -20,31 +20,34 @@ enum ArchetypeSlug: String, CaseIterable {
 
 enum VisualIdentityRegistry {
     static func resolveArchetypeSlug(_ seed: String?) -> ArchetypeSlug {
-        let key = (seed ?? "").trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        let key = (seed ?? "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+            .replacingOccurrences(of: "\\s+", with: "_", options: .regularExpression)
         switch key {
         case "sage", "мудрец":
             return .sage
         case "explorer", "исследователь":
             return .explorer
-        case "architect", "архитектор":
+        case "architect", "архитектор", "правитель", "ruler":
             return .architect
-        case "harmonizer", "гармонизатор":
+        case "harmonizer", "гармонизатор", "любовник", "lover":
             return .harmonizer
-        case "observer", "наблюдатель":
+        case "observer", "наблюдатель", "славный_малый", "everyman":
             return .observer
-        case "creator", "создатель":
+        case "creator", "создатель", "творец":
             return .creator
-        case "strategist", "стратег":
+        case "strategist", "стратег", "герой", "hero":
             return .strategist
         case "seeker", "искатель", "initiate":
             return .seeker
-        case "mentor", "наставник":
+        case "mentor", "наставник", "маг", "magician":
             return .mentor
-        case "guardian", "хранитель":
+        case "guardian", "хранитель", "заботливый", "caregiver":
             return .guardian
-        case "visionary", "провидец":
+        case "visionary", "провидец", "невинный", "innocent":
             return .visionary
-        case "catalyst", "катализатор", "alchemist":
+        case "catalyst", "катализатор", "alchemist", "бунтарь", "rebel", "outlaw":
             return .catalyst
         case "oracle":
             return .sage

@@ -322,15 +322,15 @@
 }
 
 .productWebFrame[data-theme="dark"] .appShell {
-  background: #1a1714;
-  color: rgba(253, 251, 247, 0.92);
+  background: #121018;
+  color: rgba(245, 240, 232, 0.94);
 }
 
 .productWebFrame[data-theme="dark"] .appMain {
   background:
-    radial-gradient(ellipse 80% 60% at 0% 0%, rgba(201, 169, 110, 0.22) 0%, transparent 50%),
-    radial-gradient(ellipse 80% 60% at 100% 100%, rgba(228, 207, 154, 0.14) 0%, transparent 55%),
-    linear-gradient(141deg, #141210 15%, #1a1714 49%, #211c17 85%);
+    radial-gradient(ellipse 70% 45% at 12% 0%, rgba(201, 169, 110, 0.14) 0%, transparent 52%),
+    radial-gradient(ellipse 55% 40% at 100% 8%, rgba(74, 50, 112, 0.12) 0%, transparent 50%),
+    linear-gradient(165deg, #121018 0%, #16121c 48%, #1a1620 100%);
 }
 
 @media (min-width: 64rem) {

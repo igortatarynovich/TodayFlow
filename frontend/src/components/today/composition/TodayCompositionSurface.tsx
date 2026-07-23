@@ -11,6 +11,8 @@ import { TodayEveningProductClose } from "@/components/today/composition/TodayEv
 import { TodayPersonalizedProductSection } from "@/components/today/composition/TodayPersonalizedProductSection";
 import { LoadingSpinner } from "@/components/orbit";
 import { HeroMedium } from "@/components/foundation/HeroMedium";
+import { profileMotionStyles } from "@/components/foundation/ProfileMotion";
+import { SacredGeometryBackdrop } from "@/components/visualIdentity/SacredGeometryBackdrop";
 import { buildTodayHeroPillars, buildTodayHeroSymbol, resolveTodaySunSignLabel } from "@/lib/todayHeroMedium";
 import type { MorningRitualData, TodayCycleData } from "@/components/today/todayPageUtils";
 import { anchorTarotTagsFromLead, RITUAL_COPY } from "@/components/today/todayRitualCopy";
@@ -909,21 +911,26 @@ export function TodayCompositionSurface(props: Props) {
   const heroSection = zones.hero ? (
     useProductFoundation ? (
       <section className={styles.themeDarkHero} data-testid="today-zone-hero">
-        {themeLoading ? (
-          <p className={styles.themeDarkLoading}>{copy.loadingDay}</p>
-        ) : (
-          <>
-            <PersonalizationDegradedBadge
-              contract={props.contract}
-              narrativeRequestFailed={props.guideNarrativeRequestFailed}
-            />
-            <p className={styles.themeDarkKicker}>{copy.themeLabel}</p>
-            <h2 className={styles.themeDarkTitle} data-testid="today-entity-daily-theme">
-              {story.hero.centralThought}
-            </h2>
-            {story.hero.themeShort ? <p className={styles.themeDarkSubline}>{story.hero.themeShort}</p> : null}
-          </>
-        )}
+        <div className={styles.themeDarkAtmosphere} aria-hidden>
+          <SacredGeometryBackdrop emphasis="soft" preset="today" />
+        </div>
+        <div className={`${styles.themeDarkContent} ${profileMotionStyles.heroEnter}`}>
+          {themeLoading ? (
+            <p className={styles.themeDarkLoading}>{copy.loadingDay}</p>
+          ) : (
+            <>
+              <PersonalizationDegradedBadge
+                contract={props.contract}
+                narrativeRequestFailed={props.guideNarrativeRequestFailed}
+              />
+              <p className={styles.themeDarkKicker}>{copy.themeLabel}</p>
+              <h2 className={styles.themeDarkTitle} data-testid="today-entity-daily-theme">
+                {story.hero.centralThought}
+              </h2>
+              {story.hero.themeShort ? <p className={styles.themeDarkSubline}>{story.hero.themeShort}</p> : null}
+            </>
+          )}
+        </div>
       </section>
     ) : (
       <div className={styles.dayAnchorHero} data-testid="today-zone-hero">

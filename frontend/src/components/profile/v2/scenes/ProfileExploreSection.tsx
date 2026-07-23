@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { ProfileMotionExpand, useProfileMotionInView } from "@/components/foundation/ProfileMotion";
 import { ProfileChartSection } from "@/components/profile/ProfileChartSection";
 import type { ProfileLifeSphere } from "@/components/profile/ProfileLifeSection";
 import { ProfilePortalDeepSection } from "@/components/profile/ProfilePortalDeepSection";
@@ -37,36 +38,51 @@ export function ProfileExploreSection({
 }: ProfileExploreSectionProps) {
   const hasNatal = Boolean(deep);
   const hasDetails = progressiveDetails.length > 0 || Boolean(characterSlot) || Boolean(lifeSpheres?.length);
+  const motion = useProfileMotionInView<HTMLElement>(60);
   if (!hasNatal && !hasDetails && !model.lifeMission) return null;
 
   return (
     <section
       id="profile-v2-explore"
-      className={styles.zone}
+      ref={motion.ref}
+      className={`${styles.zone} ${styles.journeyScene} ${styles.exploreScene} ${motion.className}`.trim()}
+      style={motion.style}
       data-testid="profile-v2-explore"
       aria-labelledby="profile-v2-explore-title"
     >
       <header className={styles.zoneHeader}>
         <div>
-          <p id="profile-v2-explore-title" className={styles.zoneLabel}>
-            {PROFILE_V2_COPY.zones.explore.title}
+          <p className={styles.journeyStepIndex}>
+            <span className={styles.journeyStepBadge}>{PROFILE_V2_COPY.zones.explore.stepBadge}</span>
+            <span id="profile-v2-explore-title">{PROFILE_V2_COPY.zones.explore.title}</span>
           </p>
           <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.explore.lead}</p>
         </div>
       </header>
-      <button
-        type="button"
-        className={styles.secondaryCta}
-        data-testid="profile-v2-open-explore"
-        aria-expanded={open}
-        aria-controls="profile-v2-explore-body"
-        onClick={onToggle}
-      >
-        {open ? PROFILE_V2_COPY.zones.explore.hide : PROFILE_V2_COPY.zones.explore.open}
-        <span aria-hidden> {open ? "↑" : "→"}</span>
-      </button>
 
-      {open ? (
+      <div className={styles.exploreTeaser}>
+        <div className={styles.exploreTeaserVisual} aria-hidden>
+          {/* eslint-disable-next-line @next/next/no-img-element -- static public WebP */}
+          <img src="/images/cosmic/observe.webp" alt="" className={styles.exploreTeaserImage} />
+        </div>
+        <div className={styles.exploreTeaserCopy}>
+          <p className={styles.exploreTeaserTitle}>{PROFILE_V2_COPY.zones.explore.natalTitle}</p>
+          <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.sources.lead}</p>
+          <button
+            type="button"
+            className={styles.secondaryCta}
+            data-testid="profile-v2-open-explore"
+            aria-expanded={open}
+            aria-controls="profile-v2-explore-body"
+            onClick={onToggle}
+          >
+            {open ? PROFILE_V2_COPY.zones.explore.hide : PROFILE_V2_COPY.zones.explore.open}
+            <span aria-hidden> {open ? "↑" : "→"}</span>
+          </button>
+        </div>
+      </div>
+
+      <ProfileMotionExpand open={open}>
         <div id="profile-v2-explore-body" data-testid="profile-v2-explore-body">
           {progressiveDetails.length ? (
             <div className={styles.exploreDetails} data-testid="profile-v2-progressive-details">
@@ -133,6 +149,10 @@ export function ProfileExploreSection({
               aria-labelledby="profile-v2-natal-title"
               data-testid="profile-v2-natal"
             >
+              <div className={styles.skyZoneAtmosphere} aria-hidden>
+                {/* eslint-disable-next-line @next/next/no-img-element -- static public WebP */}
+                <img src="/images/cosmic/nebula.webp" alt="" className={styles.skyZoneAtmosphereImage} />
+              </div>
               <header className={styles.zoneHeader}>
                 <div>
                   <p id="profile-v2-natal-title" className={styles.zoneLabel}>
@@ -169,7 +189,7 @@ export function ProfileExploreSection({
             </section>
           ) : null}
         </div>
-      ) : null}
+      </ProfileMotionExpand>
     </section>
   );
 }

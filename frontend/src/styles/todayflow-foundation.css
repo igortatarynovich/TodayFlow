@@ -27,7 +27,16 @@
   --tf-surface-dark: #1a1714;
   --tf-surface-dark-elevated: #2a2520;
   --tf-surface-warm: #f5f0e8;
+  --tf-surface: #ffffff;
+  --tf-surface-muted: #f7f4ee;
+  --tf-border: #e8e2d6;
+  --tf-border-strong: #d8c9b0;
   --tf-border-subtle: rgba(42, 37, 32, 0.06);
+  --tf-shadow-hero: 0 28px 56px rgba(42, 37, 32, 0.1);
+  --tf-shadow-card: 0 16px 40px rgba(42, 37, 32, 0.06);
+  --tf-semantic-gift: #4f6647;
+  --tf-semantic-trap: #a65a4f;
+  --tf-semantic-grow: #3d5a80;
   --tf-semantic-success: #4f6647;
   --tf-semantic-alert: #d4964b;
   --tf-semantic-error: #a65a4f;
@@ -165,6 +174,45 @@
   --tf-ds-space-16: 4rem;
   --tf-ds-space-20: 5rem;
   --tf-ds-mobile-max: 24.375rem;
+}
+
+/* Dark product theme — Profile Journey / product web shell */
+[data-theme="dark"],
+.productWebFrame[data-theme="dark"] {
+  color-scheme: dark;
+  --tf-page: #121018;
+  --tf-page-cream: #1a1620;
+  --tf-cream-300: #2a2430;
+  --tf-cream-400: #342e3c;
+  --tf-cream-border: rgba(255, 255, 255, 0.1);
+  --tf-ink: #f5f0e8;
+  --tf-ink-muted: #c4b8a8;
+  --tf-ink-soft: #a89888;
+  --tf-ink-100: #3a3440;
+  --tf-body: #c8bdb0;
+  --tf-caption: #8a7e72;
+  --tf-accent-gold: #d4b896;
+  --tf-accent-gold-soft: #c9a96e;
+  --tf-accent-gold-200: #e8d0a5;
+  --tf-accent-gold-600: #e8d0a5;
+  --tf-accent-gold-wash: rgba(201, 169, 110, 0.12);
+  --tf-surface-dark: #121018;
+  --tf-surface-dark-elevated: #1e1a24;
+  --tf-surface-warm: #241f2c;
+  --tf-surface: #1e1a24;
+  --tf-surface-muted: #241f2c;
+  --tf-border: rgba(255, 255, 255, 0.1);
+  --tf-border-strong: rgba(212, 184, 150, 0.28);
+  --tf-border-subtle: rgba(255, 255, 255, 0.06);
+  --tf-shadow-hero: 0 28px 56px rgba(0, 0, 0, 0.35);
+  --tf-shadow-card: 0 16px 40px rgba(0, 0, 0, 0.28);
+  --tf-on-dark: #faf8f5;
+  --tf-on-hero: var(--tf-ink);
+  --tf-ds-border-gold: rgba(201, 169, 110, 0.28);
+  --tf-ds-border-ink: rgba(255, 255, 255, 0.1);
+  --tf-ds-glass: rgba(255, 255, 255, 0.06);
+  --tf-ds-shadow-soft: 0 12px 20px rgba(0, 0, 0, 0.2);
+  --tf-ds-shadow-card: 0 8px 24px rgba(0, 0, 0, 0.28);
 }
 
 /* Global shell — any product screen */

@@ -56,9 +56,9 @@
 .rootWebEmbed .continuityPill {
   padding: 1.25rem 1.75rem;
   border-radius: 1.75rem;
-  border: 1px solid #e8e2d6;
-  background: rgba(255, 255, 255, 0.72);
-  box-shadow: 0 16px 48px rgba(42, 37, 32, 0.06);
+  border: 1px solid var(--tf-border, #e8e2d6);
+  background: color-mix(in srgb, var(--tf-surface, #fff) 72%, transparent);
+  box-shadow: var(--tf-shadow-card, 0 16px 40px rgba(42, 37, 32, 0.06));
   backdrop-filter: blur(8px);
 }
 
@@ -74,18 +74,26 @@
 .rootWebEmbed .ritualGateCard {
   padding: 1.25rem 1.75rem;
   border-radius: 1.75rem;
-  border: 1px dashed #c9a96e;
-  background: #fff;
-  box-shadow: 0 18px 28px rgba(42, 37, 32, 0.06);
+  border: 1px dashed var(--tf-accent-gold, #c9a96e);
+  background: var(--tf-surface, #fff);
+  box-shadow: var(--tf-shadow-card, 0 16px 40px rgba(42, 37, 32, 0.06));
 }
 
 .rootWebEmbed .ritualGate,
 .rootWebEmbed .ritualStage {
   padding: 1.75rem;
   border-radius: 1.75rem;
-  border: 1px solid #e8e2d6;
-  background: #fff;
-  box-shadow: 0 18px 28px rgba(42, 37, 32, 0.06);
+  border: 1px solid var(--tf-border, #e8e2d6);
+  background: color-mix(in srgb, var(--tf-surface, #fff) 88%, var(--tf-surface-warm, #f5f0e8));
+  box-shadow: var(--tf-shadow-card, 0 16px 40px rgba(42, 37, 32, 0.06));
+}
+
+.rootWebEmbed .themeDarkHero {
+  margin: 0;
+  min-height: min(var(--tf-hero-medium-min-h, 52dvh), 28rem);
+  padding: clamp(2rem, 4.5vw, 2.75rem) clamp(1.5rem, 4vw, 2.5rem);
+  border-radius: 2.25rem;
+  border: 1px solid rgba(212, 184, 150, 0.18);
 }
 
 .rootWebEmbed .ritualGateTitle {
@@ -415,37 +423,65 @@
 }
 
 .themeDarkHero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   margin: 0 1.25rem;
-  padding: 1.25rem 1.15rem 1.35rem;
-  border-radius: 24px;
-  background: var(--tdp-dark);
-  box-shadow: var(--tdp-shadow-md);
+  padding: clamp(1.75rem, 4vw, 2.5rem) clamp(1.25rem, 3vw, 1.75rem);
+  min-height: min(42dvh, 22rem);
+  border-radius: 2rem;
+  border: 1px solid rgba(212, 184, 150, 0.14);
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 0%, rgba(201, 169, 110, 0.2) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 90% 80%, rgba(74, 50, 112, 0.18) 0%, transparent 55%),
+    linear-gradient(165deg, #121018 0%, #1a1620 55%, #1e1a24 100%);
+  box-shadow: var(--tf-shadow-hero, 0 28px 56px rgba(42, 37, 32, 0.16));
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.themeDarkAtmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+.themeDarkContent {
+  position: relative;
+  z-index: 1;
+  max-width: var(--tf-shell-readable, 36rem);
 }
 
 .themeDarkKicker {
   margin: 0;
-  font-size: 0.5625rem;
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  font-size: 0.6875rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--tdp-accent);
 }
 
 .themeDarkTitle {
-  margin: 0.5rem 0 0;
+  margin: 0.65rem 0 0;
   font-family: var(--tdp-font-display);
-  font-size: clamp(1.25rem, 5vw, 1.5rem);
-  font-weight: 400;
-  line-height: 1.35;
+  font-size: clamp(1.65rem, 4.5vw, 2.35rem);
+  font-weight: 500;
+  line-height: 1.18;
   color: #f5f0e8;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.025em;
+  max-width: 22ch;
 }
 
 .themeDarkSubline {
-  margin: 0.5rem 0 0;
-  font-size: 0.875rem;
-  line-height: 1.5;
+  margin: 0.75rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.55;
   color: rgba(245, 240, 232, 0.72);
+  max-width: 42ch;
 }
 
 .themeDarkLoading {
@@ -1852,4 +1888,17 @@
   font-size: 0.8125rem;
   line-height: 1.45;
   color: #7a6d60;
+}
+
+:global([data-theme="dark"]) .rootWebEmbed .continuityPill,
+:global([data-theme="dark"]) .rootWebEmbed .ritualGateCard,
+:global([data-theme="dark"]) .rootWebEmbed .ritualGate,
+:global([data-theme="dark"]) .rootWebEmbed .ritualStage,
+:global(.productWebFrame[data-theme="dark"]) .rootWebEmbed .continuityPill,
+:global(.productWebFrame[data-theme="dark"]) .rootWebEmbed .ritualGateCard,
+:global(.productWebFrame[data-theme="dark"]) .rootWebEmbed .ritualGate,
+:global(.productWebFrame[data-theme="dark"]) .rootWebEmbed .ritualStage {
+  background: #1e1a24;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: none;
 }

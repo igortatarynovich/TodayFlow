@@ -68,8 +68,7 @@ struct HeroLargeView: View {
                     .padding(.bottom, 12)
                 }
 
-                ArchetypeSymbolView(seed: symbolSeed, size: symbolSize)
-                    .foregroundStyle(TodayFlowTheme.ink.opacity(0.82))
+                ArchetypeHeroVisual(seed: symbolSeed, symbolSize: symbolSize)
                     .padding(.bottom, 22)
                     .profileMotionHeroSymbol()
 

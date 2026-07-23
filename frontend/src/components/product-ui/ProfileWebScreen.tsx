@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ProductWebShellConfigBridge, type ProductWebShellConfig } from "@/components/product-ui/productWebShellConfig";
 import { profileWebChromeBundle } from "@/components/product-ui/profileWebChrome";
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
@@ -29,6 +29,21 @@ export type ProfileWebScreenProps = {
   children: ReactNode;
 };
 
+function usePreferredProductTheme(): "light" | "dark" {
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const apply = () => setTheme(mq.matches ? "dark" : "light");
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
+  return theme;
+}
+
 export function ProfileWebScreen({
   displayName,
   profileMeta,
@@ -47,6 +62,7 @@ export function ProfileWebScreen({
   const chrome = useMemo(() => profileWebChromeBundle(resolvedLocale), [resolvedLocale]);
   const resolvedTitle = title ?? chrome.pageTitle;
   const resolvedSubtitle = subtitle ?? chrome.pageSubtitle;
+  const preferredTheme = usePreferredProductTheme();
 
   const todayLabel = new Intl.DateTimeFormat(resolvedLocale === "ru" ? "ru-RU" : "en-US", {
     day: "numeric",
@@ -83,13 +99,16 @@ export function ProfileWebScreen({
       coreProfile,
       mainWide: true,
       fullMain: false,
-      // PR-2: rail only with real content — depth nav (v2) or map anchors.
+      // Journey mockups ship light + dark; follow OS until product theme control lands.
+      theme: isV2 ? preferredTheme : "light",
       rail: rail ?? anchorsRail,
     };
   }, [
     chrome.railAnchorsTitle,
     coreProfile,
     displayName,
+    isV2,
+    preferredTheme,
     profileMeta,
     rail,
     railAnchors,

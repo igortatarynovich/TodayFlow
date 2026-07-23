@@ -41,6 +41,11 @@
   animation-delay: var(--pm-stagger, 0ms);
 }
 
+.inViewPending {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
 .heroEnter {
   animation: pmReveal var(--tf-motion-page, 420ms) var(--tf-motion-ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
 }
@@ -50,7 +55,15 @@
   animation-delay: 60ms;
 }
 
+/* Standalone stagger waits for a reveal/hero parent so it does not fire while hidden. */
 .staggerItem {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.reveal .staggerItem,
+.heroEnter .staggerItem,
+.staggerGroup > .staggerItem {
   animation: pmReveal var(--tf-motion-reveal, 280ms) var(--tf-motion-ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
   animation-delay: var(--pm-stagger, 0ms);
 }
@@ -94,8 +107,11 @@
   .heroEnter,
   .heroSymbolEnter,
   .staggerItem,
-  .expandContent {
+  .expandContent,
+  .inViewPending {
     animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 
   .expandShell {

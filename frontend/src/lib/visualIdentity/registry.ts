@@ -110,6 +110,103 @@ export function archetypeAssetPath(slug: ArchetypeSlug): string {
   return `${ICON_BASE}/archetypes/${slug}.svg`;
 }
 
+/**
+ * Premium hero portraits (WebP) — separate from line-symbol SVGs.
+ * Missing files are fine: UI falls back to ArchetypeSymbol (placeholder slot).
+ *
+ * Illustration filenames follow Pearson RU brand names; product seeds stay English.
+ * Mapping is semantic (product role → closest Pearson portrait), not a rename.
+ */
+const ILLUSTRATION_BASE = "/images/archetypes";
+
+/** Product illustration filenames in `public/images/archetypes/`. */
+export const ARCHETYPE_ILLUSTRATION_SLUGS = [
+  "pravitel",
+  "tvorets",
+  "mudrets",
+  "geroi",
+  "buntar",
+  "liubovnik",
+  "liubovnik_f",
+  "liubovnik_m",
+  "iskatel",
+  "zabotlivyi",
+  "nevinnyi",
+  "shut",
+  "mag",
+  "slavnyi_malyi",
+] as const;
+
+export type ArchetypeIllustrationSlug = (typeof ARCHETYPE_ILLUSTRATION_SLUGS)[number];
+
+const ILLUSTRATION_SLUG_SET = new Set<string>(ARCHETYPE_ILLUSTRATION_SLUGS);
+
+/**
+ * Production seed → Pearson illustration slug.
+ * All 12 named seeds resolve; gendered lover variants stay optional overrides.
+ */
+const SEED_TO_ILLUSTRATION: Record<Exclude<ArchetypeSlug, "unknown">, ArchetypeIllustrationSlug> = {
+  architect: "pravitel",
+  creator: "tvorets",
+  sage: "mudrets",
+  strategist: "geroi",
+  catalyst: "buntar",
+  harmonizer: "liubovnik",
+  seeker: "iskatel",
+  explorer: "iskatel",
+  guardian: "zabotlivyi",
+  mentor: "mag",
+  visionary: "nevinnyi",
+  observer: "slavnyi_malyi",
+};
+
+export function archetypeIllustrationPath(slug: ArchetypeIllustrationSlug | string): string {
+  return `${ILLUSTRATION_BASE}/${String(slug).trim().toLowerCase()}.webp`;
+}
+
+/** Resolve illustration slug for a seed, or null → use symbol placeholder. */
+export function resolveArchetypeIllustrationSlug(
+  seed: string | null | undefined,
+): ArchetypeIllustrationSlug | null {
+  const key = (seed || "").trim().toLowerCase().replace(/\s+/g, "_");
+  if (!key) return null;
+  if (ILLUSTRATION_SLUG_SET.has(key)) return key as ArchetypeIllustrationSlug;
+  // Pearson RU aliases → illustration file directly
+  const pearsonAlias: Record<string, ArchetypeIllustrationSlug> = {
+    правитель: "pravitel",
+    творец: "tvorets",
+    мудрец: "mudrets",
+    герой: "geroi",
+    бунтарь: "buntar",
+    любовник: "liubovnik",
+    искатель: "iskatel",
+    заботливый: "zabotlivyi",
+    невинный: "nevinnyi",
+    шут: "shut",
+    маг: "mag",
+    "славный_малый": "slavnyi_malyi",
+    ruler: "pravitel",
+    hero: "geroi",
+    rebel: "buntar",
+    outlaw: "buntar",
+    lover: "liubovnik",
+    caregiver: "zabotlivyi",
+    innocent: "nevinnyi",
+    jester: "shut",
+    magician: "mag",
+    everyman: "slavnyi_malyi",
+  };
+  if (pearsonAlias[key]) return pearsonAlias[key];
+  const machine = resolveArchetypeSlug(key);
+  if (machine === "unknown") return null;
+  return SEED_TO_ILLUSTRATION[machine] ?? null;
+}
+
+export function archetypeIllustrationSrc(seed: string | null | undefined): string | null {
+  const slug = resolveArchetypeIllustrationSlug(seed);
+  return slug ? archetypeIllustrationPath(slug) : null;
+}
+
 export function elementAssetPath(slug: ElementSlug): string {
   return `${ICON_BASE}/elements/${slug}.svg`;
 }
@@ -134,7 +231,7 @@ export function resolveElementSlug(raw: string | null | undefined): ElementSlug 
 }
 
 export function resolveArchetypeSlug(seed: string | null | undefined): ArchetypeSlug {
-  const key = (seed || "").trim().toLowerCase();
+  const key = (seed || "").trim().toLowerCase().replace(/\s+/g, "_");
   const map: Record<string, ArchetypeSlug> = {
     sage: "sage",
     мудрец: "sage",
@@ -142,26 +239,44 @@ export function resolveArchetypeSlug(seed: string | null | undefined): Archetype
     исследователь: "explorer",
     architect: "architect",
     архитектор: "architect",
+    правитель: "architect",
+    ruler: "architect",
     harmonizer: "harmonizer",
     гармонизатор: "harmonizer",
+    любовник: "harmonizer",
+    lover: "harmonizer",
     observer: "observer",
     наблюдатель: "observer",
+    славный_малый: "observer",
+    everyman: "observer",
     creator: "creator",
     создатель: "creator",
+    творец: "creator",
     strategist: "strategist",
     стратег: "strategist",
+    герой: "strategist",
+    hero: "strategist",
     seeker: "seeker",
     искатель: "seeker",
     initiate: "seeker",
     mentor: "mentor",
     наставник: "mentor",
+    маг: "mentor",
+    magician: "mentor",
     guardian: "guardian",
     хранитель: "guardian",
+    заботливый: "guardian",
+    caregiver: "guardian",
     visionary: "visionary",
     провидец: "visionary",
+    невинный: "visionary",
+    innocent: "visionary",
     catalyst: "catalyst",
     катализатор: "catalyst",
     alchemist: "catalyst",
+    бунтарь: "catalyst",
+    rebel: "catalyst",
+    outlaw: "catalyst",
     oracle: "sage",
     строитель: "architect",
   };

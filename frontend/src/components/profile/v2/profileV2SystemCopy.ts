@@ -1,10 +1,10 @@
 /** Profile Journey + Explore copy — five human steps, then research fold. */
 export const PROFILE_V2_DEPTH_NAV = [
-  { id: "recognition", step: "01", title: "Кто я", hint: "Узнавание" },
-  { id: "why", step: "02", title: "Почему", hint: "Опоры" },
-  { id: "insight", step: "03", title: "Главный узел", hint: "Закономерность" },
+  { id: "recognition", step: "01", title: "Твоя суть", hint: "Узнавание" },
+  { id: "why", step: "02", title: "Почему именно так", hint: "Опоры" },
+  { id: "insight", step: "03", title: "Что важно понять", hint: "Узел" },
   { id: "effort", step: "04", title: "Куда усилия", hint: "Вектор" },
-  { id: "bridge", step: "05", title: "Мост", hint: "В день" },
+  { id: "bridge", step: "05", title: "Мост в день", hint: "В день" },
 ] as const;
 
 export const PROFILE_V2_EXPLORE_NAV = [
@@ -21,7 +21,7 @@ export const PROFILE_V2_COPY = {
   mapsCtaHint: "Как жизнь меняется со временем — отдельно от профиля.",
   zones: {
     recognition: {
-      title: "Кто я",
+      title: "Твоя суть",
       lead: "Одно предложение, в котором себя узнаёшь.",
     },
     why: {
@@ -31,19 +31,19 @@ export const PROFILE_V2_COPY = {
       honestyFallbackTitle: "На чём держится",
     },
     insight: {
-      title: "Главный узел",
+      title: "Что важно понять о себе",
       giftLabel: "Твой дар",
-      trapLabel: "Где он становится ловушкой",
-      restoreLabel: "Что возвращает его в силу",
+      trapLabel: "Твоя ловушка",
+      restoreLabel: "Что помогает расти",
       groundedLabel: "На чём стоит вывод",
       helpLabel: "Что помогает",
       livingLabel: "Как это уже проявлялось",
       livingNote: "Контекст из отметок — не доказательство этого узла.",
     },
     effort: {
-      title: "Твой вектор сейчас",
+      title: "Твой вектор на развитие",
       lead: "Одно направление усилия — не план дня.",
-      spheresLabel: "Сильнее всего проявляется",
+      spheresLabel: "Где это проявится сильнее",
     },
     bridge: {
       title: "Твоя история продолжается",
@@ -51,14 +51,15 @@ export const PROFILE_V2_COPY = {
       lead: "Продолжение пути, не второй совет «что делать».",
     },
     explore: {
-      title: "Исследовать глубже",
-      lead: "Карта, традиции и детали — исследовательский слой, не часть путешествия.",
-      natalTitle: "Твоя натальная карта",
+      title: "Твоя натальная карта",
+      lead: "Карта души и детали — исследовательский слой после путешествия.",
+      natalTitle: "Карта твоей души",
       detailsTitle: "Карта и детали",
-      open: "Исследовать глубже",
-      hide: "Свернуть детали",
+      open: "Исследовать карту",
+      hide: "Свернуть карту",
       exploreHint: "Полная карта, дома и аспекты — за раскрытием.",
       updatedNote: "Карта пересчитывается при изменении данных рождения.",
+      stepBadge: "6",
     },
     /** Legacy keys for fallback first-screen when journey surface absent. */
     traits: {

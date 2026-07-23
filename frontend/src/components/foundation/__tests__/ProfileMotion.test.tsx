@@ -1,10 +1,20 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import {
   ProfileMotionExpand,
   ProfileMotionReveal,
   ProfileMotionStagger,
   profileMotionStaggerDelay,
+  useProfileMotionInView,
 } from "../ProfileMotion";
+
+function InViewProbe() {
+  const motion = useProfileMotionInView<HTMLDivElement>(30);
+  return (
+    <div ref={motion.ref} className={motion.className} style={motion.style} data-testid="in-view-probe">
+      Scene
+    </div>
+  );
+}
 
 describe("ProfileMotion", () => {
   it("renders reveal wrapper", () => {
@@ -47,5 +57,47 @@ describe("ProfileMotion", () => {
 
   it("computes stagger delay helper", () => {
     expect(profileMotionStaggerDelay(2, 60)["--pm-stagger"]).toBe("150ms");
+  });
+
+  it("reveals once when intersecting", () => {
+    const observers: IntersectionObserverCallback[] = [];
+    class MockObserver {
+      constructor(cb: IntersectionObserverCallback) {
+        observers.push(cb);
+      }
+      observe() {}
+      disconnect() {}
+      unobserve() {}
+      takeRecords() {
+        return [];
+      }
+      root = null;
+      rootMargin = "";
+      thresholds: number[] = [];
+    }
+    const prev = window.IntersectionObserver;
+    Object.defineProperty(window, "IntersectionObserver", {
+      writable: true,
+      configurable: true,
+      value: MockObserver,
+    });
+
+    render(<InViewProbe />);
+    const probe = screen.getByTestId("in-view-probe");
+    expect(probe.className).toMatch(/inViewPending/);
+
+    act(() => {
+      observers[0]?.(
+        [{ isIntersecting: true, intersectionRatio: 0.5, target: probe } as IntersectionObserverEntry],
+        {} as IntersectionObserver,
+      );
+    });
+    expect(probe.className).toMatch(/reveal/);
+
+    Object.defineProperty(window, "IntersectionObserver", {
+      writable: true,
+      configurable: true,
+      value: prev,
+    });
   });
 });

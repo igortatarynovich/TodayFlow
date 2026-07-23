@@ -15,6 +15,7 @@ jest.mock("@/hooks/useMeaningRuntime", () => ({
 jest.mock("@/lib/api", () => ({
   getJson: jest.fn().mockRejectedValue(new Error("no auth")),
   postJson: jest.fn(),
+  getStoredAccessToken: jest.fn(() => null),
 }));
 
 jest.mock("@/lib/todayDayGreeting", () => ({
@@ -205,7 +206,7 @@ describe("TodayCompositionSurface", () => {
       day_story: {
         contract_version: "day_story_v1",
         theme: "Ясность",
-        story: "Сегодня день коротких договорённостей и одной ясной линии.",
+        story: "Сегодня день коротких договорённостей и спокойного темпа.",
         practice_recommendation: {
           kind: "practice",
           text: "Закрыть одну задачу до обеда.",

@@ -13,11 +13,13 @@
 }
 
 .sectionWebEmbed .synthesisCard {
-  padding: 1.75rem;
+  padding: clamp(1.75rem, 3vw, 2.25rem);
   border-radius: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: var(--tf-surface-dark, #2a2520);
-  box-shadow: 0 24px 35px rgba(42, 37, 32, 0.12);
+  border: 1px solid rgba(212, 184, 150, 0.16);
+  background:
+    radial-gradient(ellipse 70% 50% at 10% 0%, rgba(201, 169, 110, 0.14) 0%, transparent 55%),
+    var(--tf-surface-dark, #1a1714);
+  box-shadow: var(--tf-shadow-hero, 0 24px 48px rgba(42, 37, 32, 0.14));
 }
 
 .sectionWebEmbed .synthesisKicker {
@@ -31,9 +33,9 @@
 .sectionWebEmbed .productCard {
   padding: 1.75rem;
   border-radius: 1.75rem;
-  border: 1px solid #e8e2d6;
-  background: #fff;
-  box-shadow: 0 18px 28px rgba(42, 37, 32, 0.06);
+  border: 1px solid var(--tf-border, #e8e2d6);
+  background: var(--tf-surface, #fff);
+  box-shadow: var(--tf-shadow-card, 0 16px 40px rgba(42, 37, 32, 0.06));
 }
 
 .sectionWebEmbed .cardEyebrow,
@@ -41,7 +43,7 @@
   font-family: var(--tf-font-mono, ui-monospace, monospace);
   font-size: 0.6875rem;
   letter-spacing: 0.11em;
-  color: #8b6a3e;
+  color: var(--tf-accent-gold-600, #8b6a3e);
 }
 
 .sectionWebEmbed .cardTitle,
@@ -52,13 +54,35 @@
 .sectionWebEmbed .chip {
   min-height: 2rem;
   padding: 0.5rem 0.875rem;
-  border-color: #e8e2d6;
-  background: #f7f4ee;
+  border-color: var(--tf-border, #e8e2d6);
+  background: var(--tf-surface-muted, #f7f4ee);
 }
 
 .sectionWebEmbed .chipActive {
-  border-color: #8b6a3e;
+  border-color: var(--tf-accent-gold-600, #8b6a3e);
   background: rgba(139, 106, 62, 0.12);
+}
+
+.sectionWebEmbed .synthesisText {
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  max-width: 36ch;
+}
+
+:global([data-theme="dark"]) .sectionWebEmbed .glanceTile,
+:global([data-theme="dark"]) .sectionWebEmbed .productCard,
+:global(.productWebFrame[data-theme="dark"]) .sectionWebEmbed .glanceTile,
+:global(.productWebFrame[data-theme="dark"]) .sectionWebEmbed .productCard {
+  background: #1e1a24;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+}
+
+:global([data-theme="dark"]) .sectionWebEmbed .chip,
+:global(.productWebFrame[data-theme="dark"]) .sectionWebEmbed .chip {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .sectionWebEmbed .bridges {

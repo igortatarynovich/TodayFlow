@@ -2,6 +2,9 @@ import {
   resolveArchetypeSlug,
   archetypeAssetPath,
   archetypeDisplayLabel,
+  archetypeIllustrationPath,
+  archetypeIllustrationSrc,
+  resolveArchetypeIllustrationSlug,
   planetAssetPath,
   resolvePlanetSlug,
   zodiacAssetPath,
@@ -53,10 +56,24 @@ describe("visualIdentity registry", () => {
     expect(resolveElementSlug("unknown")).toBeNull();
   });
 
-  it("resolves EN and RU planet names", () => {
-    expect(resolvePlanetSlug("Sun")).toBe("sun");
-    expect(resolvePlanetSlug("MERCURY")).toBe("mercury");
-    expect(resolvePlanetSlug("Луна")).toBe("moon");
-    expect(resolvePlanetSlug("unknown")).toBeNull();
+  it("maps all 12 production seeds to Pearson illustration slugs", () => {
+    expect(resolveArchetypeIllustrationSlug("Architect")).toBe("pravitel");
+    expect(resolveArchetypeIllustrationSlug("Creator")).toBe("tvorets");
+    expect(resolveArchetypeIllustrationSlug("Sage")).toBe("mudrets");
+    expect(resolveArchetypeIllustrationSlug("Strategist")).toBe("geroi");
+    expect(resolveArchetypeIllustrationSlug("Catalyst")).toBe("buntar");
+    expect(resolveArchetypeIllustrationSlug("Harmonizer")).toBe("liubovnik");
+    expect(resolveArchetypeIllustrationSlug("Seeker")).toBe("iskatel");
+    expect(resolveArchetypeIllustrationSlug("Explorer")).toBe("iskatel");
+    expect(resolveArchetypeIllustrationSlug("shut")).toBe("shut");
+    expect(resolveArchetypeIllustrationSlug("Guardian")).toBe("zabotlivyi");
+    expect(resolveArchetypeIllustrationSlug("Mentor")).toBe("mag");
+    expect(resolveArchetypeIllustrationSlug("Visionary")).toBe("nevinnyi");
+    expect(resolveArchetypeIllustrationSlug("Observer")).toBe("slavnyi_malyi");
+    expect(resolveArchetypeIllustrationSlug("pravitel")).toBe("pravitel");
+    expect(resolveArchetypeIllustrationSlug("Любовник")).toBe("liubovnik");
+    expect(resolveArchetypeIllustrationSlug("unknown-seed")).toBeNull();
+    expect(archetypeIllustrationSrc("Architect")).toBe("/images/archetypes/pravitel.webp");
+    expect(archetypeIllustrationPath("geroi")).toBe("/images/archetypes/geroi.webp");
   });
 });

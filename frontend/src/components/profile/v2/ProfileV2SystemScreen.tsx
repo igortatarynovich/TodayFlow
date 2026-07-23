@@ -146,8 +146,6 @@ export function ProfileV2SystemScreen({
 
             <ProfileBridgeScene bridgeLine={journey.bridge?.line ?? null} />
 
-            <ProfileV2MyDays />
-
             {hasExploreBody ? (
               <ProfileExploreSection
                 open={exploreOpen}
@@ -252,6 +250,8 @@ export function ProfileV2SystemScreen({
                 }
               />
             ) : null}
+
+            <ProfileV2MyDays />
           </>
         ) : (
           <LegacyFirstScreen

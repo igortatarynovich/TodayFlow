@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { profileMotionStaggerDelay, profileMotionStyles, useProfileMotionInView } from "@/components/foundation/ProfileMotion";
 import type { TodayPromiseSuggestion } from "@/lib/todayDayDialogue";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import type { TodayStrengthenTool } from "@/lib/todayCompositionModel";
@@ -71,12 +72,20 @@ export function TodayPersonalizedProductSection({
     contract.global_context?.period?.trim() ||
     story.hero.themeHeadline;
 
+  const motion = useProfileMotionInView<HTMLElement>(40);
+
   return (
     <section
-      className={`${styles.section} ${embeddedInWebDashboard ? styles.sectionWebEmbed : ""}`.trim()}
+      ref={motion.ref}
+      className={`${styles.section} ${embeddedInWebDashboard ? styles.sectionWebEmbed : ""} ${motion.className}`.trim()}
+      style={motion.style}
       data-testid="today-zone-personal"
     >
-      <article className={styles.synthesisCard} data-testid="today-entity-synthesis">
+      <article
+        className={`${styles.synthesisCard} ${profileMotionStyles.staggerItem}`}
+        style={profileMotionStaggerDelay(0, 60)}
+        data-testid="today-entity-synthesis"
+      >
         <div>
           <p className={styles.synthesisKicker}>{themeLine || "Сегодня"}</p>
           {reading.opening ? <p className={styles.synthesisText}>{reading.opening}</p> : null}

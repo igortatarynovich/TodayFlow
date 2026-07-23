@@ -151,7 +151,7 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(/Исследователь/i);
     expect(screen.getByTestId("profile-v2-recognition-line")).toHaveTextContent("структуру");
     const markers = screen.getByTestId("profile-v2-identity-markers");
-    expect(within(markers).getAllByText(/./).length).toBeLessThanOrEqual(3);
+    expect(markers.querySelectorAll(":scope > *").length).toBeLessThanOrEqual(3);
     expect(markers).toHaveTextContent("Дева");
     expect(markers).toHaveTextContent("Земля");
     expect(markers).toHaveTextContent("Путь 7");
@@ -242,6 +242,31 @@ describe("ProfileV2SystemScreen journey rewire", () => {
   it("does not invent fake progress percentages on effort", () => {
     renderJourney();
     expect(screen.getByTestId("profile-v2-effort").textContent).not.toMatch(/%/);
+  });
+
+  it("keeps hero to one name, one recognition line, and ≤3 markers", () => {
+    renderJourney();
+    const hero = screen.getByTestId("profile-v2-recognition");
+    expect(within(hero).getAllByRole("heading", { level: 1 })).toHaveLength(1);
+    expect(screen.getByTestId("profile-v2-recognition-line")).toBeInTheDocument();
+    expect(screen.getByTestId("profile-v2-identity-markers").querySelectorAll(":scope > *").length).toBeLessThanOrEqual(3);
+  });
+
+  it("renders why as claim anchors plus synthesis, not cusp dump", () => {
+    renderJourney();
+    const why = screen.getByTestId("profile-v2-why");
+    expect(within(why).getByText(/Число пути/i)).toBeInTheDocument();
+    expect(within(why).getByText(/Солнце в Деве/i)).toBeInTheDocument();
+    expect(why.textContent).not.toMatch(/12 куспид/i);
+  });
+
+  it("renders one insight node cascade, not strengths/tensions/helps chapters", () => {
+    renderJourney();
+    expect(screen.getByTestId("profile-v2-insight-node")).toBeInTheDocument();
+    expect(screen.getByTestId("profile-v2-insight-help")).toBeInTheDocument();
+    expect(screen.queryByTestId("profile-v2-chapter-strengths")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("profile-v2-chapter-tensions_growth")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("profile-v2-chapter-helps")).not.toBeInTheDocument();
   });
 });
 
