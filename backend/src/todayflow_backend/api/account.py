@@ -241,6 +241,14 @@ class CoreProfileResponse(BaseModel):
     living: dict | None = None
     natal_summary: dict | None = None  # сжатое текстовое резюме карты для персонализации (без сырых координат)
     snapshot_id: int | None = None  # CoreProfileSnapshot.id when loaded from published snapshot
+    # Ephemeral Profile Journey read-path projections (not Snapshot).
+    portrait_why_v0: dict | None = None
+    insight_nodes_v0: dict | None = None
+    effort_vector_v0: dict | None = None
+    bridge_line_v0: dict | None = None
+    capability: dict | None = None
+    profile_matrix_v0: dict | None = None
+    profile_header_knowledge_v0: dict | None = None
 
 
 class CompactUserModelIdentity(BaseModel):

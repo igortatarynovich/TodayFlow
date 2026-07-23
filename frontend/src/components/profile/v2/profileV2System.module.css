@@ -847,9 +847,599 @@
   }
 }
 
+/* Journey Steps 1–5 (above Freeze card wall) */
+.journeyHero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: center;
+  padding: 2rem;
+  border-radius: 2rem;
+  border: 1px solid #e8e2d6;
+  background: linear-gradient(165deg, #fdfbf7 0%, #f3ebe0 55%, #efe6d8 100%);
+  box-shadow: 0 24px 35px rgba(42, 37, 32, 0.08);
+}
+
+.journeyHeroVisual {
+  display: flex;
+  justify-content: center;
+}
+
+.journeySymbolFrame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 8.5rem;
+  height: 8.5rem;
+  border-radius: 50%;
+  border: 1px solid #d8c9b0;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.journeyHeroCopy {
+  min-width: 0;
+}
+
+.journeyHeroTitle {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--tf-ink);
+  text-transform: uppercase;
+}
+
+.journeyRecognitionLine {
+  margin: 0.85rem 0 0;
+  font-family: var(--tf-font-display);
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  line-height: 1.35;
+  color: #5a5450;
+}
+
+.whyBlock {
+  margin-bottom: 1.25rem;
+}
+
+.whyBlockLabel {
+  margin: 0 0 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8b6a3e;
+}
+
+.whyList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.whyItemSelected,
+.whyItemInfluenced {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  border-radius: 0.875rem;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: var(--tf-ink);
+}
+
+.whyItemSelected {
+  border: 1px solid #c9a96e;
+  background: #fff9ef;
+  font-weight: 600;
+}
+
+.whyItemInfluenced {
+  border: 1px solid #e8e2d6;
+  background: #fff;
+}
+
+.insightCard {
+  padding: 1.5rem;
+  border-radius: 1.25rem;
+  border: 1px solid #e8e2d6;
+  background: #fff;
+  box-shadow: 0 12px 24px rgba(42, 37, 32, 0.06);
+}
+
+.insightKind {
+  margin: 0 0 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8b6a3e;
+}
+
+.insightTitle {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  line-height: 1.2;
+  color: var(--tf-ink);
+}
+
+.insightBody {
+  margin: 0.75rem 0 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #5a5450;
+}
+
+.insightMeta {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid #efe8dc;
+}
+
+.livingNote {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: #9a9490;
+}
+
+.livingQuotes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.livingQuote {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  font-style: italic;
+  color: #5a5450;
+}
+
+.traitGrid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.875rem;
+}
+
+@media (min-width: 40rem) {
+  .traitGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.traitCard {
+  margin: 0;
+  padding: 1rem 1.125rem;
+  border-radius: 1.25rem;
+  border: 1px solid #e8e2d6;
+  background: #f7f4ee;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.traitLabel {
+  margin: 0;
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8b6a3e;
+}
+
+.traitLine {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--tf-ink);
+}
+
+.actionRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.secondaryCta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid #c9a96e;
+  background: transparent;
+  color: #5b4630;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.secondaryCta:hover {
+  background: #f7f4ee;
+}
+
+.effortVector {
+  margin: 0;
+  padding: 1.25rem 1.5rem;
+  border-radius: 1.25rem;
+  border: 1px solid #2a2520;
+  background: #2a2520;
+  color: #fdfbf7;
+  font-family: var(--tf-font-display);
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  line-height: 1.35;
+}
+
+.bridgeLine {
+  margin: 0 0 1.25rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #5a5450;
+}
+
+.bridgeCta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid #2a2520;
+  background: #fff;
+  color: #2a2520;
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.bridgeCta:hover {
+  background: var(--tf-ink, #2a2520);
+  color: var(--tf-page, #fdfbf7);
+}
+
+.characterMore {
+  padding: 1rem 1.25rem;
+  border-radius: 1.25rem;
+  border: 1px solid var(--tf-border, #e8e2d6);
+  background: var(--tf-surface-muted, #faf8f4);
+}
+
+.characterMoreSummary {
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--tf-ink-soft, #5a5450);
+  list-style: none;
+}
+
+.characterMoreSummary::-webkit-details-marker {
+  display: none;
+}
+
+.characterMore[open] .characterMoreSummary {
+  margin-bottom: 1rem;
+}
+
+/* —— Journey scenes (Profile Journey Projection Rewire) —— */
+
+.journeyHeroName {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: clamp(1.85rem, 3.4vw, 2.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--tf-ink);
+}
+
+.whyProofGrid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.whyProofCard {
+  margin: 0;
+  padding: 1rem 1.125rem;
+  border-radius: 1rem;
+  border: 1px solid var(--tf-border, #e8e2d6);
+  background: var(--tf-surface-muted, #f7f4ee);
+}
+
+.whyProofTitle {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--tf-ink);
+}
+
+.whySynthesis {
+  margin: 1.25rem 0 0;
+  font-family: var(--tf-font-display);
+  font-size: 1.0625rem;
+  line-height: 1.45;
+  color: var(--tf-ink-soft, #5b4630);
+}
+
+.insightScene {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.insightChain {
+  padding-top: 0.25rem;
+  border-top: 1px solid var(--tf-border, #e8e2d6);
+}
+
+.insightChainLabel {
+  margin: 0 0 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tf-accent-gold, #8b6a3e);
+}
+
+.insightGroundList,
+.insightLivingList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.insightGroundList li,
+.insightLivingList li {
+  padding: 0.375rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--tf-border, #e8e2d6);
+  background: var(--tf-surface-muted, #f7f4ee);
+  font-size: 0.8125rem;
+  color: var(--tf-ink-soft, #5a5450);
+}
+
+.insightHelp {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--tf-ink);
+}
+
+.effortSpheres {
+  margin-top: 1.25rem;
+}
+
+.effortSpheresLabel {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tf-accent-gold, #8b6a3e);
+}
+
+.effortSpheresLine {
+  margin: 0.5rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: var(--tf-ink-soft, #5a5450);
+}
+
+.bridgeScene {
+  scroll-margin-top: 1.5rem;
+  padding: 1.75rem;
+  border-radius: 1.75rem;
+  border: 1px solid var(--tf-border, #e8e2d6);
+  background: var(--tf-surface, #fff);
+  box-shadow: 0 18px 28px rgba(42, 37, 32, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.exploreDetails {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.exploreDetailCard {
+  padding: 1rem 1.125rem;
+  border-radius: 1rem;
+  border: 1px solid var(--tf-border, #e8e2d6);
+  background: var(--tf-surface-muted, #f7f4ee);
+}
+
+.railExploreBlock {
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--tf-border, #e8e2d6);
+}
+
+@media (min-width: 40rem) {
+  .whyProofGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 56.25rem) {
+  .journeyHero {
+    grid-template-columns: 10.5rem minmax(0, 1fr);
+  }
+
+  .journeySymbolFrame {
+    width: 10rem;
+    height: 10rem;
+  }
+
+  .whyProofGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Tokenized surfaces + dark theme */
+.journeyHero {
+  border-color: var(--tf-border, #e8e2d6);
+  background: linear-gradient(
+    165deg,
+    var(--tf-page, #fdfbf7) 0%,
+    var(--tf-surface-muted, #f3ebe0) 55%,
+    var(--tf-surface-warm, #efe6d8) 100%
+  );
+}
+
+.journeySymbolFrame {
+  border-color: var(--tf-border-strong, #d8c9b0);
+  background: color-mix(in srgb, var(--tf-surface, #fff) 72%, transparent);
+}
+
+.journeyRecognitionLine {
+  color: var(--tf-ink-soft, #5a5450);
+}
+
+.zone {
+  border-color: var(--tf-border, #e8e2d6);
+  background: var(--tf-surface, #fff);
+}
+
+.zoneLabel,
+.railDepthEyebrow {
+  color: var(--tf-accent-gold, #8b6a3e);
+}
+
+.zoneLead {
+  color: var(--tf-ink-soft, #5a5450);
+}
+
+.heroPill {
+  border-color: var(--tf-border, #e8e2d6);
+  background: var(--tf-surface-muted, #f7f4ee);
+  color: var(--tf-ink-soft, #5a5450);
+}
+
+.effortVector {
+  border-color: var(--tf-ink, #2a2520);
+  background: var(--tf-ink, #2a2520);
+  color: var(--tf-page, #fdfbf7);
+}
+
+.bridgeCta {
+  border-color: var(--tf-accent-gold, #c9a96e);
+  background: var(--tf-accent-gold, #c9a96e);
+  color: var(--tf-ink, #2a2520);
+}
+
+.bridgeCta:hover {
+  filter: brightness(0.95);
+  background: var(--tf-accent-gold, #c9a96e);
+  color: var(--tf-ink, #2a2520);
+}
+
+.bridgeLine {
+  color: var(--tf-ink-soft, #5a5450);
+}
+
+.secondaryCta {
+  border-color: var(--tf-accent-gold, #c9a96e);
+  color: var(--tf-ink-soft, #5b4630);
+}
+
+.secondaryCta:hover {
+  background: var(--tf-surface-muted, #f7f4ee);
+}
+
+.railDepthBadge {
+  border-color: var(--tf-accent-gold, #c9a96e);
+  background: var(--tf-surface, #fff);
+  color: var(--tf-accent-gold, #8b6a3e);
+}
+
+.railDepthStepActive .railDepthBadge {
+  background: var(--tf-ink, #2a2520);
+  border-color: var(--tf-ink, #2a2520);
+  color: var(--tf-page, #fdfbf7);
+}
+
+.railDepthTitle {
+  color: var(--tf-ink);
+}
+
+.railDepthHint,
+.mobileDepthChip {
+  color: var(--tf-ink-muted, #9a9490);
+}
+
+.mobileDepthChip {
+  border-color: var(--tf-border, #e8e2d6);
+  background: var(--tf-surface, #fff);
+}
+
+:global([data-theme="dark"]) .journeyHero,
+:global(.productWebFrame[data-theme="dark"]) .journeyHero {
+  background: linear-gradient(
+    165deg,
+    var(--tf-surface-dark, #1a1620) 0%,
+    var(--tf-surface-dark-elevated, #241f2c) 100%
+  );
+  box-shadow: none;
+}
+
+:global([data-theme="dark"]) .zone,
+:global([data-theme="dark"]) .bridgeScene,
+:global([data-theme="dark"]) .whyProofCard,
+:global([data-theme="dark"]) .exploreDetailCard,
+:global([data-theme="dark"]) .heroPill,
+:global([data-theme="dark"]) .characterMore,
+:global(.productWebFrame[data-theme="dark"]) .zone,
+:global(.productWebFrame[data-theme="dark"]) .bridgeScene {
+  background: var(--tf-surface-dark-elevated, #241f2c);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+}
+
+:global([data-theme="dark"]) .effortVector,
+:global(.productWebFrame[data-theme="dark"]) .effortVector {
+  background: var(--tf-accent-gold, #c9a96e);
+  border-color: var(--tf-accent-gold, #c9a96e);
+  color: var(--tf-ink, #1a1510);
+}
+
 @media (min-width: 56.25rem) {
   .heroGrid {
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  }
+
+  .journeyHero {
+    grid-template-columns: 10.5rem minmax(0, 1fr);
+    gap: 2rem;
+    padding: 2.3125rem;
+  }
+
+  .journeyHeroVisual {
+    justify-content: flex-start;
   }
 }
 

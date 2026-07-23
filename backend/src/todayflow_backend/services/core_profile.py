@@ -69,15 +69,198 @@ class CoreProfileService:
         payload: dict[str, Any],
         astro_profile: db_models.AstroProfile | None,
         settings: db_models.UserSettings | None,
+        user: db_models.User | None = None,
     ) -> dict[str, Any]:
         """Подмешивает сжатое астро-резюме при отдаче (не кладём в снапшот — карта может появиться позже)."""
         from todayflow_backend.services.natal_chart_summary import build_natal_chart_summary_for_core
+        from todayflow_backend.services.profile_bridge_line_projection_v0 import (
+            attach_bridge_line_v0,
+        )
+        from todayflow_backend.services.profile_effort_vector_projection_v0 import (
+            attach_effort_vector_v0,
+        )
+        from todayflow_backend.services.profile_insight_nodes_projection_v0 import (
+            attach_insight_nodes_v0,
+        )
+        from todayflow_backend.services.profile_portrait_why_projection_v0 import attach_portrait_why_v0
 
         locale = (settings.locale if settings else None) or "ru"
         aid = astro_profile.id if astro_profile else None
         payload["natal_summary"] = build_natal_chart_summary_for_core(
             db, astro_profile_id=aid, locale=locale
         )
+        # Step-2…5 — ephemeral read projections; never persisted in Snapshot.
+        out = attach_bridge_line_v0(
+            attach_effort_vector_v0(
+                attach_insight_nodes_v0(attach_portrait_why_v0(payload))
+            )
+        )
+        return self._attach_profile_matrix(db, out, user=user, astro_profile=astro_profile, settings=settings)
+
+    def _attach_profile_matrix(
+        self,
+        db: Session,
+        payload: dict[str, Any],
+        *,
+        user: db_models.User | None,
+        astro_profile: db_models.AstroProfile | None,
+        settings: db_models.UserSettings | None,
+    ) -> dict[str, Any]:
+        """Ephemeral Availability 3.1 pack — same saved contract; access only controls reveal."""
+        from todayflow_backend.services.capability_resolver_v0 import resolve_capability
+        from todayflow_backend.services.insight_depth import get_insight_depth_tier
+        from todayflow_backend.services.profile_matrix_adapter_v0 import (
+            project_profile_slots_v0,
+            resolve_access_tier,
+        )
+        from todayflow_backend.services.subscription_level import get_subscription_snapshot
+
+        access = "free"
+        if user is not None:
+            snap = get_subscription_snapshot(user, db)
+            access = resolve_access_tier(
+                insight_depth_tier=get_insight_depth_tier(user, db),
+                subscription_status=snap.subscription_status,
+                billing_level=snap.level,
+            )
+
+        person = payload.get("person") if isinstance(payload.get("person"), dict) else {}
+        astro = payload.get("astro") if isinstance(payload.get("astro"), dict) else {}
+        display_name = (
+            (person.get("display_name") or person.get("first_name") or "").strip()
+            or ((settings.first_name if settings else None) or "")
+            or None
+        )
+        birth_date = astro.get("birth_date") or (
+            astro_profile.birth_date.isoformat() if astro_profile and astro_profile.birth_date else None
+        )
+        birth_time = astro.get("birth_time")
+        if birth_time is None and astro_profile and astro_profile.birth_time:
+            birth_time = astro_profile.birth_time.strftime("%H:%M:%S")
+        time_unknown = bool(
+            astro.get("time_unknown")
+            if "time_unknown" in astro
+            else (astro_profile.time_unknown if astro_profile else True)
+        )
+        latitude = astro.get("latitude")
+        if latitude is None and astro_profile is not None:
+            latitude = astro_profile.latitude
+        longitude = astro.get("longitude")
+        if longitude is None and astro_profile is not None:
+            longitude = astro_profile.longitude
+        location_name = astro.get("location_name") or (
+            astro_profile.location_name if astro_profile else None
+        )
+        timezone_name = astro.get("timezone_name") or (
+            astro_profile.timezone_name if astro_profile else None
+        )
+
+        natal_facts = None
+        if astro_profile is not None:
+            cached = (
+                db.query(db_models.CachedNatalChart)
+                .filter(db_models.CachedNatalChart.astro_profile_id == astro_profile.id)
+                .first()
+            )
+            if cached and isinstance(cached.chart_metadata, dict):
+                nf = cached.chart_metadata.get("natal_facts")
+                if isinstance(nf, dict):
+                    natal_facts = nf
+
+        # Merge effort_vector into contract view for helps projection without mutating snapshot.
+        contract = payload.get("profile_contract_v1")
+        contract_view = dict(contract) if isinstance(contract, dict) else {}
+        if isinstance(payload.get("effort_vector_v0"), dict):
+            contract_view["effort_vector_v0"] = payload["effort_vector_v0"]
+
+        # Deterministic header knowledge (sign / traditions / stone·color of sign).
+        # Never ask LLM for these; feeds cultural_catalog + sun/element fallbacks.
+        from todayflow_backend.services.profile_header_knowledge_v0 import (
+            build_profile_header_knowledge,
+            header_pack_to_matrix_catalog,
+        )
+
+        numerology = payload.get("numerology") if isinstance(payload.get("numerology"), dict) else {}
+        life_path = contract_view.get("life_path")
+        if life_path is None:
+            life_path = numerology.get("life_path")
+        birthday_number = contract_view.get("birthday_number")
+        if birthday_number is None:
+            birthday_number = numerology.get("birthday_number")
+        # Prefer tropical element from astro baseline when contract lacks it
+        if not contract_view.get("element"):
+            astro_el = (payload.get("astro") or {}).get("sun_element") if isinstance(payload.get("astro"), dict) else None
+            if astro_el:
+                contract_view["element"] = astro_el
+        if life_path is not None and contract_view.get("life_path") is None:
+            contract_view["life_path"] = life_path
+        if birthday_number is not None and contract_view.get("birthday_number") is None:
+            contract_view["birthday_number"] = birthday_number
+
+        def _as_int(value: object) -> int | None:
+            if isinstance(value, int):
+                return value
+            if isinstance(value, str) and value.strip().isdigit():
+                return int(value.strip())
+            return None
+
+        header_pack = build_profile_header_knowledge(
+            birth_date,
+            life_path=_as_int(life_path),
+            birthday_number=_as_int(birthday_number),
+        )
+        catalog = header_pack_to_matrix_catalog(header_pack)
+
+        # Name numerology only when we have a display name (capability already gates reveal).
+        name_numerology = None
+        if display_name and numerology.get("expression") is not None:
+            name_numerology = {
+                "expression": numerology.get("expression"),
+                "soul_urge": numerology.get("soul_urge"),
+                "personality": numerology.get("personality"),
+                "full_name": numerology.get("full_name"),
+            }
+
+        cap = resolve_capability(
+            birth_date=birth_date,
+            birth_time=birth_time,
+            time_unknown=time_unknown,
+            latitude=latitude,
+            longitude=longitude,
+            location_name=location_name,
+            timezone_name=timezone_name,
+            display_name=display_name,
+            access=access,  # type: ignore[arg-type]
+        )
+        matrix = project_profile_slots_v0(
+            contract=contract_view,
+            natal_facts=natal_facts,
+            capability=cap,
+            birth_date=str(birth_date) if birth_date else None,
+            birth_time=str(birth_time) if birth_time else None,
+            time_unknown=time_unknown,
+            latitude=latitude,
+            longitude=longitude,
+            location_name=location_name,
+            timezone_name=timezone_name,
+            display_name=display_name,
+            access=access,  # type: ignore[arg-type]
+            catalog=catalog,
+            name_numerology=name_numerology,
+        )
+        if header_pack is not None:
+            payload["profile_header_knowledge_v0"] = header_pack
+        payload["capability"] = matrix.get("capability") or {
+            "resolver_version": cap.get("resolver_version"),
+            "mode": cap.get("mode"),
+            "access": cap.get("access"),
+            "layers": cap.get("layers"),
+            "profile_slots": cap.get("profile_slots"),
+            "user_messages": cap.get("user_messages"),
+            "angles_eligible": cap.get("angles_eligible"),
+            "birth_time_unsuitable_for_angles": cap.get("birth_time_unsuitable_for_angles"),
+        }
+        payload["profile_matrix_v0"] = matrix
         return payload
 
     @staticmethod
@@ -139,7 +322,7 @@ class CoreProfileService:
         now = time_module.time()
         cached = self._cache.get(cache_key)
         if cached and cached[0] > now:
-            return self._attach_natal_summary(db, deepcopy(cached[1]), astro_profile, settings)
+            return self._attach_natal_summary(db, deepcopy(cached[1]), astro_profile, settings, user)
 
         astro_context = self._build_astro_context(astro_profile)
         numerology_context = self._build_numerology_context(numerology_profile)
@@ -154,7 +337,7 @@ class CoreProfileService:
             cached_payload["living"] = living_context
             self._cache[cache_key] = (now + self.cache_ttl_seconds, deepcopy(cached_payload))
             self._prune_cache(now)
-            return self._attach_natal_summary(db, cached_payload, astro_profile, settings)
+            return self._attach_natal_summary(db, cached_payload, astro_profile, settings, user)
 
         baseline = self._build_baseline(astro_context, numerology_context)
         missing_fields = self._build_missing_fields(settings, astro_context, numerology_context)
@@ -172,7 +355,7 @@ class CoreProfileService:
             "profiles": profiles_context,
             "living": living_context,
         }
-        return self._attach_natal_summary(db, shell, astro_profile, settings)
+        return self._attach_natal_summary(db, shell, astro_profile, settings, user)
 
     def build(
         self,
@@ -351,7 +534,7 @@ class CoreProfileService:
 
             self._cache[cache_key] = (now + self.cache_ttl_seconds, deepcopy(profile_payload))
             self._prune_cache(now)
-            get_body = self._attach_natal_summary(db, deepcopy(profile_payload), astro_profile, settings)
+            get_body = self._attach_natal_summary(db, deepcopy(profile_payload), astro_profile, settings, user)
             try:
                 from todayflow_backend.services.profile_capture_session_v0 import (
                     get_profile_capture_session,
@@ -542,15 +725,11 @@ class CoreProfileService:
                 "mutable": "Гибкость и мягкая перенастройка",
             }.get(modality_key, "Ритм через базовые микро-шаги")
 
-        archetype = "Observer"
-        if life_path in {1, 8, 22}:
-            archetype = "Architect"
-        elif life_path in {2, 6, 11}:
-            archetype = "Harmonizer"
-        elif life_path in {3, 5, 21}:
-            archetype = "Explorer"
-        elif life_path in {4, 7, 9, 33}:
-            archetype = "Sage"
+        from todayflow_backend.services.profile_baseline_archetype_v0 import (
+            archetype_seed_from_life_path,
+        )
+
+        archetype = archetype_seed_from_life_path(life_path)
 
         return {
             "archetype_seed": archetype,

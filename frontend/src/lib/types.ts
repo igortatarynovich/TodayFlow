@@ -276,6 +276,8 @@ export type CoreProfile = {
     contract_version: string;
     status?: "ready" | "forming" | "partial" | string;
     forming_message?: string | null;
+    /** Step-1 share line (≤120). Optional on old snapshots; normalize may fallback. */
+    recognition_line?: string;
     identity_core: string;
     strengths: string[];
     growth_zones: string[];
@@ -299,6 +301,109 @@ export type CoreProfile = {
     >;
     generation_meta?: Record<string, unknown> | null;
     profile_snapshot_version?: string | null;
+  } | null;
+  /**
+   * Step-2 why checklist (read-path only). Not stored in Snapshot.
+   * selected_by = life_path→archetype; portrait_influenced_by = sun/element/rhythm/…
+   */
+  portrait_why_v0?: {
+    projection_version?: string;
+    title?: string;
+    selected_by?: Array<{
+      id?: string;
+      class?: "selected_by" | string;
+      life_path?: number | null;
+      archetype_seed?: string | null;
+      label?: string;
+      fact_keys?: string[];
+    }>;
+    portrait_influenced_by?: Array<{
+      id?: string;
+      class?: "portrait_influenced_by" | string;
+      label?: string;
+      value?: string | null;
+      fact_keys?: string[];
+    }>;
+    omitted?: Array<{ id?: string; reason?: string; opens?: string }>;
+    honesty_line?: string | null;
+    rules?: {
+      archetype_selected_only_by?: string;
+      forbid_sun_as_archetype_cause?: boolean;
+    };
+  } | null;
+  /**
+   * Step-3 story nodes (read-path only). Projects existing Snapshot strings —
+   * not a second recurring_patterns schema.
+   */
+  insight_nodes_v0?: {
+    projection_version?: string;
+    nodes?: Array<{
+      id?: string;
+      kind?: "tension" | "repeat" | "strength" | string;
+      title?: string;
+      insight?: string;
+      grounded_on?: Array<{ id?: string; label?: string; fact_keys?: string[]; role?: string }>;
+      help?: string | null;
+      living_evidence?: string[];
+      source_fields?: string[];
+    }>;
+    rules?: Record<string, unknown>;
+  } | null;
+  /**
+   * Step-4 effort vector (read-path only). Derived from insight_nodes_v0.nodes[0].help.
+   * Null when no safe help — never invents from life_mission / Today / astrology.
+   */
+  effort_vector_v0?: {
+    projection_version?: string;
+    effort_vector?: string | null;
+    source_node_id?: string | null;
+    node_kind?: string | null;
+    role?: string | null;
+    source_fields?: string[];
+    rules?: Record<string, unknown>;
+  } | null;
+  /** Step-5 path bridge to Today (read-path only). Not an empty CTA / day forecast. */
+  bridge_line_v0?: {
+    projection_version?: string;
+    bridge_line?: string | null;
+    cta?: string | null;
+    leads_to?: string | null;
+    source_node_id?: string | null;
+    node_kind?: string | null;
+    source_fields?: string[];
+    rules?: Record<string, unknown>;
+  } | null;
+  capability?: {
+    resolver_version?: string;
+    mode?: "none" | "date_only" | "full" | string;
+    access?: "guest" | "free" | "trial" | "paid" | string;
+    layers?: {
+      l1?: boolean;
+      l2_structure?: boolean;
+      l3_in_result?: boolean;
+      l3_revealed?: boolean;
+      l3_depth?: boolean;
+      name_numerology?: boolean;
+    };
+    profile_slots?: {
+      data_eligible?: string[];
+      revealed?: string[];
+      allowed?: string[];
+      access_gated?: string[];
+      omitted?: string[];
+      gated_l3?: string[];
+    };
+    user_messages?: Array<{ code?: string; text?: string }>;
+    angles_eligible?: boolean;
+    birth_time_unsuitable_for_angles?: boolean;
+  } | null;
+  profile_matrix_v0?: {
+    adapter_version?: string;
+    slots?: Record<string, unknown>;
+    revealed_slots?: Record<string, unknown>;
+    access_gated_slot_ids?: string[];
+    omitted_slots?: Record<string, string>;
+    capability?: CoreProfile["capability"];
   } | null;
   daily_interpretation?: {
     daily_lenses?: {

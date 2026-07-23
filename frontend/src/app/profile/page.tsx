@@ -528,6 +528,7 @@ function ProfileHubPageInner() {
                 <ProfileV2SystemScreen
                   model={profileQuickMapModel}
                   live={profileV2Live}
+                  coreProfile={coreProfile}
                   identityPills={buildProfileIdentityPills(profileQuickMapModel.frameworkAnchors, coreProfile)}
                   onOpenBirthData={() => setForceSetup(true)}
                   lifeSpheres={profileLifeSpheres}
