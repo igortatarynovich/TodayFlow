@@ -115,6 +115,23 @@
 | **L2** ASC, дома, structural styles (emotional, decision, relationship, work, money, home) | ✅ **если** date+time+place; иначе omit + CTA | ✅ при тех же данных |
 | **L3** deep helps, conflict patterns, practical «что делать», longitudinal | ❌ omit / soft CTA trial | ✅ |
 
+### Глубина: до регистрации → после аккаунта → после подписки
+
+Одна ось доступа (не вторая интерпретация):
+
+| Момент | Кто | Что видит | Что уже построено |
+|--------|-----|-----------|-------------------|
+| **До регистрации** | Guest | Preview 1A/1B / Landing — ценность и узнавание, **не** полный `/profile` | Draft facts + preview interpretation; bind при email |
+| **После регистрации** | Free | L1 + L2 по данным; шапка и структура; **без** deep L3 reveal | Полный результат в `slots` (включая L3), UI режет `revealed` |
+| **После подписки / trial** | Trial = Paid depth | L1+L2+L3: helps, практические выводы, глубокие паттерны | **Тот же** сохранённый профиль — только раскрытие |
+
+Правила:
+
+1. Данные (дата/время/место/имя) задают **что можно вычислить**.  
+2. Тариф задаёт **что можно показать**.  
+3. Промпты facts + interpretation строят **полный** пакет по данным; Guest/Free/Trial не запускают «другую личность».  
+4. До регистрации глубина = **preview**, не урезанный production Profile.
+
 ### Code Δ слоя 2
 
 | Ячейка | TARGET | CODE |
@@ -146,20 +163,54 @@
 
 ### 3.1 Profile — слоты (APPROVED TARGET)
 
-Поток:
+#### Композиция экрана (чтение сверху вниз)
+
+```text
+┌─ ШАПКА (fixed facts) ─────────────────────────────────────┐
+│  Узнавание · Солнце/стихия/numerology_core · Соответствия │
+│  (+ нумерология имени, если имя есть)                     │
+│  = вся стабильная информация из birth data + каталога     │
+└───────────────────────────────────────────────────────────┘
+        ↓ постепенно раскрываем человека
+┌─ СТРУКТУРА (если full natal) ─────────────────────────────┐
+│  ASC / дома / MC/IC                                       │
+└───────────────────────────────────────────────────────────┘
+        ↓
+┌─ ИНТЕРПРЕТАЦИЯ (personality layers) ──────────────────────┐
+│  эмоции → решения → отношения → работа → деньги → дом     │
+│  → сильные стороны → напряжения/рост                      │
+└───────────────────────────────────────────────────────────┘
+        ↓
+┌─ ПРАКТИКА / ГЛУБИНА (L3 reveal) ──────────────────────────┐
+│  helps / «что делать» — Trial+                            │
+└───────────────────────────────────────────────────────────┘
+        + Limitations/CTA данных там, где слот скрыт из-за ввода
+        + CTA Today внизу при ready base
+```
+
+**Правила композиции**
+
+1. **Шапка** = вся **фиксированная** информация: то, что однозначно следует из даты (± имя) и каталога, не «мнение на сегодня».
+2. **Соответствия в шапке** — можно и нужно показывать знак/число в **других культурах и гороскопах** (китайский, ведический ярлык, тибетский и т.п.), **только** если есть ключ в **накопленной базе знаний / каталоге**. Lookup по дате/знаку — **код**, не LLM. Нет ключа → блок не рисуем, без догадок.
+3. **Нет данных → нет блока.** Вместо заглушки — omit + одна фраза из слоя 1.1 / `user_messages`: что откроется после ввода или на что влияет отсутствие.
+4. **Раскрытие сверху вниз:** сначала фиксированная опора (шапка), затем структура карты, затем слои характера, затем практика. Не прыгать к L3/helps раньше узнавания и опор.
+5. Тариф **не** меняет порядок и не выкидывает слои из сохранённого результата — только reveal нижних глубинных слотов.
+6. **Не спрашивать модель** «какой знак 13 февраля» / «чей год 1990» — это справочник; модель пишет смысл только из уже полученных keys + `natal_facts`.
+
+Поток данных:
 
 ```text
 available_input → natal_facts (LLM) → calculated_facts + unavailable
   → contracts: base_astrology? · name_numerology? · natal_chart? · personality · growth?
-  → UI кладёт только non-null allowed fields
+  → UI кладёт только non-null allowed/revealed fields, сверху вниз по таблице
 ```
 
 | Блок | Данные | Доступ | Facts | contract_id | Kind | Appear when | Hide when | Copy если нет | Зачем |
 |------|--------|--------|-------|-------------|------|-------------|-----------|---------------|-------|
-| **Узнавание** (`identity_summary`) | ≥ дата | Free+ | sun / life_path / element… | `personality` | llm | non-empty | нет даты / forming | «Добавьте дату рождения, чтобы увидеть основу профиля.» | Узнать себя с первого взгляда |
-| **Солнце · стихия · numerology_core** | ≥ дата | Free+ | sun_sign, element, life_path, birthday… | `base_astrology` (+ date numbers in facts) | llm + facts | keys present | нет даты | — (блок с датой) | Базовые опоры карты и чисел |
-| **Соответствия** (камень/цвет/культуры) | ≥ дата + catalog keys | Free+ | catalog via sun/sign keys | `base_astrology` | catalog | keys present | нет keys в каталоге | omit без выдумки | Мягкий культурный слой |
-| **Нумерология имени** | имя + дата | Free+ | name numbers | `name_numerology` | llm | имя usable | нет имени | «Добавьте имя для разбора имени — на натальную карту не влияет.» | Самопрезентация / мотивация |
+| **Узнавание** (`identity_summary`) · *шапка* | ≥ дата | Free+ | sun / life_path / element… | `personality` | llm | non-empty | нет даты / forming | «Добавьте дату рождения, чтобы увидеть основу профиля.» | Узнать себя с первого взгляда |
+| **Солнце · стихия · numerology_core** · *шапка* | ≥ дата | Free+ | sun_sign, element, life_path, birthday… | `base_astrology` (+ date numbers in facts) | llm + facts | keys present | нет даты | — (блок с датой) | Базовые опоры карты и чисел |
+| **Соответствия** (камень/цвет · **знак в других культурах/гороскопах**) · *шапка* | ≥ дата + catalog keys | Free+ | catalog via sun/sign/number keys | `base_astrology` | catalog | keys present | нет keys в каталоге | omit без выдумки; при partial — CTA только на отсутствующий ввод, не на «пустой каталог» | Мягкий культурный слой: один знак — разные традиции |
+| **Нумерология имени** · *шапка, optional* | имя + дата | Free+ | name numbers | `name_numerology` | llm | имя usable | нет имени | «Добавьте имя для разбора имени — на натальную карту не влияет.» | Самопрезентация / мотивация |
 | **Структура карты** (ASC, дома, MC/IC) | дата+время+место | Free+ (структура); deep copy Trial+ | angles, houses | `natal_chart` | llm on facts | `natal_facts.mode=full` | нет времени **или** места | Время без места: «Укажите место…». Без времени: «Время откроет Асцендент и дома.» | Пространственная карта жизни |
 | **Эмоции** (`emotional_style`) | ≥ дата; house-based только full | Free+ | moon, water…; house moon only if full | `personality` | llm | non-null | insufficient facts → null | omit | Как чувствует и защищается |
 | **Решения** (`decision_style`) | ≥ дата | Free+ | mercury/mars/modality… | `personality` | llm | non-null | null | omit | Как принимает решения |
@@ -175,8 +226,9 @@ available_input → natal_facts (LLM) → calculated_facts + unavailable
 | **CTA полный профиль / глубина** | есть L2/L3 тело | Free+ | — | — | ui | есть скрытые слоты | нет тела | — | Раскрыть карту |
 | Kitchen / «почему система» / eligibility | — | **никогда** | — | — | — | — | всегда | — | Не продукт |
 
-**Запрет:** показывать ASC/дома/MC или house-based текст, если факты в `unavailable_facts` или mode ≠ `full`.
-
+**Запрет:** показывать ASC/дома/MC или house-based текст, если факты в `unavailable_facts` или mode ≠ `full`.  
+**Запрет:** показывать пустой блок шапки/интерпретации «на будущее» без CTA ценности.  
+**Запрет:** выдумывать соответствия других гороскопов без catalog key.
 ### 3.1 Code Δ (не SoT)
 
 | TARGET slot | CODE сегодня |
@@ -195,7 +247,53 @@ available_input → natal_facts (LLM) → calculated_facts + unavailable
 | Главное сообщение дня | ≥ дата | Free+ | `/today/contract` · day_story | hybrid | нет базы | Смысл дня |
 | Primary action | ≥ дата | Free+ | `primary_action` | hybrid | пусто | Один шаг |
 | Domain lenses | ≥ дата; без house-claims без full natal | Free+ / Paid depth | contract domains | hybrid | house-claim без домов | Линзы дня |
+| **Цвет / камень / запах / талисман дня** | день + астро-события дня + профиль пользователя | Free+ (depth по access) | `today` / day_story interpretation | **llm on day facts** | нет day context / нет профиля | Якорь дня — **рекомендация на сегодня**, не справочник |
 | Guest / gate | нет аккаунта | Guest | preview / auth | ui | — | Ценность до bind |
+
+#### Profile «камень/цвет» ≠ Today «цвет/запах дня»
+
+| | **Шапка Profile** | **Символ дня (Today)** |
+|--|--------------------|-------------------------|
+| Что | Камень/цвет **знака** (и др. традиции) | Цвет / запах / камень / талисман **этого дня** |
+| Откуда | **Каталог / база знаний** по ключу знака | **Интерпретация дня**: календарный день + астро-события + профиль |
+| Меняется? | Нет (пока тот же birth/sign) | Каждый день |
+| Можно ли взять «из базы» одним lookup? | Да | **Нет** — это рекомендация под день и человека |
+| Промпт | Не нужен для ключа; LLM опционально для смысла знака | Нужен качественный **today / day_story** prompt на day facts + profile slice |
+
+**Запрет:** выдавать «цвет дня» = `catalog[sun_sign]` или ротацию пресетов без дня/событий/профиля.  
+**Запрет:** плодить независимые генераторы «камень дня» / «запах дня» вне контракта Today.  
+**CODE Δ:** `celestial_events_builder._DAILY_SYMBOL_PRESETS` — legacy preset table; TARGET = производное от day interpretation, не отдельный SoT.
+
+#### Today day pack — обязательная цепочка смысла (TARGET)
+
+Один ответ дня (contract `today` / day_story) собирает **все** входы и говорит **одним голосом**. Нет блока без «почему».
+
+| Слой ответа | Обязательно объяснить | Входы |
+|-------------|----------------------|-------|
+| **Какой это день** | Характер дня: что несёт, какой тон/темп | дата, астро-события/транзиты дня, профиль |
+| **Цвет · запах · камень** | *Почему* именно они; *что дадут* в этот день | day + events + profile (не catalog знака) |
+| **Карта дня (Tarot)** | Как вытянутая карта **отражается на этом дне** | draw + day pack + profile slice |
+| **Число дня** | Как открытое число **отражается на этом дне** | number ritual / numerology day + day pack |
+| **Делать / не делать** | Конкретные опоры и границы дня | вся сборка выше |
+| **Активные сферы** | Какие сферы активны и **почему** | day + natal/profile facts (без house-claims без full) |
+| **Практика** | Какая практика усилит / укрепит и почему | day pack + profile helps/style |
+| **Цели на сегодня** | Какие цели уместны сегодня и почему | day pack + intent / goals slice |
+
+**Голос (жёстко):** опытный таролог + астролог + нумеролог — **один устойчивый авторский стиль** TodayFlow ([TODAYFLOW_VOICE_CANON](./content/TODAYFLOW_VOICE_CANON.md)).  
+Не «другой автор» при каждом запросе. Вариативность формулировок допустима; смена личности / тона / школы — нет.
+
+**Сборка входа в промпт (логический порядок):**
+
+```text
+profile slice + day astro events
+  + tarot draw (если есть)
+  + day number (если открыто)
+  → today interpretation prompt (один стиль)
+  → day narrative: характер дня → символы с «почему» → карта/число в дне
+    → делать/не делать → сферы → практика → цели
+```
+
+**Запрет:** символ без обоснования; карта/число без связи с днём; сферы «просто списком»; практика/цели без опоры на собранный день; скачок стиля между блоками одного ответа.
 
 ### 3.3 Compatibility · Tarot (сводка)
 
@@ -216,6 +314,13 @@ available_input → natal_facts (LLM) → calculated_facts + unavailable
 | 4 | **Plus vs Pro** = одна колонка Paid; отличие = caps/depth knobs, не вторая IA. |
 | 5 | **Имя** = optional в 1B (спрашиваем в welcome); без имени профиль работает; слой имени — omit + CTA. |
 | 6 | **Timezone** = для показа ASC/домов нужен resolve места → lat/lon/TZ; без TZ/места углы не показывать (honesty). |
+| 7 | **Шапка Profile** = вся фиксированная информация (узнавание · солнце/стихия/числа · соответствия культур/гороскопов · имя если есть). Не дневная интерпретация. |
+| 8 | **Пустой блок не рисуем** — только omit + ценность следующего ввода (слой 1.1 / `user_messages`). |
+| 9 | **Порядок экрана** = сверху вниз: шапка → структура → интерпретация → L3 практика. Постепенное раскрытие человека. |
+| 10 | **База знаний / каталог** = накопление детерминированных ключей (знак по дате, год в культурах, камень/цвет…). LLM **не** переспрашиваем об этом каждый раз. Нет ключа → omit. |
+| 11 | **Глубина доступа:** Guest = preview до регистрации; Free = L1+L2 reveal; Trial/Paid = +L3 reveal. Один interpretation-результат; тариф не запускает вторую личность. |
+| 12 | **Цвет/запах/камень дня** = рекомендация Today из (день + астро-события + профиль), не catalog lookup знака. Profile-соответствия знака остаются в базе знаний. |
+| 13 | **Today day pack:** каждый символ/карта/число/сфера/практика/цель — с «почему»; один стабильный голос практика (таро+астро+нумерология); не разный автор каждый раз. |
 
 ---
 
@@ -241,3 +346,8 @@ available_input → natal_facts (LLM) → calculated_facts + unavailable
 | 2026-07-22 | CODE: Capability Resolver + natal_facts `capability` pack + matrix adapter (без UI IA) |
 | 2026-07-22 | CODE: time-without-place preserved; Free/Trial = disclosure not second interpretation; Profile UI reads `revealed_slots` + `user_messages` |
 | 2026-07-22 | ACCEPTANCE: `tests/test_profile_matrix_31_acceptance.py` — 6 payloads + contradiction rules (gated∈slots, data-omit∉slots) |
+| 2026-07-23 | **Composition lock:** шапка = fixed facts (+ multi-tradition catalog); empty→omit+CTA; reveal top→bottom |
+| 2026-07-23 | **Knowledge base:** deterministic catalog lookups (sign/year/traditions); LLM must not re-ask; providers §0 |
+| 2026-07-23 | Depth axis explicit: Guest preview → Free L1+L2 → Trial/Paid +L3; same interpretation |
+| 2026-07-23 | Day color/scent ≠ profile catalog: today recommendation from day+events+profile |
+| 2026-07-23 | Today day pack always-why + stable practitioner voice (decision #13) |

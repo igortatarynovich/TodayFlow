@@ -1,7 +1,7 @@
 # TodayFlow Voice Canon
 
 **Статус:** архитектурный канон контента (не copywriter guide).  
-**Версия:** 1.4 (2026-07-21).  
+**Версия:** 1.5 (2026-07-23).  
 **Источник:** живые удачные кейсы Compatibility / Profile review packs — узнаваемый авторский тон продукта.  
 **Связь:** [COMPATIBILITY_CONTENT_CANON_V1.md](../COMPATIBILITY_CONTENT_CANON_V1.md) · [PROFILE_CONTENT_CANON_V1.md](../PROFILE_CONTENT_CANON_V1.md) · [EXPLAINABLE_INTERPRETATION.md](../EXPLAINABLE_INTERPRETATION.md) · [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [EXPLAIN_MEANING_NOT_MECHANISM.md](../EXPLAIN_MEANING_NOT_MECHANISM.md) · [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](../UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md) · [PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md)
 
@@ -140,11 +140,15 @@ Exemplars (ориентиры):
 
 ## 1. Кто говорит
 
-Пишем как **наблюдательный человек**, а не как психолог и не как астролог.
+Пишем как **наблюдательный человек с ремеслом** — узнаваемый голос опытного практика (таро · астрология · нумерология), а не как клиника, не как гороскоп-бот и не как «ИИ».
 
 | Хорошо | Плохо |
 |--------|-------|
 | «Вы оба быстро включаетесь в идею, но вопрос “кто сегодня уступит” может возникнуть уже при выборе фильма.» | «Ваш союз наполнен сильной огненной энергией.» |
+| «Карта дня усиливает тему ясности — сегодня один разговор важнее десяти планов.» | «Таро показывает, что Вселенная хочет…» / «Асцендент в… поэтому вам нужно…» (жаргон без жизни) |
+
+**Стабильность стиля (Today · Profile · Compat):** один авторский голос продукта. Можно варьировать фразы; нельзя каждый раз звучать другим тарологом / другой школой / другим тоном.  
+См. матрица §3.2 Today day pack · Generation Contracts `today`.
 
 ---
 

@@ -34,6 +34,43 @@ Persist → UI / Today / Compat / Tarot
 
 ---
 
+## Два качественных промпта Profile (не смешивать)
+
+Качество результата = **качество промпта под свою роль**. Две разные работы, два разных Implementation:
+
+| Шаг | Contract | Промпт должен уметь | Вход | Выход | Запрет |
+|-----|----------|---------------------|------|-------|--------|
+| **1. Facts** | `natal_facts` | Точно собрать карту: Солнце, Луна, планеты, спутники/узлы (если в схеме), ASC, углы, дома, аспекты… | `available_input` (+ catalog keys где уместно) | validated JSON facts + `unavailable_facts` | Писать «кто ты» / советы / инсайты |
+| **2. Interpretation** | `personality` (+ `natal_chart` / `name_numerology` / `growth`…) | Из **уже полученных** facts сделать описание, рекомендации, инсайты, слоты шапки и тела | `calculated_facts` + `unavailable_facts` (+ catalog) | поля слотов 3.1 | Пересчитывать ASC/дома/планеты; угадывать missing |
+
+```text
+правильный fact-prompt  →  надёжные natal_facts
+        ↓
+правильный interpretation-prompt  →  описание · инсайты · рекомендации
+```
+
+- Без сильного **fact**-промпта интерпретация стоит на песке.  
+- Без сильного **interpretation**-промпта факты не становятся продуктом для человека.  
+- Справочник (знак по дате, год в культурах) **не** заменяет fact-prompt для углов/домов и **не** входит в interpretation как «переспрос модели».  
+- Один «напиши весь профиль» промпт — **антипаттерн**: смешивает роли и ломает explainability.
+
+### Глубина доступа и промпты
+
+Качественные fact + interpretation промпты строят **полный** пакет по данным. Глубина **показа** — отдельно:
+
+| Момент | Access | Fact prompt | Interpretation prompt | UI |
+|--------|--------|-------------|----------------------|-----|
+| До регистрации | Guest | Можно для preview (rate-limited) | Preview-слоты / укороченный surface | Нет полного `/profile` |
+| После регистрации | Free | Полный по `available_input` | Полный по facts (L3 **в результате**) | Reveal L1+L2; L3 gated |
+| После подписки / trial | Trial / Paid | Тот же facts SoT (не пересчёт ради тарифа) | Тот же результат | Reveal L1+L2+L3 |
+
+Не делать: отдельный «free prompt» и «paid prompt», которые по-разному **сочиняют** человека.  
+Делать: один качественный interpretation → `revealed_slots` по access.
+
+CODE: fact Implementation = `profile.natal_facts.v1`. Interpretation — целевые `personality` / related; legacy `profile.identity|styles|patterns` = temporary Δ до wiring по 3.1.
+
+---
+
 ## Структура одной записи
 
 ```text
@@ -118,7 +155,7 @@ optional:
 | `career` | Работа / реализация | `personality` | `natal_chart` (MC/10th) |
 | `money` | Деньги | `personality` | `natal_chart` |
 | `compatibility` | A×B | facts **обоих** профилей | depth packs |
-| `today` | День | profile packages + day facts | — |
+| `today` | День | profile packages + day facts | ritual card/number |
 | `tarot` | Ответ на вопрос | draw facts | profile slice |
 | `reflection` | Вечер | `today` package | living marks |
 | `growth` | Что помогает / рост | `personality` | living evidence |
@@ -234,6 +271,63 @@ optional: [name_numerology, natal_chart, base_astrology]
 | Слот 3.1 | contract_id |
 |----------|-------------|
 | Нумерология имени | `name_numerology` |
+| Структура карты | `natal_chart` |
+| Соответствия (catalog) | `base_astrology` + catalog (не LLM invent) |
+
+---
+
+## Пример: `today` (day pack)
+
+**UI binding:** [PRODUCT_AVAILABILITY_MATRIX](./PRODUCT_AVAILABILITY_MATRIX.md) §3.2 Today day pack.  
+Один Implementation = один стабильный голос практика. Не отдельный промпт на цвет, отдельный на карту, отдельный на сферы.
+
+### Input (логический)
+
+```text
+profile_slice          # natal_facts + personality summary (без kitchen)
+day_astro_events       # транзиты / события дня (facts)
+ritual_tarot_card?     # карта, которую открыл человек
+ritual_day_number?     # число, которое открыл человек
+intent_goals_slice?    # цели / намерение если есть
+```
+
+### Output — каждый блок с «почему»
+
+| Поле / слой | Обязательное «почему» |
+|-------------|------------------------|
+| `day_character` | какой это день и что несёт |
+| `talisman` (color / scent / stone) | почему эти; что дадут сегодня |
+| `tarot_in_day` | как карта отражается на дне |
+| `number_in_day` | как число отражается на дне |
+| `do` / `avoid` | из всей сборки |
+| `active_spheres[]` | какие активны и почему |
+| `practice` | какая усилит и почему |
+| `goals_today[]` | какие цели уместны и почему |
+
+### Quality Rules (Today)
+
+- Нет символа / сферы / практики / цели без обоснования на входах дня.  
+- Карта и число **вплетены в день**, не отдельные гороскопы.  
+- Voice = стабильный практик (таро+астро+нумерология); не смена автора между полями одного ответа.  
+- Не противоречить profile facts; house-claims только при full natal.  
+- Не говорить о системе / модели / «расчёте».
+
+### Dependencies
+
+```yaml
+requires: [profile_ready_base]   # ≥ birth date / ready profile slice
+optional: [tarot_draw, day_number, intent, full_natal]
+```
+
+**CODE Δ Today:** `day_story` / morning symbols — приближение; довести Input/Output и always-why под эту таблицу; убрать preset-only символы.
+
+---
+
+## Implementations (IP) — personality / shared
+
+| Слот 3.1 | contract_id |
+|----------|-------------|
+| Нумерология имени | `name_numerology` |
 | Структура карты (ASC/дома/MC) | `natal_chart` |
 | Что помогает (L3) | `growth` |
 
@@ -292,3 +386,5 @@ optional: [name_numerology, natal_chart, base_astrology]
 |------|--------|
 | 2026-07-22 | v0.1 — ядро = Generation Contracts; prompt = implementation; deps graph not order |
 | 2026-07-22 | v0.2 — Contract ⊕ Implementations (промпты = IP); Execution Rules ⊥ Quality Rules |
+| 2026-07-23 | Two quality prompts locked: fact (`natal_facts`) ⊥ interpretation (`personality`+) — never merge |
+| 2026-07-23 | `today` day pack: always-why · tarot/number in day · stable practitioner voice |
