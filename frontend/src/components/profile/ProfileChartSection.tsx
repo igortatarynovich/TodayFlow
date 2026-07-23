@@ -19,6 +19,11 @@ export type ProfileChartSectionProps = {
   fullChartOpen?: boolean;
   /** Journey step 6: keep signature collapsed until user asks. */
   signatureDefaultOpen?: boolean;
+  /**
+   * `inline` — signature + wheel + numbers always visible; full map behind one toggle.
+   * `expandable` — legacy nested accordion.
+   */
+  layout?: "inline" | "expandable";
 };
 
 export function ProfileChartSection({
@@ -29,10 +34,152 @@ export function ProfileChartSection({
   lifeMapSections,
   fullChartOpen = false,
   signatureDefaultOpen = true,
+  layout = "expandable",
 }: ProfileChartSectionProps) {
   const quickSignature = buildQuickSignature(natalPreview);
   const numerologyCards = buildNumerologySignatureCards(coreNumerology);
   const aspectLines = natalPreview?.aspects?.callouts ?? [];
+
+  if (layout === "inline") {
+    return (
+      <div className={styles.chartStack} data-testid="profile-chart-inline">
+        {natalPreview ? (
+          <>
+            {quickSignature.length ? (
+              <div className={styles.signatureGrid} data-testid="profile-chart-signature">
+                {quickSignature.map((item) => (
+                  <div
+                    key={item.label}
+                    className={[
+                      styles.signatureCard,
+                      item.weight === "sun" ? styles.signatureCardSun : "",
+                      item.weight === "moon" ? styles.signatureCardMoon : "",
+                      item.weight === "asc" ? styles.signatureCardAsc : "",
+                      item.weight === "mc" ? styles.signatureCardMc : "",
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
+                  >
+                    <span
+                      className={[
+                        styles.signatureGlyph,
+                        item.weight === "sun" ? styles.signatureGlyphSun : "",
+                        item.weight === "moon" ? styles.signatureGlyphMoon : "",
+                        item.weight === "asc" ? styles.signatureGlyphAsc : "",
+                        item.weight === "mc" ? styles.signatureGlyphMc : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                      aria-hidden
+                    />
+                    <p className={styles.signatureLabel}>{item.label}</p>
+                    <p className={styles.signatureValue}>{item.value}</p>
+                    {item.hint ? <p className={styles.signatureHint}>{item.hint}</p> : null}
+                  </div>
+                ))}
+              </div>
+            ) : null}
+            {numerologyCards.length ? (
+              <div
+                className={styles.signatureGrid}
+                style={{ marginTop: quickSignature.length ? "0.65rem" : 0 }}
+                data-testid="profile-chart-numerology"
+              >
+                {numerologyCards.map((item) => (
+                  <div key={item.key} className={`${styles.signatureCard} ${styles.signatureCardNumerology}`}>
+                    <p className={`${styles.signatureLabel} ${styles.signatureLabelNumerology}`}>{item.label}</p>
+                    <p className={styles.signatureValue}>{item.value}</p>
+                    {item.hint ? <p className={styles.signatureHint}>{item.hint}</p> : null}
+                  </div>
+                ))}
+              </div>
+            ) : null}
+            <div className={styles.wheelWrap} data-testid="profile-chart-wheel">
+              <NatalChartWheel
+                chartPositions={Object.entries(natalPreview.positions || {}).map(([planet, data]) => ({
+                  body: planet,
+                  sign: data.sign || "",
+                  house: data.house,
+                  degree: data.degree,
+                  longitude: data.longitude || data.degree || 0,
+                }))}
+                houses={(natalPreview.houses || []).reduce(
+                  (acc, house) => {
+                    acc[`house_${house.house}`] = {
+                      sign: house.sign,
+                      degree: house.degree,
+                      cusp_longitude: house.cusp_longitude,
+                    };
+                    return acc;
+                  },
+                  {} as Record<string, { sign?: string; degree?: number; cusp_longitude?: number }>,
+                )}
+                ascendant={natalPreview.ascendant?.longitude || natalPreview.ascendant?.degree || 0}
+                aspects={aspectLines}
+              />
+            </div>
+            <div className={styles.ribbon}>
+              {buildZodiacRibbon(natalPreview).map((item) => (
+                <span key={item.key} className={styles.ribbonChip}>
+                  {item.glyph} {item.title}
+                </span>
+              ))}
+            </div>
+          </>
+        ) : (
+          <div className={styles.emptyState}>
+            <p className="orbit-body-sm" style={{ margin: 0, color: "#475569" }}>
+              Карта еще не построена. Нажми обновить, когда профиль будет готов.
+            </p>
+            <div className={styles.actions} style={{ marginTop: "0.85rem" }}>
+              <button type="button" className="orbit-button orbit-button-secondary orbit-button-sm" onClick={onReloadPreview}>
+                Обновить карту
+              </button>
+            </div>
+          </div>
+        )}
+        {previewError ? (
+          <p className="orbit-body-sm" style={{ margin: "0.75rem 0 0", color: "#991b1b" }}>
+            {previewError}
+          </p>
+        ) : null}
+
+        {lifeMapSections.length ? (
+          <ProfileExpandableSection
+            title="Моя карта жизни"
+            subtitle="Четыре главные опоры: кто ты, где дом, как строишь связь и как проявляешься в мире."
+            defaultOpen={false}
+          >
+            <div className={styles.lifeMapGrid}>
+              {lifeMapSections.map((item) => (
+                <Link
+                  key={item.house}
+                  href={item.href}
+                  className={styles.lifeMapCard}
+                  style={{ border: `1px solid ${item.accent}2f` }}
+                >
+                  <p className={styles.lifeMapHouse} style={{ color: item.accent }}>
+                    {item.house} дом
+                  </p>
+                  <p className={styles.lifeMapTitle}>{item.title}</p>
+                  <p className={styles.lifeMapSummary}>{item.summary}</p>
+                  <p className={styles.lifeMapRoute}>{item.routeTitle}</p>
+                </Link>
+              ))}
+            </div>
+          </ProfileExpandableSection>
+        ) : null}
+
+        <ProfileExpandableSection
+          title="Полная карта"
+          subtitle="12 домов, планеты в знаках и аспекты — полный разбор натала."
+          defaultOpen={fullChartOpen}
+        >
+          <ProfileChartFullMap natalPreview={natalPreview} onReloadPreview={onReloadPreview} />
+        </ProfileExpandableSection>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.chartStack}>

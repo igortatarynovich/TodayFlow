@@ -1,6 +1,6 @@
 # Archetype hero illustrations
 
-Premium portrait art for Profile Recognition Hero (arch / circle frame).
+Premium portrait art for Profile Recognition Hero (4:5 portrait plate).
 
 **Not** the line-symbol SVGs in `../icons/archetypes/` — those stay for pills, masks, and small slots.
 
@@ -10,7 +10,7 @@ Premium portrait art for Profile Recognition Hero (arch / circle frame).
 {slug}.webp   # lowercase latin slug (Pearson RU transliteration)
 ```
 
-Product files are **4:5 hero crops** (820×1024) focused on face/bust for the arch.
+Product files are **4:5 hero crops** (820×1024) focused on face/bust for the portrait plate.
 Re-crop from masters anytime:
 
 ```bash

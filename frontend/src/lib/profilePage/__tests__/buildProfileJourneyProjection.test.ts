@@ -73,6 +73,7 @@ describe("buildProfileJourneyProjection", () => {
     expect(journey.hasJourneySurface).toBe(true);
     expect(journey.recognition.name).toMatch(/Исследователь/i);
     expect(journey.recognition.line).toContain("структуру");
+    expect(journey.recognition.identityCore).toContain("Длинное ядро");
     expect(journey.identityMarkers).toEqual(["Дева", "Земля", "Путь 7"]);
     expect(journey.identityMarkers).toHaveLength(3);
     expect(journey.why?.selectedBy).toHaveLength(1);

@@ -26,6 +26,8 @@ export default function ProfileJourneyPreviewPage() {
       perceivedAs: ["нужна ясность", "держит фокус"],
       thriveAreas: ["точность", "глубина", "ритм"],
       lifeMission: "Собрать ясность в систему, которая помогает другим.",
+      relationshipStyle: "Сначала доверие, потом открытость.",
+      moneyStyle: "Деньги — инструмент ясности, не статус.",
       frameworkTitle: "Почему портрет сложился так",
       frameworkLead: "Архетип и карта складываются в один сценарий.",
       frameworkAnchors: [

@@ -35,6 +35,8 @@ export function collectProfileQuickMapUiStrings(model: ProfileQuickMapViewModel)
   for (const item of model.perceivedAs) push(out, "perceived", "tag", item);
   for (const item of model.thriveAreas) push(out, "thrive", "tag", item);
   push(out, "mission", "text", model.lifeMission);
+  push(out, "relationship", "style", model.relationshipStyle);
+  push(out, "money", "style", model.moneyStyle);
   push(out, "framework", "lead", model.frameworkLead);
   for (const anchor of model.frameworkAnchors) push(out, "framework", "anchor", anchor.label);
   for (const card of model.frameworkCards) {

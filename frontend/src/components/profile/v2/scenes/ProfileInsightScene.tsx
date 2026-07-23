@@ -10,7 +10,7 @@ export type ProfileInsightSceneProps = {
   node: ProfileJourneyNode;
 };
 
-const insightNav = PROFILE_V2_DEPTH_NAV[2];
+const insightNav = PROFILE_V2_DEPTH_NAV.find((s) => s.id === "insight") ?? PROFILE_V2_DEPTH_NAV[2];
 
 function kindEyebrow(kind: string): string {
   const k = kind.toLowerCase();

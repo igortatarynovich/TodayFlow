@@ -9,6 +9,7 @@ import {
   type ProfileV2ZoneId,
 } from "@/components/profile/v2/profileV2SystemCopy";
 import { ProfileBridgeScene } from "@/components/profile/v2/scenes/ProfileBridgeScene";
+import { ProfileCharacterScene } from "@/components/profile/v2/scenes/ProfileCharacterScene";
 import { ProfileEffortScene } from "@/components/profile/v2/scenes/ProfileEffortScene";
 import { ProfileExploreSection } from "@/components/profile/v2/scenes/ProfileExploreSection";
 import { ProfileInsightScene } from "@/components/profile/v2/scenes/ProfileInsightScene";
@@ -68,20 +69,21 @@ export function ProfileV2SystemScreen({
   const journey = buildProfileJourneyProjection(coreProfile);
   const useJourney = journey.hasJourneySurface && !portraitForming;
   const l3Message = live.userMessages.find((m) => m.code === "l3_gated") ?? null;
-  const dataMessages = useJourney
-    ? []
-    : live.userMessages.filter((m) => m.code !== "l3_gated");
+  const dataMessages = live.userMessages.filter((m) => m.code !== "l3_gated");
 
   const showCharacterMore = Boolean(
-    model.strengthens.length || model.drains.length || helps.length || model.decisionStyle || model.perceivedAs.length,
+    model.strengthens.length ||
+      model.drains.length ||
+      helps.length ||
+      model.decisionStyle ||
+      model.perceivedAs.length ||
+      model.lifeMission ||
+      model.relationshipStyle ||
+      model.moneyStyle ||
+      model.frameworkLead,
   );
   const hasDirection = Boolean(model.lifeMission || lifeSpheres?.length);
-  const hasExploreBody = Boolean(
-    hasDirection ||
-      showCharacterMore ||
-      deep ||
-      journey.progressiveDetails.length,
-  );
+  const hasExploreBody = Boolean(deep || journey.progressiveDetails.length || lifeSpheres?.length);
 
   const first = buildProfileFirstScreenProjection(coreProfile, {
     hasDeepSources: Boolean(deep),
@@ -89,6 +91,24 @@ export function ProfileV2SystemScreen({
   });
 
   const [exploreOpen, setExploreOpen] = useState(false);
+
+  const insightForScroll = (() => {
+    const node = journey.insightNode;
+    if (!node) return null;
+    const help = node.help?.trim() || "";
+    const effort = journey.effortVector?.trim() || "";
+    if (help && effort && help.toLowerCase() === effort.toLowerCase()) {
+      return { ...node, help: null };
+    }
+    return node;
+  })();
+
+  const progressiveForExplore = journey.progressiveDetails.filter((item) => {
+    if (item.id === "relationship_style" && model.relationshipStyle) return false;
+    if (item.id === "money_patterns" && model.moneyStyle) return false;
+    if (item.id === "decision_style" && model.decisionStyle) return false;
+    return true;
+  });
 
   return (
     <div className={styles.pageRoot} data-testid="profile-v2-system">
@@ -125,13 +145,28 @@ export function ProfileV2SystemScreen({
             <ProfileRecognitionScene
               name={journey.recognition.name}
               line={journey.recognition.line}
+              identityCore={journey.recognition.identityCore}
               archetypeSeed={journey.recognition.archetypeSeed}
               identityMarkers={journey.identityMarkers}
             />
 
             {journey.why ? <ProfileWhyScene why={journey.why} /> : null}
 
-            {journey.insightNode ? <ProfileInsightScene node={journey.insightNode} /> : null}
+            {insightForScroll ? <ProfileInsightScene node={insightForScroll} /> : null}
+
+            {showCharacterMore ? (
+              <ProfileCharacterScene
+                strengthens={model.strengthens}
+                drains={model.drains}
+                helps={helps}
+                decisionStyle={model.decisionStyle}
+                patterns={model.perceivedAs}
+                lifeMission={model.lifeMission}
+                relationshipStyle={model.relationshipStyle}
+                moneyStyle={model.moneyStyle}
+                livingChanges={model.frameworkLead}
+              />
+            ) : null}
 
             {journey.effortVector ? (
               <ProfileEffortScene
@@ -150,104 +185,12 @@ export function ProfileV2SystemScreen({
               <ProfileExploreSection
                 open={exploreOpen}
                 onToggle={() => setExploreOpen((v) => !v)}
-                progressiveDetails={journey.progressiveDetails}
+                progressiveDetails={progressiveForExplore}
                 model={model}
                 lifeSpheres={lifeSpheres}
                 deep={deep}
                 deepExpanded={deepExpanded}
-                characterSlot={
-                  showCharacterMore ? (
-                    <details className={styles.characterMore} data-testid="profile-v2-character-more" open>
-                      <summary className={styles.characterMoreSummary}>
-                        {PROFILE_V2_COPY.zones.characterMore.title}
-                      </summary>
-                      <div className={styles.characterGrid}>
-                        {model.strengthens.length ? (
-                          <article className={styles.characterPanel}>
-                            <p className={styles.characterPanelTitle}>
-                              {PROFILE_V2_COPY.zones.characterMore.strengthens}
-                            </p>
-                            <ul className={styles.bulletList}>
-                              {model.strengthens.map((item) => (
-                                <li key={item} className={styles.bulletItem}>
-                                  <span className={styles.bulletMark} aria-hidden>
-                                    ✓
-                                  </span>
-                                  {item}
-                                </li>
-                              ))}
-                            </ul>
-                          </article>
-                        ) : null}
-                        {model.drains.length ? (
-                          <article className={styles.characterPanel}>
-                            <p className={styles.characterPanelTitle}>
-                              {PROFILE_V2_COPY.zones.characterMore.drains}
-                            </p>
-                            <ul className={styles.bulletList}>
-                              {model.drains.map((item) => (
-                                <li key={item} className={styles.bulletItem}>
-                                  <span
-                                    className={`${styles.bulletMark} ${styles.bulletMarkMuted}`.trim()}
-                                    aria-hidden
-                                  >
-                                    •
-                                  </span>
-                                  {item}
-                                </li>
-                              ))}
-                            </ul>
-                          </article>
-                        ) : null}
-                      </div>
-                      {helps.length ? (
-                        <article className={styles.characterPanel} style={{ marginTop: "1rem" }}>
-                          <p className={styles.characterPanelTitle}>
-                            {PROFILE_V2_COPY.zones.characterMore.helps}
-                          </p>
-                          <ul className={styles.bulletList}>
-                            {helps.map((item) => (
-                              <li key={item} className={styles.bulletItem}>
-                                <span className={styles.bulletMark} aria-hidden>
-                                  ◆
-                                </span>
-                                {item}
-                              </li>
-                            ))}
-                          </ul>
-                        </article>
-                      ) : null}
-                      {model.decisionStyle ? (
-                        <article className={styles.decisionBlock}>
-                          <p className={styles.characterPanelTitle}>
-                            {PROFILE_V2_COPY.zones.characterMore.decisions}
-                          </p>
-                          <p className={styles.factHint}>{model.decisionStyle}</p>
-                        </article>
-                      ) : null}
-                      {model.perceivedAs.length ? (
-                        <article className={styles.characterPanel} style={{ marginTop: "1rem" }}>
-                          <p className={styles.characterPanelTitle}>
-                            {PROFILE_V2_COPY.zones.characterMore.patterns}
-                          </p>
-                          <ul className={styles.bulletList}>
-                            {model.perceivedAs.map((item) => (
-                              <li key={item} className={styles.bulletItem}>
-                                <span
-                                  className={`${styles.bulletMark} ${styles.bulletMarkMuted}`.trim()}
-                                  aria-hidden
-                                >
-                                  ◦
-                                </span>
-                                {item}
-                              </li>
-                            ))}
-                          </ul>
-                        </article>
-                      ) : null}
-                    </details>
-                  ) : null
-                }
+                hideMission
               />
             ) : null}
 

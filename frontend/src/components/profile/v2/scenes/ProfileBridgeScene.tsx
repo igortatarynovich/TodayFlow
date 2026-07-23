@@ -10,7 +10,7 @@ export type ProfileBridgeSceneProps = {
   bridgeLine: string | null;
 };
 
-const bridgeNav = PROFILE_V2_DEPTH_NAV[4];
+const bridgeNav = PROFILE_V2_DEPTH_NAV.find((s) => s.id === "bridge") ?? PROFILE_V2_DEPTH_NAV[5];
 
 export function ProfileBridgeScene({ bridgeLine }: ProfileBridgeSceneProps) {
   const motion = useProfileMotionInView<HTMLElement>(100);

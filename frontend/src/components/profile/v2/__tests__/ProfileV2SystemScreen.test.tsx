@@ -19,6 +19,8 @@ const baseModel: ProfileQuickMapViewModel = {
   perceivedAs: ["нужна ясность", "держит фокус"],
   thriveAreas: ["точность", "глубина", "ритм"],
   lifeMission: "Собрать ясность в систему, которая помогает другим.",
+  relationshipStyle: "Сначала доверие, потом открытость.",
+  moneyStyle: "Деньги — инструмент ясности, не статус.",
   frameworkTitle: "Почему портрет сложился так",
   frameworkLead: "Архетип и карта складываются в один сценарий.",
   frameworkAnchors: [
@@ -35,11 +37,13 @@ const journeyCore = {
   profile_contract_v1: {
     contract_version: "v1",
     recognition_line: "Ты первым видишь структуру.",
-    identity_core: "Длинное ядро.",
+    identity_core:
+      "Держит смысл через ясный фокус и прямой контакт с реальностью — длиннее, чем одна recognition_line.",
     strengths: ["ясная система"],
     growth_zones: ["спешка ломает точность"],
     relationship_style: "Сначала доверие, потом открытость.",
-    money_style: "",
+    money_style: "Деньги — инструмент ясности, не статус.",
+    living_changes: "Учится не торопить вывод.",
     decision_style: "Сначала тело, потом структура.",
     recurring_patterns: ["нужна ясность"],
     helps: ["тишина перед решением"],
@@ -166,7 +170,7 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     expect(markers).toHaveTextContent("Земля");
     expect(markers).toHaveTextContent("Путь 7");
 
-    // Why + insight + effort in primary scroll (effort ungated)
+    // Why + insight + character + effort in primary scroll (effort ungated)
     expect(screen.getByTestId("profile-v2-why")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-why-anchor-archetype_from_life_path")).toHaveTextContent(
       /Исследовател/i,
@@ -176,15 +180,18 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     expect(screen.getByTestId("profile-v2-insight")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-insight-node")).toHaveTextContent("Ясность vs скорость");
     expect(screen.getByTestId("profile-v2-insight-living")).toHaveTextContent("поторопился");
+    expect(screen.getByTestId("profile-v2-character")).toBeInTheDocument();
+    expect(screen.getByTestId("profile-v2-character-strengthens")).toHaveTextContent("система");
     expect(screen.getByTestId("profile-v2-effort")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-effort-vector")).toHaveTextContent("тихий проход");
 
-    // Bridge immediately after effort — no catalog/natal between
+    // Bridge after effort — natal after bridge; character before effort
     const root = screen.getByTestId("profile-v2-system");
     const order = [
       "profile-v2-recognition",
       "profile-v2-why",
       "profile-v2-insight",
+      "profile-v2-character",
       "profile-v2-effort",
       "profile-v2-bridge",
     ];
@@ -200,9 +207,11 @@ describe("ProfileV2SystemScreen journey rewire", () => {
 
     expect(screen.getByTestId("profile-v2-open-today")).toHaveAttribute("href", "/today");
 
-    // Natal destination (step 6) always visible after bridge; deep details behind CTA
+    // Natal destination (step 6): signature/wheel inline; progressive details behind CTA
     expect(screen.getByTestId("profile-v2-natal")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-explore")).toBeInTheDocument();
+    expect(screen.getByTestId("profile-v2-natal-deep")).toBeInTheDocument();
+    expect(screen.getByTestId("profile-chart-inline")).toBeInTheDocument();
     expect(screen.queryByTestId("profile-v2-progressive-details")).not.toBeInTheDocument();
     expect(screen.queryByText(/12 куспид/i)).not.toBeInTheDocument();
     expect(screen.queryByTestId("profile-v2-chapter-cultural_catalog")).not.toBeInTheDocument();
@@ -224,7 +233,26 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     expect(await screen.findByTestId("profile-v2-explore-body")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-progressive-details")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-detail-cultural_catalog")).toBeInTheDocument();
-    expect(screen.getByTestId("profile-v2-natal-deep")).toBeInTheDocument();
+  });
+
+  it("surfaces identity_core under recognition without inventing copy", () => {
+    renderJourney();
+    expect(screen.getByTestId("profile-v2-identity-core")).toBeInTheDocument();
+    expect(screen.getByText(/ясный фокус/i)).toBeInTheDocument();
+  });
+
+  it("surfaces relationship and money styles on character scroll", () => {
+    renderJourney();
+    expect(screen.getByTestId("profile-v2-character-relationship")).toHaveTextContent(/доверие/i);
+    expect(screen.getByTestId("profile-v2-character-money")).toHaveTextContent(/Деньги/i);
+    expect(screen.getByTestId("profile-v2-character-mission")).toBeInTheDocument();
+    expect(screen.getByTestId("profile-v2-effort-sphere-mission")).toHaveTextContent(/Миссия/i);
+  });
+
+  it("does not duplicate insight help when it matches effort vector", () => {
+    renderJourney();
+    expect(screen.getByTestId("profile-v2-effort-vector")).toHaveTextContent("тихий проход");
+    expect(screen.queryByTestId("profile-v2-insight-help")).not.toBeInTheDocument();
   });
 
   it("omits living evidence when absent and still shows effort without explore", () => {
@@ -286,7 +314,8 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     renderJourney();
     expect(screen.getByTestId("profile-v2-insight-node")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-insight-support")).toBeInTheDocument();
-    expect(screen.getByTestId("profile-v2-insight-help")).toBeInTheDocument();
+    // Help matches effort vector → shown once on Effort, not duplicated here.
+    expect(screen.queryByTestId("profile-v2-insight-help")).not.toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-insight-grounded")).toBeInTheDocument();
     expect(screen.queryByTestId("profile-v2-chapter-strengths")).not.toBeInTheDocument();
     expect(screen.queryByTestId("profile-v2-chapter-tensions_growth")).not.toBeInTheDocument();
@@ -302,12 +331,13 @@ describe("PROFILE_V2_COPY lexicon gate", () => {
     }
   });
 
-  it("depth nav is five journey steps without Шаг 6 natal", () => {
-    expect(PROFILE_V2_DEPTH_NAV).toHaveLength(5);
+  it("depth nav is six journey steps without natal", () => {
+    expect(PROFILE_V2_DEPTH_NAV).toHaveLength(6);
     expect(PROFILE_V2_DEPTH_NAV.map((s) => s.id)).toEqual([
       "recognition",
       "why",
       "insight",
+      "character",
       "effort",
       "bridge",
     ]);

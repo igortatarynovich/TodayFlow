@@ -12,6 +12,8 @@ const baseModel: ProfileQuickMapViewModel = {
   perceivedAs: ["спокойный", "умный"],
   thriveAreas: ["Карьера", "Аналитика"],
   lifeMission: "Научиться не только понимать мир, но и воплощать идеи.",
+  relationshipStyle: null,
+  moneyStyle: null,
   frameworkTitle: "Почему портрет сложился так",
   frameworkLead: "Архетип, знак и число пути складываются в один сценарий.",
   frameworkAnchors: [{ id: "sun", label: "Солнце в Водолее" }],

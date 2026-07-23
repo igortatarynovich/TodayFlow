@@ -57,7 +57,7 @@ export function ProfileV2DepthRail() {
 
   return (
     <nav className={styles.railDepthNav} aria-label="Путешествие профиля" data-testid="profile-v2-depth-rail">
-      <p className={styles.railDepthEyebrow}>Твоя история в 6 шагах</p>
+      <p className={styles.railDepthEyebrow}>Твоя история</p>
       <ol className={styles.railDepthList}>
         {PROFILE_V2_DEPTH_NAV.map((item) => {
           const active = activeZone === item.id;

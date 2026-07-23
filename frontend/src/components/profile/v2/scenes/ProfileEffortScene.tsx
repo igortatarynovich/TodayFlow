@@ -8,7 +8,6 @@ import {
 import type { ProfileLifeSphere } from "@/components/profile/ProfileLifeSection";
 import { ProfileAtmosphere } from "@/components/profile/v2/ProfileAtmosphere";
 import { PROFILE_V2_COPY, PROFILE_V2_DEPTH_NAV } from "@/components/profile/v2/profileV2SystemCopy";
-import { profileV2SphereCardLine } from "@/lib/profilePage/profileV2SpherePresentation";
 import styles from "@/components/profile/v2/profileV2System.module.css";
 
 export type ProfileEffortSceneProps = {
@@ -16,10 +15,13 @@ export type ProfileEffortSceneProps = {
   lifeSpheres?: ProfileLifeSphere[];
 };
 
-const effortNav = PROFILE_V2_DEPTH_NAV[3];
+const effortNav = PROFILE_V2_DEPTH_NAV.find((s) => s.id === "effort") ?? PROFILE_V2_DEPTH_NAV[3];
 
+/**
+ * Effort + readable sphere portraits (how / need / risk) — not skim chips.
+ */
 export function ProfileEffortScene({ effortVector, lifeSpheres = [] }: ProfileEffortSceneProps) {
-  const spheres = lifeSpheres.filter((s) => s.title?.trim()).slice(0, 8);
+  const spheres = lifeSpheres.filter((s) => s.title?.trim()).slice(0, 6);
   const motion = useProfileMotionInView<HTMLElement>(80);
   const copy = PROFILE_V2_COPY.zones.effort;
 
@@ -63,24 +65,58 @@ export function ProfileEffortScene({ effortVector, lifeSpheres = [] }: ProfileEf
         {spheres.length ? (
           <div className={styles.effortSpheres} data-testid="profile-v2-effort-spheres">
             <p className={styles.effortSpheresLabel}>{copy.spheresLabel}</p>
-            <ul className={styles.effortSphereRow}>
+            <ul className={styles.effortSphereReadGrid}>
               {spheres.map((sphere, index) => {
-                const need = profileV2SphereCardLine(sphere);
+                const how = sphere.how?.trim() || "";
+                const need = sphere.need?.trim() || "";
+                const risk = sphere.risk?.trim() || "";
+                const turnsOn = sphere.turnsOn?.trim() || "";
+                const helps = sphere.helps?.trim() || "";
                 return (
                   <li
                     key={sphere.id}
-                    className={`${styles.effortSphereChip} ${profileMotionStyles.staggerItem}`}
-                    style={profileMotionStaggerDelay(index, 100)}
+                    className={`${styles.effortSphereReadCard} ${profileMotionStyles.staggerItem}`}
+                    style={profileMotionStaggerDelay(index, 90)}
+                    data-testid={`profile-v2-effort-sphere-${sphere.id}`}
                   >
-                    <span
-                      className={styles.effortSphereDot}
-                      style={sphere.accent ? { background: sphere.accent } : undefined}
-                      aria-hidden
-                    />
-                    <span className={styles.effortSphereCopy}>
-                      <span className={styles.effortSphereTitle}>{sphere.title}</span>
-                      {need ? <span className={styles.effortSphereNeed}>{need}</span> : null}
-                    </span>
+                    <p className={styles.effortSphereTitle}>
+                      <span
+                        className={styles.effortSphereDot}
+                        style={sphere.accent ? { background: sphere.accent, display: "inline-block", marginRight: "0.45rem", marginTop: 0, verticalAlign: "middle" } : undefined}
+                        aria-hidden
+                      />
+                      {sphere.title}
+                    </p>
+                    {how ? (
+                      <p className={styles.effortSphereHow}>
+                        <span className={styles.effortSphereMetaLabel}>{copy.sphereHow}</span>
+                        {how}
+                      </p>
+                    ) : null}
+                    {need ? (
+                      <p className={styles.effortSphereNeedFull}>
+                        <span className={styles.effortSphereMetaLabel}>{copy.sphereNeed}</span>
+                        {need}
+                      </p>
+                    ) : null}
+                    {risk ? (
+                      <p className={styles.effortSphereRisk}>
+                        <span className={styles.effortSphereMetaLabel}>{copy.sphereRisk}</span>
+                        {risk}
+                      </p>
+                    ) : null}
+                    {turnsOn ? (
+                      <p className={styles.effortSphereNeedFull}>
+                        <span className={styles.effortSphereMetaLabel}>{copy.sphereTurnsOn}</span>
+                        {turnsOn}
+                      </p>
+                    ) : null}
+                    {helps ? (
+                      <p className={styles.effortSphereNeedFull}>
+                        <span className={styles.effortSphereMetaLabel}>{copy.sphereHelps}</span>
+                        {helps}
+                      </p>
+                    ) : null}
                   </li>
                 );
               })}

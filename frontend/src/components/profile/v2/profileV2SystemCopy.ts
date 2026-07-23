@@ -3,12 +3,13 @@ export const PROFILE_V2_DEPTH_NAV = [
   { id: "recognition", step: "01", title: "Твоя суть", hint: "Узнавание" },
   { id: "why", step: "02", title: "Почему именно так", hint: "Опоры" },
   { id: "insight", step: "03", title: "Что важно понять", hint: "Узел" },
-  { id: "effort", step: "04", title: "Куда усилия", hint: "Вектор" },
-  { id: "bridge", step: "05", title: "Мост в день", hint: "В день" },
+  { id: "character", step: "04", title: "Портрет", hint: "Силы" },
+  { id: "effort", step: "05", title: "Куда усилия", hint: "Вектор" },
+  { id: "bridge", step: "06", title: "Мост в день", hint: "В день" },
 ] as const;
 
 export const PROFILE_V2_EXPLORE_NAV = [
-  { id: "explore", step: "06", title: "Натальная карта", hint: "Основа" },
+  { id: "explore", step: "07", title: "Натальная карта", hint: "Основа" },
 ] as const;
 
 export type ProfileV2ZoneId =
@@ -21,7 +22,9 @@ export const PROFILE_V2_COPY = {
   zones: {
     recognition: {
       title: "Твоя суть",
-      lead: "Одно предложение, в котором себя узнаёшь.",
+      lead: "Узнавание в одном предложении — и полный текст портрета рядом.",
+      deeperLabel: "Как это звучит полнее",
+      deeperHide: "Свернуть",
     },
     why: {
       title: "Главное, что формирует тебя",
@@ -43,9 +46,14 @@ export const PROFILE_V2_COPY = {
     },
     effort: {
       title: "Твой вектор на развитие",
-      lead: "Одно направление усилия — не план дня.",
+      lead: "Одно направление усилия — и где оно проявляется в сферах жизни.",
       focusLabel: "Фокус периода",
       spheresLabel: "Где это проявится сильнее",
+      sphereHow: "Как проявляется",
+      sphereNeed: "Нужно",
+      sphereRisk: "Риск",
+      sphereTurnsOn: "Включает",
+      sphereHelps: "Помогает",
     },
     bridge: {
       title: "Твоя история продолжается",
@@ -54,19 +62,22 @@ export const PROFILE_V2_COPY = {
     },
     explore: {
       title: "Твоя натальная карта",
-      lead: "Фундамент личности: натал и числа — внизу профиля, после путешествия.",
+      lead: "Сигнатура, числа и колесо — сразу. Полный разбор домов и аспектов — по желанию.",
       natalTitle: "Карта твоей души",
-      detailsTitle: "Детали и разбор",
-      open: "Исследовать карту",
-      hide: "Свернуть карту",
-      exploreHint: "Полная карта, дома и аспекты — внутри разбора.",
+      detailsTitle: "Ещё детали профиля",
+      open: "Ещё детали профиля",
+      hide: "Свернуть детали",
+      exploreHint: "Дома, аспекты и полная карта — внутри разбора.",
       updatedNote: "Карта пересчитывается при изменении данных рождения.",
-      stepBadge: "6",
+      stepBadge: "7",
       benefits: [
         "Потенциалы и таланты",
         "Уроки жизни и зоны роста",
         "Периоды силы и чувствительности",
       ],
+      signatureLabel: "Сигнатура рождения",
+      numbersLabel: "Личные числа",
+      wheelLabel: "Колесо карты",
     },
     /** Legacy keys for fallback first-screen when journey surface absent. */
     traits: {
@@ -89,12 +100,16 @@ export const PROFILE_V2_COPY = {
       todayLead: "День — следующий шаг после портрета: фокус и один шаг.",
     },
     characterMore: {
-      title: "Ещё о характере",
+      title: "Портрет подробнее",
+      lead: "Силы, тень, близость, деньги и стиль решений — из твоего контракта.",
       strengthens: "Сильные стороны",
       drains: "Что забирает силу",
       helps: "Внутренние опоры",
       decisions: "Как принимаешь решения",
       patterns: "Повторяющиеся паттерны",
+      intimacy: "Как строишь близость",
+      money: "Как относишься к деньгам",
+      living: "Что уже меняется",
     },
     direction: {
       missionLabel: "Главная задача",

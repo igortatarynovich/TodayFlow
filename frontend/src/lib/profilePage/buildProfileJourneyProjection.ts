@@ -38,6 +38,8 @@ export type ProfileJourneyRecognition = {
   name: string | null;
   line: string | null;
   archetypeSeed: string | null;
+  /** Full identity_core — longer than recognition_line when present. */
+  identityCore: string | null;
 };
 
 export type ProfileJourneyWhy = {
@@ -160,6 +162,7 @@ export function buildProfileJourneyProjection(
   const seed = core?.baseline?.archetype_seed?.trim() || null;
   const recognitionName = seed ? archetypeDisplayLabel(seed, "ru") : null;
   const recognitionLine = contract?.recognition_line?.trim() || null;
+  const identityCore = contract?.identity_core?.trim() || null;
 
   const whyRaw = core?.portrait_why_v0 ?? null;
   const whySelectedBy = mapWhyRows(whyRaw?.selected_by);
@@ -228,6 +231,7 @@ export function buildProfileJourneyProjection(
       name: recognitionName,
       line: recognitionLine,
       archetypeSeed: seed,
+      identityCore,
     },
     identityMarkers,
     why,

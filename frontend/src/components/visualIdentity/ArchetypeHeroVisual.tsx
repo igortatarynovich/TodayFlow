@@ -19,7 +19,7 @@ export type ArchetypeHeroVisualProps = {
 /**
  * Profile Hero visual: premium WebP when mapped + file loads,
  * otherwise live ArchetypeSymbol placeholder in the same slot.
- * Portraits are pre-cropped 4:5 for the arch (`scripts/crop_archetype_heroes.py`).
+ * Portraits are 4:5 WebP crops (`scripts/crop_archetype_heroes.py`) for the portrait plate.
  */
 export function ArchetypeHeroVisual({
   seed,

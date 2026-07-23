@@ -37,6 +37,8 @@ export type ProfileQuickMapViewModel = {
   perceivedAs: string[];
   thriveAreas: string[];
   lifeMission: string | null;
+  relationshipStyle: string | null;
+  moneyStyle: string | null;
   frameworkTitle: string;
   frameworkLead: string | null;
   frameworkAnchors: ProfileFrameworkAnchor[];
@@ -180,6 +182,8 @@ export function buildProfileQuickMapViewModel(
       perceivedAs,
       thriveAreas,
       lifeMission,
+      relationshipStyle: null,
+      moneyStyle: null,
       frameworkTitle: "Почему портрет сложился так",
       frameworkLead,
       frameworkAnchors,
@@ -248,6 +252,8 @@ function mergeProfileContractIntoQuickMap(
         perceivedAs: [],
         frameworkLead: null,
         lifeMission: null,
+        relationshipStyle: null,
+        moneyStyle: null,
         thriveAreas: [],
       };
     }
@@ -271,6 +277,10 @@ function mergeProfileContractIntoQuickMap(
   const lifeMission = isUsableProfileCopy(lifeMissionRaw, locale) ? lifeMissionRaw : null;
   // character_helps passport: contract helps only (never taxonomy thriveAreas).
   const thriveAreas = filterProfileCopyList([...(contract?.helps ?? [])], 4, locale);
+  const relationshipRaw = (contract?.relationship_style || "").trim();
+  const relationshipStyle = isUsableProfileCopy(relationshipRaw, locale) ? relationshipRaw : null;
+  const moneyRaw = (contract?.money_style || "").trim();
+  const moneyStyle = isUsableProfileCopy(moneyRaw, locale) ? moneyRaw : null;
 
   return {
     ...base,
@@ -281,6 +291,8 @@ function mergeProfileContractIntoQuickMap(
     perceivedAs,
     frameworkLead: frameworkLead ?? (allowBaseMix ? base.frameworkLead : null),
     lifeMission,
+    relationshipStyle,
+    moneyStyle,
     thriveAreas,
   };
 }
