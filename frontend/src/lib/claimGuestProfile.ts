@@ -100,13 +100,23 @@ export async function claimGuestCompatPairAfterAuth(opts?: {
   return { profile_a_id: profileA, profile_b_id: profileB };
 }
 
-/** Call before navigating to auth — syncs progress + issues claim token. */
+/** Call before navigating to auth — syncs progress + durable profiles + claim token. */
 export async function prepareGuestClaimBeforeAuth(): Promise<void> {
   try {
     await syncGuestProgressToServer();
-    await issueGuestClaimToken();
   } catch {
     // Best-effort; claim after auth will retry sync/token.
+  }
+  try {
+    const { syncGuestProfilesToServer } = await import("@/lib/guestProfilesSync");
+    await syncGuestProfilesToServer();
+  } catch {
+    /* profiles sync is best-effort; local draft remains fallback */
+  }
+  try {
+    await issueGuestClaimToken();
+  } catch {
+    /* claim after auth will retry */
   }
 }
 
@@ -149,8 +159,7 @@ async function claimDayProgressOnly(): Promise<ClaimGuestProfileResult> {
     } catch {
       /* best-effort */
     }
-    clearGuestClaimCredentials();
-    clearGuestProfileDraft();
+    // Keep local drafts on failure so user can retry claim (server drafts also retained).
   }
   return { status: "no_draft" };
 }
@@ -159,11 +168,51 @@ export async function claimGuestProfileAfterAuth(): Promise<ClaimGuestProfileRes
   const draft = readGuestProfileDraft();
   const compatPair = readGuestCompatPair();
 
+  // Ensure server has latest drafts before any bind path.
+  try {
+    await prepareGuestClaimBeforeAuth();
+  } catch {
+    /* continue */
+  }
+
+  // Prefer server claim (binds guest_profiles + day progress). Falls back to core-setup.
+  let serverBoundProfiles = false;
+  try {
+    const dayClaim = await claimGuestSessionAfterAuth({ redirectTarget: "/profile" });
+    if (dayClaim.claim_status === "completed") {
+      const blocks = dayClaim.transferred_blocks || [];
+      serverBoundProfiles = blocks.includes("profiles");
+      if (serverBoundProfiles || (await userAlreadyHasReadyProfile())) {
+        clearGuestProfileDraft();
+        clearGuestCompatPair();
+        clearGuestClaimCredentials();
+        if (dayClaim.story_refresh_required) {
+          try {
+            await refreshTodayStory({ localDate: dayClaim.local_date });
+          } catch {
+            /* FE may refresh on Today mount */
+          }
+        }
+        const path =
+          compatPair && !draft?.birth_date
+            ? "/account/profiles"
+            : dayClaim.redirect_target || "/profile";
+        return {
+          status: "ready",
+          profilePath: path,
+          storyRefreshRequired: Boolean(dayClaim.story_refresh_required),
+        };
+      }
+    }
+  } catch {
+    /* fall through to local draft / core-setup */
+  }
+
   if (!canClaimGuestProfile(draft) || !draft) {
     if (compatPair) {
       try {
-        await prepareGuestClaimBeforeAuth();
         await claimGuestCompatPairAfterAuth();
+        clearGuestClaimCredentials();
         return { status: "ready", profilePath: "/account/profiles" };
       } catch {
         return { status: "no_draft" };
@@ -186,13 +235,6 @@ export async function claimGuestProfileAfterAuth(): Promise<ClaimGuestProfileRes
     return claimDayProgressOnly();
   }
 
-  // Ensure server has latest guest progress + claim token before atomic claim.
-  try {
-    await prepareGuestClaimBeforeAuth();
-  } catch {
-    /* continue */
-  }
-
   const payload = guestDraftToCoreSetupPayload(draft);
   const response = await postJson<CoreSetupResponse>("/account/core-setup", payload);
   publishCoreProfileUpdate(response.core_profile);
@@ -211,7 +253,6 @@ export async function claimGuestProfileAfterAuth(): Promise<ClaimGuestProfileRes
   let storyRefreshRequired = false;
   try {
     const dayClaim = await claimGuestSessionAfterAuth({ redirectTarget: PROFILE_PATH });
-    // Prefer Profile V2 when core is ready; First Today is optional after bind.
     const coreReady = Boolean(response.core_profile?.is_ready);
     redirect = coreReady ? PROFILE_PATH : dayClaim.redirect_target || PROFILE_PATH;
     storyRefreshRequired = Boolean(dayClaim.story_refresh_required);
@@ -223,7 +264,6 @@ export async function claimGuestProfileAfterAuth(): Promise<ClaimGuestProfileRes
       }
     }
   } catch {
-    // Fallback: legacy symbols-only claim
     try {
       const { claimGuestDaySymbols } = await import("@/lib/daySymbolReveal");
       await claimGuestDaySymbols();

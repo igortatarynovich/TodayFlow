@@ -720,6 +720,52 @@ def _claim_guest_session_to_user_locked(
                 transferred.append("day_story")
             transferred.append("timezone")
 
+        # 3) Durable guest_profiles → AstroProfile (server SoT; do not require client draft).
+        try:
+            from todayflow_backend.services.guest_profiles_v1 import bind_guest_profiles_to_user
+
+            has_gp = (
+                db.query(db_models.GuestProfile)
+                .filter(db_models.GuestProfile.guest_session_id == gid)
+                .first()
+                is not None
+            )
+            if not has_gp and primary_snap is not None and isinstance(primary_snap.profile_draft, dict):
+                draft = primary_snap.profile_draft
+                if draft.get("birth_date"):
+                    # Lift legacy JSON draft into durable row before bind.
+                    row = db_models.GuestProfile(
+                        guest_session_id=gid,
+                        local_key="self",
+                        display_name=(str(draft.get("first_name") or "")[:128] or None),
+                        birth_date=date.fromisoformat(str(draft["birth_date"])[:10]),
+                        birth_time=None,
+                        birth_time_known=not bool(draft.get("time_unknown", True)),
+                        location_name=draft.get("location_name"),
+                        latitude=draft.get("latitude"),
+                        longitude=draft.get("longitude"),
+                        relation="self",
+                        is_owner_candidate=True,
+                        natal_facts=draft.get("natal_facts") if isinstance(draft.get("natal_facts"), dict) else None,
+                    )
+                    if draft.get("birth_time") and row.birth_time_known:
+                        try:
+                            from todayflow_backend.services.guest_profiles_v1 import _parse_birth_time
+
+                            row.birth_time = _parse_birth_time(draft.get("birth_time"))
+                        except Exception:
+                            pass
+                    db.add(row)
+                    db.flush()
+
+            bind = bind_guest_profiles_to_user(db, guest_session_id=gid, user_id=user_id)
+            if bind.get("created_profile_ids"):
+                transferred.append("profiles")
+        except Exception as exc:
+            logger.exception("guest_profiles bind failed during claim: %s", exc)
+            # Do not abort day progress claim; profiles can be claimed via core-setup fallback.
+            conflicts.append({"block": "profiles", "reason": "bind_failed"})
+
         # Seal session (keep claim_token_hash until TTL for idempotent retries).
         session.claimed_at = utc_naive_now()
         session.claimed_user_id = user_id

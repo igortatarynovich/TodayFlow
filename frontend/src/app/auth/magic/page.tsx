@@ -9,6 +9,8 @@ import { LoadingSpinner } from "@/components/orbit";
 
 type MagicLoginResponse = {
   token: string;
+  access_token?: string;
+  refresh_token?: string;
   email: string;
 };
 
@@ -27,7 +29,7 @@ function MagicLoginInner() {
     void (async () => {
       try {
         const response = await postJson<MagicLoginResponse>("/auth/magic-login", { token });
-        beginAuthSession(response.token);
+        beginAuthSession(response);
 
         const claim = await claimGuestProfileAfterAuth();
         if (claim.status === "ready") {

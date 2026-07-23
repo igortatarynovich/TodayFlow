@@ -4,6 +4,7 @@ import { clearCoreProfileCache } from "./coreProfileCacheStorage";
 import type { AccountProfile } from "./types";
 
 const AUTH_CACHE_TTL_MS = 30_000;
+const AUTH_SNAPSHOT_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 const AUTH_TOKEN_KEY = "todayflow_token";
 const AUTH_SNAPSHOT_KEY = "todayflow_auth_snapshot_v1";
 const AUTH_LAST_VALIDATED_AT_KEY = "todayflow_last_auth_validated_at";
@@ -83,7 +84,12 @@ function loadStoredSnapshot(token: string): StoredAuthSnapshot | null {
     const parsed = JSON.parse(raw) as StoredAuthSnapshot;
     if (!parsed || typeof parsed !== "object") return null;
     if (parsed.token !== token) return null;
-    if (typeof parsed.savedAt !== "number" || !Number.isFinite(parsed.savedAt) || parsed.savedAt <= 0) return null;
+    if (typeof parsed.savedAt !== "number" || !Number.isFinite(parsed.savedAt) || parsed.savedAt <= 0) {
+      return null;
+    }
+    if (Date.now() - parsed.savedAt > AUTH_SNAPSHOT_MAX_AGE_MS) {
+      return null;
+    }
     return parsed;
   } catch {
     return null;
@@ -154,7 +160,7 @@ export function useAuth() {
 
   const checkAuth = useCallback(async () => {
     const token = getStoredAccessToken();
-    
+
     if (!token) {
       clearAuthCache();
       clearAuthStorageArtifacts();
@@ -169,6 +175,20 @@ export function useAuth() {
       });
       setIsLoading(false);
       return;
+    }
+
+    // Optimistic: paint from stored snapshot immediately, then revalidate /auth/me.
+    const cached = loadStoredSnapshot(token);
+    if (cached) {
+      setIsAuthenticated(true);
+      setProfile(cached.profile);
+      setStatus({
+        networkDegraded: false,
+        warningMessage: null,
+        lastValidatedAt: readTimestamp(AUTH_LAST_VALIDATED_AT_KEY),
+        lastSnapshotSavedAt: cached.savedAt,
+      });
+      setIsLoading(false);
     }
 
     try {
@@ -222,14 +242,12 @@ export function useAuth() {
   useEffect(() => {
     checkAuth();
 
-    // Слушаем изменения localStorage для синхронизации между вкладками
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === "todayflow_token") {
+      if (e.key === "todayflow_token" || e.key === "todayflow_refresh_token") {
         checkAuth();
       }
     };
 
-    // Слушаем кастомное событие для обновления в той же вкладке
     const handleAuthChange = () => {
       clearAuthCache();
       checkAuth();
@@ -237,14 +255,13 @@ export function useAuth() {
 
     window.addEventListener("storage", handleStorageChange);
     window.addEventListener("auth:update", handleAuthChange);
-    
+
     return () => {
       window.removeEventListener("storage", handleStorageChange);
       window.removeEventListener("auth:update", handleAuthChange);
     };
   }, [checkAuth]);
 
-  // Функция для принудительного обновления состояния
   const refresh = useCallback(() => {
     checkAuth();
   }, [checkAuth]);

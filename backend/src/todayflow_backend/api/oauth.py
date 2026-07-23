@@ -90,14 +90,7 @@ def _login_or_register_by_email(email: str, db: Session) -> dict:
         db.refresh(user)
         is_new_user = True
 
-    token = auth_service.create_token(user.id, is_admin=user.is_admin)
-    return {
-        "user_id": user.id,
-        "email": user.email,
-        "is_paid": user.is_paid,
-        "token": token,
-        "is_new_user": is_new_user,
-    }
+    return auth_service.issue_token_pair(db, user, extra={"is_new_user": is_new_user})
 
 
 async def _exchange_google_authorization_code(code: str, redirect_uri: str) -> str:

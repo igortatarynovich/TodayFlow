@@ -75,10 +75,17 @@ export function OAuthButtons({ onSuccess }: OAuthButtonsProps) {
 
   const handleGoogleCallback = async (response: { credential: string }) => {
     try {
-      const result = await postJson<{ token: string; user_id: number; email: string; is_paid: boolean }>("/oauth/google", {
+      const result = await postJson<{
+        token: string;
+        access_token?: string;
+        refresh_token?: string;
+        user_id: number;
+        email: string;
+        is_paid: boolean;
+      }>("/oauth/google", {
         id_token: response.credential,
       });
-      beginAuthSession(result.token);
+      beginAuthSession(result);
       const target = await resolveTargetAfterAuthSession(redirectTarget);
       toast.success(t("auth.oauth.success", "Вход выполнен"));
       onSuccess?.();
@@ -124,12 +131,19 @@ export function OAuthButtons({ onSuccess }: OAuthButtonsProps) {
 
   const handleAppleCallback = async (response: { authorization: { id_token: string; code?: string }; user?: { email?: string; name?: { firstName?: string; lastName?: string } } }) => {
     try {
-      const result = await postJson<{ token: string; user_id: number; email: string; is_paid: boolean }>("/oauth/apple", {
+      const result = await postJson<{
+        token: string;
+        access_token?: string;
+        refresh_token?: string;
+        user_id: number;
+        email: string;
+        is_paid: boolean;
+      }>("/oauth/apple", {
         identity_token: response.authorization.id_token,
         authorization_code: response.authorization.code,
         user: response.user,
       });
-      beginAuthSession(result.token);
+      beginAuthSession(result);
       const target = await resolveTargetAfterAuthSession(redirectTarget);
       toast.success(t("auth.oauth.success", "Вход выполнен"));
       onSuccess?.();

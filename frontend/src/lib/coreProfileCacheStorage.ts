@@ -4,12 +4,19 @@ import type { CoreProfile } from "@/lib/types";
 import { resolveCacheUserScope } from "@/lib/cacheUserScope";
 
 const PREFIX = "todayflow_core_profile:v2";
+/** Soft TTL for stale-while-revalidate (7 days). Hash mismatch still wins. */
+const CORE_PROFILE_CACHE_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 
 export const CORE_PROFILE_UPDATED_EVENT = "todayflow:core-profile-updated";
 
 export type CoreProfileUpdatedDetail = {
   profile: CoreProfile;
   astroProfileId: number | null;
+};
+
+type CachedEnvelope = {
+  savedAt: number;
+  profile: CoreProfile;
 };
 
 export function cacheKeyForCoreProfile(astroProfileId: number | null | undefined): string {
@@ -29,9 +36,35 @@ function coreProfileGeneratedAtMs(profile: CoreProfile): number {
   return Number.isFinite(t) ? t : 0;
 }
 
+function readEnvelope(key: string): CachedEnvelope | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(key) ?? sessionStorage.getItem(key);
+    if (!raw) return null;
+    const parsed: unknown = JSON.parse(raw);
+    if (isPlausibleCoreProfile(parsed)) {
+      // Legacy bare profile object
+      return { savedAt: coreProfileGeneratedAtMs(parsed) || Date.now(), profile: parsed };
+    }
+    if (
+      parsed &&
+      typeof parsed === "object" &&
+      "profile" in parsed &&
+      isPlausibleCoreProfile((parsed as CachedEnvelope).profile)
+    ) {
+      const env = parsed as CachedEnvelope;
+      const savedAt = typeof env.savedAt === "number" ? env.savedAt : Date.now();
+      return { savedAt, profile: env.profile };
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Снимок `core_profile` внутри `GET /today` может отставать от явного `GET /account/core-profile`
- * (кэш дня на бэкенде). Выбираем более свежий объект по `generated_at` между телом ответа и sessionStorage.
+ * (кэш дня на бэкенде). Выбираем более свежий объект по `generated_at` между телом ответа и cache.
  */
 export function resolveCoreProfileAgainstSessionCache(
   embedded: CoreProfile | null,
@@ -49,36 +82,47 @@ export function resolveCoreProfileAgainstSessionCache(
 }
 
 export function readCoreProfileFromCache(astroProfileId?: number | null): CoreProfile | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = sessionStorage.getItem(cacheKeyForCoreProfile(astroProfileId ?? null));
-    if (!raw) return null;
-    const parsed: unknown = JSON.parse(raw);
-    return isPlausibleCoreProfile(parsed) ? parsed : null;
-  } catch {
+  const env = readEnvelope(cacheKeyForCoreProfile(astroProfileId ?? null));
+  if (!env) return null;
+  if (Date.now() - env.savedAt > CORE_PROFILE_CACHE_MAX_AGE_MS) {
     return null;
   }
+  return env.profile;
 }
 
 export function writeCoreProfileToCache(profile: CoreProfile, astroProfileId?: number | null): void {
   if (typeof window === "undefined") return;
+  const key = cacheKeyForCoreProfile(astroProfileId ?? null);
+  const envelope: CachedEnvelope = { savedAt: Date.now(), profile };
   try {
-    sessionStorage.setItem(cacheKeyForCoreProfile(astroProfileId ?? null), JSON.stringify(profile));
+    localStorage.setItem(key, JSON.stringify(envelope));
   } catch {
-    /* quota / private mode */
+    /* quota / private mode — fall back to session */
+    try {
+      sessionStorage.setItem(key, JSON.stringify(envelope));
+    } catch {
+      /* ignore */
+    }
   }
 }
 
 export function clearCoreProfileCache(): void {
   if (typeof window === "undefined") return;
-  try {
-    for (let i = sessionStorage.length - 1; i >= 0; i -= 1) {
-      const key = sessionStorage.key(i);
-      // Clear v1 (legacy unscoped) and v2.
+  const clearFrom = (storage: Storage) => {
+    for (let i = storage.length - 1; i >= 0; i -= 1) {
+      const key = storage.key(i);
       if (key?.startsWith("todayflow_core_profile:")) {
-        sessionStorage.removeItem(key);
+        storage.removeItem(key);
       }
     }
+  };
+  try {
+    clearFrom(localStorage);
+  } catch {
+    /* ignore */
+  }
+  try {
+    clearFrom(sessionStorage);
   } catch {
     /* ignore */
   }

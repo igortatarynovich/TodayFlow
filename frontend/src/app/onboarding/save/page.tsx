@@ -25,6 +25,8 @@ type EmailSignupResponse = {
   pending_email_confirmation?: boolean;
   email_sent?: boolean;
   token?: string;
+  access_token?: string;
+  refresh_token?: string;
   dev_magic_url?: string;
 };
 
@@ -59,8 +61,15 @@ function OnboardingSavePageInner() {
       await prepareGuestClaimBeforeAuth();
       const response = await postJson<EmailSignupResponse>("/auth/email-signup", { email: trimmed });
 
-      if (response.token) {
-        beginAuthSession(response.token);
+      // Persist drafts to server SoT before magic-link navigation (new tab).
+      try {
+        const { syncGuestProfilesToServer } = await import("@/lib/guestProfilesSync");
+        await syncGuestProfilesToServer();
+      } catch {
+        /* local draft remains */
+      }
+      if (response.token || response.access_token) {
+        beginAuthSession(response);
         let claimTarget: string | null = null;
         try {
           const claim = await claimGuestProfileAfterAuth();

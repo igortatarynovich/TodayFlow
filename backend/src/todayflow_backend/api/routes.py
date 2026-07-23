@@ -44,11 +44,13 @@ from todayflow_backend.api import (
 )
 from todayflow_backend.api import day_connection, today
 from todayflow_backend.api import push_notifications
+from todayflow_backend.api import guest_profiles
 
 router = APIRouter()
 router.include_router(auth.router)
 router.include_router(day_symbols.router)
 router.include_router(guest_claim.router)
+router.include_router(guest_profiles.router)
 router.include_router(payments.router)
 router.include_router(subscriptions.router)
 router.include_router(questions.router)

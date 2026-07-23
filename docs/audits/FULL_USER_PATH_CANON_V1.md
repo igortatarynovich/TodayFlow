@@ -3,7 +3,7 @@
 **Статус:** LIVING SoT пользовательского пути (обновлён после slices A–E, 2026-07-22)  
 **Роль:** карта маршрута и решений «зачем / какие данные / какая польза» по экранам.  
 **Не заменяет:** Availability · Intake · Capability · Generation Contracts (они — следствия пути).  
-**Связанные:** [USER_JOURNEY_AUDIT_2026-07-20.md](./USER_JOURNEY_AUDIT_2026-07-20.md) · [PRODUCT_DATA_INTAKE.md](../PRODUCT_DATA_INTAKE.md) · [PRODUCT_GENERATION_CONTRACTS.md](../PRODUCT_GENERATION_CONTRACTS.md) · [status/TODAY_CANON_VS_CODE_DIFF.md](../status/TODAY_CANON_VS_CODE_DIFF.md)
+**Связанные:** [USER_JOURNEY_AUDIT_2026-07-20.md](./USER_JOURNEY_AUDIT_2026-07-20.md) · [PRODUCT_DATA_INTAKE.md](../PRODUCT_DATA_INTAKE.md) · [AUTH_SESSION_CONTRACT_V1.md](../AUTH_SESSION_CONTRACT_V1.md) · [PRODUCT_GENERATION_CONTRACTS.md](../PRODUCT_GENERATION_CONTRACTS.md) · [status/TODAY_CANON_VS_CODE_DIFF.md](../status/TODAY_CANON_VS_CODE_DIFF.md)
 
 **Главный критерий:** для каждого элемента продукта ясно: *зачем он есть, какие данные использует, какую пользу даёт*.
 

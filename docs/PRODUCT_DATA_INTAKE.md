@@ -198,24 +198,25 @@ CTA: **Добавить профиль**
 
 ---
 
-## Code Δ (срез 2026-07-22) — честно
+## Code Δ (срез 2026-07-23) — честно
 
 | TARGET | CODE сегодня | Δ |
 |--------|--------------|---|
-| Ровно 2 сценария | Много воронок: value-first onboarding, core-setup, `/account/profiles`, ephemeral compat birthdates, numerology forms, reports birth form | Свести к 1A/1B/2 |
-| Public compat → Profile A/B durable | Public compat шлёт birth data в request / URL; **не** создаёт `AstroProfile` | Главный разрыв 1A |
+| Ровно 2 сценария | 1B value-first + 1A guestCompatPair + сценарий 2 `POST /account/astro-data`; legacy forms ещё есть | Сводить extras; не добавлять новые |
+| Public compat → Profile A/B durable | ✅ `guest_profiles` + `/guest/profiles/compat-pair` → claim bind | **SHIPPED** (server SoT) |
 | Auth compat по profile ids | ✅ `profile_id_1/2` | Ок для сценария 2 |
-| Добавить профиль | ✅ `POST /account/astro-data` | Ближе всего к сценарию 2 |
-| 1B preview → email → bind | Частично: guest draft → `/onboarding/save` → email-signup → claim → core-setup | Есть воронка «себя», не унифицирована с 1A |
-| Не слать пароль в email | Magic only; plaintext temp password убран | **SHIPPED A–E** |
-| Профиль до account_id | Guest draft / guest session; durable AstroProfile обычно после auth | Нужна модель «профиль до аккаунта» или claim-bind |
-| Единая анкета | Отдельные формы Profile / Compat / Numerology / Reports | Запрет новых; deprecate extras |
+| Добавить профиль | ✅ `POST /account/astro-data` | Сценарий 2 |
+| 1B preview → email → bind | ✅ guest draft → `/guest/profiles` → magic → claim → AstroProfile | **SHIPPED** |
+| Не слать пароль в email | Magic only | **SHIPPED A–E** |
+| Профиль до account_id | ✅ Durable `guest_profiles` rows + claim bind (не anonymous User) | **CLOSED** decision #1 |
+| Access + refresh session | ✅ `/auth/refresh`, Bearer pair, FE retry | См. [AUTH_SESSION_CONTRACT_V1.md](./AUTH_SESSION_CONTRACT_V1.md) |
+| Единая анкета | Отдельные forms ещё в numerology/reports | Запрет новых; deprecate extras |
 
 ---
 
 ## Open decisions (intake)
 
-1. Где физически живут Profile A/B **до** email-confirm (anonymous account · pending bind · guest session с durable rows)?  
+1. ~~Где физически живут Profile A/B до email-confirm?~~ → **durable `guest_profiles` + GuestSession** (2026-07-23).  
 2. Игровая совместимость знаков остаётся без профилей навсегда, или позже тоже пишет профили?  
 3. Trial после 1A/1B: opt-in vs informed auto-start — финальный UX copy.  
 4. Нужен ли отдельный публичный URL «Построить мой профиль» vs тот же intake-компонент на Landing.
@@ -226,4 +227,5 @@ CTA: **Добавить профиль**
 
 | Date | Change |
 |------|--------|
+| 2026-07-23 | Decision #1 closed: durable guest_profiles; auth refresh contract; Code Δ refresh |
 | 2026-07-22 | v0.1 — ровно 2 сценария; модель профиля; compat по profile ids; code Δ |

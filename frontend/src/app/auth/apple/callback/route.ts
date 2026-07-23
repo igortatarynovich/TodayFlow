@@ -76,7 +76,12 @@ export async function POST(request: Request) {
       }),
     });
 
-    const data = (await res.json()) as { token?: string; detail?: unknown };
+    const data = (await res.json()) as {
+      token?: string;
+      access_token?: string;
+      refresh_token?: string;
+      detail?: unknown;
+    };
 
     if (!res.ok) {
       const detail = data.detail;
@@ -86,11 +91,16 @@ export async function POST(request: Request) {
       return new NextResponse(html, { status: 200, headers: { "Content-Type": "text/html; charset=utf-8" } });
     }
 
-    if (!data.token) {
+    if (!data.token && !data.access_token) {
       return NextResponse.json({ error: "no_token" }, { status: 500 });
     }
 
-    const tokenJs = JSON.stringify(data.token);
+    const pair = {
+      access_token: data.access_token || data.token,
+      refresh_token: data.refresh_token || null,
+      token: data.token || data.access_token,
+    };
+    const tokenJs = JSON.stringify(pair);
     const nextJs = JSON.stringify(next);
     const html = `<!DOCTYPE html><html><head><meta charset="utf-8"/><script src="/auth-session-bridge.js"></script></head><body><script>
 (function(){
@@ -99,7 +109,10 @@ export async function POST(request: Request) {
   if (typeof window.__todayflowBeginAuthSession === "function") {
     window.__todayflowBeginAuthSession(t);
   } else {
-    try { localStorage.setItem("todayflow_token", t); } catch (e) {}
+    try {
+      localStorage.setItem("todayflow_token", t.access_token || t.token || t);
+      if (t.refresh_token) localStorage.setItem("todayflow_refresh_token", t.refresh_token);
+    } catch (e) {}
   }
   location.replace(n);
 })();

@@ -512,6 +512,27 @@ export type ProfileBuildStatus = {
   has_snapshot: boolean;
 };
 
+export type ProfileSummary = {
+  generated_at: string;
+  profile_hash: string;
+  is_ready: boolean;
+  missing_fields: string[];
+  display_name: string | null;
+  core_trio: {
+    sun_sign?: string | null;
+    birth_time_known?: boolean | null;
+    life_path?: number | string | null;
+  };
+  baseline: {
+    archetype_seed?: string | null;
+    element_focus?: string | null;
+    rhythm_style?: string | null;
+    [key: string]: unknown;
+  };
+  rings_preview: Record<string, number>;
+  living_summary?: string | null;
+};
+
 export type MeaningEventType =
   | "habit_completed"
   | "ascetic_step_done"
