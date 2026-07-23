@@ -15,6 +15,18 @@ jest.mock("@/hooks/useMeaningRuntime", () => ({
 jest.mock("@/lib/api", () => ({
   getJson: jest.fn().mockRejectedValue(new Error("no auth")),
   postJson: jest.fn(),
+  getStoredAccessToken: jest.fn().mockReturnValue(null),
+}));
+
+jest.mock("@/lib/useAuth", () => ({
+  useAuth: () => ({
+    user: null,
+    loading: false,
+    isAuthenticated: false,
+    login: jest.fn(),
+    logout: jest.fn(),
+    refreshUser: jest.fn(),
+  }),
 }));
 
 jest.mock("@/lib/todayDayGreeting", () => ({
@@ -109,7 +121,8 @@ describe("TodayCompositionSurface", () => {
     expect(screen.getByTestId("today-zone-glance")).toBeInTheDocument();
     expect(screen.getByTestId("today-zone-sky-influences")).toBeInTheDocument();
     expect(screen.getByTestId("today-zone-sphere-focus")).toBeInTheDocument();
-    expect(screen.getByTestId("today-zone-color-guide")).toBeInTheDocument();
+    // Color guide only when day_story.talisman is product authority — not celestial presets.
+    expect(screen.queryByTestId("today-zone-color-guide")).not.toBeInTheDocument();
     expect(screen.getByTestId("today-zone-ritual-gates")).toBeInTheDocument();
     expect(screen.getByTestId("today-ritual-tarot-gate")).toBeInTheDocument();
     expect(screen.queryByTestId("today-zone-why-story")).not.toBeInTheDocument();
@@ -205,7 +218,7 @@ describe("TodayCompositionSurface", () => {
       day_story: {
         contract_version: "day_story_v1",
         theme: "Ясность",
-        story: "Сегодня день коротких договорённостей и одной ясной линии.",
+        story: "Сегодня день коротких договорённостей и спокойного темпа.",
         practice_recommendation: {
           kind: "practice",
           text: "Закрыть одну задачу до обеда.",
@@ -226,6 +239,33 @@ describe("TodayCompositionSurface", () => {
     expect(screen.getByTestId("today-zone-strengthen")).toBeInTheDocument();
     expect(screen.getByTestId("today-tool-practice")).toBeInTheDocument();
     expect(screen.getByTestId("today-soft-why")).toHaveTextContent(/ясной линии/i);
+    expect(screen.getByTestId("today-zone-personal")).toHaveAttribute("data-literary", "1");
+    expect(screen.queryByTestId("today-zone-glance")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("today-zone-sky-influences")).not.toBeInTheDocument();
+  });
+
+  it("singleVoice pre-ritual shows literary opening without widget gallery", () => {
+    const contractWithStory: TodayContractV1 = {
+      ...sampleContract,
+      day_story: {
+        contract_version: "day_story_v1",
+        theme: "Тихий фокус",
+        story: "Сегодня день коротких договорённостей и одной ясной линии без лишней суеты.",
+        talisman: { color: "лазурь", stone: "аквамарин", note: "Один спокойный акцент у лица." },
+      },
+    };
+
+    render(
+      <TodayCompositionSurface {...baseProps} contract={contractWithStory} variant="default" />,
+    );
+
+    expect(screen.getByTestId("today-literary-opening")).toBeInTheDocument();
+    expect(screen.getByTestId("today-zone-ritual-gates")).toBeInTheDocument();
+    expect(screen.queryByTestId("today-zone-glance")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("today-zone-pulse")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("today-zone-sky-influences")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("today-zone-color-guide")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("today-zone-sphere-focus")).not.toBeInTheDocument();
   });
 
   it("opens promise form when ritual complete", async () => {

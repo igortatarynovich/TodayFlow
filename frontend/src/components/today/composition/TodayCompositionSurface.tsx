@@ -35,6 +35,7 @@ import {
 } from "@/lib/todayCompositionModel";
 import { buildTodayDayStoryViewModel, applySupplementaryNarrativesToDayStory } from "@/lib/todayDayStoryModel";
 import { usesDayStorySingleVoice } from "@/lib/todayContractMapper";
+import { buildTodayLiteraryReading } from "@/lib/todayLiteraryReading";
 import { loadDayEngagement, mergeEngagementWithCompactUserModel, saveDayEngagement, createEmptyDayEngagement, engagementProfileScope } from "@/lib/todayDayEngagement";
 import { fetchCompactUserModelCached, clearCompactUserModelCache } from "@/lib/compactUserModelCache";
 import {
@@ -298,8 +299,9 @@ export function TodayCompositionSurface(props: Props) {
         engagement,
         isEveningSurface: story.isEveningSurface,
         personalizedReady: story.personalizedReady,
+        singleVoice,
       }),
-    [story.isEveningSurface, story.personalizedReady, variant, engagement],
+    [story.isEveningSurface, story.personalizedReady, variant, engagement, singleVoice],
   );
 
   const showRitualSpine = useMemo(
@@ -344,23 +346,28 @@ export function TodayCompositionSurface(props: Props) {
     [props.contract.primary_action, props.contract.personal_growth.development_point, engagement.focusTopicId],
   );
 
-  const strengthenTools = useMemo(
-    () =>
-      applyRecommendedPracticeToStrengthen(
-        story.personalizedReady ? story.strengthenLinked : story.strengthenPreview,
-        story.personalizedReady ? recommendedPractice : null,
-        {
-          lowEnergy: isLowEnergyMood(engagement.morningMoodId),
-        },
-      ),
-    [
-      story.personalizedReady,
-      story.strengthenLinked,
-      story.strengthenPreview,
-      recommendedPractice,
-      engagement.morningMoodId,
-    ],
-  );
+  const strengthenTools = useMemo(() => {
+    const raw = applyRecommendedPracticeToStrengthen(
+      story.personalizedReady ? story.strengthenLinked : story.strengthenPreview,
+      story.personalizedReady ? recommendedPractice : null,
+      {
+        lowEnergy: isLowEnergyMood(engagement.morningMoodId),
+      },
+    );
+    if (!singleVoice) return raw;
+    const practice = raw.find((t) => t.id === "practice");
+    if (practice) return [practice];
+    const affirmation = raw.find((t) => t.id === "affirmation");
+    if (affirmation) return [affirmation];
+    return raw.slice(0, 1);
+  }, [
+    story.personalizedReady,
+    story.strengthenLinked,
+    story.strengthenPreview,
+    recommendedPractice,
+    engagement.morningMoodId,
+    singleVoice,
+  ]);
 
   const practiceTool = useMemo(
     () => strengthenTools.find((tool) => tool.id === "practice") ?? null,
@@ -1082,6 +1089,29 @@ export function TodayCompositionSurface(props: Props) {
       />
     ) : null;
 
+  const literaryOpeningPreview =
+    singleVoice && props.contract ? (
+      (() => {
+        const preview = buildTodayLiteraryReading(story, props.contract);
+        if (!preview.opening) return null;
+        return (
+          <section
+            className={styles.literaryOpening}
+            data-testid="today-literary-opening"
+            aria-label="Рассказ дня"
+          >
+            <p className={styles.sectionEyebrow}>
+              {props.contract.day_story?.theme?.trim() || "Сегодня"}
+            </p>
+            <p className={styles.literaryOpeningText}>{preview.opening}</p>
+            {story.ritualUnlockHint ? (
+              <p className={styles.strengthenPreviewHint}>{story.ritualUnlockHint}</p>
+            ) : null}
+          </section>
+        );
+      })()
+    ) : null;
+
   const dayStoryFoundation = isFirstToday ? (
     <ConversationThread testId="conversation-thread-first-today">
       {greetingSection ? (
@@ -1096,9 +1126,15 @@ export function TodayCompositionSurface(props: Props) {
       {!embeddedInWebDashboard ? greetingSection : null}
       {!story.personalizedReady ? (
         <>
-          {!embeddedInWebDashboard ? pulseSection : null}
-          {!embeddedInWebDashboard ? glanceSection : null}
-          {!embeddedInWebDashboard ? heroSection : null}
+          {singleVoice ? (
+            literaryOpeningPreview
+          ) : (
+            <>
+              {!embeddedInWebDashboard ? pulseSection : null}
+              {!embeddedInWebDashboard ? glanceSection : null}
+              {!embeddedInWebDashboard ? heroSection : null}
+            </>
+          )}
           {ritualGateSection}
           {ritualTarotImpactStage}
           {morningDialogue}
@@ -1138,6 +1174,7 @@ export function TodayCompositionSurface(props: Props) {
         {useProductPersonalized ? (
           <TodayPersonalizedProductSection
             embeddedInWebDashboard={embeddedInWebDashboard}
+            singleVoice={singleVoice}
             story={story}
             contract={props.contract}
             strengthenTools={strengthenTools}

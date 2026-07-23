@@ -20,6 +20,8 @@ export type TodayLiteraryReading = {
   lean: string | null;
   /** Where to go gently — one short paragraph, optional. */
   ease: string | null;
+  /** Quiet day anchor from talisman (color/stone/note) — woven prose, not a widget. */
+  anchor: string | null;
   /** One practical close, human sentence — not a command chip. */
   close: string | null;
 };
@@ -146,6 +148,24 @@ export function buildTodayLiteraryReading(
   const ease = easeRaw ? firstParagraph(easeRaw, 2) : null;
   if (ease) used.push(ease);
 
+  const talisman = dayStory?.talisman;
+  const color = clean(talisman?.color);
+  const stone = clean(talisman?.stone);
+  const note = clean(talisman?.note);
+  let anchor: string | null = null;
+  if (color || stone || note) {
+    const parts: string[] = [];
+    if (color && stone) parts.push(`Сегодняшний якорь — ${color} и ${stone}`);
+    else if (color) parts.push(`Сегодняшний якорь — оттенок «${color}»`);
+    else if (stone) parts.push(`Сегодняшний якорь — ${stone}`);
+    if (note && distinctEnough(note, used)) parts.push(note);
+    const joined = parts.join(". ").trim();
+    if (joined && distinctEnough(joined, used)) {
+      anchor = firstParagraph(joined.endsWith(".") ? joined : `${joined}.`, 2);
+      used.push(anchor);
+    }
+  }
+
   const closeRaw = [
     clean(dayStory?.today_move),
     clean(contract.primary_action),
@@ -153,5 +173,5 @@ export function buildTodayLiteraryReading(
 
   const close = closeRaw ? softenCommandLead(firstParagraph(closeRaw, 1)) : null;
 
-  return { opening, why, lean, ease, close };
+  return { opening, why, lean, ease, anchor, close };
 }
