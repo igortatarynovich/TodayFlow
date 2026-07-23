@@ -38,3 +38,19 @@ python evals/profile_quality/run_production_capture_v0.py --cases A,B
 - **Eval-only** default HTTP timeout 120s via process env (does not change production Settings defaults)
 - Spec: `docs/audits/PROFILE_PRODUCTION_CAPTURE_PACK.md`
 - Case A/B report: `docs/audits/PROFILE_CAPTURE_CASE_AB_REPORT.md`
+
+---
+
+## Life spheres quality pack (deterministic projector)
+
+Contrastive foundations for **love / money / decisions** — claim trace + product criteria (no LLM).
+
+```bash
+python evals/profile_quality/run_life_spheres_quality_pack_v0.py
+```
+
+- Cases: `life_spheres_quality_cases_v0.json` (8 contrast profiles)
+- Outputs: `runs/life_spheres_quality_<UTC>/pack.{json,md}`
+- SoT review: `docs/audits/PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md`
+
+**Gate:** do not expand to other spheres until review D1/D2 (how traits + style buckets) are fixed.

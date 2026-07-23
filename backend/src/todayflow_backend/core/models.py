@@ -509,9 +509,10 @@ class NumerologyProfile(BaseModel):
     name: str
     birth_date: str
     life_path: NumerologyNumber
-    expression: NumerologyNumber
-    soul_urge: NumerologyNumber
-    personality: NumerologyNumber
+    # Name numbers are optional: without a usable name only date numerology exists.
+    expression: NumerologyNumber | None = None
+    soul_urge: NumerologyNumber | None = None
+    personality: NumerologyNumber | None = None
 
 
 class NumerologyDailyInsight(BaseModel):

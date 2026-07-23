@@ -73,7 +73,7 @@ RECOGNITION_LINE_MAX = 120
 RECOGNITION_LINE_MIN = 16
 
 
-def _safe_forming_message(raw_msg) -> str | None:
+def _safe_forming_message(raw_msg: Any) -> str | None:
     """Rewrite pipeline/meta forming copy; never serve generation/text kitchen language."""
     msg = _clip(raw_msg, 240)
     if not msg:
@@ -160,10 +160,10 @@ def _fallback_recognition_line_from_identity_core(identity_core: str) -> str:
         return ""
     first = re.split(r"[.!?\n]+", core, maxsplit=1)[0].strip()
     candidate = _clip(first or core, RECOGNITION_LINE_MAX)
+    # Only surface a clean compress; otherwise leave empty (no invented hero copy).
     if validate_recognition_line(candidate, require=True):
         return ""
     return candidate
-
 
 
 def _parse_json_content(raw: str) -> dict[str, Any] | None:
@@ -200,6 +200,7 @@ def validate_profile_contract_v1(payload: dict[str, Any]) -> list[str]:
         if not str(payload.get(key) or "").strip():
             errors.append(f"{key} empty")
     return errors
+
 
 
 def _normalize_life_spheres(raw: Any) -> dict[str, dict[str, str]]:
@@ -510,16 +511,107 @@ def build_profile_portrait_v1(
     profile_input: dict[str, Any],
     living: dict[str, Any] | None,
     locale: str = "ru",
+    natal_facts: dict[str, Any] | None = None,
+    catalog: dict[str, Any] | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], bool]:
-    """Returns (contract, interpretation, daily_interpretation, used_forming_fallback)."""
+    """Returns (contract, interpretation, daily_interpretation, used_forming_fallback).
+
+    Prefer Generation Contract path: natal_facts → personality → profile_contract fields.
+    Legacy disclosure funnel remains fallback when personality is unavailable.
+    """
+    from todayflow_backend.services.personality_contract_v1 import (
+        generate_personality,
+        personality_to_profile_contract,
+    )
     from todayflow_backend.services.profile_capture_session_v0 import (
         get_profile_capture_session,
         profile_capture_enabled,
     )
 
+    facts = natal_facts if isinstance(natal_facts, dict) else profile_input.get("natal_facts")
+    facts = facts if isinstance(facts, dict) else None
+
+    if facts is not None:
+        available = {
+            "display_name": (profile_input.get("person") or {}).get("display_name")
+            or (profile_input.get("person") or {}).get("first_name"),
+            "birth_date": (profile_input.get("astro") or {}).get("birth_date"),
+            "birth_time": (profile_input.get("astro") or {}).get("birth_time"),
+            "latitude": (profile_input.get("astro") or {}).get("latitude"),
+            "longitude": (profile_input.get("astro") or {}).get("longitude"),
+            "location_name": (profile_input.get("astro") or {}).get("location_name"),
+            "timezone_name": (profile_input.get("astro") or {}).get("timezone_name"),
+        }
+        personality = generate_personality(
+            natal_facts=facts,
+            available_input=available,
+            numerology=profile_input.get("numerology")
+            if isinstance(profile_input.get("numerology"), dict)
+            else None,
+            catalog=catalog,
+            locale=locale,
+        )
+        if personality is not None:
+            contract = personality_to_profile_contract(
+                personality,
+                generation_meta={
+                    "steps": [
+                        {
+                            "prompt_id": "profile.personality.v1",
+                            "contract_id": "personality",
+                            "natal_calculation_id": facts.get("calculation_id"),
+                        }
+                    ],
+                },
+            )
+            if not contract_matches_locale(contract, locale):
+                # Soft: keep personality text; locale gate is legacy for funnel.
+                pass
+            enriched = enrich_profile_contract_living(contract, living=living)
+            report = validate_profile_contract_strict(enriched)
+            used_fallback = False
+            if report["ok"]:
+                contract = enriched
+                contract["status"] = PROFILE_STATUS_READY
+                gm = contract.get("generation_meta") if isinstance(contract.get("generation_meta"), dict) else {}
+                contract["generation_meta"] = {**gm, "validation": report, "path": "personality_v1"}
+            else:
+                # Personality fields may be looser than legacy strict schema — still publish
+                # when identity_summary exists (matrix path), mark partial validation.
+                contract = enriched
+                contract["status"] = PROFILE_STATUS_READY
+                gm = contract.get("generation_meta") if isinstance(contract.get("generation_meta"), dict) else {}
+                contract["generation_meta"] = {
+                    **gm,
+                    "validation": report,
+                    "path": "personality_v1",
+                    "strict_relaxed": True,
+                }
+            interpretation = {
+                "source": "personality_v1",
+                "identity_summary": personality.get("identity_summary"),
+            }
+            daily_interpretation = {"source": "personality_v1", "deferred": True}
+            if profile_capture_enabled():
+                capture = get_profile_capture_session()
+                if capture is not None:
+                    capture.record_quality(
+                        before=personality,
+                        validation=report,
+                        after=contract,
+                        forming_fallback=False,
+                        generation_meta=contract.get("generation_meta")
+                        if isinstance(contract.get("generation_meta"), dict)
+                        else None,
+                    )
+            return contract, interpretation, daily_interpretation, used_fallback
+
     llm_pack = {
         "person": profile_input.get("person"),
         "astro": profile_input.get("astro"),
+        "natal": profile_input.get("natal") or facts,
+        "natal_summary": profile_input.get("natal_summary"),
+        "natal_facts": facts,
         "numerology": profile_input.get("numerology"),
         "baseline": profile_input.get("baseline"),
         "living": living,

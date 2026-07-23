@@ -289,12 +289,16 @@ class CoreProfileService:
             return False
         status = str(contract.get("status") or "").strip().lower()
         if status in (PROFILE_STATUS_FORMING, PROFILE_STATUS_PARTIAL):
+            # Keep partial/forming portraits that already have identity — otherwise after the
+            # short cooldown GET falls back to a baseline shell and /profile looks empty.
+            if str(contract.get("identity_core") or "").strip():
+                return True
             generated_at = str(snapshot.get("generated_at") or "")
             try:
                 ts = datetime.fromisoformat(generated_at.replace("Z", "+00:00")).timestamp()
             except ValueError:
                 return False
-            # Cooldown: do not hammer LLM on every page open while forming.
+            # Empty forming scaffold: short cooldown before another publish can replace it.
             return (now - ts) < float(self.forming_retry_seconds)
         return True
 
@@ -406,11 +410,47 @@ class CoreProfileService:
             # Parallel publishers coalesce under the same hash lock.
             baseline = self._build_baseline(astro_context, numerology_context)
             missing_fields = self._build_missing_fields(settings, astro_context, numerology_context)
-            is_ready = len(missing_fields) == 0
+            is_ready = len(self._hard_missing_fields(missing_fields)) == 0
 
             person_pub = self._person_public(settings, user)
             generated_at = datetime.now(timezone.utc).isoformat()
             locale = (person_pub.get("locale") or "ru").strip()[:32] or "ru"
+
+            # Ensure natal_facts before personality (server SoT — not only guest payload).
+            natal_facts = None
+            catalog = None
+            if astro_profile is not None and astro_profile.birth_date is not None:
+                from todayflow_backend.services.ensure_natal_facts_v0 import (
+                    ensure_natal_facts_for_profile,
+                )
+                from todayflow_backend.services.insight_depth import get_insight_depth_tier
+                from todayflow_backend.services.profile_header_knowledge_v0 import (
+                    build_profile_header_knowledge,
+                    header_pack_to_matrix_catalog,
+                )
+                from todayflow_backend.services.profile_matrix_adapter_v0 import resolve_access_tier
+                from todayflow_backend.services.subscription_level import get_subscription_snapshot
+
+                snap = get_subscription_snapshot(user, db)
+                access = resolve_access_tier(
+                    insight_depth_tier=get_insight_depth_tier(user, db),
+                    subscription_status=snap.subscription_status,
+                    billing_level=snap.level,
+                )
+                natal_facts = ensure_natal_facts_for_profile(
+                    db,
+                    astro_profile,
+                    locale=locale,
+                    display_name=person_pub.get("display_name") or person_pub.get("first_name"),
+                    access=access,
+                )
+                header_pack = build_profile_header_knowledge(
+                    astro_profile.birth_date,
+                    life_path=numerology_context.get("life_path")
+                    if isinstance(numerology_context.get("life_path"), int)
+                    else None,
+                )
+                catalog = header_pack_to_matrix_catalog(header_pack)
 
             profile_input = {
                 "profile_version": self.profile_version,
@@ -423,11 +463,14 @@ class CoreProfileService:
                 "numerology": numerology_context,
                 "baseline": baseline,
                 "profiles": profiles_context,
+                "natal_facts": natal_facts,
             }
             contract, interpretation, daily_interpretation, used_fallback = build_profile_portrait_v1(
                 profile_input=profile_input,
                 living=living_context,
                 locale=locale,
+                natal_facts=natal_facts,
+                catalog=catalog,
             )
             steps = []
             gm = contract.get("generation_meta") if isinstance(contract, dict) else None
@@ -963,21 +1006,40 @@ class CoreProfileService:
         astro_context: dict[str, Any],
         numerology_context: dict[str, Any],
     ) -> list[str]:
+        """Hard blockers for base profile + soft unlock layers.
+
+        Hard (blocks ``is_ready``): birth date, life path.
+        Soft (listed for CTA, does not block readiness): name numerology, gender,
+        birth time, place when time is known.
+        """
         missing: list[str] = []
-        if not settings or not settings.first_name:
+        if not astro_context.get("birth_date"):
+            missing.append("astro_birth_date")
+        if numerology_context.get("life_path") is None:
+            missing.append("numerology_life_path")
+
+        # Soft unlocks — depth layers, not readiness.
+        if not settings or not str(settings.first_name or "").strip():
             missing.append("first_name")
         g = ""
         if settings and getattr(settings, "gender", None):
             g = str(settings.gender).strip().lower()
         if g not in _CANONICAL_USER_GENDERS:
             missing.append("gender")
-        if not astro_context.get("birth_date"):
-            missing.append("astro_birth_date")
-        if not astro_context.get("location_name"):
+
+        time_unknown = bool(astro_context.get("time_unknown"))
+        birth_time = astro_context.get("birth_time")
+        time_known = bool(birth_time) and not time_unknown
+        if not time_known:
+            missing.append("astro_birth_time")
+        elif not astro_context.get("location_name"):
+            # Place only matters for houses/ASC when time is present.
             missing.append("astro_location_name")
-        if numerology_context.get("life_path") is None:
-            missing.append("numerology_life_path")
         return missing
+
+    def _hard_missing_fields(self, missing_fields: list[str]) -> list[str]:
+        hard = {"astro_birth_date", "numerology_life_path"}
+        return [field for field in missing_fields if field in hard]
 
     def _build_profile_hash(
         self,

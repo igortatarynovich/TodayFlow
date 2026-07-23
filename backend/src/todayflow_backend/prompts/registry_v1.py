@@ -9,7 +9,13 @@ from __future__ import annotations
 
 from typing import Any, Callable
 
-from todayflow_backend.prompts import day_disclosure_v1, profile_disclosure_v1
+from todayflow_backend.prompts import (
+    day_disclosure_v1,
+    natal_facts_v1,
+    personality_v1,
+    profile_disclosure_v1,
+    profile_spheres_synthesis_v1,
+)
 
 PROMPT_REGISTRY_CONTRACT = "prompt_registry_v1"
 PROMPT_REGISTRY_VERSION = "1.0.0"
@@ -86,7 +92,7 @@ _REGISTRY: dict[str, dict[str, Any]] = {
     },
     # Profile disclosure layers
     "profile.identity.v1": {
-        "version": "1.0.0",
+        "version": "1.1.0",
         "surface": "profile",
         "step": "identity",
         "builder": profile_disclosure_v1.identity_system,
@@ -108,6 +114,27 @@ _REGISTRY: dict[str, dict[str, Any]] = {
         "surface": "profile",
         "step": "spheres",
         "builder": profile_disclosure_v1.spheres_system,
+    },
+    # Per-sphere synthesis on prepared cues (target content authority for life_spheres)
+    "profile.spheres.synthesis.v1": {
+        "version": "1.0.0",
+        "surface": "profile",
+        "step": "spheres_synthesis",
+        "builder": profile_spheres_synthesis_v1.synthesis_system,
+    },
+    # Generation Contract: natal_facts (LLM structured chart JSON)
+    "profile.natal_facts.v1": {
+        "version": "1.0.0",
+        "surface": "profile",
+        "step": "natal_facts",
+        "builder": natal_facts_v1.natal_facts_system,
+    },
+    # Generation Contract: personality (interpretation from natal_facts)
+    "profile.personality.v1": {
+        "version": "1.0.0",
+        "surface": "profile",
+        "step": "personality",
+        "builder": personality_v1.personality_system,
     },
 }
 

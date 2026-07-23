@@ -15,23 +15,35 @@
 
 **Umbrella:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) — любой вывод = источник → расчёт → интерпретация → практика → текст; иначе не production.
 
+**Качество блока (Six Questions):** [PRODUCT_BLOCK_SIX_QUESTIONS.md](./PRODUCT_BLOCK_SIX_QUESTIONS.md) — зачем · почему эта info · откуда · почему доверять · почему здесь · к чему ведёт. Нет ответа → убрать или переработать.
+
 **Understanding progress** *(глубина · missing data · trial · подписка — см. [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](./UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md)):*
 
 > Прогресс = рост качества понимания пользователя, не число открытых функций.  
 > Нет «пустого» Profile; подписка меняет глубину, не наличие; trial — полноценный опыт.  
 > Голос: TodayFlow не говорит о себе; UI описывает **человека** и ценность шага, не состояние системы ([TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md) §0–§0.06).
 
+**Canon = finished, not maximal:**
+
+> Канон — это не максимальное количество функций.  
+> Канон — это состояние, в котором **существующие** функции **закончены**.
+
+Ship-gate для Profile: [PROFILE_E2E_RECONSTRUCTION.md](./PROFILE_E2E_RECONSTRUCTION.md) § Profile v1 Freeze Checklist. После Freeze — Today копирует способ мышления, не новую платформу.
+
 **Production App Shell (закрыт):** [PR2_APP_SHELL.md](./PR2_APP_SHELL.md) — единая инфраструктура UI (sidebar · main · optional data-rail · shared states). К shell не возвращаемся, кроме багфиксов. Запрет filler-rail / reserved empty column / per-section shells — канон.
 
-**Следующий execution slice:** [PR3_TODAY_PRODUCTION_SURFACE.md](./PR3_TODAY_PRODUCTION_SURFACE.md) — сначала `day_story_v1` (evidence / confidence / limitations / claim map / trace), затем контракт независимых блоков Today, затем surface. Не с Figma.
+**Текущий execution slice:** Profile v1 Freeze — [PROFILE_E2E_RECONSTRUCTION.md](./PROFILE_E2E_RECONSTRUCTION.md).  
+Не создавать новые engines, registries, RFC или общие архитектурные слои в этом slice.
+
+**После Profile Freeze:** продуктовая реконструкция экрана **Today** (экран за экраном: блоки → данные → prompt → quality → wire → UI).  
+[PR3_TODAY_PRODUCTION_SURFACE.md](./PR3_TODAY_PRODUCTION_SURFACE.md) — ориентир поверхности; не старт с engine/RFC.
+
+`DailyState`, Recommendation Engine и другие общие слои **не реализуются заранее**. Допускаются только после разбора production-блоков Today и доказательства пользы по правилу architecture-must-prove-value.  
+Исторический / exploratory: [DAILY_INTERPRETATION_ENGINE_PHASE.md](./DAILY_INTERPRETATION_ENGINE_PHASE.md) · [rfc/RFC_DAILY_STATE_V0.md](./rfc/RFC_DAILY_STATE_V0.md) — **STATUS: DEFERRED**, не approved implementation phase.
 
 Связь с [TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md): Personal Model остаётся SoT персонализации; этот канон запрещает UI, который **притворяется**, будто модель/API уже отдали результат.
 
-**Следующая архитектурная фаза дня:** [DAILY_INTERPRETATION_ENGINE_PHASE.md](./DAILY_INTERPRETATION_ENGINE_PHASE.md) — единый `DailyState` (эволюция DayContext/DayModel), а цвет/камень/аромат/практика только как производные Recommendation Engine. Не добавлять независимые генераторы символов дня.
-
-**Следующий артефакт (не UI):** [rfc/RFC_DAILY_STATE_V0.md](./rfc/RFC_DAILY_STATE_V0.md) — слои evidence / interpretation / recommendations, provenance, разрешение конфликтов сигналов.
-
-**Объяснимая интерпретация:** [EXPLAINABLE_INTERPRETATION.md](./EXPLAINABLE_INTERPRETATION.md) — ни одно практическое утверждение без цепочки обоснования; советы только из DailyState; четыре проверки текста (обоснованность · практичность · конкретность · авторский язык).
+**Объяснимая интерпретация:** [EXPLAINABLE_INTERPRETATION.md](./EXPLAINABLE_INTERPRETATION.md) — ни одно практическое утверждение без цепочки обоснования; четыре проверки текста (обоснованность · практичность · конкретность · авторский язык). Советы дня — только из уже существующих рабочих источников Today до отдельного доказанного слоя.
 
 **Аудит / gate:** [audits/EXPLAINABLE_GENERATION_AUDIT_REGISTRY_V0.md](./audits/EXPLAINABLE_GENERATION_AUDIT_REGISTRY_V0.md) — реестр generators × violations × remediation (не новый принцип).
 
@@ -46,6 +58,34 @@
 5. **Новая функция проходит цепочку:** модель данных → вычисление/генерация → API-контракт → обработка состояний → UI.
 6. **Макеты** строятся только из подтверждённого реестра возможностей, уже существующих в коде.
 7. **Экспериментальные будущие элементы** могут находиться в документации или прототипе, но не в рабочем интерфейсе.
+8. **Архитектура только с доказанной пользой** (см. ниже) — иначе не создаётся.
+
+---
+
+## Архитектура только с доказанной пользой
+
+> Инфраструктура не должна расти быстрее продукта.
+
+Любая **новая** архитектура (engine, registry, abstraction, cross-surface framework) допускается только если заранее доказано **хотя бы одно**:
+
+| Доказательство | Критерий |
+|----------------|----------|
+| Качество | Заметно лучший пользовательский ответ (eval / Case A/B / contrast pack) |
+| Скорость разработки | Заметно меньше повторяющегося кода в **уже рабочих** потоках |
+
+Если не доказано ни одно — **не писать код-каркас «на вырост»**. Допустима короткая заметка в docs; не RFC-имплементация и не новые registries.
+
+**Приоритет исполнения — экраны продукта**, не платформенные слои:
+
+1. Зачем существует экран?  
+2. Что пользователь должен понять после него?  
+3. Какие уже рассчитанные данные нужны?  
+4. Какой prompt нужен?  
+5. Проверка качества.  
+6. Wiring.  
+7. UI. → следующий экран.
+
+**Пример остановки:** P5 Canonical Context Engine — [RFC](./rfc/RFC_CANONICAL_CONTEXT_ENGINE_V0.md) **STOPPED**; не доказано улучшение качества/скорости MVP. Оставлен только thin mapping, уже используемый spheres synthesis.
 
 ---
 

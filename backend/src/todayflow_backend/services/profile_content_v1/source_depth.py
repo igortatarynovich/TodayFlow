@@ -106,3 +106,25 @@ def patterns_generation_allowed(user_json: dict[str, Any] | None) -> bool:
 
     depth = depth_from_profile_pack(user_json)
     return bool(classify_allowed_claims(depth).get("recurring_patterns"))
+
+
+def identity_generation_allowed(user_json: dict[str, Any] | None) -> bool:
+    """Production invariant: identity LLM only with birth date + usable astro/baseline facts."""
+    pack = user_json if isinstance(user_json, dict) else {}
+    person = pack.get("person") if isinstance(pack.get("person"), dict) else {}
+    astro = pack.get("astro") if isinstance(pack.get("astro"), dict) else {}
+    numerology = pack.get("numerology") if isinstance(pack.get("numerology"), dict) else {}
+    baseline = pack.get("baseline") if isinstance(pack.get("baseline"), dict) else {}
+
+    birth_date = (
+        person.get("birth_date")
+        or astro.get("birth_date")
+        or numerology.get("birth_date")
+    )
+    if not birth_date:
+        return False
+
+    sun = str(astro.get("sun_sign") or "").strip()
+    seed = str(baseline.get("archetype_seed") or baseline.get("archetype") or "").strip()
+    life_path = numerology.get("life_path")
+    return bool(sun or seed or life_path is not None)

@@ -77,6 +77,7 @@ def test_strict_ok_on_distinct_portrait() -> None:
     report = validate_profile_contract_strict(
         {
             "contract_version": "profile_contract_v1",
+            "recognition_line": "Ты первым видишь структуру там, где остальные пока видят только хаос.",
             "identity_core": "Человек держит смысл через ясный фокус и прямой контакт.",
             "strengths": ["Фокус на одном", "Прямой контакт", "Доведение до конца"],
             "growth_zones": ["Второй приоритет", "Контроль вместо ясности", "Откладывание разговора"],

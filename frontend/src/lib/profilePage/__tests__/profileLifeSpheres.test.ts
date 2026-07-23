@@ -49,11 +49,10 @@ describe("buildProfileLifeSpheresFromChart", () => {
       plutoLine: "",
     });
     const love = spheres.find((s) => s.id === "love");
+    // Live API/portrait copy wins over chart slice when both exist (DoD: no template invent).
     expect(love?.how).toMatch(/^В отношениях/i);
-    expect(love?.how?.toLowerCase()).toContain("про отношения");
-    expect(love?.how).not.toContain("Текст из API");
-    expect(love?.how).toContain("Венера");
-    expect(love?.how).toContain("Луна");
+    expect(love?.how?.toLowerCase()).toContain("текст из api");
+    expect(love?.how).toContain("любов");
   });
 
   it("falls back to API when no chart fragments", () => {
@@ -121,7 +120,7 @@ describe("buildProfileLifeSpheresFromChart", () => {
 });
 
 describe("buildProfileLifeSpheresFromProfileData", () => {
-  it("does not fill spheres from chart/templates without a ready LLM contract", () => {
+  it("does not fill spheres from chart/templates without contract life_spheres", () => {
     const spheres = buildProfileLifeSpheresFromProfileData(null, {
       interpretation: {
         life_areas: {

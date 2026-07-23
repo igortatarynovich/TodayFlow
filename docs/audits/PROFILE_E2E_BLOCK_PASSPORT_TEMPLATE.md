@@ -1,7 +1,9 @@
 # Profile E2E — Block Passport Template
 
 **Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md)  
-**Rule:** нет заполненного паспорта → блока ещё не существует (не проектировать UI/prompt).
+**Product quality (above this template):** [PRODUCT_BLOCK_SIX_QUESTIONS.md](../PRODUCT_BLOCK_SIX_QUESTIONS.md) — зачем · почему эта info · откуда · доверие · почему здесь · к чему ведёт.  
+**Rule:** нет заполненного паспорта → блока ещё не существует (не проектировать UI/prompt).  
+**Rule:** нет убедительных Six Questions → блок не production, даже если gate/schema PASS.
 
 > Качество результата — ответственность цепочки ниже. Категории «модель выдумала» **нет**.
 
@@ -83,7 +85,7 @@
 
 | Block | Path | Product lock |
 |-------|------|--------------|
-| `life_spheres` | [PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md) | natal-presence · deterministic-first · **not** patterns continuation |
+| `life_spheres` | [PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md) · [PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md) · [PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md](./PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md) | natal-presence · deterministic-first · **not** patterns continuation |
 
 ---
 

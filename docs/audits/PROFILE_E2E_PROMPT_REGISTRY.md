@@ -2,6 +2,7 @@
 
 **Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md)  
 **Block passport:** [PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](./PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md)  
+**life_spheres:** [PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md) · [PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md](./PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md) · [PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md)  
 **Date:** 2026-07-21 · **Source:** code + eval packs
 
 > Unique-knowledge verdicts are **hypotheses** until production-faithful packs prove them.
@@ -26,20 +27,22 @@
 | Field | Content |
 |-------|---------|
 | prompt_id | `profile.identity.v1` |
-| version | `1.0.0` (`registry_v1.py`) |
+| version | `1.1.0` (`registry_v1.py`) — adds `recognition_line` |
+| **Block passport** | [PROFILE_E2E_BLOCK_PASSPORT_IDENTITY.md](./PROFILE_E2E_BLOCK_PASSPORT_IDENTITY.md) **APPROVED** |
 | Call site | `profile_disclosure_funnel_v0` step identity |
-| Trigger | `publish_portrait=True` + rich quality mode |
+| Trigger | `publish_portrait=True` + rich quality mode **and** `identity_generation_allowed` |
+| Gate | birth_date + (sun_sign \| baseline seed \| life_path); else skip LLM |
 | Input schema | shared: person, astro, numerology, baseline, living, locale, profile_hash |
-| System | `identity_system(locale)` + frame |
+| System | `identity_system(locale)` + **profile_voice** (no Today day-chain) + profile_layers |
 | User | `{ shared, step: "identity" }` |
 | Model params | policy-driven (eval: DeepSeek-V4-Pro, temp ~0.48, max_tokens 3200) |
-| Expected JSON | `profile_funnel_identity_v0`: identity_core, strengths[3], growth_zones[3] |
-| Parser | JSON extract + step validator (≥20 char identity, 3+3) |
+| Expected JSON | `profile_funnel_identity_v0`: recognition_line (≤120), identity_core, strengths[3], growth_zones[3] |
+| Parser | JSON extract + step validator (recognition_line + ≥20 char identity, 3+3) |
 | Retry | 1 on parse/schema fail |
-| Fallback | step fail → funnel fail → forming shell |
-| Forbidden claims | sun-sign passport only; Voice bans |
-| Snapshot fields | `identity_core`, `strengths`, `growth_zones` |
-| UI projections | Hero quote, Character strengthens/drains (via QuickMap), Evidence |
+| Fallback | gate skip / step fail → forming shell; **no taxonomy as portrait**; old snaps: compress identity_core → recognition_line |
+| Forbidden claims | sun-sign passport; day agenda; longitudinal invent; Voice bans; archetype name inside recognition_line |
+| Snapshot fields | `recognition_line`, `identity_core`, `strengths`, `growth_zones` |
+| UI projections | Hero quote · Character strengthens/drains — **contract-only** (recognition_line not wired to UI yet) |
 | **Unique knowledge?** | Yes if real synthesis; else sign cliché |
 
 ---
@@ -67,7 +70,8 @@
 | prompt_id | `profile.patterns.v1` |
 | version | `1.1.0` |
 | Trigger (current) | after styles — **only if** `patterns_generation_allowed(pack)` (`source_depth` ≥ `profile_plus_checkins`) |
-| Trigger (**gate**) | else: skip LLM · `reason=patterns_skipped_ineligible` · `recurring_patterns=[]` · spheres not started |
+| Trigger (**gate**) | else: skip LLM · `reason=patterns_skipped_ineligible` · `recurring_patterns=[]` |
+| **Debt (spheres coupling)** | Current funnel still **stops** after patterns skip/fail → spheres never start. Confirmed `GENERATION_GATE` defect on spheres control-flow (patterns gate itself is correct and stays). Target: continue to spheres / projector independently |
 | Input | shared + identity + styles |
 | System | patterns from **living/signals only**; mission + helps; text asks honesty if sparse |
 | Expected | recurring_patterns[], living_changes, life_mission, helps[≥2] |
@@ -80,19 +84,40 @@ Passport target: [PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](./PROFILE_E2E_BLOCK_PA
 
 ---
 
-## P4 · `profile.spheres.v1`
+## P4 · `profile.spheres.v1` — **LEGACY (not target content authority)**
 
 | Field | Content |
 |-------|---------|
 | prompt_id | `profile.spheres.v1` |
 | version | `1.0.0` |
-| Trigger | after patterns |
-| Expected | 9 spheres × how/need/risk/turns_on/turns_off/helps |
+| **Status** | **Legacy debt.** Must not be treated as target content authority for `life_spheres` |
+| Trigger (current code) | after patterns success only — **accidental coupling**; see Case A report |
+| Expected (legacy) | 9 spheres × how/need/risk/turns_on/turns_off/helps |
 | Eval gap | review runner **skips** this step |
-| Snapshot | `life_spheres` |
-| UI | Direction sphere cards (also natal house taxonomy can compete) |
+| Snapshot | `life_spheres` (today only if LLM step runs) |
+| UI | Direction sphere cards; FE chart/DEFAULTS can compete (**dual source debt**) |
 | Quality gates | identity echo into how; duplicate hows |
-| **Unique knowledge?** | **Suspect** — candidate for deterministic projection from natal+contract |
+| **Target content** | **Superseded** by P4b synthesis — projector kept as A/B baseline / cue kitchen |
+| **Future LLM** | See P4b (not a thin wording layer on projector prose) |
+| **Unique knowledge?** | Legacy LLM step is **not** the unique-knowledge path |
+
+---
+
+## P4b · `profile.spheres.synthesis.v1` — **TARGET content authority**
+
+| Field | Content |
+|-------|---------|
+| prompt_id | `profile.spheres.synthesis.v1` |
+| version | `1.0.0` |
+| **Status** | **Production-wired** · Freeze **PASS** |
+| Block passport | [PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md) |
+| Prompt passport | [PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md](./PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md) |
+| Trigger | after identity/styles; IFF `spheres_projection_allowed` **and** non-empty `sphere_cues`; **independent of patterns** |
+| Input | identity slice · relevant_style · prepared `sphere_cues` · optional house_cues |
+| Expected | one sphere × how/need/risk/turns_on/turns_off/helps |
+| Deterministic owns | eligibility · cue selection · house gate · JSON/ban validation |
+| Must not | raw planet=sign as sole homework; invent without cues; patterns dependence |
+| Eval | `run_life_spheres_synthesis_eval_v0.py` |
 
 ---
 
@@ -127,6 +152,8 @@ Required for E2E: extend capture (eval or publisher) before blaming the model.
 | identity | who in life | sign passport |
 | styles | decision/relationship/money angles | paraphrase identity |
 | patterns | evidence-backed repeats | invent from birth-only |
-| spheres | sphere-specific how/need | copy identity into every how |
+| spheres (legacy LLM) | — | do not use as SoT |
+| spheres (cues) | prepared semantic facts from natal/styles | raw planet=sign dumps |
+| spheres (synthesis) | practical manifestation map per field question | identity/style paste; kitchen astrology; generic filler |
 
-Next: run production-faithful pack and score this matrix per case.
+Next: wire synthesis into funnel after Case A/B + UI checklist; keep projector for A/B until then.

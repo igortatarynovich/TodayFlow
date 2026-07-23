@@ -1,0 +1,262 @@
+{
+  "version": "life_spheres_quality_cases_v0",
+  "created": "2026-07-21",
+  "projection_version": "life_spheres_projector_v0.2",
+  "spheres_in_scope": ["love", "money", "decisions"],
+  "purpose": "Contrastive foundations to prove useful, grounded, distinct sphere claims — not only schema validity.",
+  "cases": [
+    {
+      "id": "lsq-01",
+      "contrast": "same_sun_different_venus_moon",
+      "label": "Sun Leo · Venus Cancer · Moon Cancer — soft closeness",
+      "intent": "Same Sun as lsq-02; Venus/Moon differ → love must diverge",
+      "foundations": {
+        "locale": "ru",
+        "person": {"birth_date": "1990-08-05", "birth_time": null, "time_unknown": true},
+        "identity": {
+          "identity_core": "Держит смысл через тёплый контакт и ясную заботу о близких, не растворяясь в чужих задачах.",
+          "strengths": ["Забота", "Ясность", "Верность"],
+          "growth_zones": ["Слияние", "Обида без слов", "Откладывание твёрдого нет"]
+        },
+        "styles": {
+          "relationship_style": "Близость через тёплые слова, предсказуемость и право на мягкий темп без давления.",
+          "money_style": "Деньги как спокойная безопасность: малые регулярные шаги и понятный запас.",
+          "decision_style": "Решения через согласование с близкими, но с одним своим финальным критерием."
+        },
+        "natal": {
+          "sun_sign": "Leo",
+          "moon_sign": "Cancer",
+          "venus_sign": "Cancer",
+          "mars_sign": "Virgo",
+          "mercury_sign": "Leo",
+          "jupiter_sign": "Cancer",
+          "saturn_sign": "Capricorn",
+          "houses_available": false,
+          "houses": {}
+        }
+      }
+    },
+    {
+      "id": "lsq-02",
+      "contrast": "same_sun_different_venus_moon",
+      "label": "Sun Leo · Venus Aries · Moon Aquarius — autonomy pace",
+      "intent": "Pair with lsq-01: love/money/decisions must not collapse to same Leo sun filler",
+      "foundations": {
+        "locale": "ru",
+        "person": {"birth_date": "1990-08-12", "birth_time": null, "time_unknown": true},
+        "identity": {
+          "identity_core": "Держит смысл через инициативу и свободу хода; контакт важен, но без контроля над личным воздухом.",
+          "strengths": ["Инициатива", "Прямота", "Скорость старта"],
+          "growth_zones": ["Резкость", "Недослушанность", "Бросать недостроенное"]
+        },
+        "styles": {
+          "relationship_style": "Близость через прямые слова, быстрый темп и уважение к автономии без проверок.",
+          "money_style": "Деньги как рост: один смелый шаг с потолком, без стыда за запрос.",
+          "decision_style": "Решения быстро и честно: ясное да/нет и дата короткого пересмотра."
+        },
+        "natal": {
+          "sun_sign": "Leo",
+          "moon_sign": "Aquarius",
+          "venus_sign": "Aries",
+          "mars_sign": "Aries",
+          "mercury_sign": "Leo",
+          "jupiter_sign": "Sagittarius",
+          "saturn_sign": "Capricorn",
+          "houses_available": false,
+          "houses": {}
+        }
+      }
+    },
+    {
+      "id": "lsq-03",
+      "contrast": "same_natal_different_styles",
+      "label": "Fixed natal · clarity/structure styles",
+      "intent": "Same natal as lsq-04; only styles change → style lens must drive need/risk/on/off/helps",
+      "foundations": {
+        "locale": "ru",
+        "person": {"birth_date": "1988-01-05"},
+        "identity": {
+          "identity_core": "Строит опору через порядок и долгие обязательства; смысл в том, что можно проверить делом.",
+          "strengths": ["Структура", "Выдержка", "Ответственность"],
+          "growth_zones": ["Жёсткость", "Страх ошибки", "Медленный старт"]
+        },
+        "styles": {
+          "relationship_style": "Близость через честный разговор и ясные договорённости без намёков.",
+          "money_style": "Деньги через структуру: учёт, правила ценности времени, без импульса.",
+          "decision_style": "Решения через один критерий, короткий дедлайн и письменную рамку."
+        },
+        "natal": {
+          "sun_sign": "Capricorn",
+          "moon_sign": "Taurus",
+          "venus_sign": "Aquarius",
+          "mars_sign": "Capricorn",
+          "mercury_sign": "Capricorn",
+          "jupiter_sign": "Taurus",
+          "saturn_sign": "Sagittarius",
+          "houses_available": false,
+          "houses": {}
+        }
+      }
+    },
+    {
+      "id": "lsq-04",
+      "contrast": "same_natal_different_styles",
+      "label": "Fixed natal · depth/security/analysis styles",
+      "intent": "Pair with lsq-03: prove style sensitivity without natal drift",
+      "foundations": {
+        "locale": "ru",
+        "person": {"birth_date": "1988-01-05"},
+        "identity": {
+          "identity_core": "Строит опору через порядок и долгие обязательства; смысл в том, что можно проверить делом.",
+          "strengths": ["Структура", "Выдержка", "Ответственность"],
+          "growth_zones": ["Жёсткость", "Страх ошибки", "Медленный старт"]
+        },
+        "styles": {
+          "relationship_style": "Близость через глубину смысла и медленное раскрытие, без спектакля интенсивности.",
+          "money_style": "Деньги как чувство безопасности: видимый запас и честные пределы трат.",
+          "decision_style": "Решения через короткий анализ фактов без зависания в бесконечных данных."
+        },
+        "natal": {
+          "sun_sign": "Capricorn",
+          "moon_sign": "Taurus",
+          "venus_sign": "Aquarius",
+          "mars_sign": "Capricorn",
+          "mercury_sign": "Capricorn",
+          "jupiter_sign": "Taurus",
+          "saturn_sign": "Sagittarius",
+          "houses_available": false,
+          "houses": {}
+        }
+      }
+    },
+    {
+      "id": "lsq-05",
+      "contrast": "houses_available",
+      "label": "Full houses enrich how (time known)",
+      "intent": "House fragments must appear in evidence and how; no house claims without text",
+      "foundations": {
+        "locale": "ru",
+        "person": {"birth_date": "1993-03-18", "birth_time": "07:40:00", "time_unknown": false},
+        "identity": {
+          "identity_core": "Собирает жизнь через ясные формулировки и равный обмен; устаёт от размытых ожиданий.",
+          "strengths": ["Формулировка", "Обмен", "Гибкость"],
+          "growth_zones": ["Распыление", "Откладывание твёрдого выбора", "Сравнение"]
+        },
+        "styles": {
+          "relationship_style": "Близость через прямые слова и равный темп разговора.",
+          "money_style": "Деньги как честный обмен ценности: прозрачная цена и вклад.",
+          "decision_style": "Решения вместе собрать два мнения, затем назвать свой финальный ход."
+        },
+        "natal": {
+          "sun_sign": "Pisces",
+          "moon_sign": "Gemini",
+          "venus_sign": "Aquarius",
+          "mars_sign": "Cancer",
+          "mercury_sign": "Aquarius",
+          "jupiter_sign": "Libra",
+          "saturn_sign": "Aquarius",
+          "houses_available": true,
+          "houses": {
+            "7": {"description": "Партнёрство строится на равном разговоре и совпадении темпа."},
+            "2": {"description": "Ресурс растёт, когда вклад и цена названы без тумана."},
+            "8": {"description": "Общие обязательства требуют ясных границ обмена."},
+            "9": {"description": "Выбор держится на смысле и праве сказать своё решение вслух."}
+          }
+        }
+      }
+    },
+    {
+      "id": "lsq-06",
+      "contrast": "no_birth_time",
+      "label": "Sign-only · no houses — honesty",
+      "intent": "Must not mention houses/ASC; still emit useful sign_plus_styles map",
+      "foundations": {
+        "locale": "ru",
+        "person": {"birth_date": "1995-11-02", "birth_time": null, "time_unknown": true},
+        "identity": {
+          "identity_core": "Ищет устойчивость через ясный ритм дня и честные границы в работе и близости.",
+          "strengths": ["Ритм", "Честность", "Фокус"],
+          "growth_zones": ["Перфекционизм", "Закрытость", "Откладывание отдыха"]
+        },
+        "styles": {
+          "relationship_style": "Близость через предсказуемый ритм контакта и честные границы.",
+          "money_style": "Деньги через устойчивый порядок: регулярность важнее рывка.",
+          "decision_style": "Решения через структуру: критерии сначала, выбор потом."
+        },
+        "natal": {
+          "sun_sign": "Scorpio",
+          "moon_sign": "Virgo",
+          "venus_sign": "Libra",
+          "mars_sign": "Scorpio",
+          "mercury_sign": "Scorpio",
+          "jupiter_sign": "Sagittarius",
+          "saturn_sign": "Pisces",
+          "houses_available": false,
+          "houses": {}
+        }
+      }
+    },
+    {
+      "id": "lsq-07",
+      "contrast": "incomplete_styles",
+      "label": "Only relationship_style present",
+      "intent": "Partial map: love may emit; money/decisions omit — not invent from identity",
+      "foundations": {
+        "locale": "ru",
+        "person": {"birth_date": "1992-06-10"},
+        "identity": {
+          "identity_core": "Держит контакт через заботу и ясный тон; смысл в том, чтобы быть рядом без контроля.",
+          "strengths": ["Забота", "Тон", "Присутствие"],
+          "growth_zones": ["Самозабвение", "Молчаливая обида", "Нет границам"]
+        },
+        "styles": {
+          "relationship_style": "Близость через тёплую поддержку и право сказать о своих чувствах прямо.",
+          "money_style": "",
+          "decision_style": ""
+        },
+        "natal": {
+          "sun_sign": "Gemini",
+          "moon_sign": "Pisces",
+          "venus_sign": "Taurus",
+          "mars_sign": "Leo",
+          "mercury_sign": "Gemini",
+          "jupiter_sign": "Virgo",
+          "saturn_sign": "Aquarius",
+          "houses_available": false,
+          "houses": {}
+        }
+      }
+    },
+    {
+      "id": "lsq-08",
+      "contrast": "contradictory_foundations",
+      "label": "Identity slow/care · styles speed/impulse tension",
+      "intent": "Surface coherence risk: ruleset must not invent fake harmony; detect weak coherence",
+      "foundations": {
+        "locale": "ru",
+        "person": {"birth_date": "1987-09-20"},
+        "identity": {
+          "identity_core": "Живёт медленным накоплением смысла: сначала тишина и проверка, потом шаг к людям.",
+          "strengths": ["Терпение", "Глубина", "Наблюдательность"],
+          "growth_zones": ["Замирание", "Откладывание контакта", "Страх ошибки"]
+        },
+        "styles": {
+          "relationship_style": "Близость через быстрый темп, сразу к действию и сильную инициативу без долгих пауз.",
+          "money_style": "Деньги через смелый рост и готовность рисковать ради расширения.",
+          "decision_style": "Решения сразу: скорость важнее долгого анализа."
+        },
+        "natal": {
+          "sun_sign": "Virgo",
+          "moon_sign": "Capricorn",
+          "venus_sign": "Leo",
+          "mars_sign": "Aries",
+          "mercury_sign": "Libra",
+          "jupiter_sign": "Aries",
+          "saturn_sign": "Sagittarius",
+          "houses_available": false,
+          "houses": {}
+        }
+      }
+    }
+  ]
+}

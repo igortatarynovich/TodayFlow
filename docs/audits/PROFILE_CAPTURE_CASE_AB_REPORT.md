@@ -2,8 +2,9 @@
 
 **Date:** 2026-07-21  
 **Parent:** [PROFILE_PRODUCTION_CAPTURE_PACK.md](./PROFILE_PRODUCTION_CAPTURE_PACK.md) · [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md)  
+**life_spheres:** [PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md) · [PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md)  
 **Env fix:** `ffa50b5` (repo-root `.env` / Nebius) — closed separately  
-**Gates / prompts / UI / production timeout:** **not changed**
+**Patterns GENERATION_GATE:** shipped (`72224ae`). **Spheres control-flow / projector:** not yet implemented.
 
 ---
 
@@ -28,19 +29,29 @@
 | identity | 1 attempt · ok |
 | styles | 1 attempt · ok |
 | patterns | 2 attempts · **both fail** (`living_changes: null` while `_patterns_ok` requires ≥12 chars; patterns list still filled from birth/identity) |
-| spheres | **not started** (funnel stops after patterns fail → partial) |
-| quality / publish | `forming_fallback=true`, status **partial**, Snapshot/GET identity+styles only, `recurring_patterns=[]` |
-| FE QuickMap / visible_blocks | attached (identity/styles surface; no confirmed patterns) |
+| spheres | **not started** (funnel stops after patterns fail/skip → partial) |
+| quality / publish | `forming_fallback=true`, status **partial**, Snapshot/GET identity+styles only, `recurring_patterns=[]`, **no `life_spheres`** |
+| FE QuickMap / visible_blocks | attached (identity/styles surface; no confirmed patterns; no Direction spheres) |
 
 ### Confirmed defects (A)
 
 | Class | Code / evidence |
 |-------|-----------------|
-| `GENERATION_GATE` | eligibility forbids patterns; production still calls the step (`generation_ran_while_ineligible`) |
-| `RESPONSE_SCHEMA` | `_patterns_ok` requires `recurring_patterns` + `living_changes` without longitudinal evidence |
-| `PROMPT` (secondary) | step still asks for patterns / honesty under sparse living — wrong design vs gate |
+| `GENERATION_GATE` (patterns) | **Was:** eligibility forbade patterns but production still called the step. **Shipped fix:** skip LLM when ineligible (`patterns_skipped_ineligible`, attempts=0) |
+| `GENERATION_GATE` (spheres) | **Confirmed open defect:** after patterns skip/fail, spheres never start. Passport requires **independent** `spheres_projection_allowed` (natal-presence). Absence of spheres in Case A is **not** an acceptable product outcome |
+| `RESPONSE_SCHEMA` | (historical pack) `_patterns_ok` required `living_changes` while forcing the step — addressed for ineligible path by skip; schema still couples mission/helps to patterns step |
+| `PROMPT` (secondary) | (historical) honesty-under-sparse-living while schema required fill |
 
-Raw (both attempts) invents birth-style “recurring” lines (`Загорается новой идеей…`) with `living_changes: null` → validator rejects → no Snapshot patterns. **This is not «model invented» as a product diagnosis** — architecture forced the call and then rejected incomplete schema fill.
+**Case A expectation (locked by passport — no longer a hypothesis):**
+
+```text
+patterns: may_generate=false · ran=false
+spheres:  may_generate=true when natal+identity+styles foundations hold
+spheres:  projected (deterministic; PR-2: love/money/decisions)
+Snapshot/API/UI: keep projected spheres even with empty recurring_patterns
+```
+
+Current production after patterns gate: patterns correctly skipped; **spheres still absent** → spheres coupling defect remains until projector PR.
 
 ---
 
@@ -81,10 +92,11 @@ Literal notes are not copied into raw (good), but **semantic content matches liv
 
 ### Spheres (B)
 
-- Required by funnel after patterns.
+- **Current code:** reachable only after patterns success (LLM `profile.spheres.v1`).
 - First attempt: large raw, **JSON parse fail** → retry.
 - Second attempt: accepted 9×6 fields.
-- **Open hypothesis:** spheres still may duplicate styles/identity (not fully audited here); uniqueness not proven, but step is reachable when patterns succeed.
+- **Target:** spheres must **not** depend on patterns result. Case B proves patterns+living path; it does **not** justify coupling. After projector: Case B patterns remain; spheres come from deterministic ruleset (legacy LLM retired as content authority).
+- Uniqueness vs identity/styles: still must be proven by projector validation gates (`identity_echo`, `spheres_not_distinct`).
 
 ---
 
@@ -105,11 +117,12 @@ Cause: assembled capture GET body has `living.signals[]` but **no** `living.sign
 | Hypothesis | Status |
 |------------|--------|
 | «Плохой Profile = модель выдумывает» | **Rejected** as diagnosis — use architectural classes |
-| Patterns on birth-only should not run | **Confirmed** (eligibility false, production still runs) |
+| Patterns on birth-only should not run | **Confirmed** → **gate shipped** (skip when ineligible) |
 | Asking «не выдумывай» is enough | **Rejected** — schema + forced step dominate |
 | Patterns with living use longitudinal input | **Supported** (prompt contains living; raw/Snapshot/UI reflect it) |
-| All four steps always complete | **Only when prior steps ok** — A stops at patterns; B completes spheres on retry |
-| Spheres always unique knowledge | **Still open** |
+| All four steps always complete | **Current:** only when patterns ok — A stops; B may reach LLM spheres. **Target:** spheres independent of patterns |
+| Spheres require patterns success | **Rejected as product** — accidental coupling; confirmed `GENERATION_GATE` defect on spheres |
+| Spheres = natal-presence deterministic | **Locked** (passport + projector spec); implementation pending |
 | FE always mirrors Snapshot depth | **Partial fail** on Evidence depth without `signals_days` |
 
 ---
@@ -117,30 +130,47 @@ Cause: assembled capture GET body has `living.signals[]` but **no** `living.sign
 ## Comparative one-liner
 
 ```text
-A: eligibility FORBIDS patterns → production STILL runs → schema rejects null living_changes
-   → partial Snapshot without patterns → UI without confirmed patterns
+A (after patterns gate): patterns SKIPPED correctly → partial without patterns
+   → DEBT: spheres still not started (coupling) → UI without Direction spheres
+A (target): patterns skipped · spheres projected from foundations · UI keeps spheres
 
-B: eligibility ALLOWS patterns → living facts IN prompt → patterns IN raw/Snapshot/GET/UI
-   → spheres retry then ok → ready contract
+B (current): patterns OK → legacy LLM spheres after patterns → ready
+B (target): patterns OK · spheres from projector independent of patterns result
 ```
 
 ---
 
-## First narrow implementation slice (from evidence)
+## Implementation slices
 
-**Status: IMPLEMENTED** — `patterns_generation_allowed` gate in `profile_disclosure_funnel_v0`.
+### Slice 1 — patterns GENERATION_GATE
+
+**Status: IMPLEMENTED** — `patterns_generation_allowed` in `profile_disclosure_funnel_v0`.
 
 ```text
-if not patterns_generation_allowed(user_json):  # classify_allowed_claims(depth).recurring_patterns
+if not patterns_generation_allowed(user_json):
     skip profile.patterns.v1 (no LLM call)
     Snapshot / merge: recurring_patterns=[], living_changes=null
     reason=patterns_skipped_ineligible · partial=true
-    spheres not started (same as prior patterns_failed stop — spheres code unchanged)
+    # DEBT (still true after slice 1): spheres not started
 ```
 
-Regression: Case A path → patterns attempts=0, may_generate=false, ran=false.  
-Case B path unchanged when living/check-ins make depth ≥ profile_plus_checkins.
+Regression: Case A → patterns attempts=0, may_generate=false, ran=false.
 
+### Slice 2 — life_spheres foundation (PR-2)
+
+**Status: IMPLEMENTED** — `life_spheres_projector_v0` + funnel continues after patterns skip/fail.  
+Spec: [PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md).
+
+```text
+identity → styles
+  → patterns IFF patterns_generation_allowed   # unchanged
+  → spheres IFF spheres_projection_allowed     # independent of patterns outcome
+content = deterministic projector v0.1 (love, money, decisions)
+partial Snapshot.life_spheres allowed
+legacy profile.spheres.v1 = not target authority
+```
+
+**Case A success criteria after Slice 2:** patterns ran=false; spheres eligibility true; spheres projected; Snapshot/API/UI retain them.
 
 ---
 
@@ -150,3 +180,5 @@ Case B path unchanged when living/check-ins make depth ≥ profile_plus_checkins
 |------|--------|
 | 2026-07-21 | Case A/B packs analyzed; comparative report; slice = patterns generation gate |
 | 2026-07-21 | **IMPLEMENTED** production GENERATION_GATE: skip patterns when ineligible |
+| 2026-07-21 | Locked Case A spheres expectation; patterns↔spheres coupling = confirmed defect; Slice 2 = projector spec |
+| 2026-07-21 | **IMPLEMENTED** Slice 2: deterministic spheres (love/money/decisions) + funnel decoupling |

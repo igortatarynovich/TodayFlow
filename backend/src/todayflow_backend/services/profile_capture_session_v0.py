@@ -140,7 +140,7 @@ class ProfileCaptureSession:
         self.pack["block_eligibility"] = {
             "identity": {
                 "may_generate": True,
-                "reason": "general portrait allowed from birth/baseline",
+                "reason": "birth_date + sun_sign/baseline/life_path (refined at funnel gate)",
                 "min_source_depth": "birth_data_only",
                 "ran": None,
             },
@@ -162,7 +162,7 @@ class ProfileCaptureSession:
             },
             "spheres": {
                 "may_generate": True,
-                "reason": "spheres eligibility open until passport decides otherwise",
+                "reason": "natal-presence; refined after styles via spheres_projection_allowed",
                 "min_source_depth": "birth_data_only",
                 "ran": None,
             },

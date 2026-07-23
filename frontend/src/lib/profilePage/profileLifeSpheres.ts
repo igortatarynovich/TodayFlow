@@ -91,15 +91,16 @@ export type BuildProfileLifeSpheresFromChartInput = {
   plutoLine: string;
 };
 
+/** No fake-live portrait copy — empty when API/chart absent (DoD / PROFILE freeze). */
 const DEFAULTS = {
-  love: "Здесь видно, как ты входишь в близость, где тебе нужна ясность, а где связь начинает забирать слишком много сил.",
-  career: "Этот слой показывает, в какой роли ты становишься заметной, на что реально можно опереться в работе и где не стоит жить только в режиме обслуживания чужих задач.",
-  money: "Через этот слой читается не только тема денег, но и чувство ценности себя, устойчивости и того, на чём тебе безопасно строить рост.",
-  family: "Здесь видно, что для тебя значит дом, откуда идёт внутреннее восстановление и какие форматы близости дают опору, а не перегруз.",
-  kids: "Если тема актуальна, она проявится в сфере дома и ответственности; иначе блок остаётся нейтральным якорем.",
-  bodyMoonOnly: "Когда Луна в карте стабильна, здесь появится конкретика про сон, накопление и срывы.",
-  friends: "Когда Меркурий в карте читается устойчиво, здесь появится срез дружбы и сети поддержки.",
-  decisions: "Сатурн в карте покажет, где ты взрослеешь через структуру и честные ограничения.",
+  love: "",
+  career: "",
+  money: "",
+  family: "",
+  kids: "",
+  bodyMoonOnly: "",
+  friends: "",
+  decisions: "",
 };
 
 /**
@@ -172,8 +173,8 @@ function buildSpheresFromContractOnly(
 
 /**
  * Life spheres for Profile V2.
- * Ready portrait → only LLM contract spheres (no chart/template silent fill).
- * Forming/partial → empty list; UI shows forming state.
+ * Snapshot contract spheres only (validated synthesis or legacy) — no chart/DEFAULTS fill.
+ * Partial maps (e.g. love/money/decisions) are valid; patterns not required.
  */
 export function buildProfileLifeSpheresFromProfileData(
   preview: NatalChartPreview | null,
@@ -184,21 +185,29 @@ export function buildProfileLifeSpheresFromProfileData(
     return [];
   }
   const contract = core?.profile_contract_v1;
-  // Wrong-language portrait (e.g. EN contract on RU UI) → RU chart/template spheres, not English LLM.
+  if (!contract) {
+    return [];
+  }
+  // Wrong-language portrait → do not show mismatched copy (legacy path only when no contract spheres).
   if (!profileContractMatchesLocale(contract)) {
+    const contractSpheres = contract.life_spheres;
+    const hasContractSpheres =
+      contractSpheres &&
+      typeof contractSpheres === "object" &&
+      Object.keys(contractSpheres).length > 0;
+    if (hasContractSpheres) {
+      return [];
+    }
     const withoutContract = core ? { ...core, profile_contract_v1: undefined } : null;
     return buildProfileLifeSpheresFromProfileDataLegacy(preview, withoutContract);
   }
-  const contractSpheres = contract?.life_spheres;
+  const contractSpheres = contract.life_spheres;
   if (!contractSpheres || typeof contractSpheres !== "object") {
     return [];
   }
   const fromContract = buildSpheresFromContractOnly(contractSpheres);
-  if (fromContract.length >= 9) {
-    return fromContract;
-  }
-  // Incomplete contract → do not mix with hardcoded DEFAULTS.
-  return [];
+  // Partial synthesis OK (love/money/decisions slice). Never pad with FE DEFAULTS.
+  return fromContract;
 }
 
 /** @deprecated chart/template path kept for legacy tests only — not used by Profile V2. */
@@ -251,9 +260,7 @@ export function buildProfileLifeSpheresFromChart(input: BuildProfileLifeSpheresF
   const sexChart = joinHow([h(8), plutoLine, venusLine, marsLine]);
   const sexPlanetaryFallback =
     venusLine && marsLine ? `${venusLine} ${marsLine}`.trim() : venusLine || marsLine || "";
-  const sexDefault =
-    sexPlanetaryFallback ||
-    "Когда в карте стабильно видны Венера и Марс, здесь появится прямой разбор желания, темпа в сексе и телесных границ.";
+  const sexDefault = sexPlanetaryFallback || "";
   const sexCore = sphereHow(input.sex, sexDefault, sexChart, "sex");
   const sexTips = (input.sexPracticalTips || []).filter((t) => t.trim());
 

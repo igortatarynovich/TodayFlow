@@ -127,7 +127,15 @@ export function ProfileSetupSection({
             </div>
 
             <div style={{ display: "grid", gap: "0.7rem", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
-              <SetupStatCard label="Имя" value={setupForm.first_name || "—"} hint="Это имя станет точкой входа для персональных подсказок." />
+              <SetupStatCard
+                label="Имя"
+                value={setupForm.first_name || "—"}
+                hint={
+                  setupForm.first_name
+                    ? "Открывает именную нумерологию; на натальную карту не влияет."
+                    : "Необязательно. Без имени доступен весь профиль, кроме нумерологии имени."
+                }
+              />
               <SetupStatCard
                 label="Текст «ты»"
                 value={
@@ -139,16 +147,30 @@ export function ProfileSetupSection({
                 }
                 hint="Согласование формулировок в интерфейсе."
               />
-              <SetupStatCard label="Дата рождения" value={setupForm.birth_date || "—"} hint="На ней держатся знак, дома, карта и числовой слой." />
               <SetupStatCard
-                label="Точность времени"
-                value={setupForm.time_unknown ? "Без времени" : setupForm.birth_time || "Время добавлено"}
-                hint={setupForm.time_unknown ? "Профиль уже работает, но дома и углы могут быть менее точными." : "Точное время помогает удержать дома и оси без размывания."}
+                label="Дата рождения"
+                value={setupForm.birth_date || "—"}
+                hint="Базовая астрологическая и нумерологическая основа профиля."
               />
               <SetupStatCard
-                label="Город"
+                label="Время рождения"
+                value={setupForm.time_unknown ? "Не указано" : setupForm.birth_time || "Добавлено"}
+                hint={
+                  setupForm.time_unknown
+                    ? "Без времени Асцендент, дома и MC недоступны — не «менее точные», а закрыты."
+                    : "Открывает Асцендент, дома и углы карты."
+                }
+              />
+              <SetupStatCard
+                label="Место рождения"
                 value={setupForm.location_name || "—"}
-                hint={hasResolvedBirthplace ? "Город подтвержден через поиск и сохранен с координатами." : "Название сохранено, но координаты еще можно уточнить."}
+                hint={
+                  setupForm.time_unknown
+                    ? "Без времени место почти ничего не добавляет к профилю; можно сохранить на будущее."
+                    : hasResolvedBirthplace
+                      ? "Координаты сохранены — дома и углы считаются для вашего времени."
+                      : "Нужно вместе со временем, чтобы правильно перевести часовой пояс и построить дома."
+                }
               />
             </div>
 
@@ -170,8 +192,11 @@ export function ProfileSetupSection({
         <form onSubmit={onSubmit} className="orbit-form" style={{ marginTop: "0.9rem" }}>
           <div style={{ display: "grid", gap: "0.85rem", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
             <label>
-              Имя *
-              <input type="text" value={setupForm.first_name} onChange={(e) => onFieldChange("first_name", e.target.value)} required disabled={isBuilding} />
+              Имя <span style={{ fontWeight: 500, color: "#8a7a66" }}>(необязательно)</span>
+              <input type="text" value={setupForm.first_name} onChange={(e) => onFieldChange("first_name", e.target.value)} disabled={isBuilding} />
+              <span className="orbit-body-xs" style={{ display: "block", marginTop: "0.35rem", color: "#64748b", lineHeight: 1.55 }}>
+                Добавляет нумерологию имени. Натальная карта от имени не зависит.
+              </span>
             </label>
             {!isOnboarding ? (
               <label>
@@ -203,7 +228,7 @@ export function ProfileSetupSection({
             <div style={{ border: "1px solid rgba(201, 168, 115, 0.22)", borderRadius: "16px", padding: "0.85rem 0.9rem", background: "rgba(255,252,246,0.86)", color: "#5f4930" }}>
               <p className="orbit-body-xs" style={{ margin: 0, textTransform: "uppercase", letterSpacing: "0.08em", color: "#ab8750" }}>Зачем нужно время</p>
               <p className="orbit-body-xs" style={{ margin: "0.38rem 0 0", lineHeight: 1.6 }}>
-                Точное время помогает правильно построить дома карты и сделать профиль заметно точнее в темах отношений, карьеры и жизненных периодов.
+                Время рождения открывает Асцендент, 12 домов и MC — внешнее проявление и распределение тем по жизненным сферам. Без времени эти слои недоступны.
               </p>
             </div>
             {!setupForm.time_unknown ? (
@@ -211,12 +236,12 @@ export function ProfileSetupSection({
                 Время рождения
                 <input type="time" value={setupForm.birth_time || ""} onChange={(e) => onFieldChange("birth_time", e.target.value)} disabled={isBuilding} />
                 <span className="orbit-body-xs" style={{ display: "block", marginTop: "0.35rem", color: "#64748b", lineHeight: 1.55 }}>
-                  Если знаешь время примерно, лучше указать хотя бы его, чем оставлять поле пустым.
+                  Если знаете время примерно — укажите его. Вместе с местом это откроет Асцендент и дома.
                 </span>
               </label>
             ) : (
               <div style={{ display: "flex", alignItems: "center", border: "1px dashed rgba(143,119,86,0.3)", borderRadius: "16px", padding: "0.9rem", color: "#6b7280", fontSize: "0.9rem" }}>
-                Профиль можно собрать и без времени. Просто часть карты будет менее точной, и это нормально для первого входа.
+                Без времени доступны Солнце, планеты по знакам, аспекты и нумерология даты. Асцендент, дома и MC остаются закрытыми.
               </div>
             )}
             <label style={{ display: "flex", alignItems: "center", gap: "0.6rem", alignSelf: "end" }}>
@@ -226,7 +251,8 @@ export function ProfileSetupSection({
           </div>
 
           <label style={{ marginTop: "0.85rem" }}>
-            Место рождения *
+            Место рождения{" "}
+            <span style={{ fontWeight: 500, color: "#8a7a66" }}>(откроет Асцендент вместе со временем)</span>
             <CityAutocompleteInput
               value={setupForm.location_name}
               onChange={(value) => {
@@ -236,18 +262,24 @@ export function ProfileSetupSection({
               }}
               onSelect={onLocationSelect}
               placeholder="Город, страна"
-              required
+              required={false}
               disabled={isBuilding}
             />
           </label>
           <div style={{ marginTop: "0.55rem", borderRadius: "16px", padding: "0.8rem 0.9rem", background: hasResolvedBirthplace ? "rgba(236, 253, 245, 0.9)" : "rgba(255,252,246,0.86)", border: hasResolvedBirthplace ? "1px solid rgba(52, 211, 153, 0.28)" : "1px solid rgba(201, 168, 115, 0.2)" }}>
             <p className="orbit-body-sm" style={{ margin: 0, color: hasResolvedBirthplace ? "#166534" : "#5f4930", fontWeight: 700 }}>
-              {hasResolvedBirthplace ? "Город найден и координаты сохранены" : "Выбери город из подсказок"}
+              {hasResolvedBirthplace
+                ? "Город найден и координаты сохранены"
+                : setupForm.time_unknown
+                  ? "Место можно добавить позже вместе со временем"
+                  : "Время сохранится и без места — Асцендент откроется после координат"}
             </p>
             <p className="orbit-body-xs" style={{ margin: "0.28rem 0 0", color: hasResolvedBirthplace ? "#166534" : "#64748b", lineHeight: 1.55 }}>
               {hasResolvedBirthplace
-                ? "Это поможет точнее построить карту и не потерять место рождения из-за разницы в написании."
-                : "Лучше выбирать вариант из выпадающего списка. Так координаты сохранятся корректно, а карта будет точнее."}
+                ? "Координаты нужны, чтобы правильно перевести местное время в UTC и построить дома."
+                : setupForm.time_unknown
+                  ? "Без времени место почти ничего не добавляет к стабильному профилю."
+                  : "Время без места сохраняется, но не даёт Асцендент и дома. Выберите город из списка, чтобы открыть структуру карты."}
             </p>
           </div>
 

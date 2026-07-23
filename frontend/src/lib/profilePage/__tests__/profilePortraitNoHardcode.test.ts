@@ -35,6 +35,39 @@ describe("profile portrait no hardcode DoD", () => {
     expect(buildProfileLifeSpheresFromProfileData(null, core)).toEqual([]);
   });
 
+  it("partial contract with projected slice spheres surfaces those fields", () => {
+    const sphere = {
+      how: "Как проявляется: конкретная сцена недели в любви.",
+      need: "Нужна ясность и один честный шаг.",
+      risk: "Риск — взять лишнее обещание.",
+      turns_on: "Включает спокойный разговор.",
+      turns_off: "Выключает давление и сравнения.",
+      helps: "Помогает короткий слот в календаре.",
+    };
+    const core = {
+      profile_contract_v1: {
+        contract_version: "profile_contract_v1",
+        status: "partial",
+        identity_core: "Живой портрет человека с ясным фокусом.",
+        relationship_style: "style long enough",
+        money_style: "money style here",
+        decision_style: "decision style ok",
+        recurring_patterns: [],
+        life_spheres: {
+          love: sphere,
+          money: { ...sphere, how: "Деньги: спокойный шаг без импульса." },
+          decisions: { ...sphere, how: "Решения: один критерий и дедлайн." },
+        },
+      },
+    } as CoreProfile;
+
+    const spheres = buildProfileLifeSpheresFromProfileData(null, core);
+    expect(isProfilePortraitForming(core)).toBe(false);
+    expect(spheres).toHaveLength(3);
+    expect(spheres.map((s) => s.id).sort()).toEqual(["decisions", "love", "money"]);
+    expect(spheres.some((s) => s.how.includes("Здесь видно, как ты входишь"))).toBe(false);
+  });
+
   it("ready contract with 9 spheres surfaces LLM fields only", () => {
     const sphere = {
       how: "Как проявляется: конкретная сцена недели.",

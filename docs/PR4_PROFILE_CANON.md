@@ -5,11 +5,13 @@
 **Code:** `frontend/src/components/profile/v2/` · `frontend/src/lib/profilePage/buildProfileV2LiveContext.ts`  
 **Content pipeline:** [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) (C3 — generation; this doc is UI/IA boundaries)  
 **Screen legacy:** [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) — v0 visual master; **production IA supersedes** Living-Maps-as-Profile-half (see §7 note there).
-**Next stage:** [PROFILE_E2E_RECONSTRUCTION.md](./PROFILE_E2E_RECONSTRUCTION.md) (full chain audit) · [audits/PROFILE_AS_SOURCE_CONSUMPTION_AUDIT.md](./audits/PROFILE_AS_SOURCE_CONSUMPTION_AUDIT.md).  
+**Next stage:** [PROFILE_E2E_RECONSTRUCTION.md](./PROFILE_E2E_RECONSTRUCTION.md) — E2E + **Profile v1 Freeze Checklist** (ship-gate before Canon) · [audits/PROFILE_AS_SOURCE_CONSUMPTION_AUDIT.md](./audits/PROFILE_AS_SOURCE_CONSUMPTION_AUDIT.md).  
 **Depth / missing data / subscription:** [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](./UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md).
 
 > Profile is the identity source for Today, Tracking, Compatibility, Tarot.  
 > It answers only: **Who is this person?**
+>
+> **Canon principle:** not max features — **existing functions finished.** Freeze = can ship.
 
 ---
 

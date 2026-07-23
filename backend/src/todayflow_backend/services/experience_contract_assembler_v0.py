@@ -66,11 +66,18 @@ EXPERIENCE_ALLOWLISTS: Final[dict[str, frozenset[str]]] = {
             "helps",
             "strengths",
             "identity_line",
+            "identity_summary",
+            "emotional_style",
+            "relationship_style",
+            "work_and_realization",
             "life_path",
             "sun_sign",
+            "element",
+            "natal_mode",
             "rhythm",
             "display_name",
             "living_summary",
+            "profile_continuity",
             *PROVENANCE_FIELDS,
             "is_ready",
             "missing_fields",
@@ -208,9 +215,10 @@ def _conflict_style_from_snapshot(
 def _identity_line_from_snapshot(
     snapshot: Mapping[str, Any], contract: Mapping[str, Any]
 ) -> str | None:
-    hit = _clip(contract.get("identity_core"), 420)
-    if hit:
-        return hit
+    for key in ("identity_summary", "recognition_line", "identity_core"):
+        hit = _clip(contract.get(key), 420)
+        if hit:
+            return hit
     interp = _as_dict(snapshot.get("interpretation"))
     return _clip(interp.get("identity"), 420)
 
