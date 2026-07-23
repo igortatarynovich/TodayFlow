@@ -184,12 +184,14 @@ def validate_profile_contract_v1(payload: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     if payload.get("contract_version") != PROFILE_CONTRACT_V1:
         errors.append("invalid contract_version")
+    status = str(payload.get("status") or PROFILE_STATUS_READY).strip().lower()
+    # Forming / partial: empty scaffold is valid — never invent portrait copy.
+    if status in (PROFILE_STATUS_FORMING, PROFILE_STATUS_PARTIAL):
+        return errors
     if not str(payload.get("identity_core") or "").strip():
         errors.append("identity_core empty")
-    status = str(payload.get("status") or PROFILE_STATUS_READY).strip().lower()
-    # Generation / ready path requires recognition_line; forming may be empty.
-    if status != PROFILE_STATUS_FORMING:
-        errors.extend(validate_recognition_line(str(payload.get("recognition_line") or ""), require=True))
+    # Ready path requires recognition_line.
+    errors.extend(validate_recognition_line(str(payload.get("recognition_line") or ""), require=True))
     for key in ("strengths", "growth_zones", "recurring_patterns"):
         items = payload.get(key)
         if not isinstance(items, list) or len(items) < 1:
