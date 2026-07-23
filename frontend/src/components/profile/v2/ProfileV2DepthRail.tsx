@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import {
   PROFILE_V2_DEPTH_NAV,
+  PROFILE_V2_EXPLORE_NAV,
   type ProfileV2ZoneId,
 } from "@/components/profile/v2/profileV2SystemCopy";
 import styles from "@/components/profile/v2/profileV2System.module.css";
@@ -11,12 +12,17 @@ function zoneDomId(zone: ProfileV2ZoneId): string {
   return `profile-v2-${zone}`;
 }
 
-/** Right-rail section jump for Profile v2 — keeps the main column for content. */
+const ALL_NAV_IDS: ProfileV2ZoneId[] = [
+  ...PROFILE_V2_DEPTH_NAV.map((i) => i.id),
+  ...PROFILE_V2_EXPLORE_NAV.map((i) => i.id),
+];
+
+/** Right-rail journey jump — Explore/natal after the five steps. */
 export function ProfileV2DepthRail() {
   const [activeZone, setActiveZone] = useState<ProfileV2ZoneId>("recognition");
 
   useEffect(() => {
-    const nodes = PROFILE_V2_DEPTH_NAV.map((item) => document.getElementById(zoneDomId(item.id))).filter(
+    const nodes = ALL_NAV_IDS.map((id) => document.getElementById(zoneDomId(id))).filter(
       (node): node is HTMLElement => Boolean(node),
     );
     if (!nodes.length) return;
@@ -27,7 +33,7 @@ export function ProfileV2DepthRail() {
           .filter((entry) => entry.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
         const id = visible[0]?.target.id?.replace(/^profile-v2-/, "") as ProfileV2ZoneId | undefined;
-        if (id && PROFILE_V2_DEPTH_NAV.some((item) => item.id === id)) {
+        if (id && ALL_NAV_IDS.includes(id)) {
           setActiveZone(id);
         }
       },
@@ -39,8 +45,8 @@ export function ProfileV2DepthRail() {
   }, []);
 
   return (
-    <nav className={styles.railDepthNav} aria-label="Разделы профиля" data-testid="profile-v2-depth-rail">
-      <p className={styles.railDepthEyebrow}>По профилю</p>
+    <nav className={styles.railDepthNav} aria-label="Путешествие профиля" data-testid="profile-v2-depth-rail">
+      <p className={styles.railDepthEyebrow}>Твоя история</p>
       <ol className={styles.railDepthList}>
         {PROFILE_V2_DEPTH_NAV.map((item) => {
           const active = activeZone === item.id;
@@ -62,6 +68,29 @@ export function ProfileV2DepthRail() {
           );
         })}
       </ol>
+      <div className={styles.railExploreBlock}>
+        <p className={styles.railDepthEyebrow}>Исследовать</p>
+        <ul className={styles.railDepthList}>
+          {PROFILE_V2_EXPLORE_NAV.map((item) => {
+            const active = activeZone === item.id;
+            return (
+              <li key={item.id}>
+                <a
+                  href={`#${zoneDomId(item.id)}`}
+                  className={`${styles.railDepthStep} ${active ? styles.railDepthStepActive : ""}`.trim()}
+                  aria-current={active ? "true" : undefined}
+                  onClick={() => setActiveZone(item.id)}
+                >
+                  <span className={styles.railDepthCopy}>
+                    <span className={styles.railDepthTitle}>{item.title}</span>
+                    <span className={styles.railDepthHint}>{item.hint}</span>
+                  </span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </nav>
   );
 }
@@ -69,12 +98,15 @@ export function ProfileV2DepthRail() {
 /** Compact in-main jump strip when the shell rail is hidden (narrow viewports). */
 export function ProfileV2MobileDepthJump() {
   return (
-    <nav className={styles.mobileDepthJump} aria-label="Разделы профиля" data-testid="profile-v2-depth-jump">
+    <nav className={styles.mobileDepthJump} aria-label="Путешествие профиля" data-testid="profile-v2-depth-jump">
       {PROFILE_V2_DEPTH_NAV.map((item) => (
         <a key={item.id} href={`#${zoneDomId(item.id)}`} className={styles.mobileDepthChip}>
           {item.title}
         </a>
       ))}
+      <a href={`#${zoneDomId("explore")}`} className={styles.mobileDepthChip}>
+        Детали
+      </a>
     </nav>
   );
 }

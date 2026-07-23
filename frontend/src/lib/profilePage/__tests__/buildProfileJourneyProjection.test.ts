@@ -4,6 +4,8 @@ import type { CoreProfile } from "@/lib/types";
 describe("buildProfileJourneyProjection", () => {
   it("maps Steps 1–5 and prefers journey surface when recognition + why exist", () => {
     const core = {
+      astro: { sun_sign: "virgo", sun_element: "earth" },
+      numerology: { life_path: 7 },
       baseline: { archetype_seed: "explorer" },
       profile_contract_v1: {
         contract_version: "v1",
@@ -40,6 +42,7 @@ describe("buildProfileJourneyProjection", () => {
             grounded_on: [{ id: "g1", label: "Рост: спешка" }],
             help: "Дай себе один тихий проход перед решением.",
             living_evidence: ["снова сорвался в спешку"],
+            source_fields: ["growth_zones", "helps"],
           },
         ],
       },
@@ -52,21 +55,46 @@ describe("buildProfileJourneyProjection", () => {
           "Особенность уже ясна на уровне портрета. Today показывает, как она проявляется в конкретном дне — не как теория.",
         leads_to: "today",
       },
+      profile_matrix_v0: {
+        revealed_slots: {
+          cultural_catalog: { color: "изумрудный", traditions: [], stones: [] },
+          natal_structure: {
+            angles: { ascendant: { sign: "Leo" } },
+            houses: Array.from({ length: 12 }, (_, i) => ({ cusp: i + 1 })),
+          },
+          tensions_growth: { growth_zones: ["спешка"] },
+          helps: ["тишина"],
+          emotional_style: "Чувствует глубже.",
+        },
+      },
     } as CoreProfile;
 
     const journey = buildProfileJourneyProjection(core);
     expect(journey.hasJourneySurface).toBe(true);
-    expect(journey.recognitionName).toMatch(/Исследователь/i);
-    expect(journey.recognitionLine).toContain("структуру");
-    expect(journey.whySelectedBy).toHaveLength(1);
-    expect(journey.whyInfluencedBy[0]?.label).toContain("Дев");
-    expect(journey.node?.title).toBe("Ясность vs скорость");
-    expect(journey.node?.livingEvidence).toEqual(["снова сорвался в спешку"]);
+    expect(journey.recognition.name).toMatch(/Исследователь/i);
+    expect(journey.recognition.line).toContain("структуру");
+    expect(journey.identityMarkers).toEqual(["Дева", "Земля", "Путь 7"]);
+    expect(journey.identityMarkers).toHaveLength(3);
+    expect(journey.why?.selectedBy).toHaveLength(1);
+    expect(journey.why?.influencedBy[0]?.label).toContain("Дев");
+    expect(journey.insightNode?.title).toBe("Ясность vs скорость");
+    expect(journey.insightNode?.livingEvidence).toEqual(["снова сорвался в спешку"]);
     expect(journey.effortVector).toContain("тихий проход");
-    expect(journey.bridgeLeadsTo).toBe("today");
+    expect(journey.bridge?.leadsTo).toBe("today");
+
+    // Matrix catalog/natal go to progressiveDetails — not Journey IA order.
+    expect(journey.progressiveDetails.map((d) => d.id)).toContain("cultural_catalog");
+    expect(journey.progressiveDetails.map((d) => d.id)).toContain("natal_structure");
+    expect(journey.progressiveDetails.map((d) => d.id)).toContain("emotional_style");
+    // Consumed by insight node — omitted from explore lists.
+    expect(journey.progressiveDetails.map((d) => d.id)).not.toContain("tensions_growth");
+    expect(journey.progressiveDetails.map((d) => d.id)).not.toContain("helps");
+    // Natal explore must not dump cusp counts.
+    const natal = journey.progressiveDetails.find((d) => d.id === "natal_structure");
+    expect(natal?.lines.join(" ")).not.toMatch(/12 куспид/i);
   });
 
-  it("omits null steps and does not invent effort/bridge", () => {
+  it("omits null steps and does not invent effort/bridge/markers", () => {
     const journey = buildProfileJourneyProjection({
       baseline: { archetype_seed: "explorer" },
       profile_contract_v1: {
@@ -81,10 +109,28 @@ describe("buildProfileJourneyProjection", () => {
       },
     } as CoreProfile);
 
-    expect(journey.recognitionLine).toBeNull();
-    expect(journey.node).toBeNull();
+    expect(journey.recognition.line).toBeNull();
+    expect(journey.insightNode).toBeNull();
     expect(journey.effortVector).toBeNull();
-    expect(journey.bridgeLine).toBeNull();
+    expect(journey.bridge).toBeNull();
+    expect(journey.identityMarkers).toEqual([]);
     expect(journey.hasJourneySurface).toBe(false);
+  });
+
+  it("does not treat matrix slot order as journey surface alone", () => {
+    const journey = buildProfileJourneyProjection({
+      profile_matrix_v0: {
+        revealed_slots: {
+          cultural_catalog: { color: "золото", traditions: [], stones: [] },
+          emotional_style: "Стиль.",
+        },
+      },
+    } as CoreProfile);
+
+    expect(journey.hasJourneySurface).toBe(false);
+    expect(journey.progressiveDetails.map((d) => d.id)).toEqual([
+      "cultural_catalog",
+      "emotional_style",
+    ]);
   });
 });

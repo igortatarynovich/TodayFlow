@@ -60,8 +60,9 @@ function collectVisibleBlocks(
   return {
     identity: [
       quick.archetype,
-      j.recognitionName,
-      j.recognitionLine,
+      j.recognition.name,
+      j.recognition.line,
+      ...j.identityMarkers,
       quick.identitySummary,
       ...(quick.frameworkAnchors?.map((a) => a.label) ?? []),
     ].filter((x): x is string => Boolean(x?.trim())),
@@ -90,16 +91,16 @@ function collectVisibleBlocks(
       core.astro?.location_name ? `location:${core.astro.location_name}` : "location:missing",
     ].filter((x): x is string => Boolean(x?.trim())),
     journey: [
-      j.recognitionName,
-      j.recognitionLine,
-      ...j.whySelectedBy.map((r) => r.label),
-      ...j.whyInfluencedBy.map((r) => r.label),
-      j.whyHonesty,
-      j.node?.title,
-      j.node?.insight,
-      j.node?.help,
+      j.recognition.name,
+      j.recognition.line,
+      ...(j.why?.selectedBy.map((r) => r.label) ?? []),
+      ...(j.why?.influencedBy.map((r) => r.label) ?? []),
+      j.why?.honesty,
+      j.insightNode?.title,
+      j.insightNode?.insight,
+      j.insightNode?.help,
       j.effortVector,
-      j.bridgeLine,
+      j.bridge?.line,
     ].filter((x): x is string => Boolean(x && String(x).trim())),
   };
 }
