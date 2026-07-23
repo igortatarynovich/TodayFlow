@@ -252,9 +252,7 @@ export function ProfileSetupSection({
 
           <label style={{ marginTop: "0.85rem" }}>
             Место рождения{" "}
-            <span style={{ fontWeight: 500, color: "#8a7a66" }}>
-              {setupForm.time_unknown ? "(необязательно без времени)" : "*"}
-            </span>
+            <span style={{ fontWeight: 500, color: "#8a7a66" }}>(откроет Асцендент вместе со временем)</span>
             <CityAutocompleteInput
               value={setupForm.location_name}
               onChange={(value) => {
@@ -264,7 +262,7 @@ export function ProfileSetupSection({
               }}
               onSelect={onLocationSelect}
               placeholder="Город, страна"
-              required={!setupForm.time_unknown}
+              required={false}
               disabled={isBuilding}
             />
           </label>
@@ -274,14 +272,14 @@ export function ProfileSetupSection({
                 ? "Город найден и координаты сохранены"
                 : setupForm.time_unknown
                   ? "Место можно добавить позже вместе со временем"
-                  : "Выберите город из подсказок"}
+                  : "Время сохранится и без места — Асцендент откроется после координат"}
             </p>
             <p className="orbit-body-xs" style={{ margin: "0.28rem 0 0", color: hasResolvedBirthplace ? "#166534" : "#64748b", lineHeight: 1.55 }}>
               {hasResolvedBirthplace
                 ? "Координаты нужны, чтобы правильно перевести местное время в UTC и построить дома."
                 : setupForm.time_unknown
                   ? "Без времени место почти ничего не добавляет к стабильному профилю."
-                  : "Вместе со временем место открывает Асцендент и дома. Выберите город из списка, чтобы сохранить координаты."}
+                  : "Время без места сохраняется, но не даёт Асцендент и дома. Выберите город из списка, чтобы открыть структуру карты."}
             </p>
           </div>
 

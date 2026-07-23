@@ -14,6 +14,7 @@
 import type { CoreProfile } from "@/lib/types";
 import { getLocale } from "@/lib/i18n";
 import { isUsableProfileCopy } from "@/lib/profilePage/profileCopySafety";
+import { profileHelpsLineFromMatrix, profileSlotRevealed, PROFILE_SLOT_HELPS } from "@/lib/profilePage/profileMatrixAccess";
 import { compactProfileCopy, firstSentence } from "@/lib/profilePage/truncateProfileCopy";
 import { archetypeDisplayLabel } from "@/lib/visualIdentity/registry";
 
@@ -91,11 +92,13 @@ export function buildProfileFirstScreenProjection(
     };
   }
 
-  const helpsLine =
+  const helpsLineRaw =
+    profileHelpsLineFromMatrix(core) ||
     core?.effort_vector_v0?.effort_vector?.trim() ||
     contract?.helps?.[0]?.trim() ||
     rawNode?.help?.trim() ||
     null;
+  const helpsLine = profileSlotRevealed(core, PROFILE_SLOT_HELPS) ? helpsLineRaw : null;
 
   const bridgeLine = core?.bridge_line_v0?.bridge_line?.trim() || null;
 

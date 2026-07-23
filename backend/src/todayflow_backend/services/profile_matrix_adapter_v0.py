@@ -113,7 +113,10 @@ def project_profile_slots_v0(
         display_name=display_name,
         access=access,
     )
-    allowed = set((cap.get("profile_slots") or {}).get("allowed") or [])
+    slots_meta = cap.get("profile_slots") or {}
+    data_eligible = set(slots_meta.get("data_eligible") or slots_meta.get("allowed") or [])
+    revealed = set(slots_meta.get("revealed") or slots_meta.get("allowed") or [])
+    access_gated = set(slots_meta.get("access_gated") or slots_meta.get("gated_l3") or [])
     c = contract if isinstance(contract, dict) else {}
     facts = natal_facts if isinstance(natal_facts, dict) else {}
 
@@ -148,8 +151,9 @@ def project_profile_slots_v0(
         },
         SLOT_CTA_TODAY: {"ready": bool(birth_date or facts.get("mode"))},
         SLOT_CTA_DEPTH: {
-            "gated_l3": (cap.get("profile_slots") or {}).get("gated_l3") or [],
-            "omitted": (cap.get("profile_slots") or {}).get("omitted") or [],
+            "gated_l3": slots_meta.get("gated_l3") or [],
+            "access_gated": sorted(access_gated),
+            "omitted": slots_meta.get("omitted") or [],
         },
     }
 
@@ -158,16 +162,20 @@ def project_profile_slots_v0(
         if _is_empty_slot(val):
             raw_slots[key] = None
 
-    published: dict[str, Any] = {}
+    # Full interpretation bag (same for Free/Trial) — data eligibility only.
+    slots: dict[str, Any] = {}
     omitted: dict[str, str] = {}
     for slot_id, value in raw_slots.items():
-        if slot_id not in allowed:
-            omitted[slot_id] = "access_or_data_gate"
+        if slot_id not in data_eligible:
+            omitted[slot_id] = "data_gate"
             continue
         if value is None:
             omitted[slot_id] = "empty"
             continue
-        published[slot_id] = value
+        slots[slot_id] = value
+
+    revealed_slots = {k: v for k, v in slots.items() if k in revealed}
+    gated_present = sorted(k for k in slots if k in access_gated)
 
     return {
         "adapter_version": ADAPTER_VERSION,
@@ -178,8 +186,17 @@ def project_profile_slots_v0(
             "layers": cap.get("layers"),
             "profile_slots": cap.get("profile_slots"),
             "user_messages": cap.get("user_messages"),
+            "angles_eligible": cap.get("angles_eligible"),
+            "birth_time_unsuitable_for_angles": cap.get("birth_time_unsuitable_for_angles"),
+            "has_name": cap.get("has_name"),
+            "has_time": cap.get("has_time"),
+            "has_place": cap.get("has_place"),
+            "time_recorded": cap.get("time_recorded"),
         },
-        "slots": published,
+        # Full result projection (persist/read). UI must filter via revealed_slots.
+        "slots": slots,
+        "revealed_slots": revealed_slots,
+        "access_gated_slot_ids": gated_present,
         "omitted_slots": omitted,
         "provenance": {
             "facts_mode": facts.get("mode"),
@@ -190,9 +207,16 @@ def project_profile_slots_v0(
     }
 
 
+def slot_revealed(capability: dict[str, Any], slot_id: str) -> bool:
+    """True when UI may show the slot for this access tier."""
+    meta = capability.get("profile_slots") or {}
+    revealed = meta.get("revealed") or meta.get("allowed") or []
+    return slot_id in revealed
+
+
 def slot_allowed(capability: dict[str, Any], slot_id: str) -> bool:
-    allowed = (capability.get("profile_slots") or {}).get("allowed") or []
-    return slot_id in allowed
+    """Alias of slot_revealed (presentation). Data eligibility is separate."""
+    return slot_revealed(capability, slot_id)
 
 
 def _style_field(contract: dict[str, Any], *keys: str) -> Any:

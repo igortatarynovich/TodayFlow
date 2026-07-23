@@ -60,7 +60,7 @@ L2_STRUCTURE_SLOTS = frozenset(
 L3_SLOTS = frozenset({SLOT_HELPS})
 NAME_SLOTS = frozenset({SLOT_NAME_NUMEROLOGY})
 
-RESOLVER_VERSION = "capability_resolver_v0.1"
+RESOLVER_VERSION = "capability_resolver_v0.2"
 
 
 def _truthy_name(display_name: str | None) -> bool:
@@ -154,36 +154,49 @@ def allowed_profile_slots(
     has_name: bool,
     access: AccessTier,
 ) -> dict[str, Any]:
-    """Which matrix 3.1 slots may appear for this capability + access tier."""
+    """Matrix 3.1 slot gates.
+
+    - ``data_eligible`` — slots the interpretation may include (same for Free/Trial).
+    - ``revealed`` / ``allowed`` — slots UI may show for this access tier.
+    - ``access_gated`` — in the saved result, hidden in presentation (not a second interpretation).
+    - ``omitted`` — missing input data (not a tariff cut).
+    """
+    all_slots = L1_SLOTS | L2_STRUCTURE_SLOTS | L3_SLOTS | NAME_SLOTS
     if access == "guest" or mode == "none":
         return {
+            "data_eligible": [],
+            "revealed": [],
             "allowed": [],
-            "omitted": sorted(L1_SLOTS | L2_STRUCTURE_SLOTS | L3_SLOTS | NAME_SLOTS),
+            "access_gated": sorted(L3_SLOTS) if access != "guest" and mode == "none" else [],
+            "omitted": sorted(all_slots),
             "gated_l3": sorted(L3_SLOTS),
         }
 
-    allowed: set[str] = set(L1_SLOTS)
+    data_eligible: set[str] = set(L1_SLOTS) | set(L3_SLOTS)
     omitted: set[str] = set()
 
     if has_name:
-        allowed |= NAME_SLOTS
+        data_eligible |= NAME_SLOTS
     else:
         omitted |= NAME_SLOTS
 
     if mode == "full":
-        allowed |= L2_STRUCTURE_SLOTS
+        data_eligible |= L2_STRUCTURE_SLOTS
     else:
         omitted |= L2_STRUCTURE_SLOTS
 
-    if access_allows_l3(access):
-        allowed |= L3_SLOTS
-    else:
-        omitted |= L3_SLOTS
+    access_gated: set[str] = set()
+    if not access_allows_l3(access):
+        access_gated |= L3_SLOTS & data_eligible
 
+    revealed = data_eligible - access_gated
     return {
-        "allowed": sorted(allowed),
+        "data_eligible": sorted(data_eligible),
+        "revealed": sorted(revealed),
+        "allowed": sorted(revealed),  # presentation alias for UI wiring
+        "access_gated": sorted(access_gated),
         "omitted": sorted(omitted),
-        "gated_l3": sorted(L3_SLOTS) if not access_allows_l3(access) else [],
+        "gated_l3": sorted(access_gated & L3_SLOTS),
     }
 
 
@@ -219,8 +232,9 @@ def resolve_capability(
     )
     slots = allowed_profile_slots(mode=mode, has_name=has_name, access=access)
 
+    # Preserve entered time even when mode stays date_only (time without place).
     time_str: str | None = None
-    if has_time:
+    if has_time and birth_time is not None:
         if isinstance(birth_time, time):
             time_str = birth_time.strftime("%H:%M:%S")
         else:
@@ -234,17 +248,29 @@ def resolve_capability(
     else:
         birth_iso = None
 
+    location = (location_name or "").strip() or None
+    angles_eligible = mode == "full"
+    time_recorded = bool(has_time and time_str)
+    birth_time_unsuitable_for_angles = bool(time_recorded and not angles_eligible)
+
     available_input = {
         "display_name": (display_name or "").strip() or None,
         "birth_date": birth_iso,
         "birth_time": time_str,
         "time_unknown": not has_time,
-        "location_name": (location_name or "").strip() or None,
+        "location_name": location,
         "latitude": latitude,
         "longitude": longitude,
         "timezone_name": timezone_name,
         "mode": mode if mode != "none" else "date_only",
+        # Honesty markers — time may be saved while ASC/houses stay locked.
+        "angles_eligible": angles_eligible,
+        "time_recorded": time_recorded,
+        "birth_time_unsuitable_for_angles": birth_time_unsuitable_for_angles,
     }
+
+    l3_in_result = mode != "none"
+    l3_revealed = access_allows_l3(access) and l3_in_result
 
     return {
         "resolver_version": RESOLVER_VERSION,
@@ -253,13 +279,19 @@ def resolve_capability(
         "has_name": has_name,
         "has_time": has_time,
         "has_place": has_place,
+        "angles_eligible": angles_eligible,
+        "time_recorded": time_recorded,
+        "birth_time_unsuitable_for_angles": birth_time_unsuitable_for_angles,
         "available_input": available_input,
         "unavailable_facts": unavailable,
         "profile_slots": slots,
         "layers": {
             "l1": mode != "none",
             "l2_structure": mode == "full",
-            "l3_depth": access_allows_l3(access) and mode != "none",
+            # Saved interpretation may include L3; tariff only controls reveal.
+            "l3_in_result": l3_in_result,
+            "l3_revealed": l3_revealed,
+            "l3_depth": l3_revealed,  # alias: presentation depth, not a second generation
             "name_numerology": has_name and mode != "none",
         },
         "user_messages": _user_messages(

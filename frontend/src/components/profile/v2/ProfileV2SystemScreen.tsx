@@ -6,6 +6,7 @@ import { ProfileChartSection } from "@/components/profile/ProfileChartSection";
 import type { ProfileLifeSphere } from "@/components/profile/ProfileLifeSection";
 import { ProfilePortalDeepSection } from "@/components/profile/ProfilePortalDeepSection";
 import type { ProfileQuickMapDeepProps, ProfileQuickMapScreenProps } from "@/components/profile/quickMap/ProfileQuickMapScreen";
+import { ProfileV2MyDays } from "@/components/profile/v2/ProfileV2MyDays";
 import { ProfileV2SkySection } from "@/components/profile/v2/ProfileV2SkySection";
 import {
   PROFILE_V2_COPY,
@@ -62,6 +63,8 @@ export function ProfileV2SystemScreen({
 }: ProfileV2SystemScreenProps) {
   const formingMessage = portraitFormingMessageProp?.trim() || profilePortraitFormingMessage(null);
   const helps = live.helps;
+  const dataMessages = live.userMessages.filter((m) => m.code !== "l3_gated");
+  const l3Message = live.userMessages.find((m) => m.code === "l3_gated") ?? null;
 
   const showCharacterMore =
     Boolean(model.strengthens.length || model.drains.length || helps.length || model.decisionStyle || model.perceivedAs.length);
@@ -130,6 +133,25 @@ export function ProfileV2SystemScreen({
           <div className={styles.zone} data-testid="profile-portrait-forming" role="status">
             <p className={styles.zoneLead}>{formingMessage}</p>
           </div>
+        ) : null}
+
+        {dataMessages.length ? (
+          <section
+            className={styles.zone}
+            data-testid="profile-v2-capability-ctas"
+            aria-label="Что откроет следующий шаг"
+          >
+            <ul className={styles.traitGrid}>
+              {dataMessages.map((msg) => (
+                <li key={msg.code || msg.text} className={styles.traitCard}>
+                  <p className={styles.traitLine}>{msg.text}</p>
+                  <button type="button" className={styles.secondaryCta} onClick={onOpenBirthData}>
+                    Данные рождения
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
         ) : null}
 
         <section
@@ -237,7 +259,17 @@ export function ProfileV2SystemScreen({
             </header>
             <p className={styles.effortVector}>{helpsLine}</p>
           </section>
+        ) : live.helpsAccessGated && l3Message ? (
+          <section
+            className={styles.zone}
+            data-testid="profile-v2-helps-gated"
+            aria-label="Глубина профиля"
+          >
+            <p className={styles.zoneLead}>{l3Message.text}</p>
+          </section>
         ) : null}
+
+        <ProfileV2MyDays />
 
         <section
           className={styles.zone}
@@ -245,10 +277,14 @@ export function ProfileV2SystemScreen({
           aria-label="Дальше по профилю"
         >
           <div className={styles.actionRow}>
+            <Link href="/today" className={styles.bridgeCta} data-testid="profile-v2-open-today">
+              {PROFILE_V2_COPY.zones.actions.today}
+              <span aria-hidden> →</span>
+            </Link>
             {hasFullBody ? (
               <button
                 type="button"
-                className={styles.bridgeCta}
+                className={styles.secondaryCta}
                 data-testid="profile-v2-open-full"
                 aria-expanded={fullOpen}
                 aria-controls="profile-v2-full"
@@ -260,10 +296,6 @@ export function ProfileV2SystemScreen({
                 <span aria-hidden> {fullOpen ? "↑" : "→"}</span>
               </button>
             ) : null}
-            <Link href="/today" className={styles.secondaryCta} data-testid="profile-v2-open-today">
-              {PROFILE_V2_COPY.zones.actions.today}
-              <span aria-hidden> →</span>
-            </Link>
           </div>
           {bridgeLine ? <p className={styles.bridgeLine}>{bridgeLine}</p> : null}
           {!bridgeLine ? (

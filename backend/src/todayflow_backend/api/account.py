@@ -241,6 +241,9 @@ class CoreProfileResponse(BaseModel):
     living: dict | None = None
     natal_summary: dict | None = None  # сжатое текстовое резюме карты для персонализации (без сырых координат)
     snapshot_id: int | None = None  # CoreProfileSnapshot.id when loaded from published snapshot
+    # Ephemeral Availability 3.1 — not stored in Snapshot; access gates reveal only.
+    capability: dict | None = None
+    profile_matrix_v0: dict | None = None
 
 
 class CompactUserModelIdentity(BaseModel):
@@ -966,17 +969,9 @@ async def upsert_core_setup(
         settings.gender = normalized_g
     db.add(settings)
 
-    time_known = bool(payload.birth_time) and not payload.time_unknown
     location_name = (payload.location_name or "").strip()
-    if time_known and not location_name:
-        raise HTTPException(
-            status_code=400,
-            detail=translate(
-                "account.errors.placeRequiredWithTime",
-                locale=locale,
-                default="Birth place is required when birth time is known — otherwise Ascendant and houses cannot be calculated.",
-            ),
-        )
+    # Time without place is allowed: saved on the profile, mode stays date_only
+    # (ASC/houses locked until coordinates exist). Do not reject the save.
 
     latitude, longitude = (None, None)
     if location_name:

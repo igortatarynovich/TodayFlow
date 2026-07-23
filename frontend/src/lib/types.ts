@@ -466,9 +466,41 @@ export type CoreProfile = {
       };
     } | null;
   } | null;
+  /** Ephemeral Availability 3.1 — access gates reveal only; same saved profile for Free/Trial. */
+  capability?: {
+    resolver_version?: string;
+    mode?: "none" | "date_only" | "full" | string;
+    access?: "guest" | "free" | "trial" | "paid" | string;
+    layers?: {
+      l1?: boolean;
+      l2_structure?: boolean;
+      l3_in_result?: boolean;
+      l3_revealed?: boolean;
+      l3_depth?: boolean;
+      name_numerology?: boolean;
+    };
+    profile_slots?: {
+      data_eligible?: string[];
+      revealed?: string[];
+      allowed?: string[];
+      access_gated?: string[];
+      omitted?: string[];
+      gated_l3?: string[];
+    };
+    user_messages?: Array<{ code?: string; text?: string }>;
+    angles_eligible?: boolean;
+    birth_time_unsuitable_for_angles?: boolean;
+  } | null;
+  profile_matrix_v0?: {
+    adapter_version?: string;
+    slots?: Record<string, unknown>;
+    revealed_slots?: Record<string, unknown>;
+    access_gated_slot_ids?: string[];
+    omitted_slots?: Record<string, string>;
+    capability?: CoreProfile["capability"];
+  } | null;
 };
 
-export type ProfileSummary = {
   generated_at: string;
   profile_hash: string;
   is_ready: boolean;

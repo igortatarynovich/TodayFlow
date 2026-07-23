@@ -37,6 +37,28 @@ def test_resolve_access_tier_trial_and_paid():
     assert resolve_access_tier(is_guest=True) == "guest"
 
 
+def test_state_date_time_without_place_preserves_time():
+    cap = resolve_capability(
+        birth_date=date(1990, 5, 15),
+        birth_time=time(14, 30),
+        time_unknown=False,
+        access="free",
+    )
+    assert cap["mode"] == "date_only"
+    assert cap["has_time"] is True
+    assert cap["has_place"] is False
+    assert cap["available_input"]["birth_time"] == "14:30:00"
+    assert cap["available_input"]["time_unknown"] is False
+    assert cap["available_input"]["angles_eligible"] is False
+    assert cap["available_input"]["birth_time_unsuitable_for_angles"] is True
+    assert cap["birth_time_unsuitable_for_angles"] is True
+    assert _reason_for(cap["unavailable_facts"], "ascendant") == "birth_place_missing"
+    assert SLOT_NATAL_STRUCTURE not in cap["profile_slots"]["data_eligible"]
+    assert SLOT_HELPS in cap["profile_slots"]["data_eligible"]
+    assert SLOT_HELPS in cap["profile_slots"]["access_gated"]
+    assert SLOT_HELPS not in cap["profile_slots"]["revealed"]
+
+
 def test_state_date_only():
     cap = resolve_capability(birth_date=date(1990, 5, 15), access="free")
     assert cap["mode"] == "date_only"
@@ -45,11 +67,13 @@ def test_state_date_only():
     assert cap["has_name"] is False
     assert _reason_for(cap["unavailable_facts"], "ascendant") == "birth_time_missing"
     assert _reason_for(cap["unavailable_facts"], "name_numerology") == "name_missing"
-    assert SLOT_IDENTITY in cap["profile_slots"]["allowed"]
-    assert SLOT_NATAL_STRUCTURE not in cap["profile_slots"]["allowed"]
-    assert SLOT_NAME_NUMEROLOGY not in cap["profile_slots"]["allowed"]
+    assert SLOT_IDENTITY in cap["profile_slots"]["data_eligible"]
+    assert SLOT_IDENTITY in cap["profile_slots"]["revealed"]
+    assert SLOT_NATAL_STRUCTURE not in cap["profile_slots"]["data_eligible"]
+    assert SLOT_NAME_NUMEROLOGY not in cap["profile_slots"]["data_eligible"]
+    assert SLOT_HELPS in cap["profile_slots"]["data_eligible"]
+    assert SLOT_HELPS in cap["profile_slots"]["access_gated"]
     assert SLOT_HELPS not in cap["profile_slots"]["allowed"]
-    assert SLOT_HELPS in cap["profile_slots"]["gated_l3"]
 
 
 def test_state_date_plus_name():
@@ -60,23 +84,10 @@ def test_state_date_plus_name():
     )
     assert cap["mode"] == "date_only"
     assert cap["has_name"] is True
-    assert SLOT_NAME_NUMEROLOGY in cap["profile_slots"]["allowed"]
+    assert SLOT_NAME_NUMEROLOGY in cap["profile_slots"]["data_eligible"]
+    assert SLOT_NAME_NUMEROLOGY in cap["profile_slots"]["revealed"]
     assert _reason_for(cap["unavailable_facts"], "name_numerology") is None
     assert _reason_for(cap["unavailable_facts"], "ascendant") == "birth_time_missing"
-
-
-def test_state_date_time_without_place():
-    cap = resolve_capability(
-        birth_date=date(1990, 5, 15),
-        birth_time=time(14, 30),
-        time_unknown=False,
-        access="free",
-    )
-    assert cap["mode"] == "date_only"
-    assert cap["has_time"] is True
-    assert cap["has_place"] is False
-    assert _reason_for(cap["unavailable_facts"], "ascendant") == "birth_place_missing"
-    assert SLOT_NATAL_STRUCTURE not in cap["profile_slots"]["allowed"]
 
 
 def test_state_full_time_and_place():
@@ -93,15 +104,16 @@ def test_state_full_time_and_place():
     )
     assert cap["mode"] == "full"
     assert cap["layers"]["l2_structure"] is True
-    assert SLOT_NATAL_STRUCTURE in cap["profile_slots"]["allowed"]
-    assert SLOT_NAME_NUMEROLOGY in cap["profile_slots"]["allowed"]
+    assert SLOT_NATAL_STRUCTURE in cap["profile_slots"]["data_eligible"]
+    assert SLOT_NAME_NUMEROLOGY in cap["profile_slots"]["data_eligible"]
     assert not any(u["key"] == "ascendant" for u in cap["unavailable_facts"])
-    # Free still gates L3
-    assert SLOT_HELPS not in cap["profile_slots"]["allowed"]
-    assert cap["layers"]["l3_depth"] is False
+    assert SLOT_HELPS in cap["profile_slots"]["data_eligible"]
+    assert SLOT_HELPS not in cap["profile_slots"]["revealed"]
+    assert cap["layers"]["l3_in_result"] is True
+    assert cap["layers"]["l3_revealed"] is False
 
 
-def test_free_vs_trial_l3_gate():
+def test_free_vs_trial_l3_disclosure_same_data_eligible():
     base = dict(
         birth_date=date(1990, 5, 15),
         birth_time=time(14, 30),
@@ -112,12 +124,16 @@ def test_free_vs_trial_l3_gate():
     free = resolve_capability(**base, access="free")
     trial = resolve_capability(**base, access="trial")
     paid = resolve_capability(**base, access="paid")
-    assert SLOT_HELPS not in free["profile_slots"]["allowed"]
-    assert SLOT_HELPS in trial["profile_slots"]["allowed"]
-    assert SLOT_HELPS in paid["profile_slots"]["allowed"]
-    assert free["layers"]["l3_depth"] is False
-    assert trial["layers"]["l3_depth"] is True
-    assert paid["layers"]["l3_depth"] is True
+    assert free["profile_slots"]["data_eligible"] == trial["profile_slots"]["data_eligible"]
+    assert SLOT_HELPS in free["profile_slots"]["data_eligible"]
+    assert SLOT_HELPS in free["profile_slots"]["access_gated"]
+    assert SLOT_HELPS not in free["profile_slots"]["revealed"]
+    assert SLOT_HELPS in trial["profile_slots"]["revealed"]
+    assert SLOT_HELPS in paid["profile_slots"]["revealed"]
+    assert free["layers"]["l3_in_result"] is True
+    assert free["layers"]["l3_revealed"] is False
+    assert trial["layers"]["l3_revealed"] is True
+    assert paid["layers"]["l3_revealed"] is True
 
 
 def test_build_available_input_embeds_capability_and_precise_reason():
@@ -165,7 +181,7 @@ def test_validate_strips_angles_with_precise_reason():
     assert _reason_for(facts["unavailable_facts"], "ascendant") == "birth_place_missing"
 
 
-def test_adapter_omits_helps_on_free_publishes_on_trial():
+def test_adapter_keeps_helps_in_slots_gates_reveal_on_free():
     contract = {
         "recognition_line": "Вы опираетесь на устойчивость и ясность.",
         "helps": ["Держите утренний ритуал", "Закрывайте один контур в день"],
@@ -185,9 +201,10 @@ def test_adapter_omits_helps_on_free_publishes_on_trial():
         access="trial",
     )
     assert SLOT_IDENTITY in free_proj["slots"]
-    assert SLOT_HELPS not in free_proj["slots"]
-    assert free_proj["omitted_slots"].get(SLOT_HELPS) == "access_or_data_gate"
-    assert SLOT_HELPS in trial_proj["slots"]
+    assert SLOT_HELPS in free_proj["slots"]  # same saved result
+    assert SLOT_HELPS not in free_proj["revealed_slots"]
+    assert SLOT_HELPS in free_proj["access_gated_slot_ids"]
+    assert SLOT_HELPS in trial_proj["revealed_slots"]
     assert not slot_allowed(free_proj["capability"], SLOT_HELPS)
     assert slot_allowed(trial_proj["capability"], SLOT_HELPS)
 

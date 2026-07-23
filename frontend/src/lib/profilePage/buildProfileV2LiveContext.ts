@@ -6,6 +6,12 @@ import {
   type ProfileJourneyProjection,
 } from "@/lib/profilePage/buildProfileJourneyProjection";
 import { filterProfileCopyList } from "@/lib/profilePage/profileCopySafety";
+import {
+  PROFILE_SLOT_HELPS,
+  profileSlotInResult,
+  profileSlotRevealed,
+  profileUserMessages,
+} from "@/lib/profilePage/profileMatrixAccess";
 import { getLocale } from "@/lib/i18n";
 
 export type ObservationAccuracyLevel = "initial" | "forming" | "stable";
@@ -28,8 +34,12 @@ export type ProfileV2LiveContext = {
   evidenceBody: string;
   /** What would strengthen the portrait (no day agenda). */
   evidenceNextStep: string | null;
-  /** Stable helps only (contract + thrive) — never day recommendations. */
+  /** Stable helps only when L3 is revealed for this access tier. */
   helps: string[];
+  /** True when helps exist in the saved result but are access-gated. */
+  helpsAccessGated: boolean;
+  /** Resolver CTAs for missing name / time / place / L3. */
+  userMessages: Array<{ code: string; text: string }>;
   elementLabel: string | null;
   /** Journey Steps 1–5 — read-path projections mapped for UI. */
   journey: ProfileJourneyProjection;
@@ -168,6 +178,11 @@ export function buildProfileV2LiveContext(input: {
   const nextBase = DEPTH_NEXT[sourceDepth];
   const evidenceNextStep =
     nextBase && delta ? `${nextBase} (${delta})` : nextBase;
+  const helpsRevealed = profileSlotRevealed(input.coreProfile, PROFILE_SLOT_HELPS);
+  const helpsInResult = profileSlotInResult(input.coreProfile, PROFILE_SLOT_HELPS);
+  const stableHelps = helpsRevealed
+    ? buildStableHelps(input.thriveAreas ?? [], contractHelps)
+    : [];
 
   return {
     observationAccuracyLevel: accuracy.level,
@@ -176,7 +191,9 @@ export function buildProfileV2LiveContext(input: {
     evidenceTitle: evidenceTitleFor(sourceDepth, accuracy.level),
     evidenceBody: DEPTH_HONESTY[sourceDepth],
     evidenceNextStep,
-    helps: buildStableHelps(input.thriveAreas ?? [], contractHelps),
+    helps: stableHelps,
+    helpsAccessGated: Boolean(helpsInResult && !helpsRevealed && (contractHelps.length > 0 || (input.thriveAreas?.length ?? 0) > 0)),
+    userMessages: profileUserMessages(input.coreProfile),
     elementLabel: buildElementLabel(input.coreProfile),
     journey: buildProfileJourneyProjection(input.coreProfile),
   };

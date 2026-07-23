@@ -120,8 +120,8 @@
 | Ячейка | TARGET | CODE |
 |--------|--------|------|
 | Guest Profile | Нет полного `/profile` | ✅ auth gate; ценность 1B preview |
-| Free Profile | L1+L2 data-gated; без L3 | ✅ `capability_resolver_v0` + `profile_matrix_adapter_v0` omit `helps` / gated_l3 |
-| Trial = Paid depth | Целостный | ✅ `resolve_access_tier` (`trialing` → trial); Stripe длительность — billing |
+| Free Profile | L1+L2 data-gated; L3 **в результате**, reveal Trial+ | ✅ `data_eligible` ⊇ L3; `revealed` без L3 на Free; UI читает `revealed_slots` |
+| Trial = Paid depth | Целостный; тот же saved profile | ✅ `resolve_access_tier` (`trialing` → trial); не вторая интерпретация |
 
 ---
 
@@ -239,3 +239,5 @@ available_input → natal_facts (LLM) → calculated_facts + unavailable
 | 2026-07-22 | v0.3 — Capability Contracts pointer |
 | 2026-07-22 | **v1.0 APPROVED (Profile)** — поле→copy слой 1; Free/Trial/Guest слой 2; полная таблица слотов 3.1; closed decisions; facts SoT = `natal_facts` LLM |
 | 2026-07-22 | CODE: Capability Resolver + natal_facts `capability` pack + matrix adapter (без UI IA) |
+| 2026-07-22 | CODE: time-without-place preserved; Free/Trial = disclosure not second interpretation; Profile UI reads `revealed_slots` + `user_messages` |
+| 2026-07-22 | ACCEPTANCE: `tests/test_profile_matrix_31_acceptance.py` — 6 payloads + contradiction rules (gated∈slots, data-omit∉slots) |
