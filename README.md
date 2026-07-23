@@ -1,6 +1,6 @@
 # TodayFlow Monorepo
 
-Product and architecture canon live in **`docs/`** — start with [docs/README.md](./docs/README.md) and [docs/CORE_PRODUCT_CANON.md](./docs/CORE_PRODUCT_CANON.md).
+Agents: start with [AGENTS.md](./AGENTS.md). Documentation entry point: [docs/README.md](./docs/README.md) (five sections only).
 
 This repo holds:
 

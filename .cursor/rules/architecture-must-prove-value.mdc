@@ -1,0 +1,40 @@
+---
+description: No premature architecture — must prove quality gain or less duplicated code
+alwaysApply: true
+---
+
+# Architecture Must Prove Value
+
+**Канон:** [docs/PRODUCT_TRUTH_FIRST.md](../../docs/PRODUCT_TRUTH_FIRST.md) § «Архитектура только с доказанной пользой»
+
+> Инфраструктура не должна расти быстрее продукта.
+
+## Жёсткое правило
+
+Любая **новая** архитектура (engine, registry, abstraction layer, cross-surface framework) создаётся только если заранее доказано **хотя бы одно**:
+
+1. **Заметно повышает качество** пользовательского ответа (измеримо: eval / Case A/B / contrast pack), **или**
+2. **Заметно сокращает** объём повторяющегося кода в уже существующих рабочих потоках.
+
+Если не доказано ни одно — **архитектура не создаётся** (можно оставить заметку в docs, не код-каркас «на вырост»).
+
+## Приоритет работы
+
+Экран за экраном:
+
+1. Зачем экран?  
+2. Что пользователь должен понять?  
+3. Какие уже рассчитанные данные нужны?  
+4. Какой prompt?  
+5. Проверка качества.  
+6. Wiring.  
+7. UI.  
+
+Затем следующий экран — не следующий «слой платформы».
+
+## Заморожено (не развивать без нового доказанного кейса)
+
+- P5 Canonical Context Engine slices P5.2+ (FactAtoms, Today/Compat migration, new registries)
+- Расширение `context_engine_v0` beyond thin mapping already used by spheres synthesis
+
+Существующий working code (synthesis, cues, question→sphere mapping in use) **не удалять** ради «чистоты» — не наращивать.

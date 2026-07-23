@@ -1,84 +1,99 @@
-# Документация TodayFlow
+# TodayFlow documentation
 
-Только **живой канон**. Ветки A–E (Evolution/Calendar/Symbolic/Practice registries), screen-pipeline, старые `spec/` и дублирующие спеки удалены **2026-06-23** — история в `PRODUCT_EXECUTION_TRACKER` changelog.
+**Единственная точка входа.** Остальные файлы в `docs/` доступны только через разделы ниже.
 
-## С чего начать
+Agent rules: [AGENTS.md](../AGENTS.md) · Documentation process: [`.cursor/rules/docs-single-canon.mdc`](../.cursor/rules/docs-single-canon.mdc)  
+Full file list (before any archive): [DOCUMENTATION_INVENTORY.md](./DOCUMENTATION_INVENTORY.md)
 
-| Слой | Документ |
-|------|----------|
-| **Полный пользовательский путь (аудит + целевой канон)** | [audits/FULL_USER_PATH_CANON_V1.md](./audits/FULL_USER_PATH_CANON_V1.md) — лендинг → привычка D30 · противоречия X* · реестр генераций |
-| **Product Build Map (№1 — product SoT)** | [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md) — entities · **два базовых закона** · Personal Model pointer |
-| **Personal Model ↔ code** | [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md) — P0 read-path · [P1 Experience wiring](./audits/PERSONAL_MODEL_EXPERIENCE_WIRING_P1_2026-07-21.md) |
-| Product Model (reference) | [TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md) — §4 content model |
-| Launch gaps / DoD / code | [status/WEB_LAUNCH_EXECUTION_PLAN.md](./status/WEB_LAUNCH_EXECUTION_PLAN.md) |
-| Launch UX feel (reference) | [status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md](./status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md) |
-| Трекер работ | [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md) |
+> Consolidated `PRODUCT_MAP.md` / `TECHNICAL_ARCHITECTURE.md` / `GENERATION_REGISTRY.md` / `IMPLEMENTATION_STATUS.md` / `screens/*` are **planned in PR-2**. Until then each section names the **interim** authority — update those files in place; do not add a competing SoT.
 
-## PIM · Intelligence
+---
 
-- [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) — сквозной канон: learning-aware, PIL pipeline
-- [USER_KNOWLEDGE_MODEL.md](./USER_KNOWLEDGE_MODEL.md) — Knowledge Atoms
-- [INTENT_MODEL_V1.md](./INTENT_MODEL_V1.md) · [HUMAN_DECISION_MODEL_V1.md](./HUMAN_DECISION_MODEL_V1.md)
-- [INTERPRETATION_LAYER_AND_REFERENCE.md](./INTERPRETATION_LAYER_AND_REFERENCE.md) — event ≠ meaning
-- [KNOWLEDGE_ACQUISITION_AND_SIGNAL_POLICY.md](./KNOWLEDGE_ACQUISITION_AND_SIGNAL_POLICY.md)
-- [API_MEMORY_AND_LEARNING_LAYER.md](./API_MEMORY_AND_LEARNING_LAYER.md) — LLM Call Gate, cache, ROI
-- [CONTRADICTION_AND_REEVALUATION_V1.md](./CONTRADICTION_AND_REEVALUATION_V1.md)
+## 1. Product Map
 
-## Data · Reference (фаза 1)
+What the product is, user path, and how we decide what to build.
 
-- [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md)
-- [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md)
-- [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md)
-- [DAYMODEL_INPUT_CONTRACT.md](./DAYMODEL_INPUT_CONTRACT.md)
-- [ASTROLOGY_MACHINE_CONTRACT.md](./ASTROLOGY_MACHINE_CONTRACT.md) · [ASTROLOGY_COMPOSITION_MODEL.md](./ASTROLOGY_COMPOSITION_MODEL.md) · [CROSS_DOMAIN_MACHINE_VALIDATION.md](./CROSS_DOMAIN_MACHINE_VALIDATION.md)
-- [EVOLUTION_CALCULATION_CONTRACT.md](./EVOLUTION_CALCULATION_CONTRACT.md) — **запрет `evolution_stage` в API** до UEM-2
+| Role | Interim doc |
+|------|-------------|
+| Product model | [TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md) |
+| Build sequence (question → entity → sources → UI) | [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md) |
+| Display honesty | [PRODUCT_TRUTH_FIRST.md](./PRODUCT_TRUTH_FIRST.md) |
+| Progress / depth / missing | [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](./UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md) |
+| First-day path | [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) |
 
-## Today · Profile (experience)
+Related detail under this section: inventory → **Product Map**.
 
-- [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) — **ACCEPTED** experience layer Today
-- [TODAY_LANGUAGE_V1.md](./TODAY_LANGUAGE_V1.md) — язык и quality gate копирайта
-- [TODAY_PRODUCT_MODEL.md](./TODAY_PRODUCT_MODEL.md) · [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) — **guest → onboarding → First Today** (route contract v2)
-- [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md) — контракт, events, prompts (web + iOS)
-- [TODAY_CONTRACT_ASSEMBLER_MAPPING.md](./TODAY_CONTRACT_ASSEMBLER_MAPPING.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md)
-- [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) · [DAY_CONTEXT_V0.md](./DAY_CONTEXT_V0.md)
-- [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) · [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md)
-- [DAILY_NAVIGATION_MODEL.md](./DAILY_NAVIGATION_MODEL.md) · [CORE_USER_LOOP.md](./CORE_USER_LOOP.md) · [MARKET_ATTENTION_AND_SCREEN_JOBS.md](./MARKET_ATTENTION_AND_SCREEN_JOBS.md)
-- [EXPLAIN_MEANING_NOT_MECHANISM.md](./EXPLAIN_MEANING_NOT_MECHANISM.md)
+---
 
-## Статусы · схемы · i18n
+## 2. Technical Architecture
 
-- [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md) — **product SoT** · Entity Catalog · Design Tokens
-- [status/WEB_LAUNCH_EXECUTION_PLAN.md](./status/WEB_LAUNCH_EXECUTION_PLAN.md) — gaps · DoD · Decision Log
-- [status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md](./status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md) — screen feel/do (reference)
-- [status/BEHAVIOR_CHANGE_TEST_V0.md](./status/BEHAVIOR_CHANGE_TEST_V0.md) — **Minimum Day Cycle** ship gate (Evening Close + Tomorrow) · behavior test BLOCKED
-- [status/IOS_TODAYFLOW_STATUS.md](./status/IOS_TODAYFLOW_STATUS.md) — web + iOS направление
-- [status/TODAY_CANON_VS_CODE_DIFF.md](./status/TODAY_CANON_VS_CODE_DIFF.md) — diff канон ↔ код
-- [status/PROFILE_FOUNDATION_QA.md](./status/PROFILE_FOUNDATION_QA.md) — Profile Quick Map vs Foundation §9 (code-side)
-- `docs/schemas/` — JSON Schema (CI: `today-contract-schema`, `day-context-schema`, `compact-user-model-schema`)
-- `docs/i18n/` — правила перевода
+Services, Personal Model, data ownership, authoritative calculation paths.
 
-## Правило чтения
+| Role | Interim doc |
+|------|-------------|
+| Data ownership / consumption | [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md) |
+| Personal Intelligence Layer | [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) |
+| Explainable computation | [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) |
+| Reference / build order | [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) |
+| Astro machine contract | [ASTROLOGY_MACHINE_CONTRACT.md](./ASTROLOGY_MACHINE_CONTRACT.md) |
 
-При расхождении приоритет (сверху вниз):
+Stack snapshot (repo root): [README.md](../README.md).
 
-0. [TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md) — **модель продукта** (Personal Model, projections)
-1. [PERSONAL_INTELLIGENCE_MODEL_V1.md](./PERSONAL_INTELLIGENCE_MODEL_V1.md) · [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md)
-2. [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md)
-3. [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) (для Today UX)
-4. [CORE_PRODUCT_CANON.md](./CORE_PRODUCT_CANON.md)
-5. [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md)
+Related detail under this section: inventory → **Technical Architecture**.
 
-## Правило записи (обязательно)
+---
 
-**Сначала найти — потом писать.** Cursor rule: [`.cursor/rules/docs-single-canon.mdc`](../.cursor/rules/docs-single-canon.mdc).
+## 3. Generation Registry
 
-Перед созданием **любого** нового файла в `docs/`:
+Prompts, gates, schemas, voice — what may be generated and when.
 
-1. Пройти индекс **этого README** — тема уже покрыта?
-2. Поиск по `docs/**/*.md` (и при необходимости `PRODUCT_EXECUTION_TRACKER`) по ключевым словам.
-3. Если документ есть → **дополнить существующий**, не плодить `_V2`, `*_MAP`, `*_REGISTRY`, `branch_*`.
-4. Новый файл — только при явном пробеле в каноне + строка здесь + запись в `PRODUCT_EXECUTION_TRACKER`.
+| Role | Interim doc |
+|------|-------------|
+| Profile E2E reconstruction (eligibility before prompt) | [PROFILE_E2E_RECONSTRUCTION.md](./PROFILE_E2E_RECONSTRUCTION.md) |
+| Profile prompt registry | [audits/PROFILE_E2E_PROMPT_REGISTRY.md](./audits/PROFILE_E2E_PROMPT_REGISTRY.md) |
+| Voice | [content/TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md) |
+| LLM quality / prompt evolution | [LLM_QUALITY_AND_PROMPT_EVOLUTION.md](./LLM_QUALITY_AND_PROMPT_EVOLUTION.md) |
 
-**Не создавать:** параллельные карты/реестры, `spec/`, snapshot на каждый PR, второй SoT на ту же фичу.
+Related detail (passports, capture packs): inventory → **Generation Registry**. Prefer extending the prompt registry over new passport files.
 
-**Куда писать по умолчанию:** трекер (статус работ) · канон экрана (`TODAY_SCREEN_V1_CANON`, `PROFILE_SCREEN_MASTER`) · PIM-слой · OpenAPI/schemas.
+---
+
+## 4. Implementation Status
+
+What works, what is partial/broken, what the next minimal PR is.
+
+| Role | Interim doc |
+|------|-------------|
+| Execution tracker | [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md) |
+| Web launch gaps / DoD | [status/WEB_LAUNCH_EXECUTION_PLAN.md](./status/WEB_LAUNCH_EXECUTION_PLAN.md) |
+| Personal Model ↔ code (deltas) | [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md) |
+| Experience wiring | [audits/PERSONAL_MODEL_EXPERIENCE_WIRING_P1_2026-07-21.md](./audits/PERSONAL_MODEL_EXPERIENCE_WIRING_P1_2026-07-21.md) |
+| Documentation inventory | [DOCUMENTATION_INVENTORY.md](./DOCUMENTATION_INVENTORY.md) |
+
+Audits stay as **delta lists**, not second architecture canons.
+
+---
+
+## 5. Screen Maps
+
+What the user sees, block purpose, data source, CTA.
+
+| Screen | Interim doc |
+|--------|-------------|
+| Today | [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) · [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md) |
+| Profile | [PR4_PROFILE_CANON.md](./PR4_PROFILE_CANON.md) · [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) · [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) |
+| Compatibility | [COMPATIBILITY_CONTENT_CANON_V1.md](./COMPATIBILITY_CONTENT_CANON_V1.md) |
+| Shared screen contracts | [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) |
+| Foundation UI | [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) |
+
+Related language/calibration packs: inventory → **Screen Maps**.
+
+---
+
+## Priority when documents disagree
+
+1. Working **code + API contract** for the surface you are shipping  
+2. The **interim doc** named in the section above for that topic  
+3. [DOCUMENTATION_INVENTORY.md](./DOCUMENTATION_INVENTORY.md) to find subordinates — not to invent a new SoT  
+
+There is **no** separate parallel “main product SoT” outside this README.

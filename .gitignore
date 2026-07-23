@@ -33,7 +33,9 @@ local.properties
 
 # OS / editor / local
 .DS_Store
-.cursor/
+.cursor/*
+!.cursor/rules/
+!.cursor/rules/**
 
 # DB / local data
 pgdata/

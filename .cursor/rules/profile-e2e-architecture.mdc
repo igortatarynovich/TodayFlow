@@ -1,0 +1,43 @@
+---
+description: Profile E2E — model as contract executor; eligibility before prompt; person-facing copy
+alwaysApply: true
+---
+
+# Profile E2E — Architecture Owns Quality
+
+**Canon:** [docs/PROFILE_E2E_RECONSTRUCTION.md](../../docs/PROFILE_E2E_RECONSTRUCTION.md)  
+**Capture:** [docs/audits/PROFILE_PRODUCTION_CAPTURE_PACK.md](../../docs/audits/PROFILE_PRODUCTION_CAPTURE_PACK.md)  
+**Voice:** [docs/content/TODAYFLOW_VOICE_CANON.md](../../docs/content/TODAYFLOW_VOICE_CANON.md) §0.05–§0.06
+
+> Модель = ограниченный исполнитель **проверяемого** контракта.  
+> Языковая вариативность OK; вариативность смысла / структуры / фактов — нет.  
+> Стабильность ≠ одинаковый текст при каждом запуске.  
+> **Production invariant:** `block_eligibility=false` → LLM step **не вызывается** (patterns gate shipped).
+
+**Freeze slice:** Profile v1 только. Не создавать engines / registries / RFC / общие слои. Не начинать Today / DailyState.
+
+## Жёсткие правила
+
+1. **Нет паспорта блока — блока нет.**
+2. **`block_eligibility` до промпта:** имеет ли блок право существовать для этого пользователя? Нет → step не запускается.
+3. **Недостаточно данных — генерация не запускается.** Не «попроси не выдумывать».
+4. **Ответ ≠ паспорт → не публиковать.** Дорабатывать prompt/contract до стабильности смысла/схемы (не verbatim).
+5. **Исходы только:** стабильный контракт **или** блок не строится.
+6. **UI-текст:** только о человеке / смысле / ценности шага — никогда о состоянии системы.
+
+## Классы дефектов (только архитектурные)
+
+`BLOCK_PURPOSE` · `INSUFFICIENT_DATA` · `INPUT` · `PROMPT` · `RESPONSE_SCHEMA` · `VALIDATION` · `GENERATION_GATE` · `SNAPSHOT` · `API` · `PROJECTION` · `UI_GATE`
+
+**Нет класса `MODEL`.**
+
+## Patterns
+
+Нет living/longitudinal evidence → **не вызывать** step patterns.
+
+## Capture (4 proofs)
+
+1. Блок имел право быть создан.  
+2. Промпт точен.  
+3. Ответ = контракт.  
+4. Тот же ответ дошёл до UI.
