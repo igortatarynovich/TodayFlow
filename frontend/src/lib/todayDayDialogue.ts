@@ -140,9 +140,10 @@ export function buildTodayPromiseSuggestions(input: {
   const growth = input.developmentPoint?.trim();
   if (growth) push("development", asSoftIntention(growth));
 
-  for (const [index, item] of (input.doItems ?? []).entries()) {
+  const doItems = input.doItems ?? [];
+  for (let index = 0; index < doItems.length; index += 1) {
     if (out.length >= 4) break;
-    push(`do_${index}`, asSoftIntention(item));
+    push(`do_${index}`, asSoftIntention(doItems[index]!));
   }
 
   return out.slice(0, 4);
