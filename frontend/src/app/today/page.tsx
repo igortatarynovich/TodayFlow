@@ -1213,7 +1213,8 @@ export default function TodayPage() {
   /** Dashboard chrome must stay short — full day_story belongs in the reading, not the header. */
   const dashboardGreetingLine =
     (todayContract?.day_story?.theme || "").trim() ||
-    (summaryTitleMerged && summaryTitleMerged.length <= 72 ? summaryTitleMerged : null);
+    (summaryTitleMerged && summaryTitleMerged.length <= 72 ? summaryTitleMerged : undefined) ||
+    undefined;
   const numerologyValueRitual = String(
     todayData.morning?.numerology_number?.value ?? todayData.morning?.numerology_number?.reduced_value ?? "—",
   );
