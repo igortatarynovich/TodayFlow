@@ -116,7 +116,7 @@ describe("ProfileV2SystemScreen", () => {
     expect(screen.queryByTestId("profile-v2-full")).not.toBeInTheDocument();
     expect(screen.queryByTestId("profile-v2-character-more")).not.toBeInTheDocument();
 
-    expect(screen.getByRole("link", { name: /Открыть Today/i })).toHaveAttribute("href", "/today");
+    expect(screen.getByTestId("profile-v2-open-today")).toHaveAttribute("href", "/today");
     await user.click(screen.getByTestId("profile-v2-open-full"));
     expect(await screen.findByTestId("profile-v2-full")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-character-more")).toBeInTheDocument();

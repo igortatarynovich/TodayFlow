@@ -1149,6 +1149,37 @@ async def upsert_core_setup(
         except Exception:
             # Claim must not fail if guest facts payload is malformed.
             pass
+    else:
+        # Server ensures facts even when client did not send a guest natal_facts pack.
+        from todayflow_backend.services.ensure_natal_facts_v0 import ensure_natal_facts_for_profile
+        from todayflow_backend.services.insight_depth import get_insight_depth_tier
+        from todayflow_backend.services.profile_matrix_adapter_v0 import resolve_access_tier
+        from todayflow_backend.services.subscription_level import get_subscription_snapshot
+
+        snap = get_subscription_snapshot(user, db)
+        access = resolve_access_tier(
+            insight_depth_tier=get_insight_depth_tier(user, db),
+            subscription_status=snap.subscription_status,
+            billing_level=snap.level,
+        )
+        display_name = (
+            " ".join(
+                part
+                for part in (
+                    (payload.first_name or "").strip(),
+                    (payload.last_name or "").strip(),
+                )
+                if part
+            )
+            or None
+        )
+        ensure_natal_facts_for_profile(
+            db,
+            primary,
+            locale=locale,
+            display_name=display_name,
+            access=access,
+        )
 
     _bump_morning_ritual_cache(user.id)
 

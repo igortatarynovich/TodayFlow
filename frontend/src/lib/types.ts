@@ -499,25 +499,8 @@ export type CoreProfile = {
     omitted_slots?: Record<string, string>;
     capability?: CoreProfile["capability"];
   } | null;
-};
-
-  generated_at: string;
-  profile_hash: string;
-  is_ready: boolean;
-  missing_fields: string[];
-  display_name?: string | null;
-  core_trio: {
-    sun_sign?: string | null;
-    birth_time_known?: boolean | null;
-    life_path?: number | null;
-  };
-  baseline: {
-    archetype_seed?: string | null;
-    element_focus?: string | null;
-    rhythm_style?: string | null;
-  };
-  rings_preview: Record<string, number>;
-  living_summary?: string | null;
+  /** Deterministic header pack (sign / traditions / stone·color of sign). */
+  profile_header_knowledge_v0?: Record<string, unknown> | null;
 };
 
 export type ProfileBuildStatus = {

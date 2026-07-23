@@ -7,6 +7,7 @@ import type { ProfileLifeSphere } from "@/components/profile/ProfileLifeSection"
 import { ProfilePortalDeepSection } from "@/components/profile/ProfilePortalDeepSection";
 import type { ProfileQuickMapDeepProps, ProfileQuickMapScreenProps } from "@/components/profile/quickMap/ProfileQuickMapScreen";
 import { ProfileV2MyDays } from "@/components/profile/v2/ProfileV2MyDays";
+import { ProfileV2PersonStory } from "@/components/profile/v2/ProfileV2PersonStory";
 import { ProfileV2SkySection } from "@/components/profile/v2/ProfileV2SkySection";
 import {
   PROFILE_V2_COPY,
@@ -15,6 +16,7 @@ import {
 import { ArchetypeSymbol } from "@/components/visualIdentity/ArchetypeSymbol";
 import type { ProfileV2LiveContext } from "@/lib/profilePage/buildProfileV2LiveContext";
 import { buildProfileFirstScreenProjection } from "@/lib/profilePage/buildProfileFirstScreenProjection";
+import { buildProfilePersonStoryProjection } from "@/lib/profilePage/buildProfilePersonStoryProjection";
 import { profilePortraitFormingMessage } from "@/lib/profilePage/profilePortraitForming";
 import { profileV2SphereCardLine } from "@/lib/profilePage/profileV2SpherePresentation";
 import { buildProfileHeroQuote } from "@/lib/product-ui/profileWebFigmaHelpers";
@@ -63,7 +65,11 @@ export function ProfileV2SystemScreen({
 }: ProfileV2SystemScreenProps) {
   const formingMessage = portraitFormingMessageProp?.trim() || profilePortraitFormingMessage(null);
   const helps = live.helps;
-  const dataMessages = live.userMessages.filter((m) => m.code !== "l3_gated");
+  const personStory = buildProfilePersonStoryProjection(coreProfile);
+  const usePersonStory = personStory.hasMatrix && !portraitForming;
+  const dataMessages = usePersonStory
+    ? []
+    : live.userMessages.filter((m) => m.code !== "l3_gated");
   const l3Message = live.userMessages.find((m) => m.code === "l3_gated") ?? null;
 
   const showCharacterMore =
@@ -78,7 +84,8 @@ export function ProfileV2SystemScreen({
 
   const whoLine = portraitForming
     ? null
-    : first.whoLine ||
+    : personStory.identityLine ||
+      first.whoLine ||
       live.journey.recognitionLine ||
       buildProfileHeroQuote(model.archetype, model.identitySummary);
   const symbolSeed = first.archetypeSeed || live.journey.archetypeSeed || model.archetype || null;
@@ -104,15 +111,18 @@ export function ProfileV2SystemScreen({
             : null,
         ].filter((row): row is NonNullable<typeof row> => Boolean(row));
   const contradiction = first.contradiction;
-  const helpsLine = first.helpsLine || live.journey.effortVector || helps[0] || null;
+  const helpsLine =
+    personStory.helpsLine || first.helpsLine || live.journey.effortVector || helps[0] || null;
   const bridgeLine = first.bridgeLine || live.journey.bridgeLine;
 
   const [fullOpen, setFullOpen] = useState(false);
 
+  const sunChapter = personStory.chapters.find((c) => c.kind === "sun_facts");
   const heroPills = [
     ...identityPills,
     ...(live.elementLabel ? [live.elementLabel] : []),
-  ];
+    ...(sunChapter?.lines ?? []),
+  ].filter((v, i, arr) => arr.indexOf(v) === i);
 
   return (
     <div className={styles.pageRoot} data-testid="profile-v2-system">
@@ -199,75 +209,81 @@ export function ProfileV2SystemScreen({
           </div>
         </section>
 
-        {traits.length ? (
-          <section
-            id={zoneDomId("traits")}
-            className={styles.zone}
-            aria-labelledby="profile-v2-traits-title"
-            data-testid="profile-v2-traits"
-          >
-            <header className={styles.zoneHeader}>
-              <div>
-                <ZoneLabel id="profile-v2-traits-title" title={PROFILE_V2_COPY.zones.traits.title} />
-              </div>
-            </header>
-            <ul className={styles.traitGrid}>
-              {traits.map((trait) => (
-                <li key={trait.id} className={styles.traitCard} data-testid={`profile-v2-trait-${trait.id}`}>
-                  <p className={styles.traitLabel}>{trait.label}</p>
-                  <p className={styles.traitLine}>{trait.line}</p>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
+        {usePersonStory ? (
+          <ProfileV2PersonStory story={personStory} onOpenBirthData={onOpenBirthData} />
+        ) : (
+          <>
+            {traits.length ? (
+              <section
+                id={zoneDomId("traits")}
+                className={styles.zone}
+                aria-labelledby="profile-v2-traits-title"
+                data-testid="profile-v2-traits"
+              >
+                <header className={styles.zoneHeader}>
+                  <div>
+                    <ZoneLabel id="profile-v2-traits-title" title={PROFILE_V2_COPY.zones.traits.title} />
+                  </div>
+                </header>
+                <ul className={styles.traitGrid}>
+                  {traits.map((trait) => (
+                    <li key={trait.id} className={styles.traitCard} data-testid={`profile-v2-trait-${trait.id}`}>
+                      <p className={styles.traitLabel}>{trait.label}</p>
+                      <p className={styles.traitLine}>{trait.line}</p>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
 
-        {contradiction ? (
-          <section
-            id={zoneDomId("contradiction")}
-            className={styles.zone}
-            aria-labelledby="profile-v2-contradiction-title"
-            data-testid="profile-v2-contradiction"
-          >
-            <header className={styles.zoneHeader}>
-              <div>
-                <ZoneLabel
-                  id="profile-v2-contradiction-title"
-                  title={PROFILE_V2_COPY.zones.contradiction.title}
-                />
-              </div>
-            </header>
-            <article className={styles.insightCard}>
-              <h2 className={styles.insightTitle}>{contradiction.title}</h2>
-              <p className={styles.insightBody}>{contradiction.insight}</p>
-            </article>
-          </section>
-        ) : null}
+            {contradiction ? (
+              <section
+                id={zoneDomId("contradiction")}
+                className={styles.zone}
+                aria-labelledby="profile-v2-contradiction-title"
+                data-testid="profile-v2-contradiction"
+              >
+                <header className={styles.zoneHeader}>
+                  <div>
+                    <ZoneLabel
+                      id="profile-v2-contradiction-title"
+                      title={PROFILE_V2_COPY.zones.contradiction.title}
+                    />
+                  </div>
+                </header>
+                <article className={styles.insightCard}>
+                  <h2 className={styles.insightTitle}>{contradiction.title}</h2>
+                  <p className={styles.insightBody}>{contradiction.insight}</p>
+                </article>
+              </section>
+            ) : null}
 
-        {helpsLine ? (
-          <section
-            id={zoneDomId("helps")}
-            className={styles.zone}
-            aria-labelledby="profile-v2-helps-title"
-            data-testid="profile-v2-helps"
-          >
-            <header className={styles.zoneHeader}>
-              <div>
-                <ZoneLabel id="profile-v2-helps-title" title={PROFILE_V2_COPY.zones.helps.title} />
-                <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.helps.lead}</p>
-              </div>
-            </header>
-            <p className={styles.effortVector}>{helpsLine}</p>
-          </section>
-        ) : live.helpsAccessGated && l3Message ? (
-          <section
-            className={styles.zone}
-            data-testid="profile-v2-helps-gated"
-            aria-label="Глубина профиля"
-          >
-            <p className={styles.zoneLead}>{l3Message.text}</p>
-          </section>
-        ) : null}
+            {helpsLine ? (
+              <section
+                id={zoneDomId("helps")}
+                className={styles.zone}
+                aria-labelledby="profile-v2-helps-title"
+                data-testid="profile-v2-helps"
+              >
+                <header className={styles.zoneHeader}>
+                  <div>
+                    <ZoneLabel id="profile-v2-helps-title" title={PROFILE_V2_COPY.zones.helps.title} />
+                    <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.helps.lead}</p>
+                  </div>
+                </header>
+                <p className={styles.effortVector}>{helpsLine}</p>
+              </section>
+            ) : live.helpsAccessGated && l3Message ? (
+              <section
+                className={styles.zone}
+                data-testid="profile-v2-helps-gated"
+                aria-label="Глубина профиля"
+              >
+                <p className={styles.zoneLead}>{l3Message.text}</p>
+              </section>
+            ) : null}
+          </>
+        )}
 
         <ProfileV2MyDays />
 

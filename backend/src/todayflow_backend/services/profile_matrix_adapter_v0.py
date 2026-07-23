@@ -120,23 +120,40 @@ def project_profile_slots_v0(
     c = contract if isinstance(contract, dict) else {}
     facts = natal_facts if isinstance(natal_facts, dict) else {}
 
+    sun_from_facts = _sun_sign(facts)
+    sun_from_catalog = None
+    element_from_catalog = None
+    if isinstance(catalog, dict):
+        trop = catalog.get("tropical_sign") if isinstance(catalog.get("tropical_sign"), dict) else {}
+        sun_from_catalog = trop.get("id") or trop.get("label")
+        element_from_catalog = trop.get("element")
+        num_core = catalog.get("numerology_core") if isinstance(catalog.get("numerology_core"), dict) else {}
+    else:
+        num_core = {}
+
+    sun_element_bag = {
+        "sun_sign": sun_from_facts or sun_from_catalog,
+        "element": c.get("element") or element_from_catalog,
+        "life_path": c.get("life_path") if c.get("life_path") is not None else num_core.get("life_path"),
+        "birthday_number": c.get("birthday_number")
+        if c.get("birthday_number") is not None
+        else num_core.get("birthday_number"),
+    }
+
     raw_slots: dict[str, Any] = {
-        SLOT_IDENTITY: _clip_text(c.get("recognition_line") or c.get("identity_core")),
-        SLOT_SUN_ELEMENT_NUM: {
-            "sun_sign": _sun_sign(facts),
-            "element": c.get("element"),
-            "life_path": c.get("life_path"),
-            "birthday_number": c.get("birthday_number"),
-        },
+        SLOT_IDENTITY: _clip_text(
+            c.get("identity_summary") or c.get("recognition_line") or c.get("identity_core")
+        ),
+        SLOT_SUN_ELEMENT_NUM: sun_element_bag,
         SLOT_CATALOG: catalog,
         SLOT_NAME_NUMEROLOGY: name_numerology,
         SLOT_NATAL_STRUCTURE: _angles_pack(facts),
         SLOT_EMOTIONAL: _style_field(c, "emotional_style", "emotional"),
         SLOT_DECISION: _style_field(c, "decision_style", "decision"),
         SLOT_RELATIONSHIP: _style_field(c, "relationship_style", "relationship"),
-        SLOT_WORK: _style_field(c, "work_style", "work", "career_style"),
-        SLOT_MONEY: _style_field(c, "money_style", "money"),
-        SLOT_HOME: _style_field(c, "home_style", "security_style", "home"),
+        SLOT_WORK: _style_field(c, "work_and_realization", "work_style", "work", "career_style"),
+        SLOT_MONEY: _style_field(c, "money_patterns", "money_style", "money"),
+        SLOT_HOME: _style_field(c, "home_and_security", "home_style", "security_style", "home"),
         SLOT_STRENGTHS: _listish(c.get("strengths") or c.get("core_strengths")),
         SLOT_TENSIONS: {
             "growth_zones": _listish(c.get("growth_zones")),

@@ -17,6 +17,8 @@
 Промпты — **ключевой IP** TodayFlow, но не единственный источник логики.  
 Логика продукта живёт в Contract; мастерство формулировок — в Implementations.
 
+**Режим подачи (сквозной):** каждый Implementation пишет **историю поверхности** — Profile = человек · Today = день · Compatibility = отношения/события · Tarot = поиск ответа. Не витрина независимых полей. См. [PRODUCT_AVAILABILITY_MATRIX](./PRODUCT_AVAILABILITY_MATRIX.md) § «Режим подачи».
+
 Через год: новый промпт или другая модель → тот же Contract.  
 Несколько implementations одного контракта могут сосуществовать (выбор по модели / locale / experiment).
 
@@ -278,48 +280,58 @@ optional: [name_numerology, natal_chart, base_astrology]
 
 ## Пример: `today` (day pack)
 
-**UI binding:** [PRODUCT_AVAILABILITY_MATRIX](./PRODUCT_AVAILABILITY_MATRIX.md) §3.2 Today day pack.  
-Один Implementation = один стабильный голос практика. Не отдельный промпт на цвет, отдельный на карту, отдельный на сферы.
+**UI binding:** [PRODUCT_AVAILABILITY_MATRIX](./PRODUCT_AVAILABILITY_MATRIX.md) §3.2.  
+**Цель Implementation:** качество · уникальность под человека и день · устойчивый авторский стиль практика.  
+Не отдельный промпт на цвет, на карту, на сферы — **один** рассказ о дне.
+
+### Когда вызывается
+
+| Момент | Prompt / Implementation | Вход дополняется |
+|--------|-------------------------|------------------|
+| Открытие Today / `GET /today/contract` | `today` ← CODE: `day-story-v1.2-literary-editor` | profile slice + day events |
+| После открытия карты / числа | **тот же** `today` (refresh/enrich) | + ritual card / number |
+| Birth / claim | `natal_facts` → `personality` (не today) | — |
 
 ### Input (логический)
 
 ```text
-profile_slice          # natal_facts + personality summary (без kitchen)
-day_astro_events       # транзиты / события дня (facts)
-ritual_tarot_card?     # карта, которую открыл человек
-ritual_day_number?     # число, которое открыл человек
-intent_goals_slice?    # цели / намерение если есть
+profile_slice          # уже сохранённый портрет + natal_facts keys
+day_astro_events       # факты дня
+ritual_tarot_card?     # если человек уже открыл карту
+ritual_day_number?     # если открыл число
+intent_goals_slice?
 ```
 
-### Output — каждый блок с «почему»
+### Output — слои одного рассказа (не чеклист обоснований)
 
-| Поле / слой | Обязательное «почему» |
-|-------------|------------------------|
-| `day_character` | какой это день и что несёт |
-| `talisman` (color / scent / stone) | почему эти; что дадут сегодня |
-| `tarot_in_day` | как карта отражается на дне |
-| `number_in_day` | как число отражается на дне |
-| `do` / `avoid` | из всей сборки |
-| `active_spheres[]` | какие активны и почему |
-| `practice` | какая усилит и почему |
-| `goals_today[]` | какие цели уместны и почему |
+Текст ведёт от характера дня к следствиям. Цвет/запах/камень, карта, число, сферы, практика, цели — **продолжают** день, а не отвечают на отдельные «почему?»-поля.
+
+| Слой | Роль в рассказе |
+|------|-----------------|
+| `day_character` | какой день и что несёт |
+| `talisman` (color / scent / stone) | якоря дня внутри той же истории |
+| `tarot_in_day` / `number_in_day` | как открытое отражается в дне (если есть) |
+| `do` / `avoid` | практический вывод |
+| `active_spheres[]` | где день активнее |
+| `practice` / `goals_today[]` | что укрепит и какие цели уместны |
 
 ### Quality Rules (Today)
 
-- Нет символа / сферы / практики / цели без обоснования на входах дня.  
-- Карта и число **вплетены в день**, не отдельные гороскопы.  
-- Voice = стабильный практик (таро+астро+нумерология); не смена автора между полями одного ответа.  
+- Естественная связность: следующий слой читается как продолжение предыдущего.  
+- Карта и число вплетены в день, не отдельные мини-гороскопы.  
+- Один авторский голос на весь ответ; не смена стиля между полями.  
+- Уникальность = этот профиль × этот день × эти ritual inputs — не ротация пресетов.  
 - Не противоречить profile facts; house-claims только при full natal.  
-- Не говорить о системе / модели / «расчёте».
+- Не говорить о системе / модели.
 
 ### Dependencies
 
 ```yaml
-requires: [profile_ready_base]   # ≥ birth date / ready profile slice
+requires: [profile_ready_base]
 optional: [tarot_draw, day_number, intent, full_natal]
 ```
 
-**CODE Δ Today:** `day_story` / morning symbols — приближение; довести Input/Output и always-why под эту таблицу; убрать preset-only символы.
+**CODE Δ Today:** приближение `day_story_wire_v1` + `day-story-v1.2-literary-editor`; усилить авторский Implementation и убрать preset-only символы; refresh после ritual — тот же prompt family.
 
 ---
 
@@ -387,4 +399,4 @@ optional: [tarot_draw, day_number, intent, full_natal]
 | 2026-07-22 | v0.1 — ядро = Generation Contracts; prompt = implementation; deps graph not order |
 | 2026-07-22 | v0.2 — Contract ⊕ Implementations (промпты = IP); Execution Rules ⊥ Quality Rules |
 | 2026-07-23 | Two quality prompts locked: fact (`natal_facts`) ⊥ interpretation (`personality`+) — never merge |
-| 2026-07-23 | `today` day pack: always-why · tarot/number in day · stable practitioner voice |
+| 2026-07-23 | `today` day pack: narrative continuity (not why-checklist) · prompt moments · authorial quality |

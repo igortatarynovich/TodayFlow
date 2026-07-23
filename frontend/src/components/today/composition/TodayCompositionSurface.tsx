@@ -328,7 +328,9 @@ export function TodayCompositionSurface(props: Props) {
     [zones.glance, story.sphereFocus.cards.length],
   );
 
-  const showColorGuide = zones.glance && Boolean(story.colorGuide);
+  /** Catalog color lecture only when day_story provided the color (never celestial presets). */
+  const showColorGuide =
+    zones.glance && Boolean(story.colorGuide?.fromDayStory) && !singleVoice;
 
   const showSkyCards = zones.astroContext && story.skyCards.length > 0;
 

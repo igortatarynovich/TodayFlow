@@ -173,6 +173,54 @@ class CoreProfileService:
         if isinstance(payload.get("effort_vector_v0"), dict):
             contract_view["effort_vector_v0"] = payload["effort_vector_v0"]
 
+        # Deterministic header knowledge (sign / traditions / stone·color of sign).
+        # Never ask LLM for these; feeds cultural_catalog + sun/element fallbacks.
+        from todayflow_backend.services.profile_header_knowledge_v0 import (
+            build_profile_header_knowledge,
+            header_pack_to_matrix_catalog,
+        )
+
+        numerology = payload.get("numerology") if isinstance(payload.get("numerology"), dict) else {}
+        life_path = contract_view.get("life_path")
+        if life_path is None:
+            life_path = numerology.get("life_path")
+        birthday_number = contract_view.get("birthday_number")
+        if birthday_number is None:
+            birthday_number = numerology.get("birthday_number")
+        # Prefer tropical element from astro baseline when contract lacks it
+        if not contract_view.get("element"):
+            astro_el = (payload.get("astro") or {}).get("sun_element") if isinstance(payload.get("astro"), dict) else None
+            if astro_el:
+                contract_view["element"] = astro_el
+        if life_path is not None and contract_view.get("life_path") is None:
+            contract_view["life_path"] = life_path
+        if birthday_number is not None and contract_view.get("birthday_number") is None:
+            contract_view["birthday_number"] = birthday_number
+
+        def _as_int(value: object) -> int | None:
+            if isinstance(value, int):
+                return value
+            if isinstance(value, str) and value.strip().isdigit():
+                return int(value.strip())
+            return None
+
+        header_pack = build_profile_header_knowledge(
+            birth_date,
+            life_path=_as_int(life_path),
+            birthday_number=_as_int(birthday_number),
+        )
+        catalog = header_pack_to_matrix_catalog(header_pack)
+
+        # Name numerology only when we have a display name (capability already gates reveal).
+        name_numerology = None
+        if display_name and numerology.get("expression") is not None:
+            name_numerology = {
+                "expression": numerology.get("expression"),
+                "soul_urge": numerology.get("soul_urge"),
+                "personality": numerology.get("personality"),
+                "full_name": numerology.get("full_name"),
+            }
+
         cap = resolve_capability(
             birth_date=birth_date,
             birth_time=birth_time,
@@ -197,7 +245,11 @@ class CoreProfileService:
             timezone_name=timezone_name,
             display_name=display_name,
             access=access,  # type: ignore[arg-type]
+            catalog=catalog,
+            name_numerology=name_numerology,
         )
+        if header_pack is not None:
+            payload["profile_header_knowledge_v0"] = header_pack
         payload["capability"] = matrix.get("capability") or {
             "resolver_version": cap.get("resolver_version"),
             "mode": cap.get("mode"),
@@ -360,6 +412,42 @@ class CoreProfileService:
             generated_at = datetime.now(timezone.utc).isoformat()
             locale = (person_pub.get("locale") or "ru").strip()[:32] or "ru"
 
+            # Ensure natal_facts before personality (server SoT — not only guest payload).
+            natal_facts = None
+            catalog = None
+            if astro_profile is not None and astro_profile.birth_date is not None:
+                from todayflow_backend.services.ensure_natal_facts_v0 import (
+                    ensure_natal_facts_for_profile,
+                )
+                from todayflow_backend.services.insight_depth import get_insight_depth_tier
+                from todayflow_backend.services.profile_header_knowledge_v0 import (
+                    build_profile_header_knowledge,
+                    header_pack_to_matrix_catalog,
+                )
+                from todayflow_backend.services.profile_matrix_adapter_v0 import resolve_access_tier
+                from todayflow_backend.services.subscription_level import get_subscription_snapshot
+
+                snap = get_subscription_snapshot(user, db)
+                access = resolve_access_tier(
+                    insight_depth_tier=get_insight_depth_tier(user, db),
+                    subscription_status=snap.subscription_status,
+                    billing_level=snap.level,
+                )
+                natal_facts = ensure_natal_facts_for_profile(
+                    db,
+                    astro_profile,
+                    locale=locale,
+                    display_name=person_pub.get("display_name") or person_pub.get("first_name"),
+                    access=access,
+                )
+                header_pack = build_profile_header_knowledge(
+                    astro_profile.birth_date,
+                    life_path=numerology_context.get("life_path")
+                    if isinstance(numerology_context.get("life_path"), int)
+                    else None,
+                )
+                catalog = header_pack_to_matrix_catalog(header_pack)
+
             profile_input = {
                 "profile_version": self.profile_version,
                 "generated_at": generated_at,
@@ -371,11 +459,14 @@ class CoreProfileService:
                 "numerology": numerology_context,
                 "baseline": baseline,
                 "profiles": profiles_context,
+                "natal_facts": natal_facts,
             }
             contract, interpretation, daily_interpretation, used_fallback = build_profile_portrait_v1(
                 profile_input=profile_input,
                 living=living_context,
                 locale=locale,
+                natal_facts=natal_facts,
+                catalog=catalog,
             )
             steps = []
             gm = contract.get("generation_meta") if isinstance(contract, dict) else None

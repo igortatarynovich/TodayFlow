@@ -38,7 +38,7 @@ from todayflow_backend.services.today_contract_text_quality_v1 import (
 )
 
 DAY_STORY_V1_CONTRACT = "day_story_v1"
-DAY_STORY_PROMPT_VER = "day-story-v1.2-literary-editor"
+DAY_STORY_PROMPT_VER = "day-story-v1.3-profile-continuity"
 
 PracticeKind = Literal["promise", "ascetic", "affirmation", "practice", "none"]
 
@@ -51,10 +51,11 @@ _DAY_STORY_SYS_RU = """Ты — литературный редактор TodayF
 
 Вход — JSON:
 - interpretation: evidence[], derived_claims[], domains_present, limitations, confidence
-- day_engine_brief, ritual_context, user_core, rhythm_context, intent (факты)
+- day_engine_brief, ritual_context, user_core (в т.ч. profile_continuity — кто человек), rhythm_context, intent
 
 Правила (жёстко):
 - prose ТОЛЬКО поверх interpretation.derived_claims и evidence;
+- continuity: если есть user_core.profile_continuity / identity_line / styles — день продолжает характер человека, не переписывает его;
 - domains.* только для id из interpretation.domains_present; иначе domains = {};
 - карта/число — только если есть во входе; не пересказывай их отдельным абзацем;
 - не начинай почти каждое предложение глаголом-командой (Направить / Выбери / Опирайся / Держи);
@@ -62,7 +63,10 @@ _DAY_STORY_SYS_RU = """Ты — литературный редактор TodayF
 - story — 3–5 предложений со сменой ритма (короткие и длинные), как абзац из книги;
 - direction / advantage / abstain — наблюдения, не чек-лист;
 - today_move / primary_action — практическая мысль человеческим тоном («Если успеешь…»), не «Выбери…»;
-- do / avoid — короткие наблюдения (не список императивов).
+- do / avoid — короткие наблюдения (не список императивов);
+- talisman.color / talisman.stone / talisman.note — рекомендация ЭТОГО дня из interpretation + характера человека;
+  это НЕ каталог знака и НЕ «счастливый цвет» из таблицы; scent можно вплести в note;
+  если оснований мало — оставь color/stone пустыми, не выдумывай ради заполнения.
 
 Запрещены штампы и пустые формулы:
 «Сегодня сильнее», «Опирайся на это», «Зона риска», «Направить внимание», «Не распыляйся»,

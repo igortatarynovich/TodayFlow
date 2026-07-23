@@ -1,7 +1,7 @@
 # TodayFlow Voice Canon
 
 **Статус:** архитектурный канон контента (не copywriter guide).  
-**Версия:** 1.5 (2026-07-23).  
+**Версия:** 1.6 (2026-07-23).  
 **Источник:** живые удачные кейсы Compatibility / Profile review packs — узнаваемый авторский тон продукта.  
 **Связь:** [COMPATIBILITY_CONTENT_CANON_V1.md](../COMPATIBILITY_CONTENT_CANON_V1.md) · [PROFILE_CONTENT_CANON_V1.md](../PROFILE_CONTENT_CANON_V1.md) · [EXPLAINABLE_INTERPRETATION.md](../EXPLAINABLE_INTERPRETATION.md) · [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [EXPLAIN_MEANING_NOT_MECHANISM.md](../EXPLAIN_MEANING_NOT_MECHANISM.md) · [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](../UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md) · [PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md)
 
@@ -116,7 +116,21 @@ Exemplars (ориентиры):
 
 ---
 
-## 0.1 Today — literary editor (обязательно)
+## 0.08 Режим подачи по поверхностям
+
+Не «красивый текст в карточках», а **род истории**:
+
+| Экран | История |
+|-------|---------|
+| Profile | История пользователя — кто он, как устроен, куда растёт |
+| Today | История дня — что несёт сегодня и что с этим делать |
+| Compatibility | История отношений и событий между людьми |
+| Tarot | Поиск ответа на вопрос через расклад |
+
+Один авторский голос TodayFlow; разный **сюжет**.  
+Виджеты без сквозной истории — антипаттерн.  
+См. [PRODUCT_AVAILABILITY_MATRIX](../PRODUCT_AVAILABILITY_MATRIX.md) § «Режим подачи».
+
 
 Последний LLM-слой **не пишет прогноз**. Он **редактирует уже вычисленный смысл**.
 

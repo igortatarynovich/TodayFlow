@@ -40,7 +40,7 @@ export const PROFILE_V2_COPY = {
       fullProfile: "Открыть полный профиль",
       hideFullProfile: "Свернуть полный профиль",
       today: "Открыть Today",
-      todayLead: "День продолжается отдельно от портрета.",
+      todayLead: "День — следующий шаг после портрета: фокус и один шаг.",
     },
     characterMore: {
       title: "Ещё о характере",
