@@ -8,8 +8,7 @@ export const PROFILE_V2_DEPTH_NAV = [
 ] as const;
 
 export const PROFILE_V2_EXPLORE_NAV = [
-  { id: "explore", title: "Исследовать профиль", hint: "Детали" },
-  { id: "natal", title: "Натальная карта", hint: "Основа" },
+  { id: "explore", step: "06", title: "Натальная карта", hint: "Основа" },
 ] as const;
 
 export type ProfileV2ZoneId =
@@ -26,12 +25,14 @@ export const PROFILE_V2_COPY = {
     },
     why: {
       title: "Главное, что формирует тебя",
-      selectedLabel: "Что выбрало архетип",
-      influencedLabel: "Что влияет на портрет",
+      lead: "Опоры портрета: что выбрало имя — и чем расширен смысл.",
+      selectedLabel: "Выбрало имя",
+      influencedLabel: "Расширяет портрет",
       honestyFallbackTitle: "На чём держится",
     },
     insight: {
       title: "Что важно понять о себе",
+      lead: "Один узел — не три списка. Новая грань после узнавания.",
       giftLabel: "Твой дар",
       trapLabel: "Твоя ловушка",
       restoreLabel: "Что помогает расти",
@@ -43,6 +44,7 @@ export const PROFILE_V2_COPY = {
     effort: {
       title: "Твой вектор на развитие",
       lead: "Одно направление усилия — не план дня.",
+      focusLabel: "Фокус периода",
       spheresLabel: "Где это проявится сильнее",
     },
     bridge: {
@@ -52,14 +54,19 @@ export const PROFILE_V2_COPY = {
     },
     explore: {
       title: "Твоя натальная карта",
-      lead: "Карта души и детали — исследовательский слой после путешествия.",
+      lead: "Фундамент личности: натал и числа — внизу профиля, после путешествия.",
       natalTitle: "Карта твоей души",
-      detailsTitle: "Карта и детали",
+      detailsTitle: "Детали и разбор",
       open: "Исследовать карту",
       hide: "Свернуть карту",
-      exploreHint: "Полная карта, дома и аспекты — за раскрытием.",
+      exploreHint: "Полная карта, дома и аспекты — внутри разбора.",
       updatedNote: "Карта пересчитывается при изменении данных рождения.",
       stepBadge: "6",
+      benefits: [
+        "Потенциалы и таланты",
+        "Уроки жизни и зоны роста",
+        "Периоды силы и чувствительности",
+      ],
     },
     /** Legacy keys for fallback first-screen when journey surface absent. */
     traits: {
@@ -95,6 +102,9 @@ export const PROFILE_V2_COPY = {
     sources: {
       title: "Основа карты",
       lead: "Натальная карта и числа — фундамент личности.",
+      sourcesLabel: "Источники личности",
+      bornFrom: "из них рождается…",
+      archetypeFallback: "Архетип",
       explore: "Исследовать глубже",
       exploreHint: "Полная карта, дома и аспекты — за раскрытием.",
       updatedNote: "Карта пересчитывается при изменении данных рождения.",

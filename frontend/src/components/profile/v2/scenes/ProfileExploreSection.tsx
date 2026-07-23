@@ -2,12 +2,13 @@
 
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { NatalChartWheel } from "@/components/natal-chart/NatalChartWheel";
 import { ProfileMotionExpand, useProfileMotionInView } from "@/components/foundation/ProfileMotion";
 import { ProfileChartSection } from "@/components/profile/ProfileChartSection";
 import type { ProfileLifeSphere } from "@/components/profile/ProfileLifeSection";
-import { ProfilePortalDeepSection } from "@/components/profile/ProfilePortalDeepSection";
+import type { NatalChartPreview } from "@/components/profile/profilePanelTypes";
 import type { ProfileQuickMapDeepProps } from "@/components/profile/quickMap/ProfileQuickMapScreen";
-import { ProfileV2SkySection } from "@/components/profile/v2/ProfileV2SkySection";
+import { ProfileAtmosphere } from "@/components/profile/v2/ProfileAtmosphere";
 import { PROFILE_V2_COPY } from "@/components/profile/v2/profileV2SystemCopy";
 import type { ProgressiveDetailItem } from "@/lib/profilePage/buildProfileProgressiveDetailsProjection";
 import { profileV2SphereCardLine } from "@/lib/profilePage/profileV2SpherePresentation";
@@ -26,6 +27,35 @@ export type ProfileExploreSectionProps = {
   characterSlot?: ReactNode;
 };
 
+function natalWheelProps(preview: NatalChartPreview) {
+  return {
+    chartPositions: Object.entries(preview.positions || {}).map(([planet, data]) => ({
+      body: planet,
+      sign: data.sign || "",
+      house: data.house,
+      degree: data.degree,
+      longitude: data.longitude || data.degree || 0,
+    })),
+    houses: (preview.houses || []).reduce(
+      (acc, house) => {
+        acc[`house_${house.house}`] = {
+          sign: house.sign,
+          degree: house.degree,
+          cusp_longitude: house.cusp_longitude,
+        };
+        return acc;
+      },
+      {} as Record<string, { sign?: string; degree?: number; cusp_longitude?: number }>,
+    ),
+    ascendant: preview.ascendant?.longitude || preview.ascendant?.degree || 0,
+    aspects: preview.aspects?.callouts ?? [],
+  };
+}
+
+/**
+ * Step 6 — natal destination at the bottom of Profile.
+ * Always visible; deep chart/details open on demand (reference IA).
+ */
 export function ProfileExploreSection({
   open,
   onToggle,
@@ -37,9 +67,17 @@ export function ProfileExploreSection({
   characterSlot,
 }: ProfileExploreSectionProps) {
   const hasNatal = Boolean(deep);
-  const hasDetails = progressiveDetails.length > 0 || Boolean(characterSlot) || Boolean(lifeSpheres?.length);
+  const hasDetails =
+    progressiveDetails.length > 0 ||
+    Boolean(characterSlot) ||
+    Boolean(lifeSpheres?.length) ||
+    Boolean(model.lifeMission);
   const motion = useProfileMotionInView<HTMLElement>(60);
-  if (!hasNatal && !hasDetails && !model.lifeMission) return null;
+  if (!hasNatal && !hasDetails) return null;
+
+  const natalPreview = deep?.natalPreview ?? null;
+  const hasWheel = Boolean(natalPreview && Object.keys(natalPreview.positions || {}).length);
+  const copy = PROFILE_V2_COPY.zones.explore;
 
   return (
     <section
@@ -50,24 +88,49 @@ export function ProfileExploreSection({
       data-testid="profile-v2-explore"
       aria-labelledby="profile-v2-explore-title"
     >
+      <ProfileAtmosphere motif="natal" />
+
       <header className={styles.zoneHeader}>
         <div>
           <p className={styles.journeyStepIndex}>
-            <span className={styles.journeyStepBadge}>{PROFILE_V2_COPY.zones.explore.stepBadge}</span>
-            <span id="profile-v2-explore-title">{PROFILE_V2_COPY.zones.explore.title}</span>
+            <span className={styles.journeyStepBadge}>{copy.stepBadge}</span>
+            <span id="profile-v2-explore-title">{copy.title}</span>
           </p>
-          <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.explore.lead}</p>
+          <p className={styles.zoneLead}>{copy.lead}</p>
         </div>
       </header>
 
-      <div className={styles.exploreTeaser}>
-        <div className={styles.exploreTeaserVisual} aria-hidden>
-          {/* eslint-disable-next-line @next/next/no-img-element -- static public WebP */}
-          <img src="/images/cosmic/observe.webp" alt="" className={styles.exploreTeaserImage} />
+      <div className={styles.natalDestination} data-testid="profile-v2-natal">
+        <div className={styles.natalDestinationVisual} aria-hidden={!hasWheel}>
+          {hasWheel && natalPreview ? (
+            <div className={styles.natalDestinationWheel}>
+              <NatalChartWheel {...natalWheelProps(natalPreview)} />
+            </div>
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element -- static wash plate
+            <img
+              src="/images/cosmic/celestial_wash.webp"
+              alt=""
+              className={styles.natalDestinationWash}
+            />
+          )}
         </div>
-        <div className={styles.exploreTeaserCopy}>
-          <p className={styles.exploreTeaserTitle}>{PROFILE_V2_COPY.zones.explore.natalTitle}</p>
+
+        <div className={styles.natalDestinationCopy}>
+          <p className={styles.exploreTeaserTitle} id="profile-v2-natal-title">
+            {copy.natalTitle}
+          </p>
           <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.sources.lead}</p>
+          <ul className={styles.natalBenefitList}>
+            {copy.benefits.map((line) => (
+              <li key={line} className={styles.natalBenefitItem}>
+                <span className={styles.natalBenefitMark} aria-hidden>
+                  ✓
+                </span>
+                {line}
+              </li>
+            ))}
+          </ul>
           <button
             type="button"
             className={styles.secondaryCta}
@@ -76,7 +139,7 @@ export function ProfileExploreSection({
             aria-controls="profile-v2-explore-body"
             onClick={onToggle}
           >
-            {open ? PROFILE_V2_COPY.zones.explore.hide : PROFILE_V2_COPY.zones.explore.open}
+            {open ? copy.hide : copy.open}
             <span aria-hidden> {open ? "↑" : "→"}</span>
           </button>
         </div>
@@ -86,9 +149,13 @@ export function ProfileExploreSection({
         <div id="profile-v2-explore-body" data-testid="profile-v2-explore-body">
           {progressiveDetails.length ? (
             <div className={styles.exploreDetails} data-testid="profile-v2-progressive-details">
-              <p className={styles.zoneLabel}>{PROFILE_V2_COPY.zones.explore.detailsTitle}</p>
+              <p className={styles.zoneLabel}>{copy.detailsTitle}</p>
               {progressiveDetails.map((item) => (
-                <article key={item.id} className={styles.exploreDetailCard} data-testid={`profile-v2-detail-${item.id}`}>
+                <article
+                  key={item.id}
+                  className={styles.exploreDetailCard}
+                  data-testid={`profile-v2-detail-${item.id}`}
+                >
                   <p className={styles.traitLabel}>{item.label}</p>
                   {item.lines.map((line) => (
                     <p key={line} className={styles.traitLine}>
@@ -137,57 +204,30 @@ export function ProfileExploreSection({
             </div>
           ) : null}
 
+          {deep ? (
+            <div className={styles.skyContent} data-testid="profile-v2-natal-deep">
+              <p className={styles.zoneLead} style={{ marginBottom: "0.75rem" }}>
+                {copy.exploreHint}
+              </p>
+              <ProfileChartSection
+                natalPreview={deep.natalPreview}
+                coreNumerology={deep.coreNumerology}
+                previewError={deep.previewError}
+                onReloadPreview={deep.onReloadPreview}
+                lifeMapSections={deep.lifeMapSections}
+                fullChartOpen={deepExpanded}
+                signatureDefaultOpen={false}
+              />
+              <p className={styles.zoneLead} style={{ marginTop: "1rem" }}>
+                {copy.updatedNote}
+              </p>
+            </div>
+          ) : null}
+
           <p className={styles.zoneLead}>
             {PROFILE_V2_COPY.mapsCtaHint}{" "}
             <Link href="/maps/mood">{PROFILE_V2_COPY.mapsCta}</Link>
           </p>
-
-          {deep ? (
-            <section
-              id="profile-v2-natal"
-              className={`${styles.zone} ${styles.skyZone}`.trim()}
-              aria-labelledby="profile-v2-natal-title"
-              data-testid="profile-v2-natal"
-            >
-              <div className={styles.skyZoneAtmosphere} aria-hidden>
-                {/* eslint-disable-next-line @next/next/no-img-element -- static public WebP */}
-                <img src="/images/cosmic/nebula.webp" alt="" className={styles.skyZoneAtmosphereImage} />
-              </div>
-              <header className={styles.zoneHeader}>
-                <div>
-                  <p id="profile-v2-natal-title" className={styles.zoneLabel}>
-                    {PROFILE_V2_COPY.zones.explore.natalTitle}
-                  </p>
-                  <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.sources.lead}</p>
-                </div>
-              </header>
-              <div className={styles.skyContent}>
-                <ProfileV2SkySection
-                  natalPreview={deep.natalPreview}
-                  previewError={deep.previewError}
-                  onReloadPreview={deep.onReloadPreview}
-                  frameworkAnchors={model.frameworkAnchors}
-                  frameworkCards={model.frameworkCards}
-                />
-                <ProfilePortalDeepSection defaultOpen={false}>
-                  <p className={styles.zoneLead} style={{ marginBottom: "0.75rem" }}>
-                    {PROFILE_V2_COPY.zones.explore.exploreHint}
-                  </p>
-                  <ProfileChartSection
-                    natalPreview={deep.natalPreview}
-                    coreNumerology={deep.coreNumerology}
-                    previewError={deep.previewError}
-                    onReloadPreview={deep.onReloadPreview}
-                    lifeMapSections={deep.lifeMapSections}
-                    fullChartOpen={deepExpanded}
-                  />
-                </ProfilePortalDeepSection>
-              </div>
-              <p className={styles.zoneLead} style={{ marginTop: "1rem" }}>
-                {PROFILE_V2_COPY.zones.explore.updatedNote}
-              </p>
-            </section>
-          ) : null}
         </div>
       </ProfileMotionExpand>
     </section>

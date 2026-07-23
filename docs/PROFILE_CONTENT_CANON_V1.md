@@ -2,7 +2,7 @@
 
 **Статус:** принято для аудита и контракта (до переключения production generation).  
 **Версия:** 1.0 (2026-07-21).  
-**Связь:** [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) §4 · код `profile_content_v1` · текущая генерация `profile_contract_v1` / `profile_disclosure_funnel_v0` · голос [content/TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md) · **surface IA** [PR4_PROFILE_CANON.md](./PR4_PROFILE_CANON.md).  
+**Связь:** [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) §4 · код `profile_content_v1` · текущая генерация `profile_contract_v1` / `profile_disclosure_funnel_v0` · голос [content/TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md) · **surface IA** [PR4_PROFILE_CANON.md](./PR4_PROFILE_CANON.md) · **видимость LLM-выводов** [LLM_USER_VISIBILITY_CONTRACT_V1.md](./LLM_USER_VISIBILITY_CONTRACT_V1.md).  
 **Umbrella (выше модуля):** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) — при конфликте с Content/PR-4 побеждает umbrella.  
 **Метод оценки:** как Compatibility — вход → полный prompt → raw → final → ручная оценка + Voice rubric.
 

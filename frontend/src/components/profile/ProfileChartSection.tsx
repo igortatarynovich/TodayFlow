@@ -17,6 +17,8 @@ export type ProfileChartSectionProps = {
   onReloadPreview: () => void;
   lifeMapSections: LifeMapSection[];
   fullChartOpen?: boolean;
+  /** Journey step 6: keep signature collapsed until user asks. */
+  signatureDefaultOpen?: boolean;
 };
 
 export function ProfileChartSection({
@@ -26,6 +28,7 @@ export function ProfileChartSection({
   onReloadPreview,
   lifeMapSections,
   fullChartOpen = false,
+  signatureDefaultOpen = true,
 }: ProfileChartSectionProps) {
   const quickSignature = buildQuickSignature(natalPreview);
   const numerologyCards = buildNumerologySignatureCards(coreNumerology);
@@ -36,14 +39,37 @@ export function ProfileChartSection({
       <ProfileExpandableSection
         title="Натальная карта"
         subtitle="Сигнатура: знак Солнца и Луны, асцендент, личные числа и колесо."
-        defaultOpen
+        defaultOpen={signatureDefaultOpen}
       >
         {natalPreview ? (
           <>
             {quickSignature.length ? (
               <div className={styles.signatureGrid}>
                 {quickSignature.map((item) => (
-                  <div key={item.label} className={styles.signatureCard}>
+                  <div
+                    key={item.label}
+                    className={[
+                      styles.signatureCard,
+                      item.weight === "sun" ? styles.signatureCardSun : "",
+                      item.weight === "moon" ? styles.signatureCardMoon : "",
+                      item.weight === "asc" ? styles.signatureCardAsc : "",
+                      item.weight === "mc" ? styles.signatureCardMc : "",
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
+                  >
+                    <span
+                      className={[
+                        styles.signatureGlyph,
+                        item.weight === "sun" ? styles.signatureGlyphSun : "",
+                        item.weight === "moon" ? styles.signatureGlyphMoon : "",
+                        item.weight === "asc" ? styles.signatureGlyphAsc : "",
+                        item.weight === "mc" ? styles.signatureGlyphMc : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                      aria-hidden
+                    />
                     <p className={styles.signatureLabel}>{item.label}</p>
                     <p className={styles.signatureValue}>{item.value}</p>
                     {item.hint ? <p className={styles.signatureHint}>{item.hint}</p> : null}
@@ -155,23 +181,37 @@ function buildQuickSignature(natalPreview: NatalChartPreview | null) {
   const moon = natalPreview.positions?.moon;
   const ascSign = natalPreview.ascendant?.sign || natalPreview.houses?.[0]?.sign || "—";
   const ascDegree = natalPreview.ascendant?.longitude ?? natalPreview.ascendant?.degree;
+  const mcSign = natalPreview.positions?.mc?.sign || natalPreview.houses?.[9]?.sign || null;
 
   return [
     {
       label: "Солнце",
       value: sun?.sign || "—",
       hint: sun?.house ? `${sun.house} дом` : undefined,
+      weight: "sun" as const,
     },
     {
       label: "Луна",
       value: moon?.sign || "—",
       hint: moon?.house ? `${moon.house} дом` : undefined,
+      weight: "moon" as const,
     },
     {
       label: "Асцендент",
       value: ascSign,
       hint: typeof ascDegree === "number" ? `${Math.round(ascDegree)}°` : undefined,
+      weight: "asc" as const,
     },
+    ...(mcSign
+      ? [
+          {
+            label: "MC",
+            value: mcSign,
+            hint: undefined as string | undefined,
+            weight: "mc" as const,
+          },
+        ]
+      : []),
   ].filter((item) => item.value && item.value !== "—");
 }
 

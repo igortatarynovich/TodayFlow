@@ -111,6 +111,67 @@ function planetRuName(body: string): string {
 /** Знак из карты (en «Scorpio» / ru «Скорпион») → русское имя знака. */
 const signRuName = zodiacRuName;
 
+/** Cream / gold engraving palette — no blues, purples, or acid accents. */
+const INK = {
+  parchment0: "#fefcf9",
+  parchment1: "#f7f0e5",
+  parchment2: "#ece1d1",
+  creamFill: "#fffaf2",
+  creamSoft: "#fffaf4",
+  ringOuter: "#ccb391",
+  ringMid: "#dcc8ae",
+  ringInner: "#cdb79a",
+  ringSoft: "#d4c5b0",
+  gold: "#8b6a3e",
+  goldBright: "#c9a96e",
+  goldMuted: "#c6a677",
+  umber: "#53402a",
+  ink: "#5f4930",
+  inkDeep: "#3d3228",
+  silver: "#9a9590",
+  white: "#ffffff",
+  tooltipBg: "#3d3228",
+  tooltipMuted: "#d4c5b0",
+  aspect: {
+    conjunction: { color: "#8b6a3e", dash: "none", opacity: 0.78, width: 2.2 },
+    opposition: { color: "#6b5340", dash: "8 5", opacity: 0.72, width: 2.4 },
+    square: { color: "#a67c52", dash: "6 5", opacity: 0.7, width: 2.2 },
+    trine: { color: "#c9a96e", dash: "none", opacity: 0.62, width: 1.9 },
+    sextile: { color: "#b8956a", dash: "4 4", opacity: 0.58, width: 1.7 },
+    other: { color: "#9a8b78", dash: "3 4", opacity: 0.5, width: 1.5 },
+  },
+  elementFill: {
+    fire: "rgba(139, 106, 62, 0.1)",
+    earth: "rgba(83, 64, 42, 0.08)",
+    air: "rgba(201, 169, 110, 0.1)",
+    water: "rgba(154, 149, 144, 0.1)",
+  } as Record<string, string>,
+  elementStroke: {
+    fire: "#8b6a3e",
+    earth: "#53402a",
+    air: "#c9a96e",
+    water: "#7a7570",
+  } as Record<string, string>,
+  angle: {
+    ASC: "#8b6a3e",
+    IC: "#7a7570",
+    DSC: "#9a8b78",
+    MC: "#c9a96e",
+  } as Record<string, string>,
+  planet: {
+    Sun: "#c9a96e",
+    Moon: "#9a9590",
+    Mercury: "#8b7355",
+    Venus: "#b8956a",
+    Mars: "#8b6a3e",
+    Jupiter: "#c9a96e",
+    Saturn: "#53402a",
+    Uranus: "#8b7355",
+    Neptune: "#7a7570",
+    Pluto: "#5f4930",
+  } as Record<string, string>,
+} as const;
+
 /**
  * Interactive natal chart wheel visualization
  */
@@ -255,21 +316,21 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
   const aspectStyle = useCallback((aspect: Aspect) => {
     const aspectId = aspect.aspect_id?.toLowerCase() || "";
     if (aspectId.includes("conjunction")) {
-      return { color: "#4a90e2", dash: "none", opacity: 0.72, width: 2.4, label: "Соединение" };
+      return { ...INK.aspect.conjunction, label: "Соединение" };
     }
     if (aspectId.includes("opposition")) {
-      return { color: "#d9485f", dash: "8 5", opacity: 0.88, width: 2.8, label: "Оппозиция" };
+      return { ...INK.aspect.opposition, label: "Оппозиция" };
     }
     if (aspectId.includes("square")) {
-      return { color: "#f08c2b", dash: "6 5", opacity: 0.84, width: 2.6, label: "Квадрат" };
+      return { ...INK.aspect.square, label: "Квадрат" };
     }
     if (aspectId.includes("trine")) {
-      return { color: "#1f9d74", dash: "none", opacity: 0.7, width: 2.2, label: "Трин" };
+      return { ...INK.aspect.trine, label: "Трин" };
     }
     if (aspectId.includes("sextile")) {
-      return { color: "#4c87ff", dash: "4 4", opacity: 0.68, width: 2, label: "Секстиль" };
+      return { ...INK.aspect.sextile, label: "Секстиль" };
     }
-    return { color: "#8b94a7", dash: "3 4", opacity: 0.56, width: 1.7, label: describeAspectKind(aspect) };
+    return { ...INK.aspect.other, label: describeAspectKind(aspect) };
   }, [describeAspectKind]);
 
   const houseSegments = useMemo(() => {
@@ -412,10 +473,10 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
 
   const angleMarkers = useMemo(() => {
     const markers = [
-      { key: "ASC", degree: houseCusps[0], color: "#8b5cf6" },
-      { key: "IC", degree: houseCusps[3], color: "#0ea5e9" },
-      { key: "DSC", degree: houseCusps[6], color: "#ec4899" },
-      { key: "MC", degree: houseCusps[9], color: "#f59e0b" },
+      { key: "ASC", degree: houseCusps[0], color: INK.angle.ASC },
+      { key: "IC", degree: houseCusps[3], color: INK.angle.IC },
+      { key: "DSC", degree: houseCusps[6], color: INK.angle.DSC },
+      { key: "MC", degree: houseCusps[9], color: INK.angle.MC },
     ];
     return markers.map((marker) => {
       const angle = degreeToAngle(marker.degree);
@@ -527,9 +588,9 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
       >
         <defs>
           <radialGradient id={`${gradientId}-chart`} cx="50%" cy="50%">
-            <stop offset="0%" stopColor="#fefcf9" stopOpacity="1" />
-            <stop offset="62%" stopColor="#f7f0e5" stopOpacity="1" />
-            <stop offset="100%" stopColor="#ece1d1" stopOpacity="1" />
+            <stop offset="0%" stopColor={INK.parchment0} stopOpacity="1" />
+            <stop offset="62%" stopColor={INK.parchment1} stopOpacity="1" />
+            <stop offset="100%" stopColor={INK.parchment2} stopOpacity="1" />
           </radialGradient>
           <filter id={shadowId}>
             <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
@@ -582,7 +643,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
           cy={center}
           r={outerRadius}
           fill="none"
-          stroke="#ccb391"
+          stroke={INK.ringOuter}
           strokeWidth="2.5"
         />
 
@@ -591,7 +652,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
           cy={center}
           r={zodiacInnerRadius}
           fill="none"
-          stroke="#dcc8ae"
+          stroke={INK.ringMid}
           strokeWidth="1.3"
           opacity="0.82"
         />
@@ -601,7 +662,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
           cy={center}
           r={innerRadius}
           fill="none"
-          stroke="#cdb79a"
+          stroke={INK.ringInner}
           strokeWidth="1.5"
           opacity="0.84"
         />
@@ -624,12 +685,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
           const endInner = getPosition(end, zodiacInnerRadius);
           const largeArc = 0;
           const sweep = 0;
-          const elementColors: Record<string, string> = {
-            fire: "rgba(239, 68, 68, 0.12)",
-            earth: "rgba(16, 185, 129, 0.12)",
-            air: "rgba(59, 130, 246, 0.12)",
-            water: "rgba(99, 102, 241, 0.12)",
-          };
+          const elementColors = INK.elementFill;
           const path = [
             `M ${startOuter.x} ${startOuter.y}`,
             `A ${outerRadius} ${outerRadius} 0 ${largeArc} ${sweep} ${endOuter.x} ${endOuter.y}`,
@@ -637,7 +693,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
             `A ${zodiacInnerRadius} ${zodiacInnerRadius} 0 ${largeArc} 1 ${startInner.x} ${startInner.y}`,
             "Z",
           ].join(" ");
-          return <path key={`zodiac-sector-${sign.name}`} d={path} fill={elementColors[sign.element] || "rgba(148,163,184,0.1)"} />;
+          return <path key={`zodiac-sector-${sign.name}`} d={path} fill={elementColors[sign.element] || "rgba(154,149,144,0.08)"} />;
         })}
 
         {houseCusps.map((cusp, i) => {
@@ -651,7 +707,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
                 y1={innerPos.y}
                 x2={outerPos.x}
                 y2={outerPos.y}
-                stroke="#c9b8a3"
+                stroke={INK.ringSoft}
                 strokeWidth="1.5"
                 opacity={0.7}
               />
@@ -689,8 +745,8 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
                 cx={segment.x}
                 cy={segment.y}
                 r={isHovered ? 18 : 14}
-                fill={isHovered ? "#6f5ef0" : "#fffaf2"}
-                stroke={isHovered ? "#6f5ef0" : "#d4c5b0"}
+                fill={isHovered ? INK.gold : INK.creamFill}
+                stroke={isHovered ? INK.gold : INK.ringSoft}
                 strokeWidth={isHovered ? "2.5" : "1.5"}
                 opacity={isHovered ? 1 : 0.8}
                 style={{ transition: "all 0.2s" }}
@@ -702,7 +758,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
                 dominantBaseline="middle"
                 fontSize={isHovered ? "16" : "14"}
                 fontWeight="700"
-                fill={isHovered ? "#ffffff" : "#8b7355"}
+                fill={isHovered ? INK.white : INK.gold}
                 style={{ transition: "all 0.2s", pointerEvents: "none" }}
               >
                 {segment.number}
@@ -722,7 +778,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
               y1={signStartPos.y}
               x2={signEndPos.x}
               y2={signEndPos.y}
-              stroke="#e5e0d8"
+              stroke={INK.ringSoft}
               strokeWidth="1"
               opacity={0.4}
             />
@@ -732,20 +788,15 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
         {zodiacSigns.map((sign, i) => {
           const signAngle = degreeToAngle(i * 30 + 15);
           const pos = getPosition(signAngle, outerRadius + 10);
-          const elementColors: Record<string, string> = {
-            fire: "#ef4444",
-            earth: "#10b981",
-            air: "#3b82f6",
-            water: "#6366f1"
-          };
+          const elementColors = INK.elementStroke;
           return (
             <g key={sign.name}>
               <circle
                 cx={pos.x}
                 cy={pos.y}
                 r="17"
-                fill="#ffffff"
-                stroke={elementColors[sign.element] || "#8b7355"}
+                fill={INK.white}
+                stroke={elementColors[sign.element] || INK.gold}
                 strokeWidth="2"
                 opacity="0.9"
               />
@@ -755,7 +806,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
                 textAnchor="middle"
                 dominantBaseline="middle"
                 fontSize="18"
-                fill={elementColors[sign.element] || "#8b7355"}
+                fill={elementColors[sign.element] || INK.gold}
                 fontWeight="700"
               >
                 {sign.glyph}
@@ -812,7 +863,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
                       textAnchor="middle"
                       dominantBaseline="middle"
                       fontSize="9"
-                      fill="#ffffff"
+                      fill={INK.white}
                       fontWeight="700"
                     >
                       {line.label}
@@ -844,7 +895,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
               strokeWidth="1.8"
               opacity="0.7"
             />
-            <circle cx={marker.outer.x} cy={marker.outer.y} r="12" fill="#fff" stroke={marker.color} strokeWidth="2" />
+            <circle cx={marker.outer.x} cy={marker.outer.y} r="12" fill={INK.white} stroke={marker.color} strokeWidth="2" />
             <text
               x={marker.outer.x}
               y={marker.outer.y}
@@ -869,7 +920,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
               y1={planet.position.y}
               x2={edgePos.x}
               y2={edgePos.y}
-              stroke={isHovered ? "#667eea" : "#d4c5b0"}
+              stroke={isHovered ? INK.goldBright : INK.ringSoft}
               strokeWidth={isHovered ? "1.5" : "0.8"}
               opacity={isHovered ? 0.6 : 0.3}
               strokeDasharray="2,4"
@@ -880,19 +931,8 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
 
         {planetsWithPositions.map((planet, idx) => {
           const isHovered = hoveredPlanet === planet.body;
-          const planetColors: Record<string, string> = {
-            Sun: "#fbbf24",
-            Moon: "#e5e7eb",
-            Mercury: "#9ca3af",
-            Venus: "#f472b6",
-            Mars: "#ef4444",
-            Jupiter: "#f59e0b",
-            Saturn: "#8b5cf6",
-            Uranus: "#06b6d4",
-            Neptune: "#3b82f6",
-            Pluto: "#6366f1"
-          };
-          const planetColor = planetColors[planet.body] || "#667eea";
+          const planetColors = INK.planet;
+          const planetColor = planetColors[planet.body as keyof typeof planetColors] || INK.gold;
           
           return (
             <g
@@ -929,7 +969,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
                 textAnchor="middle"
                 dominantBaseline="middle"
                 fontSize="10"
-                fill="#8b7355"
+                fill={INK.gold}
                 fontWeight="600"
                 opacity={isHovered ? 1 : 0.8}
               >
@@ -943,7 +983,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
                     y={planet.position.y - 50}
                     width="120"
                     height="40"
-                    fill="#0f172a"
+                    fill={INK.tooltipBg}
                     fillOpacity="0.95"
                     rx="8"
                     filter={`url(#${shadowId})`}
@@ -954,7 +994,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
                     textAnchor="middle"
                     dominantBaseline="middle"
                     fontSize="12"
-                    fill="#ffffff"
+                    fill={INK.white}
                     fontWeight="700"
                   >
                     {planetRuName(planet.body)}
@@ -965,7 +1005,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
                     textAnchor="middle"
                     dominantBaseline="middle"
                     fontSize="10"
-                    fill="#cbd5e1"
+                    fill={INK.tooltipMuted}
                   >
                     {signRuName(planet.sign)} • {planet.house || "?"} дом
                     {planet.degree !== undefined && ` • ${Math.floor(planet.degree)}°`}
@@ -981,15 +1021,15 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
           cy={center}
           r="35"
           fill={`url(#${gradientId}-chart)`}
-          stroke="#d4c5b0"
+          stroke={INK.ringSoft}
           strokeWidth="2.5"
         />
         <circle
           cx={center}
           cy={center}
           r="25"
-          fill="#ffffff"
-          stroke="#667eea"
+          fill={INK.white}
+          stroke={INK.gold}
           strokeWidth="2"
           opacity="0.9"
         />
@@ -999,7 +1039,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
           textAnchor="middle"
           dominantBaseline="middle"
           fontSize="11"
-          fill="#667eea"
+          fill={INK.gold}
           fontWeight="700"
         >
           TF
@@ -1020,7 +1060,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
               fontSize: "0.875rem", 
               fontWeight: 700, 
               marginBottom: "0.45rem", 
-              color: "#0f172a",
+              color: INK.inkDeep,
               textTransform: "uppercase",
               letterSpacing: "0.05em"
             }}>
@@ -1028,11 +1068,11 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
             </div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem 0.85rem" }}>
               {[
-                { label: "Соединение", color: "#4a90e2", dash: "none" },
-                { label: "Трин", color: "#1f9d74", dash: "none" },
-                { label: "Секстиль", color: "#4c87ff", dash: "4 4" },
-                { label: "Квадрат", color: "#f08c2b", dash: "6 5" },
-                { label: "Оппозиция", color: "#d9485f", dash: "8 5" },
+                { label: "Соединение", color: INK.aspect.conjunction.color, dash: INK.aspect.conjunction.dash },
+                { label: "Трин", color: INK.aspect.trine.color, dash: INK.aspect.trine.dash },
+                { label: "Секстиль", color: INK.aspect.sextile.color, dash: INK.aspect.sextile.dash },
+                { label: "Квадрат", color: INK.aspect.square.color, dash: INK.aspect.square.dash },
+                { label: "Оппозиция", color: INK.aspect.opposition.color, dash: INK.aspect.opposition.dash },
               ].map((item) => {
                 const count = aspectSummary.find((entry) => entry.label === item.label)?.count || 0;
                 return (
@@ -1051,7 +1091,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
           fontSize: "0.875rem", 
           fontWeight: 700, 
           marginBottom: "var(--orbit-space-md)", 
-          color: "#0f172a",
+          color: INK.inkDeep,
           textTransform: "uppercase",
           letterSpacing: "0.05em"
         }}>
@@ -1063,19 +1103,8 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
           gap: "var(--orbit-space-sm)",
         }}>
           {planetsWithPositions.map((planet) => {
-            const planetColors: Record<string, string> = {
-              Sun: "#fbbf24",
-              Moon: "#e5e7eb",
-              Mercury: "#9ca3af",
-              Venus: "#f472b6",
-              Mars: "#ef4444",
-              Jupiter: "#f59e0b",
-              Saturn: "#8b5cf6",
-              Uranus: "#06b6d4",
-              Neptune: "#3b82f6",
-              Pluto: "#6366f1"
-            };
-            const planetColor = planetColors[planet.body] || "#667eea";
+            const planetColors = INK.planet;
+            const planetColor = planetColors[planet.body as keyof typeof planetColors] || INK.gold;
             
             return (
               <div 
@@ -1092,10 +1121,10 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
               >
                 <span style={{ fontSize: "1.25rem", color: planetColor }}>{planet.symbol}</span>
                 <div>
-                  <div style={{ fontSize: "0.75rem", fontWeight: 600, color: "#0f172a" }}>
+                  <div style={{ fontSize: "0.75rem", fontWeight: 600, color: INK.inkDeep }}>
                     {planetRuName(planet.body)}
                   </div>
-                  <div style={{ fontSize: "0.7rem", color: "#64748b" }}>
+                  <div style={{ fontSize: "0.7rem", color: INK.silver }}>
                     {signRuName(planet.sign)} • {planet.house} дом
                   </div>
                 </div>

@@ -46,8 +46,18 @@ const journeyCore = {
   },
   portrait_why_v0: {
     title: "Почему портрет такой",
-    selected_by: [{ id: "lp", class: "selected_by", label: "Число пути 7 → Исследователь" }],
-    portrait_influenced_by: [{ id: "sun", class: "portrait_influenced_by", label: "Солнце в Деве" }],
+    selected_by: [
+      {
+        id: "archetype_from_life_path",
+        class: "selected_by",
+        label: "Архетип Исследователя — рассчитан из числа пути 7",
+      },
+    ],
+    portrait_influenced_by: [
+      { id: "sun", class: "portrait_influenced_by", label: "Солнце в Деве" },
+      { id: "element", class: "portrait_influenced_by", label: "Стихия — земля" },
+      { id: "moon", class: "portrait_influenced_by", label: "Луна в Рыбах" },
+    ],
     honesty_line: "Повторы проявятся со временем.",
   },
   insight_nodes_v0: {
@@ -158,7 +168,11 @@ describe("ProfileV2SystemScreen journey rewire", () => {
 
     // Why + insight + effort in primary scroll (effort ungated)
     expect(screen.getByTestId("profile-v2-why")).toBeInTheDocument();
-    expect(screen.getByTestId("profile-v2-why-anchor-lp")).toHaveTextContent("Число пути");
+    expect(screen.getByTestId("profile-v2-why-anchor-archetype_from_life_path")).toHaveTextContent(
+      /Исследовател/i,
+    );
+    expect(screen.getByTestId("profile-v2-why-anchor-sun")).toHaveTextContent(/Солнце в Деве/i);
+    expect(screen.getByTestId("profile-v2-why-secondary")).toHaveTextContent(/Стихия/i);
     expect(screen.getByTestId("profile-v2-insight")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-insight-node")).toHaveTextContent("Ясность vs скорость");
     expect(screen.getByTestId("profile-v2-insight-living")).toHaveTextContent("поторопился");
@@ -186,9 +200,10 @@ describe("ProfileV2SystemScreen journey rewire", () => {
 
     expect(screen.getByTestId("profile-v2-open-today")).toHaveAttribute("href", "/today");
 
-    // Catalog / natal not in main journey — only after explore open
+    // Natal destination (step 6) always visible after bridge; deep details behind CTA
+    expect(screen.getByTestId("profile-v2-natal")).toBeInTheDocument();
+    expect(screen.getByTestId("profile-v2-explore")).toBeInTheDocument();
     expect(screen.queryByTestId("profile-v2-progressive-details")).not.toBeInTheDocument();
-    expect(screen.queryByTestId("profile-v2-natal")).not.toBeInTheDocument();
     expect(screen.queryByText(/12 куспид/i)).not.toBeInTheDocument();
     expect(screen.queryByTestId("profile-v2-chapter-cultural_catalog")).not.toBeInTheDocument();
 
@@ -197,12 +212,19 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     expect(screen.queryByTestId("profile-v2-chapter-tensions_growth")).not.toBeInTheDocument();
     expect(screen.queryByTestId("profile-v2-chapter-helps")).not.toBeInTheDocument();
 
+    const natal = screen.getByTestId("profile-v2-natal");
+    expect(
+      Boolean(
+        screen.getByTestId("profile-v2-bridge").compareDocumentPosition(natal) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      ),
+    ).toBe(true);
+
     await user.click(screen.getByTestId("profile-v2-open-explore"));
     expect(await screen.findByTestId("profile-v2-explore-body")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-progressive-details")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-detail-cultural_catalog")).toBeInTheDocument();
-    expect(screen.getByTestId("profile-v2-natal")).toBeInTheDocument();
-    expect(screen.queryByText(/Шаг 6/i)).not.toBeInTheDocument();
+    expect(screen.getByTestId("profile-v2-natal-deep")).toBeInTheDocument();
   });
 
   it("omits living evidence when absent and still shows effort without explore", () => {
@@ -255,15 +277,17 @@ describe("ProfileV2SystemScreen journey rewire", () => {
   it("renders why as claim anchors plus synthesis, not cusp dump", () => {
     renderJourney();
     const why = screen.getByTestId("profile-v2-why");
-    expect(within(why).getByText(/Число пути/i)).toBeInTheDocument();
+    expect(within(why).getByText(/Архетип Исследователя/i)).toBeInTheDocument();
     expect(within(why).getByText(/Солнце в Деве/i)).toBeInTheDocument();
     expect(why.textContent).not.toMatch(/12 куспид/i);
   });
 
-  it("renders one insight node cascade, not strengths/tensions/helps chapters", () => {
+  it("renders one insight node cascade with support accents, not strengths chapters", () => {
     renderJourney();
     expect(screen.getByTestId("profile-v2-insight-node")).toBeInTheDocument();
+    expect(screen.getByTestId("profile-v2-insight-support")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-insight-help")).toBeInTheDocument();
+    expect(screen.getByTestId("profile-v2-insight-grounded")).toBeInTheDocument();
     expect(screen.queryByTestId("profile-v2-chapter-strengths")).not.toBeInTheDocument();
     expect(screen.queryByTestId("profile-v2-chapter-tensions_growth")).not.toBeInTheDocument();
     expect(screen.queryByTestId("profile-v2-chapter-helps")).not.toBeInTheDocument();

@@ -81,9 +81,17 @@ export default function LunarTodayPage() {
       contentClassName={pl.content}
     >
       <section className={pl.panel} style={{ textAlign: "center" }}>
-        <p style={{ fontSize: "3rem", margin: "0 0 0.75rem" }} aria-hidden>
-          🌙
-        </p>
+        <div
+          aria-hidden
+          style={{
+            width: "7.5rem",
+            height: "7.5rem",
+            margin: "0 auto 1rem",
+            borderRadius: "50%",
+            background: 'url("/images/cosmic/moon_cutout.webp") center / cover no-repeat',
+            boxShadow: "0 12px 32px rgba(42, 37, 32, 0.14)",
+          }}
+        />
         <h2 className={v2.sectionTitle}>{data.current.name}</h2>
         <DsBody size="sm" muted className={pl.bodyMtSm}>
           Фаза: {data.current.id}

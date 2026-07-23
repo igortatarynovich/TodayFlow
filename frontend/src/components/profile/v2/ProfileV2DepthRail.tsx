@@ -57,7 +57,7 @@ export function ProfileV2DepthRail() {
 
   return (
     <nav className={styles.railDepthNav} aria-label="Путешествие профиля" data-testid="profile-v2-depth-rail">
-      <p className={styles.railDepthEyebrow}>Твоя история в 5 шагах</p>
+      <p className={styles.railDepthEyebrow}>Твоя история в 6 шагах</p>
       <ol className={styles.railDepthList}>
         {PROFILE_V2_DEPTH_NAV.map((item) => {
           const active = activeZone === item.id;
@@ -84,7 +84,6 @@ export function ProfileV2DepthRail() {
         })}
       </ol>
       <div className={styles.railExploreBlock}>
-        <p className={styles.railDepthEyebrow}>Исследовать</p>
         <ul className={styles.railDepthList}>
           {PROFILE_V2_EXPLORE_NAV.map((item) => {
             const active = activeZone === item.id;
@@ -100,6 +99,7 @@ export function ProfileV2DepthRail() {
                     scrollToZone(item.id);
                   }}
                 >
+                  <span className={styles.railDepthBadge}>{item.step}</span>
                   <span className={styles.railDepthCopy}>
                     <span className={styles.railDepthTitle}>{item.title}</span>
                     <span className={styles.railDepthHint}>{item.hint}</span>
@@ -139,7 +139,7 @@ export function ProfileV2MobileDepthJump() {
           scrollToZone("explore");
         }}
       >
-        Детали
+        Натал
       </a>
     </nav>
   );

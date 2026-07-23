@@ -6,7 +6,9 @@ import {
   useProfileMotionInView,
 } from "@/components/foundation/ProfileMotion";
 import type { ProfileLifeSphere } from "@/components/profile/ProfileLifeSection";
+import { ProfileAtmosphere } from "@/components/profile/v2/ProfileAtmosphere";
 import { PROFILE_V2_COPY, PROFILE_V2_DEPTH_NAV } from "@/components/profile/v2/profileV2SystemCopy";
+import { profileV2SphereCardLine } from "@/lib/profilePage/profileV2SpherePresentation";
 import styles from "@/components/profile/v2/profileV2System.module.css";
 
 export type ProfileEffortSceneProps = {
@@ -19,6 +21,7 @@ const effortNav = PROFILE_V2_DEPTH_NAV[3];
 export function ProfileEffortScene({ effortVector, lifeSpheres = [] }: ProfileEffortSceneProps) {
   const spheres = lifeSpheres.filter((s) => s.title?.trim()).slice(0, 8);
   const motion = useProfileMotionInView<HTMLElement>(80);
+  const copy = PROFILE_V2_COPY.zones.effort;
 
   return (
     <section
@@ -29,49 +32,58 @@ export function ProfileEffortScene({ effortVector, lifeSpheres = [] }: ProfileEf
       aria-labelledby="profile-v2-effort-title"
       data-testid="profile-v2-effort"
     >
+      <ProfileAtmosphere motif="effort" />
       <header className={styles.zoneHeader}>
         <div>
           <p className={styles.journeyStepIndex}>
             <span className={styles.journeyStepBadge}>{effortNav.step.replace(/^0/, "")}</span>
-            <span id="profile-v2-effort-title">{PROFILE_V2_COPY.zones.effort.title}</span>
+            <span id="profile-v2-effort-title">{copy.title}</span>
           </p>
-          <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.effort.lead}</p>
+          <p className={styles.zoneLead}>{copy.lead}</p>
         </div>
       </header>
 
       <div className={styles.effortLayout}>
         <div className={styles.effortFocus}>
-          <span className={styles.effortCompass} aria-hidden>
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-              <circle cx="14" cy="14" r="12.5" stroke="currentColor" strokeWidth="1.25" />
-              <path d="M14 6.5v15M6.5 14h15" stroke="currentColor" strokeWidth="1.25" />
-              <path d="M14 5.5l2.2 5.2L14 14l-2.2-3.3L14 5.5z" fill="currentColor" />
-            </svg>
-          </span>
-          <p className={styles.effortVector} data-testid="profile-v2-effort-vector">
-            {effortVector}
-          </p>
+          <p className={styles.effortFocusLabel}>{copy.focusLabel}</p>
+          <div className={styles.effortFocusCard}>
+            <span className={styles.effortCompass} aria-hidden>
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <circle cx="14" cy="14" r="12.5" stroke="currentColor" strokeWidth="1.25" />
+                <path d="M14 6.5v15M6.5 14h15" stroke="currentColor" strokeWidth="1.25" />
+                <path d="M14 5.5l2.2 5.2L14 14l-2.2-3.3L14 5.5z" fill="currentColor" />
+              </svg>
+            </span>
+            <p className={styles.effortVector} data-testid="profile-v2-effort-vector">
+              {effortVector}
+            </p>
+          </div>
         </div>
 
         {spheres.length ? (
           <div className={styles.effortSpheres} data-testid="profile-v2-effort-spheres">
-            <p className={styles.effortSpheresLabel}>{PROFILE_V2_COPY.zones.effort.spheresLabel}</p>
+            <p className={styles.effortSpheresLabel}>{copy.spheresLabel}</p>
             <ul className={styles.effortSphereRow}>
-              {spheres.map((sphere, index) => (
-                <li
-                  key={sphere.id}
-                  className={`${styles.effortSphereChip} ${profileMotionStyles.staggerItem}`}
-                  style={profileMotionStaggerDelay(index, 100)}
-                  title={sphere.title}
-                >
-                  <span
-                    className={styles.effortSphereDot}
-                    style={sphere.accent ? { background: sphere.accent } : undefined}
-                    aria-hidden
-                  />
-                  <span>{sphere.title}</span>
-                </li>
-              ))}
+              {spheres.map((sphere, index) => {
+                const need = profileV2SphereCardLine(sphere);
+                return (
+                  <li
+                    key={sphere.id}
+                    className={`${styles.effortSphereChip} ${profileMotionStyles.staggerItem}`}
+                    style={profileMotionStaggerDelay(index, 100)}
+                  >
+                    <span
+                      className={styles.effortSphereDot}
+                      style={sphere.accent ? { background: sphere.accent } : undefined}
+                      aria-hidden
+                    />
+                    <span className={styles.effortSphereCopy}>
+                      <span className={styles.effortSphereTitle}>{sphere.title}</span>
+                      {need ? <span className={styles.effortSphereNeed}>{need}</span> : null}
+                    </span>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         ) : null}

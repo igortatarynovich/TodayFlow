@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useProfileMotionInView } from "@/components/foundation/ProfileMotion";
+import { ProfileAtmosphere } from "@/components/profile/v2/ProfileAtmosphere";
 import { PROFILE_V2_COPY, PROFILE_V2_DEPTH_NAV } from "@/components/profile/v2/profileV2SystemCopy";
 import styles from "@/components/profile/v2/profileV2System.module.css";
 
@@ -23,6 +24,7 @@ export function ProfileBridgeScene({ bridgeLine }: ProfileBridgeSceneProps) {
       aria-labelledby="profile-v2-bridge-title"
       data-testid="profile-v2-bridge"
     >
+      <ProfileAtmosphere motif="bridge" />
       <p className={styles.journeyStepIndex}>
         <span className={styles.journeyStepBadge}>{bridgeNav.step.replace(/^0/, "")}</span>
         <span id="profile-v2-bridge-title">{PROFILE_V2_COPY.zones.bridge.title}</span>

@@ -619,7 +619,9 @@
   width: 6.25rem;
   height: 6.25rem;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #fff 0%, #888 45%, #1a1714 46%);
+  background:
+    url("/images/cosmic/moon_cutout.webp") center / cover no-repeat;
+  box-shadow: 0 8px 24px rgba(42, 37, 32, 0.12);
 }
 
 .insightCopy {

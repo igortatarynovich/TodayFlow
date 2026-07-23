@@ -14,11 +14,65 @@
   border-radius: 16px;
   background: linear-gradient(135deg, rgba(255, 252, 246, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
   border: 1px solid rgba(191, 151, 95, 0.22);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-height: 5.5rem;
+}
+
+.signatureCardSun {
+  border-color: rgba(201, 169, 110, 0.55);
+  background: linear-gradient(145deg, rgba(255, 250, 236, 0.98) 0%, rgba(255, 255, 255, 0.92) 100%);
+  box-shadow: 0 8px 20px rgba(139, 106, 62, 0.08);
+  min-height: 6.25rem;
+}
+
+.signatureCardMoon {
+  border-color: rgba(154, 149, 144, 0.45);
+  background: linear-gradient(145deg, rgba(248, 247, 245, 0.98) 0%, rgba(255, 255, 255, 0.92) 100%);
+}
+
+.signatureCardAsc {
+  border-color: rgba(139, 106, 62, 0.28);
+}
+
+.signatureCardMc {
+  border-color: rgba(201, 169, 110, 0.35);
+}
+
+.signatureGlyph {
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-bottom: 0.15rem;
+  color: #8b6a3e;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 0.85;
+}
+
+.signatureGlyphSun {
+  background-image: url("/images/decorative/solar-rays.svg");
+  color: #c9a96e;
+}
+
+.signatureGlyphMoon {
+  background-image: url("/images/cosmic/moon_cutout.webp");
+  border-radius: 50%;
+  opacity: 0.95;
+}
+
+.signatureGlyphAsc {
+  background-image: url("/images/decorative/compass.svg");
+}
+
+.signatureGlyphMc {
+  background-image: url("/images/decorative/north-star.svg");
 }
 
 .signatureCardNumerology {
-  background: linear-gradient(140deg, rgba(255, 253, 249, 0.96) 0%, rgba(250, 245, 255, 0.55) 100%);
-  border-color: rgba(141, 112, 180, 0.2);
+  background: linear-gradient(140deg, rgba(255, 253, 249, 0.96) 0%, rgba(247, 240, 229, 0.65) 100%);
+  border-color: rgba(201, 169, 110, 0.28);
 }
 
 .signatureLabel {
@@ -31,7 +85,7 @@
 }
 
 .signatureLabelNumerology {
-  color: #7c6a94;
+  color: #8b6a3e;
 }
 
 .signatureValue {
@@ -157,8 +211,8 @@
 }
 
 .houseCardKey {
-  border-color: rgba(74, 50, 112, 0.22);
-  background: linear-gradient(145deg, rgba(255, 253, 249, 0.98) 0%, rgba(250, 245, 255, 0.45) 100%);
+  border-color: rgba(201, 169, 110, 0.35);
+  background: linear-gradient(145deg, rgba(255, 253, 249, 0.98) 0%, rgba(247, 240, 229, 0.55) 100%);
 }
 
 .houseTop {
