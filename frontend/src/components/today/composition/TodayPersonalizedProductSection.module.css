@@ -63,11 +63,59 @@
   background: rgba(139, 106, 62, 0.12);
 }
 
-.sectionWebEmbed .synthesisText {
-  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
-  line-height: 1.35;
-  letter-spacing: -0.015em;
-  max-width: 36ch;
+.sectionWebEmbed .synthesisText,
+.sectionWebEmbed .narrativeParagraph {
+  font-size: clamp(1.12rem, 2.2vw, 1.35rem);
+  line-height: 1.45;
+  letter-spacing: -0.012em;
+  max-width: 42ch;
+}
+
+.narrativeScroll {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+  padding: 1.35rem 1.25rem 1.5rem;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(212, 184, 150, 0.22);
+  background:
+    radial-gradient(ellipse 70% 45% at 8% 0%, rgba(201, 169, 110, 0.12) 0%, transparent 55%),
+    var(--tf-surface-dark, #1a1714);
+  color: #f4efe6;
+}
+
+.narrativeChapter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding-top: 0.15rem;
+}
+
+.narrativeChapter + .narrativeChapter {
+  border-top: 1px solid rgba(244, 239, 230, 0.1);
+  padding-top: 1.15rem;
+}
+
+.narrativeKicker {
+  margin: 0;
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tf-accent-gold, #c9a96e);
+}
+
+.narrativeParagraph {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: rgba(244, 239, 230, 0.92);
+  max-width: 42ch;
+}
+
+.sectionWebEmbed .narrativeScroll {
+  padding: clamp(1.75rem, 3vw, 2.35rem);
+  border-radius: 2rem;
 }
 
 .journeyScene {
@@ -386,6 +434,19 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.55);
+}
+
+.narrativeWhy .softWhyLabel {
+  color: rgba(201, 169, 110, 0.9);
+}
+
+.narrativeScroll .synthesisKicker {
+  margin: 0;
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  font-size: 0.6875rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--tf-accent-gold, #c9a96e);
 }
 
 .readingParagraph {

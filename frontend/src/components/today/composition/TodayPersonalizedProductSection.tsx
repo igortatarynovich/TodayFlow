@@ -1,25 +1,23 @@
 "use client";
 
 import Link from "next/link";
+import { useMemo } from "react";
 import {
   profileMotionStaggerDelay,
   profileMotionStyles,
   useProfileMotionInView,
 } from "@/components/foundation/ProfileMotion";
 import { ProfileAtmosphere } from "@/components/profile/v2/ProfileAtmosphere";
-import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
-import { TodaySkyStoryCards } from "@/components/today/composition/TodaySkyStoryCards";
+import type { MorningRitualData } from "@/components/today/todayPageUtils";
 import type { TodayPromiseSuggestion } from "@/lib/todayDayDialogue";
 import type { TodayContractV1 } from "@/lib/todayContract";
-import { isDomainLensPresent } from "@/lib/todayContract";
 import type { TodayStrengthenTool } from "@/lib/todayCompositionModel";
 import type { TodayDayColorGuide } from "@/lib/todayDayColorGuide";
 import type { TodaySkyCard } from "@/lib/todayDaySpine";
+import { buildTodayDayNarrative } from "@/lib/todayDayNarrative";
 import type { TodayDayStoryViewModel } from "@/lib/todayDayStoryModel";
 import type { CoreProfile } from "@/lib/types";
 import { buildTodayCompatibilityHook } from "@/lib/todayCompatibilityHook";
-import { buildTodayLiteraryReading } from "@/lib/todayLiteraryReading";
-import { dayStoryAvoidItems, dayStoryDoItems } from "@/lib/todayContractMapper";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import styles from "@/components/today/composition/TodayPersonalizedProductSection.module.css";
 
@@ -40,18 +38,13 @@ type Props = {
   embeddedInWebDashboard?: boolean;
   skyCards?: TodaySkyCard[];
   colorGuide?: TodayDayColorGuide | null;
+  morningRitualData?: MorningRitualData | null;
   onPickPromise: (text: string) => void;
   onOpenGoalDraft: () => void;
   onGoalDraftChange: (value: string) => void;
   onSaveGoal: () => void;
   onPracticeAction: () => void;
   onAffirmationRead: () => void;
-};
-
-const DOMAIN_LABELS: Record<string, string> = {
-  relationships: "Отношения",
-  money_work: "Работа и деньги",
-  family: "Семья и дом",
 };
 
 export function TodayPersonalizedProductSection({
@@ -71,6 +64,7 @@ export function TodayPersonalizedProductSection({
   embeddedInWebDashboard = false,
   skyCards = [],
   colorGuide = null,
+  morningRitualData = null,
   onPickPromise,
   onOpenGoalDraft,
   onGoalDraftChange,
@@ -79,10 +73,6 @@ export function TodayPersonalizedProductSection({
   onAffirmationRead,
 }: Props) {
   const compatibility = buildTodayCompatibilityHook(coreProfile);
-  const reading = buildTodayLiteraryReading(story, contract);
-  const doItems = dayStoryDoItems(contract);
-  const avoidItems = dayStoryAvoidItems(contract);
-  const talisman = contract.day_story?.talisman;
   const practiceRec = contract.day_story?.practice_recommendation;
 
   const completedCount = (practiceCompleted ? 1 : 0) + (affirmationRead ? 1 : 0);
@@ -92,17 +82,20 @@ export function TodayPersonalizedProductSection({
   const affirmationTool = strengthenTools.find((tool) => tool.id === "affirmation");
   const otherTools = strengthenTools.filter((tool) => tool.id !== "practice" && tool.id !== "affirmation");
 
-  const themeLine =
-    contract.day_story?.theme?.trim() ||
-    contract.global_context?.period?.trim() ||
-    story.hero.themeHeadline;
-
-  const domainEntries = (["relationships", "money_work", "family"] as const)
-    .map((id) => ({ id, lens: contract.domains[id], label: DOMAIN_LABELS[id] }))
-    .filter((row) => isDomainLensPresent(row.lens));
-
-  const skyWithoutSymbols = skyCards.filter((c) => c.id !== "tarot" && c.id !== "number");
-  const symbolCards = skyCards.filter((c) => c.id === "tarot" || c.id === "number");
+  const narrative = useMemo(() => {
+    const storyWithSky =
+      skyCards.length && (!story.skyCards || story.skyCards.length === 0)
+        ? { ...story, skyCards }
+        : story.skyCards?.length
+          ? story
+          : { ...story, skyCards };
+    return buildTodayDayNarrative({
+      contract,
+      story: storyWithSky,
+      morningRitualData,
+      colorGuide: colorGuide ?? story.colorGuide,
+    });
+  }, [contract, story, skyCards, morningRitualData, colorGuide]);
 
   const motion = useProfileMotionInView<HTMLElement>(40);
 
@@ -124,146 +117,48 @@ export function TodayPersonalizedProductSection({
         </header>
 
         <article
-          className={`${styles.synthesisCard} ${profileMotionStyles.staggerItem}`}
+          className={`${styles.narrativeScroll} ${profileMotionStyles.staggerItem}`}
           style={profileMotionStaggerDelay(0, 60)}
           data-testid="today-entity-synthesis"
         >
-          <p className={styles.synthesisKicker}>{themeLine || "Сегодня"}</p>
-          {reading.opening ? <p className={styles.synthesisText}>{reading.opening}</p> : null}
-          {reading.why ? (
-            <p className={styles.softWhy} data-testid="today-soft-why">
-              <span className={styles.softWhyLabel}>Почему это важно сегодня</span>
-              {reading.why}
+          {narrative.theme ? (
+            <p className={styles.synthesisKicker} data-testid="today-narrative-theme">
+              {narrative.theme}
             </p>
           ) : null}
+
+          {narrative.chapters.map((chapter, chapterIndex) => (
+            <section
+              key={chapter.id}
+              className={styles.narrativeChapter}
+              data-testid={`today-narrative-${chapter.id}`}
+              style={profileMotionStaggerDelay(chapterIndex + 1, 70)}
+            >
+              <p className={styles.narrativeKicker}>{chapter.kicker}</p>
+              {chapter.paragraphs.map((paragraph) => {
+                const isSoftWhy =
+                  chapter.id === "opening" && Boolean(narrative.softWhy) && paragraph === narrative.softWhy;
+                return (
+                  <p
+                    key={`${chapter.id}-${paragraph.slice(0, 48)}`}
+                    className={isSoftWhy ? `${styles.narrativeParagraph} ${styles.narrativeWhy}` : styles.narrativeParagraph}
+                    data-testid={isSoftWhy ? "today-soft-why" : undefined}
+                  >
+                    {isSoftWhy ? (
+                      <>
+                        <span className={styles.softWhyLabel}>Почему это важно сегодня</span>
+                        {paragraph}
+                      </>
+                    ) : (
+                      paragraph
+                    )}
+                  </p>
+                );
+              })}
+            </section>
+          ))}
         </article>
-
-        {(reading.lean || reading.ease || reading.close) && (
-          <div className={styles.attentionGrid} data-testid="today-zone-focus-card">
-            {reading.lean ? (
-              <article className={styles.attentionCard}>
-                <p className={styles.cardEyebrow}>Куда день тянет</p>
-                <p className={styles.readingParagraph}>{reading.lean}</p>
-              </article>
-            ) : null}
-            {reading.ease ? (
-              <article className={`${styles.attentionCard} ${styles.attentionCardCaution}`}>
-                <p className={styles.cardEyebrow}>Где лучше мягче</p>
-                <p className={styles.readingParagraph}>{reading.ease}</p>
-              </article>
-            ) : null}
-            {reading.close ? (
-              <article className={styles.attentionCard}>
-                <p className={styles.cardEyebrow}>Один ход дня</p>
-                <p className={`${styles.readingParagraph} ${styles.readingClose}`.trim()}>{reading.close}</p>
-              </article>
-            ) : null}
-          </div>
-        )}
-
-        {(doItems.length > 0 || avoidItems.length > 0) && (
-          <div className={styles.dualList} data-testid="today-zone-do-avoid">
-            {doItems.length ? (
-              <article className={styles.productCard}>
-                <p className={styles.cardEyebrow}>На что опереться</p>
-                <ul className={styles.bulletList}>
-                  {doItems.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </article>
-            ) : null}
-            {avoidItems.length ? (
-              <article className={styles.productCard}>
-                <p className={styles.cardEyebrow}>Что не дожимать</p>
-                <ul className={styles.bulletList}>
-                  {avoidItems.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </article>
-            ) : null}
-          </div>
-        )}
       </div>
-
-      {domainEntries.length ? (
-        <div className={styles.journeyScene} data-testid="today-zone-domains">
-          <ProfileAtmosphere motif="insight" />
-          <header className={styles.journeySceneHeader}>
-            <p className={styles.journeyStepIndex}>
-              <span className={styles.journeyStepBadge}>·</span>
-              <span>Сферы сегодня</span>
-            </p>
-            <p className={styles.journeySceneLead}>Где день сильнее и где лучше не торопиться.</p>
-          </header>
-          <div className={styles.domainGrid}>
-            {domainEntries.map((row) => (
-              <article key={row.id} className={styles.domainCard} data-testid={`today-domain-${row.id}`}>
-                <p className={styles.cardEyebrow}>{row.label}</p>
-                {row.lens.status ? <p className={styles.domainStatus}>{row.lens.status}</p> : null}
-                {row.lens.opportunity ? (
-                  <p className={styles.domainMeta}>
-                    <span>Сильнее:</span> {row.lens.opportunity}
-                  </p>
-                ) : null}
-                {row.lens.risk ? (
-                  <p className={styles.domainMeta}>
-                    <span>Риск:</span> {row.lens.risk}
-                  </p>
-                ) : null}
-                {row.lens.action ? (
-                  <p className={styles.domainAction}>{row.lens.action}</p>
-                ) : null}
-              </article>
-            ))}
-          </div>
-        </div>
-      ) : null}
-
-      {(skyWithoutSymbols.length > 0 || symbolCards.length > 0) && (
-        <div className={styles.journeyScene} data-testid="today-zone-sky">
-          <ProfileAtmosphere motif="why" />
-          <header className={styles.journeySceneHeader}>
-            <p className={styles.journeyStepIndex}>
-              <span className={styles.journeyStepBadge}>·</span>
-              <span>Небо и фон дня</span>
-            </p>
-            <p className={styles.journeySceneLead}>Почему именно эти акценты сегодня.</p>
-          </header>
-          {skyWithoutSymbols.length ? <TodaySkyStoryCards cards={skyWithoutSymbols} /> : null}
-          {symbolCards.length ? (
-            <div className={styles.symbolLayer} data-testid="today-zone-symbols">
-              <p className={styles.cardEyebrow}>Слой после ритуала</p>
-              <TodaySkyStoryCards cards={symbolCards} />
-            </div>
-          ) : null}
-        </div>
-      )}
-
-      {(colorGuide || talisman?.color || talisman?.stone || talisman?.note) && (
-        <div className={styles.journeyScene} data-testid="today-zone-talisman">
-          <ProfileAtmosphere motif="effort" />
-          <header className={styles.journeySceneHeader}>
-            <p className={styles.journeyStepIndex}>
-              <span className={styles.journeyStepBadge}>·</span>
-              <span>Цвет и опора дня</span>
-            </p>
-            <p className={styles.journeySceneLead}>Что помочь удержать ритм — и почему.</p>
-          </header>
-          {colorGuide ? <TodayDayColorGuideSection guide={colorGuide} /> : null}
-          {(talisman?.stone || talisman?.note) && (
-            <article className={styles.productCard}>
-              {talisman.stone ? (
-                <p className={styles.readingParagraph}>
-                  <strong>Камень:</strong> {talisman.stone}
-                </p>
-              ) : null}
-              {talisman.note ? <p className={styles.readingParagraph}>{talisman.note}</p> : null}
-            </article>
-          )}
-        </div>
-      )}
 
       <div className={styles.journeyScene} data-testid="today-zone-move">
         <ProfileAtmosphere motif="effort" />

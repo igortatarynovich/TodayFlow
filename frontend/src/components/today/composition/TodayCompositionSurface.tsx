@@ -1195,6 +1195,7 @@ export function TodayCompositionSurface(props: Props) {
             coreProfile={props.coreProfile}
             skyCards={story.skyCards}
             colorGuide={story.colorGuide}
+            morningRitualData={props.morningRitualData}
             tarotDeepenHref={
               engagement.tarotPickedId != null
                 ? buildTarotDeepenHref({
