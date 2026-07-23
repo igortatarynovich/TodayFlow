@@ -94,11 +94,14 @@ export function CompatibilityWebHub({
         <section className={pl.pairPicker}>
           <div style={{ textAlign: "center", display: "grid", gap: "0.55rem" }}>
             <DsBody size="sm" muted>
-              Сначала собери свой Today — имя, дата, первый разбор и email для сохранения.
+              Два человека по датам — превью пары до email. Или быстрый разбор по знакам.
             </DsBody>
           </div>
-          <div style={{ display: "grid", gap: "0.55rem", justifyItems: "center" }}>
-            <DsButton href="/onboarding/welcome?fresh=1">Создать мой Today</DsButton>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.55rem", justifyContent: "center" }}>
+            <DsButton href="/compatibility/birthdates">Проверить пару по датам</DsButton>
+            <DsButton href="/compatibility/analyze" variant="secondary">
+              Разбор по знакам
+            </DsButton>
             <DsButton href="/auth?mode=login&redirect=/compatibility" variant="ghost">
               Уже есть аккаунт? Войти
             </DsButton>

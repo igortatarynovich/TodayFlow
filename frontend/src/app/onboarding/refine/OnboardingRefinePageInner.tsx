@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { DsButton } from "@/design-system";
@@ -64,9 +63,9 @@ export default function OnboardingRefinePageInner() {
       }
     }
 
-    const nextPath = afterSave ? VALUE_FIRST_PATHS.save : VALUE_FIRST_PATHS.firstToday;
+    const nextPath = afterSave ? VALUE_FIRST_PATHS.save : VALUE_FIRST_PATHS.save;
     if (!afterSave) {
-      patchGuestProfileDraft({ first_today_started_at: new Date().toISOString() });
+      patchGuestProfileDraft({ save_ready_at: new Date().toISOString() });
     }
     router.push(nextPath);
   };
@@ -132,27 +131,20 @@ export default function OnboardingRefinePageInner() {
         {error ? <p className={styles.error}>{error}</p> : null}
         <div className={styles.ctaRow}>
           <DsButton variant="primary" type="submit" disabled={claiming}>
-            {claiming ? "Сохраняем…" : afterSave ? "Продолжить" : copy.refine.cta}
+            {claiming
+              ? "Сохраняем…"
+              : afterSave
+                ? copy.refine.afterSaveCta
+                : copy.refine.cta}
           </DsButton>
-          {!afterSave ? (
-            <>
-              <DsButton variant="secondary" type="button" disabled={claiming} onClick={() => void persistAndContinue(true)}>
-                {copy.refine.skipCta}
-              </DsButton>
-              <Link href={VALUE_FIRST_PATHS.firstToday}>
-                <DsButton variant="secondary">{copy.refine.firstTodayLink}</DsButton>
-              </Link>
-            </>
-          ) : (
-            <>
-              <DsButton variant="secondary" type="button" disabled={claiming} onClick={() => void persistAndContinue(true)}>
-                {copy.refine.skipCta}
-              </DsButton>
-              <Link href={VALUE_FIRST_PATHS.firstToday}>
-                <DsButton variant="secondary">{copy.refine.firstTodayLink}</DsButton>
-              </Link>
-            </>
-          )}
+          <DsButton
+            variant="secondary"
+            type="button"
+            disabled={claiming}
+            onClick={() => void persistAndContinue(true)}
+          >
+            {copy.refine.skipCta}
+          </DsButton>
         </div>
       </form>
     </ValueFirstOnboardingShell>

@@ -97,8 +97,15 @@ export function useCoreSetupFlow(options: UseCoreSetupFlowOptions = {}) {
       setPreviewError(null);
       setNatalPreview(null);
 
-      if (!setupForm.first_name.trim() || !setupForm.birth_date || !setupForm.location_name.trim()) {
-        setSetupError("Заполни имя, дату рождения и место рождения.");
+      if (!setupForm.birth_date) {
+        setSetupError("Укажите дату рождения — она создаёт базовую астрологическую и нумерологическую основу.");
+        return;
+      }
+      const timeKnown = !setupForm.time_unknown && Boolean(setupForm.birth_time);
+      if (timeKnown && !setupForm.location_name.trim()) {
+        setSetupError(
+          "Укажите место рождения — без него нельзя правильно рассчитать Асцендент и дома для указанного времени.",
+        );
         return;
       }
 
@@ -106,10 +113,10 @@ export function useCoreSetupFlow(options: UseCoreSetupFlowOptions = {}) {
       try {
         const payload = {
           ...setupForm,
-          first_name: setupForm.first_name.trim(),
+          first_name: setupForm.first_name.trim() || null,
           last_name: setupForm.last_name?.trim() || null,
           label: setupForm.label.trim() || "Я",
-          location_name: setupForm.location_name.trim(),
+          location_name: setupForm.location_name.trim() || null,
           birth_time: setupForm.time_unknown ? null : setupForm.birth_time || null,
           latitude: setupForm.latitude ?? null,
           longitude: setupForm.longitude ?? null,
@@ -134,7 +141,9 @@ export function useCoreSetupFlow(options: UseCoreSetupFlowOptions = {}) {
 
         setBuildStage("done");
         setSetupMessage(
-          "Карта собрана. Теперь система будет использовать её в Today, Guidance и Compatibility. Чем больше ты отвечаешь и фиксируешь действия, тем точнее будут подсказки.",
+          timeKnown
+            ? "Основа карты собрана: знаки, дома и углы доступны при сохранённых координатах."
+            : "Базовый профиль собран по дате. Добавьте время и место, чтобы открыть Асцендент и дома.",
         );
 
         await logActiveJTBDAction("profile_core_setup_completed", {

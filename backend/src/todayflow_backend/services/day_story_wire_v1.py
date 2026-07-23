@@ -210,6 +210,32 @@ def _build_day_story_record(
         core_profile if isinstance(core_profile, dict) else None,
         experience_id="today",
     )
+    from todayflow_backend.services.profile_slice_for_today_v0 import (
+        build_profile_slice_for_today,
+    )
+
+    continuity = build_profile_slice_for_today(
+        core_profile if isinstance(core_profile, dict) else None
+    )
+    if continuity:
+        user_core = dict(user_core)
+        user_core["profile_continuity"] = continuity
+        if continuity.get("identity_summary") and not user_core.get("identity_line"):
+            user_core["identity_line"] = continuity["identity_summary"]
+        if continuity.get("decision_style") and not user_core.get("decision_style"):
+            user_core["decision_style"] = continuity["decision_style"]
+        if continuity.get("emotional_style"):
+            user_core["emotional_style"] = continuity["emotional_style"]
+        if continuity.get("relationship_style") and not user_core.get("communication_style"):
+            user_core["communication_style"] = continuity["relationship_style"]
+        if continuity.get("sun_sign") and not user_core.get("sun_sign"):
+            user_core["sun_sign"] = continuity["sun_sign"]
+        if continuity.get("life_path") is not None and user_core.get("life_path") is None:
+            user_core["life_path"] = continuity["life_path"]
+        if continuity.get("natal_mode"):
+            user_core["natal_mode"] = continuity["natal_mode"]
+        if continuity.get("strengths") and not user_core.get("strengths"):
+            user_core["strengths"] = continuity["strengths"]
     rhythm_context = (
         fusion_dump.get("rhythm_context")
         if isinstance(fusion_dump.get("rhythm_context"), dict)
@@ -441,9 +467,9 @@ def build_day_story_v1_wire(
         .first()
     )
     ritual_norm = _ritual_from_morning_and_connection(morning, dc_row)
-    recs = morning.daily_recommendations if isinstance(morning.daily_recommendations, dict) else {}
-    color = str(recs.get("lucky_color") or "") if recs else ""
-    stone = str(recs.get("lucky_stone") or "") if recs else ""
+    # Color/stone of the day = day_story recommendation (LLM), never morning lucky_* presets.
+    color = ""
+    stone = ""
     locale_value = (locale or "ru").strip()[:32] or "ru"
     owner_key = owner_key_for_user(user.id)
     expected_fp, fp_payload = compute_expected_day_story_fingerprint(
@@ -576,9 +602,9 @@ def build_day_story_record_for_refresh(
         .first()
     )
     ritual_norm = _ritual_from_morning_and_connection(morning, dc_row)
-    recs = morning.daily_recommendations if isinstance(morning.daily_recommendations, dict) else {}
-    color = str(recs.get("lucky_color") or "") if recs else ""
-    stone = str(recs.get("lucky_stone") or "") if recs else ""
+    # Same rule as GET wire: no preset lucky_* as day-symbol SoT.
+    color = ""
+    stone = ""
     return _build_day_story_record(
         db,
         user=user,

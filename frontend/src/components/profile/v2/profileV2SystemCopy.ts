@@ -1,61 +1,106 @@
-/** Profile v2 — PR-4 origin layers (Identity · Interpretation · Evidence · Sources).
- *  Platform gate: docs/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md (umbrella wins on conflict).
- *  Surface IA: docs/PR4_PROFILE_CANON.md — applies umbrella; does not invent a separate gate.
- */
-
+/** Profile Journey + Explore copy — five human steps, then research fold. */
 export const PROFILE_V2_DEPTH_NAV = [
-  { id: "identity", step: "01", title: "Идентичность", hint: "Что не меняется" },
-  { id: "character", step: "02", title: "Характер", hint: "Как устроен" },
-  { id: "direction", step: "03", title: "Направление", hint: "Куда расти" },
-  { id: "evidence", step: "04", title: "Обоснование", hint: "Почему так" },
-  { id: "sources", step: "05", title: "Источники", hint: "Натал и числа" },
+  { id: "recognition", step: "01", title: "Кто я", hint: "Узнавание" },
+  { id: "why", step: "02", title: "Почему", hint: "Опоры" },
+  { id: "insight", step: "03", title: "Главный узел", hint: "Закономерность" },
+  { id: "effort", step: "04", title: "Куда усилия", hint: "Вектор" },
+  { id: "bridge", step: "05", title: "Мост", hint: "В день" },
 ] as const;
 
-export type ProfileV2ZoneId = (typeof PROFILE_V2_DEPTH_NAV)[number]["id"];
+export const PROFILE_V2_EXPLORE_NAV = [
+  { id: "explore", title: "Исследовать профиль", hint: "Детали" },
+  { id: "natal", title: "Натальная карта", hint: "Основа" },
+] as const;
+
+export type ProfileV2ZoneId =
+  | (typeof PROFILE_V2_DEPTH_NAV)[number]["id"]
+  | (typeof PROFILE_V2_EXPLORE_NAV)[number]["id"];
 
 export const PROFILE_V2_COPY = {
-  heroEyebrow: "Профиль",
-  heroTitle: "Твой личный профиль",
-  liveBadge: "Личный профиль",
   mapsCta: "Карты и наблюдения",
   mapsCtaHint: "Как жизнь меняется со временем — отдельно от профиля.",
   zones: {
-    identity: {
-      title: "Идентичность",
-      lead: "Ядро личности: факты рождения и устойчивые сигнатуры — без дневного состояния.",
-      cards: {
-        archetype: "Архетип",
-        astro: "Базовые сигнатуры",
-      },
-      astroHint: "Солнце, Луна, ASC, стихия, число пути.",
+    recognition: {
+      title: "Кто я",
+      lead: "Одно предложение, в котором себя узнаёшь.",
     },
-    character: {
-      title: "Характер",
-      lead: "Сильные стороны, что забирает силу, и как принимаешь решения.",
+    why: {
+      title: "Главное, что формирует тебя",
+      selectedLabel: "Что выбрало архетип",
+      influencedLabel: "Что влияет на портрет",
+      honestyFallbackTitle: "На чём держится",
+    },
+    insight: {
+      title: "Главный узел",
+      giftLabel: "Твой дар",
+      trapLabel: "Где он становится ловушкой",
+      restoreLabel: "Что возвращает его в силу",
+      groundedLabel: "На чём стоит вывод",
+      helpLabel: "Что помогает",
+      livingLabel: "Как это уже проявлялось",
+      livingNote: "Контекст из отметок — не доказательство этого узла.",
+    },
+    effort: {
+      title: "Твой вектор сейчас",
+      lead: "Одно направление усилия — не план дня.",
+      spheresLabel: "Сильнее всего проявляется",
+    },
+    bridge: {
+      title: "Твоя история продолжается",
+      cta: "Открыть историю дня",
+      lead: "Продолжение пути, не второй совет «что делать».",
+    },
+    explore: {
+      title: "Исследовать глубже",
+      lead: "Карта, традиции и детали — исследовательский слой, не часть путешествия.",
+      natalTitle: "Твоя натальная карта",
+      detailsTitle: "Карта и детали",
+      open: "Исследовать глубже",
+      hide: "Свернуть детали",
+      exploreHint: "Полная карта, дома и аспекты — за раскрытием.",
+      updatedNote: "Карта пересчитывается при изменении данных рождения.",
+    },
+    /** Legacy keys for fallback first-screen when journey surface absent. */
+    traits: {
+      title: "Три главные особенности",
+      decisions: "Как принимаешь решения",
+      intimacy: "Как строишь близость",
+      selfFriction: "Где сам себе мешаешь",
+    },
+    contradiction: {
+      title: "Главное внутреннее противоречие",
+    },
+    helps: {
+      title: "Что тебе помогает",
+      lead: "Один практически применимый вывод.",
+    },
+    actions: {
+      fullProfile: "Исследовать глубже",
+      hideFullProfile: "Свернуть детали",
+      today: "Открыть историю дня",
+      todayLead: "День — следующий шаг после портрета: фокус и один шаг.",
+    },
+    characterMore: {
+      title: "Ещё о характере",
       strengthens: "Сильные стороны",
       drains: "Что забирает силу",
       helps: "Внутренние опоры",
       decisions: "Как принимаешь решения",
       patterns: "Повторяющиеся паттерны",
-      forming: "Как это складывается",
     },
     direction: {
-      title: "Направление",
-      lead: "Главная задача и сферы — куда расти и что поддерживать.",
       missionLabel: "Главная задача",
     },
-    evidence: {
-      title: "Обоснование",
-      lead: "Почему портрет звучит так — и что ещё может стать яснее.",
-      nextLabel: "Что откроет больше ясности",
-      levelPrefix: "Насколько уже видны повторы",
-    },
     sources: {
-      title: "Источники",
-      lead: "Натальная карта и числа — фундамент личности, не отдельный продукт.",
+      title: "Основа карты",
+      lead: "Натальная карта и числа — фундамент личности.",
       explore: "Исследовать глубже",
       exploreHint: "Полная карта, дома и аспекты — за раскрытием.",
       updatedNote: "Карта пересчитывается при изменении данных рождения.",
+    },
+    evidence: {
+      nextLabel: "Что откроет больше ясности",
+      levelPrefix: "Насколько уже видны повторы",
     },
   },
 } as const;

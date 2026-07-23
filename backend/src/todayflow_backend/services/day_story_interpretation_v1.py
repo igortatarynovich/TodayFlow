@@ -271,7 +271,7 @@ def build_day_story_interpretation_v1(
         evidence.append(
             _evidence(
                 evidence_id=eid,
-                source="morning.lucky_color",
+                source="day_story.talisman_seed",
                 claim_ref="color",
                 summary=color.strip(),
             )
@@ -281,7 +281,7 @@ def build_day_story_interpretation_v1(
         evidence.append(
             _evidence(
                 evidence_id=eid,
-                source="morning.lucky_stone",
+                source="day_story.talisman_seed",
                 claim_ref="stone",
                 summary=stone.strip(),
             )

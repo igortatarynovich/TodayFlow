@@ -1,9 +1,15 @@
 # Phase N — Daily Interpretation Engine
 
-**Статус:** PLANNED — архитектурная фаза (не текущий execution slice)  
+**STATUS: DEFERRED — not an approved implementation phase**
+
+Исторический / exploratory документ. Не текущий execution slice.  
+После Profile v1 Freeze следующий этап — **продуктовая реконструкция экрана Today**, не реализация DailyState / Recommendation Engine заранее.  
+Общие слои допускаются только после разбора production-блоков Today и доказательства пользы (architecture-must-prove-value). См. [PRODUCT_TRUTH_FIRST.md](./PRODUCT_TRUTH_FIRST.md).
+
+**Бывший статус:** PLANNED (снят с очереди реализации)  
 **Владелец:** Product + Architecture  
 **Канон-база:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [PRODUCT_TRUTH_FIRST.md](./PRODUCT_TRUTH_FIRST.md) · [DAY_CONTEXT_V0.md](./DAY_CONTEXT_V0.md) · [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md) · [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md)  
-**Следующий артефакт:** [rfc/RFC_DAILY_STATE_V0.md](./rfc/RFC_DAILY_STATE_V0.md) (DRAFT) — схема + правила конфликтов; **не** макет и **не** генератор символов  
+**Связанный RFC (тоже DEFERRED):** [rfc/RFC_DAILY_STATE_V0.md](./rfc/RFC_DAILY_STATE_V0.md)  
 **Канон текстов/советов:** [EXPLAINABLE_INTERPRETATION.md](./EXPLAINABLE_INTERPRETATION.md)
 
 ---

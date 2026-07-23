@@ -12,7 +12,7 @@ import styles from "@/components/onboarding/valueFirst/firstResult.module.css";
 
 type Props = {
   preview: FirstResultModel;
-  firstTodayHref: string;
+  saveHref: string;
   refineHref: string;
 };
 
@@ -131,7 +131,7 @@ function DeepenContent({ preview, showMore, onShowMore }: { preview: FirstResult
   );
 }
 
-export function FirstResultScreen({ preview, firstTodayHref, refineHref }: Props) {
+export function FirstResultScreen({ preview, saveHref, refineHref }: Props) {
   const [showMore, setShowMore] = useState(false);
   const elementTile = preview.keyInfluences.find((t) => t.id === "element");
 
@@ -168,9 +168,9 @@ export function FirstResultScreen({ preview, firstTodayHref, refineHref }: Props
             <section className={styles.ctaSection}>
               <p className={styles.closingMessage}>{preview.closingMessage}</p>
               <div className={styles.ctaRow}>
-                <Link href={firstTodayHref} data-testid="onboarding-preview-first-today">
+                <Link href={saveHref} data-testid="onboarding-preview-save">
                   <DsButton variant="primary" size="block" className={styles.primaryCta}>
-                    {preview.firstTodayCtaLabel}
+                    {preview.saveCtaLabel}
                   </DsButton>
                 </Link>
                 <Link href={refineHref} data-testid="onboarding-preview-refine">
@@ -179,7 +179,14 @@ export function FirstResultScreen({ preview, firstTodayHref, refineHref }: Props
                   </DsButton>
                 </Link>
               </div>
-              <p className={styles.refineHint}>{preview.refineHint}</p>
+              {preview.limitationsLabels.length > 0 ? (
+                <p className={styles.refineHint} data-testid="onboarding-preview-limitations">
+                  Пока закрыто без времени и места: {preview.limitationsLabels.join(", ")}. Уточнение откроет
+                  эти линии — сохранение закрепит основу.
+                </p>
+              ) : (
+                <p className={styles.refineHint}>{preview.refineHint}</p>
+              )}
             </section>
           }
         />

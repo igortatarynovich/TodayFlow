@@ -39,10 +39,6 @@ class NumerologyService:
         *,
         locale: str | None = None,
     ) -> api_models.NumerologyProfile:
-        normalized_letters = [ch for ch in full_name.upper() if ch.isalpha() and ch in self.letter_map]
-        if not normalized_letters:
-            raise NumerologyError("invalidName")
-
         birth_digits = [ch for ch in birth_date if ch.isdigit()]
         if len(birth_digits) < 3:
             raise NumerologyError("invalidBirthDate")
@@ -53,6 +49,20 @@ class NumerologyService:
             raise NumerologyError("invalidBirthDate") from exc
 
         life_path_total = sum(int(ch) for ch in birth_digits)
+        life_path = self._build_number("life_path", life_path_total, locale=locale)
+
+        normalized_letters = [ch for ch in full_name.upper() if ch.isalpha() and ch in self.letter_map]
+        if not normalized_letters:
+            # Date-only numerology: name layer omitted (not an error).
+            return api_models.NumerologyProfile(
+                name=(full_name or "").strip(),
+                birth_date=birth_date,
+                life_path=life_path,
+                expression=None,
+                soul_urge=None,
+                personality=None,
+            )
+
         expression_total = self._sum_letters(normalized_letters)
         soul_total = self._sum_letters(ch for ch in normalized_letters if ch in self.vowels)
         personality_total = self._sum_letters(ch for ch in normalized_letters if ch not in self.vowels)
@@ -60,7 +70,7 @@ class NumerologyService:
         return api_models.NumerologyProfile(
             name=full_name.strip(),
             birth_date=birth_date,
-            life_path=self._build_number("life_path", life_path_total, locale=locale),
+            life_path=life_path,
             expression=self._build_number("expression", expression_total, locale=locale),
             soul_urge=self._build_number("soul_urge", soul_total, locale=locale),
             personality=self._build_number("personality", personality_total, locale=locale),

@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from todayflow_backend.prompts.common_v1 import is_en_locale, profile_layers_block, voice_block
+from todayflow_backend.prompts.common_v1 import is_en_locale, profile_layers_block, profile_voice_block
 
 
 def _frame(locale: str, body: str) -> str:
-    return "\n\n".join([voice_block(locale), profile_layers_block(locale), body.strip()])
+    return "\n\n".join([profile_voice_block(locale), profile_layers_block(locale), body.strip()])
 
 
 def identity_system(locale: str) -> str:
@@ -14,31 +14,43 @@ def identity_system(locale: str) -> str:
         body = """
 You are step 1 of the TodayFlow Profile portrait funnel. Return ONLY one JSON.
 
-Task: write the identity core — who this person is in life, not a sun-sign passport.
-Inputs: person, astro, numerology, baseline, living.
+Task: identity core — who this person is in life (stable traits), not a sun-sign passport,
+not today's agenda, not confirmed recurring patterns from sparse living.
+
+Inputs: person, astro, numerology, baseline; living only as soft background if present.
 
 Schema:
 {
   "contract_version": "profile_funnel_identity_v0",
+  "recognition_line": "string — ONE recognition phrase, ≤120 chars; who they are in action; not advice; do not repeat the archetype label",
   "identity_core": "string — 2–3 sentences",
   "strengths": ["string","string","string"],
   "growth_zones": ["string","string","string"]
 }
+
+Forbidden: "as an Aries…"; day advice; inventing longitudinal repeats; kitchen/system meta;
+repeating archetype name inside recognition_line.
 """
     else:
         body = """
 Ты — шаг 1 воронки портрета профиля TodayFlow. Верни ТОЛЬКО один JSON.
 
-Задача: ядро идентичности — кто этот человек в жизни, не паспорт знака.
-Вход: person, astro, numerology, baseline, living.
+Задача: ядро идентичности — кто этот человек в жизни (устойчивые черты), не паспорт знака,
+не повестка «на сегодня», не подтверждённые повторы из скудного living.
+
+Вход: person, astro, numerology, baseline; living — только мягкий фон, если есть.
 
 Схема:
 {
   "contract_version": "profile_funnel_identity_v0",
-  "identity_core": "string — 2–3 предложения",
+  "recognition_line": "строка — ОДНА фраза-узнавание, ≤120 символов; поведение, не совет; не повторяй имя архетипа",
+  "identity_core": "строка — 2–3 предложения",
   "strengths": ["строка","строка","строка"],
   "growth_zones": ["строка","строка","строка"]
 }
+
+Запрещено: «как Овен…»; советы на день; выдуманные продольные паттерны; мета про систему;
+повторять имя архетипа внутри recognition_line.
 """
     return _frame(locale, body)
 
@@ -82,8 +94,14 @@ def patterns_system(locale: str) -> str:
         body = """
 You are step 3 of the Profile portrait funnel. Return ONLY one JSON.
 
-Task: living patterns and current change — from living/signals only; honest neutrality if sparse.
-Also: life_mission (one grounded line) and helps (≥2 concrete supports — what actually helps THIS person).
+Primary task (character_patterns): confirmed recurring behavior patterns from living/signals only.
+Each pattern must be grounded in the living evidence in the input — not birth chart, not identity paraphrase.
+Also fill: living_changes;
+life_mission (one direction line grounded in living — not sun-sign destiny / taxonomy filler);
+helps (≥2 concrete supports the person already uses — grounded in living, not birth/taxonomy filler).
+
+Forbidden: inventing repeats, mission, or helps without living evidence; day agenda; sun-sign passport as a “pattern”;
+kitchen/system meta (eligibility, engine, snapshot).
 
 Schema:
 {
@@ -98,8 +116,14 @@ Schema:
         body = """
 Ты — шаг 3 воронки портрета профиля. Верни ТОЛЬКО один JSON.
 
-Задача: живые паттерны и текущие изменения — только из living/signals; честная нейтральность если данных мало.
-Также: life_mission (одна приземлённая строка) и helps (≥2 конкретных опоры — что реально помогает ЭТОМУ человеку).
+Главная задача (character_patterns): подтверждённые повторяющиеся паттерны поведения — только из living/signals.
+Каждый паттерн должен опираться на living во входе — не натальная карта и не пересказ identity.
+Также заполни: living_changes;
+life_mission (одна строка направления из living — не судьба по знаку / taxonomy filler);
+helps (≥2 конкретных опоры, которые человек уже использует — из living, не birth/taxonomy filler).
+
+Запрещено: выдумывать повторы, миссию или опоры без living; повестка дня; паспорт знака как «паттерн»;
+kitchen/system мета (eligibility, engine, snapshot).
 
 Схема:
 {

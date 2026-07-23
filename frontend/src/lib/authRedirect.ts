@@ -2,11 +2,7 @@
 
 import { claimGuestProfileAfterAuth } from "@/lib/claimGuestProfile";
 import { fetchCoreProfileCached } from "@/lib/coreProfileCache";
-import { hasOnboardingIntent, hasOnboardingReality } from "@/lib/onboardingContext";
-import {
-  FIRST_TODAY_PATH,
-  hasCompletedFirstToday,
-} from "@/lib/firstTodayState";
+import { FIRST_TODAY_PATH } from "@/lib/firstTodayState";
 import { ONBOARDING_CORE_PATH } from "@/lib/coreSetup";
 import { guestSignupHref } from "@/lib/guestAccessStore";
 
@@ -50,11 +46,8 @@ export function buildAuthHref(mode: AuthMode = "login", redirect?: string | null
   return `/auth?mode=login&redirect=${encodeURIComponent(safeRedirect)}`;
 }
 
-/** Client-only: next route after core profile is ready (onboarding → First Today → Profile). */
+/** Client-only: after core is ready — Profile is default (First Today optional, not a gate). */
 export function resolvePostCoreAuthTarget(): string {
-  if (!hasOnboardingIntent()) return "/onboarding/intent";
-  if (!hasOnboardingReality()) return "/onboarding/reality";
-  if (!hasCompletedFirstToday()) return FIRST_TODAY_PATH;
   return "/profile";
 }
 

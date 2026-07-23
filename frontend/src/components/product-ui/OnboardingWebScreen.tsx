@@ -36,7 +36,7 @@ export function OnboardingWebScreen({
         <div className={s.authWebMarketingNav}>
           <ProductWebGuestNav
             ctaHref={guestSignupHref()}
-            ctaLabel={t("onboarding.nav.cta", "Создать мой Today")}
+            ctaLabel={t("onboarding.nav.cta", "Построить мой профиль")}
           />
         </div>
       ) : (

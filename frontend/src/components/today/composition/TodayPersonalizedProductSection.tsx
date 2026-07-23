@@ -26,6 +26,8 @@ type Props = {
   coreProfile?: CoreProfile | null;
   tarotDeepenHref?: string | null;
   embeddedInWebDashboard?: boolean;
+  /** Authoritative day_story — one continuous reading, ≤1 tool. */
+  singleVoice?: boolean;
   onPickPromise: (text: string) => void;
   onOpenGoalDraft: () => void;
   onGoalDraftChange: (value: string) => void;
@@ -33,6 +35,16 @@ type Props = {
   onPracticeAction: () => void;
   onAffirmationRead: () => void;
 };
+
+function pickPrimaryTool(tools: TodayStrengthenTool[]): TodayStrengthenTool | null {
+  if (!tools.length) return null;
+  return (
+    tools.find((t) => t.id === "practice") ||
+    tools.find((t) => t.id === "affirmation") ||
+    tools[0] ||
+    null
+  );
+}
 
 export function TodayPersonalizedProductSection({
   story,
@@ -49,6 +61,7 @@ export function TodayPersonalizedProductSection({
   coreProfile,
   tarotDeepenHref,
   embeddedInWebDashboard = false,
+  singleVoice = false,
   onPickPromise: _onPickPromise,
   onOpenGoalDraft,
   onGoalDraftChange,
@@ -59,12 +72,8 @@ export function TodayPersonalizedProductSection({
   const compatibility = buildTodayCompatibilityHook(coreProfile);
   const reading = buildTodayLiteraryReading(story, contract);
 
-  const completedCount = (practiceCompleted ? 1 : 0) + (affirmationRead ? 1 : 0);
-  const totalTools = strengthenTools.length;
-
-  const practiceTool = strengthenTools.find((tool) => tool.id === "practice");
-  const affirmationTool = strengthenTools.find((tool) => tool.id === "affirmation");
-  const otherTools = strengthenTools.filter((tool) => tool.id !== "practice" && tool.id !== "affirmation");
+  const tools = singleVoice ? (pickPrimaryTool(strengthenTools) ? [pickPrimaryTool(strengthenTools)!] : []) : strengthenTools;
+  const primaryTool = pickPrimaryTool(tools);
 
   const themeLine =
     contract.day_story?.theme?.trim() ||
@@ -73,31 +82,33 @@ export function TodayPersonalizedProductSection({
 
   return (
     <section
-      className={`${styles.section} ${embeddedInWebDashboard ? styles.sectionWebEmbed : ""}`.trim()}
+      className={`${styles.section} ${embeddedInWebDashboard ? styles.sectionWebEmbed : ""} ${singleVoice ? styles.sectionLiterary : ""}`.trim()}
       data-testid="today-zone-personal"
+      data-literary={singleVoice ? "1" : undefined}
     >
-      <article className={styles.synthesisCard} data-testid="today-entity-synthesis">
-        <div>
-          <p className={styles.synthesisKicker}>{themeLine || "Сегодня"}</p>
-          {reading.opening ? <p className={styles.synthesisText}>{reading.opening}</p> : null}
-          {reading.why ? (
-            <p className={styles.softWhy} data-testid="today-soft-why">
-              <span className={styles.softWhyLabel}>Почему это важно сегодня</span>
-              {reading.why}
-            </p>
-          ) : null}
-        </div>
+      <article
+        className={singleVoice ? styles.literaryReading : styles.synthesisCard}
+        data-testid="today-entity-synthesis"
+      >
+        <p className={styles.synthesisKicker}>{themeLine || "Сегодня"}</p>
+        {reading.opening ? <p className={styles.synthesisText}>{reading.opening}</p> : null}
+        {reading.why ? (
+          <p className={styles.softWhy} data-testid="today-soft-why">
+            <span className={styles.softWhyLabel}>Почему это важно сегодня</span>
+            {reading.why}
+          </p>
+        ) : null}
+        {reading.lean ? <p className={styles.readingParagraph}>{reading.lean}</p> : null}
+        {reading.ease ? <p className={styles.readingParagraph}>{reading.ease}</p> : null}
+        {reading.anchor ? (
+          <p className={styles.readingParagraph} data-testid="today-literary-anchor">
+            {reading.anchor}
+          </p>
+        ) : null}
+        {reading.close ? (
+          <p className={`${styles.readingParagraph} ${styles.readingClose}`.trim()}>{reading.close}</p>
+        ) : null}
       </article>
-
-      {(reading.lean || reading.ease || reading.close) && (
-        <article className={styles.productCard} data-testid="today-zone-focus-card">
-          {reading.lean ? <p className={styles.readingParagraph}>{reading.lean}</p> : null}
-          {reading.ease ? <p className={styles.readingParagraph}>{reading.ease}</p> : null}
-          {reading.close ? (
-            <p className={`${styles.readingParagraph} ${styles.readingClose}`.trim()}>{reading.close}</p>
-          ) : null}
-        </article>
-      )}
 
       {(dayGoal || goalDraftOpen) && (
         <article className={styles.productCard} data-testid="today-zone-promise">
@@ -139,72 +150,51 @@ export function TodayPersonalizedProductSection({
         </button>
       ) : null}
 
-      {strengthenTools.length > 0 ? (
+      {primaryTool ? (
         <article className={styles.productCard} data-testid="today-zone-strengthen">
-          <div className={styles.practicesHeader}>
-            <p className={styles.cardEyebrow}>На сегодня</p>
-            {totalTools > 1 ? (
-              <p className={styles.practicesProgress}>
-                {completedCount} из {totalTools}
-              </p>
-            ) : null}
-          </div>
-
-          {practiceTool ? (
-            <>
-              <div className={styles.practiceRow}>
-                <span
-                  className={practiceCompleted ? styles.practiceCheckDone : styles.practiceCheck}
-                  aria-hidden
-                />
-                <div className={styles.practiceBody}>
-                  <p className={styles.practiceTitle}>{practiceTool.title}</p>
-                  {practiceTool.duration ? <p className={styles.practiceMeta}>{practiceTool.duration}</p> : null}
-                  {!practiceCompleted ? (
-                    <button
-                      type="button"
-                      className={`orbit-button orbit-button-secondary ${styles.practiceAction}`}
-                      data-testid="today-tool-practice"
-                      disabled={practiceCompleting}
-                      onClick={() => void onPracticeAction()}
-                    >
-                      {practiceStarted ? copy.practiceComplete : copy.practiceStart}
-                    </button>
-                  ) : (
-                    <p className={styles.practiceMeta}>{copy.practiceCompleted}</p>
-                  )}
-                </div>
-              </div>
-            </>
-          ) : null}
-
-          {affirmationTool ? (
-            <div className={styles.practiceRow}>
-              <span className={affirmationRead ? styles.practiceCheckDone : styles.practiceCheck} aria-hidden />
-              <div className={styles.practiceBody}>
-                <p className={styles.practiceTitle}>{affirmationTool.title}</p>
-                {!affirmationRead ? (
+          <p className={styles.cardEyebrow}>На сегодня</p>
+          <div className={styles.practiceRow}>
+            <span
+              className={
+                (primaryTool.id === "practice" && practiceCompleted) ||
+                (primaryTool.id === "affirmation" && affirmationRead)
+                  ? styles.practiceCheckDone
+                  : styles.practiceCheck
+              }
+              aria-hidden
+            />
+            <div className={styles.practiceBody}>
+              <p className={styles.practiceTitle}>{primaryTool.title}</p>
+              {primaryTool.duration ? <p className={styles.practiceMeta}>{primaryTool.duration}</p> : null}
+              {primaryTool.detail && primaryTool.id !== "practice" && primaryTool.id !== "affirmation" ? (
+                <p className={styles.practiceMeta}>{primaryTool.detail}</p>
+              ) : null}
+              {primaryTool.id === "practice" ? (
+                !practiceCompleted ? (
                   <button
                     type="button"
                     className={`orbit-button orbit-button-secondary ${styles.practiceAction}`}
-                    onClick={onAffirmationRead}
+                    data-testid="today-tool-practice"
+                    disabled={practiceCompleting}
+                    onClick={() => void onPracticeAction()}
                   >
-                    {copy.readAffirmation}
+                    {practiceStarted ? copy.practiceComplete : copy.practiceStart}
                   </button>
-                ) : null}
-              </div>
+                ) : (
+                  <p className={styles.practiceMeta}>{copy.practiceCompleted}</p>
+                )
+              ) : null}
+              {primaryTool.id === "affirmation" && !affirmationRead ? (
+                <button
+                  type="button"
+                  className={`orbit-button orbit-button-secondary ${styles.practiceAction}`}
+                  onClick={onAffirmationRead}
+                >
+                  {copy.readAffirmation}
+                </button>
+              ) : null}
             </div>
-          ) : null}
-
-          {otherTools.map((tool) => (
-            <div key={tool.id} className={styles.practiceRow}>
-              <span className={styles.practiceCheck} aria-hidden />
-              <div className={styles.practiceBody}>
-                <p className={styles.practiceTitle}>{tool.title}</p>
-                {tool.detail ? <p className={styles.practiceMeta}>{tool.detail}</p> : null}
-              </div>
-            </div>
-          ))}
+          </div>
         </article>
       ) : null}
 

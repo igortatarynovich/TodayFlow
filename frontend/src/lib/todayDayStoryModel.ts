@@ -252,11 +252,27 @@ export function buildTodayDayStoryViewModel(input: {
 
   const sphereFocus = buildTodaySphereFocus(input.contract);
   const glance = buildGlanceCards(input.contract, sphereFocus);
-  const apiColor = input.morningRitualData?.celestial_events?.daily_symbols?.color;
-  const colorGuide = resolveTodayDayColorGuide({
-    name: input.colorLine ?? apiColor?.name,
-    api: apiColor,
-  });
+  const talisman = input.contract?.day_story?.talisman;
+  const talismanColor =
+    typeof talisman?.color === "string" && talisman.color.trim() ? talisman.color.trim() : null;
+  const celestialSymbols = input.morningRitualData?.celestial_events?.daily_symbols as
+    | { product_authority?: boolean; color?: { name?: string } & Record<string, unknown> }
+    | undefined;
+  const useCelestialColor =
+    Boolean(celestialSymbols?.color?.name) && celestialSymbols?.product_authority !== false;
+  const apiColor = useCelestialColor ? celestialSymbols?.color : null;
+  const colorGuide = resolveTodayDayColorGuide(
+    talismanColor
+      ? {
+          name: talismanColor,
+          fromDayStory: true,
+          storyNote: typeof talisman?.note === "string" ? talisman.note : null,
+        }
+      : {
+          name: input.colorLine ?? apiColor?.name,
+          api: apiColor as Parameters<typeof resolveTodayDayColorGuide>[0]["api"],
+        },
+  );
   const pulseLabel = "Энергия дня";
 
   const tarotImpact =

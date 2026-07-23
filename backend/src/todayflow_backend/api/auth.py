@@ -2,7 +2,7 @@
 
 import secrets
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 import jwt
 from fastapi import APIRouter, Depends, HTTPException, Request
@@ -57,6 +57,15 @@ class ChangePasswordPayload(BaseModel):
     new_password: str
 
 
+class RefreshPayload(BaseModel):
+    refresh_token: str
+    device_label: str | None = None
+
+
+class LogoutPayload(BaseModel):
+    refresh_token: str | None = None
+
+
 def _validate_new_password(password: str, *, locale: str) -> None:
     if len(password or "") < 8:
         raise HTTPException(
@@ -82,8 +91,7 @@ def signup(payload: SignupPayload, request: Request, db: Session = Depends(get_s
     db.add(user)
     db.commit()
     db.refresh(user)
-    token = auth_service.create_token(user.id, is_admin=user.is_admin)
-    return {"user_id": user.id, "email": user.email, "token": token}
+    return auth_service.issue_token_pair(db, user)
 
 
 @router.post("/login")
@@ -92,22 +100,22 @@ def login(payload: LoginPayload, request: Request, db: Session = Depends(get_ses
     user = db.query(db_models.User).filter_by(email=payload.email).first()
     if not user or not auth_service.verify_password(payload.password, user.password_hash or ""):
         raise HTTPException(status_code=401, detail=translate("auth.errors.invalidCredentials", locale=locale))
-    token = auth_service.create_token(user.id, is_admin=user.is_admin)
-    return {"user_id": user.id, "email": user.email, "is_paid": user.is_paid, "token": token}
+    return auth_service.issue_token_pair(db, user)
 
 
 @router.post("/email-signup")
 def email_signup(payload: EmailSignupPayload, request: Request, db: Session = Depends(get_session)) -> dict:
-    """Value-first save gate: email only, temp password + magic link; profile prep after login."""
+    """Value-first save gate: email only + magic link; set-password after bind (no plaintext temp password)."""
     locale = request_locale(request)
     existing = db.query(db_models.User).filter_by(email=payload.email).first()
     if existing:
         raise HTTPException(status_code=400, detail=translate("auth.errors.exists", locale=locale))
 
-    temp_password = secrets.token_urlsafe(10)
+    # Unusable random hash — account is magic-link / set-password only until user sets one.
+    unusable = auth_service.hash_password(secrets.token_urlsafe(32))
     user = db_models.User(
         email=payload.email,
-        password_hash=auth_service.hash_password(temp_password),
+        password_hash=unusable,
         is_admin=False,
     )
     db.add(user)
@@ -127,7 +135,7 @@ def email_signup(payload: EmailSignupPayload, request: Request, db: Session = De
 
     base_url = settings.frontend_app_url or str(request.base_url).rstrip("/")
     magic_url = f"{base_url}/auth/magic?token={magic_token_str}"
-    email_sent = send_welcome_email(user.email, magic_url, temp_password)
+    email_sent = send_welcome_email(user.email, magic_url)
 
     response: dict = {
         "user_id": user.id,
@@ -138,8 +146,8 @@ def email_signup(payload: EmailSignupPayload, request: Request, db: Session = De
 
     # Dev / no-SMTP fallback: allow immediate session while still showing check-email UX.
     if not email_sent:
-        response["token"] = auth_service.create_token(user.id, is_admin=user.is_admin)
-        response["dev_temp_password"] = temp_password
+        pair = auth_service.issue_token_pair(db, user)
+        response.update(pair)
         response["dev_magic_url"] = magic_url
 
     return response
@@ -164,8 +172,44 @@ def magic_login(payload: MagicLoginPayload, request: Request, db: Session = Depe
     token_record.used_at = utc_naive_now()
     db.commit()
 
-    jwt_token = auth_service.create_token(user.id, is_admin=user.is_admin)
-    return {"user_id": user.id, "email": user.email, "token": jwt_token}
+    return auth_service.issue_token_pair(db, user)
+
+
+@router.post("/refresh")
+def refresh_tokens(payload: RefreshPayload, request: Request, db: Session = Depends(get_session)) -> dict:
+    """Rotate refresh token and issue a new access+refresh pair."""
+    locale = request_locale(request)
+    try:
+        user, new_refresh = auth_service.rotate_refresh_token(
+            db,
+            raw_token=payload.refresh_token,
+            device_label=payload.device_label,
+        )
+    except ValueError:
+        raise HTTPException(
+            status_code=401,
+            detail=translate("auth.errors.invalidToken", locale=locale, default="Invalid or expired refresh token"),
+        ) from None
+
+    access = auth_service.create_token(user.id, is_admin=user.is_admin)
+    return {
+        "user_id": user.id,
+        "email": user.email,
+        "access_token": access,
+        "refresh_token": new_refresh,
+        "expires_in": auth_service.ACCESS_TOKEN_TTL_MINUTES * 60,
+        "token_type": "bearer",
+        "token": access,
+        "is_paid": bool(user.is_paid),
+    }
+
+
+@router.post("/logout")
+def logout(payload: LogoutPayload, db: Session = Depends(get_session)) -> dict:
+    """Revoke a single refresh token (client should also clear local credentials)."""
+    if payload.refresh_token:
+        auth_service.revoke_refresh_token(db, payload.refresh_token)
+    return {"ok": True}
 
 
 def require_user(
@@ -251,13 +295,13 @@ def forgot_password(payload: ForgotPasswordPayload, request: Request, db: Sessio
     """Request password reset. Always returns success to prevent email enumeration."""
     locale = request_locale(request)
     user = db.query(db_models.User).filter_by(email=payload.email).first()
-    
+
     # Always return success to prevent email enumeration
     if user:
         # Generate reset token
         token = db_models.PasswordResetToken.generate_token()
         expires_at = utc_naive_now() + timedelta(hours=24)  # Token valid for 24 hours
-        
+
         reset_token = db_models.PasswordResetToken(
             user_id=user.id,
             token=token,
@@ -265,11 +309,11 @@ def forgot_password(payload: ForgotPasswordPayload, request: Request, db: Sessio
         )
         db.add(reset_token)
         db.commit()
-        
+
         base_url = settings.frontend_app_url or str(request.base_url).rstrip("/")
         reset_url = f"{base_url}/auth/reset-password?token={token}"
         send_password_reset_email(user.email, reset_url)
-    
+
     return {
         "message": translate("auth.forgotPassword.success", locale=locale, default="If an account with this email exists, a password reset link has been sent.")
     }
@@ -280,7 +324,7 @@ def reset_password(payload: ResetPasswordPayload, request: Request, db: Session 
     """Reset password using token."""
     locale = request_locale(request)
     _validate_new_password(payload.new_password, locale=locale)
-    
+
     # Find valid token
     reset_token = (
         db.query(db_models.PasswordResetToken)
@@ -288,13 +332,13 @@ def reset_password(payload: ResetPasswordPayload, request: Request, db: Session 
         .filter(db_models.PasswordResetToken.used_at.is_(None))
         .first()
     )
-    
+
     if not reset_token or not reset_token.is_valid():
         raise HTTPException(
             status_code=400,
             detail=translate("auth.resetPassword.invalidToken", locale=locale, default="Invalid or expired reset token")
         )
-    
+
     # Update user password
     user = db.query(db_models.User).filter_by(id=reset_token.user_id).first()
     if not user:
@@ -302,14 +346,15 @@ def reset_password(payload: ResetPasswordPayload, request: Request, db: Session 
             status_code=404,
             detail=translate("auth.resetPassword.userNotFound", locale=locale, default="User not found")
         )
-    
+
     user.password_hash = auth_service.hash_password(payload.new_password)
-    
+
     # Mark token as used
     reset_token.used_at = utc_naive_now()
-    
+    auth_service.revoke_all_refresh_tokens(db, user.id)
+
     db.commit()
-    
+
     return {
         "message": translate("auth.resetPassword.success", locale=locale, default="Password has been reset successfully")
     }
@@ -364,6 +409,8 @@ def change_password(
         .update({"used_at": utc_naive_now()}, synchronize_session=False)
     )
 
+    auth_service.revoke_all_refresh_tokens(db, user.id)
+
     db.add(user)
     db.commit()
 
@@ -374,3 +421,12 @@ def change_password(
             default="Password changed successfully",
         )
     }
+
+
+@router.post("/logout-all")
+def logout_all_sessions(
+    user: db_models.User = Depends(require_user),
+    db: Session = Depends(get_session),
+) -> dict:
+    count = auth_service.revoke_all_refresh_tokens(db, user.id)
+    return {"ok": True, "revoked": count}

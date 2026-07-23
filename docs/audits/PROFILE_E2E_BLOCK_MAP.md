@@ -2,10 +2,12 @@
 
 **Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md)  
 **Passport template:** [PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](./PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md)  
+**life_spheres passport:** [PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md)  
+**Projector spec:** [PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md)  
 **Date:** 2026-07-21  
 **Surface:** `ProfileV2SystemScreen` + QuickMap builders · PR-4 boundaries
 
-> Rule: **no full passport → no block.** Rows below describe **current code reality**. Target columns mark desired end-state.
+> Rule: **no full passport → no block.** Rows below describe **current code reality** unless Gap vs target says otherwise.
 >
 > Defects on this map are **architectural** (`GENERATION_GATE`, `UI_GATE`, …). Do not label gaps as «модель выдумала».
 
@@ -27,10 +29,10 @@ Legend tier: `trial` ≈ full depth during trial · `free` · `sub` (depth) · `
 | Character · drains | Limits | What drains me? | growth_zones / taxonomy | — | LLM + FE | identity | growth_zones | non-empty | trial/free | — | Naming «drains» vs growth |
 | Character · helps | Supports | What helps? | contract helps | — | patterns step | patterns | helps | non-empty | trial/free | — | No CUM day recs (PR-4) |
 | Character · decisions | Decision style | How do I decide? | contract | — | styles | styles | decision_style | non-empty | trial/free | — | OK |
-| Character · patterns | Repeats | What repeats? | recurring_patterns | — | patterns LLM | patterns | recurring_patterns | **shown even if birth-only** | **GENERATION_GATE + UI_GATE** | — | **Target: do not generate / do not show without longitudinal** |
+| Character · patterns | Repeats | What repeats? | recurring_patterns | — | patterns LLM | patterns | recurring_patterns | only with longitudinal (gate shipped) | trial growth / sub | — | UI must not show confirmed repeats without evidence |
 | Character · forming lead | Framework | How does this form? | taxonomy / who | — | knowledge | — | — | frameworkLead | trial/free | — | May duplicate identity |
-| Direction · mission | Life direction | What’s my direction? | life_mission | — | patterns | patterns | life_mission | non-empty | trial/free | — | May be birth-invented |
-| Direction · spheres | Life areas | How do areas show? | life_spheres **or** natal house copy | natal houses | spheres LLM / FE | spheres | life_spheres | spheres present | trial/free | — | Dual source risk |
+| Direction · mission | Life direction | What’s my direction? | life_mission | — | patterns | patterns | life_mission | non-empty | trial/free | — | Own passport TBD; accidental patterns packaging |
+| Direction · spheres | How base traits show in life areas | How do my foundations show in key spheres? | **Target:** deterministic projection from natal + identity + styles | natal signs/planets; houses when time allows | **Target:** code projector (`life_spheres_projector_v0.1`) | legacy `profile.spheres.v1` **not** content authority | `life_spheres` (partial OK) | `spheres_projection_allowed` (natal-presence); **independent of patterns** | calc / trial/free presence | rule ids, fingerprint | **Current debt:** funnel stops after patterns skip/fail (`GENERATION_GATE` mis-applied to spheres); dual source LLM + FE DEFAULTS/houses. **Target locked** by passport + projector spec — not an open product gap |
 | Sources · natal strip | Natal as source | What’s the natal basis? | frameworkAnchors + cards | chart | card body only | — | natal preview | deep prop | calc | wheel/houses behind portal | Target: visual + anchors + expand |
 | Sources · portal deep | Full chart | Details? | natal API | full chart | editorial? | natal editorial paths | — | user expands | calc/sub depth | orbs, coords | Organize; not wall |
 | Maps CTA | Exit to Tracking | How do I change over time? | — | — | — | — | — | always | nav | — | OK thin CTA |
@@ -64,7 +66,7 @@ Must gain full 15-answer passports before implementation:
 | birth date | journal-like nothing on Profile natal | natal, numerology, personal compat | get date — what opens |
 | birth time | planets by sign, numerology, archetypes | ASC, MC, houses, time-sensitive | time — ASC/houses why |
 | birth place | same as time for horizon | ASC/MC/houses accuracy | place — horizon why |
-| history / living | full static portrait | recurring_patterns, living_changes, longitudinal evidence | use Today — patterns unlock |
+| history / living | full static portrait **including** natal-presence `life_spheres` when projector gate holds | recurring_patterns, living_changes, longitudinal evidence | use Today — patterns unlock (spheres must **not** wait on this) |
 | subscription after trial | complete static level | deeper why/how/longitudinal application | deepen understanding — not chopped cards |
 
 ---

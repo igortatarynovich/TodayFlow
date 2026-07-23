@@ -56,12 +56,15 @@ function GoogleOAuthCallbackContent() {
       const redirectUri = `${window.location.origin}/auth/google/callback`;
 
       try {
-        const result = await postJson<{ token: string }>("/oauth/google/code", {
-          code,
-          redirect_uri: redirectUri,
-        });
+        const result = await postJson<{ token: string; access_token?: string; refresh_token?: string }>(
+          "/oauth/google/code",
+          {
+            code,
+            redirect_uri: redirectUri,
+          },
+        );
         if (cancelled) return;
-        beginAuthSession(result.token);
+        beginAuthSession(result);
         const target = await resolveTargetAfterAuthSession(nextRaw);
         router.replace(target);
       } catch (e) {

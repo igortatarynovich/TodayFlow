@@ -42,6 +42,7 @@ import l from "@/design-system/layouts/dsLayouts.module.css";
 type Props = {
   signupHref: string;
   loginHref: string;
+  compatibilityHref?: string;
 };
 
 const ORBIT_NODE_ICONS = {
@@ -64,7 +65,11 @@ const PROMISE_CARD_ICONS = {
   memory: IconSparkles,
 } as const;
 
-export function ProductWebLanding({ signupHref, loginHref }: Props) {
+export function ProductWebLanding({
+  signupHref,
+  loginHref,
+  compatibilityHref = "/compatibility",
+}: Props) {
   const year = new Date().getFullYear();
   const guestNavLinks = buildAppNavLinks("ru", "guest");
 
@@ -141,8 +146,11 @@ export function ProductWebLanding({ signupHref, loginHref }: Props) {
             </div>
             <div className={l.heroCtas}>
               <DsButton href={signupHref}>{PRODUCT_WEB_LANDING_HERO.primaryCta}</DsButton>
-              <DsButton href={loginHref} variant="secondary">
+              <DsButton href={compatibilityHref} variant="secondary">
                 {PRODUCT_WEB_LANDING_HERO.secondaryCta}
+              </DsButton>
+              <DsButton href={loginHref} variant="secondary">
+                {PRODUCT_WEB_LANDING_HERO.loginCta}
               </DsButton>
             </div>
           </div>

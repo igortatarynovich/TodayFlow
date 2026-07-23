@@ -325,7 +325,10 @@ async def build_celestial_events(
             break
 
     preset = _DAILY_SYMBOL_PRESETS[_symbol_preset_index(target_date, personal_day)]
+    # Legacy non-product pack — day color/stone of the day come from day_story.talisman.
     daily_symbols = {
+        "product_authority": False,
+        "source": "legacy_preset",
         "color": _build_color_symbol(preset["color"]),
         "stone": {"name": preset["stone"], "story_ru": "Тихий якорь — можно вернуться к нему, когда день ускоряется."},
         "totem": {

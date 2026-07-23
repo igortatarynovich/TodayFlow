@@ -1,4 +1,4 @@
-/** Color of the day — benefit, wear, amount, avoid (RU catalog, API may override). */
+/** Color of the day — prefer day_story.talisman; FE catalog only as soft fill when API gives a name. */
 
 export type TodayDayColorGuide = {
   name: string;
@@ -8,6 +8,8 @@ export type TodayDayColorGuide = {
   amount: string;
   avoidColor: string;
   avoidWhy: string;
+  /** true when name came from day_story.talisman (product authority). */
+  fromDayStory?: boolean;
 };
 
 type ColorGuideRow = TodayDayColorGuide;
@@ -135,6 +137,9 @@ const DEFAULT_COLOR: TodayDayColorGuide = {
 
 export function resolveTodayDayColorGuide(input: {
   name?: string | null;
+  /** Prefer story-derived color; skip FE catalog lecture when set. */
+  fromDayStory?: boolean;
+  storyNote?: string | null;
   api?: {
     name?: string;
     story_ru?: string;
@@ -146,8 +151,22 @@ export function resolveTodayDayColorGuide(input: {
     avoid_why_ru?: string;
   } | null;
 }): TodayDayColorGuide | null {
-  const name = (input.api?.name ?? input.name ?? "").trim();
+  const name = (input.name ?? input.api?.name ?? "").trim();
   if (!name) return null;
+
+  if (input.fromDayStory) {
+    const note = (input.storyNote || input.api?.story_ru || "").trim();
+    return {
+      name,
+      benefit: note || `Сегодня держит линию дня оттенок «${name}».`,
+      clothing: note ? "" : `Один акцент цвета «${name}» в образе.`,
+      accessory: "",
+      amount: "Один спокойный акцент — достаточно.",
+      avoidColor: "",
+      avoidWhy: "",
+      fromDayStory: true,
+    };
+  }
 
   const preset = COLOR_GUIDE[name] ?? { ...DEFAULT_COLOR, name };
 
@@ -159,6 +178,7 @@ export function resolveTodayDayColorGuide(input: {
     amount: input.api?.amount_ru?.trim() || preset.amount,
     avoidColor: input.api?.avoid_color_ru?.trim() || preset.avoidColor,
     avoidWhy: input.api?.avoid_why_ru?.trim() || preset.avoidWhy,
+    fromDayStory: false,
   };
 }
 

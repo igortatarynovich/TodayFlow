@@ -91,9 +91,21 @@ describe("buildTodayLiteraryReading", () => {
     const reading = buildTodayLiteraryReading(story, contract);
     expect(reading.opening).toMatch(/точностью|сообщение/i);
     expect(reading.opening).not.toMatch(/опирайся|сегодня сильнее|направить внимание/i);
-    const blob = [reading.opening, reading.why, reading.lean, reading.ease, reading.close].join(" ");
+    const blob = [reading.opening, reading.why, reading.lean, reading.ease, reading.anchor, reading.close].join(" ");
     expect(blob).not.toMatch(/→/);
     expect(reading.close).toBeTruthy();
+  });
+
+  it("weaves talisman into anchor prose without inventing catalog lecture", () => {
+    const withTalisman: TodayContractV1 = {
+      ...contract,
+      day_story: {
+        ...contract.day_story!,
+        talisman: { color: "лазурь", stone: "аквамарин", note: "Один спокойный акцент." },
+      },
+    };
+    const reading = buildTodayLiteraryReading(story, withTalisman);
+    expect(reading.anchor).toMatch(/лазурь|аквамарин/i);
   });
 
   it("uses meaning-facing derived_claims for soft why, never kitchen limitations", () => {

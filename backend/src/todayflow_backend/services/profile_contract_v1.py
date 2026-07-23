@@ -38,11 +38,49 @@ PROFILE_CONTRACT_PROMPT_VER = "profile-contract-v3"
 PROFILE_STATUS_READY = "ready"
 PROFILE_STATUS_FORMING = "forming"
 PROFILE_STATUS_PARTIAL = "partial"
-FORMING_MESSAGE_RU = "Портрет ещё формируется — живые тексты появятся после генерации."
-FORMING_MESSAGE_EN = "Portrait is still forming — live copy will appear after generation."
+# Voice §0 / §0.05: person + what opens — never pipeline («генерация», «тексты», «формируется»).
+FORMING_MESSAGE_RU = (
+    "Первые контуры характера уже читаются. "
+    "Повторяющиеся опоры и линии решений проясняются через отмеченные дни."
+)
+FORMING_MESSAGE_EN = (
+    "The first outlines of your character are already readable. "
+    "Recurring supports and decision lines become clearer through marked days."
+)
 
 _LATIN_RE = re.compile(r"[A-Za-z]")
 _CYR_RE = re.compile(r"[А-Яа-яЁё]")
+_BANNED_FORMING_RE = re.compile(
+    r"генерац|сгенерир|живые\s+текст|живые\s+формулировк|после\s+генерац|"
+    r"live\s+copy|after\s+generation|портрет\s+ещё\s+формир|portrait\s+is\s+still\s+forming",
+    re.I,
+)
+# Step-1 recognition_line: no day agenda / advice; archetype labels must not appear.
+_RECOGNITION_DAY_RE = re.compile(
+    r"\bсегодня\b|\bсегодняшн|\bна\s+сегодня\b|\bзавтра\b|\btoday\b|\btonight\b|"
+    r"\bthis\s+morning\b|\bthis\s+evening\b|"
+    r"тебе\s+полезно|важно\s+сегодня|сделай\s+сегодня|начни\s+сегодня",
+    re.I,
+)
+_ARCHETYPE_LABEL_RE = re.compile(
+    r"\b("
+    r"architect|harmonizer|explorer|sage|observer|"
+    r"архитектор|гармонизатор|исследователь|мудрец|наблюдатель"
+    r")\b",
+    re.I,
+)
+RECOGNITION_LINE_MAX = 120
+RECOGNITION_LINE_MIN = 16
+
+
+def _safe_forming_message(raw_msg: Any) -> str | None:
+    """Rewrite pipeline/meta forming copy; never serve generation/text kitchen language."""
+    msg = _clip(raw_msg, 240)
+    if not msg:
+        return None
+    if _BANNED_FORMING_RE.search(msg):
+        return FORMING_MESSAGE_EN if _text_is_mostly_latin(msg) else FORMING_MESSAGE_RU
+    return msg
 
 
 def _text_is_mostly_latin(text: str) -> bool:
@@ -77,7 +115,8 @@ _PROFILE_SYS_RU = """Ты пишешь **единый портрет челов�
 Все текстовые блоки должны быть живыми и персональными — не общие шаблоны.
 
 Поля:
-- identity_core, strengths (≥3), growth_zones (≥3)
+- recognition_line (одна фраза-узнавание, ≤120 символов; не совет; не имя архетипа),
+  identity_core, strengths (≥3), growth_zones (≥3)
 - relationship_style, money_style, decision_style
 - recurring_patterns (≥1), living_changes (или null)
 - life_mission, helps (≥2)
@@ -93,6 +132,38 @@ def _clip(text: str, limit: int) -> str:
     if len(t) <= limit:
         return t
     return t[: limit - 1].rstrip() + "…"
+
+
+def validate_recognition_line(line: str, *, require: bool = True) -> list[str]:
+    """Acceptance for identity recognition_line (Forms delta #1)."""
+    text = re.sub(r"\s+", " ", str(line or "").strip())
+    errors: list[str] = []
+    if not text:
+        if require:
+            errors.append("recognition_line_empty")
+        return errors
+    if len(text) < RECOGNITION_LINE_MIN:
+        errors.append("recognition_line_short")
+    if len(text) > RECOGNITION_LINE_MAX:
+        errors.append("recognition_line_too_long")
+    if _RECOGNITION_DAY_RE.search(text):
+        errors.append("recognition_line_day_content")
+    if _ARCHETYPE_LABEL_RE.search(text):
+        errors.append("recognition_line_repeats_archetype")
+    return errors
+
+
+def _fallback_recognition_line_from_identity_core(identity_core: str) -> str:
+    """Temporary read-path fallback for snapshots minted before recognition_line."""
+    core = re.sub(r"\s+", " ", str(identity_core or "").strip())
+    if not core:
+        return ""
+    first = re.split(r"[.!?\n]+", core, maxsplit=1)[0].strip()
+    candidate = _clip(first or core, RECOGNITION_LINE_MAX)
+    # Only surface a clean compress; otherwise leave empty (no invented hero copy).
+    if validate_recognition_line(candidate, require=True):
+        return ""
+    return candidate
 
 
 def _parse_json_content(raw: str) -> dict[str, Any] | None:
@@ -115,6 +186,10 @@ def validate_profile_contract_v1(payload: dict[str, Any]) -> list[str]:
         errors.append("invalid contract_version")
     if not str(payload.get("identity_core") or "").strip():
         errors.append("identity_core empty")
+    status = str(payload.get("status") or "").strip().lower()
+    # Generation / ready path requires recognition_line; forming may be empty.
+    if status not in (PROFILE_STATUS_FORMING,):
+        errors.extend(validate_recognition_line(str(payload.get("recognition_line") or ""), require=True))
     for key in ("strengths", "growth_zones", "recurring_patterns"):
         items = payload.get(key)
         if not isinstance(items, list) or len(items) < 1:
@@ -153,11 +228,19 @@ def _normalize_profile_contract(raw: dict[str, Any], *, profile_snapshot_version
         status = PROFILE_STATUS_READY
     gen_meta = raw.get("generation_meta") if isinstance(raw.get("generation_meta"), dict) else {}
 
+    identity_core = _clip(raw.get("identity_core"), 720)
+    recognition_raw = raw.get("recognition_line")
+    recognition_line = _clip(recognition_raw, RECOGNITION_LINE_MAX) if recognition_raw is not None else ""
+    # Backward-compatible read for snapshots minted before recognition_line existed.
+    if not recognition_line and identity_core and status != PROFILE_STATUS_FORMING:
+        recognition_line = _fallback_recognition_line_from_identity_core(identity_core)
+
     return {
         "contract_version": PROFILE_CONTRACT_V1,
         "status": status,
-        "forming_message": _clip(raw.get("forming_message"), 240) or None,
-        "identity_core": _clip(raw.get("identity_core"), 720),
+        "forming_message": _safe_forming_message(raw.get("forming_message")),
+        "recognition_line": recognition_line,
+        "identity_core": identity_core,
         "strengths": [_clip(str(x), 200) for x in strengths if str(x).strip()][:6],
         "growth_zones": [_clip(str(x), 200) for x in growth if str(x).strip()][:6],
         "relationship_style": _clip(raw.get("relationship_style"), 520),
@@ -294,6 +377,7 @@ def build_profile_contract_forming_v1(
     base: dict[str, Any] = {
         "status": PROFILE_STATUS_PARTIAL if partial else PROFILE_STATUS_FORMING,
         "forming_message": FORMING_MESSAGE_EN if en else FORMING_MESSAGE_RU,
+        "recognition_line": "",
         "identity_core": "",
         "strengths": [],
         "growth_zones": [],
@@ -314,6 +398,7 @@ def build_profile_contract_forming_v1(
     }
     if isinstance(partial, dict):
         for key in (
+            "recognition_line",
             "identity_core",
             "strengths",
             "growth_zones",
@@ -423,16 +508,107 @@ def build_profile_portrait_v1(
     profile_input: dict[str, Any],
     living: dict[str, Any] | None,
     locale: str = "ru",
+    natal_facts: dict[str, Any] | None = None,
+    catalog: dict[str, Any] | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], bool]:
-    """Returns (contract, interpretation, daily_interpretation, used_forming_fallback)."""
+    """Returns (contract, interpretation, daily_interpretation, used_forming_fallback).
+
+    Prefer Generation Contract path: natal_facts → personality → profile_contract fields.
+    Legacy disclosure funnel remains fallback when personality is unavailable.
+    """
+    from todayflow_backend.services.personality_contract_v1 import (
+        generate_personality,
+        personality_to_profile_contract,
+    )
     from todayflow_backend.services.profile_capture_session_v0 import (
         get_profile_capture_session,
         profile_capture_enabled,
     )
 
+    facts = natal_facts if isinstance(natal_facts, dict) else profile_input.get("natal_facts")
+    facts = facts if isinstance(facts, dict) else None
+
+    if facts is not None:
+        available = {
+            "display_name": (profile_input.get("person") or {}).get("display_name")
+            or (profile_input.get("person") or {}).get("first_name"),
+            "birth_date": (profile_input.get("astro") or {}).get("birth_date"),
+            "birth_time": (profile_input.get("astro") or {}).get("birth_time"),
+            "latitude": (profile_input.get("astro") or {}).get("latitude"),
+            "longitude": (profile_input.get("astro") or {}).get("longitude"),
+            "location_name": (profile_input.get("astro") or {}).get("location_name"),
+            "timezone_name": (profile_input.get("astro") or {}).get("timezone_name"),
+        }
+        personality = generate_personality(
+            natal_facts=facts,
+            available_input=available,
+            numerology=profile_input.get("numerology")
+            if isinstance(profile_input.get("numerology"), dict)
+            else None,
+            catalog=catalog,
+            locale=locale,
+        )
+        if personality is not None:
+            contract = personality_to_profile_contract(
+                personality,
+                generation_meta={
+                    "steps": [
+                        {
+                            "prompt_id": "profile.personality.v1",
+                            "contract_id": "personality",
+                            "natal_calculation_id": facts.get("calculation_id"),
+                        }
+                    ],
+                },
+            )
+            if not contract_matches_locale(contract, locale):
+                # Soft: keep personality text; locale gate is legacy for funnel.
+                pass
+            enriched = enrich_profile_contract_living(contract, living=living)
+            report = validate_profile_contract_strict(enriched)
+            used_fallback = False
+            if report["ok"]:
+                contract = enriched
+                contract["status"] = PROFILE_STATUS_READY
+                gm = contract.get("generation_meta") if isinstance(contract.get("generation_meta"), dict) else {}
+                contract["generation_meta"] = {**gm, "validation": report, "path": "personality_v1"}
+            else:
+                # Personality fields may be looser than legacy strict schema — still publish
+                # when identity_summary exists (matrix path), mark partial validation.
+                contract = enriched
+                contract["status"] = PROFILE_STATUS_READY
+                gm = contract.get("generation_meta") if isinstance(contract.get("generation_meta"), dict) else {}
+                contract["generation_meta"] = {
+                    **gm,
+                    "validation": report,
+                    "path": "personality_v1",
+                    "strict_relaxed": True,
+                }
+            interpretation = {
+                "source": "personality_v1",
+                "identity_summary": personality.get("identity_summary"),
+            }
+            daily_interpretation = {"source": "personality_v1", "deferred": True}
+            if profile_capture_enabled():
+                capture = get_profile_capture_session()
+                if capture is not None:
+                    capture.record_quality(
+                        before=personality,
+                        validation=report,
+                        after=contract,
+                        forming_fallback=False,
+                        generation_meta=contract.get("generation_meta")
+                        if isinstance(contract.get("generation_meta"), dict)
+                        else None,
+                    )
+            return contract, interpretation, daily_interpretation, used_fallback
+
     llm_pack = {
         "person": profile_input.get("person"),
         "astro": profile_input.get("astro"),
+        "natal": profile_input.get("natal") or facts,
+        "natal_summary": profile_input.get("natal_summary"),
+        "natal_facts": facts,
         "numerology": profile_input.get("numerology"),
         "baseline": profile_input.get("baseline"),
         "living": living,

@@ -108,6 +108,55 @@
   box-shadow: var(--tdp-shadow-md);
 }
 
+.sectionLiterary {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.sectionLiterary.sectionWebEmbed {
+  display: flex;
+  grid-template-columns: none;
+}
+
+.literaryReading {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.75rem;
+  border-radius: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--tf-surface-dark, #2a2520);
+  box-shadow: 0 24px 35px rgba(42, 37, 32, 0.12);
+}
+
+.literaryReading .synthesisText,
+.literaryReading .readingParagraph,
+.literaryReading .softWhy {
+  color: #f7f1e6;
+}
+
+.literaryReading .softWhyLabel {
+  color: var(--tf-accent-gold, #c9a96e);
+}
+
+.literaryOpening {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 1.5rem;
+  border: 1px solid #e8e2d6;
+  background: #fff;
+}
+
+.literaryOpeningText {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  color: #2a2520;
+}
+
 .synthesisKicker {
   margin: 0;
   font-size: 0.5rem;

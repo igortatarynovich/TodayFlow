@@ -1,11 +1,14 @@
 # LLM Quality & Prompt Evolution
 
 **Status:** active canon (2026-07)  
-**Related:** [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) §2.1 · [API_MEMORY_AND_LEARNING_LAYER.md](./API_MEMORY_AND_LEARNING_LAYER.md)
+**Related:** [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) §2.1 · [API_MEMORY_AND_LEARNING_LAYER.md](./API_MEMORY_AND_LEARNING_LAYER.md)  
+**Product core (TARGET):** [PRODUCT_GENERATION_CONTRACTS.md](./PRODUCT_GENERATION_CONTRACTS.md) — Input/Output Schema · Rules · deps; промпт лишь реализация.
 
 ## Shift
 
 Platform default is no longer token scarcity. Generation quality and multi-step meaning chains win over AMLL economize.
+
+**Product shift (2026-07-22):** главный актив — библиотека **контрактов генерации**; `registry_v1.py` / тексты промптов — сменяемый executor.
 
 | Mode | Env | Behavior |
 |------|-----|----------|

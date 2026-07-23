@@ -18,6 +18,7 @@ export type GuestProfileDraft = {
   first_today_started_at: string | null;
   save_ready_at: string | null;
   preview_recognition_audit?: import("@/lib/interpretation/onboardingRecognitionTypes").RecognitionSelectionAudit | null;
+  natal_facts?: import("@/lib/natalFacts").NatalChartFacts | null;
 };
 
 export const VALUE_FIRST_PATHS = {
@@ -70,6 +71,7 @@ export function createEmptyGuestProfileDraft(): GuestProfileDraft {
     time_unknown: true,
     first_today_started_at: null,
     save_ready_at: null,
+    natal_facts: null,
   };
 }
 
@@ -176,16 +178,18 @@ export function isGuestSaveReady(draft: GuestProfileDraft | null = readGuestProf
 }
 
 export function guestDraftToCoreSetupPayload(draft: GuestProfileDraft) {
+  const location = draft.location_name?.trim() || "";
   return {
-    first_name: draft.first_name.trim(),
+    first_name: draft.first_name.trim() || null,
     last_name: null as string | null,
     label: "Я",
     birth_date: draft.birth_date,
     birth_time: draft.time_unknown ? null : draft.birth_time || null,
     time_unknown: draft.time_unknown,
-    location_name: draft.location_name?.trim() || "",
+    location_name: location || null,
     latitude: draft.latitude,
     longitude: draft.longitude,
     gender: "unspecified",
+    natal_facts: draft.natal_facts ?? null,
   };
 }

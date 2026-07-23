@@ -8,9 +8,10 @@
     "todayflow.day_continuity.v1.",
     "todayflow.energy_map.v1.",
     "todayflow.profile_atom_verdict.v1",
+    "todayflow_core_profile:",
   ];
   var SESSION_PREFIXES = [
-    "todayflow_core_profile:v1",
+    "todayflow_core_profile:",
     "todayflow.compact_user_model.v0",
     "todayflow.ritual.v1.",
     "todayflow:tarot-question-flow:v1",
@@ -45,13 +46,26 @@
     }
   }
 
-  window.__todayflowBeginAuthSession = function (token) {
+  /**
+   * @param {string|object} tokenOrPair - access JWT string or {access_token|token, refresh_token}
+   */
+  window.__todayflowBeginAuthSession = function (tokenOrPair) {
     clearUserCaches();
+    var access = "";
+    var refresh = "";
+    if (typeof tokenOrPair === "string") {
+      access = tokenOrPair;
+    } else if (tokenOrPair && typeof tokenOrPair === "object") {
+      access = tokenOrPair.access_token || tokenOrPair.token || "";
+      refresh = tokenOrPair.refresh_token || "";
+    }
     try {
       localStorage.removeItem("todayflow_auth_snapshot_v1");
       localStorage.removeItem("todayflow_last_auth_validated_at");
       localStorage.removeItem("todayflow_last_session_snapshot_saved_at");
-      localStorage.setItem("todayflow_token", token);
+      localStorage.removeItem("todayflow_refresh_token");
+      if (access) localStorage.setItem("todayflow_token", access);
+      if (refresh) localStorage.setItem("todayflow_refresh_token", refresh);
     } catch (e) {}
     try {
       window.dispatchEvent(new Event("auth:update"));

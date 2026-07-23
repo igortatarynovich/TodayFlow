@@ -70,8 +70,8 @@ export default function OnboardingPreviewPage() {
       <div className={styles.shellWide}>
         <FirstResultScreen
           preview={preview}
-          firstTodayHref={VALUE_FIRST_PATHS.firstToday}
-          refineHref={VALUE_FIRST_PATHS.refine}
+          saveHref={VALUE_FIRST_PATHS.save}
+          refineHref={`${VALUE_FIRST_PATHS.refine}?after=save`}
         />
       </div>
     </OnboardingWebScreen>

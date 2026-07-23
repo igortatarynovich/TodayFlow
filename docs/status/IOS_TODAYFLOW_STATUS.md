@@ -2,6 +2,17 @@
 
 Updated: 2026-07-05
 
+## Shared auth contract (2026-07-23)
+
+iOS/Android must use the same Bearer session as web — see [AUTH_SESSION_CONTRACT_V1.md](../AUTH_SESSION_CONTRACT_V1.md):
+
+- Store `access_token` + `refresh_token` (Keychain / EncryptedSharedPreferences).
+- On 401: one `POST /auth/refresh`, then retry; only then clear session.
+- Pre-account profiles: upsert `/guest/profiles` before email; claim binds server rows.
+- Do not invent cookie-only or app-local auth that web cannot share.
+
+Updated: 2026-07-23 (auth refresh + durable guest_profiles).
+
 ## Scope
 
 This status tracks the native iOS product work for TodayFlow.

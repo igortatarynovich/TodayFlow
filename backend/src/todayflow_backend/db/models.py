@@ -37,6 +37,7 @@ class User(Base):
     challenge_participants = relationship("ChallengeParticipant", back_populates="user", cascade="all, delete-orphan")
     practice_usages = relationship("PracticeUsage", back_populates="user", cascade="all, delete-orphan")
     password_reset_tokens = relationship("PasswordResetToken", back_populates="user", cascade="all, delete-orphan")
+    refresh_tokens = relationship("RefreshToken", back_populates="user", cascade="all, delete-orphan")
     saved_forecasts = relationship("SavedForecast", back_populates="user", cascade="all, delete-orphan")
     saved_calculations = relationship("SavedCalculation", back_populates="user", cascade="all, delete-orphan")
     promo_code_usages = relationship("PromoCodeUsage", back_populates="user", cascade="all, delete-orphan")
@@ -477,6 +478,23 @@ class PasswordResetToken(Base):
     def is_valid(self) -> bool:
         """Check if token is valid (not expired and not used)."""
         return self.expires_at > utc_naive_now() and self.used_at is None
+
+
+class RefreshToken(Base):
+    """Opaque refresh token (hashed at rest). AUTH_SESSION_CONTRACT_V1."""
+
+    __tablename__ = "refresh_tokens"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    token_hash = Column(String(128), unique=True, nullable=False, index=True)
+    device_label = Column(String(128), nullable=True)
+    expires_at = Column(DateTime, nullable=False)
+    revoked_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=utc_naive_now)
+    last_used_at = Column(DateTime, nullable=True)
+
+    user = relationship("User", back_populates="refresh_tokens")
 
 
 class PromoCode(Base):
@@ -1218,6 +1236,33 @@ class GuestDaySnapshot(Base):
     updated_at = Column(DateTime, default=utc_naive_now, onupdate=utc_naive_now)
 
     __table_args__ = (UniqueConstraint("guest_session_id", "local_date", name="uq_guest_day_session_date"),)
+
+
+class GuestProfile(Base):
+    """Durable pre-account profile draft (1A/1B). SoT until claim → AstroProfile."""
+
+    __tablename__ = "guest_profiles"
+
+    id = Column(Integer, primary_key=True)
+    guest_session_id = Column(String(64), nullable=False, index=True)
+    local_key = Column(String(32), nullable=False)  # self | person_a | person_b
+    display_name = Column(String(128), nullable=True)
+    birth_date = Column(Date, nullable=False)
+    birth_time = Column(Time, nullable=True)
+    birth_time_known = Column(Boolean, nullable=False, default=False)
+    location_name = Column(String, nullable=True)
+    latitude = Column(Float, nullable=True)
+    longitude = Column(Float, nullable=True)
+    timezone_name = Column(String(64), nullable=True)
+    relation = Column(String(32), nullable=True)  # self | partner | …
+    is_owner_candidate = Column(Boolean, nullable=False, default=False)
+    natal_facts = Column(JSON, nullable=True)
+    created_at = Column(DateTime, default=utc_naive_now)
+    updated_at = Column(DateTime, default=utc_naive_now, onupdate=utc_naive_now)
+
+    __table_args__ = (
+        UniqueConstraint("guest_session_id", "local_key", name="uq_guest_profiles_session_key"),
+    )
 
 
 class GuestClaimRecord(Base):

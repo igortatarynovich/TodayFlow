@@ -75,4 +75,20 @@ describe("todayCompositionZones", () => {
     expect(z.evening).toBe(true);
     expect(z.promise).toBe(true);
   });
+
+  it("singleVoice suppresses widget gallery zones", () => {
+    const z = resolveTodayCompositionZones({
+      variant: "default",
+      engagement: { tarotPickedName: null, numberConfirmed: false, dayGoal: null },
+      isEveningSurface: false,
+      personalizedReady: false,
+      singleVoice: true,
+    });
+    expect(z.ritualTarot).toBe(true);
+    expect(z.glance).toBe(false);
+    expect(z.astroContext).toBe(false);
+    expect(z.pulse).toBe(false);
+    expect(z.hero).toBe(false);
+    expect(z.actions).toBe(false);
+  });
 });

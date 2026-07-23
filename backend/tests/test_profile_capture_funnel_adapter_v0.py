@@ -14,6 +14,7 @@ def test_call_with_retry_records_rejected_and_accepted_attempts(tmp_path: Path):
     bad = {"contract_version": "profile_funnel_identity_v0", "identity_core": "short"}
     good = {
         "contract_version": "profile_funnel_identity_v0",
+        "recognition_line": "Ты первым видишь структуру там, где остальные пока видят только хаос.",
         "identity_core": "Человек первого шага с достаточным текстом для валидатора.",
         "strengths": ["a", "b", "c"],
         "growth_zones": ["d", "e", "f"],

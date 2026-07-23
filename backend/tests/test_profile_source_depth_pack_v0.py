@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from todayflow_backend.services.profile_content_v1.source_depth import (
     depth_from_profile_pack,
+    identity_generation_allowed,
     patterns_generation_allowed,
 )
 
@@ -41,3 +42,31 @@ def test_onboarding_alone_disallows_confirmed_patterns():
     }
     assert depth_from_profile_pack(pack) == "onboarding_answers"
     assert patterns_generation_allowed(pack) is False
+
+
+def test_identity_generation_requires_birth_and_foundation():
+    assert identity_generation_allowed({"person": {"display_name": "Гость"}}) is False
+    assert (
+        identity_generation_allowed(
+            {"person": {"birth_date": "1992-03-04"}, "astro": {}}
+        )
+        is False
+    )
+    assert (
+        identity_generation_allowed(
+            {
+                "person": {"birth_date": "1992-03-04"},
+                "astro": {"sun_sign": "aries"},
+            }
+        )
+        is True
+    )
+    assert (
+        identity_generation_allowed(
+            {
+                "person": {"birth_date": "1990-01-01"},
+                "baseline": {"archetype_seed": "sage"},
+            }
+        )
+        is True
+    )

@@ -379,6 +379,26 @@
   gap: var(--tdp-stack);
 }
 
+.literaryOpening {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0 1.25rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 1.5rem;
+  border: 1px solid var(--tdp-border);
+  background: #fff;
+  box-shadow: var(--tdp-shadow-sm);
+}
+
+.literaryOpeningText {
+  margin: 0;
+  font-family: var(--tdp-font-display);
+  font-size: 1.125rem;
+  line-height: 1.55;
+  color: var(--tdp-ink);
+}
+
 .continuityWrap {
   margin: 0 1.25rem;
   padding-top: 0.5rem;

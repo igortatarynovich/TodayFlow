@@ -16,7 +16,6 @@ import {
   hasCompletedFirstToday,
   markProfileDepthUnlocked,
   readFirstTodayState,
-  FIRST_TODAY_PATH,
 } from "@/lib/firstTodayState";
 import { getLocale } from "@/lib/i18n";
 import { profileContractMatchesLocale } from "@/lib/profilePage/profileCopySafety";
@@ -104,7 +103,7 @@ function ProfileLoadingScreen() {
       testId="profile-loading"
       title="Профиль"
       loading
-      loadingLabel="Собираем стабильное состояние профиля"
+      loadingLabel="Загрузка…"
       hideDatePill
     />
   );
@@ -294,10 +293,6 @@ function ProfileHubPageInner() {
       }
       if (!hasOnboardingRealityRecorded()) {
         router.replace("/onboarding/reality");
-        return;
-      }
-      if (!hasCompletedFirstToday()) {
-        router.replace(FIRST_TODAY_PATH);
       }
     }
   }, [
@@ -343,11 +338,11 @@ function ProfileHubPageInner() {
       <ProductPageScreen
         testId="profile-guest-gate"
         title="Профиль"
-        subtitle="Профиль и Today открываются после мягкой регистрации: имя, дата рождения, первый разбор — и email, чтобы сохранить."
+        subtitle="Профиль открывается после мягкой регистрации: имя, дата рождения, первый разбор — и email, чтобы сохранить."
       >
         <div style={{ display: "grid", gap: "0.85rem", justifyItems: "start" }}>
           <Link href={`${VALUE_FIRST_PATHS.welcome}?fresh=1`} className="orbit-button orbit-button-primary">
-            Создать мой Today
+            Построить мой профиль
           </Link>
           <Link href="/auth?mode=login" className="orbit-body-sm" style={{ color: "#78716c", textDecoration: "underline" }}>
             Уже есть аккаунт? Войти
@@ -528,6 +523,7 @@ function ProfileHubPageInner() {
                 <ProfileV2SystemScreen
                   model={profileQuickMapModel}
                   live={profileV2Live}
+                  coreProfile={coreProfile}
                   identityPills={buildProfileIdentityPills(profileQuickMapModel.frameworkAnchors, coreProfile)}
                   onOpenBirthData={() => setForceSetup(true)}
                   lifeSpheres={profileLifeSpheres}
@@ -564,23 +560,6 @@ function ProfileHubPageInner() {
                             >
                               Ввести данные здесь
                             </button>
-                          </SurfaceInsightActions>
-                        </SurfaceInsight>
-                      ) : null}
-                      {!hasCompletedFirstToday() ? (
-                        <SurfaceInsight
-                          variant="warm"
-                          className={routeStyles.noticeSpaced}
-                          data-testid="profile-first-today-notice"
-                        >
-                          <SurfaceInsightBody>
-                            Сначала открой первый Today — там главный ориентир дня. Потом возвращайся сюда за портретом
-                            личности.
-                          </SurfaceInsightBody>
-                          <SurfaceInsightActions>
-                            <Link href={FIRST_TODAY_PATH} className="orbit-button orbit-button-primary orbit-button-sm">
-                              Открыть первый Today
-                            </Link>
                           </SurfaceInsightActions>
                         </SurfaceInsight>
                       ) : null}

@@ -19,10 +19,12 @@ from todayflow_backend.services.profile_contract_v1 import (
     build_profile_contract_forming_v1,
     build_profile_contract_fallback_v1,
     _normalize_profile_contract,
+    validate_recognition_line,
 )
 from todayflow_backend.services.profile_disclosure_funnel_v0 import (
     SPHERE_IDS,
     SPHERE_FIELDS,
+    _identity_ok,
     profile_prompt_versions,
 )
 
@@ -48,6 +50,7 @@ def _full_contract() -> dict[str, Any]:
     return _normalize_profile_contract(
         {
             "status": "ready",
+            "recognition_line": "Ты первым видишь структуру там, где остальные пока видят только хаос.",
             "identity_core": "Человек держит смысл через ясный фокус и прямой контакт, не через суету.",
             "strengths": ["Фокус на одном", "Прямой контакт", "Доведение до конца"],
             "growth_zones": ["Второй приоритет без слота", "Контроль вместо ясности", "Откладывание разговора"],
@@ -94,7 +97,7 @@ def test_prompt_version_change_invalidates_hash() -> None:
     h1 = svc._build_profile_hash(None, {"birth_date": "1990-01-01", "sun_sign": "Leo"}, {"life_path": 7})
     versions = profile_prompt_versions()
     # Mutate registry version via monkeypatch on profile_prompt_versions
-    bumped = {**versions, "profile.spheres.v1": "9.9.9"}
+    bumped = {**versions, "profile.spheres.synthesis.v1": "9.9.9"}
 
     import todayflow_backend.services.core_profile as cp
 
@@ -180,4 +183,70 @@ def test_parallel_opens_do_not_multiply_generation(monkeypatch) -> None:
 def test_forming_message_constant() -> None:
     c = build_profile_contract_forming_v1(locale="ru", reason="test")
     assert c["status"] == PROFILE_STATUS_FORMING
-    assert "формируется" in (c.get("forming_message") or "").lower()
+    msg = (c.get("forming_message") or "").lower()
+    assert "контуры" in msg or "опоры" in msg
+    assert "генерац" not in msg
+    assert "текст" not in msg
+    assert "формируется" not in msg
+    assert c.get("recognition_line") == ""
+
+
+def test_recognition_line_case_a_accepts_share_phrase() -> None:
+    """Case A (pq-001 / Architect): one recognition phrase ≤120, no advice/day/archetype."""
+    line = "Ты первым видишь структуру там, где остальные пока видят только хаос."
+    assert len(line) <= 120
+    assert validate_recognition_line(line, require=True) == []
+    payload = {
+        "contract_version": "profile_funnel_identity_v0",
+        "recognition_line": line,
+        "identity_core": "Человек держит смысл через ясный фокус и прямой контакт, не через суету.",
+        "strengths": ["a", "b", "c"],
+        "growth_zones": ["d", "e", "f"],
+    }
+    assert _identity_ok(payload) is True
+
+
+def test_recognition_line_rejects_day_advice_archetype_and_length() -> None:
+    assert "recognition_line_empty" in validate_recognition_line("", require=True)
+    assert "recognition_line_too_long" in validate_recognition_line("а" * 121, require=True)
+    assert "recognition_line_day_content" in validate_recognition_line(
+        "Сегодня тебе полезно собрать хаос в систему.",
+        require=True,
+    )
+    assert "recognition_line_repeats_archetype" in validate_recognition_line(
+        "Ты Архитектор порядка в хаосе вокруг.",
+        require=True,
+    )
+    assert _identity_ok(
+        {
+            "contract_version": "profile_funnel_identity_v0",
+            "recognition_line": "Ты Архитектор порядка.",
+            "identity_core": "Человек держит смысл через ясный фокус и прямой контакт, не через суету.",
+            "strengths": ["a", "b", "c"],
+            "growth_zones": ["d", "e", "f"],
+        }
+    ) is False
+
+
+def test_recognition_line_legacy_snapshot_fallback() -> None:
+    """Old snapshots without recognition_line get a temporary compress from identity_core."""
+    normalized = _normalize_profile_contract(
+        {
+            "status": "ready",
+            "identity_core": "Человек держит смысл через ясный фокус и прямой контакт, не через суету.",
+            "strengths": ["a", "b", "c"],
+            "growth_zones": ["d", "e", "f"],
+            "relationship_style": "Близость через прямые слова и ритм.",
+            "money_style": "Деньги как спокойствие одного шага.",
+            "decision_style": "Решения через один критерий без шума.",
+            "recurring_patterns": ["Берёт второй приоритет без слота."],
+            "living_changes": "Усиливается запрос на один главный фокус.",
+            "life_mission": "Удерживать свой ритм среди чужих срочных задач.",
+            "helps": ["Один фокус", "Пауза перед да"],
+            "life_spheres": {},
+        }
+    )
+    assert "recognition_line" in normalized
+    assert normalized["recognition_line"]
+    assert len(normalized["recognition_line"]) <= 120
+    assert validate_recognition_line(normalized["recognition_line"], require=True) == []

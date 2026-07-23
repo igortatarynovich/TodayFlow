@@ -23,10 +23,12 @@ function isAuthSuccessMessage(message: string | null): boolean {
 }
 
 type LoginResponse = {
+  access_token?: string;
+  refresh_token?: string;
+  token: string;
   user_id: number;
   email: string;
   is_paid: boolean;
-  token: string;
 };
 
 type ValidationError = {
@@ -164,7 +166,7 @@ function AuthPageContent() {
     try {
       const fallbackTarget = getSafeRedirectTarget(redirectTarget);
       const response = await postJson<LoginResponse>("/auth/login", { email, password });
-      beginAuthSession(response.token);
+      beginAuthSession(response);
       const target = await resolveTargetAfterAuthSession(fallbackTarget);
       setPostAuthTarget(target);
       setMessage(t("auth.toast.loginNext", "Вход выполнен. Открываем следующий шаг."));

@@ -121,7 +121,7 @@ describe("buildProfileLifeSpheresFromChart", () => {
 });
 
 describe("buildProfileLifeSpheresFromProfileData", () => {
-  it("does not fill spheres from chart/templates without a ready LLM contract", () => {
+  it("does not fill spheres from chart/templates without contract life_spheres", () => {
     const spheres = buildProfileLifeSpheresFromProfileData(null, {
       interpretation: {
         life_areas: {

@@ -1,0 +1,7 @@
+{
+  "revalidated_after_fp_fix": true,
+  "cases_pass": "8/8",
+  "note": "Original summary showed 6/8 due to validator FPs: mars-like substring false positive on равновесие path, регулярно⊂регулярность. Outputs OK on revalidate.",
+  "contrasts_pass": "2/2",
+  "vs_projector_near_clone": false
+}

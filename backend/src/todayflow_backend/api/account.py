@@ -241,6 +241,9 @@ class CoreProfileResponse(BaseModel):
     living: dict | None = None
     natal_summary: dict | None = None  # сжатое текстовое резюме карты для персонализации (без сырых координат)
     snapshot_id: int | None = None  # CoreProfileSnapshot.id when loaded from published snapshot
+    # Ephemeral Availability 3.1 — not stored in Snapshot; access gates reveal only.
+    capability: dict | None = None
+    profile_matrix_v0: dict | None = None
 
 
 class CompactUserModelIdentity(BaseModel):
@@ -339,7 +342,7 @@ class CumConfidenceHistoryResponse(BaseModel):
 
 
 class CoreSetupPayload(BaseModel):
-    first_name: str
+    first_name: Optional[str] = None
     last_name: Optional[str] = None
     label: str = "Я"
     birth_date: date
@@ -347,11 +350,14 @@ class CoreSetupPayload(BaseModel):
     time_unknown: bool = False
     timezone_offset_minutes: Optional[int] = None
     timezone_name: Optional[str] = None
-    location_name: str
+    # Optional unless birth time is known — place only unlocks ASC/houses with time.
+    location_name: Optional[str] = None
     latitude: Optional[float] = None
     longitude: Optional[float] = None
     notes: Optional[str] = None
     gender: Optional[str] = None  # 'female', 'male', 'unspecified'
+    # Optional precomputed natal_facts contract payload (guest preview → claim).
+    natal_facts: Optional[dict[str, Any]] = None
 
 
 class CoreSetupResponse(BaseModel):
@@ -773,8 +779,9 @@ def _get_max_profiles(user: db_models.User, db: Session) -> int:
     if user.is_paid:
         return 5
     
-    # Бесплатный план: только 1 профиль
-    return 1
+    # Free: allow a small circle so Intake 1A (two people) + Scenario 2 (add profile)
+    # can bind without a paid plan. Deeper circle stays on lite_plus / pro.
+    return 3
 
 
 def _get_primary_profile(user: db_models.User, db: Session) -> db_models.AstroProfile | None:
@@ -946,7 +953,7 @@ async def upsert_core_setup(
     locale = request_locale(request)
     settings = _settings_or_create(db, user)
 
-    settings.first_name = payload.first_name.strip()
+    settings.first_name = (payload.first_name or "").strip() or None
     settings.last_name = (payload.last_name or "").strip() or None
     if payload.gender is not None:
         normalized_g = _normalize_gender_value(payload.gender, locale=locale)
@@ -962,12 +969,18 @@ async def upsert_core_setup(
         settings.gender = normalized_g
     db.add(settings)
 
-    latitude, longitude = _resolve_coordinates(
-        geocoder,
-        payload.location_name,
-        payload.latitude,
-        payload.longitude,
-    )
+    location_name = (payload.location_name or "").strip()
+    # Time without place is allowed: saved on the profile, mode stays date_only
+    # (ASC/houses locked until coordinates exist). Do not reject the save.
+
+    latitude, longitude = (None, None)
+    if location_name:
+        latitude, longitude = _resolve_coordinates(
+            geocoder,
+            location_name,
+            payload.latitude,
+            payload.longitude,
+        )
 
     primary = _get_primary_profile(user, db)
     if primary is None:
@@ -980,7 +993,7 @@ async def upsert_core_setup(
             time_unknown=payload.time_unknown,
             timezone_offset_minutes=payload.timezone_offset_minutes,
             timezone_name=payload.timezone_name,
-            location_name=payload.location_name.strip(),
+            location_name=location_name or None,
             latitude=latitude,
             longitude=longitude,
             notes=payload.notes,
@@ -995,7 +1008,7 @@ async def upsert_core_setup(
             payload.time_unknown,
             payload.timezone_offset_minutes,
             payload.timezone_name,
-            payload.location_name.strip(),
+            location_name,
             latitude,
             longitude,
         )
@@ -1020,7 +1033,7 @@ async def upsert_core_setup(
         primary.time_unknown = payload.time_unknown
         primary.timezone_offset_minutes = payload.timezone_offset_minutes
         primary.timezone_name = payload.timezone_name
-        primary.location_name = payload.location_name.strip()
+        primary.location_name = location_name or None
         primary.latitude = latitude
         primary.longitude = longitude
         primary.notes = payload.notes
@@ -1043,40 +1056,130 @@ async def upsert_core_setup(
     db.refresh(primary)
 
     full_name = " ".join([settings.first_name or "", settings.last_name or ""]).strip()
-    if not full_name:
+    try:
+        if full_name:
+            try:
+                numerology_profile = numerology_service.compute_profile(
+                    full_name=full_name,
+                    birth_date=payload.birth_date.isoformat(),
+                    locale=locale,
+                )
+            except NumerologyError as exc:
+                if exc.code != "invalidName":
+                    raise
+                fallback_name = _normalize_numerology_name(full_name)
+                numerology_profile = numerology_service.compute_profile(
+                    full_name=fallback_name or "",
+                    birth_date=payload.birth_date.isoformat(),
+                    locale=locale,
+                )
+        else:
+            numerology_profile = numerology_service.compute_profile(
+                full_name="",
+                birth_date=payload.birth_date.isoformat(),
+                locale=locale,
+            )
+    except NumerologyError:
         raise HTTPException(
             status_code=400,
-            detail=translate("account.errors.missingName", locale=locale, default="First name is required for numerology."),
-        )
-
-    try:
-        numerology_profile = numerology_service.compute_profile(
-            full_name=full_name,
-            birth_date=payload.birth_date.isoformat(),
-            locale=locale,
-        )
-    except NumerologyError as exc:
-        if exc.code != "invalidName":
-            raise HTTPException(
-                status_code=400,
-                detail=translate("numerology.errors.invalidBirthDate", locale=locale, default="Invalid birth date."),
-            )
-        fallback_name = _normalize_numerology_name(full_name)
-        if not fallback_name:
-            raise HTTPException(
-                status_code=400,
-                detail=translate("account.errors.missingName", locale=locale, default="First name is required for numerology."),
-            )
-        numerology_profile = numerology_service.compute_profile(
-            full_name=fallback_name,
-            birth_date=payload.birth_date.isoformat(),
-            locale=locale,
+            detail=translate("numerology.errors.invalidBirthDate", locale=locale, default="Invalid birth date."),
         )
     numerology_service.save_profile(user.id, numerology_profile, locale=locale)
 
     await try_warm_natal_chart_cache_for_profile(
         db, primary, geocoder, locale, astro_service=astro_service
     )
+
+    if isinstance(payload.natal_facts, dict) and payload.natal_facts.get("contract_version"):
+        from todayflow_backend.services.capability_resolver_v0 import (
+            merge_unavailable_into_facts,
+            resolve_capability,
+        )
+        from todayflow_backend.services.insight_depth import get_insight_depth_tier
+        from todayflow_backend.services.natal_facts_contract_v1 import (
+            persist_natal_facts_on_profile,
+            validate_natal_facts,
+        )
+        from todayflow_backend.services.profile_matrix_adapter_v0 import resolve_access_tier
+        from todayflow_backend.services.subscription_level import get_subscription_snapshot
+
+        snap = get_subscription_snapshot(user, db)
+        access = resolve_access_tier(
+            insight_depth_tier=get_insight_depth_tier(user, db),
+            subscription_status=snap.subscription_status,
+            billing_level=snap.level,
+        )
+        display_name = (
+            " ".join(
+                part
+                for part in (
+                    (payload.first_name or "").strip(),
+                    (payload.last_name or "").strip(),
+                )
+                if part
+            )
+            or None
+        )
+        cap = resolve_capability(
+            birth_date=payload.birth_date,
+            birth_time=payload.birth_time,
+            time_unknown=payload.time_unknown,
+            latitude=latitude,
+            longitude=longitude,
+            location_name=location_name or None,
+            timezone_name=payload.timezone_name,
+            display_name=display_name,
+            access=access,
+        )
+        mode = "full" if cap["mode"] == "full" else "date_only"
+        structure_reason = None
+        for u in cap.get("unavailable_facts") or []:
+            if isinstance(u, dict) and u.get("key") == "ascendant":
+                structure_reason = str(u.get("reason") or "") or None
+                break
+        try:
+            facts = validate_natal_facts(
+                payload.natal_facts,
+                expected_mode=mode,
+                structure_unavailable_reason=structure_reason,
+            )
+            facts = merge_unavailable_into_facts(facts, cap)
+            persist_natal_facts_on_profile(db, primary.id, facts)
+            db.commit()
+        except Exception:
+            # Claim must not fail if guest facts payload is malformed.
+            pass
+    else:
+        # Server ensures facts even when client did not send a guest natal_facts pack.
+        from todayflow_backend.services.ensure_natal_facts_v0 import ensure_natal_facts_for_profile
+        from todayflow_backend.services.insight_depth import get_insight_depth_tier
+        from todayflow_backend.services.profile_matrix_adapter_v0 import resolve_access_tier
+        from todayflow_backend.services.subscription_level import get_subscription_snapshot
+
+        snap = get_subscription_snapshot(user, db)
+        access = resolve_access_tier(
+            insight_depth_tier=get_insight_depth_tier(user, db),
+            subscription_status=snap.subscription_status,
+            billing_level=snap.level,
+        )
+        display_name = (
+            " ".join(
+                part
+                for part in (
+                    (payload.first_name or "").strip(),
+                    (payload.last_name or "").strip(),
+                )
+                if part
+            )
+            or None
+        )
+        ensure_natal_facts_for_profile(
+            db,
+            primary,
+            locale=locale,
+            display_name=display_name,
+            access=access,
+        )
 
     _bump_morning_ritual_cache(user.id)
 

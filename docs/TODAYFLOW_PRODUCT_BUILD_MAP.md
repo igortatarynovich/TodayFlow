@@ -10,9 +10,14 @@
 
 ---
 
+**До entity / UI:** состояние доступа — [PRODUCT_AVAILABILITY_MATRIX.md](./PRODUCT_AVAILABILITY_MATRIX.md)  
+*(данные × экран × блок; freeze Profile/Today до APPROVED)*.
+
 ## Главный закон *(6 шагов — всегда в этом порядке)*
 
 ```
+0. Availability (кто что видит)  ← матрица состояний
+        ↓
 1. Пользовательский вопрос
         ↓
 2. Продуктовый ответ

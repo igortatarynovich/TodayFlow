@@ -13,7 +13,7 @@ import {
   getVenusInSignEntry,
 } from "@/lib/zodiacKnowledge";
 import { getPlanetSignId } from "./buildProfilePlanetaryData";
-import { isProfilePortraitForming, PROFILE_PORTRAIT_FORMING_MESSAGE } from "./profilePortraitForming";
+import { PROFILE_PORTRAIT_FORMING_MESSAGE } from "./profilePortraitForming";
 import { profileContractMatchesLocale } from "./profileCopySafety";
 import { withLifeSphereHowFrame } from "./profileSphereCopy";
 
@@ -172,33 +172,38 @@ function buildSpheresFromContractOnly(
 
 /**
  * Life spheres for Profile V2.
- * Ready portrait → only LLM contract spheres (no chart/template silent fill).
- * Forming/partial → empty list; UI shows forming state.
+ * Snapshot contract spheres only (validated synthesis or legacy) — no chart/DEFAULTS fill.
+ * Partial maps (e.g. love/money/decisions) are valid; patterns not required.
  */
 export function buildProfileLifeSpheresFromProfileData(
   preview: NatalChartPreview | null,
   core: CoreProfile | null,
 ): ProfileLifeSphere[] {
   void preview;
-  if (isProfilePortraitForming(core)) {
+  const contract = core?.profile_contract_v1;
+  if (!contract) {
     return [];
   }
-  const contract = core?.profile_contract_v1;
-  // Wrong-language portrait (e.g. EN contract on RU UI) → RU chart/template spheres, not English LLM.
+  // Wrong-language portrait → do not show mismatched copy (legacy path only when no contract spheres).
   if (!profileContractMatchesLocale(contract)) {
+    const contractSpheres = contract.life_spheres;
+    const hasContractSpheres =
+      contractSpheres &&
+      typeof contractSpheres === "object" &&
+      Object.keys(contractSpheres).length > 0;
+    if (hasContractSpheres) {
+      return [];
+    }
     const withoutContract = core ? { ...core, profile_contract_v1: undefined } : null;
     return buildProfileLifeSpheresFromProfileDataLegacy(preview, withoutContract);
   }
-  const contractSpheres = contract?.life_spheres;
+  const contractSpheres = contract.life_spheres;
   if (!contractSpheres || typeof contractSpheres !== "object") {
     return [];
   }
   const fromContract = buildSpheresFromContractOnly(contractSpheres);
-  if (fromContract.length >= 9) {
-    return fromContract;
-  }
-  // Incomplete contract → do not mix with hardcoded DEFAULTS.
-  return [];
+  // Partial synthesis OK (love/money/decisions slice). Never pad with FE DEFAULTS.
+  return fromContract;
 }
 
 /** @deprecated chart/template path kept for legacy tests only — not used by Profile V2. */

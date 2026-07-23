@@ -7,15 +7,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
-from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
-from slowapi.util import get_remote_address
 
 from todayflow_backend.api.routes import router
 from todayflow_backend.core.config import settings
 from todayflow_backend.core.logging_config import setup_logging
 from todayflow_backend.core.monitoring import capture_exception, init_monitoring
+from todayflow_backend.core.rate_limit import limiter
 from todayflow_backend.db.models import Base
 from todayflow_backend.db.session import engine
 from todayflow_backend.db.migrations import apply_migrations
@@ -25,9 +25,6 @@ setup_logging()
 
 # Initialize monitoring (Sentry) if configured
 init_monitoring()
-
-# Initialize rate limiter
-limiter = Limiter(key_func=get_remote_address)
 
 app = FastAPI(
     title="TodayFlow Backend API",

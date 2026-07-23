@@ -33,10 +33,10 @@ describe("first result model", () => {
     expect(model.portraitCards.length).toBe(4);
     expect(model.dominantTrait.headline.length).toBeGreaterThan(20);
     expect(model.audit.candidateCount).toBeGreaterThan(10);
-    expect(model.closingMessage).toMatch(/начало|первый день/i);
+    expect(model.closingMessage).toMatch(/начало|сохрани профиль/i);
     expect(model.nameInsight?.tiles.length).toBeGreaterThanOrEqual(2);
-    expect(model.firstTodayCtaLabel).toMatch(/первый день/i);
-    expect(model.refineCtaLabel).toMatch(/карту/i);
+    expect(model.saveCtaLabel).toMatch(/сохранить/i);
+    expect(model.refineCtaLabel).toMatch(/время/i);
   });
 
   it("uses distinct why explanations per visible card", () => {

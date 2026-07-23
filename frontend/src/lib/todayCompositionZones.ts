@@ -28,6 +28,22 @@ const EMPTY_ENGAGEMENT: Pick<DayEngagementState, "tarotPickedName" | "numberConf
   numberConfirmed: false,
 };
 
+/**
+ * Authoritative day_story → one literary reading, not a widget gallery.
+ * Ritual gates stay; glance / sky / hero / multi-tool chrome go away.
+ */
+export function applySingleVoiceZones(flags: TodayCompositionZoneFlags): TodayCompositionZoneFlags {
+  return {
+    ...flags,
+    pulse: false,
+    hero: false,
+    glance: false,
+    astroContext: false,
+    whyStory: false,
+    actions: false,
+  };
+}
+
 /** Today Day Story — zone visibility per path and ritual phase. */
 export function todayCompositionZones(
   variant: TodayCompositionVariant,
@@ -81,13 +97,20 @@ export function resolveTodayCompositionZones(input: {
   engagement: Pick<DayEngagementState, "tarotPickedName" | "numberConfirmed" | "dayGoal">;
   isEveningSurface: boolean;
   personalizedReady: boolean;
+  /** When true (authoritative day_story), suppress widget gallery zones. */
+  singleVoice?: boolean;
 }): TodayCompositionZoneFlags {
+  let flags: TodayCompositionZoneFlags;
   if (input.isEveningSurface && input.personalizedReady) {
-    return todayEveningStoryZones(input.variant);
+    flags = todayEveningStoryZones(input.variant);
+  } else {
+    flags = todayCompositionZones(input.variant, input.engagement);
   }
-  const base = todayCompositionZones(input.variant, input.engagement);
-  if (base.promise && !input.engagement.dayGoal) {
-    return base;
+  if (input.singleVoice) {
+    flags = applySingleVoiceZones(flags);
+    if (input.isEveningSurface && input.personalizedReady) {
+      flags = { ...flags, pulse: false, hero: false, glance: false };
+    }
   }
-  return base;
+  return flags;
 }

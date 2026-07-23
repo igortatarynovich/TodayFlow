@@ -255,45 +255,33 @@ function mergeProfileContractIntoQuickMap(
   }
 
   const identitySummary = (contract?.identity_core || "").trim();
-  // Ready: prefer contract, allow non-overlapping base tags. Partial: contract-only (no silent mix-in).
+  // Identity passport: strengths / growth_zones / identity_core are contract-only when present.
+  // Do not silent-mix taxonomy into identity surfaces (PROJECTION dual-source).
+  const contractStrengths = filterProfileCopyList([...(contract?.strengths ?? [])], 4, locale);
+  const contractDrains = filterProfileCopyList([...(contract?.growth_zones ?? [])], 4, locale);
   const allowBaseMix = portraitReady;
-  const strengthens = filterProfileCopyList(
-    [...(contract?.strengths ?? []), ...(allowBaseMix ? base.strengthens : [])],
-    4,
-    locale,
-  );
-  const drains = filterProfileCopyList(
-    [...(contract?.growth_zones ?? []), ...(allowBaseMix ? base.drains : [])],
-    4,
-    locale,
-  );
   const decisionStyleRaw = contract?.decision_style?.trim() || (allowBaseMix ? base.decisionStyle : null);
   const decisionStyle = isUsableProfileCopy(decisionStyleRaw, locale) ? decisionStyleRaw : null;
-  const perceivedAs = filterProfileCopyList(
-    [...(contract?.recurring_patterns ?? []), ...(allowBaseMix ? base.perceivedAs : [])],
-    5,
-    locale,
-  );
+  // character_patterns passport: confirmed repeats = contract only (never taxonomy mix-in).
+  const perceivedAs = filterProfileCopyList([...(contract?.recurring_patterns ?? [])], 5, locale);
   const frameworkLeadRaw = contract?.living_changes?.trim() || (allowBaseMix ? base.frameworkLead : null);
   const frameworkLead = isUsableProfileCopy(frameworkLeadRaw, locale) ? frameworkLeadRaw : null;
-  const lifeMissionRaw = contract?.life_mission?.trim() || (allowBaseMix ? base.lifeMission : null);
+  // direction_mission passport: contract life_mission only (never taxonomy lifeTheme).
+  const lifeMissionRaw = (contract?.life_mission || "").trim();
   const lifeMission = isUsableProfileCopy(lifeMissionRaw, locale) ? lifeMissionRaw : null;
-  const thriveAreas = filterProfileCopyList(
-    [...(contract?.helps ?? []), ...(allowBaseMix ? base.thriveAreas : [])],
-    4,
-    locale,
-  );
+  // character_helps passport: contract helps only (never taxonomy thriveAreas).
+  const thriveAreas = filterProfileCopyList([...(contract?.helps ?? [])], 4, locale);
 
   return {
     ...base,
-    identitySummary: isUsableProfileCopy(identitySummary, locale) ? identitySummary : base.identitySummary,
-    strengthens: strengthens.length ? strengthens : base.strengthens,
-    drains: drains.length ? drains : base.drains,
-    decisionStyle: decisionStyle ?? base.decisionStyle,
-    perceivedAs: perceivedAs.length ? perceivedAs : base.perceivedAs,
-    frameworkLead: frameworkLead ?? base.frameworkLead,
-    lifeMission: lifeMission ?? base.lifeMission,
-    thriveAreas: thriveAreas.length ? thriveAreas : base.thriveAreas,
+    identitySummary: isUsableProfileCopy(identitySummary, locale) ? identitySummary : null,
+    strengthens: contractStrengths,
+    drains: contractDrains,
+    decisionStyle: decisionStyle ?? (allowBaseMix ? base.decisionStyle : null),
+    perceivedAs,
+    frameworkLead: frameworkLead ?? (allowBaseMix ? base.frameworkLead : null),
+    lifeMission,
+    thriveAreas,
   };
 }
 
