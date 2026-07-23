@@ -340,8 +340,16 @@ export function TodayCompositionSurface(props: Props) {
         primaryAction: props.contract.primary_action,
         focusTopicId: engagement.focusTopicId,
         developmentPoint: props.contract.personal_growth.development_point,
+        todayMove: props.contract.day_story?.today_move,
+        doItems: props.contract.day_story?.do ?? null,
       }),
-    [props.contract.primary_action, props.contract.personal_growth.development_point, engagement.focusTopicId],
+    [
+      props.contract.primary_action,
+      props.contract.personal_growth.development_point,
+      props.contract.day_story?.today_move,
+      props.contract.day_story?.do,
+      engagement.focusTopicId,
+    ],
   );
 
   const strengthenTools = useMemo(
@@ -911,12 +919,16 @@ export function TodayCompositionSurface(props: Props) {
   const heroSection = zones.hero ? (
     useProductFoundation ? (
       <section
-        className={`${styles.themeDarkHero} ${story.personalizedReady ? styles.themeDarkHeroCompact : ""}`.trim()}
+        className={`${styles.themeDarkHero} ${story.personalizedReady ? styles.themeDarkHeroCompact : styles.themeDarkHeroSpotlight}`.trim()}
         data-testid="today-zone-hero"
         aria-labelledby="today-day-theme-title"
       >
         <div className={styles.themeDarkAtmosphere} aria-hidden>
           <SacredGeometryBackdrop emphasis="soft" preset="today" />
+        </div>
+        <div className={styles.themeDarkVisualAccent} aria-hidden>
+          {/* eslint-disable-next-line @next/next/no-img-element -- static wash plate */}
+          <img src="/images/cosmic/moon_wash.webp" alt="" className={styles.themeDarkWash} />
         </div>
         <div className={`${styles.themeDarkContent} ${profileMotionStyles.heroEnter}`}>
           <p className={styles.journeyStepIndex}>
@@ -937,11 +949,12 @@ export function TodayCompositionSurface(props: Props) {
                 className={styles.themeDarkTitle}
                 data-testid="today-entity-daily-theme"
               >
-                {story.hero.centralThought}
+                {story.hero.themeShort || story.hero.centralThought}
               </h2>
-              {story.hero.themeShort ? <p className={styles.themeDarkSubline}>{story.hero.themeShort}</p> : null}
-              {!story.personalizedReady && copy.journey.dayLead ? (
+              {!story.personalizedReady ? (
                 <p className={styles.themeDarkLead}>{copy.journey.dayLead}</p>
+              ) : story.hero.themeShort && story.hero.centralThought !== story.hero.themeShort ? (
+                <p className={styles.themeDarkSubline}>{story.hero.centralThought}</p>
               ) : null}
             </>
           )}
@@ -1129,8 +1142,6 @@ export function TodayCompositionSurface(props: Props) {
 
       {!story.personalizedReady ? (
         <>
-          {pulseSection}
-          {glanceSection}
           {ritualGateSection}
           {ritualTarotImpactStage}
           {morningDialogue}
@@ -1182,6 +1193,8 @@ export function TodayCompositionSurface(props: Props) {
             goalDraftOpen={goalDraftOpen}
             goalDraft={goalDraft}
             coreProfile={props.coreProfile}
+            skyCards={story.skyCards}
+            colorGuide={story.colorGuide}
             tarotDeepenHref={
               engagement.tarotPickedId != null
                 ? buildTarotDeepenHref({

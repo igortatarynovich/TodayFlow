@@ -109,13 +109,15 @@ function asSoftIntention(raw: string): string {
 }
 
 /**
- * Intentions only from the day's computed action — never a canned affirmation list.
+ * Intentions from the day's computed action + growth point + do-list — never canned affirmations.
  * Empty when there is nothing real to offer (user can write their own).
  */
 export function buildTodayPromiseSuggestions(input: {
   primaryAction?: string | null;
   focusTopicId?: string | null;
   developmentPoint?: string | null;
+  todayMove?: string | null;
+  doItems?: string[] | null;
 }): TodayPromiseSuggestion[] {
   const out: TodayPromiseSuggestion[] = [];
   const seen = new Set<string>();
@@ -129,10 +131,21 @@ export function buildTodayPromiseSuggestions(input: {
     out.push({ id, text: normalized.length <= 140 ? normalized : `${normalized.slice(0, 137)}…` });
   };
 
+  const move = input.todayMove?.trim();
+  if (move) push("today_move", asSoftIntention(move));
+
   const primary = input.primaryAction?.trim();
   if (primary) push("contract_primary", asSoftIntention(primary));
 
-  return out.slice(0, 1);
+  const growth = input.developmentPoint?.trim();
+  if (growth) push("development", asSoftIntention(growth));
+
+  for (const [index, item] of (input.doItems ?? []).entries()) {
+    if (out.length >= 4) break;
+    push(`do_${index}`, asSoftIntention(item));
+  }
+
+  return out.slice(0, 4);
 }
 
 export const TODAY_EVENING_HIGHLIGHTS: TodayEveningHighlight[] = [

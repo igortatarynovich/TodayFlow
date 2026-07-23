@@ -104,28 +104,26 @@ describe("TodayCompositionSurface", () => {
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
 
     expect(screen.getByTestId("today-zone-greeting")).toBeInTheDocument();
-    expect(screen.getByTestId("today-zone-pulse")).toBeInTheDocument();
-    expect(screen.getByText("Энергия дня")).toBeInTheDocument();
+    expect(screen.getByTestId("today-zone-hero")).toBeInTheDocument();
     expect(screen.getByTestId("today-entity-daily-theme")).toBeInTheDocument();
-    expect(screen.getByTestId("today-zone-glance")).toBeInTheDocument();
-    expect(screen.getByTestId("today-zone-sky-influences")).toBeInTheDocument();
-    expect(screen.getByTestId("today-zone-sphere-focus")).toBeInTheDocument();
-    expect(screen.getByTestId("today-zone-color-guide")).toBeInTheDocument();
     expect(screen.getByTestId("today-zone-ritual-gates")).toBeInTheDocument();
     expect(screen.getByTestId("today-ritual-tarot-gate")).toBeInTheDocument();
     expect(screen.queryByTestId("today-zone-why-story")).not.toBeInTheDocument();
     // PR-3: no strengthen invent without practice_recommendation
     expect(screen.queryByTestId("today-zone-strengthen")).not.toBeInTheDocument();
+    // Number/card are ritual layer — not in hero before pick
+    expect(screen.getByTestId("today-zone-hero").textContent).not.toMatch(/число дня/i);
   });
 
-  it("keeps day hero and pulse when embedded in web dashboard", () => {
+  it("keeps day hero when embedded in web dashboard without leaking number before ritual", () => {
     render(<TodayCompositionSurface {...baseProps} variant="default" embeddedInWebDashboard />);
 
     expect(screen.queryByTestId("today-zone-greeting")).not.toBeInTheDocument();
     expect(screen.getByTestId("today-zone-hero")).toBeInTheDocument();
-    expect(screen.getByTestId("today-zone-pulse")).toBeInTheDocument();
+    expect(screen.queryByTestId("today-zone-pulse")).not.toBeInTheDocument();
     expect(screen.getByTestId("today-zone-ritual-gates")).toBeInTheDocument();
     expect(screen.getByText(/Суть дня/i)).toBeInTheDocument();
+    expect(screen.getByTestId("today-zone-hero").textContent).not.toMatch(/число дня\s*[—-]?\s*4/i);
   });
 
   it("hides continuity on firstToday variant", () => {

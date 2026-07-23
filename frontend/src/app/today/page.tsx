@@ -1210,6 +1210,10 @@ export default function TodayPage() {
     dayStorySingleVoice && todayContract ? dayStoryLeadParagraph(todayContract) : null;
   const summaryTitleMerged = contractStoryHeadline || narrativeGuideHeadline || guideHeadline;
   const subtitleMerged = contractStoryLead || coreGuideLead || narrativeGuideSubline || subtitleRitual;
+  /** Dashboard chrome must stay short — full day_story belongs in the reading, not the header. */
+  const dashboardGreetingLine =
+    (todayContract?.day_story?.theme || "").trim() ||
+    (summaryTitleMerged && summaryTitleMerged.length <= 72 ? summaryTitleMerged : null);
   const numerologyValueRitual = String(
     todayData.morning?.numerology_number?.value ?? todayData.morning?.numerology_number?.reduced_value ?? "—",
   );
@@ -1255,7 +1259,7 @@ export default function TodayPage() {
   const whyLunarRitual = lunarPhaseForWhy?.themes ? String(lunarPhaseForWhy.themes) : null;
 
   const profileMetaParts = [
-    numerologyValueRitual !== "—" ? `Путь ${numerologyValueRitual}` : null,
+    coreProfile?.numerology?.life_path != null ? `Путь ${coreProfile.numerology.life_path}` : null,
     coreProfile?.astro?.sun_sign ? `Солнце ${coreProfile.astro.sun_sign}` : null,
   ].filter(Boolean);
   const profileMetaDashboard = profileMetaParts.length > 0 ? profileMetaParts.join(" · ") : null;
@@ -1282,11 +1286,11 @@ export default function TodayPage() {
       <TodayWebDashboard
         displayName={firstNameRitual}
         displayDate={formatDate(todayData.date)}
-        greetingLine={subtitleMerged}
+        greetingLine={dashboardGreetingLine}
         profileMeta={profileMetaDashboard}
         themeTitle={summaryTitleMerged}
         themeTags={themeTagsDashboard}
-        themeBody={subtitleMerged}
+        themeBody={dashboardGreetingLine}
         cardName={cardNameRitual}
         cardMeaning={cardMeaningRitual}
         moonLine={whyMoonRitual}

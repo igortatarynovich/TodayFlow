@@ -11,6 +11,7 @@ import { focusTopicLabel, moodLabelRu } from "@/lib/todayDayDialogue";
 import { colorGuideSkyStory, resolveTodayDayColorGuide } from "@/lib/todayDayColorGuide";
 import { dayStoryHeadline, dayStoryPulseLine, hasAuthoritativeDayStory } from "@/lib/todayContractMapper";
 import { isRuUserFacingText, sanitizeRuCopy } from "@/lib/todaySynthesisTextPolicy";
+import { redactUnrevealedRitualProse } from "@/lib/todayRitualRevealSanitize";
 
 export type TodaySkyCard = {
   id: string;
@@ -74,16 +75,31 @@ function stripTodayLead(text: string): string {
   return text.replace(/^сегодня\s+[^.]{0,40}[.:]\s*/i, "").replace(/[.!?]+$/, "").trim();
 }
 
-export function buildDayThesis(contract: TodayContractV1, moodId?: string | null): string {
+export function buildDayThesis(
+  contract: TodayContractV1,
+  moodId?: string | null,
+  ritualComplete = true,
+): string {
+  const reveal = { numberRevealed: ritualComplete, tarotRevealed: ritualComplete };
+
   if (hasAuthoritativeDayStory(contract)) {
+    const themeRaw = contract.day_story?.theme?.trim();
+    const theme = themeRaw ? redactUnrevealedRitualProse(themeRaw, reveal) : "";
+    if (!ritualComplete && theme && isRuUserFacingText(theme) && theme.length <= 96) {
+      return theme;
+    }
     const story = contract.day_story?.story?.trim();
-    if (story && isRuUserFacingText(story)) {
+    if (story && isRuUserFacingText(story) && ritualComplete) {
       const first = story.split(/(?<=[.!?])\s+/)[0]?.trim();
       if (first && first.length >= 24 && first.length <= 220) {
         return first.endsWith(".") ? first : `${first}.`;
       }
     }
-    const headline = dayStoryHeadline(contract);
+    if (theme && isRuUserFacingText(theme)) {
+      return theme.endsWith(".") ? theme : theme;
+    }
+    const headlineRaw = dayStoryHeadline(contract);
+    const headline = headlineRaw ? redactUnrevealedRitualProse(headlineRaw, reveal) : "";
     if (headline && isRuUserFacingText(headline)) {
       return headline.endsWith(".") ? headline : `${headline}.`;
     }
@@ -134,11 +150,18 @@ function buildPulseFacet(input: {
   contract: TodayContractV1;
   morningRitualData: MorningRitualData | null;
   registry: SpineRegistry;
+  ritualComplete: boolean;
 }): string {
+  const reveal = {
+    numberRevealed: input.ritualComplete,
+    tarotRevealed: input.ritualComplete,
+  };
+
   if (hasAuthoritativeDayStory(input.contract)) {
     const fromStory = dayStoryPulseLine(input.contract);
-    if (fromStory) {
-      const claimed = input.registry.claim(fromStory);
+    const cleaned = redactUnrevealedRitualProse(fromStory, reveal);
+    if (cleaned) {
+      const claimed = input.registry.claim(cleaned);
       if (claimed) return claimed;
     }
   }
@@ -275,11 +298,14 @@ export function buildSkyInfluenceCards(input: {
   stoneLine?: string | null;
   sunSignLabel?: string | null;
   registry: SpineRegistry;
+  /** Card/number only after ritual — they are the interpretive layer, not the foundation. */
+  ritualComplete?: boolean;
 }): TodaySkyCard[] {
   const cards: TodaySkyCard[] = [];
   const celestial = input.morningRitualData?.celestial_events;
   const lunar = celestial?.lunar_phase;
   const apiSymbols = celestial?.daily_symbols;
+  const ritualComplete = Boolean(input.ritualComplete);
 
   const pushCard = (card: TodaySkyCard) => {
     if (cards.some((c) => c.id === card.id)) return;
@@ -369,7 +395,7 @@ export function buildSkyInfluenceCards(input: {
     });
   }
 
-  if (input.cardName && input.cardId != null) {
+  if (ritualComplete && input.cardName && input.cardId != null) {
     const card = getTodayTarotCardRu(input.cardId);
     pushCard({
       id: "tarot",
@@ -380,7 +406,7 @@ export function buildSkyInfluenceCards(input: {
     });
   }
 
-  if (input.numerologyValue && input.numerologyValue !== "—") {
+  if (ritualComplete && input.numerologyValue && input.numerologyValue !== "—") {
     pushCard({
       id: "number",
       emoji: "🔢",
@@ -460,14 +486,19 @@ export function buildTodayDaySpine(input: {
   tarotPicked?: boolean;
 }): TodayDaySpine {
   const registry = new SpineRegistry();
-  const thesis = buildDayThesis(input.contract, input.moodId ?? null);
+  const thesis = buildDayThesis(input.contract, input.moodId ?? null, input.ritualComplete);
   registry.reserve(thesis);
 
   const themeShort = buildThemeShort(input.contract, thesis);
-  const pulse = buildPulseFacet({
+  const pulseRaw = buildPulseFacet({
     contract: input.contract,
     morningRitualData: input.morningRitualData,
     registry,
+    ritualComplete: input.ritualComplete,
+  });
+  const pulse = redactUnrevealedRitualProse(pulseRaw, {
+    numberRevealed: input.ritualComplete,
+    tarotRevealed: input.ritualComplete,
   });
 
   const showTarot = input.cardId != null && (input.tarotPicked || input.ritualComplete);
@@ -487,6 +518,7 @@ export function buildTodayDaySpine(input: {
     stoneLine: input.stoneLine,
     sunSignLabel: input.sunSignLabel,
     registry,
+    ritualComplete: input.ritualComplete,
   });
 
   const eveningLine = buildEveningLivingLine({
