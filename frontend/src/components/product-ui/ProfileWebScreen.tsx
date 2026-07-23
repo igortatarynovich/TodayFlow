@@ -1,12 +1,13 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { ProductWebShellConfigBridge, type ProductWebShellConfig } from "@/components/product-ui/productWebShellConfig";
 import { profileWebChromeBundle } from "@/components/product-ui/profileWebChrome";
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
 import type { ProfileRailAnchor } from "@/lib/product-ui/profileWebFigmaHelpers";
 import { getLocale } from "@/lib/i18n";
+import { useProductDayNightTheme } from "@/lib/useProductDayNightTheme";
 import type { CoreProfile } from "@/lib/types";
 import l from "@/design-system/layouts/dsLayouts.module.css";
 import s from "@/components/product-ui/productWebScreens.module.css";
@@ -29,21 +30,6 @@ export type ProfileWebScreenProps = {
   children: ReactNode;
 };
 
-function usePreferredProductTheme(): "light" | "dark" {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.matchMedia) return;
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const apply = () => setTheme(mq.matches ? "dark" : "light");
-    apply();
-    mq.addEventListener("change", apply);
-    return () => mq.removeEventListener("change", apply);
-  }, []);
-
-  return theme;
-}
-
 export function ProfileWebScreen({
   displayName,
   profileMeta,
@@ -62,7 +48,7 @@ export function ProfileWebScreen({
   const chrome = useMemo(() => profileWebChromeBundle(resolvedLocale), [resolvedLocale]);
   const resolvedTitle = title ?? chrome.pageTitle;
   const resolvedSubtitle = subtitle ?? chrome.pageSubtitle;
-  const preferredTheme = usePreferredProductTheme();
+  const preferredTheme = useProductDayNightTheme();
 
   const todayLabel = new Intl.DateTimeFormat(resolvedLocale === "ru" ? "ru-RU" : "en-US", {
     day: "numeric",
@@ -99,8 +85,8 @@ export function ProfileWebScreen({
       coreProfile,
       mainWide: true,
       fullMain: false,
-      // Journey mockups ship light + dark; follow OS until product theme control lands.
-      theme: isV2 ? preferredTheme : "light",
+      // Day/night by local clock on all profile shells.
+      theme: preferredTheme,
       rail: rail ?? anchorsRail,
     };
   }, [

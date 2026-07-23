@@ -14,6 +14,7 @@ import s from "@/components/product-ui/productWebScreens.module.css";
 import { useToastContext } from "@/components/ToastProvider";
 import { getJson, postJson } from "@/lib/api";
 import { getLocale } from "@/lib/i18n";
+import { fetchTodayContractV1 } from "@/lib/todayContract";
 import type { RewardMilestone, RewardsSnapshot } from "@/lib/rewards";
 import { RewardsContourCard } from "@/components/rewards/RewardsContourCard";
 import { useTodayCycle } from "@/components/providers/TodayCycleProvider";
@@ -99,6 +100,33 @@ export default function PracticeDetailPage() {
   } | null>(null);
   const [rewardsAfterCompletion, setRewardsAfterCompletion] = useState<RewardsSnapshot | null>(null);
   const [rewardMilestones, setRewardMilestones] = useState<RewardMilestone[]>([]);
+  const [dayWhy, setDayWhy] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setDayWhy(null);
+      return;
+    }
+    let cancelled = false;
+    void fetchTodayContractV1()
+      .then((contract) => {
+        if (cancelled) return;
+        const rec = contract.day_story?.practice_recommendation;
+        const kind = (rec?.kind || "").trim().toLowerCase();
+        const reason = (rec?.reason || "").trim();
+        if (!kind || kind === "none" || !reason) {
+          setDayWhy(null);
+          return;
+        }
+        setDayWhy(reason);
+      })
+      .catch(() => {
+        if (!cancelled) setDayWhy(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [isAuthenticated]);
 
   useEffect(() => {
     const loadPractice = async () => {
@@ -207,15 +235,16 @@ export default function PracticeDetailPage() {
   return (
     <PracticeSessionWebScreen
       title={practice.title}
-      subtitle={practice.description}
+      subtitle={practice.personalized_reason?.trim() || practice.description}
+      dayWhy={dayWhy}
       meta={sessionMeta}
       backLabel={pc.practiceDetailBackLink}
     >
-          <div className={s.practiceSessionCard}>
-            {practice.is_personalized && practice.personalized_reason && (
+          <>
+            {practice.is_personalized && practice.personalized_reason && !dayWhy && (
               <div className={s.practiceSessionHighlight}>
                 <p className={s.practiceSessionHighlightText}>
-                  ✨ {practice.personalized_reason}
+                  {practice.personalized_reason}
                 </p>
               </div>
             )}
@@ -223,7 +252,7 @@ export default function PracticeDetailPage() {
             {practice.prompt && (
               <div className={s.practiceSessionHighlight}>
                 <h3 className={s.practiceSessionSectionTitle}>
-                  💭 {pc.practiceDetailTodaysTaskTitle}
+                  {pc.practiceDetailTodaysTaskTitle}
                 </h3>
                 <p className={s.practiceSessionHighlightText}>
                   {practice.prompt}
@@ -267,7 +296,7 @@ export default function PracticeDetailPage() {
                           </p>
                           {step.duration_minutes && (
                             <p className="orbit-body-xs orbit-text-muted" style={{ marginBottom: "var(--orbit-space-sm)" }}>
-                              ⏱ {tpl(pc.practiceDetailStepDurationValue, { n: step.duration_minutes })}
+                              {tpl(pc.practiceDetailStepDurationValue, { n: step.duration_minutes })}
                             </p>
                           )}
                           {step.instructions && step.instructions.length > 0 && (
@@ -338,7 +367,7 @@ export default function PracticeDetailPage() {
             {practice.sequence_id && sequenceProgress && (
               <div className={s.practiceSessionProgress}>
                 <h3 className={s.practiceSessionSectionTitle}>
-                  📚 {pc.practiceDetailSequenceProgressHeading}
+                  {pc.practiceDetailSequenceProgressHeading}
                 </h3>
                 <div style={{ marginBottom: "var(--orbit-space-md)" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--orbit-space-xs)" }}>
@@ -474,7 +503,7 @@ export default function PracticeDetailPage() {
                 </DsButton>
               </div>
             )}
-          </div>
+          </>
     </PracticeSessionWebScreen>
   );
 

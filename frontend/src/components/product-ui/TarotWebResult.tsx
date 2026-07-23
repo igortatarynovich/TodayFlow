@@ -9,8 +9,7 @@ import { TarotCardImage } from "@/components/product-ui/TarotCardImage";
 import { tarotReadingStoryChromeBundle } from "@/components/guidance/tarotReadingStoryChrome";
 import {
   ProductJourneyScene,
-  ProductNarrativeScroll,
-  type ProductNarrativeChapter,
+  ProductNarrativeBlock,
 } from "@/components/product-ui/ProductJourneyScene";
 import journeyStyles from "@/components/product-ui/ProductJourneyScene.module.css";
 import type { TarotReadingStoryModel } from "@/lib/buildTarotReadingStoryModel";
@@ -32,6 +31,16 @@ function ensurePeriod(text: string): string {
   return /[.!?…]$/.test(t0) ? t0 : `${t0}.`;
 }
 
+function splitParagraphs(text: string): string[] {
+  const parts = text
+    .split(/(?<=[.!?…])\s+/)
+    .map((p) => ensurePeriod(p))
+    .filter(Boolean);
+  if (parts.length <= 1) return parts.length ? parts : [];
+  if (parts.length === 2) return parts;
+  return [parts.slice(0, 2).join(" "), ...parts.slice(2)].filter(Boolean);
+}
+
 export function TarotWebResult({
   model,
   locale = "ru",
@@ -49,69 +58,40 @@ export function TarotWebResult({
     storyEyebrow ??
     t("tarot.story.whyNowEyebrow", loc === "ru" ? "Почему это важно сейчас" : "Why this matters now", undefined, loc);
 
-  const storyChapters = useMemo((): ProductNarrativeChapter[] => {
-    const chapters: ProductNarrativeChapter[] = [];
+  const answerParas = useMemo(
+    () => (model.mainAnswer?.trim() ? splitParagraphs(model.mainAnswer) : []),
+    [model.mainAnswer],
+  );
 
-    if (model.mainAnswer?.trim()) {
-      const parts = model.mainAnswer.split(/(?<=[.!?…])\s+/).filter(Boolean);
-      chapters.push({
-        id: "answer",
-        kicker: chrome.mainAnswerEyebrow || "Ответ расклада",
-        paragraphs: parts.length > 1 ? [parts.slice(0, 2).join(" "), parts.slice(2).join(" ")].filter(Boolean).map(ensurePeriod) : [ensurePeriod(model.mainAnswer)],
-      });
+  const whyParas = useMemo(() => {
+    const paras: string[] = [];
+    if (model.storyNarrative?.trim()) paras.push(ensurePeriod(model.storyNarrative));
+    if (model.insights.holding?.trim()) {
+      paras.push(ensurePeriod(`${chrome.insightHoldingTitle}: ${model.insights.holding}`));
     }
-
-    if (model.storyNarrative?.trim()) {
-      chapters.push({
-        id: "why",
-        kicker: whyEyebrow,
-        paragraphs: [ensurePeriod(model.storyNarrative)],
-      });
+    if (model.insights.shifting?.trim()) {
+      paras.push(ensurePeriod(`${chrome.insightShiftingTitle}: ${model.insights.shifting}`));
     }
+    if (model.insights.attention?.trim()) {
+      paras.push(ensurePeriod(`${chrome.insightAttentionTitle}: ${model.insights.attention}`));
+    }
+    return paras;
+  }, [model.storyNarrative, model.insights, chrome]);
 
-    if (model.cardInsights.length) {
-      const cardParas = model.cardInsights
+  const cardParas = useMemo(
+    () =>
+      model.cardInsights
         .map((card) => {
           const line = (card.line || "").trim();
           if (!line) return ensurePeriod(`${card.positionLabel} — ${card.cardNameRu}`);
           return ensurePeriod(`${card.positionLabel} · ${card.cardNameRu}: ${line}`);
         })
-        .filter(Boolean);
-      if (cardParas.length) {
-        chapters.push({
-          id: "cards",
-          kicker: "Слой карт",
-          paragraphs: cardParas,
-        });
-      }
-    }
+        .filter(Boolean),
+    [model.cardInsights],
+  );
 
-    const layers: string[] = [];
-    if (model.insights.holding?.trim()) {
-      layers.push(ensurePeriod(`${chrome.insightHoldingTitle}: ${model.insights.holding}`));
-    }
-    if (model.insights.shifting?.trim()) {
-      layers.push(ensurePeriod(`${chrome.insightShiftingTitle}: ${model.insights.shifting}`));
-    }
-    if (model.insights.attention?.trim()) {
-      layers.push(ensurePeriod(`${chrome.insightAttentionTitle}: ${model.insights.attention}`));
-    }
-    if (layers.length) {
-      chapters.push({ id: "layers", kicker: "Что держит и что сдвигается", paragraphs: layers });
-    }
-
-    if (model.todaySuggestion?.trim()) {
-      chapters.push({
-        id: "today",
-        kicker: chrome.todayEyebrow || "На сегодня",
-        paragraphs: [ensurePeriod(model.todaySuggestion)],
-      });
-    }
-
-    return chapters;
-  }, [model, chrome, whyEyebrow]);
-
-  const softWhy = model.storyNarrative ? ensurePeriod(model.storyNarrative) : null;
+  const hasStory =
+    answerParas.length > 0 || whyParas.length > 0 || cardParas.length > 0 || Boolean(model.todaySuggestion?.trim());
 
   return (
     <div className={s.tarotWebLayout} data-testid="tarot-web-result">
@@ -148,18 +128,57 @@ export function TarotWebResult({
       <ProductJourneyScene
         step={2}
         title="История расклада"
-        lead="Ответ, почему так, слой карт и что с этим делать."
+        lead="Ответ, почему карты так легли на вопрос, и слой позиций."
         motif="why"
         testId="tarot-journey-story"
       >
-        {storyChapters.length ? (
-          <ProductNarrativeScroll
-            theme={spreadTitle || null}
-            chapters={storyChapters}
-            softWhy={softWhy}
-            softWhyLabel={whyEyebrow}
-            testId="tarot-narrative-scroll"
-          />
+        {hasStory ? (
+          <div className={s.tarotResultNarrativeStack}>
+            {answerParas.length ? (
+              <ProductNarrativeBlock
+                id="answer"
+                kicker={chrome.mainAnswerEyebrow || "Ответ расклада"}
+                lead={answerParas[0]}
+                paragraphs={answerParas.slice(1)}
+                accent="support"
+                collapseAfter={answerParas.length > 3 ? 1 : undefined}
+                testId="tarot-narrative-answer"
+              />
+            ) : null}
+
+            {whyParas.length ? (
+              <ProductNarrativeBlock
+                id="why"
+                kicker={whyEyebrow}
+                lead={whyParas[0]}
+                paragraphs={whyParas.slice(1)}
+                accent="sky"
+                collapseAfter={whyParas.length > 2 ? 1 : undefined}
+                testId="tarot-narrative-why"
+              />
+            ) : null}
+
+            {cardParas.length ? (
+              <ProductNarrativeBlock
+                id="cards"
+                kicker={chrome.cardsEyebrow || "Слой карт"}
+                paragraphs={cardParas}
+                accent="default"
+                collapseAfter={cardParas.length > 2 ? 2 : undefined}
+                testId="tarot-narrative-cards"
+              />
+            ) : null}
+
+            {model.todaySuggestion?.trim() ? (
+              <ProductNarrativeBlock
+                id="today"
+                kicker={chrome.todayEyebrow || "На сегодня"}
+                paragraphs={[ensurePeriod(model.todaySuggestion)]}
+                accent="support"
+                testId="tarot-narrative-today"
+              />
+            ) : null}
+          </div>
         ) : (
           <DsBody muted>Пока нет полного рассказа — вернись к вопросу или открой карты ещё раз.</DsBody>
         )}

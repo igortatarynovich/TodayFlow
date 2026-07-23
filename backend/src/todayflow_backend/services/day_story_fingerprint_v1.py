@@ -112,6 +112,9 @@ def build_fingerprint_payload(
     model: str | None = None,
     contract_version: str = DAY_STORY_V1_CONTRACT,
     include_model: bool = True,
+    sky_digest: str | None = None,
+    color_name: str | None = None,
+    stone_name: str | None = None,
 ) -> dict[str, Any]:
     model_id = model if model is not None else resolve_story_model_id()
     payload: dict[str, Any] = {
@@ -126,10 +129,38 @@ def build_fingerprint_payload(
         "prompt_version": prompt_version,
         "contract_version": contract_version,
     }
+    if sky_digest:
+        payload["sky_digest"] = sky_digest
+    if color_name:
+        payload["color_name"] = str(color_name).strip()[:80]
+    if stone_name:
+        payload["stone_name"] = str(stone_name).strip()[:80]
     if include_model and (REGENERATE_ON_MODEL_CHANGE or True):
         # Always store model in fingerprint for parity; regeneration policy is enforced at refresh call sites.
         payload["model"] = model_id
     return payload
+
+
+def _sky_digest_from_celestial(celestial_events: dict[str, Any] | None) -> str | None:
+    ce = celestial_events if isinstance(celestial_events, dict) else {}
+    if not ce:
+        return None
+    bits: list[str] = []
+    lunar = ce.get("lunar_phase") if isinstance(ce.get("lunar_phase"), dict) else {}
+    if lunar.get("name"):
+        bits.append(f"moon:{lunar.get('name')}")
+    for row in (ce.get("ingresses") or [])[:3]:
+        if isinstance(row, dict) and row.get("planet"):
+            bits.append(f"ing:{row.get('planet')}:{row.get('sign')}")
+    for row in (ce.get("sky_aspects") or [])[:2]:
+        if isinstance(row, dict) and row.get("id"):
+            bits.append(f"asp:{row.get('id')}")
+    for row in (ce.get("retrogrades") or [])[:2]:
+        if isinstance(row, dict) and row.get("planet"):
+            bits.append(f"ret:{row.get('planet')}")
+    if not bits:
+        return None
+    return _stable_hash({"sky": bits})
 
 
 def compute_day_story_fingerprint(payload: dict[str, Any]) -> str:
@@ -144,6 +175,9 @@ def compute_expected_day_story_fingerprint(
     local_date: date,
     timezone_name: str = "UTC",
     locale: str = "ru",
+    celestial_events: dict[str, Any] | None = None,
+    color_name: str | None = None,
+    stone_name: str | None = None,
 ) -> tuple[str, dict[str, Any]]:
     key = owner_key or (owner_key_for_user(user_id) if user_id is not None else "")
     if not key:
@@ -160,5 +194,8 @@ def compute_expected_day_story_fingerprint(
         profile_snapshot_id=snapshot_id,
         revealed_card_id=card_id,
         revealed_number=number_value,
+        sky_digest=_sky_digest_from_celestial(celestial_events),
+        color_name=color_name,
+        stone_name=stone_name,
     )
     return compute_day_story_fingerprint(payload), payload

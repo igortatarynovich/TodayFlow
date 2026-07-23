@@ -647,7 +647,11 @@ def _compose_question_main_answer(
     )
 
 
-def _compose_question_story(card_insights: list[models.TarotCardInsight]) -> str:
+def _compose_question_story(
+    question: str | None,
+    card_insights: list[models.TarotCardInsight],
+) -> str:
+    """Author layer: why these cards answer *this* question — deck + question only."""
     if not card_insights:
         return ""
     parts = [
@@ -655,14 +659,25 @@ def _compose_question_story(card_insights: list[models.TarotCardInsight]) -> str
         for c in card_insights
     ]
     body = parts[0] if len(parts) == 1 else "; ".join(parts)
+    q = (question or "").strip()
+    if q:
+        # why_this_card pattern: explain the landing, invent no outside facts
+        return _clean(
+            f"Почему расклад отвечает на «{q}»: карты ложатся на формулировку вопроса, "
+            f"а не на общий прогноз. Вместе они могут означать следующее: {body}. "
+            f"Это только то, как колода отражает твой вопрос — без фактов вне расклада."
+        )
     return _clean(f"Если читать расклад вместе, карты могут означать следующее: {body}.")
 
 
 def _compose_question_insights(
     cards: list[models.TarotSpreadCard],
     card_insights: list[models.TarotCardInsight],
+    *,
+    question: str | None = None,
 ) -> tuple[str, str, str]:
     holding = shifting = attention = ""
+    q = (question or "").strip()
 
     for card, insight in zip(cards, card_insights):
         pos_id = (card.position.id if card.position else "").strip().lower()
@@ -671,15 +686,32 @@ def _compose_question_insights(
             f"{insight.card_name_ru} в «{insight.position_label}» может означать: {insight.line}."
         )
         if role == "holding" and not holding:
-            holding = line
+            holding = (
+                _clean(f"К вопросу «{q}» эта карта ложится как удержание: {line}")
+                if q
+                else line
+            )
         elif role == "shifting" and not shifting:
-            shifting = line
+            shifting = (
+                _clean(f"По вопросу «{q}» сдвиг виден здесь: {line}")
+                if q
+                else line
+            )
         elif role == "attention" and not attention:
-            attention = line
+            attention = (
+                _clean(f"На вопрос «{q}» карта просит заметить: {line}")
+                if q
+                else line
+            )
 
     if not holding and card_insights:
         c = card_insights[0]
-        holding = f"{c.card_name_ru} может означать: {c.line}."
+        base = f"{c.card_name_ru} может означать: {c.line}."
+        holding = (
+            _clean(f"К вопросу «{q}» первая опора расклада: {base}")
+            if q
+            else base
+        )
     if not shifting and len(card_insights) > 1:
         c = card_insights[1]
         shifting = (
@@ -704,14 +736,23 @@ def _compose_card_context_reading(
     bundle: _ReadingBundle,
 ) -> models.TarotSpreadReading:
     main_answer = _compose_question_main_answer(question, card_insights)
-    story = _compose_question_story(card_insights)
-    holding, shifting, attention = _compose_question_insights(cards, card_insights)
+    story = _compose_question_story(question, card_insights)
+    holding, shifting, attention = _compose_question_insights(
+        cards, card_insights, question=question
+    )
 
+    q = (question or "").strip()
     anchor = card_insights[-1] if card_insights else None
-    if anchor:
+    if anchor and q:
+        today = (
+            f"Вернись к вопросу «{q}» через линию {anchor.card_name_ru} "
+            f"(«{anchor.position_label}») — заметь, где она откликается в жизни, "
+            f"а не только в ожиданиях."
+        )
+    elif anchor:
         today = (
             f"Посмотри, как линия {anchor.card_name_ru} («{anchor.position_label}») "
-            f"отзывается в твоём вопросе — не только в ожиданиях."
+            f"откликается в твоём вопросе — не только в ожиданиях."
         )
     else:
         today = "Вернись к вопросу и отметь, какая линия расклада откликается сильнее."

@@ -5,6 +5,7 @@ import { practicesExperienceChromeBundle, type FlowPracticesChromeLocale } from 
 import { practicesV2Copy } from "@/components/practices/v2/practicesV2SystemCopy";
 import {
   PracticesV2SystemScreen,
+  type PracticesDayStoryRecommendation,
   type PracticesV2ProgramCard,
   type PracticesV2QuickItem,
   type PracticesV2Tab,
@@ -33,9 +34,9 @@ import {
   productWebUserInitial,
 } from "@/lib/productWebUser";
 import type { CoreProfile, PracticeHistoryResponse, PracticeProgressResponse } from "@/lib/types";
+import { fetchTodayContractV1 } from "@/lib/todayContract";
 import { useAuth } from "@/lib/useAuth";
 import styles from "@/app/practices/PracticesPage.module.css";
-
 function formatDuration(minutes: number | undefined, minutesShort: string): string {
   if (minutes == null) return "—";
   return `${minutes} ${minutesShort}`;
@@ -76,6 +77,8 @@ export default function PracticesPage() {
   const [catalogStatus, setCatalogStatus] = useState<"loaded" | "empty" | "failed">("loaded");
   const [catalogTab, setCatalogTab] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [practiceRecommendation, setPracticeRecommendation] =
+    useState<PracticesDayStoryRecommendation | null>(null);
 
   const loadPractices = useCallback(async () => {
     try {
@@ -194,6 +197,36 @@ export default function PracticesPage() {
     void fetchCoreProfileCached()
       .then(setCoreProfile)
       .catch((err) => console.error("Failed to load core profile for practices", err));
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setPracticeRecommendation(null);
+      return;
+    }
+    let cancelled = false;
+    void fetchTodayContractV1()
+      .then((contract) => {
+        if (cancelled) return;
+        const rec = contract.day_story?.practice_recommendation;
+        const kind = (rec?.kind || "").trim().toLowerCase();
+        if (!rec || !kind || kind === "none") {
+          setPracticeRecommendation(null);
+          return;
+        }
+        setPracticeRecommendation({
+          kind: rec.kind,
+          text: rec.text,
+          reason: rec.reason,
+        });
+      })
+      .catch((err) => {
+        console.error("Failed to load today contract for practices journey", err);
+        if (!cancelled) setPracticeRecommendation(null);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [isAuthenticated]);
 
   const filteredPractices = useMemo(() => {
@@ -348,6 +381,7 @@ export default function PracticesPage() {
         heroPrimaryHref={heroPrimaryHref}
         heroSecondaryHref={heroSecondaryHref}
         practiceOfDay={practiceOfDay}
+        practiceRecommendation={practiceRecommendation}
         programCards={programCards}
         quickItems={quickItems}
         live={live}

@@ -1,10 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type CSSProperties, type ReactNode } from "react";
-import { HeroSmall } from "@/components/foundation/HeroSmall";
-import { compatibilityPairSymbolFromDisplay } from "@/lib/compatibilityHeroSymbol";
+import { useMemo, useState, type ReactNode } from "react";
+import { DsBody, DsButton } from "@/design-system";
 import { stripCompatibilityDisplayGarbage } from "@/lib/compatibilityCopySanitize";
+import {
+  ProductJourneyScene,
+  ProductNarrativeBlock,
+  ProductNarrativeScroll,
+  type ProductNarrativeChapter,
+} from "@/components/product-ui/ProductJourneyScene";
+import journeyStyles from "@/components/product-ui/ProductJourneyScene.module.css";
 
 export type SignCompatProductSurface = {
   score_tagline: string;
@@ -51,74 +57,54 @@ type Props = {
   omitIntroHero?: boolean;
 };
 
-const SUB_LABELS: Array<{ key: keyof SignCompatProductSurface["subscores"]; label: string; hint: string }> = [
-  { key: "attraction", label: "Притяжение", hint: "сила и качество тяги друг к другу" },
-  { key: "stability", label: "Стабильность", hint: "насколько ровно держится контакт в быту и фазах" },
-  { key: "conflicts", label: "Конфликты", hint: "способность чинить контакт после срыва, без зацикливания" },
-  { key: "sexuality", label: "Сексуальность", hint: "химия и честность телесного слоя" },
+const SUB_LABELS: Array<{ key: keyof SignCompatProductSurface["subscores"]; label: string }> = [
+  { key: "attraction", label: "Притяжение" },
+  { key: "stability", label: "Стабильность" },
+  { key: "conflicts", label: "Конфликты" },
+  { key: "sexuality", label: "Сексуальность" },
 ];
-
-function MetricWithHint({ value, label, hint }: { value: number; label: string; hint: string }) {
-  const w = Math.min(100, Math.max(0, value));
-  return (
-    <div className="compat-metric-cell">
-      <span className="compat-metric-label">{label}</span>
-      <div className="compat-metric-value">{value}%</div>
-      <div className="compat-metric-bar" aria-hidden>
-        <span style={{ width: `${w}%` }} />
-      </div>
-      <p className="compat-metric-hint">{hint}</p>
-    </div>
-  );
-}
-
-function CompactScoreRing({ score }: { score: number }) {
-  const ringStyle = { "--compat-score-pct": score } as CSSProperties;
-  return (
-    <div className="compat-score-ring-wrap compat-score-ring-wrap--hero-small" style={ringStyle}>
-      <div className="compat-score-ring-inner">
-        <span className="compat-score-ring-value">{score}%</span>
-      </div>
-    </div>
-  );
-}
-
-function ScoreAside({
-  score,
-  tagline,
-  productSurface,
-  variant = "grid",
-}: {
-  score: number;
-  tagline: string;
-  productSurface: SignCompatProductSurface;
-  variant?: "grid" | "standalone";
-}) {
-  const ringStyle = { "--compat-score-pct": score } as CSSProperties;
-  const sideClass = variant === "standalone" ? "compat-hero-side compat-hero-side--standalone" : "compat-hero-side";
-  return (
-    <aside className={sideClass}>
-      <div className="compat-score-ring-wrap" style={ringStyle}>
-        <div className="compat-score-ring-inner">
-          <span className="compat-score-ring-value">{score}%</span>
-          <span className="compat-score-ring-label">Общий индекс</span>
-        </div>
-      </div>
-      <p className="compat-score-tagline-side">{tagline}</p>
-      <div className="compat-metrics-grid">
-        {SUB_LABELS.map((row) => (
-          <MetricWithHint key={row.key} value={productSurface.subscores[row.key]} label={row.label} hint={row.hint} />
-        ))}
-      </div>
-    </aside>
-  );
-}
 
 const ECHO_OPTIONS = [
   { id: "yes" as const, label: "Да", title: "да, это про нас" },
   { id: "partial" as const, label: "Частично", title: "частично" },
   { id: "no" as const, label: "Нет", title: "нет" },
 ];
+
+function ensurePeriod(text: string): string {
+  const t = text.replace(/\s+/g, " ").trim();
+  if (!t) return "";
+  return /[.!?…]$/.test(t) ? t : `${t}.`;
+}
+
+function initialFromPair(pairDisplay: string): [string, string] {
+  const parts = pairDisplay.split(/\s*[×xX]\s*/);
+  const a = (parts[0] || "?").trim();
+  const b = (parts[1] || "?").trim();
+  return [(a.charAt(0) || "?").toUpperCase(), (b.charAt(0) || "?").toUpperCase()];
+}
+
+function QuietScoreMeta({
+  score,
+  tagline,
+  productSurface,
+}: {
+  score: number;
+  tagline: string;
+  productSurface: SignCompatProductSurface;
+}) {
+  const metrics = SUB_LABELS.map(
+    (row) => `${row.label} ${productSurface.subscores[row.key]}%`,
+  ).join(" · ");
+  return (
+    <div data-testid="compat-dynamics-score-meta">
+      <p className={journeyStyles.pairScoreQuiet}>
+        Общий индекс: {score}%
+        {tagline ? ` · ${tagline}` : ""}
+      </p>
+      <p className={journeyStyles.pairSub}>{metrics}</p>
+    </div>
+  );
+}
 
 export function CompatibilityDynamicsSurface({
   pairDisplay,
@@ -134,129 +120,136 @@ export function CompatibilityDynamicsSurface({
   omitIntroHero,
 }: Props) {
   const [blockEcho, setBlockEcho] = useState<Partial<Record<string, "yes" | "partial" | "no">>>({});
+  const [initialA, initialB] = useMemo(() => initialFromPair(pairDisplay), [pairDisplay]);
+
+  const storyChapters = useMemo((): ProductNarrativeChapter[] => {
+    const chapters: ProductNarrativeChapter[] = [];
+    const overview = productSurface.overview_paragraphs
+      .map((p) => ensurePeriod(stripCompatibilityDisplayGarbage(p)))
+      .filter(Boolean);
+    if (overview.length) {
+      chapters.push({
+        id: "opening",
+        kicker: "Как звучит эта связь",
+        paragraphs: overview,
+      });
+    }
+    if (readingLead?.trim()) {
+      const lead = ensurePeriod(readingLead);
+      if (lead && !overview.some((o) => o.includes(lead.slice(0, 24)))) {
+        if (chapters[0]) {
+          chapters[0] = {
+            ...chapters[0],
+            paragraphs: [lead, ...chapters[0].paragraphs],
+          };
+        } else {
+          chapters.push({ id: "opening", kicker: "Как звучит эта связь", paragraphs: [lead] });
+        }
+      }
+    }
+    return chapters;
+  }, [productSurface.overview_paragraphs, readingLead]);
+
+  const layerStep = omitIntroHero ? 1 : 2;
+  const moveStep = layerStep + 1;
+  const bridgeStep = moveStep + 1;
 
   return (
-    <div className="compat-desktop-shell compat-desktop-stack">
+    <div className="compat-desktop-shell compat-desktop-stack" data-testid="compat-dynamics-surface">
       {!omitIntroHero ? (
-        <div className="compat-desktop-card compat-hero-unified">
-          <HeroSmall
-            symbol={compatibilityPairSymbolFromDisplay(pairDisplay)}
-            kicker="Совместимость"
-            title={pairDisplay}
-            titleAs="h1"
-            meta={
-              readingLead ||
-              "Не «насколько вы подходите», а как вы цепляетесь, где спотыкаетесь и что с этим делать."
-            }
-            aside={<CompactScoreRing score={score} />}
-            flush
-          />
-          <div className="compat-hero-metrics-below">
-            <p className="compat-score-tagline-side">{productSurface.score_tagline}</p>
-            <div className="compat-metrics-grid">
-              {SUB_LABELS.map((row) => (
-                <MetricWithHint key={row.key} value={productSurface.subscores[row.key]} label={row.label} hint={row.hint} />
-              ))}
+        <ProductJourneyScene
+          step={1}
+          title="Пара"
+          lead="Не «насколько вы подходите», а как вы цепляетесь, где спотыкаетесь и что с этим делать."
+          motif="insight"
+          testId="compat-dynamics-pair"
+        >
+          <div className={journeyStyles.pairHero}>
+            <div className={journeyStyles.avatarGroup} aria-hidden>
+              <span className={journeyStyles.avatar}>{initialA}</span>
+              <span className={`${journeyStyles.avatar} ${journeyStyles.avatarOverlap}`}>{initialB}</span>
+            </div>
+            <div className={journeyStyles.pairMeta}>
+              <p className={journeyStyles.pairTitle}>{pairDisplay}</p>
+              <QuietScoreMeta
+                score={score}
+                tagline={productSurface.score_tagline}
+                productSurface={productSurface}
+              />
             </div>
           </div>
-        </div>
+        </ProductJourneyScene>
       ) : (
-        <>
-          {readingLead ? <p className="compat-dynamics-lead">{readingLead}</p> : null}
-          <div className="compat-desktop-card compat-hero-unified">
-            <ScoreAside variant="standalone" score={score} tagline={productSurface.score_tagline} productSurface={productSurface} />
-          </div>
-        </>
+        <QuietScoreMeta
+          score={score}
+          tagline={productSurface.score_tagline}
+          productSurface={productSurface}
+        />
       )}
 
-      <div className="compat-desktop-card">
-        <h2 className="compat-section-title" style={{ marginBottom: "0.75rem" }}>
-          Что между вами происходит
-        </h2>
-        <div className="compat-hero-overview">
-          {productSurface.overview_paragraphs.map((p, i) => {
-            const text = stripCompatibilityDisplayGarbage(p);
-            return text ? <p key={i}>{text}</p> : null;
-          })}
-        </div>
-      </div>
+      <ProductJourneyScene
+        step={layerStep}
+        title="История связи"
+        lead="Рассказ о том, как вы звучите вместе — и почему именно так."
+        motif="why"
+        testId="compat-dynamics-story"
+      >
+        {storyChapters.length ? (
+          <ProductNarrativeScroll
+            theme={productSurface.score_tagline || pairDisplay}
+            chapters={storyChapters}
+            softWhy={readingLead ? ensurePeriod(readingLead) : null}
+            softWhyLabel="Главная мысль"
+            testId="compat-dynamics-narrative-scroll"
+          />
+        ) : (
+          <DsBody muted>Пока мало сигналов для полного рассказа — уточни знаки или даты.</DsBody>
+        )}
 
-      {personalizedCard}
+        <div className={journeyStyles.actionRow} style={{ flexDirection: "column", alignItems: "stretch", gap: "0.85rem" }}>
+          {productSurface.blocks.map((block) => {
+            const paragraphs = [
+              ensurePeriod(block.takeaway),
+              ensurePeriod(block.detail),
+              block.risk?.trim() ? ensurePeriod(`Риск — ${block.risk}`) : "",
+              block.action?.trim() ? ensurePeriod(`Как действовать — ${block.action}`) : "",
+              ...(block.key === "sexuality" && block.tips?.length
+                ? block.tips.map((tip) => ensurePeriod(tip))
+                : []),
+            ].filter(Boolean);
 
-      <section>
-        <h2 className="compat-section-title">Основные слои</h2>
-        <div className="compat-block-stack">
-          {productSurface.blocks.map((block) => (
-            <details key={block.key} className={`compat-accordion ${block.key === "sexuality" ? "compat-accordion--sexuality" : ""}`}>
-              <summary className="orbit-body-sm" style={{ fontWeight: 700, color: "#0f172a" }}>
-                {block.title}
-                <span className="orbit-body-xs" style={{ display: "block", marginTop: "0.25rem", fontWeight: 500, color: "#64748b" }}>
-                  {block.subtitle}
-                </span>
-              </summary>
-              <div style={{ display: "grid", gap: "0.65rem" }}>
-                <p className="orbit-body-sm" style={{ margin: 0, fontWeight: 600, color: "#0f172a" }}>
-                  Короткий вывод
-                </p>
-                <p className="orbit-body-sm" style={{ margin: 0, color: "#334155", lineHeight: 1.75 }}>
-                  {block.takeaway}
-                </p>
-                <p className="orbit-body-sm" style={{ margin: 0, color: "#334155", lineHeight: 1.75 }}>
-                  {block.detail}
-                </p>
-                <div className="compat-callout-warn">
-                  <p className="orbit-body-xs" style={{ margin: 0, color: "#92400e", fontWeight: 700 }}>
-                    Риск
-                  </p>
-                  <p className="orbit-body-sm" style={{ margin: "0.35rem 0 0", color: "#78350f", lineHeight: 1.65 }}>
-                    {block.risk}
-                  </p>
-                </div>
-                <div className="compat-callout-go">
-                  <p className="orbit-body-xs" style={{ margin: 0, color: "#166534", fontWeight: 700 }}>
-                    Как действовать
-                  </p>
-                  <p className="orbit-body-sm" style={{ margin: "0.35rem 0 0", color: "#14532d", lineHeight: 1.65 }}>
-                    {block.action}
-                  </p>
-                </div>
-
-                {block.key === "sexuality" && block.tips && block.tips.length > 0 ? (
-                  <div className="compat-callout-go" style={{ background: "rgba(254, 243, 199, 0.45)", borderColor: "rgba(180, 83, 9, 0.18)" }}>
-                    <p className="orbit-body-xs" style={{ margin: 0, color: "#92400e", fontWeight: 700 }}>
-                      Практические подсказки
-                    </p>
-                    <ul className="orbit-body-sm" style={{ margin: "0.45rem 0 0", paddingLeft: "1.1rem", color: "#78350f", lineHeight: 1.65 }}>
-                      {block.tips.map((tip, tipIdx) => (
-                        <li key={tipIdx}>{tip}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : null}
-
+            return (
+              <ProductNarrativeBlock
+                key={block.key}
+                id={block.key}
+                kicker={block.title}
+                lead={block.subtitle || null}
+                paragraphs={paragraphs}
+                accent={block.key === "sexuality" ? "dual" : "default"}
+                collapseAfter={2}
+                testId={`compat-dynamics-block-${block.key}`}
+              >
                 <div>
-                  <p className="orbit-body-xs" style={{ margin: "0 0 0.45rem", color: "#64748b", fontWeight: 600 }}>
+                  <p className={journeyStyles.pairSub} style={{ marginBottom: "0.45rem", fontWeight: 600 }}>
                     Это про вас?
                   </p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.45rem" }}>
+                  <div className={journeyStyles.tabRow}>
                     {ECHO_OPTIONS.map((opt) => (
                       <button
                         key={opt.id}
                         type="button"
                         title={opt.title}
-                        className="orbit-button orbit-button-secondary orbit-button-sm"
+                        className={`${journeyStyles.tabChip} ${
+                          blockEcho[block.key] === opt.id ? journeyStyles.tabChipActive : ""
+                        }`.trim()}
                         onClick={() => setBlockEcho((prev) => ({ ...prev, [block.key]: opt.id }))}
-                        style={{
-                          borderColor: blockEcho[block.key] === opt.id ? "rgba(167, 123, 55, 0.88)" : undefined,
-                          background: blockEcho[block.key] === opt.id ? "rgba(242, 220, 181, 0.35)" : undefined,
-                        }}
                       >
                         {opt.label}
                       </button>
                     ))}
                   </div>
                   {blockEcho[block.key] ? (
-                    <p className="orbit-body-xs" style={{ margin: "0.55rem 0 0", color: "#64748b", lineHeight: 1.6 }}>
+                    <p className={journeyStyles.pairSub} style={{ marginTop: "0.55rem" }}>
                       {blockEcho[block.key] === "yes"
                         ? block.key === "sexuality"
                           ? "Тогда сексуальный слой у вас реально силён — держите рядом ясность про желание, темп и границы."
@@ -267,134 +260,101 @@ export function CompatibilityDynamicsSurface({
                     </p>
                   ) : null}
                 </div>
-              </div>
-            </details>
-          ))}
+              </ProductNarrativeBlock>
+            );
+          })}
         </div>
-      </section>
+      </ProductJourneyScene>
 
-      <div className="compat-desktop-card">
-        <h2 className="compat-section-title" style={{ marginBottom: "0.5rem" }}>
-          Кто как ведёт себя в этой паре
-        </h2>
-        <p className="orbit-body-xs compat-desktop-muted" style={{ margin: 0 }}>
-          Роли ниже — про темп и защиту, не про пол. Первый столбец — «ты» ({youColumnLabel}), второй — партнёр ({partnerColumnLabel}).
-        </p>
-        <div
-          style={{
-            marginTop: "1rem",
-            display: "grid",
-            gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-            gap: "var(--compat-col-gap)",
-          }}
-          className="compat-desktop-roles-cols"
+      {personalizedCard}
+
+      <ProductJourneyScene
+        step={moveStep}
+        title="Кто как ведёт себя"
+        lead={`Роли ниже — про темп и защиту, не про пол. «Ты» (${youColumnLabel}) и партнёр (${partnerColumnLabel}).`}
+        motif="effort"
+        testId="compat-dynamics-roles"
+      >
+        <ProductNarrativeBlock
+          id="roles"
+          kicker="Два темпа в одной паре"
+          accent="dual"
+          testId="compat-dynamics-roles-block"
         >
-          <div className="compat-role-card">
-            <p className="orbit-body-sm" style={{ margin: 0, fontWeight: 700, color: "#0f172a" }}>
-              Ты
-            </p>
-            <ul style={{ margin: "0.45rem 0 0", paddingLeft: "1.1rem", color: "#475569", lineHeight: 1.65, fontSize: "0.88rem" }}>
-              {productSurface.roles.you_bullets.map((line, i) => (
-                <li key={i}>{line}</li>
+          <div className={journeyStyles.dualPanels}>
+            <div className={journeyStyles.dualPanel}>
+              <p className={journeyStyles.dualPanelTitle}>Ты</p>
+              {productSurface.roles.you_bullets.map((line) => (
+                <p key={line.slice(0, 40)} className={journeyStyles.dualPanelBody}>
+                  {line}
+                </p>
               ))}
-            </ul>
-          </div>
-          <div className="compat-role-card compat-role-card--warm">
-            <p className="orbit-body-sm" style={{ margin: 0, fontWeight: 700, color: "#0f172a" }}>
-              Партнёр
-            </p>
-            <ul style={{ margin: "0.45rem 0 0", paddingLeft: "1.1rem", color: "#475569", lineHeight: 1.65, fontSize: "0.88rem" }}>
-              {productSurface.roles.partner_bullets.map((line, i) => (
-                <li key={i}>{line}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div className="compat-desktop-card">
-        <h2 className="compat-section-title" style={{ marginBottom: "0.75rem" }}>
-          Что с этим делать
-        </h2>
-        <div style={{ display: "grid", gap: "var(--compat-col-gap)", gridTemplateColumns: "repeat(3, minmax(0, 1fr))" }} className="compat-desktop-action-cols">
-          {productSurface.scenarios.map((group) => (
-            <div key={group.id} className="compat-scenario-card">
-              <p className="orbit-body-sm" style={{ margin: 0, fontWeight: 700, color: "#7c5a33" }}>
-                {group.title}
-              </p>
-              <ul style={{ margin: "0.45rem 0 0", paddingLeft: "1.1rem", color: "#475569", lineHeight: 1.65, fontSize: "0.88rem" }}>
-                {group.bullets.map((b, i) => (
-                  <li key={i}>{b}</li>
-                ))}
-              </ul>
             </div>
-          ))}
-        </div>
-      </div>
+            <div className={journeyStyles.dualPanel}>
+              <p className={journeyStyles.dualPanelTitle}>Партнёр</p>
+              {productSurface.roles.partner_bullets.map((line) => (
+                <p key={line.slice(0, 40)} className={journeyStyles.dualPanelBody}>
+                  {line}
+                </p>
+              ))}
+            </div>
+          </div>
+        </ProductNarrativeBlock>
 
-      {extraParagraphs && extraParagraphs.length ? (
-        <details className="compat-accordion">
-          <summary className="compat-section-title" style={{ cursor: "pointer", listStyle: "none", margin: 0 }}>
-            {paragraphsDetailTitle}
-          </summary>
-          <div style={{ display: "grid", gap: "0.65rem" }}>
-            {extraParagraphs.map((paragraph, index) => (
-              <p key={index} className="orbit-body-sm" style={{ margin: 0, lineHeight: 1.75, color: "var(--compat-ink-soft)" }}>
-                {paragraph}
-              </p>
+        {productSurface.scenarios.length ? (
+          <div className={journeyStyles.actionRow} style={{ flexDirection: "column", alignItems: "stretch", gap: "0.75rem" }}>
+            {productSurface.scenarios.map((group) => (
+              <ProductNarrativeBlock
+                key={group.id}
+                id={`scenario-${group.id}`}
+                kicker={group.title}
+                paragraphs={group.bullets.map(ensurePeriod).filter(Boolean)}
+                accent="support"
+                collapseAfter={3}
+                testId={`compat-dynamics-scenario-${group.id}`}
+              />
             ))}
-            {showParagraphsUpsell ? (
-              <p className="orbit-body-xs" style={{ margin: 0, color: "var(--compat-muted)" }}>
-                Полный текст и более точный слой — в совместимости по профилям и датам с городом.
-              </p>
-            ) : null}
           </div>
-        </details>
-      ) : null}
+        ) : null}
 
-      <section>
-        <h2 className="compat-section-title" style={{ marginBottom: "0.5rem" }}>
-          Хочешь разобраться глубже?
-        </h2>
-        <p className="orbit-body-sm compat-desktop-muted" style={{ margin: "0 0 1rem" }}>
-          Если ситуация про конкретное решение — уводим в Guidance. Если хочется понять свой паттерн — в портрет профиля.
-        </p>
-        <div className="compat-footer-actions">
-          <div className="compat-desktop-card">
-            <h3 className="orbit-heading-3" style={{ margin: 0, color: "#5f4323" }}>
-              Guidance
-            </h3>
-            <p className="orbit-body-sm compat-desktop-muted" style={{ margin: "0.45rem 0 0" }}>
-              Разобрать ситуацию по шагам.
-            </p>
-            <Link href="/tarot" className="orbit-button orbit-button-primary orbit-button-sm" style={{ textDecoration: "none", marginTop: "0.85rem", display: "inline-flex" }}>
-              Разобрать ситуацию
-            </Link>
-          </div>
-          <div className="compat-desktop-card">
-            <h3 className="orbit-heading-3" style={{ margin: 0, color: "#5f4323" }}>
-              Профиль
-            </h3>
-            <p className="orbit-body-sm compat-desktop-muted" style={{ margin: "0.45rem 0 0" }}>
-              Понять свой паттерн и опоры.
-            </p>
-            <Link href="/profile" className="orbit-button orbit-button-secondary orbit-button-sm" style={{ textDecoration: "none", marginTop: "0.85rem", display: "inline-flex" }}>
-              Понять себя
-            </Link>
-          </div>
-          <div className="compat-desktop-card">
-            <h3 className="orbit-heading-3" style={{ margin: 0, color: "#5f4323" }}>
-              Совместимость
-            </h3>
-            <p className="orbit-body-sm compat-desktop-muted" style={{ margin: "0.45rem 0 0" }}>
-              Уровни по профилям и датам.
-            </p>
-            <Link href="/compatibility" className="orbit-button orbit-button-secondary orbit-button-sm" style={{ textDecoration: "none", marginTop: "0.85rem", display: "inline-flex" }}>
-              Другие уровни
-            </Link>
-          </div>
+        {extraParagraphs && extraParagraphs.length ? (
+          <ProductNarrativeBlock
+            id="extra"
+            kicker={paragraphsDetailTitle}
+            paragraphs={extraParagraphs.map(ensurePeriod).filter(Boolean)}
+            collapseAfter={2}
+            testId="compat-dynamics-extra"
+          >
+            {showParagraphsUpsell ? (
+              <DsBody size="sm" muted>
+                Полный текст и более точный слой — в совместимости по профилям и датам с городом.
+              </DsBody>
+            ) : null}
+          </ProductNarrativeBlock>
+        ) : null}
+      </ProductJourneyScene>
+
+      <ProductJourneyScene
+        step={bridgeStep}
+        title="Продолжение"
+        lead="Если ситуация про решение — в Guidance. Если паттерн — в профиль. Другие уровни пары — рядом."
+        motif="bridge"
+        bridge
+        testId="compat-dynamics-bridge"
+      >
+        <div className={journeyStyles.actionRow}>
+          <DsButton href="/tarot?from=compatibility">Разобрать ситуацию</DsButton>
+          <DsButton href="/profile" variant="secondary">
+            Понять себя
+          </DsButton>
+          <DsButton href="/compatibility" variant="secondary">
+            Другие уровни
+          </DsButton>
         </div>
-      </section>
+        <Link href="/compatibility" className={journeyStyles.bridgeLink}>
+          Вернуться к выбору направления
+        </Link>
+      </ProductJourneyScene>
     </div>
   );
 }

@@ -1,13 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
+import { useMemo, type CSSProperties } from "react";
 import {
   profileMotionStaggerDelay,
   profileMotionStyles,
   useProfileMotionInView,
 } from "@/components/foundation/ProfileMotion";
 import { ProfileAtmosphere } from "@/components/profile/v2/ProfileAtmosphere";
+import {
+  ProductNarrativeBlock,
+  planetIconSrc,
+} from "@/components/product-ui/ProductJourneyScene";
+import journeyStyles from "@/components/product-ui/ProductJourneyScene.module.css";
 import type { MorningRitualData } from "@/components/today/todayPageUtils";
 import type { TodayPromiseSuggestion } from "@/lib/todayDayDialogue";
 import type { TodayContractV1 } from "@/lib/todayContract";
@@ -116,9 +121,9 @@ export function TodayPersonalizedProductSection({
           <p className={styles.journeySceneLead}>{copy.journey.readingLead}</p>
         </header>
 
-        <article
-          className={`${styles.narrativeScroll} ${profileMotionStyles.staggerItem}`}
-          style={profileMotionStaggerDelay(0, 60)}
+        <div
+          className={`${styles.narrativeBlocks} ${profileMotionStyles.staggerItem}`}
+          style={profileMotionStaggerDelay(0, 60) as CSSProperties}
           data-testid="today-entity-synthesis"
         >
           {narrative.theme ? (
@@ -127,37 +132,79 @@ export function TodayPersonalizedProductSection({
             </p>
           ) : null}
 
-          {narrative.chapters.map((chapter, chapterIndex) => (
-            <section
-              key={chapter.id}
-              className={styles.narrativeChapter}
-              data-testid={`today-narrative-${chapter.id}`}
-              style={profileMotionStaggerDelay(chapterIndex + 1, 70)}
-            >
-              <p className={styles.narrativeKicker}>{chapter.kicker}</p>
-              {chapter.paragraphs.map((paragraph) => {
-                const isSoftWhy =
-                  chapter.id === "opening" && Boolean(narrative.softWhy) && paragraph === narrative.softWhy;
-                return (
-                  <p
-                    key={`${chapter.id}-${paragraph.slice(0, 48)}`}
-                    className={isSoftWhy ? `${styles.narrativeParagraph} ${styles.narrativeWhy}` : styles.narrativeParagraph}
-                    data-testid={isSoftWhy ? "today-soft-why" : undefined}
-                  >
-                    {isSoftWhy ? (
-                      <>
-                        <span className={styles.softWhyLabel}>Почему это важно сегодня</span>
-                        {paragraph}
-                      </>
-                    ) : (
-                      paragraph
-                    )}
-                  </p>
-                );
-              })}
-            </section>
-          ))}
-        </article>
+          {narrative.chapters.map((chapter, chapterIndex) => {
+            const planetSrc = planetIconSrc(chapter.planetHint);
+            const media =
+              chapter.id === "supports" && chapter.colorHex
+                ? ({ kind: "color" as const, hex: chapter.colorHex, label: chapter.colorLabel ?? undefined })
+                : planetSrc
+                  ? ({ kind: "image" as const, src: planetSrc, alt: chapter.planetHint ?? "" })
+                  : null;
+
+            const bodyParagraphs = [...(chapter.lead ? [chapter.lead] : []), ...chapter.paragraphs];
+            // Soft why stays visible with label when present in opening.
+            const softWhyInBody =
+              chapter.id === "opening" && narrative.softWhy
+                ? bodyParagraphs.includes(narrative.softWhy)
+                : false;
+
+            return (
+              <div
+                key={chapter.id}
+                style={profileMotionStaggerDelay(chapterIndex + 1, 70) as CSSProperties}
+                data-testid={`today-narrative-${chapter.id}`}
+              >
+                <ProductNarrativeBlock
+                  id={chapter.id}
+                  kicker={chapter.kicker}
+                  lead={softWhyInBody ? null : chapter.lead}
+                  paragraphs={
+                    softWhyInBody
+                      ? bodyParagraphs.filter((p) => p !== narrative.softWhy)
+                      : chapter.lead
+                        ? chapter.paragraphs
+                        : bodyParagraphs
+                  }
+                  accent={chapter.accent ?? "default"}
+                  media={media}
+                  collapseAfter={chapter.collapseAfter}
+                  testId={`today-narrative-block-${chapter.id}`}
+                >
+                  {softWhyInBody && narrative.softWhy ? (
+                    <p className={`${journeyStyles.narrativeBlockBody} ${styles.narrativeWhy}`} data-testid="today-soft-why">
+                      <span className={styles.softWhyLabel}>Почему это важно сегодня</span>
+                      {narrative.softWhy}
+                    </p>
+                  ) : null}
+                  {chapter.dual && (chapter.dual.strengthen.length || chapter.dual.soften.length) ? (
+                    <div className={journeyStyles.dualPanels}>
+                      {chapter.dual.strengthen.length ? (
+                        <div className={journeyStyles.dualPanel}>
+                          <p className={journeyStyles.dualPanelTitle}>Сильнее</p>
+                          {chapter.dual.strengthen.map((line) => (
+                            <p key={line.slice(0, 40)} className={journeyStyles.dualPanelBody}>
+                              {line}
+                            </p>
+                          ))}
+                        </div>
+                      ) : null}
+                      {chapter.dual.soften.length ? (
+                        <div className={journeyStyles.dualPanel}>
+                          <p className={journeyStyles.dualPanelTitle}>Мягче / не дожимать</p>
+                          {chapter.dual.soften.map((line) => (
+                            <p key={line.slice(0, 40)} className={journeyStyles.dualPanelBody}>
+                              {line}
+                            </p>
+                          ))}
+                        </div>
+                      ) : null}
+                    </div>
+                  ) : null}
+                </ProductNarrativeBlock>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       <div className={styles.journeyScene} data-testid="today-zone-move">

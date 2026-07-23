@@ -8,7 +8,8 @@ from todayflow_backend.core import models
 from todayflow_backend.services.tarot_reading_synthesis import compose_question_first_reading
 
 TAROT_ANSWER_V1_CONTRACT = "tarot_answer_v1"
-TAROT_ANSWER_PROMPT_VER = "tarot-answer-v1-template"
+# Template author layer lives in tarot_reading_synthesis (why cards land on question).
+TAROT_ANSWER_PROMPT_VER = "tarot-answer-v1.1-why-landing"
 
 
 def tarot_reading_to_answer_v1(
@@ -19,7 +20,12 @@ def tarot_reading_to_answer_v1(
     spread_id: str | None = None,
     generation_id: str | None = None,
 ) -> dict[str, Any]:
-    """Normalize spread reading → tarot_answer_v1 contract."""
+    """Normalize spread reading → tarot_answer_v1 contract.
+
+    story_narrative / insights come from synthesis author layer: explain why the
+    drawn cards answer the question using only deck lines + question text
+    (same discipline as day-card why_this_card — no invented outside facts).
+    """
     src = reading.model_dump() if hasattr(reading, "model_dump") else dict(reading)
     main = str(src.get("meaning") or "").strip()
     story = str(src.get("synthesis_why") or "").strip()
@@ -56,7 +62,7 @@ def tarot_reading_to_answer_v1(
         "follow_up_prompt": str(src.get("follow_up_prompt") or "").strip(),
         "follow_up_chips": chips,
         "generation_id": generation_id or "",
-        "synthesis_mode": "template_v1",
+        "synthesis_mode": "template_v1_why_landing",
     }
 
 

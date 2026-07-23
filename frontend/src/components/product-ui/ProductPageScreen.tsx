@@ -27,6 +27,7 @@ import {
 } from "@/components/product-ui/ProductShellStates";
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
 import { getLocale } from "@/lib/i18n";
+import { useProductDayNightTheme } from "@/lib/useProductDayNightTheme";
 import type { CoreProfile } from "@/lib/types";
 import v2 from "@/design-system/layouts/productV2Surface.module.css";
 import pl from "@/design-system/layouts/productPageLayout.module.css";
@@ -114,6 +115,7 @@ export function ProductPageScreen({
 }: ProductPageScreenProps) {
   const resolvedLocale: FlowPracticesChromeLocale =
     locale ?? (getLocale() === "ru" ? "ru" : "en");
+  const theme = useProductDayNightTheme();
 
   const todayLabel = new Intl.DateTimeFormat(resolvedLocale === "ru" ? "ru-RU" : "en-US", {
     weekday: "long",
@@ -130,9 +132,10 @@ export function ProductPageScreen({
       displayName,
       profileMeta,
       coreProfile,
+      theme,
       rail: resolvedRail,
     };
-  }, [coreProfile, displayName, mainWide, profileMeta, resolvedRail, testId]);
+  }, [coreProfile, displayName, mainWide, profileMeta, resolvedRail, testId, theme]);
 
   const body = (() => {
     if (loading) {

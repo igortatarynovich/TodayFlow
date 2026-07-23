@@ -58,6 +58,26 @@ MODULE = "day_story_v1"
 SURFACE = "day_story"
 
 
+def _daily_symbols_from_morning(
+    morning: MorningRitualResponse | None,
+) -> tuple[str, str, dict[str, Any], dict[str, Any], dict[str, Any]]:
+    """Prefer celestial daily_symbols over legacy lucky_* recommendation keys."""
+    ce: dict[str, Any] = {}
+    if morning is not None and isinstance(getattr(morning, "celestial_events", None), dict):
+        ce = morning.celestial_events or {}
+    symbols = ce.get("daily_symbols") if isinstance(ce.get("daily_symbols"), dict) else {}
+    color_sym = symbols.get("color") if isinstance(symbols.get("color"), dict) else {}
+    stone_sym = symbols.get("stone") if isinstance(symbols.get("stone"), dict) else {}
+    recs = (
+        morning.daily_recommendations
+        if morning is not None and isinstance(morning.daily_recommendations, dict)
+        else {}
+    )
+    color = str(color_sym.get("name") or (recs.get("lucky_color") if recs else "") or "").strip()
+    stone = str(stone_sym.get("name") or (recs.get("lucky_stone") if recs else "") or "").strip()
+    return color, stone, color_sym, stone_sym, ce
+
+
 def _ritual_from_morning_and_connection(
     morning: MorningRitualResponse,
     dc_row: db_models.DayConnection | None,
@@ -144,6 +164,9 @@ def _build_day_story_record(
     ritual_norm: dict[str, Any],
     color: str = "",
     stone: str = "",
+    celestial_events: dict[str, Any] | None = None,
+    color_symbol: dict[str, Any] | None = None,
+    stone_symbol: dict[str, Any] | None = None,
     force_rebuild: bool = False,
     expected_fingerprint: str | None = None,
     fingerprint_payload: dict[str, Any] | None = None,
@@ -163,6 +186,9 @@ def _build_day_story_record(
     snapshot_id = _latest_snapshot_id(db, user.id)
     ritual_fp = _ritual_context_fingerprint(ritual_norm)
     owner_key = owner_key_for_user(user.id)
+    color_sym = color_symbol if isinstance(color_symbol, dict) else {}
+    stone_sym = stone_symbol if isinstance(stone_symbol, dict) else {}
+    ce = celestial_events if isinstance(celestial_events, dict) else {}
 
     if expected_fingerprint is None or fingerprint_payload is None:
         expected_fingerprint, fingerprint_payload = compute_expected_day_story_fingerprint(
@@ -172,6 +198,9 @@ def _build_day_story_record(
             local_date=target_date,
             timezone_name=timezone_name,
             locale=locale_value,
+            celestial_events=ce or None,
+            color_name=color or None,
+            stone_name=stone or None,
         )
 
     dc_row = (
@@ -276,6 +305,9 @@ def _build_day_story_record(
             rhythm_context=rhythm_context,
             color=color,
             stone=stone,
+            celestial_events=ce or None,
+            color_symbol=color_sym or None,
+            stone_symbol=stone_sym or None,
             fingerprint=expected_fingerprint,
             locale=locale_value,
         )
@@ -290,6 +322,9 @@ def _build_day_story_record(
             stone=stone,
             locale=locale_value,
             interpretation=interpretation,
+            celestial_events=ce or None,
+            color_symbol=color_sym or None,
+            stone_symbol=stone_sym or None,
         )
         llm_input["insight_depth_tier"] = insight_tier
         llm_input["daily_foundation"] = foundation
@@ -324,6 +359,9 @@ def _build_day_story_record(
                 fingerprint=expected_fingerprint,
                 ritual_context=safe_ritual,
                 intent_slice=intent_slice,
+                celestial_events=ce or None,
+                color_symbol=color_sym or None,
+                stone_symbol=stone_sym or None,
             )
 
         story_errors = validate_day_story_v1(story)
@@ -338,6 +376,9 @@ def _build_day_story_record(
                 fingerprint=expected_fingerprint,
                 ritual_context=safe_ritual,
                 intent_slice=intent_slice,
+                celestial_events=ce or None,
+                color_symbol=color_sym or None,
+                stone_symbol=stone_sym or None,
             )
             used_fallback = True
 
@@ -441,9 +482,7 @@ def build_day_story_v1_wire(
         .first()
     )
     ritual_norm = _ritual_from_morning_and_connection(morning, dc_row)
-    recs = morning.daily_recommendations if isinstance(morning.daily_recommendations, dict) else {}
-    color = str(recs.get("lucky_color") or "") if recs else ""
-    stone = str(recs.get("lucky_stone") or "") if recs else ""
+    color, stone, color_sym, stone_sym, ce = _daily_symbols_from_morning(morning)
     locale_value = (locale or "ru").strip()[:32] or "ru"
     owner_key = owner_key_for_user(user.id)
     expected_fp, fp_payload = compute_expected_day_story_fingerprint(
@@ -453,6 +492,9 @@ def build_day_story_v1_wire(
         local_date=target_date,
         timezone_name=timezone_name,
         locale=locale_value,
+        celestial_events=ce or None,
+        color_name=color or None,
+        stone_name=stone or None,
     )
     ritual_fp = _ritual_context_fingerprint(ritual_norm)
     snapshot_id = _latest_snapshot_id(db, user.id)
@@ -528,6 +570,9 @@ def build_day_story_v1_wire(
                 ritual_norm=ritual_norm,
                 color=color,
                 stone=stone,
+                celestial_events=ce or None,
+                color_symbol=color_sym or None,
+                stone_symbol=stone_sym or None,
                 force_rebuild=False,
                 expected_fingerprint=expected_fp,
                 fingerprint_payload=fp_payload,
@@ -576,9 +621,7 @@ def build_day_story_record_for_refresh(
         .first()
     )
     ritual_norm = _ritual_from_morning_and_connection(morning, dc_row)
-    recs = morning.daily_recommendations if isinstance(morning.daily_recommendations, dict) else {}
-    color = str(recs.get("lucky_color") or "") if recs else ""
-    stone = str(recs.get("lucky_stone") or "") if recs else ""
+    color, stone, color_sym, stone_sym, ce = _daily_symbols_from_morning(morning)
     return _build_day_story_record(
         db,
         user=user,
@@ -589,6 +632,9 @@ def build_day_story_record_for_refresh(
         ritual_norm=ritual_norm,
         color=color,
         stone=stone,
+        celestial_events=ce or None,
+        color_symbol=color_sym or None,
+        stone_symbol=stone_sym or None,
         force_rebuild=force_rebuild,
         expected_fingerprint=expected_fingerprint,
         fingerprint_payload=fingerprint_payload,

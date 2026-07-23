@@ -439,6 +439,69 @@
   overflow: hidden;
 }
 
+.questionCardQuiet {
+  display: flex;
+  align-items: stretch;
+  min-height: 4rem;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 1.125rem;
+  border: 1px solid var(--tf-border, #e8e2d6);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.spreadStepList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  position: relative;
+  z-index: 1;
+}
+
+.spreadStepOption {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  width: 100%;
+  padding: 0.85rem 0.95rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(212, 184, 150, 0.28);
+  background: transparent;
+  text-decoration: none;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.spreadStepOption:hover {
+  border-color: rgba(139, 106, 62, 0.45);
+  background: rgba(139, 106, 62, 0.06);
+}
+
+.spreadStepOptionSelected {
+  border-color: var(--tf-accent-gold-600, #8b6a3e);
+  background: rgba(139, 106, 62, 0.1);
+}
+
+.spreadStepIndex {
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--tf-accent-gold-600, #8b6a3e);
+  min-width: 1.5rem;
+  line-height: 1.4;
+}
+
+.spreadStepBody {
+  min-width: 0;
+  flex: 1;
+}
+
 .questionInput {
   width: 100%;
   min-height: 4.5rem;
@@ -804,4 +867,28 @@
   .practicesSection {
     padding: 1.25rem;
   }
+}
+
+:global([data-theme="dark"]) .questionCardQuiet {
+  border-color: rgba(212, 184, 150, 0.22);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+:global([data-theme="dark"]) .questionInput {
+  color: #f4efe6;
+}
+
+:global([data-theme="dark"]) .spreadStepOption {
+  border-color: rgba(212, 184, 150, 0.2);
+  color: #f4efe6;
+}
+
+:global([data-theme="dark"]) .spreadStepOption:hover,
+:global([data-theme="dark"]) .spreadStepOptionSelected {
+  border-color: rgba(201, 169, 110, 0.45);
+  background: rgba(201, 169, 110, 0.1);
+}
+
+:global([data-theme="dark"]) .spreadTitle {
+  color: #f4efe6;
 }

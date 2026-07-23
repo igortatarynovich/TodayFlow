@@ -3,7 +3,7 @@ import { PracticesV2SystemScreen } from "@/components/practices/v2/PracticesV2Sy
 import { buildPracticesV2LiveContext } from "@/lib/practicesPage/buildPracticesV2LiveContext";
 
 describe("PracticesV2SystemScreen", () => {
-  it("renders dashboard sections from Figma 162:1522", () => {
+  it("renders journey scenes with practice of day and library", () => {
     render(
       <PracticesV2SystemScreen
         locale="ru"
@@ -28,6 +28,11 @@ describe("PracticesV2SystemScreen", () => {
           steps: 4,
           href: "/practices/p1",
         }}
+        practiceRecommendation={{
+          kind: "practice",
+          text: "Дыши медленнее перед стартом.",
+          reason: "День просит мягкий вход, без рывка.",
+        }}
         programCards={[
           {
             id: "p1",
@@ -46,9 +51,18 @@ describe("PracticesV2SystemScreen", () => {
     );
 
     expect(screen.getByTestId("practices-v2-system")).toBeInTheDocument();
+    expect(screen.getByTestId("practices-journey-support")).toBeInTheDocument();
+    expect(screen.getByTestId("practices-journey-library")).toBeInTheDocument();
+    expect(screen.getByTestId("practices-journey-bridge")).toBeInTheDocument();
+    expect(screen.getByText("Сегодняшняя опора")).toBeInTheDocument();
     expect(screen.getByText("Центр ежедневных ритуалов")).toBeInTheDocument();
-    expect(screen.getByText("Практики для ясного дня")).toBeInTheDocument();
     expect(screen.getByText("Тихий фокус")).toBeInTheDocument();
+    expect(screen.getByTestId("practices-day-story-reason")).toHaveTextContent(
+      /День просит мягкий вход/,
+    );
+    expect(screen.getByTestId("practices-day-story-text")).toHaveTextContent(
+      /Дыши медленнее/,
+    );
     expect(screen.getByText("Библиотека практик")).toBeInTheDocument();
     expect(screen.getByText("Дыхание 4-7-8")).toBeInTheDocument();
     expect(

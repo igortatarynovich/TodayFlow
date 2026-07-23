@@ -12,7 +12,7 @@ import re
 from typing import Any
 
 DAY_STORY_INTERPRETATION_V1 = "day_story_interpretation_v1"
-DAY_STORY_CALCULATION_VERSION = "day-story-interpretation-v1.0"
+DAY_STORY_CALCULATION_VERSION = "day-story-interpretation-v1.1"
 
 _DOMAIN_IDS = ("relationships", "money_work", "family")
 
@@ -75,6 +75,55 @@ def _resolve_domain_from_topic(topic: str) -> str | None:
     return None
 
 
+def _slim_day_sky(celestial_events: dict[str, Any] | None) -> dict[str, Any]:
+    """Compact sky pack for LLM — only ready story strings, capped."""
+    ce = celestial_events if isinstance(celestial_events, dict) else {}
+    out: dict[str, Any] = {}
+    lunar = ce.get("lunar_phase") if isinstance(ce.get("lunar_phase"), dict) else {}
+    if lunar:
+        out["moon"] = {
+            "name": _clip(lunar.get("name"), 80),
+            "guidance": _clip(lunar.get("guidance") or lunar.get("themes"), 200),
+        }
+    ingresses = []
+    for row in (ce.get("ingresses") or [])[:3]:
+        if not isinstance(row, dict):
+            continue
+        story = _clip(row.get("story_ru"), 200)
+        if not story:
+            continue
+        ingresses.append(
+            {
+                "planet_ru": _clip(row.get("planet_ru"), 40),
+                "sign_ru": _clip(row.get("sign_ru"), 40),
+                "story_ru": story,
+            }
+        )
+    if ingresses:
+        out["ingresses"] = ingresses
+    aspects = []
+    for row in (ce.get("sky_aspects") or [])[:2]:
+        if not isinstance(row, dict):
+            continue
+        story = _clip(row.get("story_ru"), 200)
+        if not story:
+            continue
+        aspects.append({"title": _clip(row.get("title"), 80), "story_ru": story})
+    if aspects:
+        out["sky_aspects"] = aspects
+    retros = []
+    for row in (ce.get("retrogrades") or [])[:2]:
+        if not isinstance(row, dict):
+            continue
+        story = _clip(row.get("story_ru"), 200)
+        if not story:
+            continue
+        retros.append({"planet_ru": _clip(row.get("planet_ru"), 40), "story_ru": story})
+    if retros:
+        out["retrogrades"] = retros
+    return out
+
+
 def build_day_story_interpretation_v1(
     *,
     day_engine_brief: dict[str, Any] | None,
@@ -83,6 +132,9 @@ def build_day_story_interpretation_v1(
     rhythm_context: dict[str, Any] | None = None,
     color: str = "",
     stone: str = "",
+    celestial_events: dict[str, Any] | None = None,
+    color_symbol: dict[str, Any] | None = None,
+    stone_symbol: dict[str, Any] | None = None,
     fingerprint: str | None = None,
     locale: str = "ru",
 ) -> dict[str, Any]:
@@ -91,10 +143,15 @@ def build_day_story_interpretation_v1(
     ritual = ritual_context if isinstance(ritual_context, dict) else {}
     intent = intent_slice if isinstance(intent_slice, dict) else {}
     rhythm = rhythm_context if isinstance(rhythm_context, dict) else {}
+    ce = celestial_events if isinstance(celestial_events, dict) else {}
+    color_sym = color_symbol if isinstance(color_symbol, dict) else {}
+    stone_sym = stone_symbol if isinstance(stone_symbol, dict) else {}
 
     evidence: list[dict[str, Any]] = []
     claims: list[dict[str, Any]] = []
     domain_evidence: dict[str, list[str]] = {d: [] for d in _DOMAIN_IDS}
+    color_name = str(color_sym.get("name") or color or "").strip()
+    stone_name = str(stone_sym.get("name") or stone or "").strip()
     source_inputs: dict[str, Any] = {
         "has_day_engine_brief": bool(brief),
         "brief_contract": brief.get("contract_version"),
@@ -104,8 +161,12 @@ def build_day_story_interpretation_v1(
         "has_head_topic": bool(ritual.get("head_topic") or brief.get("thread_head_topic")),
         "has_intent": bool(intent.get("what_matters_line") or intent.get("morning_focus")),
         "has_rhythm": bool(rhythm),
-        "has_color": bool(str(color or "").strip()),
-        "has_stone": bool(str(stone or "").strip()),
+        "has_color": bool(color_name),
+        "has_stone": bool(stone_name),
+        "has_lunar": bool(isinstance(ce.get("lunar_phase"), dict) and ce.get("lunar_phase")),
+        "has_ingress": bool(ce.get("ingresses")),
+        "has_sky_aspect": bool(ce.get("sky_aspects")),
+        "has_retro": bool(ce.get("retrogrades")),
         "locale": (locale or "ru")[:8],
     }
 
@@ -266,26 +327,151 @@ def build_day_story_interpretation_v1(
         )
         add_claim("claim.day_number", f"Число дня: {num}", evidence_ids=[eid], kind="symbol")
 
-    if color.strip():
+    # --- Sky evidence (ready story_ru / guidance only) ---
+    lunar = ce.get("lunar_phase") if isinstance(ce.get("lunar_phase"), dict) else {}
+    lunar_body = str(lunar.get("guidance") or lunar.get("themes") or "").strip()
+    lunar_name = str(lunar.get("name") or "").strip()
+    if lunar_name or lunar_body:
+        eid = "ev.sky.moon"
+        summary = f"{lunar_name}: {lunar_body}".strip(": ").strip() if lunar_body else lunar_name
+        evidence.append(
+            _evidence(
+                evidence_id=eid,
+                source="celestial_events.lunar_phase",
+                claim_ref="moon",
+                summary=summary,
+            )
+        )
+        add_claim("claim.sky.moon", summary, evidence_ids=[eid], kind="sky")
+
+    for idx, row in enumerate((ce.get("ingresses") or [])[:3]):
+        if not isinstance(row, dict):
+            continue
+        story = str(row.get("story_ru") or "").strip()
+        if not story:
+            continue
+        planet = str(row.get("planet") or row.get("planet_ru") or idx)
+        eid = f"ev.sky.ingress.{planet}"
+        evidence.append(
+            _evidence(
+                evidence_id=eid,
+                source="celestial_events.ingresses",
+                claim_ref="ingress",
+                summary=story,
+            )
+        )
+        add_claim(f"claim.sky.ingress.{planet}", story, evidence_ids=[eid], kind="sky")
+
+    for row in (ce.get("sky_aspects") or [])[:2]:
+        if not isinstance(row, dict):
+            continue
+        story = str(row.get("story_ru") or "").strip()
+        if not story:
+            continue
+        aid = str(row.get("id") or row.get("title") or "aspect")[:40]
+        eid = f"ev.sky.aspect.{aid}"
+        evidence.append(
+            _evidence(
+                evidence_id=eid,
+                source="celestial_events.sky_aspects",
+                claim_ref="sky_aspect",
+                summary=story,
+            )
+        )
+        add_claim(f"claim.sky.aspect.{aid}", story, evidence_ids=[eid], kind="sky")
+
+    for row in (ce.get("retrogrades") or [])[:2]:
+        if not isinstance(row, dict):
+            continue
+        story = str(row.get("story_ru") or "").strip()
+        if not story:
+            continue
+        planet = str(row.get("planet") or row.get("planet_ru") or "retro")
+        eid = f"ev.sky.retro.{planet}"
+        evidence.append(
+            _evidence(
+                evidence_id=eid,
+                source="celestial_events.retrogrades",
+                claim_ref="retrograde",
+                summary=story,
+            )
+        )
+        add_claim(f"claim.sky.retro.{planet}", story, evidence_ids=[eid], kind="sky")
+
+    # --- Color / stone ready copy ---
+    if color_name:
         eid = "ev.talisman.color"
         evidence.append(
             _evidence(
                 evidence_id=eid,
-                source="morning.lucky_color",
+                source="celestial_events.daily_symbols.color",
                 claim_ref="color",
-                summary=color.strip(),
+                summary=color_name,
             )
         )
-    if stone.strip():
+        benefit = str(color_sym.get("benefit_ru") or color_sym.get("story_ru") or "").strip()
+        if benefit:
+            eid_b = "ev.talisman.color.benefit"
+            evidence.append(
+                _evidence(
+                    evidence_id=eid_b,
+                    source="celestial_events.daily_symbols.color.benefit_ru",
+                    claim_ref="color_why",
+                    summary=benefit,
+                )
+            )
+            add_claim(
+                "claim.talisman.color_why",
+                f"Цвет дня — {color_name}: {benefit}",
+                evidence_ids=[eid, eid_b],
+                kind="support",
+            )
+        avoid_c = str(color_sym.get("avoid_color_ru") or "").strip()
+        avoid_w = str(color_sym.get("avoid_why_ru") or "").strip()
+        if avoid_c and avoid_w:
+            eid_a = "ev.talisman.color.avoid"
+            evidence.append(
+                _evidence(
+                    evidence_id=eid_a,
+                    source="celestial_events.daily_symbols.color.avoid",
+                    claim_ref="color_avoid",
+                    summary=f"{avoid_c}: {avoid_w}",
+                )
+            )
+            add_claim(
+                "claim.talisman.color_avoid",
+                f"Сегодня лучше не {avoid_c}: {avoid_w}",
+                evidence_ids=[eid_a],
+                kind="support",
+            )
+
+    if stone_name:
         eid = "ev.talisman.stone"
         evidence.append(
             _evidence(
                 evidence_id=eid,
-                source="morning.lucky_stone",
+                source="celestial_events.daily_symbols.stone",
                 claim_ref="stone",
-                summary=stone.strip(),
+                summary=stone_name,
             )
         )
+        stone_story = str(stone_sym.get("story_ru") or "").strip()
+        if stone_story:
+            eid_s = "ev.talisman.stone.story"
+            evidence.append(
+                _evidence(
+                    evidence_id=eid_s,
+                    source="celestial_events.daily_symbols.stone.story_ru",
+                    claim_ref="stone_why",
+                    summary=stone_story,
+                )
+            )
+            add_claim(
+                "claim.talisman.stone_why",
+                f"Камень-опора — {stone_name}: {stone_story}",
+                evidence_ids=[eid, eid_s],
+                kind="support",
+            )
 
     present_domains = [d for d in _DOMAIN_IDS if domain_evidence[d]]
     absent_domains = [d for d in _DOMAIN_IDS if d not in present_domains]
@@ -304,6 +490,10 @@ def build_day_story_interpretation_v1(
         limitations.append("Число дня не раскрыто или отсутствует — не упоминать число.")
     if not anchor and not do_hint:
         limitations.append("Краткий бриф дня пуст — story строится из минимума известных сигналов.")
+    if not source_inputs["has_color"] or not any(c.get("id") == "claim.talisman.color_why" for c in claims):
+        limitations.append("Нет готового why цвета — talisman.note / supports_story без выдуманной связи небо→цвет.")
+    if not any(str(c.get("kind") or "") == "sky" for c in claims):
+        limitations.append("Нет celestial story_ru — не сочинять астрологические объяснения.")
 
     confidence = 0.35
     if evidence:
@@ -325,6 +515,7 @@ def build_day_story_interpretation_v1(
         "confidence": round(confidence, 3),
         "limitations": limitations,
         "fingerprint": fingerprint or "",
+        "day_sky": _slim_day_sky(ce),
     }
     return interpretation
 

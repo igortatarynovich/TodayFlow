@@ -107,8 +107,10 @@ describe("buildTodayDayNarrative", () => {
       name: "синий",
       benefit: "Сдерживает спешку и помогает говорить точнее.",
       clothing: "В деталях одежды или аксессуаре.",
-      avoid: "Яркий красный в переговорах.",
-      wear: true,
+      accessory: "Браслет.",
+      amount: "Один акцент.",
+      avoidColor: "Яркий красный",
+      avoidWhy: "Разгоняет темп в переговорах.",
     } as TodayDayColorGuide,
     tarotImpact: {
       title: "Сила",
@@ -147,20 +149,39 @@ describe("buildTodayDayNarrative", () => {
     const ids = narrative.chapters.map((c) => c.id);
     expect(ids).toEqual(["opening", "sky", "force", "symbols", "supports"]);
     const sky = narrative.chapters.find((c) => c.id === "sky")!;
-    expect(sky.paragraphs.join(" ")).toMatch(/Луна|Меркурий|Марс/i);
-    expect(sky.paragraphs.join(" ")).toMatch(/Рак|напряжение|намерение/i);
+    const skyText = [sky.lead, ...sky.paragraphs].filter(Boolean).join(" ");
+    expect(skyText).toMatch(/Луна|Меркурий|Марс/i);
+    expect(skyText).toMatch(/Рак|напряжение|намерение/i);
     const force = narrative.chapters.find((c) => c.id === "force")!;
-    expect(force.paragraphs.join(" ")).toMatch(/усилит|ослабит|сильнее|слабее|не дожимать/i);
+    expect(force.accent).toBe("dual");
+    const forceText = [
+      ...(force.dual?.strengthen ?? []),
+      ...(force.dual?.soften ?? []),
+      ...force.paragraphs,
+    ].join(" ");
+    expect(forceText).toMatch(/усилит|ослабит|сильнее|слабее|не дожимать|Короткий|обязательств/i);
     const symbols = narrative.chapters.find((c) => c.id === "symbols")!;
-    expect(symbols.paragraphs.join(" ")).toMatch(/Карта дня|Число дня|Сила|22/i);
+    const symbolsText = [symbols.lead, ...symbols.paragraphs].filter(Boolean).join(" ");
+    expect(symbolsText).toMatch(/Карта дня|Число дня|Сила|22/i);
   });
 
   it("keeps literary opening meaning without inventing checklist chrome", () => {
     const narrative = buildTodayDayNarrative({ contract, story, morningRitualData });
     const opening = narrative.chapters.find((c) => c.id === "opening")!;
-    expect(opening.paragraphs.join(" ")).toMatch(/точностью|договорённостях/i);
-    expect(opening.paragraphs.join(" ")).not.toMatch(/опирайся|сегодня сильнее/i);
-    // literary still available for other surfaces
+    const openingText = [opening.lead, ...opening.paragraphs].filter(Boolean).join(" ");
+    expect(openingText).toMatch(/точностью|договорённостях/i);
+    expect(openingText).not.toMatch(/опирайся|сегодня сильнее/i);
     expect(buildTodayLiteraryReading(story, contract).opening).toBeTruthy();
+  });
+
+  it("expands supports as Твой ход with color why from guide + talisman note", () => {
+    const narrative = buildTodayDayNarrative({ contract, story, morningRitualData });
+    const supports = narrative.chapters.find((c) => c.id === "supports")!;
+    expect(supports.kicker).toMatch(/Твой ход/i);
+    expect(supports.accent).toBe("support");
+    expect(supports.colorHex).toBeTruthy();
+    const body = [supports.lead, ...supports.paragraphs].filter(Boolean).join(" ");
+    expect(body).toMatch(/Цвет дня|синий|Сдерживает спешку/i);
+    expect(body).toMatch(/Пауза сохраняет точность|Две минуты/i);
   });
 });

@@ -1,6 +1,7 @@
 "use client";
 
 import type { CSSProperties, ReactNode } from "react";
+import { useId, useState } from "react";
 import {
   profileMotionStaggerDelay,
   profileMotionStyles,
@@ -107,4 +108,135 @@ export function ProductNarrativeScroll({
       ))}
     </article>
   );
+}
+
+export type ProductNarrativeMedia =
+  | { kind: "image"; src: string; alt?: string }
+  | { kind: "color"; hex: string; label?: string }
+  | { kind: "node"; node: ReactNode };
+
+export type ProductNarrativeBlockProps = {
+  id?: string;
+  kicker: string;
+  lead?: string | null;
+  paragraphs?: string[];
+  /** Extra body when paragraphs alone are not enough (chips, dual panels). */
+  children?: ReactNode;
+  media?: ProductNarrativeMedia | null;
+  accent?: "default" | "dual" | "support" | "sky";
+  /** Collapse long body behind «раскрыть» when more than collapseAfter paragraphs. */
+  collapseAfter?: number;
+  expandLabel?: string;
+  collapseLabel?: string;
+  testId?: string;
+  className?: string;
+  style?: CSSProperties;
+};
+
+export function ProductNarrativeBlock({
+  id,
+  kicker,
+  lead = null,
+  paragraphs = [],
+  children,
+  media = null,
+  accent = "default",
+  collapseAfter,
+  expandLabel = "Раскрыть",
+  collapseLabel = "Свернуть",
+  testId,
+  className = "",
+  style,
+}: ProductNarrativeBlockProps) {
+  const reactId = useId();
+  const panelId = id ?? `narrative-block-${reactId}`;
+  const canCollapse =
+    typeof collapseAfter === "number" &&
+    collapseAfter >= 0 &&
+    paragraphs.length > collapseAfter;
+  const [expanded, setExpanded] = useState(!canCollapse);
+  const visibleParagraphs = canCollapse && !expanded ? paragraphs.slice(0, collapseAfter) : paragraphs;
+  const accentClass =
+    accent === "dual"
+      ? styles.narrativeBlockDual
+      : accent === "support"
+        ? styles.narrativeBlockSupport
+        : accent === "sky"
+          ? styles.narrativeBlockSky
+          : "";
+
+  return (
+    <section
+      className={`${styles.narrativeBlock} ${accentClass} ${profileMotionStyles.staggerItem} ${className}`.trim()}
+      data-testid={testId ?? `product-narrative-block-${panelId}`}
+      style={style}
+    >
+      <div className={styles.narrativeBlockMain}>
+        <p className={styles.narrativeBlockKicker}>{kicker}</p>
+        {lead ? <p className={styles.narrativeBlockLead}>{lead}</p> : null}
+        {visibleParagraphs.map((paragraph) => (
+          <p key={`${panelId}-${paragraph.slice(0, 48)}`} className={styles.narrativeBlockBody}>
+            {paragraph}
+          </p>
+        ))}
+        {children}
+        {canCollapse ? (
+          <button
+            type="button"
+            className={styles.narrativeExpandBtn}
+            aria-expanded={expanded}
+            onClick={() => setExpanded((v) => !v)}
+          >
+            {expanded ? collapseLabel : expandLabel}
+          </button>
+        ) : null}
+      </div>
+      {media ? (
+        <div className={styles.narrativeBlockMedia} aria-hidden={media.kind !== "image"}>
+          {media.kind === "image" ? (
+            // eslint-disable-next-line @next/next/no-img-element -- static public inventory
+            <img className={styles.narrativeMediaImage} src={media.src} alt={media.alt ?? ""} />
+          ) : null}
+          {media.kind === "color" ? (
+            <span className={styles.narrativeColorChip} style={{ background: media.hex }} title={media.label}>
+              {media.label ? <span className={styles.narrativeColorLabel}>{media.label}</span> : null}
+            </span>
+          ) : null}
+          {media.kind === "node" ? media.node : null}
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
+/** Resolve planet icon from public inventory when name matches. */
+export function planetIconSrc(planetRuOrEn: string | null | undefined): string | null {
+  const raw = (planetRuOrEn ?? "").trim().toLowerCase();
+  if (!raw) return null;
+  const map: Record<string, string> = {
+    sun: "sun",
+    солнце: "sun",
+    moon: "moon",
+    луна: "moon",
+    mercury: "mercury",
+    меркурий: "mercury",
+    venus: "venus",
+    венера: "venus",
+    mars: "mars",
+    марс: "mars",
+    jupiter: "jupiter",
+    юпитер: "jupiter",
+    saturn: "saturn",
+    сатурн: "saturn",
+    uranus: "uranus",
+    уран: "uranus",
+    neptune: "neptune",
+    нептун: "neptune",
+    pluto: "pluto",
+    плутон: "pluto",
+  };
+  for (const [key, file] of Object.entries(map)) {
+    if (raw.includes(key)) return `/images/icons/planets/${file}.svg`;
+  }
+  return null;
 }

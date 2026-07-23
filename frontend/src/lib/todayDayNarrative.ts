@@ -1,6 +1,6 @@
 /**
  * Assemble Today's day as continuous narrative chapters from existing fields only.
- * Order: story → sky why → strengthen/weaken → card/number layer → supports.
+ * Order: story → sky why → strengthen/weaken → card/number layer → supports («Твой ход»).
  * No invented meaning — only selection, light join, and structural kickers.
  */
 
@@ -17,10 +17,20 @@ import {
 } from "@/lib/todayLiteraryReading";
 import { isRuUserFacingText } from "@/lib/todaySynthesisTextPolicy";
 
+export type TodayDayNarrativeChapterId = "opening" | "sky" | "force" | "symbols" | "supports";
+
 export type TodayDayNarrativeChapter = {
-  id: "opening" | "sky" | "force" | "symbols" | "supports";
+  id: TodayDayNarrativeChapterId;
   kicker: string;
   paragraphs: string[];
+  lead?: string | null;
+  /** Visual accent for ProductNarrativeBlock. */
+  accent?: "default" | "dual" | "support" | "sky";
+  planetHint?: string | null;
+  colorHex?: string | null;
+  colorLabel?: string | null;
+  dual?: { strengthen: string[]; soften: string[] } | null;
+  collapseAfter?: number;
 };
 
 export type TodayDayNarrative = {
@@ -35,6 +45,35 @@ const DOMAIN_LABELS: Record<string, string> = {
   money_work: "В работе и деньгах",
   family: "В семье и доме",
 };
+
+/** Best-effort chip color from catalog name — decorative only, not meaning. */
+export function colorHexForDayName(name: string | null | undefined): string | null {
+  const n = (name ?? "").trim().toLowerCase();
+  if (!n) return null;
+  const map: Array<[RegExp, string]> = [
+    [/лазур|azure|голуб/, "#5B8FA8"],
+    [/глубок.*син|deep.*blue/, "#1E3A5F"],
+    [/индиго|indigo/, "#3F3D7A"],
+    [/изумруд|emerald|зелён|зелен/, "#2F6B4F"],
+    [/янтар|amber/, "#C9893A"],
+    [/коралл|coral/, "#E07A6A"],
+    [/бордов|burgundy|винн/, "#7A2E3C"],
+    [/перламутр|pearl/, "#D8D2C8"],
+    [/золот|gold/, "#C9A96E"],
+    [/серебр|silver/, "#A8B0B8"],
+    [/син|blue/, "#3D6E9C"],
+    [/красн|red/, "#A83C3C"],
+    [/фиолет|violet|purple/, "#6B4C8A"],
+    [/розов|pink/, "#C97A9A"],
+    [/оранж|orange/, "#D4783A"],
+    [/бел|white|cream|слонов/, "#F4EFE6"],
+    [/чёрн|черн|black/, "#2A2520"],
+  ];
+  for (const [re, hex] of map) {
+    if (re.test(n)) return hex;
+  }
+  return "#8B6A3E";
+}
 
 function clean(text: string | null | undefined): string {
   return (text ?? "").replace(/\s+/g, " ").trim();
@@ -80,6 +119,20 @@ function titledStory(title: string | null | undefined, story: string | null | un
   return ensurePeriod(`${head}. ${body}`);
 }
 
+function firstPlanetHint(input: {
+  morningRitualData: MorningRitualData | null | undefined;
+  skyCards: TodaySkyCard[];
+}): string | null {
+  const celestial = input.morningRitualData?.celestial_events;
+  const ingress = celestial?.ingresses?.[0]?.planet_ru;
+  if (ingress) return ingress;
+  const transit = celestial?.personal_transits?.[0]?.title;
+  if (transit) return transit;
+  const aspect = celestial?.sky_aspects?.[0]?.title;
+  if (aspect) return aspect;
+  return null;
+}
+
 /** Prefer mercury / personal ingresses first, then the rest — still only API story_ru. */
 function collectSkyParagraphs(input: {
   morningRitualData: MorningRitualData | null | undefined;
@@ -118,10 +171,17 @@ function collectSkyParagraphs(input: {
     return score(a.planet_ru) - score(b.planet_ru);
   });
   for (const ingress of sortedIngresses.slice(0, 3)) {
-    pushDistinct(paragraphs, used, clean(ingress.story_ru) || titledStory(
-      ingress.planet_ru && ingress.sign_ru ? `${ingress.planet_ru} → ${ingress.sign_ru}` : ingress.planet_ru,
-      ingress.story_ru,
-    ));
+    pushDistinct(
+      paragraphs,
+      used,
+      clean(ingress.story_ru) ||
+        titledStory(
+          ingress.planet_ru && ingress.sign_ru
+            ? `${ingress.planet_ru} → ${ingress.sign_ru}`
+            : ingress.planet_ru,
+          ingress.story_ru,
+        ),
+    );
   }
 
   for (const transit of (celestial?.personal_transits ?? []).slice(0, 2)) {
@@ -136,7 +196,6 @@ function collectSkyParagraphs(input: {
     pushDistinct(paragraphs, used, titledStory(retro.planet_ru, retro.story_ru));
   }
 
-  // Fallback / supplement from spine sky cards (non-symbol, non-talisman duplicates).
   const skipIds = new Set(["tarot", "number", "color", "stone", "totem"]);
   for (const card of input.skyCards) {
     if (skipIds.has(card.id)) continue;
@@ -146,40 +205,46 @@ function collectSkyParagraphs(input: {
   return paragraphs.slice(0, 8);
 }
 
-function collectForceParagraphs(
+function collectForceDual(
   contract: TodayContractV1,
   literary: ReturnType<typeof buildTodayLiteraryReading>,
   used: string[],
-): string[] {
-  const out: string[] = [];
+): { strengthen: string[]; soften: string[]; paragraphs: string[] } {
+  const strengthen: string[] = [];
+  const soften: string[] = [];
+  const paragraphs: string[] = [];
 
-  if (literary.lean) pushDistinct(out, used, literary.lean);
-  if (literary.ease) pushDistinct(out, used, literary.ease);
+  if (literary.lean) pushDistinct(strengthen, used, literary.lean);
+  if (literary.ease) pushDistinct(soften, used, literary.ease);
 
   for (const id of ["relationships", "money_work", "family"] as const) {
     const lens = contract.domains[id];
     if (!isDomainLensPresent(lens)) continue;
     const label = DOMAIN_LABELS[id];
-    const parts: string[] = [];
-    if (clean(lens.opportunity)) parts.push(`сильнее — ${clean(lens.opportunity)}`);
-    if (clean(lens.risk)) parts.push(`слабее / риск — ${clean(lens.risk)}`);
-    if (clean(lens.action) && parts.length < 2) parts.push(clean(lens.action));
-    if (!parts.length && clean(lens.status)) parts.push(clean(lens.status));
-    if (parts.length) pushDistinct(out, used, `${label}: ${parts.join("; ")}`);
+    if (clean(lens.opportunity)) {
+      pushDistinct(strengthen, used, `${label}: ${clean(lens.opportunity)}`);
+    }
+    if (clean(lens.risk)) {
+      pushDistinct(soften, used, `${label}: ${clean(lens.risk)}`);
+    }
+    if (clean(lens.action) && !clean(lens.risk)) {
+      pushDistinct(soften, used, `${label}: ${clean(lens.action)}`);
+    }
   }
 
   const doItems = dayStoryDoItems(contract).slice(0, 3);
   if (doItems.length) {
-    pushDistinct(out, used, `Что усиливает день: ${doItems.join("; ")}`);
+    pushDistinct(strengthen, used, `Что усиливает день: ${doItems.join("; ")}`);
   }
   const avoidItems = dayStoryAvoidItems(contract).slice(0, 3);
   if (avoidItems.length) {
-    pushDistinct(out, used, `Что сегодня ослабляет или лучше не дожимать: ${avoidItems.join("; ")}`);
+    pushDistinct(soften, used, `Что сегодня ослабляет или лучше не дожимать: ${avoidItems.join("; ")}`);
   }
 
-  if (literary.close) pushDistinct(out, used, literary.close);
+  if (literary.close) pushDistinct(paragraphs, used, literary.close);
 
-  return out;
+  paragraphs.push(...strengthen, ...soften);
+  return { strengthen, soften, paragraphs };
 }
 
 function collectSymbolParagraphs(story: TodayDayStoryViewModel, contract: TodayContractV1, used: string[]): string[] {
@@ -213,32 +278,64 @@ function collectSymbolParagraphs(story: TodayDayStoryViewModel, contract: TodayC
   return out;
 }
 
-function collectSupportParagraphs(
+/**
+ * «Твой ход» — expanded supports: color why, stone note, practice reason.
+ * Uses only contract + colorGuide fields — never invents sky→color links.
+ */
+function collectSupportChapter(
   contract: TodayContractV1,
   colorGuide: TodayDayColorGuide | null | undefined,
   used: string[],
-): string[] {
+): TodayDayNarrativeChapter | null {
   const out: string[] = [];
   const talisman = contract.day_story?.talisman;
+  const supportsStory = clean((contract.day_story as { supports_story?: string } | undefined)?.supports_story);
+  if (supportsStory) pushDistinct(out, used, supportsStory);
 
+  const colorName = clean(colorGuide?.name) || clean(talisman?.color);
   if (colorGuide) {
-    const colorBits = [
-      colorGuide.name ? `Цвет дня — ${colorGuide.name}` : "",
-      clean(colorGuide.benefit),
-      clean(colorGuide.clothing),
-    ].filter(Boolean);
-    if (colorBits.length) pushDistinct(out, used, colorBits.join(". "));
+    if (colorName) {
+      const whyParts = [clean(colorGuide.benefit), clean(talisman?.note)].filter(Boolean);
+      if (whyParts.length) {
+        pushDistinct(
+          out,
+          used,
+          `Цвет дня — ${colorName}. ${whyParts.join(" ")}`,
+        );
+      } else {
+        pushDistinct(out, used, `Цвет дня — ${colorName}`);
+      }
+    }
+    if (clean(colorGuide.clothing)) {
+      pushDistinct(out, used, `Куда ложится: ${clean(colorGuide.clothing)}`);
+    }
+    if (clean(colorGuide.amount)) {
+      pushDistinct(out, used, clean(colorGuide.amount));
+    }
+    if (clean(colorGuide.avoidColor) && clean(colorGuide.avoidWhy)) {
+      pushDistinct(
+        out,
+        used,
+        `Сегодня лучше не: ${clean(colorGuide.avoidColor)} — ${clean(colorGuide.avoidWhy)}`,
+      );
+    }
   } else if (talisman?.color) {
-    pushDistinct(out, used, `Цвет дня — ${talisman.color}`);
+    const colorLine = talisman.note
+      ? `Цвет дня — ${talisman.color}. ${talisman.note}`
+      : `Цвет дня — ${talisman.color}`;
+    pushDistinct(out, used, colorLine);
+  } else if (talisman?.note) {
+    pushDistinct(out, used, talisman.note);
   }
 
   if (talisman?.stone) {
-    const stoneLine = talisman.note
-      ? `Камень-опора — ${talisman.stone}. ${talisman.note}`
-      : `Камень-опора — ${talisman.stone}`;
+    // Avoid duplicating note if already used for color.
+    const stoneAlreadyInColor = Boolean(talisman.note && colorGuide && out.some((p) => p.includes(talisman.note!)));
+    const stoneLine =
+      talisman.note && !stoneAlreadyInColor
+        ? `Камень-опора — ${talisman.stone}. ${talisman.note}`
+        : `Камень-опора — ${talisman.stone}`;
     pushDistinct(out, used, stoneLine);
-  } else if (talisman?.note) {
-    pushDistinct(out, used, talisman.note);
   }
 
   const practice = contract.day_story?.practice_recommendation;
@@ -249,7 +346,18 @@ function collectSupportParagraphs(
     pushDistinct(out, used, line);
   }
 
-  return out;
+  if (!out.length) return null;
+
+  return {
+    id: "supports",
+    kicker: "Твой ход",
+    lead: out[0] ?? null,
+    paragraphs: out.slice(1),
+    accent: "support",
+    colorHex: colorHexForDayName(colorName),
+    colorLabel: colorName || null,
+    collapseAfter: out.length > 4 ? 3 : undefined,
+  };
 }
 
 export function buildTodayDayNarrative(input: {
@@ -270,7 +378,6 @@ export function buildTodayDayNarrative(input: {
 
   const openingParas: string[] = [];
   if (literary.opening) {
-    // Split opening into short paragraphs for readable storytelling.
     const parts = literary.opening.split(/(?<=[.!?…])\s+/).filter(Boolean);
     if (parts.length <= 2) {
       pushDistinct(openingParas, used, literary.opening);
@@ -286,7 +393,13 @@ export function buildTodayDayNarrative(input: {
     pushDistinct(openingParas, used, why);
   }
   if (openingParas.length) {
-    chapters.push({ id: "opening", kicker: "Как звучит этот день", paragraphs: openingParas });
+    chapters.push({
+      id: "opening",
+      kicker: "Как звучит этот день",
+      lead: openingParas[0] ?? null,
+      paragraphs: openingParas.slice(1),
+      accent: "default",
+    });
   }
 
   const skyParas = collectSkyParagraphs({
@@ -297,17 +410,33 @@ export function buildTodayDayNarrative(input: {
   if (skyParas.length) {
     chapters.push({
       id: "sky",
-      kicker: "Почему именно так — небо и переходы",
-      paragraphs: skyParas,
+      kicker: "Небо и переходы",
+      lead: skyParas[0] ?? null,
+      paragraphs: skyParas.slice(1),
+      accent: "sky",
+      planetHint: firstPlanetHint({
+        morningRitualData: input.morningRitualData,
+        skyCards: story.skyCards ?? [],
+      }),
+      collapseAfter: skyParas.length > 4 ? 3 : undefined,
     });
   }
 
-  const forceParas = collectForceParagraphs(contract, literary, used);
-  if (forceParas.length) {
+  const force = collectForceDual(contract, literary, used);
+  if (force.strengthen.length || force.soften.length || force.paragraphs.length) {
+    const extra = force.paragraphs.filter(
+      (p) => !force.strengthen.includes(p) && !force.soften.includes(p),
+    );
     chapters.push({
       id: "force",
-      kicker: "Что усилит и что ослабит",
-      paragraphs: forceParas,
+      kicker: "Сила и мягкость",
+      lead: null,
+      paragraphs: extra,
+      accent: "dual",
+      dual: {
+        strengthen: force.strengthen,
+        soften: force.soften,
+      },
     });
   }
 
@@ -316,18 +445,18 @@ export function buildTodayDayNarrative(input: {
     chapters.push({
       id: "symbols",
       kicker: "Слой карты и числа",
-      paragraphs: symbolParas,
+      lead: symbolParas[0] ?? null,
+      paragraphs: symbolParas.slice(1),
+      accent: "default",
     });
   }
 
-  const supportParas = collectSupportParagraphs(contract, input.colorGuide ?? story.colorGuide, used);
-  if (supportParas.length) {
-    chapters.push({
-      id: "supports",
-      kicker: "Опоры дня",
-      paragraphs: supportParas,
-    });
-  }
+  const supports = collectSupportChapter(
+    contract,
+    input.colorGuide ?? story.colorGuide,
+    used,
+  );
+  if (supports) chapters.push(supports);
 
   return { theme, softWhy, chapters };
 }

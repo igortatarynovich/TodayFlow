@@ -34,6 +34,17 @@ export type PracticesV2Copy = {
   tabAll: string;
   minutesShort: string;
   guestProgressHint: string;
+  /** Journey Narrative Unification */
+  journeySupportTitle: string;
+  journeySupportLead: string;
+  journeyLibraryTitle: string;
+  journeyLibraryLead: string;
+  journeyBridgeTitle: string;
+  journeyBridgeLead: string;
+  practiceWhyLabel: string;
+  dayStoryLineLabel: string;
+  bridgeStartCta: string;
+  bridgeBrowseCta: string;
 };
 
 export const PRACTICES_V2_COPY: Record<PracticesV2Locale, PracticesV2Copy> = {
@@ -72,6 +83,16 @@ export const PRACTICES_V2_COPY: Record<PracticesV2Locale, PracticesV2Copy> = {
     tabAll: "Все",
     minutesShort: "мин",
     guestProgressHint: "Войди, чтобы видеть серию и историю завершений.",
+    journeySupportTitle: "Сегодняшняя опора",
+    journeySupportLead: "Практика дня и короткое «почему» из истории сегодняшнего дня — без новой генерации.",
+    journeyLibraryTitle: "Выбери направление",
+    journeyLibraryLead: "Библиотека как выбор трека: категория, программа или быстрый вход.",
+    journeyBridgeTitle: "В сессию",
+    journeyBridgeLead: "Открой практику и пройди шаги — опора дня останется рядом.",
+    practiceWhyLabel: "Почему это важно сегодня",
+    dayStoryLineLabel: "Из истории дня",
+    bridgeStartCta: "Начать практику",
+    bridgeBrowseCta: "Смотреть библиотеку",
   },
   en: {
     pageEyebrow: "PRACTICES · WEB",
@@ -108,6 +129,16 @@ export const PRACTICES_V2_COPY: Record<PracticesV2Locale, PracticesV2Copy> = {
     personalizedCompletedLabel: "Personalized",
     byCategoryTitle: "By category",
     guestProgressHint: "Sign in to see streak and completion history.",
+    journeySupportTitle: "Today's support",
+    journeySupportLead: "Practice of the day plus a short why from today's story — no new generation.",
+    journeyLibraryTitle: "Choose a direction",
+    journeyLibraryLead: "The library as a track chooser: category, program, or quick entry.",
+    journeyBridgeTitle: "Into the session",
+    journeyBridgeLead: "Open a practice and walk the steps — today's support stays with you.",
+    practiceWhyLabel: "Why this matters today",
+    dayStoryLineLabel: "From today's story",
+    bridgeStartCta: "Start practice",
+    bridgeBrowseCta: "Browse library",
   },
 };
 

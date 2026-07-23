@@ -38,28 +38,33 @@ from todayflow_backend.services.today_contract_text_quality_v1 import (
 )
 
 DAY_STORY_V1_CONTRACT = "day_story_v1"
-DAY_STORY_PROMPT_VER = "day-story-v1.2-literary-editor"
+DAY_STORY_PROMPT_VER = "day-story-v1.3-narrative-guide"
 
 PracticeKind = Literal["promise", "ascetic", "affirmation", "practice", "none"]
 
 _DOMAIN_IDS = ("relationships", "money_work", "family")
 
-_DAY_STORY_SYS_RU = """Ты — литературный редактор TodayFlow, не астролог и не генератор прогнозов.
+_DAY_STORY_SYS_RU = """Ты — литературный автор TodayFlow: пишешь живое повествование дня только по evidence.
 
-Смысл дня УЖЕ вычислен. Твоя задача — только написать это красиво, человеческим авторским языком.
-Нельзя придумывать новый смысл, события, имена или сферы «потому что так звучит».
+Смысл дня УЖЕ вычислен в interpretation (evidence + derived_claims). Твоя задача — связный рассказ дня
+(небо → ход → опоры), человеческим языком. Нельзя придумывать новый смысл, астро-связи или сферы.
 
 Вход — JSON:
-- interpretation: evidence[], derived_claims[], domains_present, limitations, confidence
-- day_engine_brief, ritual_context, user_core, rhythm_context, intent (факты)
+- interpretation: evidence[], derived_claims[], domains_present, limitations, day_sky (slim)
+- day_sky / talisman_reasons — готовые факты неба и why цвета/камня (если есть)
+- day_engine_brief, ritual_context, user_core, rhythm_context, intent
 
 Правила (жёстко):
 - prose ТОЛЬКО поверх interpretation.derived_claims и evidence;
 - domains.* только для id из interpretation.domains_present; иначе domains = {};
 - карта/число — только если есть во входе; не пересказывай их отдельным абзацем;
+- цвет / камень / практика: объясняй (talisman.note, practice_recommendation.reason, supports_story)
+  ТОЛЬКО если есть matching claim (kind support / sky / claim.talisman.*); иначе эти поля = "";
+- не сочиняй «потому что Меркурий → зелёный» без claim;
 - не начинай почти каждое предложение глаголом-командой (Направить / Выбери / Опирайся / Держи);
 - не повторяй один смысл в разных полях разными словами;
-- story — 3–5 предложений со сменой ритма (короткие и длинные), как абзац из книги;
+- story — 3–5 предложений со сменой ритма, как абзац из книги;
+- supports_story — короткий абзац «Твой ход» (цвет/опора/практика), только по claims; иначе "";
 - direction / advantage / abstain — наблюдения, не чек-лист;
 - today_move / primary_action — практическая мысль человеческим тоном («Если успеешь…»), не «Выбери…»;
 - do / avoid — короткие наблюдения (не список императивов).
@@ -89,6 +94,7 @@ _DAY_STORY_SYS_RU = """Ты — литературный редактор TodayF
   },
   "talisman": {"color":"string","stone":"string","note":"string"},
   "practice_recommendation": {"kind":"promise|ascetic|affirmation|practice|none","text":"string","reason":"string"},
+  "supports_story": "string",
   "evening_closure": "string",
   "symbolic_note": "string"
 }
@@ -305,6 +311,7 @@ def _normalize_day_story_payload(
         },
         "evening_closure": _clip(raw.get("evening_closure"), 400),
         "symbolic_note": _clip(raw.get("symbolic_note"), 400),
+        "supports_story": _clip(raw.get("supports_story"), 480),
     }
     if not out["primary_action"]:
         out["primary_action"] = out["today_move"]
@@ -321,6 +328,9 @@ def build_day_story_fallback_v1(
     fingerprint: str | None = None,
     ritual_context: dict[str, Any] | None = None,
     intent_slice: dict[str, Any] | None = None,
+    celestial_events: dict[str, Any] | None = None,
+    color_symbol: dict[str, Any] | None = None,
+    stone_symbol: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Deterministic story from interpretation + brief when LLM unavailable."""
     interp = interpretation or build_day_story_interpretation_v1(
@@ -329,6 +339,9 @@ def build_day_story_fallback_v1(
         intent_slice=intent_slice,
         color=color,
         stone=stone,
+        celestial_events=celestial_events,
+        color_symbol=color_symbol,
+        stone_symbol=stone_symbol,
         fingerprint=fingerprint,
         locale=locale,
     )
@@ -371,6 +384,22 @@ def build_day_story_fallback_v1(
             "evidence_status": "present",
         }
 
+    support_claims = [
+        str(c.get("text") or "").strip()
+        for c in (interp.get("derived_claims") or [])
+        if isinstance(c, dict) and str(c.get("kind") or "") == "support" and str(c.get("text") or "").strip()
+    ]
+    color_why = next(
+        (
+            str(c.get("text") or "").strip()
+            for c in (interp.get("derived_claims") or [])
+            if isinstance(c, dict) and str(c.get("id") or "") == "claim.talisman.color_why"
+        ),
+        "",
+    )
+    supports_story = _clip(" ".join(support_claims[:2]), 480) if support_claims else ""
+    talisman_note = _clip(color_why, 200) if color_why else ""
+
     payload = _normalize_day_story_payload(
         {
             "theme": theme,
@@ -394,9 +423,10 @@ def build_day_story_fallback_v1(
             "talisman": {
                 "color": color if color else "",
                 "stone": stone if stone else "",
-                "note": "",
+                "note": talisman_note,
             },
             "practice_recommendation": {"kind": "none", "text": "", "reason": ""},
+            "supports_story": supports_story,
             "evening_closure": "К вечеру достаточно коротко отметить, что получилось — без жёсткой самооценки.",
             "symbolic_note": "",
         },
@@ -423,23 +453,48 @@ def build_day_story_llm_input(
     stone: str = "",
     locale: str = "ru",
     interpretation: dict[str, Any] | None = None,
+    celestial_events: dict[str, Any] | None = None,
+    color_symbol: dict[str, Any] | None = None,
+    stone_symbol: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
+    color_sym = color_symbol if isinstance(color_symbol, dict) else {}
+    stone_sym = stone_symbol if isinstance(stone_symbol, dict) else {}
+    interp = interpretation or build_day_story_interpretation_v1(
+        day_engine_brief=day_engine_brief,
+        ritual_context=ritual_context,
+        intent_slice=intent_slice,
+        rhythm_context=rhythm_context,
+        color=color,
+        stone=stone,
+        celestial_events=celestial_events,
+        color_symbol=color_sym or None,
+        stone_symbol=stone_sym or None,
+        locale=locale,
+    )
+    day_sky = interp.get("day_sky") if isinstance(interp.get("day_sky"), dict) else {}
+    talisman_reasons: dict[str, Any] = {}
+    if color_sym or color:
+        talisman_reasons["color"] = {
+            "name": str(color_sym.get("name") or color or "").strip(),
+            "story_ru": str(color_sym.get("story_ru") or "").strip(),
+            "benefit_ru": str(color_sym.get("benefit_ru") or "").strip(),
+            "avoid_color_ru": str(color_sym.get("avoid_color_ru") or "").strip(),
+            "avoid_why_ru": str(color_sym.get("avoid_why_ru") or "").strip(),
+        }
+    if stone_sym or stone:
+        talisman_reasons["stone"] = {
+            "name": str(stone_sym.get("name") or stone or "").strip(),
+            "story_ru": str(stone_sym.get("story_ru") or "").strip(),
+        }
     pack: dict[str, Any] = {
         "locale": locale,
-        "interpretation": interpretation
-        or build_day_story_interpretation_v1(
-            day_engine_brief=day_engine_brief,
-            ritual_context=ritual_context,
-            intent_slice=intent_slice,
-            rhythm_context=rhythm_context,
-            color=color,
-            stone=stone,
-            locale=locale,
-        ),
+        "interpretation": interp,
         "day_engine_brief": day_engine_brief,
         "ritual_context": ritual_context or {},
         "user_core": user_core_slim or {},
         "talisman_inputs": {"color": color, "stone": stone},
+        "day_sky": day_sky,
+        "talisman_reasons": talisman_reasons,
     }
     if intent_slice:
         pack["intent"] = intent_slice
@@ -529,6 +584,7 @@ def day_story_to_today_contract_v1(
         "talisman": story.get("talisman"),
         "practice_recommendation": story.get("practice_recommendation"),
         "symbolic_note": story.get("symbolic_note"),
+        "supports_story": story.get("supports_story") or "",
         "trace": trace,
     }
     progress_out = dict(progress) if isinstance(progress, dict) else {}

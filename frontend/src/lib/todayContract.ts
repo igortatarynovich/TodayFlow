@@ -53,6 +53,8 @@ export type TodayContractDayStoryV1 = {
   talisman?: { color?: string; stone?: string; note?: string };
   practice_recommendation?: { kind?: string; text?: string; reason?: string };
   symbolic_note?: string;
+  /** Short «Твой ход» paragraph from LLM — empty when no support claims. */
+  supports_story?: string;
   /** Kitchen trace — not required for display; used for honesty / future UI. */
   trace?: TodayContractDayStoryTraceV1;
 };

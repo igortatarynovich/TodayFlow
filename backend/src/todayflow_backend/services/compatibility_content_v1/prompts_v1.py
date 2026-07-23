@@ -1,4 +1,7 @@
-"""Prompt v1.1 — separate system prompts per freemium layer (RU first)."""
+"""Prompt v1.2 — separate system prompts per freemium layer (RU first).
+
+v1.2: pair-story editorial — stronger/weaker in chosen scenario only from synastry/evidence.
+"""
 
 from __future__ import annotations
 
@@ -6,7 +9,7 @@ from typing import Any
 
 from todayflow_backend.services.compatibility_content_v1.source_depth import depth_honesty_line
 
-PROMPT_VERSION = "compatibility_content_prompt_v1.1"
+PROMPT_VERSION = "compatibility_content_prompt_v1.2"
 
 _SHARED_RU = """Ты пишешь разбор совместимости для продукта TodayFlow на живом русском.
 
@@ -22,10 +25,17 @@ _SHARED_RU = """Ты пишешь разбор совместимости для
 — уничижительные ярлыки («истеричка» и т.п.), медицинские и травматические метафоры
 — категорические прогнозы разрыва («разбежитесь», «на разрыв аорты»)
 — оценка личности вместо поведения
+— изобретать космологию, дома, аспекты, «энергии» или планетарные сюжеты, которых нет во входе
 
 ГЕНДЕР:
 — если пол во входе не задан явно — пиши «партнёр», «второй человек», «между вами»
 — не угадывай «он»/«она»
+
+РАССКАЗ ПАРЫ (обязательно):
+— пиши как историю двух людей в выбранном сценарии связи (любовь / семья / работа / родитель-ребёнок и т.п.), если scenario / relation_mode / relationship_context есть во входе
+— в summary и ключевых блоках объясни, почему связь сильнее или слабее именно в этом сценарии
+— опирайся ТОЛЬКО на evidence во входе: synastry, аспекты/скоры, роли, friction, source_depth, явные факты профилей
+— если evidence мало — короче и с hedge («может проявляться…»); не заполняй пробелы мифом или общей астрологией «с потолка»
 
 НУЖНО:
 — конкретные бытовые ситуации и узнаваемое поведение
@@ -56,6 +66,7 @@ def system_prompt_guest_v1(*, source_depth: str, locale: str = "ru") -> str:
 
 СЛОЙ: GUEST — законченный короткий разбор (не обрывок большого текста).
 Цель: дать ценность и желание продолжить после регистрации.
+summary — цельный рассказ пары в выбранном сценарии: почему сильнее/слабее по evidence, без космологии «с потолка».
 Объём пользовательского текста суммарно ~120–180 слов.
 score — целое от 20 до 95, согласованное с тоном текста. Никогда не ставь 0.
 
@@ -86,6 +97,7 @@ def system_prompt_registered_v1(*, source_depth: str, locale: str = "ru") -> str
 
 СЛОЙ: REGISTERED — содержательный разбор отношений.
 Каждый блок отвечает на СВОЙ вопрос и НЕ повторяет summary.
+summary — короткий рассказ пары в сценарии (почему сильнее/слабее) только по synastry/evidence.
 
 ГРАНИЦА С PREMIUM (обязательно):
 — НЕ давай verdict «продолжать / не продолжать»

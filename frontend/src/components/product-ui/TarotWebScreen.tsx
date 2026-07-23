@@ -7,6 +7,7 @@ import { ProductWebShellConfigBridge, type ProductWebShellConfig } from "@/compo
 import { productWebShellChromeBundle } from "@/components/product-ui/productWebShellChrome";
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
 import { getLocale } from "@/lib/i18n";
+import { useProductDayNightTheme } from "@/lib/useProductDayNightTheme";
 import type { CoreProfile } from "@/lib/types";
 import v2 from "@/design-system/layouts/productV2Surface.module.css";
 import l from "@/design-system/layouts/dsLayouts.module.css";
@@ -33,12 +34,14 @@ export function TarotWebScreen({
   backHref = "/tarot",
   backLabel,
   topicLabel,
-  theme = "light",
+  theme: themeProp,
   rail,
   children,
 }: TarotWebScreenProps) {
   const resolvedLocale: FlowPracticesChromeLocale =
     locale ?? (getLocale() === "ru" ? "ru" : "en");
+  const dayNightTheme = useProductDayNightTheme();
+  const theme = themeProp ?? dayNightTheme;
   const shell = useMemo(() => productWebShellChromeBundle(resolvedLocale), [resolvedLocale]);
   const resolvedBackLabel = backLabel ?? shell.tarotBackLabel;
 
@@ -46,7 +49,7 @@ export function TarotWebScreen({
     return {
       testId: "tarot-web-screen",
       theme,
-      mainWide: theme === "light",
+      mainWide: true,
       displayName,
       profileMeta,
       coreProfile,
@@ -57,25 +60,15 @@ export function TarotWebScreen({
   return (
     <>
       <ProductWebShellConfigBridge config={shellConfig} />
-      {theme === "light" ? (
-        <div className={l.productWebContentV2}>
-          <div className={`${v2.pageRoot} ${pl.subPageRoot}`}>
-            <Link href={backHref} className={pl.textLink}>
-              ← {resolvedBackLabel}
-              {topicLabel ? ` · ${topicLabel}` : ""}
-            </Link>
-            {children}
-          </div>
-        </div>
-      ) : (
-        <div className={pl.subPageRoot}>
+      <div className={l.productWebContentV2}>
+        <div className={`${v2.pageRoot} ${pl.subPageRoot}`}>
           <Link href={backHref} className={pl.textLink}>
             ← {resolvedBackLabel}
             {topicLabel ? ` · ${topicLabel}` : ""}
           </Link>
           {children}
         </div>
-      )}
+      </div>
     </>
   );
 }

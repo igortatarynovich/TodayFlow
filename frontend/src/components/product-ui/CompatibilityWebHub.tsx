@@ -2,14 +2,17 @@
 
 import Link from "next/link";
 import { useMemo } from "react";
-import { DsBody, DsButton, DsEyebrow } from "@/design-system";
+import { DsBody, DsButton } from "@/design-system";
 import {
   compatibilityWebChromeBundle,
   type CompatWebModeSpec,
 } from "@/components/product-ui/compatibilityWebChrome";
+import {
+  ProductJourneyScene,
+} from "@/components/product-ui/ProductJourneyScene";
+import journeyStyles from "@/components/product-ui/ProductJourneyScene.module.css";
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
 import { getLocale } from "@/lib/i18n";
-import s from "@/components/product-ui/productWebScreens.module.css";
 import pl from "@/design-system/layouts/productPageLayout.module.css";
 
 export type CompatWebModeId = CompatWebModeSpec["id"];
@@ -36,7 +39,6 @@ function initialFromName(name: string): string {
 
 export { useCompatibilityHubRail, CompatibilityWebHubRail } from "@/components/product-ui/CompatibilityWebHubRail";
 
-
 export function CompatibilityWebHub({
   locale,
   isAuthenticated,
@@ -57,6 +59,7 @@ export function CompatibilityWebHub({
 
   const profile1 = profiles.find((p) => p.id === profile1Id) ?? null;
   const profile2 = profiles.find((p) => p.id === profile2Id) ?? null;
+  const selectedMode = chrome.modes.find((m) => m.id === selectedModeId) ?? chrome.modes[0];
   const canCalculate =
     isAuthenticated &&
     profile1Id &&
@@ -65,125 +68,165 @@ export function CompatibilityWebHub({
     !loading;
 
   return (
-    <div className={pl.content} data-testid="compatibility-web-hub">
-      <section className={pl.modeSection} aria-labelledby="compat-hub-modes">
-        <DsEyebrow id="compat-hub-modes">{chrome.hubContextEyebrow}</DsEyebrow>
-        <div className={pl.modeGrid}>
+    <div data-testid="compatibility-web-hub">
+      <ProductJourneyScene
+        step={1}
+        title={chrome.hubContextEyebrow}
+        lead={
+          resolvedLocale === "ru"
+            ? "Выбери угол связи — один тихий шаг до рассказа о паре."
+            : "Pick the relationship angle — one quiet step before the pair story."
+        }
+        motif="insight"
+        testId="compat-hub-direction"
+      >
+        <div className={journeyStyles.tabRow} role="group" aria-label={chrome.hubContextEyebrow}>
           {chrome.modes.map((mode) => {
             const active = selectedModeId === mode.id;
             return (
               <button
                 key={mode.id}
                 type="button"
-                className={`${pl.modeCard} ${active ? pl.modeCardActive : ""}`.trim()}
+                className={`${journeyStyles.tabChip} ${active ? journeyStyles.tabChipActive : ""}`.trim()}
                 aria-pressed={active}
                 onClick={() => onModeChange(mode.id)}
               >
-                <span className={pl.modeIcon} aria-hidden>
-                  {mode.emoji}
-                </span>
-                <p className={pl.modeTitle}>{mode.title}</p>
-                <p className={pl.modeHint}>{mode.hint}</p>
+                <span aria-hidden>{mode.emoji} </span>
+                {mode.title}
               </button>
             );
           })}
         </div>
-      </section>
+        {selectedMode ? (
+          <p className={journeyStyles.pairSub} data-testid="compat-hub-direction-lead">
+            {selectedMode.hint}
+          </p>
+        ) : null}
+      </ProductJourneyScene>
 
-      {!isAuthenticated ? (
-        <section className={pl.pairPicker}>
-          <div style={{ textAlign: "center", display: "grid", gap: "0.55rem" }}>
+      <ProductJourneyScene
+        step={2}
+        title={chrome.hubPairEyebrow}
+        lead={
+          resolvedLocale === "ru"
+            ? "Два человека из круга — рассказ строится вокруг этой пары."
+            : "Two people from your circle — the story is built around this pair."
+        }
+        motif="why"
+        testId="compat-hub-pair"
+      >
+        {!isAuthenticated ? (
+          <div className={journeyStyles.actionRow} style={{ flexDirection: "column", alignItems: "flex-start" }}>
             <DsBody size="sm" muted>
               Сначала собери свой Today — имя, дата, первый разбор и email для сохранения.
             </DsBody>
+            <div className={journeyStyles.actionRow}>
+              <DsButton href="/onboarding/welcome?fresh=1">Создать мой Today</DsButton>
+              <DsButton href="/auth?mode=login&redirect=/compatibility" variant="ghost">
+                Уже есть аккаунт? Войти
+              </DsButton>
+            </div>
           </div>
-          <div style={{ display: "grid", gap: "0.55rem", justifyItems: "center" }}>
-            <DsButton href="/onboarding/welcome?fresh=1">Создать мой Today</DsButton>
-            <DsButton href="/auth?mode=login&redirect=/compatibility" variant="ghost">
-              Уже есть аккаунт? Войти
-            </DsButton>
-          </div>
-        </section>
-      ) : profiles.length < 2 ? (
-        <section className={pl.pairPicker}>
-          <div style={{ textAlign: "center", display: "grid", gap: "0.65rem" }}>
+        ) : profiles.length < 2 ? (
+          <div className={journeyStyles.actionRow} style={{ flexDirection: "column", alignItems: "flex-start" }}>
             <DsBody size="sm" muted>
               {chrome.hubNeedSecondHint}
             </DsBody>
             <DsBody size="sm" muted>
               Пока можно собрать разбор по знакам или датам — без второго профиля.
             </DsBody>
-          </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.55rem", justifyContent: "center" }}>
-            <DsButton href="/compatibility/analyze">Разбор по знакам</DsButton>
-            <DsButton href="/compatibility/birthdates" variant="secondary">
-              По датам
-            </DsButton>
-            <DsButton href="/account/profiles" variant="secondary">
-              {chrome.hubAddPersonCta}
-            </DsButton>
-          </div>
-        </section>
-      ) : (
-        <section className={pl.pairPicker} aria-labelledby="compat-hub-pair">
-          <DsEyebrow id="compat-hub-pair">{chrome.hubPairEyebrow}</DsEyebrow>
-          <div className={pl.pairRow}>
-            <div className={pl.pairSlot}>
-              <span className={`${pl.pairAvatar} ${profile1 ? pl.pairAvatarFilled : ""}`.trim()} aria-hidden>
-                {profile1 ? initialFromName(profile1.label) : "?"}
-              </span>
-              <select
-                className={pl.pairSelect}
-                value={profile1Id ?? ""}
-                onChange={(event) => onProfile1Change(Number(event.target.value))}
-                aria-label={chrome.hubProfile1Aria}
-              >
-                {profiles.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <span className={pl.pairConnector} aria-hidden>
-              ⇄
-            </span>
-            <div className={pl.pairSlot}>
-              <span className={`${pl.pairAvatar} ${profile2 ? pl.pairAvatarFilled : ""}`.trim()} aria-hidden>
-                {profile2 ? initialFromName(profile2.label) : "+"}
-              </span>
-              <select
-                className={pl.pairSelect}
-                value={profile2Id ?? ""}
-                onChange={(event) => onProfile2Change(Number(event.target.value))}
-                aria-label={chrome.hubProfile2Aria}
-              >
-                <option value="">{chrome.hubAddOption}</option>
-                {profiles.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.label}
-                  </option>
-                ))}
-              </select>
+            <div className={journeyStyles.actionRow}>
+              <DsButton href="/compatibility/analyze">Разбор по знакам</DsButton>
+              <DsButton href="/compatibility/birthdates" variant="secondary">
+                По датам
+              </DsButton>
+              <DsButton href="/account/profiles" variant="secondary">
+                {chrome.hubAddPersonCta}
+              </DsButton>
             </div>
           </div>
-          <Link href="/account/profiles" className={pl.manageLink}>
-            {chrome.hubManageCircle}
-          </Link>
-        </section>
-      )}
+        ) : (
+          <>
+            <div className={journeyStyles.pairHero}>
+              <div className={journeyStyles.avatarGroup} aria-hidden>
+                <span className={journeyStyles.avatar}>
+                  {profile1 ? initialFromName(profile1.label) : "?"}
+                </span>
+                <span className={`${journeyStyles.avatar} ${journeyStyles.avatarOverlap}`}>
+                  {profile2 ? initialFromName(profile2.label) : "+"}
+                </span>
+              </div>
+              <div className={journeyStyles.pairMeta}>
+                <p className={journeyStyles.pairTitle}>
+                  {profile1?.label ?? "—"} · {profile2?.label ?? chrome.hubAddOption}
+                </p>
+                <p className={journeyStyles.pairSub}>{selectedMode?.title}</p>
+              </div>
+            </div>
+            <div className={pl.pairRow} style={{ justifyContent: "flex-start", marginTop: "0.35rem" }}>
+              <div className={pl.pairSlot}>
+                <select
+                  className={pl.pairSelect}
+                  value={profile1Id ?? ""}
+                  onChange={(event) => onProfile1Change(Number(event.target.value))}
+                  aria-label={chrome.hubProfile1Aria}
+                >
+                  {profiles.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <span className={pl.pairConnector} aria-hidden>
+                ⇄
+              </span>
+              <div className={pl.pairSlot}>
+                <select
+                  className={pl.pairSelect}
+                  value={profile2Id ?? ""}
+                  onChange={(event) => onProfile2Change(Number(event.target.value))}
+                  aria-label={chrome.hubProfile2Aria}
+                >
+                  <option value="">{chrome.hubAddOption}</option>
+                  {profiles.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <Link href="/account/profiles" className={journeyStyles.bridgeLink}>
+              {chrome.hubManageCircle}
+            </Link>
+          </>
+        )}
+      </ProductJourneyScene>
 
-      {error ? (
-        <div style={{ color: "var(--tf-semantic-error, #991b1b)" }}>
-          <DsBody size="sm">{error}</DsBody>
+      <ProductJourneyScene
+        step={3}
+        title={resolvedLocale === "ru" ? "Разбор" : "Reading"}
+        lead={
+          resolvedLocale === "ru"
+            ? "Один ход — собрать историю связи в выбранном направлении."
+            : "One move — build the relationship story in the chosen direction."
+        }
+        motif="bridge"
+        bridge
+        testId="compat-hub-cta"
+      >
+        {error ? (
+          <div style={{ color: "var(--tf-semantic-error, #991b1b)" }}>
+            <DsBody size="sm">{error}</DsBody>
+          </div>
+        ) : null}
+        <div className={journeyStyles.actionRow}>
+          <DsButton size="block" disabled={!canCalculate} onClick={onCalculate}>
+            {loading ? chrome.hubCalculateLoading : chrome.hubCalculateCta}
+          </DsButton>
         </div>
-      ) : null}
-
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <DsButton size="block" disabled={!canCalculate} onClick={onCalculate}>
-          {loading ? chrome.hubCalculateLoading : chrome.hubCalculateCta}
-        </DsButton>
-      </div>
+      </ProductJourneyScene>
     </div>
   );
 }

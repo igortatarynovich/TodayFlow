@@ -12,6 +12,7 @@ import {
   type FlowPracticesChromeLocale,
 } from "@/components/today/flowPracticesMainTabChrome";
 import { getLocale } from "@/lib/i18n";
+import { useProductDayNightTheme } from "@/lib/useProductDayNightTheme";
 import type { CoreProfile } from "@/lib/types";
 import l from "@/design-system/layouts/dsLayouts.module.css";
 import s from "@/components/product-ui/productWebScreens.module.css";
@@ -54,6 +55,7 @@ export function PracticesWebScreen({
   const resolvedLocale: FlowPracticesChromeLocale =
     locale ?? (getLocale() === "ru" ? "ru" : "en");
   const pc = useMemo(() => practicesExperienceChromeBundle(resolvedLocale), [resolvedLocale]);
+  const theme = useProductDayNightTheme();
   const bestStreakSuffix = pc.practicesRailDaysSuffix;
   const todayLabel = new Intl.DateTimeFormat(resolvedLocale === "ru" ? "ru-RU" : "en-US", {
     weekday: "long",
@@ -100,6 +102,7 @@ export function PracticesWebScreen({
       displayName,
       profileMeta,
       coreProfile,
+      theme,
       mainWide: true,
       fullMain: false,
       rail: rail !== undefined ? rail : defaultRail,
@@ -119,6 +122,7 @@ export function PracticesWebScreen({
     rail,
     showProgressRail,
     streakDays,
+    theme,
     weeklyRhythm,
   ]);
 

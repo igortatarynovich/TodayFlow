@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { TAROT_HUB_SPREADS } from "@/components/shell/tarotShellStepper";
 import s from "@/components/shell/tarotShell.module.css";
+import { ProductJourneyScene } from "@/components/product-ui/ProductJourneyScene";
+import journeyStyles from "@/components/product-ui/ProductJourneyScene.module.css";
 import {
   buildTarotRitualHref,
   composeTarotQuestion,
@@ -18,7 +20,8 @@ import {
 
 /**
  * Таро — только расклады и вопросы.
- * Карта дня и число дня живут исключительно в ритуале «Сегодня».
+ * Дневные символы (карта / число) живут исключительно в ритуале «Сегодня».
+ * Одна композиция: вопрос → направление (формат) как шаги, не стена карт.
  */
 export function TarotHubMain() {
   const router = useRouter();
@@ -57,74 +60,67 @@ export function TarotHubMain() {
   const recommended = TAROT_SPREAD_OFFERS.find((o) => o.spreadId === "three_cards");
 
   return (
-    <>
-      <header className={s.hubHeader}>
-        <p className={s.hubEyebrow}>Таро</p>
-        <div className={s.hubPills}>
-          <span className={s.hubPill}>Ритуал ясности</span>
-          <span className={s.hubPill}>Вопрос → расклад → шаг</span>
-        </div>
-      </header>
-
-      <section className={s.hubHeroRow}>
-        <div className={s.hubHeroCard}>
-          <h1 className={s.hubHeroTitle}>Спроси о том, что сейчас важно.</h1>
-          <p className={s.hubHeroLead}>
-            Не прогноз «что будет», а зеркало: где ты сейчас, что мешает и какой следующий шаг
-            выглядит честнее. Карта дня открывается только в «Сегодня» — здесь только твой вопрос.
-          </p>
-          <div className={s.hubHeroActions}>
-            <Link href="/tarot/question" className={s.hubBtnPrimary}>
-              Задать вопрос
+    <div className={s.hubQuietRoot} data-testid="tarot-hub-main-journey">
+      <ProductJourneyScene
+        step={1}
+        title="Вопрос"
+        lead="Спроси о том, что сейчас важно — не прогноз «что будет», а зеркало следующего шага."
+        motif="today"
+        testId="tarot-hub-main-question"
+      >
+        <p className={journeyStyles.pairTitle}>Спроси о том, что сейчас важно.</p>
+        <p className={journeyStyles.pairSub}>
+          Дневные символы открываются только в «Сегодня». Здесь — твой вопрос и направление чтения.
+        </p>
+        <div className={journeyStyles.actionRow}>
+          <Link href="/tarot/question" className={s.hubBtnPrimary}>
+            Задать вопрос
+          </Link>
+          {continueHref ? (
+            <Link href={continueHref} className={s.hubBtnSecondary}>
+              Продолжить прошлый вопрос
             </Link>
-            {continueHref ? (
-              <Link href={continueHref} className={s.hubBtnSecondary}>
-                Продолжить прошлый вопрос
-              </Link>
-            ) : null}
-          </div>
+          ) : null}
+          {recommended ? (
+            <Link href="/tarot/question?spread=three_cards" className={journeyStyles.bridgeLink}>
+              → {recommended.title}: хороший старт
+            </Link>
+          ) : null}
         </div>
+      </ProductJourneyScene>
 
-        <Link
-          href="/tarot/question?spread=three_cards"
-          className={s.hubRitualCard}
-          aria-label={recommended?.title ?? "Три карты"}
-        >
-          <div className={s.hubRitualCardImage} aria-hidden />
-          <div className={s.hubRitualOverlay}>
-            <p className={s.hubRitualEyebrow}>Хороший старт</p>
-            <p className={s.hubRitualTitle}>Три карты: контекст · тень · действие</p>
-          </div>
-        </Link>
-      </section>
-
-      <section className={s.hubBottomRow}>
-        <div className={s.hubSpreadPanel} style={{ gridColumn: "1 / -1" }}>
-          <div className={s.hubSpreadHeader}>
-            <div>
-              <p className={s.hubRitualEyebrow}>Выбери формат</p>
-              <h2 className={s.hubSpreadTitle}>Расклады для решения</h2>
-            </div>
-            <span className={s.hubPill}>4–7 мин</span>
-          </div>
-          <div className={s.hubSpreadGrid}>
-            {TAROT_HUB_SPREADS.map((spread) => (
-              <button
-                key={spread.spreadId}
-                type="button"
-                className={`${s.hubSpreadCard} ${selectedSpreadId === spread.spreadId ? s.hubSpreadCardSelected : ""}`.trim()}
-                onClick={() => handleSpreadPick(spread.spreadId)}
-              >
-                <span className={s.hubSpreadCount}>{spread.count}</span>
-                <div>
-                  <p className={s.hubSpreadCardTitle}>{spread.title}</p>
-                  <p className={s.hubSpreadCardDesc}>{spread.description}</p>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-    </>
+      <ProductJourneyScene
+        step={2}
+        title="Направление"
+        lead="Расклад как шаги формата — сколько карт и какой фокус, без стены карточек."
+        motif="insight"
+        testId="tarot-hub-main-direction"
+      >
+        <ol className={s.hubSpreadStepList} aria-label="Расклады для решения">
+          {TAROT_HUB_SPREADS.map((spread, index) => {
+            const selected = selectedSpreadId === spread.spreadId;
+            return (
+              <li key={spread.spreadId}>
+                <button
+                  type="button"
+                  className={`${s.hubSpreadStep} ${selected ? s.hubSpreadStepSelected : ""}`.trim()}
+                  onClick={() => handleSpreadPick(spread.spreadId)}
+                  aria-pressed={selected}
+                >
+                  <span className={s.hubSpreadStepIndex} aria-hidden>
+                    {index + 1}
+                  </span>
+                  <span className={s.hubSpreadStepCount}>{spread.count}</span>
+                  <div className={s.hubSpreadStepBody}>
+                    <p className={s.hubSpreadCardTitle}>{spread.title}</p>
+                    <p className={s.hubSpreadCardDesc}>{spread.description}</p>
+                  </div>
+                </button>
+              </li>
+            );
+          })}
+        </ol>
+      </ProductJourneyScene>
+    </div>
   );
 }

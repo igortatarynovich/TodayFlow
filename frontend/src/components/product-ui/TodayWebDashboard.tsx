@@ -13,6 +13,7 @@ import {
 } from "@/components/product-ui/todayWebDashboardChrome";
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
 import { getLocale } from "@/lib/i18n";
+import { useProductDayNightTheme } from "@/lib/useProductDayNightTheme";
 import type { CoreProfile } from "@/lib/types";
 import s from "@/components/product-ui/productWebScreens.module.css";
 
@@ -272,6 +273,7 @@ export function TodayWebDashboard({
   const resolvedLocale: FlowPracticesChromeLocale =
     locale ?? (getLocale() === "ru" ? "ru" : "en");
   const chrome = useMemo(() => todayWebDashboardChromeBundle(resolvedLocale), [resolvedLocale]);
+  const theme = useProductDayNightTheme();
 
   // PR-2: never invent timeline / weekly / practices for the rail or overview.
   const resolvedTimeline = timelineEvents ?? [];
@@ -290,6 +292,7 @@ export function TodayWebDashboard({
       displayName,
       profileMeta,
       coreProfile,
+      theme,
       mainWide: true,
       rail: hasContextRail ? (
         <TodayWebRail
@@ -309,6 +312,7 @@ export function TodayWebDashboard({
     resolvedTimeline,
     resolvedWeekly,
     streakDays,
+    theme,
   ]);
 
   return (

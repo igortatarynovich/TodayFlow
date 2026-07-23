@@ -40,17 +40,70 @@ def _sample_story() -> dict:
     return story
 
 
-def test_interpretation_marks_domain_from_head_topic():
+def test_interpretation_includes_sky_and_color_why_claims():
     interp = build_day_story_interpretation_v1(
         day_engine_brief={"anchor_summary": "Ось дня.", "do_hint": "Шаг.", "avoid_hint": "Не спеши."},
-        ritual_context={"head_topic": "love"},
+        ritual_context={},
+        celestial_events={
+            "lunar_phase": {"name": "Убывающая луна", "guidance": "Отпускай лишнее."},
+            "ingresses": [
+                {
+                    "planet": "mercury",
+                    "planet_ru": "Меркурий",
+                    "sign_ru": "Рак",
+                    "story_ru": "Меркурий переходит в Рак — меняется тон разговоров.",
+                }
+            ],
+            "sky_aspects": [
+                {
+                    "id": "sun-square-moon",
+                    "title": "Солнце — квадрат — Луна",
+                    "story_ru": "Намерение и настроение расходятся.",
+                }
+            ],
+        },
+        color_symbol={
+            "name": "Лазурь",
+            "benefit_ru": "Держит ясность в коротких решениях.",
+            "avoid_color_ru": "Кислотно-оранжевый",
+            "avoid_why_ru": "Разгоняет темп.",
+        },
+        stone_symbol={"name": "лазурит", "story_ru": "Мягкая опора для спокойного тона."},
+        color="Лазурь",
+        stone="лазурит",
     )
-    assert "relationships" in interp["domains_present"]
-    assert "family" in interp["domains_absent"]
-    assert interp["evidence"]
-    assert interp["derived_claims"]
-    assert interp["confidence"] is not None
-    assert interp["limitations"]
+    claim_ids = {c["id"] for c in interp["derived_claims"]}
+    assert "claim.sky.moon" in claim_ids
+    assert "claim.sky.ingress.mercury" in claim_ids
+    assert "claim.talisman.color_why" in claim_ids
+    assert "claim.talisman.stone_why" in claim_ids
+    assert interp["day_sky"].get("moon")
+    assert interp["calculation_version"].startswith("day-story-interpretation-v1.1")
+
+
+def test_fallback_fills_talisman_note_from_color_why():
+    story = build_day_story_fallback_v1(
+        day_engine_brief={
+            "anchor_summary": "Сегодня — один ясный шаг вместо распыления.",
+            "do_hint": "Выбери одну задачу и доведи до видимого результата",
+            "avoid_hint": "Не подписывайся на новые обязательства из импульса",
+            "tempo_hint": "Держи ровный темп.",
+            "thread_head_topic": "career",
+        },
+        color="Лазурь",
+        stone="лазурит",
+        color_symbol={
+            "name": "Лазурь",
+            "benefit_ru": "Держит ясность в коротких решениях.",
+        },
+        ritual_context={"head_topic": "career", "mood": "calm"},
+        intent_slice={"what_matters_line": "закрыть один рабочий приоритет"},
+        fingerprint="fp-test",
+    )
+    assert "ясность" in (story.get("talisman") or {}).get("note", "").lower()
+    assert story.get("supports_story")
+    contract = day_story_to_today_contract_v1(story, generation_id="1")
+    assert contract["day_story"].get("supports_story")
 
 
 def test_interpretation_no_domains_without_topic():

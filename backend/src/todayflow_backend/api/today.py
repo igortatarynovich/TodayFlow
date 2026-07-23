@@ -714,6 +714,7 @@ class TodayContractDayStoryV1(BaseModel):
     talisman: dict[str, Any] = Field(default_factory=dict)
     practice_recommendation: dict[str, Any] = Field(default_factory=dict)
     symbolic_note: str = ""
+    supports_story: str = ""
     trace: dict[str, Any] = Field(default_factory=dict)
 
 

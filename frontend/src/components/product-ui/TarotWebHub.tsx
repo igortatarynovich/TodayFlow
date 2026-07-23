@@ -5,6 +5,8 @@ import type { ReactNode } from "react";
 import { useMemo } from "react";
 import { DsBody, DsButton } from "@/design-system";
 import { ProductWebShellConfigBridge, type ProductWebShellConfig } from "@/components/product-ui/productWebShellConfig";
+import { ProductJourneyScene } from "@/components/product-ui/ProductJourneyScene";
+import journeyStyles from "@/components/product-ui/ProductJourneyScene.module.css";
 import { tarotWebHubChromeBundle } from "@/components/product-ui/tarotWebHubChrome";
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
 import type { CoreProfile } from "@/lib/types";
@@ -140,56 +142,83 @@ export function TarotWebHub({
     profileMeta,
   ]);
 
+  const showSpreads = !hideSpreadSection && spreads.length > 0;
+
   return (
     <>
       <ProductWebShellConfigBridge config={shellConfig} />
       <div className={l.productWebContentV2}>
-        <div className={v2.pageRoot}>
+        <div className={`${v2.pageRoot} ${s.tarotHubQuiet}`} data-testid="tarot-web-hub-journey">
           <header className={pl.pageHeader}>
             <h1 className={v2.displayTitle}>{hub.pageTitle}</h1>
             <p className={v2.bodyLead}>{hub.pageSubtitle}</p>
           </header>
 
-          <label className={pl.questionCard} htmlFor="tarot-hub-question">
-            <textarea
-              id="tarot-hub-question"
-              className={pl.questionInput}
-              value={customQuestion}
-              onChange={(e) => onCustomQuestionChange?.(e.target.value)}
-              placeholder={resolvedPlaceholder}
-              rows={2}
-            />
-          </label>
+          <ProductJourneyScene
+            step={1}
+            title={hub.questionStepTitle}
+            lead={hub.questionStepLead}
+            motif="today"
+            testId="tarot-hub-step-question"
+          >
+            <label className={pl.questionCardQuiet} htmlFor="tarot-hub-question">
+              <textarea
+                id="tarot-hub-question"
+                className={pl.questionInput}
+                value={customQuestion}
+                onChange={(e) => onCustomQuestionChange?.(e.target.value)}
+                placeholder={resolvedPlaceholder}
+                rows={2}
+              />
+            </label>
+          </ProductJourneyScene>
 
           {domainChips.length > 0 ? (
-            <div className={pl.domainChips}>
-              {domainChips.map((chip) => (
-                <button
-                  key={chip.id}
-                  type="button"
-                  className={`${pl.domainChip} ${selectedDomainId === chip.id ? pl.domainChipActive : ""}`}
-                  onClick={() => onDomainSelect?.(chip.id)}
-                >
-                  {chip.label}
-                </button>
-              ))}
-            </div>
+            <ProductJourneyScene
+              step={2}
+              title={hub.directionStepTitle}
+              lead={hub.directionStepLead}
+              motif="insight"
+              testId="tarot-hub-step-direction"
+            >
+              <div className={journeyStyles.tabRow} role="group" aria-label={hub.directionStepTitle}>
+                {domainChips.map((chip) => {
+                  const active = selectedDomainId === chip.id;
+                  return (
+                    <button
+                      key={chip.id}
+                      type="button"
+                      className={`${journeyStyles.tabChip} ${active ? journeyStyles.tabChipActive : ""}`.trim()}
+                      aria-pressed={active}
+                      onClick={() => onDomainSelect?.(chip.id)}
+                    >
+                      {chip.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </ProductJourneyScene>
           ) : null}
 
           {flowContent}
 
-          {!hideSpreadSection && spreads.length > 0 ? (
-            <section className={pl.spreadSection} aria-labelledby="tarot-spreads">
-              <h2 id="tarot-spreads" className={v2.eyebrow}>
-                {hub.spreadSectionTitle}
-              </h2>
-              <div className={pl.spreadList}>
-                {spreads.map((spread) => {
+          {showSpreads ? (
+            <ProductJourneyScene
+              step={domainChips.length > 0 ? 3 : 2}
+              title={hub.spreadStepTitle}
+              lead={hub.spreadStepLead}
+              motif="effort"
+              testId="tarot-hub-step-spread"
+            >
+              <ol className={pl.spreadStepList} aria-label={hub.spreadSectionTitle}>
+                {spreads.map((spread, index) => {
                   const selected = selectedSpreadId === spread.id;
                   const body = (
                     <>
-                      <span className={pl.spreadCount}>{spread.countLabel}</span>
-                      <div>
+                      <span className={pl.spreadStepIndex} aria-hidden>
+                        {spread.countLabel || index + 1}
+                      </span>
+                      <div className={pl.spreadStepBody}>
                         <p className={pl.spreadTitle}>{spread.title}</p>
                         <DsBody size="sm" muted>
                           {spread.description}
@@ -203,31 +232,46 @@ export function TarotWebHub({
 
                   if (onSpreadSelect) {
                     return (
-                      <button
-                        key={spread.id}
-                        type="button"
-                        className={`${pl.spreadOption} ${pl.spreadOptionButton} ${selected ? pl.spreadOptionSelected : ""}`}
-                        onClick={() => onSpreadSelect(spread.id)}
-                      >
-                        {body}
-                      </button>
+                      <li key={spread.id}>
+                        <button
+                          type="button"
+                          className={`${pl.spreadStepOption} ${selected ? pl.spreadStepOptionSelected : ""}`.trim()}
+                          onClick={() => onSpreadSelect(spread.id)}
+                          aria-pressed={selected}
+                        >
+                          {body}
+                        </button>
+                      </li>
                     );
                   }
 
                   return (
-                    <Link key={spread.id} href={spread.href ?? "/tarot"} className={pl.spreadOption}>
-                      {body}
-                    </Link>
+                    <li key={spread.id}>
+                      <Link href={spread.href ?? "/tarot"} className={pl.spreadStepOption}>
+                        {body}
+                      </Link>
+                    </li>
                   );
                 })}
-              </div>
-            </section>
+              </ol>
+            </ProductJourneyScene>
           ) : null}
 
           {onSubmitQuestion ? (
-            <DsButton variant="primary" size="block" onClick={onSubmitQuestion} disabled={submitDisabled}>
-              {resolvedSubmitLabel}
-            </DsButton>
+            <ProductJourneyScene
+              step={(domainChips.length > 0 ? 3 : 2) + (showSpreads ? 1 : 0)}
+              title="Дальше"
+              lead="Когда вопрос и формат ясны — к ритуалу."
+              motif="bridge"
+              bridge
+              testId="tarot-hub-step-bridge"
+            >
+              <div className={journeyStyles.actionRow}>
+                <DsButton variant="primary" size="block" onClick={onSubmitQuestion} disabled={submitDisabled}>
+                  {resolvedSubmitLabel}
+                </DsButton>
+              </div>
+            </ProductJourneyScene>
           ) : null}
 
           {cardOfDayHint ? (

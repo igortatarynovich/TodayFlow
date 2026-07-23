@@ -4,6 +4,12 @@ import { t } from "@/lib/i18n";
 export type TarotWebHubChrome = {
   pageTitle: string;
   pageSubtitle: string;
+  questionStepTitle: string;
+  questionStepLead: string;
+  directionStepTitle: string;
+  directionStepLead: string;
+  spreadStepTitle: string;
+  spreadStepLead: string;
   historyTitle: string;
   historyEmpty: string;
   historyOpenLink: string;
@@ -24,8 +30,26 @@ export function tarotWebHubChromeBundle(locale: FlowPracticesChromeLocale): Taro
     pageTitle: tr("tarot.hub.pageTitle", "Таро", "Tarot"),
     pageSubtitle: tr(
       "tarot.hub.pageSubtitle",
-      "Свежий взгляд на то, что сейчас важно.",
-      "A clear look at what matters right now.",
+      "Сначала вопрос и направление — потом расклад. Без стены карт.",
+      "Question and direction first — then the spread. No card wall.",
+    ),
+    questionStepTitle: tr("tarot.hub.questionStepTitle", "Вопрос", "Question"),
+    questionStepLead: tr(
+      "tarot.hub.questionStepLead",
+      "Сформулируй, что сейчас важно — коротко и честно.",
+      "Name what matters now — short and honest.",
+    ),
+    directionStepTitle: tr("tarot.hub.directionStepTitle", "Направление", "Direction"),
+    directionStepLead: tr(
+      "tarot.hub.directionStepLead",
+      "Тема задаёт угол чтения — не отдельный прогноз.",
+      "The theme sets the reading angle — not a separate forecast.",
+    ),
+    spreadStepTitle: tr("tarot.hub.spreadStepTitle", "Расклад", "Spread"),
+    spreadStepLead: tr(
+      "tarot.hub.spreadStepLead",
+      "Формат как шаги: сколько карт и какой фокус.",
+      "Format as steps: how many cards and which focus.",
     ),
     historyTitle: tr("tarot.hub.historyTitle", "История раскладов", "Reading history"),
     historyEmpty: tr(
