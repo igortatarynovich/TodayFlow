@@ -5,7 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
 import { buildOnboardingRitualContext, readOnboardingContext, todayDayKey } from "@/lib/onboardingContext";
 import { GuestFirstTodayScreen } from "@/components/onboarding/valueFirst/GuestFirstTodayScreen";
-import { hasGuestPreview, readGuestProfileDraft } from "@/lib/guestProfileDraft";
+import { hasGuestPreview, readGuestProfileDraft, VALUE_FIRST_PATHS } from "@/lib/guestProfileDraft";
+import { hasAuthSessionEnded } from "@/lib/authSession";
 import { markFirstTodayCompleted } from "@/lib/firstTodayState";
 import { getJson, postJson, putJson } from "@/lib/api";
 import {
@@ -1125,21 +1126,35 @@ export default function TodayPage() {
   }
 
   const guestDraft = readGuestProfileDraft();
-  const guestFirstTodayMode = !isAuthenticated && firstTodayMode && hasGuestPreview(guestDraft);
+  // After logout/401, do not keep showing Guest First Today from leftover draft —
+  // session loss must look the same on Today and Profile (login gate).
+  const guestFirstTodayMode =
+    !isAuthenticated && firstTodayMode && hasGuestPreview(guestDraft) && !hasAuthSessionEnded();
   if (guestFirstTodayMode && guestDraft) {
     return <GuestFirstTodayScreen draft={guestDraft} />;
   }
 
   if (!isAuthenticated) {
+    const sessionEnded = hasAuthSessionEnded();
     return (
       <ProductPageScreen
         testId="today-guest-gate"
         title="Сегодня"
-        guest={{
-          message: RITUAL_COPY.todayPageAuthRequired,
-          ctaHref: "/auth?mode=login",
-          ctaLabel: "Войти",
-        }}
+        guest={
+          sessionEnded
+            ? {
+                message: "Сессия завершилась. Войди снова — Today и Профиль откроются с твоими данными.",
+                ctaHref: "/auth?mode=login",
+                ctaLabel: "Войти",
+                secondaryCtaHref: `${VALUE_FIRST_PATHS.welcome}?fresh=1`,
+                secondaryCtaLabel: "Создать новый Today",
+              }
+            : {
+                message: RITUAL_COPY.todayPageAuthRequired,
+                ctaHref: "/auth?mode=login",
+                ctaLabel: "Войти",
+              }
+        }
         hideDatePill
       />
     );

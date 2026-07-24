@@ -13,6 +13,8 @@ export const AUTH_TOKEN_KEY = "todayflow_token";
 export const AUTH_SNAPSHOT_KEY = "todayflow_auth_snapshot_v1";
 export const AUTH_LAST_VALIDATED_AT_KEY = "todayflow_last_auth_validated_at";
 export const AUTH_LAST_SNAPSHOT_SAVED_AT_KEY = "todayflow_last_session_snapshot_saved_at";
+/** Set on logout/401 so guest surfaces prefer Login over leftover First Today draft. */
+export const AUTH_SESSION_ENDED_KEY = "todayflow_auth_session_ended_v1";
 
 const PROFILE_ATOM_VERDICT_PREFIX = "todayflow.profile_atom_verdict.v1";
 const ENGAGEMENT_STORAGE_PREFIX = "todayflow.day_engagement.v1.";
@@ -23,6 +25,8 @@ const LOCAL_STORAGE_PREFIXES = [
   `${DAY_CONTINUITY_STORAGE_PREFIX}.`,
   ENERGY_MAP_STORAGE_PREFIX,
   PROFILE_ATOM_VERDICT_PREFIX,
+  // Ritual day extras live in localStorage (not sessionStorage).
+  `${RITUAL_STORAGE_PREFIX}.`,
 ];
 
 const SESSION_STORAGE_PREFIXES = [
@@ -30,13 +34,39 @@ const SESSION_STORAGE_PREFIXES = [
   "todayflow.compact_user_model.",
   "todayflow.cum_confidence_history.",
   "todayflow.today_narrative.",
-  `${RITUAL_STORAGE_PREFIX}.`,
   "todayflow:tarot-question-flow:v1",
   "todayflow_guidance_compat_prefill_v1",
   "todayflow_active_jtbd_context",
   "todayflow_active_day_spine_context",
   GUEST_PROFILE_SESSION_KEY,
 ];
+
+export function markAuthSessionEnded(): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(AUTH_SESSION_ENDED_KEY, new Date().toISOString());
+  } catch {
+    /* ignore */
+  }
+}
+
+export function clearAuthSessionEnded(): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.removeItem(AUTH_SESSION_ENDED_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
+export function hasAuthSessionEnded(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return Boolean(localStorage.getItem(AUTH_SESSION_ENDED_KEY)?.trim());
+  } catch {
+    return false;
+  }
+}
 
 function removeStorageByPrefix(storage: Storage, prefixes: string[]): void {
   for (let i = storage.length - 1; i >= 0; i -= 1) {

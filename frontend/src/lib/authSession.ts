@@ -6,6 +6,8 @@ import {
   AUTH_TOKEN_KEY,
   clearAuthCredentialStorage,
   clearAuthenticatedUserCaches,
+  clearAuthSessionEnded,
+  markAuthSessionEnded,
 } from "@/lib/authSessionStorage";
 
 export {
@@ -13,6 +15,9 @@ export {
   AUTH_SNAPSHOT_KEY,
   AUTH_LAST_VALIDATED_AT_KEY,
   AUTH_LAST_SNAPSHOT_SAVED_AT_KEY,
+  AUTH_SESSION_ENDED_KEY,
+  hasAuthSessionEnded,
+  clearAuthSessionEnded,
 } from "@/lib/authSessionStorage";
 
 export function notifyAuthSessionChanged(): void {
@@ -27,6 +32,7 @@ export function beginAuthSession(token: string): void {
   if (!trimmed) return;
   clearAuthenticatedUserCaches();
   clearAuthCredentialStorage();
+  clearAuthSessionEnded();
   clearAuthMeCache();
   localStorage.setItem(AUTH_TOKEN_KEY, trimmed);
   notifyAuthSessionChanged();
@@ -35,9 +41,14 @@ export function beginAuthSession(token: string): void {
 /** Logout / 401 — wipe credentials and user caches without navigation. */
 export function clearAuthSession(): void {
   if (typeof window === "undefined") return;
+  const hadToken = Boolean(localStorage.getItem(AUTH_TOKEN_KEY)?.trim());
   clearAuthenticatedUserCaches();
   clearAuthCredentialStorage();
   clearAuthMeCache();
+  // Returning users must not keep a "logged-in Today" from ritual/guest leftovers.
+  if (hadToken) {
+    markAuthSessionEnded();
+  }
 }
 
 /** Flush learning outbox, clear session; caller handles navigation (prefer router.replace). */

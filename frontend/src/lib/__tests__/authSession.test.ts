@@ -16,6 +16,7 @@ describe("auth session storage", () => {
     window.localStorage.setItem("todayflow_token", "old");
     window.localStorage.setItem("todayflow_meaning_rings_cache_v1", "{}");
     window.localStorage.setItem("todayflow.day_engagement.v1.2026-07-03", "{}");
+    window.localStorage.setItem("todayflow.ritual.v1.2026-07-03", "{}");
     window.sessionStorage.setItem("todayflow_core_profile:v1:default", "{}");
     window.sessionStorage.setItem("todayflow.compact_user_model.v0.2026-07-03", "{}");
 
@@ -24,6 +25,7 @@ describe("auth session storage", () => {
     expect(window.localStorage.getItem("todayflow_locale_v2")).toBe("ru");
     expect(window.localStorage.getItem("todayflow_meaning_rings_cache_v1")).toBeNull();
     expect(window.localStorage.getItem("todayflow.day_engagement.v1.2026-07-03")).toBeNull();
+    expect(window.localStorage.getItem("todayflow.ritual.v1.2026-07-03")).toBeNull();
     expect(window.sessionStorage.getItem("todayflow_core_profile:v1:default")).toBeNull();
     expect(window.sessionStorage.getItem("todayflow.compact_user_model.v0.2026-07-03")).toBeNull();
   });
@@ -40,11 +42,20 @@ describe("auth session storage", () => {
     expect(window.sessionStorage.getItem("todayflow_core_profile:v1:default")).toBeNull();
   });
 
-  it("clearAuthSession removes credentials", () => {
+  it("clearAuthSession removes credentials and marks session ended", () => {
     window.localStorage.setItem(AUTH_TOKEN_KEY, "token");
     window.localStorage.setItem(AUTH_SNAPSHOT_KEY, "{}");
+    window.localStorage.setItem("todayflow.ritual.v1.2026-07-24", "{}");
     clearAuthSession();
     expect(window.localStorage.getItem(AUTH_TOKEN_KEY)).toBeNull();
     expect(window.localStorage.getItem(AUTH_SNAPSHOT_KEY)).toBeNull();
+    expect(window.localStorage.getItem("todayflow.ritual.v1.2026-07-24")).toBeNull();
+    expect(window.localStorage.getItem("todayflow_auth_session_ended_v1")).toBeTruthy();
+  });
+
+  it("beginAuthSession clears session-ended marker", () => {
+    window.localStorage.setItem("todayflow_auth_session_ended_v1", "2026-07-24T00:00:00.000Z");
+    beginAuthSession("fresh");
+    expect(window.localStorage.getItem("todayflow_auth_session_ended_v1")).toBeNull();
   });
 });

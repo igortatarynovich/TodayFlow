@@ -76,6 +76,13 @@ export function createEmptyGuestProfileDraft(): GuestProfileDraft {
 /** Start a fresh guest onboarding path — clears in-progress draft; keeps committed progress. */
 export function beginGuestOnboardingSession(): void {
   if (!isBrowser()) return;
+  // Intentional guest start — allow First Today again after a prior auth expiry.
+  // Key kept as literal to avoid circular import with authSessionStorage.
+  try {
+    localStorage.removeItem("todayflow_auth_session_ended_v1");
+  } catch {
+    /* ignore */
+  }
   sessionStorage.removeItem(GUEST_PROFILE_SESSION_KEY);
 
   const rawLocal = localStorage.getItem(GUEST_PROFILE_DRAFT_KEY);

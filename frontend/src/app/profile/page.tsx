@@ -28,6 +28,7 @@ import { useCoreSetupFlow } from "@/hooks/useCoreSetupFlow";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
+import { hasAuthSessionEnded } from "@/lib/authSession";
 import { getJson, postJson, putJson } from "@/lib/api";
 import type { AstroProfile, CoreProfile, CompactUserModel, UserSettings } from "@/lib/types";
 import {
@@ -321,19 +322,30 @@ function ProfileHubPageInner() {
   }
 
   if (!isAuthenticated) {
+    const sessionEnded = hasAuthSessionEnded();
     return (
       <ProductPageScreen
         testId="profile-guest-gate"
         title="Профиль"
         hideDatePill
-        guest={{
-          message:
-            "Профиль и Today открываются после мягкой регистрации: имя, дата рождения, первый разбор — и email, чтобы сохранить.",
-          ctaHref: `${VALUE_FIRST_PATHS.welcome}?fresh=1`,
-          ctaLabel: "Создать мой Today",
-          secondaryCtaHref: "/auth?mode=login",
-          secondaryCtaLabel: "Уже есть аккаунт? Войти",
-        }}
+        guest={
+          sessionEnded
+            ? {
+                message: "Сессия завершилась. Войди снова — Профиль и Today откроются с твоими данными.",
+                ctaHref: "/auth?mode=login",
+                ctaLabel: "Войти",
+                secondaryCtaHref: `${VALUE_FIRST_PATHS.welcome}?fresh=1`,
+                secondaryCtaLabel: "Создать новый Today",
+              }
+            : {
+                message:
+                  "Профиль и Today открываются после мягкой регистрации: имя, дата рождения, первый разбор — и email, чтобы сохранить.",
+                ctaHref: `${VALUE_FIRST_PATHS.welcome}?fresh=1`,
+                ctaLabel: "Создать мой Today",
+                secondaryCtaHref: "/auth?mode=login",
+                secondaryCtaLabel: "Уже есть аккаунт? Войти",
+              }
+        }
       />
     );
   }
