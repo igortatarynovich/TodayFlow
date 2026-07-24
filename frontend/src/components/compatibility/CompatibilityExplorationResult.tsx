@@ -12,6 +12,8 @@ import {
 } from "@/components/compatibility/CompatibilityAccessDisclosure";
 import { dimensionsSectionTitle } from "@/lib/compatibilityScenarioMetrics";
 import { HeroSmall } from "@/components/foundation/HeroSmall";
+import { MotionSettle } from "@/design-system/motion";
+import { MOTION } from "@/design-system/motion/tokens";
 import { compatibilityScenarioSymbol } from "@/lib/compatibilityHeroSymbol";
 import { recordRelationshipMapVisit } from "@/lib/relationshipMapStore";
 import styles from "@/components/compatibility/CompatibilityExplorationResult.module.css";
@@ -134,15 +136,16 @@ export function CompatibilityExplorationResult({
         </h3>
         <div className={styles.dimensionsGrid}>
           {model.dimensions.map((d, i) => (
-            <DimensionCard
-              key={d.id}
-              emoji={d.emoji}
-              label={d.label}
-              score={d.score}
-              quip={d.quip}
-              delayMs={120 + i * 90}
-              playful={isPlayful}
-            />
+            <MotionSettle key={d.id} delayMs={i * MOTION.staggerMs}>
+              <DimensionCard
+                emoji={d.emoji}
+                label={d.label}
+                score={d.score}
+                quip={d.quip}
+                delayMs={120 + i * MOTION.staggerMs}
+                playful={isPlayful}
+              />
+            </MotionSettle>
           ))}
         </div>
       </section>
@@ -152,21 +155,25 @@ export function CompatibilityExplorationResult({
           {model.narrative.length ? (
             <section className={styles.playfulPunchline}>
               {model.narrative.map((p, i) => (
-                <p key={i} className={styles.playfulPunchlineText}>
-                  {p}
-                </p>
+                <MotionSettle key={i} delayMs={i * MOTION.staggerMs}>
+                  <p className={styles.playfulPunchlineText}>{p}</p>
+                </MotionSettle>
               ))}
             </section>
           ) : null}
           <section className={styles.insights}>
-            <div className={styles.insightCard}>
-              <p className={styles.insightLabel}>🏆 Лидер stat</p>
-              <p className={styles.insightBody}>{model.strongestResource}</p>
-            </div>
-            <div className={`${styles.insightCard} ${styles.insightCardRisk}`}>
-              <p className={styles.insightLabel}>📉 Слабое звено</p>
-              <p className={styles.insightBody}>{model.mainRisk}</p>
-            </div>
+            <MotionSettle delayMs={0}>
+              <div className={styles.insightCard}>
+                <p className={styles.insightLabel}>🏆 Лидер stat</p>
+                <p className={styles.insightBody}>{model.strongestResource}</p>
+              </div>
+            </MotionSettle>
+            <MotionSettle delayMs={MOTION.staggerMs}>
+              <div className={`${styles.insightCard} ${styles.insightCardRisk}`}>
+                <p className={styles.insightLabel}>📉 Слабое звено</p>
+                <p className={styles.insightBody}>{model.mainRisk}</p>
+              </div>
+            </MotionSettle>
           </section>
         </>
       ) : (
@@ -175,30 +182,36 @@ export function CompatibilityExplorationResult({
             <section className={styles.narrative}>
               <h3 className={styles.blockTitle}>Что произойдёт, если сценарий случится завтра?</h3>
               {model.narrative.map((p, i) => (
-                <p key={i} className={styles.narrativeP}>
-                  {p}
-                </p>
+                <MotionSettle key={i} delayMs={i * MOTION.staggerMs}>
+                  <p className={styles.narrativeP}>{p}</p>
+                </MotionSettle>
               ))}
             </section>
           ) : null}
 
           <section className={styles.insights}>
-            <div className={styles.insightCard}>
-              <p className={styles.insightLabel}>💎 Самый сильный ресурс</p>
-              <p className={styles.insightBody}>{model.strongestResource}</p>
-            </div>
-            <div className={`${styles.insightCard} ${styles.insightCardRisk}`}>
-              <p className={styles.insightLabel}>⚠ Главный риск</p>
-              <p className={styles.insightBody}>{model.mainRisk}</p>
-            </div>
+            <MotionSettle delayMs={0}>
+              <div className={styles.insightCard}>
+                <p className={styles.insightLabel}>💎 Самый сильный ресурс</p>
+                <p className={styles.insightBody}>{model.strongestResource}</p>
+              </div>
+            </MotionSettle>
+            <MotionSettle delayMs={MOTION.staggerMs}>
+              <div className={`${styles.insightCard} ${styles.insightCardRisk}`}>
+                <p className={styles.insightLabel}>⚠ Главный риск</p>
+                <p className={styles.insightBody}>{model.mainRisk}</p>
+              </div>
+            </MotionSettle>
           </section>
 
           {model.tips.length ? (
             <section className={styles.tips}>
               <h3 className={styles.blockTitle}>Что поможет именно вам</h3>
               <ul className={styles.tipsList}>
-                {model.tips.map((tip) => (
-                  <li key={tip}>{tip}</li>
+                {model.tips.map((tip, i) => (
+                  <li key={tip}>
+                    <MotionSettle delayMs={i * MOTION.staggerMs}>{tip}</MotionSettle>
+                  </li>
                 ))}
               </ul>
             </section>
@@ -222,48 +235,54 @@ export function CompatibilityExplorationResult({
             <section className={styles.deepJournal}>
               <h3 className={styles.blockTitle}>Глубокий разбор</h3>
               <div className={styles.deepStack}>
-                {model.deepSections.map((section) => (
-                  <details key={section.id} className={styles.deepSection}>
-                    <summary className={styles.deepSummary}>
-                      {section.title}
-                      {section.subtitle ? <span className={styles.deepSummarySub}>{section.subtitle}</span> : null}
-                    </summary>
-                    <div className={styles.deepBody}>
-                      <p className={styles.deepTakeaway}>{section.takeaway}</p>
-                      {section.detail ? <p className={styles.deepDetail}>{section.detail}</p> : null}
-                      {section.risk ? (
-                        <div className={styles.deepRisk}>
-                          <strong>Риск:</strong> {section.risk}
-                        </div>
-                      ) : null}
-                      {section.action ? (
-                        <div className={styles.deepAction}>
-                          <strong>Как действовать:</strong> {section.action}
-                        </div>
-                      ) : null}
-                    </div>
-                  </details>
+                {model.deepSections.map((section, i) => (
+                  <MotionSettle key={section.id} delayMs={i * MOTION.staggerMs}>
+                    <details className={styles.deepSection}>
+                      <summary className={styles.deepSummary}>
+                        {section.title}
+                        {section.subtitle ? <span className={styles.deepSummarySub}>{section.subtitle}</span> : null}
+                      </summary>
+                      <div className={styles.deepBody}>
+                        <p className={styles.deepTakeaway}>{section.takeaway}</p>
+                        {section.detail ? <p className={styles.deepDetail}>{section.detail}</p> : null}
+                        {section.risk ? (
+                          <div className={styles.deepRisk}>
+                            <strong>Риск:</strong> {section.risk}
+                          </div>
+                        ) : null}
+                        {section.action ? (
+                          <div className={styles.deepAction}>
+                            <strong>Как действовать:</strong> {section.action}
+                          </div>
+                        ) : null}
+                      </div>
+                    </details>
+                  </MotionSettle>
                 ))}
               </div>
 
               {model.roles ? (
                 <div className={styles.rolesGrid}>
-                  <div className={styles.roleCard}>
-                    <p className={styles.roleTitle}>Ты</p>
-                    <ul>
-                      {model.roles.you_bullets.map((line) => (
-                        <li key={line}>{line}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className={styles.roleCard}>
-                    <p className={styles.roleTitle}>Партнёр</p>
-                    <ul>
-                      {model.roles.partner_bullets.map((line) => (
-                        <li key={line}>{line}</li>
-                      ))}
-                    </ul>
-                  </div>
+                  <MotionSettle delayMs={0}>
+                    <div className={styles.roleCard}>
+                      <p className={styles.roleTitle}>Ты</p>
+                      <ul>
+                        {model.roles.you_bullets.map((line) => (
+                          <li key={line}>{line}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </MotionSettle>
+                  <MotionSettle delayMs={MOTION.staggerMs}>
+                    <div className={styles.roleCard}>
+                      <p className={styles.roleTitle}>Партнёр</p>
+                      <ul>
+                        {model.roles.partner_bullets.map((line) => (
+                          <li key={line}>{line}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </MotionSettle>
                 </div>
               ) : null}
             </section>
@@ -280,17 +299,18 @@ export function CompatibilityExplorationResult({
             {isPlayful ? "Это эксперимент — можно переключить тему." : "Это не конец — продолжение исследования."}
           </p>
           <div className={styles.continuationGrid}>
-            {model.continuationScenarios.map((s) => (
-              <Link
-                key={s.id}
-                href={s.href}
-                className={`${styles.continuationCard} ${styles[`cont_${s.tone}`] ?? ""}`}
-                onClick={() => onScenarioSwitch?.(s.id, s.href)}
-              >
-                <span className={styles.continuationEmoji}>{s.emoji}</span>
-                <span className={styles.continuationTitle}>{s.title}</span>
-                <span className={styles.continuationHook}>{s.hook}</span>
-              </Link>
+            {model.continuationScenarios.map((s, i) => (
+              <MotionSettle key={s.id} delayMs={i * MOTION.staggerMs}>
+                <Link
+                  href={s.href}
+                  className={`${styles.continuationCard} ${styles[`cont_${s.tone}`] ?? ""}`}
+                  onClick={() => onScenarioSwitch?.(s.id, s.href)}
+                >
+                  <span className={styles.continuationEmoji}>{s.emoji}</span>
+                  <span className={styles.continuationTitle}>{s.title}</span>
+                  <span className={styles.continuationHook}>{s.hook}</span>
+                </Link>
+              </MotionSettle>
             ))}
           </div>
         </section>

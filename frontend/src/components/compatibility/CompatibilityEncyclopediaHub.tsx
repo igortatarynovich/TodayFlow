@@ -11,6 +11,8 @@ import {
 } from "@/lib/compatibilityEcho";
 import { useMeaningRuntime } from "@/hooks/useMeaningRuntime";
 import { HeroSmall } from "@/components/foundation/HeroSmall";
+import { MotionSettle } from "@/design-system/motion";
+import { MOTION } from "@/design-system/motion/tokens";
 import { compatibilityHubSymbol } from "@/lib/compatibilityHeroSymbol";
 import styles from "@/components/compatibility/CompatibilityEncyclopediaHub.module.css";
 
@@ -208,35 +210,37 @@ export function CompatibilityEncyclopediaHub({
         <h2 className={styles.sectionTitle}>{sectionThemes}</h2>
         <p className={styles.sectionLead}>{sectionThemesLead}</p>
         <div className={styles.scenarioGrid}>
-          {COMPATIBILITY_PRIMARY_SCENARIOS.map((scenario) => (
-            <div key={scenario.id} className={styles.scenarioCardWrap}>
-              <Link
-                href={scenarioHref ? scenarioHref(scenario.id, scenario.href) : scenario.href}
-                className={`${styles.scenarioCard} ${styles[`skin_${scenario.id}`] ?? ""} ${styles[`tone_${scenario.tone}`] ?? ""}`}
-                prefetch
-                onClick={() =>
-                  trackTopicSelect({
-                    selection_kind: "series",
-                    selection_id: scenario.id,
-                    series_id: scenario.id,
-                    format_id: scenario.id,
-                    tone_mode: scenario.toneMode,
-                  })
-                }
-              >
-                <span className={styles.scenarioEmoji}>{scenario.emoji}</span>
-                <p className={styles.scenarioTitle}>{scenario.title}</p>
-                <p className={styles.scenarioHook}>{scenario.hook}</p>
-                <span className={styles.scenarioFx} aria-hidden />
-              </Link>
-              <button
-                type="button"
-                className={styles.scenarioPass}
-                onClick={() => trackScenarioPass(scenario.id, scenario.toneMode)}
-              >
-                {passLabel}
-              </button>
-            </div>
+          {COMPATIBILITY_PRIMARY_SCENARIOS.map((scenario, index) => (
+            <MotionSettle key={scenario.id} delayMs={index * MOTION.staggerMs}>
+              <div className={styles.scenarioCardWrap}>
+                <Link
+                  href={scenarioHref ? scenarioHref(scenario.id, scenario.href) : scenario.href}
+                  className={`${styles.scenarioCard} ${styles[`skin_${scenario.id}`] ?? ""} ${styles[`tone_${scenario.tone}`] ?? ""}`}
+                  prefetch
+                  onClick={() =>
+                    trackTopicSelect({
+                      selection_kind: "series",
+                      selection_id: scenario.id,
+                      series_id: scenario.id,
+                      format_id: scenario.id,
+                      tone_mode: scenario.toneMode,
+                    })
+                  }
+                >
+                  <span className={styles.scenarioEmoji}>{scenario.emoji}</span>
+                  <p className={styles.scenarioTitle}>{scenario.title}</p>
+                  <p className={styles.scenarioHook}>{scenario.hook}</p>
+                  <span className={styles.scenarioFx} aria-hidden />
+                </Link>
+                <button
+                  type="button"
+                  className={styles.scenarioPass}
+                  onClick={() => trackScenarioPass(scenario.id, scenario.toneMode)}
+                >
+                  {passLabel}
+                </button>
+              </div>
+            </MotionSettle>
           ))}
         </div>
       </section>
@@ -245,36 +249,38 @@ export function CompatibilityEncyclopediaHub({
         <h2 className={styles.sectionTitle}>{sectionPlayful}</h2>
         <p className={styles.sectionLead}>{sectionPlayfulLead}</p>
         <div className={`${styles.scenarioGrid} ${styles.playfulGrid}`}>
-          {COMPATIBILITY_PLAYFUL_SCENARIOS.map((scenario) => (
-            <div key={scenario.id} className={styles.scenarioCardWrap}>
-              <Link
-                href={scenarioHref ? scenarioHref(scenario.id, scenario.href) : scenario.href}
-                className={`${styles.scenarioCard} ${styles.playfulCard} ${styles[`skin_${scenario.id}`] ?? ""} ${styles[`tone_${scenario.tone}`] ?? ""}`}
-                prefetch
-                onClick={() =>
-                  trackTopicSelect({
-                    selection_kind: "series",
-                    selection_id: scenario.id,
-                    series_id: scenario.id,
-                    tone_mode: scenario.toneMode,
-                    format_id: scenario.id,
-                  })
-                }
-              >
-                <span className={styles.scenarioEmoji}>{scenario.emoji}</span>
-                <p className={styles.scenarioTitle}>{scenario.title}</p>
-                <p className={styles.scenarioHook}>{scenario.hook}</p>
-                <span className={styles.playfulBadge}>{locale === "ru" ? "🎲 игровой" : "🎲 playful"}</span>
-                <span className={styles.scenarioFx} aria-hidden />
-              </Link>
-              <button
-                type="button"
-                className={styles.scenarioPass}
-                onClick={() => trackScenarioPass(scenario.id, scenario.toneMode)}
-              >
-                {passLabel}
-              </button>
-            </div>
+          {COMPATIBILITY_PLAYFUL_SCENARIOS.map((scenario, index) => (
+            <MotionSettle key={scenario.id} delayMs={index * MOTION.staggerMs}>
+              <div className={styles.scenarioCardWrap}>
+                <Link
+                  href={scenarioHref ? scenarioHref(scenario.id, scenario.href) : scenario.href}
+                  className={`${styles.scenarioCard} ${styles.playfulCard} ${styles[`skin_${scenario.id}`] ?? ""} ${styles[`tone_${scenario.tone}`] ?? ""}`}
+                  prefetch
+                  onClick={() =>
+                    trackTopicSelect({
+                      selection_kind: "series",
+                      selection_id: scenario.id,
+                      series_id: scenario.id,
+                      tone_mode: scenario.toneMode,
+                      format_id: scenario.id,
+                    })
+                  }
+                >
+                  <span className={styles.scenarioEmoji}>{scenario.emoji}</span>
+                  <p className={styles.scenarioTitle}>{scenario.title}</p>
+                  <p className={styles.scenarioHook}>{scenario.hook}</p>
+                  <span className={styles.playfulBadge}>{locale === "ru" ? "🎲 игровой" : "🎲 playful"}</span>
+                  <span className={styles.scenarioFx} aria-hidden />
+                </Link>
+                <button
+                  type="button"
+                  className={styles.scenarioPass}
+                  onClick={() => trackScenarioPass(scenario.id, scenario.toneMode)}
+                >
+                  {passLabel}
+                </button>
+              </div>
+            </MotionSettle>
           ))}
         </div>
       </section>
@@ -283,22 +289,23 @@ export function CompatibilityEncyclopediaHub({
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>{locale === "ru" ? "Быстрые вопросы" : "Quick questions"}</h2>
           <div className={styles.readingGrid}>
-            {catalog.popular_readings.slice(0, 6).map((reading) => (
-              <Link
-                key={reading.id}
-                href={`/compatibility/analyze?reading=${reading.id}`}
-                className={styles.readingCard}
-                prefetch
-                onClick={() =>
-                  trackTopicSelect({
-                    selection_kind: "reading",
-                    selection_id: reading.id,
-                    reading_id: reading.id,
-                  })
-                }
-              >
-                {reading.title}
-              </Link>
+            {catalog.popular_readings.slice(0, 6).map((reading, index) => (
+              <MotionSettle key={reading.id} delayMs={index * MOTION.staggerMs}>
+                <Link
+                  href={`/compatibility/analyze?reading=${reading.id}`}
+                  className={styles.readingCard}
+                  prefetch
+                  onClick={() =>
+                    trackTopicSelect({
+                      selection_kind: "reading",
+                      selection_id: reading.id,
+                      reading_id: reading.id,
+                    })
+                  }
+                >
+                  {reading.title}
+                </Link>
+              </MotionSettle>
             ))}
           </div>
         </section>
