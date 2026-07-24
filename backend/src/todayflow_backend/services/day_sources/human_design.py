@@ -1,8 +1,8 @@
 """Human Design v0 — tropical longitude → 64 gates / 6 lines (canon §5.9).
 
 School: standard Rave Mandala (Gate 41 starts at 02° Aquarius).
-Sun/Moon longitudes reuse closed-form helpers from panchanga (no Swiss in backend).
-Design chart uses the common ~88-day solar-arc approximation until timed ephemeris walks land.
+Longitudes prefer Swiss snapshots via ephemeris_bridge; fallback mean lon.
+Design chart uses the common ~88-day solar-arc approximation until timed walks land.
 """
 
 from __future__ import annotations
