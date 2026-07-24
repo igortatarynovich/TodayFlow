@@ -54,6 +54,10 @@ import { revealDayCard, revealDayNumber, type DaySymbolPublicView } from "@/lib/
 import { TodayDayDialogueMorning } from "@/components/today/composition/TodayDayDialogueMorning";
 import { ConversationThread } from "@/components/conversation/ConversationThread";
 import { ConversationTurn } from "@/components/conversation/ConversationTurn";
+import {
+  FirstTodayReactionGate,
+  firstTodayReactionComplete,
+} from "@/components/today/composition/FirstTodayReactionGate";
 import { TodayInterpretationConfirm } from "@/components/today/composition/TodayInterpretationConfirm";
 import { TodaySkyStoryCards } from "@/components/today/composition/TodaySkyStoryCards";
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
@@ -96,6 +100,8 @@ type Props = {
   spheresNarrativePayload?: Record<string, unknown> | null;
   eveningNarrativePayload?: Record<string, unknown> | null;
   onRitualSpineComplete?: (ctx: TodayRitualNarrativePayload) => void;
+  /** After First Today intent/reality chips — bias narrative / package. */
+  onFirstTodayReactionComplete?: () => void;
   colorLine?: string | null;
   stoneLine?: string | null;
   coreProfile?: CoreProfile | null;
@@ -152,6 +158,9 @@ export function TodayCompositionSurface(props: Props) {
 
   const [eveningMode, setEveningMode] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  const [reactionReady, setReactionReady] = useState(() =>
+    typeof window === "undefined" ? !isFirstToday : !isFirstToday || firstTodayReactionComplete(),
+  );
   const [continuityRecord, setContinuityRecord] = useState<DayContinuityRecord | null>(null);
   const [continuitySaving, setContinuitySaving] = useState(false);
   const [engagement, setEngagement] = useState(createEmptyDayEngagement);
@@ -446,11 +455,17 @@ export function TodayCompositionSurface(props: Props) {
   }, [hydrated, engagement.tarotPickedName, engagement.numberConfirmed, dateISO]);
 
   useEffect(() => {
+    if (isFirstToday && !reactionReady) return;
     onVisible?.();
     if (!engagement.todayOpened) {
       persistEngagement({ todayOpened: true });
     }
-  }, [onVisible, engagement.todayOpened, persistEngagement]);
+  }, [onVisible, engagement.todayOpened, persistEngagement, isFirstToday, reactionReady]);
+
+  const onReactionGateComplete = useCallback(() => {
+    setReactionReady(true);
+    props.onFirstTodayReactionComplete?.();
+  }, [props.onFirstTodayReactionComplete]);
 
   const onOpenEvening = useCallback(() => {
     const focus =
@@ -1116,7 +1131,7 @@ export function TodayCompositionSurface(props: Props) {
   ) : null;
 
   const ritualSpineSection =
-    showRitualSpine && isFirstToday ? (
+    showRitualSpine && isFirstToday && reactionReady ? (
       <ConversationTurn
         turnId="today_ritual"
         message={
@@ -1129,12 +1144,29 @@ export function TodayCompositionSurface(props: Props) {
       />
     ) : null;
 
+  const reactionGateSection =
+    isFirstToday && !reactionReady ? (
+      <ConversationTurn
+        turnId="today_reaction"
+        message={
+          <>
+            <h2>Сначала коротко о тебе сегодня</h2>
+            <p>Два выбора — и Today соберётся под твой фокус и ритм.</p>
+          </>
+        }
+        response={<FirstTodayReactionGate onComplete={onReactionGateComplete} />}
+      />
+    ) : null;
+
   const dayStoryFoundation = isFirstToday ? (
     <ConversationThread testId="conversation-thread-first-today">
-      {greetingSection ? (
+      {reactionGateSection}
+      {reactionReady && greetingSection ? (
         <ConversationTurn turnId="today_opening" message={greetingSection} response={morningDialogue} />
       ) : null}
-      {dayAnchorSection ? <ConversationTurn turnId="today_focus" message={dayAnchorSection} /> : null}
+      {reactionReady && dayAnchorSection ? (
+        <ConversationTurn turnId="today_focus" message={dayAnchorSection} />
+      ) : null}
       {ritualSpineSection}
     </ConversationThread>
   ) : (

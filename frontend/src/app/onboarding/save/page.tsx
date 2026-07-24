@@ -24,7 +24,6 @@ type EmailSignupResponse = {
   pending_email_confirmation?: boolean;
   email_sent?: boolean;
   token?: string;
-  dev_temp_password?: string;
   dev_magic_url?: string;
 };
 
@@ -34,7 +33,7 @@ function OnboardingSavePageInner() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [pendingEmail, setPendingEmail] = useState<string | null>(null);
-  const [devAccess, setDevAccess] = useState<{ password?: string; magicUrl?: string } | null>(null);
+  const [devAccess, setDevAccess] = useState<{ magicUrl?: string } | null>(null);
 
   useEffect(() => {
     if (!hasGuestPreview()) {
@@ -81,11 +80,8 @@ function OnboardingSavePageInner() {
       }
 
       setPendingEmail(trimmed);
-      if (response.dev_temp_password || response.dev_magic_url) {
-        setDevAccess({
-          password: response.dev_temp_password,
-          magicUrl: response.dev_magic_url,
-        });
+      if (response.dev_magic_url) {
+        setDevAccess({ magicUrl: response.dev_magic_url });
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : "Не удалось сохранить.";
@@ -118,11 +114,6 @@ function OnboardingSavePageInner() {
               <DsButton variant="primary">Открыть (dev magic link)</DsButton>
             </Link>
           </div>
-        ) : null}
-        {devAccess?.password ? (
-          <p className={styles.hint}>
-            Dev: временный пароль — <code>{devAccess.password}</code>
-          </p>
         ) : null}
       </ValueFirstOnboardingShell>
     );

@@ -74,6 +74,16 @@ function seedPreviousDayContinuity(record: DayContinuityRecord) {
   window.localStorage.setItem(dayContinuityStorageKey(record.dateISO), JSON.stringify(record));
 }
 
+/** Intent/Reality for today — required before First Today ritual/reveal (placement C). */
+function seedFirstTodayReaction() {
+  const now = new Date();
+  const dayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  window.localStorage.setItem(
+    "todayflow_onboarding_context_v1",
+    JSON.stringify({ intent_theme: "focus", reality_state: "stable", day_key: dayKey }),
+  );
+}
+
 describe("TodayCompositionSurface", () => {
   beforeEach(() => {
     window.localStorage.clear();
@@ -127,6 +137,7 @@ describe("TodayCompositionSurface", () => {
   });
 
   it("hides continuity on firstToday variant", () => {
+    seedFirstTodayReaction();
     seedPreviousDayContinuity({
       dateISO: "2026-06-22",
       mainFocus: "Разговор с командой",
@@ -141,6 +152,7 @@ describe("TodayCompositionSurface", () => {
   });
 
   it("shows evening CTA only after ritual on firstToday", () => {
+    seedFirstTodayReaction();
     window.localStorage.setItem(
       "todayflow.day_engagement.v1.2026-06-23",
       JSON.stringify({
@@ -266,7 +278,17 @@ describe("TodayCompositionSurface", () => {
     expect(screen.getByText("Как ты входишь в этот день?")).toBeInTheDocument();
   });
 
+  it("gates firstToday behind intent/reality reaction chips", () => {
+    render(<TodayCompositionSurface {...baseProps} variant="firstToday" />);
+
+    expect(screen.getByTestId("conversation-thread-first-today")).toBeInTheDocument();
+    expect(screen.getByTestId("first-today-reaction-gate-intent")).toBeInTheDocument();
+    expect(screen.queryByTestId("conversation-turn-today_opening")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("today-zone-ritual-tarot")).not.toBeInTheDocument();
+  });
+
   it("hides dashboard panels on firstToday conversation path", () => {
+    seedFirstTodayReaction();
     render(<TodayCompositionSurface {...baseProps} variant="firstToday" />);
 
     expect(screen.queryByTestId("today-zone-sphere-focus")).not.toBeInTheDocument();

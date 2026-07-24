@@ -8,7 +8,6 @@ import {
 } from "@/lib/guestProfileDraft";
 import type { CoreSetupResponse } from "@/lib/coreSetup";
 import { FIRST_TODAY_PATH } from "@/lib/firstTodayState";
-import { hasOnboardingIntent, hasOnboardingReality, saveIntentTheme, saveRealityState } from "@/lib/onboardingContext";
 import {
   claimGuestSessionAfterAuth,
   clearGuestClaimCredentials,
@@ -134,8 +133,6 @@ export async function claimGuestProfileAfterAuth(): Promise<ClaimGuestProfileRes
     }
   }
 
-  if (!hasOnboardingIntent()) saveIntentTheme("focus");
-  if (!hasOnboardingReality()) saveRealityState("stable");
   clearGuestProfileDraft();
   clearGuestClaimCredentials();
   return { status: "ready", profilePath: redirect, storyRefreshRequired };

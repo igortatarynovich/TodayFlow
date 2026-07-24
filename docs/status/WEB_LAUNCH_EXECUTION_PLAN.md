@@ -43,40 +43,41 @@
 
 | Priority | Screen / block | Status |
 |----------|----------------|--------|
-| **P0.2** | Value-first onboarding (2–5) | 🟡 → **mostly ✅** (preview CTA → First Today; auth claims guest draft) |
-| **P1** | Intent/Reality placement | 🟡 OPEN |
-| **P1** | Auth at save decision | 🟡 OPEN |
+| **P0.2** | Value-first onboarding (2–5) | ✅ (Landing → welcome → birth → preview → save → First Today) |
+| **P1** | Intent/Reality placement | ✅ **CLOSED 2026-07-24** — placement **C** inside First Today (`FirstTodayReactionGate`) |
+| **P1** | Auth at save decision | ✅ **CLOSED 2026-07-24** — magic only; plaintext temp password removed from welcome email |
 | **P2** | Compat return path · returning-user routing | 🟡 |
 
 **Done in React (closed):** Landing · First Today · Evening · D2 · Compat hook · Maps seeds · Composition stack · **Profile min (Blueprint §6)**.
 
 ---
 
-## Фактический путь в коде (as-is, web · 2026-07-01)
+## Фактический путь в коде (as-is, web · updated 2026-07-24)
+
+> Ранее (01.07) здесь ошибочно стоял auth-first. Value-first уже в коде; этот блок приведён к факту.
 
 ```
-Landing (/) — vitrine · signup CTA
-  → /auth (email+password) — still auth-first, not value-first
-  → /onboarding/core (full birth form)
-  → /onboarding/intent → /onboarding/reality
-  → /today?first=1 — TodayCompositionSurface · firstToday
-  → evening close → day_continuity localStorage
-  → /today — TodayCompositionSurface · default · ContinuityRecall first
-  → /profile — editorial + Мои дни + MapsPreview · deep sections still visible
+Landing (/) — signupHref → /onboarding/welcome?fresh=1
+  → /onboarding/welcome → birth → preview → (refine) → save (email + magic)
+  → claim → /today?first=1
+      → FirstTodayReactionGate (intent + reality chips)
+      → ritual spine → personalized Today
+  → evening close → D2 ContinuityRecall
+  → /profile — Profile-min
 ```
 
 | Route | Component | Launch gate |
 |-------|-----------|-------------|
 | `/` | curiosity landing + vitrine | ✅ |
 | `/demo/today` | redirect → `/onboarding/welcome?fresh=1` | ✅ |
-| `/auth` | auth-first | ❌ value-first pending |
-| `/onboarding/core` | full birth after auth | ❌ |
-| `/onboarding/intent` · `/reality` | chips | 🟡 placement |
-| `/today?first=1` | `TodayCompositionSurface` · `firstToday` | ✅ |
-| `/today` | `TodayCompositionSurface` · `default` | ✅ |
+| `/auth` | returning users (login) | ✅ |
+| `/onboarding/welcome`…`/save` | value-first funnel | ✅ |
+| `/onboarding/intent` · `/reality` | legacy → redirect First Today | ✅ placement C |
+| `/today?first=1` | `TodayCompositionSurface` · firstToday + reaction gate | ✅ |
+| `/today` | `TodayCompositionSurface` · default | ✅ |
 | `/today?experience=1` | legacy ritual | ✅ preserved |
 | `/compatibility/*` | public flows | ✅ + hook from Today |
-| `/profile` | launch-min partial | 🟡 |
+| `/profile` | launch-min | ✅ |
 
 **Redirect wiring:** ✅ `FIRST_TODAY_PATH` after onboarding when `!hasCompletedFirstToday()`.
 
@@ -231,7 +232,8 @@ Gate checklist для walkthrough. Journey — Build Map Phase 1. Layout/c copy 
 | 2026-07-01 | **Profile launch-min** — identity + «Мои дни», не natal wall | Profile = accumulated value, не first payoff | **ACTIVE** |
 | 2026-07-01 | **Field test 10×7d**, measure **behavior** not opinions | Единственный источник truth для v2 | **ACTIVE** |
 | 2026-07-01 | **Day continuity localStorage v0** OK for launch | Server persist → v2 | **ACTIVE** |
-| 2026-07-01 | Intent/Reality chips placement | Defer to **story gate** | **OPEN** |
+| 2026-07-01 | Intent/Reality chips placement | Defer to **story gate** | **CLOSED 2026-07-24** — placement **C** in First Today |
+| 2026-07-01 | Auth at save | magic vs password | **CLOSED 2026-07-24** — magic only; no plaintext password in email |
 | 2026-07-01 | **claimGuestProfile → First Today**, not Profile; no early `markFirstTodayCompleted` | Profile gate bypassed first Today after magic/save | **CLOSED** |
 | 2026-07-01 | **`/meaning/events` batch dedup** (BE + FE outbox) | Duplicate idempotency_key in one POST → 500 on Today | **CLOSED** |
 | 2026-07-01 | **Personal Model** naming (vs Profile UI) | Team review post-launch | **DEFERRED** |
@@ -288,14 +290,14 @@ Gate checklist для walkthrough. Journey — Build Map Phase 1. Layout/c copy 
 | # | Task | Status |
 |---|------|--------|
 | 0 | Story brief per §Launch Story — Имя → Email rows | ⬜ |
-| 1 | **Decision (story gate):** magic link vs password at save | ⬜ |
-| 2 | Guest flow routes — **no new entities** | ⬜ |
-| 3 | First result **before** account | ⬜ |
-| 4 | Email/save **after** first reward | ⬜ |
-| 5 | Intent/Reality: story gate picks placement | ⬜ |
-| 6 | Wire post-save → `FIRST_TODAY_PATH` | ⬜ |
-| 7 | `/auth` only for returning users | ⬜ |
-| 8 | Story gate each step | ⬜ |
+| 1 | **Decision (story gate):** magic link vs password at save | ✅ magic only (2026-07-24) |
+| 2 | Guest flow routes — **no new entities** | ✅ |
+| 3 | First result **before** account | ✅ |
+| 4 | Email/save **after** first reward | ✅ |
+| 5 | Intent/Reality: story gate picks placement | ✅ **C** inside First Today |
+| 6 | Wire post-save → `FIRST_TODAY_PATH` | ✅ |
+| 7 | `/auth` only for returning users | ✅ |
+| 8 | Story gate each step | 🟡 partial |
 
 **Reuse:** `useCoreSetupFlow` · `ProfileSetupSection` (birth calc) · `onboardingContext` · `fetchCoreProfileCached` · backend core profile API.
 

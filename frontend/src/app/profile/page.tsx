@@ -21,11 +21,7 @@ import {
 import { getLocale } from "@/lib/i18n";
 import { profileContractMatchesLocale } from "@/lib/profilePage/profileCopySafety";
 import {
-  hasOnboardingIntentRecorded,
-  hasOnboardingRealityRecorded,
   readOnboardingContext,
-  saveIntentTheme,
-  saveRealityState,
 } from "@/lib/onboardingContext";
 import { ProfileFirstDayTeaser } from "@/components/profile/ProfileFirstDayTeaser";
 import { useCoreSetupFlow } from "@/hooks/useCoreSetupFlow";
@@ -151,12 +147,6 @@ function ProfileHubPageInner() {
     onCoreProfileUpdated: setCoreProfile,
     onAstroProfilesUpdated: setAstroProfiles,
   });
-
-  useEffect(() => {
-    if (!WEB_LAUNCH_MIN_PROFILE || typeof window === "undefined") return;
-    if (!hasOnboardingIntentRecorded()) saveIntentTheme("focus");
-    if (!hasOnboardingRealityRecorded()) saveRealityState("stable");
-  }, []);
 
   useEffect(() => {
     if (authLoading || claimChecked) return;
@@ -288,14 +278,6 @@ function ProfileHubPageInner() {
   useEffect(() => {
     if (!isAuthenticated || loading || !queryChecked || !journeyChecked || !claimChecked || forceSetup || showSetupFlow || profileIncomplete) return;
     if (!WEB_LAUNCH_MIN_PROFILE) {
-      if (!hasOnboardingIntentRecorded()) {
-        router.replace("/onboarding/intent");
-        return;
-      }
-      if (!hasOnboardingRealityRecorded()) {
-        router.replace("/onboarding/reality");
-        return;
-      }
       if (!hasCompletedFirstToday()) {
         router.replace(FIRST_TODAY_PATH);
       }

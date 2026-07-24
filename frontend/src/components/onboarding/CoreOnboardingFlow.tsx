@@ -10,6 +10,7 @@ import { getJson } from "@/lib/api";
 import type { CoreProfile, UserSettings } from "@/lib/types";
 import { useCoreSetupFlow } from "@/hooks/useCoreSetupFlow";
 import { ONBOARDING_CORE_PATH } from "@/lib/coreSetup";
+import { FIRST_TODAY_PATH } from "@/lib/firstTodayState";
 import { buildAuthHref } from "@/lib/authRedirect";
 import { OnboardingWebScreen } from "@/components/product-ui/OnboardingWebScreen";
 import { OnboardingHeroSection } from "@/components/onboarding/OnboardingHeroSection";
@@ -76,7 +77,7 @@ export function CoreOnboardingFlow() {
         setCoreProfile(core);
         hydrateSetupForm(profile, core);
         if (core?.is_ready) {
-          router.replace("/onboarding/intent");
+          router.replace(FIRST_TODAY_PATH);
         }
       })
       .finally(() => setLoading(false));
@@ -134,7 +135,7 @@ export function CoreOnboardingFlow() {
           hasResolvedBirthplace={hasResolvedBirthplace}
           setupError={setupError}
           setupMessage={setupMessage}
-          onFinishSetupFlow={() => router.push("/onboarding/intent")}
+          onFinishSetupFlow={() => router.push(FIRST_TODAY_PATH)}
           onReopenSetupForm={() => {
             resetSetupFlow();
           }}

@@ -1,17 +1,10 @@
 import { FIRST_TODAY_PATH } from "@/lib/firstTodayState";
 
 const mockHasCompletedFirstToday = jest.fn<boolean, []>(() => false);
-const mockHasOnboardingIntent = jest.fn<boolean, []>(() => true);
-const mockHasOnboardingReality = jest.fn<boolean, []>(() => true);
 
 jest.mock("@/lib/firstTodayState", () => ({
   FIRST_TODAY_PATH: "/today?first=1",
   hasCompletedFirstToday: () => mockHasCompletedFirstToday(),
-}));
-
-jest.mock("@/lib/onboardingContext", () => ({
-  hasOnboardingIntent: () => mockHasOnboardingIntent(),
-  hasOnboardingReality: () => mockHasOnboardingReality(),
 }));
 
 import { resolvePostCoreAuthTarget } from "@/lib/authRedirect";
@@ -19,8 +12,6 @@ import { resolvePostCoreAuthTarget } from "@/lib/authRedirect";
 describe("resolvePostCoreAuthTarget", () => {
   beforeEach(() => {
     mockHasCompletedFirstToday.mockReturnValue(false);
-    mockHasOnboardingIntent.mockReturnValue(true);
-    mockHasOnboardingReality.mockReturnValue(true);
   });
 
   it("routes new users to First Today path", () => {
@@ -32,8 +23,9 @@ describe("resolvePostCoreAuthTarget", () => {
     expect(resolvePostCoreAuthTarget()).toBe("/profile");
   });
 
-  it("routes to intent onboarding when missing", () => {
-    mockHasOnboardingIntent.mockReturnValue(false);
-    expect(resolvePostCoreAuthTarget()).toBe("/onboarding/intent");
+  it("does not divert to /onboarding/intent (chips live in First Today)", () => {
+    mockHasCompletedFirstToday.mockReturnValue(false);
+    expect(resolvePostCoreAuthTarget()).toBe(FIRST_TODAY_PATH);
+    expect(resolvePostCoreAuthTarget()).not.toContain("/onboarding/intent");
   });
 });

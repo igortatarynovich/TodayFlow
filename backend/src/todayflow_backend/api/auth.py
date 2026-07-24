@@ -98,16 +98,17 @@ def login(payload: LoginPayload, request: Request, db: Session = Depends(get_ses
 
 @router.post("/email-signup")
 def email_signup(payload: EmailSignupPayload, request: Request, db: Session = Depends(get_session)) -> dict:
-    """Value-first save gate: email only, temp password + magic link; profile prep after login."""
+    """Value-first save gate: email only + magic link (no plaintext password)."""
     locale = request_locale(request)
     existing = db.query(db_models.User).filter_by(email=payload.email).first()
     if existing:
         raise HTTPException(status_code=400, detail=translate("auth.errors.exists", locale=locale))
 
-    temp_password = secrets.token_urlsafe(10)
+    # Random unusable password hash — login is magic-link only until user sets a password later.
+    bootstrap_secret = secrets.token_urlsafe(32)
     user = db_models.User(
         email=payload.email,
-        password_hash=auth_service.hash_password(temp_password),
+        password_hash=auth_service.hash_password(bootstrap_secret),
         is_admin=False,
     )
     db.add(user)
@@ -127,7 +128,7 @@ def email_signup(payload: EmailSignupPayload, request: Request, db: Session = De
 
     base_url = settings.frontend_app_url or str(request.base_url).rstrip("/")
     magic_url = f"{base_url}/auth/magic?token={magic_token_str}"
-    email_sent = send_welcome_email(user.email, magic_url, temp_password)
+    email_sent = send_welcome_email(user.email, magic_url)
 
     response: dict = {
         "user_id": user.id,
@@ -139,7 +140,6 @@ def email_signup(payload: EmailSignupPayload, request: Request, db: Session = De
     # Dev / no-SMTP fallback: allow immediate session while still showing check-email UX.
     if not email_sent:
         response["token"] = auth_service.create_token(user.id, is_admin=user.is_admin)
-        response["dev_temp_password"] = temp_password
         response["dev_magic_url"] = magic_url
 
     return response

@@ -572,6 +572,33 @@ export default function TodayPage() {
     lastRitualNarrativeContextRef.current = onboardingRitual;
   }, [isAuthenticated, todayData?.date, searchParams]);
 
+  const onFirstTodayReactionComplete = useCallback(async () => {
+    const d = todayData?.date;
+    if (!d || dayStorySingleVoice) return;
+    const onboardingRitual = buildOnboardingRitualContext();
+    if (!onboardingRitual) return;
+    lastRitualNarrativeContextRef.current = onboardingRitual;
+    setGuideNarrativeLoading(true);
+    try {
+      const r = await fetchTodayNarrativeCached(
+        {
+          target_date: d,
+          surface: "guide",
+          ritual_context: onboardingRitual,
+          ...(narrativeDepthForRequest ? { depth_level: narrativeDepthForRequest } : {}),
+        },
+        { force: true },
+      );
+      setGuideGenerationId(r.generation_id);
+      guideProfileSelectorRef.current = narrativeProfileSelectorPayload(r.profile_selector);
+      setGuideNarrativePayload(r.payload);
+    } catch {
+      /* keep previous guide */
+    } finally {
+      setGuideNarrativeLoading(false);
+    }
+  }, [todayData?.date, dayStorySingleVoice, narrativeDepthForRequest]);
+
   useEffect(() => {
     if (!isAuthenticated) return;
     loadToday();
@@ -1338,6 +1365,7 @@ export default function TodayPage() {
             spheresNarrativePayload={spheresPayload}
             eveningNarrativePayload={eveningPayload}
             onRitualSpineComplete={onRitualSpineComplete}
+            onFirstTodayReactionComplete={firstTodayMode ? onFirstTodayReactionComplete : undefined}
             colorLine={colorLineResolved}
             stoneLine={stoneLineResolved}
             coreProfile={coreProfile}

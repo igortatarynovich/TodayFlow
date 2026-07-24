@@ -2,7 +2,6 @@
 
 import { claimGuestProfileAfterAuth } from "@/lib/claimGuestProfile";
 import { fetchCoreProfileCached } from "@/lib/coreProfileCache";
-import { hasOnboardingIntent, hasOnboardingReality } from "@/lib/onboardingContext";
 import {
   FIRST_TODAY_PATH,
   hasCompletedFirstToday,
@@ -52,8 +51,7 @@ export function buildAuthHref(mode: AuthMode = "login", redirect?: string | null
 
 /** Client-only: next route after core profile is ready (onboarding → First Today → Profile). */
 export function resolvePostCoreAuthTarget(): string {
-  if (!hasOnboardingIntent()) return "/onboarding/intent";
-  if (!hasOnboardingReality()) return "/onboarding/reality";
+  // Intent/Reality live inside First Today (placement C) — do not divert to /onboarding/intent|reality.
   if (!hasCompletedFirstToday()) return FIRST_TODAY_PATH;
   return "/profile";
 }
