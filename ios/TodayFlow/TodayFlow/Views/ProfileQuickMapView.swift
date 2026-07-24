@@ -593,7 +593,7 @@ struct ProfileQuickMapView: View {
                 }
             }
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
-                ForEach(model.frameworkCards) { card in
+                ForEach(Array(model.frameworkCards.enumerated()), id: \.element.id) { index, card in
                     VStack(alignment: .leading, spacing: 6) {
                         Text(card.title.uppercased())
                             .font(.caption2.weight(.bold))
@@ -612,6 +612,7 @@ struct ProfileQuickMapView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Color.white.opacity(0.78))
                     .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    .profileMotionSettle(delay: ProfileMotion.staggerDelay(index: index))
                 }
             }
         }

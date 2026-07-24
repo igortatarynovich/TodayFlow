@@ -1,6 +1,6 @@
 import SwiftUI
 
-// MARK: - Profile Motion Kit (DS-4 · parity web profileMotion.module.css)
+// MARK: - Profile Motion Kit (DS-4 · parity web design-system/motion + legacy profileMotion)
 
 enum ProfileMotion {
     static let staggerStep = TodayFlowTheme.Motion.staggerCardPick
@@ -51,6 +51,28 @@ struct ProfileMotionHeroSymbolModifier: ViewModifier {
     }
 }
 
+/// Settle — slight drop + spring stop (FOUNDATION_UI §7 · web `MotionSettle`).
+struct ProfileMotionSettleModifier: ViewModifier {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    let delay: Double
+    @State private var visible = false
+
+    func body(content: Content) -> some View {
+        content
+            .opacity(visible ? 1 : 0)
+            .offset(y: visible ? 0 : -10)
+            .onAppear {
+                guard !reduceMotion else {
+                    visible = true
+                    return
+                }
+                withAnimation(TodayFlowTheme.Motion.cardSpring.delay(delay)) {
+                    visible = true
+                }
+            }
+    }
+}
+
 extension View {
     func profileMotionReveal(delay: Double = 0) -> some View {
         modifier(ProfileMotionRevealModifier(delay: delay))
@@ -58,5 +80,9 @@ extension View {
 
     func profileMotionHeroSymbol() -> some View {
         modifier(ProfileMotionHeroSymbolModifier())
+    }
+
+    func profileMotionSettle(delay: Double = 0) -> some View {
+        modifier(ProfileMotionSettleModifier(delay: delay))
     }
 }

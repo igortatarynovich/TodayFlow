@@ -993,7 +993,7 @@ Ordered work (aligns with canon §7):
 
 ## 6) Current Priorities (Execution Order)
 
-> **Активный фокус (2026-07-24):** web motion coverage (Profile → Tarot → Compatibility → Practices). CSS-структура и нативный паритет — не трогать без явного разблокирования.
+> **Активный фокус (2026-07-24):** native motion parity — **iOS first** (`ProfileMotion` → Settle / Flip / Drift / Pulse, затем mood themes). Web motion coverage закрыт. Android — после стабилизации iOS-паттерна. MoodMapView — Maps heatmap, не mood-themes (не путать).
 
 ### 🔴 Phase 3 — Screen Block Definition (единственный приоритет)
 
