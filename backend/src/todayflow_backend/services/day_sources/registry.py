@@ -9,6 +9,9 @@ from todayflow_backend.services.day_sources.adapters.chinese_metaphysics import 
 )
 from todayflow_backend.services.day_sources.adapters.moon import run_moon
 from todayflow_backend.services.day_sources.adapters.numerology import run_numerology
+from todayflow_backend.services.day_sources.adapters.personal_astrology import (
+    run_personal_astrology,
+)
 from todayflow_backend.services.day_sources.adapters.planetary_hours import run_planetary_hours
 from todayflow_backend.services.day_sources.adapters.seasonal_calendar import (
     run_seasonal_calendar,
@@ -61,10 +64,15 @@ class DaySourceRegistry:
         inputs: DaySourceInputs,
         *,
         foundation_only: bool = True,
+        personal_only: bool = False,
     ) -> list[SourceFamilySpec]:
         out: list[SourceFamilySpec] = []
         for spec in self._families.values():
-            if foundation_only and not spec.in_foundation:
+            if personal_only:
+                # L3-only families (personal, not shared foundation).
+                if not (spec.in_personal and not spec.in_foundation):
+                    continue
+            elif foundation_only and not spec.in_foundation:
                 continue
             out.append(spec)
         return sorted(out, key=lambda s: s.family_id)
@@ -74,11 +82,14 @@ class DaySourceRegistry:
         inputs: DaySourceInputs,
         *,
         foundation_only: bool = True,
+        personal_only: bool = False,
         family_ids: Iterable[str] | None = None,
     ) -> dict[str, SourceResult]:
         wanted = set(family_ids) if family_ids is not None else None
         results: dict[str, SourceResult] = {}
-        for spec in self.resolve(inputs, foundation_only=foundation_only):
+        for spec in self.resolve(
+            inputs, foundation_only=foundation_only, personal_only=personal_only
+        ):
             if wanted is not None and spec.family_id not in wanted:
                 continue
             missing = [k for k in spec.required_input_keys if not _has_input(inputs, k)]
@@ -187,6 +198,17 @@ def default_registry() -> DaySourceRegistry:
             run=run_chinese_metaphysics,
         )
     )
+    reg.register(
+        SourceFamilySpec(
+            family_id="personal_astrology",
+            layer="personal",
+            in_foundation=False,
+            in_personal=True,
+            in_today=True,
+            required_input_keys=(),
+            run=run_personal_astrology,
+        )
+    )
     return reg
 
 
@@ -210,6 +232,24 @@ def collect_foundation_sources(
     results = reg.collect(inputs, foundation_only=True)
     return {
         "contract_version": "day_source_bundle_v0",
+        "target_date": inputs.target_date.isoformat(),
+        "sources": {fid: res.to_dict() for fid, res in results.items()},
+        "ok_family_ids": sorted(
+            fid for fid, res in results.items() if res.status == "ok"
+        ),
+    }
+
+
+def collect_personal_sources(
+    inputs: DaySourceInputs,
+    *,
+    registry: DaySourceRegistry | None = None,
+) -> dict[str, Any]:
+    """Run L3 personal families; return serializable bundle for Day Personal."""
+    reg = registry or get_default_registry()
+    results = reg.collect(inputs, foundation_only=False, personal_only=True)
+    return {
+        "contract_version": "day_personal_source_bundle_v0",
         "target_date": inputs.target_date.isoformat(),
         "sources": {fid: res.to_dict() for fid, res in results.items()},
         "ok_family_ids": sorted(

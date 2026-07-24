@@ -9,7 +9,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-from datetime import date
+from datetime import date, time
 from typing import Any
 
 DAY_STORY_INTERPRETATION_V1 = "day_story_interpretation_v1"
@@ -140,6 +140,9 @@ def build_day_story_interpretation_v1(
     locale: str = "ru",
     target_date: date | None = None,
     birth_date: date | None = None,
+    birth_time: time | None = None,
+    birth_lat: float | None = None,
+    birth_lon: float | None = None,
     lat: float | None = None,
     lon: float | None = None,
     timezone: str | None = None,
@@ -157,6 +160,10 @@ def build_day_story_interpretation_v1(
         build_day_foundation_v1,
         foundation_to_interpretation_claims,
     )
+    from todayflow_backend.services.day_personal_v1 import (
+        build_day_personal_v1,
+        personal_to_interpretation_claims,
+    )
 
     resolved_date = target_date or date.today()
     # Foundation always runs: date-only Sources (weekday, universal day) do not need sky.
@@ -166,6 +173,16 @@ def build_day_story_interpretation_v1(
         birth_date=birth_date,
         lat=lat,
         lon=lon,
+        timezone=timezone,
+        locale=locale or "ru",
+    )
+    day_personal = build_day_personal_v1(
+        ce,
+        target_date=resolved_date,
+        birth_date=birth_date,
+        birth_time=birth_time,
+        birth_lat=birth_lat,
+        birth_lon=birth_lon,
         timezone=timezone,
         locale=locale or "ru",
     )
@@ -208,6 +225,10 @@ def build_day_story_interpretation_v1(
         "target_date": resolved_date.isoformat(),
         "has_birth_date": birth_date is not None,
         "has_geo": lat is not None and lon is not None,
+        "has_day_personal": bool(
+            isinstance(day_personal, dict)
+            and (day_personal.get("source_inputs") or {}).get("has_personal_astrology")
+        ),
     }
 
     def add_claim(
@@ -277,6 +298,19 @@ def build_day_story_interpretation_v1(
                     source=str((fc.get("evidence_ids") or ["day_foundation_v1"])[0]),
                     claim_ref=str(fc.get("layer") or "sky"),
                     summary=str(fc.get("text") or ""),
+                )
+            )
+
+    # Personal L3 activation (natal transits) — never mixed into Foundation essence.
+    if isinstance(day_personal, dict):
+        for pc in personal_to_interpretation_claims(day_personal):
+            claims.append(pc)
+            evidence.append(
+                _evidence(
+                    evidence_id=f"ev.{pc.get('id')}",
+                    source=str((pc.get("evidence_ids") or ["day_personal_v1"])[0]),
+                    claim_ref="personal",
+                    summary=str(pc.get("text") or ""),
                 )
             )
     do_hint = str(brief.get("do_hint") or "").strip()
@@ -596,6 +630,7 @@ def build_day_story_interpretation_v1(
         "fingerprint": fingerprint or "",
         "day_sky": _slim_day_sky(ce),
         "day_foundation": day_foundation,
+        "day_personal": day_personal,
     }
     return interpretation
 

@@ -426,8 +426,8 @@ Day Story            →  интерпретация Foundation → экран T
 
 | capability_id | version | required_inputs | in_foundation | in_personal | in_today |
 |---------------|---------|-----------------|---------------|-------------|----------|
-| `natal_transits` | v1/partial | birth chart + sky | no | yes | yes |
-| `transits_by_house` | planned | birth **time+place** | no | yes | yes |
+| `natal_transits` | v1 | birth chart + sky (`celestial_events.personal_transits`) | no | yes | yes |
+| `transits_by_house` | v1 gated | birth **time+place** (+ house fields on transit rows) | no | yes | yes |
 | `house_rulers_chains` | planned | time+place | no | yes | later |
 | `secondary_progressions` | planned | birth datetime+place | no | yes | soft background |
 | `solar_arc` | planned | birth | no | yes | soft |

@@ -57,6 +57,20 @@ export type TodayContractDayStoryV1 = {
   supports_story?: string;
   /** Objective day plot: astro + lunar layers → essence (Суть дня). */
   day_foundation?: TodayDayFoundationV1 | null;
+  /** L3 personal activation — natal transits; not part of shared Foundation. */
+  day_personal?: {
+    contract_version?: string;
+    summary_ru?: string;
+    personal_astrology?: {
+      depth?: string;
+      summary_ru?: string;
+      beats?: Array<{ id?: string; title?: string; story_ru?: string }>;
+    } | null;
+    source_inputs?: {
+      has_personal_astrology?: boolean;
+      ok_family_ids?: string[];
+    };
+  } | null;
   /** Kitchen trace — not required for display; used for honesty / future UI. */
   trace?: TodayContractDayStoryTraceV1;
 };

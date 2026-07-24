@@ -216,6 +216,14 @@ def attach_day_story_trace(
             "astro_summary": (foundation.get("astro") or {}).get("summary_ru"),
             "lunar_summary": (foundation.get("lunar") or {}).get("summary_ru"),
         }
+    personal = interpretation.get("day_personal")
+    if isinstance(personal, dict):
+        out["day_personal"] = personal
+        out["trace"]["day_personal"] = {
+            "calculation_version": personal.get("calculation_version"),
+            "summary_ru": personal.get("summary_ru"),
+            "source_inputs": personal.get("source_inputs"),
+        }
     return out
 
 
@@ -527,6 +535,8 @@ def build_day_story_llm_input(
     }
     if isinstance(interp.get("day_foundation"), dict):
         pack["day_foundation"] = interp["day_foundation"]
+    if isinstance(interp.get("day_personal"), dict):
+        pack["day_personal"] = interp["day_personal"]
     if intent_slice:
         pack["intent"] = intent_slice
     if behavior_patterns and behavior_patterns.get("total_events"):

@@ -180,6 +180,8 @@ def _build_day_story_record(
     from todayflow_backend.services.day_story_refresh_v1 import ensure_story_state
     from todayflow_backend.services.day_sources.inputs_from_profile import (
         birth_date_from_core_profile,
+        birth_place_from_core_profile,
+        birth_time_from_core_profile,
         geo_from_core_profile,
     )
     from todayflow_backend.services.day_symbol_state_v1 import owner_key_for_user
@@ -195,6 +197,8 @@ def _build_day_story_record(
     ce = celestial_events if isinstance(celestial_events, dict) else {}
     profile = core_profile if isinstance(core_profile, dict) else None
     birth_date = birth_date_from_core_profile(profile)
+    birth_time = birth_time_from_core_profile(profile)
+    birth_lat, birth_lon = birth_place_from_core_profile(profile)
     lat, lon, profile_tz = geo_from_core_profile(profile)
     geo_timezone = profile_tz or timezone_name or None
 
@@ -320,6 +324,9 @@ def _build_day_story_record(
             locale=locale_value,
             target_date=target_date,
             birth_date=birth_date,
+            birth_time=birth_time,
+            birth_lat=birth_lat,
+            birth_lon=birth_lon,
             lat=lat,
             lon=lon,
             timezone=geo_timezone,

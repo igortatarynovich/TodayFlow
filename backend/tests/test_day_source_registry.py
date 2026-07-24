@@ -64,6 +64,7 @@ def test_registry_lists_v1_families():
         "chinese_metaphysics",
         "moon",
         "numerology",
+        "personal_astrology",
         "planetary_hours",
         "seasonal_calendar",
         "vedic_panchanga",

@@ -7,6 +7,7 @@ from todayflow_backend.services.day_sources.registry import (
     DaySourceRegistry,
     default_registry,
     collect_foundation_sources,
+    collect_personal_sources,
 )
 from todayflow_backend.services.day_sources.types import (
     DAY_SOURCES_CONTRACT,
@@ -20,5 +21,6 @@ __all__ = [
     "DaySourceRegistry",
     "SourceResult",
     "collect_foundation_sources",
+    "collect_personal_sources",
     "default_registry",
 ]
