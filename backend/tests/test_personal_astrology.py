@@ -156,6 +156,55 @@ def test_profections_asc_when_time_and_place():
     assert prof["monthly"]["house"]
 
 
+def test_house_rulers_chains_requires_time_place():
+    from todayflow_backend.services.day_sources.house_rulers import (
+        build_house_rulers_chains,
+        dispositor_chain,
+    )
+
+    # Without planet longitude, Mars chain truncates after the seed step.
+    truncated = dispositor_chain("Mars", {"Sun": 4, "Moon": 3})
+    assert truncated["truncated"] == "missing_planet_longitude"
+
+    # Sun in Leo (4) → final dispositor.
+    sun_own = dispositor_chain("Sun", {"Sun": 4, "Moon": 3})
+    assert sun_own["final_dispositor"] is True
+
+    personal = build_day_personal_v1(
+        {},
+        target_date=date(2026, 7, 24),
+        birth_date=date(1990, 3, 15),
+    )
+    assert "house_rulers_chains" not in personal["personal_astrology"]["capability_ids"]
+
+    timed = build_day_personal_v1(
+        {},
+        target_date=date(2026, 7, 24),
+        birth_date=date(1990, 3, 15),
+        birth_time=time(14, 30),
+        birth_lat=55.75,
+        birth_lon=37.62,
+    )
+    pa = timed["personal_astrology"]
+    assert "house_rulers_chains" in pa["capability_ids"]
+    hr = pa["house_rulers_chains"]
+    assert len(hr["houses"]) == 12
+    assert hr["houses"][0]["house"] == 1
+    assert hr["focus"]["house"] == pa["profections"]["annual"]["house"]
+    assert hr["ascendant"]["sign_ru"]
+
+    direct = build_house_rulers_chains(
+        date(1990, 3, 15),
+        birth_time=time(14, 30),
+        birth_lat=55.75,
+        birth_lon=37.62,
+        timezone_name="Europe/Moscow",
+        focus_house=5,
+    )
+    assert direct["focus"]["house"] == 5
+    assert direct["luminaries"]["Sun"]["whole_sign_house"] >= 1
+
+
 def test_personal_houses_depth_when_time_and_place():
     personal = build_day_personal_v1(
         _sample_ce_with_transits(),

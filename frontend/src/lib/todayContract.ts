@@ -109,6 +109,14 @@ export type TodayContractDayStoryV1 = {
         };
         limitation_ru?: string;
       } | null;
+      house_rulers_chains?: {
+        summary_ru?: string;
+        depth?: string;
+        ascendant?: { sign_ru?: string };
+        houses?: Array<{ house?: number; sign_ru?: string; lord?: string; lord_ru?: string }>;
+        focus?: { house?: number; lord_ru?: string; chain?: { label_ru?: string } } | null;
+        limitation_ru?: string;
+      } | null;
       beats?: Array<{ id?: string; title?: string; story_ru?: string }>;
     } | null;
     human_design?: {
