@@ -8,6 +8,9 @@ from todayflow_backend.services.day_sources.adapters.bazi import run_bazi
 from todayflow_backend.services.day_sources.adapters.chinese_metaphysics import (
     run_chinese_metaphysics,
 )
+from todayflow_backend.services.day_sources.adapters.mayan_calendars import (
+    run_mayan_calendars,
+)
 from todayflow_backend.services.day_sources.adapters.moon import run_moon
 from todayflow_backend.services.day_sources.adapters.numerology import run_numerology
 from todayflow_backend.services.day_sources.adapters.human_design import run_human_design
@@ -199,6 +202,17 @@ def default_registry() -> DaySourceRegistry:
             in_today=True,
             required_input_keys=("target_date",),
             run=run_chinese_metaphysics,
+        )
+    )
+    reg.register(
+        SourceFamilySpec(
+            family_id="mayan_calendars",
+            layer="foundation",
+            in_foundation=True,
+            in_personal=False,
+            in_today=True,
+            required_input_keys=("target_date",),
+            run=run_mayan_calendars,
         )
     )
     reg.register(

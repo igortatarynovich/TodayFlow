@@ -229,6 +229,22 @@ export type TodayDayFoundationV1 = {
       caution_windows?: string[];
     } | null;
   } | null;
+  mayan?: {
+    summary_ru?: string;
+    note_ru?: string;
+    tzolkin_haab?: {
+      tzolkin?: { label?: string; number?: number; sign_ru?: string };
+      haab?: { label?: string };
+      long_count?: { label?: string };
+      summary_ru?: string;
+    } | null;
+    dreamspell?: {
+      kin?: number;
+      tone?: { name_ru?: string };
+      seal?: { name_ru?: string; color_ru?: string };
+      summary_ru?: string;
+    } | null;
+  } | null;
   essence?: {
     theme?: string;
     story_ru?: string;
@@ -243,6 +259,7 @@ export type TodayDayFoundationV1 = {
     has_planetary_hours?: boolean;
     has_panchanga?: boolean;
     has_chinese?: boolean;
+    has_mayan?: boolean;
     has_essence?: boolean;
     ok_family_ids?: string[];
   };

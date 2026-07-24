@@ -208,6 +208,12 @@ def _chinese_summary(payload: dict[str, Any] | None) -> str:
     return _clip(str(payload.get("summary_ru") or ""), 280)
 
 
+def _mayan_summary(payload: dict[str, Any] | None) -> str:
+    if not isinstance(payload, dict):
+        return ""
+    return _clip(str(payload.get("summary_ru") or ""), 280)
+
+
 def _essence_from_layers(
     *,
     astro_summary: str,
@@ -296,6 +302,7 @@ def build_day_foundation_from_sources(
     planetary_hours = _ok_payload(bundle, "planetary_hours")
     panchanga = _ok_payload(bundle, "vedic_panchanga")
     chinese = _ok_payload(bundle, "chinese_metaphysics")
+    mayan = _ok_payload(bundle, "mayan_calendars")
 
     astro_beats: list[dict[str, Any]] = []
     lunar_beats: list[dict[str, Any]] = []
@@ -389,6 +396,7 @@ def build_day_foundation_from_sources(
     planetary_hours_summary = _planetary_hours_summary(planetary_hours)
     panchanga_summary = _panchanga_summary(panchanga)
     chinese_summary = _chinese_summary(chinese)
+    mayan_summary = _mayan_summary(mayan)
     essence = _essence_from_layers(
         astro_summary=astro_summary,
         lunar_summary=lunar_summary,
@@ -481,6 +489,14 @@ def build_day_foundation_from_sources(
         }
         if chinese
         else None,
+        "mayan": {
+            "tzolkin_haab": mayan.get("tzolkin_haab") if mayan else None,
+            "dreamspell": mayan.get("dreamspell") if mayan else None,
+            "summary_ru": mayan_summary,
+            "note_ru": mayan.get("note_ru") if mayan else None,
+        }
+        if mayan
+        else None,
         "essence": essence,
         "source_inputs": {
             "has_astro": bool(astro_beats),
@@ -491,6 +507,7 @@ def build_day_foundation_from_sources(
             "has_planetary_hours": bool(planetary_hours),
             "has_panchanga": bool(panchanga),
             "has_chinese": bool(chinese),
+            "has_mayan": bool(mayan),
             "has_essence": bool(essence.get("story_ru")),
             "ok_family_ids": ok_ids,
         },
@@ -557,6 +574,7 @@ def foundation_to_interpretation_claims(foundation: dict[str, Any]) -> list[dict
     )
     panchanga = foundation.get("panchanga") if isinstance(foundation.get("panchanga"), dict) else {}
     chinese = foundation.get("chinese") if isinstance(foundation.get("chinese"), dict) else {}
+    mayan = foundation.get("mayan") if isinstance(foundation.get("mayan"), dict) else {}
 
     for b in (astro.get("beats") or [])[:4]:
         if not isinstance(b, dict):
@@ -667,6 +685,32 @@ def foundation_to_interpretation_claims(foundation: dict[str, Any]) -> list[dict
                 "evidence_ids": ["source.chinese_metaphysics"],
                 "domain": None,
                 "layer": "chinese",
+            }
+        )
+
+    # Soft Mayan: keep classical and Dreamspell as separate claim ids.
+    tz = mayan.get("tzolkin_haab") if isinstance(mayan.get("tzolkin_haab"), dict) else None
+    if tz and tz.get("summary_ru"):
+        claims.append(
+            {
+                "id": "claim.foundation.mayan.tzolkin_haab",
+                "kind": "support",
+                "text": _clip(str(tz.get("summary_ru") or ""), 280),
+                "evidence_ids": ["source.mayan_calendars.tzolkin_haab"],
+                "domain": None,
+                "layer": "mayan_tzolkin_haab",
+            }
+        )
+    ds = mayan.get("dreamspell") if isinstance(mayan.get("dreamspell"), dict) else None
+    if ds and ds.get("summary_ru"):
+        claims.append(
+            {
+                "id": "claim.foundation.mayan.dreamspell",
+                "kind": "support",
+                "text": _clip(str(ds.get("summary_ru") or ""), 280),
+                "evidence_ids": ["source.mayan_calendars.dreamspell"],
+                "domain": None,
+                "layer": "mayan_dreamspell",
             }
         )
 

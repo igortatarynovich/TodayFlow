@@ -608,10 +608,21 @@ Day Story            →  интерпретация Foundation → экран T
 
 ### 5.10 `mayan_calendars`
 
+| Поле | Значение |
+|------|----------|
+| purpose | Классический цолькин/хааб и отдельно Dreamspell как soft calendar layer |
+| data_sot | Civil `target_date` → JD / day counts |
+| required_inputs | `target_date` |
+| school_canon | GMT 584283 for historical; Dreamspell Kin1 = 1987-07-26 |
+| version | v1 |
+| in_foundation | soft |
+| in_personal | no (v1) |
+| in_today | soft |
+
 | capability_id | notes | version | in_foundation |
 |---------------|-------|---------|---------------|
-| `tzolkin_haab` | Historical count — separate from Dreamspell | planned | soft |
-| `dreamspell` | Argüelles system — **different family capability**, never merge ids | planned | soft |
+| `tzolkin_haab` | Historical GMT count + Long Count soft | v1 | soft |
+| `dreamspell` | Argüelles system — **different capability**, never merge ids | v1 | soft |
 
 ---
 
