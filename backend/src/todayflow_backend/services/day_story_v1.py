@@ -39,7 +39,7 @@ from todayflow_backend.services.today_contract_text_quality_v1 import (
 )
 
 DAY_STORY_V1_CONTRACT = "day_story_v1"
-DAY_STORY_PROMPT_VER = "day-story-v1.6-same-trap-bound"
+DAY_STORY_PROMPT_VER = "day-story-v1.7-no-canned-promises"
 
 PracticeKind = Literal["promise", "ascetic", "affirmation", "practice", "none"]
 
@@ -87,6 +87,8 @@ _DAY_STORY_SYS_RU = """Ты — литературный автор TodayFlow: �
   weekday ruler и т.п. — если их нет в story, их нет и в abstain/avoid).
   Тест: если убрать ловушку из story, abstain/avoid должны стать бессмысленными — иначе это
   уже другая ловушка.
+  claim.abstain / avoid_hint из day_engine_brief — мягкий фон, НЕ обязательный пункт avoid[].
+  Не копируй brief.avoid_hint в avoid, если он не следует из ловушки и 2–3 фактов story.
 - Никогда не повторяй факт (например «управитель дня недели»), который уже назван в другом
   поле ответа этого же JSON — каждый факт встречается ровно один раз во всём объекте.
 - today_move — конкретный, представимый образ (что сделать/надеть/сказать), не абстрактный совет.
@@ -436,7 +438,7 @@ def build_day_story_fallback_v1(
     avoid_hint = _voice_soften_line(
         str(
             brief.get("avoid_hint")
-            or "Лишние обещания сегодня легко превратятся в шум — лучше не раздувать список."
+            or "Резкий разворот темпа сегодня скорее шумит, чем помогает."
         )
     )
     tempo = _voice_soften_line(
@@ -487,7 +489,7 @@ def build_day_story_fallback_v1(
             ],
             "avoid": [
                 avoid_hint,
-                "Второй приоритет без времени почти всегда крадёт ясность у первого.",
+                "Второй параллельный старт без ясности почти всегда крадёт фокус у первого.",
             ],
             "advantage": do_hint,
             "abstain": avoid_hint,

@@ -159,16 +159,31 @@ def build_day_narrative_brief_v0(
         or ("One clear step today usually beats a long list." if en else "Один ясный шаг сегодня обычно стоит дороже длинного списка."),
         280,
     )
-    avoid_hint = _clip(
-        dne
-        or main_risk
-        or (
-            "New promises without time tend to turn into noise."
+    # Prefer spine risk; otherwise a tempo-linked soft line — never a canned
+    # «promises without time» that always leaks into LLM avoid[] regardless of day theme.
+    if dne or main_risk:
+        avoid_hint = _clip(dne or main_risk, 280)
+    elif 40 <= en_score <= 65:
+        avoid_hint = _clip(
+            "Sharp tempo pivots today usually add noise rather than clarity."
             if en
-            else "Новые обещания без времени сегодня легко превращаются в шум."
-        ),
-        280,
-    )
+            else "Резкий разворот темпа сегодня скорее шумит, чем помогает.",
+            280,
+        )
+    elif en_score < 40:
+        avoid_hint = _clip(
+            "Extra parallel starts today easily overload a short must-do list."
+            if en
+            else "Лишние параллельные старты сегодня легко перегружают короткий список «надо».",
+            280,
+        )
+    else:
+        avoid_hint = _clip(
+            "Speed without clarity today easily eats the focus."
+            if en
+            else "Скорость без ясности сегодня легко съедает фокус.",
+            280,
+        )
 
     if 40 <= en_score <= 65:
         tempo = (
