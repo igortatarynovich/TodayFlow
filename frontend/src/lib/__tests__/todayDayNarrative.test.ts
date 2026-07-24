@@ -234,10 +234,33 @@ describe("buildTodayDayNarrative", () => {
             },
             time_lords: {
               summary_ru: "Firdaria: мажор Луна, субпериод Сатурн.",
+              firdaria: {
+                major: { planet_ru: "Луна" },
+                sub: { planet_ru: "Сатурн" },
+              },
+              zodiacal_releasing: {
+                level1: { sign_ru: "Рак", lord_ru: "Луна" },
+              },
+            },
+            profections: {
+              summary_ru: "Годовая профекция в 10-м доме, управитель Сатурн.",
+              annual: { house: 10, lord_ru: "Сатурн", sign_ru: "Козерог" },
             },
           },
           human_design: {
-            channels: { summary_ru: "Каналы HD (soft): 1-8 (Вдохновение)." },
+            channels: {
+              summary_ru: "Каналы HD (soft): 1-8 (Вдохновение).",
+              channels: [{ id: "1-8", name_ru: "Вдохновение", centers_ru: ["G", "Горло"] }],
+            },
+            bodygraph: {
+              activations: [
+                {
+                  id: "hd-activate-sun-1",
+                  title: "Транзит активирует ворота 1",
+                  story_ru: "Сегодняшнее Солнце касается ваших ворот 1.",
+                },
+              ],
+            },
             transit_gates: {
               sun: { gate: 1, line: 2, label: "1.2", theme_ru: "творческий импульс" },
             },
@@ -254,7 +277,10 @@ describe("buildTodayDayNarrative", () => {
     expect(personal).toBeTruthy();
     expect(personal!.kicker).toMatch(/Личный слой/i);
     const text = [personal!.lead, ...personal!.paragraphs].filter(Boolean).join(" ");
-    expect(text).toMatch(/Управители|Firdaria|Каналы HD/i);
+    expect(text).toMatch(/ворот|Firdaria|Управители|Каналы HD/i);
+    expect(personal!.signals?.length).toBeGreaterThan(0);
+    expect(personal!.signals?.map((s) => s.label).join(" ")).toMatch(/Профекция|Firdaria|HD/i);
+    expect(personal!.accent).toBe("sky");
   });
 
   it("expands supports as Твой ход with color why from guide + talisman note", () => {

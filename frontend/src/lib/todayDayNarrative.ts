@@ -27,6 +27,12 @@ export type TodayDayNarrativeChapterId =
   | "symbols"
   | "supports";
 
+/** Compact glance row for Day Personal — not a chip cluster. */
+export type TodayDayPersonalSignal = {
+  label: string;
+  value: string;
+};
+
 export type TodayDayNarrativeChapter = {
   id: TodayDayNarrativeChapterId;
   kicker: string;
@@ -38,6 +44,8 @@ export type TodayDayNarrativeChapter = {
   colorHex?: string | null;
   colorLabel?: string | null;
   dual?: { strengthen: string[]; soften: string[] } | null;
+  /** Soft L3 glance signals (personal chapter only). */
+  signals?: TodayDayPersonalSignal[] | null;
   collapseAfter?: number;
 };
 
@@ -125,6 +133,101 @@ function titledStory(title: string | null | undefined, story: string | null | un
     return ensurePeriod(body);
   }
   return ensurePeriod(`${head}. ${body}`);
+}
+
+/** Prioritized soft L3 lines + glance signals from day_personal (capped). */
+export function collectDayPersonalLayer(
+  personal: NonNullable<NonNullable<TodayContractV1["day_story"]>["day_personal"]>,
+): { paragraphs: string[]; signals: TodayDayPersonalSignal[] } {
+  const paras: string[] = [];
+  const layerUsed: string[] = [];
+  const astro = personal.personal_astrology;
+  const hd = personal.human_design;
+  const bazi = personal.bazi;
+  const vedic = personal.vedic_personal;
+
+  const activation = hd?.bodygraph?.activations?.[0];
+  const zrPeak =
+    clean(astro?.time_lords?.zodiacal_releasing?.peak_soft?.note_ru) ||
+    clean(astro?.time_lords?.zodiacal_releasing_spirit?.peak_soft?.note_ru);
+  const activeReturn = (astro?.planet_returns?.active ?? []).find((r) => r?.body_ru || r?.body);
+  const windowReturn = (astro?.planet_returns?.highlights ?? []).find((h) => h?.in_return_window);
+  const returnLine = activeReturn
+    ? `Возврат ${activeReturn.body_ru || activeReturn.body}: окно активной встречи с циклом.`
+    : windowReturn?.body_ru || windowReturn?.body
+      ? `Возврат ${windowReturn.body_ru || windowReturn.body}: мягкое окно возврата.`
+      : null;
+
+  const softLines = [
+    clean(activation?.story_ru) || titledStory(activation?.title, activation?.story_ru),
+    clean(astro?.time_lords?.summary_ru),
+    zrPeak ? `ZR: ${zrPeak}` : null,
+    clean(astro?.house_rulers_chains?.summary_ru),
+    clean(astro?.profections?.summary_ru),
+    clean(hd?.channels?.summary_ru),
+    returnLine,
+    clean(astro?.solar_return?.summary_ru),
+    clean(astro?.lunar_return?.summary_ru),
+    clean(vedic?.dasha?.summary_ru) || clean(vedic?.gochara?.summary_ru) || clean(vedic?.summary_ru),
+    clean(bazi?.beats?.[0]?.story_ru) || titledStory(bazi?.beats?.[0]?.title, bazi?.beats?.[0]?.story_ru),
+    clean(hd?.transit_gates?.sun?.theme_ru
+      ? `HD: Солнце ${hd.transit_gates.sun.label ?? ""} — ${hd.transit_gates.sun.theme_ru}`.trim()
+      : null),
+    clean(personal.summary_ru),
+  ];
+  for (const line of softLines) {
+    pushDistinct(paras, layerUsed, line);
+  }
+
+  const signals: TodayDayPersonalSignal[] = [];
+  const pushSignal = (label: string, value: string | null | undefined) => {
+    const v = clean(value);
+    if (!v || signals.length >= 4) return;
+    if (signals.some((s) => s.label === label || s.value === v)) return;
+    signals.push({ label, value: v });
+  };
+
+  const annual = astro?.profections?.annual;
+  if (annual?.house) {
+    pushSignal(
+      "Профекция",
+      [annual.house ? `${annual.house}-й дом` : null, annual.lord_ru, annual.sign_ru]
+        .filter(Boolean)
+        .join(" · "),
+    );
+  }
+  const firMajor = astro?.time_lords?.firdaria?.major?.planet_ru;
+  const firSub = astro?.time_lords?.firdaria?.sub?.planet_ru;
+  if (firMajor) {
+    pushSignal("Firdaria", firSub ? `${firMajor} / ${firSub}` : firMajor);
+  }
+  const zrL1 = astro?.time_lords?.zodiacal_releasing?.level1;
+  if (zrL1?.sign_ru) {
+    pushSignal("ZR Fortune", [zrL1.sign_ru, zrL1.lord_ru].filter(Boolean).join(" · "));
+  }
+  const channel = hd?.channels?.channels?.[0];
+  if (channel?.id || channel?.name_ru) {
+    pushSignal(
+      "HD канал",
+      [channel.id, channel.name_ru, (channel.centers_ru ?? []).slice(0, 2).join(" / ")]
+        .filter(Boolean)
+        .join(" · "),
+    );
+  } else {
+    const center = hd?.channels?.defined_centers?.[0];
+    if (center?.name_ru) pushSignal("HD центр", center.name_ru);
+  }
+  const maha = vedic?.dasha?.mahadasha;
+  if (maha?.lord_ru || maha?.lord) {
+    pushSignal("Даша", maha.lord_ru || maha.lord || null);
+  }
+  const baziBeat = bazi?.beats?.[0];
+  if (baziBeat?.title) pushSignal("BaZi", baziBeat.title);
+
+  return {
+    paragraphs: paras.slice(0, 4),
+    signals,
+  };
 }
 
 function firstPlanetHint(input: {
@@ -478,33 +581,19 @@ export function buildTodayDayNarrative(input: {
 
   const personal = contract.day_story?.day_personal ?? null;
   if (personal) {
-    const paras: string[] = [];
-    const layerUsed: string[] = [];
-    const astro = personal.personal_astrology;
-    const hd = personal.human_design;
-    const softLines = [
-      clean(astro?.house_rulers_chains?.summary_ru),
-      clean(astro?.time_lords?.summary_ru),
-      clean(astro?.profections?.summary_ru),
-      clean(hd?.channels?.summary_ru),
-      clean(hd?.transit_gates?.sun?.theme_ru
-        ? `HD: Солнце ${hd.transit_gates.sun.label ?? ""} — ${hd.transit_gates.sun.theme_ru}`.trim()
-        : null),
-    ];
-    for (const line of softLines) {
-      pushDistinct(paras, layerUsed, line);
-    }
+    const layer = collectDayPersonalLayer(personal);
     // Cap soft personal chapter — do not dump full L3 pack.
-    const capped = paras.slice(0, 3);
-    if (capped.length) {
+    const capped = layer.paragraphs;
+    if (capped.length || layer.signals.length) {
       for (const p of capped) used.push(p);
       chapters.push({
         id: "personal",
         kicker: "Личный слой",
         lead: capped[0] ?? null,
         paragraphs: capped.slice(1),
-        accent: "default",
-        collapseAfter: capped.length > 2 ? 2 : undefined,
+        accent: "sky",
+        signals: layer.signals.length ? layer.signals : null,
+        collapseAfter: capped.length > 3 ? 2 : undefined,
       });
     }
   }

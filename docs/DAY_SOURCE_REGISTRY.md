@@ -66,15 +66,15 @@ DaySourceInputs
 | `kabbalah_letter` | **personal** | `target_date` | no (L3; Today claims deferred) |
 | `electional_horary` | **personal** | explicit request + geo (+ time; question→horary) | no (situational) |
 
-Планируемые (канон есть, адаптер later): richer Day Personal UI, full HD centers/type, …
+Планируемые (канон есть, адаптер later): full HD centers/type, …
 
 ### Ephemeris bridge (v0)
 
 `celestial_events.ephemeris` несёт Swiss noon (`transit_noon`), optional `natal`, и optional `design_minus_88d` (birth−88d Swiss walk) из AstroService. Day Sources читают через `DaySourceInputs.ephemeris` с fallback на mean longitude. Time-lord lots используют Swiss natal Sun/Moon/ASC когда snapshot есть.
 
-### Soft → Today wire (v1.6)
+### Soft → Today wire (v1.7)
 
-`house_rulers_chains`, `time_lords` (Firdaria) и HD classical channels приоритетно попадают в `derived_claims` и пробрасываются в `today_contract.day_story.day_personal` (глава «Личный слой» в narrative).
+`house_rulers_chains`, `time_lords`, HD channels и смежные L3 (профекция, returns, BaZi, Vedic) попадают в `today_contract.day_story.day_personal`. Narrative глава «Личный слой» показывает до 4 soft-абзацев + компактные glance-сигналы (не dump всего pack).
 
 ### Pipeline wiring
 

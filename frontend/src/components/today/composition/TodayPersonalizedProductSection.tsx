@@ -197,6 +197,16 @@ export function TodayPersonalizedProductSection({
                       {narrative.softWhy}
                     </p>
                   ) : null}
+                  {chapter.id === "personal" && chapter.signals?.length ? (
+                    <dl className={styles.personalSignals} data-testid="today-personal-signals">
+                      {chapter.signals.map((signal) => (
+                        <div key={`${signal.label}-${signal.value}`} className={styles.personalSignalRow}>
+                          <dt className={styles.personalSignalLabel}>{signal.label}</dt>
+                          <dd className={styles.personalSignalValue}>{signal.value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  ) : null}
                   {chapter.dual && (chapter.dual.strengthen.length || chapter.dual.soften.length) ? (
                     <div className={journeyStyles.dualPanels}>
                       {chapter.dual.strengthen.length ? (

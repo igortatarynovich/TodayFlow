@@ -448,6 +448,38 @@
   color: rgba(201, 169, 110, 0.9);
 }
 
+.personalSignals {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin: 0.95rem 0 0;
+  padding: 0;
+}
+
+.personalSignalRow {
+  display: grid;
+  grid-template-columns: minmax(5.5rem, 7.5rem) minmax(0, 1fr);
+  gap: 0.65rem 1rem;
+  align-items: baseline;
+}
+
+.personalSignalLabel {
+  margin: 0;
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(201, 169, 110, 0.82);
+}
+
+.personalSignalValue {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.88);
+  max-width: 36ch;
+}
+
 .narrativeScroll .synthesisKicker {
   margin: 0;
   font-family: var(--tf-font-mono, ui-monospace, monospace);
