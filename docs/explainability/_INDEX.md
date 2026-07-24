@@ -1,0 +1,10 @@
+# Explainability
+
+Слой «смысл, не механизм» и интерпретация.
+
+| Файл | Роль |
+|------|------|
+| [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) | Umbrella |
+| [EXPLAINABLE_INTERPRETATION.md](./EXPLAINABLE_INTERPRETATION.md) | Нормы интерпретации |
+| [EXPLAIN_MEANING_NOT_MECHANISM.md](./EXPLAIN_MEANING_NOT_MECHANISM.md) | UX-правило |
+| [INTERPRETATION_LAYER_AND_REFERENCE.md](./INTERPRETATION_LAYER_AND_REFERENCE.md) | event ≠ meaning |
