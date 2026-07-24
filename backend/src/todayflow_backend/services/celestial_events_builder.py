@@ -7,6 +7,7 @@ from typing import Any
 
 from todayflow_backend.services import astro
 from todayflow_backend.services.aspects import AspectEngine
+from todayflow_backend.services.day_sources.void_of_course import build_void_of_course_v0
 from todayflow_backend.services.lunar import LunarService
 from todayflow_backend.services.retrograde import RetrogradeService
 
@@ -352,6 +353,13 @@ async def build_celestial_events(
         },
     }
 
+    # Timed major Moon aspects are not in sky_aspects yet → VOC stays gated (canon §5.2.4).
+    void_of_course = build_void_of_course_v0(
+        target_date=target_date,
+        ingresses=ingresses_today,
+        timed_lunar_aspects=None,
+    )
+
     payload: dict[str, Any] = {
         "lunar_phase": lunar_phase,
         "retrogrades": retrogrades,
@@ -359,6 +367,7 @@ async def build_celestial_events(
         "personal_transits": personal,
         "ingresses": ingresses_today,
         "daily_symbols": daily_symbols,
+        "void_of_course": void_of_course,
     }
     if transit_signs.get("moon_sign"):
         payload["moon_sign"] = transit_signs["moon_sign"]

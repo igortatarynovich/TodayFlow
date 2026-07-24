@@ -84,6 +84,14 @@ export type TodayDayFoundationV1 = {
       next_phase?: { name?: string; in_days?: number } | null;
     } | null;
     moon_sign?: { sign?: string; sign_ru?: string } | null;
+    void_of_course?: {
+      status?: string;
+      rule_id?: string;
+      in_void_of_course?: boolean;
+      starts_at?: string;
+      ends_at?: string;
+      unavailable_reason?: string;
+    } | null;
     beats?: TodayDayFoundationBeatV1[];
     summary_ru?: string;
   };

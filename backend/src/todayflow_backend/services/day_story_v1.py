@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import json
 import re
+from datetime import date
 from typing import Any, Literal
 
 from todayflow_backend.core.llm_openai_compatible import (
@@ -342,6 +343,8 @@ def build_day_story_fallback_v1(
     celestial_events: dict[str, Any] | None = None,
     color_symbol: dict[str, Any] | None = None,
     stone_symbol: dict[str, Any] | None = None,
+    target_date: date | None = None,
+    birth_date: date | None = None,
 ) -> dict[str, Any]:
     """Deterministic story from interpretation + brief when LLM unavailable."""
     interp = interpretation or build_day_story_interpretation_v1(
@@ -355,6 +358,8 @@ def build_day_story_fallback_v1(
         stone_symbol=stone_symbol,
         fingerprint=fingerprint,
         locale=locale,
+        target_date=target_date,
+        birth_date=birth_date,
     )
     brief = day_engine_brief if isinstance(day_engine_brief, dict) else {}
     interp_essence = (
@@ -476,6 +481,8 @@ def build_day_story_llm_input(
     celestial_events: dict[str, Any] | None = None,
     color_symbol: dict[str, Any] | None = None,
     stone_symbol: dict[str, Any] | None = None,
+    target_date: date | None = None,
+    birth_date: date | None = None,
 ) -> dict[str, Any]:
     color_sym = color_symbol if isinstance(color_symbol, dict) else {}
     stone_sym = stone_symbol if isinstance(stone_symbol, dict) else {}
@@ -490,6 +497,8 @@ def build_day_story_llm_input(
         color_symbol=color_sym or None,
         stone_symbol=stone_sym or None,
         locale=locale,
+        target_date=target_date,
+        birth_date=birth_date,
     )
     day_sky = interp.get("day_sky") if isinstance(interp.get("day_sky"), dict) else {}
     talisman_reasons: dict[str, Any] = {}

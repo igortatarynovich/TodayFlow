@@ -29,6 +29,7 @@ def run_moon(inputs: DaySourceInputs) -> SourceResult:
 
     phase = ce.get("lunar_phase") if isinstance(ce.get("lunar_phase"), dict) else None
     moon_sign = ce.get("moon_sign") if isinstance(ce.get("moon_sign"), dict) else None
+    voc = ce.get("void_of_course") if isinstance(ce.get("void_of_course"), dict) else None
     moon_ingresses = [
         row
         for row in (ce.get("ingresses") or [])
@@ -57,12 +58,15 @@ def run_moon(inputs: DaySourceInputs) -> SourceResult:
         caps.append("lunar_aspects")
     if moon_ingresses:
         caps.append("ingresses")
+    if voc and voc.get("status") == "ok":
+        caps.append("void_of_course")
 
     payload: dict[str, Any] = {
         "lunar_phase": phase,
         "moon_sign": moon_sign,
         "ingresses": moon_ingresses,
         "lunar_aspects": lunar_aspects,
+        "void_of_course": voc,
     }
 
     if not caps:

@@ -40,6 +40,27 @@ def _sample_story() -> dict:
     return story
 
 
+def test_interpretation_always_builds_foundation_without_sky():
+    from datetime import date
+
+    interp = build_day_story_interpretation_v1(
+        day_engine_brief={"anchor_summary": "Ось дня.", "do_hint": "Шаг.", "avoid_hint": "Не спеши."},
+        ritual_context={},
+        target_date=date(2026, 7, 24),
+        birth_date=date(1990, 3, 15),
+    )
+    assert interp["source_inputs"]["has_day_foundation"] is True
+    assert interp["source_inputs"]["target_date"] == "2026-07-24"
+    assert interp["source_inputs"]["has_birth_date"] is True
+    foundation = interp["day_foundation"]
+    assert foundation["numerology"]["universal_day"] == 5
+    assert foundation["numerology"]["personal_day"] is not None
+    assert foundation["weekday"]["ruler_planet"] == "Venus"
+    claim_ids = {c["id"] for c in interp["derived_claims"]}
+    assert "claim.foundation.numerology" in claim_ids
+    assert "claim.foundation.weekday" in claim_ids
+
+
 def test_interpretation_includes_sky_and_color_why_claims():
     interp = build_day_story_interpretation_v1(
         day_engine_brief={"anchor_summary": "Ось дня.", "do_hint": "Шаг.", "avoid_hint": "Не спеши."},

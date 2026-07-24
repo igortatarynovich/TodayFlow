@@ -11,7 +11,9 @@ from todayflow_backend.services.day_foundation_v1 import (
 )
 from todayflow_backend.services.day_sources import DaySourceInputs, collect_foundation_sources
 from todayflow_backend.services.day_sources.adapters.numerology import universal_day_number
+from todayflow_backend.services.day_sources.inputs_from_profile import birth_date_from_core_profile
 from todayflow_backend.services.day_sources.registry import default_registry
+from todayflow_backend.services.day_sources.void_of_course import build_void_of_course_v0
 
 
 def _sample_ce() -> dict:
@@ -137,3 +139,56 @@ def test_legacy_build_day_foundation_v1_compat():
     assert empty["essence"]["story_ru"] == ""
     assert empty["source_inputs"]["has_essence"] is False
     assert empty["numerology"]["universal_day"] == 5
+
+
+def test_birth_date_from_core_profile():
+    assert birth_date_from_core_profile({"astro": {"birth_date": "1990-03-15"}}) == date(
+        1990, 3, 15
+    )
+    assert birth_date_from_core_profile({}) is None
+
+
+def test_void_of_course_unavailable_without_timed_aspects():
+    voc = build_void_of_course_v0(
+        target_date=date(2026, 7, 24),
+        ingresses=[
+            {"planet": "Moon", "planet_ru": "Луна", "ingress_date": "2026-07-25"},
+        ],
+        timed_lunar_aspects=None,
+    )
+    assert voc["status"] == "unavailable"
+    assert voc["unavailable_reason"] == "missing_aspect_timeline"
+    assert voc["rule_id"] == "majors_only_v1"
+    assert voc["next_moon_ingress_date"] == "2026-07-25"
+
+
+def test_void_of_course_ok_with_timed_aspects():
+    voc = build_void_of_course_v0(
+        target_date=date(2026, 7, 24),
+        ingresses=[{"planet": "Moon", "ingress_date": "2026-07-25"}],
+        timed_lunar_aspects=[
+            {
+                "id": "moon-trine-venus",
+                "exact_time": "2026-07-24T08:00:00",
+            }
+        ],
+    )
+    assert voc["status"] == "ok"
+    assert voc["in_void_of_course"] is True
+    assert voc["starts_at"].startswith("2026-07-24")
+    assert voc["ends_at"] == "2026-07-25"
+
+
+def test_foundation_voc_beat_when_in_void():
+    ce = _sample_ce()
+    ce["void_of_course"] = {
+        "rule_id": "majors_only_v1",
+        "status": "ok",
+        "in_void_of_course": True,
+        "starts_at": "2026-07-24T08:00:00",
+        "ends_at": "2026-07-25",
+    }
+    f = build_day_foundation_v1(ce, target_date=date(2026, 7, 24))
+    kinds = {b["kind"] for b in f["lunar"]["beats"]}
+    assert "void_of_course" in kinds
+    assert f["lunar"]["void_of_course"]["status"] == "ok"

@@ -297,6 +297,7 @@ def build_day_foundation_from_sources(
 
     phase = moon.get("lunar_phase") if isinstance(moon.get("lunar_phase"), dict) else None
     moon_sign = moon.get("moon_sign") if isinstance(moon.get("moon_sign"), dict) else None
+    voc = moon.get("void_of_course") if isinstance(moon.get("void_of_course"), dict) else None
     if not moon_sign:
         for b in lunar_beats:
             m = re.search(r"→\s*([А-ЯЁA-Za-z]+)", str(b.get("title") or ""))
@@ -317,6 +318,21 @@ def build_day_foundation_from_sources(
                 ),
                 "evidence_ref": "source.moon.phase",
             },
+        )
+
+    if isinstance(voc, dict) and voc.get("status") == "ok" and voc.get("in_void_of_course"):
+        lunar_beats.append(
+            {
+                "id": "lunar.void_of_course",
+                "kind": "void_of_course",
+                "title": "Луна без курса",
+                "story_ru": _clip(
+                    "Луна без курса: после последнего мажорного аспекта до смены знака "
+                    "лучше не форсировать новые старты — дождаться ясного перехода.",
+                    240,
+                ),
+                "evidence_ref": "source.moon.void_of_course",
+            }
         )
 
     astro_beats = astro_beats[:6]
@@ -355,6 +371,7 @@ def build_day_foundation_from_sources(
             if phase
             else None,
             "moon_sign": moon_sign,
+            "void_of_course": voc,
             "beats": lunar_beats,
             "summary_ru": lunar_summary,
         },

@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from datetime import date
 from typing import Any
 
 DAY_STORY_INTERPRETATION_V1 = "day_story_interpretation_v1"
@@ -137,6 +138,8 @@ def build_day_story_interpretation_v1(
     stone_symbol: dict[str, Any] | None = None,
     fingerprint: str | None = None,
     locale: str = "ru",
+    target_date: date | None = None,
+    birth_date: date | None = None,
 ) -> dict[str, Any]:
     """Build structured interpretation + evidence from known inputs (no LLM)."""
     brief = day_engine_brief if isinstance(day_engine_brief, dict) else {}
@@ -152,7 +155,14 @@ def build_day_story_interpretation_v1(
         foundation_to_interpretation_claims,
     )
 
-    day_foundation = build_day_foundation_v1(ce) if ce else None
+    resolved_date = target_date or date.today()
+    # Foundation always runs: date-only Sources (weekday, universal day) do not need sky.
+    day_foundation = build_day_foundation_v1(
+        ce,
+        target_date=resolved_date,
+        birth_date=birth_date,
+        locale=locale or "ru",
+    )
 
     evidence: list[dict[str, Any]] = []
     claims: list[dict[str, Any]] = []
@@ -176,9 +186,17 @@ def build_day_story_interpretation_v1(
         "has_retro": bool(ce.get("retrogrades")),
         "has_day_foundation": bool(
             isinstance(day_foundation, dict)
-            and (day_foundation.get("source_inputs") or {}).get("has_essence")
+            and (
+                (day_foundation.get("source_inputs") or {}).get("has_essence")
+                or (day_foundation.get("source_inputs") or {}).get("has_numerology")
+                or (day_foundation.get("source_inputs") or {}).get("has_weekday")
+                or (day_foundation.get("source_inputs") or {}).get("has_astro")
+                or (day_foundation.get("source_inputs") or {}).get("has_lunar")
+            )
         ),
         "locale": (locale or "ru")[:8],
+        "target_date": resolved_date.isoformat(),
+        "has_birth_date": birth_date is not None,
     }
 
     def add_claim(

@@ -178,6 +178,7 @@ def _build_day_story_record(
         compute_expected_day_story_fingerprint,
     )
     from todayflow_backend.services.day_story_refresh_v1 import ensure_story_state
+    from todayflow_backend.services.day_sources.inputs_from_profile import birth_date_from_core_profile
     from todayflow_backend.services.day_symbol_state_v1 import owner_key_for_user
 
     learning = get_learning_service()
@@ -189,6 +190,9 @@ def _build_day_story_record(
     color_sym = color_symbol if isinstance(color_symbol, dict) else {}
     stone_sym = stone_symbol if isinstance(stone_symbol, dict) else {}
     ce = celestial_events if isinstance(celestial_events, dict) else {}
+    birth_date = birth_date_from_core_profile(
+        core_profile if isinstance(core_profile, dict) else None
+    )
 
     if expected_fingerprint is None or fingerprint_payload is None:
         expected_fingerprint, fingerprint_payload = compute_expected_day_story_fingerprint(
@@ -310,6 +314,8 @@ def _build_day_story_record(
             stone_symbol=stone_sym or None,
             fingerprint=expected_fingerprint,
             locale=locale_value,
+            target_date=target_date,
+            birth_date=birth_date,
         )
         llm_input = build_day_story_llm_input(
             day_engine_brief=story_brief,
@@ -325,6 +331,8 @@ def _build_day_story_record(
             celestial_events=ce or None,
             color_symbol=color_sym or None,
             stone_symbol=stone_sym or None,
+            target_date=target_date,
+            birth_date=birth_date,
         )
         llm_input["insight_depth_tier"] = insight_tier
         llm_input["daily_foundation"] = foundation
@@ -362,6 +370,8 @@ def _build_day_story_record(
                 celestial_events=ce or None,
                 color_symbol=color_sym or None,
                 stone_symbol=stone_sym or None,
+                target_date=target_date,
+                birth_date=birth_date,
             )
 
         story_errors = validate_day_story_v1(story)
@@ -379,6 +389,8 @@ def _build_day_story_record(
                 celestial_events=ce or None,
                 color_symbol=color_sym or None,
                 stone_symbol=stone_sym or None,
+                target_date=target_date,
+                birth_date=birth_date,
             )
             used_fallback = True
 

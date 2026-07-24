@@ -50,7 +50,12 @@ DaySourceInputs
 |-----------|-------|-------------------|------------|
 | `western_astrology` | foundation | `celestial_events` или ephemeris path | yes |
 | `moon` | foundation | lunar fields in celestial / ephemeris | yes |
+| `moon.void_of_course` | foundation | timed major Moon aspects + next ingress | gated until aspect timeline |
 | `numerology` | foundation (+ personal caps) | `target_date`; personal needs `birth_date` | universal only in Foundation |
 | `weekday_ruler` | foundation | `target_date` | yes |
 
 Планируемые (канон есть, адаптер later): `vedic_panchanga`, `chinese_metaphysics`, `planetary_hours`, `human_design`, `personal_astrology`, …
+
+### Pipeline wiring
+
+`build_day_story_interpretation_v1` / `day_story_wire_v1` передают `target_date` и `birth_date` (из `core_profile.astro`) в Day Foundation. Foundation **всегда** собирается — даже без `celestial_events` (число дня + управитель недели).
