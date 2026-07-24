@@ -3,23 +3,28 @@
 import { useState, useEffect } from "react";
 import { TarotSpreadResult, TarotSpreadCard } from "@/lib/types";
 import { CardVisual } from "./CardVisual";
+import { TarotCardBack } from "./TarotCardBack";
+import { MotionFlip } from "@/design-system/motion";
 import { MeaningCard } from "@/components/orbit";
-import { LoadingSpinner } from "@/components/orbit";
+import { tarotCardDisplayHeightPx } from "@/lib/tarotCardAssets";
 
 interface TarotSpreadProps {
   spread: TarotSpreadResult;
   onClose?: () => void;
 }
 
+const SPREAD_CARD_WIDTH = 168;
+
 export function TarotSpread({ spread, onClose }: TarotSpreadProps) {
   const [selectedCard, setSelectedCard] = useState<TarotSpreadCard | null>(null);
   const [revealedCards, setRevealedCards] = useState<number[]>([]);
-  
+  const cardHeight = tarotCardDisplayHeightPx(SPREAD_CARD_WIDTH);
+
   useEffect(() => {
     // Анимация раскрытия карт по очереди
     spread.cards.forEach((_, index) => {
       setTimeout(() => {
-        setRevealedCards(prev => {
+        setRevealedCards((prev) => {
           if (prev.includes(index)) return prev;
           return [...prev, index];
         });
@@ -57,35 +62,32 @@ export function TarotSpread({ spread, onClose }: TarotSpreadProps) {
           return (
             <div
               key={idx}
-              onClick={() => setSelectedCard(spreadCard)}
+              onClick={() => isRevealed && setSelectedCard(spreadCard)}
               style={{
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 gap: "var(--orbit-space-xs)",
-                cursor: "pointer",
-                opacity: isRevealed ? 1 : 0,
-                transform: isRevealed ? "translateY(0) scale(1)" : "translateY(20px) scale(0.9)",
-                transition: "opacity 0.5s ease, transform 0.5s ease",
-              }}
-              onMouseEnter={(e) => {
-                if (isRevealed) {
-                  e.currentTarget.style.transform = "translateY(-4px) scale(1.05)";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (isRevealed) {
-                  e.currentTarget.style.transform = "translateY(0) scale(1)";
-                }
+                cursor: isRevealed ? "pointer" : "default",
               }}
             >
-              <CardVisual 
-                card={spreadCard.card} 
-                orientation={spreadCard.orientation as "upright" | "reversed"} 
-                size="md"
-                interactive={isRevealed}
-                onClick={() => isRevealed && setSelectedCard(spreadCard)}
-              />
+              <div style={{ width: SPREAD_CARD_WIDTH, height: cardHeight }}>
+                <MotionFlip
+                  testId={`tarot-spread-motion-flip-${idx}`}
+                  flipped={isRevealed}
+                  back={<TarotCardBack widthPx={SPREAD_CARD_WIDTH} />}
+                  front={
+                    <CardVisual
+                      card={spreadCard.card}
+                      orientation={spreadCard.orientation as "upright" | "reversed"}
+                      size="md"
+                      showName={false}
+                      interactive={isRevealed}
+                      onClick={() => isRevealed && setSelectedCard(spreadCard)}
+                    />
+                  }
+                />
+              </div>
               <div style={{ textAlign: "center", maxWidth: "120px" }}>
                 <p className="orbit-body-xs" style={{ fontWeight: 600, marginBottom: "2px" }}>
                   {spreadCard.position.title}
@@ -144,4 +146,3 @@ export function TarotSpread({ spread, onClose }: TarotSpreadProps) {
     </div>
   );
 }
-

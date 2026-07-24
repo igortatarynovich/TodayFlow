@@ -1,6 +1,8 @@
 "use client";
 
 import { CardVisual } from "./CardVisual";
+import { MotionSettle } from "@/design-system/motion";
+import { MOTION } from "@/design-system/motion/tokens";
 import type { TarotDailyDraw } from "@/lib/types";
 
 interface TarotHistoryProps {
@@ -120,7 +122,8 @@ export function TarotHistory({
               filteredHistory
                 .filter((draw): draw is TarotDailyDraw & { card: NonNullable<TarotDailyDraw["card"]> } => Boolean(draw.card))
                 .map((draw, idx) => (
-                <div key={idx} style={{ 
+                <MotionSettle key={`${draw.card.id}-${draw.date}-${idx}`} delayMs={idx * MOTION.staggerMs}>
+                <div style={{ 
                   padding: "var(--orbit-space-md)",
                   border: "1px solid var(--orbit-color-border)",
                   borderRadius: "var(--orbit-radius-sm)",
@@ -163,6 +166,7 @@ export function TarotHistory({
                     </p>
                   </div>
                 </div>
+                </MotionSettle>
               ))
             )}
           </div>

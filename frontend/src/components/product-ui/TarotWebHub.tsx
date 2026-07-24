@@ -3,7 +3,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { useMemo } from "react";
-import { DsBody, DsButton } from "@/design-system";
+import { DsBody, DsButton, MotionSettle } from "@/design-system";
+import { MOTION } from "@/design-system/motion/tokens";
 import { ProductWebShellConfigBridge, type ProductWebShellConfig } from "@/components/product-ui/productWebShellConfig";
 import { ProductJourneyScene } from "@/components/product-ui/ProductJourneyScene";
 import journeyStyles from "@/components/product-ui/ProductJourneyScene.module.css";
@@ -99,13 +100,15 @@ export function TarotWebHub({
                 {hub.historyTitle}
               </h2>
               <ul className={s.tarotHistoryList}>
-                {history.map((item) => (
+                {history.map((item, index) => (
                   <li key={item.id} className={s.tarotHistoryItem}>
-                    <div className={s.tarotHistoryMeta}>
-                      <span>{item.dateLabel}</span>
-                      <span>{item.domainLabel}</span>
-                    </div>
-                    <p>{item.summary}</p>
+                    <MotionSettle delayMs={index * MOTION.staggerMs}>
+                      <div className={s.tarotHistoryMeta}>
+                        <span>{item.dateLabel}</span>
+                        <span>{item.domainLabel}</span>
+                      </div>
+                      <p>{item.summary}</p>
+                    </MotionSettle>
                   </li>
                 ))}
               </ul>
@@ -233,23 +236,27 @@ export function TarotWebHub({
                   if (onSpreadSelect) {
                     return (
                       <li key={spread.id}>
-                        <button
-                          type="button"
-                          className={`${pl.spreadStepOption} ${selected ? pl.spreadStepOptionSelected : ""}`.trim()}
-                          onClick={() => onSpreadSelect(spread.id)}
-                          aria-pressed={selected}
-                        >
-                          {body}
-                        </button>
+                        <MotionSettle delayMs={index * MOTION.staggerMs}>
+                          <button
+                            type="button"
+                            className={`${pl.spreadStepOption} ${selected ? pl.spreadStepOptionSelected : ""}`.trim()}
+                            onClick={() => onSpreadSelect(spread.id)}
+                            aria-pressed={selected}
+                          >
+                            {body}
+                          </button>
+                        </MotionSettle>
                       </li>
                     );
                   }
 
                   return (
                     <li key={spread.id}>
-                      <Link href={spread.href ?? "/tarot"} className={pl.spreadStepOption}>
-                        {body}
-                      </Link>
+                      <MotionSettle delayMs={index * MOTION.staggerMs}>
+                        <Link href={spread.href ?? "/tarot"} className={pl.spreadStepOption}>
+                          {body}
+                        </Link>
+                      </MotionSettle>
                     </li>
                   );
                 })}

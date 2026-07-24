@@ -993,6 +993,8 @@ Ordered work (aligns with canon §7):
 
 ## 6) Current Priorities (Execution Order)
 
+> **Активный фокус (2026-07-24):** web motion coverage (Profile → Tarot → Compatibility → Practices). CSS-структура и нативный паритет — не трогать без явного разблокирования.
+
 ### 🔴 Phase 3 — Screen Block Definition (единственный приоритет)
 
 **Канон:** [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) + [PROFILE_SCREEN_MASTER.md](profile/PROFILE_SCREEN_MASTER.md) — build (full internal) vs reveal (L1–L4 UI).

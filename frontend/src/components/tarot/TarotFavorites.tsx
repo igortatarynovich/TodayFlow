@@ -1,6 +1,8 @@
 "use client";
 
 import { CardVisual } from "./CardVisual";
+import { MotionSettle } from "@/design-system/motion";
+import { MOTION } from "@/design-system/motion/tokens";
 import type { TarotDailyDraw } from "@/lib/types";
 
 interface TarotFavoritesProps {
@@ -31,17 +33,19 @@ export function TarotFavorites({ history, favorites }: TarotFavoritesProps) {
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: "var(--orbit-space-md)" }}>
             {favoriteCards.map((draw, idx) => (
-              <div key={idx} style={{ textAlign: "center" }}>
-                <CardVisual 
-                  card={draw.card} 
-                  orientation={draw.orientation as "upright" | "reversed"} 
-                  size="md"
-                  showName={true}
-                />
-                <p className="orbit-body-xs" style={{ marginTop: "var(--orbit-space-xs)" }}>
-                  {draw.card.name}
-                </p>
-              </div>
+              <MotionSettle key={draw.card.id} delayMs={idx * MOTION.staggerMs}>
+                <div style={{ textAlign: "center" }}>
+                  <CardVisual
+                    card={draw.card}
+                    orientation={draw.orientation as "upright" | "reversed"}
+                    size="md"
+                    showName={true}
+                  />
+                  <p className="orbit-body-xs" style={{ marginTop: "var(--orbit-space-xs)" }}>
+                    {draw.card.name}
+                  </p>
+                </div>
+              </MotionSettle>
             ))}
           </div>
         </div>
@@ -49,4 +53,3 @@ export function TarotFavorites({ history, favorites }: TarotFavoritesProps) {
     </section>
   );
 }
-

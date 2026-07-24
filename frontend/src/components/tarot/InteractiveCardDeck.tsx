@@ -4,6 +4,8 @@ import { useState } from "react";
 import { TarotCard } from "@/lib/types";
 import { CardVisual } from "./CardVisual";
 import { TarotCardBack } from "./TarotCardBack";
+import { MotionFlip } from "@/design-system/motion";
+import { tarotCardDisplayHeightPx } from "@/lib/tarotCardAssets";
 import styles from "./InteractiveCardDeck.module.css";
 
 interface InteractiveCardDeckProps {
@@ -16,6 +18,8 @@ interface InteractiveCardDeckProps {
   variant?: "light" | "dark";
 }
 
+const DECK_CARD_WIDTH = 68;
+
 export function InteractiveCardDeck({
   cards,
   requiredCount,
@@ -27,6 +31,7 @@ export function InteractiveCardDeck({
 }: InteractiveCardDeckProps) {
   const [selectedIndices, setSelectedIndices] = useState<Set<number>>(new Set());
   const [revealedCards, setRevealedCards] = useState<Map<number, "upright" | "reversed">>(new Map());
+  const deckCardHeight = tarotCardDisplayHeightPx(DECK_CARD_WIDTH);
 
   const handleCardClick = (index: number) => {
     if (selectedIndices.has(index) || selectedIndices.size >= requiredCount) return;
@@ -134,25 +139,37 @@ export function InteractiveCardDeck({
           const isSelected = selectedIndices.has(index);
           const orientation = revealedCards.get(index) || "upright";
           const disabled = !canSelectMore && !isSelected;
+          const canPick = canSelectMore && !isSelected;
 
           return (
             <div
               key={`${card.id}-${index}`}
               className={`${styles.deckCell} ${disabled ? styles.deckCellDisabled : ""}`}
+              style={{ width: DECK_CARD_WIDTH, height: deckCardHeight }}
+              onClick={canPick ? () => handleCardClick(index) : undefined}
+              role={canPick ? "button" : undefined}
+              tabIndex={canPick ? 0 : undefined}
+              onKeyDown={
+                canPick
+                  ? (event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        handleCardClick(index);
+                      }
+                    }
+                  : undefined
+              }
+              aria-label={canPick ? "Выбрать карту" : undefined}
             >
-              {isRevealed ? (
-                <>
+              <MotionFlip
+                testId={`tarot-deck-motion-flip-${index}`}
+                flipped={isRevealed}
+                back={<TarotCardBack widthPx={DECK_CARD_WIDTH} dimmed={disabled} />}
+                front={
                   <CardVisual card={card} orientation={orientation} size="xs" showName={false} interactive={false} />
-                  {isSelected ? <span className={styles.checkBadge}>✓</span> : null}
-                </>
-              ) : (
-                <TarotCardBack
-                  widthPx={68}
-                  interactive={canSelectMore}
-                  onClick={() => handleCardClick(index)}
-                  dimmed={disabled}
-                />
-              )}
+                }
+              />
+              {isSelected ? <span className={styles.checkBadge}>✓</span> : null}
             </div>
           );
         })}
