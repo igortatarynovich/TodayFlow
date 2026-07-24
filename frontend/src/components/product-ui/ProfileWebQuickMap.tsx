@@ -4,10 +4,9 @@ import type { ReactNode } from "react";
 import { DsEyebrow, DsThemeViz } from "@/design-system";
 import { ProfilePortalDeepSection } from "@/components/profile/ProfilePortalDeepSection";
 import { ProfileChartSection } from "@/components/profile/ProfileChartSection";
-import type { LifeMapSection, NatalChartPreview } from "@/components/profile/profilePanelTypes";
 import type { ProfileLifeSphere } from "@/components/profile/ProfileLifeSection";
-import type { CoreProfile } from "@/lib/types";
 import type { ProfileQuickMapViewModel } from "@/lib/profilePage/buildProfileQuickMapData";
+import type { ProfileQuickMapDeepProps } from "@/components/profile/quickMap/ProfileQuickMapScreen";
 import { buildProfileHeroQuote, profileSphereIcon } from "@/lib/product-ui/profileWebFigmaHelpers";
 import { PROFILE_QUICK_MAP_COPY as copy } from "@/components/profile/quickMap/profileQuickMapCopy";
 import { ProfileWebMyDays } from "@/components/product-ui/ProfileWebMyDays";
@@ -20,13 +19,7 @@ export type ProfileWebQuickMapProps = {
   model: ProfileQuickMapViewModel;
   lifeSpheres?: ProfileLifeSphere[];
   deepExpanded?: boolean;
-  deep?: {
-    natalPreview: NatalChartPreview | null;
-    coreNumerology?: CoreProfile["numerology"] | null;
-    previewError: string | null;
-    onReloadPreview: () => void;
-    lifeMapSections: LifeMapSection[];
-  } | null;
+  deep?: ProfileQuickMapDeepProps | null;
   notices?: ReactNode;
 };
 

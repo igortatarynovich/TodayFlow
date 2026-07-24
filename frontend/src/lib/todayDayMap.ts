@@ -43,7 +43,7 @@ function pushDistinct(out: string[], used: Set<string>, raw: string | null | und
   if (!t || t.length < 8) return;
   const key = t.toLowerCase();
   if (used.has(key)) return;
-  if ([...used].some((u) => u.includes(key.slice(0, 40)) || key.includes(u.slice(0, 40)))) return;
+  if (Array.from(used).some((u) => u.includes(key.slice(0, 40)) || key.includes(u.slice(0, 40)))) return;
   used.add(key);
   out.push(t.length > maxLen ? `${t.slice(0, maxLen - 1).trim()}…` : t);
 }
@@ -97,7 +97,7 @@ function fromDayStory(contract: TodayContractV1): TodayDayMap | null {
   const advantage = ensurePeriod(clean(ds.advantage));
   const move =
     clean(ds.today_move) ||
-    clean(ds.primary_action) ||
+    clean(contract.primary_action) ||
     dayStoryDoItems(contract)[0] ||
     null;
 
