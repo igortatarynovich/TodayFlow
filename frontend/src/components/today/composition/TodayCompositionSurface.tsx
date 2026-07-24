@@ -257,6 +257,9 @@ export function TodayCompositionSurface(props: Props) {
       colorLine: props.colorLine,
       stoneLine: props.stoneLine,
       sunSignLabel: resolveTodaySunSignLabel(props.coreProfile),
+      decisionStyle: props.coreProfile?.profile_contract_v1?.decision_style ?? null,
+      helpsFirst: props.coreProfile?.profile_contract_v1?.helps?.[0] ?? null,
+      guideNarrativePayload: props.guideNarrativePayload ?? null,
       engagement,
     });
     return applySupplementaryNarrativesToDayStory(base, props.contract, {

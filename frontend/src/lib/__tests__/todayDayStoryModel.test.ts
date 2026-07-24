@@ -151,3 +151,40 @@ describe("applySupplementaryNarrativesToDayStory", () => {
     expect(after.eveningReflectionPrompt).toBe(before.eveningReflectionPrompt);
   });
 });
+
+describe("buildTodayDayStoryViewModel tarot personal layer", () => {
+  it("builds trap into impact and glance when card is picked with profile slice", () => {
+    const vm = buildTodayCompositionViewModel({
+      contract: sampleContractWithDayStory,
+      cardName: "Повешенный",
+      cardMeaning: null,
+      numerologyValue: "7",
+      numerologyMeaning: null,
+      morningRitualData: null,
+    });
+    const engagement = {
+      ...createEmptyDayEngagement(),
+      tarotPickedId: 12,
+      tarotPickedName: "Повешенный",
+      numberConfirmed: true,
+    };
+    const story = buildTodayDayStoryViewModel({
+      base: vm,
+      contract: sampleContractWithDayStory,
+      dateISO: "2026-07-24",
+      cardName: "Повешенный",
+      cardMeaning: null,
+      numerologyValue: "7",
+      numerologyMeaning: null,
+      morningRitualData: null,
+      yesterdayClosed: false,
+      todayOpened: true,
+      decisionStyle: "Сначала чувствую, потом решаю",
+      engagement,
+    });
+    expect(story.tarotPersonalLayer?.personalized).toBe(true);
+    expect(story.tarotPersonalLayer?.trapLine).toMatch(/Повешенный|застревание|стиле/i);
+    expect(story.tarotImpact?.body).toMatch(/Повешенный|пауза|застревание/i);
+    expect(story.glance.helpful[0]?.comment).toMatch(/Повешенный|застревание|стиле/i);
+  });
+});

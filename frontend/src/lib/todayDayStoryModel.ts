@@ -24,6 +24,7 @@ import type {
 } from "@/lib/todayCompositionModel";
 import {
   dayStoryEveningPrompt,
+  dayStoryHeadline,
   dayStoryWhyLines,
   hasAuthoritativeDayStory,
 } from "@/lib/todayContractMapper";
@@ -32,6 +33,11 @@ import { parseDayLayerPayload } from "@/components/today/todayRitualSignals";
 import { buildEveningPrompt } from "@/lib/todayUnifiedSynthesis";
 import type { TodayContractDomainId } from "@/lib/todayContract";
 import type { TodaySphereFocusCard } from "@/lib/todayDaySphereFocus";
+import { buildDailyFocusModel } from "@/lib/todayDailyFocus";
+import {
+  composeTarotPersonalLayer,
+  type TarotPersonalLayer,
+} from "@/lib/todayTarotPersonalLayer";
 
 export type TodayGlanceCard = {
   id: string;
@@ -66,6 +72,8 @@ export type TodayDayStoryViewModel = TodayCompositionViewModel & {
   astroContext: TodayInfluenceStory[];
   skyCards: TodaySkyCard[];
   tarotImpact: TodayRitualImpact | null;
+  /** Card × focus × profile — trap for Day Map; null when no card. */
+  tarotPersonalLayer: TarotPersonalLayer | null;
   numberImpact: TodayRitualImpact | null;
   strengthenLinked: TodayStrengthenTool[];
   strengthenPreview: TodayStrengthenTool[];
@@ -92,10 +100,12 @@ function firstSentence(text: string): string {
 function buildGlanceCards(
   contract: TodayContractV1,
   sphereFocus: TodaySphereFocus,
+  tarotTrap: string | null = null,
 ): TodayDayStoryViewModel["glance"] {
   const dayMap = buildTodayDayMap({ contract });
   if (dayMap) {
-    const attentionParts = [dayMap.whereConflict, dayMap.whereYouBreak].filter(
+    const breakLine = (tarotTrap?.trim() || dayMap.whereYouBreak) ?? null;
+    const attentionParts = [dayMap.whereConflict, breakLine].filter(
       (x): x is string => Boolean(x && x.trim()),
     );
     return {
@@ -152,12 +162,17 @@ function buildTarotImpactFromSpine(
   cardId: number,
   cardName: string,
   body: string | null,
+  personal: TarotPersonalLayer | null,
 ): TodayRitualImpact {
   const card = getTodayTarotCardRu(cardId);
   return {
     title: card?.nameRu ?? cardName,
-    headline: "Символ дня",
-    body: body ?? card?.bodyRu ?? "Карта открывает другой слой смысла — не повторяя общую тему.",
+    headline: personal?.headline || "Символ дня",
+    body:
+      personal?.sceneBody ||
+      body ||
+      card?.bodyRu ||
+      "Карта открывает другой слой смысла — не повторяя общую тему.",
   };
 }
 
@@ -244,6 +259,10 @@ export function buildTodayDayStoryViewModel(input: {
   colorLine?: string | null;
   stoneLine?: string | null;
   sunSignLabel?: string | null;
+  /** Personal Model slice for tarot × day merge. */
+  decisionStyle?: string | null;
+  helpsFirst?: string | null;
+  guideNarrativePayload?: Record<string, unknown> | null;
   engagement: DayEngagementState;
   now?: Date;
 }): TodayDayStoryViewModel {
@@ -284,7 +303,6 @@ export function buildTodayDayStoryViewModel(input: {
 
   const sphereFocus = buildTodaySphereFocus(input.contract);
   const dayMap = buildTodayDayMap({ contract: input.contract });
-  const glance = buildGlanceCards(input.contract, sphereFocus);
   const apiColor = input.morningRitualData?.celestial_events?.daily_symbols?.color;
   const colorGuide = resolveTodayDayColorGuide({
     name: input.colorLine ?? apiColor?.name,
@@ -293,12 +311,37 @@ export function buildTodayDayStoryViewModel(input: {
   const pulseLabel = "Пульс дня";
   const pulseFromMap = dayMap?.whatHappens?.trim() || null;
 
+  const dailyFocus = buildDailyFocusModel(input.contract, input.guideNarrativePayload ?? null);
+  const focusTitle =
+    dailyFocus.title ||
+    dayStoryHeadline(input.contract) ||
+    input.contract.day_story?.theme ||
+    null;
+
+  const tarotPersonalLayer =
+    pickedCardId != null && ritualPhase !== "tarot_pending"
+      ? composeTarotPersonalLayer({
+          cardId: pickedCardId,
+          dailyFocusTitle: focusTitle,
+          dailyFocusId: dailyFocus.dailyFocusId,
+          decisionStyle: input.decisionStyle,
+          helpsFirst: input.helpsFirst,
+        })
+      : null;
+
+  const glance = buildGlanceCards(
+    input.contract,
+    sphereFocus,
+    tarotPersonalLayer?.trapLine ?? null,
+  );
+
   const tarotImpact =
     pickedCardName && ritualPhase !== "tarot_pending" && pickedCardId != null
       ? buildTarotImpactFromSpine(
           pickedCardId,
           pickedCardName,
           tarotPicked ? spine.tarotBody : null,
+          tarotPersonalLayer,
         )
       : null;
 
@@ -350,6 +393,7 @@ export function buildTodayDayStoryViewModel(input: {
     astroContext: skyCardsToAstroContext(spine.skyCards),
     skyCards: spine.skyCards,
     tarotImpact,
+    tarotPersonalLayer,
     numberImpact,
     strengthenLinked,
     strengthenPreview,

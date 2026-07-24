@@ -144,6 +144,26 @@ describe("buildTodayDayNarrative", () => {
     },
   } as unknown as TodayDayStoryViewModel;
 
+  it("folds tarot personal trap into Day Map soften — not a separate symbols chapter", () => {
+    const withTrap = {
+      ...story,
+      tarotPersonalLayer: {
+        cardId: 12,
+        cardName: "Повешенный",
+        trapLine: "Ловушка «Повешенный»: застревание в жертве и ожидании спасения.",
+        sceneBody: "День про точность. Повешенный просит паузу.",
+        headline: "Точность без спешки",
+        personalized: true,
+      },
+    } as unknown as TodayDayStoryViewModel;
+
+    const narrative = buildTodayDayNarrative({ contract, story: withTrap, morningRitualData });
+    expect(narrative.dayMap?.whereYouBreak).toMatch(/Повешенный|застревание/i);
+    expect(narrative.chapters.map((c) => c.id)).not.toContain("symbols");
+    const force = narrative.chapters.find((c) => c.id === "force")!;
+    expect(force.dual?.soften.join(" ")).toMatch(/Повешенный|застревание/i);
+  });
+
   it("maps day_story into Day Map chapters (opening / glance / move) — not a sky fact wall", () => {
     const narrative = buildTodayDayNarrative({ contract, story, morningRitualData });
     expect(narrative.dayMap).toBeTruthy();

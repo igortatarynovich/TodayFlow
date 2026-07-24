@@ -182,3 +182,23 @@ export function buildDailyFocusModel(
     lines,
   };
 }
+
+/** Fold card trap into Daily Focus lines — trap inside the scene, not a block after it. */
+export function mergeTarotTrapIntoDailyFocus(
+  focus: DailyFocusModel,
+  trapLine: string | null | undefined,
+): DailyFocusModel {
+  const trap = (trapLine ?? "").replace(/\s+/g, " ").trim();
+  if (!trap || trap.length < 12) return focus;
+  const key = trap.slice(0, 28).toLowerCase();
+  if (
+    focus.title.toLowerCase().includes(key) ||
+    focus.lines.some((l) => l.toLowerCase().includes(key))
+  ) {
+    return focus;
+  }
+  return {
+    ...focus,
+    lines: [...focus.lines.filter(Boolean).slice(0, 2), trap].slice(0, 3),
+  };
+}

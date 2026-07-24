@@ -404,6 +404,7 @@ function buildDayMapChapters(
   contract: TodayContractV1,
   colorGuide: TodayDayColorGuide | null | undefined,
   used: string[],
+  tarotTrap: string | null = null,
 ): TodayDayNarrativeChapter[] {
   const chapters: TodayDayNarrativeChapter[] = [];
   used.push(dayMap.whatHappens);
@@ -416,7 +417,9 @@ function buildDayMapChapters(
   });
 
   const strengthen = dayMap.whatWorks ? [dayMap.whatWorks] : [];
-  const soften = [dayMap.whereConflict, dayMap.whereYouBreak].filter(
+  // Card × person trap is «where you break» — prefer over domain risk when present.
+  const breakLine = clean(tarotTrap) || dayMap.whereYouBreak;
+  const soften = [dayMap.whereConflict, breakLine].filter(
     (x): x is string => Boolean(x && x.trim()),
   );
   if (strengthen.length || soften.length) {
@@ -766,19 +769,25 @@ export function buildTodayDayNarrative(input: {
   // Day Map path: pulse/glance/move slots — not a stacked fact wall.
   // Electional stays: explicit request, not a fact dump.
   if (dayMap) {
+    const tarotTrap = clean(story.tarotPersonalLayer?.trapLine) || null;
     const chaptersMap = buildDayMapChapters(
       dayMap,
       contract,
       input.colorGuide ?? story.colorGuide,
       used,
+      tarotTrap,
     );
     appendElectionalChapter(chaptersMap, contract);
+    const dayMapWithTrap =
+      tarotTrap && tarotTrap !== clean(dayMap.whereYouBreak)
+        ? { ...dayMap, whereYouBreak: ensurePeriod(tarotTrap) }
+        : dayMap;
     return {
       theme,
       softWhy: null,
       chapters: chaptersMap,
       foundation,
-      dayMap,
+      dayMap: dayMapWithTrap,
       headlineAnchor,
       vibeClosing,
     };
