@@ -33,9 +33,11 @@ def build_day_personal_v1(
     electional_time: time | None = None,
     electional_question: str | None = None,
     ephemeris: dict[str, Any] | None = None,
+    birth_name: str | None = None,
 ) -> dict[str, Any]:
     """Collect personal Source Families into a wire pack for Today / interpretation."""
     from todayflow_backend.services.day_sources.ephemeris_bridge import ephemeris_from_celestial
+    from todayflow_backend.services.day_sources.name_numbers import build_name_numbers_payload
 
     ce = celestial_events if isinstance(celestial_events, dict) else {}
     eph = ephemeris if isinstance(ephemeris, dict) else ephemeris_from_celestial(ce)
@@ -54,6 +56,7 @@ def build_day_personal_v1(
         electional_requested=electional_requested,
         electional_time=electional_time,
         electional_question=electional_question,
+        birth_name=birth_name,
     )
     bundle = collect_personal_sources(inputs)
     sources = bundle.get("sources") if isinstance(bundle.get("sources"), dict) else {}
@@ -70,6 +73,10 @@ def build_day_personal_v1(
     vedic_personal = _ok_payload("vedic_personal")
     kabbalah = _ok_payload("kabbalah_letter")
     electional = _ok_payload("electional_horary")
+    name_numbers = build_name_numbers_payload(birth_name)
+    if isinstance(name_numbers, dict) and name_numbers.get("status") != "ok":
+        # Keep unavailable pack for honesty, but UI only uses ok.
+        pass
 
     summary_parts = [
         str((personal_astro or {}).get("summary_ru") or "").strip(),
@@ -79,19 +86,22 @@ def build_day_personal_v1(
     ]
     if electional:
         summary_parts.append(str(electional.get("summary_ru") or "").strip())
+    if isinstance(name_numbers, dict) and name_numbers.get("status") == "ok":
+        summary_parts.append(str(name_numbers.get("summary_ru") or "").strip())
     summary = _clip(" ".join(p for p in summary_parts if p), 480)
 
     electional_row = sources.get("electional_horary") if isinstance(sources, dict) else None
 
     return {
         "contract_version": "day_personal_v1",
-        "calculation_version": "day-personal-v1.6",
+        "calculation_version": "day-personal-v1.7",
         "personal_astrology": personal_astro,
         "human_design": human_design,
         "bazi": bazi,
         "vedic_personal": vedic_personal,
         "kabbalah_letter": kabbalah,
         "electional_horary": electional,
+        "name_numbers": name_numbers if isinstance(name_numbers, dict) else None,
         "summary_ru": summary,
         "source_inputs": {
             "has_personal_astrology": bool(personal_astro),
@@ -100,6 +110,9 @@ def build_day_personal_v1(
             "has_vedic_personal": bool(vedic_personal),
             "has_kabbalah_letter": bool(kabbalah),
             "has_electional_horary": bool(electional),
+            "has_name_numbers": bool(
+                isinstance(name_numbers, dict) and name_numbers.get("status") == "ok"
+            ),
             "electional_status": (
                 electional_row.get("status")
                 if isinstance(electional_row, dict)
@@ -254,5 +267,13 @@ def personal_to_interpretation_claims(personal: dict[str, Any] | None) -> list[d
         source_fallback="source.electional_horary",
         limit=3,
         prefer_kinds=("verdict", "checklist"),
+    )
+    _from_family(
+        key="name_numbers",
+        claim_prefix="claim.personal.name_numbers",
+        layer="name_numbers",
+        source_fallback="source.name_numbers",
+        limit=1,
+        prefer_kinds=("name_numbers",),
     )
     return claims

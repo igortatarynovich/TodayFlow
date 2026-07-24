@@ -33,6 +33,8 @@ class DaySourceInputs:
     electional_requested: bool = False
     electional_time: time | None = None
     electional_question: str | None = None
+    # Name for Expression / Soul Urge / Personality (canon §5.5.5).
+    birth_name: str | None = None
 
 
 @dataclass

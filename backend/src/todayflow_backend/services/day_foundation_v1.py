@@ -450,6 +450,7 @@ def build_day_foundation_from_sources(
             "season": seasonal.get("season") if seasonal else None,
             "season_ru": seasonal.get("season_ru") if seasonal else None,
             "sun": seasonal.get("sun") if seasonal else None,
+            "holidays": seasonal.get("holidays") if seasonal else None,
             "summary_ru": seasonal_summary,
         }
         if seasonal

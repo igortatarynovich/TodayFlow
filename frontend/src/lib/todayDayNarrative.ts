@@ -190,6 +190,7 @@ export function collectDayPersonalLayer(
     clean(hd?.transit_gates?.sun?.theme_ru
       ? `HD: Солнце ${hd.transit_gates.sun.label ?? ""} — ${hd.transit_gates.sun.theme_ru}`.trim()
       : null),
+    personal.name_numbers?.status === "ok" ? clean(personal.name_numbers.summary_ru) : null,
     clean(personal.summary_ru),
   ];
   for (const line of softLines) {
@@ -279,6 +280,19 @@ export function collectDayPersonalLayer(
   }
   const baziBeat = bazi?.beats?.[0];
   if (baziBeat?.title) pushSignal("BaZi", baziBeat.title);
+  if (personal.name_numbers?.status === "ok" && personal.name_numbers.expression?.value != null) {
+    pushSignal(
+      "Имя",
+      [
+        `Expr ${personal.name_numbers.expression.value}`,
+        personal.name_numbers.soul_urge?.value != null
+          ? `Soul ${personal.name_numbers.soul_urge.value}`
+          : null,
+      ]
+        .filter(Boolean)
+        .join(" · "),
+    );
+  }
 
   return {
     paragraphs: paras.slice(0, 2),
@@ -433,6 +447,27 @@ function buildDayMapChapters(
     if (!supportUsed.has(colorLine.toLowerCase())) {
       supportUsed.add(colorLine.toLowerCase());
       supportParas.push(colorLine);
+    }
+  }
+
+  const holiday = contract.day_story?.day_foundation?.seasonal?.holidays?.today?.[0];
+  const holidayName = clean(holiday?.name_ru);
+  if (holidayName) {
+    const holidayLine = `Сегодня — ${holidayName}.`;
+    if (!supportUsed.has(holidayLine.toLowerCase())) {
+      supportUsed.add(holidayLine.toLowerCase());
+      supportParas.unshift(holidayLine);
+    }
+  }
+
+  const namePack = contract.day_story?.day_personal?.name_numbers;
+  if (namePack?.status === "ok" && namePack.expression?.value != null) {
+    const nameLine =
+      clean(namePack.summary_ru) ||
+      `Числа имени: Expression ${namePack.expression.value}.`;
+    if (!supportUsed.has(nameLine.toLowerCase())) {
+      supportUsed.add(nameLine.toLowerCase());
+      supportParas.push(nameLine);
     }
   }
 
@@ -622,6 +657,10 @@ function collectSupportChapter(
   used: string[],
 ): TodayDayNarrativeChapter | null {
   const out: string[] = [];
+  const holiday = contract.day_story?.day_foundation?.seasonal?.holidays?.today?.[0];
+  const holidayName = clean(holiday?.name_ru);
+  if (holidayName) pushDistinct(out, used, `Сегодня — ${holidayName}.`);
+
   const talisman = contract.day_story?.talisman;
   const supportsStory = clean((contract.day_story as { supports_story?: string } | undefined)?.supports_story);
   if (supportsStory) pushDistinct(out, used, supportsStory);

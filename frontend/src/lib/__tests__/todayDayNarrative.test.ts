@@ -337,6 +337,44 @@ describe("buildTodayDayNarrative", () => {
     expect(electional?.checklist?.[0]?.status).toBe("caution");
   });
 
+  it("surfaces holiday and name numbers on Day Map supports", () => {
+    const withContext: TodayContractV1 = {
+      ...contract,
+      day_story: {
+        ...contract.day_story!,
+        day_foundation: {
+          contract_version: "day_foundation_v1",
+          seasonal: {
+            season: "spring",
+            season_ru: "весна",
+            holidays: {
+              is_holiday: true,
+              today: [{ id: "womens_day", name_ru: "Международный женский день" }],
+            },
+          },
+        },
+        day_personal: {
+          name_numbers: {
+            status: "ok",
+            summary_ru: "Числа имени (soft): Expression 7, Soul Urge 5.",
+            expression: { value: 7 },
+            soul_urge: { value: 5 },
+          },
+        },
+      },
+    };
+    const narrative = buildTodayDayNarrative({
+      contract: withContext,
+      story,
+      morningRitualData,
+    });
+    expect(narrative.dayMap).toBeTruthy();
+    const supports = narrative.chapters.find((c) => c.id === "supports");
+    const body = [supports?.lead, ...(supports?.paragraphs ?? [])].filter(Boolean).join(" ");
+    expect(body).toMatch(/женск/i);
+    expect(body).toMatch(/Expression|Числа имени/i);
+  });
+
   it("expands supports as Твой ход with concrete move + color", () => {
     const narrative = buildTodayDayNarrative({ contract, story, morningRitualData });
     const supports = narrative.chapters.find((c) => c.id === "supports")!;

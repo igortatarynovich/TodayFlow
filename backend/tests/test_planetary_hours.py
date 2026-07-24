@@ -45,9 +45,18 @@ def test_planetary_hours_table_has_24_and_day_ruler_friday():
 def test_registry_geo_families_unavailable_without_geo():
     bundle = collect_foundation_sources(DaySourceInputs(target_date=date(2026, 7, 24)))
     assert bundle["sources"]["planetary_hours"]["status"] == "unavailable"
-    assert bundle["sources"]["seasonal_calendar"]["status"] == "unavailable"
+    # seasonal no longer requires geo — holidays + season still ok
+    assert bundle["sources"]["seasonal_calendar"]["status"] == "ok"
+    assert "holidays" in bundle["sources"]["seasonal_calendar"]["capability_ids"]
     assert "missing_geo" in bundle["sources"]["planetary_hours"]["unavailable_reason"]
 
+
+def test_foundation_includes_seasonal_without_geo():
+    f = build_day_foundation_v1({}, target_date=date(2026, 7, 24), locale="ru")
+    assert f["seasonal"]["season"] == "summer"
+    assert f["seasonal"]["holidays"]["is_holiday"] is False
+    assert f["source_inputs"]["has_seasonal"] is True
+    assert f["planetary_hours"] is None
 
 def test_registry_geo_families_ok_with_lat_lon():
     bundle = collect_foundation_sources(

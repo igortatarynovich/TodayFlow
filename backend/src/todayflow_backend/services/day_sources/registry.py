@@ -171,7 +171,7 @@ def default_registry() -> DaySourceRegistry:
             in_foundation=True,
             in_personal=False,
             in_today=True,
-            required_input_keys=("target_date", "geo"),
+            required_input_keys=("target_date",),
             run=run_seasonal_calendar,
         )
     )

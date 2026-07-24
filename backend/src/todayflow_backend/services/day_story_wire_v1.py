@@ -180,6 +180,7 @@ def _build_day_story_record(
     from todayflow_backend.services.day_story_refresh_v1 import ensure_story_state
     from todayflow_backend.services.day_sources.inputs_from_profile import (
         birth_date_from_core_profile,
+        birth_name_from_core_profile,
         birth_place_from_core_profile,
         birth_time_from_core_profile,
         geo_from_core_profile,
@@ -201,6 +202,7 @@ def _build_day_story_record(
     birth_lat, birth_lon = birth_place_from_core_profile(profile)
     lat, lon, profile_tz = geo_from_core_profile(profile)
     geo_timezone = profile_tz or timezone_name or None
+    birth_name = birth_name_from_core_profile(profile)
 
     if expected_fingerprint is None or fingerprint_payload is None:
         expected_fingerprint, fingerprint_payload = compute_expected_day_story_fingerprint(
@@ -333,6 +335,7 @@ def _build_day_story_record(
             lat=lat,
             lon=lon,
             timezone=geo_timezone,
+            birth_name=birth_name,
         )
         llm_input = build_day_story_llm_input(
             day_engine_brief=story_brief,

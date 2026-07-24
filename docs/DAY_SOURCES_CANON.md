@@ -523,13 +523,13 @@ Day Story            →  интерпретация Foundation → экран T
 
 | Поле | Значение |
 |------|----------|
-| purpose | Expression / soul / personality from name |
-| required_inputs | name + alphabet canon |
-| school_canon | TBD — multilingual transliteration must be frozen before ship |
-| version | planned |
-| in_foundation | no |
+| purpose | Expression / Soul Urge / Personality from name |
+| required_inputs | `birth_name` (display/first/full) |
+| school_canon | `pythagorean_latin_v0_via_ru_translit` — RU/UA→Latin translit, then Pythagorean A–Z (`DATA/numerology.json`) |
+| version | v1 |
+| in_foundation | **no** |
 | in_personal | yes |
-| in_today | optional |
+| in_today | soft (glance / Day Map supports line) |
 
 **Правило продукта:** Universal и Personal day **хранить раздельно** — общий фон vs как человек входит в день.
 
@@ -701,7 +701,7 @@ Day Story            →  интерпретация Foundation → экран T
 | `season` | Season of year | date + hemisphere | v1/partial | yes | yes |
 | `sun_rise_set` | Sunrise/sunset, day length | geo + date | v1 | yes | yes |
 | `dst_calendar` | DST transitions | TZ | planned | soft | soft |
-| `holidays` | Civil/religious holidays | locale + date | planned | soft | soft |
+| `holidays` | Civil/religious observances (fixed-date soft) | locale + date | v1 | soft | soft |
 
 Не эзотерика сами по себе, но L1-ориентация во времени.
 

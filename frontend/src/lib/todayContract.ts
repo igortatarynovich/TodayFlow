@@ -301,6 +301,14 @@ export type TodayContractDayStoryV1 = {
       moment?: { date?: string; time?: string; timezone?: string | null };
       question?: string | null;
     } | null;
+    name_numbers?: {
+      status?: string;
+      summary_ru?: string;
+      expression?: { value?: number; theme_ru?: string } | null;
+      soul_urge?: { value?: number; theme_ru?: string } | null;
+      personality?: { value?: number; theme_ru?: string } | null;
+      school_canon?: string;
+    } | null;
     source_inputs?: {
       has_personal_astrology?: boolean;
       has_human_design?: boolean;
@@ -308,6 +316,7 @@ export type TodayContractDayStoryV1 = {
       has_vedic_personal?: boolean;
       has_kabbalah_letter?: boolean;
       has_electional_horary?: boolean;
+      has_name_numbers?: boolean;
       electional_status?: string | null;
       ok_family_ids?: string[];
     };
@@ -370,6 +379,16 @@ export type TodayDayFoundationV1 = {
       sunrise_local?: string;
       sunset_local?: string;
       day_length_minutes?: number;
+    } | null;
+    holidays?: {
+      is_holiday?: boolean;
+      summary_ru?: string;
+      today?: Array<{
+        id?: string;
+        name_ru?: string;
+        name_en?: string;
+        kind?: string;
+      }>;
     } | null;
   } | null;
   planetary_hours?: {

@@ -35,12 +35,12 @@
 | `western_astrology` | positions, aspects, ingresses, retro | `target_date` + ephemeris/`celestial_events` | yes | soft | yes |
 | `moon` | phase, sign, lunar aspects | same as sky | yes | no | yes |
 | `moon` | rise/set, VOC local | + `lat/lon` + `timezone` | yes when geo | no | yes |
+| `seasonal_calendar` | season + holidays | `target_date` (+ locale); sun needs geo | yes | no | soft |
 | `weekday_ruler` | ruler | `target_date` | yes | no | yes |
 | `numerology` | universal_day | `target_date` | yes | no | yes |
 | `numerology` | personal_year/month/day | + `birth_date` | no* | yes | yes |
-| `numerology` | name_numbers | + `birth_name` + alphabet canon | no | yes | optional |
+| `numerology` | name_numbers | + `birth_name` + alphabet canon (`pythagorean_latin_v0_via_ru_translit`) | no | yes | soft |
 | `planetary_hours` | hour table | `target_date` + `lat/lon` + `timezone` | yes | elective | yes |
-| `seasonal_calendar` | sun rise/set | `lat/lon` + `timezone` | yes | no | yes |
 | `vedic_panchanga` | tithi…karana | datetime (+ geo for muhurta) | yes | no | later |
 | `vedic_panchanga` / `vedic_personal` | gochara / dasha / lagna_gochara | + natal Moon; Lagna needs time+place | no | yes | yes |
 | `chinese_metaphysics` | gan_zhi_day + lucky hours/directions | `target_date` (+ TZ preferred) | yes | soft | yes |

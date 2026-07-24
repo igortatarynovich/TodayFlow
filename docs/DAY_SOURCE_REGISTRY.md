@@ -52,9 +52,9 @@ DaySourceInputs
 | `moon` | foundation | lunar fields in celestial / ephemeris | yes |
 | `moon.void_of_course` | foundation | timed major Moon aspects + next ingress | yes when timeline resolves |
 | `moon.timed_lunar_aspects` | foundation | `AstroService` sample+bisect majors | yes (feeds VOC + lunar timeline) |
-| `numerology` | foundation (+ personal caps) | `target_date`; personal needs `birth_date` | universal only in Foundation |
+| `seasonal_calendar` | foundation | `target_date` (+ geo for sun); holidays by locale | yes |
+| `numerology` | foundation (+ personal caps) | `target_date`; personal needs `birth_date`; name_numbers needs `birth_name` | universal in Foundation; name_numbers in Day Personal |
 | `weekday_ruler` | foundation | `target_date` | yes |
-| `seasonal_calendar` | foundation | `target_date` + `lat/lon` | yes when geo |
 | `planetary_hours` | foundation | `target_date` + `lat/lon` (+ TZ preferred) | yes when geo |
 | `vedic_panchanga` | foundation | `target_date` (+ geo for muhurta) | yes |
 | `chinese_metaphysics` | foundation | `target_date` (+ TZ preferred) | yes |
@@ -72,11 +72,13 @@ DaySourceInputs
 
 `celestial_events.ephemeris` несёт Swiss noon (`transit_noon`), optional `natal`, и optional `design_minus_88d` (birth−88d Swiss walk) из AstroService. Day Sources читают через `DaySourceInputs.ephemeris` с fallback на mean longitude. Time-lord lots используют Swiss natal Sun/Moon/ASC когда snapshot есть.
 
-### Soft → Today wire (v1.8)
+### Soft → Today wire (v1.9)
 
 `house_rulers_chains`, `time_lords`, HD channels и смежные L3 (профекция, returns, BaZi, Vedic) попадают в `today_contract.day_story.day_personal`. Narrative глава «Личный слой» показывает soft-абзацы + glance-сигналы (не dump всего pack).
 
 `electional_horary` при явном запросе даёт отдельную главу «Электив / Хорар (soft)» с вердиктом и checklist (включая Day Map path — не fact-dump, а situational).
+
+`seasonal_calendar.holidays` (fixed-date soft) и `name_numbers` (Expression/Soul/Personality) мягко попадают в supports / личный glance.
 
 ### Pipeline wiring
 

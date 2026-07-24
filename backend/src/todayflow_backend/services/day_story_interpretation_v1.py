@@ -149,6 +149,7 @@ def build_day_story_interpretation_v1(
     electional_requested: bool = False,
     electional_time: time | None = None,
     electional_question: str | None = None,
+    birth_name: str | None = None,
 ) -> dict[str, Any]:
     """Build structured interpretation + evidence from known inputs (no LLM)."""
     brief = day_engine_brief if isinstance(day_engine_brief, dict) else {}
@@ -208,6 +209,7 @@ def build_day_story_interpretation_v1(
         electional_requested=ritual_electional,
         electional_time=ritual_t,
         electional_question=ritual_q,
+        birth_name=birth_name,
     )
 
     evidence: list[dict[str, Any]] = []

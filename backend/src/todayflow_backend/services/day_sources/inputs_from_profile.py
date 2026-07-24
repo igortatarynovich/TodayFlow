@@ -79,6 +79,23 @@ def birth_place_from_core_profile(
     return lat_f, lon_f
 
 
+def birth_name_from_core_profile(core_profile: dict[str, Any] | None) -> str | None:
+    """Display / first name for soft name_numbers (optional)."""
+    if not isinstance(core_profile, dict):
+        return None
+    person = core_profile.get("person") if isinstance(core_profile.get("person"), dict) else {}
+    for key in ("display_name", "first_name", "full_name", "birth_name"):
+        raw = person.get(key)
+        text = str(raw).strip() if raw is not None else ""
+        if text:
+            return text[:120]
+    settings = core_profile.get("settings") if isinstance(core_profile.get("settings"), dict) else {}
+    first = str(settings.get("first_name") or "").strip()
+    last = str(settings.get("last_name") or "").strip()
+    joined = " ".join(x for x in (first, last) if x).strip()
+    return joined[:120] or None
+
+
 def geo_from_core_profile(
     core_profile: dict[str, Any] | None,
 ) -> tuple[float | None, float | None, str | None]:
