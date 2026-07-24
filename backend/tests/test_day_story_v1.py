@@ -15,6 +15,7 @@ from todayflow_backend.services.day_story_phrase_gate_v1 import (
 )
 from todayflow_backend.services.day_story_v1 import (
     DAY_STORY_V1_CONTRACT,
+    _clip,
     build_day_story_fallback_v1,
     day_story_to_legacy_narrative,
     day_story_to_today_contract_v1,
@@ -209,3 +210,12 @@ def test_validate_rejects_empty_formula_story():
     bad["theme"] = "Довериться потоку"
     errors = validate_day_story_v1(bad)
     assert any("empty_formula" in e for e in errors)
+
+
+def test_clip_cuts_on_word_boundary_not_mid_word():
+    text = "Короткий контакт сегодня работает лучше длинных объяснений."
+    out = _clip(text, 28)
+    assert out == "Короткий контакт сегодня…"
+    # Mid-word cut would produce something like "Короткий контакт сегодн…"
+    assert "сегодн…" not in out
+    assert "работ…" not in out
