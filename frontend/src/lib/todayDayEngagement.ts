@@ -19,6 +19,9 @@ export type DayEngagementState = {
   tarotPickedName: string | null;
   numberConfirmed: boolean;
   affirmationRead: boolean;
+  /** Growth A — habit/ascetic one-tap from Today (ids marked done today). */
+  habitMarkedId: number | null;
+  asceticMarkedId: number | null;
   todayOpened: boolean;
   /** Explicit L1 — when missing/stale, Today asks (learning signal). */
   morningMoodId: string | null;
@@ -56,6 +59,8 @@ const EMPTY: DayEngagementState = {
   tarotPickedName: null,
   numberConfirmed: false,
   affirmationRead: false,
+  habitMarkedId: null,
+  asceticMarkedId: null,
   todayOpened: false,
   morningMoodId: null,
   morningMoodCapturedAtMs: null,
@@ -87,6 +92,8 @@ export function loadDayEngagement(dateISO: string, profileScope?: string | null)
       tarotPickedName: typeof p.tarotPickedName === "string" ? p.tarotPickedName : null,
       numberConfirmed: Boolean(p.numberConfirmed),
       affirmationRead: Boolean(p.affirmationRead),
+      habitMarkedId: typeof p.habitMarkedId === "number" ? p.habitMarkedId : null,
+      asceticMarkedId: typeof p.asceticMarkedId === "number" ? p.asceticMarkedId : null,
       todayOpened: Boolean(p.todayOpened),
       morningMoodId: typeof p.morningMoodId === "string" ? p.morningMoodId : null,
       morningMoodCapturedAtMs:

@@ -25,6 +25,13 @@ type Props = {
   practiceStarted: boolean;
   affirmationRead: boolean;
   strengthenToolCount: number;
+  activeHabit?: { id: number; name: string } | null;
+  activeAscetic?: { id: number; title: string } | null;
+  habitMarked?: boolean;
+  asceticMarked?: boolean;
+  /** Optional one-tap when user answers «Да» to evening habit/ascetic question. */
+  onHabitEveningDone?: () => void;
+  onAsceticEveningDone?: () => void;
   promiseSuggestions?: TodayPromiseSuggestion[];
   onPickPromise?: (text: string) => void;
   saving?: boolean;
@@ -44,8 +51,14 @@ export function TodayEveningProductClose({
   themeShort,
   practiceCompleted,
   practiceStarted,
-  affirmationRead,
+  affirmationRead: _affirmationRead,
   strengthenToolCount,
+  activeHabit = null,
+  activeAscetic = null,
+  habitMarked = false,
+  asceticMarked = false,
+  onHabitEveningDone,
+  onAsceticEveningDone,
   promiseSuggestions = [],
   onPickPromise,
   saving = false,
@@ -55,6 +68,12 @@ export function TodayEveningProductClose({
   const [outcome, setOutcome] = useState<DayFocusOutcome | null>(null);
   const [highlightId, setHighlightId] = useState<string | null>(null);
   const [skippedPromise, setSkippedPromise] = useState(false);
+  const [habitOutcome, setHabitOutcome] = useState<DayFocusOutcome | null>(
+    habitMarked ? "done" : null,
+  );
+  const [asceticOutcome, setAsceticOutcome] = useState<DayFocusOutcome | null>(
+    asceticMarked ? "done" : null,
+  );
 
   const showPromisePicker = !userPromise && !skippedPromise && promiseSuggestions.length > 0;
   const name = formatName(userName);
@@ -66,6 +85,9 @@ export function TodayEveningProductClose({
     strengthenToolCount > 0 ? `${Math.max(completedPractices, practiceCompleted ? 1 : 0)} из ${strengthenToolCount}` : "—";
   const intentionSummary = userPromise ? "Выполнено" : "Не выбрано";
   const reflectionSummary = highlightId ? "1" : "0";
+
+  const showHabitQuestion = Boolean(activeHabit) && !habitMarked;
+  const showAsceticQuestion = Boolean(activeAscetic) && !asceticMarked;
 
   return (
     <div className={styles.root} data-testid="today-composition-evening">
@@ -122,6 +144,58 @@ export function TodayEveningProductClose({
               </div>
             </article>
 
+            {showHabitQuestion && activeHabit ? (
+              <article className={styles.questionCard} data-testid="evening-habit-question">
+                <h2 className={styles.questionTitle}>
+                  Получилось сегодня с привычкой «{activeHabit.name}»?
+                </h2>
+                <div className={styles.outcomeRow} role="group" aria-label="Привычка сегодня">
+                  {OUTCOMES.map((value) => (
+                    <button
+                      key={value}
+                      type="button"
+                      data-testid={`evening-habit-outcome-${value}`}
+                      className={habitOutcome === value ? styles.outcomePillSelected : styles.outcomePill}
+                      disabled={saving}
+                      onClick={() => {
+                        setHabitOutcome(value);
+                        if (value === "done") onHabitEveningDone?.();
+                      }}
+                    >
+                      {OUTCOME_LABELS[value] ?? promiseOutcomeLabelRu(value)}
+                    </button>
+                  ))}
+                </div>
+              </article>
+            ) : null}
+
+            {showAsceticQuestion && activeAscetic ? (
+              <article className={styles.questionCard} data-testid="evening-ascetic-question">
+                <h2 className={styles.questionTitle}>
+                  Получилось сегодня с аскезой «{activeAscetic.title}»?
+                </h2>
+                <div className={styles.outcomeRow} role="group" aria-label="Аскеза сегодня">
+                  {OUTCOMES.map((value) => (
+                    <button
+                      key={value}
+                      type="button"
+                      data-testid={`evening-ascetic-outcome-${value}`}
+                      className={
+                        asceticOutcome === value ? styles.outcomePillSelected : styles.outcomePill
+                      }
+                      disabled={saving}
+                      onClick={() => {
+                        setAsceticOutcome(value);
+                        if (value === "done") onAsceticEveningDone?.();
+                      }}
+                    >
+                      {OUTCOME_LABELS[value] ?? promiseOutcomeLabelRu(value)}
+                    </button>
+                  ))}
+                </div>
+              </article>
+            ) : null}
+
             <section className={styles.highlightsSection}>
               <p className={styles.highlightsLabel}>Что запомнилось?</p>
               <div className={styles.highlightRow} role="group" aria-label="Самое важное сегодня">
@@ -156,6 +230,34 @@ export function TodayEveningProductClose({
                   {userPromise && outcome === "done" ? <span className={styles.summaryCheck}>✓</span> : null}
                 </p>
               </div>
+              {activeHabit ? (
+                <>
+                  <div className={styles.summaryDivider} />
+                  <div className={styles.summaryRow}>
+                    <p className={styles.summaryLabel}>Привычка</p>
+                    <p className={styles.summaryValue}>
+                      {habitMarked || habitOutcome === "done" ? "Отмечено" : "—"}
+                      {habitMarked || habitOutcome === "done" ? (
+                        <span className={styles.summaryCheck}>✓</span>
+                      ) : null}
+                    </p>
+                  </div>
+                </>
+              ) : null}
+              {activeAscetic ? (
+                <>
+                  <div className={styles.summaryDivider} />
+                  <div className={styles.summaryRow}>
+                    <p className={styles.summaryLabel}>Аскеза</p>
+                    <p className={styles.summaryValue}>
+                      {asceticMarked || asceticOutcome === "done" ? "Отмечено" : "—"}
+                      {asceticMarked || asceticOutcome === "done" ? (
+                        <span className={styles.summaryCheck}>✓</span>
+                      ) : null}
+                    </p>
+                  </div>
+                </>
+              ) : null}
               <div className={styles.summaryDivider} />
               <div className={styles.summaryRow}>
                 <p className={styles.summaryLabel}>Рефлексий</p>

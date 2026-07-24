@@ -36,6 +36,12 @@ type Props = {
   practiceStarted: boolean;
   affirmationRead: boolean;
   practiceCompleting: boolean;
+  activeHabit?: { id: number; name: string } | null;
+  activeAscetic?: { id: number; title: string } | null;
+  habitMarked: boolean;
+  asceticMarked: boolean;
+  habitMarking?: boolean;
+  asceticMarking?: boolean;
   goalDraftOpen: boolean;
   goalDraft: string;
   coreProfile?: CoreProfile | null;
@@ -49,7 +55,9 @@ type Props = {
   onGoalDraftChange: (value: string) => void;
   onSaveGoal: () => void;
   onPracticeAction: () => void;
-  onAffirmationRead: () => void;
+  onAffirmationDone: () => void;
+  onHabitMark?: () => void;
+  onAsceticMark?: () => void;
 };
 
 export function TodayPersonalizedProductSection({
@@ -62,6 +70,12 @@ export function TodayPersonalizedProductSection({
   practiceStarted,
   affirmationRead,
   practiceCompleting,
+  activeHabit = null,
+  activeAscetic = null,
+  habitMarked,
+  asceticMarked,
+  habitMarking = false,
+  asceticMarking = false,
   goalDraftOpen,
   goalDraft,
   coreProfile,
@@ -75,13 +89,20 @@ export function TodayPersonalizedProductSection({
   onGoalDraftChange,
   onSaveGoal,
   onPracticeAction,
-  onAffirmationRead,
+  onAffirmationDone,
+  onHabitMark,
+  onAsceticMark,
 }: Props) {
   const compatibility = buildTodayCompatibilityHook(coreProfile);
   const practiceRec = contract.day_story?.practice_recommendation;
 
-  const completedCount = (practiceCompleted ? 1 : 0) + (affirmationRead ? 1 : 0);
-  const totalTools = strengthenTools.length;
+  const completedCount =
+    (practiceCompleted ? 1 : 0) +
+    (affirmationRead ? 1 : 0) +
+    (habitMarked ? 1 : 0) +
+    (asceticMarked ? 1 : 0);
+  const totalTools =
+    strengthenTools.length + (activeHabit ? 1 : 0) + (activeAscetic ? 1 : 0);
 
   const practiceTool = strengthenTools.find((tool) => tool.id === "practice");
   const affirmationTool = strengthenTools.find((tool) => tool.id === "affirmation");
@@ -264,7 +285,7 @@ export function TodayPersonalizedProductSection({
           )}
         </article>
 
-        {strengthenTools.length > 0 || practiceRec?.text ? (
+        {strengthenTools.length > 0 || practiceRec?.text || activeHabit || activeAscetic ? (
           <article className={styles.productCard} data-testid="today-zone-strengthen">
             <div className={styles.practicesHeader}>
               <p className={styles.cardEyebrow}>Практики и опоры</p>
@@ -277,10 +298,25 @@ export function TodayPersonalizedProductSection({
 
             {practiceRec?.text && practiceRec.kind === "affirmation" && !affirmationTool ? (
               <div className={styles.practiceRow}>
-                <span className={styles.practiceCheck} aria-hidden />
+                <span
+                  className={affirmationRead ? styles.practiceCheckDone : styles.practiceCheck}
+                  aria-hidden
+                />
                 <div className={styles.practiceBody}>
                   <p className={styles.practiceTitle}>{practiceRec.text}</p>
                   {practiceRec.reason ? <p className={styles.practiceMeta}>{practiceRec.reason}</p> : null}
+                  {!affirmationRead ? (
+                    <button
+                      type="button"
+                      className={`orbit-button orbit-button-secondary ${styles.practiceAction}`}
+                      data-testid="today-tool-affirmation-done"
+                      onClick={onAffirmationDone}
+                    >
+                      {copy.markAffirmationDone}
+                    </button>
+                  ) : (
+                    <p className={styles.practiceMeta}>{copy.affirmationDone}</p>
+                  )}
                 </div>
               </div>
             ) : null}
@@ -326,11 +362,60 @@ export function TodayPersonalizedProductSection({
                     <button
                       type="button"
                       className={`orbit-button orbit-button-secondary ${styles.practiceAction}`}
-                      onClick={onAffirmationRead}
+                      data-testid="today-tool-affirmation-done"
+                      onClick={onAffirmationDone}
                     >
-                      {copy.readAffirmation}
+                      {copy.markAffirmationDone}
                     </button>
-                  ) : null}
+                  ) : (
+                    <p className={styles.practiceMeta}>{copy.affirmationDone}</p>
+                  )}
+                </div>
+              </div>
+            ) : null}
+
+            {activeHabit ? (
+              <div className={styles.practiceRow} data-testid="today-tool-habit-row">
+                <span className={habitMarked ? styles.practiceCheckDone : styles.practiceCheck} aria-hidden />
+                <div className={styles.practiceBody}>
+                  <p className={styles.practiceTitle}>{activeHabit.name}</p>
+                  <p className={styles.practiceMeta}>Привычка</p>
+                  {!habitMarked ? (
+                    <button
+                      type="button"
+                      className={`orbit-button orbit-button-secondary ${styles.practiceAction}`}
+                      data-testid="today-tool-habit-done"
+                      disabled={habitMarking || !onHabitMark}
+                      onClick={() => onHabitMark?.()}
+                    >
+                      {copy.markHabitDone}
+                    </button>
+                  ) : (
+                    <p className={styles.practiceMeta}>{copy.habitDone}</p>
+                  )}
+                </div>
+              </div>
+            ) : null}
+
+            {activeAscetic ? (
+              <div className={styles.practiceRow} data-testid="today-tool-ascetic-row">
+                <span className={asceticMarked ? styles.practiceCheckDone : styles.practiceCheck} aria-hidden />
+                <div className={styles.practiceBody}>
+                  <p className={styles.practiceTitle}>{activeAscetic.title}</p>
+                  <p className={styles.practiceMeta}>Аскеза</p>
+                  {!asceticMarked ? (
+                    <button
+                      type="button"
+                      className={`orbit-button orbit-button-secondary ${styles.practiceAction}`}
+                      data-testid="today-tool-ascetic-done"
+                      disabled={asceticMarking || !onAsceticMark}
+                      onClick={() => onAsceticMark?.()}
+                    >
+                      {copy.markAsceticDone}
+                    </button>
+                  ) : (
+                    <p className={styles.practiceMeta}>{copy.asceticDone}</p>
+                  )}
                 </div>
               </div>
             ) : null}
@@ -344,8 +429,23 @@ export function TodayPersonalizedProductSection({
                 </div>
               </div>
             ))}
+
+            <p className={styles.practiceMeta} style={{ marginTop: "0.75rem" }}>
+              <Link href="/practices" data-testid="today-setup-practices-link">
+                {copy.setupPracticesLink} →
+              </Link>
+            </p>
           </article>
-        ) : null}
+        ) : (
+          <article className={styles.productCard} data-testid="today-zone-strengthen-empty">
+            <p className={styles.cardEyebrow}>Практики и опоры</p>
+            <p className={styles.practiceMeta}>
+              <Link href="/practices" data-testid="today-setup-practices-link">
+                {copy.setupPracticesLink} →
+              </Link>
+            </p>
+          </article>
+        )}
       </div>
 
       <div className={`${styles.journeyScene} ${styles.bridgeScene}`} data-testid="today-zone-bridges-wrap">

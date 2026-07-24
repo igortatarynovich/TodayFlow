@@ -48,6 +48,11 @@ class User(Base):
     auto_insights = relationship("AutoInsight", back_populates="user", cascade="all, delete-orphan")
     weekly_integrations = relationship("WeeklyIntegration", back_populates="user", cascade="all, delete-orphan")
     weekly_goals = relationship("WeeklyGoal", back_populates="user", cascade="all, delete-orphan")
+    reward_ring_tiers_reached = relationship(
+        "RewardRingTierReached",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
     weekly_goal_steps = relationship("WeeklyGoalStep", back_populates="user", cascade="all, delete-orphan")
     state_check_ins = relationship("StateCheckIn", back_populates="user", cascade="all, delete-orphan")
     habits = relationship("Habit", back_populates="user", cascade="all, delete-orphan")
@@ -1240,6 +1245,22 @@ class GuestClaimRecord(Base):
 
     __table_args__ = (
         UniqueConstraint("guest_session_id", "user_id", name="uq_guest_claim_session_user"),
+    )
+
+
+class RewardRingTierReached(Base):
+    """First time a user crossed a reward-ring tier (merch eligibility). Idempotent per user × tier."""
+
+    __tablename__ = "reward_ring_tier_reached"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    tier_key = Column(String(64), nullable=False)
+    reached_at = Column(DateTime, nullable=False, default=utc_naive_now)
+
+    user = relationship("User", back_populates="reward_ring_tiers_reached")
+    __table_args__ = (
+        UniqueConstraint("user_id", "tier_key", name="uq_reward_ring_tier_user_tier"),
     )
 
 

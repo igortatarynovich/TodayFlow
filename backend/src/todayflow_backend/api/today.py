@@ -36,7 +36,7 @@ from todayflow_backend.services.numerology import NumerologyService, get_numerol
 from todayflow_backend.services.insight_depth import get_insight_depth_tier
 from todayflow_backend.services.generation_orchestrator import run_today_narrative_pipeline
 from todayflow_backend.services.today_narrative import _normalize_depth_level
-from todayflow_backend.constants.reward_rings import compute_reward_rings_earned
+from todayflow_backend.constants.reward_rings import REWARD_RING_THRESHOLDS, compute_reward_rings_earned
 from todayflow_backend.services.meaning_progress import (
     build_archetype_progress,
     build_growth_index_from_rings,
@@ -1347,7 +1347,38 @@ def _sync_reward_evolution_peak(db, user_id: int, evolution_index: int) -> int:
     if peak > prev:
         row.reward_evolution_index_peak = peak
         db.commit()
+    _record_newly_reached_ring_tiers(db, user_id, peak)
     return peak
+
+
+def _record_newly_reached_ring_tiers(db, user_id: int, peak: int) -> None:
+    """Idempotent: insert (user_id, tier_key, reached_at) the first time peak covers a tier."""
+    safe_peak = max(0, min(100, int(peak)))
+    existing = {
+        r.tier_key
+        for r in db.query(db_models.RewardRingTierReached.tier_key)
+        .filter(db_models.RewardRingTierReached.user_id == user_id)
+        .all()
+    }
+    now = db_models.utc_naive_now()
+    inserted = False
+    for min_idx, tier_key in REWARD_RING_THRESHOLDS:
+        if safe_peak < min_idx or tier_key in existing:
+            continue
+        db.add(
+            db_models.RewardRingTierReached(
+                user_id=user_id,
+                tier_key=tier_key,
+                reached_at=now,
+            )
+        )
+        inserted = True
+    if inserted:
+        try:
+            db.commit()
+        except Exception:
+            db.rollback()
+            # Concurrent insert on unique (user_id, tier_key) — already recorded.
 
 
 def _build_rewards_snapshot(

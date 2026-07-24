@@ -7,18 +7,19 @@ import {
 } from "@/lib/appNavConfig";
 
 describe("appNavConfig", () => {
-  it("defines five primary nav items in product order", () => {
+  it("defines four primary nav items without practices hub", () => {
     const items = buildAppNavItems("ru", "authenticated");
     expect(items.map((i) => i.id)).toEqual(APP_NAV_PRIMARY_ORDER);
-    expect(items).toHaveLength(5);
+    expect(items).toHaveLength(4);
+    expect(items.map((i) => i.id)).not.toContain("practices");
     expect(items[0].href).toBe("/today");
     expect(items[1].label).toBe("Моя карта");
   });
 
-  it("defines three guest nav items", () => {
+  it("defines two guest nav items", () => {
     const items = buildAppNavItems("en", "guest");
     expect(items.map((i) => i.id)).toEqual(APP_NAV_GUEST_ORDER);
-    expect(items).toHaveLength(3);
+    expect(items).toHaveLength(2);
     expect(items[0].label).toBe("Tarot");
   });
 
@@ -27,7 +28,6 @@ describe("appNavConfig", () => {
     expect(links).toEqual([
       { href: "/tarot", label: "Таро" },
       { href: "/compatibility", label: "Совместимость" },
-      { href: "/practices", label: "Практики" },
     ]);
   });
 

@@ -80,6 +80,11 @@ import { getJson, postJson } from "@/lib/api";
 import { PersonalizationDegradedBadge } from "@/components/product-ui/PersonalizationDegradedBadge";
 import { buildDayEventsForNarrative } from "@/components/today/todayPageUtils";
 import type { TodayRitualNarrativePayload } from "@/lib/todayNarrativeApi";
+import {
+  loadTodayGrowthTrackers,
+  markAsceticCompletedToday,
+  markHabitCompletedToday,
+} from "@/lib/todayGrowthTrackers";
 
 type Props = {
   variant?: TodayCompositionVariant;
@@ -169,6 +174,10 @@ export function TodayCompositionSurface(props: Props) {
   const [goalDraft, setGoalDraft] = useState("");
   const [recommendedPractice, setRecommendedPractice] = useState<PracticeResponse | null>(null);
   const [practiceCompleting, setPracticeCompleting] = useState(false);
+  const [activeHabit, setActiveHabit] = useState<{ id: number; name: string } | null>(null);
+  const [activeAscetic, setActiveAscetic] = useState<{ id: number; title: string } | null>(null);
+  const [habitMarking, setHabitMarking] = useState(false);
+  const [asceticMarking, setAsceticMarking] = useState(false);
   const [ritualPickOpen, setRitualPickOpen] = useState<"tarot" | "number" | null>(null);
 
   const anchorTarotId = useMemo(
@@ -453,6 +462,33 @@ export function TodayCompositionSurface(props: Props) {
       cancelled = true;
     };
   }, [hydrated, engagement.tarotPickedName, engagement.numberConfirmed, dateISO]);
+
+  useEffect(() => {
+    if (!hydrated || !isAuthenticated) {
+      setActiveHabit(null);
+      setActiveAscetic(null);
+      return;
+    }
+    let cancelled = false;
+    void loadTodayGrowthTrackers(dateISO).then((trackers) => {
+      if (cancelled) return;
+      setActiveHabit(trackers.habit);
+      setActiveAscetic(trackers.ascetic);
+      const patch: Parameters<typeof saveDayEngagement>[1] = {};
+      if (trackers.habitDoneToday && trackers.habit) {
+        patch.habitMarkedId = trackers.habit.id;
+      }
+      if (trackers.asceticDoneToday && trackers.ascetic) {
+        patch.asceticMarkedId = trackers.ascetic.id;
+      }
+      if (Object.keys(patch).length > 0) {
+        persistEngagement(patch);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [hydrated, isAuthenticated, dateISO, persistEngagement]);
 
   useEffect(() => {
     if (isFirstToday && !reactionReady) return;
@@ -746,6 +782,72 @@ export function TodayCompositionSurface(props: Props) {
     trackMeaningEvent,
   ]);
 
+  const onAffirmationDone = useCallback(() => {
+    if (engagement.affirmationRead) return;
+    persistEngagement({ affirmationRead: true });
+    trackMeaningEvent({
+      event_type: "affirmation_done",
+      event_source: "today",
+      local_date: dateISO,
+      payload: { surface: "today_day_story_v3" },
+      refreshRings: true,
+    });
+  }, [dateISO, engagement.affirmationRead, persistEngagement, trackMeaningEvent]);
+
+  const onHabitMark = useCallback(async () => {
+    if (!activeHabit || engagement.habitMarkedId === activeHabit.id || habitMarking) return;
+    try {
+      setHabitMarking(true);
+      await markHabitCompletedToday(activeHabit.id, dateISO);
+      persistEngagement({ habitMarkedId: activeHabit.id });
+      trackMeaningEvent({
+        event_type: "habit_completed",
+        event_source: "today",
+        local_date: dateISO,
+        payload: { habit_id: activeHabit.id, surface: "today_day_story_v3" },
+        refreshRings: true,
+      });
+    } catch {
+      /* retry */
+    } finally {
+      setHabitMarking(false);
+    }
+  }, [
+    activeHabit,
+    dateISO,
+    engagement.habitMarkedId,
+    habitMarking,
+    persistEngagement,
+    trackMeaningEvent,
+  ]);
+
+  const onAsceticMark = useCallback(async () => {
+    if (!activeAscetic || engagement.asceticMarkedId === activeAscetic.id || asceticMarking) return;
+    try {
+      setAsceticMarking(true);
+      await markAsceticCompletedToday(activeAscetic.id, dateISO);
+      persistEngagement({ asceticMarkedId: activeAscetic.id });
+      trackMeaningEvent({
+        event_type: "ascetic_step_done",
+        event_source: "today",
+        local_date: dateISO,
+        payload: { contract_id: activeAscetic.id, surface: "today_day_story_v3" },
+        refreshRings: true,
+      });
+    } catch {
+      /* retry */
+    } finally {
+      setAsceticMarking(false);
+    }
+  }, [
+    activeAscetic,
+    asceticMarking,
+    dateISO,
+    engagement.asceticMarkedId,
+    persistEngagement,
+    trackMeaningEvent,
+  ]);
+
   const dayClosed = isDayContinuityClosed(continuityRecord);
   const todayHeroSymbol = useMemo(() => buildTodayHeroSymbol(props.coreProfile), [props.coreProfile]);
   const todayHeroPillars = useMemo(() => buildTodayHeroPillars(props.coreProfile), [props.coreProfile]);
@@ -769,6 +871,16 @@ export function TodayCompositionSurface(props: Props) {
           practiceStarted={engagement.practiceStarted}
           affirmationRead={engagement.affirmationRead}
           strengthenToolCount={strengthenTools.length}
+          activeHabit={activeHabit}
+          activeAscetic={activeAscetic}
+          habitMarked={engagement.habitMarkedId != null && activeHabit != null && engagement.habitMarkedId === activeHabit.id}
+          asceticMarked={
+            engagement.asceticMarkedId != null &&
+            activeAscetic != null &&
+            engagement.asceticMarkedId === activeAscetic.id
+          }
+          onHabitEveningDone={() => void onHabitMark()}
+          onAsceticEveningDone={() => void onAsceticMark()}
           promiseSuggestions={promiseSuggestions}
           onPickPromise={(text) => {
             persistEngagement({ dayGoal: text });
@@ -1227,6 +1339,20 @@ export function TodayCompositionSurface(props: Props) {
             practiceStarted={engagement.practiceStarted}
             affirmationRead={engagement.affirmationRead}
             practiceCompleting={practiceCompleting}
+            activeHabit={activeHabit}
+            activeAscetic={activeAscetic}
+            habitMarked={
+              engagement.habitMarkedId != null &&
+              activeHabit != null &&
+              engagement.habitMarkedId === activeHabit.id
+            }
+            asceticMarked={
+              engagement.asceticMarkedId != null &&
+              activeAscetic != null &&
+              engagement.asceticMarkedId === activeAscetic.id
+            }
+            habitMarking={habitMarking}
+            asceticMarking={asceticMarking}
             goalDraftOpen={goalDraftOpen}
             goalDraft={goalDraft}
             coreProfile={props.coreProfile}
@@ -1260,16 +1386,9 @@ export function TodayCompositionSurface(props: Props) {
             onGoalDraftChange={setGoalDraft}
             onSaveGoal={onSaveGoal}
             onPracticeAction={() => void onPracticeAction()}
-            onAffirmationRead={() => {
-              persistEngagement({ affirmationRead: true });
-              trackMeaningEvent({
-                event_type: "action_option_selected",
-                event_source: "today",
-                local_date: dateISO,
-                payload: { action: "affirmation_read", surface: "today_day_story_v3" },
-                refreshRings: false,
-              });
-            }}
+            onAffirmationDone={onAffirmationDone}
+            onHabitMark={() => void onHabitMark()}
+            onAsceticMark={() => void onAsceticMark()}
           />
         ) : null}
 
@@ -1370,18 +1489,10 @@ export function TodayCompositionSurface(props: Props) {
                           type="button"
                           className={`orbit-button orbit-button-secondary ${styles.toolAction}`}
                           disabled={engagement.affirmationRead}
-                          onClick={() => {
-                            persistEngagement({ affirmationRead: true });
-                            trackMeaningEvent({
-                              event_type: "action_option_selected",
-                              event_source: "today",
-                              local_date: dateISO,
-                              payload: { action: "affirmation_read", surface: "today_day_story_v3" },
-                              refreshRings: false,
-                            });
-                          }}
+                          data-testid="today-tool-affirmation-done"
+                          onClick={onAffirmationDone}
                         >
-                          {engagement.affirmationRead ? copy.readAffirmation : copy.readAffirmation}
+                          {engagement.affirmationRead ? copy.affirmationDone : copy.markAffirmationDone}
                         </button>
                       ) : null}
                     </article>
