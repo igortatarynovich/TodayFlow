@@ -222,10 +222,11 @@ def personal_to_interpretation_claims(personal: dict[str, Any] | None) -> list[d
         claim_prefix="claim.personal.hd",
         layer="human_design",
         source_fallback="source.human_design",
-        limit=2,
+        limit=3,
         prefer_kinds=(
             "type_authority",
             "profile_lines_cross",
+            "variables",
             "channel",
             "transit_hits_natal_gate",
             "transit_gate",

@@ -61,6 +61,7 @@
 | `human_design` | channels / centers | natal + day (natal∪transit); natal centers for type | no | yes | soft |
 | `human_design` | type_authority | natal channels → Type / Authority / Strategy soft | no | yes | soft |
 | `human_design` | profile_lines_cross | Sun lines → Profile; Sun/Earth 4-gate Cross soft | no | yes | soft |
+| `human_design` | variables | Color/Tone arrows (Sun + North Node) soft | no | yes | soft |
 
 \* Soft Foundation transit sky deferred — v1 collected in Day Personal, not Foundation essence.
 | `tarot_oracle` | card of day | `draw_event` | **no** | contextual | yes (L5) |

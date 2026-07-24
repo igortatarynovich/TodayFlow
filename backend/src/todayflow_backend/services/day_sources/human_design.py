@@ -18,6 +18,8 @@ from todayflow_backend.services.day_sources.ephemeris_bridge import resolve_body
 GATE_41_START_LON = 302.0
 GATE_SPAN = 360.0 / 64.0  # 5°37'30"
 LINE_SPAN = GATE_SPAN / 6.0  # 0°56'15"
+COLOR_SPAN = LINE_SPAN / 6.0
+TONE_SPAN = COLOR_SPAN / 6.0
 DESIGN_SOLAR_ARC_DAYS = 88
 
 # Wheel order starting at Gate 41, increasing tropical longitude.
@@ -338,8 +340,7 @@ def resolve_type_authority(
         "school_canon": "rave_type_authority_v0_natal_channels",
         "limitation_ru": (
             "Type/Authority from natal Personality∪Design channels only "
-            "(Sun…Pluto + Earth; Design −88d). Not a commercial HD chart engine; "
-            "variables deferred."
+            "(Sun…Pluto + Earth; Design −88d). Not a commercial HD chart engine."
         ),
     }
 
@@ -562,7 +563,7 @@ def build_channels_payload(
 
 
 def longitude_to_gate_line(longitude: float) -> dict[str, Any]:
-    """Map tropical ecliptic longitude → HD gate + line (1..6)."""
+    """Map tropical ecliptic longitude → HD gate + line + soft color/tone."""
     lon = float(longitude) % 360.0
     offset = (lon - GATE_41_START_LON) % 360.0
     idx = int(offset // GATE_SPAN) % 64
@@ -570,15 +571,156 @@ def longitude_to_gate_line(longitude: float) -> dict[str, Any]:
     line = int(within // LINE_SPAN) + 1
     if line > 6:
         line = 6
+    within_line = within - (line - 1) * LINE_SPAN
+    color = int(within_line // COLOR_SPAN) + 1
+    if color > 6:
+        color = 6
+    within_color = within_line - (color - 1) * COLOR_SPAN
+    tone = int(within_color // TONE_SPAN) + 1
+    if tone > 6:
+        tone = 6
     gate = GATE_WHEEL[idx]
     theme = _GATE_THEME_RU.get(gate, "")
     return {
         "gate": gate,
         "line": line,
+        "color": color,
+        "tone": tone,
+        "orientation": "left" if color <= 3 else "right",
         "label": f"{gate}.{line}",
         "theme_ru": theme,
         "longitude": round(lon, 4),
         "wheel_index": idx,
+    }
+
+
+_DIGESTION_COLOR_RU = {
+    1: "Аппетит",
+    2: "Вкус",
+    3: "Жажда",
+    4: "Касание",
+    5: "Звук",
+    6: "Свет",
+}
+_ENVIRONMENT_COLOR_RU = {
+    1: "Пещеры",
+    2: "Рынки",
+    3: "Кухни",
+    4: "Горы",
+    5: "Долины",
+    6: "Берега",
+}
+_PERSPECTIVE_COLOR_RU = {
+    1: "Выживание",
+    2: "Возможность",
+    3: "Власть",
+    4: "Желание",
+    5: "Вероятность",
+    6: "Личное",
+}
+_MOTIVATION_COLOR_RU = {
+    1: "Страх",
+    2: "Надежда",
+    3: "Желание",
+    4: "Потребность",
+    5: "Вина",
+    6: "Невинность",
+}
+_ORIENT_RU = {"left": "влево (active)", "right": "вправо (receptive)"}
+
+
+def _arrow_from_activation(
+    *,
+    arrow_id: str,
+    name_ru: str,
+    act: dict[str, Any] | None,
+    color_names: dict[int, str],
+    source_body: str,
+) -> dict[str, Any] | None:
+    if not isinstance(act, dict) or not act.get("gate"):
+        return None
+    color = max(1, min(6, int(act.get("color") or 1)))
+    tone = max(1, min(6, int(act.get("tone") or 1)))
+    orient = str(act.get("orientation") or ("left" if color <= 3 else "right"))
+    return {
+        "id": arrow_id,
+        "name_ru": name_ru,
+        "orientation": orient,
+        "orientation_ru": _ORIENT_RU.get(orient, orient),
+        "color": color,
+        "tone": tone,
+        "color_name_ru": color_names.get(color, str(color)),
+        "source": {
+            "body": source_body,
+            "gate": act.get("gate"),
+            "line": act.get("line"),
+            "label": act.get("label"),
+        },
+    }
+
+
+def resolve_variables(
+    *,
+    personality_sun: dict[str, Any],
+    design_sun: dict[str, Any],
+    personality_north_node: dict[str, Any] | None = None,
+    design_north_node: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Soft PHS Variables: Digestion/Environment/Perspective/Motivation from Color."""
+    digestion = _arrow_from_activation(
+        arrow_id="digestion",
+        name_ru="Пищеварение",
+        act=design_sun,
+        color_names=_DIGESTION_COLOR_RU,
+        source_body="Design Sun",
+    )
+    perspective = _arrow_from_activation(
+        arrow_id="perspective",
+        name_ru="Перспектива",
+        act=personality_sun,
+        color_names=_PERSPECTIVE_COLOR_RU,
+        source_body="Personality Sun",
+    )
+    environment = _arrow_from_activation(
+        arrow_id="environment",
+        name_ru="Среда",
+        act=design_north_node,
+        color_names=_ENVIRONMENT_COLOR_RU,
+        source_body="Design North Node",
+    )
+    motivation = _arrow_from_activation(
+        arrow_id="motivation",
+        name_ru="Мотивация",
+        act=personality_north_node,
+        color_names=_MOTIVATION_COLOR_RU,
+        source_body="Personality North Node",
+    )
+    arrows = [a for a in (digestion, environment, perspective, motivation) if a]
+    left_n = sum(1 for a in arrows if a.get("orientation") == "left")
+    right_n = sum(1 for a in arrows if a.get("orientation") == "right")
+    pattern = "".join("L" if a.get("orientation") == "left" else "R" for a in arrows)
+    parts = []
+    for a in arrows:
+        parts.append(f"{a['name_ru']} {a['orientation_ru']} · {a['color_name_ru']}")
+    summary = "Variables soft: " + "; ".join(parts) + "."
+    depth = "sun_node_colors" if environment and motivation else "sun_colors_partial"
+    return {
+        "capability_id": "variables",
+        "depth": depth,
+        "arrows": arrows,
+        "digestion": digestion,
+        "environment": environment,
+        "perspective": perspective,
+        "motivation": motivation,
+        "pattern": pattern,
+        "left_count": left_n,
+        "right_count": right_n,
+        "summary_ru": summary,
+        "school_canon": "rave_variables_v0_color_tone",
+        "limitation_ru": (
+            "Arrow L/R from Color 1–3 left / 4–6 right on Sun (+ North Node when resolved). "
+            "Not full PHS Tone/Base diet engine; Design −88d / Swiss when bridge present."
+        ),
     }
 
 
@@ -593,6 +735,19 @@ def activation_for_date(
         sun = activation_for_date(d, body="Sun", ephemeris=ephemeris, role=role)
         act = earth_from_sun(sun)
         act["ephemeris_source"] = sun.get("ephemeris_source")
+        return act
+    if body in ("NorthNode", "SouthNode"):
+        # South Node = North Node + 180°; prefer Swiss NorthNode when present.
+        resolved = resolve_body_longitude("NorthNode", d, ephemeris=ephemeris, role=role)
+        lon = float(resolved["longitude"])
+        if body == "SouthNode":
+            lon = (lon + 180.0) % 360.0
+        act = longitude_to_gate_line(lon)
+        act["body"] = body
+        act["date"] = d.isoformat()
+        act["ephemeris_source"] = resolved.get("source")
+        if body == "SouthNode" and resolved.get("source") == "mean_longitude_soft":
+            act["derived_from"] = "north_node_opposition"
         return act
     resolved = resolve_body_longitude(body, d, ephemeris=ephemeris, role=role)
     lon = float(resolved["longitude"])
@@ -674,6 +829,9 @@ def bodygraph_soft(
             birth_date, body=body, ephemeris=ephemeris, role="natal"
         )
     personality["earth"] = earth_from_sun(personality["sun"])
+    personality["north_node"] = activation_for_date(
+        birth_date, body="NorthNode", ephemeris=ephemeris, role="natal"
+    )
 
     design_date = birth_date - timedelta(days=DESIGN_SOLAR_ARC_DAYS)
     design_swiss = (
@@ -690,6 +848,12 @@ def bodygraph_soft(
             role="design" if design_swiss else "transit",
         )
     design["earth"] = earth_from_sun(design["sun"])
+    design["north_node"] = activation_for_date(
+        design_date,
+        body="NorthNode",
+        ephemeris=ephemeris,
+        role="design" if design_swiss else "transit",
+    )
 
     natal_gates = {
         int(row["gate"])
@@ -768,11 +932,13 @@ def bodygraph_soft(
         "personality": {
             "sun": personality["sun"],
             "earth": personality["earth"],
+            "north_node": personality["north_node"],
             "planets": list(personality.values()),
         },
         "design": {
             "sun": design["sun"],
             "earth": design["earth"],
+            "north_node": design["north_node"],
             "approx_date": design_date.isoformat(),
             "planets": list(design.values()),
         },
@@ -822,6 +988,7 @@ def build_human_design_payload(
 
     type_authority = None
     profile_lines_cross = None
+    variables = None
     if bodygraph is not None:
         type_authority = resolve_type_authority(
             natal_channels=list(channels.get("natal_channels") or []),
@@ -838,6 +1005,17 @@ def build_human_design_payload(
                 design_earth=des.get("earth") or earth_from_sun(des["sun"]),
             )
             caps.append("profile_lines_cross")
+            variables = resolve_variables(
+                personality_sun=pers["sun"],
+                design_sun=des["sun"],
+                personality_north_node=pers.get("north_node")
+                if isinstance(pers.get("north_node"), dict)
+                else None,
+                design_north_node=des.get("north_node")
+                if isinstance(des.get("north_node"), dict)
+                else None,
+            )
+            caps.append("variables")
 
     beats: list[dict[str, Any]] = [
         {
@@ -877,6 +1055,16 @@ def build_human_design_payload(
                 "evidence_ref": "human_design.profile_lines_cross",
             }
         )
+    if variables:
+        beats.append(
+            {
+                "id": f"hd.variables.{variables.get('pattern') or 'soft'}",
+                "kind": "variables",
+                "title": f"HD · Variables {variables.get('pattern') or ''}".strip(),
+                "story_ru": variables["summary_ru"],
+                "evidence_ref": "human_design.variables",
+            }
+        )
     if bodygraph and bodygraph.get("activations"):
         for act in bodygraph["activations"][:3]:
             beats.append(
@@ -907,6 +1095,8 @@ def build_human_design_payload(
         summary = f"{summary} {type_authority['summary_ru']}"
     if profile_lines_cross:
         summary = f"{summary} {profile_lines_cross['summary_ru']}"
+    if variables:
+        summary = f"{summary} {variables['summary_ru']}"
     if bodygraph and bodygraph.get("activations"):
         summary = f"{summary} {bodygraph['summary_ru']}"
     elif bodygraph:
@@ -921,6 +1111,7 @@ def build_human_design_payload(
         "channels": channels,
         "type_authority": type_authority,
         "profile_lines_cross": profile_lines_cross,
+        "variables": variables,
         "beats": beats,
         "summary_ru": summary[:480],
         "school_canon": "rave_mandala_gate41_aquarius_2",

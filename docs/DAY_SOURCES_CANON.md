@@ -610,6 +610,7 @@ Day Story            →  интерпретация Foundation → экран T
 | `channels` / defined centers | v1/partial | full transit + natal gates; natal centers separate | no | yes | soft |
 | `type_authority` | v1/partial | natal Personality∪Design channels → Type/Authority/Strategy soft | no | yes | soft |
 | `profile_lines_cross` | v1/partial | Personality/Design Sun lines → Profile; Sun/Earth 4-gate Cross soft | no | yes | soft |
+| `variables` | v1/partial | Color/Tone → Digestion/Environment/Perspective/Motivation arrows soft | no | yes | soft |
 
 ---
 

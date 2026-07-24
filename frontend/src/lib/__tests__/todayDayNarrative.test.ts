@@ -258,6 +258,11 @@ describe("buildTodayDayNarrative", () => {
               profile: { id: "3/5", label_ru: "3/5 · Мученик / Еретик" },
               incarnation_cross: { label: "1/2/13/7" },
             },
+            variables: {
+              summary_ru: "Variables soft: Пищеварение вправо · Свет; Перспектива влево · Выживание.",
+              pattern: "RLRL",
+              digestion: { color_name_ru: "Свет", orientation: "right" },
+            },
             channels: {
               summary_ru: "Каналы HD (soft): 1-8 (Вдохновение).",
               channels: [{ id: "1-8", name_ru: "Вдохновение", centers_ru: ["G", "Горло"] }],
@@ -287,9 +292,11 @@ describe("buildTodayDayNarrative", () => {
     expect(personal).toBeTruthy();
     expect(personal!.kicker).toMatch(/Личный слой/i);
     const text = [personal!.lead, ...personal!.paragraphs].filter(Boolean).join(" ");
-    expect(text).toMatch(/Профиль 3\/5|HD soft|ворот|Firdaria|Управители|Каналы HD/i);
+    expect(text).toMatch(/Профиль 3\/5|Variables soft|HD soft|ворот|Firdaria|Управители|Каналы HD/i);
     expect(personal!.signals?.length).toBeGreaterThan(0);
-    expect(personal!.signals?.map((s) => s.label).join(" ")).toMatch(/HD тип|HD профиль|Профекция|Firdaria|HD/i);
+    expect(personal!.signals?.map((s) => s.label).join(" ")).toMatch(
+      /HD тип|HD профиль|HD variables|Профекция|Firdaria|HD/i,
+    );
     expect(personal!.accent).toBe("sky");
   });
 

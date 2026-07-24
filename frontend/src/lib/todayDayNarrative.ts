@@ -161,6 +161,7 @@ export function collectDayPersonalLayer(
   const softLines = [
     clean(hd?.type_authority?.summary_ru),
     clean(hd?.profile_lines_cross?.summary_ru),
+    clean(hd?.variables?.summary_ru),
     clean(activation?.story_ru) || titledStory(activation?.title, activation?.story_ru),
     clean(astro?.time_lords?.summary_ru),
     zrPeak ? `ZR: ${zrPeak}` : null,
@@ -209,6 +210,19 @@ export function collectDayPersonalLayer(
         hd.profile_lines_cross.profile.id,
         hd.profile_lines_cross.incarnation_cross?.label
           ? `cross ${hd.profile_lines_cross.incarnation_cross.label}`
+          : null,
+      ]
+        .filter(Boolean)
+        .join(" · "),
+    );
+  }
+  if (hd?.variables?.pattern || hd?.variables?.digestion?.color_name_ru) {
+    pushSignal(
+      "HD variables",
+      [
+        hd.variables.pattern,
+        hd.variables.digestion?.color_name_ru
+          ? `пищ. ${hd.variables.digestion.color_name_ru}`
           : null,
       ]
         .filter(Boolean)

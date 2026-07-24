@@ -217,6 +217,23 @@ export type TodayContractDayStoryV1 = {
         };
         limitation_ru?: string;
       } | null;
+      variables?: {
+        summary_ru?: string;
+        depth?: string;
+        pattern?: string;
+        digestion?: { orientation?: string; color_name_ru?: string; color?: number } | null;
+        environment?: { orientation?: string; color_name_ru?: string; color?: number } | null;
+        perspective?: { orientation?: string; color_name_ru?: string; color?: number } | null;
+        motivation?: { orientation?: string; color_name_ru?: string; color?: number } | null;
+        arrows?: Array<{
+          id?: string;
+          name_ru?: string;
+          orientation?: string;
+          orientation_ru?: string;
+          color_name_ru?: string;
+        }>;
+        limitation_ru?: string;
+      } | null;
     } | null;
     bazi?: {
       summary_ru?: string;

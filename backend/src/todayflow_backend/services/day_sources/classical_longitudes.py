@@ -98,7 +98,15 @@ _PERIOD_DAYS: dict[str, float] = {
 }
 
 
+def tropical_north_node_longitude(d: date) -> float:
+    """Mean lunar North Node (soft Meeus-style)."""
+    t = _julian_centuries(d)
+    return _norm(125.0445479 - 1934.1362891 * t + 0.0020762 * t * t)
+
+
 def classical_longitude(body: str, d: date) -> float:
+    if body == "NorthNode":
+        return tropical_north_node_longitude(d)
     fn = _BODY_FN.get(body)
     if fn is None:
         raise KeyError(body)

@@ -8,11 +8,13 @@ from todayflow_backend.services.day_personal_v1 import build_day_personal_v1
 from todayflow_backend.services.day_sources import DaySourceInputs, collect_personal_sources
 from todayflow_backend.services.day_sources.human_design import (
     GATE_WHEEL,
+    LINE_SPAN,
     defined_centers_from_channels,
     longitude_to_gate_line,
     resolve_channels,
     resolve_profile_lines_cross,
     resolve_type_authority,
+    resolve_variables,
     transit_gates_for_day,
 )
 from todayflow_backend.services.day_sources.registry import default_registry
@@ -25,6 +27,9 @@ def test_gate_41_at_aquarius_2():
     act = longitude_to_gate_line(302.0)
     assert act["gate"] == 41
     assert act["line"] == 1
+    assert act["color"] == 1
+    assert act["tone"] == 1
+    assert act["orientation"] == "left"
 
 
 def test_aries_0_is_gate_25():
@@ -130,6 +135,33 @@ def test_profile_lines_cross_from_sun_earth():
     assert left["angle"]["id"] == "left_angle"
 
 
+def test_variables_from_color_tone():
+    act_left = longitude_to_gate_line(302.0)
+    assert act_left["gate"] == 41
+    assert act_left["line"] == 1
+    assert act_left["color"] == 1
+    assert act_left["orientation"] == "left"
+
+    act_right = longitude_to_gate_line(302.0 + LINE_SPAN * 0.75)
+    assert act_right["line"] == 1
+    assert act_right["color"] >= 4
+    assert act_right["orientation"] == "right"
+
+    pack = resolve_variables(
+        personality_sun={**act_left, "gate": 1, "line": 1, "label": "1.1"},
+        design_sun={**act_right, "gate": 2, "line": 1, "label": "2.1"},
+        personality_north_node={**act_left, "gate": 10, "line": 2, "label": "10.2"},
+        design_north_node={**act_right, "gate": 15, "line": 2, "label": "15.2"},
+    )
+    assert pack["capability_id"] == "variables"
+    assert pack["digestion"]["orientation"] == "right"
+    assert pack["perspective"]["orientation"] == "left"
+    assert pack["environment"]["color_name_ru"]
+    assert pack["motivation"]["color_name_ru"]
+    assert len(pack["pattern"]) == 4
+    assert pack["depth"] == "sun_node_colors"
+
+
 def test_transit_gates_without_birth():
     transit = transit_gates_for_day(date(2026, 7, 24))
     assert 1 <= transit["sun"]["gate"] <= 64
@@ -159,6 +191,7 @@ def test_transit_gates_without_birth():
     assert "bodygraph_interaction" not in hd["capability_ids"]
     assert "type_authority" not in hd["capability_ids"]
     assert "profile_lines_cross" not in hd["capability_ids"]
+    assert "variables" not in hd["capability_ids"]
     assert "channels" in hd["payload"]["channels"]
     assert "active_gates" in hd["payload"]["channels"]
     assert len(hd["payload"]["channels"]["active_gates"]["transit"]) >= 3
@@ -179,8 +212,11 @@ def test_bodygraph_when_birth_date():
     assert "channels" in hd["capability_ids"]
     assert "type_authority" in hd["capability_ids"]
     assert "profile_lines_cross" in hd["capability_ids"]
+    assert "variables" in hd["capability_ids"]
     assert str(hd["bodygraph"]["depth"]).startswith("time_place_known")
     assert hd["bodygraph"]["personality"]["sun"]["gate"]
+    assert hd["bodygraph"]["personality"]["sun"]["color"] in range(1, 7)
+    assert hd["bodygraph"]["personality"]["north_node"]["gate"]
     assert len(hd["bodygraph"]["natal_gates"]) >= 4
     assert "natal_defined_centers" in hd["channels"]
     assert hd["type_authority"]["type"]["id"] in {
@@ -195,6 +231,8 @@ def test_bodygraph_when_birth_date():
     assert "/" in plc["profile"]["id"]
     assert plc["incarnation_cross"]["conscious_sun"]["gate"] == hd["bodygraph"]["personality"]["sun"]["gate"]
     assert plc["incarnation_cross"]["unconscious_sun"]["gate"] == hd["bodygraph"]["design"]["sun"]["gate"]
+    assert hd["variables"]["digestion"]["color_name_ru"]
+    assert hd["variables"]["perspective"]["orientation"] in {"left", "right"}
     assert "active_gates" in hd["channels"]
     assert len(hd["channels"]["active_gates"]["natal"]) >= 4
 
@@ -211,7 +249,7 @@ def test_interpretation_can_include_hd_claim():
     claim_ids = {c["id"] for c in interp["derived_claims"]}
     assert any(i.startswith("claim.personal.hd.") for i in claim_ids)
     hd_claims = [c for c in interp["derived_claims"] if str(c["id"]).startswith("claim.personal.hd.")]
-    assert 1 <= len(hd_claims) <= 2
+    assert 1 <= len(hd_claims) <= 3
     kinds_in_beats = {
         b.get("kind")
         for b in (interp["day_personal"]["human_design"].get("beats") or [])
@@ -219,5 +257,6 @@ def test_interpretation_can_include_hd_claim():
     }
     assert "type_authority" in kinds_in_beats
     assert "profile_lines_cross" in kinds_in_beats
+    assert "variables" in kinds_in_beats
     joined = " ".join(str(c.get("text") or "") for c in hd_claims)
-    assert "HD soft" in joined or "Профиль" in joined
+    assert "HD soft" in joined or "Профиль" in joined or "Variables" in joined
