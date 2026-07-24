@@ -1,5 +1,4 @@
-import { act, render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { RitualTarotPickExperience } from "@/components/today/ritual/RitualTarotPickExperience";
 
 jest.mock("@/lib/tarotCardAssets", () => ({
@@ -18,8 +17,7 @@ describe("RitualTarotPickExperience · MotionFlip", () => {
     jest.useRealTimers();
   });
 
-  it("plays MotionFlip on reveal after pick (not resume)", async () => {
-    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+  it("plays MotionFlip on reveal after pick (not resume)", () => {
     const onCommitMain = jest.fn();
     const onContinue = jest.fn();
 
@@ -39,10 +37,10 @@ describe("RitualTarotPickExperience · MotionFlip", () => {
 
     expect(screen.getByTestId("ritual-tarot-pick-grid")).toBeInTheDocument();
     const cards = screen.getAllByRole("button");
-    await user.click(cards[0]!);
 
-    await act(async () => {
-      jest.advanceTimersByTime(50);
+    act(() => {
+      fireEvent.click(cards[0]!);
+      jest.runOnlyPendingTimers();
     });
 
     expect(screen.getByTestId("ritual-tarot-motion-flip")).toBeInTheDocument();

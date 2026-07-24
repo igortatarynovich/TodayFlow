@@ -117,7 +117,7 @@
   display: flex;
   min-height: 100dvh;
   width: 100%;
-  background: var(--tf-page);
+  background: var(--tf-page-atmosphere, var(--tf-page));
   color: var(--tf-ink);
   font-family: var(--tf-font-body);
 }
@@ -323,7 +323,7 @@
 }
 
 .productWebFrame[data-theme="dark"] .appShell {
-  background: #121018;
+  background: var(--tf-page-atmosphere, #121018);
   color: rgba(245, 240, 232, 0.94);
 }
 

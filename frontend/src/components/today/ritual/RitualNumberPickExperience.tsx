@@ -3,6 +3,7 @@
 import type { CSSProperties } from "react";
 import { useCallback, useRef, useState } from "react";
 import { RITUAL_COPY } from "@/components/today/todayRitualCopy";
+import { pulseDayPhaseRevealFlash } from "@/lib/dayPhaseAtmosphere";
 import styles from "./RitualNumberPickExperience.module.css";
 
 type Props = {
@@ -52,6 +53,7 @@ export function RitualNumberPickExperience({
     if (revealed) return;
     vibrate(12, !reduceMotion);
     setRevealed(true);
+    if (!reduceMotion) pulseDayPhaseRevealFlash();
     vibrate(14, !reduceMotion);
   };
 

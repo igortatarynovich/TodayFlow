@@ -337,6 +337,14 @@ Mood **не** заменяет шрифты и spacing-токены — толь
 
 Опираться на уже существующие `frontend/src/lib/sectionAtmosphere.ts`, `SectionAtmosphereBridge`, `frontend/src/styles/section-atmosphere.css` — **достроить** day-phase, не изобретать второй atmosphere-слой с нуля.
 
+**Реализовано (2026-07-24):**
+- `frontend/src/lib/dayPhaseAtmosphere.ts` — `resolveDayPhase` / `pulseDayPhaseRevealFlash`
+- `frontend/src/styles/day-phase-atmosphere.css` — morning · day · evening · first + reveal flash
+- `SectionAtmosphereBridge` пишет `data-day-phase` только на `/today` (first ← `?first=1` или `!hasCompletedFirstToday()`)
+- Product shell берёт фон через `--tf-page-atmosphere` (`.appShell`)
+- Вспышка раскрытия: `RitualTarotPickExperience` + `RitualNumberPickExperience`
+- Лендинг (`data-atmosphere=home`) **не** получает day-phase — нет конфликта с guest blur-preview copy
+
 ---
 
 ## 10. Guest Showcase
@@ -435,7 +443,7 @@ TODAYFLOW_FOUNDATION_UI
 - [ ] Profile «без текста» frame — **pass** дорого/нет *(Cover v1: `Cover / TodayFlow — Living Portal` — portal + 10 systems + convergence; **design review**, не gate)*
 - [x] Motion kit (`design-system/motion/` + framer-motion) — Reveal / Flip / Settle / Drift / Pulse *(code 2026-07-24 · Flip wired to live `RitualTarotPickExperience` via `/today` → `TodayRitualFlow`; dead `today-ritual-cardface` CSS removed)*
 - [ ] Mood themes Calm / Focus / Night / Clarity wired to day-phase + manual pin
-- [ ] Day-phase atmosphere CSS/SVG (5 states) on `time-of-day` + section atmosphere
+- [x] Day-phase atmosphere CSS/SVG (5 states) on `time-of-day` + section atmosphere *(code 2026-07-24 · `data-day-phase` + `day-phase-atmosphere.css`; reveal flash via `pulseDayPhaseRevealFlash`; landing stays `data-atmosphere=home` — no conflict)*
 - [x] Guest showcase blur-preview on `/today` + `/profile`; loading skeletons *(code 2026-07-24 · `ProductGuestShowcase` + `ProductShellLoading`)*
 - [ ] Sound cues (optional; default off web)
 

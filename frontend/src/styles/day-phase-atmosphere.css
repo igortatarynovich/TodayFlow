@@ -1,0 +1,118 @@
+/**
+ * Day-phase procedural atmospheres (FOUNDATION_UI §9).
+ * Driven by html[data-day-phase] from SectionAtmosphereBridge.
+ * Paints via --tf-page-atmosphere (product shell) + section tokens (marketing).
+ */
+
+/* —— Morning: cream → gold haze + thin rays —— */
+html[data-atmosphere="today"][data-day-phase="morning"] {
+  --tf-page: #fdf8f0;
+  --section-page-bg: #fdf8f0;
+  --section-page-gradient:
+    repeating-linear-gradient(
+      105deg,
+      transparent 0,
+      transparent 46px,
+      rgba(201, 169, 110, 0.035) 46px,
+      rgba(201, 169, 110, 0.035) 47px
+    ),
+    radial-gradient(ellipse 95% 55% at 50% 110%, rgba(201, 169, 110, 0.28), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 8% -8%, rgba(255, 230, 200, 0.35), transparent 55%),
+    #fdf8f0;
+  --tf-page-atmosphere: var(--section-page-gradient);
+  --section-glow-a: rgba(255, 220, 180, 0.4);
+  --section-glow-b: rgba(201, 169, 110, 0.2);
+}
+
+/* —— Day: almost flat — action over atmosphere —— */
+html[data-atmosphere="today"][data-day-phase="day"] {
+  --tf-page: #f9f3ee;
+  --section-page-bg: #f9f3ee;
+  --section-page-gradient:
+    radial-gradient(ellipse 60% 35% at 50% -10%, rgba(243, 198, 180, 0.1), transparent 60%),
+    #f9f3ee;
+  --tf-page-atmosphere: var(--section-page-gradient);
+  --section-glow-a: rgba(243, 198, 180, 0.12);
+  --section-glow-b: transparent;
+}
+
+/* —— Evening: dark surface + gold star points —— */
+html[data-atmosphere="today"][data-day-phase="evening"] {
+  --tf-page: #1a1714;
+  --tf-ink: #f5f0e8;
+  --tf-ink-soft: #c9b8a0;
+  --section-page-bg: #1a1714;
+  --section-page-gradient:
+    radial-gradient(1.5px 1.5px at 12% 18%, rgba(201, 169, 110, 0.75), transparent),
+    radial-gradient(1.5px 1.5px at 28% 42%, rgba(232, 212, 170, 0.55), transparent),
+    radial-gradient(1.2px 1.2px at 48% 22%, rgba(201, 169, 110, 0.65), transparent),
+    radial-gradient(1.5px 1.5px at 72% 36%, rgba(232, 212, 170, 0.45), transparent),
+    radial-gradient(1.2px 1.2px at 86% 14%, rgba(201, 169, 110, 0.7), transparent),
+    radial-gradient(1px 1px at 64% 68%, rgba(201, 169, 110, 0.4), transparent),
+    radial-gradient(1.5px 1.5px at 18% 78%, rgba(232, 212, 170, 0.35), transparent),
+    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(201, 169, 110, 0.08), transparent 55%),
+    radial-gradient(ellipse 70% 40% at 80% 0%, rgba(60, 50, 40, 0.5), transparent 50%),
+    linear-gradient(180deg, #221e1a 0%, #1a1714 55%, #141210 100%);
+  --tf-page-atmosphere: var(--section-page-gradient);
+  --section-text: #f5f0e8;
+  --section-text-muted: rgba(201, 184, 160, 0.72);
+  --section-panel-bg: rgba(36, 32, 28, 0.88);
+  --section-panel-border: rgba(201, 169, 110, 0.22);
+  --section-nav-bg: rgba(20, 17, 14, 0.94);
+  --section-nav-ink: rgba(245, 240, 232, 0.94);
+  --section-glow-a: rgba(201, 169, 110, 0.18);
+  --section-glow-b: rgba(80, 60, 40, 0.25);
+}
+
+/* —— First day: maximum clarity, minimal texture —— */
+html[data-atmosphere="today"][data-day-phase="first"] {
+  --tf-page: #fffdfb;
+  --section-page-bg: #fffdfb;
+  --section-page-gradient: linear-gradient(180deg, #fffdfb 0%, #faf7f2 100%);
+  --tf-page-atmosphere: var(--section-page-gradient);
+  --section-glow-a: transparent;
+  --section-glow-b: transparent;
+  --section-accent-soft: rgba(201, 169, 110, 0.08);
+}
+
+/* Theme-color / PWA chrome helpers use DAY_PHASE_THEME_COLORS in bridge */
+
+/* —— Reveal flash: 2–3s reaction, not a persistent phase —— */
+html[data-day-phase-flash="1"]::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 45% at 50% 42%, rgba(255, 236, 210, 0.55), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 50% 48%, rgba(201, 169, 110, 0.28), transparent 65%);
+  animation: dayPhaseRevealFlash 2.5s var(--tf-motion-ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
+}
+
+@keyframes dayPhaseRevealFlash {
+  0% {
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  55% {
+    opacity: 0.45;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-day-phase-flash="1"]::after {
+    animation: none;
+    opacity: 0.2;
+  }
+}
+
+/* Product shell already dark via data-theme — keep evening stars visible on frame path */
+html[data-product-web-shell][data-atmosphere="today"][data-day-phase="evening"] {
+  color-scheme: dark;
+}

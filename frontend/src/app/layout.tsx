@@ -1,5 +1,6 @@
 import "./globals.css";
 import "@/styles/section-atmosphere.css";
+import "@/styles/day-phase-atmosphere.css";
 import "@/styles/premium-ui.css";
 import type { ReactNode } from "react";
 import type { Viewport } from "next";

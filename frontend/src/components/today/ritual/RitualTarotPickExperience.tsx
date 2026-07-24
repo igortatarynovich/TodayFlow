@@ -3,6 +3,7 @@
 import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 import { MotionFlip, MotionReveal } from "@/design-system/motion";
+import { pulseDayPhaseRevealFlash } from "@/lib/dayPhaseAtmosphere";
 import {
   tarotCardBackSrc,
   tarotCardFaceSrc,
@@ -100,6 +101,7 @@ export function RitualTarotPickExperience({
     }
     setCardFlipped(false);
     const t = window.setTimeout(() => setCardFlipped(true), 40);
+    pulseDayPhaseRevealFlash();
     return () => window.clearTimeout(t);
   }, [phase, reduceMotion]);
 
