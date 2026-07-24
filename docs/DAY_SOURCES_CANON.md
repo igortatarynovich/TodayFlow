@@ -433,7 +433,7 @@ Day Story            →  интерпретация Foundation → экран T
 | `solar_arc` | v1/partial | birth date (+ time+place for SA ASC) | no | yes | soft |
 | `solar_return` / `lunar_return` | v1/partial | birth date (+ time+place for soft ASC) | no | yes | soft period context |
 | `profections` | v1 | birth date (+ time+place → ASC whole-sign; else solar proxy) | no | yes | soft |
-| `time_lords` (firdaria, ZR, …) | v1/partial | birth (+ time+place for sect/lots); Firdaria + ZR Fortune/Spirit L1/L2 | no | yes | soft |
+| `time_lords` (firdaria, ZR, …) | v1/partial | birth (+ time+place for sect/lots); Swiss natal lots when ephemeris bridge | no | yes | soft |
 | `planet_returns` | v1/partial | birth date; classical mean longitudes noon | no | yes | soft event |
 
 **school_canon:** Placidus houses when time+place for transit houses; profections use **whole-sign** from tropical ASC (or solar-sign proxy without time). Without birth time — **no houses/angles/progressed angles**.
@@ -605,8 +605,8 @@ Day Story            →  интерпретация Foundation → экран T
 
 | capability_id | version | required_inputs | in_foundation | in_personal | in_today |
 |---------------|---------|-----------------|---------------|-------------|----------|
-| `transit_gates` | v1/partial | `target_date`; Sun…Pluto + Earth (mean lon) | soft deferred | yes | soft |
-| `bodygraph_interaction` | v1/partial | + `birth_date` (±88d Design; full planet set) | no | yes | soft |
+| `transit_gates` | v1/partial | `target_date`; Sun…Pluto + Earth (Swiss noon or mean lon) | soft deferred | yes | soft |
+| `bodygraph_interaction` | v1/partial | + `birth_date`; Design −88d Swiss walk when bridge | no | yes | soft |
 | `channels` / defined centers | v1/partial | full transit + natal gates (mean lon) | no | yes | soft |
 
 ---

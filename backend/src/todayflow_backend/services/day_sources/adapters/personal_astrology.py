@@ -12,7 +12,7 @@ from todayflow_backend.services.day_sources.returns import build_returns_pack
 from todayflow_backend.services.day_sources.time_lords import build_time_lords
 from todayflow_backend.services.day_sources.types import DaySourceInputs, SourceResult
 
-_CALC = "personal-astrology-adapter-v6"
+_CALC = "personal-astrology-adapter-v7"
 
 _HOUSE_KEYS = ("house", "natal_house", "transit_house", "house_number")
 
@@ -142,6 +142,7 @@ def run_personal_astrology(inputs: DaySourceInputs) -> SourceResult:
             birth_lat=inputs.birth_lat,
             birth_lon=inputs.birth_lon,
             timezone_name=inputs.timezone,
+            ephemeris=inputs.ephemeris if isinstance(inputs.ephemeris, dict) else None,
         )
         caps.append("time_lords")
         beats.extend(list(time_lords.get("beats") or [])[:1])

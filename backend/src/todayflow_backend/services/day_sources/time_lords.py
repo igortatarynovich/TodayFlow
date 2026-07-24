@@ -7,6 +7,8 @@ School freeze v0:
 - Sub-period: divide major by the 9-lord cycle starting at the major lord.
 - ZR: release from Lot of Fortune (Hellenistic day/night formula) using
   Egyptian lesser years; L1 major + soft L2. Without ASC → Moon-sign proxy.
+- Lots prefer Swiss natal Sun/Moon/ASC (sub-day birth clock) when ephemeris
+  bridge injects a natal snapshot; else soft mean lon + lagna ASC.
 """
 
 from __future__ import annotations
@@ -14,6 +16,10 @@ from __future__ import annotations
 from datetime import date, time, timedelta
 from typing import Any
 
+from todayflow_backend.services.day_sources.ephemeris_bridge import (
+    ascendant_from_snapshot,
+    resolve_body_longitude,
+)
 from todayflow_backend.services.day_sources.panchanga import (
     tropical_moon_longitude,
     tropical_sun_longitude,
@@ -143,14 +149,35 @@ def resolve_sect(
     }
 
 
+def _natal_luminaries(
+    birth_date: date,
+    *,
+    ephemeris: dict[str, Any] | None,
+) -> tuple[float, float, str]:
+    """Sun/Moon longitudes; prefer Swiss natal snapshot when present."""
+    sun_r = resolve_body_longitude("Sun", birth_date, ephemeris=ephemeris, role="natal")
+    moon_r = resolve_body_longitude("Moon", birth_date, ephemeris=ephemeris, role="natal")
+    sun = float(sun_r["longitude"])
+    moon = float(moon_r["longitude"])
+    sun_src = str(sun_r.get("source") or "")
+    moon_src = str(moon_r.get("source") or "")
+    if sun_src.startswith("astro_service") and moon_src.startswith("astro_service"):
+        return sun, moon, "swiss_natal"
+    if sun_src.startswith("astro_service") or moon_src.startswith("astro_service"):
+        return sun, moon, "swiss_partial"
+    return sun, moon, "mean_longitude_soft"
+
+
 def resolve_lot_of_fortune(
     birth_date: date,
     *,
     sect: str,
     asc_lon: float | None,
+    ephemeris: dict[str, Any] | None = None,
+    asc_source: str | None = None,
 ) -> dict[str, Any]:
-    sun = tropical_sun_longitude(birth_date)
-    moon = tropical_moon_longitude(birth_date)
+    sun, moon, lum_src = _natal_luminaries(birth_date, ephemeris=ephemeris)
+    timed = lum_src.startswith("swiss") and (asc_source or "").startswith("swiss")
     if asc_lon is None:
         # Soft proxy: release from natal Moon sign when ASC unknown.
         sign_i = _sign_index(moon)
@@ -161,6 +188,8 @@ def resolve_lot_of_fortune(
             "sign_ru": _SIGN_RU[sign_i],
             "method": "moon_sign_proxy",
             "sect": sect,
+            "luminaries_source": lum_src,
+            "asc_source": asc_source or "missing",
         }
     if sect == "day":
         lon = (float(asc_lon) + moon - sun) % 360.0
@@ -168,6 +197,8 @@ def resolve_lot_of_fortune(
     else:
         lon = (float(asc_lon) + sun - moon) % 360.0
         method = "fortune_night_asc_sun_moon"
+    if timed:
+        method = f"{method}_swiss"
     sign_i = _sign_index(lon)
     return {
         "lot": "fortune",
@@ -176,6 +207,8 @@ def resolve_lot_of_fortune(
         "sign_ru": _SIGN_RU[sign_i],
         "method": method,
         "sect": sect,
+        "luminaries_source": lum_src,
+        "asc_source": asc_source or "soft_lagna",
     }
 
 
@@ -184,10 +217,12 @@ def resolve_lot_of_spirit(
     *,
     sect: str,
     asc_lon: float | None,
+    ephemeris: dict[str, Any] | None = None,
+    asc_source: str | None = None,
 ) -> dict[str, Any]:
     """Lot of Spirit — inverse of Fortune (Hellenistic)."""
-    sun = tropical_sun_longitude(birth_date)
-    moon = tropical_moon_longitude(birth_date)
+    sun, moon, lum_src = _natal_luminaries(birth_date, ephemeris=ephemeris)
+    timed = lum_src.startswith("swiss") and (asc_source or "").startswith("swiss")
     if asc_lon is None:
         # Soft proxy: release from natal Sun sign when ASC unknown.
         sign_i = _sign_index(sun)
@@ -198,6 +233,8 @@ def resolve_lot_of_spirit(
             "sign_ru": _SIGN_RU[sign_i],
             "method": "sun_sign_proxy",
             "sect": sect,
+            "luminaries_source": lum_src,
+            "asc_source": asc_source or "missing",
         }
     if sect == "day":
         lon = (float(asc_lon) + sun - moon) % 360.0
@@ -205,6 +242,8 @@ def resolve_lot_of_spirit(
     else:
         lon = (float(asc_lon) + moon - sun) % 360.0
         method = "spirit_night_asc_moon_sun"
+    if timed:
+        method = f"{method}_swiss"
     sign_i = _sign_index(lon)
     return {
         "lot": "spirit",
@@ -213,6 +252,8 @@ def resolve_lot_of_spirit(
         "sign_ru": _SIGN_RU[sign_i],
         "method": method,
         "sect": sect,
+        "luminaries_source": lum_src,
+        "asc_source": asc_source or "soft_lagna",
     }
 
 
@@ -409,6 +450,7 @@ def build_time_lords(
     birth_lat: float | None = None,
     birth_lon: float | None = None,
     timezone_name: str | None = None,
+    ephemeris: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     sect_info = resolve_sect(
         birth_date,
@@ -419,21 +461,40 @@ def build_time_lords(
     )
     fir = locate_firdaria(birth_date, target_date, sect=str(sect_info["sect"]))
 
-    asc_lon = sect_info.get("ascendant_tropical_lon")
+    natal_snap = (
+        ephemeris.get("natal")
+        if isinstance(ephemeris, dict) and isinstance(ephemeris.get("natal"), dict)
+        else None
+    )
+    swiss_asc = ascendant_from_snapshot(natal_snap)
+    if swiss_asc is not None:
+        asc_lon: float | None = float(swiss_asc)
+        asc_source = "swiss_natal"
+    else:
+        asc_lon = sect_info.get("ascendant_tropical_lon")
+        asc_source = "soft_lagna" if asc_lon is not None else "missing"
+
     fortune = resolve_lot_of_fortune(
         birth_date,
         sect=str(sect_info["sect"]),
         asc_lon=asc_lon,
+        ephemeris=ephemeris,
+        asc_source=asc_source,
     )
     spirit = resolve_lot_of_spirit(
         birth_date,
         sect=str(sect_info["sect"]),
         asc_lon=asc_lon,
+        ephemeris=ephemeris,
+        asc_source=asc_source,
     )
     zr_fortune = locate_zodiacal_releasing(birth_date, target_date, lot=fortune)
     zr_spirit = locate_zodiacal_releasing(birth_date, target_date, lot=spirit)
 
-    if sect_info["method"] == "sun_vs_asc_whole_sign" and fortune["method"] != "moon_sign_proxy":
+    swiss_lots = str(fortune.get("method") or "").endswith("_swiss")
+    if swiss_lots:
+        depth = "firdaria_zr_fortune_spirit_swiss"
+    elif sect_info["method"] == "sun_vs_asc_whole_sign" and fortune["method"] != "moon_sign_proxy":
         depth = "firdaria_zr_fortune_spirit_sect"
     elif sect_info["method"] == "sun_vs_asc_whole_sign":
         depth = "firdaria_sect_known"
@@ -459,6 +520,8 @@ def build_time_lords(
     )
     if fortune["method"] == "moon_sign_proxy":
         summary += " Лоты soft: Луна/Солнце (нет ASC)."
+    elif swiss_lots:
+        summary += " Лоты: Swiss natal (sub-day)."
     elif sect_info["method"] == "diurnal_default":
         summary += " Секта: дневная по умолчанию."
     if zr_fortune.get("peak_soft", {}).get("active"):
@@ -477,6 +540,17 @@ def build_time_lords(
         "evidence_ref": "personal_astrology.time_lords",
     }
 
+    deferred = ["profection_lords_as_time_lord"]
+    available = [
+        "firdaria",
+        "zodiacal_releasing",
+        "zodiacal_releasing_spirit",
+    ]
+    if swiss_lots:
+        available.append("swiss_timed_lots")
+    else:
+        deferred.append("swiss_timed_lots")
+
     return {
         "capability_id": "time_lords",
         "school_canon": "firdaria_zr_fortune_spirit_v0",
@@ -485,15 +559,12 @@ def build_time_lords(
         "firdaria": fir,
         "zodiacal_releasing": zr_fortune,
         "zodiacal_releasing_spirit": zr_spirit,
-        "systems_available": [
-            "firdaria",
-            "zodiacal_releasing",
-            "zodiacal_releasing_spirit",
-        ],
-        "systems_deferred": ["profection_lords_as_time_lord", "swiss_timed_lots"],
+        "systems_available": available,
+        "systems_deferred": deferred,
         "limitation_ru": (
             "Firdaria + ZR from Fortune and Spirit (Egyptian lesser years, L1/L2 soft). "
-            "Without ASC: Fortune←Moon, Spirit←Sun. Swiss-timed lots — later."
+            "Without ASC: Fortune←Moon, Spirit←Sun. "
+            "Swiss-timed lots when natal ephemeris bridge supplies Sun/Moon/ASC."
         ),
         "beats": [beat],
         "summary_ru": summary[:480],

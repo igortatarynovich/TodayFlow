@@ -53,11 +53,11 @@
 | `personal_astrology` | secondary_progressions / solar_arc | `birth_date` (+ time+place for angles) | no | yes | soft |
 | `personal_astrology` | solar_return / lunar_return | `birth_date` (+ time+place for soft ASC) | no | yes | soft |
 | `personal_astrology` | house_rulers_chains | + `birth_time` + `birth_place` | no | yes | soft |
-| `personal_astrology` | time_lords (firdaria + ZR Fortune/Spirit) | `birth_date` (+ time+place for sect/lots) | no | yes | soft |
+| `personal_astrology` | time_lords (firdaria + ZR Fortune/Spirit; Swiss lots when natal eph) | `birth_date` (+ time+place; + natal ephemeris for Swiss lots) | no | yes | soft |
 | `personal_astrology` | planet_returns | `birth_date` | no | yes | soft |
 | `personal_astrology` | houses, ASC/MC | + `birth_time` + `birth_place` | no | yes | yes |
-| `human_design` | transit gates | datetime (Sun…Pluto + Earth, mean lon) | soft* | yes (wire) | soft |
-| `human_design` | bodygraph interaction | + birth datetime (+ place for depth); full natal set | no | yes | soft |
+| `human_design` | transit gates | datetime (Sun…Pluto + Earth; Swiss noon when bridge) | soft* | yes (wire) | soft |
+| `human_design` | bodygraph interaction | + birth; Design −88d Swiss walk when bridge | no | yes | soft |
 | `human_design` | channels / defined centers | full transit + natal gates | no | yes | soft |
 
 \* Soft Foundation transit sky deferred — v1 collected in Day Personal, not Foundation essence.

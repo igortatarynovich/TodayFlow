@@ -2,7 +2,8 @@
 
 School: standard Rave Mandala (Gate 41 starts at 02° Aquarius).
 Longitudes prefer Swiss snapshots via ephemeris_bridge; fallback mean lon.
-Design chart uses the common ~88-day solar-arc approximation until timed walks land.
+Design chart prefers Swiss snapshot at birth−88d when ephemeris bridge provides it;
+otherwise soft mean longitude on the shifted calendar day.
 """
 
 from __future__ import annotations
@@ -396,7 +397,7 @@ def transit_gates_for_day(
         "school_canon": "rave_mandala_gate41_aquarius_2",
         "limitation_ru": (
             "Sun…Pluto + Earth. Swiss transit noon when ephemeris bridge is present; "
-            "else mean longitude. Design ±88d still soft."
+            "else mean longitude. Design −88d uses separate Swiss walk when present."
         ),
     }
 
@@ -418,11 +419,18 @@ def bodygraph_soft(
     personality["earth"] = earth_from_sun(personality["sun"])
 
     design_date = birth_date - timedelta(days=DESIGN_SOLAR_ARC_DAYS)
+    design_swiss = (
+        isinstance(ephemeris, dict)
+        and isinstance(ephemeris.get("design_minus_88d"), dict)
+        and bool((ephemeris.get("design_minus_88d") or {}).get("bodies"))
+    )
     design: dict[str, dict[str, Any]] = {}
     for body in classical_bodies():
-        # Design chart still uses soft day-shift; natal swiss does not time-walk −88d.
         design[body.lower()] = activation_for_date(
-            design_date, body=body, ephemeris=None, role="transit"
+            design_date,
+            body=body,
+            ephemeris=ephemeris,
+            role="design" if design_swiss else "transit",
         )
     design["earth"] = earth_from_sun(design["sun"])
 
@@ -468,18 +476,38 @@ def bodygraph_soft(
         depth = "time_place_known"
     elif has_birth_time or has_birth_place:
         depth = "partial_birth_data"
+    if design_swiss:
+        depth = f"{depth}_design_swiss"
+
+    personality_swiss = any(
+        str(row.get("ephemeris_source") or "").startswith("astro_service")
+        for row in personality.values()
+        if isinstance(row, dict)
+    )
+    if design_swiss:
+        approx = "design_minus_88d_swiss_walk"
+    elif personality_swiss:
+        approx = "design_minus_88d_mean_lon_personality_swiss"
+    else:
+        approx = "design_minus_88d_classical_mean_lon"
 
     summary = (
-        f"Бодиграф (soft classical): Personality Sun {personality['sun']['label']}, "
+        f"Бодиграф (classical): Personality Sun {personality['sun']['label']}, "
         f"Design Sun {design['sun']['label']}; natal gates {len(natal_gates)}."
     )
+    if design_swiss:
+        summary = f"{summary} Design −88d: Swiss."
     if activations:
         summary = f"{summary} Активаций транзитом сегодня: {len(activations)}."
 
     return {
         "capability_id": "bodygraph_interaction",
         "depth": depth,
-        "approximation": "design_minus_88d_classical_mean_lon",
+        "approximation": approx,
+        "ephemeris_source": {
+            "personality": "astro_service_swiss" if personality_swiss else "mean_longitude_soft",
+            "design": "astro_service_swiss" if design_swiss else "mean_longitude_soft",
+        },
         "personality": {
             "sun": personality["sun"],
             "earth": personality["earth"],
@@ -504,8 +532,9 @@ def bodygraph_soft(
         "summary_ru": summary,
         "school_canon": "rave_mandala_gate41_aquarius_2",
         "limitation_ru": (
-            "Personality/Design Sun…Pluto + Earth (mean lon). "
-            "Точное Design-время / Swiss — later."
+            "Personality/Design Sun…Pluto + Earth. "
+            "Design ≈ birth−88d (Swiss walk when bridge present; else mean lon). "
+            "Not a full HD BodyGraph engine (centers/type/authority deferred)."
         ),
     }
 

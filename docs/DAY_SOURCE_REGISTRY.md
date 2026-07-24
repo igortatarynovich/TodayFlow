@@ -66,11 +66,11 @@ DaySourceInputs
 | `kabbalah_letter` | **personal** | `target_date` | no (L3; Today claims deferred) |
 | `electional_horary` | **personal** | explicit request + geo (+ time; question→horary) | no (situational) |
 
-Планируемые (канон есть, адаптер later): Swiss-timed lot moments (sub-day), Design −88d Swiss walk, …
+Планируемые (канон есть, адаптер later): richer Day Personal UI, full HD centers/type, …
 
 ### Ephemeris bridge (v0)
 
-`celestial_events.ephemeris` несёт Swiss noon (`transit_noon`) и optional `natal` из AstroService. Day Sources читают через `DaySourceInputs.ephemeris` с fallback на mean longitude.
+`celestial_events.ephemeris` несёт Swiss noon (`transit_noon`), optional `natal`, и optional `design_minus_88d` (birth−88d Swiss walk) из AstroService. Day Sources читают через `DaySourceInputs.ephemeris` с fallback на mean longitude. Time-lord lots используют Swiss natal Sun/Moon/ASC когда snapshot есть.
 
 ### Soft → Today wire (v1.6)
 

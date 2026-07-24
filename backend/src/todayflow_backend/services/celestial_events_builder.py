@@ -135,6 +135,39 @@ def _build_color_symbol(color_name: str) -> dict[str, str]:
     }
 
 
+def resolve_fixed_day_color(
+    *,
+    target_date: date,
+    personal_day: int | None = None,
+    celestial_events: dict[str, Any] | None = None,
+) -> dict[str, str] | None:
+    """Deterministic day color — same source as UI colorGuide / celestial daily_symbols.
+
+    Prefer an already-built celestial_events.daily_symbols.color; otherwise recompute
+    from the same preset index used by ``build_celestial_events``.
+    """
+    ce = celestial_events if isinstance(celestial_events, dict) else {}
+    symbols = ce.get("daily_symbols") if isinstance(ce.get("daily_symbols"), dict) else {}
+    color_sym = symbols.get("color") if isinstance(symbols.get("color"), dict) else {}
+    name = str(color_sym.get("name") or "").strip()
+    if name:
+        benefit = str(color_sym.get("benefit_ru") or color_sym.get("story_ru") or "").strip()
+        if not benefit:
+            benefit = _build_color_symbol(name).get("benefit_ru") or ""
+        return {
+            "name": name,
+            "benefit": benefit,
+            "source": "celestial_events.daily_symbols.color",
+        }
+    preset = _DAILY_SYMBOL_PRESETS[_symbol_preset_index(target_date, personal_day)]
+    sym = _build_color_symbol(str(preset["color"]))
+    return {
+        "name": sym["name"],
+        "benefit": sym["benefit_ru"],
+        "source": "daily_symbol_preset",
+    }
+
+
 _PERSONAL_TRANSIT_STORY: dict[str, str] = {
     "square": "Создаёт напряжение, которое просит осознанного выбора — не автоматической реакции.",
     "opposition": "Подсвечивает полярность: важно найти баланс между двумя полюсами.",
@@ -274,6 +307,7 @@ async def build_celestial_events(
     """Assemble lunar phase, retrogrades, sky aspects, personal transits, symbols."""
     from todayflow_backend.services.day_sources.ephemeris_bridge import (
         empty_ephemeris_pack,
+        fetch_design_minus_88d_snapshot,
         fetch_natal_snapshot,
     )
 
@@ -440,6 +474,16 @@ async def build_celestial_events(
         )
         if isinstance(natal, dict):
             eph["natal"] = natal
-    if eph.get("transit_noon") or eph.get("natal"):
+        design = await fetch_design_minus_88d_snapshot(
+            astro_service,
+            birth_date,
+            birth_time=birth_time,
+            birth_lat=birth_lat,
+            birth_lon=birth_lon,
+            timezone_name=timezone_name,
+        )
+        if isinstance(design, dict):
+            eph["design_minus_88d"] = design
+    if eph.get("transit_noon") or eph.get("natal") or eph.get("design_minus_88d"):
         payload["ephemeris"] = eph
     return payload

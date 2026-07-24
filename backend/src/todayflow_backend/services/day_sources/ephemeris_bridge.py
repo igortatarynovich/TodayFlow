@@ -35,9 +35,17 @@ _BODY_ALIASES: dict[str, str] = {
     "north node": "NorthNode",
     "southnode": "SouthNode",
     "south node": "SouthNode",
+    "ascendant": "Ascendant",
+    "asc": "Ascendant",
+    "rising": "Ascendant",
 }
 
-_CANON_BODIES = set(classical_bodies()) | {"Earth", "NorthNode", "SouthNode"}
+_CANON_BODIES = set(classical_bodies()) | {
+    "Earth",
+    "NorthNode",
+    "SouthNode",
+    "Ascendant",
+}
 
 
 def _canon_body(name: str) -> str | None:
@@ -107,6 +115,7 @@ def empty_ephemeris_pack() -> dict[str, Any]:
         "contract_version": "ephemeris_bridge_v0",
         "transit_noon": None,
         "natal": None,
+        "design_minus_88d": None,
     }
 
 
@@ -129,6 +138,52 @@ def longitude_from_snapshot(snapshot: dict[str, Any] | None, body: str) -> float
     return None
 
 
+def ascendant_from_snapshot(snapshot: dict[str, Any] | None) -> float | None:
+    """Best-effort ASC longitude from Swiss houses / positions."""
+    if not isinstance(snapshot, dict):
+        return None
+    bodies = snapshot.get("bodies")
+    if isinstance(bodies, dict):
+        for key in ("Ascendant", "ASC", "ascendant", "Rising", "rising"):
+            row = bodies.get(key)
+            if isinstance(row, dict) and isinstance(row.get("longitude"), (int, float)):
+                return float(row["longitude"]) % 360.0
+    houses = snapshot.get("houses")
+    if isinstance(houses, dict):
+        for key in ("ascendant", "Ascendant", "ASC", "1", 1):
+            raw = (
+                houses.get(key)
+                if not isinstance(key, int)
+                else houses.get(key) or houses.get(str(key))
+            )
+            if isinstance(raw, (int, float)):
+                return float(raw) % 360.0
+            if isinstance(raw, dict):
+                for field in ("longitude", "absolute_longitude", "cusp", "degree"):
+                    if isinstance(raw.get(field), (int, float)):
+                        return float(raw[field]) % 360.0
+        # Common shapes: houses["cusps"] list/dict, or houses list of house rows.
+        cusps = houses.get("cusps")
+        if isinstance(cusps, list) and cusps and isinstance(cusps[0], (int, float)):
+            return float(cusps[0]) % 360.0
+        if isinstance(cusps, dict):
+            for k in ("1", 1, "asc", "ASC"):
+                v = cusps.get(k)
+                if isinstance(v, (int, float)):
+                    return float(v) % 360.0
+        rows = houses.get("houses")
+        if isinstance(rows, list):
+            for row in rows:
+                if not isinstance(row, dict):
+                    continue
+                if int(row.get("house") or row.get("number") or 0) != 1:
+                    continue
+                for field in ("longitude", "absolute_longitude", "cusp"):
+                    if isinstance(row.get(field), (int, float)):
+                        return float(row[field]) % 360.0
+    return None
+
+
 def resolve_body_longitude(
     body: str,
     d: date,
@@ -141,6 +196,8 @@ def resolve_body_longitude(
     if isinstance(ephemeris, dict):
         if role == "natal":
             snap = ephemeris.get("natal")
+        elif role == "design":
+            snap = ephemeris.get("design_minus_88d")
         else:
             snap = ephemeris.get("transit_noon")
     lon = longitude_from_snapshot(snap if isinstance(snap, dict) else None, body)
@@ -151,7 +208,7 @@ def resolve_body_longitude(
             "role": role,
             "body": _canon_body(body) or body,
         }
-    # Earth soft opposite Sun (mean).
+    # Earth soft opposite Sun (mean or swiss sun already resolved above).
     if body == "Earth" or _canon_body(body) == "Earth":
         sun = classical_longitude("Sun", d)
         return {
@@ -231,6 +288,37 @@ async def fetch_natal_snapshot(
         role="natal",
         houses=houses if isinstance(houses, dict) else None,
     )
+
+
+async def fetch_design_minus_88d_snapshot(
+    astro_service: _ChartClient,
+    birth_date: date,
+    *,
+    birth_time: time | None = None,
+    birth_lat: float | None = None,
+    birth_lon: float | None = None,
+    timezone_name: str | None = None,
+    offset_days: int = 88,
+) -> dict[str, Any] | None:
+    """Swiss chart for Personality birth moment shifted −offset_days (HD Design approx)."""
+    from datetime import timedelta
+
+    design_date = birth_date - timedelta(days=int(offset_days))
+    snap = await fetch_natal_snapshot(
+        astro_service,
+        design_date,
+        birth_time=birth_time,
+        birth_lat=birth_lat,
+        birth_lon=birth_lon,
+        timezone_name=timezone_name,
+    )
+    if not isinstance(snap, dict):
+        return None
+    out = dict(snap)
+    out["role"] = "design_minus_88d"
+    out["design_offset_days"] = int(offset_days)
+    out["personality_birth_date"] = birth_date.isoformat()
+    return out
 
 
 def ephemeris_from_celestial(celestial_events: dict[str, Any] | None) -> dict[str, Any] | None:
