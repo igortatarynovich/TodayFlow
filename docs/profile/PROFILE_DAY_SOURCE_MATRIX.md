@@ -54,6 +54,7 @@
 | `personal_astrology` | houses, ASC/MC, returns | + `birth_time` + `birth_place` | no | yes | yes |
 | `human_design` | transit gates | datetime | soft* | yes (wire) | soft |
 | `human_design` | bodygraph interaction | + birth datetime (+ place for depth) | no | yes | soft |
+| `human_design` | channels / defined centers | Sun/Earth/Moon (+ natal Sun–Earth) | no | yes | soft |
 
 \* Soft Foundation transit sky deferred — v1 collected in Day Personal, not Foundation essence.
 | `tarot_oracle` | card of day | `draw_event` | **no** | contextual | yes (L5) |

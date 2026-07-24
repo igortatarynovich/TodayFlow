@@ -41,6 +41,29 @@ def test_human_design_registered_not_in_foundation():
     ]
 
 
+def test_channels_known_pair():
+    from todayflow_backend.services.day_sources.human_design import (
+        build_channels_payload,
+        resolve_channels,
+    )
+
+    ch = resolve_channels({1, 8, 99})
+    assert any(c["id"] == "1-8" for c in ch)
+    assert ch[0]["name_ru"] == "Вдохновение"
+
+    payload = build_channels_payload(
+        transit_gates={
+            "sun": {"gate": 1},
+            "earth": {"gate": 8},
+            "moon": {"gate": 20},
+        }
+    )
+    assert payload["capability_id"] == "channels"
+    assert any(c["id"] == "1-8" for c in payload["channels"])
+    centers = {c["id"] for c in payload["defined_centers"]}
+    assert "g" in centers and "throat" in centers
+
+
 def test_transit_gates_without_birth():
     transit = transit_gates_for_day(date(2026, 7, 24))
     assert 1 <= transit["sun"]["gate"] <= 64
@@ -51,7 +74,10 @@ def test_transit_gates_without_birth():
     hd = bundle["sources"]["human_design"]
     assert hd["status"] == "ok"
     assert "transit_gates" in hd["capability_ids"]
+    assert "channels" in hd["capability_ids"]
     assert "bodygraph_interaction" not in hd["capability_ids"]
+    assert "channels" in hd["payload"]["channels"]
+    assert "active_gates" in hd["payload"]["channels"]
 
 
 def test_bodygraph_when_birth_date():
@@ -66,8 +92,11 @@ def test_bodygraph_when_birth_date():
     assert personal["source_inputs"]["has_human_design"] is True
     hd = personal["human_design"]
     assert "bodygraph_interaction" in hd["capability_ids"]
+    assert "channels" in hd["capability_ids"]
     assert hd["bodygraph"]["depth"] == "time_place_known"
     assert hd["bodygraph"]["personality"]["sun"]["gate"]
+    assert "channels" in hd["channels"]
+    assert "active_gates" in hd["channels"]
 
 
 def test_interpretation_can_include_hd_claim():

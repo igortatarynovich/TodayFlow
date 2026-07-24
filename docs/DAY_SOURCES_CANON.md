@@ -607,7 +607,7 @@ Day Story            →  интерпретация Foundation → экран T
 |---------------|---------|-----------------|---------------|-------------|----------|
 | `transit_gates` | v1 | `target_date` | soft deferred | yes | soft |
 | `bodygraph_interaction` | v1/partial | + `birth_date` (±88d Design approx) | no | yes | soft |
-| `channels` / defined centers | planned | full ephemeris + birth datetime+place | no | yes | later |
+| `channels` / defined centers | v1/partial | Sun/Earth/Moon (+ natal Sun–Earth); full planet set later | no | yes | soft |
 
 ---
 

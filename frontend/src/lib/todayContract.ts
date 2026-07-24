@@ -96,6 +96,19 @@ export type TodayContractDayStoryV1 = {
         depth?: string;
         activations?: Array<{ id?: string; title?: string; story_ru?: string }>;
       } | null;
+      channels?: {
+        summary_ru?: string;
+        channels?: Array<{
+          id?: string;
+          name_ru?: string;
+          gates?: number[];
+          centers?: string[];
+          centers_ru?: string[];
+        }>;
+        defined_centers?: Array<{ id?: string; name_ru?: string; via_channels?: string[] }>;
+        active_gates?: { transit?: number[]; natal?: number[]; combined?: number[] };
+        limitation_ru?: string;
+      } | null;
     } | null;
     bazi?: {
       summary_ru?: string;

@@ -157,6 +157,146 @@ _GATE_THEME_RU: dict[int, str] = {
     64: "путаница до ясности",
 }
 
+# Standard Rave channels: (gate_a, gate_b, id, name_ru, center_a, center_b).
+_CHANNELS: tuple[tuple[int, int, str, str, str, str], ...] = (
+    (1, 8, "1-8", "Вдохновение", "g", "throat"),
+    (2, 14, "2-14", "Ритм биения", "g", "sacral"),
+    (3, 60, "3-60", "Мутация", "sacral", "root"),
+    (4, 63, "4-63", "Логика", "ajna", "head"),
+    (5, 15, "5-15", "Ритмы", "sacral", "g"),
+    (6, 59, "6-59", "Близость", "solar_plexus", "sacral"),
+    (7, 31, "7-31", "Альфа", "g", "throat"),
+    (9, 52, "9-52", "Концентрация", "sacral", "root"),
+    (10, 20, "10-20", "Пробуждение", "g", "throat"),
+    (10, 34, "10-34", "Исследование", "g", "sacral"),
+    (10, 57, "10-57", "Совершенная форма", "g", "spleen"),
+    (11, 56, "11-56", "Любопытство", "ajna", "throat"),
+    (12, 22, "12-22", "Открытость", "throat", "solar_plexus"),
+    (13, 33, "13-33", "Странник", "g", "throat"),
+    (16, 48, "16-48", "Длина волны", "throat", "spleen"),
+    (17, 62, "17-62", "Принятие", "ajna", "throat"),
+    (18, 58, "18-58", "Суждение", "spleen", "root"),
+    (19, 49, "19-49", "Синтез", "root", "solar_plexus"),
+    (20, 34, "20-34", "Харизма", "throat", "sacral"),
+    (20, 57, "20-57", "Мозговая волна", "throat", "spleen"),
+    (21, 45, "21-45", "Денежная линия", "heart", "throat"),
+    (23, 43, "23-43", "Структурирование", "throat", "ajna"),
+    (24, 61, "24-61", "Осознание", "ajna", "head"),
+    (25, 51, "25-51", "Инициация", "g", "heart"),
+    (26, 44, "26-44", "Сдача", "heart", "spleen"),
+    (27, 50, "27-50", "Сохранение", "sacral", "spleen"),
+    (28, 38, "28-38", "Борьба", "spleen", "root"),
+    (29, 46, "29-46", "Открытие", "sacral", "g"),
+    (30, 41, "30-41", "Узнавание", "solar_plexus", "root"),
+    (32, 54, "32-54", "Трансформация", "spleen", "root"),
+    (35, 36, "35-36", "Преходящесть", "throat", "solar_plexus"),
+    (37, 40, "37-40", "Сообщество", "solar_plexus", "heart"),
+    (39, 55, "39-55", "Эмоция", "root", "solar_plexus"),
+    (42, 53, "42-53", "Созревание", "sacral", "root"),
+    (47, 64, "47-64", "Абстракция", "ajna", "head"),
+)
+
+_CENTER_RU: dict[str, str] = {
+    "head": "Голова",
+    "ajna": "Аджна",
+    "throat": "Горло",
+    "g": "G-центр",
+    "heart": "Эго / Воля",
+    "sacral": "Сакрал",
+    "solar_plexus": "Солнечное сплетение",
+    "spleen": "Селезёнка",
+    "root": "Корень",
+}
+
+
+def resolve_channels(active_gates: set[int]) -> list[dict[str, Any]]:
+    """Return channels whose both gates are present in active_gates."""
+    out: list[dict[str, Any]] = []
+    gates = {int(g) for g in active_gates if g}
+    for a, b, cid, name_ru, c1, c2 in _CHANNELS:
+        if a in gates and b in gates:
+            out.append(
+                {
+                    "id": cid,
+                    "gates": [a, b],
+                    "name_ru": name_ru,
+                    "centers": [c1, c2],
+                    "centers_ru": [_CENTER_RU[c1], _CENTER_RU[c2]],
+                }
+            )
+    return out
+
+
+def defined_centers_from_channels(channels: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    seen: dict[str, list[str]] = {}
+    for ch in channels:
+        for c in ch.get("centers") or []:
+            seen.setdefault(str(c), []).append(str(ch.get("id")))
+    return [
+        {
+            "id": cid,
+            "name_ru": _CENTER_RU.get(cid, cid),
+            "via_channels": ch_ids,
+        }
+        for cid, ch_ids in sorted(seen.items())
+    ]
+
+
+def build_channels_payload(
+    *,
+    transit_gates: dict[str, Any],
+    bodygraph: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    transit_set: set[int] = set()
+    for key in ("sun", "earth", "moon"):
+        row = transit_gates.get(key) if isinstance(transit_gates, dict) else None
+        if isinstance(row, dict) and row.get("gate"):
+            transit_set.add(int(row["gate"]))
+
+    natal_set: set[int] = set()
+    if isinstance(bodygraph, dict):
+        for g in bodygraph.get("natal_sun_earth_gates") or []:
+            natal_set.add(int(g))
+
+    # Channels from transit-only and from natal∪transit (bodygraph interaction).
+    transit_channels = resolve_channels(transit_set)
+    combined = transit_set | natal_set
+    combined_channels = resolve_channels(combined) if natal_set else list(transit_channels)
+    # Prefer reporting channels that appear in the combined (personal) view when natal exists.
+    channels = combined_channels
+    centers = defined_centers_from_channels(channels)
+
+    if channels:
+        labels = ", ".join(f"{c['id']} ({c['name_ru']})" for c in channels[:3])
+        summary = f"Каналы HD (soft): {labels}" + (
+            f" и ещё {len(channels) - 3}." if len(channels) > 3 else "."
+        )
+        if centers:
+            summary += " Центры: " + ", ".join(c["name_ru"] for c in centers[:4]) + "."
+    else:
+        summary = (
+            "Каналы HD (soft): полной пары ворот сегодня нет "
+            "(Sun/Earth/Moon ± natal Sun–Earth)."
+        )
+
+    return {
+        "capability_id": "channels",
+        "active_gates": {
+            "transit": sorted(transit_set),
+            "natal": sorted(natal_set),
+            "combined": sorted(combined),
+        },
+        "channels": channels,
+        "transit_only_channels": transit_channels,
+        "defined_centers": centers,
+        "summary_ru": summary,
+        "school_canon": "rave_channels_v0_sun_earth_moon_natal",
+        "limitation_ru": (
+            "Только ворота Солнца/Земли/Луны (+ natal Sun–Earth). "
+            "Полный бодиграф планет — later."
+        ),
+    }
+
 
 def longitude_to_gate_line(longitude: float) -> dict[str, Any]:
     """Map tropical ecliptic longitude → HD gate + line (1..6)."""
@@ -309,6 +449,9 @@ def build_human_design_payload(
         )
         caps.append("bodygraph_interaction")
 
+    channels = build_channels_payload(transit_gates=transit, bodygraph=bodygraph)
+    caps.append("channels")
+
     beats: list[dict[str, Any]] = [
         {
             "id": "hd.transit.sun",
@@ -332,18 +475,34 @@ def build_human_design_payload(
                     "evidence_ref": "human_design.bodygraph_interaction",
                 }
             )
+    for ch in (channels.get("channels") or [])[:2]:
+        beats.append(
+            {
+                "id": f"hd.channel.{ch['id']}",
+                "kind": "channel",
+                "title": f"Канал {ch['id']} · {ch['name_ru']}",
+                "story_ru": (
+                    f"Активен канал {ch['id']} ({ch['name_ru']}) — "
+                    f"{' / '.join(ch.get('centers_ru') or [])}."
+                ),
+                "evidence_ref": "human_design.channels",
+            }
+        )
 
     summary = str(transit.get("summary_ru") or "")
     if bodygraph and bodygraph.get("activations"):
         summary = f"{summary} {bodygraph['summary_ru']}"
     elif bodygraph:
         summary = f"{summary} {bodygraph['summary_ru']}"
+    if channels.get("channels"):
+        summary = f"{summary} {channels['summary_ru']}"
 
     return {
         "capability_ids": caps,
         "transit_gates": transit,
         "bodygraph": bodygraph,
+        "channels": channels,
         "beats": beats,
-        "summary_ru": summary[:420],
+        "summary_ru": summary[:480],
         "school_canon": "rave_mandala_gate41_aquarius_2",
     }
