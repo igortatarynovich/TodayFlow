@@ -1,13 +1,14 @@
-"""Adapter: personal_astrology — natal transits + profections (L3 Personal)."""
+"""Adapter: personal_astrology — transits, profections, progressions (L3)."""
 
 from __future__ import annotations
 
 from typing import Any
 
 from todayflow_backend.services.day_sources.profections import build_profections
+from todayflow_backend.services.day_sources.progressions import build_progressions_pack
 from todayflow_backend.services.day_sources.types import DaySourceInputs, SourceResult
 
-_CALC = "personal-astrology-adapter-v1"
+_CALC = "personal-astrology-adapter-v2"
 
 _HOUSE_KEYS = ("house", "natal_house", "transit_house", "house_number")
 
@@ -37,9 +38,10 @@ def run_personal_astrology(inputs: DaySourceInputs) -> SourceResult:
     has_place = inputs.birth_lat is not None and inputs.birth_lon is not None
     caps: list[str] = []
     beats: list[dict[str, Any]] = []
-    evidence = []
+    evidence: list[str] = []
     depth = "none"
     profections = None
+    progressions = None
 
     if raw:
         caps.append("natal_transits")
@@ -70,6 +72,7 @@ def run_personal_astrology(inputs: DaySourceInputs) -> SourceResult:
             )
 
     if inputs.birth_date is not None:
+        evidence.append("birth_date")
         profections = build_profections(
             inputs.birth_date,
             inputs.target_date,
@@ -79,8 +82,19 @@ def run_personal_astrology(inputs: DaySourceInputs) -> SourceResult:
             timezone_name=inputs.timezone,
         )
         caps.append("profections")
-        evidence.append("birth_date")
         beats.extend(list(profections.get("beats") or [])[:1])
+
+        progressions = build_progressions_pack(
+            inputs.birth_date,
+            inputs.target_date,
+            birth_time=inputs.birth_time,
+            birth_lat=inputs.birth_lat,
+            birth_lon=inputs.birth_lon,
+            timezone_name=inputs.timezone,
+        )
+        caps.extend(list(progressions.get("capability_ids") or []))
+        # Soft background: at most one progression beat into the day pack.
+        beats.extend(list(progressions.get("beats") or [])[:1])
         if depth == "none":
             depth = f"profections_{profections.get('depth')}"
 
@@ -107,6 +121,10 @@ def run_personal_astrology(inputs: DaySourceInputs) -> SourceResult:
             summary_parts.append(f"Ещё активных личных транзитов: {transit_extra}.")
     if profections and profections.get("summary_ru"):
         summary_parts.append(str(profections["summary_ru"]))
+    if progressions and progressions.get("secondary_progressions"):
+        summary_parts.append(
+            str(progressions["secondary_progressions"].get("summary_ru") or "")
+        )
     summary = " ".join(p for p in summary_parts if p)
 
     return SourceResult(
@@ -122,9 +140,13 @@ def run_personal_astrology(inputs: DaySourceInputs) -> SourceResult:
             "has_birth_place": has_place,
             "transits": raw[:8],
             "profections": profections,
+            "secondary_progressions": (
+                progressions.get("secondary_progressions") if progressions else None
+            ),
+            "solar_arc": progressions.get("solar_arc") if progressions else None,
             "beats": beats,
-            "summary_ru": summary[:420],
-            "school_canon": "placidus_when_time_place_profections_whole_sign_v0",
+            "summary_ru": summary[:480],
+            "school_canon": "personal_astrology_v2_profections_progressions",
         },
         evidence_refs=evidence or ["birth_date"],
         calculation_version=_CALC,

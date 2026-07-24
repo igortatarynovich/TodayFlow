@@ -66,9 +66,39 @@ def test_profections_without_transits():
     )
     assert personal["source_inputs"]["has_personal_astrology"] is True
     pa = personal["personal_astrology"]
-    assert pa["capability_ids"] == ["profections"]
+    assert "profections" in pa["capability_ids"]
+    assert "secondary_progressions" in pa["capability_ids"]
+    assert "solar_arc" in pa["capability_ids"]
     assert pa["profections"]["depth"] == "solar_proxy"
     assert 1 <= pa["profections"]["annual"]["house"] <= 12
+    assert pa["secondary_progressions"]["progressed"]["sun"]["sign_ru"]
+    assert pa["solar_arc"]["arc_degrees"] >= 0
+
+
+def test_progressions_and_solar_arc_math():
+    from todayflow_backend.services.day_sources.progressions import (
+        build_progressions_pack,
+        progressed_calendar_date,
+    )
+
+    birth = date(1990, 3, 15)
+    on = date(2026, 7, 24)
+    pack = build_progressions_pack(birth, on)
+    # ~36.35 years → progressed date ~36 days after birth
+    assert pack["secondary_progressions"]["progressed_date"] == progressed_calendar_date(
+        birth, on
+    ).isoformat()
+    assert abs(pack["solar_arc"]["arc_degrees"] - 36.0) < 5.0
+    timed = build_progressions_pack(
+        birth,
+        on,
+        birth_time=time(14, 30),
+        birth_lat=55.75,
+        birth_lon=37.62,
+        timezone_name="Europe/Moscow",
+    )
+    assert timed["secondary_progressions"]["depth"] == "sun_moon_asc_soft"
+    assert timed["solar_arc"]["bodies"]["ascendant"]["sign_ru"]
 
 
 def test_profections_asc_when_time_and_place():

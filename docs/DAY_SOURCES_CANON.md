@@ -429,8 +429,8 @@ Day Story            →  интерпретация Foundation → экран T
 | `natal_transits` | v1 | birth chart + sky (`celestial_events.personal_transits`) | no | yes | yes |
 | `transits_by_house` | v1 gated | birth **time+place** (+ house fields on transit rows) | no | yes | yes |
 | `house_rulers_chains` | planned | time+place | no | yes | later |
-| `secondary_progressions` | planned | birth datetime+place | no | yes | soft background |
-| `solar_arc` | planned | birth | no | yes | soft |
+| `secondary_progressions` | v1/partial | birth date (+ time+place for soft progressed ASC) | no | yes | soft background |
+| `solar_arc` | v1/partial | birth date (+ time+place for SA ASC) | no | yes | soft |
 | `solar_return` / `lunar_return` | planned | birth | no | yes | period context |
 | `profections` | v1 | birth date (+ time+place → ASC whole-sign; else solar proxy) | no | yes | soft |
 | `time_lords` (firdaria, ZR, …) | planned | birth | no | yes | later |

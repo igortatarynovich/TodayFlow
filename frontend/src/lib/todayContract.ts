@@ -72,6 +72,16 @@ export type TodayContractDayStoryV1 = {
         monthly?: { house?: number; lord_ru?: string };
         summary_ru?: string;
       } | null;
+      secondary_progressions?: {
+        summary_ru?: string;
+        progressed_date?: string;
+        progressed?: { sun?: { sign_ru?: string }; moon?: { sign_ru?: string } };
+      } | null;
+      solar_arc?: {
+        arc_degrees?: number;
+        summary_ru?: string;
+        bodies?: { moon?: { sign_ru?: string }; ascendant?: { sign_ru?: string } | null };
+      } | null;
       beats?: Array<{ id?: string; title?: string; story_ru?: string }>;
     } | null;
     human_design?: {
