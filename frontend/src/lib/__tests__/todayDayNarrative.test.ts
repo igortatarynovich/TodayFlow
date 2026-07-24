@@ -285,6 +285,58 @@ describe("buildTodayDayNarrative", () => {
     expect(narrative.dayMap).toBeTruthy();
   });
 
+  it("keeps electional chapter even when Day Map is available", () => {
+    const withElectional: TodayContractV1 = {
+      ...contract,
+      day_story: {
+        ...contract.day_story!,
+        day_personal: {
+          electional_horary: {
+            mode: "electional",
+            verdict: "caution",
+            verdict_ru: "Момент рабочий с оговорками.",
+            summary_ru: "Электив 2026-07-24 16:00: ASC Весы, Луна Рак.",
+            notes_ru: "Электив soft: чеклист момента.",
+            moment: { date: "2026-07-24", time: "16:00" },
+            ascendant: { sign_ru: "Весы", degree_in_sign: 12 },
+            moon: { sign_ru: "Рак", dignity: { name_ru: "обитель" } },
+            planetary_hour: {
+              matched: true,
+              ruler_planet_ru: "Венера",
+              period: "day",
+            },
+            checklist: [
+              {
+                id: "asc_late",
+                status: "caution",
+                title: "ASC слишком поздний",
+                story_ru: "Асцендент в последних градусах.",
+              },
+              {
+                id: "moon_dignity",
+                status: "pass",
+                title: "Луна — обитель",
+                story_ru: "Луна в Раке.",
+              },
+            ],
+          },
+        },
+      },
+    };
+    const narrative = buildTodayDayNarrative({
+      contract: withElectional,
+      story,
+      morningRitualData,
+    });
+    expect(narrative.dayMap).toBeTruthy();
+    const electional = narrative.chapters.find((c) => c.id === "electional");
+    expect(electional).toBeTruthy();
+    expect(electional?.kicker).toMatch(/Электив/i);
+    expect(electional?.lead).toMatch(/оговорк/i);
+    expect(electional?.checklist?.length).toBeGreaterThan(0);
+    expect(electional?.checklist?.[0]?.status).toBe("caution");
+  });
+
   it("expands supports as Твой ход with concrete move + color", () => {
     const narrative = buildTodayDayNarrative({ contract, story, morningRitualData });
     const supports = narrative.chapters.find((c) => c.id === "supports")!;

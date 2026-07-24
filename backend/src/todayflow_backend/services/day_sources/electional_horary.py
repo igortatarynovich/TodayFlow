@@ -6,9 +6,13 @@ Runs only on explicit request + datetime + place.
 
 from __future__ import annotations
 
-from datetime import date, time
+from datetime import date, datetime, time
 from typing import Any
+from zoneinfo import ZoneInfo
 
+from todayflow_backend.services.day_sources.adapters.planetary_hours import (
+    build_planetary_hours_table,
+)
 from todayflow_backend.services.day_sources.panchanga import tropical_moon_longitude
 from todayflow_backend.services.day_sources.vedic_personal import compute_sidereal_lagna
 
@@ -42,6 +46,9 @@ _WEEKDAY_RULER_RU = [
     ("Saturn", "Сатурн"),
     ("Sun", "Солнце"),
 ]
+
+# Soft mean lunar speed (°/day) for sub-day Moon estimate.
+_MOON_DEG_PER_DAY = 13.176358
 
 
 def _sign_index(lon: float) -> int:
@@ -79,6 +86,117 @@ def moon_dignity(sign_i: int) -> dict[str, Any]:
     return {"id": "peregrine", "name_ru": "без акцента", "tone": "info"}
 
 
+def tropical_moon_longitude_at(d: date, t: time) -> dict[str, Any]:
+    """Noon mean Moon drifted by soft mean speed to elected clock."""
+    noon = tropical_moon_longitude(d)
+    hours_from_noon = (t.hour + t.minute / 60.0 + t.second / 3600.0) - 12.0
+    lon = (noon + hours_from_noon * (_MOON_DEG_PER_DAY / 24.0)) % 360.0
+    return {
+        "tropical_lon": round(lon, 4),
+        "method": "mean_noon_plus_soft_drift",
+        "hours_from_noon": round(hours_from_noon, 4),
+    }
+
+
+def _parse_iso_dt(raw: str | None) -> datetime | None:
+    if not raw or not isinstance(raw, str):
+        return None
+    try:
+        return datetime.fromisoformat(raw.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+
+def _elected_local_dt(
+    target_date: date,
+    electional_time: time,
+    *,
+    timezone_name: str | None,
+) -> datetime:
+    tz = ZoneInfo(timezone_name) if timezone_name else ZoneInfo("UTC")
+    return datetime(
+        target_date.year,
+        target_date.month,
+        target_date.day,
+        electional_time.hour,
+        electional_time.minute,
+        electional_time.second,
+        tzinfo=tz,
+    )
+
+
+def planetary_hour_for_moment(
+    target_date: date,
+    electional_time: time,
+    *,
+    lat: float,
+    lon: float,
+    timezone_name: str | None,
+) -> dict[str, Any] | None:
+    try:
+        table = build_planetary_hours_table(
+            target_date=target_date,
+            lat=lat,
+            lon=lon,
+            timezone_name=timezone_name,
+        )
+    except Exception:
+        return None
+    elected = _elected_local_dt(target_date, electional_time, timezone_name=timezone_name)
+    for row in table.get("hours") or []:
+        if not isinstance(row, dict):
+            continue
+        start = _parse_iso_dt(str(row.get("start_local") or ""))
+        end = _parse_iso_dt(str(row.get("end_local") or ""))
+        if start is None or end is None:
+            continue
+        if start.tzinfo is None:
+            start = start.replace(tzinfo=elected.tzinfo)
+        if end.tzinfo is None:
+            end = end.replace(tzinfo=elected.tzinfo)
+        if start <= elected < end:
+            return {
+                **row,
+                "day_ruler_planet_ru": table.get("day_ruler_planet_ru"),
+                "matched": True,
+            }
+    return {
+        "matched": False,
+        "day_ruler_planet_ru": table.get("day_ruler_planet_ru"),
+        "hours_count": len(table.get("hours") or []),
+    }
+
+
+def nearest_timed_lunar_aspect(
+    celestial_events: dict[str, Any] | None,
+    *,
+    elected: datetime,
+) -> dict[str, Any] | None:
+    ce = celestial_events if isinstance(celestial_events, dict) else {}
+    rows = ce.get("timed_lunar_aspects")
+    if not isinstance(rows, list) or not rows:
+        return None
+    best: dict[str, Any] | None = None
+    best_delta: float | None = None
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        exact = _parse_iso_dt(str(row.get("exact_time") or row.get("exact_time_utc") or ""))
+        if exact is None:
+            continue
+        if exact.tzinfo is None:
+            exact = exact.replace(tzinfo=elected.tzinfo)
+        delta = abs((exact - elected).total_seconds())
+        if best_delta is None or delta < best_delta:
+            best_delta = delta
+            best = {
+                **row,
+                "delta_minutes": round(delta / 60.0, 1),
+                "within_3h": delta <= 3 * 3600,
+            }
+    return best
+
+
 def build_electional_horary_payload(
     target_date: date,
     *,
@@ -105,7 +223,8 @@ def build_electional_horary_payload(
     asc_sign = _sign_index(asc_trop)
     asc_deg = _deg_in_sign(asc_trop)
 
-    moon_lon = tropical_moon_longitude(target_date)
+    moon_pack = tropical_moon_longitude_at(target_date, electional_time)
+    moon_lon = float(moon_pack["tropical_lon"])
     moon_sign = _sign_index(moon_lon)
     moon_dig = moon_dignity(moon_sign)
 
@@ -114,7 +233,6 @@ def build_electional_horary_payload(
 
     checks: list[dict[str, Any]] = []
 
-    # ASC early/late in sign (horary radicality soft; also useful for elections).
     if asc_deg < 3.0:
         checks.append(
             _check(
@@ -150,8 +268,8 @@ def build_electional_horary_payload(
             status=dig_status if dig_status != "info" else "info",
             title=f"Луна — {moon_dig['name_ru']}",
             story_ru=(
-                f"Луна в {_SIGN_RU[moon_sign]}: {moon_dig['name_ru']} "
-                f"(традиционные достоинства)."
+                f"Луна ≈ {_SIGN_RU[moon_sign]} в выбранный час "
+                f"({moon_dig['name_ru']}; soft drift от noon mean)."
             ),
         )
     )
@@ -191,6 +309,68 @@ def build_electional_horary_payload(
         )
     )
 
+    ph = planetary_hour_for_moment(
+        target_date,
+        electional_time,
+        lat=lat,
+        lon=lon,
+        timezone_name=timezone_name,
+    )
+    if isinstance(ph, dict) and ph.get("matched"):
+        checks.append(
+            _check(
+                check_id="planetary_hour",
+                status="info",
+                title=f"Планетарный час — {ph.get('ruler_planet_ru')}",
+                story_ru=(
+                    f"Сейчас (soft) час {ph.get('ruler_planet_ru')} "
+                    f"({str(ph.get('start_local') or '')[11:16]}–{str(ph.get('end_local') or '')[11:16]}), "
+                    f"период {ph.get('period')}."
+                ),
+            )
+        )
+        caps.append("planetary_hour_at_moment")
+    else:
+        checks.append(
+            _check(
+                check_id="planetary_hour",
+                status="info",
+                title="Планетарный час недоступен",
+                story_ru="Не удалось сопоставить unequal hour с выбранным временем (geo/sunrise).",
+            )
+        )
+
+    elected_dt = _elected_local_dt(
+        target_date, electional_time, timezone_name=timezone_name
+    )
+    near_asp = nearest_timed_lunar_aspect(ce, elected=elected_dt)
+    if isinstance(near_asp, dict) and near_asp.get("within_3h"):
+        title = str(near_asp.get("title") or near_asp.get("aspect") or "лунный аспект")
+        checks.append(
+            _check(
+                check_id="lunar_aspect_near",
+                status="caution",
+                title=f"Рядом: {title}",
+                story_ru=(
+                    f"Ближайший timed-аспект Луны ≈ через/назад {near_asp.get('delta_minutes')} мин "
+                    f"— учитывайте пик контакта (soft)."
+                ),
+            )
+        )
+        caps.append("timed_lunar_aspect_near")
+    elif isinstance(near_asp, dict):
+        checks.append(
+            _check(
+                check_id="lunar_aspect_near",
+                status="info",
+                title="Ближайший лунный аспект далеко",
+                story_ru=(
+                    f"Ближайший timed majors-аспект в ~{near_asp.get('delta_minutes')} мин от момента "
+                    f"— вне 3-часового окна."
+                ),
+            )
+        )
+
     if mode == "horary":
         q = (question or "").strip()
         checks.append(
@@ -205,12 +385,17 @@ def build_electional_horary_payload(
                 ),
             )
         )
-        caps_note = "Хорар soft: радикальность ASC + достоинства Луны + VOC; без полного суда."
+        caps_note = (
+            "Хорар soft: ASC + Луна (час) + VOC + планетарный час; без полного суда."
+        )
     else:
-        caps_note = "Электив soft: чеклист момента для выбора времени, не полный эфемеридный суд."
+        caps_note = (
+            "Электив soft: чеклист момента (ASC, Луна, VOC, час, аспект) — не полный эфемеридный суд."
+        )
 
     fails = sum(1 for c in checks if c["status"] == "fail")
     cautions = sum(1 for c in checks if c["status"] == "caution")
+    passes = sum(1 for c in checks if c["status"] == "pass")
     if fails:
         verdict = "avoid"
         verdict_ru = "Лучше не брать этот момент без сильной причины."
@@ -228,6 +413,10 @@ def build_electional_horary_payload(
         f"{verdict_ru}"
     )
 
+    ordered = sorted(
+        checks,
+        key=lambda c: {"fail": 0, "caution": 1, "pass": 2, "info": 3}.get(str(c["status"]), 9),
+    )
     beats = [
         {
             "id": f"electional.{c['id']}",
@@ -237,9 +426,20 @@ def build_electional_horary_payload(
             "status": c["status"],
             "evidence_ref": "electional_horary.checklist",
         }
-        for c in checks
+        for c in ordered
         if c["status"] in {"fail", "caution", "pass"}
-    ][:4]
+    ][:5]
+    beats.insert(
+        0,
+        {
+            "id": f"electional.verdict.{verdict}",
+            "kind": "verdict",
+            "title": f"Вердикт — {verdict_ru}",
+            "story_ru": summary,
+            "status": verdict,
+            "evidence_ref": "electional_horary.verdict",
+        },
+    )
 
     return {
         "capability_ids": caps,
@@ -263,13 +463,26 @@ def build_electional_horary_payload(
             "tropical_lon": round(moon_lon, 4),
             "sign_ru": _SIGN_RU[moon_sign],
             "dignity": moon_dig,
+            "longitude_method": moon_pack.get("method"),
         },
         "weekday_ruler": {"planet": day_planet, "planet_ru": day_planet_ru},
+        "planetary_hour": ph,
+        "nearest_lunar_aspect": near_asp,
         "void_of_course": voc,
         "checklist": checks,
+        "checklist_counts": {
+            "pass": passes,
+            "caution": cautions,
+            "fail": fails,
+            "info": sum(1 for c in checks if c["status"] == "info"),
+        },
         "verdict": verdict,
         "verdict_ru": verdict_ru,
         "beats": beats,
         "summary_ru": summary[:420],
         "notes_ru": caps_note,
+        "limitation_ru": (
+            "Soft elective/horary checklist. Moon at hour uses mean noon + drift; "
+            "ASC via lagna helper; planetary hours NOAA-approx. Not a full Lilly court."
+        ),
     }

@@ -252,6 +252,7 @@ def personal_to_interpretation_claims(personal: dict[str, Any] | None) -> list[d
         claim_prefix="claim.personal.electional",
         layer="electional_horary",
         source_fallback="source.electional_horary",
-        limit=2,
+        limit=3,
+        prefer_kinds=("verdict", "checklist"),
     )
     return claims

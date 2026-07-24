@@ -447,16 +447,18 @@ Day Story            →  интерпретация Foundation → экран T
 | purpose | Выбор времени / карта вопроса по явному запросу |
 | data_sot | Moment datetime + place → ASC, Moon dignity, VOC bridge, weekday ruler |
 | required_inputs | **explicit request** + datetime + lat/lon; question for horary mode |
-| deterministic_outputs | checklist (pass/caution/fail), verdict, ASC, Moon dignity |
+| deterministic_outputs | checklist (pass/caution/fail/info), verdict, ASC, Moon at hour (soft drift), planetary hour, nearest timed lunar aspect |
 | school_canon | `traditional_elective_checklist_v0` (Lilly-lite; not full horary judgment) |
-| version | v1/partial |
+| version | v1 |
 | in_foundation | **no** |
 | in_personal | situational |
-| in_today | only on explicit user request |
+| in_today | only on explicit user request (narrative chapter «Электив / Хорар») |
 
 | capability_id | version | notes |
 |---------------|---------|-------|
-| `elective_checklist` | v1 | ASC band, Moon dignity, VOC if available, weekday ruler |
+| `elective_checklist` | v1 | ASC band, Moon dignity @ hour, VOC if available, weekday ruler |
+| `planetary_hour_at_moment` | v1 | unequal Chaldean hour matched to elected clock |
+| `timed_lunar_aspect_near` | v1 | nearest majors lunar aspect within ~3h |
 | `horary_radicality_soft` | v1 | when `electional_question` set |
 
 ---

@@ -60,6 +60,23 @@ type Props = {
   onAsceticMark?: () => void;
 };
 
+function electionalStatusLabel(status: string): string {
+  switch (status) {
+    case "fail":
+      return "Стоп";
+    case "caution":
+      return "Осторожно";
+    case "pass":
+      return "Ок";
+    case "supportive":
+      return "Поддержка";
+    case "avoid":
+      return "Избегать";
+    default:
+      return "Заметка";
+  }
+}
+
 export function TodayPersonalizedProductSection({
   story,
   contract,
@@ -203,6 +220,25 @@ export function TodayPersonalizedProductSection({
                         <div key={`${signal.label}-${signal.value}`} className={styles.personalSignalRow}>
                           <dt className={styles.personalSignalLabel}>{signal.label}</dt>
                           <dd className={styles.personalSignalValue}>{signal.value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  ) : null}
+                  {chapter.id === "electional" && chapter.checklist?.length ? (
+                    <dl className={styles.electionalChecklist} data-testid="today-electional-checklist">
+                      {chapter.checklist.map((row) => (
+                        <div
+                          key={`${row.id}-${row.title}`}
+                          className={styles.electionalCheckRow}
+                          data-status={row.status}
+                        >
+                          <dt className={styles.electionalCheckStatus}>{electionalStatusLabel(row.status)}</dt>
+                          <dd className={styles.electionalCheckBody}>
+                            <span className={styles.electionalCheckTitle}>{row.title}</span>
+                            {row.story ? (
+                              <span className={styles.electionalCheckStory}>{row.story}</span>
+                            ) : null}
+                          </dd>
                         </div>
                       ))}
                     </dl>

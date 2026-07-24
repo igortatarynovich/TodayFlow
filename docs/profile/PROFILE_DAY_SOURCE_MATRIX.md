@@ -47,7 +47,7 @@
 | `chinese_metaphysics` / `bazi` | bazi / clashes | + birth datetime (+ hour for full) | no | yes | yes |
 | `mayan_calendars` | tzolkin_haab / dreamspell | `target_date` | soft | no | soft |
 | `kabbalah_letter` | hebrew_date / gematria / sefira | `target_date` | no | yes (wire) | no (v1) |
-| `electional_horary` | elective / horary checklist | explicit request + geo + datetime | no | situational | only if requested |
+| `electional_horary` | elective / horary checklist (+ planetary hour, near lunar aspect) | explicit request + geo + datetime | no | situational | Today chapter if requested |
 | `personal_astrology` | natal_transits (sign-level) | sky + `birth_date` (+ natal facts) | no | yes | yes |
 | `personal_astrology` | profections | `birth_date` (+ time+place for ASC) | no | yes | soft |
 | `personal_astrology` | secondary_progressions / solar_arc | `birth_date` (+ time+place for angles) | no | yes | soft |

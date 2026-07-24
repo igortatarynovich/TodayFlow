@@ -9,7 +9,7 @@ from todayflow_backend.services.day_sources.electional_horary import (
 )
 from todayflow_backend.services.day_sources.types import DaySourceInputs, SourceResult
 
-_CALC = "electional-horary-adapter-v0"
+_CALC = "electional-horary-adapter-v1"
 
 
 def run_electional_horary(inputs: DaySourceInputs) -> SourceResult:
@@ -24,7 +24,9 @@ def run_electional_horary(inputs: DaySourceInputs) -> SourceResult:
             payload={"requested": False},
         )
 
-    if inputs.lat is None or inputs.lon is None:
+    lat = inputs.lat if inputs.lat is not None else inputs.birth_lat
+    lon = inputs.lon if inputs.lon is not None else inputs.birth_lon
+    if lat is None or lon is None:
         return SourceResult(
             family_id="electional_horary",
             capability_ids=[],
@@ -39,8 +41,8 @@ def run_electional_horary(inputs: DaySourceInputs) -> SourceResult:
     payload = build_electional_horary_payload(
         inputs.target_date,
         electional_time=elected_time,
-        lat=float(inputs.lat),
-        lon=float(inputs.lon),
+        lat=float(lat),
+        lon=float(lon),
         timezone_name=inputs.timezone,
         question=inputs.electional_question,
         celestial_events=inputs.celestial_events,

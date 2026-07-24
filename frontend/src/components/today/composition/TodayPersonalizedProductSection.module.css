@@ -480,6 +480,63 @@
   max-width: 36ch;
 }
 
+.electionalChecklist {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin: 0.95rem 0 0;
+  padding: 0;
+}
+
+.electionalCheckRow {
+  display: grid;
+  grid-template-columns: minmax(5.5rem, 7.5rem) minmax(0, 1fr);
+  gap: 0.65rem 1rem;
+  align-items: start;
+}
+
+.electionalCheckStatus {
+  margin: 0;
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(201, 169, 110, 0.82);
+}
+
+.electionalCheckRow[data-status="fail"] .electionalCheckStatus,
+.electionalCheckRow[data-status="avoid"] .electionalCheckStatus {
+  color: rgba(224, 122, 106, 0.95);
+}
+
+.electionalCheckRow[data-status="caution"] .electionalCheckStatus {
+  color: rgba(201, 169, 110, 0.95);
+}
+
+.electionalCheckRow[data-status="pass"] .electionalCheckStatus,
+.electionalCheckRow[data-status="supportive"] .electionalCheckStatus {
+  color: rgba(143, 188, 160, 0.95);
+}
+
+.electionalCheckBody {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.electionalCheckTitle {
+  font-size: 0.95rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.electionalCheckStory {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.62);
+}
+
 .narrativeScroll .synthesisKicker {
   margin: 0;
   font-family: var(--tf-font-mono, ui-monospace, monospace);

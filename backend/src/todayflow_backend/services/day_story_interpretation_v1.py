@@ -146,6 +146,9 @@ def build_day_story_interpretation_v1(
     lat: float | None = None,
     lon: float | None = None,
     timezone: str | None = None,
+    electional_requested: bool = False,
+    electional_time: time | None = None,
+    electional_question: str | None = None,
 ) -> dict[str, Any]:
     """Build structured interpretation + evidence from known inputs (no LLM)."""
     brief = day_engine_brief if isinstance(day_engine_brief, dict) else {}
@@ -176,6 +179,21 @@ def build_day_story_interpretation_v1(
         timezone=timezone,
         locale=locale or "ru",
     )
+    # Ritual may carry an explicit electional request (situational L3).
+    ritual_electional = bool(ritual.get("electional_requested") or electional_requested)
+    ritual_q = electional_question or (
+        str(ritual.get("electional_question") or "").strip() or None
+    )
+    ritual_t = electional_time
+    if ritual_t is None and ritual.get("electional_time"):
+        raw_t = str(ritual.get("electional_time") or "")
+        try:
+            parts = [int(x) for x in raw_t.split(":")[:3]]
+            while len(parts) < 3:
+                parts.append(0)
+            ritual_t = time(parts[0] % 24, parts[1] % 60, parts[2] % 60)
+        except ValueError:
+            ritual_t = None
     day_personal = build_day_personal_v1(
         ce,
         target_date=resolved_date,
@@ -183,8 +201,13 @@ def build_day_story_interpretation_v1(
         birth_time=birth_time,
         birth_lat=birth_lat,
         birth_lon=birth_lon,
+        lat=lat,
+        lon=lon,
         timezone=timezone,
         locale=locale or "ru",
+        electional_requested=ritual_electional,
+        electional_time=ritual_t,
+        electional_question=ritual_q,
     )
 
     evidence: list[dict[str, Any]] = []

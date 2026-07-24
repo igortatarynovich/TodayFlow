@@ -64,17 +64,19 @@ DaySourceInputs
 | `bazi` | **personal** | `birth_date` (+ `birth_time` for hour pillar) | no (L3; clashes + pillars) |
 | `vedic_personal` | **personal** | `birth_date`; Lagna gochara needs time+place | no (L3) |
 | `kabbalah_letter` | **personal** | `target_date` | no (L3; Today claims deferred) |
-| `electional_horary` | **personal** | explicit request + geo (+ time; question→horary) | no (situational) |
+| `electional_horary` | **personal** | explicit request + geo (+ time; question→horary) | no (situational; Today chapter when requested) |
 
-Планируемые (канон есть, адаптер later): richer electional UI, …
+Планируемые (канон есть, адаптер later): …
 
 ### Ephemeris bridge (v0)
 
 `celestial_events.ephemeris` несёт Swiss noon (`transit_noon`), optional `natal`, и optional `design_minus_88d` (birth−88d Swiss walk) из AstroService. Day Sources читают через `DaySourceInputs.ephemeris` с fallback на mean longitude. Time-lord lots используют Swiss natal Sun/Moon/ASC когда snapshot есть.
 
-### Soft → Today wire (v1.7)
+### Soft → Today wire (v1.8)
 
-`house_rulers_chains`, `time_lords`, HD channels и смежные L3 (профекция, returns, BaZi, Vedic) попадают в `today_contract.day_story.day_personal`. Narrative глава «Личный слой» показывает до 4 soft-абзацев + компактные glance-сигналы (не dump всего pack).
+`house_rulers_chains`, `time_lords`, HD channels и смежные L3 (профекция, returns, BaZi, Vedic) попадают в `today_contract.day_story.day_personal`. Narrative глава «Личный слой» показывает soft-абзацы + glance-сигналы (не dump всего pack).
+
+`electional_horary` при явном запросе даёт отдельную главу «Электив / Хорар (soft)» с вердиктом и checklist (включая Day Map path — не fact-dump, а situational).
 
 ### Pipeline wiring
 

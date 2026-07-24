@@ -52,8 +52,51 @@ def test_electional_checklist_ok():
     assert "elective_checklist" in payload["capability_ids"]
     assert payload["ascendant"]["sign_ru"]
     assert payload["moon"]["dignity"]["id"]
+    assert payload["moon"]["longitude_method"] == "mean_noon_plus_soft_drift"
     assert payload["verdict"] in {"supportive", "caution", "avoid"}
     assert payload["checklist"]
+    assert payload["checklist_counts"]["pass"] + payload["checklist_counts"]["caution"] >= 1
+    assert any(c["id"] == "planetary_hour" for c in payload["checklist"])
+    assert payload["beats"][0]["kind"] == "verdict"
+    assert isinstance(payload.get("planetary_hour"), dict)
+
+
+def test_electional_near_lunar_aspect_window():
+    payload = build_electional_horary_payload(
+        date(2026, 7, 24),
+        electional_time=time(12, 0),
+        lat=55.75,
+        lon=37.62,
+        timezone_name="Europe/Moscow",
+        celestial_events={
+            "timed_lunar_aspects": [
+                {
+                    "title": "Луна □ Марс",
+                    "aspect": "square",
+                    "exact_time": "2026-07-24T13:00:00+03:00",
+                }
+            ]
+        },
+    )
+    near = payload["nearest_lunar_aspect"]
+    assert near is not None
+    assert near["within_3h"] is True
+    assert "timed_lunar_aspect_near" in payload["capability_ids"]
+    assert any(c["id"] == "lunar_aspect_near" for c in payload["checklist"])
+
+
+def test_electional_falls_back_to_birth_geo():
+    active = build_day_personal_v1(
+        {},
+        target_date=date(2026, 7, 24),
+        birth_lat=55.75,
+        birth_lon=37.62,
+        timezone="Europe/Moscow",
+        electional_requested=True,
+        electional_time=time(11, 0),
+    )
+    assert active["source_inputs"]["has_electional_horary"] is True
+    assert active["electional_horary"]["planetary_hour"] is not None
 
 
 def test_horary_mode_with_question():

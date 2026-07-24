@@ -302,6 +302,9 @@ def _build_day_story_record(
                 "numerology_value",
                 "head_topic",
                 "mood",
+                "electional_requested",
+                "electional_time",
+                "electional_question",
             )
             and v not in (None, "", [])
         }

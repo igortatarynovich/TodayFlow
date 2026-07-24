@@ -268,12 +268,38 @@ export type TodayContractDayStoryV1 = {
     } | null;
     electional_horary?: {
       summary_ru?: string;
+      notes_ru?: string;
       mode?: "electional" | "horary" | string;
       verdict?: string;
       verdict_ru?: string;
       checklist?: Array<{ id?: string; status?: string; title?: string; story_ru?: string }>;
+      checklist_counts?: {
+        pass?: number;
+        caution?: number;
+        fail?: number;
+        info?: number;
+      };
       ascendant?: { sign_ru?: string; degree_in_sign?: number };
-      moon?: { sign_ru?: string; dignity?: { name_ru?: string } };
+      moon?: {
+        sign_ru?: string;
+        dignity?: { id?: string; name_ru?: string; tone?: string };
+        longitude_method?: string;
+      };
+      planetary_hour?: {
+        matched?: boolean;
+        ruler_planet_ru?: string;
+        period?: string;
+        start_local?: string;
+        end_local?: string;
+      } | null;
+      nearest_lunar_aspect?: {
+        title?: string;
+        aspect?: string;
+        delta_minutes?: number;
+        within_3h?: boolean;
+      } | null;
+      moment?: { date?: string; time?: string; timezone?: string | null };
+      question?: string | null;
     } | null;
     source_inputs?: {
       has_personal_astrology?: boolean;

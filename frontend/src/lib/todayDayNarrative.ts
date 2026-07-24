@@ -23,6 +23,7 @@ export type TodayDayNarrativeChapterId =
   | "astro"
   | "lunar"
   | "personal"
+  | "electional"
   | "sky"
   | "force"
   | "symbols"
@@ -32,6 +33,14 @@ export type TodayDayNarrativeChapterId =
 export type TodayDayPersonalSignal = {
   label: string;
   value: string;
+};
+
+/** Soft checklist row for electional / horary chapter. */
+export type TodayDayElectionalCheck = {
+  id: string;
+  status: string;
+  title: string;
+  story?: string | null;
 };
 
 export type TodayDayNarrativeChapter = {
@@ -47,6 +56,8 @@ export type TodayDayNarrativeChapter = {
   dual?: { strengthen: string[]; soften: string[] } | null;
   /** Soft L3 glance signals (personal chapter only). */
   signals?: TodayDayPersonalSignal[] | null;
+  /** Soft elective/horary checklist (electional chapter only). */
+  checklist?: TodayDayElectionalCheck[] | null;
   collapseAfter?: number;
 };
 
@@ -273,6 +284,101 @@ export function collectDayPersonalLayer(
     paragraphs: paras.slice(0, 2),
     signals: signals.slice(0, 2),
   };
+}
+
+/** Situational electional/horary chapter — only when pack was explicitly requested. */
+export function collectElectionalChapter(
+  personal: NonNullable<NonNullable<TodayContractV1["day_story"]>["day_personal"]>,
+): TodayDayNarrativeChapter | null {
+  const pack = personal.electional_horary;
+  if (!pack || (!pack.summary_ru && !pack.verdict_ru && !(pack.checklist?.length))) {
+    return null;
+  }
+
+  const mode = pack.mode === "horary" ? "horary" : "electional";
+  const kicker = mode === "horary" ? "Хорар (soft)" : "Электив (soft)";
+  const momentBits = [
+    pack.moment?.date,
+    pack.moment?.time,
+    pack.ascendant?.sign_ru ? `ASC ${pack.ascendant.sign_ru}` : null,
+    pack.moon?.sign_ru
+      ? `Луна ${pack.moon.sign_ru}${pack.moon.dignity?.name_ru ? ` · ${pack.moon.dignity.name_ru}` : ""}`
+      : null,
+  ].filter(Boolean);
+  const lead =
+    clean(pack.verdict_ru) ||
+    clean(pack.summary_ru) ||
+    (momentBits.length ? momentBits.join(" · ") : null);
+
+  const paragraphs: string[] = [];
+  const used: string[] = [];
+  if (lead) used.push(lead);
+  const summary = clean(pack.summary_ru);
+  if (summary && summary !== lead) {
+    pushDistinct(paragraphs, used, summary);
+  }
+  if (pack.planetary_hour?.matched && pack.planetary_hour.ruler_planet_ru) {
+    pushDistinct(
+      paragraphs,
+      used,
+      `Планетарный час — ${pack.planetary_hour.ruler_planet_ru}${
+        pack.planetary_hour.period === "night" ? " (ночь)" : pack.planetary_hour.period === "day" ? " (день)" : ""
+      }.`,
+    );
+  }
+  if (pack.nearest_lunar_aspect?.within_3h) {
+    const title =
+      clean(pack.nearest_lunar_aspect.title) ||
+      clean(pack.nearest_lunar_aspect.aspect) ||
+      "лунный аспект";
+    const delta =
+      typeof pack.nearest_lunar_aspect.delta_minutes === "number"
+        ? ` ≈ ${Math.round(pack.nearest_lunar_aspect.delta_minutes)} мин`
+        : "";
+    pushDistinct(paragraphs, used, `Рядом timed-аспект: ${title}${delta}.`);
+  }
+  if (pack.question) {
+    pushDistinct(paragraphs, used, `Вопрос: «${pack.question.slice(0, 160)}».`);
+  }
+  const notes = clean(pack.notes_ru);
+  if (notes) pushDistinct(paragraphs, used, notes);
+
+  const statusOrder = (s: string) =>
+    ({ fail: 0, caution: 1, pass: 2, info: 3 } as Record<string, number>)[s] ?? 9;
+  const checklist: TodayDayElectionalCheck[] = (pack.checklist ?? [])
+    .filter((c): c is { id?: string; status?: string; title?: string; story_ru?: string } =>
+      Boolean(c && (c.title || c.story_ru)),
+    )
+    .map((c) => ({
+      id: String(c.id || c.title || "check"),
+      status: String(c.status || "info"),
+      title: String(c.title || "Пункт"),
+      story: clean(c.story_ru),
+    }))
+    .sort((a, b) => statusOrder(a.status) - statusOrder(b.status))
+    .slice(0, 6);
+
+  return {
+    id: "electional",
+    kicker,
+    lead,
+    paragraphs: paragraphs.slice(0, 3),
+    accent: "sky",
+    planetHint: "Луна",
+    checklist: checklist.length ? checklist : null,
+    collapseAfter: paragraphs.length > 2 ? 1 : undefined,
+  };
+}
+
+function appendElectionalChapter(
+  chapters: TodayDayNarrativeChapter[],
+  contract: TodayContractV1,
+): void {
+  const personal = contract.day_story?.day_personal ?? null;
+  if (!personal) return;
+  const chapter = collectElectionalChapter(personal);
+  if (!chapter) return;
+  chapters.push(chapter);
 }
 
 function buildDayMapChapters(
@@ -619,16 +725,19 @@ export function buildTodayDayNarrative(input: {
   });
 
   // Day Map path: pulse/glance/move slots — not a stacked fact wall.
+  // Electional stays: explicit request, not a fact dump.
   if (dayMap) {
+    const chaptersMap = buildDayMapChapters(
+      dayMap,
+      contract,
+      input.colorGuide ?? story.colorGuide,
+      used,
+    );
+    appendElectionalChapter(chaptersMap, contract);
     return {
       theme,
       softWhy: null,
-      chapters: buildDayMapChapters(
-        dayMap,
-        contract,
-        input.colorGuide ?? story.colorGuide,
-        used,
-      ),
+      chapters: chaptersMap,
       foundation,
       dayMap,
     };
@@ -733,6 +842,7 @@ export function buildTodayDayNarrative(input: {
         collapseAfter: capped.length > 2 ? 1 : undefined,
       });
     }
+    appendElectionalChapter(chapters, contract);
   }
 
   if (!astroSummary && !lunarSummary) {
