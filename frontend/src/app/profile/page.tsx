@@ -5,6 +5,7 @@ import { enrichCircleItemsWithAstroProfiles } from "@/lib/accountAstroMeta";
 import {
   CORE_PROFILE_UPDATED_EVENT,
   publishCoreProfileUpdate,
+  readCoreProfileFromCache,
   type CoreProfileUpdatedDetail,
 } from "@/lib/coreProfileCacheStorage";
 import { fetchCoreProfileCached } from "@/lib/coreProfileCache";
@@ -162,6 +163,28 @@ function ProfileHubPageInner() {
       return;
     }
 
+    // Returning user with a cached ready profile: don't block Profile paint on guest-claim I/O.
+    const cached = readCoreProfileFromCache(null);
+    const cachedReady = Boolean(cached?.is_ready || cached?.astro?.profile_id);
+    if (cachedReady) {
+      setClaimChecked(true);
+      void claimGuestProfileAfterAuth()
+        .then(async (claim) => {
+          if (claim.status === "needs_refine") {
+            router.replace(claim.refinePath);
+            return;
+          }
+          if (claim.status === "ready") {
+            const core = await fetchCoreProfileCached({ force: true });
+            if (core) setCoreProfile(core);
+          }
+        })
+        .catch(() => {
+          /* claim is best-effort when portrait is already available */
+        });
+      return;
+    }
+
     void (async () => {
       try {
         const claim = await claimGuestProfileAfterAuth();
@@ -215,45 +238,67 @@ function ProfileHubPageInner() {
       return;
     }
 
+    let cancelled = false;
+
+    // Paint from session cache immediately — never wait on LLM refresh / natal warm-up.
+    const cached = readCoreProfileFromCache(null);
+    if (cached) {
+      setCoreProfile(cached);
+      setLoading(false);
+    }
+
     Promise.all([
       fetchCoreProfileCached().catch(() => null),
       fetchCompactUserModelCached().catch(() => null),
       getJson<UserSettings>("/account/profile").catch(() => null),
       getJson<AstroProfilesResponse>("/account/astro-data").catch(() => null),
     ])
-      .then(async ([core, cum, profile, astroData]) => {
+      .then(([core, cum, profile, astroData]) => {
+        if (cancelled) return;
         const safeProfiles = Array.isArray(astroData?.profiles) ? astroData.profiles : [];
         const hasAstroBase = safeProfiles.length > 0 || Boolean(core?.astro?.profile_id);
-        let nextCore = core;
+        const nextCore = core ?? cached;
+        setCoreProfile(nextCore);
+        setCompactUserModel(cum);
+        setAstroProfiles(safeProfiles);
+        hydrateSetupForm(profile, nextCore);
+        setLoading(false);
+
+        // Locale republish can run a multi-step portrait LLM — background only.
         const uiLocale = getLocale();
-        // UI is RU but stored portrait/settings are EN → sync locale and republish portrait once.
         if (
           nextCore &&
           !uiLocale.toLowerCase().startsWith("en") &&
           !profileContractMatchesLocale(nextCore.profile_contract_v1, uiLocale)
         ) {
-          try {
-            if (profile && String(profile.locale || "").toLowerCase().startsWith("en")) {
-              await putJson<UserSettings>("/account/profile", { locale: uiLocale });
+          void (async () => {
+            try {
+              if (profile && String(profile.locale || "").toLowerCase().startsWith("en")) {
+                await putJson<UserSettings>("/account/profile", { locale: uiLocale });
+              }
+              const refreshed = await postJson<CoreProfile>("/account/core-profile/refresh", {});
+              if (!cancelled && refreshed) {
+                setCoreProfile(refreshed);
+                publishCoreProfileUpdate(refreshed);
+              }
+            } catch {
+              /* display filters still hide EN copy */
             }
-            const refreshed = await postJson<CoreProfile>("/account/core-profile/refresh", {});
-            if (refreshed) {
-              nextCore = refreshed;
-              publishCoreProfileUpdate(refreshed);
-            }
-          } catch {
-            /* display filters still hide EN copy */
-          }
+          })();
         }
-        setCoreProfile(nextCore);
-        setCompactUserModel(cum);
-        setAstroProfiles(safeProfiles);
-        hydrateSetupForm(profile, nextCore);
+
+        // Natal warm-up is for deep chart — not required for first Profile paint.
         if ((nextCore?.is_ready || hasAstroBase) && !forceSetup) {
-          await loadNatalPreview();
+          void loadNatalPreview();
         }
       })
-      .finally(() => setLoading(false));
+      .catch(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [isAuthenticated, forceSetup, hydrateSetupForm, loadNatalPreview]);
 
   useEffect(() => {
