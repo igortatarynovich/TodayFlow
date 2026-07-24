@@ -53,28 +53,32 @@ def build_day_personal_v1(
     human_design = _ok_payload("human_design")
     bazi = _ok_payload("bazi")
     vedic_personal = _ok_payload("vedic_personal")
+    kabbalah = _ok_payload("kabbalah_letter")
 
     summary_parts = [
         str((personal_astro or {}).get("summary_ru") or "").strip(),
         str((human_design or {}).get("summary_ru") or "").strip(),
         str((bazi or {}).get("summary_ru") or "").strip(),
         str((vedic_personal or {}).get("summary_ru") or "").strip(),
+        # Kabbalah stays in pack but out of shared summary until Today freeze lifts.
     ]
     summary = _clip(" ".join(p for p in summary_parts if p), 480)
 
     return {
         "contract_version": "day_personal_v1",
-        "calculation_version": "day-personal-v1.3",
+        "calculation_version": "day-personal-v1.4",
         "personal_astrology": personal_astro,
         "human_design": human_design,
         "bazi": bazi,
         "vedic_personal": vedic_personal,
+        "kabbalah_letter": kabbalah,
         "summary_ru": summary,
         "source_inputs": {
             "has_personal_astrology": bool(personal_astro),
             "has_human_design": bool(human_design),
             "has_bazi": bool(bazi),
             "has_vedic_personal": bool(vedic_personal),
+            "has_kabbalah_letter": bool(kabbalah),
             "ok_family_ids": list(bundle.get("ok_family_ids") or []),
             "unavailable": {
                 fid: row.get("unavailable_reason")

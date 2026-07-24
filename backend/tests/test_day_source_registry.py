@@ -64,6 +64,7 @@ def test_registry_lists_v1_families():
         "bazi",
         "chinese_metaphysics",
         "human_design",
+        "kabbalah_letter",
         "mayan_calendars",
         "moon",
         "numerology",

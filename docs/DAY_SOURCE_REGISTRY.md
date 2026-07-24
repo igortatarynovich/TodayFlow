@@ -63,11 +63,12 @@ DaySourceInputs
 | `human_design` | **personal** | `target_date` (+ birth for bodygraph) | no (L3; soft transit, Today later) |
 | `bazi` | **personal** | `birth_date` (+ `birth_time` for hour pillar) | no (L3; clashes + pillars) |
 | `vedic_personal` | **personal** | `birth_date`; Lagna gochara needs time+place | no (L3) |
+| `kabbalah_letter` | **personal** | `target_date` | no (L3; Today claims deferred) |
 
-Планируемые (канон есть, адаптер later): kabbalah_letter, electional_horary, …
+Планируемые (канон есть, адаптер later): electional_horary, …
 
 ### Pipeline wiring
 
 `build_day_story_interpretation_v1` / `day_story_wire_v1` передают `target_date` и `birth_date` (из `core_profile.astro`) в Day Foundation. Foundation **всегда** собирается — даже без `celestial_events` (число дня + управитель недели).
 
-`day_personal_v1` собирает L3 (`personal_astrology`, `human_design`, `bazi`, `vedic_personal`) отдельно: natal transits + HD + BaZi + Vedic gochara/dasha, без смешивания в Foundation essence.
+`day_personal_v1` собирает L3 (`personal_astrology`, `human_design`, `bazi`, `vedic_personal`, `kabbalah_letter`) отдельно. `kabbalah_letter` в pack есть, но Today claims не публикуются (in_today=false).

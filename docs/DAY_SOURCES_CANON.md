@@ -630,9 +630,24 @@ Day Story            →  интерпретация Foundation → экран T
 
 | Поле | Значение |
 |------|----------|
-| version | planned / school-dependent |
-| in_foundation | no (v1) |
-| notes | Strong school/religion variance — freeze before any Today wiring |
+| purpose | Еврейская civil-дата дня, гематрия, буква месяца/дня недели, soft-сефира |
+| data_sot | Gregorian `target_date` → Hebrew calendar + letter tables |
+| required_inputs | `target_date` |
+| deterministic_outputs | hebrew_date, date_gematria, month_letter, weekday_letter, sefira |
+| school_canon | `civil_hebrew_calendar_mispar_v0` (не литургический авторитет) |
+| version | v1 |
+| in_foundation | **no** |
+| in_personal | yes (wire pack) |
+| in_today | **no** (v1 — freeze first; claims later) |
+| notes | Strong school/religion variance — religious variants stay out of v1 |
+
+| capability_id | version | notes |
+|---------------|---------|-------|
+| `hebrew_date` | v1 | Tishrei-based civil Hebrew date |
+| `date_gematria` | v1 | day + month + year-digits mispar |
+| `month_letter` | v1 | Alef… by month ordinal |
+| `weekday_letter` | v1 | Sunday=א … Saturday=ז |
+| `sefira_soft` | v1 | weekday → 7 lower sefirot (Western occult soft map) |
 
 ---
 

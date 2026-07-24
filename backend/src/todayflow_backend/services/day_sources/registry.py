@@ -14,6 +14,7 @@ from todayflow_backend.services.day_sources.adapters.mayan_calendars import (
 from todayflow_backend.services.day_sources.adapters.moon import run_moon
 from todayflow_backend.services.day_sources.adapters.numerology import run_numerology
 from todayflow_backend.services.day_sources.adapters.human_design import run_human_design
+from todayflow_backend.services.day_sources.adapters.kabbalah_letter import run_kabbalah_letter
 from todayflow_backend.services.day_sources.adapters.personal_astrology import (
     run_personal_astrology,
 )
@@ -259,6 +260,18 @@ def default_registry() -> DaySourceRegistry:
             in_today=True,
             required_input_keys=(),
             run=run_vedic_personal,
+        )
+    )
+    reg.register(
+        SourceFamilySpec(
+            family_id="kabbalah_letter",
+            layer="personal",
+            in_foundation=False,
+            in_personal=True,
+            # Canon: freeze school first; no Today claim wiring in v0.
+            in_today=False,
+            required_input_keys=("target_date",),
+            run=run_kabbalah_letter,
         )
     )
     return reg

@@ -103,11 +103,19 @@ export type TodayContractDayStoryV1 = {
         summary_ru?: string;
       };
     } | null;
+    kabbalah_letter?: {
+      summary_ru?: string;
+      hebrew_date?: { label_ru?: string; year?: number; month_ru?: string; day?: number };
+      date_gematria?: { total?: number; reduced?: number };
+      sefira?: { id?: string; name_ru?: string; theme_ru?: string };
+      school_canon?: string;
+    } | null;
     source_inputs?: {
       has_personal_astrology?: boolean;
       has_human_design?: boolean;
       has_bazi?: boolean;
       has_vedic_personal?: boolean;
+      has_kabbalah_letter?: boolean;
       ok_family_ids?: string[];
     };
   } | null;

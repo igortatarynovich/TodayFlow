@@ -46,6 +46,7 @@
 | `chinese_metaphysics` | gan_zhi_day + lucky hours/directions | `target_date` (+ TZ preferred) | yes | soft | yes |
 | `chinese_metaphysics` / `bazi` | bazi / clashes | + birth datetime (+ hour for full) | no | yes | yes |
 | `mayan_calendars` | tzolkin_haab / dreamspell | `target_date` | soft | no | soft |
+| `kabbalah_letter` | hebrew_date / gematria / sefira | `target_date` | no | yes (wire) | no (v1) |
 | `personal_astrology` | natal_transits (sign-level) | sky + `birth_date` (+ natal facts) | no | yes | yes |
 | `personal_astrology` | houses, ASC/MC, progressions | + `birth_time` + `birth_place` | no | yes | yes |
 | `human_design` | transit gates | datetime | soft* | yes (wire) | soft |
