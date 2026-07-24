@@ -433,7 +433,7 @@ Day Story            →  интерпретация Foundation → экран T
 | `solar_arc` | v1/partial | birth date (+ time+place for SA ASC) | no | yes | soft |
 | `solar_return` / `lunar_return` | v1/partial | birth date (+ time+place for soft ASC) | no | yes | soft period context |
 | `profections` | v1 | birth date (+ time+place → ASC whole-sign; else solar proxy) | no | yes | soft |
-| `time_lords` (firdaria, ZR, …) | v1/partial | birth date (+ time+place for sect); Firdaria only | no | yes | soft |
+| `time_lords` (firdaria, ZR, …) | v1/partial | birth date (+ time+place for sect/Fortune); Firdaria + ZR L1/L2 | no | yes | soft |
 | `planet_returns` | v1/partial | birth date; classical mean longitudes noon | no | yes | soft event |
 
 **school_canon:** Placidus houses when time+place for transit houses; profections use **whole-sign** from tropical ASC (or solar-sign proxy without time). Without birth time — **no houses/angles/progressed angles**.

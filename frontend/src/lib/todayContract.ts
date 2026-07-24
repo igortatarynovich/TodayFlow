@@ -125,6 +125,12 @@ export type TodayContractDayStoryV1 = {
           major?: { planet?: string; planet_ru?: string; start_date?: string; end_date?: string };
           sub?: { planet?: string; planet_ru?: string; start_date?: string; end_date?: string };
         };
+        zodiacal_releasing?: {
+          lot?: { sign_ru?: string; method?: string };
+          level1?: { sign_ru?: string; lord_ru?: string; start_date?: string; end_date?: string };
+          level2?: { sign_ru?: string; lord_ru?: string; start_date?: string; end_date?: string };
+        };
+        systems_available?: string[];
         limitation_ru?: string;
       } | null;
       planet_returns?: {

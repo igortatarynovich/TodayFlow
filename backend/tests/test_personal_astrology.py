@@ -79,7 +79,8 @@ def test_profections_without_transits():
     assert pa["solar_return"]["return_date"]
     assert pa["lunar_return"]["return_date"]
     assert pa["time_lords"]["firdaria"]["major"]["planet"]
-    assert pa["time_lords"]["depth"] == "firdaria_diurnal_default"
+    assert pa["time_lords"]["depth"] == "firdaria_zr_diurnal_proxy"
+    assert pa["time_lords"]["zodiacal_releasing"]["level1"]["sign_ru"]
     assert "planet_returns" in pa["capability_ids"]
     assert len(pa["planet_returns"]["highlights"]) == 3
 
@@ -225,8 +226,12 @@ def test_time_lords_firdaria():
     assert fir["major"]["start_date"] <= on.isoformat() <= fir["major"]["end_date"]
 
     soft = build_time_lords(birth, on)
-    assert soft["depth"] == "firdaria_diurnal_default"
+    assert soft["depth"] == "firdaria_zr_diurnal_proxy"
     assert soft["capability_id"] == "time_lords"
+    assert "zodiacal_releasing" in soft["systems_available"]
+    assert soft["zodiacal_releasing"]["lot"]["method"] == "moon_sign_proxy"
+    assert soft["zodiacal_releasing"]["level1"]["lord_ru"]
+    assert soft["zodiacal_releasing"]["level2"]["sign_ru"]
 
     timed = build_time_lords(
         birth,
@@ -236,9 +241,12 @@ def test_time_lords_firdaria():
         birth_lon=37.62,
         timezone_name="Europe/Moscow",
     )
-    assert timed["depth"] == "firdaria_sect_known"
+    assert timed["depth"] == "firdaria_zr_sect_known"
     assert timed["sect"]["sect"] in ("day", "night")
     assert timed["firdaria"]["major"]["planet_ru"]
+    assert timed["zodiacal_releasing"]["lot"]["method"].startswith("fortune_")
+    assert timed["zodiacal_releasing"]["level1"]["start_date"] <= on.isoformat()
+    assert timed["zodiacal_releasing"]["level1"]["end_date"] >= on.isoformat()
 
 
 def test_planet_returns_soft():
