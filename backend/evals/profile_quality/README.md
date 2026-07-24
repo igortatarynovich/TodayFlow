@@ -24,7 +24,17 @@ Same as Compatibility: scorecard for technical defects; humans score value & nat
 
 ---
 
-## Production-faithful capture (forensic SoT)
+## Life Path co-voice (identity)
+
+Detect whether `numerology.life_path` is a real co-voice vs astro-only copy.
+
+```bash
+# LLM required (backend container or configured venv)
+python evals/profile_quality/run_life_path_co_voice_eval_v0.py
+```
+
+Matrix A/B/C/D × 2 runs. Detector: `services/life_path_visibility_v0.py`.  
+Release: `summary.release_ok == true` (no F1/F3/F4).
 
 Do **not** use `run_review_packs_v1.py` for degradation forensics. Use:
 

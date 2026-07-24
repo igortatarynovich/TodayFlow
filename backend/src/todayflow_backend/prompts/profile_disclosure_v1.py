@@ -28,6 +28,15 @@ Schema:
   "growth_zones": ["string","string","string"]
 }
 
+MANDATORY LIFE PATH REQUIREMENT:
+Life path is not background — it is a co-voice equal to astro. At least ONE value in
+strengths[] or growth_zones[] MUST be grounded in the thematic core of THIS life path
+(not astro, not generic psychology) — such that with a different life path (same natal)
+that value would read differently. If astro and numerology point the same way — name the
+convergence explicitly; do not duplicate both sources as separate filler lines.
+
+Forbidden: writing so that removing life path from the input would leave every field unchanged.
+
 Forbidden: "as an Aries…"; day advice; inventing longitudinal repeats; kitchen/system meta;
 repeating archetype name inside recognition_line.
 """
@@ -48,6 +57,21 @@ repeating archetype name inside recognition_line.
   "strengths": ["строка","строка","строка"],
   "growth_zones": ["строка","строка","строка"]
 }
+
+ОБЯЗАТЕЛЬНОЕ ТРЕБОВАНИЕ К LIFE PATH:
+Life path — не фоновый факт, а со-голос наравне с astro. Если во входе есть
+numerology.co_voice (core_ru / themes_ru) — опирайся на них как на канон этого числа.
+Как минимум ОДНО значение в strengths[] или growth_zones[] должно опираться на
+тематическое ядро именно этого life path (не astro, не общая психология) — так, чтобы
+при другом life path (тот же натал) это значение звучало иначе. Если astro и numerology
+указывают в одну сторону — усиль совпадение явно, не дублируй одной фразой оба источника.
+
+Запрещено: писать так, что life path физически можно убрать из входа без изменения
+итогового текста ни в одном поле.
+
+При конфликте astro и life path (разные направления) — НЕ растворяй число в астро-метафорах
+(огонь/лидерство/дисциплина). Явно возьми одну формулировку из numerology.co_voice.themes_ru
+в strengths[] или growth_zones[] (можно близкими словами, но тема должна быть узнаваема).
 
 Запрещено: «как Овен…»; советы на день; выдуманные продольные паттерны; мета про систему;
 повторять имя архетипа внутри recognition_line.
@@ -70,6 +94,12 @@ Schema:
   "money_style": "string",
   "decision_style": "string"
 }
+
+MANDATORY LIFE PATH REQUIREMENT:
+Life path is a co-voice equal to astro. At least ONE of relationship_style / money_style /
+decision_style MUST be grounded in THIS life path's thematic core — such that a different
+life path (same natal) would change that field. Do not write as if life path were removable
+without changing any style field.
 """
     else:
         body = """
@@ -81,10 +111,17 @@ Schema:
 Схема:
 {
   "contract_version": "profile_funnel_styles_v0",
-  "relationship_style": "string",
-  "money_style": "string",
-  "decision_style": "string"
+  "relationship_style": "строка",
+  "money_style": "строка",
+  "decision_style": "строка"
 }
+
+ОБЯЗАТЕЛЬНОЕ ТРЕБОВАНИЕ К LIFE PATH:
+Life path — со-голос наравне с astro. Если есть numerology.co_voice — используй themes_ru.
+Как минимум ОДНО из relationship_style / money_style / decision_style должно опираться на
+тематическое ядро именно этого life path — так, чтобы при другом life path (тот же натал)
+это поле звучало иначе. Запрещено писать так, что life path можно убрать из входа без
+изменения ни одного style-поля.
 """
     return _frame(locale, body)
 

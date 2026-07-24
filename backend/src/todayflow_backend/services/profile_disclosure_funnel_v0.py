@@ -27,6 +27,11 @@ from todayflow_backend.services.llm_quality_policy_v1 import (
     prefer_multi_step_funnels,
     user_json_char_budget,
 )
+from todayflow_backend.services.life_path_visibility_v0 import (
+    IDENTITY_FIELDS,
+    detect_life_path_visibility,
+    life_path_co_voice_hint,
+)
 from todayflow_backend.services.life_spheres_projector_v0 import (
     build_sphere_foundations_v0,
     spheres_projection_allowed,
@@ -206,6 +211,58 @@ def _call_with_retry(
     return result, step_meta
 
 
+def _repair_identity_life_path_co_voice(
+    *,
+    shared: dict[str, Any],
+    locale: str,
+    draft: dict[str, Any],
+) -> tuple[dict[str, Any], dict[str, Any] | None]:
+    """One repair LLM call if claimed life_path is not visible in the draft."""
+    numerology = shared.get("numerology") if isinstance(shared.get("numerology"), dict) else {}
+    try:
+        lp = int(numerology.get("life_path"))
+    except (TypeError, ValueError):
+        return draft, None
+    det = detect_life_path_visibility(draft, lp, fields=IDENTITY_FIELDS)
+    if det.get("visible"):
+        return draft, None
+    hint = life_path_co_voice_hint(lp) or {}
+    themes = hint.get("themes_ru") or []
+    repaired, meta = _call_with_retry(
+        prompt_id="profile.identity.v1",
+        locale=locale,
+        user_payload={
+            "shared": shared,
+            "step": "identity",
+            "draft": draft,
+            "repair": {
+                "reason": "life_path_co_voice_missing",
+                "life_path": lp,
+                "themes_ru": themes,
+                "instruction_ru": (
+                    f"Черновик не проявил life path {lp} детектируемо. Перепиши "
+                    f"strengths[2] ИЛИ growth_zones[0] так, чтобы тема из {themes} "
+                    "была явной (закрытие циклов / сострадание→действие / отпускание "
+                    "для 9; инициация/независимость для 1; и т.д.). Astro не должен "
+                    "поглотить число. Остальные поля можно слегка подправить."
+                ),
+            },
+        },
+        depth_level="normal",
+        ok_fn=_identity_ok,
+        temperature=0.32,
+    )
+    if meta:
+        meta["repair"] = True
+        meta["repair_reason"] = "life_path_co_voice_missing"
+    if not repaired:
+        return draft, meta
+    det2 = detect_life_path_visibility(repaired, lp, fields=IDENTITY_FIELDS)
+    if meta:
+        meta["repair_visible"] = bool(det2.get("visible"))
+    return (repaired if det2.get("visible") else draft), meta
+
+
 def _identity_ok(d: dict[str, Any] | None) -> bool:
     if not isinstance(d, dict):
         return False
@@ -287,12 +344,20 @@ def build_shared_profile_input(user_json: dict[str, Any]) -> dict[str, Any]:
         if isinstance(summary.get("houses"), dict):
             lifted.setdefault("houses", summary["houses"])
         natal = lifted
+    numerology = user_json.get("numerology")
+    if isinstance(numerology, dict):
+        numerology = dict(numerology)
+        hint = life_path_co_voice_hint(numerology.get("life_path"))
+        if hint:
+            numerology["co_voice"] = hint
+    elif numerology is None:
+        numerology = None
     return {
         "contract_version": "profile_funnel_shared_input_v0",
         "person": user_json.get("person"),
         "astro": user_json.get("astro"),
         "natal": natal,
-        "numerology": user_json.get("numerology"),
+        "numerology": numerology,
         "baseline": user_json.get("baseline"),
         "living": user_json.get("living"),
         "locale": user_json.get("locale") or "ru",
@@ -389,6 +454,14 @@ def run_profile_disclosure_funnel_v0(
         ok_fn=_identity_ok,
     )
     meta["steps"].append(m1)
+    if r1:
+        r1, repair_meta = _repair_identity_life_path_co_voice(
+            shared=shared,
+            locale=locale,
+            draft=r1,
+        )
+        if repair_meta:
+            meta["steps"].append(repair_meta)
     if profile_capture_enabled():
         capture = get_profile_capture_session()
         if capture is not None:
