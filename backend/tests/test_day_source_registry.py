@@ -63,6 +63,7 @@ def test_registry_lists_v1_families():
     assert ids == [
         "bazi",
         "chinese_metaphysics",
+        "electional_horary",
         "human_design",
         "kabbalah_letter",
         "mayan_calendars",

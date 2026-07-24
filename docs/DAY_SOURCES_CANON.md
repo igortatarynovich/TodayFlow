@@ -444,15 +444,20 @@ Day Story            →  интерпретация Foundation → экран T
 
 | Поле | Значение |
 |------|----------|
-| purpose | Выбор времени / карта вопроса |
-| data_sot | Ephemeris chart for elected or question moment |
-| required_inputs | datetime + place; question for horary |
-| deterministic_outputs | chart factors (ASC, Moon applications, dignities, VOC, …) |
-| school_canon | Traditional elective checklist TBD |
-| version | planned |
+| purpose | Выбор времени / карта вопроса по явному запросу |
+| data_sot | Moment datetime + place → ASC, Moon dignity, VOC bridge, weekday ruler |
+| required_inputs | **explicit request** + datetime + lat/lon; question for horary mode |
+| deterministic_outputs | checklist (pass/caution/fail), verdict, ASC, Moon dignity |
+| school_canon | `traditional_elective_checklist_v0` (Lilly-lite; not full horary judgment) |
+| version | v1/partial |
 | in_foundation | **no** |
 | in_personal | situational |
 | in_today | only on explicit user request |
+
+| capability_id | version | notes |
+|---------------|---------|-------|
+| `elective_checklist` | v1 | ASC band, Moon dignity, VOC if available, weekday ruler |
+| `horary_radicality_soft` | v1 | when `electional_question` set |
 
 ---
 

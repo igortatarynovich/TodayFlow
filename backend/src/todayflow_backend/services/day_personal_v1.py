@@ -26,19 +26,29 @@ def build_day_personal_v1(
     birth_lat: float | None = None,
     birth_lon: float | None = None,
     timezone: str | None = None,
+    lat: float | None = None,
+    lon: float | None = None,
     locale: str = "ru",
+    electional_requested: bool = False,
+    electional_time: time | None = None,
+    electional_question: str | None = None,
 ) -> dict[str, Any]:
     """Collect personal Source Families into a wire pack for Today / interpretation."""
     ce = celestial_events if isinstance(celestial_events, dict) else {}
     inputs = DaySourceInputs(
         target_date=target_date or date.today(),
         timezone=timezone,
+        lat=lat,
+        lon=lon,
         birth_date=birth_date,
         birth_time=birth_time,
         birth_lat=birth_lat,
         birth_lon=birth_lon,
         celestial_events=ce or None,
         locale=locale,
+        electional_requested=electional_requested,
+        electional_time=electional_time,
+        electional_question=electional_question,
     )
     bundle = collect_personal_sources(inputs)
     sources = bundle.get("sources") if isinstance(bundle.get("sources"), dict) else {}
@@ -54,24 +64,29 @@ def build_day_personal_v1(
     bazi = _ok_payload("bazi")
     vedic_personal = _ok_payload("vedic_personal")
     kabbalah = _ok_payload("kabbalah_letter")
+    electional = _ok_payload("electional_horary")
 
     summary_parts = [
         str((personal_astro or {}).get("summary_ru") or "").strip(),
         str((human_design or {}).get("summary_ru") or "").strip(),
         str((bazi or {}).get("summary_ru") or "").strip(),
         str((vedic_personal or {}).get("summary_ru") or "").strip(),
-        # Kabbalah stays in pack but out of shared summary until Today freeze lifts.
     ]
+    if electional:
+        summary_parts.append(str(electional.get("summary_ru") or "").strip())
     summary = _clip(" ".join(p for p in summary_parts if p), 480)
+
+    electional_row = sources.get("electional_horary") if isinstance(sources, dict) else None
 
     return {
         "contract_version": "day_personal_v1",
-        "calculation_version": "day-personal-v1.4",
+        "calculation_version": "day-personal-v1.5",
         "personal_astrology": personal_astro,
         "human_design": human_design,
         "bazi": bazi,
         "vedic_personal": vedic_personal,
         "kabbalah_letter": kabbalah,
+        "electional_horary": electional,
         "summary_ru": summary,
         "source_inputs": {
             "has_personal_astrology": bool(personal_astro),
@@ -79,11 +94,17 @@ def build_day_personal_v1(
             "has_bazi": bool(bazi),
             "has_vedic_personal": bool(vedic_personal),
             "has_kabbalah_letter": bool(kabbalah),
+            "has_electional_horary": bool(electional),
+            "electional_status": (
+                electional_row.get("status")
+                if isinstance(electional_row, dict)
+                else None
+            ),
             "ok_family_ids": list(bundle.get("ok_family_ids") or []),
             "unavailable": {
                 fid: row.get("unavailable_reason")
                 for fid, row in sources.items()
-                if isinstance(row, dict) and row.get("status") == "unavailable"
+                if isinstance(row, dict) and row.get("status") in {"unavailable", "skipped"}
             },
         },
         "source_bundle": {
@@ -166,6 +187,14 @@ def personal_to_interpretation_claims(personal: dict[str, Any] | None) -> list[d
         claim_prefix="claim.personal.vedic",
         layer="vedic_personal",
         source_fallback="source.vedic_personal",
+        limit=2,
+    )
+    # Only present when user explicitly requested electional/horary.
+    _from_family(
+        key="electional_horary",
+        claim_prefix="claim.personal.electional",
+        layer="electional_horary",
+        source_fallback="source.electional_horary",
         limit=2,
     )
     return claims

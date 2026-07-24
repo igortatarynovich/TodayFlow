@@ -27,6 +27,10 @@ class DaySourceInputs:
     # Bridge to current celestial pipeline until ephemeris adapters are first-class.
     celestial_events: dict[str, Any] | None = None
     locale: str = "ru"
+    # Explicit electional/horary request (canon §5.4 — not auto-run on Today).
+    electional_requested: bool = False
+    electional_time: time | None = None
+    electional_question: str | None = None
 
 
 @dataclass

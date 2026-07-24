@@ -110,12 +110,23 @@ export type TodayContractDayStoryV1 = {
       sefira?: { id?: string; name_ru?: string; theme_ru?: string };
       school_canon?: string;
     } | null;
+    electional_horary?: {
+      summary_ru?: string;
+      mode?: "electional" | "horary" | string;
+      verdict?: string;
+      verdict_ru?: string;
+      checklist?: Array<{ id?: string; status?: string; title?: string; story_ru?: string }>;
+      ascendant?: { sign_ru?: string; degree_in_sign?: number };
+      moon?: { sign_ru?: string; dignity?: { name_ru?: string } };
+    } | null;
     source_inputs?: {
       has_personal_astrology?: boolean;
       has_human_design?: boolean;
       has_bazi?: boolean;
       has_vedic_personal?: boolean;
       has_kabbalah_letter?: boolean;
+      has_electional_horary?: boolean;
+      electional_status?: string | null;
       ok_family_ids?: string[];
     };
   } | null;

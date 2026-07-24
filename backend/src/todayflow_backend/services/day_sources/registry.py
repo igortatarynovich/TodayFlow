@@ -8,6 +8,9 @@ from todayflow_backend.services.day_sources.adapters.bazi import run_bazi
 from todayflow_backend.services.day_sources.adapters.chinese_metaphysics import (
     run_chinese_metaphysics,
 )
+from todayflow_backend.services.day_sources.adapters.electional_horary import (
+    run_electional_horary,
+)
 from todayflow_backend.services.day_sources.adapters.mayan_calendars import (
     run_mayan_calendars,
 )
@@ -272,6 +275,18 @@ def default_registry() -> DaySourceRegistry:
             in_today=False,
             required_input_keys=("target_date",),
             run=run_kabbalah_letter,
+        )
+    )
+    reg.register(
+        SourceFamilySpec(
+            family_id="electional_horary",
+            layer="personal",
+            in_foundation=False,
+            in_personal=True,
+            # Canon: only on explicit user request.
+            in_today=False,
+            required_input_keys=(),
+            run=run_electional_horary,
         )
     )
     return reg
