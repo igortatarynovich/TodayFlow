@@ -10,7 +10,7 @@ from typing import Any
 
 from sqlalchemy.orm import Session
 
-from todayflow_backend import db_models
+from todayflow_backend.db import models as db_models
 from todayflow_backend.services.natal_facts_contract_v1 import (
     build_available_input,
     generate_natal_facts,
