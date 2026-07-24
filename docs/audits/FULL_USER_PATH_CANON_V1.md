@@ -1,6 +1,6 @@
 # TodayFlow — полный пользовательский путь и целевой канон v1
 
-**Статус:** LIVING SoT пользовательского пути (обновлён после slices A–E, 2026-07-22)  
+**Статус:** LIVING SoT пользовательского пути (обновлён 2026-07-24 — walkthrough vs code)  
 **Роль:** карта маршрута и решений «зачем / какие данные / какая польза» по экранам.  
 **Не заменяет:** Availability · Intake · Capability · Generation Contracts (они — следствия пути).  
 **Связанные:** [USER_JOURNEY_AUDIT_2026-07-20.md](./USER_JOURNEY_AUDIT_2026-07-20.md) · [PRODUCT_DATA_INTAKE.md](../PRODUCT_DATA_INTAKE.md) · [AUTH_SESSION_CONTRACT_V1.md](../AUTH_SESSION_CONTRACT_V1.md) · [PRODUCT_GENERATION_CONTRACTS.md](../PRODUCT_GENERATION_CONTRACTS.md) · [status/TODAY_CANON_VS_CODE_DIFF.md](../status/TODAY_CANON_VS_CODE_DIFF.md)
@@ -10,11 +10,12 @@
 **Канон первого входа после A–E (жёстко):**
 
 ```text
-Landing → (1B | 1A) → Preview → Save (email/magic) → Claim → Profile
+Landing → (1B | 1A) → Preview → Guest First Today → save-prompt → Save (email/magic) → Claim → Profile|/today
 ```
 
-- First Today **не** обязателен до email.  
-- После claim default surface = **`/profile`** при `is_ready`.  
+- Preview **не** ведёт прямой кнопкой на Save: CTA = First Today + Refine (`FirstResultScreen`).  
+- Перед email показывают вкус Today целиком (`/today?first=1` guest), затем `guest-save-prompt` → `/onboarding/save` — value-first сильнее, чем «Preview → Save» в старой формулировке.  
+- После claim: `redirect_target` с бэкенда, фолбэк `FIRST_TODAY_PATH`.  
 - 1A = два draft-профиля (не birth SoT в URL).  
 - Signup = magic only (без plaintext temp password).  
 - Free `max_profiles = 3`.  
@@ -36,7 +37,7 @@ Landing → (1B | 1A) → Preview → Save (email/magic) → Claim → Profile
 | Слой | Состояние |
 |------|-----------|
 | Продуктовая идея | Ясна: Профиль = карта, Сегодня = гид дня |
-| Маршрут первого входа | **Закреплён A–E:** Preview → Save → Claim → Profile (value-first) |
+| Маршрут первого входа | **Закреплён:** Preview → Guest First Today → save-prompt → Save → Claim (value-first; см. §4.1) |
 | Лендинг | Primary «Построить мой профиль»; secondary Совместимость; login; guest trials |
 | «Сегодня» | Ritual-first в коде; Theme→Action→Progress в части канона — **открытый** UX-долг (не откатывает A–E) |
 | Время рождения | Не блокирует; без time/place — нет ASC/домов (`unavailable_facts`) |
@@ -207,7 +208,7 @@ flowchart TD
 
 ## 4. Первый результат и post-claim surface
 
-### 4.1 До email — Preview (канон)
+### 4.1 До email — Preview → Guest First Today → Save (канон = факт кода, 2026-07-24)
 
 | Вопрос | Канон |
 |--------|-------|
@@ -215,26 +216,27 @@ flowchart TD
 | Что видит | Узнавание / gated compat; limitations без time/place |
 | Почему | Ценность **до** регистрации |
 | Facts | `natal_facts` (DeepSeek); date_only без ASC/домов |
-| CTA | Primary **Save** → `/onboarding/save`; Refine опционален |
+| CTA на Preview | **Не** прямой Save. `FirstResultScreen`: primary **First Today** (`/today?first=1`) + **Refine**. Прямого `saveHref` нет — не добавлять «кнопку Save на Preview» по старой формулировке (дубль / лишний шаг). |
+| Путь к email | Preview → Guest First Today (`GuestFirstTodayScreen`) → **`guest-save-prompt`** → `/onboarding/save` (email/magic). Перед почтой показывают вкус Today целиком — это **более** value-first, чем «Preview → Save» в одной кнопке. |
 
-### 4.2 После email — Claim → Profile (канон)
+### 4.2 После email — Claim → Profile / Today (канон)
 
 | Вопрос | Канон |
 |--------|-------|
-| Куда попадает | **`/profile`** если `is_ready` — не обязательный First Today |
-| Что видит | Profile L1 recognition-first |
-| Почему | Bind уже собранного смысла; кабинет карты себя |
-| First Today | **Опционально** после Profile (`/today?first=1`) — не gate перед save |
+| Куда попадает | `POST /account/core-setup` → **`redirect_target`** с бэкенда; фолбэк **`FIRST_TODAY_PATH`**, если путь не пришёл |
+| Что видит | Profile L1 recognition-first и/или First Today — по `redirect_target` |
+| Почему | Bind уже собранного смысла |
+| First Today до email | Уже прожит как guest taste (см. §4.1); после claim не обязан дублировать gate |
 | 1A | Оба профиля в круге (`/account/profiles`) |
 
 ### 4.3 Факт vs канон
 
-| | Факт (A–E) | Канон |
-|--|------------|-------|
-| До email | Preview (+ optional refine), не обязательный guest Today | ✓ |
-| После email | Claim → Profile (ready) | ✓ |
-| Profile | Точка входа после bind | ✓ |
-| First Today до email | Убран как blocker | ✓ |
+| | Факт (код, walkthrough 2026-07-24) | Канон |
+|--|-------------------------------------|-------|
+| До email | Preview → Guest First Today → save-prompt → Save | ✓ (§4.1 уточнён; старое «Primary CTA Preview → Save» — устарело) |
+| После email | Claim → `redirect_target` / First Today fallback | ✓ |
+| Preview Save button | Нет | ✓ не добавлять |
+| First Today до email | Guest taste path, не blocker | ✓ |
 
 ---
 
@@ -678,3 +680,4 @@ flowchart LR
 |------|-----------|
 | 2026-07-21 | Первая версия полного аудита пути и целевого канона |
 | 2026-07-21 | §0− + X16 → code compliance audit; откат ошибочного «нового принципа» |
+| 2026-07-24 | §4.1 + шапка: путь к Save = Preview → Guest First Today → `guest-save-prompt` → `/onboarding/save` (не CTA Save на Preview); walkthrough web — путь цел |
