@@ -5,6 +5,7 @@ import { ArchetypeSymbol } from "@/components/visualIdentity/ArchetypeSymbol";
 import { SacredGeometryBackdrop } from "@/components/visualIdentity/SacredGeometryBackdrop";
 import { SurfaceInsight } from "@/components/foundation/SurfaceInsight";
 import { profileMotionStaggerDelay, profileMotionStyles } from "@/components/foundation/ProfileMotion";
+import { MotionDrift } from "@/design-system/motion";
 import styles from "./heroLarge.module.css";
 
 export type HeroLargePillar = {
@@ -58,7 +59,9 @@ export function HeroLarge({
   return (
     <header className={rootClass} aria-label={ariaLabel ?? title} data-testid="hero-large">
       <div className={styles.geometry}>
-        <SacredGeometryBackdrop emphasis="soft" preset="profile" />
+        <MotionDrift className={styles.geometryDrift} durationSec={18}>
+          <SacredGeometryBackdrop emphasis="soft" preset="profile" />
+        </MotionDrift>
       </div>
       <div className={styles.fade} aria-hidden />
 

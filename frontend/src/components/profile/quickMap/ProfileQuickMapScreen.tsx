@@ -7,6 +7,7 @@ import { ProfileWebMyDays } from "@/components/product-ui/ProfileWebMyDays";
 import { ProfileMotionStagger } from "@/components/foundation/ProfileMotion";
 import { ProfileChartSection } from "@/components/profile/ProfileChartSection";
 import { ProfilePortalDeepSection } from "@/components/profile/ProfilePortalDeepSection";
+import { MotionSettle } from "@/design-system/motion";
 import type { LifeMapSection, NatalChartPreview } from "@/components/profile/profilePanelTypes";
 import type { CoreProfile } from "@/lib/types";
 import type { ProfileQuickMapViewModel } from "@/lib/profilePage/buildProfileQuickMapData";
@@ -192,12 +193,14 @@ export function ProfileQuickMapScreen({
               ) : null}
 
               <div className={styles.quickMapCards}>
-                {model.frameworkCards.map((card) => (
-                  <article key={card.id} className={styles.quickMapCard}>
-                    <p className={styles.quickMapCardTitle}>{card.title}</p>
-                    {card.anchor ? <p className={styles.quickMapCardAnchor}>{card.anchor}</p> : null}
-                    <p className={styles.quickMapCardBody}>{card.body}</p>
-                  </article>
+                {model.frameworkCards.map((card, index) => (
+                  <MotionSettle key={card.id} delayMs={index * 45}>
+                    <article className={styles.quickMapCard}>
+                      <p className={styles.quickMapCardTitle}>{card.title}</p>
+                      {card.anchor ? <p className={styles.quickMapCardAnchor}>{card.anchor}</p> : null}
+                      <p className={styles.quickMapCardBody}>{card.body}</p>
+                    </article>
+                  </MotionSettle>
                 ))}
               </div>
             </div>

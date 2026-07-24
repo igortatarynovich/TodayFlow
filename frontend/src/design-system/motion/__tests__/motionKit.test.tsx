@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { MotionFlip, MotionReveal, MOTION } from "@/design-system/motion";
+import { MotionDrift, MotionFlip, MotionPulse, MotionReveal, MotionSettle, MOTION } from "@/design-system/motion";
 
 describe("design-system/motion", () => {
   it("exposes FOUNDATION_UI §7 token durations", () => {
@@ -17,6 +17,29 @@ describe("design-system/motion", () => {
       </MotionReveal>,
     );
     expect(screen.getByText("insight")).toBeInTheDocument();
+  });
+
+  it("MotionSettle / MotionDrift / MotionPulse render children under reduced motion", () => {
+    render(
+      <>
+        <MotionSettle reducedMotion>
+          <span>settle-card</span>
+        </MotionSettle>
+        <MotionDrift reducedMotion>
+          <span>drift-orbit</span>
+        </MotionDrift>
+        <MotionPulse reducedMotion>
+          <span>pulse-cta</span>
+        </MotionPulse>
+        <MotionPulse active={false}>
+          <span>pulse-paused</span>
+        </MotionPulse>
+      </>,
+    );
+    expect(screen.getByText("settle-card")).toBeInTheDocument();
+    expect(screen.getByText("drift-orbit")).toBeInTheDocument();
+    expect(screen.getByText("pulse-cta")).toBeInTheDocument();
+    expect(screen.getByText("pulse-paused")).toBeInTheDocument();
   });
 
   it("MotionFlip shows back then face by flipped prop (reduced)", () => {

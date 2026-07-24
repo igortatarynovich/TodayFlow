@@ -33,6 +33,11 @@
   opacity: 0.85;
 }
 
+.geometryDrift {
+  width: 100%;
+  height: 100%;
+}
+
 .fade {
   position: absolute;
   inset: auto 0 0;

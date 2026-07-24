@@ -109,6 +109,15 @@
   text-transform: uppercase;
 }
 
+.ctaPulse {
+  display: inline-flex;
+  margin-top: 1.25rem;
+}
+
+.ctaPulse .cta {
+  margin-top: 0;
+}
+
 .summary:hover .cta {
   text-decoration: underline;
   text-underline-offset: 4px;

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState, type MouseEvent, type ReactNode } from "react";
 import { ProfileMotionExpand, profileMotionStyles } from "@/components/foundation/ProfileMotion";
 import { SacredGeometryBackdrop } from "@/components/visualIdentity/SacredGeometryBackdrop";
+import { MotionPulse } from "@/design-system/motion";
 import { PROFILE_QUICK_MAP_COPY as copy } from "@/components/profile/quickMap/profileQuickMapCopy";
 import styles from "./profilePortalDeepSection.module.css";
 
@@ -56,7 +57,9 @@ export function ProfilePortalDeepSection({
           <p className={styles.kicker}>{copy.portalKicker}</p>
           <p className={styles.title}>{copy.portalTitle}</p>
           <p className={styles.sub}>{copy.portalSub}</p>
-          <span className={styles.cta}>{isOpen ? copy.portalCollapse : copy.portalEnter}</span>
+          <MotionPulse active={!isOpen} className={styles.ctaPulse}>
+            <span className={styles.cta}>{isOpen ? copy.portalCollapse : copy.portalEnter}</span>
+          </MotionPulse>
         </div>
       </summary>
       <ProfileMotionExpand open={isOpen}>
