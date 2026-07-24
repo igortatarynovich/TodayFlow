@@ -99,6 +99,23 @@ def test_headline_label_not_action():
     assert is_valid_action_text("Скажи прямо одну вещь, которую обычно обходишь.")
 
 
+def test_literary_primary_action_and_domain_fallbacks_pass():
+    from todayflow_backend.services.today_contract_fallbacks_v1 import (
+        DOMAIN_FALLBACKS_V1,
+        PRIMARY_ACTION_FALLBACK,
+    )
+
+    assert is_valid_action_text(PRIMARY_ACTION_FALLBACK)
+    assert is_valid_action_text(
+        "Если успеешь закрыть одну важную вещь до обеда, остаток дня обычно идёт легче."
+    )
+    assert is_valid_action_text("Имеет смысл взять одну задачу и довести до видимого результата.")
+    for domain_id, fb in DOMAIN_FALLBACKS_V1.items():
+        if domain_id.startswith("_"):
+            continue
+        assert is_valid_action_text(fb["action"]), domain_id
+
+
 def test_normalize_action_rejects_headline():
     fb = "Выбери одну рабочую задачу и доведи её до видимого результата."
     assert normalize_action("Работа и решения", fb) == fb

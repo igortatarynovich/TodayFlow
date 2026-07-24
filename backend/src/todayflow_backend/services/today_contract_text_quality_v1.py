@@ -121,6 +121,24 @@ _ACTION_IMPERATIVE_RE = re.compile(
     re.I,
 )
 
+# Journey literary voice: practical move without command-lead (matches today_contract_fallbacks_v1).
+_ACTION_LITERARY_MARKERS = (
+    "если успеешь",
+    "если что-то",
+    "если удастся",
+    "имеет смысл",
+    "одна задача",
+    "одна прямая",
+    "одна честная",
+    "один спокойный",
+    "один ясный",
+    "один короткий",
+    "сегодня уместн",
+    "до обеда",
+    "до видимого результата",
+    "к вечеру",
+)
+
 _SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+")
 
 
@@ -213,6 +231,7 @@ def is_headline_label(text: str | None) -> bool:
 
 
 def is_valid_action_text(text: str | None) -> bool:
+    """Accept imperative OR literary practical-move copy (not headlines / traits)."""
     t = truncate_sentences(_norm_space(text or ""), MAX_ACTION_SENTENCES, MAX_ACTION_CHARS)
     if len(t) < 10:
         return False
@@ -220,7 +239,19 @@ def is_valid_action_text(text: str | None) -> bool:
         return False
     if is_profile_trait_text(t):
         return False
-    return bool(_ACTION_IMPERATIVE_RE.search(t.strip()))
+    stripped = t.strip()
+    if _ACTION_IMPERATIVE_RE.search(stripped):
+        return True
+    low = stripped.lower()
+    if any(m in low for m in _ACTION_LITERARY_MARKERS) and len(stripped) >= 24:
+        return True
+    # Concrete observational move with outcome cue (domain fallbacks).
+    if len(stripped) >= 40 and re.search(
+        r"\b(?:обычно|часто|стоит|делает|помогает|уместн[аоы]?)\b",
+        low,
+    ):
+        return True
+    return False
 
 
 def accept_status_source(text: str | None) -> str:
