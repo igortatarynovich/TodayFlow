@@ -11,6 +11,7 @@ from todayflow_backend.services.day_sources.human_design import (
     defined_centers_from_channels,
     longitude_to_gate_line,
     resolve_channels,
+    resolve_profile_lines_cross,
     resolve_type_authority,
     transit_gates_for_day,
 )
@@ -95,6 +96,40 @@ def test_type_authority_from_natal_channels():
     assert emo["authority"]["id"] == "emotional"
 
 
+def test_profile_lines_cross_from_sun_earth():
+    pack = resolve_profile_lines_cross(
+        personality_sun={"gate": 1, "line": 3, "theme_ru": "самовыражение"},
+        personality_earth={"gate": 2, "line": 3, "theme_ru": "направление"},
+        design_sun={"gate": 13, "line": 5, "theme_ru": "слушатель"},
+        design_earth={"gate": 7, "line": 5, "theme_ru": "роль лидера"},
+    )
+    assert pack["profile"]["id"] == "3/5"
+    assert pack["angle"]["id"] == "right_angle"
+    assert pack["profile"]["personality_role_ru"] == "Мученик"
+    assert pack["profile"]["design_role_ru"] == "Еретик"
+    assert pack["incarnation_cross"]["label"] == "1/2/13/7"
+    assert pack["incarnation_cross"]["named_cross"] is None
+    assert pack["incarnation_cross"]["conscious_sun"]["label"] == "1.3"
+
+    jux = resolve_profile_lines_cross(
+        personality_sun={"gate": 10, "line": 4},
+        personality_earth={"gate": 15, "line": 4},
+        design_sun={"gate": 2, "line": 1},
+        design_earth={"gate": 1, "line": 1},
+    )
+    assert jux["profile"]["id"] == "4/1"
+    assert jux["angle"]["id"] == "juxtaposition"
+
+    left = resolve_profile_lines_cross(
+        personality_sun={"gate": 20, "line": 5},
+        personality_earth={"gate": 34, "line": 5},
+        design_sun={"gate": 10, "line": 1},
+        design_earth={"gate": 15, "line": 1},
+    )
+    assert left["profile"]["id"] == "5/1"
+    assert left["angle"]["id"] == "left_angle"
+
+
 def test_transit_gates_without_birth():
     transit = transit_gates_for_day(date(2026, 7, 24))
     assert 1 <= transit["sun"]["gate"] <= 64
@@ -123,6 +158,7 @@ def test_transit_gates_without_birth():
     assert "channels" in hd["capability_ids"]
     assert "bodygraph_interaction" not in hd["capability_ids"]
     assert "type_authority" not in hd["capability_ids"]
+    assert "profile_lines_cross" not in hd["capability_ids"]
     assert "channels" in hd["payload"]["channels"]
     assert "active_gates" in hd["payload"]["channels"]
     assert len(hd["payload"]["channels"]["active_gates"]["transit"]) >= 3
@@ -142,6 +178,7 @@ def test_bodygraph_when_birth_date():
     assert "bodygraph_interaction" in hd["capability_ids"]
     assert "channels" in hd["capability_ids"]
     assert "type_authority" in hd["capability_ids"]
+    assert "profile_lines_cross" in hd["capability_ids"]
     assert str(hd["bodygraph"]["depth"]).startswith("time_place_known")
     assert hd["bodygraph"]["personality"]["sun"]["gate"]
     assert len(hd["bodygraph"]["natal_gates"]) >= 4
@@ -154,6 +191,10 @@ def test_bodygraph_when_birth_date():
         "reflector",
     }
     assert hd["type_authority"]["authority"]["name_ru"]
+    plc = hd["profile_lines_cross"]
+    assert "/" in plc["profile"]["id"]
+    assert plc["incarnation_cross"]["conscious_sun"]["gate"] == hd["bodygraph"]["personality"]["sun"]["gate"]
+    assert plc["incarnation_cross"]["unconscious_sun"]["gate"] == hd["bodygraph"]["design"]["sun"]["gate"]
     assert "active_gates" in hd["channels"]
     assert len(hd["channels"]["active_gates"]["natal"]) >= 4
 
@@ -177,5 +218,6 @@ def test_interpretation_can_include_hd_claim():
         if isinstance(b, dict)
     }
     assert "type_authority" in kinds_in_beats
-    # Prefer type_authority into Today claims.
-    assert any("HD soft" in str(c.get("text") or "") for c in hd_claims)
+    assert "profile_lines_cross" in kinds_in_beats
+    joined = " ".join(str(c.get("text") or "") for c in hd_claims)
+    assert "HD soft" in joined or "Профиль" in joined

@@ -66,7 +66,7 @@ DaySourceInputs
 | `kabbalah_letter` | **personal** | `target_date` | no (L3; Today claims deferred) |
 | `electional_horary` | **personal** | explicit request + geo (+ time; question→horary) | no (situational) |
 
-Планируемые (канон есть, адаптер later): HD profile/lines/cross, richer electional UI, …
+Планируемые (канон есть, адаптер later): HD variables, richer electional UI, …
 
 ### Ephemeris bridge (v0)
 

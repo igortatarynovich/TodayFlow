@@ -339,7 +339,156 @@ def resolve_type_authority(
         "limitation_ru": (
             "Type/Authority from natal Personality∪Design channels only "
             "(Sun…Pluto + Earth; Design −88d). Not a commercial HD chart engine; "
-            "profile/lines/variable/incarnation cross deferred."
+            "variables deferred."
+        ),
+    }
+
+
+_LINE_ROLE_RU: dict[int, str] = {
+    1: "Исследователь",
+    2: "Отшельник",
+    3: "Мученик",
+    4: "Оппортунист",
+    5: "Еретик",
+    6: "Роль-модель",
+}
+
+_LINE_THEME_RU: dict[int, str] = {
+    1: "основа и исследование",
+    2: "природный дар и уединение",
+    3: "пробы и ошибки",
+    4: "сеть и влияние",
+    5: "проекция и практическое решение",
+    6: "наблюдение и пример",
+}
+
+# Standard 12 profiles → geometry of the Incarnation Cross.
+_PROFILE_ANGLE: dict[str, str] = {
+    "1/3": "right_angle",
+    "1/4": "right_angle",
+    "2/4": "right_angle",
+    "2/5": "right_angle",
+    "3/5": "right_angle",
+    "3/6": "right_angle",
+    "4/6": "right_angle",
+    "4/1": "juxtaposition",
+    "5/1": "left_angle",
+    "5/2": "left_angle",
+    "6/2": "left_angle",
+    "6/3": "left_angle",
+}
+
+_ANGLE_RU = {
+    "right_angle": "Правый угол (личный путь)",
+    "juxtaposition": "Juxtaposition (фиксированный)",
+    "left_angle": "Левый угол (трансперсональный)",
+    "unknown": "Угол нестандартный / soft",
+}
+
+
+def _clamp_line(raw: Any) -> int:
+    try:
+        line = int(raw)
+    except (TypeError, ValueError):
+        line = 1
+    return max(1, min(6, line))
+
+
+def resolve_profile_lines_cross(
+    *,
+    personality_sun: dict[str, Any],
+    personality_earth: dict[str, Any],
+    design_sun: dict[str, Any],
+    design_earth: dict[str, Any],
+) -> dict[str, Any]:
+    """Soft Profile + Sun/Earth lines + 4-gate Incarnation Cross (no commercial name catalog)."""
+    p_sun_line = _clamp_line(personality_sun.get("line"))
+    d_sun_line = _clamp_line(design_sun.get("line"))
+    profile_id = f"{p_sun_line}/{d_sun_line}"
+    angle_id = _PROFILE_ANGLE.get(profile_id, "unknown")
+
+    p_sun_gate = int(personality_sun.get("gate") or 0)
+    p_earth_gate = int(personality_earth.get("gate") or 0)
+    d_sun_gate = int(design_sun.get("gate") or 0)
+    d_earth_gate = int(design_earth.get("gate") or 0)
+
+    def _arm(role: str, gate: int, line: int, theme_hint: str | None = None) -> dict[str, Any]:
+        theme = (theme_hint or _GATE_THEME_RU.get(gate, "")).strip()
+        return {
+            "role": role,
+            "gate": gate,
+            "line": line,
+            "label": f"{gate}.{line}" if gate else None,
+            "theme_ru": theme or None,
+        }
+
+    conscious_sun = _arm(
+        "conscious_sun",
+        p_sun_gate,
+        p_sun_line,
+        str(personality_sun.get("theme_ru") or "") or None,
+    )
+    conscious_earth = _arm(
+        "conscious_earth",
+        p_earth_gate,
+        _clamp_line(personality_earth.get("line")),
+        str(personality_earth.get("theme_ru") or "") or None,
+    )
+    unconscious_sun = _arm(
+        "unconscious_sun",
+        d_sun_gate,
+        d_sun_line,
+        str(design_sun.get("theme_ru") or "") or None,
+    )
+    unconscious_earth = _arm(
+        "unconscious_earth",
+        d_earth_gate,
+        _clamp_line(design_earth.get("line")),
+        str(design_earth.get("theme_ru") or "") or None,
+    )
+
+    cross_gates = [p_sun_gate, p_earth_gate, d_sun_gate, d_earth_gate]
+    cross_label = "/".join(str(g) for g in cross_gates if g)
+    angle_ru = _ANGLE_RU[angle_id]
+    profile_ru = (
+        f"{profile_id} · {_LINE_ROLE_RU[p_sun_line]} / {_LINE_ROLE_RU[d_sun_line]}"
+    )
+    summary = (
+        f"Профиль {profile_ru}; {angle_ru}. "
+        f"Incarnation Cross soft: ворота {cross_label} "
+        f"(Personality Sun {conscious_sun['label']}, Design Sun {unconscious_sun['label']})."
+    )
+
+    return {
+        "capability_id": "profile_lines_cross",
+        "depth": "sun_earth_lines_soft",
+        "profile": {
+            "id": profile_id,
+            "personality_line": p_sun_line,
+            "design_line": d_sun_line,
+            "personality_role_ru": _LINE_ROLE_RU[p_sun_line],
+            "design_role_ru": _LINE_ROLE_RU[d_sun_line],
+            "personality_theme_ru": _LINE_THEME_RU[p_sun_line],
+            "design_theme_ru": _LINE_THEME_RU[d_sun_line],
+            "label_ru": profile_ru,
+        },
+        "angle": {"id": angle_id, "name_ru": angle_ru},
+        "incarnation_cross": {
+            "gates": cross_gates,
+            "label": cross_label,
+            "conscious_sun": conscious_sun,
+            "conscious_earth": conscious_earth,
+            "unconscious_sun": unconscious_sun,
+            "unconscious_earth": unconscious_earth,
+            "named_cross": None,
+            "naming": "deferred_commercial_catalog",
+        },
+        "summary_ru": summary,
+        "school_canon": "rave_profile_cross_v0_sun_earth_lines",
+        "limitation_ru": (
+            "Profile = Personality Sun line / Design Sun line. "
+            "Incarnation Cross = four Sun/Earth gates (no commercial cross-name catalog). "
+            "Design time ≈ −88d; Swiss when bridge present."
         ),
     }
 
@@ -642,7 +791,7 @@ def bodygraph_soft(
         "limitation_ru": (
             "Personality/Design Sun…Pluto + Earth. "
             "Design ≈ birth−88d (Swiss walk when bridge present; else mean lon). "
-            "Not a full HD BodyGraph engine (profile / cross deferred; type soft when natal channels)."
+            "Type/Profile/Cross soft layers attach when natal gates resolve."
         ),
     }
 
@@ -672,12 +821,23 @@ def build_human_design_payload(
     caps.append("channels")
 
     type_authority = None
+    profile_lines_cross = None
     if bodygraph is not None:
         type_authority = resolve_type_authority(
             natal_channels=list(channels.get("natal_channels") or []),
             natal_centers=list(channels.get("natal_defined_centers") or []),
         )
         caps.append("type_authority")
+        pers = bodygraph.get("personality") if isinstance(bodygraph.get("personality"), dict) else {}
+        des = bodygraph.get("design") if isinstance(bodygraph.get("design"), dict) else {}
+        if isinstance(pers.get("sun"), dict) and isinstance(des.get("sun"), dict):
+            profile_lines_cross = resolve_profile_lines_cross(
+                personality_sun=pers["sun"],
+                personality_earth=pers.get("earth") or earth_from_sun(pers["sun"]),
+                design_sun=des["sun"],
+                design_earth=des.get("earth") or earth_from_sun(des["sun"]),
+            )
+            caps.append("profile_lines_cross")
 
     beats: list[dict[str, Any]] = [
         {
@@ -702,6 +862,19 @@ def build_human_design_payload(
                 ),
                 "story_ru": type_authority["summary_ru"],
                 "evidence_ref": "human_design.type_authority",
+            }
+        )
+    if profile_lines_cross:
+        beats.append(
+            {
+                "id": f"hd.profile.{profile_lines_cross['profile']['id'].replace('/', '-')}",
+                "kind": "profile_lines_cross",
+                "title": (
+                    f"HD · Профиль {profile_lines_cross['profile']['id']} · "
+                    f"Cross {profile_lines_cross['incarnation_cross']['label']}"
+                ),
+                "story_ru": profile_lines_cross["summary_ru"],
+                "evidence_ref": "human_design.profile_lines_cross",
             }
         )
     if bodygraph and bodygraph.get("activations"):
@@ -732,6 +905,8 @@ def build_human_design_payload(
     summary = str(transit.get("summary_ru") or "")
     if type_authority:
         summary = f"{summary} {type_authority['summary_ru']}"
+    if profile_lines_cross:
+        summary = f"{summary} {profile_lines_cross['summary_ru']}"
     if bodygraph and bodygraph.get("activations"):
         summary = f"{summary} {bodygraph['summary_ru']}"
     elif bodygraph:
@@ -745,6 +920,7 @@ def build_human_design_payload(
         "bodygraph": bodygraph,
         "channels": channels,
         "type_authority": type_authority,
+        "profile_lines_cross": profile_lines_cross,
         "beats": beats,
         "summary_ru": summary[:480],
         "school_canon": "rave_mandala_gate41_aquarius_2",

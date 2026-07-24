@@ -609,6 +609,7 @@ Day Story            →  интерпретация Foundation → экран T
 | `bodygraph_interaction` | v1/partial | + `birth_date`; Design −88d Swiss walk when bridge | no | yes | soft |
 | `channels` / defined centers | v1/partial | full transit + natal gates; natal centers separate | no | yes | soft |
 | `type_authority` | v1/partial | natal Personality∪Design channels → Type/Authority/Strategy soft | no | yes | soft |
+| `profile_lines_cross` | v1/partial | Personality/Design Sun lines → Profile; Sun/Earth 4-gate Cross soft | no | yes | soft |
 
 ---
 

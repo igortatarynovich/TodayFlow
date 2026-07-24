@@ -196,6 +196,27 @@ export type TodayContractDayStoryV1 = {
         motor_to_throat?: boolean;
         limitation_ru?: string;
       } | null;
+      profile_lines_cross?: {
+        summary_ru?: string;
+        depth?: string;
+        profile?: {
+          id?: string;
+          personality_line?: number;
+          design_line?: number;
+          personality_role_ru?: string;
+          design_role_ru?: string;
+          label_ru?: string;
+        };
+        angle?: { id?: string; name_ru?: string };
+        incarnation_cross?: {
+          gates?: number[];
+          label?: string;
+          conscious_sun?: { gate?: number; line?: number; label?: string; theme_ru?: string | null };
+          unconscious_sun?: { gate?: number; line?: number; label?: string; theme_ru?: string | null };
+          named_cross?: string | null;
+        };
+        limitation_ru?: string;
+      } | null;
     } | null;
     bazi?: {
       summary_ru?: string;

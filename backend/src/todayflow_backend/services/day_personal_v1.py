@@ -225,6 +225,7 @@ def personal_to_interpretation_claims(personal: dict[str, Any] | None) -> list[d
         limit=2,
         prefer_kinds=(
             "type_authority",
+            "profile_lines_cross",
             "channel",
             "transit_hits_natal_gate",
             "transit_gate",
