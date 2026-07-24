@@ -1,4 +1,4 @@
-# TodayFlow — Product Canon (Unified v1.7)
+# TodayFlow — Product Canon (Unified v1.8)
 
 **Дата:** 2026-07-24
 **Статус:** предлагаемая замена для четырёх документов, которые одновременно называли себя главными:
@@ -232,7 +232,7 @@ Today отвечает «что сегодня», Maps отвечают «как
 | 5 файлов заявляли себя «главным документом продукта» с разными датами (01.06–21.07) | TODAY_PRODUCT_MODEL, PIM_NORTH_STAR, TODAYFLOW_PRODUCT_MODEL, BUILD_MAP, CORE_PRODUCT_CANON | Один документ (этот). Build Map — только entity-трекер. Today/Profile screen models — остаются, но explicitly не «весь продукт» |
 | Порядок Today vs Profile после signup — расходится | CORE_PRODUCT_CANON §8.2 vs FULL_USER_PATH_CANON_V1 | §8 выше — FULL_USER_PATH_CANON_V1 побеждает |
 | Тарифы в ₽ в коде vs рынок US/EU | `pricing/page.tsx` (старый draft) | §7.1 — рынок US/EU, Stripe, $/€; язык UI русский; цифры всё ещё placeholder |
-| «Launch Scope Freeze» объявлен 02.07 («философия закрыта до user test»), но 21.07 в CORE_PRODUCT_CANON появился новый крупный блок (JTBD packs: Love OS/Money OS/Decision OS/Pattern OS/State OS) | TODAYFLOW_PRODUCT_MODEL freeze-notice vs CORE_PRODUCT_CANON §11 | JTBD packs сохранены как содержание (§10 ниже), но явно помечены пометкой «пост-freeze дополнение — требует явного snooze/unsnooze решения, не должно тихо расширять launch-scope» |
+| «Launch Scope Freeze» объявлен 02.07 («философия закрыта до user test»), но 21.07 в CORE_PRODUCT_CANON появился новый крупный блок (JTBD packs: Love OS/Money OS/Decision OS/Pattern OS/State OS) | TODAYFLOW_PRODUCT_MODEL freeze-notice vs CORE_PRODUCT_CANON §11 | **CLOSED 2026-07-24** — §10: packs ×6 → **backlog v2**, не launch (post-freeze scope; не core daily loop) |
 | §3.4 unified называл Maps «второй половиной Profile»; PR-4 / PROFILE_SCREEN_MASTER §7 уже вынесли Maps на `/maps/*` | этот документ (до v1.4) vs PROFILE_SCREEN_MASTER §7 | §3.4.1 — Profile = «кто я»; Maps UI = отдельные surfaces; SoT IA = PROFILE_SCREEN_MASTER §7 |
 
 ### 9.1 Уточнение: L1/L2/L3 — три разные оси, не путать в одном абзаце
@@ -247,9 +247,9 @@ Data gate и Day L3 связаны (без времени+места нет nata
 
 ---
 
-## 10. JTBD Packs (сохранено из CORE_PRODUCT_CANON — статус: пост-freeze дополнение, требует явного решения о приоритете)
+## 10. JTBD Packs — **CLOSED 2026-07-24: backlog v2, не launch**
 
-Users не покупают астрологию/таро/нумерологию как изолированные системы — они покупают ясность, объяснение, контроль, decision support, дневную ориентацию.
+Users не покупают астрологию/таро/нумерологию как изолированные системы — они покупают ясность, объяснение, контроль, decision support, дневную ориентацию. Содержание паков сохранено как справочник для v2; **в launch v1 не едут**.
 
 - **Love OS** — что чувствует другой человек · почему отношения буксуют · продолжать или отпустить · почему повторяется romantic pattern
 - **Money/Career OS** — почему не растёт доход · что монетизировать · менять работу или нет · действовать сейчас или ждать
@@ -258,7 +258,14 @@ Users не покупают астрологию/таро/нумерологию
 - **State OS** — что происходит эмоционально сейчас · временно ли это · как пережить следующие 24 часа
 - **Daily OS** — на чём фокус сегодня · чего избегать · где действовать, где держать паузу
 
-**Решение нужно явно принять:** эти 6 паков — v1 launch-контур или backlog v2? Сейчас статус не зафиксирован ни в одном документе.
+**Решение *(FROZEN 2026-07-24):*** JTBD packs ×6 → **backlog v2**, не launch-контур.
+
+**Почему:**
+
+1. **Post-freeze scope** — паки появились после объявленной заморозки философии (02.07), не до; второй раз мимо freeze (§9) — сигнал держать гейт строже, не расширять soft launch.
+2. **Не core daily loop** — не встраиваются в замороженные v1-поверхности (Today / Profile / Compatibility / Tarot); по канону это explicit-question JTBD-слой, а он сам «опционален, не центр продукта».
+3. **Не косметика** — фактически 6 новых generation-контрактов с полной планкой качества; content-спринт, конкурирующий с smoke web перед soft launch.
+4. **North Star soft launch** — проверить, что дневной цикл (Today ritual + Profile + Growth Index) даёт «вечером лучше, чем без приложения». Шесть OS ничего не добавляют к этой проверке.
 
 ---
 
@@ -340,7 +347,7 @@ Zone 4 **не создаёт** привычки/аскезы — только з
 
 | Дата | Изменение |
 |---|---|
-| 2026-07-24 | v1.0 — объединение CORE_PRODUCT_CANON + TODAYFLOW_PRODUCT_MODEL + TODAYFLOW_PRODUCT_BUILD_MAP (философская часть) + PIM_PRODUCT_NORTH_STAR; явное снятие 4 противоречий (§9); JTBD packs помечены как открытый вопрос приоритета (§10) |
+| 2026-07-24 | v1.0 — объединение CORE_PRODUCT_CANON + TODAYFLOW_PRODUCT_MODEL + TODAYFLOW_PRODUCT_BUILD_MAP (философская часть) + PIM_PRODUCT_NORTH_STAR; явное снятие 4 противоречий (§9); JTBD packs вынесены в §10 (тогда — открытый приоритет) |
 | 2026-07-24 | v1.1 — §12 Launch MVP contour FROZEN (§6.1 Cleanup Report) |
 | 2026-07-24 | v1.2 — §7.1 рынок US/EU + Stripe +$/€ FROZEN; язык продукта v1 = русский; РФ out of scope |
 | 2026-07-24 | v1.3 — Auth-at-save magic-only hygiene; Intent/Reality placement **C** in First Today |
@@ -348,3 +355,4 @@ Zone 4 **не создаёт** привычки/аскезы — только з
 | 2026-07-24 | v1.5 — §12.1 Growth feed **A**: Today micro-actions → Growth Index; ring_tier_reached_at required; no merch checkout in v1 |
 | 2026-07-24 | v1.6 — §12.2 Platforms: Android = Today+Compatibility existing; Profile+auth = build; Tarot = later sprint |
 | 2026-07-24 | v1.7 — §12.1 Zone 4/Evening slot design; `/practices` demoted from primary nav; `reward_ring_tier_reached` |
+| 2026-07-24 | v1.8 — §10 JTBD packs ×6 → **backlog v2** (не launch); post-freeze scope, не core daily loop |
