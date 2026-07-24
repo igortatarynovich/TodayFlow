@@ -6,7 +6,7 @@
 
 **Роль:** иерархия **рыночного внимания** (не философическая) и **реальная задача каждого экрана** — ежедневная причина возврата.
 
-**Связь:** [DAILY_NAVIGATION_MODEL.md](./DAILY_NAVIGATION_MODEL.md) · [INTENT_MODEL_V1.md](./INTENT_MODEL_V1.md) · [MARKET_ATTENTION_AND_SCREEN_JOBS.md](./MARKET_ATTENTION_AND_SCREEN_JOBS.md) · [TODAY_PRODUCT_MODEL.md](./TODAY_PRODUCT_MODEL.md) · [CORE_PRODUCT_CANON.md](./CORE_PRODUCT_CANON.md).
+**Связь:** [DAILY_NAVIGATION_MODEL.md](./DAILY_NAVIGATION_MODEL.md) · [INTENT_MODEL_V1.md](./INTENT_MODEL_V1.md) · [MARKET_ATTENTION_AND_SCREEN_JOBS.md](./MARKET_ATTENTION_AND_SCREEN_JOBS.md) · [TODAY_PRODUCT_MODEL.md](./TODAY_PRODUCT_MODEL.md) · [CORE_PRODUCT_CANON.md](archive/CORE_PRODUCT_CANON.md).
 
 ---
 
@@ -131,7 +131,7 @@ Tarot **не конкурирует** с Today:
 - как строит отношения и относится к деньгам;
 - какие **паттерны** повторяются.
 
-Обновляется из Today, Calendar, Compatibility, feedback — [CORE_PRODUCT_CANON.md](./CORE_PRODUCT_CANON.md) personalization rule.
+Обновляется из Today, Calendar, Compatibility, feedback — [CORE_PRODUCT_CANON.md](archive/CORE_PRODUCT_CANON.md) personalization rule.
 
 Удержание (L5) после входа через L1–L4.
 

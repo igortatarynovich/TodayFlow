@@ -2,8 +2,8 @@
 
 **Date:** 2026-07-21  
 **Status:** ACTIVE — next stage after PR-4.1 CLOSED  
-**Parent:** [PR4_PROFILE_CANON.md](../PR4_PROFILE_CANON.md) · Umbrella [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md)  
-**Related:** [PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md) · [PROFILE_CONTENT_CANON_V1.md](../PROFILE_CONTENT_CANON_V1.md)
+**Parent:** [PR4_PROFILE_CANON.md](../archive/PR4_PROFILE_CANON.md) · Umbrella [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md)  
+**Related:** [PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md) · [PROFILE_CONTENT_CANON_V1.md](../profile/PROFILE_CONTENT_CANON_V1.md)
 
 > Goal: Profile / Snapshot is the **only** identity SoT. Downstream modules may add domain context («сегодня», «эта пара», «эта карта») but must **not** invent a new character arc without their own evidence chain.
 
@@ -73,7 +73,7 @@ Either **project them via ExperienceSlice** (when a module needs them) or **stop
 2. Expand Experience Contract **only** for fields modules actually need; otherwise drop unused portrait promises from downstream prompts.
 3. Gate / deprecate legacy UserContext personality assembly on hot paths.
 4. Today FE: prefer contract / slice over legacy `interpretation` blocks.
-5. Then — and only then — deepen natal **UI** organization on Profile (person first → sources → structured natal; max understanding, not max data). See [PR4_PROFILE_CANON.md](../PR4_PROFILE_CANON.md) §3.1.
+5. Then — and only then — deepen natal **UI** organization on Profile (person first → sources → structured natal; max understanding, not max data). See [PR4_PROFILE_CANON.md](../archive/PR4_PROFILE_CANON.md) §3.1.
 
 **Do not start C3 portrait quality work** until Experiences stop assembling competing personalities from signs/baseline.
 

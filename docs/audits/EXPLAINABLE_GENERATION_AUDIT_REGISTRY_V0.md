@@ -2,7 +2,7 @@
 
 **Статус:** ACTIVE quality gate (сквозной аудит, не новый принцип)  
 **Дата:** 2026-07-21  
-**Канон:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md) · [EXPLAINABLE_INTERPRETATION.md](../EXPLAINABLE_INTERPRETATION.md)  
+**Канон:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md) · [EXPLAINABLE_INTERPRETATION.md](../explainability/EXPLAINABLE_INTERPRETATION.md)  
 **Метод:** inventory production generators / projections → check inputs · calc · prompt · schema · trace · violations → remediation  
 **Эталон compliance:** `practice_selection_ranker_v1` · частичный — `compact_user_model_v0`
 
@@ -109,7 +109,7 @@ Copy into PR description:
 
 ## Remediation backlog (execution order)
 
-1. **P0 day_story_v1** — **mitigated (2026-07-21):** interpretation+evidence before prose; domain partial; full trace; phrase validator; FE hide absent domains. Remaining: Composition Surface polish. See [PR3_TODAY_PRODUCTION_SURFACE.md](../PR3_TODAY_PRODUCTION_SURFACE.md).  
+1. **P0 day_story_v1** — **mitigated (2026-07-21):** interpretation+evidence before prose; domain partial; full trace; phrase validator; FE hide absent domains. Remaining: Composition Surface polish. See [PR3_TODAY_PRODUCTION_SURFACE.md](../archive/PR3_TODAY_PRODUCTION_SURFACE.md).  
 2. **P0 profile_contract_v1** — claim evidence map + limitations in forming.  
 3. **P0 compatibility_content_v1** — evidence by source_depth + product-visible limitations.  
 4. **P1 symbol explainers + daily_recommendations** — catalog meaning in → cite out.  

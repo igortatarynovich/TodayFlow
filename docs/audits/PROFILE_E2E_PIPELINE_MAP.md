@@ -1,6 +1,6 @@
 # Profile E2E — Pipeline Map (current reality)
 
-**Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md)  
+**Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../profile/PROFILE_E2E_RECONSTRUCTION.md)  
 **Date:** 2026-07-21 · **Mode:** code truth, no assumptions
 
 ---

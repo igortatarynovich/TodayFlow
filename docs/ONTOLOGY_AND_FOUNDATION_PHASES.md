@@ -6,7 +6,7 @@
 
 **Роль:** зафиксировать, что TodayFlow **сейчас** на этапе «определяем фундамент **мира**», а не пользователя, экранов, API или LLM. Потребители данных — **последними**.
 
-**Связь:** [CORE_PRODUCT_CANON.md](./CORE_PRODUCT_CANON.md), [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md), [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md), [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md), [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md), [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md), [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md).
+**Связь:** [CORE_PRODUCT_CANON.md](archive/CORE_PRODUCT_CANON.md), [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md), [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md), [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md), [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md), [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md), [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md).
 
 ---
 
@@ -78,9 +78,9 @@ flowchart TB
 | **Goal Reference** | GoalCategory, GoalType | REFERENCE §6 | missing |
 | **Habit Reference** | HabitType, streak rules | REFERENCE §6 | missing |
 | **Emotion Reference** | MoodSlug, CheckInDimension, OperatingMode | check_ins, ritual slugs | partial |
-| **Interpretation Reference** | meaning_id, L1–L4, multi-weight | [INTERPRETATION_LAYER_AND_REFERENCE.md](./INTERPRETATION_LAYER_AND_REFERENCE.md) | canon; catalog missing |
+| **Interpretation Reference** | meaning_id, L1–L4, multi-weight | [INTERPRETATION_LAYER_AND_REFERENCE.md](explainability/INTERPRETATION_LAYER_AND_REFERENCE.md) | canon; catalog missing |
 | **DayModel Reference** | Vector, Tempo, Risk, Dependency Map | [DAYMODEL_INPUT_CONTRACT.md](./DAYMODEL_INPUT_CONTRACT.md) | contract ✅; aggregation **P1.0** (after 3 SoT) |
-| **Evolution Reference** | Path stages, PEG shape, ES factors | [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md), [EVOLUTION_CALCULATION_CONTRACT.md](./EVOLUTION_CALCULATION_CONTRACT.md) | canon ✅; no API |
+| **Evolution Reference** | Path stages, PEG shape, ES factors | [USER_MODEL_TARGET_STATE.md](pim/USER_MODEL_TARGET_STATE.md), [EVOLUTION_CALCULATION_CONTRACT.md](./EVOLUTION_CALCULATION_CONTRACT.md) | canon ✅; no API |
 | **Commerce Reference** | ranking rules, symbolic ↔ theme/stage | SYMBOLIC_ASSET doc | partial |
 
 ### 2.2 Обязательные артеfactы фазы 1
@@ -212,7 +212,7 @@ P0.5 Numerology machine ✅
   → P1.1 CUM → ECC → UEM-2
 ```
 
-[PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) §2 Global Build Order — **горизонтальный** срез; **этот документ** — **вертикальные фазы** (1→5).
+[PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md) §2 Global Build Order — **горизонтальный** срез; **этот документ** — **вертикальные фазы** (1→5).
 
 | PIL # | PIL слой | Фаза |
 |-------|----------|------|

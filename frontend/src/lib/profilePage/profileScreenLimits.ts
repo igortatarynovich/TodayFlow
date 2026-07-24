@@ -1,4 +1,4 @@
-/** Canon: docs/PROFILE_SCREEN_MASTER.md — enforce in build + UI */
+/** Canon: docs/profile/PROFILE_SCREEN_MASTER.md — enforce in build + UI */
 
 export const PROFILE_LIMITS = {
   heroTagline: 110,

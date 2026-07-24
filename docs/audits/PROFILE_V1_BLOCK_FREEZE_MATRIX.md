@@ -1,6 +1,6 @@
 # Profile v1 — Block Freeze Matrix
 
-**Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md) § Profile v1 Freeze Checklist  
+**Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../profile/PROFILE_E2E_RECONSTRUCTION.md) § Profile v1 Freeze Checklist  
 **Surface SoT:** `frontend/src/components/profile/v2/ProfileV2SystemScreen.tsx` (+ `ProfileV2SkySection`, `ProfilePortalDeepSection`, `ProfileChartSection`)  
 **Block map (context):** [PROFILE_E2E_BLOCK_MAP.md](./PROFILE_E2E_BLOCK_MAP.md)  
 **Date:** 2026-07-21  
@@ -76,7 +76,7 @@ Legend: PASS only with proven 4 proofs. Remaining FAIL rows still block Profile 
 | 3 | `character_patterns` | birth vs longitudinal boundary |
 | 4 | `character_helps` | same gate · contract-only UI |
 | 5 | `direction_mission` | same gate · contract-only Direction |
-| *paused* | `character_decisions` | **PAUSED** — journey SoT first: [PROFILE_PRODUCT_SURFACE_CANON.md](../PROFILE_PRODUCT_SURFACE_CANON.md) |
+| *paused* | `character_decisions` | **PAUSED** — journey SoT first: [PROFILE_PRODUCT_SURFACE_CANON.md](../profile/PROFILE_PRODUCT_SURFACE_CANON.md) |
 
 Do not start next Freeze block until Product Surface Canon §5 DoD (Steps 1–2 human metrics). Freeze PASS ≠ «меня поняли / понятно почему».
 

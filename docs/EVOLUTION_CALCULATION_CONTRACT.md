@@ -6,7 +6,7 @@
 
 **Роль:** формализует **из чего** считается Evolution Score (ES), **какие сигналы** влияют, **какие нет**, **веса**, **стадии** и **требования перехода** — до появления поля `evolution_stage` в публичном API.
 
-**Связь:** [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md) (стадии и PEG), [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md) (milestone gates), [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md) (CUM inputs), [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) (commerce reads month/year, not ES directly).
+**Связь:** [USER_MODEL_TARGET_STATE.md](pim/USER_MODEL_TARGET_STATE.md) (стадии и PEG), [USER_MODEL_TARGET_STATE.md](pim/USER_MODEL_TARGET_STATE.md) (milestone gates), [USER_MODEL_TARGET_STATE.md](pim/USER_MODEL_TARGET_STATE.md) (CUM inputs), [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) (commerce reads month/year, not ES directly).
 
 ---
 
@@ -118,7 +118,7 @@ effective_ES_for_promotion = ES × confidence.overall
 
 **Demotion:** не применяется в v1 (stage sticky down only on account reset / explicit product rule).
 
-Полный список milestone gates — [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md).
+Полный список milestone gates — [USER_MODEL_TARGET_STATE.md](pim/USER_MODEL_TARGET_STATE.md).
 
 ---
 

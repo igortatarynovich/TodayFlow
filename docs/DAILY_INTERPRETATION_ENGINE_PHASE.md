@@ -2,9 +2,9 @@
 
 **Статус:** PLANNED — архитектурная фаза (не текущий execution slice)  
 **Владелец:** Product + Architecture  
-**Канон-база:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [PRODUCT_TRUTH_FIRST.md](./PRODUCT_TRUTH_FIRST.md) · [DAY_CONTEXT_V0.md](./DAY_CONTEXT_V0.md) · [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md) · [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md)  
+**Канон-база:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [PRODUCT_TRUTH_FIRST.md](./PRODUCT_TRUTH_FIRST.md) · [DAY_CONTEXT_V0.md](./DAY_CONTEXT_V0.md) · [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md) · [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md)  
 **Следующий артефакт:** [rfc/RFC_DAILY_STATE_V0.md](./rfc/RFC_DAILY_STATE_V0.md) (DRAFT) — схема + правила конфликтов; **не** макет и **не** генератор символов  
-**Канон текстов/советов:** [EXPLAINABLE_INTERPRETATION.md](./EXPLAINABLE_INTERPRETATION.md)
+**Канон текстов/советов:** [EXPLAINABLE_INTERPRETATION.md](explainability/EXPLAINABLE_INTERPRETATION.md)
 
 ---
 
@@ -106,7 +106,7 @@ UI показывает готовый `reason` с backend — **без** пов
 Ни одно практическое утверждение без цепочки обоснования.  
 Паттерны поведения важнее меню сфер.  
 Промпт = structured DailyState; выход = основание → интерпретация → одно действие.  
-Подробно: [EXPLAINABLE_INTERPRETATION.md](./EXPLAINABLE_INTERPRETATION.md).
+Подробно: [EXPLAINABLE_INTERPRETATION.md](explainability/EXPLAINABLE_INTERPRETATION.md).
 
 ---
 

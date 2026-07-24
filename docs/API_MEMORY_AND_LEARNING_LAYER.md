@@ -4,9 +4,9 @@
 **Версия:** 1.0 (2026-05-31).  
 **Владелец:** Product + Engineering.
 
-**Уровень:** рядом с [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md), [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md), [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md).
+**Уровень:** рядом с [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md), [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md), [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md).
 
-**Связь:** [USER_KNOWLEDGE_MODEL.md](./USER_KNOWLEDGE_MODEL.md) (Gate читает Knowledge, не events), [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) (сквозной PIL), [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) (orchestrator, quality gate), [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md) (events + `generation_id`), [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md).
+**Связь:** [USER_KNOWLEDGE_MODEL.md](pim/USER_KNOWLEDGE_MODEL.md) (Gate читает Knowledge, не events), [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md) (сквозной PIL), [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md) (orchestrator, quality gate), [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md) (events + `generation_id`), [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md).
 
 ---
 
@@ -53,7 +53,7 @@ context slice → API (или gate: no_call) → save response → UI
 
 ## 1. Purpose
 
-AMLL — подслой [Personal Intelligence Layer](./PERSONAL_INTELLIGENCE_LAYER.md), отвечающий за **жизненный цикл каждого LLM/API-вызова**:
+AMLL — подслой [Personal Intelligence Layer](pim/PERSONAL_INTELLIGENCE_LAYER.md), отвечающий за **жизненный цикл каждого LLM/API-вызова**:
 
 | Фаза | Что делает AMLL |
 |------|-----------------|
@@ -125,7 +125,7 @@ flowchart TD
 5. **Нужен ли LLM вообще?**  
 6. Если да — **минимальный** context slice + cheapest adequate model  
 
-**Build order:** LLM Call Gate v1 — **после** [USER_KNOWLEDGE_MODEL.md](./USER_KNOWLEDGE_MODEL.md) UKM-3 (Knowledge Store). Gate решает на **Knowledge slice**, не на сыром event log.
+**Build order:** LLM Call Gate v1 — **после** [USER_KNOWLEDGE_MODEL.md](pim/USER_KNOWLEDGE_MODEL.md) UKM-3 (Knowledge Store). Gate решает на **Knowledge slice**, не на сыром event log.
 
 ---
 

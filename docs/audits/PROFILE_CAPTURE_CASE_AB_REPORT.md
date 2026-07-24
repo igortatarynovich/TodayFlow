@@ -1,7 +1,7 @@
 # Profile Capture — Case A/B Comparative Report
 
 **Date:** 2026-07-21  
-**Parent:** [PROFILE_PRODUCTION_CAPTURE_PACK.md](./PROFILE_PRODUCTION_CAPTURE_PACK.md) · [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md)  
+**Parent:** [PROFILE_PRODUCTION_CAPTURE_PACK.md](./PROFILE_PRODUCTION_CAPTURE_PACK.md) · [PROFILE_E2E_RECONSTRUCTION.md](../profile/PROFILE_E2E_RECONSTRUCTION.md)  
 **life_spheres:** [PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md) · [PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md)  
 **Env fix:** `ffa50b5` (repo-root `.env` / Nebius) — closed separately  
 **Patterns GENERATION_GATE:** shipped (`72224ae`). **Spheres control-flow / projector:** not yet implemented.

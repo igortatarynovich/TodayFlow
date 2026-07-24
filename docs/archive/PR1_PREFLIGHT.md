@@ -3,8 +3,8 @@
 **Дата:** 2026-06-23  
 **Статус:** **Pre-flight complete** — достаточен для старта реализации; **код PR1 не начат**  
 **Следующий шаг:** PR с секциями [PR1_GATE_SECTIONS.md](./PR1_GATE_SECTIONS.md) (не ещё один doc)  
-**Канон:** [TODAY_SCREEN_V1_CANON.md](../TODAY_SCREEN_V1_CANON.md) §8–9 · [PIM_PR_GATE_V1.md](../PIM_PR_GATE_V1.md) §3  
-**Связанный diff:** [TODAY_CANON_VS_CODE_DIFF.md](./TODAY_CANON_VS_CODE_DIFF.md) (Step A, legacy `TodayRitualFlow`)
+**Канон:** [TODAY_SCREEN_V1_CANON.md](../TODAY_SCREEN_V1_CANON.md) §8–9 · [PIM_PR_GATE_V1.md](../pim/PIM_PR_GATE_V1.md) §3  
+**Связанный diff:** [TODAY_CANON_VS_CODE_DIFF.md](../status/TODAY_CANON_VS_CODE_DIFF.md) (Step A, legacy `TodayRitualFlow`)
 
 ---
 

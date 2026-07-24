@@ -1,6 +1,6 @@
 """Deterministic Profile Step-2 «why» projection (selected_by vs portrait_influenced_by).
 
-SoT: docs/PROFILE_PRODUCT_JOURNEY_FORMS_V1.md § Шаг 2
+SoT: docs/profile/PROFILE_PRODUCT_JOURNEY_FORMS_V1.md § Шаг 2
 No Snapshot fields — computed on read from existing core facts (like natal_summary).
 Production truth: archetype_seed is selected only from life_path (core_profile._build_baseline).
 """

@@ -17,7 +17,7 @@ npm run dev
 ```
 
 Environment variables (API base URLs, Stripe keys) will be pulled from `.env.local`.
-Keep all content rendering dumb — the backend API owns logic per [docs/CORE_PRODUCT_CANON.md](../docs/CORE_PRODUCT_CANON.md).
+Keep all content rendering dumb — the backend API owns logic per [docs/TODAYFLOW_PRODUCT_CANON_UNIFIED.md](../docs/TODAYFLOW_PRODUCT_CANON_UNIFIED.md).
 
 ## Routes to implement
 - `/` Landing page with CTA → Birth Chart form

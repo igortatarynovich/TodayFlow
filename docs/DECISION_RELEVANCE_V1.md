@@ -12,8 +12,8 @@
 
 | Документ | Роль |
 |----------|------|
-| [PERSONAL_INTELLIGENCE_MODEL_V1.md](./PERSONAL_INTELLIGENCE_MODEL_V1.md) | PIM; DRE / LRE inputs |
-| [USER_KNOWLEDGE_MODEL.md](./USER_KNOWLEDGE_MODEL.md) | `decision_relevance` на atoms; Context Selection §6 |
+| [PERSONAL_INTELLIGENCE_MODEL_V1.md](pim/PERSONAL_INTELLIGENCE_MODEL_V1.md) | PIM; DRE / LRE inputs |
+| [USER_KNOWLEDGE_MODEL.md](pim/USER_KNOWLEDGE_MODEL.md) | `decision_relevance` на atoms; Context Selection §6 |
 | [HUMAN_DECISION_MODEL_V1.md](./HUMAN_DECISION_MODEL_V1.md) | HDM claims — typically high relevance |
 | [TEMPORAL_IDENTITY_V1.md](./TEMPORAL_IDENTITY_V1.md) | historical + low relevance → archive |
 | [TODAY_INTERNAL_PATTERNS_V0.md](./TODAY_INTERNAL_PATTERNS_V0.md) | RAT → **Recognition Relevance Map** (hypothesis); параллельная ось curation |
@@ -125,7 +125,7 @@ Schema: `recognition_relevance_map.knowledge_investment_economics` in [TODAY_LAN
 
 **Не строить сейчас:** Discovery Validation Protocol · Discovery Engine · prod `discovery_relevance`.
 
-**Сейчас (post-PR2):** **Discovery Watchlist** — наблюдение без интерпретации. Поля: `first_seen_at` · `source_intent_record_ids[]` · `source_discovery_answers[]` · `reappeared_count` · `user_self_reference_count` · `linked_future_goals_count` · `linked_future_outcomes_count`. См. [TODAY_INTERNAL_PATTERNS_V0.md](./TODAY_INTERNAL_PATTERNS_V0.md) §Discovery Watchlist · [PR2_PREFLIGHT.md](./status/PR2_PREFLIGHT.md) §14.
+**Сейчас (post-PR2):** **Discovery Watchlist** — наблюдение без интерпретации. Поля: `first_seen_at` · `source_intent_record_ids[]` · `source_discovery_answers[]` · `reappeared_count` · `user_self_reference_count` · `linked_future_goals_count` · `linked_future_outcomes_count`. См. [TODAY_INTERNAL_PATTERNS_V0.md](./TODAY_INTERNAL_PATTERNS_V0.md) §Discovery Watchlist · [PR2_PREFLIGHT.md](./archive/PR2_PREFLIGHT.md) §14.
 
 **Fork review** *(не раньше ≥50–100 завершённых Intent Records + недели истории + contradiction events)*:
 
@@ -185,7 +185,7 @@ Schema: `recognition_relevance_map.knowledge_investment_economics` in [TODAY_LAN
 
 | Источник | Как |
 |----------|-----|
-| **Claim registry** | default tier per `domain` + `claim` ([USER_KNOWLEDGE_MODEL.md](./USER_KNOWLEDGE_MODEL.md) §3) |
+| **Claim registry** | default tier per `domain` + `claim` ([USER_KNOWLEDGE_MODEL.md](pim/USER_KNOWLEDGE_MODEL.md) §3) |
 | **Empirical lift** | atom correlated с goal outcomes / contradiction impact → tier ↑ |
 | **User utility** | save / «это про меня» / dismiss на guidance с atom ref → tier adjust |
 

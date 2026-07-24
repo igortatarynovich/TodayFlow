@@ -6,7 +6,7 @@
 
 **Роль:** зафиксировать **что TodayFlow продаёт** и **как система работает каждый день** — не как Q&A и не как набор esoteric модулей.
 
-**Связь:** [CORE_USER_LOOP.md](./CORE_USER_LOOP.md) (Theme → Action → Progress) · [TODAY_PRODUCT_MODEL.md](./TODAY_PRODUCT_MODEL.md) · [INTENT_MODEL_V1.md](./INTENT_MODEL_V1.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) · [CORE_PRODUCT_CANON.md](./CORE_PRODUCT_CANON.md).
+**Связь:** [CORE_USER_LOOP.md](./CORE_USER_LOOP.md) (Theme → Action → Progress) · [TODAY_PRODUCT_MODEL.md](./TODAY_PRODUCT_MODEL.md) · [INTENT_MODEL_V1.md](./INTENT_MODEL_V1.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) · [CORE_PRODUCT_CANON.md](archive/CORE_PRODUCT_CANON.md).
 
 ---
 

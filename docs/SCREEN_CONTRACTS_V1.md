@@ -44,7 +44,7 @@ Projection implementation    ← Reference / engines / Assembler
 | **Не engine dump** | Raw scores / планеты / traits без слоя Guidance — нарушение контракта |
 | **Паритет** | web · iOS · Android — одни и те же mandatory slots |
 | **Empty state** | Слот есть; честный fallback («мало данных»), не скрытие блока |
-| **PIM loop** | Каждый mandatory slot: **read CUM slice → give → learn**; не data-collection modal; см. [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) §3.1 |
+| **PIM loop** | Каждый mandatory slot: **read CUM slice → give → learn**; не data-collection modal; см. [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md) §3.1 |
 
 Каждый контракт = **acceptance test** для QA и для Assembler completeness check.
 
@@ -189,7 +189,7 @@ today_contract_v1:
 **Screen job:** живая база знаний (не snapshot, не паспорт знака/числа).  
 **Ценность Calendar** проявляется здесь — что **меняется** во времени.
 
-**C3 — контент и глубина:** [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) — типы данных, `source_depth`, base/extended/premium, запрет LLM на чужих read path, review packs.
+**C3 — контент и глубина:** [PROFILE_CONTENT_CANON_V1.md](profile/PROFILE_CONTENT_CANON_V1.md) — типы данных, `source_depth`, base/extended/premium, запрет LLM на чужих read path, review packs.
 
 ### 4.1 Mandatory elements
 

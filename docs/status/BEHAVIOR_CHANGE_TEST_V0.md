@@ -173,7 +173,7 @@ CORS `:3001` · demo 404 на `:3000` · onboarding → `FirstTodaySurface`.
 
 **Candidate behavior** *(hypothesis, not canon)*: один фокус → доведён до конца **чаще**.
 
-**AR freeze:** [PIM_PRODUCT_NORTH_STAR.md](../PIM_PRODUCT_NORTH_STAR.md) §0.2.
+**AR freeze:** [PIM_PRODUCT_NORTH_STAR.md](../archive/PIM_PRODUCT_NORTH_STAR.md) §0.2.
 
 ---
 

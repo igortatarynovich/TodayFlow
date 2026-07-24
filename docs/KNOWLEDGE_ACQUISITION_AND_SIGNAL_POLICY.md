@@ -4,9 +4,9 @@
 **Версия:** 1.0 (2026-05-31).  
 **Владелец:** Product + Engineering.
 
-**Уровень:** **до** [USER_KNOWLEDGE_MODEL.md](./USER_KNOWLEDGE_MODEL.md) — Knowledge строится **только** из разрешённых и описанных источников.
+**Уровень:** **до** [USER_KNOWLEDGE_MODEL.md](pim/USER_KNOWLEDGE_MODEL.md) — Knowledge строится **только** из разрешённых и описанных источников.
 
-**Связь:** [INTERPRETATION_LAYER_AND_REFERENCE.md](./INTERPRETATION_LAYER_AND_REFERENCE.md) (signal → meaning), [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md) (learned → knowledge lifecycle), [USER_KNOWLEDGE_MODEL.md](./USER_KNOWLEDGE_MODEL.md), [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md), [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md) (event names), [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md), [API_MEMORY_AND_LEARNING_LAYER.md](./API_MEMORY_AND_LEARNING_LAYER.md), [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md).
+**Связь:** [INTERPRETATION_LAYER_AND_REFERENCE.md](explainability/INTERPRETATION_LAYER_AND_REFERENCE.md) (signal → meaning), [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md) (learned → knowledge lifecycle), [USER_KNOWLEDGE_MODEL.md](pim/USER_KNOWLEDGE_MODEL.md), [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md), [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md) (event names), [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md), [API_MEMORY_AND_LEARNING_LAYER.md](./API_MEMORY_AND_LEARNING_LAYER.md), [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md).
 
 ---
 
@@ -31,7 +31,7 @@ Reference → Profile
   → Interpretation Engine → Confirmation → Knowledge → Memory → Context → LLM → Feedback
 ```
 
-**UKM** применяется только к данным, прошедшим KASP + ILR, и **только** если двигает [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md) §2–§3.
+**UKM** применяется только к данным, прошедшим KASP + ILR, и **только** если двигает [USER_MODEL_TARGET_STATE.md](pim/USER_MODEL_TARGET_STATE.md) §2–§3.
 
 ---
 
@@ -51,7 +51,7 @@ Reference → Profile
 
 ## 2. Три типа знания (knowledge_type)
 
-В [USER_KNOWLEDGE_MODEL.md](./USER_KNOWLEDGE_MODEL.md) каждый Knowledge Atom **обязан** иметь:
+В [USER_KNOWLEDGE_MODEL.md](pim/USER_KNOWLEDGE_MODEL.md) каждый Knowledge Atom **обязан** иметь:
 
 | `knowledge_type` | Определение | Источники (типично) | В LLM / рекомендациях |
 |------------------|-------------|---------------------|------------------------|

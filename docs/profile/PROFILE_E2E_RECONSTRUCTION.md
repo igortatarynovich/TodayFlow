@@ -3,7 +3,7 @@
 **Status:** ACTIVE — сквозной этап (не UI redesign)  
 **Started:** 2026-07-21  
 **Product surface SoT:** [PROFILE_PRODUCT_SURFACE_CANON.md](./PROFILE_PRODUCT_SURFACE_CANON.md) — **выше** inventory Freeze-матрицы для смысла скролла  
-**Parent canons:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) · [PR4_PROFILE_CANON.md](./PR4_PROFILE_CANON.md) · [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](./UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md) · [TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md)
+**Parent canons:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) · [PR4_PROFILE_CANON.md](../archive/PR4_PROFILE_CANON.md) · [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](../UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md) · [TODAYFLOW_VOICE_CANON.md](../content/TODAYFLOW_VOICE_CANON.md)
 
 > **Запрет на этом этапе:** рисовать новый экран · переписывать промпты «на глаз» · чинить тексты без доказанной точки в цепочке · объяснять брак фразой «модель выдумала».  
 > **Пауза (2026-07-21):** следующий Freeze-блок (`character_decisions`) и косметика V2 — пока не закрыт Product Surface Canon §5 (путешествие: узнал себя → понял почему). Pipeline passports = механизм под шаги, не цель экрана.
@@ -65,7 +65,7 @@ Capture фиксирует `may_generate` vs `ran`.
 > Ни один пользовательский текст не описывает состояние системы.  
 > Любой текст описывает человека, смысл данных или ценность следующего шага.
 
-Канон: [TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md) §0.05–§0.06 · весь TodayFlow.
+Канон: [TODAYFLOW_VOICE_CANON.md](../content/TODAYFLOW_VOICE_CANON.md) §0.05–§0.06 · весь TodayFlow.
 
 ### Порядок проектирования блока
 
@@ -83,7 +83,7 @@ Capture фиксирует `may_generate` vs `ran`.
 Недостаточно данных → генерация **не запускается** (не «попроси не выдумывать»).  
 Ответ ≠ паспорт → не публиковать; дорабатывать prompt/contract до стабильности.
 
-**Passport template:** [audits/PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](./audits/PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md)
+**Passport template:** [audits/PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](../audits/PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md)
 
 ### Пример: Patterns
 
@@ -108,25 +108,25 @@ Production-faithful pack должен это **доказать** (eligibility +
 | # | Artifact | Path | Status |
 |---|----------|------|--------|
 | 0 | Architecture principle + defect classes | this doc | **canon** |
-| 0b | Block passport template | [audits/PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](./audits/PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md) | **v0** |
-| 0c | Block passport · `life_spheres` | [audits/PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./audits/PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md) | **PASS** Freeze — [PROFILE_CAPTURE_LIFE_SPHERES_FREEZE_ABC.md](./audits/PROFILE_CAPTURE_LIFE_SPHERES_FREEZE_ABC.md) |
-| 0d | Deterministic projector · cues kitchen | [audits/PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](./audits/PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md) | A/B + cue/trait kitchen — **not** user-copy SoT |
-| 0e | Quality review · love/money/decisions | [audits/PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md](./audits/PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md) | projector baseline + synthesis wire Case A/B |
-| 0f | Spheres synthesis passport | [audits/PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md](./audits/PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md) | **wired** — cues → prompt → validate → Snapshot |
+| 0b | Block passport template | [audits/PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](../audits/PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md) | **v0** |
+| 0c | Block passport · `life_spheres` | [audits/PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](../audits/PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md) | **PASS** Freeze — [PROFILE_CAPTURE_LIFE_SPHERES_FREEZE_ABC.md](../audits/PROFILE_CAPTURE_LIFE_SPHERES_FREEZE_ABC.md) |
+| 0d | Deterministic projector · cues kitchen | [audits/PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md](../audits/PROFILE_LIFE_SPHERES_DETERMINISTIC_PROJECTOR_V0.md) | A/B + cue/trait kitchen — **not** user-copy SoT |
+| 0e | Quality review · love/money/decisions | [audits/PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md](../audits/PROFILE_LIFE_SPHERES_QUALITY_REVIEW_V0.md) | projector baseline + synthesis wire Case A/B |
+| 0f | Spheres synthesis passport | [audits/PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md](../audits/PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md) | **wired** — cues → prompt → validate → Snapshot |
 | 0g | P5 Canonical Context Engine | [rfc/RFC_CANONICAL_CONTEXT_ENGINE_V0.md](./rfc/RFC_CANONICAL_CONTEXT_ENGINE_V0.md) · [audits/CONTEXT_ENGINE_P5_FIRST_SLICE.md](./audits/CONTEXT_ENGINE_P5_FIRST_SLICE.md) | **STOPPED** — keep thin in-use mapping only; no further slices |
-| 1 | Pipeline map (registration → UI + alt paths) | [audits/PROFILE_E2E_PIPELINE_MAP.md](./audits/PROFILE_E2E_PIPELINE_MAP.md) | **v0** |
-| 2 | Prompt registry (passports) | [audits/PROFILE_E2E_PROMPT_REGISTRY.md](./audits/PROFILE_E2E_PROMPT_REGISTRY.md) | **v0 — align to block passport** |
-| 3 | Block map (every surface block) | [audits/PROFILE_E2E_BLOCK_MAP.md](./audits/PROFILE_E2E_BLOCK_MAP.md) | **v0 — current reality** |
-| 3b | Block Freeze Matrix (ship-gate) | [audits/PROFILE_V1_BLOCK_FREEZE_MATRIX.md](./audits/PROFILE_V1_BLOCK_FREEZE_MATRIX.md) | **ACTIVE** — close one block at a time |
-| 3c | Block passport · `identity` | [audits/PROFILE_E2E_BLOCK_PASSPORT_IDENTITY.md](./audits/PROFILE_E2E_BLOCK_PASSPORT_IDENTITY.md) | **PASS** — [PROFILE_CAPTURE_IDENTITY_FREEZE_A.md](./audits/PROFILE_CAPTURE_IDENTITY_FREEZE_A.md) |
-| 4 | Sample pack through full pipeline | [audits/PROFILE_E2E_SAMPLE_PACK.md](./audits/PROFILE_E2E_SAMPLE_PACK.md) | **v0 — existing eval + gaps** |
-| 4b | Production-faithful capture harness | [audits/PROFILE_PRODUCTION_CAPTURE_PACK.md](./audits/PROFILE_PRODUCTION_CAPTURE_PACK.md) | **IMPLEMENTATION** |
-| 4c | Case A/B capture report | [audits/PROFILE_CAPTURE_CASE_AB_REPORT.md](./audits/PROFILE_CAPTURE_CASE_AB_REPORT.md) | **v0 — packs run** |
+| 1 | Pipeline map (registration → UI + alt paths) | [audits/PROFILE_E2E_PIPELINE_MAP.md](../audits/PROFILE_E2E_PIPELINE_MAP.md) | **v0** |
+| 2 | Prompt registry (passports) | [audits/PROFILE_E2E_PROMPT_REGISTRY.md](../audits/PROFILE_E2E_PROMPT_REGISTRY.md) | **v0 — align to block passport** |
+| 3 | Block map (every surface block) | [audits/PROFILE_E2E_BLOCK_MAP.md](../audits/PROFILE_E2E_BLOCK_MAP.md) | **v0 — current reality** |
+| 3b | Block Freeze Matrix (ship-gate) | [audits/PROFILE_V1_BLOCK_FREEZE_MATRIX.md](../audits/PROFILE_V1_BLOCK_FREEZE_MATRIX.md) | **ACTIVE** — close one block at a time |
+| 3c | Block passport · `identity` | [audits/PROFILE_E2E_BLOCK_PASSPORT_IDENTITY.md](../audits/PROFILE_E2E_BLOCK_PASSPORT_IDENTITY.md) | **PASS** — [PROFILE_CAPTURE_IDENTITY_FREEZE_A.md](../audits/PROFILE_CAPTURE_IDENTITY_FREEZE_A.md) |
+| 4 | Sample pack through full pipeline | [audits/PROFILE_E2E_SAMPLE_PACK.md](../audits/PROFILE_E2E_SAMPLE_PACK.md) | **v0 — existing eval + gaps** |
+| 4b | Production-faithful capture harness | [audits/PROFILE_PRODUCTION_CAPTURE_PACK.md](../audits/PROFILE_PRODUCTION_CAPTURE_PACK.md) | **IMPLEMENTATION** |
+| 4c | Case A/B capture report | [audits/PROFILE_CAPTURE_CASE_AB_REPORT.md](../audits/PROFILE_CAPTURE_CASE_AB_REPORT.md) | **v0 — packs run** |
 | 5 | Degradation points (architectural classes only) | capture packs + maps | **v0** |
 | 6 | Missing-data matrix · trial/free/sub content plan | Understanding Progress canon + block map | partial |
 | 7 | Target architecture + Screen Master rewrite | *later* | not started |
 | 8 | Contract tests per layer | *later* | not started |
-| 9 | Downstream Snapshot consumption proof | [PROFILE_AS_SOURCE_CONSUMPTION_AUDIT.md](./audits/PROFILE_AS_SOURCE_CONSUMPTION_AUDIT.md) | exists |
+| 9 | Downstream Snapshot consumption proof | [PROFILE_AS_SOURCE_CONSUMPTION_AUDIT.md](../audits/PROFILE_AS_SOURCE_CONSUMPTION_AUDIT.md) | exists |
 
 ---
 
@@ -143,7 +143,7 @@ Production-faithful pack должен это **доказать** (eligibility +
 **Запрет в этом slice:** новые engines · registries · RFC · общие слои · redesign всего экрана · target-блоки · старт Today / DailyState.
 
 **Закрыто:** `identity` · `life_spheres` = **PASS**.  
-**Следующий (рекомендован):** `character_patterns` — граница birth vs longitudinal. Только из [PROFILE_V1_BLOCK_FREEZE_MATRIX.md](./audits/PROFILE_V1_BLOCK_FREEZE_MATRIX.md), один за раз.
+**Следующий (рекомендован):** `character_patterns` — граница birth vs longitudinal. Только из [PROFILE_V1_BLOCK_FREEZE_MATRIX.md](../audits/PROFILE_V1_BLOCK_FREEZE_MATRIX.md), один за раз.
 
 SoT capture: `run_production_capture_v0.py`.
 
@@ -174,13 +174,13 @@ SoT capture: `run_production_capture_v0.py`.
 > Канон — это состояние, в котором **существующие** функции **закончены**.
 
 Любая работа по пунктам ниже допускается только если ответ «да» хотя бы на один вопрос: текст полезнее · блок понятнее · UI лучше.  
-«Ещё один слой инфраструктуры» → **не делать** ([PRODUCT_TRUTH_FIRST.md](./PRODUCT_TRUTH_FIRST.md) · architecture-must-prove-value).
+«Ещё один слой инфраструктуры» → **не делать** ([PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md) · architecture-must-prove-value).
 
 ### 1. Product completeness
 
 | # | Критерий | Доказательство | Status |
 |---|----------|----------------|--------|
-| 1.1 | Каждый production-блок имеет **утверждённый** паспорт | 1:1 с [audits/PROFILE_E2E_BLOCK_MAP.md](./audits/PROFILE_E2E_BLOCK_MAP.md) + отдельный passport file / секция | OPEN |
+| 1.1 | Каждый production-блок имеет **утверждённый** паспорт | 1:1 с [audits/PROFILE_E2E_BLOCK_MAP.md](../audits/PROFILE_E2E_BLOCK_MAP.md) + отдельный passport file / секция | OPEN |
 | 1.2 | Нет production-блоков без паспорта | audit block map × UI × Snapshot fields | OPEN |
 | 1.3 | Нет паспортов без существующего production-блока | orphan passport = удалить или пометить `not shipped` | OPEN |
 
@@ -197,7 +197,7 @@ SoT capture: `run_production_capture_v0.py`.
 
 | # | Критерий | Доказательство | Status |
 |---|----------|----------------|--------|
-| 3.1 | Каждый LLM-prompt блока проходит evaluation | production-faithful pack / Case A/B ([PROFILE_PRODUCTION_CAPTURE_PACK.md](./audits/PROFILE_PRODUCTION_CAPTURE_PACK.md)) | OPEN |
+| 3.1 | Каждый LLM-prompt блока проходит evaluation | production-faithful pack / Case A/B ([PROFILE_PRODUCTION_CAPTURE_PACK.md](../audits/PROFILE_PRODUCTION_CAPTURE_PACK.md)) | OPEN |
 | 3.2 | Контракт стабилен | raw → validate → Snapshot соответствует passport; иначе не publish | OPEN |
 | 3.3 | Известные дефекты закрыты **или** явное limitation в passport/kitchen (не тихий брак) | defect log с классом; UI не врёт | OPEN |
 
@@ -230,7 +230,7 @@ SoT capture: `run_production_capture_v0.py`.
 
 | # | Действие |
 |---|----------|
-| 7.1 | Объявить **Profile v1 Canon** (статус в этом doc + [PR4_PROFILE_CANON.md](./PR4_PROFILE_CANON.md) / Content Canon ссылка на Freeze). |
+| 7.1 | Объявить **Profile v1 Canon** (статус в этом doc + [PR4_PROFILE_CANON.md](../archive/PR4_PROFILE_CANON.md) / Content Canon ссылка на Freeze). |
 | 7.2 | Дальнейшие изменения Profile **только** при одном из оснований: (a) подтверждённый UX-дефект; (b) bugfix; (c) новый production-блок с полным паспортом. |
 | 7.3 | Экран Today и остальные — копируют **способ мышления** (паспорт → eligibility → контракт → capture → UI), не наращивают отдельную архитектуру «как у Profile». |
 
@@ -243,7 +243,7 @@ SoT capture: `run_production_capture_v0.py`.
 | Date | Change |
 |------|--------|
 | 2026-07-21 | Stage opened; pipeline / prompt / block / sample-pack v0 from code audit |
-| 2026-07-21 | Capture harness shipped — [PROFILE_PRODUCTION_CAPTURE_PACK.md](./audits/PROFILE_PRODUCTION_CAPTURE_PACK.md) |
+| 2026-07-21 | Capture harness shipped — [PROFILE_PRODUCTION_CAPTURE_PACK.md](../audits/PROFILE_PRODUCTION_CAPTURE_PACK.md) |
 | 2026-07-21 | Architecture principle: no MODEL blame; block passport template; defect classes |
 | 2026-07-21 | Hardened: model = contract executor; block_eligibility before prompt; Voice §0.05 person-not-system |
 | 2026-07-21 | Profile v1 Freeze Checklist (ship-gate) + canon principle: finished existing functions, not max features |

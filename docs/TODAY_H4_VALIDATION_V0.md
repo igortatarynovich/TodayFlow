@@ -5,7 +5,7 @@
 **Гипотеза:** H4 Observable · **H5 candidate:** [TODAY_SELF_VERIFICATION_V0.md](./TODAY_SELF_VERIFICATION_V0.md)  
 **Dataset:** [datasets/TODAY_H4_VALIDATION_V0.json](./datasets/TODAY_H4_VALIDATION_V0.json)
 
-**Связь:** [TODAY_LANGUAGE_CALIBRATION_V0.md](./TODAY_LANGUAGE_CALIBRATION_V0.md) · TL-0C.5
+**Связь:** [TODAY_LANGUAGE_CALIBRATION_V0.md](today-language/TODAY_LANGUAGE_CALIBRATION_V0.md) · TL-0C.5
 
 ---
 

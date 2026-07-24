@@ -5,7 +5,7 @@
 **Владелец:** Product + Architecture + Engineering + Content  
 
 **Дочерние каноны:**  
-[PRODUCT_TRUTH_FIRST.md](./PRODUCT_TRUTH_FIRST.md) · [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](./UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md) · [EXPLAINABLE_INTERPRETATION.md](./EXPLAINABLE_INTERPRETATION.md) · [EXPLAIN_MEANING_NOT_MECHANISM.md](./EXPLAIN_MEANING_NOT_MECHANISM.md) · [rfc/RFC_DAILY_STATE_V0.md](./rfc/RFC_DAILY_STATE_V0.md) · [content/TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md)
+[PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md) · [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](../UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md) · [EXPLAINABLE_INTERPRETATION.md](./EXPLAINABLE_INTERPRETATION.md) · [EXPLAIN_MEANING_NOT_MECHANISM.md](./EXPLAIN_MEANING_NOT_MECHANISM.md) · [rfc/RFC_DAILY_STATE_V0.md](../rfc/RFC_DAILY_STATE_V0.md) · [content/TODAYFLOW_VOICE_CANON.md](../content/TODAYFLOW_VOICE_CANON.md)
 
 ---
 
@@ -137,7 +137,7 @@
 
 ## 3. Смысловой вывод
 
-Значение сигналов — по утверждённой системе правил, весов и конфликтов ([RFC DailyState K3](./rfc/RFC_DAILY_STATE_V0.md)), не свободная фантазия.
+Значение сигналов — по утверждённой системе правил, весов и конфликтов ([RFC DailyState K3](../rfc/RFC_DAILY_STATE_V0.md)), не свободная фантазия.
 
 Примеры допустимых machine-claims:
 
@@ -168,7 +168,7 @@
 
 ## 5. Пользовательский текст
 
-Короткий грамотный вывод человеческим языком наставника ([TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md)).
+Короткий грамотный вывод человеческим языком наставника ([TODAYFLOW_VOICE_CANON.md](../content/TODAYFLOW_VOICE_CANON.md)).
 
 Формируется **только после** шагов 1–4.
 
@@ -326,7 +326,7 @@ EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md   ← этот документ (u
 
 Сквозной реестр генераторов и projection:
 
-**[audits/EXPLAINABLE_GENERATION_AUDIT_REGISTRY_V0.md](./audits/EXPLAINABLE_GENERATION_AUDIT_REGISTRY_V0.md)**
+**[audits/EXPLAINABLE_GENERATION_AUDIT_REGISTRY_V0.md](../audits/EXPLAINABLE_GENERATION_AUDIT_REGISTRY_V0.md)**
 
 Формат строки: `generator → inputs → calculation → prompt → output schema → trace → violations → remediation`.
 

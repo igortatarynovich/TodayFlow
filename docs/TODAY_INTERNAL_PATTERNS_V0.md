@@ -5,7 +5,7 @@
 **Родитель:** [TODAY_ANCHOR_TYPES_V0.md](./TODAY_ANCHOR_TYPES_V0.md) · AT-006 Internal Anchor  
 **Dataset:** [datasets/TODAY_LANGUAGE_CALIBRATION_V0.json](./datasets/TODAY_LANGUAGE_CALIBRATION_V0.json) · поле `internal_pattern_ids[]`
 
-**Связь:** [TODAY_LANGUAGE_CALIBRATION_V0.md](./TODAY_LANGUAGE_CALIBRATION_V0.md) · [DECISION_RELEVANCE_V1.md](./DECISION_RELEVANCE_V1.md) (C17) · PIM: [INTENT_MODEL_V1.md](./INTENT_MODEL_V1.md)
+**Связь:** [TODAY_LANGUAGE_CALIBRATION_V0.md](today-language/TODAY_LANGUAGE_CALIBRATION_V0.md) · [DECISION_RELEVANCE_V1.md](./DECISION_RELEVANCE_V1.md) (C17) · PIM: [INTENT_MODEL_V1.md](./INTENT_MODEL_V1.md)
 
 **Не путать с PIM:** «Internal patterns» — **editorial taxonomy** повторяющихся объяснительных конструкций. **Не** доказанный platform layer «IPL». См. § «Что доказано vs что нет».
 
@@ -176,7 +176,7 @@ Dataset expansion **PAUSED**. Риск: построить вторую «кра
 | contracts | **измерение** |
 | consumers | **модель** → **только потом** платформенный слой |
 
-См. [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md) · [PIM_PR_GATE_V1.md](./PIM_PR_GATE_V1.md) C18 freeze.
+См. [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md) · [PIM_PR_GATE_V1.md](pim/PIM_PR_GATE_V1.md) C18 freeze.
 
 ### Что сейчас — реальность vs гипотеза *(2026-06-23)*
 
@@ -358,7 +358,7 @@ RRM *(recognition map)* — **часть** KIP, не весь KIP. Discovery —
 
 > **Решение (2026-06-23):** не строить **Discovery Validation Protocol** и **не** проектировать Discovery Engine до появления реальных Intent Records в проде. Аналог C10–C17: без write-path нельзя знать, какие сигналы возникают, как часто, что противоречит, что знание vs шум.
 
-**Сейчас:** только **Discovery Watchlist** — наблюдение, не архитектура · без интерпретации. См. §Discovery Watchlist · [PR2_PREFLIGHT.md](./status/PR2_PREFLIGHT.md) §14.
+**Сейчас:** только **Discovery Watchlist** — наблюдение, не архитектура · без интерпретации. См. §Discovery Watchlist · [PR2_PREFLIGHT.md](./archive/PR2_PREFLIGHT.md) §14.
 
 | Fork A | Fork B |
 |--------|--------|
@@ -1016,7 +1016,7 @@ Schema: [TODAY_LANGUAGE_CALIBRATION_V0.json](./datasets/TODAY_LANGUAGE_CALIBRATI
 | **Gate question** | «У нас уже есть **наблюдаемое явление** — или только правдоподобная теория?» |
 | **C18+ gate** | «**Какое наблюдаемое явление не может быть объяснено текущим стеком?**» — нет ответа → слой не нужен |
 | **Failure mode** | Месяцы на Engine / Registry / Policy для сущности, которая не существовала отдельно |
-| **Mitigation** | §Стоп-условие · §Platform Layer Gate · data-first · PR2 создаёт явление · Watchlist без выводов · [PIM_PR_GATE_V1.md](./PIM_PR_GATE_V1.md) C18 freeze |
+| **Mitigation** | §Стоп-условие · §Platform Layer Gate · data-first · PR2 создаёт явление · Watchlist без выводов · [PIM_PR_GATE_V1.md](pim/PIM_PR_GATE_V1.md) C18 freeze |
 
 **Asymmetric cost:** подождать ≈ бесплатно · ошибочная канонизация Discovery-оси = месяцы лишней работы. Fork B может снять need for Discovery policy entirely.
 
@@ -1038,7 +1038,7 @@ Schema: [TODAY_LANGUAGE_CALIBRATION_V0.json](./datasets/TODAY_LANGUAGE_CALIBRATI
 
 **Phase:** pre-PR2 = phenomenon creation · post-PR2 prod data = knowledge extraction *(Discovery fork · KIP · IPL)*.
 
-**PR2 Success Criterion** *(не merge gate)*: retention **и** IR as byproduct — см. [PR2_PREFLIGHT.md](./status/PR2_PREFLIGHT.md) §15 · AR-012. IR-only success без D7/D10 = **instrumentation trap**.
+**PR2 Success Criterion** *(не merge gate)*: retention **и** IR as byproduct — см. [PR2_PREFLIGHT.md](./archive/PR2_PREFLIGHT.md) §15 · AR-012. IR-only success без D7/D10 = **instrumentation trap**.
 
 **Roadmap gate question:** создаём **поток фактов** быстрее, чем **новые гипотезы**? *(только если продукт уже даёт причину вернуться — иначе см. AR-012)*
 

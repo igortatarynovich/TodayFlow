@@ -206,5 +206,5 @@ python3 scripts/analyze_i18n_quality.py
 
 **См. также:**
 - `docs/i18n/Translation_Guide.md` — правила мультиязычности
-- `docs/TODAY_LANGUAGE_V1.md` — язык и качество копирайта Today
+- `docs/today-language/TODAY_LANGUAGE_V1.md` — язык и качество копирайта Today
 

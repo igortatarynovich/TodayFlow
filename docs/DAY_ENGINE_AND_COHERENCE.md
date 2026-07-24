@@ -1,7 +1,7 @@
 # Day Engine и цельность продукта (аудит → направление)
 
 **Статус:** канон продуктово-инженерного направления (не маркетинг).  
-**Связь:** [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md), [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md), [CORE_PRODUCT_CANON.md](./CORE_PRODUCT_CANON.md). **Выполнение:** чеклист DE-1…DE-13 и порядок работ — [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md) §4.7, §5.3.  
+**Связь:** [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md), [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md), [CORE_PRODUCT_CANON.md](archive/CORE_PRODUCT_CANON.md). **Выполнение:** чеклист DE-1…DE-13 и порядок работ — [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md) §4.7, §5.3.  
 **Паритет:** web и iOS должны опираться на одни и те же контракты данных и один смысл «дня».  
 **Центральная логика:** [§10 DayModel](#10-daymodel-и-decision-engine-закрытый-канон) — без этого слоя текст и UI не имеют опоры.
 
@@ -114,7 +114,7 @@
 - Ритуал как вход, карта и число как якоря.  
 - Поверхности narrative (`guide`, `spheres`, `evening`, …), `ritual_context`, fusion, вечер.  
 - Flow как зона действий.  
-- Контур обучения и событий в [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) и [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md).
+- Контур обучения и событий в [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md) и [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md).
 
 **Главный разрыв не «нет фич», а недостаточная связка и явная причинность.**
 

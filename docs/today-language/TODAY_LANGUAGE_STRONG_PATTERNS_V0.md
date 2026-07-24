@@ -22,7 +22,7 @@
 
 **Связь с RULE_004 (Ставка):** почти каждый SP включает tension — что можно потерять, от чего устали, чего боимся услышать.
 
-**Источники `examples_good`:** editorial canon · [TODAY_LANGUAGE_CALIBRATION_V0.json](./datasets/TODAY_LANGUAGE_CALIBRATION_V0.json) (score 8–10) · единичные `api_live` где форма уже проявилась.  
+**Источники `examples_good`:** editorial canon · [TODAY_LANGUAGE_CALIBRATION_V0.json](../datasets/TODAY_LANGUAGE_CALIBRATION_V0.json) (score 8–10) · единичные `api_live` где форма уже проявилась.  
 **Важно:** в export 323 logs **большинство SP почти не встречаются** — это целевая библиотека, не описание текущего LLM-output.
 
 ---

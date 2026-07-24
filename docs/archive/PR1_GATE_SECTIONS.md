@@ -2,7 +2,7 @@
 
 **Статус:** draft для копирования в PR description при открытии PR1  
 **Pre-flight:** [PR1_PREFLIGHT.md](./PR1_PREFLIGHT.md)  
-**Gate:** [PIM_PR_GATE_V1.md](../PIM_PR_GATE_V1.md) §1, §3, §5
+**Gate:** [PIM_PR_GATE_V1.md](../pim/PIM_PR_GATE_V1.md) §1, §3, §5
 
 Заполнять **фактическими** значениями после реализации; до merge — заменить `TBD` / `expected` на ссылки на код, тесты, audit log sample.
 

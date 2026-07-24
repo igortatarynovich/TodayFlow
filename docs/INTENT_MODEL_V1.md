@@ -12,9 +12,9 @@
 
 | Документ | Роль |
 |----------|------|
-| [PERSONAL_INTELLIGENCE_MODEL_V1.md](./PERSONAL_INTELLIGENCE_MODEL_V1.md) | PIM — контейнер; IM — **подграф** |
+| [PERSONAL_INTELLIGENCE_MODEL_V1.md](pim/PERSONAL_INTELLIGENCE_MODEL_V1.md) | PIM — контейнер; IM — **подграф** |
 | [HUMAN_DECISION_MODEL_V1.md](./HUMAN_DECISION_MODEL_V1.md) | HDM читает паттерны из IM (decision style, stress) |
-| [USER_KNOWLEDGE_MODEL.md](./USER_KNOWLEDGE_MODEL.md) | Паттерны IM → Knowledge Atoms (`domain: intent`) |
+| [USER_KNOWLEDGE_MODEL.md](pim/USER_KNOWLEDGE_MODEL.md) | Паттерны IM → Knowledge Atoms (`domain: intent`) |
 | [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) | Goal Loop S6–S10 — **главный поставщик** IM records |
 
 **North star:**
@@ -84,7 +84,7 @@ Intent Model (per user)
 | Slip correlates | `intent.slip_when_*` | что ведёт к срыву |
 | Post-goal behavior | `intent.action_within_2h_rate` | дисциплина после намерения |
 
-Все derived patterns — **Knowledge Atoms** ([USER_KNOWLEDGE_MODEL.md](./USER_KNOWLEDGE_MODEL.md) §2), не поля без provenance.
+Все derived patterns — **Knowledge Atoms** ([USER_KNOWLEDGE_MODEL.md](pim/USER_KNOWLEDGE_MODEL.md) §2), не поля без provenance.
 
 ---
 
@@ -102,7 +102,7 @@ S10 outcome     → outcome + outcome_note (**signal** on record)
 
 **Запрещено:** цель только в local state / только в day API response без Intent Record + PIM path (R10, R22, R23).
 
-**Владелец:** Intent Model (PIM) — не Today, не Evening Reflection. Evening = signal; outcome = поле **Intent Record**. Тест: [PIM_PR_GATE_V1.md](./PIM_PR_GATE_V1.md) §1.2, §4.8.
+**Владелец:** Intent Model (PIM) — не Today, не Evening Reflection. Evening = signal; outcome = поле **Intent Record**. Тест: [PIM_PR_GATE_V1.md](pim/PIM_PR_GATE_V1.md) §1.2, §4.8.
 
 ---
 

@@ -1,3 +1,5 @@
+> ⚠️ STALE — не отражает Journey/Day Sources. См. [audits/FULL_USER_PATH_CANON_V1.md](../audits/FULL_USER_PATH_CANON_V1.md). Полная ревизия — отдельная задача.
+
 # Today · Step A — Canon vs Code Diff
 
 **Дата:** 2026-07-02  
@@ -8,7 +10,7 @@
 
 **Web launch v1 (2026-07-01):** diff для launch path — [WEB_LAUNCH_EXECUTION_PLAN.md](./WEB_LAUNCH_EXECUTION_PLAN.md).
 
-**Stack:** [PERSONAL_INTELLIGENCE_MODEL_V1.md](../PERSONAL_INTELLIGENCE_MODEL_V1.md) · Today canon **v4.0** §11 · Composition Today v1.
+**Stack:** [PERSONAL_INTELLIGENCE_MODEL_V1.md](../pim/PERSONAL_INTELLIGENCE_MODEL_V1.md) · Today canon **v4.0** §11 · Composition Today v1.
 
 ---
 
@@ -137,7 +139,7 @@ Default /today
 
 ## Следующий шаг
 
-**PR gate:** [PIM_PR_GATE_V1.md](../PIM_PR_GATE_V1.md) — PR1 §3, PR2 §4. **Freeze C18** до прохождения стека в коде.
+**PR gate:** [PIM_PR_GATE_V1.md](../pim/PIM_PR_GATE_V1.md) — PR1 §3, PR2 §4. **Freeze C18** до прохождения стека в коде.
 
 **Канон Today:** [TODAY_SCREEN_V1_CANON.md](../TODAY_SCREEN_V1_CANON.md) v3.0 `ACCEPTED`. P0.2 — PR1 → PR2 по PIM gate.
 

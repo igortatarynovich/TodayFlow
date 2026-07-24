@@ -3,9 +3,9 @@
 **Статус:** ACTIVE — канон продуктовой модели TodayFlow  
 **Уровень:** после umbrella и Product Truth First; выше отдельных модулей (Profile · Today · Tarot · Compatibility · Goals · Practices · любые будущие)  
 **Владелец:** Product + Architecture + Engineering  
-**Umbrella:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md)  
-**Display honesty:** [PRODUCT_TRUTH_FIRST.md](./PRODUCT_TRUTH_FIRST.md) · [EXPLAIN_MEANING_NOT_MECHANISM.md](./EXPLAIN_MEANING_NOT_MECHANISM.md)  
-**Profile surface:** [PR4_PROFILE_CANON.md](./PR4_PROFILE_CANON.md)  
+**Umbrella:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md)  
+**Display honesty:** [PRODUCT_TRUTH_FIRST.md](./PRODUCT_TRUTH_FIRST.md) · [EXPLAIN_MEANING_NOT_MECHANISM.md](explainability/EXPLAIN_MEANING_NOT_MECHANISM.md)  
+**Profile surface:** [PR4_PROFILE_CANON.md](./archive/PR4_PROFILE_CANON.md)  
 **Availability SoT (экраны · доступ · блоки):** [PRODUCT_AVAILABILITY_MATRIX.md](./PRODUCT_AVAILABILITY_MATRIX.md) — **до APPROVED матрицы не менять Profile/Today IA**.
 
 ---
@@ -16,7 +16,7 @@
 
 Из этого следуют все решения ниже: нет пустых экранов; нет искусственно обрезанных блоков; отсутствующие данные всегда с объяснением ценности; подписка увеличивает **глубину анализа**, а не прячет «основную часть продукта»; Profile (и Personal Model) богатеет по мере подтверждённых данных и взаимодействия.
 
-Companion ([PR4](./PR4_PROFILE_CANON.md) / [EXPLAIN_MEANING](./EXPLAIN_MEANING_NOT_MECHANISM.md)):
+Companion ([PR4](./archive/PR4_PROFILE_CANON.md) / [EXPLAIN_MEANING](explainability/EXPLAIN_MEANING_NOT_MECHANISM.md)):
 
 > Интерфейс показывает **не максимум данных**, а **максимум понимания**.
 
@@ -174,7 +174,7 @@ Trial **запрещено** ощущаться как:
 
 Ценность растёт, потому что Profile / Personal Model становится **живой моделью личности** на накопленных данных — не потому что открылась новая страница.
 
-Связь с [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) Reference Rate / Longitudinal Validation: подписка монетизирует рост качества понимания, не feature-count.
+Связь с [PROFILE_CONTENT_CANON_V1.md](profile/PROFILE_CONTENT_CANON_V1.md) Reference Rate / Longitudinal Validation: подписка монетизирует рост качества понимания, не feature-count.
 
 ---
 

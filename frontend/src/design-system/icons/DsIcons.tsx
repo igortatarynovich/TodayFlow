@@ -193,18 +193,6 @@ export function DsFeatureIcon({ name, className }: { name: keyof typeof FEATURE_
   return <Cmp className={className} />;
 }
 
-/**
- * @deprecated Use `dsAppNavItemsRu()` from `@/components/product-ui/productWebShellChrome`
- * or `buildAppNavItems()` from `@/lib/appNavConfig`.
- */
-export const DS_APP_NAV = [
-  { href: "/today", label: "Сегодня", icon: IconSun },
-  { href: "/profile", label: "Моя карта", icon: IconMap },
-  { href: "/compatibility", label: "Совместимость", icon: IconUsers },
-  { href: "/tarot", label: "Таро", icon: IconWalletCards },
-  { href: "/practices", label: "Практики", icon: IconActivity },
-] as const;
-
 export const DS_NAV_ICON_MAP = {
   sun: IconSun,
   map: IconMap,

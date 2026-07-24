@@ -4,7 +4,7 @@
 **Версия:** 1.5 (2026-06-23)  
 **Владелец:** Engineering + Product
 
-**North star продукта:** [PIM_PRODUCT_NORTH_STAR.md](./PIM_PRODUCT_NORTH_STAR.md) — завершённый день → ценность PIM ↑.
+**North star продукта:** [PIM_PRODUCT_NORTH_STAR.md](../archive/PIM_PRODUCT_NORTH_STAR.md) — завершённый день → ценность PIM ↑.
 
 **North star вопрос ревью:**
 
@@ -20,7 +20,7 @@
 
 **Freeze:** **не** придумывать C18+, пока C10–C17 не прошли через код и не столкнулись с реальностью.
 
-**Platform Layer Gate (C18+):** новый платформенный слой — только если **устойчивое наблюдаемое явление** нельзя объяснить текущим стеком. Gate question: *«Какое явление не объясняется существующими слоями?»* — нет ответа → слой не нужен. См. [TODAY_INTERNAL_PATTERNS_V0.md](./TODAY_INTERNAL_PATTERNS_V0.md) §Platform Layer Gate · AR-010. **C18 freeze = защита архитектуры**, не только пауза на документы.
+**Platform Layer Gate (C18+):** новый платформенный слой — только если **устойчивое наблюдаемое явление** нельзя объяснить текущим стеком. Gate question: *«Какое явление не объясняется существующими слоями?»* — нет ответа → слой не нужен. См. [TODAY_INTERNAL_PATTERNS_V0.md](../TODAY_INTERNAL_PATTERNS_V0.md) §Platform Layer Gate · AR-010. **C18 freeze = защита архитектуры**, не только пауза на документы.
 
 **Риск сейчас:** не недостаток архитектуры, а **упрощённые реализации**, тихо обходящие C10–C17.
 
@@ -51,7 +51,7 @@ Signal → Intent → Evidence → Interpretation → Contradiction → Temporal
 
 | Контур | Вопрос | Инструменты gate |
 |--------|--------|------------------|
-| **Experience** | Пользователю стало **понятнее и полезнее**? | UI smoke, copy, [TODAY_LANGUAGE_V1.md](./TODAY_LANGUAGE_V1.md) |
+| **Experience** | Пользователю стало **понятнее и полезнее**? | UI smoke, copy, [TODAY_LANGUAGE_V1.md](../today-language/TODAY_LANGUAGE_V1.md) |
 | **Architecture** | Соблюдены **C10–C17** и **ownership**? | §1.1, §1.2, anti-patterns §2 |
 | **Learning** | Система стала **умнее** после взаимодействия? | **PIM test**, **PIM Diff**, **Learning Δ** §1.5 |
 
@@ -94,7 +94,7 @@ Signal → Intent → Evidence → Interpretation → Contradiction → Temporal
 
 **Правило HostFlow:** сначала **источник истины**, потом потребители — не наоборот.
 
-См. [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md).
+См. [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](../DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md).
 
 ### 1.2 Тест «Today исчез»
 
@@ -186,7 +186,7 @@ Learning Δ = 0  →  PIM Δ = 0  →  PR подозрителен
 
 ### 1.6 PIM ROI (новые сценарии и roadmap)
 
-См. [PIM_PRODUCT_NORTH_STAR.md](./PIM_PRODUCT_NORTH_STAR.md) §5.
+См. [PIM_PRODUCT_NORTH_STAR.md](../archive/PIM_PRODUCT_NORTH_STAR.md) §5.
 
 | Вопрос | Заполнить в PR |
 |--------|----------------|
@@ -263,9 +263,9 @@ Learning Δ = 0  →  PIM Δ = 0  →  PR подозрителен
 
 #### 3.1.2 Meaning events minimum (L1)
 
-Один проход S0–S5 → **все шесть:** `day_opened`, `day_sky_fact_viewed`, `tarot_selected`, `tarot_revealed`, `number_selected`, `first_synthesis_viewed`. Детали: [PR1_PREFLIGHT.md](./status/PR1_PREFLIGHT.md) §6.1.
+Один проход S0–S5 → **все шесть:** `day_opened`, `day_sky_fact_viewed`, `tarot_selected`, `tarot_revealed`, `number_selected`, `first_synthesis_viewed`. Детали: [PR1_PREFLIGHT.md](../archive/PR1_PREFLIGHT.md) §6.1.
 
-**Главный вопрос PR1:** появился ли **наблюдаемый путь** Experience → signals → PIM read → DRE? Шаблон секций PR: [PR1_GATE_SECTIONS.md](./status/PR1_GATE_SECTIONS.md).
+**Главный вопрос PR1:** появился ли **наблюдаемый путь** Experience → signals → PIM read → DRE? Шаблон секций PR: [PR1_GATE_SECTIONS.md](../archive/PR1_GATE_SECTIONS.md).
 
 ### 3.2 Код сегодня (2026-06-23)
 
@@ -289,7 +289,7 @@ Learning Δ = 0  →  PIM Δ = 0  →  PR подозрителен
 
 ## 4. PR2 — Goal Loop (верификация по фазам)
 
-**Scope:** S6–S10 (goal path) + A1–A6 ([TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) §9, [INTENT_MODEL_V1.md](./INTENT_MODEL_V1.md) §5).
+**Scope:** S6–S10 (goal path) + A1–A6 ([TODAY_SCREEN_V1_CANON.md](../TODAY_SCREEN_V1_CANON.md) §9, [INTENT_MODEL_V1.md](../INTENT_MODEL_V1.md) §5).
 
 ### 4.1 Intent Record — поля при создании (S6)
 
@@ -396,7 +396,7 @@ Exclude: historical, archive_only, very_low
 
 **Reject:** sticky ritual (D7 ok · evening weak) · IR-first KPI.
 
-Full spec: [PIM_PRODUCT_NORTH_STAR.md](./PIM_PRODUCT_NORTH_STAR.md) §0.2 · [PR2_PREFLIGHT.md](./status/PR2_PREFLIGHT.md) §15.
+Full spec: [PIM_PRODUCT_NORTH_STAR.md](../archive/PIM_PRODUCT_NORTH_STAR.md) §0.2 · [PR2_PREFLIGHT.md](../archive/PR2_PREFLIGHT.md) §15.
 
 ---
 
@@ -404,11 +404,11 @@ Full spec: [PIM_PRODUCT_NORTH_STAR.md](./PIM_PRODUCT_NORTH_STAR.md) §0.2 · [PR
 
 **Freeze:** новый канон (C18+, новые docs) — **пауза**. Достаточно архитектуры на месяцы; нужно **столкновение с кодом**.
 
-**Главный результат сессии:** измеримый критерий успеха — [PIM_PRODUCT_NORTH_STAR.md](./PIM_PRODUCT_NORTH_STAR.md). Актив продукта = **PIM**. Не C10–C17 по отдельности.
+**Главный результат сессии:** измеримый критерий успеха — [PIM_PRODUCT_NORTH_STAR.md](../archive/PIM_PRODUCT_NORTH_STAR.md). Актив продукта = **PIM**. Не C10–C17 по отдельности.
 
 ### Gate 1 — открыть PR1: PIM-мышление, не Today-мышление
 
-**Шаг 0 (обязателен до кода):** [status/PR1_PREFLIGHT.md](./status/PR1_PREFLIGHT.md) — короткий canon vs code diff (entry, spoilers, LLM, mood, events, keep/delete/debt). PR1 режется узко по §9 того документа.
+**Шаг 0 (обязателен до кода):** [PR1_PREFLIGHT.md](../archive/PR1_PREFLIGHT.md) — короткий canon vs code diff (entry, spoilers, LLM, mood, events, keep/delete/debt). PR1 режется узко по §9 того документа.
 
 **Цель Gate 1 — не доказать, что архитектура правильная.**  
 **Цель — найти первое место, где канон ломается при столкновении с кодом.** Такие места дают самые ценные открытия.
@@ -436,7 +436,7 @@ Full spec: [PIM_PRODUCT_NORTH_STAR.md](./PIM_PRODUCT_NORTH_STAR.md) §0.2 · [PR
 
 **Freeze до первых prod IR:** Discovery Engine · IPL · KIP review · новые C18+ docs.
 
-**Tracker:** [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md) · Step A: [status/TODAY_CANON_VS_CODE_DIFF.md](./status/TODAY_CANON_VS_CODE_DIFF.md) · **PR1 pre-flight:** [status/PR1_PREFLIGHT.md](./status/PR1_PREFLIGHT.md).
+**Tracker:** [PRODUCT_EXECUTION_TRACKER.md](../PRODUCT_EXECUTION_TRACKER.md) · Step A: [status/TODAY_CANON_VS_CODE_DIFF.md](../status/TODAY_CANON_VS_CODE_DIFF.md) · **PR1 pre-flight:** [PR1_PREFLIGHT.md](../archive/PR1_PREFLIGHT.md).
 
 ---
 
@@ -451,7 +451,7 @@ Full spec: [PIM_PRODUCT_NORTH_STAR.md](./PIM_PRODUCT_NORTH_STAR.md) §0.2 · [PR
 | 2026-06-23 | v1.1 — data ownership matrix; «Today исчез» test; PR2 Intent Record / outcome owners |
 | 2026-06-23 | v1.2 — Experience vs PIM test; mandatory PIM Diff; «guidance → PIM unchanged»; daily cycle richness criterion |
 | 2026-06-23 | v1.3 — три контура acceptance; **Learning Delta Test**; «чему научилась система?» |
-| 2026-06-23 | v1.4 — PIM ROI §1.6; link [PIM_PRODUCT_NORTH_STAR.md](./PIM_PRODUCT_NORTH_STAR.md) |
+| 2026-06-23 | v1.4 — PIM ROI §1.6; link [PIM_PRODUCT_NORTH_STAR.md](../archive/PIM_PRODUCT_NORTH_STAR.md) |
 | 2026-06-23 | §5 — **Gate 1: PR1 в коде**; freeze нового канона; критерий успеха = PIM ↑ |
-| 2026-06-23 | §5 — **шаг 0:** [PR1_PREFLIGHT.md](./status/PR1_PREFLIGHT.md) до кода; узкий scope S0–S5 |
-| 2026-06-23 | §3 — S5 boundary, PIM audit trio, `first_synthesis_viewed`; [PR1_GATE_SECTIONS.md](./status/PR1_GATE_SECTIONS.md) |
+| 2026-06-23 | §5 — **шаг 0:** [PR1_PREFLIGHT.md](../archive/PR1_PREFLIGHT.md) до кода; узкий scope S0–S5 |
+| 2026-06-23 | §3 — S5 boundary, PIM audit trio, `first_synthesis_viewed`; [PR1_GATE_SECTIONS.md](../archive/PR1_GATE_SECTIONS.md) |

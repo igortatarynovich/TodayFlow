@@ -12,10 +12,10 @@
 
 | Документ | Роль |
 |----------|------|
-| [PERSONAL_INTELLIGENCE_MODEL_V1.md](./PERSONAL_INTELLIGENCE_MODEL_V1.md) | **PIM — центральный артефакт** (4 слоя) |
-| [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md) | CUM = compact export PIM |
+| [PERSONAL_INTELLIGENCE_MODEL_V1.md](pim/PERSONAL_INTELLIGENCE_MODEL_V1.md) | **PIM — центральный артефакт** (4 слоя) |
+| [USER_MODEL_TARGET_STATE.md](pim/USER_MODEL_TARGET_STATE.md) | CUM = compact export PIM |
 | [INTENT_MODEL_V1.md](./INTENT_MODEL_V1.md) | **Подграф PIM** — история намерений |
-| [USER_KNOWLEDGE_MODEL.md](./USER_KNOWLEDGE_MODEL.md) | Knowledge Atom — единица PIM |
+| [USER_KNOWLEDGE_MODEL.md](pim/USER_KNOWLEDGE_MODEL.md) | Knowledge Atom — единица PIM |
 | [KNOWLEDGE_ACQUISITION_AND_SIGNAL_POLICY.md](./KNOWLEDGE_ACQUISITION_AND_SIGNAL_POLICY.md) | Signal → PIM |
 | [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) | Today = Experience; Goal → PIM |
 
@@ -235,7 +235,7 @@ Goal → Human Model update → Guidance (день + долгосрочный у
 | **90 дней** | Стабильные decision_style / under_load; персонализированный discovery schedule |
 | **180 дней** | Guidance с «обычно ты…» на ключевых traits; measurable recommendation lift |
 
-**Метрика успеха HDM:** снижение **uncertainty** по измерениям §1 + рост **confirmed** patterns — [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md) §2 #4.
+**Метрика успеха HDM:** снижение **uncertainty** по измерениям §1 + рост **confirmed** patterns — [USER_MODEL_TARGET_STATE.md](pim/USER_MODEL_TARGET_STATE.md) §2 #4.
 
 ---
 

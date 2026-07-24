@@ -1,6 +1,6 @@
 """Deterministic Profile Step-3 insight node projection (journey «Не замечал»).
 
-SoT: docs/PROFILE_PRODUCT_JOURNEY_FORMS_V1.md § Шаг 3
+SoT: docs/profile/PROFILE_PRODUCT_JOURNEY_FORMS_V1.md § Шаг 3
 Reuses Snapshot materials as-is — does NOT invent a second patterns schema:
   recurring_patterns[] · growth_zones[] · strengths[] · helps[] · living.signals
 Grounded-on facts come from portrait_why_v0 (labels only — no causal trace claim).

@@ -121,8 +121,3 @@ export function resolveDailyTarotDeckIndex(args: {
   if (k2 && ENGLISH_MAJOR_NAME_TO_ID[k2] != null) return ENGLISH_MAJOR_NAME_TO_ID[k2]!;
   return stableTarotDeckIndexFromDateISO(args.dateISO);
 }
-
-/** @deprecated Используйте `resolveDailyTarotDeckIndex` — оставлено для старых импортов. */
-export function resolveDailyTarotMajorArcanaId(args: Parameters<typeof resolveDailyTarotDeckIndex>[0]): number {
-  return resolveDailyTarotDeckIndex(args);
-}

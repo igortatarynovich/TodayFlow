@@ -1,7 +1,7 @@
 # Profile Production-Faithful Capture Pack
 
 **Status:** IMPLEMENTATION — infra only  
-**Parent:** [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md)  
+**Parent:** [PROFILE_E2E_RECONSTRUCTION.md](../profile/PROFILE_E2E_RECONSTRUCTION.md)  
 **Passport:** [PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](./PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md)  
 **Date:** 2026-07-21
 

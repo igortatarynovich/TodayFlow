@@ -21,7 +21,7 @@
 
 **Источники примеров:** `api_live` (generation logs, 2026-06-23) · editorial seed · contract/fixtures где форма воспроизводится в продукте.
 
-**Machine draft:** [datasets/TODAY_LANGUAGE_PATTERNS_V0.json](./datasets/TODAY_LANGUAGE_PATTERNS_V0.json)
+**Machine draft:** [datasets/TODAY_LANGUAGE_PATTERNS_V0.json](../datasets/TODAY_LANGUAGE_PATTERNS_V0.json)
 
 **Strong pattern library:** [TODAY_LANGUAGE_STRONG_PATTERNS_V0.md](./TODAY_LANGUAGE_STRONG_PATTERNS_V0.md)
 

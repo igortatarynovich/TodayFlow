@@ -3,7 +3,7 @@
 **Дата:** 2026-06-23  
 **Статус:** **Pre-flight complete** — достаточен для **планирования** PR2; **код Goal Loop не начат**  
 **Следующий шаг:** PR с секциями [PR2_GATE_SECTIONS.md](./PR2_GATE_SECTIONS.md) (когда откроем PR)  
-**Канон (уже принят — не дублировать):** [PIM_PR_GATE_V1.md](../PIM_PR_GATE_V1.md) §4 · [INTENT_MODEL_V1.md](../INTENT_MODEL_V1.md) · [TODAY_SCREEN_V1_CANON.md](../TODAY_SCREEN_V1_CANON.md) §4, §9 PR2  
+**Канон (уже принят — не дублировать):** [PIM_PR_GATE_V1.md](../pim/PIM_PR_GATE_V1.md) §4 · [INTENT_MODEL_V1.md](../INTENT_MODEL_V1.md) · [TODAY_SCREEN_V1_CANON.md](../TODAY_SCREEN_V1_CANON.md) §4, §9 PR2  
 **PR1 baseline:** [PR1_MERGE_VERIFICATION.md](./PR1_MERGE_VERIFICATION.md) — read-path доказан (gen **692**, S0–S5)
 
 ---
@@ -27,7 +27,7 @@ PR1 доказал **read**. PR2 обязан доказать **write** и **ca
 
 **North Star prod — не retention и не IR.** Полезность завершённого дня; D7 и IR — **индикаторы**. **Sticky ritual trap:** D7 без вечернего «день был лучше» = провал.
 
-**Operating priority *(2026-06-23)*:** **usefulness first** — вечерний ответ сильнее D7. AR-012 · [PIM_PRODUCT_NORTH_STAR](../PIM_PRODUCT_NORTH_STAR.md) §0.2.
+**Operating priority *(2026-06-23)*:** **usefulness first** — вечерний ответ сильнее D7. AR-012 · [PIM_PRODUCT_NORTH_STAR](PIM_PRODUCT_NORTH_STAR.md) §0.2.
 
 ---
 
@@ -58,7 +58,7 @@ PR1 доказал **read**. PR2 обязан доказать **write** и **ca
 | **`generation_logs`** (existing) | +guide pass **with goal** + audit | DRE pipeline |
 | **Atom candidates / job queue** | async после S10 | UKM / PIL job (не UI) |
 
-Поля Intent Record — [INTENT_MODEL_V1.md](../INTENT_MODEL_V1.md) §1.1 + link `daily_focus_id`, ritual refs ([PIM_PR_GATE_V1.md](../PIM_PR_GATE_V1.md) §4.1).
+Поля Intent Record — [INTENT_MODEL_V1.md](../INTENT_MODEL_V1.md) §1.1 + link `daily_focus_id`, ritual refs ([PIM_PR_GATE_V1.md](../pim/PIM_PR_GATE_V1.md) §4.1).
 
 ### 1.2 Что уже есть в коде (не путать с IM)
 
@@ -70,7 +70,7 @@ PR1 доказал **read**. PR2 обязан доказать **write** и **ca
 | `MeaningEvent` | `db/models.py` | event stream | **extend** types |
 | `day_connection.morning_intention` | tracking / today data | legacy текст | **не** Intent Record |
 
-**Reject PR2:** `CREATE TABLE day_goals` owned by Today API без `intent_records` в PIM store ([PIM_PR_GATE_V1.md](../PIM_PR_GATE_V1.md) §4.8).
+**Reject PR2:** `CREATE TABLE day_goals` owned by Today API без `intent_records` в PIM store ([PIM_PR_GATE_V1.md](../pim/PIM_PR_GATE_V1.md) §4.8).
 
 **Решение до первого коммита PR2:** где физически живёт IM — отдельная таблица `intent_records` + JSON `post_set_actions`, или версионированный blob `user_intent_model`. Канон не требует UI-table; требует **Today disappearance test** и A1–A6.
 
@@ -140,7 +140,7 @@ PR1 доказал **read**. PR2 обязан доказать **write** и **ca
 
 ---
 
-Канон ([TODAY_SCREEN_V1_CANON.md](../TODAY_SCREEN_V1_CANON.md) §9, [PIM_PR_GATE_V1.md](../PIM_PR_GATE_V1.md) §4.2):
+Канон ([TODAY_SCREEN_V1_CANON.md](../TODAY_SCREEN_V1_CANON.md) §9, [PIM_PR_GATE_V1.md](../pim/PIM_PR_GATE_V1.md) §4.2):
 
 | Phase | UI | `event_type` (target) | Payload minimum | В `meaning.py`? |
 |-------|-----|----------------------|-----------------|-----------------|
@@ -170,7 +170,7 @@ Atom candidate — **optional layer on top**, not substitute for this chain.
 
 ## 4. Где возникает Interpretation Layer
 
-**Канон:** Event ≠ meaning. Outcome на Intent Record — **signal**; trait/pattern — только через ILR → confirmation → atom ([INTERPRETATION_LAYER_AND_REFERENCE.md](../INTERPRETATION_LAYER_AND_REFERENCE.md), C14).
+**Канон:** Event ≠ meaning. Outcome на Intent Record — **signal**; trait/pattern — только через ILR → confirmation → atom ([INTERPRETATION_LAYER_AND_REFERENCE.md](../explainability/INTERPRETATION_LAYER_AND_REFERENCE.md), C14).
 
 | Момент | Что происходит | Код сегодня |
 |--------|----------------|-------------|
@@ -198,13 +198,13 @@ Atom candidate — **optional layer on top**, not substitute for this chain.
 
 **PR2 success ≠ atom exists.** PR2 success = **causal chain** (§3) + separate audits (§10).
 
-Примеры claims ([PIM_PR_GATE_V1.md](../PIM_PR_GATE_V1.md) §4.3): `intent.overestimate_frequency`, `intent.action_within_2h_rate` — **post-PR2** interpretation layer.
+Примеры claims ([PIM_PR_GATE_V1.md](../pim/PIM_PR_GATE_V1.md) §4.3): `intent.overestimate_frequency`, `intent.action_within_2h_rate` — **post-PR2** interpretation layer.
 
 ---
 
 ## 6. Где строится `evidence_chain`
 
-**Канон ([USER_KNOWLEDGE_MODEL.md](../USER_KNOWLEDGE_MODEL.md) §2):** каждый promoted atom — `evidence_chain[]` с refs на signals / intent records / events.
+**Канон ([USER_KNOWLEDGE_MODEL.md](../pim/USER_KNOWLEDGE_MODEL.md) §2):** каждый promoted atom — `evidence_chain[]` с refs на signals / intent records / events.
 
 **PR2 minimum chain for one hypothesis atom** *(when A6 job enabled)*:
 
@@ -225,7 +225,7 @@ day_goal_set (event_id)
 
 ## 7. Какие contradiction triggers возникают автоматически
 
-PR2 **не обязан resolve** day-1 ([PIM_PR_GATE_V1.md](../PIM_PR_GATE_V1.md) §4.5). **Обязан** не писать conflicting atom без event.
+PR2 **не обязан resolve** day-1 ([PIM_PR_GATE_V1.md](../pim/PIM_PR_GATE_V1.md) §4.5). **Обязан** не писать conflicting atom без event.
 
 | Trigger | Example | Expected path |
 |---------|---------|---------------|
@@ -460,7 +460,7 @@ Discovery / IPL / KIP · IR count as primary KPI
 
 Evening screen test пройден для S0–S10 · write-path не ломает вечернюю пользу
 
-См. [PIM_PRODUCT_NORTH_STAR.md](../PIM_PRODUCT_NORTH_STAR.md) §0.2 · AR-012.
+См. [PIM_PRODUCT_NORTH_STAR.md](PIM_PRODUCT_NORTH_STAR.md) §0.2 · AR-012.
 
 ---
 

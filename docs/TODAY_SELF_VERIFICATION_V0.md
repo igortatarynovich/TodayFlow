@@ -2,7 +2,7 @@
 
 **Статус:** `CALIBRATION_HYPOTHESIS` — candidate; не gate, не код.  
 **Версия:** 0.1 (2026-06-23)  
-**Родитель:** [TODAY_LANGUAGE_V1.md](./TODAY_LANGUAGE_V1.md) · editorial quality stack  
+**Родитель:** [TODAY_LANGUAGE_V1.md](today-language/TODAY_LANGUAGE_V1.md) · editorial quality stack  
 
 **Связь:** [TODAY_H4_VALIDATION_V0.md](./TODAY_H4_VALIDATION_V0.md) · [TODAY_INTERNAL_PATTERNS_V0.md](./TODAY_INTERNAL_PATTERNS_V0.md) · [TODAY_ANCHOR_TYPES_V0.md](./TODAY_ANCHOR_TYPES_V0.md)
 

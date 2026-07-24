@@ -1,7 +1,7 @@
 # Ядро персонализации: Today (контракт, события, prompt)
 
 **Статус:** канон для реализации Today после утреннего ритуала.  
-**Связь:** [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) (общий контур), [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) (PIL: refinement, retrieval, evaluation), [CORE_PRODUCT_CANON.md](./CORE_PRODUCT_CANON.md) (продукт).  
+**Связь:** [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md) (общий контур), [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md) (PIL: refinement, retrieval, evaluation), [CORE_PRODUCT_CANON.md](archive/CORE_PRODUCT_CANON.md) (продукт).  
 **Паритет:** один контракт и один словарь событий для **web и iOS**.
 
 ---

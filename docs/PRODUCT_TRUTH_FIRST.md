@@ -13,7 +13,7 @@
 
 Цель: не урезать построенный продукт, а **честно и последовательно показать то, что уже работает**.
 
-**Umbrella:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) — любой вывод = источник → расчёт → интерпретация → практика → текст; иначе не production.
+**Umbrella:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) — любой вывод = источник → расчёт → интерпретация → практика → текст; иначе не production.
 
 **Качество блока (Six Questions):** [PRODUCT_BLOCK_SIX_QUESTIONS.md](./PRODUCT_BLOCK_SIX_QUESTIONS.md) — зачем · почему эта info · откуда · почему доверять · почему здесь · к чему ведёт. Нет ответа → убрать или переработать.
 
@@ -28,22 +28,22 @@
 > Канон — это не максимальное количество функций.  
 > Канон — это состояние, в котором **существующие** функции **закончены**.
 
-Ship-gate для Profile: [PROFILE_E2E_RECONSTRUCTION.md](./PROFILE_E2E_RECONSTRUCTION.md) § Profile v1 Freeze Checklist. После Freeze — Today копирует способ мышления, не новую платформу.
+Ship-gate для Profile: [PROFILE_E2E_RECONSTRUCTION.md](profile/PROFILE_E2E_RECONSTRUCTION.md) § Profile v1 Freeze Checklist. После Freeze — Today копирует способ мышления, не новую платформу.
 
 **Production App Shell (закрыт):** [PR2_APP_SHELL.md](./PR2_APP_SHELL.md) — единая инфраструктура UI (sidebar · main · optional data-rail · shared states). К shell не возвращаемся, кроме багфиксов. Запрет filler-rail / reserved empty column / per-section shells — канон.
 
-**Текущий execution slice:** Profile v1 Freeze — [PROFILE_E2E_RECONSTRUCTION.md](./PROFILE_E2E_RECONSTRUCTION.md).  
+**Текущий execution slice:** Profile v1 Freeze — [PROFILE_E2E_RECONSTRUCTION.md](profile/PROFILE_E2E_RECONSTRUCTION.md).  
 Не создавать новые engines, registries, RFC или общие архитектурные слои в этом slice.
 
 **После Profile Freeze:** продуктовая реконструкция экрана **Today** (экран за экраном: блоки → данные → prompt → quality → wire → UI).  
-[PR3_TODAY_PRODUCTION_SURFACE.md](./PR3_TODAY_PRODUCTION_SURFACE.md) — ориентир поверхности; не старт с engine/RFC.
+[PR3_TODAY_PRODUCTION_SURFACE.md](./archive/PR3_TODAY_PRODUCTION_SURFACE.md) — ориентир поверхности; не старт с engine/RFC.
 
 `DailyState`, Recommendation Engine и другие общие слои **не реализуются заранее**. Допускаются только после разбора production-блоков Today и доказательства пользы по правилу architecture-must-prove-value.  
 Исторический / exploratory: [DAILY_INTERPRETATION_ENGINE_PHASE.md](./DAILY_INTERPRETATION_ENGINE_PHASE.md) · [rfc/RFC_DAILY_STATE_V0.md](./rfc/RFC_DAILY_STATE_V0.md) — **STATUS: DEFERRED**, не approved implementation phase.
 
-Связь с [TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md): Personal Model остаётся SoT персонализации; этот канон запрещает UI, который **притворяется**, будто модель/API уже отдали результат.
+Связь с [TODAYFLOW_PRODUCT_MODEL.md](archive/TODAYFLOW_PRODUCT_MODEL.md): Personal Model остаётся SoT персонализации; этот канон запрещает UI, который **притворяется**, будто модель/API уже отдали результат.
 
-**Объяснимая интерпретация:** [EXPLAINABLE_INTERPRETATION.md](./EXPLAINABLE_INTERPRETATION.md) — ни одно практическое утверждение без цепочки обоснования; четыре проверки текста (обоснованность · практичность · конкретность · авторский язык). Советы дня — только из уже существующих рабочих источников Today до отдельного доказанного слоя.
+**Объяснимая интерпретация:** [EXPLAINABLE_INTERPRETATION.md](explainability/EXPLAINABLE_INTERPRETATION.md) — ни одно практическое утверждение без цепочки обоснования; четыре проверки текста (обоснованность · практичность · конкретность · авторский язык). Советы дня — только из уже существующих рабочих источников Today до отдельного доказанного слоя.
 
 **Аудит / gate:** [audits/EXPLAINABLE_GENERATION_AUDIT_REGISTRY_V0.md](./audits/EXPLAINABLE_GENERATION_AUDIT_REGISTRY_V0.md) — реестр generators × violations × remediation (не новый принцип).
 

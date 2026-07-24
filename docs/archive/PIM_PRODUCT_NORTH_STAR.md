@@ -1,3 +1,5 @@
+> SUPERSEDED 2026-07-24 → см. docs/TODAYFLOW_PRODUCT_CANON_UNIFIED.md
+
 # PIM Product North Star
 
 **Статус:** `ACCEPTED` — **критерий успеха продукта** (платформа, не экран).  
@@ -8,7 +10,7 @@
 
 **Это:** ответ на вопрос, которого не хватало месяцами споров про карточки, порядок блоков, прогнозы и чек-ины.
 
-**Связь:** [PERSONAL_INTELLIGENCE_MODEL_V1.md](./PERSONAL_INTELLIGENCE_MODEL_V1.md) (C10–C17) · [PIM_PR_GATE_V1.md](./PIM_PR_GATE_V1.md) (Learning Δ, три контура) · [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md) (артефакт CUM)
+**Связь:** [PERSONAL_INTELLIGENCE_MODEL_V1.md](../pim/PERSONAL_INTELLIGENCE_MODEL_V1.md) (C10–C17) · [PIM_PR_GATE_V1.md](../pim/PIM_PR_GATE_V1.md) (Learning Δ, три контура) · [USER_MODEL_TARGET_STATE.md](../pim/USER_MODEL_TARGET_STATE.md) (артефакт CUM)
 
 ---
 
@@ -73,9 +75,9 @@ Data ↛ Retention ↛ Usefulness
 
 **Launch one-liner:** не сбор данных · не streak ради streak — **день, который вечером ощущается полезнее**. Тогда PR2 · IR · PIM получают шанс.
 
-**AR freeze *(2026-06-23)*:** новые AR **не добавлять**. Ответ на *какое **поведение** меняется* — [BEHAVIOR_CHANGE_TEST_V0.md](./status/BEHAVIOR_CHANGE_TEST_V0.md).
+**AR freeze *(2026-06-23)*:** новые AR **не добавлять**. Ответ на *какое **поведение** меняется* — [BEHAVIOR_CHANGE_TEST_V0.md](../status/BEHAVIOR_CHANGE_TEST_V0.md).
 
-См. AR-012 · [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) · [TODAY_INTERNAL_PATTERNS_V0.md](./TODAY_INTERNAL_PATTERNS_V0.md) §Launch freeze.
+См. AR-012 · [TODAY_SCREEN_V1_CANON.md](../TODAY_SCREEN_V1_CANON.md) · [TODAY_INTERNAL_PATTERNS_V0.md](../TODAY_INTERNAL_PATTERNS_V0.md) §Launch freeze.
 
 ---
 
@@ -178,7 +180,7 @@ Experience лучше · PIM нет · стратегическая ценнос
 - targeted discovery на `hypothesis_id`;
 - contradiction с `change_nature`.
 
-**PR template:** секция `## PIM ROI` — [PIM_PR_GATE_V1.md](./PIM_PR_GATE_V1.md) §1.6.
+**PR template:** секция `## PIM ROI` — [PIM_PR_GATE_V1.md](../pim/PIM_PR_GATE_V1.md) §1.6.
 
 ---
 

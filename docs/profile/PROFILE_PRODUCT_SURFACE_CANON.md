@@ -4,8 +4,8 @@
 **Version:** 1.3 (2026-07-22)  
 **Locked forms:** [PROFILE_PRODUCT_JOURNEY_FORMS_V1.md](./PROFILE_PRODUCT_JOURNEY_FORMS_V1.md) — **product sign-off YES** (samples corrected); next = mechanism deltas only  
 **Overrides:** cosmetic V2 polish · next Freeze rows as screen goal · equal-card document as «done»  
-**Parents:** [PRODUCT_BLOCK_SIX_QUESTIONS.md](./PRODUCT_BLOCK_SIX_QUESTIONS.md) · [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) · [PR4_PROFILE_CANON.md](./PR4_PROFILE_CANON.md) · [content/TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md)  
-**Mechanism (ниже продукта):** [PROFILE_E2E_RECONSTRUCTION.md](./PROFILE_E2E_RECONSTRUCTION.md) · [audits/PROFILE_V1_BLOCK_FREEZE_MATRIX.md](./audits/PROFILE_V1_BLOCK_FREEZE_MATRIX.md) · [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) §0.3
+**Parents:** [PRODUCT_BLOCK_SIX_QUESTIONS.md](../PRODUCT_BLOCK_SIX_QUESTIONS.md) · [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) · [PR4_PROFILE_CANON.md](../archive/PR4_PROFILE_CANON.md) · [content/TODAYFLOW_VOICE_CANON.md](../content/TODAYFLOW_VOICE_CANON.md)  
+**Mechanism (ниже продукта):** [PROFILE_E2E_RECONSTRUCTION.md](./PROFILE_E2E_RECONSTRUCTION.md) · [audits/PROFILE_V1_BLOCK_FREEZE_MATRIX.md](../audits/PROFILE_V1_BLOCK_FREEZE_MATRIX.md) · [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) §0.3
 
 ---
 
@@ -17,7 +17,7 @@
 
 Любой слой, блок, промпт, поле Snapshot или UI-зона проверяются:
 
-1. **Six Questions** — [PRODUCT_BLOCK_SIX_QUESTIONS.md](./PRODUCT_BLOCK_SIX_QUESTIONS.md)  
+1. **Six Questions** — [PRODUCT_BLOCK_SIX_QUESTIONS.md](../PRODUCT_BLOCK_SIX_QUESTIONS.md)  
 2. **Новая ценность пути:** добавляет ли новый этап — или только повторяет уже сказанное?
 
 Если только повторяет или нет ответа на Six Questions — **не улучшать. Удалить или объединить.**
@@ -287,7 +287,7 @@ Target-поля смысла (сжать из identity / Content Canon): имя 
 | 7c | Mechanism delta #3 `insight_nodes_v0` | **SHIPPED** `aa27720` |
 | 7d | Mechanism delta #4 `effort_vector_v0` | **SHIPPED** `efd7141` |
 | 7e | Mechanism delta #5 `bridge_line_v0` | **IN CODE** v0.2 — «зачем Today», не «что делать» |
-| 7f | Six Questions product SoT | [PRODUCT_BLOCK_SIX_QUESTIONS.md](./PRODUCT_BLOCK_SIX_QUESTIONS.md) |
+| 7f | Six Questions product SoT | [PRODUCT_BLOCK_SIX_QUESTIONS.md](../PRODUCT_BLOCK_SIX_QUESTIONS.md) |
 | 8 | UI journey surface | waiting — после deltas |
 
 Пауза: Freeze `character_decisions` · новые Freeze-строки · UI.

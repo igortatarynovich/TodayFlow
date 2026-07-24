@@ -3,10 +3,10 @@
 **Status:** **CLOSED** — slice 4.1 accepted (2026-07-21)  
 **Version:** 1.2 (2026-07-21)  
 **Code:** `frontend/src/components/profile/v2/` · `frontend/src/lib/profilePage/buildProfileV2LiveContext.ts`  
-**Content pipeline:** [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) (C3 — generation; this doc is UI/IA boundaries)  
-**Screen legacy:** [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) — v0 visual master; **production IA supersedes** Living-Maps-as-Profile-half (see §7 note there).
-**Next stage:** [PROFILE_E2E_RECONSTRUCTION.md](./PROFILE_E2E_RECONSTRUCTION.md) — E2E + **Profile v1 Freeze Checklist** (ship-gate before Canon) · [audits/PROFILE_AS_SOURCE_CONSUMPTION_AUDIT.md](./audits/PROFILE_AS_SOURCE_CONSUMPTION_AUDIT.md).  
-**Depth / missing data / subscription:** [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](./UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md).
+**Content pipeline:** [PROFILE_CONTENT_CANON_V1.md](../profile/PROFILE_CONTENT_CANON_V1.md) (C3 — generation; this doc is UI/IA boundaries)  
+**Screen legacy:** [PROFILE_SCREEN_MASTER.md](../profile/PROFILE_SCREEN_MASTER.md) — v0 visual master; **production IA supersedes** Living-Maps-as-Profile-half (see §7 note there).
+**Next stage:** [PROFILE_E2E_RECONSTRUCTION.md](../profile/PROFILE_E2E_RECONSTRUCTION.md) — E2E + **Profile v1 Freeze Checklist** (ship-gate before Canon) · [audits/PROFILE_AS_SOURCE_CONSUMPTION_AUDIT.md](../audits/PROFILE_AS_SOURCE_CONSUMPTION_AUDIT.md).  
+**Depth / missing data / subscription:** [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](../UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md).
 
 > Profile is the identity source for Today, Tracking, Compatibility, Tarot.  
 > It answers only: **Who is this person?**
@@ -24,16 +24,16 @@ Kitchen may hold dozens of calculated parameters, weights, conflicts, confidence
 The screen shows only what helps the person understand themselves better.  
 Everything else stays internal and improves interpretation quality — it does not fill the viewport.
 
-Aligns with [EXPLAIN_MEANING_NOT_MECHANISM.md](./EXPLAIN_MEANING_NOT_MECHANISM.md): never dump mechanism; show meaning.
+Aligns with [EXPLAIN_MEANING_NOT_MECHANISM.md](../explainability/EXPLAIN_MEANING_NOT_MECHANISM.md): never dump mechanism; show meaning.
 
 ---
 
 ## Hierarchy (не новое правило)
 
 **Umbrella (platform-wide, выше модулей):**  
-[EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md)
+[EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md)
 
-Дочерние: [PRODUCT_TRUTH_FIRST.md](./PRODUCT_TRUTH_FIRST.md) · [EXPLAINABLE_INTERPRETATION.md](./EXPLAINABLE_INTERPRETATION.md) · Voice canon.
+Дочерние: [PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md) · [EXPLAINABLE_INTERPRETATION.md](../explainability/EXPLAINABLE_INTERPRETATION.md) · Voice canon.
 
 **PR-4 не создаёт отдельный production gate.**  
 PR-4 **применяет** уже действующий umbrella-канон к поверхности Profile — так же, как он обязателен для Today, Tarot, Numerology, Compatibility, Goals, Practices, аскез и **любых будущих разделов**.
@@ -61,7 +61,7 @@ PR-4 **применяет** уже действующий umbrella-канон к
 > Нет объяснимого происхождения, расчёта и практического назначения — элемент **не** в production.  
 > Нет исключений для «просто красивого CTA», если CTA несёт или изображает смысловой вывод.
 
-Единые текстовые нормы ([EXPLAINABLE_INTERPRETATION.md](./EXPLAINABLE_INTERPRETATION.md)): не выдумывать факты; не выбирать сферу без основания; не выдавать общий совет за персональный; не повторять смысл; снижать конкретность при слабых данных; связывать совет с наблюдаемым паттерном.
+Единые текстовые нормы ([EXPLAINABLE_INTERPRETATION.md](../explainability/EXPLAINABLE_INTERPRETATION.md)): не выдумывать факты; не выбирать сферу без основания; не выдавать общий совет за персональный; не повторять смысл; снижать конкретность при слабых данных; связывать совет с наблюдаемым паттерном.
 
 ---
 
@@ -184,7 +184,7 @@ Modules read Snapshot/facts — not day ritual via Profile UI.
 | Stage | Focus |
 |-------|--------|
 | **4.1 CLOSED** | Boundaries: who-you-are only; day/maps out; umbrella applied |
-| **Next — Source consumption** | [PROFILE_AS_SOURCE_CONSUMPTION_AUDIT.md](./audits/PROFILE_AS_SOURCE_CONSUMPTION_AUDIT.md): Today/Compat/Tarot/Guidance read Snapshot; no competing personality |
+| **Next — Source consumption** | [PROFILE_AS_SOURCE_CONSUMPTION_AUDIT.md](../audits/PROFILE_AS_SOURCE_CONSUMPTION_AUDIT.md): Today/Compat/Tarot/Guidance read Snapshot; no competing personality |
 | **Then — Natal organization UI** | §3 progressive disclosure on Profile (anchors → accents → show more) |
 | Later | Slow evolution UI · C3 LLM quality · Snapshot-on-read jobs |
 

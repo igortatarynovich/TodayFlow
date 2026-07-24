@@ -4,9 +4,9 @@
 **Версия:** 1.0 (2026-05-31).  
 **Владелец:** Product + Engineering.
 
-**Связь:** [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md), [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md), [DAYMODEL_INPUT_CONTRACT.md](./DAYMODEL_INPUT_CONTRACT.md), [DAY_CONTEXT_V0.md](./DAY_CONTEXT_V0.md), [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md), [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md), [USER_KNOWLEDGE_MODEL.md](./USER_KNOWLEDGE_MODEL.md), [API_MEMORY_AND_LEARNING_LAYER.md](./API_MEMORY_AND_LEARNING_LAYER.md).
+**Связь:** [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md), [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md), [DAYMODEL_INPUT_CONTRACT.md](./DAYMODEL_INPUT_CONTRACT.md), [DAY_CONTEXT_V0.md](./DAY_CONTEXT_V0.md), [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md), [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md), [USER_KNOWLEDGE_MODEL.md](pim/USER_KNOWLEDGE_MODEL.md), [API_MEMORY_AND_LEARNING_LAYER.md](./API_MEMORY_AND_LEARNING_LAYER.md).
 
-**Главный принцип:** каждый слой читает **только свой вход**, а не весь мир. Справочники — источник истины для **движков**, а не payload каждого HTTP-запроса. **Personal Intelligence Layer** — обязательный посредник перед LLM/API ([PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md)). **API Memory & Learning Layer** — каждый LLM-вызов становится активом ([API_MEMORY_AND_LEARNING_LAYER.md](./API_MEMORY_AND_LEARNING_LAYER.md)).
+**Главный принцип:** каждый слой читает **только свой вход**, а не весь мир. Справочники — источник истины для **движков**, а не payload каждого HTTP-запроса. **Personal Intelligence Layer** — обязательный посредник перед LLM/API ([PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md)). **API Memory & Learning Layer** — каждый LLM-вызов становится активом ([API_MEMORY_AND_LEARNING_LAYER.md](./API_MEMORY_AND_LEARNING_LAYER.md)).
 
 ---
 

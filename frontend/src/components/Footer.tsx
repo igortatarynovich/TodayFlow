@@ -49,9 +49,6 @@ export function Footer() {
                     {link.label}
                   </Link>
                 ))}
-                <Link href="/pricing" className="orbit-footer__link">
-                  {t("footer.product.subscriptions", "Subscriptions")}
-                </Link>
               </nav>
             </div>
           </div>

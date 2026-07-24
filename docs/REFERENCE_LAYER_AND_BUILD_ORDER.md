@@ -4,7 +4,7 @@
 **Версия:** 1.0 (2026-05-31).  
 **Владелец:** Product + Engineering.
 
-**Связь:** [ONTOLOGY_AND_FOUNDATION_PHASES.md](./ONTOLOGY_AND_FOUNDATION_PHASES.md) (**фаза 1** — этот документ), [CORE_PRODUCT_CANON.md](./CORE_PRODUCT_CANON.md), [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) (сквозной PIL — обязателен для всех генераций), [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md), [DAYMODEL_INPUT_CONTRACT.md](./DAYMODEL_INPUT_CONTRACT.md), [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md), [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md) (откуда данные, наполнение, lifecycle), [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) (полная карта 180 + C/D/Co/R), [DAY_CONTEXT_V0.md](./DAY_CONTEXT_V0.md), [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md), [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md).
+**Связь:** [ONTOLOGY_AND_FOUNDATION_PHASES.md](./ONTOLOGY_AND_FOUNDATION_PHASES.md) (**фаза 1** — этот документ), [CORE_PRODUCT_CANON.md](archive/CORE_PRODUCT_CANON.md), [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md) (сквозной PIL — обязателен для всех генераций), [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md), [DAYMODEL_INPUT_CONTRACT.md](./DAYMODEL_INPUT_CONTRACT.md), [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md), [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md) (откуда данные, наполнение, lifecycle), [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) (полная карта 180 + C/D/Co/R), [DAY_CONTEXT_V0.md](./DAY_CONTEXT_V0.md), [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md), [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md).
 
 ---
 
@@ -45,7 +45,7 @@ Reference Layer → Profile → Daily Context → Personal Intelligence Layer
   → LLM/API → Evaluation → Output → Feedback → Training Dataset
 ```
 
-Справочники — **фундамент**. PIL — **обязательный посредник** перед любым LLM/API. Без PIL новые output surfaces не строятся ([PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) §4).
+Справочники — **фундамент**. PIL — **обязательный посредник** перед любым LLM/API. Без PIL новые output surfaces не строятся ([PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md) §4).
 
 ### 1.2 Что запрещено делать без Reference Layer
 
@@ -65,7 +65,7 @@ Reference Layer → Profile → Daily Context → Personal Intelligence Layer
 | **Profile Engine** | Astro, Numerology, Emotional baseline | Machine + частично Content (interpretation modules) |
 | **Daily Context Builder** | Tarot, Numerology cycles, Astro transits, Calendar Rhythm | Machine |
 | **DayModel / Decision Engine** | Нормализованные шкалы из Astro, Tarot, Numerology, Emotional State | Machine — поля строго по [DAYMODEL_INPUT_CONTRACT.md](./DAYMODEL_INPUT_CONTRACT.md) §5 |
-| **Generation Pipeline (LLM)** | Content Contract срезов + Machine weights **через PIL** | Content (адаптация), не invention; см. [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) |
+| **Generation Pipeline (LLM)** | Content Contract срезов + Machine weights **через PIL** | Content (адаптация), не invention; см. [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md) |
 | **Today / Morning Ritual** | Tarot card, Numerology day, UI Copy | Content + Machine |
 | **Horoscope** | Astro (signs, transits, categories) | Content по категориям |
 | **Tarot** | Tarot cards, spreads | Content + Machine (позиции расклада) |
@@ -73,7 +73,7 @@ Reference Layer → Profile → Daily Context → Personal Intelligence Layer
 | **Calendar** | Calendar Rhythm, Emotional aggregates, tracker types | Machine |
 | **UI (web / iOS / Android)** | UI Copy | Content only (никогда raw Machine rules в UX) |
 
-**Personal Map** (layer 3 в `/profile?section=chart`) читает **Astrology Reference** как доказательную базу, не как генератор дневного текста ([PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md)). Legacy URL `/natal-chart` редиректит на canonical deep link.
+**Personal Map** (layer 3 в `/profile?section=chart`) читает **Astrology Reference** как доказательную базу, не как генератор дневного текста ([PROFILE_SCREEN_MASTER.md](profile/PROFILE_SCREEN_MASTER.md)). Legacy URL `/natal-chart` редиректит на canonical deep link.
 
 ---
 
@@ -81,7 +81,7 @@ Reference Layer → Profile → Daily Context → Personal Intelligence Layer
 
 Десять доменов. Внутри домена — **entities** (строки таблицы §6).
 
-**Связанный домен (PIL):** **Interpretation** — [INTERPRETATION_LAYER_AND_REFERENCE.md](./INTERPRETATION_LAYER_AND_REFERENCE.md).
+**Связанный домен (PIL):** **Interpretation** — [INTERPRETATION_LAYER_AND_REFERENCE.md](explainability/INTERPRETATION_LAYER_AND_REFERENCE.md).
 
 **Связанный домен (продукт / commerce):** **Symbolic Assets** — [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md); target `DATA/reference/symbolic/`. P3+ после P0 Today-critical reference.
 
@@ -429,7 +429,7 @@ Daily Engine (`build_day_context_v0`, `build_day_model_v0`) **не может с
 
 ### 5.5 Порядок после справочников (Global Build Order)
 
-Полная очередь — [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) §2. Кратко:
+Полная очередь — [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md) §2. Кратко:
 
 ```
 P0 Reference → Data Ownership (done) → PIL Architecture (done)
@@ -509,13 +509,13 @@ Daily Context → DayModel → PIL (retrieval + refinement) → split Generation
 
 | Документ | Роль после Reference Layer |
 |----------|------------------------------|
-| [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) | Сквозной PIL: learning-aware features, два выхода, events, training dataset |
-| [INTERPRETATION_LAYER_AND_REFERENCE.md](./INTERPRETATION_LAYER_AND_REFERENCE.md) | Behavior Interpretation Reference |
-| [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md) | Personal Path, PEG, stage → engine |
-| [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md) | Cycles, paths, achievements |
+| [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md) | Сквозной PIL: learning-aware features, два выхода, events, training dataset |
+| [INTERPRETATION_LAYER_AND_REFERENCE.md](explainability/INTERPRETATION_LAYER_AND_REFERENCE.md) | Behavior Interpretation Reference |
+| [USER_MODEL_TARGET_STATE.md](pim/USER_MODEL_TARGET_STATE.md) | Personal Path, PEG, stage → engine |
+| [USER_MODEL_TARGET_STATE.md](pim/USER_MODEL_TARGET_STATE.md) | Cycles, paths, achievements |
 | [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) | Symbolic Reference + commerce rules |
 | [KNOWLEDGE_ACQUISITION_AND_SIGNAL_POLICY.md](./KNOWLEDGE_ACQUISITION_AND_SIGNAL_POLICY.md) | Каналы сбора A–I, trust, confirmation gates |
-| [USER_KNOWLEDGE_MODEL.md](./USER_KNOWLEDGE_MODEL.md) | Knowledge Atoms; fact/pattern/hypothesis |
+| [USER_KNOWLEDGE_MODEL.md](pim/USER_KNOWLEDGE_MODEL.md) | Knowledge Atoms; fact/pattern/hypothesis |
 | [API_MEMORY_AND_LEARNING_LAYER.md](./API_MEMORY_AND_LEARNING_LAYER.md) | API как актив: Gate (after UKM), cache/reuse, token ROI |
 | [ASTROLOGY_COMPOSITION_MODEL.md](./ASTROLOGY_COMPOSITION_MODEL.md) | P0.8 gate — atomic only; composites → Composition Engine |
 | [ASTROLOGY_MACHINE_CONTRACT.md](./ASTROLOGY_MACHINE_CONTRACT.md) | P0.7 — astro Machine Layer (third SoT pillar) |
@@ -525,9 +525,9 @@ Daily Context → DayModel → PIL (retrieval + refinement) → split Generation
 | [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md) | Кто владеет SN/RT; PIL читает slices |
 | [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) | DayModel / DayContext — **consumers** Machine Contract; входные шкалы — [DAYMODEL_INPUT_CONTRACT.md](./DAYMODEL_INPUT_CONTRACT.md) |
 | [DAY_CONTEXT_V0.md](./DAY_CONTEXT_V0.md) | Форма входа; layers ссылаются на reference codes |
-| [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) | Порядок слоёв; generation **после** reference P0 |
+| [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md) | Порядок слоёв; generation **после** reference P0 |
 | [API_MEMORY_AND_LEARNING_LAYER.md](./API_MEMORY_AND_LEARNING_LAYER.md) | Validator/safety — **после** freeze снятия для новых prompts |
-| [TODAY_LANGUAGE_V1.md](./TODAY_LANGUAGE_V1.md) | Quality gates на уже существующий guide — не новые промпты |
+| [TODAY_LANGUAGE_V1.md](today-language/TODAY_LANGUAGE_V1.md) | Quality gates на уже существующий guide — не новые промпты |
 
 ---
 

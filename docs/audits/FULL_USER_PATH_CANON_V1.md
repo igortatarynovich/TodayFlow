@@ -626,11 +626,11 @@ flowchart LR
 ### 16.2 Файлы документации к обновлению
 
 - `docs/FIRST_DAY_EXPERIENCE.md` — value-first SoT  
-- `docs/CORE_PRODUCT_CANON.md` — ссылка на этот путь; уточнить birth_time  
+- `docs/TODAYFLOW_PRODUCT_CANON_UNIFIED.md` — ссылка на этот путь; уточнить birth_time  
 - `docs/TODAY_SCREEN_V1_CANON.md` — гибрид Theme + ritual  
 - `docs/status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md` — лендинг как в коде  
 - `docs/status/TODAY_CANON_VS_CODE_DIFF.md` — пересчитать после решений  
-- `docs/PROFILE_CONTENT_CANON_V1.md` — опоры/камень дня  
+- `docs/profile/PROFILE_CONTENT_CANON_V1.md` — опоры/камень дня  
 - `docs/PRODUCT_LEXICON_AND_RETENTION.md` — запрет жаргона  
 - `docs/README.md` — приоритет чтения (этот аудит)  
 - `docs/PRODUCT_EXECUTION_TRACKER.md` — строка принятия канона  

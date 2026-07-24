@@ -1,7 +1,7 @@
 # Today Production Blocks Registry (PR-3 entry)
 
 **Status:** ACTIVE — Composition Surface honesty pass  
-**Depends on:** [PR2_APP_SHELL.md](./PR2_APP_SHELL.md) · [PR3_TODAY_PRODUCTION_SURFACE.md](./PR3_TODAY_PRODUCTION_SURFACE.md) · `day_story_v1` explainable trace  
+**Depends on:** [PR2_APP_SHELL.md](../PR2_APP_SHELL.md) · [PR3_TODAY_PRODUCTION_SURFACE.md](./PR3_TODAY_PRODUCTION_SURFACE.md) · `day_story_v1` explainable trace  
 **Rule:** no Source / Appear-when → block is not designed.
 
 ---

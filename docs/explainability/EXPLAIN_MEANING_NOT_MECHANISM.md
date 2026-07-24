@@ -13,7 +13,7 @@
 
 > **Интерфейс показывает не максимум данных, а максимум понимания.**  
 > Kitchen holds full chart, weights, conflicts, confidence, trace. UI shows only what improves self-understanding.  
-> See [PR4_PROFILE_CANON.md](./PR4_PROFILE_CANON.md) (Profile natal) · umbrella [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md).
+> See [PR4_PROFILE_CANON.md](../archive/PR4_PROFILE_CANON.md) (Profile natal) · umbrella [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md).
 
 **Жёсткое правило:**
 
@@ -25,7 +25,7 @@
 > Пользователь **никогда** не должен чувствовать, что его **анализирует алгоритм**.  
 > Режим продукта — **«я изучаю себя»**, не **«меня оценивает система»**.
 
-**Расширение (весь TodayFlow):** [TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md) §0.05–§0.06 —
+**Расширение (весь TodayFlow):** [TODAYFLOW_VOICE_CANON.md](../content/TODAYFLOW_VOICE_CANON.md) §0.05–§0.06 —
 
 > Ни один пользовательский текст не описывает состояние системы.  
 > Текст описывает человека, смысл данных или ценность следующего шага.  
@@ -33,7 +33,7 @@
 
 **Umbrella:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) — кухня обязана существовать; этот документ задаёт, что из неё **не** становится user-facing механизмом.
 
-**Связь:** [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) · [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md) §0.1 · [INTERPRETATION_LAYER_AND_REFERENCE.md](./INTERPRETATION_LAYER_AND_REFERENCE.md) · [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) §3 · [EXPLAINABLE_INTERPRETATION.md](./EXPLAINABLE_INTERPRETATION.md).
+**Связь:** [PROFILE_SCREEN_MASTER.md](../profile/PROFILE_SCREEN_MASTER.md) · [USER_MODEL_TARGET_STATE.md](../pim/USER_MODEL_TARGET_STATE.md) §0.1 · [INTERPRETATION_LAYER_AND_REFERENCE.md](./INTERPRETATION_LAYER_AND_REFERENCE.md) · [TODAY_SCREEN_V1_CANON.md](../TODAY_SCREEN_V1_CANON.md) §3 · [EXPLAINABLE_INTERPRETATION.md](./EXPLAINABLE_INTERPRETATION.md).
 
 ---
 
@@ -90,7 +90,7 @@ selection trace · rank · score · confidence · signal · pattern candidate ·
 | «Потому что AI так решил» | No meaning |
 
 **Замена:** факт или результат как субъект · второе лицо к пользователю · без «мы/система/ИИ».  
-См. [TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md) §0.
+См. [TODAYFLOW_VOICE_CANON.md](../content/TODAYFLOW_VOICE_CANON.md) §0.
 
 ### 2.2 Технический прогресс (Profile · Gamification · Evolution)
 
@@ -102,7 +102,7 @@ selection trace · rank · score · confidence · signal · pattern candidate ·
 | «Profile completeness» | «Путь становится понятнее» |
 | «+50 XP» · «Level 5 unlocked» | Milestone **смыслом**, не валютой |
 
-**Граница:** метафора **конкретная и спокойная** — не «космическая энергия пробудилась». См. [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md) §0.1.
+**Граница:** метафора **конкретная и спокойная** — не «космическая энергия пробудилась». См. [USER_MODEL_TARGET_STATE.md](../pim/USER_MODEL_TARGET_STATE.md) §0.1.
 
 ### 2.3 Internal vocabulary — **никогда** в product UI
 
@@ -123,7 +123,7 @@ selection trace · rank · score · confidence · signal · pattern candidate ·
 | Completeness bar | «Глубина профиля» / discrete milestones |
 | Derived traits registry | Markers как **интерпретации** |
 
-Layout — [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) §4.1 (interest navigation).
+Layout — [PROFILE_SCREEN_MASTER.md](../profile/PROFILE_SCREEN_MASTER.md) §4.1 (interest navigation).
 
 ---
 
@@ -163,9 +163,9 @@ Layout — [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) §4.1 (interes
 
 | Канон | Роль |
 |-------|------|
-| [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) | Foundation vs Narrative — оба **без** mechanism |
+| [PROFILE_SCREEN_MASTER.md](../profile/PROFILE_SCREEN_MASTER.md) | Foundation vs Narrative — оба **без** mechanism |
 | [INTERPRETATION_LAYER_AND_REFERENCE.md](./INTERPRETATION_LAYER_AND_REFERENCE.md) | Reference → meaning; не trace в UI |
-| [DAY_CONTEXT_V0.md](./DAY_CONTEXT_V0.md) | `debug_trace` — internal only |
+| [DAY_CONTEXT_V0.md](../DAY_CONTEXT_V0.md) | `debug_trace` — internal only |
 | L4 Interpretation | Never strategic conclusions **as facts** |
 
 **Insight (Today):** «почему так» = **смысл** (луна · число · контекст) — не «почему selector проголосовал».

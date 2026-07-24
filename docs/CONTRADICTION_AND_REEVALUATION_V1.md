@@ -13,9 +13,9 @@
 | Документ | Роль |
 |----------|------|
 | [TEMPORAL_IDENTITY_V1.md](./TEMPORAL_IDENTITY_V1.md) | C16 — `change_nature`, validity windows |
-| [PERSONAL_INTELLIGENCE_MODEL_V1.md](./PERSONAL_INTELLIGENCE_MODEL_V1.md) | PIM; цепочка после C14 |
-| [USER_KNOWLEDGE_MODEL.md](./USER_KNOWLEDGE_MODEL.md) | Atoms, `decay_strategy: contradiction`, `evidence_chain` |
-| [INTERPRETATION_LAYER_AND_REFERENCE.md](./INTERPRETATION_LAYER_AND_REFERENCE.md) | Конкурирующие interpretations до promotion |
+| [PERSONAL_INTELLIGENCE_MODEL_V1.md](pim/PERSONAL_INTELLIGENCE_MODEL_V1.md) | PIM; цепочка после C14 |
+| [USER_KNOWLEDGE_MODEL.md](pim/USER_KNOWLEDGE_MODEL.md) | Atoms, `decay_strategy: contradiction`, `evidence_chain` |
+| [INTERPRETATION_LAYER_AND_REFERENCE.md](explainability/INTERPRETATION_LAYER_AND_REFERENCE.md) | Конкурирующие interpretations до promotion |
 | [INTENT_MODEL_V1.md](./INTENT_MODEL_V1.md) | Intent outcomes как contradiction triggers |
 | [API_MEMORY_AND_LEARNING_LAYER.md](./API_MEMORY_AND_LEARNING_LAYER.md) | Contradiction events = **primary training asset** |
 

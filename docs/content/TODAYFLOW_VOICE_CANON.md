@@ -3,7 +3,7 @@
 **Статус:** архитектурный канон контента (не copywriter guide).  
 **Версия:** 1.6 (2026-07-23).  
 **Источник:** живые удачные кейсы Compatibility / Profile review packs — узнаваемый авторский тон продукта.  
-**Связь:** [COMPATIBILITY_CONTENT_CANON_V1.md](../COMPATIBILITY_CONTENT_CANON_V1.md) · [PROFILE_CONTENT_CANON_V1.md](../PROFILE_CONTENT_CANON_V1.md) · [EXPLAINABLE_INTERPRETATION.md](../EXPLAINABLE_INTERPRETATION.md) · [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [EXPLAIN_MEANING_NOT_MECHANISM.md](../EXPLAIN_MEANING_NOT_MECHANISM.md) · [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](../UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md) · [PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md)
+**Связь:** [COMPATIBILITY_CONTENT_CANON_V1.md](../COMPATIBILITY_CONTENT_CANON_V1.md) · [PROFILE_CONTENT_CANON_V1.md](../profile/PROFILE_CONTENT_CANON_V1.md) · [EXPLAINABLE_INTERPRETATION.md](../explainability/EXPLAINABLE_INTERPRETATION.md) · [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [EXPLAIN_MEANING_NOT_MECHANISM.md](../explainability/EXPLAIN_MEANING_NOT_MECHANISM.md) · [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](../UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md) · [PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md)
 
 ---
 
@@ -13,7 +13,7 @@
 > Пользователь не читает про систему, модель, ИИ, алгоритмы или внутренние процессы.  
 > Интерфейс объясняет **человека**, **смысл данных** и **ценность следующего шага** — не состояние продукта.
 
-Связь с [EXPLAIN_MEANING_NOT_MECHANISM.md](../EXPLAIN_MEANING_NOT_MECHANISM.md): смысл и честные границы — да; кухня и «кто посчитал» — нет.
+Связь с [EXPLAIN_MEANING_NOT_MECHANISM.md](../explainability/EXPLAIN_MEANING_NOT_MECHANISM.md): смысл и честные границы — да; кухня и «кто посчитал» — нет.
 
 ### Запрещённые паттерны (весь продукт · UI · LLM · email · push)
 

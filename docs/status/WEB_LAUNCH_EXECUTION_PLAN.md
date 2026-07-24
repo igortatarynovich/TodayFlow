@@ -1,3 +1,5 @@
+> ⚠️ STALE — не отражает Journey/Day Sources. См. [audits/FULL_USER_PATH_CANON_V1.md](../audits/FULL_USER_PATH_CANON_V1.md). Полная ревизия — отдельная задача.
+
 # Web Launch v1 — Execution Plan
 
 **Статус:** **PROCESS FROZEN** — режиссура истории в **React**; Figma **не используем**.  
@@ -32,7 +34,7 @@
 |--------|----------|
 | **Что строить дальше?** | [TODAYFLOW_PRODUCT_BUILD_MAP.md](../TODAYFLOW_PRODUCT_BUILD_MAP.md) |
 | Gaps vs code · DoD · Decision Log | **этот файл** |
-| Content model (reference) | [TODAYFLOW_PRODUCT_MODEL.md](../TODAYFLOW_PRODUCT_MODEL.md) §4 |
+| Content model (reference) | [TODAYFLOW_PRODUCT_MODEL.md](../archive/TODAYFLOW_PRODUCT_MODEL.md) §4 |
 | Changelog | [PRODUCT_EXECUTION_TRACKER.md](../PRODUCT_EXECUTION_TRACKER.md) |
 
 **Сейчас:** Build Map screen gate — **4 экрана ✅ · 4 ❌ · 2 🟡**. Достраиваем launch scope, walkthrough **после** последнего ✅.

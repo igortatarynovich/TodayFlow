@@ -24,7 +24,7 @@ Code gap: [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./audits/PERSONA
 | Текст глубже данных | **Запрещено.** `source_depth` ограничивает формулировки. |
 
 **Rollout (2026-07-21):** Guest + Registered — `COMPATIBILITY_CONTENT_V1=1` (publish_gate в `compatibility_enrichment_v0`). Premium — не включать широко до ≥5 реальных вопросов. Промпт не трогать до пользовательских данных.  
-**Следующий контроль:** telemetry (publish/fallback · regen · save · opens · confirm/reject) + позже **Reference Rate** (доля генераций с опорой на Profile Snapshot) — см. [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) §7.2.
+**Следующий контроль:** telemetry (publish/fallback · regen · save · opens · confirm/reject) + позже **Reference Rate** (доля генераций с опорой на Profile Snapshot) — см. [PROFILE_CONTENT_CANON_V1.md](profile/PROFILE_CONTENT_CANON_V1.md) §7.2.
 
 ---
 

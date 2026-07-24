@@ -403,7 +403,7 @@ Step 5 — LLM (Content Contract only as context):
 - [x] **P0.7** Astrology Machine Contract — [ASTROLOGY_MACHINE_CONTRACT.md](./ASTROLOGY_MACHINE_CONTRACT.md)
 - [x] **P0.8** Astrology atomic machine drafts (39: 12+10+12+5)
 - [x] **P0.9** Cross-domain validation — [CROSS_DOMAIN_MACHINE_VALIDATION.md](./CROSS_DOMAIN_MACHINE_VALIDATION.md) PASS
-- [x] **P1.0–P1.27** DayModel pipeline (interpretation → LLM gate → learning signals → dataset registry) — **реализовано в коде** (`backend/.../day_model_*`, `day_content_*`, tests). Per-step markdown specs удалены 2026-06-23; канон pipeline: [API_MEMORY_AND_LEARNING_LAYER.md](./API_MEMORY_AND_LEARNING_LAYER.md), [USER_KNOWLEDGE_MODEL.md](./USER_KNOWLEDGE_MODEL.md), [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md).
+- [x] **P1.0–P1.27** DayModel pipeline (interpretation → LLM gate → learning signals → dataset registry) — **реализовано в коде** (`backend/.../day_model_*`, `day_content_*`, tests). Per-step markdown specs удалены 2026-06-23; канон pipeline: [API_MEMORY_AND_LEARNING_LAYER.md](./API_MEMORY_AND_LEARNING_LAYER.md), [USER_KNOWLEDGE_MODEL.md](pim/USER_KNOWLEDGE_MODEL.md), [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md).
 - [ ] Astro signal composer отдаёт validated machine records
 - [x] `day_model_v1` читает Machine Contract (multi-source P1.0)
 - [ ] Cutover + `reference_version` in generation_logs
@@ -415,7 +415,7 @@ Step 5 — LLM (Content Contract only as context):
 1. [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md) — taxonomy, catalog §6, freeze  
 2. [DAYMODEL_INPUT_CONTRACT.md](./DAYMODEL_INPUT_CONTRACT.md) (этот файл) — Dependency Map  
 3. [REFERENCE_MACHINE_CONTRACT_V1.md](./schemas/REFERENCE_MACHINE_CONTRACT_V1.md) — JSON Schema формы (P0.2)  
-4. P0.3 … → P1.27 ✅ (frozen in code) → **PIM / CUM** ([PERSONAL_INTELLIGENCE_MODEL_V1.md](./PERSONAL_INTELLIGENCE_MODEL_V1.md), [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md)) → ECC → UEM-2  
+4. P0.3 … → P1.27 ✅ (frozen in code) → **PIM / CUM** ([PERSONAL_INTELLIGENCE_MODEL_V1.md](pim/PERSONAL_INTELLIGENCE_MODEL_V1.md), [USER_MODEL_TARGET_STATE.md](pim/USER_MODEL_TARGET_STATE.md)) → ECC → UEM-2  
    Freeze: [API_MEMORY_AND_LEARNING_LAYER.md](./API_MEMORY_AND_LEARNING_LAYER.md)
 
 ---

@@ -6,9 +6,9 @@
 
 **Роль:** зафиксировать **из чего состоит Today для пользователя** как **projection** [Core User Loop](./CORE_USER_LOOP.md) (Theme → Action → Progress) и [Daily Navigation Model](./DAILY_NAVIGATION_MODEL.md) (Context → Guidance → Action на экране дня).
 
-**Не входит:** OpenAPI, JSON Schema, prompt texts. Pipeline — [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md), [API_MEMORY_AND_LEARNING_LAYER.md](./API_MEMORY_AND_LEARNING_LAYER.md); experience/UI — [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md).
+**Не входит:** OpenAPI, JSON Schema, prompt texts. Pipeline — [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md), [API_MEMORY_AND_LEARNING_LAYER.md](./API_MEMORY_AND_LEARNING_LAYER.md); experience/UI — [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md).
 
-**Связь:** [CORE_USER_LOOP.md](./CORE_USER_LOOP.md) · [MARKET_ATTENTION_AND_SCREEN_JOBS.md](./MARKET_ATTENTION_AND_SCREEN_JOBS.md) (5 доменов Today · Today formula) · [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) · [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) · [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md) · [DAY_CONTEXT_V0.md](./DAY_CONTEXT_V0.md) · [DAYMODEL_INPUT_CONTRACT.md](./DAYMODEL_INPUT_CONTRACT.md) · [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) · [INTERPRETATION_LAYER_AND_REFERENCE.md](./INTERPRETATION_LAYER_AND_REFERENCE.md) (Why layer — product consumer, не блокер wire).
+**Связь:** [CORE_USER_LOOP.md](./CORE_USER_LOOP.md) · [MARKET_ATTENTION_AND_SCREEN_JOBS.md](./MARKET_ATTENTION_AND_SCREEN_JOBS.md) (5 доменов Today · Today formula) · [PROFILE_SCREEN_MASTER.md](profile/PROFILE_SCREEN_MASTER.md) · [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) · [USER_MODEL_TARGET_STATE.md](pim/USER_MODEL_TARGET_STATE.md) · [DAY_CONTEXT_V0.md](./DAY_CONTEXT_V0.md) · [DAYMODEL_INPUT_CONTRACT.md](./DAYMODEL_INPUT_CONTRACT.md) · [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) · [INTERPRETATION_LAYER_AND_REFERENCE.md](explainability/INTERPRETATION_LAYER_AND_REFERENCE.md) (Why layer — product consumer, не блокер wire).
 
 ---
 
@@ -16,7 +16,7 @@
 
 Today — **не «гороскоп на день»** и **не пять отдельных генераций**.
 
-Today — **персональный экран дня** и **потребитель** [Profile](./PROFILE_SCREEN_MASTER.md). Проектировать блок Today — только после строки «из какого блока Profile приходит data».
+Today — **персональный экран дня** и **потребитель** [Profile](profile/PROFILE_SCREEN_MASTER.md). Проектировать блок Today — только после строки «из какого блока Profile приходит data».
 
 | # | Вопрос | Блок |
 |---|--------|------|
@@ -141,7 +141,7 @@ Today Package
 
 ## 3. Воронка построения Today
 
-Шесть стадий — **строгий порядок**. Детали gates — [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md), [TODAY_CONTRACT_ASSEMBLER_MAPPING.md](./TODAY_CONTRACT_ASSEMBLER_MAPPING.md).
+Шесть стадий — **строгий порядок**. Детали gates — [PERSONAL_INTELLIGENCE_LAYER.md](pim/PERSONAL_INTELLIGENCE_LAYER.md), [TODAY_CONTRACT_ASSEMBLER_MAPPING.md](./TODAY_CONTRACT_ASSEMBLER_MAPPING.md).
 
 ```mermaid
 flowchart TB
@@ -348,7 +348,7 @@ Wire-plan: [TODAY_CONTRACT_ASSEMBLER_MAPPING.md](./TODAY_CONTRACT_ASSEMBLER_MAPP
 
 - Gap audit vs код: [status/TODAY_CANON_VS_CODE_DIFF.md](./status/TODAY_CANON_VS_CODE_DIFF.md)
 - First Day MVP: [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md)
-- Profile: [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md)
+- Profile: [PROFILE_SCREEN_MASTER.md](profile/PROFILE_SCREEN_MASTER.md)
 - Порядок генерации: [TODAY_CONTRACT_ASSEMBLER_MAPPING.md](./TODAY_CONTRACT_ASSEMBLER_MAPPING.md)
 - UI решения: [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md)
 - JSON post-ritual: [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md)

@@ -7,9 +7,9 @@
 **Это не:** список запрещённых слов и не «сделай текст менее эзотерическим».  
 **Это:** фильтр **банальность / небанальность** — отдельный слой качества **после** генерации, **до** показа пользователю.
 
-**Калибровка (до кода):** [TODAY_LANGUAGE_CALIBRATION_V0.md](./TODAY_LANGUAGE_CALIBRATION_V0.md) · [TODAY_LANGUAGE_ANTI_PATTERNS_V0.md](./TODAY_LANGUAGE_ANTI_PATTERNS_V0.md) · [TODAY_LANGUAGE_STRONG_PATTERNS_V0.md](./TODAY_LANGUAGE_STRONG_PATTERNS_V0.md) · [TODAY_ANCHOR_TYPES_V0.md](./TODAY_ANCHOR_TYPES_V0.md) · [TODAY_INTERNAL_PATTERNS_V0.md](./TODAY_INTERNAL_PATTERNS_V0.md) · [TODAY_SELF_VERIFICATION_V0.md](./TODAY_SELF_VERIFICATION_V0.md) · [datasets/TODAY_LANGUAGE_CORPUS_V0.json](./datasets/TODAY_LANGUAGE_CORPUS_V0.json)
+**Калибровка (до кода):** [TODAY_LANGUAGE_CALIBRATION_V0.md](./TODAY_LANGUAGE_CALIBRATION_V0.md) · [TODAY_LANGUAGE_ANTI_PATTERNS_V0.md](./TODAY_LANGUAGE_ANTI_PATTERNS_V0.md) · [TODAY_LANGUAGE_STRONG_PATTERNS_V0.md](./TODAY_LANGUAGE_STRONG_PATTERNS_V0.md) · [TODAY_ANCHOR_TYPES_V0.md](../TODAY_ANCHOR_TYPES_V0.md) · [TODAY_INTERNAL_PATTERNS_V0.md](../TODAY_INTERNAL_PATTERNS_V0.md) · [TODAY_SELF_VERIFICATION_V0.md](../TODAY_SELF_VERIFICATION_V0.md) · [datasets/TODAY_LANGUAGE_CORPUS_V0.json](../datasets/TODAY_LANGUAGE_CORPUS_V0.json)
 
-**Связь:** [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) · [TODAY_LANGUAGE_V1.md](./TODAY_LANGUAGE_V1.md) · [CORE_PRODUCT_CANON.md](./CORE_PRODUCT_CANON.md) §6 · [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) (Evaluation Engine)
+**Связь:** [TODAY_SCREEN_V1_CANON.md](../TODAY_SCREEN_V1_CANON.md) · [TODAY_LANGUAGE_V1.md](./TODAY_LANGUAGE_V1.md) · [CORE_PRODUCT_CANON.md](../archive/CORE_PRODUCT_CANON.md) §6 · [PERSONAL_INTELLIGENCE_LAYER.md](../pim/PERSONAL_INTELLIGENCE_LAYER.md) (Evaluation Engine)
 
 ---
 
@@ -84,7 +84,7 @@
 | ✅ | Подготовь отчёт, который уже давно откладывал. | объект · действие · узнавание |
 | ✅ (сильнее) | Разговор, который откладывали из-за страха услышать ответ. | сцена · ставка |
 
-**Статус:** `CALIBRATION_HYPOTHESIS` — operationalized as `anchor_types[]` (`AT-001`…`AT-006`) in calibration schema v0.5. Каталог: [TODAY_ANCHOR_TYPES_V0.md](./TODAY_ANCHOR_TYPES_V0.md).
+**Статус:** `CALIBRATION_HYPOTHESIS` — operationalized as `anchor_types[]` (`AT-001`…`AT-006`) in calibration schema v0.5. Каталог: [TODAY_ANCHOR_TYPES_V0.md](../TODAY_ANCHOR_TYPES_V0.md).
 
 **Эволюция гипотезы (batch_3, 2026-06-23):** «хорошая фраза **обязательно** содержит ставку» **не выдержала** api_live keep/exemplar (фокус, перегруз, дедлайн, объекты без `stake_type`). Ставка остаётся **сильным усилителем**, не единственным правилом.
 
@@ -175,7 +175,7 @@
 | 7–8 | Хорошо |
 | 9–10 | Эталон |
 
-Примеры с разметкой — в [TODAY_LANGUAGE_CALIBRATION_V0.json](./datasets/TODAY_LANGUAGE_CALIBRATION_V0.json).
+Примеры с разметкой — в [TODAY_LANGUAGE_CALIBRATION_V0.json](../datasets/TODAY_LANGUAGE_CALIBRATION_V0.json).
 
 ---
 
@@ -242,7 +242,7 @@ LLM / assembler → draft text → TODAY_LANGUAGE gate (RULE_001+002+003) → sh
 
 | Слой | Сейчас | Цель |
 |------|--------|------|
-| **TL-0 dataset** | **IN_PROGRESS** | TL-0A ✅ · TL-0B ✅ · TL-0C.1–0C.2 pending · [TODAY_LANGUAGE_CALIBRATION_V0.md](./TODAY_LANGUAGE_CALIBRATION_V0.md) · [TODAY_LANGUAGE_PATTERNS_V0.json](./datasets/TODAY_LANGUAGE_PATTERNS_V0.json) |
+| **TL-0 dataset** | **IN_PROGRESS** | TL-0A ✅ · TL-0B ✅ · TL-0C.1–0C.2 pending · [TODAY_LANGUAGE_CALIBRATION_V0.md](./TODAY_LANGUAGE_CALIBRATION_V0.md) · [TODAY_LANGUAGE_PATTERNS_V0.json](../datasets/TODAY_LANGUAGE_PATTERNS_V0.json) |
 | Prompt hints | анти-абстракция в `today_narrative.py` | Согласовать с каноном; не единственная защита |
 | RU substring ban | `_RU_NARRATIVE_BANNED_SUBSTRINGS` | Явный мусор; **не** основной фильтр |
 | Contract gate | `today_contract_text_quality_v1.py` | Навигация, dedupe — **дополнение** |
@@ -300,6 +300,6 @@ Quality memory (internal): weak pattern → низкий helpful rate → downra
 
 | Дата | Изменение |
 |------|-----------|
-| 2026-06-23 | **v1.2** — RULE_004: точка зацепки; [TODAY_ANCHOR_TYPES_V0](./TODAY_ANCHOR_TYPES_V0.md) AT-001…AT-006; stake — усилитель |
+| 2026-06-23 | **v1.2** — RULE_004: точка зацепки; [TODAY_ANCHOR_TYPES_V0](../TODAY_ANCHOR_TYPES_V0.md) AT-001…AT-006; stake — усилитель |
 | 2026-06-23 | **v1.1** — RULE_002–003; таксономия сцен; TL-0C.1–0C.3; RULE_004 (ставка) как гипотеза; контрпример «холодильник» |
 | 2026-06-23 | v1.0 — ACCEPTED: ось банальность/небанальность; RULE_001; разрешено/запрещено |

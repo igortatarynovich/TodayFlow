@@ -3,7 +3,7 @@
 **Status:** subordinate prompt passport · **wired** (`synthesize_life_spheres_v0`)  
 **Date:** 2026-07-21  
 **Block canon (SoT):** [PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md) — **APPROVED**  
-**Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md)  
+**Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../profile/PROFILE_E2E_RECONSTRUCTION.md)  
 **Code:** `prompts/profile_spheres_synthesis_v1.py` · cues / `life_spheres_synthesis_validate_v0.py`  
 **Eval:** `evals/profile_quality/run_life_spheres_synthesis_eval_v0.py`
 

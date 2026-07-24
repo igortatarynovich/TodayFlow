@@ -11,14 +11,14 @@
 | **TL-0C.2** | Сильные patterns + «почему работает» | ✅ [TODAY_LANGUAGE_STRONG_PATTERNS_V0.md](./TODAY_LANGUAGE_STRONG_PATTERNS_V0.md) |
 | **TL-0C.3** | Ручная разметка 30+30 | ⬜ **IN_PROGRESS** (batch_1–3: 45 api_live) |
 | **TL-0C.4** | Anchor hypothesis validation | ✅ 60 api_live — count gate **REFUTED**; role model H2 |
-| **TL-0C.5** | RAT phase 2 | ⬜ **PR2 ∥ RAT** · dependency map + **RRM** · [TODAY_RAT_VALIDATION_V0](./TODAY_RAT_VALIDATION_V0.md) · **no platform layer** |
+| **TL-0C.5** | RAT phase 2 | ⬜ **PR2 ∥ RAT** · dependency map + **RRM** · [TODAY_RAT_VALIDATION_V0](../TODAY_RAT_VALIDATION_V0.md) · **no platform layer** |
 | **TL-1** | Code gate | **BLOCKED** |
 
 **Ключевое число:** `323 generation logs → 2080 фраз` — достаточный объём для поиска **закономерностей**, не для немедленных score.
 
 **Скрипты:** `export_today_generation_logs.py` · `today_language_corpus_v0.py` · `today_language_patterns_v0.py`
 
-**Machine draft (TL-0C.1/0C.2):** [datasets/TODAY_LANGUAGE_PATTERNS_V0.json](./datasets/TODAY_LANGUAGE_PATTERNS_V0.json)
+**Machine draft (TL-0C.1/0C.2):** [datasets/TODAY_LANGUAGE_PATTERNS_V0.json](../datasets/TODAY_LANGUAGE_PATTERNS_V0.json)
 
 ---
 
@@ -57,7 +57,7 @@ TL-1      code gate (BLOCKED — после IP Library sign-off)
 
 **Deliverable:** 10–20 именованных анти-паттернов с 3–5 примерами каждый — editorial, не авто-score.
 
-**Machine draft:** `today_language_patterns_v0.py` → [TODAY_LANGUAGE_PATTERNS_V0.json](./datasets/TODAY_LANGUAGE_PATTERNS_V0.json)
+**Machine draft:** `today_language_patterns_v0.py` → [TODAY_LANGUAGE_PATTERNS_V0.json](../datasets/TODAY_LANGUAGE_PATTERNS_V0.json)
 
 **Editorial classifier:** [TODAY_LANGUAGE_ANTI_PATTERNS_V0.md](./TODAY_LANGUAGE_ANTI_PATTERNS_V0.md) — AP-001–008
 
@@ -93,7 +93,7 @@ TL-1      code gate (BLOCKED — после IP Library sign-off)
 
 ## TL-0C.3 — ручная разметка (schema v0.3)
 
-**Файл:** [datasets/TODAY_LANGUAGE_CALIBRATION_V0.json](./datasets/TODAY_LANGUAGE_CALIBRATION_V0.json) · `schema_version: 0.3`
+**Файл:** [datasets/TODAY_LANGUAGE_CALIBRATION_V0.json](../datasets/TODAY_LANGUAGE_CALIBRATION_V0.json) · `schema_version: 0.3`
 
 ### Зачем v0.2 → v0.3
 
@@ -102,7 +102,7 @@ TL-1      code gate (BLOCKED — после IP Library sign-off)
 | Фаза | Вывод |
 |------|--------|
 | **batch_1** | `core_scene` часто есть у слабых фраз — слабость часто в **отсутствии ставки** |
-| **batch_3** | **Keep/exemplar без ставки** — фокус, перегруз, объект, дедлайн. Гипотеза «ставка обязательна» **не выдержала** → RULE_004 = анкоры ([TODAY_ANCHOR_TYPES_V0](./TODAY_ANCHOR_TYPES_V0.md)) |
+| **batch_3** | **Keep/exemplar без ставки** — фокус, перегруз, объект, дедлайн. Гипотеза «ставка обязательна» **не выдержала** → RULE_004 = анкоры ([TODAY_ANCHOR_TYPES_V0](../TODAY_ANCHOR_TYPES_V0.md)) |
 
 | Поле | Смысл |
 |------|--------|
@@ -115,7 +115,7 @@ TL-1      code gate (BLOCKED — после IP Library sign-off)
 | `strong_pattern_id` | SP-001…008 |
 | **`core_scene`** | id из `core_scenes.catalog` |
 | **`stake_type`** | id из `stake_types.catalog` — v0.3; **усилитель**, не единственный критерий |
-| **`anchor_types`** | id[] из `anchor_types.catalog` — **v0.5**: `AT-001`…`AT-006` ([TODAY_ANCHOR_TYPES_V0](./TODAY_ANCHOR_TYPES_V0.md)) |
+| **`anchor_types`** | id[] из `anchor_types.catalog` — **v0.5**: `AT-001`…`AT-006` ([TODAY_ANCHOR_TYPES_V0](../TODAY_ANCHOR_TYPES_V0.md)) |
 | **`hypothesis_bucket`** | v0.4 batch_4: `no_anchor` \| `scene_only` \| `object_no_stake` |
 | `text_improved` | Обязателен для `rewrite` |
 
@@ -147,7 +147,7 @@ TL-1      code gate (BLOCKED — после IP Library sign-off)
 
 ### anchor_types (v0.5)
 
-Каталог **[TODAY_ANCHOR_TYPES_V0.md](./TODAY_ANCHOR_TYPES_V0.md)** — ids `AT-001`…`AT-006`.
+Каталог **[TODAY_ANCHOR_TYPES_V0.md](../TODAY_ANCHOR_TYPES_V0.md)** — ids `AT-001`…`AT-006`.
 
 | id | Тип |
 |----|-----|
@@ -211,7 +211,7 @@ TL-1      code gate (BLOCKED — после IP Library sign-off)
 
 → Решение: `stake_anchor` как **RULE** или как **усилитель** в генераторе.
 
-Каталог: [TODAY_ANCHOR_TYPES_V0.md](./TODAY_ANCHOR_TYPES_V0.md)
+Каталог: [TODAY_ANCHOR_TYPES_V0.md](../TODAY_ANCHOR_TYPES_V0.md)
 
 **Гипотеза gate (pre-TL-1):** проверена на **60 api_live** — см. [TL-0C.4 validation](#tl-0c4-validation--60-api_live) ниже.
 
@@ -325,13 +325,13 @@ JSON: `stats.tl_0c_4_hypothesis_validation` · `internal_patterns`
 
 **Два deliverable RAT:** dependency map (текст) · **RRM** (знания · **не** побочный продукт).
 
-**Dataset:** [TODAY_RAT_VALIDATION_V0](./TODAY_RAT_VALIDATION_V0.md) · n=23 · `phase_2_class_matrix` in JSON
+**Dataset:** [TODAY_RAT_VALIDATION_V0](../TODAY_RAT_VALIDATION_V0.md) · n=23 · `phase_2_class_matrix` in JSON
 
 **Два артефакта phase 2:** (1) dependency map / stack A–E · (2) **RRM** — knowledge type → recognition relevance · **Knowledge Type Catalog** (8 classes) · survivor→class correlation.
 
 **Главный вопрос n=40:** какие **классы знаний** стоят за survivor — не «кто победил в ablation». **AR-004:** density illusion · C17 ∩ RRM.
 
-**C17 vs RRM:** [DECISION_RELEVANCE_V1](./DECISION_RELEVANCE_V1.md) = решения · RRM = «это про меня» — **независимые оси** curation.
+**C17 vs RRM:** [DECISION_RELEVANCE_V1](../DECISION_RELEVANCE_V1.md) = решения · RRM = «это про меня» — **независимые оси** curation.
 
 **Порядок:** `PR2 ∥ RAT (→n=40) → RRM → Observability → ROI → Reusability → KIP sign-off`
 
@@ -462,7 +462,7 @@ Raw JSONL **не коммитятся** — `.gitignore`: `docs/datasets/raw/*.j
 
 `no_scene` · `too_generic` · `abstract` · `has_scene` · `has_trigger` · `emotional_hook` · `likely_good`
 
-Очередь: `review_slices` в [TODAY_LANGUAGE_CORPUS_V0.json](./datasets/TODAY_LANGUAGE_CORPUS_V0.json).
+Очередь: `review_slices` в [TODAY_LANGUAGE_CORPUS_V0.json](../datasets/TODAY_LANGUAGE_CORPUS_V0.json).
 
 **Ограничение:** auto-tags — **не** замена TL-0C.1; тип D обходит `likely_good`.
 

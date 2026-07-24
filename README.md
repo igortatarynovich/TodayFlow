@@ -1,6 +1,6 @@
 # TodayFlow Monorepo
 
-Product and architecture canon live in **`docs/`** — start with [docs/README.md](./docs/README.md) and [docs/CORE_PRODUCT_CANON.md](./docs/CORE_PRODUCT_CANON.md).
+Product and architecture canon live in **`docs/`** — start with [docs/README.md](./docs/README.md) and [docs/TODAYFLOW_PRODUCT_CANON_UNIFIED.md](./docs/TODAYFLOW_PRODUCT_CANON_UNIFIED.md).
 
 This repo holds:
 

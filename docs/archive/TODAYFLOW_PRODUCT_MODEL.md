@@ -1,10 +1,12 @@
+> SUPERSEDED 2026-07-24 → см. docs/TODAYFLOW_PRODUCT_CANON_UNIFIED.md
+
 # TodayFlow — Product Model
 
 **Статус:** **FROZEN for Launch v1** (execution) · **§4 Content Models — ACTIVE** (2026-07-01).  
 **Версия:** 0.4.9 (2026-07-02)  
 **Владелец:** Product
 
-> **Launch Scope Freeze:** Personal Model, Projection-first, PIM, философия, новые категории и новые product-docs — **закрыты** до user test. Работа только по [WEB_LAUNCH_PRODUCT_BLUEPRINT.md](./status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md) Epic 1–4.
+> **Launch Scope Freeze:** Personal Model, Projection-first, PIM, философия, новые категории и новые product-docs — **закрыты** до user test. Работа только по [WEB_LAUNCH_PRODUCT_BLUEPRINT.md](../status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md) Epic 1–4.
 
 **Роль:** описание **самой модели продукта** — не UX-спека, не PIM-канон, не OpenAPI.  
 **Для кого:** product, design, engineering — единый язык решений на годы.
@@ -15,17 +17,17 @@
 
 Если через год появятся ещё 20 разделов — этот принцип остаётся истинным.
 
-**Explainable Computation** *(общий канон вычислений и интерпретаций — см. [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md)):*
+**Explainable Computation** *(общий канон вычислений и интерпретаций — см. [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md)):*
 
 > Источник → расчёт → интерпретация → практический смысл → текст.  
 > Нельзя объяснить происхождение вывода — нельзя в production. Касается целей, аскез, рекомендаций, натала, совместимости и всех разделов.
 
-**Product Truth First** *(обязательный принцип отображения — см. [PRODUCT_TRUTH_FIRST.md](./PRODUCT_TRUTH_FIRST.md)):*
+**Product Truth First** *(обязательный принцип отображения — см. [PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md)):*
 
 > **Сначала рабочая логика, данные и API. Потом интерфейс.**  
 > Дизайн отображает построенный продукт, а не изображает будущий. Нет источника / нет данных — нет заполненного блока в production UI.
 
-**Understanding Progress** *(см. [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](./UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md)):*
+**Understanding Progress** *(см. [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](../UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md)):*
 
 > Прогресс = качество понимания пользователя. Missing data → «знаем X, для Y нужно Z». Подписка = глубина, не обрезанные блоки. Trial = целостный опыт.
 
@@ -34,11 +36,11 @@
 | Документ | Уровень |
 |----------|---------|
 | [TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md) | **Весь продукт** — Personal Model, projections, законы |
-| [TODAY_PRODUCT_MODEL.md](./TODAY_PRODUCT_MODEL.md) | **Projection Today** — блоки экрана дня, Today Package |
-| [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) | **UI Profile** — layout, editorial, depth routes |
-| [PERSONAL_INTELLIGENCE_MODEL_V1.md](./PERSONAL_INTELLIGENCE_MODEL_V1.md) | **PIM** — инфраструктура atoms, signals, gate |
-| [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md) | **CUM** — compact export для reasoning / LLM |
-| [status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md](./status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md) | **Launch v1** — feel/do по экранам (временный execution slice) |
+| [TODAY_PRODUCT_MODEL.md](../TODAY_PRODUCT_MODEL.md) | **Projection Today** — блоки экрана дня, Today Package |
+| [PROFILE_SCREEN_MASTER.md](../profile/PROFILE_SCREEN_MASTER.md) | **UI Profile** — layout, editorial, depth routes |
+| [PERSONAL_INTELLIGENCE_MODEL_V1.md](../pim/PERSONAL_INTELLIGENCE_MODEL_V1.md) | **PIM** — инфраструктура atoms, signals, gate |
+| [USER_MODEL_TARGET_STATE.md](../pim/USER_MODEL_TARGET_STATE.md) | **CUM** — compact export для reasoning / LLM |
+| [status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md](../status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md) | **Launch v1** — feel/do по экранам (временный execution slice) |
 
 **Launch Blueprint** не дублирует этот документ. Blueprint = *как войти в продукт*. Product Model = *что продукт есть*.
 
@@ -56,13 +58,13 @@
 | **PIM** | **Инфраструктура** обновления Personal Model — не то, что видит пользователь | Knowledge Atoms, ILR, Learning Δ |
 | **Reference Layer** | Справочники смыслов — **кормят** Personal Model, не UI | ~180 entities, machine contract |
 | **Experience** | Конкретный UI/session на projection | First Today, evening close |
-| **CUM** | Compact export для reasoning/LLM ([UMTS](./USER_MODEL_TARGET_STATE.md)) | top-K atoms, current_state |
+| **CUM** | Compact export для reasoning/LLM ([UMTS](../pim/USER_MODEL_TARGET_STATE.md)) | top-K atoms, current_state |
 | **Maps** | Живая **накопительная история** жизни — вторая половина продукта (§4.10) | Mood Map · Habit Map · My 2026 |
 | **Map** *(единственное)* | Одна временная проекция Personal Model — heatmap, journey, network, timeline | Карта настроения · карта обещаний |
 
 **Правило речи:** в продуктовых и архитектурных обсуждениях — **Personal Model** (или утверждённый термин из §0.1); в пользовательском UI — **Profile**.
 
-**Запрет user-facing слов:** **трекер** · **статистика** · **completion rate** · **алгоритм нашёл** → **карта** · **история** · **наблюдение** ([EXPLAIN_MEANING_NOT_MECHANISM.md](./EXPLAIN_MEANING_NOT_MECHANISM.md) · §4.10 · §5.8).
+**Запрет user-facing слов:** **трекер** · **статистика** · **completion rate** · **алгоритм нашёл** → **карта** · **история** · **наблюдение** ([EXPLAIN_MEANING_NOT_MECHANISM.md](../explainability/EXPLAIN_MEANING_NOT_MECHANISM.md) · §4.10 · §5.8).
 
 ### 0.1 Имя сущности — **OPEN на review**
 
@@ -211,7 +213,7 @@ Today — **не** «астро-экран» и **не** линейный сце
 |------|------------|-----------|
 | **1 · Overview** | Hero · тема дня · energy · главный фокус | ✅ core |
 | **2 · Guidance** | что делать · чего избегать · внимание · вероятные события | ✅ do/don't; events v2 |
-| **3 · Daily Symbols** | карта · число · символ · цвет · тотем · камень · луна · планета · стихия… | ✅ card+number; rest 🟡 — **не** как отдельные генераторы; см. [DAILY_INTERPRETATION_ENGINE_PHASE.md](./DAILY_INTERPRETATION_ENGINE_PHASE.md) |
+| **3 · Daily Symbols** | карта · число · символ · цвет · тотем · камень · луна · планета · стихия… | ✅ card+number; rest 🟡 — **не** как отдельные генераторы; см. [DAILY_INTERPRETATION_ENGINE_PHASE.md](../DAILY_INTERPRETATION_ENGINE_PHASE.md) |
 | **4 · Practice** | **одна** рекомендованная: дыхание · медитация · практика · аскеза · благодарность · визуализация · affirmation | 🟡 one rec |
 | **5 · Goals** | цель дня (системная или своя) | 🟡 optional |
 | **6 · Tracking** | привычки · аскеза · **месячный цикл** + прогноз/рекомендации · mood · energy · вода · сон… | v2+ *(code exists)* |
@@ -381,7 +383,7 @@ Copy: «узор привычек растёт сам», не «отметьте
 
 #### Язык: истории, не статистика
 
-В продукте **нет статистики** — только **истории** и **наблюдения** ([EXPLAIN_MEANING_NOT_MECHANISM.md](./EXPLAIN_MEANING_NOT_MECHANISM.md) · §5.8).
+В продукте **нет статистики** — только **истории** и **наблюдения** ([EXPLAIN_MEANING_NOT_MECHANISM.md](../explainability/EXPLAIN_MEANING_NOT_MECHANISM.md) · §5.8).
 
 | ❌ | ✅ |
 |----|---|
@@ -570,7 +572,7 @@ Maps — **не продукт для заполнения**; **награда**
 > Снаружи для пользователя — **только:** астрология · нумерология · таро · **его жизнь**.
 
 Каждая сущность: **Internal** (reads/writes/models) + **External** (вывод · смысл · L1–L4).  
-Copy gate: [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md) §1.
+Copy gate: [TODAYFLOW_PRODUCT_BUILD_MAP.md](../TODAYFLOW_PRODUCT_BUILD_MAP.md) §1.
 
 ### 5.7 Закон позитивного определения *(§2 · CLOSED)*
 
@@ -581,15 +583,15 @@ Copy gate: [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md) §
 
 **Всегда:** что это · зачем человеку · что даёт. **Никогда:** чем не является · почему не похоже на X · почему лучше Y.
 
-Spec gate: [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md) §2.  
+Spec gate: [TODAYFLOW_PRODUCT_BUILD_MAP.md](../TODAYFLOW_PRODUCT_BUILD_MAP.md) §2.  
 **Два закона** (§5.6 + §5.7) — автоматически для каждой новой сущности и экрана. К законам **не возвращаемся**.
 
-Personal Model как единственный источник персонализации — § выше в этом документе + [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md).  
-Разрыв с кодом: [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md).
+Personal Model как единственный источник персонализации — § выше в этом документе + [PERSONAL_INTELLIGENCE_LAYER.md](../pim/PERSONAL_INTELLIGENCE_LAYER.md).  
+Разрыв с кодом: [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](../audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md).
 
 ### 5.8 Закон историй *(Maps language · ACTIVE)*
 
-**Статус:** **ACTIVE** 2026-07-02. Связан с §4.10 · [EXPLAIN_MEANING_NOT_MECHANISM.md](./EXPLAIN_MEANING_NOT_MECHANISM.md).
+**Статус:** **ACTIVE** 2026-07-02. Связан с §4.10 · [EXPLAIN_MEANING_NOT_MECHANISM.md](../explainability/EXPLAIN_MEANING_NOT_MECHANISM.md).
 
 > **В продукте нет статистики и трекеров — только карты и истории.**
 
@@ -612,7 +614,7 @@ Copy type для Map insights — **«Наблюдение»** (EXPLAIN_MEANING 
 - Запрещено: «раздел Reference», простыня планет/домов вместо модели.
 - Разрешено: 1–3 строки смысла из модели («опора дня — …»).
 
-См. [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md).
+См. [REFERENCE_LAYER_AND_BUILD_ORDER.md](../REFERENCE_LAYER_AND_BUILD_ORDER.md).
 
 ---
 
@@ -689,11 +691,11 @@ Launch filter:
 
 ## 11. Связь с launch (Blueprint)
 
-**Builder SoT:** [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md) — Entity Catalog · Design Tokens · 6-step law.  
-**Launch feel/do (reference):** [status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md](./status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md).  
-**Gaps / DoD:** [status/WEB_LAUNCH_EXECUTION_PLAN.md](./status/WEB_LAUNCH_EXECUTION_PLAN.md).
+**Builder SoT:** [TODAYFLOW_PRODUCT_BUILD_MAP.md](../TODAYFLOW_PRODUCT_BUILD_MAP.md) — Entity Catalog · Design Tokens · 6-step law.  
+**Launch feel/do (reference):** [status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md](../status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md).  
+**Gaps / DoD:** [status/WEB_LAUNCH_EXECUTION_PLAN.md](../status/WEB_LAUNCH_EXECUTION_PLAN.md).
 
-[WEB_LAUNCH_PRODUCT_BLUEPRINT.md](./status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md) — execution slice:
+[WEB_LAUNCH_PRODUCT_BLUEPRINT.md](../status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md) — execution slice:
 
 `Landing → bootstrap Identity (Stage 1) → Today projection → evening write → D2 continuity (Stage 3 Growing)`
 

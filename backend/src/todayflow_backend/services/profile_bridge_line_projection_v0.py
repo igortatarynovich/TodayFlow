@@ -1,6 +1,6 @@
 """Deterministic Profile Step-5 bridge_line (journey «хочу возвращаться»).
 
-SoT: docs/PROFILE_PRODUCT_JOURNEY_FORMS_V1.md § Шаг 5
+SoT: docs/profile/PROFILE_PRODUCT_JOURNEY_FORMS_V1.md § Шаг 5
      docs/PRODUCT_BLOCK_SIX_QUESTIONS.md
 
 Answers ONLY: «Почему теперь имеет смысл открыть Today?»

@@ -3,7 +3,7 @@
 **Дата:** 2026-07-03  
 **Статус:** **code-side pass** · manual shape scroll — optional  
 **Prod route:** `/profile` → `ProfileWebScreen` + `ProfileQuickMapScreen` (`WEB_LAUNCH_MIN_PROFILE`) · legacy `?view=v0` → `ProfileV0Screen`  
-**Источники:** [TODAYFLOW_FOUNDATION_UI.md](../TODAYFLOW_FOUNDATION_UI.md) §9 · [PROFILE_SCREEN_MASTER.md](../PROFILE_SCREEN_MASTER.md) §10
+**Источники:** [TODAYFLOW_FOUNDATION_UI.md](../TODAYFLOW_FOUNDATION_UI.md) §9 · [PROFILE_SCREEN_MASTER.md](../profile/PROFILE_SCREEN_MASTER.md) §10
 
 ---
 

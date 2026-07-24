@@ -13,7 +13,7 @@
 
 **Код:** `frontend/src/styles/todayflow-foundation.css` — подключён в `globals.css` · классы `.tf-shell` / `.tf-shell-grid-2`.
 
-**Экран Profile:** [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) — **заморожен** до sign-off §8 здесь.
+**Экран Profile:** [PROFILE_SCREEN_MASTER.md](profile/PROFILE_SCREEN_MASTER.md) — **заморожен** до sign-off §8 здесь.
 
 ---
 
@@ -22,7 +22,7 @@
 | Это | Не это |
 |-----|--------|
 | Визуальные **примитивы** продукта | Design system компонентов (Button, Input…) |
-| Поверхности · герои · символы · геометрия | [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) · [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) §2 Symbols |
+| Поверхности · герои · символы · геометрия | [PROFILE_SCREEN_MASTER.md](profile/PROFILE_SCREEN_MASTER.md) · [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) §2 Symbols |
 | Один Figma-источник правды | Moodboard 100 UI · «TodayFlow is…» |
 
 **Порядок:** Foundation UI (Figma) → Profile снова → Today.
@@ -311,7 +311,7 @@ TODAYFLOW_FOUNDATION_UI
 
 **Code sign-off (2026-07-03):** all checklist items except Figma frames — see [status/PROFILE_FOUNDATION_QA.md](./status/PROFILE_FOUNDATION_QA.md).
 
-**После ✓:** обновить `todayflow-foundation.css` · рефактор `profileV0.module.css` на `--tf-*` · QA [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md).
+**После ✓:** обновить `todayflow-foundation.css` · рефактор `profileV0.module.css` на `--tf-*` · QA [PROFILE_SCREEN_MASTER.md](profile/PROFILE_SCREEN_MASTER.md).
 
 ---
 

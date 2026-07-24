@@ -359,8 +359,8 @@ def mine_patterns(corpus: dict[str, Any]) -> dict[str, Any]:
         "dataset_id": "TODAY_LANGUAGE_PATTERNS_V0",
         "status": "TL-0C.1_0C.2_MACHINE_DRAFT",
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "canon_ref": "docs/TODAY_LANGUAGE_V1.md",
-        "calibration_ref": "docs/TODAY_LANGUAGE_CALIBRATION_V0.md",
+        "canon_ref": "docs/today-language/TODAY_LANGUAGE_V1.md",
+        "calibration_ref": "docs/today-language/TODAY_LANGUAGE_CALIBRATION_V0.md",
         "method": {
             "scope": "generation_log phrases only (api_live)",
             "narrative_filter": "excludes pattern_hint, tarot card lines, bare personalization",

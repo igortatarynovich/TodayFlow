@@ -1,6 +1,6 @@
 """Deterministic Profile Step-4 effort_vector (journey «что делать дальше»).
 
-SoT: docs/PROFILE_PRODUCT_JOURNEY_FORMS_V1.md § Шаг 4
+SoT: docs/profile/PROFILE_PRODUCT_JOURNEY_FORMS_V1.md § Шаг 4
 Source: ONLY insight_nodes_v0.nodes[0] — never life_mission / Today / astrology / new rec lists.
 Read-path only. No LLM. No Snapshot fields.
 """

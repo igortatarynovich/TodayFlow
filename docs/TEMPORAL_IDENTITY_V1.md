@@ -12,8 +12,8 @@
 
 | Документ | Роль |
 |----------|------|
-| [PERSONAL_INTELLIGENCE_MODEL_V1.md](./PERSONAL_INTELLIGENCE_MODEL_V1.md) | PIM — историческая модель |
-| [USER_KNOWLEDGE_MODEL.md](./USER_KNOWLEDGE_MODEL.md) | Temporal fields на atoms |
+| [PERSONAL_INTELLIGENCE_MODEL_V1.md](pim/PERSONAL_INTELLIGENCE_MODEL_V1.md) | PIM — историческая модель |
+| [USER_KNOWLEDGE_MODEL.md](pim/USER_KNOWLEDGE_MODEL.md) | Temporal fields на atoms |
 | [CONTRADICTION_AND_REEVALUATION_V1.md](./CONTRADICTION_AND_REEVALUATION_V1.md) | C15 + `change_nature` при resolve |
 | [INTENT_MODEL_V1.md](./INTENT_MODEL_V1.md) | Intent history как temporal evidence |
 

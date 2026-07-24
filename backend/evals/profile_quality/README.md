@@ -1,6 +1,6 @@
 # Profile quality eval (C3)
 
-Canon: `docs/PROFILE_CONTENT_CANON_V1.md`  
+Canon: `docs/profile/PROFILE_CONTENT_CANON_V1.md`  
 Code: `services/profile_content_v1/`
 
 ## First batch

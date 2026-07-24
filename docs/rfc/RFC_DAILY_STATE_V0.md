@@ -2,7 +2,7 @@
 
 **Статус:** DRAFT — следующий артефакт Phase N (не implementation)  
 **Фаза:** [DAILY_INTERPRETATION_ENGINE_PHASE.md](../DAILY_INTERPRETATION_ENGINE_PHASE.md)  
-**Канон:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md) · [DAY_CONTEXT_V0.md](../DAY_CONTEXT_V0.md) · [EXPLAINABLE_INTERPRETATION.md](../EXPLAINABLE_INTERPRETATION.md)  
+**Канон:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md) · [DAY_CONTEXT_V0.md](../DAY_CONTEXT_V0.md) · [EXPLAINABLE_INTERPRETATION.md](../explainability/EXPLAINABLE_INTERPRETATION.md)  
 **Запрещено до принятия RFC:** production UI, независимые генераторы символов дня, советы «по сферам» без цепочки обоснования
 
 ---
@@ -112,7 +112,7 @@ resolution:
 
 ### K4. Объяснимые советы (канон текста)
 
-См. [EXPLAINABLE_INTERPRETATION.md](../EXPLAINABLE_INTERPRETATION.md). Кратко для контракта:
+См. [EXPLAINABLE_INTERPRETATION.md](../explainability/EXPLAINABLE_INTERPRETATION.md). Кратко для контракта:
 
 - Практическое утверждение без цепочки `evidence → pattern → risk/opportunity → action` **невалидно**.
 - `recommendations.*.reason` — человеческий слой 1–3 (основание · интерпретация · действие), не ярлык сферы.
@@ -183,7 +183,7 @@ recommendations:
 - [ ] K1: три слоя разделены в схеме и в правилах сборщика  
 - [ ] K2: тип `ProvenancedRec` обязателен для всех recommendations  
 - [ ] K3: конфликт сигналов описан; запрет silent average зафиксирован  
-- [ ] K4: советы только с цепочкой обоснования; запрет sphere-menu copy; промпт = structured DailyState ([EXPLAINABLE_INTERPRETATION.md](../EXPLAINABLE_INTERPRETATION.md))  
+- [ ] K4: советы только с цепочкой обоснования; запрет sphere-menu copy; промпт = structured DailyState ([EXPLAINABLE_INTERPRETATION.md](../explainability/EXPLAINABLE_INTERPRETATION.md))  
 - [ ] Имя контракта и отношение к `day_context_v*` выбраны без дубля SoT  
 - [ ] JSON Schema + минимум один valid / один invalid fixture  
 - [ ] Список потребителей и порядок миграции согласованы  

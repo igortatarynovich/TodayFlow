@@ -4,10 +4,10 @@
 **Метод:** сверка существующих SoT с backend call sites  
 **Канон (читать, не дублировать):**
 
-- [TODAYFLOW_PRODUCT_MODEL.md](../TODAYFLOW_PRODUCT_MODEL.md) — Personal Model · экраны = проекции  
-- [PERSONAL_INTELLIGENCE_LAYER.md](../PERSONAL_INTELLIGENCE_LAYER.md) — Experience → CUM → результат → signal  
+- [TODAYFLOW_PRODUCT_MODEL.md](../archive/TODAYFLOW_PRODUCT_MODEL.md) — Personal Model · экраны = проекции  
+- [PERSONAL_INTELLIGENCE_LAYER.md](../pim/PERSONAL_INTELLIGENCE_LAYER.md) — Experience → CUM → результат → signal  
 - [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](../DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md) — snapshot write / module read  
-- [PROFILE_CONTENT_CANON_V1.md](../PROFILE_CONTENT_CANON_V1.md) — read-path без portrait LLM  
+- [PROFILE_CONTENT_CANON_V1.md](../profile/PROFILE_CONTENT_CANON_V1.md) — read-path без portrait LLM  
 
 **Формат строк:** канон → фактический код → нарушение → минимальное исправление.
 
@@ -128,7 +128,7 @@ Tests: `tests/test_core_profile_read_path_no_llm_v1.py`.
 
 ## 7. Документы vs код (PIL checklist)
 
-Из [PERSONAL_INTELLIGENCE_LAYER.md](../PERSONAL_INTELLIGENCE_LAYER.md) status table (сверка 2026-07-21):
+Из [PERSONAL_INTELLIGENCE_LAYER.md](../pim/PERSONAL_INTELLIGENCE_LAYER.md) status table (сверка 2026-07-21):
 
 | Компонент | Канон | Код |
 |-----------|-------|-----|

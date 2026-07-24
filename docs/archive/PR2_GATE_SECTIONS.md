@@ -2,7 +2,7 @@
 
 **Статус:** draft — заполнять при открытии PR2  
 **Pre-flight:** [PR2_PREFLIGHT.md](./PR2_PREFLIGHT.md)  
-**Gate:** [PIM_PR_GATE_V1.md](../PIM_PR_GATE_V1.md) §1, §4 · **Success:** §4.10, §Success below
+**Gate:** [PIM_PR_GATE_V1.md](../pim/PIM_PR_GATE_V1.md) §1, §4 · **Success:** §4.10, §Success below
 
 ---
 
@@ -113,4 +113,4 @@ PR2 minimum: **causal chain of facts** — Intent Record + outcome + dual audits
 
 **Tertiary:** IR only after usefulness + retention signal.
 
-Детали: [PIM_PRODUCT_NORTH_STAR.md](../PIM_PRODUCT_NORTH_STAR.md) §0.2 · [PR2_PREFLIGHT.md](./PR2_PREFLIGHT.md) §15.
+Детали: [PIM_PRODUCT_NORTH_STAR.md](PIM_PRODUCT_NORTH_STAR.md) §0.2 · [PR2_PREFLIGHT.md](./PR2_PREFLIGHT.md) §15.

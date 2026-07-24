@@ -9,7 +9,7 @@ const USER_FACING_DIRS = [
 const USER_FACING_FILES = [
   "src/lib/coldStart.ts",
   "src/lib/thematicReports.ts",
-  "../docs/TODAY_LANGUAGE_V1.md",
+  "../docs/today-language/TODAY_LANGUAGE_V1.md",
 ];
 
 const TEXT_FILE_EXTENSIONS = new Set([".ts", ".tsx", ".md"]);

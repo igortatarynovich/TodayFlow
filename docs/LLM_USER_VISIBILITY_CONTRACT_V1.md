@@ -4,7 +4,7 @@
 **Версия:** 1.1 (2026-07-23).  
 **Владелец:** Product + Engineering.  
 **Область:** Profile · Today · Compatibility · Tarot · Numerology · любой будущий AI-экран.  
-**Связь:** [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) · [PR4_PROFILE_CANON.md](./PR4_PROFILE_CANON.md) · Profile Journey V2 (`ProfileV2SystemScreen`) — первый контур аудита, не единственный.
+**Связь:** [PROFILE_CONTENT_CANON_V1.md](profile/PROFILE_CONTENT_CANON_V1.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) · [PR4_PROFILE_CANON.md](./archive/PR4_PROFILE_CANON.md) · Profile Journey V2 (`ProfileV2SystemScreen`) — первый контур аудита, не единственный.
 
 ---
 

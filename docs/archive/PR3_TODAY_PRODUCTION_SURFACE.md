@@ -1,7 +1,7 @@
 # PR-3: Today Production Surface
 
 **Status:** IN PROGRESS — Composition honesty pass (soft why + strengthen)  
-**Canon:** [PRODUCT_TRUTH_FIRST.md](./PRODUCT_TRUTH_FIRST.md) · [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [EXPLAINABLE_INTERPRETATION.md](./EXPLAINABLE_INTERPRETATION.md) · [audits/EXPLAINABLE_GENERATION_AUDIT_REGISTRY_V0.md](./audits/EXPLAINABLE_GENERATION_AUDIT_REGISTRY_V0.md) · [rfc/RFC_DAILY_STATE_V0.md](./rfc/RFC_DAILY_STATE_V0.md) · [PR3_TODAY_BLOCKS_REGISTRY.md](./PR3_TODAY_BLOCKS_REGISTRY.md)
+**Canon:** [PRODUCT_TRUTH_FIRST.md](../PRODUCT_TRUTH_FIRST.md) · [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [EXPLAINABLE_INTERPRETATION.md](../explainability/EXPLAINABLE_INTERPRETATION.md) · [audits/EXPLAINABLE_GENERATION_AUDIT_REGISTRY_V0.md](../audits/EXPLAINABLE_GENERATION_AUDIT_REGISTRY_V0.md) · [rfc/RFC_DAILY_STATE_V0.md](../rfc/RFC_DAILY_STATE_V0.md) · [PR3_TODAY_BLOCKS_REGISTRY.md](./PR3_TODAY_BLOCKS_REGISTRY.md)
 
 > Не начинать с Figma. Сначала модель и explainable-контракт, затем независимые блоки Today, затем surface.
 
@@ -54,4 +54,4 @@ App Shell (PR-2 CLOSED)
 | Surface поверх подтверждённых блоков | Независимые «камень/цвет дня» вне DailyState path |
 | Profile отдельно | Смешивать Profile WIP в Today deploy |
 
-**App Shell:** закрыт в [PR2_APP_SHELL.md](./PR2_APP_SHELL.md) — Today Surface садится только в него.
+**App Shell:** закрыт в [PR2_APP_SHELL.md](../PR2_APP_SHELL.md) — Today Surface садится только в него.

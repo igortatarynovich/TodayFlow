@@ -1,255 +1,12 @@
 # TodayFlow — Product Build Map
 
-**Статус:** **ACTIVE** — **главный документ продукта**.  
-**Версия:** 0.7.2  
-**Дата:** 2026-07-03  
-**Текущая работа:** **React Today** *(Composition v1 🟢 — продуктовых обсуждений больше нет)*
-
-> **Правило:** проектируем **сущности продукта**. React · CSS · Figma — **после** entity spec 🟢.  
-> Экран = вторичен. Today = набор entities. Profile = проекции тех же entities + накопление.
-
----
-
-**До entity / UI:** состояние доступа — [PRODUCT_AVAILABILITY_MATRIX.md](./PRODUCT_AVAILABILITY_MATRIX.md)  
-*(данные × экран × блок; freeze Profile/Today до APPROVED)*.
-
-## Главный закон *(6 шагов — всегда в этом порядке)*
-
-```
-0. Availability (кто что видит)  ← матрица состояний
-        ↓
-1. Пользовательский вопрос
-        ↓
-2. Продуктовый ответ
-        ↓
-3. Сущность (Entity)          ← единица продукта, не UI
-        ↓
-4. Источники данных
-        ↓
-5. Проекции (где ещё живёт)
-        ↓
-6. React-компонент            ← только после entity 🟢
-```
-
-*(Design Tokens · layout — после entity inventory.)*
-
-**Пример · `DailyTheme`:**
-
-| Шаг | Содержание |
-|-----|------------|
-| **Вопрос** | Что сегодня **главное**? |
-| **Ответ** | Главная **тема дня** |
-| **Сущность** | `DailyTheme` |
-| **Источники** | Day Model · Profile |
-| **Проекции** | Today · Weekly · Profile · Wrapped |
-| **React** | `<DailyTheme />` — layout меняется, сущность нет |
-
-Если начать с `ThemeCard.tsx` — мышление UI-first и через год сотни одноразовых компонентов.  
-Если начать с **сущности** — десятки стабильных смыслов с множеством проекций.
-
-**Код запрещён**, пока сущность sprint не **🟢** (шаги 1–5 + §Today Entity Pattern + **два базовых закона** §1–§2).
-
----
-
-## §Два базовых закона *(CLOSED — не обсуждаем, применяем автоматически)*
-
-| # | Закон | Применение |
-|---|--------|------------|
-| **§1** | **Невидимый механизм** | Experience · copy · L1–L4 |
-| **§2** | **Позитивное определение** | Product Model · Build Map · Screen/Entity Specs · UX · onboarding · paywall · empty states · marketing |
-
-Новая сущность · экран · функция · текст — **сразу** через оба закона. К законам **не возвращаемся**.
-
-**Personal Model (уже канон, не третий закон):** экраны — проекции единой модели; модули не пересобирают личность.  
-SoT: [TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md) · [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) · [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md).  
-Соблюдение в коде: [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md).
-
----
-
-## §1 · Закон невидимого механизма *(CLOSED — не обсуждаем, применяем везде)*
-
-**Статус:** **CLOSED** 2026-07-01. Граница **архитектура ↔ продукт**. Copy gate G1–G5 — обязателен автоматически.
-
-> **TodayFlow не объясняет, *как* он думает.** Только **почему** вывод имеет смысл.
-
-### Внутри может быть что угодно · снаружи — только четыре знания
-
-**Internal (существует для команды):** PIM · Personal Model · DayModel · Knowledge Atoms · Reference · LLM · API · интерпретации · любые модели.
-
-**External (существует для пользователя) — только:**
-
-| # | Что пользователь «знает» |
-|---|------------------------|
-| 1 | **Астрология** |
-| 2 | **Нумерология** |
-| 3 | **Таро** |
-| 4 | **Его собственная жизнь** (история · паттерны · привычки · дни) |
-
-Весь Experience собирается **только** из этих четырёх. Движок **⛔**.
-
-### Два описания каждой сущности *(обязательно)*
-
-| | **Internal** *(spec / dev)* | **External** *(UI / copy)* |
-|---|---------------------------|---------------------------|
-| **Что** | reads · writes · dependencies · models · API | **только** вывод · смысл · L1–L4 |
-| **Язык** | Day Model · PIM · events · schemas | астрология · нумерология · таро · **жизнь человека** |
-| **Пример Tarot** | Tarot engine + Day Model + card ID | «Сегодня **Сила** хорошо сочетается с темой дня…» |
-| **Пример Profile** | pattern detection · atoms | «**Последние недели** тема отдыха возвращалась чаще обычного» |
-| **Пример Number** | numerology weight in assembler | «**Число дня** усиливает стремление завершать начатое» |
-| **Пример life** | PIM correlation · signals | «**За последнее время** ты чаще чувствовал прилив энергии после прогулок» |
-
-### ⛔ / ✅ *(закрытый список)*
-
-| ⛔ | ✅ |
-|----|-----|
-| «Система сопоставила карту…» | «Сегодня карта **Сила** хорошо сочетается с темой дня…» |
-| «Мы нашли повторяющийся паттерн…» | «Последние недели тема отдыха возвращалась чаще обычного» |
-| «Алгоритм повысил вес…» | «Сегодняшнее **число дня** усиливает…» |
-| «PIM обнаружил корреляцию…» | «**За последнее время** ты чаще чувствовал… после прогулок» |
-
-### Copy gate G1–G5
-
-Fail → переписать, не ship. Без исключений для экранов · entities · push · Profile · Compatibility.
-
----
-
-## §2 · Закон позитивного определения *(CLOSED — не обсуждаем, применяем везде)*
-
-**Статус:** **CLOSED** 2026-07-01. Фундаментальный · наравне с §1.
-
-> **Любая сущность, экран, функция и текст описываются через свою ценность для пользователя.**  
-> **Никогда — через свои ограничения или отличия от других сущностей.**
-
-### Всегда отвечаем
-
-- **Что это?**
-- **Зачем это человеку?**
-- **Что это ему даёт?**
-
-### Никогда не отвечаем
-
-- Чем это **не является**?
-- Почему это **не похоже** на X?
-- Почему это **лучше** Y?
-
-### Примеры *(автоматический rewrite)*
-
-| ❌ | ✅ |
-|----|-----|
-| «Это не гороскоп.» | «Today помогает быстрее понять **характер** сегодняшнего дня.» |
-| «Это не натальная карта.» | «Профиль объединяет все знания о человеке в **одну персональную картину**.» |
-| «Это не список практик.» | «Сегодня Today предлагает **одну** практику, которая лучше всего поддерживает тему дня.» |
-| «У вас пока нет данных.» | «Начните **создавать свою историю**.» |
-
-### Где действует *(везде)*
-
-Product Model · Build Map · Screen Specs · Entity Specs · UX copy · onboarding · paywall · empty states · marketing.
-
-### В entity spec
-
-Только про **эту** entity: **Роль** · **Зачем** · **Суть** / **Ценность** · L1–L4.  
-Границы entity ID — в **Internal** *(dev)*, без сравнительных формулировок в product spec.
-
-**Copy gate:** определение сущности через «не / нет / отсутствует / unlike X» → **fail**, переписать.
-
----
-
-## §Today Entity Pattern *(системный принцип)*
-
-### Роли — каждая сущность свой вопрос *(не повторять одну мысль)*
-
-| Entity | Вопрос | Роль |
-|--------|--------|------|
-| `DailyTheme` | **О чём** сегодняшний день? | Смысл / тема («День ясности») |
-| `DailyFocus` | **Куда** смотреть? | Внимание (descriptive) |
-| `DailyEnergy` | **В каком темпе** жить? | **Режим и темп** дня («меньше, но глубже») |
-| `DailyGuidance` | **Как** действовать? | 2–3 do |
-| `DailyWarnings` | **Чего** избегать? | 1–3 мягких don't |
-| `PracticeRecommendation` | Что **лучше всего поможет прожить** день? | **Одна** практика |
-
-`DailyEnergy` **кормит** Guidance · Warnings · Practice — задаёт **ритм**, не дублирует Theme.
-
-**Theme vs Energy (пример):**
-
-| | Theme | Energy |
-|---|-------|--------|
-| Вопрос | О чём день? | В каком темпе? |
-| Пример | «Ясность» | «Не торопись — меньше, но глубже» |
-| | | «Хороший день для быстрых решений» |
-
----
-
-### Два уровня *(каждая сущность Today)*
-
-**Уровень 1 — быстрый (30–60 сек)**  
-Достаточно закрыть приложение и жить. Theme · Focus · Energy · Guidance · Warnings — короткие выводы.
-
-**Уровень 2 — «Почему так?»**  
-Глубина по желанию — **язык предметной области** (луна · число · карта · цикл · **твоя** история).  
-⛔ PIM · DayModel · API · «алгоритм» · «ИИ» — см. §Invisible Mechanism.
-
----
-
-### Четыре слоя *(единая структура каждой сущности — Experience)*
-
-| # | Слой | Время | Содержание | Язык |
-|---|------|-------|------------|------|
-| **L1** | Короткий вывод | ~5 сек | Одна строка / режим / пункт | человек |
-| **L2** | Лично для тебя | ~20 сек | Что значит **для меня** сегодня | человек |
-| **L3** | Почему так | expand | **Почему имеет смысл** — луна · число · карта · цикл · паттерн из истории | **предметная область** |
-| **L4** | Подробнее | deep link | Трактовка · Profile · библиотека | предметная область |
-
-**L3** — факторы **как явления** («Луна в…», «число дня…»), не как pipeline («PIM slice»).
-
----
-
-### Источники в entity spec — **Internal / External**
-
-Каждая entity spec **две колонки** (см. §Invisible Mechanism):
-
-| **Internal** | **External (L1–L4 copy)** |
-|--------------|---------------------------|
-| Input: Day Model · PIM · API · dependencies | Output: астрология · нумерология · таро · **жизнь человека** |
-| Writes: events · schemas · learning path | Writes: как прожил · совпало · помогло — **продуктово** |
-
----
-
-### Writes в entity spec
-
-Пишем **продуктово**, не event names:
-
-- как человек **прожил** день;
-- **совпал** ли рекомендуемый темп/фокус с реальностью;
-- что **помогло** / **мешало**;
-- материал для **Maps** и будущего анализа.
-
----
-
-## Две параллельные оси
-
-Экран **не владеет** сущностью. Экран **использует** сущность с токенами проекции.
-
-```
-AXIS A · Пользовательская (вертикаль)          AXIS B · Сущностная (горизонталь)
-────────────────────────────────────          ────────────────────────────────────
-Landing                                       Hero · Insight · Summary · Timeline
-  ↓                                           Chart · Heatmap · Practice · Goal
-Onboarding                                    Tracker · Symbol · Match · Reading …
-  ↓
-Today              ←── composes ──→           DailyTheme · DailyFocus · DailyEnergy · DailyGuidance …
-Evening
-  ↓
-Day 2
-  ↓
-Compatibility        ←── composes ──→          CompatibilityMatch · CompatibilityInsight
-  ↓
-Tarot                ←── composes ──→          TarotReading · CardOfDay
-  ↓
-Profile              ←── composes ──→          Portrait · DaysTimeline · MapsPreview
-```
-
-**Владелец смысла:** §Entity Catalog.  
-**Экран:** composition map — какие entities + какие Design Tokens на этой проекции.
+**Статус:** **ACTIVE** — рабочий трекер entity catalog + build order (не «главный документ продукта»).  
+**Версия:** 0.7.3  
+**Дата:** 2026-07-24  
+
+> **Канон продукта:** [TODAYFLOW_PRODUCT_CANON_UNIFIED.md](./TODAYFLOW_PRODUCT_CANON_UNIFIED.md) (§5 — 6-шаговый закон, Entity Rules, Design Tokens).  
+> Этот файл — **только** живой список entities, compositions и порядка сборки.  
+> Availability: [PRODUCT_AVAILABILITY_MATRIX.md](./PRODUCT_AVAILABILITY_MATRIX.md).
 
 ---
 
@@ -320,7 +77,7 @@ Profile              ←── composes ──→          Portrait · DaysTimel
 | **Продукт** | Персональный ежедневный ориентир — точнее со временем; **помнит вчера** |
 | **4 продукта** | Today · Profile · Compatibility · Tarot |
 | **Services** | practice · habit · ascetic · affirmation · cycle · symbols — **внутри Today** |
-| **Maps** | накопительная ценность в Profile — **вторая половина продукта** ([TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md) §4.10) |
+| **Maps** | накопительная ценность в Profile — **вторая половина продукта** ([TODAYFLOW_PRODUCT_MODEL.md](archive/TODAYFLOW_PRODUCT_MODEL.md) §4.10) |
 | **UI-закон** | ответы, не дисциплины |
 
 **Формула:** `today → value · each day → more · week → patterns · month → life map · year → share`
@@ -1173,9 +930,9 @@ Code gaps: [WEB_LAUNCH_EXECUTION_PLAN.md](./status/WEB_LAUNCH_EXECUTION_PLAN.md)
 
 | Документ | Когда |
 |----------|-------|
-| [TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md) §4 | Content model |
+| [TODAYFLOW_PRODUCT_MODEL.md](archive/TODAYFLOW_PRODUCT_MODEL.md) §4 | Content model |
 | [status/WEB_LAUNCH_EXECUTION_PLAN.md](./status/WEB_LAUNCH_EXECUTION_PLAN.md) | Code gaps · DoD |
-| [PERSONAL_INTELLIGENCE_MODEL_V1.md](./PERSONAL_INTELLIGENCE_MODEL_V1.md) | Learning |
+| [PERSONAL_INTELLIGENCE_MODEL_V1.md](pim/PERSONAL_INTELLIGENCE_MODEL_V1.md) | Learning |
 
 ---
 

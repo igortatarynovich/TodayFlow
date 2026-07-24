@@ -1,12 +1,12 @@
 # PR-2: Production App Shell
 
 **Status:** **ACCEPTED / CLOSED** (2026-07-21)  
-**Canon:** [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) · [PRODUCT_TRUTH_FIRST.md](./PRODUCT_TRUTH_FIRST.md) · [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md)  
+**Canon:** [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) · [PRODUCT_TRUTH_FIRST.md](./PRODUCT_TRUTH_FIRST.md) · [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md)  
 **Code base:** `ProductWebShellLayout` → `ProductWebAppShell` → `DsAppShell`  
 **Tracker:** Product Page Standard v1 → PR-2 shell honesty  
 
 > Shell answers for structure only. It does not invent product blocks, recommendations, percentages, or decorative rails.  
-> **После CLOSED:** к App Shell возвращаемся только за багфиксами. Следующая крупная работа — [PR-3 Today Production Surface](./PR3_TODAY_PRODUCTION_SURFACE.md) (сначала `day_story_v1` explainable-контракт, не Figma).
+> **После CLOSED:** к App Shell возвращаемся только за багфиксами. Следующая крупная работа — [PR-3 Today Production Surface](./archive/PR3_TODAY_PRODUCTION_SURFACE.md) (сначала `day_story_v1` explainable-контракт, не Figma).
 
 ---
 

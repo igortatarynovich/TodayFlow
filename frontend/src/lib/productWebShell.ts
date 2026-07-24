@@ -43,7 +43,9 @@ const PRODUCT_WEB_CHROME_PREFIXES = [
 
 const PRODUCT_WEB_CHROME_EXACT = ["/"] as const;
 
-/** Marketing / legal — keep legacy Header/Footer, no product sidebar. */
+/** Marketing / legal — keep legacy Header/Footer, no product sidebar.
+ *  `/pricing` is draft/wave-2 (placeholder tariffs) — not a launch product decision;
+ *  see docs/TODAYFLOW_PRODUCT_CANON_UNIFIED.md §7. Keep route for deep links/checkout redirects. */
 const LEGACY_MARKETING_PREFIXES = [
   "/terms",
   "/privacy",

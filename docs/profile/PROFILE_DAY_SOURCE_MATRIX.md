@@ -2,7 +2,7 @@
 
 **Статус:** принято (канон доступности Source Families по данным профиля).  
 **Версия:** 1.0 (2026-07-24).  
-**Канон источников:** [DAY_SOURCES_CANON.md](./DAY_SOURCES_CANON.md) · [DAY_SOURCE_REGISTRY.md](./DAY_SOURCE_REGISTRY.md).
+**Канон источников:** [DAY_SOURCES_CANON.md](../DAY_SOURCES_CANON.md) · [DAY_SOURCE_REGISTRY.md](../DAY_SOURCE_REGISTRY.md).
 
 ## Назначение
 
@@ -54,7 +54,7 @@
 | `biorhythms` | — | birth_date | **out_of_core** | — | no |
 | `synchronicity_journal` | — | user observation | no | — | journal |
 
-\* Personal day numbers могут **ехать в wire** рядом с Foundation для UI, но канонически относятся к Personal layer ([DAY_SOURCES_CANON](./DAY_SOURCES_CANON.md) §5.5).
+\* Personal day numbers могут **ехать в wire** рядом с Foundation для UI, но канонически относятся к Personal layer ([DAY_SOURCES_CANON](../DAY_SOURCES_CANON.md) §5.5).
 
 ---
 

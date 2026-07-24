@@ -3,7 +3,7 @@
 **Status:** SoT for **eligibility · evidence · traits/cues kitchen · A/B baseline** · **not** long-term SoT for final user copy  
 **Passport:** [PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md](./PROFILE_E2E_BLOCK_PASSPORT_LIFE_SPHERES.md)  
 **User-copy target:** [PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md](./PROFILE_E2E_BLOCK_PASSPORT_SPHERES_SYNTHESIS.md)  
-**Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md)  
+**Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../profile/PROFILE_E2E_RECONSTRUCTION.md)  
 **Date:** 2026-07-21  
 **projection_version:** `life_spheres_projector_v0.2` (D1 traits · D2 scored buckets)
 

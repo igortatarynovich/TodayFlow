@@ -1,5 +1,8 @@
 "use client";
 
+// DRAFT PRICING — placeholder numbers, not a decision (see docs/TODAYFLOW_PRODUCT_CANON_UNIFIED.md §7).
+// Monetization is not a launch-v1 DoD blocker; paywall + price are a separate wave.
+
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/useAuth";

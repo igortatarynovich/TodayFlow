@@ -646,8 +646,8 @@ def build_corpus(*, logs_dir: Path | None = None) -> dict[str, Any]:
         "dataset_id": "TODAY_LANGUAGE_CORPUS_V0",
         "phase": "TL-0B",
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "canon_ref": "docs/TODAY_LANGUAGE_V1.md",
-        "calibration_ref": "docs/TODAY_LANGUAGE_CALIBRATION_V0.md",
+        "canon_ref": "docs/today-language/TODAY_LANGUAGE_V1.md",
+        "calibration_ref": "docs/today-language/TODAY_LANGUAGE_CALIBRATION_V0.md",
         "generation_logs_note": (
             "No generation_logs in repo by default. Export from DB "
             "(generation_logs.output_payload) and pass --logs-dir to merge."

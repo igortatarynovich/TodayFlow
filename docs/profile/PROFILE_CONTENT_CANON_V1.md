@@ -2,8 +2,8 @@
 
 **Статус:** принято для аудита и контракта (до переключения production generation).  
 **Версия:** 1.0 (2026-07-21).  
-**Связь:** [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) §4 · код `profile_content_v1` · текущая генерация `profile_contract_v1` / `profile_disclosure_funnel_v0` · голос [content/TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md) · **surface IA** [PR4_PROFILE_CANON.md](./PR4_PROFILE_CANON.md) · **видимость LLM-выводов** [LLM_USER_VISIBILITY_CONTRACT_V1.md](./LLM_USER_VISIBILITY_CONTRACT_V1.md).  
-**Umbrella (выше модуля):** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) — при конфликте с Content/PR-4 побеждает umbrella.  
+**Связь:** [SCREEN_CONTRACTS_V1.md](../SCREEN_CONTRACTS_V1.md) §4 · код `profile_content_v1` · текущая генерация `profile_contract_v1` / `profile_disclosure_funnel_v0` · голос [content/TODAYFLOW_VOICE_CANON.md](../content/TODAYFLOW_VOICE_CANON.md) · **surface IA** [PR4_PROFILE_CANON.md](../archive/PR4_PROFILE_CANON.md) · **видимость LLM-выводов** [LLM_USER_VISIBILITY_CONTRACT_V1.md](../LLM_USER_VISIBILITY_CONTRACT_V1.md).  
+**Umbrella (выше модуля):** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) — при конфликте с Content/PR-4 побеждает umbrella.  
 **Метод оценки:** как Compatibility — вход → полный prompt → raw → final → ручная оценка + Voice rubric.
 
 Профиль — источник персонализации для Today, Compatibility, Tarot и рекомендаций. Качество здесь важнее большинства отдельных модулей.
@@ -11,7 +11,7 @@
 **UI origin layers (PR-4):** Identity ↔ факты/расчёты · Interpretation ↔ §4.1–4.2 contract · Evidence ↔ `source_depth` + honesty · Deep Sources ↔ natal attach. Day/week UI не входит в content contract Profile. Каждый блок — полная umbrella-цепочка; PR-4 не ослабляет platform gate.
 
 **Personal Model (уже канон):** личность → Snapshot этим конвейером; модули читают Snapshot.  
-Соблюдение в коде: [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md).
+Соблюдение в коде: [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](../audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md).
 
 ---
 

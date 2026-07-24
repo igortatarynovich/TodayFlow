@@ -1,6 +1,6 @@
 # TodayFlow Backend
 
-Core API that powers Today, Profile, and product surfaces. Canon: [docs/CORE_PRODUCT_CANON.md](../docs/CORE_PRODUCT_CANON.md).
+Core API that powers Today, Profile, and product surfaces. Canon: [docs/TODAYFLOW_PRODUCT_CANON_UNIFIED.md](../docs/TODAYFLOW_PRODUCT_CANON_UNIFIED.md).
 
 ## Responsibilities
 - Accept birth data, orchestrate the astrology microservice, and map results to the internal model (see `SPEC/Internal_Model_v1.md`, `SPEC/Model_Mapping_v1.md`).

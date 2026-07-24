@@ -1,6 +1,6 @@
 # Profile E2E — Sample Pack (first forensic artifact)
 
-**Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md)  
+**Stage:** [PROFILE_E2E_RECONSTRUCTION.md](../profile/PROFILE_E2E_RECONSTRUCTION.md)  
 **Date:** 2026-07-21  
 **Source pack:** `backend/evals/profile_quality/runs/review_packs_20260721T085424Z/case_01_pq-001_base.json`  
 **Scenario:** Birth only — Aries / life path 1 (`pq-001`), `source_depth=birth_data_only`, `living=null`
@@ -107,7 +107,7 @@ Capture adapter wraps production path (funnel + portrait + optional CoreProfileS
 | Four funnel steps each unique | **Not proven**; patterns on birth-only is **GENERATION_GATE + RESPONSE_SCHEMA** |
 | Spheres needed as LLM | **Unknown** — never captured in this run |
 
-Architecture principle: [PROFILE_E2E_RECONSTRUCTION.md](../PROFILE_E2E_RECONSTRUCTION.md) · passport: [PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](./PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md)
+Architecture principle: [PROFILE_E2E_RECONSTRUCTION.md](../profile/PROFILE_E2E_RECONSTRUCTION.md) · passport: [PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md](./PROFILE_E2E_BLOCK_PASSPORT_TEMPLATE.md)
 
 ---
 

@@ -1,3 +1,5 @@
+> SUPERSEDED 2026-07-24 → см. docs/TODAYFLOW_PRODUCT_CANON_UNIFIED.md
+
 # TodayFlow Core Product Canon
 
 Last updated: 2026-07-21
@@ -11,9 +13,9 @@ Owner: Product + Engineering
 TodayFlow is not a collection of separate esoteric tools.
 It is a **daily navigation system** built around one person — clarity, direction, and daily reflection through a personal map.
 
-**Product kernel:** [DAILY_NAVIGATION_MODEL.md](./DAILY_NAVIGATION_MODEL.md) (Identity → Current Context → Guidance → Action).  
-**Market + screens:** [MARKET_ATTENTION_AND_SCREEN_JOBS.md](./MARKET_ATTENTION_AND_SCREEN_JOBS.md) (рыночные уровни, 5 доменов Today, зачем открывать экран).  
-**Daily loop:** [CORE_USER_LOOP.md](./CORE_USER_LOOP.md) (Theme → Action → Progress).
+**Product kernel:** [DAILY_NAVIGATION_MODEL.md](../DAILY_NAVIGATION_MODEL.md) (Identity → Current Context → Guidance → Action).  
+**Market + screens:** [MARKET_ATTENTION_AND_SCREEN_JOBS.md](../MARKET_ATTENTION_AND_SCREEN_JOBS.md) (рыночные уровни, 5 доменов Today, зачем открывать экран).  
+**Daily loop:** [CORE_USER_LOOP.md](../CORE_USER_LOOP.md) (Theme → Action → Progress).
 
 Core product formula:
 
@@ -42,7 +44,7 @@ This is the user's:
 ### A. Profile
 This is the user's main personal page.
 
-**Product model:** [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) (единственная UI-спека Profile).
+**Product model:** [PROFILE_SCREEN_MASTER.md](../profile/PROFILE_SCREEN_MASTER.md) (единственная UI-спека Profile).
 
 It must show:
 - natal chart
@@ -72,8 +74,8 @@ This page answers:
 ### B. Today
 This is the user's daily guide.
 
-**Product model (blocks, Today Package, generation funnel):** [TODAY_PRODUCT_MODEL.md](./TODAY_PRODUCT_MODEL.md).  
-**First 30 seconds after signup:** [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md).
+**Product model (blocks, Today Package, generation funnel):** [TODAY_PRODUCT_MODEL.md](../TODAY_PRODUCT_MODEL.md).  
+**First 30 seconds after signup:** [FIRST_DAY_EXPERIENCE.md](../FIRST_DAY_EXPERIENCE.md).
 
 It must show only today's relevant information:
 - what today may bring
@@ -104,7 +106,7 @@ Additional rule:
 ### C. JTBD Entry Layer
 This is an **optional explicit-input** layer (Questions Hub, future AI). It is **not** the product center.
 
-The daily product center is **opening a surface** (Today, Profile, Compatibility) and receiving orientation without typing a question. See [DAILY_NAVIGATION_MODEL.md](./DAILY_NAVIGATION_MODEL.md).
+The daily product center is **opening a surface** (Today, Profile, Compatibility) and receiving orientation without typing a question. See [DAILY_NAVIGATION_MODEL.md](../DAILY_NAVIGATION_MODEL.md).
 
 When the user types a question, the same pipeline applies: Profile → Context → Guidance → Action — not a separate Q&A brain.
 
@@ -192,7 +194,7 @@ Modules such as tarot, compatibility, growth layers, and profile remain implemen
 ## 4. Personalization Rule *(Personal Model — уже канон)*
 
 **SoT (не дублировать новым «принципом»):**  
-[TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md) · [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) · [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md).
+[TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md) · [PERSONAL_INTELLIGENCE_LAYER.md](../pim/PERSONAL_INTELLIGENCE_LAYER.md) · [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](../DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md).
 
 All personal content must go through the same Personal Model / core profile snapshot.
 
@@ -210,7 +212,7 @@ Additional personalization rule:
 - it is a living interpretation base that is updated through behavior and daily signals;
 - `Today`, weekly state maps, monthly state maps, and future learning layers must all enrich the same user understanding model.
 
-**Code compliance (канон → факт → fix):** [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](./audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md).
+**Code compliance (канон → факт → fix):** [audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md](../audits/PERSONAL_MODEL_CODE_COMPLIANCE_2026-07-21.md).
 
 ## 5. Multi-Profile Rule
 
@@ -257,7 +259,7 @@ Its task is:
 
 This learning layer is shared infrastructure for web and iOS, not a separate product surface.
 
-**Operational plan:** [PERSONAL_INTELLIGENCE_MODEL_V1.md](./PERSONAL_INTELLIGENCE_MODEL_V1.md) · [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) · [USER_KNOWLEDGE_MODEL.md](./USER_KNOWLEDGE_MODEL.md). **Today** events and prompts — [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md). **DayContext** — [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md), [DAY_CONTEXT_V0.md](./DAY_CONTEXT_V0.md). **North star** — [USER_MODEL_TARGET_STATE.md](./USER_MODEL_TARGET_STATE.md). **Today experience** — [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md).
+**Operational plan:** [PERSONAL_INTELLIGENCE_MODEL_V1.md](../pim/PERSONAL_INTELLIGENCE_MODEL_V1.md) · [PERSONAL_INTELLIGENCE_LAYER.md](../pim/PERSONAL_INTELLIGENCE_LAYER.md) · [USER_KNOWLEDGE_MODEL.md](../pim/USER_KNOWLEDGE_MODEL.md). **Today** events and prompts — [TODAY_PERSONALIZATION_CORE.md](../TODAY_PERSONALIZATION_CORE.md). **DayContext** — [DAY_ENGINE_AND_COHERENCE.md](../DAY_ENGINE_AND_COHERENCE.md), [DAY_CONTEXT_V0.md](../DAY_CONTEXT_V0.md). **North star** — [USER_MODEL_TARGET_STATE.md](../pim/USER_MODEL_TARGET_STATE.md). **Today experience** — [TODAY_SCREEN_V1_CANON.md](../TODAY_SCREEN_V1_CANON.md).
 
 Important product rule:
 - the system must remember which generated answers led to helpful reactions, continued engagement, route completion, or confusion;
@@ -292,7 +294,7 @@ It must not feel:
 
 ## 6.1 Canonical Answer Shape
 
-**Product contracts per need/intent:** [INTENT_MODEL_V1.md](./INTENT_MODEL_V1.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md). Central object = `need_id`; envelope below is how assembled answers are shaped.
+**Product contracts per need/intent:** [INTENT_MODEL_V1.md](../INTENT_MODEL_V1.md) · [SCREEN_CONTRACTS_V1.md](../SCREEN_CONTRACTS_V1.md). Central object = `need_id`; envelope below is how assembled answers are shaped.
 
 Any serious JTBD answer in TodayFlow must try to cover the following structure:
 - clarity: what is happening
@@ -371,7 +373,7 @@ Morning, day, and evening are:
 
 ## 8.2 Canonical User Journey
 
-**Contract (v2, 2026-06-23):** [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) — routes, signup vs onboarding data, guest demo, PIM.
+**Contract (v2, 2026-06-23):** [FIRST_DAY_EXPERIENCE.md](../FIRST_DAY_EXPERIENCE.md) — routes, signup vs onboarding data, guest demo, PIM.
 
 The canonical user journey is:
 

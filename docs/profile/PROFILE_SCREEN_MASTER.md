@@ -1,16 +1,16 @@
 # Profile · Screen Master
 
-**Статус:** **CANON** для visual/layout legacy v0; **production IA** — [PR4_PROFILE_CANON.md](./PR4_PROFILE_CANON.md) (2026-07-21).  
-**Umbrella:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](./EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) — platform production gate; при конфликте с этим Screen Master побеждает umbrella.  
+**Статус:** **CANON** для visual/layout legacy v0; **production IA** — [PR4_PROFILE_CANON.md](../archive/PR4_PROFILE_CANON.md) (2026-07-21).  
+**Umbrella:** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) — platform production gate; при конфликте с этим Screen Master побеждает umbrella.  
 **Версия:** 2.3 (2026-07-21).  
 **Код:** `frontend/src/components/profile/v0/` · production V2 `frontend/src/components/profile/v2/` · лимиты `frontend/src/lib/profilePage/profileScreenLimits.ts`
 
-**Production route (2026-07-21):** default `/profile` → **`ProfileWebScreen`** shell + **`ProfileV2SystemScreen`** (Identity · Interpretation · Evidence · Deep Sources). Legacy: `?view=v0` → `ProfileV0Screen`. Superseded: `ProfileQuickMapScreen` / `ProfileWebMyDays` as Profile home. QA: [status/PROFILE_FOUNDATION_QA.md](./status/PROFILE_FOUNDATION_QA.md).
+**Production route (2026-07-21):** default `/profile` → **`ProfileWebScreen`** shell + **`ProfileV2SystemScreen`** (Identity · Interpretation · Evidence · Deep Sources). Legacy: `?view=v0` → `ProfileV0Screen`. Superseded: `ProfileQuickMapScreen` / `ProfileWebMyDays` as Profile home. QA: [status/PROFILE_FOUNDATION_QA.md](../status/PROFILE_FOUNDATION_QA.md).
 
 **Цель (production):** Profile отвечает только на **«Кто я»** — константы личности + объяснимое Evidence.  
 **Не** день (Today), **не** недельные карты/трекеры (Maps/Tracking). Живая история живёт на `/maps/*` и `/tracking/*`; на Profile — максимум тонкая CTA.
 
-**Onboarding (v2):** Profile **не** первый экран после signup и **не** host для core setup. Сбор birth data — `/onboarding/core` ([FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md)). Profile показываем как «твой портрет» **после** First Today или по depth CTA.
+**Onboarding (v2):** Profile **не** первый экран после signup и **не** host для core setup. Сбор birth data — `/onboarding/core` ([FIRST_DAY_EXPERIENCE.md](../FIRST_DAY_EXPERIENCE.md)). Profile показываем как «твой портрет» **после** First Today или по depth CTA.
 
 **Две фазы работы:**
 
@@ -114,7 +114,7 @@
 
 **C · Maps home (не Profile)**
 
-Living Maps / My Days / week rhythm → `/maps/*`, `/tracking/*` ([PR4_PROFILE_CANON.md](./PR4_PROFILE_CANON.md)).
+Living Maps / My Days / week rhythm → `/maps/*`, `/tracking/*` ([PR4_PROFILE_CANON.md](../archive/PR4_PROFILE_CANON.md)).
 
 **Не на скролле Profile:** Compatibility hub · day state · week heatmaps · **Name entity (removed)**.
 
@@ -235,7 +235,7 @@ Living Maps / My Days / week rhythm → `/maps/*`, `/tracking/*` ([PR4_PROFILE_C
 > Full visual/entity notes below remain for Maps surfaces — not for mounting on `/profile`.
 
 **Роль:** **живая история** TodayFlow (не трекеры и не статистика) — на Maps/Tracking, не на Profile.  
-**Канон IA:** [PR4_PROFILE_CANON.md](./PR4_PROFILE_CANON.md) · product model [TODAYFLOW_PRODUCT_MODEL.md](./TODAYFLOW_PRODUCT_MODEL.md) §4.10 · §5.8 · [PERSONAL_INTELLIGENCE_LAYER.md](./PERSONAL_INTELLIGENCE_LAYER.md) §3.3 *(Maps product; Profile home retracted)*.
+**Канон IA:** [PR4_PROFILE_CANON.md](../archive/PR4_PROFILE_CANON.md) · product model [TODAYFLOW_PRODUCT_MODEL.md](../archive/TODAYFLOW_PRODUCT_MODEL.md) §4.10 · §5.8 · [PERSONAL_INTELLIGENCE_LAYER.md](../pim/PERSONAL_INTELLIGENCE_LAYER.md) §3.3 *(Maps product; Profile home retracted)*.
 
 **JTBD:** *Каким становится моя жизнь?* — узоры из Today на Maps/Tracking.
 
@@ -280,7 +280,7 @@ L3 **только** язык предметной области + **твоя и
 | `core_profile.living` | cross-map observations · share cards |
 
 **Код (seed):** `ProfileMapsPreviewBlock.tsx` · `profileMapsPreview.ts` · iOS Maps preview.  
-**Backlog:** MP-* в [PRODUCT_EXECUTION_TRACKER.md](./PRODUCT_EXECUTION_TRACKER.md).
+**Backlog:** MP-* в [PRODUCT_EXECUTION_TRACKER.md](../PRODUCT_EXECUTION_TRACKER.md).
 
 ### 7.5 Cycle *(контекст, не hero)*
 
@@ -327,7 +327,7 @@ L3 **только** язык предметной области + **твоя и
 
 ## 10. Perception audit (ощущения, не блоки)
 
-**Gate (2026-06-01):** taxonomy **ACTIVE** — см. [PROFILE_V0_CONTENT_INSIGHT_AUDIT.md](./status/PROFILE_V0_CONTENT_INSIGHT_AUDIT.md).  
+**Gate (2026-06-01):** taxonomy **ACTIVE** — см. [PROFILE_V0_CONTENT_INSIGHT_AUDIT.md](../status/PROFILE_V0_CONTENT_INSIGHT_AUDIT.md).  
 Считать инсайты по **категории измерения**, не по количеству строк. Pipeline target: `{ categoryId, text }`.
 
 **Не уходить в генерацию текста** до category contract в builders.
@@ -381,4 +381,4 @@ Pass: Sage · 7 · love/money · compass. Fail: «красивые круги» 
 
 ### Главный оставшийся риск
 
-Не UI — **одномерные инсайты** (5 строк = 1 категория) и **перекос origin/application** (~30% объяснение vs цель ≤20%). Taxonomy gate + spatial mix — [insight audit](./status/PROFILE_V0_CONTENT_INSIGHT_AUDIT.md).
+Не UI — **одномерные инсайты** (5 строк = 1 категория) и **перекос origin/application** (~30% объяснение vs цель ≤20%). Taxonomy gate + spatial mix — [insight audit](../status/PROFILE_V0_CONTENT_INSIGHT_AUDIT.md).

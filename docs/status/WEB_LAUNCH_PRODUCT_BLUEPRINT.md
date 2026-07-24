@@ -1,3 +1,5 @@
+> ⚠️ STALE — не отражает Journey/Day Sources. См. [audits/FULL_USER_PATH_CANON_V1.md](../audits/FULL_USER_PATH_CANON_V1.md). Полная ревизия — отдельная задача.
+
 # Web Launch — Product Blueprint (Stage 0)
 
 **Статус:** **LAUNCH SCOPE FROZEN** (2026-07-01) — execution only.  
@@ -35,7 +37,7 @@ v2 → одна строка в трекер, **не обсуждаем**.
 
 **UI-детали (reference):** этот Blueprint.
 
-**Фундамент (frozen до v2):** [TODAYFLOW_PRODUCT_MODEL.md](../TODAYFLOW_PRODUCT_MODEL.md) §4.
+**Фундамент (frozen до v2):** [TODAYFLOW_PRODUCT_MODEL.md](../archive/TODAYFLOW_PRODUCT_MODEL.md) §4.
 
 > TodayFlow — персональный ежедневный ориентир, который **помнит, что было вчера**.
 
@@ -71,7 +73,7 @@ v2 → одна строка в трекер, **не обсуждаем**.
 | [BEHAVIOR_CHANGE_TEST_V0.md](./BEHAVIOR_CHANGE_TEST_V0.md) ship gate row | «Demo» в минимальном пути |
 | [PRODUCT_EXECUTION_TRACKER.md](../PRODUCT_EXECUTION_TRACKER.md) P0.1 | «DONE demo today» — **reverse для launch** |
 
-**Сохраняет силу:** [EXPLAIN_MEANING_NOT_MECHANISM.md](../EXPLAIN_MEANING_NOT_MECHANISM.md), [MARKET_ATTENTION_AND_SCREEN_JOBS.md](../MARKET_ATTENTION_AND_SCREEN_JOBS.md) (совместимость = L1), evening/continuity intent в [BEHAVIOR_CHANGE_TEST_V0.md](./BEHAVIOR_CHANGE_TEST_V0.md).
+**Сохраняет силу:** [EXPLAIN_MEANING_NOT_MECHANISM.md](../explainability/EXPLAIN_MEANING_NOT_MECHANISM.md), [MARKET_ATTENTION_AND_SCREEN_JOBS.md](../MARKET_ATTENTION_AND_SCREEN_JOBS.md) (совместимость = L1), evening/continuity intent в [BEHAVIOR_CHANGE_TEST_V0.md](./BEHAVIOR_CHANGE_TEST_V0.md).
 
 ---
 
@@ -491,7 +493,7 @@ Landing → Onboarding → First Today → Evening → Day 2 → Compatibility �
 - [ ] [FIRST_DAY_EXPERIENCE.md](../FIRST_DAY_EXPERIENCE.md) — пометка §1–2 **superseded by Blueprint** для web launch; новый маршрут
 - [ ] [BEHAVIOR_CHANGE_TEST_V0.md](./BEHAVIOR_CHANGE_TEST_V0.md) — убрать Demo из ship gate path
 - [ ] [PRODUCT_EXECUTION_TRACKER.md](../PRODUCT_EXECUTION_TRACKER.md) — Stage 0 + Epic E1; P0.1 demo → **REVERSE for launch**
-- [ ] [CORE_PRODUCT_CANON.md](../CORE_PRODUCT_CANON.md) §8 guest — align or footnote Blueprint
+- [ ] [CORE_PRODUCT_CANON.md](../archive/CORE_PRODUCT_CANON.md) §8 guest — align or footnote Blueprint
 - [ ] [TODAY_CANON_VS_CODE_DIFF.md](./TODAY_CANON_VS_CODE_DIFF.md) — launch diff в Execution Plan
 
 ---
