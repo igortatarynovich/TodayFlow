@@ -1088,19 +1088,7 @@ export function TodayRitualFlow(props: Props) {
         .today-ritual-sphere {
           animation: todayRitualBreath 4.2s ease-in-out infinite;
         }
-        .today-ritual-cardface {
-          transition: transform 0.65s cubic-bezier(0.2, 0.8, 0.2, 1);
-          transform-style: preserve-3d;
-        }
-        .today-ritual-cardface.flipped {
-          transform: rotateY(180deg);
-        }
-        .today-ritual-card-inner {
-          backface-visibility: hidden;
-        }
-        .today-ritual-card-back {
-          transform: rotateY(180deg);
-        }
+        /* Card Flip lives in design-system/motion (MotionFlip) via RitualTarotPickExperience */
         .today-ritual-sphere-card:focus-visible {
           outline: 2px solid rgba(214, 142, 122, 0.65);
           outline-offset: 2px;

@@ -80,7 +80,7 @@ def build_day_personal_v1(
 
     return {
         "contract_version": "day_personal_v1",
-        "calculation_version": "day-personal-v1.5",
+        "calculation_version": "day-personal-v1.6",
         "personal_astrology": personal_astro,
         "human_design": human_design,
         "bazi": bazi,
@@ -119,6 +119,24 @@ def personal_to_interpretation_claims(personal: dict[str, Any] | None) -> list[d
     if not isinstance(personal, dict):
         return claims
 
+    def _beat_claim(
+        *,
+        beat: dict[str, Any],
+        claim_prefix: str,
+        layer: str,
+    ) -> dict[str, Any] | None:
+        text = _clip(str(beat.get("story_ru") or beat.get("title") or ""), 280)
+        if not text:
+            return None
+        return {
+            "id": f"{claim_prefix}.{beat.get('id')}",
+            "kind": "personal",
+            "text": text,
+            "evidence_ids": [str(beat.get("evidence_ref") or beat.get("id"))],
+            "domain": None,
+            "layer": layer,
+        }
+
     def _from_family(
         *,
         key: str,
@@ -126,27 +144,41 @@ def personal_to_interpretation_claims(personal: dict[str, Any] | None) -> list[d
         layer: str,
         source_fallback: str,
         limit: int = 4,
+        prefer_kinds: tuple[str, ...] = (),
+        natal_transit_cap: int | None = None,
     ) -> None:
         block = personal.get(key)
         if not isinstance(block, dict):
             return
+        beats = [b for b in (block.get("beats") or []) if isinstance(b, dict)]
+        ordered: list[dict[str, Any]] = []
+        seen: set[int] = set()
+
+        def _take(b: dict[str, Any]) -> None:
+            i = id(b)
+            if i in seen:
+                return
+            seen.add(i)
+            ordered.append(b)
+
+        for kind in prefer_kinds:
+            for b in beats:
+                if str(b.get("kind") or "") == kind:
+                    _take(b)
+        transit_n = 0
+        for b in beats:
+            kind = str(b.get("kind") or "")
+            if kind == "natal_transit":
+                if natal_transit_cap is not None and transit_n >= natal_transit_cap:
+                    continue
+                transit_n += 1
+            _take(b)
+
         local: list[dict[str, Any]] = []
-        for b in (block.get("beats") or [])[:limit]:
-            if not isinstance(b, dict):
-                continue
-            text = _clip(str(b.get("story_ru") or b.get("title") or ""), 280)
-            if not text:
-                continue
-            local.append(
-                {
-                    "id": f"{claim_prefix}.{b.get('id')}",
-                    "kind": "personal",
-                    "text": text,
-                    "evidence_ids": [str(b.get("evidence_ref") or b.get("id"))],
-                    "domain": None,
-                    "layer": layer,
-                }
-            )
+        for b in ordered[:limit]:
+            claim = _beat_claim(beat=b, claim_prefix=claim_prefix, layer=layer)
+            if claim:
+                local.append(claim)
         summary = _clip(str(block.get("summary_ru") or ""), 280)
         if summary and not local:
             local.append(
@@ -161,19 +193,32 @@ def personal_to_interpretation_claims(personal: dict[str, Any] | None) -> list[d
             )
         claims.extend(local)
 
+    # Soft personal caps first so house_rulers / time_lords reach Today claims
+    # even when natal transits fill the beat list.
     _from_family(
         key="personal_astrology",
         claim_prefix="claim.personal.astro",
         layer="personal_astrology",
         source_fallback="source.personal_astrology",
+        limit=5,
+        prefer_kinds=(
+            "house_rulers_chains",
+            "time_lords",
+            "profection_annual",
+            "solar_return",
+            "secondary_progression",
+            "planet_returns",
+        ),
+        natal_transit_cap=1,
     )
-    # HD is soft for Today (in_today=false): at most one transit beat into claims.
+    # HD soft: channel (classical planet set) + one transit gate.
     _from_family(
         key="human_design",
         claim_prefix="claim.personal.hd",
         layer="human_design",
         source_fallback="source.human_design",
-        limit=1,
+        limit=2,
+        prefer_kinds=("channel", "transit_hits_natal_gate", "transit_gate"),
     )
     _from_family(
         key="bazi",

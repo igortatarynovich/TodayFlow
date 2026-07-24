@@ -278,7 +278,7 @@
 | Паттерн | Поведение | Токены | Где |
 |---------|-----------|--------|-----|
 | **Reveal** | Текст/инсайт снизу-вверх + лёгкий fade | `--tf-motion-reveal`, ease-out | Daily Focus, S9, любой «синтез» |
-| **Flip** | 3D-поворот по Y (ощущение переворота, не кроссфейд) | `--tf-motion-card` | Таро, число дня |
+| **Flip** | 3D-поворот по Y (ощущение переворота, не кроссфейд) | `--tf-motion-card` | Таро в `/today` (`RitualTarotPickExperience` ← `TodayRitualFlow`), число дня |
 | **Settle** | Лёгкое «падение» + пружинная остановка | `--tf-motion-card` / spring | Карточки практик/трекеров |
 | **Drift** | Очень медленное движение фона без взаимодействия | длинный loop | Орбита лендинга, частицы атмосферы |
 | **Pulse** | Тихая пульсация CTA, ждущего действия | `--tf-motion-reveal` loop soft | «Раскрыть карту дня», если ещё не открыта |
@@ -433,7 +433,7 @@ TODAYFLOW_FOUNDATION_UI
 - [x] Typography — `--tf-type-*` roles in foundation CSS · legacy `--orbit-text-*` aliased in `globals.css` (DS-10)
 - [x] Colors — ≤12 core tokens in `todayflow-foundation.css`
 - [ ] Profile «без текста» frame — **pass** дорого/нет *(Cover v1: `Cover / TodayFlow — Living Portal` — portal + 10 systems + convergence; **design review**, не gate)*
-- [ ] Motion kit (`design-system/motion/` + framer-motion) — Reveal / Flip / Settle / Drift / Pulse
+- [x] Motion kit (`design-system/motion/` + framer-motion) — Reveal / Flip / Settle / Drift / Pulse *(code 2026-07-24 · Flip wired to live `RitualTarotPickExperience` via `/today` → `TodayRitualFlow`; dead `today-ritual-cardface` CSS removed)*
 - [ ] Mood themes Calm / Focus / Night / Clarity wired to day-phase + manual pin
 - [ ] Day-phase atmosphere CSS/SVG (5 states) on `time-of-day` + section atmosphere
 - [x] Guest showcase blur-preview on `/today` + `/profile`; loading skeletons *(code 2026-07-24 · `ProductGuestShowcase` + `ProductShellLoading`)*

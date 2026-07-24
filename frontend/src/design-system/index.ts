@@ -74,3 +74,14 @@ export {
 export { DsCatalog } from "@/design-system/catalog/DsCatalog";
 
 export * from "@/design-system/icons/DsIcons";
+
+export {
+  MOTION,
+  MotionDrift,
+  MotionFlip,
+  MotionPulse,
+  MotionReveal,
+  MotionSettle,
+  usePrefersReducedMotion,
+} from "@/design-system/motion";
+export type { MotionEase } from "@/design-system/motion";

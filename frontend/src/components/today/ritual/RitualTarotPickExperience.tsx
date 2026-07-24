@@ -2,6 +2,7 @@
 
 import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
+import { MotionFlip, MotionReveal } from "@/design-system/motion";
 import {
   tarotCardBackSrc,
   tarotCardFaceSrc,
@@ -71,6 +72,9 @@ export function RitualTarotPickExperience({
   const pickedRef = useRef<number | null>(null);
   const [picked, setPicked] = useState<number | null>(null);
   const continueRef = useRef(false);
+  /** Skip Flip only when we *mounted* already in reveal (persisted resume). */
+  const mountedInRevealRef = useRef(resumeCommittedId != null);
+  const [cardFlipped, setCardFlipped] = useState(() => resumeCommittedId != null);
 
   const back = tarotCardBackSrc();
   const face = tarotCardFaceSrc(effectiveId);
@@ -86,6 +90,18 @@ export function RitualTarotPickExperience({
     const id = requestAnimationFrame(() => setGridOpen(true));
     return () => cancelAnimationFrame(id);
   }, [phase]);
+
+  useEffect(() => {
+    if (phase !== "reveal") return;
+    if (mountedInRevealRef.current || reduceMotion) {
+      mountedInRevealRef.current = false;
+      setCardFlipped(true);
+      return;
+    }
+    setCardFlipped(false);
+    const t = window.setTimeout(() => setCardFlipped(true), 40);
+    return () => window.clearTimeout(t);
+  }, [phase, reduceMotion]);
 
   const onContinueClick = () => {
     if (continueRef.current) return;
@@ -133,35 +149,48 @@ export function RitualTarotPickExperience({
       <div className={styles.wrap} data-reduce={reduceMotion ? "true" : undefined}>
         <div>
           <p className={styles.revealScreenTitle}>{RITUAL_COPY.tarotRevealScreenTitle}</p>
-          <div className={`${styles.revealStage} ${styles.revealFace}`}>
-            {/* eslint-disable-next-line @next/next/no-img-element -- локальные PNG из public */}
-            <img src={face} alt="" width={TAROT_CARD_PIXEL_WIDTH} height={TAROT_CARD_PIXEL_HEIGHT} draggable={false} />
+          <div className={styles.revealStage}>
+            <MotionFlip
+              testId="ritual-tarot-motion-flip"
+              flipped={cardFlipped}
+              reducedMotion={reduceMotion}
+              back={
+                // eslint-disable-next-line @next/next/no-img-element -- локальные PNG из public
+                <img src={back} alt="" width={TAROT_CARD_PIXEL_WIDTH} height={TAROT_CARD_PIXEL_HEIGHT} draggable={false} />
+              }
+              front={
+                // eslint-disable-next-line @next/next/no-img-element -- локальные PNG из public
+                <img src={face} alt="" width={TAROT_CARD_PIXEL_WIDTH} height={TAROT_CARD_PIXEL_HEIGHT} draggable={false} />
+              }
+            />
           </div>
-          <div className={styles.revealMeta}>
-            <div style={{ fontFamily: "var(--orbit-font-display)", fontWeight: 600, color: "#2d241c", fontSize: "1.15rem" }}>
-              {cardTitleRu}
-            </div>
-            {tagLabels.length > 0 ? (
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem", justifyContent: "center", marginTop: "0.45rem" }}>
-                {tagLabels.map((t) => (
-                  <span
-                    key={t}
-                    style={{
-                      fontSize: "0.72rem",
-                      fontWeight: 600,
-                      color: "#5f4930",
-                      padding: "0.2rem 0.55rem",
-                      borderRadius: 999,
-                      background: "rgba(255, 237, 228, 0.75)",
-                      border: "1px solid rgba(214,142,122,0.32)",
-                    }}
-                  >
-                    {t}
-                  </span>
-                ))}
+          <MotionReveal reducedMotion={reduceMotion} delayMs={reduceMotion ? 0 : 90}>
+            <div className={styles.revealMeta}>
+              <div style={{ fontFamily: "var(--orbit-font-display)", fontWeight: 600, color: "#2d241c", fontSize: "1.15rem" }}>
+                {cardTitleRu}
               </div>
-            ) : null}
-          </div>
+              {tagLabels.length > 0 ? (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem", justifyContent: "center", marginTop: "0.45rem" }}>
+                  {tagLabels.map((t) => (
+                    <span
+                      key={t}
+                      style={{
+                        fontSize: "0.72rem",
+                        fontWeight: 600,
+                        color: "#5f4930",
+                        padding: "0.2rem 0.55rem",
+                        borderRadius: 999,
+                        background: "rgba(255, 237, 228, 0.75)",
+                        border: "1px solid rgba(214,142,122,0.32)",
+                      }}
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          </MotionReveal>
           <div className={styles.revealCtaRow}>
             <button type="button" className={styles.revealPrimaryCta} onClick={onContinueClick}>
               {RITUAL_COPY.tarotRevealContinueCta}

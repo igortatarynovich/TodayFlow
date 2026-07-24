@@ -1,6 +1,6 @@
 /**
  * Assemble Today's day as continuous narrative chapters from existing fields only.
- * Order: essence (Суть дня) → astro → lunar → force → symbols → supports.
+ * Order: essence (Суть дня) → astro → lunar → personal (soft L3) → force → symbols → supports.
  * Foundation layers preferred over mixed sky dump when day_foundation is present.
  */
 
@@ -21,6 +21,7 @@ export type TodayDayNarrativeChapterId =
   | "opening"
   | "astro"
   | "lunar"
+  | "personal"
   | "sky"
   | "force"
   | "symbols"
@@ -471,6 +472,39 @@ export function buildTodayDayNarrative(input: {
         accent: "sky",
         planetHint: "Луна",
         collapseAfter: paras.length > 4 ? 3 : undefined,
+      });
+    }
+  }
+
+  const personal = contract.day_story?.day_personal ?? null;
+  if (personal) {
+    const paras: string[] = [];
+    const layerUsed: string[] = [];
+    const astro = personal.personal_astrology;
+    const hd = personal.human_design;
+    const softLines = [
+      clean(astro?.house_rulers_chains?.summary_ru),
+      clean(astro?.time_lords?.summary_ru),
+      clean(astro?.profections?.summary_ru),
+      clean(hd?.channels?.summary_ru),
+      clean(hd?.transit_gates?.sun?.theme_ru
+        ? `HD: Солнце ${hd.transit_gates.sun.label ?? ""} — ${hd.transit_gates.sun.theme_ru}`.trim()
+        : null),
+    ];
+    for (const line of softLines) {
+      pushDistinct(paras, layerUsed, line);
+    }
+    // Cap soft personal chapter — do not dump full L3 pack.
+    const capped = paras.slice(0, 3);
+    if (capped.length) {
+      for (const p of capped) used.push(p);
+      chapters.push({
+        id: "personal",
+        kicker: "Личный слой",
+        lead: capped[0] ?? null,
+        paragraphs: capped.slice(1),
+        accent: "default",
+        collapseAfter: capped.length > 2 ? 2 : undefined,
       });
     }
   }

@@ -307,7 +307,7 @@
   box-sizing: border-box;
   margin: 0 auto;
   border-radius: 16px;
-  overflow: hidden;
+  overflow: visible;
   border: 1px solid rgba(214, 142, 122, 0.42);
   box-shadow: 0 12px 32px rgba(90, 52, 44, 0.16);
   background: var(--tarot-card-bg);
@@ -321,36 +321,9 @@
   display: block;
 }
 
-.revealFace {
-  animation: faceIn 0.45s ease-out both;
-}
-
-@keyframes faceIn {
-  from {
-    opacity: 0;
-    transform: scale(1.06);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
 .revealMeta {
   margin-top: 0.75rem;
   text-align: center;
-  animation: metaIn 0.22s ease-out 0.1s both;
-}
-
-@keyframes metaIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .revealCtaRow {
@@ -358,7 +331,6 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  animation: metaIn 0.28s ease-out 0.12s both;
 }
 
 .revealPrimaryCta {

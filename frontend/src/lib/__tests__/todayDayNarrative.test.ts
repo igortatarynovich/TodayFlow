@@ -216,6 +216,47 @@ describe("buildTodayDayNarrative", () => {
     expect(narrative.theme).toMatch(/перспектив|Меркурий/i);
   });
 
+  it("surfaces soft personal layer from day_personal (rulers / lords / HD)", () => {
+    const withPersonal: TodayContractV1 = {
+      ...contract,
+      day_story: {
+        ...contract.day_story!,
+        day_foundation: {
+          contract_version: "day_foundation_v1",
+          essence: { theme: "Ось", story_ru: "Суть дня без личного слоя." },
+          astro: { summary_ru: "Небо дня спокойное." },
+          lunar: { summary_ru: "Луна в спокойном знаке." },
+        },
+        day_personal: {
+          personal_astrology: {
+            house_rulers_chains: {
+              summary_ru: "Управители домов: 1-й — Венера, 10-й — Сатурн.",
+            },
+            time_lords: {
+              summary_ru: "Firdaria: мажор Луна, субпериод Сатурн.",
+            },
+          },
+          human_design: {
+            channels: { summary_ru: "Каналы HD (soft): 1-8 (Вдохновение)." },
+            transit_gates: {
+              sun: { gate: 1, line: 2, label: "1.2", theme_ru: "творческий импульс" },
+            },
+          },
+        },
+      },
+    };
+    const narrative = buildTodayDayNarrative({
+      contract: withPersonal,
+      story,
+      morningRitualData,
+    });
+    const personal = narrative.chapters.find((c) => c.id === "personal");
+    expect(personal).toBeTruthy();
+    expect(personal!.kicker).toMatch(/Личный слой/i);
+    const text = [personal!.lead, ...personal!.paragraphs].filter(Boolean).join(" ");
+    expect(text).toMatch(/Управители|Firdaria|Каналы HD/i);
+  });
+
   it("expands supports as Твой ход with color why from guide + talisman note", () => {
     const narrative = buildTodayDayNarrative({ contract, story, morningRitualData });
     const supports = narrative.chapters.find((c) => c.id === "supports")!;

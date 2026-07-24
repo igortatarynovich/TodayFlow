@@ -165,6 +165,27 @@ def test_day_story_to_today_contract_marks_absent_domains():
     assert "story_limitations" in contract["progress"]
 
 
+def test_day_story_to_today_contract_forwards_day_personal():
+    story = _sample_story()
+    story["day_personal"] = {
+        "contract_version": "day_personal_v1",
+        "summary_ru": "Firdaria и управители.",
+        "personal_astrology": {
+            "capability_ids": ["house_rulers_chains", "time_lords"],
+            "house_rulers_chains": {"summary_ru": "Управители домов soft."},
+            "time_lords": {"summary_ru": "Firdaria: мажор Луна."},
+        },
+        "human_design": {
+            "channels": {"summary_ru": "Каналы HD soft."},
+        },
+    }
+    contract = day_story_to_today_contract_v1(story, generation_id="dp-1")
+    personal = contract["day_story"].get("day_personal")
+    assert isinstance(personal, dict)
+    assert personal["personal_astrology"]["time_lords"]["summary_ru"]
+    assert personal["human_design"]["channels"]["summary_ru"]
+
+
 def test_day_story_to_legacy_narrative_derives_surfaces():
     story = _sample_story()
     narrative = day_story_to_legacy_narrative(story, generation_id="42")

@@ -281,3 +281,35 @@ def test_interpretation_includes_personal_claims():
     assert interp["day_personal"]["personal_astrology"]["beats"]
     claim_ids = {c["id"] for c in interp["derived_claims"]}
     assert any(i.startswith("claim.personal.astro.") for i in claim_ids)
+
+
+def test_soft_caps_reach_claims_before_transit_flood():
+    """house_rulers_chains + time_lords must appear in claims even with natal transits."""
+    from todayflow_backend.services.day_personal_v1 import personal_to_interpretation_claims
+
+    ce = {
+        "personal_transits": [
+            {
+                "id": f"pt-{i}",
+                "title": f"Транзит {i}",
+                "story_ru": f"Личный транзит номер {i}.",
+            }
+            for i in range(6)
+        ]
+    }
+    personal = build_day_personal_v1(
+        ce,
+        target_date=date(2026, 7, 24),
+        birth_date=date(1990, 3, 15),
+        birth_time=time(14, 30),
+        birth_lat=55.75,
+        birth_lon=37.62,
+    )
+    claims = personal_to_interpretation_claims(personal)
+    texts = " ".join(c["text"] for c in claims)
+    ids = " ".join(c["id"] for c in claims)
+    assert "house-rulers" in ids or "Управители" in texts
+    assert "time-lords" in ids or "Firdaria" in texts
+    # Natal transits capped so soft caps are not crowded out.
+    transit_claims = [c for c in claims if "pt-" in c["id"] or "Транзит" in c["text"]]
+    assert len(transit_claims) <= 1

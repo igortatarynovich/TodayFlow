@@ -116,3 +116,13 @@ def test_interpretation_can_include_hd_claim():
     assert interp["day_personal"]["human_design"]["transit_gates"]["sun"]["gate"]
     claim_ids = {c["id"] for c in interp["derived_claims"]}
     assert any(i.startswith("claim.personal.hd.") for i in claim_ids)
+    hd_claims = [c for c in interp["derived_claims"] if str(c["id"]).startswith("claim.personal.hd.")]
+    assert 1 <= len(hd_claims) <= 2
+    # Classical planet set feeds channels into beats; prefer channel when present.
+    kinds_in_beats = {
+        b.get("kind")
+        for b in (interp["day_personal"]["human_design"].get("beats") or [])
+        if isinstance(b, dict)
+    }
+    if "channel" in kinds_in_beats:
+        assert any("channel" in str(c["id"]) for c in hd_claims)

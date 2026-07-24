@@ -68,6 +68,10 @@ DaySourceInputs
 
 Планируемые (канон есть, адаптер later): ZR, outer HD planets (Uranus+), …
 
+### Soft → Today wire (v1.6)
+
+`house_rulers_chains`, `time_lords` (Firdaria) и HD classical channels приоритетно попадают в `derived_claims` и пробрасываются в `today_contract.day_story.day_personal` (глава «Личный слой» в narrative).
+
 ### Pipeline wiring
 
 `build_day_story_interpretation_v1` / `day_story_wire_v1` передают `target_date` и `birth_date` (из `core_profile.astro`) в Day Foundation. Foundation **всегда** собирается — даже без `celestial_events` (число дня + управитель недели).
