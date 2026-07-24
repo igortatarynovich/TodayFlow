@@ -61,9 +61,9 @@ DaySourceInputs
 | `personal_astrology` | **personal** | birth_date + `celestial_events.personal_transits` | no (L3) |
 | `human_design` | **personal** | `target_date` (+ birth for bodygraph) | no (L3; soft transit, Today later) |
 | `bazi` | **personal** | `birth_date` (+ `birth_time` for hour pillar) | no (L3; clashes + pillars) |
-| `vedic_personal` | **personal** | `birth_date` (Moon nakshatra → dasha; Chandra gochara) | no (L3) |
+| `vedic_personal` | **personal** | `birth_date`; Lagna gochara needs time+place | no (L3) |
 
-Планируемые (канон есть, адаптер later): Lagna gochara, lucky hours/directions, …
+Планируемые (канон есть, адаптер later): Mayan calendars, kabbalah, electional, …
 
 ### Pipeline wiring
 

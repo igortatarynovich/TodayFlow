@@ -48,6 +48,10 @@ def test_chinese_day_payload_structure():
     }
     assert payload["solar_term"]["name_ru"]
     assert payload["almanac_actions"]["suitable_ru"]
+    assert "lucky_hours_directions" in payload["capability_ids"]
+    lucky = payload["lucky_hours_directions"]
+    assert lucky["directions"]["xi_shen"]["compass"]
+    assert len(lucky["hours"]) == 12
     assert 0 <= payload["gan_zhi_day"]["cycle_index"] < 60
 
 
@@ -57,4 +61,5 @@ def test_registry_and_foundation_include_chinese():
     assert bundle["sources"]["chinese_metaphysics"]["status"] == "ok"
     f = build_day_foundation_v1({}, target_date=date(2026, 7, 24))
     assert f["chinese"]["gan_zhi_day"]["label_zh"]
+    assert f["chinese"]["lucky_hours_directions"]["directions"]["xi_shen"]
     assert f["source_inputs"]["has_chinese"] is True

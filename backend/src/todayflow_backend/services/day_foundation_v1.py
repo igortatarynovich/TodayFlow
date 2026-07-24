@@ -475,6 +475,7 @@ def build_day_foundation_from_sources(
             "five_elements_day": chinese.get("five_elements_day") if chinese else None,
             "jianchu_officer": chinese.get("jianchu_officer") if chinese else None,
             "almanac_actions": chinese.get("almanac_actions") if chinese else None,
+            "lucky_hours_directions": chinese.get("lucky_hours_directions") if chinese else None,
             "solar_term": chinese.get("solar_term") if chinese else None,
             "summary_ru": chinese_summary,
         }

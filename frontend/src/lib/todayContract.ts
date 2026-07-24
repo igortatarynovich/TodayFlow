@@ -88,10 +88,15 @@ export type TodayContractDayStoryV1 = {
     vedic_personal?: {
       summary_ru?: string;
       depth?: string;
+      lagna?: { sign_ru?: string; sidereal_lon?: number } | null;
       gochara?: {
         transit_moon?: { house_from_natal_moon?: number; sign_ru?: string };
         summary_ru?: string;
       };
+      lagna_gochara?: {
+        transit_moon?: { house_from_natal?: number; sign_ru?: string };
+        summary_ru?: string;
+      } | null;
       dasha?: {
         mahadasha?: { lord?: string; lord_ru?: string; start?: string; end?: string };
         antardasha?: { lord?: string; lord_ru?: string } | null;
@@ -214,6 +219,15 @@ export type TodayDayFoundationV1 = {
       avoid_ru?: string[];
     } | null;
     solar_term?: { id?: string; name_ru?: string; zh?: string } | null;
+    lucky_hours_directions?: {
+      summary_ru?: string;
+      directions?: Record<
+        string,
+        { compass?: string; name_ru?: string; role_ru?: string }
+      >;
+      supportive_windows?: string[];
+      caution_windows?: string[];
+    } | null;
   } | null;
   essence?: {
     theme?: string;

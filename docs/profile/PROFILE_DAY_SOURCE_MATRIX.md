@@ -42,8 +42,8 @@
 | `planetary_hours` | hour table | `target_date` + `lat/lon` + `timezone` | yes | elective | yes |
 | `seasonal_calendar` | sun rise/set | `lat/lon` + `timezone` | yes | no | yes |
 | `vedic_panchanga` | tithi…karana | datetime (+ geo for muhurta) | yes | no | later |
-| `vedic_panchanga` / `vedic_personal` | gochara / dasha | + natal Moon (`birth_date`; Lagna later) | no | yes | yes |
-| `chinese_metaphysics` | gan_zhi_day | `target_date` + `timezone` | yes | no | later |
+| `vedic_panchanga` / `vedic_personal` | gochara / dasha / lagna_gochara | + natal Moon; Lagna needs time+place | no | yes | yes |
+| `chinese_metaphysics` | gan_zhi_day + lucky hours/directions | `target_date` (+ TZ preferred) | yes | soft | yes |
 | `chinese_metaphysics` / `bazi` | bazi / clashes | + birth datetime (+ hour for full) | no | yes | yes |
 | `personal_astrology` | natal_transits (sign-level) | sky + `birth_date` (+ natal facts) | no | yes | yes |
 | `personal_astrology` | houses, ASC/MC, progressions | + `birth_time` + `birth_place` | no | yes | yes |

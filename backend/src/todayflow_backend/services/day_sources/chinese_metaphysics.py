@@ -192,6 +192,112 @@ _SOLAR_TERM_RU = {
     "dahan": "Большой холод",
 }
 
+# Day-stem auspicious gods (喜神 / 财神 / 福神) — soft almanac directions.
+_STEM_DIRECTIONS: dict[str, dict[str, tuple[str, str, str]]] = {
+    # stem_id → role → (sector_id, compass, name_ru)
+    "jia": {
+        "xi_shen": ("gen", "NE", "северо-восток"),
+        "cai_shen": ("xun", "SE", "юго-восток"),
+        "fu_shen": ("xun", "SE", "юго-восток"),
+    },
+    "yi": {
+        "xi_shen": ("qian", "NW", "северо-запад"),
+        "cai_shen": ("kun", "SW", "юго-запад"),
+        "fu_shen": ("kun", "SW", "юго-запад"),
+    },
+    "bing": {
+        "xi_shen": ("dui", "W", "запад"),
+        "cai_shen": ("kun", "SW", "юго-запад"),
+        "fu_shen": ("gen", "NE", "северо-восток"),
+    },
+    "ding": {
+        "xi_shen": ("li", "S", "юг"),
+        "cai_shen": ("dui", "W", "запад"),
+        "fu_shen": ("qian", "NW", "северо-запад"),
+    },
+    "wu": {
+        "xi_shen": ("xun", "SE", "юго-восток"),
+        "cai_shen": ("gen", "NE", "северо-восток"),
+        "fu_shen": ("xun", "SE", "юго-восток"),
+    },
+    "ji": {
+        "xi_shen": ("gen", "NE", "северо-восток"),
+        "cai_shen": ("qian", "NW", "северо-запад"),
+        "fu_shen": ("kun", "SW", "юго-запад"),
+    },
+    "geng": {
+        "xi_shen": ("qian", "NW", "северо-запад"),
+        "cai_shen": ("kun", "SW", "юго-запад"),
+        "fu_shen": ("kun", "SW", "юго-запад"),
+    },
+    "xin": {
+        "xi_shen": ("dui", "W", "запад"),
+        "cai_shen": ("xun", "SE", "юго-восток"),
+        "fu_shen": ("gen", "NE", "северо-восток"),
+    },
+    "ren": {
+        "xi_shen": ("li", "S", "юг"),
+        "cai_shen": ("kun", "SW", "юго-запад"),
+        "fu_shen": ("qian", "NW", "северо-запад"),
+    },
+    "gui": {
+        "xi_shen": ("xun", "SE", "юго-восток"),
+        "cai_shen": ("dui", "W", "запад"),
+        "fu_shen": ("xun", "SE", "юго-восток"),
+    },
+}
+
+_BRANCH_COMPASS: dict[str, tuple[str, str]] = {
+    "zi": ("N", "север"),
+    "chou": ("NNE", "северо-северо-восток"),
+    "yin": ("ENE", "восток-северо-восток"),
+    "mao": ("E", "восток"),
+    "chen": ("ESE", "восток-юго-восток"),
+    "si": ("SE", "юго-восток"),
+    "wu": ("S", "юг"),
+    "wei": ("SW", "юго-запад"),
+    "shen": ("WSW", "запад-юго-запад"),
+    "you": ("W", "запад"),
+    "xu": ("WNW", "запад-северо-запад"),
+    "hai": ("NW", "северо-запад"),
+}
+
+_HOUR_LABELS_RU = (
+    "23–01",
+    "01–03",
+    "03–05",
+    "05–07",
+    "07–09",
+    "09–11",
+    "11–13",
+    "13–15",
+    "15–17",
+    "17–19",
+    "19–21",
+    "21–23",
+)
+
+_CLASH_PAIRS: frozenset[frozenset[str]] = frozenset(
+    {
+        frozenset({"zi", "wu"}),
+        frozenset({"chou", "wei"}),
+        frozenset({"yin", "shen"}),
+        frozenset({"mao", "you"}),
+        frozenset({"chen", "xu"}),
+        frozenset({"si", "hai"}),
+    }
+)
+_COMBINE_PAIRS: frozenset[frozenset[str]] = frozenset(
+    {
+        frozenset({"zi", "chou"}),
+        frozenset({"yin", "hai"}),
+        frozenset({"mao", "xu"}),
+        frozenset({"chen", "you"}),
+        frozenset({"si", "shen"}),
+        frozenset({"wu", "wei"}),
+    }
+)
+
 
 def day_pillar_index(d: date) -> int:
     return (d - _DAY_PILLAR_EPOCH).days % 60
@@ -265,6 +371,80 @@ def current_solar_term(sun_lon: float) -> dict[str, Any]:
     }
 
 
+def build_lucky_hours_directions(pillar: dict[str, Any], *, year_branch_id: str | None = None) -> dict[str, Any]:
+    """Day-stem directions + shichen tone vs day branch (canon lucky_hours_directions)."""
+    stem_id = str(pillar["stem"]["id"])
+    day_branch = str(pillar["branch"]["id"])
+    dirs_raw = _STEM_DIRECTIONS.get(stem_id, _STEM_DIRECTIONS["jia"])
+    directions = {
+        role: {
+            "sector": meta[0],
+            "compass": meta[1],
+            "name_ru": meta[2],
+            "role": role,
+            "role_ru": {"xi_shen": "喜神", "cai_shen": "财神", "fu_shen": "福神"}[role],
+        }
+        for role, meta in dirs_raw.items()
+    }
+
+    hours: list[dict[str, Any]] = []
+    supportive: list[str] = []
+    caution: list[str] = []
+    for bi, branch in enumerate(_BRANCHES):
+        bid = branch[0]
+        pair = frozenset({day_branch, bid})
+        if pair in _CLASH_PAIRS:
+            tone = "caution"
+            tone_ru = "осторожнее"
+        elif pair in _COMBINE_PAIRS:
+            tone = "supportive"
+            tone_ru = "опора"
+        else:
+            tone = "neutral"
+            tone_ru = "нейтрально"
+        row = {
+            "branch_id": bid,
+            "branch_zh": branch[2],
+            "animal_ru": _ANIMAL_RU[branch[3]],
+            "window_local": _HOUR_LABELS_RU[bi],
+            "tone": tone,
+            "tone_ru": tone_ru,
+        }
+        hours.append(row)
+        if tone == "supportive":
+            supportive.append(_HOUR_LABELS_RU[bi])
+        elif tone == "caution":
+            caution.append(_HOUR_LABELS_RU[bi])
+
+    tai_sui = None
+    if year_branch_id:
+        compass = _BRANCH_COMPASS.get(year_branch_id, ("", ""))
+        tai_sui = {
+            "year_branch_id": year_branch_id,
+            "compass": compass[0],
+            "name_ru": compass[1],
+            "advice_ru": (
+                f"Tai Sui года — {compass[1]}: лучше не «смотреть в упор» в эту сторону "
+                f"в спорных делах (soft)."
+            ),
+        }
+
+    xi = directions["xi_shen"]
+    summary = (
+        f"Направления дня: 喜神 — {xi['name_ru']}; "
+        f"опорные часы — {', '.join(supportive) or 'нет'}; "
+        f"осторожнее — {', '.join(caution) or 'нет'}."
+    )
+    return {
+        "directions": directions,
+        "hours": hours,
+        "supportive_windows": supportive,
+        "caution_windows": caution,
+        "tai_sui": tai_sui,
+        "summary_ru": summary,
+    }
+
+
 def build_chinese_day_payload(d: date) -> dict[str, Any]:
     idx = day_pillar_index(d)
     pillar = gan_zhi_from_index(idx)
@@ -274,6 +454,13 @@ def build_chinese_day_payload(d: date) -> dict[str, Any]:
     term = current_solar_term(sun_lon)
     month_branch = _BRANCHES[month_bi]
 
+    # Solar year branch for soft Tai Sui direction (Lichun ≈ Feb 4).
+    lichun = date(d.year, 2, 4)
+    solar_year = d.year if d >= lichun else d.year - 1
+    year_idx = (solar_year - 1984) % 60
+    year_branch_id = gan_zhi_from_index(year_idx)["branch"]["id"]
+    lucky = build_lucky_hours_directions(pillar, year_branch_id=year_branch_id)
+
     stem_el = pillar["stem"]["element"]
     branch_el = pillar["branch"]["element"]
 
@@ -282,7 +469,8 @@ def build_chinese_day_payload(d: date) -> dict[str, Any]:
         f"{pillar['stem']['polarity_ru']} {_ELEMENT_RU[stem_el]}, "
         f"ветвь {pillar['branch']['animal_ru']}. "
         f"Управитель Jianchu — {officer['name_ru']}. "
-        f"Солнечный термин — {term['name_ru']}."
+        f"Солнечный термин — {term['name_ru']}. "
+        f"{lucky['summary_ru']}"
     )
 
     return {
@@ -301,6 +489,7 @@ def build_chinese_day_payload(d: date) -> dict[str, Any]:
             "avoid_ru": officer["avoid_ru"],
             "source": "jianchu_v0",
         },
+        "lucky_hours_directions": lucky,
         "solar_term": term,
         "solar_month_branch": {
             "id": month_branch[0],
@@ -313,6 +502,7 @@ def build_chinese_day_payload(d: date) -> dict[str, Any]:
             "five_elements_day",
             "jianchu_officer",
             "almanac_actions",
+            "lucky_hours_directions",
             "solar_terms",
         ],
         "summary_ru": summary,

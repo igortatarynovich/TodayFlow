@@ -61,14 +61,28 @@ def test_gochara_and_dasha_payload():
     payload = build_vedic_personal_payload(
         date(2026, 7, 24),
         date(1990, 3, 15),
-        has_birth_time=True,
-        has_birth_place=True,
     )
     assert "gochara" in payload["capability_ids"]
     assert "dasha" in payload["capability_ids"]
+    assert "lagna_gochara" not in payload["capability_ids"]
     assert 1 <= payload["gochara"]["transit_moon"]["house_from_natal_moon"] <= 12
-    assert payload["depth"] == "chandra_lagna_time_known"
+    assert payload["depth"] == "chandra_lagna"
     assert payload["beats"]
+
+
+def test_lagna_gochara_when_time_and_place():
+    payload = build_vedic_personal_payload(
+        date(2026, 7, 24),
+        date(1990, 3, 15),
+        birth_time=time(14, 30),
+        birth_lat=55.75,
+        birth_lon=37.62,
+        timezone_name="Europe/Moscow",
+    )
+    assert "lagna_gochara" in payload["capability_ids"]
+    assert payload["depth"] == "lagna_gochara"
+    assert payload["lagna"]["sign_ru"]
+    assert 1 <= payload["lagna_gochara"]["transit_moon"]["house_from_natal"] <= 12
 
 
 def test_day_personal_and_interpretation():
@@ -79,9 +93,11 @@ def test_day_personal_and_interpretation():
         birth_time=time(10, 0),
         birth_lat=55.75,
         birth_lon=37.62,
+        timezone="Europe/Moscow",
     )
     assert personal["source_inputs"]["has_vedic_personal"] is True
     assert personal["vedic_personal"]["dasha"]["mahadasha"]["lord"]
+    assert personal["vedic_personal"]["lagna"]["sign_ru"]
 
     interp = build_day_story_interpretation_v1(
         day_engine_brief={"anchor_summary": "Ось.", "do_hint": "Шаг.", "avoid_hint": "Стоп."},

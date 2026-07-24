@@ -538,7 +538,8 @@ Day Story            →  интерпретация Foundation → экран T
 | `karana` | half-tithi | datetime | v1 | yes | no | yes |
 | `vara` | weekday planetary ruler | date + TZ | v1 | yes | no | yes |
 | `muhurta_intervals` | Rahu Kala, Yamaganda, … | geo + sunrise | v1 | soft | elective | yes |
-| `gochara` | Vedic transits vs natal Moon (Chandra Lagna); Lagna later | natal Moon + sky | v1/partial | no | yes (`vedic_personal`) | yes |
+| `gochara` | Vedic transits vs natal Moon (Chandra Lagna) | natal Moon + sky | v1 | no | yes (`vedic_personal`) | yes |
+| `lagna_gochara` | Transits vs sidereal Lagna | birth time+place | v1/partial | no | yes (`vedic_personal`) | yes |
 | `dasha` | Vimshottari MD/AD from birth Moon nakshatra | birth_date | v1/partial | no | yes (`vedic_personal`) | soft |
 
 **Personal wire:** L3 family id `vedic_personal` — gochara + dasha beside Foundation panchanga.
@@ -557,7 +558,7 @@ Day Story            →  интерпретация Foundation → экран T
 | `jianchu_officer` | 12 day officers | date cycle | v1 | yes | no | yes |
 | `almanac_actions` | Auspicious / inauspicious lists | day factors | v1 soft via Jianchu | soft | elective | yes |
 | `clashes` | Animal clash / 六合 vs day pillar | birth pillars + day | v1 | no | yes (`bazi` family) | yes |
-| `lucky_hours_directions` | Hours / directions / Tai Sui | date + geo rules | planned | soft | yes | yes |
+| `lucky_hours_directions` | Hours / directions / Tai Sui soft | day pillar (+ year branch) | v1 | soft | elective | yes |
 | `solar_terms` | 24 jieqi | sun longitude | v1 | yes | no | yes |
 | `bazi` | Four pillars vs day pillar | birth date (+ time for hour) | v1/partial | no | yes (`bazi` family) | yes |
 
