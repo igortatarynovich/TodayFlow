@@ -1,7 +1,7 @@
 # TODAYFLOW_FOUNDATION_UI
 
 **Статус:** **ACTIVE** — канон визуала **всего сервиса** (web · iOS · Android).  
-**Версия:** 0.2 (2026-06-02).  
+**Версия:** 0.3 (2026-07-24).  
 **Владелец:** Design + Product.
 
 **Figma-файл:** [TODAYFLOW_FOUNDATION_UI](https://www.figma.com/design/pWdevqQqOi6wvoVc6hFWHa) · `file_key` `pWdevqQqOi6wvoVc6hFWHa` *(Cover v1 — living portal + orbit; design iteration, не sign-off)*.
@@ -11,9 +11,11 @@
 > Убрать весь текст. Осталась только композиция. **Выглядит ли дорого?**  
 > Пока **нет** → не открываем Today · не CD · не Love · не новые docs.
 
+Тот же тест применяется к **динамическим** состояниям: экран в покое с Drift · гостевая витрина без CTA-текста · переключение mood / day-phase. Если «без текста» не дорого — слой не готов.
+
 **Код:** `frontend/src/styles/todayflow-foundation.css` — подключён в `globals.css` · классы `.tf-shell` / `.tf-shell-grid-2`.
 
-**Экран Profile:** [PROFILE_SCREEN_MASTER.md](profile/PROFILE_SCREEN_MASTER.md) — **заморожен** до sign-off §8 здесь.
+**Экран Profile:** [PROFILE_SCREEN_MASTER.md](profile/PROFILE_SCREEN_MASTER.md) — **заморожен** до sign-off §15 здесь.
 
 ---
 
@@ -22,10 +24,11 @@
 | Это | Не это |
 |-----|--------|
 | Визуальные **примитивы** продукта | Design system компонентов (Button, Input…) |
-| Поверхности · герои · символы · геометрия | [PROFILE_SCREEN_MASTER.md](profile/PROFILE_SCREEN_MASTER.md) · [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) §2 Symbols |
+| Поверхности · герои · символы · геометрия | [PROFILE_SCREEN_MASTER.md](profile/PROFILE_SCREEN_MASTER.md) · §2 Symbols |
+| **Динамика:** motion · mood themes · day-phase atmosphere · guest showcase | Отдельный «премиум-канон» / параллельный SoT-файл |
 | Один Figma-источник правды | Moodboard 100 UI · «TodayFlow is…» |
 
-**Порядок:** Foundation UI (Figma) → Profile снова → Today.
+**Порядок:** Foundation UI (Figma + этот документ) → Profile снова → Today. Динамические слои (§7–§12) — часть того же канона, не отдельная дисциплина.
 
 **Product Truth First:** визуал не опережает продукт. Нет backend-источника / нет реальных данных — нет заполненного production-блока. Канон: [PRODUCT_TRUTH_FIRST.md](./PRODUCT_TRUTH_FIRST.md).
 
@@ -254,7 +257,123 @@
 
 ---
 
-## 7. Layout shell *(весь продукт)*
+## 7. Motion
+
+Токены уже объявлены в `todayflow-foundation.css` (`--tf-motion-*`, DS-4 · parity iOS `TodayFlowTheme.Motion`). **Не менять значения** без явного bump версии канона. Проблема не в токенах — в системном применении.
+
+| Токен | Значение | Когда применять |
+|-------|----------|-----------------|
+| `--tf-motion-micro` | 150ms | Hover, нажатие кнопки, чекбокс |
+| `--tf-motion-reveal` | 280ms | Появление текста/инсайта после действия |
+| `--tf-motion-card` | 320ms | Переворот карты Таро, раскрытие числа дня |
+| `--tf-motion-page` | 420ms | Переход между экранами ритуала |
+| `--tf-motion-stagger` | 45ms | Задержка между элементами списка при появлении |
+| `--tf-motion-ease-out` | `cubic-bezier(0.22, 1, 0.36, 1)` | Появление (быстрый старт, мягкое торможение) |
+| `--tf-motion-ease-in-out` | `cubic-bezier(0.45, 0, 0.55, 1)` | Переходы между состояниями |
+
+### 7.1 Именованные паттерны
+
+Реализовать **один раз** как переиспользуемые хуки/компоненты в `frontend/src/design-system/motion/` — не как одноразовый CSS на каждом экране.
+
+| Паттерн | Поведение | Токены | Где |
+|---------|-----------|--------|-----|
+| **Reveal** | Текст/инсайт снизу-вверх + лёгкий fade | `--tf-motion-reveal`, ease-out | Daily Focus, S9, любой «синтез» |
+| **Flip** | 3D-поворот по Y (ощущение переворота, не кроссфейд) | `--tf-motion-card` | Таро, число дня |
+| **Settle** | Лёгкое «падение» + пружинная остановка | `--tf-motion-card` / spring | Карточки практик/трекеров |
+| **Drift** | Очень медленное движение фона без взаимодействия | длинный loop | Орбита лендинга, частицы атмосферы |
+| **Pulse** | Тихая пульсация CTA, ждущего действия | `--tf-motion-reveal` loop soft | «Раскрыть карту дня», если ещё не открыта |
+
+### 7.2 Инструмент и правило
+
+- **Инструмент (фаза реализации motion):** `framer-motion` поверх тех же `--tf-motion-*`. Сейчас анимационных библиотек в зависимостях фронтенда нет.
+- **Прецедент:** Profile Motion Kit (`profileMotion.module.css`) — CSS-only DS-4; при переходе на общий kit паттерны Profile мапятся на Reveal / Settle, не дублируются.
+- **Незыблемо:** ни одна новая анимация не пишется как inline-`@keyframes` / ad-hoc CSS на конкретном экране. Только через `design-system/motion/`.
+
+---
+
+## 8. Mood Themes
+
+Существующая база (`--tf-page` / cream · ink · gold accents в foundation) — **дефолт**. Её не ломаем. Бинарный `light` / `dark` в коде сегодня — **clock-driven** (`frontend/src/lib/time-of-day.ts` → `useProductDayNightTheme.ts` → `data-theme` на product shell), не тумблер в меню.
+
+**Эволюция:** вместо двух технических режимов — **эмоциональные настроения**. Переключение мягко следует фазе дня; пользователь может **закрепить** mood вручную.
+
+| Тема | Когда предлагается | Направление палитры |
+|------|--------------------|---------------------|
+| **Спокойствие** (дефолт) | Всегда доступна · утро | Тёплый parchment/cream + золото + ink — текущая база |
+| **Фокус** | День (11:00–18:00) или когда отмечена цель дня | Холоднее и собраннее: приглушённый графит вместо ink, акцент — приглушённая медь |
+| **Ночь** | Вечерний ритуал (после 18:00 / до 05:00) | Тёмная поверхность как основной фон; золото — единственный тёплый акцент |
+| **Ясность** | Первый день / онбординг | Максимально светлая, минимум текстур — не перегружать атмосферой до понимания продукта |
+
+Mood **не** заменяет шрифты и spacing-токены — только цветовые / surface / atmosphere overrides.
+
+**Код-якоря (фаза реализации themes):** `time-of-day.ts`, `useProductDayNightTheme.ts`, `ProductWebAppShell` (`data-theme`).
+
+---
+
+## 9. Day-Phase Atmosphere
+
+`time-of-day.ts` уже умеет morning / day / evening (с приоритетом действий пользователя над часами). Дыра — **рендерить нечего** в папках атмосферы суток (`public/images/backgrounds/`, `patterns/`, ритуальный entry): в основном README/спеки.
+
+**Не путать слои:**
+
+| Слой | Примеры | Роль |
+|------|---------|------|
+| Контентные ассеты | `cosmic/`, `archetypes/`, `decorative/`, icons | Символы · washes контента — **не** замена атмосферы суток |
+| Day-phase atmosphere | procedural CSS/SVG по фазе дня | Фон момента · связка с mood |
+
+Вместо стоковых фото — **процедурные фоны**: слоистый градиент + тонкая геометрия/частицы (язык обложки: орбиты, созвездие). Дешевле, легче, ложится на ink/gold.
+
+### 9.1 Минимальный набор (первая итерация)
+
+1. **Утро** — крем → золотая дымка снизу, редкие тонкие лучи  
+2. **День** — почти плоский, минимум украшений (день = действие)  
+3. **Вечер** — тёмный surface, золотые точки-звёзды; допустим медленный Drift / существующий дух `float-silk`  
+4. **Первый день** — самое лёгкое состояние, без тяжёлой темы (см. mood **Ясность**)  
+5. **Раскрытие карты/числа** — вспышка 2–3 сек на момент реакции, не постоянный фон  
+
+Все пять — **SVG/CSS**, не растровые файлы.
+
+### 9.2 Код-якоря (фаза реализации atmosphere)
+
+Опираться на уже существующие `frontend/src/lib/sectionAtmosphere.ts`, `SectionAtmosphereBridge`, `frontend/src/styles/section-atmosphere.css` — **достроить** day-phase, не изобретать второй atmosphere-слой с нуля.
+
+---
+
+## 10. Guest Showcase
+
+**Правило:** ни один product-экран не показывает пустую gate-карточку на большом viewport. Вместо этого — **blur-preview** реального контента позади карточки входа (паттерн секции лендинга «Твой Today каждое утро» — переиспользовать, не изобретать заново).
+
+**Экраны фазы реализации (guest gate):**
+
+| Route | Поведение |
+|-------|-----------|
+| `/today` | Guest gate → blur-preview + CTA (`ProductPageScreen` / `today-guest-gate`) |
+| `/profile` | Guest gate → blur-preview + CTA (`profile-guest-gate`) |
+| `/dashboard` | **Не отдельный UI** — редирект на `/today` |
+
+**Загрузка:** состояния вроде «Сессия…» — skeleton с геометрией итогового контента, никогда голый текст без каркаса. Тот же уровень внимания, что и финальный экран.
+
+---
+
+## 11. Sound *(optional tactile)*
+
+Не замена утилитарного `<audio>` для практик/медитаций.
+
+Отдельно: **1–2** коротких тихих cue на ключевые точки ритуала — открытие карты дня · закрытие вечера. Один toggle вкл/выкл. **Default:** выкл на web · вкл на native (где tactile ожидаем).
+
+---
+
+## 12. Antipatterns *(этот канон)*
+
+- Не писать новый CSS в монолитный `globals.css` (~6884 строк) — только модули / `todayflow-foundation.css` / `design-system/`.
+- Не использовать фейковые testimonials (имя + должность без реального источника).
+- Не создавать параллельный SoT (`PREMIUM_DESIGN_CANON.md` и аналоги) — motion / mood / atmosphere / guest **живут здесь**.
+- Не добавлять анимацию точечно на один экран — только через `design-system/motion/` (§7).
+- Не подменять day-phase atmosphere стоковыми фото или контентными `cosmic/` washes без явной привязки к фазе дня.
+
+---
+
+## 13. Layout shell *(весь продукт)*
 
 **Ошибка:** узкая «колонка телефона» на ноутбуке. **Правило:** mobile-first ≠ phone-width на desktop.
 
@@ -278,25 +397,31 @@
 
 ---
 
-## 8. Figma file structure
+## 14. Figma file structure
 
 ```
 TODAYFLOW_FOUNDATION_UI
-├── Cover (test: composition without text)
+├── Cover (test: composition without text · idle Drift · guest blur)
 ├── 01 Hero (Large / Medium / Small)
 ├── 02 Symbols (Archetype · Zodiac · Element · Planet)
 ├── 03 Geometry (G1–G5 · 3 compositions)
 ├── 04 Surfaces (A · B · C · D · N — textless mocks)
 ├── 05 Typography
 ├── 06 Colors
-└── 07 Reference · Profile wireframe (no copy, shapes only)
+├── 07 Motion (Reveal · Flip · Settle · Drift · Pulse)
+├── 08 Mood Themes (Calm · Focus · Night · Clarity)
+├── 09 Day-Phase Atmosphere (morning · day · evening · first · reveal flash)
+├── 10 Guest Showcase (today · profile blur-preview)
+└── 11 Reference · Profile wireframe (no copy, shapes only)
 ```
 
 ---
 
-## 9. Sign-off checklist
+## 15. Sign-off checklist
 
 **Code implementation (2026-07-03):** DS-2 HeroLarge · DS-3 surfaces · DS-4 motion · DS-1 lite archetype SVG · `--tf-*` tokens in `todayflow-foundation.css`. **Figma v0 (2026-07-03):** [file](https://www.figma.com/design/pWdevqQqOi6wvoVc6hFWHa) — Cover · Hero · Symbols · Geometry · Surfaces · Typography · Colors · Platforms; variables `TF / *`.
+
+**Canon v0.3 (2026-07-24):** §7–§12 зафиксированы как принципы (документ). Реализация — фазы 1–6 вне этого checklist; не отмечать ✓ до кода.
 
 - [x] Hero L/M/S — frames on **390** (`01 Hero`: Large 680 · Medium 420 · Small 200; symbols 120/80/48) *(size annotations — polish pass)*
 - [x] Hero L — code §1.1 (`88dvh`, 120px symbol, 36px radius, fade 45%) — `HeroLarge.tsx` + iOS
@@ -308,6 +433,11 @@ TODAYFLOW_FOUNDATION_UI
 - [x] Typography — `--tf-type-*` roles in foundation CSS · legacy `--orbit-text-*` aliased in `globals.css` (DS-10)
 - [x] Colors — ≤12 core tokens in `todayflow-foundation.css`
 - [ ] Profile «без текста» frame — **pass** дорого/нет *(Cover v1: `Cover / TodayFlow — Living Portal` — portal + 10 systems + convergence; **design review**, не gate)*
+- [ ] Motion kit (`design-system/motion/` + framer-motion) — Reveal / Flip / Settle / Drift / Pulse
+- [ ] Mood themes Calm / Focus / Night / Clarity wired to day-phase + manual pin
+- [ ] Day-phase atmosphere CSS/SVG (5 states) on `time-of-day` + section atmosphere
+- [ ] Guest showcase blur-preview on `/today` + `/profile`; loading skeletons
+- [ ] Sound cues (optional; default off web)
 
 **Code sign-off (2026-07-03):** all checklist items except Figma frames — see [status/PROFILE_FOUNDATION_QA.md](./status/PROFILE_FOUNDATION_QA.md).
 
@@ -315,15 +445,16 @@ TODAYFLOW_FOUNDATION_UI
 
 ---
 
-## 10. Explicitly paused
+## 16. Explicitly paused
 
 | | |
 |---|---|
 | Today Screen Master | **unblocked (code)** — Figma Foundation frames still open · см. [TODAY_CANON_VS_CODE_DIFF.md](./status/TODAY_CANON_VS_CODE_DIFF.md) |
 | Love / Money / CD / data | |
-| Новые product docs | |
+| Новые product docs | параллельный premium/design SoT **запрещён** — дополнять этот файл |
 | Profile feature code | только hotfix · не новые карточки |
+| Фазы 1–6 реализации (§7–§12) | ждут отдельного go после канона v0.3 |
 
 ---
 
-*Сначала Figma foundation. Потом Profile снова проходит тест «без текста».*
+*Сначала Figma foundation + канон динамики (§7–§12). Потом Profile снова проходит тест «без текста» — в том числе idle Drift и guest showcase.*
