@@ -1,0 +1,141 @@
+/* Guest Showcase — full-bleed blur preview behind gate card (FOUNDATION_UI §10) */
+
+.root {
+  position: relative;
+  width: 100%;
+  min-height: min(72vh, 40rem);
+  display: grid;
+  place-items: center;
+  padding: clamp(1.5rem, 4vw, 2.5rem) 0;
+}
+
+.preview {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 3vw, 2rem);
+  pointer-events: none;
+  user-select: none;
+  filter: blur(7px);
+  opacity: 0.52;
+  transform: scale(1.02);
+}
+
+.previewPanel {
+  width: min(100%, 42rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border-radius: 1.5rem;
+  background: linear-gradient(
+    165deg,
+    rgba(255, 250, 242, 0.95) 0%,
+    rgba(253, 247, 238, 0.88) 55%,
+    rgba(245, 236, 220, 0.9) 100%
+  );
+  border: 1px solid rgba(201, 169, 110, 0.22);
+  box-shadow: 0 24px 64px rgba(42, 37, 32, 0.08);
+}
+
+.previewEyebrow {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.previewTitle {
+  margin: 0;
+  font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
+  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--tf-ink, #1a1510);
+}
+
+.previewTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.previewTag {
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--tf-ink-soft, #5b4630);
+  background: rgba(201, 169, 110, 0.14);
+  border: 1px solid rgba(201, 169, 110, 0.28);
+}
+
+.previewCards {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.35rem;
+}
+
+.previewCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.85rem 1rem;
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(42, 37, 32, 0.06);
+}
+
+.previewCardLabel {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tf-caption, #9a8468);
+}
+
+.previewCardValue {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--tf-ink-soft, #5b4630);
+}
+
+.gate {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 28rem);
+}
+
+@media (min-width: 56.25rem) {
+  .previewCards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .preview {
+    opacity: 0.58;
+  }
+}
+
+[data-theme="dark"] .previewPanel {
+  background: linear-gradient(
+    165deg,
+    rgba(36, 32, 28, 0.95) 0%,
+    rgba(26, 23, 20, 0.92) 100%
+  );
+  border-color: rgba(201, 169, 110, 0.28);
+}
+
+[data-theme="dark"] .previewTitle,
+[data-theme="dark"] .previewCardValue {
+  color: var(--tf-on-dark, #faf8f5);
+}
+
+[data-theme="dark"] .previewCard {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.08);
+}

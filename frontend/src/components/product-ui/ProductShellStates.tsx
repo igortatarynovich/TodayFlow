@@ -2,19 +2,34 @@
 
 /**
  * Shared in-main states for Product App Shell (PR-2).
- * Structure only — no invented product cards or filler metrics.
+ * Loading uses page-geometry skeleton (FOUNDATION_UI §10) — never bare text alone.
  */
 import type { ReactNode } from "react";
 import { DsButton } from "@/design-system";
-import { LoadingSpinner } from "@/components/orbit";
+import { SkeletonLoader } from "@/components/orbit/SkeletonLoader";
 import v2 from "@/design-system/layouts/productV2Surface.module.css";
 import pl from "@/design-system/layouts/productPageLayout.module.css";
 
 export function ProductShellLoading({ label }: { label?: string }) {
   return (
-    <div className={pl.centerState} data-testid="product-shell-loading">
-      <LoadingSpinner size="lg" />
-      {label ? <p className={v2.bodyLead}>{label}</p> : null}
+    <div
+      className={pl.pageSkeleton}
+      data-testid="product-shell-loading"
+      role="status"
+      aria-busy="true"
+      aria-label={label || "Loading"}
+    >
+      <div className={pl.pageSkeletonHeader}>
+        <SkeletonLoader height="2.25rem" width="42%" />
+        <SkeletonLoader height="1.75rem" width="7.5rem" />
+      </div>
+      <SkeletonLoader height="7.5rem" width="100%" className={pl.pageSkeletonHero} />
+      <div className={pl.pageSkeletonGrid}>
+        <SkeletonLoader height="5.5rem" width="100%" />
+        <SkeletonLoader height="5.5rem" width="100%" />
+        <SkeletonLoader height="5.5rem" width="100%" />
+      </div>
+      {label ? <p className={pl.pageSkeletonLabel}>{label}</p> : null}
     </div>
   );
 }

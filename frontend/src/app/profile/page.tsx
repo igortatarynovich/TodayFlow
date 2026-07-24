@@ -325,17 +325,16 @@ function ProfileHubPageInner() {
       <ProductPageScreen
         testId="profile-guest-gate"
         title="Профиль"
-        subtitle="Профиль и Today открываются после мягкой регистрации: имя, дата рождения, первый разбор — и email, чтобы сохранить."
-      >
-        <div style={{ display: "grid", gap: "0.85rem", justifyItems: "start" }}>
-          <Link href={`${VALUE_FIRST_PATHS.welcome}?fresh=1`} className="orbit-button orbit-button-primary">
-            Создать мой Today
-          </Link>
-          <Link href="/auth?mode=login" className="orbit-body-sm" style={{ color: "#78716c", textDecoration: "underline" }}>
-            Уже есть аккаунт? Войти
-          </Link>
-        </div>
-      </ProductPageScreen>
+        hideDatePill
+        guest={{
+          message:
+            "Профиль и Today открываются после мягкой регистрации: имя, дата рождения, первый разбор — и email, чтобы сохранить.",
+          ctaHref: `${VALUE_FIRST_PATHS.welcome}?fresh=1`,
+          ctaLabel: "Создать мой Today",
+          secondaryCtaHref: "/auth?mode=login",
+          secondaryCtaLabel: "Уже есть аккаунт? Войти",
+        }}
+      />
     );
   }
 

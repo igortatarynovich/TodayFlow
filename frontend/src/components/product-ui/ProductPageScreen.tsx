@@ -20,6 +20,7 @@ import type { ReactNode } from "react";
 import { useMemo } from "react";
 import { DsBody, DsButton, DsRailPanel, IconCalendar } from "@/design-system";
 import { ProductWebShellConfigBridge, type ProductWebShellConfig } from "@/components/product-ui/productWebShellConfig";
+import { ProductGuestShowcase } from "@/components/product-ui/ProductGuestShowcase";
 import {
   ProductShellEmpty,
   ProductShellError,
@@ -37,6 +38,9 @@ export type ProductPageGuestState = {
   message: string;
   ctaHref?: string;
   ctaLabel?: string;
+  /** Optional secondary action (e.g. login when primary is signup). */
+  secondaryCtaHref?: string;
+  secondaryCtaLabel?: string;
 };
 
 export type ProductPageErrorState = {
@@ -144,13 +148,21 @@ export function ProductPageScreen({
 
     if (guest) {
       return (
-        <div className={pl.loginGate}>
-          <h1 className={v2.sectionTitle}>{title}</h1>
-          <p className={v2.bodyLead}>{guest.message}</p>
-          {guest.ctaHref && guest.ctaLabel ? (
-            <DsButton href={guest.ctaHref}>{guest.ctaLabel}</DsButton>
-          ) : null}
-        </div>
+        <ProductGuestShowcase>
+          <div className={pl.loginGate}>
+            <h1 className={v2.sectionTitle}>{title}</h1>
+            {subtitle ? <p className={v2.bodyLead}>{subtitle}</p> : null}
+            <p className={v2.bodyLead}>{guest.message}</p>
+            {guest.ctaHref && guest.ctaLabel ? (
+              <DsButton href={guest.ctaHref}>{guest.ctaLabel}</DsButton>
+            ) : null}
+            {guest.secondaryCtaHref && guest.secondaryCtaLabel ? (
+              <DsButton href={guest.secondaryCtaHref} variant="secondary">
+                {guest.secondaryCtaLabel}
+              </DsButton>
+            ) : null}
+          </div>
+        </ProductGuestShowcase>
       );
     }
 

@@ -436,7 +436,7 @@ TODAYFLOW_FOUNDATION_UI
 - [ ] Motion kit (`design-system/motion/` + framer-motion) — Reveal / Flip / Settle / Drift / Pulse
 - [ ] Mood themes Calm / Focus / Night / Clarity wired to day-phase + manual pin
 - [ ] Day-phase atmosphere CSS/SVG (5 states) on `time-of-day` + section atmosphere
-- [ ] Guest showcase blur-preview on `/today` + `/profile`; loading skeletons
+- [x] Guest showcase blur-preview on `/today` + `/profile`; loading skeletons *(code 2026-07-24 · `ProductGuestShowcase` + `ProductShellLoading`)*
 - [ ] Sound cues (optional; default off web)
 
 **Code sign-off (2026-07-03):** all checklist items except Figma frames — see [status/PROFILE_FOUNDATION_QA.md](./status/PROFILE_FOUNDATION_QA.md).
