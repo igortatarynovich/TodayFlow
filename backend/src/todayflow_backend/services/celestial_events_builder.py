@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, time
 from typing import Any
 
 from todayflow_backend.services import astro
@@ -205,8 +205,10 @@ async def _sky_aspects_for_date(
     locale: str,
     astro_service: astro.AstroService,
     aspect_engine: AspectEngine,
-) -> tuple[list[dict[str, Any]], dict[str, Any]]:
-    """Returns (sky_aspects, transit_signs) where transit_signs may include moon_sign/sun_sign."""
+) -> tuple[list[dict[str, Any]], dict[str, Any], dict[str, Any] | None]:
+    """Returns (sky_aspects, transit_signs, transit_noon_ephemeris_snapshot)."""
+    from todayflow_backend.services.day_sources.ephemeris_bridge import snapshot_from_positions
+
     birth_payload = {"date": target_date.isoformat(), "time": "12:00:00", "location": "Equator"}
     transit_signs: dict[str, Any] = {}
     try:
@@ -215,7 +217,7 @@ async def _sky_aspects_for_date(
             coordinates={"latitude": 0.0, "longitude": 0.0},
         )
     except Exception:
-        return [], transit_signs
+        return [], transit_signs, None
 
     for pos in chart.positions or []:
         if not isinstance(pos, dict):
@@ -247,7 +249,13 @@ async def _sky_aspects_for_date(
                 "tension_level": callout.tension_level or None,
             }
         )
-    return out, transit_signs
+    snap = snapshot_from_positions(
+        list(chart.positions or []),
+        as_of=target_date,
+        role="transit_noon",
+        houses=chart.houses if isinstance(chart.houses, dict) else None,
+    )
+    return out, transit_signs, snap
 
 
 async def build_celestial_events(
@@ -257,8 +265,18 @@ async def build_celestial_events(
     personal_day: int | None = None,
     personal_transits: list[dict[str, Any]] | None = None,
     astro_service: astro.AstroService | None = None,
+    birth_date: date | None = None,
+    birth_time: time | None = None,
+    birth_lat: float | None = None,
+    birth_lon: float | None = None,
+    timezone_name: str | None = None,
 ) -> dict[str, Any]:
     """Assemble lunar phase, retrogrades, sky aspects, personal transits, symbols."""
+    from todayflow_backend.services.day_sources.ephemeris_bridge import (
+        empty_ephemeris_pack,
+        fetch_natal_snapshot,
+    )
+
     astro_service = astro_service or astro.AstroService()
     aspect_engine = AspectEngine()
     lunar_service = LunarService()
@@ -329,7 +347,7 @@ async def build_celestial_events(
     except Exception:
         pass
 
-    sky_aspects, transit_signs = await _sky_aspects_for_date(
+    sky_aspects, transit_signs, transit_noon = await _sky_aspects_for_date(
         target_date, locale, astro_service, aspect_engine
     )
 
@@ -407,4 +425,21 @@ async def build_celestial_events(
         payload["moon_sign"] = transit_signs["moon_sign"]
     if transit_signs.get("sun_sign"):
         payload["sun_sign"] = transit_signs["sun_sign"]
+
+    eph = empty_ephemeris_pack()
+    if isinstance(transit_noon, dict):
+        eph["transit_noon"] = transit_noon
+    if birth_date is not None:
+        natal = await fetch_natal_snapshot(
+            astro_service,
+            birth_date,
+            birth_time=birth_time,
+            birth_lat=birth_lat,
+            birth_lon=birth_lon,
+            timezone_name=timezone_name,
+        )
+        if isinstance(natal, dict):
+            eph["natal"] = natal
+    if eph.get("transit_noon") or eph.get("natal"):
+        payload["ephemeris"] = eph
     return payload

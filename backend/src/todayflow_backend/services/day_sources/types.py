@@ -26,6 +26,8 @@ class DaySourceInputs:
     birth_lon: float | None = None
     # Bridge to current celestial pipeline until ephemeris adapters are first-class.
     celestial_events: dict[str, Any] | None = None
+    # Optional Swiss/AstroService snapshots (from celestial_events.ephemeris or pre-fetch).
+    ephemeris: dict[str, Any] | None = None
     locale: str = "ru"
     # Explicit electional/horary request (canon §5.4 — not auto-run on Today).
     electional_requested: bool = False

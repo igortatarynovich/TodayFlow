@@ -32,9 +32,13 @@ def build_day_personal_v1(
     electional_requested: bool = False,
     electional_time: time | None = None,
     electional_question: str | None = None,
+    ephemeris: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Collect personal Source Families into a wire pack for Today / interpretation."""
+    from todayflow_backend.services.day_sources.ephemeris_bridge import ephemeris_from_celestial
+
     ce = celestial_events if isinstance(celestial_events, dict) else {}
+    eph = ephemeris if isinstance(ephemeris, dict) else ephemeris_from_celestial(ce)
     inputs = DaySourceInputs(
         target_date=target_date or date.today(),
         timezone=timezone,
@@ -45,6 +49,7 @@ def build_day_personal_v1(
         birth_lat=birth_lat,
         birth_lon=birth_lon,
         celestial_events=ce or None,
+        ephemeris=eph,
         locale=locale,
         electional_requested=electional_requested,
         electional_time=electional_time,

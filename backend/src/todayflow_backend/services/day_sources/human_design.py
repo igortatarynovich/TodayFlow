@@ -10,14 +10,8 @@ from __future__ import annotations
 from datetime import date, timedelta
 from typing import Any
 
-from todayflow_backend.services.day_sources.classical_longitudes import (
-    classical_bodies,
-    classical_longitude,
-)
-from todayflow_backend.services.day_sources.panchanga import (
-    tropical_moon_longitude,
-    tropical_sun_longitude,
-)
+from todayflow_backend.services.day_sources.classical_longitudes import classical_bodies
+from todayflow_backend.services.day_sources.ephemeris_bridge import resolve_body_longitude
 
 # Gate 41 opens at 02°00' Aquarius = absolute tropical longitude 302°.
 GATE_41_START_LON = 302.0
@@ -330,16 +324,24 @@ def longitude_to_gate_line(longitude: float) -> dict[str, Any]:
     }
 
 
-def activation_for_date(d: date, *, body: str = "Sun") -> dict[str, Any]:
+def activation_for_date(
+    d: date,
+    *,
+    body: str = "Sun",
+    ephemeris: dict[str, Any] | None = None,
+    role: str = "transit",
+) -> dict[str, Any]:
     if body == "Earth":
-        sun = activation_for_date(d, body="Sun")
-        return earth_from_sun(sun)
-    lon = classical_longitude(body, d) if body in classical_bodies() else (
-        tropical_moon_longitude(d) if body == "Moon" else tropical_sun_longitude(d)
-    )
+        sun = activation_for_date(d, body="Sun", ephemeris=ephemeris, role=role)
+        act = earth_from_sun(sun)
+        act["ephemeris_source"] = sun.get("ephemeris_source")
+        return act
+    resolved = resolve_body_longitude(body, d, ephemeris=ephemeris, role=role)
+    lon = float(resolved["longitude"])
     act = longitude_to_gate_line(lon)
     act["body"] = body
     act["date"] = d.isoformat()
+    act["ephemeris_source"] = resolved.get("source")
     return act
 
 
@@ -351,27 +353,41 @@ def earth_from_sun(sun_act: dict[str, Any]) -> dict[str, Any]:
     return act
 
 
-def transit_gates_for_day(target_date: date) -> dict[str, Any]:
+def transit_gates_for_day(
+    target_date: date,
+    *,
+    ephemeris: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     planets: list[dict[str, Any]] = []
     by_body: dict[str, dict[str, Any]] = {}
+    sources: set[str] = set()
     for body in classical_bodies():
-        act = activation_for_date(target_date, body=body)
+        act = activation_for_date(
+            target_date, body=body, ephemeris=ephemeris, role="transit"
+        )
         planets.append(act)
         by_body[body.lower()] = act
+        if act.get("ephemeris_source"):
+            sources.add(str(act["ephemeris_source"]))
     earth = earth_from_sun(by_body["sun"])
+    earth["ephemeris_source"] = by_body["sun"].get("ephemeris_source")
     planets.append(earth)
     by_body["earth"] = earth
 
     sun = by_body["sun"]
     moon = by_body["moon"]
+    swiss = "astro_service_swiss" in sources
+    depth = "full_planet_set_swiss_noon" if swiss else "full_planet_set_mean_lon"
     summary = (
-        f"Транзит HD (soft classical): Солнце {sun['label']} ({sun['theme_ru']}), "
+        f"Транзит HD ({'Swiss noon' if swiss else 'soft mean'}): "
+        f"Солнце {sun['label']} ({sun['theme_ru']}), "
         f"Земля {earth['label']}, Луна {moon['label']}; "
         f"ещё {len(planets) - 3} тел."
     )
     return {
         "capability_id": "transit_gates",
-        "depth": "full_planet_set_mean_lon",
+        "depth": depth,
+        "ephemeris_source": "astro_service_swiss" if swiss else "mean_longitude_soft",
         "sun": sun,
         "earth": earth,
         "moon": moon,
@@ -379,7 +395,8 @@ def transit_gates_for_day(target_date: date) -> dict[str, Any]:
         "summary_ru": summary,
         "school_canon": "rave_mandala_gate41_aquarius_2",
         "limitation_ru": (
-            "Mean longitude noon для Sun…Pluto + Earth. Swiss — later."
+            "Sun…Pluto + Earth. Swiss transit noon when ephemeris bridge is present; "
+            "else mean longitude. Design ±88d still soft."
         ),
     }
 
@@ -390,17 +407,23 @@ def bodygraph_soft(
     transit: dict[str, Any] | None = None,
     has_birth_time: bool = False,
     has_birth_place: bool = False,
+    ephemeris: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Soft bodygraph: Personality/Design classical planets (±88d Design)."""
     personality: dict[str, dict[str, Any]] = {}
     for body in classical_bodies():
-        personality[body.lower()] = activation_for_date(birth_date, body=body)
+        personality[body.lower()] = activation_for_date(
+            birth_date, body=body, ephemeris=ephemeris, role="natal"
+        )
     personality["earth"] = earth_from_sun(personality["sun"])
 
     design_date = birth_date - timedelta(days=DESIGN_SOLAR_ARC_DAYS)
     design: dict[str, dict[str, Any]] = {}
     for body in classical_bodies():
-        design[body.lower()] = activation_for_date(design_date, body=body)
+        # Design chart still uses soft day-shift; natal swiss does not time-walk −88d.
+        design[body.lower()] = activation_for_date(
+            design_date, body=body, ephemeris=None, role="transit"
+        )
     design["earth"] = earth_from_sun(design["sun"])
 
     natal_gates = {
@@ -493,8 +516,9 @@ def build_human_design_payload(
     birth_date: date | None = None,
     has_birth_time: bool = False,
     has_birth_place: bool = False,
+    ephemeris: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    transit = transit_gates_for_day(target_date)
+    transit = transit_gates_for_day(target_date, ephemeris=ephemeris)
     caps = ["transit_gates"]
     bodygraph = None
     if birth_date is not None:
@@ -503,6 +527,7 @@ def build_human_design_payload(
             transit=transit,
             has_birth_time=has_birth_time,
             has_birth_place=has_birth_place,
+            ephemeris=ephemeris,
         )
         caps.append("bodygraph_interaction")
 

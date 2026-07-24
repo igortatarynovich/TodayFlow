@@ -130,6 +130,7 @@ def run_personal_astrology(inputs: DaySourceInputs) -> SourceResult:
                 birth_lon=float(inputs.birth_lon),
                 timezone_name=inputs.timezone,
                 focus_house=focus_house,
+                ephemeris=inputs.ephemeris if isinstance(inputs.ephemeris, dict) else None,
             )
             caps.append("house_rulers_chains")
             beats.extend(list(house_rulers.get("beats") or [])[:1])

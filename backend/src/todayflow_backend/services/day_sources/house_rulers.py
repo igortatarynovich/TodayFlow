@@ -78,14 +78,22 @@ def _whole_sign_house(asc_sign: int, body_sign: int) -> int:
     return ((body_sign - asc_sign) % 12) + 1
 
 
-def _known_natal_signs(birth_date: date) -> dict[str, int]:
-    """Natal signs from soft mean longitudes (Sun…Pluto)."""
-    from todayflow_backend.services.day_sources.classical_longitudes import (
-        classical_bodies,
-        classical_longitude,
-    )
+def _known_natal_signs(
+    birth_date: date,
+    *,
+    ephemeris: dict[str, Any] | None = None,
+) -> dict[str, int]:
+    """Natal signs from Swiss natal snapshot when present, else mean longitudes."""
+    from todayflow_backend.services.day_sources.classical_longitudes import classical_bodies
+    from todayflow_backend.services.day_sources.ephemeris_bridge import resolve_body_longitude
 
-    return {name: _sign_index(classical_longitude(name, birth_date)) for name in classical_bodies()}
+    out: dict[str, int] = {}
+    for name in classical_bodies():
+        lon = resolve_body_longitude(name, birth_date, ephemeris=ephemeris, role="natal")[
+            "longitude"
+        ]
+        out[name] = _sign_index(float(lon))
+    return out
 
 
 def build_house_rulers(
@@ -179,6 +187,7 @@ def build_house_rulers_chains(
     birth_lon: float,
     timezone_name: str | None = None,
     focus_house: int | None = None,
+    ephemeris: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     asc = compute_sidereal_lagna(
         birth_date,
@@ -189,7 +198,7 @@ def build_house_rulers_chains(
     )
     asc_sign = _sign_index(float(asc["tropical_lon"]))
     rulers = build_house_rulers(asc_sign)
-    natal_signs = _known_natal_signs(birth_date)
+    natal_signs = _known_natal_signs(birth_date, ephemeris=ephemeris)
 
     luminaries = {
         name: {
@@ -259,8 +268,8 @@ def build_house_rulers_chains(
         "chains": chains,
         "focus": focus,
         "limitation_ru": (
-            "Цепочки диспозиторов через soft mean-longitude Sun…Pluto. "
-            "Swiss-точные натальные позиции — later."
+            "Цепочки диспозиторов через natal Swiss snapshot (если есть) "
+            "или soft mean-longitude Sun…Pluto."
         ),
         "beats": [beat],
         "summary_ru": summary[:420],

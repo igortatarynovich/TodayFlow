@@ -5,8 +5,6 @@ from __future__ import annotations
 from todayflow_backend.services.day_sources.human_design import build_human_design_payload
 from todayflow_backend.services.day_sources.types import DaySourceInputs, SourceResult
 
-_CALC = "human-design-adapter-v0"
-
 
 def run_human_design(inputs: DaySourceInputs) -> SourceResult:
     has_time = inputs.birth_time is not None
@@ -16,16 +14,25 @@ def run_human_design(inputs: DaySourceInputs) -> SourceResult:
         birth_date=inputs.birth_date,
         has_birth_time=has_time,
         has_birth_place=has_place,
+        ephemeris=inputs.ephemeris if isinstance(inputs.ephemeris, dict) else None,
     )
+    evidence = ["target_date"]
+    if inputs.birth_date:
+        evidence.append("birth_date")
+    if has_time:
+        evidence.append("birth_time")
+    if has_place:
+        evidence.append("birth_place")
+    if isinstance(inputs.ephemeris, dict) and (
+        inputs.ephemeris.get("transit_noon") or inputs.ephemeris.get("natal")
+    ):
+        evidence.append("ephemeris_bridge")
     return SourceResult(
         family_id="human_design",
         capability_ids=list(payload.get("capability_ids") or []),
         layer="personal",
         status="ok",
         payload=payload,
-        evidence_refs=["target_date"]
-        + (["birth_date"] if inputs.birth_date else [])
-        + (["birth_time"] if has_time else [])
-        + (["birth_place"] if has_place else []),
-        calculation_version=_CALC,
+        evidence_refs=evidence,
+        calculation_version="human-design-adapter-v1-ephemeris",
     )
