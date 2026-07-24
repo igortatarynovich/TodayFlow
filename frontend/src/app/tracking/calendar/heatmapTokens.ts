@@ -11,8 +11,8 @@ export const HEATMAP_THRESHOLDS = {
 } as const;
 
 /**
- * Фон клетки: сначала читаем :root из globals.css, fallback — те же значения.
- * Меняй палитру в одном месте: --heatmap-* в globals.css.
+ * Фон клетки: сначала читаем :root (legacy tokens in `styles/globals/01-tokens-base.css`), fallback — те же значения.
+ * Меняй палитру в одном месте: `--heatmap-*` в tokens-base module.
  */
 export const HEATMAP_CELL_BG = {
   noData: "var(--heatmap-no-data, rgba(180, 170, 158, 0.42))",

@@ -1,0 +1,1677 @@
+/**
+ * Extracted from app/globals.css (phase 6 CSS split).
+ * Original lines 4663–6334. Do not reorder relative to sibling modules.
+ */
+
+/* Unified Hero Design for Sub-pages */
+/* Высота переопределена в .orbit-hero-design.orbit-hero-design-unified выше */
+
+/* Simplified Hero Design - Clean, minimal, slowlife */
+.orbit-hero-simplified {
+  position: relative;
+  width: 100%;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.orbit-hero-simplified-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 70vh;
+}
+
+.orbit-hero-simplified-bg {
+  z-index: 1;
+  object-fit: cover;
+  object-position: center;
+}
+
+.orbit-hero-simplified-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  background: linear-gradient(
+    to bottom,
+    rgba(3, 7, 18, 0.4) 0%,
+    rgba(3, 7, 18, 0.5) 100%
+  );
+  pointer-events: none;
+}
+
+.orbit-hero-simplified-container {
+  position: relative;
+  z-index: 3;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--orbit-space-2xl) var(--orbit-space-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  text-align: center;
+}
+
+.orbit-hero-simplified-title {
+  font-family: var(--orbit-font-display);
+  font-size: 3rem;
+  line-height: 1.15;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.98);
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--orbit-space-md) 0;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.orbit-hero-simplified-subtitle {
+  font-family: var(--orbit-font-body);
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 var(--orbit-space-2xl) 0;
+  max-width: 600px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.orbit-hero-simplified-buttons {
+  display: flex;
+  gap: var(--orbit-space-md);
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.orbit-button-hero-capsule {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--orbit-space-sm);
+  padding: var(--orbit-space-md) var(--orbit-space-xl);
+  border-radius: var(--orbit-radius-capsule);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  color: rgba(255, 255, 255, 0.98);
+  font-family: var(--orbit-font-body);
+  font-size: var(--orbit-text-body);
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--orbit-transition-base);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.orbit-button-hero-capsule:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+.orbit-button-hero-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+@media (max-width: 768px) {
+  .orbit-hero-simplified-title {
+    font-size: 2rem;
+  }
+  
+  .orbit-hero-simplified-subtitle {
+    font-size: 1rem;
+  }
+  
+  .orbit-hero-simplified-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .orbit-button-hero-capsule {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+/* Section Spacing - Breathing room between semantic blocks */
+.orbit-section-primary {
+  padding: var(--orbit-space-3xl) var(--orbit-space-xl);
+  background: var(--orbit-color-page);
+}
+
+.orbit-section-secondary {
+  padding: var(--orbit-space-3xl) var(--orbit-space-xl);
+}
+
+.orbit-section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--orbit-space-lg);
+}
+
+@media (max-width: 768px) {
+  .orbit-section-primary,
+  .orbit-section-secondary {
+    padding: var(--orbit-space-2xl) var(--orbit-space-lg);
+  }
+}
+
+/* Section Mantra - Micro-mantras between sections */
+.orbit-section-mantra {
+  text-align: center;
+  padding: var(--orbit-space-xl) var(--orbit-space-lg);
+  background: var(--orbit-color-page);
+}
+
+.orbit-section-mantra .orbit-mantra {
+  margin: 0;
+  color: var(--orbit-color-muted);
+  font-size: var(--orbit-text-accent);
+}
+
+/* Moodboard-style Cards */
+.orbit-cards-moodboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--orbit-space-xl);
+  margin-top: var(--orbit-space-2xl);
+}
+
+.orbit-card-moodboard {
+  background: var(--orbit-color-card-warm);
+  border: 1px solid var(--orbit-color-border);
+  border-radius: var(--orbit-radius-md);
+  padding: var(--orbit-space-xl);
+  box-shadow: var(--orbit-shadow-soft);
+  position: relative;
+  transition: all var(--orbit-transition-base);
+}
+
+.orbit-card-moodboard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--orbit-color-secondary-accent-light),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity var(--orbit-transition-base);
+}
+
+.orbit-card-moodboard:hover {
+  box-shadow: var(--orbit-shadow-medium);
+  transform: translateY(-2px);
+}
+
+.orbit-card-moodboard:hover::before {
+  opacity: 1;
+}
+
+.orbit-card-moodboard h3 {
+  font-family: var(--orbit-font-display);
+  color: var(--orbit-color-ink);
+}
+
+@media (max-width: 768px) {
+  .orbit-cards-moodboard {
+    grid-template-columns: 1fr;
+    gap: var(--orbit-space-lg);
+  }
+  
+  .orbit-card-moodboard {
+    padding: var(--orbit-space-lg);
+  }
+}
+
+.orbit-hero-design-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--orbit-space-md);
+  justify-content: center;
+}
+
+.orbit-hero-design-title-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.orbit-hero-design-title-text {
+  font-family: var(--orbit-font-body);
+  font-size: 2rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.98);
+  text-align: center;
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Enhanced card hover effects for dashboard */
+.orbit-card-link:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Account Page Styles */
+.orbit-account-page {
+  padding: 0;
+}
+
+.orbit-account-header {
+  background: var(--orbit-color-page);
+  border-bottom: 1px solid var(--orbit-color-border);
+  padding: var(--orbit-space-xl) var(--orbit-space-xl);
+}
+
+.orbit-account-header-container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.orbit-account-title {
+  font-family: var(--orbit-font-body);
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--orbit-color-ink);
+  margin: 0 0 var(--orbit-space-lg) 0;
+  text-align: center;
+}
+
+.orbit-account-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--orbit-space-md);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.orbit-account-panel-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--orbit-space-xs);
+  padding: var(--orbit-space-md);
+  background: var(--orbit-color-card);
+  border: 1px solid var(--orbit-color-border);
+  border-radius: 2px;
+}
+
+.orbit-account-panel-label {
+  font-family: var(--orbit-font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--orbit-color-ink);
+  text-align: center;
+}
+
+.orbit-account-panel-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  margin-top: var(--orbit-space-xs);
+}
+
+.orbit-account-panel-line {
+  width: 40px;
+  height: 2px;
+  background: var(--orbit-color-slate);
+  border-radius: 1px;
+}
+
+.orbit-account-panel-item-date {
+  grid-column: span 2;
+}
+
+.orbit-account-panel-date {
+  font-family: var(--orbit-font-body);
+  font-size: 0.875rem;
+  color: var(--orbit-color-slate);
+  text-align: center;
+  margin-top: var(--orbit-space-xs);
+}
+
+.orbit-account-panel-subitems {
+  display: flex;
+  flex-direction: column;
+  gap: var(--orbit-space-xs);
+  margin-top: var(--orbit-space-sm);
+}
+
+.orbit-account-panel-subitem {
+  padding: var(--orbit-space-xs);
+  background: var(--orbit-color-mist);
+  border-radius: 2px;
+  text-align: center;
+}
+
+.orbit-account-panel-item-switch {
+  grid-column: span 1;
+}
+
+.orbit-account-panel-switch {
+  display: flex;
+  gap: var(--orbit-space-xs);
+  margin-top: var(--orbit-space-sm);
+  justify-content: center;
+}
+
+.orbit-account-section {
+  padding: var(--orbit-space-2xl) var(--orbit-space-xl);
+  background: var(--orbit-color-page);
+}
+
+.orbit-account-oval {
+  padding: var(--orbit-space-xl) var(--orbit-space-xl);
+}
+
+.orbit-account-oval-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--orbit-space-xl) var(--orbit-space-2xl);
+  background: var(--orbit-color-card);
+  border: 2px solid var(--orbit-color-ink);
+  border-radius: 50px;
+  text-align: center;
+}
+
+.orbit-account-oval-content h2 {
+  margin: 0;
+  color: var(--orbit-color-ink);
+}
+
+.orbit-account-grid {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--orbit-space-md);
+}
+
+.orbit-account-card-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--orbit-space-sm);
+  border-radius: 2px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--orbit-color-mist);
+}
+
+.orbit-account-card-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .orbit-account-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .orbit-account-panel-item-date,
+  .orbit-account-panel-item-switch {
+    grid-column: span 1;
+  }
+
+  .orbit-account-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .orbit-account-oval-content {
+    border-radius: 24px;
+    padding: var(--orbit-space-lg) var(--orbit-space-md);
+  }
+}
+
+/* Birth Chart Page Styles */
+.orbit-birth-chart-page {
+  padding: 0;
+  max-width: 100%;
+}
+
+.orbit-birth-chart-header {
+  background: var(--orbit-color-page);
+  border-bottom: 1px solid var(--orbit-color-border);
+  padding: var(--orbit-space-lg) var(--orbit-space-xl);
+}
+
+.orbit-birth-chart-header-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.orbit-birth-chart-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--orbit-space-md);
+}
+
+.orbit-birth-chart-title-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+}
+
+.orbit-birth-chart-title {
+  font-family: var(--orbit-font-body);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--orbit-color-ink);
+  text-align: center;
+  text-decoration: underline;
+  margin: 0;
+}
+
+.orbit-birth-chart-main {
+  padding: var(--orbit-space-4xl) var(--orbit-space-xl);
+  background: var(--orbit-color-page);
+}
+
+.orbit-birth-chart-main-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--orbit-space-3xl);
+  align-items: start;
+}
+
+.orbit-birth-chart-input-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.orbit-birth-chart-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--orbit-space-md);
+}
+
+/* Horoscopes Waterfall (Horizontal Scroll) */
+.orbit-horoscopes-waterfall {
+  scrollbar-width: thin;
+  scrollbar-color: var(--orbit-color-border) transparent;
+}
+
+.orbit-horoscopes-waterfall::-webkit-scrollbar {
+  height: 8px;
+}
+
+.orbit-horoscopes-waterfall::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.orbit-horoscopes-waterfall::-webkit-scrollbar-thumb {
+  background: var(--orbit-color-border);
+  border-radius: 4px;
+}
+
+.orbit-horoscopes-waterfall::-webkit-scrollbar-thumb:hover {
+  background: var(--orbit-color-slate);
+}
+
+/* Smooth scroll snap for waterfall */
+.orbit-horoscopes-waterfall > * {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.orbit-birth-chart-input-box {
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  min-height: auto;
+  display: block;
+  position: relative;
+  overflow: visible;
+}
+
+.orbit-birth-chart-input-decoration {
+  display: none;
+}
+
+.orbit-birth-chart-input-bg-icon {
+  display: none;
+}
+
+.orbit-birth-chart-input-fields {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--orbit-space-lg);
+  position: relative;
+  z-index: 1;
+}
+
+.orbit-birth-chart-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--orbit-space-md);
+  transition: all var(--orbit-transition-base);
+}
+
+.orbit-birth-chart-input-wrapper:hover {
+  transform: translateX(2px);
+}
+
+.orbit-birth-chart-input-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  opacity: 0.5;
+  transition: opacity var(--orbit-transition-base);
+}
+
+.orbit-birth-chart-input-wrapper:hover .orbit-birth-chart-input-icon {
+  opacity: 0.8;
+}
+
+.orbit-birth-chart-input-label {
+  font-family: var(--orbit-font-body);
+  font-size: var(--orbit-text-body-sm);
+  font-weight: 600;
+  color: var(--orbit-color-ink);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--orbit-space-lg);
+  text-align: left;
+}
+
+.orbit-birth-chart-input-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--orbit-space-md);
+}
+
+.orbit-birth-chart-input {
+  flex: 1;
+  padding: var(--orbit-space-md) var(--orbit-space-lg);
+  border: 1px solid var(--orbit-color-border);
+  border-radius: var(--orbit-radius-sm);
+  background: var(--orbit-color-page);
+  font-family: var(--orbit-font-body);
+  font-size: var(--orbit-text-body);
+  color: var(--orbit-color-ink);
+  transition: all var(--orbit-transition-base);
+}
+
+.orbit-birth-chart-input:focus {
+  outline: none;
+  border-color: var(--orbit-color-highlight);
+  box-shadow: 0 0 0 3px rgba(var(--orbit-color-highlight-rgb), 0.1);
+}
+
+.orbit-birth-chart-checkbox {
+  display: flex;
+  gap: var(--orbit-space-sm);
+  align-items: center;
+  font-size: var(--orbit-text-body-sm);
+  color: var(--orbit-color-slate);
+  cursor: pointer;
+  padding: var(--orbit-space-xs);
+  border-radius: var(--orbit-radius-sm);
+  transition: background var(--orbit-transition-base);
+}
+
+.orbit-birth-chart-checkbox:hover {
+  background: var(--orbit-color-mist);
+}
+
+.orbit-birth-chart-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--orbit-color-ink);
+}
+
+.orbit-birth-chart-calculate-button {
+  padding: var(--orbit-space-lg) var(--orbit-space-2xl);
+  background: var(--orbit-color-ink);
+  color: var(--orbit-color-page);
+  border: none;
+  border-radius: var(--orbit-radius-sm);
+  font-family: var(--orbit-font-body);
+  font-size: var(--orbit-text-body);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--orbit-transition-base);
+}
+
+.orbit-birth-chart-calculate-button:hover:not(:disabled) {
+  background: var(--orbit-color-slate);
+  transform: translateY(-2px);
+  box-shadow: var(--orbit-shadow-medium);
+}
+
+.orbit-birth-chart-calculate-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.orbit-birth-chart-calculate-button:hover:not(:disabled) {
+  background: var(--orbit-color-slate);
+  transform: translateY(-1px);
+}
+
+.orbit-birth-chart-calculate-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.orbit-birth-chart-output-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--orbit-space-md);
+  align-items: flex-start;
+}
+
+.orbit-birth-chart-output-box {
+  padding: var(--orbit-space-xl);
+  background: var(--orbit-color-card);
+  border: 1px solid var(--orbit-color-border);
+  border-radius: 2px;
+  min-width: 300px;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.orbit-birth-chart-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--orbit-space-md);
+}
+
+.orbit-birth-chart-empty-icon {
+  width: 80px;
+  height: 80px;
+  opacity: 0.3;
+}
+
+.orbit-birth-chart-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--orbit-space-md);
+  width: 100%;
+}
+
+.orbit-birth-chart-preview-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.orbit-birth-chart-report-icon {
+  width: 32px;
+  height: 32px;
+  margin-bottom: var(--orbit-space-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+}
+
+.orbit-birth-chart-output-box-small {
+  min-width: 200px;
+  min-height: 100px;
+}
+
+.orbit-birth-chart-arrow {
+  font-size: 1.5rem;
+  color: var(--orbit-color-slate);
+  margin-left: var(--orbit-space-md);
+}
+
+.orbit-birth-chart-dashed-line {
+  width: 200px;
+  height: 2px;
+  border-top: 2px dashed var(--orbit-color-border);
+  margin-left: var(--orbit-space-md);
+  margin-top: var(--orbit-space-sm);
+}
+
+.orbit-birth-chart-preview {
+  width: 100%;
+  text-align: center;
+}
+
+.orbit-birth-chart-categories {
+  padding: var(--orbit-space-2xl) var(--orbit-space-xl);
+  background: var(--orbit-color-page);
+  border-top: 1px solid var(--orbit-color-border);
+}
+
+.orbit-birth-chart-categories-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  gap: var(--orbit-space-xl);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.orbit-birth-chart-category {
+  display: flex;
+  align-items: center;
+  gap: var(--orbit-space-sm);
+  font-family: var(--orbit-font-body);
+  font-size: var(--orbit-text-body);
+  color: var(--orbit-color-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--orbit-color-slate);
+  transition: all var(--orbit-transition-base);
+  padding: var(--orbit-space-xs) var(--orbit-space-sm);
+  border-radius: 2px;
+}
+
+.orbit-birth-chart-category img {
+  width: 24px;
+  height: 24px;
+  opacity: 0.7;
+  transition: opacity var(--orbit-transition-base);
+}
+
+.orbit-birth-chart-category:hover {
+  color: var(--orbit-color-slate);
+  text-decoration-color: var(--orbit-color-ink);
+  background: var(--orbit-color-mist);
+}
+
+.orbit-birth-chart-category:hover img {
+  opacity: 1;
+}
+
+.orbit-birth-chart-cta {
+  padding: var(--orbit-space-4xl) var(--orbit-space-xl);
+  background: var(--orbit-color-page);
+  border-top: 1px solid var(--orbit-color-border);
+}
+
+.orbit-birth-chart-cta-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--orbit-space-md);
+}
+
+.orbit-birth-chart-cta-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 2px solid var(--orbit-color-ink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--orbit-space-xs);
+  font-family: var(--orbit-font-body);
+  font-size: var(--orbit-text-body);
+  font-weight: 600;
+  color: var(--orbit-color-ink);
+  text-decoration: none;
+  transition: all var(--orbit-transition-base);
+  padding: var(--orbit-space-md);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.orbit-birth-chart-cta-circle:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+.orbit-birth-chart-cta-icon {
+  width: 48px;
+  height: 48px;
+  opacity: 0.8;
+  transition: opacity var(--orbit-transition-base);
+}
+
+.orbit-birth-chart-cta-circle:hover {
+  background: var(--orbit-color-ink);
+  color: var(--orbit-color-page);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.orbit-birth-chart-cta-circle:hover .orbit-birth-chart-cta-icon {
+  opacity: 1;
+}
+
+.orbit-birth-chart-cta-text {
+  font-family: var(--orbit-font-body);
+  font-size: var(--orbit-text-body-sm);
+  color: var(--orbit-color-slate);
+  text-align: center;
+  margin: 0;
+}
+
+.orbit-birth-chart-cta-extra {
+  font-family: var(--orbit-font-body);
+  font-size: var(--orbit-text-body-sm);
+  color: var(--orbit-color-muted);
+  text-align: center;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .orbit-birth-chart-header-container {
+    justify-content: center;
+  }
+
+  .orbit-birth-chart-main-container {
+    grid-template-columns: 1fr;
+    gap: var(--orbit-space-xl);
+  }
+
+  .orbit-birth-chart-output-section {
+    order: -1;
+  }
+
+  .orbit-birth-chart-categories-container {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* Daily Page Styles */
+/* Tarot Card Visual - Flip correction for image only */
+/* Переворачиваем всю карту */
+.tarot-card-visual.tarot-card-flipped {
+  transform: scaleY(-1) !important;
+}
+
+/* Отменяем переворот для текстовых элементов (номер, название) */
+.tarot-card-visual.tarot-card-flipped .card-number,
+.tarot-card-visual.tarot-card-flipped .card-name {
+  transform: scaleY(-1) !important;
+}
+
+/* Daily Cards Layout */
+.daily-cards-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--orbit-space-3xl);
+  flex-wrap: wrap;
+}
+
+.daily-card-item {
+  flex: 0 0 auto;
+}
+
+.daily-card-item-tarot {
+  order: 3;
+}
+
+/* Desktop: все три карты в одну линию */
+@media (min-width: 1024px) {
+  .daily-cards-container {
+    flex-wrap: nowrap;
+  }
+  
+  .daily-card-item {
+    flex: 0 0 auto;
+  }
+  
+  .daily-card-item-tarot {
+    order: 3;
+  }
+}
+
+/* Tablet: 2 карты в линию, третья по центру ниже */
+@media (max-width: 1023px) and (min-width: 769px) {
+  .daily-cards-container {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .daily-card-item {
+    flex: 0 0 calc(50% - var(--orbit-space-3xl) / 2);
+    max-width: 280px;
+  }
+  
+  .daily-card-item-tarot {
+    flex: 0 0 100%;
+    max-width: 280px;
+    order: 3;
+    margin-top: var(--orbit-space-lg);
+  }
+}
+
+/* Мобильные устройства: все карты вертикально */
+@media (max-width: 768px) {
+  .daily-card-item {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+  
+  .daily-card-item-tarot {
+    margin-top: var(--orbit-space-md);
+  }
+}
+
+.orbit-daily-page {
+  padding: 0;
+  max-width: 100%;
+}
+
+.orbit-daily-header {
+  background: var(--orbit-color-page);
+  border-bottom: 1px solid var(--orbit-color-border);
+  padding: var(--orbit-space-xl) var(--orbit-space-xl);
+}
+
+.orbit-daily-header-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.orbit-daily-title {
+  font-family: var(--orbit-font-body);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--orbit-color-ink);
+  text-align: center;
+  margin: 0;
+}
+
+.orbit-daily-main {
+  padding: var(--orbit-space-4xl) var(--orbit-space-xl);
+  background: var(--orbit-color-page);
+}
+
+.orbit-daily-main-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--orbit-space-2xl);
+  align-items: start;
+}
+
+.orbit-daily-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--orbit-space-md);
+}
+
+.orbit-daily-column-title {
+  font-family: var(--orbit-font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--orbit-color-ink);
+  text-align: center;
+  margin: 0;
+}
+
+.orbit-daily-card {
+  width: 100%;
+  min-height: 280px;
+  padding: var(--orbit-space-xl);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--orbit-color-border);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: all var(--orbit-transition-base);
+}
+
+.orbit-daily-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.orbit-daily-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.orbit-daily-card-icon {
+  width: 80px;
+  height: 80px;
+  opacity: 0.7;
+  margin-bottom: var(--orbit-space-md);
+}
+
+.orbit-daily-card-symbols {
+  display: flex;
+  gap: var(--orbit-space-md);
+  margin: var(--orbit-space-sm) 0;
+}
+
+.orbit-daily-symbol {
+  font-size: 1.5rem;
+  color: var(--orbit-color-slate);
+  opacity: 0.6;
+}
+
+.orbit-daily-arrow {
+  font-size: 2rem;
+  color: var(--orbit-color-slate);
+  opacity: 0.5;
+  margin-top: var(--orbit-space-sm);
+}
+
+.orbit-daily-registration {
+  padding: var(--orbit-space-2xl) var(--orbit-space-xl);
+  background: var(--orbit-color-page);
+}
+
+.orbit-daily-registration-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.orbit-daily-registration-oval {
+  width: 200px;
+  height: 80px;
+  border-radius: 50px;
+  border: 2px solid var(--orbit-color-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--orbit-font-body);
+  font-size: var(--orbit-text-body);
+  font-weight: 600;
+  color: var(--orbit-color-ink);
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.95);
+  transition: all var(--orbit-transition-base);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.orbit-daily-registration-oval:hover {
+  background: var(--orbit-color-ink);
+  color: var(--orbit-color-page);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+.orbit-daily-benefits {
+  padding: var(--orbit-space-3xl) var(--orbit-space-xl);
+  background: var(--orbit-color-page);
+}
+
+.orbit-daily-benefits-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  grid-template-rows: auto 1fr;
+  gap: var(--orbit-space-xl);
+  align-items: center;
+  justify-items: center;
+}
+
+.orbit-daily-benefit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--orbit-space-sm);
+  text-align: center;
+}
+
+.orbit-daily-benefit-left {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.orbit-daily-benefit-bottom {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.orbit-daily-benefit-right {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.orbit-daily-benefit-arrow {
+  font-size: 1.5rem;
+  color: var(--orbit-color-slate);
+  opacity: 0.6;
+}
+
+.orbit-daily-subscription {
+  padding: var(--orbit-space-4xl) var(--orbit-space-xl);
+  background: var(--orbit-color-page);
+  border-top: 1px solid var(--orbit-color-border);
+}
+
+.orbit-daily-subscription-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--orbit-space-md);
+}
+
+@media (max-width: 768px) {
+  .orbit-daily-main-container {
+    grid-template-columns: 1fr;
+    gap: var(--orbit-space-xl);
+  }
+
+  .orbit-daily-benefits-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: var(--orbit-space-lg);
+  }
+
+  .orbit-daily-benefit-left,
+  .orbit-daily-benefit-bottom,
+  .orbit-daily-benefit-right {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .orbit-daily-benefit-arrow {
+    display: none;
+  }
+}
+
+/* Practices Page Styles */
+.orbit-practices-page {
+  padding: 0;
+  max-width: 100%;
+}
+
+.orbit-practices-main {
+  padding: var(--orbit-space-4xl) var(--orbit-space-xl);
+  background: var(--orbit-color-page);
+}
+
+.orbit-practices-main-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--orbit-space-2xl);
+  align-items: start;
+}
+
+.orbit-practices-box-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--orbit-space-sm);
+  position: relative;
+}
+
+.orbit-practices-box {
+  width: 100%;
+  min-height: 200px;
+  padding: var(--orbit-space-xl);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--orbit-color-border);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--orbit-transition-base);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.orbit-practices-box:hover {
+  border-color: var(--orbit-color-ink);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.orbit-practices-box-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--orbit-space-md);
+  width: 100%;
+}
+
+.orbit-practices-box-icon {
+  width: 64px;
+  height: 64px;
+  opacity: 0.8;
+}
+
+.orbit-practices-box-title {
+  font-family: var(--orbit-font-body);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--orbit-color-ink);
+  text-align: center;
+  margin: 0;
+}
+
+.orbit-practices-box-label {
+  font-family: var(--orbit-font-body);
+  font-size: var(--orbit-text-body-sm);
+  color: var(--orbit-color-slate);
+  text-align: center;
+  margin: 0;
+}
+
+.orbit-practices-arrow {
+  font-size: 1.5rem;
+  color: var(--orbit-color-slate);
+  opacity: 0.5;
+  margin-top: var(--orbit-space-sm);
+  position: relative;
+}
+
+.orbit-practices-arrow-left {
+  transform: rotate(45deg);
+}
+
+.orbit-practices-arrow-center {
+  transform: rotate(0deg);
+}
+
+.orbit-practices-arrow-right {
+  transform: rotate(-45deg);
+}
+
+.orbit-practices-registration {
+  padding: var(--orbit-space-2xl) var(--orbit-space-xl);
+  background: var(--orbit-color-page);
+}
+
+.orbit-practices-registration-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.orbit-practices-registration-oval {
+  width: 200px;
+  height: 80px;
+  border-radius: 50px;
+  border: 2px solid var(--orbit-color-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--orbit-font-body);
+  font-size: var(--orbit-text-body);
+  font-weight: 600;
+  color: var(--orbit-color-ink);
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.95);
+  transition: all var(--orbit-transition-base);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.orbit-practices-registration-oval:hover {
+  background: var(--orbit-color-ink);
+  color: var(--orbit-color-page);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+.orbit-practices-cta {
+  padding: var(--orbit-space-3xl) var(--orbit-space-xl);
+  background: var(--orbit-color-page);
+  border-top: 1px solid var(--orbit-color-border);
+}
+
+.orbit-practices-cta-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.orbit-practices-cta-text {
+  font-family: var(--orbit-font-body);
+  font-size: var(--orbit-text-body);
+  color: var(--orbit-color-slate);
+  text-align: center;
+  margin: 0;
+  max-width: 800px;
+  line-height: 1.6;
+}
+
+.orbit-practices-cta-promo {
+  font-weight: 600;
+  color: var(--orbit-color-ink);
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 768px) {
+  .orbit-practices-main-container {
+    grid-template-columns: 1fr;
+    gap: var(--orbit-space-xl);
+  }
+
+  .orbit-practices-arrow {
+    display: none;
+  }
+
+  /* Homepage Mobile Responsive Styles */
+  /* Hero buttons mobile */
+  .orbit-hero-design-buttons {
+    flex-direction: column;
+    gap: var(--orbit-space-lg);
+    width: 100%;
+    padding: 0 var(--orbit-space-md);
+  }
+
+  .orbit-button-hero-new {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  /* Daily cards container mobile */
+  .daily-cards-container {
+    flex-direction: column;
+    gap: var(--orbit-space-xl);
+    padding: 0 var(--orbit-space-md);
+  }
+
+  .daily-card-item {
+    width: 100%;
+  }
+
+  /* Demo pattern blocks mobile */
+  .demo-pattern-blocks-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--orbit-space-lg);
+  }
+
+  /* Subscription tiers mobile */
+  .subscription-tiers-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--orbit-space-lg);
+  }
+
+  /* Practices preview mobile */
+  .practices-preview-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--orbit-space-md);
+  }
+
+  /* Daily cards preview mobile */
+  .daily-cards-preview {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--orbit-space-lg);
+  }
+
+  .daily-cards-preview > div {
+    transform: scale(0.9) !important;
+  }
+
+  /* One-time purchases mobile */
+  .one-time-purchases-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--orbit-space-lg);
+  }
+
+  /* Horoscope cards mobile */
+  .horoscope-cards-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--orbit-space-md);
+  }
+
+  /* Structure info mobile */
+  .structure-info-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--orbit-space-md);
+  }
+
+  /* Monetization info mobile */
+  .monetization-info-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--orbit-space-md);
+  }
+
+  /* Text blocks mobile */
+  .orbit-hero-content-title {
+    font-size: 2rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .orbit-hero-content-subtitle {
+    font-size: 1rem !important;
+  }
+
+  .orbit-display-sm {
+    font-size: 1.75rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small mobile */
+  .orbit-hero-design-buttons {
+    gap: var(--orbit-space-md);
+  }
+
+  .orbit-button-hero-new {
+    padding: var(--orbit-space-sm) var(--orbit-space-lg);
+    font-size: 0.9rem;
+  }
+
+  .orbit-hero-content-title {
+    font-size: 1.75rem !important;
+  }
+
+  .orbit-display-sm {
+    font-size: 1.5rem !important;
+  }
+
+  /* Journal page mobile */
+  .orbit-journal-page .orbit-card {
+    padding: var(--orbit-space-lg) !important;
+  }
+
+  /* Challenges page mobile */
+  .orbit-challenges-page .subscription-tiers-grid,
+  .orbit-challenges-page [style*="gridTemplateColumns"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Challenge detail page mobile */
+  .orbit-challenge-detail-page .orbit-card {
+    padding: var(--orbit-space-md) !important;
+  }
+
+  .orbit-challenge-detail-page [style*="gridTemplateColumns"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Pricing page mobile */
+  .orbit-pricing-page table {
+    font-size: 0.875rem;
+  }
+
+  .orbit-pricing-page th,
+  .orbit-pricing-page td {
+    padding: var(--orbit-space-sm) !important;
+  }
+
+  /* Profile page mobile */
+  .orbit-profile-page .orbit-card {
+    padding: var(--orbit-space-lg) !important;
+  }
+
+  /* Auth page mobile */
+  .orbit-auth-page .orbit-card {
+    padding: var(--orbit-space-md) !important;
+  }
+}
+
+/* Empty State Component */
+.orbit-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--orbit-space-3xl) var(--orbit-space-xl);
+  text-align: center;
+  min-height: 300px;
+}
+
+.orbit-empty-state__icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: var(--orbit-space-lg);
+  opacity: 0.4;
+  color: var(--orbit-color-muted);
+}
+
+.orbit-empty-state__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.orbit-empty-state__title {
+  font-family: var(--orbit-font-display);
+  font-size: var(--orbit-text-display-sm);
+  font-weight: 500;
+  color: var(--orbit-color-ink);
+  margin: 0 0 var(--orbit-space-md) 0;
+  letter-spacing: -0.01em;
+}
+
+.orbit-empty-state__description {
+  font-size: var(--orbit-text-body);
+  color: var(--orbit-color-slate);
+  line-height: 1.6;
+  margin: 0 0 var(--orbit-space-xl) 0;
+  max-width: 500px;
+}
+
+/* Error State Component */
+.orbit-error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--orbit-space-3xl) var(--orbit-space-xl);
+  text-align: center;
+  min-height: 300px;
+}
+
+.orbit-error-state__icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: var(--orbit-space-lg);
+  color: var(--orbit-color-muted);
+  opacity: 0.6;
+}
+
+.orbit-error-state__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.orbit-error-state__title {
+  font-family: var(--orbit-font-display);
+  font-size: var(--orbit-text-display-sm);
+  font-weight: 500;
+  color: var(--orbit-color-ink);
+  margin: 0 0 var(--orbit-space-md) 0;
+  letter-spacing: -0.01em;
+}
+
+.orbit-error-state__message {
+  font-size: var(--orbit-text-body);
+  color: var(--orbit-color-slate);
+  line-height: 1.6;
+  margin: 0 0 var(--orbit-space-xl) 0;
+  max-width: 500px;
+}
+
+/* Loading State Improvements */
+.orbit-loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--orbit-space-3xl) var(--orbit-space-xl);
+  min-height: 300px;
+}
+
+.orbit-loading-state__spinner {
+  margin-bottom: var(--orbit-space-lg);
+}
+
+.orbit-loading-state__text {
+  font-size: var(--orbit-text-body-sm);
+  color: var(--orbit-color-muted);
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .orbit-empty-state,
+  .orbit-error-state,
+  .orbit-loading-state {
+    padding: var(--orbit-space-2xl) var(--orbit-space-lg);
+    min-height: 250px;
+  }
+
+  .orbit-empty-state__icon,
+  .orbit-error-state__icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .orbit-empty-state__title,
+  .orbit-error-state__title {
+    font-size: var(--orbit-text-display-xs);
+  }
+}
+

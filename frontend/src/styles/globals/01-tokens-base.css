@@ -1,0 +1,453 @@
+/**
+ * Extracted from app/globals.css (phase 6 CSS split).
+ * Original lines 11–458. Do not reorder relative to sibling modules.
+ */
+
+:root {
+  /* Product palette — крем / персик / терракота (макет Today) */
+  --todayflow-peach: #f3c6b4;
+  --todayflow-terracotta: #d68e7a;
+  --todayflow-terracotta-deep: #c97a65;
+  --todayflow-cream-page: #fff9f5;
+  --todayflow-gradient-cta: linear-gradient(135deg, var(--todayflow-peach) 0%, var(--todayflow-terracotta) 100%);
+  --todayflow-gradient-cta-hover: linear-gradient(135deg, #fad4c4 0%, #e29a86 52%, var(--todayflow-terracotta) 100%);
+
+  /* Base — тёплый сепия вместо холодного графита */
+  --orbit-color-night: #1f1a17;
+  --orbit-color-ink: #3d342c;
+  --orbit-color-slate: #5c5046;
+
+  /* Фоны */
+  --orbit-color-page: var(--todayflow-cream-page);
+  --orbit-color-card: #ffffff;
+  --orbit-color-card-warm: #fffaf6;
+  --orbit-color-mist: #f7ebe4;
+  --orbit-color-sage: #f3e9e2;
+
+  /* Заголовки и сильный акцент текста */
+  --orbit-color-primary-accent: #2d241c;
+  --orbit-color-primary-accent-light: #453930;
+
+  /* Вторичный акцент — терракота / rose gold */
+  --orbit-color-secondary-accent: #b86b55;
+  --orbit-color-secondary-accent-light: #d68e7a;
+
+  /* Legacy / мягкие акценты — в тёплом ряду */
+  --orbit-color-coral: #e8a090;
+  --orbit-color-coral-light: #f4c9bc;
+  --orbit-color-turquoise: #c4b8a8;
+  --orbit-color-turquoise-light: #ddd4c8;
+  --orbit-color-sand: #e5d2c4;
+  --orbit-color-apricot: var(--todayflow-peach);
+
+  /* Semantic */
+  --orbit-color-muted: #7a6d62;
+  --orbit-color-border: rgba(214, 142, 122, 0.28);
+  --orbit-color-border-light: rgba(243, 198, 180, 0.45);
+  --orbit-color-highlight: var(--todayflow-terracotta);
+  --orbit-color-glow: rgba(243, 198, 180, 0.55);
+  --orbit-color-lock: #d946ef;
+  --orbit-color-success: #10b981; /* green for success */
+
+  /* Rewards visual tokens (Phase 5 lock) */
+  --orbit-reward-bg: linear-gradient(135deg, #fffdfa 0%, #fff3ec 100%);
+  --orbit-reward-border: rgba(214, 142, 122, 0.22);
+  --orbit-reward-done: #ecfccb;
+  --orbit-reward-next: #f8fafc;
+  --orbit-reward-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+
+  /* Heatmap трекера (месячная карта интенсивности) — пороги в calendarHeatmapModel / heatmapTokens */
+  --heatmap-no-data: rgba(190, 175, 168, 0.4);
+  --heatmap-intensity-0: rgba(247, 235, 228, 0.45);
+  --heatmap-intensity-low: rgba(243, 198, 180, 0.42);
+  --heatmap-intensity-mid: rgba(230, 160, 138, 0.58);
+  --heatmap-intensity-high: rgba(214, 142, 122, 0.88);
+  --heatmap-entity-done: rgba(184, 107, 85, 0.92);
+  --heatmap-entity-miss: rgba(240, 228, 220, 0.55);
+  --heatmap-hover-ring: rgba(180, 95, 75, 0.45);
+  
+  /* Typography Scale - Serif для заголовков, sans-serif для основного текста */
+  --orbit-font-display: "Playfair Display", "Cormorant Garamond", "Lora", "Georgia", serif;
+  --orbit-font-body: "Inter", "Inter var", system-ui, -apple-system, BlinkMacSystemFont, sans-serif; /* Clean sans-serif */
+  --orbit-font-accent: "Caveat", cursive; /* лёгкий скрипт для акцентов */
+  
+  /* Typography — legacy `--orbit-text-*` aliases Foundation §5 (DS-10); prefer `--tf-type-*` in new code */
+  --orbit-text-display: var(--tf-type-display-size);
+  --orbit-text-display-sm: 2rem; /* legacy 32px — between hero (33px) and display (40px) */
+  --orbit-text-display-xs: var(--tf-type-section-size);
+  --orbit-text-body: var(--tf-type-body-size);
+  --orbit-text-body-sm: var(--tf-type-body-size);
+  --orbit-text-soft: 0.875rem; /* legacy context — migrate call sites to body/caption */
+  --orbit-text-accent: var(--tf-type-caption-lg-size);
+
+  --orbit-line-height-display: var(--tf-type-display-line);
+  --orbit-line-height-body: var(--tf-type-body-line);
+  --orbit-line-height-soft: var(--tf-type-body-line);
+  
+  --orbit-font-weight-display: 600;
+  --orbit-font-weight-body: 400;
+  --orbit-font-weight-accent: 500;
+  
+  /* Spacing System - увеличенные паузы между смысловыми блоками, уменьшенные внутри */
+  --orbit-space-xs: 6px;
+  --orbit-space-sm: 12px;
+  --orbit-space-1: 12px;
+  --orbit-space-md: 18px;
+  --orbit-space-2: 24px;
+  --orbit-space-lg: 32px;
+  --orbit-space-3: 36px;
+  --orbit-space-xl: 48px;
+  --orbit-space-2xl: 80px; /* Увеличено для пауз между смысловыми блоками */
+  --orbit-space-3xl: 120px; /* Увеличено для больших пауз */
+  
+  /* Visual Layers - 3 визуальных слоя для иерархии */
+  --orbit-layer-primary-gap: var(--orbit-space-2xl); /* Пауза перед PRIMARY */
+  --orbit-layer-secondary-gap: var(--orbit-space-xl); /* Пауза перед SECONDARY */
+  --orbit-layer-background-gap: var(--orbit-space-lg); /* Пауза перед BACKGROUND */
+  
+  /* Border Radius - мягкие контуры */
+  --orbit-radius-sm: 8px;
+  --orbit-radius-md: 16px;
+  --orbit-radius-lg: 24px;
+  --orbit-radius-xl: 32px;
+  --orbit-radius-capsule: 999px; /* для CTA капсул */
+  
+  /* Shadows - мягкие тени, тёплые */
+  --orbit-shadow-soft: 0 4px 12px rgba(15, 23, 42, 0.04);
+  --orbit-shadow-medium: 0 8px 24px rgba(15, 23, 42, 0.06);
+  --orbit-shadow-warm: 0 12px 32px rgba(212, 165, 116, 0.08); /* тёплая тень */
+  --orbit-shadow-card: 0 2px 8px rgba(15, 23, 42, 0.03);
+  
+  /* Transitions - медленные, редкие, fade/slide (150-250ms) */
+  --orbit-transition-fast: 150ms ease;
+  --orbit-transition-base: 200ms ease; /* Оптимизировано для fade/slide */
+  --orbit-transition-slow: 250ms ease; /* Максимум для анимаций */
+  --orbit-transition-ritual: 300ms ease; /* Для редких анимаций */
+  
+  /* Grain Overlay - paper grain / film dust */
+  --orbit-grain-opacity: 0.03;
+  
+  /* Elevation */
+  --orbit-elevation-flat: 0;
+  --orbit-elevation-card: 1;
+  --orbit-elevation-context: 2;
+
+  /* TodayFlow — третий слой: сетка отступов (12 / 16 / 20) и типографика оболочки */
+  --todayflow-space-1: 0.75rem; /* 12px */
+  --todayflow-space-2: 1rem; /* 16px */
+  --todayflow-space-3: 1.25rem; /* 20px */
+  --todayflow-space-4: 1.5rem; /* 24px */
+  --todayflow-pad-inset: var(--todayflow-space-3);
+  --todayflow-pad-inset-tight: var(--todayflow-space-2);
+  --todayflow-pad-inset-hero: var(--todayflow-space-3) calc(var(--todayflow-space-3) * 1.08);
+  --todayflow-stack-gap: var(--todayflow-space-2);
+  --todayflow-stack-gap-tight: var(--todayflow-space-1);
+  --todayflow-stack-gap-relaxed: var(--todayflow-space-3);
+  --todayflow-section-padding: 2rem 0 4.5rem;
+  --todayflow-text-eyebrow: 0.7rem;
+  --todayflow-text-eyebrow-lh: 1.35;
+  --todayflow-text-title-hero: clamp(1.6rem, 1.1rem + 1.2vw, 2rem);
+  --todayflow-text-title-hero-lh: 1.2;
+  --todayflow-text-title-section: 1.25rem;
+  --todayflow-text-title-section-lh: 1.35;
+  --todayflow-text-body: 0.95rem;
+  --todayflow-text-body-lh: 1.6;
+  --todayflow-text-muted: #6b5d4d;
+  --todayflow-text-eyebrow-color: #9a7a68;
+  --todayflow-color-ink-warm: #4a3d35;
+  --todayflow-radius-hero: 28px;
+  --todayflow-radius-panel: 26px;
+}
+
+html {
+  overflow-x: clip;
+  max-width: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  max-width: 100%;
+  overflow-x: clip;
+  background: var(--orbit-color-page);
+  font-family: var(--orbit-font-body);
+  color: var(--orbit-color-ink);
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+/* iOS: не даём полям в фокусе «прыгать» масштабом страницы (font-size < 16px) */
+@media (max-width: 640px) {
+  input,
+  textarea,
+  select {
+    font-size: max(16px, var(--orbit-text-body-sm));
+  }
+}
+
+/* Paper grain overlay - тонкий слой текстуры */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: var(--orbit-grain-opacity);
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.03) 2px,
+      rgba(0, 0, 0, 0.03) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.03) 2px,
+      rgba(0, 0, 0, 0.03) 4px
+    );
+  background-size: 4px 4px;
+}
+
+/* Typography Utilities - Serif для заголовков смыслов, Sans-serif для основного текста */
+.orbit-display {
+  font-family: var(--orbit-font-display); /* Serif для заголовков смыслов */
+  font-size: var(--orbit-text-display);
+  line-height: var(--orbit-line-height-display);
+  font-weight: 500; /* Medium weight для serif */
+  color: var(--orbit-color-primary-accent); /* Deep graphite */
+  letter-spacing: -0.01em;
+}
+
+.orbit-display-sm {
+  font-family: var(--orbit-font-display); /* Serif для заголовков смыслов */
+  font-size: var(--orbit-text-display-sm);
+  line-height: var(--orbit-line-height-display);
+  font-weight: 500; /* Medium weight для serif */
+  color: var(--orbit-color-primary-accent); /* Deep graphite */
+  letter-spacing: -0.01em;
+}
+
+.orbit-display-xs {
+  font-family: var(--orbit-font-display); /* Serif для коротких заголовков */
+  font-size: 1.5rem;
+  line-height: 1.3;
+  font-weight: 500;
+  color: var(--orbit-color-primary-accent);
+  letter-spacing: -0.005em;
+}
+
+.orbit-body {
+  font-family: var(--orbit-font-body);
+  font-size: var(--orbit-text-body);
+  line-height: var(--orbit-line-height-body);
+  font-weight: var(--orbit-font-weight-body);
+  color: var(--orbit-color-ink);
+}
+
+.orbit-body-sm {
+  font-family: var(--orbit-font-body);
+  font-size: var(--orbit-text-body-sm);
+  line-height: var(--orbit-line-height-body);
+  font-weight: var(--orbit-font-weight-body);
+  color: var(--orbit-color-ink);
+}
+
+.orbit-soft {
+  font-family: var(--orbit-font-body);
+  font-size: var(--orbit-text-soft);
+  line-height: var(--orbit-line-height-soft);
+  font-weight: var(--orbit-font-weight-body);
+  color: var(--orbit-color-muted);
+}
+
+.orbit-accent {
+  font-family: var(--orbit-font-accent);
+  font-size: var(--orbit-text-accent);
+  font-weight: var(--orbit-font-weight-accent);
+  color: var(--orbit-color-ink);
+}
+
+/* Mantra utility - для микро-мантр */
+.orbit-mantra {
+  font-family: var(--orbit-font-accent);
+  font-size: var(--orbit-text-accent);
+  color: var(--orbit-color-muted);
+  font-style: italic;
+  letter-spacing: 0.05em;
+}
+
+/* CTA Capsule - мягкие капсулы вместо жёстких кнопок */
+.orbit-cta-capsule {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--orbit-space-sm) var(--orbit-space-2);
+  border-radius: var(--orbit-radius-capsule);
+  border: 1px solid var(--orbit-color-border);
+  background: var(--orbit-color-card);
+  color: var(--orbit-color-ink);
+  font-family: var(--orbit-font-body);
+  font-size: var(--orbit-text-body-sm);
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--orbit-transition-base);
+  box-shadow: var(--orbit-shadow-card);
+}
+
+.orbit-cta-capsule:hover {
+  background: var(--orbit-color-glow);
+  box-shadow: var(--orbit-shadow-soft);
+  transform: translateY(-1px);
+}
+
+.orbit-cta-capsule--primary {
+  background: var(--orbit-color-apricot);
+  border-color: var(--orbit-color-apricot);
+  color: var(--orbit-color-ink);
+}
+
+.orbit-cta-capsule--primary:hover {
+  background: var(--orbit-color-highlight);
+  border-color: var(--orbit-color-highlight);
+  box-shadow: var(--orbit-shadow-warm);
+}
+
+.orbit-surface-card {
+  background: var(--orbit-color-card);
+  border: 1px solid var(--orbit-color-border);
+  border-radius: 14px;
+  box-shadow: var(--orbit-shadow-card);
+}
+
+/* Visual Layers - 3 визуальных слоя для иерархии */
+.orbit-layer-primary {
+  /* PRIMARY - текущий фокус (1 элемент) */
+  margin-bottom: var(--orbit-layer-primary-gap);
+}
+
+.orbit-layer-secondary {
+  /* SECONDARY - поддержка (2-3 элемента) */
+  margin-bottom: var(--orbit-layer-secondary-gap);
+  opacity: 0.9;
+}
+
+.orbit-layer-background {
+  /* BACKGROUND - контекст (остальное) */
+  margin-bottom: var(--orbit-layer-background-gap);
+  opacity: 0.7;
+}
+
+/* Container Types - разные контейнеры вместо одинаковых карточек */
+.orbit-container-focus {
+  /* Текущий шаг - без рамки, лёгкий фон */
+  background: rgba(255, 250, 245, 0.6);
+  border: none;
+  padding: var(--orbit-space-lg);
+  border-radius: var(--orbit-radius-sm);
+}
+
+.orbit-container-practice {
+  /* Практика дня - контур + акцент */
+  border: 2px solid var(--orbit-color-primary-accent);
+  background: var(--orbit-color-card);
+  padding: var(--orbit-space-lg);
+  border-radius: var(--orbit-radius-md);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+}
+
+.orbit-container-affirmation {
+  /* Аффирмация - полупрозрачный, "воздушный" */
+  background: rgba(255, 250, 245, 0.4);
+  border: 1px solid rgba(229, 224, 216, 0.3);
+  padding: var(--orbit-space-lg);
+  border-radius: var(--orbit-radius-sm);
+  backdrop-filter: blur(10px);
+}
+
+.orbit-container-pattern {
+  /* Паттерн - плоский, широкий блок */
+  background: var(--orbit-color-card);
+  border: none;
+  border-bottom: 1px solid var(--orbit-color-border-light);
+  padding: var(--orbit-space-lg);
+  border-radius: 0;
+}
+
+.orbit-container-recommendation {
+  /* Рекомендация - чёткая, тёмная */
+  background: var(--orbit-color-primary-accent);
+  color: var(--orbit-color-card);
+  padding: var(--orbit-space-lg);
+  border-radius: var(--orbit-radius-sm);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
+}
+
+.orbit-container-recommendation * {
+  color: var(--orbit-color-card);
+}
+
+/* Animations - медленные, редкие, fade/slide */
+.orbit-fade-in {
+  animation: fadeIn var(--orbit-transition-slow) ease;
+}
+
+.orbit-slide-up {
+  animation: slideUp var(--orbit-transition-slow) ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tf-shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+/* Сквозная полоска уровня под шапкой (клик — достижения в профиле) */
+.tf-global-level-strip {
+  position: relative;
+  z-index: 9;
+  border-bottom: 1px solid rgba(201, 168, 115, 0.15);
+  background: rgba(255, 253, 249, 0.65);
+  backdrop-filter: blur(8px);
+}
+
+.tf-global-level-strip:focus-visible {
+  outline: 2px solid rgba(166, 124, 58, 0.55);
+  outline-offset: 0;
+}
+

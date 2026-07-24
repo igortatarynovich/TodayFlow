@@ -1,0 +1,793 @@
+/**
+ * Extracted from app/globals.css (phase 6 CSS split).
+ * Original lines 1890–2677. Do not reorder relative to sibling modules.
+ */
+
+/* Orbit system */
+.orbit-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--orbit-space-1);
+}
+
+.orbit-meaning-card {
+  grid-column: span 12;
+  background: var(--orbit-color-card-warm);
+  border-radius: var(--orbit-radius-lg);
+  border: 1px solid var(--orbit-color-border);
+  padding: var(--orbit-space-2);
+  box-shadow: var(--orbit-shadow-soft);
+  display: flex;
+  flex-direction: column;
+  gap: var(--orbit-space-md);
+  transition: all var(--orbit-transition-base);
+  position: relative;
+}
+
+.orbit-meaning-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: var(--orbit-radius-lg);
+  opacity: var(--orbit-grain-opacity);
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.02) 2px,
+      rgba(0, 0, 0, 0.02) 4px
+    );
+  pointer-events: none;
+}
+
+.orbit-meaning-card[data-locked="true"] {
+  background: linear-gradient(135deg, var(--orbit-color-card-warm), var(--orbit-color-mist));
+  border-color: var(--orbit-color-border-light);
+}
+
+/* Layer-specific styling */
+.orbit-meaning-card--observation {
+  border-left: 3px solid var(--orbit-color-apricot);
+  padding-left: calc(var(--orbit-space-2) - 3px);
+}
+
+.orbit-meaning-card--interpretation {
+  border-left: 2px solid var(--orbit-color-turquoise);
+  padding-left: calc(var(--orbit-space-2) - 2px);
+}
+
+.orbit-meaning-card--context {
+  background: var(--orbit-color-sage);
+  border-color: var(--orbit-color-border-light);
+  margin-left: var(--orbit-space-2);
+  padding-left: var(--orbit-space-2);
+}
+
+.orbit-meaning-card__rail {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--orbit-space-sm);
+  align-items: center;
+  padding-bottom: var(--orbit-space-sm);
+  border-bottom: 1px solid var(--orbit-color-border-light);
+}
+
+.orbit-rail__label {
+  font-size: var(--orbit-text-body-sm);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin: 0;
+  color: var(--orbit-color-ink);
+  text-transform: uppercase;
+}
+
+.orbit-rail__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--orbit-space-xs);
+  text-transform: uppercase;
+  font-size: var(--orbit-text-accent);
+  letter-spacing: 0.1em;
+  background: var(--orbit-color-apricot);
+  color: var(--orbit-color-ink);
+  padding: var(--orbit-space-xs) var(--orbit-space-md);
+  border-radius: var(--orbit-radius-capsule);
+  font-weight: 600;
+}
+
+/* Orientation Rail Component */
+.orbit-rail {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--orbit-space-sm);
+  padding: var(--orbit-space-sm) 0;
+  margin-bottom: var(--orbit-space-md);
+  border-bottom: 1px solid var(--orbit-color-border-light);
+  transition: all var(--orbit-transition-base);
+}
+
+.orbit-rail__info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--orbit-space-sm);
+}
+
+.orbit-rail__section {
+  font-size: var(--orbit-text-body-sm);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--orbit-color-ink);
+  font-family: var(--orbit-font-display);
+}
+
+.orbit-rail__meta {
+  font-size: var(--orbit-text-accent);
+  border-radius: var(--orbit-radius-capsule);
+  padding: var(--orbit-space-xs) var(--orbit-space-md);
+  border: 1px solid var(--orbit-color-border);
+  background: var(--orbit-color-mist);
+  color: var(--orbit-color-slate);
+  font-weight: 500;
+}
+
+.orbit-rail__status {
+  font-size: var(--orbit-text-accent);
+  border-radius: var(--orbit-radius-capsule);
+  padding: var(--orbit-space-xs) var(--orbit-space-md);
+  border: 1px solid var(--orbit-color-coral-light);
+  background: var(--orbit-color-coral-light);
+  color: var(--orbit-color-ink);
+  font-weight: 500;
+}
+
+.orbit-rail__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--orbit-space-sm);
+  align-items: center;
+}
+
+.orbit-rail__step {
+  font-size: var(--orbit-text-soft);
+  font-weight: 500;
+  color: var(--orbit-color-muted);
+}
+
+.orbit-rail__mantra {
+  font-family: var(--orbit-font-accent);
+  font-size: var(--orbit-text-accent);
+  color: var(--orbit-color-muted);
+  font-style: italic;
+  letter-spacing: 0.05em;
+  opacity: 0.8;
+}
+
+.orbit-meaning-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.orbit-meaning-card__heading {
+  margin: 0 0 var(--orbit-space-sm);
+  font-family: var(--orbit-font-accent);
+  font-size: var(--orbit-text-accent);
+  color: var(--orbit-color-muted);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.orbit-meaning-card__heading--observation {
+  font-family: var(--orbit-font-display);
+  font-size: var(--orbit-text-display-sm);
+  font-weight: var(--orbit-font-weight-display);
+  color: var(--orbit-color-ink);
+  line-height: var(--orbit-line-height-display);
+  letter-spacing: -0.01em;
+  margin-bottom: var(--orbit-space-md);
+}
+
+.orbit-meaning-card__heading--interpretation {
+  color: var(--orbit-color-slate);
+  font-weight: 600;
+}
+
+.orbit-meaning-card__heading--context {
+  color: var(--orbit-color-muted);
+  font-style: italic;
+}
+
+.orbit-meaning-card__text {
+  font-size: var(--orbit-text-body);
+  line-height: var(--orbit-line-height-body);
+  color: var(--orbit-color-ink);
+}
+
+.orbit-meaning-card__text--observation {
+  font-size: var(--orbit-text-display-sm);
+  line-height: var(--orbit-line-height-display);
+  font-weight: var(--orbit-font-weight-display);
+  color: var(--orbit-color-ink);
+  margin-bottom: var(--orbit-space-md);
+}
+
+.orbit-meaning-card__text--interpretation {
+  font-size: var(--orbit-text-body);
+  line-height: var(--orbit-line-height-body);
+  color: var(--orbit-color-ink);
+}
+
+.orbit-meaning-card__text--context {
+  font-size: var(--orbit-text-soft);
+  line-height: var(--orbit-line-height-soft);
+  color: var(--orbit-color-muted);
+}
+
+.orbit-meaning-card__text p {
+  margin-top: 0;
+}
+
+.orbit-meaning-card__nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--orbit-space-1);
+  flex-wrap: wrap;
+}
+
+.orbit-meaning-card__nav button {
+  border: 1px solid var(--orbit-color-border);
+  background: var(--orbit-color-card);
+  border-radius: var(--orbit-radius-capsule);
+  padding: var(--orbit-space-sm) var(--orbit-space-2);
+  font-weight: 600;
+  font-size: var(--orbit-text-body-sm);
+  color: var(--orbit-color-ink);
+  cursor: pointer;
+  transition: all var(--orbit-transition-base);
+  box-shadow: var(--orbit-shadow-card);
+}
+
+.orbit-meaning-card__nav button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.orbit-meaning-card__nav button:not(:disabled):hover {
+  background: var(--orbit-color-glow);
+  box-shadow: var(--orbit-shadow-soft);
+  transform: translateY(-1px);
+}
+
+.orbit-meaning-card__counter {
+  font-size: 0.85rem;
+  color: var(--orbit-color-muted);
+  margin: 0;
+}
+
+.orbit-meaning-card__note {
+  font-size: 0.9rem;
+  color: var(--orbit-color-muted);
+  border-left: 3px solid var(--orbit-color-border);
+  padding-left: var(--orbit-space-1);
+}
+
+.orbit-meaning-card__cta {
+  border: 1px solid var(--orbit-color-border);
+  border-radius: var(--orbit-radius-md);
+  padding: var(--orbit-space-1);
+  background: var(--orbit-color-mist);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.orbit-meaning-card__cta {
+  background: var(--orbit-color-sage);
+  border: 1px solid var(--orbit-color-border-light);
+  border-radius: var(--orbit-radius-md);
+  padding: var(--orbit-space-md);
+  margin-top: var(--orbit-space-md);
+}
+
+.orbit-meaning-card__cta button {
+  align-self: flex-start;
+  border: none;
+  border-radius: var(--orbit-radius-capsule);
+  background: var(--orbit-color-apricot);
+  color: var(--orbit-color-ink);
+  padding: var(--orbit-space-sm) var(--orbit-space-lg);
+  font-weight: 600;
+  font-size: var(--orbit-text-body-sm);
+  cursor: pointer;
+  transition: all var(--orbit-transition-base);
+  box-shadow: var(--orbit-shadow-card);
+}
+
+.orbit-meaning-card__cta button:hover {
+  background: var(--orbit-color-highlight);
+  box-shadow: var(--orbit-shadow-warm);
+  transform: translateY(-1px);
+}
+
+.numerology-grid {
+  margin-top: var(--orbit-space-2);
+}
+
+.numerology-grid .orbit-meaning-card {
+  grid-column: span 12;
+}
+
+@media (min-width: 768px) {
+  .numerology-grid .orbit-meaning-card {
+    grid-column: span 6;
+  }
+}
+
+/* Method Context Capsule */
+.orbit-method-context {
+  background: var(--orbit-color-card-warm);
+  border: 1px solid var(--orbit-color-border);
+  border-radius: var(--orbit-radius-lg);
+  padding: var(--orbit-space-2);
+  box-shadow: var(--orbit-shadow-soft);
+  display: flex;
+  flex-direction: column;
+  gap: var(--orbit-space-2);
+  position: relative;
+}
+
+.orbit-method-context::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: var(--orbit-radius-lg);
+  opacity: var(--orbit-grain-opacity);
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.02) 2px,
+      rgba(0, 0, 0, 0.02) 4px
+    );
+  pointer-events: none;
+}
+
+.orbit-method-context__heading {
+  font-family: var(--orbit-font-display);
+  font-size: var(--orbit-text-body-sm);
+  font-weight: 600;
+  color: var(--orbit-color-ink);
+  margin: 0 0 var(--orbit-space-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.orbit-method-context__anchors {
+  position: relative;
+  z-index: 1;
+}
+
+.orbit-method-context__anchor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--orbit-space-sm);
+}
+
+.orbit-anchor-card {
+  background: var(--orbit-color-mist);
+  border: 1px solid var(--orbit-color-border-light);
+  border-radius: var(--orbit-radius-md);
+  padding: var(--orbit-space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--orbit-space-xs);
+}
+
+.orbit-anchor-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--orbit-space-xs);
+}
+
+.orbit-anchor-card__label {
+  font-size: var(--orbit-text-accent);
+  font-weight: 600;
+  color: var(--orbit-color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.orbit-anchor-card__sign {
+  font-family: var(--orbit-font-display);
+  font-size: var(--orbit-text-body-sm);
+  font-weight: 600;
+  color: var(--orbit-color-ink);
+}
+
+.orbit-anchor-card__meta {
+  display: flex;
+  gap: var(--orbit-space-xs);
+  flex-wrap: wrap;
+}
+
+.orbit-anchor-card__badge {
+  font-size: var(--orbit-text-accent);
+  padding: 2px var(--orbit-space-xs);
+  border-radius: var(--orbit-radius-sm);
+  font-weight: 500;
+}
+
+.orbit-anchor-card__badge--element {
+  background: var(--orbit-color-turquoise-light);
+  color: var(--orbit-color-ink);
+}
+
+.orbit-anchor-card__badge--modality {
+  background: var(--orbit-color-coral-light);
+  color: var(--orbit-color-ink);
+}
+
+.orbit-anchor-card__themes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--orbit-space-xs);
+  margin-top: var(--orbit-space-xs);
+}
+
+.orbit-anchor-card__theme {
+  font-size: var(--orbit-text-soft);
+  color: var(--orbit-color-muted);
+  font-style: italic;
+}
+
+.orbit-method-context__axes {
+  position: relative;
+  z-index: 1;
+}
+
+.orbit-method-context__axis-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--orbit-space-md);
+}
+
+.orbit-axis-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--orbit-space-xs);
+}
+
+.orbit-axis-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--orbit-space-sm);
+}
+
+.orbit-axis-card__id {
+  font-family: var(--orbit-font-display);
+  font-size: var(--orbit-text-body-sm);
+  font-weight: 700;
+  color: var(--orbit-color-highlight);
+  min-width: 2rem;
+}
+
+.orbit-axis-card__label {
+  font-size: var(--orbit-text-body-sm);
+  font-weight: 500;
+  color: var(--orbit-color-ink);
+}
+
+.orbit-axis-card__range {
+  display: flex;
+  flex-direction: column;
+  gap: var(--orbit-space-xs);
+}
+
+.orbit-axis-card__range-track {
+  position: relative;
+  height: 8px;
+  background: var(--orbit-color-border-light);
+  border-radius: var(--orbit-radius-sm);
+  overflow: hidden;
+}
+
+.orbit-axis-card__range-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background: var(--orbit-color-apricot);
+  opacity: 0.3;
+  transition: all var(--orbit-transition-base);
+}
+
+.orbit-axis-card__range-marker {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  background: var(--orbit-color-highlight);
+  border-radius: 50%;
+  transform: translateY(-50%);
+  box-shadow: var(--orbit-shadow-card);
+}
+
+.orbit-axis-card__range-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--orbit-text-soft);
+  color: var(--orbit-color-muted);
+}
+
+.orbit-axis-card__description {
+  font-size: var(--orbit-text-soft);
+  color: var(--orbit-color-muted);
+  margin: 0;
+  line-height: var(--orbit-line-height-soft);
+}
+
+.orbit-method-context__trace {
+  position: relative;
+  z-index: 1;
+  padding-top: var(--orbit-space-sm);
+  border-top: 1px solid var(--orbit-color-border-light);
+}
+
+.orbit-method-context__trace-hint {
+  font-size: var(--orbit-text-soft);
+  color: var(--orbit-color-muted);
+  font-style: italic;
+  margin: 0;
+  line-height: var(--orbit-line-height-soft);
+}
+
+.orbit-method-context__unlock {
+  position: relative;
+  z-index: 1;
+  padding-top: var(--orbit-space-sm);
+  border-top: 1px solid var(--orbit-color-border-light);
+}
+
+.orbit-method-context__unlock-hint {
+  font-size: var(--orbit-text-accent);
+  color: var(--orbit-color-coral);
+  font-weight: 500;
+  margin: 0 0 var(--orbit-space-md) 0;
+  text-align: center;
+}
+
+.orbit-method-context__unlock-action {
+  display: flex;
+  flex-direction: column;
+  gap: var(--orbit-space-sm);
+  margin-top: var(--orbit-space-md);
+  padding-top: var(--orbit-space-md);
+  border-top: 1px solid var(--orbit-color-border);
+}
+
+.orbit-method-context__unlock-cta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--orbit-space-sm);
+}
+
+/* Practice Capsule */
+.orbit-practice-capsule {
+  background: var(--orbit-color-card-warm);
+  border: 1px solid var(--orbit-color-border);
+  border-radius: var(--orbit-radius-lg);
+  padding: var(--orbit-space-2);
+  box-shadow: var(--orbit-shadow-soft);
+  display: flex;
+  flex-direction: column;
+  gap: var(--orbit-space-md);
+  position: relative;
+}
+
+.orbit-practice-capsule::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: var(--orbit-radius-lg);
+  opacity: var(--orbit-grain-opacity);
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.02) 2px,
+      rgba(0, 0, 0, 0.02) 4px
+    );
+  pointer-events: none;
+}
+
+.orbit-practice-capsule--tarot {
+  border-left: 3px solid var(--orbit-color-turquoise);
+}
+
+.orbit-practice-capsule--check-in {
+  border-left: 3px solid var(--orbit-color-apricot);
+}
+
+.orbit-practice-capsule--numerology {
+  border-left: 3px solid var(--orbit-color-coral);
+}
+
+.orbit-practice-capsule--ritual {
+  border-left: 3px solid var(--orbit-color-sand);
+}
+
+.orbit-practice-capsule--mantra {
+  border-left: 3px solid var(--orbit-color-turquoise-light);
+}
+
+.orbit-practice-capsule__header {
+  display: flex;
+  gap: var(--orbit-space-sm);
+  align-items: flex-start;
+  position: relative;
+  z-index: 1;
+}
+
+.orbit-practice-capsule__icon {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--orbit-color-mist);
+  border-radius: var(--orbit-radius-md);
+  font-size: 1.5rem;
+}
+
+.orbit-practice-capsule__title-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--orbit-space-xs);
+}
+
+.orbit-practice-capsule__title {
+  font-family: var(--orbit-font-display);
+  font-size: var(--orbit-text-body);
+  font-weight: 600;
+  color: var(--orbit-color-ink);
+  margin: 0;
+}
+
+.orbit-practice-capsule__metadata {
+  display: flex;
+  gap: var(--orbit-space-sm);
+  flex-wrap: wrap;
+}
+
+.orbit-practice-capsule__meta-item {
+  font-size: var(--orbit-text-soft);
+  color: var(--orbit-color-muted);
+  font-style: italic;
+}
+
+.orbit-practice-capsule__description {
+  font-size: var(--orbit-text-body-sm);
+  color: var(--orbit-color-ink);
+  line-height: var(--orbit-line-height-body);
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.orbit-practice-capsule__steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--orbit-space-sm);
+  position: relative;
+  z-index: 1;
+}
+
+.orbit-practice-capsule__step {
+  font-size: var(--orbit-text-body-sm);
+  color: var(--orbit-color-ink);
+  line-height: var(--orbit-line-height-body);
+  padding-left: var(--orbit-space-lg);
+  position: relative;
+}
+
+.orbit-practice-capsule__step::before {
+  content: counter(step-counter);
+  counter-increment: step-counter;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--orbit-color-apricot);
+  color: var(--orbit-color-ink);
+  border-radius: 50%;
+  font-size: var(--orbit-text-accent);
+  font-weight: 600;
+}
+
+.orbit-practice-capsule__steps {
+  counter-reset: step-counter;
+}
+
+.orbit-practice-capsule__footer {
+  position: relative;
+  z-index: 1;
+  margin-top: var(--orbit-space-xs);
+}
+
+/* Action Footer */
+.orbit-action-footer {
+  padding: var(--orbit-space-2) 0;
+  border-top: 1px solid var(--orbit-color-border-light);
+  margin-top: var(--orbit-space-xl);
+}
+
+.orbit-action-footer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--orbit-space-sm);
+  justify-content: center;
+}
+
+.orbit-cta-capsule__icon {
+  margin-right: var(--orbit-space-xs);
+  display: inline-flex;
+  align-items: center;
+}
+
+.orbit-cta-capsule--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.orbit-cta-capsule--secondary {
+  background: var(--orbit-color-card);
+  border-color: var(--orbit-color-border);
+  color: var(--orbit-color-ink);
+}
+
+.orbit-cta-capsule--secondary:hover {
+  background: var(--orbit-color-mist);
+  border-color: var(--orbit-color-border);
+}
+
+.orbit-cta-capsule--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--orbit-color-ink);
+  box-shadow: none;
+}
+
+.orbit-cta-capsule--ghost:hover {
+  background: var(--orbit-color-mist);
+  border-color: var(--orbit-color-border-light);
+}
+

@@ -387,6 +387,7 @@ Mood **не** заменяет шрифты и spacing-токены — толь
 ## 12. Antipatterns *(этот канон)*
 
 - Не писать новый CSS в монолитный `globals.css` (~6884 строк) — только модули / `todayflow-foundation.css` / `design-system/`.
+  - **Phase 6 (2026-07-24):** legacy monolith split → `frontend/src/styles/globals/01–06-*.css`, orchestrator `app/globals.css` (import order locked). New product CSS still goes to foundation / design-system / feature modules — **not** back into the 01–06 legacy packs unless fixing those exact rules.
 - Не использовать фейковые testimonials (имя + должность без реального источника).
 - Не создавать параллельный SoT (`PREMIUM_DESIGN_CANON.md` и аналоги) — motion / mood / atmosphere / guest **живут здесь**.
 - Не добавлять анимацию точечно на один экран — только через `design-system/motion/` (§7).
@@ -471,6 +472,7 @@ TODAYFLOW_FOUNDATION_UI
 - [x] Day-phase atmosphere CSS/SVG (5 states) on `time-of-day` + section atmosphere *(code 2026-07-24 · `data-day-phase` + `day-phase-atmosphere.css`; reveal flash via `pulseDayPhaseRevealFlash`; landing stays `data-atmosphere=home` — no conflict)*
 - [x] Guest showcase blur-preview on `/today` + `/profile`; loading skeletons *(code 2026-07-24 · `ProductGuestShowcase` + `ProductShellLoading`)*
 - [x] Copy antipatterns — fake landing testimonials removed; promise theme card de-plakatized *(2026-07-24 · §12.1)*
+- [x] `globals.css` split into ordered modules *(2026-07-24 · `styles/globals/01–06` + cascade fixture test; visual checklist: `/`, `/today`, `/profile`, `/tarot`)*
 - [ ] Sound cues (optional; default off web)
 
 **Code sign-off (2026-07-03):** all checklist items except Figma frames — see [status/PROFILE_FOUNDATION_QA.md](./status/PROFILE_FOUNDATION_QA.md).
