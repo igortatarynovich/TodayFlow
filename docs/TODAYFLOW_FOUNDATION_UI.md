@@ -392,6 +392,18 @@ Mood **не** заменяет шрифты и spacing-токены — толь
 - Не добавлять анимацию точечно на один экран — только через `design-system/motion/` (§7).
 - Не подменять day-phase atmosphere стоковыми фото или контентными `cosmic/` washes без явной привязки к фазе дня.
 
+### 12.1 Copy revision (фаза 5 · 2026-07-24)
+
+Сверка с [TODAY_LANGUAGE_ANTI_PATTERNS_V0.md](./today-language/TODAY_LANGUAGE_ANTI_PATTERNS_V0.md) + §12 выше. Scope: marketing landing (не генеративный Today narrative).
+
+| Место | Было | Стало | Почему |
+|-------|------|-------|--------|
+| Лендинг · секция «Зачем возвращаются» (`PRODUCT_WEB_LANDING_TESTIMONIALS`) | Цитаты от «Елена Р., креативный директор» / «Юлиан В.» / «Сара Л., клинический психолог» | `PRODUCT_WEB_LANDING_RETURN_REASONS` — три product-reason карточки без имени и должности | §12: фейковый testimonial; нет реального источника |
+| Лендинг · promise card «Тема» | «Сегодня лучше не спешить — выбери одно главное» (императив-плакат) | «Если с утра уже пять „срочных“ дел — день скорее про одно главное…» | AP-006 / AP-008: императив без сцены → сцена с узнаваемым паттерном |
+| `DsQuoteTile` | Использовался только под фейковые отзывы | Остаётся в DS; лендинг переведён на `DsFeatureTile` | Компонент не запрещён — запрещены вымышленные атрибуции |
+
+**Не трогали в этой фазе:** генеративный Today/guide copy (отдельный TL-gate), iOS strings, help pages.
+
 ---
 
 ## 13. Layout shell *(весь продукт)*
@@ -458,6 +470,7 @@ TODAYFLOW_FOUNDATION_UI
 - [x] Mood themes Calm / Focus / Night / Clarity wired to day-phase + manual pin *(code 2026-07-24 · `data-mood` + `mood-themes.css`; pin via `MoodThemeControl`; day-phase follows mood on `/today`)*
 - [x] Day-phase atmosphere CSS/SVG (5 states) on `time-of-day` + section atmosphere *(code 2026-07-24 · `data-day-phase` + `day-phase-atmosphere.css`; reveal flash via `pulseDayPhaseRevealFlash`; landing stays `data-atmosphere=home` — no conflict)*
 - [x] Guest showcase blur-preview on `/today` + `/profile`; loading skeletons *(code 2026-07-24 · `ProductGuestShowcase` + `ProductShellLoading`)*
+- [x] Copy antipatterns — fake landing testimonials removed; promise theme card de-plakatized *(2026-07-24 · §12.1)*
 - [ ] Sound cues (optional; default off web)
 
 **Code sign-off (2026-07-03):** all checklist items except Figma frames — see [status/PROFILE_FOUNDATION_QA.md](./status/PROFILE_FOUNDATION_QA.md).

@@ -8,7 +8,7 @@ import {
   PRODUCT_WEB_LANDING_GUEST_TRIALS,
   PRODUCT_WEB_LANDING_HERO,
   PRODUCT_WEB_LANDING_ORBIT_NODES,
-  PRODUCT_WEB_LANDING_TESTIMONIALS,
+  PRODUCT_WEB_LANDING_RETURN_REASONS,
   PRODUCT_WEB_LANDING_TODAY_PROMISE,
 } from "@/components/product-ui/productWebLandingContent";
 import { ProductWebGuestNav } from "@/components/product-ui/ProductWebGuestNav";
@@ -23,11 +23,9 @@ import {
   DsMarketingSection,
   DsOrbitalNode,
   DsOrbitalViz,
-  DsQuoteTile,
   DsSectionTitle,
   DsThemeAsideRow,
   DsThemePanel,
-  DsFeatureIcon,
   IconActivity,
   IconEye,
   IconMountain,
@@ -56,6 +54,12 @@ const GUEST_TRIAL_ICONS = {
   tarot: IconTarot,
   users: IconUsers,
   activity: IconActivity,
+} as const;
+
+const RETURN_REASON_ICONS = {
+  morning: IconSun,
+  memory: IconSparkles,
+  "today-not-portrait": IconEye,
 } as const;
 
 const PROMISE_CARD_ICONS = {
@@ -205,11 +209,20 @@ export function ProductWebLanding({ signupHref, loginHref }: Props) {
 
       <DsMarketingSection>
         <div className={l.centerStack}>
-          <DsSectionTitle id="landing-testimonials">{PRODUCT_WEB_LANDING_TESTIMONIALS.title}</DsSectionTitle>
+          <DsSectionTitle id="landing-return-reasons">{PRODUCT_WEB_LANDING_RETURN_REASONS.title}</DsSectionTitle>
           <div className={l.grid3}>
-            {PRODUCT_WEB_LANDING_TESTIMONIALS.items.map((item) => (
-              <DsQuoteTile key={item.name} quote={item.quote} name={item.name} role={item.role} />
-            ))}
+            {PRODUCT_WEB_LANDING_RETURN_REASONS.items.map((item) => {
+              const Icon = RETURN_REASON_ICONS[item.id as keyof typeof RETURN_REASON_ICONS] ?? IconSparkles;
+              return (
+                <DsFeatureTile
+                  key={item.id}
+                  testId={`landing-reason-${item.id}`}
+                  icon={<Icon />}
+                  title={item.title}
+                  body={item.body}
+                />
+              );
+            })}
           </div>
         </div>
       </DsMarketingSection>
