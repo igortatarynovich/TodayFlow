@@ -87,6 +87,18 @@ export type TodayDayFoundationV1 = {
     beats?: TodayDayFoundationBeatV1[];
     summary_ru?: string;
   };
+  /** Shared universal day from numerology Source Family (personal day is Personal layer). */
+  numerology?: {
+    universal_day?: number | null;
+    personal_day?: number | null;
+    summary_ru?: string;
+  } | null;
+  weekday?: {
+    weekday?: string | null;
+    ruler_planet?: string | null;
+    ruler_planet_ru?: string | null;
+    summary_ru?: string;
+  } | null;
   essence?: {
     theme?: string;
     story_ru?: string;
@@ -95,7 +107,10 @@ export type TodayDayFoundationV1 = {
   source_inputs?: {
     has_astro?: boolean;
     has_lunar?: boolean;
+    has_numerology?: boolean;
+    has_weekday?: boolean;
     has_essence?: boolean;
+    ok_family_ids?: string[];
   };
 };
 

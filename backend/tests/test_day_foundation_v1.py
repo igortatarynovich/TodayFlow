@@ -70,9 +70,14 @@ def test_foundation_splits_astro_and_lunar():
 
 
 def test_foundation_empty_without_celestial():
-    f = build_day_foundation_v1({})
+    from datetime import date
+
+    f = build_day_foundation_v1({}, target_date=date(2026, 7, 24))
     assert f["essence"]["story_ru"] == ""
     assert f["source_inputs"]["has_essence"] is False
+    # Date-only Source Families still register via Registry.
+    assert f["numerology"]["universal_day"] == 5
+    assert f["weekday"]["ruler_planet"] == "Venus"
 
 
 def test_foundation_claims_for_interpretation():
