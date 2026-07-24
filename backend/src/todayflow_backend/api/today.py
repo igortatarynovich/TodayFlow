@@ -715,6 +715,7 @@ class TodayContractDayStoryV1(BaseModel):
     practice_recommendation: dict[str, Any] = Field(default_factory=dict)
     symbolic_note: str = ""
     supports_story: str = ""
+    day_foundation: dict[str, Any] | None = None
     trace: dict[str, Any] = Field(default_factory=dict)
 
 

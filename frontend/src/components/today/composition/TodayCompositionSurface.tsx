@@ -737,6 +737,11 @@ export function TodayCompositionSurface(props: Props) {
   const themeLoading = !singleVoice && props.guideNarrativeLoading && !props.guideNarrativePayload;
   const useProductFoundation = !isFirstToday;
   const useProductPersonalized = useProductFoundation && story.personalizedReady;
+  const storyHasDayFoundation = Boolean(
+    props.contract.day_story?.day_foundation?.essence?.story_ru ||
+      props.contract.day_story?.day_foundation?.astro?.summary_ru ||
+      props.contract.day_story?.day_foundation?.lunar?.summary_ru,
+  );
 
   if (eveningMode && continuityRecord && !dayClosed) {
     if (useProductFoundation) {
@@ -1236,7 +1241,7 @@ export function TodayCompositionSurface(props: Props) {
           />
         ) : null}
 
-        {!useProductPersonalized && showSkyCards ? (
+        {!useProductPersonalized && showSkyCards && !storyHasDayFoundation ? (
           <section className={styles.skySection} data-testid="today-zone-sky-influences">
             <span className={styles.sectionEyebrow}>Что формирует день</span>
             <h2 className={styles.sectionTitle}>{copy.astroContextTitle}</h2>

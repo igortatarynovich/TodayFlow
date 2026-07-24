@@ -200,15 +200,29 @@ async def _sky_aspects_for_date(
     locale: str,
     astro_service: astro.AstroService,
     aspect_engine: AspectEngine,
-) -> list[dict[str, Any]]:
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Returns (sky_aspects, transit_signs) where transit_signs may include moon_sign/sun_sign."""
     birth_payload = {"date": target_date.isoformat(), "time": "12:00:00", "location": "Equator"}
+    transit_signs: dict[str, Any] = {}
     try:
         chart = await astro_service.compute_chart(
             birth_payload=birth_payload,
             coordinates={"latitude": 0.0, "longitude": 0.0},
         )
     except Exception:
-        return []
+        return [], transit_signs
+
+    for pos in chart.positions or []:
+        if not isinstance(pos, dict):
+            continue
+        body = str(pos.get("body") or pos.get("planet") or "").strip()
+        sign = str(pos.get("sign") or "").strip()
+        if not body or not sign:
+            continue
+        if body.lower() == "moon":
+            transit_signs["moon_sign"] = {"sign": sign, "sign_ru": _sign_ru(sign), "source": "transit_chart"}
+        elif body.lower() == "sun":
+            transit_signs["sun_sign"] = {"sign": sign, "sign_ru": _sign_ru(sign), "source": "transit_chart"}
 
     callouts = aspect_engine.callouts(chart.positions, locale=locale)
     out: list[dict[str, Any]] = []
@@ -228,7 +242,7 @@ async def _sky_aspects_for_date(
                 "tension_level": callout.tension_level or None,
             }
         )
-    return out
+    return out, transit_signs
 
 
 async def build_celestial_events(
@@ -310,7 +324,9 @@ async def build_celestial_events(
     except Exception:
         pass
 
-    sky_aspects = await _sky_aspects_for_date(target_date, locale, astro_service, aspect_engine)
+    sky_aspects, transit_signs = await _sky_aspects_for_date(
+        target_date, locale, astro_service, aspect_engine
+    )
 
     personal: list[dict[str, Any]] = []
     sorted_transits = sorted(personal_transits or [], key=_transit_sort_key)
@@ -336,7 +352,7 @@ async def build_celestial_events(
         },
     }
 
-    return {
+    payload: dict[str, Any] = {
         "lunar_phase": lunar_phase,
         "retrogrades": retrogrades,
         "sky_aspects": sky_aspects,
@@ -344,3 +360,8 @@ async def build_celestial_events(
         "ingresses": ingresses_today,
         "daily_symbols": daily_symbols,
     }
+    if transit_signs.get("moon_sign"):
+        payload["moon_sign"] = transit_signs["moon_sign"]
+    if transit_signs.get("sun_sign"):
+        payload["sun_sign"] = transit_signs["sun_sign"]
+    return payload

@@ -73,12 +73,15 @@ def test_interpretation_includes_sky_and_color_why_claims():
         stone="лазурит",
     )
     claim_ids = {c["id"] for c in interp["derived_claims"]}
-    assert "claim.sky.moon" in claim_ids
-    assert "claim.sky.ingress.mercury" in claim_ids
+    # With celestial present, foundation owns sky claims (not legacy claim.sky.*).
+    assert "claim.day_axis" in claim_ids
+    assert any(i.startswith("claim.foundation.astro.") for i in claim_ids)
+    assert any(i.startswith("claim.foundation.lunar.") for i in claim_ids)
     assert "claim.talisman.color_why" in claim_ids
     assert "claim.talisman.stone_why" in claim_ids
     assert interp["day_sky"].get("moon")
-    assert interp["calculation_version"].startswith("day-story-interpretation-v1.1")
+    assert interp.get("day_foundation", {}).get("essence", {}).get("story_ru")
+    assert interp["calculation_version"].startswith("day-story-interpretation-v1.2")
 
 
 def test_fallback_fills_talisman_note_from_color_why():

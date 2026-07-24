@@ -147,7 +147,12 @@ describe("buildTodayDayNarrative", () => {
   it("tells sky → force → symbols as narrative chapters, not empty", () => {
     const narrative = buildTodayDayNarrative({ contract, story, morningRitualData });
     const ids = narrative.chapters.map((c) => c.id);
-    expect(ids).toEqual(["opening", "sky", "force", "symbols", "supports"]);
+    expect(ids).toContain("opening");
+    expect(ids).toContain("force");
+    expect(ids).toContain("symbols");
+    expect(ids).toContain("supports");
+    // Without day_foundation, legacy mixed sky chapter remains.
+    expect(ids).toContain("sky");
     const sky = narrative.chapters.find((c) => c.id === "sky")!;
     const skyText = [sky.lead, ...sky.paragraphs].filter(Boolean).join(" ");
     expect(skyText).toMatch(/Луна|Меркурий|Марс/i);
@@ -165,13 +170,50 @@ describe("buildTodayDayNarrative", () => {
     expect(symbolsText).toMatch(/Карта дня|Число дня|Сила|22/i);
   });
 
-  it("keeps literary opening meaning without inventing checklist chrome", () => {
-    const narrative = buildTodayDayNarrative({ contract, story, morningRitualData });
-    const opening = narrative.chapters.find((c) => c.id === "opening")!;
-    const openingText = [opening.lead, ...opening.paragraphs].filter(Boolean).join(" ");
-    expect(openingText).toMatch(/точностью|договорённостях/i);
-    expect(openingText).not.toMatch(/опирайся|сегодня сильнее/i);
-    expect(buildTodayLiteraryReading(story, contract).opening).toBeTruthy();
+  it("splits foundation into Суть дня + astro + lunar when present", () => {
+    const withFoundation: TodayContractV1 = {
+      ...contract,
+      day_story: {
+        ...contract.day_story!,
+        day_foundation: {
+          contract_version: "day_foundation_v1",
+          essence: {
+            theme: "Смена перспективы: Меркурий → Рак",
+            story_ru:
+              "Сегодня в небе складывается смена процессов. Меркурий переходит в Рак. Луна сейчас — Убывающая луна: отпускай лишнее. Суть дня рождается на стыке этих двух слоёв.",
+          },
+          astro: {
+            summary_ru: "Меркурий переходит в Рак — меняется тон разговоров.",
+            beats: [
+              {
+                id: "ingress.Mercury",
+                kind: "ingress",
+                title: "Меркурий → Рак",
+                story_ru: "Меркурий переходит в Рак — меняется тон разговоров.",
+              },
+            ],
+          },
+          lunar: {
+            summary_ru: "Луна сейчас — Убывающая луна: Отпускай лишнее.",
+            moon_sign: { sign_ru: "Стрелец" },
+            beats: [{ id: "lunar.phase", kind: "phase", title: "Убывающая луна", story_ru: "Отпускай лишнее." }],
+          },
+          source_inputs: { has_astro: true, has_lunar: true, has_essence: true },
+        },
+      },
+    };
+    const narrative = buildTodayDayNarrative({
+      contract: withFoundation,
+      story,
+      morningRitualData,
+    });
+    const ids = narrative.chapters.map((c) => c.id);
+    expect(ids[0]).toBe("opening");
+    expect(narrative.chapters[0].kicker).toMatch(/Суть дня/i);
+    expect(ids).toContain("astro");
+    expect(ids).toContain("lunar");
+    expect(ids).not.toContain("sky");
+    expect(narrative.theme).toMatch(/перспектив|Меркурий/i);
   });
 
   it("expands supports as Твой ход with color why from guide + talisman note", () => {

@@ -12,7 +12,7 @@ import re
 from typing import Any
 
 DAY_STORY_INTERPRETATION_V1 = "day_story_interpretation_v1"
-DAY_STORY_CALCULATION_VERSION = "day-story-interpretation-v1.1"
+DAY_STORY_CALCULATION_VERSION = "day-story-interpretation-v1.2"
 
 _DOMAIN_IDS = ("relationships", "money_work", "family")
 
@@ -147,6 +147,13 @@ def build_day_story_interpretation_v1(
     color_sym = color_symbol if isinstance(color_symbol, dict) else {}
     stone_sym = stone_symbol if isinstance(stone_symbol, dict) else {}
 
+    from todayflow_backend.services.day_foundation_v1 import (
+        build_day_foundation_v1,
+        foundation_to_interpretation_claims,
+    )
+
+    day_foundation = build_day_foundation_v1(ce) if ce else None
+
     evidence: list[dict[str, Any]] = []
     claims: list[dict[str, Any]] = []
     domain_evidence: dict[str, list[str]] = {d: [] for d in _DOMAIN_IDS}
@@ -167,6 +174,10 @@ def build_day_story_interpretation_v1(
         "has_ingress": bool(ce.get("ingresses")),
         "has_sky_aspect": bool(ce.get("sky_aspects")),
         "has_retro": bool(ce.get("retrogrades")),
+        "has_day_foundation": bool(
+            isinstance(day_foundation, dict)
+            and (day_foundation.get("source_inputs") or {}).get("has_essence")
+        ),
         "locale": (locale or "ru")[:8],
     }
 
@@ -188,9 +199,32 @@ def build_day_story_interpretation_v1(
             }
         )
 
-    # Brief anchors
-    anchor = str(brief.get("anchor_summary") or "").strip()
-    if anchor:
+    # Brief anchors — prefer foundation essence as day axis when present.
+    essence = (
+        day_foundation.get("essence")
+        if isinstance(day_foundation, dict) and isinstance(day_foundation.get("essence"), dict)
+        else {}
+    )
+    foundation_axis = str(essence.get("theme") or "").strip()
+    foundation_story = str(essence.get("story_ru") or "").strip()
+    anchor = foundation_axis or str(brief.get("anchor_summary") or "").strip()
+    if foundation_axis or foundation_story:
+        eid = "ev.foundation.essence"
+        evidence.append(
+            _evidence(
+                evidence_id=eid,
+                source="day_foundation_v1.essence",
+                claim_ref="day_axis",
+                summary=foundation_story or foundation_axis,
+            )
+        )
+        add_claim(
+            "claim.day_axis",
+            foundation_story or foundation_axis,
+            evidence_ids=[eid],
+            kind="axis",
+        )
+    elif anchor:
         eid = "ev.brief.anchor"
         evidence.append(
             _evidence(
@@ -202,6 +236,20 @@ def build_day_story_interpretation_v1(
         )
         add_claim("claim.day_axis", anchor, evidence_ids=[eid], kind="axis")
 
+    # Foundation layer claims (astro / lunar beats) — after axis.
+    if isinstance(day_foundation, dict):
+        for fc in foundation_to_interpretation_claims(day_foundation):
+            if fc.get("id") == "claim.foundation.essence":
+                continue  # already as claim.day_axis
+            claims.append(fc)
+            evidence.append(
+                _evidence(
+                    evidence_id=f"ev.{fc.get('id')}",
+                    source=str((fc.get("evidence_ids") or ["day_foundation_v1"])[0]),
+                    claim_ref=str(fc.get("layer") or "sky"),
+                    summary=str(fc.get("text") or ""),
+                )
+            )
     do_hint = str(brief.get("do_hint") or "").strip()
     if do_hint:
         eid = "ev.brief.do_hint"
@@ -327,76 +375,78 @@ def build_day_story_interpretation_v1(
         )
         add_claim("claim.day_number", f"Число дня: {num}", evidence_ids=[eid], kind="symbol")
 
-    # --- Sky evidence (ready story_ru / guidance only) ---
-    lunar = ce.get("lunar_phase") if isinstance(ce.get("lunar_phase"), dict) else {}
-    lunar_body = str(lunar.get("guidance") or lunar.get("themes") or "").strip()
-    lunar_name = str(lunar.get("name") or "").strip()
-    if lunar_name or lunar_body:
-        eid = "ev.sky.moon"
-        summary = f"{lunar_name}: {lunar_body}".strip(": ").strip() if lunar_body else lunar_name
-        evidence.append(
-            _evidence(
-                evidence_id=eid,
-                source="celestial_events.lunar_phase",
-                claim_ref="moon",
-                summary=summary,
+    # --- Sky evidence: when foundation is present, beats already cover sky claims ---
+    use_legacy_sky_claims = not source_inputs.get("has_day_foundation")
+    if use_legacy_sky_claims:
+        lunar = ce.get("lunar_phase") if isinstance(ce.get("lunar_phase"), dict) else {}
+        lunar_body = str(lunar.get("guidance") or lunar.get("themes") or "").strip()
+        lunar_name = str(lunar.get("name") or "").strip()
+        if lunar_name or lunar_body:
+            eid = "ev.sky.moon"
+            summary = f"{lunar_name}: {lunar_body}".strip(": ").strip() if lunar_body else lunar_name
+            evidence.append(
+                _evidence(
+                    evidence_id=eid,
+                    source="celestial_events.lunar_phase",
+                    claim_ref="moon",
+                    summary=summary,
+                )
             )
-        )
-        add_claim("claim.sky.moon", summary, evidence_ids=[eid], kind="sky")
+            add_claim("claim.sky.moon", summary, evidence_ids=[eid], kind="sky")
 
-    for idx, row in enumerate((ce.get("ingresses") or [])[:3]):
-        if not isinstance(row, dict):
-            continue
-        story = str(row.get("story_ru") or "").strip()
-        if not story:
-            continue
-        planet = str(row.get("planet") or row.get("planet_ru") or idx)
-        eid = f"ev.sky.ingress.{planet}"
-        evidence.append(
-            _evidence(
-                evidence_id=eid,
-                source="celestial_events.ingresses",
-                claim_ref="ingress",
-                summary=story,
+        for idx, row in enumerate((ce.get("ingresses") or [])[:3]):
+            if not isinstance(row, dict):
+                continue
+            story = str(row.get("story_ru") or "").strip()
+            if not story:
+                continue
+            planet = str(row.get("planet") or row.get("planet_ru") or idx)
+            eid = f"ev.sky.ingress.{planet}"
+            evidence.append(
+                _evidence(
+                    evidence_id=eid,
+                    source="celestial_events.ingresses",
+                    claim_ref="ingress",
+                    summary=story,
+                )
             )
-        )
-        add_claim(f"claim.sky.ingress.{planet}", story, evidence_ids=[eid], kind="sky")
+            add_claim(f"claim.sky.ingress.{planet}", story, evidence_ids=[eid], kind="sky")
 
-    for row in (ce.get("sky_aspects") or [])[:2]:
-        if not isinstance(row, dict):
-            continue
-        story = str(row.get("story_ru") or "").strip()
-        if not story:
-            continue
-        aid = str(row.get("id") or row.get("title") or "aspect")[:40]
-        eid = f"ev.sky.aspect.{aid}"
-        evidence.append(
-            _evidence(
-                evidence_id=eid,
-                source="celestial_events.sky_aspects",
-                claim_ref="sky_aspect",
-                summary=story,
+        for row in (ce.get("sky_aspects") or [])[:2]:
+            if not isinstance(row, dict):
+                continue
+            story = str(row.get("story_ru") or "").strip()
+            if not story:
+                continue
+            aid = str(row.get("id") or row.get("title") or "aspect")[:40]
+            eid = f"ev.sky.aspect.{aid}"
+            evidence.append(
+                _evidence(
+                    evidence_id=eid,
+                    source="celestial_events.sky_aspects",
+                    claim_ref="sky_aspect",
+                    summary=story,
+                )
             )
-        )
-        add_claim(f"claim.sky.aspect.{aid}", story, evidence_ids=[eid], kind="sky")
+            add_claim(f"claim.sky.aspect.{aid}", story, evidence_ids=[eid], kind="sky")
 
-    for row in (ce.get("retrogrades") or [])[:2]:
-        if not isinstance(row, dict):
-            continue
-        story = str(row.get("story_ru") or "").strip()
-        if not story:
-            continue
-        planet = str(row.get("planet") or row.get("planet_ru") or "retro")
-        eid = f"ev.sky.retro.{planet}"
-        evidence.append(
-            _evidence(
-                evidence_id=eid,
-                source="celestial_events.retrogrades",
-                claim_ref="retrograde",
-                summary=story,
+        for row in (ce.get("retrogrades") or [])[:2]:
+            if not isinstance(row, dict):
+                continue
+            story = str(row.get("story_ru") or "").strip()
+            if not story:
+                continue
+            planet = str(row.get("planet") or row.get("planet_ru") or "retro")
+            eid = f"ev.sky.retro.{planet}"
+            evidence.append(
+                _evidence(
+                    evidence_id=eid,
+                    source="celestial_events.retrogrades",
+                    claim_ref="retrograde",
+                    summary=story,
+                )
             )
-        )
-        add_claim(f"claim.sky.retro.{planet}", story, evidence_ids=[eid], kind="sky")
+            add_claim(f"claim.sky.retro.{planet}", story, evidence_ids=[eid], kind="sky")
 
     # --- Color / stone ready copy ---
     if color_name:
@@ -516,6 +566,7 @@ def build_day_story_interpretation_v1(
         "limitations": limitations,
         "fingerprint": fingerprint or "",
         "day_sky": _slim_day_sky(ce),
+        "day_foundation": day_foundation,
     }
     return interpretation
 

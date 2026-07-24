@@ -8,7 +8,8 @@ export const TODAY_COMPOSITION_COPY = {
   glanceWeakTitle: "Где лучше не торопиться",
   sphereNeutralNote: "",
   whyStoryTitle: "Почему сегодня именно так",
-  astroContextTitle: "Астрологический и лунный контекст",
+  astroContextTitle: "Астрологический контекст",
+  lunarContextTitle: "Лунный контекст",
   ritualTarotPendingTitle: "Давай вытащим карту дня",
   ritualTarotPendingBody:
     "Не ответ на все вопросы — скорее зеркало. Выбери ту, к которой тянет, и посмотрим, что она говорит о сегодня.",

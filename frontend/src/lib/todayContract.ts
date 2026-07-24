@@ -55,8 +55,48 @@ export type TodayContractDayStoryV1 = {
   symbolic_note?: string;
   /** Short «Твой ход» paragraph from LLM — empty when no support claims. */
   supports_story?: string;
+  /** Objective day plot: astro + lunar layers → essence (Суть дня). */
+  day_foundation?: TodayDayFoundationV1 | null;
   /** Kitchen trace — not required for display; used for honesty / future UI. */
   trace?: TodayContractDayStoryTraceV1;
+};
+
+export type TodayDayFoundationBeatV1 = {
+  id?: string;
+  kind?: string;
+  title?: string;
+  story_ru?: string;
+};
+
+export type TodayDayFoundationV1 = {
+  contract_version?: string;
+  calculation_version?: string;
+  astro?: {
+    beats?: TodayDayFoundationBeatV1[];
+    summary_ru?: string;
+  };
+  lunar?: {
+    phase?: {
+      name?: string;
+      cycle_day?: number;
+      guidance?: string;
+      themes?: string;
+      next_phase?: { name?: string; in_days?: number } | null;
+    } | null;
+    moon_sign?: { sign?: string; sign_ru?: string } | null;
+    beats?: TodayDayFoundationBeatV1[];
+    summary_ru?: string;
+  };
+  essence?: {
+    theme?: string;
+    story_ru?: string;
+    evidence_ids?: string[];
+  };
+  source_inputs?: {
+    has_astro?: boolean;
+    has_lunar?: boolean;
+    has_essence?: boolean;
+  };
 };
 
 export type TodayContractV1 = {
