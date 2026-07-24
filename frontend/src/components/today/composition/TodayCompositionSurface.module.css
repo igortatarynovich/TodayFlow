@@ -1940,6 +1940,25 @@
   background: linear-gradient(165deg, #fffefb 0%, #f7f2ea 100%);
 }
 
+.colorGuideTitleRow {
+  margin: 0.3rem 0 0;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.colorGuideSwatch {
+  flex: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.colorGuideTitleRow .sectionTitle {
+  margin: 0;
+}
+
 .colorGuideBenefit {
   margin: 0.35rem 0 0.85rem;
   font-size: 0.9375rem;
@@ -2037,11 +2056,7 @@
 :global([data-theme="dark"]) .rootWebEmbed .continuityPill,
 :global([data-theme="dark"]) .rootWebEmbed .ritualGateCard,
 :global([data-theme="dark"]) .rootWebEmbed .ritualGate,
-:global([data-theme="dark"]) .rootWebEmbed .ritualStage,
-:global(.productWebFrame[data-theme="dark"]) .rootWebEmbed .continuityPill,
-:global(.productWebFrame[data-theme="dark"]) .rootWebEmbed .ritualGateCard,
-:global(.productWebFrame[data-theme="dark"]) .rootWebEmbed .ritualGate,
-:global(.productWebFrame[data-theme="dark"]) .rootWebEmbed .ritualStage {
+:global([data-theme="dark"]) .rootWebEmbed .ritualStage {
   background: #1e1a24;
   border-color: rgba(255, 255, 255, 0.1);
   box-shadow: none;

@@ -46,8 +46,8 @@
   --tf-on-hero: var(--tf-ink);
 
   /* —— Typography (§5) —— */
-  --tf-font-display: "Instrument Serif", "Playfair Display", "Cormorant Garamond", Georgia, serif;
-  --tf-font-body: "Manrope", "Inter", system-ui, sans-serif;
+  --tf-font-display: var(--font-instrument-serif), var(--font-playfair-display), var(--font-cormorant-garamond), Georgia, serif;
+  --tf-font-body: var(--font-manrope), var(--font-inter), system-ui, sans-serif;
 
   --tf-type-display-size: 2.5rem;
   --tf-type-display-line: 1.15;
@@ -177,8 +177,7 @@
 }
 
 /* Dark product theme — Profile Journey / product web shell */
-[data-theme="dark"],
-.productWebFrame[data-theme="dark"] {
+[data-theme="dark"] {
   color-scheme: dark;
   --tf-page: #121018;
   --tf-page-cream: #1a1620;

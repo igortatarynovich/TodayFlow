@@ -54,6 +54,11 @@
   text-align: center;
 }
 
+.ritualGate:focus-visible {
+  outline: 2px solid var(--tf-accent-gold, #c9a96e);
+  outline-offset: 3px;
+}
+
 .ritualGateTarot {
   background: var(--tf-surface-dark);
   color: var(--tf-on-dark);
@@ -116,14 +121,35 @@
 }
 
 .gateHint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.2rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
   font-size: var(--tf-type-caption-size);
-  opacity: 0.6;
-  color: inherit;
+  font-weight: 700;
+  color: var(--tf-ink, #1a1510);
+  background: var(--tf-accent-gold, #c9a96e);
+  opacity: 1;
+  transition:
+    transform var(--tf-motion-micro, 150ms) var(--tf-motion-ease-out, ease),
+    box-shadow var(--tf-motion-micro, 150ms) var(--tf-motion-ease-out, ease);
 }
 
-.ritualGateNumber .gateHint {
-  color: var(--tf-caption);
-  opacity: 1;
+.gateHint::after {
+  content: "→";
+}
+
+.ritualGate:hover .gateHint,
+.ritualGate:focus-visible .gateHint {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(201, 169, 110, 0.38);
+}
+
+.ritualGate:active .gateHint {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 .pulseCard {

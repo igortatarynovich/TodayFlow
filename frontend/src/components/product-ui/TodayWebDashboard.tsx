@@ -53,6 +53,8 @@ export type TodayWebDashboardProps = {
   coreProfile?: CoreProfile | null;
   locale?: FlowPracticesChromeLocale;
   layout?: TodayWebDashboardLayout;
+  /** First-day / onboarding signal (FOUNDATION_UI §8) — drives mood "clarity". */
+  isFirstDay?: boolean;
   children?: ReactNode;
 };
 
@@ -269,12 +271,13 @@ export function TodayWebDashboard({
   coreProfile,
   locale,
   layout = "full",
+  isFirstDay = false,
   children,
 }: TodayWebDashboardProps) {
   const resolvedLocale: FlowPracticesChromeLocale =
     locale ?? (getLocale() === "ru" ? "ru" : "en");
   const chrome = useMemo(() => todayWebDashboardChromeBundle(resolvedLocale), [resolvedLocale]);
-  const { theme, mood } = useProductMoodTheme();
+  const { theme, mood } = useProductMoodTheme({ isFirstDay });
 
   // PR-2: never invent timeline / weekly / practices for the rail or overview.
   const resolvedTimeline = timelineEvents ?? [];
@@ -339,7 +342,7 @@ export function TodayWebDashboard({
             </p>
           </header>
 
-          <MoodThemeControl className={pl.moodThemeSlot} />
+          <MoodThemeControl className={pl.moodThemeSlot} isFirstDay={isFirstDay} />
 
           {showOverview ? (
             <TodayWebOverview

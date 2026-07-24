@@ -350,16 +350,13 @@
 }
 
 :global([data-theme="dark"]) .sectionWebEmbed .glanceTile,
-:global([data-theme="dark"]) .sectionWebEmbed .productCard,
-:global(.productWebFrame[data-theme="dark"]) .sectionWebEmbed .glanceTile,
-:global(.productWebFrame[data-theme="dark"]) .sectionWebEmbed .productCard {
+:global([data-theme="dark"]) .sectionWebEmbed .productCard {
   background: #1e1a24;
   border-color: rgba(255, 255, 255, 0.1);
   box-shadow: none;
 }
 
-:global([data-theme="dark"]) .sectionWebEmbed .chip,
-:global(.productWebFrame[data-theme="dark"]) .sectionWebEmbed .chip {
+:global([data-theme="dark"]) .sectionWebEmbed .chip {
   background: rgba(255, 255, 255, 0.04);
   border-color: rgba(255, 255, 255, 0.1);
 }

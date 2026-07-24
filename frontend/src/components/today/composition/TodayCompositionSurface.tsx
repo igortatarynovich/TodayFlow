@@ -12,6 +12,8 @@ import { TodayPersonalizedProductSection } from "@/components/today/composition/
 import { LoadingSpinner } from "@/components/orbit";
 import { HeroMedium } from "@/components/foundation/HeroMedium";
 import { profileMotionStyles } from "@/components/foundation/ProfileMotion";
+import { MotionReveal } from "@/design-system/motion/MotionReveal";
+import { MOTION } from "@/design-system/motion/tokens";
 import { SacredGeometryBackdrop } from "@/components/visualIdentity/SacredGeometryBackdrop";
 import { buildTodayHeroPillars, buildTodayHeroSymbol, resolveTodaySunSignLabel } from "@/lib/todayHeroMedium";
 import type { MorningRitualData, TodayCycleData } from "@/components/today/todayPageUtils";
@@ -1290,17 +1292,17 @@ export function TodayCompositionSurface(props: Props) {
       {!embeddedInWebDashboard ? topRowSection : null}
       {!embeddedInWebDashboard ? greetingSection : null}
 
-      {heroSection}
+      <MotionReveal>{heroSection}</MotionReveal>
 
       {useProductFoundation && story.personalizedReady ? (
         <>
-          {pulseSection}
-          {glanceSection}
+          <MotionReveal delayMs={MOTION.staggerMs}>{pulseSection}</MotionReveal>
+          <MotionReveal delayMs={MOTION.staggerMs * 2}>{glanceSection}</MotionReveal>
           {morningDialogue}
         </>
       ) : !story.personalizedReady ? (
         <>
-          {ritualGateSection}
+          <MotionReveal delayMs={MOTION.staggerMs}>{ritualGateSection}</MotionReveal>
           {ritualTarotImpactStage}
           {morningDialogue}
         </>

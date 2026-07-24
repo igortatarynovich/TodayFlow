@@ -2,6 +2,7 @@
 
 export type TodayDayColorGuide = {
   name: string;
+  hex: string;
   benefit: string;
   clothing: string;
   accessory: string;
@@ -15,6 +16,7 @@ type ColorGuideRow = TodayDayColorGuide;
 const COLOR_GUIDE: Record<string, ColorGuideRow> = {
   Лазурь: {
     name: "Лазурь",
+    hex: "#4A9FD8",
     benefit: "Успокаивает ум и помогает держать ясность, когда день требует решений.",
     clothing: "Светлая рубашка, шарф или носки лазурного оттенка.",
     accessory: "Тонкий браслет, часы с голубым циферблатом или блокнот в мягком синем.",
@@ -24,6 +26,7 @@ const COLOR_GUIDE: Record<string, ColorGuideRow> = {
   },
   "Глубокий синий": {
     name: "Глубокий синий",
+    hex: "#1F3A6B",
     benefit: "Даёт опору и глубину — легче не сорваться на суету.",
     clothing: "Тёмно-синий свитер, пиджак или джинсы глубокого синего.",
     accessory: "Сумка, ремень или перстень в спокойном синем.",
@@ -33,6 +36,7 @@ const COLOR_GUIDE: Record<string, ColorGuideRow> = {
   },
   Индиго: {
     name: "Индиго",
+    hex: "#453B8C",
     benefit: "Усиливает интуицию и внутреннюю честность — про «услышать себя до действия».",
     clothing: "Индиго в нижнем слое: футболка, колготки, носки.",
     accessory: "Платок, шарф или обложка телефона.",
@@ -42,6 +46,7 @@ const COLOR_GUIDE: Record<string, ColorGuideRow> = {
   },
     Изумрудный: {
     name: "Изумрудный",
+    hex: "#1F9D6E",
     benefit: "Поддерживает восстановление и мягкий рост — телу и отношениям.",
     clothing: "Изумрудный шарф, кардиган или одна деталь у лица.",
     accessory: "Серьги, брошь или чашка — маленький якорь зелени.",
@@ -51,6 +56,7 @@ const COLOR_GUIDE: Record<string, ColorGuideRow> = {
   },
   Янтарный: {
     name: "Янтарный",
+    hex: "#C68A2E",
     benefit: "Согревает и возвращает энергию без суеты — хорош для дней, где нужен тёплый тон.",
     clothing: "Янтарный шарф, бежево-медный свитер или тёплые аксессуары.",
     accessory: "Украшение с янтарным или медовым оттенком.",
@@ -60,6 +66,7 @@ const COLOR_GUIDE: Record<string, ColorGuideRow> = {
   },
   Коралловый: {
     name: "Коралловый",
+    hex: "#F27A5E",
     benefit: "Смягчает общение — легче говорить без давления и упрёка.",
     clothing: "Коралловый топ под пиджак, шарф или помада мягкого коралла.",
     accessory: "Небольшая брошь, nail-accent или телефонный чехол.",
@@ -69,6 +76,7 @@ const COLOR_GUIDE: Record<string, ColorGuideRow> = {
   },
   Бордовый: {
     name: "Бордовый",
+    hex: "#6E1F35",
     benefit: "Даёт собранность и глубину — помогает не распыляться.",
     clothing: "Бордовый шарф, ремень или один слой outerwear.",
     accessory: "Кожаный аксессуар бордового или винного тона.",
@@ -78,6 +86,7 @@ const COLOR_GUIDE: Record<string, ColorGuideRow> = {
   },
   Перламутровый: {
     name: "Перламутровый",
+    hex: "#E4DCEC",
     benefit: "Смягчает края дня — помогает не цепляться за мелочи.",
     clothing: "Перламутровая блуза, светлый жакет или платье с перламутровым отливом.",
     accessory: "Жемчуг, светлые серьги или перламутровый manicure.",
@@ -87,6 +96,7 @@ const COLOR_GUIDE: Record<string, ColorGuideRow> = {
   },
   Оливковый: {
     name: "Оливковый",
+    hex: "#71773A",
     benefit: "Заземляет и помогает идти ровно — без рывков и самокритики.",
     clothing: "Оливковый кардиган, брюки или кроссовки.",
     accessory: "Рюкзак, ремень или часы в оливковом/хаки.",
@@ -96,6 +106,7 @@ const COLOR_GUIDE: Record<string, ColorGuideRow> = {
   },
   Сливовый: {
     name: "Сливовый",
+    hex: "#6B3E63",
     benefit: "Усиливает концентрацию — один фокус вместо десяти.",
     clothing: "Сливовый шарф, носки или внутренний слой.",
     accessory: "Тёмная сумка, перчатки или обложка.",
@@ -105,6 +116,7 @@ const COLOR_GUIDE: Record<string, ColorGuideRow> = {
   },
   Песочный: {
     name: "Песочный",
+    hex: "#C9A96E",
     benefit: "Даёт мягкую стабильность — день легче переносить без жёстких контрастов.",
     clothing: "Песочный свитер, бежевый trench или нейтральный слой.",
     accessory: "Сумка natural tone, шляпа или шарф.",
@@ -114,6 +126,7 @@ const COLOR_GUIDE: Record<string, ColorGuideRow> = {
   },
   Серебряный: {
     name: "Серебряный",
+    hex: "#A9ADB4",
     benefit: "Охлаждает реакции и помогает смотреть на день спокойнее.",
     clothing: "Серебристая футболка, серый металлик в аксессуарах.",
     accessory: "Серебряные украшения, часы, браслет.",
@@ -125,6 +138,7 @@ const COLOR_GUIDE: Record<string, ColorGuideRow> = {
 
 const DEFAULT_COLOR: TodayDayColorGuide = {
   name: "Лазурь",
+  hex: "#4A9FD8",
   benefit: "Поддерживает спокойный фокус и помогает не ускоряться раньше времени.",
   clothing: "Один предмет одежды спокойного оттенка — рубашка, шарф или носки.",
   accessory: "Небольшой аксессуар того же тона — браслет, чехол, блокнот.",
@@ -153,6 +167,7 @@ export function resolveTodayDayColorGuide(input: {
 
   return {
     name,
+    hex: preset.hex,
     benefit: input.api?.benefit_ru?.trim() || preset.benefit,
     clothing: input.api?.clothing_ru?.trim() || preset.clothing,
     accessory: input.api?.accessory_ru?.trim() || preset.accessory,

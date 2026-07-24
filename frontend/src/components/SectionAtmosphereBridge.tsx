@@ -6,7 +6,7 @@ import {
   DAY_PHASE_THEME_COLORS,
   resolveDayPhase,
 } from "@/lib/dayPhaseAtmosphere";
-import { hasCompletedFirstToday } from "@/lib/firstTodayState";
+import { resolveIsFirstDay } from "@/lib/firstTodayState";
 import {
   MOOD_THEME_COLORS,
   readMoodPin,
@@ -29,9 +29,7 @@ export function SectionAtmosphereBridge() {
   useEffect(() => {
     document.documentElement.setAttribute("data-atmosphere", atmosphere);
 
-    const firstQuery = searchParams?.get("first") === "1";
-    const isFirstDay =
-      firstQuery || (pathname?.startsWith("/today") === true && !hasCompletedFirstToday());
+    const isFirstDay = resolveIsFirstDay(pathname, searchParams);
 
     const apply = () => {
       const mood = resolveProductMood({

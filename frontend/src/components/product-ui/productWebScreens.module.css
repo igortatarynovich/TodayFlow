@@ -2789,109 +2789,109 @@
 }
 
 /* —— Tarot dark theme (Figma 29:692 — result + ritual) —— */
-.productWebFrame[data-theme="dark"] .tarotWebRoot {
+:global([data-theme="dark"]) .tarotWebRoot {
   color: rgba(245, 242, 237, 0.92);
 }
 
-.productWebFrame[data-theme="dark"] .tarotWebStory {
+:global([data-theme="dark"]) .tarotWebStory {
   min-width: 0;
 }
 
-.productWebFrame[data-theme="dark"] .tarotWebVerdict,
-.productWebFrame[data-theme="dark"] .tarotWebVerdictSub {
+:global([data-theme="dark"]) .tarotWebVerdict,
+:global([data-theme="dark"]) .tarotWebVerdictSub {
   white-space: normal;
   overflow-wrap: anywhere;
   word-break: normal;
 }
 
-.productWebFrame[data-theme="dark"] .tarotWebQuestion {
+:global([data-theme="dark"]) .tarotWebQuestion {
   white-space: normal;
   overflow-wrap: anywhere;
 }
 
-.productWebFrame[data-theme="dark"] .tarotWebInsightRow p {
+:global([data-theme="dark"]) .tarotWebInsightRow p {
   white-space: normal;
   overflow-wrap: anywhere;
 }
 
-.productWebFrame[data-theme="dark"] .tarotWebBack {
+:global([data-theme="dark"]) .tarotWebBack {
   color: rgba(245, 242, 237, 0.42);
 }
 
-.productWebFrame[data-theme="dark"] .tarotWebBack:hover {
+:global([data-theme="dark"]) .tarotWebBack:hover {
   color: rgba(245, 242, 237, 0.88);
 }
 
-.productWebFrame[data-theme="dark"] .tarotWebTopicChip {
+:global([data-theme="dark"]) .tarotWebTopicChip {
   background: rgba(212, 175, 55, 0.1);
   border-color: rgba(212, 175, 55, 0.3);
   color: #d4af37;
 }
 
-.productWebFrame[data-theme="dark"] .tarotWebCardLabel {
+:global([data-theme="dark"]) .tarotWebCardLabel {
   color: rgba(245, 242, 237, 0.42);
 }
 
-.productWebFrame[data-theme="dark"] .tarotWebQuestion {
+:global([data-theme="dark"]) .tarotWebQuestion {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.1);
   color: #f5f2ed;
   backdrop-filter: blur(10px);
 }
 
-.productWebFrame[data-theme="dark"] .tarotWebVerdict {
+:global([data-theme="dark"]) .tarotWebVerdict {
   color: #f5f2ed;
 }
 
-.productWebFrame[data-theme="dark"] .tarotWebVerdictSub {
+:global([data-theme="dark"]) .tarotWebVerdictSub {
   color: #d4af37;
 }
 
-.productWebFrame[data-theme="dark"] .tarotWebInsightRow {
+:global([data-theme="dark"]) .tarotWebInsightRow {
   background: rgba(255, 255, 255, 0.05);
   border-color: rgba(255, 255, 255, 0.08);
   color: #f5f2ed;
 }
 
-.productWebFrame[data-theme="dark"] .tarotWebInsightLabel {
+:global([data-theme="dark"]) .tarotWebInsightLabel {
   color: #d4af37;
 }
 
-.productWebFrame[data-theme="dark"] .tarotWebActionBox {
+:global([data-theme="dark"]) .tarotWebActionBox {
   background: rgba(212, 175, 55, 0.1);
   border-color: rgba(212, 175, 55, 0.3);
   color: #f5f2ed;
 }
 
-.productWebFrame[data-theme="dark"] .tarotWebChip {
+:global([data-theme="dark"]) .tarotWebChip {
   background: transparent;
   border-color: rgba(212, 175, 55, 0.3);
   color: #f5f2ed;
 }
 
-.productWebFrame[data-theme="dark"] .tarotWebChip:hover {
+:global([data-theme="dark"]) .tarotWebChip:hover {
   background: rgba(212, 175, 55, 0.08);
   border-color: rgba(212, 175, 55, 0.45);
 }
 
-.productWebFrame[data-theme="dark"] .tarotWebCardPlaceholder {
+:global([data-theme="dark"]) .tarotWebCardPlaceholder {
   background: rgba(255, 255, 255, 0.06);
   border-color: rgba(255, 255, 255, 0.12);
 }
 
-.productWebFrame[data-theme="dark"] .tarotWebCardPlaceholderName {
+:global([data-theme="dark"]) .tarotWebCardPlaceholderName {
   color: rgba(245, 242, 237, 0.88);
 }
 
-.productWebFrame[data-theme="dark"] .tarotWebStory {
+:global([data-theme="dark"]) .tarotWebStory {
   color: rgba(245, 242, 237, 0.88);
 }
 
-.productWebFrame[data-theme="dark"] .tarotWebStory :global([class*="DsBody"]) {
+:global([data-theme="dark"]) .tarotWebStory :global([class*="DsBody"]) {
   color: rgba(245, 242, 237, 0.88);
 }
 
-.productWebFrame[data-theme="dark"] .tarotWebStory :global([class*="DsEyebrow"]) {
+:global([data-theme="dark"]) .tarotWebStory :global([class*="DsEyebrow"]) {
   color: #d4af37;
 }
 

@@ -1,10 +1,5 @@
-@import url("https://rsms.me/inter/inter.css");
-@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap");
+/* Fonts: self-hosted via next/font/google (see app/fonts.ts), not @import — an
+   @import here would block CSS parsing on a render-blocking external round-trip. */
 @import "../styles/todayflow-foundation.css";
 @import "../styles/product-web-shell.css";
 

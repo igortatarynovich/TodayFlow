@@ -47,15 +47,13 @@
   color: var(--tf-ink, #1a1510);
 }
 
-.productWebFrame[data-mood="night"] .chip,
-:global(.productWebFrame[data-mood="night"]) .chip {
+:global([data-mood="night"]) .chip {
   background: rgba(255, 255, 255, 0.06);
   color: var(--tf-ink-soft, #c9b8a0);
   border-color: rgba(201, 169, 110, 0.28);
 }
 
-.productWebFrame[data-mood="night"] .chipActive,
-:global(.productWebFrame[data-mood="night"]) .chipActive {
+:global([data-mood="night"]) .chipActive {
   background: rgba(201, 169, 110, 0.2);
   color: var(--tf-ink, #f5f0e8);
 }

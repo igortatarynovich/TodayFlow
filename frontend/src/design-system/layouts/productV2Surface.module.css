@@ -148,6 +148,32 @@
   color: rgba(255, 255, 255, 0.78);
 }
 
+/* Dark theme (mood night / data-theme=dark on shell): these surfaces are the ground
+   under every product page header. Titles read var(--tf-ink) which flips light in
+   dark mode — without dark grounds here the whole app shows light-on-light heroes. */
+:global([data-theme="dark"]) .surfaceHero,
+:global([data-theme="dark"]) .surfacePanel {
+  border-color: rgba(212, 184, 150, 0.16);
+  background: #1e1a24;
+  box-shadow: none;
+}
+
+:global([data-theme="dark"]) .surfaceGlass {
+  border-color: rgba(212, 184, 150, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: none;
+}
+
+:global([data-theme="dark"]) .bodyLead {
+  color: rgba(245, 240, 232, 0.72);
+}
+
+:global([data-theme="dark"]) .chip {
+  border-color: rgba(212, 184, 150, 0.24);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(245, 240, 232, 0.85);
+}
+
 @media (max-width: 47.99rem) {
   .pageRoot {
     gap: 1.25rem;

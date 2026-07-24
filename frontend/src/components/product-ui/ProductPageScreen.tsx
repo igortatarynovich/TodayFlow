@@ -18,6 +18,7 @@
  */
 import type { ReactNode } from "react";
 import { useMemo } from "react";
+import { usePathname } from "next/navigation";
 import { DsBody, DsButton, DsRailPanel, IconCalendar } from "@/design-system";
 import { ProductWebShellConfigBridge, type ProductWebShellConfig } from "@/components/product-ui/productWebShellConfig";
 import { ProductGuestShowcase } from "@/components/product-ui/ProductGuestShowcase";
@@ -27,6 +28,7 @@ import {
   ProductShellLoading,
 } from "@/components/product-ui/ProductShellStates";
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
+import { resolveIsFirstDay } from "@/lib/firstTodayState";
 import { getLocale } from "@/lib/i18n";
 import { useProductMoodTheme } from "@/lib/useProductDayNightTheme";
 import type { CoreProfile } from "@/lib/types";
@@ -119,7 +121,12 @@ export function ProductPageScreen({
 }: ProductPageScreenProps) {
   const resolvedLocale: FlowPracticesChromeLocale =
     locale ?? (getLocale() === "ru" ? "ru" : "en");
-  const { theme, mood } = useProductMoodTheme();
+  const pathname = usePathname();
+  const isFirstDay = resolveIsFirstDay(
+    pathname,
+    typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null,
+  );
+  const { theme, mood } = useProductMoodTheme({ isFirstDay });
 
   const todayLabel = new Intl.DateTimeFormat(resolvedLocale === "ru" ? "ru-RU" : "en-US", {
     weekday: "long",

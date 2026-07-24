@@ -5,7 +5,7 @@
  */
 
 /* Calm = warm parchment baseline — mostly inherits foundation tokens */
-.productWebFrame[data-mood="calm"] {
+[data-mood="calm"] {
   --tf-page: #fdf8f0;
   --tf-ink: #1a1510;
   --tf-ink-soft: #5b4630;
@@ -14,7 +14,7 @@
 }
 
 /* Focus = cooler, collected — graphite ink, muted copper accent */
-.productWebFrame[data-mood="focus"] {
+[data-mood="focus"] {
   --tf-page: #f4f2ef;
   --tf-page-cream: #f7f5f2;
   --tf-ink: #2c2a28;
@@ -31,7 +31,7 @@
 }
 
 /* Night = dark surface; gold is the only warm accent */
-.productWebFrame[data-mood="night"] {
+[data-mood="night"] {
   color-scheme: dark;
   --tf-page: #1a1714;
   --tf-page-cream: #221e1a;
@@ -53,7 +53,7 @@
 }
 
 /* Clarity = first day — max light, min texture */
-.productWebFrame[data-mood="clarity"] {
+[data-mood="clarity"] {
   --tf-page: #fffdfb;
   --tf-page-cream: #fffdfb;
   --tf-ink: #1a1510;

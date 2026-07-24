@@ -281,7 +281,7 @@ function CompatibilityLayerSelector({
                 padding: "0.9rem",
                 display: "block",
                 textAlign: "left",
-                height: "100%",
+                boxSizing: "border-box",
               }}
             >
               <p className="orbit-body-sm" style={{ margin: 0, fontWeight: 700, color: "#0f172a" }}>

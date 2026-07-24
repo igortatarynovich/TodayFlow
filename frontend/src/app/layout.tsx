@@ -3,6 +3,7 @@ import "@/styles/section-atmosphere.css";
 import "@/styles/day-phase-atmosphere.css";
 import "@/styles/mood-themes.css";
 import "@/styles/premium-ui.css";
+import { fontVariables } from "./fonts";
 import type { ReactNode } from "react";
 import type { Viewport } from "next";
 import { Suspense } from "react";
@@ -96,7 +97,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="ru">
+    <html lang="ru" className={fontVariables}>
       <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#fff9f5" />

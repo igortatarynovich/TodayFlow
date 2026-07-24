@@ -2474,8 +2474,7 @@
   background: var(--tf-surface, #fff);
 }
 
-:global([data-theme="dark"]) .journeyHero,
-:global(.productWebFrame[data-theme="dark"]) .journeyHero {
+:global([data-theme="dark"]) .journeyHero {
   border-color: rgba(212, 184, 150, 0.18);
   background:
     radial-gradient(ellipse 70% 55% at 50% 0%, rgba(201, 169, 110, 0.14) 0%, transparent 62%),
@@ -2483,8 +2482,7 @@
   box-shadow: none;
 }
 
-:global([data-theme="dark"]) .journeyHeroArch,
-:global(.productWebFrame[data-theme="dark"]) .journeyHeroArch {
+:global([data-theme="dark"]) .journeyHeroArch {
   border-radius: 1.65rem 1.65rem 1.25rem 1.25rem;
   aspect-ratio: 4 / 5;
   border-color: rgba(212, 184, 150, 0.28);
@@ -2496,13 +2494,11 @@
     0 22px 48px rgba(0, 0, 0, 0.35);
 }
 
-:global([data-theme="dark"]) .journeyHeroArchFilled,
-:global(.productWebFrame[data-theme="dark"]) .journeyHeroArchFilled {
+:global([data-theme="dark"]) .journeyHeroArchFilled {
   background: #0c0a10;
 }
 
-:global([data-theme="dark"]) .journeySymbolFrame[data-visual="symbol"],
-:global(.productWebFrame[data-theme="dark"]) .journeySymbolFrame[data-visual="symbol"] {
+:global([data-theme="dark"]) .journeySymbolFrame[data-visual="symbol"] {
   background: rgba(255, 255, 255, 0.04);
   border-color: rgba(212, 184, 150, 0.28);
   color: var(--tf-accent-gold-soft, #c9a96e);
@@ -2569,9 +2565,7 @@
 :global([data-theme="dark"]) .insightHelpBlock,
 :global([data-theme="dark"]) .insightQuote,
 :global([data-theme="dark"]) .effortSphereChip,
-:global([data-theme="dark"]) .mobileDepthChip,
-:global(.productWebFrame[data-theme="dark"]) .zone,
-:global(.productWebFrame[data-theme="dark"]) .bridgeScene {
+:global([data-theme="dark"]) .mobileDepthChip {
   background: #1e1a24;
   border-color: rgba(255, 255, 255, 0.1);
   box-shadow: none;
@@ -2611,8 +2605,7 @@
     rgba(253, 251, 247, 0.05);
 }
 
-:global([data-theme="dark"]) .effortVector,
-:global(.productWebFrame[data-theme="dark"]) .effortVector {
+:global([data-theme="dark"]) .effortVector {
   background: transparent;
   border: none;
   color: #f5f0e8;
@@ -2655,8 +2648,7 @@
   background: color-mix(in srgb, #3d5a80 18%, transparent);
 }
 
-:global([data-theme="dark"]) .bridgeCta,
-:global(.productWebFrame[data-theme="dark"]) .bridgeCta {
+:global([data-theme="dark"]) .bridgeCta {
   border-color: #d4b896;
   background: linear-gradient(145deg, #e8d0a5 0%, #d4b896 52%, #c9a96e 100%);
   color: #1a1510;

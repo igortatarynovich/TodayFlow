@@ -7,7 +7,7 @@ import { buildOnboardingRitualContext, readOnboardingContext, todayDayKey } from
 import { GuestFirstTodayScreen } from "@/components/onboarding/valueFirst/GuestFirstTodayScreen";
 import { hasGuestPreview, readGuestProfileDraft, VALUE_FIRST_PATHS } from "@/lib/guestProfileDraft";
 import { hasAuthSessionEnded } from "@/lib/authSession";
-import { markFirstTodayCompleted } from "@/lib/firstTodayState";
+import { markFirstTodayCompleted, resolveIsFirstDay } from "@/lib/firstTodayState";
 import { getJson, postJson, putJson } from "@/lib/api";
 import {
   CORE_PROFILE_UPDATED_EVENT,
@@ -104,6 +104,9 @@ export default function TodayPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const firstTodayMode = searchParams.get("first") === "1";
+  // Mood/atmosphere first-day signal (FOUNDATION_UI §8) — same resolver as
+  // SectionAtmosphereBridge, so shell + dashboard don't diverge from html.
+  const isFirstDayMood = resolveIsFirstDay("/today", searchParams);
   const coreLoopViabilityMode =
     searchParams.get("core_loop") === "1" || firstTodayMode;
   const todayExperienceMode = searchParams.get("full") !== "1";
@@ -1328,6 +1331,7 @@ export default function TodayPage() {
     <>
       <TodayWebDashboard
         displayName={firstNameRitual}
+        isFirstDay={isFirstDayMood}
         displayDate={formatDate(todayData.date)}
         greetingLine={dashboardGreetingLine}
         profileMeta={profileMetaDashboard}

@@ -59,3 +59,16 @@ export function shouldShowProfileTeaser(state = readFirstTodayState()): boolean 
 }
 
 export const FIRST_TODAY_PATH = "/today?first=1";
+
+/**
+ * Single source of truth for the mood/day-phase "first day" signal (FOUNDATION_UI §8/§9).
+ * Kept in one place so shell, dashboard, and atmosphere resolvers can't diverge —
+ * they previously computed this independently and disagreed.
+ */
+export function resolveIsFirstDay(
+  pathname: string | null | undefined,
+  searchParams: URLSearchParams | null | undefined,
+): boolean {
+  const firstQuery = searchParams?.get("first") === "1";
+  return firstQuery || ((pathname?.startsWith("/today") ?? false) && !hasCompletedFirstToday());
+}

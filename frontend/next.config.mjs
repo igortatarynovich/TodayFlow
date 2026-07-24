@@ -59,6 +59,11 @@ const nextConfig = {
   // Code splitting optimization
   webpack: (config, { isServer }) => {
     if (!isServer) {
+      // CSS modules (css/mini-extract) must stay out of these named chunks: if a
+      // node_modules-origin CSS asset (e.g. next/font's generated CSS) lands in
+      // `vendor`, Next emits vendor.css and its chunk loader also injects it as a
+      // <script>, throwing "Invalid or unexpected token" on every page.
+      const notCss = (module) => module.type !== 'css/mini-extract';
       config.optimization.splitChunks = {
         chunks: 'all',
         cacheGroups: {
@@ -68,7 +73,8 @@ const nextConfig = {
           vendor: {
             name: 'vendor',
             chunks: 'all',
-            test: /node_modules/,
+            test: (module) =>
+              notCss(module) && /[\\/]node_modules[\\/]/.test(module.resource || module.context || ''),
             priority: 20,
           },
           // Common chunk for shared code
@@ -76,6 +82,7 @@ const nextConfig = {
             name: 'common',
             minChunks: 2,
             chunks: 'all',
+            test: notCss,
             priority: 10,
             reuseExistingChunk: true,
             enforce: true,

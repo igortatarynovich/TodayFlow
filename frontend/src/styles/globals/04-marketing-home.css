@@ -669,6 +669,24 @@
   border-color: rgba(214, 142, 122, 0.55);
 }
 
+/* orbit-button-secondary predates the --tf-* mood/theme system (FOUNDATION_UI §8) and
+   never got a dark counterpart — chips using it (e.g. today-soft-day-checkin) stayed
+   cream on a dark shell. */
+[data-theme="dark"] .orbit-button-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--tf-ink, #f5f0e8);
+  border-color: rgba(201, 169, 110, 0.28);
+}
+
+[data-theme="dark"] .orbit-button-secondary:hover:not(:disabled) {
+  background: rgba(201, 169, 110, 0.14);
+  border-color: rgba(201, 169, 110, 0.45);
+}
+
+[data-theme="dark"] .orbit-button-primary {
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+}
+
 .orbit-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;

@@ -67,9 +67,9 @@
   --heatmap-hover-ring: rgba(180, 95, 75, 0.45);
   
   /* Typography Scale - Serif для заголовков, sans-serif для основного текста */
-  --orbit-font-display: "Playfair Display", "Cormorant Garamond", "Lora", "Georgia", serif;
-  --orbit-font-body: "Inter", "Inter var", system-ui, -apple-system, BlinkMacSystemFont, sans-serif; /* Clean sans-serif */
-  --orbit-font-accent: "Caveat", cursive; /* лёгкий скрипт для акцентов */
+  --orbit-font-display: var(--font-playfair-display), var(--font-cormorant-garamond), var(--font-lora), Georgia, serif;
+  --orbit-font-body: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, sans-serif; /* Clean sans-serif */
+  --orbit-font-accent: var(--font-caveat), cursive; /* лёгкий скрипт для акцентов */
   
   /* Typography — legacy `--orbit-text-*` aliases Foundation §5 (DS-10); prefer `--tf-type-*` in new code */
   --orbit-text-display: var(--tf-type-display-size);

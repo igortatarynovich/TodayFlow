@@ -62,9 +62,9 @@
   --heatmap-hover-ring: rgba(180, 95, 75, 0.45);
   
   /* Typography Scale - Serif для заголовков, sans-serif для основного текста */
-  --orbit-font-display: "Playfair Display", "Cormorant Garamond", "Lora", "Georgia", serif;
-  --orbit-font-body: "Inter", "Inter var", system-ui, -apple-system, BlinkMacSystemFont, sans-serif; /* Clean sans-serif */
-  --orbit-font-accent: "Caveat", cursive; /* лёгкий скрипт для акцентов */
+  --orbit-font-display: var(--font-playfair-display), var(--font-cormorant-garamond), var(--font-lora), Georgia, serif;
+  --orbit-font-body: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, sans-serif; /* Clean sans-serif */
+  --orbit-font-accent: var(--font-caveat), cursive; /* лёгкий скрипт для акцентов */
   
   /* Typography — legacy `--orbit-text-*` aliases Foundation §5 (DS-10); prefer `--tf-type-*` in new code */
   --orbit-text-display: var(--tf-type-display-size);
@@ -3329,6 +3329,24 @@ body::before {
 .orbit-button-secondary:hover:not(:disabled) {
   background: rgba(243, 198, 180, 0.28);
   border-color: rgba(214, 142, 122, 0.55);
+}
+
+/* orbit-button-secondary predates the --tf-* mood/theme system (FOUNDATION_UI §8) and
+   never got a dark counterpart — chips using it (e.g. today-soft-day-checkin) stayed
+   cream on a dark shell. */
+[data-theme="dark"] .orbit-button-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--tf-ink, #f5f0e8);
+  border-color: rgba(201, 169, 110, 0.28);
+}
+
+[data-theme="dark"] .orbit-button-secondary:hover:not(:disabled) {
+  background: rgba(201, 169, 110, 0.14);
+  border-color: rgba(201, 169, 110, 0.45);
+}
+
+[data-theme="dark"] .orbit-button-primary {
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
 }
 
 .orbit-button:disabled {
