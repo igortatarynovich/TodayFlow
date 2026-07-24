@@ -21,6 +21,10 @@
   margin: 0.15rem 0 0;
 }
 
+.moodThemeSlot {
+  margin: -0.35rem 0 0.35rem;
+}
+
 .datePill {
   align-self: flex-start;
   display: inline-flex;

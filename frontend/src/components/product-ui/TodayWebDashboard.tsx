@@ -6,6 +6,7 @@ import { DsOrbitalViz, IconCalendar, IconSun } from "@/design-system";
 import v2 from "@/design-system/layouts/productV2Surface.module.css";
 import l from "@/design-system/layouts/dsLayouts.module.css";
 import { ProductWebShellConfigBridge, type ProductWebShellConfig } from "@/components/product-ui/productWebShellConfig";
+import { MoodThemeControl } from "@/components/product-ui/MoodThemeControl";
 import pl from "@/design-system/layouts/productPageLayout.module.css";
 import {
   todayWebDashboardChromeBundle,
@@ -13,7 +14,7 @@ import {
 } from "@/components/product-ui/todayWebDashboardChrome";
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
 import { getLocale } from "@/lib/i18n";
-import { useProductDayNightTheme } from "@/lib/useProductDayNightTheme";
+import { useProductMoodTheme } from "@/lib/useProductDayNightTheme";
 import type { CoreProfile } from "@/lib/types";
 import s from "@/components/product-ui/productWebScreens.module.css";
 
@@ -273,7 +274,7 @@ export function TodayWebDashboard({
   const resolvedLocale: FlowPracticesChromeLocale =
     locale ?? (getLocale() === "ru" ? "ru" : "en");
   const chrome = useMemo(() => todayWebDashboardChromeBundle(resolvedLocale), [resolvedLocale]);
-  const theme = useProductDayNightTheme();
+  const { theme, mood } = useProductMoodTheme();
 
   // PR-2: never invent timeline / weekly / practices for the rail or overview.
   const resolvedTimeline = timelineEvents ?? [];
@@ -293,6 +294,7 @@ export function TodayWebDashboard({
       profileMeta,
       coreProfile,
       theme,
+      mood,
       mainWide: true,
       rail: hasContextRail ? (
         <TodayWebRail
@@ -308,6 +310,7 @@ export function TodayWebDashboard({
     coreProfile,
     displayName,
     hasContextRail,
+    mood,
     profileMeta,
     resolvedTimeline,
     resolvedWeekly,
@@ -335,6 +338,8 @@ export function TodayWebDashboard({
               {displayDate}
             </p>
           </header>
+
+          <MoodThemeControl className={pl.moodThemeSlot} />
 
           {showOverview ? (
             <TodayWebOverview

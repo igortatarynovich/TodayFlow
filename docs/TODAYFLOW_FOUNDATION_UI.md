@@ -306,7 +306,20 @@
 
 Mood **не** заменяет шрифты и spacing-токены — только цветовые / surface / atmosphere overrides.
 
-**Код-якоря (фаза реализации themes):** `time-of-day.ts`, `useProductDayNightTheme.ts`, `ProductWebAppShell` (`data-theme`).
+**Код-якоря (фаза реализации themes):** `time-of-day.ts`, `productMoodTheme.ts`, `useProductDayNightTheme.ts` / `useProductMoodTheme`, `ProductWebAppShell` (`data-theme` + `data-mood`).
+
+### 8.1 Конфликт с day-phase (§9) — зафиксированные правила
+
+| Слой | Где | Что делает |
+|------|-----|------------|
+| `data-mood` | product shell · все product-роуты | Палитра (calm/focus/night/clarity) |
+| `data-day-phase` | только `/today` | Текстура фона (gradients/stars) |
+| `data-theme` | shell | light\|dark — **legacy**, выводится из mood (night→dark) |
+
+- **Авто (нет pin):** mood и day-phase из одного сигнала (утро↔calm/morning, день↔focus/day, вечер↔night/evening, первый день↔clarity/first).
+- **Pin:** mood = pin на всех роутах; на `/today` day-phase = `dayPhaseFromMood(pin)` — текстуры не спорят с палитрой.
+- **Не-/today:** day-phase = null (как раньше); mood всё равно действует на shell.
+- **Лендинг:** без product shell mood-токенов; `data-atmosphere=home` без day-phase.
 
 ---
 
@@ -442,7 +455,7 @@ TODAYFLOW_FOUNDATION_UI
 - [x] Colors — ≤12 core tokens in `todayflow-foundation.css`
 - [ ] Profile «без текста» frame — **pass** дорого/нет *(Cover v1: `Cover / TodayFlow — Living Portal` — portal + 10 systems + convergence; **design review**, не gate)*
 - [x] Motion kit (`design-system/motion/` + framer-motion) — Reveal / Flip / Settle / Drift / Pulse *(code 2026-07-24 · Flip wired to live `RitualTarotPickExperience` via `/today` → `TodayRitualFlow`; dead `today-ritual-cardface` CSS removed)*
-- [ ] Mood themes Calm / Focus / Night / Clarity wired to day-phase + manual pin
+- [x] Mood themes Calm / Focus / Night / Clarity wired to day-phase + manual pin *(code 2026-07-24 · `data-mood` + `mood-themes.css`; pin via `MoodThemeControl`; day-phase follows mood on `/today`)*
 - [x] Day-phase atmosphere CSS/SVG (5 states) on `time-of-day` + section atmosphere *(code 2026-07-24 · `data-day-phase` + `day-phase-atmosphere.css`; reveal flash via `pulseDayPhaseRevealFlash`; landing stays `data-atmosphere=home` — no conflict)*
 - [x] Guest showcase blur-preview on `/today` + `/profile`; loading skeletons *(code 2026-07-24 · `ProductGuestShowcase` + `ProductShellLoading`)*
 - [ ] Sound cues (optional; default off web)

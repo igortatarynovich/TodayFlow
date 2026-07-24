@@ -23,6 +23,7 @@ export function ProductWebShellLayout({ children }: { children: ReactNode }) {
       rail={config.rail}
       sidebar={config.sidebar}
       theme={config.theme}
+      mood={config.mood}
       mainWide={config.mainWide}
       fullMain={config.fullMain}
       main={children}

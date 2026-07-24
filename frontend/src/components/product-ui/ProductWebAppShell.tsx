@@ -17,6 +17,8 @@ import {
   productWebProfileMeta,
   productWebUserInitial,
 } from "@/lib/productWebUser";
+import type { ProductMood } from "@/lib/productMoodTheme";
+import { useProductMoodTheme } from "@/lib/useProductDayNightTheme";
 import l from "@/design-system/layouts/dsLayouts.module.css";
 
 export type ProductWebAppShellProps = {
@@ -29,6 +31,8 @@ export type ProductWebAppShellProps = {
   rail?: ReactNode;
   sidebar?: ReactNode;
   theme?: "light" | "dark";
+  /** Optional override; default from useProductMoodTheme. */
+  mood?: ProductMood;
   /** Wider horizontal padding for profile v2 canvas (Figma px-24). */
   mainWide?: boolean;
   /** Page draws its own internal columns (profile v2): main spans both grid tracks. */
@@ -44,11 +48,15 @@ export function ProductWebAppShell({
   main,
   rail,
   sidebar,
-  theme = "light",
+  theme: themeProp,
+  mood: moodProp,
   mainWide = false,
   fullMain = false,
 }: ProductWebAppShellProps) {
   const pathname = usePathname() ?? "/today";
+  const { mood: hookMood, theme: hookTheme } = useProductMoodTheme();
+  const theme = themeProp ?? hookTheme;
+  const mood = moodProp ?? hookMood;
   const resolvedLocale: FlowPracticesChromeLocale =
     locale ?? (getLocale() === "ru" ? "ru" : "en");
   // In-app sidebar always shows the full nav (Today / My map / Compatibility / Tarot /
@@ -63,7 +71,7 @@ export function ProductWebAppShell({
   const resolvedMeta = profileMeta ?? productWebProfileMeta(coreProfile);
 
   return (
-    <div className={l.productWebFrame} data-testid={testId} data-theme={theme}>
+    <div className={l.productWebFrame} data-testid={testId} data-theme={theme} data-mood={mood}>
       <DsAppShell
         sidebar={
           sidebar ?? (

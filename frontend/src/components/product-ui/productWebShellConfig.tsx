@@ -22,6 +22,8 @@ export type ProductWebShellConfig = {
   rail?: ReactNode;
   sidebar?: ReactNode;
   theme?: "light" | "dark";
+  /** Emotional mood (FOUNDATION_UI §8). */
+  mood?: import("@/lib/productMoodTheme").ProductMood;
   mainWide?: boolean;
   /** Page draws its own internal columns: main spans the body; do not also set rail. */
   fullMain?: boolean;

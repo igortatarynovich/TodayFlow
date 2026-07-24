@@ -1,0 +1,66 @@
+/**
+ * Mood theme color overrides (FOUNDATION_UI §8).
+ * Applied via [data-mood] on product shell. Does not replace fonts/spacing.
+ * `data-theme` light|dark stays for legacy selectors; night mood also sets dark.
+ */
+
+/* Calm = warm parchment baseline — mostly inherits foundation tokens */
+.productWebFrame[data-mood="calm"] {
+  --tf-page: #fdf8f0;
+  --tf-ink: #1a1510;
+  --tf-ink-soft: #5b4630;
+  --tf-accent-gold: #c9a96e;
+  --tf-accent-action: #8f6b3a;
+}
+
+/* Focus = cooler, collected — graphite ink, muted copper accent */
+.productWebFrame[data-mood="focus"] {
+  --tf-page: #f4f2ef;
+  --tf-page-cream: #f7f5f2;
+  --tf-ink: #2c2a28;
+  --tf-ink-soft: #5a5650;
+  --tf-body: #4a4f57;
+  --tf-caption: #7a756c;
+  --tf-accent-gold: #a67c5b;
+  --tf-accent-gold-soft: #8f6b4a;
+  --tf-accent-action: #7a5c45;
+  --tf-border: rgba(44, 42, 40, 0.1);
+  --tf-page-atmosphere:
+    radial-gradient(ellipse 55% 35% at 50% -8%, rgba(120, 130, 145, 0.06), transparent 60%),
+    #f4f2ef;
+}
+
+/* Night = dark surface; gold is the only warm accent */
+.productWebFrame[data-mood="night"] {
+  color-scheme: dark;
+  --tf-page: #1a1714;
+  --tf-page-cream: #221e1a;
+  --tf-ink: #f5f0e8;
+  --tf-ink-soft: #c9b8a0;
+  --tf-body: #c8bdb0;
+  --tf-caption: #9a8468;
+  --tf-accent-gold: #d4b896;
+  --tf-accent-gold-soft: #c9a96e;
+  --tf-accent-action: #c9a96e;
+  --tf-surface: #241f1a;
+  --tf-surface-muted: #2a241e;
+  --tf-border: rgba(201, 169, 110, 0.22);
+  --tf-page-atmosphere:
+    radial-gradient(1.5px 1.5px at 18% 22%, rgba(201, 169, 110, 0.55), transparent),
+    radial-gradient(1.2px 1.2px at 72% 38%, rgba(232, 212, 170, 0.4), transparent),
+    radial-gradient(ellipse 70% 40% at 50% 100%, rgba(201, 169, 110, 0.07), transparent 55%),
+    linear-gradient(180deg, #221e1a 0%, #1a1714 100%);
+}
+
+/* Clarity = first day — max light, min texture */
+.productWebFrame[data-mood="clarity"] {
+  --tf-page: #fffdfb;
+  --tf-page-cream: #fffdfb;
+  --tf-ink: #1a1510;
+  --tf-ink-soft: #6a6258;
+  --tf-accent-gold: #c9a96e;
+  --tf-accent-action: #8f6b3a;
+  --tf-page-atmosphere: linear-gradient(180deg, #fffdfb 0%, #faf7f2 100%);
+  --section-glow-a: transparent;
+  --section-glow-b: transparent;
+}
