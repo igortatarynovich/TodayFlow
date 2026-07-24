@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCallback, useRef, useState } from "react";
 import { SacredGeometryBackdrop } from "@/components/visualIdentity/SacredGeometryBackdrop";
-import { ProfileLivingMapsSection } from "@/components/profile/ProfileLivingMapsSection";
+import { PROFILE_V2_COPY } from "@/components/profile/v2/profileV2SystemCopy";
 import { ProfilePortraitSection } from "@/components/profile/ProfilePortraitSection";
 import type { ProfileV0ViewModel } from "@/lib/profilePage/buildProfileV0Data";
 import { ProfileV0ActionLayer } from "./ProfileV0ActionLayer";
@@ -56,7 +56,11 @@ export function ProfileV0Screen({ model, onOpenBirthData }: ProfileV0ScreenProps
           {action ? <ProfileV0ActionLayer action={action} /> : null}
         </ProfilePortraitSection>
 
-        <ProfileLivingMapsSection variant="editorial" showMyDays />
+        {/* PR-4: Maps home is /maps/* — thin CTA only, not Living Maps on Profile scroll. */}
+        <p className={styles.mapsCta} data-testid="profile-maps-thin-cta">
+          {PROFILE_V2_COPY.mapsCtaHint}{" "}
+          <Link href="/maps/mood">{PROFILE_V2_COPY.mapsCta}</Link>
+        </p>
 
         <Link href={deepDiveHref} className={styles.profilePortalCard}>
           <div className={styles.profilePortalVisual}>

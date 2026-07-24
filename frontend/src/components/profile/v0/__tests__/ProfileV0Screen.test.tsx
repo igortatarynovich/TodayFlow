@@ -34,13 +34,19 @@ const baseModel: ProfileV0ViewModel = {
 };
 
 describe("ProfileV0Screen", () => {
-  it("renders portrait band, social mirror, living maps, and portal without name entity", async () => {
+  it("renders portrait band, social mirror, thin Maps CTA (PR-4), and portal without name entity", async () => {
     render(<ProfileV0Screen model={baseModel} onOpenBirthData={() => {}} />);
     expect(screen.getByTestId("profile-portrait-section")).toBeInTheDocument();
     expect(screen.getByText(baseModel.socialMirror!.lead)).toBeInTheDocument();
     expect(screen.queryByText("Имя")).not.toBeInTheDocument();
-    expect(screen.getByTestId("profile-living-maps-section")).toBeInTheDocument();
-    expect(await screen.findByTestId("profile-maps-preview")).toBeInTheDocument();
+    expect(screen.queryByTestId("profile-living-maps-section")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("profile-maps-preview")).not.toBeInTheDocument();
+    const mapsCta = screen.getByTestId("profile-maps-thin-cta");
+    expect(mapsCta).toHaveTextContent(/Как жизнь меняется/);
+    expect(screen.getByRole("link", { name: /Карты и наблюдения/i })).toHaveAttribute(
+      "href",
+      "/maps/mood",
+    );
     expect(screen.getByText("Следующий уровень")).toBeInTheDocument();
     expect(screen.getByText("Войти")).toBeInTheDocument();
   });

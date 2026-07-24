@@ -230,9 +230,11 @@ Living Maps / My Days / week rhythm → `/maps/*`, `/tracking/*` ([PR4_PROFILE_C
 
 ## 7. Living Maps · «Как меняется моя жизнь»
 
-> **PR-4 supersede (2026-07-21):** Maps **не** вторая половина Profile scroll.  
-> Home: `/maps/*` · `/tracking/*`. Profile may link with a thin CTA only.  
+> **PR-4 supersede (2026-07-21):** Maps **не** вторая половина Profile scroll.
+> Home: `/maps/*` · `/tracking/*`. Profile may link with a thin CTA only.
 > Full visual/entity notes below remain for Maps surfaces — not for mounting on `/profile`.
+>
+> **Code (2026-07-24):** default `/profile` (`ProfileV0Screen`) and editorial fallback no longer mount `ProfileLivingMapsSection` / `showMyDays` — thin CTA → `/maps/mood` only. `ProfileLivingMapsSection` remains for `?view=quickMap` / legacy Surfaces, not production Profile scroll.
 
 **Роль:** **живая история** TodayFlow (не трекеры и не статистика) — на Maps/Tracking, не на Profile.  
 **Канон IA:** [PR4_PROFILE_CANON.md](../archive/PR4_PROFILE_CANON.md) · product model [TODAYFLOW_PRODUCT_MODEL.md](../archive/TODAYFLOW_PRODUCT_MODEL.md) §4.10 · §5.8 · [PERSONAL_INTELLIGENCE_LAYER.md](../pim/PERSONAL_INTELLIGENCE_LAYER.md) §3.3 *(Maps product; Profile home retracted)*.

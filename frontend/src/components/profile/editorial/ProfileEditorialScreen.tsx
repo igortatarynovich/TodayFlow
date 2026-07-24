@@ -7,7 +7,7 @@ import { WEB_LAUNCH_MIN_PROFILE } from "@/lib/webLaunchFlags";
 import { ProfileEditorialNumbers } from "./ProfileEditorialNumbers";
 import { ProfileEditorialSocialMirror } from "./ProfileEditorialSocialMirror";
 import { ProfilePortraitSection } from "@/components/profile/ProfilePortraitSection";
-import { ProfileLivingMapsSection } from "@/components/profile/ProfileLivingMapsSection";
+import { PROFILE_V2_COPY } from "@/components/profile/v2/profileV2SystemCopy";
 import styles from "./profileEditorial.module.css";
 
 export type ProfileEditorialScreenProps = {
@@ -137,7 +137,11 @@ export function ProfileEditorialScreen({ model, onOpenBirthData }: ProfileEditor
 
         </ProfilePortraitSection>
 
-        <ProfileLivingMapsSection variant="editorial" showMyDays />
+        {/* PR-4: Maps home is /maps/* — thin CTA only. */}
+        <p className={styles.mapsCta} data-testid="profile-maps-thin-cta">
+          {PROFILE_V2_COPY.mapsCtaHint}{" "}
+          <Link href="/maps/mood">{PROFILE_V2_COPY.mapsCta}</Link>
+        </p>
 
         {!WEB_LAUNCH_MIN_PROFILE ? (
         <Link href={deepDiveHref} className={styles.portal}>

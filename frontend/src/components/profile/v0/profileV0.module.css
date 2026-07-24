@@ -509,6 +509,25 @@
   border-color: rgba(201, 168, 115, 0.16);
 }
 
+/* PR-4 thin CTA — text bridge to Maps home, not a Living Maps section */
+.mapsCta {
+  margin: 0;
+  padding: 0 0.15rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: rgba(40, 36, 30, 0.62);
+}
+
+.mapsCta a {
+  color: rgba(40, 36, 30, 0.88);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.mapsCta a:hover {
+  color: rgba(40, 36, 30, 1);
+}
+
 .profilePortalCard {
   display: grid;
   gap: 1.25rem;
