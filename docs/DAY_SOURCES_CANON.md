@@ -554,10 +554,12 @@ Day Story            →  интерпретация Foundation → экран T
 | `five_elements_day` | Element + Yin/Yang of pillar | gan_zhi | v1 | yes | no | yes |
 | `jianchu_officer` | 12 day officers | date cycle | v1 | yes | no | yes |
 | `almanac_actions` | Auspicious / inauspicious lists | day factors | v1 soft via Jianchu | soft | elective | yes |
-| `clashes` | Animal clash etc. | birth animal + day | planned | no | yes | yes |
+| `clashes` | Animal clash / 六合 vs day pillar | birth pillars + day | v1 | no | yes (`bazi` family) | yes |
 | `lucky_hours_directions` | Hours / directions / Tai Sui | date + geo rules | planned | soft | yes | yes |
 | `solar_terms` | 24 jieqi | sun longitude | v1 | yes | no | yes |
-| `bazi` | Four pillars vs day pillar | birth datetime+place | planned | no | yes | yes |
+| `bazi` | Four pillars vs day pillar | birth date (+ time for hour) | v1/partial | no | yes (`bazi` family) | yes |
+
+**Personal wire:** L3 family id `bazi` (not Foundation) — year/month/day[/hour] pillars, branch clashes + soft Tai Sui.
 
 ---
 

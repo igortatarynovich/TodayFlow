@@ -1,7 +1,7 @@
 """Chinese metaphysics day factors — Gan-Zhi, elements, Jianchu, jieqi (canon §5.7).
 
 v0: civil local date → sexagenary day pillar. Jianchu from solar-month branch.
-BaZi / clashes stay Personal later.
+BaZi / clashes / lucky directions — Personal via L3 `bazi` family (v1/partial).
 """
 
 from __future__ import annotations

@@ -60,11 +60,12 @@ DaySourceInputs
 | `chinese_metaphysics` | foundation | `target_date` (+ TZ preferred) | yes |
 | `personal_astrology` | **personal** | birth_date + `celestial_events.personal_transits` | no (L3) |
 | `human_design` | **personal** | `target_date` (+ birth for bodygraph) | no (L3; soft transit, Today later) |
+| `bazi` | **personal** | `birth_date` (+ `birth_time` for hour pillar) | no (L3; clashes + pillars) |
 
-Планируемые (канон есть, адаптер later): …
+Планируемые (канон есть, адаптер later): vedic `gochara` / `dasha`, …
 
 ### Pipeline wiring
 
 `build_day_story_interpretation_v1` / `day_story_wire_v1` передают `target_date` и `birth_date` (из `core_profile.astro`) в Day Foundation. Foundation **всегда** собирается — даже без `celestial_events` (число дня + управитель недели).
 
-`day_personal_v1` собирает L3 (`personal_astrology`, `human_design`) отдельно: natal transits + HD transit gates / soft bodygraph, без смешивания в Foundation essence.
+`day_personal_v1` собирает L3 (`personal_astrology`, `human_design`, `bazi`) отдельно: natal transits + HD + BaZi clashes/pillars, без смешивания в Foundation essence.

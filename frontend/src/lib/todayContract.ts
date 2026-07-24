@@ -79,9 +79,16 @@ export type TodayContractDayStoryV1 = {
         activations?: Array<{ id?: string; title?: string; story_ru?: string }>;
       } | null;
     } | null;
+    bazi?: {
+      summary_ru?: string;
+      depth?: string;
+      beats?: Array<{ id?: string; title?: string; story_ru?: string; kind?: string }>;
+      pillars?: Record<string, { label_zh?: string; branch?: { animal_ru?: string } } | null>;
+    } | null;
     source_inputs?: {
       has_personal_astrology?: boolean;
       has_human_design?: boolean;
+      has_bazi?: boolean;
       ok_family_ids?: string[];
     };
   } | null;

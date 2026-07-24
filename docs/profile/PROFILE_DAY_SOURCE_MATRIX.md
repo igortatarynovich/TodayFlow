@@ -44,7 +44,7 @@
 | `vedic_panchanga` | tithi…karana | datetime (+ geo for muhurta) | yes | no | later |
 | `vedic_panchanga` | gochara / dasha | + natal (Moon/Lagna; birth for dasha) | no | yes | later |
 | `chinese_metaphysics` | gan_zhi_day | `target_date` + `timezone` | yes | no | later |
-| `chinese_metaphysics` | bazi / clashes | + birth datetime (+ hour for full) | no | yes | later |
+| `chinese_metaphysics` / `bazi` | bazi / clashes | + birth datetime (+ hour for full) | no | yes | yes |
 | `personal_astrology` | natal_transits (sign-level) | sky + `birth_date` (+ natal facts) | no | yes | yes |
 | `personal_astrology` | houses, ASC/MC, progressions | + `birth_time` + `birth_place` | no | yes | yes |
 | `human_design` | transit gates | datetime | soft* | yes (wire) | soft |

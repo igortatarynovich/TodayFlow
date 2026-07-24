@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Iterable
 
+from todayflow_backend.services.day_sources.adapters.bazi import run_bazi
 from todayflow_backend.services.day_sources.adapters.chinese_metaphysics import (
     run_chinese_metaphysics,
 )
@@ -221,6 +222,17 @@ def default_registry() -> DaySourceRegistry:
             in_today=False,
             required_input_keys=("target_date",),
             run=run_human_design,
+        )
+    )
+    reg.register(
+        SourceFamilySpec(
+            family_id="bazi",
+            layer="personal",
+            in_foundation=False,
+            in_personal=True,
+            in_today=True,
+            required_input_keys=(),
+            run=run_bazi,
         )
     )
     return reg

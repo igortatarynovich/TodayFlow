@@ -51,22 +51,26 @@ def build_day_personal_v1(
 
     personal_astro = _ok_payload("personal_astrology")
     human_design = _ok_payload("human_design")
+    bazi = _ok_payload("bazi")
 
     summary_parts = [
         str((personal_astro or {}).get("summary_ru") or "").strip(),
         str((human_design or {}).get("summary_ru") or "").strip(),
+        str((bazi or {}).get("summary_ru") or "").strip(),
     ]
     summary = _clip(" ".join(p for p in summary_parts if p), 420)
 
     return {
         "contract_version": "day_personal_v1",
-        "calculation_version": "day-personal-v1.1",
+        "calculation_version": "day-personal-v1.2",
         "personal_astrology": personal_astro,
         "human_design": human_design,
+        "bazi": bazi,
         "summary_ru": summary,
         "source_inputs": {
             "has_personal_astrology": bool(personal_astro),
             "has_human_design": bool(human_design),
+            "has_bazi": bool(bazi),
             "ok_family_ids": list(bundle.get("ok_family_ids") or []),
             "unavailable": {
                 fid: row.get("unavailable_reason")
@@ -141,5 +145,12 @@ def personal_to_interpretation_claims(personal: dict[str, Any] | None) -> list[d
         layer="human_design",
         source_fallback="source.human_design",
         limit=1,
+    )
+    _from_family(
+        key="bazi",
+        claim_prefix="claim.personal.bazi",
+        layer="bazi",
+        source_fallback="source.bazi",
+        limit=2,
     )
     return claims
