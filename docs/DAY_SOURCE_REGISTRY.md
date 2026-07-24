@@ -80,6 +80,8 @@ DaySourceInputs
 
 `seasonal_calendar.holidays` (fixed-date soft) и `name_numbers` (Expression/Soul/Personality) мягко попадают в supports / личный glance.
 
+**Compatibility soft echo:** `name_numbers_pair` на `/compatibility/dynamics` и `/compatibility/signs` — тот же school (`pythagorean_latin_v0_via_ru_translit`); claim_line без score gate. Holidays в совместимость не входят.
+
 ### Pipeline wiring
 
 `build_day_story_interpretation_v1` / `day_story_wire_v1` передают `target_date` и `birth_date` (из `core_profile.astro`) в Day Foundation. Foundation **всегда** собирается — даже без `celestial_events` (число дня + управитель недели).

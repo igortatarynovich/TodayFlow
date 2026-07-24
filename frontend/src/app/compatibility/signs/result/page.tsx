@@ -51,6 +51,10 @@ type SignCompatibilityPayload = {
     avoid_focus?: string;
   } | null;
   funnel_artifact?: CompatibilityFunnelArtifact | null;
+  name_numbers_pair?: {
+    status?: string;
+    claim_lines?: string[];
+  } | null;
 };
 
 function ResultContent() {
@@ -192,45 +196,63 @@ function ResultContent() {
   const personalStrongestText = result.personalized?.do_focus || generalStrongestText;
   const personalFrictionText = result.personalized?.avoid_focus || generalFrictionText;
 
+  const nameClaim = result.name_numbers_pair?.claim_lines?.[0]?.trim() || null;
   const personalizedCard =
-    isAuthenticated && result.personalized ? (
+    (isAuthenticated && result.personalized) || nameClaim ? (
       <div className="compat-personalized-inline">
-        <p className="orbit-body-xs" style={{ margin: 0, color: "#8b7355", fontWeight: 700 }}>
-          С учётом профиля
-        </p>
-        <h2 className="orbit-heading-2" style={{ margin: "0.45rem 0 0" }}>
-          {result.personalized.headline || "Как твой ритм влияет на пару"}
-        </h2>
-        {result.personalized.hint ? (
-          <p className="orbit-body-sm compat-desktop-muted" style={{ margin: "0.65rem 0 0" }}>
-            {result.personalized.hint}
+        {isAuthenticated && result.personalized ? (
+          <>
+            <p className="orbit-body-xs" style={{ margin: 0, color: "#8b7355", fontWeight: 700 }}>
+              С учётом профиля
+            </p>
+            <h2 className="orbit-heading-2" style={{ margin: "0.45rem 0 0" }}>
+              {result.personalized.headline || "Как твой ритм влияет на пару"}
+            </h2>
+            {result.personalized.hint ? (
+              <p className="orbit-body-sm compat-desktop-muted" style={{ margin: "0.65rem 0 0" }}>
+                {result.personalized.hint}
+              </p>
+            ) : null}
+            <div
+              style={{
+                marginTop: "0.9rem",
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                gap: "0.75rem",
+              }}
+            >
+              <div className="compat-callout-go">
+                <p className="orbit-body-xs" style={{ margin: 0, color: "#166534", fontWeight: 700 }}>
+                  Опора
+                </p>
+                <p className="orbit-body-sm" style={{ margin: "0.35rem 0 0", color: "#14532d", lineHeight: 1.55 }}>
+                  {personalStrongestText}
+                </p>
+              </div>
+              <div className="compat-callout-warn">
+                <p className="orbit-body-xs" style={{ margin: 0, color: "#92400e", fontWeight: 700 }}>
+                  Риск
+                </p>
+                <p className="orbit-body-sm" style={{ margin: "0.35rem 0 0", color: "#78350f", lineHeight: 1.55 }}>
+                  {personalFrictionText}
+                </p>
+              </div>
+            </div>
+          </>
+        ) : null}
+        {nameClaim ? (
+          <p
+            className="orbit-body-xs"
+            style={{
+              margin: isAuthenticated && result.personalized ? "0.75rem 0 0" : 0,
+              color: "#64748b",
+              lineHeight: 1.55,
+            }}
+            data-testid="compat-name-numbers-claim"
+          >
+            {nameClaim}
           </p>
         ) : null}
-        <div
-          style={{
-            marginTop: "0.9rem",
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-            gap: "0.75rem",
-          }}
-        >
-          <div className="compat-callout-go">
-            <p className="orbit-body-xs" style={{ margin: 0, color: "#166534", fontWeight: 700 }}>
-              Опора
-            </p>
-            <p className="orbit-body-sm" style={{ margin: "0.35rem 0 0", color: "#14532d", lineHeight: 1.55 }}>
-              {personalStrongestText}
-            </p>
-          </div>
-          <div className="compat-callout-warn">
-            <p className="orbit-body-xs" style={{ margin: 0, color: "#92400e", fontWeight: 700 }}>
-              Риск
-            </p>
-            <p className="orbit-body-sm" style={{ margin: "0.35rem 0 0", color: "#78350f", lineHeight: 1.55 }}>
-              {personalFrictionText}
-            </p>
-          </div>
-        </div>
       </div>
     ) : undefined;
 

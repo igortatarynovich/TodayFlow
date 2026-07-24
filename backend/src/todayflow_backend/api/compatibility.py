@@ -43,6 +43,8 @@ from todayflow_backend.services.interpretation_orchestrator import (
     get_interpretation_orchestrator,
 )
 from todayflow_backend.services.compatibility_editorial import generate_compatibility_editorial
+from todayflow_backend.services.compatibility_name_numbers_v0 import build_name_numbers_pair
+from todayflow_backend.services.day_sources.inputs_from_profile import birth_name_from_core_profile
 from todayflow_backend.services.sign_compatibility_product import (
     SignCompatibilityProductSurface,
     build_sign_product_surface,
@@ -278,6 +280,8 @@ class SignCompatibilityResponse(BaseModel):
     attachment_reference: CompatibilityAttachmentReferenceV0 | None = None
     access_disclosure: Optional[dict] = None
     generation_lifecycle: Optional[dict] = None
+    # Soft Day Source echo — Expression/Soul/Personality; not a score gate.
+    name_numbers_pair: Optional[dict] = None
 
 
 class CompatibilityDynamicsRequest(BaseModel):
@@ -390,10 +394,15 @@ def signs_compatibility(
     paid = _is_paid_user(user, db)
     personalized = None
     access_tier_signs = resolve_compat_access_tier(user, db)
+    name_numbers_pair = None
+    profile_name_a: str | None = None
 
     if include_personalized and user is not None and access_tier_signs != "guest":
         try:
             core_profile = core_profile_service.build_cached_or_baseline(db, user)
+            profile_name_a = birth_name_from_core_profile(
+                core_profile if isinstance(core_profile, dict) else None
+            )
             consistency = orchestrator.build_daily_guidance(
                 core_profile=core_profile,
                 numerology=None,
@@ -412,6 +421,13 @@ def signs_compatibility(
             )
         except Exception:
             personalized = None
+
+    name_numbers_pair = build_name_numbers_pair(
+        name_a=profile_name_a,
+        name_b=None,
+        label_a=translate("compat.label.you", locale=effective_locale),
+        label_b=translate("compat.label.partner", locale=effective_locale),
+    )
 
     pair_dyn_for_funnel = build_pair_dynamics(
         user1_label=translate("compat.label.you", locale=effective_locale),
@@ -491,6 +507,7 @@ def signs_compatibility(
         pair_dynamics=pair_dyn_for_funnel,
         content_locale=effective_locale,
         funnel_artifact=funnel_artifact,
+        name_numbers_pair=name_numbers_pair,
     )
 
 
@@ -647,11 +664,15 @@ def compatibility_dynamics(
 
     paid = _is_paid_user(user, db)
     personalized = None
+    profile_name_a: str | None = None
     # build_daily_guidance is deterministic. Never call core_profile.build() here — it can
     # trigger portrait LLM (~12–25s) and make Compatibility look crashed.
     if body.include_personalized and user is not None and access_tier != "guest":
         try:
             core_profile = core_profile_service.build_cached_or_baseline(db, user)
+            profile_name_a = birth_name_from_core_profile(
+                core_profile if isinstance(core_profile, dict) else None
+            )
             consistency = orchestrator.build_daily_guidance(
                 core_profile=core_profile,
                 numerology=None,
@@ -677,6 +698,17 @@ def compatibility_dynamics(
                 tier=access_tier,
             )
             personalized = None
+
+    name_a = (body.name_1 or "").strip() or profile_name_a
+    name_b = (body.name_2 or "").strip() or None
+    name_numbers_pair = build_name_numbers_pair(
+        name_a=name_a,
+        name_b=name_b,
+        label_a=(body.name_1 or "").strip()
+        or translate("compat.label.you", locale=effective_locale),
+        label_b=(body.name_2 or "").strip()
+        or translate("compat.label.partner", locale=effective_locale),
+    )
 
     td = (str(personalized.get("do_focus", "")).strip() if personalized else "") or None
     ta = (str(personalized.get("avoid_focus", "")).strip() if personalized else "") or None
@@ -932,6 +964,7 @@ def compatibility_dynamics(
         attachment_reference=attachment_reference,
         access_disclosure=access_disclosure,
         generation_lifecycle=generation_lifecycle,
+        name_numbers_pair=name_numbers_pair,
     )
 
 

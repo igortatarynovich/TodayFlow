@@ -44,6 +44,10 @@ type CompatibilityDynamicsApiResponse = {
     do_focus?: string;
     avoid_focus?: string;
   } | null;
+  name_numbers_pair?: {
+    status?: string;
+    claim_lines?: string[];
+  } | null;
 };
 
 type CompatibilityBirthdatesResult = {
@@ -62,6 +66,7 @@ type CompatibilityBirthdatesResult = {
   is_paid: boolean;
   funnel_artifact?: CompatibilityFunnelArtifact | null;
   personalized?: CompatibilityDynamicsApiResponse["personalized"];
+  name_numbers_pair?: CompatibilityDynamicsApiResponse["name_numbers_pair"];
 };
 
 function toBirthDateParam(raw: string): string {
@@ -157,6 +162,7 @@ function CompatibilityBirthdatesResultContent() {
           is_paid: paid,
           funnel_artifact: response.funnel_artifact ?? null,
           personalized: response.personalized ?? null,
+          name_numbers_pair: response.name_numbers_pair ?? null,
         });
 
         if (!isAuthenticated) {
@@ -363,6 +369,15 @@ function CompatibilityBirthdatesResultContent() {
           </div>
 
           <div style={{ position: "relative", zIndex: 1 }}>
+            {result.name_numbers_pair?.claim_lines?.[0] ? (
+              <p
+                className="orbit-body-xs"
+                style={{ margin: "0 0 0.85rem", color: "#64748b", lineHeight: 1.55 }}
+                data-testid="compat-name-numbers-claim"
+              >
+                {result.name_numbers_pair.claim_lines[0]}
+              </p>
+            ) : null}
             <CompatibilityDynamicsSurface
               pairDisplay={`${result.label1} × ${result.label2}`}
               youColumnLabel={result.label1}

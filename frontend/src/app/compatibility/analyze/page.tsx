@@ -83,6 +83,13 @@ type DynamicsResponse = {
     } | null;
   } | null;
   generation_lifecycle?: GenerationLifecycle | null;
+  name_numbers_pair?: {
+    status?: string;
+    claim_lines?: string[];
+    a?: { expression?: { value?: number }; soul_urge?: { value?: number } | null } | null;
+    b?: { expression?: { value?: number }; soul_urge?: { value?: number } | null } | null;
+    limitation_ru?: string;
+  } | null;
 };
 
 export default function CompatibilityAnalyzePage() {
@@ -384,24 +391,42 @@ function CompatibilityAnalyzeContent() {
   };
 
   const personalizedSlot = useMemo(() => {
-    if (!result?.personalized?.headline) return null;
-    const p = result.personalized;
+    const p = result?.personalized;
+    const nameClaim = result?.name_numbers_pair?.claim_lines?.[0]?.trim() || null;
+    if (!p?.headline && !nameClaim) return null;
     return (
       <div>
-        <p className="orbit-body-xs" style={{ margin: 0, color: "#8b7355", fontWeight: 700 }}>
-          Через твой профиль
-        </p>
-        <p className="orbit-body-sm" style={{ margin: "0.45rem 0 0", color: "#334155", lineHeight: 1.65 }}>
-          {p.headline}
-        </p>
-        {p.do_focus ? (
-          <p className="orbit-body-xs" style={{ margin: "0.55rem 0 0", color: "#166534", lineHeight: 1.55 }}>
-            Усилить: {p.do_focus}
-          </p>
+        {p?.headline ? (
+          <>
+            <p className="orbit-body-xs" style={{ margin: 0, color: "#8b7355", fontWeight: 700 }}>
+              Через твой профиль
+            </p>
+            <p className="orbit-body-sm" style={{ margin: "0.45rem 0 0", color: "#334155", lineHeight: 1.65 }}>
+              {p.headline}
+            </p>
+            {p.do_focus ? (
+              <p className="orbit-body-xs" style={{ margin: "0.55rem 0 0", color: "#166534", lineHeight: 1.55 }}>
+                Усилить: {p.do_focus}
+              </p>
+            ) : null}
+            {p.avoid_focus ? (
+              <p className="orbit-body-xs" style={{ margin: "0.35rem 0 0", color: "#9a3412", lineHeight: 1.55 }}>
+                Осторожнее с: {p.avoid_focus}
+              </p>
+            ) : null}
+          </>
         ) : null}
-        {p.avoid_focus ? (
-          <p className="orbit-body-xs" style={{ margin: "0.35rem 0 0", color: "#9a3412", lineHeight: 1.55 }}>
-            Осторожнее с: {p.avoid_focus}
+        {nameClaim ? (
+          <p
+            className="orbit-body-xs"
+            style={{
+              margin: p?.headline ? "0.65rem 0 0" : 0,
+              color: "#64748b",
+              lineHeight: 1.55,
+            }}
+            data-testid="compat-name-numbers-claim"
+          >
+            {nameClaim}
           </p>
         ) : null}
       </div>

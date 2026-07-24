@@ -26,6 +26,7 @@ def test_compatibility_dynamics_template_quick(client: TestClient) -> None:
     assert data.get("to_sign") == "scorpio"
     assert data.get("generation_source") == "template"
     assert isinstance(data.get("pair_dynamics"), dict)
+    assert data.get("name_numbers_pair") is None
     surface = data.get("product_surface")
     assert isinstance(surface, dict)
     assert len(surface.get("blocks", [])) == 1
@@ -35,6 +36,28 @@ def test_compatibility_dynamics_template_quick(client: TestClient) -> None:
     assert access.get("tier") == "guest"
     assert "yes_no" in (access.get("locked_layers") or [])
     assert data.get("funnel_artifact") is None
+
+
+@pytest.mark.smoke
+def test_compatibility_dynamics_name_numbers_pair(client: TestClient) -> None:
+    r = client.post(
+        "/compatibility/dynamics",
+        json={
+            "mode": "quick",
+            "from_sign": "leo",
+            "to_sign": "scorpio",
+            "generation": "template",
+            "name_1": "Анна",
+            "name_2": "Игорь",
+        },
+    )
+    assert r.status_code == 200, r.text
+    pack = r.json().get("name_numbers_pair")
+    assert isinstance(pack, dict)
+    assert pack.get("status") == "ok"
+    assert pack["a"]["expression"]["value"]
+    assert pack["b"]["expression"]["value"]
+    assert pack.get("claim_lines")
 
 
 @pytest.mark.smoke
