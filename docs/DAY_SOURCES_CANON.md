@@ -538,8 +538,10 @@ Day Story            →  интерпретация Foundation → экран T
 | `karana` | half-tithi | datetime | v1 | yes | no | yes |
 | `vara` | weekday planetary ruler | date + TZ | v1 | yes | no | yes |
 | `muhurta_intervals` | Rahu Kala, Yamaganda, … | geo + sunrise | v1 | soft | elective | yes |
-| `gochara` | Vedic transits vs natal Moon/Lagna | natal + sky | planned | no | yes | yes |
-| `dasha` | Vimshottari periods | birth | planned | no | yes | soft |
+| `gochara` | Vedic transits vs natal Moon (Chandra Lagna); Lagna later | natal Moon + sky | v1/partial | no | yes (`vedic_personal`) | yes |
+| `dasha` | Vimshottari MD/AD from birth Moon nakshatra | birth_date | v1/partial | no | yes (`vedic_personal`) | soft |
+
+**Personal wire:** L3 family id `vedic_personal` — gochara + dasha beside Foundation panchanga.
 | `ayanamsha` | Sidereal offset | — (config) | v1 Lahiri | config | config | — |
 
 **school_canon:** Lahiri ayanamsha (§3). Sidereal only inside this family — не подменять tropic Foundation.

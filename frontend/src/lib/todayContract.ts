@@ -85,10 +85,24 @@ export type TodayContractDayStoryV1 = {
       beats?: Array<{ id?: string; title?: string; story_ru?: string; kind?: string }>;
       pillars?: Record<string, { label_zh?: string; branch?: { animal_ru?: string } } | null>;
     } | null;
+    vedic_personal?: {
+      summary_ru?: string;
+      depth?: string;
+      gochara?: {
+        transit_moon?: { house_from_natal_moon?: number; sign_ru?: string };
+        summary_ru?: string;
+      };
+      dasha?: {
+        mahadasha?: { lord?: string; lord_ru?: string; start?: string; end?: string };
+        antardasha?: { lord?: string; lord_ru?: string } | null;
+        summary_ru?: string;
+      };
+    } | null;
     source_inputs?: {
       has_personal_astrology?: boolean;
       has_human_design?: boolean;
       has_bazi?: boolean;
+      has_vedic_personal?: boolean;
       ok_family_ids?: string[];
     };
   } | null;

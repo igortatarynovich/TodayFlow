@@ -231,6 +231,7 @@ def build_day_story_interpretation_v1(
                 (day_personal.get("source_inputs") or {}).get("has_personal_astrology")
                 or (day_personal.get("source_inputs") or {}).get("has_human_design")
                 or (day_personal.get("source_inputs") or {}).get("has_bazi")
+                or (day_personal.get("source_inputs") or {}).get("has_vedic_personal")
             )
         ),
     }

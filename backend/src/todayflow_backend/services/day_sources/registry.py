@@ -19,6 +19,7 @@ from todayflow_backend.services.day_sources.adapters.seasonal_calendar import (
     run_seasonal_calendar,
 )
 from todayflow_backend.services.day_sources.adapters.vedic_panchanga import run_vedic_panchanga
+from todayflow_backend.services.day_sources.adapters.vedic_personal import run_vedic_personal
 from todayflow_backend.services.day_sources.adapters.weekday_ruler import run_weekday_ruler
 from todayflow_backend.services.day_sources.adapters.western_astrology import (
     run_western_astrology,
@@ -233,6 +234,17 @@ def default_registry() -> DaySourceRegistry:
             in_today=True,
             required_input_keys=(),
             run=run_bazi,
+        )
+    )
+    reg.register(
+        SourceFamilySpec(
+            family_id="vedic_personal",
+            layer="personal",
+            in_foundation=False,
+            in_personal=True,
+            in_today=True,
+            required_input_keys=(),
+            run=run_vedic_personal,
         )
     )
     return reg

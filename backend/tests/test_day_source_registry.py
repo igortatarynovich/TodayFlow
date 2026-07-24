@@ -70,6 +70,7 @@ def test_registry_lists_v1_families():
         "planetary_hours",
         "seasonal_calendar",
         "vedic_panchanga",
+        "vedic_personal",
         "weekday_ruler",
         "western_astrology",
     ]
