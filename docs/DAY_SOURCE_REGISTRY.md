@@ -56,8 +56,9 @@ DaySourceInputs
 | `weekday_ruler` | foundation | `target_date` | yes |
 | `seasonal_calendar` | foundation | `target_date` + `lat/lon` | yes when geo |
 | `planetary_hours` | foundation | `target_date` + `lat/lon` (+ TZ preferred) | yes when geo |
+| `vedic_panchanga` | foundation | `target_date` (+ geo for muhurta) | yes |
 
-Планируемые (канон есть, адаптер later): `vedic_panchanga`, `chinese_metaphysics`, `human_design`, `personal_astrology`, …
+Планируемые (канон есть, адаптер later): `chinese_metaphysics`, `human_design`, `personal_astrology`, …
 
 ### Pipeline wiring
 

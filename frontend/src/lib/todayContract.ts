@@ -132,6 +132,16 @@ export type TodayDayFoundationV1 = {
       end_local?: string;
     }>;
   } | null;
+  panchanga?: {
+    summary_ru?: string;
+    tithi?: { number?: number; name_ru?: string; paksha_ru?: string } | null;
+    nakshatra?: { number?: number; name_ru?: string; pada?: number } | null;
+    yoga?: { number?: number; name_ru?: string } | null;
+    karana?: { name_ru?: string } | null;
+    vara?: { name_ru?: string; ruler_planet_ru?: string } | null;
+    muhurta?: Record<string, unknown> | null;
+    ayanamsha?: { id?: string; degrees?: number } | null;
+  } | null;
   essence?: {
     theme?: string;
     story_ru?: string;
@@ -144,6 +154,7 @@ export type TodayDayFoundationV1 = {
     has_weekday?: boolean;
     has_seasonal?: boolean;
     has_planetary_hours?: boolean;
+    has_panchanga?: boolean;
     has_essence?: boolean;
     ok_family_ids?: string[];
   };

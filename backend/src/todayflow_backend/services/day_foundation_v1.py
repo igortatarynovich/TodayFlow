@@ -196,6 +196,12 @@ def _planetary_hours_summary(payload: dict[str, Any] | None) -> str:
     return _clip(str(payload.get("summary_ru") or ""), 200)
 
 
+def _panchanga_summary(payload: dict[str, Any] | None) -> str:
+    if not isinstance(payload, dict):
+        return ""
+    return _clip(str(payload.get("summary_ru") or ""), 280)
+
+
 def _essence_from_layers(
     *,
     astro_summary: str,
@@ -282,6 +288,7 @@ def build_day_foundation_from_sources(
     weekday = _ok_payload(bundle, "weekday_ruler")
     seasonal = _ok_payload(bundle, "seasonal_calendar")
     planetary_hours = _ok_payload(bundle, "planetary_hours")
+    panchanga = _ok_payload(bundle, "vedic_panchanga")
 
     astro_beats: list[dict[str, Any]] = []
     lunar_beats: list[dict[str, Any]] = []
@@ -373,6 +380,7 @@ def build_day_foundation_from_sources(
     weekday_summary = _weekday_summary(weekday)
     seasonal_summary = _seasonal_summary(seasonal)
     planetary_hours_summary = _planetary_hours_summary(planetary_hours)
+    panchanga_summary = _panchanga_summary(panchanga)
     essence = _essence_from_layers(
         astro_summary=astro_summary,
         lunar_summary=lunar_summary,
@@ -442,6 +450,18 @@ def build_day_foundation_from_sources(
         }
         if planetary_hours
         else None,
+        "panchanga": {
+            "tithi": panchanga.get("tithi") if panchanga else None,
+            "nakshatra": panchanga.get("nakshatra") if panchanga else None,
+            "yoga": panchanga.get("yoga") if panchanga else None,
+            "karana": panchanga.get("karana") if panchanga else None,
+            "vara": panchanga.get("vara") if panchanga else None,
+            "muhurta": panchanga.get("muhurta") if panchanga else None,
+            "ayanamsha": panchanga.get("ayanamsha") if panchanga else None,
+            "summary_ru": panchanga_summary,
+        }
+        if panchanga
+        else None,
         "essence": essence,
         "source_inputs": {
             "has_astro": bool(astro_beats),
@@ -450,6 +470,7 @@ def build_day_foundation_from_sources(
             "has_weekday": bool(weekday),
             "has_seasonal": bool(seasonal),
             "has_planetary_hours": bool(planetary_hours),
+            "has_panchanga": bool(panchanga),
             "has_essence": bool(essence.get("story_ru")),
             "ok_family_ids": ok_ids,
         },
@@ -514,6 +535,7 @@ def foundation_to_interpretation_claims(foundation: dict[str, Any]) -> list[dict
         if isinstance(foundation.get("planetary_hours"), dict)
         else {}
     )
+    panchanga = foundation.get("panchanga") if isinstance(foundation.get("panchanga"), dict) else {}
 
     for b in (astro.get("beats") or [])[:4]:
         if not isinstance(b, dict):
@@ -598,6 +620,19 @@ def foundation_to_interpretation_claims(foundation: dict[str, Any]) -> list[dict
                 "evidence_ids": ["source.planetary_hours"],
                 "domain": None,
                 "layer": "planetary_hours",
+            }
+        )
+
+    panchanga_line = _clip(str(panchanga.get("summary_ru") or ""), 280)
+    if panchanga_line:
+        claims.append(
+            {
+                "id": "claim.foundation.panchanga",
+                "kind": "support",
+                "text": panchanga_line,
+                "evidence_ids": ["source.vedic_panchanga"],
+                "domain": None,
+                "layer": "panchanga",
             }
         )
 

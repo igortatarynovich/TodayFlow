@@ -532,15 +532,15 @@ Day Story            →  интерпретация Foundation → экран T
 
 | capability_id | purpose | required_inputs | version | in_foundation | in_personal | in_today |
 |---------------|---------|-----------------|---------|---------------|-------------|----------|
-| `tithi` | 30 lunar days from Sun–Moon angle | datetime | planned | yes | no | yes |
-| `nakshatra` | 27 lunar mansion of Moon | datetime | planned | yes | soft | yes |
-| `yoga` | 27 yogas from Sun+Moon | datetime | planned | yes | no | yes |
-| `karana` | half-tithi | datetime | planned | yes | no | yes |
-| `vara` | weekday planetary ruler | date + TZ | planned | yes | no | yes |
-| `muhurta_intervals` | Rahu Kala, Yamaganda, … | geo + sunrise | planned | soft | elective | yes |
+| `tithi` | 30 lunar days from Sun–Moon angle | datetime | v1 | yes | no | yes |
+| `nakshatra` | 27 lunar mansion of Moon | datetime | v1 | yes | soft | yes |
+| `yoga` | 27 yogas from Sun+Moon | datetime | v1 | yes | no | yes |
+| `karana` | half-tithi | datetime | v1 | yes | no | yes |
+| `vara` | weekday planetary ruler | date + TZ | v1 | yes | no | yes |
+| `muhurta_intervals` | Rahu Kala, Yamaganda, … | geo + sunrise | v1 | soft | elective | yes |
 | `gochara` | Vedic transits vs natal Moon/Lagna | natal + sky | planned | no | yes | yes |
 | `dasha` | Vimshottari periods | birth | planned | no | yes | soft |
-| `ayanamsha` | Sidereal offset | — (config) | planned | config | config | — |
+| `ayanamsha` | Sidereal offset | — (config) | v1 Lahiri | config | config | — |
 
 **school_canon:** Lahiri ayanamsha (§3). Sidereal only inside this family — не подменять tropic Foundation.
 

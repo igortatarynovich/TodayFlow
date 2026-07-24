@@ -10,6 +10,7 @@ from todayflow_backend.services.day_sources.adapters.planetary_hours import run_
 from todayflow_backend.services.day_sources.adapters.seasonal_calendar import (
     run_seasonal_calendar,
 )
+from todayflow_backend.services.day_sources.adapters.vedic_panchanga import run_vedic_panchanga
 from todayflow_backend.services.day_sources.adapters.weekday_ruler import run_weekday_ruler
 from todayflow_backend.services.day_sources.adapters.western_astrology import (
     run_western_astrology,
@@ -159,6 +160,17 @@ def default_registry() -> DaySourceRegistry:
             in_today=True,
             required_input_keys=("target_date", "geo"),
             run=run_planetary_hours,
+        )
+    )
+    reg.register(
+        SourceFamilySpec(
+            family_id="vedic_panchanga",
+            layer="foundation",
+            in_foundation=True,
+            in_personal=False,
+            in_today=True,
+            required_input_keys=("target_date",),
+            run=run_vedic_panchanga,
         )
     )
     return reg
