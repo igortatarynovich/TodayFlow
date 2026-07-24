@@ -5,13 +5,14 @@ from __future__ import annotations
 from typing import Any
 
 from todayflow_backend.services.day_sources.house_rulers import build_house_rulers_chains
+from todayflow_backend.services.day_sources.planet_returns import build_planet_returns
 from todayflow_backend.services.day_sources.profections import build_profections
 from todayflow_backend.services.day_sources.progressions import build_progressions_pack
 from todayflow_backend.services.day_sources.returns import build_returns_pack
 from todayflow_backend.services.day_sources.time_lords import build_time_lords
 from todayflow_backend.services.day_sources.types import DaySourceInputs, SourceResult
 
-_CALC = "personal-astrology-adapter-v5"
+_CALC = "personal-astrology-adapter-v6"
 
 _HOUSE_KEYS = ("house", "natal_house", "transit_house", "house_number")
 
@@ -48,6 +49,7 @@ def run_personal_astrology(inputs: DaySourceInputs) -> SourceResult:
     returns = None
     house_rulers = None
     time_lords = None
+    planet_returns = None
 
     if raw:
         caps.append("natal_transits")
@@ -143,6 +145,11 @@ def run_personal_astrology(inputs: DaySourceInputs) -> SourceResult:
         caps.append("time_lords")
         beats.extend(list(time_lords.get("beats") or [])[:1])
 
+        planet_returns = build_planet_returns(inputs.birth_date, inputs.target_date)
+        caps.append("planet_returns")
+        if planet_returns.get("active"):
+            beats.extend(list(planet_returns.get("beats") or [])[:1])
+
         if depth == "none":
             depth = f"profections_{profections.get('depth')}"
 
@@ -179,6 +186,8 @@ def run_personal_astrology(inputs: DaySourceInputs) -> SourceResult:
         summary_parts.append(str(house_rulers["summary_ru"]))
     if time_lords and time_lords.get("summary_ru"):
         summary_parts.append(str(time_lords["summary_ru"]))
+    if planet_returns and planet_returns.get("active") and planet_returns.get("summary_ru"):
+        summary_parts.append(str(planet_returns["summary_ru"]))
     summary = " ".join(p for p in summary_parts if p)
 
     return SourceResult(
@@ -202,9 +211,10 @@ def run_personal_astrology(inputs: DaySourceInputs) -> SourceResult:
             "lunar_return": returns.get("lunar_return") if returns else None,
             "house_rulers_chains": house_rulers,
             "time_lords": time_lords,
+            "planet_returns": planet_returns,
             "beats": beats,
             "summary_ru": summary[:480],
-            "school_canon": "personal_astrology_v5_time_lords",
+            "school_canon": "personal_astrology_v6_planet_returns",
         },
         evidence_refs=evidence or ["birth_date"],
         calculation_version=_CALC,

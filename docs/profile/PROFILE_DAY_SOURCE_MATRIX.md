@@ -54,6 +54,7 @@
 | `personal_astrology` | solar_return / lunar_return | `birth_date` (+ time+place for soft ASC) | no | yes | soft |
 | `personal_astrology` | house_rulers_chains | + `birth_time` + `birth_place` | no | yes | soft |
 | `personal_astrology` | time_lords (firdaria) | `birth_date` (+ time+place for sect) | no | yes | soft |
+| `personal_astrology` | planet_returns | `birth_date` | no | yes | soft |
 | `personal_astrology` | houses, ASC/MC | + `birth_time` + `birth_place` | no | yes | yes |
 | `human_design` | transit gates | datetime | soft* | yes (wire) | soft |
 | `human_design` | bodygraph interaction | + birth datetime (+ place for depth) | no | yes | soft |

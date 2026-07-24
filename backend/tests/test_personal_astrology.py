@@ -80,6 +80,8 @@ def test_profections_without_transits():
     assert pa["lunar_return"]["return_date"]
     assert pa["time_lords"]["firdaria"]["major"]["planet"]
     assert pa["time_lords"]["depth"] == "firdaria_diurnal_default"
+    assert "planet_returns" in pa["capability_ids"]
+    assert len(pa["planet_returns"]["highlights"]) == 3
 
 
 def test_progressions_and_solar_arc_math():
@@ -237,6 +239,21 @@ def test_time_lords_firdaria():
     assert timed["depth"] == "firdaria_sect_known"
     assert timed["sect"]["sect"] in ("day", "night")
     assert timed["firdaria"]["major"]["planet_ru"]
+
+
+def test_planet_returns_soft():
+    from todayflow_backend.services.day_sources.planet_returns import build_planet_returns
+
+    birth = date(1990, 3, 15)
+    on = date(2026, 7, 24)
+    pack = build_planet_returns(birth, on)
+    assert pack["capability_id"] == "planet_returns"
+    by = {r["body"]: r for r in pack["returns"]}
+    assert set(by) >= {"Sun", "Moon", "Mars", "Jupiter", "Saturn"}
+    assert by["Saturn"]["return_date"] <= on.isoformat()
+    assert by["Saturn"]["next_return_date"] > on.isoformat()
+    assert by["Mars"]["noon_error_deg"] < 5.0
+    assert len(pack["highlights"]) == 3
 
 
 def test_personal_houses_depth_when_time_and_place():

@@ -127,6 +127,19 @@ export type TodayContractDayStoryV1 = {
         };
         limitation_ru?: string;
       } | null;
+      planet_returns?: {
+        summary_ru?: string;
+        depth?: string;
+        highlights?: Array<{
+          body?: string;
+          body_ru?: string;
+          return_date?: string;
+          next_return_date?: string;
+          in_return_window?: boolean;
+        }>;
+        active?: Array<{ body?: string; body_ru?: string }>;
+        limitation_ru?: string;
+      } | null;
       beats?: Array<{ id?: string; title?: string; story_ru?: string }>;
     } | null;
     human_design?: {

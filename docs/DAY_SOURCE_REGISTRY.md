@@ -66,7 +66,7 @@ DaySourceInputs
 | `kabbalah_letter` | **personal** | `target_date` | no (L3; Today claims deferred) |
 | `electional_horary` | **personal** | explicit request + geo (+ time; question→horary) | no (situational) |
 
-Планируемые (канон есть, адаптер later): planet_returns, full HD planet set, ZR, …
+Планируемые (канон есть, адаптер later): full HD planet set, ZR, …
 
 ### Pipeline wiring
 
