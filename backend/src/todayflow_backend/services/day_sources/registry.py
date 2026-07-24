@@ -6,6 +6,10 @@ from typing import Any, Iterable
 
 from todayflow_backend.services.day_sources.adapters.moon import run_moon
 from todayflow_backend.services.day_sources.adapters.numerology import run_numerology
+from todayflow_backend.services.day_sources.adapters.planetary_hours import run_planetary_hours
+from todayflow_backend.services.day_sources.adapters.seasonal_calendar import (
+    run_seasonal_calendar,
+)
 from todayflow_backend.services.day_sources.adapters.weekday_ruler import run_weekday_ruler
 from todayflow_backend.services.day_sources.adapters.western_astrology import (
     run_western_astrology,
@@ -133,6 +137,28 @@ def default_registry() -> DaySourceRegistry:
             in_today=True,
             required_input_keys=("target_date",),
             run=run_weekday_ruler,
+        )
+    )
+    reg.register(
+        SourceFamilySpec(
+            family_id="seasonal_calendar",
+            layer="foundation",
+            in_foundation=True,
+            in_personal=False,
+            in_today=True,
+            required_input_keys=("target_date", "geo"),
+            run=run_seasonal_calendar,
+        )
+    )
+    reg.register(
+        SourceFamilySpec(
+            family_id="planetary_hours",
+            layer="foundation",
+            in_foundation=True,
+            in_personal=False,
+            in_today=True,
+            required_input_keys=("target_date", "geo"),
+            run=run_planetary_hours,
         )
     )
     return reg

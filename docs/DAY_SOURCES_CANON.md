@@ -622,7 +622,7 @@ Day Story            →  интерпретация Foundation → экран T
 | deterministic_outputs | hour table: start/end, ruler |
 | depends_on | `seasonal_calendar.sun_rise_set` |
 | school_canon | Chaldean order from day ruler |
-| version | planned |
+| version | v1 (NOAA-approx sunrise/sunset in backend; Swiss rise_trans later) |
 | in_foundation | yes (L2) when geo |
 | in_personal | elective |
 | in_today | yes when geo |
@@ -650,7 +650,7 @@ Day Story            →  интерпретация Foundation → экран T
 | capability_id | purpose | required_inputs | version | in_foundation | in_today |
 |---------------|---------|-----------------|---------|---------------|----------|
 | `season` | Season of year | date + hemisphere | v1/partial | yes | yes |
-| `sun_rise_set` | Sunrise/sunset, day length | geo + date | planned | yes | yes |
+| `sun_rise_set` | Sunrise/sunset, day length | geo + date | v1 | yes | yes |
 | `dst_calendar` | DST transitions | TZ | planned | soft | soft |
 | `holidays` | Civil/religious holidays | locale + date | planned | soft | soft |
 

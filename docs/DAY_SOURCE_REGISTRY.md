@@ -54,8 +54,10 @@ DaySourceInputs
 | `moon.timed_lunar_aspects` | foundation | `AstroService` sample+bisect majors | yes (feeds VOC + lunar timeline) |
 | `numerology` | foundation (+ personal caps) | `target_date`; personal needs `birth_date` | universal only in Foundation |
 | `weekday_ruler` | foundation | `target_date` | yes |
+| `seasonal_calendar` | foundation | `target_date` + `lat/lon` | yes when geo |
+| `planetary_hours` | foundation | `target_date` + `lat/lon` (+ TZ preferred) | yes when geo |
 
-Планируемые (канон есть, адаптер later): `vedic_panchanga`, `chinese_metaphysics`, `planetary_hours`, `human_design`, `personal_astrology`, …
+Планируемые (канон есть, адаптер later): `vedic_panchanga`, `chinese_metaphysics`, `human_design`, `personal_astrology`, …
 
 ### Pipeline wiring
 

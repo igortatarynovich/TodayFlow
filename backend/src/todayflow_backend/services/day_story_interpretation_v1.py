@@ -140,6 +140,9 @@ def build_day_story_interpretation_v1(
     locale: str = "ru",
     target_date: date | None = None,
     birth_date: date | None = None,
+    lat: float | None = None,
+    lon: float | None = None,
+    timezone: str | None = None,
 ) -> dict[str, Any]:
     """Build structured interpretation + evidence from known inputs (no LLM)."""
     brief = day_engine_brief if isinstance(day_engine_brief, dict) else {}
@@ -161,6 +164,9 @@ def build_day_story_interpretation_v1(
         ce,
         target_date=resolved_date,
         birth_date=birth_date,
+        lat=lat,
+        lon=lon,
+        timezone=timezone,
         locale=locale or "ru",
     )
 
@@ -192,11 +198,14 @@ def build_day_story_interpretation_v1(
                 or (day_foundation.get("source_inputs") or {}).get("has_weekday")
                 or (day_foundation.get("source_inputs") or {}).get("has_astro")
                 or (day_foundation.get("source_inputs") or {}).get("has_lunar")
+                or (day_foundation.get("source_inputs") or {}).get("has_seasonal")
+                or (day_foundation.get("source_inputs") or {}).get("has_planetary_hours")
             )
         ),
         "locale": (locale or "ru")[:8],
         "target_date": resolved_date.isoformat(),
         "has_birth_date": birth_date is not None,
+        "has_geo": lat is not None and lon is not None,
     }
 
     def add_claim(

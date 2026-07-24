@@ -63,6 +63,8 @@ def test_registry_lists_v1_families():
     assert ids == [
         "moon",
         "numerology",
+        "planetary_hours",
+        "seasonal_calendar",
         "weekday_ruler",
         "western_astrology",
     ]

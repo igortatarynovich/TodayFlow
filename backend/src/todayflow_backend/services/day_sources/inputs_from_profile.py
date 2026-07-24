@@ -32,3 +32,25 @@ def birth_date_from_core_profile(core_profile: dict[str, Any] | None) -> date | 
         return parsed
     person = core_profile.get("person") if isinstance(core_profile.get("person"), dict) else {}
     return parse_iso_date(person.get("birth_date") or person.get("date_of_birth"))
+
+
+def geo_from_core_profile(
+    core_profile: dict[str, Any] | None,
+) -> tuple[float | None, float | None, str | None]:
+    """Return (lat, lon, timezone_name) from profile astro block when present."""
+    if not isinstance(core_profile, dict):
+        return None, None, None
+    astro = core_profile.get("astro") if isinstance(core_profile.get("astro"), dict) else {}
+    lat = astro.get("latitude")
+    lon = astro.get("longitude")
+    try:
+        lat_f = float(lat) if lat is not None else None
+    except (TypeError, ValueError):
+        lat_f = None
+    try:
+        lon_f = float(lon) if lon is not None else None
+    except (TypeError, ValueError):
+        lon_f = None
+    tz = astro.get("timezone_name") or astro.get("timezone")
+    tz_s = str(tz).strip() if tz else None
+    return lat_f, lon_f, tz_s or None

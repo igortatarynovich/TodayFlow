@@ -107,6 +107,31 @@ export type TodayDayFoundationV1 = {
     ruler_planet_ru?: string | null;
     summary_ru?: string;
   } | null;
+  seasonal?: {
+    season?: string | null;
+    season_ru?: string | null;
+    summary_ru?: string;
+    sun?: {
+      sunrise_local?: string;
+      sunset_local?: string;
+      day_length_minutes?: number;
+    } | null;
+  } | null;
+  planetary_hours?: {
+    day_ruler_planet?: string | null;
+    day_ruler_planet_ru?: string | null;
+    sunrise_local?: string | null;
+    sunset_local?: string | null;
+    summary_ru?: string;
+    hours?: Array<{
+      index?: number;
+      period?: string;
+      ruler_planet?: string;
+      ruler_planet_ru?: string;
+      start_local?: string;
+      end_local?: string;
+    }>;
+  } | null;
   essence?: {
     theme?: string;
     story_ru?: string;
@@ -117,6 +142,8 @@ export type TodayDayFoundationV1 = {
     has_lunar?: boolean;
     has_numerology?: boolean;
     has_weekday?: boolean;
+    has_seasonal?: boolean;
+    has_planetary_hours?: boolean;
     has_essence?: boolean;
     ok_family_ids?: string[];
   };

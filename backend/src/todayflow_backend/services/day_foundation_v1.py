@@ -184,6 +184,18 @@ def _weekday_summary(payload: dict[str, Any] | None) -> str:
     return _clip(f"Управитель дня недели — {ruler}.", 120)
 
 
+def _seasonal_summary(payload: dict[str, Any] | None) -> str:
+    if not isinstance(payload, dict):
+        return ""
+    return _clip(str(payload.get("summary_ru") or ""), 200)
+
+
+def _planetary_hours_summary(payload: dict[str, Any] | None) -> str:
+    if not isinstance(payload, dict):
+        return ""
+    return _clip(str(payload.get("summary_ru") or ""), 200)
+
+
 def _essence_from_layers(
     *,
     astro_summary: str,
@@ -268,6 +280,8 @@ def build_day_foundation_from_sources(
     moon = _ok_payload(bundle, "moon") or {}
     numerology = _ok_payload(bundle, "numerology")
     weekday = _ok_payload(bundle, "weekday_ruler")
+    seasonal = _ok_payload(bundle, "seasonal_calendar")
+    planetary_hours = _ok_payload(bundle, "planetary_hours")
 
     astro_beats: list[dict[str, Any]] = []
     lunar_beats: list[dict[str, Any]] = []
@@ -357,6 +371,8 @@ def build_day_foundation_from_sources(
     lunar_summary = _lunar_summary(phase=phase, moon_sign=moon_sign, beats=lunar_beats)
     numerology_summary = _numerology_summary(numerology)
     weekday_summary = _weekday_summary(weekday)
+    seasonal_summary = _seasonal_summary(seasonal)
+    planetary_hours_summary = _planetary_hours_summary(planetary_hours)
     essence = _essence_from_layers(
         astro_summary=astro_summary,
         lunar_summary=lunar_summary,
@@ -406,12 +422,34 @@ def build_day_foundation_from_sources(
         }
         if weekday
         else None,
+        "seasonal": {
+            "season": seasonal.get("season") if seasonal else None,
+            "season_ru": seasonal.get("season_ru") if seasonal else None,
+            "sun": seasonal.get("sun") if seasonal else None,
+            "summary_ru": seasonal_summary,
+        }
+        if seasonal
+        else None,
+        "planetary_hours": {
+            "day_ruler_planet": planetary_hours.get("day_ruler_planet") if planetary_hours else None,
+            "day_ruler_planet_ru": planetary_hours.get("day_ruler_planet_ru")
+            if planetary_hours
+            else None,
+            "sunrise_local": planetary_hours.get("sunrise_local") if planetary_hours else None,
+            "sunset_local": planetary_hours.get("sunset_local") if planetary_hours else None,
+            "hours": (planetary_hours.get("hours") or [])[:24] if planetary_hours else [],
+            "summary_ru": planetary_hours_summary,
+        }
+        if planetary_hours
+        else None,
         "essence": essence,
         "source_inputs": {
             "has_astro": bool(astro_beats),
             "has_lunar": bool(lunar_summary or lunar_beats),
             "has_numerology": bool(numerology),
             "has_weekday": bool(weekday),
+            "has_seasonal": bool(seasonal),
+            "has_planetary_hours": bool(planetary_hours),
             "has_essence": bool(essence.get("story_ru")),
             "ok_family_ids": ok_ids,
         },
@@ -470,6 +508,12 @@ def foundation_to_interpretation_claims(foundation: dict[str, Any]) -> list[dict
         foundation.get("numerology") if isinstance(foundation.get("numerology"), dict) else {}
     )
     weekday = foundation.get("weekday") if isinstance(foundation.get("weekday"), dict) else {}
+    seasonal = foundation.get("seasonal") if isinstance(foundation.get("seasonal"), dict) else {}
+    planetary_hours = (
+        foundation.get("planetary_hours")
+        if isinstance(foundation.get("planetary_hours"), dict)
+        else {}
+    )
 
     for b in (astro.get("beats") or [])[:4]:
         if not isinstance(b, dict):
@@ -528,6 +572,32 @@ def foundation_to_interpretation_claims(foundation: dict[str, Any]) -> list[dict
                 "evidence_ids": ["source.weekday_ruler"],
                 "domain": None,
                 "layer": "weekday",
+            }
+        )
+
+    seasonal_line = _clip(str(seasonal.get("summary_ru") or ""), 200)
+    if seasonal_line:
+        claims.append(
+            {
+                "id": "claim.foundation.seasonal",
+                "kind": "support",
+                "text": seasonal_line,
+                "evidence_ids": ["source.seasonal_calendar"],
+                "domain": None,
+                "layer": "seasonal",
+            }
+        )
+
+    ph_line = _clip(str(planetary_hours.get("summary_ru") or ""), 200)
+    if ph_line:
+        claims.append(
+            {
+                "id": "claim.foundation.planetary_hours",
+                "kind": "support",
+                "text": ph_line,
+                "evidence_ids": ["source.planetary_hours"],
+                "domain": None,
+                "layer": "planetary_hours",
             }
         )
 

@@ -178,7 +178,10 @@ def _build_day_story_record(
         compute_expected_day_story_fingerprint,
     )
     from todayflow_backend.services.day_story_refresh_v1 import ensure_story_state
-    from todayflow_backend.services.day_sources.inputs_from_profile import birth_date_from_core_profile
+    from todayflow_backend.services.day_sources.inputs_from_profile import (
+        birth_date_from_core_profile,
+        geo_from_core_profile,
+    )
     from todayflow_backend.services.day_symbol_state_v1 import owner_key_for_user
 
     learning = get_learning_service()
@@ -190,9 +193,10 @@ def _build_day_story_record(
     color_sym = color_symbol if isinstance(color_symbol, dict) else {}
     stone_sym = stone_symbol if isinstance(stone_symbol, dict) else {}
     ce = celestial_events if isinstance(celestial_events, dict) else {}
-    birth_date = birth_date_from_core_profile(
-        core_profile if isinstance(core_profile, dict) else None
-    )
+    profile = core_profile if isinstance(core_profile, dict) else None
+    birth_date = birth_date_from_core_profile(profile)
+    lat, lon, profile_tz = geo_from_core_profile(profile)
+    geo_timezone = profile_tz or timezone_name or None
 
     if expected_fingerprint is None or fingerprint_payload is None:
         expected_fingerprint, fingerprint_payload = compute_expected_day_story_fingerprint(
@@ -316,6 +320,9 @@ def _build_day_story_record(
             locale=locale_value,
             target_date=target_date,
             birth_date=birth_date,
+            lat=lat,
+            lon=lon,
+            timezone=geo_timezone,
         )
         llm_input = build_day_story_llm_input(
             day_engine_brief=story_brief,
