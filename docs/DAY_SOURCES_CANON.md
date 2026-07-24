@@ -432,11 +432,11 @@ Day Story            →  интерпретация Foundation → экран T
 | `secondary_progressions` | planned | birth datetime+place | no | yes | soft background |
 | `solar_arc` | planned | birth | no | yes | soft |
 | `solar_return` / `lunar_return` | planned | birth | no | yes | period context |
-| `profections` | planned | birth date (+time for day/month) | no | yes | soft |
+| `profections` | v1 | birth date (+ time+place → ASC whole-sign; else solar proxy) | no | yes | soft |
 | `time_lords` (firdaria, ZR, …) | planned | birth | no | yes | later |
 | `planet_returns` | planned | birth | no | yes | event |
 
-**school_canon:** Placidus houses when time+place; without birth time — **no houses/angles/progressed angles**.
+**school_canon:** Placidus houses when time+place for transit houses; profections use **whole-sign** from tropical ASC (or solar-sign proxy without time). Without birth time — **no houses/angles/progressed angles**.
 
 ---
 

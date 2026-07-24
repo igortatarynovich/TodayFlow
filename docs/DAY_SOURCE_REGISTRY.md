@@ -59,14 +59,14 @@ DaySourceInputs
 | `vedic_panchanga` | foundation | `target_date` (+ geo for muhurta) | yes |
 | `chinese_metaphysics` | foundation | `target_date` (+ TZ preferred) | yes |
 | `mayan_calendars` | foundation | `target_date` | soft |
-| `personal_astrology` | **personal** | birth_date + `celestial_events.personal_transits` | no (L3) |
+| `personal_astrology` | **personal** | birth_date (profections); + `personal_transits` for natal transits | no (L3) |
 | `human_design` | **personal** | `target_date` (+ birth for bodygraph) | no (L3; soft transit, Today later) |
 | `bazi` | **personal** | `birth_date` (+ `birth_time` for hour pillar) | no (L3; clashes + pillars) |
 | `vedic_personal` | **personal** | `birth_date`; Lagna gochara needs time+place | no (L3) |
 | `kabbalah_letter` | **personal** | `target_date` | no (L3; Today claims deferred) |
 | `electional_horary` | **personal** | explicit request + geo (+ time; question→horary) | no (situational) |
 
-Планируемые (канон есть, адаптер later): deeper personal_astrology (profections…), HD channels, …
+Планируемые (канон есть, адаптер later): secondary_progressions / solar_arc, HD channels, …
 
 ### Pipeline wiring
 

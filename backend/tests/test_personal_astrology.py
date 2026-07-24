@@ -53,7 +53,38 @@ def test_personal_ok_with_transits_and_birth_date():
     )
     assert personal["source_inputs"]["has_personal_astrology"] is True
     assert personal["personal_astrology"]["depth"] == "sign_level"
+    assert "profections" in personal["personal_astrology"]["capability_ids"]
+    assert personal["personal_astrology"]["profections"]["annual"]["house"]
     assert personal["personal_astrology"]["beats"][0]["title"]
+
+
+def test_profections_without_transits():
+    personal = build_day_personal_v1(
+        {},
+        target_date=date(2026, 7, 24),
+        birth_date=date(1990, 3, 15),
+    )
+    assert personal["source_inputs"]["has_personal_astrology"] is True
+    pa = personal["personal_astrology"]
+    assert pa["capability_ids"] == ["profections"]
+    assert pa["profections"]["depth"] == "solar_proxy"
+    assert 1 <= pa["profections"]["annual"]["house"] <= 12
+
+
+def test_profections_asc_when_time_and_place():
+    from todayflow_backend.services.day_sources.profections import build_profections
+
+    prof = build_profections(
+        date(1990, 3, 15),
+        date(2026, 7, 24),
+        birth_time=time(14, 30),
+        birth_lat=55.75,
+        birth_lon=37.62,
+        timezone_name="Europe/Moscow",
+    )
+    assert prof["depth"] == "asc_whole_sign"
+    assert prof["annual"]["lord_ru"]
+    assert prof["monthly"]["house"]
 
 
 def test_personal_houses_depth_when_time_and_place():
@@ -66,6 +97,7 @@ def test_personal_houses_depth_when_time_and_place():
         birth_lon=37.62,
     )
     assert "transits_by_house" in personal["personal_astrology"]["capability_ids"]
+    assert "profections" in personal["personal_astrology"]["capability_ids"]
     assert personal["personal_astrology"]["depth"] == "sign_level_time_known"
 
 

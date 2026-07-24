@@ -64,6 +64,14 @@ export type TodayContractDayStoryV1 = {
     personal_astrology?: {
       depth?: string;
       summary_ru?: string;
+      capability_ids?: string[];
+      profections?: {
+        age_years?: number;
+        depth?: string;
+        annual?: { house?: number; sign_ru?: string; lord_ru?: string; theme_ru?: string };
+        monthly?: { house?: number; lord_ru?: string };
+        summary_ru?: string;
+      } | null;
       beats?: Array<{ id?: string; title?: string; story_ru?: string }>;
     } | null;
     human_design?: {
