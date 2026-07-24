@@ -257,10 +257,11 @@ def test_planet_returns_soft():
     pack = build_planet_returns(birth, on)
     assert pack["capability_id"] == "planet_returns"
     by = {r["body"]: r for r in pack["returns"]}
-    assert set(by) >= {"Sun", "Moon", "Mars", "Jupiter", "Saturn"}
+    assert set(by) >= {"Sun", "Moon", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"}
     assert by["Saturn"]["return_date"] <= on.isoformat()
     assert by["Saturn"]["next_return_date"] > on.isoformat()
     assert by["Mars"]["noon_error_deg"] < 5.0
+    assert by["Uranus"]["next_return_date"] > on.isoformat()
     assert len(pack["highlights"]) == 3
 
 

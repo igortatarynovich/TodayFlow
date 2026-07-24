@@ -301,10 +301,10 @@ def build_channels_payload(
         "transit_only_channels": transit_channels,
         "defined_centers": centers,
         "summary_ru": summary,
-        "school_canon": "rave_channels_v1_classical_planets",
+        "school_canon": "rave_channels_v1_full_planet_set",
         "limitation_ru": (
-            "Ворота Sun…Saturn + Earth (mean longitude noon). "
-            "Уран/Нептун/Плутон и точный Swiss — later."
+            "Ворота Sun…Pluto + Earth (mean longitude noon). "
+            "Точный Swiss / Design-время — later."
         ),
     }
 
@@ -371,7 +371,7 @@ def transit_gates_for_day(target_date: date) -> dict[str, Any]:
     )
     return {
         "capability_id": "transit_gates",
-        "depth": "classical_planets_mean_lon",
+        "depth": "full_planet_set_mean_lon",
         "sun": sun,
         "earth": earth,
         "moon": moon,
@@ -379,8 +379,7 @@ def transit_gates_for_day(target_date: date) -> dict[str, Any]:
         "summary_ru": summary,
         "school_canon": "rave_mandala_gate41_aquarius_2",
         "limitation_ru": (
-            "Mean longitude noon для Sun…Saturn + Earth. "
-            "Уран/Нептун/Плутон / Swiss — later."
+            "Mean longitude noon для Sun…Pluto + Earth. Swiss — later."
         ),
     }
 
@@ -482,8 +481,8 @@ def bodygraph_soft(
         "summary_ru": summary,
         "school_canon": "rave_mandala_gate41_aquarius_2",
         "limitation_ru": (
-            "Personality/Design Sun…Saturn + Earth (mean lon). "
-            "Уран/Нептун/Плутон / точное Design-время — later."
+            "Personality/Design Sun…Pluto + Earth (mean lon). "
+            "Точное Design-время / Swiss — later."
         ),
     }
 

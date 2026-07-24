@@ -1,9 +1,9 @@
 """Planet returns soft layer (canon §5.3 `planet_returns`).
 
 School freeze v0:
-- Classical bodies Sun…Saturn via soft mean longitudes (noon).
+- Bodies Sun…Pluto via soft mean longitudes (noon).
 - Find last/next civil date when mean lon ≈ natal mean lon.
-- Highlight Mars / Jupiter / Saturn; include Mercury/Venus/Sun/Moon in pack.
+- Highlight Mars / Jupiter / Saturn; include outers in pack.
 - Not a full return chart — period event markers only.
 """
 
@@ -27,6 +27,9 @@ _PLANET_RU = {
     "Mars": "Марс",
     "Jupiter": "Юпитер",
     "Saturn": "Сатурн",
+    "Uranus": "Уран",
+    "Neptune": "Нептун",
+    "Pluto": "Плутон",
 }
 
 _HIGHLIGHT = ("Mars", "Jupiter", "Saturn")

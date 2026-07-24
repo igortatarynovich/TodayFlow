@@ -54,6 +54,22 @@ def tropical_saturn_longitude(d: date) -> float:
     return _norm(50.077444 + 1222.1138488 * t)
 
 
+def tropical_uranus_longitude(d: date) -> float:
+    t = _julian_centuries(d)
+    return _norm(314.055005 + 428.4669983 * t - 0.00000486 * t * t)
+
+
+def tropical_neptune_longitude(d: date) -> float:
+    t = _julian_centuries(d)
+    return _norm(304.348665 + 218.4862002 * t + 0.00000036 * t * t)
+
+
+def tropical_pluto_longitude(d: date) -> float:
+    # Soft mean longitude only — high eccentricity ignored.
+    t = _julian_centuries(d)
+    return _norm(238.9568 + 145.2078 * t)
+
+
 _BODY_FN: dict[str, Callable[[date], float]] = {
     "Sun": tropical_sun_longitude,
     "Moon": tropical_moon_longitude,
@@ -62,6 +78,9 @@ _BODY_FN: dict[str, Callable[[date], float]] = {
     "Mars": tropical_mars_longitude,
     "Jupiter": tropical_jupiter_longitude,
     "Saturn": tropical_saturn_longitude,
+    "Uranus": tropical_uranus_longitude,
+    "Neptune": tropical_neptune_longitude,
+    "Pluto": tropical_pluto_longitude,
 }
 
 # Sidereal-ish tropical return periods (days) for seeding the search window.
@@ -73,6 +92,9 @@ _PERIOD_DAYS: dict[str, float] = {
     "Mars": 686.980,
     "Jupiter": 4332.589,
     "Saturn": 10759.22,
+    "Uranus": 30687.15,
+    "Neptune": 60190.03,
+    "Pluto": 90560.0,
 }
 
 
@@ -85,6 +107,10 @@ def classical_longitude(body: str, d: date) -> float:
 
 def classical_bodies() -> tuple[str, ...]:
     return tuple(_BODY_FN.keys())
+
+
+def outer_bodies() -> tuple[str, ...]:
+    return ("Uranus", "Neptune", "Pluto")
 
 
 def period_days(body: str) -> float:

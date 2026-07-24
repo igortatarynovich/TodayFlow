@@ -69,9 +69,21 @@ def test_transit_gates_without_birth():
     assert 1 <= transit["sun"]["gate"] <= 64
     assert 1 <= transit["sun"]["line"] <= 6
     assert transit["earth"]["gate"] != transit["sun"]["gate"]
-    assert transit["depth"] == "classical_planets_mean_lon"
+    assert transit["depth"] == "full_planet_set_mean_lon"
     bodies = {p["body"] for p in transit["planets"]}
-    assert bodies >= {"Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Earth"}
+    assert bodies >= {
+        "Sun",
+        "Moon",
+        "Mercury",
+        "Venus",
+        "Mars",
+        "Jupiter",
+        "Saturn",
+        "Uranus",
+        "Neptune",
+        "Pluto",
+        "Earth",
+    }
 
     bundle = collect_personal_sources(DaySourceInputs(target_date=date(2026, 7, 24)))
     hd = bundle["sources"]["human_design"]
