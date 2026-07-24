@@ -155,6 +155,7 @@ def resolve_lot_of_fortune(
         # Soft proxy: release from natal Moon sign when ASC unknown.
         sign_i = _sign_index(moon)
         return {
+            "lot": "fortune",
             "longitude": round(moon, 4),
             "sign_index": sign_i,
             "sign_ru": _SIGN_RU[sign_i],
@@ -169,6 +170,44 @@ def resolve_lot_of_fortune(
         method = "fortune_night_asc_sun_moon"
     sign_i = _sign_index(lon)
     return {
+        "lot": "fortune",
+        "longitude": round(lon, 4),
+        "sign_index": sign_i,
+        "sign_ru": _SIGN_RU[sign_i],
+        "method": method,
+        "sect": sect,
+    }
+
+
+def resolve_lot_of_spirit(
+    birth_date: date,
+    *,
+    sect: str,
+    asc_lon: float | None,
+) -> dict[str, Any]:
+    """Lot of Spirit — inverse of Fortune (Hellenistic)."""
+    sun = tropical_sun_longitude(birth_date)
+    moon = tropical_moon_longitude(birth_date)
+    if asc_lon is None:
+        # Soft proxy: release from natal Sun sign when ASC unknown.
+        sign_i = _sign_index(sun)
+        return {
+            "lot": "spirit",
+            "longitude": round(sun, 4),
+            "sign_index": sign_i,
+            "sign_ru": _SIGN_RU[sign_i],
+            "method": "sun_sign_proxy",
+            "sect": sect,
+        }
+    if sect == "day":
+        lon = (float(asc_lon) + sun - moon) % 360.0
+        method = "spirit_day_asc_sun_moon"
+    else:
+        lon = (float(asc_lon) + moon - sun) % 360.0
+        method = "spirit_night_asc_moon_sun"
+    sign_i = _sign_index(lon)
+    return {
+        "lot": "spirit",
         "longitude": round(lon, 4),
         "sign_index": sign_i,
         "sign_ru": _SIGN_RU[sign_i],
@@ -251,15 +290,18 @@ def locate_zodiacal_releasing(
     birth_date: date,
     target_date: date,
     *,
-    fortune: dict[str, Any],
+    lot: dict[str, Any],
 ) -> dict[str, Any]:
     age = _age_years(birth_date, target_date)
-    start_sign = int(fortune["sign_index"])
+    start_sign = int(lot["sign_index"])
     major = _zr_period_at_age(start_sign, age)
     l2 = _zr_l2(major, age)
+    # Soft peak: L1 sign is opposite the lot's start (classic "loosing of the bond" cue).
+    opposite = (start_sign + 6) % 12
+    peakish = int(major["sign_index"]) == opposite
     return {
         "age_years": round(age, 4),
-        "lot": fortune,
+        "lot": lot,
         "level1": {
             **major,
             "start_date": _add_years(birth_date, float(major["start_age"])).isoformat(),
@@ -269,6 +311,14 @@ def locate_zodiacal_releasing(
             **l2,
             "start_date": _add_years(birth_date, float(l2["start_age"])).isoformat(),
             "end_date": _add_years(birth_date, float(l2["end_age"])).isoformat(),
+        },
+        "peak_soft": {
+            "active": peakish,
+            "note_ru": (
+                "L1 на противоположном знаке от лота (soft peak / loosing cue)."
+                if peakish
+                else None
+            ),
         },
     }
 
@@ -369,44 +419,59 @@ def build_time_lords(
     )
     fir = locate_firdaria(birth_date, target_date, sect=str(sect_info["sect"]))
 
+    asc_lon = sect_info.get("ascendant_tropical_lon")
     fortune = resolve_lot_of_fortune(
         birth_date,
         sect=str(sect_info["sect"]),
-        asc_lon=sect_info.get("ascendant_tropical_lon"),
+        asc_lon=asc_lon,
     )
-    zr = locate_zodiacal_releasing(birth_date, target_date, fortune=fortune)
+    spirit = resolve_lot_of_spirit(
+        birth_date,
+        sect=str(sect_info["sect"]),
+        asc_lon=asc_lon,
+    )
+    zr_fortune = locate_zodiacal_releasing(birth_date, target_date, lot=fortune)
+    zr_spirit = locate_zodiacal_releasing(birth_date, target_date, lot=spirit)
 
     if sect_info["method"] == "sun_vs_asc_whole_sign" and fortune["method"] != "moon_sign_proxy":
-        depth = "firdaria_zr_sect_known"
+        depth = "firdaria_zr_fortune_spirit_sect"
     elif sect_info["method"] == "sun_vs_asc_whole_sign":
         depth = "firdaria_sect_known"
     else:
-        depth = "firdaria_zr_diurnal_proxy"
+        depth = "firdaria_zr_fortune_spirit_proxy"
 
     major = fir["major"]
     sub = fir["sub"]
-    l1 = zr["level1"]
-    l2 = zr["level2"]
+    l1 = zr_fortune["level1"]
+    l2 = zr_fortune["level2"]
+    s1 = zr_spirit["level1"]
+    s2 = zr_spirit["level2"]
 
     summary = (
         f"Firdaria: мажор {_PLANET_RU[major['planet']]} "
         f"({major['start_date']} → {major['end_date']}), "
         f"субпериод {_PLANET_RU[sub['planet']]} "
         f"(до {sub['end_date']}). "
-        f"ZR (Fortune→{fortune['sign_ru']}): L1 {l1['sign_ru']} / {l1['lord_ru']}, "
-        f"L2 {l2['sign_ru']} / {l2['lord_ru']}."
+        f"ZR Fortune→{fortune['sign_ru']}: L1 {l1['sign_ru']}/{l1['lord_ru']}, "
+        f"L2 {l2['sign_ru']}. "
+        f"ZR Spirit→{spirit['sign_ru']}: L1 {s1['sign_ru']}/{s1['lord_ru']}, "
+        f"L2 {s2['sign_ru']}."
     )
     if fortune["method"] == "moon_sign_proxy":
-        summary += " ZR старт — знак Луны (нет ASC)."
+        summary += " Лоты soft: Луна/Солнце (нет ASC)."
     elif sect_info["method"] == "diurnal_default":
         summary += " Секта: дневная по умолчанию."
+    if zr_fortune.get("peak_soft", {}).get("active"):
+        summary += " Fortune L1 — soft peak (opposite)."
+    if zr_spirit.get("peak_soft", {}).get("active"):
+        summary += " Spirit L1 — soft peak (opposite)."
 
     beat = {
         "id": f"time-lords-firdaria-zr-{major['planet'].lower()}",
         "kind": "time_lords",
         "title": (
             f"Time lords · Firdaria {major['planet_ru']} · "
-            f"ZR {l1['sign_ru']}/{l2['sign_ru']}"
+            f"ZR F {l1['sign_ru']}/S {s1['sign_ru']}"
         ),
         "story_ru": summary,
         "evidence_ref": "personal_astrology.time_lords",
@@ -414,16 +479,21 @@ def build_time_lords(
 
     return {
         "capability_id": "time_lords",
-        "school_canon": "firdaria_zr_v0",
+        "school_canon": "firdaria_zr_fortune_spirit_v0",
         "depth": depth,
         "sect": sect_info,
         "firdaria": fir,
-        "zodiacal_releasing": zr,
-        "systems_available": ["firdaria", "zodiacal_releasing"],
-        "systems_deferred": ["profection_lords_as_time_lord", "zr_from_spirit"],
+        "zodiacal_releasing": zr_fortune,
+        "zodiacal_releasing_spirit": zr_spirit,
+        "systems_available": [
+            "firdaria",
+            "zodiacal_releasing",
+            "zodiacal_releasing_spirit",
+        ],
+        "systems_deferred": ["profection_lords_as_time_lord", "swiss_timed_lots"],
         "limitation_ru": (
-            "Firdaria + ZR from Fortune (Egyptian lesser years, L1/L2 soft). "
-            "Without ASC, ZR starts from Moon sign. Spirit lot / peak periods — later."
+            "Firdaria + ZR from Fortune and Spirit (Egyptian lesser years, L1/L2 soft). "
+            "Without ASC: Fortune←Moon, Spirit←Sun. Swiss-timed lots — later."
         ),
         "beats": [beat],
         "summary_ru": summary[:480],

@@ -126,9 +126,16 @@ export type TodayContractDayStoryV1 = {
           sub?: { planet?: string; planet_ru?: string; start_date?: string; end_date?: string };
         };
         zodiacal_releasing?: {
-          lot?: { sign_ru?: string; method?: string };
+          lot?: { sign_ru?: string; method?: string; lot?: string };
           level1?: { sign_ru?: string; lord_ru?: string; start_date?: string; end_date?: string };
           level2?: { sign_ru?: string; lord_ru?: string; start_date?: string; end_date?: string };
+          peak_soft?: { active?: boolean; note_ru?: string | null };
+        };
+        zodiacal_releasing_spirit?: {
+          lot?: { sign_ru?: string; method?: string; lot?: string };
+          level1?: { sign_ru?: string; lord_ru?: string; start_date?: string; end_date?: string };
+          level2?: { sign_ru?: string; lord_ru?: string; start_date?: string; end_date?: string };
+          peak_soft?: { active?: boolean; note_ru?: string | null };
         };
         systems_available?: string[];
         limitation_ru?: string;

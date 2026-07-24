@@ -3,8 +3,7 @@
 School freeze v0:
 - Whole-sign houses from tropical ASC (requires birth time+place).
 - Traditional domicile rulers (no exaltation/triplicity almuten).
-- Dispositor chains use natal noon Sun/Moon only; other classical lords
-  truncate with `missing_planet_longitude` (full 7-planet set later).
+- Dispositor chains use soft mean-longitude natal signs (Sun…Pluto).
 """
 
 from __future__ import annotations
@@ -12,10 +11,6 @@ from __future__ import annotations
 from datetime import date, time
 from typing import Any
 
-from todayflow_backend.services.day_sources.panchanga import (
-    tropical_moon_longitude,
-    tropical_sun_longitude,
-)
 from todayflow_backend.services.day_sources.vedic_personal import compute_sidereal_lagna
 
 _SIGN_RU = [
@@ -84,11 +79,13 @@ def _whole_sign_house(asc_sign: int, body_sign: int) -> int:
 
 
 def _known_natal_signs(birth_date: date) -> dict[str, int]:
-    """Soft natal signs available without full ephemeris."""
-    return {
-        "Sun": _sign_index(tropical_sun_longitude(birth_date)),
-        "Moon": _sign_index(tropical_moon_longitude(birth_date)),
-    }
+    """Natal signs from soft mean longitudes (Sun…Pluto)."""
+    from todayflow_backend.services.day_sources.classical_longitudes import (
+        classical_bodies,
+        classical_longitude,
+    )
+
+    return {name: _sign_index(classical_longitude(name, birth_date)) for name in classical_bodies()}
 
 
 def build_house_rulers(
@@ -247,7 +244,7 @@ def build_house_rulers_chains(
     return {
         "capability_id": "house_rulers_chains",
         "school_canon": "whole_sign_domicile_rulers_v0",
-        "depth": "asc_whole_sign_luminaries_soft",
+        "depth": "asc_whole_sign_full_planet_soft",
         "ascendant": {
             "tropical_lon": asc["tropical_lon"],
             "sign_index": asc_sign,
@@ -255,11 +252,15 @@ def build_house_rulers_chains(
         },
         "houses": rulers,
         "luminaries": luminaries,
+        "natal_signs": {
+            name: {"sign_index": si, "sign_ru": _SIGN_RU[si]}
+            for name, si in natal_signs.items()
+        },
         "chains": chains,
         "focus": focus,
         "limitation_ru": (
-            "Цепочки диспозиторов только через натальные Солнце/Луну (noon). "
-            "Полный набор классических планет — later."
+            "Цепочки диспозиторов через soft mean-longitude Sun…Pluto. "
+            "Swiss-точные натальные позиции — later."
         ),
         "beats": [beat],
         "summary_ru": summary[:420],

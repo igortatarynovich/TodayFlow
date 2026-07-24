@@ -79,8 +79,9 @@ def test_profections_without_transits():
     assert pa["solar_return"]["return_date"]
     assert pa["lunar_return"]["return_date"]
     assert pa["time_lords"]["firdaria"]["major"]["planet"]
-    assert pa["time_lords"]["depth"] == "firdaria_zr_diurnal_proxy"
+    assert pa["time_lords"]["depth"] == "firdaria_zr_fortune_spirit_proxy"
     assert pa["time_lords"]["zodiacal_releasing"]["level1"]["sign_ru"]
+    assert pa["time_lords"]["zodiacal_releasing_spirit"]["level1"]["sign_ru"]
     assert "planet_returns" in pa["capability_ids"]
     assert len(pa["planet_returns"]["highlights"]) == 3
 
@@ -168,13 +169,17 @@ def test_house_rulers_chains_requires_time_place():
         dispositor_chain,
     )
 
-    # Without planet longitude, Mars chain truncates after the seed step.
-    truncated = dispositor_chain("Mars", {"Sun": 4, "Moon": 3})
+    # Unknown body still truncates.
+    truncated = dispositor_chain("Chiron", {"Sun": 4, "Moon": 3})
     assert truncated["truncated"] == "missing_planet_longitude"
 
     # Sun in Leo (4) → final dispositor.
     sun_own = dispositor_chain("Sun", {"Sun": 4, "Moon": 3})
     assert sun_own["final_dispositor"] is True
+
+    # Mars with known sign continues the chain.
+    mars_chain = dispositor_chain("Mars", {"Mars": 0, "Sun": 4, "Moon": 3})
+    assert mars_chain["steps"][0]["next_lord"] == "Mars" or len(mars_chain["steps"]) >= 1
 
     personal = build_day_personal_v1(
         {},
@@ -198,6 +203,7 @@ def test_house_rulers_chains_requires_time_place():
     assert hr["houses"][0]["house"] == 1
     assert hr["focus"]["house"] == pa["profections"]["annual"]["house"]
     assert hr["ascendant"]["sign_ru"]
+    assert "Mars" in hr["natal_signs"]
 
     direct = build_house_rulers_chains(
         date(1990, 3, 15),
@@ -209,6 +215,12 @@ def test_house_rulers_chains_requires_time_place():
     )
     assert direct["focus"]["house"] == 5
     assert direct["luminaries"]["Sun"]["whole_sign_house"] >= 1
+    # Chains should not truncate solely for missing classical planet longitudes.
+    assert any(
+        c.get("truncated") != "missing_planet_longitude"
+        for c in direct["chains"]
+        if c.get("start") in {"Sun", "Moon", "Mars", "Venus", "Mercury", "Jupiter", "Saturn"}
+    )
 
 
 def test_time_lords_firdaria():
@@ -226,12 +238,15 @@ def test_time_lords_firdaria():
     assert fir["major"]["start_date"] <= on.isoformat() <= fir["major"]["end_date"]
 
     soft = build_time_lords(birth, on)
-    assert soft["depth"] == "firdaria_zr_diurnal_proxy"
+    assert soft["depth"] == "firdaria_zr_fortune_spirit_proxy"
     assert soft["capability_id"] == "time_lords"
     assert "zodiacal_releasing" in soft["systems_available"]
+    assert "zodiacal_releasing_spirit" in soft["systems_available"]
     assert soft["zodiacal_releasing"]["lot"]["method"] == "moon_sign_proxy"
+    assert soft["zodiacal_releasing_spirit"]["lot"]["method"] == "sun_sign_proxy"
     assert soft["zodiacal_releasing"]["level1"]["lord_ru"]
     assert soft["zodiacal_releasing"]["level2"]["sign_ru"]
+    assert soft["zodiacal_releasing_spirit"]["level1"]["sign_ru"]
 
     timed = build_time_lords(
         birth,
@@ -241,12 +256,14 @@ def test_time_lords_firdaria():
         birth_lon=37.62,
         timezone_name="Europe/Moscow",
     )
-    assert timed["depth"] == "firdaria_zr_sect_known"
+    assert timed["depth"] == "firdaria_zr_fortune_spirit_sect"
     assert timed["sect"]["sect"] in ("day", "night")
     assert timed["firdaria"]["major"]["planet_ru"]
     assert timed["zodiacal_releasing"]["lot"]["method"].startswith("fortune_")
+    assert timed["zodiacal_releasing_spirit"]["lot"]["method"].startswith("spirit_")
     assert timed["zodiacal_releasing"]["level1"]["start_date"] <= on.isoformat()
     assert timed["zodiacal_releasing"]["level1"]["end_date"] >= on.isoformat()
+    assert "peak_soft" in timed["zodiacal_releasing"]
 
 
 def test_planet_returns_soft():

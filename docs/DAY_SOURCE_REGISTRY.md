@@ -66,7 +66,7 @@ DaySourceInputs
 | `kabbalah_letter` | **personal** | `target_date` | no (L3; Today claims deferred) |
 | `electional_horary` | **personal** | explicit request + geo (+ time; question→horary) | no (situational) |
 
-Планируемые (канон есть, адаптер later): ZR from Spirit, Swiss ephemeris deepenings, …
+Планируемые (канон есть, адаптер later): Swiss-timed lots / ephemeris bridge (async AstroService), …
 
 ### Soft → Today wire (v1.6)
 
