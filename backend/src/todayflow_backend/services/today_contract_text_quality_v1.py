@@ -176,6 +176,9 @@ def is_profile_trait_text(text: str | None) -> bool:
     if not t:
         return False
     low = t.lower()
+    # Today-framed navigation copy is never a Profile passport trait.
+    if has_today_marker(t):
+        return False
     if _FAMILY_PROFILE_RE.search(t):
         return True
     if _THIRD_PERSON_TRAIT_RE.search(low):
