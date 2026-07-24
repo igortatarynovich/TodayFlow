@@ -117,6 +117,16 @@ export type TodayContractDayStoryV1 = {
         focus?: { house?: number; lord_ru?: string; chain?: { label_ru?: string } } | null;
         limitation_ru?: string;
       } | null;
+      time_lords?: {
+        summary_ru?: string;
+        depth?: string;
+        sect?: { sect?: string; method?: string };
+        firdaria?: {
+          major?: { planet?: string; planet_ru?: string; start_date?: string; end_date?: string };
+          sub?: { planet?: string; planet_ru?: string; start_date?: string; end_date?: string };
+        };
+        limitation_ru?: string;
+      } | null;
       beats?: Array<{ id?: string; title?: string; story_ru?: string }>;
     } | null;
     human_design?: {

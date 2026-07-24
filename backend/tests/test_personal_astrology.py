@@ -71,12 +71,15 @@ def test_profections_without_transits():
     assert "solar_arc" in pa["capability_ids"]
     assert "solar_return" in pa["capability_ids"]
     assert "lunar_return" in pa["capability_ids"]
+    assert "time_lords" in pa["capability_ids"]
     assert pa["profections"]["depth"] == "solar_proxy"
     assert 1 <= pa["profections"]["annual"]["house"] <= 12
     assert pa["secondary_progressions"]["progressed"]["sun"]["sign_ru"]
     assert pa["solar_arc"]["arc_degrees"] >= 0
     assert pa["solar_return"]["return_date"]
     assert pa["lunar_return"]["return_date"]
+    assert pa["time_lords"]["firdaria"]["major"]["planet"]
+    assert pa["time_lords"]["depth"] == "firdaria_diurnal_default"
 
 
 def test_progressions_and_solar_arc_math():
@@ -203,6 +206,37 @@ def test_house_rulers_chains_requires_time_place():
     )
     assert direct["focus"]["house"] == 5
     assert direct["luminaries"]["Sun"]["whole_sign_house"] >= 1
+
+
+def test_time_lords_firdaria():
+    from todayflow_backend.services.day_sources.time_lords import (
+        build_time_lords,
+        locate_firdaria,
+    )
+
+    birth = date(1990, 3, 15)
+    on = date(2026, 7, 24)
+    # Age ~36.35 → day sequence: Sun10+Venus8+Mercury13=31, into Moon (9) → Moon major
+    fir = locate_firdaria(birth, on, sect="day")
+    assert fir["major"]["planet"] == "Moon"
+    assert fir["sub"]["planet"]
+    assert fir["major"]["start_date"] <= on.isoformat() <= fir["major"]["end_date"]
+
+    soft = build_time_lords(birth, on)
+    assert soft["depth"] == "firdaria_diurnal_default"
+    assert soft["capability_id"] == "time_lords"
+
+    timed = build_time_lords(
+        birth,
+        on,
+        birth_time=time(14, 30),
+        birth_lat=55.75,
+        birth_lon=37.62,
+        timezone_name="Europe/Moscow",
+    )
+    assert timed["depth"] == "firdaria_sect_known"
+    assert timed["sect"]["sect"] in ("day", "night")
+    assert timed["firdaria"]["major"]["planet_ru"]
 
 
 def test_personal_houses_depth_when_time_and_place():
