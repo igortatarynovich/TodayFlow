@@ -50,7 +50,8 @@ DaySourceInputs
 |-----------|-------|-------------------|------------|
 | `western_astrology` | foundation | `celestial_events` или ephemeris path | yes |
 | `moon` | foundation | lunar fields in celestial / ephemeris | yes |
-| `moon.void_of_course` | foundation | timed major Moon aspects + next ingress | gated until aspect timeline |
+| `moon.void_of_course` | foundation | timed major Moon aspects + next ingress | yes when timeline resolves |
+| `moon.timed_lunar_aspects` | foundation | `AstroService` sample+bisect majors | yes (feeds VOC + lunar timeline) |
 | `numerology` | foundation (+ personal caps) | `target_date`; personal needs `birth_date` | universal only in Foundation |
 | `weekday_ruler` | foundation | `target_date` | yes |
 

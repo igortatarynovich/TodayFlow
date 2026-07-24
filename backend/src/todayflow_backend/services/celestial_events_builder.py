@@ -7,6 +7,10 @@ from typing import Any
 
 from todayflow_backend.services import astro
 from todayflow_backend.services.aspects import AspectEngine
+from todayflow_backend.services.day_sources.timed_lunar_aspects import (
+    find_moon_sign_ingress_time,
+    find_timed_major_moon_aspects,
+)
 from todayflow_backend.services.day_sources.void_of_course import build_void_of_course_v0
 from todayflow_backend.services.lunar import LunarService
 from todayflow_backend.services.retrograde import RetrogradeService
@@ -353,11 +357,40 @@ async def build_celestial_events(
         },
     }
 
-    # Timed major Moon aspects are not in sky_aspects yet → VOC stays gated (canon §5.2.4).
+    # Timed major Moon aspects + refine Moon ingress clock time for VOC window.
+    timed_lunar_aspects: list[dict[str, Any]] = []
+    try:
+        timed_lunar_aspects = await find_timed_major_moon_aspects(
+            astro_service,
+            target_date=target_date,
+        )
+    except Exception:
+        timed_lunar_aspects = []
+
+    for row in ingresses_today:
+        if not isinstance(row, dict):
+            continue
+        planet = str(row.get("planet") or "")
+        if "moon" not in planet.lower() and "лун" not in str(row.get("planet_ru") or "").lower():
+            continue
+        if row.get("exact_time"):
+            continue
+        try:
+            ing_day = date.fromisoformat(str(row.get("ingress_date") or target_date)[:10])
+        except ValueError:
+            ing_day = target_date
+        try:
+            exact = await find_moon_sign_ingress_time(astro_service, around_date=ing_day)
+        except Exception:
+            exact = None
+        if exact is not None:
+            row["exact_time"] = exact.isoformat(timespec="seconds")
+            row["ingress_date"] = exact.date().isoformat()
+
     void_of_course = build_void_of_course_v0(
         target_date=target_date,
         ingresses=ingresses_today,
-        timed_lunar_aspects=None,
+        timed_lunar_aspects=timed_lunar_aspects,
     )
 
     payload: dict[str, Any] = {
@@ -367,6 +400,7 @@ async def build_celestial_events(
         "personal_transits": personal,
         "ingresses": ingresses_today,
         "daily_symbols": daily_symbols,
+        "timed_lunar_aspects": timed_lunar_aspects,
         "void_of_course": void_of_course,
     }
     if transit_signs.get("moon_sign"):

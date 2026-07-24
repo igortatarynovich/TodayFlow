@@ -351,7 +351,7 @@ Day Story            →  интерпретация Foundation → экран T
 | deterministic_outputs | voc_start, voc_end, rule_id |
 | depends_on | `lunar_aspects`, `sign` |
 | school_canon | Majors-only (see §3) |
-| version | planned |
+| version | v1 (timeline via timed_lunar_aspects; unavailable without ingress+aspects) |
 | in_foundation | yes when ready |
 | in_personal | elective |
 | in_today | yes when ready |

@@ -48,13 +48,14 @@ def run_moon(inputs: DaySourceInputs) -> SourceResult:
             or _is_moonish(str(row.get("story_ru") or ""))
         )
     ]
+    timed = [row for row in (ce.get("timed_lunar_aspects") or []) if isinstance(row, dict)]
 
     caps: list[str] = []
     if phase:
         caps.append("phase")
     if moon_sign or moon_ingresses:
         caps.append("sign")
-    if lunar_aspects:
+    if lunar_aspects or timed:
         caps.append("lunar_aspects")
     if moon_ingresses:
         caps.append("ingresses")
@@ -66,6 +67,7 @@ def run_moon(inputs: DaySourceInputs) -> SourceResult:
         "moon_sign": moon_sign,
         "ingresses": moon_ingresses,
         "lunar_aspects": lunar_aspects,
+        "timed_lunar_aspects": timed,
         "void_of_course": voc,
     }
 

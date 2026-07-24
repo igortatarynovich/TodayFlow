@@ -294,6 +294,21 @@ def build_day_foundation_from_sources(
     lunar_beats.extend(
         _beats_from_aspects((moon.get("lunar_aspects") or [])[:3], evidence_family="moon")
     )
+    for row in (moon.get("timed_lunar_aspects") or [])[:3]:
+        if not isinstance(row, dict):
+            continue
+        title = str(row.get("title") or "")
+        exact = str(row.get("exact_time") or "")
+        story = f"{title} · {exact}" if title and exact else title or exact
+        beat = _beat(
+            beat_id=f"timed.{row.get('id') or exact}",
+            kind="timed_aspect",
+            title=title or "Лунный аспект",
+            story_ru=story,
+            evidence_ref="source.moon.timed_lunar_aspects",
+        )
+        if beat:
+            lunar_beats.append(beat)
 
     phase = moon.get("lunar_phase") if isinstance(moon.get("lunar_phase"), dict) else None
     moon_sign = moon.get("moon_sign") if isinstance(moon.get("moon_sign"), dict) else None
