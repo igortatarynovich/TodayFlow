@@ -8,7 +8,8 @@ import {
   type FlowPracticesChromeLocale,
   type PracticesExperienceChromeBundle,
 } from "@/components/today/flowPracticesMainTabChrome";
-import { DsButton } from "@/design-system";
+import { DsButton, MotionReveal, MotionSettle } from "@/design-system";
+import { MOTION } from "@/design-system/motion/tokens";
 import { PracticeSessionWebScreen } from "@/components/product-ui/PracticeSessionWebScreen";
 import s from "@/components/product-ui/productWebScreens.module.css";
 import { useToastContext } from "@/components/ToastProvider";
@@ -242,116 +243,124 @@ export default function PracticeDetailPage() {
     >
           <>
             {practice.is_personalized && practice.personalized_reason && !dayWhy && (
-              <div className={s.practiceSessionHighlight}>
+              <MotionReveal className={s.practiceSessionHighlight}>
                 <p className={s.practiceSessionHighlightText}>
                   {practice.personalized_reason}
                 </p>
-              </div>
+              </MotionReveal>
             )}
 
             {practice.prompt && (
-              <div className={s.practiceSessionHighlight}>
+              <MotionReveal className={s.practiceSessionHighlight} delayMs={MOTION.staggerMs}>
                 <h3 className={s.practiceSessionSectionTitle}>
                   {pc.practiceDetailTodaysTaskTitle}
                 </h3>
                 <p className={s.practiceSessionHighlightText}>
                   {practice.prompt}
                 </p>
-              </div>
+              </MotionReveal>
             )}
 
             {practice.questions && practice.questions.length > 0 && (
-              <div style={{ marginBottom: "var(--orbit-space-xl)" }}>
-                <h3 className="orbit-body" style={{ fontWeight: 600, marginBottom: "var(--orbit-space-md)" }}>
-                  {pc.practiceDetailReflectionQuestionsTitle}
-                </h3>
-                <ol style={{ paddingLeft: "var(--orbit-space-lg)", lineHeight: 1.8 }}>
-                  {practice.questions.map((question, idx) => (
-                    <li key={idx} className="orbit-body-sm" style={{ marginBottom: "var(--orbit-space-md)" }}>
-                      {question}
-                    </li>
-                  ))}
-                </ol>
-              </div>
+              <MotionReveal delayMs={MOTION.staggerMs * 2}>
+                <div style={{ marginBottom: "var(--orbit-space-xl)" }}>
+                  <h3 className="orbit-body" style={{ fontWeight: 600, marginBottom: "var(--orbit-space-md)" }}>
+                    {pc.practiceDetailReflectionQuestionsTitle}
+                  </h3>
+                  <ol style={{ paddingLeft: "var(--orbit-space-lg)", lineHeight: 1.8 }}>
+                    {practice.questions.map((question, idx) => (
+                      <li key={idx} className="orbit-body-sm" style={{ marginBottom: "var(--orbit-space-md)" }}>
+                        <MotionSettle delayMs={idx * MOTION.staggerMs}>{question}</MotionSettle>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              </MotionReveal>
             )}
 
             {practice.steps && practice.steps.length > 0 && (
-              <div style={{ marginBottom: "var(--orbit-space-xl)" }}>
-                <h3 className={s.practiceSessionSectionTitle}>
-                  {tpl(pc.practiceDetailSequenceStepsTitle, { count: practice.total_steps || practice.steps.length })}
-                </h3>
-                <div className={s.practiceSessionStepList}>
-                  {practice.steps.map((step) => (
-                    <div key={step.step_number} className={s.practiceSessionStepCard}>
-                      <div className={s.practiceSessionStepHead}>
-                        <div className={s.practiceSessionStepBadge}>
-                          {step.step_number}
-                        </div>
-                        <div style={{ flex: 1 }}>
-                          <h4 className={s.practiceSessionStepTitle}>
-                            {step.title}
-                          </h4>
-                          <p className={s.practiceSessionStepBody}>
-                            {step.description}
-                          </p>
-                          {step.duration_minutes && (
-                            <p className="orbit-body-xs orbit-text-muted" style={{ marginBottom: "var(--orbit-space-sm)" }}>
-                              {tpl(pc.practiceDetailStepDurationValue, { n: step.duration_minutes })}
-                            </p>
-                          )}
-                          {step.instructions && step.instructions.length > 0 && (
-                            <ol style={{ paddingLeft: "var(--orbit-space-md)", marginTop: "var(--orbit-space-sm)", lineHeight: 1.7 }}>
-                              {step.instructions.map((instruction, idx) => (
-                                <li key={idx} className="orbit-body-sm" style={{ marginBottom: "4px" }}>
-                                  {instruction}
-                                </li>
-                              ))}
-                            </ol>
-                          )}
-                          {step.questions && step.questions.length > 0 && (
-                            <div style={{ marginTop: "var(--orbit-space-sm)" }}>
-                              <p className="orbit-body-xs orbit-text-muted" style={{ marginBottom: "4px", fontWeight: 600 }}>
-                                {pc.practiceDetailStepQuestionsLabel}
-                              </p>
-                              <ul style={{ paddingLeft: "var(--orbit-space-md)", lineHeight: 1.7 }}>
-                                {step.questions.map((question, idx) => (
-                                  <li key={idx} className="orbit-body-sm" style={{ marginBottom: "4px" }}>
-                                    {question}
-                                  </li>
-                                ))}
-                              </ul>
+              <MotionReveal delayMs={MOTION.staggerMs}>
+                <div style={{ marginBottom: "var(--orbit-space-xl)" }}>
+                  <h3 className={s.practiceSessionSectionTitle}>
+                    {tpl(pc.practiceDetailSequenceStepsTitle, { count: practice.total_steps || practice.steps.length })}
+                  </h3>
+                  <div className={s.practiceSessionStepList}>
+                    {practice.steps.map((step, index) => (
+                      <MotionSettle key={step.step_number} delayMs={index * MOTION.staggerMs}>
+                        <div className={s.practiceSessionStepCard}>
+                          <div className={s.practiceSessionStepHead}>
+                            <div className={s.practiceSessionStepBadge}>
+                              {step.step_number}
                             </div>
-                          )}
+                            <div style={{ flex: 1 }}>
+                              <h4 className={s.practiceSessionStepTitle}>
+                                {step.title}
+                              </h4>
+                              <p className={s.practiceSessionStepBody}>
+                                {step.description}
+                              </p>
+                              {step.duration_minutes && (
+                                <p className="orbit-body-xs orbit-text-muted" style={{ marginBottom: "var(--orbit-space-sm)" }}>
+                                  {tpl(pc.practiceDetailStepDurationValue, { n: step.duration_minutes })}
+                                </p>
+                              )}
+                              {step.instructions && step.instructions.length > 0 && (
+                                <ol style={{ paddingLeft: "var(--orbit-space-md)", marginTop: "var(--orbit-space-sm)", lineHeight: 1.7 }}>
+                                  {step.instructions.map((instruction, idx) => (
+                                    <li key={idx} className="orbit-body-sm" style={{ marginBottom: "4px" }}>
+                                      {instruction}
+                                    </li>
+                                  ))}
+                                </ol>
+                              )}
+                              {step.questions && step.questions.length > 0 && (
+                                <div style={{ marginTop: "var(--orbit-space-sm)" }}>
+                                  <p className="orbit-body-xs orbit-text-muted" style={{ marginBottom: "4px", fontWeight: 600 }}>
+                                    {pc.practiceDetailStepQuestionsLabel}
+                                  </p>
+                                  <ul style={{ paddingLeft: "var(--orbit-space-md)", lineHeight: 1.7 }}>
+                                    {step.questions.map((question, idx) => (
+                                      <li key={idx} className="orbit-body-sm" style={{ marginBottom: "4px" }}>
+                                        {question}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  ))}
+                      </MotionSettle>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </MotionReveal>
             )}
 
             {practice.instructions && practice.instructions.length > 0 && !practice.steps && (
-              <div style={{ marginBottom: "var(--orbit-space-xl)" }}>
-                <h3 className="orbit-body" style={{ fontWeight: 600, marginBottom: "var(--orbit-space-md)" }}>
-                  {pc.practiceDetailHowToTitle}
-                </h3>
-                <ol style={{ paddingLeft: "var(--orbit-space-lg)", lineHeight: 1.8 }}>
-                  {practice.instructions.map((instruction, idx) => (
-                    <li key={idx} className="orbit-body-sm" style={{ marginBottom: "var(--orbit-space-sm)" }}>
-                      {instruction}
-                    </li>
-                  ))}
-                </ol>
-              </div>
+              <MotionReveal delayMs={MOTION.staggerMs}>
+                <div style={{ marginBottom: "var(--orbit-space-xl)" }}>
+                  <h3 className="orbit-body" style={{ fontWeight: 600, marginBottom: "var(--orbit-space-md)" }}>
+                    {pc.practiceDetailHowToTitle}
+                  </h3>
+                  <ol style={{ paddingLeft: "var(--orbit-space-lg)", lineHeight: 1.8 }}>
+                    {practice.instructions.map((instruction, idx) => (
+                      <li key={idx} className="orbit-body-sm" style={{ marginBottom: "var(--orbit-space-sm)" }}>
+                        <MotionSettle delayMs={idx * MOTION.staggerMs}>{instruction}</MotionSettle>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              </MotionReveal>
             )}
 
             {practice.tags && practice.tags.length > 0 && (
               <div className={s.practiceSessionTagRow}>
-                  {practice.tags.map((tag) => (
-                    <span key={tag} className={s.practiceSessionTag}>
-                      {tag}
-                    </span>
-                  ))}
+                {practice.tags.map((tag, index) => (
+                  <MotionSettle key={tag} delayMs={index * MOTION.staggerMs}>
+                    <span className={s.practiceSessionTag}>{tag}</span>
+                  </MotionSettle>
+                ))}
               </div>
             )}
 

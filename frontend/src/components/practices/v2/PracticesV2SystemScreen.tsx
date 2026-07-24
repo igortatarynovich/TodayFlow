@@ -3,6 +3,8 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { IconSparkles } from "@/design-system/icons/DsIcons";
+import { MotionSettle } from "@/design-system/motion";
+import { MOTION } from "@/design-system/motion/tokens";
 import p from "@/design-system/primitives/dsPrimitives.module.css";
 import v2 from "@/design-system/layouts/productV2Surface.module.css";
 import {
@@ -257,23 +259,24 @@ export function PracticesV2SystemScreen({
               </div>
             ) : programCards.length > 0 ? (
               <div className={styles.programGrid}>
-                {programCards.map((card) => (
-                  <Link
-                    key={card.id}
-                    href={card.href}
-                    className={`${styles.programCard} ${card.featured ? styles.programCardFeatured : ""}`.trim()}
-                  >
-                    <div className={styles.programCardOrb} aria-hidden />
-                    <div className={styles.programCardIcon} aria-hidden>
-                      {card.iconGlyph}
-                    </div>
-                    <h3 className={styles.programCardTitle}>{card.title}</h3>
-                    <p className={styles.programCardBody}>{card.description}</p>
-                    <div className={styles.programCardMeta}>
-                      {card.tagLabel ? <span className={styles.programTag}>{card.tagLabel}</span> : <span />}
-                      <span className={styles.programDuration}>{card.durationLabel}</span>
-                    </div>
-                  </Link>
+                {programCards.map((card, index) => (
+                  <MotionSettle key={card.id} delayMs={index * MOTION.staggerMs}>
+                    <Link
+                      href={card.href}
+                      className={`${styles.programCard} ${card.featured ? styles.programCardFeatured : ""}`.trim()}
+                    >
+                      <div className={styles.programCardOrb} aria-hidden />
+                      <div className={styles.programCardIcon} aria-hidden>
+                        {card.iconGlyph}
+                      </div>
+                      <h3 className={styles.programCardTitle}>{card.title}</h3>
+                      <p className={styles.programCardBody}>{card.description}</p>
+                      <div className={styles.programCardMeta}>
+                        {card.tagLabel ? <span className={styles.programTag}>{card.tagLabel}</span> : <span />}
+                        <span className={styles.programDuration}>{card.durationLabel}</span>
+                      </div>
+                    </Link>
+                  </MotionSettle>
                 ))}
               </div>
             ) : (
@@ -290,20 +293,22 @@ export function PracticesV2SystemScreen({
                 </div>
 
                 <div className={styles.quickList}>
-                  {quickItems.map((item) => (
-                    <div key={item.id} className={styles.quickRow}>
-                      <div className={styles.quickIcon} aria-hidden>
-                        {item.iconGlyph}
+                  {quickItems.map((item, index) => (
+                    <MotionSettle key={item.id} delayMs={index * MOTION.staggerMs}>
+                      <div className={styles.quickRow}>
+                        <div className={styles.quickIcon} aria-hidden>
+                          {item.iconGlyph}
+                        </div>
+                        <div className={styles.quickText}>
+                          <p className={styles.quickTitle}>{item.title}</p>
+                          <p className={styles.quickSubtitle}>{item.subtitle}</p>
+                        </div>
+                        <span className={styles.quickDuration}>{item.durationLabel}</span>
+                        <Link href={item.href} className={styles.quickOpenBtn}>
+                          {copy.openCta}
+                        </Link>
                       </div>
-                      <div className={styles.quickText}>
-                        <p className={styles.quickTitle}>{item.title}</p>
-                        <p className={styles.quickSubtitle}>{item.subtitle}</p>
-                      </div>
-                      <span className={styles.quickDuration}>{item.durationLabel}</span>
-                      <Link href={item.href} className={styles.quickOpenBtn}>
-                        {copy.openCta}
-                      </Link>
-                    </div>
+                    </MotionSettle>
                   ))}
                 </div>
               </>
@@ -336,13 +341,14 @@ export function PracticesV2SystemScreen({
                     </div>
                   </div>
                   <div className={styles.weekdayRow}>
-                    {live.weekCells.map((cell) => (
-                      <span
-                        key={cell.dateISO}
-                        className={`${styles.weekdayPill} ${cell.closed ? styles.weekdayPillActive : ""}`.trim()}
-                      >
-                        {cell.weekdayLabel}
-                      </span>
+                    {live.weekCells.map((cell, index) => (
+                      <MotionSettle key={cell.dateISO} delayMs={index * MOTION.staggerMs}>
+                        <span
+                          className={`${styles.weekdayPill} ${cell.closed ? styles.weekdayPillActive : ""}`.trim()}
+                        >
+                          {cell.weekdayLabel}
+                        </span>
+                      </MotionSettle>
                     ))}
                   </div>
                 </div>
@@ -354,46 +360,44 @@ export function PracticesV2SystemScreen({
                 {progressSummary ? (
                   <>
                     <dl className={styles.progressStats}>
-                      <div className={styles.progressStat}>
-                        <dt>{copy.totalCompletedLabel}</dt>
-                        <dd>{progressSummary.totalCompleted}</dd>
-                      </div>
-                      <div className={styles.progressStat}>
-                        <dt>{copy.personalizedCompletedLabel}</dt>
-                        <dd>{progressSummary.personalizedCompleted}</dd>
-                      </div>
-                      <div className={styles.progressStat}>
-                        <dt>{copy.longestStreakLabel}</dt>
-                        <dd>{progressSummary.longestStreakDays}</dd>
-                      </div>
-                      <div className={styles.progressStat}>
-                        <dt>{copy.weeksActiveLabel}</dt>
-                        <dd>{progressSummary.weeksActive}</dd>
-                      </div>
-                      {limitsRemaining != null ? (
-                        <div className={styles.progressStat}>
-                          <dt>{copy.limitsRemainingLabel}</dt>
-                          <dd>{limitsRemaining}</dd>
-                        </div>
-                      ) : null}
+                      {(
+                        [
+                          { label: copy.totalCompletedLabel, value: progressSummary.totalCompleted },
+                          { label: copy.personalizedCompletedLabel, value: progressSummary.personalizedCompleted },
+                          { label: copy.longestStreakLabel, value: progressSummary.longestStreakDays },
+                          { label: copy.weeksActiveLabel, value: progressSummary.weeksActive },
+                          ...(limitsRemaining != null
+                            ? [{ label: copy.limitsRemainingLabel, value: limitsRemaining }]
+                            : []),
+                        ] as Array<{ label: string; value: number }>
+                      ).map((stat, index) => (
+                        <MotionSettle key={stat.label} delayMs={index * MOTION.staggerMs}>
+                          <div className={styles.progressStat}>
+                            <dt>{stat.label}</dt>
+                            <dd>{stat.value}</dd>
+                          </div>
+                        </MotionSettle>
+                      ))}
                     </dl>
 
                     {progressSummary.byCategory.length > 0 ? (
                       <div className={styles.categoryBreakdown}>
                         <h3 className={styles.categoryBreakdownTitle}>{copy.byCategoryTitle}</h3>
                         <ul className={styles.categoryBreakdownList}>
-                          {progressSummary.byCategory.map((row) => (
+                          {progressSummary.byCategory.map((row, index) => (
                             <li key={row.categoryId} className={styles.categoryBreakdownRow}>
-                              <div className={styles.categoryBreakdownMeta}>
-                                <span className={styles.categoryBreakdownLabel}>{row.label}</span>
-                                <span className={styles.categoryBreakdownCount}>{row.totalCompleted}</span>
-                              </div>
-                              <div className={styles.categoryBreakdownTrack}>
-                                <div
-                                  className={styles.categoryBreakdownFill}
-                                  style={{ width: `${row.sharePercent}%` }}
-                                />
-                              </div>
+                              <MotionSettle delayMs={index * MOTION.staggerMs}>
+                                <div className={styles.categoryBreakdownMeta}>
+                                  <span className={styles.categoryBreakdownLabel}>{row.label}</span>
+                                  <span className={styles.categoryBreakdownCount}>{row.totalCompleted}</span>
+                                </div>
+                                <div className={styles.categoryBreakdownTrack}>
+                                  <div
+                                    className={styles.categoryBreakdownFill}
+                                    style={{ width: `${row.sharePercent}%` }}
+                                  />
+                                </div>
+                              </MotionSettle>
                             </li>
                           ))}
                         </ul>
