@@ -550,13 +550,13 @@ Day Story            →  интерпретация Foundation → экран T
 
 | capability_id | purpose | required_inputs | version | in_foundation | in_personal | in_today |
 |---------------|---------|-----------------|---------|---------------|-------------|----------|
-| `gan_zhi_day` | Stem–branch day pillar | date + TZ | planned | yes | no | yes |
-| `five_elements_day` | Element + Yin/Yang of pillar | gan_zhi | planned | yes | no | yes |
-| `jianchu_officer` | 12 day officers | date cycle | planned | yes | no | yes |
-| `almanac_actions` | Auspicious / inauspicious lists | day factors | planned | soft | elective | yes |
+| `gan_zhi_day` | Stem–branch day pillar | date + TZ | v1 | yes | no | yes |
+| `five_elements_day` | Element + Yin/Yang of pillar | gan_zhi | v1 | yes | no | yes |
+| `jianchu_officer` | 12 day officers | date cycle | v1 | yes | no | yes |
+| `almanac_actions` | Auspicious / inauspicious lists | day factors | v1 soft via Jianchu | soft | elective | yes |
 | `clashes` | Animal clash etc. | birth animal + day | planned | no | yes | yes |
 | `lucky_hours_directions` | Hours / directions / Tai Sui | date + geo rules | planned | soft | yes | yes |
-| `solar_terms` | 24 jieqi | sun longitude | planned | yes | no | yes |
+| `solar_terms` | 24 jieqi | sun longitude | v1 | yes | no | yes |
 | `bazi` | Four pillars vs day pillar | birth datetime+place | planned | no | yes | yes |
 
 ---

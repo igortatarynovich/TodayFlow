@@ -142,6 +142,30 @@ export type TodayDayFoundationV1 = {
     muhurta?: Record<string, unknown> | null;
     ayanamsha?: { id?: string; degrees?: number } | null;
   } | null;
+  chinese?: {
+    summary_ru?: string;
+    gan_zhi_day?: {
+      label_zh?: string;
+      label_pinyin?: string;
+      cycle_index?: number;
+    } | null;
+    five_elements_day?: {
+      stem_element_ru?: string;
+      stem_polarity_ru?: string;
+      branch_element_ru?: string;
+    } | null;
+    jianchu_officer?: {
+      id?: string;
+      name_ru?: string;
+      suitable_ru?: string[];
+      avoid_ru?: string[];
+    } | null;
+    almanac_actions?: {
+      suitable_ru?: string[];
+      avoid_ru?: string[];
+    } | null;
+    solar_term?: { id?: string; name_ru?: string; zh?: string } | null;
+  } | null;
   essence?: {
     theme?: string;
     story_ru?: string;
@@ -155,6 +179,7 @@ export type TodayDayFoundationV1 = {
     has_seasonal?: boolean;
     has_planetary_hours?: boolean;
     has_panchanga?: boolean;
+    has_chinese?: boolean;
     has_essence?: boolean;
     ok_family_ids?: string[];
   };

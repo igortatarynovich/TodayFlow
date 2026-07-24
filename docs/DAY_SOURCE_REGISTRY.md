@@ -57,8 +57,9 @@ DaySourceInputs
 | `seasonal_calendar` | foundation | `target_date` + `lat/lon` | yes when geo |
 | `planetary_hours` | foundation | `target_date` + `lat/lon` (+ TZ preferred) | yes when geo |
 | `vedic_panchanga` | foundation | `target_date` (+ geo for muhurta) | yes |
+| `chinese_metaphysics` | foundation | `target_date` (+ TZ preferred) | yes |
 
-Планируемые (канон есть, адаптер later): `chinese_metaphysics`, `human_design`, `personal_astrology`, …
+Планируемые (канон есть, адаптер later): `human_design`, `personal_astrology`, …
 
 ### Pipeline wiring
 

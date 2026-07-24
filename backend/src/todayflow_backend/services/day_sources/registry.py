@@ -4,6 +4,9 @@ from __future__ import annotations
 
 from typing import Any, Iterable
 
+from todayflow_backend.services.day_sources.adapters.chinese_metaphysics import (
+    run_chinese_metaphysics,
+)
 from todayflow_backend.services.day_sources.adapters.moon import run_moon
 from todayflow_backend.services.day_sources.adapters.numerology import run_numerology
 from todayflow_backend.services.day_sources.adapters.planetary_hours import run_planetary_hours
@@ -171,6 +174,17 @@ def default_registry() -> DaySourceRegistry:
             in_today=True,
             required_input_keys=("target_date",),
             run=run_vedic_panchanga,
+        )
+    )
+    reg.register(
+        SourceFamilySpec(
+            family_id="chinese_metaphysics",
+            layer="foundation",
+            in_foundation=True,
+            in_personal=False,
+            in_today=True,
+            required_input_keys=("target_date",),
+            run=run_chinese_metaphysics,
         )
     )
     return reg

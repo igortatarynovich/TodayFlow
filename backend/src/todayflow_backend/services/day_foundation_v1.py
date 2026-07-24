@@ -202,6 +202,12 @@ def _panchanga_summary(payload: dict[str, Any] | None) -> str:
     return _clip(str(payload.get("summary_ru") or ""), 280)
 
 
+def _chinese_summary(payload: dict[str, Any] | None) -> str:
+    if not isinstance(payload, dict):
+        return ""
+    return _clip(str(payload.get("summary_ru") or ""), 280)
+
+
 def _essence_from_layers(
     *,
     astro_summary: str,
@@ -289,6 +295,7 @@ def build_day_foundation_from_sources(
     seasonal = _ok_payload(bundle, "seasonal_calendar")
     planetary_hours = _ok_payload(bundle, "planetary_hours")
     panchanga = _ok_payload(bundle, "vedic_panchanga")
+    chinese = _ok_payload(bundle, "chinese_metaphysics")
 
     astro_beats: list[dict[str, Any]] = []
     lunar_beats: list[dict[str, Any]] = []
@@ -381,6 +388,7 @@ def build_day_foundation_from_sources(
     seasonal_summary = _seasonal_summary(seasonal)
     planetary_hours_summary = _planetary_hours_summary(planetary_hours)
     panchanga_summary = _panchanga_summary(panchanga)
+    chinese_summary = _chinese_summary(chinese)
     essence = _essence_from_layers(
         astro_summary=astro_summary,
         lunar_summary=lunar_summary,
@@ -462,6 +470,16 @@ def build_day_foundation_from_sources(
         }
         if panchanga
         else None,
+        "chinese": {
+            "gan_zhi_day": chinese.get("gan_zhi_day") if chinese else None,
+            "five_elements_day": chinese.get("five_elements_day") if chinese else None,
+            "jianchu_officer": chinese.get("jianchu_officer") if chinese else None,
+            "almanac_actions": chinese.get("almanac_actions") if chinese else None,
+            "solar_term": chinese.get("solar_term") if chinese else None,
+            "summary_ru": chinese_summary,
+        }
+        if chinese
+        else None,
         "essence": essence,
         "source_inputs": {
             "has_astro": bool(astro_beats),
@@ -471,6 +489,7 @@ def build_day_foundation_from_sources(
             "has_seasonal": bool(seasonal),
             "has_planetary_hours": bool(planetary_hours),
             "has_panchanga": bool(panchanga),
+            "has_chinese": bool(chinese),
             "has_essence": bool(essence.get("story_ru")),
             "ok_family_ids": ok_ids,
         },
@@ -536,6 +555,7 @@ def foundation_to_interpretation_claims(foundation: dict[str, Any]) -> list[dict
         else {}
     )
     panchanga = foundation.get("panchanga") if isinstance(foundation.get("panchanga"), dict) else {}
+    chinese = foundation.get("chinese") if isinstance(foundation.get("chinese"), dict) else {}
 
     for b in (astro.get("beats") or [])[:4]:
         if not isinstance(b, dict):
@@ -633,6 +653,19 @@ def foundation_to_interpretation_claims(foundation: dict[str, Any]) -> list[dict
                 "evidence_ids": ["source.vedic_panchanga"],
                 "domain": None,
                 "layer": "panchanga",
+            }
+        )
+
+    chinese_line = _clip(str(chinese.get("summary_ru") or ""), 280)
+    if chinese_line:
+        claims.append(
+            {
+                "id": "claim.foundation.chinese",
+                "kind": "support",
+                "text": chinese_line,
+                "evidence_ids": ["source.chinese_metaphysics"],
+                "domain": None,
+                "layer": "chinese",
             }
         )
 

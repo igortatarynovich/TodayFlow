@@ -201,6 +201,7 @@ def build_day_story_interpretation_v1(
                 or (day_foundation.get("source_inputs") or {}).get("has_seasonal")
                 or (day_foundation.get("source_inputs") or {}).get("has_planetary_hours")
                 or (day_foundation.get("source_inputs") or {}).get("has_panchanga")
+                or (day_foundation.get("source_inputs") or {}).get("has_chinese")
             )
         ),
         "locale": (locale or "ru")[:8],
