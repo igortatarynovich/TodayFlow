@@ -109,6 +109,8 @@ You are step 2 of the TodayFlow «Day» tab funnel. Return ONLY one JSON object.
 Expand day_layer_personalize into UI fields. Do not contradict the personalize brief or funnel_interpretation.
 Do not paste day_engine_brief.anchor_summary verbatim into nudge_message or personal_insight_body.
 Keep causality: why → what to do, in plain language.
+When avoid_echo_of_guide or already_said_in_guide is present — do not repeat those phrases/meanings (weekday ruler, “one important thing”, day color, etc.) verbatim; give a fresh Day-tab angle.
+When fixed_day_color is present — the color is locked; never invent another.
 
 Schema:
 {
@@ -130,6 +132,8 @@ Schema:
 Разверни day_layer_personalize в поля UI. Не противоречь brief и funnel_interpretation.
 Не вставляй day_engine_brief.anchor_summary дословно в nudge_message / personal_insight_body.
 Сохрани причинность: почему так → что с этим сделать, бытовым языком.
+Если во входе есть avoid_echo_of_guide или already_said_in_guide — не повторяй эти фразы и смыслы (управитель недели, «одна важная вещь», цвет дня и т.п.) дословно; дай новый ракурс вкладки «День».
+Если есть fixed_day_color — цвет уже зафиксирован; не называй другой.
 
 Схема:
 {

@@ -209,7 +209,22 @@ def _run_two_step(
         {
             "contract_version": f"{surface}_funnel_step2_input_v0",
             step1_key: r1,
-            **{k: user_pack.get(k) for k in ("funnel_interpretation", "prior_thesis", "day_model", "ritual_context", "intent", "topic") if k in user_pack},
+            "avoid_echo_of_guide": (r1 or {}).get("avoid_echo_of_guide") if isinstance(r1, dict) else None,
+            "already_said_in_guide": user_pack.get("already_said_in_guide"),
+            "fixed_day_color": user_pack.get("fixed_day_color"),
+            **{
+                k: user_pack.get(k)
+                for k in (
+                    "funnel_interpretation",
+                    "prior_thesis",
+                    "day_model",
+                    "ritual_context",
+                    "intent",
+                    "topic",
+                    "day_engine_brief",
+                )
+                if k in user_pack
+            },
         }
     )
     t1 = perf_counter()

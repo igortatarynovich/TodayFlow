@@ -27,6 +27,7 @@ import {
   dayStoryWhyLines,
   hasAuthoritativeDayStory,
 } from "@/lib/todayContractMapper";
+import { buildTodayDayMap } from "@/lib/todayDayMap";
 import { parseDayLayerPayload } from "@/components/today/todayRitualSignals";
 import { buildEveningPrompt } from "@/lib/todayUnifiedSynthesis";
 import type { TodayContractDomainId } from "@/lib/todayContract";
@@ -76,6 +77,8 @@ export type TodayDayStoryViewModel = TodayCompositionViewModel & {
 };
 
 function buildWhyStoryFromContract(contract: TodayContractV1): string[] {
+  const dayMap = buildTodayDayMap({ contract });
+  if (dayMap?.whyLayers.length) return dayMap.whyLayers;
   return dayStoryWhyLines(contract);
 }
 
@@ -90,6 +93,35 @@ function buildGlanceCards(
   contract: TodayContractV1,
   sphereFocus: TodaySphereFocus,
 ): TodayDayStoryViewModel["glance"] {
+  const dayMap = buildTodayDayMap({ contract });
+  if (dayMap) {
+    const attentionParts = [dayMap.whereConflict, dayMap.whereYouBreak].filter(
+      (x): x is string => Boolean(x && x.trim()),
+    );
+    return {
+      supported: dayMap.whatWorks
+        ? [
+            {
+              id: "supported",
+              sphere: "Поддержано",
+              comment: firstSentence(dayMap.whatWorks) || dayMap.whatWorks,
+              tone: "strong" as const,
+            },
+          ]
+        : [],
+      helpful: attentionParts.length
+        ? [
+            {
+              id: "helpful",
+              sphere: "Требует внимания",
+              comment: attentionParts.join(" "),
+              tone: "helpful" as const,
+            },
+          ]
+        : [],
+    };
+  }
+
   const peak = sphereFocus.cards.find((card) => card.role === "peak");
   const caution = sphereFocus.cards.find((card) => card.role === "caution");
 
@@ -251,13 +283,15 @@ export function buildTodayDayStoryViewModel(input: {
   });
 
   const sphereFocus = buildTodaySphereFocus(input.contract);
+  const dayMap = buildTodayDayMap({ contract: input.contract });
   const glance = buildGlanceCards(input.contract, sphereFocus);
   const apiColor = input.morningRitualData?.celestial_events?.daily_symbols?.color;
   const colorGuide = resolveTodayDayColorGuide({
     name: input.colorLine ?? apiColor?.name,
     api: apiColor,
   });
-  const pulseLabel = "Энергия дня";
+  const pulseLabel = "Пульс дня";
+  const pulseFromMap = dayMap?.whatHappens?.trim() || null;
 
   const tarotImpact =
     pickedCardName && ritualPhase !== "tarot_pending" && pickedCardId != null
@@ -308,7 +342,7 @@ export function buildTodayDayStoryViewModel(input: {
     personalizedReady,
     greeting,
     pulseLabel,
-    pulse: spine.pulse,
+    pulse: pulseFromMap || spine.pulse,
     glance,
     sphereFocus,
     colorGuide,

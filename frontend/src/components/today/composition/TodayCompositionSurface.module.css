@@ -758,6 +758,23 @@
   padding: 0;
 }
 
+.whyStoryDetails {
+  margin: 0;
+}
+
+.whyStoryDetails > summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.whyStoryDetails > summary::-webkit-details-marker {
+  display: none;
+}
+
+.whyStoryDetails[open] .whyStoryBody {
+  margin-top: 0.65rem;
+}
+
 .whyStoryBody {
   padding: 0;
   border: none;

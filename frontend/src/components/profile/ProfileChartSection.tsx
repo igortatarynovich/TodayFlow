@@ -24,6 +24,10 @@ export type ProfileChartSectionProps = {
    * `expandable` — legacy nested accordion.
    */
   layout?: "inline" | "expandable";
+  /** Step-5 funnel: connected natal reading under signature cards. */
+  chartReading?: string | null;
+  methodologyNote?: string | null;
+  unavailableNote?: string | null;
 };
 
 export function ProfileChartSection({
@@ -35,10 +39,21 @@ export function ProfileChartSection({
   fullChartOpen = false,
   signatureDefaultOpen = true,
   layout = "expandable",
+  chartReading = null,
+  methodologyNote = null,
+  unavailableNote = null,
 }: ProfileChartSectionProps) {
   const quickSignature = buildQuickSignature(natalPreview);
   const numerologyCards = buildNumerologySignatureCards(coreNumerology);
   const aspectLines = natalPreview?.aspects?.callouts ?? [];
+  const readingBlock =
+    chartReading || methodologyNote || unavailableNote ? (
+      <div className={styles.chartReading} data-testid="profile-chart-reading">
+        {methodologyNote ? <p className={styles.chartReadingMethod}>{methodologyNote}</p> : null}
+        {chartReading ? <p className={styles.chartReadingBody}>{chartReading}</p> : null}
+        {unavailableNote ? <p className={styles.chartReadingUnavailable}>{unavailableNote}</p> : null}
+      </div>
+    ) : null;
 
   if (layout === "inline") {
     return (
@@ -79,6 +94,7 @@ export function ProfileChartSection({
                 ))}
               </div>
             ) : null}
+            {readingBlock}
             {numerologyCards.length ? (
               <div
                 className={styles.signatureGrid}
@@ -224,6 +240,7 @@ export function ProfileChartSection({
                 ))}
               </div>
             ) : null}
+            {readingBlock}
             {numerologyCards.length ? (
               <div className={styles.signatureGrid} style={{ marginTop: quickSignature.length ? "0.65rem" : 0 }}>
                 {numerologyCards.map((item) => (

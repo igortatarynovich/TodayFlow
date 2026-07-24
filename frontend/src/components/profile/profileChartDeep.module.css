@@ -9,6 +9,33 @@
   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
 }
 
+.chartReading {
+  margin-top: 0.35rem;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.chartReadingMethod {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: rgba(95, 73, 48, 0.78);
+}
+
+.chartReadingBody {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: #2d241c;
+}
+
+.chartReadingUnavailable {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: rgba(95, 73, 48, 0.72);
+}
+
 .signatureCard {
   padding: 0.85rem 0.95rem;
   border-radius: 16px;

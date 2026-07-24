@@ -132,6 +132,9 @@ export function ProfileWebQuickMap({
               onReloadPreview={deep.onReloadPreview}
               lifeMapSections={deep.lifeMapSections}
               fullChartOpen={deepExpanded}
+              chartReading={deep.chartReading}
+              methodologyNote={deep.methodologyNote}
+              unavailableNote={deep.unavailableNote}
             />
           </ProfilePortalDeepSection>
         </details>

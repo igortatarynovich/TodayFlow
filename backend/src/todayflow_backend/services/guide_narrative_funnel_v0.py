@@ -108,6 +108,8 @@ _SYS_INTERP_RU = """Ты — шаг 1 воронки экрана «Главно
 - Обязательна причинность: «что усиливает день» vs «что в тебе/ресурсе даёт натяжение».
 - why_layers: ровно 3 короткие строки — каждая явно опирается на разные входы (луна/стержень; карта+число; настроение или профиль).
 - avoid_hints: 3 строки — запреты с глаголами (чего не делать сегодня), приземлённо.
+- Если во входе есть fixed_day_color — цвет дня уже определён детерминированно (name + benefit). Ссылайся на него, если уместно; никогда не называй другой цвет.
+- Из всех входных фактов дня (аспекты, фаза Луны, лунный день, управитель недели, цвет дня) выбери РОВНО 1–2 самых значимых для этого дня. Остальные — не упоминай вообще, даже вскользь. Никогда не повторяй одно и то же предложение дважды в пределах ответа. Причинность одна: факт → что это значит → что делать — не список фактов подряд.
 
 Ответ строго по схеме:
 {
@@ -135,6 +137,8 @@ Rules:
 - Include tension: what the day amplifies vs what bandwidth/patterns constrain.
 - why_layers: exactly 3 short strings, each anchored in different inputs (moon/spine; card+number; mood or profile).
 - avoid_hints: 3 lines — clear «do not» actions with verbs.
+- When fixed_day_color is present — the day color is already determined (name + benefit). Reference it if useful; never invent a different color.
+- From all day facts in the input (aspects, Moon phase, lunar day, weekday ruler, day color) pick EXACTLY 1–2 most significant for this day. Do not mention the rest at all, even in passing. Never repeat the same sentence twice within the response. One causal thread: fact → what it means → what to do — not a list of facts.
 
 Schema:
 {
@@ -153,7 +157,7 @@ _SYS_CORE_RU = """Ты — шаг 3 воронки «Главное» TodayFlow.
 
 Задача: развернуть funnel_interpretation в пользовательское **ядро экрана** — headline, subline, core_message, do/avoid, сигналы ресурса и риска.
 
-На входе: funnel_interpretation (шаг 1), guide_decision (серверные якоря day_model — не противоречь оси дня), day_model, day_engine_brief, ritual_context.
+На входе: funnel_interpretation (шаг 1), guide_decision (серверные якоря day_model — не противоречь оси дня), day_model, day_engine_brief, ritual_context, fixed_day_color (если есть).
 
 Правила:
 - Сохрани причинность interpretation: what_happens → where_conflict → where_you_break → what_works → one_concrete_move.
@@ -163,6 +167,8 @@ _SYS_CORE_RU = """Ты — шаг 3 воронки «Главное» TodayFlow.
 - do_items и avoid_items — ровно по 3 строки с глаголами; avoid согласуй с avoid_hints из interpretation.
 - energy_line, focus_line, risk_line, risk_detail — коротко, бытовым языком, согласованы с day_model.risk/strategy если есть.
 - Не возвращай action_options, sphere_triad, why_astrological_layers — их делает шаг 2.
+- Если есть fixed_day_color — цвет дня уже зафиксирован (name + benefit). Ссылайся на него при уместности; никогда не называй другой цвет.
+- Из фактов дня в interpretation и day_model удержи РОВНО 1–2 ключевых нити; не перечисляй аспекты/луну/управителя подряд. Не повторяй одно предложение дважды.
 
 Схема:
 {
@@ -183,7 +189,7 @@ _SYS_CORE_EN = """You are step 3 of the TodayFlow «Main» funnel. Return ONLY o
 
 Task: expand funnel_interpretation into the screen **core** — headline, subline, core_message, do/avoid, energy/focus/risk lines.
 
-Inputs: funnel_interpretation (step 1), guide_decision (server day_model anchors — do not contradict the day's axis), day_model, day_engine_brief, ritual_context.
+Inputs: funnel_interpretation (step 1), guide_decision (server day_model anchors — do not contradict the day's axis), day_model, day_engine_brief, ritual_context, fixed_day_color when present.
 
 Rules:
 - Keep interpretation causality: what_happens → conflict → break pattern → what_works → one_concrete_move.
@@ -193,6 +199,8 @@ Rules:
 - do_items and avoid_items: exactly 3 strings each with verbs; avoid aligns with interpretation.avoid_hints.
 - energy_line, focus_line, risk_line, risk_detail: short, grounded; align with day_model risk/strategy when present.
 - Do NOT return action_options, sphere_triad, or why_astrological_layers — step 2 handles those.
+- When fixed_day_color is present — the day color is locked (name + benefit). Reference it if useful; never invent another color.
+- Keep EXACTLY 1–2 key day facts from interpretation/day_model; do not list aspects/Moon/weekday ruler in a row. Never repeat the same sentence twice.
 
 Schema:
 {
@@ -224,6 +232,7 @@ ritual_context, day_model, insight_depth_tier, user_core_excerpt, fusion.rhythm_
 - context_for_next_surfaces: 4–8 предложений — единый тезис для вкладок «сферы» и углубления.
 - header_disclaimer: как в текущем продукте — экран про личный день, не про совместимость.
 - insight_depth_tier: если free — pattern_insight и life_context_insight пустые строки ""; если pro — pattern_insight 1–2 предложения, life_context ""; если premium — оба блока по 1–2 предложения.
+- Не повторяй дословно фразы из funnel_core_text (headline, subline, core_message.body, do/avoid) и funnel_interpretation — развивай детали, не эхо.
 
 Запрещены slug'и API (general, neutral как метка оси) в пользовательском тексте.
 
@@ -335,6 +344,7 @@ def _build_step1_user_json(guide_user: dict[str, Any], *, foundation: dict[str, 
         ),
         "day_engine_brief": guide_user.get("day_engine_brief"),
         "guide_decision": guide_user.get("guide_decision"),
+        "fixed_day_color": guide_user.get("fixed_day_color"),
         "daily_foundation": _slim_foundation_for_funnel(
             guide_user.get("daily_foundation") if isinstance(guide_user.get("daily_foundation"), dict) else foundation
         ),
@@ -356,6 +366,7 @@ def _build_step3_user_json(
         "day_model": guide_user.get("day_model"),
         "day_engine_brief": guide_user.get("day_engine_brief"),
         "ritual_context": guide_user.get("ritual_context"),
+        "fixed_day_color": guide_user.get("fixed_day_color"),
         "intent": guide_user.get("intent"),
         "user_core_excerpt": _user_core_excerpt(
             guide_user.get("user_core") if isinstance(guide_user.get("user_core"), dict) else None

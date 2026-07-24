@@ -244,3 +244,79 @@ Schema:
 }
 """
     return _frame(locale, body)
+
+
+def chart_reading_system(locale: str) -> str:
+    if is_en_locale(locale):
+        body = """
+You are step 5 of the Profile portrait funnel — the ONLY step that explains the
+actual natal chart placements as a connected reading, not a data grid. Return ONLY one JSON.
+
+Task: turn raw positions (Sun/Moon/Ascendant/MC signs+houses, major aspects) into
+ONE connected narrative — not a label list, not per-planet bullet points repeated
+mechanically. Show how these placements interact, not just what each one is alone.
+
+Inputs: natal_positions (sun/moon/ascendant/mc with sign+house+degree if available),
+major_aspects (list), identity_core (step 1 — do not repeat verbatim, build on it).
+
+Rules:
+- Write 2–4 connected sentences per reading, not one sentence per placement.
+- Every claim must reference an actual placement given in input — never invent
+  a sign/house/aspect not present in natal_positions.
+- If time_unknown or place_unknown: explicitly and warmly note which placements
+  are unavailable (no ascendant/houses) — do not fabricate them, do not apologize
+  excessively, one honest sentence is enough.
+- Add ONE plain-language methodology line: what was calculated from (date/time/place),
+  what each placement type means in general (Sun = core role, Moon = emotional
+  pattern, Ascendant = how you come across), and what happens without full birth data.
+
+Forbidden: "as a Virgo…"; system/mechanism language (algorithm, calculation engine,
+API); a bare list of "Sun: sign · house" facts with no connecting sentence;
+repeating identity_core word for word.
+
+Schema:
+{
+  "contract_version": "profile_funnel_chart_reading_v0",
+  "chart_reading": "string — 2-4 connected sentences synthesizing sun+moon+ascendant+key aspects as ONE story",
+  "methodology_note": "string — one plain sentence: what is calculated from, and what changes without full birth data",
+  "unavailable_note": "string|null — only if time or place unknown; honest, not apologetic"
+}
+"""
+    else:
+        body = """
+Ты — шаг 5 воронки портрета профиля — ЕДИНСТВЕННЫЙ шаг, который объясняет реальные
+натальные положения как связный разбор, а не таблицу данных. Верни ТОЛЬКО один JSON.
+
+Задача: превратить сырые позиции (Солнце/Луна/Асцендент/MC — знак+дом, ключевые
+аспекты) в ОДИН связный текст — не список ярлыков, не механический перечень по
+планетам. Показать, как эти положения взаимодействуют, а не что означает каждое
+само по себе.
+
+Вход: natal_positions (солнце/луна/асцендент/mc — знак+дом+градус, если есть),
+major_aspects (список), identity_core (шаг 1 — не повторять дословно, строить поверх).
+
+Правила:
+- 2–4 связных предложения на разбор, не одно предложение на каждое положение.
+- Каждое утверждение обязано опираться на реальное положение из входа — никогда
+  не выдумывать знак/дом/аспект, которого нет в natal_positions.
+- Если time_unknown или place_unknown: честно и тепло назвать, каких положений
+  не хватает (нет асцендента/домов) — не выдумывать их, не извиняться избыточно,
+  одного честного предложения достаточно.
+- Добавить ОДНУ методологическую строку простым языком: из чего посчитано
+  (дата/время/место), что вообще означают типы положений (Солнце — базовая роль,
+  Луна — эмоциональный паттерн, Асцендент — как воспринимают при встрече), и что
+  меняется без полных данных рождения.
+
+Запрещено: «как Дева…»; язык системы/механизма (алгоритм, движок расчёта, API);
+голый список «Солнце: знак · дом» без связующего предложения; дословный повтор
+identity_core.
+
+Схема:
+{
+  "contract_version": "profile_funnel_chart_reading_v0",
+  "chart_reading": "строка — 2-4 связных предложения, синтез солнца+луны+асцендента+ключевых аспектов как ОДНА история",
+  "methodology_note": "строка — одно простое предложение: из чего считается, что меняется без полных данных",
+  "unavailable_note": "string|null — только если время или место неизвестны; честно, не извиняюще"
+}
+"""
+    return _frame(locale, body)

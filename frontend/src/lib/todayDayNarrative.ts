@@ -1,7 +1,7 @@
 /**
- * Assemble Today's day as continuous narrative chapters from existing fields only.
- * Order: essence (Суть дня) → astro → lunar → personal (soft L3) → force → symbols → supports.
- * Foundation layers preferred over mixed sky dump when day_foundation is present.
+ * Assemble Today's day narrative.
+ * Prefer Day Map slots (guide interpretation or day_story structured fields)
+ * over stacking astro/lunar/personal fact chapters.
  */
 
 import type { MorningRitualData } from "@/components/today/todayPageUtils";
@@ -9,6 +9,7 @@ import type { TodayContractV1, TodayDayFoundationV1 } from "@/lib/todayContract"
 import { isDomainLensPresent } from "@/lib/todayContract";
 import { dayStoryAvoidItems, dayStoryDoItems } from "@/lib/todayContractMapper";
 import type { TodayDayColorGuide } from "@/lib/todayDayColorGuide";
+import { buildTodayDayMap, type TodayDayMap } from "@/lib/todayDayMap";
 import type { TodaySkyCard } from "@/lib/todayDaySpine";
 import type { TodayDayStoryViewModel } from "@/lib/todayDayStoryModel";
 import {
@@ -54,6 +55,8 @@ export type TodayDayNarrative = {
   softWhy: string | null;
   chapters: TodayDayNarrativeChapter[];
   foundation: TodayDayFoundationV1 | null;
+  /** Canonical Day Map when resolved — UI should prefer this over chapter dumps. */
+  dayMap: TodayDayMap | null;
 };
 
 const DOMAIN_LABELS: Record<string, string> = {
@@ -267,9 +270,81 @@ export function collectDayPersonalLayer(
   if (baziBeat?.title) pushSignal("BaZi", baziBeat.title);
 
   return {
-    paragraphs: paras.slice(0, 4),
-    signals,
+    paragraphs: paras.slice(0, 2),
+    signals: signals.slice(0, 2),
   };
+}
+
+function buildDayMapChapters(
+  dayMap: TodayDayMap,
+  contract: TodayContractV1,
+  colorGuide: TodayDayColorGuide | null | undefined,
+  used: string[],
+): TodayDayNarrativeChapter[] {
+  const chapters: TodayDayNarrativeChapter[] = [];
+  used.push(dayMap.whatHappens);
+  chapters.push({
+    id: "opening",
+    kicker: "Суть дня",
+    lead: dayMap.whatHappens,
+    paragraphs: [],
+    accent: "default",
+  });
+
+  const strengthen = dayMap.whatWorks ? [dayMap.whatWorks] : [];
+  const soften = [dayMap.whereConflict, dayMap.whereYouBreak].filter(
+    (x): x is string => Boolean(x && x.trim()),
+  );
+  if (strengthen.length || soften.length) {
+    chapters.push({
+      id: "force",
+      kicker: "День в одном взгляде",
+      lead: null,
+      paragraphs: [],
+      accent: "dual",
+      dual: { strengthen, soften },
+    });
+  }
+
+  const supportParas: string[] = [];
+  const supportUsed = new Set(used.map((u) => u.toLowerCase()));
+  for (const hint of dayMap.avoidHints) {
+    const line =
+      hint.startsWith("Не ") || hint.startsWith("не ")
+        ? hint
+        : `Лучше не: ${hint.replace(/[.!?]+$/, "")}.`;
+    if (!supportUsed.has(line.toLowerCase())) {
+      supportUsed.add(line.toLowerCase());
+      supportParas.push(line);
+    }
+  }
+  const colorName = clean(colorGuide?.name) || clean(contract.day_story?.talisman?.color);
+  const colorHex = colorHexForDayName(colorName);
+  if (colorName) {
+    const colorLine = clean(colorGuide?.benefit)
+      ? `Цвет дня — ${colorName}. ${clean(colorGuide?.benefit)}`
+      : `Цвет дня — ${colorName}`;
+    if (!supportUsed.has(colorLine.toLowerCase())) {
+      supportUsed.add(colorLine.toLowerCase());
+      supportParas.push(colorLine);
+    }
+  }
+
+  const move = dayMap.oneConcreteMove;
+  if (move || supportParas.length) {
+    chapters.push({
+      id: "supports",
+      kicker: "Твой ход",
+      lead: move,
+      paragraphs: supportParas,
+      accent: "support",
+      colorHex,
+      colorLabel: colorName || null,
+      collapseAfter: supportParas.length > 3 ? 2 : undefined,
+    });
+  }
+
+  return chapters;
 }
 
 function firstPlanetHint(input: {
@@ -518,6 +593,7 @@ export function buildTodayDayNarrative(input: {
   story: TodayDayStoryViewModel;
   morningRitualData?: MorningRitualData | null;
   colorGuide?: TodayDayColorGuide | null;
+  guideNarrativePayload?: Record<string, unknown> | null;
 }): TodayDayNarrative {
   const { contract, story } = input;
   const literary = buildTodayLiteraryReading(story, contract);
@@ -536,6 +612,27 @@ export function buildTodayDayNarrative(input: {
     clean(contract.day_story?.theme) ||
     clean(story.hero.themeShort) ||
     null;
+
+  const dayMap = buildTodayDayMap({
+    contract,
+    guideNarrativePayload: input.guideNarrativePayload,
+  });
+
+  // Day Map path: pulse/glance/move slots — not a stacked fact wall.
+  if (dayMap) {
+    return {
+      theme,
+      softWhy: null,
+      chapters: buildDayMapChapters(
+        dayMap,
+        contract,
+        input.colorGuide ?? story.colorGuide,
+        used,
+      ),
+      foundation,
+      dayMap,
+    };
+  }
 
   const openingParas: string[] = [];
   if (essenceStory) {
@@ -575,16 +672,16 @@ export function buildTodayDayNarrative(input: {
     const paras: string[] = [];
     const layerUsed: string[] = [];
     if (astroSummary) pushDistinct(paras, layerUsed, astroSummary);
-    for (const beat of foundation?.astro?.beats ?? []) {
+    for (const beat of (foundation?.astro?.beats ?? []).slice(0, 1)) {
       pushDistinct(paras, layerUsed, clean(beat.story_ru) || clean(beat.title));
     }
     if (paras.length) {
-      for (const p of paras) used.push(p);
+      for (const p of paras.slice(0, 2)) used.push(p);
       chapters.push({
         id: "astro",
         kicker: "Астрологический контекст",
         lead: paras[0] ?? null,
-        paragraphs: paras.slice(1),
+        paragraphs: paras.slice(1, 2),
         accent: "sky",
         planetHint:
           foundation?.astro?.beats?.find((b) =>
@@ -594,7 +691,6 @@ export function buildTodayDayNarrative(input: {
             morningRitualData: input.morningRitualData,
             skyCards: story.skyCards ?? [],
           }),
-        collapseAfter: paras.length > 4 ? 3 : undefined,
       });
     }
   }
@@ -606,17 +702,17 @@ export function buildTodayDayNarrative(input: {
     for (const beat of foundation?.lunar?.beats ?? []) {
       if (beat.kind === "phase" && lunarSummary) continue;
       pushDistinct(paras, layerUsed, clean(beat.story_ru) || clean(beat.title));
+      if (paras.length >= 2) break;
     }
     if (paras.length) {
-      for (const p of paras) used.push(p);
+      for (const p of paras.slice(0, 2)) used.push(p);
       chapters.push({
         id: "lunar",
         kicker: "Лунный контекст",
         lead: paras[0] ?? null,
-        paragraphs: paras.slice(1),
+        paragraphs: paras.slice(1, 2),
         accent: "sky",
         planetHint: "Луна",
-        collapseAfter: paras.length > 4 ? 3 : undefined,
       });
     }
   }
@@ -624,7 +720,6 @@ export function buildTodayDayNarrative(input: {
   const personal = contract.day_story?.day_personal ?? null;
   if (personal) {
     const layer = collectDayPersonalLayer(personal);
-    // Cap soft personal chapter — do not dump full L3 pack.
     const capped = layer.paragraphs;
     if (capped.length || layer.signals.length) {
       for (const p of capped) used.push(p);
@@ -635,17 +730,18 @@ export function buildTodayDayNarrative(input: {
         paragraphs: capped.slice(1),
         accent: "sky",
         signals: layer.signals.length ? layer.signals : null,
-        collapseAfter: capped.length > 3 ? 2 : undefined,
+        collapseAfter: capped.length > 2 ? 1 : undefined,
       });
     }
   }
 
-  // Legacy mixed sky only when foundation layers are empty.
   if (!astroSummary && !lunarSummary) {
     const skyParas = collectSkyParagraphs({
       morningRitualData: input.morningRitualData,
       skyCards: story.skyCards ?? [],
-    }).filter((p) => distinctEnough(p, used));
+    })
+      .filter((p) => distinctEnough(p, used))
+      .slice(0, 2);
     for (const p of skyParas) used.push(p);
     if (skyParas.length) {
       chapters.push({
@@ -658,7 +754,6 @@ export function buildTodayDayNarrative(input: {
           morningRitualData: input.morningRitualData,
           skyCards: story.skyCards ?? [],
         }),
-        collapseAfter: skyParas.length > 4 ? 3 : undefined,
       });
     }
   }
@@ -675,13 +770,13 @@ export function buildTodayDayNarrative(input: {
       paragraphs: extra,
       accent: "dual",
       dual: {
-        strengthen: force.strengthen,
-        soften: force.soften,
+        strengthen: force.strengthen.slice(0, 2),
+        soften: force.soften.slice(0, 2),
       },
     });
   }
 
-  const symbolParas = collectSymbolParagraphs(story, contract, used);
+  const symbolParas = collectSymbolParagraphs(story, contract, used).slice(0, 2);
   if (symbolParas.length) {
     chapters.push({
       id: "symbols",
@@ -699,5 +794,5 @@ export function buildTodayDayNarrative(input: {
   );
   if (supports) chapters.push(supports);
 
-  return { theme, softWhy, chapters, foundation };
+  return { theme, softWhy, chapters, foundation, dayMap: null };
 }

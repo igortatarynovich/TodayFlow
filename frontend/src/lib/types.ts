@@ -299,6 +299,10 @@ export type CoreProfile = {
         helps?: string;
       }
     >;
+    /** Step-5 connected natal reading (optional on older snapshots). */
+    chart_reading?: string | null;
+    methodology_note?: string | null;
+    unavailable_note?: string | null;
     generation_meta?: Record<string, unknown> | null;
     profile_snapshot_version?: string | null;
   } | null;

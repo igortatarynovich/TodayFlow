@@ -254,6 +254,9 @@ def _normalize_profile_contract(raw: dict[str, Any], *, profile_snapshot_version
         "life_mission": _clip(raw.get("life_mission"), 420) or None,
         "helps": [_clip(str(x), 220) for x in helps if str(x).strip()][:5],
         "life_spheres": _normalize_life_spheres(raw.get("life_spheres")),
+        "chart_reading": _clip(raw.get("chart_reading"), 900) or None,
+        "methodology_note": _clip(raw.get("methodology_note"), 420) or None,
+        "unavailable_note": _clip(raw.get("unavailable_note"), 320) or None,
         "generation_meta": gen_meta,
         "profile_snapshot_version": profile_snapshot_version or PROFILE_CONTRACT_PROMPT_VER,
     }
@@ -413,6 +416,9 @@ def build_profile_contract_forming_v1(
             "life_mission",
             "helps",
             "life_spheres",
+            "chart_reading",
+            "methodology_note",
+            "unavailable_note",
         ):
             if key in partial and partial[key] not in (None, "", [], {}):
                 base[key] = partial[key]

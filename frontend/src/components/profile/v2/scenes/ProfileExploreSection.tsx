@@ -96,6 +96,9 @@ export function ProfileExploreSection({
               lifeMapSections={deep.lifeMapSections}
               fullChartOpen={deepExpanded}
               layout="inline"
+              chartReading={deep.chartReading}
+              methodologyNote={deep.methodologyNote}
+              unavailableNote={deep.unavailableNote}
             />
             <p className={styles.zoneLead} style={{ marginTop: "1rem" }}>
               {copy.updatedNote}

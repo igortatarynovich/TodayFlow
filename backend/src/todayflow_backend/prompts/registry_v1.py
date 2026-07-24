@@ -115,6 +115,12 @@ _REGISTRY: dict[str, dict[str, Any]] = {
         "step": "spheres",
         "builder": profile_disclosure_v1.spheres_system,
     },
+    "profile.chart_reading.v1": {
+        "version": "1.0.0",
+        "surface": "profile",
+        "step": "chart_reading",
+        "builder": profile_disclosure_v1.chart_reading_system,
+    },
     # Per-sphere synthesis on prepared cues (target content authority for life_spheres)
     "profile.spheres.synthesis.v1": {
         "version": "1.0.0",

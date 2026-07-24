@@ -37,6 +37,8 @@ from todayflow_backend.services.generation_orchestrator import (
 from todayflow_backend.profile_engine.selector import narrative_surface_to_selector_params
 from todayflow_backend.services.day_model_v0 import build_day_model_v0
 from todayflow_backend.services.day_narrative_brief_v0 import build_day_narrative_brief_v0
+from todayflow_backend.services.today_banned_phrases_v0 import scrub_banned_phrases
+from todayflow_backend.services.celestial_events_builder import resolve_fixed_day_color
 from todayflow_backend.services.experience_contract_assembler_v0 import assemble_experience_slice
 from todayflow_backend.services.profile_prompt_slices_v0 import build_internal_profile_slice_v0
 from todayflow_backend.services.learning import get_learning_service
@@ -545,10 +547,23 @@ def _parse_json_content(content: str) -> dict[str, Any] | None:
 
 
 def _truncate_narrative_text(value: str, max_len: int) -> str:
+    """Safety-net length clip: never cut mid-word; prefer sentence, then word boundary."""
     s = (value or "").strip()
     if len(s) <= max_len:
         return s
-    return s[: max_len - 1].rstrip() + "…"
+    limit = max(8, max_len - 1)
+    cut = s[:limit].rstrip()
+    for sep in (". ", "! ", "? ", "; ", ", ", " — ", " – ", " "):
+        i = cut.rfind(sep)
+        if i >= max(12, limit // 4):
+            frag = cut[: i + (0 if sep == " " else len(sep))].rstrip(" ,;—–-")
+            if len(frag) >= 12:
+                return frag + "…"
+    # Last resort: back up to previous whitespace so we never split a word.
+    sp = cut.rfind(" ")
+    if sp >= 8:
+        return cut[:sp].rstrip() + "…"
+    return cut + "…"
 
 
 _PLANET_RU: dict[str, str] = {
@@ -2508,9 +2523,9 @@ def _finalize_day_layer_payload_o8(
         if strip_anchor and anchor:
             t = _day_layer_strip_anchor_echo(anchor, t)
         if key in ("nudge_message", "personal_insight_body"):
-            p[key] = _smart_truncate_day_layer_line(t, max_len)
+            p[key] = scrub_banned_phrases(_smart_truncate_day_layer_line(t, max_len))
         else:
-            p[key] = _truncate_narrative_text(t, max_len)
+            p[key] = scrub_banned_phrases(_truncate_narrative_text(t, max_len))
 
     clip_str("nudge_message", _DAY_LAYER_NUDGE_MAX, strip_anchor=True)
     clip_str("nudge_cta_label", _DAY_LAYER_NUDGE_CTA_MAX, strip_anchor=False)
@@ -3578,6 +3593,23 @@ def build_today_narrative(
             gd = layers_dc.get("guide_decision")
             if isinstance(gd, dict):
                 guide_user["guide_decision"] = gd
+            personal_day_raw = None
+            if isinstance(ritual_norm, dict):
+                pd = ritual_norm.get("numerology_value")
+                try:
+                    personal_day_raw = int(pd) if pd is not None and str(pd).strip() else None
+                except (TypeError, ValueError):
+                    personal_day_raw = None
+            ce_for_color = None
+            if isinstance(foundation, dict) and isinstance(foundation.get("celestial_events"), dict):
+                ce_for_color = foundation.get("celestial_events")
+            fixed_color = resolve_fixed_day_color(
+                target_date=target_date,
+                personal_day=personal_day_raw,
+                celestial_events=ce_for_color,
+            )
+            if fixed_color:
+                guide_user["fixed_day_color"] = fixed_color
             _attach_profile_slices(guide_user, layers_dc)
             _attach_profile_selector(guide_user, layers_dc)
             _attach_day_history_to_llm_pack(guide_user, layers_dc)
@@ -3912,6 +3944,37 @@ def build_today_narrative(
             _attach_day_history_to_llm_pack(day_layer_pack, layers_dc)
             _attach_day_logic_slices(day_layer_pack, layers_dc=layers_dc, day_engine_brief=day_engine_brief)
             _attach_funnel_chain_to_child_pack(day_layer_pack, funnel_chain)
+            # Echo guard: pass what guide already said + locked day color.
+            already: list[str] = []
+            if isinstance(funnel_chain, dict):
+                interp = funnel_chain.get("funnel_interpretation")
+                if isinstance(interp, dict):
+                    for k in ("what_happens", "what_works", "one_concrete_move"):
+                        v = str(interp.get(k) or "").strip()
+                        if v:
+                            already.append(v[:280])
+                cfs = str(funnel_chain.get("context_for_next_surfaces") or "").strip()
+                if cfs:
+                    already.append(cfs[:400])
+            if already:
+                day_layer_pack["already_said_in_guide"] = already[:6]
+            personal_day_raw = None
+            if isinstance(ritual_norm, dict):
+                pd = ritual_norm.get("numerology_value")
+                try:
+                    personal_day_raw = int(pd) if pd is not None and str(pd).strip() else None
+                except (TypeError, ValueError):
+                    personal_day_raw = None
+            ce_for_color = None
+            if isinstance(foundation, dict) and isinstance(foundation.get("celestial_events"), dict):
+                ce_for_color = foundation.get("celestial_events")
+            fixed_color = resolve_fixed_day_color(
+                target_date=target_date,
+                personal_day=personal_day_raw,
+                celestial_events=ce_for_color,
+            )
+            if fixed_color:
+                day_layer_pack["fixed_day_color"] = fixed_color
             user_prompt = json.dumps(day_layer_pack, ensure_ascii=False)[: user_json_char_budget()]
             payload = None
             if llm_configured and not skip_llm:

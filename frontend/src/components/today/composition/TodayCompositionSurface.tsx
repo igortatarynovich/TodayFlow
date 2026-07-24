@@ -1289,7 +1289,13 @@ export function TodayCompositionSurface(props: Props) {
 
       {heroSection}
 
-      {!story.personalizedReady ? (
+      {useProductFoundation && story.personalizedReady ? (
+        <>
+          {pulseSection}
+          {glanceSection}
+          {morningDialogue}
+        </>
+      ) : !story.personalizedReady ? (
         <>
           {ritualGateSection}
           {ritualTarotImpactStage}
@@ -1571,14 +1577,16 @@ export function TodayCompositionSurface(props: Props) {
 
         {zones.whyStory && story.whyStory.length > 0 ? (
           <section className={styles.whyStory} data-testid="today-zone-why-story">
-            <h2 className={styles.sectionTitle}>{copy.whyStoryTitle}</h2>
-            <div className={styles.whyStoryBody} data-testid="today-entity-why-expand">
-              {story.whyStory.map((line) => (
-                <p key={line} className={styles.whyStoryParagraph}>
-                  {line}
-                </p>
-              ))}
-            </div>
+            <details className={styles.whyStoryDetails} data-testid="today-entity-why-expand">
+              <summary className={styles.sectionTitle}>{copy.whyStoryTitle}</summary>
+              <div className={styles.whyStoryBody}>
+                {story.whyStory.map((line) => (
+                  <p key={line} className={styles.whyStoryParagraph}>
+                    {line}
+                  </p>
+                ))}
+              </div>
+            </details>
           </section>
         ) : null}
 

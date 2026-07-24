@@ -144,33 +144,26 @@ describe("buildTodayDayNarrative", () => {
     },
   } as unknown as TodayDayStoryViewModel;
 
-  it("tells sky → force → symbols as narrative chapters, not empty", () => {
+  it("maps day_story into Day Map chapters (opening / glance / move) — not a sky fact wall", () => {
     const narrative = buildTodayDayNarrative({ contract, story, morningRitualData });
+    expect(narrative.dayMap).toBeTruthy();
+    expect(narrative.dayMap?.source).toBe("day_story");
     const ids = narrative.chapters.map((c) => c.id);
-    expect(ids).toContain("opening");
-    expect(ids).toContain("force");
-    expect(ids).toContain("symbols");
-    expect(ids).toContain("supports");
-    // Without day_foundation, legacy mixed sky chapter remains.
-    expect(ids).toContain("sky");
-    const sky = narrative.chapters.find((c) => c.id === "sky")!;
-    const skyText = [sky.lead, ...sky.paragraphs].filter(Boolean).join(" ");
-    expect(skyText).toMatch(/Луна|Меркурий|Марс/i);
-    expect(skyText).toMatch(/Рак|напряжение|намерение/i);
+    expect(ids).toEqual(["opening", "force", "supports"]);
+    expect(ids).not.toContain("sky");
+    expect(ids).not.toContain("personal");
+    expect(ids).not.toContain("symbols");
+    const opening = narrative.chapters.find((c) => c.id === "opening")!;
+    expect(opening.lead || opening.paragraphs.join(" ")).toMatch(/точност|сообщен/i);
     const force = narrative.chapters.find((c) => c.id === "force")!;
-    expect(force.accent).toBe("dual");
-    const forceText = [
-      ...(force.dual?.strengthen ?? []),
-      ...(force.dual?.soften ?? []),
-      ...force.paragraphs,
-    ].join(" ");
-    expect(forceText).toMatch(/усилит|ослабит|сильнее|слабее|не дожимать|Короткий|обязательств/i);
-    const symbols = narrative.chapters.find((c) => c.id === "symbols")!;
-    const symbolsText = [symbols.lead, ...symbols.paragraphs].filter(Boolean).join(" ");
-    expect(symbolsText).toMatch(/Карта дня|Число дня|Сила|22/i);
+    expect(force.kicker).toMatch(/одном взгляде/i);
+    expect(force.dual?.strengthen.join(" ")).toMatch(/Короткий контакт/i);
+    expect(force.dual?.soften.join(" ")).toMatch(/обязательств|перегруж/i);
+    const supports = narrative.chapters.find((c) => c.id === "supports")!;
+    expect(supports.lead).toMatch(/Закрой одну важную/i);
   });
 
-  it("splits foundation into Суть дня + astro + lunar when present", () => {
+  it("prefers Day Map over foundation dumps when day_story slots are present", () => {
     const withFoundation: TodayContractV1 = {
       ...contract,
       day_story: {
@@ -210,13 +203,13 @@ describe("buildTodayDayNarrative", () => {
     const ids = narrative.chapters.map((c) => c.id);
     expect(ids[0]).toBe("opening");
     expect(narrative.chapters[0].kicker).toMatch(/Суть дня/i);
-    expect(ids).toContain("astro");
-    expect(ids).toContain("lunar");
+    expect(ids).not.toContain("astro");
+    expect(ids).not.toContain("lunar");
     expect(ids).not.toContain("sky");
-    expect(narrative.theme).toMatch(/перспектив|Меркурий/i);
+    expect(narrative.dayMap?.whyLayers.some((l) => /Меркурий|Луна/i.test(l))).toBe(true);
   });
 
-  it("surfaces soft personal layer from day_personal (rulers / lords / HD)", () => {
+  it("does not dump day_personal into chapters when Day Map is available", () => {
     const withPersonal: TodayContractV1 = {
       ...contract,
       day_story: {
@@ -288,26 +281,17 @@ describe("buildTodayDayNarrative", () => {
       story,
       morningRitualData,
     });
-    const personal = narrative.chapters.find((c) => c.id === "personal");
-    expect(personal).toBeTruthy();
-    expect(personal!.kicker).toMatch(/Личный слой/i);
-    const text = [personal!.lead, ...personal!.paragraphs].filter(Boolean).join(" ");
-    expect(text).toMatch(/Профиль 3\/5|Variables soft|HD soft|ворот|Firdaria|Управители|Каналы HD/i);
-    expect(personal!.signals?.length).toBeGreaterThan(0);
-    expect(personal!.signals?.map((s) => s.label).join(" ")).toMatch(
-      /HD тип|HD профиль|HD variables|Профекция|Firdaria|HD/i,
-    );
-    expect(personal!.accent).toBe("sky");
+    expect(narrative.chapters.find((c) => c.id === "personal")).toBeUndefined();
+    expect(narrative.dayMap).toBeTruthy();
   });
 
-  it("expands supports as Твой ход with color why from guide + talisman note", () => {
+  it("expands supports as Твой ход with concrete move + color", () => {
     const narrative = buildTodayDayNarrative({ contract, story, morningRitualData });
     const supports = narrative.chapters.find((c) => c.id === "supports")!;
     expect(supports.kicker).toMatch(/Твой ход/i);
     expect(supports.accent).toBe("support");
-    expect(supports.colorHex).toBeTruthy();
+    expect(supports.lead).toMatch(/Закрой одну важную/i);
     const body = [supports.lead, ...supports.paragraphs].filter(Boolean).join(" ");
     expect(body).toMatch(/Цвет дня|синий|Сдерживает спешку/i);
-    expect(body).toMatch(/Пауза сохраняет точность|Две минуты/i);
   });
 });

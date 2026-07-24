@@ -227,6 +227,8 @@ def test_patterns_skipped_when_birth_only_synthesizes_spheres(monkeypatch) -> No
         temperature: float = 0.48,
     ) -> tuple[dict[str, Any] | None, str | None]:
         calls.append(user[:80])
+        if not responses:
+            return None, None
         parsed = responses.pop(0)
         return parsed, "{}"
 
@@ -241,11 +243,13 @@ def test_patterns_skipped_when_birth_only_synthesizes_spheres(monkeypatch) -> No
         },
         locale="ru",
     )
-    assert len(calls) == 2  # identity + styles only (no patterns)
+    # identity + styles (+ optional chart_reading attempt that returns None)
+    assert len(calls) >= 2
     assert meta["reason"] == "patterns_skipped_ineligible"
     assert meta["patterns_omitted"] is True
     assert meta["partial"] is True
-    assert meta["completed_steps"] == ["identity", "styles", "spheres"]
+    assert meta["completed_steps"][:3] == ["identity", "styles", "spheres"]
+    assert "patterns" not in meta["completed_steps"]
     skip = meta["steps"][2]
     assert skip.get("skipped") is True
     assert skip.get("skip_reason") == "generation_gate_ineligible"
@@ -255,9 +259,8 @@ def test_patterns_skipped_when_birth_only_synthesizes_spheres(monkeypatch) -> No
     assert merged.get("living_changes") is None
     assert set(merged.get("life_spheres") or {}) == {"love", "money", "decisions"}
     assert meta.get("spheres_source") == SPHERES_SOURCE
-    syn = meta["steps"][3]
+    syn = next(s for s in meta["steps"] if s.get("prompt_id") == "profile.spheres.synthesis.v1")
     assert syn.get("spheres_source") == SPHERES_SOURCE
-    assert syn.get("prompt_id") == "profile.spheres.synthesis.v1"
     assert syn.get("ok") is True
 
 

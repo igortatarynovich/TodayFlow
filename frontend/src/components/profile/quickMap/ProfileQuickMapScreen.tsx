@@ -27,6 +27,9 @@ export type ProfileQuickMapDeepProps = {
   previewError: string | null;
   onReloadPreview: () => void;
   lifeMapSections: LifeMapSection[];
+  chartReading?: string | null;
+  methodologyNote?: string | null;
+  unavailableNote?: string | null;
 };
 
 export type ProfileQuickMapScreenProps = {
@@ -229,6 +232,9 @@ export function ProfileQuickMapScreen({
                 onReloadPreview={deep.onReloadPreview}
                 lifeMapSections={deep.lifeMapSections}
                 fullChartOpen={deepExpanded}
+                chartReading={deep.chartReading}
+                methodologyNote={deep.methodologyNote}
+                unavailableNote={deep.unavailableNote}
               />
             </ProfilePortalDeepSection>
           </div>

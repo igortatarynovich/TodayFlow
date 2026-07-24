@@ -32,7 +32,7 @@ _MOOD_ID_RU: dict[str, str] = {
 
 # head_topic из честного шага / фокуса → RU (не сырой slug вроде general/body)
 _HEAD_TOPIC_SLUG_RU: dict[str, str] = {
-    "general": "общий фон дня",
+    "general": "день в целом",
     "body": "тело и энергия",
     "money": "деньги",
     "dialogue": "общение и контакт",
@@ -134,7 +134,7 @@ def build_day_narrative_brief_v0(
     if head_topic:
         parts.append(
             _clip(
-                f"Тема «в голове»: {head_topic} — она уже намекает, куда уйдёт главный вес дня."
+                f"Фокус внимания: {head_topic} — уже намекает, куда уйдёт главный вес дня."
                 if not en
                 else f"Head topic: {head_topic} — it already hints where the day’s weight will land.",
                 200,

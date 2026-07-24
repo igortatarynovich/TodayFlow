@@ -72,6 +72,8 @@ export function pickSoftDayCheckIn(dateISO: string): TodaySoftDayCheckIn {
 export const TODAY_DAY_DIALOGUE_COPY = {
   focusTitle: "Что сейчас ближе всего к сердцу?",
   focusLead: "Проведу день через эту тему.",
+  moodTitle: "Как ты сейчас?",
+  moodLead: "Короткий сигнал — помогает точнее собрать день.",
 } as const;
 
 /** Label catalog for Maps / historical mood ids — not rendered as Today chips (R18). */
@@ -188,21 +190,30 @@ export function shouldAskMorningDialogue(input: {
   morningMoodCapturedAtMs?: number | null;
   focusTopicCapturedAtMs?: number | null;
 }): boolean {
-  // R18: mood is never asked on Today; only soft focus discovery remains.
-  return shouldAskMorningFocus({
-    dateISO: input.dateISO,
-    focusTopicId: input.focusTopicId,
-    focusTopicCapturedAtMs: input.focusTopicCapturedAtMs,
-  });
+  return (
+    shouldAskMorningFocus({
+      dateISO: input.dateISO,
+      focusTopicId: input.focusTopicId,
+      focusTopicCapturedAtMs: input.focusTopicCapturedAtMs,
+    }) ||
+    shouldAskMorningMood({
+      dateISO: input.dateISO,
+      morningMoodId: input.morningMoodId,
+      morningMoodCapturedAtMs: input.morningMoodCapturedAtMs,
+    })
+  );
 }
 
-/** @deprecated R18 — mood chips removed from Today; always false. */
-export function shouldAskMorningMood(_input: {
+/** Mood writes mood_selected (PIM) — keep, but ask after focus, not as hero. */
+export function shouldAskMorningMood(input: {
   dateISO: string;
   morningMoodId: string | null;
   morningMoodCapturedAtMs?: number | null;
 }): boolean {
-  return false;
+  return (
+    !input.morningMoodId ||
+    !isSignalCapturedToday(input.dateISO, input.morningMoodCapturedAtMs ?? null)
+  );
 }
 
 export function shouldAskMorningFocus(input: {

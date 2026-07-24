@@ -211,7 +211,11 @@ export function TodayPersonalizedProductSection({
                     <div className={journeyStyles.dualPanels}>
                       {chapter.dual.strengthen.length ? (
                         <div className={journeyStyles.dualPanel}>
-                          <p className={journeyStyles.dualPanelTitle}>Сильнее</p>
+                          <p className={journeyStyles.dualPanelTitle}>
+                            {chapter.id === "force" && chapter.kicker === "День в одном взгляде"
+                              ? "Поддержано"
+                              : "Сильнее"}
+                          </p>
                           {chapter.dual.strengthen.map((line) => (
                             <p key={line.slice(0, 40)} className={journeyStyles.dualPanelBody}>
                               {line}
@@ -221,7 +225,11 @@ export function TodayPersonalizedProductSection({
                       ) : null}
                       {chapter.dual.soften.length ? (
                         <div className={journeyStyles.dualPanel}>
-                          <p className={journeyStyles.dualPanelTitle}>Мягче / не дожимать</p>
+                          <p className={journeyStyles.dualPanelTitle}>
+                            {chapter.id === "force" && chapter.kicker === "День в одном взгляде"
+                              ? "Требует внимания"
+                              : "Мягче / не дожимать"}
+                          </p>
                           {chapter.dual.soften.map((line) => (
                             <p key={line.slice(0, 40)} className={journeyStyles.dualPanelBody}>
                               {line}

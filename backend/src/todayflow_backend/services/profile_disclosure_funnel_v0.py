@@ -58,6 +58,7 @@ IDENTITY_CONTRACT = "profile_funnel_identity_v0"
 STYLES_CONTRACT = "profile_funnel_styles_v0"
 PATTERNS_CONTRACT = "profile_funnel_patterns_v0"
 SPHERES_CONTRACT = "profile_funnel_spheres_v0"
+CHART_READING_CONTRACT = "profile_funnel_chart_reading_v0"
 
 SPHERE_IDS = (
     "love",
@@ -77,6 +78,7 @@ PROMPT_IDS = (
     "profile.styles.v1",
     "profile.patterns.v1",
     "profile.spheres.synthesis.v1",
+    "profile.chart_reading.v1",
 )
 
 
@@ -137,6 +139,8 @@ def _step_name_from_prompt_id(prompt_id: str) -> str:
         return "styles"
     if "patterns" in prompt_id:
         return "patterns"
+    if "chart_reading" in prompt_id:
+        return "chart_reading"
     if "spheres" in prompt_id:
         return "spheres"
     return prompt_id
@@ -305,6 +309,65 @@ def _patterns_ok(d: dict[str, Any] | None) -> bool:
     if not isinstance(helps, list) or len(helps) < 2:
         return False
     return True
+
+
+def _chart_reading_ok(d: dict[str, Any] | None) -> bool:
+    if not isinstance(d, dict):
+        return False
+    if str(d.get("contract_version") or "").strip() != CHART_READING_CONTRACT:
+        return False
+    if len(str(d.get("chart_reading") or "").strip()) < 40:
+        return False
+    if len(str(d.get("methodology_note") or "").strip()) < 20:
+        return False
+    return True
+
+
+def _slim_natal_for_chart_reading(shared: dict[str, Any]) -> dict[str, Any]:
+    natal = shared.get("natal") if isinstance(shared.get("natal"), dict) else {}
+    astro = shared.get("astro") if isinstance(shared.get("astro"), dict) else {}
+    positions = natal.get("positions") if isinstance(natal.get("positions"), dict) else {}
+    asc = natal.get("ascendant") if isinstance(natal.get("ascendant"), dict) else {}
+    out_pos: dict[str, Any] = {}
+    for key in ("sun", "moon", "mc"):
+        row = positions.get(key) if isinstance(positions.get(key), dict) else None
+        if row:
+            out_pos[key] = {
+                "sign": row.get("sign"),
+                "house": row.get("house"),
+                "degree": row.get("degree") or row.get("longitude"),
+            }
+    if asc:
+        houses = natal.get("houses") if isinstance(natal.get("houses"), list) else []
+        house0 = houses[0] if houses and isinstance(houses[0], dict) else {}
+        out_pos["ascendant"] = {
+            "sign": asc.get("sign") or house0.get("sign"),
+            "degree": asc.get("longitude") or asc.get("degree"),
+        }
+    aspects = natal.get("aspects") if isinstance(natal.get("aspects"), list) else []
+    major = []
+    for a in aspects[:8]:
+        if isinstance(a, dict):
+            major.append(
+                {
+                    "a": a.get("planet_a") or a.get("a"),
+                    "b": a.get("planet_b") or a.get("b"),
+                    "aspect": a.get("aspect") or a.get("type"),
+                }
+            )
+    person = shared.get("person") if isinstance(shared.get("person"), dict) else {}
+    return {
+        "natal_positions": out_pos
+        or {
+            "sun": {"sign": astro.get("sun_sign")},
+            "moon": {"sign": astro.get("moon_sign")},
+        },
+        "major_aspects": major,
+        "time_unknown": not bool(person.get("birth_time") or person.get("birth_time_local")),
+        "place_unknown": not bool(
+            person.get("birth_place") or person.get("birth_city") or person.get("lat")
+        ),
+    }
 
 
 def _spheres_ok(d: dict[str, Any] | None) -> bool:
@@ -636,6 +699,35 @@ def run_profile_disclosure_funnel_v0(
             if capture is not None:
                 capture.mark_step_ran("spheres", ran=False)
 
+    # Step 5: connected natal chart reading (optional — does not fail the funnel).
+    chart_reading_payload: dict[str, Any] | None = None
+    if r1:
+        natal_pack = _slim_natal_for_chart_reading(shared)
+        r5, m5 = _call_with_retry(
+            prompt_id="profile.chart_reading.v1",
+            locale=locale,
+            user_payload={
+                "shared": shared,
+                "identity_core": r1.get("identity_core"),
+                **natal_pack,
+                "step": "chart_reading",
+            },
+            depth_level="normal",
+            ok_fn=_chart_reading_ok,
+        )
+        meta["steps"].append(m5)
+        if r5:
+            chart_reading_payload = r5
+            meta["completed_steps"].append("chart_reading")
+            if profile_capture_enabled():
+                capture = get_profile_capture_session()
+                if capture is not None:
+                    capture.mark_step_ran("chart_reading", ran=True)
+        elif profile_capture_enabled():
+            capture = get_profile_capture_session()
+            if capture is not None:
+                capture.mark_step_ran("chart_reading", ran=False)
+
     # Birth-safe slice: identity + styles (+ optional patterns) + up to 3 natal spheres.
     # Still "partial" vs full 9-sphere/patterns contract, but not a failed publish —
     # FE must show the usable identity/styles/spheres instead of an empty shell.
@@ -663,4 +755,8 @@ def run_profile_disclosure_funnel_v0(
         merged["life_spheres"] = life_spheres
         if spheres_meta:
             merged["life_spheres_meta"] = spheres_meta
+    if chart_reading_payload:
+        merged["chart_reading"] = chart_reading_payload.get("chart_reading")
+        merged["methodology_note"] = chart_reading_payload.get("methodology_note")
+        merged["unavailable_note"] = chart_reading_payload.get("unavailable_note")
     return merged, meta
