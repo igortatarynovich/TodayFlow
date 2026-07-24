@@ -66,7 +66,6 @@ import {
   RITUAL_CARD_HONEST_STEP_CHIPS,
   RITUAL_COPY,
   RITUAL_HEAD_TOPIC_CHIPS,
-  RITUAL_MOOD_GRID,
   RITUAL_MOOD_LABELS,
   RITUAL_NUMBER_RHYTHM_CHIPS,
   essentialsForMood,
@@ -109,8 +108,6 @@ import {
 } from "@/lib/todayRitualSpineMachine";
 
 function labelForRitualMoodId(id: string): string {
-  const g = RITUAL_MOOD_GRID.find((m) => m.id === id);
-  if (g) return g.label;
   return RITUAL_MOOD_LABELS.find((m) => m.id === id)?.label ?? id;
 }
 
@@ -343,17 +340,17 @@ export function TodayRitualFlow(props: Props) {
       mood,
       checkInSubmitted,
     });
-    if (!spine || tarotMainId == null || mood == null) return;
+    if (!spine || tarotMainId == null) return;
     const drawn = getTodayTarotCardRu(tarotMainId);
     if (!drawn) return;
-    const key = `${dateISO}|${tarotMainId}|${mood}|${ritualNumerologyValue}|${headTopic ?? ""}`;
+    const key = `${dateISO}|${tarotMainId}|${mood ?? ""}|${ritualNumerologyValue}|${headTopic ?? ""}`;
     if (ritualNarrativePostKeyRef.current === key) return;
     ritualNarrativePostKeyRef.current = key;
     onRitualSpineComplete({
       tarot_main_id: tarotMainId,
       tarot_name_ru: drawn.nameRu,
       numerology_value: ritualNumerologyValue,
-      mood,
+      mood: mood ?? undefined,
       day_events: buildDayEventsForNarrative(ritualTodayData),
       head_topic: headTopic ?? undefined,
     });
@@ -2220,7 +2217,7 @@ export function TodayRitualFlow(props: Props) {
             </section>
           ) : null}
 
-          {/* BLOCK 5 — Check-in (после числа: паритет iOS `TodayRitualSpineTransition` / конечный автомат) */}
+          {/* BLOCK 5 — Check-in after number (R18: no mood chips; soft head_topic only) */}
           {numberRevealed ? (
           <section
             id="today-ritual-checkin"
@@ -2238,114 +2235,41 @@ export function TodayRitualFlow(props: Props) {
               {RITUAL_COPY.checkInTitle}
             </h2>
             <p className="orbit-body-sm" style={{ margin: "0 0 0.75rem", color: "#5f4930", lineHeight: 1.55, ...ritualTextWrap }}>
-              {mood ? RITUAL_COPY.moodCheckSubDone : RITUAL_COPY.moodCheckSub}
+              {RITUAL_COPY.checkInMicroHint}
             </p>
-            {mood ? (
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.55rem",
-                  flexWrap: "wrap",
-                  padding: "0.55rem 0.7rem",
-                  borderRadius: 14,
-                  background: "rgba(255,252,247,0.95)",
-                  border: "1px solid rgba(201,168,115,0.28)",
-                  maxWidth: "100%",
-                  boxSizing: "border-box",
-                }}
-              >
-                <span aria-hidden style={{ fontSize: "1.05rem", lineHeight: 1 }}>
-                  {RITUAL_MOOD_GRID.find((x) => x.id === mood)?.icon ?? "✓"}
-                </span>
-                <span className="orbit-body-sm" style={{ margin: 0, fontWeight: 700, color: "#2d241c", ...ritualTextWrap }}>
-                  {labelForRitualMoodId(mood)}
-                </span>
-                <span className="orbit-body-xs" style={{ margin: 0, color: "#7a6242" }}>
-                  {RITUAL_COPY.checkInMoodMarkedTail}
-                </span>
-              </div>
-            ) : (
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-                  gap: "0.4rem",
-                  maxWidth: "min(20.5rem, 100%)",
-                  width: "100%",
-                  margin: "0 auto",
-                }}
-              >
-                {RITUAL_MOOD_GRID.map((m) => (
-                  <button
-                    key={m.id}
-                    type="button"
-                    onClick={() => onMood(m.id)}
-                    className={`orbit-button orbit-button-sm ${mood === m.id ? "orbit-button-primary" : "orbit-button-secondary"}`}
-                    style={{
-                      ...ritualChipWrap,
-                      borderRadius: 12,
-                      padding: "0.42rem 0.32rem",
-                      minHeight: "4.1rem",
-                      border: "1px solid rgba(201, 168, 115, 0.32)",
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "0.22rem",
-                    }}
-                  >
-                    <span style={{ fontSize: "1rem", lineHeight: 1, fontWeight: 300, opacity: 0.92 }} aria-hidden>
-                      {m.icon}
-                    </span>
-                    <span style={{ fontSize: "0.72rem", fontWeight: 600, textAlign: "center", lineHeight: 1.2 }}>{m.label}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-            {mood && moodNote && (
-              <p className="orbit-body-sm" style={{ margin: "0.6rem 0 0", color: "#4a3d2e", ...ritualTextWrap }}>
-                {moodNote}
+            <div style={{ marginTop: "0.25rem" }}>
+              <p className="todayflow-eyebrow" style={{ margin: "0 0 0.35rem", ...ritualTextWrap }}>
+                {RITUAL_COPY.checkInMicroEyebrow}
               </p>
-            )}
-            {mood ? (
-              <div style={{ marginTop: "0.85rem" }}>
-                <p className="todayflow-eyebrow" style={{ margin: "0 0 0.35rem", ...ritualTextWrap }}>
-                  {RITUAL_COPY.checkInMicroEyebrow}
+              {headTopic ? (
+                <p className="orbit-body-sm" style={{ margin: 0, color: "#3f3428", fontWeight: 600, ...ritualTextWrap }}>
+                  {RITUAL_COPY.headTopicSavedLabel}:{" "}
+                  {RITUAL_HEAD_TOPIC_CHIPS.find((t) => t.id === headTopic)?.label ?? headTopic}
                 </p>
-                <p className="orbit-body-sm" style={{ margin: "0 0 0.55rem", color: "#5f4930", lineHeight: 1.55, ...ritualTextWrap }}>
-                  {RITUAL_COPY.checkInMicroHint}
-                </p>
-                {headTopic ? (
-                  <p className="orbit-body-sm" style={{ margin: 0, color: "#3f3428", fontWeight: 600, ...ritualTextWrap }}>
-                    {RITUAL_COPY.headTopicSavedLabel}:{" "}
-                    {RITUAL_HEAD_TOPIC_CHIPS.find((t) => t.id === headTopic)?.label ?? headTopic}
-                  </p>
-                ) : (
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
-                    {RITUAL_HEAD_TOPIC_CHIPS.map((t) => (
-                      <button
-                        key={t.id}
-                        type="button"
-                        onClick={() => {
-                          setHeadTopic(t.id);
-                          trackMeaningEvent({
-                            event_type: "head_topic_selected",
-                            event_source: "today",
-                            payload: { topic_id: t.id },
-                          });
-                        }}
-                        className={`orbit-button orbit-button-sm ${headTopic === t.id ? "orbit-button-primary" : "orbit-button-secondary"}`}
-                        style={{ ...ritualChipWrap, borderRadius: 999, padding: "0.4rem 0.85rem" }}
-                      >
-                        {t.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ) : null}
-            {mood ? (
+              ) : (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+                  {RITUAL_HEAD_TOPIC_CHIPS.map((t) => (
+                    <button
+                      key={t.id}
+                      type="button"
+                      onClick={() => {
+                        setHeadTopic(t.id);
+                        trackMeaningEvent({
+                          event_type: "head_topic_selected",
+                          event_source: "today",
+                          payload: { topic_id: t.id },
+                        });
+                      }}
+                      className={`orbit-button orbit-button-sm ${headTopic === t.id ? "orbit-button-primary" : "orbit-button-secondary"}`}
+                      style={{ ...ritualChipWrap, borderRadius: 999, padding: "0.4rem 0.85rem" }}
+                    >
+                      {t.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            {!checkInSubmitted ? (
               <button
                 type="button"
                 onClick={() => {

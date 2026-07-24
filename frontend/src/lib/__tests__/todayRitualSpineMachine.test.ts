@@ -76,19 +76,19 @@ describe("todayRitualSpineMachine", () => {
     expect(out?.effects.analyticsHint).toEqual({ kind: "moodSelected", moodId: "tired" });
   });
 
-  it("submittedCheckIn requires mood and resolved tarot", () => {
+  it("submittedCheckIn requires resolved tarot (mood optional — R18)", () => {
     const bad = {
       ...base(),
       dayOpened: true,
       tarotContinueAck: true,
       numberRevealed: true,
       tarotMainId: 1,
-      tarotMainResolved: true,
+      tarotMainResolved: false,
       selectedMoodId: null,
       checkInSubmitted: false,
     };
     expect(applyTodayRitualSpineReducer({ type: "submittedCheckIn" }, bad)).toBeNull();
-    const ok = { ...bad, selectedMoodId: "tired" as const };
+    const ok = { ...bad, tarotMainResolved: true };
     const out = applyTodayRitualSpineReducer({ type: "submittedCheckIn" }, ok);
     expect(out?.after.checkInSubmitted).toBe(true);
     expect(out?.effects.scrollAfterNarrativeRefresh).toBe("ritualYourDay");

@@ -70,19 +70,18 @@ export function pickSoftDayCheckIn(dateISO: string): TodaySoftDayCheckIn {
 }
 
 export const TODAY_DAY_DIALOGUE_COPY = {
-  moodTitle: "Как ты входишь в этот день?",
-  moodLead: "От этого зависит, на что я сделаю акцент дальше.",
   focusTitle: "Что сейчас ближе всего к сердцу?",
   focusLead: "Проведу день через эту тему.",
 } as const;
 
+/** Label catalog for Maps / historical mood ids — not rendered as Today chips (R18). */
 export const TODAY_MORNING_MOODS: TodayMorningMood[] = [
-  { id: "calm", label: "Спокойно", icon: "😊" },
-  { id: "driven", label: "Полон сил", icon: "⚡" },
-  { id: "tired", label: "Устал", icon: "😴" },
-  { id: "anxious", label: "Тревожно", icon: "😟" },
-  { id: "overloaded", label: "Перегружен", icon: "🤯" },
-  { id: "inspired", label: "Вдохновлён", icon: "❤️" },
+  { id: "calm", label: "Спокойно", icon: "" },
+  { id: "driven", label: "Полон сил", icon: "" },
+  { id: "tired", label: "Устал", icon: "" },
+  { id: "anxious", label: "Тревожно", icon: "" },
+  { id: "overloaded", label: "Перегружен", icon: "" },
+  { id: "inspired", label: "Вдохновлён", icon: "" },
 ];
 
 export const TODAY_FOCUS_TOPICS: TodayFocusTopic[] = [
@@ -189,21 +188,21 @@ export function shouldAskMorningDialogue(input: {
   morningMoodCapturedAtMs?: number | null;
   focusTopicCapturedAtMs?: number | null;
 }): boolean {
-  const moodNeeded =
-    !input.morningMoodId || !isSignalCapturedToday(input.dateISO, input.morningMoodCapturedAtMs ?? null);
-  const focusNeeded =
-    !input.focusTopicId || !isSignalCapturedToday(input.dateISO, input.focusTopicCapturedAtMs ?? null);
-  return moodNeeded || focusNeeded;
+  // R18: mood is never asked on Today; only soft focus discovery remains.
+  return shouldAskMorningFocus({
+    dateISO: input.dateISO,
+    focusTopicId: input.focusTopicId,
+    focusTopicCapturedAtMs: input.focusTopicCapturedAtMs,
+  });
 }
 
-export function shouldAskMorningMood(input: {
+/** @deprecated R18 — mood chips removed from Today; always false. */
+export function shouldAskMorningMood(_input: {
   dateISO: string;
   morningMoodId: string | null;
   morningMoodCapturedAtMs?: number | null;
 }): boolean {
-  return (
-    !input.morningMoodId || !isSignalCapturedToday(input.dateISO, input.morningMoodCapturedAtMs ?? null)
-  );
+  return false;
 }
 
 export function shouldAskMorningFocus(input: {

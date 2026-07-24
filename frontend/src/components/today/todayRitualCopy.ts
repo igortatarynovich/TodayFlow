@@ -2058,17 +2058,7 @@ export const RITUAL_HEAD_TOPIC_CHIPS: { id: string; label: string }[] = [
   { id: "none", label: "ничего конкретного" },
 ];
 
-/** Шесть состояний как на макете Today (2×3). */
-export const RITUAL_MOOD_GRID: { id: string; label: string; icon: string }[] = [
-  { id: "calm", label: "Спокойно", icon: "♥" },
-  { id: "anxious", label: "Тревожно", icon: "☁" },
-  { id: "tired", label: "Устало", icon: "🔋" },
-  { id: "driven", label: "В драйве", icon: "🔥" },
-  { id: "irritated", label: "Раздражённо", icon: "⚡" },
-  { id: "other", label: "Другое", icon: "⋯" },
-];
-
-/** Все id настроения (сетка + старые сохранённые значения). */
+/** Labels for historical ritual mood ids — chips removed from Today UI (R18). */
 export const RITUAL_MOOD_LABELS: { id: string; label: string }[] = [
   { id: "calm", label: "спокойно" },
   { id: "anxious", label: "тревожно" },

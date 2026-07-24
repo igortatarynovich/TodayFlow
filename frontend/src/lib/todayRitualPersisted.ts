@@ -104,9 +104,9 @@ export type RitualSpineSlice = Pick<
   "tarotMainId" | "tarotContinueAck" | "numberRevealed" | "mood" | "checkInSubmitted"
 >;
 
-/** Карта (с ack) → число → настроение → подтверждение чек-ина — паритет с iOS `ritualSpineComplete`. */
+/** Карта (с ack) → число → подтверждение чек-ина — mood chips removed (R18). */
 export function isRitualSpineComplete(s: RitualSpineSlice): boolean {
   return Boolean(
-    s.tarotMainId != null && s.tarotContinueAck && s.numberRevealed && s.mood && s.checkInSubmitted,
+    s.tarotMainId != null && s.tarotContinueAck && s.numberRevealed && s.checkInSubmitted,
   );
 }

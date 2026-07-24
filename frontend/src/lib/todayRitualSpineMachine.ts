@@ -1,6 +1,7 @@
 /**
- * Конечный автомат хребта Today (карта → число → настроение → чек-ин → «Твой день»).
- * Логика 1:1 с iOS `TodayFlow/Design/TodayRitualStateMachine.swift` (фазы, допустимость, reducer, эффекты).
+ * Конечный автомат хребта Today (карта → число → чек-ин → «Твой день»).
+ * Mood chips removed (R18); optional historical mood still stored if present.
+ * Логика фаз — паритет с iOS `TodayFlow/Design/TodayRitualStateMachine.swift` (без mood gate).
  * DOM-якоря — через `mapRitualSpineScrollToDomId` (iOS id → веб `id`).
  */
 
@@ -24,7 +25,6 @@ export function isRitualSpineSnapshotComplete(s: TodayRitualSpineSnapshot): bool
       s.tarotMainResolved &&
       s.tarotContinueAck &&
       s.numberRevealed &&
-      s.selectedMoodId != null &&
       s.checkInSubmitted,
   );
 }
@@ -51,7 +51,6 @@ export function ritualSpineConsistencyIssues(s: TodayRitualSpineSnapshot): strin
   if (s.tarotContinueAck && !s.dayOpened) issues.push("tarot_continue_without_opened_day");
   if (s.numberRevealed && !s.dayOpened) issues.push("number_without_opened_day");
   if (s.checkInSubmitted && !s.numberRevealed) issues.push("checkin_without_number");
-  if (s.checkInSubmitted && s.selectedMoodId == null) issues.push("checkin_without_mood");
   if (isRitualSpineSnapshotComplete(s) && !s.tarotMainResolved) {
     issues.push("spine_complete_without_resolved_tarot");
   }
@@ -166,7 +165,7 @@ export function ritualSpineTransitionAllows(
     case "selectedMood":
       return before.numberRevealed && !before.checkInSubmitted;
     case "submittedCheckIn":
-      if (!before.numberRevealed || before.checkInSubmitted || before.selectedMoodId == null) return false;
+      if (!before.numberRevealed || before.checkInSubmitted) return false;
       return before.tarotMainResolved;
     default:
       return false;

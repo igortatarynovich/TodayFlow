@@ -76,8 +76,8 @@ describe("isRitualSpineComplete", () => {
     expect(isRitualSpineComplete({ ...base, checkInSubmitted: false })).toBe(false);
   });
 
-  it("is false without mood", () => {
-    expect(isRitualSpineComplete({ ...base, mood: null })).toBe(false);
+  it("is true without mood (R18 — mood chips removed)", () => {
+    expect(isRitualSpineComplete({ ...base, mood: null })).toBe(true);
   });
 
   it("is false without tarotMainId", () => {
