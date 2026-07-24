@@ -10,6 +10,10 @@ from __future__ import annotations
 from datetime import date, timedelta
 from typing import Any
 
+from todayflow_backend.services.day_sources.classical_longitudes import (
+    classical_bodies,
+    classical_longitude,
+)
 from todayflow_backend.services.day_sources.panchanga import (
     tropical_moon_longitude,
     tropical_sun_longitude,
@@ -248,14 +252,21 @@ def build_channels_payload(
     bodygraph: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     transit_set: set[int] = set()
-    for key in ("sun", "earth", "moon"):
-        row = transit_gates.get(key) if isinstance(transit_gates, dict) else None
-        if isinstance(row, dict) and row.get("gate"):
-            transit_set.add(int(row["gate"]))
+    # Prefer explicit planets list; fall back to sun/earth/moon keys.
+    planet_rows = transit_gates.get("planets") if isinstance(transit_gates, dict) else None
+    if isinstance(planet_rows, list):
+        for row in planet_rows:
+            if isinstance(row, dict) and row.get("gate"):
+                transit_set.add(int(row["gate"]))
+    else:
+        for key in ("sun", "earth", "moon"):
+            row = transit_gates.get(key) if isinstance(transit_gates, dict) else None
+            if isinstance(row, dict) and row.get("gate"):
+                transit_set.add(int(row["gate"]))
 
     natal_set: set[int] = set()
     if isinstance(bodygraph, dict):
-        for g in bodygraph.get("natal_sun_earth_gates") or []:
+        for g in bodygraph.get("natal_gates") or bodygraph.get("natal_sun_earth_gates") or []:
             natal_set.add(int(g))
 
     # Channels from transit-only and from natal∪transit (bodygraph interaction).
@@ -276,7 +287,7 @@ def build_channels_payload(
     else:
         summary = (
             "Каналы HD (soft): полной пары ворот сегодня нет "
-            "(Sun/Earth/Moon ± natal Sun–Earth)."
+            "(классические планеты ± natal gates)."
         )
 
     return {
@@ -290,10 +301,10 @@ def build_channels_payload(
         "transit_only_channels": transit_channels,
         "defined_centers": centers,
         "summary_ru": summary,
-        "school_canon": "rave_channels_v0_sun_earth_moon_natal",
+        "school_canon": "rave_channels_v1_classical_planets",
         "limitation_ru": (
-            "Только ворота Солнца/Земли/Луны (+ natal Sun–Earth). "
-            "Полный бодиграф планет — later."
+            "Ворота Sun…Saturn + Earth (mean longitude noon). "
+            "Уран/Нептун/Плутон и точный Swiss — later."
         ),
     }
 
@@ -320,10 +331,12 @@ def longitude_to_gate_line(longitude: float) -> dict[str, Any]:
 
 
 def activation_for_date(d: date, *, body: str = "Sun") -> dict[str, Any]:
-    if body == "Moon":
-        lon = tropical_moon_longitude(d)
-    else:
-        lon = tropical_sun_longitude(d)
+    if body == "Earth":
+        sun = activation_for_date(d, body="Sun")
+        return earth_from_sun(sun)
+    lon = classical_longitude(body, d) if body in classical_bodies() else (
+        tropical_moon_longitude(d) if body == "Moon" else tropical_sun_longitude(d)
+    )
     act = longitude_to_gate_line(lon)
     act["body"] = body
     act["date"] = d.isoformat()
@@ -339,20 +352,36 @@ def earth_from_sun(sun_act: dict[str, Any]) -> dict[str, Any]:
 
 
 def transit_gates_for_day(target_date: date) -> dict[str, Any]:
-    sun = activation_for_date(target_date, body="Sun")
-    earth = earth_from_sun(sun)
-    moon = activation_for_date(target_date, body="Moon")
+    planets: list[dict[str, Any]] = []
+    by_body: dict[str, dict[str, Any]] = {}
+    for body in classical_bodies():
+        act = activation_for_date(target_date, body=body)
+        planets.append(act)
+        by_body[body.lower()] = act
+    earth = earth_from_sun(by_body["sun"])
+    planets.append(earth)
+    by_body["earth"] = earth
+
+    sun = by_body["sun"]
+    moon = by_body["moon"]
     summary = (
-        f"Транзит HD: Солнце {sun['label']} ({sun['theme_ru']}), "
-        f"Земля {earth['label']}, Луна {moon['label']}."
+        f"Транзит HD (soft classical): Солнце {sun['label']} ({sun['theme_ru']}), "
+        f"Земля {earth['label']}, Луна {moon['label']}; "
+        f"ещё {len(planets) - 3} тел."
     )
     return {
         "capability_id": "transit_gates",
+        "depth": "classical_planets_mean_lon",
         "sun": sun,
         "earth": earth,
         "moon": moon,
+        "planets": planets,
         "summary_ru": summary,
         "school_canon": "rave_mandala_gate41_aquarius_2",
+        "limitation_ru": (
+            "Mean longitude noon для Sun…Saturn + Earth. "
+            "Уран/Нептун/Плутон / Swiss — later."
+        ),
     }
 
 
@@ -363,38 +392,50 @@ def bodygraph_soft(
     has_birth_time: bool = False,
     has_birth_place: bool = False,
 ) -> dict[str, Any]:
-    """Soft bodygraph: Personality/Design Sun–Earth from birth date (±88d)."""
-    personality_sun = activation_for_date(birth_date, body="Sun")
-    personality_earth = earth_from_sun(personality_sun)
+    """Soft bodygraph: Personality/Design classical planets (±88d Design)."""
+    personality: dict[str, dict[str, Any]] = {}
+    for body in classical_bodies():
+        personality[body.lower()] = activation_for_date(birth_date, body=body)
+    personality["earth"] = earth_from_sun(personality["sun"])
+
     design_date = birth_date - timedelta(days=DESIGN_SOLAR_ARC_DAYS)
-    design_sun = activation_for_date(design_date, body="Sun")
-    design_earth = earth_from_sun(design_sun)
+    design: dict[str, dict[str, Any]] = {}
+    for body in classical_bodies():
+        design[body.lower()] = activation_for_date(design_date, body=body)
+    design["earth"] = earth_from_sun(design["sun"])
 
     natal_gates = {
-        int(personality_sun["gate"]),
-        int(personality_earth["gate"]),
-        int(design_sun["gate"]),
-        int(design_earth["gate"]),
+        int(row["gate"])
+        for block in (personality, design)
+        for row in block.values()
+        if isinstance(row, dict) and row.get("gate")
     }
 
     activations: list[dict[str, Any]] = []
     if isinstance(transit, dict):
-        for key in ("sun", "earth", "moon"):
-            row = transit.get(key)
+        transit_rows = transit.get("planets") if isinstance(transit.get("planets"), list) else []
+        if not transit_rows:
+            transit_rows = [
+                transit[k]
+                for k in ("sun", "earth", "moon")
+                if isinstance(transit.get(k), dict)
+            ]
+        for row in transit_rows:
             if not isinstance(row, dict):
                 continue
             g = int(row.get("gate") or 0)
+            body = str(row.get("body") or "")
             if g and g in natal_gates:
                 activations.append(
                     {
-                        "id": f"hd-activate-{key}-{g}",
+                        "id": f"hd-activate-{body.lower()}-{g}",
                         "kind": "transit_hits_natal_gate",
-                        "transit_body": key,
+                        "transit_body": body,
                         "gate": g,
                         "line": row.get("line"),
                         "title": f"Транзит активирует ворота {g}",
                         "story_ru": (
-                            f"Сегодняшний {key} в {row.get('label')} касается "
+                            f"Сегодняшний {body} в {row.get('label')} касается "
                             f"ваших ворот {g} ({_GATE_THEME_RU.get(g, '')})."
                         ),
                     }
@@ -407,8 +448,8 @@ def bodygraph_soft(
         depth = "partial_birth_data"
 
     summary = (
-        f"Бодиграф (soft): Personality Sun {personality_sun['label']}, "
-        f"Design Sun {design_sun['label']}."
+        f"Бодиграф (soft classical): Personality Sun {personality['sun']['label']}, "
+        f"Design Sun {design['sun']['label']}; natal gates {len(natal_gates)}."
     )
     if activations:
         summary = f"{summary} Активаций транзитом сегодня: {len(activations)}."
@@ -416,17 +457,34 @@ def bodygraph_soft(
     return {
         "capability_id": "bodygraph_interaction",
         "depth": depth,
-        "approximation": "design_minus_88d_solar_arc",
-        "personality": {"sun": personality_sun, "earth": personality_earth},
-        "design": {
-            "sun": design_sun,
-            "earth": design_earth,
-            "approx_date": design_date.isoformat(),
+        "approximation": "design_minus_88d_classical_mean_lon",
+        "personality": {
+            "sun": personality["sun"],
+            "earth": personality["earth"],
+            "planets": list(personality.values()),
         },
-        "natal_sun_earth_gates": sorted(natal_gates),
+        "design": {
+            "sun": design["sun"],
+            "earth": design["earth"],
+            "approx_date": design_date.isoformat(),
+            "planets": list(design.values()),
+        },
+        "natal_sun_earth_gates": sorted(
+            {
+                int(personality["sun"]["gate"]),
+                int(personality["earth"]["gate"]),
+                int(design["sun"]["gate"]),
+                int(design["earth"]["gate"]),
+            }
+        ),
+        "natal_gates": sorted(natal_gates),
         "activations": activations,
         "summary_ru": summary,
         "school_canon": "rave_mandala_gate41_aquarius_2",
+        "limitation_ru": (
+            "Personality/Design Sun…Saturn + Earth (mean lon). "
+            "Уран/Нептун/Плутон / точное Design-время — later."
+        ),
     }
 
 

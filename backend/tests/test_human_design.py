@@ -69,6 +69,9 @@ def test_transit_gates_without_birth():
     assert 1 <= transit["sun"]["gate"] <= 64
     assert 1 <= transit["sun"]["line"] <= 6
     assert transit["earth"]["gate"] != transit["sun"]["gate"]
+    assert transit["depth"] == "classical_planets_mean_lon"
+    bodies = {p["body"] for p in transit["planets"]}
+    assert bodies >= {"Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Earth"}
 
     bundle = collect_personal_sources(DaySourceInputs(target_date=date(2026, 7, 24)))
     hd = bundle["sources"]["human_design"]
@@ -78,6 +81,7 @@ def test_transit_gates_without_birth():
     assert "bodygraph_interaction" not in hd["capability_ids"]
     assert "channels" in hd["payload"]["channels"]
     assert "active_gates" in hd["payload"]["channels"]
+    assert len(hd["payload"]["channels"]["active_gates"]["transit"]) >= 3
 
 
 def test_bodygraph_when_birth_date():
@@ -95,8 +99,10 @@ def test_bodygraph_when_birth_date():
     assert "channels" in hd["capability_ids"]
     assert hd["bodygraph"]["depth"] == "time_place_known"
     assert hd["bodygraph"]["personality"]["sun"]["gate"]
+    assert len(hd["bodygraph"]["natal_gates"]) >= 4
     assert "channels" in hd["channels"]
     assert "active_gates" in hd["channels"]
+    assert len(hd["channels"]["active_gates"]["natal"]) >= 4
 
 
 def test_interpretation_can_include_hd_claim():

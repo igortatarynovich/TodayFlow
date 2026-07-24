@@ -146,13 +146,17 @@ export type TodayContractDayStoryV1 = {
       summary_ru?: string;
       capability_ids?: string[];
       transit_gates?: {
+        depth?: string;
         sun?: { gate?: number; line?: number; label?: string; theme_ru?: string };
         earth?: { gate?: number; line?: number; label?: string };
         moon?: { gate?: number; line?: number; label?: string };
+        planets?: Array<{ body?: string; gate?: number; line?: number; label?: string }>;
+        limitation_ru?: string;
       };
       bodygraph?: {
         depth?: string;
         activations?: Array<{ id?: string; title?: string; story_ru?: string }>;
+        natal_gates?: number[];
       } | null;
       channels?: {
         summary_ru?: string;

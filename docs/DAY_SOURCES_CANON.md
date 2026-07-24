@@ -605,9 +605,9 @@ Day Story            →  интерпретация Foundation → экран T
 
 | capability_id | version | required_inputs | in_foundation | in_personal | in_today |
 |---------------|---------|-----------------|---------------|-------------|----------|
-| `transit_gates` | v1 | `target_date` | soft deferred | yes | soft |
-| `bodygraph_interaction` | v1/partial | + `birth_date` (±88d Design approx) | no | yes | soft |
-| `channels` / defined centers | v1/partial | Sun/Earth/Moon (+ natal Sun–Earth); full planet set later | no | yes | soft |
+| `transit_gates` | v1/partial | `target_date`; classical Sun…Saturn + Earth | soft deferred | yes | soft |
+| `bodygraph_interaction` | v1/partial | + `birth_date` (±88d Design; classical planets) | no | yes | soft |
+| `channels` / defined centers | v1/partial | classical transit + natal gates | no | yes | soft |
 
 ---
 

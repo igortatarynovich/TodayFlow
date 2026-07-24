@@ -56,9 +56,9 @@
 | `personal_astrology` | time_lords (firdaria) | `birth_date` (+ time+place for sect) | no | yes | soft |
 | `personal_astrology` | planet_returns | `birth_date` | no | yes | soft |
 | `personal_astrology` | houses, ASC/MC | + `birth_time` + `birth_place` | no | yes | yes |
-| `human_design` | transit gates | datetime | soft* | yes (wire) | soft |
-| `human_design` | bodygraph interaction | + birth datetime (+ place for depth) | no | yes | soft |
-| `human_design` | channels / defined centers | Sun/Earth/Moon (+ natal Sun–Earth) | no | yes | soft |
+| `human_design` | transit gates | datetime (classical Sun…Saturn + Earth) | soft* | yes (wire) | soft |
+| `human_design` | bodygraph interaction | + birth datetime (+ place for depth); classical natal | no | yes | soft |
+| `human_design` | channels / defined centers | classical transit + natal gates | no | yes | soft |
 
 \* Soft Foundation transit sky deferred — v1 collected in Day Personal, not Foundation essence.
 | `tarot_oracle` | card of day | `draw_event` | **no** | contextual | yes (L5) |
