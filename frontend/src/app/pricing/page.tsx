@@ -1,7 +1,7 @@
 "use client";
 
-// DRAFT PRICING — placeholder numbers, not a decision (see docs/TODAYFLOW_PRODUCT_CANON_UNIFIED.md §7).
-// Monetization is not a launch-v1 DoD blocker; paywall + price are a separate wave.
+// DRAFT PRICING — placeholder amounts, not a price decision (see docs/TODAYFLOW_PRODUCT_CANON_UNIFIED.md §7).
+// Market: US/EU → Stripe, show $/€ (not ₽). Product language v1: Russian. Monetization is not launch-v1 DoD.
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -135,7 +135,7 @@ export default function PricingPage() {
             {/* Free Tier */}
             <SubscriptionTier
               name="Free"
-              price="0 ₽"
+              price="$0"
               features={[
                 t("pricing.free.feature1", "Сигналы дня: энергия, фокус, короткие шаги"),
                 t("pricing.free.feature2", "Поверхностные инсайты («что сделать сегодня»)"),
@@ -149,7 +149,7 @@ export default function PricingPage() {
             {/* Plus Tier */}
             <SubscriptionTier
               name="Plus"
-              price="990 ₽/мес"
+              price="$9.99/mo"
               recommended={true}
               highlight={true}
               features={[
@@ -168,7 +168,7 @@ export default function PricingPage() {
             {/* Pro Tier */}
             <SubscriptionTier
               name="Pro"
-              price="2490 ₽/мес"
+              price="$24.99/mo"
               features={[
                 t("pricing.pro.feature1", "Всё из Plus"),
                 t("pricing.pro.feature2", "Системные инсайты и более глубокое чтение жизни на «Сегодня»"),
