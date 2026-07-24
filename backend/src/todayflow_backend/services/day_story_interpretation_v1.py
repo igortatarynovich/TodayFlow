@@ -227,7 +227,10 @@ def build_day_story_interpretation_v1(
         "has_geo": lat is not None and lon is not None,
         "has_day_personal": bool(
             isinstance(day_personal, dict)
-            and (day_personal.get("source_inputs") or {}).get("has_personal_astrology")
+            and (
+                (day_personal.get("source_inputs") or {}).get("has_personal_astrology")
+                or (day_personal.get("source_inputs") or {}).get("has_human_design")
+            )
         ),
     }
 

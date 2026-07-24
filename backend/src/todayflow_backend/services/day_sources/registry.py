@@ -9,6 +9,7 @@ from todayflow_backend.services.day_sources.adapters.chinese_metaphysics import 
 )
 from todayflow_backend.services.day_sources.adapters.moon import run_moon
 from todayflow_backend.services.day_sources.adapters.numerology import run_numerology
+from todayflow_backend.services.day_sources.adapters.human_design import run_human_design
 from todayflow_backend.services.day_sources.adapters.personal_astrology import (
     run_personal_astrology,
 )
@@ -207,6 +208,19 @@ def default_registry() -> DaySourceRegistry:
             in_today=True,
             required_input_keys=(),
             run=run_personal_astrology,
+        )
+    )
+    reg.register(
+        SourceFamilySpec(
+            family_id="human_design",
+            layer="personal",
+            # Soft transit sky stays off shared Foundation essence for v1;
+            # family is collected in Day Personal (transit_gates always, bodygraph when birth).
+            in_foundation=False,
+            in_personal=True,
+            in_today=False,
+            required_input_keys=("target_date",),
+            run=run_human_design,
         )
     )
     return reg

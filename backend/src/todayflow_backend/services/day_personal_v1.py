@@ -42,20 +42,31 @@ def build_day_personal_v1(
     )
     bundle = collect_personal_sources(inputs)
     sources = bundle.get("sources") if isinstance(bundle.get("sources"), dict) else {}
-    personal_astro = sources.get("personal_astrology") if isinstance(sources, dict) else None
-    payload = (
-        personal_astro.get("payload")
-        if isinstance(personal_astro, dict) and personal_astro.get("status") == "ok"
-        else None
-    )
+
+    def _ok_payload(family_id: str) -> dict[str, Any] | None:
+        row = sources.get(family_id) if isinstance(sources, dict) else None
+        if isinstance(row, dict) and row.get("status") == "ok" and isinstance(row.get("payload"), dict):
+            return row["payload"]
+        return None
+
+    personal_astro = _ok_payload("personal_astrology")
+    human_design = _ok_payload("human_design")
+
+    summary_parts = [
+        str((personal_astro or {}).get("summary_ru") or "").strip(),
+        str((human_design or {}).get("summary_ru") or "").strip(),
+    ]
+    summary = _clip(" ".join(p for p in summary_parts if p), 420)
 
     return {
         "contract_version": "day_personal_v1",
-        "calculation_version": "day-personal-v1.0",
-        "personal_astrology": payload,
-        "summary_ru": _clip(str((payload or {}).get("summary_ru") or ""), 320),
+        "calculation_version": "day-personal-v1.1",
+        "personal_astrology": personal_astro,
+        "human_design": human_design,
+        "summary_ru": summary,
         "source_inputs": {
-            "has_personal_astrology": bool(payload),
+            "has_personal_astrology": bool(personal_astro),
+            "has_human_design": bool(human_design),
             "ok_family_ids": list(bundle.get("ok_family_ids") or []),
             "unavailable": {
                 fid: row.get("unavailable_reason")
@@ -74,35 +85,61 @@ def personal_to_interpretation_claims(personal: dict[str, Any] | None) -> list[d
     claims: list[dict[str, Any]] = []
     if not isinstance(personal, dict):
         return claims
-    astro = personal.get("personal_astrology")
-    if not isinstance(astro, dict):
-        return claims
-    for b in (astro.get("beats") or [])[:4]:
-        if not isinstance(b, dict):
-            continue
-        text = _clip(str(b.get("story_ru") or b.get("title") or ""), 280)
-        if not text:
-            continue
-        claims.append(
-            {
-                "id": f"claim.personal.astro.{b.get('id')}",
-                "kind": "personal",
-                "text": text,
-                "evidence_ids": [str(b.get("evidence_ref") or b.get("id"))],
-                "domain": None,
-                "layer": "personal_astrology",
-            }
-        )
-    summary = _clip(str(astro.get("summary_ru") or ""), 280)
-    if summary and not claims:
-        claims.append(
-            {
-                "id": "claim.personal.astro.summary",
-                "kind": "personal",
-                "text": summary,
-                "evidence_ids": ["source.personal_astrology"],
-                "domain": None,
-                "layer": "personal_astrology",
-            }
-        )
+
+    def _from_family(
+        *,
+        key: str,
+        claim_prefix: str,
+        layer: str,
+        source_fallback: str,
+        limit: int = 4,
+    ) -> None:
+        block = personal.get(key)
+        if not isinstance(block, dict):
+            return
+        local: list[dict[str, Any]] = []
+        for b in (block.get("beats") or [])[:limit]:
+            if not isinstance(b, dict):
+                continue
+            text = _clip(str(b.get("story_ru") or b.get("title") or ""), 280)
+            if not text:
+                continue
+            local.append(
+                {
+                    "id": f"{claim_prefix}.{b.get('id')}",
+                    "kind": "personal",
+                    "text": text,
+                    "evidence_ids": [str(b.get("evidence_ref") or b.get("id"))],
+                    "domain": None,
+                    "layer": layer,
+                }
+            )
+        summary = _clip(str(block.get("summary_ru") or ""), 280)
+        if summary and not local:
+            local.append(
+                {
+                    "id": f"{claim_prefix}.summary",
+                    "kind": "personal",
+                    "text": summary,
+                    "evidence_ids": [source_fallback],
+                    "domain": None,
+                    "layer": layer,
+                }
+            )
+        claims.extend(local)
+
+    _from_family(
+        key="personal_astrology",
+        claim_prefix="claim.personal.astro",
+        layer="personal_astrology",
+        source_fallback="source.personal_astrology",
+    )
+    # HD is soft for Today (in_today=false): at most one transit beat into claims.
+    _from_family(
+        key="human_design",
+        claim_prefix="claim.personal.hd",
+        layer="human_design",
+        source_fallback="source.human_design",
+        limit=1,
+    )
     return claims

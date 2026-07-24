@@ -581,15 +581,23 @@ Day Story            →  интерпретация Foundation → экран T
 
 | Поле | Значение |
 |------|----------|
-| purpose | Транзиты по 64 воротам; соединение с бодиграфом |
-| data_sot | Ephemeris → HD gates/lines |
-| required_inputs | datetime; personal: birth datetime+place |
-| deterministic_outputs | gate activations, channels, defined centers (transit) |
-| school_canon | Standard HD gate mapping |
-| version | planned |
-| in_foundation | soft (transit sky only) |
+| purpose | Транзиты по 64 воротам; soft-соединение с бодиграфом |
+| data_sot | Tropical longitude → HD gates/lines (closed-form Sun/Moon; Swiss later) |
+| required_inputs | `target_date`; personal bodygraph: `birth_date` (+ time/place for depth) |
+| deterministic_outputs | transit Sun/Earth/Moon gates; soft Personality/Design Sun–Earth; gate activations |
+| school_canon | Standard Rave Mandala — Gate 41 @ 02° Aquarius |
+| version | v1/partial |
+| in_foundation | soft deferred (v1 lives in Day Personal, not Foundation essence) |
 | in_personal | yes |
-| in_today | later |
+| in_today | soft (at most one HD claim; full surface later) |
+
+#### Capabilities
+
+| capability_id | version | required_inputs | in_foundation | in_personal | in_today |
+|---------------|---------|-----------------|---------------|-------------|----------|
+| `transit_gates` | v1 | `target_date` | soft deferred | yes | soft |
+| `bodygraph_interaction` | v1/partial | + `birth_date` (±88d Design approx) | no | yes | soft |
+| `channels` / defined centers | planned | full ephemeris + birth datetime+place | no | yes | later |
 
 ---
 

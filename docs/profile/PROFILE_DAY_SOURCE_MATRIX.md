@@ -47,8 +47,10 @@
 | `chinese_metaphysics` | bazi / clashes | + birth datetime (+ hour for full) | no | yes | later |
 | `personal_astrology` | natal_transits (sign-level) | sky + `birth_date` (+ natal facts) | no | yes | yes |
 | `personal_astrology` | houses, ASC/MC, progressions | + `birth_time` + `birth_place` | no | yes | yes |
-| `human_design` | transit gates | datetime | soft | — | later |
-| `human_design` | bodygraph interaction | + birth datetime + place | no | yes | later |
+| `human_design` | transit gates | datetime | soft* | yes (wire) | soft |
+| `human_design` | bodygraph interaction | + birth datetime (+ place for depth) | no | yes | soft |
+
+\* Soft Foundation transit sky deferred — v1 collected in Day Personal, not Foundation essence.
 | `tarot_oracle` | card of day | `draw_event` | **no** | contextual | yes (L5) |
 | `life_context` | tasks/mood | user permissions | no | — | yes (L4) |
 | `biorhythms` | — | birth_date | **out_of_core** | — | no |

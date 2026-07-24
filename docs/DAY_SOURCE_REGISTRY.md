@@ -59,11 +59,12 @@ DaySourceInputs
 | `vedic_panchanga` | foundation | `target_date` (+ geo for muhurta) | yes |
 | `chinese_metaphysics` | foundation | `target_date` (+ TZ preferred) | yes |
 | `personal_astrology` | **personal** | birth_date + `celestial_events.personal_transits` | no (L3) |
+| `human_design` | **personal** | `target_date` (+ birth for bodygraph) | no (L3; soft transit, Today later) |
 
-Планируемые (канон есть, адаптер later): `human_design`, …
+Планируемые (канон есть, адаптер later): …
 
 ### Pipeline wiring
 
 `build_day_story_interpretation_v1` / `day_story_wire_v1` передают `target_date` и `birth_date` (из `core_profile.astro`) в Day Foundation. Foundation **всегда** собирается — даже без `celestial_events` (число дня + управитель недели).
 
-`day_personal_v1` собирает L3 (`personal_astrology`) отдельно: natal transits из `celestial_events.personal_transits`, без смешивания в Foundation essence.
+`day_personal_v1` собирает L3 (`personal_astrology`, `human_design`) отдельно: natal transits + HD transit gates / soft bodygraph, без смешивания в Foundation essence.

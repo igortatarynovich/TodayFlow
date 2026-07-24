@@ -62,6 +62,7 @@ def test_registry_lists_v1_families():
     ids = reg.list_families()
     assert ids == [
         "chinese_metaphysics",
+        "human_design",
         "moon",
         "numerology",
         "personal_astrology",

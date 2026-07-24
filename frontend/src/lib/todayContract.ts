@@ -66,8 +66,22 @@ export type TodayContractDayStoryV1 = {
       summary_ru?: string;
       beats?: Array<{ id?: string; title?: string; story_ru?: string }>;
     } | null;
+    human_design?: {
+      summary_ru?: string;
+      capability_ids?: string[];
+      transit_gates?: {
+        sun?: { gate?: number; line?: number; label?: string; theme_ru?: string };
+        earth?: { gate?: number; line?: number; label?: string };
+        moon?: { gate?: number; line?: number; label?: string };
+      };
+      bodygraph?: {
+        depth?: string;
+        activations?: Array<{ id?: string; title?: string; story_ru?: string }>;
+      } | null;
+    } | null;
     source_inputs?: {
       has_personal_astrology?: boolean;
+      has_human_design?: boolean;
       ok_family_ids?: string[];
     };
   } | null;
