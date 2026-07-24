@@ -216,14 +216,19 @@ def personal_to_interpretation_claims(personal: dict[str, Any] | None) -> list[d
         ),
         natal_transit_cap=1,
     )
-    # HD soft: channel (classical planet set) + one transit gate.
+    # HD soft: type/authority first, then channel + gate activation.
     _from_family(
         key="human_design",
         claim_prefix="claim.personal.hd",
         layer="human_design",
         source_fallback="source.human_design",
         limit=2,
-        prefer_kinds=("channel", "transit_hits_natal_gate", "transit_gate"),
+        prefer_kinds=(
+            "type_authority",
+            "channel",
+            "transit_hits_natal_gate",
+            "transit_gate",
+        ),
     )
     _from_family(
         key="bazi",

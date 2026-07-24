@@ -8,7 +8,10 @@ from todayflow_backend.services.day_personal_v1 import build_day_personal_v1
 from todayflow_backend.services.day_sources import DaySourceInputs, collect_personal_sources
 from todayflow_backend.services.day_sources.human_design import (
     GATE_WHEEL,
+    defined_centers_from_channels,
     longitude_to_gate_line,
+    resolve_channels,
+    resolve_type_authority,
     transit_gates_for_day,
 )
 from todayflow_backend.services.day_sources.registry import default_registry
@@ -42,10 +45,7 @@ def test_human_design_registered_not_in_foundation():
 
 
 def test_channels_known_pair():
-    from todayflow_backend.services.day_sources.human_design import (
-        build_channels_payload,
-        resolve_channels,
-    )
+    from todayflow_backend.services.day_sources.human_design import build_channels_payload
 
     ch = resolve_channels({1, 8, 99})
     assert any(c["id"] == "1-8" for c in ch)
@@ -62,6 +62,37 @@ def test_channels_known_pair():
     assert any(c["id"] == "1-8" for c in payload["channels"])
     centers = {c["id"] for c in payload["defined_centers"]}
     assert "g" in centers and "throat" in centers
+
+
+def test_type_authority_from_natal_channels():
+    def pack(gates: set[int]):
+        channels = resolve_channels(gates)
+        centers = defined_centers_from_channels(channels)
+        return resolve_type_authority(natal_channels=channels, natal_centers=centers)
+
+    assert pack(set())["type"]["id"] == "reflector"
+    assert pack(set())["authority"]["id"] == "lunar"
+
+    gen = pack({3, 60})
+    assert gen["type"]["id"] == "generator"
+    assert gen["authority"]["id"] == "sacral"
+    assert gen["motor_to_throat"] is False
+
+    mg = pack({20, 34})
+    assert mg["type"]["id"] == "manifesting_generator"
+    assert mg["motor_to_throat"] is True
+
+    man = pack({21, 45})
+    assert man["type"]["id"] == "manifestor"
+    assert man["authority"]["id"] == "ego"
+
+    proj = pack({1, 8})
+    assert proj["type"]["id"] == "projector"
+    assert proj["authority"]["id"] == "self_projected"
+
+    emo = pack({19, 49, 1, 8})
+    assert emo["type"]["id"] == "projector"
+    assert emo["authority"]["id"] == "emotional"
 
 
 def test_transit_gates_without_birth():
@@ -91,6 +122,7 @@ def test_transit_gates_without_birth():
     assert "transit_gates" in hd["capability_ids"]
     assert "channels" in hd["capability_ids"]
     assert "bodygraph_interaction" not in hd["capability_ids"]
+    assert "type_authority" not in hd["capability_ids"]
     assert "channels" in hd["payload"]["channels"]
     assert "active_gates" in hd["payload"]["channels"]
     assert len(hd["payload"]["channels"]["active_gates"]["transit"]) >= 3
@@ -109,10 +141,19 @@ def test_bodygraph_when_birth_date():
     hd = personal["human_design"]
     assert "bodygraph_interaction" in hd["capability_ids"]
     assert "channels" in hd["capability_ids"]
-    assert hd["bodygraph"]["depth"] == "time_place_known"
+    assert "type_authority" in hd["capability_ids"]
+    assert str(hd["bodygraph"]["depth"]).startswith("time_place_known")
     assert hd["bodygraph"]["personality"]["sun"]["gate"]
     assert len(hd["bodygraph"]["natal_gates"]) >= 4
-    assert "channels" in hd["channels"]
+    assert "natal_defined_centers" in hd["channels"]
+    assert hd["type_authority"]["type"]["id"] in {
+        "manifestor",
+        "generator",
+        "manifesting_generator",
+        "projector",
+        "reflector",
+    }
+    assert hd["type_authority"]["authority"]["name_ru"]
     assert "active_gates" in hd["channels"]
     assert len(hd["channels"]["active_gates"]["natal"]) >= 4
 
@@ -130,11 +171,11 @@ def test_interpretation_can_include_hd_claim():
     assert any(i.startswith("claim.personal.hd.") for i in claim_ids)
     hd_claims = [c for c in interp["derived_claims"] if str(c["id"]).startswith("claim.personal.hd.")]
     assert 1 <= len(hd_claims) <= 2
-    # Classical planet set feeds channels into beats; prefer channel when present.
     kinds_in_beats = {
         b.get("kind")
         for b in (interp["day_personal"]["human_design"].get("beats") or [])
         if isinstance(b, dict)
     }
-    if "channel" in kinds_in_beats:
-        assert any("channel" in str(c["id"]) for c in hd_claims)
+    assert "type_authority" in kinds_in_beats
+    # Prefer type_authority into Today claims.
+    assert any("HD soft" in str(c.get("text") or "") for c in hd_claims)

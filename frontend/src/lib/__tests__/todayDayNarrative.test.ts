@@ -248,6 +248,11 @@ describe("buildTodayDayNarrative", () => {
             },
           },
           human_design: {
+            type_authority: {
+              summary_ru: "HD soft: Генератор; авторитет Сакральный; стратегия — Отвечать.",
+              type: { id: "generator", name_ru: "Генератор" },
+              authority: { id: "sacral", name_ru: "Сакральный" },
+            },
             channels: {
               summary_ru: "Каналы HD (soft): 1-8 (Вдохновение).",
               channels: [{ id: "1-8", name_ru: "Вдохновение", centers_ru: ["G", "Горло"] }],
@@ -277,9 +282,9 @@ describe("buildTodayDayNarrative", () => {
     expect(personal).toBeTruthy();
     expect(personal!.kicker).toMatch(/Личный слой/i);
     const text = [personal!.lead, ...personal!.paragraphs].filter(Boolean).join(" ");
-    expect(text).toMatch(/ворот|Firdaria|Управители|Каналы HD/i);
+    expect(text).toMatch(/HD soft|ворот|Firdaria|Управители|Каналы HD/i);
     expect(personal!.signals?.length).toBeGreaterThan(0);
-    expect(personal!.signals?.map((s) => s.label).join(" ")).toMatch(/Профекция|Firdaria|HD/i);
+    expect(personal!.signals?.map((s) => s.label).join(" ")).toMatch(/HD тип|Профекция|Firdaria|HD/i);
     expect(personal!.accent).toBe("sky");
   });
 

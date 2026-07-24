@@ -159,6 +159,7 @@ export function collectDayPersonalLayer(
       : null;
 
   const softLines = [
+    clean(hd?.type_authority?.summary_ru),
     clean(activation?.story_ru) || titledStory(activation?.title, activation?.story_ru),
     clean(astro?.time_lords?.summary_ru),
     zrPeak ? `ZR: ${zrPeak}` : null,
@@ -187,6 +188,19 @@ export function collectDayPersonalLayer(
     signals.push({ label, value: v });
   };
 
+  if (hd?.type_authority?.type?.name_ru) {
+    pushSignal(
+      "HD тип",
+      [
+        hd.type_authority.type.name_ru,
+        hd.type_authority.authority?.name_ru
+          ? `авт. ${hd.type_authority.authority.name_ru}`
+          : null,
+      ]
+        .filter(Boolean)
+        .join(" · "),
+    );
+  }
   const annual = astro?.profections?.annual;
   if (annual?.house) {
     pushSignal(

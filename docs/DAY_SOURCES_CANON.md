@@ -607,7 +607,8 @@ Day Story            →  интерпретация Foundation → экран T
 |---------------|---------|-----------------|---------------|-------------|----------|
 | `transit_gates` | v1/partial | `target_date`; Sun…Pluto + Earth (Swiss noon or mean lon) | soft deferred | yes | soft |
 | `bodygraph_interaction` | v1/partial | + `birth_date`; Design −88d Swiss walk when bridge | no | yes | soft |
-| `channels` / defined centers | v1/partial | full transit + natal gates (mean lon) | no | yes | soft |
+| `channels` / defined centers | v1/partial | full transit + natal gates; natal centers separate | no | yes | soft |
+| `type_authority` | v1/partial | natal Personality∪Design channels → Type/Authority/Strategy soft | no | yes | soft |
 
 ---
 

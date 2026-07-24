@@ -58,7 +58,8 @@
 | `personal_astrology` | houses, ASC/MC | + `birth_time` + `birth_place` | no | yes | yes |
 | `human_design` | transit gates | datetime (Sun…Pluto + Earth; Swiss noon when bridge) | soft* | yes (wire) | soft |
 | `human_design` | bodygraph interaction | + birth; Design −88d Swiss walk when bridge | no | yes | soft |
-| `human_design` | channels / defined centers | full transit + natal gates | no | yes | soft |
+| `human_design` | channels / centers | natal + day (natal∪transit); natal centers for type | no | yes | soft |
+| `human_design` | type_authority | natal channels → Type / Authority / Strategy soft | no | yes | soft |
 
 \* Soft Foundation transit sky deferred — v1 collected in Day Personal, not Foundation essence.
 | `tarot_oracle` | card of day | `draw_event` | **no** | contextual | yes (L5) |

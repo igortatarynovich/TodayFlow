@@ -207,6 +207,34 @@ _CENTER_RU: dict[str, str] = {
     "root": "Корень",
 }
 
+_MOTOR_CENTERS = frozenset({"heart", "solar_plexus", "sacral", "root"})
+
+_TYPE_RU = {
+    "manifestor": "Манифестор",
+    "generator": "Генератор",
+    "manifesting_generator": "Манифестирующий генератор",
+    "projector": "Проектор",
+    "reflector": "Рефлектор",
+}
+
+_AUTHORITY_RU = {
+    "emotional": "Эмоциональный",
+    "sacral": "Сакральный",
+    "splenic": "Селезёночный",
+    "ego": "Эго / воля",
+    "self_projected": "Self-Projected",
+    "mental": "Ментальный / внешний",
+    "lunar": "Лунный",
+}
+
+_STRATEGY_RU = {
+    "manifestor": "Информировать",
+    "generator": "Отвечать",
+    "manifesting_generator": "Отвечать (и информировать)",
+    "projector": "Ждать приглашения",
+    "reflector": "Ждать лунный цикл",
+}
+
 
 def resolve_channels(active_gates: set[int]) -> list[dict[str, Any]]:
     """Return channels whose both gates are present in active_gates."""
@@ -241,6 +269,81 @@ def defined_centers_from_channels(channels: list[dict[str, Any]]) -> list[dict[s
     ]
 
 
+def _center_ids(centers: list[dict[str, Any]]) -> set[str]:
+    return {str(c.get("id")) for c in centers if isinstance(c, dict) and c.get("id")}
+
+
+def motor_to_throat(channels: list[dict[str, Any]]) -> bool:
+    """True if any channel links Throat to a motor center."""
+    for ch in channels:
+        centers = {str(c) for c in (ch.get("centers") or [])}
+        if "throat" in centers and centers & _MOTOR_CENTERS:
+            return True
+    return False
+
+
+def resolve_type_authority(
+    *,
+    natal_channels: list[dict[str, Any]],
+    natal_centers: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Soft Type / Authority / Strategy from natal Personality∪Design centers only."""
+    defined = _center_ids(natal_centers)
+    sacral = "sacral" in defined
+    throat_motor = motor_to_throat(natal_channels)
+
+    if not defined:
+        type_id = "reflector"
+    elif sacral and throat_motor:
+        type_id = "manifesting_generator"
+    elif sacral:
+        type_id = "generator"
+    elif throat_motor:
+        type_id = "manifestor"
+    else:
+        type_id = "projector"
+
+    if "solar_plexus" in defined:
+        authority_id = "emotional"
+    elif "sacral" in defined:
+        authority_id = "sacral"
+    elif "spleen" in defined:
+        authority_id = "splenic"
+    elif "heart" in defined:
+        authority_id = "ego"
+    elif "g" in defined:
+        authority_id = "self_projected"
+    elif type_id == "reflector":
+        authority_id = "lunar"
+    else:
+        authority_id = "mental"
+
+    type_ru = _TYPE_RU[type_id]
+    authority_ru = _AUTHORITY_RU[authority_id]
+    strategy_ru = _STRATEGY_RU[type_id]
+    center_labels = ", ".join(c["name_ru"] for c in natal_centers[:5]) if natal_centers else "все открыты"
+    summary = (
+        f"HD soft: {type_ru}; авторитет {authority_ru}; стратегия — {strategy_ru}. "
+        f"Определённые центры (natal): {center_labels}."
+    )
+    return {
+        "capability_id": "type_authority",
+        "depth": "natal_channels_soft",
+        "type": {"id": type_id, "name_ru": type_ru},
+        "authority": {"id": authority_id, "name_ru": authority_ru},
+        "strategy": {"id": type_id, "name_ru": strategy_ru},
+        "defined_center_ids": sorted(defined),
+        "motor_to_throat": throat_motor,
+        "summary_ru": summary,
+        "school_canon": "rave_type_authority_v0_natal_channels",
+        "limitation_ru": (
+            "Type/Authority from natal Personality∪Design channels only "
+            "(Sun…Pluto + Earth; Design −88d). Not a commercial HD chart engine; "
+            "profile/lines/variable/incarnation cross deferred."
+        ),
+    }
+
+
 def build_channels_payload(
     *,
     transit_gates: dict[str, Any],
@@ -264,11 +367,12 @@ def build_channels_payload(
         for g in bodygraph.get("natal_gates") or bodygraph.get("natal_sun_earth_gates") or []:
             natal_set.add(int(g))
 
-    # Channels from transit-only and from natal∪transit (bodygraph interaction).
     transit_channels = resolve_channels(transit_set)
+    natal_channels = resolve_channels(natal_set) if natal_set else []
+    natal_centers = defined_centers_from_channels(natal_channels)
     combined = transit_set | natal_set
     combined_channels = resolve_channels(combined) if natal_set else list(transit_channels)
-    # Prefer reporting channels that appear in the combined (personal) view when natal exists.
+    # Day interaction view: natal∪transit; Type uses natal_* only.
     channels = combined_channels
     centers = defined_centers_from_channels(channels)
 
@@ -278,7 +382,9 @@ def build_channels_payload(
             f" и ещё {len(channels) - 3}." if len(channels) > 3 else "."
         )
         if centers:
-            summary += " Центры: " + ", ".join(c["name_ru"] for c in centers[:4]) + "."
+            summary += " Центры (день): " + ", ".join(c["name_ru"] for c in centers[:4]) + "."
+        if natal_centers:
+            summary += " Natal: " + ", ".join(c["name_ru"] for c in natal_centers[:4]) + "."
     else:
         summary = (
             "Каналы HD (soft): полной пары ворот сегодня нет "
@@ -294,12 +400,14 @@ def build_channels_payload(
         },
         "channels": channels,
         "transit_only_channels": transit_channels,
+        "natal_channels": natal_channels,
         "defined_centers": centers,
+        "natal_defined_centers": natal_centers,
         "summary_ru": summary,
         "school_canon": "rave_channels_v1_full_planet_set",
         "limitation_ru": (
-            "Ворота Sun…Pluto + Earth (mean longitude noon). "
-            "Точный Swiss / Design-время — later."
+            "Ворота Sun…Pluto + Earth (Swiss when bridge; else mean lon). "
+            "Day centers = natal∪transit; Type uses natal centers only."
         ),
     }
 
@@ -534,7 +642,7 @@ def bodygraph_soft(
         "limitation_ru": (
             "Personality/Design Sun…Pluto + Earth. "
             "Design ≈ birth−88d (Swiss walk when bridge present; else mean lon). "
-            "Not a full HD BodyGraph engine (centers/type/authority deferred)."
+            "Not a full HD BodyGraph engine (profile / cross deferred; type soft when natal channels)."
         ),
     }
 
@@ -563,6 +671,14 @@ def build_human_design_payload(
     channels = build_channels_payload(transit_gates=transit, bodygraph=bodygraph)
     caps.append("channels")
 
+    type_authority = None
+    if bodygraph is not None:
+        type_authority = resolve_type_authority(
+            natal_channels=list(channels.get("natal_channels") or []),
+            natal_centers=list(channels.get("natal_defined_centers") or []),
+        )
+        caps.append("type_authority")
+
     beats: list[dict[str, Any]] = [
         {
             "id": "hd.transit.sun",
@@ -575,6 +691,19 @@ def build_human_design_payload(
             "evidence_ref": "human_design.transit_gates",
         }
     ]
+    if type_authority:
+        beats.append(
+            {
+                "id": f"hd.type.{type_authority['type']['id']}",
+                "kind": "type_authority",
+                "title": (
+                    f"HD · {type_authority['type']['name_ru']} · "
+                    f"{type_authority['authority']['name_ru']}"
+                ),
+                "story_ru": type_authority["summary_ru"],
+                "evidence_ref": "human_design.type_authority",
+            }
+        )
     if bodygraph and bodygraph.get("activations"):
         for act in bodygraph["activations"][:3]:
             beats.append(
@@ -601,6 +730,8 @@ def build_human_design_payload(
         )
 
     summary = str(transit.get("summary_ru") or "")
+    if type_authority:
+        summary = f"{summary} {type_authority['summary_ru']}"
     if bodygraph and bodygraph.get("activations"):
         summary = f"{summary} {bodygraph['summary_ru']}"
     elif bodygraph:
@@ -613,6 +744,7 @@ def build_human_design_payload(
         "transit_gates": transit,
         "bodygraph": bodygraph,
         "channels": channels,
+        "type_authority": type_authority,
         "beats": beats,
         "summary_ru": summary[:480],
         "school_canon": "rave_mandala_gate41_aquarius_2",

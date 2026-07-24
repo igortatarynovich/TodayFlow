@@ -180,8 +180,20 @@ export type TodayContractDayStoryV1 = {
           centers?: string[];
           centers_ru?: string[];
         }>;
+        natal_channels?: Array<{ id?: string; name_ru?: string; centers_ru?: string[] }>;
         defined_centers?: Array<{ id?: string; name_ru?: string; via_channels?: string[] }>;
+        natal_defined_centers?: Array<{ id?: string; name_ru?: string; via_channels?: string[] }>;
         active_gates?: { transit?: number[]; natal?: number[]; combined?: number[] };
+        limitation_ru?: string;
+      } | null;
+      type_authority?: {
+        summary_ru?: string;
+        depth?: string;
+        type?: { id?: string; name_ru?: string };
+        authority?: { id?: string; name_ru?: string };
+        strategy?: { id?: string; name_ru?: string };
+        defined_center_ids?: string[];
+        motor_to_throat?: boolean;
         limitation_ru?: string;
       } | null;
     } | null;
