@@ -68,6 +68,10 @@ export type TodayDayNarrative = {
   foundation: TodayDayFoundationV1 | null;
   /** Canonical Day Map when resolved — UI should prefer this over chapter dumps. */
   dayMap: TodayDayMap | null;
+  /** §0.1 hero image-title when present on day_story. */
+  headlineAnchor: string | null;
+  /** §0.5 concrete closing strokes. */
+  vibeClosing: string | null;
 };
 
 const DOMAIN_LABELS: Record<string, string> = {
@@ -440,15 +444,8 @@ function buildDayMapChapters(
   }
   const colorName = clean(colorGuide?.name) || clean(contract.day_story?.talisman?.color);
   const colorHex = colorHexForDayName(colorName);
-  if (colorName) {
-    const colorLine = clean(colorGuide?.benefit)
-      ? `Цвет дня — ${colorName}. ${clean(colorGuide?.benefit)}`
-      : `Цвет дня — ${colorName}`;
-    if (!supportUsed.has(colorLine.toLowerCase())) {
-      supportUsed.add(colorLine.toLowerCase());
-      supportParas.push(colorLine);
-    }
-  }
+  // Color lives on the support media chip — do not also dump "Цвет дня — …" prose
+  // next to it (structural talisman + prose would read as a duplicate).
 
   const holiday = contract.day_story?.day_foundation?.seasonal?.holidays?.today?.[0];
   const holidayName = clean(holiday?.name_ru);
@@ -762,6 +759,9 @@ export function buildTodayDayNarrative(input: {
     contract,
     guideNarrativePayload: input.guideNarrativePayload,
   });
+  const headlineAnchor =
+    clean(contract.day_story?.headline_anchor) || clean(contract.day_story?.theme) || null;
+  const vibeClosing = clean(contract.day_story?.vibe_closing) || null;
 
   // Day Map path: pulse/glance/move slots — not a stacked fact wall.
   // Electional stays: explicit request, not a fact dump.
@@ -779,6 +779,8 @@ export function buildTodayDayNarrative(input: {
       chapters: chaptersMap,
       foundation,
       dayMap,
+      headlineAnchor,
+      vibeClosing,
     };
   }
 
@@ -943,5 +945,5 @@ export function buildTodayDayNarrative(input: {
   );
   if (supports) chapters.push(supports);
 
-  return { theme, softWhy, chapters, foundation, dayMap: null };
+  return { theme, softWhy, chapters, foundation, dayMap: null, headlineAnchor, vibeClosing };
 }

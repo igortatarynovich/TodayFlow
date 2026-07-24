@@ -164,9 +164,9 @@ export function TodayPersonalizedProductSection({
           style={profileMotionStaggerDelay(0, 60) as CSSProperties}
           data-testid="today-entity-synthesis"
         >
-          {narrative.theme ? (
+          {narrative.headlineAnchor || narrative.theme ? (
             <p className={styles.synthesisKicker} data-testid="today-narrative-theme">
-              {narrative.theme}
+              {narrative.headlineAnchor || narrative.theme}
             </p>
           ) : null}
 
@@ -279,6 +279,12 @@ export function TodayPersonalizedProductSection({
               </div>
             );
           })}
+
+          {narrative.vibeClosing ? (
+            <p className={styles.vibeClosing} data-testid="today-vibe-closing">
+              {narrative.vibeClosing}
+            </p>
+          ) : null}
         </div>
       </div>
 

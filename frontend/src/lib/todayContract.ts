@@ -43,6 +43,8 @@ export type TodayContractDayStoryTraceV1 = {
 export type TodayContractDayStoryV1 = {
   contract_version: string;
   theme?: string;
+  /** §0.1 image-title for hero — not an astro fact label. */
+  headline_anchor?: string;
   direction?: string;
   story?: string;
   do?: string[];
@@ -50,6 +52,8 @@ export type TodayContractDayStoryV1 = {
   advantage?: string;
   abstain?: string;
   today_move?: string;
+  /** §0.5 concrete sensory closing strokes (semicolon-separated). */
+  vibe_closing?: string;
   talisman?: { color?: string; stone?: string; note?: string };
   practice_recommendation?: { kind?: string; text?: string; reason?: string };
   symbolic_note?: string;

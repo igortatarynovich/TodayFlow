@@ -448,6 +448,21 @@
   color: rgba(201, 169, 110, 0.9);
 }
 
+.vibeClosing {
+  margin: 1.1rem 0 0;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(212, 184, 150, 0.22);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--tdp-body, #3d342c);
+  font-style: italic;
+}
+
+.sectionWebEmbed .vibeClosing {
+  color: rgba(255, 255, 255, 0.82);
+  border-top-color: rgba(212, 184, 150, 0.18);
+}
+
 .personalSignals {
   display: flex;
   flex-direction: column;

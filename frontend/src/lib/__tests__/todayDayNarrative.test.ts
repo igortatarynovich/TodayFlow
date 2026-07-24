@@ -375,13 +375,15 @@ describe("buildTodayDayNarrative", () => {
     expect(body).toMatch(/Expression|Числа имени/i);
   });
 
-  it("expands supports as Твой ход with concrete move + color", () => {
+  it("expands supports as Твой ход with concrete move; color as media not prose", () => {
     const narrative = buildTodayDayNarrative({ contract, story, morningRitualData });
     const supports = narrative.chapters.find((c) => c.id === "supports")!;
     expect(supports.kicker).toMatch(/Твой ход/i);
     expect(supports.accent).toBe("support");
     expect(supports.lead).toMatch(/Закрой одну важную/i);
+    expect(supports.colorHex).toBeTruthy();
+    expect(supports.colorLabel).toMatch(/синий/i);
     const body = [supports.lead, ...supports.paragraphs].filter(Boolean).join(" ");
-    expect(body).toMatch(/Цвет дня|синий|Сдерживает спешку/i);
+    expect(body).not.toMatch(/Цвет дня/i);
   });
 });

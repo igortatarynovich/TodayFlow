@@ -132,6 +132,14 @@ export function buildDayThesis(
 }
 
 export function buildThemeShort(contract: TodayContractV1, thesis: string): string {
+  const anchor = contract.day_story?.headline_anchor?.trim();
+  if (anchor && isRuUserFacingText(anchor) && anchor.length <= 96) {
+    return anchor.replace(/[.!?]+$/, "").trim();
+  }
+  const theme = contract.day_story?.theme?.trim();
+  if (theme && isRuUserFacingText(theme) && theme.length <= 96) {
+    return theme.replace(/[.!?]+$/, "").trim();
+  }
   const period = contract.global_context.period.trim();
   const dash = period.split(/\s*[—–]\s+/);
   if (dash.length >= 2) {
