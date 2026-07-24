@@ -82,6 +82,33 @@ export type TodayContractDayStoryV1 = {
         summary_ru?: string;
         bodies?: { moon?: { sign_ru?: string }; ascendant?: { sign_ru?: string } | null };
       } | null;
+      solar_return?: {
+        summary_ru?: string;
+        period_year?: number;
+        return_date?: string;
+        next_return_date?: string;
+        days_since_return?: number;
+        days_until_next?: number;
+        return_chart_soft?: {
+          sun?: { sign_ru?: string };
+          moon?: { sign_ru?: string };
+          ascendant?: { sign_ru?: string } | null;
+        };
+        limitation_ru?: string;
+      } | null;
+      lunar_return?: {
+        summary_ru?: string;
+        return_date?: string;
+        next_return_date?: string;
+        days_since_return?: number;
+        days_until_next?: number;
+        return_chart_soft?: {
+          sun?: { sign_ru?: string };
+          moon?: { sign_ru?: string };
+          ascendant?: { sign_ru?: string } | null;
+        };
+        limitation_ru?: string;
+      } | null;
       beats?: Array<{ id?: string; title?: string; story_ru?: string }>;
     } | null;
     human_design?: {

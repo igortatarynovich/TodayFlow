@@ -51,7 +51,8 @@
 | `personal_astrology` | natal_transits (sign-level) | sky + `birth_date` (+ natal facts) | no | yes | yes |
 | `personal_astrology` | profections | `birth_date` (+ time+place for ASC) | no | yes | soft |
 | `personal_astrology` | secondary_progressions / solar_arc | `birth_date` (+ time+place for angles) | no | yes | soft |
-| `personal_astrology` | houses, ASC/MC, returns | + `birth_time` + `birth_place` | no | yes | yes |
+| `personal_astrology` | solar_return / lunar_return | `birth_date` (+ time+place for soft ASC) | no | yes | soft |
+| `personal_astrology` | houses, ASC/MC, house_rulers | + `birth_time` + `birth_place` | no | yes | yes |
 | `human_design` | transit gates | datetime | soft* | yes (wire) | soft |
 | `human_design` | bodygraph interaction | + birth datetime (+ place for depth) | no | yes | soft |
 | `human_design` | channels / defined centers | Sun/Earth/Moon (+ natal Sun–Earth) | no | yes | soft |

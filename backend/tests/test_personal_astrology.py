@@ -69,10 +69,14 @@ def test_profections_without_transits():
     assert "profections" in pa["capability_ids"]
     assert "secondary_progressions" in pa["capability_ids"]
     assert "solar_arc" in pa["capability_ids"]
+    assert "solar_return" in pa["capability_ids"]
+    assert "lunar_return" in pa["capability_ids"]
     assert pa["profections"]["depth"] == "solar_proxy"
     assert 1 <= pa["profections"]["annual"]["house"] <= 12
     assert pa["secondary_progressions"]["progressed"]["sun"]["sign_ru"]
     assert pa["solar_arc"]["arc_degrees"] >= 0
+    assert pa["solar_return"]["return_date"]
+    assert pa["lunar_return"]["return_date"]
 
 
 def test_progressions_and_solar_arc_math():
@@ -99,6 +103,41 @@ def test_progressions_and_solar_arc_math():
     )
     assert timed["secondary_progressions"]["depth"] == "sun_moon_asc_soft"
     assert timed["solar_arc"]["bodies"]["ascendant"]["sign_ru"]
+
+
+def test_solar_and_lunar_returns():
+    from todayflow_backend.services.day_sources.returns import (
+        build_returns_pack,
+        find_solar_return_date,
+    )
+
+    birth = date(1990, 3, 15)
+    on = date(2026, 7, 24)
+    sr_d, _lon, err = find_solar_return_date(birth, 2026)
+    assert sr_d.month in (3, 4)  # near birthday
+    assert err < 1.0  # noon search within ~1°
+
+    pack = build_returns_pack(birth, on)
+    assert pack["solar_return"]["period_year"] == 2026
+    assert pack["solar_return"]["days_since_return"] >= 0
+    assert pack["solar_return"]["days_until_next"] > 0
+    assert pack["lunar_return"]["days_since_return"] >= 0
+    assert pack["lunar_return"]["days_until_next"] >= 0
+    # Last lunar return should be on/before target; next after.
+    assert pack["lunar_return"]["return_date"] <= on.isoformat()
+    assert pack["lunar_return"]["next_return_date"] > on.isoformat()
+
+    timed = build_returns_pack(
+        birth,
+        on,
+        birth_time=time(14, 30),
+        birth_lat=55.75,
+        birth_lon=37.62,
+        timezone_name="Europe/Moscow",
+    )
+    assert timed["solar_return"]["depth"] == "sun_moon_asc_soft"
+    assert timed["solar_return"]["return_chart_soft"]["ascendant"]["sign_ru"]
+    assert timed["lunar_return"]["return_chart_soft"]["ascendant"]["sign_ru"]
 
 
 def test_profections_asc_when_time_and_place():

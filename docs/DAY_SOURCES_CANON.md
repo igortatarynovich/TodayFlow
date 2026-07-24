@@ -431,7 +431,7 @@ Day Story            →  интерпретация Foundation → экран T
 | `house_rulers_chains` | planned | time+place | no | yes | later |
 | `secondary_progressions` | v1/partial | birth date (+ time+place for soft progressed ASC) | no | yes | soft background |
 | `solar_arc` | v1/partial | birth date (+ time+place for SA ASC) | no | yes | soft |
-| `solar_return` / `lunar_return` | planned | birth | no | yes | period context |
+| `solar_return` / `lunar_return` | v1/partial | birth date (+ time+place for soft ASC) | no | yes | soft period context |
 | `profections` | v1 | birth date (+ time+place → ASC whole-sign; else solar proxy) | no | yes | soft |
 | `time_lords` (firdaria, ZR, …) | planned | birth | no | yes | later |
 | `planet_returns` | planned | birth | no | yes | event |
