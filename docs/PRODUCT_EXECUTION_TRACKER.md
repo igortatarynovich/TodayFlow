@@ -997,7 +997,7 @@ Ordered work (aligns with canon §7):
 
 ## 6) Current Priorities (Execution Order)
 
-> **Активный фокус (2026-07-25):** **Character Engine** — Inventory + **Architecture Impact D1–D4 ACCEPTED** ([CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1](audits/CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md)). **Next:** schema `character_engine_v1` + Evidence Graph + adapters (не UI redesign; не dual publish).
+> **Активный фокус (2026-07-25):** **Character Engine schema** — [CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0](audits/CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md) DRAFT (identity/provenance first). Impact D1–D4 ACCEPTED. **Next:** JSON Schema + ID stability tests → recipe/stages behind flag. Не UI redesign; не dual publish.
 
 ### 🔴 Phase 3 — Screen Block Definition (единственный приоритет)
 
@@ -1706,7 +1706,8 @@ Historical note:
 - 2026-07-01 | Product | **Positive Definition §2 CLOSED (canonical)** | **CLOSED** | Два базовых закона с §1
 - 2026-07-01 | Product | **Positive Definition CLOSED** | **CLOSED** | §5.7 · Build Map E9 · spec · UX · empty states
 - 2026-07-01 | Product | **Build Map v0.5.6 — `PracticeRecommendation` spec 🟢** | **ACTIVE** | One practice · [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md)
-- 2026-07-25 | Profile / Architecture | **CE Architecture Impact D1–D4** | **ACCEPTED** | [CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md](audits/CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md): D1=`payload.character_engine_v1` in `core_profile_snapshots` · D2=typed Evidence Graph + Swiss calc authority · D3=staged pipeline 0–6 atomic publish (`profile.character_engine.v1`) · D4=deterministic adapters + Shadow≠SoT + kill at cutover. **Next:** schema contracts (not full prose catalog).
+- 2026-07-25 | Profile / Architecture | **CE Schema Contracts v0.1** | **DRAFT** | [CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md](audits/CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md): identity/provenance rules · envelope · RawFact · EvidenceGraph · stage boundaries · Compass · LegacyMap · Shadow. **No** prose/UI/life-area roots. **Next:** machine-readable schemas + ID stability tests.
+- 2026-07-25 | Profile / Architecture | **CE Architecture Impact D1–D4** | **ACCEPTED** | [CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md](audits/CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md): D1=`payload.character_engine_v1` · D2=Evidence Graph + Swiss authority · D3=stages 0–6 · D4=adapters + Shadow≠SoT. **Next:** schema track (in progress).
 - 2026-07-25 | Profile / Canon | **CE Runtime Inventory v0** | **DONE** | [CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md](audits/CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md): preferred `personality` path vs live disclosure funnel/oneshot · Snapshot=`core_profile_snapshots` · kill list · D1–D4 closed via Impact doc.
 - 2026-07-25 | Profile / Canon | **Character Engine Scenario v1.1.1 + matrix scrub** | **ACTIVE** | Header=1.1.1 · §8 wiring track · Availability Matrix dual roots scrubbed · `growth` deprecated as root. Residual: canon ≠ runtime until wiring.
 - 2026-07-25 | Profile / Canon | **Character Engine Scenario v1.1** | **SUPERSEDED → v1.1.1** | См. строку выше.

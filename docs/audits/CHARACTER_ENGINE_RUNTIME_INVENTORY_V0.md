@@ -163,12 +163,10 @@ SoT решений: [CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md](./CHARACTER_ENG
 
 ## 7. Next actions (execution)
 
-1. ~~Inventory~~ · ~~Architecture Impact D1–D4~~ → **DONE**.  
-2. Schema contracts (`character_engine_v1` + Evidence Graph + adapter map) — **без** полной prose catalog в том же PR, если возможно.  
-3. Recipe `character_engine_recipe_v1` + stage prompt IDs (`profile.character_engine.v1`).  
-4. Pipeline behind flag + Shadow harness.  
-5. Cutover readers: Profile web → iOS → ExperienceSlice/CUM → Today → Tarot → Compat.  
-6. Kill funnel/oneshot/orphan prompts at cutover; cleanup files later.  
+1. ~~Inventory · Architecture Impact D1–D4 · Schema draft v0.1~~ → [CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0](./CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md).  
+2. Machine-readable JSON Schema + ID stability tests.  
+3. Recipe + stage prompts · pipeline behind flag · Shadow.  
+4. Cutover readers · kill roots · cleanup.  
 
 **UI Profile:** только изменения, не закрепляющие старые смысловые зависимости.
 
@@ -180,3 +178,4 @@ SoT решений: [CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md](./CHARACTER_ENG
 |------|--------|
 | 2026-07-25 | v0 — full runtime inventory (BE roots · registry · FE/iOS clusters · kill list · D1–D4 open) |
 | 2026-07-25 | v0.1 — D1–D4 closed → [CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1](./CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md) |
+| 2026-07-25 | v0.2 — schema draft pointer [CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0](./CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md) |

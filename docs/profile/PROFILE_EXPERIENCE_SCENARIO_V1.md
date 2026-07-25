@@ -434,16 +434,17 @@ Personal Model / Snapshot в коде = носитель Character Engine output
 Канон ≠ runtime. Главный риск: старые контракты и jobs продолжают **параллельно** строить другую личность.
 
 **Inventory (вход):** [audits/CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md](../audits/CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md)  
-**Architecture Impact (D1–D4 ACCEPTED):** [audits/CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md](../audits/CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md)
+**Architecture Impact (D1–D4 ACCEPTED):** [audits/CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md](../audits/CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md)  
+**Schema (DRAFT v0.1):** [audits/CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md](../audits/CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md) — identity/provenance first; no prose catalog
 
-**Не делать сейчас:** редизайн Profile; полная JSON prose-schema до schema-PR; dual-SoT publish.
+**Не делать сейчас:** редизайн Profile; dual-SoT publish; prose/UI taxonomy schemas.
 
 **Делать (порядок):**
 
-1. ~~Инвентаризация~~ · ~~Architecture Impact D1–D4~~ → **DONE**.  
-2. Schema: `payload.character_engine_v1` + Evidence Graph + adapter map.  
-3. Recipe `character_engine_recipe_v1` · prompt family `profile.character_engine.v1` · stages 0–6.  
-4. Pipeline behind flag · Compass deterministic (stage 5) · Shadow harness.  
+1. ~~Inventory · Architecture Impact D1–D4~~ → **DONE**.  
+2. ~~Schema draft identity/provenance~~ → **DRAFT v0.1**.  
+3. JSON Schema files + ID stability tests · recipe + stage prompts.  
+4. Pipeline behind flag · Compass Stage 5 · Shadow harness.  
 5. Cutover: Profile web → iOS → ExperienceSlice/CUM → Today → Tarot → Compat.  
 6. Kill funnel/oneshot/orphan roots at cutover; cleanup later.
 

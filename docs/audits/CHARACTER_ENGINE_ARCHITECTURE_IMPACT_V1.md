@@ -6,7 +6,8 @@
 **Canon:** [PROFILE_EXPERIENCE_SCENARIO_V1.md](../profile/PROFILE_EXPERIENCE_SCENARIO_V1.md)  
 **Parent rule:** root `AGENTS.md` · `.cursor/rules/architecture-impact.mdc`
 
-**Не входит в этот документ:** полная JSON/schema структура полей. Schema — следующий трек **после** принятия D1–D4.
+**Не входит в этот документ:** полная JSON/schema структура полей.  
+**Schema track (next):** [CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md](./CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md) — identity/provenance-first.
 
 ---
 
@@ -278,11 +279,11 @@ Forming = UX/status envelope (facts ready · pending · failed · retry).
 
 ## Next (после принятия этого документа)
 
-1. Schema contracts: `character_engine_v1` + Evidence Graph + adapter map (без полной prose catalog).  
-2. Recipe `character_engine_recipe_v1` + stage prompt IDs.  
-3. Pipeline implementation behind flag · Shadow harness.  
-4. Cutover Profile web → iOS → ExperienceSlice → Today → Tarot → Compat.  
-5. Kill flags · cleanup.
+1. ~~Schema contracts~~ → [CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0](./CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md) DRAFT.  
+2. Machine-readable schemas + ID stability tests.  
+3. Recipe `character_engine_recipe_v1` + stage prompt IDs.  
+4. Pipeline behind flag · Shadow harness.  
+5. Cutover readers · kill flags · cleanup.
 
 ---
 
