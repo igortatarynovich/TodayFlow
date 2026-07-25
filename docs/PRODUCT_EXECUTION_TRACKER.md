@@ -997,7 +997,7 @@ Ordered work (aligns with canon §7):
 
 ## 6) Current Priorities (Execution Order)
 
-> **Активный фокус (2026-07-25):** **Tarot Interpretation Engine v1.1** (Context Pack → LLM → UI) + Character Engine schema v0.2. Tarot: [TAROT_INTERPRETATION_ENGINE_V1](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md). Character: [CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0](audits/CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md).
+> **Активный фокус (2026-07-25):** **Tarot Interpretation Engine v1.1** (Context Pack → LLM → UI) + **Character Engine Stage 0–1 shadow**. Tarot: [TAROT_INTERPRETATION_ENGINE_V1](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md). Character: machine schema + local validation landed; **CI job pending workflow-capable push**; Stage 0–1 shadow (no `character_engine_v1` ready publish) — [CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0](audits/CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md).
 
 ### 🔴 Phase 3 — Screen Block Definition (единственный приоритет)
 
@@ -1709,7 +1709,8 @@ Historical note:
 - 2026-07-01 | Product | **Positive Definition §2 CLOSED (canonical)** | **CLOSED** | Два базовых закона с §1
 - 2026-07-01 | Product | **Positive Definition CLOSED** | **CLOSED** | §5.7 · Build Map E9 · spec · UX · empty states
 - 2026-07-01 | Product | **Build Map v0.5.6 — `PracticeRecommendation` spec 🟢** | **ACTIVE** | One practice · [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md)
-- 2026-07-25 | Profile / Architecture | **CE Schema Contracts v0.2** | **DRAFT+validate** | `docs/schemas/character_engine_v1.schema.json` · fixtures · `character_engine_ids_v0` · pytest ID stability · `scripts/validate_character_engine_contract.py`. CI job patch local-only (push blocked without `workflow` scope). **Next:** Stage 0–1 builders.
+- 2026-07-25 | Profile / Architecture | **CE Stage 0–1 shadow** | **IN_PROGRESS** | Facts pack + evidence registry/builders · flags `CHARACTER_ENGINE_STAGE01_SHADOW` / `ENABLED` · diagnostics-only (no `character_engine_v1.status=ready`) · funnel/`personality` remain publish SoT. **Status:** Stage 0–1 shadow, no publish. **Next:** Stage 2 Identity Core (still behind flag).
+- 2026-07-25 | Profile / Architecture | **CE Schema Contracts v0.2** | **DRAFT+validate** | Machine schema + local validation landed (`docs/schemas/character_engine_v1.schema.json` · fixtures · `character_engine_ids_v0` · pytest · `scripts/validate_character_engine_contract.py`). **CI job pending workflow-capable push** (local `ci.yml` patch not remote). **Next:** land CI when token has `workflow` scope.
 - 2026-07-25 | Profile / Architecture | **CE Schema Contracts v0.1** | **SUPERSEDED → v0.2** | identity/provenance draft; see v0.2.
 - 2026-07-25 | Profile / Architecture | **CE Architecture Impact D1–D4** | **ACCEPTED** | [CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md](audits/CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md): D1=`payload.character_engine_v1` · D2=Evidence Graph + Swiss authority · D3=stages 0–6 · D4=adapters + Shadow≠SoT. **Next:** schema track (in progress).
 - 2026-07-25 | Profile / Canon | **CE Runtime Inventory v0** | **DONE** | [CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md](audits/CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md): preferred `personality` path vs live disclosure funnel/oneshot · Snapshot=`core_profile_snapshots` · kill list · D1–D4 closed via Impact doc.
