@@ -405,33 +405,47 @@ function buildDayMapChapters(
   contract: TodayContractV1,
   colorGuide: TodayDayColorGuide | null | undefined,
   used: string[],
-  tarotTrap: string | null = null,
 ): TodayDayNarrativeChapter[] {
+  /**
+   * One claim → one place:
+   * primaryConflict stays on Hero; here only Why → Expect → Trap → Do/Avoid → Vibe.
+   */
   const chapters: TodayDayNarrativeChapter[] = [];
-  used.push(dayMap.whatHappens);
-  const conflictTitle = dayMap.primaryConflict;
-  chapters.push({
-    id: "opening",
-    kicker: conflictTitle || "Суть дня",
-    lead: dayMap.whatHappens,
-    paragraphs: dayMap.eventsLead && dayMap.eventsLead !== dayMap.whatHappens ? [dayMap.eventsLead] : [],
-    accent: "default",
-  });
+  const whyLead =
+    dayMap.eventsLead && !nearDuplicate(dayMap.eventsLead, dayMap.primaryConflict || "")
+      ? dayMap.eventsLead
+      : dayMap.whyLayers[0] && !nearDuplicate(dayMap.whyLayers[0], dayMap.primaryConflict || "")
+        ? dayMap.whyLayers[0]
+        : null;
+  if (whyLead) {
+    used.push(whyLead);
+    chapters.push({
+      id: "opening",
+      kicker: "Почему такой день",
+      lead: whyLead,
+      paragraphs: dayMap.whyLayers
+        .slice(1)
+        .filter((l) => l && !nearDuplicate(l, whyLead) && !nearDuplicate(l, dayMap.primaryConflict || "")),
+      accent: "sky",
+    });
+  }
 
-  const strengthen = dayMap.whatWorks ? [dayMap.whatWorks] : [];
-  const breakLine = clean(tarotTrap) || dayMap.whereYouBreak;
-  const soften = [dayMap.whereConflict, breakLine].filter(
-    (x): x is string => Boolean(x && x.trim()),
+  const strengthen = dayMap.whatWorks
+    ? [dayMap.whatWorks].filter((l) => !nearDuplicate(l, dayMap.primaryConflict || ""))
+    : [];
+  const soften = [dayMap.whereConflict].filter(
+    (x): x is string => Boolean(x && x.trim() && !nearDuplicate(x, dayMap.primaryConflict || "")),
   );
   if (strengthen.length || soften.length) {
+    for (const s of [...strengthen, ...soften]) used.push(s);
     chapters.push({
       id: "force",
-      kicker: "Чего ожидать · Ловушка дня",
+      kicker: "Чего ожидать · Ловушка",
       lead: null,
       paragraphs: [],
       accent: "dual",
       dual: {
-        strengthen: strengthen.length ? strengthen : dayMap.doHints.slice(0, 1),
+        strengthen,
         soften,
       },
     });
@@ -439,55 +453,49 @@ function buildDayMapChapters(
 
   const supportParas: string[] = [];
   const supportUsed = new Set(used.map((u) => u.toLowerCase()));
+  const move = dayMap.oneConcreteMove;
+  const moveOk = Boolean(
+    move &&
+      !nearDuplicate(move, dayMap.primaryConflict || "") &&
+      !nearDuplicate(move, dayMap.whatWorks || "") &&
+      !nearDuplicate(move, dayMap.whereConflict || ""),
+  );
+  if (moveOk && move) {
+    supportUsed.add(move.toLowerCase());
+  }
   for (const hint of dayMap.doHints) {
-    const line = hint.startsWith("Сделай") || hint.startsWith("Можно") ? hint : `Что делать: ${hint.replace(/[.!?]+$/, "")}.`;
-    if (!supportUsed.has(line.toLowerCase())) {
+    const line = hint.replace(/^[«"]?Что делать:\s*/i, "").trim();
+    if (
+      line &&
+      !supportUsed.has(line.toLowerCase()) &&
+      !nearDuplicate(line, dayMap.primaryConflict || "") &&
+      !(moveOk && move && nearDuplicate(line, move))
+    ) {
       supportUsed.add(line.toLowerCase());
-      supportParas.push(line);
+      supportParas.push(line.endsWith(".") || line.endsWith("!") ? line : `${line}.`);
     }
   }
   for (const hint of dayMap.avoidHints) {
-    const line =
-      hint.startsWith("Не ") || hint.startsWith("не ")
-        ? hint
-        : `Чего не делать: ${hint.replace(/[.!?]+$/, "")}.`;
-    if (!supportUsed.has(line.toLowerCase())) {
+    const line = hint.replace(/^[«"]?Чего не делать:\s*/i, "").trim();
+    if (line && !supportUsed.has(line.toLowerCase()) && !nearDuplicate(line, dayMap.whereConflict || "")) {
       supportUsed.add(line.toLowerCase());
-      supportParas.push(line);
+      supportParas.push(
+        line.startsWith("Не ") || line.startsWith("не ")
+          ? line.endsWith(".")
+            ? line
+            : `${line}.`
+          : `Не ${line.replace(/[.!?]+$/, "")}.`,
+      );
     }
   }
   const colorName = clean(colorGuide?.name) || clean(contract.day_story?.talisman?.color);
   const colorHex = colorHexForDayName(colorName);
-  // Color lives on the support media chip — do not also dump "Цвет дня — …" prose
-  // next to it (structural talisman + prose would read as a duplicate).
 
-  const holiday = contract.day_story?.day_foundation?.seasonal?.holidays?.today?.[0];
-  const holidayName = clean(holiday?.name_ru);
-  if (holidayName) {
-    const holidayLine = `Сегодня — ${holidayName}.`;
-    if (!supportUsed.has(holidayLine.toLowerCase())) {
-      supportUsed.add(holidayLine.toLowerCase());
-      supportParas.unshift(holidayLine);
-    }
-  }
-
-  const namePack = contract.day_story?.day_personal?.name_numbers;
-  if (namePack?.status === "ok" && namePack.expression?.value != null) {
-    const nameLine =
-      clean(namePack.summary_ru) ||
-      `Числа имени: Expression ${namePack.expression.value}.`;
-    if (!supportUsed.has(nameLine.toLowerCase())) {
-      supportUsed.add(nameLine.toLowerCase());
-      supportParas.push(nameLine);
-    }
-  }
-
-  const move = dayMap.oneConcreteMove;
-  if (move || supportParas.length) {
+  if (moveOk || supportParas.length) {
     chapters.push({
       id: "supports",
-      kicker: "Инструкция дня",
-      lead: move,
+      kicker: "Что делать · чего не делать",
+      lead: moveOk ? move : null,
       paragraphs: supportParas,
       accent: "support",
       colorHex,
@@ -496,8 +504,8 @@ function buildDayMapChapters(
     });
   }
 
-  const vibe = clean(dayMap.vibeClosing) || clean(contract.day_story?.evening_closure);
-  if (vibe) {
+  const vibe = clean(dayMap.vibeClosing);
+  if (vibe && !nearDuplicate(vibe, dayMap.primaryConflict || "")) {
     chapters.push({
       id: "vibe",
       kicker: "Общий вайб",
@@ -508,6 +516,14 @@ function buildDayMapChapters(
   }
 
   return chapters;
+}
+
+function nearDuplicate(a: string, b: string): boolean {
+  const x = clean(a).toLowerCase();
+  const y = clean(b).toLowerCase();
+  if (!x || !y) return false;
+  if (x === y) return true;
+  return x.includes(y.slice(0, Math.min(40, y.length))) || y.includes(x.slice(0, Math.min(40, x.length)));
 }
 
 function firstPlanetHint(input: {
@@ -795,25 +811,19 @@ export function buildTodayDayNarrative(input: {
   // Day Map path: pulse/glance/move slots — not a stacked fact wall.
   // Electional stays: explicit request, not a fact dump.
   if (dayMap) {
-    const tarotTrap = clean(story.tarotPersonalLayer?.trapLine) || null;
     const chaptersMap = buildDayMapChapters(
       dayMap,
       contract,
       input.colorGuide ?? story.colorGuide,
       used,
-      tarotTrap,
     );
     appendElectionalChapter(chaptersMap, contract);
-    const dayMapWithTrap =
-      tarotTrap && tarotTrap !== clean(dayMap.whereYouBreak)
-        ? { ...dayMap, whereYouBreak: ensurePeriod(tarotTrap) }
-        : dayMap;
     return {
       theme,
       softWhy: null,
       chapters: chaptersMap,
       foundation,
-      dayMap: dayMapWithTrap,
+      dayMap,
       headlineAnchor,
       vibeClosing,
     };

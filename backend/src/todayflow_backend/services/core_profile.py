@@ -970,27 +970,52 @@ class CoreProfileService:
         weekly_state: dict[str, Any] | None,
         recent_insights: list[dict[str, Any]],
     ) -> str:
+        """Person-facing living line — or empty when depth is insufficient.
+
+        Never describe pipeline state («слой собран», raw topic keys, «профиль видит»).
+        Insufficient signal → empty string (UI must hide the block).
+        """
         if signal_summary.get("signals_days", 0) == 0:
-            return "Пока профиль в основном опирается на базовые данные. Когда ты чаще отвечаешь дню, карта начнет показывать и живой паттерн проживания."
+            return ""
+
+        closure = str(signal_summary.get("closure_state") or "unknown")
+        clarity = str(signal_summary.get("clarity_state") or "unknown")
+        if closure == "unknown" and clarity == "unknown":
+            return ""
 
         closure_map = {
-            "stable": "Ты всё чаще собираешь день до ощущения завершенности.",
-            "fragile": "Сейчас профиль видит, что дню часто не хватает спокойного закрытия.",
+            "stable": "Чаще получается довести день до ощущения завершённости.",
+            "fragile": "Дню часто не хватает спокойного закрытия — день обрывается раньше, чем хотелось бы.",
             "building": "Собранность уже появляется, но пока держится не каждый день.",
-            "mixed": "Ритм дня пока живет неровно: часть дней собирается, часть распадается.",
-            "unknown": "Собранность дня пока ещё не читается устойчиво.",
+            "mixed": "Часть дней складывается до конца, часть распадается раньше времени.",
         }
         clarity_map = {
-            "growing": "Ясность решений растет.",
-            "unclear": "Неясность решений повторяется чаще, чем хотелось бы.",
-            "mixed": "С решениями есть и ясные, и зависающие дни.",
-            "unknown": "Слой быстрых решений пока собран слабо.",
+            "growing": "Решения даются яснее, чем раньше.",
+            "unclear": "Неясность в решениях повторяется чаще, чем хотелось бы.",
+            "mixed": "В решениях есть и ясные, и зависающие дни.",
         }
-        focus = signal_summary.get("dominant_focus")
-        focus_line = f" Чаще всего сейчас всплывает тема `{focus}`." if focus else ""
-        weekly_line = f" Недельный слой тоже это подтверждает: {weekly_state.get('integration_text')}" if weekly_state and weekly_state.get("integration_text") else ""
-        insight_line = f" Последний инсайт: {recent_insights[0]['text']}" if recent_insights else ""
-        return f"{closure_map.get(signal_summary.get('closure_state'), '')} {clarity_map.get(signal_summary.get('clarity_state'), '')}{focus_line}{weekly_line}{insight_line}".strip()
+        parts = [
+            closure_map.get(closure, ""),
+            clarity_map.get(clarity, ""),
+        ]
+        # Never append raw topic keys (e.g. focus) or weekly kitchen text.
+        insight_line = ""
+        if recent_insights:
+            text = str((recent_insights[0] or {}).get("text") or "").strip()
+            low = text.lower()
+            banned = (
+                "слой",
+                "профиль видит",
+                "собран слабо",
+                "тема `",
+                "всплывает тема",
+            )
+            if text and not any(b in low for b in banned):
+                insight_line = f" Последний инсайт: {text}"
+        body = " ".join(p for p in parts if p).strip()
+        if not body:
+            return ""
+        return f"{body}{insight_line}".strip()
 
     def _relation_for_profile(self, astro_profile: db_models.AstroProfile) -> str:
         relation = (astro_profile.relation or "").strip().lower()

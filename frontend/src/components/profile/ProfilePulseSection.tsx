@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { CoreProfile } from "@/lib/types";
 import { livingClarityLabel, livingClosureLabel } from "@/components/profile/livingLabels";
 import { ProfileSurfacePanel, ProfileSurfaceTile, profileSurfaceStyles } from "@/components/profile/ProfileSurface";
+import { scrubUserFacingText } from "@/lib/todayValueGate";
 
 type Living = NonNullable<CoreProfile["living"]>;
 
@@ -30,15 +31,21 @@ function LivingStatTile({ label, children }: { label: string; children: ReactNod
   );
 }
 
+function isRawFocusKey(focus: string | null | undefined): boolean {
+  const t = (focus ?? "").trim();
+  return Boolean(t && /^[a-z][a-z0-9_]{0,32}$/.test(t));
+}
+
 export function ProfilePulseSection({ living }: { living: Living | null | undefined }) {
   const livingProfile = living;
   const sparse = isLivingSparse(livingProfile);
 
   if (sparse || !livingProfile) {
+    // Missing depth → absence CTA, not pipeline status (Voice §0.05–0.06).
     return (
-      <ProfileSurfacePanel eyebrow="Живой слой" panelClass="living">
+      <ProfileSurfacePanel eyebrow="Как это проявляется сейчас" panelClass="living">
         <p className="orbit-body-sm" style={{ margin: 0, color: "#0f172a", fontWeight: 700, lineHeight: 1.65 }}>
-          Сейчас система знает твою карту рождения. Живой слой появится, когда накопятся ответы и действия в «Я сегодня», подсказках и вечерней фиксации.
+          Повторяющиеся жизненные закономерности проявляются через отмеченные дни — ответы, действия и вечернюю фиксацию.
         </p>
         <div style={{ marginTop: "0.85rem" }}>
           <Link href="/today" className="orbit-button orbit-button-primary orbit-button-sm" style={{ textDecoration: "none" }}>
@@ -54,31 +61,47 @@ export function ProfilePulseSection({ living }: { living: Living | null | undefi
   const livingInsights = Array.isArray(livingProfile.recent_insights) ? livingProfile.recent_insights : [];
   const learningContext = livingProfile.learning_context;
 
+  const summary = scrubUserFacingText(livingProfile.summary);
+  const closure = livingClosureLabel(livingSignals?.closure_state);
+  const clarity = livingClarityLabel(livingSignals?.clarity_state);
+  const focusRaw = livingSignals?.dominant_focus?.trim() || "";
+  const focus = !isRawFocusKey(focusRaw) ? scrubUserFacingText(focusRaw) : null;
+  const weekText = scrubUserFacingText(livingWeeklyState?.integration_text);
+  const safeInsights = livingInsights
+    .map((item) => ({ ...item, text: scrubUserFacingText(item.text) }))
+    .filter((item): item is typeof item & { text: string } => Boolean(item.text));
+
+  const hasBody = Boolean(summary || closure || clarity || focus || weekText || safeInsights.length);
+  if (!hasBody) {
+    return null;
+  }
+
   return (
-    <ProfileSurfacePanel eyebrow="Живой слой" panelClass="living">
-      <p className="orbit-body-sm" style={{ margin: 0, color: "#0f172a", fontWeight: 700 }}>
-        {livingProfile.summary ||
-          "Здесь собирается то, что система видит по твоим ответам, вечерней фиксации и действиям — честно и привязано к поведению."}
-      </p>
-      <div style={{ display: "grid", gap: "0.75rem", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", marginTop: "0.85rem" }}>
-        <LivingStatTile label="Последние 14 дней">
-          {livingSignals?.signals_days || 0} дней с живым откликом — настроение, темы и действия.
-        </LivingStatTile>
-        <LivingStatTile label="Собранность дня">{livingClosureLabel(livingSignals?.closure_state)}</LivingStatTile>
-        <LivingStatTile label="Ясность решений">{livingClarityLabel(livingSignals?.clarity_state)}</LivingStatTile>
-        <LivingStatTile label="Что чаще всплывает">
-          {livingSignals?.dominant_focus || "Тема проявится, когда накопится больше ответов дня."}
-        </LivingStatTile>
+    <ProfileSurfacePanel eyebrow="Как это проявляется сейчас" panelClass="living">
+      {summary ? (
+        <p className="orbit-body-sm" style={{ margin: 0, color: "#0f172a", fontWeight: 700 }}>
+          {summary}
+        </p>
+      ) : null}
+      <div style={{ display: "grid", gap: "0.75rem", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", marginTop: summary ? "0.85rem" : 0 }}>
+        {(livingSignals?.signals_days || 0) > 0 ? (
+          <LivingStatTile label="Последние 14 дней">
+            {livingSignals?.signals_days} дней с живым откликом — настроение, темы и действия.
+          </LivingStatTile>
+        ) : null}
+        {closure ? <LivingStatTile label="Собранность дня">{closure}</LivingStatTile> : null}
+        {clarity ? <LivingStatTile label="Ясность решений">{clarity}</LivingStatTile> : null}
+        {focus ? <LivingStatTile label="Что чаще всплывает">{focus}</LivingStatTile> : null}
       </div>
-      {livingWeeklyState || livingInsights.length ? (
+      {weekText || safeInsights.length ? (
         <div style={{ display: "grid", gap: "0.75rem", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", marginTop: "0.85rem" }}>
-          {livingWeeklyState ? (
+          {weekText ? (
             <ProfileSurfaceTile tone="solid">
               <p className="orbit-body-xs" style={{ margin: 0, color: "#8f7756", textTransform: "uppercase", letterSpacing: "0.08em" }}>
                 Последние 7 дней
               </p>
               <p className="orbit-body-xs" style={{ margin: "0.42rem 0 0", color: "#475569", lineHeight: 1.7 }}>
-                {livingWeeklyState.integration_text}
+                {weekText}
               </p>
               <div style={{ marginTop: "0.6rem", display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
                 <Link href="/weekly/integration" className="orbit-button orbit-button-secondary orbit-button-sm" style={{ textDecoration: "none" }}>
@@ -87,13 +110,13 @@ export function ProfilePulseSection({ living }: { living: Living | null | undefi
               </div>
             </ProfileSurfaceTile>
           ) : null}
-          {livingInsights.length ? (
+          {safeInsights.length ? (
             <ProfileSurfaceTile tone="solid">
               <p className="orbit-body-xs" style={{ margin: 0, color: "#8f7756", textTransform: "uppercase", letterSpacing: "0.08em" }}>
                 Повтор за 30 дней
               </p>
               <div style={{ display: "grid", gap: "0.45rem", marginTop: "0.45rem" }}>
-                {livingInsights.slice(0, 2).map((item) => (
+                {safeInsights.slice(0, 2).map((item) => (
                   <p key={item.id} className="orbit-body-xs" style={{ margin: 0, color: "#475569", lineHeight: 1.7 }}>
                     • {item.text}
                   </p>
@@ -108,45 +131,15 @@ export function ProfilePulseSection({ living }: { living: Living | null | undefi
           ) : null}
         </div>
       ) : null}
-      {learningContext ? (
+      {learningContext && scrubUserFacingText(learningContext.summary) ? (
         <div style={{ marginTop: "0.85rem" }}>
           <ProfileSurfaceTile tone="solid">
-          <p className="orbit-body-xs" style={{ margin: 0, color: "#8f7756", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-            Как тебе сейчас полезнее получать ответ
-          </p>
-          <p className="orbit-body-xs" style={{ margin: "0.42rem 0 0", color: "#475569", lineHeight: 1.7 }}>
-            {learningContext.summary}
-          </p>
-          <div style={{ display: "grid", gap: "0.7rem", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", marginTop: "0.75rem" }}>
-            <div>
-              <p className="orbit-body-xs" style={{ margin: 0, color: "#8f7756", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                Как лучше давать ответ
-              </p>
-              <p className="orbit-body-xs" style={{ margin: "0.35rem 0 0", color: "#334155", lineHeight: 1.7 }}>
-                {learningContext.response_style || "Станет яснее после нескольких дней с ответами."}
-              </p>
-            </div>
-            <div>
-              <p className="orbit-body-xs" style={{ margin: 0, color: "#8f7756", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                Что сейчас помогает сильнее
-              </p>
-              <p className="orbit-body-xs" style={{ margin: "0.35rem 0 0", color: "#334155", lineHeight: 1.7 }}>
-                {learningContext.support_style || "Отметь пару вечеров подряд — поддержка станет точнее."}
-              </p>
-            </div>
-            <div>
-              <p className="orbit-body-xs" style={{ margin: 0, color: "#8f7756", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                Что повторяется чаще всего
-              </p>
-              <p className="orbit-body-xs" style={{ margin: "0.35rem 0 0", color: "#334155", lineHeight: 1.7 }}>
-                {learningContext.dominant_lanes?.length
-                  ? learningContext.dominant_lanes.join(", ")
-                  : learningContext.dominant_diary_topics?.length
-                    ? learningContext.dominant_diary_topics.join(", ")
-                    : "Повторы станут видны после нескольких закрытий дня."}
-              </p>
-            </div>
-          </div>
+            <p className="orbit-body-xs" style={{ margin: 0, color: "#8f7756", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+              Как тебе сейчас полезнее получать ответ
+            </p>
+            <p className="orbit-body-xs" style={{ margin: "0.42rem 0 0", color: "#475569", lineHeight: 1.7 }}>
+              {scrubUserFacingText(learningContext.summary)}
+            </p>
           </ProfileSurfaceTile>
         </div>
       ) : null}

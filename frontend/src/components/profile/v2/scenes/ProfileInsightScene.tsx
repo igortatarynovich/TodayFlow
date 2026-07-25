@@ -4,6 +4,7 @@ import { useProfileMotionInView } from "@/components/foundation/ProfileMotion";
 import { ProfileAtmosphere } from "@/components/profile/v2/ProfileAtmosphere";
 import { PROFILE_V2_COPY, PROFILE_V2_DEPTH_NAV } from "@/components/profile/v2/profileV2SystemCopy";
 import type { ProfileJourneyNode } from "@/lib/profilePage/buildProfileJourneyProjection";
+import { scrubUserFacingText } from "@/lib/todayValueGate";
 import styles from "@/components/profile/v2/profileV2System.module.css";
 
 export type ProfileInsightSceneProps = {
@@ -33,9 +34,14 @@ function kindClass(kind: string): string {
  */
 export function ProfileInsightScene({ node }: ProfileInsightSceneProps) {
   const copy = PROFILE_V2_COPY.zones.insight;
-  const showLiving = node.livingEvidence.length > 0;
+  const livingEvidence = node.livingEvidence
+    .map((q) => scrubUserFacingText(q))
+    .filter((q): q is string => Boolean(q));
+  const showLiving = livingEvidence.length > 0;
   const showGrounded = node.groundedOn.length > 0;
-  const showHelp = Boolean(node.help);
+  const help = scrubUserFacingText(node.help);
+  const showHelp = Boolean(help);
+  const insight = scrubUserFacingText(node.insight) || node.insight;
   const motion = useProfileMotionInView<HTMLElement>(60);
 
   return (
@@ -54,7 +60,7 @@ export function ProfileInsightScene({ node }: ProfileInsightSceneProps) {
             <span className={styles.journeyStepBadge}>{insightNav.step.replace(/^0/, "")}</span>
             <span id="profile-v2-insight-title">{copy.title}</span>
           </p>
-          <p className={styles.zoneLead}>{copy.lead}</p>
+          {copy.lead ? <p className={styles.zoneLead}>{copy.lead}</p> : null}
         </div>
       </header>
 
@@ -66,7 +72,7 @@ export function ProfileInsightScene({ node }: ProfileInsightSceneProps) {
         >
           <p className={styles.insightKind}>{kindEyebrow(node.kind)}</p>
           <h2 className={styles.insightTitle}>{node.title}</h2>
-          <p className={styles.insightBody}>{node.insight}</p>
+          <p className={styles.insightBody}>{insight}</p>
         </article>
 
         {showGrounded || showHelp ? (
@@ -95,7 +101,7 @@ export function ProfileInsightScene({ node }: ProfileInsightSceneProps) {
                 data-testid="profile-v2-insight-help"
               >
                 <p className={styles.insightChainLabel}>{copy.restoreLabel}</p>
-                <p className={styles.insightHelp}>{node.help}</p>
+                <p className={styles.insightHelp}>{help}</p>
               </div>
             ) : null}
           </div>
@@ -108,11 +114,10 @@ export function ProfileInsightScene({ node }: ProfileInsightSceneProps) {
             </span>
             <p className={styles.insightChainLabel}>{copy.livingLabel}</p>
             <ul className={styles.insightLivingList}>
-              {node.livingEvidence.map((q) => (
+              {livingEvidence.map((q) => (
                 <li key={q}>{q}</li>
               ))}
             </ul>
-            <p className={styles.zoneLead}>{copy.livingNote}</p>
           </blockquote>
         ) : null}
       </div>

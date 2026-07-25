@@ -185,6 +185,7 @@ describe("buildTodayDayStoryViewModel tarot personal layer", () => {
     expect(story.tarotPersonalLayer?.personalized).toBe(true);
     expect(story.tarotPersonalLayer?.trapLine).toMatch(/Повешенный|застревание|стиле/i);
     expect(story.tarotImpact?.body).toMatch(/Повешенный|пауза|застревание/i);
-    expect(story.glance.helpful[0]?.comment).toMatch(/Повешенный|застревание|стиле/i);
+    // Day Map trap stays day_story — tarot trap is ritual layer only.
+    expect(story.glance.helpful[0]?.comment || "").not.toMatch(/Повешенный|стиле/i);
   });
 });

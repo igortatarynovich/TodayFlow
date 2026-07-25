@@ -100,12 +100,11 @@ function firstSentence(text: string): string {
 function buildGlanceCards(
   contract: TodayContractV1,
   sphereFocus: TodaySphereFocus,
-  tarotTrap: string | null = null,
 ): TodayDayStoryViewModel["glance"] {
   const dayMap = buildTodayDayMap({ contract });
   if (dayMap) {
-    const breakLine = (tarotTrap?.trim() || dayMap.whereYouBreak) ?? null;
-    const attentionParts = [dayMap.whereConflict, breakLine].filter(
+    // Trap = day_story.trap only — never fold tarot/profile dumps into Day Map.
+    const attentionParts = [dayMap.whereConflict].filter(
       (x): x is string => Boolean(x && x.trim()),
     );
     return {
@@ -332,7 +331,6 @@ export function buildTodayDayStoryViewModel(input: {
   const glance = buildGlanceCards(
     input.contract,
     sphereFocus,
-    tarotPersonalLayer?.trapLine ?? null,
   );
 
   const tarotImpact =

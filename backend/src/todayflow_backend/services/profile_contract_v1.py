@@ -279,19 +279,31 @@ def enrich_profile_contract_living(
     if not patterns:
         hints: list[str] = []
         dom_focus = weekly.get("dominant_question_focus")
-        if dom_focus:
-            hints.append(_clip(f"Часто возвращается тема: {dom_focus}", 240))
+        focus_s = str(dom_focus or "").strip()
+        # Skip raw machine keys (focus, career, …) — not person-facing topics.
+        if focus_s and not re.fullmatch(r"[a-z][a-z0-9_]{0,32}", focus_s):
+            hints.append(_clip(f"Часто возвращается тема: {focus_s}", 240))
         yes_days = int(weekly.get("ritual_feedback_yes_days") or 0)
         no_days = int(weekly.get("ritual_feedback_no_days") or 0)
         if yes_days >= 2:
             hints.append("Ритуал дня чаще закрывается с ощущением «получилось».")
         elif no_days >= 2:
             hints.append("Несколько дней подряд день закрывается с ощущением «не дотянул» — стоит смягчить план.")
-        if not hints and summary:
-            hints.append(_clip(summary.split(".")[0], 240))
-        # No invented soft templates — empty stays empty until living data or LLM fills it.
-        if hints:
-            out["recurring_patterns"] = hints[:3]
+        # Do NOT promote living.summary into personality patterns — it is day-closure fluff.
+        # Also never promote raw topic keys (focus, etc.) as «patterns».
+        safe_hints: list[str] = []
+        for h in hints:
+            low = h.lower()
+            if "`" in h:
+                continue
+            if any(
+                p in low
+                for p in ("слой собран", "профиль видит", "собран слабо", "всплывает тема")
+            ):
+                continue
+            safe_hints.append(h)
+        if safe_hints:
+            out["recurring_patterns"] = safe_hints[:3]
 
     if not out.get("living_changes"):
         parts: list[str] = []
@@ -301,8 +313,7 @@ def enrich_profile_contract_living(
             first = insights[0] if isinstance(insights[0], dict) else {}
             if first.get("text"):
                 parts.append(_clip(str(first["text"]), 320))
-        elif summary:
-            parts.append(_clip(summary, 320))
+        # Skip raw living.summary — too often repeats as trap/patterns chrome.
         if parts:
             out["living_changes"] = parts[0]
     return out

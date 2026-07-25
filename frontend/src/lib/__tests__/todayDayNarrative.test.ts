@@ -42,7 +42,10 @@ describe("buildTodayDayNarrative", () => {
       theme: "Точность важнее объёма",
       story:
         "Сегодня многое решается не количеством слов, а их точностью. Иногда одно короткое сообщение меняет больше, чем длинный разговор.",
-      advantage: "Короткий контакт сегодня работает лучше долгих объяснений.",
+      events_lead: "Меркурий держит тон коротких договорённостей.",
+      expect: "Короткий контакт сегодня работает лучше долгих объяснений.",
+      trap: "Домашние обязательства лучше не раздувать.",
+      advantage: "Одно точное сообщение",
       abstain: "Домашние обязательства лучше не раздувать.",
       today_move: "Закрой одну важную вещь до обеда.",
       do: ["Одно точное сообщение", "Пауза перед ответом"],
@@ -144,7 +147,7 @@ describe("buildTodayDayNarrative", () => {
     },
   } as unknown as TodayDayStoryViewModel;
 
-  it("folds tarot personal trap into Day Map soften — not a separate symbols chapter", () => {
+  it("keeps day_story trap in Day Map — tarot personal trap stays on ritual layer only", () => {
     const withTrap = {
       ...story,
       tarotPersonalLayer: {
@@ -158,10 +161,11 @@ describe("buildTodayDayNarrative", () => {
     } as unknown as TodayDayStoryViewModel;
 
     const narrative = buildTodayDayNarrative({ contract, story: withTrap, morningRitualData });
-    expect(narrative.dayMap?.whereYouBreak).toMatch(/Повешенный|застревание/i);
+    expect(narrative.dayMap?.whereYouBreak || "").not.toMatch(/Повешенный/i);
     expect(narrative.chapters.map((c) => c.id)).not.toContain("symbols");
     const force = narrative.chapters.find((c) => c.id === "force")!;
-    expect(force.dual?.soften.join(" ")).toMatch(/Повешенный|застревание/i);
+    expect(force.dual?.soften.join(" ")).not.toMatch(/Повешенный/i);
+    expect(force.dual?.soften.join(" ") || force.dual?.strengthen.join(" ")).toBeTruthy();
   });
 
   it("maps day_story into Day Map chapters (opening / glance / move) — not a sky fact wall", () => {
@@ -176,11 +180,11 @@ describe("buildTodayDayNarrative", () => {
     expect(ids).not.toContain("personal");
     expect(ids).not.toContain("symbols");
     const opening = narrative.chapters.find((c) => c.id === "opening")!;
-    expect(opening.lead || opening.paragraphs.join(" ")).toMatch(/точност|сообщен/i);
+    expect(opening.lead || opening.paragraphs.join(" ")).toMatch(/Меркурий|договорённост/i);
     const force = narrative.chapters.find((c) => c.id === "force")!;
     expect(force.kicker).toMatch(/ожидать|Ловушка|взгляде/i);
     expect(force.dual?.strengthen.join(" ")).toMatch(/Короткий контакт/i);
-    expect(force.dual?.soften.join(" ")).toMatch(/обязательств|перегруж/i);
+    expect(force.dual?.soften.join(" ")).toMatch(/обязательств|раздувать/i);
     const supports = narrative.chapters.find((c) => c.id === "supports")!;
     expect(supports.lead).toMatch(/Закрой одну важную/i);
   });
@@ -224,7 +228,7 @@ describe("buildTodayDayNarrative", () => {
     });
     const ids = narrative.chapters.map((c) => c.id);
     expect(ids[0]).toBe("opening");
-    expect(narrative.chapters[0].kicker).toMatch(/Суть дня|День /i);
+    expect(narrative.chapters[0].kicker).toMatch(/Почему такой день/i);
     expect(ids).not.toContain("astro");
     expect(ids).not.toContain("lunar");
     expect(ids).not.toContain("sky");
@@ -359,7 +363,7 @@ describe("buildTodayDayNarrative", () => {
     expect(electional?.checklist?.[0]?.status).toBe("caution");
   });
 
-  it("surfaces holiday and name numbers on Day Map supports", () => {
+  it("keeps holiday and name numbers out of instruction — do/avoid only", () => {
     const withContext: TodayContractV1 = {
       ...contract,
       day_story: {
@@ -393,11 +397,11 @@ describe("buildTodayDayNarrative", () => {
     expect(narrative.dayMap).toBeTruthy();
     const supports = narrative.chapters.find((c) => c.id === "supports");
     const body = [supports?.lead, ...(supports?.paragraphs ?? [])].filter(Boolean).join(" ");
-    expect(body).toMatch(/женск/i);
-    expect(body).toMatch(/Expression|Числа имени/i);
+    expect(body).not.toMatch(/женск/i);
+    expect(body).not.toMatch(/Expression|Числа имени/i);
   });
 
-  it("expands supports as Инструкция дня with concrete move; color as media not prose", () => {
+  it("expands supports as do/avoid with concrete move; color as media not prose", () => {
     const narrative = buildTodayDayNarrative({
       contract: {
         ...contract,
@@ -437,7 +441,7 @@ describe("buildTodayDayNarrative", () => {
       },
     });
     const supports = narrative.chapters.find((c) => c.id === "supports")!;
-    expect(supports.kicker).toMatch(/Инструкция дня|Твой ход/i);
+    expect(supports.kicker).toMatch(/Что делать|чего не делать/i);
     expect(supports.accent).toBe("support");
     expect(supports.lead).toMatch(/письмо|черновик/i);
     expect(supports.colorHex).toBeTruthy();

@@ -156,7 +156,9 @@ export function TodayPersonalizedProductSection({
             <span className={styles.journeyStepBadge}>3</span>
             <span>{copy.journey.readingTitle}</span>
           </p>
-          <p className={styles.journeySceneLead}>{copy.journey.readingLead}</p>
+          {copy.journey.readingLead ? (
+            <p className={styles.journeySceneLead}>{copy.journey.readingLead}</p>
+          ) : null}
         </header>
 
         <div
@@ -164,12 +166,6 @@ export function TodayPersonalizedProductSection({
           style={profileMotionStaggerDelay(0, 60) as CSSProperties}
           data-testid="today-entity-synthesis"
         >
-          {narrative.headlineAnchor || narrative.theme ? (
-            <p className={styles.synthesisKicker} data-testid="today-narrative-theme">
-              {narrative.headlineAnchor || narrative.theme}
-            </p>
-          ) : null}
-
           {narrative.chapters.map((chapter, chapterIndex) => {
             const planetSrc = planetIconSrc(chapter.planetHint);
             const media =
@@ -280,7 +276,7 @@ export function TodayPersonalizedProductSection({
             );
           })}
 
-          {narrative.vibeClosing ? (
+          {narrative.vibeClosing && !narrative.chapters.some((c) => c.id === "vibe") ? (
             <p className={styles.vibeClosing} data-testid="today-vibe-closing">
               {narrative.vibeClosing}
             </p>
@@ -295,7 +291,9 @@ export function TodayPersonalizedProductSection({
             <span className={styles.journeyStepBadge}>4</span>
             <span>{copy.journey.moveTitle}</span>
           </p>
-          <p className={styles.journeySceneLead}>{copy.journey.moveLead}</p>
+          {copy.journey.moveLead ? (
+            <p className={styles.journeySceneLead}>{copy.journey.moveLead}</p>
+          ) : null}
         </header>
 
         <article className={styles.productCard} data-testid="today-zone-promise">
@@ -515,7 +513,9 @@ export function TodayPersonalizedProductSection({
             <span className={styles.journeyStepBadge}>5</span>
             <span>{copy.journey.bridgeTitle}</span>
           </p>
-          <p className={styles.journeySceneLead}>{copy.journey.bridgeLead}</p>
+          {copy.journey.bridgeLead ? (
+            <p className={styles.journeySceneLead}>{copy.journey.bridgeLead}</p>
+          ) : null}
         </header>
         <nav className={styles.bridges} aria-label="Связанные разделы" data-testid="today-zone-bridges">
           <Link href="/profile" className={styles.bridgeCta}>

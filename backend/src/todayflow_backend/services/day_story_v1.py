@@ -29,6 +29,7 @@ from todayflow_backend.services.day_story_interpretation_v1 import (
     build_day_story_interpretation_v1,
 )
 from todayflow_backend.services.day_story_phrase_gate_v1 import day_story_passes_phrase_gate
+from todayflow_backend.services.day_story_value_gate_v1 import apply_day_story_value_gate
 from todayflow_backend.services.today_contract_assembler_v1 import (
     TODAY_CONTRACT_V1_CONTRACT,
     TODAY_CONTRACT_V1_VERSION,
@@ -39,7 +40,7 @@ from todayflow_backend.services.today_contract_text_quality_v1 import (
 )
 
 DAY_STORY_V1_CONTRACT = "day_story_v1"
-DAY_STORY_PROMPT_VER = "day-story-v1.7-no-canned-promises"
+DAY_STORY_PROMPT_VER = "day-story-v1.8-value-gate"
 
 PracticeKind = Literal["promise", "ascetic", "affirmation", "practice", "none"]
 
@@ -277,9 +278,17 @@ def validate_day_story_v1(payload: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     if payload.get("contract_version") != DAY_STORY_V1_CONTRACT:
         errors.append("invalid contract_version")
-    for key in ("theme", "direction", "story", "advantage", "abstain", "today_move", "global_period"):
+    # story is optional when editorial slots (expect/trap) carry the plot —
+    # value gate clears soup dumps so story must not be a hard required dump field.
+    required = ("theme", "direction", "advantage", "abstain", "today_move", "global_period")
+    for key in required:
         if not str(payload.get(key) or "").strip():
             errors.append(f"missing or empty: {key}")
+    has_editorial = bool(str(payload.get("expect") or "").strip()) and bool(
+        str(payload.get("trap") or payload.get("abstain") or "").strip()
+    )
+    if not has_editorial and not str(payload.get("story") or "").strip():
+        errors.append("missing or empty: story")
     for key in ("do", "avoid"):
         items = payload.get(key)
         if not isinstance(items, list) or len(items) < 2:
@@ -314,7 +323,8 @@ def validate_day_story_v1(payload: dict[str, Any]) -> list[str]:
             errors.append("trace.limitations missing")
         if not str(trace.get("calculation_version") or "").strip():
             errors.append("trace.calculation_version missing")
-    ok_phrase, phrase_hits = day_story_passes_phrase_gate(payload)
+    scrubbed = apply_day_story_value_gate(payload)
+    ok_phrase, phrase_hits = day_story_passes_phrase_gate(scrubbed)
     if not ok_phrase:
         errors.append(f"empty_formula_hits: {phrase_hits[:5]}")
     return errors
@@ -584,10 +594,8 @@ def build_day_story_fallback_v1(
         vibe_strokes = [str(x).strip() for x in (formula.get("vibe_strokes") or []) if str(x).strip()][:4]
         theme = _clip(formula.get("theme") or theme or conflict_label, 200)
         conflict_label = str(formula.get("headline_anchor") or conflict_label).strip()
-        story = _clip(
-            f"{conflict_label}. {expect_text} {trap_text} {(do_items[0] if do_items else do_hint)}",
-            900,
-        )
+        # Do not dump expect+trap+do into story — slots are authoritative; UI shows each once.
+        story = _clip(expect_text or events_lead or conflict_label, 900)
         do_hint = do_items[0] if do_items else do_hint
         avoid_hint = avoid_items[0] if avoid_items else avoid_hint
         development_point = _clip(
@@ -658,7 +666,7 @@ def build_day_story_fallback_v1(
         raw_story["editorial"] = editorial_meta
 
     payload = _normalize_day_story_payload(
-        raw_story,
+        apply_day_story_value_gate(raw_story),
         domains_present=present,
     )
     return attach_day_story_trace(
@@ -749,6 +757,51 @@ def build_day_story_llm_input(
     return pack
 
 
+def _apply_editorial_formula_slots(story: dict[str, Any]) -> dict[str, Any]:
+    """Hard-apply thesis formula slots so LLM cannot replace expect/trap/do/avoid/vibe."""
+    from todayflow_backend.services.day_story_editorial_formulas_v1 import lookup_editorial_formula
+
+    thesis = story.get("day_thesis") if isinstance(story.get("day_thesis"), dict) else None
+    formula = lookup_editorial_formula(day_thesis=thesis)
+    if not formula:
+        return story
+    out = dict(story)
+    out["theme"] = formula.get("theme") or out.get("theme")
+    out["headline_anchor"] = formula.get("headline_anchor") or out.get("headline_anchor")
+    out["expect"] = formula.get("expect") or out.get("expect")
+    out["trap"] = formula.get("trap") or out.get("trap")
+    out["abstain"] = out.get("trap") or out.get("abstain")
+    do_items = [str(x).strip() for x in (formula.get("do") or []) if str(x).strip()]
+    avoid_items = [str(x).strip() for x in (formula.get("avoid") or []) if str(x).strip()]
+    if do_items:
+        out["do"] = do_items
+        out["today_move"] = do_items[0]
+        out["primary_action"] = do_items[0]
+        out["advantage"] = do_items[0]
+    if avoid_items:
+        out["avoid"] = avoid_items
+    vibe = str(formula.get("vibe_closing") or "").strip()
+    strokes = [str(x).strip() for x in (formula.get("vibe_strokes") or []) if str(x).strip()]
+    if strokes:
+        out["vibe_strokes"] = strokes
+    if vibe:
+        out["vibe_closing"] = vibe
+    elif strokes:
+        out["vibe_closing"] = "; ".join(strokes)
+    if formula.get("development_point"):
+        out["development_point"] = formula["development_point"]
+    out["editorial"] = {
+        "exemplar_id": formula.get("exemplar_id") or "",
+        "strong_pattern_ids": list(formula.get("strong_pattern_ids") or [])[:4],
+    }
+    if isinstance(thesis, dict) and formula.get("headline_anchor"):
+        thesis_out = dict(thesis)
+        thesis_out["label_ru"] = formula["headline_anchor"]
+        out["day_thesis"] = thesis_out
+        out["primary_conflict"] = formula["headline_anchor"]
+    return out
+
+
 def call_day_story_llm_v1(
     user_json: dict[str, Any],
     *,
@@ -780,7 +833,14 @@ def call_day_story_llm_v1(
         user_json.get("interpretation") if isinstance(user_json.get("interpretation"), dict) else {}
     )
     present = list((interp or {}).get("domains_present") or [])
+    # Keep LLM thesis if present; else inherit from interpretation.
+    if not isinstance(parsed.get("day_thesis"), dict) and isinstance((interp or {}).get("day_thesis"), dict):
+        parsed["day_thesis"] = interp["day_thesis"]
     normalized = _normalize_day_story_payload(parsed, domains_present=present)
+    normalized = _normalize_day_story_payload(
+        apply_day_story_value_gate(_apply_editorial_formula_slots(normalized)),
+        domains_present=present,
+    )
     ok_phrase, _hits = day_story_passes_phrase_gate(normalized, locale=locale)
     if not ok_phrase:
         return None

@@ -108,18 +108,21 @@ def _collect_user_facing_strings(story: dict[str, Any]) -> list[tuple[str, str]]
 
 
 def find_structural_gaps(story: dict[str, Any]) -> list[str]:
-    """Required editorial slots when story body is present."""
+    """Required editorial slots when any plot body is present."""
     gaps: list[str] = []
     story_body = str(story.get("story") or "").strip()
-    if not story_body:
-        return gaps
+    expect = str(story.get("expect") or "").strip()
+    trap = str(story.get("trap") or story.get("abstain") or "").strip()
     thesis = story.get("day_thesis") if isinstance(story.get("day_thesis"), dict) else {}
     label = str(thesis.get("label_ru") or story.get("primary_conflict") or "").strip()
+    has_plot = bool(story_body or expect or trap or label)
+    if not has_plot:
+        return gaps
     if not label:
         gaps.append("day_thesis_missing")
-    if not str(story.get("expect") or "").strip() and not str(story.get("direction") or "").strip():
+    if not expect and not str(story.get("direction") or "").strip():
         gaps.append("expect_missing")
-    if not str(story.get("trap") or "").strip() and not str(story.get("abstain") or "").strip():
+    if not trap:
         gaps.append("trap_missing")
     # events_lead soft — prefer present but not hard-fail (ambient-only days)
     if not str(story.get("events_lead") or "").strip():

@@ -1073,7 +1073,11 @@ export function TodayCompositionSurface(props: Props) {
   );
 
   const greetingParts = splitSalutation(story.greeting.salutation);
-  const showGlance = zones.glance && (story.glance.supported.length > 0 || story.glance.helpful.length > 0);
+  // Glance expect/trap only when personalized narrative is not showing the same slots.
+  const showGlance =
+    zones.glance &&
+    (story.glance.supported.length > 0 || story.glance.helpful.length > 0) &&
+    !(useProductFoundation && story.personalizedReady);
 
   const greetingSection = zones.greeting ? (
     <section className={styles.greeting} data-testid="today-zone-greeting">
@@ -1187,7 +1191,7 @@ export function TodayCompositionSurface(props: Props) {
               >
                 {story.hero.themeShort || story.hero.centralThought}
               </h2>
-              {!story.personalizedReady ? (
+              {!story.personalizedReady && copy.journey.dayLead ? (
                 <p className={styles.themeDarkLead}>{copy.journey.dayLead}</p>
               ) : story.hero.themeShort && story.hero.centralThought !== story.hero.themeShort ? (
                 <p className={styles.themeDarkSubline}>{story.hero.centralThought}</p>

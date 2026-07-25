@@ -145,11 +145,13 @@ def _load_cached_day_story(
         nr = row.normalized_response if isinstance(row.normalized_response, dict) else None
         if nr and nr.get("contract_version") == DAY_STORY_V1_CONTRACT:
             from todayflow_backend.services.day_story_phrase_gate_v1 import day_story_passes_phrase_gate
+            from todayflow_backend.services.day_story_value_gate_v1 import apply_day_story_value_gate
 
-            ok_phrase, _hits = day_story_passes_phrase_gate(nr)
+            scrubbed = apply_day_story_value_gate(nr)
+            ok_phrase, _hits = day_story_passes_phrase_gate(scrubbed)
             if not ok_phrase:
                 continue
-            return nr, int(row.id), stored_fp
+            return scrubbed, int(row.id), stored_fp
     return None
 
 
