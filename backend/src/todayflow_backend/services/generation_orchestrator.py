@@ -632,6 +632,7 @@ def run_today_narrative_pipeline(
     voice_profile: str | None = "live-clean-supportive-v1",
     ritual_context: dict[str, Any] | None = None,
     depth_level: str | None = None,
+    celestial_events: dict[str, Any] | None = None,
 ) -> tuple[dict[str, Any], int, bool, dict[str, Any] | None]:
     """Единая точка входа API для Today narrative; внутри — существующий `build_today_narrative`."""
 
@@ -652,4 +653,5 @@ def run_today_narrative_pipeline(
         voice_profile=voice_profile,
         ritual_context=ritual_context,
         depth_level=depth_level,
+        celestial_events=celestial_events,
     )

@@ -156,8 +156,13 @@ def build_day_context_v0(
     )
 
     # Evidence nest: celestial day_events_pack is NOT a second day SoT.
+    # Always attempt pack for target_date (cycles/seasons work even without live CE).
     evidence: dict[str, Any] = {}
     ce = celestial_events if isinstance(celestial_events, dict) else None
+    if ce is None and isinstance(daily_foundation, dict):
+        raw_ce = daily_foundation.get("celestial_events")
+        if isinstance(raw_ce, dict):
+            ce = raw_ce
     ce_pack = None
     if ce and isinstance(ce.get("day_events_pack"), dict):
         ce_pack = ce["day_events_pack"]
@@ -167,11 +172,11 @@ def build_day_context_v0(
         raw = daily_foundation.get("day_events_pack")
         if isinstance(raw, dict) and raw.get("contract_version") == "day_events_pack_v1":
             ce_pack = raw
-    if ce_pack is None and ce is not None:
+    if ce_pack is None:
         try:
             from todayflow_backend.services.day_events_pack_v1 import build_day_events_pack_v1
 
-            ce_pack = build_day_events_pack_v1(ce, target_date=target_date)
+            ce_pack = build_day_events_pack_v1(ce or {}, target_date=target_date)
         except Exception:
             ce_pack = None
     if ce_pack:

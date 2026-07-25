@@ -3144,6 +3144,25 @@ def _day_model_snapshot_for_guide(
     )
 
 
+def _resolve_celestial_events_for_day_context(
+    *,
+    foundation: dict[str, Any] | None,
+    celestial_events: dict[str, Any] | None,
+) -> dict[str, Any] | None:
+    """Prefer explicit CE, then foundation nest — never invent a parallel sky SoT."""
+    if isinstance(celestial_events, dict) and celestial_events:
+        return celestial_events
+    if not isinstance(foundation, dict):
+        return None
+    ce = foundation.get("celestial_events")
+    if isinstance(ce, dict) and ce:
+        return ce
+    pack = foundation.get("day_events_pack")
+    if isinstance(pack, dict) and pack.get("contract_version") == "day_events_pack_v1":
+        return pack
+    return None
+
+
 def build_today_narrative(
     db: Session,
     *,
@@ -3160,6 +3179,7 @@ def build_today_narrative(
     voice_profile: str | None = "live-clean-supportive-v1",
     ritual_context: dict[str, Any] | None = None,
     depth_level: str | None = None,
+    celestial_events: dict[str, Any] | None = None,
 ) -> tuple[dict[str, Any], int, bool, dict[str, Any] | None]:
     """Возвращает (payload, generation_log_id, used_fallback, profile_selector_slim)."""
     learning = get_learning_service()
@@ -3194,6 +3214,10 @@ def build_today_narrative(
     depth_norm = _clamp_narrative_depth_for_insight_tier(_normalize_depth_level(depth_level), tier_norm)
 
     foundation = _load_foundation_from_logs(db, user_id, target_date, snapshot_id)
+    ce_for_ctx = _resolve_celestial_events_for_day_context(
+        foundation=foundation,
+        celestial_events=celestial_events,
+    )
 
     scores_for_brief = (fusion_dump or {}).get("scores") if isinstance(fusion_dump, dict) else {}
     day_engine_brief = build_day_narrative_brief_v0(
@@ -3252,6 +3276,7 @@ def build_today_narrative(
         behavior_patterns=behavior_patterns,
         intent_slice=intent_slice,
         history_slice=history_slice,
+        celestial_events=ce_for_ctx,
         policy_version=pol_ver,
         voice_profile=voice_ver,
         profile_snapshot_id=snapshot_id,
@@ -3593,6 +3618,17 @@ def build_today_narrative(
             gd = layers_dc.get("guide_decision")
             if isinstance(gd, dict):
                 guide_user["guide_decision"] = gd
+            thesis = layers_dc.get("day_thesis")
+            if isinstance(thesis, dict) and thesis.get("label_ru"):
+                guide_user["day_thesis"] = thesis
+                # Legacy alias for mid-migration funnel prompts
+                guide_user["primary_conflict"] = str(thesis.get("label_ru") or "").strip()
+            evidence = layers_dc.get("evidence") if isinstance(layers_dc.get("evidence"), dict) else {}
+            pack = evidence.get("celestial_events") if isinstance(evidence, dict) else None
+            if isinstance(pack, dict) and pack.get("contract_version") == "day_events_pack_v1":
+                from todayflow_backend.services.day_events_pack_v1 import slim_day_events_for_llm
+
+                guide_user["day_events_pack"] = slim_day_events_for_llm(pack)
             personal_day_raw = None
             if isinstance(ritual_norm, dict):
                 pd = ritual_norm.get("numerology_value")
@@ -3600,8 +3636,8 @@ def build_today_narrative(
                     personal_day_raw = int(pd) if pd is not None and str(pd).strip() else None
                 except (TypeError, ValueError):
                     personal_day_raw = None
-            ce_for_color = None
-            if isinstance(foundation, dict) and isinstance(foundation.get("celestial_events"), dict):
+            ce_for_color = ce_for_ctx
+            if ce_for_color is None and isinstance(foundation, dict) and isinstance(foundation.get("celestial_events"), dict):
                 ce_for_color = foundation.get("celestial_events")
             fixed_color = resolve_fixed_day_color(
                 target_date=target_date,

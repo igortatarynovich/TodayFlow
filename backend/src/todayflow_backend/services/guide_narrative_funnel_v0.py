@@ -106,8 +106,8 @@ _SYS_INTERP_RU = """Ты — шаг 1 воронки экрана «Главно
 Правила:
 - Каждое текстовое поле — конкретика дня, не общие аффирмации. Запрещены пустые пары существительных («смысл и коммуникация», «пространство и контакт»).
 - Обязательна причинность: «что усиливает день» vs «что в тебе/ресурсе даёт натяжение».
-- Если во входе есть primary_conflict / day_story.primary_conflict — это ЕДИНСТВЕННЫЙ конфликт дня.
-  Не изобретай второй тезис. what_happens и where_conflict раскрывают именно его.
+- Если во входе есть day_thesis (или legacy primary_conflict / day_story.primary_conflict) — это ЕДИНСТВЕННЫЙ сюжет дня.
+  Не изобретай второй тезис. what_happens и where_conflict раскрывают именно его. primary_conflict в ответе = day_thesis.label_ru.
 - Если есть day_events_pack.ranked_drivers — опирайся только на эти 1–3 драйвера; остальные события неба не упоминай.
 - why_layers: ровно 3 короткие строки — каждая явно опирается на разные входы (луна/стержень; карта+число; настроение или профиль).
 - avoid_hints: 3 строки — запреты с глаголами (чего не делать сегодня), приземлённо.
@@ -117,7 +117,7 @@ _SYS_INTERP_RU = """Ты — шаг 1 воронки экрана «Главно
 Ответ строго по схеме:
 {
   "contract_version": "guide_funnel_interpretation_v0",
-  "primary_conflict": "string — короткое имя конфликта дня (из входа, если есть)",
+  "primary_conflict": "string — короткое имя сюжета дня (= day_thesis.label_ru из входа, если есть)",
   "events_lead": "string — 1 абзац про 1–3 драйвера неба",
   "what_happens": "string — 2–4 предложения: что за день по слоям",
   "where_conflict": "string — 1–3 предложения: главное натяжение / ловушка",
@@ -140,6 +140,8 @@ Task: merge three layers from the input JSON into ONE causal picture:
 Rules:
 - Every field must be specific to today; no empty noun-pair headlines.
 - Include tension: what the day amplifies vs what bandwidth/patterns constrain.
+- When day_thesis (or legacy primary_conflict) is present — it is the ONLY day plot. Do not invent a second thesis. Expand it in what_happens / where_conflict; set primary_conflict = day_thesis.label_ru.
+- When day_events_pack.ranked_drivers is present — use only those 1–3 drivers; do not mention other sky events.
 - why_layers: exactly 3 short strings, each anchored in different inputs (moon/spine; card+number; mood or profile).
 - avoid_hints: 3 lines — clear «do not» actions with verbs.
 - When fixed_day_color is present — the day color is already determined (name + benefit). Reference it if useful; never invent a different color.
@@ -148,6 +150,8 @@ Rules:
 Schema:
 {
   "contract_version": "guide_funnel_interpretation_v0",
+  "primary_conflict": "string — day plot label (= day_thesis.label_ru when present)",
+  "events_lead": "string — 1 paragraph on 1–3 sky drivers",
   "what_happens": "string",
   "where_conflict": "string",
   "where_you_break": "string",
@@ -339,6 +343,7 @@ def _slim_day_history_for_funnel(h: dict[str, Any] | None) -> dict[str, Any] | N
 def _build_step1_user_json(guide_user: dict[str, Any], *, foundation: dict[str, Any] | None) -> str:
     dm = guide_user.get("day_model") if isinstance(guide_user.get("day_model"), dict) else {}
     temporal = dm.get("temporal") if isinstance(dm, dict) else None
+    thesis = guide_user.get("day_thesis") if isinstance(guide_user.get("day_thesis"), dict) else None
     pack = {
         "contract_version": "guide_funnel_step1_input_v0",
         "ritual_context": guide_user.get("ritual_context"),
@@ -350,6 +355,11 @@ def _build_step1_user_json(guide_user: dict[str, Any], *, foundation: dict[str, 
         "day_engine_brief": guide_user.get("day_engine_brief"),
         "guide_decision": guide_user.get("guide_decision"),
         "fixed_day_color": guide_user.get("fixed_day_color"),
+        "day_thesis": thesis,
+        "primary_conflict": (
+            str((thesis or {}).get("label_ru") or guide_user.get("primary_conflict") or "").strip() or None
+        ),
+        "day_events_pack": guide_user.get("day_events_pack"),
         "daily_foundation": _slim_foundation_for_funnel(
             guide_user.get("daily_foundation") if isinstance(guide_user.get("daily_foundation"), dict) else foundation
         ),

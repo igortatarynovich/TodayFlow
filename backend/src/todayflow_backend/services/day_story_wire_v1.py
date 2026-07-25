@@ -259,6 +259,35 @@ def _build_day_story_record(
         else {}
     )
 
+    # Shared DayContext evidence + thesis — interpretation must not invent a second plot.
+    from todayflow_backend.services.day_context import build_day_context_v0
+
+    day_ctx = build_day_context_v0(
+        target_date=target_date,
+        locale=locale_value,
+        insight_depth_tier=insight_tier,
+        core_profile=core_profile if isinstance(core_profile, dict) else None,
+        fusion_dump=fusion_dump if isinstance(fusion_dump, dict) else {},
+        daily_foundation=foundation,
+        ritual_context=ritual_norm if ritual_norm else None,
+        behavior_patterns=behavior_patterns,
+        intent_slice=intent_slice,
+        celestial_events=ce or None,
+        profile_snapshot_id=snapshot_id,
+        ritual_context_fingerprint=ritual_fp,
+    )
+    layers_dc = day_ctx.get("layers") if isinstance(day_ctx.get("layers"), dict) else {}
+    day_model_layer = layers_dc.get("day_model") if isinstance(layers_dc.get("day_model"), dict) else None
+    day_thesis_layer = layers_dc.get("day_thesis") if isinstance(layers_dc.get("day_thesis"), dict) else None
+    evidence_layer = layers_dc.get("evidence") if isinstance(layers_dc.get("evidence"), dict) else {}
+    pack_from_ctx = (
+        evidence_layer.get("celestial_events")
+        if isinstance(evidence_layer.get("celestial_events"), dict)
+        else None
+    )
+    if pack_from_ctx and not (ce.get("day_events_pack") if isinstance(ce, dict) else None):
+        ce = {**(ce if isinstance(ce, dict) else {}), "day_events_pack": pack_from_ctx}
+
     cached = None
     if not force_rebuild:
         cached = _load_cached_day_story(
@@ -336,6 +365,8 @@ def _build_day_story_record(
             lon=lon,
             timezone=geo_timezone,
             birth_name=birth_name,
+            day_model=day_model_layer,
+            day_thesis=day_thesis_layer,
         )
         llm_input = build_day_story_llm_input(
             day_engine_brief=story_brief,

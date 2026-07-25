@@ -96,6 +96,11 @@ export function buildDayThesis(
   ritualComplete = true,
 ): string {
   const reveal = { numberRevealed: ritualComplete, tarotRevealed: ritualComplete };
+  const thesisLabel =
+    contract.day_story?.day_thesis?.label_ru?.trim() ||
+    contract.day_story?.day_thesis?.label?.trim() ||
+    contract.day_story?.primary_conflict?.trim() ||
+    "";
 
   if (hasAuthoritativeDayStory(contract)) {
     const themeRaw = contract.day_story?.theme?.trim();
@@ -118,6 +123,11 @@ export function buildDayThesis(
     if (headline && isRuUserFacingText(headline)) {
       return headline.endsWith(".") ? headline : `${headline}.`;
     }
+  }
+
+  // Backend day_thesis is the single plot — do not invent a competing mood/regex thesis.
+  if (thesisLabel && isRuUserFacingText(thesisLabel)) {
+    return thesisLabel.endsWith(".") ? thesisLabel : `${thesisLabel}.`;
   }
 
   const growth = contract.personal_growth.development_point?.trim() ?? "";

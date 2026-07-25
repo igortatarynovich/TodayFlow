@@ -78,6 +78,7 @@ today_contract_v1:
 |------|---------------------------------------------|
 | Any `DomainLens.*` | 1 spheres narrative keys → 2 narrative `spheres` surface → 3 morning `scenarios` → 4 fusion-derived hint → 5 template |
 | `global_context.period` | 1 narrative `guide` primary / theme → 2 `spine.best_mode` + scenario lead → 3 `decision_engine.hero` label → 4 fusion `encouragement` → 5 template |
+| Day plot label (`day_story.day_thesis.label_ru`) | 1 DayContext `layers.day_thesis` → 2 day_story interpretation → **never** client mood/regex or funnel-invented conflict |
 | `personal_growth.development_point` | 1 narrative growth/body keys → 2 spine + insight synthesis → 3 `decision_engine.actions[0]` hint → 4 template |
 | `primary_action` | 1 strongest domain `action` (priority: relationships > money_work > family if tie by score) → 2 `spine.first_move` → 3 `decision_engine.actions[0]` → 4 `daily_recommendations.what_to_do` → 5 template |
 
@@ -274,6 +275,7 @@ UI **не** рендерит DomainLens slots напрямую. `buildTodayNarra
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-07-25 | day_thesis: `day_story.day_thesis` — единственный сюжет дня; `primary_conflict` deprecated alias; FE/funnel не изобретают второй thesis |
 | 2026-06-22 | v1.3 — P0.1.3 Narrative Layer + Growth skill: UI story from contract; growth rejects observations |
 | 2026-06-22 | v1.2 — P0.1.2 Today Text Quality v2: family profile reject, Growth≠Period, cross-domain dedupe, domain themes |
 | 2026-06-22 | v1.1 — P0.1.1 text quality gate: profile reject, imperative actions, family dedupe, length limits |

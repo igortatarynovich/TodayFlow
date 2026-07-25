@@ -50,6 +50,14 @@ def test_build_day_context_v0_minimal_structure():
     gd = ctx["layers"].get("guide_decision")
     assert isinstance(gd, dict)
     assert gd.get("contract_version") == "guide_decision_v0"
+    evidence = ctx["layers"].get("evidence")
+    assert isinstance(evidence, dict)
+    assert isinstance(evidence.get("celestial_events"), dict)
+    assert evidence["celestial_events"].get("contract_version") == "day_events_pack_v1"
+    thesis = ctx["layers"].get("day_thesis")
+    assert isinstance(thesis, dict)
+    assert thesis.get("label_ru")
+    assert thesis.get("family")
 
     ps = ctx["layers"].get("profile_selector")
     assert isinstance(ps, dict)

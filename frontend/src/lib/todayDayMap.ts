@@ -166,13 +166,24 @@ function fromDayStory(contract: TodayContractV1): TodayDayMap | null {
   };
 }
 
-/** Resolve Day Map for UI — funnel interpretation first, day_story fallback. */
+/** Resolve Day Map for UI — funnel prose first, but day_thesis label wins for the plot name. */
 export function buildTodayDayMap(input: {
   contract: TodayContractV1 | null | undefined;
   guideNarrativePayload?: Record<string, unknown> | null;
 }): TodayDayMap | null {
   const fromGuide = fromFunnelInterpretation(input.guideNarrativePayload);
-  if (fromGuide) return fromGuide;
-  if (input.contract) return fromDayStory(input.contract);
-  return null;
+  const fromStory = input.contract ? fromDayStory(input.contract) : null;
+  const thesisLabel =
+    clean(input.contract?.day_story?.day_thesis?.label_ru) ||
+    clean(input.contract?.day_story?.day_thesis?.label) ||
+    clean(input.contract?.day_story?.primary_conflict) ||
+    "";
+
+  if (fromGuide) {
+    if (thesisLabel) {
+      return { ...fromGuide, primaryConflict: thesisLabel };
+    }
+    return fromGuide;
+  }
+  return fromStory;
 }

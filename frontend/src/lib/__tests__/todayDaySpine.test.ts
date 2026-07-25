@@ -91,4 +91,23 @@ describe("todayDaySpine", () => {
     const thesis = buildDayThesis(contract, "anxious");
     expect(thesis).toMatch(/перестаёт спешить/i);
   });
+
+  it("prefers day_thesis label over mood heuristics", () => {
+    const withThesis: TodayContractV1 = {
+      ...contract,
+      day_story: {
+        day_thesis: {
+          family: "clarity",
+          variant: "clarity_returns_after_delay",
+          mode: "transition",
+          label_ru: "День возвращения ясности",
+          driver_ids: ["merc-direct"],
+          composition_ids: [],
+        },
+      },
+    };
+    const thesis = buildDayThesis(withThesis, "anxious");
+    expect(thesis).toMatch(/возвращения ясности/i);
+    expect(thesis).not.toMatch(/перестаёт спешить/i);
+  });
 });

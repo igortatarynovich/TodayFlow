@@ -156,6 +156,8 @@ def build_day_story_interpretation_v1(
     electional_time: time | None = None,
     electional_question: str | None = None,
     birth_name: str | None = None,
+    day_model: dict[str, Any] | None = None,
+    day_thesis: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Build structured interpretation + evidence from known inputs (no LLM)."""
     brief = day_engine_brief if isinstance(day_engine_brief, dict) else {}
@@ -628,12 +630,12 @@ def build_day_story_interpretation_v1(
 
     # --- Primary conflict + ranked drivers (one plot for the whole Today) ---
     pack = ce.get("day_events_pack") if isinstance(ce.get("day_events_pack"), dict) else None
-    if pack is None and ce:
+    if pack is None:
         try:
             from todayflow_backend.services.day_events_pack_v1 import build_day_events_pack_v1
 
             pack = build_day_events_pack_v1(
-                ce,
+                ce or {},
                 target_date=resolved_date,
                 lat=lat,
                 lon=lon,
@@ -644,11 +646,16 @@ def build_day_story_interpretation_v1(
 
     from todayflow_backend.services.day_thesis_v1 import build_day_thesis_v1
 
-    day_thesis = build_day_thesis_v1(
-        day_events_pack=pack,
-        day_engine_brief=brief,
-        day_model=None,  # day_model not in interpretation inputs yet; brief carries tempo/risk
-    )
+    # Prefer DayContext thesis when provided — avoid a second independent plot.
+    if isinstance(day_thesis, dict) and day_thesis.get("family") and day_thesis.get("label_ru"):
+        resolved_thesis = dict(day_thesis)
+    else:
+        resolved_thesis = build_day_thesis_v1(
+            day_events_pack=pack,
+            day_engine_brief=brief,
+            day_model=day_model if isinstance(day_model, dict) else None,
+        )
+    day_thesis = resolved_thesis
     # Legacy mirror for mid-migration consumers
     primary_conflict = {
         "contract_version": "day_conflict_registry_v1",

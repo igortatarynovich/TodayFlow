@@ -167,7 +167,23 @@ today_contract_v1:
   primary_action: string           # echo strongest domain action или отдельный synthesis
   progress: object
   generation_id: string
+  # Optional narrative nest (post-P0.1 wire)
+  day_story?:
+    day_thesis:                    # единственный сюжет дня (family/variant/mode/label_ru)
+      family: string
+      variant: string
+      mode: conflict|opportunity|transition|recovery|stability
+      label_ru: string
+      driver_ids: string[]
+      composition_ids: string[]
+    primary_conflict?: string      # deprecated alias = day_thesis.label_ru
+    events_lead?: string
+    expect?: string
+    trap?: string
+    # … do / avoid / vibe_closing — проекции thesis, не второй SoT
 ```
+
+**Инвариант:** UI читает `day_thesis` / `day_story` как проекцию DayContext; клиент **не** собирает конкурирующий сюжет из mood/regex/funnel.
 
 **P0.1 DoD:** Today без вопроса закрывает **3 DomainLens + period + development_point + primary_action**.  
 **Anti-pattern:** период/рост как `domains.period` · family только в love slug · `tension/support` как wire ids (только UI labels → `risk/opportunity`).
@@ -471,6 +487,7 @@ Projection Specs позже мапят: `projection_field` → `slot_id`.
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-07-25 | §3.3 — optional `day_story.day_thesis` nest; UI must not invent a second plot |
 | 2026-06-22 | v1.0 — five screen contracts + Today domain slot model |
 | 2026-06-22 | v1.1 — §0 sprint priority; Today market questions; family tension/support; P0.2 potential_tier; Calendar demoted; Living Profile P1 |
 | 2026-06-22 | v1.2 — ADR Model B: 3 DomainLens + global_context + personal_growth; unified slot ids; отвергнуты Model A и смешанная v1.1 |
