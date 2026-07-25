@@ -88,6 +88,24 @@ Invariant: смена prompt **не** требует нового `schema_versio
 - `recipe_version` · `prompt_id` (если LLM stage)  
 - `confidence` · `capability_floor`  
 
+### 1.4 Stage 2 exit criterion (official)
+
+Stage 2 is **done** not when Identity Core is “good prose”, but when it is the **sole source of truth** for later stages.
+
+| Stage | Question | Mode vs Identity Core |
+|-------|----------|------------------------|
+| **2** | Who is this person? | **defines** the one core |
+| **3** | How does this core show up in life? | **expansion** only |
+| **4** | How does this core behave across contexts? | **expansion** only |
+| **5** | How do we turn that into a coherent user story? | **projection** only |
+
+**Hard rule:** Stage 3–5 must **expand**, never **reinterpret**. They must not change, replace, or invent a second independent Identity Core. If building Stage 3–5 requires choosing a different core, adding a second independent explanation, or rewriting the central line — Stage 2 is not mature yet; fix Stage 2 (prompt / evidence), do not patch later stages.
+
+**Live review question (each production-like pack):**  
+If everything else is removed and only this Identity Core remains — can it naturally explain later Profile levels?  
+Any new layer must answer: *«This is a manifestation of the Identity Core because…»*  
+If that explanation feels natural for most packs → Stage 2 is ready for Stage 3+ without architecture change.
+
 ---
 
 ## 2. Envelope — `character_engine_v1`
@@ -366,6 +384,8 @@ If no → fix identity rules before implementing pipeline.
 **Prompt owns quality** (one core vs trait list, contradiction resolution, insufficient-data judgment).  
 **Code owns contract:** JSON shape · refs to existing `claim_id`/`fact_id` · no invented claims · `thesis_key` must match chosen Stage 1 claim · required fields.  
 
+**Exit criterion:** §1.4 — Identity Core is the sole source of truth for Stage 3–5 (**expansion**, not reinterpretation).
+
 ### ID semantics (v1)
 
 `fact_id` includes `authority` + `calc_version`. `claim_id` fingerprints supporting `fact_id`s.  
@@ -383,3 +403,4 @@ Cross-version sense comparison requires separate `fact_key` / semantic key (Stag
 | 2026-07-25 | Stage 0–1 builders + shadow flags; ID semantics note (calc_version-scoped); no CE ready publish |
 | 2026-07-25 | Staging eval v0 + registry tighten; Stage 2 Identity Core LLM-first prompt + structural contract validation (no quality heuristics) |
 | 2026-07-25 | CE-only land SHA `5eb61c6`; live Stage 0–1 shadow first; do not cite branch tip as CE baseline |
+| 2026-07-25 | §1.4 Stage 2 exit criterion: sole SoT for later stages; Stage 3–5 = expansion only |

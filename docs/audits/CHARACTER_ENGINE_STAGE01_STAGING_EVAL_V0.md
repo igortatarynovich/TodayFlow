@@ -80,7 +80,7 @@ Runner: `python -m todayflow_backend.services.character_engine_stage01_staging_e
 Live review order:
 1. Stage 0–1 shadow only (flags above) on real packs — inspect facts, authority dedupe, claim breadth, exclusions.
 2. Separately enable `CHARACTER_ENGINE_STAGE2_SHADOW=1` after that review.
-3. Stage 3+ only after Stage 2 shadow evaluation.
+3. Stage 3+ only after Stage 2 **exit criterion** (canon [CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0 §1.4](./CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md)): Identity Core is sole SoT; Stage 3–5 expand, never reinterpret. Review question: *«This is a manifestation of the Identity Core because…»*.
 
 Stage 2 Identity Core is **LLM-first**: prompt `profile.character_engine.stage2.v1` chooses one core; code validates structure/provenance only (not interpretation quality).  
 Do not add quality-scoring gates that duplicate the prompt.
