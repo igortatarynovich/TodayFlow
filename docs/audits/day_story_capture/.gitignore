@@ -1,0 +1,6 @@
+# Day story product capture runs (may contain prompts / PII)
+
+Keep local unless redacted. Schema docs stay in docs/audits/.
+
+docs/audits/day_story_capture/runs/
+backend/evals/day_story_quality/runs/

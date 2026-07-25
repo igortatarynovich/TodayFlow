@@ -748,6 +748,8 @@ def call_day_story_llm_v1(
     max_attempts: int = 2,
 ) -> dict[str, Any] | None:
     """Generate day_story via LLM. Retries once on empty/invalid; never fills formula prose."""
+    from todayflow_backend.services.day_story_capture_session_v0 import get_day_story_capture_session
+
     if not is_llm_chat_configured():
         return None
     client = get_openai_compatible_client()
@@ -759,48 +761,115 @@ def call_day_story_llm_v1(
     )
     present = list((interp or {}).get("domains_present") or [])
     attempts = max(1, min(int(max_attempts or 1), 3))
+    user_full = json.dumps(user_json, ensure_ascii=False)
+    user_sent = user_full[:14000]
+    model_name = ""
+    try:
+        model_name = str(resolve_default_chat_model() or "")
+    except Exception:
+        model_name = ""
 
-    for _attempt in range(attempts):
+    capture = get_day_story_capture_session()
+    if capture is not None:
+        capture.record_prompt(
+            system=system,
+            user_full=user_full,
+            user_sent=user_sent,
+            prompt_version=DAY_STORY_PROMPT_VER,
+            model=model_name or None,
+        )
+
+    for attempt_idx in range(attempts):
         content = chat_completion_plain(
             client,
             model=resolve_default_chat_model(),
             messages=[
                 {"role": "system", "content": system},
-                {"role": "user", "content": json.dumps(user_json, ensure_ascii=False)[:14000]},
+                {"role": "user", "content": user_sent},
             ],
             temperature=0.52,
             max_tokens=resolve_max_tokens(1800),
         )
         if not content:
+            if capture is not None:
+                capture.record_attempt(
+                    attempt_index=attempt_idx,
+                    raw_response=None,
+                    parsed=None,
+                    after_normalize=None,
+                    after_gate=None,
+                    status="empty_response",
+                    reject_reason="empty_llm_content",
+                )
             continue
         parsed = _parse_json_content(content)
         if not parsed:
+            if capture is not None:
+                capture.record_attempt(
+                    attempt_index=attempt_idx,
+                    raw_response=content,
+                    parsed=None,
+                    after_normalize=None,
+                    after_gate=None,
+                    status="parse_fail",
+                    reject_reason="json_parse_failed",
+                )
             continue
         # Keep LLM thesis if present; else inherit from interpretation.
         if not isinstance(parsed.get("day_thesis"), dict) and isinstance(
             (interp or {}).get("day_thesis"), dict
         ):
             parsed["day_thesis"] = interp["day_thesis"]
-        normalized = _normalize_day_story_payload(parsed, domains_present=present)
-        normalized = _normalize_day_story_payload(
-            apply_day_story_value_gate(normalized),
+        after_normalize = _normalize_day_story_payload(parsed, domains_present=present)
+        after_gate = _normalize_day_story_payload(
+            apply_day_story_value_gate(after_normalize),
             domains_present=present,
         )
-        normalized["interpretation_status"] = "ok"
-        normalized.pop("interpretation_unavailable_message", None)
-        ok_phrase, _hits = day_story_passes_phrase_gate(normalized, locale=locale)
+        after_gate["interpretation_status"] = "ok"
+        after_gate.pop("interpretation_unavailable_message", None)
+        ok_phrase, phrase_hits = day_story_passes_phrase_gate(after_gate, locale=locale)
         if not ok_phrase:
+            if capture is not None:
+                capture.record_attempt(
+                    attempt_index=attempt_idx,
+                    raw_response=content,
+                    parsed=parsed,
+                    after_normalize=after_normalize,
+                    after_gate=after_gate,
+                    phrase_ok=False,
+                    phrase_hits=list(phrase_hits or []),
+                    status="phrase_gate_reject",
+                    reject_reason="phrase_gate",
+                )
             continue
-        if not str(normalized.get("expect") or "").strip() and not str(normalized.get("trap") or "").strip():
+        if not str(after_gate.get("expect") or "").strip() and not str(after_gate.get("trap") or "").strip():
             # Too thin — retry rather than ship hollow slots or formula filler.
+            if capture is not None:
+                capture.record_attempt(
+                    attempt_index=attempt_idx,
+                    raw_response=content,
+                    parsed=parsed,
+                    after_normalize=after_normalize,
+                    after_gate=after_gate,
+                    phrase_ok=True,
+                    phrase_hits=list(phrase_hits or []),
+                    status="too_thin",
+                    reject_reason="empty_expect_and_trap",
+                )
             continue
-        model_name = ""
-        try:
-            model_name = str(resolve_default_chat_model() or "")
-        except Exception:
-            model_name = ""
+        if capture is not None:
+            capture.record_attempt(
+                attempt_index=attempt_idx,
+                raw_response=content,
+                parsed=parsed,
+                after_normalize=after_normalize,
+                after_gate=after_gate,
+                phrase_ok=True,
+                phrase_hits=list(phrase_hits or []),
+                status="accepted",
+            )
         return attach_day_story_trace(
-            normalized,
+            after_gate,
             interp if isinstance(interp, dict) else {},
             used_fallback=False,
             prompt_version=DAY_STORY_PROMPT_VER,

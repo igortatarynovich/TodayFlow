@@ -45,3 +45,10 @@ docs/datasets/raw/*.jsonl
 # Profile capture sidecars may contain prompts/PII — keep local unless redacted
 backend/evals/profile_quality/runs/capture_*/
 
+# Day product capture sidecars (prompts / PII)
+docs/audits/day_story_capture/runs/
+backend/evals/day_story_quality/runs/
+
+
+# Licensed / large asset masters — web derivatives only in public/
+assets-source/

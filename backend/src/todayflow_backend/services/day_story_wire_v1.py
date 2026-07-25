@@ -290,6 +290,27 @@ def _build_day_story_record(
     if pack_from_ctx and not (ce.get("day_events_pack") if isinstance(ce, dict) else None):
         ce = {**(ce if isinstance(ce, dict) else {}), "day_events_pack": pack_from_ctx}
 
+    from todayflow_backend.services.day_story_capture_session_v0 import get_day_story_capture_session
+
+    capture = get_day_story_capture_session()
+    if capture is not None:
+        capture.record_lifecycle(
+            force_rebuild_used=bool(force_rebuild),
+            get_calls_llm=False,
+            refresh_calls_llm=True,
+        )
+        capture.record_color(
+            color_symbol=color_sym or None,
+            color_name=color,
+            domains_present=[],
+            preset_inputs={
+                "color_name": color,
+                "stone_name": stone,
+                "has_celestial_events": bool(ce),
+                "source": "morning.daily_symbols / celestial preset",
+            },
+        )
+
     cached = None
     if not force_rebuild:
         cached = _load_cached_day_story(
@@ -308,6 +329,18 @@ def _build_day_story_record(
     if cached is not None:
         story, gen_id, _ = cached
         used_fallback = False
+        if capture is not None:
+            capture.record_lifecycle(cache_hit=True, used_fallback=False)
+            try:
+                from todayflow_backend.services.day_story_v1 import day_story_to_today_contract_v1
+
+                capture.record_final(
+                    story=story,
+                    contract=day_story_to_today_contract_v1(story, generation_id=str(gen_id)),
+                    used_fallback=False,
+                )
+            except Exception:
+                capture.record_final(story=story, used_fallback=False)
         if commit_story_state:
             state = ensure_story_state(
                 db,
@@ -370,6 +403,9 @@ def _build_day_story_record(
             day_model=day_model_layer,
             day_thesis=day_thesis_layer,
         )
+        if capture is not None:
+            capture._last_ritual = safe_ritual
+            capture.record_interpretation_snapshot(interpretation)
         llm_input = build_day_story_llm_input(
             day_engine_brief=story_brief,
             ritual_context=safe_ritual,
@@ -399,6 +435,8 @@ def _build_day_story_record(
         )
         if history_slice:
             llm_input["day_history"] = history_slice
+            if capture is not None:
+                capture.record_day_history(history_slice)
 
         # P0: GET /today/contract must not block on Nebius. Prefer deterministic story;
         # LLM remaining available via force_rebuild / refresh paths later.
@@ -446,6 +484,18 @@ def _build_day_story_record(
                 birth_date=birth_date,
             )
             used_fallback = True
+
+        if capture is not None:
+            try:
+                from todayflow_backend.services.day_story_v1 import day_story_to_today_contract_v1
+
+                capture.record_final(
+                    story=story,
+                    contract=day_story_to_today_contract_v1(story),
+                    used_fallback=used_fallback,
+                )
+            except Exception:
+                capture.record_final(story=story, used_fallback=used_fallback)
 
         pv = learning.get_or_create_prompt_version(
             db,
