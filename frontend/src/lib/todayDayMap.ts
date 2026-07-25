@@ -161,9 +161,17 @@ function fromDayStory(contract: TodayContractV1): TodayDayMap | null {
     whyLayers: whyLayers.slice(0, 3),
     avoidHints: avoidHints.slice(0, 3),
     doHints: doHints.slice(0, 3),
-    vibeClosing: clean(ds.vibe_closing) || null,
+    vibeClosing: resolveVibeClosing(ds),
     source: "day_story",
   };
+}
+
+function resolveVibeClosing(ds: NonNullable<TodayContractV1["day_story"]>): string | null {
+  const strokes = Array.isArray(ds.vibe_strokes)
+    ? ds.vibe_strokes.map((s) => clean(s)).filter(Boolean)
+    : [];
+  if (strokes.length) return strokes.join("; ");
+  return clean(ds.vibe_closing) || null;
 }
 
 /** Resolve Day Map for UI — funnel prose first, but day_thesis label wins for the plot name. */

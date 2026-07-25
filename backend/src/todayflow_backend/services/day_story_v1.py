@@ -79,7 +79,7 @@ _DAY_STORY_SYS_RU = """Ты — литературный редактор TodayF
 СТРУКТУРА ПОЛЕЙ (обязательна):
 - day_thesis — объект: скопируй family, variant, mode, label_ru, driver_ids, composition_ids из interpretation.
 - primary_conflict — УСТАРЕВШИЙ alias: строка = day_thesis.label_ru (для совместимости).
-- Если во входе есть editorial_formula — используй её expect/trap/do/avoid/vibe_closing как эталон слотов (можно слегка адаптировать под drivers, не меняя сюжет).
+- Если во входе есть editorial_formula — используй её expect/trap/do/avoid/vibe_closing/vibe_strokes как эталон слотов (можно слегка адаптировать под drivers, не меняя сюжет). strong_pattern_ids — подсказка драматургии (SP), не тема дня.
 - events_lead — 1 абзац: названные 1–3 драйвера и причинная связь.
 - expect — чего ожидать сегодня в быту (сцена).
 - trap — одна ловушка / точка срыва (даже если mode != conflict — мягкая оговорка).
@@ -120,7 +120,9 @@ _DAY_STORY_SYS_RU = """Ты — литературный редактор TodayF
   "advantage": "string",
   "abstain": "string",
   "today_move": "string",
-  "vibe_closing": "string — 2–3 штриха; drivers + approved ambient",
+  "vibe_closing": "string — 2–3 штриха через «;» (или собери из vibe_strokes)",
+  "vibe_strokes": ["string", "string"],
+  "editorial": {"exemplar_id": "string", "strong_pattern_ids": ["SP-001"]},
   "global_period": "string",
   "development_point": "string",
   "primary_action": "string",
@@ -241,6 +243,10 @@ def attach_day_story_trace(
         "day_thesis": interpretation.get("day_thesis"),
         "day_events_pack": interpretation.get("day_events_pack"),
     }
+    editorial = story.get("editorial") if isinstance(story.get("editorial"), dict) else None
+    if editorial:
+        out["editorial"] = editorial
+        out["trace"]["editorial"] = editorial
     if used_fallback:
         lim = out["trace"]["limitations"]
         note = "История собрана детерминированным fallback без LLM."
@@ -407,6 +413,31 @@ def _normalize_day_story_payload(
         "symbolic_note": _clip(raw.get("symbolic_note"), 400),
         "supports_story": _clip(raw.get("supports_story"), 480),
     }
+    strokes_raw = raw.get("vibe_strokes")
+    strokes: list[str] = []
+    if isinstance(strokes_raw, list):
+        strokes = [_clip(str(x), 80) for x in strokes_raw if str(x).strip()][:4]
+    if not strokes and out["vibe_closing"]:
+        strokes = [
+            part.strip()
+            for part in out["vibe_closing"].split(";")
+            if part.strip()
+        ][:4]
+    if strokes:
+        out["vibe_strokes"] = strokes
+        if not out["vibe_closing"]:
+            out["vibe_closing"] = _clip("; ".join(strokes), 280)
+    editorial_in = raw.get("editorial") if isinstance(raw.get("editorial"), dict) else None
+    if editorial_in:
+        sp = [
+            str(x).strip()
+            for x in (editorial_in.get("strong_pattern_ids") or [])
+            if str(x).strip().startswith("SP-")
+        ][:4]
+        out["editorial"] = {
+            "exemplar_id": _clip(editorial_in.get("exemplar_id"), 64),
+            "strong_pattern_ids": sp,
+        }
     if not out["primary_action"]:
         out["primary_action"] = out["today_move"]
     if not out["headline_anchor"] and thesis_label:
@@ -542,12 +573,15 @@ def build_day_story_fallback_v1(
     from todayflow_backend.services.day_story_editorial_formulas_v1 import lookup_editorial_formula
 
     formula = lookup_editorial_formula(day_thesis=conflict if isinstance(conflict, dict) else None)
+    editorial_meta: dict[str, Any] | None = None
+    vibe_strokes: list[str] = []
     if formula:
         expect_text = _clip(formula["expect"], 400)
         trap_text = _clip(formula["trap"], 360)
         do_items = [_clip(x, 200) for x in (formula.get("do") or []) if str(x).strip()][:3]
         avoid_items = [_clip(x, 200) for x in (formula.get("avoid") or []) if str(x).strip()][:3]
         vibe = _clip(formula.get("vibe_closing") or "", 280)
+        vibe_strokes = [str(x).strip() for x in (formula.get("vibe_strokes") or []) if str(x).strip()][:4]
         theme = _clip(formula.get("theme") or theme or conflict_label, 200)
         conflict_label = str(formula.get("headline_anchor") or conflict_label).strip()
         story = _clip(
@@ -560,6 +594,10 @@ def build_day_story_fallback_v1(
             formula.get("development_point") or "Замечать, что реально двигает день, а что только шум.",
             240,
         )
+        editorial_meta = {
+            "exemplar_id": formula.get("exemplar_id") or "",
+            "strong_pattern_ids": list(formula.get("strong_pattern_ids") or [])[:4],
+        }
     else:
         expect_text = _clip(tempo or do_hint or f"{conflict_label}: день просит одного ясного хода.", 400)
         trap_text = _clip(avoid_hint or "Легко принять суету за движение и потерять главный сюжет дня.", 360)
@@ -583,39 +621,44 @@ def build_day_story_fallback_v1(
         "composition_ids": list(conflict.get("composition_ids") or [])[:3],
     }
 
-    payload = _normalize_day_story_payload(
-        {
-            "theme": theme or conflict_label,
-            "headline_anchor": conflict_label or theme,
-            "day_thesis": day_thesis_payload,
-            "primary_conflict": conflict_label,
-            "events_lead": events_lead,
-            "expect": expect_text,
-            "trap": trap_text,
-            "direction": expect_text if formula else (tempo or expect_text),
-            "story": story,
-            "do": do_items,
-            "avoid": avoid_items,
-            "advantage": do_hint,
-            "abstain": trap_text,
-            "today_move": do_hint,
-            "vibe_closing": vibe,
-            "global_period": theme or conflict_label,
-            "development_point": development_point,
-            "primary_action": do_hint,
-            "domains": domains,
-            "talisman": {
-                "color": color if color else "",
-                "stone": stone if stone else "",
-                "note": talisman_note,
-            },
-            "practice_recommendation": {"kind": "none", "text": "", "reason": ""},
-            "supports_story": supports_story,
-            "evening_closure": (
-                f"К вечеру коротко отметь, как проявил себя «{conflict_label}» — без жёсткой самооценки."
-            ),
-            "symbolic_note": "",
+    raw_story: dict[str, Any] = {
+        "theme": theme or conflict_label,
+        "headline_anchor": conflict_label or theme,
+        "day_thesis": day_thesis_payload,
+        "primary_conflict": conflict_label,
+        "events_lead": events_lead,
+        "expect": expect_text,
+        "trap": trap_text,
+        "direction": expect_text if formula else (tempo or expect_text),
+        "story": story,
+        "do": do_items,
+        "avoid": avoid_items,
+        "advantage": do_hint,
+        "abstain": trap_text,
+        "today_move": do_hint,
+        "vibe_closing": vibe,
+        "vibe_strokes": vibe_strokes,
+        "global_period": theme or conflict_label,
+        "development_point": development_point,
+        "primary_action": do_hint,
+        "domains": domains,
+        "talisman": {
+            "color": color if color else "",
+            "stone": stone if stone else "",
+            "note": talisman_note,
         },
+        "practice_recommendation": {"kind": "none", "text": "", "reason": ""},
+        "supports_story": supports_story,
+        "evening_closure": (
+            f"К вечеру коротко отметь, как проявил себя «{conflict_label}» — без жёсткой самооценки."
+        ),
+        "symbolic_note": "",
+    }
+    if editorial_meta:
+        raw_story["editorial"] = editorial_meta
+
+    payload = _normalize_day_story_payload(
+        raw_story,
         domains_present=present,
     )
     return attach_day_story_trace(
@@ -792,6 +835,10 @@ def day_story_to_today_contract_v1(
         "abstain": story.get("abstain"),
         "today_move": story.get("today_move"),
         "vibe_closing": story.get("vibe_closing") or "",
+        "vibe_strokes": list(story.get("vibe_strokes") or [])
+        if isinstance(story.get("vibe_strokes"), list)
+        else [],
+        "editorial": story.get("editorial") if isinstance(story.get("editorial"), dict) else None,
         "talisman": story.get("talisman"),
         "practice_recommendation": story.get("practice_recommendation"),
         "symbolic_note": story.get("symbolic_note"),

@@ -1702,7 +1702,7 @@ Historical note:
 - 2026-07-01 | Product | **Positive Definition §2 CLOSED (canonical)** | **CLOSED** | Два базовых закона с §1
 - 2026-07-01 | Product | **Positive Definition CLOSED** | **CLOSED** | §5.7 · Build Map E9 · spec · UX · empty states
 - 2026-07-01 | Product | **Build Map v0.5.6 — `PracticeRecommendation` spec 🟢** | **ACTIVE** | One practice · [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md)
-- 2026-07-25 | Today / Architecture | **day_thesis + evidence pack in DayContext** | **IN_PROGRESS** | Evidence + FE parity · PR-5 formula bank covers **all** thesis variants + golden/smoke · TL-1 blocked · next: TL-0C.3 editorial marking / more SP linkage · linked: [TODAY_LANGUAGE_STRONG_PATTERNS_V0.md](./today-language/TODAY_LANGUAGE_STRONG_PATTERNS_V0.md)
+- 2026-07-25 | Today / Architecture | **day_thesis + evidence pack in DayContext** | **IN_PROGRESS** | Evidence + FE parity · formula bank + **SP links** + `vibe_strokes` · TL-1 blocked · next: TL-0C.3 editorial marking · linked: [TODAY_LANGUAGE_STRONG_PATTERNS_V0.md](./today-language/TODAY_LANGUAGE_STRONG_PATTERNS_V0.md)
 - 2026-07-01 | Product | **Build Map v0.5.5 — `DailySymbols` spec 🟢** | **ACTIVE** | Wave 1: color + stone · umbrella entity · [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md)
 - 2026-07-01 | Product | **Invisible Mechanism CLOSED** | **CLOSED** | §5.6 · Build Map · dual Internal/External · 4 user knowledges — не revisiting
 - 2026-07-01 | Product | **Build Map v0.2** | **REVOKED** | Component Catalog → Entity Catalog

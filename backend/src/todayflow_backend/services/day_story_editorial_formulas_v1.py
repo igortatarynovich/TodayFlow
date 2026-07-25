@@ -315,6 +315,34 @@ def formula_key(family: str | None, variant: str | None) -> str:
     return f"{(family or '').strip()}.{(variant or '').strip()}"
 
 
+# Soft SP linkage for LLM / calibration — not a TL-1 score.
+_STRONG_PATTERNS_BY_KEY: dict[str, tuple[str, ...]] = {
+    "decision.stop_pleasing_everyone": ("SP-002", "SP-004"),
+    "decision.one_clear_yes": ("SP-004", "SP-002"),
+    "decision.close_the_loop": ("SP-004", "SP-005"),
+    "communication.clarity_returns_after_delay": ("SP-001", "SP-003"),
+    "communication.truth_without_filter": ("SP-008", "SP-002"),
+    "communication.restart_messages": ("SP-001", "SP-003"),
+    "change.sudden_turns": ("SP-006", "SP-007"),
+    "change.soft_expansion": ("SP-004", "SP-007"),
+    "change.release_old_script": ("SP-007", "SP-005"),
+    "pressure.patience_test": ("SP-005", "SP-002"),
+    "pressure.boundary_day": ("SP-004", "SP-008"),
+    "pressure.intensity_without_drama": ("SP-002", "SP-008"),
+    "momentum.steady_productive_rhythm": ("SP-004",),
+    "momentum.new_window": ("SP-001", "SP-004"),
+    "momentum.gather_pace": ("SP-004", "SP-005"),
+    "connection.honest_contact": ("SP-008", "SP-003"),
+    "connection.repair_after_friction": ("SP-008", "SP-003"),
+}
+
+_VALID_SP_IDS = frozenset(f"SP-{i:03d}" for i in range(1, 9))
+
+
+def _vibe_strokes_from_closing(vibe_closing: str) -> list[str]:
+    return [part.strip() for part in str(vibe_closing or "").split(";") if part.strip()][:4]
+
+
 def lookup_editorial_formula(
     *,
     family: str | None = None,
@@ -327,9 +355,19 @@ def lookup_editorial_formula(
     if isinstance(day_thesis, dict):
         fam = fam or day_thesis.get("family")
         var = var or day_thesis.get("variant")
-    row = _FORMULAS.get(formula_key(str(fam or ""), str(var or "")))
+    key = formula_key(str(fam or ""), str(var or ""))
+    row = _FORMULAS.get(key)
     if not row:
         return None
+    vibe = str(row.get("vibe_closing") or "")
+    strokes = list(row.get("vibe_strokes") or []) or _vibe_strokes_from_closing(vibe)
+    if not vibe and strokes:
+        vibe = "; ".join(strokes)
+    sp_ids = [
+        sid
+        for sid in (_STRONG_PATTERNS_BY_KEY.get(key) or tuple(row.get("strong_pattern_ids") or ()))
+        if sid in _VALID_SP_IDS
+    ]
     return {
         "exemplar_id": row["exemplar_id"],
         "theme": row["theme"],
@@ -338,10 +376,17 @@ def lookup_editorial_formula(
         "trap": row["trap"],
         "do": list(row["do"]),
         "avoid": list(row["avoid"]),
-        "vibe_closing": row["vibe_closing"],
+        "vibe_closing": vibe,
+        "vibe_strokes": strokes,
+        "strong_pattern_ids": sp_ids,
         "development_point": row["development_point"],
     }
 
 
 def list_editorial_formula_keys() -> list[str]:
     return sorted(_FORMULAS.keys())
+
+
+def list_strong_pattern_links() -> dict[str, list[str]]:
+    """Debug / docs helper: formula key → SP ids."""
+    return {k: list(v) for k, v in sorted(_STRONG_PATTERNS_BY_KEY.items())}

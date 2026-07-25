@@ -72,6 +72,13 @@ export type TodayContractDayStoryV1 = {
   today_move?: string;
   /** §0.5 concrete sensory closing strokes (semicolon-separated). */
   vibe_closing?: string;
+  /** Preferred structured strokes when present — join for display. */
+  vibe_strokes?: string[];
+  /** Kitchen editorial meta (exemplar + SP ids) — not primary UI copy. */
+  editorial?: {
+    exemplar_id?: string;
+    strong_pattern_ids?: string[];
+  } | null;
   evening_closure?: string;
   talisman?: { color?: string; stone?: string; note?: string };
   practice_recommendation?: { kind?: string; text?: string; reason?: string };

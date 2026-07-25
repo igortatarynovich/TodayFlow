@@ -786,7 +786,11 @@ export function buildTodayDayNarrative(input: {
   });
   const headlineAnchor =
     clean(contract.day_story?.headline_anchor) || clean(contract.day_story?.theme) || null;
-  const vibeClosing = clean(contract.day_story?.vibe_closing) || null;
+  const strokes = Array.isArray(contract.day_story?.vibe_strokes)
+    ? contract.day_story.vibe_strokes.map((s) => clean(s)).filter(Boolean)
+    : [];
+  const vibeClosing =
+    (strokes.length ? strokes.join("; ") : null) || clean(contract.day_story?.vibe_closing) || null;
 
   // Day Map path: pulse/glance/move slots — not a stacked fact wall.
   // Electional stays: explicit request, not a fact dump.

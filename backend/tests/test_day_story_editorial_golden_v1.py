@@ -187,3 +187,20 @@ def test_every_formula_passes_phrase_gate_smoke(key: str):
     assert story.get("avoid")
     assert str(story.get("vibe_closing") or "").strip()
     assert (story.get("day_thesis") or {}).get("variant") == variant
+    strokes = story.get("vibe_strokes") or []
+    assert isinstance(strokes, list) and len(strokes) >= 1
+    editorial = story.get("editorial") or {}
+    assert editorial.get("exemplar_id")
+    sp = editorial.get("strong_pattern_ids") or []
+    assert sp and all(str(x).startswith("SP-") for x in sp)
+
+
+def test_every_formula_links_valid_strong_patterns():
+    from todayflow_backend.services.day_story_editorial_formulas_v1 import list_strong_pattern_links
+
+    links = list_strong_pattern_links()
+    for key in list_editorial_formula_keys():
+        assert key in links, f"missing SP link for {key}"
+        ids = links[key]
+        assert 1 <= len(ids) <= 3
+        assert all(x.startswith("SP-00") for x in ids)

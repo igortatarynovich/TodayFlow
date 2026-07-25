@@ -417,6 +417,8 @@
 ### PR-5 engineering slice (2026-07-25) — без TL-1
 
 Детерминированный bank `day_story_editorial_formulas_v1` заполняет слоты эталонов A–C **и все** `day_thesis` variants в **fallback** (и soft-hint в LLM input).  
+Каждый variant связан с 1–3 `strong_pattern_ids` (SP-001…008) — подсказка драматургии, не score.  
+`vibe_strokes[]` + `vibe_closing` string (проекция) на wire.  
 Golden: `backend/tests/fixtures/day_story_editorial/golden_v1.json` + smoke на каждый ключ.  
 **Не** открывает `today_language_quality_v1` — только coherence + формула RULE_005.
 
@@ -462,6 +464,7 @@ Golden: `backend/tests/fixtures/day_story_editorial/golden_v1.json` + smoke на
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-07-25 | PR-5: SP linkage + vibe_strokes on formulas/contract; TL-1 still blocked |
 | 2026-07-25 | PR-5: full variant formula coverage + smoke/golden; TL-1 still blocked |
 | 2026-07-25 | PR-5: editorial formula bank + golden fixtures (A–C) wired to day_story fallback; TL-1 still blocked |
 | 2026-07-25 | Эталоны A–C + RULE_005 link (один конфликт / event pack) |
