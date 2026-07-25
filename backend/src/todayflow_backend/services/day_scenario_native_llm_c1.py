@@ -41,7 +41,7 @@ _SPHERE_LABEL_RU: dict[str, str] = {
 }
 
 NATIVE_LLM_SCHEMA_VERSION = "day_scenario_native_llm_c1"
-NATIVE_PROMPT_VERSION = "day-scenario-native-c3.1"
+NATIVE_PROMPT_VERSION = "day-scenario-native-c3.2"
 GENERATION_SOURCE_NATIVE = "native_llm_c1"
 GENERATION_SOURCE_DETERMINISTIC = "deterministic_engine_b5"
 
@@ -97,10 +97,10 @@ _NATIVE_SYS_RU = """Ты — драматург TodayFlow. Твоя задача
 {
   "schema_version": "day_scenario_native_llm_c1",
   "interpretive_chorus": {
-    "astrology": [{"named_factor": "...", "human_meaning": "...", "link_to_conflict": "...", "evidence_refs": ["id"]}],
-    "day_card": {"named_factor": "...", "archetype_role": "...", "link_to_conflict": "...", "evidence_refs": []},
-    "day_number": {"named_factor": "...", "tempo": "...", "style": "...", "link_to_conflict": "...", "evidence_refs": []},
-    "natal": [{"named_factor": "...", "human_meaning": "...", "link_to_conflict": "...", "evidence_refs": ["id"]}]
+    "astrology": [{"named_factor": "...", "human_meaning": "...", "link_to_conflict": "...", "conflict_id": "conflict.<slug>", "evidence_refs": ["id"]}],
+    "day_card": {"named_factor": "...", "archetype_role": "...", "link_to_conflict": "...", "conflict_id": "conflict.<slug>", "evidence_refs": []},
+    "day_number": {"named_factor": "...", "tempo": "...", "style": "...", "link_to_conflict": "...", "conflict_id": "conflict.<slug>", "evidence_refs": []},
+    "natal": [{"named_factor": "...", "human_meaning": "...", "link_to_conflict": "...", "conflict_id": "conflict.<slug>", "evidence_refs": ["id"]}]
   },
   "conflict": {
     "title": "...",
@@ -163,9 +163,16 @@ everyday_example обязателен и конкретен (сообщение,
 «не торопитесь», «сохраняйте баланс», «слушайте себя», «избегайте конфликтов», «сделайте паузу» —
 если они не встроены в конкретный момент и действие.
 
-Хор — последовательность одной истории, не четыре похожих абзаца:
-1) астрология = среда; 2) карта = архетип; 3) число = способ действия; 4) натал = личная чувствительность.
-Без натальных evidence не выдумывай глубокую персонализацию.
+Хор — одна причинная линия (C3.2), не четыре мини-прогноза:
+1) астрология = внешняя среда (небо → атмосфера дня для ЭТОГО conflict);
+2) карта дня = архетип реакции (как проживать conflict);
+3) число дня = темп / способ прохождения conflict;
+4) натал = личная уязвимость или ресурс (только при evidence).
+Каждый голос ОБЯЗАН иметь один и тот же conflict_id (slug от conflict.title, вида conflict.<slug>)
+и link_to_conflict, явно связанный с conflict.
+Запрещены: смысловые повторы между голосами; одинаковые абзацы с заменой терминов;
+параллельные прогнозы («в работе… / в отношениях…» как отдельные истории).
+Без натальных evidence не выдумывай глубокую персонализацию (natal=[]).
 
 - ЗАПРЕЩЕНЫ legacy keys: expect, trap, do, avoid, domains, talisman, story, theme,
   color_note, affirmation, goals, day_thesis, primary_conflict, events_lead и т.п.
@@ -266,17 +273,19 @@ def normalize_native_scenario_llm_c1(raw: dict[str, Any] | None) -> dict[str, An
     scenes_in = _as_list(src.get("scenes"))
     props_in = _as_dict(src.get("prop_material"))
 
-    def _voice_row(row: Any) -> dict[str, Any] | None:
+    def _voice_row(row: Any, *, default_conflict_id: str = "") -> dict[str, Any] | None:
         d = _as_dict(row)
         if not d:
             return None
         named = _clip(d.get("named_factor") or d.get("named"), 220)
         if not named:
             return None
+        cid = _clip(d.get("conflict_id"), 80) or default_conflict_id
         return {
             "named_factor": named,
             "human_meaning": _clip(d.get("human_meaning") or d.get("meaning"), 280),
             "link_to_conflict": _clip(d.get("link_to_conflict") or d.get("for_conflict"), 240),
+            "conflict_id": cid,
             "archetype_role": _clip(d.get("archetype_role") or d.get("role"), 200),
             "tempo": _clip(d.get("tempo"), 80),
             "style": _clip(d.get("style"), 80),
@@ -291,18 +300,25 @@ def normalize_native_scenario_llm_c1(raw: dict[str, Any] | None) -> dict[str, An
             ][:6],
         }
 
+    from todayflow_backend.services.day_scenario_editorial_gate_c31 import conflict_anchor_id
+
+    conflict_title_for_id = {
+        "title": _clip(conflict_in.get("title") or conflict_in.get("short_name"), 120),
+    }
+    default_cid = conflict_anchor_id(conflict_title_for_id)
+
     astrology = []
     for row in _as_list(chorus_in.get("astrology")):
-        v = _voice_row(row)
+        v = _voice_row(row, default_conflict_id=default_cid)
         if v:
             astrology.append(v)
     natal = []
     for row in _as_list(chorus_in.get("natal")):
-        v = _voice_row(row)
+        v = _voice_row(row, default_conflict_id=default_cid)
         if v:
             natal.append(v)
-    day_card = _voice_row(chorus_in.get("day_card"))
-    day_number = _voice_row(chorus_in.get("day_number"))
+    day_card = _voice_row(chorus_in.get("day_card"), default_conflict_id=default_cid)
+    day_number = _voice_row(chorus_in.get("day_number"), default_conflict_id=default_cid)
 
     scenes_out: list[dict[str, Any]] = []
     seen_spheres: set[str] = set()
@@ -564,6 +580,7 @@ def native_llm_to_day_scenario_v1(
                 "named_factor": row.get("named_factor"),
                 "human_meaning": row.get("human_meaning"),
                 "link_to_conflict": row.get("link_to_conflict"),
+                "conflict_id": row.get("conflict_id"),
                 "evidence_ref": (_as_list(row.get("evidence_refs")) or [None])[0],
                 "evidence_refs": list(row.get("evidence_refs") or []),
             }
@@ -576,6 +593,7 @@ def native_llm_to_day_scenario_v1(
             "named_factor": card_n.get("named_factor"),
             "archetype_role": card_n.get("archetype_role") or card_n.get("link_to_conflict"),
             "link_to_conflict": card_n.get("link_to_conflict"),
+            "conflict_id": card_n.get("conflict_id"),
             "human_meaning": card_n.get("link_to_conflict") or card_n.get("human_meaning"),
             "evidence_refs": list(card_n.get("evidence_refs") or []),
             "is_not_astro_proof": True,
@@ -590,6 +608,7 @@ def native_llm_to_day_scenario_v1(
             "tempo": number_n.get("tempo"),
             "style": number_n.get("style"),
             "link_to_conflict": number_n.get("link_to_conflict"),
+            "conflict_id": number_n.get("conflict_id"),
             "human_meaning": number_n.get("link_to_conflict") or number_n.get("human_meaning"),
             "evidence_refs": list(number_n.get("evidence_refs") or []),
             "must_not_invent_second_plot": True,
@@ -604,6 +623,7 @@ def native_llm_to_day_scenario_v1(
                 "named_factor": row.get("named_factor"),
                 "human_meaning": row.get("human_meaning"),
                 "link_to_conflict": row.get("link_to_conflict"),
+                "conflict_id": row.get("conflict_id"),
                 "evidence_refs": list(row.get("evidence_refs") or []),
             }
         )
