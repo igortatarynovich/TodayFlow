@@ -27,21 +27,26 @@ const KEY_HOUSES = new Set([1, 4, 7, 10]);
 
 type ProfileChartFullMapProps = {
   natalPreview: NatalChartPreview | null;
+  natalPreviewLoading?: boolean;
   onReloadPreview: () => void;
 };
 
-export function ProfileChartFullMap({ natalPreview, onReloadPreview }: ProfileChartFullMapProps) {
+export function ProfileChartFullMap({ natalPreview, natalPreviewLoading = false, onReloadPreview }: ProfileChartFullMapProps) {
   if (!natalPreview) {
     return (
       <div className={styles.emptyState}>
         <p className="orbit-body-sm" style={{ margin: 0, color: "#475569" }}>
-          Полная карта появится после построения натала. Нажми «Обновить карту», когда данные рождения сохранены.
+          {natalPreviewLoading
+            ? "Собираем полную карту…"
+            : "Полная карта появится после построения натала. Нажми «Обновить карту», когда данные рождения сохранены."}
         </p>
-        <div className={styles.actions} style={{ marginTop: "0.75rem" }}>
-          <button type="button" className="orbit-button orbit-button-secondary orbit-button-sm" onClick={onReloadPreview}>
-            Обновить карту
-          </button>
-        </div>
+        {!natalPreviewLoading ? (
+          <div className={styles.actions} style={{ marginTop: "0.75rem" }}>
+            <button type="button" className="orbit-button orbit-button-secondary orbit-button-sm" onClick={onReloadPreview}>
+              Обновить карту
+            </button>
+          </div>
+        ) : null}
       </div>
     );
   }

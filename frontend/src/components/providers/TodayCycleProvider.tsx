@@ -17,6 +17,8 @@ import {
   normalizeTodayPayload,
   type TodayCycleData,
 } from "@/components/today/todayPageUtils";
+import { readTodayDayBundle, writeTodayDayBundle } from "@/lib/todayDayBundleCache";
+import { warmTodayDayBundle } from "@/lib/warmTodayDayBundle";
 
 export type TodayCycleContextValue = {
   cycle: TodayCycleData | null;
@@ -47,9 +49,13 @@ export function TodayCycleProvider({ children }: { children: ReactNode }) {
   const activeUserIdRef = useRef<number | null>(null);
 
   const setCycle = useCallback((data: TodayCycleData) => {
-    setCycleState(normalizeTodayPayload(data));
+    const normalized = normalizeTodayPayload(data);
+    setCycleState(normalized);
     setError(null);
     setTodayHeavyLayersPending(false);
+    if (normalized?.date) {
+      writeTodayDayBundle(normalized.date, { cycle: normalized });
+    }
   }, []);
 
   const refetchToday = useCallback(
@@ -84,6 +90,7 @@ export function TodayCycleProvider({ children }: { children: ReactNode }) {
             if (firstPaint) {
               if (fetchGeneration === fullFetchGenerationRef.current && activeUserIdRef.current === fetchUserId) {
                 setCycleState(firstPaint);
+                writeTodayDayBundle(firstPaint.date, { cycle: firstPaint });
               }
             } else {
               firstPaint = null;
@@ -113,6 +120,9 @@ export function TodayCycleProvider({ children }: { children: ReactNode }) {
               setCycleState(normalizeTodayPayload(fullRaw));
               setError(null);
               setTodayHeavyLayersPending(false);
+              writeTodayDayBundle(normalizeTodayPayload(fullRaw).date, {
+                cycle: normalizeTodayPayload(fullRaw),
+              });
             })
             .catch((e) => {
               if (fetchGeneration !== fullFetchGenerationRef.current) return;
@@ -164,7 +174,13 @@ export function TodayCycleProvider({ children }: { children: ReactNode }) {
       inFlightRef.current = null;
       fullFetchGenerationRef.current += 1;
     }
-    void refetchToday({ force: true });
+    const todayIso = new Date().toISOString().split("T")[0];
+    const cached = readTodayDayBundle(todayIso);
+    if (cached?.cycle?.date === todayIso) {
+      setCycleState(normalizeTodayPayload(cached.cycle));
+    }
+    void warmTodayDayBundle();
+    void refetchToday({ force: !cached?.cycle });
   }, [isAuthenticated, userId, refetchToday]);
 
   /** После полуночи кэш по вчерашней дате: обновляем при возврате на вкладку / из bfcache. */

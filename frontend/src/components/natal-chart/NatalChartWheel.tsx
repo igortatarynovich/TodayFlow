@@ -242,8 +242,10 @@ export function NatalChartWheel({
   const innerRadius = outerRadius * 0.56;
   const aspectRadius = innerRadius - 18;
   const houseRadius = (outerRadius + innerRadius) / 2;
-  const basePlanetRadius = zodiacInnerRadius - 14;
-  const planetRadiusVariation = 34;
+  const basePlanetRadius = zodiacInnerRadius - 28;
+  const planetRadiusVariation = 18;
+  const planetRadiusMin = innerRadius + 28;
+  const planetRadiusMax = zodiacInnerRadius - 10;
   const gradientId = useId().replace(/:/g, "");
   const softGlowId = `${gradientId}-glow`;
   const webClipId = `${gradientId}-clip`;
@@ -507,6 +509,12 @@ export function NatalChartWheel({
         // Distribute evenly around base radius
         const clusterOffset = (positionInCluster - (clusterSize - 1) / 2) * planetRadiusVariation;
         radiusOffset = clusterOffset;
+        // Keep glyphs inside the zodiac band — never spill past the ring.
+        const clampedR = Math.min(
+          planetRadiusMax,
+          Math.max(planetRadiusMin, basePlanetRadius + radiusOffset),
+        );
+        radiusOffset = clampedR - basePlanetRadius;
       }
 
       return { ...planet, radiusOffset };
@@ -539,8 +547,7 @@ export function NatalChartWheel({
         radius: finalRadius,
       };
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chartPositions, houseCusps, basePlanetRadius, planetRadiusVariation, getPosition, planetSymbols]);
+  }, [chartPositions, houseCusps, basePlanetRadius, planetRadiusVariation, planetRadiusMin, planetRadiusMax, getPosition, planetSymbols]);
 
   const angleMarkers = useMemo(() => {
     const markers = [
@@ -554,7 +561,7 @@ export function NatalChartWheel({
       return {
         ...marker,
         angle,
-        outer: getPosition(angle, outerRadius + 24),
+        outer: getPosition(angle, outerRadius + 12),
         inner: getPosition(angle, zodiacInnerRadius - 8),
       };
     });

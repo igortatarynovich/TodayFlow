@@ -55,7 +55,7 @@ export function ProfileRecognitionScene({
           <span className={styles.journeyStepBadge}>{recognitionNav.step.replace(/^0/, "")}</span>
           <span>{copy.title}</span>
         </p>
-        <p className={styles.zoneLead}>{copy.lead}</p>
+        {copy.lead ? <p className={styles.zoneLead}>{copy.lead}</p> : null}
         {name ? (
           <h1
             id="profile-v2-recognition-title"

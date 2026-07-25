@@ -459,6 +459,45 @@ def _parse_editorial_json(raw: str) -> dict[str, Any] | None:
     return parsed
 
 
+def _reuse_last_successful_editorial(
+    db: Session,
+    *,
+    user_id: int,
+    core_profile_snapshot_id: int | None,
+) -> dict[str, Any] | None:
+    """Return last successful editorial when still tied to the same core snapshot.
+
+    Natal structure is stable; re-calling LLM on every Profile open made the chart
+    appear "not built yet" for ~1 minute. Reuse until birth data / core snapshot changes.
+    """
+    rows = (
+        db.query(db_models.GenerationLog)
+        .filter(
+            db_models.GenerationLog.user_id == user_id,
+            db_models.GenerationLog.module == MODULE,
+            db_models.GenerationLog.surface == SURFACE,
+            db_models.GenerationLog.status == "success",
+        )
+        .order_by(db_models.GenerationLog.created_at.desc())
+        .limit(5)
+        .all()
+    )
+    for row in rows:
+        payload = row.normalized_response if isinstance(row.normalized_response, dict) else None
+        if not payload or not str(payload.get("headline") or "").strip():
+            continue
+        if core_profile_snapshot_id is not None:
+            if row.core_profile_snapshot_id is not None and int(row.core_profile_snapshot_id) != int(
+                core_profile_snapshot_id
+            ):
+                continue
+        reused = dict(payload)
+        reused["generation_log_id"] = row.id
+        reused["reused"] = True
+        return reused
+    return None
+
+
 def generate_natal_chart_editorial(
     db: Session,
     *,
@@ -468,6 +507,7 @@ def generate_natal_chart_editorial(
     interpretations: dict[str, Any] | None,
     aspects: dict[str, Any] | None,
     locale: str = "ru",
+    force_refresh: bool = False,
 ) -> dict[str, Any]:
     fallback = _fallback_editorial(
         core_profile=core_profile,
@@ -499,6 +539,26 @@ def generate_natal_chart_editorial(
         .order_by(CoreProfileSnapshot.updated_at.desc())
         .first()
     )
+    snapshot_id = latest_snapshot.id if latest_snapshot else None
+
+    if not force_refresh:
+        reused = _reuse_last_successful_editorial(
+            db,
+            user_id=user.id,
+            core_profile_snapshot_id=snapshot_id,
+        )
+        if reused is not None:
+            reused = _apply_natal_memory_editorial_bias(
+                reused,
+                interpretations=interpretations,
+                aspects=aspects,
+                learning_context=learning_context,
+            )
+            reused["route"] = _build_route_from_editorial(
+                reused, core_profile=core_profile, learning_context=learning_context
+            )
+            return reused
+
     user_prompt = _build_prompt(
         core_profile=core_profile,
         natal_summary=natal_summary,
@@ -514,7 +574,7 @@ def generate_natal_chart_editorial(
             module=MODULE,
             surface=SURFACE,
             user_id=user.id,
-            core_profile_snapshot_id=latest_snapshot.id if latest_snapshot else None,
+            core_profile_snapshot_id=snapshot_id,
             prompt_version_id=prompt_version.id,
             model=resolve_default_chat_model(),
             locale=locale,
@@ -537,7 +597,7 @@ def generate_natal_chart_editorial(
             module=MODULE,
             surface=SURFACE,
             user_id=user.id,
-            core_profile_snapshot_id=latest_snapshot.id if latest_snapshot else None,
+            core_profile_snapshot_id=snapshot_id,
             prompt_version_id=prompt_version.id,
             model=resolve_default_chat_model(),
             locale=locale,
@@ -574,7 +634,7 @@ def generate_natal_chart_editorial(
                 module=MODULE,
                 surface=SURFACE,
                 user_id=user.id,
-                core_profile_snapshot_id=latest_snapshot.id if latest_snapshot else None,
+                core_profile_snapshot_id=snapshot_id,
                 prompt_version_id=prompt_version.id,
                 model=model_id,
                 locale=locale,
@@ -616,7 +676,7 @@ def generate_natal_chart_editorial(
             module=MODULE,
             surface=SURFACE,
             user_id=user.id,
-            core_profile_snapshot_id=latest_snapshot.id if latest_snapshot else None,
+            core_profile_snapshot_id=snapshot_id,
             prompt_version_id=prompt_version.id,
             model=model_id,
             locale=locale,
@@ -639,7 +699,7 @@ def generate_natal_chart_editorial(
                 module=MODULE,
                 surface=SURFACE,
                 user_id=user.id,
-                core_profile_snapshot_id=latest_snapshot.id if latest_snapshot else None,
+                core_profile_snapshot_id=snapshot_id,
                 prompt_version_id=prompt_version.id,
                 model=model_id,
                 locale=locale,

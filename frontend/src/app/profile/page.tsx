@@ -135,6 +135,7 @@ function ProfileHubPageInner() {
     setupMessage,
     setSetupMessage,
     natalPreview,
+    natalPreviewLoading,
     previewError,
     isBuilding,
     currentBuildState,
@@ -578,6 +579,7 @@ function ProfileHubPageInner() {
                     natalPreview,
                     coreNumerology: coreProfile?.numerology,
                     previewError,
+                    natalPreviewLoading,
                     onReloadPreview: reloadNatalPreview,
                     lifeMapSections,
                   }}

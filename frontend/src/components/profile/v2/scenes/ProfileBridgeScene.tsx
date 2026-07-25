@@ -33,9 +33,9 @@ export function ProfileBridgeScene({ bridgeLine }: ProfileBridgeSceneProps) {
         <p className={styles.bridgeHeadline} data-testid="profile-v2-bridge-line">
           {bridgeLine}
         </p>
-      ) : (
+      ) : PROFILE_V2_COPY.zones.bridge.lead ? (
         <p className={styles.bridgeHeadline}>{PROFILE_V2_COPY.zones.bridge.lead}</p>
-      )}
+      ) : null}
       <Link href="/today" className={styles.bridgeCta} data-testid="profile-v2-open-today">
         {PROFILE_V2_COPY.zones.bridge.cta}
         <span aria-hidden> →</span>

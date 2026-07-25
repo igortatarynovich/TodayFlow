@@ -26,6 +26,7 @@ export type ProfileQuickMapDeepProps = {
   natalPreview: NatalChartPreview | null;
   coreNumerology?: CoreProfile["numerology"] | null;
   previewError: string | null;
+  natalPreviewLoading?: boolean;
   onReloadPreview: () => void;
   lifeMapSections: LifeMapSection[];
   chartReading?: string | null;
@@ -232,6 +233,7 @@ export function ProfileQuickMapScreen({
                 natalPreview={deep.natalPreview}
                 coreNumerology={deep.coreNumerology}
                 previewError={deep.previewError}
+                natalPreviewLoading={deep.natalPreviewLoading}
                 onReloadPreview={deep.onReloadPreview}
                 lifeMapSections={deep.lifeMapSections}
                 fullChartOpen={deepExpanded}

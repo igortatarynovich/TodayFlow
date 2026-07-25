@@ -24,6 +24,13 @@ import {
 import { TodayNarrativeDepthControl } from "@/components/today/TodayNarrativeDepthControl";
 import { TodayWebDashboard } from "@/components/product-ui/TodayWebDashboard";
 import { ProductPageScreen } from "@/components/product-ui/ProductPageScreen";
+import { TodayDayReveal } from "@/components/today/TodayDayReveal";
+import {
+  readTodayDayBundle,
+  todayDayBundleIsReady,
+  writeTodayDayBundle,
+} from "@/lib/todayDayBundleCache";
+import { warmTodayDayBundle } from "@/lib/warmTodayDayBundle";
 import {
   buildTodayWebPractices,
   buildTodayWebStreak,
@@ -134,9 +141,12 @@ export default function TodayPage() {
   }, [searchParams, router, toast]);
 
   const todayIso = useMemo(() => new Date().toISOString().split("T")[0], []);
-  const [loading, setLoading] = useState(true);
-  const [todayData, setTodayData] = useState<TodayCycleData | null>(null);
-  const [todayContract, setTodayContract] = useState<TodayContractV1 | null>(null);
+  const initialBundle = useMemo(() => (typeof window !== "undefined" ? readTodayDayBundle(todayIso) : null), [todayIso]);
+  const [loading, setLoading] = useState(() => !todayDayBundleIsReady(initialBundle));
+  const [todayData, setTodayData] = useState<TodayCycleData | null>(() => initialBundle?.cycle ?? null);
+  const [todayContract, setTodayContract] = useState<TodayContractV1 | null>(() => initialBundle?.contract ?? null);
+  const [dayRevealDone, setDayRevealDone] = useState(false);
+  const onDayRevealComplete = useCallback(() => setDayRevealDone(true), []);
   const [dayStoryUpdating, setDayStoryUpdating] = useState(false);
   const dayStoryRefreshInFlight = useRef(false);
   const dayStorySingleVoice = useMemo(
@@ -153,6 +163,7 @@ export default function TodayPage() {
       const result = await refreshTodayStory({ localDate: view.local_date });
       if (result.contract) {
         setTodayContract(result.contract);
+        writeTodayDayBundle(view.local_date, { contract: result.contract });
       }
     } catch {
       /* keep previous story; symbols already shown; do not pretend story matches new symbols */
@@ -161,7 +172,7 @@ export default function TodayPage() {
       setDayStoryUpdating(false);
     }
   }, []);
-  const [morningRitualData, setMorningRitualData] = useState<MorningRitualData | null>(null);
+  const [morningRitualData, setMorningRitualData] = useState<MorningRitualData | null>(() => initialBundle?.morning ?? null);
   const [fusionData, setFusionData] = useState<FusionResponse | null>(null);
   const [quickPractice, setQuickPractice] = useState<PracticeResponse | null>(null);
   const [coreProfile, setCoreProfile] = useState<CoreProfile | null>(null);
@@ -376,13 +387,13 @@ export default function TodayPage() {
         const initialLoad = !hasLoadedOnceRef.current;
         const startedAt = initialLoad ? Date.now() : null;
         const warmCache = cycleRef.current?.date === todayIso;
+        const bundleReady = todayDayBundleIsReady(readTodayDayBundle(todayIso));
         try {
-          if (initialLoad && !warmCache) {
+          if (initialLoad && !warmCache && !bundleReady) {
             setLoading(true);
             setThinkingState({ active: true, mode: "initial", startedAt: startedAt || Date.now() });
           }
           setError(null);
-          const todayIso = new Date().toISOString().split("T")[0];
           const experienceMode = searchParams.get("full") !== "1";
           const ritualPromise = getJson<MorningRitualData>(
             `/morning-ritual/today?target_date=${encodeURIComponent(todayIso)}`,
@@ -393,6 +404,10 @@ export default function TodayPage() {
             const cached = cycleRef.current;
             if (cached?.date === todayIso) {
               data = cached;
+            }
+            if (!data) {
+              const bundle = readTodayDayBundle(todayIso);
+              if (bundle?.cycle?.date === todayIso) data = bundle.cycle;
             }
           }
           if (!data) {
@@ -430,6 +445,7 @@ export default function TodayPage() {
               pollTodayJob(jobId).then((polled) => {
                 if (polled?.lifecycle.status === "enriched" && polled.contract) {
                   setTodayContract(polled.contract as typeof contractPayload);
+                  writeTodayDayBundle(todayIso, { contract: polled.contract as typeof contractPayload });
                 }
                 setDayStoryUpdating(false);
               }),
@@ -440,18 +456,25 @@ export default function TodayPage() {
             writeCoreProfileToCache(core, core.astro?.profile_id ?? null);
           }
           const morningFromCycle = (normalized.morning as MorningRitualData) || null;
+          let nextMorning: MorningRitualData | null = morningFromCycle;
           if (ritualPayload) {
-            setMorningRitualData({
+            nextMorning = {
               ...morningFromCycle,
               ...ritualPayload,
               celestial_events:
                 ritualPayload.celestial_events ?? morningFromCycle?.celestial_events ?? undefined,
               daily_horoscope:
                 ritualPayload.daily_horoscope ?? morningFromCycle?.daily_horoscope ?? undefined,
-            });
+            };
+            setMorningRitualData(nextMorning);
           } else {
             setMorningRitualData(morningFromCycle);
           }
+          writeTodayDayBundle(todayIso, {
+            contract: contractPayload,
+            morning: nextMorning,
+            cycle: normalized,
+          });
           setLoading(false);
           if (initialLoad) {
             setThinkingState(null);
@@ -605,6 +628,7 @@ export default function TodayPage() {
 
   useEffect(() => {
     if (!isAuthenticated) return;
+    void warmTodayDayBundle();
     loadToday();
   }, [isAuthenticated, loadToday]);
 
@@ -1109,20 +1133,17 @@ export default function TodayPage() {
     }
   }, [questionsHubContext?.preferred_lane, searchParams, todayTab]);
 
-  /** Cycle cache can paint `todayData` before `loadToday` finishes `/today/contract`. */
-  const awaitingInitialLoad = !todayData && !error;
-  const contractPending = Boolean(todayData && !todayContract && !error);
+  /** Cycle/contract cache can paint immediately; network soft-refreshes underneath the reveal. */
+  const dayReady = Boolean(isAuthenticated && todayData && todayContract && !error);
+  const showDayReveal = Boolean(isAuthenticated && !authLoading && !dayRevealDone);
 
-  // Guests never load `todayData` (loadToday runs only for authenticated users), so the
-  // data gate must be scoped to authenticated sessions — otherwise guests get stuck on an
-  // infinite "building your day" spinner and never reach the guest/auth branches below.
-  if (authLoading || (isAuthenticated && (loading || awaitingInitialLoad || contractPending))) {
+  if (authLoading) {
     return (
       <ProductPageScreen
         testId="today-loading"
         title="Сегодня"
         loading
-        loadingLabel={authLoading ? RITUAL_COPY.todayPageLoadingSession : RITUAL_COPY.todayPageLoadingDay}
+        loadingLabel={RITUAL_COPY.todayPageLoadingSession}
         hideDatePill
       />
     );
@@ -1159,6 +1180,16 @@ export default function TodayPage() {
               }
         }
         hideDatePill
+      />
+    );
+  }
+
+  if (!dayReady && !error) {
+    return (
+      <TodayDayReveal
+        ready={false}
+        waitingLabel={RITUAL_COPY.todayPageLoadingDay}
+        onComplete={onDayRevealComplete}
       />
     );
   }
@@ -1329,6 +1360,15 @@ export default function TodayPage() {
 
   return (
     <>
+      {showDayReveal ? (
+        <TodayDayReveal
+          ready={dayReady}
+          waitingLabel={RITUAL_COPY.todayPageLoadingDay}
+          readyLabel="День уже собран"
+          openLabel="Открываю…"
+          onComplete={onDayRevealComplete}
+        />
+      ) : null}
       <TodayWebDashboard
         displayName={firstNameRitual}
         isFirstDay={isFirstDayMood}

@@ -40,7 +40,9 @@ export function ProfileWhyScene({ why }: ProfileWhySceneProps) {
             <span className={styles.journeyStepBadge}>{whyNav.step.replace(/^0/, "")}</span>
             <span id="profile-v2-why-title">{PROFILE_V2_COPY.zones.why.title}</span>
           </p>
-          <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.why.lead}</p>
+          {PROFILE_V2_COPY.zones.why.lead ? (
+            <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.why.lead}</p>
+          ) : null}
         </div>
       </header>
 
@@ -94,7 +96,9 @@ export function ProfileWhyScene({ why }: ProfileWhySceneProps) {
         </ul>
       ) : null}
 
-      {why.title ? <p className={styles.whySynthesis}>{why.title}</p> : null}
+      {why.title && why.title !== PROFILE_V2_COPY.zones.why.title ? (
+        <p className={styles.whySynthesis}>{why.title}</p>
+      ) : null}
       {why.honesty ? (
         <p className={styles.zoneLead} data-testid="profile-v2-why-honesty">
           {why.honesty}

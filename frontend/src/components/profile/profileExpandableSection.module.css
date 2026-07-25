@@ -65,3 +65,52 @@
 .body {
   margin-top: 0.95rem;
 }
+
+.rootPlain {
+  padding: 0.85rem 0 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+.rootPlain .toggle {
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  color: #8b6a3e;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 600;
+}
+
+.rootPlain[open] .toggle {
+  background: transparent;
+  border: none;
+  color: #6b5336;
+}
+
+:global([data-theme="dark"]) .root {
+  background: linear-gradient(165deg, rgba(36, 30, 40, 0.96) 0%, rgba(26, 22, 32, 0.92) 100%);
+  border-color: rgba(212, 184, 150, 0.18);
+}
+
+:global([data-theme="dark"]) .rootPlain {
+  background: transparent;
+  border: none;
+}
+
+:global([data-theme="dark"]) .title {
+  color: #f5f0e8;
+}
+
+:global([data-theme="dark"]) .subtitle {
+  color: rgba(245, 240, 232, 0.62);
+}
+
+:global([data-theme="dark"]) .rootPlain .toggle,
+:global([data-theme="dark"]) .rootPlain[open] .toggle {
+  color: rgba(212, 184, 150, 0.9);
+  background: transparent;
+}
+

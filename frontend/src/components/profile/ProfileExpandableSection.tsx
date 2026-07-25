@@ -14,6 +14,7 @@ export function ProfileExpandableSection({
   open: controlledOpen,
   onOpenChange,
   children,
+  variant = "card",
 }: {
   id?: string;
   title: string;
@@ -23,6 +24,8 @@ export function ProfileExpandableSection({
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   children: ReactNode;
+  /** `plain` — text toggle only, no nested card chrome. */
+  variant?: "card" | "plain";
 }) {
   const isControlled = controlledOpen !== undefined;
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
@@ -47,7 +50,11 @@ export function ProfileExpandableSection({
   );
 
   return (
-    <details id={id} open={isOpen} className={styles.root}>
+    <details
+      id={id}
+      open={isOpen}
+      className={`${styles.root} ${variant === "plain" ? styles.rootPlain : ""}`.trim()}
+    >
       <summary className={`${styles.summary} ${profileMotionStyles.summaryCta}`} onClick={handleSummaryClick}>
         <div>
           <p className={styles.title}>{title}</p>

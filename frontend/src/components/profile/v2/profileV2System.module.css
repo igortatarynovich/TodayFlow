@@ -2178,6 +2178,48 @@
     var(--tf-surface, #fff);
 }
 
+/* Natal: one open surface — no zone/journey card chrome. */
+.natalFlatScene {
+  position: relative;
+  isolation: isolate;
+  scroll-margin-top: 4.5rem;
+  padding: clamp(0.35rem, 1.5vw, 0.75rem) 0 clamp(1.25rem, 3vw, 1.75rem);
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.natalFlatHeader {
+  margin-bottom: 0.85rem;
+}
+
+.natalPlainToggle {
+  margin-top: 1rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #8b6a3e;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.natalPlainToggle:hover {
+  color: #6b5336;
+}
+
+:global([data-theme="dark"]) .natalPlainToggle {
+  color: rgba(212, 184, 150, 0.9);
+}
+
+:global([data-theme="dark"]) .natalPlainToggle:hover {
+  color: #e8d4b0;
+}
+
 /* Step 6 — natal destination (always visible; deep chart on demand) */
 .natalInline {
   display: flex;

@@ -6,7 +6,6 @@ import { ProfileMotionExpand, useProfileMotionInView } from "@/components/founda
 import { ProfileChartSection } from "@/components/profile/ProfileChartSection";
 import type { ProfileLifeSphere } from "@/components/profile/ProfileLifeSection";
 import type { ProfileQuickMapDeepProps } from "@/components/profile/quickMap/ProfileQuickMapScreen";
-import { ProfileAtmosphere } from "@/components/profile/v2/ProfileAtmosphere";
 import { PROFILE_V2_COPY } from "@/components/profile/v2/profileV2SystemCopy";
 import type { ProgressiveDetailItem } from "@/lib/profilePage/buildProfileProgressiveDetailsProjection";
 import { profileV2SphereCardLine } from "@/lib/profilePage/profileV2SpherePresentation";
@@ -28,8 +27,8 @@ export type ProfileExploreSectionProps = {
 };
 
 /**
- * Step 6 — natal as readable destination: signature + numbers + wheel always visible.
- * Full houses/aspects + secondary profile details stay behind one optional fold.
+ * Natal as one flat surface: title → signature strip → wheel → one plain fold.
+ * No nested card chrome around the chart.
  */
 export function ProfileExploreSection({
   open,
@@ -55,83 +54,52 @@ export function ProfileExploreSection({
     <section
       id="profile-v2-explore"
       ref={motion.ref}
-      className={`${styles.zone} ${styles.journeyScene} ${styles.exploreScene} ${motion.className}`.trim()}
+      className={`${styles.natalFlatScene} ${motion.className}`.trim()}
       style={motion.style}
       data-testid="profile-v2-explore"
       aria-labelledby="profile-v2-explore-title"
     >
-      <ProfileAtmosphere motif="natal" />
-
-      <header className={styles.zoneHeader}>
-        <div>
-          <p className={styles.journeyStepIndex}>
-            <span className={styles.journeyStepBadge}>{copy.stepBadge}</span>
-            <span id="profile-v2-explore-title">{copy.title}</span>
-          </p>
-          <p className={styles.zoneLead}>{copy.lead}</p>
-        </div>
+      <header className={styles.natalFlatHeader}>
+        <p className={styles.journeyStepIndex}>
+          <span className={styles.journeyStepBadge}>{copy.stepBadge}</span>
+          <span id="profile-v2-explore-title">{copy.title}</span>
+        </p>
       </header>
 
       {hasNatal && deep ? (
-        <div className={styles.natalInline} data-testid="profile-v2-natal">
-          <p className={styles.exploreTeaserTitle} id="profile-v2-natal-title">
-            {copy.natalTitle}
-          </p>
-          <ul className={styles.natalBenefitList}>
-            {copy.benefits.map((line) => (
-              <li key={line} className={styles.natalBenefitItem}>
-                <span className={styles.natalBenefitMark} aria-hidden>
-                  ✓
-                </span>
-                {line}
-              </li>
-            ))}
-          </ul>
-          <div className={styles.skyContent} data-testid="profile-v2-natal-deep">
+        <div data-testid="profile-v2-natal">
+          <div data-testid="profile-v2-natal-deep">
             <ProfileChartSection
               natalPreview={deep.natalPreview}
               coreNumerology={deep.coreNumerology}
               previewError={deep.previewError}
+              natalPreviewLoading={deep.natalPreviewLoading}
               onReloadPreview={deep.onReloadPreview}
               lifeMapSections={deep.lifeMapSections}
               fullChartOpen={deepExpanded}
-              layout="inline"
               chartReading={deep.chartReading}
               methodologyNote={deep.methodologyNote}
               unavailableNote={deep.unavailableNote}
             />
-            <p className={styles.zoneLead} style={{ marginTop: "1rem" }}>
-              {copy.updatedNote}
-            </p>
           </div>
         </div>
       ) : (
-        <div className={styles.natalDestination} data-testid="profile-v2-natal">
-          {/* eslint-disable-next-line @next/next/no-img-element -- static wash plate */}
-          <img
-            src="/images/cosmic/celestial_wash.webp"
-            alt=""
-            className={styles.natalDestinationWash}
-          />
-          <div className={styles.natalDestinationCopy}>
-            <p className={styles.exploreTeaserTitle}>{copy.natalTitle}</p>
-            <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.sources.lead}</p>
-          </div>
-        </div>
+        <p className={styles.zoneLead} data-testid="profile-v2-natal">
+          {PROFILE_V2_COPY.zones.sources.lead}
+        </p>
       )}
 
       {hasExtraDetails ? (
         <>
           <button
             type="button"
-            className={styles.secondaryCta}
+            className={styles.natalPlainToggle}
             data-testid="profile-v2-open-explore"
             aria-expanded={open}
             aria-controls="profile-v2-explore-body"
             onClick={onToggle}
           >
             {open ? copy.hide : copy.open}
-            <span aria-hidden> {open ? "↑" : "→"}</span>
           </button>
 
           <ProfileMotionExpand open={open}>

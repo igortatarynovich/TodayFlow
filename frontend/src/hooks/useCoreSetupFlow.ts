@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { getJson, postJson } from "@/lib/api";
 import { publishCoreProfileUpdate } from "@/lib/coreProfileCacheStorage";
 import {
@@ -31,6 +31,12 @@ type UseCoreSetupFlowOptions = {
   onAstroProfilesUpdated?: (profiles: AstroProfile[]) => void;
 };
 
+const STRUCTURE_QUERY = "/natal-chart/?include_interpretations=false&include_editorial=false";
+/** Routine enrich: houses/aspects text without LLM editorial. */
+const ENRICH_QUERY = "/natal-chart/?include_interpretations=true&include_editorial=false";
+/** First build after birth data save — editorial once. */
+const SETUP_QUERY = "/natal-chart/?include_interpretations=true&include_editorial=true";
+
 export function useCoreSetupFlow(options: UseCoreSetupFlowOptions = {}) {
   const { warmNatalPreview = false, onCoreProfileUpdated, onAstroProfilesUpdated } = options;
 
@@ -38,37 +44,69 @@ export function useCoreSetupFlow(options: UseCoreSetupFlowOptions = {}) {
   const [setupError, setSetupError] = useState<string | null>(null);
   const [setupMessage, setSetupMessage] = useState<string | null>(null);
   const [natalPreview, setNatalPreview] = useState<NatalChartPreview | null>(null);
+  const [natalPreviewLoading, setNatalPreviewLoading] = useState(false);
   const [previewError, setPreviewError] = useState<string | null>(null);
   const [setupForm, setSetupForm] = useState<CoreSetupPayload>(() => createEmptyCoreSetupForm());
+  const loadGenRef = useRef(0);
 
-  const loadNatalPreview = useCallback(async (opts?: { force?: boolean }) => {
-    setPreviewError(null);
-    if (!opts?.force) {
-      const cached = readNatalPreviewFromCache(null);
-      if (cached) {
-        setNatalPreview(cached);
-        return;
-      }
-    }
-    try {
-      const chart = await getJson<NatalChartPreview>("/natal-chart/?include_interpretations=true");
-      setNatalPreview(chart);
-      writeNatalPreviewToCache(chart, null);
-    } catch (err) {
-      setPreviewError(err instanceof Error ? err.message : "Не удалось построить натальную карту.");
+  const applyPreview = useCallback((chart: NatalChartPreview) => {
+    setNatalPreview(chart);
+    writeNatalPreviewToCache(chart, (chart as { astro_profile_id?: number }).astro_profile_id ?? null);
+  }, []);
+
+  const loadNatalPreview = useCallback(
+    async (opts?: { force?: boolean; withEditorial?: boolean }) => {
+      const gen = ++loadGenRef.current;
+      setPreviewError(null);
+
       if (!opts?.force) {
         const cached = readNatalPreviewFromCache(null);
         if (cached) {
           setNatalPreview(cached);
+          setNatalPreviewLoading(false);
+          // Soft revalidate structure in background (no LLM editorial).
+          void getJson<NatalChartPreview>(STRUCTURE_QUERY)
+            .then((chart) => {
+              if (gen !== loadGenRef.current) return;
+              applyPreview({ ...cached, ...chart, interpretations: cached.interpretations ?? chart.interpretations });
+            })
+            .catch(() => {
+              /* keep cache */
+            });
           return;
         }
       }
-      setNatalPreview(null);
-    }
-  }, []);
+
+      setNatalPreviewLoading(true);
+      try {
+        // Phase 1: structure only — wheel + signature without waiting for LLM.
+        const structure = await getJson<NatalChartPreview>(STRUCTURE_QUERY);
+        if (gen !== loadGenRef.current) return;
+        applyPreview(structure);
+        setNatalPreviewLoading(false);
+
+        // Phase 2: interpretations. Editorial only on first setup / explicit request.
+        const enrichUrl = opts?.withEditorial ? SETUP_QUERY : ENRICH_QUERY;
+        const full = await getJson<NatalChartPreview>(enrichUrl);
+        if (gen !== loadGenRef.current) return;
+        applyPreview(full);
+      } catch (err) {
+        if (gen !== loadGenRef.current) return;
+        setPreviewError(err instanceof Error ? err.message : "Не удалось построить натальную карту.");
+        const cached = readNatalPreviewFromCache(null);
+        if (cached) {
+          setNatalPreview(cached);
+        } else if (opts?.force) {
+          setNatalPreview(null);
+        }
+        setNatalPreviewLoading(false);
+      }
+    },
+    [applyPreview],
+  );
 
   const reloadNatalPreview = useCallback(() => {
-    void loadNatalPreview({ force: true });
+    void loadNatalPreview({ force: true, withEditorial: false });
   }, [loadNatalPreview]);
 
   useEffect(() => {
@@ -159,7 +197,7 @@ export function useCoreSetupFlow(options: UseCoreSetupFlowOptions = {}) {
 
         if (warmNatalPreview) {
           setBuildStage("building");
-          await loadNatalPreview({ force: true });
+          await loadNatalPreview({ force: true, withEditorial: true });
         }
 
         setBuildStage("done");
@@ -217,6 +255,7 @@ export function useCoreSetupFlow(options: UseCoreSetupFlowOptions = {}) {
     setupMessage,
     setSetupMessage,
     natalPreview,
+    natalPreviewLoading,
     previewError,
     isBuilding,
     currentBuildState,

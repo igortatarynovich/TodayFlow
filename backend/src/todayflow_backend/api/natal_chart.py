@@ -23,6 +23,8 @@ async def get_natal_chart(
     request: Request,
     astro_profile_id: int = None,
     include_interpretations: bool = True,
+    include_editorial: bool = False,
+    force_editorial_refresh: bool = False,
     user: User = Depends(require_user),
     db: Session = Depends(get_session),
     astro_service: AstroService = Depends(lambda: AstroService()),
@@ -35,6 +37,8 @@ async def get_natal_chart(
     
     Args:
         include_interpretations: Включить интерпретации (что в каком доме значит, планеты в знаках)
+        include_editorial: LLM editorial layer (slow). False for fast structure paint.
+        force_editorial_refresh: Bypass editorial reuse cache.
     """
     locale = request_locale(request)
     
@@ -127,14 +131,16 @@ async def get_natal_chart(
                 ]
             }
 
-    result["editorial"] = generate_natal_chart_editorial(
-        db,
-        user=user,
-        core_profile=core_profile,
-        natal_summary=core_profile.get("natal_summary") if isinstance(core_profile, dict) else None,
-        interpretations=result.get("interpretations") if isinstance(result.get("interpretations"), dict) else None,
-        aspects=result.get("aspects") if isinstance(result.get("aspects"), dict) else None,
-        locale=locale,
-    )
+    if include_editorial:
+        result["editorial"] = generate_natal_chart_editorial(
+            db,
+            user=user,
+            core_profile=core_profile,
+            natal_summary=core_profile.get("natal_summary") if isinstance(core_profile, dict) else None,
+            interpretations=result.get("interpretations") if isinstance(result.get("interpretations"), dict) else None,
+            aspects=result.get("aspects") if isinstance(result.get("aspects"), dict) else None,
+            locale=locale,
+            force_refresh=force_editorial_refresh,
+        )
     
     return result

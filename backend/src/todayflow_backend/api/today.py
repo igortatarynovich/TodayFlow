@@ -352,7 +352,7 @@ def _morning_to_scenarios_response(m: MorningRitualResponse) -> TodayScenariosRe
 
 
 _MORNING_RITUAL_CACHE: dict[tuple[int, str, str], tuple[float, MorningRitualResponse]] = {}
-_MORNING_CACHE_TTL = 120.0
+_MORNING_CACHE_TTL = 6 * 60 * 60.0  # same calendar morning: reuse until evening
 _MAX_MORNING_CACHE_ENTRIES = 320
 
 
