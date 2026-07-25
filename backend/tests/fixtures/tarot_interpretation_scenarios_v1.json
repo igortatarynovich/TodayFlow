@@ -1,0 +1,143 @@
+[
+  {
+    "id": "work_choice_reversed",
+    "label": "Работа · выбор A/B · перевёрнутые",
+    "question": "Стоит ли менять работу — или сначала что-то прояснить здесь?",
+    "concern_domain": "work",
+    "spread_id": "guidance_choice_two",
+    "cards": [
+      {"card_id": 18, "orientation": "reversed", "position_id": "a_gives", "title": "Вариант A — что он даёт"},
+      {"card_id": 22, "orientation": "upright", "position_id": "a_risk", "title": "Вариант A — риск"},
+      {"card_id": 4, "orientation": "upright", "position_id": "b_gives", "title": "Вариант B — что он даёт"},
+      {"card_id": 12, "orientation": "reversed", "position_id": "b_risk", "title": "Вариант B — риск"},
+      {"card_id": 15, "orientation": "upright", "position_id": "weights", "title": "Что важно учитывать"},
+      {"card_id": 0, "orientation": "upright", "position_id": "best_step", "title": "Лучший следующий шаг"}
+    ]
+  },
+  {
+    "id": "relationships_three",
+    "label": "Отношения · три карты",
+    "question": "Что сейчас важно понять в отношениях с этим человеком?",
+    "concern_domain": "relationships",
+    "spread_id": "three_card",
+    "cards": [
+      {"card_id": 6, "orientation": "upright", "position_id": "past", "title": "Прошлое"},
+      {"card_id": 2, "orientation": "reversed", "position_id": "present", "title": "Настоящее"},
+      {"card_id": 11, "orientation": "upright", "position_id": "future", "title": "Будущее"}
+    ]
+  },
+  {
+    "id": "money_two",
+    "label": "Деньги · две карты",
+    "question": "Какой взгляд поможет принять решение о деньгах спокойнее?",
+    "concern_domain": "money",
+    "spread_id": "two_card",
+    "cards": [
+      {"card_id": 20, "orientation": "reversed", "position_id": "fear", "title": "Страх"},
+      {"card_id": 14, "orientation": "upright", "position_id": "advice", "title": "Совет"}
+    ]
+  },
+  {
+    "id": "vague_one",
+    "label": "Неопределённый вопрос · одна карта",
+    "question": "Что мне важно увидеть сейчас?",
+    "concern_domain": "other",
+    "spread_id": "one_card",
+    "cards": [
+      {"card_id": 9, "orientation": "upright", "position_id": "focus", "title": "Фокус"}
+    ]
+  },
+  {
+    "id": "minors_heavy",
+    "label": "Несколько младших арканов",
+    "question": "Где я теряю энергию в работе?",
+    "concern_domain": "work",
+    "spread_id": "three_card",
+    "cards": [
+      {"card_id": 22, "orientation": "upright", "position_id": "past", "title": "Откуда"},
+      {"card_id": 40, "orientation": "reversed", "position_id": "present", "title": "Сейчас"},
+      {"card_id": 63, "orientation": "upright", "position_id": "future", "title": "Куда"}
+    ]
+  },
+  {
+    "id": "emotional_hard",
+    "label": "Эмоционально сложный вопрос",
+    "question": "Как отпустить историю с бывшим, если всё ещё болит?",
+    "concern_domain": "relationships",
+    "spread_id": "three_card",
+    "cards": [
+      {"card_id": 13, "orientation": "reversed", "position_id": "past", "title": "Что держит"},
+      {"card_id": 3, "orientation": "reversed", "position_id": "present", "title": "Что болит"},
+      {"card_id": 17, "orientation": "upright", "position_id": "future", "title": "Опора"}
+    ]
+  },
+  {
+    "id": "decision_fear",
+    "label": "Решение со страхом ошибки",
+    "question": "Боюсь ошибиться — как принять решение?",
+    "concern_domain": "decision",
+    "spread_id": "three_card",
+    "cards": [
+      {"card_id": 8, "orientation": "upright", "position_id": "you", "title": "Ты"},
+      {"card_id": 16, "orientation": "reversed", "position_id": "obstacle", "title": "Препятствие"},
+      {"card_id": 7, "orientation": "upright", "position_id": "advice", "title": "Совет"}
+    ]
+  },
+  {
+    "id": "conflict",
+    "label": "Конфликт",
+    "question": "Как пройти этот конфликт без разрушения?",
+    "concern_domain": "conflict",
+    "spread_id": "three_card",
+    "cards": [
+      {"card_id": 5, "orientation": "upright", "position_id": "you", "title": "Ты"},
+      {"card_id": 54, "orientation": "upright", "position_id": "other", "title": "Другой"},
+      {"card_id": 14, "orientation": "upright", "position_id": "bridge", "title": "Мост"}
+    ]
+  },
+  {
+    "id": "family",
+    "label": "Семья · границы",
+    "question": "Как поставить границу с родителями мягко, но твёрдо?",
+    "concern_domain": "family",
+    "spread_id": "three_card",
+    "cards": [
+      {"card_id": 4, "orientation": "reversed", "position_id": "past", "title": "Привычка"},
+      {"card_id": 11, "orientation": "upright", "position_id": "present", "title": "Сейчас"},
+      {"card_id": 8, "orientation": "upright", "position_id": "advice", "title": "Как держать"}
+    ]
+  },
+  {
+    "id": "inner_anxiety",
+    "label": "Внутренняя тревога",
+    "question": "Почему меня так тревожит неопределённость?",
+    "concern_domain": "inner_state",
+    "spread_id": "one_card",
+    "cards": [
+      {"card_id": 18, "orientation": "upright", "position_id": "focus", "title": "Фокус"}
+    ]
+  },
+  {
+    "id": "growth",
+    "label": "Рост · маленький шаг",
+    "question": "Какой следующий шаг в моём росте реально сделать?",
+    "concern_domain": "growth",
+    "spread_id": "two_card",
+    "cards": [
+      {"card_id": 1, "orientation": "upright", "position_id": "resource", "title": "Ресурс"},
+      {"card_id": 0, "orientation": "reversed", "position_id": "risk", "title": "Риск"}
+    ]
+  },
+  {
+    "id": "work_burnout_minors",
+    "label": "Выгорание · минорные",
+    "question": "Я выгораю на работе — что важно увидеть?",
+    "concern_domain": "work",
+    "spread_id": "three_card",
+    "cards": [
+      {"card_id": 30, "orientation": "reversed", "position_id": "past", "title": "Откуда усталость"},
+      {"card_id": 48, "orientation": "upright", "position_id": "present", "title": "Сейчас"},
+      {"card_id": 56, "orientation": "upright", "position_id": "advice", "title": "Что сделать"}
+    ]
+  }
+]

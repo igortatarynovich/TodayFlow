@@ -118,6 +118,13 @@ class Settings(BaseSettings):
     # Guest+registered content v1.1 (publish_gate in enrichment). Premium not via this flag.
     compatibility_content_v1: bool = False  # COMPATIBILITY_CONTENT_V1=1 to enable
 
+    # Character Engine Stage 0–1 (facts + evidence candidates). No CE ready publish yet.
+    # CHARACTER_ENGINE_STAGE01_SHADOW=1 — build/validate on publish; store diagnostics only.
+    # CHARACTER_ENGINE_STAGE01_ENABLED=1 — reserved; in this slice same as allowing shadow runners
+    # (still diagnostics-only; Stage 2–5 cutover required for payload.character_engine_v1 ready).
+    character_engine_stage01_shadow: bool = False
+    character_engine_stage01_enabled: bool = False
+
     # Push: optional cron secret for POST /internal/push/run-due (set in production)
     push_dispatch_secret: str | None = None
     # Optional FCM legacy server key for HTTP API (v1 JSON credentials preferred later)

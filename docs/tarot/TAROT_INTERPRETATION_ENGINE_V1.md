@@ -55,50 +55,66 @@ Template/suit banks may exist **only** as pack facts or as **emergency fallback*
 
 ## 3. Context Pack (facts for LLM)
 
-Для каждой карты:
+Для каждой карты — **диапазон**, не одна фраза:
 
-- название (`name_ru`);
-- major / minor + масть;
-- upright / reversed;
-- базовый диапазон смыслов (themes / keywords / catalog upright·reversed);
-- значение масти (если minor);
-- роль позиции + prompt позиции;
-- соседи (имена соседних карт).
+- `central_symbol`
+- `light_side` / `shadow_side`
+- `upright_themes` / `reversed_themes`
+- `upright_meaning` / `reversed_meaning` (catalog)
+- масть + light/shadow масти (minor)
+- стихия (`element` / `element_ru`)
+- роль позиции + instruction + prompt
+- `question_lens` (как читать под тип вопроса)
+- соседи
 
-Для пользователя/сессии:
+Для сессии:
 
-- точный вопрос;
-- `spread_id` / title / kind (`choice` · `one_card` · `general` · …);
-- `concern_domain`;
-- краткий `profile_relevant` (1–2 поля max);
-- `response_shape` (какие блоки обязательны; для choice — сравнить A/B внутри `question_story`).
+- вопрос, spread kind, `question_domain`
+- `profile_relevant`: **1–2 поля, выбранные под домен вопроса**  
+  (work → decision_style / motivation / helps; relationships → communication/conflict; …)  
+  Не натальный dump.
+- `response_shape` (блоки; choice_compare; order=`conflict_first_then_answer`)
 
-**Запрещено класть в pack готовые абзацы-ответы** («сейчас карты скорее не советуют…»).
+**Запрещено** класть в pack готовые абзацы-ответы.
 
 ---
 
 ## 4. LLM job (universal prompt)
 
-Четыре действия:
+Порядок: конфликт → связь с вопросом → ответ → шаг.
 
-1. Объяснить, что обычно символизируют ключевые карты и масти.
-2. Показать, как значения меняются из-за позиции и ориентации.
-3. Связать карты с вопросом и только релевантной частью профиля.
-4. Дать прямой, но не категоричный ответ и один конкретный следующий шаг.
+Запреты: механический список карт; повтор вопроса >1; спам названий позиций; цитата профиля; карты как факты о внешнем мире; пустые формулы; «Аркан».
 
-**Правило голоса:** не пересказывай карты по одной как список. Сначала символический материал → единая картина → ответ на вопрос.
+Prompt ver: `tarot-interpretation-v1.1`
 
-JSON output:
+---
 
-```yaml
-symbols_overview: string   # Что здесь показывают карты
-question_story: string     # Как это связано с вопросом (+ A/B если choice)
-direct_answer: string      # Ответ на вопрос
-next_step: string          # Что сделать дальше
-option_a_note: string|null # optional choice
-option_b_note: string|null
-confidence_note: string|null
-```
+## 4.1 Validation / quality gates
+
+Структура **и** качество:
+
+| Gate | Правило |
+|------|---------|
+| bans | нет «Аркан», «просит быть замеченным», empty formulas |
+| no profile paste | profile_relevant не скопирован дословно |
+| question once | вопрос ≤1 раз во всём ответе |
+| cards linked | ≥2 имён карт в тексте (если карт ≥2) |
+| concrete step | next_step с действием / критерием |
+| no cross-dup | блоки не дублируют друг друга |
+| length | разумные пределы |
+| choice | A/B notes различимы (или явный контраст в story) |
+
+Reject → retry → иначе `tarot_fallback_v1`.
+
+---
+
+## 4.2 Fallback honesty
+
+`tarot_fallback_v1` — короткий и честный:
+
+> Не удалось собрать полноценную интерпретацию. Ниже — только базовые значения карт без персонального синтеза.
+
+Не имитировать полноценный разбор.
 
 ---
 
@@ -161,9 +177,12 @@ Editorial default: reject-invalid LLM → thin fallback. **Do not** hard-overwri
 
 ## 8. Acceptance
 
-- [ ] Live path prefers LLM when configured
-- [ ] Pack never emits «Аркан»
-- [ ] Unresolved blocks LLM
-- [ ] UI shows four universal blocks
-- [ ] Choice spreads compare A/B inside `question_story` / notes — same voice
-- [ ] Fallback is thin + marked `tarot_fallback_v1`, not rich fake tarot voice
+- [x] Live path prefers LLM when configured
+- [x] Pack never emits «Аркан»
+- [x] Unresolved blocks LLM
+- [x] UI shows four universal blocks
+- [x] Pack carries central/light/shadow + element + question_lens
+- [x] Profile fields selected by question domain
+- [x] Quality gates beyond JSON schema
+- [x] Fallback honest / non-imitative
+- [ ] Live eval 10–15 scenarios (script: `scripts/tarot_interpretation_live_eval.py --live`) — owner scores text usefulness

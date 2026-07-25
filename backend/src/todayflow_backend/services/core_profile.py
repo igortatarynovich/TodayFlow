@@ -494,6 +494,50 @@ class CoreProfileService:
                 "daily_interpretation": daily_interpretation,
                 "living": living_context,
             }
+            # Character Engine Stage 0–1 shadow only (diagnostics). Does not publish CE ready.
+            try:
+                from todayflow_backend.services.character_engine_stage01_shadow_v0 import (
+                    character_engine_stage01_should_run,
+                    maybe_attach_stage01_shadow,
+                )
+
+                if character_engine_stage01_should_run():
+                    from todayflow_backend.services.natal_chart_cache import NatalChartCacheService
+
+                    swiss_chart = None
+                    if astro_profile is not None:
+                        cached = NatalChartCacheService(db).get_cached_natal_chart(astro_profile.id)
+                        if cached is not None:
+                            swiss_chart = {
+                                "positions": cached.positions,
+                                "houses": cached.houses,
+                                "metadata": cached.metadata or {},
+                            }
+                    cap = {
+                        "natal_mode": (natal_facts or {}).get("mode")
+                        if isinstance(natal_facts, dict)
+                        else ("date_only" if astro_context.get("birth_date") else "none"),
+                        "has_name": bool(person_pub.get("display_name") or person_pub.get("first_name")),
+                        "has_birth_time": bool(astro_context.get("birth_time"))
+                        and not bool(astro_context.get("time_unknown")),
+                        "has_birth_place": bool(astro_context.get("location_name")),
+                    }
+                    if isinstance(natal_facts, dict) and natal_facts.get("mode") == "full":
+                        cap["natal_mode"] = "full"
+                    profile_payload = maybe_attach_stage01_shadow(
+                        profile_payload,
+                        profile_fingerprint=profile_hash,
+                        swiss_chart=swiss_chart,
+                        numerology=numerology_context,
+                        catalog_facts=None,
+                        natal_facts_bridge=natal_facts if isinstance(natal_facts, dict) else None,
+                        capability=cap,
+                        birth_date=astro_context.get("birth_date"),
+                    )
+            except Exception:
+                # Shadow must never break portrait publish.
+                pass
+
             snapshot_id = self._save_snapshot(
                 db=db,
                 user_id=user.id,

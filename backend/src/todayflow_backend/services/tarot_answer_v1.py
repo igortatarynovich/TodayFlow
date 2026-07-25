@@ -9,7 +9,7 @@ from todayflow_backend.services import tarot_interpretation_engine_v1 as engine
 from todayflow_backend.services.tarot_reading_synthesis import compose_question_first_reading
 
 TAROT_ANSWER_V1_CONTRACT = "tarot_answer_v1"
-TAROT_ANSWER_PROMPT_VER = "tarot-interpretation-v1.0"
+TAROT_ANSWER_PROMPT_VER = "tarot-interpretation-v1.1"
 
 
 def tarot_reading_to_answer_v1(
