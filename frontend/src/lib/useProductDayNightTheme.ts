@@ -3,33 +3,46 @@
 import { useCallback, useEffect, useState } from "react";
 import { getTimeOfDayByHour, type TimeOfDay } from "@/lib/time-of-day";
 import {
+  readAppearanceMode,
+  resolveAppearance,
+  systemPrefersDark,
+  writeAppearanceMode,
+  type ProductAppearance,
+  type ProductAppearanceMode,
+} from "@/lib/productAppearance";
+import {
   readMoodPin,
   resolveProductMood,
-  themeModeFromMood,
   writeMoodPin,
   type ProductMood,
   type ProductThemeMode,
 } from "@/lib/productMoodTheme";
 
 export type { ProductMood, ProductThemeMode } from "@/lib/productMoodTheme";
+export type { ProductAppearance, ProductAppearanceMode } from "@/lib/productAppearance";
 export {
   dayPhaseFromMood,
   moodFromTimeOfDay,
   resolveProductMood,
   themeModeFromMood,
 } from "@/lib/productMoodTheme";
+export { resolveAppearance, readAppearanceMode, writeAppearanceMode } from "@/lib/productAppearance";
 
 export type ProductMoodThemeState = {
   mood: ProductMood;
-  theme: ProductThemeMode;
+  /** UI chrome light/dark — independent of mood. */
+  theme: ProductAppearance;
+  appearance: ProductAppearance;
+  appearanceMode: ProductAppearanceMode;
   pinned: boolean;
   pinMood: (mood: ProductMood) => void;
   clearPin: () => void;
+  setAppearanceMode: (mode: ProductAppearanceMode) => void;
 };
 
 /**
- * Emotional mood + derived light/dark for product chrome (FOUNDATION_UI §8).
- * Pin persists in localStorage; auto follows clock / first-day.
+ * Mood (emotional) + appearance (light/dark) for product chrome.
+ * Appearance never follows mood; day-phase is resolved separately.
  */
 export function useProductMoodTheme(options?: { isFirstDay?: boolean }): ProductMoodThemeState {
   const isFirstDay = options?.isFirstDay ?? false;
@@ -37,6 +50,8 @@ export function useProductMoodTheme(options?: { isFirstDay?: boolean }): Product
   const [mood, setMood] = useState<ProductMood>(() =>
     resolveProductMood({ isFirstDay, timeOfDay: getTimeOfDayByHour() }),
   );
+  const [appearanceMode, setAppearanceModeState] = useState<ProductAppearanceMode>("system");
+  const [appearance, setAppearance] = useState<ProductAppearance>("light");
 
   const refresh = useCallback(() => {
     const pin = readMoodPin();
@@ -48,18 +63,25 @@ export function useProductMoodTheme(options?: { isFirstDay?: boolean }): Product
         timeOfDay: getTimeOfDayByHour(),
       }),
     );
+    const mode = readAppearanceMode();
+    setAppearanceModeState(mode);
+    setAppearance(resolveAppearance({ mode, systemDark: systemPrefersDark() }));
   }, [isFirstDay]);
 
   useEffect(() => {
     refresh();
     const id = window.setInterval(refresh, 60_000);
     const onStorage = (e: StorageEvent) => {
-      if (e.key === "todayflow_mood_pin_v1") refresh();
+      if (e.key === "todayflow_mood_pin_v1" || e.key === "todayflow_appearance_v1") refresh();
     };
+    const mq = window.matchMedia?.("(prefers-color-scheme: dark)");
+    const onScheme = () => refresh();
+    mq?.addEventListener?.("change", onScheme);
     window.addEventListener("storage", onStorage);
     return () => {
       window.clearInterval(id);
       window.removeEventListener("storage", onStorage);
+      mq?.removeEventListener?.("change", onScheme);
     };
   }, [refresh]);
 
@@ -81,27 +103,37 @@ export function useProductMoodTheme(options?: { isFirstDay?: boolean }): Product
     );
   }, [isFirstDay]);
 
+  const setAppearanceMode = useCallback((mode: ProductAppearanceMode) => {
+    writeAppearanceMode(mode);
+    setAppearanceModeState(mode);
+    setAppearance(resolveAppearance({ mode, systemDark: systemPrefersDark() }));
+  }, []);
+
   return {
     mood,
-    theme: themeModeFromMood(mood),
+    theme: appearance,
+    appearance,
+    appearanceMode,
     pinned: pinnedMood != null,
     pinMood,
     clearPin,
+    setAppearanceMode,
   };
 }
 
 export function themeFromTimeOfDay(tod: TimeOfDay): ProductThemeMode {
-  return themeModeFromMood(resolveProductMood({ timeOfDay: tod }));
+  // Appearance is independent; keep light as default for clock-only helpers.
+  void tod;
+  return "light";
 }
 
 export function resolveProductDayNightTheme(now: Date = new Date()): ProductThemeMode {
-  const hour = now.getHours();
-  const tod: TimeOfDay = hour >= 5 && hour < 11 ? "morning" : hour >= 11 && hour < 18 ? "day" : "evening";
-  return themeModeFromMood(resolveProductMood({ timeOfDay: tod }));
+  void now;
+  return resolveAppearance({ mode: readAppearanceMode(), systemDark: systemPrefersDark() });
 }
 
 /**
- * Clock → light/dark (backward compatible). Derives from mood mapping (§8).
+ * Clock → light/dark via appearance preference (not mood).
  */
 export function useProductDayNightTheme(): ProductThemeMode {
   const { theme } = useProductMoodTheme();

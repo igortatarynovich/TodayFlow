@@ -1,13 +1,13 @@
 /**
  * Day-phase atmosphere (FOUNDATION_UI §9).
  * Extends section atmosphere — does not replace route `data-atmosphere`.
- * Procedural CSS only; no raster stock.
+ *
+ * Canon (independent of mood / appearance):
+ *   date + timezone (browser local clock) → dayPhase → visual asset
+ * Appearance + mood only tint/overlay the asset — they never replace it.
  */
 
-import { getTimeOfDayByHour, type TimeOfDay } from "@/lib/time-of-day";
-import { dayPhaseFromMood, type ProductMood } from "@/lib/productMoodTheme";
-
-export type DayPhase = "morning" | "day" | "evening" | "first";
+export type DayPhase = "morning" | "day" | "evening" | "night" | "first";
 
 export const DAY_PHASE_REVEAL_FLASH_MS = 2500;
 
@@ -15,38 +15,55 @@ export const DAY_PHASE_THEME_COLORS: Record<DayPhase, string> = {
   morning: "#fdf8f0",
   day: "#f9f3ee",
   evening: "#1a1714",
+  night: "#121018",
   first: "#fffdfb",
 };
 
-export function dayPhaseFromTimeOfDay(tod: TimeOfDay): Exclude<DayPhase, "first"> {
-  return tod;
+/** Clock → phase. Night is late evening / early morning, not UI dark mode. */
+export function dayPhaseFromHour(hour: number): Exclude<DayPhase, "first"> {
+  const h = ((hour % 24) + 24) % 24;
+  if (h >= 5 && h < 11) return "morning";
+  if (h >= 11 && h < 18) return "day";
+  if (h >= 18 && h < 22) return "evening";
+  return "night";
 }
 
 export type ResolveDayPhaseInput = {
   pathname: string | null | undefined;
-  /** First-day / onboarding clarity — wins over clock when true (unless mood set). */
+  /** First-day / onboarding — wins over clock. */
   isFirstDay?: boolean;
-  timeOfDay?: TimeOfDay;
-  /**
-   * Resolved mood (auto or pinned). When set, day-phase follows mood so
-   * `/today` textures never fight the product-wide palette (FOUNDATION_UI §8↔§9).
-   */
-  mood?: ProductMood | null;
+  /** Explicit hour (0–23). Defaults to local browser hour. */
+  hour?: number;
+  /** @deprecated Ignored — day-phase must not follow mood. Kept for call-site compat. */
+  mood?: unknown;
+  /** @deprecated Use `hour`. Mapped via morning→5, day→12, evening→19. */
+  timeOfDay?: "morning" | "day" | "evening";
 };
+
+function hourFromInput(input: ResolveDayPhaseInput): number {
+  if (typeof input.hour === "number" && Number.isFinite(input.hour)) return input.hour;
+  if (input.timeOfDay === "morning") return 8;
+  if (input.timeOfDay === "day") return 14;
+  if (input.timeOfDay === "evening") return 19;
+  if (typeof Date !== "undefined") return new Date().getHours();
+  return 12;
+}
 
 /**
  * Day-phase applies only on `/today`. Elsewhere → null (clear attribute).
  *
- * Precedence: mood (pin or auto) → first-day → clock.
- * Callers should pass the same resolved mood used for `data-mood` on the shell.
+ * Precedence: first-day → clock (local timezone). Mood is never consulted.
  */
 export function resolveDayPhase(input: ResolveDayPhaseInput): DayPhase | null {
   const path = input.pathname ?? "";
   if (!path.startsWith("/today")) return null;
-  if (input.mood) return dayPhaseFromMood(input.mood);
   if (input.isFirstDay) return "first";
-  const tod = input.timeOfDay ?? getTimeOfDayByHour();
-  return dayPhaseFromTimeOfDay(tod);
+  return dayPhaseFromHour(hourFromInput(input));
+}
+
+/** @deprecated Use dayPhaseFromHour. Kept for older tests/callers. */
+export function dayPhaseFromTimeOfDay(tod: "morning" | "day" | "evening"): Exclude<DayPhase, "first" | "night"> {
+  return tod;
 }
 
 const FLASH_ATTR = "data-day-phase-flash";

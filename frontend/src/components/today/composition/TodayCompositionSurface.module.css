@@ -441,7 +441,7 @@
   justify-content: flex-end;
 }
 
-/* Day / morning / first-day: light photographic plate, not a permanent night moon. */
+/* Day / morning / first-day: light photographic plate by default. */
 .themeDarkHero[data-hero-tone="light"] {
   border-color: rgba(154, 107, 63, 0.18);
   background:
@@ -468,6 +468,32 @@
 
 .themeDarkHero[data-hero-tone="light"] .journeyStepIndex {
   color: rgba(58, 46, 34, 0.7);
+}
+
+/*
+ * Daytime plate + dark appearance: keep the day photograph, darken for readable
+ * light type — never swap to moon/night media.
+ */
+.themeDarkHero[data-hero-tone="dark"][data-hero-plate="daylight"] {
+  border-color: rgba(212, 184, 150, 0.14);
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 0%, rgba(201, 169, 110, 0.16) 0%, transparent 60%),
+    linear-gradient(165deg, #1a1620 0%, #121018 55%, #0e0c12 100%);
+}
+
+.themeDarkHero[data-hero-tone="dark"][data-hero-plate="daylight"] .themeDarkWash {
+  filter: saturate(0.75) brightness(0.42);
+  opacity: 0.9;
+}
+
+.themeDarkHero[data-hero-tone="dark"] .themeDarkTitle {
+  color: #f5f0e8;
+}
+
+.themeDarkHero[data-hero-tone="dark"] .themeDarkSubline,
+.themeDarkHero[data-hero-tone="dark"] .themeDarkLoading,
+.themeDarkHero[data-hero-tone="dark"] .themeDarkLead {
+  color: rgba(245, 240, 232, 0.72);
 }
 
 .themeDarkAtmosphere {
@@ -1906,10 +1932,21 @@
 }
 
 .skyCard {
+  display: block;
+  width: 100%;
+  text-align: left;
   padding: 0.85rem 0.95rem;
   border: 1px solid var(--tdp-border);
   border-radius: 12px;
   background: linear-gradient(165deg, #fffdf9 0%, #f8f3eb 100%);
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.skyCardOpen {
+  border-color: rgba(154, 107, 63, 0.35);
+  box-shadow: 0 8px 20px rgba(90, 70, 40, 0.08);
 }
 
 .skyCardIcon {

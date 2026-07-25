@@ -1,20 +1,19 @@
 /**
- * Mood themes (FOUNDATION_UI §8).
+ * Mood themes (FOUNDATION_UI §8) — emotional atmosphere only.
  *
- * Conflict rules with day-phase (§9):
- * - `data-mood` — product-wide palette (all product routes via shell).
- * - `data-day-phase` — `/today` only (textures). Never set on profile/tarot/etc.
- * - Auto (no pin): both derive from the same clock / first-day signal → stay aligned
- *   (morning↔calm, day↔focus, evening↔night, first↔clarity).
- * - Pin: mood = pin everywhere; on `/today`, day-phase follows `dayPhaseFromMood(pin)`
- *   so textures never fight a pinned palette.
- * - `data-theme` light|dark remains for existing CSS; derived from mood (night→dark).
+ * Independent of:
+ * - appearance (light/dark) — see productAppearance.ts
+ * - dayPhase (morning/day/evening/night) — see dayPhaseAtmosphere.ts
+ *
+ * Mood "night" means nocturnal *palette*, not dark mode and not evening photography.
  */
 
 import { getTimeOfDayByHour, type TimeOfDay } from "@/lib/time-of-day";
 
 export type ProductMood = "calm" | "focus" | "night" | "clarity";
+/** @deprecated Use ProductAppearance from productAppearance.ts */
 export type ProductThemeMode = "light" | "dark";
+/** @deprecated Day-phase must not follow mood. */
 export type DayPhaseFromMood = "morning" | "day" | "evening" | "first";
 
 export const PRODUCT_MOODS: readonly ProductMood[] = ["calm", "focus", "night", "clarity"] as const;
@@ -34,11 +33,16 @@ export function moodFromTimeOfDay(tod: TimeOfDay): Exclude<ProductMood, "clarity
   return "night";
 }
 
-export function themeModeFromMood(mood: ProductMood): ProductThemeMode {
-  return mood === "night" ? "dark" : "light";
+/**
+ * @deprecated Appearance is independent. Prefer resolveAppearance().
+ * Kept only so legacy call sites that still import this don't crash; night mood
+ * no longer drives product chrome.
+ */
+export function themeModeFromMood(_mood: ProductMood): ProductThemeMode {
+  return "light";
 }
 
-/** Keep day-phase textures aligned with mood (esp. when pinned). */
+/** @deprecated Informational only — do not drive day-phase or hero assets. */
 export function dayPhaseFromMood(mood: ProductMood): DayPhaseFromMood {
   switch (mood) {
     case "calm":
@@ -91,7 +95,7 @@ export function writeMoodPin(mood: ProductMood | null): void {
   localStorage.setItem(PIN_STORAGE_KEY, JSON.stringify({ mood }));
 }
 
-/** Theme-color / PWA chrome per mood. */
+/** Theme-color / PWA chrome accents per mood (not appearance). */
 export const MOOD_THEME_COLORS: Record<ProductMood, string> = {
   calm: "#fdf8f0",
   focus: "#f4f2ef",

@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState, useCallback, useId } from "react";
+import { useMemo, useState, useCallback, useId, useEffect } from "react";
 import { eclipticLongitudeFromSignAndDegree, zodiacRuName } from "@/lib/zodiacKnowledge";
+import { PlanetIcon } from "@/components/visualIdentity/PlanetIcon";
 import styles from "@/components/natal-chart/natalChartWheel.module.css";
 
 interface Aspect {
@@ -24,6 +25,12 @@ interface NatalChartWheelProps {
   houses?: Record<string, any>;
   ascendant?: number; // ASC degree for proper house positioning
   aspects?: Aspect[]; // Aspect lines to draw
+  /**
+   * `auto` — matchMedia &lt;640px → mobile layout.
+   * Mobile: simplified wheel (aspects only for selection) + structured planet list.
+   * Desktop: full aspect web + denser labels.
+   */
+  layout?: "auto" | "desktop" | "mobile";
 }
 
 type WheelSelection =
@@ -199,7 +206,35 @@ const INK = {
  * detail panel under the plate; hover only pre-highlights on pointer devices.
  * The old hover-only SVG tooltips were unreachable on mobile.
  */
-export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, aspects: aspectsProp = [] }: NatalChartWheelProps) {
+function useIsMobileLayout(layout: "auto" | "desktop" | "mobile"): boolean {
+  const [mobile, setMobile] = useState(layout === "mobile");
+  useEffect(() => {
+    if (layout === "mobile") {
+      setMobile(true);
+      return;
+    }
+    if (layout === "desktop") {
+      setMobile(false);
+      return;
+    }
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia("(max-width: 39.99rem)");
+    const apply = () => setMobile(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, [layout]);
+  return mobile;
+}
+
+export function NatalChartWheel({
+  chartPositions,
+  houses = {},
+  ascendant = 0,
+  aspects: aspectsProp = [],
+  layout = "auto",
+}: NatalChartWheelProps) {
+  const isMobile = useIsMobileLayout(layout);
   const size = 720;
   const center = size / 2;
   const outerRadius = size / 2 - 44;
@@ -632,7 +667,11 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
   }
 
   return (
-    <div className={styles.root} data-testid="natal-chart-wheel">
+    <div
+      className={styles.root}
+      data-testid="natal-chart-wheel"
+      data-layout={isMobile ? "mobile" : "desktop"}
+    >
       <div className={styles.plate}>
         <svg
           className={styles.svg}
@@ -845,6 +884,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
                 strokeWidth="2"
                 opacity="0.9"
               />
+              {!isMobile ? (
               <text
                 x={pos.x}
                 y={pos.y}
@@ -856,18 +896,32 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
               >
                 {sign.glyph}
               </text>
+              ) : null}
             </g>
           );
         })}
 
         <g clipPath={`url(#${webClipId})`}>
-          {aspectLines.map((line) => {
+          {(isMobile
+            ? aspectLines.filter(
+                (line) =>
+                  selectedPlanet != null &&
+                  (line.planet1.body === selectedPlanet || line.planet2.body === selectedPlanet),
+              )
+            : aspectLines
+          ).map((line) => {
             const isLinked =
               activePlanet != null &&
               (line.planet1.body === activePlanet || line.planet2.body === activePlanet);
-            // With a planet active, its web comes forward and the rest recedes.
-            const opacity = activePlanet == null ? line.opacity : isLinked ? Math.min(line.opacity + 0.22, 1) : 0.1;
-            const width = isLinked ? line.width + 0.7 : line.width;
+            // Mobile: only the selected planet's aspects. Desktop: full web with focus fade.
+            const opacity = isMobile
+              ? Math.min(line.opacity + 0.2, 1)
+              : activePlanet == null
+                ? line.opacity
+                : isLinked
+                  ? Math.min(line.opacity + 0.22, 1)
+                  : 0.1;
+            const width = isLinked || isMobile ? line.width + 0.7 : line.width;
             return (
               <g key={line.key}>
                 <line
@@ -1034,7 +1088,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
           <>
             <div className={styles.panelHeader}>
               <span className={styles.panelGlyph} aria-hidden>
-                {selectedPlanetData.symbol}
+                <PlanetIcon planet={selectedPlanetData.body} size={22} />
               </span>
               <h3 className={styles.panelTitle}>{planetRuName(selectedPlanetData.body)}</h3>
               <p className={styles.panelMeta}>
@@ -1085,48 +1139,77 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
         )}
       </div>
 
-      {/* Planet rail — same selection, reachable without aiming at the wheel */}
-      <div className={styles.chipRail} data-testid="natal-chart-planet-rail">
-        {planetsWithPositions.map((planet) => {
-          const planetColors = INK.planet;
-          const planetColor = planetColors[planet.body as keyof typeof planetColors] || INK.gold;
-          const isActive = selectedPlanet === planet.body;
-          return (
-            <button
-              key={planet.body}
-              type="button"
-              className={`${styles.chip} ${isActive ? styles.chipActive : ""}`.trim()}
-              onClick={() => togglePlanet(planet.body)}
-              aria-pressed={isActive}
-            >
-              <span className={styles.chipGlyph} style={isActive ? undefined : { color: planetColor }} aria-hidden>
-                {planet.symbol}
-              </span>
-              {planetRuName(planet.body)}
-            </button>
-          );
-        })}
-      </div>
-
-      <div className={styles.legend} aria-label="Типы аспектов">
-        {[
-          { label: "Соединение", color: INK.aspect.conjunction.color, dash: INK.aspect.conjunction.dash },
-          { label: "Трин", color: INK.aspect.trine.color, dash: INK.aspect.trine.dash },
-          { label: "Секстиль", color: INK.aspect.sextile.color, dash: INK.aspect.sextile.dash },
-          { label: "Квадрат", color: INK.aspect.square.color, dash: INK.aspect.square.dash },
-          { label: "Оппозиция", color: INK.aspect.opposition.color, dash: INK.aspect.opposition.dash },
-        ].map((item) => {
-          const count = aspectSummary.find((entry) => entry.label === item.label)?.count || 0;
-          return (
-            <div key={item.label} className={styles.legendItem}>
-              <svg width="28" height="10" viewBox="0 0 28 10" aria-hidden="true">
-                <line x1="1" y1="5" x2="27" y2="5" stroke={item.color} strokeWidth="2.4" strokeDasharray={item.dash} strokeLinecap="round" />
-              </svg>
-              <span>{item.label}{count ? ` · ${count}` : ""}</span>
-            </div>
-          );
-        })}
-      </div>
+      {/* Mobile: structured planet list is the reading surface; wheel stays visual. */}
+      {isMobile ? (
+        <ul className={styles.planetList} data-testid="natal-chart-planet-list">
+          {planetsWithPositions.map((planet) => {
+            const isActive = selectedPlanet === planet.body;
+            return (
+              <li key={planet.body}>
+                <button
+                  type="button"
+                  className={`${styles.planetListRow} ${isActive ? styles.planetListRowActive : ""}`.trim()}
+                  onClick={() => togglePlanet(planet.body)}
+                  aria-pressed={isActive}
+                >
+                  <span className={styles.planetListIcon} aria-hidden>
+                    <PlanetIcon planet={planet.body} size={20} />
+                  </span>
+                  <span className={styles.planetListName}>{planetRuName(planet.body)}</span>
+                  <span className={styles.planetListMeta}>
+                    {signRuName(planet.sign)}
+                    {planet.house ? ` · ${planet.house} дом` : ""}
+                    {planet.degree !== undefined
+                      ? ` · ${Math.floor(((planet.degree % 30) + 30) % 30)}°`
+                      : ""}
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <>
+          <div className={styles.chipRail} data-testid="natal-chart-planet-rail">
+            {planetsWithPositions.map((planet) => {
+              const isActive = selectedPlanet === planet.body;
+              return (
+                <button
+                  key={planet.body}
+                  type="button"
+                  className={`${styles.chip} ${isActive ? styles.chipActive : ""}`.trim()}
+                  onClick={() => togglePlanet(planet.body)}
+                  aria-pressed={isActive}
+                >
+                  <span className={styles.chipGlyph} aria-hidden>
+                    <PlanetIcon planet={planet.body} size={16} />
+                  </span>
+                  {planetRuName(planet.body)}
+                </button>
+              );
+            })}
+          </div>
+          <div className={styles.legend} aria-label="Типы аспектов">
+            {[
+              { label: "Соединение", color: INK.aspect.conjunction.color, dash: INK.aspect.conjunction.dash },
+              { label: "Трин", color: INK.aspect.trine.color, dash: INK.aspect.trine.dash },
+              { label: "Секстиль", color: INK.aspect.sextile.color, dash: INK.aspect.sextile.dash },
+              { label: "Квадрат", color: INK.aspect.square.color, dash: INK.aspect.square.dash },
+              { label: "Оппозиция", color: INK.aspect.opposition.color, dash: INK.aspect.opposition.dash },
+            ].map((item) => {
+              const count = aspectSummary.find((entry) => entry.label === item.label)?.count || 0;
+              return (
+                <div key={item.label} className={styles.legendItem}>
+                  <svg width="28" height="10" viewBox="0 0 28 10" aria-hidden="true">
+                    <line x1="1" y1="5" x2="27" y2="5" stroke={item.color} strokeWidth="2.4" strokeDasharray={item.dash} strokeLinecap="round" />
+                  </svg>
+                  <span>{item.label}{count ? ` · ${count}` : ""}</span>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
     </div>
   );
 }

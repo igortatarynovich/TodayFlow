@@ -23,7 +23,7 @@ import type { TodayContractV1 } from "@/lib/todayContract";
 import type { CoreProfile } from "@/lib/types";
 import { resolveDailyTarotDeckIndex } from "@/lib/tarotCardAssets";
 import { resolveDayPhase } from "@/lib/dayPhaseAtmosphere";
-import { resolveDayPhaseHeroWash } from "@/lib/dayPhaseHeroWash";
+import { resolveDayPhaseHeroWash, resolveHeroChromeTone } from "@/lib/dayPhaseHeroWash";
 import { useProductMoodTheme } from "@/lib/useProductDayNightTheme";
 import {
   buildContinuityOpeningLine,
@@ -162,15 +162,20 @@ export function TodayCompositionSurface(props: Props) {
   const { onVisible, onDayClosed, dateISO, embeddedInWebDashboard = false } = props;
   const variant = props.variant ?? "default";
   const isFirstToday = variant === "firstToday";
-  const { mood } = useProductMoodTheme({ isFirstDay: isFirstToday });
+  const { appearance } = useProductMoodTheme({ isFirstDay: isFirstToday });
   const heroWash = useMemo(() => {
     const phase = resolveDayPhase({
       pathname: "/today",
       isFirstDay: isFirstToday,
-      mood,
+      hour: typeof Date !== "undefined" ? new Date().getHours() : 12,
     });
-    return resolveDayPhaseHeroWash(phase);
-  }, [isFirstToday, mood]);
+    const wash = resolveDayPhaseHeroWash(phase);
+    return {
+      ...wash,
+      tone: resolveHeroChromeTone(wash, appearance),
+      phase,
+    };
+  }, [isFirstToday, appearance]);
   const { trackMeaningEvent } = useMeaningRuntime();
   const { isAuthenticated } = useAuth();
   const reduceMotion = useReduceMotion();
@@ -365,9 +370,11 @@ export function TodayCompositionSurface(props: Props) {
     [zones.glance, story.sphereFocus.cards.length],
   );
 
-  const showColorGuide = zones.glance && Boolean(story.colorGuide);
-
   const showSkyCards = zones.astroContext && story.skyCards.length > 0;
+  // Color lives in the sky summary grid (tap to expand) — never also as a full sibling card.
+  const colorInSkyGrid = story.skyCards.some((c) => c.id === "color");
+  const showColorGuide =
+    zones.glance && Boolean(story.colorGuide) && !colorInSkyGrid && !showSkyCards;
 
   const promiseSuggestions = useMemo(
     () =>
@@ -1071,6 +1078,8 @@ export function TodayCompositionSurface(props: Props) {
         className={`${styles.themeDarkHero} ${story.personalizedReady ? styles.themeDarkHeroCompact : styles.themeDarkHeroSpotlight}`.trim()}
         data-testid="today-zone-hero"
         data-hero-tone={heroWash.tone}
+        data-hero-plate={heroWash.plate}
+        data-day-phase={heroWash.phase ?? undefined}
         aria-labelledby="today-day-theme-title"
       >
         <div className={styles.themeDarkAtmosphere} aria-hidden>

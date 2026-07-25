@@ -1,6 +1,6 @@
 "use client";
 
-import type { ComponentType, SVGProps } from "react";
+import { useState, type ComponentType, type SVGProps } from "react";
 import type { TodaySkyCard, TodaySkyIconKey } from "@/lib/todayDaySpine";
 import {
   IconCompass,
@@ -38,22 +38,35 @@ const SKY_ICONS: Record<TodaySkyIconKey, ComponentType<SVGProps<SVGSVGElement>>>
   palette: IconPalette,
 };
 
+/**
+ * Summary grid: icon + label + short title.
+ * Tap expands the story in-place — no second full card elsewhere for the same fact.
+ */
 export function TodaySkyStoryCards({ cards, testId = "today-zone-sky-cards" }: Props) {
+  const [openId, setOpenId] = useState<string | null>(null);
   if (cards.length === 0) return null;
 
   return (
     <div className={styles.skyCardGrid} data-testid={testId}>
       {cards.map((card) => {
         const Icon = SKY_ICONS[card.icon] ?? IconSparkles;
+        const open = openId === card.id;
         return (
-          <article key={card.id} className={styles.skyCard} data-testid={`today-sky-${card.id}`}>
+          <button
+            key={card.id}
+            type="button"
+            className={`${styles.skyCard} ${open ? styles.skyCardOpen : ""}`.trim()}
+            data-testid={`today-sky-${card.id}`}
+            aria-expanded={open}
+            onClick={() => setOpenId(open ? null : card.id)}
+          >
             <span className={styles.skyCardIcon} aria-hidden>
               <Icon className={styles.skyCardIconSvg} />
             </span>
             <p className={styles.skyCardLabel}>{card.label}</p>
             <p className={styles.skyCardTitle}>{card.title}</p>
-            <p className={styles.skyCardStory}>{card.story}</p>
-          </article>
+            {open ? <p className={styles.skyCardStory}>{card.story}</p> : null}
+          </button>
         );
       })}
     </div>

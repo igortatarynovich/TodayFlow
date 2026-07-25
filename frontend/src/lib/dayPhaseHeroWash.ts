@@ -1,24 +1,41 @@
 /**
- * Raster hero washes by day-phase / mood texture.
- * Uses existing cosmic plates — moon only for evening; day never shows a night moon.
+ * Raster hero washes by day-phase only.
+ * Appearance (light/dark) and mood apply as overlay/tint — never swap the plate.
  */
 
 import type { DayPhase } from "@/lib/dayPhaseAtmosphere";
+import type { ProductAppearance } from "@/lib/productAppearance";
 
 export type DayPhaseHeroWash = {
   src: string;
-  /** CSS class tone for hero chrome: light copy on dark plate vs dark copy on light plate. */
-  tone: "dark" | "light";
+  /**
+   * Base plate luminance from the photograph.
+   * Separately, `appearance` may force a darkened treatment on a light plate.
+   */
+  plate: "daylight" | "night";
 };
 
 const WASH: Record<DayPhase, DayPhaseHeroWash> = {
-  morning: { src: "/images/cosmic/celestial_wash.webp", tone: "light" },
-  day: { src: "/images/cosmic/zodiac_wash.webp", tone: "light" },
-  evening: { src: "/images/cosmic/moon_wash.webp", tone: "dark" },
-  first: { src: "/images/cosmic/stars.webp", tone: "light" },
+  morning: { src: "/images/cosmic/celestial_wash.webp", plate: "daylight" },
+  day: { src: "/images/cosmic/zodiac_wash.webp", plate: "daylight" },
+  evening: { src: "/images/cosmic/moon_wash.webp", plate: "night" },
+  night: { src: "/images/cosmic/moon_wash.webp", plate: "night" },
+  first: { src: "/images/cosmic/stars.webp", plate: "daylight" },
 };
 
 export function resolveDayPhaseHeroWash(phase: DayPhase | null | undefined): DayPhaseHeroWash {
   if (phase && WASH[phase]) return WASH[phase];
   return WASH.day;
+}
+
+/**
+ * Hero chrome tone for copy contrast.
+ * Daytime + dark appearance → still the day plate, but darkened for readable light text.
+ */
+export function resolveHeroChromeTone(
+  wash: DayPhaseHeroWash,
+  appearance: ProductAppearance,
+): "light" | "dark" {
+  if (wash.plate === "night") return "dark";
+  return appearance === "dark" ? "dark" : "light";
 }

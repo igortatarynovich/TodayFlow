@@ -7,6 +7,7 @@ import v2 from "@/design-system/layouts/productV2Surface.module.css";
 import l from "@/design-system/layouts/dsLayouts.module.css";
 import { ProductWebShellConfigBridge, type ProductWebShellConfig } from "@/components/product-ui/productWebShellConfig";
 import { MoodThemeControl } from "@/components/product-ui/MoodThemeControl";
+import { AppearanceControl } from "@/components/product-ui/AppearanceControl";
 import pl from "@/design-system/layouts/productPageLayout.module.css";
 import {
   todayWebDashboardChromeBundle,
@@ -342,6 +343,7 @@ export function TodayWebDashboard({
             </p>
           </header>
 
+          <AppearanceControl className={pl.moodThemeSlot} />
           <MoodThemeControl className={pl.moodThemeSlot} isFirstDay={isFirstDay} />
 
           {showOverview ? (

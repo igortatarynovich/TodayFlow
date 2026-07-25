@@ -8,6 +8,11 @@ import {
 } from "@/lib/dayPhaseAtmosphere";
 import { resolveIsFirstDay } from "@/lib/firstTodayState";
 import {
+  readAppearanceMode,
+  resolveAppearance,
+  systemPrefersDark,
+} from "@/lib/productAppearance";
+import {
   MOOD_THEME_COLORS,
   readMoodPin,
   resolveProductMood,
@@ -16,10 +21,10 @@ import { resolveSectionAtmosphere, SECTION_THEME_COLORS } from "@/lib/sectionAtm
 import { getTimeOfDayByHour } from "@/lib/time-of-day";
 
 /**
- * Syncs route atmosphere + day-phase on `<html>`.
+ * Syncs route atmosphere + day-phase + mood on `<html>`.
  *
- * Day-phase only on `/today`. When mood is resolved (pin or auto), day-phase
- * follows that mood so §8 and §9 stay aligned (FOUNDATION_UI).
+ * Day-phase only on `/today`, from clock / first-day — never from mood.
+ * Appearance (data-theme) is applied on the product shell frame, not here.
  */
 export function SectionAtmosphereBridge() {
   const pathname = usePathname();
@@ -42,8 +47,7 @@ export function SectionAtmosphereBridge() {
       const dayPhase = resolveDayPhase({
         pathname,
         isFirstDay,
-        timeOfDay: getTimeOfDayByHour(),
-        mood,
+        hour: new Date().getHours(),
       });
 
       if (dayPhase) {
@@ -52,11 +56,20 @@ export function SectionAtmosphereBridge() {
         document.documentElement.removeAttribute("data-day-phase");
       }
 
+      const appearance = resolveAppearance({
+        mode: readAppearanceMode(),
+        systemDark: systemPrefersDark(),
+      });
+      document.documentElement.setAttribute("data-theme", appearance);
+
       const meta = document.querySelector('meta[name="theme-color"]');
       if (meta) {
-        const content = dayPhase
-          ? DAY_PHASE_THEME_COLORS[dayPhase]
-          : MOOD_THEME_COLORS[mood] ?? SECTION_THEME_COLORS[atmosphere];
+        const content =
+          appearance === "dark"
+            ? "#121018"
+            : dayPhase
+              ? DAY_PHASE_THEME_COLORS[dayPhase]
+              : MOOD_THEME_COLORS[mood] ?? SECTION_THEME_COLORS[atmosphere];
         meta.setAttribute("content", content);
       }
     };
@@ -64,15 +77,20 @@ export function SectionAtmosphereBridge() {
     apply();
     const id = window.setInterval(apply, 60_000);
     const onStorage = (e: StorageEvent) => {
-      if (e.key === "todayflow_mood_pin_v1") apply();
+      if (e.key === "todayflow_mood_pin_v1" || e.key === "todayflow_appearance_v1") apply();
     };
+    const mq = window.matchMedia?.("(prefers-color-scheme: dark)");
+    const onScheme = () => apply();
+    mq?.addEventListener?.("change", onScheme);
     window.addEventListener("storage", onStorage);
 
     return () => {
       window.clearInterval(id);
       window.removeEventListener("storage", onStorage);
+      mq?.removeEventListener?.("change", onScheme);
       document.documentElement.removeAttribute("data-day-phase");
       document.documentElement.removeAttribute("data-mood");
+      document.documentElement.removeAttribute("data-theme");
     };
   }, [atmosphere, pathname, searchParams]);
 

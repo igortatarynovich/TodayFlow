@@ -11,11 +11,25 @@ describe("appNavConfig", () => {
     const items = buildAppNavItems("ru", "authenticated");
     expect(items.map((i) => i.id)).toEqual(APP_NAV_PRIMARY_ORDER);
     expect(items).toHaveLength(5);
-    expect(items.map((i) => i.id)).toContain("practices");
+    expect(items.map((i) => i.id)).toEqual([
+      "today",
+      "profile",
+      "compatibility",
+      "tarot",
+      "practices",
+    ]);
     expect(items[0].href).toBe("/today");
     expect(items[1].label).toBe("Моя карта");
     expect(items[4].href).toBe("/practices");
     expect(items[4].label).toBe("Практики");
+  });
+
+  it("authenticated chrome exposes the full required nav set", () => {
+    const required = ["today", "profile", "compatibility", "tarot", "practices"] as const;
+    expect(APP_NAV_PRIMARY_ORDER).toEqual([...required]);
+    const en = buildAppNavItems("en", "authenticated");
+    expect(en.map((i) => i.id)).toEqual([...required]);
+    expect(en.find((i) => i.id === "practices")?.href).toBe("/practices");
   });
 
   it("defines two guest nav items", () => {
