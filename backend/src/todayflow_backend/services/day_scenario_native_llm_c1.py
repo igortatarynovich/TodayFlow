@@ -41,7 +41,7 @@ _SPHERE_LABEL_RU: dict[str, str] = {
 }
 
 NATIVE_LLM_SCHEMA_VERSION = "day_scenario_native_llm_c1"
-NATIVE_PROMPT_VERSION = "day-scenario-native-c3.3a"
+NATIVE_PROMPT_VERSION = "day-scenario-native-c3.3b"
 GENERATION_SOURCE_NATIVE = "native_llm_c1"
 GENERATION_SOURCE_DETERMINISTIC = "deterministic_engine_b5"
 
@@ -197,14 +197,17 @@ everyday_example обязателен и конкретен (сообщение,
 параллельные прогнозы («в работе… / в отношениях…» как отдельные истории).
 Без натальных evidence не выдумывай глубокую персонализацию (natal=[]).
 
-ПЕРСОНАЛИЗАЦИЯ (C3.3a) — контракт глубины:
-Во входе есть personalization_evidence (ограниченный pack). Не читай сырой Profile.
+ПЕРСОНАЛИЗАЦИЯ (C3.3a/C3.3b) — контракт глубины:
+Во входе есть personalization_evidence (ограниченный pack) и sphere_selection.ranked_spheres.
+Не читай сырой Profile.
 Соблюдай evidence_depth из pack:
 - general: без «вы обычно / вам свойственно / ваша привычка»; natal=[]; why_personal пустой или без личных утверждений.
 - light_personalized: можно why_personal, тон рекомендации, одну сферу, вероятную реакцию; без точных домов/асцендента/натальных активаций.
 - deep_personalized: можно opposing forces, ranking сфер, trap, compensating action, intensity, natal voice;
   обязательно personalization traces с evidence_refs; habitual_force vs required_movement;
   минимум два структурных изменения, не только why_personal + natal абзац.
+Сферы: предпочитай sphere_selection.allowed_spheres / primary_candidates.
+Сфера вне списка — только с sphere_reason + personalization_evidence_refs.
 Действие должно компенсировать baseline из pack.tendencies (не универсальный take a pause).
 Не повторяй технические id, координаты, Human Design type labels в публичном тексте.
 
@@ -851,6 +854,25 @@ def call_day_scenario_native_llm_c1(
     )
 
     pers_pack = build_personalization_evidence_pack_c33(interp)
+    from todayflow_backend.services.day_scenario_sphere_selection_c33b import (
+        attach_sphere_selection_to_pack,
+        run_sphere_selection_gate_c33b,
+    )
+
+    ritual = _as_dict(ritual_context)
+    thesis = _as_dict(interp.get("day_thesis"))
+    domains_present = []
+    for d in _as_list(interp.get("domains_present") or _as_dict(interp.get("domain_presence")).get("present")):
+        if isinstance(d, str):
+            domains_present.append(d)
+        elif isinstance(d, dict) and d.get("id"):
+            domains_present.append(str(d["id"]))
+    pers_pack = attach_sphere_selection_to_pack(
+        pers_pack,
+        day_domains=domains_present,
+        ritual_head_topic=str(ritual.get("head_topic") or "") or None,
+        thesis_family=str(thesis.get("family") or "") or None,
+    )
     has_natal_evidence = str(pers_pack.get("evidence_depth") or "") == DEPTH_DEEP
 
     # Bounded LLM input: inject pack; drop raw day_personal dump from payload copy
@@ -951,8 +973,9 @@ def call_day_scenario_native_llm_c1(
             retry_feedback = "Исправь schema/validation ошибки: " + "; ".join(errors[:6])
             continue
 
-        # --- C3.3a personalization gate (before editorial) ---
+        # --- C3.3a/b personalization + sphere selection gates (before editorial) ---
         pers_defects = run_personalization_gate_c33(normalized, pers_pack)
+        pers_defects = list(pers_defects) + list(run_sphere_selection_gate_c33b(normalized, pers_pack))
         last_pers_defects = pers_defects
         pers_score = score_personalization_c33(pers_defects)
         if pers_defects and (
@@ -1008,7 +1031,20 @@ def call_day_scenario_native_llm_c1(
                     "natal_activations": [],
                     "confidence": 0.0,
                 }
+                from todayflow_backend.services.day_scenario_sphere_selection_c33b import (
+                    attach_sphere_selection_to_pack as _attach_sel,
+                )
+
+                general_pack = _attach_sel(
+                    general_pack,
+                    day_domains=domains_present,
+                    ritual_head_topic=str(ritual.get("head_topic") or "") or None,
+                    thesis_family=str(thesis.get("family") or "") or None,
+                )
                 pers_defects = run_personalization_gate_c33(normalized, general_pack)
+                pers_defects = list(pers_defects) + list(
+                    run_sphere_selection_gate_c33b(normalized, general_pack)
+                )
                 if personalization_decision_after_retries(pers_defects) == "reject_story":
                     return None
                 pers_score = score_personalization_c33(pers_defects)
@@ -1087,7 +1123,7 @@ def call_day_scenario_native_llm_c1(
                     "personalization_defects": pers_defects,
                 },
                 after_gate=scenario,
-                status="accepted_native_c33a",
+                status="accepted_native_c33b",
             )
         scenario["personalization_depth"] = normalized.get("personalization_depth") or DEPTH_GENERAL
         scenario["personalization_evidence"] = {
@@ -1099,6 +1135,7 @@ def call_day_scenario_native_llm_c1(
                 for t in _as_list(pers_pack.get("behavioral_tendencies"))
                 if isinstance(t, dict)
             ][:6],
+            "sphere_selection": _as_dict(pers_pack.get("sphere_selection")),
         }
         scenario["editorial_meta"] = {
             "prompt_version": NATIVE_PROMPT_VERSION,

@@ -1,8 +1,8 @@
 # DAY_SCENARIO_V1 — драматургический каркас дня
 
-**Status:** CANON DRAFT — **B1–B5 + C1 + C2 + C3.1 + C3.2 + C3.3a landed** (personalization evidence contract); C3.3b / C3.5 open  
+**Status:** CANON DRAFT — **B1–B5 + C1 + C2 + C3.1–C3.3b landed** (sphere selection + pairwise eval); C3.5 open  
 **Date:** 2026-07-25  
-**Engine:** `day_scenario_v1.py` · `day_color_catalog_v1.py` · `day_scenario_project_v1.py` · `day_scenario_native_llm_c1.py` · `day_scenario_editorial_gate_c31.py` · `day_scenario_personalization_c33.py`  
+**Engine:** `day_scenario_v1.py` · `day_color_catalog_v1.py` · `day_scenario_project_v1.py` · `day_scenario_native_llm_c1.py` · `day_scenario_editorial_gate_c31.py` · `day_scenario_personalization_c33.py` · `day_scenario_sphere_selection_c33b.py` · `day_scenario_pairwise_eval_c33b.py`  
 **Wire note:** [audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md](./audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md)  
 **UI note:** [audits/DAY_SCENARIO_UI_PREFERENCE_B4.md](./audits/DAY_SCENARIO_UI_PREFERENCE_B4.md)  
 **Runtime SoT:** [audits/DAY_SCENARIO_RUNTIME_SOT_B5.md](./audits/DAY_SCENARIO_RUNTIME_SOT_B5.md)  
@@ -11,6 +11,7 @@
 **Everyday quality:** [audits/DAY_SCENARIO_EVERYDAY_QUALITY_C31.md](./audits/DAY_SCENARIO_EVERYDAY_QUALITY_C31.md)  
 **Chorus quality:** [audits/DAY_SCENARIO_CHORUS_QUALITY_C32.md](./audits/DAY_SCENARIO_CHORUS_QUALITY_C32.md)  
 **Personalization:** [audits/DAY_SCENARIO_PERSONALIZATION_C33A.md](./audits/DAY_SCENARIO_PERSONALIZATION_C33A.md)  
+**Sphere selection:** [audits/DAY_SCENARIO_SPHERE_SELECTION_C33B.md](./audits/DAY_SCENARIO_SPHERE_SELECTION_C33B.md)  
 **Capture rubric:** [audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md](./audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md)  
 **Related:** [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) · [today-language/TODAY_LANGUAGE_V1.md](./today-language/TODAY_LANGUAGE_V1.md)
 
@@ -316,7 +317,20 @@ Legacy projections remain for old clients only.
 - **Backward compatible?** yes
 ```
 
-### Next — C3.3b sphere selection / pairwise production eval · C3.5 Eval pack
+### C3.3b (landed) — Sphere selection + pairwise eval
+
+```markdown
+## Architecture impact
+- **SoT before:** sphere choice unconstrained beyond soft unjustified checks
+- **SoT after:** sphere_selection candidates on pack; outside-pack needs justification;
+  pairwise A/B/control eval harness (no Nebius)
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — DAY_SCENARIO_SPHERE_SELECTION_C33B
+- **Backward compatible?** yes
+```
+
+### Next — C3.5 Eval pack (14 days × profiles × locales)
 
 ---
 

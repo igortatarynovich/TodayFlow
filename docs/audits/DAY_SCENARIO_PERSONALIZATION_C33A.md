@@ -84,9 +84,11 @@ Downgrade strips natal / personal claims / traces; **keeps** day conflict + scen
 
 ## Out of scope (C3.3b+)
 
-- Automatic ranking of all life spheres  
+- Automatic ranking of all life spheres every day — **superseded by C3.3b capped candidates**  
 - Profile generation changes  
 - UI depth indicator  
 - Language polish  
 - New personality sources  
 - Long-term memory / lifecycle
+
+**Landed:** [DAY_SCENARIO_SPHERE_SELECTION_C33B.md](./DAY_SCENARIO_SPHERE_SELECTION_C33B.md)
