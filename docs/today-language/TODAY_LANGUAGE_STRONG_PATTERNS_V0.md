@@ -414,6 +414,12 @@
 3. Проверить AP-классификатором.
 4. Проверить RULE_001–003 + RULE_004 (если принят) + **RULE_005 (один конфликт)**.
 
+### PR-5 engineering slice (2026-07-25) — без TL-1
+
+Детерминированный bank `day_story_editorial_formulas_v1` заполняет слоты эталонов A–C в **fallback** (и soft-hint в LLM input).  
+Golden: `backend/tests/fixtures/day_story_editorial/golden_v1.json`.  
+**Не** открывает `today_language_quality_v1` — только coherence + формула RULE_005.
+
 ---
 
 ## Эталонные дни (editorial formula · 2026-07)
@@ -456,5 +462,6 @@
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-07-25 | PR-5: editorial formula bank + golden fixtures (A–C) wired to day_story fallback; TL-1 still blocked |
 | 2026-07-25 | Эталоны A–C + RULE_005 link (один конфликт / event pack) |
 | 2026-06-23 | v0.1 — SP-001–008 editorial library; dramaturgy-first; api_live gap noted |

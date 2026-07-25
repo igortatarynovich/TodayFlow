@@ -1,0 +1,88 @@
+{
+  "schema_version": "day_story_editorial_golden_v1",
+  "canon_ref": "docs/today-language/TODAY_LANGUAGE_STRONG_PATTERNS_V0.md#эталонные-дни",
+  "note": "Golden cases for RULE_005 formula fill — not TL-1 language quality scores.",
+  "cases": [
+    {
+      "id": "editorial_A_clarity_return",
+      "family": "communication",
+      "variant": "clarity_returns_after_delay",
+      "mode": "transition",
+      "label_ru": "Возвращение ясности",
+      "drivers": [
+        {
+          "id": "merc-direct",
+          "kind": "station_direct",
+          "title_ru": "Меркурий station direct",
+          "fact_ru": "Меркурий выходит из ретрограда — переписка и планы снова сходятся."
+        },
+        {
+          "id": "moon-sag",
+          "kind": "moon_ingress",
+          "title_ru": "Луна → Стрелец",
+          "fact_ru": "Луна входит в Стрелец — шире горизонт, легче говорить прямо."
+        }
+      ],
+      "expect_contains": ["шум", "черновик"],
+      "trap_contains": ["лишн", "знайк"],
+      "do_contains_any": ["черновик", "отправ"],
+      "avoid_contains_any": ["нотац", "фронт"],
+      "vibe_contains_any": ["спонтан", "смех", "быстр"],
+      "theme_contains": "ясности"
+    },
+    {
+      "id": "editorial_B_sudden_turns",
+      "family": "change",
+      "variant": "sudden_turns",
+      "mode": "conflict",
+      "label_ru": "Неожиданные повороты",
+      "drivers": [
+        {
+          "id": "moon-uranus",
+          "kind": "lunar_aspect",
+          "title_ru": "Луна — оппозиция — Уран",
+          "fact_ru": "Луна напротив Урана — внезапные повороты и эмоциональные всплески."
+        },
+        {
+          "id": "moon-pluto",
+          "kind": "lunar_aspect",
+          "title_ru": "Луна — квадрат — Плутон",
+          "fact_ru": "Луна в квадрате к Плутону — давление и всплывшие тайны."
+        }
+      ],
+      "expect_contains": ["план", "эмоц"],
+      "trap_contains": ["мост"],
+      "do_contains_any": ["гибк", "напряжен"],
+      "avoid_contains_any": ["импульс", "необратим"],
+      "vibe_contains_any": ["новост", "наушник", "сюрприз"],
+      "theme_contains": "поворот"
+    },
+    {
+      "id": "editorial_C_day_of_choice",
+      "family": "decision",
+      "variant": "stop_pleasing_everyone",
+      "mode": "conflict",
+      "label_ru": "Выбор без попытки всем угодить",
+      "drivers": [
+        {
+          "id": "first-quarter",
+          "kind": "phase_change",
+          "title_ru": "Первая четверть Луны",
+          "fact_ru": "Первая четверть — точка выбора между компромиссом и шагом вперёд."
+        },
+        {
+          "id": "jup-ura",
+          "kind": "sky_aspect",
+          "title_ru": "Юпитер — тригон — Уран",
+          "fact_ru": "Юпитер в гармонии с Ураном — окно удачи при одном ясном ходе."
+        }
+      ],
+      "expect_contains": ["компромисс", "удач"],
+      "trap_contains": ["стул"],
+      "do_contains_any": ["шаг", "да"],
+      "avoid_contains_any": ["угодить", "отклад"],
+      "vibe_contains_any": ["продуктив", "хватит", "почт"],
+      "theme_contains": "выбор"
+    }
+  ]
+}

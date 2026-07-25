@@ -79,6 +79,7 @@ _DAY_STORY_SYS_RU = """Ты — литературный редактор TodayF
 СТРУКТУРА ПОЛЕЙ (обязательна):
 - day_thesis — объект: скопируй family, variant, mode, label_ru, driver_ids, composition_ids из interpretation.
 - primary_conflict — УСТАРЕВШИЙ alias: строка = day_thesis.label_ru (для совместимости).
+- Если во входе есть editorial_formula — используй её expect/trap/do/avoid/vibe_closing как эталон слотов (можно слегка адаптировать под drivers, не меняя сюжет).
 - events_lead — 1 абзац: названные 1–3 драйвера и причинная связь.
 - expect — чего ожидать сегодня в быту (сцена).
 - trap — одна ловушка / точка срыва (даже если mode != conflict — мягкая оговорка).
@@ -517,6 +518,8 @@ def build_day_story_fallback_v1(
     conflict = interp.get("day_thesis") if isinstance(interp.get("day_thesis"), dict) else {}
     if not conflict:
         conflict = interp.get("primary_conflict") if isinstance(interp.get("primary_conflict"), dict) else {}
+        if isinstance(conflict.get("day_thesis"), dict):
+            conflict = conflict["day_thesis"]
     conflict_label = str(conflict.get("label_ru") or conflict.get("label") or theme).strip()
     pack = interp.get("day_events_pack") if isinstance(interp.get("day_events_pack"), dict) else {}
     by_id = {
@@ -535,8 +538,41 @@ def build_day_story_fallback_v1(
         if len(driver_facts) >= 3:
             break
     events_lead = _clip(" ".join(driver_facts) or essence_story or story, 480)
-    expect_text = _clip(tempo or do_hint or f"{conflict_label}: день просит одного ясного хода.", 400)
-    trap_text = _clip(avoid_hint or "Легко принять суету за движение и потерять главный сюжет дня.", 360)
+
+    from todayflow_backend.services.day_story_editorial_formulas_v1 import lookup_editorial_formula
+
+    formula = lookup_editorial_formula(day_thesis=conflict if isinstance(conflict, dict) else None)
+    if formula:
+        expect_text = _clip(formula["expect"], 400)
+        trap_text = _clip(formula["trap"], 360)
+        do_items = [_clip(x, 200) for x in (formula.get("do") or []) if str(x).strip()][:3]
+        avoid_items = [_clip(x, 200) for x in (formula.get("avoid") or []) if str(x).strip()][:3]
+        vibe = _clip(formula.get("vibe_closing") or "", 280)
+        theme = _clip(formula.get("theme") or theme or conflict_label, 200)
+        conflict_label = str(formula.get("headline_anchor") or conflict_label).strip()
+        story = _clip(
+            f"{conflict_label}. {expect_text} {trap_text} {(do_items[0] if do_items else do_hint)}",
+            900,
+        )
+        do_hint = do_items[0] if do_items else do_hint
+        avoid_hint = avoid_items[0] if avoid_items else avoid_hint
+        development_point = _clip(
+            formula.get("development_point") or "Замечать, что реально двигает день, а что только шум.",
+            240,
+        )
+    else:
+        expect_text = _clip(tempo or do_hint or f"{conflict_label}: день просит одного ясного хода.", 400)
+        trap_text = _clip(avoid_hint or "Легко принять суету за движение и потерять главный сюжет дня.", 360)
+        do_items = [
+            do_hint or "Сделай один шаг в сторону главного сюжета дня — и остановись проверить эффект.",
+            "После главного шага имеет смысл коротко заметить, стало ли спокойнее.",
+        ]
+        avoid_items = [
+            avoid_hint or "Не открывай второй фронт, пока не закрыт первый.",
+            "Второй параллельный старт без ясности почти всегда крадёт фокус у первого.",
+        ]
+        vibe = ""
+        development_point = "Замечать, что реально двигает день, а что только шум."
 
     day_thesis_payload = {
         "family": conflict.get("family") or "momentum",
@@ -556,22 +592,16 @@ def build_day_story_fallback_v1(
             "events_lead": events_lead,
             "expect": expect_text,
             "trap": trap_text,
-            "direction": tempo or expect_text,
+            "direction": expect_text if formula else (tempo or expect_text),
             "story": story,
-            "do": [
-                do_hint or "Сделай один шаг в сторону главного конфликта дня — и остановись проверить эффект.",
-                "После главного шага имеет смысл коротко заметить, стало ли спокойнее.",
-            ],
-            "avoid": [
-                avoid_hint or "Не открывай второй фронт, пока не закрыт первый.",
-                "Второй параллельный старт без ясности почти всегда крадёт фокус у первого.",
-            ],
+            "do": do_items,
+            "avoid": avoid_items,
             "advantage": do_hint,
             "abstain": trap_text,
             "today_move": do_hint,
-            "vibe_closing": "",
+            "vibe_closing": vibe,
             "global_period": theme or conflict_label,
-            "development_point": "Замечать, что реально двигает день, а что только шум.",
+            "development_point": development_point,
             "primary_action": do_hint,
             "domains": domains,
             "talisman": {
@@ -660,6 +690,13 @@ def build_day_story_llm_input(
         pack["day_foundation"] = interp["day_foundation"]
     if isinstance(interp.get("day_personal"), dict):
         pack["day_personal"] = interp["day_personal"]
+    thesis = interp.get("day_thesis") if isinstance(interp.get("day_thesis"), dict) else None
+    if thesis:
+        from todayflow_backend.services.day_story_editorial_formulas_v1 import lookup_editorial_formula
+
+        formula = lookup_editorial_formula(day_thesis=thesis)
+        if formula:
+            pack["editorial_formula"] = formula
     if intent_slice:
         pack["intent"] = intent_slice
     if behavior_patterns and behavior_patterns.get("total_events"):
