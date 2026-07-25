@@ -95,7 +95,7 @@ Template/suit banks may exist **only** as pack facts or as **emergency fallback*
 
 Запреты: механический список карт; повтор вопроса >1; спам названий позиций; цитата профиля; карты как факты о внешнем мире; пустые формулы; «Аркан».
 
-Prompt ver: `tarot-interpretation-v1.1`
+Prompt ver: `tarot-interpretation-v1.2` (KB fields: inner_conflict, domain_lens, intensifies_drawn, …)
 
 ---
 
@@ -167,7 +167,7 @@ UI blocks (any spread):
 | Слой | SoT |
 |------|-----|
 | Card identity | `DATA/astrology_reference/tarot_full_deck.json` |
-| Meaning ranges (facts) | **today:** deck keywords + pack builder · **next:** Tarot Knowledge Base v1 (semantic facts, not prose templates) |
+| Meaning ranges (facts) | **Tarot Knowledge Base v1** — `DATA/reference/tarot/knowledge_v1/cards.json` · canon [TAROT_KNOWLEDGE_BASE_V1.md](./TAROT_KNOWLEDGE_BASE_V1.md) |
 | Position function | pack role strings · **next:** Position Semantics library |
 | Question type | `question_domain` / lens · **next:** Question Ontology |
 | User-facing prose | **LLM** (`tarot_interpretation_llm_v1`) |
@@ -178,8 +178,8 @@ Editorial default: reject-invalid LLM → thin fallback. **Do not** hard-overwri
 
 ### Content backlog (quality, not architecture)
 
-1. **Tarot Knowledge Base v1** — per card 0–77 semantic facts: central archetype, light/shadow, inner conflict, outer expression, relationships / work / money / growth, reversed, which questions it amplifies, which cards typically intensify/soften. Facts for the pack — not pre-written answer paragraphs.
-2. **Position Semantics** — role library (gives / blocks / hidden cause / resource / next step / outcome / past / present / future / advice / warning) so the LLM reads function, not only a label.
+1. **Tarot Knowledge Base v1** — **ACTIVE** — [TAROT_KNOWLEDGE_BASE_V1.md](./TAROT_KNOWLEDGE_BASE_V1.md) · 78 semantic records in pack. Next: editorial deepen + live scoring.
+2. **Position Semantics** — role library (gives / blocks / hidden cause / resource / next step / outcome / past–present–future / advice / warning) so the LLM reads function, not only a label.
 3. **Question Ontology** — choice · relationships · work · money · purpose · inner state · decision · conflict · growth · undefined; drives interpretation logic in pack + prompt.
 4. **Prompt Evaluation** — golden set (~50 real questions); after each content/prompt change score: has answer · no loops · no fluff · no categorical claims · clear takeaway · worth finishing. Prefer this over more unit tests of glue.
 
@@ -205,5 +205,7 @@ Editorial default: reject-invalid LLM → thin fallback. **Do not** hard-overwri
 - [x] Quality gates beyond JSON schema
 - [x] Fallback honest / non-imitative
 - [x] Architecture freeze declared (no new contract/UI/spreads/engine branches as primary track)
+- [x] Knowledge Base v1 landed (78 cards → pack; prompt v1.2 reads KB fields)
 - [ ] Live eval 10–15 scenarios (script: `scripts/tarot_interpretation_live_eval.py --live`) — owner scores text usefulness
-- [ ] Knowledge Base v1 · Position Semantics · Question Ontology · Prompt golden eval (~50) — content track
+- [ ] Position Semantics · Question Ontology · Prompt golden eval (~50) — next content track
+- [ ] KB editorial deepen (majors review · weak minors rewrite)

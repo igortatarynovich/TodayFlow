@@ -6,10 +6,11 @@ from typing import Any
 
 from todayflow_backend.core import models
 from todayflow_backend.services import tarot_interpretation_engine_v1 as engine
+from todayflow_backend.services.tarot_interpretation_llm_v1 import TAROT_INTERPRETATION_PROMPT_VER
 from todayflow_backend.services.tarot_reading_synthesis import compose_question_first_reading
 
 TAROT_ANSWER_V1_CONTRACT = "tarot_answer_v1"
-TAROT_ANSWER_PROMPT_VER = "tarot-interpretation-v1.1"
+TAROT_ANSWER_PROMPT_VER = TAROT_INTERPRETATION_PROMPT_VER
 
 
 def tarot_reading_to_answer_v1(

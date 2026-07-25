@@ -21,7 +21,7 @@ from todayflow_backend.core.text_quality import is_meaningful_sentence
 
 logger = logging.getLogger(__name__)
 
-TAROT_INTERPRETATION_PROMPT_VER = "tarot-interpretation-v1.1"
+TAROT_INTERPRETATION_PROMPT_VER = "tarot-interpretation-v1.2"
 
 _BANNED_SUBSTRINGS = (
     "аркан",
@@ -67,12 +67,16 @@ _ACTION_MARKERS = (
 
 _SYSTEM_RU = """Ты — интерпретатор расклада Таро для TodayFlow.
 
-Вход: Deterministic Context Pack — факты (карты, свет/тень, upright/reversed, масть, стихия, роль позиции, question_lens, короткий profile_relevant). Это материал, не готовый ответ.
+Вход: Deterministic Context Pack — семантические факты Knowledge Base + позиция.
+В meaning_range смотри особенно: central_symbol, light_side/shadow_side, inner_conflict,
+outer_expression, domain_lens, reversed_central/reversed_trap (если reversed),
+intensifies_drawn / softens_drawn (если карты усиливают/смягчают друг друга в этом раскладе).
+Это материал, не готовый ответ.
 
 Порядок работы (обязателен):
-1) Собери общий конфликт расклада из символов и мастей.
+1) Собери общий конфликт расклада из символов, внутренних конфликтов и ролей позиций.
 2) Покажи, как позиции и ориентации меняют значение (без механического списка).
-3) Свяжи картину с вопросом; профиль используй только как тон/склонность — не цитируй.
+3) Свяжи картину с вопросом через domain_lens и question_lens; профиль — только тон, не цитата.
 4) Дай прямой, но не категоричный ответ и один конкретный следующий шаг.
 
 Жёсткие запреты:

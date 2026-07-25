@@ -17,6 +17,7 @@ from typing import Any, TypedDict
 
 from todayflow_backend.core import models
 from todayflow_backend.data import astrology as astrology_ref
+from todayflow_backend.data import tarot_knowledge_v1 as tarot_kb
 
 logger = logging.getLogger(__name__)
 
@@ -246,16 +247,41 @@ def infer_question_domain(question: str | None, concern_domain: str | None) -> s
     return "general"
 
 
-def _meaning_range(card_id: int, row: dict[str, Any]) -> dict[str, Any]:
+def _meaning_range(
+    card_id: int,
+    row: dict[str, Any],
+    *,
+    question_domain: str | None = None,
+) -> dict[str, Any]:
     corr = row.get("correspondences") if isinstance(row.get("correspondences"), dict) else {}
     element = str(corr.get("element") or "") or None
     keywords = [str(k).strip() for k in (row.get("keywords") or []) if str(k).strip()]
     catalog_up = str(row.get("upright") or "").strip()
     catalog_rev = str(row.get("reversed") or "").strip()
+    element_ru = _ELEMENT_RU.get(element or "", None)
 
+    kb = tarot_kb.get_card(int(card_id))
+    if kb is not None:
+        suit = str(row.get("suit") or "").lower()
+        suit_meta = _SUIT_THEMES.get(suit) or {}
+        if not element:
+            element = suit_meta.get("element")
+            element_ru = _ELEMENT_RU.get(str(element or ""), None)
+        return tarot_kb.meaning_range_from_kb(
+            kb,
+            question_domain=question_domain,
+            catalog_up=catalog_up,
+            catalog_rev=catalog_rev,
+            keywords=keywords or None,
+            element=element,
+            element_ru=element_ru,
+        )
+
+    # Legacy thin fallback when KB row missing.
     if int(card_id) in _MAJOR_THEMES:
         major = _MAJOR_THEMES[int(card_id)]
         return {
+            "knowledge_source": "legacy_major_themes",
             "central_symbol": str(major.get("central") or major["name"]),
             "light_side": list(major.get("light") or major["up"]),
             "shadow_side": list(major.get("shadow") or major["rev"]),
@@ -265,13 +291,14 @@ def _meaning_range(card_id: int, row: dict[str, Any]) -> dict[str, Any]:
             "reversed_meaning": catalog_rev,
             "keywords": keywords or list(major["up"])[:4],
             "element": element,
-            "element_ru": _ELEMENT_RU.get(element or "", None),
+            "element_ru": element_ru,
         }
 
     suit = str(row.get("suit") or "").lower()
     suit_meta = _SUIT_THEMES.get(suit) or {}
     central = keywords[0] if keywords else str(row.get("name_ru") or row.get("name") or "тема карты")
     return {
+        "knowledge_source": "legacy_suit_keywords",
         "central_symbol": central,
         "light_side": list(suit_meta.get("light") or keywords[:3]),
         "shadow_side": list(suit_meta.get("shadow") or keywords[:3]),
@@ -283,6 +310,41 @@ def _meaning_range(card_id: int, row: dict[str, Any]) -> dict[str, Any]:
         "element": element or suit_meta.get("element"),
         "element_ru": _ELEMENT_RU.get(str(element or suit_meta.get("element") or ""), None),
     }
+
+
+def _annotate_spread_relations(pack_cards: list[dict[str, Any]]) -> None:
+    """Attach intensify/soften names for cards that appear together in this spread."""
+    by_id: dict[int, str] = {}
+    for card in pack_cards:
+        try:
+            by_id[int(card["card_id"])] = str(card.get("name_ru") or card["card_id"])
+        except (KeyError, TypeError, ValueError):
+            continue
+    drawn = set(by_id)
+    for card in pack_cards:
+        rng = card.get("meaning_range") if isinstance(card.get("meaning_range"), dict) else None
+        if not rng:
+            continue
+        try:
+            self_id = int(card["card_id"])
+        except (KeyError, TypeError, ValueError):
+            continue
+
+        def _names(ids: Any) -> list[str]:
+            out: list[str] = []
+            if not isinstance(ids, list):
+                return out
+            for raw in ids:
+                try:
+                    cid = int(raw)
+                except (TypeError, ValueError):
+                    continue
+                if cid in drawn and cid != self_id:
+                    out.append(by_id[cid])
+            return out
+
+        rng["intensifies_drawn"] = _names(rng.get("intensifies_with"))
+        rng["softens_drawn"] = _names(rng.get("softens_with"))
 
 
 def _display_name(card_id: int, orientation: str, row: dict[str, Any]) -> str:
@@ -307,7 +369,7 @@ def build_card_insights(cards: list[models.TarotSpreadCard]) -> list[models.Taro
         row = deck[int(card.card.id)]
         orient = (card.orientation or "upright").strip().lower()
         name = _display_name(card.card.id, orient, row)
-        rng = _meaning_range(card.card.id, row)
+        rng = _meaning_range(card.card.id, row, question_domain=None)
         themes = rng["reversed_themes"] if orient == "reversed" else rng["upright_themes"]
         line = ", ".join(str(t) for t in themes[:4]) if themes else str(rng.get("upright_meaning") or "")[:120]
         insights.append(
@@ -420,11 +482,13 @@ def build_context_pack(
                 "position_prompt": (card.position.prompt if card.position else None),
                 "position_role": role,
                 "position_role_instruction": _ROLE_INSTRUCTION.get(role, _ROLE_INSTRUCTION["neutral"]),
-                "meaning_range": _meaning_range(card.card.id, row),
+                "meaning_range": _meaning_range(card.card.id, row, question_domain=domain),
                 "question_lens": _DOMAIN_QUESTION_LENS.get(domain, _DOMAIN_QUESTION_LENS["general"]),
                 "neighbors": neighbors,
             }
         )
+
+    _annotate_spread_relations(pack_cards)
 
     return {
         "question": (question or "").strip(),
