@@ -144,6 +144,7 @@ function ProfileHubPageInner() {
     resetSetupFlow,
     handleCoreSetupSubmit,
     loadNatalPreview,
+    reloadNatalPreview,
   } = useCoreSetupFlow({
     warmNatalPreview: true,
     onCoreProfileUpdated: setCoreProfile,
@@ -577,7 +578,7 @@ function ProfileHubPageInner() {
                     natalPreview,
                     coreNumerology: coreProfile?.numerology,
                     previewError,
-                    onReloadPreview: loadNatalPreview,
+                    onReloadPreview: reloadNatalPreview,
                     lifeMapSections,
                   }}
                   notices={

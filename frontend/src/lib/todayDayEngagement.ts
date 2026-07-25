@@ -133,6 +133,53 @@ function parseCapturedAtMs(iso: string | null | undefined): number | null {
   return Number.isFinite(ms) ? ms : null;
 }
 
+/**
+ * Merge server day-symbol SoT (`/today/symbols/state`) into local engagement.
+ * Server revealed card/number wins so desktop ↔ phone stay aligned.
+ */
+export function mergeEngagementWithDaySymbolState(
+  local: DayEngagementState,
+  view: {
+    card?: {
+      revealed?: boolean;
+      id?: number | string | null;
+      name?: string | null;
+    };
+    number?: { revealed?: boolean };
+  } | null,
+  resolveCardName?: (cardId: number) => string | null | undefined,
+): DayEngagementState {
+  if (!view) return local;
+  let next = { ...local };
+
+  if (view.card?.revealed) {
+    const rawId = view.card.id;
+    const cardId =
+      typeof rawId === "number"
+        ? rawId
+        : typeof rawId === "string" && rawId.trim() !== "" && Number.isFinite(Number(rawId))
+          ? Number(rawId)
+          : null;
+    if (cardId != null) {
+      const fromServer = typeof view.card.name === "string" && view.card.name.trim() ? view.card.name.trim() : null;
+      const fromLocal = resolveCardName?.(cardId) ?? null;
+      next = {
+        ...next,
+        tarotPickedId: cardId,
+        tarotPickedName: fromServer || fromLocal || next.tarotPickedName || `Карта ${cardId}`,
+      };
+    } else if (typeof view.card.name === "string" && view.card.name.trim() && !next.tarotPickedName) {
+      next = { ...next, tarotPickedName: view.card.name.trim() };
+    }
+  }
+
+  if (view.number?.revealed && !next.numberConfirmed) {
+    next = { ...next, numberConfirmed: true };
+  }
+
+  return next;
+}
+
 /** Merge server CUM explicit state into local engagement (Profile read → Today give). */
 export function mergeEngagementWithCompactUserModel(
   dateISO: string,

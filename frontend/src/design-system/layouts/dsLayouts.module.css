@@ -337,8 +337,9 @@
 @media (min-width: 64rem) {
   .productWebFrame[data-theme="dark"] :global([class*="sidebar"]) {
     width: 16.25rem;
-    background: #2a2520;
-    border-right-color: rgba(253, 251, 247, 0.08);
+    background:
+      linear-gradient(180deg, rgba(24, 20, 30, 0.98) 0%, rgba(18, 16, 24, 0.98) 100%);
+    border-right-color: rgba(212, 184, 150, 0.12);
     color: rgba(253, 251, 247, 0.92);
   }
 }

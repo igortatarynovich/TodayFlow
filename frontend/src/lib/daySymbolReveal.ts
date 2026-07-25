@@ -95,11 +95,15 @@ function clientTimezone(): string {
   }
 }
 
-export async function fetchDaySymbolState(_isAuthenticated: boolean): Promise<DaySymbolPublicView> {
+export async function fetchDaySymbolState(isAuthenticated: boolean): Promise<DaySymbolPublicView> {
   const tz = clientTimezone();
   const day = localDateISO(tz);
   const q = `?local_date=${encodeURIComponent(day)}&timezone=${encodeURIComponent(tz)}`;
-  return symbolsRequest<DaySymbolPublicView>(`/today/symbols/state${q}`, { method: "GET", guest: true });
+  // Authenticated: Bearer only (user owner_key). Guest: X-Guest-Session-Id.
+  return symbolsRequest<DaySymbolPublicView>(`/today/symbols/state${q}`, {
+    method: "GET",
+    guest: !isAuthenticated,
+  });
 }
 
 export async function revealDayCard(input: {

@@ -1,8 +1,13 @@
 "use client";
 
-import { useCallback, useMemo, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import { getJson, postJson } from "@/lib/api";
 import { publishCoreProfileUpdate } from "@/lib/coreProfileCacheStorage";
+import {
+  clearNatalPreviewCache,
+  readNatalPreviewFromCache,
+  writeNatalPreviewToCache,
+} from "@/lib/natalChartPreviewCache";
 import { logActiveJTBDAction } from "@/lib/jtbdFeedback";
 import type { AstroProfile, CoreProfile, UserSettings } from "@/lib/types";
 import type { NatalChartPreview } from "@/components/profile/profilePanelTypes";
@@ -36,15 +41,39 @@ export function useCoreSetupFlow(options: UseCoreSetupFlowOptions = {}) {
   const [previewError, setPreviewError] = useState<string | null>(null);
   const [setupForm, setSetupForm] = useState<CoreSetupPayload>(() => createEmptyCoreSetupForm());
 
-  const loadNatalPreview = useCallback(async () => {
+  const loadNatalPreview = useCallback(async (opts?: { force?: boolean }) => {
     setPreviewError(null);
+    if (!opts?.force) {
+      const cached = readNatalPreviewFromCache(null);
+      if (cached) {
+        setNatalPreview(cached);
+        return;
+      }
+    }
     try {
       const chart = await getJson<NatalChartPreview>("/natal-chart/?include_interpretations=true");
       setNatalPreview(chart);
+      writeNatalPreviewToCache(chart, null);
     } catch (err) {
       setPreviewError(err instanceof Error ? err.message : "Не удалось построить натальную карту.");
+      if (!opts?.force) {
+        const cached = readNatalPreviewFromCache(null);
+        if (cached) {
+          setNatalPreview(cached);
+          return;
+        }
+      }
       setNatalPreview(null);
     }
+  }, []);
+
+  const reloadNatalPreview = useCallback(() => {
+    void loadNatalPreview({ force: true });
+  }, [loadNatalPreview]);
+
+  useEffect(() => {
+    const cached = readNatalPreviewFromCache(null);
+    if (cached) setNatalPreview(cached);
   }, []);
 
   const hydrateSetupForm = useCallback(
@@ -96,6 +125,7 @@ export function useCoreSetupFlow(options: UseCoreSetupFlowOptions = {}) {
       setSetupMessage(null);
       setPreviewError(null);
       setNatalPreview(null);
+      clearNatalPreviewCache(null);
 
       if (!setupForm.first_name.trim() || !setupForm.birth_date || !setupForm.location_name.trim()) {
         setSetupError("Заполни имя, дату рождения и место рождения.");
@@ -129,7 +159,7 @@ export function useCoreSetupFlow(options: UseCoreSetupFlowOptions = {}) {
 
         if (warmNatalPreview) {
           setBuildStage("building");
-          await loadNatalPreview();
+          await loadNatalPreview({ force: true });
         }
 
         setBuildStage("done");
@@ -196,5 +226,6 @@ export function useCoreSetupFlow(options: UseCoreSetupFlowOptions = {}) {
     resetSetupFlow,
     handleCoreSetupSubmit,
     loadNatalPreview,
+    reloadNatalPreview,
   };
 }

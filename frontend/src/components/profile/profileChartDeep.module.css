@@ -140,6 +140,43 @@
   border-color: rgba(212, 184, 150, 0.16);
 }
 
+:global([data-theme="dark"]) .signatureCard,
+:global([data-theme="dark"]) .signatureCardSun,
+:global([data-theme="dark"]) .signatureCardMoon,
+:global([data-theme="dark"]) .signatureCardNumerology {
+  background: linear-gradient(145deg, rgba(36, 30, 40, 0.96) 0%, rgba(26, 22, 32, 0.94) 100%);
+  border-color: rgba(212, 184, 150, 0.2);
+  box-shadow: none;
+}
+
+:global([data-theme="dark"]) .signatureLabel,
+:global([data-theme="dark"]) .signatureLabelNumerology {
+  color: rgba(212, 184, 150, 0.72);
+}
+
+:global([data-theme="dark"]) .signatureValue {
+  color: #f5f0e8;
+}
+
+:global([data-theme="dark"]) .signatureHint {
+  color: rgba(245, 240, 232, 0.55);
+}
+
+:global([data-theme="dark"]) .chartReadingMethod,
+:global([data-theme="dark"]) .chartReadingUnavailable {
+  color: rgba(245, 240, 232, 0.58);
+}
+
+:global([data-theme="dark"]) .chartReadingBody {
+  color: rgba(245, 240, 232, 0.88);
+}
+
+:global([data-theme="dark"]) .ribbonChip {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(245, 240, 232, 0.88);
+  border-color: rgba(201, 169, 110, 0.28);
+}
+
 .ribbon {
   margin-top: 0.7rem;
   display: flex;

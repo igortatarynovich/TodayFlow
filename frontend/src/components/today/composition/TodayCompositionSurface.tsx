@@ -42,7 +42,14 @@ import {
 } from "@/lib/todayCompositionModel";
 import { buildTodayDayStoryViewModel, applySupplementaryNarrativesToDayStory } from "@/lib/todayDayStoryModel";
 import { usesDayStorySingleVoice } from "@/lib/todayContractMapper";
-import { loadDayEngagement, mergeEngagementWithCompactUserModel, saveDayEngagement, createEmptyDayEngagement, engagementProfileScope } from "@/lib/todayDayEngagement";
+import {
+  loadDayEngagement,
+  mergeEngagementWithCompactUserModel,
+  mergeEngagementWithDaySymbolState,
+  saveDayEngagement,
+  createEmptyDayEngagement,
+  engagementProfileScope,
+} from "@/lib/todayDayEngagement";
 import { fetchCompactUserModelCached, clearCompactUserModelCache } from "@/lib/compactUserModelCache";
 import {
   loadRitualPersisted,
@@ -55,7 +62,12 @@ import {
 } from "@/lib/todayCompositionZones";
 import { useMeaningRuntime } from "@/hooks/useMeaningRuntime";
 import { useAuth } from "@/lib/useAuth";
-import { revealDayCard, revealDayNumber, type DaySymbolPublicView } from "@/lib/daySymbolReveal";
+import {
+  fetchDaySymbolState,
+  revealDayCard,
+  revealDayNumber,
+  type DaySymbolPublicView,
+} from "@/lib/daySymbolReveal";
 import { TodayDayDialogueMorning } from "@/components/today/composition/TodayDayDialogueMorning";
 import { ConversationThread } from "@/components/conversation/ConversationThread";
 import { ConversationTurn } from "@/components/conversation/ConversationTurn";
@@ -452,6 +464,71 @@ export function TodayCompositionSurface(props: Props) {
     setGoalDraft(loadDayEngagement(dateISO, engagementProfileKey).dayGoal ?? "");
     setHydrated(true);
   }, [dateISO, engagementProfileKey]);
+
+  /** Server SoT for card+number — restores ritual across devices / fresh browsers. */
+  useEffect(() => {
+    if (!hydrated) return;
+    let cancelled = false;
+    const onReveal = props.onSymbolRevealResult;
+    void fetchDaySymbolState(isAuthenticated)
+      .then((view) => {
+        if (cancelled || !view) return;
+        setEngagement((prev) => {
+          const merged = mergeEngagementWithDaySymbolState(prev, view, (id) => getTodayTarotCardRu(id)?.nameRu);
+          if (
+            merged.tarotPickedId === prev.tarotPickedId &&
+            merged.tarotPickedName === prev.tarotPickedName &&
+            merged.numberConfirmed === prev.numberConfirmed
+          ) {
+            return prev;
+          }
+          saveDayEngagement(dateISO, merged, engagementProfileKey);
+          return merged;
+        });
+        if (view.card?.revealed || view.number?.revealed) {
+          const rawId = view.card?.id;
+          const cardId =
+            typeof rawId === "number"
+              ? rawId
+              : typeof rawId === "string" && Number.isFinite(Number(rawId))
+                ? Number(rawId)
+                : null;
+          const base =
+            loadRitualPersisted(dateISO) ??
+            ({
+              opened: true,
+              numberRevealed: false,
+              mood: null,
+              headTopic: null,
+              essentials: {},
+              honestStep: null,
+              numberRhythm: null,
+              tarotMainId: null,
+              tarotClarifierId: null,
+              tarotApplied: false,
+              tarotContinueAck: false,
+              checkInSubmitted: false,
+            } satisfies RitualPersistedState);
+          saveRitualPersisted(dateISO, {
+            ...base,
+            opened: true,
+            tarotMainId: cardId ?? base.tarotMainId,
+            tarotApplied: Boolean(view.card?.revealed) || base.tarotApplied,
+            tarotContinueAck: Boolean(view.card?.revealed) || base.tarotContinueAck,
+            numberRevealed: Boolean(view.number?.revealed) || base.numberRevealed,
+          });
+        }
+        onReveal?.(view);
+      })
+      .catch(() => {
+        /* offline / guest sealed — keep local engagement */
+      });
+    return () => {
+      cancelled = true;
+    };
+    // Intentionally omit onSymbolRevealResult identity — parent may recreate it each render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- hydrate once per day/auth scope
+  }, [hydrated, dateISO, engagementProfileKey, isAuthenticated]);
 
   useEffect(() => {
     let cancelled = false;
@@ -1075,7 +1152,7 @@ export function TodayCompositionSurface(props: Props) {
   const heroSection = zones.hero ? (
     useProductFoundation ? (
       <section
-        className={`${styles.themeDarkHero} ${story.personalizedReady ? styles.themeDarkHeroCompact : styles.themeDarkHeroSpotlight}`.trim()}
+        className={`${styles.themeDarkHero} ${styles.themeDarkHeroSpotlight}`.trim()}
         data-testid="today-zone-hero"
         data-hero-tone={heroWash.tone}
         data-hero-plate={heroWash.plate}
