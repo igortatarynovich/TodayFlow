@@ -22,7 +22,7 @@ Code: [`day_story_wire_v1.py`](../../backend/src/todayflow_backend/services/day_
 
 ## Retry
 
-Native C1: up to **2** attempts. Rejects: empty, parse fail, legacy keys, validation defects (conflict/scenes/chorus/evidence). On total failure → `facts_only_unavailable` (**not** legacy LLM schema, **not** formula-bank prose).
+Native C1/C3.1: up to **2** attempts. Rejects: empty, parse fail, legacy keys, schema validation, **editorial gate** (abstract/universal/clone scenes, bare astro jargon, …). Retry includes defect feedback. On total failure → `facts_only_unavailable` (**not** legacy LLM schema, **not** formula-bank prose).
 
 ## Cache
 

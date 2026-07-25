@@ -1,13 +1,14 @@
 # DAY_SCENARIO_V1 — драматургический каркас дня
 
-**Status:** CANON DRAFT — **B1–B5 + C1 + C2 landed** (SoT + native LLM + **story chapters UI**); language polish open  
+**Status:** CANON DRAFT — **B1–B5 + C1 + C2 + C3.1 landed** (SoT · native LLM · chapters · **everyday quality gate**); C3.2–C3.5 open  
 **Date:** 2026-07-25  
-**Engine:** `day_scenario_v1.py` · `day_color_catalog_v1.py` · `day_scenario_project_v1.py` · `day_scenario_native_llm_c1.py`  
+**Engine:** `day_scenario_v1.py` · `day_color_catalog_v1.py` · `day_scenario_project_v1.py` · `day_scenario_native_llm_c1.py` · `day_scenario_editorial_gate_c31.py`  
 **Wire note:** [audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md](./audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md)  
 **UI note:** [audits/DAY_SCENARIO_UI_PREFERENCE_B4.md](./audits/DAY_SCENARIO_UI_PREFERENCE_B4.md)  
 **Runtime SoT:** [audits/DAY_SCENARIO_RUNTIME_SOT_B5.md](./audits/DAY_SCENARIO_RUNTIME_SOT_B5.md)  
 **Native LLM:** [audits/DAY_SCENARIO_NATIVE_LLM_C1.md](./audits/DAY_SCENARIO_NATIVE_LLM_C1.md)  
 **Chapters UI:** [audits/DAY_SCENARIO_CHAPTERS_C2.md](./audits/DAY_SCENARIO_CHAPTERS_C2.md)  
+**Everyday quality:** [audits/DAY_SCENARIO_EVERYDAY_QUALITY_C31.md](./audits/DAY_SCENARIO_EVERYDAY_QUALITY_C31.md)  
 **Capture rubric:** [audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md](./audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md)  
 **Related:** [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) · [today-language/TODAY_LANGUAGE_V1.md](./today-language/TODAY_LANGUAGE_V1.md)
 
@@ -275,7 +276,19 @@ Legacy projections remain for old clients only.
 - **Backward compatible?** yes
 ```
 
-### Next — language / personalization quality
+### C3.1 (landed) — Everyday scenes + editorial gate
+
+```markdown
+## Architecture impact
+- **SoT before:** schema-valid native scenario could ship abstract/universal scenes
+- **SoT after:** editorial gate + retry feedback; critical fail → unavailable (no formula rewrite)
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — DAY_SCENARIO_EVERYDAY_QUALITY_C31
+- **Backward compatible?** yes
+```
+
+### Next — C3.2 Chorus quality · C3.3 Personalization depth · C3.5 Eval pack
 
 ---
 

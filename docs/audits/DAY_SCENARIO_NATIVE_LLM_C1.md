@@ -47,8 +47,11 @@ Forbidden legacy keys: expect, trap, do, avoid, domains, talisman, story, theme,
 
 ## Prompt version
 
-`day-scenario-native-c1.0` — registered on refresh path.  
-Legacy `day-story-v1.10-no-formula-runtime` remains in code for eval/compare only — **not** runtime SoT.
+`day-scenario-native-c3.1` — everyday scene rules + editorial gate on refresh.  
+Prior: `day-scenario-native-c1.0` (schema-only accept).  
+Legacy `day-story-v1.10-no-formula-runtime` remains eval/compare only — **not** runtime SoT.
+
+See [DAY_SCENARIO_EVERYDAY_QUALITY_C31.md](./DAY_SCENARIO_EVERYDAY_QUALITY_C31.md).
 
 ## Cache migration
 
@@ -58,9 +61,10 @@ Legacy `day-story-v1.10-no-formula-runtime` remains in code for eval/compare onl
 | Missing marker (pre-C1) | `facts_only_unavailable` — no invent from expect/trap |
 | Refresh | Native LLM (if configured) or deterministic on GET miss |
 
-## Out of scope (C2+)
+## Out of scope (later)
 
-- Today Chapters UI
-- Language polish
 - Changing LLM call count / GET Nebius
 - Profile / Tarot product flows
+- Formula-bank rewrite of failed editorial output
+
+**Landed later:** C2 chapters UI · C3.1 everyday editorial gate (this prompt version).

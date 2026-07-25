@@ -41,7 +41,7 @@ _SPHERE_LABEL_RU: dict[str, str] = {
 }
 
 NATIVE_LLM_SCHEMA_VERSION = "day_scenario_native_llm_c1"
-NATIVE_PROMPT_VERSION = "day-scenario-native-c1.0"
+NATIVE_PROMPT_VERSION = "day-scenario-native-c3.1"
 GENERATION_SOURCE_NATIVE = "native_llm_c1"
 GENERATION_SOURCE_DETERMINISTIC = "deterministic_engine_b5"
 
@@ -142,9 +142,31 @@ _NATIVE_SYS_RU = """Ты — драматург TodayFlow. Твоя задача
 - 2–4 scenes; каждая связана с conflict (setup/opportunity/trap про тот же сюжет);
 - астрология объясняет внешнюю среду; карта — архетип; число — ритм; натал — личную реакцию;
 - ни один голос хора не создаёт отдельный прогноз или вторую историю;
-- формулировки вроде «Луна в Рыбах» желательны, если сразу связано с conflict;
-- бытовые проявления конкретны; без справочного списка аспектов;
-- без wellness/формул Formula Bank; без универсальных штампов;
+- формулировки вроде «Луна в Рыбах» желательны, если сразу переводятся в человеческое проявление и связаны с conflict;
+- без справочного списка аспектов; без wellness/формул Formula Bank;
+
+BYTOVAЯ КОНКРЕТИКА СЦЕН (C3.1) — обязательно:
+Каждая сцена = узнаваемый момент, не абстрактная сфера.
+В каждой сцене явно:
+1) конкретный бытовой момент (кто / где / что сказано или сделано);
+2) внутренний импульс;
+3) внешняя ситуация;
+4) выбор между двумя стратегиями (opportunity vs trap / force_a vs force_b);
+5) наблюдаемое последствие;
+6) действие, которое реально выполнить сегодня (recommended_action).
+everyday_example обязателен и конкретен (сообщение, вопрос, письмо, пауза перед ответом, счёт, созвон…).
+
+Плохо: «В отношениях возможна напряжённость. Сохраняйте границы.»
+Хорошо: «Человек может спросить, всё ли в порядке, именно когда хочется закрыться и ответить «нормально». Ловушка — согласиться ради тишины, а затем злиться, что вас не поняли.»
+
+Запрещены универсальные конструкции без сцены:
+«не торопитесь», «сохраняйте баланс», «слушайте себя», «избегайте конфликтов», «сделайте паузу» —
+если они не встроены в конкретный момент и действие.
+
+Хор — последовательность одной истории, не четыре похожих абзаца:
+1) астрология = среда; 2) карта = архетип; 3) число = способ действия; 4) натал = личная чувствительность.
+Без натальных evidence не выдумывай глубокую персонализацию.
+
 - ЗАПРЕЩЕНЫ legacy keys: expect, trap, do, avoid, domains, talisman, story, theme,
   color_note, affirmation, goals, day_thesis, primary_conflict, events_lead и т.п.
 - не выбирай финальный цвет дня — только prop_material кандидаты;
@@ -680,7 +702,17 @@ def call_day_scenario_native_llm_c1(
     celestial_events: dict[str, Any] | None = None,
     max_attempts: int = 2,
 ) -> dict[str, Any] | None:
-    """Generate native scenario via LLM. Returns day_scenario_v1 or None after retries."""
+    """Generate native scenario via LLM. Returns day_scenario_v1 or None after retries.
+
+    Pipeline per attempt: parse → schema validate → editorial gate (C3.1) → map → structural validate.
+    Critical editorial defects trigger retry with defect feedback (no formula rewrite).
+    """
+    from todayflow_backend.services.day_scenario_editorial_gate_c31 import (
+        editorial_has_critical,
+        format_editorial_retry_feedback,
+        run_editorial_quality_gate_c31,
+        score_editorial_quality_c31,
+    )
     from todayflow_backend.services.day_story_capture_session_v0 import get_day_story_capture_session
 
     if not is_llm_chat_configured():
@@ -697,9 +729,29 @@ def call_day_scenario_native_llm_c1(
         ritual_context=ritual_context,
         celestial_events=celestial_events,
     )
+    # Natal evidence: personal claims / natal activations in interpretation
+    has_natal_evidence = False
+    if isinstance(interp, dict):
+        claims = _as_list(interp.get("derived_claims"))
+        if any(str(c.get("id") or "").startswith("claim.personal.") for c in claims if isinstance(c, dict)):
+            has_natal_evidence = True
+        foundation = _as_dict(interp.get("day_foundation"))
+        personal = _as_dict(interp.get("day_personal"))
+        if foundation or personal.get("natal") or personal.get("transits"):
+            # Soft: presence of personal nest counts as possible evidence channel
+            if _as_list(personal.get("activations")) or _as_list(
+                _as_dict(personal.get("astrology")).get("activations")
+            ):
+                has_natal_evidence = True
+        evidence = _as_list(interp.get("evidence"))
+        if any("natal" in str(e.get("id") or "").lower() for e in evidence if isinstance(e, dict)):
+            has_natal_evidence = True
+
     attempts = max(1, min(int(max_attempts or 1), 3))
     user_full = json.dumps(user_json, ensure_ascii=False)
-    user_sent = user_full[:14000]
+    user_base = user_full[:14000]
+    user_sent = user_base
+    retry_feedback = ""
     model_name = ""
     try:
         model_name = str(resolve_default_chat_model() or "")
@@ -717,6 +769,8 @@ def call_day_scenario_native_llm_c1(
         )
 
     for attempt_idx in range(attempts):
+        if retry_feedback:
+            user_sent = f"{user_base}\n\n---\n{retry_feedback}"[:16000]
         content = chat_completion_plain(
             client,
             model=resolve_default_chat_model(),
@@ -754,7 +808,6 @@ def call_day_scenario_native_llm_c1(
             continue
         normalized = normalize_native_scenario_llm_c1(parsed)
         errors = validate_native_scenario_llm_c1(normalized, allowed_evidence_ids=allowed)
-        # Also reject if raw had legacy keys before normalize stripped them
         legacy_raw = find_legacy_keys(parsed)
         if legacy_raw:
             errors = list(errors) + [f"legacy_keys:{','.join(legacy_raw)}"]
@@ -769,7 +822,46 @@ def call_day_scenario_native_llm_c1(
                     status="native_validation_reject",
                     reject_reason=";".join(errors[:8]),
                 )
+            retry_feedback = (
+                "Исправь schema/validation ошибки: " + "; ".join(errors[:6])
+            )
             continue
+
+        editorial = run_editorial_quality_gate_c31(
+            normalized,
+            has_natal_evidence=has_natal_evidence if has_natal_evidence else None,
+        )
+        # If natal rows exist but we detected no evidence, force False
+        natal_rows = _as_list(_as_dict(normalized.get("interpretive_chorus")).get("natal"))
+        if natal_rows and not has_natal_evidence:
+            editorial = run_editorial_quality_gate_c31(
+                normalized, has_natal_evidence=False
+            )
+        ed_score = score_editorial_quality_c31(editorial)
+        if editorial_has_critical(editorial):
+            feedback = format_editorial_retry_feedback(editorial)
+            if capture is not None:
+                capture.record_attempt(
+                    attempt_index=attempt_idx,
+                    raw_response=content,
+                    parsed=parsed,
+                    after_normalize={**normalized, "editorial_score": ed_score, "editorial_defects": editorial},
+                    after_gate=None,
+                    status="editorial_gate_reject",
+                    reject_reason=";".join(f"{d.get('code')}" for d in editorial[:8]),
+                )
+                try:
+                    for d in editorial:
+                        capture.add_defect(
+                            str(d.get("code") or "EDITORIAL"),
+                            f"{d.get('field')}:{d.get('message')}",
+                            cls=str(d.get("capture_class") or "VALIDATION"),
+                        )
+                except Exception:
+                    pass
+            retry_feedback = feedback
+            continue
+
         scenario = native_llm_to_day_scenario_v1(
             normalized,
             interpretation=interp if isinstance(interp, dict) else {},
@@ -796,14 +888,16 @@ def call_day_scenario_native_llm_c1(
                 attempt_index=attempt_idx,
                 raw_response=content,
                 parsed=parsed,
-                after_normalize=normalized,
+                after_normalize={**normalized, "editorial_score": ed_score, "editorial_defects": editorial},
                 after_gate=scenario,
-                status="accepted_native_c1",
+                status="accepted_native_c31",
             )
         scenario["editorial_meta"] = {
             "prompt_version": NATIVE_PROMPT_VERSION,
             "model_version": model_name,
             "native_schema_version": NATIVE_LLM_SCHEMA_VERSION,
+            "editorial_score": ed_score,
+            "editorial_defects": editorial,
         }
         return scenario
     return None
