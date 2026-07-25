@@ -1,0 +1,246 @@
+/* Natal chart wheel — interactive instrument chrome.
+   The wheel plate itself stays parchment (deliberate engraved-paper look in both
+   themes); the frame, detail panel and planet chips follow the app theme. */
+
+.root {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.plate {
+  padding: clamp(0.6rem, 2vw, 1.1rem);
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.96), rgba(244, 237, 226, 0.94) 48%, rgba(236, 227, 213, 0.92) 100%);
+  border-radius: 28px;
+  box-shadow: 0 18px 48px rgba(112, 92, 63, 0.12);
+  border: 1px solid rgba(198, 166, 119, 0.16);
+}
+
+:global([data-theme="dark"]) .plate {
+  background: radial-gradient(circle at top, rgba(253, 248, 240, 0.97), rgba(240, 232, 219, 0.95) 52%, rgba(228, 217, 200, 0.93) 100%);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.4);
+  border-color: rgba(212, 184, 150, 0.22);
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  overflow: visible;
+  touch-action: manipulation;
+}
+
+.svg [data-wheel-hit] {
+  cursor: pointer;
+}
+
+/* Detail panel — the reading surface for the selected body/house */
+.panel {
+  border-radius: 18px;
+  border: 1px solid rgba(198, 166, 119, 0.22);
+  background: linear-gradient(135deg, #ffffff 0%, #faf9f7 100%);
+  padding: 1rem 1.1rem;
+  min-height: 7.5rem;
+}
+
+:global([data-theme="dark"]) .panel {
+  border-color: rgba(212, 184, 150, 0.18);
+  background: #1e1a24;
+}
+
+.panelHint {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #8a7355;
+}
+
+:global([data-theme="dark"]) .panelHint {
+  color: rgba(245, 240, 232, 0.6);
+}
+
+.panelHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.panelGlyph {
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #8b6a3e;
+}
+
+:global([data-theme="dark"]) .panelGlyph {
+  color: #d4b896;
+}
+
+.panelTitle {
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: 1.35rem;
+  line-height: 1.2;
+  color: #3d3228;
+}
+
+:global([data-theme="dark"]) .panelTitle {
+  color: #f5f0e8;
+}
+
+.panelMeta {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: #8a7355;
+}
+
+:global([data-theme="dark"]) .panelMeta {
+  color: rgba(245, 240, 232, 0.65);
+}
+
+.panelBody {
+  margin: 0.55rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #4a4036;
+}
+
+:global([data-theme="dark"]) .panelBody {
+  color: rgba(245, 240, 232, 0.78);
+}
+
+.aspectList {
+  margin: 0.7rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.aspectRow {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.8125rem;
+  color: #4a4036;
+}
+
+:global([data-theme="dark"]) .aspectRow {
+  color: rgba(245, 240, 232, 0.8);
+}
+
+.aspectSwatch {
+  flex: none;
+  width: 26px;
+  height: 10px;
+}
+
+.aspectOther {
+  appearance: none;
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 700;
+  color: #8b6a3e;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: rgba(139, 106, 62, 0.35);
+  text-underline-offset: 2px;
+}
+
+:global([data-theme="dark"]) .aspectOther {
+  color: #d4b896;
+  text-decoration-color: rgba(212, 184, 150, 0.4);
+}
+
+.aspectKind {
+  color: #8a7355;
+}
+
+:global([data-theme="dark"]) .aspectKind {
+  color: rgba(245, 240, 232, 0.55);
+}
+
+/* Planet chip rail — tap targets duplicating the wheel bodies */
+.chipRail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.42rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(198, 166, 119, 0.28);
+  background: rgba(255, 255, 255, 0.85);
+  color: #4a4036;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background var(--tf-motion-micro, 150ms) ease,
+    border-color var(--tf-motion-micro, 150ms) ease,
+    transform var(--tf-motion-micro, 150ms) ease;
+}
+
+.chip:hover {
+  border-color: rgba(139, 106, 62, 0.5);
+  transform: translateY(-1px);
+}
+
+.chipActive {
+  background: #8b6a3e;
+  border-color: #8b6a3e;
+  color: #fffaf2;
+}
+
+.chipGlyph {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+:global([data-theme="dark"]) .chip {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(212, 184, 150, 0.24);
+  color: rgba(245, 240, 232, 0.85);
+}
+
+:global([data-theme="dark"]) .chip:hover {
+  border-color: rgba(212, 184, 150, 0.5);
+}
+
+:global([data-theme="dark"]) .chipActive {
+  background: #c9a96e;
+  border-color: #c9a96e;
+  color: #1a1510;
+}
+
+/* Aspect legend */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.85rem;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #5f4930;
+}
+
+:global([data-theme="dark"]) .legendItem {
+  color: rgba(245, 240, 232, 0.7);
+}

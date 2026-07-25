@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useCallback, useId } from "react";
 import { eclipticLongitudeFromSignAndDegree, zodiacRuName } from "@/lib/zodiacKnowledge";
+import styles from "@/components/natal-chart/natalChartWheel.module.css";
 
 interface Aspect {
   aspect_id: string;
@@ -24,6 +25,11 @@ interface NatalChartWheelProps {
   ascendant?: number; // ASC degree for proper house positioning
   aspects?: Aspect[]; // Aspect lines to draw
 }
+
+type WheelSelection =
+  | { kind: "planet"; body: string }
+  | { kind: "house"; number: number }
+  | null;
 
 /** API и fallback отдают bodies как "Sun · Moon", "Солнце — Луна", а не только "Sun-Moon". */
 function parseAspectBodyPair(bodies: string | undefined | null): [string, string] | null {
@@ -111,6 +117,22 @@ function planetRuName(body: string): string {
 /** Знак из карты (en «Scorpio» / ru «Скорпион») → русское имя знака. */
 const signRuName = zodiacRuName;
 
+/** Короткие ориентиры домов для панели деталей (не заменяют полную трактовку). */
+const HOUSE_MEANINGS_RU: Record<number, string> = {
+  1: "Я и самоподача — как ты входишь в мир.",
+  2: "Ресурсы и деньги — на что опираешься.",
+  3: "Общение и ближняя среда.",
+  4: "Дом, корни, внутренняя база.",
+  5: "Творчество, радость, игра.",
+  6: "Быт, порядок, здоровье.",
+  7: "Партнёрство и близкие союзы.",
+  8: "Глубина, кризисы, общие ресурсы.",
+  9: "Смыслы, горизонты, дальние планы.",
+  10: "Дело, статус, публичная линия.",
+  11: "Круг, единомышленники, будущее.",
+  12: "Тишина, внутреннее, невидимое.",
+};
+
 /** Cream / gold engraving palette — no blues, purples, or acid accents. */
 const INK = {
   parchment0: "#fefcf9",
@@ -130,8 +152,6 @@ const INK = {
   inkDeep: "#3d3228",
   silver: "#9a9590",
   white: "#ffffff",
-  tooltipBg: "#3d3228",
-  tooltipMuted: "#d4c5b0",
   aspect: {
     conjunction: { color: "#8b6a3e", dash: "none", opacity: 0.78, width: 2.2 },
     opposition: { color: "#6b5340", dash: "8 5", opacity: 0.72, width: 2.4 },
@@ -173,7 +193,11 @@ const INK = {
 } as const;
 
 /**
- * Interactive natal chart wheel visualization
+ * Interactive natal chart wheel.
+ *
+ * Selection is click/tap-driven (touch-first): tapping a planet or house opens a
+ * detail panel under the plate; hover only pre-highlights on pointer devices.
+ * The old hover-only SVG tooltips were unreachable on mobile.
  */
 export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, aspects: aspectsProp = [] }: NatalChartWheelProps) {
   const size = 720;
@@ -183,17 +207,27 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
   const innerRadius = outerRadius * 0.56;
   const aspectRadius = innerRadius - 18;
   const houseRadius = (outerRadius + innerRadius) / 2;
-  const basePlanetRadius = zodiacInnerRadius - 12;
-  const planetRadiusVariation = 26;
+  const basePlanetRadius = zodiacInnerRadius - 14;
+  const planetRadiusVariation = 34;
   const gradientId = useId().replace(/:/g, "");
-  const shadowId = `${gradientId}-shadow`;
   const softGlowId = `${gradientId}-glow`;
   const webClipId = `${gradientId}-clip`;
   const planetGlowId = `${gradientId}-planet-glow`;
 
+  const [selected, setSelected] = useState<WheelSelection>(null);
   const [hoveredPlanet, setHoveredPlanet] = useState<string | null>(null);
-  const [hoveredHouse, setHoveredHouse] = useState<number | null>(null);
-  const [hoveredAspect, setHoveredAspect] = useState<string | null>(null);
+
+  const selectedPlanet = selected?.kind === "planet" ? selected.body : null;
+  const selectedHouse = selected?.kind === "house" ? selected.number : null;
+  const activePlanet = selectedPlanet ?? hoveredPlanet;
+
+  const togglePlanet = useCallback((body: string) => {
+    setSelected((prev) => (prev?.kind === "planet" && prev.body === body ? null : { kind: "planet", body }));
+  }, []);
+
+  const toggleHouse = useCallback((number: number) => {
+    setSelected((prev) => (prev?.kind === "house" && prev.number === number ? null : { kind: "house", number }));
+  }, []);
 
   // Planet symbols (memoized to avoid recreating on every render).
   // U+FE0E after each glyph forces text presentation — without it Chrome/Safari
@@ -295,7 +329,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
         return cusps;
       }
     }
-    
+
     // Fallback to equal houses if no house data available
     const ascDegree = ascendant || 0;
     const cusps: number[] = [];
@@ -341,7 +375,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
       const nextCusp = houseCusps[(i + 1) % 12];
       const endAngle = degreeToAngle(nextCusp);
       const midAngle = (startAngle + (endAngle < startAngle ? endAngle + 360 : endAngle)) / 2;
-      
+
       return {
         number: i + 1,
         cusp,
@@ -360,7 +394,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
     if (filtered.length === 0) {
       return [];
     }
-    
+
     // First pass: calculate all planet angles using longitude (точное позиционирование)
     const planetsWithAngles = filtered.map((p) => {
       // Используем longitude для точного позиционирования, если нет - вычисляем из sign + degree
@@ -380,15 +414,15 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
     // Second pass: distribute planets on different radii to avoid overlap
     // Sort planets by angle
     const sortedPlanets = [...planetsWithAngles].sort((a, b) => a.angle - b.angle);
-    
+
     // Assign radius offsets based on proximity to other planets
     const planetsWithOffsets = sortedPlanets.map((planet, index) => {
       let radiusOffset = 0;
-      
+
       // Check proximity to previous and next planets
       const prevPlanet = sortedPlanets[index > 0 ? index - 1 : sortedPlanets.length - 1];
       const nextPlanet = sortedPlanets[(index + 1) % sortedPlanets.length];
-      
+
       // Calculate angular distance to neighbors
       const distToPrev = Math.min(
         Math.abs(planet.angle - prevPlanet.angle),
@@ -398,29 +432,29 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
         Math.abs(nextPlanet.angle - planet.angle),
         360 - Math.abs(nextPlanet.angle - planet.angle)
       );
-      
-      // If planets are within 10 degrees, offset them (increased threshold)
+
+      // If planets are within 12 degrees, offset them across radii
       const minDistance = Math.min(distToPrev, distToNext);
-      if (minDistance < 10) {
+      if (minDistance < 12) {
         // Use a spiral pattern to distribute planets
         // Calculate how many planets are in this cluster
         let clusterSize = 1;
         let checkIndex = index;
-        
+
         // Count consecutive close planets
         while (checkIndex < sortedPlanets.length - 1) {
           const nextDist = Math.min(
             Math.abs(sortedPlanets[checkIndex + 1].angle - sortedPlanets[checkIndex].angle),
             360 - Math.abs(sortedPlanets[checkIndex + 1].angle - sortedPlanets[checkIndex].angle)
           );
-          if (nextDist < 10) {
+          if (nextDist < 12) {
             clusterSize++;
             checkIndex++;
           } else {
             break;
           }
         }
-        
+
         // Find position within cluster
         let positionInCluster = 0;
         for (let i = index; i > 0; i--) {
@@ -428,18 +462,18 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
             Math.abs(sortedPlanets[i].angle - sortedPlanets[i - 1].angle),
             360 - Math.abs(sortedPlanets[i].angle - sortedPlanets[i - 1].angle)
           );
-          if (prevDist < 10) {
+          if (prevDist < 12) {
             positionInCluster++;
           } else {
             break;
           }
         }
-        
+
         // Distribute evenly around base radius
         const clusterOffset = (positionInCluster - (clusterSize - 1) / 2) * planetRadiusVariation;
         radiusOffset = clusterOffset;
       }
-      
+
       return { ...planet, radiusOffset };
     });
 
@@ -447,14 +481,14 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
     return planetsWithOffsets.map((p) => {
       const finalRadius = basePlanetRadius + p.radiusOffset;
       const position = getPosition(p.angle, finalRadius);
-      
+
       // Find which house this planet is in
       const planetHouse = houseCusps.findIndex((cusp, i) => {
         const nextCusp = houseCusps[(i + 1) % 12];
         const normalizedDegree = p.degree % 360;
         const normalizedCusp = cusp % 360;
         const normalizedNext = nextCusp % 360;
-        
+
         if (normalizedNext > normalizedCusp) {
           return normalizedDegree >= normalizedCusp && normalizedDegree < normalizedNext;
         } else {
@@ -507,8 +541,8 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
 
     const lines: Array<{
       key: string;
-      planet1: { body: string; position: { x: number; y: number }; anchor: { x: number; y: number } };
-      planet2: { body: string; position: { x: number; y: number }; anchor: { x: number; y: number } };
+      planet1: { body: string; anchor: { x: number; y: number } };
+      planet2: { body: string; anchor: { x: number; y: number } };
       aspect: Aspect;
       color: string;
       dash: string;
@@ -516,7 +550,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
       width: number;
       label: string;
     }> = [];
-    
+
     for (const aspect of aspectsProp) {
       const pair = parseAspectBodyPair(aspect.bodies);
       if (!pair) {
@@ -526,31 +560,56 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
 
       const planet1 = planetsWithPositions.find((p) => planetTokensMatch(String(p.body || ""), body1));
       const planet2 = planetsWithPositions.find((p) => planetTokensMatch(String(p.body || ""), body2));
-      
+
       if (!planet1 || !planet2) {
         continue;
       }
-      
-      if (planet1 && planet2) {
-        const style = aspectStyle(aspect);
-        const anchor1 = getPosition(planet1.angle, aspectRadius);
-        const anchor2 = getPosition(planet2.angle, aspectRadius);
-        lines.push({
-          key: `${aspect.aspect_id}-${planet1.body}-${planet2.body}`,
-          planet1: { body: planet1.body, position: planet1.position, anchor: anchor1 },
-          planet2: { body: planet2.body, position: planet2.position, anchor: anchor2 },
-          aspect,
-          color: style.color,
-          dash: style.dash,
-          opacity: style.opacity,
-          width: style.width,
-          label: style.label,
-        });
-      }
+
+      const style = aspectStyle(aspect);
+      const anchor1 = getPosition(planet1.angle, aspectRadius);
+      const anchor2 = getPosition(planet2.angle, aspectRadius);
+      lines.push({
+        key: `${aspect.aspect_id}-${planet1.body}-${planet2.body}`,
+        planet1: { body: planet1.body, anchor: anchor1 },
+        planet2: { body: planet2.body, anchor: anchor2 },
+        aspect,
+        color: style.color,
+        dash: style.dash,
+        opacity: style.opacity,
+        width: style.width,
+        label: style.label,
+      });
     }
 
     return lines;
   }, [aspectRadius, aspectStyle, aspectsProp, getPosition, planetsWithPositions]);
+
+  const selectedPlanetData = useMemo(
+    () => (selectedPlanet ? planetsWithPositions.find((p) => p.body === selectedPlanet) ?? null : null),
+    [planetsWithPositions, selectedPlanet],
+  );
+
+  const selectedPlanetAspects = useMemo(() => {
+    if (!selectedPlanet) return [];
+    return aspectLines
+      .filter((l) => l.planet1.body === selectedPlanet || l.planet2.body === selectedPlanet)
+      .map((l) => ({
+        key: l.key,
+        other: l.planet1.body === selectedPlanet ? l.planet2.body : l.planet1.body,
+        label: l.label,
+        color: l.color,
+        dash: l.dash,
+      }));
+  }, [aspectLines, selectedPlanet]);
+
+  const selectedHouseData = useMemo(() => {
+    if (selectedHouse == null) return null;
+    const cusp = houseCusps[selectedHouse - 1] ?? 0;
+    const signIndex = Math.floor(((cusp % 360) + 360) % 360 / 30);
+    const signName = zodiacSigns[signIndex]?.name ?? "";
+    const inhabitants = planetsWithPositions.filter((p) => p.house === selectedHouse);
+    return { number: selectedHouse, signName, inhabitants };
+  }, [houseCusps, planetsWithPositions, selectedHouse, zodiacSigns]);
 
   if (!chartPositions || chartPositions.length === 0) {
     return (
@@ -573,38 +632,20 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
   }
 
   return (
-    <div style={{ 
-      width: "100%", 
-      maxWidth: size, 
-      margin: "0 auto",
-      padding: "clamp(0.9rem, 2vw, 1.3rem)",
-      background: "radial-gradient(circle at top, rgba(255,255,255,0.96), rgba(244,237,226,0.94) 48%, rgba(236,227,213,0.92) 100%)",
-      borderRadius: "28px",
-      boxShadow: "0 18px 48px rgba(112, 92, 63, 0.12)",
-      border: "1px solid rgba(198, 166, 119, 0.16)",
-    }}>
-      <svg
-        width="100%"
-        viewBox={`0 0 ${size} ${size}`}
-        style={{ display: "block", aspectRatio: "1 / 1", height: "auto", overflow: "visible" }}
-      >
+    <div className={styles.root} data-testid="natal-chart-wheel">
+      <div className={styles.plate}>
+        <svg
+          className={styles.svg}
+          viewBox={`0 0 ${size} ${size}`}
+          role="img"
+          aria-label="Натальная карта"
+        >
         <defs>
           <radialGradient id={`${gradientId}-chart`} cx="50%" cy="50%">
             <stop offset="0%" stopColor={INK.parchment0} stopOpacity="1" />
             <stop offset="62%" stopColor={INK.parchment1} stopOpacity="1" />
             <stop offset="100%" stopColor={INK.parchment2} stopOpacity="1" />
           </radialGradient>
-          <filter id={shadowId}>
-            <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
-            <feOffset dx="0" dy="2" result="offsetblur" />
-            <feComponentTransfer>
-              <feFuncA type="linear" slope="0.3" />
-            </feComponentTransfer>
-            <feMerge>
-              <feMergeNode />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
           <filter id={softGlowId}>
             <feGaussianBlur stdDeviation="5" result="coloredBlur" />
             <feMerge>
@@ -623,12 +664,14 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
             <circle cx={center} cy={center} r={innerRadius - 2} />
           </clipPath>
         </defs>
-        
+
+        {/* Background circle doubles as the tap-to-deselect surface */}
         <circle
           cx={center}
           cy={center}
           r={outerRadius + 16}
           fill={`url(#${gradientId}-chart)`}
+          onClick={() => setSelected(null)}
         />
 
         <circle
@@ -676,6 +719,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
           fill="rgba(255,255,255,0.42)"
           stroke="rgba(198, 166, 119, 0.18)"
           strokeWidth="1"
+          onClick={() => setSelected(null)}
         />
 
         {zodiacSigns.map((sign, i) => {
@@ -735,32 +779,31 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
         })}
 
         {houseSegments.map((segment) => {
-          const isHovered = hoveredHouse === segment.number;
+          const isActive = selectedHouse === segment.number;
           return (
             <g
               key={`house-${segment.number}`}
-              onMouseEnter={() => setHoveredHouse(segment.number)}
-              onMouseLeave={() => setHoveredHouse(null)}
-              style={{ cursor: "pointer" }}
+              data-wheel-hit
+              onClick={() => toggleHouse(segment.number)}
             >
               <circle
                 cx={segment.x}
                 cy={segment.y}
-                r={isHovered ? 18 : 14}
-                fill={isHovered ? INK.gold : INK.creamFill}
-                stroke={isHovered ? INK.gold : INK.ringSoft}
-                strokeWidth={isHovered ? "2.5" : "1.5"}
-                opacity={isHovered ? 1 : 0.8}
+                r={isActive ? 19 : 15}
+                fill={isActive ? INK.gold : INK.creamFill}
+                stroke={isActive ? INK.gold : INK.ringSoft}
+                strokeWidth={isActive ? "2.5" : "1.5"}
+                opacity={isActive ? 1 : 0.85}
                 style={{ transition: "all 0.2s" }}
               />
               <text
                 x={segment.x}
                 y={segment.y}
                 textAnchor="middle"
-                dominantBaseline="middle"
-                fontSize={isHovered ? "16" : "14"}
+                dominantBaseline="central"
+                fontSize="15"
                 fontWeight="700"
-                fill={isHovered ? INK.white : INK.gold}
+                fill={isActive ? INK.white : INK.gold}
                 style={{ transition: "all 0.2s", pointerEvents: "none" }}
               >
                 {segment.number}
@@ -796,7 +839,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
               <circle
                 cx={pos.x}
                 cy={pos.y}
-                r="17"
+                r="19"
                 fill={INK.white}
                 stroke={elementColors[sign.element] || INK.gold}
                 strokeWidth="2"
@@ -806,8 +849,8 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
                 x={pos.x}
                 y={pos.y}
                 textAnchor="middle"
-                dominantBaseline="middle"
-                fontSize="18"
+                dominantBaseline="central"
+                fontSize="20"
                 fill={elementColors[sign.element] || INK.gold}
                 fontWeight="700"
               >
@@ -819,21 +862,14 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
 
         <g clipPath={`url(#${webClipId})`}>
           {aspectLines.map((line) => {
-            const isHovered = hoveredAspect === line.key;
-            const isPlanetLinked = hoveredPlanet === line.planet1.body || hoveredPlanet === line.planet2.body;
-            const opacity = isHovered ? 1 : isPlanetLinked ? Math.min(line.opacity + 0.18, 1) : line.opacity;
-            const width = isHovered ? line.width + 1 : isPlanetLinked ? line.width + 0.5 : line.width;
-            const mid = {
-              x: (line.planet1.anchor.x + line.planet2.anchor.x) / 2,
-              y: (line.planet1.anchor.y + line.planet2.anchor.y) / 2,
-            };
+            const isLinked =
+              activePlanet != null &&
+              (line.planet1.body === activePlanet || line.planet2.body === activePlanet);
+            // With a planet active, its web comes forward and the rest recedes.
+            const opacity = activePlanet == null ? line.opacity : isLinked ? Math.min(line.opacity + 0.22, 1) : 0.1;
+            const width = isLinked ? line.width + 0.7 : line.width;
             return (
-              <g
-                key={line.key}
-                onMouseEnter={() => setHoveredAspect(line.key)}
-                onMouseLeave={() => setHoveredAspect(null)}
-                style={{ cursor: "pointer" }}
-              >
+              <g key={line.key}>
                 <line
                   x1={line.planet1.anchor.x}
                   y1={line.planet1.anchor.y}
@@ -841,7 +877,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
                   y2={line.planet2.anchor.y}
                   stroke={line.color}
                   strokeWidth={width + 4}
-                  opacity={Math.max(opacity - 0.45, 0.08)}
+                  opacity={Math.max(opacity - 0.45, 0.04)}
                   strokeLinecap="round"
                   filter={`url(#${softGlowId})`}
                 />
@@ -856,22 +892,6 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
                   strokeDasharray={line.dash}
                   strokeLinecap="round"
                 />
-                {isHovered ? (
-                  <g>
-                    <circle cx={mid.x} cy={mid.y} r="16" fill="rgba(15,23,42,0.92)" />
-                    <text
-                      x={mid.x}
-                      y={mid.y}
-                      textAnchor="middle"
-                      dominantBaseline="middle"
-                      fontSize="9"
-                      fill={INK.white}
-                      fontWeight="700"
-                    >
-                      {line.label}
-                    </text>
-                  </g>
-                ) : null}
               </g>
             );
           })}
@@ -883,6 +903,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
             fill="rgba(255,255,255,0.45)"
             stroke="rgba(198, 166, 119, 0.12)"
             strokeWidth="1"
+            onClick={() => setSelected(null)}
           />
         </g>
 
@@ -897,13 +918,13 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
               strokeWidth="1.8"
               opacity="0.7"
             />
-            <circle cx={marker.outer.x} cy={marker.outer.y} r="12" fill={INK.white} stroke={marker.color} strokeWidth="2" />
+            <circle cx={marker.outer.x} cy={marker.outer.y} r="13" fill={INK.white} stroke={marker.color} strokeWidth="2" />
             <text
               x={marker.outer.x}
               y={marker.outer.y}
               textAnchor="middle"
-              dominantBaseline="middle"
-              fontSize="9"
+              dominantBaseline="central"
+              fontSize="10"
               fill={marker.color}
               fontWeight="700"
             >
@@ -914,7 +935,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
 
         {planetsWithPositions.map((planet, index) => {
           const edgePos = getPosition(planet.angle, outerRadius);
-          const isHovered = hoveredPlanet === planet.body;
+          const isActive = activePlanet === planet.body;
           return (
             <line
               key={`planet-radial-${planet.body}-${index}`}
@@ -922,9 +943,9 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
               y1={planet.position.y}
               x2={edgePos.x}
               y2={edgePos.y}
-              stroke={isHovered ? INK.goldBright : INK.ringSoft}
-              strokeWidth={isHovered ? "1.5" : "0.8"}
-              opacity={isHovered ? 0.6 : 0.3}
+              stroke={isActive ? INK.goldBright : INK.ringSoft}
+              strokeWidth={isActive ? "1.5" : "0.8"}
+              opacity={isActive ? 0.6 : 0.3}
               strokeDasharray="2,4"
               style={{ transition: "all 0.3s ease" }}
             />
@@ -932,88 +953,43 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
         })}
 
         {planetsWithPositions.map((planet, idx) => {
-          const isHovered = hoveredPlanet === planet.body;
+          const isSelected = selectedPlanet === planet.body;
+          const isActive = activePlanet === planet.body;
           const planetColors = INK.planet;
           const planetColor = planetColors[planet.body as keyof typeof planetColors] || INK.gold;
-          
+
           return (
             <g
               key={`planet-${planet.body}-${idx}`}
+              data-wheel-hit
+              onClick={() => togglePlanet(planet.body)}
               onMouseEnter={() => setHoveredPlanet(planet.body)}
               onMouseLeave={() => setHoveredPlanet(null)}
-              style={{ cursor: "pointer" }}
-              filter={isHovered ? `url(#${planetGlowId})` : undefined}
+              filter={isActive ? `url(#${planetGlowId})` : undefined}
             >
+              {/* Generous invisible hit area for touch */}
+              <circle cx={planet.position.x} cy={planet.position.y} r={30} fill="transparent" />
               <circle
                 cx={planet.position.x}
                 cy={planet.position.y}
-                r={isHovered ? 20 : 16}
-                fill={isHovered ? "#ffffff" : "#fffaf4"}
+                r={isActive ? 24 : 20}
+                fill={isSelected ? planetColor : isActive ? "#ffffff" : "#fffaf4"}
                 stroke={planetColor}
-                strokeWidth={isHovered ? "3" : "2"}
+                strokeWidth={isActive ? "3" : "2"}
                 style={{ transition: "all 0.3s ease" }}
               />
               <text
                 x={planet.position.x}
                 y={planet.position.y}
                 textAnchor="middle"
-                dominantBaseline="middle"
-                fontSize={isHovered ? "20" : "18"}
-                fill={planetColor}
+                dominantBaseline="central"
+                fontSize={isActive ? "24" : "22"}
+                fill={isSelected ? INK.white : planetColor}
                 fontWeight="700"
-                style={{ transition: "all 0.3s ease" }}
+                style={{ transition: "all 0.3s ease", pointerEvents: "none" }}
               >
                 {planet.symbol}
               </text>
-              <text
-                x={planet.position.x}
-                y={planet.position.y + 26}
-                textAnchor="middle"
-                dominantBaseline="middle"
-                fontSize="10"
-                fill={INK.gold}
-                fontWeight="600"
-                opacity={isHovered ? 1 : 0.8}
-              >
-                {signRuName(planet.sign).substring(0, 3) || ""}
-              </text>
-
-              {isHovered && (
-                <g>
-                  <rect
-                    x={planet.position.x - 60}
-                    y={planet.position.y - 50}
-                    width="120"
-                    height="40"
-                    fill={INK.tooltipBg}
-                    fillOpacity="0.95"
-                    rx="8"
-                    filter={`url(#${shadowId})`}
-                  />
-                  <text
-                    x={planet.position.x}
-                    y={planet.position.y - 32}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    fontSize="12"
-                    fill={INK.white}
-                    fontWeight="700"
-                  >
-                    {planetRuName(planet.body)}
-                  </text>
-                  <text
-                    x={planet.position.x}
-                    y={planet.position.y - 18}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    fontSize="10"
-                    fill={INK.tooltipMuted}
-                  >
-                    {signRuName(planet.sign)} • {planet.house || "?"} дом
-                    {planet.degree !== undefined && ` • ${Math.floor(planet.degree)}°`}
-                  </text>
-                </g>
-              )}
             </g>
           );
         })}
@@ -1025,6 +1001,7 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
           fill={`url(#${gradientId}-chart)`}
           stroke={INK.ringSoft}
           strokeWidth="2.5"
+          onClick={() => setSelected(null)}
         />
         <circle
           cx={center}
@@ -1034,106 +1011,121 @@ export function NatalChartWheel({ chartPositions, houses = {}, ascendant = 0, as
           stroke={INK.gold}
           strokeWidth="2"
           opacity="0.9"
+          onClick={() => setSelected(null)}
         />
         <text
           x={center}
           y={center}
           textAnchor="middle"
-          dominantBaseline="middle"
+          dominantBaseline="central"
           fontSize="11"
           fill={INK.gold}
           fontWeight="700"
+          style={{ pointerEvents: "none" }}
         >
           TF
         </text>
-      </svg>
+        </svg>
+      </div>
 
-      <div style={{ 
-        marginTop: "var(--orbit-space-lg)", 
-        padding: "var(--orbit-space-lg)", 
-        background: "linear-gradient(135deg, #ffffff 0%, #faf9f7 100%)",
-        borderRadius: "var(--orbit-radius-md)", 
-        border: "1px solid #e5e0d8",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.04)"
-      }}>
-        <div style={{ display: "grid", gap: "0.85rem", marginBottom: "var(--orbit-space-lg)" }}>
-          <div>
-            <div style={{ 
-              fontSize: "0.875rem", 
-              fontWeight: 700, 
-              marginBottom: "0.45rem", 
-              color: INK.inkDeep,
-              textTransform: "uppercase",
-              letterSpacing: "0.05em"
-            }}>
-              Сетка аспектов
+      {/* Detail panel — selection target for both tap (mobile) and click (desktop) */}
+      <div className={styles.panel} data-testid="natal-chart-detail" aria-live="polite">
+        {selectedPlanetData ? (
+          <>
+            <div className={styles.panelHeader}>
+              <span className={styles.panelGlyph} aria-hidden>
+                {selectedPlanetData.symbol}
+              </span>
+              <h3 className={styles.panelTitle}>{planetRuName(selectedPlanetData.body)}</h3>
+              <p className={styles.panelMeta}>
+                {signRuName(selectedPlanetData.sign)}
+                {selectedPlanetData.house ? ` · ${selectedPlanetData.house} дом` : ""}
+                {selectedPlanetData.degree !== undefined
+                  ? ` · ${Math.floor(((selectedPlanetData.degree % 30) + 30) % 30)}°`
+                  : ""}
+              </p>
             </div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem 0.85rem" }}>
-              {[
-                { label: "Соединение", color: INK.aspect.conjunction.color, dash: INK.aspect.conjunction.dash },
-                { label: "Трин", color: INK.aspect.trine.color, dash: INK.aspect.trine.dash },
-                { label: "Секстиль", color: INK.aspect.sextile.color, dash: INK.aspect.sextile.dash },
-                { label: "Квадрат", color: INK.aspect.square.color, dash: INK.aspect.square.dash },
-                { label: "Оппозиция", color: INK.aspect.opposition.color, dash: INK.aspect.opposition.dash },
-              ].map((item) => {
-                const count = aspectSummary.find((entry) => entry.label === item.label)?.count || 0;
-                return (
-                  <div key={item.label} style={{ display: "flex", alignItems: "center", gap: "0.45rem", color: "#5f4930", fontSize: "0.78rem", fontWeight: 600 }}>
-                    <svg width="28" height="10" viewBox="0 0 28 10" aria-hidden="true">
-                      <line x1="1" y1="5" x2="27" y2="5" stroke={item.color} strokeWidth="2.4" strokeDasharray={item.dash} strokeLinecap="round" />
+            {selectedPlanetAspects.length > 0 ? (
+              <ul className={styles.aspectList}>
+                {selectedPlanetAspects.map((a) => (
+                  <li key={a.key} className={styles.aspectRow}>
+                    <svg className={styles.aspectSwatch} viewBox="0 0 26 10" aria-hidden>
+                      <line x1="1" y1="5" x2="25" y2="5" stroke={a.color} strokeWidth="2.4" strokeDasharray={a.dash} strokeLinecap="round" />
                     </svg>
-                    <span>{item.label}{count ? ` · ${count}` : ""}</span>
-                  </div>
-                );
-              })}
+                    <span className={styles.aspectKind}>{a.label} с</span>
+                    <button type="button" className={styles.aspectOther} onClick={() => togglePlanet(a.other)}>
+                      {planetRuName(a.other)}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className={styles.panelBody}>Мажорных аспектов к этой точке в карте нет — она действует самостоятельно.</p>
+            )}
+          </>
+        ) : selectedHouseData ? (
+          <>
+            <div className={styles.panelHeader}>
+              <h3 className={styles.panelTitle}>{selectedHouseData.number} дом</h3>
+              {selectedHouseData.signName ? (
+                <p className={styles.panelMeta}>куспид в {signRuName(selectedHouseData.signName)}</p>
+              ) : null}
             </div>
-          </div>
-        </div>
-        <div style={{ 
-          fontSize: "0.875rem", 
-          fontWeight: 700, 
-          marginBottom: "var(--orbit-space-md)", 
-          color: INK.inkDeep,
-          textTransform: "uppercase",
-          letterSpacing: "0.05em"
-        }}>
-          Планеты в карте
-        </div>
-        <div style={{ 
-          display: "grid", 
-          gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", 
-          gap: "var(--orbit-space-sm)",
-        }}>
-          {planetsWithPositions.map((planet) => {
-            const planetColors = INK.planet;
-            const planetColor = planetColors[planet.body as keyof typeof planetColors] || INK.gold;
-            
-            return (
-              <div 
-                key={planet.body} 
-                style={{ 
-                  display: "flex", 
-                  alignItems: "center", 
-                  gap: "0.5rem",
-                  padding: "0.5rem",
-                  borderRadius: "6px",
-                  background: "#faf9f7",
-                  transition: "all 0.2s"
-                }}
-              >
-                <span style={{ fontSize: "1.25rem", color: planetColor }}>{planet.symbol}</span>
-                <div>
-                  <div style={{ fontSize: "0.75rem", fontWeight: 600, color: INK.inkDeep }}>
-                    {planetRuName(planet.body)}
-                  </div>
-                  <div style={{ fontSize: "0.7rem", color: INK.silver }}>
-                    {signRuName(planet.sign)} • {planet.house} дом
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+            <p className={styles.panelBody}>{HOUSE_MEANINGS_RU[selectedHouseData.number] ?? ""}</p>
+            {selectedHouseData.inhabitants.length > 0 ? (
+              <p className={styles.panelBody}>
+                Здесь: {selectedHouseData.inhabitants.map((p) => planetRuName(p.body)).join(", ")}
+              </p>
+            ) : null}
+          </>
+        ) : (
+          <p className={styles.panelHint}>
+            Нажми на планету или номер дома — здесь откроются её знак, дом, градус и все связи в карте.
+          </p>
+        )}
+      </div>
+
+      {/* Planet rail — same selection, reachable without aiming at the wheel */}
+      <div className={styles.chipRail} data-testid="natal-chart-planet-rail">
+        {planetsWithPositions.map((planet) => {
+          const planetColors = INK.planet;
+          const planetColor = planetColors[planet.body as keyof typeof planetColors] || INK.gold;
+          const isActive = selectedPlanet === planet.body;
+          return (
+            <button
+              key={planet.body}
+              type="button"
+              className={`${styles.chip} ${isActive ? styles.chipActive : ""}`.trim()}
+              onClick={() => togglePlanet(planet.body)}
+              aria-pressed={isActive}
+            >
+              <span className={styles.chipGlyph} style={isActive ? undefined : { color: planetColor }} aria-hidden>
+                {planet.symbol}
+              </span>
+              {planetRuName(planet.body)}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className={styles.legend} aria-label="Типы аспектов">
+        {[
+          { label: "Соединение", color: INK.aspect.conjunction.color, dash: INK.aspect.conjunction.dash },
+          { label: "Трин", color: INK.aspect.trine.color, dash: INK.aspect.trine.dash },
+          { label: "Секстиль", color: INK.aspect.sextile.color, dash: INK.aspect.sextile.dash },
+          { label: "Квадрат", color: INK.aspect.square.color, dash: INK.aspect.square.dash },
+          { label: "Оппозиция", color: INK.aspect.opposition.color, dash: INK.aspect.opposition.dash },
+        ].map((item) => {
+          const count = aspectSummary.find((entry) => entry.label === item.label)?.count || 0;
+          return (
+            <div key={item.label} className={styles.legendItem}>
+              <svg width="28" height="10" viewBox="0 0 28 10" aria-hidden="true">
+                <line x1="1" y1="5" x2="27" y2="5" stroke={item.color} strokeWidth="2.4" strokeDasharray={item.dash} strokeLinecap="round" />
+              </svg>
+              <span>{item.label}{count ? ` · ${count}` : ""}</span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

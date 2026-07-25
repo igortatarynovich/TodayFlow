@@ -15,7 +15,8 @@ import { ProfileExploreSection } from "@/components/profile/v2/scenes/ProfileExp
 import { ProfileInsightScene } from "@/components/profile/v2/scenes/ProfileInsightScene";
 import { ProfileRecognitionScene } from "@/components/profile/v2/scenes/ProfileRecognitionScene";
 import { ProfileWhyScene } from "@/components/profile/v2/scenes/ProfileWhyScene";
-import { ArchetypeSymbol } from "@/components/visualIdentity/ArchetypeSymbol";
+import { ArchetypeHeroVisual } from "@/components/visualIdentity/ArchetypeHeroVisual";
+import { resolveArchetypeIllustrationSlug } from "@/lib/visualIdentity/registry";
 import type { ProfileV2LiveContext } from "@/lib/profilePage/buildProfileV2LiveContext";
 import { buildProfileFirstScreenProjection } from "@/lib/profilePage/buildProfileFirstScreenProjection";
 import { buildProfileJourneyProjection } from "@/lib/profilePage/buildProfileJourneyProjection";
@@ -294,8 +295,18 @@ function LegacyFirstScreen({
       >
         <div className={styles.journeyHeroVisual} aria-hidden={symbolSeed ? undefined : true}>
           {symbolSeed ? (
-            <div className={styles.journeySymbolFrame}>
-              <ArchetypeSymbol seed={symbolSeed} size={112} stroke="var(--tf-ink-soft, #5b4630)" />
+            <div
+              className={`${styles.journeyHeroArch} ${
+                resolveArchetypeIllustrationSlug(symbolSeed) ? styles.journeyHeroArchFilled : ""
+              }`.trim()}
+              data-testid="profile-v2-hero-arch"
+            >
+              <div className={styles.journeyHeroArchGlow} aria-hidden />
+              <ArchetypeHeroVisual
+                seed={symbolSeed}
+                className={styles.journeySymbolFrame}
+                portraitClassName={styles.journeyHeroPortrait}
+              />
             </div>
           ) : null}
         </div>
