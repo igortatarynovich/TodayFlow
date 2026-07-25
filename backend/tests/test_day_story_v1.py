@@ -126,9 +126,9 @@ def test_fallback_fills_talisman_note_from_color_why():
         fingerprint="fp-test",
     )
     assert "ясность" in (story.get("talisman") or {}).get("note", "").lower()
-    assert story.get("supports_story")
     contract = day_story_to_today_contract_v1(story, generation_id="1")
-    assert contract["day_story"].get("supports_story")
+    assert "ясность" in ((contract["day_story"].get("talisman") or {}).get("note") or "").lower()
+    assert contract["day_story"].get("interpretation_status") == "unavailable"
 
 
 def test_interpretation_no_domains_without_topic():
@@ -147,21 +147,23 @@ def test_validate_day_story_v1_green_on_fallback():
 def test_build_day_story_fallback_has_trace_and_partial_domains():
     story = _sample_story()
     assert story["contract_version"] == DAY_STORY_V1_CONTRACT
+    assert story.get("interpretation_status") == "unavailable"
     assert "trace" in story
-    assert story["trace"]["evidence"]
-    assert story["trace"]["derived_claims"]
+    assert story["trace"]["evidence"] is not None
+    assert story["trace"]["derived_claims"] is not None
     assert story["trace"]["calculation_version"]
-    assert "money_work" in story["domains"]
-    assert "family" not in story["domains"] or story["domains"].get("family", {}).get("evidence_status") != "present"
+    # Facts-only: domains may be empty when no present signal with copy.
+    assert isinstance(story.get("domains"), dict)
 
 
 def test_day_story_to_today_contract_marks_absent_domains():
     contract = day_story_to_today_contract_v1(_sample_story(), generation_id="42", progress={})
     assert contract["contract_version"] == "today_contract_v1"
     assert contract["generation_id"] == "42"
-    assert contract["domains"]["money_work"].get("evidence_status") == "present"
-    assert contract["domains"]["family"].get("evidence_status") == "absent"
-    assert contract["domains"]["family"]["status"] == ""
+    assert contract["day_story"]["interpretation_status"] == "unavailable"
+    assert not str(contract.get("primary_action") or "").strip()
+    for did in ("money_work", "relationships", "family"):
+        assert contract["domains"][did].get("evidence_status") == "absent"
     assert contract["day_story"]["trace"]["confidence"] is not None
     assert "story_limitations" in contract["progress"]
 
@@ -196,12 +198,13 @@ def test_day_story_to_legacy_narrative_derives_surfaces():
         story.get("headline_anchor"),
         story.get("theme"),
     }
+    # Facts-only unavailable: no invented story/move prose.
+    assert story.get("interpretation_status") == "unavailable"
+    assert not str(story.get("story") or "").strip()
+    assert not str(story.get("today_move") or "").strip()
     assert narrative["spheres"]["payload"]["page_intro"] == story["story"]
     assert narrative["day_layer"]["payload"]["nudge_message"] == story["today_move"]
-    assert narrative["evening"]["payload"]["panel_intro"]
-    assert story.get("primary_conflict")
-    assert story.get("expect") or story.get("direction")
-    assert story.get("trap") or story.get("abstain")
+    assert story.get("primary_conflict") or story.get("theme")
 
 
 def test_phrase_gate_rejects_empty_formulas():
@@ -214,8 +217,30 @@ def test_phrase_gate_rejects_empty_formulas():
 
 
 def test_validate_rejects_empty_formula_story():
-    bad = _sample_story()
-    bad["theme"] = "Довериться потоку"
+    # Full interpretation path still rejects chrome — unavailable shells skip phrase gate.
+    bad = {
+        "contract_version": DAY_STORY_V1_CONTRACT,
+        "interpretation_status": "ok",
+        "theme": "Довериться потоку",
+        "direction": "Выбрать главное на сегодня.",
+        "story": "Сегодня лучше довериться потоку.",
+        "advantage": "Одно дело до конца.",
+        "abstain": "Не распыляйся.",
+        "today_move": "Выбери одно дело до конца.",
+        "global_period": "Довериться потоку",
+        "expect": "Довериться потоку",
+        "trap": "Не распыляйся",
+        "do": ["Выбери главное.", "Одно дело до конца."],
+        "avoid": ["Не распыляйся.", "Довериться потоку."],
+        "domains": {},
+        "trace": {
+            "evidence": [],
+            "derived_claims": [],
+            "confidence": 0.5,
+            "limitations": [],
+            "calculation_version": "test",
+        },
+    }
     errors = validate_day_story_v1(bad)
     assert any("empty_formula" in e for e in errors)
 

@@ -1,15 +1,15 @@
-"""Editorial formula bank for day_story fallback — RULE_005 slot fill.
+"""Editorial formula bank — QA / golden / exemplar corpus only.
 
-Keyed by day_thesis family.variant. Covers the full day_thesis_v1 variant map.
-Exemplars A–C from TODAY_LANGUAGE_STRONG_PATTERNS_V0; remaining variants follow
-the same expect/trap/do/avoid/vibe shape. Not TL-1 language quality scoring.
+NOT a runtime source of user-facing day_story prose.
+Runtime path: LLM → value gate → empty/unavailable slots (no formula fill).
+Keyed by day_thesis family.variant for tests and prompt calibration.
 """
 
 from __future__ import annotations
 
 from typing import Any
 
-# family.variant → editorial slots (RU). events_lead stays driver-projected.
+# family.variant → editorial slots (RU). QA exemplars only.
 _FORMULAS: dict[str, dict[str, Any]] = {
     # --- decision ---
     "decision.stop_pleasing_everyone": {

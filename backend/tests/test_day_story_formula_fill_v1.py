@@ -1,59 +1,31 @@
-"""Editorial formula fill — empty/invalid only, never hard-overwrite good LLM prose."""
+"""Runtime must not fill formula bank into user-facing day_story slots."""
 
 from __future__ import annotations
 
-from todayflow_backend.services.day_story_v1 import _fill_editorial_formula_slots
+from todayflow_backend.services.day_story_v1 import (
+    INTERPRETATION_UNAVAILABLE_RU,
+    build_day_story_fallback_v1,
+)
 
 
-def _base_thesis() -> dict:
-    return {
-        "family": "communication",
-        "variant": "truth_without_filter",
-        "mode": "conflict",
-        "label_ru": "Прямота без фильтра",
-        "driver_ids": ["merc-hard"],
-        "composition_ids": [],
-    }
-
-
-def test_fill_preserves_good_llm_expect_and_trap():
-    llm_expect = "На работе проще назвать проблему вслух, чем сгладить её до пустоты."
-    llm_trap = "После резкого сообщения не отправляй второе «для ясности» в ту же минуту."
-    story = {
-        "day_thesis": _base_thesis(),
-        "primary_conflict": "Прямота без фильтра",
-        "expect": llm_expect,
-        "trap": llm_trap,
-        "abstain": llm_trap,
-        "do": ["Скажи одно точное предложение и поставь точку."],
-        "avoid": ["Не продолжай разбор полётов при свидетелях."],
-        "today_move": "Скажи одно точное предложение и поставь точку.",
-        "vibe_closing": "Короткий глаз в глаз; пауза после правды.",
-    }
-    out = _fill_editorial_formula_slots(story)
-    assert out["expect"] == llm_expect
-    assert out["trap"] == llm_trap
-    assert out["do"][0].startswith("Скажи одно точное")
-    assert out.get("editorial", {}).get("fill_mode") == "empty_or_invalid"
-    assert "expect" not in (out.get("editorial") or {}).get("filled_slots", [])
-
-
-def test_fill_replaces_empty_and_system_leak_slots():
-    story = {
-        "day_thesis": _base_thesis(),
-        "primary_conflict": "Прямота без фильтра",
-        "expect": "",
-        "trap": "При твоём стиле («вы решаете…») «Двойка пентаклей» легко скатывается…",
-        "do": [],
-        "avoid": ["довериться потоку"],
-        "today_move": "",
-        "vibe_closing": "",
-    }
-    out = _fill_editorial_formula_slots(story)
-    assert out["expect"]
-    assert "при твоём стиле" not in out["trap"].lower().replace("ё", "е")
-    assert len(out["do"]) >= 1
-    assert len(out["avoid"]) >= 1
-    filled = out.get("editorial", {}).get("filled_slots") or []
-    assert "expect" in filled
-    assert "trap" in filled
+def test_fallback_leaves_editorial_slots_empty():
+    story = build_day_story_fallback_v1(
+        day_engine_brief={
+            "anchor_summary": "Сегодня — один ясный шаг.",
+            "do_hint": "Выбери одну задачу",
+            "avoid_hint": "Не подписывайся на новое",
+            "tempo_hint": "Ровный темп",
+            "thread_head_topic": "career",
+        },
+        ritual_context={"head_topic": "career"},
+        fingerprint="fp-no-formula",
+    )
+    assert story.get("interpretation_status") == "unavailable"
+    assert INTERPRETATION_UNAVAILABLE_RU in str(story.get("interpretation_unavailable_message") or "")
+    assert not str(story.get("expect") or "").strip()
+    assert not str(story.get("trap") or "").strip()
+    assert not (story.get("do") or [])
+    assert not (story.get("avoid") or [])
+    # Engine brief hints must not become user prose on this path.
+    assert "Выбери одну задачу" not in str(story.get("today_move") or "")
+    assert "довериться потоку" not in str(story.get("story") or "").lower()

@@ -161,6 +161,13 @@ export function TodayPersonalizedProductSection({
           ) : null}
         </header>
 
+        {contract.day_story?.interpretation_status === "unavailable" ? (
+          <p className={styles.readingParagraph} data-testid="today-interpretation-unavailable">
+            {contract.day_story.interpretation_unavailable_message ||
+              "Мы не смогли подготовить персональную интерпретацию дня. Попробуйте обновить экран через несколько минут."}
+          </p>
+        ) : null}
+
         <div
           className={`${styles.narrativeBlocks} ${profileMotionStyles.staggerItem}`}
           style={profileMotionStaggerDelay(0, 60) as CSSProperties}

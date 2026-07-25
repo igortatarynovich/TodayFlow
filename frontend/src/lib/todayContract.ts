@@ -42,6 +42,9 @@ export type TodayContractDayStoryTraceV1 = {
 
 export type TodayContractDayStoryV1 = {
   contract_version: string;
+  /** ok | unavailable — facts-only shell when interpretation could not be generated. */
+  interpretation_status?: "ok" | "unavailable" | string;
+  interpretation_unavailable_message?: string | null;
   theme?: string;
   /** §0.1 image-title for hero — not an astro fact label. */
   headline_anchor?: string;
