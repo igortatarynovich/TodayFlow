@@ -1,7 +1,7 @@
 # TODAY_LANGUAGE_V1 — редакционный канон текста Today
 
 **Статус:** `ACCEPTED` — источник истины для **языка и качества копирайта** на экране Today и связанных narrative surfaces.  
-**Версия:** 1.2 (2026-06-23)  
+**Версия:** 1.3 (2026-07-25)  
 **Владелец:** Product (sign-off) + Editorial + Engineering (quality gate)
 
 **Это не:** список запрещённых слов и не «сделай текст менее эзотерическим».  
@@ -89,6 +89,29 @@
 **Эволюция гипотезы (batch_3, 2026-06-23):** «хорошая фраза **обязательно** содержит ставку» **не выдержала** api_live keep/exemplar (фокус, перегруз, дедлайн, объекты без `stake_type`). Ставка остаётся **сильным усилителем**, не единственным правилом.
 
 **Legacy sub-hypothesis — stake:** `stake_type` в dataset v0.3; batch_1/2 показали rewrite при scene без stake; batch_3 показал keep **без** stake при object/action/recognition.
+
+### TODAY_WRITING_RULE_005 — один главный сюжет дня (day_thesis)
+
+> **У дня ровно один главный сюжет (`day_thesis`).** Не пять тем одновременно. Не каждый день — конфликт.
+
+Машинная сущность: `family` + `variant` + `mode` (`conflict|opportunity|transition|recovery|stability`) + `label_ru` + `driver_ids` + `composition_ids`.
+
+UI может говорить «главный сюжет» / vibe title («Возвращение ясности»). Не превращать каждый день в драму.
+
+Все главы Today (Hero, Небо, Day Map, Инструкции, Вечер) раскрывают **тот же** thesis.
+
+| Поле / глава | Роль |
+|--------------|------|
+| `day_thesis` | Единый сюжет (SoT для всех поверхностей) |
+| `events_lead` / Небо | 1–3 драйвера (+ compositions) из `DayContext.layers.evidence.celestial_events` |
+| `expect` | Чего ожидать — бытовая сцена |
+| `trap` | Одна оговорка / ловушка (даже в mode=opportunity — мягко) |
+| `do` / `avoid` | Инструкция — следствия thesis |
+| `vibe_closing` / вечер | Штрихи из drivers + approved ambient |
+
+**Запрещено:** независимые тезисы на разных поверхностях; LLM выбирает астро-события; frontend invents second thesis.
+
+**Evidence ownership:** `day_events_pack_v1` — вложенный evidence-пакет в DayContext, **не** второй SoT дня.
 
 ---
 

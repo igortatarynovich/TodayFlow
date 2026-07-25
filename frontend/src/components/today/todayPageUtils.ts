@@ -289,6 +289,20 @@ export type MorningRitualData = {
       sign_ru?: string;
       story_ru?: string;
     }>;
+    day_events_pack?: {
+      contract_version?: string;
+      ranked_drivers?: string[];
+      ambient?: string[];
+      events?: Array<{
+        id?: string;
+        kind?: string;
+        title_ru?: string;
+        fact_ru?: string;
+        when?: string;
+        strength?: number;
+        priority_hint?: string;
+      }>;
+    };
     daily_symbols?: {
       color?: {
         name?: string;

@@ -169,6 +169,8 @@ User opens Today
 | Active goals / habits / ascetics | RT+SN | `fusion.rhythm_context` |
 | Card of day / number of day | RT+SN | ritual, morning_ritual persist |
 | Transits / daily foundation | DD+SN | `daily_foundation` |
+| Celestial evidence pack (`day_events_pack_v1`) | DD | `layers.evidence.celestial_events` — nested evidence, **not** parallel day SoT |
+| Day thesis (`day_thesis_v1`) | SN (derived) | `layers.day_thesis` — single plot for all Today surfaces |
 | Check-in | RT | ritual mood, tracking |
 | Recent events / history | SN | `layers.history`, meaning_events |
 | Behavior patterns | SN | `behavior_patterns`, `internal_profile` |

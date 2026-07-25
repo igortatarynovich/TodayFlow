@@ -10,6 +10,10 @@ import type { TodayContractV1 } from "@/lib/todayContract";
 import { dayStoryAvoidItems, dayStoryDoItems } from "@/lib/todayContractMapper";
 
 export type TodayDayMap = {
+  /** Primary conflict label when known. */
+  primaryConflict: string | null;
+  /** Sky drivers paragraph. */
+  eventsLead: string | null;
   whatHappens: string;
   whereConflict: string | null;
   whereYouBreak: string | null;
@@ -17,6 +21,8 @@ export type TodayDayMap = {
   oneConcreteMove: string | null;
   whyLayers: string[];
   avoidHints: string[];
+  doHints: string[];
+  vibeClosing: string | null;
   source: "funnel_interpretation" | "day_story";
 };
 
@@ -69,6 +75,8 @@ function fromFunnelInterpretation(payload: Record<string, unknown> | null | unde
   for (const a of avoidRaw) pushDistinct(avoidHints, avoidUsed, String(a), 160);
 
   return {
+    primaryConflict: clean(String(interp.primary_conflict || "")) || null,
+    eventsLead: ensurePeriod(String(interp.events_lead || "")) || null,
     whatHappens,
     whereConflict: ensurePeriod(String(interp.where_conflict || "")) || null,
     whereYouBreak: ensurePeriod(String(interp.where_you_break || "")) || null,
@@ -76,6 +84,8 @@ function fromFunnelInterpretation(payload: Record<string, unknown> | null | unde
     oneConcreteMove: clean(String(interp.one_concrete_move || "")) || null,
     whyLayers: whyLayers.slice(0, 3),
     avoidHints: avoidHints.slice(0, 3),
+    doHints: [],
+    vibeClosing: null,
     source: "funnel_interpretation",
   };
 }
@@ -86,14 +96,22 @@ function fromDayStory(contract: TodayContractV1): TodayDayMap | null {
 
   const foundation = ds.day_foundation;
   const essence = clean(foundation?.essence?.story_ru);
+  const expect = clean(ds.expect);
+  const eventsLead = clean(ds.events_lead);
   const direction = clean(ds.direction);
   const story = clean(ds.story);
+  const thesisLabel =
+    clean(ds.day_thesis?.label_ru) ||
+    clean(ds.day_thesis?.label) ||
+    clean(ds.primary_conflict) ||
+    clean(ds.headline_anchor);
+  const conflict = thesisLabel;
   const whatHappens = ensurePeriod(
-    firstSentences(direction || essence || story, direction ? 2 : 2),
+    firstSentences(expect || direction || eventsLead || essence || story, 2),
   );
   if (whatHappens.length < 16) return null;
 
-  const abstain = ensurePeriod(clean(ds.abstain));
+  const trap = ensurePeriod(clean(ds.trap) || clean(ds.abstain));
   const advantage = ensurePeriod(clean(ds.advantage));
   const move =
     clean(ds.today_move) ||
@@ -103,38 +121,47 @@ function fromDayStory(contract: TodayContractV1): TodayDayMap | null {
 
   const used = new Set<string>([whatHappens.toLowerCase()]);
   const whyLayers: string[] = [];
+  pushDistinct(whyLayers, used, eventsLead, 240);
   pushDistinct(whyLayers, used, clean(foundation?.astro?.summary_ru), 200);
   pushDistinct(whyLayers, used, clean(foundation?.lunar?.summary_ru), 200);
   pushDistinct(whyLayers, used, clean(ds.symbolic_note), 200);
-  // Never dump global_period / development_point into why — those are the fact wall.
 
   const avoidHints: string[] = [];
   const avoidUsed = new Set<string>();
   for (const a of dayStoryAvoidItems(contract).slice(0, 3)) {
     pushDistinct(avoidHints, avoidUsed, a, 160);
   }
-  if (!avoidHints.length && abstain) pushDistinct(avoidHints, avoidUsed, abstain, 160);
+  if (!avoidHints.length && trap) pushDistinct(avoidHints, avoidUsed, trap, 160);
 
-  // Soft "where you break": prefer domain risk over repeating abstain.
+  const doHints: string[] = [];
+  const doUsed = new Set<string>();
+  for (const d of dayStoryDoItems(contract).slice(0, 3)) {
+    pushDistinct(doHints, doUsed, d, 160);
+  }
+
   let whereYouBreak: string | null = null;
   const domains = contract.domains;
   for (const key of ["money_work", "relationships", "family"] as const) {
     const lens = domains?.[key];
     const risk = lens && typeof lens === "object" ? clean((lens as { risk?: string }).risk) : "";
-    if (risk && risk.length >= 12 && risk.toLowerCase() !== abstain.toLowerCase()) {
+    if (risk && risk.length >= 12 && risk.toLowerCase() !== trap.toLowerCase()) {
       whereYouBreak = ensurePeriod(firstSentences(risk, 2));
       break;
     }
   }
 
   return {
+    primaryConflict: conflict || null,
+    eventsLead: ensurePeriod(eventsLead) || null,
     whatHappens,
-    whereConflict: abstain || null,
+    whereConflict: trap || null,
     whereYouBreak,
     whatWorks: advantage || null,
     oneConcreteMove: move,
-    whyLayers: whyLayers.slice(0, 2),
+    whyLayers: whyLayers.slice(0, 3),
     avoidHints: avoidHints.slice(0, 3),
+    doHints: doHints.slice(0, 3),
+    vibeClosing: clean(ds.vibe_closing) || null,
     source: "day_story",
   };
 }

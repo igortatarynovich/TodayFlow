@@ -67,6 +67,7 @@ def test_build_celestial_events_includes_symbols_and_transits():
         "todayflow_backend.services.celestial_events_builder.find_moon_sign_ingress_time",
         new=AsyncMock(return_value=None),
     ):
+        lunar_cls.return_value.phase_at.return_value = mock_lunar
         lunar_cls.return_value.current_phase.return_value = mock_lunar
         retro_cls.return_value.get_retrograde_status = AsyncMock(return_value=mock_retro)
         aspect_cls.return_value.callouts.return_value = MagicMock(callouts=[])
@@ -90,3 +91,5 @@ def test_build_celestial_events_includes_symbols_and_transits():
     assert payload["daily_symbols"]["color"]["name"]
     assert "void_of_course" in payload
     assert payload["timed_lunar_aspects"] == []
+    assert payload["day_events_pack"]["contract_version"] == "day_events_pack_v1"
+    assert isinstance(payload["day_events_pack"]["ranked_drivers"], list)

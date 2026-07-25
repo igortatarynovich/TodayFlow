@@ -13,7 +13,7 @@ from datetime import date, time
 from typing import Any
 
 DAY_STORY_INTERPRETATION_V1 = "day_story_interpretation_v1"
-DAY_STORY_CALCULATION_VERSION = "day-story-interpretation-v1.2"
+DAY_STORY_CALCULATION_VERSION = "day-story-interpretation-v1.3"
 
 _DOMAIN_IDS = ("relationships", "money_work", "family")
 
@@ -77,9 +77,15 @@ def _resolve_domain_from_topic(topic: str) -> str | None:
 
 
 def _slim_day_sky(celestial_events: dict[str, Any] | None) -> dict[str, Any]:
-    """Compact sky pack for LLM — only ready story strings, capped."""
+    """Compact sky pack for LLM — drivers first, then capped legacy story strings."""
     ce = celestial_events if isinstance(celestial_events, dict) else {}
     out: dict[str, Any] = {}
+
+    pack = ce.get("day_events_pack") if isinstance(ce.get("day_events_pack"), dict) else None
+    if pack:
+        from todayflow_backend.services.day_events_pack_v1 import slim_day_events_for_llm
+
+        out["day_events_pack"] = slim_day_events_for_llm(pack)
     lunar = ce.get("lunar_phase") if isinstance(ce.get("lunar_phase"), dict) else {}
     if lunar:
         out["moon"] = {
@@ -620,7 +626,101 @@ def build_day_story_interpretation_v1(
     present_domains = [d for d in _DOMAIN_IDS if domain_evidence[d]]
     absent_domains = [d for d in _DOMAIN_IDS if d not in present_domains]
 
+    # --- Primary conflict + ranked drivers (one plot for the whole Today) ---
+    pack = ce.get("day_events_pack") if isinstance(ce.get("day_events_pack"), dict) else None
+    if pack is None and ce:
+        try:
+            from todayflow_backend.services.day_events_pack_v1 import build_day_events_pack_v1
+
+            pack = build_day_events_pack_v1(
+                ce,
+                target_date=resolved_date,
+                lat=lat,
+                lon=lon,
+                timezone_name=timezone,
+            )
+        except Exception:
+            pack = None
+
+    from todayflow_backend.services.day_thesis_v1 import build_day_thesis_v1
+
+    day_thesis = build_day_thesis_v1(
+        day_events_pack=pack,
+        day_engine_brief=brief,
+        day_model=None,  # day_model not in interpretation inputs yet; brief carries tempo/risk
+    )
+    # Legacy mirror for mid-migration consumers
+    primary_conflict = {
+        "contract_version": "day_conflict_registry_v1",
+        "id": f"{day_thesis['family']}.{day_thesis['variant']}",
+        "label_ru": day_thesis["label_ru"],
+        "driver_ids": day_thesis["driver_ids"],
+        "day_thesis": day_thesis,
+    }
+    source_inputs["has_day_events_pack"] = bool(pack and (pack.get("ranked_drivers") or pack.get("events")))
+    source_inputs["day_thesis_family"] = day_thesis.get("family")
+    source_inputs["day_thesis_variant"] = day_thesis.get("variant")
+    source_inputs["primary_conflict_id"] = primary_conflict.get("id")
+
+    if pack and (pack.get("ranked_drivers") or pack.get("events")):
+        by_id = {
+            str(e.get("id")): e
+            for e in (pack.get("events") or [])
+            if isinstance(e, dict) and e.get("id")
+        }
+        driver_summaries: list[str] = []
+        for did in day_thesis.get("driver_ids") or pack.get("ranked_drivers") or []:
+            ev = by_id.get(str(did))
+            if not ev:
+                continue
+            fact = str(ev.get("fact_ru") or ev.get("title_ru") or "").strip()
+            if not fact:
+                continue
+            eid = f"ev.driver.{did}"
+            evidence.append(
+                _evidence(
+                    evidence_id=eid,
+                    source="day_events_pack_v1.ranked_drivers",
+                    claim_ref="day_driver",
+                    summary=fact,
+                )
+            )
+            driver_summaries.append(fact)
+            add_claim(
+                f"claim.day.driver.{did}",
+                fact,
+                evidence_ids=[eid],
+                kind="sky",
+            )
+        if driver_summaries:
+            eid_c = "ev.day.thesis"
+            label = str(day_thesis.get("label_ru") or "")
+            evidence.append(
+                _evidence(
+                    evidence_id=eid_c,
+                    source="day_thesis_v1",
+                    claim_ref="day_thesis",
+                    summary=label,
+                )
+            )
+            add_claim(
+                "claim.day.primary_conflict",  # legacy claim id
+                f"{label}. Драйверы: {'; '.join(driver_summaries[:3])}",
+                evidence_ids=[eid_c] + [f"ev.driver.{d}" for d in (day_thesis.get("driver_ids") or [])[:3]],
+                kind="axis",
+            )
+            add_claim(
+                "claim.day.thesis",
+                f"{label} [{day_thesis.get('family')}/{day_thesis.get('variant')}, mode={day_thesis.get('mode')}]",
+                evidence_ids=[eid_c],
+                kind="axis",
+            )
+
     limitations: list[str] = []
+    if pack and isinstance(pack.get("limitations"), list):
+        for lim in pack["limitations"]:
+            if lim and lim not in limitations:
+                limitations.append(str(lim))
     if not present_domains:
         limitations.append(
             "Нет явного сигнала по сферам (отношения / работа / семья) — доменные блоки не заполняются выдуманным текстом."
@@ -659,9 +759,12 @@ def build_day_story_interpretation_v1(
         "confidence": round(confidence, 3),
         "limitations": limitations,
         "fingerprint": fingerprint or "",
-        "day_sky": _slim_day_sky(ce),
+        "day_sky": _slim_day_sky(ce if pack is None else {**ce, "day_events_pack": pack}),
         "day_foundation": day_foundation,
         "day_personal": day_personal,
+        "primary_conflict": primary_conflict,
+        "day_thesis": day_thesis,
+        "day_events_pack": pack,
     }
     return interpretation
 

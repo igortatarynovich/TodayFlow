@@ -23,21 +23,27 @@ class LunarService:
             self.phases.append((start_deg, end_deg, record))
 
     def current_phase(self, locale: str | None = None) -> models.MoonPhaseResponse:
-        now = datetime.now(timezone.utc)
-        age_days = ((now - EPOCH).total_seconds() / 86400.0) % SYNODIC_PERIOD_DAYS
+        return self.phase_at(datetime.now(timezone.utc), locale=locale)
+
+    def phase_at(self, at: datetime, locale: str | None = None) -> models.MoonPhaseResponse:
+        """Moon phase for an arbitrary datetime — required for target_date Today stories."""
+        if at.tzinfo is None:
+            at = at.replace(tzinfo=timezone.utc)
+        else:
+            at = at.astimezone(timezone.utc)
+        age_days = ((at - EPOCH).total_seconds() / 86400.0) % SYNODIC_PERIOD_DAYS
         angle = (age_days / SYNODIC_PERIOD_DAYS) * 360.0
 
-        start_deg, end_deg, record, index = self._phase_for_angle(angle)
+        _start_deg, _end_deg, record, index = self._phase_for_angle(angle)
         cycle_percent = age_days / SYNODIC_PERIOD_DAYS * 100
 
         next_index = (index + 1) % len(self.phases)
         next_start, _, next_record = self.phases[next_index]
         days_to_next = self._days_until(angle, next_start)
-        next_date = (now + timedelta(days=days_to_next)).date().isoformat()
+        next_date = (at + timedelta(days=days_to_next)).date().isoformat()
 
         upcoming = []
         cursor_index = next_index
-        cursor_angle = next_start
         for _ in range(4):
             phase_start, _, phase_record = self.phases[cursor_index]
             days_until = self._days_until(angle, phase_start)
@@ -45,22 +51,20 @@ class LunarService:
                 models.UpcomingPhase(
                     id=phase_record["id"],
                     name=self._phase_name(phase_record, locale),
-                    date=(now + timedelta(days=days_until)).date().isoformat(),
+                    date=(at + timedelta(days=days_until)).date().isoformat(),
                     in_days=round(days_until, 2),
                 )
             )
             cursor_index = (cursor_index + 1) % len(self.phases)
 
-        # Try to get human_text from Content System
         content_phase = content_system.get_moon_phase_by_id(record["id"])
         human_text = content_phase.get("human_text") if content_phase else None
-        
-        # Fallback to i18n if Content System doesn't have human_text
+
         themes = translate(f"moon_phase.{record['id']}.themes", locale=locale, default=record.get("themes", ""))
         guidance = translate(
             f"moon_phase.{record['id']}.guidance", locale=locale, default=record.get("guidance", "")
         )
-        
+
         current_snapshot = models.MoonPhaseSnapshot(
             id=record["id"],
             name=self._phase_name(record, locale),

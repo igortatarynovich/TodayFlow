@@ -147,6 +147,13 @@ export function buildDayThesis(
 }
 
 export function buildThemeShort(contract: TodayContractV1, thesis: string): string {
+  const conflict =
+    contract.day_story?.day_thesis?.label_ru?.trim() ||
+    contract.day_story?.day_thesis?.label?.trim() ||
+    contract.day_story?.primary_conflict?.trim();
+  if (conflict && isRuUserFacingText(conflict) && conflict.length <= 96) {
+    return conflict.replace(/[.!?]+$/, "").trim();
+  }
   const anchor = contract.day_story?.headline_anchor?.trim();
   if (anchor && isRuUserFacingText(anchor) && anchor.length <= 96) {
     return anchor.replace(/[.!?]+$/, "").trim();
@@ -329,13 +336,45 @@ export function buildSkyInfluenceCards(input: {
   const lunar = celestial?.lunar_phase;
   const apiSymbols = celestial?.daily_symbols;
   const ritualComplete = Boolean(input.ritualComplete);
+  const pack = celestial?.day_events_pack;
 
   const pushCard = (card: TodaySkyCard) => {
     if (cards.some((c) => c.id === card.id)) return;
     cards.push(card);
   };
 
-  if (lunar?.name) {
+  const iconForKind = (kind: string | undefined): TodaySkyIconKey => {
+    const k = (kind || "").toLowerCase();
+    if (k.includes("moon") || k.includes("phase") || k.includes("lunar")) return "moon";
+    if (k.includes("station") || k.includes("retro")) return "refresh";
+    if (k.includes("ingress")) return "compass";
+    if (k.includes("aspect")) return "star";
+    if (k.includes("solar") || k.includes("seasonal")) return "sun";
+    if (k.includes("personal")) return "sparkles";
+    return "orbital";
+  };
+
+  // Prefer ranked drivers from day_events_pack — one plot, not a fact wall.
+  if (pack?.ranked_drivers?.length && pack.events?.length) {
+    const byId = new Map((pack.events || []).filter((e) => e?.id).map((e) => [String(e.id), e]));
+    for (const did of pack.ranked_drivers.slice(0, 3)) {
+      const ev = byId.get(String(did));
+      if (!ev?.title_ru && !ev?.fact_ru) continue;
+      const story = sanitizeRuCopy(
+        ev.fact_ru,
+        ev.title_ru || "Сигнал дня — держи один главный конфликт.",
+      );
+      pushCard({
+        id: `driver-${ev.id}`,
+        icon: iconForKind(ev.kind),
+        label: "Драйвер дня",
+        title: ev.title_ru || "Сигнал неба",
+        story: input.registry.claim(story) ?? story,
+      });
+    }
+  }
+
+  if (cards.length < 2 && lunar?.name) {
     const story = sanitizeRuCopy(
       lunar.guidance ?? lunar.themes,
       "Луна задаёт эмоциональный фон — замечай, что сегодня становится заметнее.",
@@ -349,51 +388,59 @@ export function buildSkyInfluenceCards(input: {
     });
   }
 
-  const mainTransit = celestial?.personal_transits?.[0];
-  if (mainTransit?.title && mainTransit.story_ru) {
-    pushCard({
-      id: "personal-transit",
-      icon: "sparkles",
-      label: "Твой транзит",
-      title: mainTransit.title,
-      story: input.registry.claim(mainTransit.story_ru) ?? mainTransit.story_ru,
-    });
+  if (cards.length < 3) {
+    const mainTransit = celestial?.personal_transits?.[0];
+    if (mainTransit?.title && mainTransit.story_ru) {
+      pushCard({
+        id: "personal-transit",
+        icon: "sparkles",
+        label: "Твой транзит",
+        title: mainTransit.title,
+        story: input.registry.claim(mainTransit.story_ru) ?? mainTransit.story_ru,
+      });
+    }
   }
 
-  const mainAspect = celestial?.sky_aspects?.[0];
-  if (mainAspect?.title && mainAspect.story_ru) {
-    pushCard({
-      id: "sky-aspect",
-      icon: "star",
-      label: "Аспект дня",
-      title: mainAspect.title,
-      story: input.registry.claim(mainAspect.story_ru) ?? mainAspect.story_ru,
-    });
+  if (cards.length < 3) {
+    const mainAspect = celestial?.sky_aspects?.[0];
+    if (mainAspect?.title && mainAspect.story_ru) {
+      pushCard({
+        id: "sky-aspect",
+        icon: "star",
+        label: "Аспект дня",
+        title: mainAspect.title,
+        story: input.registry.claim(mainAspect.story_ru) ?? mainAspect.story_ru,
+      });
+    }
   }
 
-  const retro = celestial?.retrogrades?.[0];
-  if (retro?.planet_ru && retro.story_ru) {
-    pushCard({
-      id: `retro-${retro.planet ?? "planet"}`,
-      icon: "refresh",
-      label: "Ретроград",
-      title: retro.planet_ru,
-      story: input.registry.claim(retro.story_ru) ?? retro.story_ru,
-    });
+  if (cards.length < 3) {
+    const retro = celestial?.retrogrades?.[0];
+    if (retro?.planet_ru && retro.story_ru) {
+      pushCard({
+        id: `retro-${retro.planet ?? "planet"}`,
+        icon: "refresh",
+        label: "Ретроград",
+        title: retro.planet_ru,
+        story: input.registry.claim(retro.story_ru) ?? retro.story_ru,
+      });
+    }
   }
 
-  const ingress = celestial?.ingresses?.[0];
-  if (ingress?.planet_ru && ingress?.story_ru) {
-    pushCard({
-      id: "ingress",
-      icon: "compass",
-      label: "Переход",
-      title: `${ingress.planet_ru} → ${ingress.sign_ru ?? "новый знак"}`,
-      story: input.registry.claim(ingress.story_ru) ?? ingress.story_ru,
-    });
+  if (cards.length < 3) {
+    const ingress = celestial?.ingresses?.[0];
+    if (ingress?.planet_ru && ingress?.story_ru) {
+      pushCard({
+        id: "ingress",
+        icon: "compass",
+        label: "Переход",
+        title: `${ingress.planet_ru} → ${ingress.sign_ru ?? "новый знак"}`,
+        story: input.registry.claim(ingress.story_ru) ?? ingress.story_ru,
+      });
+    }
   }
 
-  if (input.sunSignLabel) {
+  if (cards.length < 2 && input.sunSignLabel) {
     pushCard({
       id: "sun",
       icon: "sun",
@@ -407,15 +454,17 @@ export function buildSkyInfluenceCards(input: {
     });
   }
 
-  const headline = input.morningRitualData?.daily_horoscope?.headline?.trim();
-  if (headline && isRuUserFacingText(headline) && headline.length >= 16) {
-    pushCard({
-      id: "day-axis",
-      icon: "orbital",
-      label: "Фон дня",
-      title: "Главный акцент",
-      story: input.registry.claim(headline) ?? headline,
-    });
+  if (cards.length < 2) {
+    const headline = input.morningRitualData?.daily_horoscope?.headline?.trim();
+    if (headline && isRuUserFacingText(headline) && headline.length >= 16) {
+      pushCard({
+        id: "day-axis",
+        icon: "orbital",
+        label: "Фон дня",
+        title: "Главный акцент",
+        story: input.registry.claim(headline) ?? headline,
+      });
+    }
   }
 
   if (ritualComplete && input.cardName && input.cardId != null) {

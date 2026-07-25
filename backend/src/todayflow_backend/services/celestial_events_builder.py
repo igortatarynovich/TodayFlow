@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
-from datetime import date, time
+from datetime import date, datetime, time, timezone
 from typing import Any
 
 from todayflow_backend.services import astro
 from todayflow_backend.services.aspects import AspectEngine
+from todayflow_backend.services.day_events_pack_v1 import build_day_events_pack_v1
 from todayflow_backend.services.day_sources.timed_lunar_aspects import (
     find_moon_sign_ingress_time,
     find_timed_major_moon_aspects,
@@ -14,6 +15,14 @@ from todayflow_backend.services.day_sources.timed_lunar_aspects import (
 from todayflow_backend.services.day_sources.void_of_course import build_void_of_course_v0
 from todayflow_backend.services.lunar import LunarService
 from todayflow_backend.services.retrograde import RetrogradeService
+
+_LUNAR_ASPECT_STORY: dict[str, str] = {
+    "conjunction": "Луна сливается с темой планеты — эмоции и событие звучат в одной тональности.",
+    "opposition": "Луна напротив планеты — полярность дня: держи два полюса, не выбирай «всё или ничего».",
+    "square": "Луна в квадрате — трение и накал; легче сорваться, чем договорить.",
+    "trine": "Луна в тригоне — поддержка без усилия; хороший день для мягкого шага вперёд.",
+    "sextile": "Луна в секстиле — окно для лёгкого хода, если не игнорировать сигнал.",
+}
 
 _PLANET_RU: dict[str, str] = {
     "Sun": "Солнце",
@@ -280,6 +289,8 @@ async def _sky_aspects_for_date(
                 "title": title.replace(" · ", " — "),
                 "story_ru": desc[:240],
                 "tension_level": callout.tension_level or None,
+                "orb_delta": getattr(callout, "orb_delta", None),
+                "strength": getattr(callout, "strength", None),
             }
         )
     snap = snapshot_from_positions(
@@ -302,9 +313,11 @@ async def build_celestial_events(
     birth_time: time | None = None,
     birth_lat: float | None = None,
     birth_lon: float | None = None,
+    lat: float | None = None,
+    lon: float | None = None,
     timezone_name: str | None = None,
 ) -> dict[str, Any]:
-    """Assemble lunar phase, retrogrades, sky aspects, personal transits, symbols."""
+    """Assemble lunar phase, retrogrades, sky aspects, personal transits, symbols + day_events_pack."""
     from todayflow_backend.services.day_sources.ephemeris_bridge import (
         empty_ephemeris_pack,
         fetch_design_minus_88d_snapshot,
@@ -318,7 +331,9 @@ async def build_celestial_events(
 
     lunar_phase: dict[str, Any] | None = None
     try:
-        moon_phase = lunar_service.current_phase(locale=locale)
+        # Noon UTC on target_date — date-accurate phase for Today (not wall-clock "now").
+        at = datetime(target_date.year, target_date.month, target_date.day, 12, 0, tzinfo=timezone.utc)
+        moon_phase = lunar_service.phase_at(at, locale=locale)
         if moon_phase.current:
             lunar_phase = {
                 "id": moon_phase.current.id,
@@ -368,14 +383,27 @@ async def build_celestial_events(
                 continue
             planet = ing.planet if hasattr(ing, "planet") else ing.get("planet")
             sign = ing.sign if hasattr(ing, "sign") else ing.get("sign")
+            planet_s = str(planet)
+            sign_s = str(sign)
+            is_moon = "moon" in planet_s.lower()
+            if is_moon:
+                story = (
+                    f"Луна переходит в {_sign_ru(sign_s)} ({str(ing_date)[:10]}) "
+                    f"— меняется эмоциональный тон дня."
+                )
+            else:
+                story = (
+                    f"{_planet_ru(planet_s)} входит в {_sign_ru(sign_s)} ({str(ing_date)[:10]}) "
+                    f"— смещается акцент тем этой планеты."
+                )
             ingresses_today.append(
                 {
                     "planet": planet,
-                    "planet_ru": _planet_ru(str(planet)),
+                    "planet_ru": _planet_ru(planet_s),
                     "sign": sign,
-                    "sign_ru": _sign_ru(str(sign)),
+                    "sign_ru": _sign_ru(sign_s),
                     "ingress_date": str(ing_date)[:10],
-                    "story_ru": f"{_planet_ru(str(planet))} переходит в {_sign_ru(str(sign))} — меняется тон тем, которые она подсвечивает.",
+                    "story_ru": story,
                 }
             )
     except Exception:
@@ -438,6 +466,20 @@ async def build_celestial_events(
         if exact is not None:
             row["exact_time"] = exact.isoformat(timespec="seconds")
             row["ingress_date"] = exact.date().isoformat()
+            sign_ru = str(row.get("sign_ru") or _sign_ru(str(row.get("sign") or "")))
+            hm = exact.strftime("%H:%M")
+            row["story_ru"] = f"Луна переходит в {sign_ru} около {hm} — меняется эмоциональный тон дня."
+
+    # Enrich timed lunar aspects with interpretive story_ru when missing.
+    for row in timed_lunar_aspects:
+        if not isinstance(row, dict) or row.get("story_ru"):
+            continue
+        aspect = str(row.get("aspect") or "").strip().lower()
+        title = str(row.get("title") or "").strip()
+        base = _LUNAR_ASPECT_STORY.get(aspect, "Лунный аспект задаёт ритм эмоций на часы.")
+        when = str(row.get("exact_time") or "")
+        time_bit = f" Точно около {when[11:16]}." if len(when) >= 16 else ""
+        row["story_ru"] = f"{title}: {base}{time_bit}"[:240] if title else f"{base}{time_bit}"[:240]
 
     void_of_course = build_void_of_course_v0(
         target_date=target_date,
@@ -486,4 +528,25 @@ async def build_celestial_events(
             eph["design_minus_88d"] = design
     if eph.get("transit_noon") or eph.get("natal") or eph.get("design_minus_88d"):
         payload["ephemeris"] = eph
+
+    # Ranked event pack for generation contract (1–3 drivers).
+    geo_lat = lat if lat is not None else birth_lat
+    geo_lon = lon if lon is not None else birth_lon
+    try:
+        payload["day_events_pack"] = build_day_events_pack_v1(
+            payload,
+            target_date=target_date,
+            lat=geo_lat,
+            lon=geo_lon,
+            timezone_name=timezone_name,
+        )
+    except Exception:
+        payload["day_events_pack"] = {
+            "contract_version": "day_events_pack_v1",
+            "events": [],
+            "ranked_drivers": [],
+            "ambient": [],
+            "limitations": ["day_events_pack_build_failed"],
+            "target_date": target_date.isoformat(),
+        }
     return payload

@@ -45,77 +45,73 @@ PracticeKind = Literal["promise", "ascetic", "affirmation", "practice", "none"]
 
 _DOMAIN_IDS = ("relationships", "money_work", "family")
 
-_DAY_STORY_SYS_RU = """Ты — литературный автор TodayFlow: пишешь живое повествование дня только по evidence.
+_DAY_STORY_SYS_RU = """Ты — литературный редактор TodayFlow: пишешь единую историю дня только по evidence.
 
-Смысл дня УЖЕ вычислен в interpretation (evidence + derived_claims). Твоя задача — связный рассказ дня
-(небо → ход → опоры), человеческим языком. Нельзя придумывать новый смысл, астро-связи или сферы.
+Смысл дня УЖЕ вычислен в interpretation (evidence + derived_claims + day_thesis + day_events_pack).
+Твоя задача — связный рассказ дня (небо → ожидание → ловушка → ход → вайб), человеческим языком.
+Нельзя придумывать новый смысл, астро-связи, события или сферы.
 
 Вход — JSON:
-- interpretation: evidence[], derived_claims[], domains_present, limitations, day_sky, day_foundation, day_personal
-- day_foundation: astro + lunar layers + essence (Суть дня) — objective plot; write story from this first
-- day_personal: soft L3 (house rulers, time lords / Firdaria, HD channels) — only via matching derived_claims
-- day_sky / talisman_reasons — готовые факты неба и why цвета/камня (если есть)
+- interpretation: evidence[], derived_claims[], domains_present, limitations, day_sky, day_foundation,
+  day_personal, day_thesis {family, variant, mode, label_ru, driver_ids, composition_ids},
+  day_events_pack / day_sky.day_events_pack
+- day_foundation: astro + lunar layers + essence — objective plot
+- day_personal: soft L3 — only via matching derived_claims
 - day_engine_brief, ritual_context, user_core, rhythm_context, intent
 
 Правила (жёстко):
 - prose ТОЛЬКО поверх interpretation.derived_claims и evidence;
-- личные soft-сигналы (управители домов, Firdaria, каналы HD) — только если есть claim.personal.*;
+- личные soft-сигналы — только если есть claim.personal.*;
 - domains.* только для id из interpretation.domains_present; иначе domains = {};
-- карта/число — только если есть во входе; не пересказывай их отдельным абзацем;
-- цвет / камень / практика: объясняй (talisman.note, practice_recommendation.reason, supports_story)
-  ТОЛЬКО если есть matching claim (kind support / sky / claim.talisman.*); иначе эти поля = "";
-- не сочиняй «потому что Меркурий → зелёный» без claim;
-- не начинай почти каждое предложение глаголом-командой (Направить / Выбери / Опирайся / Держи);
-- не повторяй один смысл в разных полях разными словами;
-- story — 3–5 предложений со сменой ритма, как абзац из книги;
-- supports_story — короткий абзац «Твой ход» (цвет/опора/практика), только по claims; иначе "";
-- direction / advantage / abstain — наблюдения, не чек-лист;
-- today_move / primary_action — практическая мысль человеческим тоном («Если успеешь…»), не «Выбери…»;
-- do / avoid — короткие наблюдения (не список императивов).
+- карта/число — только если есть во входе;
+- цвет / камень / практика — только при matching claim; иначе "";
+- не начинай почти каждое предложение глаголом-командой;
+- не повторяй один смысл в разных полях;
 
-СТРУКТУРА (обязательна для story, не опция):
-- Возьми ИЗ ВСЕХ входных фактов (аспекты, фаза Луны, лунный день, управитель недели, натальные
-  слои) РОВНО 2–3 самых значимых для сегодня. Остальные факты — не упоминай вообще, даже вскользь,
-  даже одним словом. Один Sun-Mars ИЛИ Луна-фаза ИЛИ weekday ruler — не всё сразу.
-- story = одна сцена на этих 2–3 фактах, не перечисление; между фактами — причинная связь
-  («Х создаёт давление, поэтому Y»), не «также», «кроме того», «в картине дня».
-- Ровно одна «ловушка дня» — живёт ТОЛЬКО в story (конкретный момент, где легко перепутать
-  один импульс с другим: пауза ≠ бездействие; чувствительность ≠ слабость). Не общее предостережение.
-  abstain / avoid — практические следствия ЭТОЙ ЖЕ ловушки и тех же 2–3 фактов, что уже в story
-  (тот же аспект / ингресс / лунная фаза). Запрещено под видом abstain/avoid вводить НОВЫЙ
-  источник, которого нет в этих 2–3 фактах story (Нептун, planetary hours, майя, китайский день,
-  weekday ruler и т.п. — если их нет в story, их нет и в abstain/avoid).
-  Тест: если убрать ловушку из story, abstain/avoid должны стать бессмысленными — иначе это
-  уже другая ловушка.
-  claim.abstain / avoid_hint из day_engine_brief — мягкий фон, НЕ обязательный пункт avoid[].
-  Не копируй brief.avoid_hint в avoid, если он не следует из ловушки и 2–3 фактов story.
-- Никогда не повторяй факт (например «управитель дня недели»), который уже назван в другом
-  поле ответа этого же JSON — каждый факт встречается ровно один раз во всём объекте.
-- today_move — конкретный, представимый образ (что сделать/надеть/сказать), не абстрактный совет.
-- headline_anchor — образ-заголовок дня (§0.1): короткое имя настроения/картины
-  («Чувствительная прямота», «Тихий вес слова»), НЕ описание астро-факта
-  («Меркурий вышел из ретрограда»). Без эмодзи. Не дублирует theme дословно, если theme уже образ —
-  тогда headline_anchor может совпасть с theme.
-- vibe_closing — вайб-концовка (§0.5): 2–3 (лучше меньше, чем слабее) конкретных штриха через
-  точку с запятой. КАЖДЫЙ штрих обязан явно находиться в input claims / talisman / today_move /
-  ritual (лазурь/лазурит из talisman; одно сообщение из primary move; карта/число, если есть).
-  Если штрих нельзя показать пальцем на claim — ВЫБРОСЬ его, не оставляй «для атмосферы»
-  (запрещены: наушники «просто так», стакан воды, выключенный телефон, прогулка «для ясности»
-  без опоры на claim этого дня). Не повторяй факты из story дословно.
-- development_point — если берёшь личный soft-клейм (HD/ворота/Firdaria): одна фраза
-  «что это значит сегодня» (причина → бытовой смысл), не ярлык «ворота 31.1 — влияние».
+КАНОН «ОДИН СЮЖЕТ (day_thesis)»:
+- interpretation.day_thesis — единственная центральная идея дня (family/variant/mode/label_ru).
+  Не каждый день — конфликт: mode может быть conflict|opportunity|transition|recovery|stability.
+- Вокруг тезиса — РОВНО драйверы из ranked_drivers / claim.day.driver.* (1–3 факта).
+  Остальные события неба НЕ упоминай в events_lead.
+- ambient из pack можно использовать только в vibe_closing (если явно в evidence).
+- Не пиши пять тем. Один thesis → разные грани в разных полях.
 
-Запрещены штампы и пустые формулы:
+СТРУКТУРА ПОЛЕЙ (обязательна):
+- day_thesis — объект: скопируй family, variant, mode, label_ru, driver_ids, composition_ids из interpretation.
+- primary_conflict — УСТАРЕВШИЙ alias: строка = day_thesis.label_ru (для совместимости).
+- events_lead — 1 абзац: названные 1–3 драйвера и причинная связь.
+- expect — чего ожидать сегодня в быту (сцена).
+- trap — одна ловушка / точка срыва (даже если mode != conflict — мягкая оговорка).
+- story — 3–5 предложений на тех же драйверах.
+- do / avoid — следствия того же thesis и драйверов.
+- headline_anchor — образ-заголовок (может совпасть с label_ru); БЕЗ эмодзи.
+- vibe_closing — 2–3 бытовых штриха; можно из drivers + approved ambient.
+- development_point — личный soft-клейм → бытовой смысл, иначе "".
+
+Запрещены штампы:
 «Сегодня сильнее», «Опирайся на это», «Зона риска», «Направить внимание», «Не распыляйся»,
 «довериться потоку», «устойчивость через ритм», «один важный разговор», «одно дело до конца»,
 «мягко проявить себя», «выбрать главное», «вселенная», «позволь себе», «важно помнить».
 
-Тон: умный спокойный наставник. Без драмы и без телеграм-бота из однострочных абзацев.
+Тон: редакционный вайб TodayFlow — конкретика, энергия, узнаваемая сцена. Без драмы телеграм-оракула
+и без канцелярита «спокойного наставника». Без эмодзи в JSON.
 
 Верни только JSON:
 {
   "theme": "string",
   "headline_anchor": "string — образ-заголовок дня, без эмодзи",
+  "day_thesis": {
+    "family": "string",
+    "variant": "string",
+    "mode": "conflict|opportunity|transition|recovery|stability",
+    "label_ru": "string",
+    "driver_ids": ["string"],
+    "composition_ids": ["string"]
+  },
+  "primary_conflict": "string — alias = day_thesis.label_ru",
+  "events_lead": "string — 1 абзац про 1–3 драйвера",
+  "expect": "string — чего ожидать",
+  "trap": "string — ловушка / оговорка дня",
   "direction": "string",
   "story": "string",
   "do": ["string","string"],
@@ -123,9 +119,9 @@ _DAY_STORY_SYS_RU = """Ты — литературный автор TodayFlow: �
   "advantage": "string",
   "abstain": "string",
   "today_move": "string",
-  "vibe_closing": "string — 2–3 штриха, каждый из claims/talisman/today_move; иначе выбрось",
+  "vibe_closing": "string — 2–3 штриха; drivers + approved ambient",
   "global_period": "string",
-  "development_point": "string — причина → бытовой смысл, не ярлык",
+  "development_point": "string",
   "primary_action": "string",
   "domains": {
     "<только domains_present>": {"status":"string","opportunity":"string","risk":"string","action":"string"}
@@ -240,6 +236,9 @@ def attach_day_story_trace(
         "domains_present": list(interpretation.get("domains_present") or []),
         "domains_absent": list(interpretation.get("domains_absent") or []),
         "used_fallback": bool(used_fallback),
+        "primary_conflict": interpretation.get("primary_conflict"),
+        "day_thesis": interpretation.get("day_thesis"),
+        "day_events_pack": interpretation.get("day_events_pack"),
     }
     if used_fallback:
         lim = out["trace"]["limitations"]
@@ -345,10 +344,42 @@ def _normalize_day_story_payload(
             continue
         domains_out[did] = lens
 
+    # Normalize day_thesis object
+    thesis_in = raw.get("day_thesis") if isinstance(raw.get("day_thesis"), dict) else {}
+    thesis_label = _clip(
+        thesis_in.get("label_ru")
+        or thesis_in.get("label")
+        or raw.get("primary_conflict")
+        or raw.get("headline_anchor")
+        or raw.get("theme"),
+        96,
+    )
+    day_thesis = {
+        "family": _clip(thesis_in.get("family") or "momentum", 40),
+        "variant": _clip(thesis_in.get("variant") or "steady_productive_rhythm", 64),
+        "mode": _clip(thesis_in.get("mode") or "stability", 32),
+        "label_ru": thesis_label,
+        "driver_ids": [
+            str(x).strip()
+            for x in (thesis_in.get("driver_ids") or [])
+            if str(x).strip()
+        ][:3],
+        "composition_ids": [
+            str(x).strip()
+            for x in (thesis_in.get("composition_ids") or [])
+            if str(x).strip()
+        ][:3],
+    }
+
     out: dict[str, Any] = {
         "contract_version": DAY_STORY_V1_CONTRACT,
         "theme": _clip(raw.get("theme"), 240),
-        "headline_anchor": _clip(raw.get("headline_anchor") or raw.get("theme"), 96),
+        "headline_anchor": _clip(raw.get("headline_anchor") or thesis_label or raw.get("theme"), 96),
+        "day_thesis": day_thesis,
+        "primary_conflict": thesis_label,  # deprecated alias
+        "events_lead": _clip(raw.get("events_lead"), 480),
+        "expect": _clip(raw.get("expect"), 400),
+        "trap": _clip(raw.get("trap"), 360),
         "direction": _clip(raw.get("direction"), 480),
         "story": _clip(raw.get("story"), 1200),
         "do": [_clip(str(x), 200) for x in do_raw if str(x).strip()][:4],
@@ -377,8 +408,14 @@ def _normalize_day_story_payload(
     }
     if not out["primary_action"]:
         out["primary_action"] = out["today_move"]
-    if not out["headline_anchor"] and out["theme"]:
-        out["headline_anchor"] = out["theme"]
+    if not out["headline_anchor"] and thesis_label:
+        out["headline_anchor"] = thesis_label
+    if not out["trap"] and out["abstain"]:
+        out["trap"] = out["abstain"]
+    if not out["abstain"] and out["trap"]:
+        out["abstain"] = out["trap"]
+    if not out["expect"] and out["direction"]:
+        out["expect"] = out["direction"]
     return out
 
 
@@ -477,25 +514,63 @@ def build_day_story_fallback_v1(
     supports_story = _clip(" ".join(support_claims[:2]), 480) if support_claims else ""
     talisman_note = _clip(color_why, 200) if color_why else ""
 
+    conflict = interp.get("day_thesis") if isinstance(interp.get("day_thesis"), dict) else {}
+    if not conflict:
+        conflict = interp.get("primary_conflict") if isinstance(interp.get("primary_conflict"), dict) else {}
+    conflict_label = str(conflict.get("label_ru") or conflict.get("label") or theme).strip()
+    pack = interp.get("day_events_pack") if isinstance(interp.get("day_events_pack"), dict) else {}
+    by_id = {
+        str(e.get("id")): e
+        for e in (pack.get("events") or [])
+        if isinstance(e, dict) and e.get("id")
+    }
+    driver_facts: list[str] = []
+    for did in conflict.get("driver_ids") or pack.get("ranked_drivers") or []:
+        ev = by_id.get(str(did))
+        if not ev:
+            continue
+        fact = str(ev.get("fact_ru") or ev.get("title_ru") or "").strip()
+        if fact:
+            driver_facts.append(fact)
+        if len(driver_facts) >= 3:
+            break
+    events_lead = _clip(" ".join(driver_facts) or essence_story or story, 480)
+    expect_text = _clip(tempo or do_hint or f"{conflict_label}: день просит одного ясного хода.", 400)
+    trap_text = _clip(avoid_hint or "Легко принять суету за движение и потерять главный сюжет дня.", 360)
+
+    day_thesis_payload = {
+        "family": conflict.get("family") or "momentum",
+        "variant": conflict.get("variant") or "steady_productive_rhythm",
+        "mode": conflict.get("mode") or "stability",
+        "label_ru": conflict_label,
+        "driver_ids": list(conflict.get("driver_ids") or pack.get("ranked_drivers") or [])[:3],
+        "composition_ids": list(conflict.get("composition_ids") or [])[:3],
+    }
+
     payload = _normalize_day_story_payload(
         {
-            "theme": theme,
-            "headline_anchor": theme,
-            "direction": tempo,
+            "theme": theme or conflict_label,
+            "headline_anchor": conflict_label or theme,
+            "day_thesis": day_thesis_payload,
+            "primary_conflict": conflict_label,
+            "events_lead": events_lead,
+            "expect": expect_text,
+            "trap": trap_text,
+            "direction": tempo or expect_text,
             "story": story,
             "do": [
-                do_hint,
+                do_hint or "Сделай один шаг в сторону главного конфликта дня — и остановись проверить эффект.",
                 "После главного шага имеет смысл коротко заметить, стало ли спокойнее.",
             ],
             "avoid": [
-                avoid_hint,
+                avoid_hint or "Не открывай второй фронт, пока не закрыт первый.",
                 "Второй параллельный старт без ясности почти всегда крадёт фокус у первого.",
             ],
             "advantage": do_hint,
-            "abstain": avoid_hint,
+            "abstain": trap_text,
             "today_move": do_hint,
             "vibe_closing": "",
-            "global_period": theme,
+            "global_period": theme or conflict_label,
             "development_point": "Замечать, что реально двигает день, а что только шум.",
             "primary_action": do_hint,
             "domains": domains,
@@ -506,7 +581,9 @@ def build_day_story_fallback_v1(
             },
             "practice_recommendation": {"kind": "none", "text": "", "reason": ""},
             "supports_story": supports_story,
-            "evening_closure": "К вечеру достаточно коротко отметить, что получилось — без жёсткой самооценки.",
+            "evening_closure": (
+                f"К вечеру коротко отметь, как проявил себя «{conflict_label}» — без жёсткой самооценки."
+            ),
             "symbolic_note": "",
         },
         domains_present=present,
@@ -662,6 +739,14 @@ def day_story_to_today_contract_v1(
         "contract_version": DAY_STORY_V1_CONTRACT,
         "theme": story.get("theme"),
         "headline_anchor": story.get("headline_anchor") or story.get("theme"),
+        "day_thesis": story.get("day_thesis") if isinstance(story.get("day_thesis"), dict) else None,
+        "primary_conflict": story.get("primary_conflict")
+        or ((story.get("day_thesis") or {}).get("label_ru") if isinstance(story.get("day_thesis"), dict) else None)
+        or story.get("headline_anchor")
+        or story.get("theme"),
+        "events_lead": story.get("events_lead") or "",
+        "expect": story.get("expect") or story.get("direction") or "",
+        "trap": story.get("trap") or story.get("abstain") or "",
         "direction": story.get("direction"),
         "story": story.get("story"),
         "do": story.get("do"),
@@ -674,6 +759,7 @@ def day_story_to_today_contract_v1(
         "practice_recommendation": story.get("practice_recommendation"),
         "symbolic_note": story.get("symbolic_note"),
         "supports_story": story.get("supports_story") or "",
+        "evening_closure": story.get("evening_closure") or "",
         "day_foundation": (
             (story.get("trace") or {}).get("day_foundation")
             if isinstance(story.get("trace"), dict)
@@ -734,12 +820,12 @@ def day_story_to_legacy_narrative(story: dict[str, Any], *, generation_id: str |
     )
 
     guide: dict[str, Any] = {
-        "headline": story.get("headline_anchor") or story.get("theme"),
-        "subline": story.get("direction"),
+        "headline": story.get("primary_conflict") or story.get("headline_anchor") or story.get("theme"),
+        "subline": story.get("expect") or story.get("direction"),
         "energy_line": story.get("advantage"),
         "focus_line": story.get("direction"),
-        "risk_line": _clip(str(avoid_items[0] if avoid_items else story.get("abstain")), 120),
-        "risk_detail": story.get("abstain"),
+        "risk_line": _clip(str(avoid_items[0] if avoid_items else story.get("trap") or story.get("abstain")), 120),
+        "risk_detail": story.get("trap") or story.get("abstain"),
         "do_items": do_items[:3],
         "avoid_items": avoid_items[:3],
         "header_disclaimer": "Это про ваш личный день, не про совместимость с другими.",

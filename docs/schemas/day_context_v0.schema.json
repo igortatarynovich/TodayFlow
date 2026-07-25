@@ -69,6 +69,16 @@
           "type": "object",
           "additionalProperties": true
         },
+        "evidence": {
+          "description": "Nested evidence packs (celestial day_events_pack_v1, etc.). Not a second day SoT — feeds day_thesis / interpretation.",
+          "type": ["object", "null"],
+          "additionalProperties": true
+        },
+        "day_thesis": {
+          "description": "day_thesis_v1 — single day plot (family/variant/mode). UI may call it vibe/сюжет; not always a conflict.",
+          "type": ["object", "null"],
+          "additionalProperties": true
+        },
         "profile_selector": {
           "description": "Profile Selector v0 output (task, topic, mode, relevant_profile, generation_rules). See docs/PROFILE_ENGINE_AND_SELECTOR.md.",
           "type": "object",

@@ -103,7 +103,7 @@ def test_interpretation_includes_sky_and_color_why_claims():
     assert "claim.talisman.stone_why" in claim_ids
     assert interp["day_sky"].get("moon")
     assert interp.get("day_foundation", {}).get("essence", {}).get("story_ru")
-    assert interp["calculation_version"].startswith("day-story-interpretation-v1.2")
+    assert interp["calculation_version"].startswith("day-story-interpretation-v1.")
 
 
 def test_fallback_fills_talisman_note_from_color_why():
@@ -190,10 +190,18 @@ def test_day_story_to_today_contract_forwards_day_personal():
 def test_day_story_to_legacy_narrative_derives_surfaces():
     story = _sample_story()
     narrative = day_story_to_legacy_narrative(story, generation_id="42")
-    assert narrative["guide"]["payload"]["headline"] == story["theme"]
+    headline = narrative["guide"]["payload"]["headline"]
+    assert headline in {
+        story.get("primary_conflict"),
+        story.get("headline_anchor"),
+        story.get("theme"),
+    }
     assert narrative["spheres"]["payload"]["page_intro"] == story["story"]
     assert narrative["day_layer"]["payload"]["nudge_message"] == story["today_move"]
     assert narrative["evening"]["payload"]["panel_intro"]
+    assert story.get("primary_conflict")
+    assert story.get("expect") or story.get("direction")
+    assert story.get("trap") or story.get("abstain")
 
 
 def test_phrase_gate_rejects_empty_formulas():

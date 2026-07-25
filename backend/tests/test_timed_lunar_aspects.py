@@ -102,6 +102,7 @@ def test_build_celestial_events_wires_timed_aspects_into_voc():
         "todayflow_backend.services.celestial_events_builder.find_moon_sign_ingress_time",
         new=AsyncMock(return_value=datetime(2026, 7, 25, 14, 30, 0)),
     ):
+        lunar_cls.return_value.phase_at.return_value = mock_lunar
         lunar_cls.return_value.current_phase.return_value = mock_lunar
         retro_cls.return_value.get_retrograde_status = AsyncMock(return_value=mock_retro)
         aspect_cls.return_value.callouts.return_value = MagicMock(callouts=[])

@@ -26,6 +26,7 @@ def build_day_context_v0(
     behavior_patterns: dict[str, Any] | None = None,
     intent_slice: dict[str, Any] | None = None,
     history_slice: dict[str, Any] | None = None,  # DE-9: `day_history_v0` из `history_layer_v0`
+    celestial_events: dict[str, Any] | None = None,
     policy_version: str = "clean-info-v1",
     voice_profile: str = "live-clean-supportive-v1",
     profile_snapshot_id: int | None = None,
@@ -153,6 +154,44 @@ def build_day_context_v0(
         fusion_scores=fusion.get("scores") if isinstance(fusion.get("scores"), dict) else {},
         locale=loc,
     )
+
+    # Evidence nest: celestial day_events_pack is NOT a second day SoT.
+    evidence: dict[str, Any] = {}
+    ce = celestial_events if isinstance(celestial_events, dict) else None
+    ce_pack = None
+    if ce and isinstance(ce.get("day_events_pack"), dict):
+        ce_pack = ce["day_events_pack"]
+    elif ce and ce.get("contract_version") == "day_events_pack_v1":
+        ce_pack = ce
+    elif isinstance(daily_foundation, dict):
+        raw = daily_foundation.get("day_events_pack")
+        if isinstance(raw, dict) and raw.get("contract_version") == "day_events_pack_v1":
+            ce_pack = raw
+    if ce_pack is None and ce is not None:
+        try:
+            from todayflow_backend.services.day_events_pack_v1 import build_day_events_pack_v1
+
+            ce_pack = build_day_events_pack_v1(ce, target_date=target_date)
+        except Exception:
+            ce_pack = None
+    if ce_pack:
+        evidence["celestial_events"] = ce_pack
+        if ce and ce is not ce_pack:
+            evidence["celestial_raw_keys"] = sorted(
+                k for k in ce.keys() if k != "day_events_pack" and k != "ephemeris"
+            )
+    if evidence:
+        layers["evidence"] = evidence
+        try:
+            from todayflow_backend.services.day_thesis_v1 import build_day_thesis_v1
+
+            layers["day_thesis"] = build_day_thesis_v1(
+                day_events_pack=evidence.get("celestial_events"),
+                day_engine_brief=None,
+                day_model=layers.get("day_model"),
+            )
+        except Exception:
+            pass
 
     if active_knowledge_list is not None:
         from todayflow_backend.services.day_model_v1_day_engine_knowledge_wiring import (

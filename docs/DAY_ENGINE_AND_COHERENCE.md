@@ -37,6 +37,10 @@
 | `visible_profile` / `internal_profile` | Разделение UX-фактов и агрегатов для LLM | **DE-12:** `profile_prompt_slices_v0` → `DayContext.layers` + user JSON всех narrative surface; системный блок в промпте v9 |
 | `rhythm` | Цели, привычки, аскезы, отметки, **сводка дневника** | `fusion.rhythm_context` в промпте narrative; дневник как факт, не выдумка |
 | `health_signals` | Сон, активность (с согласия пользователя) | **пробел:** интеграция Health |
+| `evidence.celestial_events` | `day_events_pack_v1` — structured sky evidence + ranked drivers + compositions | **вложено в DayContext**, не второй SoT дня |
+| `day_thesis` | Единый сюжет дня (family/variant/mode/label) для всех поверхностей Today | `day_thesis_v1` из drivers + compositions + day_model |
+
+**Инвариант (2026-07):** `day_events_pack` — evidence; `day_thesis` — один сюжет; `day_story` / Day Map / Hero / Instructions — проекции thesis. Запрещено параллельно вести conflict/headline/funnel thesis как независимые SoT.
 
 **Правило Day Engine (вход):** в LLM для поверхностей Today уходит **один согласованный пакет входа** (DayContext + версии), а не разрозненные догадки по отдельным полям.
 

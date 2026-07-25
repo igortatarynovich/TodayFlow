@@ -408,16 +408,16 @@ function buildDayMapChapters(
 ): TodayDayNarrativeChapter[] {
   const chapters: TodayDayNarrativeChapter[] = [];
   used.push(dayMap.whatHappens);
+  const conflictTitle = dayMap.primaryConflict;
   chapters.push({
     id: "opening",
-    kicker: "Суть дня",
+    kicker: conflictTitle || "Суть дня",
     lead: dayMap.whatHappens,
-    paragraphs: [],
+    paragraphs: dayMap.eventsLead && dayMap.eventsLead !== dayMap.whatHappens ? [dayMap.eventsLead] : [],
     accent: "default",
   });
 
   const strengthen = dayMap.whatWorks ? [dayMap.whatWorks] : [];
-  // Card × person trap is «where you break» — prefer over domain risk when present.
   const breakLine = clean(tarotTrap) || dayMap.whereYouBreak;
   const soften = [dayMap.whereConflict, breakLine].filter(
     (x): x is string => Boolean(x && x.trim()),
@@ -425,21 +425,31 @@ function buildDayMapChapters(
   if (strengthen.length || soften.length) {
     chapters.push({
       id: "force",
-      kicker: "День в одном взгляде",
+      kicker: "Чего ожидать · Ловушка дня",
       lead: null,
       paragraphs: [],
       accent: "dual",
-      dual: { strengthen, soften },
+      dual: {
+        strengthen: strengthen.length ? strengthen : dayMap.doHints.slice(0, 1),
+        soften,
+      },
     });
   }
 
   const supportParas: string[] = [];
   const supportUsed = new Set(used.map((u) => u.toLowerCase()));
+  for (const hint of dayMap.doHints) {
+    const line = hint.startsWith("Сделай") || hint.startsWith("Можно") ? hint : `Что делать: ${hint.replace(/[.!?]+$/, "")}.`;
+    if (!supportUsed.has(line.toLowerCase())) {
+      supportUsed.add(line.toLowerCase());
+      supportParas.push(line);
+    }
+  }
   for (const hint of dayMap.avoidHints) {
     const line =
       hint.startsWith("Не ") || hint.startsWith("не ")
         ? hint
-        : `Лучше не: ${hint.replace(/[.!?]+$/, "")}.`;
+        : `Чего не делать: ${hint.replace(/[.!?]+$/, "")}.`;
     if (!supportUsed.has(line.toLowerCase())) {
       supportUsed.add(line.toLowerCase());
       supportParas.push(line);
@@ -475,13 +485,24 @@ function buildDayMapChapters(
   if (move || supportParas.length) {
     chapters.push({
       id: "supports",
-      kicker: "Твой ход",
+      kicker: "Инструкция дня",
       lead: move,
       paragraphs: supportParas,
       accent: "support",
       colorHex,
       colorLabel: colorName || null,
       collapseAfter: supportParas.length > 3 ? 2 : undefined,
+    });
+  }
+
+  const vibe = clean(dayMap.vibeClosing) || clean(contract.day_story?.evening_closure);
+  if (vibe) {
+    chapters.push({
+      id: "vibe",
+      kicker: "Общий вайб",
+      lead: vibe,
+      paragraphs: [],
+      accent: "default",
     });
   }
 

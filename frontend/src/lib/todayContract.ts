@@ -45,6 +45,24 @@ export type TodayContractDayStoryV1 = {
   theme?: string;
   /** §0.1 image-title for hero — not an astro fact label. */
   headline_anchor?: string;
+  /** Single day plot (family/variant/mode). Prefer over primary_conflict. */
+  day_thesis?: {
+    family?: string;
+    variant?: string;
+    mode?: string;
+    label_ru?: string;
+    label?: string;
+    driver_ids?: string[];
+    composition_ids?: string[];
+  } | null;
+  /** @deprecated Use day_thesis.label_ru — kept for mid-migration UI. */
+  primary_conflict?: string;
+  /** Named 1–3 sky drivers paragraph. */
+  events_lead?: string;
+  /** What to expect today (everyday scene). */
+  expect?: string;
+  /** Single day trap. */
+  trap?: string;
   direction?: string;
   story?: string;
   do?: string[];
@@ -54,6 +72,7 @@ export type TodayContractDayStoryV1 = {
   today_move?: string;
   /** §0.5 concrete sensory closing strokes (semicolon-separated). */
   vibe_closing?: string;
+  evening_closure?: string;
   talisman?: { color?: string; stone?: string; note?: string };
   practice_recommendation?: { kind?: string; text?: string; reason?: string };
   symbolic_note?: string;

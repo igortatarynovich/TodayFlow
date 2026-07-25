@@ -225,10 +225,10 @@ Day Story            →  интерпретация Foundation → экран T
 | deterministic_outputs | planet, state (retro/direct), station_type, station_time, shadow_window |
 | depends_on | `planetary_positions` |
 | school_canon | Station as distinct event when speed ≈ 0 |
-| version | v1 |
+| version | v1 (stations/Rx edges also via `planetary_cycles.json` → `day_events_pack_v1`) |
 | in_foundation | yes |
 | in_personal | soft background |
-| in_today | yes |
+| in_today | yes — **wired into Today `day_events_pack`** (station / station_direct / retrograde_edge) |
 
 #### 5.1.5 `solar_proximity` (combustion / cazimi / under beams / heliacal)
 
@@ -285,10 +285,10 @@ Day Story            →  интерпретация Foundation → экран T
 | deterministic_outputs | season_point events, sun_sign ingress |
 | depends_on | `ingresses` (sun) |
 | school_canon | Tropic seasons |
-| version | v1 (sun ingress already); equinox/solstice planned explicit |
+| version | v1 (sun ingress already); equinox/solstice approx in `day_events_pack_v1` (seasonal) |
 | in_foundation | yes |
 | in_personal | no |
-| in_today | yes |
+| in_today | yes — calendar + seasonal points feed Today event pack (ambient/secondary) |
 
 ---
 
@@ -396,10 +396,10 @@ Day Story            →  интерпретация Foundation → экран T
 | deterministic_outputs | distance_km, event flags near full/new |
 | depends_on | `phase` |
 | school_canon | Astronomical distances |
-| version | planned |
+| version | planned (soft: limitation `perigee_apogee_not_computed_v1` in day_events_pack until calc ships) |
 | in_foundation | soft |
 | in_personal | no |
-| in_today | optional |
+| in_today | optional — reserved kind in `day_events_pack_v1` |
 
 #### 5.2.8 `declination_oob`
 
