@@ -1,4 +1,4 @@
-import type { TarotAnswerV1 } from "@/lib/tarotAnswerContract";
+import type { TarotAnswerV1, TarotChoiceStory, TarotUnresolvedCard } from "@/lib/tarotAnswerContract";
 import type { GuidanceReadingResult } from "@/components/guidance/GuidanceStructuredResult";
 import type { TarotConcernDomain } from "@/lib/tarotQuestionFlowCanon";
 import { buildTarotNextRoutes } from "@/lib/buildTarotNextRoutes";
@@ -62,6 +62,9 @@ export type TarotReadingStoryModel = {
   followUpChips: TarotFollowUpChip[];
   actions: TarotStoryAction[];
   isClarification?: boolean;
+  choiceStory?: TarotChoiceStory | null;
+  synthesisStatus?: string | null;
+  unresolvedCards?: TarotUnresolvedCard[];
 };
 
 export type TarotSpreadStoryInput = {
@@ -377,6 +380,24 @@ export function buildTarotReadingStoryFromAnswer(
       };
     });
 
+  const isChoice =
+    Boolean(answer.choice_story) ||
+    answer.spread_id === "guidance_choice_two" ||
+    answer.spread_id === "choice";
+  const domain = (input.concernDomain || answer.concern_domain || "").toLowerCase();
+  const primaryAction =
+    isChoice || domain === "work" || domain === "decision"
+      ? {
+          id: "save" as const,
+          label: input.locale === "ru" ? "Зафиксировать условия решения" : "Capture decision criteria",
+          description:
+            input.locale === "ru"
+              ? "Запиши, что должно измениться здесь и какой первый шаг к другому варианту."
+              : "Write what must change here and the first step toward the other path.",
+          href: input.saveHref || "/journal",
+        }
+      : null;
+
   return {
     question: (answer.question_text || input.question || "").trim(),
     mainAnswer,
@@ -390,10 +411,15 @@ export function buildTarotReadingStoryFromAnswer(
     todaySuggestion: todaySuggestion ? sanitizeTarotStoryText(todaySuggestion) : null,
     followUpPrompt,
     followUpChips,
+    choiceStory: answer.choice_story || null,
+    synthesisStatus: answer.synthesis_status || null,
+    unresolvedCards: answer.unresolved_cards || [],
     actions: buildTarotNextRoutes({
       locale: input.locale,
-      concernDomain: input.concernDomain,
+      concernDomain: input.concernDomain || answer.concern_domain,
       saveHref: input.saveHref,
+      primaryAction,
+      compact: true,
     }),
   };
 }

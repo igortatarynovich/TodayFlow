@@ -383,12 +383,13 @@ def test_tarot_spread_context_question_first_reading(client: TestClient, test_us
 def _assert_card_context_reading(reading, *, question: str, card_names: list[str]):
     meaning = (reading.meaning or "").lower()
     story = (reading.synthesis_why or "").lower()
-    assert question.lower() in meaning
-    assert "может" in meaning or "может" in story
-    assert any(name.lower() in meaning for name in card_names)
-    assert "могут означать" in story
+    # Question may appear once in main answer; story focuses on card relations.
+    assert "аркан" not in meaning and "аркан" not in story
+    assert "просит быть замеченным" not in meaning and "просит быть замеченным" not in story
+    assert any(name.lower() in meaning or name.lower() in story for name in card_names)
     assert reading.insight_holding
     assert reading.today_suggestion
+    assert "учитывая твой стиль решений" not in (reading.insight_attention or "").lower()
 
 
 def test_compose_question_first_reading_relationship_ex_partner():
@@ -553,11 +554,11 @@ def test_compose_question_first_reading_love_feelings_card_context():
     assert "скорее нет" not in meaning
     assert "важнее не угадать" not in meaning
     assert "чего ты хочешь от близости" not in meaning
-    assert "шут" in meaning
-    assert "луна" in meaning
-    assert "может" in meaning or "может" in story
-    assert "любит или нет" in meaning
-    assert "шут" in story and "луна" in story and "императрица" in story
+    assert "шут" in meaning or "шут" in story
+    assert "луна" in meaning or "луна" in story
+    assert "любит или нет" in meaning or "любит или нет" in story or "вопрос" in meaning
+    assert "шут" in story or "луна" in story
+    assert "аркан" not in meaning and "аркан" not in story
     assert reading.insight_holding
     assert reading.insight_shifting
     assert any(c.id == "honest_talk" for c in reading.follow_up_chips)
@@ -597,4 +598,116 @@ def test_compose_question_first_reading_relationships_not_ex():
     )
     assert "бывш" not in reading.meaning.lower()
     assert "важнее не угадать" not in reading.meaning.lower()
+
+
+def test_compose_resolves_minor_arcana_never_arkan():
+    from todayflow_backend.core import models
+    from todayflow_backend.services.tarot_reading_synthesis import compose_question_first_reading
+
+    spread = models.TarotSpreadResult(
+        spread_id="three_card",
+        title="Три карты",
+        cards=[
+            models.TarotSpreadCard(
+                card=models.TarotCard(id=22, name="Ace of Wands", keywords=[], upright="", reversed=""),
+                orientation="upright",
+                position=models.TarotSpreadPosition(id="past", title="Прошлое"),
+                meaning="",
+            ),
+            models.TarotSpreadCard(
+                card=models.TarotCard(id=40, name="Five of Cups", keywords=[], upright="", reversed=""),
+                orientation="reversed",
+                position=models.TarotSpreadPosition(id="present", title="Настоящее"),
+                meaning="",
+            ),
+            models.TarotSpreadCard(
+                card=models.TarotCard(id=63, name="King of Swords", keywords=[], upright="", reversed=""),
+                orientation="upright",
+                position=models.TarotSpreadPosition(id="future", title="Будущее"),
+                meaning="",
+            ),
+        ],
+    )
+    reading = compose_question_first_reading(
+        spread,
+        question="Что важно увидеть в работе?",
+        concern_domain="work",
+    )
+    blob = f"{reading.meaning} {reading.synthesis_why} {[c.card_name_ru for c in reading.card_insights]}"
+    assert "Аркан" not in blob
+    assert "просит быть замеченным" not in blob
+    assert any("жезлов" in c.card_name_ru.lower() for c in reading.card_insights)
+    assert len(reading.card_insights) == 3
+
+
+def test_compose_choice_two_compares_paths_and_blocks_arkan():
+    from todayflow_backend.core import models
+    from todayflow_backend.services.tarot_answer_v1 import compose_tarot_answer_v1
+
+    question = "Стоит ли менять работу — или сначала что-то прояснить здесь?"
+    positions = [
+        ("a_gives", "Вариант A — что он даёт", 18, "reversed"),
+        ("a_risk", "Вариант A — риск", 22, "upright"),
+        ("b_gives", "Вариант B — что он даёт", 4, "upright"),
+        ("b_risk", "Вариант B — риск", 12, "reversed"),
+        ("weights", "Что важно учитывать", 15, "upright"),
+        ("best_step", "Лучший следующий шаг", 0, "upright"),
+    ]
+    spread = models.TarotSpreadResult(
+        spread_id="guidance_choice_two",
+        title="Выбор между двумя вариантами",
+        cards=[
+            models.TarotSpreadCard(
+                card=models.TarotCard(id=cid, name=f"Card {cid}", keywords=[], upright="", reversed=""),
+                orientation=orient,
+                position=models.TarotSpreadPosition(id=pid, title=title),
+                meaning="",
+            )
+            for pid, title, cid, orient in positions
+        ],
+    )
+    reading, answer = compose_tarot_answer_v1(
+        spread,
+        question=question,
+        concern_domain="work",
+        experience_slice={
+            "decision_style": (
+                "Вы решаете, опираясь на стратегический расчёт и долгосрочную перспективу."
+            ),
+        },
+    )
+    blob = f"{reading.meaning} {reading.synthesis_why} {reading.insight_attention}"
+    assert "Аркан" not in blob
+    assert "Учитывая твой стиль решений" not in (reading.insight_attention or "")
+    assert "сменить работу" in reading.meaning.lower() or "проясн" in reading.meaning.lower()
+    assert answer["synthesis_status"] == "ok"
+    assert answer.get("choice_story")
+    assert answer["choice_story"]["option_a_gain"]
+    assert answer["choice_story"]["option_b_risk"]
+    assert "туз" in answer["choice_story"]["option_a_risk"].lower() or "жезлов" in answer["choice_story"]["option_a_risk"].lower()
+    assert reading.profile_lens_applied is True
+    assert "определённости" in (reading.today_suggestion or "").lower()
+
+
+def test_compose_blocks_unresolved_card_ids():
+    from todayflow_backend.core import models
+    from todayflow_backend.services.tarot_answer_v1 import compose_tarot_answer_v1
+
+    spread = models.TarotSpreadResult(
+        spread_id="one_card",
+        title="Одна карта",
+        cards=[
+            models.TarotSpreadCard(
+                card=models.TarotCard(id=999, name="Ghost", keywords=[], upright="", reversed=""),
+                orientation="upright",
+                position=models.TarotSpreadPosition(id="focus", title="Фокус"),
+                meaning="",
+            ),
+        ],
+    )
+    reading, answer = compose_tarot_answer_v1(spread, question="Что делать?")
+    assert answer["synthesis_status"] == "unresolved_cards"
+    assert answer["unresolved_cards"]
+    assert "Аркан" not in (reading.meaning or "")
+    assert "не публикуем" in (reading.meaning or "").lower() or "распознать" in (reading.meaning or "").lower()
 

@@ -46,7 +46,6 @@ export function TarotWebResult({
   locale = "ru",
   spreadTitle,
   cardsAriaLabel,
-  storyEyebrow,
   extraActions,
 }: TarotWebResultProps) {
   const chrome = useMemo(() => tarotReadingStoryChromeBundle(locale), [locale]);
@@ -54,44 +53,41 @@ export function TarotWebResult({
   const cardsLabel =
     cardsAriaLabel ??
     t("tarot.story.cardsSpreadAria", loc === "ru" ? "Карты расклада" : "Spread cards", undefined, loc);
-  const whyEyebrow =
-    storyEyebrow ??
-    t("tarot.story.whyNowEyebrow", loc === "ru" ? "Почему это важно сейчас" : "Why this matters now", undefined, loc);
+
+  const blocked = model.synthesisStatus === "unresolved_cards";
+  const choice = model.choiceStory;
 
   const answerParas = useMemo(
     () => (model.mainAnswer?.trim() ? splitParagraphs(model.mainAnswer) : []),
     [model.mainAnswer],
   );
 
-  const whyParas = useMemo(() => {
-    const paras: string[] = [];
-    if (model.storyNarrative?.trim()) paras.push(ensurePeriod(model.storyNarrative));
-    if (model.insights.holding?.trim()) {
-      paras.push(ensurePeriod(`${chrome.insightHoldingTitle}: ${model.insights.holding}`));
+  const compareParas = useMemo(() => {
+    if (blocked) return [];
+    if (choice) {
+      return [
+        choice.option_a_summary,
+        choice.option_b_summary,
+        choice.confidence_note,
+      ]
+        .map((p) => (p ? ensurePeriod(p) : ""))
+        .filter(Boolean);
     }
-    if (model.insights.shifting?.trim()) {
-      paras.push(ensurePeriod(`${chrome.insightShiftingTitle}: ${model.insights.shifting}`));
-    }
-    if (model.insights.attention?.trim()) {
-      paras.push(ensurePeriod(`${chrome.insightAttentionTitle}: ${model.insights.attention}`));
-    }
-    return paras;
-  }, [model.storyNarrative, model.insights, chrome]);
+    if (model.storyNarrative?.trim()) return [ensurePeriod(model.storyNarrative)];
+    return [];
+  }, [blocked, choice, model.storyNarrative]);
 
-  const cardParas = useMemo(
-    () =>
-      model.cardInsights
-        .map((card) => {
-          const line = (card.line || "").trim();
-          if (!line) return ensurePeriod(`${card.positionLabel} — ${card.cardNameRu}`);
-          return ensurePeriod(`${card.positionLabel} · ${card.cardNameRu}: ${line}`);
-        })
-        .filter(Boolean),
-    [model.cardInsights],
-  );
+  const tensionParas = useMemo(() => {
+    if (blocked) return [];
+    const holding = model.insights.holding?.trim() || choice?.hidden_tension?.trim() || "";
+    return holding ? [ensurePeriod(holding)] : [];
+  }, [blocked, model.insights.holding, choice]);
 
   const hasStory =
-    answerParas.length > 0 || whyParas.length > 0 || cardParas.length > 0 || Boolean(model.todaySuggestion?.trim());
+    answerParas.length > 0 ||
+    compareParas.length > 0 ||
+    tensionParas.length > 0 ||
+    Boolean(model.todaySuggestion?.trim());
 
   return (
     <div className={s.tarotWebLayout} data-testid="tarot-web-result">
@@ -113,7 +109,7 @@ export function TarotWebResult({
                 <TarotCardImage
                   cardId={card.cardId}
                   cardName={card.cardNameRu}
-                  width={120}
+                  width={160}
                   reversed={card.orientation === "reversed"}
                 />
                 <p className={journeyStyles.cardStripLabel}>
@@ -127,8 +123,14 @@ export function TarotWebResult({
 
       <ProductJourneyScene
         step={2}
-        title="История расклада"
-        lead="Ответ, почему карты так легли на вопрос, и слой позиций."
+        title={blocked ? "Расклад" : "Ответ"}
+        lead={
+          blocked
+            ? "Карты не удалось полностью распознать для интерпретации."
+            : choice
+              ? "Сравнение двух путей и следующий шаг."
+              : "Главный вывод и что с ним делать."
+        }
         motif="why"
         testId="tarot-journey-story"
       >
@@ -137,7 +139,7 @@ export function TarotWebResult({
             {answerParas.length ? (
               <ProductNarrativeBlock
                 id="answer"
-                kicker={chrome.mainAnswerEyebrow || "Ответ расклада"}
+                kicker={blocked ? "Что случилось" : "Главный вывод"}
                 lead={answerParas[0]}
                 paragraphs={answerParas.slice(1)}
                 accent="support"
@@ -146,33 +148,32 @@ export function TarotWebResult({
               />
             ) : null}
 
-            {whyParas.length ? (
+            {compareParas.length ? (
               <ProductNarrativeBlock
-                id="why"
-                kicker={whyEyebrow}
-                lead={whyParas[0]}
-                paragraphs={whyParas.slice(1)}
+                id="compare"
+                kicker={choice ? "Сравнение вариантов" : "Как карты складываются"}
+                lead={compareParas[0]}
+                paragraphs={compareParas.slice(1)}
                 accent="sky"
-                collapseAfter={whyParas.length > 2 ? 1 : undefined}
+                collapseAfter={compareParas.length > 2 ? 1 : undefined}
                 testId="tarot-narrative-why"
               />
             ) : null}
 
-            {cardParas.length ? (
+            {tensionParas.length ? (
               <ProductNarrativeBlock
-                id="cards"
-                kicker={chrome.cardsEyebrow || "Слой карт"}
-                paragraphs={cardParas}
+                id="tension"
+                kicker="Что мешает увидеть решение"
+                paragraphs={tensionParas}
                 accent="default"
-                collapseAfter={cardParas.length > 2 ? 2 : undefined}
-                testId="tarot-narrative-cards"
+                testId="tarot-narrative-tension"
               />
             ) : null}
 
             {model.todaySuggestion?.trim() ? (
               <ProductNarrativeBlock
                 id="today"
-                kicker={chrome.todayEyebrow || "На сегодня"}
+                kicker={chrome.todayEyebrow || "Следующий шаг"}
                 paragraphs={[ensurePeriod(model.todaySuggestion)]}
                 accent="support"
                 testId="tarot-narrative-today"
@@ -186,8 +187,12 @@ export function TarotWebResult({
 
       <ProductJourneyScene
         step={3}
-        title="Мост"
-        lead="Куда можно продолжить из этого расклада."
+        title="Дальше"
+        lead={
+          blocked
+            ? "Можно пересобрать расклад или открыть карты снова."
+            : "Один контекстный шаг из этого вывода."
+        }
         motif="bridge"
         bridge
         testId="tarot-journey-bridge"

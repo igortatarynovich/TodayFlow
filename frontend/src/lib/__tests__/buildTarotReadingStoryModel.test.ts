@@ -117,8 +117,10 @@ describe("buildTarotReadingStoryFromSpread", () => {
     expect(model.insights.holding).toContain("удерживает");
     expect(model.todaySuggestion).toContain("критерий");
     expect(model.followUpChips).toHaveLength(2);
-    expect(model.actions.some((a) => a.id === "today")).toBe(true);
-    expect(model.actions.some((a) => a.id === "goal")).toBe(true);
+    // Compact bridge: contextual primary (work → decision criteria) + save, not a 5-link menu.
+    expect(model.actions[0].label).toMatch(/условия решения|Capture decision/i);
+    expect(model.actions.some((a) => a.id === "save")).toBe(true);
+    expect(model.actions.some((a) => a.id === "goal")).toBe(false);
   });
 });
 

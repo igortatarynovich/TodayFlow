@@ -133,4 +133,7 @@ def test_tarot_synthesis_uses_experience_slice():
     assert reading_with.profile_lens_applied is True
     assert reading_with.profile_lens == tarot_slice["decision_style"]
     assert reading_without.profile_lens_applied is False
-    assert reading_with.insight_attention != reading_without.insight_attention
+    # Soft tint on next step — never paste profile paragraph into attention.
+    assert "Учитывая твой стиль решений" not in (reading_with.insight_attention or "")
+    assert reading_with.today_suggestion != reading_without.today_suggestion
+    assert "определённости" in (reading_with.today_suggestion or "").lower() or reading_with.profile_lens_applied

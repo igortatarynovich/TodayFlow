@@ -635,7 +635,14 @@ class TarotService:
         cards: List[api_models.TarotSpreadCard] = []
         for idx, position in enumerate(positions):
             card_data = deck[idx]
-            card_model = api_models.TarotCard(**card_data)
+            card_model = api_models.TarotCard(
+                id=int(card_data["id"]),
+                name=str(card_data.get("name") or ""),
+                keywords=list(card_data.get("keywords") or []),
+                upright=str(card_data.get("upright") or ""),
+                reversed=str(card_data.get("reversed") or ""),
+                correspondences=dict(card_data.get("correspondences") or {}),
+            )
             selected_orientation = None
             if selected_cards and idx < len(selected_cards):
                 selected_orientation = str(selected_cards[idx].orientation or "").strip().lower()

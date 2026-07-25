@@ -1,15 +1,15 @@
-"""Tarot Answer v1 — single canonical artifact for spread result (question-first reading)."""
+"""Tarot Answer v1 — single canonical artifact for spread result (Interpretation Engine)."""
 
 from __future__ import annotations
 
 from typing import Any
 
 from todayflow_backend.core import models
+from todayflow_backend.services import tarot_interpretation_engine_v1 as engine
 from todayflow_backend.services.tarot_reading_synthesis import compose_question_first_reading
 
 TAROT_ANSWER_V1_CONTRACT = "tarot_answer_v1"
-# Template author layer lives in tarot_reading_synthesis (why cards land on question).
-TAROT_ANSWER_PROMPT_VER = "tarot-answer-v1.1-why-landing"
+TAROT_ANSWER_PROMPT_VER = "tarot-answer-v1.2-interpretation-engine"
 
 
 def tarot_reading_to_answer_v1(
@@ -20,13 +20,14 @@ def tarot_reading_to_answer_v1(
     spread_id: str | None = None,
     generation_id: str | None = None,
 ) -> dict[str, Any]:
-    """Normalize spread reading → tarot_answer_v1 contract.
-
-    story_narrative / insights come from synthesis author layer: explain why the
-    drawn cards answer the question using only deck lines + question text
-    (same discipline as day-card why_this_card — no invented outside facts).
-    """
+    """Normalize spread reading → tarot_answer_v1 contract."""
     src = reading.model_dump() if hasattr(reading, "model_dump") else dict(reading)
+    meta = {}
+    if hasattr(reading, "__dict__"):
+        meta = reading.__dict__.get("_engine_meta") or {}
+    if isinstance(src.get("_engine_meta"), dict):
+        meta = src["_engine_meta"]
+
     main = str(src.get("meaning") or "").strip()
     story = str(src.get("synthesis_why") or "").strip()
     holding = str(src.get("insight_holding") or "").strip()
@@ -41,7 +42,12 @@ def tarot_reading_to_answer_v1(
         elif isinstance(c, dict):
             chips.append({"id": str(c.get("id") or ""), "label": str(c.get("label") or "")})
 
-    return {
+    unresolved = meta.get("unresolved_cards") if isinstance(meta.get("unresolved_cards"), list) else []
+    choice_story = meta.get("choice_story") if isinstance(meta.get("choice_story"), dict) else None
+    status = str(meta.get("synthesis_status") or engine.STATUS_OK)
+    mode = str(meta.get("synthesis_mode") or engine.SYNTHESIS_MODE_OK)
+
+    payload: dict[str, Any] = {
         "contract_version": TAROT_ANSWER_V1_CONTRACT,
         "question_text": (question or "").strip(),
         "concern_domain": (concern_domain or "").strip(),
@@ -62,8 +68,15 @@ def tarot_reading_to_answer_v1(
         "follow_up_prompt": str(src.get("follow_up_prompt") or "").strip(),
         "follow_up_chips": chips,
         "generation_id": generation_id or "",
-        "synthesis_mode": "template_v1_why_landing",
+        "synthesis_mode": mode,
+        "synthesis_status": status,
+        "unresolved_cards": unresolved,
+        "profile_lens": src.get("profile_lens"),
+        "profile_lens_applied": bool(src.get("profile_lens_applied")),
     }
+    if choice_story:
+        payload["choice_story"] = choice_story
+    return payload
 
 
 def compose_tarot_answer_v1(

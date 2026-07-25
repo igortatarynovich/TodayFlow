@@ -1,37 +1,15 @@
-"""Question-first tarot synthesis — name cards, what they may mean in question context."""
+"""Question-first tarot synthesis — Interpretation Engine v1 entry.
+
+Canon: docs/tarot/TAROT_INTERPRETATION_ENGINE_V1.md
+"""
 
 from __future__ import annotations
 
 import re
-from typing import TypedDict
+from typing import Any, TypedDict
 
 from todayflow_backend.core import models
-
-# Russian card voice — surfaced to user; shapes answer, story, insights.
-_CARD_SPEAK: dict[int, dict[str, str]] = {
-    0: {"name": "Шут", "up": "можно сделать шаг без гарантии идеального исхода — это не безрассудство, а честность", "rev": "импульсивный шаг ради снятия тревоги, а не ради ясности"},
-    1: {"name": "Маг", "up": "всё нужное для решения уже в твоих руках — осталось собрать внимание в один ход", "rev": "силы разбросаны: ты сомневаешься, что можешь повлиять на ситуацию"},
-    2: {"name": "Верховная Жрица", "up": "ответ уже внутри — его не принесут извне, только услышат", "rev": "ты слышишь ответ, но не даёшь себе в него поверить"},
-    3: {"name": "Императрица", "up": "сейчас важна забота и опора — не награда «потом», а база для решения", "rev": "истощение: ты отдаёшь больше, чем получаешь обратно"},
-    4: {"name": "Император", "up": "нужны ясные границы и структура — они защищают, а не давят", "rev": "жёсткость как броня: контроль вместо живого разговора с собой"},
-    5: {"name": "Иерофант", "up": "опора на свои ценности важнее, чем чужие «как надо»", "rev": "ты повторяешь чужие правила вместо собственного выбора"},
-    6: {"name": "Влюблённые", "up": "дело в честном выборе сердца — назвать, чего ты хочешь", "rev": "колебание: страшно назвать желание вслух, даже себе"},
-    7: {"name": "Колесница", "up": "можно двигаться вперёд — направление уже почти ясно", "rev": "гонка без паузы: спешка маскирует страх остановиться"},
-    8: {"name": "Сила", "up": "мягкая устойчивость: держать себя, не подавляя чувства", "rev": "срыв терпения или сомнение, что выдержишь"},
-    9: {"name": "Отшельник", "up": "нужно время побыть с собой — в шуме ответ не слышен", "rev": "изоляция как способ не встречаться с правдой"},
-    10: {"name": "Колесо Фортуны", "up": "цикл уже сдвинулся — ты не в той же точке, что месяц назад", "rev": "ощущение застревания: страх, что ничего не изменится"},
-    11: {"name": "Справедливость", "up": "нужен честный взгляд на то, что произошло — без самооправданий", "rev": "холодная правота вместо признания того, что болит"},
-    12: {"name": "Повешенный", "up": "пауза, чтобы увидеть иначе — не заморозка, а другой угол", "rev": "застревание в ожидании, что кто-то другой всё решит"},
-    13: {"name": "Смерть", "up": "этап завершается — прежнюю форму не вернуть, и это освобождает", "rev": "цепляние за старое из страха пустоты"},
-    14: {"name": "Умеренность", "up": "нужен баланс и ровный темп — не крайности", "rev": "качели «всё или ничего» забирают ясность"},
-    15: {"name": "Дьявол", "up": "удерживает не человек — привычный сценарий, который сложно заметить", "rev": "петля видна: первый шаг к выходу уже возможен"},
-    16: {"name": "Башня", "up": "то, что казалось надёжным, уже трещит — и это высвобождает место для правды", "rev": "страх перемены сильнее, чем сама перемена"},
-    17: {"name": "Звезда", "up": "тонкая надежда после усталости — восстановление возможно", "rev": "сомнение, что восстановление вообще реально"},
-    18: {"name": "Луна", "up": "неясность нельзя торопить — сначала назвать страх", "rev": "путаешь свои ожидания с реальностью"},
-    19: {"name": "Солнце", "up": "ясность близко — правда уже становится видимой", "rev": "радость или ясность сдерживаются: страшно быть уязвимым"},
-    20: {"name": "Суд", "up": "момент честно подвести итог и откликнуться на зов внутри", "rev": "ты откладываешь разговор с собой — хотя ответ уже назрел"},
-    21: {"name": "Мир", "up": "дуга завершается — можно выдохнуть и принять итог", "rev": "формально всё закрыто, но внутри — незавершённость"},
-}
+from todayflow_backend.services import tarot_interpretation_engine_v1 as engine
 
 _HOLDING_POSITIONS = {"past", "you", "core", "obstacle", "block", "fear", "risk", "suppress", "reality"}
 _SHIFTING_POSITIONS = {"present", "dynamic", "tension", "between", "heart", "mind", "works"}
@@ -178,24 +156,6 @@ def _detect_intent(question: str | None, theme: str) -> str:
     return theme if theme != "general" else "general"
 
 
-def _card_speak_line(card_id: int, orientation: str) -> tuple[str, str]:
-    row = _CARD_SPEAK.get(card_id, {"name": "Аркан", "up": "то, что просит быть замеченным", "rev": "то, что просит быть замеченным"})
-    name = row["name"]
-    key = "rev" if orientation == "reversed" else "up"
-    line = row.get(key) or row.get("up") or ""
-    if orientation == "reversed":
-        name = f"{name} (перевёрнутый)"
-    return name, line
-
-
-def _position_label(card: models.TarotSpreadCard) -> str:
-    if card.position and card.position.title:
-        return card.position.title.strip()
-    if card.position and card.position.id:
-        return card.position.id.strip()
-    return "Позиция"
-
-
 def _position_role(position_id: str) -> str:
     pid = position_id.strip().lower()
     if pid in _HOLDING_POSITIONS:
@@ -207,20 +167,8 @@ def _position_role(position_id: str) -> str:
     return "neutral"
 
 
-def _build_card_insights(cards: list[models.TarotSpreadCard]) -> list[models.TarotCardInsight]:
-    insights: list[models.TarotCardInsight] = []
-    for card in cards:
-        name_ru, line = _card_speak_line(card.card.id, card.orientation)
-        insights.append(
-            models.TarotCardInsight(
-                position_label=_position_label(card),
-                card_name_ru=name_ru,
-                card_id=card.card.id,
-                orientation=card.orientation,
-                line=line,
-            )
-        )
-    return insights
+def _build_card_insights(cards: list[models.TarotSpreadCard]) -> list[models.TarotCardInsight] | None:
+    return engine.build_card_insights(cards)
 
 
 def _bundle_for_intent(intent: str) -> _ReadingBundle:
@@ -631,19 +579,18 @@ def _compose_question_main_answer(
 ) -> str:
     q = (question or "").strip()
     if not card_insights:
-        return _clean(
-            f"По вопросу «{q}» карты не дали конкретных линий — попробуй уточнить формулировку."
-        )
+        return _clean("Карты не дали конкретных линий — попробуй уточнить формулировку.")
     if len(card_insights) == 1:
         c = card_insights[0]
+        lead = f"По твоему вопросу «{q}» — " if q else ""
         return _clean(
-            f"По вопросу «{q}» {c.card_name_ru} в позиции «{c.position_label}» "
-            f"может означать: {c.line}."
+            f"{lead}{c.card_name_ru} в позиции «{c.position_label}» может означать: {c.line}."
         )
     a, b = card_insights[0], card_insights[1]
+    lead = f"По твоему вопросу — " if q else ""
     return _clean(
-        f"По вопросу «{q}» {a.card_name_ru} («{a.position_label}») может указывать: {a.line}. "
-        f"{b.card_name_ru} («{b.position_label}») — {b.line}."
+        f"{lead}{a.card_name_ru} («{a.position_label}») указывает: {a.line}. "
+        f"{b.card_name_ru} («{b.position_label}») добавляет: {b.line}."
     )
 
 
@@ -651,23 +598,30 @@ def _compose_question_story(
     question: str | None,
     card_insights: list[models.TarotCardInsight],
 ) -> str:
-    """Author layer: why these cards answer *this* question — deck + question only."""
+    """Relations between cards — not a dump of every position line."""
     if not card_insights:
         return ""
+    if len(card_insights) == 1:
+        c = card_insights[0]
+        return _clean(f"Единственная опора расклада — {c.card_name_ru}: {c.line}.")
+    head = card_insights[0]
+    mid = card_insights[1]
+    tail = card_insights[-1] if len(card_insights) > 2 else None
     parts = [
-        f"{c.card_name_ru} («{c.position_label}») — {c.line}"
-        for c in card_insights
+        f"{head.card_name_ru} задаёт тон («{head.position_label}»): {head.line}",
+        f"{mid.card_name_ru} («{mid.position_label}») сдвигает картину: {mid.line}",
     ]
-    body = parts[0] if len(parts) == 1 else "; ".join(parts)
+    if tail and tail is not mid and tail is not head:
+        parts.append(
+            f"Итог через {tail.card_name_ru} («{tail.position_label}»): {tail.line}"
+        )
+    body = ". ".join(parts)
     q = (question or "").strip()
     if q:
-        # why_this_card pattern: explain the landing, invent no outside facts
         return _clean(
-            f"Почему расклад отвечает на «{q}»: карты ложатся на формулировку вопроса, "
-            f"а не на общий прогноз. Вместе они могут означать следующее: {body}. "
-            f"Это только то, как колода отражает твой вопрос — без фактов вне расклада."
+            f"Карты отвечают на формулировку вопроса, а не на общий прогноз. {body}."
         )
-    return _clean(f"Если читать расклад вместе, карты могут означать следующее: {body}.")
+    return _clean(f"Если читать расклад вместе: {body}.")
 
 
 def _compose_question_insights(
@@ -676,54 +630,29 @@ def _compose_question_insights(
     *,
     question: str | None = None,
 ) -> tuple[str, str, str]:
+    del question  # avoid repeating the question in every insight block
     holding = shifting = attention = ""
-    q = (question or "").strip()
 
     for card, insight in zip(cards, card_insights):
         pos_id = (card.position.id if card.position else "").strip().lower()
         role = _position_role(pos_id)
-        line = (
-            f"{insight.card_name_ru} в «{insight.position_label}» может означать: {insight.line}."
-        )
+        line = f"{insight.card_name_ru} («{insight.position_label}»): {insight.line}."
         if role == "holding" and not holding:
-            holding = (
-                _clean(f"К вопросу «{q}» эта карта ложится как удержание: {line}")
-                if q
-                else line
-            )
+            holding = line
         elif role == "shifting" and not shifting:
-            shifting = (
-                _clean(f"По вопросу «{q}» сдвиг виден здесь: {line}")
-                if q
-                else line
-            )
+            shifting = line
         elif role == "attention" and not attention:
-            attention = (
-                _clean(f"На вопрос «{q}» карта просит заметить: {line}")
-                if q
-                else line
-            )
+            attention = line
 
     if not holding and card_insights:
         c = card_insights[0]
-        base = f"{c.card_name_ru} может означать: {c.line}."
-        holding = (
-            _clean(f"К вопросу «{q}» первая опора расклада: {base}")
-            if q
-            else base
-        )
+        holding = f"{c.card_name_ru}: {c.line}."
     if not shifting and len(card_insights) > 1:
         c = card_insights[1]
-        shifting = (
-            f"Через {c.card_name_ru} («{c.position_label}») может проявиться: {c.line}."
-        )
+        shifting = f"{c.card_name_ru} («{c.position_label}»): {c.line}."
     if not attention and len(card_insights) > 2:
         c = card_insights[2]
-        attention = f"{c.card_name_ru} предлагает заметить: {c.line}."
-    if len(card_insights) >= 4:
-        c = card_insights[3]
-        extra = f" {c.card_name_ru} («{c.position_label}») может добавлять: {c.line}."
-        attention = (attention + extra) if attention else _clean(extra.strip())
+        attention = f"{c.card_name_ru}: {c.line}."
 
     return _clean(holding), _clean(shifting), _clean(attention)
 
@@ -741,21 +670,15 @@ def _compose_card_context_reading(
         cards, card_insights, question=question
     )
 
-    q = (question or "").strip()
     anchor = card_insights[-1] if card_insights else None
-    if anchor and q:
+    if anchor:
         today = (
-            f"Вернись к вопросу «{q}» через линию {anchor.card_name_ru} "
-            f"(«{anchor.position_label}») — заметь, где она откликается в жизни, "
+            f"Сделай один шаг по линии {anchor.card_name_ru} "
+            f"(«{anchor.position_label}»): заметь, где это откликается в жизни, "
             f"а не только в ожиданиях."
         )
-    elif anchor:
-        today = (
-            f"Посмотри, как линия {anchor.card_name_ru} («{anchor.position_label}») "
-            f"откликается в твоём вопросе — не только в ожиданиях."
-        )
     else:
-        today = "Вернись к вопросу и отметь, какая линия расклада откликается сильнее."
+        today = "Отметь, какая линия расклада откликается сильнее — и сделай один маленький шаг."
 
     chips = [models.TarotFollowUpChip(id=cid, label=label) for cid, label in bundle["chips"]]
 
@@ -779,17 +702,40 @@ def _compose_card_context_reading(
     )
 
 
-def _profile_lens_from_experience_slice(
-    experience_slice: dict | None,
-) -> tuple[str | None, bool]:
-    """Use ExperienceSlice personality fields — never assemble from raw Snapshot here."""
-    if not isinstance(experience_slice, dict):
-        return None, False
-    for key in ("decision_style", "identity_line", "motivation", "communication_style"):
-        raw = experience_slice.get(key)
-        if isinstance(raw, str) and raw.strip():
-            return raw.strip()[:280], True
-    return None, False
+def _compose_choice_reading(
+    *,
+    question: str | None,
+    cards: list[models.TarotSpreadCard],
+    card_insights: list[models.TarotCardInsight],
+    bundle: _ReadingBundle,
+    concern_domain: str | None,
+) -> tuple[models.TarotSpreadReading, dict[str, Any]]:
+    built = engine.compose_choice_story(
+        question=question,
+        cards=cards,
+        insights=card_insights,
+        concern_domain=concern_domain,
+    )
+    chips = [models.TarotFollowUpChip(id=cid, label=label) for cid, label in bundle["chips"]]
+    reading = models.TarotSpreadReading(
+        meaning=built["direct_answer"],
+        synthesis_why=built["story_narrative"],
+        insight_holding=built["holding"],
+        insight_shifting=built["shifting"],
+        insight_attention=built["attention"],
+        today_suggestion=built["today_suggestion"],
+        follow_up_prompt=bundle["follow_up_prompt"],
+        follow_up_chips=chips,
+        card_insights=card_insights,
+        manifestation="",
+        caution="",
+        next_step=built["today_suggestion"],
+        actions_today=[built["today_suggestion"]],
+        self_question=None,
+        profile_lens=None,
+        profile_lens_applied=False,
+    )
+    return reading, built["choice_story"]
 
 
 def compose_question_first_reading(
@@ -801,26 +747,62 @@ def compose_question_first_reading(
     experience_slice: dict | None = None,
     core_profile: dict | None = None,
 ) -> models.TarotSpreadReading:
+    """Compose reading. Attaches engine meta on the reading object for answer_v1 mapping."""
     del consistency  # orchestrator consistency is not Experience Contract SoI
     del core_profile  # Personal Model enters only via experience_slice
     cards = spread.cards or []
     theme = _detect_theme(question, concern_domain)
     intent = _detect_intent(question, theme)
-    card_insights = _build_card_insights(cards)
     bundle = _bundle_for_intent(intent)
 
-    reading = _compose_card_context_reading(
-        question=question,
-        cards=cards,
-        card_insights=card_insights,
-        bundle=bundle,
+    unresolved = engine.collect_unresolved(cards)
+    if unresolved:
+        reading = engine.technical_fallback_reading(unresolved=unresolved)
+        # Stash for tarot_answer_v1 (dynamic attrs — not in pydantic model).
+        reading.__dict__["_engine_meta"] = {
+            "synthesis_mode": engine.SYNTHESIS_MODE_BLOCKED,
+            "synthesis_status": engine.STATUS_UNRESOLVED,
+            "unresolved_cards": unresolved,
+            "choice_story": None,
+        }
+        return reading
+
+    card_insights = _build_card_insights(cards)
+    assert card_insights is not None
+
+    choice_story: dict[str, Any] | None = None
+    if spread.spread_id in engine.CHOICE_SPREAD_IDS:
+        reading, choice_story = _compose_choice_reading(
+            question=question,
+            cards=cards,
+            card_insights=card_insights,
+            bundle=bundle,
+            concern_domain=concern_domain,
+        )
+    else:
+        reading = _compose_card_context_reading(
+            question=question,
+            cards=cards,
+            card_insights=card_insights,
+            bundle=bundle,
+        )
+
+    today, lens, applied = engine.soft_profile_next_step(
+        reading.today_suggestion or "",
+        experience_slice,
     )
-    lens, applied = _profile_lens_from_experience_slice(experience_slice)
     if applied and lens:
         reading.profile_lens = lens
         reading.profile_lens_applied = True
-        # Fold decision style into attention so synthesis input is observably slice-dependent.
-        attention = (reading.insight_attention or "").strip()
-        prefix = f"Учитывая твой стиль решений: {lens}"
-        reading.insight_attention = f"{prefix}. {attention}".strip() if attention else prefix
+        reading.today_suggestion = today
+        reading.next_step = today
+        reading.actions_today = [today]
+        # Do NOT paste profile into insight_attention (canon §1).
+
+    reading.__dict__["_engine_meta"] = {
+        "synthesis_mode": engine.SYNTHESIS_MODE_OK,
+        "synthesis_status": engine.STATUS_OK,
+        "unresolved_cards": [],
+        "choice_story": choice_story,
+    }
     return reading
