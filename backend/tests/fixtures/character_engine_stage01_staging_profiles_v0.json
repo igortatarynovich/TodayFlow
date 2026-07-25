@@ -1,0 +1,188 @@
+{
+  "fixture_version": "character_engine_stage01_staging_profiles_v0",
+  "note": "Fixed synthetic profiles for Stage 0–1 breadth/authority gates. Rebalanced so autonomy suns are not the majority sample.",
+  "profiles": [
+    {
+      "id": "full_natal_air_asc",
+      "label": "Full natal with exact time (air ASC)",
+      "profile_fingerprint": "stg_full_natal_air_001",
+      "birth_date": "1990-02-01",
+      "capability": {
+        "natal_mode": "full",
+        "has_name": true,
+        "has_birth_time": true,
+        "has_birth_place": true
+      },
+      "swiss_chart": {
+        "positions": [
+          {"body": "Sun", "sign": "Aquarius", "degree": 12.0},
+          {"body": "Moon", "sign": "Pisces", "degree": 3.0},
+          {"body": "Mars", "sign": "Aries", "degree": 8.0},
+          {"body": "Saturn", "sign": "Capricorn", "degree": 10.0},
+          {"body": "Ascendant", "sign": "Gemini", "degree": 1.0}
+        ],
+        "houses": [
+          {"house": 1, "sign": "Gemini"},
+          {"house": 7, "sign": "Sagittarius"}
+        ]
+      },
+      "numerology": {"life_path": 7, "expression": 3},
+      "natal_facts_bridge": null
+    },
+    {
+      "id": "date_only",
+      "label": "Birth date only (no houses/ASC capability); Leo — negative control for autonomy/analysis",
+      "profile_fingerprint": "stg_date_only_002",
+      "birth_date": "1988-08-15",
+      "capability": {
+        "natal_mode": "date_only",
+        "has_name": true,
+        "has_birth_time": false,
+        "has_birth_place": false
+      },
+      "swiss_chart": {
+        "positions": [
+          {"body": "Sun", "sign": "Leo", "degree": 22.0},
+          {"body": "Moon", "sign": "Taurus", "degree": 5.0},
+          {"body": "Mars", "sign": "Virgo", "degree": 14.0},
+          {"body": "Ascendant", "sign": "Scorpio", "degree": 2.0}
+        ],
+        "houses": [{"house": 1, "sign": "Scorpio"}]
+      },
+      "numerology": {"life_path": 9},
+      "natal_facts_bridge": null
+    },
+    {
+      "id": "no_name_no_numerology",
+      "label": "No name / no numerology — Capricorn analysis without LP",
+      "profile_fingerprint": "stg_no_num_003",
+      "birth_date": "1995-01-05",
+      "capability": {
+        "natal_mode": "date_only",
+        "has_name": false,
+        "has_birth_time": false,
+        "has_birth_place": false
+      },
+      "swiss_chart": {
+        "positions": [
+          {"body": "Sun", "sign": "Capricorn", "degree": 14.0},
+          {"body": "Moon", "sign": "Gemini", "degree": 11.0}
+        ],
+        "houses": []
+      },
+      "numerology": null,
+      "natal_facts_bridge": null
+    },
+    {
+      "id": "conflicting_sources",
+      "label": "Autonomy sun vs structure life path + earth moon",
+      "profile_fingerprint": "stg_conflict_004",
+      "birth_date": "1992-01-20",
+      "capability": {
+        "natal_mode": "date_only",
+        "has_name": true,
+        "has_birth_time": false,
+        "has_birth_place": false
+      },
+      "swiss_chart": {
+        "positions": [
+          {"body": "Sun", "sign": "Aquarius", "degree": 0.2},
+          {"body": "Moon", "sign": "Taurus", "degree": 18.0},
+          {"body": "Mars", "sign": "Capricorn", "degree": 4.0}
+        ],
+        "houses": []
+      },
+      "numerology": {"life_path": 4, "expression": 8},
+      "natal_facts_bridge": null
+    },
+    {
+      "id": "bridge_diverges_swiss",
+      "label": "Bridge sun disagrees with Swiss (Virgo wins over Leo bridge)",
+      "profile_fingerprint": "stg_bridge_005",
+      "birth_date": "1985-09-10",
+      "capability": {
+        "natal_mode": "date_only",
+        "has_name": true,
+        "has_birth_time": false,
+        "has_birth_place": false
+      },
+      "swiss_chart": {
+        "positions": [
+          {"body": "Sun", "sign": "Virgo", "degree": 17.0},
+          {"body": "Moon", "sign": "Libra", "degree": 7.0}
+        ],
+        "houses": []
+      },
+      "numerology": {"life_path": 5},
+      "natal_facts_bridge": {
+        "planets": [{"id": "sun", "sign": "leo"}, {"id": "moon", "sign": "aries"}]
+      }
+    },
+    {
+      "id": "earth_analysis",
+      "label": "Distinct earth/analysis chart",
+      "profile_fingerprint": "stg_earth_006",
+      "birth_date": "1985-09-10",
+      "capability": {
+        "natal_mode": "date_only",
+        "has_name": true,
+        "has_birth_time": false,
+        "has_birth_place": false
+      },
+      "swiss_chart": {
+        "positions": [
+          {"body": "Sun", "sign": "Virgo", "degree": 17.0},
+          {"body": "Moon", "sign": "Capricorn", "degree": 2.0},
+          {"body": "Mars", "sign": "Virgo", "degree": 9.0}
+        ],
+        "houses": []
+      },
+      "numerology": {"life_path": 4},
+      "natal_facts_bridge": null
+    },
+    {
+      "id": "water_emotional",
+      "label": "Distinct water/emotional chart",
+      "profile_fingerprint": "stg_water_007",
+      "birth_date": "1993-07-05",
+      "capability": {
+        "natal_mode": "date_only",
+        "has_name": true,
+        "has_birth_time": false,
+        "has_birth_place": false
+      },
+      "swiss_chart": {
+        "positions": [
+          {"body": "Sun", "sign": "Cancer", "degree": 13.0},
+          {"body": "Moon", "sign": "Scorpio", "degree": 21.0},
+          {"body": "Mars", "sign": "Pisces", "degree": 6.0}
+        ],
+        "houses": []
+      },
+      "numerology": {"life_path": 2},
+      "natal_facts_bridge": null
+    },
+    {
+      "id": "fire_direct",
+      "label": "Distinct fire chart (autonomy sun, no water moon)",
+      "profile_fingerprint": "stg_fire_008",
+      "birth_date": "1991-11-25",
+      "capability": {
+        "natal_mode": "date_only",
+        "has_name": true,
+        "has_birth_time": false,
+        "has_birth_place": false
+      },
+      "swiss_chart": {
+        "positions": [
+          {"body": "Sun", "sign": "Sagittarius", "degree": 3.0},
+          {"body": "Moon", "sign": "Aries", "degree": 19.0},
+          {"body": "Mars", "sign": "Leo", "degree": 28.0}
+        ],
+        "houses": []
+      },
+      "numerology": {"life_path": 1},
+      "natal_facts_bridge": null
+    }
+  ]
+}

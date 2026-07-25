@@ -5,7 +5,7 @@
 **Parents:** [CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md](./CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md) (D1–D4 ACCEPTED) · [CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md](./CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md) · [PROFILE_EXPERIENCE_SCENARIO_V1.md](../profile/PROFILE_EXPERIENCE_SCENARIO_V1.md)  
 **Home:** `core_profile_snapshots.payload.character_engine_v1`  
 **Machine schema:** [character_engine_v1.schema.json](../schemas/character_engine_v1.schema.json) · validate `scripts/validate_character_engine_contract.py` · ids `services/character_engine_ids_v0.py`  
-**CI note:** job `character-engine-schema` prepared in local `.github/workflows/ci.yml` but not pushed (OAuth lacks `workflow` scope) — run validator locally / add job with workflow-capable token.
+**CI note:** Machine schema + local validation landed; CI job `character-engine-schema` pending workflow-capable push (prepared in local `.github/workflows/ci.yml`, not on remote).
 
 ### Out of scope (explicit)
 
@@ -346,10 +346,31 @@ If no → fix identity rules before implementing pipeline.
 1. ~~Machine-readable JSON Schema~~ → `docs/schemas/character_engine_v1.schema.json` + fixtures + `scripts/validate_character_engine_contract.py`.  
 2. ~~ID stability module/tests~~ → `character_engine_ids_v0.py` + `test_character_engine_ids_v0.py`.  
 3. Land CI job `character-engine-schema` (needs `workflow` scope on push).  
-4. Implement Stage 0–1 fact+evidence builders (deterministic-first).  
-5. Wire Stage 2–4 behind flag with ID stability tests on publish.  
-6. Stage 5 adapters → fill `profile_contract_v1` from CE only.  
-7. Shadow harness.
+   Status: **pending** — machine schema + local validation landed; CI job pending workflow-capable push.  
+4. ~~Implement Stage 0–1 fact+evidence builders (deterministic-first)~~ → `character_engine_stage0_facts_v0` · registry · stage1 · staging eval gate PASS ([CHARACTER_ENGINE_STAGE01_STAGING_EVAL_V0.md](./CHARACTER_ENGINE_STAGE01_STAGING_EVAL_V0.md)).  
+5. ~~Stage 2 Identity Core~~ → LLM-first prompt `profile.character_engine.stage2.v1` + structural/provenance validator only (no quality heuristics). Diagnostics flags `STAGE2_SHADOW` / `STAGE2_ENABLED`; SoT cutover = future `CHARACTER_ENGINE_PUBLISH_READY`.  
+6. Stage 3 Internal Engine + tensions (after Stage 2 shadow review on live packs).  
+7. Stage 4 scenes / potential / blind spots.  
+8. Stage 5 Compass + legacy adapters → full ready CE + shadow comparison → publish cutover.  
+
+### Flag semantics
+
+| Flag | Runs stages? | Publishes CE ready SoT? |
+|------|----------------|-------------------------|
+| `CHARACTER_ENGINE_STAGE01_SHADOW` / `ENABLED` | Stage 0–1 | **no** |
+| `CHARACTER_ENGINE_STAGE2_SHADOW` / `ENABLED` | Stage 2 (+ builds 0–1 inputs) | **no** |
+| `CHARACTER_ENGINE_PUBLISH_READY` | (future) cutover | **yes** — only after Stage 5 + ready validation |
+
+### Stage 2 validation boundary
+
+**Prompt owns quality** (one core vs trait list, contradiction resolution, insufficient-data judgment).  
+**Code owns contract:** JSON shape · refs to existing `claim_id`/`fact_id` · no invented claims · `thesis_key` must match chosen Stage 1 claim · required fields.  
+
+### ID semantics (v1)
+
+`fact_id` includes `authority` + `calc_version`. `claim_id` fingerprints supporting `fact_id`s.  
+IDs are stable **within** one calculation authority/version — not eternal subject entities.  
+Cross-version sense comparison requires separate `fact_key` / semantic key (Stage 0 emits `fact_key` in diagnostics only).
 
 ---
 
@@ -358,4 +379,6 @@ If no → fix identity rules before implementing pipeline.
 | Date | Change |
 |------|--------|
 | 2026-07-25 | v0.1 — identity/provenance-first schema; envelope · facts · evidence · stages · compass · adapters · shadow; no prose/UI catalog |
-| 2026-07-25 | v0.2 — JSON Schema + fixtures + `character_engine_ids_v0` + CI validate script |
+| 2026-07-25 | v0.2 — JSON Schema + fixtures + `character_engine_ids_v0` + local validate script (CI job pending workflow scope) |
+| 2026-07-25 | Stage 0–1 builders + shadow flags; ID semantics note (calc_version-scoped); no CE ready publish |
+| 2026-07-25 | Staging eval v0 + registry tighten; Stage 2 Identity Core LLM-first prompt + structural contract validation (no quality heuristics) |

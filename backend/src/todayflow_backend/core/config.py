@@ -118,6 +118,17 @@ class Settings(BaseSettings):
     # Guest+registered content v1.1 (publish_gate in enrichment). Premium not via this flag.
     compatibility_content_v1: bool = False  # COMPATIBILITY_CONTENT_V1=1 to enable
 
+    # Character Engine stages — flags control execution, not Snapshot SoT cutover.
+    # CHARACTER_ENGINE_STAGE01_SHADOW=1 — Stage 0–1 diagnostics only (recommended staging).
+    # CHARACTER_ENGINE_STAGE01_ENABLED=1 — also runs Stage 0–1; still diagnostics-only.
+    # CHARACTER_ENGINE_STAGE2_SHADOW / ENABLED — Stage 2 Identity Core diagnostics-only.
+    # CHARACTER_ENGINE_PUBLISH_READY — future SoT switch after Stage 5 + ready validation (keep false).
+    character_engine_stage01_shadow: bool = False
+    character_engine_stage01_enabled: bool = False
+    character_engine_stage2_shadow: bool = False
+    character_engine_stage2_enabled: bool = False
+    character_engine_publish_ready: bool = False
+
     # Push: optional cron secret for POST /internal/push/run-due (set in production)
     push_dispatch_secret: str | None = None
     # Optional FCM legacy server key for HTTP API (v1 JSON credentials preferred later)
