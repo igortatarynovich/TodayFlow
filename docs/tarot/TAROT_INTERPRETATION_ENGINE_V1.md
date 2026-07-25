@@ -329,5 +329,5 @@ Semantic profile на карту (семантика, не литература)
 - [x] Canon principles: LLM = one story · answer this question · card-name ablation
 - [x] Q1 Editorial deepen minors (unique archetype per card, not rank×suit)
 - [x] Golden Dataset (scenarios without scores)
-- [ ] Golden Eval (rubric + paid-worth + anti-sameness) — freeze lift gate
+- [x] Golden Eval harness (rubric + CLI + offline tests) — live report / freeze lift still pending
 - [ ] Q3 Prompt iteration from eval deltas only

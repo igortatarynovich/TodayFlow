@@ -669,7 +669,7 @@ Source of truth: [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) §1–§13
 - [x] **Question Ontology v1** — [TAROT_QUESTION_ONTOLOGY_V1](./tarot/TAROT_QUESTION_ONTOLOGY_V1.md) · prompt v1.4 · integration set 12.
 - [x] **Q1 Editorial deepen minors** — each of 56 = unique psychological archetype (not rank×suit); Q1 profile in KB + pack; `adjacent_distinction` required.
 - [x] **Golden Dataset** — fixed scenarios (question/profile/cards/expected type) without scores. Canon [TAROT_GOLDEN_DATASET_V1](./tarot/TAROT_GOLDEN_DATASET_V1.md).
-- [ ] **Golden Eval** — rubric 1–5 · paid-worth · anti-sameness · freeze-lift gate. **← next**
+- [x] **Golden Eval harness** — rubric 1–5 · paid-worth heuristic · anti-sameness · CLI. Canon [TAROT_GOLDEN_EVAL_V1](./tarot/TAROT_GOLDEN_EVAL_V1.md). **Live report + freeze-lift decision ← next**
 - [ ] **Q3 Prompt iteration** — wording only after Eval.
 - [ ] **Tarot Design Language v1** — [docs/tarot/TAROT_DESIGN_LANGUAGE_V1.md](./tarot/TAROT_DESIGN_LANGUAGE_V1.md) **DRAFT / PENDING ACCEPT** · **parked under architecture freeze**
   - Канон-объект: колода на столе; формации 1/3/5/2; один reveal-жест; рубашка = фирменный язык
@@ -1006,7 +1006,7 @@ Ordered work (aligns with canon §7):
 
 ## 6) Current Priorities (Execution Order)
 
-> **Активный фокус (2026-07-25):** **Tarot Interpretation Stack v1 FROZEN** — Q1 + **Golden Dataset DONE** → next **Golden Eval** → Q3 prompt wording. Canon [TAROT_INTERPRETATION_ENGINE_V1](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md) · [TAROT_GOLDEN_DATASET_V1](./tarot/TAROT_GOLDEN_DATASET_V1.md). Parallel: **CE Stage 0–1 staging GATE PASS** + **Stage 2 Identity Core LLM prompt** (structural validation only; no quality heuristics; no publish). CE baseline: `5eb61c6` (not branch tip).
+> **Активный фокус (2026-07-25):** **Tarot Interpretation Stack v1 FROZEN** — Dataset + **Eval harness DONE** → next **live Golden Eval report** (freeze-lift gate) → Q3 prompt wording. Canon [TAROT_GOLDEN_EVAL_V1](./tarot/TAROT_GOLDEN_EVAL_V1.md). Parallel: **CE Stage 0–1 staging GATE PASS** + **Stage 2 Identity Core LLM prompt** (structural validation only; no quality heuristics; no publish). CE baseline: `5eb61c6` (not branch tip).
 
 ### 🔴 Phase 3 — Screen Block Definition (единственный приоритет)
 
@@ -1099,6 +1099,7 @@ Historical note:
 - 2026-07-08 | Web product UI | calendar / profile-summary / subscriptions / discover pattern → ProductPageScreen | IN PROGRESS | `/calendar`, `/profile-summary`, `/subscriptions`, `/discover/pattern/[axis_id]` — orbit-page и hero images убраны; v2 header + pl.panel + legacyHost.
 - 2026-07-08 | Web product UI | challenges / reports / help / tarot cards → ProductPageScreen | IN PROGRESS | `/challenges`, `/challenges/[id]`, `/reports/full`, `/reports/thematic`, `/reports/thematic/[theme]`, `/help`, `/help/*`, `/tarot/cards/[slug]` — orbit-page и hero images убраны; metadata help → layout.tsx; inner forms/viewer в legacyHost.
 - 2026-07-07 | Web product UI | Today dashboard v2 aligned to Profile reference | IN PROGRESS | Today dashboard на `productPageLayout` + `productV2Surface` tokens; wide canvas `mainWide`; cards/type/spacing match profile v2.
+- 2026-07-25 | Tarot | **Golden Eval v1 harness** | **DONE (offline)** | Rubric 1–5 · shape flags · anti-sameness · CLI `scripts/tarot_golden_eval_v1.py`. Freeze remains until live report accepted. Canon [TAROT_GOLDEN_EVAL_V1](./tarot/TAROT_GOLDEN_EVAL_V1.md).
 - 2026-07-25 | Tarot | **Golden Dataset v1** | **DONE (fixture)** | 12 fixed scenarios (all ontology types + Cups/Swords 8–10 Q1 gates) without scores. Schema + offline tests. Canon [TAROT_GOLDEN_DATASET_V1](./tarot/TAROT_GOLDEN_DATASET_V1.md). Next: Golden Eval harness.
 - 2026-07-25 | Tarot | **Q1 Editorial deepen minors** | **DONE (data+wire)** | 56 unique archetype profiles (`scripts/tarot_minors_q1_archetypes.py`) → KB JSON + pack projection (`core_scene`…`adjacent_distinction`). Gate: swords/cups 8–10 distinct. Public contract unchanged. Next: Golden Dataset → Golden Eval → Q3.
 - 2026-07-25 | Tarot | **Interpretation Stack v1 FROZEN (docs)** | **ACTIVE** | Hard freeze until Golden Eval. Order: Q1 unique-archetype minors → Golden Dataset → Golden Eval → Q3 prompt wording. Principles: one story · answer this question · card-name ablation. Canon [TAROT_INTERPRETATION_ENGINE_V1](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md) · KB §Q1 profile. No engine/contract change in this commit.
@@ -1738,7 +1739,7 @@ Historical note:
 - 2026-07-25 | Ops / Agents | **SoT stack clarified** | **ACTIVE** | Authority: **canon → backlog/tracker → server (live)**. Git = ledger only. Root `AGENTS.md` + `.cursor/rules/architecture-impact.mdc` updated.
 - 2026-07-25 | Profile / UI | **Premium Profile pass · natal instrument + book scroll** | **ON SERVER** | Canon: Foundation UI «дорого без текста» · PROFILE_SCREEN_MASTER §0.2–0.3. Natal = one `instrument` bezel (plate+dial+selector) · planets angular fan inside rim · Journey/Bridge/Natal scenes stitched as chapters (hairline + air, no card stack). Today untouched. **Next:** owner mobile QA.
 - 2026-07-25 | Today / Architecture | **day_thesis + evidence pack in DayContext** | **IN_PROGRESS** | Evidence + FE parity · formula bank + **SP links** + `vibe_strokes` · TL-1 blocked · next: TL-0C.3 editorial marking · linked: [TODAY_LANGUAGE_STRONG_PATTERNS_V0.md](./today-language/TODAY_LANGUAGE_STRONG_PATTERNS_V0.md)
-- 2026-07-25 | Today / Scenario | **Day Scenario SoT + product capture** | **IN_PROGRESS** | Canon [DAY_SCENARIO_V1.md](./DAY_SCENARIO_V1.md) · **B1–B5 + C1–C3.3b landed** (sphere selection + pairwise eval) · [C3.3b note](./audits/DAY_SCENARIO_SPHERE_SELECTION_C33B.md) · **next:** C3.5 eval pack (14d × profiles × locales)
+- 2026-07-25 | Today / Scenario | **Day Scenario SoT + product capture** | **IN_PROGRESS** | Canon [DAY_SCENARIO_V1.md](./DAY_SCENARIO_V1.md) · **B1–B5 + C1–C3.5 landed** (eval pack 14d × profiles × locales) · [C3.5 note](./audits/DAY_SCENARIO_EVAL_PACK_C35.md) · **next:** visual polish / capture review
 - 2026-07-01 | Product | **Build Map v0.5.5 — `DailySymbols` spec 🟢** | **ACTIVE** | Wave 1: color + stone · umbrella entity · [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md)
 - 2026-07-01 | Product | **Invisible Mechanism CLOSED** | **CLOSED** | §5.6 · Build Map · dual Internal/External · 4 user knowledges — не revisiting
 - 2026-07-01 | Product | **Build Map v0.2** | **REVOKED** | Component Catalog → Entity Catalog
