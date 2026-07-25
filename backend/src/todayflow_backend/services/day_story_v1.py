@@ -40,7 +40,7 @@ from todayflow_backend.services.today_contract_text_quality_v1 import (
 )
 
 DAY_STORY_V1_CONTRACT = "day_story_v1"
-DAY_STORY_PROMPT_VER = "day-story-v1.8-value-gate"
+DAY_STORY_PROMPT_VER = "day-story-v1.9-formula-fill-empty"
 
 PracticeKind = Literal["promise", "ascetic", "affirmation", "practice", "none"]
 
@@ -757,8 +757,38 @@ def build_day_story_llm_input(
     return pack
 
 
-def _apply_editorial_formula_slots(story: dict[str, Any]) -> dict[str, Any]:
-    """Hard-apply thesis formula slots so LLM cannot replace expect/trap/do/avoid/vibe."""
+def _slot_text_needs_formula_fill(text: str | None, *, locale: str = "ru") -> bool:
+    """True when slot is empty or clearly invalid chrome / system leak."""
+    from todayflow_backend.services.day_story_phrase_gate_v1 import EMPTY_FORMULA_PHRASES_EN, EMPTY_FORMULA_PHRASES_RU
+    from todayflow_backend.services.day_story_value_gate_v1 import find_value_gate_hits
+
+    raw = str(text or "").strip()
+    if not raw:
+        return True
+    if find_value_gate_hits(raw, allow_textbook=True):
+        return True
+    low = raw.lower().replace("ё", "е")
+    phrases = EMPTY_FORMULA_PHRASES_RU
+    if (locale or "").lower().startswith("en"):
+        phrases = EMPTY_FORMULA_PHRASES_EN
+    return any(p in low for p in phrases)
+
+
+def _list_needs_formula_fill(items: Any, *, locale: str = "ru") -> bool:
+    if not isinstance(items, list) or not items:
+        return True
+    cleaned = [str(x).strip() for x in items if str(x).strip()]
+    if len(cleaned) < 1:
+        return True
+    return any(_slot_text_needs_formula_fill(x, locale=locale) for x in cleaned)
+
+
+def _fill_editorial_formula_slots(story: dict[str, Any], *, locale: str = "ru") -> dict[str, Any]:
+    """Fill empty / clearly invalid slots from formula bank — never hard-overwrite good prose.
+
+    SoT for slot text after LLM remains the LLM (or event-derived) output.
+    Formula is a quality limiter / fallback ceiling, not a post-generation overwrite.
+    """
     from todayflow_backend.services.day_story_editorial_formulas_v1 import lookup_editorial_formula
 
     thesis = story.get("day_thesis") if isinstance(story.get("day_thesis"), dict) else None
@@ -766,40 +796,83 @@ def _apply_editorial_formula_slots(story: dict[str, Any]) -> dict[str, Any]:
     if not formula:
         return story
     out = dict(story)
-    out["theme"] = formula.get("theme") or out.get("theme")
-    out["headline_anchor"] = formula.get("headline_anchor") or out.get("headline_anchor")
-    out["expect"] = formula.get("expect") or out.get("expect")
-    out["trap"] = formula.get("trap") or out.get("trap")
-    out["abstain"] = out.get("trap") or out.get("abstain")
+    filled: list[str] = []
+
+    def _take(key: str, formula_key: str) -> None:
+        if _slot_text_needs_formula_fill(out.get(key), locale=locale) and formula.get(formula_key):
+            out[key] = formula[formula_key]
+            filled.append(key)
+
+    _take("theme", "theme")
+    _take("headline_anchor", "headline_anchor")
+    _take("expect", "expect")
+    _take("trap", "trap")
+    if _slot_text_needs_formula_fill(out.get("abstain"), locale=locale):
+        out["abstain"] = out.get("trap") or formula.get("trap") or out.get("abstain")
+        if out.get("abstain"):
+            filled.append("abstain")
+    if _slot_text_needs_formula_fill(out.get("direction"), locale=locale) and out.get("expect"):
+        out["direction"] = out["expect"]
+        filled.append("direction")
+
     do_items = [str(x).strip() for x in (formula.get("do") or []) if str(x).strip()]
     avoid_items = [str(x).strip() for x in (formula.get("avoid") or []) if str(x).strip()]
-    if do_items:
+    if do_items and _list_needs_formula_fill(out.get("do"), locale=locale):
         out["do"] = do_items
-        out["today_move"] = do_items[0]
-        out["primary_action"] = do_items[0]
-        out["advantage"] = do_items[0]
-    if avoid_items:
+        filled.append("do")
+        if _slot_text_needs_formula_fill(out.get("today_move"), locale=locale):
+            out["today_move"] = do_items[0]
+            filled.append("today_move")
+        if _slot_text_needs_formula_fill(out.get("primary_action"), locale=locale):
+            out["primary_action"] = do_items[0]
+            filled.append("primary_action")
+        if _slot_text_needs_formula_fill(out.get("advantage"), locale=locale):
+            out["advantage"] = do_items[0]
+            filled.append("advantage")
+    if avoid_items and _list_needs_formula_fill(out.get("avoid"), locale=locale):
         out["avoid"] = avoid_items
-    vibe = str(formula.get("vibe_closing") or "").strip()
-    strokes = [str(x).strip() for x in (formula.get("vibe_strokes") or []) if str(x).strip()]
-    if strokes:
-        out["vibe_strokes"] = strokes
-    if vibe:
-        out["vibe_closing"] = vibe
-    elif strokes:
-        out["vibe_closing"] = "; ".join(strokes)
-    if formula.get("development_point"):
+        filled.append("avoid")
+
+    if _slot_text_needs_formula_fill(out.get("vibe_closing"), locale=locale):
+        vibe = str(formula.get("vibe_closing") or "").strip()
+        strokes = [str(x).strip() for x in (formula.get("vibe_strokes") or []) if str(x).strip()]
+        if strokes and not isinstance(out.get("vibe_strokes"), list):
+            out["vibe_strokes"] = strokes
+        if vibe:
+            out["vibe_closing"] = vibe
+            filled.append("vibe_closing")
+        elif strokes:
+            out["vibe_closing"] = "; ".join(strokes)
+            filled.append("vibe_closing")
+
+    if _slot_text_needs_formula_fill(out.get("development_point"), locale=locale) and formula.get(
+        "development_point"
+    ):
         out["development_point"] = formula["development_point"]
+        filled.append("development_point")
+
+    # Attach editorial meta for traceability; do not overwrite a present thesis label.
     out["editorial"] = {
         "exemplar_id": formula.get("exemplar_id") or "",
         "strong_pattern_ids": list(formula.get("strong_pattern_ids") or [])[:4],
+        "fill_mode": "empty_or_invalid",
+        "filled_slots": filled[:12],
     }
-    if isinstance(thesis, dict) and formula.get("headline_anchor"):
-        thesis_out = dict(thesis)
-        thesis_out["label_ru"] = formula["headline_anchor"]
-        out["day_thesis"] = thesis_out
-        out["primary_conflict"] = formula["headline_anchor"]
+    if isinstance(thesis, dict):
+        label = str(thesis.get("label_ru") or thesis.get("label") or "").strip()
+        if not label and formula.get("headline_anchor"):
+            thesis_out = dict(thesis)
+            thesis_out["label_ru"] = formula["headline_anchor"]
+            out["day_thesis"] = thesis_out
+            if _slot_text_needs_formula_fill(out.get("primary_conflict"), locale=locale):
+                out["primary_conflict"] = formula["headline_anchor"]
+                filled.append("primary_conflict")
     return out
+
+
+# Back-compat alias for callers / tests that still use the old name.
+def _apply_editorial_formula_slots(story: dict[str, Any], *, locale: str = "ru") -> dict[str, Any]:
+    return _fill_editorial_formula_slots(story, locale=locale)
 
 
 def call_day_story_llm_v1(
@@ -838,7 +911,7 @@ def call_day_story_llm_v1(
         parsed["day_thesis"] = interp["day_thesis"]
     normalized = _normalize_day_story_payload(parsed, domains_present=present)
     normalized = _normalize_day_story_payload(
-        apply_day_story_value_gate(_apply_editorial_formula_slots(normalized)),
+        apply_day_story_value_gate(_fill_editorial_formula_slots(normalized, locale=locale)),
         domains_present=present,
     )
     ok_phrase, _hits = day_story_passes_phrase_gate(normalized, locale=locale)

@@ -43,7 +43,7 @@ function ensurePeriod(text: string): string {
 }
 
 function gate(text: string | null | undefined): string {
-  return scrubUserFacingText(text, { allowTextbook: true }) ?? "";
+  return scrubUserFacingText(text) ?? "";
 }
 
 function firstSentences(text: string, max = 2): string {

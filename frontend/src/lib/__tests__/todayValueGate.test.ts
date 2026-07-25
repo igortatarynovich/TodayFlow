@@ -1,32 +1,30 @@
 /**
- * Value gate unit tests — hide kitchen / system / textbook copy.
+ * FE display helpers — defensive only; meaning gate is backend.
  */
 
-import { findValueGateHits, scrubUserFacingText } from "@/lib/todayValueGate";
+import { nearDuplicateClaim, scrubUserFacingText } from "@/lib/todayValueGate";
 
-describe("todayValueGate", () => {
-  it("hides living pipeline fluff and raw keys", () => {
-    const text =
+describe("todayValueGate (defensive)", () => {
+  it("hides empty / whitespace", () => {
+    expect(scrubUserFacingText("")).toBeNull();
+    expect(scrubUserFacingText("   ")).toBeNull();
+    expect(scrubUserFacingText(null)).toBeNull();
+  });
+
+  it("passes through non-empty text without meaning filtering", () => {
+    const leak =
       "Слой быстрых решений пока собран слабо. Чаще всего сейчас всплывает тема `focus`.";
-    expect(findValueGateHits(text).length).toBeGreaterThan(0);
-    expect(scrubUserFacingText(text)).toBeNull();
+    // Backend owns meaning scrub; FE must not invent a second gate.
+    expect(scrubUserFacingText(leak)).toBe(leak);
   });
 
-  it("hides truncated style×tarot mashup", () => {
-    const text =
-      "Осторожнее с темой «общий фон дня»… При твоём стиле («вы решаете…») «Двойка пентаклей»…";
-    expect(scrubUserFacingText(text)).toBeNull();
-  });
-
-  it("allows concrete behavioral trap", () => {
-    const text =
-      "После резкого сообщения захочется сразу отправить ещё одно, чтобы окончательно объяснить свою позицию.";
-    expect(scrubUserFacingText(text)).toBe(text);
-  });
-
-  it("hides textbook house meaning unless allowed", () => {
-    const text = "Первый дом отвечает за первое впечатление.";
-    expect(scrubUserFacingText(text)).toBeNull();
-    expect(scrubUserFacingText(text, { allowTextbook: true })).toBe(text);
+  it("detects near-duplicate claims for composition dedupe", () => {
+    expect(nearDuplicateClaim("Прямота без фильтра.", "Прямота без фильтра")).toBe(true);
+    expect(
+      nearDuplicateClaim(
+        "Короткий разговор внезапно станет серьёзным.",
+        "Отправь одно письмо из черновиков.",
+      ),
+    ).toBe(false);
   });
 });
