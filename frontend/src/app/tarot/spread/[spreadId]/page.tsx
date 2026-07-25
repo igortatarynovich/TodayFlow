@@ -244,59 +244,55 @@ function TarotSpreadRitualContent() {
           <h1 className={s.tarotRitualTitle}>{offer.title}</h1>
           <p className={s.tarotRitualLead}>{offer.answersQuestions}</p>
           {displayQuestion ? <p className={s.tarotRitualQuestion}>«{displayQuestion}»</p> : null}
+          <p className={s.tarotRitualLead} style={{ marginTop: "0.25rem", fontSize: "0.875rem" }}>
+            {anchorParam && anchorCard
+              ? `Первая карта уже на месте — добери ещё ${requiredFromDeck === 1 ? "одну" : requiredFromDeck}.`
+              : `Выбери ${requiredCount === 1 ? "одну карту" : `${requiredCount} карты`} — карта откроется крупно.`}
+          </p>
+          {anchorParam && anchorCard ? (
+            <div className={s.tarotRitualAnchor}>
+              <p className={s.tarotRitualEyebrow}>{positionLabels[0] || "Якорь"}</p>
+              <CardVisual card={anchorCard} orientation={anchorParam.orientation} size="md" chrome="bare" showName />
+            </div>
+          ) : null}
         </header>
 
-        <div className={s.tarotRitualLayout}>
-          <aside className={s.tarotRitualSide}>
-            <p className={s.tarotRitualLead} style={{ margin: 0, fontSize: "0.875rem" }}>
-              {anchorParam && anchorCard
-                ? `Первая карта уже на месте — добери ещё ${requiredFromDeck === 1 ? "одну" : requiredFromDeck}.`
-                : `Выбери ${requiredCount === 1 ? "одну карту" : `${requiredCount} карты`} — не спеши. После выбора карта перевернётся.`}
-            </p>
-            {anchorParam && anchorCard ? (
-              <div className={s.tarotRitualAnchor}>
-                <p className={s.tarotRitualEyebrow}>{positionLabels[0] || "Якорь"}</p>
-                <CardVisual card={anchorCard} orientation={anchorParam.orientation} size="sm" showName />
-              </div>
-            ) : null}
-            <div className={s.tarotRitualActions}>
-              <DsButton
-                variant="primary"
-                onClick={handleOpenResult}
-                disabled={
-                  selectedCards.length !== requiredCount ||
-                  Boolean(anchorParam && (anchorLoading || !anchorCard))
-                }
-              >
-                Получить толкование →
-              </DsButton>
-              <Link href="/tarot" style={{ textDecoration: "none" }}>
-                <DsButton variant="secondary">← Назад</DsButton>
-              </Link>
+        <section className={s.tarotRitualDeck}>
+          {loadingDeck || (anchorParam && anchorLoading) ? (
+            <div className={s.tarotRitualLoader}>
+              <LoadingSpinner size="lg" />
             </div>
-          </aside>
+          ) : (
+            <InteractiveCardDeck
+              cards={deckCards}
+              requiredCount={requiredFromDeck}
+              onCardsSelected={setDeckPicks}
+              spreadTitle={undefined}
+              selectionLabels={deckSelectionLabels}
+              ritualIntro={
+                anchorParam
+                  ? "Добери карты к якорю — это продолжение разговора с днём."
+                  : "Медленно выбери рубашку — иллюстрация раскроется крупно."
+              }
+              variant="dark"
+            />
+          )}
+        </section>
 
-          <section className={s.tarotRitualDeck}>
-            {loadingDeck || (anchorParam && anchorLoading) ? (
-              <div className={s.tarotRitualLoader}>
-                <LoadingSpinner size="lg" />
-              </div>
-            ) : (
-              <InteractiveCardDeck
-                cards={deckCards}
-                requiredCount={requiredFromDeck}
-                onCardsSelected={setDeckPicks}
-                spreadTitle={offer.title}
-                selectionLabels={deckSelectionLabels}
-                ritualIntro={
-                  anchorParam
-                    ? "Добери карты к якорю — это продолжение разговора с днём."
-                    : "Медленно выбери карты — это часть ответа."
-                }
-                variant="dark"
-              />
-            )}
-          </section>
+        <div className={s.tarotRitualActions}>
+          <DsButton
+            variant="primary"
+            onClick={handleOpenResult}
+            disabled={
+              selectedCards.length !== requiredCount ||
+              Boolean(anchorParam && (anchorLoading || !anchorCard))
+            }
+          >
+            Получить толкование →
+          </DsButton>
+          <Link href="/tarot" style={{ textDecoration: "none" }}>
+            <DsButton variant="secondary">← Назад</DsButton>
+          </Link>
         </div>
       </div>
     </>

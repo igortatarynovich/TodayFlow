@@ -978,10 +978,10 @@
 
 .tarotWebCardImageWrap {
   position: relative;
-  border-radius: var(--tf-ds-radius-md);
-  border: 1px solid rgba(212, 175, 55, 0.28);
-  background: rgba(255, 255, 255, 0.04);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
   overflow: hidden;
 }
 
@@ -2964,20 +2964,21 @@
 
 .tarotRitualDeck {
   min-width: 0;
-  padding: 1.15rem;
-  border-radius: 1.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.03);
+  padding: 0.35rem 0 0.5rem;
+  border-radius: 0;
+  border: none;
+  background: transparent;
 }
 
 .tarotRitualAnchor {
-  display: grid;
-  gap: 0.55rem;
-  justify-items: center;
-  padding: 0.85rem;
-  border-radius: 0.875rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  align-items: center;
+  padding: 0.35rem 0;
+  border-radius: 0;
+  border: none;
+  background: transparent;
 }
 
 .tarotRitualActions {

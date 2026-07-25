@@ -15,6 +15,8 @@ type TarotCardBackProps = {
   onClick?: () => void;
   dimmed?: boolean;
   selected?: boolean;
+  /** Art only — no UI plate/border around the sleeve. */
+  chrome?: "frame" | "bare";
 };
 
 export function TarotCardBack({
@@ -24,28 +26,48 @@ export function TarotCardBack({
   onClick,
   dimmed = false,
   selected = false,
+  chrome = "frame",
 }: TarotCardBackProps) {
   const heightPx = tarotCardDisplayHeightPx(widthPx);
   const sources = tarotCardBackPicture();
-  const frameStyle = {
-    display: "block" as const,
-    width: `${widthPx}px`,
-    maxWidth: "100%",
-    height: `${heightPx}px`,
-    margin: "0 auto",
-    padding: 0,
-    border: selected
-      ? "2px solid rgba(210, 180, 120, 0.65)"
-      : "1px solid rgba(214, 142, 122, 0.38)",
-    borderRadius: "14px",
-    overflow: "hidden" as const,
-    position: "relative" as const,
-    background: "#faf6f2",
-    boxShadow: selected
-      ? "0 10px 22px rgba(90, 52, 44, 0.18)"
-      : "0 6px 16px rgba(90, 52, 44, 0.1)",
-    opacity: dimmed ? 0.42 : 1,
-  };
+  const bare = chrome === "bare";
+  const frameStyle = bare
+    ? {
+        display: "block" as const,
+        width: `${widthPx}px`,
+        maxWidth: "100%",
+        height: `${heightPx}px`,
+        margin: "0 auto",
+        padding: 0,
+        border: selected ? "1px solid rgba(212, 175, 55, 0.55)" : "none",
+        borderRadius: "10px",
+        overflow: "hidden" as const,
+        position: "relative" as const,
+        background: "transparent",
+        boxShadow: selected
+          ? "0 14px 28px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(212, 175, 55, 0.35)"
+          : "0 12px 26px rgba(0, 0, 0, 0.32)",
+        opacity: dimmed ? 0.38 : 1,
+      }
+    : {
+        display: "block" as const,
+        width: `${widthPx}px`,
+        maxWidth: "100%",
+        height: `${heightPx}px`,
+        margin: "0 auto",
+        padding: 0,
+        border: selected
+          ? "2px solid rgba(210, 180, 120, 0.65)"
+          : "1px solid rgba(214, 142, 122, 0.38)",
+        borderRadius: "14px",
+        overflow: "hidden" as const,
+        position: "relative" as const,
+        background: "#faf6f2",
+        boxShadow: selected
+          ? "0 10px 22px rgba(90, 52, 44, 0.18)"
+          : "0 6px 16px rgba(90, 52, 44, 0.1)",
+        opacity: dimmed ? 0.42 : 1,
+      };
 
   if (!interactive) {
     return (
@@ -65,7 +87,7 @@ export function TarotCardBack({
         ...frameStyle,
         cursor: "pointer",
         transition: "transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease",
-        transform: selected ? "translateY(-2px) scale(1.03)" : "none",
+        transform: selected ? "translateY(-4px) scale(1.02)" : "none",
       }}
     >
       <TarotPicture sources={sources} sizes={`${widthPx}px`} />
