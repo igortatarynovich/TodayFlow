@@ -82,5 +82,5 @@ Report facts, not literary summary:
 - `docs/content/TODAYFLOW_VOICE_CANON.md` — person-not-system
 - `docs/DAY_ENGINE_AND_COHERENCE.md` / `docs/DAY_SOURCES_CANON.md` — day calculation SoT
 - `docs/today-language/TODAY_LANGUAGE_V1.md` — language quality (TL-1 gated separately)
-- `docs/profile/PROFILE_SCREEN_MASTER.md` · `docs/TODAYFLOW_FOUNDATION_UI.md` — Profile / visual SoT
+- `docs/profile/PROFILE_SCREEN_MASTER.md` · `docs/profile/PROFILE_EXPERIENCE_SCENARIO_V1.md` · `docs/TODAYFLOW_FOUNDATION_UI.md` — Character Engine / Profile UI / visual SoT
 - `docs/PRODUCT_EXECUTION_TRACKER.md` — backlog / progress

@@ -1,9 +1,10 @@
 # Profile Product Surface Canon
 
-**Status:** ACTIVE — product SoT for `/profile`  
-**Version:** 1.3 (2026-07-22)  
+**Status:** ACTIVE — product SoT for `/profile` **reveal journey** (не composition order)  
+**Version:** 1.5 (2026-07-25)  
 **Locked forms:** [PROFILE_PRODUCT_JOURNEY_FORMS_V1.md](./PROFILE_PRODUCT_JOURNEY_FORMS_V1.md) — **product sign-off YES** (samples corrected); next = mechanism deltas only  
 **Overrides:** cosmetic V2 polish · next Freeze rows as screen goal · equal-card document as «done»  
+**Composition SoT (выше reveal):** [PROFILE_EXPERIENCE_SCENARIO_V1.md](./PROFILE_EXPERIENCE_SCENARIO_V1.md) — **Character Engine** (не экран); при конфликте «что существует раньше чего» / «кто SoT личности» побеждает Scenario  
 **Parents:** [PRODUCT_BLOCK_SIX_QUESTIONS.md](../PRODUCT_BLOCK_SIX_QUESTIONS.md) · [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) · [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) · [PR4_PROFILE_CANON.md](../archive/PR4_PROFILE_CANON.md) · [content/TODAYFLOW_VOICE_CANON.md](../content/TODAYFLOW_VOICE_CANON.md)  
 **Mechanism (ниже продукта):** [PROFILE_E2E_RECONSTRUCTION.md](./PROFILE_E2E_RECONSTRUCTION.md) · [audits/PROFILE_V1_BLOCK_FREEZE_MATRIX.md](../audits/PROFILE_V1_BLOCK_FREEZE_MATRIX.md) · [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) §0.3
 
@@ -11,8 +12,10 @@
 
 ## Главный принцип (верхний SoT)
 
-> **Profile — это не отчёт о расчётах и не набор карточек.**  
-> Это управляемое путешествие человека:  
+> **Profile — не отчёт о расчётах и не набор карточек.**  
+> Сначала — **Character Engine** ([PROFILE_EXPERIENCE_SCENARIO_V1](./PROFILE_EXPERIENCE_SCENARIO_V1.md)): единая модель личности платформы.  
+> Profile — **первая проекция** этой модели.  
+> На экране — управляемое путешествие:  
 > **узнал себя → понял почему → обнаружил закономерности → понял, куда прикладывать усилия → захотел возвращаться.**
 
 Любой слой, блок, промпт, поле Snapshot или UI-зона проверяются:
@@ -89,11 +92,11 @@
 | | |
 |---|---|
 | **Что должен почувствовать** | «А, поэтому. Это не случайный AI-текст.» |
-| **Задача продукта** | Показать опоры вывода: расчётные якоря рядом со смыслом |
-| **Метрика** | Человек перестаёт искать «откуда взяли» |
-| **Что на экране** | Почему именно такой: Солнце · Луна · ASC (если есть) · число · другие реальные опоры — как доказательства, не как меню «Сигнатуры» |
-| **Без времени рождения** | Честно без ASC/домов; что откроет время — с ценностью |
-| **Новая ценность** | До Шага 2 человек знал *кто*; здесь впервые видит *почему* |
+| **Задача продукта** | Показать опоры вывода: расчётные якоря рядом со смыслом — **как это работает у него**, не что значит термин |
+| **Метрика** | Человек перестаёт искать «откуда взяли»; узнаёт себя в опоре |
+| **Что на экране** | Солнце · Луна · ASC (если есть) · число · дома (если full) — каждая опора с **личной** полезной фразой (вклад в ядро / проявление). Не меню «Сигнатуры», не «7-й дом = партнёрство» |
+| **Без времени рождения** | Честно без ASC/домов; CTA: что откроется **о нём**, не определение домов |
+| **Новая ценность** | До Шага 2 человек знал *кто*; здесь впервые видит *почему именно у меня* |
 
 ---
 
@@ -302,3 +305,6 @@ Target-поля смысла (сжать из identity / Content Canon): имя 
 | 2026-07-21 | v1.1 — **journey-first SoT**; human metrics; story nodes not mandatory L3–L5; shareable Hero; new-value rule; L0–L8 demoted to mechanism |
 | 2026-07-21 | v1.2 — link locked journey forms v1; queue → product sign-off |
 | 2026-07-22 | v1.3 — forms sign-off YES; queue → mechanism deltas only |
+| 2026-07-25 | v1.4 — parent composition SoT: PROFILE_EXPERIENCE_SCENARIO_V1 (характер ≠ набор слотов) |
+| 2026-07-25 | v1.5 — Scenario v1.1: Character Engine; Profile = первая проекция |
+| 2026-07-25 | v1.5.1 — Шаг 2: опоры/дома = личная польза, не энциклопедия |

@@ -1,12 +1,14 @@
 # Profile Content Canon v1 (C3)
 
 **Статус:** принято для аудита и контракта (до переключения production generation).  
-**Версия:** 1.0 (2026-07-21).  
+**Версия:** 1.2 (2026-07-25).  
 **Связь:** [SCREEN_CONTRACTS_V1.md](../SCREEN_CONTRACTS_V1.md) §4 · код `profile_content_v1` · текущая генерация `profile_contract_v1` / `profile_disclosure_funnel_v0` · голос [content/TODAYFLOW_VOICE_CANON.md](../content/TODAYFLOW_VOICE_CANON.md) · **surface IA** [PR4_PROFILE_CANON.md](../archive/PR4_PROFILE_CANON.md) · **видимость LLM-выводов** [LLM_USER_VISIBILITY_CONTRACT_V1.md](../LLM_USER_VISIBILITY_CONTRACT_V1.md).  
-**Umbrella (выше модуля):** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) — при конфликте с Content/PR-4 побеждает umbrella.  
+**Composition SoT:** [PROFILE_EXPERIENCE_SCENARIO_V1.md](./PROFILE_EXPERIENCE_SCENARIO_V1.md) — **Character Engine**; Profile Snapshot = носитель модели; поля §4 — **проекции**, не независимые корни. Компас / strengths / energy — **derived**, без собственного LLM-корня.  
+**Umbrella (выше модуля):** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) — при конфликте с Content/PR-4 побеждает umbrella. Evidence Graph сценария = вход для explainability.  
 **Метод оценки:** как Compatibility — вход → полный prompt → raw → final → ручная оценка + Voice rubric.
 
-Профиль — источник персонализации для Today, Compatibility, Tarot и рекомендаций. Качество здесь важнее большинства отдельных модулей.
+Профиль-экран — первая проекция Character Engine для Today, Compatibility, Tarot и рекомендаций. Качество модели важнее большинства отдельных модулей.  
+Character Engine = **история / путь человека**, не набор слотов strengths / career / energy.
 
 **UI origin layers (PR-4):** Identity ↔ факты/расчёты · Interpretation ↔ §4.1–4.2 contract · Evidence ↔ `source_depth` + honesty · Deep Sources ↔ natal attach. Day/week UI не входит в content contract Profile. Каждый блок — полная umbrella-цепочка; PR-4 не ослабляет platform gate.
 
@@ -99,25 +101,29 @@ UI: без технических терминов — короткая honesty 
 
 ## 4. Продуктовые слои
 
+Поля ниже — **контрактные слоты Snapshot / UI**. Порядок смысла — [PROFILE_EXPERIENCE_SCENARIO_V1](./PROFILE_EXPERIENCE_SCENARIO_V1.md) (Character Engine):  
+Raw Sources → Evidence Graph → Акт I **одна мысль** → II роли источников → III Internal Engine → IV главное+вторичные противоречия → V **жизненные сцены** → VI потенциал → VII слепые зоны → VIII **Компас (derived only)** → Финал (путь).  
+Заполнять слот без опоры на ядро = дефект. Отдельный LLM для strengths/energy/compass = дефект.
+
 ### 4.1 Базовый профиль (после регистрации)
 
-| Поле | Вопрос |
-|------|--------|
-| `headline` | Одна строка «кто вы» |
-| `core_summary` | Краткое ядро |
-| `strengths` | Сильные стороны |
-| `emotional_style` | Эмоциональные потребности / стиль |
-| `communication_style` | Стиль общения |
-| `decision_style` | Как принимает решения |
-| `energy_sources` | Что даёт энергию |
-| `energy_drains` | Что истощает |
-| `under_pressure` | Типичные реакции под давлением |
-| `inner_tension` | Главный внутренний конфликт |
-| `practical_takeaway` | Один практический вывод |
-| `confidence` | low \| medium \| high |
-| `source_depth` | см. §3 |
+| Поле | Вопрос | Акт сценария |
+|------|--------|--------------|
+| `headline` | Одна строка «кто вы» (**логлайн**, не список) | I |
+| `core_summary` | Краткое ядро (та же одна мысль) | I |
+| `strengths` | Сильные стороны | VIII (**derived** компаса) |
+| `emotional_style` | Эмоциональные потребности / стиль | III Internal Engine |
+| `communication_style` | Стиль общения | VIII derived |
+| `decision_style` | Как принимает решения | III |
+| `energy_sources` | Что даёт энергию | VIII derived |
+| `energy_drains` | Что истощает | III / VIII derived |
+| `under_pressure` | Типичные реакции под давлением | III |
+| `inner_tension` | **Главное** внутреннее противоречие | IV primary |
+| `practical_takeaway` | Один практический вывод | VIII derived |
+| `confidence` | low \| medium \| high | meta |
+| `source_depth` | см. §3 | meta |
 
-Не одна длинная биография. Не «только приятный портрет» и не «разоблачение».
+Не одна длинная биография. Не «только приятный портрет» и не «разоблачение». Не анкета качеств в `headline`.
 
 ### 4.2 Расширенный (после накопления данных)
 
@@ -323,3 +329,5 @@ Profile refresh «создал новый snapshot» учитывается от
 | 2026-07-21 | §7.4 reserved: hypothesis falsifiers after first real-user weeks (not active yet) |
 | 2026-07-21 | Link PR-4 surface layers (Identity/Interpretation/Evidence/Deep Sources); UI day/week out of Profile |
 | 2026-07-21 | Umbrella parent explicit: EXPLAINABLE_COMPUTATION wins over Content/PR-4 on conflict |
+| 2026-07-25 | v1.1 — link PROFILE_EXPERIENCE_SCENARIO_V1; §4 fields mapped to acts (projections, not roots) |
+| 2026-07-25 | v1.2 — Character Engine v1.1: logline core · Evidence Graph · compass derived-only · scenes not spheres |

@@ -19,7 +19,7 @@ Important:
 - Product canon: [CORE_PRODUCT_CANON.md](archive/CORE_PRODUCT_CANON.md).
 - **PIM center:** [PERSONAL_INTELLIGENCE_MODEL_V1.md](pim/PERSONAL_INTELLIGENCE_MODEL_V1.md) · [USER_KNOWLEDGE_MODEL.md](pim/USER_KNOWLEDGE_MODEL.md) · [INTENT_MODEL_V1.md](./INTENT_MODEL_V1.md).
 - **Today experience (ACCEPTED):** [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) · [TODAY_LANGUAGE_V1.md](today-language/TODAY_LANGUAGE_V1.md).
-- **Profile UI:** [PR4_PROFILE_CANON.md](./archive/PR4_PROFILE_CANON.md) (production IA; applies umbrella) · [PROFILE_SCREEN_MASTER.md](profile/PROFILE_SCREEN_MASTER.md) (v0 visual) · [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md).
+- **Profile UI:** [PR4_PROFILE_CANON.md](./archive/PR4_PROFILE_CANON.md) (production IA; applies umbrella) · [PROFILE_EXPERIENCE_SCENARIO_V1.md](profile/PROFILE_EXPERIENCE_SCENARIO_V1.md) (**Character Engine** — SoT личности платформы) · [PROFILE_SCREEN_MASTER.md](profile/PROFILE_SCREEN_MASTER.md) (v0 visual) · [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md).
 - **Explainable Computation (platform gate):** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) — выше модулей; конфликт → umbrella.
 - **Understanding progress (depth · missing · trial · sub):** [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](./UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md).
 - **Core loop:** [CORE_USER_LOOP.md](./CORE_USER_LOOP.md) · [DAILY_NAVIGATION_MODEL.md](./DAILY_NAVIGATION_MODEL.md).
@@ -662,6 +662,10 @@ Source of truth: [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) §1–§13
 - [x] **OpenAPI learning contracts:** `CompatibilityAttachmentReferenceV0`, `CompactUserModelInterpretationInstance`, meaning payload schemas + `GET /meaning/events/learning-payloads`; JSON Schema in `docs/schemas/`.
 
 ### Tarot
+- [ ] **Tarot Design Language v1** — [docs/tarot/TAROT_DESIGN_LANGUAGE_V1.md](./tarot/TAROT_DESIGN_LANGUAGE_V1.md) **DRAFT / PENDING ACCEPT**
+  - Канон-объект: колода на столе; формации 1/3/5/2; один reveal-жест; рубашка = фирменный язык
+  - До accept: не плодить новые ритуальные UI; после accept → один `TarotDeckExperience` везде
+  - Figma formations + код — только после product accept §8
 - [x] Audit the entire tarot flow:
   - [x] Tarot Hub
   - [x] One Card
@@ -993,7 +997,7 @@ Ordered work (aligns with canon §7):
 
 ## 6) Current Priorities (Execution Order)
 
-> **Активный фокус (2026-07-25):** Profile V2 **mobile flat frame** (canon §0.2) + owner QA on **server**; затем либо Phase 2 visual entities, либо трек day_thesis/TL. SoT: canon → tracker → server (не git).
+> **Активный фокус (2026-07-25):** **Character Engine v1.1** ([PROFILE_EXPERIENCE_SCENARIO_V1](profile/PROFILE_EXPERIENCE_SCENARIO_V1.md)) — единая модель личности; Profile = первая проекция. **Tarot UI freeze** до accept [TAROT_DESIGN_LANGUAGE_V1](tarot/TAROT_DESIGN_LANGUAGE_V1.md) (колода = один объект; код нового ритуала не плодить). Asset pipeline уже на сервере. SoT: canon → tracker → server (не git).
 
 ### 🔴 Phase 3 — Screen Block Definition (единственный приоритет)
 
@@ -1702,9 +1706,12 @@ Historical note:
 - 2026-07-01 | Product | **Positive Definition §2 CLOSED (canonical)** | **CLOSED** | Два базовых закона с §1
 - 2026-07-01 | Product | **Positive Definition CLOSED** | **CLOSED** | §5.7 · Build Map E9 · spec · UX · empty states
 - 2026-07-01 | Product | **Build Map v0.5.6 — `PracticeRecommendation` spec 🟢** | **ACTIVE** | One practice · [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md)
+- 2026-07-25 | Profile / Canon | **Character Engine Scenario v1.1** | **ACTIVE** | [PROFILE_EXPERIENCE_SCENARIO_V1.md](profile/PROFILE_EXPERIENCE_SCENARIO_V1.md): не экран, а движок личности платформы. Raw Sources + Evidence Graph · ядро = один логлайн · Internal Engine · главное+вторичные противоречия · жизненные сцены (не сферы) · Компас **без** LLM-промпта · Финал = путь личности · отказ от независимых Relationships/Career/Money/Strengths/…. Profile/Today/Compat/Tarot = readers. Wired Unified §1/§3.4 · Content · Surface · Generation Contracts. **Δ v1.1.1:** опоры и дома = полезная информация о пользователе, не энциклопедия. **Next:** schema + pipeline wiring (не UI polish).
+- 2026-07-25 | Profile / Canon | **Profile Experience Scenario v1** | **SUPERSEDED → v1.1 Character Engine** | См. строку выше.
 - 2026-07-25 | Ops / Agents | **SoT stack clarified** | **ACTIVE** | Authority: **canon → backlog/tracker → server (live)**. Git = ledger only. Root `AGENTS.md` + `.cursor/rules/architecture-impact.mdc` updated.
 - 2026-07-25 | Profile / UI | **Premium Profile pass · natal instrument + book scroll** | **ON SERVER** | Canon: Foundation UI «дорого без текста» · PROFILE_SCREEN_MASTER §0.2–0.3. Natal = one `instrument` bezel (plate+dial+selector) · planets angular fan inside rim · Journey/Bridge/Natal scenes stitched as chapters (hairline + air, no card stack). Today untouched. **Next:** owner mobile QA.
 - 2026-07-25 | Today / Architecture | **day_thesis + evidence pack in DayContext** | **IN_PROGRESS** | Evidence + FE parity · formula bank + **SP links** + `vibe_strokes` · TL-1 blocked · next: TL-0C.3 editorial marking · linked: [TODAY_LANGUAGE_STRONG_PATTERNS_V0.md](./today-language/TODAY_LANGUAGE_STRONG_PATTERNS_V0.md)
+- 2026-07-25 | Today / Scenario | **Day Scenario SoT + product capture** | **IN_PROGRESS** | Canon draft [DAY_SCENARIO_V1.md](./DAY_SCENARIO_V1.md) · **two levels:** (1) what happens = scenario · (2) why = interpretive chorus (astro + day card + day number + natal as one story, not parallel modules) · capture pack [DAY_PRODUCT_LOGIC_CAPTURE_PACK.md](./audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md) · **next:** Phase B engine · Architecture impact before runtime SoT switch
 - 2026-07-01 | Product | **Build Map v0.5.5 — `DailySymbols` spec 🟢** | **ACTIVE** | Wave 1: color + stone · umbrella entity · [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md)
 - 2026-07-01 | Product | **Invisible Mechanism CLOSED** | **CLOSED** | §5.6 · Build Map · dual Internal/External · 4 user knowledges — не revisiting
 - 2026-07-01 | Product | **Build Map v0.2** | **REVOKED** | Component Catalog → Entity Catalog

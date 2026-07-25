@@ -152,10 +152,10 @@ optional:
 | `base_astrology` | Смысл L1-фактов / symbolism | `natal_facts` (date-level keys) | catalog |
 | `name_numerology` | Числа + смысл имени | name in input | — |
 | `natal_chart` | Смысл структуры карты | `natal_facts` with full capability | — |
-| `personality` | Кто ты / эмоции / strengths / blind spots | `natal_facts` (+ `base_astrology` если отделён) | `name_numerology`, `natal_chart` |
-| `relationships` | Близость | `personality` | `natal_chart` |
-| `career` | Работа / реализация | `personality` | `natal_chart` (MC/10th) |
-| `money` | Деньги | `personality` | `natal_chart` |
+| `personality` | **Character Engine cascade** (Raw→Evidence→ядро→Internal Engine→противоречия→сцены→потенциал/слепые→компас derived) — SoT: [PROFILE_EXPERIENCE_SCENARIO_V1](./profile/PROFILE_EXPERIENCE_SCENARIO_V1.md) | `natal_facts` (+ evidence graph) | `name_numerology`, `natal_chart`, catalogs |
+| `relationships` | ~~корень~~ → **UI/slot projection** сцен близости (Акт V) · **не генерировать отдельно** | Character Engine output | — |
+| `career` | ~~корень~~ → **UI/slot projection** сцен ответственности/реализации · **не генерировать отдельно** | Character Engine output | — |
+| `money` | ~~корень~~ → **UI/slot projection** сцен ресурсов · **не генерировать отдельно** | Character Engine output | — |
 | `compatibility` | A×B | facts **обоих** профилей | depth packs |
 | `today` | День | profile packages + day facts | ritual card/number |
 | `tarot` | Ответ на вопрос | draw facts | profile slice |
@@ -400,3 +400,5 @@ optional: [tarot_draw, day_number, intent, full_natal]
 | 2026-07-22 | v0.2 — Contract ⊕ Implementations (промпты = IP); Execution Rules ⊥ Quality Rules |
 | 2026-07-23 | Two quality prompts locked: fact (`natal_facts`) ⊥ interpretation (`personality`+) — never merge |
 | 2026-07-23 | `today` day pack: narrative continuity (not why-checklist) · prompt moments · authorial quality |
+| 2026-07-25 | Profile Scenario v1: `personality` = character cascade; `relationships`/`career`/`money` marked projection-only (deprecate as meaning roots) |
+| 2026-07-25 | Character Engine v1.1: independent generators abolished as meaning roots; Compass must not have own prompt; Evidence Graph required input |

@@ -1,6 +1,6 @@
-# TodayFlow — Product Canon (Unified v1.8)
+# TodayFlow — Product Canon (Unified v1.10)
 
-**Дата:** 2026-07-24
+**Дата:** 2026-07-25
 **Статус:** предлагаемая замена для четырёх документов, которые одновременно называли себя главными:
 `CORE_PRODUCT_CANON.md` (21.07) · `TODAYFLOW_PRODUCT_MODEL.md` (02.07, v0.4.9) · `TODAYFLOW_PRODUCT_BUILD_MAP.md` (03.07, философская часть) · `PIM_PRODUCT_NORTH_STAR.md` (23.06).
 
@@ -27,9 +27,10 @@ TodayFlow — не набор эзотерических инструменто�
 
 | Термин | Что это | Не путать с |
 |---|---|---|
-| **Personal Model** | Главная продуктовая сущность — живое цифровое представление человека, единственный SoT персонализации. Рабочее имя, финальный термин — open review | «Profile» как SoT — Profile это лишь UI-проекция |
-| **Profile** (экран) | UI-проекция Personal Model — вкладка «Профиль» | Personal Model целиком |
-| **Projection** | Экран/flow, который читает Personal Model, пишет обратно, делает модель понятнее пользователю | «раздел приложения» |
+| **Personal Model** | Главная продуктовая сущность — живое цифровое представление человека. Рабочее имя; **смысловой SoT построения личности** = Character Engine ([profile/PROFILE_EXPERIENCE_SCENARIO_V1.md](./profile/PROFILE_EXPERIENCE_SCENARIO_V1.md)) | «Profile» как SoT — Profile это UI-проекция |
+| **Character Engine** | Движок личности: Raw Sources → Evidence Graph → ядро → Internal Engine → противоречия → сцены → компас (derived). Единый SoT «кто этот человек» для всей платформы | Экран `/profile` · набор независимых LLM-генераторов |
+| **Profile** (экран) | **Первая** UI-проекция Character Engine — вкладка «Профиль» | Character Engine / Personal Model целиком |
+| **Projection** | Экран/flow, который читает модель (Profile, Today, Compat, Tarot, …), пишет обратно, делает модель понятнее | «раздел приложения» · собственный personality-корень |
 | **PIM** | Инфраструктура обновления Personal Model (Knowledge Atoms, Learning Δ) — невидима пользователю | UI-функция |
 | **Experience** | Конкретный UI/сессия на projection (First Today, evening close) | Projection целиком |
 | **Maps** | Живая накопительная история жизни — вторая половина **продукта** (UI: `/maps/*`, не Profile scroll; §3.4.1) | «трекер» / «статистика» · «вторая половина Profile» |
@@ -94,15 +95,15 @@ TodayFlow — не набор эзотерических инструменто�
 
 ### 3.4 Profile (карта человека)
 
-Экран Profile отвечает на один вопрос — **«кто я»** (почти не меняется):
+Экран Profile отвечает на один вопрос — **«кто этот человек?»** (почти не меняется):
 
 | Слой | Содержание |
 |---|---|
-| **Кто я** | Portrait · natal · numerology · циклы · сильные/слабые · отношения · деньги · предназначение |
+| **Кто я** | **Character Engine** → первая проекция на Profile. Ядро = одна мысль; проявления = жизненные сцены; компас derived. SoT: [profile/PROFILE_EXPERIENCE_SCENARIO_V1.md](./profile/PROFILE_EXPERIENCE_SCENARIO_V1.md). |
 
 Maps на Profile **не** вторая половина скролла — вынесены (см. §3.4.1); на экране допустима только тонкая CTA / seed preview.
 
-North star: устойчивый портрет человека, не CRM и не натальная стена. Launch v1: identity strip + тонкая CTA/MapsPreview seed + свёрнутые deep-слои. Живая история («как меняется моя жизнь») — на Maps surfaces.
+North star: **одна модель человека** (Character Engine); Profile/Today/Compat/Tarot — проекции. Не CRM, не натальная стена, не энциклопедия систем, не набор независимых AI-экранов. Launch v1: identity strip + тонкая CTA/MapsPreview seed + свёрнутые deep-слои. Живая история («как меняется моя жизнь») — на Maps surfaces.
 
 ### 3.4.1 IA-уточнение: где живёт UI Maps *(PR-4 supersede, 2026-07-21)*
 
@@ -356,3 +357,5 @@ Zone 4 **не создаёт** привычки/аскезы — только з
 | 2026-07-24 | v1.6 — §12.2 Platforms: Android = Today+Compatibility existing; Profile+auth = build; Tarot = later sprint |
 | 2026-07-24 | v1.7 — §12.1 Zone 4/Evening slot design; `/practices` demoted from primary nav; `reward_ring_tier_reached` |
 | 2026-07-24 | v1.8 — §10 JTBD packs ×6 → **backlog v2** (не launch); post-freeze scope, не core daily loop |
+| 2026-07-25 | v1.9 — §3.4 Profile = драматургия характера (PROFILE_EXPERIENCE_SCENARIO_V1); не энциклопедия слотов |
+| 2026-07-25 | v1.10 — §1 Character Engine термин; Profile = первая проекция; Scenario v1.1 |
