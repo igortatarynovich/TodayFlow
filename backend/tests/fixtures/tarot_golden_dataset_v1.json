@@ -1,0 +1,302 @@
+{
+  "contract_version": "tarot_golden_dataset_v1",
+  "locale": "ru",
+  "note": "Fixed scenarios without scores. Rubric + LLM scoring = Golden Eval (separate).",
+  "scenarios": [
+    {
+      "id": "choice_work_leave_or_stay",
+      "label": "Выбор · работа уйти/остаться",
+      "question": "Стоит ли менять работу — или сначала что-то прояснить здесь?",
+      "concern_domain": "work",
+      "spread_id": "guidance_choice_two",
+      "tags": ["choice", "work", "ontology"],
+      "cards": [
+        {"card_id": 18, "orientation": "reversed", "position_id": "a_gives", "title": "Вариант A — что он даёт"},
+        {"card_id": 22, "orientation": "upright", "position_id": "a_risk", "title": "Вариант A — риск"},
+        {"card_id": 4, "orientation": "upright", "position_id": "b_gives", "title": "Вариант B — что он даёт"},
+        {"card_id": 12, "orientation": "reversed", "position_id": "b_risk", "title": "Вариант B — риск"},
+        {"card_id": 15, "orientation": "upright", "position_id": "weights", "title": "Что важно учитывать"},
+        {"card_id": 0, "orientation": "upright", "position_id": "best_step", "title": "Лучший следующий шаг"}
+      ],
+      "profile": {
+        "decision_style": "Сверяется с телом, потом фиксирует выбор",
+        "motivation": "Нужна стабильность без потери смысла",
+        "helps": "Пишет критерии на бумаге перед разговором"
+      },
+      "expect": {
+        "question_type": "choice",
+        "domain": "work",
+        "intent": "choose",
+        "decision_horizon": "near_term",
+        "answer_shape": ["compare_options", "one_story", "direct_answer", "next_step", "no_arkan_label"]
+      }
+    },
+    {
+      "id": "relationship_state_three",
+      "label": "Состояние связи · три карты",
+      "question": "Что сейчас важно понять в отношениях с этим человеком?",
+      "concern_domain": "relationships",
+      "spread_id": "three_card",
+      "tags": ["relationship_state", "majors"],
+      "cards": [
+        {"card_id": 6, "orientation": "upright", "position_id": "past", "title": "Прошлое"},
+        {"card_id": 2, "orientation": "reversed", "position_id": "present", "title": "Настоящее"},
+        {"card_id": 11, "orientation": "upright", "position_id": "future", "title": "Будущее"}
+      ],
+      "profile": {
+        "communication_style": "Говорит прямо, но долго держит паузу перед сложным",
+        "conflict_style": "Уходит в анализ вместо ссоры",
+        "decision_style": "Нужен ясный жест, не абстрактный совет"
+      },
+      "expect": {
+        "question_type": "relationship_state",
+        "domain": "relationship",
+        "intent": "understand",
+        "answer_shape": ["one_story", "direct_answer", "next_step", "no_arkan_label"]
+      }
+    },
+    {
+      "id": "relationship_intent_other",
+      "label": "Намерение другого · без чтения мыслей как факта",
+      "question": "Что он думает обо мне после нашего разговора?",
+      "concern_domain": "relationships",
+      "spread_id": "three_card",
+      "tags": ["relationship_intent", "guard"],
+      "cards": [
+        {"card_id": 16, "orientation": "upright", "position_id": "signal", "title": "Сигнал"},
+        {"card_id": 14, "orientation": "reversed", "position_id": "shadow", "title": "Тень"},
+        {"card_id": 17, "orientation": "upright", "position_id": "for_you", "title": "Для тебя"}
+      ],
+      "profile": {
+        "communication_style": "Чувствителен к недосказанности",
+        "conflict_style": "Боится давить вопросами",
+        "decision_style": "Нужна гипотеза с оговоркой, не приговор"
+      },
+      "expect": {
+        "question_type": "relationship_intent",
+        "domain": "relationship",
+        "intent": "clarify",
+        "answer_shape": ["one_story", "direct_answer", "next_step", "no_other_mind_as_fact", "no_arkan_label"]
+      }
+    },
+    {
+      "id": "work_decision_burnout_minors",
+      "label": "Рабочее решение · выгорание · минорные",
+      "question": "Я выгораю на работе — что важно учесть перед сменой роли?",
+      "concern_domain": "work",
+      "spread_id": "three_card",
+      "tags": ["work_decision", "minors", "q1"],
+      "cards": [
+        {"card_id": 30, "orientation": "reversed", "position_id": "past", "title": "Откуда усталость"},
+        {"card_id": 48, "orientation": "upright", "position_id": "present", "title": "Сейчас"},
+        {"card_id": 56, "orientation": "upright", "position_id": "advice", "title": "Что сделать"}
+      ],
+      "profile": {
+        "decision_style": "Откладывает разговор с руководителем",
+        "motivation": "Хочет смысл, не только зарплату",
+        "helps": "Короткие списки критериев"
+      },
+      "expect": {
+        "question_type": "work_decision",
+        "domain": "work",
+        "answer_shape": ["one_story", "direct_answer", "next_step", "distinct_minors", "no_arkan_label"]
+      }
+    },
+    {
+      "id": "money_decision_calm",
+      "label": "Деньги · спокойное решение",
+      "question": "Какой взгляд поможет принять решение о деньгах спокойнее?",
+      "concern_domain": "money",
+      "spread_id": "two_card",
+      "tags": ["money_decision"],
+      "cards": [
+        {"card_id": 20, "orientation": "reversed", "position_id": "fear", "title": "Страх"},
+        {"card_id": 14, "orientation": "upright", "position_id": "advice", "title": "Совет"}
+      ],
+      "profile": {
+        "decision_style": "Считает цифры, но тревога перебивает",
+        "motivation": "Опора важнее азарта",
+        "helps": "Один проверяемый денежный жест"
+      },
+      "expect": {
+        "question_type": "money_decision",
+        "domain": "money",
+        "answer_shape": ["one_story", "direct_answer", "next_step", "no_arkan_label"]
+      }
+    },
+    {
+      "id": "conflict_colleague",
+      "label": "Конфликт · без раздувания",
+      "question": "В чём корень конфликта с коллегой и как его не раздуть?",
+      "concern_domain": "conflict",
+      "spread_id": "three_card",
+      "tags": ["conflict"],
+      "cards": [
+        {"card_id": 5, "orientation": "upright", "position_id": "you", "title": "Ты"},
+        {"card_id": 54, "orientation": "upright", "position_id": "other", "title": "Другой"},
+        {"card_id": 14, "orientation": "upright", "position_id": "bridge", "title": "Мост"}
+      ],
+      "profile": {
+        "conflict_style": "Защищается логикой",
+        "communication_style": "Режет правду слишком остро",
+        "decision_style": "Нужен мост, не победа"
+      },
+      "expect": {
+        "question_type": "conflict",
+        "domain": "work",
+        "answer_shape": ["one_story", "direct_answer", "next_step", "no_arkan_label"]
+      }
+    },
+    {
+      "id": "self_state_anxiety",
+      "label": "Внутреннее состояние · тревога",
+      "question": "Почему мне так тревожно и тяжело внутри последние дни?",
+      "concern_domain": "inner_state",
+      "spread_id": "one_card",
+      "tags": ["self_state"],
+      "cards": [
+        {"card_id": 18, "orientation": "upright", "position_id": "focus", "title": "Фокус"}
+      ],
+      "profile": {
+        "energy_source": "Тишина и прогулка без разговоров",
+        "helps": "Назвать чувство без самоосуждения",
+        "decision_style": "Сначала контакт с телом"
+      },
+      "expect": {
+        "question_type": "self_state",
+        "domain": "self",
+        "answer_shape": ["one_story", "direct_answer", "next_step", "no_arkan_label"]
+      }
+    },
+    {
+      "id": "direction_creative",
+      "label": "Направление · творческий проект",
+      "question": "Куда мне двигаться дальше в творческом проекте?",
+      "concern_domain": "growth",
+      "spread_id": "two_card",
+      "tags": ["direction"],
+      "cards": [
+        {"card_id": 1, "orientation": "upright", "position_id": "resource", "title": "Ресурс"},
+        {"card_id": 0, "orientation": "reversed", "position_id": "risk", "title": "Риск"}
+      ],
+      "profile": {
+        "motivation": "Нужен живой следующий шаг, не идеальный план",
+        "identity_line": "Делает смысл через форму",
+        "decision_style": "Лучше маленький эксперимент"
+      },
+      "expect": {
+        "question_type": "direction",
+        "domain": "creative",
+        "answer_shape": ["one_story", "direct_answer", "next_step", "no_arkan_label"]
+      }
+    },
+    {
+      "id": "timing_readiness_job",
+      "label": "Готовность / timing · без даты",
+      "question": "Когда лучше менять работу — пора ли сейчас?",
+      "concern_domain": "work",
+      "spread_id": "three_card",
+      "tags": ["timing_readiness", "guard"],
+      "cards": [
+        {"card_id": 10, "orientation": "upright", "position_id": "pace", "title": "Темп"},
+        {"card_id": 7, "orientation": "reversed", "position_id": "block", "title": "Блок"},
+        {"card_id": 21, "orientation": "upright", "position_id": "ready", "title": "Готовность"}
+      ],
+      "profile": {
+        "decision_style": "Ждёт «знака», откладывает критерии",
+        "motivation": "Хочет ясности без фатализма",
+        "helps": "Чеклист готовности вместо календаря"
+      },
+      "expect": {
+        "question_type": "timing_readiness",
+        "domain": "work",
+        "intent": "prepare",
+        "answer_shape": ["one_story", "direct_answer", "next_step", "no_exact_date", "no_arkan_label"]
+      }
+    },
+    {
+      "id": "open_reflection_one",
+      "label": "Открытый вопрос · одна карта",
+      "question": "Что мне важно увидеть сейчас?",
+      "concern_domain": "other",
+      "spread_id": "one_card",
+      "tags": ["open_reflection"],
+      "cards": [
+        {"card_id": 9, "orientation": "upright", "position_id": "focus", "title": "Фокус"}
+      ],
+      "profile": {
+        "decision_style": "Ищет зеркало, не инструкцию",
+        "motivation": "Понять следующий внутренний акцент",
+        "helps": "Одна ясная формулировка"
+      },
+      "expect": {
+        "question_type": "open_reflection",
+        "domain": "general",
+        "answer_shape": ["one_story", "direct_answer", "next_step", "no_arkan_label"]
+      }
+    },
+    {
+      "id": "q1_cups_8_9_10_leave",
+      "label": "Q1 gate · Cups 8/9/10 · уход vs сытость vs дом",
+      "question": "Стоит ли уходить из отношений, которые почти хороши, но внутри уже пусто?",
+      "concern_domain": "relationships",
+      "spread_id": "three_card",
+      "tags": ["q1", "adjacent_minors", "cups", "card_name_ablation"],
+      "notes": "Gate: three distinct human stories after card-name ablation.",
+      "cards": [
+        {"card_id": 43, "orientation": "upright", "position_id": "past", "title": "Что уже случилось"},
+        {"card_id": 44, "orientation": "upright", "position_id": "present", "title": "Где я сейчас"},
+        {"card_id": 45, "orientation": "upright", "position_id": "future", "title": "Куда тянет"}
+      ],
+      "profile": {
+        "communication_style": "Говорит мягко, но уже внутренне отошёл",
+        "conflict_style": "Избегает разрыва «из жалости»",
+        "decision_style": "Нужно различить комфорт и живую близость"
+      },
+      "expect": {
+        "question_type": "choice",
+        "domain": "relationship",
+        "answer_shape": [
+          "compare_options",
+          "one_story",
+          "direct_answer",
+          "next_step",
+          "distinct_minors",
+          "card_name_ablation_ready",
+          "no_arkan_label"
+        ]
+      }
+    },
+    {
+      "id": "q1_swords_8_9_10_anxiety",
+      "label": "Q1 gate · Swords 8/9/10 · клетка / ночь / дно",
+      "question": "Почему я чувствую себя в ловушке мыслей и что с этим делать?",
+      "concern_domain": "inner_state",
+      "spread_id": "three_card",
+      "tags": ["q1", "adjacent_minors", "swords", "card_name_ablation"],
+      "notes": "Gate: 8/9/10 Swords must not collapse into one 'anxiety' template.",
+      "cards": [
+        {"card_id": 57, "orientation": "upright", "position_id": "bind", "title": "Что связывает"},
+        {"card_id": 58, "orientation": "upright", "position_id": "night", "title": "Ночной ум"},
+        {"card_id": 59, "orientation": "reversed", "position_id": "turn", "title": "Поворот"}
+      ],
+      "profile": {
+        "energy_source": "Сон и граница экрана",
+        "helps": "Назвать одну мысль, которую крутит",
+        "decision_style": "Сначала уменьшить стимуляцию, потом решать"
+      },
+      "expect": {
+        "question_type": "self_state",
+        "domain": "self",
+        "answer_shape": [
+          "one_story",
+          "direct_answer",
+          "next_step",
+          "distinct_minors",
+          "card_name_ablation_ready",
+          "no_arkan_label"
+        ]
+      }
+    }
+  ]
+}

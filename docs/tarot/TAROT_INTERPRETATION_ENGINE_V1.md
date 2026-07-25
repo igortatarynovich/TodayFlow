@@ -275,7 +275,7 @@ Semantic profile на карту (семантика, не литература)
 
 - вопрос · профиль · расклад/карты · ожидаемый `question_type` (ontology)
 
-Расширяется независимо от рубрикатора. Path (target): `backend/tests/fixtures/tarot_golden_dataset_v1.json` (создаётся в Q2 prep).
+Расширяется независимо от рубрикатора. Path: `backend/tests/fixtures/tarot_golden_dataset_v1.json` · canon [TAROT_GOLDEN_DATASET_V1.md](./TAROT_GOLDEN_DATASET_V1.md).
 
 #### Golden Eval (after Dataset)
 
@@ -328,6 +328,6 @@ Semantic profile на карту (семантика, не литература)
 - [x] Interpretation Stack v1 **hard-frozen** until Golden Eval results
 - [x] Canon principles: LLM = one story · answer this question · card-name ablation
 - [x] Q1 Editorial deepen minors (unique archetype per card, not rank×suit)
-- [ ] Golden Dataset (scenarios without scores)
+- [x] Golden Dataset (scenarios without scores)
 - [ ] Golden Eval (rubric + paid-worth + anti-sameness) — freeze lift gate
 - [ ] Q3 Prompt iteration from eval deltas only
