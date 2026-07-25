@@ -192,7 +192,7 @@ export function ProfileChartSection({
                 key={item.house}
                 href={item.href}
                 className={styles.lifeMapCard}
-                style={{ border: `1px solid ${item.accent}2f` }}
+                style={{ borderLeft: `3px solid ${item.accent}` }}
               >
                 <p className={styles.lifeMapHouse} style={{ color: item.accent }}>
                   {item.house} дом

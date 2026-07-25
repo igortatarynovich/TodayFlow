@@ -237,15 +237,17 @@ export function NatalChartWheel({
   const isMobile = useIsMobileLayout(layout);
   const size = 720;
   const center = size / 2;
-  const outerRadius = size / 2 - 44;
-  const zodiacInnerRadius = outerRadius - 42;
+  /* Keep engraved rings inside the circular plate — no spill past the rim. */
+  const outerRadius = size / 2 - 58;
+  const zodiacInnerRadius = outerRadius - 40;
   const innerRadius = outerRadius * 0.56;
   const aspectRadius = innerRadius - 18;
   const houseRadius = (outerRadius + innerRadius) / 2;
-  const basePlanetRadius = zodiacInnerRadius - 28;
-  const planetRadiusVariation = 18;
-  const planetRadiusMin = innerRadius + 28;
-  const planetRadiusMax = zodiacInnerRadius - 10;
+  const planetDisc = isMobile ? 16 : 20;
+  const basePlanetRadius = (zodiacInnerRadius + innerRadius) / 2;
+  const planetRadiusVariation = isMobile ? 12 : 16;
+  const planetRadiusMin = innerRadius + planetDisc + 6;
+  const planetRadiusMax = zodiacInnerRadius - planetDisc - 6;
   const gradientId = useId().replace(/:/g, "");
   const softGlowId = `${gradientId}-glow`;
   const webClipId = `${gradientId}-clip`;
@@ -547,7 +549,7 @@ export function NatalChartWheel({
         radius: finalRadius,
       };
     });
-  }, [chartPositions, houseCusps, basePlanetRadius, planetRadiusVariation, planetRadiusMin, planetRadiusMax, getPosition, planetSymbols]);
+  }, [chartPositions, houseCusps, basePlanetRadius, planetRadiusVariation, planetRadiusMin, planetRadiusMax, getPosition, planetSymbols, isMobile]);
 
   const angleMarkers = useMemo(() => {
     const markers = [
@@ -561,8 +563,8 @@ export function NatalChartWheel({
       return {
         ...marker,
         angle,
-        outer: getPosition(angle, outerRadius + 12),
-        inner: getPosition(angle, zodiacInnerRadius - 8),
+        outer: getPosition(angle, outerRadius - 2),
+        inner: getPosition(angle, zodiacInnerRadius + 2),
       };
     });
   }, [degreeToAngle, getPosition, houseCusps, outerRadius, zodiacInnerRadius]);
@@ -715,7 +717,7 @@ export function NatalChartWheel({
         <circle
           cx={center}
           cy={center}
-          r={outerRadius + 16}
+          r={outerRadius + 4}
           fill={`url(#${gradientId}-chart)`}
           onClick={() => setSelected(null)}
         />
@@ -723,10 +725,10 @@ export function NatalChartWheel({
         <circle
           cx={center}
           cy={center}
-          r={outerRadius + 8}
+          r={outerRadius + 2}
           fill="none"
-          stroke="rgba(255,255,255,0.74)"
-          strokeWidth="18"
+          stroke="rgba(255,255,255,0.7)"
+          strokeWidth="10"
         />
 
         <circle
@@ -878,32 +880,32 @@ export function NatalChartWheel({
 
         {zodiacSigns.map((sign, i) => {
           const signAngle = degreeToAngle(i * 30 + 15);
-          const pos = getPosition(signAngle, outerRadius + 10);
+          const bandRadius = (outerRadius + zodiacInnerRadius) / 2;
+          const pos = getPosition(signAngle, bandRadius);
           const elementColors = INK.elementStroke;
+          const markerR = isMobile ? 13 : 16;
           return (
             <g key={sign.name}>
               <circle
                 cx={pos.x}
                 cy={pos.y}
-                r="19"
+                r={markerR}
                 fill={INK.white}
                 stroke={elementColors[sign.element] || INK.gold}
-                strokeWidth="2"
-                opacity="0.9"
+                strokeWidth="1.5"
+                opacity="0.92"
               />
-              {!isMobile ? (
               <text
                 x={pos.x}
                 y={pos.y}
                 textAnchor="middle"
                 dominantBaseline="central"
-                fontSize="20"
+                fontSize={isMobile ? "14" : "17"}
                 fill={elementColors[sign.element] || INK.gold}
                 fontWeight="700"
               >
                 {sign.glyph}
               </text>
-              ) : null}
             </g>
           );
         })}
@@ -1029,14 +1031,14 @@ export function NatalChartWheel({
               filter={isActive ? `url(#${planetGlowId})` : undefined}
             >
               {/* Generous invisible hit area for touch */}
-              <circle cx={planet.position.x} cy={planet.position.y} r={30} fill="transparent" />
+              <circle cx={planet.position.x} cy={planet.position.y} r={planetDisc + 10} fill="transparent" />
               <circle
                 cx={planet.position.x}
                 cy={planet.position.y}
-                r={isActive ? 24 : 20}
+                r={isActive ? planetDisc + 3 : planetDisc}
                 fill={isSelected ? planetColor : isActive ? "#ffffff" : "#fffaf4"}
                 stroke={planetColor}
-                strokeWidth={isActive ? "3" : "2"}
+                strokeWidth={isActive ? "2.5" : "1.75"}
                 style={{ transition: "all 0.3s ease" }}
               />
               <text
@@ -1044,7 +1046,7 @@ export function NatalChartWheel({
                 y={planet.position.y}
                 textAnchor="middle"
                 dominantBaseline="central"
-                fontSize={isActive ? "24" : "22"}
+                fontSize={isMobile ? (isActive ? "17" : "15") : isActive ? "20" : "18"}
                 fill={isSelected ? INK.white : planetColor}
                 fontWeight="700"
                 style={{ transition: "all 0.3s ease", pointerEvents: "none" }}

@@ -67,26 +67,27 @@
 }
 
 .rootPlain {
-  padding: 0.85rem 0 0;
+  margin-top: 0.35rem;
+  padding: 0.95rem 0 0;
   border: none;
+  border-top: 1px solid rgba(198, 166, 119, 0.22);
   border-radius: 0;
   background: transparent;
 }
 
 .rootPlain .toggle {
-  border: none;
-  border-radius: 0;
-  padding: 0;
-  background: transparent;
-  color: #8b6a3e;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  border: 1px solid rgba(184, 144, 88, 0.32);
+  border-radius: 999px;
+  padding: 0.38rem 0.75rem;
+  background: rgba(255, 255, 255, 0.72);
+  color: #7b6140;
+  text-decoration: none;
   font-weight: 600;
 }
 
 .rootPlain[open] .toggle {
-  background: transparent;
-  border: none;
+  background: rgba(139, 106, 62, 0.1);
+  border-color: rgba(139, 106, 62, 0.38);
   color: #6b5336;
 }
 
@@ -97,7 +98,8 @@
 
 :global([data-theme="dark"]) .rootPlain {
   background: transparent;
-  border: none;
+  border-color: transparent;
+  border-top-color: rgba(212, 184, 150, 0.2);
 }
 
 :global([data-theme="dark"]) .title {
@@ -110,7 +112,9 @@
 
 :global([data-theme="dark"]) .rootPlain .toggle,
 :global([data-theme="dark"]) .rootPlain[open] .toggle {
-  color: rgba(212, 184, 150, 0.9);
-  background: transparent;
+  color: rgba(232, 208, 165, 0.92);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(212, 184, 150, 0.28);
+  text-decoration: none;
 }
 

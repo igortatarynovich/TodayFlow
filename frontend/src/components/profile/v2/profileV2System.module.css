@@ -2178,45 +2178,68 @@
     var(--tf-surface, #fff);
 }
 
-/* Natal: one open surface — no zone/journey card chrome. */
-.natalFlatScene {
+/*
+ * Natal: ONE journey card — same language as bridgeScene.
+ * Content inside has no second/third borders (signature, wheel wrap, accordion).
+ */
+.natalScene {
   position: relative;
   isolation: isolate;
+  overflow: hidden;
   scroll-margin-top: 4.5rem;
-  padding: clamp(0.35rem, 1.5vw, 0.75rem) 0 clamp(1.25rem, 3vw, 1.75rem);
-  border: none;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-  overflow: visible;
+  padding: clamp(1.15rem, 3.5vw, 1.85rem);
+  border-radius: 1.75rem;
+  border: 1px solid var(--tf-border, #e8e2d6);
+  background:
+    radial-gradient(ellipse 75% 50% at 92% -8%, rgba(201, 169, 110, 0.14) 0%, transparent 55%),
+    linear-gradient(168deg, rgba(255, 253, 249, 0.99) 0%, rgba(250, 246, 239, 0.96) 100%);
+  box-shadow: var(--tf-shadow-card, 0 14px 36px rgba(42, 37, 32, 0.055));
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.natalFlatHeader {
-  margin-bottom: 0.85rem;
+.natalSceneHeader {
+  margin: 0;
 }
 
 .natalPlainToggle {
-  margin-top: 1rem;
-  padding: 0;
-  border: none;
-  background: transparent;
-  color: #8b6a3e;
-  font-size: 0.875rem;
+  align-self: flex-start;
+  margin-top: 0.25rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(184, 144, 88, 0.32);
+  background: rgba(255, 255, 255, 0.72);
+  color: #7b6140;
+  font-size: 0.8125rem;
   font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 3px;
   cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
 .natalPlainToggle:hover {
+  border-color: rgba(139, 106, 62, 0.48);
+  background: rgba(255, 252, 246, 0.95);
   color: #6b5336;
 }
 
+:global([data-theme="dark"]) .natalScene {
+  border-color: rgba(212, 184, 150, 0.18);
+  background:
+    radial-gradient(ellipse 75% 50% at 92% -8%, rgba(201, 169, 110, 0.1) 0%, transparent 55%),
+    linear-gradient(168deg, #221c28 0%, #1a1620 100%);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28);
+}
+
 :global([data-theme="dark"]) .natalPlainToggle {
-  color: rgba(212, 184, 150, 0.9);
+  border-color: rgba(212, 184, 150, 0.28);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(232, 208, 165, 0.92);
 }
 
 :global([data-theme="dark"]) .natalPlainToggle:hover {
+  border-color: rgba(212, 184, 150, 0.48);
+  background: rgba(201, 169, 110, 0.1);
   color: #e8d4b0;
 }
 

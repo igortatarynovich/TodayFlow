@@ -27,8 +27,8 @@ export type ProfileExploreSectionProps = {
 };
 
 /**
- * Natal as one flat surface: title → signature strip → wheel → one plain fold.
- * No nested card chrome around the chart.
+ * One natal journey card: signature + wheel + one fold.
+ * No nested bordered wrappers — only this scene carries a frame.
  */
 export function ProfileExploreSection({
   open,
@@ -54,12 +54,12 @@ export function ProfileExploreSection({
     <section
       id="profile-v2-explore"
       ref={motion.ref}
-      className={`${styles.natalFlatScene} ${motion.className}`.trim()}
+      className={`${styles.natalScene} ${motion.className}`.trim()}
       style={motion.style}
       data-testid="profile-v2-explore"
       aria-labelledby="profile-v2-explore-title"
     >
-      <header className={styles.natalFlatHeader}>
+      <header className={styles.natalSceneHeader}>
         <p className={styles.journeyStepIndex}>
           <span className={styles.journeyStepBadge}>{copy.stepBadge}</span>
           <span id="profile-v2-explore-title">{copy.title}</span>
