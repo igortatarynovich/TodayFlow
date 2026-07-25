@@ -1,12 +1,12 @@
-/* Natal chart — one finished instrument (not SVG + orphan UI). */
+/* Natal chart — full-width instrument inside the profile column. */
 
 .root {
   --natal-ink: #3d3228;
   --natal-ink-soft: #8a7355;
   --natal-gold: #8b6a3e;
   width: 100%;
-  max-width: 28rem;
-  margin: 0 auto;
+  max-width: min(100%, 42rem);
+  margin: 0;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -16,6 +16,7 @@
   display: flex;
   flex-direction: column;
   gap: 0;
+  width: 100%;
   border-radius: 1.65rem;
   background:
     radial-gradient(circle at 50% 18%, rgba(255, 252, 246, 0.98) 0%, transparent 42%),
@@ -40,13 +41,15 @@
 .plate {
   position: relative;
   margin: 0.85rem 0.85rem 0;
-  padding: 0.35rem;
+  padding: clamp(0.35rem, 1.5vw, 0.75rem);
   background: transparent;
   border-radius: 50%;
   border: none;
   box-shadow: none;
   overflow: hidden;
   aspect-ratio: 1 / 1;
+  width: auto;
+  max-width: 100%;
 }
 
 .svg {
@@ -69,8 +72,8 @@
   padding: 0.85rem 0.95rem 0.95rem;
   min-height: 5.75rem;
   border-radius: 0.95rem;
-  border: none;
-  background: rgba(255, 252, 246, 0.55);
+  border: 1px solid rgba(154, 132, 104, 0.18);
+  background: rgba(255, 252, 246, 0.72);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 
@@ -159,6 +162,7 @@
   margin: 0.55rem 0.55rem 0.75rem;
   padding: 0.45rem 0.35rem 0.55rem;
   border-radius: 1rem;
+  border: 1px solid rgba(154, 132, 104, 0.14);
   background: rgba(92, 72, 48, 0.06);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
@@ -259,7 +263,7 @@
   width: 100%;
   padding: 0.55rem 0.65rem;
   border-radius: 0.75rem;
-  border: none;
+  border: 1px solid rgba(154, 132, 104, 0.12);
   background: rgba(255, 252, 246, 0.55);
   text-align: left;
   font: inherit;
@@ -269,6 +273,7 @@
 
 .planetListRowActive {
   background: rgba(139, 106, 62, 0.14);
+  border-color: rgba(139, 106, 62, 0.28);
 }
 
 .planetListIcon {
@@ -288,10 +293,8 @@
   white-space: nowrap;
 }
 
-.root[data-layout="mobile"] {
-  max-width: min(100%, 22.5rem);
-}
-
+/* Fill the profile column — do not shrink to a middle stub. */
+.root[data-layout="mobile"],
 .root[data-layout="desktop"] {
-  max-width: 26rem;
+  max-width: min(100%, 42rem);
 }

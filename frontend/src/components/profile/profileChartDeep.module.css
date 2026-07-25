@@ -42,13 +42,13 @@
   color: rgba(95, 73, 48, 0.72);
 }
 
-/* Soft tiles inside the scene — wash only, no nested border rings. */
+/* Soft tiles inside the natal scene — light edge so they don't melt into the wash. */
 .signatureCard {
   padding: 0.7rem 0.75rem;
-  border: none;
+  border: 1px solid rgba(154, 132, 104, 0.22);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.55);
-  box-shadow: none;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 6px 16px rgba(92, 72, 48, 0.05);
   display: flex;
   flex-direction: column;
   gap: 0.12rem;
@@ -152,7 +152,7 @@
 :global([data-theme="dark"]) .signatureCardMc,
 :global([data-theme="dark"]) .signatureCardNumerology {
   background: rgba(255, 255, 255, 0.05);
-  border: none;
+  border-color: rgba(212, 184, 150, 0.2);
   box-shadow: none;
 }
 

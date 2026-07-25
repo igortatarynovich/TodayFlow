@@ -4,47 +4,48 @@ import {
   resolveDailyTarotDeckIndex,
   resolveTarotDeckIndexByName,
   tarotCardFaceSrc,
+  tarotCardFacePicture,
+  tarotCardBackPicture,
   TAROT_FULL_DECK_COUNT,
 } from "@/lib/tarotCardAssets";
 import tarotIndex from "@/data/tarotDeckIndex.json";
+import tarotWebManifest from "@/data/tarotWebManifest.json";
 
-const TAROT_PUBLIC = path.join(process.cwd(), "public/images/cards/tarot");
+const TAROT_WEB = path.join(process.cwd(), "public/images/cards/tarot/web");
 
-function facePathOnDisk(deckIndex: number): string {
-  if (deckIndex <= 21) {
-    return path.join(TAROT_PUBLIC, "Major Arcana", `${deckIndex}.png`);
-  }
-  const n = deckIndex - 22;
-  const suits = ["Suit of Wands", "Suit of Cups", "Suit of Swords", "Suit of Pentacles"];
-  const suit = suits[Math.floor(n / 14)]!;
-  const rank = (n % 14) + 1;
-  return path.join(TAROT_PUBLIC, suit, `${rank}.png`);
-}
-
-describe("tarotCardAssets full deck", () => {
+describe("tarotCardAssets full deck (web pipeline)", () => {
   it("registry has exactly 78 unique deck indices 0…77", () => {
     const ids = tarotIndex.cards.map((c) => c.deck_index).sort((a, b) => a - b);
     expect(ids).toHaveLength(78);
     expect(new Set(ids).size).toBe(78);
     expect(ids[0]).toBe(0);
     expect(ids[77]).toBe(77);
-    expect(ids.filter((i) => i <= 21)).toHaveLength(22);
-    expect(ids.filter((i) => i >= 22)).toHaveLength(56);
   });
 
-  it("all 78 face PNG assets exist on disk", () => {
+  it("web manifest lists 78 cards and back variants", () => {
+    expect(tarotWebManifest.cards).toHaveLength(78);
+    expect(tarotWebManifest.back.variants["576x960"]).toBeTruthy();
+  });
+
+  it("all 78 face web assets exist on disk (avif+webp mid size)", () => {
     for (let i = 0; i < TAROT_FULL_DECK_COUNT; i++) {
-      const file = facePathOnDisk(i);
-      expect(fs.existsSync(file)).toBe(true);
+      const stem = String(i).padStart(2, "0");
+      const avif = path.join(TAROT_WEB, "faces", `${stem}-576x960.avif`);
+      const webp = path.join(TAROT_WEB, "faces", `${stem}-576x960.webp`);
+      expect(fs.existsSync(avif)).toBe(true);
+      expect(fs.existsSync(webp)).toBe(true);
       expect(tarotCardFaceSrc(i)).toBeTruthy();
+      expect(tarotCardFacePicture(i)?.avifSrcSet).toContain(".avif");
     }
+    expect(fs.existsSync(path.join(TAROT_WEB, "back-576x960.webp"))).toBe(true);
+    expect(tarotCardBackPicture().src).toContain("/images/cards/tarot/web/");
   });
 
-  it("maps every deck index 0…77 to a face path", () => {
+  it("maps every deck index 0…77 to a web face path", () => {
     for (let i = 0; i < TAROT_FULL_DECK_COUNT; i++) {
       const src = tarotCardFaceSrc(i);
       expect(src).toBeTruthy();
-      expect(src).toContain("/images/cards/tarot/");
+      expect(src).toContain("/images/cards/tarot/web/");
     }
   });
 

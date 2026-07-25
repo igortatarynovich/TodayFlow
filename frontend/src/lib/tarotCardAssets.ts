@@ -1,54 +1,131 @@
 /**
- * Статические изображения колоды в `public/images/cards/tarot/`.
- * Полная колода: 22 старших аркана + 56 младших (4 масти × 14 карт, файлы 1.png…14.png).
+ * Tarot card assets — production path uses optimized web derivatives only.
+ * Masters live in assets-source/tarot/masters/ (gitignored); rebuild via:
+ *   python3 scripts/build-tarot-assets.py
  */
 
 import tarotMeta from "@/data/tarotDeckIndex.json";
+import tarotWebManifest from "@/data/tarotWebManifest.json";
 
-const TAROT_PUBLIC_BASE = "/images/cards/tarot";
+const WEB_BASE = "/images/cards/tarot/web";
 
-const SUIT_OF = ["Suit of Wands", "Suit of Cups", "Suit of Swords", "Suit of Pentacles"] as const;
-
-/** Всего карт в колоде Waite-Smith (как в ассетах). */
+/** Full Waite-Smith deck size. */
 export const TAROT_FULL_DECK_COUNT = 78;
 
-/** Натуральный размер PNG колоды (пропорции UI на вебе и в iOS). */
-export const TAROT_CARD_PIXEL_WIDTH = 192;
-export const TAROT_CARD_PIXEL_HEIGHT = 320;
+/** Canonical face aspect (3:5). */
+export const TAROT_CARD_ASPECT_RATIO = 3 / 5;
 
-/** Миниатюра лица в блоке «день готов» (паритет с iOS `TodayRitualFlowView` spine). */
-export const TAROT_SPINE_THUMB_WIDTH_PX = 76;
-
-/** Макс. ширина раскрытой карты в ритуале Today (лицо + рубашка в pick flow). */
+/** Logical CSS width of a ritual reveal card (density handled via srcSet). */
 export const TAROT_RITUAL_REVEAL_MAX_WIDTH_PX = 220;
 
-/** CSS `aspect-ratio`: ширина / высота. */
-export const TAROT_CARD_ASPECT_RATIO = TAROT_CARD_PIXEL_WIDTH / TAROT_CARD_PIXEL_HEIGHT;
+/** Spine thumbnail width. */
+export const TAROT_SPINE_THUMB_WIDTH_PX = 76;
+
+/** @deprecated Prefer aspect-ratio; kept for call-site height helpers. */
+export const TAROT_CARD_PIXEL_WIDTH = 576;
+/** @deprecated Prefer aspect-ratio. */
+export const TAROT_CARD_PIXEL_HEIGHT = 960;
+
+export type TarotWebSizeLabel = "384x640" | "576x960" | "768x1280";
+
+type VariantPair = {
+  avif: string;
+  webp: string;
+  width: number;
+  height: number;
+};
+
+type ManifestCard = {
+  deck_index: number;
+  variants: Record<string, VariantPair>;
+};
+
+type Manifest = {
+  public_base: string;
+  back: { variants: Record<string, VariantPair> };
+  cards: ManifestCard[];
+};
+
+const manifest = tarotWebManifest as Manifest;
+
+const CARD_BY_INDEX = new Map<number, ManifestCard>(
+  (manifest.cards ?? []).map((c) => [c.deck_index, c]),
+);
 
 export function tarotCardDisplayHeightPx(widthPx: number): number {
-  return Math.round((widthPx * TAROT_CARD_PIXEL_HEIGHT) / TAROT_CARD_PIXEL_WIDTH);
+  return Math.round(widthPx / TAROT_CARD_ASPECT_RATIO);
 }
 
-/** Рубашка колоды (веб-ассет в корне `tarot/`). */
-export function tarotCardBackSrc(): string {
-  return `${TAROT_PUBLIC_BASE}/${encodeURIComponent("Back_web.png")}`;
+function absWeb(rel: string): string {
+  return `${WEB_BASE}/${rel.replace(/^\//, "")}`;
 }
 
-/**
- * Лицо карты по индексу колоды 0…77: 0–21 Major Arcana, 22–77 младшие арканы
- * (жезлы, кубки, мечи, пентакли по 14 карт в порядке файлов 1…14).
- */
-export function tarotCardFaceSrc(deckIndex: number): string | null {
+function sizeOrder(): TarotWebSizeLabel[] {
+  return ["384x640", "576x960", "768x1280"];
+}
+
+export function tarotCardBackSrc(preferred: TarotWebSizeLabel = "576x960"): string {
+  const v = manifest.back?.variants?.[preferred] ?? manifest.back?.variants?.["576x960"];
+  if (!v) return `${WEB_BASE}/back-576x960.webp`;
+  return absWeb(v.webp);
+}
+
+export function tarotCardFaceSrc(
+  deckIndex: number,
+  preferred: TarotWebSizeLabel = "576x960",
+): string | null {
   if (!Number.isFinite(deckIndex) || deckIndex < 0 || deckIndex > 77) return null;
-  if (deckIndex <= 21) {
-    return `${TAROT_PUBLIC_BASE}/${encodeURIComponent("Major Arcana")}/${deckIndex}.png`;
+  const card = CARD_BY_INDEX.get(deckIndex);
+  const v = card?.variants?.[preferred] ?? card?.variants?.["576x960"];
+  if (!v) return null;
+  return absWeb(v.webp);
+}
+
+export type TarotPictureSources = {
+  /** Fallback <img src> (webp mid density). */
+  src: string;
+  avifSrcSet: string;
+  webpSrcSet: string;
+  width: number;
+  height: number;
+};
+
+function buildPictureSources(variants: Record<string, VariantPair> | undefined): TarotPictureSources | null {
+  if (!variants) return null;
+  const avifParts: string[] = [];
+  const webpParts: string[] = [];
+  for (const label of sizeOrder()) {
+    const v = variants[label];
+    if (!v) continue;
+    avifParts.push(`${absWeb(v.avif)} ${v.width}w`);
+    webpParts.push(`${absWeb(v.webp)} ${v.width}w`);
   }
-  const n = deckIndex - 22;
-  const suitIndex = Math.floor(n / 14);
-  const rank = (n % 14) + 1;
-  const folder = SUIT_OF[suitIndex];
-  if (!folder) return null;
-  return `${TAROT_PUBLIC_BASE}/${encodeURIComponent(folder)}/${rank}.png`;
+  const mid = variants["576x960"] ?? variants["384x640"] ?? variants["768x1280"];
+  if (!mid || !webpParts.length) return null;
+  return {
+    src: absWeb(mid.webp),
+    avifSrcSet: avifParts.join(", "),
+    webpSrcSet: webpParts.join(", "),
+    width: mid.width,
+    height: mid.height,
+  };
+}
+
+export function tarotCardFacePicture(deckIndex: number): TarotPictureSources | null {
+  if (!Number.isFinite(deckIndex) || deckIndex < 0 || deckIndex > 77) return null;
+  return buildPictureSources(CARD_BY_INDEX.get(deckIndex)?.variants);
+}
+
+export function tarotCardBackPicture(): TarotPictureSources {
+  return (
+    buildPictureSources(manifest.back?.variants) ?? {
+      src: `${WEB_BASE}/back-576x960.webp`,
+      avifSrcSet: "",
+      webpSrcSet: `${WEB_BASE}/back-576x960.webp 576w`,
+      width: 576,
+      height: 960,
+    }
+  );
 }
 
 type TarotMetaCard = {
@@ -69,7 +146,6 @@ function normalizeTarotNameKey(raw: string | null | undefined): string | null {
   return t.length ? t : null;
 }
 
-/** name_en / name_ru / slug → deck_index 0…77 (полная колода). */
 function buildTarotNameToIdMap(): Record<string, number> {
   const map: Record<string, number> = {};
   const cards = (tarotMeta as { cards: TarotMetaCard[] }).cards ?? [];
@@ -82,14 +158,12 @@ function buildTarotNameToIdMap(): Record<string, number> {
     for (const k of keys) {
       if (map[k] == null) map[k] = idx;
     }
-    // Common major aliases without leading "the "
     const en = normalizeTarotNameKey(card.name_en);
     if (en?.startsWith("the ")) {
       const short = en.slice(4);
       if (short && map[short] == null) map[short] = idx;
     }
   }
-  // Extra major aliases used in legacy reference JSON
   const extras: Record<string, number> = {
     "the hanged man": 12,
     "hanged man": 12,
@@ -123,20 +197,14 @@ function fnvHash32(dateISO: string): number {
   return h >>> 0;
 }
 
-/** Стабильный индекс 0…77 по дате (FNV-1a 32-bit) — паритет с iOS `stableDeckIndex`. */
 export function stableTarotDeckIndexFromDateISO(dateISO: string): number {
   return fnvHash32(dateISO) % TAROT_FULL_DECK_COUNT;
 }
 
-/** Стабильный старший аркан 0…21 по той же базе FNV (как iOS `stableMajorArcanaId`). */
 export function stableMajorArcanaIdFromDateISO(dateISO: string): number {
   return fnvHash32(dateISO) % 22;
 }
 
-/**
- * Индекс карты в колоде 0…77 для PNG и ритуала «карта дня».
- * Сначала id из утреннего слоя (если 0…77), затем имя (EN/RU/slug, вся колода), затем стабильный индекс по дате.
- */
 export function resolveDailyTarotDeckIndex(args: {
   morningTarotCardId?: string | number | null;
   morningTarotName?: string | null;

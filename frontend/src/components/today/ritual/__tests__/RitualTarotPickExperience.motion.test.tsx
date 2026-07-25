@@ -1,11 +1,22 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { RitualTarotPickExperience } from "@/components/today/ritual/RitualTarotPickExperience";
 
+const pic = {
+  src: "/images/cards/tarot/web/back-576x960.webp",
+  avifSrcSet: "",
+  webpSrcSet: "/images/cards/tarot/web/back-576x960.webp 576w",
+  width: 576,
+  height: 960,
+};
+
 jest.mock("@/lib/tarotCardAssets", () => ({
-  TAROT_CARD_PIXEL_WIDTH: 192,
-  TAROT_CARD_PIXEL_HEIGHT: 320,
-  tarotCardBackSrc: () => "/images/cards/tarot/back.png",
-  tarotCardFaceSrc: (id: number) => `/images/cards/tarot/${id}.png`,
+  TAROT_CARD_PIXEL_WIDTH: 576,
+  TAROT_CARD_PIXEL_HEIGHT: 960,
+  tarotCardBackPicture: () => pic,
+  tarotCardFacePicture: () => ({
+    ...pic,
+    src: "/images/cards/tarot/web/faces/07-576x960.webp",
+  }),
 }));
 
 describe("RitualTarotPickExperience · MotionFlip", () => {

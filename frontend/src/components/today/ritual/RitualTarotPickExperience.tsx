@@ -5,15 +5,14 @@ import { useEffect, useRef, useState } from "react";
 import { MotionFlip, MotionReveal } from "@/design-system/motion";
 import { pulseDayPhaseRevealFlash } from "@/lib/dayPhaseAtmosphere";
 import {
-  tarotCardBackSrc,
-  tarotCardFaceSrc,
-  TAROT_CARD_PIXEL_HEIGHT,
-  TAROT_CARD_PIXEL_WIDTH,
+  tarotCardBackPicture,
+  tarotCardFacePicture,
 } from "@/lib/tarotCardAssets";
+import { TarotPicture } from "@/components/tarot/TarotPicture";
 import { RITUAL_COPY } from "@/components/today/todayRitualCopy";
 import styles from "./RitualTarotPickExperience.module.css";
 
-type Phase = "idle" | "grid" | "reveal";
+type Phase = "idle" | "fan" | "reveal";
 
 type Props = {
   anchorCardId: number;
@@ -25,10 +24,10 @@ type Props = {
   /** PR1: face visible — отдельный `tarot_revealed` event. */
   onRevealed?: (id: number) => void;
   onContinue: () => void;
-  /** PR1 canon: 5 закрытых карт (default 5). */
+  /** Fan size (default 5 closed backs). */
   gridSize?: number;
   reduceMotion: boolean;
-  /** Сразу сетка закрытых карт (Today experience), без одиночной рубашки. */
+  /** Сразу веер закрытых карт (Today experience), без одиночной рубашки. */
   startAtGrid?: boolean;
   /** Скрыть «Показать карту сразу» — обход выбора. */
   allowSkipAnimation?: boolean;
@@ -45,6 +44,34 @@ function vibrate(pattern: number | number[], allow: boolean) {
   } catch {
     /* noop */
   }
+}
+
+/** Fan arc transforms for 5 cards — center slightly raised. */
+function fanStyle(index: number, count: number, picked: number | null): CSSProperties {
+  const mid = (count - 1) / 2;
+  const t = index - mid;
+  const rotate = t * 7.5;
+  const lift = -Math.abs(t) * 6 + (Math.abs(t) === 0 ? 10 : 0);
+  const shiftX = t * 38;
+  const z = 10 - Math.abs(t);
+  const isPicked = picked === index;
+  const isDimmed = picked != null && !isPicked;
+  return {
+    "--fan-rotate": `${rotate}deg`,
+    "--fan-x": `${shiftX}px`,
+    "--fan-y": `${lift}px`,
+    "--fan-z": String(isPicked ? 40 : z),
+    "--stagger": `${index * 55}ms`,
+    ...(isDimmed
+      ? { opacity: 0.28, transform: `translateX(${shiftX}px) translateY(${lift + 12}px) rotate(${rotate}deg) scale(0.92)` }
+      : null),
+    ...(isPicked
+      ? {
+          opacity: 1,
+          transform: `translateX(${shiftX * 0.35}px) translateY(${lift - 28}px) rotate(${rotate * 0.25}deg) scale(1.08)`,
+        }
+      : null),
+  } as CSSProperties;
 }
 
 export function RitualTarotPickExperience({
@@ -65,20 +92,19 @@ export function RitualTarotPickExperience({
   const effectiveId = resumeCommittedId ?? anchorCardId;
   const [phase, setPhase] = useState<Phase>(() => {
     if (resumeCommittedId != null) return "reveal";
-    if (startAtGrid) return "grid";
+    if (startAtGrid) return "fan";
     return "idle";
   });
   const [pressed, setPressed] = useState(false);
-  const [gridOpen, setGridOpen] = useState(false);
+  const [fanOpen, setFanOpen] = useState(false);
   const pickedRef = useRef<number | null>(null);
   const [picked, setPicked] = useState<number | null>(null);
   const continueRef = useRef(false);
-  /** Skip Flip only when we *mounted* already in reveal (persisted resume). */
   const mountedInRevealRef = useRef(resumeCommittedId != null);
   const [cardFlipped, setCardFlipped] = useState(() => resumeCommittedId != null);
 
-  const back = tarotCardBackSrc();
-  const face = tarotCardFaceSrc(effectiveId);
+  const back = tarotCardBackPicture();
+  const face = tarotCardFacePicture(effectiveId) ?? back;
 
   useEffect(() => {
     if (resumeCommittedId != null && phase === "idle" && pickedRef.current == null) {
@@ -87,8 +113,8 @@ export function RitualTarotPickExperience({
   }, [resumeCommittedId, phase]);
 
   useEffect(() => {
-    if (phase !== "grid") return;
-    const id = requestAnimationFrame(() => setGridOpen(true));
+    if (phase !== "fan") return;
+    const id = requestAnimationFrame(() => setFanOpen(true));
     return () => cancelAnimationFrame(id);
   }, [phase]);
 
@@ -115,21 +141,22 @@ export function RitualTarotPickExperience({
   const onIdleActivate = () => {
     vibrate(12, !reduceMotion);
     if (reduceMotion) {
-      setPhase("grid");
+      setPhase("fan");
       return;
     }
     setPressed(true);
     window.setTimeout(() => setPressed(false), 200);
-    window.setTimeout(() => setPhase("grid"), 190);
+    window.setTimeout(() => setPhase("fan"), 190);
   };
 
-  const onPick = (i: number) => {
+  /** Ritual reveal: any sleeve opens the same predetermined day card. */
+  const onPickSleeve = (i: number) => {
     if (pickedRef.current != null) return;
     pickedRef.current = i;
     vibrate(14, !reduceMotion);
     setPicked(i);
     onCommitMain(anchorCardId);
-    const delay = reduceMotion ? 0 : 280;
+    const delay = reduceMotion ? 0 : 320;
     window.setTimeout(() => {
       setPhase("reveal");
       onRevealed?.(anchorCardId);
@@ -146,50 +173,29 @@ export function RitualTarotPickExperience({
     vibrate(10, !reduceMotion);
   };
 
-  if (phase === "reveal" && face) {
+  if (phase === "reveal") {
     return (
       <div className={styles.wrap} data-reduce={reduceMotion ? "true" : undefined}>
-        <div>
+        <div className={styles.scene}>
           <p className={styles.revealScreenTitle}>{RITUAL_COPY.tarotRevealScreenTitle}</p>
           <div className={styles.revealStage}>
             <MotionFlip
               testId="ritual-tarot-motion-flip"
               flipped={cardFlipped}
               reducedMotion={reduceMotion}
-              back={
-                // eslint-disable-next-line @next/next/no-img-element -- локальные PNG из public
-                <img src={back} alt="" width={TAROT_CARD_PIXEL_WIDTH} height={TAROT_CARD_PIXEL_HEIGHT} draggable={false} />
-              }
-              front={
-                // eslint-disable-next-line @next/next/no-img-element -- локальные PNG из public
-                <img src={face} alt="" width={TAROT_CARD_PIXEL_WIDTH} height={TAROT_CARD_PIXEL_HEIGHT} draggable={false} />
-              }
+              back={<TarotPicture sources={back} sizes="(max-width: 40rem) 58vw, 220px" priority />}
+              front={<TarotPicture sources={face} sizes="(max-width: 40rem) 58vw, 220px" priority />}
             />
           </div>
           <MotionReveal reducedMotion={reduceMotion} delayMs={reduceMotion ? 0 : 90}>
             <div className={styles.revealMeta}>
-              <div style={{ fontFamily: "var(--orbit-font-display)", fontWeight: 600, color: "#2d241c", fontSize: "1.15rem" }}>
-                {cardTitleRu}
-              </div>
+              <p className={styles.revealCardName}>{cardTitleRu}</p>
               {tagLabels.length > 0 ? (
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem", justifyContent: "center", marginTop: "0.45rem" }}>
+                <ul className={styles.revealTags}>
                   {tagLabels.map((t) => (
-                    <span
-                      key={t}
-                      style={{
-                        fontSize: "0.72rem",
-                        fontWeight: 600,
-                        color: "#5f4930",
-                        padding: "0.2rem 0.55rem",
-                        borderRadius: 999,
-                        background: "rgba(255, 237, 228, 0.75)",
-                        border: "1px solid rgba(214,142,122,0.32)",
-                      }}
-                    >
-                      {t}
-                    </span>
+                    <li key={t}>{t}</li>
                   ))}
-                </div>
+                </ul>
               ) : null}
             </div>
           </MotionReveal>
@@ -203,10 +209,10 @@ export function RitualTarotPickExperience({
     );
   }
 
-  if (phase === "grid") {
+  if (phase === "fan") {
     return (
       <div
-        className={`${styles.wrap} ${gridOpen ? styles.gridOpen : ""} ${picked != null ? styles.dimGridOthers : ""}`}
+        className={`${styles.wrap} ${styles.table} ${fanOpen ? styles.fanOpen : ""} ${picked != null ? styles.fanPicked : ""}`}
         data-testid="ritual-tarot-pick-grid"
         data-reduce={reduceMotion ? "true" : undefined}
       >
@@ -214,29 +220,21 @@ export function RitualTarotPickExperience({
           <p className={styles.gridLead}>{gridLead ?? RITUAL_COPY.tarotGridLead}</p>
           <p className={styles.gridSub}>{gridSub ?? RITUAL_COPY.tarotGridSub}</p>
         </div>
-        <div className={styles.gridRoot}>
+        <div className={styles.fanStage} aria-label="Ритуал раскрытия карты дня">
           {Array.from({ length: gridSize }, (_, i) => (
             <button
               key={i}
               type="button"
-              className={`${styles.gridCard} ${picked === i ? styles.gridPicked : ""}`}
-              style={{ "--stagger": `${i * 55}ms` } as CSSProperties}
-              onClick={() => onPick(i)}
+              className={`${styles.fanCard} ${picked === i ? styles.fanCardPicked : ""}`}
+              style={fanStyle(i, gridSize, picked)}
+              onClick={() => onPickSleeve(i)}
+              aria-label={`Рубашка ${i + 1}`}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={back} alt="" width={TAROT_CARD_PIXEL_WIDTH} height={TAROT_CARD_PIXEL_HEIGHT} draggable={false} />
+              <TarotPicture sources={back} sizes="96px" />
             </button>
           ))}
         </div>
-        <div className={styles.gridHintPanel} role="note">
-          <span className={styles.gridHintIcon} aria-hidden>
-            ⓘ
-          </span>
-          <div className={styles.gridHintText}>
-            <span className={styles.gridHintPrimary}>{RITUAL_COPY.tarotGridPickHintPrimary}</span>
-            <span className={styles.gridHintSecondary}>{RITUAL_COPY.tarotGridPickHintSecondary}</span>
-          </div>
-        </div>
+        <p className={styles.fanHonesty}>{RITUAL_COPY.tarotFanHonesty}</p>
         <p className={styles.gridFooter}>{RITUAL_COPY.tarotGridPickFooter}</p>
       </div>
     );
@@ -247,11 +245,10 @@ export function RitualTarotPickExperience({
       className={`${styles.wrap} ${styles.breathe} ${pressed ? styles.press : ""}`}
       data-reduce={reduceMotion ? "true" : undefined}
     >
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+      <div className={styles.idleStack}>
         <button type="button" className={styles.idleCard} onClick={onIdleActivate}>
           <span className={styles.breatheGlow} aria-hidden />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={back} alt="" width={TAROT_CARD_PIXEL_WIDTH} height={TAROT_CARD_PIXEL_HEIGHT} draggable={false} />
+          <TarotPicture sources={back} sizes="168px" priority />
           <span className={styles.hint}>
             <span className={styles.hintSparkle} aria-hidden>
               ✦
@@ -260,18 +257,7 @@ export function RitualTarotPickExperience({
           </span>
         </button>
         {allowSkipAnimation ? (
-          <button
-            type="button"
-            className="orbit-body-xs"
-            style={{
-              border: "none",
-              background: "transparent",
-              color: "#7a6a52",
-              textDecoration: "underline",
-              cursor: "pointer",
-            }}
-            onClick={skipToRevealCommitted}
-          >
+          <button type="button" className={styles.skipLink} onClick={skipToRevealCommitted}>
             {RITUAL_COPY.tarotSkipAnimationCta}
           </button>
         ) : null}

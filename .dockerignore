@@ -1,0 +1,10 @@
+# Keep Docker build context lean (masters are ~250MB+ and must never ship in the image).
+assets-source/
+.git/
+**/.git/
+**/node_modules/
+frontend/node_modules/
+**/__pycache__/
+**/.next/cache/
+*.pyc
+.DS_Store

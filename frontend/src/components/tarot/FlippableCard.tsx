@@ -1,12 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { CardVisual } from "./CardVisual";
 import { LoadingSpinner } from "@/components/orbit";
 import { MotionFlip, usePrefersReducedMotion } from "@/design-system/motion";
 import type { TarotCard } from "@/lib/types";
-import { tarotCardBackSrc, tarotCardDisplayHeightPx, TAROT_CARD_PIXEL_WIDTH } from "@/lib/tarotCardAssets";
+import {
+  tarotCardBackPicture,
+  tarotCardDisplayHeightPx,
+  TAROT_RITUAL_REVEAL_MAX_WIDTH_PX,
+} from "@/lib/tarotCardAssets";
+import { TarotPicture } from "@/components/tarot/TarotPicture";
 
 interface FlippableCardProps {
   card: TarotCard | null;
@@ -27,9 +31,10 @@ export function FlippableCard({ card, orientation, loading = false, onFlip }: Fl
     }
   };
 
-  const flipW = TAROT_CARD_PIXEL_WIDTH;
+  const flipW = TAROT_RITUAL_REVEAL_MAX_WIDTH_PX;
   const flipH = tarotCardDisplayHeightPx(flipW);
   const canFlip = Boolean(card && !isFlipped && !loading);
+  const backSources = tarotCardBackPicture();
 
   const back = (
     <div
@@ -44,14 +49,7 @@ export function FlippableCard({ card, orientation, loading = false, onFlip }: Fl
         background: "#faf6f2",
       }}
     >
-      <Image
-        src={tarotCardBackSrc()}
-        alt="Рубашка карты"
-        fill
-        sizes={`${flipW}px`}
-        style={{ objectFit: "contain" }}
-        priority={false}
-      />
+      <TarotPicture sources={backSources} alt="Рубашка карты" sizes={`${flipW}px`} />
       {!loading ? (
         <div
           style={{
@@ -134,6 +132,7 @@ export function FlippableCard({ card, orientation, loading = false, onFlip }: Fl
       <MotionFlip
         testId="tarot-flippable-motion-flip"
         flipped={isFlipped}
+        reducedMotion={reduceMotion}
         back={back}
         front={front}
         onAnimationComplete={() => {

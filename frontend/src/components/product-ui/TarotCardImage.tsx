@@ -1,12 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import {
   TAROT_CARD_ASPECT_RATIO,
-  tarotCardBackSrc,
-  tarotCardFaceSrc,
+  tarotCardBackPicture,
+  tarotCardFacePicture,
 } from "@/lib/tarotCardAssets";
+import { TarotPicture } from "@/components/tarot/TarotPicture";
 import s from "@/components/product-ui/productWebScreens.module.css";
 
 export type TarotCardImageProps = {
@@ -17,7 +17,7 @@ export type TarotCardImageProps = {
   reversed?: boolean;
 };
 
-/** Tarot face with graceful fallback when deck PNGs are missing from `public/`. */
+/** Tarot face with deck back fallback — never emoji. */
 export function TarotCardImage({
   cardId,
   cardName,
@@ -26,18 +26,8 @@ export function TarotCardImage({
   reversed = false,
 }: TarotCardImageProps) {
   const [failed, setFailed] = useState(false);
-  const src = tarotCardFaceSrc(cardId) ?? tarotCardBackSrc();
-
-  if (failed) {
-    return (
-      <div
-        className={`${s.tarotWebCardPlaceholder} ${className ?? ""}`.trim()}
-        aria-label={cardName}
-      >
-        <span className={s.tarotWebCardPlaceholderName}>{cardName}</span>
-      </div>
-    );
-  }
+  const face = tarotCardFacePicture(cardId);
+  const sources = failed || !face ? tarotCardBackPicture() : face;
 
   return (
     <div
@@ -48,15 +38,9 @@ export function TarotCardImage({
         aspectRatio: String(TAROT_CARD_ASPECT_RATIO),
         transform: reversed ? "rotate(180deg)" : undefined,
       }}
+      onErrorCapture={() => setFailed(true)}
     >
-      <Image
-        src={src}
-        alt={cardName}
-        fill
-        sizes={`${width}px`}
-        onError={() => setFailed(true)}
-        style={{ objectFit: "contain", borderRadius: "inherit" }}
-      />
+      <TarotPicture sources={sources} alt={cardName} sizes={`${width}px`} />
     </div>
   );
 }

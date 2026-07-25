@@ -1,0 +1,2191 @@
+{
+  "version": "1.0.0",
+  "deck": "white-witchcore",
+  "aspect_ratio": "3:5",
+  "sizes": [
+    {
+      "width": 384,
+      "height": 640,
+      "label": "384x640"
+    },
+    {
+      "width": 576,
+      "height": 960,
+      "label": "576x960"
+    },
+    {
+      "width": 768,
+      "height": 1280,
+      "label": "768x1280"
+    }
+  ],
+  "formats": [
+    "avif",
+    "webp"
+  ],
+  "public_base": "/images/cards/tarot/web",
+  "back": {
+    "variants": {
+      "384x640": {
+        "avif": "back-384x640.avif",
+        "webp": "back-384x640.webp",
+        "width": 384,
+        "height": 640
+      },
+      "576x960": {
+        "avif": "back-576x960.avif",
+        "webp": "back-576x960.webp",
+        "width": 576,
+        "height": 960
+      },
+      "768x1280": {
+        "avif": "back-768x1280.avif",
+        "webp": "back-768x1280.webp",
+        "width": 768,
+        "height": 1280
+      }
+    }
+  },
+  "cards": [
+    {
+      "deck_index": 0,
+      "id": "major_0",
+      "type": "major",
+      "source": "Major Arcana/0.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/00-384x640.avif",
+          "webp": "faces/00-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/00-576x960.avif",
+          "webp": "faces/00-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/00-768x1280.avif",
+          "webp": "faces/00-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 1,
+      "id": "major_1",
+      "type": "major",
+      "source": "Major Arcana/1.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/01-384x640.avif",
+          "webp": "faces/01-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/01-576x960.avif",
+          "webp": "faces/01-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/01-768x1280.avif",
+          "webp": "faces/01-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 2,
+      "id": "major_2",
+      "type": "major",
+      "source": "Major Arcana/2.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/02-384x640.avif",
+          "webp": "faces/02-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/02-576x960.avif",
+          "webp": "faces/02-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/02-768x1280.avif",
+          "webp": "faces/02-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 3,
+      "id": "major_3",
+      "type": "major",
+      "source": "Major Arcana/3.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/03-384x640.avif",
+          "webp": "faces/03-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/03-576x960.avif",
+          "webp": "faces/03-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/03-768x1280.avif",
+          "webp": "faces/03-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 4,
+      "id": "major_4",
+      "type": "major",
+      "source": "Major Arcana/4.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/04-384x640.avif",
+          "webp": "faces/04-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/04-576x960.avif",
+          "webp": "faces/04-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/04-768x1280.avif",
+          "webp": "faces/04-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 5,
+      "id": "major_5",
+      "type": "major",
+      "source": "Major Arcana/5.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/05-384x640.avif",
+          "webp": "faces/05-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/05-576x960.avif",
+          "webp": "faces/05-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/05-768x1280.avif",
+          "webp": "faces/05-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 6,
+      "id": "major_6",
+      "type": "major",
+      "source": "Major Arcana/6.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/06-384x640.avif",
+          "webp": "faces/06-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/06-576x960.avif",
+          "webp": "faces/06-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/06-768x1280.avif",
+          "webp": "faces/06-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 7,
+      "id": "major_7",
+      "type": "major",
+      "source": "Major Arcana/7.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/07-384x640.avif",
+          "webp": "faces/07-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/07-576x960.avif",
+          "webp": "faces/07-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/07-768x1280.avif",
+          "webp": "faces/07-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 8,
+      "id": "major_8",
+      "type": "major",
+      "source": "Major Arcana/8.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/08-384x640.avif",
+          "webp": "faces/08-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/08-576x960.avif",
+          "webp": "faces/08-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/08-768x1280.avif",
+          "webp": "faces/08-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 9,
+      "id": "major_9",
+      "type": "major",
+      "source": "Major Arcana/9.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/09-384x640.avif",
+          "webp": "faces/09-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/09-576x960.avif",
+          "webp": "faces/09-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/09-768x1280.avif",
+          "webp": "faces/09-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 10,
+      "id": "major_10",
+      "type": "major",
+      "source": "Major Arcana/10.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/10-384x640.avif",
+          "webp": "faces/10-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/10-576x960.avif",
+          "webp": "faces/10-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/10-768x1280.avif",
+          "webp": "faces/10-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 11,
+      "id": "major_11",
+      "type": "major",
+      "source": "Major Arcana/11.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/11-384x640.avif",
+          "webp": "faces/11-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/11-576x960.avif",
+          "webp": "faces/11-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/11-768x1280.avif",
+          "webp": "faces/11-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 12,
+      "id": "major_12",
+      "type": "major",
+      "source": "Major Arcana/12.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/12-384x640.avif",
+          "webp": "faces/12-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/12-576x960.avif",
+          "webp": "faces/12-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/12-768x1280.avif",
+          "webp": "faces/12-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 13,
+      "id": "major_13",
+      "type": "major",
+      "source": "Major Arcana/13.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/13-384x640.avif",
+          "webp": "faces/13-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/13-576x960.avif",
+          "webp": "faces/13-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/13-768x1280.avif",
+          "webp": "faces/13-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 14,
+      "id": "major_14",
+      "type": "major",
+      "source": "Major Arcana/14.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/14-384x640.avif",
+          "webp": "faces/14-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/14-576x960.avif",
+          "webp": "faces/14-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/14-768x1280.avif",
+          "webp": "faces/14-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 15,
+      "id": "major_15",
+      "type": "major",
+      "source": "Major Arcana/15.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/15-384x640.avif",
+          "webp": "faces/15-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/15-576x960.avif",
+          "webp": "faces/15-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/15-768x1280.avif",
+          "webp": "faces/15-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 16,
+      "id": "major_16",
+      "type": "major",
+      "source": "Major Arcana/16.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/16-384x640.avif",
+          "webp": "faces/16-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/16-576x960.avif",
+          "webp": "faces/16-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/16-768x1280.avif",
+          "webp": "faces/16-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 17,
+      "id": "major_17",
+      "type": "major",
+      "source": "Major Arcana/17.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/17-384x640.avif",
+          "webp": "faces/17-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/17-576x960.avif",
+          "webp": "faces/17-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/17-768x1280.avif",
+          "webp": "faces/17-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 18,
+      "id": "major_18",
+      "type": "major",
+      "source": "Major Arcana/18.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/18-384x640.avif",
+          "webp": "faces/18-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/18-576x960.avif",
+          "webp": "faces/18-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/18-768x1280.avif",
+          "webp": "faces/18-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 19,
+      "id": "major_19",
+      "type": "major",
+      "source": "Major Arcana/19.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/19-384x640.avif",
+          "webp": "faces/19-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/19-576x960.avif",
+          "webp": "faces/19-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/19-768x1280.avif",
+          "webp": "faces/19-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 20,
+      "id": "major_20",
+      "type": "major",
+      "source": "Major Arcana/20.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/20-384x640.avif",
+          "webp": "faces/20-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/20-576x960.avif",
+          "webp": "faces/20-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/20-768x1280.avif",
+          "webp": "faces/20-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 21,
+      "id": "major_21",
+      "type": "major",
+      "source": "Major Arcana/21.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/21-384x640.avif",
+          "webp": "faces/21-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/21-576x960.avif",
+          "webp": "faces/21-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/21-768x1280.avif",
+          "webp": "faces/21-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 22,
+      "id": "wands_1",
+      "type": "minor",
+      "suit": "wands",
+      "rank": 1,
+      "source": "Suit of Wands/1.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/22-384x640.avif",
+          "webp": "faces/22-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/22-576x960.avif",
+          "webp": "faces/22-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/22-768x1280.avif",
+          "webp": "faces/22-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 23,
+      "id": "wands_2",
+      "type": "minor",
+      "suit": "wands",
+      "rank": 2,
+      "source": "Suit of Wands/2.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/23-384x640.avif",
+          "webp": "faces/23-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/23-576x960.avif",
+          "webp": "faces/23-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/23-768x1280.avif",
+          "webp": "faces/23-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 24,
+      "id": "wands_3",
+      "type": "minor",
+      "suit": "wands",
+      "rank": 3,
+      "source": "Suit of Wands/3.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/24-384x640.avif",
+          "webp": "faces/24-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/24-576x960.avif",
+          "webp": "faces/24-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/24-768x1280.avif",
+          "webp": "faces/24-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 25,
+      "id": "wands_4",
+      "type": "minor",
+      "suit": "wands",
+      "rank": 4,
+      "source": "Suit of Wands/4.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/25-384x640.avif",
+          "webp": "faces/25-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/25-576x960.avif",
+          "webp": "faces/25-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/25-768x1280.avif",
+          "webp": "faces/25-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 26,
+      "id": "wands_5",
+      "type": "minor",
+      "suit": "wands",
+      "rank": 5,
+      "source": "Suit of Wands/5.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/26-384x640.avif",
+          "webp": "faces/26-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/26-576x960.avif",
+          "webp": "faces/26-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/26-768x1280.avif",
+          "webp": "faces/26-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 27,
+      "id": "wands_6",
+      "type": "minor",
+      "suit": "wands",
+      "rank": 6,
+      "source": "Suit of Wands/6.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/27-384x640.avif",
+          "webp": "faces/27-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/27-576x960.avif",
+          "webp": "faces/27-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/27-768x1280.avif",
+          "webp": "faces/27-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 28,
+      "id": "wands_7",
+      "type": "minor",
+      "suit": "wands",
+      "rank": 7,
+      "source": "Suit of Wands/7.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/28-384x640.avif",
+          "webp": "faces/28-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/28-576x960.avif",
+          "webp": "faces/28-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/28-768x1280.avif",
+          "webp": "faces/28-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 29,
+      "id": "wands_8",
+      "type": "minor",
+      "suit": "wands",
+      "rank": 8,
+      "source": "Suit of Wands/8.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/29-384x640.avif",
+          "webp": "faces/29-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/29-576x960.avif",
+          "webp": "faces/29-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/29-768x1280.avif",
+          "webp": "faces/29-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 30,
+      "id": "wands_9",
+      "type": "minor",
+      "suit": "wands",
+      "rank": 9,
+      "source": "Suit of Wands/9.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/30-384x640.avif",
+          "webp": "faces/30-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/30-576x960.avif",
+          "webp": "faces/30-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/30-768x1280.avif",
+          "webp": "faces/30-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 31,
+      "id": "wands_10",
+      "type": "minor",
+      "suit": "wands",
+      "rank": 10,
+      "source": "Suit of Wands/10.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/31-384x640.avif",
+          "webp": "faces/31-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/31-576x960.avif",
+          "webp": "faces/31-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/31-768x1280.avif",
+          "webp": "faces/31-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 32,
+      "id": "wands_11",
+      "type": "minor",
+      "suit": "wands",
+      "rank": 11,
+      "source": "Suit of Wands/11.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/32-384x640.avif",
+          "webp": "faces/32-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/32-576x960.avif",
+          "webp": "faces/32-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/32-768x1280.avif",
+          "webp": "faces/32-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 33,
+      "id": "wands_12",
+      "type": "minor",
+      "suit": "wands",
+      "rank": 12,
+      "source": "Suit of Wands/12.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/33-384x640.avif",
+          "webp": "faces/33-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/33-576x960.avif",
+          "webp": "faces/33-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/33-768x1280.avif",
+          "webp": "faces/33-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 34,
+      "id": "wands_13",
+      "type": "minor",
+      "suit": "wands",
+      "rank": 13,
+      "source": "Suit of Wands/13.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/34-384x640.avif",
+          "webp": "faces/34-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/34-576x960.avif",
+          "webp": "faces/34-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/34-768x1280.avif",
+          "webp": "faces/34-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 35,
+      "id": "wands_14",
+      "type": "minor",
+      "suit": "wands",
+      "rank": 14,
+      "source": "Suit of Wands/14.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/35-384x640.avif",
+          "webp": "faces/35-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/35-576x960.avif",
+          "webp": "faces/35-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/35-768x1280.avif",
+          "webp": "faces/35-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 36,
+      "id": "cups_1",
+      "type": "minor",
+      "suit": "cups",
+      "rank": 1,
+      "source": "Suit of Cups/1.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/36-384x640.avif",
+          "webp": "faces/36-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/36-576x960.avif",
+          "webp": "faces/36-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/36-768x1280.avif",
+          "webp": "faces/36-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 37,
+      "id": "cups_2",
+      "type": "minor",
+      "suit": "cups",
+      "rank": 2,
+      "source": "Suit of Cups/2.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/37-384x640.avif",
+          "webp": "faces/37-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/37-576x960.avif",
+          "webp": "faces/37-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/37-768x1280.avif",
+          "webp": "faces/37-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 38,
+      "id": "cups_3",
+      "type": "minor",
+      "suit": "cups",
+      "rank": 3,
+      "source": "Suit of Cups/3.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/38-384x640.avif",
+          "webp": "faces/38-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/38-576x960.avif",
+          "webp": "faces/38-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/38-768x1280.avif",
+          "webp": "faces/38-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 39,
+      "id": "cups_4",
+      "type": "minor",
+      "suit": "cups",
+      "rank": 4,
+      "source": "Suit of Cups/4.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/39-384x640.avif",
+          "webp": "faces/39-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/39-576x960.avif",
+          "webp": "faces/39-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/39-768x1280.avif",
+          "webp": "faces/39-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 40,
+      "id": "cups_5",
+      "type": "minor",
+      "suit": "cups",
+      "rank": 5,
+      "source": "Suit of Cups/5.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/40-384x640.avif",
+          "webp": "faces/40-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/40-576x960.avif",
+          "webp": "faces/40-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/40-768x1280.avif",
+          "webp": "faces/40-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 41,
+      "id": "cups_6",
+      "type": "minor",
+      "suit": "cups",
+      "rank": 6,
+      "source": "Suit of Cups/6.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/41-384x640.avif",
+          "webp": "faces/41-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/41-576x960.avif",
+          "webp": "faces/41-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/41-768x1280.avif",
+          "webp": "faces/41-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 42,
+      "id": "cups_7",
+      "type": "minor",
+      "suit": "cups",
+      "rank": 7,
+      "source": "Suit of Cups/7.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/42-384x640.avif",
+          "webp": "faces/42-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/42-576x960.avif",
+          "webp": "faces/42-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/42-768x1280.avif",
+          "webp": "faces/42-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 43,
+      "id": "cups_8",
+      "type": "minor",
+      "suit": "cups",
+      "rank": 8,
+      "source": "Suit of Cups/8.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/43-384x640.avif",
+          "webp": "faces/43-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/43-576x960.avif",
+          "webp": "faces/43-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/43-768x1280.avif",
+          "webp": "faces/43-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 44,
+      "id": "cups_9",
+      "type": "minor",
+      "suit": "cups",
+      "rank": 9,
+      "source": "Suit of Cups/9.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/44-384x640.avif",
+          "webp": "faces/44-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/44-576x960.avif",
+          "webp": "faces/44-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/44-768x1280.avif",
+          "webp": "faces/44-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 45,
+      "id": "cups_10",
+      "type": "minor",
+      "suit": "cups",
+      "rank": 10,
+      "source": "Suit of Cups/10.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/45-384x640.avif",
+          "webp": "faces/45-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/45-576x960.avif",
+          "webp": "faces/45-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/45-768x1280.avif",
+          "webp": "faces/45-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 46,
+      "id": "cups_11",
+      "type": "minor",
+      "suit": "cups",
+      "rank": 11,
+      "source": "Suit of Cups/11.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/46-384x640.avif",
+          "webp": "faces/46-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/46-576x960.avif",
+          "webp": "faces/46-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/46-768x1280.avif",
+          "webp": "faces/46-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 47,
+      "id": "cups_12",
+      "type": "minor",
+      "suit": "cups",
+      "rank": 12,
+      "source": "Suit of Cups/12.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/47-384x640.avif",
+          "webp": "faces/47-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/47-576x960.avif",
+          "webp": "faces/47-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/47-768x1280.avif",
+          "webp": "faces/47-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 48,
+      "id": "cups_13",
+      "type": "minor",
+      "suit": "cups",
+      "rank": 13,
+      "source": "Suit of Cups/13.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/48-384x640.avif",
+          "webp": "faces/48-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/48-576x960.avif",
+          "webp": "faces/48-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/48-768x1280.avif",
+          "webp": "faces/48-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 49,
+      "id": "cups_14",
+      "type": "minor",
+      "suit": "cups",
+      "rank": 14,
+      "source": "Suit of Cups/14.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/49-384x640.avif",
+          "webp": "faces/49-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/49-576x960.avif",
+          "webp": "faces/49-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/49-768x1280.avif",
+          "webp": "faces/49-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 50,
+      "id": "swords_1",
+      "type": "minor",
+      "suit": "swords",
+      "rank": 1,
+      "source": "Suit of Swords/1.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/50-384x640.avif",
+          "webp": "faces/50-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/50-576x960.avif",
+          "webp": "faces/50-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/50-768x1280.avif",
+          "webp": "faces/50-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 51,
+      "id": "swords_2",
+      "type": "minor",
+      "suit": "swords",
+      "rank": 2,
+      "source": "Suit of Swords/2.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/51-384x640.avif",
+          "webp": "faces/51-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/51-576x960.avif",
+          "webp": "faces/51-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/51-768x1280.avif",
+          "webp": "faces/51-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 52,
+      "id": "swords_3",
+      "type": "minor",
+      "suit": "swords",
+      "rank": 3,
+      "source": "Suit of Swords/3.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/52-384x640.avif",
+          "webp": "faces/52-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/52-576x960.avif",
+          "webp": "faces/52-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/52-768x1280.avif",
+          "webp": "faces/52-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 53,
+      "id": "swords_4",
+      "type": "minor",
+      "suit": "swords",
+      "rank": 4,
+      "source": "Suit of Swords/4.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/53-384x640.avif",
+          "webp": "faces/53-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/53-576x960.avif",
+          "webp": "faces/53-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/53-768x1280.avif",
+          "webp": "faces/53-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 54,
+      "id": "swords_5",
+      "type": "minor",
+      "suit": "swords",
+      "rank": 5,
+      "source": "Suit of Swords/5.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/54-384x640.avif",
+          "webp": "faces/54-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/54-576x960.avif",
+          "webp": "faces/54-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/54-768x1280.avif",
+          "webp": "faces/54-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 55,
+      "id": "swords_6",
+      "type": "minor",
+      "suit": "swords",
+      "rank": 6,
+      "source": "Suit of Swords/6.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/55-384x640.avif",
+          "webp": "faces/55-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/55-576x960.avif",
+          "webp": "faces/55-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/55-768x1280.avif",
+          "webp": "faces/55-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 56,
+      "id": "swords_7",
+      "type": "minor",
+      "suit": "swords",
+      "rank": 7,
+      "source": "Suit of Swords/7.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/56-384x640.avif",
+          "webp": "faces/56-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/56-576x960.avif",
+          "webp": "faces/56-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/56-768x1280.avif",
+          "webp": "faces/56-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 57,
+      "id": "swords_8",
+      "type": "minor",
+      "suit": "swords",
+      "rank": 8,
+      "source": "Suit of Swords/8.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/57-384x640.avif",
+          "webp": "faces/57-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/57-576x960.avif",
+          "webp": "faces/57-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/57-768x1280.avif",
+          "webp": "faces/57-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 58,
+      "id": "swords_9",
+      "type": "minor",
+      "suit": "swords",
+      "rank": 9,
+      "source": "Suit of Swords/9.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/58-384x640.avif",
+          "webp": "faces/58-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/58-576x960.avif",
+          "webp": "faces/58-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/58-768x1280.avif",
+          "webp": "faces/58-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 59,
+      "id": "swords_10",
+      "type": "minor",
+      "suit": "swords",
+      "rank": 10,
+      "source": "Suit of Swords/10.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/59-384x640.avif",
+          "webp": "faces/59-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/59-576x960.avif",
+          "webp": "faces/59-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/59-768x1280.avif",
+          "webp": "faces/59-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 60,
+      "id": "swords_11",
+      "type": "minor",
+      "suit": "swords",
+      "rank": 11,
+      "source": "Suit of Swords/11.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/60-384x640.avif",
+          "webp": "faces/60-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/60-576x960.avif",
+          "webp": "faces/60-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/60-768x1280.avif",
+          "webp": "faces/60-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 61,
+      "id": "swords_12",
+      "type": "minor",
+      "suit": "swords",
+      "rank": 12,
+      "source": "Suit of Swords/12.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/61-384x640.avif",
+          "webp": "faces/61-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/61-576x960.avif",
+          "webp": "faces/61-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/61-768x1280.avif",
+          "webp": "faces/61-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 62,
+      "id": "swords_13",
+      "type": "minor",
+      "suit": "swords",
+      "rank": 13,
+      "source": "Suit of Swords/13.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/62-384x640.avif",
+          "webp": "faces/62-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/62-576x960.avif",
+          "webp": "faces/62-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/62-768x1280.avif",
+          "webp": "faces/62-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 63,
+      "id": "swords_14",
+      "type": "minor",
+      "suit": "swords",
+      "rank": 14,
+      "source": "Suit of Swords/14.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/63-384x640.avif",
+          "webp": "faces/63-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/63-576x960.avif",
+          "webp": "faces/63-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/63-768x1280.avif",
+          "webp": "faces/63-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 64,
+      "id": "pentacles_1",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": 1,
+      "source": "Suit of Pentacles/1.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/64-384x640.avif",
+          "webp": "faces/64-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/64-576x960.avif",
+          "webp": "faces/64-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/64-768x1280.avif",
+          "webp": "faces/64-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 65,
+      "id": "pentacles_2",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": 2,
+      "source": "Suit of Pentacles/2.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/65-384x640.avif",
+          "webp": "faces/65-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/65-576x960.avif",
+          "webp": "faces/65-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/65-768x1280.avif",
+          "webp": "faces/65-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 66,
+      "id": "pentacles_3",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": 3,
+      "source": "Suit of Pentacles/3.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/66-384x640.avif",
+          "webp": "faces/66-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/66-576x960.avif",
+          "webp": "faces/66-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/66-768x1280.avif",
+          "webp": "faces/66-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 67,
+      "id": "pentacles_4",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": 4,
+      "source": "Suit of Pentacles/4.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/67-384x640.avif",
+          "webp": "faces/67-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/67-576x960.avif",
+          "webp": "faces/67-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/67-768x1280.avif",
+          "webp": "faces/67-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 68,
+      "id": "pentacles_5",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": 5,
+      "source": "Suit of Pentacles/5.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/68-384x640.avif",
+          "webp": "faces/68-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/68-576x960.avif",
+          "webp": "faces/68-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/68-768x1280.avif",
+          "webp": "faces/68-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 69,
+      "id": "pentacles_6",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": 6,
+      "source": "Suit of Pentacles/6.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/69-384x640.avif",
+          "webp": "faces/69-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/69-576x960.avif",
+          "webp": "faces/69-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/69-768x1280.avif",
+          "webp": "faces/69-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 70,
+      "id": "pentacles_7",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": 7,
+      "source": "Suit of Pentacles/7.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/70-384x640.avif",
+          "webp": "faces/70-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/70-576x960.avif",
+          "webp": "faces/70-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/70-768x1280.avif",
+          "webp": "faces/70-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 71,
+      "id": "pentacles_8",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": 8,
+      "source": "Suit of Pentacles/8.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/71-384x640.avif",
+          "webp": "faces/71-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/71-576x960.avif",
+          "webp": "faces/71-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/71-768x1280.avif",
+          "webp": "faces/71-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 72,
+      "id": "pentacles_9",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": 9,
+      "source": "Suit of Pentacles/9.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/72-384x640.avif",
+          "webp": "faces/72-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/72-576x960.avif",
+          "webp": "faces/72-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/72-768x1280.avif",
+          "webp": "faces/72-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 73,
+      "id": "pentacles_10",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": 10,
+      "source": "Suit of Pentacles/10.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/73-384x640.avif",
+          "webp": "faces/73-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/73-576x960.avif",
+          "webp": "faces/73-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/73-768x1280.avif",
+          "webp": "faces/73-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 74,
+      "id": "pentacles_11",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": 11,
+      "source": "Suit of Pentacles/11.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/74-384x640.avif",
+          "webp": "faces/74-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/74-576x960.avif",
+          "webp": "faces/74-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/74-768x1280.avif",
+          "webp": "faces/74-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 75,
+      "id": "pentacles_12",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": 12,
+      "source": "Suit of Pentacles/12.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/75-384x640.avif",
+          "webp": "faces/75-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/75-576x960.avif",
+          "webp": "faces/75-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/75-768x1280.avif",
+          "webp": "faces/75-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 76,
+      "id": "pentacles_13",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": 13,
+      "source": "Suit of Pentacles/13.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/76-384x640.avif",
+          "webp": "faces/76-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/76-576x960.avif",
+          "webp": "faces/76-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/76-768x1280.avif",
+          "webp": "faces/76-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    },
+    {
+      "deck_index": 77,
+      "id": "pentacles_14",
+      "type": "minor",
+      "suit": "pentacles",
+      "rank": 14,
+      "source": "Suit of Pentacles/14.png",
+      "variants": {
+        "384x640": {
+          "avif": "faces/77-384x640.avif",
+          "webp": "faces/77-384x640.webp",
+          "width": 384,
+          "height": 640
+        },
+        "576x960": {
+          "avif": "faces/77-576x960.avif",
+          "webp": "faces/77-576x960.webp",
+          "width": 576,
+          "height": 960
+        },
+        "768x1280": {
+          "avif": "faces/77-768x1280.avif",
+          "webp": "faces/77-768x1280.webp",
+          "width": 768,
+          "height": 1280
+        }
+      }
+    }
+  ]
+}

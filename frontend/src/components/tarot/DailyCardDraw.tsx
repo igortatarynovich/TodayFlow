@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { TarotCard } from "@/lib/types";
 import { CardVisual } from "./CardVisual";
+import { TarotPicture } from "@/components/tarot/TarotPicture";
+import { tarotCardBackPicture } from "@/lib/tarotCardAssets";
 import Link from "next/link";
 import { t } from "@/lib/i18n";
 
@@ -93,18 +95,14 @@ export function DailyCardDraw({
             style={{
               width: "234px",
               height: "390px",
-              background: "linear-gradient(135deg, rgba(100, 100, 100, 0.2), rgba(150, 150, 150, 0.1))",
-              border: "2px solid rgba(100, 100, 100, 0.4)",
               borderRadius: "var(--orbit-radius-md)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "0 4px 16px rgba(0, 0, 0, 0.15)",
+              overflow: "hidden",
+              border: "1px solid rgba(154, 132, 104, 0.4)",
+              boxShadow: "0 4px 16px rgba(0, 0, 0, 0.12)",
+              background: "#f4ebe0",
             }}
           >
-            <div style={{ fontSize: "4rem", opacity: 0.6 }}>
-              🃏
-            </div>
+            <TarotPicture sources={tarotCardBackPicture()} sizes="234px" />
           </div>
         </div>
         <p className="orbit-body-xs orbit-text-muted" style={{ marginTop: "var(--orbit-space-md)" }}>

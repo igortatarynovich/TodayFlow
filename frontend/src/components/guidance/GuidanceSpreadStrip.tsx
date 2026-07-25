@@ -6,11 +6,8 @@ import { guidanceResultChromeBundle } from "@/components/guidance/guidanceResult
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
 import { getLocale } from "@/lib/i18n";
 import type { TarotSpreadCard } from "@/lib/types";
-import {
-  tarotCardBackSrc,
-  TAROT_CARD_PIXEL_HEIGHT,
-  TAROT_CARD_PIXEL_WIDTH,
-} from "@/lib/tarotCardAssets";
+import { tarotCardBackPicture } from "@/lib/tarotCardAssets";
+import { TarotPicture } from "@/components/tarot/TarotPicture";
 
 type GuidanceSpreadStripProps = {
   spreadTitle?: string;
@@ -20,19 +17,11 @@ type GuidanceSpreadStripProps = {
 };
 
 function TarotDeckBackButton({ onOpen, revealHint }: { onOpen: () => void; revealHint: string }) {
-  const back = tarotCardBackSrc();
+  const back = tarotCardBackPicture();
   return (
     <button type="button" onClick={onOpen} className="guidance-tarot-back-btn">
       <span className="guidance-tarot-back-btn__frame">
-        {/* eslint-disable-next-line @next/next/no-img-element -- статический PNG из public */}
-        <img
-          src={back}
-          alt=""
-          width={TAROT_CARD_PIXEL_WIDTH}
-          height={TAROT_CARD_PIXEL_HEIGHT}
-          draggable={false}
-          className="guidance-tarot-back-btn__img"
-        />
+        <TarotPicture sources={back} sizes="168px" className="guidance-tarot-back-btn__img" />
       </span>
       <span className="guidance-tarot-back-btn__hint">{revealHint}</span>
     </button>
