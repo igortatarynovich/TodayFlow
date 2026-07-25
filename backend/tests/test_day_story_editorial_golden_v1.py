@@ -142,3 +142,48 @@ def test_editorial_formula_bank_covers_exemplars():
     assert "communication.clarity_returns_after_delay" in keys
     assert "change.sudden_turns" in keys
     assert "decision.stop_pleasing_everyone" in keys
+
+
+def test_editorial_formula_bank_covers_all_thesis_variants():
+    from todayflow_backend.services.day_thesis_v1 import list_day_thesis_variant_keys
+
+    thesis_keys = set(list_day_thesis_variant_keys())
+    formula_keys = set(list_editorial_formula_keys())
+    missing = sorted(thesis_keys - formula_keys)
+    assert not missing, f"editorial formulas missing for: {missing}"
+
+
+@pytest.mark.parametrize("key", list_editorial_formula_keys())
+def test_every_formula_passes_phrase_gate_smoke(key: str):
+    family, variant = key.split(".", 1)
+    formula = lookup_editorial_formula(family=family, variant=variant)
+    assert formula is not None
+    story = build_day_story_fallback_v1(
+        day_engine_brief={"anchor_summary": "тест", "do_hint": "", "avoid_hint": ""},
+        interpretation=_interp_for_case(
+            {
+                "id": f"smoke-{key}",
+                "family": family,
+                "variant": variant,
+                "mode": "transition",
+                "label_ru": formula["headline_anchor"],
+                "drivers": [
+                    {
+                        "id": "drv-smoke",
+                        "kind": "sky_aspect",
+                        "title_ru": "Тестовый драйвер",
+                        "fact_ru": "Тестовый драйвер дня задаёт тон сюжету.",
+                    }
+                ],
+            }
+        ),
+        locale="ru",
+    )
+    ok, hits = day_story_passes_phrase_gate(story)
+    assert ok, hits
+    assert str(story.get("expect") or "").strip()
+    assert str(story.get("trap") or "").strip()
+    assert story.get("do")
+    assert story.get("avoid")
+    assert str(story.get("vibe_closing") or "").strip()
+    assert (story.get("day_thesis") or {}).get("variant") == variant

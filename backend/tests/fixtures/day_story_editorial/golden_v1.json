@@ -83,6 +83,48 @@
       "avoid_contains_any": ["угодить", "отклад"],
       "vibe_contains_any": ["продуктив", "хватит", "почт"],
       "theme_contains": "выбор"
+    },
+    {
+      "id": "editorial_pressure_patience",
+      "family": "pressure",
+      "variant": "patience_test",
+      "mode": "conflict",
+      "label_ru": "Проверка терпения",
+      "drivers": [
+        {
+          "id": "rx-edge",
+          "kind": "retrograde_edge",
+          "title_ru": "Ретроградный край",
+          "fact_ru": "Планета у края ретрограда — ожидание и повторные циклы."
+        }
+      ],
+      "expect_contains": ["задерж", "время"],
+      "trap_contains": ["сорв"],
+      "do_contains_any": ["очеред", "шаг"],
+      "avoid_contains_any": ["гневн", "ультимат"],
+      "vibe_contains_any": ["таймер", "чай", "тиш"],
+      "theme_contains": "терпен"
+    },
+    {
+      "id": "editorial_connection_honest",
+      "family": "connection",
+      "variant": "honest_contact",
+      "mode": "opportunity",
+      "label_ru": "Честный контакт",
+      "drivers": [
+        {
+          "id": "venus-soft",
+          "kind": "sky_aspect",
+          "title_ru": "Венера — тригон — Луна",
+          "fact_ru": "Венера в гармонии с Луной — окно для тёплого честного контакта."
+        }
+      ],
+      "expect_contains": ["маск", "услыш"],
+      "trap_contains": ["жалоб"],
+      "do_contains_any": ["вопрос", "факт"],
+      "avoid_contains_any": ["допрос", "исчеза"],
+      "vibe_contains_any": ["глаз", "спасибо", "пауз"],
+      "theme_contains": "контакт"
     }
   ]
 }

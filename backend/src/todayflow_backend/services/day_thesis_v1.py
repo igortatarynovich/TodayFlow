@@ -248,6 +248,15 @@ def build_day_thesis_v1(
     }
 
 
+def list_day_thesis_variant_keys() -> list[str]:
+    """Stable `family.variant` keys for editorial formula coverage checks."""
+    keys: list[str] = []
+    for family, variants in _VARIANTS.items():
+        for variant in variants:
+            keys.append(f"{family}.{variant}")
+    return sorted(keys)
+
+
 # Back-compat wrappers during migration from primary_conflict
 def pick_primary_conflict(**kwargs: Any) -> dict[str, Any]:
     thesis = build_day_thesis_v1(**kwargs)
