@@ -433,22 +433,21 @@ Personal Model / Snapshot в коде = носитель Character Engine output
 
 Канон ≠ runtime. Главный риск: старые контракты и jobs продолжают **параллельно** строить другую личность.
 
-**Не делать сейчас:** редизайн Profile, новые Freeze-блоки, polish карточек.
+**Inventory (вход):** [audits/CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md](../audits/CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md)  
+**Architecture Impact (D1–D4 ACCEPTED):** [audits/CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md](../audits/CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md)
+
+**Не делать сейчас:** редизайн Profile; полная JSON prose-schema до schema-PR; dual-SoT publish.
 
 **Делать (порядок):**
 
-1. Инвентаризация всех personality-related contracts, prompt IDs, jobs, API schemas и FE consumers.  
-2. Versioned **Character Engine output** contract (Snapshot schema).  
-3. Отдельная схема **Evidence Graph** (claim ids · source_fact_ids · confidence · capability).  
-4. Один связанный generation pipeline: ядро → Internal Engine → tensions → scenes → potential → blind spots.  
-5. **Compass assembler** без отдельного generative call.  
-6. Адаптеры legacy-полей (`relationship_style`, career/money slots, strengths, energy) → чтение новой модели.  
-7. Переключение Profile на новый Snapshot.  
-8. Подключение Today · Compatibility · Tarot как **readers** (после Profile).  
-9. Удаление / блокировка старых независимых prompt roots.  
-10. Regression acceptance: один character arc во всех проекциях без противоречий.
+1. ~~Инвентаризация~~ · ~~Architecture Impact D1–D4~~ → **DONE**.  
+2. Schema: `payload.character_engine_v1` + Evidence Graph + adapter map.  
+3. Recipe `character_engine_recipe_v1` · prompt family `profile.character_engine.v1` · stages 0–6.  
+4. Pipeline behind flag · Compass deterministic (stage 5) · Shadow harness.  
+5. Cutover: Profile web → iOS → ExperienceSlice/CUM → Today → Tarot → Compat.  
+6. Kill funnel/oneshot/orphan roots at cutover; cleanup later.
 
-Каждый шаг, меняющий public JSON / fallback / generation order — с **Architecture impact** (см. root `AGENTS.md`).
+**Миграционное правило:** Shadow ≠ dual publish; adapters = pure projections; forming без partial character.
 
 ---
 
@@ -459,3 +458,4 @@ Personal Model / Snapshot в коде = носитель Character Engine output
 | 2026-07-25 | v1.0 — драматургия Profile: Пролог→Акты I–VIII→Финал; каскад; запрет отдельных проекций-корней |
 | 2026-07-25 | v1.1 — **Character Engine** (платформенный SoT); Пролог Raw Sources + Evidence Graph; Акт I = один логлайн; Акт II = драматургия источников; Акт III = Internal Engine; главное+вторичные противоречия; жизненные сцены вместо сфер; Компас derived-only; Финал = путь личности; полный отказ от независимых генераторов |
 | 2026-07-25 | v1.1.1 — опоры и дома: только полезная информация о пользователе; запрет энциклопедии; header = 1.1.1; §8 next wiring track |
+| 2026-07-25 | v1.1.1 — §8: inventory v0 linked; order = Impact → schema → shadow → readers → kill roots |

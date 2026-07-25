@@ -5,6 +5,8 @@
 | Файл | Роль |
 |------|------|
 | [PROFILE_EXPERIENCE_SCENARIO_V1.md](./PROFILE_EXPERIENCE_SCENARIO_V1.md) | **Character Engine SoT** — единая модель личности платформы · каскад · запрет независимых генераторов |
+| [../audits/CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md](../audits/CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md) | Runtime inventory — contracts · prompts · jobs · FE/iOS · kill list |
+| [../audits/CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md](../audits/CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md) | **D1–D4 ACCEPTED** — Snapshot home · Evidence Graph · staged pipeline · adapters |
 | [PROFILE_PRODUCT_SURFACE_CANON.md](./PROFILE_PRODUCT_SURFACE_CANON.md) | Surface journey (Шаги 1–5) — *как* раскрывается |
 | [PROFILE_CONTENT_CANON_V1.md](./PROFILE_CONTENT_CANON_V1.md) | Content pipeline · Snapshot · eval |
 | [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) | Visual/layout master (legacy v0) |
