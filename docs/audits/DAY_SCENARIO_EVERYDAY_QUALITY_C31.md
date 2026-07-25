@@ -67,7 +67,9 @@ Banned as sole content: «не торопитесь», «сохраняйте б
 
 ## Out of scope (later C3.x)
 
-- C3.2 chorus sequencing polish beyond gate  
-- C3.3 deep personalization construction  
+- C3.3b sphere selection / production pairwise eval  
 - C3.5 multi-day eval harness pack  
 - UI redesign
+
+**Landed:** [DAY_SCENARIO_CHORUS_QUALITY_C32.md](./DAY_SCENARIO_CHORUS_QUALITY_C32.md) ·
+[DAY_SCENARIO_PERSONALIZATION_C33A.md](./DAY_SCENARIO_PERSONALIZATION_C33A.md)

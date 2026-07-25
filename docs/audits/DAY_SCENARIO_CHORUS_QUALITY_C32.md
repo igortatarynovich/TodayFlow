@@ -45,6 +45,6 @@ Retry uses existing `format_editorial_retry_feedback` — **no** formula rewrite
 
 ## Out of scope
 
-- C3.3 personalization depth  
+- C3.3b sphere selection / production pairwise eval  
 - C3.5 eval pack  
 - UI / lifecycle / public contract changes

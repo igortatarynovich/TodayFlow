@@ -22,7 +22,7 @@ Code: [`day_story_wire_v1.py`](../../backend/src/todayflow_backend/services/day_
 
 ## Retry
 
-Native C1/C3.1/C3.2: up to **2** attempts. Rejects: empty, parse fail, legacy keys, schema validation, **editorial gate** (abstract/universal/clone scenes, chorus parallel forecast / role drift / semantic dupe, bare astro jargon, …). Retry includes defect feedback. On total failure → `facts_only_unavailable` (**not** legacy LLM schema, **not** formula-bank prose).
+Native C1/C3.1–C3.3a: up to **2** attempts. Rejects: empty, parse fail, legacy keys, schema validation, **personalization gate** (then downgrade to general or reject on profile leak), **editorial gate** (scenes/chorus). Retry includes defect feedback. On total failure → `facts_only_unavailable` (**not** legacy LLM schema, **not** formula-bank prose). Bad personalization with a salvageable day story → **honest general** (strip personal layer), not unavailable.
 
 ## Cache
 

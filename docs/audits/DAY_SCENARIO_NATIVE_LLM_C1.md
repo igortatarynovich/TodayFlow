@@ -47,12 +47,13 @@ Forbidden legacy keys: expect, trap, do, avoid, domains, talisman, story, theme,
 
 ## Prompt version
 
-`day-scenario-native-c3.2` — everyday scenes (C3.1) + chorus causal chain (C3.2).  
-Prior: `day-scenario-native-c3.1` · `day-scenario-native-c1.0`.  
+`day-scenario-native-c3.3a` — everyday scenes + chorus chain + personalization depth contract.  
+Prior: `day-scenario-native-c3.2` · `c3.1` · `c1.0`.  
 Legacy `day-story-v1.10-no-formula-runtime` remains eval/compare only — **not** runtime SoT.
 
 See [DAY_SCENARIO_EVERYDAY_QUALITY_C31.md](./DAY_SCENARIO_EVERYDAY_QUALITY_C31.md) ·
-[DAY_SCENARIO_CHORUS_QUALITY_C32.md](./DAY_SCENARIO_CHORUS_QUALITY_C32.md).
+[DAY_SCENARIO_CHORUS_QUALITY_C32.md](./DAY_SCENARIO_CHORUS_QUALITY_C32.md) ·
+[DAY_SCENARIO_PERSONALIZATION_C33A.md](./DAY_SCENARIO_PERSONALIZATION_C33A.md).
 
 ## Cache migration
 
@@ -68,4 +69,4 @@ See [DAY_SCENARIO_EVERYDAY_QUALITY_C31.md](./DAY_SCENARIO_EVERYDAY_QUALITY_C31.m
 - Profile / Tarot product flows
 - Formula-bank rewrite of failed editorial output
 
-**Landed later:** C2 chapters UI · C3.1 everyday editorial gate · C3.2 chorus causal chain.
+**Landed later:** C2 chapters UI · C3.1 everyday editorial gate · C3.2 chorus causal chain · C3.3a personalization contract.

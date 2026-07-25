@@ -41,7 +41,7 @@ _SPHERE_LABEL_RU: dict[str, str] = {
 }
 
 NATIVE_LLM_SCHEMA_VERSION = "day_scenario_native_llm_c1"
-NATIVE_PROMPT_VERSION = "day-scenario-native-c3.2"
+NATIVE_PROMPT_VERSION = "day-scenario-native-c3.3a"
 GENERATION_SOURCE_NATIVE = "native_llm_c1"
 GENERATION_SOURCE_DETERMINISTIC = "deterministic_engine_b5"
 
@@ -96,6 +96,11 @@ _NATIVE_SYS_RU = """Ты — драматург TodayFlow. Твоя задача
 Структура:
 {
   "schema_version": "day_scenario_native_llm_c1",
+  "personalization_depth": "general|light_personalized|deep_personalized",
+  "personalization": {
+    "depth": "general|light_personalized|deep_personalized",
+    "pack_confidence": 0.0
+  },
   "interpretive_chorus": {
     "astrology": [{"named_factor": "...", "human_meaning": "...", "link_to_conflict": "...", "conflict_id": "conflict.<slug>", "evidence_refs": ["id"]}],
     "day_card": {"named_factor": "...", "archetype_role": "...", "link_to_conflict": "...", "conflict_id": "conflict.<slug>", "evidence_refs": []},
@@ -110,7 +115,15 @@ _NATIVE_SYS_RU = """Ты — драматург TodayFlow. Твоя задача
     "why_today": "...",
     "why_personal": "...",
     "driver_refs": ["id"],
-    "evidence_refs": ["id"]
+    "evidence_refs": ["id"],
+    "personalization": {
+      "personalization_level": "general|light_personalized|deep_personalized",
+      "personalization_reason": "...",
+      "personalization_evidence_refs": ["id"],
+      "general_fallback_available": true,
+      "habitual_force": "a|b",
+      "required_movement": "a|b"
+    }
   },
   "scenes": [
     {
@@ -124,7 +137,17 @@ _NATIVE_SYS_RU = """Ты — драматург TodayFlow. Твоя задача
       "avoid_action": "...",
       "everyday_example": "...",
       "evidence_refs": ["id"],
-      "chorus_refs": ["astrology", "day_card", "day_number", "natal", "conflict"]
+      "chorus_refs": ["astrology", "day_card", "day_number", "natal", "conflict"],
+      "personalization": {
+        "personalization_level": "general|light_personalized|deep_personalized",
+        "personalization_reason": "почему эта сфера и эта реакция",
+        "personalization_evidence_refs": ["id"],
+        "general_fallback_available": true,
+        "response_pattern": "привычный паттерн",
+        "compensating_for": "какой baseline компенсирует действие",
+        "trap_pattern": "тип ловушки",
+        "sphere_reason": "почему сфера"
+      }
     }
   ],
   "prop_material": {
@@ -174,6 +197,17 @@ everyday_example обязателен и конкретен (сообщение,
 параллельные прогнозы («в работе… / в отношениях…» как отдельные истории).
 Без натальных evidence не выдумывай глубокую персонализацию (natal=[]).
 
+ПЕРСОНАЛИЗАЦИЯ (C3.3a) — контракт глубины:
+Во входе есть personalization_evidence (ограниченный pack). Не читай сырой Profile.
+Соблюдай evidence_depth из pack:
+- general: без «вы обычно / вам свойственно / ваша привычка»; natal=[]; why_personal пустой или без личных утверждений.
+- light_personalized: можно why_personal, тон рекомендации, одну сферу, вероятную реакцию; без точных домов/асцендента/натальных активаций.
+- deep_personalized: можно opposing forces, ranking сфер, trap, compensating action, intensity, natal voice;
+  обязательно personalization traces с evidence_refs; habitual_force vs required_movement;
+  минимум два структурных изменения, не только why_personal + natal абзац.
+Действие должно компенсировать baseline из pack.tendencies (не универсальный take a pause).
+Не повторяй технические id, координаты, Human Design type labels в публичном тексте.
+
 - ЗАПРЕЩЕНЫ legacy keys: expect, trap, do, avoid, domains, talisman, story, theme,
   color_note, affirmation, goals, day_thesis, primary_conflict, events_lead и т.п.
 - не выбирай финальный цвет дня — только prop_material кандидаты;
@@ -197,6 +231,29 @@ def _clip(value: Any, n: int = 400) -> str:
     if len(text) <= n:
         return text
     return text[: n - 1].rstrip() + "…"
+
+
+def _normalize_personalization_trace(raw: Any) -> dict[str, Any]:
+    d = _as_dict(raw)
+    level = _clip(d.get("personalization_level") or d.get("level") or "general", 32)
+    if level not in {"general", "light_personalized", "deep_personalized"}:
+        level = "general"
+    return {
+        "personalization_level": level,
+        "personalization_reason": _clip(
+            d.get("personalization_reason") or d.get("reason") or d.get("sphere_reason"), 240
+        ),
+        "personalization_evidence_refs": [
+            str(x).strip() for x in _as_list(d.get("personalization_evidence_refs")) if str(x).strip()
+        ][:6],
+        "general_fallback_available": bool(d.get("general_fallback_available", True)),
+        "habitual_force": _clip(d.get("habitual_force"), 16),
+        "required_movement": _clip(d.get("required_movement"), 16),
+        "response_pattern": _clip(d.get("response_pattern"), 120),
+        "compensating_for": _clip(d.get("compensating_for"), 120),
+        "trap_pattern": _clip(d.get("trap_pattern"), 80),
+        "sphere_reason": _clip(d.get("sphere_reason"), 160),
+    }
 
 
 def _slug_scene_id(raw: Any, sphere: str, idx: int) -> str:
@@ -345,6 +402,7 @@ def normalize_native_scenario_llm_c1(raw: dict[str, Any] | None) -> dict[str, An
                 "everyday_example": _clip(sc.get("everyday_example") or sc.get("domestic_example"), 280),
                 "evidence_refs": [str(x).strip() for x in _as_list(sc.get("evidence_refs")) if str(x).strip()][:6],
                 "chorus_refs": [str(x).strip() for x in _as_list(sc.get("chorus_refs")) if str(x).strip()][:8],
+                "personalization": _normalize_personalization_trace(sc.get("personalization")),
             }
         )
 
@@ -361,8 +419,30 @@ def normalize_native_scenario_llm_c1(raw: dict[str, Any] | None) -> dict[str, An
     affirm = _as_dict(props_in.get("affirmation_tension"))
     humor = _as_dict(props_in.get("humor_setup"))
 
+    pers_in = _as_dict(src.get("personalization"))
+    depth = _clip(
+        src.get("personalization_depth") or pers_in.get("depth") or "general",
+        32,
+    )
+    if depth not in {"general", "light_personalized", "deep_personalized"}:
+        depth = "general"
+    conflict_pers = _normalize_personalization_trace(
+        conflict_in.get("personalization") or src.get("conflict_personalization")
+    )
+    if conflict_in.get("habitual_force") and not conflict_pers.get("habitual_force"):
+        conflict_pers["habitual_force"] = _clip(conflict_in.get("habitual_force"), 16)
+    if conflict_in.get("required_movement") and not conflict_pers.get("required_movement"):
+        conflict_pers["required_movement"] = _clip(conflict_in.get("required_movement"), 16)
+
     return {
         "schema_version": NATIVE_LLM_SCHEMA_VERSION,
+        "personalization_depth": depth,
+        "personalization": {
+            "depth": depth,
+            "pack_confidence": pers_in.get("pack_confidence"),
+            "downgraded_from": pers_in.get("downgraded_from"),
+            "downgrade_reason": pers_in.get("downgrade_reason"),
+        },
         "interpretive_chorus": {
             "astrology": astrology[:4],
             "day_card": day_card,
@@ -378,6 +458,7 @@ def normalize_native_scenario_llm_c1(raw: dict[str, Any] | None) -> dict[str, An
             "why_personal": _clip(conflict_in.get("why_personal"), 280),
             "driver_refs": [str(x).strip() for x in _as_list(conflict_in.get("driver_refs") or conflict_in.get("driver_ids")) if str(x).strip()][:5],
             "evidence_refs": [str(x).strip() for x in _as_list(conflict_in.get("evidence_refs")) if str(x).strip()][:8],
+            "personalization": conflict_pers,
         },
         "scenes": scenes_out[:4],
         "prop_material": {
@@ -567,6 +648,7 @@ def native_llm_to_day_scenario_v1(
         "confidence": 0.72,
         "foundation_rule": "Native LLM conflict; facts from foundation; card/number do not invent rival plot.",
         "evidence_refs": list(conflict_n.get("evidence_refs") or []),
+        "personalization": _as_dict(conflict_n.get("personalization")),
     }
 
     chorus_n = _as_dict(norm.get("interpretive_chorus"))
@@ -724,14 +806,29 @@ def call_day_scenario_native_llm_c1(
 ) -> dict[str, Any] | None:
     """Generate native scenario via LLM. Returns day_scenario_v1 or None after retries.
 
-    Pipeline per attempt: parse → schema validate → editorial gate (C3.1) → map → structural validate.
-    Critical editorial defects trigger retry with defect feedback (no formula rewrite).
+    Pipeline per attempt:
+      parse → schema validate → personalization gate (C3.3a) → editorial gate (C3.1/C3.2)
+      → map → structural validate.
+    Bad personalization may downgrade to honest general (not always unavailable).
+    Critical editorial / profile-leak defects → retry; story-level fail → None.
     """
     from todayflow_backend.services.day_scenario_editorial_gate_c31 import (
         editorial_has_critical,
         format_editorial_retry_feedback,
         run_editorial_quality_gate_c31,
         score_editorial_quality_c31,
+    )
+    from todayflow_backend.services.day_scenario_personalization_c33 import (
+        DEPTH_DEEP,
+        DEPTH_GENERAL,
+        build_personalization_evidence_pack_c33,
+        downgrade_native_to_general_c33,
+        format_personalization_retry_feedback,
+        personalization_decision_after_retries,
+        personalization_has_critical,
+        personalization_requires_retry,
+        run_personalization_gate_c33,
+        score_personalization_c33,
     )
     from todayflow_backend.services.day_story_capture_session_v0 import get_day_story_capture_session
 
@@ -744,31 +841,29 @@ def call_day_scenario_native_llm_c1(
     interp = interpretation or (
         user_json.get("interpretation") if isinstance(user_json.get("interpretation"), dict) else {}
     )
+    if not isinstance(interp, dict):
+        interp = {}
+
     allowed = collect_allowed_evidence_ids(
-        interpretation=interp if isinstance(interp, dict) else {},
+        interpretation=interp,
         ritual_context=ritual_context,
         celestial_events=celestial_events,
     )
-    # Natal evidence: personal claims / natal activations in interpretation
-    has_natal_evidence = False
-    if isinstance(interp, dict):
-        claims = _as_list(interp.get("derived_claims"))
-        if any(str(c.get("id") or "").startswith("claim.personal.") for c in claims if isinstance(c, dict)):
-            has_natal_evidence = True
-        foundation = _as_dict(interp.get("day_foundation"))
-        personal = _as_dict(interp.get("day_personal"))
-        if foundation or personal.get("natal") or personal.get("transits"):
-            # Soft: presence of personal nest counts as possible evidence channel
-            if _as_list(personal.get("activations")) or _as_list(
-                _as_dict(personal.get("astrology")).get("activations")
-            ):
-                has_natal_evidence = True
-        evidence = _as_list(interp.get("evidence"))
-        if any("natal" in str(e.get("id") or "").lower() for e in evidence if isinstance(e, dict)):
-            has_natal_evidence = True
+
+    pers_pack = build_personalization_evidence_pack_c33(interp)
+    has_natal_evidence = str(pers_pack.get("evidence_depth") or "") == DEPTH_DEEP
+
+    # Bounded LLM input: inject pack; drop raw day_personal dump from payload copy
+    llm_payload = dict(user_json) if isinstance(user_json, dict) else {}
+    llm_payload["personalization_evidence"] = pers_pack
+    llm_payload.pop("day_personal", None)
+    if isinstance(llm_payload.get("interpretation"), dict):
+        interp_copy = dict(llm_payload["interpretation"])
+        interp_copy.pop("day_personal", None)
+        llm_payload["interpretation"] = interp_copy
 
     attempts = max(1, min(int(max_attempts or 1), 3))
-    user_full = json.dumps(user_json, ensure_ascii=False)
+    user_full = json.dumps(llm_payload, ensure_ascii=False)
     user_base = user_full[:14000]
     user_sent = user_base
     retry_feedback = ""
@@ -788,6 +883,8 @@ def call_day_scenario_native_llm_c1(
             model=model_name or None,
         )
 
+    last_pers_defects: list[dict[str, str]] = []
+
     for attempt_idx in range(attempts):
         if retry_feedback:
             user_sent = f"{user_base}\n\n---\n{retry_feedback}"[:16000]
@@ -799,7 +896,7 @@ def call_day_scenario_native_llm_c1(
                 {"role": "user", "content": user_sent},
             ],
             temperature=0.52,
-            max_tokens=resolve_max_tokens(2200),
+            max_tokens=resolve_max_tokens(2400),
         )
         if not content:
             if capture is not None:
@@ -827,6 +924,15 @@ def call_day_scenario_native_llm_c1(
                 )
             continue
         normalized = normalize_native_scenario_llm_c1(parsed)
+        # Align declared depth with pack if model omitted it
+        if not normalized.get("personalization_depth"):
+            normalized["personalization_depth"] = pers_pack.get("evidence_depth") or DEPTH_GENERAL
+            normalized["personalization"] = {
+                **_as_dict(normalized.get("personalization")),
+                "depth": normalized["personalization_depth"],
+                "pack_confidence": pers_pack.get("confidence"),
+            }
+
         errors = validate_native_scenario_llm_c1(normalized, allowed_evidence_ids=allowed)
         legacy_raw = find_legacy_keys(parsed)
         if legacy_raw:
@@ -842,21 +948,80 @@ def call_day_scenario_native_llm_c1(
                     status="native_validation_reject",
                     reject_reason=";".join(errors[:8]),
                 )
-            retry_feedback = (
-                "Исправь schema/validation ошибки: " + "; ".join(errors[:6])
-            )
+            retry_feedback = "Исправь schema/validation ошибки: " + "; ".join(errors[:6])
             continue
 
+        # --- C3.3a personalization gate (before editorial) ---
+        pers_defects = run_personalization_gate_c33(normalized, pers_pack)
+        last_pers_defects = pers_defects
+        pers_score = score_personalization_c33(pers_defects)
+        if pers_defects and (
+            personalization_requires_retry(pers_defects)
+            or personalization_decision_after_retries(pers_defects) == "downgrade_general"
+        ):
+            if attempt_idx + 1 < attempts and personalization_has_critical(pers_defects):
+                feedback = format_personalization_retry_feedback(pers_defects, pack=pers_pack)
+                if capture is not None:
+                    capture.record_attempt(
+                        attempt_index=attempt_idx,
+                        raw_response=content,
+                        parsed=parsed,
+                        after_normalize={
+                            **normalized,
+                            "personalization_score": pers_score,
+                            "personalization_defects": pers_defects,
+                        },
+                        after_gate=None,
+                        status="personalization_gate_reject",
+                        reject_reason=";".join(str(d.get("code")) for d in pers_defects[:8]),
+                    )
+                    try:
+                        for d in pers_defects:
+                            capture.add_defect(
+                                str(d.get("code") or "PERSONALIZATION"),
+                                f"{d.get('field')}:{d.get('message')}",
+                                cls="PERSONALIZATION",
+                            )
+                    except Exception:
+                        pass
+                retry_feedback = feedback
+                continue
+            decision = personalization_decision_after_retries(pers_defects)
+            if decision == "reject_story":
+                if capture is not None:
+                    capture.record_attempt(
+                        attempt_index=attempt_idx,
+                        raw_response=content,
+                        parsed=parsed,
+                        after_normalize=normalized,
+                        after_gate=None,
+                        status="personalization_reject_story",
+                        reject_reason=";".join(str(d.get("code")) for d in pers_defects[:8]),
+                    )
+                return None
+            if decision == "downgrade_general":
+                normalized = downgrade_native_to_general_c33(normalized)
+                general_pack = {
+                    **pers_pack,
+                    "evidence_depth": DEPTH_GENERAL,
+                    "behavioral_tendencies": [],
+                    "natal_activations": [],
+                    "confidence": 0.0,
+                }
+                pers_defects = run_personalization_gate_c33(normalized, general_pack)
+                if personalization_decision_after_retries(pers_defects) == "reject_story":
+                    return None
+                pers_score = score_personalization_c33(pers_defects)
+                last_pers_defects = pers_defects
+
+        # --- C3.1/C3.2 editorial gate ---
         editorial = run_editorial_quality_gate_c31(
             normalized,
-            has_natal_evidence=has_natal_evidence if has_natal_evidence else None,
+            has_natal_evidence=has_natal_evidence if has_natal_evidence else False,
         )
-        # If natal rows exist but we detected no evidence, force False
         natal_rows = _as_list(_as_dict(normalized.get("interpretive_chorus")).get("natal"))
         if natal_rows and not has_natal_evidence:
-            editorial = run_editorial_quality_gate_c31(
-                normalized, has_natal_evidence=False
-            )
+            editorial = run_editorial_quality_gate_c31(normalized, has_natal_evidence=False)
         ed_score = score_editorial_quality_c31(editorial)
         if editorial_has_critical(editorial):
             feedback = format_editorial_retry_feedback(editorial)
@@ -865,7 +1030,13 @@ def call_day_scenario_native_llm_c1(
                     attempt_index=attempt_idx,
                     raw_response=content,
                     parsed=parsed,
-                    after_normalize={**normalized, "editorial_score": ed_score, "editorial_defects": editorial},
+                    after_normalize={
+                        **normalized,
+                        "editorial_score": ed_score,
+                        "editorial_defects": editorial,
+                        "personalization_score": pers_score,
+                        "personalization_defects": pers_defects,
+                    },
                     after_gate=None,
                     status="editorial_gate_reject",
                     reject_reason=";".join(f"{d.get('code')}" for d in editorial[:8]),
@@ -884,10 +1055,10 @@ def call_day_scenario_native_llm_c1(
 
         scenario = native_llm_to_day_scenario_v1(
             normalized,
-            interpretation=interp if isinstance(interp, dict) else {},
+            interpretation=interp,
             ritual_context=ritual_context,
             celestial_events=celestial_events,
-            day_thesis=_as_dict(interp.get("day_thesis")) if isinstance(interp, dict) else None,
+            day_thesis=_as_dict(interp.get("day_thesis")),
         )
         scen_errors = validate_day_scenario_v1(scenario)
         hard = [e for e in scen_errors if e in {"scenes_empty", "conflict_missing_short_name", "bad_contract_version"}]
@@ -908,16 +1079,36 @@ def call_day_scenario_native_llm_c1(
                 attempt_index=attempt_idx,
                 raw_response=content,
                 parsed=parsed,
-                after_normalize={**normalized, "editorial_score": ed_score, "editorial_defects": editorial},
+                after_normalize={
+                    **normalized,
+                    "editorial_score": ed_score,
+                    "editorial_defects": editorial,
+                    "personalization_score": pers_score,
+                    "personalization_defects": pers_defects,
+                },
                 after_gate=scenario,
-                status="accepted_native_c31",
+                status="accepted_native_c33a",
             )
+        scenario["personalization_depth"] = normalized.get("personalization_depth") or DEPTH_GENERAL
+        scenario["personalization_evidence"] = {
+            "evidence_depth": pers_pack.get("evidence_depth"),
+            "confidence": pers_pack.get("confidence"),
+            "evidence_refs": list(pers_pack.get("evidence_refs") or [])[:12],
+            "tendency_ids": [
+                t.get("id")
+                for t in _as_list(pers_pack.get("behavioral_tendencies"))
+                if isinstance(t, dict)
+            ][:6],
+        }
         scenario["editorial_meta"] = {
             "prompt_version": NATIVE_PROMPT_VERSION,
             "model_version": model_name,
             "native_schema_version": NATIVE_LLM_SCHEMA_VERSION,
             "editorial_score": ed_score,
             "editorial_defects": editorial,
+            "personalization_score": pers_score,
+            "personalization_defects": last_pers_defects,
+            "personalization_depth": scenario["personalization_depth"],
         }
         return scenario
     return None
