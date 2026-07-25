@@ -1,12 +1,13 @@
 # DAY_SCENARIO_V1 — драматургический каркас дня
 
-**Status:** CANON DRAFT — **B1–B5 + C1 landed** (exclusive SoT + **native scenario LLM**); Chapters UI = C2  
+**Status:** CANON DRAFT — **B1–B5 + C1 + C2 landed** (SoT + native LLM + **story chapters UI**); language polish open  
 **Date:** 2026-07-25  
 **Engine:** `day_scenario_v1.py` · `day_color_catalog_v1.py` · `day_scenario_project_v1.py` · `day_scenario_native_llm_c1.py`  
 **Wire note:** [audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md](./audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md)  
 **UI note:** [audits/DAY_SCENARIO_UI_PREFERENCE_B4.md](./audits/DAY_SCENARIO_UI_PREFERENCE_B4.md)  
 **Runtime SoT:** [audits/DAY_SCENARIO_RUNTIME_SOT_B5.md](./audits/DAY_SCENARIO_RUNTIME_SOT_B5.md)  
 **Native LLM:** [audits/DAY_SCENARIO_NATIVE_LLM_C1.md](./audits/DAY_SCENARIO_NATIVE_LLM_C1.md)  
+**Chapters UI:** [audits/DAY_SCENARIO_CHAPTERS_C2.md](./audits/DAY_SCENARIO_CHAPTERS_C2.md)  
 **Capture rubric:** [audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md](./audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md)  
 **Related:** [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) · [today-language/TODAY_LANGUAGE_V1.md](./today-language/TODAY_LANGUAGE_V1.md)
 
@@ -260,6 +261,21 @@ Compose Today around prolog → conflict → chorus → scenes → props-in-scen
 
 Compose Today as story chapters from conflict + scenes (not independent widgets).  
 Legacy projections remain for old clients only.
+
+### C2 (landed) — Story chapters UI
+
+```markdown
+## Architecture impact
+- **SoT before (FE):** Day Map from projected expect/trap/do
+- **SoT after:** scenario-ready → five chapters from conflict/chorus/scenes/props;
+  fallback Day Map / legacy when scenario missing or unavailable
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — DAY_SCENARIO_CHAPTERS_C2
+- **Backward compatible?** yes
+```
+
+### Next — language / personalization quality
 
 ---
 

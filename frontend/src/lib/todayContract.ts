@@ -395,6 +395,8 @@ export type TodayContractDayStoryV1 = {
     contract_version?: string;
     version?: string;
     runtime_sot?: boolean;
+    ready?: boolean;
+    generation_source?: string;
     conflict?: {
       short_name?: string;
       why_arose?: string;

@@ -154,7 +154,11 @@ export function TodayPersonalizedProductSection({
         <header className={styles.journeySceneHeader}>
           <p className={styles.journeyStepIndex}>
             <span className={styles.journeyStepBadge}>3</span>
-            <span>{copy.journey.readingTitle}</span>
+            <span>
+              {narrative.composition === "scenario_chapters"
+                ? copy.journey.readingTitleStory
+                : copy.journey.readingTitle}
+            </span>
           </p>
           {copy.journey.readingLead ? (
             <p className={styles.journeySceneLead}>{copy.journey.readingLead}</p>
@@ -253,7 +257,9 @@ export function TodayPersonalizedProductSection({
                           <p className={journeyStyles.dualPanelTitle}>
                             {chapter.id === "force"
                               ? copy.expectLabel
-                              : "Сильнее"}
+                              : chapter.id === "scenes"
+                                ? copy.journey.sceneOpportunityLabel
+                                : "Сильнее"}
                           </p>
                           {chapter.dual.strengthen.map((line) => (
                             <p key={line.slice(0, 40)} className={journeyStyles.dualPanelBody}>
@@ -267,7 +273,9 @@ export function TodayPersonalizedProductSection({
                           <p className={journeyStyles.dualPanelTitle}>
                             {chapter.id === "force"
                               ? copy.trapLabel
-                              : "Мягче / не дожимать"}
+                              : chapter.id === "scenes"
+                                ? copy.journey.sceneTrapLabel
+                                : "Мягче / не дожимать"}
                           </p>
                           {chapter.dual.soften.map((line) => (
                             <p key={line.slice(0, 40)} className={journeyStyles.dualPanelBody}>

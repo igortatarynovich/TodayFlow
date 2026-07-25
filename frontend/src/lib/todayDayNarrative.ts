@@ -17,6 +17,7 @@ import {
   pickSoftWhyLine,
 } from "@/lib/todayLiteraryReading";
 import { isRuUserFacingText } from "@/lib/todaySynthesisTextPolicy";
+import { buildScenarioStoryChapters } from "@/lib/todayScenarioChapters";
 
 export type TodayDayNarrativeChapterId =
   | "opening"
@@ -29,7 +30,8 @@ export type TodayDayNarrativeChapterId =
   | "symbols"
   | "supports"
   | "vibe"
-  | "chorus";
+  | "chorus"
+  | "scenes";
 
 /** Compact glance row for Day Personal — not a chip cluster. */
 export type TodayDayPersonalSignal = {
@@ -74,6 +76,8 @@ export type TodayDayNarrative = {
   headlineAnchor: string | null;
   /** §0.5 concrete closing strokes. */
   vibeClosing: string | null;
+  /** C2: scenario story chapters vs Day Map / legacy stack. */
+  composition?: "scenario_chapters" | "day_map" | "legacy";
 };
 
 const DOMAIN_LABELS: Record<string, string> = {
@@ -866,6 +870,25 @@ export function buildTodayDayNarrative(input: {
   const vibeClosing =
     (strokes.length ? strokes.join("; ") : null) || clean(contract.day_story?.vibe_closing) || null;
 
+  // C2: prefer day_scenario story chapters when ready (conflict + scenes).
+  const scenarioChapters = buildScenarioStoryChapters({
+    contract,
+    colorGuide: input.colorGuide ?? story.colorGuide,
+  });
+  if (scenarioChapters?.length) {
+    appendElectionalChapter(scenarioChapters, contract);
+    return {
+      theme,
+      softWhy: null,
+      chapters: scenarioChapters,
+      foundation,
+      dayMap,
+      headlineAnchor,
+      vibeClosing,
+      composition: "scenario_chapters",
+    };
+  }
+
   // Day Map path: pulse/glance/move slots — not a stacked fact wall.
   // Electional stays: explicit request, not a fact dump.
   if (dayMap) {
@@ -884,6 +907,7 @@ export function buildTodayDayNarrative(input: {
       dayMap,
       headlineAnchor,
       vibeClosing,
+      composition: "day_map",
     };
   }
 
@@ -1048,5 +1072,14 @@ export function buildTodayDayNarrative(input: {
   );
   if (supports) chapters.push(supports);
 
-  return { theme, softWhy, chapters, foundation, dayMap: null, headlineAnchor, vibeClosing };
+  return {
+    theme,
+    softWhy,
+    chapters,
+    foundation,
+    dayMap: null,
+    headlineAnchor,
+    vibeClosing,
+    composition: "legacy",
+  };
 }
