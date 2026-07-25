@@ -665,11 +665,11 @@ Source of truth: [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) §1–§13
 - [x] **Interpretation Engine v1.1** — Context Pack → LLM → validation → UI; ban «Аркан»; quality gates; honest fallback. Canon [TAROT_INTERPRETATION_ENGINE_V1](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md). Ledger: `fb8cd34` · `c4bbe56` (+ CE scrub `f2ac8c2` · `8c7bd2e`).
 - [x] **Architecture freeze (2026-07-25)** — no new contract fields · engine branches · spread types · Tarot UI as primary track until content quality lands.
 - [x] **Tarot Knowledge Base v1** — [TAROT_KNOWLEDGE_BASE_V1](./tarot/TAROT_KNOWLEDGE_BASE_V1.md) · `DATA/reference/tarot/knowledge_v1/cards.json` (78) · pack projection + prompt v1.2 · schema. Next: editorial deepen + live scoring.
-- [ ] **Position Semantics library** — role functions (gives / blocks / hidden cause / resource / next step / outcome / past–present–future / advice / warning). **← next**
-- [ ] **Question Ontology** — choice · relationships · work · money · purpose · inner state · decision · conflict · growth · undefined → interpretation logic.
+- [x] **Position Semantics v1** — [TAROT_POSITION_SEMANTICS_V1](./tarot/TAROT_POSITION_SEMANTICS_V1.md) · `DATA/reference/tarot/position_semantics_v1/roles.json` · pack `position_semantics` · prompt v1.3. Public contract unchanged.
+- [ ] **Question Ontology** — choice · relationships · work · money · purpose · inner state · decision · conflict · growth · undefined → interpretation logic. **← next**
 - [ ] **Prompt Evaluation golden set (~50 real questions)** — score answer / no loops / no fluff / no categorical claims / clear takeaway / worth reading; prefer over more glue unit tests.
 - [ ] Live owner scoring on current 10–15 scenario harness (`scripts/tarot_interpretation_live_eval.py --live`).
-- [ ] KB editorial deepen (majors review · weak minors rewrite).
+- [ ] KB editorial deepen (majors review · weak minors rewrite) — before golden eval.
 - [ ] **Tarot Design Language v1** — [docs/tarot/TAROT_DESIGN_LANGUAGE_V1.md](./tarot/TAROT_DESIGN_LANGUAGE_V1.md) **DRAFT / PENDING ACCEPT** · **parked under architecture freeze**
   - Канон-объект: колода на столе; формации 1/3/5/2; один reveal-жест; рубашка = фирменный язык
   - До accept: не плодить новые ритуальные UI; после accept → один `TarotDeckExperience` везде
@@ -1005,7 +1005,7 @@ Ordered work (aligns with canon §7):
 
 ## 6) Current Priorities (Execution Order)
 
-> **Активный фокус (2026-07-25):** **Tarot Knowledge Base v1** (content SoT in pack) + architecture freeze. Next: Position Semantics · Question Ontology · Prompt golden eval. Canon: [TAROT_KNOWLEDGE_BASE_V1](./tarot/TAROT_KNOWLEDGE_BASE_V1.md) · [TAROT_INTERPRETATION_ENGINE_V1](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md). Parallel: Character Engine Stage 0–1 shadow (local WIP).
+> **Активный фокус (2026-07-25):** **Tarot Position Semantics v1** landed; next **Question Ontology** · KB minors deepen · Prompt golden eval. Canon: [TAROT_POSITION_SEMANTICS_V1](./tarot/TAROT_POSITION_SEMANTICS_V1.md) · [TAROT_KNOWLEDGE_BASE_V1](./tarot/TAROT_KNOWLEDGE_BASE_V1.md) · [TAROT_INTERPRETATION_ENGINE_V1](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md). Parallel:  Character Engine Stage 0–1 shadow (local WIP).
 
 ### 🔴 Phase 3 — Screen Block Definition (единственный приоритет)
 
@@ -1099,7 +1099,8 @@ Historical note:
 - 2026-07-08 | Web product UI | challenges / reports / help / tarot cards → ProductPageScreen | IN PROGRESS | `/challenges`, `/challenges/[id]`, `/reports/full`, `/reports/thematic`, `/reports/thematic/[theme]`, `/help`, `/help/*`, `/tarot/cards/[slug]` — orbit-page и hero images убраны; metadata help → layout.tsx; inner forms/viewer в legacyHost.
 - 2026-07-07 | Web product UI | Today dashboard v2 aligned to Profile reference | IN PROGRESS | Today dashboard на `productPageLayout` + `productV2Surface` tokens; wide canvas `mainWide`; cards/type/spacing match profile v2.
 - 2026-07-25 | Tarot | **Knowledge Base v1** | **DONE (data+wire)** | 78 semantic cards → Context Pack (`inner_conflict`, domains, reverse trap, amplify, intensify/soften in-spread). Prompt `tarot-interpretation-v1.2`. Canon [TAROT_KNOWLEDGE_BASE_V1](./tarot/TAROT_KNOWLEDGE_BASE_V1.md). Public contract unchanged. Next: Position Semantics · live text scoring · editorial deepen.
-- 2026-07-25 | Tarot | **Architecture freeze + content backlog** | **ACTIVE** | Freeze: contract / engine branches / new spreads / Tarot UI. Next content: Position Semantics → Question Ontology → Prompt golden eval (~50). Risk = knowledge+prompt, not pipeline. Canon § freeze + §6 content backlog.
+- 2026-07-25 | Tarot | **Position Semantics v1** | **DONE (data+wire)** | Role library → pack `position_semantics` (purpose / answers_question / extract / do_not / result_type). Prompt `tarot-interpretation-v1.3`. Canon [TAROT_POSITION_SEMANTICS_V1](./tarot/TAROT_POSITION_SEMANTICS_V1.md). Public contract unchanged. Next: Question Ontology · minors deepen · golden eval.
+- 2026-07-25 | Tarot | **Architecture freeze + content backlog** | **ACTIVE** | Freeze: contract / engine branches / new spreads / Tarot UI. Next content: Question Ontology → minors deepen → Prompt golden eval (~50). Risk = knowledge+prompt, not pipeline. Canon § freeze + §6 content backlog.
 - 2026-07-25 | Tarot | **Interpretation Engine pack+gates v1.1** | **DONE** | Rich meaning ranges · domain profile · prompt bans · quality gates · honest fallback · scenario fixture + `scripts/tarot_interpretation_live_eval.py`. CE scrub commits `f2ac8c2` / `8c7bd2e`.
 - 2026-07-25 | Tarot | **Interpretation Engine v1.1 LLM author** | **DONE (web+BE)** | Architecture: Context Pack → LLM → validation → UI. Templates demoted to pack facts / thin fallback. Canon [TAROT_INTERPRETATION_ENGINE_V1](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md). UI: symbols / question story / answer / next step.
 - 2026-07-25 | Tarot | **Interpretation Engine v1** | **SUPERSEDED by v1.1** | Full-deck resolve; ban «Аркан»; unresolved gate; first template path replaced by LLM author.

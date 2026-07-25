@@ -59,7 +59,7 @@ Template/suit banks may exist **only** as pack facts or as **emergency fallback*
 | **No «Аркан»** | Запрещено в pack, LLM output и UI |
 | **Unresolved → no story** | `unresolved_cards.length > 0` → technical fallback, no LLM |
 | **Profile** | В pack — **короткий релевантный фрагмент** (напр. decision_style). Запрещено дословно вставлять длинный Profile-параграф как готовый ответ |
-| **Position role** | Pack сообщает роль: gain / risk / weights / step / … — LLM обязан учитывать |
+| **Position role** | Pack несёт `position_semantics` (purpose / extract / do_not / result_type) — LLM обязан учитывать |
 
 ---
 
@@ -73,7 +73,7 @@ Template/suit banks may exist **only** as pack facts or as **emergency fallback*
 - `upright_meaning` / `reversed_meaning` (catalog)
 - масть + light/shadow масти (minor)
 - стихия (`element` / `element_ru`)
-- роль позиции + instruction + prompt
+- роль позиции + **Position Semantics** (`purpose`, `answers_question`, `extract_from_card`, `do_not`, `result_type`)
 - `question_lens` (как читать под тип вопроса)
 - соседи
 
@@ -95,7 +95,7 @@ Template/suit banks may exist **only** as pack facts or as **emergency fallback*
 
 Запреты: механический список карт; повтор вопроса >1; спам названий позиций; цитата профиля; карты как факты о внешнем мире; пустые формулы; «Аркан».
 
-Prompt ver: `tarot-interpretation-v1.2` (KB fields: inner_conflict, domain_lens, intensifies_drawn, …)
+Prompt ver: `tarot-interpretation-v1.3` (KB + `position_semantics`: purpose / extract / do_not / result_type)
 
 ---
 
@@ -168,7 +168,7 @@ UI blocks (any spread):
 |------|-----|
 | Card identity | `DATA/astrology_reference/tarot_full_deck.json` |
 | Meaning ranges (facts) | **Tarot Knowledge Base v1** — `DATA/reference/tarot/knowledge_v1/cards.json` · canon [TAROT_KNOWLEDGE_BASE_V1.md](./TAROT_KNOWLEDGE_BASE_V1.md) |
-| Position function | pack role strings · **next:** Position Semantics library |
+| Position function | **Position Semantics v1** — `DATA/reference/tarot/position_semantics_v1/roles.json` · [TAROT_POSITION_SEMANTICS_V1.md](./TAROT_POSITION_SEMANTICS_V1.md) |
 | Question type | `question_domain` / lens · **next:** Question Ontology |
 | User-facing prose | **LLM** (`tarot_interpretation_llm_v1`) |
 | Structure / gates | code |
@@ -178,10 +178,11 @@ Editorial default: reject-invalid LLM → thin fallback. **Do not** hard-overwri
 
 ### Content backlog (quality, not architecture)
 
-1. **Tarot Knowledge Base v1** — **ACTIVE** — [TAROT_KNOWLEDGE_BASE_V1.md](./TAROT_KNOWLEDGE_BASE_V1.md) · 78 semantic records in pack. Next: editorial deepen + live scoring.
-2. **Position Semantics** — role library (gives / blocks / hidden cause / resource / next step / outcome / past–present–future / advice / warning) so the LLM reads function, not only a label.
-3. **Question Ontology** — choice · relationships · work · money · purpose · inner state · decision · conflict · growth · undefined; drives interpretation logic in pack + prompt.
+1. **Tarot Knowledge Base v1** — **ACTIVE** — [TAROT_KNOWLEDGE_BASE_V1.md](./TAROT_KNOWLEDGE_BASE_V1.md) · 78 semantic records in pack. Next: editorial deepen minors.
+2. **Position Semantics** — **ACTIVE** — [TAROT_POSITION_SEMANTICS_V1.md](./TAROT_POSITION_SEMANTICS_V1.md) · role library in pack.
+3. **Question Ontology** — choice · relationships · work · money · purpose · inner state · decision · conflict · growth · undefined; drives interpretation logic in pack + prompt. **← next**
 4. **Prompt Evaluation** — golden set (~50 real questions); after each content/prompt change score: has answer · no loops · no fluff · no categorical claims · clear takeaway · worth finishing. Prefer this over more unit tests of glue.
+5. **KB editorial deepen (minors)** — central scene · unique conflict · vs neighbor ranks · upright/reversed · domain nuance (before golden eval).
 
 ---
 
@@ -206,6 +207,7 @@ Editorial default: reject-invalid LLM → thin fallback. **Do not** hard-overwri
 - [x] Fallback honest / non-imitative
 - [x] Architecture freeze declared (no new contract/UI/spreads/engine branches as primary track)
 - [x] Knowledge Base v1 landed (78 cards → pack; prompt v1.2 reads KB fields)
+- [x] Position Semantics v1 landed (role library → pack `position_semantics`; prompt v1.3)
 - [ ] Live eval 10–15 scenarios (script: `scripts/tarot_interpretation_live_eval.py --live`) — owner scores text usefulness
-- [ ] Position Semantics · Question Ontology · Prompt golden eval (~50) — next content track
-- [ ] KB editorial deepen (majors review · weak minors rewrite)
+- [ ] Question Ontology · Prompt golden eval (~50) — next content track
+- [ ] KB editorial deepen (majors review · weak minors rewrite) — before golden eval

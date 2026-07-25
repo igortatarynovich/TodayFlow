@@ -21,7 +21,7 @@ from todayflow_backend.core.text_quality import is_meaningful_sentence
 
 logger = logging.getLogger(__name__)
 
-TAROT_INTERPRETATION_PROMPT_VER = "tarot-interpretation-v1.2"
+TAROT_INTERPRETATION_PROMPT_VER = "tarot-interpretation-v1.3"
 
 _BANNED_SUBSTRINGS = (
     "аркан",
@@ -67,10 +67,13 @@ _ACTION_MARKERS = (
 
 _SYSTEM_RU = """Ты — интерпретатор расклада Таро для TodayFlow.
 
-Вход: Deterministic Context Pack — семантические факты Knowledge Base + позиция.
+Вход: Deterministic Context Pack — семантические факты Knowledge Base + Position Semantics.
 В meaning_range смотри особенно: central_symbol, light_side/shadow_side, inner_conflict,
 outer_expression, domain_lens, reversed_central/reversed_trap (если reversed),
 intensifies_drawn / softens_drawn (если карты усиливают/смягчают друг друга в этом раскладе).
+В position_semantics смотри: purpose, answers_question, extract_from_card, do_not, result_type —
+это инструкция, КАК читать карту в позиции (не готовая фраза).
+Одна карта в risk ≠ та же карта в next_step ≠ та же в outcome.
 Это материал, не готовый ответ.
 
 Порядок работы (обязателен):
@@ -87,7 +90,8 @@ intensifies_drawn / softens_drawn (если карты усиливают/смя
 - не выдавай карты за факты о внешнем мире («он точно…», «уволят…»);
 - не используй пустые формулы («что-то просит быть замеченным», «просто доверься»);
 - запрещено слово «Аркан» как имя карты;
-- сначала конфликт/картина, потом ответ — не наоборот.
+- сначала конфликт/картина, потом ответ — не наоборот;
+- соблюдай do_not каждой position_semantics.
 
 Для spread_kind=choice:
 - в question_story явно сравни A и B (что даёт / риск);

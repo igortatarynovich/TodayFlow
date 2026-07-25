@@ -18,6 +18,7 @@ from typing import Any, TypedDict
 from todayflow_backend.core import models
 from todayflow_backend.data import astrology as astrology_ref
 from todayflow_backend.data import tarot_knowledge_v1 as tarot_kb
+from todayflow_backend.data import tarot_position_semantics_v1 as position_sem
 
 logger = logging.getLogger(__name__)
 
@@ -133,35 +134,13 @@ _PROFILE_KEYS_BY_DOMAIN: dict[str, tuple[str, ...]] = {
 }
 
 
-_POSITION_ROLE_BY_ID: dict[str, str] = {
-    "a_gives": "gain",
-    "b_gives": "gain",
-    "option_a": "gain",
-    "option_b": "gain",
-    "a_risk": "risk",
-    "b_risk": "risk",
-    "risk": "risk",
-    "obstacle": "risk",
-    "fear": "risk",
-    "block": "risk",
-    "weights": "weights",
-    "core": "weights",
-    "you": "weights",
-    "best_step": "step",
-    "next_step": "step",
-    "advice": "step",
-    "step": "step",
-    "future": "step",
-    "outcome": "step",
-}
+def position_role(position_id: str | None) -> str:
+    """Resolve stable role_id for a spread position (Position Semantics v1)."""
+    return position_sem.resolve_role_id(position_id)
 
-_ROLE_INSTRUCTION: dict[str, str] = {
-    "gain": "Позиция про то, что даёт путь / ресурс / облегчение — не совет «сделай так».",
-    "risk": "Позиция про конкретную опасность выбранного пути — не совет и не мораль.",
-    "weights": "Позиция про то, что нельзя игнорировать при решении.",
-    "step": "Позиция про действие в реальности — не описание настроения.",
-    "neutral": "Читай через prompt позиции.",
-}
+
+def position_semantics_for(position_id: str | None) -> dict[str, Any]:
+    return position_sem.pack_position_semantics(position_id)
 
 
 class UnresolvedCard(TypedDict):
@@ -173,21 +152,6 @@ class UnresolvedCard(TypedDict):
 @lru_cache(maxsize=1)
 def _deck_by_id() -> dict[int, dict[str, Any]]:
     return {int(c["id"]): c for c in astrology_ref.tarot_full_deck()}
-
-
-def position_role(position_id: str | None) -> str:
-    pid = (position_id or "").strip().lower()
-    if pid in _POSITION_ROLE_BY_ID:
-        return _POSITION_ROLE_BY_ID[pid]
-    if any(x in pid for x in ("risk", "fear", "obstacle", "block", "caution")):
-        return "risk"
-    if any(x in pid for x in ("give", "gain", "resource", "open", "benefit")):
-        return "gain"
-    if any(x in pid for x in ("step", "advice", "next", "action")):
-        return "step"
-    if any(x in pid for x in ("weight", "core", "consider", "important")):
-        return "weights"
-    return "neutral"
 
 
 def spread_kind(spread_id: str | None) -> str:
@@ -453,7 +417,8 @@ def build_context_pack(
     for idx, card in enumerate(cards):
         row = deck[int(card.card.id)]
         pid = (card.position.id if card.position else "") or ""
-        role = position_role(pid)
+        role_sem = position_semantics_for(pid)
+        role = str(role_sem.get("role_id") or position_role(pid))
         orient = (card.orientation or "upright").strip().lower()
         suit = str(row.get("suit") or "") or None
         card_type = str(row.get("type") or ("major" if int(card.card.id) <= 21 else "minor"))
@@ -481,7 +446,15 @@ def build_context_pack(
                 "position_title": (card.position.title if card.position else "") or pid,
                 "position_prompt": (card.position.prompt if card.position else None),
                 "position_role": role,
-                "position_role_instruction": _ROLE_INSTRUCTION.get(role, _ROLE_INSTRUCTION["neutral"]),
+                "position_role_instruction": role_sem.get("short_instruction") or "",
+                "position_semantics": {
+                    "role_id": role_sem.get("role_id"),
+                    "purpose": role_sem.get("purpose"),
+                    "answers_question": role_sem.get("answers_question"),
+                    "extract_from_card": role_sem.get("extract_from_card"),
+                    "do_not": role_sem.get("do_not") or [],
+                    "result_type": role_sem.get("result_type"),
+                },
                 "meaning_range": _meaning_range(card.card.id, row, question_domain=domain),
                 "question_lens": _DOMAIN_QUESTION_LENS.get(domain, _DOMAIN_QUESTION_LENS["general"]),
                 "neighbors": neighbors,

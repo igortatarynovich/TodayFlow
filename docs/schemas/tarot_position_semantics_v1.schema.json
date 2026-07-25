@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://todayflow.today/schemas/tarot_position_semantics_v1.schema.json",
+  "title": "Tarot Position Semantics v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "locale", "roles", "position_role_map"],
+  "properties": {
+    "contract_version": { "const": "tarot_position_semantics_v1" },
+    "locale": { "type": "string", "minLength": 2 },
+    "roles": {
+      "type": "array",
+      "minItems": 8,
+      "items": { "$ref": "#/$defs/role" }
+    },
+    "position_role_map": {
+      "type": "object",
+      "additionalProperties": { "type": "string", "minLength": 2 }
+    }
+  },
+  "$defs": {
+    "role": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role_id",
+        "purpose",
+        "answers_question",
+        "extract_from_card",
+        "do_not",
+        "result_type",
+        "short_instruction"
+      ],
+      "properties": {
+        "role_id": { "type": "string", "minLength": 2 },
+        "purpose": { "type": "string", "minLength": 8 },
+        "answers_question": { "type": "string", "minLength": 8 },
+        "extract_from_card": { "type": "string", "minLength": 8 },
+        "do_not": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": "string", "minLength": 4 }
+        },
+        "result_type": { "type": "string", "minLength": 2 },
+        "short_instruction": { "type": "string", "minLength": 8 }
+      }
+    }
+  }
+}

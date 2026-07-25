@@ -56,7 +56,14 @@ def test_context_pack_has_rich_meaning_range_for_major_and_minor():
     assert pack["cards"][0]["question_lens"]
     assert pack["cards"][1]["suit"] == "wands"
     assert pack["cards"][1]["meaning_range"].get("element") or pack["cards"][1]["suit_themes"]
-    assert pack["cards"][3]["position_role"] == "step"
+    assert pack["cards"][3]["position_role"] == "next_step"
+    step_sem = pack["cards"][3]["position_semantics"]
+    assert step_sem["result_type"] == "concrete_action"
+    assert step_sem["answers_question"]
+    assert any("состоян" in d.lower() or "гарант" in d.lower() for d in step_sem["do_not"])
+    risk_sem = pack["cards"][1]["position_semantics"]
+    assert risk_sem["role_id"] == "risk"
+    assert risk_sem["result_type"] == "concrete_risk"
 
 
 def test_thin_fallback_is_honest_not_fake_synthesis():
