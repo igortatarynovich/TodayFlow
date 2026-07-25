@@ -256,6 +256,9 @@ def summarize_gates(
     anti_sameness_mean: float | None,
     anti_sameness_threshold: float = 0.55,
     rubric_threshold: float = 3.5,
+    llm_pass: int | None = None,
+    scenario_count: int | None = None,
+    min_llm_pass_ratio: float = 0.85,
 ) -> dict[str, bool]:
     critical_flags = ("no_arkan_label", "direct_answer", "next_step")
     shape_ok = True
@@ -265,9 +268,13 @@ def summarize_gates(
                 shape_ok = False
     anti_ok = True if anti_sameness_mean is None else anti_sameness_mean < anti_sameness_threshold
     rubric_ok = bool(rubric_means) and (sum(rubric_means) / len(rubric_means) >= rubric_threshold)
+    llm_ok = True
+    if llm_pass is not None and scenario_count:
+        llm_ok = (llm_pass / scenario_count) >= min_llm_pass_ratio
     return {
         "critical_shape_pass": shape_ok,
         "anti_sameness_pass": anti_ok,
         "rubric_mean_pass": rubric_ok,
-        "freeze_lift_ready": shape_ok and anti_ok and rubric_ok,
+        "llm_pass_rate_ok": llm_ok,
+        "freeze_lift_ready": shape_ok and anti_ok and rubric_ok and llm_ok,
     }

@@ -669,8 +669,9 @@ Source of truth: [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) §1–§13
 - [x] **Question Ontology v1** — [TAROT_QUESTION_ONTOLOGY_V1](./tarot/TAROT_QUESTION_ONTOLOGY_V1.md) · prompt v1.4 · integration set 12.
 - [x] **Q1 Editorial deepen minors** — each of 56 = unique psychological archetype (not rank×suit); Q1 profile in KB + pack; `adjacent_distinction` required.
 - [x] **Golden Dataset** — fixed scenarios (question/profile/cards/expected type) without scores. Canon [TAROT_GOLDEN_DATASET_V1](./tarot/TAROT_GOLDEN_DATASET_V1.md).
-- [x] **Golden Eval harness** — rubric 1–5 · paid-worth heuristic · anti-sameness · CLI. Canon [TAROT_GOLDEN_EVAL_V1](./tarot/TAROT_GOLDEN_EVAL_V1.md). **Live report + freeze-lift decision ← next**
-- [ ] **Q3 Prompt iteration** — wording only after Eval.
+- [x] **Golden Eval harness** — rubric 1–5 · paid-worth heuristic · anti-sameness · CLI. Canon [TAROT_GOLDEN_EVAL_V1](./tarot/TAROT_GOLDEN_EVAL_V1.md).
+- [ ] **Golden Eval live accept** — first live report: llm_pass **7/12** → freeze **not** lifted. Audit [TAROT_GOLDEN_EVAL_LIVE_2026-07-25](./audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-25.md). **← next: raise LLM pass rate**
+- [ ] **Q3 Prompt iteration** — wording only after accepted live Eval.
 - [ ] **Tarot Design Language v1** — [docs/tarot/TAROT_DESIGN_LANGUAGE_V1.md](./tarot/TAROT_DESIGN_LANGUAGE_V1.md) **DRAFT / PENDING ACCEPT** · **parked under architecture freeze**
   - Канон-объект: колода на столе; формации 1/3/5/2; один reveal-жест; рубашка = фирменный язык
   - До accept: не плодить новые ритуальные UI; после accept → один `TarotDeckExperience` везде
@@ -1006,7 +1007,7 @@ Ordered work (aligns with canon §7):
 
 ## 6) Current Priorities (Execution Order)
 
-> **Активный фокус (2026-07-25):** **Tarot Interpretation Stack v1 FROZEN** — Dataset + **Eval harness DONE** → next **live Golden Eval report** (freeze-lift gate) → Q3 prompt wording. Canon [TAROT_GOLDEN_EVAL_V1](./tarot/TAROT_GOLDEN_EVAL_V1.md). Parallel: **CE Stage 0–1 staging GATE PASS** + **Stage 2 Identity Core LLM prompt** (structural validation only; no quality heuristics; no publish). CE baseline: `5eb61c6` (not branch tip).
+> **Активный фокус (2026-07-25):** **Tarot Interpretation Stack v1 FROZEN** — Dataset + Eval harness + first **live report (7/12 LLM)** → freeze stays. Next: improve LLM pass on Golden Dataset, then owner freeze-lift. Canon [TAROT_GOLDEN_EVAL_V1](./tarot/TAROT_GOLDEN_EVAL_V1.md) · audit [TAROT_GOLDEN_EVAL_LIVE_2026-07-25](./audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-25.md). Parallel: **CE Stage 0–1 staging GATE PASS** + **Stage 2 Identity Core LLM prompt**. CE baseline: `5eb61c6` (not branch tip).
 
 ### 🔴 Phase 3 — Screen Block Definition (единственный приоритет)
 
@@ -1099,6 +1100,7 @@ Historical note:
 - 2026-07-08 | Web product UI | calendar / profile-summary / subscriptions / discover pattern → ProductPageScreen | IN PROGRESS | `/calendar`, `/profile-summary`, `/subscriptions`, `/discover/pattern/[axis_id]` — orbit-page и hero images убраны; v2 header + pl.panel + legacyHost.
 - 2026-07-08 | Web product UI | challenges / reports / help / tarot cards → ProductPageScreen | IN PROGRESS | `/challenges`, `/challenges/[id]`, `/reports/full`, `/reports/thematic`, `/reports/thematic/[theme]`, `/help`, `/help/*`, `/tarot/cards/[slug]` — orbit-page и hero images убраны; metadata help → layout.tsx; inner forms/viewer в legacyHost.
 - 2026-07-07 | Web product UI | Today dashboard v2 aligned to Profile reference | IN PROGRESS | Today dashboard на `productPageLayout` + `productV2Surface` tokens; wide canvas `mainWide`; cards/type/spacing match profile v2.
+- 2026-07-25 | Tarot | **Golden Eval live #1** | **DONE (report) / FAIL lift** | 12/12 pack · **7/12 LLM** · anti-sameness OK · `freeze_lift_ready=false`. Audit [TAROT_GOLDEN_EVAL_LIVE_2026-07-25](./audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-25.md). Next: diagnose quality rejects → raise pass rate.
 - 2026-07-25 | Tarot | **Golden Eval v1 harness** | **DONE (offline)** | Rubric 1–5 · shape flags · anti-sameness · CLI `scripts/tarot_golden_eval_v1.py`. Freeze remains until live report accepted. Canon [TAROT_GOLDEN_EVAL_V1](./tarot/TAROT_GOLDEN_EVAL_V1.md).
 - 2026-07-25 | Tarot | **Golden Dataset v1** | **DONE (fixture)** | 12 fixed scenarios (all ontology types + Cups/Swords 8–10 Q1 gates) without scores. Schema + offline tests. Canon [TAROT_GOLDEN_DATASET_V1](./tarot/TAROT_GOLDEN_DATASET_V1.md). Next: Golden Eval harness.
 - 2026-07-25 | Tarot | **Q1 Editorial deepen minors** | **DONE (data+wire)** | 56 unique archetype profiles (`scripts/tarot_minors_q1_archetypes.py`) → KB JSON + pack projection (`core_scene`…`adjacent_distinction`). Gate: swords/cups 8–10 distinct. Public contract unchanged. Next: Golden Dataset → Golden Eval → Q3.

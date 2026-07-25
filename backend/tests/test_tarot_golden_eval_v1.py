@@ -99,9 +99,19 @@ def test_shape_and_anti_sameness_helpers():
         shape_results=[shape],
         rubric_means=[4.2],
         anti_sameness_mean=0.2,
+        llm_pass=12,
+        scenario_count=12,
     )
     assert gates["critical_shape_pass"] is True
     assert gates["freeze_lift_ready"] is True
+    gates_low_llm = geval.summarize_gates(
+        shape_results=[shape],
+        rubric_means=[4.2],
+        anti_sameness_mean=0.2,
+        llm_pass=7,
+        scenario_count=12,
+    )
+    assert gates_low_llm["freeze_lift_ready"] is False
 
 
 def test_offline_eval_report_validates_schema_for_all_dataset_scenarios():

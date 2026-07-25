@@ -172,6 +172,8 @@ def main() -> int:
         shape_results=shape_list if args.live else offline_shapes,
         rubric_means=rubric_means,
         anti_sameness_mean=anti_mean,
+        llm_pass=(None if not args.live else sum(1 for r in results if r.get("llm_ok"))),
+        scenario_count=len(results),
     )
     if not args.live:
         gates["freeze_lift_ready"] = False
