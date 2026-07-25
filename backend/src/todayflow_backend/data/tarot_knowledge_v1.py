@@ -115,7 +115,7 @@ def meaning_range_from_kb(
         if str(x).strip()
     ]
     facet = domain_facet(card, question_domain)
-    return {
+    out: dict[str, Any] = {
         "knowledge_source": CONTRACT_VERSION,
         "central_symbol": str(card.get("central_archetype") or "").strip(),
         "light_side": light,
@@ -143,3 +143,21 @@ def meaning_range_from_kb(
         "element": element,
         "element_ru": element_ru,
     }
+    # Q1 minor archetype profile — semantic facts for the LLM author (not prose).
+    for key in (
+        "core_scene",
+        "central_conflict",
+        "driving_need",
+        "shadow_pattern",
+        "growth_direction",
+        "work_lens",
+        "relationship_lens",
+        "money_lens",
+        "inner_lens",
+        "reversed_shift",
+        "adjacent_distinction",
+    ):
+        val = str(card.get(key) or "").strip()
+        if val:
+            out[key] = val
+    return out

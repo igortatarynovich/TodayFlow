@@ -327,7 +327,7 @@ Semantic profile на карту (семантика, не литература)
 - [x] Knowledge Base v1 · Position Semantics v1 · Question Ontology v1 landed
 - [x] Interpretation Stack v1 **hard-frozen** until Golden Eval results
 - [x] Canon principles: LLM = one story · answer this question · card-name ablation
-- [ ] Q1 Editorial deepen minors (unique archetype per card, not rank×suit)
+- [x] Q1 Editorial deepen minors (unique archetype per card, not rank×suit)
 - [ ] Golden Dataset (scenarios without scores)
 - [ ] Golden Eval (rubric + paid-worth + anti-sameness) — freeze lift gate
 - [ ] Q3 Prompt iteration from eval deltas only

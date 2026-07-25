@@ -8,10 +8,14 @@ Canon: docs/tarot/TAROT_KNOWLEDGE_BASE_V1.md
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from scripts.tarot_minors_q1_archetypes import MINORS_Q1  # noqa: E402
+
 OUT = ROOT / "DATA" / "reference" / "tarot" / "knowledge_v1" / "cards.json"
 DECK = ROOT / "DATA" / "astrology_reference" / "tarot_full_deck.json"
 
@@ -76,8 +80,9 @@ def _card(
     softens: list[int],
     upright_themes: list[str] | None = None,
     reversed_themes: list[str] | None = None,
+    q1: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    return {
+    out: dict[str, Any] = {
         "card_id": card_id,
         "name_ru": name_ru,
         "central_archetype": central,
@@ -102,6 +107,24 @@ def _card(
         "upright_themes": upright_themes or light[:4],
         "reversed_themes": reversed_themes or rev_themes,
     }
+    if q1:
+        for key in (
+            "core_scene",
+            "central_conflict",
+            "driving_need",
+            "shadow_pattern",
+            "growth_direction",
+            "work_lens",
+            "relationship_lens",
+            "money_lens",
+            "inner_lens",
+            "reversed_shift",
+            "adjacent_distinction",
+        ):
+            val = q1.get(key)
+            if val:
+                out[key] = val
+    return out
 
 
 MAJORS: dict[int, dict[str, Any]] = {
@@ -742,62 +765,52 @@ def _minor_id(suit: str, rank: str) -> int:
 
 
 def _build_minor(suit: str, rank: str, name_ru: str) -> dict[str, Any]:
+    """Q1: unique archetype profile is SoT for minors (not rank×suit matrix)."""
     sid = _minor_id(suit, rank)
+    profile = MINORS_Q1.get((suit, rank))
+    if profile is None:
+        raise KeyError(f"missing Q1 archetype for {(suit, rank)}")
+
     s = SUIT_CORE[suit]
-    r = RANK_CORE[rank]
-    polish = MINOR_POLISH.get(sid, {})
+    light = [str(x) for x in (profile.get("light") or [])][:5]
+    shadow = [str(x) for x in (profile.get("shadow") or [])][:5]
+    central = str(profile.get("central") or profile.get("core_scene") or "")
+    inner = str(profile.get("central_conflict") or "")
+    outer = str(profile.get("core_scene") or "")
+    relationships = str(profile.get("relationship_lens") or "")
+    work = str(profile.get("work_lens") or "")
+    money = str(profile.get("money_lens") or "")
+    growth = str(profile.get("growth_direction") or profile.get("inner_lens") or "")
+    rev_central = str(profile.get("reversed_shift") or "")
+    rev_themes = [rev_central[:80], str(profile.get("shadow_pattern") or "")[:80]]
+    rev_themes = [t for t in rev_themes if t]
+    rev_trap = str(profile.get("shadow_pattern") or "")
 
-    central = polish.get(
-        "central",
-        f"{r['phase']} в поле «{s['axis']}»",
-    )
-    light = list(dict.fromkeys([*s["light"][:2], r["phase"].split("/")[0].strip()]))
-    shadow = list(s["shadow"][:3])
-    if polish.get("shadow_extra"):
-        shadow = list(dict.fromkeys([*shadow, *polish["shadow_extra"]]))[:5]
-
-    inner = polish.get("inner", f"{r['inner']} ({suit})")
-    outer = polish.get("outer", f"{r['outer']} через {s['axis'].split(',')[0]}")
-
-    relationships = f"{s['relationships']}; акцент фазы: {r['phase']}"
-    work = f"{s['work']}; акцент фазы: {r['phase']}"
-    money = f"{s['money']}; акцент фазы: {r['phase']}"
-    growth = polish.get("growth", f"{s['growth']}; фаза «{r['phase']}»")
-
-    rev_central = polish.get("rev_central", r["rev"] + f" в масти {suit}")
-    rev_themes = [r["rev"], s["shadow"][0], "потеря контакта с осью масти"]
-    rev_trap = polish.get("trap", r["trap"])
-
-    # Neighbor ranks same suit intensify; opposite suit same rank softens; + element majors.
-    same_suit_ids = [_minor_id(suit, rk) for rk in RANK_ORDER if rk != rank]
-    near = []
     idx = RANK_ORDER.index(rank)
+    near: list[int] = []
     for j in (idx - 1, idx + 1, idx - 2, idx + 2):
         if 0 <= j < len(RANK_ORDER):
             near.append(_minor_id(suit, RANK_ORDER[j]))
     intensifies = list(dict.fromkeys([*near[:3], *s["element_hard"][:2]]))[:5]
     opp = OPPOSITE_SUIT[suit]
-    softens = list(
-        dict.fromkeys([_minor_id(opp, rank), *s["element_soft"][:3]])
-    )[:5]
+    softens = list(dict.fromkeys([_minor_id(opp, rank), *s["element_soft"][:3]]))[:5]
 
-    amplifies = list(r["amplifies"])
-    # Bias suit domains into amplifies
-    if suit == "cups" and "relationships" not in amplifies:
-        amplifies = ["relationships", *amplifies][:4]
-    if suit == "pentacles" and "money" not in amplifies:
-        amplifies = ["money", *amplifies][:4]
-    if suit == "swords" and "conflict" not in amplifies:
-        amplifies = ["conflict", *amplifies][:4]
-    if suit == "wands" and "work" not in amplifies:
-        amplifies = ["work", *amplifies][:4]
+    amplifies = ["growth", "decision"]
+    if suit == "cups":
+        amplifies = ["relationships", "inner_state", "growth"]
+    elif suit == "pentacles":
+        amplifies = ["money", "work", "growth"]
+    elif suit == "swords":
+        amplifies = ["conflict", "decision", "inner_state"]
+    elif suit == "wands":
+        amplifies = ["work", "growth", "decision"]
 
     return _card(
         sid,
         name_ru,
         central=central,
-        light=light,
-        shadow=shadow,
+        light=light or ["живая грань", "уникальный фокус"],
+        shadow=shadow or ["ловушка карты", "срыв зрелости"],
         inner=inner,
         outer=outer,
         relationships=relationships,
@@ -805,11 +818,24 @@ def _build_minor(suit: str, rank: str, name_ru: str) -> dict[str, Any]:
         money=money,
         growth=growth,
         rev_central=rev_central,
-        rev_themes=rev_themes,
-        rev_trap=rev_trap,
+        rev_themes=rev_themes or [rev_central, "сдвиг динамики"],
+        rev_trap=rev_trap or rev_central,
         amplifies=amplifies,
         intensifies=intensifies,
         softens=softens,
+        q1={
+            "core_scene": profile.get("core_scene"),
+            "central_conflict": profile.get("central_conflict"),
+            "driving_need": profile.get("driving_need"),
+            "shadow_pattern": profile.get("shadow_pattern"),
+            "growth_direction": profile.get("growth_direction"),
+            "work_lens": profile.get("work_lens"),
+            "relationship_lens": profile.get("relationship_lens"),
+            "money_lens": profile.get("money_lens"),
+            "inner_lens": profile.get("inner_lens"),
+            "reversed_shift": profile.get("reversed_shift"),
+            "adjacent_distinction": profile.get("adjacent_distinction"),
+        },
     )
 
 
@@ -830,6 +856,21 @@ def build_all() -> list[dict[str, Any]]:
         rank = slug.split("_", 1)[1] if "_" in slug else RANK_ORDER[(cid - 22) % 14]
         cards.append(_build_minor(suit, rank, name_ru))
     return cards
+
+
+_Q1_FIELDS = (
+    "core_scene",
+    "central_conflict",
+    "driving_need",
+    "shadow_pattern",
+    "growth_direction",
+    "work_lens",
+    "relationship_lens",
+    "money_lens",
+    "inner_lens",
+    "reversed_shift",
+    "adjacent_distinction",
+)
 
 
 def validate(cards: list[dict[str, Any]]) -> None:
@@ -865,6 +906,11 @@ def validate(cards: list[dict[str, Any]]) -> None:
             assert b not in blob, (c["card_id"], b)
         assert 2 <= len(c["light"]) <= 6
         assert 2 <= len(c["shadow"]) <= 6
+        # Minors 22–77: full Q1 archetype profile required.
+        if int(c["card_id"]) >= 22:
+            for qk in _Q1_FIELDS:
+                assert str(c.get(qk) or "").strip(), (c["card_id"], qk)
+            assert len(str(c["adjacent_distinction"]).strip()) >= 12, c["card_id"]
 
 
 def main() -> None:

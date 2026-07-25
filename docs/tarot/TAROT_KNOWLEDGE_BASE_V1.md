@@ -86,8 +86,8 @@ Public `tarot_answer_v1` **не** меняется.
 | Slice | Policy |
 |-------|--------|
 | Majors 0–21 | Hand-authored; keep rich; optional Q1 fields |
-| Minors 22–77 | **Q1:** unique archetype profile (not rank×suit matrix as SoT) |
-| Missing Q1 field | Pack may omit; editorial incomplete until filled |
+| Minors 22–77 | **Q1 required:** unique archetype profile (SoT = `scripts/tarot_minors_q1_archetypes.py` → rebuild JSON) |
+| Missing Q1 on minor | Build/validate fails; pack incomplete |
 
 ---
 
@@ -95,6 +95,6 @@ Public `tarot_answer_v1` **не** меняется.
 
 - [x] Schema + loader + 78 base records
 - [x] Pack prefers KB when present
-- [ ] Q1: all 56 minors have full semantic profile + non-empty `adjacent_distinction`
+- [x] Q1: all 56 minors have full semantic profile + non-empty `adjacent_distinction`
 - [ ] Card-name ablation pass on sample spreads
 - [ ] Golden Dataset / Eval (separate track; after Q1)

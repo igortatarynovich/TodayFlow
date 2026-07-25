@@ -102,7 +102,18 @@
           "type": "array",
           "minItems": 1,
           "items": { "type": "string", "minLength": 1 }
-        }
+        },
+        "core_scene": { "type": "string", "minLength": 8 },
+        "central_conflict": { "type": "string", "minLength": 8 },
+        "driving_need": { "type": "string", "minLength": 8 },
+        "shadow_pattern": { "type": "string", "minLength": 8 },
+        "growth_direction": { "type": "string", "minLength": 8 },
+        "work_lens": { "type": "string", "minLength": 8 },
+        "relationship_lens": { "type": "string", "minLength": 8 },
+        "money_lens": { "type": "string", "minLength": 8 },
+        "inner_lens": { "type": "string", "minLength": 8 },
+        "reversed_shift": { "type": "string", "minLength": 8 },
+        "adjacent_distinction": { "type": "string", "minLength": 12 }
       }
     }
   }

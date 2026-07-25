@@ -76,7 +76,9 @@ question_ontology задаёт логику ответа:
 
 position_semantics задаёт, КАК читать каждую карту в позиции (purpose / extract_from_card / do_not / result_type).
 meaning_range — семантические факты карты (central_symbol, light/shadow, inner_conflict, domain_lens,
-reversed_*, intensifies_drawn / softens_drawn).
+reversed_*, intensifies_drawn / softens_drawn; для младших — Q1: core_scene, central_conflict,
+driving_need, shadow_pattern, growth_direction, *_lens, reversed_shift, adjacent_distinction).
+Используй Q1 как уникальный архетип карты, не как формулу масть×ранг.
 
 Порядок работы (обязателен):
 1) Собери конфликт расклада из символов и ролей позиций.

@@ -80,5 +80,54 @@ def test_minor_pack_not_just_suit_keyword():
     assert pack is not None
     rng = pack["cards"][0]["meaning_range"]
     assert rng["knowledge_source"] == "tarot_knowledge_v1"
-    assert "боль" in rng["central_symbol"].lower() or "разрез" in rng["central_symbol"].lower()
+    blob = " ".join(
+        str(rng.get(k) or "")
+        for k in ("central_symbol", "core_scene", "central_conflict", "inner_conflict")
+    ).lower()
+    assert any(tok in blob for tok in ("боль", "разрез", "меч", "сердц")), blob
     assert rng.get("inner_conflict")
+    assert rng.get("core_scene")
+    assert rng.get("adjacent_distinction")
+
+
+_Q1_FIELDS = (
+    "core_scene",
+    "central_conflict",
+    "driving_need",
+    "shadow_pattern",
+    "growth_direction",
+    "work_lens",
+    "relationship_lens",
+    "money_lens",
+    "inner_lens",
+    "reversed_shift",
+    "adjacent_distinction",
+)
+
+
+def test_all_minors_have_q1_archetype_profile():
+    cards = tarot_kb.cards_by_id()
+    assert len(cards) == 78
+    for cid in range(22, 78):
+        row = cards[cid]
+        for key in _Q1_FIELDS:
+            assert str(row.get(key) or "").strip(), (cid, key)
+        assert len(str(row["adjacent_distinction"]).strip()) >= 12
+
+
+def test_adjacent_swords_and_cups_are_distinct_archetypes():
+    """Gate: 8/9/10 of a suit must be three different human stories."""
+    cards = tarot_kb.cards_by_id()
+    # Swords 8/9/10 = 57/58/59; Cups 8/9/10 = 43/44/45
+    for trio in ((57, 58, 59), (43, 44, 45)):
+        scenes = [str(cards[i]["core_scene"]).strip().lower() for i in trio]
+        centrals = [str(cards[i]["central_archetype"]).strip().lower() for i in trio]
+        conflicts = [str(cards[i]["central_conflict"]).strip().lower() for i in trio]
+        assert len(set(scenes)) == 3, scenes
+        assert len(set(centrals)) == 3, centrals
+        assert len(set(conflicts)) == 3, conflicts
+        for i in trio:
+            adj = str(cards[i]["adjacent_distinction"]).strip()
+            assert len(adj) >= 12
+            # Distinction text must not be identical to this card's own core_scene.
+            assert adj.strip().lower() != str(cards[i]["core_scene"]).strip().lower()
