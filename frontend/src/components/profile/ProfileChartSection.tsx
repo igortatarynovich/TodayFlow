@@ -134,13 +134,6 @@ export function ProfileChartSection({
                 aspects={aspectLines}
               />
             </div>
-            <div className={styles.ribbon}>
-              {buildZodiacRibbon(natalPreview).map((item) => (
-                <span key={item.key} className={styles.ribbonChip}>
-                  {item.glyph} {item.title}
-                </span>
-              ))}
-            </div>
           </>
         ) : (
           <div className={styles.emptyState}>
@@ -276,13 +269,6 @@ export function ProfileChartSection({
                 aspects={aspectLines}
               />
             </div>
-            <div className={styles.ribbon}>
-              {buildZodiacRibbon(natalPreview).map((item) => (
-                <span key={item.key} className={styles.ribbonChip}>
-                  {item.glyph} {item.title}
-                </span>
-              ))}
-            </div>
             <div className={styles.actions} style={{ marginTop: "0.85rem" }}>
               <button type="button" className="orbit-button orbit-button-secondary orbit-button-sm" onClick={onReloadPreview}>
                 Обновить карту
@@ -377,38 +363,4 @@ function buildQuickSignature(natalPreview: NatalChartPreview | null) {
         ]
       : []),
   ].filter((item) => item.value && item.value !== "—");
-}
-
-function buildZodiacRibbon(natalPreview: NatalChartPreview | null) {
-  if (!natalPreview) return [];
-  const signs = Array.from(
-    new Set(
-      Object.values(natalPreview.positions || {})
-        .map((pos) => (pos?.sign || "").trim())
-        .filter(Boolean),
-    ),
-  ).slice(0, 6);
-
-  return signs.map((title) => ({
-    key: title,
-    title,
-    glyph: zodiacGlyph(title),
-  }));
-}
-
-function zodiacGlyph(sign: string) {
-  const s = sign.toLowerCase();
-  if (s.includes("aries") || s.includes("овен")) return "♈";
-  if (s.includes("taurus") || s.includes("телец")) return "♉";
-  if (s.includes("gemini") || s.includes("близнец")) return "♊";
-  if (s.includes("cancer") || s.includes("рак")) return "♋";
-  if (s.includes("leo") || s.includes("лев")) return "♌";
-  if (s.includes("virgo") || s.includes("дева")) return "♍";
-  if (s.includes("libra") || s.includes("вес")) return "♎";
-  if (s.includes("scorpio") || s.includes("скорпион")) return "♏";
-  if (s.includes("sagittarius") || s.includes("стрел")) return "♐";
-  if (s.includes("capricorn") || s.includes("козер")) return "♑";
-  if (s.includes("aquarius") || s.includes("водол")) return "♒";
-  if (s.includes("pisces") || s.includes("рыб")) return "♓";
-  return "✦";
 }

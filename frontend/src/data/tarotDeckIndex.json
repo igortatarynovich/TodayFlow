@@ -1,0 +1,472 @@
+{
+  "cards": [
+    {
+      "deck_index": 0,
+      "id": "fool",
+      "name_en": "The Fool",
+      "name_ru": "Шут"
+    },
+    {
+      "deck_index": 1,
+      "id": "magician",
+      "name_en": "The Magician",
+      "name_ru": "Маг"
+    },
+    {
+      "deck_index": 2,
+      "id": "high_priestess",
+      "name_en": "The High Priestess",
+      "name_ru": "Верховная Жрица"
+    },
+    {
+      "deck_index": 3,
+      "id": "empress",
+      "name_en": "The Empress",
+      "name_ru": "Императрица"
+    },
+    {
+      "deck_index": 4,
+      "id": "emperor",
+      "name_en": "The Emperor",
+      "name_ru": "Император"
+    },
+    {
+      "deck_index": 5,
+      "id": "hierophant",
+      "name_en": "The Hierophant",
+      "name_ru": "Иерофант"
+    },
+    {
+      "deck_index": 6,
+      "id": "lovers",
+      "name_en": "The Lovers",
+      "name_ru": "Влюблённые"
+    },
+    {
+      "deck_index": 7,
+      "id": "chariot",
+      "name_en": "The Chariot",
+      "name_ru": "Колесница"
+    },
+    {
+      "deck_index": 8,
+      "id": "strength",
+      "name_en": "Strength",
+      "name_ru": "Сила"
+    },
+    {
+      "deck_index": 9,
+      "id": "hermit",
+      "name_en": "The Hermit",
+      "name_ru": "Отшельник"
+    },
+    {
+      "deck_index": 10,
+      "id": "wheel_of_fortune",
+      "name_en": "Wheel of Fortune",
+      "name_ru": "Колесо Фортуны"
+    },
+    {
+      "deck_index": 11,
+      "id": "justice",
+      "name_en": "Justice",
+      "name_ru": "Справедливость"
+    },
+    {
+      "deck_index": 12,
+      "id": "hanged_one",
+      "name_en": "The Hanged One",
+      "name_ru": "Повешенный"
+    },
+    {
+      "deck_index": 13,
+      "id": "death",
+      "name_en": "Death",
+      "name_ru": "Смерть"
+    },
+    {
+      "deck_index": 14,
+      "id": "temperance",
+      "name_en": "Temperance",
+      "name_ru": "Умеренность"
+    },
+    {
+      "deck_index": 15,
+      "id": "devil",
+      "name_en": "The Devil",
+      "name_ru": "Дьявол"
+    },
+    {
+      "deck_index": 16,
+      "id": "tower",
+      "name_en": "The Tower",
+      "name_ru": "Башня"
+    },
+    {
+      "deck_index": 17,
+      "id": "star",
+      "name_en": "The Star",
+      "name_ru": "Звезда"
+    },
+    {
+      "deck_index": 18,
+      "id": "moon",
+      "name_en": "The Moon",
+      "name_ru": "Луна"
+    },
+    {
+      "deck_index": 19,
+      "id": "sun",
+      "name_en": "The Sun",
+      "name_ru": "Солнце"
+    },
+    {
+      "deck_index": 20,
+      "id": "judgement",
+      "name_en": "Judgement",
+      "name_ru": "Суд"
+    },
+    {
+      "deck_index": 21,
+      "id": "world",
+      "name_en": "The World",
+      "name_ru": "Мир"
+    },
+    {
+      "deck_index": 22,
+      "id": "wands_ace",
+      "name_en": "Ace of Wands",
+      "name_ru": "Туз жезлов"
+    },
+    {
+      "deck_index": 23,
+      "id": "wands_2",
+      "name_en": "Two of Wands",
+      "name_ru": "Двойка жезлов"
+    },
+    {
+      "deck_index": 24,
+      "id": "wands_3",
+      "name_en": "Three of Wands",
+      "name_ru": "Тройка жезлов"
+    },
+    {
+      "deck_index": 25,
+      "id": "wands_4",
+      "name_en": "Four of Wands",
+      "name_ru": "Четвёрка жезлов"
+    },
+    {
+      "deck_index": 26,
+      "id": "wands_5",
+      "name_en": "Five of Wands",
+      "name_ru": "Пятёрка жезлов"
+    },
+    {
+      "deck_index": 27,
+      "id": "wands_6",
+      "name_en": "Six of Wands",
+      "name_ru": "Шестёрка жезлов"
+    },
+    {
+      "deck_index": 28,
+      "id": "wands_7",
+      "name_en": "Seven of Wands",
+      "name_ru": "Семёрка жезлов"
+    },
+    {
+      "deck_index": 29,
+      "id": "wands_8",
+      "name_en": "Eight of Wands",
+      "name_ru": "Восьмёрка жезлов"
+    },
+    {
+      "deck_index": 30,
+      "id": "wands_9",
+      "name_en": "Nine of Wands",
+      "name_ru": "Девятка жезлов"
+    },
+    {
+      "deck_index": 31,
+      "id": "wands_10",
+      "name_en": "Ten of Wands",
+      "name_ru": "Десятка жезлов"
+    },
+    {
+      "deck_index": 32,
+      "id": "wands_page",
+      "name_en": "Page of Wands",
+      "name_ru": "Паж жезлов"
+    },
+    {
+      "deck_index": 33,
+      "id": "wands_knight",
+      "name_en": "Knight of Wands",
+      "name_ru": "Рыцарь жезлов"
+    },
+    {
+      "deck_index": 34,
+      "id": "wands_queen",
+      "name_en": "Queen of Wands",
+      "name_ru": "Королева жезлов"
+    },
+    {
+      "deck_index": 35,
+      "id": "wands_king",
+      "name_en": "King of Wands",
+      "name_ru": "Король жезлов"
+    },
+    {
+      "deck_index": 36,
+      "id": "cups_ace",
+      "name_en": "Ace of Cups",
+      "name_ru": "Туз кубков"
+    },
+    {
+      "deck_index": 37,
+      "id": "cups_2",
+      "name_en": "Two of Cups",
+      "name_ru": "Двойка кубков"
+    },
+    {
+      "deck_index": 38,
+      "id": "cups_3",
+      "name_en": "Three of Cups",
+      "name_ru": "Тройка кубков"
+    },
+    {
+      "deck_index": 39,
+      "id": "cups_4",
+      "name_en": "Four of Cups",
+      "name_ru": "Четвёрка кубков"
+    },
+    {
+      "deck_index": 40,
+      "id": "cups_5",
+      "name_en": "Five of Cups",
+      "name_ru": "Пятёрка кубков"
+    },
+    {
+      "deck_index": 41,
+      "id": "cups_6",
+      "name_en": "Six of Cups",
+      "name_ru": "Шестёрка кубков"
+    },
+    {
+      "deck_index": 42,
+      "id": "cups_7",
+      "name_en": "Seven of Cups",
+      "name_ru": "Семёрка кубков"
+    },
+    {
+      "deck_index": 43,
+      "id": "cups_8",
+      "name_en": "Eight of Cups",
+      "name_ru": "Восьмёрка кубков"
+    },
+    {
+      "deck_index": 44,
+      "id": "cups_9",
+      "name_en": "Nine of Cups",
+      "name_ru": "Девятка кубков"
+    },
+    {
+      "deck_index": 45,
+      "id": "cups_10",
+      "name_en": "Ten of Cups",
+      "name_ru": "Десятка кубков"
+    },
+    {
+      "deck_index": 46,
+      "id": "cups_page",
+      "name_en": "Page of Cups",
+      "name_ru": "Паж кубков"
+    },
+    {
+      "deck_index": 47,
+      "id": "cups_knight",
+      "name_en": "Knight of Cups",
+      "name_ru": "Рыцарь кубков"
+    },
+    {
+      "deck_index": 48,
+      "id": "cups_queen",
+      "name_en": "Queen of Cups",
+      "name_ru": "Королева кубков"
+    },
+    {
+      "deck_index": 49,
+      "id": "cups_king",
+      "name_en": "King of Cups",
+      "name_ru": "Король кубков"
+    },
+    {
+      "deck_index": 50,
+      "id": "swords_ace",
+      "name_en": "Ace of Swords",
+      "name_ru": "Туз мечей"
+    },
+    {
+      "deck_index": 51,
+      "id": "swords_2",
+      "name_en": "Two of Swords",
+      "name_ru": "Двойка мечей"
+    },
+    {
+      "deck_index": 52,
+      "id": "swords_3",
+      "name_en": "Three of Swords",
+      "name_ru": "Тройка мечей"
+    },
+    {
+      "deck_index": 53,
+      "id": "swords_4",
+      "name_en": "Four of Swords",
+      "name_ru": "Четвёрка мечей"
+    },
+    {
+      "deck_index": 54,
+      "id": "swords_5",
+      "name_en": "Five of Swords",
+      "name_ru": "Пятёрка мечей"
+    },
+    {
+      "deck_index": 55,
+      "id": "swords_6",
+      "name_en": "Six of Swords",
+      "name_ru": "Шестёрка мечей"
+    },
+    {
+      "deck_index": 56,
+      "id": "swords_7",
+      "name_en": "Seven of Swords",
+      "name_ru": "Семёрка мечей"
+    },
+    {
+      "deck_index": 57,
+      "id": "swords_8",
+      "name_en": "Eight of Swords",
+      "name_ru": "Восьмёрка мечей"
+    },
+    {
+      "deck_index": 58,
+      "id": "swords_9",
+      "name_en": "Nine of Swords",
+      "name_ru": "Девятка мечей"
+    },
+    {
+      "deck_index": 59,
+      "id": "swords_10",
+      "name_en": "Ten of Swords",
+      "name_ru": "Десятка мечей"
+    },
+    {
+      "deck_index": 60,
+      "id": "swords_page",
+      "name_en": "Page of Swords",
+      "name_ru": "Паж мечей"
+    },
+    {
+      "deck_index": 61,
+      "id": "swords_knight",
+      "name_en": "Knight of Swords",
+      "name_ru": "Рыцарь мечей"
+    },
+    {
+      "deck_index": 62,
+      "id": "swords_queen",
+      "name_en": "Queen of Swords",
+      "name_ru": "Королева мечей"
+    },
+    {
+      "deck_index": 63,
+      "id": "swords_king",
+      "name_en": "King of Swords",
+      "name_ru": "Король мечей"
+    },
+    {
+      "deck_index": 64,
+      "id": "pentacles_ace",
+      "name_en": "Ace of Pentacles",
+      "name_ru": "Туз пентаклей"
+    },
+    {
+      "deck_index": 65,
+      "id": "pentacles_2",
+      "name_en": "Two of Pentacles",
+      "name_ru": "Двойка пентаклей"
+    },
+    {
+      "deck_index": 66,
+      "id": "pentacles_3",
+      "name_en": "Three of Pentacles",
+      "name_ru": "Тройка пентаклей"
+    },
+    {
+      "deck_index": 67,
+      "id": "pentacles_4",
+      "name_en": "Four of Pentacles",
+      "name_ru": "Четвёрка пентаклей"
+    },
+    {
+      "deck_index": 68,
+      "id": "pentacles_5",
+      "name_en": "Five of Pentacles",
+      "name_ru": "Пятёрка пентаклей"
+    },
+    {
+      "deck_index": 69,
+      "id": "pentacles_6",
+      "name_en": "Six of Pentacles",
+      "name_ru": "Шестёрка пентаклей"
+    },
+    {
+      "deck_index": 70,
+      "id": "pentacles_7",
+      "name_en": "Seven of Pentacles",
+      "name_ru": "Семёрка пентаклей"
+    },
+    {
+      "deck_index": 71,
+      "id": "pentacles_8",
+      "name_en": "Eight of Pentacles",
+      "name_ru": "Восьмёрка пентаклей"
+    },
+    {
+      "deck_index": 72,
+      "id": "pentacles_9",
+      "name_en": "Nine of Pentacles",
+      "name_ru": "Девятка пентаклей"
+    },
+    {
+      "deck_index": 73,
+      "id": "pentacles_10",
+      "name_en": "Ten of Pentacles",
+      "name_ru": "Десятка пентаклей"
+    },
+    {
+      "deck_index": 74,
+      "id": "pentacles_page",
+      "name_en": "Page of Pentacles",
+      "name_ru": "Паж пентаклей"
+    },
+    {
+      "deck_index": 75,
+      "id": "pentacles_knight",
+      "name_en": "Knight of Pentacles",
+      "name_ru": "Рыцарь пентаклей"
+    },
+    {
+      "deck_index": 76,
+      "id": "pentacles_queen",
+      "name_en": "Queen of Pentacles",
+      "name_ru": "Королева пентаклей"
+    },
+    {
+      "deck_index": 77,
+      "id": "pentacles_king",
+      "name_en": "King of Pentacles",
+      "name_ru": "Король пентаклей"
+    }
+  ]
+}

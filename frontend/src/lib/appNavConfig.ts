@@ -69,13 +69,13 @@ export const APP_NAV_ITEM_DEFS: Record<AppNavItemId, AppNavItemDef> = {
   },
 };
 
-/** Authenticated product shell — sidebar + mobile tab bar.
- *  `/practices` stays as deep link (Growth A: setup from Today zone 4), not primary nav. */
+/** Authenticated product shell — sidebar + mobile tab bar (iOS TabView parity). */
 export const APP_NAV_PRIMARY_ORDER: AppNavItemId[] = [
   "today",
   "profile",
   "compatibility",
   "tarot",
+  "practices",
 ];
 
 /** Pre-auth: guest trials on landing, auth, marketing surfaces. */

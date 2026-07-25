@@ -73,8 +73,13 @@ def moon_phases() -> List[Dict[str, Any]]:
 
 
 def tarot_major_arcana() -> List[Dict[str, Any]]:
-    """Reference deck for major arcana cards."""
+    """Reference deck for major arcana cards (0…21)."""
     return _load_json("tarot_major_arcana.json")
+
+
+def tarot_full_deck() -> List[Dict[str, Any]]:
+    """Full Waite-Smith deck 0…77 (majors + minors). Asset paths match frontend tarotCardFaceSrc."""
+    return _load_json("tarot_full_deck.json")
 
 
 def mantras() -> List[Dict[str, Any]]:

@@ -182,6 +182,65 @@ export function IconOrbitalGlyph({ className }: IconProps) {
   );
 }
 
+export function IconStar({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M12 3.5 13.8 9H20l-5 3.6 1.9 5.9L12 15.2 7.1 18.5 9 12.6 4 9h6.2L12 3.5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function IconRefresh({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M20 12a8 8 0 1 1-2.3-5.6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <path d="M20 4v5h-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function IconGem({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M12 21 4 10l3-5h10l3 5-8 11Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+      <path d="M4 10h16M9 5l-2 5 5 11 5-11-2-5" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function IconPalette({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M12 3a9 9 0 0 0-1.2 17.9c.7.1 1.2-.4 1.2-1.1 0-.6.2-1.1.6-1.4.3-.3.8-.4 1.3-.3A6.5 6.5 0 0 0 12 3Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <circle cx="8.5" cy="10" r="1" fill="currentColor" />
+      <circle cx="12" cy="7.5" r="1" fill="currentColor" />
+      <circle cx="15.5" cy="10" r="1" fill="currentColor" />
+    </svg>
+  );
+}
+
+export function IconHash({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M9 5 7 19M17 5l-2 14M5 9h14M4 15h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 const FEATURE_ICONS = {
   compass: IconCompass,
   circle: IconCircleX,

@@ -26,7 +26,8 @@ DEFAULT_REMINDER_MINUTE = 0
 
 class TarotService:
     def __init__(self) -> None:
-        self.cards = astrology_ref.tarot_major_arcana()
+        # Full 78-card deck — PNG faces in frontend map 0…77 via tarotCardFaceSrc.
+        self.cards = astrology_ref.tarot_full_deck()
         self.card_map = {str(card["id"]): card for card in self.cards}
         spreads = astrology_ref.tarot_spreads()
         self.spreads = {spread["id"]: spread for spread in spreads}

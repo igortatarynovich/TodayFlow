@@ -13,9 +13,24 @@ import { dayStoryHeadline, dayStoryPulseLine, hasAuthoritativeDayStory } from "@
 import { isRuUserFacingText, sanitizeRuCopy } from "@/lib/todaySynthesisTextPolicy";
 import { redactUnrevealedRitualProse } from "@/lib/todayRitualRevealSanitize";
 
+export type TodaySkyIconKey =
+  | "moon"
+  | "sparkles"
+  | "star"
+  | "refresh"
+  | "compass"
+  | "sun"
+  | "orbital"
+  | "tarot"
+  | "hash"
+  | "mountain"
+  | "gem"
+  | "palette";
+
 export type TodaySkyCard = {
   id: string;
-  emoji: string;
+  /** Linear icon from design-system (no emoji — consistent across platforms). */
+  icon: TodaySkyIconKey;
   label: string;
   title: string;
   story: string;
@@ -327,7 +342,7 @@ export function buildSkyInfluenceCards(input: {
     );
     pushCard({
       id: "moon",
-      emoji: "🌙",
+      icon: "moon",
       label: "Луна",
       title: lunar.name,
       story: input.registry.claim(story) ?? story,
@@ -338,7 +353,7 @@ export function buildSkyInfluenceCards(input: {
   if (mainTransit?.title && mainTransit.story_ru) {
     pushCard({
       id: "personal-transit",
-      emoji: "✨",
+      icon: "sparkles",
       label: "Твой транзит",
       title: mainTransit.title,
       story: input.registry.claim(mainTransit.story_ru) ?? mainTransit.story_ru,
@@ -349,7 +364,7 @@ export function buildSkyInfluenceCards(input: {
   if (mainAspect?.title && mainAspect.story_ru) {
     pushCard({
       id: "sky-aspect",
-      emoji: "⭐",
+      icon: "star",
       label: "Аспект дня",
       title: mainAspect.title,
       story: input.registry.claim(mainAspect.story_ru) ?? mainAspect.story_ru,
@@ -360,7 +375,7 @@ export function buildSkyInfluenceCards(input: {
   if (retro?.planet_ru && retro.story_ru) {
     pushCard({
       id: `retro-${retro.planet ?? "planet"}`,
-      emoji: "↩️",
+      icon: "refresh",
       label: "Ретроград",
       title: retro.planet_ru,
       story: input.registry.claim(retro.story_ru) ?? retro.story_ru,
@@ -371,7 +386,7 @@ export function buildSkyInfluenceCards(input: {
   if (ingress?.planet_ru && ingress?.story_ru) {
     pushCard({
       id: "ingress",
-      emoji: "♈",
+      icon: "compass",
       label: "Переход",
       title: `${ingress.planet_ru} → ${ingress.sign_ru ?? "новый знак"}`,
       story: input.registry.claim(ingress.story_ru) ?? ingress.story_ru,
@@ -381,7 +396,7 @@ export function buildSkyInfluenceCards(input: {
   if (input.sunSignLabel) {
     pushCard({
       id: "sun",
-      emoji: "☀️",
+      icon: "sun",
       label: "Солнце",
       title: input.sunSignLabel,
       story:
@@ -396,7 +411,7 @@ export function buildSkyInfluenceCards(input: {
   if (headline && isRuUserFacingText(headline) && headline.length >= 16) {
     pushCard({
       id: "day-axis",
-      emoji: "📡",
+      icon: "orbital",
       label: "Фон дня",
       title: "Главный акцент",
       story: input.registry.claim(headline) ?? headline,
@@ -407,7 +422,7 @@ export function buildSkyInfluenceCards(input: {
     const card = getTodayTarotCardRu(input.cardId);
     pushCard({
       id: "tarot",
-      emoji: "🎴",
+      icon: "tarot",
       label: "Карта",
       title: card?.nameRu ?? input.cardName,
       story: card?.focusRu ?? card?.leadRu ?? "Символ дня открывается после ритуала.",
@@ -417,7 +432,7 @@ export function buildSkyInfluenceCards(input: {
   if (ritualComplete && input.numerologyValue && input.numerologyValue !== "—") {
     pushCard({
       id: "number",
-      emoji: "🔢",
+      icon: "hash",
       label: "Число",
       title: input.numerologyValue,
       story: NUMBER_RHYTHM_BY_VALUE[input.numerologyValue] ?? "Ритм дня через число откроется после ритуала.",
@@ -428,7 +443,7 @@ export function buildSkyInfluenceCards(input: {
   if (totem?.name && totem.story_ru) {
     pushCard({
       id: "totem",
-      emoji: totem.emoji ?? "🐺",
+      icon: "mountain",
       label: "Тотем",
       title: totem.name,
       story: totem.story_ru,
@@ -439,7 +454,7 @@ export function buildSkyInfluenceCards(input: {
   if (stoneName) {
     pushCard({
       id: "stone",
-      emoji: "💎",
+      icon: "gem",
       label: "Камень",
       title: stoneName,
       story: apiSymbols?.stone?.story_ru ?? "Тихий якорь — можно вернуться к нему, когда день ускоряется.",
@@ -451,7 +466,7 @@ export function buildSkyInfluenceCards(input: {
     const guide = resolveTodayDayColorGuide({ name: colorName, api: apiSymbols?.color });
     pushCard({
       id: "color",
-      emoji: "🎨",
+      icon: "palette",
       label: "Цвет",
       title: colorName,
       story: guide ? colorGuideSkyStory(guide) : apiSymbols?.color?.story_ru ?? "Оттенок, который помогает удержать сегодняшний ритм.",

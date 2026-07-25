@@ -22,6 +22,9 @@ import { getTodayTarotCardRu } from "@/components/today/todayTarotCardsRu";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import type { CoreProfile } from "@/lib/types";
 import { resolveDailyTarotDeckIndex } from "@/lib/tarotCardAssets";
+import { resolveDayPhase } from "@/lib/dayPhaseAtmosphere";
+import { resolveDayPhaseHeroWash } from "@/lib/dayPhaseHeroWash";
+import { useProductMoodTheme } from "@/lib/useProductDayNightTheme";
 import {
   buildContinuityOpeningLine,
   isDayContinuityClosed,
@@ -159,6 +162,15 @@ export function TodayCompositionSurface(props: Props) {
   const { onVisible, onDayClosed, dateISO, embeddedInWebDashboard = false } = props;
   const variant = props.variant ?? "default";
   const isFirstToday = variant === "firstToday";
+  const { mood } = useProductMoodTheme({ isFirstDay: isFirstToday });
+  const heroWash = useMemo(() => {
+    const phase = resolveDayPhase({
+      pathname: "/today",
+      isFirstDay: isFirstToday,
+      mood,
+    });
+    return resolveDayPhaseHeroWash(phase);
+  }, [isFirstToday, mood]);
   const { trackMeaningEvent } = useMeaningRuntime();
   const { isAuthenticated } = useAuth();
   const reduceMotion = useReduceMotion();
@@ -1058,6 +1070,7 @@ export function TodayCompositionSurface(props: Props) {
       <section
         className={`${styles.themeDarkHero} ${story.personalizedReady ? styles.themeDarkHeroCompact : styles.themeDarkHeroSpotlight}`.trim()}
         data-testid="today-zone-hero"
+        data-hero-tone={heroWash.tone}
         aria-labelledby="today-day-theme-title"
       >
         <div className={styles.themeDarkAtmosphere} aria-hidden>
@@ -1065,7 +1078,7 @@ export function TodayCompositionSurface(props: Props) {
         </div>
         <div className={styles.themeDarkVisualAccent} aria-hidden>
           {/* eslint-disable-next-line @next/next/no-img-element -- static wash plate */}
-          <img src="/images/cosmic/moon_wash.webp" alt="" className={styles.themeDarkWash} />
+          <img src={heroWash.src} alt="" className={styles.themeDarkWash} />
         </div>
         <div className={`${styles.themeDarkContent} ${profileMotionStyles.heroEnter}`}>
           <p className={styles.journeyStepIndex}>

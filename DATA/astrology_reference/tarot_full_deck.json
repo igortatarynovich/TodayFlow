@@ -1,0 +1,1774 @@
+[
+  {
+    "id": 0,
+    "name": "The Fool",
+    "keywords": [
+      "beginnings",
+      "trust",
+      "risk"
+    ],
+    "upright": "Leap of faith, curiosity, willingness to reset even without guarantees.",
+    "reversed": "Impulsivity, refusing to ground plans, or naively repeating cycles.",
+    "correspondences": {
+      "element": "air",
+      "planet": "uranus",
+      "axes": [
+        "A7",
+        "A4"
+      ]
+    },
+    "name_ru": "Шут",
+    "slug": "fool",
+    "type": "major"
+  },
+  {
+    "id": 1,
+    "name": "The Magician",
+    "keywords": [
+      "agency",
+      "communication",
+      "focus"
+    ],
+    "upright": "Channeling intent into action; coordination between mind, body, speech.",
+    "reversed": "Scattered energy, manipulation, or doubting your tools.",
+    "correspondences": {
+      "element": "air",
+      "planet": "mercury",
+      "axes": [
+        "A3",
+        "A1"
+      ]
+    },
+    "name_ru": "Маг",
+    "slug": "magician",
+    "type": "major"
+  },
+  {
+    "id": 2,
+    "name": "The High Priestess",
+    "keywords": [
+      "intuition",
+      "stillness",
+      "mystery"
+    ],
+    "upright": "Staying with the unknown, processing information beneath the surface.",
+    "reversed": "Withholding truth, ignoring intuition, or emotional shutdown.",
+    "correspondences": {
+      "element": "water",
+      "planet": "moon",
+      "axes": [
+        "A2",
+        "A7"
+      ]
+    },
+    "name_ru": "Верховная Жрица",
+    "slug": "high_priestess",
+    "type": "major"
+  },
+  {
+    "id": 3,
+    "name": "The Empress",
+    "keywords": [
+      "nurture",
+      "creation",
+      "abundance"
+    ],
+    "upright": "Somatic safety, relational generosity, bringing ideas into form.",
+    "reversed": "Over-caregiving, depletion, or creative stagnation.",
+    "correspondences": {
+      "element": "earth",
+      "planet": "venus",
+      "axes": [
+        "A6",
+        "A4"
+      ]
+    },
+    "name_ru": "Императрица",
+    "slug": "empress",
+    "type": "major"
+  },
+  {
+    "id": 4,
+    "name": "The Emperor",
+    "keywords": [
+      "structure",
+      "authority",
+      "boundaries"
+    ],
+    "upright": "Owning responsibility and building systems that protect growth.",
+    "reversed": "Rigidity, dominance, or rejecting accountability.",
+    "correspondences": {
+      "element": "fire",
+      "planet": "mars",
+      "axes": [
+        "A1",
+        "A5"
+      ]
+    },
+    "name_ru": "Император",
+    "slug": "emperor",
+    "type": "major"
+  },
+  {
+    "id": 5,
+    "name": "The Hierophant",
+    "keywords": [
+      "tradition",
+      "teaching",
+      "alignment"
+    ],
+    "upright": "Learning from lineage, defining values, agreeing on shared language.",
+    "reversed": "Dogma, hollow conformity, resisting your own philosophy.",
+    "correspondences": {
+      "element": "earth",
+      "planet": "venus",
+      "axes": [
+        "A3",
+        "A4"
+      ]
+    },
+    "name_ru": "Иерофант",
+    "slug": "hierophant",
+    "type": "major"
+  },
+  {
+    "id": 6,
+    "name": "The Lovers",
+    "keywords": [
+      "choice",
+      "union",
+      "alignment"
+    ],
+    "upright": "Choosing with full awareness, integrating dualities, transparent bonding.",
+    "reversed": "Decision paralysis, fractured priorities, misaligned agreements.",
+    "correspondences": {
+      "element": "air",
+      "planet": "mercury",
+      "axes": [
+        "A6",
+        "A2"
+      ]
+    },
+    "name_ru": "Влюблённые",
+    "slug": "lovers",
+    "type": "major"
+  },
+  {
+    "id": 7,
+    "name": "The Chariot",
+    "keywords": [
+      "momentum",
+      "direction",
+      "victory"
+    ],
+    "upright": "Harnessed willpower, emotional regulation in motion, disciplined progress.",
+    "reversed": "Burnout, forced speed, or lack of integration between desire and action.",
+    "correspondences": {
+      "element": "water",
+      "planet": "moon",
+      "axes": [
+        "A2",
+        "A5"
+      ]
+    },
+    "name_ru": "Колесница",
+    "slug": "chariot",
+    "type": "major"
+  },
+  {
+    "id": 8,
+    "name": "Strength",
+    "keywords": [
+      "courage",
+      "compassion",
+      "somatic trust"
+    ],
+    "upright": "Soft power, listening to the body, transforming instinct through care.",
+    "reversed": "Force, self-doubt, or suppressing emotion instead of meeting it.",
+    "correspondences": {
+      "element": "fire",
+      "planet": "sun",
+      "axes": [
+        "A1",
+        "A2"
+      ]
+    },
+    "name_ru": "Сила",
+    "slug": "strength",
+    "type": "major"
+  },
+  {
+    "id": 9,
+    "name": "The Hermit",
+    "keywords": [
+      "reflection",
+      "wisdom",
+      "solitude"
+    ],
+    "upright": "Intentional retreat, processing experience, guiding from integrity.",
+    "reversed": "Isolation, avoidance, or over-intellectualizing feelings.",
+    "correspondences": {
+      "element": "earth",
+      "planet": "mercury",
+      "axes": [
+        "A3",
+        "A7"
+      ]
+    },
+    "name_ru": "Отшельник",
+    "slug": "hermit",
+    "type": "major"
+  },
+  {
+    "id": 10,
+    "name": "Wheel of Fortune",
+    "keywords": [
+      "cycles",
+      "turning point",
+      "fate"
+    ],
+    "upright": "Accepting change, adaptive optimism, tracking repeating lessons.",
+    "reversed": "Clinging to control, blaming luck, ignoring feedback loops.",
+    "correspondences": {
+      "element": "fire",
+      "planet": "jupiter",
+      "axes": [
+        "A4",
+        "A7"
+      ]
+    },
+    "name_ru": "Колесо Фортуны",
+    "slug": "wheel_of_fortune",
+    "type": "major"
+  },
+  {
+    "id": 11,
+    "name": "Justice",
+    "keywords": [
+      "truth",
+      "ethics",
+      "balance"
+    ],
+    "upright": "Clear agreements, lawful consequences, integrating logic with compassion.",
+    "reversed": "Bias, withholding facts, or weaponizing fairness.",
+    "correspondences": {
+      "element": "air",
+      "planet": "venus",
+      "axes": [
+        "A3",
+        "A6"
+      ]
+    },
+    "name_ru": "Справедливость",
+    "slug": "justice",
+    "type": "major"
+  },
+  {
+    "id": 12,
+    "name": "The Hanged One",
+    "keywords": [
+      "surrender",
+      "reframe",
+      "pause"
+    ],
+    "upright": "Yielding to process, seeing from another angle, gestation period.",
+    "reversed": "Stagnation, martyrdom, or refusing to release control.",
+    "correspondences": {
+      "element": "water",
+      "planet": "neptune",
+      "axes": [
+        "A2",
+        "A3"
+      ]
+    },
+    "name_ru": "Повешенный",
+    "slug": "hanged_one",
+    "type": "major"
+  },
+  {
+    "id": 13,
+    "name": "Death",
+    "keywords": [
+      "transition",
+      "closure",
+      "rebirth"
+    ],
+    "upright": "Honoring endings, composting the past, making room for authenticity.",
+    "reversed": "Attachment to decay, fear of transformation, unresolved grief.",
+    "correspondences": {
+      "element": "water",
+      "planet": "pluto",
+      "axes": [
+        "A5",
+        "A2"
+      ]
+    },
+    "name_ru": "Смерть",
+    "slug": "death",
+    "type": "major"
+  },
+  {
+    "id": 14,
+    "name": "Temperance",
+    "keywords": [
+      "integration",
+      "moderation",
+      "healing"
+    ],
+    "upright": "Mixing elements intentionally, pacing change, somatic regulation.",
+    "reversed": "Extremes, imbalance, or skipping the integration phase.",
+    "correspondences": {
+      "element": "fire",
+      "planet": "jupiter",
+      "axes": [
+        "A4",
+        "A2"
+      ]
+    },
+    "name_ru": "Умеренность",
+    "slug": "temperance",
+    "type": "major"
+  },
+  {
+    "id": 15,
+    "name": "The Devil",
+    "keywords": [
+      "attachment",
+      "shadow",
+      "compulsion"
+    ],
+    "upright": "Naming patterns that own you, conscious rebellion, transmuting shame.",
+    "reversed": "Breaking chains, detoxing, or denial of addictive cycles.",
+    "correspondences": {
+      "element": "earth",
+      "planet": "saturn",
+      "axes": [
+        "A5",
+        "A6"
+      ]
+    },
+    "name_ru": "Дьявол",
+    "slug": "devil",
+    "type": "major"
+  },
+  {
+    "id": 16,
+    "name": "The Tower",
+    "keywords": [
+      "upheaval",
+      "truth",
+      "liberation"
+    ],
+    "upright": "Rapid dismantling of false structures, necessary course correction.",
+    "reversed": "Avoiding the inevitable, prolonged instability, suppressed emotion erupting later.",
+    "correspondences": {
+      "element": "fire",
+      "planet": "mars",
+      "axes": [
+        "A4",
+        "A1"
+      ]
+    },
+    "name_ru": "Башня",
+    "slug": "tower",
+    "type": "major"
+  },
+  {
+    "id": 17,
+    "name": "The Star",
+    "keywords": [
+      "hope",
+      "repair",
+      "vision"
+    ],
+    "upright": "Post-crisis healing, reconnecting to purpose, generosity seeded in truth.",
+    "reversed": "Cynicism, depletion, or spiritual bypassing.",
+    "correspondences": {
+      "element": "air",
+      "planet": "uranus",
+      "axes": [
+        "A7",
+        "A3"
+      ]
+    },
+    "name_ru": "Звезда",
+    "slug": "star",
+    "type": "major"
+  },
+  {
+    "id": 18,
+    "name": "The Moon",
+    "keywords": [
+      "mystery",
+      "emotion",
+      "dreams"
+    ],
+    "upright": "Navigating liminal states, intuition, subconscious material surfacing.",
+    "reversed": "Fog, projection, or drowning in unprocessed feelings.",
+    "correspondences": {
+      "element": "water",
+      "planet": "moon",
+      "axes": [
+        "A2",
+        "A6"
+      ]
+    },
+    "name_ru": "Луна",
+    "slug": "moon",
+    "type": "major"
+  },
+  {
+    "id": 19,
+    "name": "The Sun",
+    "keywords": [
+      "clarity",
+      "vitality",
+      "joy"
+    ],
+    "upright": "Confidence, transparency, life-affirming action.",
+    "reversed": "Ego burns, comparison, or performative brightness that hides fatigue.",
+    "correspondences": {
+      "element": "fire",
+      "planet": "sun",
+      "axes": [
+        "A1",
+        "A4"
+      ]
+    },
+    "name_ru": "Солнце",
+    "slug": "sun",
+    "type": "major"
+  },
+  {
+    "id": 20,
+    "name": "Judgement",
+    "keywords": [
+      "awakening",
+      "assessment",
+      "calling"
+    ],
+    "upright": "Integrating past cycles, honest review, definitive decision making.",
+    "reversed": "Self-criticism, stagnation, or ignoring the wake-up call.",
+    "correspondences": {
+      "element": "fire",
+      "planet": "pluto",
+      "axes": [
+        "A5",
+        "A3"
+      ]
+    },
+    "name_ru": "Суд",
+    "slug": "judgement",
+    "type": "major"
+  },
+  {
+    "id": 21,
+    "name": "The World",
+    "keywords": [
+      "completion",
+      "wholeness",
+      "integration"
+    ],
+    "upright": "Synthesis, graduation, and joyful closure with lessons embodied.",
+    "reversed": "Delayed completion, loose ends, or struggling to release identity tied to the journey.",
+    "correspondences": {
+      "element": "earth",
+      "planet": "saturn",
+      "axes": [
+        "A4",
+        "A7"
+      ]
+    },
+    "name_ru": "Мир",
+    "slug": "world",
+    "type": "major"
+  },
+  {
+    "id": 22,
+    "name": "Ace of Wands",
+    "name_ru": "Туз жезлов",
+    "slug": "wands_ace",
+    "type": "minor",
+    "suit": "wands",
+    "keywords": [
+      "инициатива",
+      "воля",
+      "потенциал"
+    ],
+    "upright": "Action, initiative, and the heat of what you choose to start or defend.",
+    "reversed": "Scattered drive, forcing progress, or burning out the spark before it settles.",
+    "correspondences": {
+      "element": "fire",
+      "axes": [
+        "A1",
+        "A6"
+      ],
+      "energy": "dynamic"
+    }
+  },
+  {
+    "id": 23,
+    "name": "Two of Wands",
+    "name_ru": "Двойка жезлов",
+    "slug": "wands_2",
+    "type": "minor",
+    "suit": "wands",
+    "keywords": [
+      "инициатива",
+      "воля",
+      "баланс"
+    ],
+    "upright": "Action, initiative, and the heat of what you choose to start or defend.",
+    "reversed": "Scattered drive, forcing progress, or burning out the spark before it settles.",
+    "correspondences": {
+      "element": "fire",
+      "axes": [
+        "A1",
+        "A6"
+      ],
+      "energy": "dynamic"
+    }
+  },
+  {
+    "id": 24,
+    "name": "Three of Wands",
+    "name_ru": "Тройка жезлов",
+    "slug": "wands_3",
+    "type": "minor",
+    "suit": "wands",
+    "keywords": [
+      "инициатива",
+      "воля",
+      "рост"
+    ],
+    "upright": "Action, initiative, and the heat of what you choose to start or defend.",
+    "reversed": "Scattered drive, forcing progress, or burning out the spark before it settles.",
+    "correspondences": {
+      "element": "fire",
+      "axes": [
+        "A1",
+        "A6"
+      ],
+      "energy": "dynamic"
+    }
+  },
+  {
+    "id": 25,
+    "name": "Four of Wands",
+    "name_ru": "Четвёрка жезлов",
+    "slug": "wands_4",
+    "type": "minor",
+    "suit": "wands",
+    "keywords": [
+      "инициатива",
+      "воля",
+      "опора"
+    ],
+    "upright": "Action, initiative, and the heat of what you choose to start or defend.",
+    "reversed": "Scattered drive, forcing progress, or burning out the spark before it settles.",
+    "correspondences": {
+      "element": "fire",
+      "axes": [
+        "A1",
+        "A6"
+      ],
+      "energy": "dynamic"
+    }
+  },
+  {
+    "id": 26,
+    "name": "Five of Wands",
+    "name_ru": "Пятёрка жезлов",
+    "slug": "wands_5",
+    "type": "minor",
+    "suit": "wands",
+    "keywords": [
+      "инициатива",
+      "воля",
+      "напряжение"
+    ],
+    "upright": "Action, initiative, and the heat of what you choose to start or defend.",
+    "reversed": "Scattered drive, forcing progress, or burning out the spark before it settles.",
+    "correspondences": {
+      "element": "fire",
+      "axes": [
+        "A1",
+        "A6"
+      ],
+      "energy": "dynamic"
+    }
+  },
+  {
+    "id": 27,
+    "name": "Six of Wands",
+    "name_ru": "Шестёрка жезлов",
+    "slug": "wands_6",
+    "type": "minor",
+    "suit": "wands",
+    "keywords": [
+      "инициатива",
+      "воля",
+      "гармония"
+    ],
+    "upright": "Action, initiative, and the heat of what you choose to start or defend.",
+    "reversed": "Scattered drive, forcing progress, or burning out the spark before it settles.",
+    "correspondences": {
+      "element": "fire",
+      "axes": [
+        "A1",
+        "A6"
+      ],
+      "energy": "dynamic"
+    }
+  },
+  {
+    "id": 28,
+    "name": "Seven of Wands",
+    "name_ru": "Семёрка жезлов",
+    "slug": "wands_7",
+    "type": "minor",
+    "suit": "wands",
+    "keywords": [
+      "инициатива",
+      "воля",
+      "выбор"
+    ],
+    "upright": "Action, initiative, and the heat of what you choose to start or defend.",
+    "reversed": "Scattered drive, forcing progress, or burning out the spark before it settles.",
+    "correspondences": {
+      "element": "fire",
+      "axes": [
+        "A1",
+        "A6"
+      ],
+      "energy": "dynamic"
+    }
+  },
+  {
+    "id": 29,
+    "name": "Eight of Wands",
+    "name_ru": "Восьмёрка жезлов",
+    "slug": "wands_8",
+    "type": "minor",
+    "suit": "wands",
+    "keywords": [
+      "инициатива",
+      "воля",
+      "движение"
+    ],
+    "upright": "Action, initiative, and the heat of what you choose to start or defend.",
+    "reversed": "Scattered drive, forcing progress, or burning out the spark before it settles.",
+    "correspondences": {
+      "element": "fire",
+      "axes": [
+        "A1",
+        "A6"
+      ],
+      "energy": "dynamic"
+    }
+  },
+  {
+    "id": 30,
+    "name": "Nine of Wands",
+    "name_ru": "Девятка жезлов",
+    "slug": "wands_9",
+    "type": "minor",
+    "suit": "wands",
+    "keywords": [
+      "инициатива",
+      "воля",
+      "граница"
+    ],
+    "upright": "Action, initiative, and the heat of what you choose to start or defend.",
+    "reversed": "Scattered drive, forcing progress, or burning out the spark before it settles.",
+    "correspondences": {
+      "element": "fire",
+      "axes": [
+        "A1",
+        "A6"
+      ],
+      "energy": "dynamic"
+    }
+  },
+  {
+    "id": 31,
+    "name": "Ten of Wands",
+    "name_ru": "Десятка жезлов",
+    "slug": "wands_10",
+    "type": "minor",
+    "suit": "wands",
+    "keywords": [
+      "инициатива",
+      "воля",
+      "итог"
+    ],
+    "upright": "Action, initiative, and the heat of what you choose to start or defend.",
+    "reversed": "Scattered drive, forcing progress, or burning out the spark before it settles.",
+    "correspondences": {
+      "element": "fire",
+      "axes": [
+        "A1",
+        "A6"
+      ],
+      "energy": "dynamic"
+    }
+  },
+  {
+    "id": 32,
+    "name": "Page of Wands",
+    "name_ru": "Паж жезлов",
+    "slug": "wands_page",
+    "type": "minor",
+    "suit": "wands",
+    "keywords": [
+      "инициатива",
+      "воля",
+      "новости"
+    ],
+    "upright": "Action, initiative, and the heat of what you choose to start or defend.",
+    "reversed": "Scattered drive, forcing progress, or burning out the spark before it settles.",
+    "correspondences": {
+      "element": "fire",
+      "axes": [
+        "A1",
+        "A6"
+      ],
+      "energy": "dynamic"
+    }
+  },
+  {
+    "id": 33,
+    "name": "Knight of Wands",
+    "name_ru": "Рыцарь жезлов",
+    "slug": "wands_knight",
+    "type": "minor",
+    "suit": "wands",
+    "keywords": [
+      "инициатива",
+      "воля",
+      "скорость"
+    ],
+    "upright": "Action, initiative, and the heat of what you choose to start or defend.",
+    "reversed": "Scattered drive, forcing progress, or burning out the spark before it settles.",
+    "correspondences": {
+      "element": "fire",
+      "axes": [
+        "A1",
+        "A6"
+      ],
+      "energy": "dynamic"
+    }
+  },
+  {
+    "id": 34,
+    "name": "Queen of Wands",
+    "name_ru": "Королева жезлов",
+    "slug": "wands_queen",
+    "type": "minor",
+    "suit": "wands",
+    "keywords": [
+      "инициатива",
+      "воля",
+      "забота"
+    ],
+    "upright": "Action, initiative, and the heat of what you choose to start or defend.",
+    "reversed": "Scattered drive, forcing progress, or burning out the spark before it settles.",
+    "correspondences": {
+      "element": "fire",
+      "axes": [
+        "A1",
+        "A6"
+      ],
+      "energy": "dynamic"
+    }
+  },
+  {
+    "id": 35,
+    "name": "King of Wands",
+    "name_ru": "Король жезлов",
+    "slug": "wands_king",
+    "type": "minor",
+    "suit": "wands",
+    "keywords": [
+      "инициатива",
+      "воля",
+      "мастерство"
+    ],
+    "upright": "Action, initiative, and the heat of what you choose to start or defend.",
+    "reversed": "Scattered drive, forcing progress, or burning out the spark before it settles.",
+    "correspondences": {
+      "element": "fire",
+      "axes": [
+        "A1",
+        "A6"
+      ],
+      "energy": "dynamic"
+    }
+  },
+  {
+    "id": 36,
+    "name": "Ace of Cups",
+    "name_ru": "Туз кубков",
+    "slug": "cups_ace",
+    "type": "minor",
+    "suit": "cups",
+    "keywords": [
+      "чувства",
+      "связь",
+      "потенциал"
+    ],
+    "upright": "Feeling, receptivity, and the honesty of what moves you emotionally.",
+    "reversed": "Avoiding feeling, idealizing, or leaking care without a clear container.",
+    "correspondences": {
+      "element": "water",
+      "axes": [
+        "A2",
+        "A7"
+      ],
+      "energy": "soft_positive"
+    }
+  },
+  {
+    "id": 37,
+    "name": "Two of Cups",
+    "name_ru": "Двойка кубков",
+    "slug": "cups_2",
+    "type": "minor",
+    "suit": "cups",
+    "keywords": [
+      "чувства",
+      "связь",
+      "баланс"
+    ],
+    "upright": "Feeling, receptivity, and the honesty of what moves you emotionally.",
+    "reversed": "Avoiding feeling, idealizing, or leaking care without a clear container.",
+    "correspondences": {
+      "element": "water",
+      "axes": [
+        "A2",
+        "A7"
+      ],
+      "energy": "soft_positive"
+    }
+  },
+  {
+    "id": 38,
+    "name": "Three of Cups",
+    "name_ru": "Тройка кубков",
+    "slug": "cups_3",
+    "type": "minor",
+    "suit": "cups",
+    "keywords": [
+      "чувства",
+      "связь",
+      "рост"
+    ],
+    "upright": "Feeling, receptivity, and the honesty of what moves you emotionally.",
+    "reversed": "Avoiding feeling, idealizing, or leaking care without a clear container.",
+    "correspondences": {
+      "element": "water",
+      "axes": [
+        "A2",
+        "A7"
+      ],
+      "energy": "soft_positive"
+    }
+  },
+  {
+    "id": 39,
+    "name": "Four of Cups",
+    "name_ru": "Четвёрка кубков",
+    "slug": "cups_4",
+    "type": "minor",
+    "suit": "cups",
+    "keywords": [
+      "чувства",
+      "связь",
+      "опора"
+    ],
+    "upright": "Feeling, receptivity, and the honesty of what moves you emotionally.",
+    "reversed": "Avoiding feeling, idealizing, or leaking care without a clear container.",
+    "correspondences": {
+      "element": "water",
+      "axes": [
+        "A2",
+        "A7"
+      ],
+      "energy": "soft_positive"
+    }
+  },
+  {
+    "id": 40,
+    "name": "Five of Cups",
+    "name_ru": "Пятёрка кубков",
+    "slug": "cups_5",
+    "type": "minor",
+    "suit": "cups",
+    "keywords": [
+      "чувства",
+      "связь",
+      "напряжение"
+    ],
+    "upright": "Feeling, receptivity, and the honesty of what moves you emotionally.",
+    "reversed": "Avoiding feeling, idealizing, or leaking care without a clear container.",
+    "correspondences": {
+      "element": "water",
+      "axes": [
+        "A2",
+        "A7"
+      ],
+      "energy": "soft_positive"
+    }
+  },
+  {
+    "id": 41,
+    "name": "Six of Cups",
+    "name_ru": "Шестёрка кубков",
+    "slug": "cups_6",
+    "type": "minor",
+    "suit": "cups",
+    "keywords": [
+      "чувства",
+      "связь",
+      "гармония"
+    ],
+    "upright": "Feeling, receptivity, and the honesty of what moves you emotionally.",
+    "reversed": "Avoiding feeling, idealizing, or leaking care without a clear container.",
+    "correspondences": {
+      "element": "water",
+      "axes": [
+        "A2",
+        "A7"
+      ],
+      "energy": "soft_positive"
+    }
+  },
+  {
+    "id": 42,
+    "name": "Seven of Cups",
+    "name_ru": "Семёрка кубков",
+    "slug": "cups_7",
+    "type": "minor",
+    "suit": "cups",
+    "keywords": [
+      "чувства",
+      "связь",
+      "выбор"
+    ],
+    "upright": "Feeling, receptivity, and the honesty of what moves you emotionally.",
+    "reversed": "Avoiding feeling, idealizing, or leaking care without a clear container.",
+    "correspondences": {
+      "element": "water",
+      "axes": [
+        "A2",
+        "A7"
+      ],
+      "energy": "soft_positive"
+    }
+  },
+  {
+    "id": 43,
+    "name": "Eight of Cups",
+    "name_ru": "Восьмёрка кубков",
+    "slug": "cups_8",
+    "type": "minor",
+    "suit": "cups",
+    "keywords": [
+      "чувства",
+      "связь",
+      "движение"
+    ],
+    "upright": "Feeling, receptivity, and the honesty of what moves you emotionally.",
+    "reversed": "Avoiding feeling, idealizing, or leaking care without a clear container.",
+    "correspondences": {
+      "element": "water",
+      "axes": [
+        "A2",
+        "A7"
+      ],
+      "energy": "soft_positive"
+    }
+  },
+  {
+    "id": 44,
+    "name": "Nine of Cups",
+    "name_ru": "Девятка кубков",
+    "slug": "cups_9",
+    "type": "minor",
+    "suit": "cups",
+    "keywords": [
+      "чувства",
+      "связь",
+      "граница"
+    ],
+    "upright": "Feeling, receptivity, and the honesty of what moves you emotionally.",
+    "reversed": "Avoiding feeling, idealizing, or leaking care without a clear container.",
+    "correspondences": {
+      "element": "water",
+      "axes": [
+        "A2",
+        "A7"
+      ],
+      "energy": "soft_positive"
+    }
+  },
+  {
+    "id": 45,
+    "name": "Ten of Cups",
+    "name_ru": "Десятка кубков",
+    "slug": "cups_10",
+    "type": "minor",
+    "suit": "cups",
+    "keywords": [
+      "чувства",
+      "связь",
+      "итог"
+    ],
+    "upright": "Feeling, receptivity, and the honesty of what moves you emotionally.",
+    "reversed": "Avoiding feeling, idealizing, or leaking care without a clear container.",
+    "correspondences": {
+      "element": "water",
+      "axes": [
+        "A2",
+        "A7"
+      ],
+      "energy": "soft_positive"
+    }
+  },
+  {
+    "id": 46,
+    "name": "Page of Cups",
+    "name_ru": "Паж кубков",
+    "slug": "cups_page",
+    "type": "minor",
+    "suit": "cups",
+    "keywords": [
+      "чувства",
+      "связь",
+      "новости"
+    ],
+    "upright": "Feeling, receptivity, and the honesty of what moves you emotionally.",
+    "reversed": "Avoiding feeling, idealizing, or leaking care without a clear container.",
+    "correspondences": {
+      "element": "water",
+      "axes": [
+        "A2",
+        "A7"
+      ],
+      "energy": "soft_positive"
+    }
+  },
+  {
+    "id": 47,
+    "name": "Knight of Cups",
+    "name_ru": "Рыцарь кубков",
+    "slug": "cups_knight",
+    "type": "minor",
+    "suit": "cups",
+    "keywords": [
+      "чувства",
+      "связь",
+      "скорость"
+    ],
+    "upright": "Feeling, receptivity, and the honesty of what moves you emotionally.",
+    "reversed": "Avoiding feeling, idealizing, or leaking care without a clear container.",
+    "correspondences": {
+      "element": "water",
+      "axes": [
+        "A2",
+        "A7"
+      ],
+      "energy": "soft_positive"
+    }
+  },
+  {
+    "id": 48,
+    "name": "Queen of Cups",
+    "name_ru": "Королева кубков",
+    "slug": "cups_queen",
+    "type": "minor",
+    "suit": "cups",
+    "keywords": [
+      "чувства",
+      "связь",
+      "забота"
+    ],
+    "upright": "Feeling, receptivity, and the honesty of what moves you emotionally.",
+    "reversed": "Avoiding feeling, idealizing, or leaking care without a clear container.",
+    "correspondences": {
+      "element": "water",
+      "axes": [
+        "A2",
+        "A7"
+      ],
+      "energy": "soft_positive"
+    }
+  },
+  {
+    "id": 49,
+    "name": "King of Cups",
+    "name_ru": "Король кубков",
+    "slug": "cups_king",
+    "type": "minor",
+    "suit": "cups",
+    "keywords": [
+      "чувства",
+      "связь",
+      "мастерство"
+    ],
+    "upright": "Feeling, receptivity, and the honesty of what moves you emotionally.",
+    "reversed": "Avoiding feeling, idealizing, or leaking care without a clear container.",
+    "correspondences": {
+      "element": "water",
+      "axes": [
+        "A2",
+        "A7"
+      ],
+      "energy": "soft_positive"
+    }
+  },
+  {
+    "id": 50,
+    "name": "Ace of Swords",
+    "name_ru": "Туз мечей",
+    "slug": "swords_ace",
+    "type": "minor",
+    "suit": "swords",
+    "keywords": [
+      "мысль",
+      "конфликт",
+      "потенциал"
+    ],
+    "upright": "Clarity, boundaries, and the cost of what you think or say.",
+    "reversed": "Overthinking, harsh speech, or cutting too quickly without listening.",
+    "correspondences": {
+      "element": "air",
+      "axes": [
+        "A3",
+        "A5"
+      ],
+      "energy": "tense"
+    }
+  },
+  {
+    "id": 51,
+    "name": "Two of Swords",
+    "name_ru": "Двойка мечей",
+    "slug": "swords_2",
+    "type": "minor",
+    "suit": "swords",
+    "keywords": [
+      "мысль",
+      "конфликт",
+      "баланс"
+    ],
+    "upright": "Clarity, boundaries, and the cost of what you think or say.",
+    "reversed": "Overthinking, harsh speech, or cutting too quickly without listening.",
+    "correspondences": {
+      "element": "air",
+      "axes": [
+        "A3",
+        "A5"
+      ],
+      "energy": "tense"
+    }
+  },
+  {
+    "id": 52,
+    "name": "Three of Swords",
+    "name_ru": "Тройка мечей",
+    "slug": "swords_3",
+    "type": "minor",
+    "suit": "swords",
+    "keywords": [
+      "мысль",
+      "конфликт",
+      "рост"
+    ],
+    "upright": "Clarity, boundaries, and the cost of what you think or say.",
+    "reversed": "Overthinking, harsh speech, or cutting too quickly without listening.",
+    "correspondences": {
+      "element": "air",
+      "axes": [
+        "A3",
+        "A5"
+      ],
+      "energy": "tense"
+    }
+  },
+  {
+    "id": 53,
+    "name": "Four of Swords",
+    "name_ru": "Четвёрка мечей",
+    "slug": "swords_4",
+    "type": "minor",
+    "suit": "swords",
+    "keywords": [
+      "мысль",
+      "конфликт",
+      "опора"
+    ],
+    "upright": "Clarity, boundaries, and the cost of what you think or say.",
+    "reversed": "Overthinking, harsh speech, or cutting too quickly without listening.",
+    "correspondences": {
+      "element": "air",
+      "axes": [
+        "A3",
+        "A5"
+      ],
+      "energy": "tense"
+    }
+  },
+  {
+    "id": 54,
+    "name": "Five of Swords",
+    "name_ru": "Пятёрка мечей",
+    "slug": "swords_5",
+    "type": "minor",
+    "suit": "swords",
+    "keywords": [
+      "мысль",
+      "конфликт",
+      "напряжение"
+    ],
+    "upright": "Clarity, boundaries, and the cost of what you think or say.",
+    "reversed": "Overthinking, harsh speech, or cutting too quickly without listening.",
+    "correspondences": {
+      "element": "air",
+      "axes": [
+        "A3",
+        "A5"
+      ],
+      "energy": "tense"
+    }
+  },
+  {
+    "id": 55,
+    "name": "Six of Swords",
+    "name_ru": "Шестёрка мечей",
+    "slug": "swords_6",
+    "type": "minor",
+    "suit": "swords",
+    "keywords": [
+      "мысль",
+      "конфликт",
+      "гармония"
+    ],
+    "upright": "Clarity, boundaries, and the cost of what you think or say.",
+    "reversed": "Overthinking, harsh speech, or cutting too quickly without listening.",
+    "correspondences": {
+      "element": "air",
+      "axes": [
+        "A3",
+        "A5"
+      ],
+      "energy": "tense"
+    }
+  },
+  {
+    "id": 56,
+    "name": "Seven of Swords",
+    "name_ru": "Семёрка мечей",
+    "slug": "swords_7",
+    "type": "minor",
+    "suit": "swords",
+    "keywords": [
+      "мысль",
+      "конфликт",
+      "выбор"
+    ],
+    "upright": "Clarity, boundaries, and the cost of what you think or say.",
+    "reversed": "Overthinking, harsh speech, or cutting too quickly without listening.",
+    "correspondences": {
+      "element": "air",
+      "axes": [
+        "A3",
+        "A5"
+      ],
+      "energy": "tense"
+    }
+  },
+  {
+    "id": 57,
+    "name": "Eight of Swords",
+    "name_ru": "Восьмёрка мечей",
+    "slug": "swords_8",
+    "type": "minor",
+    "suit": "swords",
+    "keywords": [
+      "мысль",
+      "конфликт",
+      "движение"
+    ],
+    "upright": "Clarity, boundaries, and the cost of what you think or say.",
+    "reversed": "Overthinking, harsh speech, or cutting too quickly without listening.",
+    "correspondences": {
+      "element": "air",
+      "axes": [
+        "A3",
+        "A5"
+      ],
+      "energy": "tense"
+    }
+  },
+  {
+    "id": 58,
+    "name": "Nine of Swords",
+    "name_ru": "Девятка мечей",
+    "slug": "swords_9",
+    "type": "minor",
+    "suit": "swords",
+    "keywords": [
+      "мысль",
+      "конфликт",
+      "граница"
+    ],
+    "upright": "Clarity, boundaries, and the cost of what you think or say.",
+    "reversed": "Overthinking, harsh speech, or cutting too quickly without listening.",
+    "correspondences": {
+      "element": "air",
+      "axes": [
+        "A3",
+        "A5"
+      ],
+      "energy": "tense"
+    }
+  },
+  {
+    "id": 59,
+    "name": "Ten of Swords",
+    "name_ru": "Десятка мечей",
+    "slug": "swords_10",
+    "type": "minor",
+    "suit": "swords",
+    "keywords": [
+      "мысль",
+      "конфликт",
+      "итог"
+    ],
+    "upright": "Clarity, boundaries, and the cost of what you think or say.",
+    "reversed": "Overthinking, harsh speech, or cutting too quickly without listening.",
+    "correspondences": {
+      "element": "air",
+      "axes": [
+        "A3",
+        "A5"
+      ],
+      "energy": "tense"
+    }
+  },
+  {
+    "id": 60,
+    "name": "Page of Swords",
+    "name_ru": "Паж мечей",
+    "slug": "swords_page",
+    "type": "minor",
+    "suit": "swords",
+    "keywords": [
+      "мысль",
+      "конфликт",
+      "новости"
+    ],
+    "upright": "Clarity, boundaries, and the cost of what you think or say.",
+    "reversed": "Overthinking, harsh speech, or cutting too quickly without listening.",
+    "correspondences": {
+      "element": "air",
+      "axes": [
+        "A3",
+        "A5"
+      ],
+      "energy": "tense"
+    }
+  },
+  {
+    "id": 61,
+    "name": "Knight of Swords",
+    "name_ru": "Рыцарь мечей",
+    "slug": "swords_knight",
+    "type": "minor",
+    "suit": "swords",
+    "keywords": [
+      "мысль",
+      "конфликт",
+      "скорость"
+    ],
+    "upright": "Clarity, boundaries, and the cost of what you think or say.",
+    "reversed": "Overthinking, harsh speech, or cutting too quickly without listening.",
+    "correspondences": {
+      "element": "air",
+      "axes": [
+        "A3",
+        "A5"
+      ],
+      "energy": "tense"
+    }
+  },
+  {
+    "id": 62,
+    "name": "Queen of Swords",
+    "name_ru": "Королева мечей",
+    "slug": "swords_queen",
+    "type": "minor",
+    "suit": "swords",
+    "keywords": [
+      "мысль",
+      "конфликт",
+      "забота"
+    ],
+    "upright": "Clarity, boundaries, and the cost of what you think or say.",
+    "reversed": "Overthinking, harsh speech, or cutting too quickly without listening.",
+    "correspondences": {
+      "element": "air",
+      "axes": [
+        "A3",
+        "A5"
+      ],
+      "energy": "tense"
+    }
+  },
+  {
+    "id": 63,
+    "name": "King of Swords",
+    "name_ru": "Король мечей",
+    "slug": "swords_king",
+    "type": "minor",
+    "suit": "swords",
+    "keywords": [
+      "мысль",
+      "конфликт",
+      "мастерство"
+    ],
+    "upright": "Clarity, boundaries, and the cost of what you think or say.",
+    "reversed": "Overthinking, harsh speech, or cutting too quickly without listening.",
+    "correspondences": {
+      "element": "air",
+      "axes": [
+        "A3",
+        "A5"
+      ],
+      "energy": "tense"
+    }
+  },
+  {
+    "id": 64,
+    "name": "Ace of Pentacles",
+    "name_ru": "Туз пентаклей",
+    "slug": "pentacles_ace",
+    "type": "minor",
+    "suit": "pentacles",
+    "keywords": [
+      "материя",
+      "работа",
+      "потенциал"
+    ],
+    "upright": "Material rhythm, craft, and the patience of building something real.",
+    "reversed": "Stalling, clutching, or neglecting the body of the work for empty control.",
+    "correspondences": {
+      "element": "earth",
+      "axes": [
+        "A4",
+        "A8"
+      ],
+      "energy": "grounding"
+    }
+  },
+  {
+    "id": 65,
+    "name": "Two of Pentacles",
+    "name_ru": "Двойка пентаклей",
+    "slug": "pentacles_2",
+    "type": "minor",
+    "suit": "pentacles",
+    "keywords": [
+      "материя",
+      "работа",
+      "баланс"
+    ],
+    "upright": "Material rhythm, craft, and the patience of building something real.",
+    "reversed": "Stalling, clutching, or neglecting the body of the work for empty control.",
+    "correspondences": {
+      "element": "earth",
+      "axes": [
+        "A4",
+        "A8"
+      ],
+      "energy": "grounding"
+    }
+  },
+  {
+    "id": 66,
+    "name": "Three of Pentacles",
+    "name_ru": "Тройка пентаклей",
+    "slug": "pentacles_3",
+    "type": "minor",
+    "suit": "pentacles",
+    "keywords": [
+      "материя",
+      "работа",
+      "рост"
+    ],
+    "upright": "Material rhythm, craft, and the patience of building something real.",
+    "reversed": "Stalling, clutching, or neglecting the body of the work for empty control.",
+    "correspondences": {
+      "element": "earth",
+      "axes": [
+        "A4",
+        "A8"
+      ],
+      "energy": "grounding"
+    }
+  },
+  {
+    "id": 67,
+    "name": "Four of Pentacles",
+    "name_ru": "Четвёрка пентаклей",
+    "slug": "pentacles_4",
+    "type": "minor",
+    "suit": "pentacles",
+    "keywords": [
+      "материя",
+      "работа",
+      "опора"
+    ],
+    "upright": "Material rhythm, craft, and the patience of building something real.",
+    "reversed": "Stalling, clutching, or neglecting the body of the work for empty control.",
+    "correspondences": {
+      "element": "earth",
+      "axes": [
+        "A4",
+        "A8"
+      ],
+      "energy": "grounding"
+    }
+  },
+  {
+    "id": 68,
+    "name": "Five of Pentacles",
+    "name_ru": "Пятёрка пентаклей",
+    "slug": "pentacles_5",
+    "type": "minor",
+    "suit": "pentacles",
+    "keywords": [
+      "материя",
+      "работа",
+      "напряжение"
+    ],
+    "upright": "Material rhythm, craft, and the patience of building something real.",
+    "reversed": "Stalling, clutching, or neglecting the body of the work for empty control.",
+    "correspondences": {
+      "element": "earth",
+      "axes": [
+        "A4",
+        "A8"
+      ],
+      "energy": "grounding"
+    }
+  },
+  {
+    "id": 69,
+    "name": "Six of Pentacles",
+    "name_ru": "Шестёрка пентаклей",
+    "slug": "pentacles_6",
+    "type": "minor",
+    "suit": "pentacles",
+    "keywords": [
+      "материя",
+      "работа",
+      "гармония"
+    ],
+    "upright": "Material rhythm, craft, and the patience of building something real.",
+    "reversed": "Stalling, clutching, or neglecting the body of the work for empty control.",
+    "correspondences": {
+      "element": "earth",
+      "axes": [
+        "A4",
+        "A8"
+      ],
+      "energy": "grounding"
+    }
+  },
+  {
+    "id": 70,
+    "name": "Seven of Pentacles",
+    "name_ru": "Семёрка пентаклей",
+    "slug": "pentacles_7",
+    "type": "minor",
+    "suit": "pentacles",
+    "keywords": [
+      "материя",
+      "работа",
+      "выбор"
+    ],
+    "upright": "Material rhythm, craft, and the patience of building something real.",
+    "reversed": "Stalling, clutching, or neglecting the body of the work for empty control.",
+    "correspondences": {
+      "element": "earth",
+      "axes": [
+        "A4",
+        "A8"
+      ],
+      "energy": "grounding"
+    }
+  },
+  {
+    "id": 71,
+    "name": "Eight of Pentacles",
+    "name_ru": "Восьмёрка пентаклей",
+    "slug": "pentacles_8",
+    "type": "minor",
+    "suit": "pentacles",
+    "keywords": [
+      "материя",
+      "работа",
+      "движение"
+    ],
+    "upright": "Material rhythm, craft, and the patience of building something real.",
+    "reversed": "Stalling, clutching, or neglecting the body of the work for empty control.",
+    "correspondences": {
+      "element": "earth",
+      "axes": [
+        "A4",
+        "A8"
+      ],
+      "energy": "grounding"
+    }
+  },
+  {
+    "id": 72,
+    "name": "Nine of Pentacles",
+    "name_ru": "Девятка пентаклей",
+    "slug": "pentacles_9",
+    "type": "minor",
+    "suit": "pentacles",
+    "keywords": [
+      "материя",
+      "работа",
+      "граница"
+    ],
+    "upright": "Material rhythm, craft, and the patience of building something real.",
+    "reversed": "Stalling, clutching, or neglecting the body of the work for empty control.",
+    "correspondences": {
+      "element": "earth",
+      "axes": [
+        "A4",
+        "A8"
+      ],
+      "energy": "grounding"
+    }
+  },
+  {
+    "id": 73,
+    "name": "Ten of Pentacles",
+    "name_ru": "Десятка пентаклей",
+    "slug": "pentacles_10",
+    "type": "minor",
+    "suit": "pentacles",
+    "keywords": [
+      "материя",
+      "работа",
+      "итог"
+    ],
+    "upright": "Material rhythm, craft, and the patience of building something real.",
+    "reversed": "Stalling, clutching, or neglecting the body of the work for empty control.",
+    "correspondences": {
+      "element": "earth",
+      "axes": [
+        "A4",
+        "A8"
+      ],
+      "energy": "grounding"
+    }
+  },
+  {
+    "id": 74,
+    "name": "Page of Pentacles",
+    "name_ru": "Паж пентаклей",
+    "slug": "pentacles_page",
+    "type": "minor",
+    "suit": "pentacles",
+    "keywords": [
+      "материя",
+      "работа",
+      "новости"
+    ],
+    "upright": "Material rhythm, craft, and the patience of building something real.",
+    "reversed": "Stalling, clutching, or neglecting the body of the work for empty control.",
+    "correspondences": {
+      "element": "earth",
+      "axes": [
+        "A4",
+        "A8"
+      ],
+      "energy": "grounding"
+    }
+  },
+  {
+    "id": 75,
+    "name": "Knight of Pentacles",
+    "name_ru": "Рыцарь пентаклей",
+    "slug": "pentacles_knight",
+    "type": "minor",
+    "suit": "pentacles",
+    "keywords": [
+      "материя",
+      "работа",
+      "скорость"
+    ],
+    "upright": "Material rhythm, craft, and the patience of building something real.",
+    "reversed": "Stalling, clutching, or neglecting the body of the work for empty control.",
+    "correspondences": {
+      "element": "earth",
+      "axes": [
+        "A4",
+        "A8"
+      ],
+      "energy": "grounding"
+    }
+  },
+  {
+    "id": 76,
+    "name": "Queen of Pentacles",
+    "name_ru": "Королева пентаклей",
+    "slug": "pentacles_queen",
+    "type": "minor",
+    "suit": "pentacles",
+    "keywords": [
+      "материя",
+      "работа",
+      "забота"
+    ],
+    "upright": "Material rhythm, craft, and the patience of building something real.",
+    "reversed": "Stalling, clutching, or neglecting the body of the work for empty control.",
+    "correspondences": {
+      "element": "earth",
+      "axes": [
+        "A4",
+        "A8"
+      ],
+      "energy": "grounding"
+    }
+  },
+  {
+    "id": 77,
+    "name": "King of Pentacles",
+    "name_ru": "Король пентаклей",
+    "slug": "pentacles_king",
+    "type": "minor",
+    "suit": "pentacles",
+    "keywords": [
+      "материя",
+      "работа",
+      "мастерство"
+    ],
+    "upright": "Material rhythm, craft, and the patience of building something real.",
+    "reversed": "Stalling, clutching, or neglecting the body of the work for empty control.",
+    "correspondences": {
+      "element": "earth",
+      "axes": [
+        "A4",
+        "A8"
+      ],
+      "energy": "grounding"
+    }
+  }
+]
