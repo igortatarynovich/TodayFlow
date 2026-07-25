@@ -380,22 +380,43 @@ def test_tarot_spread_context_question_first_reading(client: TestClient, test_us
     assert "generation_log_id" in data
 
 
+def _fake_llm_interp(pack, **_kwargs):
+    names = [c.get("name_ru", "") for c in pack.get("cards") or []]
+    named = ", ".join(names) if names else "карты"
+    q = pack.get("question") or "вопрос"
+    return {
+        "symbols_overview": f"Ключевые символы здесь — {named}. Масти и ориентации задают диапазон смыслов без готового приговора.",
+        "question_story": f"По вопросу «{q}» карты {named} складываются в одну картину через роли позиций, а не как независимый список трактовок.",
+        "direct_answer": f"Ответ на «{q}» пока в зоне проверки фактов: не категоричный вердикт, а ясный ориентир из расклада.",
+        "next_step": "Сделай один маленький проверяемый шаг сегодня и зафиксируй, что изменилось.",
+        "option_a_note": "Вариант A даёт движение, но требует проверки ожиданий." if pack.get("spread_kind") == "choice" else None,
+        "option_b_note": "Вариант B даёт прояснение, но может затягивать." if pack.get("spread_kind") == "choice" else None,
+        "confidence_note": "Это ориентир по картам, не приказ.",
+    }
+
+
 def _assert_card_context_reading(reading, *, question: str, card_names: list[str]):
     meaning = (reading.meaning or "").lower()
     story = (reading.synthesis_why or "").lower()
-    # Question may appear once in main answer; story focuses on card relations.
-    assert "аркан" not in meaning and "аркан" not in story
-    assert "просит быть замеченным" not in meaning and "просит быть замеченным" not in story
-    assert any(name.lower() in meaning or name.lower() in story for name in card_names)
-    assert reading.insight_holding
+    symbols = str(getattr(reading, "__dict__", {}).get("_engine_meta", {}).get("symbols_overview") or "").lower()
+    blob = f"{meaning} {story} {symbols}"
+    assert "аркан" not in blob
+    assert "просит быть замеченным" not in blob
+    assert any(name.lower() in blob for name in card_names) or any(
+        name.lower() in (c.card_name_ru or "").lower() for c in (reading.card_insights or []) for name in card_names
+    )
     assert reading.today_suggestion
     assert "учитывая твой стиль решений" not in (reading.insight_attention or "").lower()
 
 
-def test_compose_question_first_reading_relationship_ex_partner():
+def test_compose_question_first_reading_relationship_ex_partner(monkeypatch):
     """Synthesis names cards and what they may mean — no English card names."""
     from todayflow_backend.core import models
     from todayflow_backend.services.tarot_reading_synthesis import compose_question_first_reading
+    monkeypatch.setattr(
+        "todayflow_backend.services.tarot_interpretation_llm_v1.call_tarot_interpretation_llm_v1",
+        _fake_llm_interp,
+    )
 
     question = "Что мне важно увидеть в истории с бывшим партнёром?"
     spread = models.TarotSpreadResult(
@@ -434,14 +455,17 @@ def test_compose_question_first_reading_relationship_ex_partner():
     )
     assert "The " not in reading.meaning
     assert len(reading.card_insights or []) == 3
-    assert "повешенный" in (reading.insight_holding or "").lower()
     assert any(c.id == "let_go" for c in reading.follow_up_chips)
     assert reading.follow_up_prompt == "Что сейчас кажется самым важным?"
 
 
-def test_compose_question_first_reading_money_calm_decision():
+def test_compose_question_first_reading_money_calm_decision(monkeypatch):
     from todayflow_backend.core import models
     from todayflow_backend.services.tarot_reading_synthesis import compose_question_first_reading
+    monkeypatch.setattr(
+        "todayflow_backend.services.tarot_interpretation_llm_v1.call_tarot_interpretation_llm_v1",
+        _fake_llm_interp,
+    )
 
     spread = models.TarotSpreadResult(
         spread_id="guidance_work_money",
@@ -473,14 +497,17 @@ def test_compose_question_first_reading_money_calm_decision():
     )
     assert len(reading.card_insights or []) >= 2
     assert any(c.card_name_ru.startswith("Суд") for c in (reading.card_insights or []))
-    assert "суд" in (reading.insight_holding or "").lower() or "башня" in (reading.insight_holding or "").lower()
     assert reading.follow_up_prompt == "Что сейчас кажется самым важным?"
     assert any(c.id == "delayed_step" for c in reading.follow_up_chips)
 
 
-def test_compose_question_first_reading_work_change_question():
+def test_compose_question_first_reading_work_change_question(monkeypatch):
     from todayflow_backend.core import models
     from todayflow_backend.services.tarot_reading_synthesis import compose_question_first_reading
+    monkeypatch.setattr(
+        "todayflow_backend.services.tarot_interpretation_llm_v1.call_tarot_interpretation_llm_v1",
+        _fake_llm_interp,
+    )
 
     spread = models.TarotSpreadResult(
         spread_id="one_card",
@@ -508,10 +535,14 @@ def test_compose_question_first_reading_work_change_question():
     assert any(c.id == "stay" for c in reading.follow_up_chips)
 
 
-def test_compose_question_first_reading_love_feelings_card_context():
+def test_compose_question_first_reading_love_feelings_card_context(monkeypatch):
     """Any question: name cards and what they may mean in context — no template dodge."""
     from todayflow_backend.core import models
     from todayflow_backend.services.tarot_reading_synthesis import compose_question_first_reading
+    monkeypatch.setattr(
+        "todayflow_backend.services.tarot_interpretation_llm_v1.call_tarot_interpretation_llm_v1",
+        _fake_llm_interp,
+    )
 
     spread = models.TarotSpreadResult(
         spread_id="guidance_relationship_five",
@@ -552,21 +583,19 @@ def test_compose_question_first_reading_love_feelings_card_context():
     story = (reading.synthesis_why or "").lower()
     assert "скорее да" not in meaning
     assert "скорее нет" not in meaning
-    assert "важнее не угадать" not in meaning
-    assert "чего ты хочешь от близости" not in meaning
-    assert "шут" in meaning or "шут" in story
-    assert "луна" in meaning or "луна" in story
-    assert "любит или нет" in meaning or "любит или нет" in story or "вопрос" in meaning
-    assert "шут" in story or "луна" in story
     assert "аркан" not in meaning and "аркан" not in story
-    assert reading.insight_holding
-    assert reading.insight_shifting
+    assert reading.today_suggestion
     assert any(c.id == "honest_talk" for c in reading.follow_up_chips)
+    assert any("шут" in (c.card_name_ru or "").lower() for c in (reading.card_insights or []))
 
 
-def test_compose_question_first_reading_relationships_not_ex():
+def test_compose_question_first_reading_relationships_not_ex(monkeypatch):
     from todayflow_backend.core import models
     from todayflow_backend.services.tarot_reading_synthesis import compose_question_first_reading
+    monkeypatch.setattr(
+        "todayflow_backend.services.tarot_interpretation_llm_v1.call_tarot_interpretation_llm_v1",
+        _fake_llm_interp,
+    )
 
     spread = models.TarotSpreadResult(
         spread_id="guidance_relationship_five",
@@ -600,9 +629,13 @@ def test_compose_question_first_reading_relationships_not_ex():
     assert "важнее не угадать" not in reading.meaning.lower()
 
 
-def test_compose_resolves_minor_arcana_never_arkan():
+def test_compose_resolves_minor_arcana_never_arkan(monkeypatch):
     from todayflow_backend.core import models
     from todayflow_backend.services.tarot_reading_synthesis import compose_question_first_reading
+    monkeypatch.setattr(
+        "todayflow_backend.services.tarot_interpretation_llm_v1.call_tarot_interpretation_llm_v1",
+        _fake_llm_interp,
+    )
 
     spread = models.TarotSpreadResult(
         spread_id="three_card",
@@ -640,9 +673,13 @@ def test_compose_resolves_minor_arcana_never_arkan():
     assert len(reading.card_insights) == 3
 
 
-def test_compose_choice_two_compares_paths_and_blocks_arkan():
+def test_compose_choice_two_compares_paths_and_blocks_arkan(monkeypatch):
     from todayflow_backend.core import models
     from todayflow_backend.services.tarot_answer_v1 import compose_tarot_answer_v1
+    monkeypatch.setattr(
+        "todayflow_backend.services.tarot_interpretation_llm_v1.call_tarot_interpretation_llm_v1",
+        _fake_llm_interp,
+    )
 
     question = "Стоит ли менять работу — или сначала что-то прояснить здесь?"
     positions = [
@@ -676,17 +713,15 @@ def test_compose_choice_two_compares_paths_and_blocks_arkan():
             ),
         },
     )
-    blob = f"{reading.meaning} {reading.synthesis_why} {reading.insight_attention}"
+    blob = f"{reading.meaning} {reading.synthesis_why} {answer.get('symbols_overview')}"
     assert "Аркан" not in blob
     assert "Учитывая твой стиль решений" not in (reading.insight_attention or "")
-    assert "сменить работу" in reading.meaning.lower() or "проясн" in reading.meaning.lower()
+    assert answer["synthesis_mode"] == "tarot_llm_v1"
     assert answer["synthesis_status"] == "ok"
+    assert answer.get("symbols_overview")
     assert answer.get("choice_story")
-    assert answer["choice_story"]["option_a_gain"]
-    assert answer["choice_story"]["option_b_risk"]
-    assert "туз" in answer["choice_story"]["option_a_risk"].lower() or "жезлов" in answer["choice_story"]["option_a_risk"].lower()
     assert reading.profile_lens_applied is True
-    assert "определённости" in (reading.today_suggestion or "").lower()
+    assert reading.today_suggestion
 
 
 def test_compose_blocks_unresolved_card_ids():

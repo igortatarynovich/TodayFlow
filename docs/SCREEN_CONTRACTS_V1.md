@@ -353,25 +353,27 @@ tarot_contract_v1:
 
 **SoT интерпретации:** [TAROT_INTERPRETATION_ENGINE_V1.md](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md) (2026-07-25).
 
-**Принцип:** психологический диалог через карты — не энциклопедия и не Profile/Today с подстановкой названий. Главный объект экрана — **вопрос человека**. Карты — аргументы внутри одного ответа.
+**Pipeline:** Deterministic Context Pack → LLM interpretation → validation → UI.  
+Шаблоны / suit-banks — только факты для pack или emergency fallback, не автор текста.
 
-**Hard gates:** нет «Аркан»; `unresolved_cards` → technical fallback без narrative; Profile не вставляется дословно в body.
+**Принцип:** один вопрос → символы → картина → ответ → шаг. Карты — аргументы, не шесть независимых трактовок.
 
-Порядок блоков — **обязателен** (один рассказ, без дублей):
+**Hard gates:** нет «Аркан»; `unresolved_cards` → technical fallback без LLM; Profile — короткий фрагмент в pack, не копипаст в body.
 
-| # | Block | `tarot_element_id` | Язык |
-|---|-------|-------------------|------|
-| 1 | Твой вопрос + визуал карт | `user_question` | Вопрос; карты как объекты (имена RU) |
-| 2 | Главный вывод | `main_answer` | **Одна мысль** — ответ на вопрос / сравнение путей |
-| 3 | Сравнение / как складывается | `story_narrative` · `choice_story` | Отношения карт; для choice — A vs B |
-| 4 | Что мешает увидеть решение | `insight_holding` | Скрытое напряжение (не Profile-paste) |
-| 5 | Следующий шаг | `today_suggestion` | **Одна** рекомендация |
-| 6 | Follow-up (опционально) | `reading_follow_up` | Чипы по домену |
-| 7 | Дальше | `next_routes` | **Один** контекстный primary CTA + optional save — не меню из 5 ссылок |
+Порядок блоков — **обязателен** (универсален для любого расклада):
 
-**Запрещено в narrative:** «Аркан»; «то, что просит быть замеченным»; дословный Profile-параграф; повтор одного смысла в четырёх блоках; английские имена карт.
+| # | Block | Field | Язык |
+|---|-------|-------|------|
+| 1 | Вопрос + визуал карт | `user_question` | Вопрос; карты как объекты (имена RU) |
+| 2 | Что здесь показывают карты | `symbols_overview` | Символы, масти, напряжения |
+| 3 | Как это связано с твоим вопросом | `story_narrative` (+ choice notes) | Единая история; для choice — A vs B |
+| 4 | Ответ на вопрос | `main_answer` | Прямой, не категоричный |
+| 5 | Что сделать дальше | `today_suggestion` | Один применимый шаг |
+| 6 | Дальше | `next_routes` | Один контекстный CTA + optional save |
 
-**API:** `tarot_answer_v1` + optional `choice_story` · `unresolved_cards` · `synthesis_status`. Legacy `TarotSpreadReading` поля сохраняются.
+**Запрещено в narrative:** «Аркан»; «то, что просит быть замеченным»; дословный Profile-параграф; перечень «карта 1 = … карта 2 = …» как весь ответ; английские имена.
+
+**API:** `tarot_answer_v1` + `symbols_overview` · optional `choice_story` · `unresolved_cards` · `synthesis_mode` (`tarot_llm_v1` \| `tarot_fallback_v1` \| `unresolved_blocked`).
 
 ### 6.6 Today ↔ Tarot bridge
 

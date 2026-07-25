@@ -51,6 +51,7 @@ export type TarotReadingStoryModel = {
   question: string;
   mainAnswer: string;
   storyNarrative: string | null;
+  symbolsOverview: string | null;
   cardInsights: TarotCardInsight[];
   insights: {
     holding: string | null;
@@ -311,6 +312,7 @@ export function buildTarotReadingStoryFromGuidance(
     question: result.question.trim(),
     mainAnswer,
     storyNarrative,
+    symbolsOverview: null,
     cardInsights,
     insights: {
       holding: result.interpretation?.core_insight?.trim() || null,
@@ -402,6 +404,9 @@ export function buildTarotReadingStoryFromAnswer(
     question: (answer.question_text || input.question || "").trim(),
     mainAnswer,
     storyNarrative: storyNarrative ? sanitizeTarotStoryText(storyNarrative) : null,
+    symbolsOverview: answer.symbols_overview?.trim()
+      ? sanitizeTarotStoryText(answer.symbols_overview)
+      : null,
     cardInsights,
     insights: {
       holding: answer.insights?.holding?.trim() || input.reading?.insight_holding?.trim() || null,
@@ -470,6 +475,7 @@ export function buildTarotReadingStoryFromSpread(input: TarotSpreadStoryInput): 
     question: input.question?.trim() || (input.locale === "ru" ? "Твой вопрос" : "Your question"),
     mainAnswer,
     storyNarrative,
+    symbolsOverview: null,
     cardInsights,
     insights: {
       holding: input.reading?.insight_holding?.trim() || null,

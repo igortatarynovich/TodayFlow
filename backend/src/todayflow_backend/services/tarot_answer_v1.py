@@ -1,4 +1,4 @@
-"""Tarot Answer v1 — single canonical artifact for spread result (Interpretation Engine)."""
+"""Tarot Answer v1 — public contract from Interpretation Engine (pack → LLM)."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from todayflow_backend.services import tarot_interpretation_engine_v1 as engine
 from todayflow_backend.services.tarot_reading_synthesis import compose_question_first_reading
 
 TAROT_ANSWER_V1_CONTRACT = "tarot_answer_v1"
-TAROT_ANSWER_PROMPT_VER = "tarot-answer-v1.2-interpretation-engine"
+TAROT_ANSWER_PROMPT_VER = "tarot-interpretation-v1.0"
 
 
 def tarot_reading_to_answer_v1(
@@ -22,7 +22,7 @@ def tarot_reading_to_answer_v1(
 ) -> dict[str, Any]:
     """Normalize spread reading → tarot_answer_v1 contract."""
     src = reading.model_dump() if hasattr(reading, "model_dump") else dict(reading)
-    meta = {}
+    meta: dict[str, Any] = {}
     if hasattr(reading, "__dict__"):
         meta = reading.__dict__.get("_engine_meta") or {}
     if isinstance(src.get("_engine_meta"), dict):
@@ -34,6 +34,11 @@ def tarot_reading_to_answer_v1(
     shifting = str(src.get("insight_shifting") or "").strip()
     attention = str(src.get("insight_attention") or "").strip()
     today = str(src.get("today_suggestion") or src.get("next_step") or "").strip()
+    symbols = ""
+    if hasattr(reading, "__dict__"):
+        symbols = str(reading.__dict__.get("_symbols_overview") or "")
+    symbols = str(meta.get("symbols_overview") or symbols or "").strip()
+
     chips_raw = src.get("follow_up_chips") if isinstance(src.get("follow_up_chips"), list) else []
     chips: list[dict[str, str]] = []
     for c in chips_raw:
@@ -44,8 +49,10 @@ def tarot_reading_to_answer_v1(
 
     unresolved = meta.get("unresolved_cards") if isinstance(meta.get("unresolved_cards"), list) else []
     choice_story = meta.get("choice_story") if isinstance(meta.get("choice_story"), dict) else None
+    if choice_story is None and hasattr(reading, "__dict__"):
+        choice_story = reading.__dict__.get("_choice_story")
     status = str(meta.get("synthesis_status") or engine.STATUS_OK)
-    mode = str(meta.get("synthesis_mode") or engine.SYNTHESIS_MODE_OK)
+    mode = str(meta.get("synthesis_mode") or engine.SYNTHESIS_MODE_FALLBACK)
 
     payload: dict[str, Any] = {
         "contract_version": TAROT_ANSWER_V1_CONTRACT,
@@ -54,6 +61,7 @@ def tarot_reading_to_answer_v1(
         "spread_id": (spread_id or "").strip(),
         "main_answer": main,
         "story_narrative": story,
+        "symbols_overview": symbols,
         "new_angle": main,
         "hidden_factor": holding,
         "risk": shifting,
@@ -89,7 +97,7 @@ def compose_tarot_answer_v1(
     core_profile: dict | None = None,
     generation_id: str | None = None,
 ) -> tuple[models.TarotSpreadReading, dict[str, Any]]:
-    """Build legacy reading + canonical tarot_answer_v1 from one synthesis pass."""
+    """Build legacy reading + canonical tarot_answer_v1 from pack → LLM pass."""
     reading = compose_question_first_reading(
         spread,
         question=question,

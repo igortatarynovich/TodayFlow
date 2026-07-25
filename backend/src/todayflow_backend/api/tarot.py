@@ -321,7 +321,7 @@ async def generate_tarot_spread_with_context(
             ),
             normalized_response=tarot_answer,
             status="success",
-            used_fallback=True,
+            used_fallback=str(tarot_answer.get("synthesis_mode") or "") != "tarot_llm_v1",
             locale=request_locale(request),
         )
         generation_log_id = gen.id

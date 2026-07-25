@@ -23,6 +23,7 @@ export type TarotAnswerV1 = {
   spread_id?: string;
   main_answer: string;
   story_narrative?: string;
+  symbols_overview?: string;
   new_angle?: string;
   hidden_factor?: string;
   risk?: string;
@@ -38,7 +39,7 @@ export type TarotAnswerV1 = {
   follow_up_chips?: Array<{ id: string; label: string }>;
   generation_id?: string;
   synthesis_mode?: string;
-  synthesis_status?: "ok" | "unresolved_cards" | string;
+  synthesis_status?: "ok" | "unresolved_cards" | "llm_unavailable" | string;
   unresolved_cards?: TarotUnresolvedCard[];
   choice_story?: TarotChoiceStory | null;
   profile_lens?: string | null;

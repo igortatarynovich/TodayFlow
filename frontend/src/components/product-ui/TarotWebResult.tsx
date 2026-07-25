@@ -57,36 +57,31 @@ export function TarotWebResult({
   const blocked = model.synthesisStatus === "unresolved_cards";
   const choice = model.choiceStory;
 
+  const symbolsParas = useMemo(() => {
+    if (blocked) return [];
+    const raw = model.symbolsOverview?.trim();
+    return raw ? splitParagraphs(raw) : [];
+  }, [blocked, model.symbolsOverview]);
+
+  const storyParas = useMemo(() => {
+    if (blocked) return [];
+    if (choice?.option_a_summary || choice?.option_b_summary) {
+      return [choice.option_a_summary, choice.option_b_summary, model.storyNarrative]
+        .map((p) => (p ? ensurePeriod(p) : ""))
+        .filter(Boolean);
+    }
+    return model.storyNarrative?.trim() ? splitParagraphs(model.storyNarrative) : [];
+  }, [blocked, choice, model.storyNarrative]);
+
   const answerParas = useMemo(
     () => (model.mainAnswer?.trim() ? splitParagraphs(model.mainAnswer) : []),
     [model.mainAnswer],
   );
 
-  const compareParas = useMemo(() => {
-    if (blocked) return [];
-    if (choice) {
-      return [
-        choice.option_a_summary,
-        choice.option_b_summary,
-        choice.confidence_note,
-      ]
-        .map((p) => (p ? ensurePeriod(p) : ""))
-        .filter(Boolean);
-    }
-    if (model.storyNarrative?.trim()) return [ensurePeriod(model.storyNarrative)];
-    return [];
-  }, [blocked, choice, model.storyNarrative]);
-
-  const tensionParas = useMemo(() => {
-    if (blocked) return [];
-    const holding = model.insights.holding?.trim() || choice?.hidden_tension?.trim() || "";
-    return holding ? [ensurePeriod(holding)] : [];
-  }, [blocked, model.insights.holding, choice]);
-
   const hasStory =
+    symbolsParas.length > 0 ||
+    storyParas.length > 0 ||
     answerParas.length > 0 ||
-    compareParas.length > 0 ||
-    tensionParas.length > 0 ||
     Boolean(model.todaySuggestion?.trim());
 
   return (
@@ -123,23 +118,45 @@ export function TarotWebResult({
 
       <ProductJourneyScene
         step={2}
-        title={blocked ? "Расклад" : "Ответ"}
+        title={blocked ? "Расклад" : "Разбор"}
         lead={
           blocked
             ? "Карты не удалось полностью распознать для интерпретации."
-            : choice
-              ? "Сравнение двух путей и следующий шаг."
-              : "Главный вывод и что с ним делать."
+            : "Символы → связь с вопросом → ответ → шаг."
         }
         motif="why"
         testId="tarot-journey-story"
       >
         {hasStory ? (
           <div className={s.tarotResultNarrativeStack}>
+            {symbolsParas.length ? (
+              <ProductNarrativeBlock
+                id="symbols"
+                kicker="Что здесь показывают карты"
+                lead={symbolsParas[0]}
+                paragraphs={symbolsParas.slice(1)}
+                accent="sky"
+                collapseAfter={symbolsParas.length > 3 ? 2 : undefined}
+                testId="tarot-narrative-symbols"
+              />
+            ) : null}
+
+            {storyParas.length ? (
+              <ProductNarrativeBlock
+                id="story"
+                kicker="Как это связано с твоим вопросом"
+                lead={storyParas[0]}
+                paragraphs={storyParas.slice(1)}
+                accent="default"
+                collapseAfter={storyParas.length > 3 ? 2 : undefined}
+                testId="tarot-narrative-why"
+              />
+            ) : null}
+
             {answerParas.length ? (
               <ProductNarrativeBlock
                 id="answer"
-                kicker={blocked ? "Что случилось" : "Главный вывод"}
+                kicker="Ответ на вопрос"
                 lead={answerParas[0]}
                 paragraphs={answerParas.slice(1)}
                 accent="support"
@@ -148,32 +165,10 @@ export function TarotWebResult({
               />
             ) : null}
 
-            {compareParas.length ? (
-              <ProductNarrativeBlock
-                id="compare"
-                kicker={choice ? "Сравнение вариантов" : "Как карты складываются"}
-                lead={compareParas[0]}
-                paragraphs={compareParas.slice(1)}
-                accent="sky"
-                collapseAfter={compareParas.length > 2 ? 1 : undefined}
-                testId="tarot-narrative-why"
-              />
-            ) : null}
-
-            {tensionParas.length ? (
-              <ProductNarrativeBlock
-                id="tension"
-                kicker="Что мешает увидеть решение"
-                paragraphs={tensionParas}
-                accent="default"
-                testId="tarot-narrative-tension"
-              />
-            ) : null}
-
             {model.todaySuggestion?.trim() ? (
               <ProductNarrativeBlock
                 id="today"
-                kicker={chrome.todayEyebrow || "Следующий шаг"}
+                kicker="Что сделать дальше"
                 paragraphs={[ensurePeriod(model.todaySuggestion)]}
                 accent="support"
                 testId="tarot-narrative-today"

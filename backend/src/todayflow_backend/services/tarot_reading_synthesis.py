@@ -156,19 +156,6 @@ def _detect_intent(question: str | None, theme: str) -> str:
     return theme if theme != "general" else "general"
 
 
-def _position_role(position_id: str) -> str:
-    pid = position_id.strip().lower()
-    if pid in _HOLDING_POSITIONS:
-        return "holding"
-    if pid in _SHIFTING_POSITIONS:
-        return "shifting"
-    if pid in _ATTENTION_POSITIONS:
-        return "attention"
-    return "neutral"
-
-
-def _build_card_insights(cards: list[models.TarotSpreadCard]) -> list[models.TarotCardInsight] | None:
-    return engine.build_card_insights(cards)
 
 
 def _bundle_for_intent(intent: str) -> _ReadingBundle:
@@ -573,169 +560,8 @@ def _bundle_for_intent(intent: str) -> _ReadingBundle:
     return bundles["general"]
 
 
-def _compose_question_main_answer(
-    question: str | None,
-    card_insights: list[models.TarotCardInsight],
-) -> str:
-    q = (question or "").strip()
-    if not card_insights:
-        return _clean("Карты не дали конкретных линий — попробуй уточнить формулировку.")
-    if len(card_insights) == 1:
-        c = card_insights[0]
-        lead = f"По твоему вопросу «{q}» — " if q else ""
-        return _clean(
-            f"{lead}{c.card_name_ru} в позиции «{c.position_label}» может означать: {c.line}."
-        )
-    a, b = card_insights[0], card_insights[1]
-    lead = f"По твоему вопросу — " if q else ""
-    return _clean(
-        f"{lead}{a.card_name_ru} («{a.position_label}») указывает: {a.line}. "
-        f"{b.card_name_ru} («{b.position_label}») добавляет: {b.line}."
-    )
-
-
-def _compose_question_story(
-    question: str | None,
-    card_insights: list[models.TarotCardInsight],
-) -> str:
-    """Relations between cards — not a dump of every position line."""
-    if not card_insights:
-        return ""
-    if len(card_insights) == 1:
-        c = card_insights[0]
-        return _clean(f"Единственная опора расклада — {c.card_name_ru}: {c.line}.")
-    head = card_insights[0]
-    mid = card_insights[1]
-    tail = card_insights[-1] if len(card_insights) > 2 else None
-    parts = [
-        f"{head.card_name_ru} задаёт тон («{head.position_label}»): {head.line}",
-        f"{mid.card_name_ru} («{mid.position_label}») сдвигает картину: {mid.line}",
-    ]
-    if tail and tail is not mid and tail is not head:
-        parts.append(
-            f"Итог через {tail.card_name_ru} («{tail.position_label}»): {tail.line}"
-        )
-    body = ". ".join(parts)
-    q = (question or "").strip()
-    if q:
-        return _clean(
-            f"Карты отвечают на формулировку вопроса, а не на общий прогноз. {body}."
-        )
-    return _clean(f"Если читать расклад вместе: {body}.")
-
-
-def _compose_question_insights(
-    cards: list[models.TarotSpreadCard],
-    card_insights: list[models.TarotCardInsight],
-    *,
-    question: str | None = None,
-) -> tuple[str, str, str]:
-    del question  # avoid repeating the question in every insight block
-    holding = shifting = attention = ""
-
-    for card, insight in zip(cards, card_insights):
-        pos_id = (card.position.id if card.position else "").strip().lower()
-        role = _position_role(pos_id)
-        line = f"{insight.card_name_ru} («{insight.position_label}»): {insight.line}."
-        if role == "holding" and not holding:
-            holding = line
-        elif role == "shifting" and not shifting:
-            shifting = line
-        elif role == "attention" and not attention:
-            attention = line
-
-    if not holding and card_insights:
-        c = card_insights[0]
-        holding = f"{c.card_name_ru}: {c.line}."
-    if not shifting and len(card_insights) > 1:
-        c = card_insights[1]
-        shifting = f"{c.card_name_ru} («{c.position_label}»): {c.line}."
-    if not attention and len(card_insights) > 2:
-        c = card_insights[2]
-        attention = f"{c.card_name_ru}: {c.line}."
-
-    return _clean(holding), _clean(shifting), _clean(attention)
-
-
-def _compose_card_context_reading(
-    *,
-    question: str | None,
-    cards: list[models.TarotSpreadCard],
-    card_insights: list[models.TarotCardInsight],
-    bundle: _ReadingBundle,
-) -> models.TarotSpreadReading:
-    main_answer = _compose_question_main_answer(question, card_insights)
-    story = _compose_question_story(question, card_insights)
-    holding, shifting, attention = _compose_question_insights(
-        cards, card_insights, question=question
-    )
-
-    anchor = card_insights[-1] if card_insights else None
-    if anchor:
-        today = (
-            f"Сделай один шаг по линии {anchor.card_name_ru} "
-            f"(«{anchor.position_label}»): заметь, где это откликается в жизни, "
-            f"а не только в ожиданиях."
-        )
-    else:
-        today = "Отметь, какая линия расклада откликается сильнее — и сделай один маленький шаг."
-
-    chips = [models.TarotFollowUpChip(id=cid, label=label) for cid, label in bundle["chips"]]
-
-    return models.TarotSpreadReading(
-        meaning=main_answer,
-        synthesis_why=story,
-        insight_holding=holding,
-        insight_shifting=shifting,
-        insight_attention=attention,
-        today_suggestion=today,
-        follow_up_prompt=bundle["follow_up_prompt"],
-        follow_up_chips=chips,
-        card_insights=card_insights,
-        manifestation="",
-        caution="",
-        next_step=today,
-        actions_today=[today],
-        self_question=None,
-        profile_lens=None,
-        profile_lens_applied=False,
-    )
-
-
-def _compose_choice_reading(
-    *,
-    question: str | None,
-    cards: list[models.TarotSpreadCard],
-    card_insights: list[models.TarotCardInsight],
-    bundle: _ReadingBundle,
-    concern_domain: str | None,
-) -> tuple[models.TarotSpreadReading, dict[str, Any]]:
-    built = engine.compose_choice_story(
-        question=question,
-        cards=cards,
-        insights=card_insights,
-        concern_domain=concern_domain,
-    )
-    chips = [models.TarotFollowUpChip(id=cid, label=label) for cid, label in bundle["chips"]]
-    reading = models.TarotSpreadReading(
-        meaning=built["direct_answer"],
-        synthesis_why=built["story_narrative"],
-        insight_holding=built["holding"],
-        insight_shifting=built["shifting"],
-        insight_attention=built["attention"],
-        today_suggestion=built["today_suggestion"],
-        follow_up_prompt=bundle["follow_up_prompt"],
-        follow_up_chips=chips,
-        card_insights=card_insights,
-        manifestation="",
-        caution="",
-        next_step=built["today_suggestion"],
-        actions_today=[built["today_suggestion"]],
-        self_question=None,
-        profile_lens=None,
-        profile_lens_applied=False,
-    )
-    return reading, built["choice_story"]
+def _build_card_insights(cards: list[models.TarotSpreadCard]) -> list[models.TarotCardInsight] | None:
+    return engine.build_card_insights(cards)
 
 
 def compose_question_first_reading(
@@ -747,62 +573,75 @@ def compose_question_first_reading(
     experience_slice: dict | None = None,
     core_profile: dict | None = None,
 ) -> models.TarotSpreadReading:
-    """Compose reading. Attaches engine meta on the reading object for answer_v1 mapping."""
-    del consistency  # orchestrator consistency is not Experience Contract SoI
-    del core_profile  # Personal Model enters only via experience_slice
+    """Context Pack → LLM → validation. Templates only as emergency fallback."""
+    del consistency
+    del core_profile
+    from todayflow_backend.services import tarot_interpretation_llm_v1 as tarot_llm
+
     cards = spread.cards or []
     theme = _detect_theme(question, concern_domain)
     intent = _detect_intent(question, theme)
     bundle = _bundle_for_intent(intent)
+    chips = [models.TarotFollowUpChip(id=cid, label=label) for cid, label in bundle["chips"]]
 
     unresolved = engine.collect_unresolved(cards)
     if unresolved:
         reading = engine.technical_fallback_reading(unresolved=unresolved)
-        # Stash for tarot_answer_v1 (dynamic attrs — not in pydantic model).
         reading.__dict__["_engine_meta"] = {
             "synthesis_mode": engine.SYNTHESIS_MODE_BLOCKED,
             "synthesis_status": engine.STATUS_UNRESOLVED,
             "unresolved_cards": unresolved,
             "choice_story": None,
+            "symbols_overview": reading.synthesis_why,
         }
         return reading
 
+    pack = engine.build_context_pack(
+        spread,
+        question=question,
+        concern_domain=concern_domain,
+        experience_slice=experience_slice,
+    )
+    assert pack is not None
     card_insights = _build_card_insights(cards)
     assert card_insights is not None
 
-    choice_story: dict[str, Any] | None = None
-    if spread.spread_id in engine.CHOICE_SPREAD_IDS:
-        reading, choice_story = _compose_choice_reading(
-            question=question,
-            cards=cards,
-            card_insights=card_insights,
-            bundle=bundle,
-            concern_domain=concern_domain,
-        )
+    lens = pack.get("profile_lens")
+    lens_applied = bool(lens)
+
+    interp = tarot_llm.call_tarot_interpretation_llm_v1(pack)
+    if interp:
+        mode = engine.SYNTHESIS_MODE_LLM
+        status = engine.STATUS_OK
+        choice_story = tarot_llm.choice_story_from_interpretation(interp, pack)
     else:
-        reading = _compose_card_context_reading(
-            question=question,
-            cards=cards,
-            card_insights=card_insights,
-            bundle=bundle,
-        )
+        mode = engine.SYNTHESIS_MODE_FALLBACK
+        status = engine.STATUS_LLM_UNAVAILABLE
+        interp = engine.thin_fallback_from_pack(pack)
+        choice_story = None
+        if pack.get("spread_kind") == "choice":
+            choice_story = {
+                "option_a_summary": "",
+                "option_b_summary": "",
+                "recommended_next_step": interp.get("next_step") or "",
+                "confidence_note": "Полный сравнительный разбор временно недоступен.",
+            }
 
-    today, lens, applied = engine.soft_profile_next_step(
-        reading.today_suggestion or "",
-        experience_slice,
+    reading = engine.reading_from_interpretation(
+        interpretation=interp,
+        card_insights=card_insights,
+        follow_up_chips=chips,
+        follow_up_prompt=bundle["follow_up_prompt"],
+        profile_lens=lens if isinstance(lens, str) else None,
+        profile_lens_applied=lens_applied,
+        choice_story=choice_story,
     )
-    if applied and lens:
-        reading.profile_lens = lens
-        reading.profile_lens_applied = True
-        reading.today_suggestion = today
-        reading.next_step = today
-        reading.actions_today = [today]
-        # Do NOT paste profile into insight_attention (canon §1).
-
     reading.__dict__["_engine_meta"] = {
-        "synthesis_mode": engine.SYNTHESIS_MODE_OK,
-        "synthesis_status": engine.STATUS_OK,
+        "synthesis_mode": mode,
+        "synthesis_status": status,
         "unresolved_cards": [],
         "choice_story": choice_story,
+        "symbols_overview": interp.get("symbols_overview") or "",
+        "context_pack_card_ids": [c.get("card_id") for c in pack.get("cards") or []],
     }
     return reading

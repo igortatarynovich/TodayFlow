@@ -997,7 +997,7 @@ Ordered work (aligns with canon §7):
 
 ## 6) Current Priorities (Execution Order)
 
-> **Активный фокус (2026-07-25):** **Tarot Interpretation Engine v1** (ship) + **Character Engine schema v0.2**. Tarot: [TAROT_INTERPRETATION_ENGINE_V1](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md) — блок «Аркан», choice A/B, без Profile-paste. Character: JSON Schema + ID stability ([CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0](audits/CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md)); next Stage 0–1 builders behind flag.
+> **Активный фокус (2026-07-25):** **Tarot Interpretation Engine v1.1** (Context Pack → LLM → UI) + Character Engine schema v0.2. Tarot: [TAROT_INTERPRETATION_ENGINE_V1](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md). Character: [CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0](audits/CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md).
 
 ### 🔴 Phase 3 — Screen Block Definition (единственный приоритет)
 
@@ -1090,7 +1090,8 @@ Historical note:
 - 2026-07-08 | Web product UI | calendar / profile-summary / subscriptions / discover pattern → ProductPageScreen | IN PROGRESS | `/calendar`, `/profile-summary`, `/subscriptions`, `/discover/pattern/[axis_id]` — orbit-page и hero images убраны; v2 header + pl.panel + legacyHost.
 - 2026-07-08 | Web product UI | challenges / reports / help / tarot cards → ProductPageScreen | IN PROGRESS | `/challenges`, `/challenges/[id]`, `/reports/full`, `/reports/thematic`, `/reports/thematic/[theme]`, `/help`, `/help/*`, `/tarot/cards/[slug]` — orbit-page и hero images убраны; metadata help → layout.tsx; inner forms/viewer в legacyHost.
 - 2026-07-07 | Web product UI | Today dashboard v2 aligned to Profile reference | IN PROGRESS | Today dashboard на `productPageLayout` + `productV2Surface` tokens; wide canvas `mainWide`; cards/type/spacing match profile v2.
-- 2026-07-25 | Tarot | **Interpretation Engine v1** | **DONE (web+BE)** | Canon [TAROT_INTERPRETATION_ENGINE_V1](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md); full-deck resolve 0–77; ban «Аркан»; `unresolved_cards` blocks narrative; choice A/B compare for `guidance_choice_two`; Profile soft-tint only (no paste); FE result collapses to вывод/сравнение/напряжение/шаг + contextual bridge. §6.5 updated. iOS/Android parity later.
+- 2026-07-25 | Tarot | **Interpretation Engine v1.1 LLM author** | **DONE (web+BE)** | Architecture: Context Pack → LLM → validation → UI. Templates demoted to pack facts / thin fallback. Canon [TAROT_INTERPRETATION_ENGINE_V1](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md). UI: symbols / question story / answer / next step.
+- 2026-07-25 | Tarot | **Interpretation Engine v1** | **SUPERSEDED by v1.1** | Full-deck resolve; ban «Аркан»; unresolved gate; first template path replaced by LLM author.
 - 2026-07-21 | Today / Story | PR-3 day_story_v1 explainable slice | **IN PROGRESS** | Backend trace+gates; FE domain honesty; soft why from claims; strengthen from practice_recommendation only. [PR3_TODAY_PRODUCTION_SURFACE.md](./archive/PR3_TODAY_PRODUCTION_SURFACE.md)
 - 2026-07-21 | Web product UI | PR-3 Today Production Surface | **IN PROGRESS** | Composition = single reading line + optional soft why + optional one strengthen tool. Block gate: why / 10–20s / action.
 - 2026-07-21 | Profile | PR-4 Profile Canon (slice 4.1) | **ACCEPTED / CLOSED** | Who-you-are surface; umbrella applied; day/maps out; natal stays on Profile as source (person first). Next: [audits/PROFILE_AS_SOURCE_CONSUMPTION_AUDIT.md](./audits/PROFILE_AS_SOURCE_CONSUMPTION_AUDIT.md). [PR4_PROFILE_CANON.md](./archive/PR4_PROFILE_CANON.md)

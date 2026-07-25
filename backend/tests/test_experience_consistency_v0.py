@@ -99,7 +99,7 @@ def test_allowlist_enforced_no_extra_contract_fields():
             assert key in allow, f"{exp} slice leaked {key}"
 
 
-def test_tarot_synthesis_uses_experience_slice():
+def test_tarot_synthesis_uses_experience_slice(monkeypatch):
     snap = _rich_snapshot()
     tarot_slice = assemble_experience_slice(snap, experience_id="tarot")
     spread = api_models.TarotSpreadResult(
@@ -120,7 +120,30 @@ def test_tarot_synthesis_uses_experience_slice():
             )
         ],
     )
-    reading_with, _ = compose_tarot_answer_v1(
+
+    def _llm(pack, **_k):
+        profile = pack.get("profile_relevant") or {}
+        has_profile = bool(profile)
+        return {
+            "symbols_overview": "Шут здесь про новый шаг и эксперимент без полной гарантии исхода.",
+            "question_story": (
+                "В контексте склонности решать через сверку с телом картина проявляется мягче."
+                if has_profile
+                else "Карта отвечает на вопрос через тему начала."
+            ),
+            "direct_answer": "Важно увидеть, где ты уже готов к маленькому шагу.",
+            "next_step": (
+                "Сверься с телесным откликом и сделай один маленький шаг."
+                if has_profile
+                else "Сделай один маленький шаг сегодня."
+            ),
+        }
+
+    monkeypatch.setattr(
+        "todayflow_backend.services.tarot_interpretation_llm_v1.call_tarot_interpretation_llm_v1",
+        _llm,
+    )
+    reading_with, answer_with = compose_tarot_answer_v1(
         spread,
         question="Что важно увидеть?",
         experience_slice=tarot_slice,
@@ -133,7 +156,7 @@ def test_tarot_synthesis_uses_experience_slice():
     assert reading_with.profile_lens_applied is True
     assert reading_with.profile_lens == tarot_slice["decision_style"]
     assert reading_without.profile_lens_applied is False
-    # Soft tint on next step — never paste profile paragraph into attention.
     assert "Учитывая твой стиль решений" not in (reading_with.insight_attention or "")
     assert reading_with.today_suggestion != reading_without.today_suggestion
-    assert "определённости" in (reading_with.today_suggestion or "").lower() or reading_with.profile_lens_applied
+    assert answer_with["synthesis_mode"] == "tarot_llm_v1"
+    assert answer_with.get("symbols_overview")
