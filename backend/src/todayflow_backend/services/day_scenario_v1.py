@@ -1,11 +1,12 @@
 """day_scenario_v1 — central day dramaturgy contract (Phase B engine).
 
-Source of Truth (target):
+Source of Truth (runtime B5):
   facts → interpretive chorus → conflict → scenes → props → UI projections
 
 B1: foundation, chorus, conflict, scenes.
 B2: props-from-scenes (color/avoid/goals/affirm/humor) — catalog knowledge only.
-B3–B4: wire/UI switch (`runtime_sot` still false here).
+B3–B4: wire projection + FE preference.
+B5: ``runtime_sot=True`` — exclusive meaning SoT; legacy slots are projections only.
 
 Canon: docs/DAY_SCENARIO_V1.md
 """
@@ -16,7 +17,7 @@ import re
 from typing import Any
 
 DAY_SCENARIO_V1_CONTRACT = "day_scenario_v1"
-DAY_SCENARIO_V1_VERSION = "day-scenario-v1.1-b2-props"
+DAY_SCENARIO_V1_VERSION = "day-scenario-v1.2-b5-runtime-sot"
 
 # Product spheres (Act V). Not all appear every day.
 PRODUCT_SPHERE_IDS: tuple[str, ...] = (
@@ -1036,7 +1037,7 @@ def build_day_scenario_v1(
     celestial_events: dict[str, Any] | None = None,
     max_scenes: int = 4,
 ) -> dict[str, Any]:
-    """Assemble day_scenario_v1 spine + B2 props. Does not switch wire/UI."""
+    """Assemble day_scenario_v1 spine + props. Exclusive meaning SoT (B5)."""
     interp = _as_dict(interpretation)
     foundation = build_scenario_foundation_v1(
         interpretation=interp,
@@ -1062,18 +1063,20 @@ def build_day_scenario_v1(
         max_scenes=max_scenes,
     )
     props = build_scenario_props_v1(conflict=conflict, scenes=scenes, chorus=chorus)
+    ready = bool(scenes) and bool(conflict.get("short_name"))
     return {
         "contract_version": DAY_SCENARIO_V1_CONTRACT,
         "version": DAY_SCENARIO_V1_VERSION,
-        "runtime_sot": False,  # wire/UI switch is B3–B4
+        "runtime_sot": True,
+        "ready": ready,
         "foundation": foundation,
         "chorus": chorus,
         "conflict": conflict,
         "scenes": scenes,
         "props": props,
         "projections": {
-            "status": "deferred_to_b3",
-            "note": "Map to today_contract / day_story slots in PR B3.",
+            "status": "day_scenario_project_v1.b5",
+            "note": "Legacy day_story slots are projections only; not meaning inputs.",
         },
     }
 

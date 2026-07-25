@@ -1,17 +1,15 @@
-"""Project day_scenario_v1 → day_story / today_contract slots (Phase B3).
+"""Project day_scenario_v1 → day_story / today_contract slots (Phase B5 exclusive SoT).
 
-Public contract shape stays today_contract_v1 + day_story nest.
-Meaning authority for projected fields: day_scenario (when present & valid).
+Meaning authority: day_scenario only (when scenes valid).
+Legacy expect/trap/do/avoid/domains/LLM prose are projections or discarded —
+they never remain as parallel meaning SoT.
 
-Legacy paths that no longer set meaning after projection:
-- celestial date-preset color as user recommendation (seed only)
-- empty facts-only expect/trap when scenario scenes exist
-- formula bank (still QA-only; never projected)
+Modes:
+- scenario ready → interpretation_status=ok; all meaning slots overwritten from scenario
+- scenario not ready (no/invalid scenes) → unavailable; strip editorial meaning;
+  keep facts + scenario meta + honest message
 
-Missing scenes: do not invent editorial slots; keep unavailable if already;
-attach scenario meta with scenes=[].
-
-Canon: docs/DAY_SCENARIO_V1.md · docs/audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md
+Canon: docs/DAY_SCENARIO_V1.md · docs/audits/DAY_SCENARIO_RUNTIME_SOT_B5.md
 """
 
 from __future__ import annotations
@@ -21,6 +19,11 @@ from typing import Any
 from todayflow_backend.services.day_scenario_v1 import (
     PRODUCT_SPHERE_IDS,
     validate_day_scenario_v1,
+)
+
+_UNAVAILABLE_RU = (
+    "Мы не смогли подготовить персональную интерпретацию дня. "
+    "Попробуйте обновить экран через несколько минут."
 )
 
 # Product sphere → wire DomainLens id (Model B)
@@ -38,6 +41,8 @@ _SPHERE_TO_WIRE: dict[str, str] = {
 
 _WIRE_DOMAIN_IDS = ("relationships", "money_work", "family")
 
+PROJECTION_VERSION = "day_scenario_project_v1.b5"
+
 PROJECTION_MAP = {
     "expect": "conflict + primary scene opportunity/what_happens",
     "trap": "primary scene.trap",
@@ -45,14 +50,14 @@ PROJECTION_MAP = {
     "avoid": "primary scene.do_not",
     "primary_action": "same as do[0]",
     "today_move": "same as do[0]",
-    "domains.*": "scenes grouped by wire lens",
+    "domains.*": "scenes grouped by wire lens (overwrite)",
     "talisman.color": "props.color.name",
     "talisman.note": "props.color.link_to_conflict (+ avoid hint)",
     "practice_recommendation": "props.affirmations[0] as kind=affirmation",
     "day_thesis / primary_conflict": "conflict.thesis / short_name",
     "events_lead": "foundation.ranked_drivers fact_ru",
     "interpretive_chorus": "chorus voices (card/number/astro/natal)",
-    "day_scenario": "full internal nest (runtime_sot flag)",
+    "day_scenario": "full internal nest (runtime_sot exclusive)",
 }
 
 LEGACY_NON_SOT = (
@@ -60,6 +65,9 @@ LEGACY_NON_SOT = (
     "date_preset color selection as meaning SoT",
     "formula_bank runtime prose",
     "independent tarot/numerology forecast modules on Today",
+    "LLM day_story expect/trap/do/avoid as parallel SoT",
+    "domains editorial prose as scene SoT",
+    "llm_with_scenario_overlay hybrid mode",
 )
 
 
@@ -88,18 +96,47 @@ def _primary_scene(scenes: list[Any]) -> dict[str, Any] | None:
     return None
 
 
+def _origin_conflict_id(conflict: dict[str, Any]) -> str:
+    label = str(conflict.get("short_name") or "").strip()
+    if label:
+        return f"conflict:{label}"
+    drivers = _as_list(conflict.get("driver_ids"))
+    if drivers:
+        return f"conflict:drivers:{'+'.join(str(d) for d in drivers[:3])}"
+    return "conflict:unknown"
+
+
+def _field_provenance(
+    *,
+    origin_scene_id: str | None,
+    origin_conflict_id: str,
+    evidence_refs: list[Any] | None = None,
+    source_kind: str = "day_scenario_v1",
+) -> dict[str, Any]:
+    return {
+        "source_kind": source_kind,
+        "origin_scene_id": origin_scene_id,
+        "origin_conflict_id": origin_conflict_id,
+        "evidence_refs": list(evidence_refs or [])[:8],
+        "projection_version": PROJECTION_VERSION,
+    }
+
+
 def _chorus_public(chorus: dict[str, Any]) -> dict[str, Any]:
     """Slim chorus for day_story public nest — explanation layer, not second plot."""
     astro = _as_list(chorus.get("astrology"))
     natal = _as_list(chorus.get("natal"))
     card = _as_dict(chorus.get("day_card"))
     number = _as_dict(chorus.get("day_number"))
+    astro0 = _as_dict(astro[0]) if astro else {}
+    natal0 = _as_dict(natal[0]) if natal else {}
     return {
-        "astrology_lead": _clip((astro[0] or {}).get("named_factor") if astro else "", 220),
-        "astrology_meaning": _clip((astro[0] or {}).get("human_meaning") if astro else "", 280),
+        "astrology_lead": _clip(astro0.get("named_factor"), 220),
+        "astrology_meaning": _clip(astro0.get("human_meaning"), 280),
         "day_card": {
             "named": card.get("named_factor"),
             "role": card.get("archetype_role") or card.get("link_to_conflict"),
+            "evidence_refs": list(card.get("evidence_refs") or card.get("evidence_references") or [])[:4],
         }
         if card
         else None,
@@ -108,16 +145,27 @@ def _chorus_public(chorus: dict[str, Any]) -> dict[str, Any]:
             "tempo": number.get("tempo"),
             "style": number.get("style"),
             "for_conflict": number.get("link_to_conflict") or number.get("human_meaning"),
+            "evidence_refs": list(
+                number.get("evidence_refs") or number.get("evidence_references") or []
+            )[:4],
         }
         if number
         else None,
-        "natal_lead": _clip((natal[0] or {}).get("named_factor") if natal else "", 220),
+        "natal_lead": _clip(natal0.get("named_factor"), 220),
         "dialogue_rule": chorus.get("dialogue_rule"),
         "parallel_forecast_forbidden": True,
+        "evidence_refs": {
+            "astrology": list(astro0.get("evidence_refs") or astro0.get("event_ids") or [])[:4],
+            "natal": list(natal0.get("evidence_refs") or natal0.get("activation_ids") or [])[:4],
+        },
     }
 
 
-def _domains_from_scenes(scenes: list[Any]) -> dict[str, dict[str, Any]]:
+def _domains_from_scenes(
+    scenes: list[Any],
+    *,
+    origin_conflict_id: str,
+) -> dict[str, dict[str, Any]]:
     buckets: dict[str, list[dict[str, Any]]] = {d: [] for d in _WIRE_DOMAIN_IDS}
     for sc in scenes:
         if not isinstance(sc, dict):
@@ -132,72 +180,149 @@ def _domains_from_scenes(scenes: list[Any]) -> dict[str, dict[str, Any]]:
         if not rows:
             continue
         primary = rows[0]
-        # Prefer support opportunity / risk from first matching scene
+        origin_scene = primary.get("scene_id")
         out[did] = {
             "status": _clip(primary.get("what_happens"), 200),
             "opportunity": _clip(primary.get("opportunity"), 240),
             "risk": _clip(primary.get("trap"), 240),
             "action": _clip(primary.get("recommended_action"), 200),
             "evidence_status": "present",
-            "origin_scene_id": primary.get("scene_id"),
+            "origin_scene_id": origin_scene,
+            "provenance": _field_provenance(
+                origin_scene_id=str(origin_scene) if origin_scene else None,
+                origin_conflict_id=origin_conflict_id,
+                evidence_refs=_as_list(primary.get("evidence_references")),
+            ),
         }
     return out
+
+
+def _strip_meaning_slots(base: dict[str, Any]) -> None:
+    """Remove user-facing editorial so unavailable cannot leak legacy story."""
+    base["expect"] = ""
+    base["trap"] = ""
+    base["direction"] = ""
+    base["advantage"] = ""
+    base["abstain"] = ""
+    base["story"] = ""
+    base["do"] = []
+    base["avoid"] = []
+    base["today_move"] = ""
+    base["primary_action"] = ""
+    base["development_point"] = ""
+    base["vibe_closing"] = ""
+    base["vibe_strokes"] = []
+    base["supports_story"] = ""
+    base["evening_closure"] = ""
+    base["practice_recommendation"] = None
+    base.pop("talisman", None)
+    # Domains: keep structure empty — contract maps unavailable → empty lenses
+    base["domains"] = {}
 
 
 def project_day_scenario_onto_day_story_v1(
     story: dict[str, Any] | None,
     scenario: dict[str, Any] | None,
     *,
-    fill_empty_editorial: bool = True,
+    exclusive_runtime_sot: bool = True,
 ) -> dict[str, Any]:
     """Merge scenario meaning into day_story slots. Returns new story dict.
 
-    - Always attaches ``day_scenario`` + ``interpretive_chorus`` when scenario validates.
-    - Always projects color / affirmation / thesis / events_lead when props/scenes exist.
-    - Fills empty expect/trap/do/avoid from scenes when ``fill_empty_editorial``
-      (including recovering from ``interpretation_status=unavailable``).
-    - Missing scenes: no invented editorial; unavailable preserved if already set.
+    B5: with valid scenes, overwrite all meaning slots from scenario.
+    Legacy LLM/catalog prose is never kept as parallel SoT.
+    ``exclusive_runtime_sot`` must stay True in runtime (parameter retained for
+    call-site clarity / Architecture impact).
     """
+    if not exclusive_runtime_sot:
+        raise ValueError("exclusive_runtime_sot=False is retired (B5); scenario is sole meaning SoT")
+
     base = dict(story) if isinstance(story, dict) else {}
     scen = scenario if isinstance(scenario, dict) else None
     if scen is None:
+        # No scenario → cannot claim interpretation
+        _strip_meaning_slots(base)
+        base["interpretation_status"] = "unavailable"
+        base["interpretation_unavailable_message"] = _UNAVAILABLE_RU
+        editorial = dict(_as_dict(base.get("editorial")))
+        editorial["runtime_source"] = "facts_only_unavailable"
+        editorial["projection_version"] = PROJECTION_VERSION
+        editorial["legacy_non_sot"] = list(LEGACY_NON_SOT)
+        base["editorial"] = editorial
+        base.pop("day_scenario", None)
+        base.pop("interpretive_chorus", None)
         return base
 
     errors = validate_day_scenario_v1(scen)
-    # Allow projection even with soft errors except total break
-    hard = [e for e in errors if e in {"scenario_not_dict", "bad_contract_version", "scenes_empty", "conflict_missing_short_name"}]
+    hard = [
+        e
+        for e in errors
+        if e
+        in {
+            "scenario_not_dict",
+            "bad_contract_version",
+            "scenes_empty",
+            "conflict_missing_short_name",
+        }
+    ]
     scenes = _as_list(scen.get("scenes"))
     conflict = _as_dict(scen.get("conflict"))
     props = _as_dict(scen.get("props"))
     foundation = _as_dict(scen.get("foundation"))
     chorus = _as_dict(scen.get("chorus"))
     primary = _primary_scene(scenes)
+    origin_conflict = _origin_conflict_id(conflict)
+    driver_ids = list(conflict.get("driver_ids") or [])[:5]
 
     editorial = dict(_as_dict(base.get("editorial")))
     editorial["projection_map"] = PROJECTION_MAP
     editorial["legacy_non_sot"] = list(LEGACY_NON_SOT)
     editorial["scenario_version"] = scen.get("version")
     editorial["scenario_validate_errors"] = errors
+    editorial["projection_version"] = PROJECTION_VERSION
+    editorial["exclusive_runtime_sot"] = True
 
-    # Always attach full scenario for meta / future UI (B4)
     base["day_scenario"] = {
         **scen,
-        "runtime_sot": True,  # meaning authority for projected fields on this story
-        "wire_projection": "day_scenario_project_v1",
+        "runtime_sot": True,
+        "wire_projection": PROJECTION_VERSION,
     }
     base["interpretive_chorus"] = _chorus_public(chorus)
 
     if hard or not primary:
+        _strip_meaning_slots(base)
+        # Keep factual lead from foundation drivers only (not editorial story)
+        facts = [
+            str(d.get("fact_ru") or "").strip()
+            for d in _as_list(foundation.get("ranked_drivers"))
+            if isinstance(d, dict) and d.get("fact_ru")
+        ]
+        if facts:
+            base["events_lead"] = _clip(" ".join(facts[:3]), 480)
+        label = str(conflict.get("short_name") or "").strip()
+        if label:
+            base["theme"] = label
+            base["headline_anchor"] = label
+            base["primary_conflict"] = label
+            base["global_period"] = label
+        base["interpretation_status"] = "unavailable"
+        base["interpretation_unavailable_message"] = _UNAVAILABLE_RU
         editorial["runtime_source"] = "scenario_meta_only"
         editorial["projection_note"] = (
-            "Scenario attached but scenes missing/invalid — editorial slots not invented."
+            "Scenario attached but scenes missing/invalid — meaning slots stripped; "
+            "facts-only unavailable shell."
         )
         base["editorial"] = editorial
+        if isinstance(base.get("day_scenario"), dict):
+            base["day_scenario"]["runtime_sot"] = False
+            base["day_scenario"]["ready"] = False
         return base
 
-    # Thesis / conflict label
+    # --- Exclusive overwrite path ---
     thesis = _as_dict(conflict.get("thesis"))
     label = str(conflict.get("short_name") or thesis.get("label_ru") or "").strip()
+    scene_id = str(primary.get("scene_id") or "")
+    scene_evidence = _as_list(primary.get("evidence_references")) or driver_ids
+
     if label:
         base["theme"] = label
         base["headline_anchor"] = label
@@ -212,7 +337,6 @@ def project_day_scenario_onto_day_story_v1(
             "composition_ids": list(thesis.get("composition_ids") or [])[:3],
         }
 
-    # events_lead from drivers
     facts = [
         str(d.get("fact_ru") or "").strip()
         for d in _as_list(foundation.get("ranked_drivers"))
@@ -221,26 +345,14 @@ def project_day_scenario_onto_day_story_v1(
     if facts:
         base["events_lead"] = _clip(" ".join(facts[:3]), 480)
 
-    # Domains from scenes (fill empty lenses; do not wipe rich LLM prose if present)
-    scene_domains = _domains_from_scenes(scenes)
-    domains = dict(_as_dict(base.get("domains")))
-    for did, lens in scene_domains.items():
-        existing = _as_dict(domains.get(did))
-        has_prose = bool(
-            str(existing.get("opportunity") or "").strip()
-            or str(existing.get("risk") or "").strip()
-            or str(existing.get("action") or "").strip()
-        )
-        if not has_prose:
-            domains[did] = lens
-    base["domains"] = domains
+    # Domains: full overwrite from scenes (empty lenses for uncovered wire ids)
+    scene_domains = _domains_from_scenes(scenes, origin_conflict_id=origin_conflict)
+    base["domains"] = scene_domains
 
-    # Color / avoid from props (scenario SoT — overrides catalog seed on talisman)
+    # Color / avoid from props only
     color = _as_dict(props.get("color"))
     avoid = _as_dict(props.get("avoid_color"))
-    talisman = dict(_as_dict(base.get("talisman")))
     if color.get("name"):
-        talisman["color"] = str(color["name"])
         note_parts = [
             _clip(color.get("link_to_conflict"), 160),
             _clip(color.get("expected_effect_today"), 120),
@@ -249,13 +361,21 @@ def project_day_scenario_onto_day_story_v1(
             note_parts.append(
                 _clip(f"Избегать: {avoid.get('name')} — {avoid.get('why')}", 160)
             )
-        talisman["note"] = _clip(" ".join(p for p in note_parts if p), 280)
-        talisman["origin_scene_id"] = color.get("origin_scene_id")
-        talisman["avoid_color"] = avoid.get("name")
-        talisman["avoid_why"] = avoid.get("why")
-        base["talisman"] = talisman
+        base["talisman"] = {
+            "color": str(color["name"]),
+            "note": _clip(" ".join(p for p in note_parts if p), 280),
+            "origin_scene_id": color.get("origin_scene_id"),
+            "avoid_color": avoid.get("name"),
+            "avoid_why": avoid.get("why"),
+            "provenance": _field_provenance(
+                origin_scene_id=str(color.get("origin_scene_id") or scene_id or None),
+                origin_conflict_id=origin_conflict,
+                evidence_refs=scene_evidence,
+            ),
+        }
+    else:
+        base.pop("talisman", None)
 
-    # Affirmation → practice_recommendation
     affirms = _as_list(props.get("affirmations"))
     if affirms and isinstance(affirms[0], dict) and affirms[0].get("text"):
         a0 = affirms[0]
@@ -264,110 +384,121 @@ def project_day_scenario_onto_day_story_v1(
             "text": _clip(a0.get("text"), 240),
             "reason": _clip(a0.get("compensates_trap") or a0.get("helps_action"), 200),
             "origin_scene_id": a0.get("origin_scene_id"),
+            "provenance": _field_provenance(
+                origin_scene_id=str(a0.get("origin_scene_id") or None),
+                origin_conflict_id=origin_conflict,
+                evidence_refs=scene_evidence,
+            ),
         }
+    else:
+        base["practice_recommendation"] = None
 
-    # Goals → development / optional today_move seed
     goals = _as_list(props.get("goals"))
     if goals and isinstance(goals[0], dict) and goals[0].get("text"):
-        if not str(base.get("development_point") or "").strip():
-            base["development_point"] = _clip(goals[0].get("text"), 240)
-
-    unavailable = str(base.get("interpretation_status") or "").strip() == "unavailable"
-    expect_empty = not str(base.get("expect") or base.get("direction") or "").strip()
-    trap_empty = not str(base.get("trap") or base.get("abstain") or "").strip()
-    do_empty = not _as_list(base.get("do"))
-
-    filled_from_scenario = False
-    if fill_empty_editorial and (unavailable or expect_empty or trap_empty or do_empty):
-        if expect_empty or unavailable:
-            base["expect"] = _clip(
-                f"{primary.get('what_happens')} {primary.get('opportunity')}".strip(),
-                400,
-            )
-            filled_from_scenario = True
-        if trap_empty or unavailable:
-            base["trap"] = _clip(primary.get("trap"), 320)
-            filled_from_scenario = True
-        if do_empty or unavailable:
-            do_text = ""
-            if goals and isinstance(goals[0], dict):
-                do_text = str(goals[0].get("text") or "")
-            if not do_text:
-                do_text = str(primary.get("recommended_action") or "")
-            do_list = [_clip(do_text, 240)] if do_text else []
-            # Secondary do from second scene / goal so validate_day_story (>=2) passes
-            if len(goals) > 1 and isinstance(goals[1], dict) and goals[1].get("text"):
-                do_list.append(_clip(goals[1].get("text"), 240))
-            elif len(scenes) > 1 and isinstance(scenes[1], dict):
-                alt = _clip(scenes[1].get("recommended_action"), 240)
-                if alt and alt not in do_list:
-                    do_list.append(alt)
-            if len(do_list) == 1:
-                force_a = str(_as_dict(conflict.get("opposing_forces")).get("a") or "автопилот")
-                do_list.append(
-                    _clip(f"Заметить момент «{force_a}» и не усилить его.", 240)
-                )
-            base["do"] = do_list
-            base["today_move"] = _clip(do_list[0] if do_list else do_text, 200)
-            base["primary_action"] = _clip(do_list[0] if do_list else do_text, 200)
-            filled_from_scenario = True
-        if not _as_list(base.get("avoid")):
-            avoid_list = []
-            avoid_text = _clip(primary.get("do_not"), 240)
-            if avoid_text:
-                avoid_list.append(avoid_text)
-            force_a = str(_as_dict(conflict.get("opposing_forces")).get("a") or "автопилот")
-            avoid_list.append(
-                _clip(f"Не усиливать стратегию «{force_a}» ради ложной гармонии.", 240)
-            )
-            base["avoid"] = avoid_list[:3]
-            filled_from_scenario = True
-        if not str(base.get("direction") or "").strip():
-            base["direction"] = _clip(base.get("expect") or primary.get("opportunity"), 320)
-        if not str(base.get("advantage") or "").strip():
-            base["advantage"] = _clip(primary.get("opportunity"), 280)
-        if not str(base.get("abstain") or "").strip():
-            base["abstain"] = _clip(base.get("trap") or primary.get("trap"), 280)
-        if not str(base.get("story") or "").strip():
-            base["story"] = _clip(primary.get("domestic_example") or primary.get("what_happens"), 400)
-            filled_from_scenario = True
-        if not str(base.get("evening_closure") or "").strip():
-            base["evening_closure"] = _clip(
-                f"Если удержали «{label}» — к вечеру яснее, где выбрали осознанно.",
-                280,
-            )
-        if not str(base.get("global_period") or "").strip():
-            base["global_period"] = label
-
-        if filled_from_scenario and (
-            str(base.get("expect") or "").strip() or str(base.get("trap") or "").strip()
-        ):
-            base["interpretation_status"] = "ok"
-            base.pop("interpretation_unavailable_message", None)
-            editorial["runtime_source"] = "day_scenario_v1"
-            editorial["recovered_from_unavailable"] = unavailable
-        elif unavailable:
-            editorial["runtime_source"] = "unavailable_with_scenario_meta"
+        base["development_point"] = _clip(goals[0].get("text"), 240)
     else:
-        editorial["runtime_source"] = editorial.get("runtime_source") or "llm_with_scenario_overlay"
-        editorial["scenario_overlay"] = ["talisman", "practice_recommendation", "domains_fill", "thesis", "chorus"]
+        base["development_point"] = _clip(primary.get("recommended_action"), 240)
 
-    # Strong/weak as editorial hint for FE (B4)
+    # Editorial slots — always from scenario
+    base["expect"] = _clip(
+        f"{primary.get('what_happens')} {primary.get('opportunity')}".strip(),
+        400,
+    )
+    base["trap"] = _clip(primary.get("trap"), 320)
+    base["direction"] = _clip(primary.get("opportunity") or base["expect"], 320)
+    base["advantage"] = _clip(primary.get("opportunity"), 280)
+    base["abstain"] = _clip(primary.get("trap"), 280)
+    base["story"] = _clip(
+        primary.get("domestic_example") or primary.get("what_happens"),
+        400,
+    )
+
+    do_text = ""
+    if goals and isinstance(goals[0], dict):
+        do_text = str(goals[0].get("text") or "")
+    if not do_text:
+        do_text = str(primary.get("recommended_action") or "")
+    do_list = [_clip(do_text, 240)] if do_text else []
+    if len(goals) > 1 and isinstance(goals[1], dict) and goals[1].get("text"):
+        do_list.append(_clip(goals[1].get("text"), 240))
+    elif len(scenes) > 1 and isinstance(scenes[1], dict):
+        alt = _clip(scenes[1].get("recommended_action"), 240)
+        if alt and alt not in do_list:
+            do_list.append(alt)
+    if len(do_list) == 1:
+        force_a = str(_as_dict(conflict.get("opposing_forces")).get("a") or "автопилот")
+        do_list.append(
+            _clip(f"Заметить момент «{force_a}» и не усилить его.", 240)
+        )
+    base["do"] = do_list
+    base["today_move"] = _clip(do_list[0] if do_list else do_text, 200)
+    base["primary_action"] = _clip(do_list[0] if do_list else do_text, 200)
+
+    avoid_list: list[str] = []
+    avoid_text = _clip(primary.get("do_not"), 240)
+    if avoid_text:
+        avoid_list.append(avoid_text)
+    force_a = str(_as_dict(conflict.get("opposing_forces")).get("a") or "автопилот")
+    avoid_list.append(
+        _clip(f"Не усиливать стратегию «{force_a}» ради ложной гармонии.", 240)
+    )
+    base["avoid"] = avoid_list[:3]
+
+    base["evening_closure"] = _clip(
+        f"Если удержали «{label}» — к вечеру яснее, где выбрали осознанно.",
+        280,
+    )
+
+    # Provenance for primary slots (editorial nest for capture packs)
+    editorial["slot_provenance"] = {
+        "expect": _field_provenance(
+            origin_scene_id=scene_id or None,
+            origin_conflict_id=origin_conflict,
+            evidence_refs=scene_evidence,
+        ),
+        "trap": _field_provenance(
+            origin_scene_id=scene_id or None,
+            origin_conflict_id=origin_conflict,
+            evidence_refs=scene_evidence,
+        ),
+        "do": _field_provenance(
+            origin_scene_id=str(
+                (goals[0].get("origin_scene_id") if goals and isinstance(goals[0], dict) else None)
+                or scene_id
+                or None
+            ),
+            origin_conflict_id=origin_conflict,
+            evidence_refs=scene_evidence,
+        ),
+        "avoid": _field_provenance(
+            origin_scene_id=scene_id or None,
+            origin_conflict_id=origin_conflict,
+            evidence_refs=scene_evidence,
+        ),
+        "talisman": _field_provenance(
+            origin_scene_id=str(color.get("origin_scene_id") or scene_id or None),
+            origin_conflict_id=origin_conflict,
+            evidence_refs=scene_evidence,
+        ),
+    }
     editorial["strong_spheres"] = props.get("strong_spheres") or []
     editorial["weak_spheres"] = props.get("weak_spheres") or []
     editorial["goals"] = goals
     if props.get("humor"):
         editorial["humor"] = props.get("humor")
+    editorial["runtime_source"] = "day_scenario_v1"
+    editorial.pop("scenario_overlay", None)
+    editorial.pop("recovered_from_unavailable", None)
 
+    base["interpretation_status"] = "ok"
+    base.pop("interpretation_unavailable_message", None)
     base["editorial"] = editorial
 
-    # Mark scenario as SoT for projected fields on this payload
     if isinstance(base.get("day_scenario"), dict):
         base["day_scenario"]["runtime_sot"] = True
+        base["day_scenario"]["ready"] = True
 
-    # Ensure product sphere ids referenced stay documented
     _ = PRODUCT_SPHERE_IDS
-
     return base
 
 

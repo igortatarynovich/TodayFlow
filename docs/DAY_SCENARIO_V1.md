@@ -1,10 +1,11 @@
 # DAY_SCENARIO_V1 — драматургический каркас дня
 
-**Status:** CANON DRAFT — **B1–B4 landed** (engine + props + wire + FE preference); full Today layout rewrite still open  
+**Status:** CANON DRAFT — **B1–B5 landed** (engine + props + wire + FE preference + **exclusive runtime SoT**); fuller scene UI still open  
 **Date:** 2026-07-25  
 **Engine:** `day_scenario_v1.py` · `day_color_catalog_v1.py` · `day_scenario_project_v1.py`  
 **Wire note:** [audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md](./audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md)  
 **UI note:** [audits/DAY_SCENARIO_UI_PREFERENCE_B4.md](./audits/DAY_SCENARIO_UI_PREFERENCE_B4.md)  
+**Runtime SoT:** [audits/DAY_SCENARIO_RUNTIME_SOT_B5.md](./audits/DAY_SCENARIO_RUNTIME_SOT_B5.md)  
 **Capture rubric:** [audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md](./audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md)  
 **Related:** [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) · [today-language/TODAY_LANGUAGE_V1.md](./today-language/TODAY_LANGUAGE_V1.md)
 
@@ -179,25 +180,26 @@ Date-preset color catalog **не** meaning SoT (может остаться seed
 2. Interpretive chorus (Уровень 2) — факторы с ролями, без второго сюжета  
 3. Scenario spine (prolog → **conflict** → consequences → scenes)  
 4. Props derived from scenes (**B2**)  
-5. Project to contract / UI (**B3–B4**): хор виден как объяснение, не как вкладки-конкуренты  
+5. Project to contract / UI (**B3–B5**): exclusive SoT; хор = объяснение, не вкладки-конкуренты  
 6. Value gate: reject orphan props; second conflict; card/number that invent a rival story; scene without conflict link  
 
-### B1–B4 shipped
+### B1–B5 shipped
 
-- `build_day_scenario_v1` → foundation · chorus · conflict · scenes · props
-- Wire: `project_day_scenario_onto_day_story_v1` in `_build_day_story_record` (deterministic; lifecycle unchanged)
+- `build_day_scenario_v1` → foundation · chorus · conflict · scenes · props (`runtime_sot=true`)
+- Wire: `project_day_scenario_onto_day_story_v1` **overwrites** meaning slots (not fill-empty hybrid)
 - Public additive nests: `day_story.day_scenario`, `day_story.interpretive_chorus`
-- Color on `talisman` from scenario props; catalog knowledge-only
-- Unavailable + scenes → recovered `ok` via scenario editorial
+- Color / avoid / goals / affirm / domains only from scenario props/scenes
+- Missing scenes → `unavailable` + stripped editorial (no legacy story leak)
 - **B4 FE:** prefer talisman/chorus/scenes in Today model (not full UI rewrite)
+- **B5:** exclusive runtime SoT; GET/refresh lifecycle unchanged
 
-Fallback: facts-only / unavailable — **не** formula-bank prose как user text.
+Fallback: facts-only / unavailable — **не** formula-bank / catalog why / LLM parallel prose.
 
 ---
 
 ## Architecture impact (Phase B — progressive)
 
-### B1–B3 (landed) — engine + props + wire projection
+### B1–B3 (landed) — engine + props + wire projection (historical)
 
 ```markdown
 ## Architecture impact
@@ -222,19 +224,24 @@ Fallback: facts-only / unavailable — **не** formula-bank prose как user t
 - **Backward compatible?** yes — missing nests keep prior FE paths
 ```
 
-### B3+ (when runtime switches)
+### B5 (landed) — exclusive runtime meaning SoT
 
 ```markdown
 ## Architecture impact
-- **SoT before:** day_thesis + day_story slots; color = celestial date preset + catalog;
-  tarot/numerology often parallel surfaces
-- **SoT after:** day_scenario (Level 1) + interpretive chorus (Level 2);
-  card/number explain one conflict; all props from scenes
-- **Public contract changed?** yes — scenario nest; chorus nest; color from scene
-- **Migration required?** yes
-- **Canon updated?** yes — this doc + contracts/coherence/language
-- **Backward compatible?** partial — legacy nests as projections of one story
+- **SoT before:** hybrid overlay — LLM expect/trap/do kept; domains LLM preserved; fill-empty only
+- **SoT after:** day_scenario_v1 sole meaning SoT when ready; legacy slots = projections;
+  missing scenario/scenes → unavailable + stripped meaning (facts_only / meta_only)
+- **Public contract changed?** semantics of meaning fields (always scenario when ok);
+  unavailable blanks talisman/practice on contract
+- **Migration required?** no today_contract version bump; caches re-projected on serve
+- **Canon updated?** yes — DAY_SCENARIO_V1 + DAY_SCENARIO_RUNTIME_SOT_B5
+- **Backward compatible?** field shapes yes; parallel LLM meaning no longer visible when scenario ready
 ```
+
+### Next — fuller scene UI (after B5)
+
+Compose Today around prolog → conflict → chorus → scenes → props-in-scene → evening vector.  
+**Does not** reintroduce hybrid meaning; SoT remains B5.
 
 ---
 

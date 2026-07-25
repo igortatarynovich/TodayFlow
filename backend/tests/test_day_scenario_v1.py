@@ -70,7 +70,7 @@ def test_scenario_builds_one_conflict_from_drivers_not_card_alone():
         ritual_context=ritual,
     )
     assert scenario["contract_version"] == DAY_SCENARIO_V1_CONTRACT
-    assert scenario["runtime_sot"] is False
+    assert scenario["runtime_sot"] is True
     assert validate_day_scenario_v1(scenario) == []
 
     conflict = scenario["conflict"]

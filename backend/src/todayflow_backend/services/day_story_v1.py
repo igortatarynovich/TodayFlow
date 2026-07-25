@@ -932,11 +932,11 @@ def day_story_to_today_contract_v1(
             else []
         ),
         "editorial": story.get("editorial") if isinstance(story.get("editorial"), dict) else None,
-        "talisman": story.get("talisman"),
-        "practice_recommendation": story.get("practice_recommendation"),
-        "symbolic_note": story.get("symbolic_note"),
-        "supports_story": story.get("supports_story") or "",
-        "evening_closure": story.get("evening_closure") or "",
+        "talisman": None if unavailable else story.get("talisman"),
+        "practice_recommendation": None if unavailable else story.get("practice_recommendation"),
+        "symbolic_note": "" if unavailable else story.get("symbolic_note"),
+        "supports_story": "" if unavailable else (story.get("supports_story") or ""),
+        "evening_closure": "" if unavailable else (story.get("evening_closure") or ""),
         "day_foundation": (
             (story.get("trace") or {}).get("day_foundation")
             if isinstance(story.get("trace"), dict)

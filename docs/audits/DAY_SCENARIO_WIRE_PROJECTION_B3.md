@@ -1,6 +1,6 @@
 # Day Scenario Wire Projection B3
 
-**Status:** LANDED (engine projection on wire; FE preference = B4)  
+**Status:** SUPERSEDED for meaning policy by [DAY_SCENARIO_RUNTIME_SOT_B5.md](./DAY_SCENARIO_RUNTIME_SOT_B5.md) (B3 fill-empty / keep-LLM retired)  
 **Date:** 2026-07-25  
 **Code:** `day_scenario_project_v1.py` · hooked in `day_story_wire_v1._build_day_story_record`  
 **Canon:** [DAY_SCENARIO_V1.md](../DAY_SCENARIO_V1.md)

@@ -329,35 +329,34 @@ def _build_day_story_record(
     if cached is not None:
         story, gen_id, _ = cached
         used_fallback = False
-        # B3: refresh scenario projection on cache hit if nest missing (no LLM).
-        if not isinstance(story.get("day_scenario"), dict):
-            try:
-                from todayflow_backend.services.day_scenario_project_v1 import (
-                    build_and_project_day_scenario_v1,
-                )
+        # B5: always re-project on cache hit so exclusive SoT overwrites stored LLM prose.
+        try:
+            from todayflow_backend.services.day_scenario_project_v1 import (
+                build_and_project_day_scenario_v1,
+            )
 
-                trace = story.get("trace") if isinstance(story.get("trace"), dict) else {}
-                domains_map = story.get("domains") if isinstance(story.get("domains"), dict) else {}
-                interp_cached = {
-                    "day_thesis": story.get("day_thesis"),
-                    "day_events_pack": trace.get("day_events_pack"),
-                    "day_foundation": story.get("day_foundation") or trace.get("day_foundation"),
-                    "day_personal": story.get("day_personal") or trace.get("day_personal"),
-                    "domains_present": trace.get("domains_present") or list(domains_map.keys()),
-                    "derived_claims": trace.get("derived_claims") or [],
-                    "evidence": trace.get("evidence") or [],
-                }
-                story = build_and_project_day_scenario_v1(
-                    story=story,
-                    interpretation=interp_cached,
-                    ritual_context=ritual_norm,
-                    celestial_events=ce or None,
-                    day_thesis=story.get("day_thesis")
-                    if isinstance(story.get("day_thesis"), dict)
-                    else day_thesis_layer,
-                )
-            except Exception:
-                logger.exception("day_scenario projection on cache hit failed")
+            trace = story.get("trace") if isinstance(story.get("trace"), dict) else {}
+            domains_map = story.get("domains") if isinstance(story.get("domains"), dict) else {}
+            interp_cached = {
+                "day_thesis": story.get("day_thesis"),
+                "day_events_pack": trace.get("day_events_pack"),
+                "day_foundation": story.get("day_foundation") or trace.get("day_foundation"),
+                "day_personal": story.get("day_personal") or trace.get("day_personal"),
+                "domains_present": trace.get("domains_present") or list(domains_map.keys()),
+                "derived_claims": trace.get("derived_claims") or [],
+                "evidence": trace.get("evidence") or [],
+            }
+            story = build_and_project_day_scenario_v1(
+                story=story,
+                interpretation=interp_cached,
+                ritual_context=ritual_norm,
+                celestial_events=ce or None,
+                day_thesis=story.get("day_thesis")
+                if isinstance(story.get("day_thesis"), dict)
+                else day_thesis_layer,
+            )
+        except Exception:
+            logger.exception("day_scenario exclusive projection on cache hit failed")
         if capture is not None:
             capture.record_lifecycle(cache_hit=True, used_fallback=False)
             try:
@@ -507,11 +506,11 @@ def _build_day_story_record(
                 day_thesis=day_thesis_layer,
             )
 
-        # Phase B3: project day_scenario onto day_story (color/chorus/empty editorial).
+        # Phase B5: exclusive scenario SoT projection (deterministic; no LLM).
         try:
             story = _project_scenario(story)
         except Exception:
-            logger.exception("day_scenario projection failed; keeping unprojected story")
+            logger.exception("day_scenario exclusive projection failed; keeping unprojected story")
 
         story_errors = validate_day_story_v1(story)
         if story_errors:
@@ -749,6 +748,34 @@ def build_day_story_v1_wire(
             raise ValueError("day_story_missing")
 
     assert story is not None
+    # B5: exclusive SoT re-project before contract (deterministic; lifecycle unchanged).
+    try:
+        from todayflow_backend.services.day_scenario_project_v1 import (
+            build_and_project_day_scenario_v1,
+        )
+
+        trace = story.get("trace") if isinstance(story.get("trace"), dict) else {}
+        domains_map = story.get("domains") if isinstance(story.get("domains"), dict) else {}
+        story = build_and_project_day_scenario_v1(
+            story=story,
+            interpretation={
+                "day_thesis": story.get("day_thesis"),
+                "day_events_pack": trace.get("day_events_pack"),
+                "day_foundation": story.get("day_foundation") or trace.get("day_foundation"),
+                "day_personal": story.get("day_personal") or trace.get("day_personal"),
+                "domains_present": trace.get("domains_present") or list(domains_map.keys()),
+                "derived_claims": trace.get("derived_claims") or [],
+                "evidence": trace.get("evidence") or [],
+            },
+            ritual_context=ritual_norm,
+            celestial_events=ce or None,
+            day_thesis=story.get("day_thesis")
+            if isinstance(story.get("day_thesis"), dict)
+            else None,
+        )
+    except Exception:
+        logger.exception("day_scenario exclusive projection on wire serve failed")
+
     progress = story_progress_meta(db, owner_key=owner_key, local_date=target_date)
     contract = day_story_to_today_contract_v1(
         story,
