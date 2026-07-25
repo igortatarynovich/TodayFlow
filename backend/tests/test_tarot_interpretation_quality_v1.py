@@ -39,6 +39,10 @@ def test_context_pack_has_rich_meaning_range_for_major_and_minor():
     )
     assert pack is not None
     assert pack["question_domain"] in {"work", "work_change", "decision"}
+    qo = pack["question_ontology"]
+    assert qo["question_type"] == "choice"
+    assert qo["domain"] == "work"
+    assert qo["must_show"] and qo["must_not_claim"]
     assert "decision_style" in pack["profile_relevant"]
     assert "identity_line" not in pack["profile_relevant"]
 

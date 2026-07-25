@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://todayflow.today/schemas/tarot_question_ontology_v1.schema.json",
+  "title": "Tarot Question Ontology v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "locale", "types"],
+  "properties": {
+    "contract_version": { "const": "tarot_question_ontology_v1" },
+    "locale": { "type": "string", "minLength": 2 },
+    "types": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": { "$ref": "#/$defs/type" }
+    }
+  },
+  "$defs": {
+    "type": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "question_type",
+        "central_task",
+        "direct_answer_means",
+        "must_show",
+        "allowed_specificity",
+        "must_not_claim",
+        "next_step_kind"
+      ],
+      "properties": {
+        "question_type": { "type": "string", "minLength": 2 },
+        "central_task": { "type": "string", "minLength": 8 },
+        "direct_answer_means": { "type": "string", "minLength": 8 },
+        "must_show": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": "string", "minLength": 3 }
+        },
+        "allowed_specificity": { "type": "string", "minLength": 8 },
+        "must_not_claim": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": "string", "minLength": 4 }
+        },
+        "next_step_kind": { "type": "string", "minLength": 8 }
+      }
+    }
+  }
+}

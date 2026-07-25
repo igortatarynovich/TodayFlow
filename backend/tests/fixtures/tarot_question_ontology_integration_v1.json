@@ -1,0 +1,135 @@
+{
+  "contract_version": "tarot_question_ontology_integration_v1",
+  "note": "Offline classification checks before minors deepen / golden eval.",
+  "cases": [
+    {
+      "id": "work_choice",
+      "question": "Стоит ли менять работу — или сначала что-то прояснить здесь?",
+      "concern_domain": "work",
+      "spread_kind": "choice",
+      "expect": {
+        "question_type": "choice",
+        "domain": "work",
+        "intent": "choose",
+        "decision_horizon": "near_term"
+      }
+    },
+    {
+      "id": "relationship_state",
+      "question": "Что сейчас важно понять в отношениях с этим человеком?",
+      "concern_domain": "relationships",
+      "spread_kind": "general",
+      "expect": {
+        "question_type": "relationship_state",
+        "domain": "relationship",
+        "intent": "understand"
+      }
+    },
+    {
+      "id": "relationship_intent",
+      "question": "Что он думает обо мне после нашего разговора?",
+      "concern_domain": "relationships",
+      "spread_kind": "general",
+      "expect": {
+        "question_type": "relationship_intent",
+        "domain": "relationship",
+        "intent": "clarify"
+      },
+      "must_not_claim_contains": "не утверждай мысли"
+    },
+    {
+      "id": "money_decision",
+      "question": "Какой взгляд поможет принять решение о деньгах спокойнее?",
+      "concern_domain": "money",
+      "spread_kind": "general",
+      "expect": {
+        "question_type": "money_decision",
+        "domain": "money"
+      }
+    },
+    {
+      "id": "open_reflection",
+      "question": "Что мне важно увидеть сейчас?",
+      "concern_domain": "other",
+      "spread_kind": "one_card",
+      "expect": {
+        "question_type": "open_reflection",
+        "domain": "general"
+      }
+    },
+    {
+      "id": "self_state",
+      "question": "Почему мне так тревожно и тяжело внутри последние дни?",
+      "concern_domain": "inner_state",
+      "spread_kind": "general",
+      "expect": {
+        "question_type": "self_state",
+        "domain": "self"
+      }
+    },
+    {
+      "id": "conflict",
+      "question": "В чём корень конфликта с коллегой и как его не раздуть?",
+      "concern_domain": "conflict",
+      "spread_kind": "general",
+      "expect": {
+        "question_type": "conflict",
+        "domain": "work"
+      }
+    },
+    {
+      "id": "timing_readiness",
+      "question": "Когда лучше менять работу — пора ли сейчас?",
+      "concern_domain": "work",
+      "spread_kind": "general",
+      "expect": {
+        "question_type": "timing_readiness",
+        "domain": "work",
+        "intent": "prepare"
+      },
+      "must_not_claim_contains": "точную дату"
+    },
+    {
+      "id": "direction",
+      "question": "Куда мне двигаться дальше в творческом проекте?",
+      "concern_domain": "growth",
+      "spread_kind": "general",
+      "expect": {
+        "question_type": "direction",
+        "domain": "creative"
+      }
+    },
+    {
+      "id": "work_decision_plain",
+      "question": "Как выстроить границы с начальником на этой работе?",
+      "concern_domain": "work",
+      "spread_kind": "general",
+      "expect": {
+        "question_type": "work_decision",
+        "domain": "work"
+      }
+    },
+    {
+      "id": "clarify_vs_choice",
+      "question": "Помоги прояснить, что на самом деле происходит с моим решением о переезде",
+      "concern_domain": "decision",
+      "spread_kind": "general",
+      "expect": {
+        "question_type": "open_reflection",
+        "intent": "clarify"
+      },
+      "not_question_type": "choice"
+    },
+    {
+      "id": "money_choice_fork",
+      "question": "Взять кредит на обучение или копить ещё год?",
+      "concern_domain": "money",
+      "spread_kind": "choice",
+      "expect": {
+        "question_type": "choice",
+        "domain": "money",
+        "intent": "choose"
+      }
+    }
+  ]
+}

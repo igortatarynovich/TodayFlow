@@ -35,6 +35,32 @@ Deterministic templates → склейка → UI
 
 **Продуктовая единица:** один вопрос → символический материал → одна картина → прямой (не категоричный) ответ → один шаг.
 
+### Principle: LLM is author of one story
+
+**LLM — автор, а не толкователь отдельных карт.**
+
+Задача модели — **ответить на вопрос пользователя**, используя карты как символический материал Context Pack (KB + Position Semantics + Question Ontology + profile tint).
+
+| Плохо | Хорошо |
+|-------|--------|
+| Луна = X. Дьявол = Y. Шут = Z. | Один конфликт/картина: карты складываются в **одну** историю под вопрос |
+| Энциклопедия значений | Ответ + один шаг; символика объяснена естественно внутри сюжета |
+
+Не перечислять значения карт по очереди. Validation уже банит механический список; канон закрепляет продуктовый смысл запрета.
+
+**Слои ответственности (зрелая модель):**
+
+| Слой | Отвечает на |
+|------|-------------|
+| Knowledge Base | что символизирует карта |
+| Position Semantics | как читать её в этой позиции |
+| Question Ontology | какой тип решения нужен пользователю |
+| LLM | одна история / ответ / шаг |
+| Validation | качество и запреты |
+| UI | только отображение |
+
+Дальше — качество знаний (minors deepen) и golden evaluation, не новая архитектура пайплайна.
+
 ---
 
 ## 1. Pipeline
@@ -79,11 +105,11 @@ Template/suit banks may exist **only** as pack facts or as **emergency fallback*
 
 Для сессии:
 
-- вопрос, spread kind, `question_domain`
-- `profile_relevant`: **1–2 поля, выбранные под домен вопроса**  
-  (work → decision_style / motivation / helps; relationships → communication/conflict; …)  
+- вопрос, spread kind, **`question_ontology`** (type / domain / intent / horizon + interpretation instructions)
+- `profile_relevant`: **1–2 поля, выбранные под ontology domain**  
+  (work → decision_style / motivation / helps; relationship → communication/conflict; …)  
   Не натальный dump.
-- `response_shape` (блоки; choice_compare; order=`conflict_first_then_answer`)
+- `response_shape` (блоки; choice_compare; order=`conflict_first_then_answer`; next_step_kind)
 
 **Запрещено** класть в pack готовые абзацы-ответы.
 
@@ -95,7 +121,7 @@ Template/suit banks may exist **only** as pack facts or as **emergency fallback*
 
 Запреты: механический список карт; повтор вопроса >1; спам названий позиций; цитата профиля; карты как факты о внешнем мире; пустые формулы; «Аркан».
 
-Prompt ver: `tarot-interpretation-v1.3` (KB + `position_semantics`: purpose / extract / do_not / result_type)
+Prompt ver: `tarot-interpretation-v1.4` (single author prompt: ontology + position_semantics + KB + profile tint)
 
 ---
 
@@ -169,7 +195,7 @@ UI blocks (any spread):
 | Card identity | `DATA/astrology_reference/tarot_full_deck.json` |
 | Meaning ranges (facts) | **Tarot Knowledge Base v1** — `DATA/reference/tarot/knowledge_v1/cards.json` · canon [TAROT_KNOWLEDGE_BASE_V1.md](./TAROT_KNOWLEDGE_BASE_V1.md) |
 | Position function | **Position Semantics v1** — `DATA/reference/tarot/position_semantics_v1/roles.json` · [TAROT_POSITION_SEMANTICS_V1.md](./TAROT_POSITION_SEMANTICS_V1.md) |
-| Question type | `question_domain` / lens · **next:** Question Ontology |
+| Question type | **Question Ontology v1** — `DATA/reference/tarot/question_ontology_v1/types.json` · [TAROT_QUESTION_ONTOLOGY_V1.md](./TAROT_QUESTION_ONTOLOGY_V1.md) |
 | User-facing prose | **LLM** (`tarot_interpretation_llm_v1`) |
 | Structure / gates | code |
 | Public fields | `tarot_answer_v1` (**frozen**) |
@@ -178,11 +204,11 @@ Editorial default: reject-invalid LLM → thin fallback. **Do not** hard-overwri
 
 ### Content backlog (quality, not architecture)
 
-1. **Tarot Knowledge Base v1** — **ACTIVE** — [TAROT_KNOWLEDGE_BASE_V1.md](./TAROT_KNOWLEDGE_BASE_V1.md) · 78 semantic records in pack. Next: editorial deepen minors.
+1. **Tarot Knowledge Base v1** — **ACTIVE** — [TAROT_KNOWLEDGE_BASE_V1.md](./TAROT_KNOWLEDGE_BASE_V1.md) · 78 semantic records in pack.
 2. **Position Semantics** — **ACTIVE** — [TAROT_POSITION_SEMANTICS_V1.md](./TAROT_POSITION_SEMANTICS_V1.md) · role library in pack.
-3. **Question Ontology** — choice · relationships · work · money · purpose · inner state · decision · conflict · growth · undefined; drives interpretation logic in pack + prompt. **← next**
-4. **Prompt Evaluation** — golden set (~50 real questions); after each content/prompt change score: has answer · no loops · no fluff · no categorical claims · clear takeaway · worth finishing. Prefer this over more unit tests of glue.
-5. **KB editorial deepen (minors)** — central scene · unique conflict · vs neighbor ranks · upright/reversed · domain nuance (before golden eval).
+3. **Question Ontology** — **ACTIVE** — [TAROT_QUESTION_ONTOLOGY_V1.md](./TAROT_QUESTION_ONTOLOGY_V1.md) · type/domain/intent + pack instructions; integration set 12.
+4. **KB editorial deepen (minors)** — central scene · unique conflict · vs neighbor ranks · upright/reversed · domain nuance. **← next after ontology hold**
+5. **Prompt Evaluation** — golden set (~50 real questions); score answer / no loops / no fluff / no categorical claims / clear takeaway / worth finishing.
 
 ---
 
@@ -208,6 +234,7 @@ Editorial default: reject-invalid LLM → thin fallback. **Do not** hard-overwri
 - [x] Architecture freeze declared (no new contract/UI/spreads/engine branches as primary track)
 - [x] Knowledge Base v1 landed (78 cards → pack; prompt v1.2 reads KB fields)
 - [x] Position Semantics v1 landed (role library → pack `position_semantics`; prompt v1.3)
+- [x] Question Ontology v1 landed (pack `question_ontology`; prompt v1.4; integration set 12)
 - [ ] Live eval 10–15 scenarios (script: `scripts/tarot_interpretation_live_eval.py --live`) — owner scores text usefulness
-- [ ] Question Ontology · Prompt golden eval (~50) — next content track
-- [ ] KB editorial deepen (majors review · weak minors rewrite) — before golden eval
+- [ ] KB editorial deepen (majors review · weak minors rewrite) — next content track
+- [ ] Prompt golden eval (~50) — after minors deepen

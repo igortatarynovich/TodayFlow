@@ -19,6 +19,7 @@ from todayflow_backend.core import models
 from todayflow_backend.data import astrology as astrology_ref
 from todayflow_backend.data import tarot_knowledge_v1 as tarot_kb
 from todayflow_backend.data import tarot_position_semantics_v1 as position_sem
+from todayflow_backend.data import tarot_question_ontology_v1 as question_ont
 
 logger = logging.getLogger(__name__)
 
@@ -107,6 +108,7 @@ _SUIT_THEMES: dict[str, dict[str, Any]] = {
 
 _ELEMENT_RU = {"fire": "огонь", "water": "вода", "air": "воздух", "earth": "земля"}
 
+# Legacy lenses kept as fallback short line on cards; primary SoT is question_ontology.
 _DOMAIN_QUESTION_LENS: dict[str, str] = {
     "work": "читай через роль, условия, границы, стабильность и темп решения о работе",
     "work_change": "читай через выбор уйти/остаться, критерии и страх ошибки",
@@ -130,6 +132,17 @@ _PROFILE_KEYS_BY_DOMAIN: dict[str, tuple[str, ...]] = {
     "family": ("communication_style", "decision_style", "helps"),
     "growth": ("motivation", "identity_line", "decision_style"),
     "inner_state": ("energy_source", "helps", "decision_style"),
+    "general": ("decision_style", "motivation", "communication_style"),
+}
+
+# Ontology domain → profile key bundle
+_PROFILE_KEYS_BY_ONTOLOGY_DOMAIN: dict[str, tuple[str, ...]] = {
+    "work": ("decision_style", "motivation", "helps"),
+    "relationship": ("communication_style", "conflict_style", "decision_style"),
+    "money": ("decision_style", "motivation", "helps"),
+    "self": ("energy_source", "helps", "decision_style"),
+    "family": ("communication_style", "decision_style", "helps"),
+    "creative": ("motivation", "identity_line", "decision_style"),
     "general": ("decision_style", "motivation", "communication_style"),
 }
 
@@ -188,27 +201,22 @@ def collect_unresolved(cards: list[models.TarotSpreadCard]) -> list[UnresolvedCa
 
 
 def infer_question_domain(question: str | None, concern_domain: str | None) -> str:
-    domain = (concern_domain or "").strip().lower()
-    if domain in _DOMAIN_QUESTION_LENS:
-        return domain
-    text = (question or "").strip().lower()
-    if any(w in text for w in ("работ", "карьер", "увольн", "начальник", "коллег")):
-        if any(w in text for w in ("менять", "сменить", "уйти", "остаться", "проясн")):
-            return "work_change"
-        return "work"
-    if any(w in text for w in ("отношен", "партнёр", "партнер", "любов", "бывш")):
-        return "relationships"
-    if any(w in text for w in ("деньг", "доход", "финанс", "трат")):
-        return "money"
-    if any(w in text for w in ("выбор", "решени", "стоит ли", " или ")):
-        return "decision"
-    if any(w in text for w in ("конфликт", "ссор", "спор")):
-        return "conflict"
-    if any(w in text for w in ("семь", "родител", "ребён", "ребен")):
-        return "family"
-    if any(w in text for w in ("тревог", "апати", "настроен", "устала", "устал")):
-        return "inner_state"
-    return "general"
+    """Legacy bridge: returns profile/KB facet domain from Question Ontology."""
+    classified = question_ont.classify_question(question, concern_domain=concern_domain)
+    return str(classified.get("legacy_question_domain") or "general")
+
+
+def classify_question_ontology(
+    question: str | None,
+    *,
+    concern_domain: str | None = None,
+    spread_kind_name: str | None = None,
+) -> dict[str, Any]:
+    return question_ont.classify_question(
+        question,
+        concern_domain=concern_domain,
+        spread_kind=spread_kind_name,
+    )
 
 
 def _meaning_range(
@@ -368,12 +376,18 @@ def profile_relevant_fragment(
     *,
     question: str | None = None,
     concern_domain: str | None = None,
+    ontology: dict[str, Any] | None = None,
 ) -> tuple[dict[str, str], str | None]:
     """Select short domain-relevant profile fields — never a natal dump."""
     if not isinstance(experience_slice, dict):
         return {}, None
-    domain = infer_question_domain(question, concern_domain)
-    keys = _PROFILE_KEYS_BY_DOMAIN.get(domain, _PROFILE_KEYS_BY_DOMAIN["general"])
+    if ontology is None:
+        ontology = question_ont.classify_question(question, concern_domain=concern_domain)
+    ont_domain = str(ontology.get("domain") or "general")
+    legacy = str(ontology.get("legacy_question_domain") or "general")
+    keys = _PROFILE_KEYS_BY_ONTOLOGY_DOMAIN.get(ont_domain) or _PROFILE_KEYS_BY_DOMAIN.get(
+        legacy, _PROFILE_KEYS_BY_DOMAIN["general"]
+    )
     out: dict[str, str] = {}
     for key in keys:
         clipped = _clip_profile_value(experience_slice.get(key))
@@ -406,11 +420,27 @@ def build_context_pack(
 
     deck = _deck_by_id()
     kind = spread_kind(spread.spread_id)
-    domain = infer_question_domain(question, concern_domain)
+    ontology_full = classify_question_ontology(
+        question,
+        concern_domain=concern_domain,
+        spread_kind_name=kind,
+    )
+    ontology_pack = question_ont.pack_question_ontology(
+        question,
+        concern_domain=concern_domain,
+        spread_kind=kind,
+    )
+    domain = str(ontology_full.get("legacy_question_domain") or "general")
     profile_frag, lens = profile_relevant_fragment(
         experience_slice,
         question=question,
         concern_domain=concern_domain,
+        ontology=ontology_full,
+    )
+
+    # Per-card short lens: prefer ontology central task over legacy one-liner.
+    question_lens = str(ontology_pack.get("central_task") or "").strip() or _DOMAIN_QUESTION_LENS.get(
+        domain, _DOMAIN_QUESTION_LENS["general"]
     )
 
     pack_cards: list[dict[str, Any]] = []
@@ -430,6 +460,18 @@ def build_context_pack(
         if idx + 1 < len(cards):
             nxt = cards[idx + 1]
             neighbors.append(_display_name(nxt.card.id, nxt.orientation, deck[int(nxt.card.id)]))
+
+        # KB facet prefers ontology domain (relationship → relationships, etc.)
+        kb_domain = domain
+        ont_domain = str(ontology_pack.get("domain") or "")
+        if ont_domain == "relationship":
+            kb_domain = "relationships"
+        elif ont_domain == "self":
+            kb_domain = "inner_state"
+        elif ont_domain in {"work", "money", "family"}:
+            kb_domain = ont_domain
+        elif ont_domain == "creative":
+            kb_domain = "growth"
 
         pack_cards.append(
             {
@@ -455,13 +497,15 @@ def build_context_pack(
                     "do_not": role_sem.get("do_not") or [],
                     "result_type": role_sem.get("result_type"),
                 },
-                "meaning_range": _meaning_range(card.card.id, row, question_domain=domain),
-                "question_lens": _DOMAIN_QUESTION_LENS.get(domain, _DOMAIN_QUESTION_LENS["general"]),
+                "meaning_range": _meaning_range(card.card.id, row, question_domain=kb_domain),
+                "question_lens": question_lens,
                 "neighbors": neighbors,
             }
         )
 
     _annotate_spread_relations(pack_cards)
+
+    choice_compare = kind == "choice" or ontology_pack.get("question_type") == "choice"
 
     return {
         "question": (question or "").strip(),
@@ -470,15 +514,17 @@ def build_context_pack(
         "spread_kind": kind,
         "concern_domain": (concern_domain or "").strip(),
         "question_domain": domain,
+        "question_ontology": ontology_pack,
         "profile_relevant": profile_frag,
         "profile_lens": lens,
         "cards": pack_cards,
         "response_shape": {
             "blocks": ["symbols_overview", "question_story", "direct_answer", "next_step"],
-            "choice_compare": kind == "choice",
+            "choice_compare": choice_compare,
             "voice": "person-not-system",
             "locale": "ru",
             "order": "conflict_first_then_answer",
+            "next_step_kind": ontology_pack.get("next_step_kind"),
         },
     }
 
