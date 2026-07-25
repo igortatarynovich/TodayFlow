@@ -26,7 +26,6 @@ from todayflow_backend.services.day_story_v1 import (
     _DAY_STORY_SYS_RU,
     build_day_story_fallback_v1,
     build_day_story_llm_input,
-    call_day_story_llm_v1,
     day_story_to_legacy_narrative,
     day_story_to_today_contract_v1,
     validate_day_story_v1,
@@ -329,32 +328,49 @@ def _build_day_story_record(
     if cached is not None:
         story, gen_id, _ = cached
         used_fallback = False
-        # B5: always re-project on cache hit so exclusive SoT overwrites stored LLM prose.
+        # C1: old cache without generation_source marker → facts_only_unavailable
+        # (do not reconstruct meaning from legacy expect/trap). Valid marker →
+        # re-project stored scenario when present, else deterministic rebuild.
         try:
+            from todayflow_backend.services.day_scenario_native_llm_c1 import (
+                has_native_generation_marker,
+            )
             from todayflow_backend.services.day_scenario_project_v1 import (
                 build_and_project_day_scenario_v1,
+                project_day_scenario_onto_day_story_v1,
             )
 
-            trace = story.get("trace") if isinstance(story.get("trace"), dict) else {}
-            domains_map = story.get("domains") if isinstance(story.get("domains"), dict) else {}
-            interp_cached = {
-                "day_thesis": story.get("day_thesis"),
-                "day_events_pack": trace.get("day_events_pack"),
-                "day_foundation": story.get("day_foundation") or trace.get("day_foundation"),
-                "day_personal": story.get("day_personal") or trace.get("day_personal"),
-                "domains_present": trace.get("domains_present") or list(domains_map.keys()),
-                "derived_claims": trace.get("derived_claims") or [],
-                "evidence": trace.get("evidence") or [],
-            }
-            story = build_and_project_day_scenario_v1(
-                story=story,
-                interpretation=interp_cached,
-                ritual_context=ritual_norm,
-                celestial_events=ce or None,
-                day_thesis=story.get("day_thesis")
-                if isinstance(story.get("day_thesis"), dict)
-                else day_thesis_layer,
-            )
+            if not has_native_generation_marker(story):
+                story = project_day_scenario_onto_day_story_v1(story, None)
+                editorial = dict(story.get("editorial") or {})
+                editorial["cache_migration"] = "pre_c1_without_native_marker"
+                editorial["runtime_source"] = "facts_only_unavailable"
+                story["editorial"] = editorial
+            else:
+                stored = story.get("day_scenario") if isinstance(story.get("day_scenario"), dict) else None
+                if stored and stored.get("ready") and stored.get("scenes"):
+                    story = project_day_scenario_onto_day_story_v1(story, stored)
+                else:
+                    trace = story.get("trace") if isinstance(story.get("trace"), dict) else {}
+                    domains_map = story.get("domains") if isinstance(story.get("domains"), dict) else {}
+                    interp_cached = {
+                        "day_thesis": story.get("day_thesis"),
+                        "day_events_pack": trace.get("day_events_pack"),
+                        "day_foundation": story.get("day_foundation") or trace.get("day_foundation"),
+                        "day_personal": story.get("day_personal") or trace.get("day_personal"),
+                        "domains_present": trace.get("domains_present") or list(domains_map.keys()),
+                        "derived_claims": trace.get("derived_claims") or [],
+                        "evidence": trace.get("evidence") or [],
+                    }
+                    story = build_and_project_day_scenario_v1(
+                        story=story,
+                        interpretation=interp_cached,
+                        ritual_context=ritual_norm,
+                        celestial_events=ce or None,
+                        day_thesis=story.get("day_thesis")
+                        if isinstance(story.get("day_thesis"), dict)
+                        else day_thesis_layer,
+                    )
         except Exception:
             logger.exception("day_scenario exclusive projection on cache hit failed")
         if capture is not None:
@@ -466,16 +482,27 @@ def _build_day_story_record(
             if capture is not None:
                 capture.record_day_history(history_slice)
 
-        # P0: GET /today/contract must not block on Nebius. Prefer deterministic story;
-        # LLM remaining available via force_rebuild / refresh paths later.
-        if force_rebuild and is_llm_chat_configured():
-            story = call_day_story_llm_v1(
-                llm_input, locale=locale_value, interpretation=interpretation
+        # P0: GET /today/contract must not block on Nebius.
+        # C1: force_rebuild uses native scenario LLM (not legacy expect/trap schema).
+        native_scenario = None
+        llm_attempted = bool(force_rebuild and is_llm_chat_configured())
+        if llm_attempted:
+            from todayflow_backend.services.day_scenario_native_llm_c1 import (
+                call_day_scenario_native_llm_c1,
             )
-            used_fallback = story is None
+
+            native_scenario = call_day_scenario_native_llm_c1(
+                llm_input,
+                interpretation=interpretation,
+                ritual_context=safe_ritual,
+                celestial_events=ce or None,
+            )
+            used_fallback = native_scenario is None
+            story = None
         else:
             story = None
             used_fallback = True
+
         if story is None:
             story = build_day_story_fallback_v1(
                 day_engine_brief=day_engine_brief,
@@ -493,11 +520,27 @@ def _build_day_story_record(
                 birth_date=birth_date,
             )
 
-        def _project_scenario(current: dict[str, Any]) -> dict[str, Any]:
+        def _project_scenario(
+            current: dict[str, Any],
+            *,
+            scenario_override: dict[str, Any] | None = None,
+            allow_deterministic_rebuild: bool = True,
+        ) -> dict[str, Any]:
             from todayflow_backend.services.day_scenario_project_v1 import (
                 build_and_project_day_scenario_v1,
+                project_day_scenario_onto_day_story_v1,
             )
 
+            if scenario_override is not None:
+                projected = project_day_scenario_onto_day_story_v1(current, scenario_override)
+                editorial = dict(projected.get("editorial") or {})
+                editorial["native_scenario_generation"] = "day_scenario_native_llm_c1"
+                editorial["runtime_source"] = editorial.get("runtime_source") or "day_scenario_v1"
+                projected["editorial"] = editorial
+                return projected
+            if not allow_deterministic_rebuild:
+                # LLM attempted and failed — facts_only_unavailable; no deterministic invent.
+                return project_day_scenario_onto_day_story_v1(current, None)
             return build_and_project_day_scenario_v1(
                 story=current,
                 interpretation=interpretation,
@@ -506,9 +549,14 @@ def _build_day_story_record(
                 day_thesis=day_thesis_layer,
             )
 
-        # Phase B5: exclusive scenario SoT projection (deterministic; no LLM).
+        # Phase C1/B5: exclusive scenario SoT projection (deterministic; no LLM here).
         try:
-            story = _project_scenario(story)
+            if native_scenario is not None:
+                story = _project_scenario(story, scenario_override=native_scenario)
+            elif llm_attempted:
+                story = _project_scenario(story, allow_deterministic_rebuild=False)
+            else:
+                story = _project_scenario(story)
         except Exception:
             logger.exception("day_scenario exclusive projection failed; keeping unprojected story")
 
@@ -532,7 +580,11 @@ def _build_day_story_record(
             )
             used_fallback = True
             try:
-                story = _project_scenario(story)
+                # After validate failure: if LLM path failed, stay unavailable.
+                story = _project_scenario(
+                    story,
+                    allow_deterministic_rebuild=not llm_attempted,
+                )
             except Exception:
                 logger.exception("day_scenario projection failed after fallback")
 
@@ -548,14 +600,21 @@ def _build_day_story_record(
             except Exception:
                 capture.record_final(story=story, used_fallback=used_fallback)
 
+        from todayflow_backend.services.day_scenario_native_llm_c1 import (
+            NATIVE_PROMPT_VERSION,
+            NATIVE_SYS_RU,
+        )
+
+        prompt_ver = NATIVE_PROMPT_VERSION if llm_attempted else DAY_STORY_PROMPT_VER
+        prompt_text = NATIVE_SYS_RU if llm_attempted else _DAY_STORY_SYS_RU
         pv = learning.get_or_create_prompt_version(
             db,
             module=MODULE,
-            version=DAY_STORY_PROMPT_VER,
+            version=prompt_ver,
             prompt_kind="system",
-            prompt_text=_DAY_STORY_SYS_RU,
-            label="day_story_v1",
-            metadata={"contract": DAY_STORY_V1_CONTRACT},
+            prompt_text=prompt_text,
+            label="day_scenario_native_c1" if llm_attempted else "day_story_v1",
+            metadata={"contract": DAY_STORY_V1_CONTRACT, "native_c1": llm_attempted},
         )
         input_payload: dict[str, Any] = {
             "target_date": target_date.isoformat(),
@@ -567,8 +626,9 @@ def _build_day_story_record(
             "day_story_fingerprint_payload": fingerprint_payload,
             "day_engine_brief_contract": day_engine_brief.get("contract_version"),
             "contract": DAY_STORY_V1_CONTRACT,
-            "prompt_version": DAY_STORY_PROMPT_VER,
+            "prompt_version": prompt_ver,
             "llm_input_keys": sorted(llm_input.keys()),
+            "native_scenario_c1": bool(native_scenario),
             **slice_log_fields(user_core),
         }
         gen = learning.log_generation(
@@ -748,31 +808,46 @@ def build_day_story_v1_wire(
             raise ValueError("day_story_missing")
 
     assert story is not None
-    # B5: exclusive SoT re-project before contract (deterministic; lifecycle unchanged).
+    # C1/B5: exclusive SoT re-project before contract (deterministic; lifecycle unchanged).
     try:
+        from todayflow_backend.services.day_scenario_native_llm_c1 import (
+            has_native_generation_marker,
+        )
         from todayflow_backend.services.day_scenario_project_v1 import (
             build_and_project_day_scenario_v1,
+            project_day_scenario_onto_day_story_v1,
         )
 
-        trace = story.get("trace") if isinstance(story.get("trace"), dict) else {}
-        domains_map = story.get("domains") if isinstance(story.get("domains"), dict) else {}
-        story = build_and_project_day_scenario_v1(
-            story=story,
-            interpretation={
-                "day_thesis": story.get("day_thesis"),
-                "day_events_pack": trace.get("day_events_pack"),
-                "day_foundation": story.get("day_foundation") or trace.get("day_foundation"),
-                "day_personal": story.get("day_personal") or trace.get("day_personal"),
-                "domains_present": trace.get("domains_present") or list(domains_map.keys()),
-                "derived_claims": trace.get("derived_claims") or [],
-                "evidence": trace.get("evidence") or [],
-            },
-            ritual_context=ritual_norm,
-            celestial_events=ce or None,
-            day_thesis=story.get("day_thesis")
-            if isinstance(story.get("day_thesis"), dict)
-            else None,
-        )
+        if not has_native_generation_marker(story):
+            story = project_day_scenario_onto_day_story_v1(story, None)
+            editorial = dict(story.get("editorial") or {})
+            editorial["cache_migration"] = "pre_c1_without_native_marker"
+            editorial["runtime_source"] = "facts_only_unavailable"
+            story["editorial"] = editorial
+        else:
+            stored = story.get("day_scenario") if isinstance(story.get("day_scenario"), dict) else None
+            if stored and stored.get("ready") and stored.get("scenes"):
+                story = project_day_scenario_onto_day_story_v1(story, stored)
+            else:
+                trace = story.get("trace") if isinstance(story.get("trace"), dict) else {}
+                domains_map = story.get("domains") if isinstance(story.get("domains"), dict) else {}
+                story = build_and_project_day_scenario_v1(
+                    story=story,
+                    interpretation={
+                        "day_thesis": story.get("day_thesis"),
+                        "day_events_pack": trace.get("day_events_pack"),
+                        "day_foundation": story.get("day_foundation") or trace.get("day_foundation"),
+                        "day_personal": story.get("day_personal") or trace.get("day_personal"),
+                        "domains_present": trace.get("domains_present") or list(domains_map.keys()),
+                        "derived_claims": trace.get("derived_claims") or [],
+                        "evidence": trace.get("evidence") or [],
+                    },
+                    ritual_context=ritual_norm,
+                    celestial_events=ce or None,
+                    day_thesis=story.get("day_thesis")
+                    if isinstance(story.get("day_thesis"), dict)
+                    else None,
+                )
     except Exception:
         logger.exception("day_scenario exclusive projection on wire serve failed")
 

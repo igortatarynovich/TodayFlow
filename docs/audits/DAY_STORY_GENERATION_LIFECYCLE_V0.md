@@ -1,26 +1,38 @@
 # Day Story Generation Lifecycle v0
 
-**Status:** audit note (no runtime change)  
+**Status:** audit note — updated for Phase C1 native scenario LLM  
 **Date:** 2026-07-25  
-**Related:** [DAY_PRODUCT_LOGIC_CAPTURE_PACK.md](./DAY_PRODUCT_LOGIC_CAPTURE_PACK.md)
+**Related:** [DAY_PRODUCT_LOGIC_CAPTURE_PACK.md](./DAY_PRODUCT_LOGIC_CAPTURE_PACK.md) · [DAY_SCENARIO_NATIVE_LLM_C1.md](./DAY_SCENARIO_NATIVE_LLM_C1.md)
 
 ## When LLM runs today
 
 | Entry | `force_rebuild` | LLM? |
 |-------|-----------------|------|
-| `GET /today/contract` → `build_day_story_v1_wire` | `False` | **No** (cache or deterministic fallback / unavailable shell) |
-| `POST /today/story/refresh` → `build_day_story_record_for_refresh` | `True` | **Yes**, if chat LLM configured |
+| `GET /today/contract` → `build_day_story_v1_wire` | `False` | **No** (cache or deterministic scenario / unavailable shell) |
+| `POST /today/story/refresh` → `build_day_story_record_for_refresh` | `True` | **Yes** — **native scenario** (`call_day_scenario_native_llm_c1`), if chat LLM configured |
 
-Code: [`day_story_wire_v1.py`](../../backend/src/todayflow_backend/services/day_story_wire_v1.py) — comment: GET must not block on Nebius.
+Code: [`day_story_wire_v1.py`](../../backend/src/todayflow_backend/services/day_story_wire_v1.py) — GET must not block on Nebius.
+
+## Native vs legacy
+
+| Path | Runtime? |
+|------|----------|
+| `call_day_scenario_native_llm_c1` | **Yes** on refresh |
+| `call_day_story_llm_v1` (legacy expect/trap JSON) | **No** — eval/compare only |
 
 ## Retry
 
-`call_day_story_llm_v1`: up to **2** attempts. Rejects: empty content, JSON parse fail, phrase gate fail, empty expect+trap. On total failure → `build_day_story_fallback_v1` (facts-only / `interpretation_status: unavailable` — **not** formula-bank prose).
+Native C1: up to **2** attempts. Rejects: empty, parse fail, legacy keys, validation defects (conflict/scenes/chorus/evidence). On total failure → `facts_only_unavailable` (**not** legacy LLM schema, **not** formula-bank prose).
+
+## Cache
+
+- Valid `day_scenario.generation_source` ∈ {`native_llm_c1`, `deterministic_engine_b5`} → re-project.
+- Missing marker (pre-C1) → unavailable; refresh creates native scenario. No reconstruct from expect/trap.
 
 ## Capture implication
 
-Packs that need raw DeepSeek must use **refresh / force_rebuild=True**. Lifecycle section records `get_calls_llm: false`.
+Packs that need raw DeepSeek must use **refresh / force_rebuild=True**. Capture records native prompt + validation defects. Lifecycle: `get_calls_llm: false`.
 
-## Follow-up (not this note)
+## Follow-up
 
-If packs show mass `unavailable` on first open → separate Architecture impact for warmup / first-open generate. Do not silently re-enable LLM on every GET.
+C2 Chapters UI. Do not re-enable LLM on every GET.

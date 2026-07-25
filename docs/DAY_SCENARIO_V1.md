@@ -1,11 +1,12 @@
 # DAY_SCENARIO_V1 — драматургический каркас дня
 
-**Status:** CANON DRAFT — **B1–B5 landed** (engine + props + wire + FE preference + **exclusive runtime SoT**); fuller scene UI still open  
+**Status:** CANON DRAFT — **B1–B5 + C1 landed** (exclusive SoT + **native scenario LLM**); Chapters UI = C2  
 **Date:** 2026-07-25  
-**Engine:** `day_scenario_v1.py` · `day_color_catalog_v1.py` · `day_scenario_project_v1.py`  
+**Engine:** `day_scenario_v1.py` · `day_color_catalog_v1.py` · `day_scenario_project_v1.py` · `day_scenario_native_llm_c1.py`  
 **Wire note:** [audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md](./audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md)  
 **UI note:** [audits/DAY_SCENARIO_UI_PREFERENCE_B4.md](./audits/DAY_SCENARIO_UI_PREFERENCE_B4.md)  
 **Runtime SoT:** [audits/DAY_SCENARIO_RUNTIME_SOT_B5.md](./audits/DAY_SCENARIO_RUNTIME_SOT_B5.md)  
+**Native LLM:** [audits/DAY_SCENARIO_NATIVE_LLM_C1.md](./audits/DAY_SCENARIO_NATIVE_LLM_C1.md)  
 **Capture rubric:** [audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md](./audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md)  
 **Related:** [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) · [today-language/TODAY_LANGUAGE_V1.md](./today-language/TODAY_LANGUAGE_V1.md)
 
@@ -242,6 +243,23 @@ Fallback: facts-only / unavailable — **не** formula-bank / catalog why / LLM
 
 Compose Today around prolog → conflict → chorus → scenes → props-in-scene → evening vector.  
 **Does not** reintroduce hybrid meaning; SoT remains B5.
+
+### C1 (landed) — Native Scenario Generation
+
+```markdown
+## Architecture impact
+- **SoT before:** LLM wrote legacy expect/trap/do; B5 discarded as meaning
+- **SoT after:** refresh LLM writes day_scenario_native_llm_c1; props deterministic; projector adapts
+- **Public contract changed?** no
+- **Migration required?** pre-C1 cache without generation_source → unavailable until refresh
+- **Canon updated?** yes — DAY_SCENARIO_NATIVE_LLM_C1
+- **Backward compatible?** field shapes yes
+```
+
+### Next — C2 Chapters UI
+
+Compose Today as story chapters from conflict + scenes (not independent widgets).  
+Legacy projections remain for old clients only.
 
 ---
 

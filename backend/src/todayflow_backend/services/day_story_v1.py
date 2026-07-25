@@ -747,7 +747,11 @@ def call_day_story_llm_v1(
     interpretation: dict[str, Any] | None = None,
     max_attempts: int = 2,
 ) -> dict[str, Any] | None:
-    """Generate day_story via LLM. Retries once on empty/invalid; never fills formula prose."""
+    """Legacy expect/trap JSON LLM — **eval/compare only** after Phase C1.
+
+    Runtime SoT path is ``call_day_scenario_native_llm_c1`` (refresh/force_rebuild).
+    Do not wire this into meaning generation.
+    """
     from todayflow_backend.services.day_story_capture_session_v0 import get_day_story_capture_session
 
     if not is_llm_chat_configured():

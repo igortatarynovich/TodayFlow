@@ -1069,6 +1069,7 @@ def build_day_scenario_v1(
         "version": DAY_SCENARIO_V1_VERSION,
         "runtime_sot": True,
         "ready": ready,
+        "generation_source": "deterministic_engine_b5",
         "foundation": foundation,
         "chorus": chorus,
         "conflict": conflict,
