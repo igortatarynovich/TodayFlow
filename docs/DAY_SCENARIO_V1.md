@@ -1,8 +1,9 @@
 # DAY_SCENARIO_V1 — драматургический каркас дня
 
-**Status:** CANON DRAFT — **B1+B2 landed** (`day_scenario_v1.py` + `day_color_catalog_v1.py`); runtime wire/UI **not** switched yet (B3–B4)  
+**Status:** CANON DRAFT — **B1–B3 landed** (engine + props + wire projection); full UI rewrite = B4  
 **Date:** 2026-07-25  
-**Engine:** `backend/src/todayflow_backend/services/day_scenario_v1.py`  
+**Engine:** `day_scenario_v1.py` · `day_color_catalog_v1.py` · `day_scenario_project_v1.py`  
+**Wire note:** [audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md](./audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md)  
 **Capture rubric:** [audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md](./audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md)  
 **Related:** [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) · [today-language/TODAY_LANGUAGE_V1.md](./today-language/TODAY_LANGUAGE_V1.md)
 
@@ -180,14 +181,14 @@ Date-preset color catalog **не** meaning SoT (может остаться seed
 5. Project to contract / UI (**B3–B4**): хор виден как объяснение, не как вкладки-конкуренты  
 6. Value gate: reject orphan props; second conflict; card/number that invent a rival story; scene without conflict link  
 
-### B1–B2 shipped
+### B1–B3 shipped
 
-- `build_day_scenario_v1` → `foundation` · `chorus` · `conflict` · `scenes` · **`props` (B2)**
-- Props: color / avoid_color / goals / affirmations / optional humor / strong·weak spheres — each with `origin_scene_id`
-- Color catalog (`day_color_catalog_v1`) = **knowledge only**; selection + why from scene/conflict
-- `runtime_sot: false` until B3 wire switch
-- Conflict foundation = drivers + natal; card/number only in `chorus_references`
-- Named language encouraged («Луна в Рыбах», «Карта дня — …», «Число дня — …»)
+- `build_day_scenario_v1` → foundation · chorus · conflict · scenes · props
+- Wire: `project_day_scenario_onto_day_story_v1` in `_build_day_story_record` (deterministic; lifecycle unchanged)
+- Public additive nests: `day_story.day_scenario`, `day_story.interpretive_chorus`
+- Color on `talisman` from scenario props; catalog knowledge-only
+- Unavailable + scenes → recovered `ok` via scenario editorial
+- Full UI chapter rewrite = **B4**
 
 Fallback: facts-only / unavailable — **не** formula-bank prose как user text.
 
@@ -195,17 +196,17 @@ Fallback: facts-only / unavailable — **не** formula-bank prose как user t
 
 ## Architecture impact (Phase B — progressive)
 
-### B1–B2 (landed) — engine + props, no wire switch
+### B1–B3 (landed) — engine + props + wire projection
 
 ```markdown
 ## Architecture impact
-- **SoT before:** unchanged at runtime (day_story slots + preset color still live on wire)
-- **SoT after (code available):** day_scenario_v1 builds foundation/chorus/conflict/scenes/**props**;
-  `runtime_sot=false`; color catalog is knowledge-only for prop selection
-- **Public contract changed?** no
+- **SoT before:** day_story LLM/fallback; color = celestial preset + catalog why
+- **SoT after (projected fields):** day_scenario → day_story; color/affirm/domains-fill/thesis from scenario;
+  LLM prose kept when present; unavailable may recover via scenes
+- **Public contract changed?** additive nests only
 - **Migration required?** no
-- **Canon updated?** yes — DAY_SCENARIO_V1 B2 note
-- **Backward compatible?** yes — no wire/UI switch
+- **Canon updated?** yes — DAY_SCENARIO_V1 + DAY_SCENARIO_WIRE_PROJECTION_B3
+- **Backward compatible?** yes — old clients ignore new nests; FE color guide may still prefer morning until B4
 ```
 
 ### B3+ (when runtime switches)

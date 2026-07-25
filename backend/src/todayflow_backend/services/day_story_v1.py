@@ -953,6 +953,14 @@ def day_story_to_today_contract_v1(
                 else None
             )
         ),
+        "interpretive_chorus": (
+            story.get("interpretive_chorus")
+            if isinstance(story.get("interpretive_chorus"), dict)
+            else None
+        ),
+        "day_scenario": (
+            story.get("day_scenario") if isinstance(story.get("day_scenario"), dict) else None
+        ),
         "trace": trace,
     }
     progress_out = dict(progress) if isinstance(progress, dict) else {}

@@ -329,6 +329,35 @@ def _build_day_story_record(
     if cached is not None:
         story, gen_id, _ = cached
         used_fallback = False
+        # B3: refresh scenario projection on cache hit if nest missing (no LLM).
+        if not isinstance(story.get("day_scenario"), dict):
+            try:
+                from todayflow_backend.services.day_scenario_project_v1 import (
+                    build_and_project_day_scenario_v1,
+                )
+
+                trace = story.get("trace") if isinstance(story.get("trace"), dict) else {}
+                domains_map = story.get("domains") if isinstance(story.get("domains"), dict) else {}
+                interp_cached = {
+                    "day_thesis": story.get("day_thesis"),
+                    "day_events_pack": trace.get("day_events_pack"),
+                    "day_foundation": story.get("day_foundation") or trace.get("day_foundation"),
+                    "day_personal": story.get("day_personal") or trace.get("day_personal"),
+                    "domains_present": trace.get("domains_present") or list(domains_map.keys()),
+                    "derived_claims": trace.get("derived_claims") or [],
+                    "evidence": trace.get("evidence") or [],
+                }
+                story = build_and_project_day_scenario_v1(
+                    story=story,
+                    interpretation=interp_cached,
+                    ritual_context=ritual_norm,
+                    celestial_events=ce or None,
+                    day_thesis=story.get("day_thesis")
+                    if isinstance(story.get("day_thesis"), dict)
+                    else day_thesis_layer,
+                )
+            except Exception:
+                logger.exception("day_scenario projection on cache hit failed")
         if capture is not None:
             capture.record_lifecycle(cache_hit=True, used_fallback=False)
             try:
@@ -465,6 +494,25 @@ def _build_day_story_record(
                 birth_date=birth_date,
             )
 
+        def _project_scenario(current: dict[str, Any]) -> dict[str, Any]:
+            from todayflow_backend.services.day_scenario_project_v1 import (
+                build_and_project_day_scenario_v1,
+            )
+
+            return build_and_project_day_scenario_v1(
+                story=current,
+                interpretation=interpretation,
+                ritual_context=safe_ritual,
+                celestial_events=ce or None,
+                day_thesis=day_thesis_layer,
+            )
+
+        # Phase B3: project day_scenario onto day_story (color/chorus/empty editorial).
+        try:
+            story = _project_scenario(story)
+        except Exception:
+            logger.exception("day_scenario projection failed; keeping unprojected story")
+
         story_errors = validate_day_story_v1(story)
         if story_errors:
             logger.warning("day_story_v1 validation failed, using fallback: %s", story_errors)
@@ -484,6 +532,10 @@ def _build_day_story_record(
                 birth_date=birth_date,
             )
             used_fallback = True
+            try:
+                story = _project_scenario(story)
+            except Exception:
+                logger.exception("day_scenario projection failed after fallback")
 
         if capture is not None:
             try:
