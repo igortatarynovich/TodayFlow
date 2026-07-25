@@ -83,8 +83,21 @@ export type TodayContractDayStoryV1 = {
     strong_pattern_ids?: string[];
   } | null;
   evening_closure?: string;
-  talisman?: { color?: string; stone?: string; note?: string };
-  practice_recommendation?: { kind?: string; text?: string; reason?: string };
+  talisman?: {
+    color?: string;
+    stone?: string;
+    note?: string;
+    /** Scenario-derived avoid (B3+); preferred over morning catalog avoid. */
+    avoid_color?: string;
+    avoid_why?: string;
+    origin_scene_id?: string;
+  };
+  practice_recommendation?: {
+    kind?: string;
+    text?: string;
+    reason?: string;
+    origin_scene_id?: string;
+  };
   symbolic_note?: string;
   /** Short «Твой ход» paragraph from LLM — empty when no support claims. */
   supports_story?: string;
@@ -356,6 +369,61 @@ export type TodayContractDayStoryV1 = {
   } | null;
   /** Kitchen trace — not required for display; used for honesty / future UI. */
   trace?: TodayContractDayStoryTraceV1;
+  /**
+   * Level-2 interpretive chorus (astro / day card / number / natal) — explains one conflict.
+   * Not a second forecast.
+   */
+  interpretive_chorus?: {
+    astrology_lead?: string | null;
+    astrology_meaning?: string | null;
+    day_card?: { named?: string | null; role?: string | null } | null;
+    day_number?: {
+      named?: string | null;
+      tempo?: string | null;
+      style?: string | null;
+      for_conflict?: string | null;
+    } | null;
+    natal_lead?: string | null;
+    dialogue_rule?: string | null;
+    parallel_forecast_forbidden?: boolean;
+  } | null;
+  /**
+   * Full day_scenario nest (B3+). Prefer for conflict/scenes/props when present;
+   * public slots remain projections.
+   */
+  day_scenario?: {
+    contract_version?: string;
+    version?: string;
+    runtime_sot?: boolean;
+    conflict?: {
+      short_name?: string;
+      why_arose?: string;
+      why_personal?: string;
+      opposing_forces?: { a?: string; b?: string };
+    };
+    scenes?: Array<{
+      scene_id?: string;
+      sphere?: string;
+      sphere_label_ru?: string;
+      role_in_story?: string;
+      what_happens?: string;
+      opportunity?: string;
+      trap?: string;
+      recommended_action?: string;
+      do_not?: string;
+      domestic_example?: string;
+    }>;
+    props?: {
+      status?: string;
+      color?: { name?: string; origin_scene_id?: string; link_to_conflict?: string };
+      avoid_color?: { name?: string; why?: string; origin_scene_id?: string };
+      goals?: Array<{ text?: string; origin_scene_id?: string }>;
+      affirmations?: Array<{ text?: string; origin_scene_id?: string }>;
+      strong_spheres?: Array<{ sphere?: string; sphere_label_ru?: string; status?: string }>;
+      weak_spheres?: Array<{ sphere?: string; sphere_label_ru?: string; status?: string }>;
+    };
+    chorus?: Record<string, unknown>;
+  } | null;
 };
 
 export type TodayDayFoundationBeatV1 = {

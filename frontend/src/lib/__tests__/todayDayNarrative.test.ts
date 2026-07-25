@@ -449,4 +449,47 @@ describe("buildTodayDayNarrative", () => {
     const body = [supports.lead, ...supports.paragraphs].filter(Boolean).join(" ");
     expect(body).not.toMatch(/Цвет дня/i);
   });
+
+  it("surfaces interpretive_chorus as explanation chapter and skips rival symbol chapter", () => {
+    const withChorus: TodayContractV1 = {
+      ...contract,
+      day_story: {
+        ...contract.day_story!,
+        interpretive_chorus: {
+          astrology_lead: "Луна в Рыбах",
+          astrology_meaning: "Держит мягкий тон решений.",
+          day_card: { named: "Карта дня — Отшельник", role: "Архетип паузы перед ответом." },
+          day_number: { named: "Число дня — 7", for_conflict: "Темп: сначала понять, потом говорить." },
+          parallel_forecast_forbidden: true,
+        },
+      },
+    };
+    const narrative = buildTodayDayNarrative({
+      contract: withChorus,
+      story: {
+        ...story,
+        tarotImpact: {
+          title: "Отшельник",
+          headline: "Независимый прогноз карты",
+          body: "Это второй сюжет, его не должно быть рядом с хором.",
+        },
+        numberImpact: {
+          title: "7",
+          headline: "Независимый прогноз числа",
+          body: "Тоже соперник.",
+        },
+      },
+      morningRitualData,
+    });
+    const chorus = narrative.chapters.find((c) => c.id === "chorus");
+    expect(chorus).toBeTruthy();
+    expect(chorus?.kicker).toMatch(/Почему именно так/i);
+    const chorusText = [chorus?.lead, ...(chorus?.paragraphs ?? [])].join(" ");
+    expect(chorusText).toMatch(/Луна в Рыбах/i);
+    expect(chorusText).toMatch(/Отшельник/i);
+    expect(chorusText).toMatch(/Число дня — 7/i);
+    expect(narrative.chapters.map((c) => c.id)).not.toContain("symbols");
+    const all = narrative.chapters.map((c) => [c.lead, ...c.paragraphs].join(" ")).join(" ");
+    expect(all).not.toMatch(/Независимый прогноз/i);
+  });
 });

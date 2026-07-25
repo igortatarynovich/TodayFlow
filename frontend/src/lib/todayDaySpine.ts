@@ -340,6 +340,13 @@ export function buildSkyInfluenceCards(input: {
   registry: SpineRegistry;
   /** Card/number only after ritual — they are the interpretive layer, not the foundation. */
   ritualComplete?: boolean;
+  /** Scenario talisman — preferred over morning catalog for color card (B4). */
+  scenarioColor?: {
+    name?: string | null;
+    note?: string | null;
+    avoidColor?: string | null;
+    avoidWhy?: string | null;
+  } | null;
 }): TodaySkyCard[] {
   const cards: TodaySkyCard[] = [];
   const celestial = input.morningRitualData?.celestial_events;
@@ -520,9 +527,23 @@ export function buildSkyInfluenceCards(input: {
     });
   }
 
-  const colorName = apiSymbols?.color?.name ?? input.colorLine?.trim();
+  const colorName =
+    input.scenarioColor?.name?.trim() ||
+    apiSymbols?.color?.name ||
+    input.colorLine?.trim();
   if (colorName) {
-    const guide = resolveTodayDayColorGuide({ name: colorName, api: apiSymbols?.color });
+    const guide = resolveTodayDayColorGuide({
+      name: colorName,
+      api: apiSymbols?.color,
+      scenario: input.scenarioColor?.name
+        ? {
+            name: input.scenarioColor.name,
+            note: input.scenarioColor.note,
+            avoidColor: input.scenarioColor.avoidColor,
+            avoidWhy: input.scenarioColor.avoidWhy,
+          }
+        : null,
+    });
     pushCard({
       id: "color",
       icon: "palette",
@@ -591,6 +612,7 @@ export function buildTodayDaySpine(input: {
       ? buildNumberRhythmFacet(input.numerologyValue, input.numerologyMeaning, registry)
       : null;
 
+  const talisman = input.contract.day_story?.talisman;
   const skyCards = buildSkyInfluenceCards({
     morningRitualData: input.morningRitualData,
     cardName: input.cardName,
@@ -601,6 +623,14 @@ export function buildTodayDaySpine(input: {
     sunSignLabel: input.sunSignLabel,
     registry,
     ritualComplete: input.ritualComplete,
+    scenarioColor: talisman?.color
+      ? {
+          name: talisman.color,
+          note: talisman.note,
+          avoidColor: talisman.avoid_color,
+          avoidWhy: talisman.avoid_why,
+        }
+      : null,
   });
 
   const eveningLine = buildEveningLivingLine({

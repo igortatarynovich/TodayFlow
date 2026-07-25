@@ -159,21 +159,44 @@ export function resolveTodayDayColorGuide(input: {
     avoid_color_ru?: string;
     avoid_why_ru?: string;
   } | null;
+  /** Scenario / day_story.talisman — meaning SoT when present (B4). */
+  scenario?: {
+    name?: string | null;
+    benefit?: string | null;
+    note?: string | null;
+    avoidColor?: string | null;
+    avoidWhy?: string | null;
+  } | null;
 }): TodayDayColorGuide | null {
-  const name = (input.api?.name ?? input.name ?? "").trim();
+  const name = (
+    input.scenario?.name ??
+    input.api?.name ??
+    input.name ??
+    ""
+  ).trim();
   if (!name) return null;
 
   const preset = COLOR_GUIDE[name] ?? { ...DEFAULT_COLOR, name };
+  const scenarioBenefit = [input.scenario?.benefit, input.scenario?.note]
+    .map((s) => (s ?? "").trim())
+    .filter(Boolean)
+    .join(" ");
 
   return {
     name,
     hex: preset.hex,
-    benefit: input.api?.benefit_ru?.trim() || preset.benefit,
+    benefit: scenarioBenefit || input.api?.benefit_ru?.trim() || preset.benefit,
     clothing: input.api?.clothing_ru?.trim() || preset.clothing,
     accessory: input.api?.accessory_ru?.trim() || preset.accessory,
     amount: input.api?.amount_ru?.trim() || preset.amount,
-    avoidColor: input.api?.avoid_color_ru?.trim() || preset.avoidColor,
-    avoidWhy: input.api?.avoid_why_ru?.trim() || preset.avoidWhy,
+    avoidColor:
+      input.scenario?.avoidColor?.trim() ||
+      input.api?.avoid_color_ru?.trim() ||
+      preset.avoidColor,
+    avoidWhy:
+      input.scenario?.avoidWhy?.trim() ||
+      input.api?.avoid_why_ru?.trim() ||
+      preset.avoidWhy,
   };
 }
 

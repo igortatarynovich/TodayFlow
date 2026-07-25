@@ -1,6 +1,6 @@
 # Day Scenario Wire Projection B3
 
-**Status:** LANDED (engine projection on wire; UI full rewrite = B4)  
+**Status:** LANDED (engine projection on wire; FE preference = B4)  
 **Date:** 2026-07-25  
 **Code:** `day_scenario_project_v1.py` · hooked in `day_story_wire_v1._build_day_story_record`  
 **Canon:** [DAY_SCENARIO_V1.md](../DAY_SCENARIO_V1.md)
@@ -17,7 +17,7 @@
 - **Migration required?** no (additive nests)
 - **Canon updated?** yes — this note + DAY_SCENARIO_V1
 - **Backward compatible?** yes — old clients ignore new nests; FE color guide may still read morning
-  until B4 prefers scenario talisman
+  until B4 prefers scenario talisman → [DAY_SCENARIO_UI_PREFERENCE_B4.md](./DAY_SCENARIO_UI_PREFERENCE_B4.md)
 ```
 
 ## Projection map

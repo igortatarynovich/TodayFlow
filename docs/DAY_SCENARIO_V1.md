@@ -1,9 +1,10 @@
 # DAY_SCENARIO_V1 — драматургический каркас дня
 
-**Status:** CANON DRAFT — **B1–B3 landed** (engine + props + wire projection); full UI rewrite = B4  
+**Status:** CANON DRAFT — **B1–B4 landed** (engine + props + wire + FE preference); full Today layout rewrite still open  
 **Date:** 2026-07-25  
 **Engine:** `day_scenario_v1.py` · `day_color_catalog_v1.py` · `day_scenario_project_v1.py`  
 **Wire note:** [audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md](./audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md)  
+**UI note:** [audits/DAY_SCENARIO_UI_PREFERENCE_B4.md](./audits/DAY_SCENARIO_UI_PREFERENCE_B4.md)  
 **Capture rubric:** [audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md](./audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md)  
 **Related:** [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) · [today-language/TODAY_LANGUAGE_V1.md](./today-language/TODAY_LANGUAGE_V1.md)
 
@@ -181,14 +182,14 @@ Date-preset color catalog **не** meaning SoT (может остаться seed
 5. Project to contract / UI (**B3–B4**): хор виден как объяснение, не как вкладки-конкуренты  
 6. Value gate: reject orphan props; second conflict; card/number that invent a rival story; scene without conflict link  
 
-### B1–B3 shipped
+### B1–B4 shipped
 
 - `build_day_scenario_v1` → foundation · chorus · conflict · scenes · props
 - Wire: `project_day_scenario_onto_day_story_v1` in `_build_day_story_record` (deterministic; lifecycle unchanged)
 - Public additive nests: `day_story.day_scenario`, `day_story.interpretive_chorus`
 - Color on `talisman` from scenario props; catalog knowledge-only
 - Unavailable + scenes → recovered `ok` via scenario editorial
-- Full UI chapter rewrite = **B4**
+- **B4 FE:** prefer talisman/chorus/scenes in Today model (not full UI rewrite)
 
 Fallback: facts-only / unavailable — **не** formula-bank prose как user text.
 
@@ -207,6 +208,18 @@ Fallback: facts-only / unavailable — **не** formula-bank prose как user t
 - **Migration required?** no
 - **Canon updated?** yes — DAY_SCENARIO_V1 + DAY_SCENARIO_WIRE_PROJECTION_B3
 - **Backward compatible?** yes — old clients ignore new nests; FE color guide may still prefer morning until B4
+```
+
+### B4 (landed) — FE preference for scenario nests
+
+```markdown
+## Architecture impact
+- **SoT before (FE):** morning catalog color why; tarot/number parallel dumps; domains-only spheres
+- **SoT after (FE):** talisman/chorus/scenes preferred when present; no layout redesign
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — DAY_SCENARIO_V1 + DAY_SCENARIO_UI_PREFERENCE_B4
+- **Backward compatible?** yes — missing nests keep prior FE paths
 ```
 
 ### B3+ (when runtime switches)

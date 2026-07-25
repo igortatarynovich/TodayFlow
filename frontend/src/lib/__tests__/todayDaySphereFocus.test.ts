@@ -78,4 +78,43 @@ describe("buildTodaySphereFocus", () => {
     expect(focus.cards.every((c) => c.id.includes("money_work"))).toBe(true);
     expect(focus.cards.some((c) => /relationships|family/.test(c.id))).toBe(false);
   });
+
+  it("falls back to day_scenario scenes when domains are empty", () => {
+    const contract: TodayContractV1 = {
+      ...baseContract,
+      domains: {
+        relationships: { status: "", opportunity: "", risk: "", action: "", evidence_status: "absent" },
+        money_work: { status: "", opportunity: "", risk: "", action: "", evidence_status: "absent" },
+        family: { status: "", opportunity: "", risk: "", action: "", evidence_status: "absent" },
+      },
+      day_story: {
+        contract_version: "day_story_v1",
+        theme: "Точность",
+        story: "День коротких решений.",
+        day_scenario: {
+          scenes: [
+            {
+              scene_id: "work_peak",
+              sphere: "money_work",
+              sphere_label_ru: "Работа и деньги",
+              role_in_story: "peak",
+              opportunity: "Закрыть одну задачу до обеда.",
+              trap: "Распыление на мелочи.",
+            },
+            {
+              scene_id: "home_caution",
+              sphere: "family",
+              sphere_label_ru: "Дом и семья",
+              role_in_story: "caution",
+              trap: "Лишние обязательства легко перегружают.",
+              recommended_action: "Оставь минимум без вины.",
+            },
+          ],
+        },
+      },
+    };
+    const focus = buildTodaySphereFocus(contract);
+    expect(focus.cards.some((c) => c.role === "peak" && /работ/i.test(c.sphere))).toBe(true);
+    expect(focus.cards.some((c) => c.role === "caution" && /дом|сем/i.test(c.sphere))).toBe(true);
+  });
 });

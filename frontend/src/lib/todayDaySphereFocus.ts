@@ -60,6 +60,12 @@ function proseOrEmpty(text: string | null | undefined): string {
 }
 
 export function buildTodaySphereFocus(contract: TodayContractV1): TodaySphereFocus {
+  const fromDomains = buildSphereFocusFromDomains(contract);
+  if (fromDomains.cards.length) return fromDomains;
+  return buildSphereFocusFromScenarioScenes(contract);
+}
+
+function buildSphereFocusFromDomains(contract: TodayContractV1): TodaySphereFocus {
   const ranked = DOMAIN_ORDER.map((id) => {
     const domain = contract.domains[id];
     if (!isDomainLensPresent(domain)) {
@@ -116,4 +122,46 @@ export function buildTodaySphereFocus(contract: TodayContractV1): TodaySphereFoc
     // Do not announce “other spheres are neutral” — that is product chrome, not voice.
     neutralNote: "",
   };
+}
+
+/** Fallback when domain lenses are empty — use scenario scenes (B4). */
+function buildSphereFocusFromScenarioScenes(contract: TodayContractV1): TodaySphereFocus {
+  const scenes = contract.day_story?.day_scenario?.scenes ?? [];
+  if (!scenes.length) return { cards: [], neutralNote: "" };
+
+  const cards: TodaySphereFocusCard[] = [];
+  const peak = scenes.find((s) => s.role_in_story === "peak" || s.opportunity) ?? scenes[0];
+  const peakBody = proseOrEmpty(peak?.opportunity || peak?.what_happens);
+  if (peak && peakBody) {
+    cards.push({
+      id: `scene-peak-${peak.scene_id ?? "0"}`,
+      sphere: peak.sphere_label_ru || peak.sphere || "Сфера дня",
+      role: "peak",
+      headline: peak.sphere_label_ru || peak.sphere || "Сфера дня",
+      body: peakBody,
+    });
+  }
+
+  const caution =
+    scenes.find(
+      (s) =>
+        s !== peak &&
+        (s.role_in_story === "caution" || s.trap || s.do_not),
+    ) ?? null;
+  if (caution) {
+    const cautionBody = proseOrEmpty(caution.trap || caution.do_not || caution.what_happens);
+    const release = proseOrEmpty(caution.recommended_action);
+    if (cautionBody || release) {
+      cards.push({
+        id: `scene-caution-${caution.scene_id ?? "1"}`,
+        sphere: caution.sphere_label_ru || caution.sphere || "Зона внимания",
+        role: "caution",
+        headline: caution.sphere_label_ru || caution.sphere || "Зона внимания",
+        body: cautionBody || release,
+        releaseLine: cautionBody && release && release !== cautionBody ? release : undefined,
+      });
+    }
+  }
+
+  return { cards: cards.slice(0, 2), neutralNote: "" };
 }

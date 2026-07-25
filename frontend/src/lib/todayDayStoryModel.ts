@@ -303,9 +303,19 @@ export function buildTodayDayStoryViewModel(input: {
   const sphereFocus = buildTodaySphereFocus(input.contract);
   const dayMap = buildTodayDayMap({ contract: input.contract });
   const apiColor = input.morningRitualData?.celestial_events?.daily_symbols?.color;
+  const talisman = input.contract.day_story?.talisman;
   const colorGuide = resolveTodayDayColorGuide({
-    name: input.colorLine ?? apiColor?.name,
+    // Scenario talisman wins over morning catalog name (B4).
+    name: talisman?.color ?? input.colorLine ?? apiColor?.name,
     api: apiColor,
+    scenario: talisman?.color
+      ? {
+          name: talisman.color,
+          note: talisman.note,
+          avoidColor: talisman.avoid_color,
+          avoidWhy: talisman.avoid_why,
+        }
+      : null,
   });
   const pulseLabel = "Пульс дня";
   const pulseFromMap = dayMap?.whatHappens?.trim() || null;

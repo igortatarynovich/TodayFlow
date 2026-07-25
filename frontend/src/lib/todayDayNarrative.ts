@@ -430,6 +430,9 @@ function buildDayMapChapters(
     });
   }
 
+  const chorusChapter = collectChorusChapter(contract, used);
+  if (chorusChapter) chapters.push(chorusChapter);
+
   const strengthen = dayMap.whatWorks
     ? [dayMap.whatWorks].filter((l) => !nearDuplicate(l, dayMap.primaryConflict || ""))
     : [];
@@ -654,8 +657,62 @@ function collectForceDual(
   return { strengthen, soften, paragraphs };
 }
 
+function collectChorusChapter(
+  contract: TodayContractV1,
+  used: string[],
+): TodayDayNarrativeChapter | null {
+  const chorus = contract.day_story?.interpretive_chorus;
+  if (!chorus) return null;
+  const paras: string[] = [];
+  const astro = clean(chorus.astrology_lead);
+  const astroMeaning = clean(chorus.astrology_meaning);
+  if (astro && astroMeaning) {
+    pushDistinct(paras, used, `${astro}. ${astroMeaning}`);
+  } else if (astro) {
+    pushDistinct(paras, used, astro);
+  } else if (astroMeaning) {
+    pushDistinct(paras, used, astroMeaning);
+  }
+  const card = chorus.day_card;
+  if (card?.named) {
+    const role = clean(card.role);
+    pushDistinct(
+      paras,
+      used,
+      role ? `${clean(card.named)}. ${role}` : clean(card.named),
+    );
+  }
+  const number = chorus.day_number;
+  if (number?.named) {
+    const tempo = clean(number.for_conflict) || clean(number.tempo);
+    pushDistinct(
+      paras,
+      used,
+      tempo ? `${clean(number.named)}. ${tempo}` : clean(number.named),
+    );
+  }
+  const natal = clean(chorus.natal_lead);
+  if (natal) pushDistinct(paras, used, natal);
+  if (!paras.length) return null;
+  return {
+    id: "chorus",
+    kicker: "Почему именно так",
+    lead: paras[0] ?? null,
+    paragraphs: paras.slice(1),
+    accent: "sky",
+    collapseAfter: paras.length > 3 ? 2 : undefined,
+  };
+}
+
 function collectSymbolParagraphs(story: TodayDayStoryViewModel, contract: TodayContractV1, used: string[]): string[] {
   const out: string[] = [];
+  // When interpretive chorus is present, card/number already explain the conflict —
+  // do not stack a second independent tarot/number forecast chapter.
+  if (contract.day_story?.interpretive_chorus) {
+    pushDistinct(out, used, contract.day_story?.symbolic_note);
+    return out;
+  }
+
   const tarot = story.tarotImpact;
   if (tarot) {
     const title = clean(tarot.title);

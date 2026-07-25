@@ -12,18 +12,25 @@ describe("resolveTodayDayColorGuide", () => {
     expect(guide?.avoidWhy).toBeTruthy();
   });
 
-  it("merges API overrides when present", () => {
+  it("prefers scenario talisman over API benefit/avoid", () => {
     const guide = resolveTodayDayColorGuide({
       name: "Лазурь",
       api: {
         name: "Лазурь",
         benefit_ru: "API benefit",
-        clothing_ru: "API clothing",
+        avoid_color_ru: "API avoid",
+        avoid_why_ru: "API why",
+      },
+      scenario: {
+        name: "Лазурь",
+        note: "Держит ясность в коротких решениях.",
+        avoidColor: "кислотный жёлтый",
+        avoidWhy: "Размывает точность конфликта дня.",
       },
     });
-    expect(guide?.benefit).toBe("API benefit");
-    expect(guide?.clothing).toBe("API clothing");
-    expect(guide?.accessory).toMatch(/браслет/i);
+    expect(guide?.benefit).toMatch(/ясност|коротких/i);
+    expect(guide?.avoidColor).toBe("кислотный жёлтый");
+    expect(guide?.avoidWhy).toMatch(/конфликта/i);
   });
 
   it("returns null when name missing", () => {
