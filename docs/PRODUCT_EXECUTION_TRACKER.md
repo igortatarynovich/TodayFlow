@@ -663,14 +663,14 @@ Source of truth: [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) §1–§13
 
 ### Tarot
 - [x] **Interpretation Engine v1.1** — Context Pack → LLM → validation → UI; ban «Аркан»; quality gates; honest fallback. Canon [TAROT_INTERPRETATION_ENGINE_V1](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md). Ledger: `fb8cd34` · `c4bbe56` (+ CE scrub `f2ac8c2` · `8c7bd2e`).
-- [x] **Architecture freeze (2026-07-25)** — no new contract fields · engine branches · spread types · Tarot UI as primary track until content quality lands.
-- [x] **Tarot Knowledge Base v1** — [TAROT_KNOWLEDGE_BASE_V1](./tarot/TAROT_KNOWLEDGE_BASE_V1.md) · `DATA/reference/tarot/knowledge_v1/cards.json` (78) · pack projection + prompt v1.2 · schema. Next: editorial deepen + live scoring.
-- [x] **Position Semantics v1** — [TAROT_POSITION_SEMANTICS_V1](./tarot/TAROT_POSITION_SEMANTICS_V1.md) · `DATA/reference/tarot/position_semantics_v1/roles.json` · pack `position_semantics` · prompt v1.3. Public contract unchanged.
-- [x] **Question Ontology v1** — [TAROT_QUESTION_ONTOLOGY_V1](./tarot/TAROT_QUESTION_ONTOLOGY_V1.md) · type/domain/intent/horizon + pack instructions · prompt v1.4 · integration set 12. Single author prompt. Canon principle: LLM = one story, not card encyclopedia. Public contract unchanged.
-- [ ] **KB editorial deepen (minors)** — each minor as entity (scene, tension, mature/immature, domains, reversed). **← next**
-- [ ] **Prompt Evaluation golden set (~50)** — work/relationship/choice/money/self/purpose/open + rubric 1–5; regression after prompt/KB changes.
-- [ ] Live owner scoring on current 10–15 scenario harness (`scripts/tarot_interpretation_live_eval.py --live`).
-- [ ] **Tarot Design Language v1** — [docs/tarot/TAROT_DESIGN_LANGUAGE_V1.md](./tarot/TAROT_DESIGN_LANGUAGE_V1.md) **DRAFT / PENDING ACCEPT** · **parked under architecture freeze**
+- [x] **Interpretation Stack v1 FROZEN** — KB + Position Semantics + Question Ontology + single LLM author. **No architectural changes until Golden Eval results.** Canon [TAROT_INTERPRETATION_ENGINE_V1](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md). Principles: one story · answer this question · card-name ablation.
+- [x] **Tarot Knowledge Base v1** — [TAROT_KNOWLEDGE_BASE_V1](./tarot/TAROT_KNOWLEDGE_BASE_V1.md) · 78 cards in pack.
+- [x] **Position Semantics v1** — [TAROT_POSITION_SEMANTICS_V1](./tarot/TAROT_POSITION_SEMANTICS_V1.md).
+- [x] **Question Ontology v1** — [TAROT_QUESTION_ONTOLOGY_V1](./tarot/TAROT_QUESTION_ONTOLOGY_V1.md) · prompt v1.4 · integration set 12.
+- [ ] **Q1 Editorial deepen minors** — each of 56 = unique psychological archetype (not rank×suit); profile includes `adjacent_distinction`. **← next**
+- [ ] **Golden Dataset** — fixed scenarios (question/profile/cards/expected type) without scores.
+- [ ] **Golden Eval** — rubric 1–5 · paid-worth · anti-sameness · freeze-lift gate.
+- [ ] **Q3 Prompt iteration** — wording only after Eval.- [ ] **Tarot Design Language v1** — [docs/tarot/TAROT_DESIGN_LANGUAGE_V1.md](./tarot/TAROT_DESIGN_LANGUAGE_V1.md) **DRAFT / PENDING ACCEPT** · **parked under architecture freeze**
   - Канон-объект: колода на столе; формации 1/3/5/2; один reveal-жест; рубашка = фирменный язык
   - До accept: не плодить новые ритуальные UI; после accept → один `TarotDeckExperience` везде
   - Figma formations + код — только после product accept §8
@@ -1005,7 +1005,7 @@ Ordered work (aligns with canon §7):
 
 ## 6) Current Priorities (Execution Order)
 
-> **Активный фокус (2026-07-25):** **Tarot interpretation stack complete** (KB + Position Semantics + Question Ontology). Next: **minors deepen** · golden eval rubric. Canon: [TAROT_QUESTION_ONTOLOGY_V1](./tarot/TAROT_QUESTION_ONTOLOGY_V1.md) · [TAROT_INTERPRETATION_ENGINE_V1](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md) §0 principle. Parallel: **CE Stage 0–1 staging GATE PASS** + **Stage 2 Identity Core LLM prompt** (structural validation only; no quality heuristics; no publish). CE baseline: `5eb61c6` (not branch tip).
+> **Активный фокус (2026-07-25):** **Tarot Interpretation Stack v1 FROZEN** — next **Q1 minors as unique archetypes** → Golden Dataset → Golden Eval → Q3 prompt wording. Canon [TAROT_INTERPRETATION_ENGINE_V1](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md) · [TAROT_KNOWLEDGE_BASE_V1](./tarot/TAROT_KNOWLEDGE_BASE_V1.md) §Q1. Parallel: **CE Stage 0–1 staging GATE PASS** + **Stage 2 Identity Core LLM prompt** (structural validation only; no quality heuristics; no publish). CE baseline: `5eb61c6` (not branch tip).
 
 ### 🔴 Phase 3 — Screen Block Definition (единственный приоритет)
 
@@ -1098,10 +1098,11 @@ Historical note:
 - 2026-07-08 | Web product UI | calendar / profile-summary / subscriptions / discover pattern → ProductPageScreen | IN PROGRESS | `/calendar`, `/profile-summary`, `/subscriptions`, `/discover/pattern/[axis_id]` — orbit-page и hero images убраны; v2 header + pl.panel + legacyHost.
 - 2026-07-08 | Web product UI | challenges / reports / help / tarot cards → ProductPageScreen | IN PROGRESS | `/challenges`, `/challenges/[id]`, `/reports/full`, `/reports/thematic`, `/reports/thematic/[theme]`, `/help`, `/help/*`, `/tarot/cards/[slug]` — orbit-page и hero images убраны; metadata help → layout.tsx; inner forms/viewer в legacyHost.
 - 2026-07-07 | Web product UI | Today dashboard v2 aligned to Profile reference | IN PROGRESS | Today dashboard на `productPageLayout` + `productV2Surface` tokens; wide canvas `mainWide`; cards/type/spacing match profile v2.
+- 2026-07-25 | Tarot | **Interpretation Stack v1 FROZEN (docs)** | **ACTIVE** | Hard freeze until Golden Eval. Order: Q1 unique-archetype minors → Golden Dataset → Golden Eval → Q3 prompt wording. Principles: one story · answer this question · card-name ablation. Canon [TAROT_INTERPRETATION_ENGINE_V1](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md) · KB §Q1 profile. No engine/contract change in this commit.
 - 2026-07-25 | Tarot | **Knowledge Base v1** | **DONE (data+wire)** | 78 semantic cards → Context Pack (`inner_conflict`, domains, reverse trap, amplify, intensify/soften in-spread). Prompt `tarot-interpretation-v1.2`. Canon [TAROT_KNOWLEDGE_BASE_V1](./tarot/TAROT_KNOWLEDGE_BASE_V1.md). Public contract unchanged. Next: Position Semantics · live text scoring · editorial deepen.
 - 2026-07-25 | Tarot | **Question Ontology v1** | **DONE (data+wire)** | question_type/domain/intent/horizon → pack instructions. Prompt v1.4 (single author). Integration set 12. Canon principle: LLM = one story. [TAROT_QUESTION_ONTOLOGY_V1](./tarot/TAROT_QUESTION_ONTOLOGY_V1.md). Public contract unchanged. Next: minors deepen → golden eval.
 - 2026-07-25 | Tarot | **Position Semantics v1** | **DONE (data+wire)** | Role library → pack `position_semantics` (purpose / answers_question / extract / do_not / result_type). Prompt `tarot-interpretation-v1.3`. Canon [TAROT_POSITION_SEMANTICS_V1](./tarot/TAROT_POSITION_SEMANTICS_V1.md). Public contract unchanged. Next: Question Ontology · minors deepen · golden eval.
-- 2026-07-25 | Tarot | **Architecture freeze + content backlog** | **ACTIVE** | Freeze: contract / engine branches / new spreads / Tarot UI. Next content: minors deepen → Prompt golden eval (~50). Interpretation architecture frozen. Risk = knowledge+prompt, not pipeline. Canon § freeze + §6 content backlog.
+- 2026-07-25 | Tarot | **Architecture freeze + content backlog** | **SUPERSEDED by Stack v1 FROZEN** | See Interpretation Stack v1 FROZEN (docs). Next: Q1 → Dataset → Eval → Q3.
 - 2026-07-25 | Tarot | **Interpretation Engine pack+gates v1.1** | **DONE** | Rich meaning ranges · domain profile · prompt bans · quality gates · honest fallback · scenario fixture + `scripts/tarot_interpretation_live_eval.py`. CE scrub commits `f2ac8c2` / `8c7bd2e`.
 - 2026-07-25 | Tarot | **Interpretation Engine v1.1 LLM author** | **DONE (web+BE)** | Architecture: Context Pack → LLM → validation → UI. Templates demoted to pack facts / thin fallback. Canon [TAROT_INTERPRETATION_ENGINE_V1](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md). UI: symbols / question story / answer / next step.
 - 2026-07-25 | Tarot | **Interpretation Engine v1** | **SUPERSEDED by v1.1** | Full-deck resolve; ban «Аркан»; unresolved gate; first template path replaced by LLM author.

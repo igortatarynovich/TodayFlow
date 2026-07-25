@@ -1,6 +1,6 @@
 # Tarot Question Ontology v1
 
-**Статус:** ACTIVE (2026-07-25) — content SoT for Context Pack  
+**Статус:** ACTIVE (2026-07-25) — content SoT for Context Pack · **Interpretation Stack v1 frozen** ([engine](./TAROT_INTERPRETATION_ENGINE_V1.md))  
 **Тип:** reference / interpretation instructions (не user-facing prose)  
 **Владелец:** Product + Backend  
 **Связанные:** [TAROT_INTERPRETATION_ENGINE_V1.md](./TAROT_INTERPRETATION_ENGINE_V1.md) · [TAROT_POSITION_SEMANTICS_V1.md](./TAROT_POSITION_SEMANTICS_V1.md) · [TAROT_KNOWLEDGE_BASE_V1.md](./TAROT_KNOWLEDGE_BASE_V1.md)

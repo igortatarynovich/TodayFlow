@@ -1,19 +1,32 @@
 # Tarot Interpretation Engine v1
 
-**Статус:** ACTIVE (2026-07-25) — **architecture frozen**; quality work is content/prompt only  
+**Статус:** ACTIVE (2026-07-25) — **Interpretation Stack v1 FROZEN** until Golden Eval results  
 **Тип:** generation / meaning contract (SoT для ответа расклада)  
 **Владелец:** Product + Backend  
-**Связанные:** [SCREEN_CONTRACTS_V1.md](../SCREEN_CONTRACTS_V1.md) §6.4–§6.5 · [PRODUCT_GENERATION_CONTRACTS.md](../PRODUCT_GENERATION_CONTRACTS.md) · [TAROT_DESIGN_LANGUAGE_V1.md](./TAROT_DESIGN_LANGUAGE_V1.md)
+**Связанные:** [SCREEN_CONTRACTS_V1.md](../SCREEN_CONTRACTS_V1.md) §6.4–§6.5 · [PRODUCT_GENERATION_CONTRACTS.md](../PRODUCT_GENERATION_CONTRACTS.md) · [TAROT_DESIGN_LANGUAGE_V1.md](./TAROT_DESIGN_LANGUAGE_V1.md) · [TAROT_KNOWLEDGE_BASE_V1.md](./TAROT_KNOWLEDGE_BASE_V1.md) · [TAROT_POSITION_SEMANTICS_V1.md](./TAROT_POSITION_SEMANTICS_V1.md) · [TAROT_QUESTION_ONTOLOGY_V1.md](./TAROT_QUESTION_ONTOLOGY_V1.md)
 
-### Architecture freeze (owner, 2026-07-25)
+### Interpretation Stack v1 — hard freeze (owner, 2026-07-25)
 
-Pipeline `Context Pack → LLM → validation → UI` and public `tarot_answer_v1` shape are **frozen**.
+```
+Question
+   → Question Ontology
+   → Context Pack (Card KB · Position Semantics · Profile Tint · Draw Facts)
+   → LLM (один автор)
+   → Validation
+   → UI
+```
 
-**Do not** (until freeze lifts): new contract fields · new engine branches · new spread types · new Tarot UI as primary work.
+Стек **завершён и заморожен**. До появления результатов **Golden Eval** запрещены:
 
-**Primary risk** is no longer architecture — it is **knowledge quality + prompt**. Next work is content SoT feeding the pack, not more pipeline code.
+- новые слои / ветки engine;
+- новые поля `tarot_answer_v1`;
+- отдельные prompt-ветки по типу вопроса / расклада;
+- новые типы раскладов и Tarot UI как основной трек;
+- любое «умное» усложнение пайплайна «ради качества».
 
-Ledger anchors: `fb8cd34` (engine v1) · `c4bbe56` (pack/gates) · `f2ac8c2` / `8c7bd2e` (CE scrub from tarot path).
+Дальше только **редакторское качество** (три независимых направления ниже). Новый архитектурный слой без доказанного прироста на Golden Eval — отказ по умолчанию.
+
+Ledger: `fb8cd34` · `c4bbe56` · `1e53497` (KB) · `56d753a` (positions) · `724d958` (ontology + stack freeze).
 
 ---
 
@@ -48,7 +61,29 @@ Deterministic templates → склейка → UI
 
 Не перечислять значения карт по очереди. Validation уже банит механический список; канон закрепляет продуктовый смысл запрета.
 
-**Слои ответственности (зрелая модель):**
+### Principle: answer this question, not demonstrate the deck
+
+**Каждый расклад должен ощущаться как ответ именно на этот вопрос, а не как демонстрация знаний о картах.**
+
+Редакторский приоритет при любом выборе:
+
+1. лучше ответить человеку;
+2. чем «рассказать ещё про карту».
+
+Если после правки текст стал богаче по символике, но слабее отвечает на вопрос — правка отклоняется.
+
+### Principle: card-name ablation test (KB distinctness)
+
+**Если после удаления названий карт текст почти не меняется, Knowledge Base недостаточно различает карты.**
+
+Практика: взять несколько раскладов, убрать из ответа имена карт.
+
+| Результат | Вывод |
+|-----------|--------|
+| Остаются **разные человеческие истории** | KB различает карты |
+| Один и тот же текст с переставленными существительными | продолжать Q1 deepen minors |
+
+**Слои ответственности (Interpretation Stack v1 — frozen):**
 
 | Слой | Отвечает на |
 |------|-------------|
@@ -58,8 +93,6 @@ Deterministic templates → склейка → UI
 | LLM | одна история / ответ / шаг |
 | Validation | качество и запреты |
 | UI | только отображение |
-
-Дальше — качество знаний (minors deepen) и golden evaluation, не новая архитектура пайплайна.
 
 ---
 
@@ -202,13 +235,72 @@ UI blocks (any spread):
 
 Editorial default: reject-invalid LLM → thin fallback. **Do not** hard-overwrite good LLM prose with formula banks.
 
-### Content backlog (quality, not architecture)
+### Quality track (only work allowed under stack freeze)
 
-1. **Tarot Knowledge Base v1** — **ACTIVE** — [TAROT_KNOWLEDGE_BASE_V1.md](./TAROT_KNOWLEDGE_BASE_V1.md) · 78 semantic records in pack.
-2. **Position Semantics** — **ACTIVE** — [TAROT_POSITION_SEMANTICS_V1.md](./TAROT_POSITION_SEMANTICS_V1.md) · role library in pack.
-3. **Question Ontology** — **ACTIVE** — [TAROT_QUESTION_ONTOLOGY_V1.md](./TAROT_QUESTION_ONTOLOGY_V1.md) · type/domain/intent + pack instructions; integration set 12.
-4. **KB editorial deepen (minors)** — central scene · unique conflict · vs neighbor ranks · upright/reversed · domain nuance. **← next after ontology hold**
-5. **Prompt Evaluation** — golden set (~50 real questions); score answer / no loops / no fluff / no categorical claims / clear takeaway / worth finishing.
+Порядок после freeze:
+
+1. **Q1** Editorial Deepen Minors  
+2. **Golden Dataset** (эталонные сценарии без оценок)  
+3. **Golden Eval** (рубрикатор + прогон по датасету)  
+4. **Q3** Prompt iteration (wording only)
+
+Dataset и Eval — **разные** артефакты: набор сценариев расширяется независимо от рубрикатора.
+
+#### Q1 — Editorial Deepen Minors
+
+**Цель (формулировка):** сделать каждую из **56** младших карт **уникальным психологическим архетипом**, а не комбинацией rank × suit.
+
+Не «углубить поля», а добиться, что 8 / 9 / 10 Мечей — **три разные человеческие истории**.
+
+Semantic profile на карту (семантика, не литература) — SoT в [TAROT_KNOWLEDGE_BASE_V1.md](./TAROT_KNOWLEDGE_BASE_V1.md) § Q1:
+
+| Field | Meaning |
+|-------|---------|
+| `core_scene` | какая человеческая ситуация изображена |
+| `central_conflict` | внутреннее противоречие |
+| `driving_need` | чего человек пытается добиться |
+| `shadow_pattern` | типичная ловушка |
+| `growth_direction` | куда ведёт зрелое проживание |
+| `work_lens` / `relationship_lens` / `money_lens` / `inner_lens` | доменные линзы |
+| `reversed_shift` | как меняется динамика (не «просто наоборот») |
+| `adjacent_distinction` | чем отличается от соседних рангов той же масти |
+
+**Gate:** если нельзя ответить «чем 9 Кубков отличается от 8 и 10» — карта не готова.
+
+Тест: principle *card-name ablation* выше.
+
+#### Golden Dataset (before Eval)
+
+Фиксированные сценарии **без баллов**:
+
+- вопрос · профиль · расклад/карты · ожидаемый `question_type` (ontology)
+
+Расширяется независимо от рубрикатора. Path (target): `backend/tests/fixtures/tarot_golden_dataset_v1.json` (создаётся в Q2 prep).
+
+#### Golden Eval (after Dataset)
+
+Механизм оценки ответов по датасету. Рубрикатор **1–5**:
+
+| Критерий | 1–5 |
+|----------|-----|
+| Ответил на вопрос | |
+| Понятность | |
+| История вместо списка карт | |
+| Символика раскрыта естественно | |
+| Практическая польза | |
+| Нет повторов | |
+| Нет ложной уверенности | |
+| Хочется дочитать | |
+
+Отдельно (да/нет): **«Я бы заплатил за такой разбор.»**
+
+**Anti-sameness:** ~30 раскладов подряд — не звучат ли все ответы одинаково?
+
+Без результатов Golden Eval — **не** поднимать architecture freeze.
+
+#### Q3 — Prompt iteration (wording only)
+
+Только после Eval: wording · ритм · длина · баланс символика/практика · голос. Не pipeline / контракт / новые слои.
 
 ---
 
@@ -232,9 +324,10 @@ Editorial default: reject-invalid LLM → thin fallback. **Do not** hard-overwri
 - [x] Quality gates beyond JSON schema
 - [x] Fallback honest / non-imitative
 - [x] Architecture freeze declared (no new contract/UI/spreads/engine branches as primary track)
-- [x] Knowledge Base v1 landed (78 cards → pack; prompt v1.2 reads KB fields)
-- [x] Position Semantics v1 landed (role library → pack `position_semantics`; prompt v1.3)
-- [x] Question Ontology v1 landed (pack `question_ontology`; prompt v1.4; integration set 12)
-- [ ] Live eval 10–15 scenarios (script: `scripts/tarot_interpretation_live_eval.py --live`) — owner scores text usefulness
-- [ ] KB editorial deepen (majors review · weak minors rewrite) — next content track
-- [ ] Prompt golden eval (~50) — after minors deepen
+- [x] Knowledge Base v1 · Position Semantics v1 · Question Ontology v1 landed
+- [x] Interpretation Stack v1 **hard-frozen** until Golden Eval results
+- [x] Canon principles: LLM = one story · answer this question · card-name ablation
+- [ ] Q1 Editorial deepen minors (unique archetype per card, not rank×suit)
+- [ ] Golden Dataset (scenarios without scores)
+- [ ] Golden Eval (rubric + paid-worth + anti-sameness) — freeze lift gate
+- [ ] Q3 Prompt iteration from eval deltas only

@@ -1,6 +1,6 @@
 # Tarot Knowledge Base v1
 
-**Статус:** ACTIVE (2026-07-25) — content SoT for Context Pack  
+**Статус:** ACTIVE (2026-07-25) — content SoT for Context Pack · stack frozen ([engine](./TAROT_INTERPRETATION_ENGINE_V1.md))  
 **Тип:** reference / meaning facts (не user-facing prose)  
 **Владелец:** Product + Content  
 **Связанные:** [TAROT_INTERPRETATION_ENGINE_V1.md](./TAROT_INTERPRETATION_ENGINE_V1.md) · `DATA/astrology_reference/tarot_full_deck.json` (identity) · Machine Contract vectors remain separate (`DATA/reference/tarot/machine/`)
@@ -20,36 +20,52 @@ Knowledge Base = факты для LLM. **Не** готовые абзацы о�
 | Слой | Путь | Роль |
 |------|------|------|
 | Card identity | `DATA/astrology_reference/tarot_full_deck.json` | id, `name_ru`, suit, catalog upright/reversed |
-| **Semantic facts (KB v1)** | `DATA/reference/tarot/knowledge_v1/cards.json` | архетип, свет/тень, конфликт, домены, reversed, amplify, intensify/soften |
+| **Semantic facts (KB v1)** | `DATA/reference/tarot/knowledge_v1/cards.json` | архетип + Q1 profile fields |
 | Machine vectors | `DATA/reference/tarot/machine/` | DayModel / numeric axes — **не** текст интерпретации |
 | Pack builder | `tarot_interpretation_engine_v1._meaning_range` | merge KB → pack `meaning_range` |
 | User prose | LLM | единственный author ответа |
 
-Rebuild from authoring script: `scripts/build_tarot_knowledge_v1.py` (optional; committed JSON is runtime SoT).
+Rebuild: `scripts/build_tarot_knowledge_v1.py` (committed JSON = runtime SoT).
 
 ---
 
-## 2. Card record (semantic)
+## 2. Card record (v1 base + Q1 deepen)
 
-Per `card_id` `0…77`:
+### 2.1 Base fields (already in pack)
 
 | Field | Meaning |
 |-------|---------|
 | `central_archetype` | одно ядро (не синоним названия) |
-| `light` | 2–5 светлых граней (фразы-факты) |
-| `shadow` | 2–5 теневых граней |
-| `inner_conflict` | что тянет человека внутри |
-| `outer_expression` | как это видно снаружи / в ситуации |
-| `domains.relationships` / `work` / `money` / `growth` | короткие факты по сфере |
-| `reversed.central` | ядро в перевороте |
-| `reversed.themes` | 2–4 темы |
-| `reversed.trap` | типичная ловушка переворота |
-| `amplifies_questions` | типы вопросов, где карта особенно сильна |
-| `intensifies_with` | card_id[], обычно усиливают смысл |
-| `softens_with` | card_id[], обычно смягчают / балансируют |
-| `upright_themes` / `reversed_themes` | короткие темы для pack/UI strip |
+| `light` / `shadow` | светлые / теневые грани |
+| `inner_conflict` / `outer_expression` | внутри / снаружи |
+| `domains.*` | relationships / work / money / growth |
+| `reversed.*` | central / themes / trap |
+| `amplifies_questions` / `intensifies_with` / `softens_with` | связи |
+| `upright_themes` / `reversed_themes` | короткие темы |
 
-**Запрещено:** абзацы-ответы; «Аркан»; категоричные предсказания; Profile-paste.
+### 2.2 Q1 semantic profile (minors — editorial deepen)
+
+**Цель Q1:** каждая из 56 младших карт — **уникальный психологический архетип**, не комбинация rank × suit.
+
+| Field | Meaning |
+|-------|---------|
+| `core_scene` | какая человеческая ситуация изображена |
+| `central_conflict` | внутреннее противоречие карты |
+| `driving_need` | чего человек пытается добиться |
+| `shadow_pattern` | типичная ловушка |
+| `growth_direction` | куда ведёт зрелое проживание |
+| `work_lens` | работа / роль |
+| `relationship_lens` | отношения |
+| `money_lens` | деньги / материя |
+| `inner_lens` | внутренний рост / состояние |
+| `reversed_shift` | как меняется динамика в перевороте (не «просто наоборот») |
+| `adjacent_distinction` | чем отличается от соседних рангов той же масти |
+
+**Gate:** если нельзя ответить «чем 9 Кубков отличается от 8 и 10» — карта не готова.
+
+**Тест:** [engine](./TAROT_INTERPRETATION_ENGINE_V1.md) principle *card-name ablation*.
+
+**Запрещено:** абзацы-ответы; «Аркан»; категоричные предсказания; Profile-paste; копипаст suit×rank без `adjacent_distinction`.
 
 ---
 
@@ -57,10 +73,11 @@ Per `card_id` `0…77`:
 
 `meaning_range` получает KB fields +:
 
-- `domain_lens` — один доменный факт под `question_domain`
-- `intensifies_drawn` / `softens_drawn` — имена карт **из текущего расклада**, попадающие в intensify/soften
+- `domain_lens` — один доменный факт под вопрос
+- `intensifies_drawn` / `softens_drawn` — имена карт из текущего расклада
+- Q1 fields when present (`core_scene`, `central_conflict`, …) — facts for LLM, not prose
 
-Public `tarot_answer_v1` **не** меняется (architecture freeze).
+Public `tarot_answer_v1` **не** меняется.
 
 ---
 
@@ -68,16 +85,16 @@ Public `tarot_answer_v1` **не** меняется (architecture freeze).
 
 | Slice | Policy |
 |-------|--------|
-| Majors 0–21 | Hand-authored rich facts |
-| Minors 22–77 | Suit × rank semantic matrix + per-card polish; must not collapse to shared suit keywords only |
-| Missing card | Engine falls back to legacy thin themes / catalog; log once |
+| Majors 0–21 | Hand-authored; keep rich; optional Q1 fields |
+| Minors 22–77 | **Q1:** unique archetype profile (not rank×suit matrix as SoT) |
+| Missing Q1 field | Pack may omit; editorial incomplete until filled |
 
 ---
 
 ## 5. Acceptance
 
-- [x] Schema + loader + 78 records in `cards.json`
-- [x] Pack prefers KB when present (`knowledge_source=tarot_knowledge_v1`)
-- [x] Domain lens + intensify/soften within spread
-- [ ] Owner live text scoring after KB lands (existing eval harness)
-- [ ] Editorial pass: majors deep review · minors weak cards rewritten
+- [x] Schema + loader + 78 base records
+- [x] Pack prefers KB when present
+- [ ] Q1: all 56 minors have full semantic profile + non-empty `adjacent_distinction`
+- [ ] Card-name ablation pass on sample spreads
+- [ ] Golden Dataset / Eval (separate track; after Q1)
