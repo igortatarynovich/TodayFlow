@@ -220,6 +220,23 @@ def _run_offline_day(target: date, *, out_dir: Path, redact: bool, force_llm: bo
             )
         contract = day_story_to_today_contract_v1(story)
         session.record_final(story=story, contract=contract, used_fallback=used_fallback)
+        try:
+            from todayflow_backend.services.day_scenario_v1 import build_day_scenario_v1
+
+            scenario = build_day_scenario_v1(
+                interpretation=interpretation,
+                day_events_pack=interpretation.get("day_events_pack")
+                if isinstance(interpretation.get("day_events_pack"), dict)
+                else None,
+                day_thesis=interpretation.get("day_thesis")
+                if isinstance(interpretation.get("day_thesis"), dict)
+                else None,
+                ritual_context=session._last_ritual,
+                celestial_events=ce,
+            )
+            session.pack["day_scenario_v1"] = scenario
+        except Exception as exc:
+            session.add_defect("day_scenario_build_failed", str(exc), cls="VALIDATION")
         session.pack["generation_metadata"]["prompt_version"] = DAY_STORY_PROMPT_VER
         session.pack["generation_metadata"]["llm_configured"] = is_llm_chat_configured()
         path = session.write_pack(stem=case_id)

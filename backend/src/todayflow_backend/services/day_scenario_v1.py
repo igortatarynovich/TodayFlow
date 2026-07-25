@@ -1,0 +1,822 @@
+"""day_scenario_v1 — central day dramaturgy contract (Phase B1 engine).
+
+Source of Truth (target):
+  facts → interpretive chorus → conflict → scenes → props → UI projections
+
+B1 ships the deterministic spine (foundation, chorus, conflict, scenes) with
+origin/evidence links. Props-from-scenes and wire/UI switch are B2–B4.
+
+Canon: docs/DAY_SCENARIO_V1.md
+"""
+
+from __future__ import annotations
+
+from typing import Any
+
+DAY_SCENARIO_V1_CONTRACT = "day_scenario_v1"
+DAY_SCENARIO_V1_VERSION = "day-scenario-v1.0-b1-engine"
+
+# Product spheres (Act V). Not all appear every day.
+PRODUCT_SPHERE_IDS: tuple[str, ...] = (
+    "work_decisions",
+    "relationships",
+    "communication",
+    "money",
+    "energy_body",
+    "creativity",
+    "home",
+    "rest_travel",
+)
+
+WIRE_DOMAIN_TO_SPHERES: dict[str, tuple[str, ...]] = {
+    "money_work": ("work_decisions", "money"),
+    "relationships": ("relationships", "communication"),
+    "family": ("home", "relationships"),
+}
+
+# thesis family → default spheres when domain evidence is thin
+_FAMILY_SPHERES: dict[str, tuple[str, ...]] = {
+    "decision": ("work_decisions", "communication"),
+    "communication": ("communication", "relationships"),
+    "change": ("work_decisions", "rest_travel", "energy_body"),
+    "pressure": ("work_decisions", "energy_body", "home"),
+    "momentum": ("work_decisions", "creativity"),
+    "connection": ("relationships", "communication"),
+}
+
+_SPHERE_LABEL_RU: dict[str, str] = {
+    "work_decisions": "Работа и решения",
+    "relationships": "Отношения",
+    "communication": "Общение",
+    "money": "Деньги",
+    "energy_body": "Энергия и тело",
+    "creativity": "Творчество",
+    "home": "Дом",
+    "rest_travel": "Отдых и поездки",
+}
+
+# Number → how to live the conflict (tempo / measure), not a second forecast
+_NUMBER_TEMPO_RU: dict[int, dict[str, str]] = {
+    1: {
+        "tempo": "инициатива",
+        "style": "один ясный старт",
+        "lesson": "не ждать разрешения снаружи",
+        "initiative": "высокая, но точечная",
+        "closure": "закрыть день видимым первым шагом",
+    },
+    2: {
+        "tempo": "диалог",
+        "style": "пара, а не толпа",
+        "lesson": "слушать до ответа",
+        "initiative": "умеренная — после контакта",
+        "closure": "зафиксировать договорённость",
+    },
+    3: {
+        "tempo": "выражение",
+        "style": "сказать вслух, не копить",
+        "lesson": "форма важна не меньше смысла",
+        "initiative": "лёгкая, игрово-творческая",
+        "closure": "оставить след — сообщение, набросок, жест",
+    },
+    4: {
+        "tempo": "структура",
+        "style": "порядок и границы",
+        "lesson": "опора важнее скорости",
+        "initiative": "сдержанная, по плану",
+        "closure": "закрыть контур, не открывать новый",
+    },
+    5: {
+        "tempo": "движение",
+        "style": "смена угла, не смена жизни",
+        "lesson": "свобода без разрушения",
+        "initiative": "средняя — один эксперимент",
+        "closure": "отметить, что изменилось",
+    },
+    6: {
+        "tempo": "забота",
+        "style": "близкий круг и ответственность",
+        "lesson": "не раствориться в чужом",
+        "initiative": "мягкая, сервисная",
+        "closure": "тепло без самоотречения",
+    },
+    7: {
+        "tempo": "глубина",
+        "style": "пауза, анализ, тишина",
+        "lesson": "не заполнять пустоту шумом",
+        "initiative": "низкая снаружи, высокая внутри",
+        "closure": "одна честная формулировка для себя",
+    },
+    8: {
+        "tempo": "сила",
+        "style": "решение и ресурс",
+        "lesson": "власть без давления",
+        "initiative": "высокая — с мерой",
+        "closure": "зафиксировать результат или отказ",
+    },
+    9: {
+        "tempo": "завершение",
+        "style": "отпустить и собрать смысл",
+        "lesson": "не тащить вчерашнее в завтра",
+        "initiative": "завершающая, не стартовая",
+        "closure": "ритуал окончания — список, прощание, архив",
+    },
+}
+
+
+def _clip(value: Any, n: int = 400) -> str:
+    text = str(value or "").strip()
+    if len(text) <= n:
+        return text
+    return text[: n - 1].rstrip() + "…"
+
+
+def _as_dict(value: Any) -> dict[str, Any]:
+    return value if isinstance(value, dict) else {}
+
+
+def _as_list(value: Any) -> list[Any]:
+    return value if isinstance(value, list) else []
+
+
+def _event_by_id(pack: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    out: dict[str, dict[str, Any]] = {}
+    for ev in _as_list(pack.get("events")):
+        if isinstance(ev, dict) and ev.get("id"):
+            out[str(ev["id"])] = ev
+    return out
+
+
+def _driver_rows(pack: dict[str, Any]) -> list[dict[str, Any]]:
+    by_id = _event_by_id(pack)
+    rows: list[dict[str, Any]] = []
+    for did in _as_list(pack.get("ranked_drivers"))[:3]:
+        eid = str(did)
+        ev = by_id.get(eid) or {}
+        rows.append(
+            {
+                "id": eid,
+                "kind": ev.get("kind"),
+                "title_ru": ev.get("title_ru"),
+                "fact_ru": ev.get("fact_ru") or ev.get("title_ru") or eid,
+                "strength": ev.get("strength"),
+                "body": ev.get("body"),
+                "sign": ev.get("sign"),
+                "aspect": ev.get("aspect"),
+                "evidence_ref": f"event:{eid}",
+            }
+        )
+    return rows
+
+
+def _claims_by_prefix(claims: list[Any], prefix: str) -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = []
+    for c in claims:
+        if not isinstance(c, dict):
+            continue
+        cid = str(c.get("id") or "")
+        if cid.startswith(prefix):
+            out.append(c)
+    return out
+
+
+def build_scenario_foundation_v1(
+    *,
+    interpretation: dict[str, Any] | None = None,
+    day_events_pack: dict[str, Any] | None = None,
+    ritual_context: dict[str, Any] | None = None,
+    celestial_events: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Facts and computed data — not user-facing prose."""
+    interp = _as_dict(interpretation)
+    pack = day_events_pack if isinstance(day_events_pack, dict) else _as_dict(interp.get("day_events_pack"))
+    ritual = _as_dict(ritual_context)
+    ce = celestial_events if isinstance(celestial_events, dict) else {}
+    foundation_nest = _as_dict(interp.get("day_foundation"))
+    personal_nest = _as_dict(interp.get("day_personal"))
+    claims = _as_list(interp.get("derived_claims"))
+    evidence = _as_list(interp.get("evidence"))
+
+    drivers = _driver_rows(pack)
+    astronomy: list[dict[str, Any]] = []
+    astrology: list[dict[str, Any]] = []
+    for row in drivers:
+        kind = str(row.get("kind") or "")
+        item = {
+            "id": row["id"],
+            "label_ru": row.get("fact_ru"),
+            "kind": kind,
+            "strength": row.get("strength"),
+            "evidence_ref": row.get("evidence_ref"),
+        }
+        if kind in {"lunar_phase", "eclipse", "ingress", "moon_ingress"} or "moon" in kind:
+            astronomy.append(item)
+            astrology.append(item)
+        else:
+            astrology.append(item)
+
+    # Extra sky from celestial if pack thin
+    if not astronomy:
+        lunar = _as_dict(ce.get("lunar_phase") or _as_dict(interp.get("day_sky")).get("lunar_phase"))
+        if lunar.get("name"):
+            astronomy.append(
+                {
+                    "id": "lunar_phase",
+                    "label_ru": lunar.get("name"),
+                    "kind": "lunar_phase",
+                    "guidance": lunar.get("guidance"),
+                    "evidence_ref": "celestial.lunar_phase",
+                }
+            )
+
+    natal_activations: list[dict[str, Any]] = []
+    for c in _claims_by_prefix(claims, "claim.personal."):
+        natal_activations.append(
+            {
+                "id": c.get("id"),
+                "text": _clip(c.get("text"), 280),
+                "evidence_ids": list(c.get("evidence_ids") or []),
+                "layer": c.get("layer") or "personal",
+            }
+        )
+    if not natal_activations and personal_nest:
+        natal_activations.append(
+            {
+                "id": "day_personal.summary",
+                "text": _clip(personal_nest.get("summary") or personal_nest.get("dynamic") or "", 280),
+                "evidence_ids": [],
+                "layer": "personal",
+            }
+        )
+
+    card_name = str(ritual.get("tarot_name_ru") or ritual.get("tarot_main_id") or "").strip() or None
+    if not card_name:
+        for c in claims:
+            if isinstance(c, dict) and str(c.get("id") or "") == "claim.day_card":
+                card_name = _clip(c.get("text"), 120) or None
+                break
+
+    number_val: int | str | None = None
+    if ritual.get("numerology_value") is not None:
+        try:
+            number_val = int(ritual.get("numerology_value"))
+        except (TypeError, ValueError):
+            number_val = str(ritual.get("numerology_value"))
+    num_block = _as_dict(foundation_nest.get("numerology"))
+    if number_val is None and num_block.get("personal_day") is not None:
+        number_val = num_block.get("personal_day")
+    elif number_val is None and num_block.get("universal_day") is not None:
+        number_val = num_block.get("universal_day")
+
+    cycles: list[dict[str, Any]] = []
+    weekday = _as_dict(foundation_nest.get("weekday"))
+    if weekday:
+        cycles.append(
+            {
+                "id": "weekday",
+                "label_ru": weekday.get("name_ru") or weekday.get("ruler_planet"),
+                "evidence_ref": "day_foundation.weekday",
+            }
+        )
+    seasonal = _as_dict(foundation_nest.get("seasonal"))
+    if seasonal:
+        cycles.append(
+            {
+                "id": "seasonal",
+                "label_ru": seasonal.get("summary_ru") or seasonal.get("name"),
+                "evidence_ref": "day_foundation.seasonal",
+            }
+        )
+
+    confidence = interp.get("confidence")
+    if not isinstance(confidence, (int, float)):
+        confidence = 0.55 if drivers else 0.35
+
+    return {
+        "contract_version": "day_scenario_foundation_v1",
+        "ranked_drivers": drivers,
+        "astronomy_facts": astronomy,
+        "astrology_facts": astrology,
+        "personal_natal_activations": [a for a in natal_activations if a.get("text")],
+        "tarot_card": {
+            "name": card_name,
+            "id": ritual.get("tarot_main_id"),
+            "present": bool(card_name),
+            "evidence_ref": "ritual.tarot" if card_name else None,
+        },
+        "day_number": {
+            "value": number_val,
+            "personal_day": num_block.get("personal_day"),
+            "universal_day": num_block.get("universal_day"),
+            "present": number_val is not None,
+            "evidence_ref": "ritual.numerology" if ritual.get("numerology_value") is not None else "day_foundation.numerology",
+        },
+        "cycles": cycles,
+        "confidence": float(confidence),
+        "evidence_references": [
+            {"id": e.get("id"), "source": e.get("source"), "text": _clip(e.get("text") or e.get("fact_ru"), 160)}
+            for e in evidence
+            if isinstance(e, dict)
+        ][:40],
+        "limitations": list(interp.get("limitations") or []),
+    }
+
+
+def _human_meaning_for_driver(row: dict[str, Any], conflict_label: str) -> str:
+    fact = _clip(row.get("fact_ru") or row.get("title_ru"), 200)
+    if not fact:
+        return f"Фактор дня усиливает линию «{conflict_label}»."
+    return f"{fact} Это подталкивает день к сюжету «{conflict_label}»."
+
+
+def _card_archetype_voice(card_name: str, conflict_label: str) -> dict[str, str]:
+    name = card_name.strip()
+    return {
+        "named": f"Карта дня — {name}",
+        "role_for_conflict": (
+            f"Архетип «{name}» лучше всего описывает, какой ролью пройти «{conflict_label}» — "
+            f"не как отдельный прогноз, а как способ отношения к уже названному конфликту."
+        ),
+        "hidden_side": f"«{name}» может открыть скрытую сторону того же конфликта, а не новую тему дня.",
+        "way_to_relate": f"Проживите день в ключе «{name}»: держите одну роль, не собирайте второй сюжет.",
+    }
+
+
+def _number_voice(value: Any, conflict_label: str) -> dict[str, Any]:
+    try:
+        n = int(value) % 9 or 9
+    except (TypeError, ValueError):
+        n = 0
+    tempo = _NUMBER_TEMPO_RU.get(n) or {
+        "tempo": "ровный",
+        "style": "без лишних параллельных сюжетов",
+        "lesson": "держаться одной линии",
+        "initiative": "умеренная",
+        "closure": "закрыть день осознанно",
+    }
+    return {
+        "named": f"Число дня — {value}",
+        "reduced": n or None,
+        **tempo,
+        "for_conflict": (
+            f"Число {value} окрашивает прохождение «{conflict_label}»: "
+            f"темп — {tempo['tempo']}, способ — {tempo['style']}."
+        ),
+    }
+
+
+def build_interpretive_chorus_v1(
+    *,
+    foundation: dict[str, Any],
+    conflict_label: str,
+    interpretation: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Four voices for one story — explain, do not compete."""
+    interp = _as_dict(interpretation)
+    claims = _as_list(interp.get("derived_claims"))
+    label = conflict_label or "главный сюжет дня"
+
+    astrology_voices: list[dict[str, Any]] = []
+    for row in _as_list(foundation.get("ranked_drivers")) or _as_list(foundation.get("astrology_facts")):
+        if not isinstance(row, dict):
+            continue
+        fact = _clip(row.get("fact_ru") or row.get("label_ru") or row.get("title_ru"), 220)
+        if not fact:
+            continue
+        astrology_voices.append(
+            {
+                "voice": "astrology",
+                "named_factor": fact,
+                "human_meaning": _human_meaning_for_driver(row, label),
+                "link_to_conflict": f"Объясняет, почему сегодня в центре «{label}».",
+                "evidence_ref": row.get("evidence_ref") or row.get("id"),
+                "driver_id": row.get("id"),
+            }
+        )
+
+    card = _as_dict(foundation.get("tarot_card"))
+    card_voice = None
+    if card.get("present") and card.get("name"):
+        voices = _card_archetype_voice(str(card["name"]), label)
+        card_voice = {
+            "voice": "day_card",
+            "named_factor": voices["named"],
+            "archetype_role": voices["role_for_conflict"],
+            "hidden_side": voices["hidden_side"],
+            "way_to_relate": voices["way_to_relate"],
+            "link_to_conflict": voices["role_for_conflict"],
+            "human_meaning": voices["way_to_relate"],
+            "evidence_ref": card.get("evidence_ref"),
+            "is_not_astro_proof": True,
+            "must_not_invent_second_plot": True,
+        }
+
+    number = _as_dict(foundation.get("day_number"))
+    number_voice = None
+    if number.get("present") and number.get("value") is not None:
+        nv = _number_voice(number.get("value"), label)
+        number_voice = {
+            "voice": "day_number",
+            "named_factor": nv["named"],
+            "tempo": nv.get("tempo"),
+            "style": nv.get("style"),
+            "lesson": nv.get("lesson"),
+            "initiative": nv.get("initiative"),
+            "closure": nv.get("closure"),
+            "link_to_conflict": nv["for_conflict"],
+            "human_meaning": nv["for_conflict"],
+            "evidence_ref": number.get("evidence_ref"),
+            "must_not_invent_second_plot": True,
+        }
+
+    natal_voices: list[dict[str, Any]] = []
+    for act in _as_list(foundation.get("personal_natal_activations")):
+        if not isinstance(act, dict) or not act.get("text"):
+            continue
+        natal_voices.append(
+            {
+                "voice": "natal",
+                "named_factor": _clip(act.get("text"), 200),
+                "human_meaning": (
+                    f"Личная активация усиливает «{label}»: реакция может быть сильнее средней."
+                ),
+                "link_to_conflict": f"Почему именно вы проживаете «{label}» именно так.",
+                "evidence_ref": act.get("id"),
+                "evidence_ids": list(act.get("evidence_ids") or []),
+            }
+        )
+    if not natal_voices:
+        for c in _claims_by_prefix(claims, "claim.personal.")[:3]:
+            natal_voices.append(
+                {
+                    "voice": "natal",
+                    "named_factor": _clip(c.get("text"), 200),
+                    "human_meaning": f"Натальный слой делает «{label}» личным.",
+                    "link_to_conflict": f"Почему «{label}» задевает именно вас.",
+                    "evidence_ref": c.get("id"),
+                    "evidence_ids": list(c.get("evidence_ids") or []),
+                }
+            )
+
+    return {
+        "contract_version": "day_scenario_chorus_v1",
+        "astrology": astrology_voices,
+        "day_card": card_voice,
+        "day_number": number_voice,
+        "natal": natal_voices,
+        "dialogue_rule": (
+            "Четыре взгляда на одну историю: астрология — что снаружи; "
+            "карта — архетип; число — темп; натал — почему вам."
+        ),
+        "named_language_encouraged": True,
+        "parallel_forecast_forbidden": True,
+    }
+
+
+def _opposing_forces(family: str, mode: str) -> tuple[str, str]:
+    pairs: dict[str, tuple[str, str]] = {
+        "decision": ("угодить всем", "выбрать своё"),
+        "communication": ("сгладить", "сказать прямо"),
+        "change": ("удержать привычное", "принять поворот"),
+        "pressure": ("сорваться", "удержать меру"),
+        "momentum": ("распылиться", "держать ритм"),
+        "connection": ("закрыться", "войти в контакт"),
+    }
+    a, b = pairs.get(family, ("автопилот", "осознанный выбор"))
+    if mode == "opportunity":
+        return ("упустить окно", "сделать один ясный шаг")
+    if mode == "recovery":
+        return ("тащить старое", "отпустить и восстановиться")
+    if mode == "stability":
+        return ("ломать работающее", "беречь ровный ритм")
+    return (a, b)
+
+
+def build_scenario_conflict_v1(
+    *,
+    foundation: dict[str, Any],
+    day_thesis: dict[str, Any] | None = None,
+    interpretation: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """One central conflict. Foundation = drivers + natal; card/number only refine reading."""
+    interp = _as_dict(interpretation)
+    thesis = day_thesis if isinstance(day_thesis, dict) else _as_dict(interp.get("day_thesis"))
+    if not thesis.get("family"):
+        # last resort from primary_conflict alias
+        pc = interp.get("primary_conflict")
+        if isinstance(pc, dict):
+            thesis = _as_dict(pc.get("day_thesis")) or {
+                "family": "momentum",
+                "variant": "steady_productive_rhythm",
+                "mode": "stability",
+                "label_ru": pc.get("label_ru") or "Ровный день",
+                "driver_ids": list(pc.get("driver_ids") or []),
+            }
+        elif isinstance(pc, str) and pc.strip():
+            thesis = {
+                "family": "momentum",
+                "variant": "steady_productive_rhythm",
+                "mode": "stability",
+                "label_ru": pc.strip(),
+                "driver_ids": [d.get("id") for d in _as_list(foundation.get("ranked_drivers")) if isinstance(d, dict)],
+            }
+
+    family = str(thesis.get("family") or "momentum")
+    variant = str(thesis.get("variant") or "steady_productive_rhythm")
+    mode = str(thesis.get("mode") or "stability")
+    label = str(thesis.get("label_ru") or thesis.get("label") or "Сюжет дня").strip()
+    driver_ids = [str(x) for x in _as_list(thesis.get("driver_ids"))][:3]
+    if not driver_ids:
+        driver_ids = [
+            str(d.get("id"))
+            for d in _as_list(foundation.get("ranked_drivers"))
+            if isinstance(d, dict) and d.get("id")
+        ][:3]
+
+    force_a, force_b = _opposing_forces(family, mode)
+    why_arose_parts = [
+        _clip(d.get("fact_ru"), 160)
+        for d in _as_list(foundation.get("ranked_drivers"))
+        if isinstance(d, dict) and d.get("fact_ru")
+    ][:2]
+    why_arose = (
+        " · ".join(why_arose_parts)
+        if why_arose_parts
+        else "Факты дня собирают одну линию напряжения / возможности."
+    )
+
+    natal = _as_list(foundation.get("personal_natal_activations"))
+    why_personal = (
+        _clip(natal[0].get("text"), 220)
+        if natal and isinstance(natal[0], dict) and natal[0].get("text")
+        else "Личный контекст делает этот сюжет узнаваемым именно вам — не «среднему» дню."
+    )
+
+    chorus_refs: list[str] = []
+    for d in driver_ids:
+        chorus_refs.append(f"astrology:{d}")
+    card = _as_dict(foundation.get("tarot_card"))
+    if card.get("present"):
+        chorus_refs.append("day_card")
+    number = _as_dict(foundation.get("day_number"))
+    if number.get("present"):
+        chorus_refs.append("day_number")
+    if natal:
+        chorus_refs.append("natal")
+
+    confidence = float(foundation.get("confidence") or 0.5)
+    if not driver_ids:
+        confidence = min(confidence, 0.4)
+
+    return {
+        "contract_version": "day_scenario_conflict_v1",
+        "short_name": label,
+        "thesis": {
+            "family": family,
+            "variant": variant,
+            "mode": mode,
+            "label_ru": label,
+            "day_thesis": thesis,
+        },
+        "opposing_forces": {"a": force_a, "b": force_b},
+        "why_arose": why_arose,
+        "why_personal": why_personal,
+        "driver_ids": driver_ids,
+        "chorus_references": chorus_refs,
+        "confidence": confidence,
+        "foundation_rule": (
+            "Conflict is built from day facts + personal activation; "
+            "card and number refine reading/tempo, never invent a rival plot."
+        ),
+    }
+
+
+def _select_sphere_ids(
+    *,
+    family: str,
+    domains_present: list[str],
+    max_scenes: int = 4,
+) -> list[str]:
+    ordered: list[str] = []
+    seen: set[str] = set()
+
+    def add(sid: str) -> None:
+        if sid in PRODUCT_SPHERE_IDS and sid not in seen:
+            seen.add(sid)
+            ordered.append(sid)
+
+    for domain in domains_present:
+        for sid in WIRE_DOMAIN_TO_SPHERES.get(domain, ()):
+            add(sid)
+    for sid in _FAMILY_SPHERES.get(family, ("work_decisions", "communication")):
+        add(sid)
+        if len(ordered) >= max_scenes:
+            break
+    if not ordered:
+        add("work_decisions")
+        add("communication")
+    return ordered[:max_scenes]
+
+
+def _scene_role(sphere_id: str, index: int) -> str:
+    if index == 0:
+        return "primary"
+    if sphere_id in {"energy_body", "rest_travel", "home"}:
+        return "support_or_risk"
+    return "secondary"
+
+
+def build_scenario_scenes_v1(
+    *,
+    conflict: dict[str, Any],
+    chorus: dict[str, Any],
+    foundation: dict[str, Any],
+    interpretation: dict[str, Any] | None = None,
+    max_scenes: int = 4,
+) -> list[dict[str, Any]]:
+    """Only spheres where the conflict actually shows."""
+    interp = _as_dict(interpretation)
+    family = str((_as_dict(conflict.get("thesis")).get("family")) or "momentum")
+    label = str(conflict.get("short_name") or "сюжет дня")
+    domains_present = [str(d) for d in _as_list(interp.get("domains_present"))]
+    sphere_ids = _select_sphere_ids(family=family, domains_present=domains_present, max_scenes=max_scenes)
+
+    force = _as_dict(conflict.get("opposing_forces"))
+    a = force.get("a") or "автопилот"
+    b = force.get("b") or "осознанный выбор"
+    driver_ids = list(conflict.get("driver_ids") or [])
+    number_voice = _as_dict(chorus.get("day_number"))
+    card_voice = _as_dict(chorus.get("day_card"))
+
+    scenes: list[dict[str, Any]] = []
+    for idx, sid in enumerate(sphere_ids):
+        scene_id = f"scene.{sid}"
+        sphere_label = _SPHERE_LABEL_RU.get(sid, sid)
+        role = _scene_role(sid, idx)
+        what = f"В сфере «{sphere_label}» проявляется «{label}»: натяжение между «{a}» и «{b}»."
+        why = conflict.get("why_arose") or "Факты дня собираются в одну линию."
+        opportunity = f"Шанс выбрать «{b}» именно здесь — один конкретный жест."
+        trap = f"Ловушка — скатиться в «{a}» и сделать вид, что выбора не было."
+        do = f"Сделайте один шаг в пользу «{b}» в зоне «{sphere_label}»."
+        avoid = f"Не усиливайте «{a}» автоматическим согласием или откладыванием."
+        domestic = {
+            "work_decisions": "Одно письмо или решение, которое вы откладывали из-за чужой реакции.",
+            "relationships": "Разговор, где важно не сгладить то, что лучше проговорить.",
+            "communication": "Сообщение: сначала смысл, потом скорость ответа.",
+            "money": "Трата или отказ: не покупать спокойствие импульсом.",
+            "energy_body": "Пауза до усталости — вода, прогулка, сон без «ещё один час».",
+            "creativity": "Набросок без требования шедевра.",
+            "home": "Один бытовой контур — не весь дом сразу.",
+            "rest_travel": "Смена обстановки на час, если тянет «всё бросить».",
+        }.get(sid, "Одна бытовая сцена, где конфликт становится видимым.")
+
+        chorus_refs: list[str] = ["conflict"]
+        if driver_ids:
+            chorus_refs.append(f"astrology:{driver_ids[0]}")
+        if card_voice:
+            chorus_refs.append("day_card")
+        if number_voice:
+            chorus_refs.append("day_number")
+        if _as_list(chorus.get("natal")):
+            chorus_refs.append("natal")
+
+        # Number paints tempo into action language
+        if number_voice.get("tempo"):
+            do = f"{do} Темп дня ({number_voice.get('named_factor') or 'число'}): {number_voice.get('tempo')}."
+
+        scenes.append(
+            {
+                "scene_id": scene_id,
+                "sphere": sid,
+                "sphere_label_ru": sphere_label,
+                "role_in_story": role,
+                "what_happens": what,
+                "why": why,
+                "opportunity": opportunity,
+                "trap": trap,
+                "recommended_action": do,
+                "do_not": avoid,
+                "domestic_example": domestic,
+                "evidence_references": list(driver_ids),
+                "chorus_references": chorus_refs,
+                "confidence": float(conflict.get("confidence") or 0.5),
+                "serves_conflict": label,
+            }
+        )
+    return scenes
+
+
+def empty_props_v1() -> dict[str, Any]:
+    """Prop schema reserved for B2 — not filled in B1."""
+    return {
+        "contract_version": "day_scenario_props_v1",
+        "status": "deferred_to_b2",
+        "color": None,
+        "avoid_color": None,
+        "goals": [],
+        "affirmations": [],
+        "humor": None,
+        "rule": "Every prop must carry origin_scene_id; catalog is knowledge only, not SoT.",
+    }
+
+
+def build_day_scenario_v1(
+    *,
+    interpretation: dict[str, Any] | None = None,
+    day_events_pack: dict[str, Any] | None = None,
+    day_thesis: dict[str, Any] | None = None,
+    ritual_context: dict[str, Any] | None = None,
+    celestial_events: dict[str, Any] | None = None,
+    max_scenes: int = 4,
+) -> dict[str, Any]:
+    """Assemble day_scenario_v1 spine (B1). Does not switch wire/UI."""
+    interp = _as_dict(interpretation)
+    foundation = build_scenario_foundation_v1(
+        interpretation=interp,
+        day_events_pack=day_events_pack,
+        ritual_context=ritual_context,
+        celestial_events=celestial_events,
+    )
+    conflict = build_scenario_conflict_v1(
+        foundation=foundation,
+        day_thesis=day_thesis,
+        interpretation=interp,
+    )
+    chorus = build_interpretive_chorus_v1(
+        foundation=foundation,
+        conflict_label=str(conflict.get("short_name") or ""),
+        interpretation=interp,
+    )
+    scenes = build_scenario_scenes_v1(
+        conflict=conflict,
+        chorus=chorus,
+        foundation=foundation,
+        interpretation=interp,
+        max_scenes=max_scenes,
+    )
+    return {
+        "contract_version": DAY_SCENARIO_V1_CONTRACT,
+        "version": DAY_SCENARIO_V1_VERSION,
+        "runtime_sot": False,  # B1: engine available; wire not switched
+        "foundation": foundation,
+        "chorus": chorus,
+        "conflict": conflict,
+        "scenes": scenes,
+        "props": empty_props_v1(),
+        "projections": {
+            "status": "deferred_to_b3",
+            "note": "Map to today_contract / day_story slots in PR B3.",
+        },
+    }
+
+
+def validate_day_scenario_v1(scenario: dict[str, Any] | None) -> list[str]:
+    """Structural validation — architectural invariants for B1."""
+    errors: list[str] = []
+    if not isinstance(scenario, dict):
+        return ["scenario_not_dict"]
+    if scenario.get("contract_version") != DAY_SCENARIO_V1_CONTRACT:
+        errors.append("bad_contract_version")
+    foundation = _as_dict(scenario.get("foundation"))
+    conflict = _as_dict(scenario.get("conflict"))
+    chorus = _as_dict(scenario.get("chorus"))
+    scenes = _as_list(scenario.get("scenes"))
+
+    if not conflict.get("short_name"):
+        errors.append("conflict_missing_short_name")
+    if not conflict.get("driver_ids") and not _as_list(foundation.get("ranked_drivers")):
+        errors.append("conflict_without_drivers_or_foundation")
+    if not isinstance(conflict.get("opposing_forces"), dict):
+        errors.append("conflict_missing_opposing_forces")
+
+    # Card/number must not be sole foundation of conflict
+    drivers = _as_list(conflict.get("driver_ids"))
+    if not drivers and (foundation.get("tarot_card") or {}).get("present"):
+        # allowed only if natal present — still warn
+        if not _as_list(foundation.get("personal_natal_activations")):
+            errors.append("conflict_card_without_drivers")
+
+    if chorus.get("day_card") and not chorus["day_card"].get("must_not_invent_second_plot"):
+        errors.append("day_card_missing_no_second_plot_flag")
+    if chorus.get("day_number") and not chorus["day_number"].get("must_not_invent_second_plot"):
+        errors.append("day_number_missing_no_second_plot_flag")
+
+    if not scenes:
+        errors.append("scenes_empty")
+    for sc in scenes:
+        if not isinstance(sc, dict):
+            errors.append("scene_not_dict")
+            continue
+        if not sc.get("scene_id"):
+            errors.append("scene_missing_id")
+        if sc.get("sphere") not in PRODUCT_SPHERE_IDS:
+            errors.append(f"scene_bad_sphere:{sc.get('sphere')}")
+        if not sc.get("serves_conflict"):
+            errors.append(f"scene_missing_serves_conflict:{sc.get('scene_id')}")
+
+    props = _as_dict(scenario.get("props"))
+    if props.get("status") != "deferred_to_b2" and props.get("color") is not None:
+        # B1 must not invent color SoT
+        if not _as_dict(props.get("color")).get("origin_scene_id"):
+            errors.append("prop_color_without_origin_scene")
+
+    return errors

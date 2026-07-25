@@ -1,7 +1,8 @@
 # DAY_SCENARIO_V1 — драматургический каркас дня
 
-**Status:** CANON DRAFT — target SoT (runtime migration = Phase B after capture packs)  
+**Status:** CANON DRAFT — **B1 engine landed** (`day_scenario_v1.py`); runtime wire/UI **not** switched yet (B3–B4)  
 **Date:** 2026-07-25  
+**Engine:** `backend/src/todayflow_backend/services/day_scenario_v1.py`  
 **Capture rubric:** [audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md](./audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md)  
 **Related:** [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) · [today-language/TODAY_LANGUAGE_V1.md](./today-language/TODAY_LANGUAGE_V1.md)
 
@@ -175,15 +176,36 @@ Date-preset color catalog **не** meaning SoT (может остаться seed
 1. Facts: небо, циклы, натал, **карта дня**, **число дня**, history  
 2. Interpretive chorus (Уровень 2) — факторы с ролями, без второго сюжета  
 3. Scenario spine (prolog → **conflict** → consequences → scenes)  
-4. Props derived from scenes  
-5. Project to contract / UI: хор виден как объяснение, не как вкладки-конкуренты  
+4. Props derived from scenes (**B2**)  
+5. Project to contract / UI (**B3–B4**): хор виден как объяснение, не как вкладки-конкуренты  
 6. Value gate: reject orphan props; second conflict; card/number that invent a rival story; scene without conflict link  
+
+### B1 shipped
+
+- `build_day_scenario_v1` → `foundation` · `chorus` · `conflict` · `scenes` · `props.status=deferred_to_b2`
+- `runtime_sot: false` until B3 wire switch
+- Conflict foundation = drivers + natal; card/number only in `chorus_references`
+- Named language encouraged («Луна в Рыбах», «Карта дня — …», «Число дня — …»)
 
 Fallback: facts-only / unavailable — **не** formula-bank prose как user text.
 
 ---
 
-## Architecture impact (when runtime switches)
+## Architecture impact (Phase B — progressive)
+
+### B1 (this land) — engine only
+
+```markdown
+## Architecture impact
+- **SoT before:** unchanged at runtime (day_story slots + preset color still live)
+- **SoT after (code available):** day_scenario_v1 builds foundation/chorus/conflict/scenes; `runtime_sot=false`
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — DAY_SCENARIO_V1 B1 note
+- **Backward compatible?** yes — no wire/UI switch
+```
+
+### B3+ (when runtime switches)
 
 ```markdown
 ## Architecture impact
