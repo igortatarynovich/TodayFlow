@@ -1,0 +1,559 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://todayflow.app/schemas/character_engine_v1.json",
+  "title": "TodayFlow Character Engine v1 (snapshot nest)",
+  "description": "Identity/provenance-first Character Engine nest for core_profile_snapshots.payload.character_engine_v1. See docs/audits/CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md. No prose catalog.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "recipe_version",
+    "status",
+    "profile_fingerprint",
+    "input_fact_set_version",
+    "generated_at",
+    "meta"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "character_engine_v1" },
+    "recipe_version": { "type": "string", "const": "character_engine_recipe_v1" },
+    "status": { "type": "string", "enum": ["ready", "forming", "failed"] },
+    "profile_fingerprint": { "type": "string", "minLength": 8, "maxLength": 128 },
+    "input_fact_set_version": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "calc_authority": { "$ref": "#/$defs/calc_authority" },
+    "capability": { "$ref": "#/$defs/capability" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "raw_facts": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/raw_fact" }
+    },
+    "evidence": { "$ref": "#/$defs/evidence_graph" },
+    "cascade": { "$ref": "#/$defs/cascade" },
+    "compass": { "$ref": "#/$defs/compass" },
+    "legacy_projections": { "$ref": "#/$defs/legacy_map" },
+    "diagnostics": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "shadow": { "$ref": "#/$defs/shadow_report" }
+      }
+    },
+    "meta": { "$ref": "#/$defs/meta" },
+    "error": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": { "type": "string", "maxLength": 64 },
+        "message": { "type": "string", "maxLength": 512 },
+        "retry_available": { "type": "boolean" }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "status": { "const": "ready" } },
+        "required": ["status"]
+      },
+      "then": {
+        "required": [
+          "raw_facts",
+          "evidence",
+          "cascade",
+          "compass",
+          "calc_authority",
+          "capability"
+        ]
+      }
+    }
+  ],
+  "$defs": {
+    "stable_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*:[a-f0-9]{12,64}$",
+      "description": "Prefixed deterministic id, e.g. fact:ab12… — never hash of LLM prose."
+    },
+    "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+    "capability_floor": {
+      "type": "string",
+      "enum": ["date_only", "full_natal", "name", "onboarding", "longitudinal"]
+    },
+    "section_ref": {
+      "type": "string",
+      "enum": [
+        "identity_core",
+        "source_roles",
+        "internal_engine",
+        "primary_tension",
+        "secondary_tensions",
+        "scenes",
+        "potential",
+        "blind_spots",
+        "compass",
+        "life_path"
+      ]
+    },
+    "edge_type": {
+      "type": "string",
+      "enum": [
+        "supports",
+        "strengthens",
+        "qualifies",
+        "contradicts",
+        "limits",
+        "contextualizes"
+      ]
+    },
+    "scene_kind": {
+      "type": "string",
+      "enum": [
+        "responsibility",
+        "intimacy",
+        "risk",
+        "success",
+        "uncertainty",
+        "competition",
+        "recovery_context",
+        "learning_pressure"
+      ]
+    },
+    "calc_authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "swiss": { "type": "string", "maxLength": 128 },
+        "numerology": { "type": "string", "maxLength": 128 },
+        "catalogs": { "type": "string", "maxLength": 128 }
+      }
+    },
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "natal_mode": { "type": "string", "enum": ["date_only", "full", "none"] },
+        "has_name": { "type": "boolean" },
+        "has_birth_time": { "type": "boolean" },
+        "has_birth_place": { "type": "boolean" }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["adapter_version"],
+      "properties": {
+        "adapter_version": { "type": "string", "const": "character_engine_adapter_v1" },
+        "stage_prompt_ids": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "maxLength": 128 }
+        },
+        "validation_report_id": { "type": ["string", "null"], "maxLength": 128 }
+      }
+    },
+    "raw_fact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fact_id",
+        "fact_type",
+        "value",
+        "authority",
+        "calc_version",
+        "capability_required",
+        "confidence",
+        "provenance"
+      ],
+      "properties": {
+        "fact_id": { "$ref": "#/$defs/stable_id" },
+        "fact_type": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "value": {},
+        "display_key": { "type": "string", "maxLength": 128 },
+        "authority": {
+          "type": "string",
+          "enum": [
+            "swiss",
+            "deterministic_numerology",
+            "catalog",
+            "bridge_natal_facts_llm"
+          ]
+        },
+        "calc_version": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "capability_required": { "$ref": "#/$defs/capability_floor" },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["source_system", "input_fingerprint"],
+          "properties": {
+            "source_system": { "type": "string", "maxLength": 64 },
+            "input_fingerprint": { "type": "string", "maxLength": 128 },
+            "computed_at": { "type": "string", "format": "date-time" }
+          }
+        },
+        "unavailable_reason": { "type": "string", "maxLength": 256 }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_id",
+        "claim_kind",
+        "thesis_key",
+        "cascade_role",
+        "supporting_fact_ids",
+        "confidence",
+        "capability_floor",
+        "produced_by_stage",
+        "evidence_status"
+      ],
+      "properties": {
+        "claim_id": { "$ref": "#/$defs/stable_id" },
+        "claim_kind": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "thesis_key": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "surface_text": { "type": "string", "maxLength": 2000 },
+        "cascade_role": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "supporting_fact_ids": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/stable_id" }
+        },
+        "contradicting_fact_ids": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/stable_id" }
+        },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "capability_floor": { "$ref": "#/$defs/capability_floor" },
+        "produced_by_stage": { "type": "integer", "minimum": 1, "maximum": 4 },
+        "evidence_status": {
+          "type": "string",
+          "enum": ["grounded", "insufficient", "excluded"]
+        },
+        "exclusion_reason": { "type": "string", "maxLength": 256 }
+      }
+    },
+    "evidence_edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["edge_id", "fact_id", "claim_id", "edge_type"],
+      "properties": {
+        "edge_id": { "$ref": "#/$defs/stable_id" },
+        "fact_id": { "$ref": "#/$defs/stable_id" },
+        "claim_id": { "$ref": "#/$defs/stable_id" },
+        "edge_type": { "$ref": "#/$defs/edge_type" },
+        "note_key": { "type": "string", "maxLength": 64 }
+      }
+    },
+    "evidence_graph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "claims", "edges"],
+      "properties": {
+        "schema_version": { "type": "string", "const": "evidence_graph_v1" },
+        "claims": { "type": "array", "items": { "$ref": "#/$defs/claim" } },
+        "edges": { "type": "array", "items": { "$ref": "#/$defs/evidence_edge" } }
+      }
+    },
+    "claim_ref_block": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim_ids"],
+      "properties": {
+        "claim_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/stable_id" }
+        },
+        "surface_text": { "type": "string", "maxLength": 2000 }
+      }
+    },
+    "source_role": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role_key", "fact_ids", "claim_ids"],
+      "properties": {
+        "role_key": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "fact_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/stable_id" }
+        },
+        "claim_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/stable_id" }
+        },
+        "surface_text": { "type": "string", "maxLength": 2000 }
+      }
+    },
+    "mechanism_slot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slot", "claim_ids"],
+      "properties": {
+        "slot": {
+          "type": "string",
+          "enum": [
+            "decision",
+            "perception",
+            "stress",
+            "risk",
+            "recovery",
+            "growth",
+            "burnout"
+          ]
+        },
+        "claim_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/stable_id" }
+        },
+        "surface_text": { "type": "string", "maxLength": 2000 }
+      }
+    },
+    "tension": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tension_key", "claim_ids"],
+      "properties": {
+        "tension_key": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "pole_a": { "type": "string", "maxLength": 64 },
+        "pole_b": { "type": "string", "maxLength": 64 },
+        "claim_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/stable_id" }
+        },
+        "surface_text": { "type": "string", "maxLength": 2000 }
+      }
+    },
+    "scene": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scene_id", "scene_kind", "claim_ids"],
+      "properties": {
+        "scene_id": { "$ref": "#/$defs/stable_id" },
+        "scene_kind": { "$ref": "#/$defs/scene_kind" },
+        "claim_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/stable_id" }
+        },
+        "tension_refs": {
+          "type": "array",
+          "items": { "type": "string", "maxLength": 64 }
+        },
+        "surface_text": { "type": "string", "maxLength": 2000 }
+      }
+    },
+    "cascade": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity_core",
+        "source_roles",
+        "internal_engine",
+        "primary_tension",
+        "secondary_tensions",
+        "scenes",
+        "potential",
+        "blind_spots"
+      ],
+      "properties": {
+        "identity_core": { "$ref": "#/$defs/claim_ref_block" },
+        "source_roles": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/source_role" }
+        },
+        "internal_engine": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/mechanism_slot" }
+        },
+        "primary_tension": { "$ref": "#/$defs/tension" },
+        "secondary_tensions": {
+          "type": "array",
+          "maxItems": 3,
+          "items": { "$ref": "#/$defs/tension" }
+        },
+        "scenes": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/scene" }
+        },
+        "potential": { "$ref": "#/$defs/claim_ref_block" },
+        "blind_spots": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/claim_ref_block" }
+        },
+        "life_path": { "$ref": "#/$defs/claim_ref_block" }
+      }
+    },
+    "compass_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["item_id", "item_kind", "value", "derived_from"],
+      "properties": {
+        "item_id": { "$ref": "#/$defs/stable_id" },
+        "item_kind": {
+          "type": "string",
+          "enum": [
+            "best_conditions",
+            "work_style",
+            "communication_style",
+            "learning_style",
+            "energy_sources",
+            "recovery",
+            "ideal_environment",
+            "triggers",
+            "red_flags",
+            "strengths",
+            "growth_directions"
+          ]
+        },
+        "value": {
+          "oneOf": [
+            { "type": "string", "maxLength": 2000 },
+            {
+              "type": "array",
+              "items": { "type": "string", "maxLength": 512 }
+            }
+          ]
+        },
+        "derived_from": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "claim_ids": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/stable_id" }
+            },
+            "scene_ids": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/stable_id" }
+            },
+            "mechanism_slots": {
+              "type": "array",
+              "items": { "type": "string", "maxLength": 64 }
+            }
+          }
+        }
+      }
+    },
+    "compass": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "assembler_version", "items", "source_refs"],
+      "properties": {
+        "schema_version": { "type": "string", "const": "compass_v1" },
+        "assembler_version": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "items": { "type": "array", "items": { "$ref": "#/$defs/compass_item" } },
+        "source_refs": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "claim_ids": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/stable_id" }
+            },
+            "scene_ids": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/stable_id" }
+            },
+            "mechanism_slots": {
+              "type": "array",
+              "items": { "type": "string", "maxLength": 64 }
+            }
+          }
+        }
+      }
+    },
+    "adapter_out": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_refs"],
+      "properties": {
+        "value": {},
+        "source_refs": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "claim_ids": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/stable_id" }
+            },
+            "scene_ids": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/stable_id" }
+            },
+            "compass_item_ids": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/stable_id" }
+            }
+          }
+        },
+        "omit_reason": { "type": "string", "maxLength": 256 }
+      }
+    },
+    "legacy_map": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["adapter_version", "fields"],
+      "properties": {
+        "adapter_version": {
+          "type": "string",
+          "const": "character_engine_adapter_v1"
+        },
+        "fields": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/adapter_out" }
+        }
+      }
+    },
+    "shadow_report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "compared_at",
+        "ce_recipe_version",
+        "recommendation"
+      ],
+      "properties": {
+        "schema_version": { "type": "string", "const": "ce_shadow_v1" },
+        "compared_at": { "type": "string", "format": "date-time" },
+        "legacy_recipe": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "prompt_ids": {
+              "type": "array",
+              "items": { "type": "string", "maxLength": 128 }
+            },
+            "snapshot_fingerprint": { "type": "string", "maxLength": 128 }
+          }
+        },
+        "ce_recipe_version": { "type": "string", "maxLength": 64 },
+        "metrics": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "samples": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["field"],
+            "properties": {
+              "field": { "type": "string", "maxLength": 64 },
+              "legacy_excerpt": { "type": "string", "maxLength": 500 },
+              "ce_ref": { "type": "string", "maxLength": 128 }
+            }
+          }
+        },
+        "recommendation": {
+          "type": "string",
+          "enum": ["hold", "cutover_ready", "block"]
+        }
+      }
+    }
+  }
+}

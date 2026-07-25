@@ -1,9 +1,10 @@
 # Character Engine — Schema Contracts v0
 
 **Status:** DRAFT — identity/provenance-first schema (не prose catalog)  
-**Version:** 0.1 (2026-07-25)  
+**Version:** 0.2 (2026-07-25)  
 **Parents:** [CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md](./CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md) (D1–D4 ACCEPTED) · [CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md](./CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md) · [PROFILE_EXPERIENCE_SCENARIO_V1.md](../profile/PROFILE_EXPERIENCE_SCENARIO_V1.md)  
-**Home:** `core_profile_snapshots.payload.character_engine_v1`
+**Home:** `core_profile_snapshots.payload.character_engine_v1`  
+**Machine schema:** [character_engine_v1.schema.json](../schemas/character_engine_v1.schema.json) · CI `character-engine-schema` · ids `services/character_engine_ids_v0.py`
 
 ### Out of scope (explicit)
 
@@ -341,11 +342,12 @@ If no → fix identity rules before implementing pipeline.
 
 ## 11. Next after acceptance of v0.1
 
-1. Machine-readable JSON Schema files under `docs/schemas/` (or backend schemas) for envelope / RawFact / EvidenceGraph / Compass / LegacyMap / Shadow — still **without** prose catalogs.  
-2. Implement Stage 0–1 fact+evidence builders (deterministic-first).  
-3. Wire Stage 2–4 behind flag with ID stability tests.  
-4. Stage 5 adapters → fill `profile_contract_v1` from CE only.  
-5. Shadow harness.
+1. ~~Machine-readable JSON Schema~~ → `docs/schemas/character_engine_v1.schema.json` + fixtures + CI `character-engine-schema`.  
+2. ~~ID stability module/tests~~ → `character_engine_ids_v0.py` + `test_character_engine_ids_v0.py`.  
+3. Implement Stage 0–1 fact+evidence builders (deterministic-first).  
+4. Wire Stage 2–4 behind flag with ID stability tests on publish.  
+5. Stage 5 adapters → fill `profile_contract_v1` from CE only.  
+6. Shadow harness.
 
 ---
 
@@ -354,3 +356,4 @@ If no → fix identity rules before implementing pipeline.
 | Date | Change |
 |------|--------|
 | 2026-07-25 | v0.1 — identity/provenance-first schema; envelope · facts · evidence · stages · compass · adapters · shadow; no prose/UI catalog |
+| 2026-07-25 | v0.2 — JSON Schema + fixtures + `character_engine_ids_v0` + CI validate script |

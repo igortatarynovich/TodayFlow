@@ -1,0 +1,11 @@
+{
+  "schema_version": "character_engine_v1",
+  "recipe_version": "character_engine_recipe_v1",
+  "status": "forming",
+  "profile_fingerprint": "pf_demo_00000001",
+  "input_fact_set_version": "facts_pack_v0_demo",
+  "generated_at": "2026-07-25T12:00:00Z",
+  "meta": {
+    "adapter_version": "character_engine_adapter_v1"
+  }
+}

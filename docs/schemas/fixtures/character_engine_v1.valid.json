@@ -1,0 +1,315 @@
+{
+  "schema_version": "character_engine_v1",
+  "recipe_version": "character_engine_recipe_v1",
+  "status": "ready",
+  "profile_fingerprint": "pf_demo_00000001",
+  "input_fact_set_version": "facts_pack_v0_demo",
+  "calc_authority": {
+    "swiss": "swiss_ephe_v1",
+    "numerology": "num_v1",
+    "catalogs": "catalog_v0"
+  },
+  "capability": {
+    "natal_mode": "date_only",
+    "has_name": true,
+    "has_birth_time": false,
+    "has_birth_place": false
+  },
+  "generated_at": "2026-07-25T12:00:00Z",
+  "raw_facts": [
+    {
+      "fact_id": "fact:9b0ede6ee9dbf609bf8257da",
+      "fact_type": "sun_sign",
+      "value": "Aquarius",
+      "display_key": "Sun",
+      "authority": "swiss",
+      "calc_version": "swiss_ephe_v1",
+      "capability_required": "date_only",
+      "confidence": "high",
+      "provenance": {
+        "source_system": "swiss",
+        "input_fingerprint": "dob_demo",
+        "computed_at": "2026-07-25T12:00:00Z"
+      }
+    },
+    {
+      "fact_id": "fact:603b9f4916a911637d99f7f2",
+      "fact_type": "moon_sign",
+      "value": "Pisces",
+      "display_key": "Moon",
+      "authority": "swiss",
+      "calc_version": "swiss_ephe_v1",
+      "capability_required": "date_only",
+      "confidence": "medium",
+      "provenance": {
+        "source_system": "swiss",
+        "input_fingerprint": "dob_demo",
+        "computed_at": "2026-07-25T12:00:00Z"
+      }
+    },
+    {
+      "fact_id": "fact:02ada84b25edf1381eb1f90e",
+      "fact_type": "life_path_number",
+      "value": 7,
+      "authority": "deterministic_numerology",
+      "calc_version": "num_v1",
+      "capability_required": "date_only",
+      "confidence": "high",
+      "provenance": {
+        "source_system": "numerology",
+        "input_fingerprint": "dob_demo",
+        "computed_at": "2026-07-25T12:00:00Z"
+      }
+    }
+  ],
+  "evidence": {
+    "schema_version": "evidence_graph_v1",
+    "claims": [
+      {
+        "claim_id": "claim:14b40b58dc6ac25cafd6eab2",
+        "claim_kind": "identity_core",
+        "thesis_key": "builds_own_world_system",
+        "surface_text": "Builds their own system of the world.",
+        "cascade_role": "identity_core",
+        "supporting_fact_ids": [
+          "fact:9b0ede6ee9dbf609bf8257da",
+          "fact:02ada84b25edf1381eb1f90e"
+        ],
+        "confidence": "high",
+        "capability_floor": "date_only",
+        "produced_by_stage": 2,
+        "evidence_status": "grounded"
+      },
+      {
+        "claim_id": "claim:0533cad5c3ab337ec784e033",
+        "claim_kind": "autonomy_need",
+        "thesis_key": "autonomy_high",
+        "cascade_role": "source_roles",
+        "supporting_fact_ids": [
+          "fact:9b0ede6ee9dbf609bf8257da",
+          "fact:603b9f4916a911637d99f7f2"
+        ],
+        "confidence": "medium",
+        "capability_floor": "date_only",
+        "produced_by_stage": 1,
+        "evidence_status": "grounded"
+      },
+      {
+        "claim_id": "claim:4fa3e8272e59f24db7742735",
+        "claim_kind": "tension",
+        "thesis_key": "freedom_vs_stability",
+        "cascade_role": "primary_tension",
+        "supporting_fact_ids": [
+          "fact:9b0ede6ee9dbf609bf8257da",
+          "fact:603b9f4916a911637d99f7f2",
+          "fact:02ada84b25edf1381eb1f90e"
+        ],
+        "confidence": "high",
+        "capability_floor": "date_only",
+        "produced_by_stage": 3,
+        "evidence_status": "grounded"
+      },
+      {
+        "claim_id": "claim:9c75f8059159bf98c97f163b",
+        "claim_kind": "mechanism",
+        "thesis_key": "analysis_before_action",
+        "cascade_role": "decision",
+        "supporting_fact_ids": [
+          "fact:02ada84b25edf1381eb1f90e"
+        ],
+        "confidence": "medium",
+        "capability_floor": "date_only",
+        "produced_by_stage": 3,
+        "evidence_status": "grounded"
+      },
+      {
+        "claim_id": "claim:9df6728d10c37e5843d1a7e7",
+        "claim_kind": "potential",
+        "thesis_key": "growth_via_own_system",
+        "cascade_role": "potential",
+        "supporting_fact_ids": [
+          "fact:9b0ede6ee9dbf609bf8257da",
+          "fact:02ada84b25edf1381eb1f90e"
+        ],
+        "confidence": "medium",
+        "capability_floor": "date_only",
+        "produced_by_stage": 4,
+        "evidence_status": "grounded"
+      },
+      {
+        "claim_id": "claim:c65550706874ec41773d21f5",
+        "claim_kind": "blind_spot",
+        "thesis_key": "misses_need_for_structure",
+        "cascade_role": "blind_spots",
+        "supporting_fact_ids": [
+          "fact:603b9f4916a911637d99f7f2"
+        ],
+        "confidence": "low",
+        "capability_floor": "date_only",
+        "produced_by_stage": 4,
+        "evidence_status": "grounded"
+      }
+    ],
+    "edges": [
+      {
+        "edge_id": "edge:119733c48204b82553a52f05",
+        "fact_id": "fact:9b0ede6ee9dbf609bf8257da",
+        "claim_id": "claim:14b40b58dc6ac25cafd6eab2",
+        "edge_type": "supports"
+      },
+      {
+        "edge_id": "edge:a27aee93b3bba4d48efe01b2",
+        "fact_id": "fact:02ada84b25edf1381eb1f90e",
+        "claim_id": "claim:14b40b58dc6ac25cafd6eab2",
+        "edge_type": "strengthens"
+      },
+      {
+        "edge_id": "edge:11e01135d4aed69b1e869942",
+        "fact_id": "fact:603b9f4916a911637d99f7f2",
+        "claim_id": "claim:4fa3e8272e59f24db7742735",
+        "edge_type": "qualifies"
+      }
+    ]
+  },
+  "cascade": {
+    "identity_core": {
+      "claim_ids": [
+        "claim:14b40b58dc6ac25cafd6eab2"
+      ],
+      "surface_text": "Builds their own system of the world."
+    },
+    "source_roles": [
+      {
+        "role_key": "sun_direction",
+        "fact_ids": [
+          "fact:9b0ede6ee9dbf609bf8257da"
+        ],
+        "claim_ids": [
+          "claim:0533cad5c3ab337ec784e033"
+        ]
+      }
+    ],
+    "internal_engine": [
+      {
+        "slot": "decision",
+        "claim_ids": [
+          "claim:9c75f8059159bf98c97f163b"
+        ]
+      }
+    ],
+    "primary_tension": {
+      "tension_key": "freedom_vs_stability",
+      "pole_a": "freedom",
+      "pole_b": "stability",
+      "claim_ids": [
+        "claim:4fa3e8272e59f24db7742735"
+      ]
+    },
+    "secondary_tensions": [],
+    "scenes": [
+      {
+        "scene_id": "scene:e63c56e14d5e2390c7dae1ff",
+        "scene_kind": "intimacy",
+        "claim_ids": [
+          "claim:4fa3e8272e59f24db7742735"
+        ],
+        "tension_refs": [
+          "freedom_vs_stability"
+        ]
+      }
+    ],
+    "potential": {
+      "claim_ids": [
+        "claim:9df6728d10c37e5843d1a7e7"
+      ]
+    },
+    "blind_spots": [
+      {
+        "claim_ids": [
+          "claim:c65550706874ec41773d21f5"
+        ]
+      }
+    ]
+  },
+  "compass": {
+    "schema_version": "compass_v1",
+    "assembler_version": "compass_assembler_v0",
+    "items": [
+      {
+        "item_id": "compass:72ed21fcac22648e90cf5feb",
+        "item_kind": "strengths",
+        "value": [
+          "depth",
+          "autonomy"
+        ],
+        "derived_from": {
+          "claim_ids": [
+            "claim:14b40b58dc6ac25cafd6eab2",
+            "claim:9c75f8059159bf98c97f163b"
+          ]
+        }
+      }
+    ],
+    "source_refs": {
+      "claim_ids": [
+        "claim:14b40b58dc6ac25cafd6eab2",
+        "claim:9c75f8059159bf98c97f163b"
+      ],
+      "scene_ids": [
+        "scene:e63c56e14d5e2390c7dae1ff"
+      ],
+      "mechanism_slots": [
+        "decision"
+      ]
+    }
+  },
+  "legacy_projections": {
+    "adapter_version": "character_engine_adapter_v1",
+    "fields": {
+      "identity_core": {
+        "value": "Builds their own system of the world.",
+        "source_refs": {
+          "claim_ids": [
+            "claim:14b40b58dc6ac25cafd6eab2"
+          ]
+        }
+      },
+      "decision_style": {
+        "value": "Analyzes before acting.",
+        "source_refs": {
+          "claim_ids": [
+            "claim:9c75f8059159bf98c97f163b"
+          ]
+        }
+      },
+      "relationship_style": {
+        "value": "Needs autonomy inside closeness.",
+        "source_refs": {
+          "claim_ids": [
+            "claim:4fa3e8272e59f24db7742735"
+          ],
+          "scene_ids": [
+            "scene:e63c56e14d5e2390c7dae1ff"
+          ]
+        }
+      },
+      "strengths": {
+        "value": [
+          "depth",
+          "autonomy"
+        ],
+        "source_refs": {
+          "compass_item_ids": [
+            "compass:72ed21fcac22648e90cf5feb"
+          ]
+        }
+      }
+    }
+  },
+  "meta": {
+    "adapter_version": "character_engine_adapter_v1",
+    "stage_prompt_ids": {
+      "stage2": "profile.character_engine.stage2.v1"
+    }
+  }
+}

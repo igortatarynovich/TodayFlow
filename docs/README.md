@@ -62,7 +62,7 @@
 - [status/IOS_TODAYFLOW_STATUS.md](./status/IOS_TODAYFLOW_STATUS.md) — web + iOS направление
 - [status/TODAY_CANON_VS_CODE_DIFF.md](./status/TODAY_CANON_VS_CODE_DIFF.md) — diff канон ↔ код
 - [status/PROFILE_FOUNDATION_QA.md](./status/PROFILE_FOUNDATION_QA.md) — Profile Quick Map vs Foundation §9 (code-side)
-- `docs/schemas/` — JSON Schema (CI: `today-contract-schema`, `day-context-schema`, `compact-user-model-schema`)
+- `docs/schemas/` — JSON Schema (CI: `today-contract-schema`, `day-context-schema`, `compact-user-model-schema`, `character-engine-schema`)
 - `docs/i18n/` — правила перевода
 
 ## Правило чтения
