@@ -28,7 +28,8 @@ export type TodayDayNarrativeChapterId =
   | "force"
   | "symbols"
   | "supports"
-  | "vibe";
+  | "vibe"
+  | "chorus";
 
 /** Compact glance row for Day Personal — not a chip cluster. */
 export type TodayDayPersonalSignal = {
