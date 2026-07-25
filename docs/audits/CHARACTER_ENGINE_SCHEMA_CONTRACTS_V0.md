@@ -4,7 +4,8 @@
 **Version:** 0.2 (2026-07-25)  
 **Parents:** [CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md](./CHARACTER_ENGINE_ARCHITECTURE_IMPACT_V1.md) (D1–D4 ACCEPTED) · [CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md](./CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md) · [PROFILE_EXPERIENCE_SCENARIO_V1.md](../profile/PROFILE_EXPERIENCE_SCENARIO_V1.md)  
 **Home:** `core_profile_snapshots.payload.character_engine_v1`  
-**Machine schema:** [character_engine_v1.schema.json](../schemas/character_engine_v1.schema.json) · CI `character-engine-schema` · ids `services/character_engine_ids_v0.py`
+**Machine schema:** [character_engine_v1.schema.json](../schemas/character_engine_v1.schema.json) · validate `scripts/validate_character_engine_contract.py` · ids `services/character_engine_ids_v0.py`  
+**CI note:** job `character-engine-schema` prepared in local `.github/workflows/ci.yml` but not pushed (OAuth lacks `workflow` scope) — run validator locally / add job with workflow-capable token.
 
 ### Out of scope (explicit)
 
@@ -342,12 +343,13 @@ If no → fix identity rules before implementing pipeline.
 
 ## 11. Next after acceptance of v0.1
 
-1. ~~Machine-readable JSON Schema~~ → `docs/schemas/character_engine_v1.schema.json` + fixtures + CI `character-engine-schema`.  
+1. ~~Machine-readable JSON Schema~~ → `docs/schemas/character_engine_v1.schema.json` + fixtures + `scripts/validate_character_engine_contract.py`.  
 2. ~~ID stability module/tests~~ → `character_engine_ids_v0.py` + `test_character_engine_ids_v0.py`.  
-3. Implement Stage 0–1 fact+evidence builders (deterministic-first).  
-4. Wire Stage 2–4 behind flag with ID stability tests on publish.  
-5. Stage 5 adapters → fill `profile_contract_v1` from CE only.  
-6. Shadow harness.
+3. Land CI job `character-engine-schema` (needs `workflow` scope on push).  
+4. Implement Stage 0–1 fact+evidence builders (deterministic-first).  
+5. Wire Stage 2–4 behind flag with ID stability tests on publish.  
+6. Stage 5 adapters → fill `profile_contract_v1` from CE only.  
+7. Shadow harness.
 
 ---
 
