@@ -382,3 +382,4 @@ Cross-version sense comparison requires separate `fact_key` / semantic key (Stag
 | 2026-07-25 | v0.2 — JSON Schema + fixtures + `character_engine_ids_v0` + local validate script (CI job pending workflow scope) |
 | 2026-07-25 | Stage 0–1 builders + shadow flags; ID semantics note (calc_version-scoped); no CE ready publish |
 | 2026-07-25 | Staging eval v0 + registry tighten; Stage 2 Identity Core LLM-first prompt + structural contract validation (no quality heuristics) |
+| 2026-07-25 | CE-only land SHA `5eb61c6`; live Stage 0–1 shadow first; do not cite branch tip as CE baseline |

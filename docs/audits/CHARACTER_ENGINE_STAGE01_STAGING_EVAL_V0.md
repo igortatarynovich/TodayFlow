@@ -2,7 +2,19 @@
 
 **Date:** 2026-07-25  
 **Status:** GATE PASS (synthetic fixed profiles)  
-**Flags for live staging:** `CHARACTER_ENGINE_STAGE01_SHADOW=1`, `CHARACTER_ENGINE_STAGE01_ENABLED=0`  
+**CE baseline commit:** `5eb61c665b04cf1ade8f15939a0bf2acfcf1adc5` (`feat(character-engine): add LLM-first identity core shadow`)  
+**Note:** Cite this SHA as CE baseline — not the current tip of `design/profile-journey-premium` (branch may already contain later Day Scenario / Tarot commits).  
+
+**Flags for live Stage 0–1 shadow review (only):**
+```
+CHARACTER_ENGINE_STAGE01_SHADOW=1
+CHARACTER_ENGINE_STAGE01_ENABLED=0
+CHARACTER_ENGINE_STAGE2_SHADOW=0
+CHARACTER_ENGINE_STAGE2_ENABLED=0
+CHARACTER_ENGINE_PUBLISH_READY=0
+```
+Enable Stage 2 shadow only after real-pack Stage 0–1 diagnostics review.  
+
 **SoT:** unchanged — diagnostics only; funnel / `personality` remain publish path.
 
 ## Profiles (fixed fixture)
@@ -65,5 +77,10 @@ Runner: `python -m todayflow_backend.services.character_engine_stage01_staging_e
 
 ## Next
 
+Live review order:
+1. Stage 0–1 shadow only (flags above) on real packs — inspect facts, authority dedupe, claim breadth, exclusions.
+2. Separately enable `CHARACTER_ENGINE_STAGE2_SHADOW=1` after that review.
+3. Stage 3+ only after Stage 2 shadow evaluation.
+
 Stage 2 Identity Core is **LLM-first**: prompt `profile.character_engine.stage2.v1` chooses one core; code validates structure/provenance only (not interpretation quality).  
-Do not add quality-scoring gates that duplicate the prompt. After live Stage 2 shadow review → Stage 3.
+Do not add quality-scoring gates that duplicate the prompt.
