@@ -160,7 +160,7 @@ optional:
 | `today` | День | profile packages + day facts | ritual card/number |
 | `tarot` | Ответ на вопрос | draw facts | profile slice |
 | `reflection` | Вечер | `today` package | living marks |
-| `growth` | Что помогает / рост | `personality` | living evidence |
+| `growth` | ~~корень~~ → **Compass / helps projection** · **не генерировать отдельно** | Character Engine output | living evidence |
 
 Имена можно уточнять; менять можно промпт и модель, не ломая `contract_id` и schemas.
 
@@ -402,3 +402,4 @@ optional: [tarot_draw, day_number, intent, full_natal]
 | 2026-07-23 | `today` day pack: narrative continuity (not why-checklist) · prompt moments · authorial quality |
 | 2026-07-25 | Profile Scenario v1: `personality` = character cascade; `relationships`/`career`/`money` marked projection-only (deprecate as meaning roots) |
 | 2026-07-25 | Character Engine v1.1: independent generators abolished as meaning roots; Compass must not have own prompt; Evidence Graph required input |
+| 2026-07-25 | `growth` marked projection/derived like relationships/career/money; Matrix dual roots scrubbed |

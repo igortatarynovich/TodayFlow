@@ -2,7 +2,7 @@
 
 **Status:** ACTIVE — SoT **Character Engine** (единая модель личности платформы)  
 **Filename legacy:** `PROFILE_EXPERIENCE_SCENARIO_V1.md` (path stabilen; смысл = движок, не экран)  
-**Version:** 1.1 (2026-07-25)  
+**Version:** 1.1.1 (2026-07-25)  
 **Parents:** [TODAYFLOW_PRODUCT_CANON_UNIFIED.md](../TODAYFLOW_PRODUCT_CANON_UNIFIED.md) · [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](../explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md)  
 **Siblings (проекции / UI, не заменяют движок):**  
 - [PROFILE_PRODUCT_SURFACE_CANON.md](./PROFILE_PRODUCT_SURFACE_CANON.md) — *как* Profile-скролл раскрывает модель (Шаги 1–5)  
@@ -405,7 +405,7 @@ Personal Model / Snapshot в коде = носитель Character Engine output
 | Content Canon §4 field bag | Плоский список | Поля = проекции; порядок — этот сценарий |
 | «Profile = SoT персонализации» в разговорах | Путаница экран/модель | SoT = **Character Engine**; Profile = первая проекция |
 
-Миграция кода — отдельный трек. Этот документ = **SoT смысла** до полного wiring.
+Миграция кода — отдельный трек (§9). Этот документ = **SoT смысла** до полного wiring.
 
 ---
 
@@ -429,10 +429,33 @@ Personal Model / Snapshot в коде = носитель Character Engine output
 
 ---
 
-## 8. Changelog
+## 8. Next track — wiring (не UI redesign)
+
+Канон ≠ runtime. Главный риск: старые контракты и jobs продолжают **параллельно** строить другую личность.
+
+**Не делать сейчас:** редизайн Profile, новые Freeze-блоки, polish карточек.
+
+**Делать (порядок):**
+
+1. Инвентаризация всех personality-related contracts, prompt IDs, jobs, API schemas и FE consumers.  
+2. Versioned **Character Engine output** contract (Snapshot schema).  
+3. Отдельная схема **Evidence Graph** (claim ids · source_fact_ids · confidence · capability).  
+4. Один связанный generation pipeline: ядро → Internal Engine → tensions → scenes → potential → blind spots.  
+5. **Compass assembler** без отдельного generative call.  
+6. Адаптеры legacy-полей (`relationship_style`, career/money slots, strengths, energy) → чтение новой модели.  
+7. Переключение Profile на новый Snapshot.  
+8. Подключение Today · Compatibility · Tarot как **readers** (после Profile).  
+9. Удаление / блокировка старых независимых prompt roots.  
+10. Regression acceptance: один character arc во всех проекциях без противоречий.
+
+Каждый шаг, меняющий public JSON / fallback / generation order — с **Architecture impact** (см. root `AGENTS.md`).
+
+---
+
+## 9. Changelog
 
 | Дата | Изменение |
 |------|-----------|
 | 2026-07-25 | v1.0 — драматургия Profile: Пролог→Акты I–VIII→Финал; каскад; запрет отдельных проекций-корней |
 | 2026-07-25 | v1.1 — **Character Engine** (платформенный SoT); Пролог Raw Sources + Evidence Graph; Акт I = один логлайн; Акт II = драматургия источников; Акт III = Internal Engine; главное+вторичные противоречия; жизненные сцены вместо сфер; Компас derived-only; Финал = путь личности; полный отказ от независимых генераторов |
-| 2026-07-25 | v1.1.1 — опоры и дома: только полезная информация о пользователе; запрет энциклопедии / общих дефиниций |
+| 2026-07-25 | v1.1.1 — опоры и дома: только полезная информация о пользователе; запрет энциклопедии; header = 1.1.1; §8 next wiring track |

@@ -237,13 +237,13 @@ available_input → natal_facts (LLM) → calculated_facts + unavailable
 | **Структура карты** (ASC, дома, MC/IC) | дата+время+место | Free+ (структура); deep copy Trial+ | angles, houses | `natal_chart` | llm on facts | `natal_facts.mode=full` | нет времени **или** места | Время без места: «Укажите место…». Без времени: «Время откроет, **как у вас** проявляются ASC и дома.» | Пространственная карта **его** жизни: каждый дом/угол — личный смысл, не дефиниция |
 | **Эмоции** (`emotional_style`) | ≥ дата; house-based только full | Free+ | moon, water…; house moon only if full | `personality` | llm | non-null | insufficient facts → null | omit | Как чувствует и защищается |
 | **Решения** (`decision_style`) | ≥ дата | Free+ | mercury/mars/modality… | `personality` | llm | non-null | null | omit | Как принимает решения |
-| **Отношения** (`relationship_style`) | ≥ дата; 7th/DSC только full | Free+ | venus…; houses if full | `personality` / `relationships` | llm | non-null | null / no house facts for house-claims | Без времени не показывать house-based близость | Близость и трение |
-| **Работа / реализация** | ≥ дата; MC/10th только full | Free+ structure | saturn/MC… | `personality` / `career` | llm | non-null | house-claims without full | «Время и место откроют карьерную ось (MC).» | Реализация |
-| **Деньги** | ≥ дата; 2/8 только full | Free+ | venus… | `personality` / `money` | llm | non-null | house-claims without full | omit house-money | Деньги и ресурсы |
-| **Дом / безопасность** | full natal | Free+ если full | IC/4th/moon | `personality` | llm | full mode | нет full | «Время и место откроют ось дома и корней.» | База безопасности |
-| **Сильные стороны** (`strengths` / `core_strengths`) | ≥ дата | Free+ | dominants / harmonious | `personality` | llm | non-empty array | empty | omit | На что опираться |
-| **Напряжения / рост** (`internal_tensions`, `growth_zones`, `blind_spots`) | ≥ дата | Free+ L2 list; **deep pattern text** Trial+ | hard aspects, clashes | `personality` | llm | non-empty | empty | omit | Где конфликт и рост |
-| **Что помогает** (`helps[]`) | L3: следствие выводов; living optional | **Trial / Paid** | prior claims only | `growth` | llm | non-empty + Trial+ | Free: omit; нет оснований → null | Free: «В trial откроются конкретные опоры.» | Практический следующий шаг |
+| **Отношения** (`relationship_style`) | ≥ дата; 7th/DSC только full | Free+ | venus…; houses if full | `personality` *(scene projection; ~~`relationships` root~~)* | llm → CE | non-null | null / no house facts for house-claims | Без времени не показывать house-based близость | Проявление близости из Character Engine (Акт V), не отдельный генератор |
+| **Работа / реализация** | ≥ дата; MC/10th только full | Free+ structure | saturn/MC… | `personality` *(scene projection; ~~`career` root~~)* | llm → CE | non-null | house-claims without full | «Время и место откроют карьерную ось (MC).» | Сцена ответственности/реализации из CE |
+| **Деньги** | ≥ дата; 2/8 только full | Free+ | venus… | `personality` *(scene projection; ~~`money` root~~)* | llm → CE | non-null | house-claims without full | omit house-money | Сцена ресурсов из CE |
+| **Дом / безопасность** | full natal | Free+ если full | IC/4th/moon | `personality` | llm → CE | full mode | нет full | «Время и место откроют ось дома и корней.» | Сцена корней/безопасности из CE |
+| **Сильные стороны** (`strengths` / `core_strengths`) | ≥ дата | Free+ | dominants / harmonious | `personality` *(Compass derived)* | **derived** | non-empty array | empty | omit | Из компаса CE — **без** отдельного prompt root |
+| **Напряжения / рост** (`internal_tensions`, `growth_zones`, `blind_spots`) | ≥ дата | Free+ L2 list; **deep pattern text** Trial+ | hard aspects, clashes | `personality` | llm → CE | non-empty | empty | omit | Акты IV / VI / VII Character Engine |
+| **Что помогает** (`helps[]`) | L3: следствие модели; living optional | **Trial / Paid** | prior CE claims only | `personality` *(Compass/growth derived; ~~`growth` root~~)* | **derived** | non-empty + Trial+ | Free: omit; нет оснований → null | Free: «В trial откроются конкретные опоры.» | Практический слой компаса, не отдельный LLM |
 | **Limitations + CTA данных** | любой partial | Free+ | `unavailable_facts` | — (UI from facts meta) | ui | always if unavailable non-empty | полный набор + имя | Конкретные фразы слоя 1.1 | Честность и следующий ввод |
 | **CTA Today** | ready base (≥ дата) | Free+ | — | — | ui | `is_ready` | нет даты | — | Дневная петля |
 | **CTA полный профиль / глубина** | есть L2/L3 тело | Free+ | — | — | ui | есть скрытые слоты | нет тела | — | Раскрыть карту |
@@ -251,7 +251,8 @@ available_input → natal_facts (LLM) → calculated_facts + unavailable
 
 **Запрет:** показывать ASC/дома/MC или house-based текст, если факты в `unavailable_facts` или mode ≠ `full`.  
 **Запрет:** показывать пустой блок шапки/интерпретации «на будущее» без CTA ценности.  
-**Запрет:** выдумывать соответствия других гороскопов без catalog key.
+**Запрет:** выдумывать соответствия других гороскопов без catalog key.  
+**Запрет (Character Engine):** `contract_id` слота ≠ самостоятельный смысловой корень `relationships` / `career` / `money` / `growth` / strengths·energy prompt. Слоты читают **`personality` (CE cascade)** или derived Compass. Legacy id в CODE Δ допустим до wiring; в TARGET-матрице — нет.
 ### 3.1 Code Δ (не SoT)
 
 | TARGET slot | CODE сегодня |
@@ -371,8 +372,8 @@ available_input → natal_facts (LLM) → calculated_facts + unavailable
 ## Порядок после Profile APPROVED
 
 1. Capability Resolver в коде (`available_input` → mode → `unavailable_facts`).  
-2. Production path: `natal_facts` → `personality` (+ optional `name_numerology` / `natal_chart` / `growth`) → persist → UI **только** слоты 3.1.  
-3. Legacy `profile.identity|styles|patterns` — temporary adapter / Δ, не наращивать как SoT.  
+2. Production path: `natal_facts` → **Character Engine** (`personality` cascade + Evidence Graph) → Compass **derived** → persist Snapshot → UI **только** слоты 3.1. Optional facts helpers: `name_numerology` / `natal_chart` / `base_astrology` catalog — **не** параллельные personality roots. ~~`growth` / `relationships` / `career` / `money` как generative roots~~ — запрещены.  
+3. Legacy `profile.identity|styles|patterns` — temporary adapter / Δ, не наращивать как SoT. Next: CE wiring (§8 Scenario).  
 4. Wire UI слот за слотом по 3.1.  
 5. Затем детализировать Today / Compat слой 3.  
 6. Блок без строки слоя 3 = не реализуется.
@@ -397,3 +398,4 @@ available_input → natal_facts (LLM) → calculated_facts + unavailable
 | 2026-07-23 | Today day pack = narrative continuity + prompt timing; goal quality/uniqueness/author voice |
 | 2026-07-23 | **Presentation mode:** Profile/Today/Compat/Tarot = story kinds (decision #14) |
 | 2026-07-25 | Character Engine: слоты опор/ASC/домов — личная польза о пользователе, не энциклопедия ([PROFILE_EXPERIENCE_SCENARIO_V1](./profile/PROFILE_EXPERIENCE_SCENARIO_V1.md) Акт II) |
+| 2026-07-25 | Matrix §3.1: убраны dual roots `personality/relationships|career|money`; strengths/helps = derived Compass; запрет legacy generative roots в TARGET |
