@@ -48,7 +48,7 @@ export function ProfileInsightScene({ node }: ProfileInsightSceneProps) {
     <section
       id="profile-v2-insight"
       ref={motion.ref}
-      className={`${styles.zone} ${styles.journeyScene} ${motion.className}`}
+      className={`${styles.journeyScene} ${motion.className}`}
       style={motion.style}
       aria-labelledby="profile-v2-insight-title"
       data-testid="profile-v2-insight"

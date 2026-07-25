@@ -237,17 +237,18 @@ export function NatalChartWheel({
   const isMobile = useIsMobileLayout(layout);
   const size = 720;
   const center = size / 2;
-  /* Keep engraved rings inside the circular plate — no spill past the rim. */
-  const outerRadius = size / 2 - 58;
-  const zodiacInnerRadius = outerRadius - 40;
-  const innerRadius = outerRadius * 0.56;
-  const aspectRadius = innerRadius - 18;
-  const houseRadius = (outerRadius + innerRadius) / 2;
-  const planetDisc = isMobile ? 16 : 20;
-  const basePlanetRadius = (zodiacInnerRadius + innerRadius) / 2;
-  const planetRadiusVariation = isMobile ? 12 : 16;
-  const planetRadiusMin = innerRadius + planetDisc + 6;
-  const planetRadiusMax = zodiacInnerRadius - planetDisc - 6;
+  /* Hard margin so glyphs never kiss the circular clip. */
+  const outerRadius = size / 2 - 64;
+  const zodiacInnerRadius = outerRadius - 38;
+  const innerRadius = outerRadius * 0.55;
+  const aspectRadius = innerRadius - 16;
+  const houseRadius = (zodiacInnerRadius + innerRadius) / 2;
+  const planetDisc = isMobile ? 15 : 18;
+  const basePlanetRadius = (zodiacInnerRadius + innerRadius) / 2 - 4;
+  const planetRadiusVariation = isMobile ? 10 : 14;
+  const planetAngleFan = isMobile ? 3.4 : 2.8;
+  const planetRadiusMin = innerRadius + planetDisc + 8;
+  const planetRadiusMax = zodiacInnerRadius - planetDisc - 8;
   const gradientId = useId().replace(/:/g, "");
   const softGlowId = `${gradientId}-glow`;
   const webClipId = `${gradientId}-clip`;
@@ -508,24 +509,27 @@ export function NatalChartWheel({
           }
         }
 
-        // Distribute evenly around base radius
+        // Prefer a light angular fan + short radial stagger so labels don't collide
+        // and discs never leave the house band.
         const clusterOffset = (positionInCluster - (clusterSize - 1) / 2) * planetRadiusVariation;
+        const angleOffset = (positionInCluster - (clusterSize - 1) / 2) * planetAngleFan;
         radiusOffset = clusterOffset;
-        // Keep glyphs inside the zodiac band — never spill past the ring.
         const clampedR = Math.min(
           planetRadiusMax,
           Math.max(planetRadiusMin, basePlanetRadius + radiusOffset),
         );
         radiusOffset = clampedR - basePlanetRadius;
+        return { ...planet, radiusOffset, angleOffset };
       }
 
-      return { ...planet, radiusOffset };
+      return { ...planet, radiusOffset: 0, angleOffset: 0 };
     });
 
     // Calculate final positions
     return planetsWithOffsets.map((p) => {
       const finalRadius = basePlanetRadius + p.radiusOffset;
-      const position = getPosition(p.angle, finalRadius);
+      const finalAngle = p.angle + (p.angleOffset || 0);
+      const position = getPosition(finalAngle, finalRadius);
 
       // Find which house this planet is in
       const planetHouse = houseCusps.findIndex((cusp, i) => {
@@ -549,7 +553,7 @@ export function NatalChartWheel({
         radius: finalRadius,
       };
     });
-  }, [chartPositions, houseCusps, basePlanetRadius, planetRadiusVariation, planetRadiusMin, planetRadiusMax, getPosition, planetSymbols, isMobile]);
+  }, [chartPositions, houseCusps, basePlanetRadius, planetRadiusVariation, planetRadiusMin, planetRadiusMax, planetAngleFan, getPosition, planetSymbols, isMobile]);
 
   const angleMarkers = useMemo(() => {
     const markers = [
@@ -681,6 +685,7 @@ export function NatalChartWheel({
       data-testid="natal-chart-wheel"
       data-layout={isMobile ? "mobile" : "desktop"}
     >
+      <div className={styles.instrument}>
       <div className={styles.plate}>
         <svg
           className={styles.svg}
@@ -997,8 +1002,10 @@ export function NatalChartWheel({
         ))}
 
         {planetsWithPositions.map((planet, index) => {
-          const edgePos = getPosition(planet.angle, outerRadius);
           const isActive = activePlanet === planet.body;
+          if (!isActive) return null;
+          const spokeAngle = planet.angle + (planet.angleOffset || 0);
+          const edgePos = getPosition(spokeAngle, zodiacInnerRadius - 2);
           return (
             <line
               key={`planet-radial-${planet.body}-${index}`}
@@ -1006,9 +1013,9 @@ export function NatalChartWheel({
               y1={planet.position.y}
               x2={edgePos.x}
               y2={edgePos.y}
-              stroke={isActive ? INK.goldBright : INK.ringSoft}
-              strokeWidth={isActive ? "1.5" : "0.8"}
-              opacity={isActive ? 0.6 : 0.3}
+              stroke={INK.goldBright}
+              strokeWidth="1.2"
+              opacity={0.45}
               strokeDasharray="2,4"
               style={{ transition: "all 0.3s ease" }}
             />
@@ -1030,15 +1037,14 @@ export function NatalChartWheel({
               onMouseLeave={() => setHoveredPlanet(null)}
               filter={isActive ? `url(#${planetGlowId})` : undefined}
             >
-              {/* Generous invisible hit area for touch */}
               <circle cx={planet.position.x} cy={planet.position.y} r={planetDisc + 10} fill="transparent" />
               <circle
                 cx={planet.position.x}
                 cy={planet.position.y}
-                r={isActive ? planetDisc + 3 : planetDisc}
+                r={isActive ? planetDisc + 2 : planetDisc}
                 fill={isSelected ? planetColor : isActive ? "#ffffff" : "#fffaf4"}
                 stroke={planetColor}
-                strokeWidth={isActive ? "2.5" : "1.75"}
+                strokeWidth={isActive ? "2.25" : "1.6"}
                 style={{ transition: "all 0.3s ease" }}
               />
               <text
@@ -1046,7 +1052,7 @@ export function NatalChartWheel({
                 y={planet.position.y}
                 textAnchor="middle"
                 dominantBaseline="central"
-                fontSize={isMobile ? (isActive ? "17" : "15") : isActive ? "20" : "18"}
+                fontSize={isMobile ? (isActive ? "16" : "14") : isActive ? "18" : "16"}
                 fill={isSelected ? INK.white : planetColor}
                 fontWeight="700"
                 style={{ transition: "all 0.3s ease", pointerEvents: "none" }}
@@ -1060,38 +1066,33 @@ export function NatalChartWheel({
         <circle
           cx={center}
           cy={center}
-          r="35"
+          r="32"
           fill={`url(#${gradientId}-chart)`}
           stroke={INK.ringSoft}
-          strokeWidth="2.5"
+          strokeWidth="1.5"
           onClick={() => setSelected(null)}
         />
         <circle
           cx={center}
           cy={center}
-          r="25"
+          r="18"
           fill={INK.white}
           stroke={INK.gold}
-          strokeWidth="2"
-          opacity="0.9"
+          strokeWidth="1.5"
+          opacity="0.92"
           onClick={() => setSelected(null)}
         />
-        <text
-          x={center}
-          y={center}
-          textAnchor="middle"
-          dominantBaseline="central"
-          fontSize="11"
+        <circle
+          cx={center}
+          cy={center}
+          r="4"
           fill={INK.gold}
-          fontWeight="700"
+          opacity="0.85"
           style={{ pointerEvents: "none" }}
-        >
-          TF
-        </text>
+        />
         </svg>
       </div>
 
-      {/* Detail panel — selection target for both tap (mobile) and click (desktop) */}
       <div className={styles.panel} data-testid="natal-chart-detail" aria-live="polite">
         {selectedPlanetData ? (
           <>
@@ -1143,61 +1144,33 @@ export function NatalChartWheel({
           </>
         ) : (
           <p className={styles.panelHint}>
-            Нажми на планету или номер дома — здесь откроются её знак, дом, градус и все связи в карте.
+            Выбери планету на кольце или ниже — откроются знак, дом и связи.
           </p>
         )}
       </div>
 
-      {/* Mobile: structured planet list is the reading surface; wheel stays visual. */}
-      {isMobile ? (
-        <ul className={styles.planetList} data-testid="natal-chart-planet-list">
+      <div className={styles.selector}>
+        <p className={styles.selectorLabel}>Планеты</p>
+        <div className={styles.chipRail} data-testid="natal-chart-planet-rail">
           {planetsWithPositions.map((planet) => {
             const isActive = selectedPlanet === planet.body;
             return (
-              <li key={planet.body}>
-                <button
-                  type="button"
-                  className={`${styles.planetListRow} ${isActive ? styles.planetListRowActive : ""}`.trim()}
-                  onClick={() => togglePlanet(planet.body)}
-                  aria-pressed={isActive}
-                >
-                  <span className={styles.planetListIcon} aria-hidden>
-                    <PlanetIcon planet={planet.body} size={20} />
-                  </span>
-                  <span className={styles.planetListName}>{planetRuName(planet.body)}</span>
-                  <span className={styles.planetListMeta}>
-                    {signRuName(planet.sign)}
-                    {planet.house ? ` · ${planet.house} дом` : ""}
-                    {planet.degree !== undefined
-                      ? ` · ${Math.floor(((planet.degree % 30) + 30) % 30)}°`
-                      : ""}
-                  </span>
-                </button>
-              </li>
+              <button
+                key={planet.body}
+                type="button"
+                className={`${styles.chip} ${isActive ? styles.chipActive : ""}`.trim()}
+                onClick={() => togglePlanet(planet.body)}
+                aria-pressed={isActive}
+              >
+                <span className={styles.chipGlyph} aria-hidden>
+                  <PlanetIcon planet={planet.body} size={15} />
+                </span>
+                {planetRuName(planet.body)}
+              </button>
             );
           })}
-        </ul>
-      ) : (
-        <>
-          <div className={styles.chipRail} data-testid="natal-chart-planet-rail">
-            {planetsWithPositions.map((planet) => {
-              const isActive = selectedPlanet === planet.body;
-              return (
-                <button
-                  key={planet.body}
-                  type="button"
-                  className={`${styles.chip} ${isActive ? styles.chipActive : ""}`.trim()}
-                  onClick={() => togglePlanet(planet.body)}
-                  aria-pressed={isActive}
-                >
-                  <span className={styles.chipGlyph} aria-hidden>
-                    <PlanetIcon planet={planet.body} size={16} />
-                  </span>
-                  {planetRuName(planet.body)}
-                </button>
-              );
-            })}
-          </div>
+        </div>
+        {!isMobile ? (
           <div className={styles.legend} aria-label="Типы аспектов">
             {[
               { label: "Соединение", color: INK.aspect.conjunction.color, dash: INK.aspect.conjunction.dash },
@@ -1217,8 +1190,9 @@ export function NatalChartWheel({
               );
             })}
           </div>
-        </>
-      )}
+        ) : null}
+      </div>
+      </div>
     </div>
   );
 }

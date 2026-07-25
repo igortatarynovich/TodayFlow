@@ -10,7 +10,7 @@
 .mainColumn {
   display: flex;
   flex-direction: column;
-  gap: clamp(1.75rem, 4vw, 2.75rem);
+  gap: 0;
   min-width: 0;
   max-width: 100%;
 }
@@ -419,24 +419,24 @@
 }
 
 .characterPanel {
-  padding: 1.25rem;
-  border-radius: 1.125rem;
-  border: 1px solid #e8e2d6;
-  background: #f7f4ee;
+  padding: 1.1rem 1.15rem;
+  border-radius: 1.05rem;
+  border: none;
+  background: rgba(247, 244, 238, 0.85);
 }
 
 .characterPanelGift {
-  border-color: rgba(139, 106, 62, 0.35);
+  border: none;
   background: linear-gradient(160deg, #faf6ef 0%, #f3eee4 100%);
 }
 
 .characterPanelTrap {
-  border-color: rgba(201, 122, 90, 0.4);
+  border: none;
   background: linear-gradient(160deg, #faf5f2 0%, #f4ebe6 100%);
 }
 
 .characterPanelHelp {
-  border-color: rgba(90, 130, 120, 0.35);
+  border: none;
   background: linear-gradient(160deg, #f3f7f5 0%, #ebf2ef 100%);
 }
 
@@ -1621,11 +1621,21 @@
 .journeyScene {
   position: relative;
   isolation: isolate;
-  overflow: hidden;
+  overflow: visible;
   scroll-margin-top: 4.5rem;
-  padding: clamp(1.75rem, 4vw, 2.5rem);
-  border-radius: 2rem;
-  box-shadow: var(--tf-shadow-card, 0 16px 40px rgba(42, 37, 32, 0.06));
+  padding: clamp(1.75rem, 4.5vw, 2.75rem) 0 clamp(1.35rem, 3.5vw, 2.1rem);
+  border-radius: 0;
+  border: none;
+  border-top: 1px solid color-mix(in srgb, var(--tf-border, #e8e2d6) 70%, transparent);
+  background:
+    linear-gradient(180deg, rgba(201, 169, 110, 0.05) 0%, transparent 28%),
+    transparent;
+  box-shadow: none;
+}
+
+.journeyScene:first-of-type {
+  border-top: none;
+  padding-top: clamp(0.5rem, 2vw, 1rem);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1661,21 +1671,21 @@
 
 .whyProofCard {
   margin: 0;
-  min-height: 8.5rem;
-  padding: 1.15rem 1.2rem 1.25rem;
-  border-radius: 1.35rem;
-  border: 1px solid var(--tf-border, #e8e2d6);
-  background: var(--tf-surface, #fff);
+  min-height: 0;
+  padding: 1rem 1.05rem 1.1rem;
+  border-radius: 1.15rem;
+  border: none;
+  background: rgba(247, 244, 238, 0.85);
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.55rem;
   justify-content: flex-start;
-  box-shadow: 0 10px 24px rgba(42, 37, 32, 0.04);
+  box-shadow: none;
 }
 
 .whyProofCard[data-why-class="selected_by"] {
-  border-color: color-mix(in srgb, var(--tf-accent-gold, #c9a96e) 55%, var(--tf-border, #e8e2d6));
-  background: color-mix(in srgb, var(--tf-accent-gold-wash, #f9f4e8) 70%, var(--tf-surface, #fff));
+  border: none;
+  background: color-mix(in srgb, var(--tf-accent-gold-wash, #f9f4e8) 78%, transparent);
 }
 
 .whyProofCardTop {
@@ -1755,8 +1765,8 @@
   max-width: 100%;
   padding: 0.55rem 0.75rem;
   border-radius: 999px;
-  border: 1px solid var(--tf-border, #e8e2d6);
-  background: var(--tf-surface-muted, #f7f4ee);
+  border: none;
+  background: rgba(247, 244, 238, 0.9);
 }
 
 .whySecondaryIcon {
@@ -1823,20 +1833,20 @@
 
 .insightNode {
   margin: 0;
-  padding: clamp(1.25rem, 3vw, 1.65rem);
-  border-radius: 1.5rem;
-  border: 1px solid var(--tf-border, #e8e2d6);
-  background: var(--tf-surface-muted, #f7f4ee);
-  border-top: 3px solid var(--tf-accent-gold, #c9a96e);
+  padding: clamp(1.15rem, 3vw, 1.5rem);
+  border-radius: 1.25rem;
+  border: none;
+  background: rgba(247, 244, 238, 0.9);
+  box-shadow: inset 0 3px 0 0 var(--tf-accent-gold, #c9a96e);
 }
 
 .insightNode.insightKind_strength {
-  border-top-color: var(--tf-semantic-gift, #4f6647);
+  box-shadow: inset 0 3px 0 0 var(--tf-semantic-gift, #4f6647);
 }
 
 .insightNode.insightKind_tension,
 .insightNode.insightKind_repeat {
-  border-top-color: var(--tf-semantic-trap, #a65a4f);
+  box-shadow: inset 0 3px 0 0 var(--tf-semantic-trap, #a65a4f);
 }
 
 .insightSupportGrid {
@@ -1865,11 +1875,11 @@
 
 .insightHelpBlock {
   margin-top: 1.25rem;
-  padding: 1.1rem 1.2rem;
-  border-radius: 1.15rem;
-  border: 1px solid var(--tf-border, #e8e2d6);
-  background: color-mix(in srgb, var(--tf-semantic-grow, #3d5a80) 8%, var(--tf-surface, #fff));
-  border-left: 3px solid var(--tf-semantic-grow, #3d5a80);
+  padding: 1.05rem 1.1rem;
+  border-radius: 1.05rem;
+  border: none;
+  background: color-mix(in srgb, var(--tf-semantic-grow, #3d5a80) 8%, transparent);
+  box-shadow: inset 3px 0 0 0 var(--tf-semantic-grow, #3d5a80);
 }
 
 .insightScene {
@@ -1937,10 +1947,10 @@
 
 .insightQuote {
   margin: 0;
-  padding: 1.25rem 1.35rem 1.25rem 1.5rem;
-  border-radius: 1.25rem;
-  border: 1px solid var(--tf-border, #e8e2d6);
-  background: color-mix(in srgb, var(--tf-accent-gold-wash, #f9f4e8) 70%, var(--tf-surface, #fff));
+  padding: 1.15rem 1.25rem 1.15rem 1.4rem;
+  border-radius: 1.15rem;
+  border: none;
+  background: color-mix(in srgb, var(--tf-accent-gold-wash, #f9f4e8) 75%, transparent);
   position: relative;
 }
 
@@ -1977,12 +1987,12 @@
   flex-direction: column;
   gap: 0.85rem;
   align-items: flex-start;
-  padding: 1.25rem 1.35rem;
-  border-radius: 1.5rem;
-  border: 1px solid var(--tf-border, #e8e2d6);
+  padding: 1.15rem 1.2rem;
+  border-radius: 1.25rem;
+  border: none;
   background:
     radial-gradient(ellipse 80% 60% at 0% 0%, rgba(201, 169, 110, 0.14) 0%, transparent 55%),
-    var(--tf-surface-muted, #f7f4ee);
+    rgba(247, 244, 238, 0.9);
 }
 
 .effortCompass {
@@ -2050,9 +2060,9 @@
   max-width: min(16rem, 82vw);
   min-height: 2.75rem;
   padding: 0.65rem 0.9rem;
-  border-radius: 1.15rem;
-  border: 1px solid var(--tf-border, #e8e2d6);
-  background: var(--tf-surface, #fff);
+  border-radius: 1.05rem;
+  border: none;
+  background: rgba(255, 255, 255, 0.55);
   scroll-snap-align: start;
 }
 
@@ -2099,10 +2109,10 @@
 }
 
 .effortSphereReadCard {
-  padding: 1rem 1.1rem;
-  border-radius: 1.05rem;
-  border: 1px solid var(--tf-border, #e8e2d6);
-  background: var(--tf-surface, #fff);
+  padding: 0.95rem 1rem;
+  border-radius: 1rem;
+  border: none;
+  background: rgba(255, 255, 255, 0.55);
 }
 
 .effortSphereHow,
@@ -2133,15 +2143,16 @@
 .bridgeScene {
   position: relative;
   isolation: isolate;
-  overflow: hidden;
+  overflow: visible;
   scroll-margin-top: 4.5rem;
-  padding: clamp(2rem, 4.5vw, 2.75rem);
-  border-radius: 2rem;
-  border: 1px solid var(--tf-border, #e8e2d6);
+  padding: clamp(1.85rem, 4.5vw, 2.85rem) 0 clamp(1.5rem, 4vw, 2.4rem);
+  border-radius: 0;
+  border: none;
+  border-top: 1px solid color-mix(in srgb, var(--tf-border, #e8e2d6) 70%, transparent);
   background:
-    radial-gradient(ellipse 80% 60% at 10% 0%, rgba(201, 169, 110, 0.16) 0%, transparent 60%),
-    var(--tf-surface, #fff);
-  box-shadow: var(--tf-shadow-card, 0 16px 40px rgba(42, 37, 32, 0.06));
+    linear-gradient(180deg, rgba(201, 169, 110, 0.07) 0%, transparent 36%),
+    transparent;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -2179,24 +2190,24 @@
 }
 
 /*
- * Natal: ONE journey card — same language as bridgeScene.
- * Content inside has no second/third borders (signature, wheel wrap, accordion).
+ * Natal as a chapter in the same book — instrument carries the visual weight.
  */
 .natalScene {
   position: relative;
   isolation: isolate;
-  overflow: hidden;
+  overflow: visible;
   scroll-margin-top: 4.5rem;
-  padding: clamp(1.15rem, 3.5vw, 1.85rem);
-  border-radius: 1.75rem;
-  border: 1px solid var(--tf-border, #e8e2d6);
+  padding: clamp(1.75rem, 4.5vw, 2.75rem) 0 clamp(1.5rem, 4vw, 2.4rem);
+  border-radius: 0;
+  border: none;
+  border-top: 1px solid color-mix(in srgb, var(--tf-border, #e8e2d6) 70%, transparent);
   background:
-    radial-gradient(ellipse 75% 50% at 92% -8%, rgba(201, 169, 110, 0.14) 0%, transparent 55%),
-    linear-gradient(168deg, rgba(255, 253, 249, 0.99) 0%, rgba(250, 246, 239, 0.96) 100%);
-  box-shadow: var(--tf-shadow-card, 0 14px 36px rgba(42, 37, 32, 0.055));
+    radial-gradient(ellipse 70% 40% at 50% 0%, rgba(201, 169, 110, 0.1) 0%, transparent 55%),
+    transparent;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.15rem;
 }
 
 .natalSceneHeader {
@@ -2221,14 +2232,6 @@
   border-color: rgba(139, 106, 62, 0.48);
   background: rgba(255, 252, 246, 0.95);
   color: #6b5336;
-}
-
-:global([data-theme="dark"]) .natalScene {
-  border-color: rgba(212, 184, 150, 0.18);
-  background:
-    radial-gradient(ellipse 75% 50% at 92% -8%, rgba(201, 169, 110, 0.1) 0%, transparent 55%),
-    linear-gradient(168deg, #221c28 0%, #1a1620 100%);
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28);
 }
 
 :global([data-theme="dark"]) .natalPlainToggle {
@@ -2619,8 +2622,30 @@
   color: #c4b8a8;
 }
 
-:global([data-theme="dark"]) .zone,
+:global([data-theme="dark"]) .zone {
+  border-color: rgba(212, 184, 150, 0.18);
+  background:
+    radial-gradient(ellipse 70% 45% at 90% -5%, rgba(201, 169, 110, 0.1) 0%, transparent 55%),
+    #1e1a24;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28);
+}
+
 :global([data-theme="dark"]) .bridgeScene,
+:global([data-theme="dark"]) .natalScene,
+:global([data-theme="dark"]) .journeyScene {
+  border-color: transparent;
+  border-top-color: rgba(212, 184, 150, 0.16);
+  background:
+    linear-gradient(180deg, rgba(201, 169, 110, 0.06) 0%, transparent 34%),
+    transparent;
+  box-shadow: none;
+}
+
+:global([data-theme="dark"]) .natalScene {
+  background:
+    radial-gradient(ellipse 70% 40% at 50% 0%, rgba(201, 169, 110, 0.1) 0%, transparent 55%),
+    transparent;
+}
 :global([data-theme="dark"]) .whyProofCard,
 :global([data-theme="dark"]) .exploreDetailCard,
 :global([data-theme="dark"]) .natalDestination,
@@ -2630,24 +2655,31 @@
 :global([data-theme="dark"]) .insightHelpBlock,
 :global([data-theme="dark"]) .insightQuote,
 :global([data-theme="dark"]) .effortSphereChip,
+:global([data-theme="dark"]) .effortSphereReadCard,
+:global([data-theme="dark"]) .effortFocusCard,
+:global([data-theme="dark"]) .characterPanel,
 :global([data-theme="dark"]) .mobileDepthChip {
-  background: #1e1a24;
-  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: transparent;
   box-shadow: none;
 }
 
+:global([data-theme="dark"]) .insightNode {
+  box-shadow: inset 0 3px 0 0 #c9a96e;
+}
+
 :global([data-theme="dark"]) .insightNode.insightKind_strength {
-  border-top-color: #6f8f66;
+  box-shadow: inset 0 3px 0 0 #6f8f66;
 }
 
 :global([data-theme="dark"]) .insightNode.insightKind_tension,
 :global([data-theme="dark"]) .insightNode.insightKind_repeat {
-  border-top-color: #c47a6e;
+  box-shadow: inset 0 3px 0 0 #c47a6e;
 }
 
 :global([data-theme="dark"]) .insightHelpBlock {
   background: rgba(61, 90, 128, 0.22);
-  border-left-color: #7a9cc4;
+  box-shadow: inset 3px 0 0 0 #7a9cc4;
 }
 
 :global([data-theme="dark"]) .insightQuote {

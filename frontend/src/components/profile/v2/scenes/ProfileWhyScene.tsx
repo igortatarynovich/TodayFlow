@@ -28,7 +28,7 @@ export function ProfileWhyScene({ why }: ProfileWhySceneProps) {
     <section
       id="profile-v2-why"
       ref={motion.ref}
-      className={`${styles.zone} ${styles.journeyScene} ${motion.className}`}
+      className={`${styles.journeyScene} ${motion.className}`}
       style={motion.style}
       aria-labelledby="profile-v2-why-title"
       data-testid="profile-v2-why"

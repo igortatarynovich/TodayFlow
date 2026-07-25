@@ -55,7 +55,7 @@ export function ProfileCharacterScene({
     <section
       id="profile-v2-character"
       ref={motion.ref}
-      className={`${styles.zone} ${styles.journeyScene} ${motion.className}`}
+      className={`${styles.journeyScene} ${motion.className}`}
       style={motion.style}
       aria-labelledby="profile-v2-character-title"
       data-testid="profile-v2-character"

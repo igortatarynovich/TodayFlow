@@ -1,6 +1,6 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-07-21
+Last updated: 2026-07-25
 Owner: Product + Engineering
 Status: Active working document
 
@@ -993,7 +993,7 @@ Ordered work (aligns with canon §7):
 
 ## 6) Current Priorities (Execution Order)
 
-> **Активный фокус (2026-07-24):** native motion parity — **iOS first** (`ProfileMotion` → Settle / Flip / Drift / Pulse, затем mood themes). Web motion coverage закрыт. Android — после стабилизации iOS-паттерна. MoodMapView — Maps heatmap, не mood-themes (не путать).
+> **Активный фокус (2026-07-25):** Profile V2 **mobile flat frame** (canon §0.2) + owner QA on **server**; затем либо Phase 2 visual entities, либо трек day_thesis/TL. SoT: canon → tracker → server (не git).
 
 ### 🔴 Phase 3 — Screen Block Definition (единственный приоритет)
 
@@ -1702,6 +1702,8 @@ Historical note:
 - 2026-07-01 | Product | **Positive Definition §2 CLOSED (canonical)** | **CLOSED** | Два базовых закона с §1
 - 2026-07-01 | Product | **Positive Definition CLOSED** | **CLOSED** | §5.7 · Build Map E9 · spec · UX · empty states
 - 2026-07-01 | Product | **Build Map v0.5.6 — `PracticeRecommendation` spec 🟢** | **ACTIVE** | One practice · [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md)
+- 2026-07-25 | Ops / Agents | **SoT stack clarified** | **ACTIVE** | Authority: **canon → backlog/tracker → server (live)**. Git = ledger only. Root `AGENTS.md` + `.cursor/rules/architecture-impact.mdc` updated.
+- 2026-07-25 | Profile / UI | **Premium Profile pass · natal instrument + book scroll** | **ON SERVER** | Canon: Foundation UI «дорого без текста» · PROFILE_SCREEN_MASTER §0.2–0.3. Natal = one `instrument` bezel (plate+dial+selector) · planets angular fan inside rim · Journey/Bridge/Natal scenes stitched as chapters (hairline + air, no card stack). Today untouched. **Next:** owner mobile QA.
 - 2026-07-25 | Today / Architecture | **day_thesis + evidence pack in DayContext** | **IN_PROGRESS** | Evidence + FE parity · formula bank + **SP links** + `vibe_strokes` · TL-1 blocked · next: TL-0C.3 editorial marking · linked: [TODAY_LANGUAGE_STRONG_PATTERNS_V0.md](./today-language/TODAY_LANGUAGE_STRONG_PATTERNS_V0.md)
 - 2026-07-01 | Product | **Build Map v0.5.5 — `DailySymbols` spec 🟢** | **ACTIVE** | Wave 1: color + stone · umbrella entity · [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md)
 - 2026-07-01 | Product | **Invisible Mechanism CLOSED** | **CLOSED** | §5.6 · Build Map · dual Internal/External · 4 user knowledges — не revisiting
