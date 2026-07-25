@@ -100,8 +100,11 @@ Human can override `paid_worth` and rubric scores in the report later; harness n
 2. Нет системных провалов shape (`no_arkan_label`, `direct_answer`, `next_step`)
 3. Anti-sameness не провален
 4. Средние rubric ≥ порога продукта (зафиксировать в report `gates`)
+5. **LLM pass rate ≥ 0.85** (quality reject → fallback не считается pass)
 
 Пока отчёт не принят владельцем — freeze **ACTIVE**.
+
+Первый live: [TAROT_GOLDEN_EVAL_LIVE_2026-07-25](../audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-25.md) — **7/12 LLM · freeze not lifted**.
 
 ---
 
@@ -109,5 +112,5 @@ Human can override `paid_worth` and rubric scores in the report later; harness n
 
 - [x] Rubric + result schema + scorer + CLI
 - [x] Offline tests on Dataset
-- [ ] live report accepted by owner
-- [ ] freeze lift decision documented in tracker
+- [x] first live report recorded (2026-07-25) — llm_pass 7/12, freeze not lifted
+- [ ] live report accepted by owner / freeze lift decision
