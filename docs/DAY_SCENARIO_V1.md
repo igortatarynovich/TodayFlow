@@ -1,6 +1,6 @@
 # DAY_SCENARIO_V1 — драматургический каркас дня
 
-**Status:** CANON DRAFT — **B1 engine landed** (`day_scenario_v1.py`); runtime wire/UI **not** switched yet (B3–B4)  
+**Status:** CANON DRAFT — **B1+B2 landed** (`day_scenario_v1.py` + `day_color_catalog_v1.py`); runtime wire/UI **not** switched yet (B3–B4)  
 **Date:** 2026-07-25  
 **Engine:** `backend/src/todayflow_backend/services/day_scenario_v1.py`  
 **Capture rubric:** [audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md](./audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md)  
@@ -180,9 +180,11 @@ Date-preset color catalog **не** meaning SoT (может остаться seed
 5. Project to contract / UI (**B3–B4**): хор виден как объяснение, не как вкладки-конкуренты  
 6. Value gate: reject orphan props; second conflict; card/number that invent a rival story; scene without conflict link  
 
-### B1 shipped
+### B1–B2 shipped
 
-- `build_day_scenario_v1` → `foundation` · `chorus` · `conflict` · `scenes` · `props.status=deferred_to_b2`
+- `build_day_scenario_v1` → `foundation` · `chorus` · `conflict` · `scenes` · **`props` (B2)**
+- Props: color / avoid_color / goals / affirmations / optional humor / strong·weak spheres — each with `origin_scene_id`
+- Color catalog (`day_color_catalog_v1`) = **knowledge only**; selection + why from scene/conflict
 - `runtime_sot: false` until B3 wire switch
 - Conflict foundation = drivers + natal; card/number only in `chorus_references`
 - Named language encouraged («Луна в Рыбах», «Карта дня — …», «Число дня — …»)
@@ -193,15 +195,16 @@ Fallback: facts-only / unavailable — **не** formula-bank prose как user t
 
 ## Architecture impact (Phase B — progressive)
 
-### B1 (this land) — engine only
+### B1–B2 (landed) — engine + props, no wire switch
 
 ```markdown
 ## Architecture impact
-- **SoT before:** unchanged at runtime (day_story slots + preset color still live)
-- **SoT after (code available):** day_scenario_v1 builds foundation/chorus/conflict/scenes; `runtime_sot=false`
+- **SoT before:** unchanged at runtime (day_story slots + preset color still live on wire)
+- **SoT after (code available):** day_scenario_v1 builds foundation/chorus/conflict/scenes/**props**;
+  `runtime_sot=false`; color catalog is knowledge-only for prop selection
 - **Public contract changed?** no
 - **Migration required?** no
-- **Canon updated?** yes — DAY_SCENARIO_V1 B1 note
+- **Canon updated?** yes — DAY_SCENARIO_V1 B2 note
 - **Backward compatible?** yes — no wire/UI switch
 ```
 

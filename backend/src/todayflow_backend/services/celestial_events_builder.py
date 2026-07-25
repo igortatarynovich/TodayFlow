@@ -150,10 +150,11 @@ def resolve_fixed_day_color(
     personal_day: int | None = None,
     celestial_events: dict[str, Any] | None = None,
 ) -> dict[str, str] | None:
-    """Deterministic day color — same source as UI colorGuide / celestial daily_symbols.
+    """Legacy deterministic day-color seed (date preset / celestial symbols).
 
-    Prefer an already-built celestial_events.daily_symbols.color; otherwise recompute
-    from the same preset index used by ``build_celestial_events``.
+    **Not** day_scenario SoT for user-facing recommendations (Phase B2+).
+    Prefer ``day_scenario_v1.props.color`` once wire projection (B3) switches.
+    Catalog knowledge for scenario selection: ``day_color_catalog_v1``.
     """
     ce = celestial_events if isinstance(celestial_events, dict) else {}
     symbols = ce.get("daily_symbols") if isinstance(ce.get("daily_symbols"), dict) else {}

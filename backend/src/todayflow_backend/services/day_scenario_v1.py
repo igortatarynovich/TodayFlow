@@ -1,20 +1,22 @@
-"""day_scenario_v1 — central day dramaturgy contract (Phase B1 engine).
+"""day_scenario_v1 — central day dramaturgy contract (Phase B engine).
 
 Source of Truth (target):
   facts → interpretive chorus → conflict → scenes → props → UI projections
 
-B1 ships the deterministic spine (foundation, chorus, conflict, scenes) with
-origin/evidence links. Props-from-scenes and wire/UI switch are B2–B4.
+B1: foundation, chorus, conflict, scenes.
+B2: props-from-scenes (color/avoid/goals/affirm/humor) — catalog knowledge only.
+B3–B4: wire/UI switch (`runtime_sot` still false here).
 
 Canon: docs/DAY_SCENARIO_V1.md
 """
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 DAY_SCENARIO_V1_CONTRACT = "day_scenario_v1"
-DAY_SCENARIO_V1_VERSION = "day-scenario-v1.0-b1-engine"
+DAY_SCENARIO_V1_VERSION = "day-scenario-v1.1-b2-props"
 
 # Product spheres (Act V). Not all appear every day.
 PRODUCT_SPHERE_IDS: tuple[str, ...] = (
@@ -706,16 +708,322 @@ def build_scenario_scenes_v1(
 
 
 def empty_props_v1() -> dict[str, Any]:
-    """Prop schema reserved for B2 — not filled in B1."""
+    """Empty props shell (tests / unavailable)."""
     return {
         "contract_version": "day_scenario_props_v1",
-        "status": "deferred_to_b2",
+        "status": "empty",
         "color": None,
         "avoid_color": None,
         "goals": [],
         "affirmations": [],
         "humor": None,
+        "strong_spheres": [],
+        "weak_spheres": [],
         "rule": "Every prop must carry origin_scene_id; catalog is knowledge only, not SoT.",
+    }
+
+
+def _needed_color_tags(*, trap: str, force_a: str, sphere: str, mode: str) -> set[str]:
+    blob = f"{trap} {force_a} {sphere} {mode}".lower()
+    tags: set[str] = set()
+    if any(k in blob for k in ("соглас", "угодить", "гармон", "please", "сглад")):
+        tags.update({"hold_distance", "boundaries", "slow_reply", "clarity"})
+    if any(k in blob for k in ("спеш", "импульс", "ускор", "rush", "срыв")):
+        tags.update({"calm_clarity", "pause_before_act", "depth"})
+    if any(k in blob for k in ("разговор", "сообщ", "контакт", "communication", "прям")):
+        tags.update({"soft_speech", "communication", "inner_honesty"})
+    if any(k in blob for k in ("устал", "восстанов", "тело", "сон", "energy")):
+        tags.update({"restore", "body", "tempo_gentle"})
+    if any(k in blob for k in ("давлен", "границ", "контрол", "pressure")):
+        tags.update({"boundaries", "ground", "focus"})
+    if any(k in blob for k in ("распыл", "сует", "шум")):
+        tags.update({"focus", "calm_clarity", "steady"})
+    if mode in {"recovery", "stability"}:
+        tags.update({"restore", "steady", "ground"})
+    if not tags:
+        tags.update({"calm_clarity", "hold_distance", "clarity"})
+    if sphere in {"relationships", "communication"}:
+        tags.add("communication")
+    if sphere in {"energy_body", "rest_travel"}:
+        tags.update({"restore", "body"})
+    if sphere in {"work_decisions", "money"}:
+        tags.update({"focus", "decision", "calm_clarity"})
+    return tags
+
+
+def _amplify_tags_for_trap(trap: str, force_a: str) -> set[str]:
+    blob = f"{trap} {force_a}".lower()
+    tags: set[str] = set()
+    if any(k in blob for k in ("соглас", "угодить", "гармон", "сглад", "please")):
+        tags.update({"please", "harmony_at_any_cost", "soft_over_truth"})
+    if any(k in blob for k in ("спеш", "импульс", "ускор", "реакц")):
+        tags.update({"rush", "react_first", "impulse", "alarm"})
+    if any(k in blob for k in ("распыл", "сует", "шум")):
+        tags.update({"scatter", "noise"})
+    if any(k in blob for k in ("давлен", "всё или", "контрол")):
+        tags.update({"pressure", "all_or_nothing", "over_control", "harsh"})
+    if not tags:
+        tags.update({"rush", "scatter", "please"})
+    return tags
+
+
+def _pick_primary_scene(scenes: list[dict[str, Any]]) -> dict[str, Any] | None:
+    for sc in scenes:
+        if isinstance(sc, dict) and sc.get("role_in_story") == "primary":
+            return sc
+    for sc in scenes:
+        if isinstance(sc, dict):
+            return sc
+    return None
+
+
+def _humor_opportunity(scene: dict[str, Any], conflict: dict[str, Any]) -> dict[str, Any] | None:
+    blob = " ".join(
+        str(scene.get(k) or "")
+        for k in ("domestic_example", "trap", "opportunity", "what_happens")
+    ).lower()
+    patterns: list[tuple[str, re.Pattern[str]]] = [
+        ("impulse_purchase", re.compile(r"покуп|импульс|трат")),
+        ("odd_message", re.compile(r"сообщен|написа|ответ")),
+        ("cancel_plans", re.compile(r"отмен|вс[её]\s*брос|планы")),
+        ("vacation_urge", re.compile(r"отпуск|уех|обстанов")),
+        ("romantic_glitch", re.compile(r"отношен|близост|роман")),
+        ("over_control", re.compile(r"контрол|вс[её]\s*удерж")),
+    ]
+    for kind, pat in patterns:
+        if pat.search(blob):
+            return {
+                "kind": kind,
+                "origin_scene_id": scene.get("scene_id"),
+                "text": (
+                    f"Если поймаете себя на «{conflict.get('opposing_forces', {}).get('a') or 'автопилоте'}» "
+                    f"в зоне «{scene.get('sphere_label_ru')}» — это уже сцена дня, не личный провал. "
+                    f"Можно улыбнуться и выбрать другой жест."
+                ),
+                "serves_conflict": conflict.get("short_name"),
+                "optional": True,
+            }
+    return None
+
+
+def build_scenario_props_v1(
+    *,
+    conflict: dict[str, Any],
+    scenes: list[dict[str, Any]],
+    chorus: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Derive color/avoid/goals/affirmations/humor from scenes (B2).
+
+    Color catalog = knowledge only. Selection + user-facing why come from conflict/scene.
+    """
+    from todayflow_backend.services.day_color_catalog_v1 import (
+        list_color_knowledge,
+        score_color_for_needs,
+    )
+
+    primary = _pick_primary_scene(scenes)
+    if not primary:
+        return empty_props_v1()
+
+    trap = str(primary.get("trap") or "")
+    force = _as_dict(conflict.get("opposing_forces"))
+    force_a = str(force.get("a") or "")
+    force_b = str(force.get("b") or "")
+    thesis = _as_dict(conflict.get("thesis"))
+    mode = str(thesis.get("mode") or "")
+    sphere = str(primary.get("sphere") or "")
+    scene_id = str(primary.get("scene_id") or "")
+    label = str(conflict.get("short_name") or "сюжет дня")
+
+    needed = _needed_color_tags(trap=trap, force_a=force_a, sphere=sphere, mode=mode)
+    amplify = _amplify_tags_for_trap(trap, force_a)
+
+    catalog = list_color_knowledge()
+    ranked = sorted(
+        catalog,
+        key=lambda e: score_color_for_needs(e, needed),
+        reverse=True,
+    )
+    chosen = ranked[0] if ranked else None
+    if not chosen:
+        return empty_props_v1()
+
+    # Prefer catalog avoid candidate that amplifies today's trap tags
+    avoid_pick = None
+    best_avoid_score = -1
+    for cand in chosen.get("avoid_candidates") or ():
+        if not isinstance(cand, dict):
+            continue
+        score = len(set(cand.get("amplifies") or ()) & amplify)
+        if score > best_avoid_score:
+            best_avoid_score = score
+            avoid_pick = cand
+    if avoid_pick is None:
+        # scan other entries' avoid candidates
+        for entry in catalog:
+            for cand in entry.get("avoid_candidates") or ():
+                if not isinstance(cand, dict):
+                    continue
+                score = len(set(cand.get("amplifies") or ()) & amplify)
+                if score > best_avoid_score:
+                    best_avoid_score = score
+                    avoid_pick = cand
+
+    apply = _as_dict(chosen.get("apply"))
+    color_prop = {
+        "name": chosen.get("name"),
+        "origin_scene_id": scene_id,
+        "serves_conflict": label,
+        "link_to_conflict": (
+            f"В сцене «{primary.get('sphere_label_ru')}» конфликт «{label}» "
+            f"тянет к «{force_a}». {chosen.get('symbolic_property')} — "
+            f"это свойство нужно сегодня, чтобы удержать «{force_b}»."
+        ),
+        "supports_or_compensates": f"Компенсирует ловушку: {_clip(trap, 160)}",
+        "expected_effect_today": (
+            f"Помогает не сорваться в «{force_a}» и сделать один жест в сторону «{force_b}»."
+        ),
+        "where_to_use": {
+            "clothing": apply.get("clothing"),
+            "accessory": apply.get("accessory"),
+            "workspace": apply.get("workspace"),
+            "makeup": apply.get("makeup"),
+            "ui_or_bg": apply.get("ui_or_bg"),
+        },
+        "intensity": chosen.get("intensity_default"),
+        "catalog_knowledge_ref": chosen.get("name"),
+        "evidence_references": list(primary.get("evidence_references") or []),
+        "chorus_references": list(primary.get("chorus_references") or []),
+        "so_t_note": "scenario_scene_derived; catalog is knowledge only",
+    }
+
+    avoid_name = str((avoid_pick or {}).get("name") or "Кислотный неон")
+    avoid_prop = {
+        "name": avoid_name,
+        "origin_scene_id": scene_id,
+        "serves_conflict": label,
+        "amplifies_trap": _clip(trap, 200),
+        "why": (
+            f"{avoid_name} сегодня нежелателен: усиливает ловушку сцены "
+            f"«{_clip(trap, 120)}» и разгоняет стратегию «{force_a}», "
+            f"вместо нужного «{force_b}»."
+        ),
+        "where_especially_avoid": (
+            f"В одежде и на фоне разговора/решения в зоне «{primary.get('sphere_label_ru')}»."
+        ),
+        "ok_as_tiny_accent": False,
+        "catalog_knowledge_ref": avoid_name,
+        "evidence_references": list(primary.get("evidence_references") or []),
+    }
+
+    # Goals: 1 primary + up to 2 secondary from other scenes — not verbatim do
+    goals: list[dict[str, Any]] = []
+    primary_goal = {
+        "text": (
+            f"Закрыть один жест в зоне «{primary.get('sphere_label_ru')}», "
+            f"который сдвигает «{label}» к «{force_b}» — без ожидания чужой реакции."
+        ),
+        "origin_scene_id": scene_id,
+        "serves_conflict": label,
+        "solves": _clip(trap, 160),
+        "one_day_feasible": True,
+        "duplicates_do": False,
+        "role": "primary",
+    }
+    goals.append(primary_goal)
+    for sc in scenes:
+        if not isinstance(sc, dict) or sc.get("scene_id") == scene_id:
+            continue
+        if len(goals) >= 3:
+            break
+        goals.append(
+            {
+                "text": (
+                    f"В «{sc.get('sphere_label_ru')}» заметить момент «{force_a}» "
+                    f"и заменить его одним маленьким «{force_b}»."
+                ),
+                "origin_scene_id": sc.get("scene_id"),
+                "serves_conflict": label,
+                "solves": _clip(sc.get("trap"), 120),
+                "one_day_feasible": True,
+                "duplicates_do": False,
+                "role": "secondary",
+            }
+        )
+
+    affirmations = [
+        {
+            "text": (
+                f"Мне не нужно выбирать «{force_a}», чтобы сохранить лицо дня — "
+                f"я могу сделать один шаг к «{force_b}»."
+            ),
+            "origin_scene_id": scene_id,
+            "serves_conflict": label,
+            "compensates_trap": _clip(trap, 160),
+            "helps_action": _clip(primary.get("recommended_action"), 160),
+            "universal_formula": False,
+        }
+    ]
+
+    humor = _humor_opportunity(primary, conflict)
+
+    strong: list[dict[str, Any]] = []
+    weak: list[dict[str, Any]] = []
+    for sc in scenes:
+        if not isinstance(sc, dict):
+            continue
+        row = {
+            "sphere": sc.get("sphere"),
+            "sphere_label_ru": sc.get("sphere_label_ru"),
+            "origin_scene_id": sc.get("scene_id"),
+            "role_in_story": sc.get("role_in_story"),
+        }
+        if sc.get("role_in_story") == "primary" or sc.get("sphere") in {
+            "work_decisions",
+            "communication",
+            "relationships",
+            "creativity",
+        }:
+            # primary + opportunity-forward spheres → strong unless explicitly support_or_risk body/rest
+            if sc.get("role_in_story") == "support_or_risk" and sc.get("sphere") in {
+                "energy_body",
+                "rest_travel",
+                "home",
+            }:
+                weak.append({**row, "status": "vulnerable", "risk": sc.get("trap")})
+            else:
+                strong.append({**row, "status": "strong", "opportunity": sc.get("opportunity")})
+        else:
+            weak.append({**row, "status": "vulnerable", "risk": sc.get("trap")})
+
+    # Ensure primary appears in strong
+    if primary and not any(s.get("origin_scene_id") == scene_id for s in strong):
+        strong.insert(
+            0,
+            {
+                "sphere": primary.get("sphere"),
+                "sphere_label_ru": primary.get("sphere_label_ru"),
+                "origin_scene_id": scene_id,
+                "role_in_story": primary.get("role_in_story"),
+                "status": "strong",
+                "opportunity": primary.get("opportunity"),
+            },
+        )
+
+    return {
+        "contract_version": "day_scenario_props_v1",
+        "status": "ok",
+        "color": color_prop,
+        "avoid_color": avoid_prop,
+        "goals": goals,
+        "affirmations": affirmations,
+        "humor": humor,
+        "strong_spheres": strong,
+        "weak_spheres": weak,
+        "rule": "Every prop carries origin_scene_id; catalog is knowledge only, not SoT.",
+        "chorus_tempo_hint": (_as_dict(chorus).get("day_number") or {}).get("tempo")
+        if isinstance(chorus, dict)
+        else None,
     }
 
 
@@ -728,7 +1036,7 @@ def build_day_scenario_v1(
     celestial_events: dict[str, Any] | None = None,
     max_scenes: int = 4,
 ) -> dict[str, Any]:
-    """Assemble day_scenario_v1 spine (B1). Does not switch wire/UI."""
+    """Assemble day_scenario_v1 spine + B2 props. Does not switch wire/UI."""
     interp = _as_dict(interpretation)
     foundation = build_scenario_foundation_v1(
         interpretation=interp,
@@ -753,15 +1061,16 @@ def build_day_scenario_v1(
         interpretation=interp,
         max_scenes=max_scenes,
     )
+    props = build_scenario_props_v1(conflict=conflict, scenes=scenes, chorus=chorus)
     return {
         "contract_version": DAY_SCENARIO_V1_CONTRACT,
         "version": DAY_SCENARIO_V1_VERSION,
-        "runtime_sot": False,  # B1: engine available; wire not switched
+        "runtime_sot": False,  # wire/UI switch is B3–B4
         "foundation": foundation,
         "chorus": chorus,
         "conflict": conflict,
         "scenes": scenes,
-        "props": empty_props_v1(),
+        "props": props,
         "projections": {
             "status": "deferred_to_b3",
             "note": "Map to today_contract / day_story slots in PR B3.",
@@ -770,7 +1079,7 @@ def build_day_scenario_v1(
 
 
 def validate_day_scenario_v1(scenario: dict[str, Any] | None) -> list[str]:
-    """Structural validation — architectural invariants for B1."""
+    """Structural validation — architectural invariants for B1+B2."""
     errors: list[str] = []
     if not isinstance(scenario, dict):
         return ["scenario_not_dict"]
@@ -788,10 +1097,8 @@ def validate_day_scenario_v1(scenario: dict[str, Any] | None) -> list[str]:
     if not isinstance(conflict.get("opposing_forces"), dict):
         errors.append("conflict_missing_opposing_forces")
 
-    # Card/number must not be sole foundation of conflict
     drivers = _as_list(conflict.get("driver_ids"))
     if not drivers and (foundation.get("tarot_card") or {}).get("present"):
-        # allowed only if natal present — still warn
         if not _as_list(foundation.get("personal_natal_activations")):
             errors.append("conflict_card_without_drivers")
 
@@ -802,21 +1109,46 @@ def validate_day_scenario_v1(scenario: dict[str, Any] | None) -> list[str]:
 
     if not scenes:
         errors.append("scenes_empty")
+    scene_ids = set()
     for sc in scenes:
         if not isinstance(sc, dict):
             errors.append("scene_not_dict")
             continue
         if not sc.get("scene_id"):
             errors.append("scene_missing_id")
+        else:
+            scene_ids.add(str(sc["scene_id"]))
         if sc.get("sphere") not in PRODUCT_SPHERE_IDS:
             errors.append(f"scene_bad_sphere:{sc.get('sphere')}")
         if not sc.get("serves_conflict"):
             errors.append(f"scene_missing_serves_conflict:{sc.get('scene_id')}")
 
     props = _as_dict(scenario.get("props"))
-    if props.get("status") != "deferred_to_b2" and props.get("color") is not None:
-        # B1 must not invent color SoT
-        if not _as_dict(props.get("color")).get("origin_scene_id"):
-            errors.append("prop_color_without_origin_scene")
+    if props.get("status") == "ok":
+        color = _as_dict(props.get("color"))
+        if color:
+            if not color.get("origin_scene_id"):
+                errors.append("prop_color_without_origin_scene")
+            elif str(color.get("origin_scene_id")) not in scene_ids:
+                errors.append("prop_color_origin_not_in_scenes")
+            if not color.get("link_to_conflict"):
+                errors.append("prop_color_missing_conflict_link")
+        avoid = _as_dict(props.get("avoid_color"))
+        if avoid:
+            if not avoid.get("origin_scene_id"):
+                errors.append("prop_avoid_without_origin_scene")
+            if not avoid.get("amplifies_trap"):
+                errors.append("prop_avoid_missing_trap_link")
+        for g in _as_list(props.get("goals")):
+            if isinstance(g, dict) and not g.get("origin_scene_id"):
+                errors.append("prop_goal_without_origin_scene")
+        for a in _as_list(props.get("affirmations")):
+            if isinstance(a, dict) and not a.get("origin_scene_id"):
+                errors.append("prop_affirmation_without_origin_scene")
+            if isinstance(a, dict) and a.get("universal_formula"):
+                errors.append("prop_affirmation_universal_forbidden")
+        humor = props.get("humor")
+        if isinstance(humor, dict) and humor and not humor.get("origin_scene_id"):
+            errors.append("prop_humor_without_origin_scene")
 
     return errors

@@ -997,7 +997,7 @@ Ordered work (aligns with canon §7):
 
 ## 6) Current Priorities (Execution Order)
 
-> **Активный фокус (2026-07-25):** **Character Engine wiring** (не UI redesign) — канон v1.1.1 принят; runtime ещё может строить параллельную личность. Next: inventory → versioned CE Snapshot + Evidence Graph → pipeline → Compass assembler → Profile switch → readers → kill old roots. SoT: [PROFILE_EXPERIENCE_SCENARIO_V1](profile/PROFILE_EXPERIENCE_SCENARIO_V1.md) §8. Tarot Design Language / Day Scenario — параллельные треки, не смешивать в CE commits.
+> **Активный фокус (2026-07-25):** **Character Engine wiring** — inventory **DONE** ([CHARACTER_ENGINE_RUNTIME_INVENTORY_V0](audits/CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md)). **Next:** Architecture Impact D1–D4 → schema → pipeline → adapters → Shadow → readers → kill old roots. Не UI Profile redesign. Не dual-SoT publish.
 
 ### 🔴 Phase 3 — Screen Block Definition (единственный приоритет)
 
@@ -1706,13 +1706,14 @@ Historical note:
 - 2026-07-01 | Product | **Positive Definition §2 CLOSED (canonical)** | **CLOSED** | Два базовых закона с §1
 - 2026-07-01 | Product | **Positive Definition CLOSED** | **CLOSED** | §5.7 · Build Map E9 · spec · UX · empty states
 - 2026-07-01 | Product | **Build Map v0.5.6 — `PracticeRecommendation` spec 🟢** | **ACTIVE** | One practice · [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md)
-- 2026-07-25 | Profile / Canon | **Character Engine Scenario v1.1.1 + matrix scrub** | **ACTIVE** | Header=1.1.1 · §8 wiring track (10 steps) · Availability Matrix: no dual `personality/relationships|career|money`; strengths/helps derived · `growth` root deprecated in Generation Contracts. **Honest residual:** canon ≠ runtime; old funnel/prompts may still invent parallel personality until CE wiring. **c83ff8c** scope note: tracker file also carried adjacent focus/changelog noise — do not claim “CE-only” for that SHA; follow-ups keep CE commits narrow. **Next:** Architecture impact + inventory of contracts/prompt IDs/jobs/schemas/FE consumers.
+- 2026-07-25 | Profile / Canon | **CE Runtime Inventory v0** | **DONE** | [CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md](audits/CHARACTER_ENGINE_RUNTIME_INVENTORY_V0.md): preferred `personality` path vs live disclosure funnel/oneshot · Snapshot=`core_profile_snapshots` · kill list (funnel, natal editorial, thematic, V0 FE, iOS life_areas) · open Architecture Impact D1–D4. **Next:** Impact session — no schema until D1–D4 closed.
+- 2026-07-25 | Profile / Canon | **Character Engine Scenario v1.1.1 + matrix scrub** | **ACTIVE** | Header=1.1.1 · §8 wiring track · Availability Matrix dual roots scrubbed · `growth` deprecated as root. Residual: canon ≠ runtime until wiring.
 - 2026-07-25 | Profile / Canon | **Character Engine Scenario v1.1** | **SUPERSEDED → v1.1.1** | См. строку выше.
 - 2026-07-25 | Profile / Canon | **Profile Experience Scenario v1** | **SUPERSEDED → v1.1 Character Engine** | См. Character Engine v1.1.1.
 - 2026-07-25 | Ops / Agents | **SoT stack clarified** | **ACTIVE** | Authority: **canon → backlog/tracker → server (live)**. Git = ledger only. Root `AGENTS.md` + `.cursor/rules/architecture-impact.mdc` updated.
 - 2026-07-25 | Profile / UI | **Premium Profile pass · natal instrument + book scroll** | **ON SERVER** | Canon: Foundation UI «дорого без текста» · PROFILE_SCREEN_MASTER §0.2–0.3. Natal = one `instrument` bezel (plate+dial+selector) · planets angular fan inside rim · Journey/Bridge/Natal scenes stitched as chapters (hairline + air, no card stack). Today untouched. **Next:** owner mobile QA.
 - 2026-07-25 | Today / Architecture | **day_thesis + evidence pack in DayContext** | **IN_PROGRESS** | Evidence + FE parity · formula bank + **SP links** + `vibe_strokes` · TL-1 blocked · next: TL-0C.3 editorial marking · linked: [TODAY_LANGUAGE_STRONG_PATTERNS_V0.md](./today-language/TODAY_LANGUAGE_STRONG_PATTERNS_V0.md)
-- 2026-07-25 | Today / Scenario | **Day Scenario SoT + product capture** | **IN_PROGRESS** | Canon draft [DAY_SCENARIO_V1.md](./DAY_SCENARIO_V1.md) · **two levels:** (1) what happens = scenario · (2) why = interpretive chorus (astro + day card + day number + natal as one story, not parallel modules) · capture pack [DAY_PRODUCT_LOGIC_CAPTURE_PACK.md](./audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md) · **next:** Phase B engine · Architecture impact before runtime SoT switch
+- 2026-07-25 | Today / Scenario | **Day Scenario SoT + product capture** | **IN_PROGRESS** | Canon [DAY_SCENARIO_V1.md](./DAY_SCENARIO_V1.md) · **B1+B2 landed** (engine + props-from-scenes; `day_color_catalog_v1` knowledge-only; `runtime_sot=false`) · capture packs · **next:** B3 wire projection · B4 UI · Architecture impact on switch
 - 2026-07-01 | Product | **Build Map v0.5.5 — `DailySymbols` spec 🟢** | **ACTIVE** | Wave 1: color + stone · umbrella entity · [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md)
 - 2026-07-01 | Product | **Invisible Mechanism CLOSED** | **CLOSED** | §5.6 · Build Map · dual Internal/External · 4 user knowledges — не revisiting
 - 2026-07-01 | Product | **Build Map v0.2** | **REVOKED** | Component Catalog → Entity Catalog

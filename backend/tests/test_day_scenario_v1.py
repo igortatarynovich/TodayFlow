@@ -148,13 +148,49 @@ def test_scenes_are_relevant_and_serve_conflict():
         assert s["chorus_references"]
 
 
-def test_props_deferred_in_b1():
+def test_props_from_scenes_have_origin_and_conflict_link():
     pack = _pack_merc_moon()
     thesis = build_day_thesis_v1(day_events_pack=pack)
-    scenario = build_day_scenario_v1(day_events_pack=pack, day_thesis=thesis)
-    assert scenario["props"]["status"] == "deferred_to_b2"
-    assert scenario["props"]["color"] is None
-    assert scenario["projections"]["status"] == "deferred_to_b3"
+    ritual = {
+        "tarot_name_ru": "Отшельник",
+        "numerology_value": 7,
+        "head_topic": "relationships",
+    }
+    interp = build_day_story_interpretation_v1(
+        day_engine_brief={
+            "anchor_summary": "Ось дня.",
+            "do_hint": "Сказать прямо.",
+            "avoid_hint": "Не соглашаться сразу ради гармонии.",
+            "thread_head_topic": "relationships",
+        },
+        ritual_context=ritual,
+        celestial_events={"day_events_pack": pack},
+        day_thesis=thesis,
+        target_date=date(2026, 7, 24),
+        birth_date=date(1990, 3, 15),
+    )
+    scenario = build_day_scenario_v1(
+        interpretation=interp,
+        day_events_pack=pack,
+        day_thesis=thesis,
+        ritual_context=ritual,
+    )
+    assert validate_day_scenario_v1(scenario) == []
+    props = scenario["props"]
+    assert props["status"] == "ok"
+    color = props["color"]
+    assert color["origin_scene_id"]
+    assert color["link_to_conflict"]
+    assert color["so_t_note"].startswith("scenario_scene_derived")
+    assert props["avoid_color"]["amplifies_trap"]
+    assert props["avoid_color"]["origin_scene_id"] == color["origin_scene_id"]
+    assert 1 <= len(props["goals"]) <= 3
+    assert all(g.get("origin_scene_id") for g in props["goals"])
+    assert props["affirmations"][0]["origin_scene_id"]
+    assert props["affirmations"][0]["universal_formula"] is False
+    assert props["strong_spheres"]
+    # Catalog is knowledge — user why must mention conflict/scene, not only catalog benefit
+    assert "конфликт" in color["link_to_conflict"].lower() or scenario["conflict"]["short_name"] in color["link_to_conflict"]
 
 
 def test_validate_rejects_empty_conflict_name():
@@ -162,3 +198,11 @@ def test_validate_rejects_empty_conflict_name():
     scenario = build_day_scenario_v1(day_events_pack=pack)
     scenario["conflict"]["short_name"] = ""
     assert "conflict_missing_short_name" in validate_day_scenario_v1(scenario)
+
+
+def test_color_catalog_is_knowledge_not_sot():
+    from todayflow_backend.services.day_color_catalog_v1 import list_color_knowledge
+
+    rows = list_color_knowledge()
+    assert len(rows) >= 5
+    assert all("tags" in r and "name" in r for r in rows)
