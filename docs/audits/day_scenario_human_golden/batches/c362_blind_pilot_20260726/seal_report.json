@@ -1,0 +1,47 @@
+{
+  "batch": "c362_blind_pilot_20260726",
+  "cases": [
+    {
+      "case_id": "hg-1482ed91292c",
+      "filled_reviews": 1,
+      "status": "waiting_reviews",
+      "missing": 1
+    },
+    {
+      "case_id": "hg-21d5bfaf98ab",
+      "filled_reviews": 1,
+      "status": "waiting_reviews",
+      "missing": 1
+    },
+    {
+      "case_id": "hg-369b42ad90c1",
+      "filled_reviews": 1,
+      "status": "waiting_reviews",
+      "missing": 1
+    },
+    {
+      "case_id": "hg-660b14d4bbb4",
+      "filled_reviews": 1,
+      "status": "waiting_reviews",
+      "missing": 1
+    },
+    {
+      "case_id": "hg-df42bbdb781d",
+      "filled_reviews": 1,
+      "status": "waiting_reviews",
+      "missing": 1
+    },
+    {
+      "case_id": "hg-f3c8ab09e03f",
+      "filled_reviews": 1,
+      "status": "waiting_reviews",
+      "missing": 1
+    },
+    {
+      "case_id": "hg-f61a374bc5aa",
+      "filled_reviews": 1,
+      "status": "waiting_reviews",
+      "missing": 1
+    }
+  ]
+}
