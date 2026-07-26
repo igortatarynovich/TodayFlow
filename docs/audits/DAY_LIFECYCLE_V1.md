@@ -93,4 +93,4 @@ Engine: `day_lifecycle_jobs_c5.py`
 4. **C5.2 Ready push** — landed
 5. **C5.3 System close** — landed
 
-Ops: ensure cron hits `/internal/push/run-due` at least every ~10–15 min through 05–09 and 22–00 local bands for active TZs.
+Ops: crontab every 10 min → `scripts/run_day_lifecycle_cron.sh` → `POST /internal/push/run-due` (needs `PUSH_DISPATCH_SECRET`). Cover 05–09 and 22–00 local bands for active TZs.
