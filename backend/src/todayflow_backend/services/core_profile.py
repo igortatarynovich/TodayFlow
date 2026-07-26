@@ -336,8 +336,27 @@ class CoreProfileService:
         if cached and cached[0] > now:
             payload = deepcopy(cached[1])
             diagnostics = payload.get("diagnostics") if isinstance(payload.get("diagnostics"), dict) else {}
-            # Avoid re-running Stage 2 LLM on every memory-cache hit.
-            if not diagnostics.get("character_engine_stage2"):
+            # Re-attach only when a required CE nest is missing (avoid Stage 2 LLM every hit).
+            need_ce_attach = not diagnostics.get("character_engine_stage2")
+            try:
+                from todayflow_backend.services.character_engine_stage3_shadow_v0 import (
+                    character_engine_stage3_should_run,
+                )
+                from todayflow_backend.services.character_engine_stage4_shadow_v0 import (
+                    character_engine_stage4_should_run,
+                )
+
+                if character_engine_stage3_should_run() and not diagnostics.get(
+                    "character_engine_stage3"
+                ):
+                    need_ce_attach = True
+                if character_engine_stage4_should_run() and not diagnostics.get(
+                    "character_engine_stage4"
+                ):
+                    need_ce_attach = True
+            except Exception:
+                pass
+            if need_ce_attach:
                 payload = self._maybe_attach_character_engine_shadow(
                     db,
                     payload,

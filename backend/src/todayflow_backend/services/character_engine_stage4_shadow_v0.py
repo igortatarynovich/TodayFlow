@@ -140,12 +140,16 @@ def maybe_attach_stage4_shadow(
 ) -> dict[str, Any]:
     if not character_engine_stage4_should_run():
         return profile_payload
+    diagnostics = profile_payload.get("diagnostics")
+    if isinstance(diagnostics, dict):
+        existing = diagnostics.get("character_engine_stage4")
+        if isinstance(existing, dict) and isinstance(existing.get("stage4"), dict):
+            return profile_payload
     if character_engine_publish_ready_enabled():
         logger.warning(
             "CHARACTER_ENGINE_PUBLISH_READY set but Stage 4 path remains diagnostics-only until cutover"
         )
 
-    diagnostics = profile_payload.get("diagnostics")
     if not isinstance(diagnostics, dict):
         diagnostics = {}
 

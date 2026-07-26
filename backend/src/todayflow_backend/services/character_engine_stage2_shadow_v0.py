@@ -95,6 +95,11 @@ def maybe_attach_stage2_shadow(
 ) -> dict[str, Any]:
     if not character_engine_stage2_should_run():
         return profile_payload
+    diagnostics = profile_payload.get("diagnostics")
+    if isinstance(diagnostics, dict):
+        existing = diagnostics.get("character_engine_stage2")
+        if isinstance(existing, dict) and isinstance(existing.get("stage2"), dict):
+            return profile_payload
     # Explicit: publish-ready must never be implied by Stage 2 enabled/shadow.
     if character_engine_publish_ready_enabled():
         logger.warning(
