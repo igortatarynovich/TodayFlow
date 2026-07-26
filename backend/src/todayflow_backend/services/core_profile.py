@@ -343,6 +343,10 @@ class CoreProfileService:
             had_stage5 = isinstance(before_diag.get("character_engine_stage5"), dict) and isinstance(
                 (before_diag.get("character_engine_stage5") or {}).get("stage5"), dict
             )
+            had_envelope = isinstance(payload.get("character_engine_v1"), dict) and (
+                (payload.get("character_engine_v1") or {}).get("schema_version")
+                == "character_engine_v1"
+            )
             payload = self._maybe_attach_character_engine_shadow(
                 db,
                 payload,
@@ -360,7 +364,14 @@ class CoreProfileService:
             filled_stage5 = isinstance(after_diag.get("character_engine_stage5"), dict) and isinstance(
                 (after_diag.get("character_engine_stage5") or {}).get("stage5"), dict
             )
-            if filled_stage5 and not had_stage5 and payload.get("profile_hash"):
+            filled_envelope = isinstance(payload.get("character_engine_v1"), dict) and (
+                (payload.get("character_engine_v1") or {}).get("schema_version")
+                == "character_engine_v1"
+            )
+            if (
+                ((filled_stage5 and not had_stage5) or (filled_envelope and not had_envelope))
+                and payload.get("profile_hash")
+            ):
                 try:
                     sid = self._save_snapshot(
                         db=db,
@@ -394,6 +405,10 @@ class CoreProfileService:
             had_stage5 = isinstance(before_diag.get("character_engine_stage5"), dict) and isinstance(
                 (before_diag.get("character_engine_stage5") or {}).get("stage5"), dict
             )
+            had_envelope = isinstance(cached_payload.get("character_engine_v1"), dict) and (
+                (cached_payload.get("character_engine_v1") or {}).get("schema_version")
+                == "character_engine_v1"
+            )
             cached_payload = self._maybe_attach_character_engine_shadow(
                 db,
                 cached_payload,
@@ -413,8 +428,12 @@ class CoreProfileService:
             filled_stage5 = isinstance(after_diag.get("character_engine_stage5"), dict) and isinstance(
                 (after_diag.get("character_engine_stage5") or {}).get("stage5"), dict
             )
-            # Persist one-shot deterministic CE fill so next GET is snapshot-only.
-            if filled_stage5 and not had_stage5:
+            filled_envelope = isinstance(cached_payload.get("character_engine_v1"), dict) and (
+                (cached_payload.get("character_engine_v1") or {}).get("schema_version")
+                == "character_engine_v1"
+            )
+            # Persist one-shot CE fill / envelope so next GET is snapshot-only.
+            if (filled_stage5 and not had_stage5) or (filled_envelope and not had_envelope):
                 try:
                     sid = self._save_snapshot(
                         db=db,
@@ -1332,9 +1351,16 @@ class CoreProfileService:
                 (diagnostics.get("character_engine_stage5") or {}).get("stage5"), dict
             )
 
-            # Read path: assembled snapshot is authoritative — do not recompute Stage 0–5.
+            # Read path: Stage 5 already assembled — do not recompute Stage 0–5.
+            # May still attach character_engine_v1 envelope once if missing.
             if not include_stage2 and has_stage5:
-                return profile_payload
+                from todayflow_backend.services.character_engine_envelope_v0 import (
+                    maybe_attach_character_engine_envelope_v0,
+                )
+
+                return maybe_attach_character_engine_envelope_v0(
+                    profile_payload, profile_fingerprint=profile_hash
+                )
 
             # Publish: full LLM cascade when CE flags / consumption on.
             # Read: deterministic fill-once only onto an existing portrait snapshot
@@ -1406,6 +1432,16 @@ class CoreProfileService:
                 )
             if run_stage5:
                 profile_payload = maybe_attach_stage5_shadow(profile_payload, **shadow_kwargs)
+            # Envelope home (forming until PUBLISH_READY): compose once after Stage nests exist.
+            from todayflow_backend.services.character_engine_envelope_v0 import (
+                maybe_attach_character_engine_envelope_v0,
+            )
+
+            profile_payload = maybe_attach_character_engine_envelope_v0(
+                profile_payload,
+                profile_fingerprint=profile_hash,
+                force=bool(include_stage2),
+            )
         except Exception:
             # Shadow must never break portrait publish / read path.
             pass

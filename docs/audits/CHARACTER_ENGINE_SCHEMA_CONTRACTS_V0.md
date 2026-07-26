@@ -370,7 +370,8 @@ If no → fix identity rules before implementing pipeline.
 6. ~~Stage 3 Internal Engine + tensions~~ → prompt `profile.character_engine.stage3.v1` **1.0.0** · expand-only validator (no Identity Core rewrite) · diagnostics `STAGE3_SHADOW` / `ENABLED` · Profile consumption prefers Stage 3 trap/decision when grounded ([CHARACTER_ENGINE_STAGE3_INTERNAL_V0.md](./CHARACTER_ENGINE_STAGE3_INTERNAL_V0.md)).  
 7. ~~Stage 4 scenes / potential / blind spots~~ → prompt `profile.character_engine.stage4.v1` **1.0.0** · expand-only life_bundle · `STAGE4_SHADOW` / `ENABLED` · consumption v0.6 prefers intimacy/resource scenes + potential ([CHARACTER_ENGINE_STAGE4_LIFE_V0.md](./CHARACTER_ENGINE_STAGE4_LIFE_V0.md)).  
 8. ~~Stage 5 Compass + legacy adapters~~ → deterministic assembly · no LLM · `STAGE5_SHADOW` / `ENABLED` · consumption v0.7 prefers `legacy_map` ([CHARACTER_ENGINE_STAGE5_ASSEMBLY_V0.md](./CHARACTER_ENGINE_STAGE5_ASSEMBLY_V0.md)). **PUBLISH_READY cutover still off.**  
-
+9. ~~Envelope `character_engine_v1` forming nest~~ → compose from Stage 0–5 diagnostics · `status=forming` until `PUBLISH_READY` · assemble-once on GET ([CHARACTER_ENGINE_ENVELOPE_V0.md](./CHARACTER_ENGINE_ENVELOPE_V0.md)).  
+10. Owner `PUBLISH_READY` cutover (separate Architecture impact) → then kill funnel/oneshot.
 ### Flag semantics
 
 | Flag | Runs stages? | Publishes CE ready SoT? |

@@ -251,6 +251,8 @@ class CoreProfileResponse(BaseModel):
     profile_header_knowledge_v0: dict | None = None
     # Shadow / ops diagnostics (e.g. Character Engine Stage 0–1). Not Profile SoT.
     diagnostics: dict | None = None
+    # Versioned CE nest (D1). status=forming until PUBLISH_READY cutover.
+    character_engine_v1: dict | None = None
     # CE → Profile journey slice (recognition / why / trap). Optional.
     character_engine_consumption_v0: dict | None = None
     # CE person-voice house lines (1–12). Optional; natal facts stay on natal preview.
