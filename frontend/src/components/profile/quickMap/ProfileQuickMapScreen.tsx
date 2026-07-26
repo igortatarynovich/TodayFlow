@@ -32,6 +32,7 @@ export type ProfileQuickMapDeepProps = {
   chartReading?: string | null;
   methodologyNote?: string | null;
   unavailableNote?: string | null;
+  housePersonLines?: Record<string, { line?: string } | undefined> | null;
 };
 
 export type ProfileQuickMapScreenProps = {
@@ -240,6 +241,7 @@ export function ProfileQuickMapScreen({
                 chartReading={deep.chartReading}
                 methodologyNote={deep.methodologyNote}
                 unavailableNote={deep.unavailableNote}
+                housePersonLines={deep.housePersonLines}
               />
             </ProfilePortalDeepSection>
           </div>

@@ -29,9 +29,16 @@ type ProfileChartFullMapProps = {
   natalPreview: NatalChartPreview | null;
   natalPreviewLoading?: boolean;
   onReloadPreview: () => void;
+  /** CE person-voice lines keyed by house number string — preferred over encyclopedia. */
+  housePersonLines?: Record<string, { line?: string } | undefined> | null;
 };
 
-export function ProfileChartFullMap({ natalPreview, natalPreviewLoading = false, onReloadPreview }: ProfileChartFullMapProps) {
+export function ProfileChartFullMap({
+  natalPreview,
+  natalPreviewLoading = false,
+  onReloadPreview,
+  housePersonLines = null,
+}: ProfileChartFullMapProps) {
   if (!natalPreview) {
     return (
       <div className={styles.emptyState}>
@@ -80,7 +87,8 @@ export function ProfileChartFullMap({ natalPreview, natalPreviewLoading = false,
                 </div>
                 <p className={styles.houseTitle}>{layer?.title ?? `Дом ${house.house}`}</p>
                 <p className={styles.houseText}>
-                  {interpretation?.description?.trim() ||
+                  {housePersonLines?.[String(house.house)]?.line?.trim() ||
+                    interpretation?.description?.trim() ||
                     interpretation?.theme?.trim() ||
                     HOUSE_FALLBACK[house.house]}
                 </p>

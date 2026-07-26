@@ -95,6 +95,14 @@ class CoreProfileService:
                 attach_insight_nodes_v0(attach_portrait_why_v0(payload))
             )
         )
+        # CE consumption overwrites recognition / why / trap after legacy projections.
+        from todayflow_backend.services.character_engine_profile_consumption_v0 import (
+            apply_character_engine_profile_consumption_v0,
+        )
+
+        out = apply_character_engine_profile_consumption_v0(out)
+        # Re-derive effort/bridge from post-consumption insight (null when no help).
+        out = attach_bridge_line_v0(attach_effort_vector_v0(out))
         return self._attach_profile_matrix(db, out, user=user, astro_profile=astro_profile, settings=settings)
 
     def _attach_profile_matrix(
@@ -326,17 +334,21 @@ class CoreProfileService:
         now = time_module.time()
         cached = self._cache.get(cache_key)
         if cached and cached[0] > now:
-            payload = self._attach_natal_summary(db, deepcopy(cached[1]), astro_profile, settings, user)
-            return self._maybe_attach_character_engine_shadow(
-                db,
-                payload,
-                astro_profile=astro_profile,
-                astro_context=self._build_astro_context(astro_profile),
-                numerology_context=self._build_numerology_context(numerology_profile),
-                person_pub=self._person_public(settings, user),
-                profile_hash=payload.get("profile_hash") or "",
-                natal_facts=None,
-            )
+            payload = deepcopy(cached[1])
+            diagnostics = payload.get("diagnostics") if isinstance(payload.get("diagnostics"), dict) else {}
+            # Avoid re-running Stage 2 LLM on every memory-cache hit.
+            if not diagnostics.get("character_engine_stage2"):
+                payload = self._maybe_attach_character_engine_shadow(
+                    db,
+                    payload,
+                    astro_profile=astro_profile,
+                    astro_context=self._build_astro_context(astro_profile),
+                    numerology_context=self._build_numerology_context(numerology_profile),
+                    person_pub=self._person_public(settings, user),
+                    profile_hash=payload.get("profile_hash") or "",
+                    natal_facts=None,
+                )
+            return self._attach_natal_summary(db, payload, astro_profile, settings, user)
 
         astro_context = self._build_astro_context(astro_profile)
         numerology_context = self._build_numerology_context(numerology_profile)
@@ -1215,8 +1227,8 @@ class CoreProfileService:
     ) -> dict[str, Any]:
         """Attach CE Stage 0–1 (cheap) and optionally Stage 2 (LLM) diagnostics.
 
-        Stage 2 must not run on ordinary GET read-path — latency/cost. Pass
-        ``include_stage2=True`` only from explicit portrait publish/refresh.
+        Stage 2 is expensive: pass ``include_stage2=True`` on portrait publish/refresh,
+        or enable ``CHARACTER_ENGINE_PROFILE_CONSUMPTION`` (Identity Core on Profile read).
         Never publishes character_engine_v1 ready.
         """
         try:
@@ -1230,7 +1242,17 @@ class CoreProfileService:
             )
 
             run_stage2 = bool(include_stage2) and character_engine_stage2_should_run()
-            if not (character_engine_stage01_should_run() or run_stage2):
+            try:
+                from todayflow_backend.services.character_engine_profile_consumption_v0 import (
+                    character_engine_profile_consumption_enabled,
+                )
+
+                if character_engine_profile_consumption_enabled():
+                    # Product slice needs Identity Core on Profile read.
+                    run_stage2 = True
+            except Exception:
+                pass
+            if not (character_engine_stage01_should_run() or run_stage2 or character_engine_stage2_should_run()):
                 return profile_payload
 
             from todayflow_backend.services.natal_chart_cache import NatalChartCacheService

@@ -270,7 +270,14 @@ function mergeProfileContractIntoQuickMap(
   const decisionStyle = isUsableProfileCopy(decisionStyleRaw, locale) ? decisionStyleRaw : null;
   // character_patterns passport: confirmed repeats = contract only (never taxonomy mix-in).
   const perceivedAs = filterProfileCopyList([...(contract?.recurring_patterns ?? [])], 5, locale);
-  const frameworkLeadRaw = contract?.living_changes?.trim() || (allowBaseMix ? base.frameworkLead : null);
+  // Explicit null living_changes (CE consumption) = do not resurrect taxonomy / day-rhythm lead.
+  const livingCleared =
+    contract != null &&
+    Object.prototype.hasOwnProperty.call(contract, "living_changes") &&
+    !(contract.living_changes && String(contract.living_changes).trim());
+  const frameworkLeadRaw = livingCleared
+    ? null
+    : contract?.living_changes?.trim() || (allowBaseMix ? base.frameworkLead : null);
   const frameworkLead = isUsableProfileCopy(frameworkLeadRaw, locale) ? frameworkLeadRaw : null;
   // direction_mission passport: contract life_mission only (never taxonomy lifeTheme).
   const lifeMissionRaw = (contract?.life_mission || "").trim();
@@ -289,7 +296,9 @@ function mergeProfileContractIntoQuickMap(
     drains: contractDrains,
     decisionStyle: decisionStyle ?? (allowBaseMix ? base.decisionStyle : null),
     perceivedAs,
-    frameworkLead: frameworkLead ?? (allowBaseMix ? base.frameworkLead : null),
+    frameworkLead: livingCleared
+      ? null
+      : frameworkLead ?? (allowBaseMix ? base.frameworkLead : null),
     lifeMission,
     relationshipStyle,
     moneyStyle,

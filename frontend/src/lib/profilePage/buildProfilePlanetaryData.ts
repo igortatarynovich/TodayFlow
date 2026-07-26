@@ -237,11 +237,13 @@ const LIFE_MAP_BLUEPRINT: Array<{
 
 export function buildLifeMapSections(
   natalPreview: NatalChartPreview | null,
+  houseLines?: Record<string, { line?: string } | undefined> | null,
 ): LifeMapSection[] {
   const houses = ensureTwelveProfileHouses(natalPreview);
   return LIFE_MAP_BLUEPRINT.map((item) => {
     const house = houses.find((entry) => entry.house === item.house);
     const interpretation = natalPreview?.interpretations?.houses?.[item.house];
+    const ceLine = houseLines?.[String(item.house)]?.line?.trim() || null;
 
     return {
       house: item.house,
@@ -250,6 +252,7 @@ export function buildLifeMapSections(
       href: item.href,
       accent: item.accent,
       summary:
+        ceLine ||
         interpretation?.description ||
         interpretation?.theme ||
         HOUSE_FALLBACK[item.house],

@@ -3,7 +3,7 @@
 import type { CoreProfile } from "@/lib/types";
 import { resolveCacheUserScope } from "@/lib/cacheUserScope";
 
-const PREFIX = "todayflow_core_profile:v2";
+const PREFIX = "todayflow_core_profile:v3";
 /** Soft TTL for stale-while-revalidate (7 days). Hash mismatch still wins. */
 const CORE_PROFILE_CACHE_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 
@@ -111,7 +111,11 @@ export function clearCoreProfileCache(): void {
   const clearFrom = (storage: Storage) => {
     for (let i = storage.length - 1; i >= 0; i -= 1) {
       const key = storage.key(i);
-      if (key?.startsWith("todayflow_core_profile:")) {
+      // Clear current + legacy v2 keys so old Мудрец snapshots cannot stick.
+      if (
+        key?.startsWith("todayflow_core_profile:") ||
+        key?.startsWith("todayflow_core_profile:v2")
+      ) {
         storage.removeItem(key);
       }
     }

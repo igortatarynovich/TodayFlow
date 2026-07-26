@@ -122,11 +122,14 @@ class Settings(BaseSettings):
     # CHARACTER_ENGINE_STAGE01_SHADOW=1 — Stage 0–1 diagnostics only (recommended staging).
     # CHARACTER_ENGINE_STAGE01_ENABLED=1 — also runs Stage 0–1; still diagnostics-only.
     # CHARACTER_ENGINE_STAGE2_SHADOW / ENABLED — Stage 2 Identity Core diagnostics-only.
-    # CHARACTER_ENGINE_PUBLISH_READY — future SoT switch after Stage 5 + ready validation (keep false).
+    # CHARACTER_ENGINE_PROFILE_CONSUMPTION=1 — Identity Core overwrites Profile journey slots
+    #   (recognition / why / trap). Not full PUBLISH_READY cascade cutover.
+    # CHARACTER_ENGINE_PUBLISH_READY — future full SoT switch after Stage 5 (keep false).
     character_engine_stage01_shadow: bool = False
     character_engine_stage01_enabled: bool = False
     character_engine_stage2_shadow: bool = False
     character_engine_stage2_enabled: bool = False
+    character_engine_profile_consumption: bool = False
     character_engine_publish_ready: bool = False
 
     # Push: optional cron secret for POST /internal/push/run-due (set in production)

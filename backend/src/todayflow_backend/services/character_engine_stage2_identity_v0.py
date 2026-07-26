@@ -33,6 +33,125 @@ STAGE2_VERSION = "character_engine_stage2_identity_v0"
 STAGE2_PROMPT_ID = "profile.character_engine.stage2.v1"
 RECIPE_VERSION = "character_engine_recipe_v1"
 
+# Editorial surface when LLM is down — Identity thesis → readable core (fill-empty, not overwrite of good LLM).
+_DETERMINISTIC_SURFACE_BY_IDENTITY: dict[str, str] = {
+    "builds_through_autonomy": (
+        "Ты строишь жизнь через собственную систему и автономию — "
+        "ясность важнее чужого темпа."
+    ),
+    "builds_through_analysis": (
+        "Ты строишь через анализ до шага — сначала понять устройство, потом выбрать."
+    ),
+    "builds_through_air_mind": (
+        "Ты идёшь через идеи и связи — направление собирается в уме раньше, чем в действии."
+    ),
+    "builds_through_earth_stability": (
+        "Ты опираешься на осязаемое и прочное — устойчивость важнее скорости."
+    ),
+    "builds_through_water_care": (
+        "Ты строишь мир через заботу и проницаемость — чужая боль входит в поле раньше границ."
+    ),
+    "builds_through_emotional_depth": (
+        "Ты проживаешь глубже обычного — чувства заполняют поле до любого внешнего шага."
+    ),
+    "builds_through_earth_anchor": (
+        "Ты якоришься в привычном порядке — опора даёт ритм, но может держать на месте."
+    ),
+    "builds_through_freedom_vs_stability": (
+        "В тебе тянутся свобода и опора — характер держит это напряжение как ось."
+    ),
+    "builds_through_fire_drive": (
+        "Ты движешься импульсом — сила в старте, риск в отсутствии выбранного направления."
+    ),
+    "builds_through_air_presence": (
+        "Ты входишь в мир через лёгкий контакт и разговор — присутствие начинается с воздуха."
+    ),
+    "builds_through_fire_presence": (
+        "Ты входишь прямо и с напором — первый контакт задаёт температуру поля."
+    ),
+    "builds_through_earth_presence": (
+        "Ты показываешь плотную, надёжную форму — присутствие читается как опора."
+    ),
+    "builds_through_water_presence": (
+        "Ты встречаешь мир через чуткую оболочку — контакт мягкий, желания часто неназванные."
+    ),
+}
+
+
+def _confidence_rank(value: Any) -> int:
+    key = str(value or "").strip().lower()
+    if key == "high":
+        return 0
+    if key == "medium":
+        return 1
+    if key == "low":
+        return 2
+    return 3
+
+
+def _pick_primary_grounded_claim(evidence: dict[str, Any]) -> dict[str, Any] | None:
+    claims = evidence.get("claims") if isinstance(evidence.get("claims"), list) else []
+    grounded = [
+        c
+        for c in claims
+        if isinstance(c, dict)
+        and c.get("evidence_status") == "grounded"
+        and c.get("claim_id")
+        and c.get("thesis_key")
+    ]
+    if not grounded:
+        return None
+    grounded.sort(
+        key=lambda c: (
+            _confidence_rank(c.get("confidence")),
+            str(c.get("claim_id")),
+        )
+    )
+    return grounded[0]
+
+
+def build_deterministic_stage2_raw_v0(evidence: dict[str, Any]) -> dict[str, Any] | None:
+    """LLM-down Identity Core from Stage 1 primary claim + editorial surface bank."""
+    primary = _pick_primary_grounded_claim(evidence)
+    if not primary:
+        return None
+    stage1_thesis = str(primary.get("thesis_key") or "").strip()
+    identity_thesis = normalize_identity_thesis_key(stage1_thesis)
+    if not identity_thesis:
+        return None
+    surface = _DETERMINISTIC_SURFACE_BY_IDENTITY.get(identity_thesis)
+    if not surface:
+        return None
+    primary_id = str(primary.get("claim_id"))
+    others = [
+        str(c.get("claim_id"))
+        for c in (evidence.get("claims") or [])
+        if isinstance(c, dict)
+        and c.get("evidence_status") == "grounded"
+        and str(c.get("claim_id") or "") != primary_id
+        and c.get("claim_id")
+    ]
+    return {
+        "status": "grounded",
+        "identity_core": {
+            "primary_claim_id": primary_id,
+            "thesis_key": stage1_thesis,
+            "surface_text": surface,
+            "supporting_claim_ids": [primary_id, *others[:2]],
+            "qualifying_claim_ids": others[2:3],
+            "contradicting_claim_ids": [],
+            "confidence": str(primary.get("confidence") or "medium"),
+        },
+        "source_roles": [
+            {"claim_id": primary_id, "role": "dominant_mechanism"},
+            *[
+                {"claim_id": cid, "role": "supporting_claim"}
+                for cid in others[:2]
+            ],
+        ],
+        "selection_rationale": "deterministic_fallback_llm_unavailable",
+    }
+
 
 def _now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
@@ -337,7 +456,8 @@ def build_character_engine_identity_core_v0(
     Run Stage 2 Identity Core.
 
     Pass ``llm_raw`` in tests to inject a model response without calling the network.
-    Without LLM config and without ``llm_raw`` → insufficient_identity_core (no invented core).
+    When LLM is missing/empty/invalid and Stage 1 has grounded claims → deterministic
+    editorial surface (fill-empty resilience). LLM success remains preferred SoT for prose.
     """
     context = build_stage2_context_pack(facts_pack=facts_pack, evidence=evidence)
     prompt_version = "0"
@@ -363,19 +483,41 @@ def build_character_engine_identity_core_v0(
             prompt_version="n/a",
         )
 
-    if not is_llm_chat_configured():
-        logger.info("character_engine_stage2: LLM not configured — insufficient_identity_core")
-        return validate_stage2_identity_contract(
-            {
-                "status": "insufficient_identity_core",
-                "identity_core": None,
-                "source_roles": [],
-                "selection_rationale": "llm_not_configured",
-            },
+    def _deterministic(*, reason: str, prompt_ver: str) -> dict[str, Any]:
+        raw = build_deterministic_stage2_raw_v0(evidence)
+        if raw is None:
+            return validate_stage2_identity_contract(
+                {
+                    "status": "insufficient_identity_core",
+                    "identity_core": None,
+                    "source_roles": [],
+                    "selection_rationale": reason,
+                },
+                facts_pack=facts_pack,
+                evidence=evidence,
+                prompt_version=prompt_ver,
+            )
+        logger.warning(
+            "character_engine_stage2: using deterministic Identity Core (%s)",
+            reason,
+        )
+        out = validate_stage2_identity_contract(
+            raw,
             facts_pack=facts_pack,
             evidence=evidence,
-            prompt_version="n/a",
+            prompt_version=prompt_ver,
         )
+        if isinstance(out.get("validation"), dict):
+            out["validation"] = {
+                **out["validation"],
+                "deterministic_fallback": True,
+                "fallback_reason": reason,
+            }
+        return out
+
+    if not is_llm_chat_configured():
+        logger.info("character_engine_stage2: LLM not configured — deterministic fallback")
+        return _deterministic(reason="llm_not_configured", prompt_ver="n/a")
 
     system, prompt_version = get_prompt(STAGE2_PROMPT_ID, locale=locale)
     client = get_openai_compatible_client(operation="background")
@@ -405,18 +547,8 @@ def build_character_engine_identity_core_v0(
         )
     parsed = _parse_json_object(raw_text or "")
     if not parsed:
-        logger.warning("character_engine_stage2: empty/invalid LLM JSON")
-        return validate_stage2_identity_contract(
-            {
-                "status": "insufficient_identity_core",
-                "identity_core": None,
-                "source_roles": [],
-                "selection_rationale": "llm_json_invalid",
-            },
-            facts_pack=facts_pack,
-            evidence=evidence,
-            prompt_version=prompt_version,
-        )
+        logger.warning("character_engine_stage2: empty/invalid LLM JSON — deterministic fallback")
+        return _deterministic(reason="llm_json_invalid", prompt_ver=prompt_version)
     return validate_stage2_identity_contract(
         parsed,
         facts_pack=facts_pack,

@@ -14,7 +14,9 @@ export {
 } from "@/lib/coreProfileCacheStorage";
 
 /**
- * Загружает ядро профиля: при отсутствии query по astro использует sessionStorage, затем сеть.
+ * Загружает ядро профиля.
+ * Без force: может вернуть local/session cache (быстрый paint).
+ * С force: всегда сеть — нужно после SoT/consumption смен и на Profile mount.
  */
 export async function fetchCoreProfileCached(options?: {
   astroProfileId?: number | null;
@@ -37,6 +39,10 @@ export async function fetchCoreProfileCached(options?: {
     return profile;
   } catch {
     if (!force && astroId == null) {
+      return readCoreProfileFromCache(null);
+    }
+    // Force failed — last-resort paint from any still-valid cache.
+    if (force && astroId == null) {
       return readCoreProfileFromCache(null);
     }
     return null;

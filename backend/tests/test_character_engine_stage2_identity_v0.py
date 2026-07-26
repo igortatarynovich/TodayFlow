@@ -235,6 +235,19 @@ def test_stage2_shadow_diagnostics_only() -> None:
     )
     assert art["character_engine_ready_published"] is False
     assert art["publish_mode"] == "diagnostics_only"
-    # Without LLM in test env → insufficient, still ok structurally
+    # Without LLM in test env → deterministic grounded (or insufficient if no claims)
     assert art["stage2"]["status"] in {"grounded", "insufficient_identity_core"}
     assert "cascade" not in art["stage2"]
+
+
+def test_stage2_deterministic_fallback_when_llm_missing(monkeypatch) -> None:
+    facts, evidence = _aquarius_inputs()
+    monkeypatch.setattr(
+        "todayflow_backend.services.character_engine_stage2_identity_v0.is_llm_chat_configured",
+        lambda: False,
+    )
+    identity = build_character_engine_identity_core_v0(facts_pack=facts, evidence=evidence)
+    assert identity["status"] == "grounded"
+    assert identity["identity_core"]["thesis_key"] == "builds_through_autonomy"
+    assert "автоном" in identity["identity_core"]["surface_text"].lower()
+    assert identity["validation"].get("deterministic_fallback") is True

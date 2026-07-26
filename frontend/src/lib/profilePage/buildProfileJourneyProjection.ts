@@ -160,7 +160,9 @@ export function buildProfileJourneyProjection(
 ): ProfileJourneyProjection {
   const contract = core?.profile_contract_v1;
   const seed = core?.baseline?.archetype_seed?.trim() || null;
-  const recognitionName = seed ? archetypeDisplayLabel(seed, "ru") : null;
+  const ceLabel = core?.character_engine_consumption_v0?.recognition_label?.trim() || null;
+  const recognitionName =
+    ceLabel || (seed ? archetypeDisplayLabel(seed, "ru") : null);
   const recognitionLine = contract?.recognition_line?.trim() || null;
   const identityCore = contract?.identity_core?.trim() || null;
 
@@ -230,6 +232,7 @@ export function buildProfileJourneyProjection(
     recognition: {
       name: recognitionName,
       line: recognitionLine,
+      // Visual identity (Мудрец art etc.) stays; title/line come from CE when applied.
       archetypeSeed: seed,
       identityCore,
     },

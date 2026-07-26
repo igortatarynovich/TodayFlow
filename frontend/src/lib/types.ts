@@ -354,6 +354,29 @@ export type CoreProfile = {
     rules?: Record<string, unknown>;
   } | null;
   /**
+   * CE → Profile journey consumption (optional). When applied, Identity Core owns
+   * recognition / why / trap slots — not LP archetype or living day-rhythm.
+   */
+  character_engine_consumption_v0?: {
+    projection_version?: string;
+    applied?: boolean;
+    identity_thesis?: string;
+    recognition_label?: string;
+    primary_claim_id?: string;
+    slots_owned?: string[];
+    slots_not_owned_yet?: string[];
+    reason?: string;
+    status?: string;
+    visual_note?: string;
+  } | null;
+  /** CE person-voice lines for houses 1–12 (cusp/sign stay on natal preview). */
+  character_engine_house_lines_v0?: {
+    projection_version?: string;
+    identity_thesis?: string;
+    houses?: Record<string, { line?: string }>;
+    note?: string;
+  } | null;
+  /**
    * Step-4 effort vector (read-path only). Derived from insight_nodes_v0.nodes[0].help.
    * Null when no safe help — never invents from life_mission / Today / astrology.
    */

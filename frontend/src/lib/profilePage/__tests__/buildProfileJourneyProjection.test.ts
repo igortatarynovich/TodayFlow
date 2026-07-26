@@ -95,6 +95,32 @@ describe("buildProfileJourneyProjection", () => {
     expect(natal?.lines.join(" ")).not.toMatch(/12 куспид/i);
   });
 
+  it("prefers CE recognition_label over LP archetype seed", () => {
+    const journey = buildProfileJourneyProjection({
+      baseline: { archetype_seed: "sage" },
+      character_engine_consumption_v0: {
+        applied: true,
+        recognition_label: "Автономия",
+      },
+      profile_contract_v1: {
+        contract_version: "v1",
+        recognition_line: "Ты строишь через собственную систему.",
+        identity_core: "Ядро CE.",
+        strengths: [],
+        growth_zones: [],
+        relationship_style: "",
+        money_style: "",
+        decision_style: "",
+        recurring_patterns: [],
+      },
+    } as CoreProfile);
+
+    expect(journey.recognition.name).toBe("Автономия");
+    expect(journey.recognition.name).not.toMatch(/Мудрец/i);
+    expect(journey.recognition.archetypeSeed).toBe("sage");
+    expect(journey.recognition.line).toContain("собственную систему");
+  });
+
   it("omits null steps and does not invent effort/bridge/markers", () => {
     const journey = buildProfileJourneyProjection({
       baseline: { archetype_seed: "explorer" },

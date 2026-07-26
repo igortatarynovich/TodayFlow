@@ -80,6 +80,7 @@ export function ProfileExploreSection({
               chartReading={deep.chartReading}
               methodologyNote={deep.methodologyNote}
               unavailableNote={deep.unavailableNote}
+              housePersonLines={deep.housePersonLines}
             />
           </div>
         </div>

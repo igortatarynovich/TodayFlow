@@ -250,7 +250,8 @@ function ProfileHubPageInner() {
     }
 
     Promise.all([
-      fetchCoreProfileCached().catch(() => null),
+      // Always hit network on Profile — local cache can hide CE consumption for days.
+      fetchCoreProfileCached({ force: true }).catch(() => null),
       fetchCompactUserModelCached().catch(() => null),
       getJson<UserSettings>("/account/profile").catch(() => null),
       getJson<AstroProfilesResponse>("/account/astro-data").catch(() => null),
@@ -419,7 +420,8 @@ function ProfileHubPageInner() {
 
   const moonNarrativeLine = moonLayer?.bullets?.[0]?.trim() || "";
 
-  const lifeMapSections = buildLifeMapSections(natalPreview).map((item) =>
+  const housePersonLines = coreProfile?.character_engine_house_lines_v0?.houses ?? null;
+  const lifeMapSections = buildLifeMapSections(natalPreview, housePersonLines).map((item) =>
     item.house === 7
       ? {
           ...item,
@@ -582,6 +584,7 @@ function ProfileHubPageInner() {
                     natalPreviewLoading,
                     onReloadPreview: reloadNatalPreview,
                     lifeMapSections,
+                    housePersonLines,
                   }}
                   notices={
                     <>
