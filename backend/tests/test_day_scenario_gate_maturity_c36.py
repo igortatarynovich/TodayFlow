@@ -1,16 +1,20 @@
-"""C3.6 — Gate maturity: analysis vs runtime policy."""
+"""C3.6 / C3.6.3 — Gate maturity: analysis vs runtime policy."""
 
 from __future__ import annotations
 
 from todayflow_backend.services.day_scenario_editorial_gate_c31 import (
     CRITICAL_DEFECTS,
     DEFECT_SCENE_ABSTRACT,
+    DEFECT_SCENE_CLONE,
+    DEFECT_SCENE_MISSING_EVERYDAY,
+    DEFECT_SCENE_UNIVERSAL_ADVICE,
 )
 from todayflow_backend.services.day_scenario_gate_maturity_c36 import (
     FAMILY_HARD,
     FAMILY_QUALITY,
     MATURITY_ADVISORY,
     MATURITY_BLOCKING,
+    MATURITY_CANDIDATE_BLOCKING,
     MATURITY_EXPERIMENTAL,
     annotate_defects_with_maturity,
     get_rule,
@@ -26,13 +30,41 @@ from todayflow_backend.services.day_scenario_personalization_c33 import (
     DEFECT_PROFILE_FACT_LEAK,
 )
 
+# C3.6.3 sealed-pilot promotions (quality family, blocking maturity).
+PROMOTED_QUALITY_BLOCKING = frozenset(
+    {
+        DEFECT_SCENE_ABSTRACT,
+        DEFECT_SCENE_CLONE,
+        DEFECT_SCENE_MISSING_EVERYDAY,
+        "ASTRO_JARGON_BARE",
+    }
+)
 
-def test_editorial_critical_codes_are_quality_observe_only():
+
+def test_unpromoted_editorial_critical_codes_remain_observe_only():
     for code in CRITICAL_DEFECTS:
+        if code in PROMOTED_QUALITY_BLOCKING:
+            continue
+        if code == DEFECT_SCENE_UNIVERSAL_ADVICE:
+            rule = get_rule(code)
+            assert rule.maturity == MATURITY_CANDIDATE_BLOCKING
+            assert not should_retry_defects([{"code": code}])
+            continue
         rule = get_rule(code)
         assert rule.family == FAMILY_QUALITY
-        assert rule.maturity in {MATURITY_EXPERIMENTAL, MATURITY_ADVISORY}
+        assert rule.maturity in {MATURITY_EXPERIMENTAL, MATURITY_ADVISORY, MATURITY_CANDIDATE_BLOCKING}
         assert not should_retry_defects([{"code": code}])
+        assert not should_reject_story([{"code": code}])
+        assert not should_downgrade_general([{"code": code}])
+
+
+def test_promoted_scene_quality_codes_retry_via_maturity():
+    for code in PROMOTED_QUALITY_BLOCKING:
+        rule = get_rule(code)
+        assert rule.family == FAMILY_QUALITY
+        assert rule.maturity == MATURITY_BLOCKING
+        assert should_retry_defects([{"code": code}])
+        # Prefer retry while attempts remain; reject_story action only when no retry flag.
         assert not should_reject_story([{"code": code}])
         assert not should_downgrade_general([{"code": code}])
 
@@ -63,7 +95,7 @@ def test_evidence_orphan_is_hard_blocking():
     assert should_retry_defects([{"code": DEFECT_EVIDENCE_ORPHAN}])
 
 
-def test_scene_abstract_does_not_block_even_if_severity_critical():
+def test_scene_abstract_retries_when_promoted():
     defects = [
         {
             "code": DEFECT_SCENE_ABSTRACT,
@@ -73,9 +105,8 @@ def test_scene_abstract_does_not_block_even_if_severity_critical():
         }
     ]
     annotated = annotate_defects_with_maturity(defects)
-    assert annotated[0]["runtime_action"] == "score_only"
-    assert not should_retry_defects(annotated)
-    assert not should_reject_story(annotated)
+    assert annotated[0]["runtime_action"] == "retry"
+    assert should_retry_defects(annotated)
 
 
 def test_hard_scenario_validate_markers():

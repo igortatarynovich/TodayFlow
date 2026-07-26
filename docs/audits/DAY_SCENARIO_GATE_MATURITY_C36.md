@@ -1,9 +1,10 @@
 # Day Scenario Gate Maturity C3.6
 
-**Status:** LANDED (maturity registry · quality observe · hard-only blocking)  
+**Status:** LANDED (maturity registry · hard + selective quality blocking C3.6.3)  
 **Date:** 2026-07-26  
 **Code:** `day_scenario_gate_maturity_c36.py` · wired in `call_day_scenario_native_llm_c1`  
-**Depends on:** C3.1–C3.5.1 analyzers (unchanged as detectors)
+**Depends on:** C3.1–C3.5.1 analyzers (unchanged as detectors)  
+**Promotion note:** [DAY_SCENARIO_GATE_PROMOTION_C363.md](./DAY_SCENARIO_GATE_PROMOTION_C363.md)
 
 ## Architecture impact
 
@@ -11,18 +12,19 @@
 ## Architecture impact
 - **SoT before:** editorial CRITICAL + soft personalization could retry / downgrade /
   unavailable in native LLM user loop (parallel policy in analyzers)
-- **SoT after:** single runtime-policy owner = maturity registry. Analyzers emit
-  defect code + score + details only. Quality = observe (capture/eval). Hard =
-  schema/SoT/broken refs/PROFILE_FACT_LEAK may retry or reject.
+- **SoT after (C3.6):** single runtime-policy owner = maturity registry. Analyzers
+  emit defect code + score + details only. Hard = schema/SoT/broken refs/
+  PROFILE_FACT_LEAK may retry or reject.
+- **SoT after (C3.6.3):** four quality codes promoted to blocking (retry→unavailable)
+  from sealed C3.6.2 pilot evidence; remaining quality still observe.
 - **Public contract changed?** no — no new user-facing fields. `gate_maturity`,
   policy decisions, and maturity annotations live in **capture** only.
   Pre-existing `editorial_meta` scores/defects keep analyzer shape without
   maturity/runtime_action keys.
 - **Migration required?** no
-- **Canon updated?** yes — this note + DAY_SCENARIO_V1 + tracker + lifecycle
-- **Backward compatible?** yes for clients; generation may accept more
-  quality-imperfect scenarios that previously became unavailable
-- **Lifecycle:** GET still no Nebius; refresh LLM path policy changed (safer)
+- **Canon updated?** yes — this note + C363 promotion + DAY_SCENARIO_V1 + tracker
+- **Backward compatible?** yes for clients; more unavailable on promoted defects
+- **Lifecycle:** GET still no Nebius; refresh LLM path uses maturity policy
 ```
 
 ## Maturity modes (runtime effect)
@@ -47,11 +49,16 @@ Only `blocking` may change the user answer. `candidate_blocking` does **not** bl
 
 After hard retries exhausted → `None` → wire `facts_only_unavailable`.
 
-## Quality (observe only)
+## Quality — default observe; selective blocking (C3.6.3)
 
-Scene concreteness, chorus coherence, repetition, formulation, closure, personalization depth, generic wording, role drift, semantic duplication — and all other registered quality codes.
+| Mode | Codes (examples) |
+|------|------------------|
+| **blocking** (retry → unavailable) | `SCENE_CLONE`, `SCENE_MISSING_EVERYDAY`, `SCENE_ABSTRACT`, `ASTRO_JARGON_BARE` |
+| **candidate_blocking** (observe) | `SCENE_UNIVERSAL_ADVICE` |
+| **observe** (experimental/advisory) | remaining scene/chorus/closure/personalization depth codes |
 
-Must **not**: retry, downgrade to general, unavailable, replace first valid answer.
+Unpromoted quality must **not**: retry, downgrade to general, unavailable, replace first valid answer.  
+Promoted quality may retry then unavailable — **never** quality→general downgrade.
 
 ## Where scores / defects live
 
@@ -71,7 +78,7 @@ Must **not**: retry, downgrade to general, unavailable, replace first valid answ
   **not** used by `call_day_scenario_native_llm_c1`.
 - Integration proof: `tests/test_day_scenario_gate_maturity_runtime_c36.py`.
 
-## Out of scope
+## Out of scope / next
 
-- Promoting quality codes to blocking (needs calibration metrics)
+- Broader quality promotions without EN/40 human golden consensus
 - Visual polish / UI / Nebius / today.py Optional talisman / CE / Tarot

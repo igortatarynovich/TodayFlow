@@ -25,7 +25,7 @@ MATURITY_BLOCKING: Maturity = "blocking"
 FAMILY_HARD: Family = "hard"
 FAMILY_QUALITY: Family = "quality"
 
-# Until calibration (C3.6 default): only hard+blocking may change user-facing outcome.
+# Only maturity=blocking changes user-facing outcome (hard + promoted quality C3.6.3).
 # candidate_blocking behaves like advisory in runtime (observe only).
 RUNTIME_BLOCKING_MATURITIES = frozenset({MATURITY_BLOCKING})
 
@@ -56,6 +56,34 @@ def _q_adv(code: str, *, note: str = "") -> GateRule:
         family=FAMILY_QUALITY,
         maturity=MATURITY_ADVISORY,
         note=note or "quality analysis — score/capture only",
+    )
+
+
+def _q_cand(code: str, *, note: str = "") -> GateRule:
+    return GateRule(
+        code=code,
+        family=FAMILY_QUALITY,
+        maturity=MATURITY_CANDIDATE_BLOCKING,
+        note=note or "quality — candidate_blocking (observe until full promotion)",
+    )
+
+
+def _q_block(
+    code: str,
+    *,
+    allow_retry: bool = True,
+    allow_reject: bool = True,
+    note: str = "",
+) -> GateRule:
+    """Promoted quality rule: still family=quality, maturity=blocking (may retry/reject)."""
+    return GateRule(
+        code=code,
+        family=FAMILY_QUALITY,
+        maturity=MATURITY_BLOCKING,
+        allow_retry=allow_retry,
+        allow_reject=allow_reject,
+        note=note
+        or "quality promoted after C3.6.2 sealed pilot — retry then unavailable",
     )
 
 
@@ -93,14 +121,33 @@ GATE_RULES: dict[str, GateRule] = {
         allow_reject=True,
         note="broken evidence_refs / provenance — hard retry then unavailable",
     ),
-    # --- Quality / experimental (editorial C3.1–C3.2) ---
-    "SCENE_ABSTRACT": _q_exp("SCENE_ABSTRACT"),
-    "SCENE_UNIVERSAL_ADVICE": _q_exp("SCENE_UNIVERSAL_ADVICE"),
-    "SCENE_CLONE": _q_exp("SCENE_CLONE"),
-    "SCENE_MISSING_EVERYDAY": _q_exp("SCENE_MISSING_EVERYDAY"),
+    # --- Quality promoted (C3.6.3 · sealed C3.6.2 pilot evidence) ---
+    # Dual-agreed reject drivers on B5-template cases: clone / missing everyday /
+    # abstract scene / bare astro jargon. Retry then reject_story (unavailable).
+    "SCENE_ABSTRACT": _q_block(
+        "SCENE_ABSTRACT",
+        note="C3.6.2 sealed: abstract/advice-without-scene → retry then unavailable",
+    ),
+    "SCENE_CLONE": _q_block(
+        "SCENE_CLONE",
+        note="C3.6.2 sealed: B5 scene clones → retry then unavailable",
+    ),
+    "SCENE_MISSING_EVERYDAY": _q_block(
+        "SCENE_MISSING_EVERYDAY",
+        note="C3.6.2 sealed: missing everyday moment → retry then unavailable",
+    ),
+    "ASTRO_JARGON_BARE": _q_block(
+        "ASTRO_JARGON_BARE",
+        note="C3.6.2 sealed: bare astro jargon without translation → retry then unavailable",
+    ),
+    # Present on reject + acceptable_with_issues (minor) — observe at candidate first.
+    "SCENE_UNIVERSAL_ADVICE": _q_cand(
+        "SCENE_UNIVERSAL_ADVICE",
+        note="C3.6.2: reject co-driver but also minor on acceptable — candidate_blocking",
+    ),
+    # --- Quality / experimental|advisory (editorial C3.1–C3.2, not yet promoted) ---
     "SCENE_MISSING_CHOICE": _q_adv("SCENE_MISSING_CHOICE"),
     "THESIS_ECHO": _q_exp("THESIS_ECHO"),
-    "ASTRO_JARGON_BARE": _q_exp("ASTRO_JARGON_BARE"),
     "PSEUDO_DIAGNOSIS": _q_exp("PSEUDO_DIAGNOSIS"),
     "CATEGORICAL_PROMISE": _q_exp("CATEGORICAL_PROMISE"),
     "CHORUS_PARALLEL_ECHO": _q_adv("CHORUS_PARALLEL_ECHO"),

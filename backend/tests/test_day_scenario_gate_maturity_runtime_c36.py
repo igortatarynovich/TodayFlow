@@ -83,8 +83,8 @@ def _run_native(payload: dict[str, Any], *, max_attempts: int = 2, chat_side_eff
     return result, call_count["n"]
 
 
-def test_quality_abstract_scene_accepts_without_retry():
-    """SCENE_ABSTRACT is CRITICAL for scoring but must not drive runtime."""
+def test_promoted_abstract_scene_retries_then_accepts_good():
+    """C3.6.3: SCENE_ABSTRACT blocking → retry; second good payload ships."""
     bad = _valid_native()
     for sc in bad["scenes"]:
         sc["setup"] = "Сегодня важно быть внимательным к отношениям."
@@ -93,18 +93,50 @@ def test_quality_abstract_scene_accepts_without_retry():
         sc["trap"] = "Не торопитесь."
         sc["recommended_action"] = "Сделайте паузу."
         sc["avoid_action"] = "Избегайте крайностей."
-        # keep conflict link via chorus_refs
         sc["chorus_refs"] = ["conflict", "day_card"]
+    good = _valid_native()
 
-    with day_story_capture_session(case_id="c36-quality") as session:
-        result, calls = _run_native(bad, max_attempts=2)
+    with day_story_capture_session(case_id="c363-quality-retry") as session:
+        result, calls = _run_native(
+            bad,
+            max_attempts=2,
+            chat_side_effect=[
+                json.dumps(bad, ensure_ascii=False),
+                json.dumps(good, ensure_ascii=False),
+            ],
+        )
 
     assert result is not None
-    assert calls == 1  # no quality retry
+    assert calls == 2
     meta = result.get("editorial_meta") or {}
-    assert "gate_maturity" not in meta  # not a public-contract expansion
+    assert "gate_maturity" not in meta  # still not a public-contract expansion
     assert CRITICAL_DEFECTS  # scoring vocabulary still exists
-    assert session.pack.get("attempts")
+    statuses = [a.get("status") for a in (session.pack.get("attempts") or [])]
+    assert "editorial_quality_retry" in statuses
+    assert "accepted_native_c36" in statuses
+
+
+def test_promoted_abstract_scene_exhausted_retries_unavailable():
+    bad = _valid_native()
+    for sc in bad["scenes"]:
+        sc["setup"] = "Сегодня важно быть внимательным к отношениям."
+        sc["everyday_example"] = "Будьте мягче."
+        sc["opportunity"] = "Сохраняйте баланс."
+        sc["trap"] = "Не торопитесь."
+        sc["recommended_action"] = "Сделайте паузу."
+        sc["avoid_action"] = "Избегайте крайностей."
+        sc["chorus_refs"] = ["conflict", "day_card"]
+
+    result, calls = _run_native(
+        bad,
+        max_attempts=2,
+        chat_side_effect=[
+            json.dumps(bad, ensure_ascii=False),
+            json.dumps(bad, ensure_ascii=False),
+        ],
+    )
+    assert result is None
+    assert calls == 2
 
 
 def test_legacy_critical_helpers_do_not_match_runtime_policy():
@@ -244,17 +276,23 @@ def test_first_valid_kept_when_advisory_defects_present():
     assert "gate_maturity" in after
 
 
-def test_no_quality_rule_blocks_via_registry():
+def test_unpromoted_quality_rules_remain_observe_only():
+    from todayflow_backend.services.day_scenario_gate_maturity_c36 import MATURITY_BLOCKING
+
     for code, rule in GATE_RULES.items():
         if rule.family != FAMILY_QUALITY:
+            continue
+        if rule.maturity == MATURITY_BLOCKING:
+            d = annotate_defects_with_maturity([{"code": code}])[0]
+            assert d["runtime_action"] in {"retry", "reject_story"}
             continue
         assert rule.maturity in non_blocking_maturities()
         d = annotate_defects_with_maturity([{"code": code}])[0]
         assert d["runtime_action"] == "score_only"
 
 
-def test_editorial_critical_does_not_force_second_llm_call():
-    """Regression: editorial CRITICAL must not open a retry branch."""
+def test_promoted_editorial_defect_forces_second_llm_call():
+    """C3.6.3: promoted SCENE_ABSTRACT opens maturity retry branch."""
     from todayflow_backend.services.day_scenario_editorial_gate_c31 import DEFECT_SCENE_ABSTRACT
 
     native = _valid_native()
@@ -271,6 +309,7 @@ def test_editorial_critical_does_not_force_second_llm_call():
 
     def _chat(*_a, **_k):
         call_count["n"] += 1
+        # Always return same native; gate patched to keep firing → exhausted reject.
         return json.dumps(native, ensure_ascii=False)
 
     with (
@@ -306,7 +345,5 @@ def test_editorial_critical_does_not_force_second_llm_call():
             celestial_events={"day_events_pack": pack},
             max_attempts=2,
         )
-    assert result is not None
-    assert call_count["n"] == 1
-    codes = {d.get("code") for d in (result.get("editorial_meta") or {}).get("editorial_defects") or []}
-    assert DEFECT_SCENE_ABSTRACT in codes
+    assert result is None
+    assert call_count["n"] == 2

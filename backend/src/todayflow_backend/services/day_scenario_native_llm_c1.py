@@ -817,15 +817,18 @@ def call_day_scenario_native_llm_c1(
 ) -> dict[str, Any] | None:
     """Generate native scenario via LLM. Returns day_scenario_v1 or None after hard fails.
 
-    Pipeline per attempt (C3.6):
+    Pipeline per attempt (C3.6 / C3.6.3):
       parse → hard schema validate → quality analysis (editorial + personalization)
-      → map → hard structural validate → accept with scores/defects in editorial_meta.
+      → maturity policy (hard + promoted quality) → map → hard structural validate
+      → accept with scores/defects in editorial_meta.
 
-    Quality defects are **advisory/experimental**: scored + captured, no retry / no
-    unavailable / no general downgrade. Only hard contract/safety defects may retry
-    or reject (PROFILE_FACT_LEAK, broken evidence refs, schema/SoT).
+    Default quality remains observe-only. C3.6.3 promotes SCENE_CLONE /
+    SCENE_MISSING_EVERYDAY / SCENE_ABSTRACT / ASTRO_JARGON_BARE to blocking
+    (retry then unavailable). Still no quality→general downgrade.
+    Hard: PROFILE_FACT_LEAK, broken evidence refs, schema/SoT.
     """
     from todayflow_backend.services.day_scenario_editorial_gate_c31 import (
+        format_editorial_retry_feedback,
         run_editorial_quality_gate_c31,
         score_editorial_quality_c31,
     )
@@ -1109,7 +1112,7 @@ def call_day_scenario_native_llm_c1(
                     reject_reason=";".join(str(d.get("code")) for d in pers_defects[:8]),
                 )
             return None
-        # Quality personalization defects: keep first valid story (no downgrade, no retry).
+        # Quality personalization defects (non-blocking maturity): keep first valid story.
 
         editorial = run_editorial_quality_gate_c31(
             normalized,
@@ -1120,14 +1123,93 @@ def call_day_scenario_native_llm_c1(
             editorial = run_editorial_quality_gate_c31(normalized, has_natal_evidence=False)
         editorial = annotate_defects_with_maturity(editorial)
         ed_score = score_editorial_quality_c31(editorial)
-        # Editorial is quality analysis only — never retry / never unavailable (C3.6).
+
+        # C3.6.3: promoted quality codes may retry / reject via maturity registry.
+        if should_reject_story(editorial):
+            if capture is not None:
+                capture.record_attempt(
+                    attempt_index=attempt_idx,
+                    raw_response=content,
+                    parsed=parsed,
+                    after_normalize={
+                        **normalized,
+                        "editorial_score": ed_score,
+                        "editorial_defects": editorial,
+                        "gate_maturity": maturity_summary(editorial),
+                    },
+                    after_gate=None,
+                    status="editorial_reject_story",
+                    reject_reason=";".join(str(d.get("code")) for d in editorial[:8]),
+                )
+                try:
+                    for d in editorial:
+                        capture.add_defect(
+                            str(d.get("code") or "EDITORIAL"),
+                            f"{d.get('field')}:{d.get('message')}|maturity={d.get('gate_maturity')}"
+                            f"|action={d.get('runtime_action')}",
+                            cls=str(d.get("capture_class") or "VALIDATION"),
+                        )
+                except Exception:
+                    pass
+            return None
+        if should_retry_defects(editorial):
+            retryable = [d for d in editorial if str(d.get("runtime_action")) == "retry"]
+            if attempt_idx + 1 < attempts and retryable:
+                feedback = format_editorial_retry_feedback(retryable)
+                if capture is not None:
+                    capture.record_attempt(
+                        attempt_index=attempt_idx,
+                        raw_response=content,
+                        parsed=parsed,
+                        after_normalize={
+                            **normalized,
+                            "editorial_score": ed_score,
+                            "editorial_defects": editorial,
+                            "gate_maturity": maturity_summary(editorial),
+                        },
+                        after_gate=None,
+                        status="editorial_quality_retry",
+                        reject_reason=";".join(str(d.get("code")) for d in retryable[:8]),
+                    )
+                    try:
+                        for d in editorial:
+                            capture.add_defect(
+                                str(d.get("code") or "EDITORIAL"),
+                                f"{d.get('field')}:{d.get('message')}|maturity={d.get('gate_maturity')}"
+                                f"|action={d.get('runtime_action')}",
+                                cls=str(d.get("capture_class") or "VALIDATION"),
+                            )
+                    except Exception:
+                        pass
+                retry_feedback = feedback
+                continue
+            if capture is not None:
+                capture.record_attempt(
+                    attempt_index=attempt_idx,
+                    raw_response=content,
+                    parsed=parsed,
+                    after_normalize={
+                        **normalized,
+                        "editorial_score": ed_score,
+                        "editorial_defects": editorial,
+                        "gate_maturity": maturity_summary(editorial),
+                    },
+                    after_gate=None,
+                    status="editorial_reject_story",
+                    reject_reason=";".join(str(d.get("code")) for d in editorial[:8]),
+                )
+            return None
+
+        # Remaining editorial defects: observe only (score + capture).
         if editorial and capture is not None:
             try:
                 for d in editorial:
+                    if str(d.get("runtime_action") or "score_only") != "score_only":
+                        continue
                     capture.add_defect(
                         str(d.get("code") or "EDITORIAL"),
                         f"{d.get('field')}:{d.get('message')}|maturity={d.get('gate_maturity')}"
-                        f"|action={d.get('runtime_action')}",
+                        f"|action=score_only",
                         cls=str(d.get("capture_class") or "VALIDATION"),
                     )
             except Exception:
@@ -1182,7 +1264,7 @@ def call_day_scenario_native_llm_c1(
                     "gate_maturity": {
                         "editorial": maturity_summary(editorial),
                         "personalization": maturity_summary(pers_defects),
-                        "policy": "quality_observe_hard_blocking",
+                        "policy": "hard_plus_promoted_quality_blocking_c363",
                     },
                 },
                 after_gate=scenario,

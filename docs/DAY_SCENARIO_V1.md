@@ -1,6 +1,6 @@
 # DAY_SCENARIO_V1 — драматургический каркас дня
 
-**Status:** CANON DRAFT — **B1–B5 + C1 + C2 + C3.1–C3.6.2 + C4 + C4.1 delivery + C5–C5.3 lifecycle landed**  
+**Status:** CANON DRAFT — **B1–B5 + C1 + C2 + C3.1–C3.6.3 + C4 + C4.1 delivery + C5–C5.3 lifecycle landed**  
 **Date:** 2026-07-26  
 **Engine:** `day_scenario_v1.py` · `day_color_catalog_v1.py` · `day_scenario_project_v1.py` · `day_scenario_native_llm_c1.py` · `day_scenario_dramaturgy_brief_c4.py` · `day_scenario_editorial_gate_c31.py` · `day_scenario_personalization_c33.py` · `day_scenario_sphere_selection_c33b.py` · `day_scenario_pairwise_eval_c33b.py` · `day_scenario_eval_pack_c35.py` · `day_scenario_eval_*_c351.py` · `day_scenario_gate_maturity_c36.py`  
 **Wire note:** [audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md](./audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md)  
@@ -370,14 +370,27 @@ Legacy projections remain for old clients only.
 - **SoT before:** editorial CRITICAL + soft personalization could retry / downgrade /
   unavailable in native LLM user loop
 - **SoT after:** maturity registry is sole runtime-policy owner; quality analyzers
-  observe (score/defects → capture); only hard contract/safety blocks;
-  no subjective editorial retry; no quality→general downgrade;
-  PROFILE_FACT_LEAK immediate reject (no quality rewrite)
+  score/defects → capture; hard contract/safety blocks; PROFILE_FACT_LEAK
+  immediate reject (no quality rewrite); no quality→general downgrade
 - **Public contract changed?** no — gate_maturity/policy not added to user API;
   capture-only for maturity annotations
 - **Migration required?** no
 - **Canon updated?** yes — DAY_SCENARIO_GATE_MATURITY_C36
-- **Backward compatible?** yes — softer quality policy; hard still unavailable
+- **Backward compatible?** yes — hard still unavailable
+```
+
+### C3.6.3 (landed) — Selective quality promotion (sealed C3.6.2 pilot)
+
+```markdown
+## Architecture impact
+- **SoT before:** all quality codes observe-only under C3.6
+- **SoT after:** SCENE_CLONE / SCENE_MISSING_EVERYDAY / SCENE_ABSTRACT /
+  ASTRO_JARGON_BARE → blocking (retry then unavailable); SCENE_UNIVERSAL_ADVICE →
+  candidate_blocking; maturity remains sole policy owner
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — DAY_SCENARIO_GATE_PROMOTION_C363
+- **Backward compatible?** yes for clients; more unavailable on B5-style defects
 ```
 
 ### C3.6.1 (landed) — Calibration harness (synthetic bootstrap · P/R/FPR · RU/EN)
@@ -416,7 +429,7 @@ Legacy projections remain for old clients only.
 - **Runtime / maturity / Nebius / UI:** untouched; no promotions; no fake 40 labels
 ```
 
-### Next — run real blind human batch (target 40) → consensus calibration → promote by evidence
+### Next — grow EN/40 human golden → consensus calibration → further promotions by evidence
 
 ---
 
