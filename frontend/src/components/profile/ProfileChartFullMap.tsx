@@ -31,6 +31,8 @@ type ProfileChartFullMapProps = {
   onReloadPreview: () => void;
   /** CE person-voice lines keyed by house number string — preferred over encyclopedia. */
   housePersonLines?: Record<string, { line?: string } | undefined> | null;
+  /** CE person-voice aspect essays keyed by aspect_id / normalized bodies. */
+  aspectPersonLines?: Record<string, { line?: string } | undefined> | null;
 };
 
 export function ProfileChartFullMap({
@@ -38,6 +40,7 @@ export function ProfileChartFullMap({
   natalPreviewLoading = false,
   onReloadPreview,
   housePersonLines = null,
+  aspectPersonLines = null,
 }: ProfileChartFullMapProps) {
   if (!natalPreview) {
     return (
@@ -138,7 +141,11 @@ export function ProfileChartFullMap({
         {callouts.length ? (
           <div className={styles.aspectsList}>
             {callouts.map((callout) => (
-              <AspectCard key={callout.aspect_id || `${callout.bodies}-${callout.label}`} callout={callout} />
+              <AspectCard
+                key={callout.aspect_id || `${callout.bodies}-${callout.label}`}
+                callout={callout}
+                aspectPersonLines={aspectPersonLines}
+              />
             ))}
           </div>
         ) : (
@@ -158,7 +165,34 @@ export function ProfileChartFullMap({
   );
 }
 
-function AspectCard({ callout }: { callout: AspectCallout }) {
+function resolveAspectPersonLine(
+  callout: AspectCallout,
+  aspectPersonLines?: Record<string, { line?: string } | undefined> | null,
+): string | null {
+  if (!aspectPersonLines) return null;
+  const byId = callout.aspect_id ? aspectPersonLines[callout.aspect_id]?.line?.trim() : null;
+  if (byId) return byId;
+  const bodyBits = String(callout.bodies || "").match(/[A-Za-z]+/g) || [];
+  const asp = String(callout.aspect_id || callout.label || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_|_$/g, "");
+  // Prefer bodies + last aspect token from aspect_id (sun_moon_square → square)
+  const aspToken = asp.includes("_") ? asp.split("_").slice(-1)[0] : asp;
+  const key = [...bodyBits.map((b) => b.toLowerCase()), aspToken].filter(Boolean).join("_");
+  const byKey = key ? aspectPersonLines[key]?.line?.trim() : null;
+  if (byKey) return byKey;
+  if (asp && aspectPersonLines[asp]?.line?.trim()) return aspectPersonLines[asp]?.line?.trim() || null;
+  return null;
+}
+
+function AspectCard({
+  callout,
+  aspectPersonLines = null,
+}: {
+  callout: AspectCallout;
+  aspectPersonLines?: Record<string, { line?: string } | undefined> | null;
+}) {
   const tension = (callout.tension_level || "").toLowerCase();
   const cardClass =
     tension === "high"
@@ -172,6 +206,8 @@ function AspectCard({ callout }: { callout: AspectCallout }) {
       : tension === "medium"
         ? styles.aspectBadgeMedium
         : styles.aspectBadgeLow;
+  const description =
+    resolveAspectPersonLine(callout, aspectPersonLines) || callout.description?.trim() || null;
 
   return (
     <article className={`${styles.aspectCard} ${cardClass}`}>
@@ -182,7 +218,7 @@ function AspectCard({ callout }: { callout: AspectCallout }) {
         ) : null}
       </div>
       {callout.bodies ? <p className={styles.aspectBodies}>{callout.bodies}</p> : null}
-      {callout.description ? <p className={styles.aspectDescription}>{callout.description}</p> : null}
+      {description ? <p className={styles.aspectDescription}>{description}</p> : null}
       {callout.keywords?.length ? (
         <div className={styles.aspectKeywords}>
           {callout.keywords.slice(0, 5).map((keyword) => (

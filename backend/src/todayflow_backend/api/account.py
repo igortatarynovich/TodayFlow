@@ -255,6 +255,8 @@ class CoreProfileResponse(BaseModel):
     character_engine_consumption_v0: dict | None = None
     # CE person-voice house lines (1–12). Optional; natal facts stay on natal preview.
     character_engine_house_lines_v0: dict | None = None
+    # CE person-voice aspect essays. Optional.
+    character_engine_aspect_lines_v0: dict | None = None
 
 
 class CompactUserModelIdentity(BaseModel):

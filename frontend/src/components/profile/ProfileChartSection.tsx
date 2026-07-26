@@ -28,6 +28,7 @@ export type ProfileChartSectionProps = {
   methodologyNote?: string | null;
   unavailableNote?: string | null;
   housePersonLines?: Record<string, { line?: string } | undefined> | null;
+  aspectPersonLines?: Record<string, { line?: string } | undefined> | null;
 };
 
 /**
@@ -46,6 +47,7 @@ export function ProfileChartSection({
   methodologyNote = null,
   unavailableNote = null,
   housePersonLines = null,
+  aspectPersonLines = null,
 }: ProfileChartSectionProps) {
   const quickSignature = buildQuickSignature(natalPreview);
   const numerologyCards = buildNumerologySignatureCards(coreNumerology);
@@ -211,6 +213,7 @@ export function ProfileChartSection({
           natalPreviewLoading={natalPreviewLoading}
           onReloadPreview={onReloadPreview}
           housePersonLines={housePersonLines}
+          aspectPersonLines={aspectPersonLines}
         />
       </ProfileExpandableSection>
     </div>

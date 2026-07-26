@@ -421,6 +421,7 @@ function ProfileHubPageInner() {
   const moonNarrativeLine = moonLayer?.bullets?.[0]?.trim() || "";
 
   const housePersonLines = coreProfile?.character_engine_house_lines_v0?.houses ?? null;
+  const aspectPersonLines = coreProfile?.character_engine_aspect_lines_v0?.aspects ?? null;
   const lifeMapSections = buildLifeMapSections(natalPreview, housePersonLines).map((item) =>
     item.house === 7
       ? {
@@ -585,6 +586,7 @@ function ProfileHubPageInner() {
                     onReloadPreview: reloadNatalPreview,
                     lifeMapSections,
                     housePersonLines,
+                    aspectPersonLines,
                   }}
                   notices={
                     <>

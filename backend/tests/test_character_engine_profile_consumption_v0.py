@@ -125,6 +125,12 @@ def test_consumption_overwrites_recognition_why_trap(monkeypatch) -> None:
     assert "Вы " not in spheres["love"]["how"]
     houses = (out.get("character_engine_house_lines_v0") or {}).get("houses") or {}
     assert "1" in houses and "автоном" in houses["1"]["line"].lower()
+    assert "Вы " not in (contract.get("emotional_style") or "")
+    assert "ты " in (contract.get("emotional_style") or "").lower() or (contract.get("emotional_style") or "").startswith(
+        "Эмоции ты"
+    )
+    assert contract.get("work_and_realization")
+    assert contract.get("home_and_security")
 
     why = out["portrait_why_v0"]
     assert why["source"] == "character_engine_stage2"
@@ -146,3 +152,29 @@ def test_consumption_skips_when_not_grounded(monkeypatch) -> None:
     assert out["character_engine_consumption_v0"]["applied"] is False
     assert out["profile_contract_v1"]["identity_core"].startswith("Старый")
     assert "Ритм дня" in out["insight_nodes_v0"]["nodes"][0]["insight"]
+
+
+def test_consumption_rewrites_aspect_gists(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "todayflow_backend.services.character_engine_profile_consumption_v0.settings",
+        type("S", (), {"character_engine_profile_consumption": True})(),
+    )
+    payload = _payload()
+    payload["natal_summary"] = {
+        "available": True,
+        "notable_aspects": [
+            {
+                "bodies": "Sun · Moon",
+                "aspect": "sesquiquadrate",
+                "strength": "tight",
+                "gist": "Энциклопедия аспекта для вас.",
+            }
+        ],
+    }
+    out = apply_character_engine_profile_consumption_v0(payload)
+    gist = out["natal_summary"]["notable_aspects"][0]["gist"]
+    assert "Вы " not in gist
+    assert "автоном" in gist.lower() or "ядро" in gist.lower()
+    aspects = (out.get("character_engine_aspect_lines_v0") or {}).get("aspects") or {}
+    assert aspects
+    assert any("автоном" in (v.get("line") or "").lower() for v in aspects.values())

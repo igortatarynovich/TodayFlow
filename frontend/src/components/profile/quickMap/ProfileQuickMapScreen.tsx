@@ -33,6 +33,7 @@ export type ProfileQuickMapDeepProps = {
   methodologyNote?: string | null;
   unavailableNote?: string | null;
   housePersonLines?: Record<string, { line?: string } | undefined> | null;
+  aspectPersonLines?: Record<string, { line?: string } | undefined> | null;
 };
 
 export type ProfileQuickMapScreenProps = {
@@ -242,6 +243,7 @@ export function ProfileQuickMapScreen({
                 methodologyNote={deep.methodologyNote}
                 unavailableNote={deep.unavailableNote}
                 housePersonLines={deep.housePersonLines}
+                aspectPersonLines={deep.aspectPersonLines}
               />
             </ProfilePortalDeepSection>
           </div>

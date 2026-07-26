@@ -376,6 +376,13 @@ export type CoreProfile = {
     houses?: Record<string, { line?: string }>;
     note?: string;
   } | null;
+  /** CE person-voice aspect essays keyed for natal callout matching. */
+  character_engine_aspect_lines_v0?: {
+    projection_version?: string;
+    identity_thesis?: string;
+    aspects?: Record<string, { line?: string }>;
+    note?: string;
+  } | null;
   /**
    * Step-4 effort vector (read-path only). Derived from insight_nodes_v0.nodes[0].help.
    * Null when no safe help — never invents from life_mission / Today / astrology.

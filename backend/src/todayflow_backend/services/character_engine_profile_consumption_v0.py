@@ -23,7 +23,7 @@ from typing import Any
 
 from todayflow_backend.core.config import settings
 
-PROJECTION_VERSION = "character_engine_profile_consumption_v0.3"
+PROJECTION_VERSION = "character_engine_profile_consumption_v0.4"
 _MAX_RECOGNITION = 160
 _MAX_CORE = 420
 _MAX_TRAP = 220
@@ -738,14 +738,17 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
             "profile_contract_v1.money_style",
             "profile_contract_v1.living_changes",
             "profile_contract_v1.life_spheres",
+            "profile_contract_v1.emotional_style",
+            "profile_contract_v1.work_and_realization",
+            "profile_contract_v1.home_and_security",
             "character_engine_house_lines_v0",
+            "character_engine_aspect_lines_v0",
+            "natal_summary.notable_aspects.gist",
             "portrait_why_v0",
             "insight_nodes_v0",
         ],
         "slots_not_owned_yet": [
             "natal_instrument_facts",
-            "aspect_encyclopedia_essays",
-            "emotional_style_matrix_slot",
         ],
     }
     return payload

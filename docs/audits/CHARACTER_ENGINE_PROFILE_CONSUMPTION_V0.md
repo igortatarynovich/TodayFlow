@@ -29,9 +29,10 @@ Dual SoT: Swiss/natal + CE diagnostics vs publish personality. Shadow never fed 
 - Trap lines = editorial bank keyed by identity thesis (declared overwrite for this slice)
 - Stage 3 Internal Engine **HOLD** until owner §1.4 skim + this slice verified on server
 
-## Architecture impact (2026-07-26 v0.3 spheres + houses)
+## Architecture impact (2026-07-26 v0.4 residual close)
 
-- **SoT after:** `profile_contract_v1.life_spheres` + `character_engine_house_lines_v0` from Identity thesis (person-voice).
-- **Keep Swiss:** cusp/sign/degree, wheel, aspect structure.
-- **FE:** `buildLifeMapSections` + `ProfileChartFullMap` prefer CE house lines when present.
-- **Residual:** aspect encyclopedia essays, emotional_style matrix slot.
+- **SoT after:** `emotional_style` / `work_and_realization` / `home_and_security` on contract (matrix explore) + `character_engine_aspect_lines_v0` + rewritten `natal_summary.notable_aspects.gist`.
+- **Keep Swiss:** aspect geometry / orb / strength; cusp/sign/degree.
+- **FE:** AspectCard prefers CE line when key matches.
+- **Consumption profile surface:** journey + character + spheres + houses + matrix styles + aspect person-voice — residual natal instrument facts only.
+- **Still HOLD Stage 3** until owner §1.4 skim.

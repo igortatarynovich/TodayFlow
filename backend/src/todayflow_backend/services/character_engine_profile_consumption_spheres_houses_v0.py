@@ -5,6 +5,7 @@ Natal cusp/sign/degree stay Swiss. These strings are person-voice essays only.
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 # Sphere IDs that Profile V2 contract builder accepts (full 6 fields required).
@@ -134,18 +135,95 @@ def build_house_person_lines_for_identity_v0(identity_thesis: str) -> dict[str, 
     return out
 
 
+def matrix_style_fields_for_identity_v0(identity_thesis: str) -> dict[str, str]:
+    """Contract fields that feed profile_matrix emotional / work / home slots."""
+    m = _mech(identity_thesis)
+    return {
+        "emotional_style": (
+            f"Эмоции ты пропускаешь через {m}: сначала внутренний контур и ясность, "
+            f"потом проявление наружу. Чувства не обязаны быть красивыми для других — "
+            f"им нужно место в твоей системе."
+        ),
+        "work_and_realization": (
+            f"В работе ты реализуешься через {m}: роль должна давать влияние без потери "
+            f"собственного контура. Видимость важна, если она не требует сдать твой способ делать."
+        ),
+        "home_and_security": (
+            f"Дом и безопасность ты собираешь через {m}: опора должна давать воздух для "
+            f"восстановления, а не клетку из чужих правил и суеты."
+        ),
+    }
+
+
+def _norm_aspect_key(bodies: str, aspect: str) -> str:
+    body_bits = re.findall(r"[A-Za-z]+", str(bodies or ""))
+    asp = re.sub(r"[^a-z0-9]+", "_", str(aspect or "").strip().lower()).strip("_")
+    parts = [b.lower() for b in body_bits if b]
+    if asp:
+        parts.append(asp)
+    return "_".join(parts)
+
+
+def apply_aspect_lines_to_payload(payload: dict[str, Any], *, identity_thesis: str) -> None:
+    """Rewrite natal_summary aspect gists + emit FE map keyed for callout matching."""
+    m = _mech(identity_thesis)
+    ns = payload.get("natal_summary")
+    if not isinstance(ns, dict):
+        return
+    notable = ns.get("notable_aspects")
+    if not isinstance(notable, list) or not notable:
+        return
+    houses_map: dict[str, dict[str, str]] = {}
+    new_notable: list[dict[str, Any]] = []
+    for row in notable:
+        if not isinstance(row, dict):
+            continue
+        bodies = str(row.get("bodies") or "").strip()
+        aspect = str(row.get("aspect") or "").strip()
+        if not bodies:
+            new_notable.append(row)
+            continue
+        line = (
+            f"Через {m} связка {bodies}"
+            + (f" ({aspect})" if aspect else "")
+            + " показывает, где ядро проявляется в карте — "
+            "не энциклопедия аспекта, а напряжение/поток именно твоего механизма."
+        )
+        key = _norm_aspect_key(bodies, aspect)
+        if key:
+            houses_map[key] = {"line": line}
+        # Also index by raw aspect_id if already looks like sun_moon_…
+        raw_asp = aspect.lower().replace(" ", "_")
+        if raw_asp and "_" in raw_asp:
+            houses_map[raw_asp] = {"line": line}
+        updated = dict(row)
+        updated["gist"] = line
+        new_notable.append(updated)
+    ns = dict(ns)
+    ns["notable_aspects"] = new_notable
+    payload["natal_summary"] = ns
+    payload["character_engine_aspect_lines_v0"] = {
+        "projection_version": "character_engine_aspect_lines_v0",
+        "identity_thesis": identity_thesis,
+        "aspects": houses_map,
+        "note": "Person-voice only; aspect geometry stays Swiss/natal engine.",
+    }
+
+
 def apply_spheres_and_houses_to_payload(
     payload: dict[str, Any],
     *,
     identity_thesis: str,
 ) -> None:
-    """Mutate payload: contract.life_spheres + character_engine_house_lines_v0."""
+    """Mutate payload: contract.life_spheres + house lines + matrix style fields + aspects."""
     spheres = build_life_spheres_for_identity_v0(identity_thesis)
     houses = build_house_person_lines_for_identity_v0(identity_thesis)
+    styles = matrix_style_fields_for_identity_v0(identity_thesis)
     contract = payload.get("profile_contract_v1")
     if isinstance(contract, dict):
         contract = dict(contract)
         contract["life_spheres"] = spheres
+        contract.update(styles)
         payload["profile_contract_v1"] = contract
     payload["character_engine_house_lines_v0"] = {
         "projection_version": "character_engine_house_lines_v0",
@@ -153,3 +231,4 @@ def apply_spheres_and_houses_to_payload(
         "houses": houses,
         "note": "Person-voice only; cusp/sign/degree remain Swiss natal facts.",
     }
+    apply_aspect_lines_to_payload(payload, identity_thesis=identity_thesis)
