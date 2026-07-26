@@ -503,6 +503,24 @@ def _clip(text: str, limit: int) -> str:
     return t[: max(0, limit - 1)].rstrip() + "…"
 
 
+def _scrub_machine_thesis(text: str, identity_thesis: str | None = None) -> str:
+    """Never ship builds_through_* machine ids in person-facing copy."""
+    raw = str(text or "")
+    if not raw:
+        return raw
+    label = _RECOGNITION_LABEL.get(str(identity_thesis or "").strip()) or "ядро"
+    out = raw
+    thesis = str(identity_thesis or "").strip()
+    if thesis and thesis in out:
+        out = out.replace(thesis, label)
+    out = re.sub(r"builds_through_[a-z0-9_]+", label, out)
+    return out
+
+
+def _clip_person(text: str, limit: int, *, identity_thesis: str | None = None) -> str:
+    return _clip(_scrub_machine_thesis(text, identity_thesis), limit)
+
+
 def _fact_label(fact: dict[str, Any]) -> str | None:
     ft = str(fact.get("fact_type") or "")
     value = fact.get("value")
@@ -716,9 +734,10 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
         pot = stage4.get("potential") if isinstance(stage4.get("potential"), dict) else None
         pot_text = str((pot or {}).get("surface_text") or "").strip()
         if pot_text:
-            growth = [_clip(pot_text, _MAX_ESSAY), *growth][:3]
+            pot_clean = _clip_person(pot_text, _MAX_ESSAY, identity_thesis=identity_thesis)
+            growth = [pot_clean, *growth][:3]
             growth_source = "stage4_potential"
-            helps = [_clip(pot_text, _MAX_ESSAY), *helps][:3]
+            helps = [pot_clean, *helps][:3]
     # Stage 5 adapters preferred; when character_engine_v1.status=ready, SoT is the envelope.
     ce_root = payload.get("character_engine_v1") if isinstance(payload.get("character_engine_v1"), dict) else {}
     ce_sot = str(ce_root.get("status") or "") == "ready"
@@ -749,7 +768,15 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
         a_strengths = _adapter_value(stage5, "strengths")
         if isinstance(a_strengths, list) and a_strengths:
             strengths = [_clip(str(x), _MAX_ESSAY) for x in a_strengths if str(x).strip()][:4]
-    help_line = helps[0] if helps else None
+    help_line = _scrub_machine_thesis(helps[0], identity_thesis) if helps else None
+    if help_line:
+        helps = [_scrub_machine_thesis(h, identity_thesis) for h in helps]
+    growth = [_scrub_machine_thesis(g, identity_thesis) for g in growth]
+    trap = _scrub_machine_thesis(trap, identity_thesis)
+    decision = _scrub_machine_thesis(decision, identity_thesis)
+    relationship = _scrub_machine_thesis(relationship, identity_thesis)
+    money = _scrub_machine_thesis(money, identity_thesis)
+    strengths = [_scrub_machine_thesis(s, identity_thesis) for s in strengths]
 
     claims = stage1.get("claims") if isinstance(stage1.get("claims"), list) else []
     facts_by_id = {

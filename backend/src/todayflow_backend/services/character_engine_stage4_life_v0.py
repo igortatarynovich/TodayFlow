@@ -97,6 +97,30 @@ _LIFE_BY_IDENTITY: dict[str, dict[str, Any]] = {
     },
 }
 
+# Person-facing labels for thesis keys (must never leak machine ids into surface_text).
+_THESIS_SURFACE_LABEL: dict[str, str] = {
+    "builds_through_autonomy": "автономию",
+    "builds_through_analysis": "анализ",
+    "builds_through_air_mind": "исследование идей",
+    "builds_through_earth_stability": "опору",
+    "builds_through_water_care": "заботу",
+    "builds_through_emotional_depth": "глубину",
+    "builds_through_earth_anchor": "якорь",
+    "builds_through_freedom_vs_stability": "свободу и опору",
+    "builds_through_fire_drive": "импульс",
+    "builds_through_air_presence": "лёгкий контакт",
+    "builds_through_fire_presence": "прямой вход",
+    "builds_through_earth_presence": "плотную форму",
+    "builds_through_water_presence": "чуткий вход",
+}
+
+
+def _thesis_surface_label(identity_thesis: str) -> str:
+    key = str(identity_thesis or "").strip()
+    if not key:
+        return "своё ядро"
+    return _THESIS_SURFACE_LABEL.get(key) or "своё ядро"
+
 
 def _now_iso() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
@@ -124,12 +148,13 @@ def _generic_life(identity_thesis: str) -> dict[str, Any]:
     pack = _LIFE_BY_IDENTITY.get(identity_thesis)
     if pack:
         return pack
+    label = _thesis_surface_label(identity_thesis)
     return {
         "scenes": [
             {
                 "scene_kind": "uncertainty",
                 "surface_text": (
-                    f"В неопределённости ядро «{identity_thesis}» проявляется как способ "
+                    f"В неопределённости {label} проявляется как способ "
                     "держать поле, пока выбор ещё не назван."
                 ),
                 "expansion_because": f"Это расширение {identity_thesis}, а не новая identity-линия.",
@@ -138,7 +163,7 @@ def _generic_life(identity_thesis: str) -> dict[str, Any]:
             {
                 "scene_kind": "responsibility",
                 "surface_text": (
-                    f"В зоне ответственности тот же механизм «{identity_thesis}» задаёт, "
+                    f"В зоне ответственности тот же механизм — {label} — задаёт, "
                     "когда ты реально берёшь задачу на себя."
                 ),
                 "expansion_because": f"Ситуация раскрывает {identity_thesis} без career-корня.",
@@ -147,7 +172,7 @@ def _generic_life(identity_thesis: str) -> dict[str, Any]:
             {
                 "scene_kind": "intimacy",
                 "surface_text": (
-                    f"В близости ядро «{identity_thesis}» задаёт, сколько пространства нужно, "
+                    f"В близости {label} задаёт, сколько пространства нужно, "
                     "чтобы оставаться собой рядом с другим."
                 ),
                 "expansion_because": f"Интимность как ситуация, не love-энциклопедия — проявление {identity_thesis}.",
@@ -156,14 +181,14 @@ def _generic_life(identity_thesis: str) -> dict[str, Any]:
         ],
         "potential": {
             "surface_text": (
-                f"Потенциал — переводить «{identity_thesis}» в явный шаг, а не только в понимание."
+                f"Потенциал — переводить {label} в явный шаг, а не только в понимание."
             ),
             "expansion_because": f"Growth направления из того же ядра {identity_thesis}.",
         },
         "blind_spots": [
             {
                 "surface_text": (
-                    f"Легко не увидеть, где сила «{identity_thesis}» уже стала отсрочкой жизни."
+                    f"Легко не увидеть, где сила ({label}) уже стала отсрочкой жизни."
                 ),
                 "expansion_because": f"Слепое пятно — гипертрофия того же механизма {identity_thesis}.",
             }

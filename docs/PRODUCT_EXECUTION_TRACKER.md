@@ -1731,6 +1731,7 @@ Historical note:
 - 2026-07-01 | Product | **Positive Definition §2 CLOSED (canonical)** | **CLOSED** | Два базовых закона с §1
 - 2026-07-01 | Product | **Positive Definition CLOSED** | **CLOSED** | §5.7 · Build Map E9 · spec · UX · empty states
 - 2026-07-01 | Product | **Build Map v0.5.6 — `PracticeRecommendation` spec 🟢** | **ACTIVE** | One practice · [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md)
+- 2026-07-26 | Profile / Architecture | **CE consumption restore** | **LIVE** | Backend CE env restored · compose PROFILE_CONSUMPTION default on · scrub thesis leak in Effort · [CHARACTER_ENGINE_CONSUMPTION_RESTORE_V0.md](audits/CHARACTER_ENGINE_CONSUMPTION_RESTORE_V0.md).
 - 2026-07-26 | Profile / UI | **Profile visuals living pass** | **LIVE** | Portrait seed harden · atmosphere opacity · MotionDrift · sphere motifs · [PROFILE_VISUALS_LIVING_PASS_V0.md](audits/PROFILE_VISUALS_LIVING_PASS_V0.md).
 - 2026-07-26 | Profile / Architecture | **CE readers pass 2** | **LIVE** | Drop life_areas primary (FE V0 taxonomy + iOS spheres/QuickMap) · Compat `person_sot`/`identity_line` · Tarot log soft SoT · helper `person_meaning_from_core_v0` · [CHARACTER_ENGINE_READERS_PASS2_V0.md](audits/CHARACTER_ENGINE_READERS_PASS2_V0.md).
 - 2026-07-26 | Profile / Architecture | **CE post-cutover kill + readers** | **LIVE PARTIAL** | Personality/funnel hard-killed · CUM+iOS+FE V0 prefer contract/CE · [CHARACTER_ENGINE_POST_CUTOVER_READERS_V0.md](audits/CHARACTER_ENGINE_POST_CUTOVER_READERS_V0.md). **Next:** readers pass 2 (in progress) · file cleanup.
