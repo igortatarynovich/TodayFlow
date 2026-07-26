@@ -15,11 +15,14 @@ from sqlalchemy.orm import Session
 from todayflow_backend.db import models as db_models
 from todayflow_backend.db.models import User
 from todayflow_backend.services.day_lifecycle_clock_c5 import (
+    DEFAULT_ASSEMBLE_END,
     DEFAULT_ASSEMBLE_START,
     DEFAULT_CLOSE_TIME,
+    DEFAULT_READY_TIME,
     DEFAULT_TIMEZONE,
     in_assemble_window,
     local_now,
+    parse_hhmm,
     should_system_close_date,
 )
 from todayflow_backend.services.push_delivery import _schedule_row
@@ -47,21 +50,68 @@ def day_story_is_product_ready(db: Session, *, user_id: int, local_date: date) -
     return bool(sc.get("ready") and sc.get("scenes") and str(sc.get("generation_source") or "") in READY_SOURCES)
 
 
-def _minimal_morning(target_date: date):
+def _minimal_morning(target_date: date, *, celestial_events: dict[str, Any] | None = None):
     from todayflow_backend.api.morning_ritual import MorningRitualResponse
 
     return MorningRitualResponse.model_construct(
         date=target_date.isoformat(),
         energy_level=5,
         focus_areas=[],
-        daily_recommendations={},
+        daily_recommendations={
+            "what_to_do": "Выбери один ясный результат к вечеру и сделай по нему первый короткий шаг.",
+            "what_to_avoid": "Не отдавай маршрут дня чужой срочности.",
+            "key_focus": "general",
+        },
         ritual_completed=False,
         tarot_card={},
         tarot_explanation={},
         numerology_number={},
         numerology_explanation={},
-        celestial_events={},
+        celestial_events=celestial_events if isinstance(celestial_events, dict) else {},
     )
+
+
+def _build_prewarm_celestial(local_date: date, locale: str) -> dict[str, Any]:
+    """Sky pack for assemble-once — best-effort, never blocks pre-warm."""
+    try:
+        import asyncio
+
+        from todayflow_backend.services import astro
+        from todayflow_backend.services.celestial_events_builder import build_celestial_events
+
+        coro = build_celestial_events(
+            local_date,
+            locale,
+            personal_day=None,
+            personal_transits=[],
+            astro_service=astro.AstroService(),
+        )
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            loop = None
+        if loop and loop.is_running():
+            # Cron path is sync; nested loop is unexpected — skip sky rather than deadlock.
+            return {}
+        return asyncio.run(coro) or {}
+    except Exception as exc:
+        logger.warning("prewarm celestial_events failed date=%s: %s", local_date, exc)
+        return {}
+
+
+def _fusion_dump_for_user(db: Session, *, user: User, local_date: date) -> dict[str, Any]:
+    try:
+        from todayflow_backend.api.tracking import get_daily_fusion_index
+
+        fusion = get_daily_fusion_index(
+            target_date=local_date.isoformat(),
+            current_user=user,
+            db=db,
+        )
+        return fusion.model_dump() if hasattr(fusion, "model_dump") else dict(fusion or {})
+    except Exception as exc:
+        logger.warning("prewarm fusion failed user=%s date=%s: %s", user.id, local_date, exc)
+        return {}
 
 
 def prewarm_assemble_user_day(
@@ -74,8 +124,32 @@ def prewarm_assemble_user_day(
 ) -> str:
     """
     Assemble once for (user, local_date) if missing.
-    Returns: skipped_ready | rebuilt | unchanged | error
+    Lays out story/scenario + prebaked card/number. Returns: skipped_ready | rebuilt | unchanged | error
     """
+    from todayflow_backend.services.day_symbol_state_v1 import (
+        ensure_symbols_prebaked,
+        owner_key_for_user,
+    )
+
+    owner_key = owner_key_for_user(int(user.id))
+    # Symbols are part of the day package even when story is already ready.
+    try:
+        ensure_symbols_prebaked(
+            db,
+            owner_key=owner_key,
+            local_date=local_date,
+            timezone_name=timezone_name,
+            user_id=int(user.id),
+            locale=locale,
+        )
+    except Exception as sym_exc:
+        logger.warning(
+            "prewarm symbol prebake failed user=%s date=%s: %s",
+            user.id,
+            local_date,
+            sym_exc,
+        )
+
     if day_story_is_product_ready(db, user_id=int(user.id), local_date=local_date):
         return "skipped_ready"
 
@@ -83,9 +157,10 @@ def prewarm_assemble_user_day(
     from todayflow_backend.services.day_story_refresh_v1 import refresh_day_story_for_user
     from todayflow_backend.services.day_story_wire_v1 import build_day_story_record_for_refresh
 
-    morning = _minimal_morning(local_date)
+    celestial = _build_prewarm_celestial(local_date, locale)
+    morning = _minimal_morning(local_date, celestial_events=celestial)
     core_profile = get_core_profile_service().build_cached_or_baseline(db, user)
-    fusion_dump: dict[str, Any] = {}
+    fusion_dump = _fusion_dump_for_user(db, user=user, local_date=local_date)
 
     def _build(db_sess, **kwargs):
         return build_day_story_record_for_refresh(
@@ -177,8 +252,25 @@ def system_close_user_day(db: Session, *, user_id: int, local_date: date) -> str
 
 
 def _candidate_user_ids(db: Session) -> list[int]:
-    """Users with push devices (active delivery surface) — same set as push cron."""
-    return [int(r[0]) for r in db.query(db_models.PushDevice.user_id).distinct().all()]
+    """Users who should receive assemble-once: push surface and recent Today activity."""
+    ids: set[int] = set()
+    for (uid,) in db.query(db_models.PushDevice.user_id).distinct().all():
+        if uid is not None:
+            ids.add(int(uid))
+    for (uid,) in db.query(db_models.UserPushSchedule.user_id).distinct().all():
+        if uid is not None:
+            ids.add(int(uid))
+    # Recent day engagement — don't leave active users without a morning package.
+    recent_cut = date.today() - timedelta(days=3)
+    for (uid,) in (
+        db.query(db_models.DayConnection.user_id)
+        .filter(db_models.DayConnection.date >= recent_cut)
+        .distinct()
+        .all()
+    ):
+        if uid is not None:
+            ids.add(int(uid))
+    return sorted(ids)
 
 
 def run_day_lifecycle_due(
@@ -235,14 +327,19 @@ def run_day_lifecycle_due(
             elif outcome == "already_closed":
                 counts["system_already_closed"] += 1
 
-        # C5.1 pre-warm — only in assemble window, budgeted
+        # C5.1 pre-warm — assemble window, or catch-up after ready_at if package missing
         if prewarm_budget <= 0:
             continue
+        ready_t = parse_hhmm(sch.get("morning_time"), fallback=DEFAULT_READY_TIME)
+        past_ready = (now_local.hour * 60 + now_local.minute) >= (ready_t.hour * 60 + ready_t.minute)
+        needs_catchup = past_ready and not day_story_is_product_ready(
+            db, user_id=uid, local_date=local_date
+        )
         if not in_assemble_window(
             now_local,
             assemble_start=DEFAULT_ASSEMBLE_START,
             assemble_end=DEFAULT_ASSEMBLE_END,
-        ):
+        ) and not needs_catchup:
             continue
         counts["prewarm_candidates"] += 1
         outcome = prewarm_assemble_user_day(

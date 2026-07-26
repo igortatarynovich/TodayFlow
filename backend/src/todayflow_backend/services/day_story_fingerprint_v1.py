@@ -106,8 +106,8 @@ def build_fingerprint_payload(
     mood: Any,
     goals: list[str],
     profile_snapshot_id: int | None,
-    revealed_card_id: int | None,
-    revealed_number: int | None,
+    revealed_card_id: int | None = None,
+    revealed_number: int | None = None,
     prompt_version: str = DAY_STORY_PROMPT_VER,
     model: str | None = None,
     contract_version: str = DAY_STORY_V1_CONTRACT,
@@ -116,6 +116,13 @@ def build_fingerprint_payload(
     color_name: str | None = None,
     stone_name: str | None = None,
 ) -> dict[str, Any]:
+    """Fingerprint for day_story identity.
+
+    Card/number are an interpretive overlay (DAY_LIFECYCLE_V1 / DAY_SYMBOL_REVEAL_CANON):
+    they must **not** change this fingerprint or trigger day reassemble.
+    ``revealed_card_id`` / ``revealed_number`` are accepted for call-site compat but ignored.
+    """
+    _ = revealed_card_id, revealed_number
     model_id = model if model is not None else resolve_story_model_id()
     payload: dict[str, Any] = {
         "local_date": local_date.isoformat(),
@@ -124,8 +131,6 @@ def build_fingerprint_payload(
         "mood": mood,
         "goals": list(goals or []),
         "profile_snapshot_id": profile_snapshot_id,
-        "revealed_card_id": revealed_card_id,
-        "revealed_number": revealed_number,
         "prompt_version": prompt_version,
         "contract_version": contract_version,
     }

@@ -77,7 +77,7 @@ import { useMeaningRuntime } from "@/hooks/useMeaningRuntime";
 import {
   fetchTodayContractV1,
   buildFallbackTodayContract,
-  refreshTodayStory,
+  isDayAssembling,
   isDayNotReady,
   readDayLifecycle,
   localCalendarDateISO,
@@ -85,7 +85,7 @@ import {
 } from "@/lib/todayContract";
 import { TodayDayNotReadySurface } from "@/components/today/TodayDayNotReadySurface";
 import {
-  shouldRefreshStoryAfterReveal,
+  applySymbolRevealToMorning,
   type DaySymbolPublicView,
 } from "@/lib/daySymbolReveal";
 import {
@@ -146,37 +146,41 @@ export default function TodayPage() {
 
   const todayIso = useMemo(() => localCalendarDateISO(), []);
   const initialBundle = useMemo(() => (typeof window !== "undefined" ? readTodayDayBundle(todayIso) : null), [todayIso]);
-  const [loading, setLoading] = useState(() => !todayDayBundleIsReady(initialBundle));
+  const packageReadyFromCache = todayDayBundleIsReady(initialBundle);
+  const [loading, setLoading] = useState(() => !packageReadyFromCache);
   const [todayData, setTodayData] = useState<TodayCycleData | null>(() => initialBundle?.cycle ?? null);
   const [todayContract, setTodayContract] = useState<TodayContractV1 | null>(() => initialBundle?.contract ?? null);
-  const [dayRevealDone, setDayRevealDone] = useState(false);
+  const todayContractRef = useRef(todayContract);
+  todayContractRef.current = todayContract;
+  // Morning push path: day already assembled — skip long theatrical wait.
+  const [dayRevealDone, setDayRevealDone] = useState(() => packageReadyFromCache);
   const onDayRevealComplete = useCallback(() => setDayRevealDone(true), []);
   const [dayStoryUpdating, setDayStoryUpdating] = useState(false);
-  const dayStoryRefreshInFlight = useRef(false);
   const dayStorySingleVoice = useMemo(
     () => usesDayStorySingleVoice(todayContract),
     [todayContract],
   );
-
-  const onSymbolRevealResult = useCallback(async (view: DaySymbolPublicView) => {
-    if (!shouldRefreshStoryAfterReveal(view)) return;
-    if (dayStoryRefreshInFlight.current) return;
-    dayStoryRefreshInFlight.current = true;
-    setDayStoryUpdating(true);
-    try {
-      const result = await refreshTodayStory({ localDate: view.local_date });
-      if (result.contract) {
-        setTodayContract(result.contract);
-        writeTodayDayBundle(view.local_date, { contract: result.contract });
-      }
-    } catch {
-      /* keep previous story; symbols already shown; do not pretend story matches new symbols */
-    } finally {
-      dayStoryRefreshInFlight.current = false;
-      setDayStoryUpdating(false);
-    }
-  }, []);
   const [morningRitualData, setMorningRitualData] = useState<MorningRitualData | null>(() => initialBundle?.morning ?? null);
+
+  /** Card/number overlay only — never reassemble day_story (DAY_LIFECYCLE_V1). */
+  const onSymbolRevealResult = useCallback((view: DaySymbolPublicView) => {
+    setMorningRitualData((prev) => {
+      if (!prev) return prev;
+      const patched = applySymbolRevealToMorning(prev as unknown as Record<string, unknown>, view);
+      return patched ? (patched as typeof prev) : prev;
+    });
+    setTodayData((prev) => {
+      if (!prev?.morning) return prev;
+      const patchedMorning = applySymbolRevealToMorning(
+        prev.morning as unknown as Record<string, unknown>,
+        view,
+      );
+      if (!patchedMorning) return prev;
+      const next = { ...prev, morning: patchedMorning as typeof prev.morning };
+      writeTodayDayBundle(view.local_date, { cycle: next });
+      return next;
+    });
+  }, []);
   const [fusionData, setFusionData] = useState<FusionResponse | null>(null);
   const [quickPractice, setQuickPractice] = useState<PracticeResponse | null>(null);
   const [coreProfile, setCoreProfile] = useState<CoreProfile | null>(null);
@@ -391,13 +395,36 @@ export default function TodayPage() {
         const initialLoad = !hasLoadedOnceRef.current;
         const startedAt = initialLoad ? Date.now() : null;
         const warmCache = cycleRef.current?.date === todayIso;
-        const bundleReady = todayDayBundleIsReady(readTodayDayBundle(todayIso));
+        const cachedBundle = !force ? readTodayDayBundle(todayIso) : null;
+        const bundleReady = todayDayBundleIsReady(cachedBundle);
         try {
           if (initialLoad && !warmCache && !bundleReady) {
             setLoading(true);
             setThinkingState({ active: true, mode: "initial", startedAt: startedAt || Date.now() });
           }
           setError(null);
+
+          // Paint-first: if the day package is already in hand (morning push → open),
+          // show it immediately; network soft-refresh must not block calm use.
+          if (!force && bundleReady && cachedBundle?.cycle && cachedBundle.contract) {
+            const paintedCycle = normalizeTodayPayload(cachedBundle.cycle);
+            setTodayData(paintedCycle);
+            setTodayContract(cachedBundle.contract);
+            if (cachedBundle.morning) setMorningRitualData(cachedBundle.morning);
+            const corePainted = resolveCoreProfileAgainstSessionCache(
+              paintedCycle.core_profile ?? null,
+              paintedCycle.core_profile?.astro?.profile_id ?? null,
+            );
+            if (corePainted) {
+              setCoreProfile(corePainted);
+              writeCoreProfileToCache(corePainted, corePainted.astro?.profile_id ?? null);
+            }
+            setLoading(false);
+            setThinkingState(null);
+            hasLoadedOnceRef.current = true;
+            setDayRevealDone(true);
+          }
+
           const experienceMode = searchParams.get("full") !== "1";
           const ritualPromise = getJson<MorningRitualData>(
             `/morning-ritual/today?target_date=${encodeURIComponent(todayIso)}`,
@@ -409,9 +436,8 @@ export default function TodayPage() {
             if (cached?.date === todayIso) {
               data = cached;
             }
-            if (!data) {
-              const bundle = readTodayDayBundle(todayIso);
-              if (bundle?.cycle?.date === todayIso) data = bundle.cycle;
+            if (!data && cachedBundle?.cycle?.date === todayIso) {
+              data = cachedBundle.cycle;
             }
           }
           if (!data) {
@@ -430,31 +456,25 @@ export default function TodayPage() {
           if (!contractPayload) {
             contractPayload = buildFallbackTodayContract({ coreProfile: core });
           }
+          // Do not wipe a painted day with a not-ready/assembling null shell on soft refresh.
+          const painted = todayContractRef.current;
+          const incomingEmpty =
+            isDayNotReady(contractPayload) ||
+            isDayAssembling(contractPayload) ||
+            !contractPayload.day_story;
+          if (
+            !force &&
+            incomingEmpty &&
+            painted?.day_story &&
+            !isDayNotReady(painted) &&
+            !isDayAssembling(painted)
+          ) {
+            contractPayload = painted;
+          }
           setTodayData(normalized);
           setTodayContract(contractPayload);
-          // C1: baseline first; poll enrichment without blocking paint.
-          const lcRaw = (contractPayload?.progress as Record<string, unknown> | undefined)
-            ?.generation_lifecycle;
-          const jobId =
-            lcRaw && typeof lcRaw === "object" && typeof (lcRaw as { job_id?: unknown }).job_id === "number"
-              ? (lcRaw as { job_id: number }).job_id
-              : null;
-          const lcStatus =
-            lcRaw && typeof lcRaw === "object"
-              ? String((lcRaw as { status?: unknown }).status || "")
-              : "";
-          if (jobId != null && (lcStatus === "enrichment_pending" || lcStatus === "stale")) {
-            setDayStoryUpdating(true);
-            void import("@/lib/pollGenerationJob").then(({ pollTodayJob }) =>
-              pollTodayJob(jobId).then((polled) => {
-                if (polled?.lifecycle.status === "enriched" && polled.contract) {
-                  setTodayContract(polled.contract as typeof contractPayload);
-                  writeTodayDayBundle(todayIso, { contract: polled.contract as typeof contractPayload });
-                }
-                setDayStoryUpdating(false);
-              }),
-            );
-          }
+          // Assemble-once: never poll enrichment from user open — package is server-owned.
+          setDayStoryUpdating(false);
           setCoreProfile(core);
           if (core) {
             writeCoreProfileToCache(core, core.astro?.profile_id ?? null);
@@ -474,11 +494,18 @@ export default function TodayPage() {
           } else {
             setMorningRitualData(morningFromCycle);
           }
-          writeTodayDayBundle(todayIso, {
-            contract: contractPayload,
-            morning: nextMorning,
-            cycle: normalized,
-          });
+          // Only persist product-ready packages into the calm-open cache.
+          if (
+            contractPayload.day_story &&
+            !isDayNotReady(contractPayload) &&
+            !isDayAssembling(contractPayload)
+          ) {
+            writeTodayDayBundle(todayIso, {
+              contract: contractPayload,
+              morning: nextMorning,
+              cycle: normalized,
+            });
+          }
           setLoading(false);
           if (initialLoad) {
             setThinkingState(null);
@@ -1141,6 +1168,15 @@ export default function TodayPage() {
   const dayReady = Boolean(isAuthenticated && todayData && todayContract && !error);
   const showDayReveal = Boolean(isAuthenticated && !authLoading && !dayRevealDone);
   const dayNotReady = isDayNotReady(todayContract);
+  const dayAssembling = isDayAssembling(todayContract);
+
+  useEffect(() => {
+    if (!isAuthenticated || !dayAssembling) return;
+    const id = window.setInterval(() => {
+      void loadTodayRef.current({ force: true });
+    }, 8000);
+    return () => window.clearInterval(id);
+  }, [isAuthenticated, dayAssembling]);
 
   if (authLoading) {
     return (
@@ -1222,6 +1258,16 @@ export default function TodayPage() {
           primaryAction={todayContract.primary_action}
         />
       </ProductPageScreen>
+    );
+  }
+
+  if (dayAssembling) {
+    return (
+      <TodayDayReveal
+        ready={false}
+        waitingLabel={todayContract.primary_action || RITUAL_COPY.todayPageLoadingDay}
+        onComplete={onDayRevealComplete}
+      />
     );
   }
 
@@ -1378,10 +1424,11 @@ export default function TodayPage() {
     <>
       {showDayReveal ? (
         <TodayDayReveal
-          ready={dayReady}
+          ready={dayReady && !dayNotReady && !dayAssembling}
           waitingLabel={RITUAL_COPY.todayPageLoadingDay}
-          readyLabel="День уже собран"
+          readyLabel="День готов"
           openLabel="Открываю…"
+          minReadyMs={700}
           onComplete={onDayRevealComplete}
         />
       ) : null}

@@ -758,15 +758,6 @@ export function TodayCompositionSurface(props: Props) {
   const onNumberComplete = useCallback(() => {
     persistEngagement({ numberConfirmed: true });
     setRitualPickOpen(null);
-    void revealDayNumber({
-      isAuthenticated,
-      source: "today_ritual",
-      idempotencyKey: `number_reveal:${dateISO}:${isAuthenticated ? "u" : "g"}`,
-    })
-      .then((view) => props.onSymbolRevealResult?.(view))
-      .catch(() => {
-        /* local ack kept; server SoT can retry */
-      });
     trackMeaningEvent({
       event_type: "number_selected",
       event_source: "today",
@@ -774,7 +765,22 @@ export function TodayCompositionSurface(props: Props) {
       payload: { surface: "today_day_story_v3", experience_inline: true },
       refreshRings: false,
     });
-  }, [dateISO, isAuthenticated, persistEngagement, props.onSymbolRevealResult, trackMeaningEvent]);
+  }, [dateISO, persistEngagement, trackMeaningEvent]);
+
+  const onNumberRevealRequest = useCallback(async () => {
+    const view = await revealDayNumber({
+      isAuthenticated,
+      source: "today_ritual",
+      idempotencyKey: `number_reveal:${dateISO}:${isAuthenticated ? "u" : "g"}`,
+    });
+    props.onSymbolRevealResult?.(view);
+    const value = view.number?.value ?? view.number?.reduced_value;
+    const display = value != null ? String(value) : "";
+    return {
+      display,
+      meaning: view.number?.title ?? props.numerologyMeaning ?? null,
+    };
+  }, [dateISO, isAuthenticated, props.numerologyMeaning, props.onSymbolRevealResult]);
 
   const onInterpretationConfirm = useCallback(
     (
@@ -1256,6 +1262,7 @@ export function TodayCompositionSurface(props: Props) {
       numberMeaning={props.numerologyMeaning ?? undefined}
       tileMode="symbol"
       reduceMotion={reduceMotion}
+      onRevealRequest={onNumberRevealRequest}
       onComplete={onNumberComplete}
     />
   );

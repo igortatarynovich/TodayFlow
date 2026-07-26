@@ -78,13 +78,19 @@ def _log_story(db, *, user_id: int, local_date: date, fingerprint: str, story: d
     return int(row.id)
 
 
-def test_1_base_then_reveal_card_changes_fingerprint_one_rebuild() -> None:
+def test_1_reveal_card_does_not_change_fingerprint_or_require_rebuild() -> None:
+    """DAY_LIFECYCLE_V1: card reveal is overlay-only — no day_story reassemble."""
     db = _session()
     user = _user(db)
     day = date(2026, 7, 20)
     owner = symbols.owner_key_for_user(user.id)
     base_fp, _ = fp.compute_expected_day_story_fingerprint(
-        db, user_id=user.id, owner_key=owner, local_date=day, locale="ru"
+        db,
+        user_id=user.id,
+        owner_key=owner,
+        local_date=day,
+        timezone_name="Europe/Moscow",
+        locale="ru",
     )
     story0 = _fake_story("base")
     gid0 = _log_story(db, user_id=user.id, local_date=day, fingerprint=base_fp, story=story0)
@@ -109,24 +115,14 @@ def test_1_base_then_reveal_card_changes_fingerprint_one_rebuild() -> None:
     meta = refresh.mark_day_story_stale_after_input_change(
         db, owner_key=owner, local_date=day, timezone_name="Europe/Moscow", user_id=user.id
     )
-    assert meta["story_refresh_required"] is True
-    card_fp = meta["story_fingerprint"]
-    assert card_fp != base_fp
+    assert meta["story_refresh_required"] is False
+    assert meta["story_fingerprint"] == base_fp
 
-    builds = 0
+    calls: list[str] = []
 
     def build_fn(db_sess, **kwargs):
-        nonlocal builds
-        builds += 1
-        s = _fake_story("with-card", card=0)
-        gid = _log_story(
-            db_sess,
-            user_id=user.id,
-            local_date=day,
-            fingerprint=kwargs["expected_fingerprint"],
-            story=s,
-        )
-        return s, gid, True
+        calls.append("should-not-run")
+        raise AssertionError("LLM must not run after card reveal")
 
     out = refresh.refresh_day_story_for_user(
         db,
@@ -135,14 +131,14 @@ def test_1_base_then_reveal_card_changes_fingerprint_one_rebuild() -> None:
         timezone_name="Europe/Moscow",
         locale="ru",
         build_fn=build_fn,
+        llm_calls=calls,
     )
-    assert out["rebuilt"] is True
-    assert builds == 1
-    assert "card:0" in out["story"]["story"]
-    assert out["story_fingerprint"] == card_fp
+    assert out["rebuilt"] is False
+    assert calls == []
+    assert out["story"]["theme"] == "base"
 
 
-def test_2_then_reveal_number_second_rebuild() -> None:
+def test_2_reveal_number_does_not_require_second_rebuild() -> None:
     db = _session()
     user = _user(db)
     day = date(2026, 7, 20)
@@ -180,30 +176,20 @@ def test_2_then_reveal_number_second_rebuild() -> None:
     meta = refresh.mark_day_story_stale_after_input_change(
         db, owner_key=owner, local_date=day, user_id=user.id
     )
-    assert meta["story_refresh_required"] is True
-    builds = 0
+    assert meta["story_refresh_required"] is False
+    assert meta["story_fingerprint"] == card_fp
+
+    calls: list[str] = []
 
     def build_fn(db_sess, **kwargs):
-        nonlocal builds
-        builds += 1
-        view = symbols.public_view(
-            symbols.get_state_row(db_sess, owner_key=owner, local_date=day),
-            local_date=day,
-        )
-        num = view["number"].get("reduced_value")
-        s = _fake_story("full", card=1, number=num)
-        gid2 = _log_story(
-            db_sess, user_id=user.id, local_date=day, fingerprint=kwargs["expected_fingerprint"], story=s
-        )
-        return s, gid2, True
+        calls.append("nope")
+        raise AssertionError("LLM must not run after number reveal")
 
     out = refresh.refresh_day_story_for_user(
-        db, user=user, local_date=day, timezone_name="UTC", locale="ru", build_fn=build_fn
+        db, user=user, local_date=day, timezone_name="UTC", locale="ru", build_fn=build_fn, llm_calls=calls
     )
-    assert out["rebuilt"] is True
-    assert builds == 1
-    assert "card:1" in out["story"]["story"]
-    assert "num:" in out["story"]["story"]
+    assert out["rebuilt"] is False
+    assert calls == []
 
 
 def test_3_repeat_reveal_no_rebuild() -> None:
@@ -261,7 +247,7 @@ def test_3_repeat_reveal_no_rebuild() -> None:
     assert calls == []
 
 
-def test_4_parallel_reveal_final_story_has_both() -> None:
+def test_4_parallel_reveal_keeps_base_story_without_rebuild() -> None:
     db = _session()
     user = _user(db)
     day = date(2026, 7, 21)
@@ -295,38 +281,42 @@ def test_4_parallel_reveal_final_story_has_both() -> None:
         idempotency_key="pn",
         user_id=user.id,
     )
-    refresh.mark_day_story_stale_after_input_change(db, owner_key=owner, local_date=day, user_id=user.id)
+    meta = refresh.mark_day_story_stale_after_input_change(
+        db, owner_key=owner, local_date=day, user_id=user.id
+    )
+    assert meta["story_refresh_required"] is False
+
+    calls: list[str] = []
 
     def build_fn(db_sess, **kwargs):
-        view = symbols.public_view(
-            symbols.get_state_row(db_sess, owner_key=owner, local_date=day), local_date=day
-        )
-        s = _fake_story(
-            "both",
-            card=int(view["card"]["id"]),
-            number=int(view["number"]["reduced_value"]),
-        )
-        gid2 = _log_story(
-            db_sess, user_id=user.id, local_date=day, fingerprint=kwargs["expected_fingerprint"], story=s
-        )
-        return s, gid2, True
+        calls.append("nope")
+        raise AssertionError("no rebuild after symbol overlay")
 
     out = refresh.refresh_day_story_for_user(
-        db, user=user, local_date=day, timezone_name="UTC", locale="ru", build_fn=build_fn
+        db, user=user, local_date=day, timezone_name="UTC", locale="ru", build_fn=build_fn, llm_calls=calls
     )
-    assert "card:3" in out["story"]["story"]
-    assert "num:" in out["story"]["story"]
-    payload = out["fingerprint_payload"]
-    assert payload["revealed_card_id"] == 3
-    assert payload["revealed_number"] is not None
+    assert out["rebuilt"] is False
+    assert calls == []
+    assert out["story"]["theme"] == "base"
+    _fp2, payload = fp.compute_expected_day_story_fingerprint(
+        db, user_id=user.id, owner_key=owner, local_date=day
+    )
+    assert "revealed_card_id" not in payload
+    assert "revealed_number" not in payload
+    view = symbols.public_view(symbols.get_state_row(db, owner_key=owner, local_date=day), local_date=day)
+    assert view["card"]["revealed"] is True
+    assert int(view["card"]["id"]) == 3
+    assert view["number"]["revealed"] is True
+    assert view["number"]["reduced_value"] is not None
 
 
-def test_5_slow_old_generation_does_not_overwrite_newer() -> None:
+def test_5_mood_change_still_can_require_rebuild() -> None:
+    """Non-symbol inputs (mood) may still invalidate fingerprint — symbols must not."""
     db = _session()
     user = _user(db)
     day = date(2026, 7, 22)
     owner = symbols.owner_key_for_user(user.id)
-    base_fp, _ = fp.compute_expected_day_story_fingerprint(
+    base_fp, base_payload = fp.compute_expected_day_story_fingerprint(
         db, user_id=user.id, owner_key=owner, local_date=day
     )
     gid = _log_story(db, user_id=user.id, local_date=day, fingerprint=base_fp, story=_fake_story("base"))
@@ -346,48 +336,32 @@ def test_5_slow_old_generation_does_not_overwrite_newer() -> None:
         idempotency_key="slow-c",
         user_id=user.id,
     )
-    refresh.mark_day_story_stale_after_input_change(db, owner_key=owner, local_date=day, user_id=user.id)
-    builds: list[str] = []
-
-    def build_fn(db_sess, **kwargs):
-        builds.append(kwargs["expected_fingerprint"])
-        if len(builds) == 1:
-            # Mid-flight newer reveal — old generation must not become canonical alone.
-            symbols.reveal_number(
-                db_sess,
-                owner_key=owner,
-                local_date=day,
-                timezone_name="UTC",
-                reveal_source="t",
-                idempotency_key="slow-n",
-                user_id=user.id,
-            )
-            refresh.mark_day_story_stale_after_input_change(
-                db_sess, owner_key=owner, local_date=day, user_id=user.id
-            )
-        view = symbols.public_view(
-            symbols.get_state_row(db_sess, owner_key=owner, local_date=day), local_date=day
-        )
-        card = view["card"].get("id")
-        num = view["number"].get("reduced_value") if view["number"].get("revealed") else None
-        s = _fake_story("gen", card=int(card) if card is not None else None, number=num)
-        gid2 = _log_story(
-            db_sess, user_id=user.id, local_date=day, fingerprint=kwargs["expected_fingerprint"], story=s
-        )
-        return s, gid2, True
-
-    out = refresh.refresh_day_story_for_user(
-        db, user=user, local_date=day, timezone_name="UTC", locale="ru", build_fn=build_fn, max_attempts=2
-    )
-    final_fp, payload = fp.compute_expected_day_story_fingerprint(
+    after_card_fp, _ = fp.compute_expected_day_story_fingerprint(
         db, user_id=user.id, owner_key=owner, local_date=day
     )
-    st2 = refresh.get_story_state_row(db, owner_key=owner, local_date=day)
-    assert st2 is not None
-    assert payload.get("revealed_number") is not None
-    assert st2.fingerprint == final_fp
-    assert "num:" in out["story"]["story"]
-    assert len(builds) == 2
+    assert after_card_fp == base_fp
+    assert base_payload.get("mood") is None
+
+    from todayflow_backend.db import models as db_models
+
+    db.add(
+        db_models.StateCheckIn(
+            user_id=user.id,
+            checkin_date=day,
+            phase="morning",
+            mood_scale=4,
+        )
+    )
+    db.commit()
+    mood_fp, mood_payload = fp.compute_expected_day_story_fingerprint(
+        db, user_id=user.id, owner_key=owner, local_date=day
+    )
+    assert mood_payload.get("mood") == 4
+    assert mood_fp != base_fp
+    meta = refresh.mark_day_story_stale_after_input_change(
+        db, owner_key=owner, local_date=day, user_id=user.id
+    )
+    assert meta["story_refresh_required"] is True
 
 
 def test_6_matching_fingerprint_skips_llm() -> None:
@@ -434,17 +408,11 @@ def test_7_llm_error_keeps_last_valid() -> None:
     st.last_generation_log_id = gid
     db.add(st)
     db.commit()
-    symbols.reveal_card(
-        db,
-        owner_key=owner,
-        local_date=day,
-        timezone_name="UTC",
-        card_id=5,
-        reveal_source="t",
-        idempotency_key="err-c",
-        user_id=user.id,
-    )
-    refresh.mark_day_story_stale_after_input_change(db, owner_key=owner, local_date=day, user_id=user.id)
+    # Force stale via mismatched stored fingerprint (not via symbol reveal).
+    st.fingerprint = "force-stale-mismatch"
+    st.stale = True
+    db.add(st)
+    db.commit()
 
     def build_fn(db_sess, **kwargs):
         raise RuntimeError("llm down")
@@ -460,7 +428,7 @@ def test_7_llm_error_keeps_last_valid() -> None:
     assert st2.last_generation_log_id == gid
 
 
-def test_8_guest_claim_marks_user_story_stale() -> None:
+def test_8_guest_claim_does_not_force_rebuild_from_symbols_alone() -> None:
     db = _session()
     user = _user(db, uid=11)
     day = date(2026, 7, 25)
@@ -478,11 +446,12 @@ def test_8_guest_claim_marks_user_story_stale() -> None:
     )
     symbols.claim_guest_symbols_to_user(db, guest_session_id=gid, user_id=user.id, local_date=day)
     ukey = symbols.owner_key_for_user(user.id)
-    # Seed a base user story that does not include the claimed card.
-    base_fp = "old-base-fp"
-    log_id = _log_story(db, user_id=user.id, local_date=day, fingerprint=base_fp, story=_fake_story("old"))
+    expected_fp, _ = fp.compute_expected_day_story_fingerprint(
+        db, user_id=user.id, owner_key=ukey, local_date=day
+    )
+    log_id = _log_story(db, user_id=user.id, local_date=day, fingerprint=expected_fp, story=_fake_story("ok"))
     st = refresh.ensure_story_state(db, owner_key=ukey, local_date=day, user_id=user.id)
-    st.fingerprint = base_fp
+    st.fingerprint = expected_fp
     st.last_generation_log_id = log_id
     st.stale = False
     db.add(st)
@@ -490,7 +459,7 @@ def test_8_guest_claim_marks_user_story_stale() -> None:
     meta = refresh.mark_day_story_stale_after_input_change(
         db, owner_key=ukey, local_date=day, user_id=user.id
     )
-    assert meta["story_refresh_required"] is True
+    assert meta["story_refresh_required"] is False
 
 
 def test_9_and_10_prompt_symbols_only_when_revealed() -> None:
@@ -501,8 +470,8 @@ def test_9_and_10_prompt_symbols_only_when_revealed() -> None:
     before_fp, before_payload = fp.compute_expected_day_story_fingerprint(
         db, user_id=user.id, owner_key=owner, local_date=day
     )
-    assert before_payload["revealed_card_id"] is None
-    assert before_payload["revealed_number"] is None
+    assert "revealed_card_id" not in before_payload
+    assert "revealed_number" not in before_payload
     ritual = symbols.ritual_context_from_symbol_view(
         symbols.public_view(None, local_date=day)
     )
@@ -522,9 +491,8 @@ def test_9_and_10_prompt_symbols_only_when_revealed() -> None:
     after_fp, after_payload = fp.compute_expected_day_story_fingerprint(
         db, user_id=user.id, owner_key=owner, local_date=day
     )
-    assert after_fp != before_fp
-    assert after_payload["revealed_card_id"] == 7
-    assert after_payload["revealed_number"] is None
+    assert after_fp == before_fp
+    assert "revealed_card_id" not in after_payload
     view = symbols.public_view(symbols.get_state_row(db, owner_key=owner, local_date=day), local_date=day)
     ritual2 = symbols.ritual_context_from_symbol_view(view)
     assert ritual2.get("tarot_main_id") == 7

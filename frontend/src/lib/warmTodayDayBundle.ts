@@ -7,7 +7,7 @@
 
 import { getJson } from "@/lib/api";
 import type { MorningRitualData, TodayCycleData } from "@/components/today/todayPageUtils";
-import { fetchTodayContractV1, type TodayContractV1 } from "@/lib/todayContract";
+import { fetchTodayContractV1, isDayAssembling, isDayNotReady, localCalendarDateISO, type TodayContractV1 } from "@/lib/todayContract";
 import { readTodayDayBundle, todayDayBundleIsReady, writeTodayDayBundle } from "@/lib/todayDayBundleCache";
 
 let inFlight: Promise<void> | null = null;
@@ -15,7 +15,7 @@ let lastWarmKey = "";
 
 export function warmTodayDayBundle(options?: { force?: boolean }): Promise<void> {
   if (typeof window === "undefined") return Promise.resolve();
-  const localDate = new Date().toISOString().slice(0, 10);
+  const localDate = localCalendarDateISO();
   const key = localDate;
   if (!options?.force && todayDayBundleIsReady(readTodayDayBundle(localDate))) {
     return Promise.resolve();
@@ -38,6 +38,11 @@ export function warmTodayDayBundle(options?: { force?: boolean }): Promise<void>
       if (opening && bundle) {
         const { assembleTodayCycleFromProgressive } = await import("@/components/today/todayPageUtils");
         cycle = assembleTodayCycleFromProgressive(opening, bundle);
+      }
+
+      // Only cache a product-ready day — never warm not_ready/assembling shells as "ready".
+      if (contract && (isDayNotReady(contract) || isDayAssembling(contract) || !contract.day_story)) {
+        return;
       }
 
       writeTodayDayBundle(localDate, {

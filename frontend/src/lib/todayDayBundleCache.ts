@@ -84,7 +84,16 @@ export function clearTodayDayBundle(localDate: string): void {
   }
 }
 
-/** True when we can paint Today without waiting on network. */
+/** True when we can paint Today without waiting on network (product-ready day package). */
 export function todayDayBundleIsReady(bundle: TodayDayBundle | null | undefined): boolean {
-  return Boolean(bundle?.contract && bundle?.cycle);
+  const contract = bundle?.contract;
+  if (!bundle?.cycle || !contract) return false;
+  if (!contract.day_story) return false;
+  const status = String(
+    (contract.progress as { day_lifecycle?: { status?: string } } | undefined)?.day_lifecycle?.status || "",
+  );
+  if (status === "day_not_ready" || status === "assembling") return false;
+  if ((contract.generation_id || "").trim() === "day-not-ready-c5") return false;
+  if ((contract.generation_id || "").trim() === "day-assembling-c5") return false;
+  return true;
 }

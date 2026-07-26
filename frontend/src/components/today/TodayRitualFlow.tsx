@@ -874,6 +874,20 @@ export function TodayRitualFlow(props: Props) {
     });
   }, [tarotMainId, tarotClarifierId, props.narrativeGenerationIds?.guide, trackMeaningEvent]);
 
+  const onNumberRevealRequest = useCallback(async () => {
+    const view = await revealDayNumber({
+      isAuthenticated,
+      source: "today_ritual_flow",
+      idempotencyKey: `number_reveal:${dateISO}:${isAuthenticated ? "u" : "g"}`,
+    });
+    props.onSymbolRevealResult?.(view);
+    const value = view.number?.value ?? view.number?.reduced_value;
+    return {
+      display: value != null ? String(value) : "",
+      meaning: view.number?.title ?? null,
+    };
+  }, [dateISO, isAuthenticated, props.onSymbolRevealResult]);
+
   const onRevealNumber = useCallback(() => {
     const snap = buildRitualSpineSnapshotWeb({
       showCardSection,
@@ -887,13 +901,6 @@ export function TodayRitualFlow(props: Props) {
     const out = applyTodayRitualSpineReducer({ type: "revealedNumber" }, snap);
     if (!out) return;
     setNumberRevealed(out.after.numberRevealed);
-    void revealDayNumber({
-      isAuthenticated,
-      source: "today_ritual_flow",
-      idempotencyKey: `number_reveal:${dateISO}:u`,
-    })
-      .then((view) => props.onSymbolRevealResult?.(view))
-      .catch(() => undefined);
     if (out.effects.scrollToAnchorId) scrollToRitualSpineDomAnchor(out.effects.scrollToAnchorId);
     executeRitualSpineAnalytics(out.effects.analyticsHint, {
       numerologyValue: props.numerologyValue,
@@ -908,11 +915,8 @@ export function TodayRitualFlow(props: Props) {
     mood,
     checkInSubmitted,
     guideNarrativeLoading,
-    dateISO,
-    isAuthenticated,
     props.narrativeGenerationIds?.guide,
     props.numerologyValue,
-    props.onSymbolRevealResult,
     trackMeaningEvent,
   ]);
 
@@ -1804,6 +1808,7 @@ export function TodayRitualFlow(props: Props) {
                 <RitualNumberPickExperience
                   systemDisplay={props.numerologyValue}
                   reduceMotion={reduceMotion}
+                  onRevealRequest={onNumberRevealRequest}
                   onComplete={onRevealNumber}
                 />
               </>

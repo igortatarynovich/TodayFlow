@@ -22,6 +22,7 @@ DEFAULT_ASSEMBLE_END = "07:00"
 DEFAULT_CLOSE_TIME = "23:00"
 
 DAY_STATUS_NOT_READY = "day_not_ready"
+DAY_STATUS_ASSEMBLING = "assembling"
 DAY_STATUS_READY = "ready"
 DAY_STATUS_CLOSED = "closed"
 
@@ -180,6 +181,7 @@ def build_day_not_ready_contract(*, lifecycle: dict[str, Any], locale: str = "ru
     from todayflow_backend.services.today_contract_fallbacks_v1 import DOMAIN_FALLBACKS_V1
 
     meta = DOMAIN_FALLBACKS_V1["_meta"]
+    _ = meta
     domains = {
         key: dict(val)
         for key, val in DOMAIN_FALLBACKS_V1.items()
@@ -208,3 +210,21 @@ def build_day_not_ready_contract(*, lifecycle: dict[str, Any], locale: str = "ru
         "generation_id": "day-not-ready-c5",
         "day_story": None,
     }
+
+
+def build_day_assembling_contract(*, lifecycle: dict[str, Any], locale: str = "ru") -> dict[str, Any]:
+    """Past ready_at but package not served yet — beautiful wait, no user-triggered assemble."""
+    nest = dict(lifecycle or {})
+    nest["status"] = DAY_STATUS_ASSEMBLING
+    shell = build_day_not_ready_contract(lifecycle=nest, locale=locale)
+    if (locale or "").lower().startswith("en"):
+        shell["primary_action"] = "Your day is almost ready — one moment."
+        shell["global_context"] = {"period": "We are laying out today’s package."}
+    else:
+        shell["primary_action"] = "День почти готов — ещё мгновение."
+        shell["global_context"] = {"period": "Мы раскладываем сегодняшний пакет."}
+    progress = dict(shell.get("progress") or {})
+    progress["story_status"] = "assembling"
+    shell["progress"] = progress
+    shell["generation_id"] = "day-assembling-c5"
+    return shell

@@ -148,9 +148,43 @@ export async function revealDayNumber(input: {
   });
 }
 
-/** After reveal: show symbols immediately; refresh story only when server asks. */
-export function shouldRefreshStoryAfterReveal(view: DaySymbolPublicView | null | undefined): boolean {
-  return Boolean(view?.story_refresh_required);
+/**
+ * Card/number are an interpretive overlay on the assembled day (DAY_LIFECYCLE_V1).
+ * Reveal must never trigger day_story reassemble — even if a legacy server sets the flag.
+ */
+export function shouldRefreshStoryAfterReveal(_view?: DaySymbolPublicView | null): boolean {
+  return false;
+}
+
+/** Apply revealed card/number into morning payloads without rebuilding the day. */
+export function applySymbolRevealToMorning(
+  morning: Record<string, unknown> | null | undefined,
+  view: DaySymbolPublicView,
+): Record<string, unknown> | null {
+  if (!morning) return null;
+  const next = { ...morning };
+  if (view.card?.revealed) {
+    next.tarot_card = {
+      ...((morning.tarot_card as Record<string, unknown> | undefined) || {}),
+      selection_status: "selected",
+      status: "revealed",
+      id: view.card.id ?? null,
+      name: view.card.name ?? null,
+      orientation: view.card.orientation ?? "upright",
+    };
+  }
+  if (view.number?.revealed) {
+    const value = view.number.value ?? view.number.reduced_value ?? null;
+    next.numerology_number = {
+      ...((morning.numerology_number as Record<string, unknown> | undefined) || {}),
+      selection_status: "selected",
+      status: "revealed",
+      value,
+      reduced_value: view.number.reduced_value ?? value,
+      title: view.number.title ?? null,
+    };
+  }
+  return next;
 }
 
 export async function claimGuestDaySymbols(): Promise<void> {

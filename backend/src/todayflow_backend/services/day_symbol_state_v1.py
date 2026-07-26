@@ -1,9 +1,11 @@
 """Unified server SoT for card-of-day and day-number reveal.
 
-Product canon (2026-07-20):
-- Card: user selects one of closed cards (card_id on reveal).
-- Number: system-calculated from local_date, revealed only on explicit action.
-- GET never creates/reveals/mutates. Only POST reveal/select changes state.
+Product canon (DAY_LIFECYCLE_V1 / DAY_SYMBOL_REVEAL_CANON_V1):
+- System prebakes card + number at day assemble (identity stored, not public until reveal).
+- Ritual reveal only opens what was already laid out — does not reassemble the day.
+- Card: prebaked id is SoT; client pick is theater and may be ignored if prebaked.
+- Number: system-calculated from local_date; reveal flips visibility.
+- GET never creates/reveals/mutates. Only POST reveal/claim changes reveal flags.
 - Before reveal: no id/name/number/meaning in any public payload.
 """
 
@@ -239,6 +241,66 @@ def _ensure_row(
     return row
 
 
+def _stable_day_card_id(*, owner_key: str, local_date: date) -> int:
+    digest = hashlib.sha256(f"{owner_key}|{local_date.isoformat()}|day_card".encode()).hexdigest()
+    return int(digest[:8], 16) % 78
+
+
+def ensure_symbols_prebaked(
+    db: Session,
+    *,
+    owner_key: str,
+    local_date: date,
+    timezone_name: str,
+    user_id: int | None = None,
+    guest_session_id: str | None = None,
+    numerology_service: NumerologyService | None = None,
+    locale: str = "ru",
+) -> db_models.DaySymbolState:
+    """Lay out card + number for the day without revealing them (assemble-once package)."""
+    row = _ensure_row(
+        db,
+        owner_key=owner_key,
+        local_date=local_date,
+        timezone_name=timezone_name,
+        user_id=user_id,
+        guest_session_id=guest_session_id,
+    )
+    now = utc_naive_now()
+    changed = False
+
+    if row.number_reduced is None and not is_number_revealed(row):
+        svc = numerology_service or get_numerology_service()
+        insight = svc.daily_number(reference_date=local_date, locale=locale or "ru", reveal=True)
+        number = insight.number
+        if number is not None:
+            row.number_value = int(number.value) if number.value is not None else int(number.reduced_value)
+            row.number_reduced = int(number.reduced_value)
+            row.number_is_master = bool(number.is_master)
+            row.number_title = str(number.title or "")[:120]
+            row.number_summary = str(number.summary or "")
+            row.number_generated_at = now
+            # Keep hidden until ritual reveal.
+            row.number_status = STATUS_NOT_REVEALED
+            row.number_revealed_at = None
+            changed = True
+
+    if not row.card_id and not is_card_revealed(row):
+        row.card_id = str(_stable_day_card_id(owner_key=owner_key, local_date=local_date))
+        row.card_orientation = "upright"
+        row.card_generated_at = now
+        row.card_status = STATUS_NOT_REVEALED
+        row.card_revealed_at = None
+        changed = True
+
+    if changed:
+        row.updated_at = now
+        db.add(row)
+        db.commit()
+        db.refresh(row)
+    return row
+
+
 def reveal_card(
     db: Session,
     *,
@@ -253,7 +315,7 @@ def reveal_card(
     guest_session_id: str | None = None,
     tarot_service: TarotService | None = None,
 ) -> dict[str, Any]:
-    """User selects a closed card → reveal. Idempotent on idempotency_key."""
+    """Reveal the day's card (prebaked at assemble when present). Idempotent on idempotency_key."""
     key = (idempotency_key or "").strip()
     if not key:
         raise ValueError("idempotency_key_required")
@@ -262,9 +324,6 @@ def reveal_card(
         orient = "upright"
 
     svc = tarot_service or TarotService()
-    card = svc.get_card_by_id(int(card_id))
-    if card is None:
-        raise ValueError("unknown_tarot_card")
 
     # Idempotency: same key returns existing reveal for THIS owner only.
     by_idem = (
@@ -290,10 +349,20 @@ def reveal_card(
         # Already revealed for this day — return same card (no silent swap)
         return public_view(row, local_date=local_date, timezone_name=timezone_name, tarot_service=svc)
 
+    # Assemble-once: if the day package already laid out a card, reveal that identity.
+    if row.card_id and str(row.card_id).strip().isdigit():
+        resolved_id = int(str(row.card_id).strip())
+    else:
+        resolved_id = int(card_id)
+    resolved = svc.get_card_by_id(resolved_id)
+    if resolved is None:
+        raise ValueError("unknown_tarot_card")
+
     now = utc_naive_now()
-    row.card_id = str(int(card_id))
-    row.card_orientation = orient
-    row.card_generated_at = now
+    row.card_id = str(resolved_id)
+    if not row.card_orientation:
+        row.card_orientation = orient
+    row.card_generated_at = row.card_generated_at or now
     row.card_revealed_at = now
     row.card_reveal_source = (reveal_source or "ritual")[:64]
     row.card_idempotency_key = key[:128]
@@ -362,22 +431,24 @@ def reveal_number(
     if is_number_revealed(row):
         return public_view(row, local_date=local_date, timezone_name=timezone_name)
 
-    svc = numerology_service or get_numerology_service()
-    insight = svc.daily_number(reference_date=local_date, locale="ru", reveal=True)
-    number = insight.number
-    if number is None:
-        row.number_status = STATUS_ERROR
-        db.add(row)
-        db.commit()
-        raise ValueError("number_generation_failed")
-
     now = utc_naive_now()
-    row.number_value = int(number.value) if number.value is not None else int(number.reduced_value)
-    row.number_reduced = int(number.reduced_value)
-    row.number_is_master = bool(number.is_master)
-    row.number_title = str(number.title or "")[:120]
-    row.number_summary = str(number.summary or "")
-    row.number_generated_at = now
+    # Prefer prebaked identity from assemble; compute only if missing.
+    if row.number_reduced is None:
+        svc = numerology_service or get_numerology_service()
+        insight = svc.daily_number(reference_date=local_date, locale="ru", reveal=True)
+        number = insight.number
+        if number is None:
+            row.number_status = STATUS_ERROR
+            db.add(row)
+            db.commit()
+            raise ValueError("number_generation_failed")
+        row.number_value = int(number.value) if number.value is not None else int(number.reduced_value)
+        row.number_reduced = int(number.reduced_value)
+        row.number_is_master = bool(number.is_master)
+        row.number_title = str(number.title or "")[:120]
+        row.number_summary = str(number.summary or "")
+        row.number_generated_at = now
+
     row.number_revealed_at = now
     row.number_reveal_source = (reveal_source or "ritual")[:64]
     row.number_idempotency_key = key[:128]

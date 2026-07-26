@@ -591,7 +591,7 @@ export type TodayDayFoundationV1 = {
 /** C5 day clock — see docs/audits/DAY_LIFECYCLE_V1.md */
 export type DayLifecycleC5 = {
   contract_version?: string;
-  status?: "day_not_ready" | "ready" | "closed" | string;
+  status?: "day_not_ready" | "assembling" | "ready" | "closed" | string;
   local_date?: string;
   target_date?: string;
   timezone?: string;
@@ -621,6 +621,14 @@ export function readDayLifecycle(contract: TodayContractV1 | null | undefined): 
 export function isDayNotReady(contract: TodayContractV1 | null | undefined): boolean {
   if ((contract?.generation_id || "").trim() === "day-not-ready-c5") return true;
   return readDayLifecycle(contract)?.status === "day_not_ready";
+}
+
+/** Past ready_at but package not served yet — show loading, never trigger assemble. */
+export function isDayAssembling(contract: TodayContractV1 | null | undefined): boolean {
+  if ((contract?.generation_id || "").trim() === "day-assembling-c5") return true;
+  if (readDayLifecycle(contract)?.status === "assembling") return true;
+  const storyStatus = String((contract?.progress as { story_status?: unknown } | undefined)?.story_status || "");
+  return storyStatus === "assembling";
 }
 
 export type TodayContractDomainId = keyof TodayContractDomainsV1;

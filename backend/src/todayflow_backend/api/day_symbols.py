@@ -86,8 +86,14 @@ def _with_story_refresh_meta(
     user_id: int | None,
     guest_id: str | None,
 ) -> dict:
+    """Attach day_story progress after symbol reveal.
+
+    Card/number are an interpretive overlay — they must **not** mark the day stale
+    or set story_refresh_required (DAY_LIFECYCLE_V1 assemble-once).
+    """
     from todayflow_backend.services import day_story_refresh_v1 as story_refresh
 
+    _ = guest_id, timezone_name
     if user_id is not None:
         try:
             from todayflow_backend.api.today import invalidate_morning_cache_for_user
@@ -95,15 +101,17 @@ def _with_story_refresh_meta(
             invalidate_morning_cache_for_user(user_id)
         except Exception:
             pass
-    meta = story_refresh.mark_day_story_stale_after_input_change(
+    meta = story_refresh.story_progress_meta(
         db,
         owner_key=owner_key,
         local_date=local_date,
-        timezone_name=timezone_name,
-        locale="ru",
-        user_id=user_id,
-        guest_session_id=guest_id,
     )
+    meta = {
+        **meta,
+        "story_refresh_required": False,
+        "story_status": "fresh" if meta.get("story_status") != "missing" else "missing",
+        "symbol_overlay_only": True,
+    }
     return story_refresh.attach_story_refresh_meta(view, meta)
 
 
@@ -188,8 +196,6 @@ def claim_guest_symbols(
     user=Depends(require_user),
 ) -> dict:
     """Transfer guest symbol reveals into the authenticated user (idempotent)."""
-    from todayflow_backend.services import day_story_refresh_v1 as story_refresh
-
     day = None
     if payload.local_date:
         day = symbols.resolve_local_date(local_date=payload.local_date, timezone_name="UTC")
@@ -203,14 +209,27 @@ def claim_guest_symbols(
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     claim_day = day or symbols.resolve_local_date(local_date=None, timezone_name="UTC")
-    meta = story_refresh.mark_day_story_stale_after_input_change(
+    # Symbols are overlay-only — claiming them must not force day_story rebuild.
+    try:
+        from todayflow_backend.api.today import invalidate_morning_cache_for_user
+
+        invalidate_morning_cache_for_user(int(user.id))
+    except Exception:
+        pass
+    from todayflow_backend.services import day_story_refresh_v1 as story_refresh
+
+    meta = story_refresh.story_progress_meta(
         db,
         owner_key=symbols.owner_key_for_user(int(user.id)),
         local_date=claim_day,
-        timezone_name="UTC",
-        locale="ru",
-        user_id=int(user.id),
     )
     result = dict(result)
-    result.update(meta)
+    result.update(
+        {
+            **meta,
+            "story_refresh_required": False,
+            "story_status": "fresh" if meta.get("story_status") != "missing" else "missing",
+            "symbol_overlay_only": True,
+        }
+    )
     return result
