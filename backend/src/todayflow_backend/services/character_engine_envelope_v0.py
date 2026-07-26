@@ -410,10 +410,40 @@ def maybe_attach_character_engine_envelope_v0(
                     },
                 }
                 profile_payload["character_engine_v1"] = promoted
+                # Stamp legacy DTO meta so readers see CE as SoT without waiting for republish.
+                contract = profile_payload.get("profile_contract_v1")
+                if isinstance(contract, dict):
+                    gm = contract.get("generation_meta") if isinstance(contract.get("generation_meta"), dict) else {}
+                    profile_payload["profile_contract_v1"] = {
+                        **contract,
+                        "generation_meta": {
+                            **gm,
+                            "sot": "character_engine_v1",
+                            "path": "character_engine_v1",
+                            "ce_status": "ready",
+                            "cutover_promoted": True,
+                        },
+                    }
                 return profile_payload
         if existing.get("status") == "ready" and not publish_ready:
             # Defensive: ready without flag is not allowed.
             profile_payload["character_engine_v1"] = {**existing, "status": "forming"}
+            return profile_payload
+        if publish_ready and existing.get("status") == "ready":
+            contract = profile_payload.get("profile_contract_v1")
+            if isinstance(contract, dict):
+                gm = contract.get("generation_meta") if isinstance(contract.get("generation_meta"), dict) else {}
+                if gm.get("sot") != "character_engine_v1":
+                    profile_payload["profile_contract_v1"] = {
+                        **contract,
+                        "generation_meta": {
+                            **gm,
+                            "sot": "character_engine_v1",
+                            "path": "character_engine_v1",
+                            "ce_status": "ready",
+                            "cutover_stamped": True,
+                        },
+                    }
             return profile_payload
         return profile_payload
 

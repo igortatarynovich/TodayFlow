@@ -412,6 +412,12 @@ class CoreProfileService:
             had_ce_status = str(
                 (cached_payload.get("character_engine_v1") or {}).get("status") or ""
             )
+            had_sot = str(
+                ((cached_payload.get("profile_contract_v1") or {}).get("generation_meta") or {}).get(
+                    "sot"
+                )
+                or ""
+            )
             cached_payload = self._maybe_attach_character_engine_shadow(
                 db,
                 cached_payload,
@@ -438,12 +444,20 @@ class CoreProfileService:
             after_ce_status = str(
                 (cached_payload.get("character_engine_v1") or {}).get("status") or ""
             )
+            after_sot = str(
+                ((cached_payload.get("profile_contract_v1") or {}).get("generation_meta") or {}).get(
+                    "sot"
+                )
+                or ""
+            )
             promoted_ready = had_ce_status == "forming" and after_ce_status == "ready"
+            sot_stamped = after_sot == "character_engine_v1" and had_sot != "character_engine_v1"
             # Persist one-shot CE fill / envelope / cutover promote so next GET is snapshot-only.
             if (
                 (filled_stage5 and not had_stage5)
                 or (filled_envelope and not had_envelope)
                 or promoted_ready
+                or sot_stamped
             ):
                 try:
                     sid = self._save_snapshot(
@@ -462,11 +476,14 @@ class CoreProfileService:
 
         baseline = self._build_baseline(astro_context, numerology_context)
         missing_fields = self._build_missing_fields(settings, astro_context, numerology_context)
+        # Same readiness rule as publish: soft fields stay in missing_fields for CTAs,
+        # but must not flip is_ready=false and bounce returning users into core setup.
+        is_ready = len(self._hard_missing_fields(missing_fields)) == 0
         person_pub = self._person_public(settings, user)
         shell = {
             "profile_version": self.profile_version,
             "generated_at": datetime.now(timezone.utc).isoformat(),
-            "is_ready": len(missing_fields) == 0,
+            "is_ready": is_ready,
             "missing_fields": missing_fields,
             "profile_hash": profile_hash,
             "person": person_pub,
