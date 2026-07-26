@@ -53,7 +53,7 @@ def test_stage01_staging_eval_gates_pass() -> None:
 def test_stage2_prompt_registered() -> None:
     system, version = get_prompt("profile.character_engine.stage2.v1", locale="ru")
     assert "Identity Core" in system or "ядро личности" in system
-    assert version == "1.0.0"
+    assert version == "1.1.0"
 
 
 def test_stage2_context_pack_excludes_legacy_roots() -> None:
@@ -186,7 +186,8 @@ def test_stage2_insufficient_when_no_claims() -> None:
         swiss_chart={
             "positions": [
                 {"body": "Sun", "sign": "Leo", "degree": 1.0},
-                {"body": "Moon", "sign": "Taurus", "degree": 2.0},
+                {"body": "Moon", "sign": "Aries", "degree": 2.0},
+                {"body": "Mars", "sign": "Virgo", "degree": 3.0},
             ],
             "houses": [],
         },
@@ -197,6 +198,7 @@ def test_stage2_insufficient_when_no_claims() -> None:
     )
     evidence = build_character_engine_evidence_candidates_v0(facts)
     identity = build_character_engine_identity_core_v0(facts_pack=facts, evidence=evidence)
+    assert evidence["claims"] == []
     assert identity["status"] == "insufficient_identity_core"
     assert identity["identity_core"] is None
 

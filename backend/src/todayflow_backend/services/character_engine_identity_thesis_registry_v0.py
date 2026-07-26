@@ -10,9 +10,17 @@ from __future__ import annotations
 STAGE1_TO_IDENTITY_THESIS: dict[str, str] = {
     "autonomy_high": "builds_through_autonomy",
     "analysis_before_action": "builds_through_analysis",
+    "direction_through_air_mind": "builds_through_air_mind",
+    "stability_through_earth": "builds_through_earth_stability",
+    "care_through_water_sun": "builds_through_water_care",
     "emotional_sensitivity_high": "builds_through_emotional_depth",
+    "anchor_through_earth_moon": "builds_through_earth_anchor",
     "freedom_vs_stability": "builds_through_freedom_vs_stability",
+    "drive_through_fire_mars": "builds_through_fire_drive",
     "presence_through_air_asc": "builds_through_air_presence",
+    "presence_through_fire_asc": "builds_through_fire_presence",
+    "presence_through_earth_asc": "builds_through_earth_presence",
+    "presence_through_water_asc": "builds_through_water_presence",
 }
 
 ALLOWED_IDENTITY_THESIS_KEYS = frozenset(STAGE1_TO_IDENTITY_THESIS.values())

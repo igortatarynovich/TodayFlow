@@ -1,86 +1,91 @@
-# Character Engine Stage 0–1 — Staging Evaluation v0
+# Character Engine Stage 0–1 — Staging Evaluation v0 / v1
 
-**Date:** 2026-07-25  
-**Status:** GATE PASS (synthetic fixed profiles)  
-**CE baseline commit:** `5eb61c665b04cf1ade8f15939a0bf2acfcf1adc5` (`feat(character-engine): add LLM-first identity core shadow`)  
-**Note:** Cite this SHA as CE baseline — not the current tip of `design/profile-journey-premium` (branch may already contain later Day Scenario / Tarot commits).  
-
-**Flags for live Stage 0–1 shadow review (only):**
-```
-CHARACTER_ENGINE_STAGE01_SHADOW=1
-CHARACTER_ENGINE_STAGE01_ENABLED=0
-CHARACTER_ENGINE_STAGE2_SHADOW=0
-CHARACTER_ENGINE_STAGE2_ENABLED=0
-CHARACTER_ENGINE_PUBLISH_READY=0
-```
-Enable Stage 2 shadow only after real-pack Stage 0–1 diagnostics review.  
+**Date:** 2026-07-26 (v1 expansion) · prior GATE PASS 2026-07-25  
+**Status:** **GATE PASS (v1)** — expanded registry + 16 fixtures  
+**CE baseline commit:** `5eb61c665b04cf1ade8f15939a0bf2acfcf1adc5`  
+**Eval version:** `character_engine_stage01_staging_eval_v1`
 
 **SoT:** unchanged — diagnostics only; funnel / `personality` remain publish path.
 
+## Expansion intent (v1)
+
+Live gap was thin registry → high empty rate (Gemini/Taurus/etc.). Expand with **AND** sun/moon/ASC patterns — not LP-alone OR mints.
+
+New Stage 1 theses:
+
+| thesis_key | Pattern (AND) |
+|------------|----------------|
+| `direction_through_air_mind` | Sun Gemini/Libra (Aquarius stays autonomy) |
+| `stability_through_earth` | Sun Taurus (Virgo/Cap stay analysis) |
+| `care_through_water_sun` | Sun Cancer/Pisces |
+| `anchor_through_earth_moon` | Earth moon AND sun not autonomy |
+| `drive_through_fire_mars` | Mars in fire + sun present |
+| `presence_through_{fire,earth,water}_asc` | Full natal ASC element |
+
+Identity thesis map updated for all emitted keys (Stage 2 normalize).
+
 ## Profiles (fixed fixture)
 
-`backend/tests/fixtures/character_engine_stage01_staging_profiles_v0.json`
+`backend/tests/fixtures/character_engine_stage01_staging_profiles_v0.json` (fixture_version **v1**)
 
 | id | Intent |
 |----|--------|
-| `full_natal_air_asc` | Full natal + ASC/houses |
-| `date_only` | Date-only capability; Leo negative control |
-| `no_name_no_numerology` | Capricorn without numerology |
-| `conflicting_sources` | Autonomy sun + structure LP + earth moon |
-| `bridge_diverges_swiss` | Swiss Virgo vs bridge Leo |
-| `earth_analysis` | Distinct analysis chart |
-| `water_emotional` | Distinct water chart |
-| `fire_direct` | Distinct fire autonomy chart |
+| `full_natal_air_asc` | Full natal + air ASC |
+| `full_natal_earth_asc` | Gemini + Taurus ASC |
+| `full_natal_fire_asc` | Capricorn + Aries ASC |
+| `full_natal_water_asc` | Taurus + Cancer ASC |
+| `date_only` | Leo negative control (empty) |
+| `no_name_no_numerology` | Capricorn analysis sans LP |
+| `conflicting_sources` | Autonomy + structure LP + earth moon |
+| `bridge_diverges_swiss` | Swiss Virgo > bridge Leo |
+| `earth_analysis` | Virgo + earth moon anchor |
+| `water_emotional` | Cancer care + Scorpio moon |
+| `fire_direct` | Sagittarius + fire mars |
+| `gemini_air_mind` | Live gap — Gemini |
+| `taurus_earth_stable` | Live gap — Taurus |
+| `libra_air_mind` | Libra + earth moon |
+| `pisces_water_care` | Pisces care |
+| `scorpio_analysis_water_moon` | Scorpio + water moon |
 
 Runner: `python -m todayflow_backend.services.character_engine_stage01_staging_eval_v0`
 
-## Findings (pre-tighten)
+## Post-expansion thesis frequency (16 packs)
 
-- `autonomy_high` fired on **5/8** when life_path alone could mint autonomy (LP 1/5/7 OR autonomy sun).
-- `direction_through_ideas` duplicated autonomy for air suns.
-- `analysis_before_action` fired on Aquarius via LP7 overlap — polluted autonomy charts.
-- Leo date-only correctly produced **zero** claims (no generic Sun+LP portrait) — kept as negative control.
+| thesis_key | count / 16 | share |
+|------------|------------|-------|
+| analysis_before_action | 5 | 0.31 |
+| autonomy_high | 3 | 0.19 |
+| emotional_sensitivity_high | 3 | 0.19 |
+| direction_through_air_mind | 3 | 0.19 |
+| freedom_vs_stability | 2 | 0.12 |
+| drive_through_fire_mars | 2 | 0.12 |
+| stability_through_earth | 2 | 0.12 |
+| anchor_through_earth_moon | 2 | 0.12 |
+| care_through_water_sun | 2 | 0.12 |
+| presence_through_*_asc | 1 each | 0.06 |
 
-## Registry corrections applied
+**Empty claim packs:** 1/16 (0.062) — Leo negative control only.
 
-1. Autonomy / analysis require **sun pattern**; life_path only **strengthens**.
-2. Removed standalone `air_sun_direction_v0` claim.
-3. Rebalanced fixtures so autonomy suns are not the majority sample.
-4. Gates: Swiss>bridge · no ASC without full natal · repeatability · negative controls · no thesis on >50% of set · distinct claim sets across archetypes.
-
-## Post-tighten thesis frequency
-
-| thesis_key | count / 8 |
-|------------|-----------|
-| autonomy_high | 3 |
-| analysis_before_action | 3 |
-| emotional_sensitivity_high | 2 |
-| freedom_vs_stability | 2 |
-| presence_through_air_asc | 1 |
-
-## Gate checklist (before Stage 2)
+## Gate checklist
 
 | Gate | Result |
 |------|--------|
-| No unknown fact/claim/edge refs | PASS |
-| Same input → stable IDs | PASS |
+| all_cases_ok / repeatable IDs | PASS |
 | Swiss displaces bridge | PASS |
-| Full-natal claims absent without birth time | PASS |
-| Registry not emitting one claim set to most profiles | PASS |
-| Diagnostics do not change active Snapshot semantics | PASS (by design) |
+| Full-natal ASC gated | PASS |
+| No thesis on >50% of set | PASS |
+| Distinct claim sets (≥5 among archetype subset) | PASS |
+| Live-gap charts nonempty (Gemini/Taurus/Pisces) | PASS |
+| Stage1→identity thesis map complete | PASS |
+| Leo negative control empty | PASS |
+| Diagnostics do not change Snapshot SoT | PASS (by design) |
 
-## Residual semantic risk
+## Residual risk
 
-- Registry is still sun-element thin (few mechanisms). Expand carefully with **AND** patterns, not broad OR.
-- Live server profiles may still cluster; re-run this eval with anonymized staging packs before Stage 3.
-- Empty evidence (Leo) → Stage 2 must return `insufficient_identity_core` (covered in Stage 2 tests).
+- `analysis_before_action` is the densest thesis (still ≤50%). Prefer AND-tightening over new broad OR if it climbs.
+- Leo still has no fire-sun expression rule by design (preserves empty control). Add Leo expression only with a separate negative control.
+- Next: Stage 2 staging/eval over the same 16 packs (logline/voice) before more live prod testing.
 
-## Next
+## Prior v0 note (2026-07-25)
 
-Live review order:
-1. Stage 0–1 shadow only (flags above) on real packs — inspect facts, authority dedupe, claim breadth, exclusions.
-2. Separately enable `CHARACTER_ENGINE_STAGE2_SHADOW=1` after that review.
-3. Stage 3+ only after Stage 2 **exit criterion** (canon [CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0 §1.4](./CHARACTER_ENGINE_SCHEMA_CONTRACTS_V0.md)): Identity Core is sole SoT; Stage 3–5 expand, never reinterpret. Review question: *«This is a manifestation of the Identity Core because…»*.
-
-Stage 2 Identity Core is **LLM-first**: prompt `profile.character_engine.stage2.v1` chooses one core; code validates structure/provenance only (not interpretation quality).  
-Do not add quality-scoring gates that duplicate the prompt.
+Tightened autonomy/analysis to require sun pattern; removed redundant air-sun direction; 8-fixture GATE PASS. Superseded by v1 expansion above for coverage.

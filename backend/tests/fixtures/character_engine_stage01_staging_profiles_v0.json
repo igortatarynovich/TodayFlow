@@ -1,6 +1,6 @@
 {
-  "fixture_version": "character_engine_stage01_staging_profiles_v0",
-  "note": "Fixed synthetic profiles for Stage 0–1 breadth/authority gates. Rebalanced so autonomy suns are not the majority sample.",
+  "fixture_version": "character_engine_stage01_staging_profiles_v1",
+  "note": "Expanded synthetic profiles for Stage 0–1 coverage. Leo date_only remains empty negative control (fire moon, earth mars — no matching primary rules).",
   "profiles": [
     {
       "id": "full_natal_air_asc",
@@ -30,8 +30,90 @@
       "natal_facts_bridge": null
     },
     {
+      "id": "full_natal_earth_asc",
+      "label": "Full natal earth ASC (Taurus rising) + Gemini sun",
+      "profile_fingerprint": "stg_full_natal_earth_009",
+      "birth_date": "1994-06-10",
+      "capability": {
+        "natal_mode": "full",
+        "has_name": true,
+        "has_birth_time": true,
+        "has_birth_place": true
+      },
+      "swiss_chart": {
+        "positions": [
+          {"body": "Sun", "sign": "Gemini", "degree": 19.0},
+          {"body": "Moon", "sign": "Leo", "degree": 4.0},
+          {"body": "Mercury", "sign": "Gemini", "degree": 8.0},
+          {"body": "Mars", "sign": "Virgo", "degree": 12.0},
+          {"body": "Uranus", "sign": "Capricorn", "degree": 2.0},
+          {"body": "Ascendant", "sign": "Taurus", "degree": 6.0}
+        ],
+        "houses": [
+          {"house": 1, "sign": "Taurus"},
+          {"house": 10, "sign": "Capricorn"}
+        ]
+      },
+      "numerology": {"life_path": 5},
+      "natal_facts_bridge": null
+    },
+    {
+      "id": "full_natal_fire_asc",
+      "label": "Full natal fire ASC (Aries rising) + Capricorn analysis",
+      "profile_fingerprint": "stg_full_natal_fire_010",
+      "birth_date": "1987-01-12",
+      "capability": {
+        "natal_mode": "full",
+        "has_name": true,
+        "has_birth_time": true,
+        "has_birth_place": true
+      },
+      "swiss_chart": {
+        "positions": [
+          {"body": "Sun", "sign": "Capricorn", "degree": 21.0},
+          {"body": "Moon", "sign": "Libra", "degree": 9.0},
+          {"body": "Mars", "sign": "Taurus", "degree": 14.0},
+          {"body": "Saturn", "sign": "Sagittarius", "degree": 3.0},
+          {"body": "Ascendant", "sign": "Aries", "degree": 11.0}
+        ],
+        "houses": [
+          {"house": 1, "sign": "Aries"},
+          {"house": 7, "sign": "Libra"}
+        ]
+      },
+      "numerology": {"life_path": 8},
+      "natal_facts_bridge": null
+    },
+    {
+      "id": "full_natal_water_asc",
+      "label": "Full natal water ASC (Cancer rising) + Taurus stability",
+      "profile_fingerprint": "stg_full_natal_water_011",
+      "birth_date": "1989-05-05",
+      "capability": {
+        "natal_mode": "full",
+        "has_name": true,
+        "has_birth_time": true,
+        "has_birth_place": true
+      },
+      "swiss_chart": {
+        "positions": [
+          {"body": "Sun", "sign": "Taurus", "degree": 14.0},
+          {"body": "Moon", "sign": "Gemini", "degree": 2.0},
+          {"body": "Mars", "sign": "Capricorn", "degree": 18.0},
+          {"body": "Saturn", "sign": "Capricorn", "degree": 7.0},
+          {"body": "Ascendant", "sign": "Cancer", "degree": 22.0}
+        ],
+        "houses": [
+          {"house": 1, "sign": "Cancer"},
+          {"house": 10, "sign": "Pisces"}
+        ]
+      },
+      "numerology": {"life_path": 6},
+      "natal_facts_bridge": null
+    },
+    {
       "id": "date_only",
-      "label": "Birth date only (no houses/ASC capability); Leo — negative control for autonomy/analysis",
+      "label": "Leo date-only negative control — no Stage 1 primary match",
       "profile_fingerprint": "stg_date_only_002",
       "birth_date": "1988-08-15",
       "capability": {
@@ -43,7 +125,7 @@
       "swiss_chart": {
         "positions": [
           {"body": "Sun", "sign": "Leo", "degree": 22.0},
-          {"body": "Moon", "sign": "Taurus", "degree": 5.0},
+          {"body": "Moon", "sign": "Aries", "degree": 5.0},
           {"body": "Mars", "sign": "Virgo", "degree": 14.0},
           {"body": "Ascendant", "sign": "Scorpio", "degree": 2.0}
         ],
@@ -164,7 +246,7 @@
     },
     {
       "id": "fire_direct",
-      "label": "Distinct fire chart (autonomy sun, no water moon)",
+      "label": "Distinct fire chart (autonomy sun + fire mars)",
       "profile_fingerprint": "stg_fire_008",
       "birth_date": "1991-11-25",
       "capability": {
@@ -182,6 +264,120 @@
         "houses": []
       },
       "numerology": {"life_path": 1},
+      "natal_facts_bridge": null
+    },
+    {
+      "id": "gemini_air_mind",
+      "label": "Gemini sun — air mind direction (live gap)",
+      "profile_fingerprint": "stg_gemini_012",
+      "birth_date": "1996-06-01",
+      "capability": {
+        "natal_mode": "date_only",
+        "has_name": true,
+        "has_birth_time": false,
+        "has_birth_place": false
+      },
+      "swiss_chart": {
+        "positions": [
+          {"body": "Sun", "sign": "Gemini", "degree": 10.0},
+          {"body": "Moon", "sign": "Aquarius", "degree": 3.0},
+          {"body": "Mercury", "sign": "Gemini", "degree": 16.0},
+          {"body": "Mars", "sign": "Cancer", "degree": 8.0}
+        ],
+        "houses": []
+      },
+      "numerology": {"life_path": 3},
+      "natal_facts_bridge": null
+    },
+    {
+      "id": "taurus_earth_stable",
+      "label": "Taurus sun — earth stability (live gap)",
+      "profile_fingerprint": "stg_taurus_013",
+      "birth_date": "1990-05-01",
+      "capability": {
+        "natal_mode": "date_only",
+        "has_name": true,
+        "has_birth_time": false,
+        "has_birth_place": false
+      },
+      "swiss_chart": {
+        "positions": [
+          {"body": "Sun", "sign": "Taurus", "degree": 11.0},
+          {"body": "Moon", "sign": "Leo", "degree": 7.0},
+          {"body": "Saturn", "sign": "Capricorn", "degree": 20.0},
+          {"body": "Mars", "sign": "Virgo", "degree": 2.0}
+        ],
+        "houses": []
+      },
+      "numerology": {"life_path": 3},
+      "natal_facts_bridge": null
+    },
+    {
+      "id": "libra_air_mind",
+      "label": "Libra sun — air mind with earth moon anchor",
+      "profile_fingerprint": "stg_libra_014",
+      "birth_date": "1991-10-05",
+      "capability": {
+        "natal_mode": "date_only",
+        "has_name": true,
+        "has_birth_time": false,
+        "has_birth_place": false
+      },
+      "swiss_chart": {
+        "positions": [
+          {"body": "Sun", "sign": "Libra", "degree": 12.0},
+          {"body": "Moon", "sign": "Virgo", "degree": 4.0},
+          {"body": "Mercury", "sign": "Libra", "degree": 18.0},
+          {"body": "Mars", "sign": "Scorpio", "degree": 9.0}
+        ],
+        "houses": []
+      },
+      "numerology": {"life_path": 6},
+      "natal_facts_bridge": null
+    },
+    {
+      "id": "pisces_water_care",
+      "label": "Pisces sun — water care without water moon",
+      "profile_fingerprint": "stg_pisces_015",
+      "birth_date": "1992-03-10",
+      "capability": {
+        "natal_mode": "date_only",
+        "has_name": true,
+        "has_birth_time": false,
+        "has_birth_place": false
+      },
+      "swiss_chart": {
+        "positions": [
+          {"body": "Sun", "sign": "Pisces", "degree": 20.0},
+          {"body": "Moon", "sign": "Aries", "degree": 1.0},
+          {"body": "Neptune", "sign": "Capricorn", "degree": 15.0},
+          {"body": "Mars", "sign": "Taurus", "degree": 6.0}
+        ],
+        "houses": []
+      },
+      "numerology": {"life_path": 9},
+      "natal_facts_bridge": null
+    },
+    {
+      "id": "scorpio_analysis_water_moon",
+      "label": "Scorpio analysis + water moon emotional",
+      "profile_fingerprint": "stg_scorpio_016",
+      "birth_date": "1986-11-08",
+      "capability": {
+        "natal_mode": "date_only",
+        "has_name": true,
+        "has_birth_time": false,
+        "has_birth_place": false
+      },
+      "swiss_chart": {
+        "positions": [
+          {"body": "Sun", "sign": "Scorpio", "degree": 16.0},
+          {"body": "Moon", "sign": "Cancer", "degree": 8.0},
+          {"body": "Mars", "sign": "Virgo", "degree": 22.0}
+        ],
+        "houses": []
+      },
+      "numerology": {"life_path": 7},
       "natal_facts_bridge": null
     }
   ]

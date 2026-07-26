@@ -380,17 +380,29 @@ def build_character_engine_identity_core_v0(
     system, prompt_version = get_prompt(STAGE2_PROMPT_ID, locale=locale)
     client = get_openai_compatible_client(operation="background")
     model = resolve_default_chat_model()
+    messages = [
+        {"role": "system", "content": system},
+        {"role": "user", "content": json.dumps(context, ensure_ascii=False)},
+    ]
     raw_text = chat_completion_text(
         client,
         model=model,
-        messages=[
-            {"role": "system", "content": system},
-            {"role": "user", "content": json.dumps(context, ensure_ascii=False)},
-        ],
+        messages=messages,
         temperature=0.35,
-        max_tokens=1200,
+        max_tokens=900,
         json_object=True,
     )
+    if not raw_text:
+        # One retry — staging/live saw intermittent read timeouts → empty JSON.
+        logger.info("character_engine_stage2: empty LLM text — retrying once")
+        raw_text = chat_completion_text(
+            client,
+            model=model,
+            messages=messages,
+            temperature=0.2,
+            max_tokens=900,
+            json_object=True,
+        )
     parsed = _parse_json_object(raw_text or "")
     if not parsed:
         logger.warning("character_engine_stage2: empty/invalid LLM JSON")

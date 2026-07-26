@@ -145,7 +145,7 @@ _REGISTRY: dict[str, dict[str, Any]] = {
     },
     # Character Engine Stage 2 — Identity Core (LLM-first; structural validation in code)
     "profile.character_engine.stage2.v1": {
-        "version": "1.0.0",
+        "version": "1.1.0",
         "surface": "character_engine",
         "step": "identity_core",
         "builder": character_engine_stage2_v1.character_engine_stage2_system,

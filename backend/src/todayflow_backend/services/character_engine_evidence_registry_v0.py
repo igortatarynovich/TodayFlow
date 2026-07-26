@@ -3,9 +3,10 @@
 Rules emit stable claim_kind + thesis_key — LLM must not invent thesis_key later.
 No identity_core / scenes / compass / career|love|money roots.
 
-Staging eval v0 (2026-07-25): narrowed OR-on-life-path matches — autonomy/analysis
-require sun pattern; life_path only strengthens. Dropped redundant air-sun direction
-claim (overlapped autonomy for Aquarius). See CHARACTER_ENGINE_STAGE01_STAGING_EVAL_V0.md.
+Expansion v1 (2026-07-26): broader AND-pattern coverage for air mind, earth
+stability, water-sun care, earth-moon anchor, and elemental ASC presence —
+without LP-alone mints and without one thesis dominating the staging set.
+See CHARACTER_ENGINE_STAGE01_STAGING_EVAL_V0.md.
 """
 
 from __future__ import annotations
@@ -53,7 +54,14 @@ def _number_of(facts_by_type: dict[str, dict[str, Any]], fact_type: str) -> int 
 
 _AUTONOMY_SUNS = frozenset({"aquarius", "aries", "sagittarius"})
 _ANALYSIS_SUNS = frozenset({"virgo", "capricorn", "scorpio"})
+_AIR_MIND_SUNS = frozenset({"gemini", "libra"})  # Aquarius stays autonomy-only
+_EARTH_STABILITY_SUNS = frozenset({"taurus"})  # Virgo/Capricorn stay analysis-only
+_WATER_CARE_SUNS = frozenset({"cancer", "pisces"})
 _STRUCTURE_PATHS = frozenset({4, 8, 22})
+_FIRE_SIGNS = frozenset({"aries", "leo", "sagittarius"})
+_EARTH_SIGNS = frozenset({"taurus", "virgo", "capricorn"})
+_AIR_SIGNS = frozenset({"gemini", "libra", "aquarius"})
+_WATER_SIGNS = frozenset({"cancer", "scorpio", "pisces"})
 
 
 def _rule_autonomy(facts: dict[str, dict[str, Any]]) -> bool:
@@ -65,9 +73,32 @@ def _rule_analysis(facts: dict[str, dict[str, Any]]) -> bool:
     return _sign_of(facts, "planet_sign:sun") in _ANALYSIS_SUNS
 
 
+def _rule_air_mind(facts: dict[str, dict[str, Any]]) -> bool:
+    return _sign_of(facts, "planet_sign:sun") in _AIR_MIND_SUNS
+
+
+def _rule_earth_stability_sun(facts: dict[str, dict[str, Any]]) -> bool:
+    return _sign_of(facts, "planet_sign:sun") in _EARTH_STABILITY_SUNS
+
+
+def _rule_water_care_sun(facts: dict[str, dict[str, Any]]) -> bool:
+    return _sign_of(facts, "planet_sign:sun") in _WATER_CARE_SUNS
+
+
 def _rule_emotional_water(facts: dict[str, dict[str, Any]]) -> bool:
     moon = _sign_of(facts, "planet_sign:moon")
     return element_for_sign(moon) == "water"
+
+
+def _rule_earth_moon_anchor(facts: dict[str, dict[str, Any]]) -> bool:
+    """Earth moon anchors pace — exclude autonomy suns (they use freedom_vs_stability)."""
+    moon = _sign_of(facts, "planet_sign:moon")
+    sun = _sign_of(facts, "planet_sign:sun")
+    if element_for_sign(moon) != "earth":
+        return False
+    if sun in _AUTONOMY_SUNS:
+        return False
+    return True
 
 
 def _rule_freedom_vs_stability(facts: dict[str, dict[str, Any]]) -> bool:
@@ -77,6 +108,20 @@ def _rule_freedom_vs_stability(facts: dict[str, dict[str, Any]]) -> bool:
     lp = _number_of(facts, "life_path_number")
     moon_el = element_for_sign(moon)
     return moon_el in {"earth", "water"} or (lp in _STRUCTURE_PATHS)
+
+
+def _rule_drive_fire_mars(facts: dict[str, dict[str, Any]]) -> bool:
+    """Mars in fire AND sun present — not LP-alone; not every chart."""
+    mars = _sign_of(facts, "planet_sign:mars")
+    sun = _sign_of(facts, "planet_sign:sun")
+    if not sun or not mars:
+        return False
+    return mars in _FIRE_SIGNS
+
+
+def _asc_in(facts: dict[str, dict[str, Any]], signs: frozenset[str]) -> bool:
+    asc = _sign_of(facts, "angle_sign:ascendant")
+    return bool(asc) and asc in signs
 
 
 EVIDENCE_RULES_V0: tuple[EvidenceRule, ...] = (
@@ -101,6 +146,39 @@ EVIDENCE_RULES_V0: tuple[EvidenceRule, ...] = (
         strengthen_fact_types=("life_path_number", "planet_sign:mars"),
     ),
     EvidenceRule(
+        rule_key="direction_through_air_mind_v0",
+        claim_kind="mechanism",
+        thesis_key="direction_through_air_mind",
+        capability_floor="date_only",
+        confidence="medium",
+        match=_rule_air_mind,
+        supporting_fact_types=("planet_sign:sun",),
+        strengthen_fact_types=("planet_sign:mercury", "life_path_number"),
+        qualify_fact_types=("planet_sign:moon",),
+    ),
+    EvidenceRule(
+        rule_key="stability_through_earth_sun_v0",
+        claim_kind="mechanism",
+        thesis_key="stability_through_earth",
+        capability_floor="date_only",
+        confidence="medium",
+        match=_rule_earth_stability_sun,
+        supporting_fact_types=("planet_sign:sun",),
+        strengthen_fact_types=("planet_sign:saturn", "life_path_number"),
+        qualify_fact_types=("planet_sign:moon",),
+    ),
+    EvidenceRule(
+        rule_key="care_through_water_sun_v0",
+        claim_kind="mechanism",
+        thesis_key="care_through_water_sun",
+        capability_floor="date_only",
+        confidence="medium",
+        match=_rule_water_care_sun,
+        supporting_fact_types=("planet_sign:sun",),
+        strengthen_fact_types=("planet_sign:moon", "life_path_number"),
+        qualify_fact_types=("planet_sign:neptune",),
+    ),
+    EvidenceRule(
         rule_key="emotional_sensitivity_water_moon_v0",
         claim_kind="emotional_sensitivity",
         thesis_key="emotional_sensitivity_high",
@@ -109,6 +187,16 @@ EVIDENCE_RULES_V0: tuple[EvidenceRule, ...] = (
         match=_rule_emotional_water,
         supporting_fact_types=("planet_sign:moon",),
         qualify_fact_types=("planet_sign:sun",),
+    ),
+    EvidenceRule(
+        rule_key="anchor_through_earth_moon_v0",
+        claim_kind="mechanism",
+        thesis_key="anchor_through_earth_moon",
+        capability_floor="date_only",
+        confidence="medium",
+        match=_rule_earth_moon_anchor,
+        supporting_fact_types=("planet_sign:moon",),
+        qualify_fact_types=("planet_sign:sun", "life_path_number"),
     ),
     EvidenceRule(
         rule_key="freedom_vs_stability_v0",
@@ -122,15 +210,59 @@ EVIDENCE_RULES_V0: tuple[EvidenceRule, ...] = (
         qualify_fact_types=("life_path_number",),
     ),
     EvidenceRule(
+        rule_key="drive_through_fire_mars_v0",
+        claim_kind="mechanism",
+        thesis_key="drive_through_fire_mars",
+        capability_floor="date_only",
+        confidence="medium",
+        match=_rule_drive_fire_mars,
+        supporting_fact_types=("planet_sign:mars",),
+        qualify_fact_types=("planet_sign:sun",),
+        strengthen_fact_types=("life_path_number",),
+    ),
+    EvidenceRule(
         rule_key="ascendant_air_presence_v0",
         claim_kind="presence",
         thesis_key="presence_through_air_asc",
         capability_floor="full_natal",
         confidence="medium",
-        match=lambda facts: element_for_sign(_sign_of(facts, "angle_sign:ascendant")) == "air",
+        match=lambda facts: _asc_in(facts, _AIR_SIGNS),
         supporting_fact_types=("angle_sign:ascendant",),
         qualify_fact_types=("planet_sign:sun",),
         contradict_fact_types=("planet_sign:saturn",),
+    ),
+    EvidenceRule(
+        rule_key="ascendant_fire_presence_v0",
+        claim_kind="presence",
+        thesis_key="presence_through_fire_asc",
+        capability_floor="full_natal",
+        confidence="medium",
+        match=lambda facts: _asc_in(facts, _FIRE_SIGNS),
+        supporting_fact_types=("angle_sign:ascendant",),
+        qualify_fact_types=("planet_sign:sun",),
+        contradict_fact_types=("planet_sign:saturn",),
+    ),
+    EvidenceRule(
+        rule_key="ascendant_earth_presence_v0",
+        claim_kind="presence",
+        thesis_key="presence_through_earth_asc",
+        capability_floor="full_natal",
+        confidence="medium",
+        match=lambda facts: _asc_in(facts, _EARTH_SIGNS),
+        supporting_fact_types=("angle_sign:ascendant",),
+        qualify_fact_types=("planet_sign:sun",),
+        contradict_fact_types=("planet_sign:uranus",),
+    ),
+    EvidenceRule(
+        rule_key="ascendant_water_presence_v0",
+        claim_kind="presence",
+        thesis_key="presence_through_water_asc",
+        capability_floor="full_natal",
+        confidence="medium",
+        match=lambda facts: _asc_in(facts, _WATER_SIGNS),
+        supporting_fact_types=("angle_sign:ascendant",),
+        qualify_fact_types=("planet_sign:sun",),
+        contradict_fact_types=("planet_sign:mars",),
     ),
 )
 
@@ -150,7 +282,15 @@ FORBIDDEN_STAGE1_CLAIM_KINDS = frozenset(
 CLAIM_SEMANTIC_FAMILY: dict[str, str] = {
     "autonomy_high": "autonomy",
     "analysis_before_action": "analysis_mechanism",
+    "direction_through_air_mind": "air_mind_direction",
+    "stability_through_earth": "earth_stability",
+    "care_through_water_sun": "water_care",
     "emotional_sensitivity_high": "emotional_depth",
+    "anchor_through_earth_moon": "earth_moon_anchor",
     "freedom_vs_stability": "freedom_stability_tension",
+    "drive_through_fire_mars": "fire_drive",
     "presence_through_air_asc": "presence_style",
+    "presence_through_fire_asc": "presence_style",
+    "presence_through_earth_asc": "presence_style",
+    "presence_through_water_asc": "presence_style",
 }

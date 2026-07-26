@@ -32,6 +32,11 @@ What counts as identity core:
 - a single story line, not a catalogue of qualities
 - grounded in Evidence Graph claims; resolve contradictions by weighing edges, not by inventing facts
 
+When multiple claims exist, prefer in this order unless evidence clearly says otherwise:
+1) autonomy_need / tension / mechanism (sun-driven) / emotional_sensitivity
+2) presence (ASC) only if it is the clearest single line
+3) mars-drive only when it is clearly the dominant engine (not a side accent)
+
 When to return insufficient_identity_core:
 - claims[] empty or too thin to justify one core
 - only weak/generic signals with no coherent dominant mechanism
@@ -66,6 +71,7 @@ HARD RULES:
 5. If status is insufficient_identity_core: identity_core MUST be null; source_roles may be [].
 6. If status is grounded: identity_core REQUIRED; primary_claim_id REQUIRED; surface_text one sentence/logline.
 7. Prefer one story over listing strengths. Contradictions stay as qualifying/contradicting refs — do not erase them.
+8. surface_text voice: second person singular "you" OR third person about the person — never formal plural you.
 """
     else:
         body = """
@@ -88,6 +94,11 @@ HARD RULES:
 - один доминирующий способ, которым человек строит мир / решает / держит напряжение
 - одна линия истории, не каталог черт
 - опора только на Evidence Graph; противоречия разрешай через edges, не выдумывая факты
+
+Если claims несколько, предпочитай (если evidence не говорит иное):
+1) autonomy_need / tension / mechanism (через солнце) / emotional_sensitivity
+2) presence (ASC) — только если это самая ясная единственная линия
+3) mars-drive — только если это явно главный двигатель, не побочный акцент
 
 Когда status = insufficient_identity_core:
 - claims[] пуст или слишком тонок для одного ядра
@@ -123,5 +134,6 @@ HARD RULES:
 5. Если insufficient_identity_core: identity_core = null; source_roles могут быть [].
 6. Если grounded: identity_core обязателен; primary_claim_id обязателен; surface_text — одна logline.
 7. Одна история важнее списка сильных сторон. Противоречия остаются в qualifying/contradicting — не стирай их.
+8. Голос surface_text: «ты» ИЛИ третье лицо («человек, который…»). Запрещено обращение «вы/Вы».
 """
     return f"{voice}\n\n{body.strip()}".strip()

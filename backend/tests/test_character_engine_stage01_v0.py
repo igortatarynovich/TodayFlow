@@ -342,6 +342,69 @@ def test_stage1_contradict_edge_preserved_when_configured() -> None:
     assert any(f["fact_type"] == "planet_sign:saturn" for f in facts["raw_facts"])
 
 
+def test_stage1_gemini_air_mind_and_taurus_stability() -> None:
+    gemini = build_character_engine_facts_pack_v0(
+        profile_fingerprint="pf_g",
+        swiss_chart={
+            "positions": [
+                {"body": "Sun", "sign": "Gemini", "degree": 10.0},
+                {"body": "Moon", "sign": "Aquarius", "degree": 3.0},
+            ],
+            "houses": [],
+        },
+        numerology={"life_path": 3},
+        birth_date="1996-06-01",
+        capability={"natal_mode": "date_only"},
+        input_fingerprint="in_g",
+    )
+    g_claims = {
+        c["thesis_key"]
+        for c in build_character_engine_evidence_candidates_v0(gemini)["claims"]
+    }
+    assert "direction_through_air_mind" in g_claims
+    assert "autonomy_high" not in g_claims
+
+    taurus = build_character_engine_facts_pack_v0(
+        profile_fingerprint="pf_t",
+        swiss_chart={
+            "positions": [
+                {"body": "Sun", "sign": "Taurus", "degree": 11.0},
+                {"body": "Moon", "sign": "Leo", "degree": 7.0},
+            ],
+            "houses": [],
+        },
+        numerology={"life_path": 3},
+        birth_date="1990-05-01",
+        capability={"natal_mode": "date_only"},
+        input_fingerprint="in_t",
+    )
+    t_claims = {
+        c["thesis_key"]
+        for c in build_character_engine_evidence_candidates_v0(taurus)["claims"]
+    }
+    assert "stability_through_earth" in t_claims
+    assert "analysis_before_action" not in t_claims
+
+
+def test_stage1_leo_negative_control_stays_empty() -> None:
+    leo = build_character_engine_facts_pack_v0(
+        profile_fingerprint="pf_leo",
+        swiss_chart={
+            "positions": [
+                {"body": "Sun", "sign": "Leo", "degree": 22.0},
+                {"body": "Moon", "sign": "Aries", "degree": 5.0},
+                {"body": "Mars", "sign": "Virgo", "degree": 14.0},
+            ],
+            "houses": [],
+        },
+        numerology={"life_path": 9},
+        birth_date="1988-08-15",
+        capability={"natal_mode": "date_only"},
+        input_fingerprint="in_leo",
+    )
+    assert build_character_engine_evidence_candidates_v0(leo)["claims"] == []
+
+
 def test_stage1_surface_text_not_in_claim_id() -> None:
     facts = build_character_engine_facts_pack_v0(
         profile_fingerprint="pf1",

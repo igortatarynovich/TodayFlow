@@ -122,10 +122,10 @@ def evaluate_stage01_staging_v0() -> dict[str, Any]:
         "date_only_excludes_full_natal_facts": all(
             (not c.get("has_asc") and not c.get("has_houses"))
             for c in cases
-            if c.get("id") != "full_natal_air_asc"
+            if not str(c.get("id") or "").startswith("full_natal")
         ),
         "full_natal_can_include_asc": any(
-            c.get("id") == "full_natal_air_asc" and c.get("has_asc") for c in cases
+            str(c.get("id") or "").startswith("full_natal") and c.get("has_asc") for c in cases
         ),
         "swiss_beats_bridge": any(
             c.get("id") == "bridge_diverges_swiss"
@@ -136,7 +136,7 @@ def evaluate_stage01_staging_v0() -> dict[str, Any]:
             )
             for c in cases
         ),
-        "no_majority_identical_claim_set": len({tuple(c.get("thesis_keys") or []) for c in cases}) >= 3,
+        "no_majority_identical_claim_set": len({tuple(c.get("thesis_keys") or []) for c in cases}) >= 5,
         "no_single_thesis_on_most_profiles": all(
             (thesis_freq[t] / n) <= 0.5 for t in thesis_freq
         ),
@@ -153,24 +153,50 @@ def evaluate_stage01_staging_v0() -> dict[str, Any]:
                 c.get("id") != "earth_analysis"
                 or "autonomy_high" not in (c.get("thesis_keys") or [])
             )
+            and (
+                c.get("id") != "gemini_air_mind"
+                or "autonomy_high" not in (c.get("thesis_keys") or [])
+            )
+            and (
+                c.get("id") != "taurus_earth_stable"
+                or "autonomy_high" not in (c.get("thesis_keys") or [])
+            )
             for c in cases
         ),
         "claim_sets_differ_across_distinct_charts": len(
             {
                 tuple(c.get("thesis_keys") or [])
                 for c in cases
-                if c.get("id") in {"earth_analysis", "water_emotional", "fire_direct", "date_only"}
+                if c.get("id")
+                in {
+                    "earth_analysis",
+                    "water_emotional",
+                    "fire_direct",
+                    "date_only",
+                    "gemini_air_mind",
+                    "taurus_earth_stable",
+                    "pisces_water_care",
+                }
             }
         )
-        >= 3,
+        >= 5,
+        "live_gap_charts_nonempty": all(
+            bool(c.get("thesis_keys"))
+            for c in cases
+            if c.get("id") in {"gemini_air_mind", "taurus_earth_stable", "pisces_water_care"}
+        ),
+        "stage1_to_identity_thesis_complete": _identity_map_covers_emitted(thesis_freq),
     }
 
+    empty_n = sum(1 for c in cases if not (c.get("thesis_keys") or []))
     return {
-        "eval_version": "character_engine_stage01_staging_eval_v0",
+        "eval_version": "character_engine_stage01_staging_eval_v1",
         "profile_count": len(cases),
         "cases": cases,
         "thesis_frequency": dict(thesis_freq),
         "majority_theses": majority_theses,
+        "empty_claim_packs": empty_n,
+        "empty_claim_rate": round(empty_n / n, 3),
         "gates": gates,
         "gate_pass": all(gates.values()),
         "publish_semantics_unchanged": True,
@@ -178,9 +204,33 @@ def evaluate_stage01_staging_v0() -> dict[str, Any]:
     }
 
 
+def _identity_map_covers_emitted(thesis_freq: Counter) -> bool:
+    from todayflow_backend.services.character_engine_identity_thesis_registry_v0 import (
+        normalize_identity_thesis_key,
+    )
+
+    return all(normalize_identity_thesis_key(t) for t in thesis_freq)
+
+
 def main() -> int:
     report = evaluate_stage01_staging_v0()
-    print(json.dumps({k: report[k] for k in ("eval_version", "profile_count", "thesis_frequency", "gates", "gate_pass")}, indent=2))
+    print(
+        json.dumps(
+            {
+                k: report[k]
+                for k in (
+                    "eval_version",
+                    "profile_count",
+                    "thesis_frequency",
+                    "empty_claim_packs",
+                    "empty_claim_rate",
+                    "gates",
+                    "gate_pass",
+                )
+            },
+            indent=2,
+        )
+    )
     for case in report["cases"]:
         print(
             f"- {case['id']}: claims={case['thesis_keys']} facts={len(case['fact_types'])} "
