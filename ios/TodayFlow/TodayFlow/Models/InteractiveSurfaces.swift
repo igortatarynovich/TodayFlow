@@ -164,6 +164,13 @@ enum TodayContractMapper {
     }
 }
 
+struct ProfileLifeSphereSlotV1: Codable, Equatable {
+    let how: String?
+    let need: String?
+    let text: String?
+    let why: String?
+}
+
 struct ProfileContractV1: Codable, Equatable {
     let contractVersion: String
     let identityCore: String
@@ -175,6 +182,8 @@ struct ProfileContractV1: Codable, Equatable {
     let recurringPatterns: [String]
     let livingChanges: String?
     let profileSnapshotVersion: String?
+    /// CE cutover: prefer these how-lines over interpretation.life_areas.
+    let lifeSpheres: [String: ProfileLifeSphereSlotV1]?
 
     enum CodingKeys: String, CodingKey {
         case contractVersion = "contract_version"
@@ -187,6 +196,16 @@ struct ProfileContractV1: Codable, Equatable {
         case recurringPatterns = "recurring_patterns"
         case livingChanges = "living_changes"
         case profileSnapshotVersion = "profile_snapshot_version"
+        case lifeSpheres = "life_spheres"
+    }
+
+    func sphereHow(_ key: String) -> String? {
+        guard let slot = lifeSpheres?[key] else { return nil }
+        for candidate in [slot.how, slot.text, slot.need, slot.why] {
+            let trimmed = candidate?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            if !trimmed.isEmpty { return trimmed }
+        }
+        return nil
     }
 }
 

@@ -208,21 +208,12 @@ def _topic_sphere_excerpt(
     core_profile: dict[str, Any] | None,
     topic: ProfileTopicDomain,
 ) -> str | None:
-    if not isinstance(core_profile, dict):
-        return None
-    interp = core_profile.get("interpretation")
-    if not isinstance(interp, dict):
-        return None
-    life_areas = interp.get("life_areas")
-    if not isinstance(life_areas, dict):
-        return None
+    from todayflow_backend.services.person_meaning_from_core_v0 import sphere_excerpt_from_core
+
     area_key = _TOPIC_TO_LIFE_AREA.get(topic)
     if not area_key:
         return None
-    raw = life_areas.get(area_key)
-    if not isinstance(raw, str) or not raw.strip():
-        return None
-    return _clip(raw.strip(), 240)
+    return sphere_excerpt_from_core(core_profile, area_key, max_len=240)
 
 
 def build_relevant_profile(
@@ -230,7 +221,14 @@ def build_relevant_profile(
     mode: UserOperatingMode,
     topic: ProfileTopicDomain,
 ) -> dict[str, Any]:
-    rp: dict[str, Any] = {"topic": topic.value}
+    from todayflow_backend.services.person_meaning_from_core_v0 import (
+        identity_excerpt_from_core,
+        person_sot_label,
+        strengths_from_core,
+        watchouts_from_core,
+    )
+
+    rp: dict[str, Any] = {"topic": topic.value, "person_sot": person_sot_label(core_profile)}
     baseline: dict[str, Any] = {}
     if isinstance(core_profile, dict):
         b = core_profile.get("baseline")
@@ -241,16 +239,15 @@ def build_relevant_profile(
     if baseline.get("archetype_seed"):
         rp["archetype_seed"] = _clip(str(baseline["archetype_seed"]), 120)
 
-    interp = core_profile.get("interpretation") if isinstance(core_profile, dict) else None
-    if isinstance(interp, dict):
-        if interp.get("identity"):
-            rp["identity_excerpt"] = _clip(str(interp["identity"]), 280)
-        wo = interp.get("watchouts")
-        if isinstance(wo, list) and wo:
-            rp["primary_watchout_excerpt"] = _clip(str(wo[0]), 220)
-        st_list = interp.get("strengths")
-        if isinstance(st_list, list) and st_list:
-            rp["primary_strength_excerpt"] = _clip(str(st_list[0]), 220)
+    identity = identity_excerpt_from_core(core_profile, max_len=280)
+    if identity:
+        rp["identity_excerpt"] = identity
+    strengths = strengths_from_core(core_profile)
+    if strengths:
+        rp["primary_strength_excerpt"] = _clip(str(strengths[0]), 220)
+    watchouts = watchouts_from_core(core_profile)
+    if watchouts:
+        rp["primary_watchout_excerpt"] = _clip(str(watchouts[0]), 220)
 
     living = core_profile.get("living") if isinstance(core_profile, dict) else None
     if isinstance(living, dict):

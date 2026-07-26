@@ -183,6 +183,8 @@ def _compat_personalized_from_experience_slice(
     locale: str,
 ) -> dict[str, Any]:
     """Compatibility personalization reads personality only via ExperienceSlice."""
+    from todayflow_backend.services.person_meaning_from_core_v0 import person_sot_label
+
     experience_slice = assemble_experience_slice(core_profile, experience_id="compatibility")
     user_sun = experience_slice.get("sun_sign")
     personal_focus = _compatibility_personal_focus_phrase(
@@ -191,10 +193,13 @@ def _compat_personalized_from_experience_slice(
     decision = experience_slice.get("decision_style")
     if isinstance(decision, str) and decision.strip() and not personal_focus:
         personal_focus = decision.strip()[:160]
+    identity_line = experience_slice.get("identity_line")
     out: dict[str, Any] = {
         # Snapshot-gated readiness — shell without snapshot is not "profile ready".
         "profile_ready": bool(experience_slice.get("generated_from_snapshot")),
         "profile_hash": experience_slice.get("profile_hash"),
+        "person_sot": person_sot_label(core_profile),
+        "identity_line": identity_line,
         "headline": translate("compat.personalized.headline", locale=locale).format(
             focus=personal_focus
         ),

@@ -290,6 +290,9 @@ async def generate_tarot_spread_with_context(
         core_payload if isinstance(core_payload, dict) else None,
         experience_id="tarot",
     )
+    from todayflow_backend.services.person_meaning_from_core_v0 import person_sot_label
+
+    person_sot = person_sot_label(core_payload if isinstance(core_payload, dict) else None)
     reading, tarot_answer = compose_tarot_answer_v1(
         spread,
         question=payload.question,
@@ -314,6 +317,7 @@ async def generate_tarot_spread_with_context(
                     "concern_domain": payload.concern_domain,
                     "card_ids": [c.card.id for c in spread.cards],
                     "contract": TAROT_ANSWER_V1_CONTRACT,
+                    "person_sot": person_sot,
                     **slice_log_fields(experience_slice),
                 },
                 core_payload if isinstance(core_payload, dict) else None,

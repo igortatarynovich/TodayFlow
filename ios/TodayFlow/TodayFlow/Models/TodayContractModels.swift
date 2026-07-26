@@ -147,28 +147,4 @@ enum JSONValue: Codable, Equatable {
     }
 }
 
-struct ProfileContractV1: Codable, Equatable {
-    let contractVersion: String
-    let identityCore: String
-    let strengths: [String]
-    let growthZones: [String]
-    let relationshipStyle: String
-    let moneyStyle: String
-    let decisionStyle: String
-    let recurringPatterns: [String]
-    let livingChanges: String?
-    let profileSnapshotVersion: String?
-
-    enum CodingKeys: String, CodingKey {
-        case contractVersion = "contract_version"
-        case identityCore = "identity_core"
-        case strengths
-        case growthZones = "growth_zones"
-        case relationshipStyle = "relationship_style"
-        case moneyStyle = "money_style"
-        case decisionStyle = "decision_style"
-        case recurringPatterns = "recurring_patterns"
-        case livingChanges = "living_changes"
-        case profileSnapshotVersion = "profile_snapshot_version"
-    }
-}
+// ProfileContractV1 (+ life_spheres) lives in InteractiveSurfaces.swift — single SoT for iOS decode.

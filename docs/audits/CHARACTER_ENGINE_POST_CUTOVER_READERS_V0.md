@@ -36,6 +36,5 @@
 
 ## Next
 
-1. Remove dead FE/iOS `life_areas` primary paths after QA.  
-2. Compat pair-semantics CE pass.  
-3. Optional file cleanup of funnel modules (keep until evals migrated).
+1. Readers pass 2 — see [CHARACTER_ENGINE_READERS_PASS2_V0.md](./CHARACTER_ENGINE_READERS_PASS2_V0.md).  
+2. Optional file cleanup of funnel modules (keep until evals migrated).

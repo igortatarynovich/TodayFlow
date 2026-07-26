@@ -46,6 +46,45 @@ def test_topic_sphere_excerpt_from_life_areas():
     assert "близост" in excerpt.lower()
     assert out.debug_trace is not None
     assert out.debug_trace.get("selector_rules_version") == "profile-selector-v1"
+    assert out.relevant_profile.get("person_sot") == "interpretation"
+
+
+def test_topic_sphere_excerpt_prefers_profile_contract():
+    core = {
+        "profile_contract_v1": {
+            "identity_core": "Ядро из контракта.",
+            "life_spheres": {
+                "love": {"how": "Контракт: близость без спешки."},
+            },
+        },
+        "interpretation": {
+            "life_areas": {
+                "love": "Legacy life_areas love — не должен выиграть.",
+            }
+        },
+    }
+    out = select_profile_context(
+        ProfileContextSelectorInput(
+            surface=ProfilePromptSurface.TODAY,
+            topic=ProfileTopicDomain.INTIMACY,
+            locale="ru",
+        ),
+        core_profile=core,
+        fusion_dump={
+            "date": "2026-07-03",
+            "scores": {"energy": 3, "focus": 3, "emotional_balance": 3},
+            "cycle_context": {},
+            "activity_context": {},
+            "rhythm_context": {},
+            "recommendations": [],
+            "encouragement": "",
+        },
+    )
+    excerpt = out.relevant_profile.get("topic_sphere_excerpt") or ""
+    assert "Контракт" in excerpt
+    assert "Legacy" not in excerpt
+    assert out.relevant_profile.get("person_sot") == "profile_contract_v1"
+    assert "контракта" in (out.relevant_profile.get("identity_excerpt") or "").lower()
 
 
 def test_day_history_signal_in_recent_signals():

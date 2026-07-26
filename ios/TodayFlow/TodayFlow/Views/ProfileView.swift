@@ -1789,7 +1789,8 @@ private struct ProfileLifeSections: View {
                     title: "Любовь и отношения",
                     text: composedLifeAreaText(
                         api: preferredSphereText(
-                            contract: coreProfile.profileContractV1?.relationshipStyle,
+                            contract: coreProfile.profileContractV1?.sphereHow("love")
+                                ?? coreProfile.profileContractV1?.relationshipStyle,
                             legacy: coreProfile.interpretation?.lifeAreas?.love
                         ),
                         fallback: "Здесь видно, как ты входишь в близость, где тебе нужна ясность, а где связь начинает забирать слишком много сил.",
@@ -1805,7 +1806,8 @@ private struct ProfileLifeSections: View {
                     title: "Карьера и реализация",
                     text: composedLifeAreaText(
                         api: preferredSphereText(
-                            contract: nil,
+                            contract: coreProfile.profileContractV1?.sphereHow("work")
+                                ?? coreProfile.profileContractV1?.sphereHow("career"),
                             legacy: coreProfile.interpretation?.lifeAreas?.career
                         ),
                         fallback: "Этот слой показывает, в какой роли ты становишься заметной, на что реально можно опереться в работе и где не стоит жить только в режиме обслуживания чужих задач.",
@@ -1821,7 +1823,8 @@ private struct ProfileLifeSections: View {
                     title: "Деньги и ресурсы",
                     text: composedLifeAreaText(
                         api: preferredSphereText(
-                            contract: coreProfile.profileContractV1?.moneyStyle,
+                            contract: coreProfile.profileContractV1?.sphereHow("money")
+                                ?? coreProfile.profileContractV1?.moneyStyle,
                             legacy: coreProfile.interpretation?.lifeAreas?.money
                         ),
                         fallback: "Через этот слой читается не только тема денег, но и чувство ценности себя, устойчивости и того, на чем тебе действительно безопасно строить рост.",
@@ -1837,7 +1840,10 @@ private struct ProfileLifeSections: View {
                 LifeAreaCard(
                     title: "Семья и дом",
                     text: composedLifeAreaText(
-                        api: coreProfile.interpretation?.lifeAreas?.family,
+                        api: preferredSphereText(
+                            contract: coreProfile.profileContractV1?.sphereHow("family"),
+                            legacy: coreProfile.interpretation?.lifeAreas?.family
+                        ),
                         fallback: "Здесь видно, что для тебя значит дом, откуда идет внутреннее восстановление и какие форматы близости дают опору, а не перегруз.",
                         pieces: [
                             chartHouseSummary(chart: natalChart, house: 4),
@@ -1879,7 +1885,10 @@ private struct ProfileLifeSections: View {
                 LifeAreaCard(
                     title: "Дети и родительство",
                     text: composedLifeAreaText(
-                        api: coreProfile.interpretation?.lifeAreas?.kids,
+                        api: preferredSphereText(
+                            contract: coreProfile.profileContractV1?.sphereHow("kids"),
+                            legacy: coreProfile.interpretation?.lifeAreas?.kids
+                        ),
                         fallback: "Если тема актуальна, она проявится в сфере дома и ответственности; иначе блок остаётся нейтральным якорем.",
                         pieces: [
                             chartHouseSummary(chart: natalChart, house: 5),
@@ -1896,7 +1905,10 @@ private struct ProfileLifeSections: View {
                 LifeAreaCard(
                     title: "Дружба и окружение",
                     text: composedLifeAreaText(
-                        api: coreProfile.interpretation?.lifeAreas?.friends,
+                        api: preferredSphereText(
+                            contract: coreProfile.profileContractV1?.sphereHow("friends"),
+                            legacy: coreProfile.interpretation?.lifeAreas?.friends
+                        ),
                         fallback: "Когда Меркурий в карте читается устойчиво, здесь появится срез дружбы и сети поддержки.",
                         pieces: [
                             chartHouseSummary(chart: natalChart, house: 11),
@@ -1908,7 +1920,11 @@ private struct ProfileLifeSections: View {
                 LifeAreaCard(
                     title: "Решения и дисциплина",
                     text: composedLifeAreaText(
-                        api: coreProfile.interpretation?.lifeAreas?.decisions,
+                        api: preferredSphereText(
+                            contract: coreProfile.profileContractV1?.sphereHow("decisions")
+                                ?? coreProfile.profileContractV1?.decisionStyle,
+                            legacy: coreProfile.interpretation?.lifeAreas?.decisions
+                        ),
                         fallback: "Сатурн в карте покажет, где ты взрослеешь через структуру и честные ограничения.",
                         pieces: [
                             chartHouseSummary(chart: natalChart, house: 9),
@@ -1939,7 +1955,10 @@ private struct ProfileLifeSections: View {
             let joined = flat.joined(separator: " ")
             return joined.count > 520 ? String(joined.prefix(519)) + "…" : joined
         }
-        if let api = coreProfile.interpretation?.lifeAreas?.body?.trimmingCharacters(in: .whitespacesAndNewlines), !api.isEmpty {
+        if let api = preferredSphereText(
+            contract: coreProfile.profileContractV1?.sphereHow("body"),
+            legacy: coreProfile.interpretation?.lifeAreas?.body
+        ) {
             return api
         }
         if let moon = planetSummary(chart: natalChart, body: "moon"), !moon.isEmpty {
@@ -1950,7 +1969,10 @@ private struct ProfileLifeSections: View {
 
     private var intimacySphereText: String {
         composedLifeAreaText(
-            api: coreProfile.interpretation?.lifeAreas?.sex,
+            api: preferredSphereText(
+                contract: coreProfile.profileContractV1?.sphereHow("sex"),
+                legacy: coreProfile.interpretation?.lifeAreas?.sex
+            ),
             fallback: "Когда в карте появятся срезы по 8 дому и планетам, здесь будет короткий разбор желания, границ и темпа — опора для Guidance и Compatibility.",
             pieces: [
                 chartHouseSummary(chart: natalChart, house: 8),

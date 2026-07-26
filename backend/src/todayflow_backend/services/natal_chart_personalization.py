@@ -144,6 +144,11 @@ def _first_sentence(value: str | None, fallback: str = "", max_len: int = 220) -
 
 
 def _core_area_text(core_profile: dict[str, Any] | None, area: str) -> str:
+    from todayflow_backend.services.person_meaning_from_core_v0 import (
+        identity_excerpt_from_core,
+        sphere_excerpt_from_core,
+    )
+
     payload = core_profile or {}
     interpretation = payload.get("interpretation") if isinstance(payload.get("interpretation"), dict) else {}
     daily = payload.get("daily_interpretation") if isinstance(payload.get("daily_interpretation"), dict) else {}
@@ -161,7 +166,8 @@ def _core_area_text(core_profile: dict[str, Any] | None, area: str) -> str:
         else:
             archetype_phrase = "твоей личной линии"
         return _first_sentence(
-            interpretation.get("identity"),
+            identity_excerpt_from_core(payload if isinstance(core_profile, dict) else None)
+            or interpretation.get("identity"),
             fallback=(
                 f"Твоя карта опирается на {archetype_phrase} "
                 f"и ритм {baseline.get('rhythm_style') or 'спокойного устойчивого темпа'}."
@@ -169,15 +175,18 @@ def _core_area_text(core_profile: dict[str, Any] | None, area: str) -> str:
         )
     if area == "general":
         return _first_sentence(
-            daily_lenses.get("general") or interpretation.get("identity"),
+            daily_lenses.get("general")
+            or identity_excerpt_from_core(payload if isinstance(core_profile, dict) else None)
+            or interpretation.get("identity"),
             fallback=(
                 f"Тебе лучше всего работает формат, где есть {baseline.get('element_focus') or 'понятная опора'} "
                 f"и {baseline.get('rhythm_style') or 'мягкий ритм без лишних рывков'}."
             ),
         )
 
-    life_areas = interpretation.get("life_areas") if isinstance(interpretation.get("life_areas"), dict) else {}
-    life_text = life_areas.get(area)
+    life_text = sphere_excerpt_from_core(
+        payload if isinstance(core_profile, dict) else None, area, max_len=320
+    )
     daily_text = daily_lenses.get(area)
     if area == "career":
         fallback = "Рабочая реализация раскрывается лучше там, где у тебя есть своя роль, ясная ответственность и видимый результат."
