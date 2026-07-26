@@ -64,5 +64,13 @@ export function ritualEntryImagePublicPaths(
     `${ENTRY_BASE}/default-${slot}.webp`,
     `${ENTRY_BASE}/default.webp`,
   ];
-  return [...new Set([...knownDefaults, ...out])];
+  const merged = [...knownDefaults, ...out];
+  const seen = new Set<string>();
+  const deduped: string[] = [];
+  for (const path of merged) {
+    if (seen.has(path)) continue;
+    seen.add(path);
+    deduped.push(path);
+  }
+  return deduped;
 }
