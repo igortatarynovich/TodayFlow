@@ -25,7 +25,7 @@ from typing import Any
 
 from todayflow_backend.core.config import settings
 
-PROJECTION_VERSION = "character_engine_profile_consumption_v0.6"
+PROJECTION_VERSION = "character_engine_profile_consumption_v0.7"
 _MAX_RECOGNITION = 160
 _MAX_CORE = 420
 _MAX_TRAP = 220
@@ -564,6 +564,31 @@ def _stage4_life(payload: dict[str, Any]) -> dict[str, Any] | None:
     return stage4
 
 
+def _stage5_assembly(payload: dict[str, Any]) -> dict[str, Any] | None:
+    diagnostics = payload.get("diagnostics")
+    if not isinstance(diagnostics, dict):
+        return None
+    art = diagnostics.get("character_engine_stage5")
+    if not isinstance(art, dict):
+        return None
+    stage5 = art.get("stage5") if isinstance(art.get("stage5"), dict) else art
+    if str(stage5.get("status") or "") != "grounded":
+        return None
+    return stage5
+
+
+def _adapter_value(stage5: dict[str, Any], field: str) -> Any:
+    legacy = stage5.get("legacy_map") if isinstance(stage5.get("legacy_map"), dict) else {}
+    fields = legacy.get("fields") if isinstance(legacy.get("fields"), dict) else {}
+    row = fields.get(field) if isinstance(fields.get(field), dict) else None
+    if not row:
+        return None
+    val = row.get("value")
+    if val is None or val == "" or val == []:
+        return None
+    return val
+
+
 def _scene_by_kind(stage4: dict[str, Any], *kinds: str) -> str | None:
     scenes = stage4.get("scenes") if isinstance(stage4.get("scenes"), list) else []
     for want in kinds:
@@ -640,6 +665,7 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
     recognition = _clip(surface, _MAX_RECOGNITION)
     stage3 = _stage3_internal(payload)
     stage4 = _stage4_life(payload)
+    stage5 = _stage5_assembly(payload)
     trap_source = "editorial_bank"
     decision_source = "editorial_bank"
     relationship_source = "editorial_bank"
@@ -667,7 +693,6 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
         if dec_text:
             decision = _clip(dec_text, _MAX_ESSAY)
             decision_source = "stage3_internal_engine.decision"
-        # Prefer Stage 3 growth/recovery help lines when present.
         growth_slot = engine.get("growth") if isinstance(engine.get("growth"), dict) else None
         recovery_slot = engine.get("recovery") if isinstance(engine.get("recovery"), dict) else None
         stage3_helps: list[str] = []
@@ -684,7 +709,6 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
         if intimacy:
             relationship = _clip(intimacy, _MAX_ESSAY)
             relationship_source = "stage4_scene.intimacy"
-        # Resource/security via risk / responsibility / uncertainty scenes (not money root).
         money_scene = _scene_by_kind(stage4, "risk", "responsibility", "uncertainty")
         if money_scene:
             money = _clip(money_scene, _MAX_ESSAY)
@@ -695,13 +719,34 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
             growth = [_clip(pot_text, _MAX_ESSAY), *growth][:3]
             growth_source = "stage4_potential"
             helps = [_clip(pot_text, _MAX_ESSAY), *helps][:3]
-        blinds = stage4.get("blind_spots") if isinstance(stage4.get("blind_spots"), list) else []
-        for b in blinds[:1]:
-            if isinstance(b, dict):
-                bt = str(b.get("surface_text") or "").strip()
-                if bt and trap_source == "editorial_bank":
-                    # Keep Stage 3 trap preferred; blind spot only fills empty trap path.
-                    pass
+    # Stage 5 adapters are preferred SoT for owned slots when grounded (still not PUBLISH_READY).
+    if isinstance(stage5, dict):
+        a_dec = _adapter_value(stage5, "decision_style")
+        if isinstance(a_dec, str) and a_dec.strip():
+            decision = _clip(a_dec, _MAX_ESSAY)
+            decision_source = "stage5_legacy_map.decision_style"
+        a_rel = _adapter_value(stage5, "relationship_style")
+        if isinstance(a_rel, str) and a_rel.strip():
+            relationship = _clip(a_rel, _MAX_ESSAY)
+            relationship_source = "stage5_legacy_map.relationship_style"
+        a_money = _adapter_value(stage5, "money_patterns")
+        if isinstance(a_money, str) and a_money.strip():
+            money = _clip(a_money, _MAX_ESSAY)
+            money_source = "stage5_legacy_map.money_patterns"
+        a_growth = _adapter_value(stage5, "growth_zones")
+        if isinstance(a_growth, list) and a_growth:
+            growth = [_clip(str(x), _MAX_ESSAY) for x in a_growth if str(x).strip()][:3]
+            growth_source = "stage5_legacy_map.growth_zones"
+        a_helps = _adapter_value(stage5, "helps")
+        if isinstance(a_helps, list) and a_helps:
+            helps = [_clip(str(x), _MAX_ESSAY) for x in a_helps if str(x).strip()][:3]
+        a_trap = _adapter_value(stage5, "recurring_patterns")
+        if isinstance(a_trap, list) and a_trap and str(a_trap[0]).strip():
+            trap = _clip(str(a_trap[0]), _MAX_TRAP)
+            trap_source = "stage5_legacy_map.recurring_patterns"
+        a_strengths = _adapter_value(stage5, "strengths")
+        if isinstance(a_strengths, list) and a_strengths:
+            strengths = [_clip(str(x), _MAX_ESSAY) for x in a_strengths if str(x).strip()][:4]
     help_line = helps[0] if helps else None
 
     claims = stage1.get("claims") if isinstance(stage1.get("claims"), list) else []
@@ -826,6 +871,7 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
         "growth_source": growth_source,
         "stage3_status": (stage3 or {}).get("status") if isinstance(stage3, dict) else None,
         "stage4_status": (stage4 or {}).get("status") if isinstance(stage4, dict) else None,
+        "stage5_status": (stage5 or {}).get("status") if isinstance(stage5, dict) else None,
         "visual_note": "archetype_seed remains FE illustration only; recognition title is CE",
         "slots_owned": [
             "profile_contract_v1.identity_core",

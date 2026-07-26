@@ -56,3 +56,10 @@ Dual SoT: Swiss/natal + CE diagnostics vs publish personality. Shadow never fed 
 - **Keep:** Stage 3 trap/decision preferred for those slots.
 - **Canon:** [CHARACTER_ENGINE_STAGE4_LIFE_V0.md](./CHARACTER_ENGINE_STAGE4_LIFE_V0.md).
 - **Not:** PUBLISH_READY / Stage 5 Compass.
+
+## Architecture impact (2026-07-26 v0.7 — Stage 5 adapters)
+
+- **SoT after:** when Stage 5 grounded, owned Profile slots prefer `legacy_map` AdapterOut values.
+- **Compass:** diagnostics only (`compass_v1`) — not UI SoT yet.
+- **Still off:** `CHARACTER_ENGINE_PUBLISH_READY`.
+- **Canon:** [CHARACTER_ENGINE_STAGE5_ASSEMBLY_V0.md](./CHARACTER_ENGINE_STAGE5_ASSEMBLY_V0.md).

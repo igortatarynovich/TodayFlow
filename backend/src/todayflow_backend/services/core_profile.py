@@ -345,6 +345,9 @@ class CoreProfileService:
                 from todayflow_backend.services.character_engine_stage4_shadow_v0 import (
                     character_engine_stage4_should_run,
                 )
+                from todayflow_backend.services.character_engine_stage5_shadow_v0 import (
+                    character_engine_stage5_should_run,
+                )
 
                 if character_engine_stage3_should_run() and not diagnostics.get(
                     "character_engine_stage3"
@@ -352,6 +355,10 @@ class CoreProfileService:
                     need_ce_attach = True
                 if character_engine_stage4_should_run() and not diagnostics.get(
                     "character_engine_stage4"
+                ):
+                    need_ce_attach = True
+                if character_engine_stage5_should_run() and not diagnostics.get(
+                    "character_engine_stage5"
                 ):
                     need_ce_attach = True
             except Exception:
@@ -1267,20 +1274,26 @@ class CoreProfileService:
                 character_engine_stage4_should_run,
                 maybe_attach_stage4_shadow,
             )
+            from todayflow_backend.services.character_engine_stage5_shadow_v0 import (
+                character_engine_stage5_should_run,
+                maybe_attach_stage5_shadow,
+            )
 
             run_stage2 = bool(include_stage2) and character_engine_stage2_should_run()
             run_stage3 = False
             run_stage4 = False
+            run_stage5 = False
             try:
                 from todayflow_backend.services.character_engine_profile_consumption_v0 import (
                     character_engine_profile_consumption_enabled,
                 )
 
                 if character_engine_profile_consumption_enabled():
-                    # Product slice needs Identity Core (+ Stage 3–4) on Profile read.
+                    # Product slice needs Identity Core (+ Stage 3–5 assembly) on Profile read.
                     run_stage2 = True
                     run_stage3 = True
                     run_stage4 = True
+                    run_stage5 = True
             except Exception:
                 pass
             if character_engine_stage3_should_run():
@@ -1290,12 +1303,18 @@ class CoreProfileService:
                 run_stage2 = True
                 run_stage3 = True
                 run_stage4 = True
+            if character_engine_stage5_should_run():
+                run_stage2 = True
+                run_stage3 = True
+                run_stage4 = True
+                run_stage5 = True
             if not (
                 character_engine_stage01_should_run()
                 or run_stage2
                 or character_engine_stage2_should_run()
                 or run_stage3
                 or run_stage4
+                or run_stage5
             ):
                 return profile_payload
 
@@ -1338,6 +1357,8 @@ class CoreProfileService:
                 profile_payload = maybe_attach_stage3_shadow(profile_payload, **shadow_kwargs)
             if run_stage4:
                 profile_payload = maybe_attach_stage4_shadow(profile_payload, **shadow_kwargs)
+            if run_stage5:
+                profile_payload = maybe_attach_stage5_shadow(profile_payload, **shadow_kwargs)
         except Exception:
             # Shadow must never break portrait publish / read path.
             pass
