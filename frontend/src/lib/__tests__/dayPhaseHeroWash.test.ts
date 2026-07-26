@@ -17,6 +17,6 @@ describe("dayPhaseHeroWash", () => {
   it("dark appearance darkens daylight chrome without swapping the plate", () => {
     const day = resolveDayPhaseHeroWash("day");
     expect(resolveHeroChromeTone(day, "dark")).toBe("dark");
-    expect(day.src).toContain("zodiac_wash");
+    expect(day.src).toContain("observe");
   });
 });

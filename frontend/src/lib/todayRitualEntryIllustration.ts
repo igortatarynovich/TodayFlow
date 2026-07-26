@@ -59,5 +59,10 @@ export function ritualEntryImagePublicPaths(
       out.push(`${ENTRY_BASE}/${base}${ext}`);
     }
   }
-  return out;
+  // Prefer known shipped defaults early to avoid a long 404 cascade in prod.
+  const knownDefaults = [
+    `${ENTRY_BASE}/default-${slot}.webp`,
+    `${ENTRY_BASE}/default.webp`,
+  ];
+  return [...new Set([...knownDefaults, ...out])];
 }

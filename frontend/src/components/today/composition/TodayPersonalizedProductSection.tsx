@@ -179,12 +179,20 @@ export function TodayPersonalizedProductSection({
         >
           {narrative.chapters.map((chapter, chapterIndex) => {
             const planetSrc = planetIconSrc(chapter.planetHint);
+            const chapterAccent =
+              chapter.id === "opening"
+                ? "/images/cosmic/moon_orb.webp"
+                : chapter.id === "pressure"
+                  ? "/images/cosmic/eclipse_wash.webp"
+                  : null;
             const media =
               chapter.id === "supports" && chapter.colorHex
                 ? ({ kind: "color" as const, hex: chapter.colorHex, label: chapter.colorLabel ?? undefined })
                 : planetSrc
                   ? ({ kind: "image" as const, src: planetSrc, alt: chapter.planetHint ?? "" })
-                  : null;
+                  : chapterAccent
+                    ? ({ kind: "image" as const, src: chapterAccent, alt: "" })
+                    : null;
 
             const bodyParagraphs = [...(chapter.lead ? [chapter.lead] : []), ...chapter.paragraphs];
             // Soft why stays visible with label when present in opening.

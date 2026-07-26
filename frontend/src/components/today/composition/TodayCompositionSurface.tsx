@@ -13,6 +13,7 @@ import { LoadingSpinner } from "@/components/orbit";
 import { HeroMedium } from "@/components/foundation/HeroMedium";
 import { profileMotionStyles } from "@/components/foundation/ProfileMotion";
 import { MotionReveal } from "@/design-system/motion/MotionReveal";
+import { MotionDrift } from "@/design-system/motion/MotionDrift";
 import { MOTION } from "@/design-system/motion/tokens";
 import { SacredGeometryBackdrop } from "@/components/visualIdentity/SacredGeometryBackdrop";
 import { buildTodayHeroPillars, buildTodayHeroSymbol, resolveTodaySunSignLabel } from "@/lib/todayHeroMedium";
@@ -1173,8 +1174,10 @@ export function TodayCompositionSurface(props: Props) {
           <SacredGeometryBackdrop emphasis="soft" preset="today" />
         </div>
         <div className={styles.themeDarkVisualAccent} aria-hidden>
-          {/* eslint-disable-next-line @next/next/no-img-element -- static wash plate */}
-          <img src={heroWash.src} alt="" className={styles.themeDarkWash} />
+          <MotionDrift className={styles.themeDarkWashDrift} durationSec={22} reducedMotion={reduceMotion}>
+            {/* eslint-disable-next-line @next/next/no-img-element -- static wash plate */}
+            <img src={heroWash.src} alt="" className={styles.themeDarkWash} />
+          </MotionDrift>
         </div>
         <div className={`${styles.themeDarkContent} ${profileMotionStyles.heroEnter}`}>
           <p className={styles.journeyStepIndex}>

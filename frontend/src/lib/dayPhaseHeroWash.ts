@@ -1,6 +1,9 @@
 /**
  * Raster hero washes by day-phase only.
  * Appearance (light/dark) and mood apply as overlay/tint — never swap the plate.
+ *
+ * Morning/day use luminous plates (nebula / observatory) so mobile opacity + dark
+ * appearance still leave a readable photograph. Evening/night keep moon wash.
  */
 
 import type { DayPhase } from "@/lib/dayPhaseAtmosphere";
@@ -16,8 +19,8 @@ export type DayPhaseHeroWash = {
 };
 
 const WASH: Record<DayPhase, DayPhaseHeroWash> = {
-  morning: { src: "/images/cosmic/celestial_wash.webp", plate: "daylight" },
-  day: { src: "/images/cosmic/zodiac_wash.webp", plate: "daylight" },
+  morning: { src: "/images/cosmic/nebula.webp", plate: "daylight" },
+  day: { src: "/images/cosmic/observe.webp", plate: "daylight" },
   evening: { src: "/images/cosmic/moon_wash.webp", plate: "night" },
   night: { src: "/images/cosmic/moon_wash.webp", plate: "night" },
   first: { src: "/images/cosmic/stars.webp", plate: "daylight" },

@@ -28,14 +28,20 @@ enum TodayRitualEntryIllustration {
             "default-\(slot)",
             "default",
         ]
-        let exts = ["webp", "png", "jpg", "jpeg"]
-        var out: [String] = []
+        let exts = ["png", "webp", "jpg", "jpeg"]
+        var out: [String] = [
+            "default-\(slot).png",
+            "default-\(slot).webp",
+            "default.png",
+            "default.webp",
+        ]
         for b in bases {
             for e in exts {
                 out.append("\(b).\(e)")
             }
         }
-        return out
+        var seen = Set<String>()
+        return out.filter { seen.insert($0).inserted }
     }
 
     static func loadUIImage(dateISO: String, energyScore: Int) -> UIImage? {
