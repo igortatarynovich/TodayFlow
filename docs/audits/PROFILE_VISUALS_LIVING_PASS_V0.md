@@ -1,7 +1,7 @@
 # Profile visuals — portrait seed fix + living atmosphere (v0)
 
 **Date:** 2026-07-26  
-**Status:** LIVE (pending deploy)
+**Status:** LIVE
 
 ## Problem
 
