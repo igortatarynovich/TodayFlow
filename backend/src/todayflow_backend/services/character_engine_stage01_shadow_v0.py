@@ -83,6 +83,14 @@ def maybe_attach_stage01_shadow(
     """Attach diagnostics under profile_payload['diagnostics']['character_engine_stage01']."""
     if not character_engine_stage01_should_run():
         return profile_payload
+    diagnostics = profile_payload.get("diagnostics")
+    if isinstance(diagnostics, dict):
+        existing = diagnostics.get("character_engine_stage01")
+        if isinstance(existing, dict) and (
+            isinstance(existing.get("stage0"), dict) or isinstance(existing.get("stage1"), dict)
+        ):
+            # Assemble-once: do not recompute Stage 0–1 when already present for this hash.
+            return profile_payload
     try:
         artifact = run_character_engine_stage01_shadow_v0(
             profile_fingerprint=profile_fingerprint,

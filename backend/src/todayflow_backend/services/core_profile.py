@@ -336,7 +336,13 @@ class CoreProfileService:
         cached = self._cache.get(cache_key)
         if cached and cached[0] > now:
             payload = deepcopy(cached[1])
-            # Memory hit: never re-run CE LLM. Optional cheap deterministic fill if nests missing.
+            # Memory hit: never re-run CE when Stage 5 already assembled.
+            before_diag = (
+                payload.get("diagnostics") if isinstance(payload.get("diagnostics"), dict) else {}
+            )
+            had_stage5 = isinstance(before_diag.get("character_engine_stage5"), dict) and isinstance(
+                (before_diag.get("character_engine_stage5") or {}).get("stage5"), dict
+            )
             payload = self._maybe_attach_character_engine_shadow(
                 db,
                 payload,
@@ -348,6 +354,25 @@ class CoreProfileService:
                 natal_facts=None,
                 include_stage2=False,
             )
+            after_diag = (
+                payload.get("diagnostics") if isinstance(payload.get("diagnostics"), dict) else {}
+            )
+            filled_stage5 = isinstance(after_diag.get("character_engine_stage5"), dict) and isinstance(
+                (after_diag.get("character_engine_stage5") or {}).get("stage5"), dict
+            )
+            if filled_stage5 and not had_stage5 and payload.get("profile_hash"):
+                try:
+                    sid = self._save_snapshot(
+                        db=db,
+                        user_id=user.id,
+                        profile_hash=str(payload.get("profile_hash")),
+                        payload=payload,
+                    )
+                    if sid is not None:
+                        payload["snapshot_id"] = sid
+                    self._cache[cache_key] = (now + self.cache_ttl_seconds, deepcopy(payload))
+                except Exception:
+                    pass
             return self._attach_natal_summary(db, payload, astro_profile, settings, user)
 
         astro_context = self._build_astro_context(astro_profile)
@@ -432,6 +457,8 @@ class CoreProfileService:
             natal_facts=None,
             include_stage2=False,
         )
+        # Do not persist a shell-only snapshot: portrait contract is still missing.
+        # CE fill-once is saved only when a reusable portrait snapshot already exists.
         return self._attach_natal_summary(db, shell, astro_profile, settings, user)
 
     def build(
@@ -1258,9 +1285,13 @@ class CoreProfileService:
     ) -> dict[str, Any]:
         """Attach CE diagnostics.
 
-        ``include_stage2=True`` (portrait publish): Stage 2–5 may call LLM.
-        ``include_stage2=False`` (Profile GET): never LLM — reuse snapshot nests or
-        fill missing Stage 2–5 with deterministic-only once (natal-chart style).
+        Assemble-once rule (natal-chart style):
+        - Same ``profile_hash`` + Stage 5 already in payload → **no CE recompute** on GET.
+        - Rebuild only when hash changes (birth/name/gender/prompt ver) or explicit
+          portrait publish (``include_stage2=True`` / POST refresh / core-setup).
+        - Read path may deterministic fill-once if consumption is on and Stage 5 missing,
+          then caller persists into the snapshot.
+
         Never publishes character_engine_v1 ready.
         """
         try:
@@ -1301,28 +1332,31 @@ class CoreProfileService:
                 (diagnostics.get("character_engine_stage5") or {}).get("stage5"), dict
             )
 
+            # Read path: assembled snapshot is authoritative — do not recompute Stage 0–5.
+            if not include_stage2 and has_stage5:
+                return profile_payload
+
             # Publish: full LLM cascade when CE flags / consumption on.
-            # Read: deterministic fill-once only if consumption needs CE and nest missing.
+            # Read: deterministic fill-once only onto an existing portrait snapshot
+            # when consumption needs CE and Stage 5 is missing — never invent CE on a bare shell.
             if include_stage2:
                 run_stage2 = character_engine_stage2_should_run() or consumption
                 run_stage3 = run_stage2
                 run_stage4 = run_stage2
                 run_stage5 = run_stage2
+                run_stage01 = character_engine_stage01_should_run()
                 deterministic_only = False
             else:
-                run_stage2 = bool(consumption and not has_stage5)
+                has_portrait = isinstance(profile_payload.get("profile_contract_v1"), dict)
+                run_stage2 = bool(consumption and not has_stage5 and has_portrait)
                 run_stage3 = run_stage2
                 run_stage4 = run_stage2
                 run_stage5 = run_stage2
+                # Stage 0–1 only as part of fill-once (Stage 2 rebuilds facts internally).
+                run_stage01 = False
                 deterministic_only = True
 
-            if not (
-                character_engine_stage01_should_run()
-                or run_stage2
-                or run_stage3
-                or run_stage4
-                or run_stage5
-            ):
+            if not (run_stage01 or run_stage2 or run_stage3 or run_stage4 or run_stage5):
                 return profile_payload
 
             from todayflow_backend.services.natal_chart_cache import NatalChartCacheService
@@ -1356,11 +1390,9 @@ class CoreProfileService:
                 capability=cap,
                 birth_date=astro_context.get("birth_date"),
             )
-            if character_engine_stage01_should_run():
+            if run_stage01:
                 profile_payload = maybe_attach_stage01_shadow(profile_payload, **shadow_kwargs)
-            # Stage 2 should_run also true via consumption; force-enable path for read fill.
             if run_stage2:
-                # Temporarily allow attach even if only consumption drives the fill.
                 profile_payload = maybe_attach_stage2_shadow(
                     profile_payload, deterministic_only=deterministic_only, **shadow_kwargs
                 )

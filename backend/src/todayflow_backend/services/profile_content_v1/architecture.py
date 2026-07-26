@@ -3,6 +3,10 @@
 Rule: Today / Compatibility / Tarot / account GETs MUST use snapshot or baseline only.
 Portrait LLM runs only via ``CoreProfileService.build(..., publish_portrait=True)``
 (core-setup, birth-fact save, ``POST /account/core-profile/refresh``).
+
+Assemble-once (same as natal chart): for a given ``profile_hash``, do not recompute
+portrait / Character Engine on GET. Rebuild only when input facts change (new hash)
+or an explicit publisher runs.
 """
 
 from __future__ import annotations

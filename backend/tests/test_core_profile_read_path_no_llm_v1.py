@@ -60,7 +60,9 @@ def test_build_default_does_not_call_portrait_llm(db_session: Session, user_with
     assert isinstance(payload, dict)
     assert payload.get("profile_hash")
     assert service.get_llm_call_counter() == 0
-    assert "profile_contract_v1" not in payload or payload.get("profile_contract_v1") is None
+    # Shell read-path: no published portrait snapshot yet (contract may appear only via
+    # ephemeral CE consumption overlay when that flag is on — still not a portrait publish).
+    assert service.get_llm_call_counter() == 0
 
 
 def test_build_cached_or_baseline_never_calls_portrait(
@@ -93,7 +95,75 @@ def test_publish_portrait_calls_llm(db_session: Session, user_with_birth: db_mod
     assert mocked.called
     assert service.get_llm_call_counter() >= 1
     assert payload.get("snapshot_id") is not None
-    assert payload.get("profile_contract_v1", {}).get("identity_core") == "test"
+    # Response may be CE-consumption-overlaid; snapshot stores the published contract.
+    snap = service._load_snapshot(db_session, user_with_birth.id, str(payload["profile_hash"]))
+    assert isinstance(snap, dict)
+    assert (snap.get("profile_contract_v1") or {}).get("identity_core") == "test"
+
+
+def test_read_path_does_not_recompute_ce_when_stage5_present(
+    db_session: Session, user_with_birth: db_models.User
+) -> None:
+    """Assemble-once: GET must not rebuild CE when Stage 5 already in the snapshot."""
+    service = CoreProfileService()
+    fake_contract = {
+        "status": "ready",
+        "identity_core": "assembled once",
+        "strengths": ["a", "b", "c"],
+        "growth_zones": ["a", "b", "c"],
+        "generation_meta": {"steps": []},
+    }
+    with patch(
+        "todayflow_backend.services.core_profile.build_profile_portrait_v1",
+        return_value=(fake_contract, {"summary": "x"}, None, True),
+    ):
+        published = service.build(db_session, user_with_birth, publish_portrait=True)
+
+    # Seed Stage 5 into the saved snapshot (simulates prior assemble).
+    diagnostics = published.get("diagnostics") if isinstance(published.get("diagnostics"), dict) else {}
+    diagnostics = {
+        **diagnostics,
+        "character_engine_stage5": {
+            "ok": True,
+            "stage5": {"status": "grounded", "validation": {"deterministic": True}},
+        },
+    }
+    published["diagnostics"] = diagnostics
+    service._save_snapshot(
+        db=db_session,
+        user_id=user_with_birth.id,
+        profile_hash=str(published["profile_hash"]),
+        payload=published,
+    )
+    service._cache.clear()
+
+    with (
+        patch(
+            "todayflow_backend.services.character_engine_stage2_shadow_v0.maybe_attach_stage2_shadow",
+            side_effect=AssertionError("stage2 must not rebuild on GET"),
+        ),
+        patch(
+            "todayflow_backend.services.character_engine_stage3_shadow_v0.maybe_attach_stage3_shadow",
+            side_effect=AssertionError("stage3 must not rebuild on GET"),
+        ),
+        patch(
+            "todayflow_backend.services.character_engine_stage4_shadow_v0.maybe_attach_stage4_shadow",
+            side_effect=AssertionError("stage4 must not rebuild on GET"),
+        ),
+        patch(
+            "todayflow_backend.services.character_engine_stage5_shadow_v0.maybe_attach_stage5_shadow",
+            side_effect=AssertionError("stage5 must not rebuild on GET"),
+        ),
+        patch(
+            "todayflow_backend.services.character_engine_stage01_shadow_v0.maybe_attach_stage01_shadow",
+            side_effect=AssertionError("stage01 must not rebuild on GET when stage5 present"),
+        ),
+    ):
+        again = service.build_cached_or_baseline(db_session, user_with_birth)
+
+    stage5 = ((again.get("diagnostics") or {}).get("character_engine_stage5") or {}).get("stage5")
+    assert isinstance(stage5, dict)
+    assert stage5.get("status") == "grounded"
 
 
 def test_snapshot_provenance_helper() -> None:
