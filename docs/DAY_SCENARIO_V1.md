@@ -431,6 +431,9 @@ Legacy projections remain for old clients only.
 
 ### Next — grow EN/40 human golden → consensus calibration → further promotions by evidence
 
+**Progress:** RU pilot 7 + EN curated 20 sealed = **27/40** human consensus cases.
+Remaining: **+13 RU live** (prefer live_capture over more curated).
+
 ---
 
 ## Non-goals
