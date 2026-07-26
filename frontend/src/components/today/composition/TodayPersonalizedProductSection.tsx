@@ -182,7 +182,7 @@ export function TodayPersonalizedProductSection({
             const chapterAccent =
               chapter.id === "opening"
                 ? "/images/cosmic/moon_orb.webp"
-                : chapter.id === "pressure"
+                : chapter.id === "force"
                   ? "/images/cosmic/eclipse_wash.webp"
                   : null;
             const media =
