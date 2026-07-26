@@ -3,45 +3,2243 @@
   "cases": [
     {
       "case_id": "hg-1482ed91292c",
-      "filled_reviews": 1,
-      "status": "waiting_reviews",
-      "missing": 1
+      "filled_reviews": 2,
+      "status": "sealed",
+      "agreement": {
+        "case_id": "hg-1482ed91292c",
+        "reviewer_count": 2,
+        "exact_overall_agreement": true,
+        "weighted_overall_distance": 0.0,
+        "requires_adjudication": false,
+        "defect_agreement": {
+          "codes": {
+            "AFFIRMATION_UNNATURAL": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "ASTRO_JARGON_BARE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "BUREAUCRATIC": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "CATEGORICAL_PROMISE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "CHORUS_NATAL_WITHOUT_EVIDENCE": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_PARALLEL_ECHO": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_PARALLEL_FORECAST": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_ROLE_DRIFT": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_SEMANTIC_DUPLICATION": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_UNTRANSLATED_JARGON": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_AFFIRMATION_ECHO": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_MISSING": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_NEW_FORECAST": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_NO_CONFLICT_CALLBACK": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_WELLNESS_MUSH": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "LOCALE_LANGUAGE_MISMATCH": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "NATAL_WITHOUT_EVIDENCE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_CONFLICT_UNCHANGED": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_DECORATIVE_ONLY": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_DEPTH_OVERREACH": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_EVIDENCE_ORPHAN": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_GENERIC_ACTION": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_NATAL_OVERCLAIM": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_PROFILE_FACT_LEAK": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SCENES_UNCHANGED": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_CROSS_PROFILE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_OUTSIDE_PACK": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_SELECTION_EMPTY": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_UNJUSTIFIED": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PROVENANCE_ACTION_NOT_DERIVED": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_PROP_NOT_DERIVED": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_REF_MISSING": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_REF_ORPHAN": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_WRONG_PROFILE": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PSEUDO_DIAGNOSIS": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_ABSTRACT": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_CLONE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_MISSING_CHOICE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_MISSING_EVERYDAY": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_UNIVERSAL_ADVICE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "THESIS_ECHO": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            }
+          },
+          "exact_match_rate": 1.0,
+          "compared": 42,
+          "matches": 42
+        },
+        "cohens_kappa_defect_presence": 1.0,
+        "cohens_kappa_overall": null,
+        "uncertain_rate": 0.0,
+        "cannot_assess_involved": false,
+        "note": "Kappa is unstable for rare defects — use alongside exact agreement and support counts; never as sole promotion evidence."
+      },
+      "integrity_errors": [],
+      "consensus_band": "pass"
     },
     {
       "case_id": "hg-21d5bfaf98ab",
-      "filled_reviews": 1,
-      "status": "waiting_reviews",
-      "missing": 1
+      "filled_reviews": 2,
+      "status": "sealed",
+      "agreement": {
+        "case_id": "hg-21d5bfaf98ab",
+        "reviewer_count": 2,
+        "exact_overall_agreement": true,
+        "weighted_overall_distance": 0.0,
+        "requires_adjudication": false,
+        "defect_agreement": {
+          "codes": {
+            "AFFIRMATION_UNNATURAL": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "ASTRO_JARGON_BARE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "BUREAUCRATIC": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "CATEGORICAL_PROMISE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "CHORUS_NATAL_WITHOUT_EVIDENCE": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_PARALLEL_ECHO": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_PARALLEL_FORECAST": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_ROLE_DRIFT": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_SEMANTIC_DUPLICATION": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_UNTRANSLATED_JARGON": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_AFFIRMATION_ECHO": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_MISSING": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_NEW_FORECAST": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_NO_CONFLICT_CALLBACK": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_WELLNESS_MUSH": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "LOCALE_LANGUAGE_MISMATCH": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "NATAL_WITHOUT_EVIDENCE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_CONFLICT_UNCHANGED": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_DECORATIVE_ONLY": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_DEPTH_OVERREACH": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_EVIDENCE_ORPHAN": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_GENERIC_ACTION": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_NATAL_OVERCLAIM": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_PROFILE_FACT_LEAK": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SCENES_UNCHANGED": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_CROSS_PROFILE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_OUTSIDE_PACK": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_SELECTION_EMPTY": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_UNJUSTIFIED": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PROVENANCE_ACTION_NOT_DERIVED": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_PROP_NOT_DERIVED": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_REF_MISSING": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_REF_ORPHAN": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_WRONG_PROFILE": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PSEUDO_DIAGNOSIS": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_ABSTRACT": {
+              "a": "present",
+              "b": "present",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_CLONE": {
+              "a": "present",
+              "b": "present",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_MISSING_CHOICE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_MISSING_EVERYDAY": {
+              "a": "present",
+              "b": "present",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_UNIVERSAL_ADVICE": {
+              "a": "present",
+              "b": "present",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "THESIS_ECHO": {
+              "a": "present",
+              "b": "present",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            }
+          },
+          "exact_match_rate": 1.0,
+          "compared": 42,
+          "matches": 42
+        },
+        "cohens_kappa_defect_presence": 1.0,
+        "cohens_kappa_overall": null,
+        "uncertain_rate": 0.0,
+        "cannot_assess_involved": false,
+        "note": "Kappa is unstable for rare defects — use alongside exact agreement and support counts; never as sole promotion evidence."
+      },
+      "integrity_errors": [],
+      "consensus_band": "reject"
     },
     {
       "case_id": "hg-369b42ad90c1",
-      "filled_reviews": 1,
-      "status": "waiting_reviews",
-      "missing": 1
+      "filled_reviews": 2,
+      "status": "sealed",
+      "agreement": {
+        "case_id": "hg-369b42ad90c1",
+        "reviewer_count": 2,
+        "exact_overall_agreement": true,
+        "weighted_overall_distance": 0.0,
+        "requires_adjudication": false,
+        "defect_agreement": {
+          "codes": {
+            "AFFIRMATION_UNNATURAL": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "ASTRO_JARGON_BARE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "BUREAUCRATIC": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "CATEGORICAL_PROMISE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "CHORUS_NATAL_WITHOUT_EVIDENCE": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_PARALLEL_ECHO": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_PARALLEL_FORECAST": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_ROLE_DRIFT": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_SEMANTIC_DUPLICATION": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_UNTRANSLATED_JARGON": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_AFFIRMATION_ECHO": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_MISSING": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_NEW_FORECAST": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_NO_CONFLICT_CALLBACK": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_WELLNESS_MUSH": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "LOCALE_LANGUAGE_MISMATCH": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "NATAL_WITHOUT_EVIDENCE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_CONFLICT_UNCHANGED": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_DECORATIVE_ONLY": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_DEPTH_OVERREACH": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_EVIDENCE_ORPHAN": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_GENERIC_ACTION": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_NATAL_OVERCLAIM": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_PROFILE_FACT_LEAK": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SCENES_UNCHANGED": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_CROSS_PROFILE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_OUTSIDE_PACK": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_SELECTION_EMPTY": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_UNJUSTIFIED": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PROVENANCE_ACTION_NOT_DERIVED": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_PROP_NOT_DERIVED": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_REF_MISSING": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_REF_ORPHAN": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_WRONG_PROFILE": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PSEUDO_DIAGNOSIS": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_ABSTRACT": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_CLONE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_MISSING_CHOICE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_MISSING_EVERYDAY": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_UNIVERSAL_ADVICE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "THESIS_ECHO": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            }
+          },
+          "exact_match_rate": 1.0,
+          "compared": 42,
+          "matches": 42
+        },
+        "cohens_kappa_defect_presence": 1.0,
+        "cohens_kappa_overall": null,
+        "uncertain_rate": 0.0,
+        "cannot_assess_involved": false,
+        "note": "Kappa is unstable for rare defects — use alongside exact agreement and support counts; never as sole promotion evidence."
+      },
+      "integrity_errors": [],
+      "consensus_band": "pass"
     },
     {
       "case_id": "hg-660b14d4bbb4",
-      "filled_reviews": 1,
-      "status": "waiting_reviews",
-      "missing": 1
+      "filled_reviews": 2,
+      "status": "sealed",
+      "agreement": {
+        "case_id": "hg-660b14d4bbb4",
+        "reviewer_count": 2,
+        "exact_overall_agreement": true,
+        "weighted_overall_distance": 0.0,
+        "requires_adjudication": false,
+        "defect_agreement": {
+          "codes": {
+            "AFFIRMATION_UNNATURAL": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "ASTRO_JARGON_BARE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "BUREAUCRATIC": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "CATEGORICAL_PROMISE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "CHORUS_NATAL_WITHOUT_EVIDENCE": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_PARALLEL_ECHO": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_PARALLEL_FORECAST": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_ROLE_DRIFT": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_SEMANTIC_DUPLICATION": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_UNTRANSLATED_JARGON": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_AFFIRMATION_ECHO": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_MISSING": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_NEW_FORECAST": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_NO_CONFLICT_CALLBACK": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_WELLNESS_MUSH": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "LOCALE_LANGUAGE_MISMATCH": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "NATAL_WITHOUT_EVIDENCE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_CONFLICT_UNCHANGED": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_DECORATIVE_ONLY": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_DEPTH_OVERREACH": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_EVIDENCE_ORPHAN": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_GENERIC_ACTION": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_NATAL_OVERCLAIM": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_PROFILE_FACT_LEAK": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SCENES_UNCHANGED": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_CROSS_PROFILE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_OUTSIDE_PACK": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_SELECTION_EMPTY": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_UNJUSTIFIED": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PROVENANCE_ACTION_NOT_DERIVED": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_PROP_NOT_DERIVED": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_REF_MISSING": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_REF_ORPHAN": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_WRONG_PROFILE": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PSEUDO_DIAGNOSIS": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_ABSTRACT": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_CLONE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_MISSING_CHOICE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_MISSING_EVERYDAY": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_UNIVERSAL_ADVICE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "THESIS_ECHO": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            }
+          },
+          "exact_match_rate": 1.0,
+          "compared": 42,
+          "matches": 42
+        },
+        "cohens_kappa_defect_presence": 1.0,
+        "cohens_kappa_overall": null,
+        "uncertain_rate": 0.0,
+        "cannot_assess_involved": false,
+        "note": "Kappa is unstable for rare defects — use alongside exact agreement and support counts; never as sole promotion evidence."
+      },
+      "integrity_errors": [],
+      "consensus_band": "pass"
     },
     {
       "case_id": "hg-df42bbdb781d",
-      "filled_reviews": 1,
-      "status": "waiting_reviews",
-      "missing": 1
+      "filled_reviews": 2,
+      "status": "sealed",
+      "agreement": {
+        "case_id": "hg-df42bbdb781d",
+        "reviewer_count": 2,
+        "exact_overall_agreement": true,
+        "weighted_overall_distance": 0.0,
+        "requires_adjudication": false,
+        "defect_agreement": {
+          "codes": {
+            "AFFIRMATION_UNNATURAL": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "ASTRO_JARGON_BARE": {
+              "a": "present",
+              "b": "present",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "BUREAUCRATIC": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "CATEGORICAL_PROMISE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "CHORUS_NATAL_WITHOUT_EVIDENCE": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_PARALLEL_ECHO": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_PARALLEL_FORECAST": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_ROLE_DRIFT": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_SEMANTIC_DUPLICATION": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_UNTRANSLATED_JARGON": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_AFFIRMATION_ECHO": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_MISSING": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_NEW_FORECAST": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_NO_CONFLICT_CALLBACK": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_WELLNESS_MUSH": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "LOCALE_LANGUAGE_MISMATCH": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "NATAL_WITHOUT_EVIDENCE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_CONFLICT_UNCHANGED": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_DECORATIVE_ONLY": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_DEPTH_OVERREACH": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_EVIDENCE_ORPHAN": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_GENERIC_ACTION": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_NATAL_OVERCLAIM": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_PROFILE_FACT_LEAK": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SCENES_UNCHANGED": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_CROSS_PROFILE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_OUTSIDE_PACK": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_SELECTION_EMPTY": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_UNJUSTIFIED": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PROVENANCE_ACTION_NOT_DERIVED": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_PROP_NOT_DERIVED": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_REF_MISSING": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_REF_ORPHAN": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_WRONG_PROFILE": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PSEUDO_DIAGNOSIS": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_ABSTRACT": {
+              "a": "present",
+              "b": "present",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_CLONE": {
+              "a": "present",
+              "b": "present",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_MISSING_CHOICE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_MISSING_EVERYDAY": {
+              "a": "present",
+              "b": "present",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_UNIVERSAL_ADVICE": {
+              "a": "present",
+              "b": "present",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "THESIS_ECHO": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            }
+          },
+          "exact_match_rate": 1.0,
+          "compared": 42,
+          "matches": 42
+        },
+        "cohens_kappa_defect_presence": 1.0,
+        "cohens_kappa_overall": null,
+        "uncertain_rate": 0.0,
+        "cannot_assess_involved": false,
+        "note": "Kappa is unstable for rare defects — use alongside exact agreement and support counts; never as sole promotion evidence."
+      },
+      "integrity_errors": [],
+      "consensus_band": "reject"
     },
     {
       "case_id": "hg-f3c8ab09e03f",
-      "filled_reviews": 1,
-      "status": "waiting_reviews",
-      "missing": 1
+      "filled_reviews": 2,
+      "status": "sealed",
+      "agreement": {
+        "case_id": "hg-f3c8ab09e03f",
+        "reviewer_count": 2,
+        "exact_overall_agreement": true,
+        "weighted_overall_distance": 0.0,
+        "requires_adjudication": false,
+        "defect_agreement": {
+          "codes": {
+            "AFFIRMATION_UNNATURAL": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "ASTRO_JARGON_BARE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "BUREAUCRATIC": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "CATEGORICAL_PROMISE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "CHORUS_NATAL_WITHOUT_EVIDENCE": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_PARALLEL_ECHO": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_PARALLEL_FORECAST": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_ROLE_DRIFT": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_SEMANTIC_DUPLICATION": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_UNTRANSLATED_JARGON": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_AFFIRMATION_ECHO": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_MISSING": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_NEW_FORECAST": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_NO_CONFLICT_CALLBACK": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_WELLNESS_MUSH": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "LOCALE_LANGUAGE_MISMATCH": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "NATAL_WITHOUT_EVIDENCE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_CONFLICT_UNCHANGED": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_DECORATIVE_ONLY": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_DEPTH_OVERREACH": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_EVIDENCE_ORPHAN": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_GENERIC_ACTION": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_NATAL_OVERCLAIM": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_PROFILE_FACT_LEAK": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SCENES_UNCHANGED": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_CROSS_PROFILE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_OUTSIDE_PACK": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_SELECTION_EMPTY": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_UNJUSTIFIED": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PROVENANCE_ACTION_NOT_DERIVED": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_PROP_NOT_DERIVED": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_REF_MISSING": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_REF_ORPHAN": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_WRONG_PROFILE": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PSEUDO_DIAGNOSIS": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_ABSTRACT": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_CLONE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_MISSING_CHOICE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_MISSING_EVERYDAY": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_UNIVERSAL_ADVICE": {
+              "a": "present",
+              "b": "present",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "THESIS_ECHO": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            }
+          },
+          "exact_match_rate": 1.0,
+          "compared": 42,
+          "matches": 42
+        },
+        "cohens_kappa_defect_presence": 1.0,
+        "cohens_kappa_overall": null,
+        "uncertain_rate": 0.0,
+        "cannot_assess_involved": false,
+        "note": "Kappa is unstable for rare defects — use alongside exact agreement and support counts; never as sole promotion evidence."
+      },
+      "integrity_errors": [],
+      "consensus_band": "acceptable_with_issues"
     },
     {
       "case_id": "hg-f61a374bc5aa",
-      "filled_reviews": 1,
-      "status": "waiting_reviews",
-      "missing": 1
+      "filled_reviews": 2,
+      "status": "sealed",
+      "agreement": {
+        "case_id": "hg-f61a374bc5aa",
+        "reviewer_count": 2,
+        "exact_overall_agreement": true,
+        "weighted_overall_distance": 0.0,
+        "requires_adjudication": false,
+        "defect_agreement": {
+          "codes": {
+            "AFFIRMATION_UNNATURAL": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "ASTRO_JARGON_BARE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "BUREAUCRATIC": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "CATEGORICAL_PROMISE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "CHORUS_NATAL_WITHOUT_EVIDENCE": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_PARALLEL_ECHO": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_PARALLEL_FORECAST": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_ROLE_DRIFT": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_SEMANTIC_DUPLICATION": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CHORUS_UNTRANSLATED_JARGON": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_AFFIRMATION_ECHO": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_MISSING": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_NEW_FORECAST": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_NO_CONFLICT_CALLBACK": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "CLOSURE_WELLNESS_MUSH": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "LOCALE_LANGUAGE_MISMATCH": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "NATAL_WITHOUT_EVIDENCE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_CONFLICT_UNCHANGED": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_DECORATIVE_ONLY": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_DEPTH_OVERREACH": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_EVIDENCE_ORPHAN": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_GENERIC_ACTION": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_NATAL_OVERCLAIM": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_PROFILE_FACT_LEAK": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SCENES_UNCHANGED": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_CROSS_PROFILE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_OUTSIDE_PACK": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_SELECTION_EMPTY": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PERSONALIZATION_SPHERE_UNJUSTIFIED": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "PROVENANCE_ACTION_NOT_DERIVED": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_PROP_NOT_DERIVED": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_REF_MISSING": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_REF_ORPHAN": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PROVENANCE_WRONG_PROFILE": {
+              "a": "not_applicable",
+              "b": "not_applicable",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": true
+            },
+            "PSEUDO_DIAGNOSIS": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_ABSTRACT": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_CLONE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_MISSING_CHOICE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_MISSING_EVERYDAY": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "SCENE_UNIVERSAL_ADVICE": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            },
+            "THESIS_ECHO": {
+              "a": "absent",
+              "b": "absent",
+              "agree": true,
+              "involves_uncertain": false,
+              "involves_not_applicable": false
+            }
+          },
+          "exact_match_rate": 1.0,
+          "compared": 42,
+          "matches": 42
+        },
+        "cohens_kappa_defect_presence": 1.0,
+        "cohens_kappa_overall": null,
+        "uncertain_rate": 0.0,
+        "cannot_assess_involved": false,
+        "note": "Kappa is unstable for rare defects — use alongside exact agreement and support counts; never as sole promotion evidence."
+      },
+      "integrity_errors": [],
+      "consensus_band": "pass"
     }
   ]
 }
