@@ -1,0 +1,84 @@
+{
+  "note": "Example C3.6.2 blind→consensus cycle. No PII. Analyzer attached only after seal.",
+  "blind_packet_keys": [
+    "case_id",
+    "defect_catalog_version",
+    "defect_codes_for_labeling",
+    "evidence_depth",
+    "export_kind",
+    "golden_contract_version",
+    "instructions",
+    "locale",
+    "profile_type",
+    "review_protocol_version",
+    "rubric_version",
+    "scenario",
+    "scenario_contract_version",
+    "scenario_hash",
+    "scenario_id",
+    "source_type"
+  ],
+  "blind_has_analyzer_defects": false,
+  "case_id": "hg-de453f05aff2",
+  "scenario_hash": "sha256:258eed3a8673f9706987c1f214ce8befe6e3a4947b7b6284f7873ea2e4305f6f",
+  "review_status": "sealed",
+  "reviewers": [
+    {
+      "id": "reviewer_a",
+      "band": "pass"
+    },
+    {
+      "id": "reviewer_b",
+      "band": "pass"
+    }
+  ],
+  "final_consensus": {
+    "overall_band": "pass",
+    "source": "exact_agreement",
+    "label_source": "human"
+  },
+  "analyzer_attached_after_seal": true,
+  "calibration_row": {
+    "case_id": "hg-de453f05aff2",
+    "locale": "en",
+    "profile_id": "smooth_conflict",
+    "profile_type": "smooth_conflict",
+    "source": "curated",
+    "label_source": "human",
+    "native_ref": "hg-de453f05aff2",
+    "scenario_hash": "sha256:258eed3a8673f9706987c1f214ce8befe6e3a4947b7b6284f7873ea2e4305f6f",
+    "expected": {
+      "band": "pass",
+      "primary_defects": [],
+      "absent_defects": [
+        "AFFIRMATION_UNNATURAL",
+        "ASTRO_JARGON_BARE",
+        "BUREAUCRATIC",
+        "CATEGORICAL_PROMISE",
+        "CHORUS_NATAL_WITHOUT_EVIDENCE",
+        "CHORUS_PARALLEL_ECHO",
+        "CHORUS_PARALLEL_FORECAST",
+        "CHORUS_ROLE_DRIFT"
+      ],
+      "uncertain_defects": [],
+      "not_applicable_defects": [],
+      "human_overall_band": "pass"
+    },
+    "consensus_band": "pass",
+    "human_overall_band": "pass",
+    "golden_contract_version": "day_scenario_human_golden_c362",
+    "rubric_version": "day_scenario_human_review_rubric_c362.1",
+    "defect_catalog_version": "gate_rules_c36.42",
+    "review_protocol_version": "day_scenario_review_protocol_c362.1",
+    "scenario_contract_version": "day_scenario_native_llm_c1",
+    "analyzer_version": "day_scenario_eval_pack_c35.1+gate_maturity_c36"
+  },
+  "versions": {
+    "golden_contract_version": "day_scenario_human_golden_c362",
+    "rubric_version": "day_scenario_human_review_rubric_c362.1",
+    "defect_catalog_version": "gate_rules_c36.42",
+    "review_protocol_version": "day_scenario_review_protocol_c362.1",
+    "scenario_contract_version": "day_scenario_native_llm_c1",
+    "analyzer_version": "day_scenario_eval_pack_c35.1+gate_maturity_c36"
+  }
+}

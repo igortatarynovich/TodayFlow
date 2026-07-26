@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "day_scenario_human_golden_schema_c362",
+  "title": "Day Scenario Human Golden Case C3.6.2",
+  "type": "object",
+  "required": [
+    "golden_contract_version",
+    "rubric_version",
+    "defect_catalog_version",
+    "review_protocol_version",
+    "scenario_contract_version",
+    "case_id",
+    "scenario_hash",
+    "locale",
+    "profile_type",
+    "evidence_depth",
+    "source_type",
+    "scenario",
+    "review_status",
+    "label_source",
+    "reviewers",
+    "review_history"
+  ],
+  "properties": {
+    "golden_contract_version": { "type": "string" },
+    "rubric_version": { "type": "string" },
+    "defect_catalog_version": { "type": "string" },
+    "review_protocol_version": { "type": "string" },
+    "scenario_contract_version": { "type": "string" },
+    "analyzer_version": { "type": "string" },
+    "case_id": { "type": "string", "pattern": "^hg-" },
+    "scenario_id": { "type": "string" },
+    "scenario_hash": { "type": "string", "pattern": "^sha256:" },
+    "locale": { "enum": ["ru", "en"] },
+    "profile_type": { "type": "string" },
+    "evidence_depth": { "type": "string" },
+    "source_type": { "enum": ["synthetic", "live_capture", "curated"] },
+    "generator_version": { "type": ["string", "null"] },
+    "generation_seed": { "type": ["string", "null"] },
+    "created_at": { "type": "string" },
+    "scenario": { "type": "object" },
+    "evidence_pack_snapshot": { "type": ["object", "null"] },
+    "evidence_pack_ref": { "type": ["string", "null"] },
+    "contract_valid": { "type": "boolean" },
+    "hard_gate_result": { "type": "string" },
+    "review_status": {
+      "enum": [
+        "draft",
+        "exported_blind",
+        "reviews_in_progress",
+        "needs_adjudication",
+        "consensus_ready",
+        "sealed"
+      ]
+    },
+    "label_source": { "enum": ["human"] },
+    "reviewers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["reviewer_id", "overall_band", "defects"],
+        "properties": {
+          "reviewer_id": { "type": "string" },
+          "overall_band": {
+            "enum": ["pass", "acceptable_with_issues", "reject", "cannot_assess"]
+          },
+          "defects": { "type": "object" },
+          "notes": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "adjudicator": { "type": ["object", "null"] },
+    "final_consensus": { "type": ["object", "null"] },
+    "review_history": { "type": "array" },
+    "analyzer_attachment": { "type": ["object", "null"] }
+  }
+}

@@ -56,20 +56,20 @@ Loaded by `bootstrap_golden_cases_c361()` — fixtures live in code, not PII.
 
 Metrics snapshot: [DAY_SCENARIO_GATE_CALIBRATION_BASELINE_C361.md](./DAY_SCENARIO_GATE_CALIBRATION_BASELINE_C361.md)
 
-### B. Human-labeled
+### B. Human-labeled (C3.6.2 protocol)
 
-_None yet._
+**Protocol + tooling landed** — [DAY_SCENARIO_HUMAN_GOLDEN_C362.md](./DAY_SCENARIO_HUMAN_GOLDEN_C362.md) · [rubric](./DAY_SCENARIO_HUMAN_REVIEW_RUBRIC_C362.md).  
+**Production human labels:** none yet (do not invent 40 fake consensus rows in code).
 
 | case_id | locale | profile_id | source | consensus_band | labeled_at |
 |---------|--------|------------|--------|----------------|------------|
 | — | — | — | — | — | — |
 
+Example tooling cycle: [DAY_SCENARIO_HUMAN_GOLDEN_EXAMPLE_CYCLE_C362.json](./DAY_SCENARIO_HUMAN_GOLDEN_EXAMPLE_CYCLE_C362.json)
+
 ## Next
 
-**C3.6.2 — Human Golden Set and Review Protocol**
-
-Manual labeling + disagreement resolution among raters before any promotion.
-Synthetic bootstrap alone must not be treated as promotion evidence.
+**Human labeling batch** under C3.6.2 protocol (blind dual review + adjudication) → consensus calibration → promotions only with evidence.
 
 ## Non-goals
 

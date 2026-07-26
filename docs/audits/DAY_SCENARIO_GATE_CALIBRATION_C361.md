@@ -56,5 +56,5 @@ For each code the report includes:
 
 ## Next
 
-**C3.6.2 — Human Golden Set and Review Protocol**  
-Manual labeling + disagreement resolution among raters before any promotion decision. Do not treat a single editor’s labels as consensus.
+**C3.6.2 — Human Golden Set and Review Protocol** — tooling landed; run real blind batch.  
+See [DAY_SCENARIO_HUMAN_GOLDEN_C362.md](./DAY_SCENARIO_HUMAN_GOLDEN_C362.md).
