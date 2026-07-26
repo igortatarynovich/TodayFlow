@@ -451,6 +451,7 @@ def build_character_engine_identity_core_v0(
     evidence: dict[str, Any],
     locale: str = "ru",
     llm_raw: dict[str, Any] | None = None,
+    deterministic_only: bool = False,
 ) -> dict[str, Any]:
     """
     Run Stage 2 Identity Core.
@@ -458,6 +459,7 @@ def build_character_engine_identity_core_v0(
     Pass ``llm_raw`` in tests to inject a model response without calling the network.
     When LLM is missing/empty/invalid and Stage 1 has grounded claims → deterministic
     editorial surface (fill-empty resilience). LLM success remains preferred SoT for prose.
+    ``deterministic_only=True`` skips LLM (Profile GET fill-once; publish uses LLM).
     """
     context = build_stage2_context_pack(facts_pack=facts_pack, evidence=evidence)
     prompt_version = "0"
@@ -515,9 +517,11 @@ def build_character_engine_identity_core_v0(
             }
         return out
 
-    if not is_llm_chat_configured():
-        logger.info("character_engine_stage2: LLM not configured — deterministic fallback")
-        return _deterministic(reason="llm_not_configured", prompt_ver="n/a")
+    if deterministic_only or not is_llm_chat_configured():
+        reason = "deterministic_only_read_path" if deterministic_only else "llm_not_configured"
+        if not deterministic_only:
+            logger.info("character_engine_stage2: LLM not configured — deterministic fallback")
+        return _deterministic(reason=reason, prompt_ver="n/a")
 
     system, prompt_version = get_prompt(STAGE2_PROMPT_ID, locale=locale)
     client = get_openai_compatible_client(operation="background")

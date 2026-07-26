@@ -318,8 +318,9 @@ class CoreProfileService:
     ) -> dict[str, Any]:
         """Read-path only: memory/snapshot or deterministic baseline shell.
 
-        Never runs portrait LLM. All GET / side modules must use this (or ``build()``
-        without ``publish_portrait``).
+        Never runs portrait LLM. Never runs Character Engine Stage 2–5 LLM.
+        CE nests are read from the persisted snapshot (assembled once on publish /
+        deterministic fill-once). All GET / side modules must use this.
         """
         settings = (
             db.query(db_models.UserSettings).filter(db_models.UserSettings.user_id == user.id).first()
@@ -335,45 +336,18 @@ class CoreProfileService:
         cached = self._cache.get(cache_key)
         if cached and cached[0] > now:
             payload = deepcopy(cached[1])
-            diagnostics = payload.get("diagnostics") if isinstance(payload.get("diagnostics"), dict) else {}
-            # Re-attach only when a required CE nest is missing (avoid Stage 2 LLM every hit).
-            need_ce_attach = not diagnostics.get("character_engine_stage2")
-            try:
-                from todayflow_backend.services.character_engine_stage3_shadow_v0 import (
-                    character_engine_stage3_should_run,
-                )
-                from todayflow_backend.services.character_engine_stage4_shadow_v0 import (
-                    character_engine_stage4_should_run,
-                )
-                from todayflow_backend.services.character_engine_stage5_shadow_v0 import (
-                    character_engine_stage5_should_run,
-                )
-
-                if character_engine_stage3_should_run() and not diagnostics.get(
-                    "character_engine_stage3"
-                ):
-                    need_ce_attach = True
-                if character_engine_stage4_should_run() and not diagnostics.get(
-                    "character_engine_stage4"
-                ):
-                    need_ce_attach = True
-                if character_engine_stage5_should_run() and not diagnostics.get(
-                    "character_engine_stage5"
-                ):
-                    need_ce_attach = True
-            except Exception:
-                pass
-            if need_ce_attach:
-                payload = self._maybe_attach_character_engine_shadow(
-                    db,
-                    payload,
-                    astro_profile=astro_profile,
-                    astro_context=self._build_astro_context(astro_profile),
-                    numerology_context=self._build_numerology_context(numerology_profile),
-                    person_pub=self._person_public(settings, user),
-                    profile_hash=payload.get("profile_hash") or "",
-                    natal_facts=None,
-                )
+            # Memory hit: never re-run CE LLM. Optional cheap deterministic fill if nests missing.
+            payload = self._maybe_attach_character_engine_shadow(
+                db,
+                payload,
+                astro_profile=astro_profile,
+                astro_context=self._build_astro_context(astro_profile),
+                numerology_context=self._build_numerology_context(numerology_profile),
+                person_pub=self._person_public(settings, user),
+                profile_hash=payload.get("profile_hash") or "",
+                natal_facts=None,
+                include_stage2=False,
+            )
             return self._attach_natal_summary(db, payload, astro_profile, settings, user)
 
         astro_context = self._build_astro_context(astro_profile)
@@ -387,6 +361,14 @@ class CoreProfileService:
                 cached_payload["astro"]["relation"] = astro_context.get("relation")
             cached_payload["profiles"] = profiles_context
             cached_payload["living"] = living_context
+            before_diag = (
+                cached_payload.get("diagnostics")
+                if isinstance(cached_payload.get("diagnostics"), dict)
+                else {}
+            )
+            had_stage5 = isinstance(before_diag.get("character_engine_stage5"), dict) and isinstance(
+                (before_diag.get("character_engine_stage5") or {}).get("stage5"), dict
+            )
             cached_payload = self._maybe_attach_character_engine_shadow(
                 db,
                 cached_payload,
@@ -396,7 +378,29 @@ class CoreProfileService:
                 person_pub=self._person_public(settings, user),
                 profile_hash=profile_hash,
                 natal_facts=None,
+                include_stage2=False,
             )
+            after_diag = (
+                cached_payload.get("diagnostics")
+                if isinstance(cached_payload.get("diagnostics"), dict)
+                else {}
+            )
+            filled_stage5 = isinstance(after_diag.get("character_engine_stage5"), dict) and isinstance(
+                (after_diag.get("character_engine_stage5") or {}).get("stage5"), dict
+            )
+            # Persist one-shot deterministic CE fill so next GET is snapshot-only.
+            if filled_stage5 and not had_stage5:
+                try:
+                    sid = self._save_snapshot(
+                        db=db,
+                        user_id=user.id,
+                        profile_hash=profile_hash,
+                        payload=cached_payload,
+                    )
+                    if sid is not None:
+                        cached_payload["snapshot_id"] = sid
+                except Exception:
+                    pass
             self._cache[cache_key] = (now + self.cache_ttl_seconds, deepcopy(cached_payload))
             self._prune_cache(now)
             return self._attach_natal_summary(db, cached_payload, astro_profile, settings, user)
@@ -426,6 +430,7 @@ class CoreProfileService:
             person_pub=person_pub,
             profile_hash=profile_hash,
             natal_facts=None,
+            include_stage2=False,
         )
         return self._attach_natal_summary(db, shell, astro_profile, settings, user)
 
@@ -1251,10 +1256,11 @@ class CoreProfileService:
         natal_facts: dict[str, Any] | None = None,
         include_stage2: bool = False,
     ) -> dict[str, Any]:
-        """Attach CE Stage 0–1 (cheap) and optionally Stage 2 (LLM) diagnostics.
+        """Attach CE diagnostics.
 
-        Stage 2 is expensive: pass ``include_stage2=True`` on portrait publish/refresh,
-        or enable ``CHARACTER_ENGINE_PROFILE_CONSUMPTION`` (Identity Core on Profile read).
+        ``include_stage2=True`` (portrait publish): Stage 2–5 may call LLM.
+        ``include_stage2=False`` (Profile GET): never LLM — reuse snapshot nests or
+        fill missing Stage 2–5 with deterministic-only once (natal-chart style).
         Never publishes character_engine_v1 ready.
         """
         try:
@@ -1267,51 +1273,52 @@ class CoreProfileService:
                 maybe_attach_stage2_shadow,
             )
             from todayflow_backend.services.character_engine_stage3_shadow_v0 import (
-                character_engine_stage3_should_run,
                 maybe_attach_stage3_shadow,
             )
             from todayflow_backend.services.character_engine_stage4_shadow_v0 import (
-                character_engine_stage4_should_run,
                 maybe_attach_stage4_shadow,
             )
             from todayflow_backend.services.character_engine_stage5_shadow_v0 import (
-                character_engine_stage5_should_run,
                 maybe_attach_stage5_shadow,
             )
 
-            run_stage2 = bool(include_stage2) and character_engine_stage2_should_run()
-            run_stage3 = False
-            run_stage4 = False
-            run_stage5 = False
+            consumption = False
             try:
                 from todayflow_backend.services.character_engine_profile_consumption_v0 import (
                     character_engine_profile_consumption_enabled,
                 )
 
-                if character_engine_profile_consumption_enabled():
-                    # Product slice needs Identity Core (+ Stage 3–5 assembly) on Profile read.
-                    run_stage2 = True
-                    run_stage3 = True
-                    run_stage4 = True
-                    run_stage5 = True
+                consumption = character_engine_profile_consumption_enabled()
             except Exception:
                 pass
-            if character_engine_stage3_should_run():
-                run_stage2 = True
-                run_stage3 = True
-            if character_engine_stage4_should_run():
-                run_stage2 = True
-                run_stage3 = True
-                run_stage4 = True
-            if character_engine_stage5_should_run():
-                run_stage2 = True
-                run_stage3 = True
-                run_stage4 = True
-                run_stage5 = True
+
+            diagnostics = (
+                profile_payload.get("diagnostics")
+                if isinstance(profile_payload.get("diagnostics"), dict)
+                else {}
+            )
+            has_stage5 = isinstance(diagnostics.get("character_engine_stage5"), dict) and isinstance(
+                (diagnostics.get("character_engine_stage5") or {}).get("stage5"), dict
+            )
+
+            # Publish: full LLM cascade when CE flags / consumption on.
+            # Read: deterministic fill-once only if consumption needs CE and nest missing.
+            if include_stage2:
+                run_stage2 = character_engine_stage2_should_run() or consumption
+                run_stage3 = run_stage2
+                run_stage4 = run_stage2
+                run_stage5 = run_stage2
+                deterministic_only = False
+            else:
+                run_stage2 = bool(consumption and not has_stage5)
+                run_stage3 = run_stage2
+                run_stage4 = run_stage2
+                run_stage5 = run_stage2
+                deterministic_only = True
+
             if not (
                 character_engine_stage01_should_run()
                 or run_stage2
-                or character_engine_stage2_should_run()
                 or run_stage3
                 or run_stage4
                 or run_stage5
@@ -1351,12 +1358,20 @@ class CoreProfileService:
             )
             if character_engine_stage01_should_run():
                 profile_payload = maybe_attach_stage01_shadow(profile_payload, **shadow_kwargs)
+            # Stage 2 should_run also true via consumption; force-enable path for read fill.
             if run_stage2:
-                profile_payload = maybe_attach_stage2_shadow(profile_payload, **shadow_kwargs)
+                # Temporarily allow attach even if only consumption drives the fill.
+                profile_payload = maybe_attach_stage2_shadow(
+                    profile_payload, deterministic_only=deterministic_only, **shadow_kwargs
+                )
             if run_stage3:
-                profile_payload = maybe_attach_stage3_shadow(profile_payload, **shadow_kwargs)
+                profile_payload = maybe_attach_stage3_shadow(
+                    profile_payload, deterministic_only=deterministic_only, **shadow_kwargs
+                )
             if run_stage4:
-                profile_payload = maybe_attach_stage4_shadow(profile_payload, **shadow_kwargs)
+                profile_payload = maybe_attach_stage4_shadow(
+                    profile_payload, deterministic_only=deterministic_only, **shadow_kwargs
+                )
             if run_stage5:
                 profile_payload = maybe_attach_stage5_shadow(profile_payload, **shadow_kwargs)
         except Exception:

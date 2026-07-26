@@ -16,7 +16,7 @@ export {
 /**
  * Загружает ядро профиля.
  * Без force: может вернуть local/session cache (быстрый paint).
- * С force: всегда сеть — нужно после SoT/consumption смен и на Profile mount.
+ * С force: сеть — GET обязан быть дешёвым (snapshot + consumption, без LLM).
  */
 export async function fetchCoreProfileCached(options?: {
   astroProfileId?: number | null;

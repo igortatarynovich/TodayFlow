@@ -49,6 +49,7 @@ def run_character_engine_stage2_shadow_v0(
     capability: dict[str, Any] | None = None,
     birth_date: Any = None,
     input_fingerprint: str | None = None,
+    deterministic_only: bool = False,
 ) -> dict[str, Any]:
     facts_pack = build_character_engine_facts_pack_v0(
         profile_fingerprint=profile_fingerprint,
@@ -61,7 +62,9 @@ def run_character_engine_stage2_shadow_v0(
         input_fingerprint=input_fingerprint,
     )
     evidence = build_character_engine_evidence_candidates_v0(facts_pack)
-    identity = build_character_engine_identity_core_v0(facts_pack=facts_pack, evidence=evidence)
+    identity = build_character_engine_identity_core_v0(
+        facts_pack=facts_pack, evidence=evidence, deterministic_only=deterministic_only
+    )
     validation = identity.get("validation") or {}
     ok = identity.get("status") in {"grounded", "insufficient_identity_core"} and bool(
         validation.get("no_new_facts", True)
@@ -94,6 +97,7 @@ def maybe_attach_stage2_shadow(
     natal_facts_bridge: dict[str, Any] | None = None,
     capability: dict[str, Any] | None = None,
     birth_date: Any = None,
+    deterministic_only: bool = False,
 ) -> dict[str, Any]:
     if not character_engine_stage2_should_run():
         return profile_payload
@@ -116,6 +120,7 @@ def maybe_attach_stage2_shadow(
             natal_facts_bridge=natal_facts_bridge,
             capability=capability,
             birth_date=birth_date,
+            deterministic_only=deterministic_only,
         )
     except Exception:
         logger.exception("character_engine_stage2_shadow failed")

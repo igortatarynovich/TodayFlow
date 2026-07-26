@@ -43,6 +43,7 @@ def run_character_engine_stage3_shadow_v0(
     input_fingerprint: str | None = None,
     stage2_artifact: dict[str, Any] | None = None,
     locale: str = "ru",
+    deterministic_only: bool = False,
 ) -> dict[str, Any]:
     if not isinstance(stage2_artifact, dict) or not isinstance(stage2_artifact.get("stage2"), dict):
         if not character_engine_stage2_should_run() and not character_engine_stage3_should_run():
@@ -57,6 +58,7 @@ def run_character_engine_stage3_shadow_v0(
                 capability=capability,
                 birth_date=birth_date,
                 input_fingerprint=input_fingerprint,
+                deterministic_only=deterministic_only,
             )
 
     if not isinstance(stage2_artifact, dict):
@@ -79,6 +81,7 @@ def run_character_engine_stage3_shadow_v0(
         evidence=evidence,
         identity=identity,
         locale=locale,
+        deterministic_only=deterministic_only,
     )
     validation = internal.get("validation") or {}
     ok = internal.get("status") in {"grounded", "insufficient_internal_engine"} and bool(
@@ -113,6 +116,7 @@ def maybe_attach_stage3_shadow(
     capability: dict[str, Any] | None = None,
     birth_date: Any = None,
     locale: str = "ru",
+    deterministic_only: bool = False,
 ) -> dict[str, Any]:
     if not character_engine_stage3_should_run():
         return profile_payload
@@ -143,6 +147,7 @@ def maybe_attach_stage3_shadow(
             natal_facts_bridge=natal_facts_bridge,
             capability=capability,
             birth_date=birth_date,
+            deterministic_only=deterministic_only,
         )
         diagnostics = profile_payload.get("diagnostics")
         if not isinstance(diagnostics, dict):
@@ -162,6 +167,7 @@ def maybe_attach_stage3_shadow(
             birth_date=birth_date,
             stage2_artifact=stage2_artifact,
             locale=locale,
+            deterministic_only=deterministic_only,
         )
     except Exception:
         logger.exception("character_engine_stage3_shadow failed")

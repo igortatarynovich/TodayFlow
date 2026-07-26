@@ -44,6 +44,7 @@ def run_character_engine_stage4_shadow_v0(
     stage2_artifact: dict[str, Any] | None = None,
     stage3_artifact: dict[str, Any] | None = None,
     locale: str = "ru",
+    deterministic_only: bool = False,
 ) -> dict[str, Any]:
     if not isinstance(stage3_artifact, dict) or not isinstance(stage3_artifact.get("stage3"), dict):
         stage3_artifact = run_character_engine_stage3_shadow_v0(
@@ -57,6 +58,7 @@ def run_character_engine_stage4_shadow_v0(
             input_fingerprint=input_fingerprint,
             stage2_artifact=stage2_artifact,
             locale=locale,
+            deterministic_only=deterministic_only,
         )
 
     if not isinstance(stage3_artifact, dict):
@@ -91,6 +93,7 @@ def run_character_engine_stage4_shadow_v0(
             capability=capability,
             birth_date=birth_date,
             input_fingerprint=input_fingerprint,
+            deterministic_only=deterministic_only,
         )
 
     facts_pack = stage2_artifact.get("stage0") if isinstance(stage2_artifact.get("stage0"), dict) else {}
@@ -104,6 +107,7 @@ def run_character_engine_stage4_shadow_v0(
         identity=identity,
         stage3=stage3,
         locale=locale,
+        deterministic_only=deterministic_only,
     )
     validation = life.get("validation") or {}
     ok = life.get("status") in {"grounded", "insufficient_life_bundle"} and bool(
@@ -139,6 +143,7 @@ def maybe_attach_stage4_shadow(
     capability: dict[str, Any] | None = None,
     birth_date: Any = None,
     locale: str = "ru",
+    deterministic_only: bool = False,
 ) -> dict[str, Any]:
     if not character_engine_stage4_should_run():
         return profile_payload
@@ -171,6 +176,7 @@ def maybe_attach_stage4_shadow(
             capability=capability,
             birth_date=birth_date,
             locale=locale,
+            deterministic_only=deterministic_only,
         )
         diagnostics = profile_payload.get("diagnostics")
         if not isinstance(diagnostics, dict):
@@ -194,6 +200,7 @@ def maybe_attach_stage4_shadow(
             stage2_artifact=stage2_artifact,
             stage3_artifact=stage3_artifact,
             locale=locale,
+            deterministic_only=deterministic_only,
         )
     except Exception:
         logger.exception("character_engine_stage4_shadow failed")

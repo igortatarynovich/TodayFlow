@@ -250,7 +250,7 @@ function ProfileHubPageInner() {
     }
 
     Promise.all([
-      // Always hit network on Profile — local cache can hide CE consumption for days.
+      // Soft network revalidate — backend GET is snapshot-fast (no CE LLM).
       fetchCoreProfileCached({ force: true }).catch(() => null),
       fetchCompactUserModelCached().catch(() => null),
       getJson<UserSettings>("/account/profile").catch(() => null),

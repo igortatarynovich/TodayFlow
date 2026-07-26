@@ -504,6 +504,7 @@ def build_character_engine_internal_engine_v0(
     identity: dict[str, Any],
     locale: str = "ru",
     llm_raw: dict[str, Any] | None = None,
+    deterministic_only: bool = False,
 ) -> dict[str, Any]:
     """Run Stage 3 Internal Engine. Pass llm_raw in tests."""
     context = build_stage3_context_pack(
@@ -559,8 +560,9 @@ def build_character_engine_internal_engine_v0(
             }
         return out
 
-    if not is_llm_chat_configured():
-        return _deterministic(reason="llm_not_configured", prompt_ver="n/a")
+    if deterministic_only or not is_llm_chat_configured():
+        reason = "deterministic_only_read_path" if deterministic_only else "llm_not_configured"
+        return _deterministic(reason=reason, prompt_ver="n/a")
 
     system, prompt_version = get_prompt(STAGE3_PROMPT_ID, locale=locale)
     client = get_openai_compatible_client(operation="background")
