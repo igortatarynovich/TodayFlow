@@ -87,15 +87,24 @@ def test_publish_portrait_calls_llm(db_session: Session, user_with_birth: db_mod
         "growth_zones": ["a", "b", "c"],
         "generation_meta": {"steps": [{"id": 1}]},
     }
-    with patch(
-        "todayflow_backend.services.core_profile.build_profile_portrait_v1",
-        return_value=(fake_contract, {"summary": "x"}, None, False),
-    ) as mocked:
+    with (
+        patch(
+            "todayflow_backend.services.character_engine_stage2_shadow_v0.character_engine_publish_ready_enabled",
+            return_value=False,
+        ),
+        patch(
+            "todayflow_backend.core.config.settings.character_engine_publish_ready",
+            False,
+        ),
+        patch(
+            "todayflow_backend.services.core_profile.build_profile_portrait_v1",
+            return_value=(fake_contract, {"summary": "x"}, None, False),
+        ) as mocked,
+    ):
         payload = service.build(db_session, user_with_birth, publish_portrait=True)
     assert mocked.called
     assert service.get_llm_call_counter() >= 1
     assert payload.get("snapshot_id") is not None
-    # Response may be CE-consumption-overlaid; snapshot stores the published contract.
     snap = service._load_snapshot(db_session, user_with_birth.id, str(payload["profile_hash"]))
     assert isinstance(snap, dict)
     assert (snap.get("profile_contract_v1") or {}).get("identity_core") == "test"

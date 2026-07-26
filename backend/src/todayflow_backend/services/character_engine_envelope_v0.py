@@ -378,11 +378,43 @@ def maybe_attach_character_engine_envelope_v0(
         and existing.get("schema_version") == SCHEMA_VERSION
         and str(existing.get("profile_fingerprint") or "") == str(profile_fingerprint or "")
     ):
-        # Assemble-once: never rebuild for same fingerprint.
-        if existing.get("status") == "ready" and not character_engine_publish_ready_enabled():
+        publish_ready = character_engine_publish_ready_enabled()
+        if publish_ready and existing.get("status") != "ready":
+            # Cutover: promote complete forming nests to ready without full rebuild.
+            complete = (
+                isinstance(existing.get("cascade"), dict)
+                and isinstance(existing.get("compass"), dict)
+                and isinstance(existing.get("raw_facts"), list)
+                and isinstance(existing.get("evidence"), dict)
+                and isinstance(existing.get("calc_authority"), dict)
+                and isinstance(existing.get("capability"), dict)
+            )
+            if complete:
+                promoted = dict(existing)
+                promoted["status"] = "ready"
+                diag = promoted.get("diagnostics") if isinstance(promoted.get("diagnostics"), dict) else {}
+                shadow = diag.get("shadow") if isinstance(diag.get("shadow"), dict) else {}
+                promoted["diagnostics"] = {
+                    **diag,
+                    "shadow": {
+                        **shadow,
+                        "schema_version": "ce_shadow_v1",
+                        "compared_at": _now_iso(),
+                        "ce_recipe_version": RECIPE_VERSION,
+                        "recommendation": "cutover_ready",
+                        "metrics": {
+                            **(shadow.get("metrics") if isinstance(shadow.get("metrics"), dict) else {}),
+                            "promoted_from_forming": True,
+                            "publish_ready_flag": True,
+                        },
+                    },
+                }
+                profile_payload["character_engine_v1"] = promoted
+                return profile_payload
+        if existing.get("status") == "ready" and not publish_ready:
             # Defensive: ready without flag is not allowed.
-            existing = {**existing, "status": "forming"}
-            profile_payload["character_engine_v1"] = existing
+            profile_payload["character_engine_v1"] = {**existing, "status": "forming"}
+            return profile_payload
         return profile_payload
 
     diagnostics = (

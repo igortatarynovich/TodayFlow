@@ -719,12 +719,14 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
             growth = [_clip(pot_text, _MAX_ESSAY), *growth][:3]
             growth_source = "stage4_potential"
             helps = [_clip(pot_text, _MAX_ESSAY), *helps][:3]
-    # Stage 5 adapters are preferred SoT for owned slots when grounded (still not PUBLISH_READY).
+    # Stage 5 adapters preferred; when character_engine_v1.status=ready, SoT is the envelope.
+    ce_root = payload.get("character_engine_v1") if isinstance(payload.get("character_engine_v1"), dict) else {}
+    ce_sot = str(ce_root.get("status") or "") == "ready"
     if isinstance(stage5, dict):
         a_dec = _adapter_value(stage5, "decision_style")
         if isinstance(a_dec, str) and a_dec.strip():
             decision = _clip(a_dec, _MAX_ESSAY)
-            decision_source = "stage5_legacy_map.decision_style"
+            decision_source = "character_engine_v1.legacy_map.decision_style" if ce_sot else "stage5_legacy_map.decision_style"
         a_rel = _adapter_value(stage5, "relationship_style")
         if isinstance(a_rel, str) and a_rel.strip():
             relationship = _clip(a_rel, _MAX_ESSAY)

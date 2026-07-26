@@ -409,6 +409,9 @@ class CoreProfileService:
                 (cached_payload.get("character_engine_v1") or {}).get("schema_version")
                 == "character_engine_v1"
             )
+            had_ce_status = str(
+                (cached_payload.get("character_engine_v1") or {}).get("status") or ""
+            )
             cached_payload = self._maybe_attach_character_engine_shadow(
                 db,
                 cached_payload,
@@ -432,8 +435,16 @@ class CoreProfileService:
                 (cached_payload.get("character_engine_v1") or {}).get("schema_version")
                 == "character_engine_v1"
             )
-            # Persist one-shot CE fill / envelope so next GET is snapshot-only.
-            if (filled_stage5 and not had_stage5) or (filled_envelope and not had_envelope):
+            after_ce_status = str(
+                (cached_payload.get("character_engine_v1") or {}).get("status") or ""
+            )
+            promoted_ready = had_ce_status == "forming" and after_ce_status == "ready"
+            # Persist one-shot CE fill / envelope / cutover promote so next GET is snapshot-only.
+            if (
+                (filled_stage5 and not had_stage5)
+                or (filled_envelope and not had_envelope)
+                or promoted_ready
+            ):
                 try:
                     sid = self._save_snapshot(
                         db=db,
@@ -584,46 +595,107 @@ class CoreProfileService:
                 "profiles": profiles_context,
                 "natal_facts": natal_facts,
             }
-            contract, interpretation, daily_interpretation, used_fallback = build_profile_portrait_v1(
-                profile_input=profile_input,
-                living=living_context,
-                locale=locale,
-                natal_facts=natal_facts,
-                catalog=catalog,
-            )
-            steps = []
-            gm = contract.get("generation_meta") if isinstance(contract, dict) else None
-            if isinstance(gm, dict) and isinstance(gm.get("steps"), list):
-                steps = gm["steps"]
-            self._bump_llm_call_counter(len(steps) if steps else (0 if used_fallback else 1))
 
-            profile_payload = {
-                "profile_version": self.profile_version,
-                "generated_at": generated_at,
-                "is_ready": is_ready,
-                "missing_fields": missing_fields,
-                "profile_hash": profile_hash,
-                "person": person_pub,
-                "astro": astro_context,
-                "numerology": numerology_context,
-                "baseline": baseline,
-                "profiles": profiles_context,
-                "profile_contract_v1": contract,
-                "interpretation": interpretation,
-                "daily_interpretation": daily_interpretation,
-                "living": living_context,
-            }
-            profile_payload = self._maybe_attach_character_engine_shadow(
-                db,
-                profile_payload,
-                astro_profile=astro_profile,
-                astro_context=astro_context,
-                numerology_context=numerology_context,
-                person_pub=person_pub,
-                profile_hash=profile_hash,
-                natal_facts=natal_facts if isinstance(natal_facts, dict) else None,
-                include_stage2=True,
+            from todayflow_backend.services.character_engine_stage2_shadow_v0 import (
+                character_engine_publish_ready_enabled,
             )
+
+            publish_ready = character_engine_publish_ready_enabled()
+            if publish_ready:
+                # Cutover: CE cascade is SoT — do not run personality / funnel / oneshot.
+                profile_payload = {
+                    "profile_version": self.profile_version,
+                    "generated_at": generated_at,
+                    "is_ready": is_ready,
+                    "missing_fields": missing_fields,
+                    "profile_hash": profile_hash,
+                    "person": person_pub,
+                    "astro": astro_context,
+                    "numerology": numerology_context,
+                    "baseline": baseline,
+                    "profiles": profiles_context,
+                    "living": living_context,
+                }
+                profile_payload = self._maybe_attach_character_engine_shadow(
+                    db,
+                    profile_payload,
+                    astro_profile=astro_profile,
+                    astro_context=astro_context,
+                    numerology_context=numerology_context,
+                    person_pub=person_pub,
+                    profile_hash=profile_hash,
+                    natal_facts=natal_facts if isinstance(natal_facts, dict) else None,
+                    include_stage2=True,
+                )
+                from todayflow_backend.services.character_engine_contract_projection_v0 import (
+                    project_profile_contract_from_character_engine_v0,
+                )
+
+                contract = project_profile_contract_from_character_engine_v0(
+                    profile_payload, living=living_context
+                )
+                interpretation = {
+                    "source": "character_engine_v1",
+                    "identity_summary": contract.get("identity_core"),
+                }
+                daily_interpretation = {"source": "character_engine_v1", "deferred": True}
+                used_fallback = str(contract.get("status") or "") != "ready"
+                profile_payload["profile_contract_v1"] = contract
+                profile_payload["interpretation"] = interpretation
+                profile_payload["daily_interpretation"] = daily_interpretation
+                # Persist CE-projected slots into snapshot (GET consumption still reapplies).
+                from todayflow_backend.services.character_engine_profile_consumption_v0 import (
+                    apply_character_engine_profile_consumption_v0,
+                )
+
+                profile_payload = apply_character_engine_profile_consumption_v0(profile_payload)
+                steps = []
+                gm = contract.get("generation_meta") if isinstance(contract, dict) else None
+                if isinstance(gm, dict) and isinstance(gm.get("steps"), list):
+                    steps = gm["steps"]
+                # CE Stage 2–4 may have called LLM; counter bumped inside builders if wired.
+                self._bump_llm_call_counter(len(steps) if steps else 0)
+            else:
+                contract, interpretation, daily_interpretation, used_fallback = build_profile_portrait_v1(
+                    profile_input=profile_input,
+                    living=living_context,
+                    locale=locale,
+                    natal_facts=natal_facts,
+                    catalog=catalog,
+                )
+                steps = []
+                gm = contract.get("generation_meta") if isinstance(contract, dict) else None
+                if isinstance(gm, dict) and isinstance(gm.get("steps"), list):
+                    steps = gm["steps"]
+                self._bump_llm_call_counter(len(steps) if steps else (0 if used_fallback else 1))
+
+                profile_payload = {
+                    "profile_version": self.profile_version,
+                    "generated_at": generated_at,
+                    "is_ready": is_ready,
+                    "missing_fields": missing_fields,
+                    "profile_hash": profile_hash,
+                    "person": person_pub,
+                    "astro": astro_context,
+                    "numerology": numerology_context,
+                    "baseline": baseline,
+                    "profiles": profiles_context,
+                    "profile_contract_v1": contract,
+                    "interpretation": interpretation,
+                    "daily_interpretation": daily_interpretation,
+                    "living": living_context,
+                }
+                profile_payload = self._maybe_attach_character_engine_shadow(
+                    db,
+                    profile_payload,
+                    astro_profile=astro_profile,
+                    astro_context=astro_context,
+                    numerology_context=numerology_context,
+                    person_pub=person_pub,
+                    profile_hash=profile_hash,
+                    natal_facts=natal_facts if isinstance(natal_facts, dict) else None,
+                    include_stage2=True,
+                )
 
             snapshot_id = self._save_snapshot(
                 db=db,

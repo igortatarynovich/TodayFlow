@@ -535,7 +535,29 @@ def build_profile_portrait_v1(
 
     Prefer Generation Contract path: natal_facts → personality → profile_contract fields.
     Legacy disclosure funnel remains fallback when personality is unavailable.
+
+    When CHARACTER_ENGINE_PUBLISH_READY is on, callers must not use this path for SoT —
+    ``CoreProfileService._publish_portrait`` projects from Character Engine instead.
+    Hard gate here prevents accidental dual personality publish.
     """
+    from todayflow_backend.core.config import settings
+
+    if bool(getattr(settings, "character_engine_publish_ready", False)):
+        forming = {
+            "status": PROFILE_STATUS_FORMING,
+            "identity_core": "",
+            "recognition_line": "",
+            "strengths": [],
+            "growth_zones": [],
+            "helps": [],
+            "generation_meta": {
+                "path": "character_engine_v1_gate",
+                "sot": "character_engine_v1",
+                "note": "legacy portrait LLM blocked — use CE publish path",
+            },
+        }
+        return forming, {"source": "character_engine_v1_gate"}, {"deferred": True}, True
+
     from todayflow_backend.services.personality_contract_v1 import (
         generate_personality,
         personality_to_profile_contract,

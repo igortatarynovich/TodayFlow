@@ -106,10 +106,10 @@ def maybe_attach_stage2_shadow(
         existing = diagnostics.get("character_engine_stage2")
         if isinstance(existing, dict) and isinstance(existing.get("stage2"), dict):
             return profile_payload
-    # Explicit: publish-ready must never be implied by Stage 2 enabled/shadow.
+    # Explicit: publish-ready cutover is handled by envelope attach + contract projection.
     if character_engine_publish_ready_enabled():
-        logger.warning(
-            "CHARACTER_ENGINE_PUBLISH_READY set but Stage 2 path remains diagnostics-only until cutover wiring exists"
+        logger.info(
+            "CHARACTER_ENGINE_PUBLISH_READY on — Stage 2 feeds character_engine_v1 SoT via envelope"
         )
     try:
         artifact = run_character_engine_stage2_shadow_v0(
@@ -137,10 +137,11 @@ def maybe_attach_stage2_shadow(
     diagnostics = {**diagnostics, "character_engine_stage2": artifact}
     profile_payload["diagnostics"] = diagnostics
     # Never promote Stage 2 alone to CE ready SoT.
+    # Keep character_engine_v1 when publish-ready cutover is on; otherwise strip accidental ready.
     if "character_engine_v1" in profile_payload and not character_engine_publish_ready_enabled():
         ce = profile_payload.get("character_engine_v1")
         if isinstance(ce, dict) and ce.get("status") == "ready":
-            # Defensive: Stage 2 shadow must not leave a ready nest without full cascade.
+            # Defensive: Stage 2 shadow must not leave a ready nest without cutover flag.
             if not ce.get("cascade"):
                 profile_payload.pop("character_engine_v1", None)
     return profile_payload

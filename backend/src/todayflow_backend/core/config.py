@@ -126,8 +126,9 @@ class Settings(BaseSettings):
     # CHARACTER_ENGINE_STAGE4_SHADOW / ENABLED — Stage 4 life_bundle diagnostics-only.
     # CHARACTER_ENGINE_STAGE5_SHADOW / ENABLED — Stage 5 Compass+adapters diagnostics-only.
     # CHARACTER_ENGINE_PROFILE_CONSUMPTION=1 — Identity Core (+ Stage 3–5 when on) overwrites
-    #   Profile journey slots. Not PUBLISH_READY.
-    # CHARACTER_ENGINE_PUBLISH_READY — future full SoT switch after Stage 5 validation (keep false).
+    #   Profile journey slots.
+    # CHARACTER_ENGINE_PUBLISH_READY=1 — cutover: character_engine_v1 is portrait SoT;
+    #   personality / disclosure funnel / oneshot blocked on publish.
     character_engine_stage01_shadow: bool = False
     character_engine_stage01_enabled: bool = False
     character_engine_stage2_shadow: bool = False

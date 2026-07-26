@@ -7,6 +7,8 @@ from pathlib import Path
 
 import pytest
 
+from unittest.mock import patch
+
 from todayflow_backend.services.character_engine_envelope_v0 import (
     SCHEMA_VERSION,
     build_character_engine_envelope_v0,
@@ -170,10 +172,14 @@ def _minimal_diagnostics(*, grounded: bool = True) -> dict:
 
 
 def test_envelope_forming_when_publish_ready_off() -> None:
-    env = build_character_engine_envelope_v0(
-        diagnostics=_minimal_diagnostics(grounded=True),
-        profile_fingerprint="pf_test_envelope_01",
-    )
+    with patch(
+        "todayflow_backend.services.character_engine_envelope_v0.character_engine_publish_ready_enabled",
+        return_value=False,
+    ):
+        env = build_character_engine_envelope_v0(
+            diagnostics=_minimal_diagnostics(grounded=True),
+            profile_fingerprint="pf_test_envelope_01",
+        )
     assert env["schema_version"] == SCHEMA_VERSION
     assert env["status"] == "forming"
     assert isinstance(env.get("cascade"), dict)
@@ -183,16 +189,33 @@ def test_envelope_forming_when_publish_ready_off() -> None:
     assert env["diagnostics"]["shadow"]["recommendation"] == "hold"
 
 
+def test_envelope_ready_when_publish_ready_on() -> None:
+    with patch(
+        "todayflow_backend.services.character_engine_envelope_v0.character_engine_publish_ready_enabled",
+        return_value=True,
+    ):
+        env = build_character_engine_envelope_v0(
+            diagnostics=_minimal_diagnostics(grounded=True),
+            profile_fingerprint="pf_test_envelope_01",
+        )
+    assert env["status"] == "ready"
+    assert isinstance(env.get("cascade"), dict)
+
+
 def test_envelope_validates_against_machine_schema() -> None:
     jsonschema = pytest.importorskip("jsonschema")
     schema_path = (
         Path(__file__).resolve().parents[2] / "docs" / "schemas" / "character_engine_v1.schema.json"
     )
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
-    env = build_character_engine_envelope_v0(
-        diagnostics=_minimal_diagnostics(grounded=True),
-        profile_fingerprint="pf_test_envelope_01",
-    )
+    with patch(
+        "todayflow_backend.services.character_engine_envelope_v0.character_engine_publish_ready_enabled",
+        return_value=False,
+    ):
+        env = build_character_engine_envelope_v0(
+            diagnostics=_minimal_diagnostics(grounded=True),
+            profile_fingerprint="pf_test_envelope_01",
+        )
     jsonschema.validate(instance=env, schema=schema)
 
 
