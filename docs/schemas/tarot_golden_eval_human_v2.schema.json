@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://todayflow.today/schemas/tarot_golden_eval_human_v2.schema.json",
+  "title": "Tarot Golden Eval Human v2",
+  "type": "object",
+  "required": ["contract_version", "cases"],
+  "additionalProperties": false,
+  "properties": {
+    "contract_version": { "const": "tarot_golden_eval_human_v2" },
+    "notes": { "type": "string" },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/case" }
+    }
+  },
+  "$defs": {
+    "tri": { "type": "string", "enum": ["yes", "partial", "no"] },
+    "case": {
+      "type": "object",
+      "required": ["id", "question", "spread_id", "cards", "answer"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 4 },
+        "label": { "type": "string" },
+        "locale": { "type": "string", "enum": ["ru", "en"] },
+        "question": { "type": "string", "minLength": 8 },
+        "concern_domain": { "type": "string" },
+        "spread_id": { "type": "string", "minLength": 2 },
+        "cards": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {
+            "type": "object",
+            "required": ["card_id", "orientation"],
+            "additionalProperties": false,
+            "properties": {
+              "card_id": { "type": "integer", "minimum": 0 },
+              "orientation": { "type": "string", "enum": ["upright", "reversed"] },
+              "position_id": { "type": "string" },
+              "title": { "type": "string" },
+              "name_ru": { "type": "string" }
+            }
+          }
+        },
+        "answer": {
+          "type": "object",
+          "required": ["symbols_overview", "question_story", "direct_answer", "next_step"],
+          "additionalProperties": false,
+          "properties": {
+            "symbols_overview": { "type": "string", "minLength": 20 },
+            "question_story": { "type": "string", "minLength": 20 },
+            "direct_answer": { "type": "string", "minLength": 12 },
+            "next_step": { "type": "string", "minLength": 8 }
+          }
+        },
+        "capture": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "prompt_version": { "type": "string" },
+            "model": { "type": "string" },
+            "synthesis_mode": { "type": "string" },
+            "captured_at": { "type": "string" },
+            "source": { "type": "string", "enum": ["owner_live", "prod_capture", "live_cli", "manual"] }
+          }
+        },
+        "human": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "understood_symbols": { "$ref": "#/$defs/tri" },
+            "answered_my_question": { "$ref": "#/$defs/tri" },
+            "would_pay": { "$ref": "#/$defs/tri" },
+            "rubric": {
+              "type": "object",
+              "additionalProperties": { "type": "integer", "minimum": 1, "maximum": 5 }
+            },
+            "voice_flags": {
+              "type": "object",
+              "additionalProperties": { "type": "boolean" }
+            },
+            "editor_notes": { "type": "string" },
+            "scored_by": { "type": "string" },
+            "scored_at": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

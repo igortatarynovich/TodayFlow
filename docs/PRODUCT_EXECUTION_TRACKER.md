@@ -673,7 +673,7 @@ Source of truth: [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) §1–§13
 - [x] **Production reliability** — background timeout · no timeout→plain double-burn · live eval budgets · commit `da03d22` · deployed.
 - [x] **Golden Eval live #3** — **12/12 LLM** · `freeze_lift_ready=true`. Audit [TAROT_GOLDEN_EVAL_LIVE_2026-07-26_r3](./audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-26_r3.md).
 - [x] **Owner editorial-phase accept** — full architecture lift declined; Editorial Phase allowlist active.
-- [ ] **Human Golden Eval v2** — 20–30 real questions · editor scores · three post-answer questions (понял? на вопрос? заплатил бы?). **← next**
+- [ ] **Human Golden Eval v2** — protocol seeded ([TAROT_GOLDEN_EVAL_HUMAN_V2](./tarot/TAROT_GOLDEN_EVAL_HUMAN_V2.md) · 1 owner case). Fill 20–30 real Q+A · three post-answer questions. **← next**
 - [ ] **Q3+ prompt polish** — wording only under Editorial Phase.
 - [ ] **Fallback LLM provider** — deferred until owner purchases/connects.
 - [ ] **Tarot Design Language v1** — [docs/tarot/TAROT_DESIGN_LANGUAGE_V1.md](./tarot/TAROT_DESIGN_LANGUAGE_V1.md) **DRAFT / PENDING ACCEPT** · **parked under architecture freeze**

@@ -2,7 +2,7 @@
 
 **Статус:** ACTIVE (2026-07-26) — live r3 **12/12**; owner → **Architecture Frozen / Editorial Phase** (full freeze lift declined)  
 **Тип:** quality eval / gate  
-**Связанные:** [TAROT_GOLDEN_DATASET_V1.md](./TAROT_GOLDEN_DATASET_V1.md) · [TAROT_INTERPRETATION_ENGINE_V1.md](./TAROT_INTERPRETATION_ENGINE_V1.md)
+**Связанные:** [TAROT_GOLDEN_DATASET_V1.md](./TAROT_GOLDEN_DATASET_V1.md) · [TAROT_INTERPRETATION_ENGINE_V1.md](./TAROT_INTERPRETATION_ENGINE_V1.md) · [TAROT_GOLDEN_EVAL_HUMAN_V2.md](./TAROT_GOLDEN_EVAL_HUMAN_V2.md)
 
 ---
 
@@ -125,4 +125,5 @@ Harness may set `freeze_lift_ready=true` when:
 - [x] third live report (2026-07-26 r3) — llm_pass 12/12 after timeout deploy
 - [x] owner accept: Architecture Frozen / Editorial Phase (full lift declined)
 - [x] Q3 prompt deltas landed with reliability commit (`tarot-interpretation-v1.6`)
-- [ ] human Golden Eval v2 (real questions · three post-answer questions)
+- [x] Q3 voice: antithesis ban (`tarot-interpretation-v1.7`)
+- [ ] human Golden Eval v2 (real questions · three post-answer questions) — protocol seeded

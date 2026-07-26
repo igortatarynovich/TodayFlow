@@ -44,9 +44,9 @@ Not `freeze lifted`. Not a return to open architecture work.
 
 ## Next (product eyes — not new engine)
 
-Human **Golden Eval v2**:
+Human **Golden Eval v2** — protocol: [TAROT_GOLDEN_EVAL_HUMAN_V2.md](../tarot/TAROT_GOLDEN_EVAL_HUMAN_V2.md) · seed fixture `tarot_golden_eval_human_v2.json` (1 owner case).
 
-- 20–30 real questions  
+- **20–30** real questions  
 - varied spreads  
 - real model answers  
 - editor scores  

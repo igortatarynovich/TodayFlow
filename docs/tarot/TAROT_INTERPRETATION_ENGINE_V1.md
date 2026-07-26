@@ -263,7 +263,7 @@ Editorial default: reject-invalid LLM → thin fallback. **Do not** hard-overwri
 3. **Golden Eval** harness + live r3 (12/12) — done · harness gate green  
 4. **Q3** Prompt iteration — in progress (wording only)  
 
-**Next (product eyes, not new engine):** human Golden Eval v2 — 20–30 real questions · real spreads · editor scores · three post-answer questions (понял? ответил на вопрос? заплатил бы?). Canon seed: [TAROT_STACK_EDITORIAL_PHASE_2026-07-26.md](../audits/TAROT_STACK_EDITORIAL_PHASE_2026-07-26.md).
+**Next (product eyes, not new engine):** human Golden Eval v2 — 20–30 real questions · real spreads · editor scores · three post-answer questions (понял? ответил на вопрос? заплатил бы?). Canon: [TAROT_GOLDEN_EVAL_HUMAN_V2.md](./TAROT_GOLDEN_EVAL_HUMAN_V2.md).
 
 Dataset и Eval — **разные** артефакты: набор сценариев расширяется независимо от рубрикатора.
 
@@ -359,5 +359,5 @@ Semantic profile на карту (семантика, не литература)
 - [x] Golden Dataset (scenarios without scores)
 - [x] Golden Eval harness + live #3 12/12
 - [x] Owner: **Architecture Frozen / Editorial Phase** (full lift declined; editorial allowlist)
-- [ ] Q3+ / human Golden Eval v2 (product eyes)
+- [ ] Q3+ / human Golden Eval v2 (product eyes) — protocol seeded
 - [ ] Fallback LLM provider (deferred — owner will wire when purchased)
