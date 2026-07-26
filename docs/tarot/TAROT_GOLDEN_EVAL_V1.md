@@ -1,6 +1,6 @@
 # Tarot Golden Eval v1
 
-**Статус:** ACTIVE (2026-07-26) — harness + live #2 gate green; **freeze lift** только после accept владельцем  
+**Статус:** ACTIVE (2026-07-26) — live r3 **12/12**; owner → **Architecture Frozen / Editorial Phase** (full freeze lift declined)  
 **Тип:** quality eval / gate  
 **Связанные:** [TAROT_GOLDEN_DATASET_V1.md](./TAROT_GOLDEN_DATASET_V1.md) · [TAROT_INTERPRETATION_ENGINE_V1.md](./TAROT_INTERPRETATION_ENGINE_V1.md)
 
@@ -92,9 +92,9 @@ Human can override `paid_worth` and rubric scores in the report later; harness n
 
 ---
 
-## 6. Freeze lift gate
+## 6. Architecture gate (was «freeze lift»)
 
-Поднять Interpretation Stack freeze **только если**:
+Harness may set `freeze_lift_ready=true` when:
 
 1. Live прогон по Golden Dataset записан (report)
 2. Нет системных провалов shape (`no_arkan_label`, `direct_answer`, `next_step`)
@@ -102,11 +102,17 @@ Human can override `paid_worth` and rubric scores in the report later; harness n
 4. Средние rubric ≥ порога продукта (зафиксировать в report `gates`)
 5. **LLM pass rate ≥ 0.85** (quality reject → fallback не считается pass)
 
-Пока отчёт не принят владельцем — freeze **ACTIVE**.
+**Owner (2026-07-26):** gate green **принят** как закрытие foundation stage.  
+Полный lift архитектуры **не** делается. Статус продукта:
+
+**Tarot Interpretation Stack v1 — Architecture Frozen / Editorial Phase**
+
+Допускаются: KB · prompt wording · editorial data · eval · timeout/reliability.  
+Новые слои / контракты / pipeline / LLM stages — только по **RFC**.
 
 - Live #1: [TAROT_GOLDEN_EVAL_LIVE_2026-07-25](../audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-25.md) — **7/12 LLM · gate red**
 - Live #2: [TAROT_GOLDEN_EVAL_LIVE_2026-07-26](../audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-26.md) — **11/12 LLM · gate green**
-- Live #3: [TAROT_GOLDEN_EVAL_LIVE_2026-07-26_r3](../audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-26_r3.md) — **12/12 LLM · gate green** (timeout deploy)
+- Live #3: [TAROT_GOLDEN_EVAL_LIVE_2026-07-26_r3](../audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-26_r3.md) — **12/12 LLM · gate green** (timeout deploy) · **owner editorial-phase accept**
 
 ---
 
@@ -117,5 +123,6 @@ Human can override `paid_worth` and rubric scores in the report later; harness n
 - [x] first live report recorded (2026-07-25) — llm_pass 7/12, freeze not lifted
 - [x] second live report (2026-07-26) — llm_pass 11/12, harness gate green
 - [x] third live report (2026-07-26 r3) — llm_pass 12/12 after timeout deploy
-- [ ] live report accepted by owner / freeze lift decision
-- [ ] Q3 prompt iteration from eval deltas (in progress: v1.6 choice length)
+- [x] owner accept: Architecture Frozen / Editorial Phase (full lift declined)
+- [x] Q3 prompt deltas landed with reliability commit (`tarot-interpretation-v1.6`)
+- [ ] human Golden Eval v2 (real questions · three post-answer questions)

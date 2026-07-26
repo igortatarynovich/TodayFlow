@@ -1,11 +1,11 @@
 # Tarot Interpretation Engine v1
 
-**Статус:** ACTIVE (2026-07-25) — **Interpretation Stack v1 FROZEN** until Golden Eval results  
+**Статус:** ACTIVE (2026-07-26) — **Architecture Frozen / Editorial Phase**  
 **Тип:** generation / meaning contract (SoT для ответа расклада)  
 **Владелец:** Product + Backend  
-**Связанные:** [SCREEN_CONTRACTS_V1.md](../SCREEN_CONTRACTS_V1.md) §6.4–§6.5 · [PRODUCT_GENERATION_CONTRACTS.md](../PRODUCT_GENERATION_CONTRACTS.md) · [TAROT_DESIGN_LANGUAGE_V1.md](./TAROT_DESIGN_LANGUAGE_V1.md) · [TAROT_KNOWLEDGE_BASE_V1.md](./TAROT_KNOWLEDGE_BASE_V1.md) · [TAROT_POSITION_SEMANTICS_V1.md](./TAROT_POSITION_SEMANTICS_V1.md) · [TAROT_QUESTION_ONTOLOGY_V1.md](./TAROT_QUESTION_ONTOLOGY_V1.md)
+**Связанные:** [SCREEN_CONTRACTS_V1.md](../SCREEN_CONTRACTS_V1.md) §6.4–§6.5 · [PRODUCT_GENERATION_CONTRACTS.md](../PRODUCT_GENERATION_CONTRACTS.md) · [TAROT_DESIGN_LANGUAGE_V1.md](./TAROT_DESIGN_LANGUAGE_V1.md) · [TAROT_KNOWLEDGE_BASE_V1.md](./TAROT_KNOWLEDGE_BASE_V1.md) · [TAROT_POSITION_SEMANTICS_V1.md](./TAROT_POSITION_SEMANTICS_V1.md) · [TAROT_QUESTION_ONTOLOGY_V1.md](./TAROT_QUESTION_ONTOLOGY_V1.md) · [TAROT_GOLDEN_EVAL_V1.md](./TAROT_GOLDEN_EVAL_V1.md)
 
-### Interpretation Stack v1 — hard freeze (owner, 2026-07-25)
+### Interpretation Stack v1 — Architecture Frozen / Editorial Phase (owner, 2026-07-26)
 
 ```
 Question
@@ -16,17 +16,36 @@ Question
    → UI
 ```
 
-Стек **завершён и заморожен**. До появления результатов **Golden Eval** запрещены:
+**Не:** полный lift freeze · **не:** «можно снова наращивать pipeline».
 
-- новые слои / ветки engine;
-- новые поля `tarot_answer_v1`;
-- отдельные prompt-ветки по типу вопроса / расклада;
-- новые типы раскладов и Tarot UI как основной трек;
-- любое «умное» усложнение пайплайна «ради качества».
+Фундамент **завершён и принят** (стек + production reliability + live Golden Eval r3 = 12/12).  
+Архитектура **закрыта**, чтобы защитить её от преждевременных изменений. Дальнейший прогресс — **редакторское качество**, оценка людьми и reliability — не новые слои.
 
-Дальше только **редакторское качество** (три независимых направления ниже). Новый архитектурный слой без доказанного прироста на Golden Eval — отказ по умолчанию.
+#### Accepted stage (2026-07-26)
 
-Ledger: `fb8cd34` · `c4bbe56` · `1e53497` (KB) · `56d753a` (positions) · `724d958` (ontology + stack freeze).
+- Timeout fix · background LLM budget · no JSON→plain retry on ReadTimeout  
+- Q3 wording (`tarot-interpretation-v1.6`)  
+- Live Golden Eval r3 (12/12) · production deploy  
+
+Ledger (foundation): `fb8cd34` · `c4bbe56` · `1e53497` (KB) · `56d753a` (positions) · `724d958` (ontology) · `da03d22` (reliability + live #2–#3).
+
+#### Allowed without RFC (Editorial Phase)
+
+- Knowledge Base editorial data  
+- Prompt wording (Q3+)  
+- Editorial data / fixtures  
+- Evaluation harness, datasets, human scorecards  
+- Timeout / reliability hardening (client budgets, logging classes; **not** a second provider until owner wires one)
+
+#### Requires separate RFC (blocked by default)
+
+- New engine layers or pipeline stages  
+- New public contracts / `tarot_answer_v1` fields  
+- Extra LLM hops or parallel authors  
+- New spread types / Tarot UI as primary track  
+- Any «умное» усложнение пайплайна «ради качества» без доказанного прироста на human + golden eval
+
+Owner note: [TAROT_STACK_EDITORIAL_PHASE_2026-07-26.md](../audits/TAROT_STACK_EDITORIAL_PHASE_2026-07-26.md)
 
 ---
 
@@ -235,14 +254,16 @@ UI blocks (any spread):
 
 Editorial default: reject-invalid LLM → thin fallback. **Do not** hard-overwrite good LLM prose with formula banks.
 
-### Quality track (only work allowed under stack freeze)
+### Quality track (Editorial Phase — architecture stays frozen)
 
-Порядок после freeze:
+Завершённый порядок foundation → eval:
 
-1. **Q1** Editorial Deepen Minors  
-2. **Golden Dataset** (эталонные сценарии без оценок)  
-3. **Golden Eval** (рубрикатор + прогон по датасету)  
-4. **Q3** Prompt iteration (wording only)
+1. **Q1** Editorial Deepen Minors — done  
+2. **Golden Dataset** — done  
+3. **Golden Eval** harness + live r3 (12/12) — done · harness gate green  
+4. **Q3** Prompt iteration — in progress (wording only)  
+
+**Next (product eyes, not new engine):** human Golden Eval v2 — 20–30 real questions · real spreads · editor scores · three post-answer questions (понял? ответил на вопрос? заплатил бы?). Canon seed: [TAROT_STACK_EDITORIAL_PHASE_2026-07-26.md](../audits/TAROT_STACK_EDITORIAL_PHASE_2026-07-26.md).
 
 Dataset и Eval — **разные** артефакты: набор сценариев расширяется независимо от рубрикатора.
 
@@ -296,7 +317,9 @@ Semantic profile на карту (семантика, не литература)
 
 **Anti-sameness:** ~30 раскладов подряд — не звучат ли все ответы одинаково?
 
-Без результатов Golden Eval — **не** поднимать architecture freeze.
+Без результатов Golden Eval — **не** открывать архитектуру для новых слоёв.
+
+**Owner (2026-07-26):** harness gate green (live r3 12/12) **принят** как завершение foundation; полный lift freeze **отклонён**. Статус: **Architecture Frozen / Editorial Phase** — см. header.
 
 #### Q3 — Prompt iteration (wording only)
 
@@ -329,11 +352,11 @@ Semantic profile на карту (семантика, не литература)
 - [x] Fallback honest / non-imitative
 - [x] Architecture freeze declared (no new contract/UI/spreads/engine branches as primary track)
 - [x] Knowledge Base v1 · Position Semantics v1 · Question Ontology v1 landed
-- [x] Interpretation Stack v1 **hard-frozen** until Golden Eval results
+- [x] Interpretation Stack v1 foundation complete (live r3 12/12 + reliability deploy)
 - [x] Canon principles: LLM = one story · answer this question · card-name ablation
 - [x] Q1 Editorial deepen minors (unique archetype per card, not rank×suit)
 - [x] Golden Dataset (scenarios without scores)
-- [x] Golden Eval harness (rubric + CLI + offline tests)
-- [x] Live #2 gate green (11/12 LLM, 2026-07-26)
-- [x] Live #3 **12/12 LLM** after timeout deploy (2026-07-26 r3) — **owner freeze-lift accept still pending**
-- [ ] Q3 Prompt iteration from eval deltas only
+- [x] Golden Eval harness + live #3 12/12
+- [x] Owner: **Architecture Frozen / Editorial Phase** (full lift declined; editorial allowlist)
+- [ ] Q3+ / human Golden Eval v2 (product eyes)
+- [ ] Fallback LLM provider (deferred — owner will wire when purchased)

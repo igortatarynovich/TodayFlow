@@ -65,4 +65,4 @@ Public `tarot_answer_v1` **не** меняется.
 - [x] Schema + fixture landed
 - [x] Offline tests: schema · ontology expect · pack builds · minors carry Q1 fields
 - [ ] Golden Eval harness consumes this fixture (next)
-- [ ] Live LLM scoring pass (Eval gate to lift architecture freeze)
+- [ ] Live LLM scoring pass (Eval gate) — live r3 12/12 done; architecture stays Frozen / Editorial Phase

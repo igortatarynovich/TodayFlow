@@ -7,7 +7,8 @@
 
 ## Verdict
 
-**Freeze lift gate: YES** (`freeze_lift_ready=true`) — **LLM 12/12**.
+**Freeze lift gate: YES** (`freeze_lift_ready=true`) — **LLM 12/12**.  
+**Owner (2026-07-26):** gate accepted as foundation close; **full lift declined** → [Architecture Frozen / Editorial Phase](./TAROT_STACK_EDITORIAL_PHASE_2026-07-26.md).
 
 | Gate | Result |
 |------|--------|
@@ -30,6 +31,6 @@
 
 ## Next
 
-1. **Owner:** accept freeze lift (yes/no).
-2. Continue Q3 editorial polish only if owner wants further wording work.
+1. ~~Owner call on freeze lift~~ → **Architecture Frozen / Editorial Phase** (full lift declined). See [TAROT_STACK_EDITORIAL_PHASE_2026-07-26.md](./TAROT_STACK_EDITORIAL_PHASE_2026-07-26.md).
+2. Human Golden Eval v2 (real questions · three post-answer questions).
 3. Fallback provider — later, when purchased.
