@@ -6,7 +6,7 @@ from copy import deepcopy
 
 from todayflow_backend.services.day_scenario_eval_pack_c35 import (
     LOCALES,
-    PROFILE_IDS,
+    PROFILE_IDS_C35_LEGACY,
     build_synthetic_eval_matrix_c35,
     run_eval_pack_c35,
     score_formulation_repeatability,
@@ -23,12 +23,12 @@ def test_token_jaccard_identical_and_distinct():
 
 def test_synthetic_matrix_shape():
     matrix = build_synthetic_eval_matrix_c35(days=14)
-    assert len(matrix) == 14 * len(PROFILE_IDS) * len(LOCALES)
+    assert len(matrix) == 14 * len(PROFILE_IDS_C35_LEGACY) * len(LOCALES)
     dates = {c["date"] for c in matrix}
     assert len(dates) == 14
-    assert set(c["profile_id"] for c in matrix) == set(PROFILE_IDS)
+    assert set(c["profile_id"] for c in matrix) == set(PROFILE_IDS_C35_LEGACY)
     assert set(c["locale"] for c in matrix) == set(LOCALES)
-    assert "no_birth_time" in PROFILE_IDS
+    assert "no_birth_time" in PROFILE_IDS_C35_LEGACY
 
 
 def test_eval_pack_passes_on_synthetic_fixtures():
