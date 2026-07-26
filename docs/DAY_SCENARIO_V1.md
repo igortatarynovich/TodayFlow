@@ -1,8 +1,8 @@
 # DAY_SCENARIO_V1 — драматургический каркас дня
 
-**Status:** CANON DRAFT — **B1–B5 + C1 + C2 + C3.1–C3.3b landed** (sphere selection + pairwise eval); C3.5 open  
+**Status:** CANON DRAFT — **B1–B5 + C1 + C2 + C3.1–C3.5 landed** (eval pack 14d × profiles × locales)  
 **Date:** 2026-07-25  
-**Engine:** `day_scenario_v1.py` · `day_color_catalog_v1.py` · `day_scenario_project_v1.py` · `day_scenario_native_llm_c1.py` · `day_scenario_editorial_gate_c31.py` · `day_scenario_personalization_c33.py` · `day_scenario_sphere_selection_c33b.py` · `day_scenario_pairwise_eval_c33b.py`  
+**Engine:** `day_scenario_v1.py` · `day_color_catalog_v1.py` · `day_scenario_project_v1.py` · `day_scenario_native_llm_c1.py` · `day_scenario_editorial_gate_c31.py` · `day_scenario_personalization_c33.py` · `day_scenario_sphere_selection_c33b.py` · `day_scenario_pairwise_eval_c33b.py` · `day_scenario_eval_pack_c35.py`  
 **Wire note:** [audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md](./audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md)  
 **UI note:** [audits/DAY_SCENARIO_UI_PREFERENCE_B4.md](./audits/DAY_SCENARIO_UI_PREFERENCE_B4.md)  
 **Runtime SoT:** [audits/DAY_SCENARIO_RUNTIME_SOT_B5.md](./audits/DAY_SCENARIO_RUNTIME_SOT_B5.md)  
@@ -12,6 +12,7 @@
 **Chorus quality:** [audits/DAY_SCENARIO_CHORUS_QUALITY_C32.md](./audits/DAY_SCENARIO_CHORUS_QUALITY_C32.md)  
 **Personalization:** [audits/DAY_SCENARIO_PERSONALIZATION_C33A.md](./audits/DAY_SCENARIO_PERSONALIZATION_C33A.md)  
 **Sphere selection:** [audits/DAY_SCENARIO_SPHERE_SELECTION_C33B.md](./audits/DAY_SCENARIO_SPHERE_SELECTION_C33B.md)  
+**Eval pack:** [audits/DAY_SCENARIO_EVAL_PACK_C35.md](./audits/DAY_SCENARIO_EVAL_PACK_C35.md)  
 **Capture rubric:** [audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md](./audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md)  
 **Related:** [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) · [today-language/TODAY_LANGUAGE_V1.md](./today-language/TODAY_LANGUAGE_V1.md)
 
@@ -330,7 +331,20 @@ Legacy projections remain for old clients only.
 - **Backward compatible?** yes
 ```
 
-### Next — C3.5 Eval pack (14 days × profiles × locales)
+### C3.5 (landed) — Eval pack (14 days × profiles × locales)
+
+```markdown
+## Architecture impact
+- **SoT before:** pairwise same-day only
+- **SoT after:** 14d × 4 profiles (incl. no birth time) × ru/en eval pack;
+  fixture CI matrix; live captures optional
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — DAY_SCENARIO_EVAL_PACK_C35
+- **Backward compatible?** yes — eval-only
+```
+
+### Next — capture review with C3.5 eval harness (live weeks → defect hotspots) · then visual/language polish
 
 ---
 

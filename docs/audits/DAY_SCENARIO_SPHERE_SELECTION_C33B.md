@@ -58,7 +58,7 @@ Output nest `personalization_evidence.sphere_selection`:
 
 ## Out of scope
 
-- C3.5 multi-day × multi-locale eval pack  
+- C3.5 multi-day × multi-locale eval pack — **landed:** [DAY_SCENARIO_EVAL_PACK_C35.md](./DAY_SCENARIO_EVAL_PACK_C35.md)  
 - UI depth / sphere badges  
 - Profile generation changes  
 - Live Nebius pairwise in CI
