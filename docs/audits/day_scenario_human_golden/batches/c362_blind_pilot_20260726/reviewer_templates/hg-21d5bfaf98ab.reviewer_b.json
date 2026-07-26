@@ -1,0 +1,309 @@
+{
+  "case_id": "hg-21d5bfaf98ab",
+  "scenario_hash": "sha256:36780eff169b14a0ffaeae0144249538f73efc2a0e2a24a1328a506ca43e8283",
+  "reviewer_id": "reviewer_b",
+  "overall_band": null,
+  "defects": {
+    "AFFIRMATION_UNNATURAL": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "ASTRO_JARGON_BARE": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "BUREAUCRATIC": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "CATEGORICAL_PROMISE": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "CHORUS_NATAL_WITHOUT_EVIDENCE": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "CHORUS_PARALLEL_ECHO": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "CHORUS_PARALLEL_FORECAST": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "CHORUS_ROLE_DRIFT": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "CHORUS_SEMANTIC_DUPLICATION": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "CHORUS_UNTRANSLATED_JARGON": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "CLOSURE_AFFIRMATION_ECHO": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "CLOSURE_MISSING": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "CLOSURE_NEW_FORECAST": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "CLOSURE_NO_CONFLICT_CALLBACK": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "CLOSURE_WELLNESS_MUSH": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "LOCALE_LANGUAGE_MISMATCH": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "NATAL_WITHOUT_EVIDENCE": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "PERSONALIZATION_CONFLICT_UNCHANGED": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "PERSONALIZATION_DECORATIVE_ONLY": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "PERSONALIZATION_DEPTH_OVERREACH": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "PERSONALIZATION_EVIDENCE_ORPHAN": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "PERSONALIZATION_GENERIC_ACTION": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "PERSONALIZATION_NATAL_OVERCLAIM": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "PERSONALIZATION_PROFILE_FACT_LEAK": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "PERSONALIZATION_SCENES_UNCHANGED": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "PERSONALIZATION_SPHERE_CROSS_PROFILE": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "PERSONALIZATION_SPHERE_OUTSIDE_PACK": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "PERSONALIZATION_SPHERE_SELECTION_EMPTY": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "PERSONALIZATION_SPHERE_UNJUSTIFIED": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "PROVENANCE_ACTION_NOT_DERIVED": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "PROVENANCE_PROP_NOT_DERIVED": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "PROVENANCE_REF_MISSING": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "PROVENANCE_REF_ORPHAN": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "PROVENANCE_WRONG_PROFILE": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "PSEUDO_DIAGNOSIS": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "SCENE_ABSTRACT": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "SCENE_CLONE": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "SCENE_MISSING_CHOICE": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "SCENE_MISSING_EVERYDAY": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "SCENE_UNIVERSAL_ADVICE": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    },
+    "THESIS_ECHO": {
+      "presence": null,
+      "severity": null,
+      "evidence_location": null,
+      "rationale": null,
+      "affects_overall_band": null
+    }
+  },
+  "notes": null,
+  "golden_contract_version": "day_scenario_human_golden_c362",
+  "rubric_version": "day_scenario_human_review_rubric_c362.1",
+  "defect_catalog_version": "gate_rules_c36.42",
+  "review_protocol_version": "day_scenario_review_protocol_c362.1",
+  "scenario_contract_version": "day_scenario_native_llm_c1",
+  "analyzer_version": "day_scenario_eval_pack_c35.1+gate_maturity_c36"
+}

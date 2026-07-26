@@ -1,0 +1,745 @@
+{
+  "export_kind": "blind_human_review_c362",
+  "case_id": "hg-f61a374bc5aa",
+  "scenario_id": "hg-f61a374bc5aa",
+  "scenario_hash": "sha256:63bcf5830a42e57c5e7199107c04b67ce95ac96e7369b5112c41c28ab805ae3c",
+  "locale": "ru",
+  "profile_type": "live_registered_personal",
+  "evidence_depth": "deep_personalized",
+  "source_type": "live_capture",
+  "rubric_version": "day_scenario_human_review_rubric_c362.1",
+  "golden_contract_version": "day_scenario_human_golden_c362",
+  "defect_catalog_version": "gate_rules_c36.42",
+  "review_protocol_version": "day_scenario_review_protocol_c362.1",
+  "scenario_contract_version": "day_scenario_native_llm_c1",
+  "defect_codes_for_labeling": [
+    "AFFIRMATION_UNNATURAL",
+    "ASTRO_JARGON_BARE",
+    "BUREAUCRATIC",
+    "CATEGORICAL_PROMISE",
+    "CHORUS_NATAL_WITHOUT_EVIDENCE",
+    "CHORUS_PARALLEL_ECHO",
+    "CHORUS_PARALLEL_FORECAST",
+    "CHORUS_ROLE_DRIFT",
+    "CHORUS_SEMANTIC_DUPLICATION",
+    "CHORUS_UNTRANSLATED_JARGON",
+    "CLOSURE_AFFIRMATION_ECHO",
+    "CLOSURE_MISSING",
+    "CLOSURE_NEW_FORECAST",
+    "CLOSURE_NO_CONFLICT_CALLBACK",
+    "CLOSURE_WELLNESS_MUSH",
+    "LOCALE_LANGUAGE_MISMATCH",
+    "NATAL_WITHOUT_EVIDENCE",
+    "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE",
+    "PERSONALIZATION_CONFLICT_UNCHANGED",
+    "PERSONALIZATION_DECORATIVE_ONLY",
+    "PERSONALIZATION_DEPTH_OVERREACH",
+    "PERSONALIZATION_EVIDENCE_ORPHAN",
+    "PERSONALIZATION_GENERIC_ACTION",
+    "PERSONALIZATION_NATAL_OVERCLAIM",
+    "PERSONALIZATION_PROFILE_FACT_LEAK",
+    "PERSONALIZATION_SCENES_UNCHANGED",
+    "PERSONALIZATION_SPHERE_CROSS_PROFILE",
+    "PERSONALIZATION_SPHERE_OUTSIDE_PACK",
+    "PERSONALIZATION_SPHERE_SELECTION_EMPTY",
+    "PERSONALIZATION_SPHERE_UNJUSTIFIED",
+    "PROVENANCE_ACTION_NOT_DERIVED",
+    "PROVENANCE_PROP_NOT_DERIVED",
+    "PROVENANCE_REF_MISSING",
+    "PROVENANCE_REF_ORPHAN",
+    "PROVENANCE_WRONG_PROFILE",
+    "PSEUDO_DIAGNOSIS",
+    "SCENE_ABSTRACT",
+    "SCENE_CLONE",
+    "SCENE_MISSING_CHOICE",
+    "SCENE_MISSING_EVERYDAY",
+    "SCENE_UNIVERSAL_ADVICE",
+    "THESIS_ECHO"
+  ],
+  "scenario": {
+    "contract_version": "day_scenario_v1",
+    "version": "day-scenario-v1.2-b5-runtime-sot",
+    "runtime_sot": true,
+    "ready": true,
+    "generation_source": "native_llm_c1",
+    "native_schema_version": "day_scenario_native_llm_c1",
+    "foundation": {
+      "contract_version": "day_scenario_foundation_v1",
+      "ranked_drivers": [
+        {
+          "id": "cycle-mercury_station_direct_summer",
+          "kind": "station_direct",
+          "title_ru": "Меркурий выходит из ретрограда (Лев)",
+          "fact_ru": "Меркурий разворачивается в директное движение в знаке Лев.",
+          "strength": 0.95,
+          "body": null,
+          "sign": null,
+          "aspect": null,
+          "evidence_ref": "event:cycle-mercury_station_direct_summer"
+        }
+      ],
+      "astronomy_facts": [],
+      "astrology_facts": [
+        {
+          "id": "cycle-mercury_station_direct_summer",
+          "label_ru": "Меркурий разворачивается в директное движение в знаке Лев.",
+          "kind": "station_direct",
+          "strength": 0.95,
+          "evidence_ref": "event:cycle-mercury_station_direct_summer"
+        }
+      ],
+      "personal_natal_activations": [
+        {
+          "id": "claim.personal.astro.time-lords-firdaria-zr-moon",
+          "text": "Firdaria: мажор Луна ([redacted] → [redacted]), субпериод Солнце (до [redacted]). ZR Fortune→Весы: L1 Козерог/Сатурн, L2 Козерог. ZR Spirit→Водолей: L1 Рыбы/Юпитер, L2 Дева. Лоты soft: Луна/Солнце (нет ASC).",
+          "evidence_ids": [
+            "personal_astrology.time_lords"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.astro.profection-annual-h1",
+          "text": "Профекция года (возраст 36): 1-й дом, знак Водолей, управитель Сатурн — тело, самопрезентация, как вас видят. База — солнечный знак (нет времени/места для ASC).",
+          "evidence_ids": [
+            "personal_astrology.profections"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.astro.returns-solar",
+          "text": "Solar return 2026: карта от [redacted] (Солнце ≈ Водолей 25.3°, ошибка noon 0.27°). День 164 периода; до следующего SR ~202 дн.",
+          "evidence_ids": [
+            "personal_astrology.solar_return"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.astro.progressions-secondary-sun-moon",
+          "text": "Секундарные прогрессии (день=год): прогресс. Солнце Овен 1.1°, Луна Козерог 28.6° (возраст 36.45 лет → дата [redacted]). Солнце сменило знак с Водолей. Луна сменила знак с Весы.",
+          "evidence_ids": [
+            "personal_astrology.secondary_progressions"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.astro.planet-returns-soft",
+          "text": "Возвраты планет (soft): в окне — Луна.",
+          "evidence_ids": [
+            "personal_astrology.planet_returns"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.hd.hd.type.generator",
+          "text": "HD soft: Генератор; авторитет Сакральный; стратегия — Отвечать. Определённые центры (natal): Аджна, G-центр, Сакрал, Горло.",
+          "evidence_ids": [
+            "human_design.type_authority"
+          ],
+          "layer": "human_design"
+        },
+        {
+          "id": "claim.personal.hd.hd.profile.1-2",
+          "text": "Профиль 1/2 · Исследователь / Отшельник; Угол нестандартный / soft. Incarnation Cross soft: ворота 30/29/14/8 (Personality Sun 30.1, Design Sun 14.2).",
+          "evidence_ids": [
+            "human_design.profile_lines_cross"
+          ],
+          "layer": "human_design"
+        },
+        {
+          "id": "claim.personal.hd.hd.variables.LLRL",
+          "text": "Variables soft: Пищеварение влево (active) · Вкус; Среда влево (active) · Пещеры; Перспектива вправо (receptive) · Желание; Мотивация влево (active) · Страх.",
+          "evidence_ids": [
+            "human_design.variables"
+          ],
+          "layer": "human_design"
+        },
+        {
+          "id": "claim.personal.bazi.bazi-branch_combine-month-yin-hai",
+          "text": "Тигр + Свинья — поддержка движения.",
+          "evidence_ids": [
+            "bazi.clashes"
+          ],
+          "layer": "bazi"
+        },
+        {
+          "id": "claim.personal.vedic.chandra_lagna-moon-h4",
+          "text": "Луна в 4-м — дом, корни, потребность в опоре.",
+          "evidence_ids": [
+            "vedic_personal.gochara"
+          ],
+          "layer": "vedic_personal"
+        },
+        {
+          "id": "claim.personal.vedic.dasha-md-jupiter",
+          "text": "Vimshottari: махадаша Юпитер / антардаша Венера (баланс при рождении 2.56 лет Луна).",
+          "evidence_ids": [
+            "vedic_personal.dasha"
+          ],
+          "layer": "vedic_personal"
+        },
+        {
+          "id": "claim.personal.name_numbers.name.expression",
+          "text": "Expression 4 — как имя звучит вовне (soft Pythagorean).",
+          "evidence_ids": [
+            "name_numbers.expression"
+          ],
+          "layer": "name_numbers"
+        }
+      ],
+      "tarot_card": {
+        "name": null,
+        "id": null,
+        "present": false,
+        "evidence_ref": null
+      },
+      "day_number": {
+        "value": 4,
+        "personal_day": 4,
+        "universal_day": 7,
+        "present": true,
+        "evidence_ref": "day_foundation.numerology"
+      },
+      "cycles": [
+        {
+          "id": "weekday",
+          "label_ru": "Sun",
+          "evidence_ref": "day_foundation.weekday"
+        },
+        {
+          "id": "seasonal",
+          "label_ru": "Сезон — лето.",
+          "evidence_ref": "day_foundation.seasonal"
+        }
+      ],
+      "confidence": 0.92,
+      "evidence_references": [
+        {
+          "id": "ev.brief.anchor",
+          "source": "day_narrative_brief_v0.anchor_summary",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.numerology",
+          "source": "source.numerology.universal_day",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.weekday",
+          "source": "source.weekday_ruler",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.seasonal",
+          "source": "source.seasonal_calendar",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.panchanga",
+          "source": "source.vedic_panchanga",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.chinese",
+          "source": "source.chinese_metaphysics",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.mayan.tzolkin_haab",
+          "source": "source.mayan_calendars.tzolkin_haab",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.mayan.dreamspell",
+          "source": "source.mayan_calendars.dreamspell",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.time-lords-firdaria-zr-moon",
+          "source": "personal_astrology.time_lords",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.profection-annual-h1",
+          "source": "personal_astrology.profections",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.returns-solar",
+          "source": "personal_astrology.solar_return",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.progressions-secondary-sun-moon",
+          "source": "personal_astrology.secondary_progressions",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.planet-returns-soft",
+          "source": "personal_astrology.planet_returns",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.hd.hd.type.generator",
+          "source": "human_design.type_authority",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.hd.hd.profile.1-2",
+          "source": "human_design.profile_lines_cross",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.hd.hd.variables.LLRL",
+          "source": "human_design.variables",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.bazi.bazi-branch_combine-month-yin-hai",
+          "source": "bazi.clashes",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.vedic.chandra_lagna-moon-h4",
+          "source": "vedic_personal.gochara",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.vedic.dasha-md-jupiter",
+          "source": "vedic_personal.dasha",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.name_numbers.name.expression",
+          "source": "name_numbers.expression",
+          "text": ""
+        },
+        {
+          "id": "ev.brief.do_hint",
+          "source": "day_narrative_brief_v0.do_hint",
+          "text": ""
+        },
+        {
+          "id": "ev.brief.avoid_hint",
+          "source": "day_narrative_brief_v0.avoid_hint",
+          "text": ""
+        },
+        {
+          "id": "ev.brief.tempo",
+          "source": "day_narrative_brief_v0.tempo_hint",
+          "text": ""
+        },
+        {
+          "id": "ev.driver.cycle-mercury_station_direct_summer",
+          "source": "day_events_pack_v1.ranked_drivers",
+          "text": ""
+        },
+        {
+          "id": "ev.day.thesis",
+          "source": "day_thesis_v1",
+          "text": ""
+        }
+      ],
+      "limitations": [
+        "perigee_apogee_not_computed_v1",
+        "Нет явного сигнала по сферам (отношения / работа / семья) — доменные блоки не заполняются выдуманным текстом.",
+        "Карта дня не раскрыта или отсутствует — не упоминать карту.",
+        "Число дня не раскрыто или отсутствует — не упоминать число.",
+        "Нет готового why цвета — talisman.note / supports_story без выдуманной связи небо→цвет."
+      ]
+    },
+    "chorus": {
+      "contract_version": "day_scenario_chorus_v1",
+      "astrology": [
+        {
+          "voice": "astrology",
+          "named_factor": "Меркурий разворачивается в директное движение в знаке Лев",
+          "human_meaning": "Внешняя среда сегодня похожа на зал ожидания, где внезапно объявили посадку. Все разговоры, которые зависли в воздухе или крутились по кругу, получают резкий импульс к завершению. Появляется соблазн высказать всё, что накопилось, громко и с королевской прямотой, не заботясь о фо…",
+          "link_to_conflict": "Этот астрономический разворот создаёт внешнее давление, требующее немедленной ясности. Он сталкивает желание человека спокойно во всём разобраться с лавиной чужих или своих собственных нефильтрованных заявлений.",
+          "conflict_id": "conflict.royal_statement_vs_inner_laboratory",
+          "evidence_ref": "ev.driver.cycle-mercury_station_direct_summer",
+          "evidence_refs": [
+            "ev.driver.cycle-mercury_station_direct_summer",
+            "claim.day.driver.cycle-mercury_station_direct_summer"
+          ]
+        }
+      ],
+      "day_card": {
+        "voice": "day_card",
+        "named_factor": "Карта дня не раскрыта",
+        "archetype_role": "отсутствует",
+        "link_to_conflict": "не применимо",
+        "conflict_id": "conflict.royal_statement_vs_inner_laboratory",
+        "human_meaning": "не применимо",
+        "evidence_refs": [],
+        "is_not_astro_proof": true,
+        "must_not_invent_second_plot": true
+      },
+      "day_number": {
+        "voice": "day_number",
+        "named_factor": "Число дня 7",
+        "tempo": "замедленный, аналитический",
+        "style": "Число 7 задаёт ритм отшельника, который предпочитает наблюдать со стороны и док…",
+        "link_to_conflict": "Этот внутренний ритм вступает в прямой конфликт с внешним давлением Меркурия во Льве. Среда требует немедленного и громкого заявления, а число дня настаивает на паузе, проверке фактов и уединении.",
+        "conflict_id": "conflict.royal_statement_vs_inner_laboratory",
+        "human_meaning": "Этот внутренний ритм вступает в прямой конфликт с внешним давлением Меркурия во Льве. Среда требует немедленного и громкого заявления, а число дня настаивает на паузе, проверке фактов и уединении.",
+        "evidence_refs": [
+          "ev.claim.foundation.numerology",
+          "claim.foundation.numerology"
+        ],
+        "must_not_invent_second_plot": true
+      },
+      "natal": [
+        {
+          "voice": "natal",
+          "named_factor": "Профиль 1/2 Исследователь/Отшельник",
+          "human_meaning": "Ваша базовая конструкция — это человек, который сначала должен глубоко изучить вопрос в одиночестве (линия 1) и лишь потом, возможно, явить результат, часто неожиданно для себя (линия 2). Вас естественным образом тянет уйти в «пещеру», чтобы во всём разобраться, прежде чем отвеч…",
+          "link_to_conflict": "Это личная уязвимость в сегодняшнем конфликте, потому что внешний мир (Меркурий во Льве) не даёт времени на исследование и требует немедленной, яркой презентации. Ваш привычный способ (уйти и подумать) сегодня будет постоянно атакован.",
+          "conflict_id": "conflict.royal_statement_vs_inner_laboratory",
+          "evidence_refs": [
+            "ev.claim.personal.hd.hd.profile.1-2",
+            "claim.personal.hd.hd.profile.1-2"
+          ]
+        }
+      ],
+      "dialogue_rule": "Four voices explain one conflict; no parallel forecasts.",
+      "parallel_forecast_forbidden": true
+    },
+    "conflict": {
+      "contract_version": "day_scenario_conflict_v1",
+      "short_name": "Королевское заявление против внутренней лаборатории",
+      "thesis": {
+        "family": "communication",
+        "variant": "truth_without_filter",
+        "mode": "conflict",
+        "label_ru": "Королевское заявление против внутренней лаборатории",
+        "day_thesis": {
+          "contract_version": "day_thesis_v1",
+          "family": "communication",
+          "variant": "truth_without_filter",
+          "mode": "conflict",
+          "label_ru": "Прямота без фильтра",
+          "label": "Прямота без фильтра",
+          "driver_ids": [
+            "cycle-mercury_station_direct_summer"
+          ],
+          "composition_ids": []
+        },
+        "llm_thesis": "Сегодняшний день — это столкновение между импульсом высказать нефильтрованную правду здесь и сейчас и глубинной потребностью сначала всё обдумать, проверить и найти точную формулировку."
+      },
+      "opposing_forces": {
+        "a": "Громкая, немедленная прямота, требующая признания и немедленного ответа.",
+        "b": "Потребность в тишине, анализе и уединении, чтобы найти единственно верные слова."
+      },
+      "why_arose": "Меркурий, планета коммуникации, разворачивается в прямое движение в знаке Льва, создавая атмосферу, в которой «молчать больше нельзя». Это внешний триггер, который запускает лавину невысказанного.",
+      "why_personal": "Вашему внутреннему «Исследователю/Отшельнику» (Профиль 1/2) это внешнее давление особенно некомфортно. Вас вынуждают действовать по чужому сценарию, игнорируя вашу потребность сначала всё изучить в одиночестве.",
+      "driver_ids": [
+        "cycle-mercury_station_direct_summer"
+      ],
+      "chorus_references": [
+        "astrology",
+        "day_card",
+        "day_number",
+        "natal"
+      ],
+      "confidence": 0.72,
+      "foundation_rule": "Native LLM conflict; facts from foundation; card/number do not invent rival plot.",
+      "evidence_refs": [
+        "ev.driver.cycle-mercury_station_direct_summer",
+        "claim.day.driver.cycle-mercury_station_direct_summer",
+        "claim.day.primary_conflict",
+        "claim.day.thesis",
+        "ev.claim.personal.hd.hd.profile.1-2",
+        "claim.personal.hd.hd.profile.1-2",
+        "ev.claim.foundation.numerology",
+        "claim.foundation.numerology"
+      ],
+      "personalization": {
+        "personalization_level": "light_personalized",
+        "personalization_reason": "Конфликт строится вокруг столкновения внешнего драйвера дня (Меркурий во Льве) и личной уязвимости (Профиль 1/2), что позволяет дать вероятную реакцию и рекомендацию, не углубляясь в точные натальные активации.",
+        "personalization_evidence_refs": [
+          "ev.claim.personal.hd.hd.profile.1-2",
+          "claim.personal.hd.hd.profile.1-2"
+        ],
+        "general_fallback_available": true,
+        "habitual_force": "b",
+        "required_movement": "a",
+        "response_pattern": "",
+        "compensating_for": "",
+        "trap_pattern": "",
+        "sphere_reason": ""
+      }
+    },
+    "scenes": [
+      {
+        "scene_id": "scene.energy_body",
+        "sphere": "energy_body",
+        "sphere_label_ru": "Энергия и тело",
+        "role_in_story": "primary",
+        "what_happens": "Вы чувствуете внутреннее напряжение, как будто вас распирает изнутри. Кто-то из близких или коллег внезапно задаёт вам прямой вопрос, ответ на который вы долго откладывали. Внутренний импульс — либо взорваться и выдать всё как есть, либо закрыться и уйти в себя, чтобы не наговорить лишнего.",
+        "why": "Меркурий, планета коммуникации, разворачивается в прямое движение в знаке Льва, создавая атмосферу, в которой «молчать больше нельзя». Это внешний триггер, который запускает лавину невысказанного.",
+        "opportunity": "Использовать этот прилив энергии не для взрыва, а для короткой, ясной и честной фразы, сказанной спокойным тоном. Это возможность перевести грубую силу в точное действие, которое снимет внутреннее давление.",
+        "trap": "Попасть в ловушку «праведного гнева» и выдать длинный эмоциональный монолог, который принесёт временное облегчение, но затем вызовет чувство вины и необходимость разбирать последствия.",
+        "recommended_action": "Когда почувствуете, что вас «несёт», физически остановитесь. Сделайте один глубокий вдох и выдох. Скажите только одну фразу, которая является сутью вашего ответа, и замолчите, давая пространство для реакции.",
+        "do_not": "Избегайте публичных заявлений в мессенджерах и соцсетях под влиянием момента. Написанное сегодня будет иметь эффект разорвавшейся бомбы.",
+        "domestic_example": "В чате дома или с друзьями всплывает старая тема, где вы чувствуете себя недооценённым. Вместо того чтобы написать три абзаца о том, как вы устали, вы пишете: «Мне важно, чтобы мой вклад был замечен. Давайте обсудим это вечером». И выключаете уведомления на час.",
+        "evidence_references": [
+          "ev.driver.cycle-mercury_station_direct_summer",
+          "claim.day.primary_conflict",
+          "ev.brief.tempo",
+          "claim.tempo"
+        ],
+        "chorus_references": [
+          "astrology",
+          "day_number",
+          "natal",
+          "conflict"
+        ],
+        "confidence": 0.7,
+        "serves_conflict": "Королевское заявление против внутренней лаборатории"
+      },
+      {
+        "scene_id": "scene.relationships",
+        "sphere": "relationships",
+        "sphere_label_ru": "Отношения",
+        "role_in_story": "support",
+        "what_happens": "Разговор с близким человеком, где вы чувствуете, что вас не слышат. Вы уже готовы сказать что-то резкое, чтобы наконец пробить эту стену. Второй участник диалога, наоборот, ждёт от вас привычной мягкой реакции и не готов к вашей новой прямоте.",
+        "why": "Меркурий, планета коммуникации, разворачивается в прямое движение в знаке Льва, создавая атмосферу, в которой «молчать больше нельзя». Это внешний триггер, который запускает лавину невысказанного.",
+        "opportunity": "Сказать правду о своих чувствах, но не в форме обвинения, а в форме «я-сообщения». Это может неожиданно сломать старый, неработающий сценарий в отношениях.",
+        "trap": "Сорваться на обвинения и перейти на личности, используя «ты всегда...» и «ты никогда...». Это только усилит конфликт и заставит другого человека занять глухую оборону.",
+        "recommended_action": "Начните фразу с «Я чувствую...» и говорите только о себе. Например: «Я чувствую разочарование, когда мой голос остаётся незамеченным». Не ждите немедленного понимания, просто обозначьте свою позицию.",
+        "do_not": "Не используйте сегодняшнюю прямоту как дубину, чтобы припомнить все старые обиды. Это разрушит возможность для нового диалога.",
+        "domestic_example": "Партнёр в очередной раз не выполнил обещание. Вместо «Ты как всегда безответственный!» вы говорите: «Я чувствую, что мои просьбы не важны. Мне нужно понять, можем ли мы это изменить». И выдерживаете паузу, не требуя немедленного ответа.",
+        "evidence_references": [
+          "ev.driver.cycle-mercury_station_direct_summer",
+          "claim.day.primary_conflict",
+          "ev.brief.do_hint",
+          "claim.primary_move"
+        ],
+        "chorus_references": [
+          "astrology",
+          "day_number",
+          "natal",
+          "conflict"
+        ],
+        "confidence": 0.7,
+        "serves_conflict": "Королевское заявление против внутренней лаборатории"
+      }
+    ],
+    "props": {
+      "contract_version": "day_scenario_props_v1",
+      "status": "ok",
+      "color": {
+        "name": "Янтарный",
+        "origin_scene_id": "scene.energy_body",
+        "serves_conflict": "Королевское заявление против внутренней лаборатории",
+        "link_to_conflict": "В сцене «Энергия и тело» конфликт «Королевское заявление против внутренней лаборатории» тянет к «Громкая, немедленная прямота, требующая признания и немедленного ответа.». тёплая энергия без суеты — это свойство нужно сегодня, чтобы удержать «Потребность в тишине, анализе и уединении, чтобы найти единственно верные слова.».",
+        "supports_or_compensates": "Компенсирует ловушку: Попасть в ловушку «праведного гнева» и выдать длинный эмоциональный монолог, который принесёт временное облегчение, но затем вызовет чувство вины и необходимос…",
+        "expected_effect_today": "Помогает не сорваться в «Громкая, немедленная прямота, требующая признания и немедленного ответа.» и сделать один жест в сторону «Потребность в тишине, анализе и уединении, чтобы найти единственно верные слова.».",
+        "where_to_use": {
+          "clothing": "Янтарный шарф или тёплый свитер.",
+          "accessory": "Украшение медового оттенка.",
+          "workspace": null,
+          "makeup": null,
+          "ui_or_bg": null
+        },
+        "intensity": "тёплый акцент у лица или на руках",
+        "catalog_knowledge_ref": "Янтарный",
+        "evidence_references": [
+          "ev.driver.cycle-mercury_station_direct_summer",
+          "claim.day.primary_conflict",
+          "ev.brief.tempo",
+          "claim.tempo"
+        ],
+        "chorus_references": [
+          "astrology",
+          "day_number",
+          "natal",
+          "conflict"
+        ],
+        "so_t_note": "scenario_scene_derived; catalog is knowledge only"
+      },
+      "avoid_color": {
+        "name": "Холодный стальной",
+        "origin_scene_id": "scene.energy_body",
+        "serves_conflict": "Королевское заявление против внутренней лаборатории",
+        "amplifies_trap": "Попасть в ловушку «праведного гнева» и выдать длинный эмоциональный монолог, который принесёт временное облегчение, но затем вызовет чувство вины и необходимость разбирать последствия.",
+        "why": "Холодный стальной сегодня нежелателен: усиливает ловушку сцены «Попасть в ловушку «праведного гнева» и выдать длинный эмоциональный монолог, который принесёт временное облегчение, но…» и разгоняет стратегию «Громкая, немедленная прямота, требующая признания и немедленного ответа.», вместо нужного «Потребность в тишине, анализе и уединении, чтобы найти единственно верные слова.».",
+        "where_especially_avoid": "В одежде и на фоне разговора/решения в зоне «Энергия и тело».",
+        "ok_as_tiny_accent": false,
+        "catalog_knowledge_ref": "Холодный стальной",
+        "evidence_references": [
+          "ev.driver.cycle-mercury_station_direct_summer",
+          "claim.day.primary_conflict",
+          "ev.brief.tempo",
+          "claim.tempo"
+        ]
+      },
+      "goals": [
+        {
+          "text": "Закрыть один жест в зоне «Энергия и тело», который сдвигает «Королевское заявление против внутренней лаборатории» к «Потребность в тишине, анализе и уединении, чтобы найти единственно верные слова.» — без ожидания чужой реакции.",
+          "origin_scene_id": "scene.energy_body",
+          "serves_conflict": "Королевское заявление против внутренней лаборатории",
+          "solves": "Попасть в ловушку «праведного гнева» и выдать длинный эмоциональный монолог, который принесёт временное облегчение, но затем вызовет чувство вины и необходимос…",
+          "one_day_feasible": true,
+          "duplicates_do": false,
+          "role": "primary"
+        },
+        {
+          "text": "В «Отношения» заметить момент «Громкая, немедленная прямота, требующая признания и немедленного ответа.» и заменить его одним маленьким «Потребность в тишине, анализе и уединении, чтобы найти единственно верные слова.».",
+          "origin_scene_id": "scene.relationships",
+          "serves_conflict": "Королевское заявление против внутренней лаборатории",
+          "solves": "Сорваться на обвинения и перейти на личности, используя «ты всегда...» и «ты никогда...». Это только усилит конфликт и…",
+          "one_day_feasible": true,
+          "duplicates_do": false,
+          "role": "secondary"
+        }
+      ],
+      "affirmations": [
+        {
+          "text": "Мне не нужно выбирать «Громкая, немедленная прямота, требующая признания и немедленного ответа.», чтобы сохранить лицо дня — я могу сделать один шаг к «Потребность в тишине, анализе и уединении, чтобы найти единственно верные слова.».",
+          "origin_scene_id": "scene.energy_body",
+          "serves_conflict": "Королевское заявление против внутренней лаборатории",
+          "compensates_trap": "Попасть в ловушку «праведного гнева» и выдать длинный эмоциональный монолог, который принесёт временное облегчение, но затем вызовет чувство вины и необходимос…",
+          "helps_action": "Когда почувствуете, что вас «несёт», физически остановитесь. Сделайте один глубокий вдох и выдох. Скажите только одну фразу, которая является сутью вашего отве…",
+          "universal_formula": false
+        }
+      ],
+      "humor": {
+        "kind": "impulse_purchase",
+        "origin_scene_id": "scene.energy_body",
+        "text": "Если поймаете себя на «Громкая, немедленная прямота, требующая признания и немедленного ответа.» в зоне «Энергия и тело» — это уже сцена дня, не личный провал. Можно улыбнуться и выбрать другой жест.",
+        "serves_conflict": "Королевское заявление против внутренней лаборатории",
+        "optional": true
+      },
+      "strong_spheres": [
+        {
+          "sphere": "energy_body",
+          "sphere_label_ru": "Энергия и тело",
+          "origin_scene_id": "scene.energy_body",
+          "role_in_story": "primary",
+          "status": "strong",
+          "opportunity": "Использовать этот прилив энергии не для взрыва, а для короткой, ясной и честной фразы, сказанной спокойным тоном. Это возможность перевести грубую силу в точное действие, которое снимет внутреннее давление."
+        },
+        {
+          "sphere": "relationships",
+          "sphere_label_ru": "Отношения",
+          "origin_scene_id": "scene.relationships",
+          "role_in_story": "support",
+          "status": "strong",
+          "opportunity": "Сказать правду о своих чувствах, но не в форме обвинения, а в форме «я-сообщения». Это может неожиданно сломать старый, неработающий сценарий в отношениях."
+        }
+      ],
+      "weak_spheres": [],
+      "rule": "Every prop carries origin_scene_id; catalog is knowledge only, not SoT.",
+      "chorus_tempo_hint": "замедленный, аналитический",
+      "prop_material_llm": {
+        "color_scene_candidates": [],
+        "avoid_color_trigger": "",
+        "goal_candidates": [],
+        "affirmation_tension": null,
+        "humor_setup": null
+      }
+    },
+    "projections": {
+      "status": "day_scenario_project_v1.b5",
+      "note": "Native LLM scenario; props deterministic; legacy slots projections only."
+    },
+    "generation_notes": "",
+    "personalization_depth": "light_personalized",
+    "personalization_evidence": {
+      "evidence_depth": "light_personalized",
+      "confidence": 0.45,
+      "evidence_refs": [
+        "claim.personal.astro.time-lords-firdaria-zr-moon",
+        "personal_astrology.time_lords",
+        "claim.personal.astro.profection-annual-h1",
+        "personal_astrology.profections",
+        "claim.personal.astro.returns-solar",
+        "personal_astrology.solar_return",
+        "claim.personal.astro.progressions-secondary-sun-moon",
+        "personal_astrology.secondary_progressions",
+        "claim.personal.astro.planet-returns-soft",
+        "personal_astrology.planet_returns",
+        "claim.personal.hd.hd.type.generator",
+        "human_design.type_authority"
+      ],
+      "tendency_ids": [],
+      "sphere_selection": {
+        "contract_version": "day_scenario_sphere_selection_c33b",
+        "evidence_depth": "light_personalized",
+        "ranked_spheres": [
+          {
+            "sphere": "energy_body",
+            "label_ru": "Энергия и тело",
+            "reason": "personal sensitive domain",
+            "evidence_refs": [
+              "claim.personal.astro.time-lords-firdaria-zr-moon",
+              "personal_astrology.time_lords",
+              "claim.personal.astro.profection-annual-h1",
+              "personal_astrology.profections"
+            ],
+            "source": "personal",
+            "weight": 0.7,
+            "rank": 1
+          },
+          {
+            "sphere": "relationships",
+            "label_ru": "Отношения",
+            "reason": "thesis family «communication»",
+            "evidence_refs": [
+              "thesis.communication"
+            ],
+            "source": "family",
+            "weight": 0.55,
+            "rank": 2
+          },
+          {
+            "sphere": "communication",
+            "label_ru": "Общение",
+            "reason": "thesis family «communication»",
+            "evidence_refs": [
+              "thesis.communication"
+            ],
+            "source": "family",
+            "weight": 0.55,
+            "rank": 3
+          }
+        ],
+        "primary_candidates": [
+          "energy_body",
+          "relationships"
+        ],
+        "allowed_spheres": [
+          "energy_body",
+          "relationships",
+          "communication"
+        ],
+        "personal_sphere_count": 1,
+        "must_justify_outside": true,
+        "notes": "prefer listed spheres; outside list requires sphere_reason + evidence_refs"
+      }
+    },
+    "wire_projection": "day_scenario_project_v1.b5"
+  },
+  "instructions": {
+    "overall_band": [
+      "acceptable_with_issues",
+      "cannot_assess",
+      "pass",
+      "reject"
+    ],
+    "defect_presence": [
+      "absent",
+      "not_applicable",
+      "present",
+      "uncertain"
+    ],
+    "severity": [
+      "minor",
+      "material",
+      "severe"
+    ],
+    "blind": true,
+    "do_not_infer_from_filename": true
+  }
+}

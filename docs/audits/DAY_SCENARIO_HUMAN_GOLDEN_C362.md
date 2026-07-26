@@ -58,4 +58,7 @@ Minimum **40** human cases after process check:
 
 ## Next
 
-Real human labeling batch under this protocol → feed consensus into calibration → only then consider promotions.
+1. **Pilot blind batch** — [day_scenario_human_golden/batches/c362_blind_pilot_20260726](./day_scenario_human_golden/batches/c362_blind_pilot_20260726/) (7 live RU cases; dual templates ready)
+2. Real human labeling under this protocol → feed consensus into calibration → only then consider promotions
+3. Grow inventory to **40** (20 RU · 20 EN) after process check — do **not** auto-fill fake human labels
+

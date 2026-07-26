@@ -1,0 +1,787 @@
+{
+  "export_kind": "blind_human_review_c362",
+  "case_id": "hg-1482ed91292c",
+  "scenario_id": "hg-1482ed91292c",
+  "scenario_hash": "sha256:ceec0f74163b6679fa148f29d1b80fc22bbbe4feda79e827d71ad4a359e75500",
+  "locale": "ru",
+  "profile_type": "live_registered_personal",
+  "evidence_depth": "deep_personalized",
+  "source_type": "live_capture",
+  "rubric_version": "day_scenario_human_review_rubric_c362.1",
+  "golden_contract_version": "day_scenario_human_golden_c362",
+  "defect_catalog_version": "gate_rules_c36.42",
+  "review_protocol_version": "day_scenario_review_protocol_c362.1",
+  "scenario_contract_version": "day_scenario_native_llm_c1",
+  "defect_codes_for_labeling": [
+    "AFFIRMATION_UNNATURAL",
+    "ASTRO_JARGON_BARE",
+    "BUREAUCRATIC",
+    "CATEGORICAL_PROMISE",
+    "CHORUS_NATAL_WITHOUT_EVIDENCE",
+    "CHORUS_PARALLEL_ECHO",
+    "CHORUS_PARALLEL_FORECAST",
+    "CHORUS_ROLE_DRIFT",
+    "CHORUS_SEMANTIC_DUPLICATION",
+    "CHORUS_UNTRANSLATED_JARGON",
+    "CLOSURE_AFFIRMATION_ECHO",
+    "CLOSURE_MISSING",
+    "CLOSURE_NEW_FORECAST",
+    "CLOSURE_NO_CONFLICT_CALLBACK",
+    "CLOSURE_WELLNESS_MUSH",
+    "LOCALE_LANGUAGE_MISMATCH",
+    "NATAL_WITHOUT_EVIDENCE",
+    "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE",
+    "PERSONALIZATION_CONFLICT_UNCHANGED",
+    "PERSONALIZATION_DECORATIVE_ONLY",
+    "PERSONALIZATION_DEPTH_OVERREACH",
+    "PERSONALIZATION_EVIDENCE_ORPHAN",
+    "PERSONALIZATION_GENERIC_ACTION",
+    "PERSONALIZATION_NATAL_OVERCLAIM",
+    "PERSONALIZATION_PROFILE_FACT_LEAK",
+    "PERSONALIZATION_SCENES_UNCHANGED",
+    "PERSONALIZATION_SPHERE_CROSS_PROFILE",
+    "PERSONALIZATION_SPHERE_OUTSIDE_PACK",
+    "PERSONALIZATION_SPHERE_SELECTION_EMPTY",
+    "PERSONALIZATION_SPHERE_UNJUSTIFIED",
+    "PROVENANCE_ACTION_NOT_DERIVED",
+    "PROVENANCE_PROP_NOT_DERIVED",
+    "PROVENANCE_REF_MISSING",
+    "PROVENANCE_REF_ORPHAN",
+    "PROVENANCE_WRONG_PROFILE",
+    "PSEUDO_DIAGNOSIS",
+    "SCENE_ABSTRACT",
+    "SCENE_CLONE",
+    "SCENE_MISSING_CHOICE",
+    "SCENE_MISSING_EVERYDAY",
+    "SCENE_UNIVERSAL_ADVICE",
+    "THESIS_ECHO"
+  ],
+  "scenario": {
+    "contract_version": "day_scenario_v1",
+    "version": "day-scenario-v1.2-b5-runtime-sot",
+    "runtime_sot": true,
+    "ready": true,
+    "generation_source": "native_llm_c1",
+    "native_schema_version": "day_scenario_native_llm_c1",
+    "foundation": {
+      "contract_version": "day_scenario_foundation_v1",
+      "ranked_drivers": [
+        {
+          "id": "cycle-mercury_station_direct_summer",
+          "kind": "station_direct",
+          "title_ru": "Меркурий выходит из ретрограда (Лев)",
+          "fact_ru": "Меркурий разворачивается в директное движение в знаке Лев.",
+          "strength": 0.95,
+          "body": null,
+          "sign": null,
+          "aspect": null,
+          "evidence_ref": "event:cycle-mercury_station_direct_summer"
+        }
+      ],
+      "astronomy_facts": [],
+      "astrology_facts": [
+        {
+          "id": "cycle-mercury_station_direct_summer",
+          "label_ru": "Меркурий разворачивается в директное движение в знаке Лев.",
+          "kind": "station_direct",
+          "strength": 0.95,
+          "evidence_ref": "event:cycle-mercury_station_direct_summer"
+        }
+      ],
+      "personal_natal_activations": [
+        {
+          "id": "claim.personal.astro.time-lords-firdaria-zr-moon",
+          "text": "Firdaria: мажор Луна ([redacted] → [redacted]), субпериод Луна (до [redacted]). ZR Fortune→Телец: L1 Рак/Луна, L2 Лев. ZR Spirit→Близнецы: L1 Рак/Луна, L2 Стрелец. Лоты soft: Луна/Солнце (нет ASC).",
+          "evidence_ids": [
+            "personal_astrology.time_lords"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.astro.profection-annual-h8",
+          "text": "Профекция года (возраст 31): 8-й дом, знак Козерог, управитель Сатурн — глубина, общие ресурсы, перемены. База — солнечный знак (нет времени/места для ASC).",
+          "evidence_ids": [
+            "personal_astrology.profections"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.astro.returns-solar",
+          "text": "Solar return 2026: карта от [redacted] (Солнце ≈ Близнецы 4.8°, ошибка noon 0.47°). День 63 периода; до следующего SR ~304 дн.",
+          "evidence_ids": [
+            "personal_astrology.solar_return"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.astro.progressions-secondary-sun-moon",
+          "text": "Секундарные прогрессии (день=год): прогресс. Солнце Рак 4.9°, Луна Близнецы 23.6° (возраст 31.17 лет → дата [redacted]). Солнце сменило знак с Близнецы. Луна сменила знак с Телец.",
+          "evidence_ids": [
+            "personal_astrology.secondary_progressions"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.astro.planet-returns-soft",
+          "text": "Возвраты планет (soft): в окне — Луна.",
+          "evidence_ids": [
+            "personal_astrology.planet_returns"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.hd.hd.type.manifesting_generator",
+          "text": "HD soft: Манифестирующий генератор; авторитет Эмоциональный; стратегия — Отвечать (и информировать). Определённые центры (natal): Аджна, Голова, Эго / Воля, Сакрал, Солнечное сплетение.",
+          "evidence_ids": [
+            "human_design.type_authority"
+          ],
+          "layer": "human_design"
+        },
+        {
+          "id": "claim.personal.hd.hd.profile.6-4",
+          "text": "Профиль 6/4 · Роль-модель / Оппортунист; Угол нестандартный / soft. Incarnation Cross soft: ворота 20/34/37/40 (Personality Sun 20.6, Design Sun 37.4).",
+          "evidence_ids": [
+            "human_design.profile_lines_cross"
+          ],
+          "layer": "human_design"
+        },
+        {
+          "id": "claim.personal.hd.hd.variables.LLLL",
+          "text": "Variables soft: Пищеварение влево (active) · Жажда; Среда влево (active) · Пещеры; Перспектива влево (active) · Власть; Мотивация влево (active) · Надежда.",
+          "evidence_ids": [
+            "human_design.variables"
+          ],
+          "layer": "human_design"
+        },
+        {
+          "id": "claim.personal.bazi.bazi-branch_clash-month-si-hai",
+          "text": "Змея ↔ Свинья — скрытое vs открытое напряжение.",
+          "evidence_ids": [
+            "bazi.clashes"
+          ],
+          "layer": "bazi"
+        },
+        {
+          "id": "claim.personal.vedic.chandra_lagna-moon-h9",
+          "text": "Луна в 9-м — смысл, учёба, расширение горизонта.",
+          "evidence_ids": [
+            "vedic_personal.gochara"
+          ],
+          "layer": "vedic_personal"
+        },
+        {
+          "id": "claim.personal.vedic.dasha-md-moon",
+          "text": "Vimshottari: махадаша Луна / антардаша Венера (баланс при рождении 17.24 лет Венера).",
+          "evidence_ids": [
+            "vedic_personal.dasha"
+          ],
+          "layer": "vedic_personal"
+        },
+        {
+          "id": "claim.personal.name_numbers.name.expression",
+          "text": "Expression 4 — как имя звучит вовне (soft Pythagorean).",
+          "evidence_ids": [
+            "name_numbers.expression"
+          ],
+          "layer": "name_numbers"
+        }
+      ],
+      "tarot_card": {
+        "name": null,
+        "id": null,
+        "present": false,
+        "evidence_ref": null
+      },
+      "day_number": {
+        "value": 11,
+        "personal_day": 11,
+        "universal_day": 7,
+        "present": true,
+        "evidence_ref": "day_foundation.numerology"
+      },
+      "cycles": [
+        {
+          "id": "weekday",
+          "label_ru": "Sun",
+          "evidence_ref": "day_foundation.weekday"
+        },
+        {
+          "id": "seasonal",
+          "label_ru": "Сезон — лето.",
+          "evidence_ref": "day_foundation.seasonal"
+        }
+      ],
+      "confidence": 0.92,
+      "evidence_references": [
+        {
+          "id": "ev.brief.anchor",
+          "source": "day_narrative_brief_v0.anchor_summary",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.numerology",
+          "source": "source.numerology.universal_day",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.weekday",
+          "source": "source.weekday_ruler",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.seasonal",
+          "source": "source.seasonal_calendar",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.panchanga",
+          "source": "source.vedic_panchanga",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.chinese",
+          "source": "source.chinese_metaphysics",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.mayan.tzolkin_haab",
+          "source": "source.mayan_calendars.tzolkin_haab",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.mayan.dreamspell",
+          "source": "source.mayan_calendars.dreamspell",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.time-lords-firdaria-zr-moon",
+          "source": "personal_astrology.time_lords",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.profection-annual-h8",
+          "source": "personal_astrology.profections",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.returns-solar",
+          "source": "personal_astrology.solar_return",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.progressions-secondary-sun-moon",
+          "source": "personal_astrology.secondary_progressions",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.planet-returns-soft",
+          "source": "personal_astrology.planet_returns",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.hd.hd.type.manifesting_generator",
+          "source": "human_design.type_authority",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.hd.hd.profile.6-4",
+          "source": "human_design.profile_lines_cross",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.hd.hd.variables.LLLL",
+          "source": "human_design.variables",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.bazi.bazi-branch_clash-month-si-hai",
+          "source": "bazi.clashes",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.vedic.chandra_lagna-moon-h9",
+          "source": "vedic_personal.gochara",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.vedic.dasha-md-moon",
+          "source": "vedic_personal.dasha",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.name_numbers.name.expression",
+          "source": "name_numbers.expression",
+          "text": ""
+        },
+        {
+          "id": "ev.brief.do_hint",
+          "source": "day_narrative_brief_v0.do_hint",
+          "text": ""
+        },
+        {
+          "id": "ev.brief.avoid_hint",
+          "source": "day_narrative_brief_v0.avoid_hint",
+          "text": ""
+        },
+        {
+          "id": "ev.brief.tempo",
+          "source": "day_narrative_brief_v0.tempo_hint",
+          "text": ""
+        },
+        {
+          "id": "ev.driver.cycle-mercury_station_direct_summer",
+          "source": "day_events_pack_v1.ranked_drivers",
+          "text": ""
+        },
+        {
+          "id": "ev.day.thesis",
+          "source": "day_thesis_v1",
+          "text": ""
+        }
+      ],
+      "limitations": [
+        "perigee_apogee_not_computed_v1",
+        "Нет явного сигнала по сферам (отношения / работа / семья) — доменные блоки не заполняются выдуманным текстом.",
+        "Карта дня не раскрыта или отсутствует — не упоминать карту.",
+        "Число дня не раскрыто или отсутствует — не упоминать число.",
+        "Нет готового why цвета — talisman.note / supports_story без выдуманной связи небо→цвет."
+      ]
+    },
+    "chorus": {
+      "contract_version": "day_scenario_chorus_v1",
+      "astrology": [
+        {
+          "voice": "astrology",
+          "named_factor": "Меркурий разворачивается в директное движение в знаке Лев",
+          "human_meaning": "Внешняя среда сегодня — как замедленная съёмка, которая внезапно переходит в обычный темп. То, что казалось запутанным или застрявшим в последние недели, начинает распутываться, но не само по себе, а через смелость сказать или сделать шаг. Лев добавляет желание проявить себя, а…",
+          "link_to_conflict": "Именно этот разворот создаёт напряжение: ясность возвращается, но требует от вас публичного или личного заявления, к которому вы, возможно, ещё не готовы.",
+          "conflict_id": "conflict.clarity-requires-audience",
+          "evidence_ref": "ev.driver.cycle-mercury_station_direct_summer",
+          "evidence_refs": [
+            "ev.driver.cycle-mercury_station_direct_summer"
+          ]
+        }
+      ],
+      "day_card": {
+        "voice": "day_card",
+        "named_factor": "Карта дня не раскрыта",
+        "archetype_role": "недоступно",
+        "link_to_conflict": "недоступно",
+        "conflict_id": "conflict.clarity-requires-audience",
+        "human_meaning": "недоступно",
+        "evidence_refs": [],
+        "is_not_astro_proof": true,
+        "must_not_invent_second_plot": true
+      },
+      "day_number": {
+        "voice": "day_number",
+        "named_factor": "Число дня 7",
+        "tempo": "замедленный, аналитический",
+        "style": "Число 7 предлагает прожить этот день не как гонку за результатом, а как исследо…",
+        "link_to_conflict": "Замедление числа 7 вступает в противоречие с импульсивным желанием Меркурия во Льве немедленно всё высказать. Это создаёт внутренний ритм: «увидь суть, прежде чем говорить».",
+        "conflict_id": "conflict.clarity-requires-audience",
+        "human_meaning": "Замедление числа 7 вступает в противоречие с импульсивным желанием Меркурия во Льве немедленно всё высказать. Это создаёт внутренний ритм: «увидь суть, прежде чем говорить».",
+        "evidence_refs": [
+          "ev.claim.foundation.numerology"
+        ],
+        "must_not_invent_second_plot": true
+      },
+      "natal": [
+        {
+          "voice": "natal",
+          "named_factor": "Махадаша Луны, антардаша Венеры (Вимшоттари)",
+          "human_meaning": "Ваш личный период сейчас окрашен Луной и Венерой — это делает вас более восприимчивым к эмоциональному фону и потребности в гармонии. Вы острее чувствуете, когда слова нарушают мир, и это может заставлять вас откладывать важные разговоры.",
+          "link_to_conflict": "Эта повышенная чувствительность — ваша личная уязвимость в сегодняшнем конфликте: желание сохранить эмоциональный комфорт борется с необходимостью ясно высказаться.",
+          "conflict_id": "conflict.clarity-requires-audience",
+          "evidence_refs": [
+            "ev.claim.personal.vedic.dasha-md-moon"
+          ]
+        }
+      ],
+      "dialogue_rule": "Four voices explain one conflict; no parallel forecasts.",
+      "parallel_forecast_forbidden": true
+    },
+    "conflict": {
+      "contract_version": "day_scenario_conflict_v1",
+      "short_name": "Ясность, которая требует зрителя",
+      "thesis": {
+        "family": "communication",
+        "variant": "clarity_returns_after_delay",
+        "mode": "transition",
+        "label_ru": "Ясность, которая требует зрителя",
+        "day_thesis": {
+          "contract_version": "day_thesis_v1",
+          "family": "communication",
+          "variant": "clarity_returns_after_delay",
+          "mode": "transition",
+          "label_ru": "Возвращение ясности",
+          "label": "Возвращение ясности",
+          "driver_ids": [
+            "cycle-mercury_station_direct_summer"
+          ],
+          "composition_ids": []
+        },
+        "llm_thesis": "Сегодня вы получаете долгожданную ясность в вопросе, который долго «висел». Но эта ясность — не тихое внутреннее озарение. Она требует быть высказанной, показанной, предъявленной кому-то ещё, что и вызывает главное напряжение дня."
+      },
+      "opposing_forces": {
+        "a": "Смелость предъявить свою новую ясность миру, даже если это нарушит временный комфорт.",
+        "b": "Желание сохранить только что обретённую ясность внутри, в безопасности, никому не показывая, чтобы избежать возможной к…"
+      },
+      "why_arose": "Меркурий, планета коммуникации и мышления, разворачивается в прямое движение в знаке Льва. Это астрономическое событие — как снятие «режима паузы» с темы, которая буксовала. Лев требует проявления, сцены, признания. Ясность приходит не для того, чтобы лежать в столе.",
+      "why_personal": "Ваша текущая махадаша Луны с подпериодом Венеры делает вас особенно чувствительным к гармонии в отношениях. Вам может быть сложно начать разговор, который потенциально нарушит мир, даже если он необходим.",
+      "driver_ids": [
+        "cycle-mercury_station_direct_summer"
+      ],
+      "chorus_references": [
+        "astrology",
+        "day_card",
+        "day_number",
+        "natal"
+      ],
+      "confidence": 0.72,
+      "foundation_rule": "Native LLM conflict; facts from foundation; card/number do not invent rival plot.",
+      "evidence_refs": [
+        "ev.driver.cycle-mercury_station_direct_summer",
+        "ev.claim.personal.vedic.dasha-md-moon"
+      ],
+      "personalization": {
+        "personalization_level": "light_personalized",
+        "personalization_reason": "Учтена личная планетарная чувствительность (Луна/Венера), которая объясняет вероятную реакцию на конфликт — желание избежать демонстрации ясности ради сохранения мира.",
+        "personalization_evidence_refs": [
+          "ev.claim.personal.vedic.dasha-md-moon"
+        ],
+        "general_fallback_available": true,
+        "habitual_force": "b",
+        "required_movement": "a",
+        "response_pattern": "",
+        "compensating_for": "",
+        "trap_pattern": "",
+        "sphere_reason": ""
+      }
+    },
+    "scenes": [
+      {
+        "scene_id": "scene.home",
+        "sphere": "home",
+        "sphere_label_ru": "Дом",
+        "role_in_story": "primary",
+        "what_happens": "Воскресное утро. Вы на кухне, и кто-то из близких вскользь спрашивает о том деле, которое вы наконец-то для себя «разложили по полочкам» за последние дни. Внутренне вы уже всё поняли, решение созрело.",
+        "why": "Меркурий, планета коммуникации и мышления, разворачивается в прямое движение в знаке Льва. Это астрономическое событие — как снятие «режима паузы» с темы, которая буксовала. Лев требует проявления, сцены, признания. Ясность приходит не для того, чтобы лежать в столе.",
+        "opportunity": "Использовать этот простой вопрос как трамплин, чтобы впервые проговорить своё новое понимание вслух. Сделать это не в формате отчёта, а как историю — с чувством, с расстановкой акцентов, как это свойственно Льву. Это снимет внутренний груз и даст другому человеку шанс увидеть ва…",
+        "trap": "Ответить уклончиво: «Да так, разбираюсь потихоньку» или «Потом расскажу». Ловушка в том, что, сохранив ясность при себе, вы к вечеру почувствуете, как она теряет свою силу и превращается в очередную невысказанную мысль, вызывая глухое раздражение на себя.",
+        "recommended_action": "Скажите: «Я как раз вчера понял(а) кое-что важное про это. Если интересно, могу рассказать, как теперь это вижу». И после паузы, если интерес подтверждён, изложите самую суть в трёх предложениях.",
+        "do_not": "Не переводите разговор в шутку или самокритику вроде «Ой, да я там такого намудрил(а), сама не рада», чтобы обесценить свою ясность до того, как её кто-то услышит.",
+        "domestic_example": "Партнёр спрашивает: «Ну что, ты решил(а) насчёт той поездки/ремонта/покупки?» Вместо привычного «Я ещё думаю», вы говорите: «Да, решил(а). Понял(а), что для меня там главное — не цена, а время, которое мы сэкономим. Давай обсудим».",
+        "evidence_references": [
+          "ev.driver.cycle-mercury_station_direct_summer",
+          "ev.brief.do_hint"
+        ],
+        "chorus_references": [
+          "astrology",
+          "day_number",
+          "natal",
+          "conflict"
+        ],
+        "confidence": 0.7,
+        "serves_conflict": "Ясность, которая требует зрителя"
+      },
+      {
+        "scene_id": "scene.relationships",
+        "sphere": "relationships",
+        "sphere_label_ru": "Отношения",
+        "role_in_story": "support",
+        "what_happens": "Ближе к вечеру. Вам пишет друг или подруга, с которым вы давно не обсуждали один конкретный, немного «зависший» вопрос. Сообщение нейтральное: «Как дела? Как твой проект/ситуация?»",
+        "why": "Меркурий, планета коммуникации и мышления, разворачивается в прямое движение в знаке Льва. Это астрономическое событие — как снятие «режима паузы» с темы, которая буксовала. Лев требует проявления, сцены, признания. Ясность приходит не для того, чтобы лежать в столе.",
+        "opportunity": "Ответить не дежурным «нормально», а честно, коротко и с новой позиции. Например: «Знаешь, наконец-то разобрался(ась). Понял(а), что главное было — перестать ждать идеального момента. Сейчас уже легче». Это переводит отношения из режима «старой пластинки» в новое качество.",
+        "trap": "Ответить односложно, потому что «сейчас не время для долгих объяснений» или «всё равно не поймут». За этим стоит страх, что ваша новая ясность будет неинтересна или непонятна другому.",
+        "recommended_action": "Напишите в ответ три предложения: 1) констатация факта, что вы разобрались; 2) суть вашего нового понимания; 3) лёгкий вопрос в ответ, чтобы перевести фокус на диалог.",
+        "do_not": "Не начинайте ответ с извинений или обесценивания: «Извини, что долго не отвечал(а), у меня там такая каша была…»",
+        "domestic_example": "Сообщение: «Привет! Ну как, ты определился(ась) с тем курсом?» Ваш ответ: «Привет! Да, определился(ась). Понял(а), что мне важнее практика, а не корочка. Записался(ась) на воркшоп. А ты как?»",
+        "evidence_references": [
+          "ev.driver.cycle-mercury_station_direct_summer",
+          "ev.brief.tempo"
+        ],
+        "chorus_references": [
+          "astrology",
+          "day_number",
+          "natal",
+          "conflict"
+        ],
+        "confidence": 0.7,
+        "serves_conflict": "Ясность, которая требует зрителя"
+      },
+      {
+        "scene_id": "scene.communication",
+        "sphere": "communication",
+        "sphere_label_ru": "Общение",
+        "role_in_story": "caution",
+        "what_happens": "В течение дня вы натыкаетесь на старую переписку или черновик письма, которое так и не отправили. Это напоминает вам о ситуации, где вы «зависли» в неопределённости.",
+        "why": "Меркурий, планета коммуникации и мышления, разворачивается в прямое движение в знаке Льва. Это астрономическое событие — как снятие «режима паузы» с темы, которая буксовала. Лев требует проявления, сцены, признания. Ясность приходит не для того, чтобы лежать в столе.",
+        "opportunity": "Использовать это напоминание как импульс, чтобы закрыть гештальт. Не обязательно писать тому человеку снова, но можно для себя сформулировать, что именно вы теперь поняли про ту ситуацию, и записать это одной фразой.",
+        "trap": "Начать мысленно пережёвывать старый диалог, додумывать за другого человека его реакцию и в итоге либо написать эмоциональное сообщение, либо, наоборот, удалить переписку в порыве «забыть как страшный сон».",
+        "recommended_action": "Если решите написать, сделайте это коротко и без оправданий. Например: «Перечитал(а) наш старый диалог. Понял(а), что тогда не хватало вот этого пункта. Сейчас вижу иначе. Если актуально — дай знать».",
+        "do_not": "Не пишите сообщение, если чувствуете, что вами движет желание доказать свою правоту или вызвать чувство вины у собеседника.",
+        "domestic_example": "Вы видите в почте черновик письма двухнедельной давности с темой «По поводу нашего разговора». Вместо того чтобы удалить его, вы дописываете одно предложение: «Сейчас понимаю, что главное было — сроки. Давай просто зафиксируем дедлайн». И отправляете.",
+        "evidence_references": [
+          "ev.driver.cycle-mercury_station_direct_summer",
+          "ev.brief.avoid_hint"
+        ],
+        "chorus_references": [
+          "astrology",
+          "day_number",
+          "conflict"
+        ],
+        "confidence": 0.7,
+        "serves_conflict": "Ясность, которая требует зрителя"
+      }
+    ],
+    "props": {
+      "contract_version": "day_scenario_props_v1",
+      "status": "ok",
+      "color": {
+        "name": "Глубокий синий",
+        "origin_scene_id": "scene.home",
+        "serves_conflict": "Ясность, которая требует зрителя",
+        "link_to_conflict": "В сцене «Дом» конфликт «Ясность, которая требует зрителя» тянет к «Смелость предъявить свою новую ясность миру, даже если это нарушит временный комфорт.». дистанция и опора — сначала сформулировать позицию — это свойство нужно сегодня, чтобы удержать «Желание сохранить только что обретённую ясность внутри, в безопасности, никому не показывая, чтобы избежать возможной к…».",
+        "supports_or_compensates": "Компенсирует ловушку: Ответить уклончиво: «Да так, разбираюсь потихоньку» или «Потом расскажу». Ловушка в том, что, сохранив ясность при себе, вы к вечеру почувствуете, как она теря…",
+        "expected_effect_today": "Помогает не сорваться в «Смелость предъявить свою новую ясность миру, даже если это нарушит временный комфорт.» и сделать один жест в сторону «Желание сохранить только что обретённую ясность внутри, в безопасности, никому не показывая, чтобы избежать возможной к…».",
+        "where_to_use": {
+          "clothing": "Тёмно-синий свитер, пиджак или джинсы глубокого синего.",
+          "accessory": "Сумка, ремень или перстень в спокойном синем.",
+          "workspace": "Один синий предмет в зоне разговора или на столе.",
+          "makeup": "Холодный синий акцент у глаз — без «маски».",
+          "ui_or_bg": "Спокойный тёмно-синий фон в заметках дня."
+        },
+        "intensity": "один заметный элемент или два мелких",
+        "catalog_knowledge_ref": "Глубокий синий",
+        "evidence_references": [
+          "ev.driver.cycle-mercury_station_direct_summer",
+          "ev.brief.do_hint"
+        ],
+        "chorus_references": [
+          "astrology",
+          "day_number",
+          "natal",
+          "conflict"
+        ],
+        "so_t_note": "scenario_scene_derived; catalog is knowledge only"
+      },
+      "avoid_color": {
+        "name": "Неоновый жёлтый",
+        "origin_scene_id": "scene.home",
+        "serves_conflict": "Ясность, которая требует зрителя",
+        "amplifies_trap": "Ответить уклончиво: «Да так, разбираюсь потихоньку» или «Потом расскажу». Ловушка в том, что, сохранив ясность при себе, вы к вечеру почувствуете, как она теряет свою силу и превращается в очередную…",
+        "why": "Неоновый жёлтый сегодня нежелателен: усиливает ловушку сцены «Ответить уклончиво: «Да так, разбираюсь потихоньку» или «Потом расскажу». Ловушка в том, что, сохранив ясность при себе…» и разгоняет стратегию «Смелость предъявить свою новую ясность миру, даже если это нарушит временный комфорт.», вместо нужного «Желание сохранить только что обретённую ясность внутри, в безопасности, никому не показывая, чтобы избежать возможной к…».",
+        "where_especially_avoid": "В одежде и на фоне разговора/решения в зоне «Дом».",
+        "ok_as_tiny_accent": false,
+        "catalog_knowledge_ref": "Неоновый жёлтый",
+        "evidence_references": [
+          "ev.driver.cycle-mercury_station_direct_summer",
+          "ev.brief.do_hint"
+        ]
+      },
+      "goals": [
+        {
+          "text": "Закрыть один жест в зоне «Дом», который сдвигает «Ясность, которая требует зрителя» к «Желание сохранить только что обретённую ясность внутри, в безопасности, никому не показывая, чтобы избежать возможной к…» — без ожидания чужой реакции.",
+          "origin_scene_id": "scene.home",
+          "serves_conflict": "Ясность, которая требует зрителя",
+          "solves": "Ответить уклончиво: «Да так, разбираюсь потихоньку» или «Потом расскажу». Ловушка в том, что, сохранив ясность при себе, вы к вечеру почувствуете, как она теря…",
+          "one_day_feasible": true,
+          "duplicates_do": false,
+          "role": "primary"
+        },
+        {
+          "text": "В «Отношения» заметить момент «Смелость предъявить свою новую ясность миру, даже если это нарушит временный комфорт.» и заменить его одним маленьким «Желание сохранить только что обретённую ясность внутри, в безопасности, никому не показывая, чтобы избежать возможной к…».",
+          "origin_scene_id": "scene.relationships",
+          "serves_conflict": "Ясность, которая требует зрителя",
+          "solves": "Ответить односложно, потому что «сейчас не время для долгих объяснений» или «всё равно не поймут». За этим стоит страх,…",
+          "one_day_feasible": true,
+          "duplicates_do": false,
+          "role": "secondary"
+        },
+        {
+          "text": "В «Общение» заметить момент «Смелость предъявить свою новую ясность миру, даже если это нарушит временный комфорт.» и заменить его одним маленьким «Желание сохранить только что обретённую ясность внутри, в безопасности, никому не показывая, чтобы избежать возможной к…».",
+          "origin_scene_id": "scene.communication",
+          "serves_conflict": "Ясность, которая требует зрителя",
+          "solves": "Начать мысленно пережёвывать старый диалог, додумывать за другого человека его реакцию и в итоге либо написать эмоциона…",
+          "one_day_feasible": true,
+          "duplicates_do": false,
+          "role": "secondary"
+        }
+      ],
+      "affirmations": [
+        {
+          "text": "Мне не нужно выбирать «Смелость предъявить свою новую ясность миру, даже если это нарушит временный комфорт.», чтобы сохранить лицо дня — я могу сделать один шаг к «Желание сохранить только что обретённую ясность внутри, в безопасности, никому не показывая, чтобы избежать возможной к…».",
+          "origin_scene_id": "scene.home",
+          "serves_conflict": "Ясность, которая требует зрителя",
+          "compensates_trap": "Ответить уклончиво: «Да так, разбираюсь потихоньку» или «Потом расскажу». Ловушка в том, что, сохранив ясность при себе, вы к вечеру почувствуете, как она теря…",
+          "helps_action": "Скажите: «Я как раз вчера понял(а) кое-что важное про это. Если интересно, могу рассказать, как теперь это вижу». И после паузы, если интерес подтверждён, изло…",
+          "universal_formula": false
+        }
+      ],
+      "humor": {
+        "kind": "impulse_purchase",
+        "origin_scene_id": "scene.home",
+        "text": "Если поймаете себя на «Смелость предъявить свою новую ясность миру, даже если это нарушит временный комфорт.» в зоне «Дом» — это уже сцена дня, не личный провал. Можно улыбнуться и выбрать другой жест.",
+        "serves_conflict": "Ясность, которая требует зрителя",
+        "optional": true
+      },
+      "strong_spheres": [
+        {
+          "sphere": "home",
+          "sphere_label_ru": "Дом",
+          "origin_scene_id": "scene.home",
+          "role_in_story": "primary",
+          "status": "strong",
+          "opportunity": "Использовать этот простой вопрос как трамплин, чтобы впервые проговорить своё новое понимание вслух. Сделать это не в формате отчёта, а как историю — с чувством, с расстановкой акцентов, как это свойственно Льву. Это снимет внутренний груз и даст другому человеку шанс увидеть ва…"
+        },
+        {
+          "sphere": "relationships",
+          "sphere_label_ru": "Отношения",
+          "origin_scene_id": "scene.relationships",
+          "role_in_story": "support",
+          "status": "strong",
+          "opportunity": "Ответить не дежурным «нормально», а честно, коротко и с новой позиции. Например: «Знаешь, наконец-то разобрался(ась). Понял(а), что главное было — перестать ждать идеального момента. Сейчас уже легче». Это переводит отношения из режима «старой пластинки» в новое качество."
+        },
+        {
+          "sphere": "communication",
+          "sphere_label_ru": "Общение",
+          "origin_scene_id": "scene.communication",
+          "role_in_story": "caution",
+          "status": "strong",
+          "opportunity": "Использовать это напоминание как импульс, чтобы закрыть гештальт. Не обязательно писать тому человеку снова, но можно для себя сформулировать, что именно вы теперь поняли про ту ситуацию, и записать это одной фразой."
+        }
+      ],
+      "weak_spheres": [],
+      "rule": "Every prop carries origin_scene_id; catalog is knowledge only, not SoT.",
+      "chorus_tempo_hint": "замедленный, аналитический",
+      "prop_material_llm": {
+        "color_scene_candidates": [
+          "scene.home",
+          "scene.relationships"
+        ],
+        "avoid_color_trigger": "Цвета, которые вы обычно носите, чтобы «слиться с обстановкой» и не привлекать внимания, сегодня могут усилить ловушку сцены home — желание остаться незамеченным и не высказываться.",
+        "goal_candidates": [
+          {
+            "scene_id": "scene.home",
+            "text": "Проговорить своё новое понимание хотя бы одному человеку в первой половине дня."
+          },
+          {
+            "scene_id": "scene.relationships",
+            "text": "Ответить на одно «зависшее» сообщение, используя формулу из recommended_action."
+          }
+        ],
+        "affirmation_tension": {
+          "scene_id": "scene.home",
+          "trap": "Сохранить ясность при себе, чтобы избежать неловкости.",
+          "text": "Моя ясность не исчезнет, если я её выскажу. Она станет реальностью только тогда, когда у неё появится свидетель."
+        },
+        "humor_setup": {
+          "scene_id": "scene.home",
+          "text": "Представьте, что ваша ясность — это питомец, которого вы прячете в шкафу, когда приходят гости. Сегодня Меркурий во Льве говорит: «Выпускай тигра, он уже не котёнок»."
+        }
+      }
+    },
+    "projections": {
+      "status": "day_scenario_project_v1.b5",
+      "note": "Native LLM scenario; props deterministic; legacy slots projections only."
+    },
+    "generation_notes": "Построен один сценарий вокруг разворота Меркурия. Конфликт — напряжение между обретённой ясностью и страхом её публичного предъявления. Сцены ранжированы: home (primary, устная речь), relationships (support, переписка), communication (caution, работа с прошлым). Персонализация light: учтена только лунно-венерианская чувствительность как объяснение привычной реакции избегания. Число 7 использовано…",
+    "personalization_depth": "light_personalized",
+    "personalization_evidence": {
+      "evidence_depth": "light_personalized",
+      "confidence": 0.45,
+      "evidence_refs": [
+        "claim.personal.astro.time-lords-firdaria-zr-moon",
+        "personal_astrology.time_lords",
+        "claim.personal.astro.profection-annual-h8",
+        "personal_astrology.profections",
+        "claim.personal.astro.returns-solar",
+        "personal_astrology.solar_return",
+        "claim.personal.astro.progressions-secondary-sun-moon",
+        "personal_astrology.secondary_progressions",
+        "claim.personal.astro.planet-returns-soft",
+        "personal_astrology.planet_returns",
+        "claim.personal.hd.hd.type.manifesting_generator",
+        "human_design.type_authority"
+      ],
+      "tendency_ids": [],
+      "sphere_selection": {
+        "contract_version": "day_scenario_sphere_selection_c33b",
+        "evidence_depth": "light_personalized",
+        "ranked_spheres": [
+          {
+            "sphere": "home",
+            "label_ru": "Дом",
+            "reason": "personal sensitive domain",
+            "evidence_refs": [
+              "claim.personal.astro.time-lords-firdaria-zr-moon",
+              "personal_astrology.time_lords",
+              "claim.personal.astro.profection-annual-h8",
+              "personal_astrology.profections"
+            ],
+            "source": "personal",
+            "weight": 0.7,
+            "rank": 1
+          },
+          {
+            "sphere": "relationships",
+            "label_ru": "Отношения",
+            "reason": "thesis family «communication»",
+            "evidence_refs": [
+              "thesis.communication"
+            ],
+            "source": "family",
+            "weight": 0.55,
+            "rank": 2
+          },
+          {
+            "sphere": "communication",
+            "label_ru": "Общение",
+            "reason": "thesis family «communication»",
+            "evidence_refs": [
+              "thesis.communication"
+            ],
+            "source": "family",
+            "weight": 0.55,
+            "rank": 3
+          }
+        ],
+        "primary_candidates": [
+          "home",
+          "relationships"
+        ],
+        "allowed_spheres": [
+          "home",
+          "relationships",
+          "communication"
+        ],
+        "personal_sphere_count": 1,
+        "must_justify_outside": true,
+        "notes": "prefer listed spheres; outside list requires sphere_reason + evidence_refs"
+      }
+    },
+    "wire_projection": "day_scenario_project_v1.b5"
+  },
+  "instructions": {
+    "overall_band": [
+      "acceptable_with_issues",
+      "cannot_assess",
+      "pass",
+      "reject"
+    ],
+    "defect_presence": [
+      "absent",
+      "not_applicable",
+      "present",
+      "uncertain"
+    ],
+    "severity": [
+      "minor",
+      "material",
+      "severe"
+    ],
+    "blind": true,
+    "do_not_infer_from_filename": true
+  }
+}

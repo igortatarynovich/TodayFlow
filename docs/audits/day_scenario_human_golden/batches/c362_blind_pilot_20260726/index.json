@@ -1,0 +1,117 @@
+{
+  "batch_id": "c362_blind_pilot_20260726",
+  "export_kind": "c362_human_golden_blind_batch",
+  "created_at": "2026-07-26T16:26:52.662490+00:00",
+  "versions": {
+    "golden_contract_version": "day_scenario_human_golden_c362",
+    "rubric_version": "day_scenario_human_review_rubric_c362.1",
+    "defect_catalog_version": "gate_rules_c36.42",
+    "review_protocol_version": "day_scenario_review_protocol_c362.1",
+    "scenario_contract_version": "day_scenario_native_llm_c1",
+    "analyzer_version": "day_scenario_eval_pack_c35.1+gate_maturity_c36"
+  },
+  "case_count": 7,
+  "duplicate_scenario_hashes": [],
+  "instructions": {
+    "quorum": 2,
+    "rubric": "docs/audits/DAY_SCENARIO_HUMAN_REVIEW_RUBRIC_C362.md",
+    "protocol": "docs/audits/DAY_SCENARIO_HUMAN_GOLDEN_C362.md",
+    "blind_dir": "blind/",
+    "do_not_open_cases_dir_as_reviewer": true,
+    "fill_templates": "reviewer_templates/*.json then return to operator",
+    "next_target": "grow to 40 after process check (20 RU / 20 EN mix)"
+  },
+  "cases": [
+    {
+      "case_id": "hg-1482ed91292c",
+      "locale": "ru",
+      "source_type": "live_capture",
+      "profile_type": "live_registered_personal",
+      "evidence_depth": "deep_personalized",
+      "generation_source": "native_llm_c1",
+      "theme": "Ясность, которая требует зрителя",
+      "scene_count": 3,
+      "scenario_hash": "sha256:ceec0f74163b6679fa148f29d1b80fc22bbbe4feda79e827d71ad4a359e75500",
+      "blind_path": "blind/hg-1482ed91292c.blind.json",
+      "case_path": "cases/hg-1482ed91292c.json"
+    },
+    {
+      "case_id": "hg-660b14d4bbb4",
+      "locale": "ru",
+      "source_type": "live_capture",
+      "profile_type": "live_registered_personal",
+      "evidence_depth": "deep_personalized",
+      "generation_source": "native_llm_c1",
+      "theme": "Импульс ясности против страха чужой реакции",
+      "scene_count": 3,
+      "scenario_hash": "sha256:2f7c25f83a248ebb2ce784071d211bdddf1b9b15083b6224376b42895bd4be28",
+      "blind_path": "blind/hg-660b14d4bbb4.blind.json",
+      "case_path": "cases/hg-660b14d4bbb4.json"
+    },
+    {
+      "case_id": "hg-f61a374bc5aa",
+      "locale": "ru",
+      "source_type": "live_capture",
+      "profile_type": "live_registered_personal",
+      "evidence_depth": "deep_personalized",
+      "generation_source": "native_llm_c1",
+      "theme": "Королевское заявление против внутренней лаборатории",
+      "scene_count": 2,
+      "scenario_hash": "sha256:63bcf5830a42e57c5e7199107c04b67ce95ac96e7369b5112c41c28ab805ae3c",
+      "blind_path": "blind/hg-f61a374bc5aa.blind.json",
+      "case_path": "cases/hg-f61a374bc5aa.json"
+    },
+    {
+      "case_id": "hg-369b42ad90c1",
+      "locale": "ru",
+      "source_type": "live_capture",
+      "profile_type": "live_registered_personal",
+      "evidence_depth": "deep_personalized",
+      "generation_source": "native_llm_c1",
+      "theme": "Сигнал или шум",
+      "scene_count": 2,
+      "scenario_hash": "sha256:b078081600b002f865df923063bec25b9d0e725085afa9ba251a564d758ea027",
+      "blind_path": "blind/hg-369b42ad90c1.blind.json",
+      "case_path": "cases/hg-369b42ad90c1.json"
+    },
+    {
+      "case_id": "hg-df42bbdb781d",
+      "locale": "ru",
+      "source_type": "live_capture",
+      "profile_type": "live_registered_personal",
+      "evidence_depth": "deep_personalized",
+      "generation_source": "deterministic_engine_b5",
+      "theme": "Сгладить или сказать прямо — пока меркурий разворачивается в директное движение в знаке Лев.",
+      "scene_count": 2,
+      "scenario_hash": "sha256:8b2ffdd0caf318fee9107f961eb979534c19eb1289c6fe7970bddefc0ac17631",
+      "blind_path": "blind/hg-df42bbdb781d.blind.json",
+      "case_path": "cases/hg-df42bbdb781d.json"
+    },
+    {
+      "case_id": "hg-f3c8ab09e03f",
+      "locale": "ru",
+      "source_type": "live_capture",
+      "profile_type": "live_registered_personal",
+      "evidence_depth": "deep_personalized",
+      "generation_source": "native_llm_c1",
+      "theme": "Сказать как есть или сохранить контакт",
+      "scene_count": 2,
+      "scenario_hash": "sha256:a85ce2bd84776187bc918fdbcf69cfb57490b5b127c6b1bc6571dd6e04dc4901",
+      "blind_path": "blind/hg-f3c8ab09e03f.blind.json",
+      "case_path": "cases/hg-f3c8ab09e03f.json"
+    },
+    {
+      "case_id": "hg-21d5bfaf98ab",
+      "locale": "ru",
+      "source_type": "live_capture",
+      "profile_type": "live_registered_personal",
+      "evidence_depth": "deep_personalized",
+      "generation_source": "deterministic_engine_b5",
+      "theme": "Прямота без фильтра",
+      "scene_count": 2,
+      "scenario_hash": "sha256:36780eff169b14a0ffaeae0144249538f73efc2a0e2a24a1328a506ca43e8283",
+      "blind_path": "blind/hg-21d5bfaf98ab.blind.json",
+      "case_path": "cases/hg-21d5bfaf98ab.json"
+    }
+  ]
+}
