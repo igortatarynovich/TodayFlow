@@ -438,8 +438,12 @@ struct ProfileQuickMapView: View {
     }
 
     private var headerSection: some View {
-        HeroLargeView(
-            symbolSeed: model.archetype,
+        let artSeed = coreProfile.baseline?.archetypeSeed?
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .nilIfEmpty
+            ?? model.archetype
+        return HeroLargeView(
+            symbolSeed: artSeed,
             title: model.archetype,
             kicker: ProfileQuickMapCopy.pageKicker,
             sectionLabel: ProfileQuickMapCopy.whoTitle,

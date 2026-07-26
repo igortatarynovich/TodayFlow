@@ -9,6 +9,9 @@ import type { ProfileLifeSphere } from "@/components/profile/ProfileLifeSection"
 import { ProfileAtmosphere } from "@/components/profile/v2/ProfileAtmosphere";
 import { PROFILE_V2_COPY, PROFILE_V2_DEPTH_NAV } from "@/components/profile/v2/profileV2SystemCopy";
 import styles from "@/components/profile/v2/profileV2System.module.css";
+import { ElementIcon } from "@/components/visualIdentity/ElementIcon";
+import { PlanetIcon } from "@/components/visualIdentity/PlanetIcon";
+import type { ElementSlug, PlanetSlug } from "@/lib/visualIdentity/registry";
 
 export type ProfileEffortSceneProps = {
   effortVector: string;
@@ -16,6 +19,31 @@ export type ProfileEffortSceneProps = {
 };
 
 const effortNav = PROFILE_V2_DEPTH_NAV.find((s) => s.id === "effort") ?? PROFILE_V2_DEPTH_NAV[3];
+
+type SphereMotif =
+  | { kind: "planet"; slug: PlanetSlug }
+  | { kind: "element"; slug: ElementSlug };
+
+const SPHERE_MOTIF: Record<string, SphereMotif> = {
+  love: { kind: "planet", slug: "venus" },
+  sex: { kind: "planet", slug: "mars" },
+  money: { kind: "planet", slug: "jupiter" },
+  work: { kind: "planet", slug: "saturn" },
+  career: { kind: "planet", slug: "sun" },
+  family: { kind: "planet", slug: "moon" },
+  kids: { kind: "element", slug: "water" },
+  body: { kind: "element", slug: "earth" },
+  friends: { kind: "planet", slug: "mercury" },
+  decisions: { kind: "planet", slug: "saturn" },
+};
+
+function SphereMotifGlyph({ sphereId }: { sphereId: string }) {
+  const motif = SPHERE_MOTIF[sphereId] ?? { kind: "element" as const, slug: "air" as ElementSlug };
+  if (motif.kind === "planet") {
+    return <PlanetIcon planet={motif.slug} size={18} stroke="currentColor" />;
+  }
+  return <ElementIcon element={motif.slug} size={18} stroke="currentColor" />;
+}
 
 /**
  * Effort + readable sphere portraits (how / need / risk) — not skim chips.
@@ -80,9 +108,22 @@ export function ProfileEffortScene({ effortVector, lifeSpheres = [] }: ProfileEf
                     data-testid={`profile-v2-effort-sphere-${sphere.id}`}
                   >
                     <p className={styles.effortSphereTitle}>
+                      <span className={styles.effortSphereMotif} aria-hidden>
+                        <SphereMotifGlyph sphereId={sphere.id} />
+                      </span>
                       <span
                         className={styles.effortSphereDot}
-                        style={sphere.accent ? { background: sphere.accent, display: "inline-block", marginRight: "0.45rem", marginTop: 0, verticalAlign: "middle" } : undefined}
+                        style={
+                          sphere.accent
+                            ? {
+                                background: sphere.accent,
+                                display: "inline-block",
+                                marginRight: "0.45rem",
+                                marginTop: 0,
+                                verticalAlign: "middle",
+                              }
+                            : undefined
+                        }
                         aria-hidden
                       />
                       {sphere.title}

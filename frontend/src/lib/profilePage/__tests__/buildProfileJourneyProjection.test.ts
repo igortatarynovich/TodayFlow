@@ -141,7 +141,8 @@ describe("buildProfileJourneyProjection", () => {
     expect(journey.effortVector).toBeNull();
     expect(journey.bridge).toBeNull();
     expect(journey.identityMarkers).toEqual([]);
-    expect(journey.hasJourneySurface).toBe(false);
+    // identity_core alone is enough to open Journey (portrait + recognition plate).
+    expect(journey.hasJourneySurface).toBe(true);
   });
 
   it("does not treat matrix slot order as journey surface alone", () => {

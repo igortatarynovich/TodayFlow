@@ -7,6 +7,7 @@ import styles from "@/components/profile/v2/profileV2System.module.css";
 import { WhyAnchorGlyph } from "@/components/profile/v2/whyAnchorVisual";
 import { ArchetypeHeroVisual } from "@/components/visualIdentity/ArchetypeHeroVisual";
 import { SacredGeometryBackdrop } from "@/components/visualIdentity/SacredGeometryBackdrop";
+import { MotionDrift } from "@/design-system/motion";
 import { resolveArchetypeIllustrationSlug } from "@/lib/visualIdentity/registry";
 
 export type ProfileRecognitionSceneProps = {
@@ -110,17 +111,19 @@ export function ProfileRecognitionScene({
         className={`${styles.journeyHeroVisual} ${profileMotionStyles.heroSymbolEnter}`}
         aria-hidden={archetypeSeed ? undefined : true}
       >
-        <div
-          className={`${styles.journeyHeroArch} ${hasPortraitSlot ? styles.journeyHeroArchFilled : ""}`.trim()}
-          data-testid="profile-v2-hero-arch"
-        >
-          <div className={styles.journeyHeroArchGlow} aria-hidden />
-          <ArchetypeHeroVisual
-            seed={archetypeSeed}
-            className={styles.journeySymbolFrame}
-            portraitClassName={styles.journeyHeroPortrait}
-          />
-        </div>
+        <MotionDrift durationSec={18} className={styles.journeyHeroDrift}>
+          <div
+            className={`${styles.journeyHeroArch} ${hasPortraitSlot ? styles.journeyHeroArchFilled : ""}`.trim()}
+            data-testid="profile-v2-hero-arch"
+          >
+            <div className={styles.journeyHeroArchGlow} aria-hidden />
+            <ArchetypeHeroVisual
+              seed={archetypeSeed}
+              className={styles.journeySymbolFrame}
+              portraitClassName={styles.journeyHeroPortrait}
+            />
+          </div>
+        </MotionDrift>
       </div>
     </section>
   );

@@ -102,7 +102,8 @@ describe("buildProfileV2LiveContext", () => {
     expect(live).not.toHaveProperty("dailyAnchors");
     expect(live).not.toHaveProperty("updatedLabel");
     expect(live.journey).toBeDefined();
-    expect(live.journey.hasJourneySurface).toBe(false);
+    // identity_core alone opens Journey surface (portrait plate).
+    expect(live.journey.hasJourneySurface).toBe(true);
   });
 
   it("keeps evidence honest when data is missing", () => {

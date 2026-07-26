@@ -17,6 +17,7 @@ import { ProfileRecognitionScene } from "@/components/profile/v2/scenes/ProfileR
 import { ProfileWhyScene } from "@/components/profile/v2/scenes/ProfileWhyScene";
 import { ArchetypeHeroVisual } from "@/components/visualIdentity/ArchetypeHeroVisual";
 import { resolveArchetypeIllustrationSlug } from "@/lib/visualIdentity/registry";
+import { MotionDrift } from "@/design-system/motion";
 import type { ProfileV2LiveContext } from "@/lib/profilePage/buildProfileV2LiveContext";
 import { buildProfileFirstScreenProjection } from "@/lib/profilePage/buildProfileFirstScreenProjection";
 import { buildProfileJourneyProjection } from "@/lib/profilePage/buildProfileJourneyProjection";
@@ -214,6 +215,7 @@ export function ProfileV2SystemScreen({
             l3Message={l3Message}
             exploreOpen={exploreOpen}
             setExploreOpen={setExploreOpen}
+            coreProfile={coreProfile}
           />
         )}
       </div>
@@ -238,6 +240,7 @@ function LegacyFirstScreen({
   l3Message,
   exploreOpen,
   setExploreOpen,
+  coreProfile,
 }: {
   model: ProfileQuickMapScreenProps["model"];
   live: ProfileV2LiveContext;
@@ -254,12 +257,22 @@ function LegacyFirstScreen({
   l3Message: { code: string; text: string } | null | undefined;
   exploreOpen: boolean;
   setExploreOpen: (fn: (v: boolean) => boolean) => void;
+  coreProfile?: CoreProfile | null;
 }) {
   const whoLine = portraitForming
     ? null
     : first.whoLine || live.journey.recognition.line || buildProfileHeroQuote(model.archetype, model.identitySummary);
+  // Illustration seed must be a machine/Pearson key — never CE recognition titles
+  // ("Автономия", "Опора") or display labels that fail illustration resolve.
+  const seedCandidates = [
+    first.archetypeSeed,
+    live.journey.recognition.archetypeSeed,
+    coreProfile?.baseline?.archetype_seed,
+  ];
   const symbolSeed =
-    first.archetypeSeed || live.journey.recognition.archetypeSeed || model.archetype || null;
+    seedCandidates.find((s) => Boolean(s && resolveArchetypeIllustrationSlug(s))) ||
+    seedCandidates.find((s) => Boolean(String(s || "").trim())) ||
+    null;
   const archetypeLabel =
     first.archetypeLabel || live.journey.recognition.name || model.archetype || null;
   const traits =
@@ -295,19 +308,21 @@ function LegacyFirstScreen({
       >
         <div className={styles.journeyHeroVisual} aria-hidden={symbolSeed ? undefined : true}>
           {symbolSeed ? (
-            <div
-              className={`${styles.journeyHeroArch} ${
-                resolveArchetypeIllustrationSlug(symbolSeed) ? styles.journeyHeroArchFilled : ""
-              }`.trim()}
-              data-testid="profile-v2-hero-arch"
-            >
-              <div className={styles.journeyHeroArchGlow} aria-hidden />
-              <ArchetypeHeroVisual
-                seed={symbolSeed}
-                className={styles.journeySymbolFrame}
-                portraitClassName={styles.journeyHeroPortrait}
-              />
-            </div>
+            <MotionDrift durationSec={18} className={styles.journeyHeroDrift}>
+              <div
+                className={`${styles.journeyHeroArch} ${
+                  resolveArchetypeIllustrationSlug(symbolSeed) ? styles.journeyHeroArchFilled : ""
+                }`.trim()}
+                data-testid="profile-v2-hero-arch"
+              >
+                <div className={styles.journeyHeroArchGlow} aria-hidden />
+                <ArchetypeHeroVisual
+                  seed={symbolSeed}
+                  className={styles.journeySymbolFrame}
+                  portraitClassName={styles.journeyHeroPortrait}
+                />
+              </div>
+            </MotionDrift>
           ) : null}
         </div>
         <div className={styles.journeyHeroCopy}>

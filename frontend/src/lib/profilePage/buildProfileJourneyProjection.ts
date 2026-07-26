@@ -221,6 +221,7 @@ export function buildProfileJourneyProjection(
 
   const hasJourneySurface = Boolean(
     (recognitionName && recognitionLine) ||
+      identityCore ||
       why ||
       insightNode ||
       effortVector ||
