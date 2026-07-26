@@ -25,7 +25,7 @@ from typing import Any
 
 from todayflow_backend.core.config import settings
 
-PROJECTION_VERSION = "character_engine_profile_consumption_v0.5"
+PROJECTION_VERSION = "character_engine_profile_consumption_v0.6"
 _MAX_RECOGNITION = 160
 _MAX_CORE = 420
 _MAX_TRAP = 220
@@ -551,6 +551,30 @@ def _stage3_internal(payload: dict[str, Any]) -> dict[str, Any] | None:
     return stage3
 
 
+def _stage4_life(payload: dict[str, Any]) -> dict[str, Any] | None:
+    diagnostics = payload.get("diagnostics")
+    if not isinstance(diagnostics, dict):
+        return None
+    art = diagnostics.get("character_engine_stage4")
+    if not isinstance(art, dict):
+        return None
+    stage4 = art.get("stage4") if isinstance(art.get("stage4"), dict) else art
+    if str(stage4.get("status") or "") != "grounded":
+        return None
+    return stage4
+
+
+def _scene_by_kind(stage4: dict[str, Any], *kinds: str) -> str | None:
+    scenes = stage4.get("scenes") if isinstance(stage4.get("scenes"), list) else []
+    for want in kinds:
+        for sc in scenes:
+            if isinstance(sc, dict) and str(sc.get("scene_kind") or "") == want:
+                text = str(sc.get("surface_text") or "").strip()
+                if text:
+                    return text
+    return None
+
+
 def _essays_for(identity_thesis: str) -> dict[str, Any]:
     pack = _ESSAYS_BY_IDENTITY.get(identity_thesis)
     if isinstance(pack, dict):
@@ -615,8 +639,12 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
 
     recognition = _clip(surface, _MAX_RECOGNITION)
     stage3 = _stage3_internal(payload)
+    stage4 = _stage4_life(payload)
     trap_source = "editorial_bank"
     decision_source = "editorial_bank"
+    relationship_source = "editorial_bank"
+    money_source = "editorial_bank"
+    growth_source = "editorial_bank"
     trap = _TRAP_BY_IDENTITY_THESIS.get(identity_thesis) or (
         "Пока ядро характера не переводится в выбор, сила уходит в удержание формы вместо движения."
     )
@@ -651,6 +679,29 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
             helps = stage3_helps[:3]
     relationship = _clip(str(essays.get("relationship_style") or ""), _MAX_ESSAY)
     money = _clip(str(essays.get("money_style") or ""), _MAX_ESSAY)
+    if isinstance(stage4, dict):
+        intimacy = _scene_by_kind(stage4, "intimacy")
+        if intimacy:
+            relationship = _clip(intimacy, _MAX_ESSAY)
+            relationship_source = "stage4_scene.intimacy"
+        # Resource/security via risk / responsibility / uncertainty scenes (not money root).
+        money_scene = _scene_by_kind(stage4, "risk", "responsibility", "uncertainty")
+        if money_scene:
+            money = _clip(money_scene, _MAX_ESSAY)
+            money_source = "stage4_scene.resource_proxy"
+        pot = stage4.get("potential") if isinstance(stage4.get("potential"), dict) else None
+        pot_text = str((pot or {}).get("surface_text") or "").strip()
+        if pot_text:
+            growth = [_clip(pot_text, _MAX_ESSAY), *growth][:3]
+            growth_source = "stage4_potential"
+            helps = [_clip(pot_text, _MAX_ESSAY), *helps][:3]
+        blinds = stage4.get("blind_spots") if isinstance(stage4.get("blind_spots"), list) else []
+        for b in blinds[:1]:
+            if isinstance(b, dict):
+                bt = str(b.get("surface_text") or "").strip()
+                if bt and trap_source == "editorial_bank":
+                    # Keep Stage 3 trap preferred; blind spot only fills empty trap path.
+                    pass
     help_line = helps[0] if helps else None
 
     claims = stage1.get("claims") if isinstance(stage1.get("claims"), list) else []
@@ -770,7 +821,11 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
         "primary_claim_id": primary_id,
         "trap_source": trap_source,
         "decision_source": decision_source,
+        "relationship_source": relationship_source,
+        "money_source": money_source,
+        "growth_source": growth_source,
         "stage3_status": (stage3 or {}).get("status") if isinstance(stage3, dict) else None,
+        "stage4_status": (stage4 or {}).get("status") if isinstance(stage4, dict) else None,
         "visual_note": "archetype_seed remains FE illustration only; recognition title is CE",
         "slots_owned": [
             "profile_contract_v1.identity_core",

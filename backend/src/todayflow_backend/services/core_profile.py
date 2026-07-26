@@ -1244,28 +1244,39 @@ class CoreProfileService:
                 character_engine_stage3_should_run,
                 maybe_attach_stage3_shadow,
             )
+            from todayflow_backend.services.character_engine_stage4_shadow_v0 import (
+                character_engine_stage4_should_run,
+                maybe_attach_stage4_shadow,
+            )
 
             run_stage2 = bool(include_stage2) and character_engine_stage2_should_run()
             run_stage3 = False
+            run_stage4 = False
             try:
                 from todayflow_backend.services.character_engine_profile_consumption_v0 import (
                     character_engine_profile_consumption_enabled,
                 )
 
                 if character_engine_profile_consumption_enabled():
-                    # Product slice needs Identity Core (+ Stage 3 Internal Engine) on Profile read.
+                    # Product slice needs Identity Core (+ Stage 3–4) on Profile read.
                     run_stage2 = True
                     run_stage3 = True
+                    run_stage4 = True
             except Exception:
                 pass
             if character_engine_stage3_should_run():
                 run_stage2 = True
                 run_stage3 = True
+            if character_engine_stage4_should_run():
+                run_stage2 = True
+                run_stage3 = True
+                run_stage4 = True
             if not (
                 character_engine_stage01_should_run()
                 or run_stage2
                 or character_engine_stage2_should_run()
                 or run_stage3
+                or run_stage4
             ):
                 return profile_payload
 
@@ -1306,6 +1317,8 @@ class CoreProfileService:
                 profile_payload = maybe_attach_stage2_shadow(profile_payload, **shadow_kwargs)
             if run_stage3:
                 profile_payload = maybe_attach_stage3_shadow(profile_payload, **shadow_kwargs)
+            if run_stage4:
+                profile_payload = maybe_attach_stage4_shadow(profile_payload, **shadow_kwargs)
         except Exception:
             # Shadow must never break portrait publish / read path.
             pass

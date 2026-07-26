@@ -46,3 +46,13 @@ Dual SoT: Swiss/natal + CE diagnostics vs publish personality. Shadow never fed 
 - **Fallback:** v0.4 editorial banks if Stage 3 missing/insufficient.
 - **Flag:** consumption still forces Stage 2+3 on Profile read; `PUBLISH_READY=0`.
 - **Canon:** [CHARACTER_ENGINE_STAGE3_INTERNAL_V0.md](./CHARACTER_ENGINE_STAGE3_INTERNAL_V0.md).
+
+## Architecture impact (2026-07-26 v0.6 — Stage 4 consumption)
+
+- **SoT after:** when Stage 4 grounded:
+  - `relationship_style` ← scene `intimacy`
+  - `money_style` ← scene risk/responsibility/uncertainty (resource proxy, not money root)
+  - `growth_zones` / helps ← `potential`
+- **Keep:** Stage 3 trap/decision preferred for those slots.
+- **Canon:** [CHARACTER_ENGINE_STAGE4_LIFE_V0.md](./CHARACTER_ENGINE_STAGE4_LIFE_V0.md).
+- **Not:** PUBLISH_READY / Stage 5 Compass.
