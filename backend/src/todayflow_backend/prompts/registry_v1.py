@@ -11,6 +11,7 @@ from typing import Any, Callable
 
 from todayflow_backend.prompts import (
     character_engine_stage2_v1,
+    character_engine_stage3_v1,
     day_disclosure_v1,
     natal_facts_v1,
     personality_v1,
@@ -149,6 +150,13 @@ _REGISTRY: dict[str, dict[str, Any]] = {
         "surface": "character_engine",
         "step": "identity_core",
         "builder": character_engine_stage2_v1.character_engine_stage2_system,
+    },
+    # Character Engine Stage 3 — Internal Engine + tensions (expand Identity Core only)
+    "profile.character_engine.stage3.v1": {
+        "version": "1.0.0",
+        "surface": "character_engine",
+        "step": "internal_engine",
+        "builder": character_engine_stage3_v1.character_engine_stage3_system,
     },
 }
 

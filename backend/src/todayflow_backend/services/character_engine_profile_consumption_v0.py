@@ -1,19 +1,21 @@
 """Character Engine → Profile consumption slice v0.
 
-Architecture: Identity Core (+ Stage 1 evidence) become SoT for Profile journey
-and character slots. Natal instrument (wheel / houses / aspects) stays Swiss facts.
-Archetype illustration seed remains FE visual only — not recognition title SoT.
+Architecture: Identity Core (+ Stage 1 evidence + Stage 3 Internal Engine when grounded)
+become SoT for Profile journey and character slots. Natal instrument (wheel / houses /
+aspects) stays Swiss facts. Archetype illustration seed remains FE visual only —
+not recognition title SoT.
 
 Owned when Stage 2 grounded + flag on:
   - recognition / identity_core
   - portrait_why
-  - insight trap (+ help)
+  - insight trap (+ help) — Stage 3 primary_tension when grounded, else editorial bank
   - strengths / growth_zones / helps
-  - decision_style / relationship_style / money_style
+  - decision_style — Stage 3 internal_engine.decision when grounded, else editorial bank
+  - relationship_style / money_style
   - recurring_patterns
   - clears living_changes day-rhythm leak
 
-Not owned yet: aspect encyclopedia essays; natal cusp/sign/degree facts stay Swiss.
+Not owned yet: natal cusp/sign/degree facts stay Swiss.
 """
 
 from __future__ import annotations
@@ -23,7 +25,7 @@ from typing import Any
 
 from todayflow_backend.core.config import settings
 
-PROJECTION_VERSION = "character_engine_profile_consumption_v0.4"
+PROJECTION_VERSION = "character_engine_profile_consumption_v0.5"
 _MAX_RECOGNITION = 160
 _MAX_CORE = 420
 _MAX_TRAP = 220
@@ -536,6 +538,19 @@ def _stage2_artifact(payload: dict[str, Any]) -> dict[str, Any] | None:
     return art if isinstance(art, dict) and (art.get("stage2") or art.get("identity_core")) else None
 
 
+def _stage3_internal(payload: dict[str, Any]) -> dict[str, Any] | None:
+    diagnostics = payload.get("diagnostics")
+    if not isinstance(diagnostics, dict):
+        return None
+    art = diagnostics.get("character_engine_stage3")
+    if not isinstance(art, dict):
+        return None
+    stage3 = art.get("stage3") if isinstance(art.get("stage3"), dict) else art
+    if str(stage3.get("status") or "") != "grounded":
+        return None
+    return stage3
+
+
 def _essays_for(identity_thesis: str) -> dict[str, Any]:
     pack = _ESSAYS_BY_IDENTITY.get(identity_thesis)
     if isinstance(pack, dict):
@@ -599,15 +614,41 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
         return payload
 
     recognition = _clip(surface, _MAX_RECOGNITION)
+    stage3 = _stage3_internal(payload)
+    trap_source = "editorial_bank"
+    decision_source = "editorial_bank"
     trap = _TRAP_BY_IDENTITY_THESIS.get(identity_thesis) or (
         "Пока ядро характера не переводится в выбор, сила уходит в удержание формы вместо движения."
     )
+    if isinstance(stage3, dict):
+        pt = stage3.get("primary_tension") if isinstance(stage3.get("primary_tension"), dict) else None
+        pt_text = str((pt or {}).get("surface_text") or "").strip()
+        if pt_text:
+            trap = pt_text
+            trap_source = "stage3_primary_tension"
     trap = _clip(trap, _MAX_TRAP)
     essays = _essays_for(identity_thesis)
     strengths = [str(x).strip() for x in (essays.get("strengths") or []) if str(x).strip()][:4]
     growth = [str(x).strip() for x in (essays.get("growth_zones") or []) if str(x).strip()][:3]
     helps = [str(x).strip() for x in (essays.get("helps") or []) if str(x).strip()][:3]
     decision = _clip(str(essays.get("decision_style") or ""), _MAX_ESSAY)
+    if isinstance(stage3, dict):
+        engine = stage3.get("internal_engine") if isinstance(stage3.get("internal_engine"), dict) else {}
+        dec = engine.get("decision") if isinstance(engine.get("decision"), dict) else None
+        dec_text = str((dec or {}).get("surface_text") or "").strip()
+        if dec_text:
+            decision = _clip(dec_text, _MAX_ESSAY)
+            decision_source = "stage3_internal_engine.decision"
+        # Prefer Stage 3 growth/recovery help lines when present.
+        growth_slot = engine.get("growth") if isinstance(engine.get("growth"), dict) else None
+        recovery_slot = engine.get("recovery") if isinstance(engine.get("recovery"), dict) else None
+        stage3_helps: list[str] = []
+        for slot in (growth_slot, recovery_slot):
+            t = str((slot or {}).get("surface_text") or "").strip()
+            if t:
+                stage3_helps.append(_clip(t, _MAX_ESSAY))
+        if stage3_helps:
+            helps = stage3_helps[:3]
     relationship = _clip(str(essays.get("relationship_style") or ""), _MAX_ESSAY)
     money = _clip(str(essays.get("money_style") or ""), _MAX_ESSAY)
     help_line = helps[0] if helps else None
@@ -709,11 +750,13 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
                 "source_fields": [
                     "character_engine_stage2.identity_core",
                     "character_engine_stage1.claims",
+                    "character_engine_stage3.primary_tension",
                 ],
             }
         ],
         "rules": {
             "source": "character_engine_identity_core",
+            "trap_source": trap_source,
             "forbids_living_day_rhythm_as_identity_trap": True,
             "snapshot_materials_may_differ": True,
         },
@@ -725,6 +768,9 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
         "identity_thesis": identity_thesis,
         "recognition_label": _RECOGNITION_LABEL.get(identity_thesis) or "Ядро",
         "primary_claim_id": primary_id,
+        "trap_source": trap_source,
+        "decision_source": decision_source,
+        "stage3_status": (stage3 or {}).get("status") if isinstance(stage3, dict) else None,
         "visual_note": "archetype_seed remains FE illustration only; recognition title is CE",
         "slots_owned": [
             "profile_contract_v1.identity_core",

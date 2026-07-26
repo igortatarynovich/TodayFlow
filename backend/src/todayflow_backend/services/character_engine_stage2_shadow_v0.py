@@ -25,6 +25,8 @@ def character_engine_stage2_should_run() -> bool:
         getattr(settings, "character_engine_stage2_shadow", False)
         or getattr(settings, "character_engine_stage2_enabled", False)
         or getattr(settings, "character_engine_profile_consumption", False)
+        or getattr(settings, "character_engine_stage3_shadow", False)
+        or getattr(settings, "character_engine_stage3_enabled", False)
     )
 
 

@@ -367,7 +367,7 @@ If no → fix identity rules before implementing pipeline.
    Status: **pending** — machine schema + local validation landed; CI job pending workflow-capable push.  
 4. ~~Implement Stage 0–1 fact+evidence builders (deterministic-first)~~ → `character_engine_stage0_facts_v0` · registry · stage1 · staging eval gate PASS ([CHARACTER_ENGINE_STAGE01_STAGING_EVAL_V0.md](./CHARACTER_ENGINE_STAGE01_STAGING_EVAL_V0.md)).  
 5. ~~Stage 2 Identity Core~~ → LLM-first prompt `profile.character_engine.stage2.v1` + structural/provenance validator only (no quality heuristics). Diagnostics flags `STAGE2_SHADOW` / `STAGE2_ENABLED`; SoT cutover = future `CHARACTER_ENGINE_PUBLISH_READY`.  
-6. Stage 3 Internal Engine + tensions (after Stage 2 shadow review on live packs).  
+6. ~~Stage 3 Internal Engine + tensions~~ → prompt `profile.character_engine.stage3.v1` **1.0.0** · expand-only validator (no Identity Core rewrite) · diagnostics `STAGE3_SHADOW` / `ENABLED` · Profile consumption prefers Stage 3 trap/decision when grounded ([CHARACTER_ENGINE_STAGE3_INTERNAL_V0.md](./CHARACTER_ENGINE_STAGE3_INTERNAL_V0.md)).  
 7. Stage 4 scenes / potential / blind spots.  
 8. Stage 5 Compass + legacy adapters → full ready CE + shadow comparison → publish cutover.  
 
@@ -377,6 +377,8 @@ If no → fix identity rules before implementing pipeline.
 |------|----------------|-------------------------|
 | `CHARACTER_ENGINE_STAGE01_SHADOW` / `ENABLED` | Stage 0–1 | **no** |
 | `CHARACTER_ENGINE_STAGE2_SHADOW` / `ENABLED` | Stage 2 (+ builds 0–1 inputs) | **no** |
+| `CHARACTER_ENGINE_STAGE3_SHADOW` / `ENABLED` | Stage 3 (+ Stage 2 prerequisite) | **no** |
+| `CHARACTER_ENGINE_PROFILE_CONSUMPTION` | Stage 2–3 on Profile read + slot overwrite | **no** |
 | `CHARACTER_ENGINE_PUBLISH_READY` | (future) cutover | **yes** — only after Stage 5 + ready validation |
 
 ### Stage 2 validation boundary

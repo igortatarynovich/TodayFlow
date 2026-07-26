@@ -36,3 +36,13 @@ Dual SoT: Swiss/natal + CE diagnostics vs publish personality. Shadow never fed 
 - **FE:** AspectCard prefers CE line when key matches.
 - **Consumption profile surface:** journey + character + spheres + houses + matrix styles + aspect person-voice — residual natal instrument facts only.
 - **Still HOLD Stage 3** until owner §1.4 skim.
+
+## Architecture impact (2026-07-26 v0.5 — Stage 3 consumption)
+
+- **SoT after:** when `diagnostics.character_engine_stage3.stage3.status=grounded`:
+  - trap ← `primary_tension.surface_text`
+  - `decision_style` ← `internal_engine.decision`
+  - helps prefer growth/recovery surfaces
+- **Fallback:** v0.4 editorial banks if Stage 3 missing/insufficient.
+- **Flag:** consumption still forces Stage 2+3 on Profile read; `PUBLISH_READY=0`.
+- **Canon:** [CHARACTER_ENGINE_STAGE3_INTERNAL_V0.md](./CHARACTER_ENGINE_STAGE3_INTERNAL_V0.md).
