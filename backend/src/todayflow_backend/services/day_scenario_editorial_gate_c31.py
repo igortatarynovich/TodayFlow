@@ -1,13 +1,16 @@
-"""Phase C3.1–C3.2 — Editorial quality gate for native day_scenario LLM output.
+"""Phase C3.1–C3.2 — Editorial quality **analysis** for native day_scenario LLM output.
 
 C3.1: everyday scene concreteness.
 C3.2: interpretive chorus causal chain (one story, four roles).
 
-Runs after schema validation. Does **not** rewrite prose with formula templates —
-reject → retry with defect feedback → facts_only_unavailable if still failing.
+Runs after schema validation. Analyzers emit defects + scores for capture/eval.
+**Runtime policy is owned by C3.6 gate maturity** (`day_scenario_gate_maturity_c36`):
+quality codes are experimental/advisory (observe only). Do not treat
+`CRITICAL_DEFECTS` / `editorial_has_critical` as user-runtime blockers.
 
 Canon: docs/audits/DAY_SCENARIO_EVERYDAY_QUALITY_C31.md
        docs/audits/DAY_SCENARIO_CHORUS_QUALITY_C32.md
+       docs/audits/DAY_SCENARIO_GATE_MATURITY_C36.md
 """
 
 from __future__ import annotations
@@ -39,6 +42,7 @@ DEFECT_CHORUS_NATAL_WITHOUT_EVIDENCE = "CHORUS_NATAL_WITHOUT_EVIDENCE"
 
 CRITICAL_DEFECTS = frozenset(
     {
+        # Severity labels for eval/scoring — NOT runtime blockers (see C3.6 maturity).
         DEFECT_SCENE_ABSTRACT,
         DEFECT_SCENE_UNIVERSAL_ADVICE,
         DEFECT_SCENE_CLONE,

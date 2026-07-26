@@ -1,10 +1,18 @@
-"""Phase C3.3a — Personalization evidence contract, depth modes, and gate.
+"""Phase C3.3a — Personalization evidence contract, depth modes, and analysis.
 
 Builds a bounded personalization_evidence pack (never raw Profile dump).
 Modes: general | light_personalized | deep_personalized.
-Gate can retry, downgrade personal layer to honest general, or reject the story.
+
+Analyzers emit defects + scores. **Runtime policy is owned by C3.6 gate maturity**
+(`day_scenario_gate_maturity_c36`): only hard codes (PROFILE_FACT_LEAK,
+EVIDENCE_ORPHAN) may retry/reject in user runtime. Soft personalization codes are
+advisory (no downgrade / no unavailable).
+
+Legacy helpers `personalization_requires_retry` / `personalization_decision_after_retries`
+remain for tests/eval labeling — native LLM loop must not use them for product policy.
 
 Canon: docs/audits/DAY_SCENARIO_PERSONALIZATION_C33A.md
+       docs/audits/DAY_SCENARIO_GATE_MATURITY_C36.md
 """
 
 from __future__ import annotations
@@ -35,6 +43,7 @@ DEFECT_PROFILE_FACT_LEAK = "PERSONALIZATION_PROFILE_FACT_LEAK"
 DEFECT_SPHERE_OUTSIDE_PACK = "PERSONALIZATION_SPHERE_OUTSIDE_PACK"
 DEFECT_SPHERE_SELECTION_EMPTY = "PERSONALIZATION_SPHERE_SELECTION_EMPTY"
 
+# Legacy severity sets for eval/tests — runtime uses gate maturity C3.6.
 CRITICAL_RETRY_DEFECTS = frozenset(
     {
         DEFECT_CLAIM_WITHOUT_EVIDENCE,

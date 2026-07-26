@@ -670,7 +670,8 @@ Source of truth: [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) §1–§13
 - [x] **Q1 Editorial deepen minors** — each of 56 = unique psychological archetype (not rank×suit); Q1 profile in KB + pack; `adjacent_distinction` required.
 - [x] **Golden Dataset** — fixed scenarios (question/profile/cards/expected type) without scores. Canon [TAROT_GOLDEN_DATASET_V1](./tarot/TAROT_GOLDEN_DATASET_V1.md).
 - [x] **Golden Eval harness** — rubric 1–5 · paid-worth heuristic · anti-sameness · CLI. Canon [TAROT_GOLDEN_EVAL_V1](./tarot/TAROT_GOLDEN_EVAL_V1.md).
-- [ ] **Golden Eval live accept** — first live report: llm_pass **7/12** → freeze **not** lifted. Audit [TAROT_GOLDEN_EVAL_LIVE_2026-07-25](./audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-25.md). **← next: raise LLM pass rate**
+- [x] **Golden Eval live #2** — pack 12/12 · **LLM 11/12** · `freeze_lift_ready=true`. Audit [TAROT_GOLDEN_EVAL_LIVE_2026-07-26](./audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-26.md). **← next: owner freeze-lift accept · Q3 prompt polish**
+- [ ] **Owner freeze-lift accept** — harness green; architecture freeze stays ACTIVE until owner decision
 - [ ] **Q3 Prompt iteration** — wording only after accepted live Eval.
 - [ ] **Tarot Design Language v1** — [docs/tarot/TAROT_DESIGN_LANGUAGE_V1.md](./tarot/TAROT_DESIGN_LANGUAGE_V1.md) **DRAFT / PENDING ACCEPT** · **parked under architecture freeze**
   - Канон-объект: колода на столе; формации 1/3/5/2; один reveal-жест; рубашка = фирменный язык
@@ -1007,7 +1008,7 @@ Ordered work (aligns with canon §7):
 
 ## 6) Current Priorities (Execution Order)
 
-> **Активный фокус (2026-07-25):** **Tarot Interpretation Stack v1 FROZEN** — Dataset + Eval harness + first **live report (7/12 LLM)** → freeze stays. Next: improve LLM pass on Golden Dataset, then owner freeze-lift. Canon [TAROT_GOLDEN_EVAL_V1](./tarot/TAROT_GOLDEN_EVAL_V1.md) · audit [TAROT_GOLDEN_EVAL_LIVE_2026-07-25](./audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-25.md). Parallel: **CE Stage 0–1 staging GATE PASS** + **Stage 2 Identity Core LLM prompt**. CE baseline: `5eb61c6` (not branch tip).
+> **Активный фокус (2026-07-26):** **Tarot Interpretation Stack v1 FROZEN** — live Golden Eval **#2: 11/12 LLM · freeze_lift_ready=true**. Owner accept still required to lift freeze. Parallel Q3: choice length / compact story (`tarot-interpretation-v1.6`). Canon [TAROT_GOLDEN_EVAL_V1](./tarot/TAROT_GOLDEN_EVAL_V1.md) · audit [TAROT_GOLDEN_EVAL_LIVE_2026-07-26](./audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-26.md).
 
 ### 🔴 Phase 3 — Screen Block Definition (единственный приоритет)
 
@@ -1100,6 +1101,7 @@ Historical note:
 - 2026-07-08 | Web product UI | calendar / profile-summary / subscriptions / discover pattern → ProductPageScreen | IN PROGRESS | `/calendar`, `/profile-summary`, `/subscriptions`, `/discover/pattern/[axis_id]` — orbit-page и hero images убраны; v2 header + pl.panel + legacyHost.
 - 2026-07-08 | Web product UI | challenges / reports / help / tarot cards → ProductPageScreen | IN PROGRESS | `/challenges`, `/challenges/[id]`, `/reports/full`, `/reports/thematic`, `/reports/thematic/[theme]`, `/help`, `/help/*`, `/tarot/cards/[slug]` — orbit-page и hero images убраны; metadata help → layout.tsx; inner forms/viewer в legacyHost.
 - 2026-07-07 | Web product UI | Today dashboard v2 aligned to Profile reference | IN PROGRESS | Today dashboard на `productPageLayout` + `productV2Surface` tokens; wide canvas `mainWide`; cards/type/spacing match profile v2.
+- 2026-07-26 | Tarot | **Golden Eval live #2** | **DONE (gate green)** | 12/12 pack · **11/12 LLM** · anti-sameness OK · `freeze_lift_ready=true`. Fail: `choice_work_leave_or_stay` (`too_long` / quality). Audit [TAROT_GOLDEN_EVAL_LIVE_2026-07-26](./audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-26.md). Next: owner freeze-lift · Q3.
 - 2026-07-25 | Tarot | **Golden Eval live #1** | **DONE (report) / FAIL lift** | 12/12 pack · **7/12 LLM** · anti-sameness OK · `freeze_lift_ready=false`. Audit [TAROT_GOLDEN_EVAL_LIVE_2026-07-25](./audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-25.md). Next: diagnose quality rejects → raise pass rate.
 - 2026-07-25 | Tarot | **Golden Eval v1 harness** | **DONE (offline)** | Rubric 1–5 · shape flags · anti-sameness · CLI `scripts/tarot_golden_eval_v1.py`. Freeze remains until live report accepted. Canon [TAROT_GOLDEN_EVAL_V1](./tarot/TAROT_GOLDEN_EVAL_V1.md).
 - 2026-07-25 | Tarot | **Golden Dataset v1** | **DONE (fixture)** | 12 fixed scenarios (all ontology types + Cups/Swords 8–10 Q1 gates) without scores. Schema + offline tests. Canon [TAROT_GOLDEN_DATASET_V1](./tarot/TAROT_GOLDEN_DATASET_V1.md). Next: Golden Eval harness.
@@ -1743,7 +1745,8 @@ Historical note:
 - 2026-07-25 | Ops / Agents | **SoT stack clarified** | **ACTIVE** | Authority: **canon → backlog/tracker → server (live)**. Git = ledger only. Root `AGENTS.md` + `.cursor/rules/architecture-impact.mdc` updated.
 - 2026-07-25 | Profile / UI | **Premium Profile pass · natal instrument + book scroll** | **ON SERVER** | Canon: Foundation UI «дорого без текста» · PROFILE_SCREEN_MASTER §0.2–0.3. Natal = one `instrument` bezel (plate+dial+selector) · planets angular fan inside rim · Journey/Bridge/Natal scenes stitched as chapters (hairline + air, no card stack). Today untouched. **Next:** owner mobile QA.
 - 2026-07-25 | Today / Architecture | **day_thesis + evidence pack in DayContext** | **IN_PROGRESS** | Evidence + FE parity · formula bank + **SP links** + `vibe_strokes` · TL-1 blocked · next: TL-0C.3 editorial marking · linked: [TODAY_LANGUAGE_STRONG_PATTERNS_V0.md](./today-language/TODAY_LANGUAGE_STRONG_PATTERNS_V0.md)
-- 2026-07-26 | Today / Scenario | **Day Scenario SoT + product capture** | **IN_PROGRESS** | Canon [DAY_SCENARIO_V1.md](./DAY_SCENARIO_V1.md) · **B1–B5 + C1–C3.5.1 landed** (eval hardening 28×11×2=616 · dual scores · EN eval gate · provenance/closure) · [C3.5.1](./audits/DAY_SCENARIO_EVAL_HARDENING_C351.md) · [baseline](./audits/DAY_SCENARIO_EVAL_BASELINE_C35.md) · [golden scaffold](./audits/DAY_SCENARIO_EVAL_GOLDEN_SET_C35C.md) · **next:** golden labeling (C3.5c) → live shadow → C3.6 gate calibration
+- 2026-07-26 | Today / Scenario | **Day Scenario SoT + product capture** | **IN_PROGRESS** | Canon [DAY_SCENARIO_V1.md](./DAY_SCENARIO_V1.md) · **B1–B5 + C1–C3.6 landed** · [C3.6 Gate Maturity](./audits/DAY_SCENARIO_GATE_MATURITY_C36.md) (quality=observe; hard=blocking; no editorial retry; leak=immediate reject; public contract unchanged) · [C3.5.1](./audits/DAY_SCENARIO_EVAL_HARDENING_C351.md) · **next:** golden labeling + shadow calibration → promote codes by evidence
+- 2026-07-26 | Today / Scenario | **Day Scenario SoT + product capture** | **SUPERSEDED → C3.6 row** | C3.5.1 eval hardening only (`c57f8e0`); superseded by Gate Maturity runtime policy.
 - 2026-07-25 | Today / Scenario | **Day Scenario SoT + product capture** | **SUPERSEDED → 2026-07-26 C3.5.1 row** | C3.5.0 14d pack; see updated row above.
 - 2026-07-01 | Product | **Build Map v0.5.5 — `DailySymbols` spec 🟢** | **ACTIVE** | Wave 1: color + stone · umbrella entity · [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md)
 - 2026-07-01 | Product | **Invisible Mechanism CLOSED** | **CLOSED** | §5.6 · Build Map · dual Internal/External · 4 user knowledges — не revisiting

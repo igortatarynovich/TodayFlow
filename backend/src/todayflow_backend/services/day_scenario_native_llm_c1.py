@@ -807,29 +807,35 @@ def call_day_scenario_native_llm_c1(
     celestial_events: dict[str, Any] | None = None,
     max_attempts: int = 2,
 ) -> dict[str, Any] | None:
-    """Generate native scenario via LLM. Returns day_scenario_v1 or None after retries.
+    """Generate native scenario via LLM. Returns day_scenario_v1 or None after hard fails.
 
-    Pipeline per attempt:
-      parse → schema validate → personalization gate (C3.3a) → editorial gate (C3.1/C3.2)
-      → map → structural validate.
-    Bad personalization may downgrade to honest general (not always unavailable).
-    Critical editorial / profile-leak defects → retry; story-level fail → None.
+    Pipeline per attempt (C3.6):
+      parse → hard schema validate → quality analysis (editorial + personalization)
+      → map → hard structural validate → accept with scores/defects in editorial_meta.
+
+    Quality defects are **advisory/experimental**: scored + captured, no retry / no
+    unavailable / no general downgrade. Only hard contract/safety defects may retry
+    or reject (PROFILE_FACT_LEAK, broken evidence refs, schema/SoT).
     """
     from todayflow_backend.services.day_scenario_editorial_gate_c31 import (
-        editorial_has_critical,
-        format_editorial_retry_feedback,
         run_editorial_quality_gate_c31,
         score_editorial_quality_c31,
+    )
+    from todayflow_backend.services.day_scenario_gate_maturity_c36 import (
+        annotate_defects_with_maturity,
+        is_hard_native_validate_error,
+        is_hard_scenario_validate_error,
+        maturity_summary,
+        public_defect_view,
+        should_reject_story,
+        should_retry_defects,
     )
     from todayflow_backend.services.day_scenario_personalization_c33 import (
         DEPTH_DEEP,
         DEPTH_GENERAL,
+        DEFECT_PROFILE_FACT_LEAK,
         build_personalization_evidence_pack_c33,
-        downgrade_native_to_general_c33,
         format_personalization_retry_feedback,
-        personalization_decision_after_retries,
-        personalization_has_critical,
-        personalization_requires_retry,
         run_personalization_gate_c33,
         score_personalization_c33,
     )
@@ -959,7 +965,9 @@ def call_day_scenario_native_llm_c1(
         legacy_raw = find_legacy_keys(parsed)
         if legacy_raw:
             errors = list(errors) + [f"legacy_keys:{','.join(legacy_raw)}"]
-        if errors:
+        hard_errors = [e for e in errors if is_hard_native_validate_error(e)]
+        soft_native = [e for e in errors if not is_hard_native_validate_error(e)]
+        if hard_errors:
             if capture is not None:
                 capture.record_attempt(
                     attempt_index=attempt_idx,
@@ -968,22 +976,68 @@ def call_day_scenario_native_llm_c1(
                     after_normalize=normalized,
                     after_gate=None,
                     status="native_validation_reject",
-                    reject_reason=";".join(errors[:8]),
+                    reject_reason=";".join(hard_errors[:8]),
                 )
-            retry_feedback = "Исправь schema/validation ошибки: " + "; ".join(errors[:6])
+            retry_feedback = "Исправь schema/validation ошибки: " + "; ".join(hard_errors[:6])
             continue
+        # Soft native findings (e.g. parallel_forecast regex) → capture only.
+        if soft_native and capture is not None:
+            try:
+                for e in soft_native[:12]:
+                    capture.add_defect(
+                        "NATIVE_SOFT_VALIDATE",
+                        f"{e}|maturity=experimental|action=score_only",
+                        cls="VALIDATION",
+                    )
+            except Exception:
+                pass
 
-        # --- C3.3a/b personalization + sphere selection gates (before editorial) ---
+        # --- Quality analysis (C3.1–C3.3b): always measure; maturity decides runtime ---
         pers_defects = run_personalization_gate_c33(normalized, pers_pack)
         pers_defects = list(pers_defects) + list(run_sphere_selection_gate_c33b(normalized, pers_pack))
+        pers_defects = annotate_defects_with_maturity(pers_defects)
         last_pers_defects = pers_defects
         pers_score = score_personalization_c33(pers_defects)
-        if pers_defects and (
-            personalization_requires_retry(pers_defects)
-            or personalization_decision_after_retries(pers_defects) == "downgrade_general"
-        ):
-            if attempt_idx + 1 < attempts and personalization_has_critical(pers_defects):
-                feedback = format_personalization_retry_feedback(pers_defects, pack=pers_pack)
+
+        # Hard personalization: reject_story (e.g. PROFILE_FACT_LEAK) wins over retry.
+        # Leaked prose must never reach the user or a quality-rewrite retry prompt.
+        if should_reject_story(pers_defects):
+            if capture is not None:
+                capture.record_attempt(
+                    attempt_index=attempt_idx,
+                    raw_response=content,
+                    parsed=parsed,
+                    after_normalize={
+                        **normalized,
+                        "personalization_score": pers_score,
+                        "personalization_defects": pers_defects,
+                        "gate_maturity": maturity_summary(pers_defects),
+                    },
+                    after_gate=None,
+                    status="personalization_reject_story",
+                    reject_reason=";".join(str(d.get("code")) for d in pers_defects[:8]),
+                )
+                try:
+                    for d in pers_defects:
+                        capture.add_defect(
+                            str(d.get("code") or "PERSONALIZATION"),
+                            f"{d.get('field')}:{d.get('message')}|maturity={d.get('gate_maturity')}"
+                            f"|action={d.get('runtime_action')}",
+                            cls="PERSONALIZATION",
+                        )
+                except Exception:
+                    pass
+            return None
+        if should_retry_defects(pers_defects):
+            # Hard orphan/refs only — never include PROFILE_FACT_LEAK in retry feedback.
+            retryable = [
+                d
+                for d in pers_defects
+                if str(d.get("runtime_action")) == "retry"
+                and str(d.get("code")) != DEFECT_PROFILE_FACT_LEAK
+            ]
+            if attempt_idx + 1 < attempts and retryable:
+                feedback = format_personalization_retry_feedback(retryable, pack=pers_pack)
                 if capture is not None:
                     capture.record_attempt(
                         attempt_index=attempt_idx,
@@ -993,64 +1047,36 @@ def call_day_scenario_native_llm_c1(
                             **normalized,
                             "personalization_score": pers_score,
                             "personalization_defects": pers_defects,
+                            "gate_maturity": maturity_summary(pers_defects),
                         },
                         after_gate=None,
-                        status="personalization_gate_reject",
-                        reject_reason=";".join(str(d.get("code")) for d in pers_defects[:8]),
+                        status="personalization_hard_retry",
+                        reject_reason=";".join(str(d.get("code")) for d in retryable[:8]),
                     )
                     try:
                         for d in pers_defects:
                             capture.add_defect(
                                 str(d.get("code") or "PERSONALIZATION"),
-                                f"{d.get('field')}:{d.get('message')}",
+                                f"{d.get('field')}:{d.get('message')}|maturity={d.get('gate_maturity')}",
                                 cls="PERSONALIZATION",
                             )
                     except Exception:
                         pass
                 retry_feedback = feedback
                 continue
-            decision = personalization_decision_after_retries(pers_defects)
-            if decision == "reject_story":
-                if capture is not None:
-                    capture.record_attempt(
-                        attempt_index=attempt_idx,
-                        raw_response=content,
-                        parsed=parsed,
-                        after_normalize=normalized,
-                        after_gate=None,
-                        status="personalization_reject_story",
-                        reject_reason=";".join(str(d.get("code")) for d in pers_defects[:8]),
-                    )
-                return None
-            if decision == "downgrade_general":
-                normalized = downgrade_native_to_general_c33(normalized)
-                general_pack = {
-                    **pers_pack,
-                    "evidence_depth": DEPTH_GENERAL,
-                    "behavioral_tendencies": [],
-                    "natal_activations": [],
-                    "confidence": 0.0,
-                }
-                from todayflow_backend.services.day_scenario_sphere_selection_c33b import (
-                    attach_sphere_selection_to_pack as _attach_sel,
+            if capture is not None:
+                capture.record_attempt(
+                    attempt_index=attempt_idx,
+                    raw_response=content,
+                    parsed=parsed,
+                    after_normalize=normalized,
+                    after_gate=None,
+                    status="personalization_reject_story",
+                    reject_reason=";".join(str(d.get("code")) for d in pers_defects[:8]),
                 )
+            return None
+        # Quality personalization defects: keep first valid story (no downgrade, no retry).
 
-                general_pack = _attach_sel(
-                    general_pack,
-                    day_domains=domains_present,
-                    ritual_head_topic=str(ritual.get("head_topic") or "") or None,
-                    thesis_family=str(thesis.get("family") or "") or None,
-                )
-                pers_defects = run_personalization_gate_c33(normalized, general_pack)
-                pers_defects = list(pers_defects) + list(
-                    run_sphere_selection_gate_c33b(normalized, general_pack)
-                )
-                if personalization_decision_after_retries(pers_defects) == "reject_story":
-                    return None
-                pers_score = score_personalization_c33(pers_defects)
-                last_pers_defects = pers_defects
-
-        # --- C3.1/C3.2 editorial gate ---
         editorial = run_editorial_quality_gate_c31(
             normalized,
             has_natal_evidence=has_natal_evidence if has_natal_evidence else False,
@@ -1058,36 +1084,33 @@ def call_day_scenario_native_llm_c1(
         natal_rows = _as_list(_as_dict(normalized.get("interpretive_chorus")).get("natal"))
         if natal_rows and not has_natal_evidence:
             editorial = run_editorial_quality_gate_c31(normalized, has_natal_evidence=False)
+        editorial = annotate_defects_with_maturity(editorial)
         ed_score = score_editorial_quality_c31(editorial)
-        if editorial_has_critical(editorial):
-            feedback = format_editorial_retry_feedback(editorial)
-            if capture is not None:
-                capture.record_attempt(
-                    attempt_index=attempt_idx,
-                    raw_response=content,
-                    parsed=parsed,
-                    after_normalize={
-                        **normalized,
-                        "editorial_score": ed_score,
-                        "editorial_defects": editorial,
-                        "personalization_score": pers_score,
-                        "personalization_defects": pers_defects,
-                    },
-                    after_gate=None,
-                    status="editorial_gate_reject",
-                    reject_reason=";".join(f"{d.get('code')}" for d in editorial[:8]),
-                )
-                try:
-                    for d in editorial:
-                        capture.add_defect(
-                            str(d.get("code") or "EDITORIAL"),
-                            f"{d.get('field')}:{d.get('message')}",
-                            cls=str(d.get("capture_class") or "VALIDATION"),
-                        )
-                except Exception:
-                    pass
-            retry_feedback = feedback
-            continue
+        # Editorial is quality analysis only — never retry / never unavailable (C3.6).
+        if editorial and capture is not None:
+            try:
+                for d in editorial:
+                    capture.add_defect(
+                        str(d.get("code") or "EDITORIAL"),
+                        f"{d.get('field')}:{d.get('message')}|maturity={d.get('gate_maturity')}"
+                        f"|action={d.get('runtime_action')}",
+                        cls=str(d.get("capture_class") or "VALIDATION"),
+                    )
+            except Exception:
+                pass
+        if pers_defects and capture is not None:
+            try:
+                for d in pers_defects:
+                    if str(d.get("runtime_action") or "score_only") != "score_only":
+                        continue
+                    capture.add_defect(
+                        str(d.get("code") or "PERSONALIZATION"),
+                        f"{d.get('field')}:{d.get('message')}|maturity={d.get('gate_maturity')}"
+                        f"|action=score_only",
+                        cls="PERSONALIZATION",
+                    )
+            except Exception:
+                pass
 
         scenario = native_llm_to_day_scenario_v1(
             normalized,
@@ -1097,7 +1120,7 @@ def call_day_scenario_native_llm_c1(
             day_thesis=_as_dict(interp.get("day_thesis")),
         )
         scen_errors = validate_day_scenario_v1(scenario)
-        hard = [e for e in scen_errors if e in {"scenes_empty", "conflict_missing_short_name", "bad_contract_version"}]
+        hard = [e for e in scen_errors if is_hard_scenario_validate_error(e)]
         if hard:
             if capture is not None:
                 capture.record_attempt(
@@ -1109,6 +1132,7 @@ def call_day_scenario_native_llm_c1(
                     status="scenario_validate_reject",
                     reject_reason=";".join(hard),
                 )
+            retry_feedback = "Исправь structural/SoT ошибки: " + "; ".join(hard[:6])
             continue
         if capture is not None:
             capture.record_attempt(
@@ -1121,9 +1145,14 @@ def call_day_scenario_native_llm_c1(
                     "editorial_defects": editorial,
                     "personalization_score": pers_score,
                     "personalization_defects": pers_defects,
+                    "gate_maturity": {
+                        "editorial": maturity_summary(editorial),
+                        "personalization": maturity_summary(pers_defects),
+                        "policy": "quality_observe_hard_blocking",
+                    },
                 },
                 after_gate=scenario,
-                status="accepted_native_c33b",
+                status="accepted_native_c36",
             )
         scenario["personalization_depth"] = normalized.get("personalization_depth") or DEPTH_GENERAL
         scenario["personalization_evidence"] = {
@@ -1137,14 +1166,16 @@ def call_day_scenario_native_llm_c1(
             ][:6],
             "sphere_selection": _as_dict(pers_pack.get("sphere_selection")),
         }
+        # Public editorial_meta keeps pre-C3.6 analyzer shape only.
+        # gate_maturity / runtime_action / policy live in capture metadata (not API).
         scenario["editorial_meta"] = {
             "prompt_version": NATIVE_PROMPT_VERSION,
             "model_version": model_name,
             "native_schema_version": NATIVE_LLM_SCHEMA_VERSION,
             "editorial_score": ed_score,
-            "editorial_defects": editorial,
+            "editorial_defects": public_defect_view(editorial),
             "personalization_score": pers_score,
-            "personalization_defects": last_pers_defects,
+            "personalization_defects": public_defect_view(last_pers_defects),
             "personalization_depth": scenario["personalization_depth"],
         }
         return scenario

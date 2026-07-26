@@ -1,8 +1,8 @@
 # DAY_SCENARIO_V1 — драматургический каркас дня
 
-**Status:** CANON DRAFT — **B1–B5 + C1 + C2 + C3.1–C3.5.1 landed** (eval hardening 28d × 11 profiles × ru/en)  
+**Status:** CANON DRAFT — **B1–B5 + C1 + C2 + C3.1–C3.6 landed** (gate maturity: quality observe; hard blocking)  
 **Date:** 2026-07-26  
-**Engine:** `day_scenario_v1.py` · `day_color_catalog_v1.py` · `day_scenario_project_v1.py` · `day_scenario_native_llm_c1.py` · `day_scenario_editorial_gate_c31.py` · `day_scenario_personalization_c33.py` · `day_scenario_sphere_selection_c33b.py` · `day_scenario_pairwise_eval_c33b.py` · `day_scenario_eval_pack_c35.py` · `day_scenario_eval_*_c351.py`  
+**Engine:** `day_scenario_v1.py` · `day_color_catalog_v1.py` · `day_scenario_project_v1.py` · `day_scenario_native_llm_c1.py` · `day_scenario_editorial_gate_c31.py` · `day_scenario_personalization_c33.py` · `day_scenario_sphere_selection_c33b.py` · `day_scenario_pairwise_eval_c33b.py` · `day_scenario_eval_pack_c35.py` · `day_scenario_eval_*_c351.py` · `day_scenario_gate_maturity_c36.py`  
 **Wire note:** [audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md](./audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md)  
 **UI note:** [audits/DAY_SCENARIO_UI_PREFERENCE_B4.md](./audits/DAY_SCENARIO_UI_PREFERENCE_B4.md)  
 **Runtime SoT:** [audits/DAY_SCENARIO_RUNTIME_SOT_B5.md](./audits/DAY_SCENARIO_RUNTIME_SOT_B5.md)  
@@ -13,6 +13,7 @@
 **Personalization:** [audits/DAY_SCENARIO_PERSONALIZATION_C33A.md](./audits/DAY_SCENARIO_PERSONALIZATION_C33A.md)  
 **Sphere selection:** [audits/DAY_SCENARIO_SPHERE_SELECTION_C33B.md](./audits/DAY_SCENARIO_SPHERE_SELECTION_C33B.md)  
 **Eval pack:** [audits/DAY_SCENARIO_EVAL_PACK_C35.md](./audits/DAY_SCENARIO_EVAL_PACK_C35.md) · [audits/DAY_SCENARIO_EVAL_HARDENING_C351.md](./audits/DAY_SCENARIO_EVAL_HARDENING_C351.md)  
+**Gate maturity:** [audits/DAY_SCENARIO_GATE_MATURITY_C36.md](./audits/DAY_SCENARIO_GATE_MATURITY_C36.md)  
 **Capture rubric:** [audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md](./audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md)  
 **Related:** [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) · [today-language/TODAY_LANGUAGE_V1.md](./today-language/TODAY_LANGUAGE_V1.md)
 
@@ -358,7 +359,29 @@ Legacy projections remain for old clients only.
 - **Runtime gates / today.py / Nebius / UI / lifecycle:** untouched
 ```
 
-### Next — golden-set labeling (C3.5c) → live shadow → Gate Calibration (C3.6)
+### C3.6 (landed) — Gate Maturity & Runtime Safety
+
+```markdown
+## Architecture impact
+- **SoT before:** editorial CRITICAL + soft personalization could retry / downgrade /
+  unavailable in native LLM user loop
+- **SoT after:** maturity registry is sole runtime-policy owner; quality analyzers
+  observe (score/defects → capture); only hard contract/safety blocks;
+  no subjective editorial retry; no quality→general downgrade;
+  PROFILE_FACT_LEAK immediate reject (no quality rewrite)
+- **Public contract changed?** no — gate_maturity/policy not added to user API;
+  capture-only for maturity annotations
+- **Migration required?** no
+- **Canon updated?** yes — DAY_SCENARIO_GATE_MATURITY_C36
+- **Backward compatible?** yes — softer quality policy; hard still unavailable
+```
+
+### Next — Gate calibration (golden + shadow metrics) · promote quality codes by evidence
+
+> **Supersedes runtime claims in C3.1–C3.3a Architecture impact** that said critical
+> editorial / soft personalization → retry → unavailable / downgrade. Those analyzers
+> remain for eval/capture; product control is C3.6 maturity
+> ([DAY_SCENARIO_GATE_MATURITY_C36.md](./audits/DAY_SCENARIO_GATE_MATURITY_C36.md)).
 
 ---
 
