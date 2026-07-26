@@ -1,0 +1,250 @@
+{
+  "batch_id": "c362_en_expansion_20260726",
+  "export_kind": "c362_human_golden_curated_en_batch",
+  "created_at": "2026-07-26T17:57:06.026008+00:00",
+  "versions": {
+    "golden_contract_version": "day_scenario_human_golden_c362",
+    "rubric_version": "day_scenario_human_review_rubric_c362.1",
+    "defect_catalog_version": "gate_rules_c36.42",
+    "review_protocol_version": "day_scenario_review_protocol_c362.1",
+    "scenario_contract_version": "day_scenario_native_llm_c1",
+    "analyzer_version": "day_scenario_eval_pack_c35.1+gate_maturity_c36"
+  },
+  "case_count": 20,
+  "locale_counts": {
+    "en": 20
+  },
+  "duplicate_scenario_hashes": [],
+  "inventory_note": "Curated EN expansion toward 20 EN / 40 total. Live EN native_llm_c1 inventory was empty at export time. Do not treat operator_mix.json as reviewer input.",
+  "instructions": {
+    "quorum": 2,
+    "rubric": "docs/audits/DAY_SCENARIO_HUMAN_REVIEW_RUBRIC_C362.md",
+    "protocol": "docs/audits/DAY_SCENARIO_HUMAN_GOLDEN_C362.md",
+    "blind_dir": "blind/",
+    "review_sheets": "review_sheets/",
+    "do_not_open_cases_dir_as_reviewer": true,
+    "do_not_open_operator_mix": true
+  },
+  "cases": [
+    {
+      "case_id": "hg-db583965e761",
+      "locale": "en",
+      "source_type": "curated",
+      "profile_type": "curated_smooth_conflict",
+      "evidence_depth": "deep_personalized",
+      "scenario_hash": "sha256:f20490bd803aa7e9ee2b450b91bc7d512542a6f55e753e005cb53c1f4832dd54",
+      "blind_path": "blind/hg-db583965e761.blind.json",
+      "sheet_path": "review_sheets/hg-db583965e761.md",
+      "case_path": "cases/hg-db583965e761.json"
+    },
+    {
+      "case_id": "hg-1070b2cb77c1",
+      "locale": "en",
+      "source_type": "curated",
+      "profile_type": "curated_demand_clarity",
+      "evidence_depth": "deep_personalized",
+      "scenario_hash": "sha256:5ad63ab75d61d41ad39ff9f5ddb946f1fdcdeca014d71d4837a31329e95c01db",
+      "blind_path": "blind/hg-1070b2cb77c1.blind.json",
+      "sheet_path": "review_sheets/hg-1070b2cb77c1.md",
+      "case_path": "cases/hg-1070b2cb77c1.json"
+    },
+    {
+      "case_id": "hg-a3c24fe67f40",
+      "locale": "en",
+      "source_type": "curated",
+      "profile_type": "curated_analyze_first",
+      "evidence_depth": "deep_personalized",
+      "scenario_hash": "sha256:6ee8e84e478389e76ae53c8955403b2c950aa6eec217c228c29580fb01d086c3",
+      "blind_path": "blind/hg-a3c24fe67f40.blind.json",
+      "sheet_path": "review_sheets/hg-a3c24fe67f40.md",
+      "case_path": "cases/hg-a3c24fe67f40.json"
+    },
+    {
+      "case_id": "hg-b7422994fb17",
+      "locale": "en",
+      "source_type": "curated",
+      "profile_type": "curated_act_first",
+      "evidence_depth": "deep_personalized",
+      "scenario_hash": "sha256:1dadf6d31806847f4c7936d586027bb6a6611ecc7859e010af23b4963123c1f5",
+      "blind_path": "blind/hg-b7422994fb17.blind.json",
+      "sheet_path": "review_sheets/hg-b7422994fb17.md",
+      "case_path": "cases/hg-b7422994fb17.json"
+    },
+    {
+      "case_id": "hg-d80a942b117e",
+      "locale": "en",
+      "source_type": "curated",
+      "profile_type": "curated_over_responsible",
+      "evidence_depth": "deep_personalized",
+      "scenario_hash": "sha256:efce228f13ded7a6adfaca090b0b62aca394a67469611d981d0328f0c75e14bb",
+      "blind_path": "blind/hg-d80a942b117e.blind.json",
+      "sheet_path": "review_sheets/hg-d80a942b117e.md",
+      "case_path": "cases/hg-d80a942b117e.json"
+    },
+    {
+      "case_id": "hg-635bcdb02948",
+      "locale": "en",
+      "source_type": "curated",
+      "profile_type": "curated_rejection_sensitive",
+      "evidence_depth": "deep_personalized",
+      "scenario_hash": "sha256:c5ee29c62cda941cba76bf6a45ed85941b58806c1f1ab60a518a20aa1ee2fcea",
+      "blind_path": "blind/hg-635bcdb02948.blind.json",
+      "sheet_path": "review_sheets/hg-635bcdb02948.md",
+      "case_path": "cases/hg-635bcdb02948.json"
+    },
+    {
+      "case_id": "hg-92e15fd8d24e",
+      "locale": "en",
+      "source_type": "curated",
+      "profile_type": "curated_autonomy_oriented",
+      "evidence_depth": "deep_personalized",
+      "scenario_hash": "sha256:37cfe39f5ca6db86008be71a1d5f4d30f168fb5eb8bed3c70ee14db6b65954f4",
+      "blind_path": "blind/hg-92e15fd8d24e.blind.json",
+      "sheet_path": "review_sheets/hg-92e15fd8d24e.md",
+      "case_path": "cases/hg-92e15fd8d24e.json"
+    },
+    {
+      "case_id": "hg-cab7f02b64a4",
+      "locale": "en",
+      "source_type": "curated",
+      "profile_type": "curated_control_no_birth_time",
+      "evidence_depth": "general_personalized",
+      "scenario_hash": "sha256:e5604af4a9f7f6501b6a7e642786a389b6dea4d7d3ba9add533d88aa14ec77e5",
+      "blind_path": "blind/hg-cab7f02b64a4.blind.json",
+      "sheet_path": "review_sheets/hg-cab7f02b64a4.md",
+      "case_path": "cases/hg-cab7f02b64a4.json"
+    },
+    {
+      "case_id": "hg-0d38c0fbd68b",
+      "locale": "en",
+      "source_type": "curated",
+      "profile_type": "curated_control_birth_date_only",
+      "evidence_depth": "general_personalized",
+      "scenario_hash": "sha256:6a5fd7843ffb7e69b7b7266d19a9ce8461d5f27b09fc8834edb18d604fa44014",
+      "blind_path": "blind/hg-0d38c0fbd68b.blind.json",
+      "sheet_path": "review_sheets/hg-0d38c0fbd68b.md",
+      "case_path": "cases/hg-0d38c0fbd68b.json"
+    },
+    {
+      "case_id": "hg-bb5545c4ae6c",
+      "locale": "en",
+      "source_type": "curated",
+      "profile_type": "curated_control_no_profile",
+      "evidence_depth": "general",
+      "scenario_hash": "sha256:db00e7a2f23239e3b80a3281391f136b98b0da69ebcf05e2907644f65bfa32c8",
+      "blind_path": "blind/hg-bb5545c4ae6c.blind.json",
+      "sheet_path": "review_sheets/hg-bb5545c4ae6c.md",
+      "case_path": "cases/hg-bb5545c4ae6c.json"
+    },
+    {
+      "case_id": "hg-cd9869e37166",
+      "locale": "en",
+      "source_type": "curated",
+      "profile_type": "curated_smooth_conflict",
+      "evidence_depth": "deep_personalized",
+      "scenario_hash": "sha256:2900413174845a483dae8540fe39f610ae0127db7891deba15cf57502e90fad3",
+      "blind_path": "blind/hg-cd9869e37166.blind.json",
+      "sheet_path": "review_sheets/hg-cd9869e37166.md",
+      "case_path": "cases/hg-cd9869e37166.json"
+    },
+    {
+      "case_id": "hg-17f37590abe1",
+      "locale": "en",
+      "source_type": "curated",
+      "profile_type": "curated_demand_clarity",
+      "evidence_depth": "deep_personalized",
+      "scenario_hash": "sha256:7bec1e86a807896103fed2ba65db7c4a0f13ba07b39bcdc18d911e92b00b4bf2",
+      "blind_path": "blind/hg-17f37590abe1.blind.json",
+      "sheet_path": "review_sheets/hg-17f37590abe1.md",
+      "case_path": "cases/hg-17f37590abe1.json"
+    },
+    {
+      "case_id": "hg-5544ec96cc77",
+      "locale": "en",
+      "source_type": "curated",
+      "profile_type": "curated_analyze_first",
+      "evidence_depth": "deep_personalized",
+      "scenario_hash": "sha256:bda0611ad653e37ae947b5d1bdcec87275c60239ffbfb2fa56cff60f92e0136e",
+      "blind_path": "blind/hg-5544ec96cc77.blind.json",
+      "sheet_path": "review_sheets/hg-5544ec96cc77.md",
+      "case_path": "cases/hg-5544ec96cc77.json"
+    },
+    {
+      "case_id": "hg-a176a3ec4dd0",
+      "locale": "en",
+      "source_type": "curated",
+      "profile_type": "curated_act_first",
+      "evidence_depth": "deep_personalized",
+      "scenario_hash": "sha256:76b0050386e82ec14e4b3678eb3bdba1947d9ef9ecd1f940de67845128414631",
+      "blind_path": "blind/hg-a176a3ec4dd0.blind.json",
+      "sheet_path": "review_sheets/hg-a176a3ec4dd0.md",
+      "case_path": "cases/hg-a176a3ec4dd0.json"
+    },
+    {
+      "case_id": "hg-71308efe32e3",
+      "locale": "en",
+      "source_type": "curated",
+      "profile_type": "curated_over_responsible",
+      "evidence_depth": "deep_personalized",
+      "scenario_hash": "sha256:0556b08ce2f3cf7c32974929d18570f97effddcf5f2780b25630fadfdce2a3e0",
+      "blind_path": "blind/hg-71308efe32e3.blind.json",
+      "sheet_path": "review_sheets/hg-71308efe32e3.md",
+      "case_path": "cases/hg-71308efe32e3.json"
+    },
+    {
+      "case_id": "hg-97ddff2ded8f",
+      "locale": "en",
+      "source_type": "curated",
+      "profile_type": "curated_rejection_sensitive",
+      "evidence_depth": "deep_personalized",
+      "scenario_hash": "sha256:c533b980b385b88bd3ec48895da7faf34a75f28a008ca4cb56c136597ae1c25c",
+      "blind_path": "blind/hg-97ddff2ded8f.blind.json",
+      "sheet_path": "review_sheets/hg-97ddff2ded8f.md",
+      "case_path": "cases/hg-97ddff2ded8f.json"
+    },
+    {
+      "case_id": "hg-e7b2a20acfd5",
+      "locale": "en",
+      "source_type": "curated",
+      "profile_type": "curated_autonomy_oriented",
+      "evidence_depth": "deep_personalized",
+      "scenario_hash": "sha256:19ea3f94a0dd17868c0739e77a67f9091cd5bc9e52a9f8d12f463f40e37bd7e2",
+      "blind_path": "blind/hg-e7b2a20acfd5.blind.json",
+      "sheet_path": "review_sheets/hg-e7b2a20acfd5.md",
+      "case_path": "cases/hg-e7b2a20acfd5.json"
+    },
+    {
+      "case_id": "hg-30aea28606de",
+      "locale": "en",
+      "source_type": "curated",
+      "profile_type": "curated_control_incomplete_evidence",
+      "evidence_depth": "general",
+      "scenario_hash": "sha256:2cb47f3463f62be006b7dcb87dfc43369abc715011eaa28975fce9ca91ecb2cb",
+      "blind_path": "blind/hg-30aea28606de.blind.json",
+      "sheet_path": "review_sheets/hg-30aea28606de.md",
+      "case_path": "cases/hg-30aea28606de.json"
+    },
+    {
+      "case_id": "hg-3ecb8be8ce24",
+      "locale": "en",
+      "source_type": "curated",
+      "profile_type": "curated_smooth_conflict",
+      "evidence_depth": "deep_personalized",
+      "scenario_hash": "sha256:a6b7ef60cda730dd5f0f93641663aa4028b7f6a205f7a1f9fa3cb7ed0ff332be",
+      "blind_path": "blind/hg-3ecb8be8ce24.blind.json",
+      "sheet_path": "review_sheets/hg-3ecb8be8ce24.md",
+      "case_path": "cases/hg-3ecb8be8ce24.json"
+    },
+    {
+      "case_id": "hg-bc82c5c30eff",
+      "locale": "en",
+      "source_type": "curated",
+      "profile_type": "curated_demand_clarity",
+      "evidence_depth": "deep_personalized",
+      "scenario_hash": "sha256:c7960cba7226ee572d12a2c119ff2f447e83f1af5a6c0a7f957b487aa29ed095",
+      "blind_path": "blind/hg-bc82c5c30eff.blind.json",
+      "sheet_path": "review_sheets/hg-bc82c5c30eff.md",
+      "case_path": "cases/hg-bc82c5c30eff.json"
+    }
+  ]
+}

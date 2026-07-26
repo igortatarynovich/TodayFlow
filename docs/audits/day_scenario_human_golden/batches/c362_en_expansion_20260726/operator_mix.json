@@ -1,0 +1,145 @@
+{
+  "batch_id": "c362_en_expansion_20260726",
+  "slots": [
+    {
+      "case_id": "hg-db583965e761",
+      "slot": 0,
+      "kind": "good",
+      "profile_id": "smooth_conflict",
+      "operator_mutation": null
+    },
+    {
+      "case_id": "hg-1070b2cb77c1",
+      "slot": 1,
+      "kind": "good",
+      "profile_id": "demand_clarity",
+      "operator_mutation": null
+    },
+    {
+      "case_id": "hg-a3c24fe67f40",
+      "slot": 2,
+      "kind": "good",
+      "profile_id": "analyze_first",
+      "operator_mutation": null
+    },
+    {
+      "case_id": "hg-b7422994fb17",
+      "slot": 3,
+      "kind": "good",
+      "profile_id": "act_first",
+      "operator_mutation": null
+    },
+    {
+      "case_id": "hg-d80a942b117e",
+      "slot": 4,
+      "kind": "good",
+      "profile_id": "over_responsible",
+      "operator_mutation": null
+    },
+    {
+      "case_id": "hg-635bcdb02948",
+      "slot": 5,
+      "kind": "good",
+      "profile_id": "rejection_sensitive",
+      "operator_mutation": null
+    },
+    {
+      "case_id": "hg-92e15fd8d24e",
+      "slot": 6,
+      "kind": "good",
+      "profile_id": "autonomy_oriented",
+      "operator_mutation": null
+    },
+    {
+      "case_id": "hg-cab7f02b64a4",
+      "slot": 7,
+      "kind": "good",
+      "profile_id": "no_birth_time",
+      "operator_mutation": null
+    },
+    {
+      "case_id": "hg-0d38c0fbd68b",
+      "slot": 8,
+      "kind": "good",
+      "profile_id": "birth_date_only",
+      "operator_mutation": null
+    },
+    {
+      "case_id": "hg-bb5545c4ae6c",
+      "slot": 9,
+      "kind": "good",
+      "profile_id": "no_profile",
+      "operator_mutation": null
+    },
+    {
+      "case_id": "hg-cd9869e37166",
+      "slot": 10,
+      "kind": "mut",
+      "profile_id": "smooth_conflict",
+      "operator_mutation": "clone_scene_into_second"
+    },
+    {
+      "case_id": "hg-17f37590abe1",
+      "slot": 11,
+      "kind": "mut",
+      "profile_id": "demand_clarity",
+      "operator_mutation": "universal_advice_example"
+    },
+    {
+      "case_id": "hg-5544ec96cc77",
+      "slot": 12,
+      "kind": "mut",
+      "profile_id": "analyze_first",
+      "operator_mutation": "drop_day_closure"
+    },
+    {
+      "case_id": "hg-a176a3ec4dd0",
+      "slot": 13,
+      "kind": "mut",
+      "profile_id": "act_first",
+      "operator_mutation": "mush_closure"
+    },
+    {
+      "case_id": "hg-71308efe32e3",
+      "slot": 14,
+      "kind": "mut",
+      "profile_id": "over_responsible",
+      "operator_mutation": "soft_generic_action"
+    },
+    {
+      "case_id": "hg-97ddff2ded8f",
+      "slot": 15,
+      "kind": "mut",
+      "profile_id": "rejection_sensitive",
+      "operator_mutation": "clone_scene_into_second"
+    },
+    {
+      "case_id": "hg-e7b2a20acfd5",
+      "slot": 16,
+      "kind": "mut",
+      "profile_id": "autonomy_oriented",
+      "operator_mutation": "universal_advice_example"
+    },
+    {
+      "case_id": "hg-30aea28606de",
+      "slot": 17,
+      "kind": "good",
+      "profile_id": "incomplete_evidence",
+      "operator_mutation": null
+    },
+    {
+      "case_id": "hg-3ecb8be8ce24",
+      "slot": 18,
+      "kind": "good",
+      "profile_id": "smooth_conflict",
+      "operator_mutation": null
+    },
+    {
+      "case_id": "hg-bc82c5c30eff",
+      "slot": 19,
+      "kind": "mut",
+      "profile_id": "demand_clarity",
+      "operator_mutation": "drop_evidence_refs"
+    }
+  ]
+}

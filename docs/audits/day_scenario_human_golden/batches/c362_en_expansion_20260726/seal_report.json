@@ -1,0 +1,125 @@
+{
+  "batch": "c362_en_expansion_20260726",
+  "cases": [
+    {
+      "case_id": "hg-0d38c0fbd68b",
+      "status": "sealed",
+      "consensus_band": "pass",
+      "integrity_errors": []
+    },
+    {
+      "case_id": "hg-1070b2cb77c1",
+      "status": "sealed",
+      "consensus_band": "pass",
+      "integrity_errors": []
+    },
+    {
+      "case_id": "hg-17f37590abe1",
+      "status": "sealed",
+      "consensus_band": "reject",
+      "integrity_errors": []
+    },
+    {
+      "case_id": "hg-30aea28606de",
+      "status": "sealed",
+      "consensus_band": "pass",
+      "integrity_errors": []
+    },
+    {
+      "case_id": "hg-3ecb8be8ce24",
+      "status": "sealed",
+      "consensus_band": "pass",
+      "integrity_errors": []
+    },
+    {
+      "case_id": "hg-5544ec96cc77",
+      "status": "sealed",
+      "consensus_band": "acceptable_with_issues",
+      "integrity_errors": []
+    },
+    {
+      "case_id": "hg-635bcdb02948",
+      "status": "sealed",
+      "consensus_band": "pass",
+      "integrity_errors": []
+    },
+    {
+      "case_id": "hg-71308efe32e3",
+      "status": "sealed",
+      "consensus_band": "pass",
+      "integrity_errors": []
+    },
+    {
+      "case_id": "hg-92e15fd8d24e",
+      "status": "sealed",
+      "consensus_band": "pass",
+      "integrity_errors": []
+    },
+    {
+      "case_id": "hg-97ddff2ded8f",
+      "status": "sealed",
+      "consensus_band": "reject",
+      "integrity_errors": []
+    },
+    {
+      "case_id": "hg-a176a3ec4dd0",
+      "status": "sealed",
+      "consensus_band": "reject",
+      "integrity_errors": []
+    },
+    {
+      "case_id": "hg-a3c24fe67f40",
+      "status": "sealed",
+      "consensus_band": "pass",
+      "integrity_errors": []
+    },
+    {
+      "case_id": "hg-b7422994fb17",
+      "status": "sealed",
+      "consensus_band": "pass",
+      "integrity_errors": []
+    },
+    {
+      "case_id": "hg-bb5545c4ae6c",
+      "status": "sealed",
+      "consensus_band": "pass",
+      "integrity_errors": []
+    },
+    {
+      "case_id": "hg-bc82c5c30eff",
+      "status": "sealed",
+      "consensus_band": "acceptable_with_issues",
+      "integrity_errors": []
+    },
+    {
+      "case_id": "hg-cab7f02b64a4",
+      "status": "sealed",
+      "consensus_band": "pass",
+      "integrity_errors": []
+    },
+    {
+      "case_id": "hg-cd9869e37166",
+      "status": "sealed",
+      "consensus_band": "reject",
+      "integrity_errors": []
+    },
+    {
+      "case_id": "hg-d80a942b117e",
+      "status": "sealed",
+      "consensus_band": "pass",
+      "integrity_errors": []
+    },
+    {
+      "case_id": "hg-db583965e761",
+      "status": "sealed",
+      "consensus_band": "pass",
+      "integrity_errors": []
+    },
+    {
+      "case_id": "hg-e7b2a20acfd5",
+      "status": "sealed",
+      "consensus_band": "reject",
+      "integrity_errors": []
+    }
+  ]
+}

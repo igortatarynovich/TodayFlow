@@ -1,0 +1,258 @@
+{
+  "export_kind": "blind_human_review_c362",
+  "case_id": "hg-17f37590abe1",
+  "scenario_id": "hg-17f37590abe1",
+  "scenario_hash": "sha256:7bec1e86a807896103fed2ba65db7c4a0f13ba07b39bcdc18d911e92b00b4bf2",
+  "locale": "en",
+  "profile_type": "curated_demand_clarity",
+  "evidence_depth": "deep_personalized",
+  "source_type": "curated",
+  "rubric_version": "day_scenario_human_review_rubric_c362.1",
+  "golden_contract_version": "day_scenario_human_golden_c362",
+  "defect_catalog_version": "gate_rules_c36.42",
+  "review_protocol_version": "day_scenario_review_protocol_c362.1",
+  "scenario_contract_version": "day_scenario_native_llm_c1",
+  "defect_codes_for_labeling": [
+    "AFFIRMATION_UNNATURAL",
+    "ASTRO_JARGON_BARE",
+    "BUREAUCRATIC",
+    "CATEGORICAL_PROMISE",
+    "CHORUS_NATAL_WITHOUT_EVIDENCE",
+    "CHORUS_PARALLEL_ECHO",
+    "CHORUS_PARALLEL_FORECAST",
+    "CHORUS_ROLE_DRIFT",
+    "CHORUS_SEMANTIC_DUPLICATION",
+    "CHORUS_UNTRANSLATED_JARGON",
+    "CLOSURE_AFFIRMATION_ECHO",
+    "CLOSURE_MISSING",
+    "CLOSURE_NEW_FORECAST",
+    "CLOSURE_NO_CONFLICT_CALLBACK",
+    "CLOSURE_WELLNESS_MUSH",
+    "LOCALE_LANGUAGE_MISMATCH",
+    "NATAL_WITHOUT_EVIDENCE",
+    "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE",
+    "PERSONALIZATION_CONFLICT_UNCHANGED",
+    "PERSONALIZATION_DECORATIVE_ONLY",
+    "PERSONALIZATION_DEPTH_OVERREACH",
+    "PERSONALIZATION_EVIDENCE_ORPHAN",
+    "PERSONALIZATION_GENERIC_ACTION",
+    "PERSONALIZATION_NATAL_OVERCLAIM",
+    "PERSONALIZATION_PROFILE_FACT_LEAK",
+    "PERSONALIZATION_SCENES_UNCHANGED",
+    "PERSONALIZATION_SPHERE_CROSS_PROFILE",
+    "PERSONALIZATION_SPHERE_OUTSIDE_PACK",
+    "PERSONALIZATION_SPHERE_SELECTION_EMPTY",
+    "PERSONALIZATION_SPHERE_UNJUSTIFIED",
+    "PROVENANCE_ACTION_NOT_DERIVED",
+    "PROVENANCE_PROP_NOT_DERIVED",
+    "PROVENANCE_REF_MISSING",
+    "PROVENANCE_REF_ORPHAN",
+    "PROVENANCE_WRONG_PROFILE",
+    "PSEUDO_DIAGNOSIS",
+    "SCENE_ABSTRACT",
+    "SCENE_CLONE",
+    "SCENE_MISSING_CHOICE",
+    "SCENE_MISSING_EVERYDAY",
+    "SCENE_UNIVERSAL_ADVICE",
+    "THESIS_ECHO"
+  ],
+  "scenario": {
+    "schema_version": "day_scenario_native_llm_c1",
+    "personalization_depth": "deep_personalized",
+    "personalization": {
+      "depth": "deep_personalized",
+      "pack_confidence": null,
+      "downgraded_from": null,
+      "downgrade_reason": null
+    },
+    "interpretive_chorus": {
+      "astrology": [
+        {
+          "named_factor": "Uranus aspect to Sun",
+          "human_meaning": "Emotional subtext becomes louder than direct words.",
+          "link_to_conflict": "That is why the conflict “Autonomy versus agreement · 12” asks for one clear side.",
+          "conflict_id": "conflict.autonomy-versus-agreement-12",
+          "archetype_role": "",
+          "tempo": "",
+          "style": "",
+          "evidence_refs": [
+            "sky-factor"
+          ]
+        }
+      ],
+      "day_card": {
+        "named_factor": "Day card — Strength",
+        "human_meaning": "",
+        "link_to_conflict": "The card names the reaction style for the same choice.",
+        "conflict_id": "conflict.autonomy-versus-agreement-12",
+        "archetype_role": "Archetype of how to meet the day's conflict.",
+        "tempo": "",
+        "style": "",
+        "evidence_refs": [
+          "day_card"
+        ]
+      },
+      "day_number": {
+        "named_factor": "Day number — 8",
+        "human_meaning": "",
+        "link_to_conflict": "The number sets the tempo through the conflict.",
+        "conflict_id": "conflict.autonomy-versus-agreement-12",
+        "archetype_role": "",
+        "tempo": "one short step",
+        "style": "without rush",
+        "evidence_refs": [
+          "day_number"
+        ]
+      },
+      "natal": [
+        {
+          "named_factor": "over_control",
+          "human_meaning": "Personal habit pulls toward force A in the same conflict.",
+          "link_to_conflict": "That is why conflict “Autonomy versus agreement · 12” needs force B.",
+          "conflict_id": "conflict.autonomy-versus-agreement-12",
+          "archetype_role": "",
+          "tempo": "",
+          "style": "",
+          "evidence_refs": [
+            "claim.personal.mars1.direct"
+          ]
+        }
+      ]
+    },
+    "conflict": {
+      "title": "Autonomy versus agreement · 12",
+      "thesis": "Today it matters more to pick a side: Autonomy versus agreement · 12.",
+      "force_a": "push for clarity",
+      "force_b": "one question before answering",
+      "why_today": "Uranus aspect to Sun amplifies the day's theme.",
+      "why_personal": "",
+      "driver_refs": [
+        "sky-factor"
+      ],
+      "evidence_refs": [
+        "sky-factor"
+      ],
+      "personalization": {
+        "personalization_level": "deep_personalized",
+        "personalization_reason": "over_control",
+        "personalization_evidence_refs": [
+          "claim.personal.mars1.direct"
+        ],
+        "general_fallback_available": true,
+        "habitual_force": "a",
+        "required_movement": "b",
+        "response_pattern": "",
+        "compensating_for": "",
+        "trap_pattern": "",
+        "sphere_reason": ""
+      }
+    },
+    "scenes": [
+      {
+        "scene_id": "scene.relationships",
+        "sphere": "relationships",
+        "role_in_story": "primary",
+        "setup": "Take a pause and trust the process.",
+        "opportunity": "Listen to yourself.",
+        "trap": "Trust the process without a concrete step.",
+        "recommended_action": "Don't rush and stay in the moment.",
+        "avoid_action": "Avoid conflict and find balance.",
+        "everyday_example": "Find balance and be mindful today.",
+        "evidence_refs": [
+          "sky-factor"
+        ],
+        "chorus_refs": [
+          "conflict",
+          "day_card"
+        ],
+        "personalization": {
+          "personalization_level": "general",
+          "personalization_reason": "",
+          "personalization_evidence_refs": [],
+          "general_fallback_available": true,
+          "habitual_force": "",
+          "required_movement": "",
+          "response_pattern": "",
+          "compensating_for": "",
+          "trap_pattern": "",
+          "sphere_reason": ""
+        }
+      },
+      {
+        "scene_id": "scene.work_decisions",
+        "sphere": "work_decisions",
+        "role_in_story": "support",
+        "setup": "A manager switches your priority without your ok. (day 12)",
+        "opportunity": "Come back with an exact reply time.",
+        "trap": "Turn clarity into pressure.",
+        "recommended_action": "Ask one question before answering; do not decide for them (day 12).",
+        "avoid_action": "Do not react before reading.",
+        "everyday_example": "Slack 10:05: “we’re switching to X”.",
+        "evidence_refs": [
+          "sky-factor",
+          "claim.personal.mars1.direct",
+          "claim.personal.sat.overload"
+        ],
+        "chorus_refs": [
+          "conflict",
+          "astrology"
+        ],
+        "personalization": {
+          "personalization_level": "deep_personalized",
+          "personalization_reason": "work_decisions",
+          "personalization_evidence_refs": [
+            "claim.personal.sat.overload"
+          ],
+          "general_fallback_available": true,
+          "habitual_force": "",
+          "required_movement": "",
+          "response_pattern": "over_control",
+          "compensating_for": "",
+          "trap_pattern": "",
+          "sphere_reason": "over_control"
+        }
+      }
+    ],
+    "prop_material": {
+      "color_scene_candidates": [
+        "scene.work_decisions"
+      ],
+      "avoid_color_trigger": "",
+      "goal_candidates": [],
+      "affirmation_tension": {
+        "scene_id": "scene.work_decisions",
+        "trap": "smooth",
+        "text": "I can choose clarity without pressure (day 12)."
+      },
+      "humor_setup": null
+    },
+    "generation_notes": "",
+    "day_closure": {
+      "resolution": "By evening you chose one clear side of “Autonomy versus agreement · 12” (day 12).",
+      "remaining_tension": "A mild pull toward the habitual force remains.",
+      "evening_state": "Quieter contact without false harmony.",
+      "conflict_callback": "The conflict “Autonomy versus agreement · 12” closed through one concrete reply."
+    }
+  },
+  "instructions": {
+    "overall_band": [
+      "acceptable_with_issues",
+      "cannot_assess",
+      "pass",
+      "reject"
+    ],
+    "defect_presence": [
+      "absent",
+      "not_applicable",
+      "present",
+      "uncertain"
+    ],
+    "severity": [
+      "minor",
+      "material",
+      "severe"
+    ],
+    "blind": true,
+    "do_not_infer_from_filename": true
+  }
+}

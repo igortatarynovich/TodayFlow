@@ -1,0 +1,262 @@
+{
+  "export_kind": "blind_human_review_c362",
+  "case_id": "hg-cd9869e37166",
+  "scenario_id": "hg-cd9869e37166",
+  "scenario_hash": "sha256:2900413174845a483dae8540fe39f610ae0127db7891deba15cf57502e90fad3",
+  "locale": "en",
+  "profile_type": "curated_smooth_conflict",
+  "evidence_depth": "deep_personalized",
+  "source_type": "curated",
+  "rubric_version": "day_scenario_human_review_rubric_c362.1",
+  "golden_contract_version": "day_scenario_human_golden_c362",
+  "defect_catalog_version": "gate_rules_c36.42",
+  "review_protocol_version": "day_scenario_review_protocol_c362.1",
+  "scenario_contract_version": "day_scenario_native_llm_c1",
+  "defect_codes_for_labeling": [
+    "AFFIRMATION_UNNATURAL",
+    "ASTRO_JARGON_BARE",
+    "BUREAUCRATIC",
+    "CATEGORICAL_PROMISE",
+    "CHORUS_NATAL_WITHOUT_EVIDENCE",
+    "CHORUS_PARALLEL_ECHO",
+    "CHORUS_PARALLEL_FORECAST",
+    "CHORUS_ROLE_DRIFT",
+    "CHORUS_SEMANTIC_DUPLICATION",
+    "CHORUS_UNTRANSLATED_JARGON",
+    "CLOSURE_AFFIRMATION_ECHO",
+    "CLOSURE_MISSING",
+    "CLOSURE_NEW_FORECAST",
+    "CLOSURE_NO_CONFLICT_CALLBACK",
+    "CLOSURE_WELLNESS_MUSH",
+    "LOCALE_LANGUAGE_MISMATCH",
+    "NATAL_WITHOUT_EVIDENCE",
+    "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE",
+    "PERSONALIZATION_CONFLICT_UNCHANGED",
+    "PERSONALIZATION_DECORATIVE_ONLY",
+    "PERSONALIZATION_DEPTH_OVERREACH",
+    "PERSONALIZATION_EVIDENCE_ORPHAN",
+    "PERSONALIZATION_GENERIC_ACTION",
+    "PERSONALIZATION_NATAL_OVERCLAIM",
+    "PERSONALIZATION_PROFILE_FACT_LEAK",
+    "PERSONALIZATION_SCENES_UNCHANGED",
+    "PERSONALIZATION_SPHERE_CROSS_PROFILE",
+    "PERSONALIZATION_SPHERE_OUTSIDE_PACK",
+    "PERSONALIZATION_SPHERE_SELECTION_EMPTY",
+    "PERSONALIZATION_SPHERE_UNJUSTIFIED",
+    "PROVENANCE_ACTION_NOT_DERIVED",
+    "PROVENANCE_PROP_NOT_DERIVED",
+    "PROVENANCE_REF_MISSING",
+    "PROVENANCE_REF_ORPHAN",
+    "PROVENANCE_WRONG_PROFILE",
+    "PSEUDO_DIAGNOSIS",
+    "SCENE_ABSTRACT",
+    "SCENE_CLONE",
+    "SCENE_MISSING_CHOICE",
+    "SCENE_MISSING_EVERYDAY",
+    "SCENE_UNIVERSAL_ADVICE",
+    "THESIS_ECHO"
+  ],
+  "scenario": {
+    "schema_version": "day_scenario_native_llm_c1",
+    "personalization_depth": "deep_personalized",
+    "personalization": {
+      "depth": "deep_personalized",
+      "pack_confidence": null,
+      "downgraded_from": null,
+      "downgrade_reason": null
+    },
+    "interpretive_chorus": {
+      "astrology": [
+        {
+          "named_factor": "Mars in Aries",
+          "human_meaning": "Emotional subtext becomes louder than direct words.",
+          "link_to_conflict": "That is why the conflict “Action versus delay · 11” asks for one clear side.",
+          "conflict_id": "conflict.action-versus-delay-11",
+          "archetype_role": "",
+          "tempo": "",
+          "style": "",
+          "evidence_refs": [
+            "sky-factor"
+          ]
+        }
+      ],
+      "day_card": {
+        "named_factor": "Day card — The Chariot",
+        "human_meaning": "",
+        "link_to_conflict": "The card names the reaction style for the same choice.",
+        "conflict_id": "conflict.action-versus-delay-11",
+        "archetype_role": "Archetype of how to meet the day's conflict.",
+        "tempo": "",
+        "style": "",
+        "evidence_refs": [
+          "day_card"
+        ]
+      },
+      "day_number": {
+        "named_factor": "Day number — 1",
+        "human_meaning": "",
+        "link_to_conflict": "The number sets the tempo through the conflict.",
+        "conflict_id": "conflict.action-versus-delay-11",
+        "archetype_role": "",
+        "tempo": "understand first",
+        "style": "without rush",
+        "evidence_refs": [
+          "day_number"
+        ]
+      },
+      "natal": [
+        {
+          "named_factor": "smooth_conflict",
+          "human_meaning": "Personal habit pulls toward force A in the same conflict.",
+          "link_to_conflict": "That is why conflict “Action versus delay · 11” needs force B.",
+          "conflict_id": "conflict.action-versus-delay-11",
+          "archetype_role": "",
+          "tempo": "",
+          "style": "",
+          "evidence_refs": [
+            "claim.personal.moon7.smooth"
+          ]
+        }
+      ]
+    },
+    "conflict": {
+      "title": "Action versus delay · 11",
+      "thesis": "Today it matters more to pick a side: Action versus delay · 11.",
+      "force_a": "smooth for quiet",
+      "force_b": "say it short and honest",
+      "why_today": "Mars in Aries amplifies the day's theme.",
+      "why_personal": "",
+      "driver_refs": [
+        "sky-factor"
+      ],
+      "evidence_refs": [
+        "sky-factor"
+      ],
+      "personalization": {
+        "personalization_level": "deep_personalized",
+        "personalization_reason": "smooth_conflict",
+        "personalization_evidence_refs": [
+          "claim.personal.moon7.smooth"
+        ],
+        "general_fallback_available": true,
+        "habitual_force": "a",
+        "required_movement": "b",
+        "response_pattern": "",
+        "compensating_for": "",
+        "trap_pattern": "",
+        "sphere_reason": ""
+      }
+    },
+    "scenes": [
+      {
+        "scene_id": "scene.relationships",
+        "sphere": "relationships",
+        "role_in_story": "primary",
+        "setup": "A partner waits on an invite reply while you reopen the thread without sending. (day 11)",
+        "opportunity": "Name one fact in a short message.",
+        "trap": "Agree for quiet and resent it later.",
+        "recommended_action": "Send one concrete sentence instead of silence (day 11).",
+        "avoid_action": "Do not reply with automatic “I'm fine”.",
+        "everyday_example": "Draft reply sitting since 15:10.",
+        "evidence_refs": [
+          "sky-factor",
+          "claim.personal.moon7.smooth",
+          "claim.personal.venus.reject"
+        ],
+        "chorus_refs": [
+          "conflict",
+          "day_card"
+        ],
+        "personalization": {
+          "personalization_level": "deep_personalized",
+          "personalization_reason": "relationships",
+          "personalization_evidence_refs": [
+            "claim.personal.venus.reject"
+          ],
+          "general_fallback_available": true,
+          "habitual_force": "",
+          "required_movement": "",
+          "response_pattern": "smooth_conflict",
+          "compensating_for": "",
+          "trap_pattern": "",
+          "sphere_reason": "smooth_conflict"
+        }
+      },
+      {
+        "scene_id": "scene.communication",
+        "sphere": "communication",
+        "role_in_story": "primary",
+        "setup": "A partner waits on an invite reply while you reopen the thread without sending. (day 11)",
+        "opportunity": "Name one fact in a short message.",
+        "trap": "Agree for quiet and resent it later.",
+        "recommended_action": "Send one concrete sentence instead of silence (day 11).",
+        "avoid_action": "Do not reply with automatic “I'm fine”.",
+        "everyday_example": "Draft reply sitting since 15:10.",
+        "evidence_refs": [
+          "sky-factor",
+          "claim.personal.moon7.smooth",
+          "claim.personal.venus.reject"
+        ],
+        "chorus_refs": [
+          "conflict",
+          "day_card"
+        ],
+        "personalization": {
+          "personalization_level": "deep_personalized",
+          "personalization_reason": "relationships",
+          "personalization_evidence_refs": [
+            "claim.personal.venus.reject"
+          ],
+          "general_fallback_available": true,
+          "habitual_force": "",
+          "required_movement": "",
+          "response_pattern": "smooth_conflict",
+          "compensating_for": "",
+          "trap_pattern": "",
+          "sphere_reason": "smooth_conflict"
+        }
+      }
+    ],
+    "prop_material": {
+      "color_scene_candidates": [
+        "scene.relationships"
+      ],
+      "avoid_color_trigger": "",
+      "goal_candidates": [],
+      "affirmation_tension": {
+        "scene_id": "scene.relationships",
+        "trap": "smooth",
+        "text": "I can choose clarity without pressure (day 11)."
+      },
+      "humor_setup": null
+    },
+    "generation_notes": "",
+    "day_closure": {
+      "resolution": "By evening you chose one clear side of “Action versus delay · 11” (day 11).",
+      "remaining_tension": "A mild pull toward the habitual force remains.",
+      "evening_state": "Quieter contact without false harmony.",
+      "conflict_callback": "The conflict “Action versus delay · 11” closed through one concrete reply."
+    }
+  },
+  "instructions": {
+    "overall_band": [
+      "acceptable_with_issues",
+      "cannot_assess",
+      "pass",
+      "reject"
+    ],
+    "defect_presence": [
+      "absent",
+      "not_applicable",
+      "present",
+      "uncertain"
+    ],
+    "severity": [
+      "minor",
+      "material",
+      "severe"
+    ],
+    "blind": true,
+    "do_not_infer_from_filename": true
+  }
+}
