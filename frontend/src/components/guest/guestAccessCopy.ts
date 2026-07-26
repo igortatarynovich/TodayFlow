@@ -7,6 +7,9 @@ export const GUEST_ACCESS_COPY = {
   compatLimitBody: `Без регистрации — ${GUEST_ACCESS_LIMITS.compatibilityChecks} проверки совместимости. Создай Today, чтобы сохранять пары и возвращаться к ним.`,
   practiceLockedTitle: "Эта практика — после регистрации",
   practiceLockedBody: "Без аккаунта доступны базовые бесплатные практики. Создай Today — персональные рекомендации откроются вместе с экраном дня.",
+  sessionEndedCta: "Войти снова",
+  sessionEndedBody: (fallback: string) =>
+    `Сессия завершилась. Войди снова — твой профиль и прогресс уже сохранены. ${fallback}`,
   remainingTarot: (n: number) =>
     n === 1 ? "1 бесплатный расклад" : n === 0 ? "Бесплатный расклад использован" : `${n} бесплатных расклада`,
   remainingCompat: (n: number) =>

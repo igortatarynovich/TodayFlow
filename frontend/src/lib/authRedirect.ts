@@ -56,6 +56,18 @@ export function resolvePostCoreAuthTarget(): string {
   return "/profile";
 }
 
+/** Birth facts / astro id already on the account — do not force core setup again. */
+export function hasUsableCoreProfileBase(coreProfile: {
+  is_ready?: boolean;
+  astro?: { profile_id?: number | null; birth_date?: string | null } | null;
+} | null | undefined): boolean {
+  if (!coreProfile) return false;
+  if (coreProfile.is_ready) return true;
+  if (coreProfile.astro?.profile_id) return true;
+  const birth = coreProfile.astro?.birth_date;
+  return typeof birth === "string" && Boolean(birth.trim());
+}
+
 export async function resolvePostAuthTarget(explicitRedirect?: string | null): Promise<string> {
   const safeRedirect = getSafeRedirectTarget(explicitRedirect);
   if (safeRedirect !== "/profile" && safeRedirect !== ONBOARDING_CORE_PATH) {
@@ -64,10 +76,11 @@ export async function resolvePostAuthTarget(explicitRedirect?: string | null): P
 
   try {
     const coreProfile = await fetchCoreProfileCached();
-    if (!coreProfile?.is_ready) return ONBOARDING_CORE_PATH;
+    if (!hasUsableCoreProfileBase(coreProfile)) return ONBOARDING_CORE_PATH;
     return resolvePostCoreAuthTarget();
   } catch {
-    return ONBOARDING_CORE_PATH;
+    // Transient API failure must not look like "profile missing" — keep the session path.
+    return resolvePostCoreAuthTarget();
   }
 }
 

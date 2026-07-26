@@ -50,24 +50,32 @@ async function userAlreadyHasReadyProfile(): Promise<boolean> {
   return false;
 }
 
-async function claimDayProgressOnly(): Promise<ClaimGuestProfileResult> {
+async function claimDayProgressOnly(options?: {
+  /** Clear draft only when account already owns profile facts (avoid stale overwrite). */
+  clearDraftOnSuccess?: boolean;
+}): Promise<ClaimGuestProfileResult> {
+  const clearDraftOnSuccess = options?.clearDraftOnSuccess ?? false;
   try {
     const dayClaim = await claimGuestSessionAfterAuth({ redirectTarget: FIRST_TODAY_PATH });
     clearGuestClaimCredentials();
-    clearGuestProfileDraft();
-    if (dayClaim.claim_status === "completed" && dayClaim.transferred_blocks.length > 0) {
-      if (dayClaim.story_refresh_required) {
-        try {
-          await refreshTodayStory({ localDate: dayClaim.local_date });
-        } catch {
-          /* refresh is separate from claim */
-        }
+    if (dayClaim.claim_status === "completed") {
+      if (clearDraftOnSuccess || dayClaim.transferred_blocks.length > 0) {
+        clearGuestProfileDraft();
       }
-      return {
-        status: "ready",
-        profilePath: dayClaim.redirect_target || FIRST_TODAY_PATH,
-        storyRefreshRequired: dayClaim.story_refresh_required,
-      };
+      if (dayClaim.transferred_blocks.length > 0) {
+        if (dayClaim.story_refresh_required) {
+          try {
+            await refreshTodayStory({ localDate: dayClaim.local_date });
+          } catch {
+            /* refresh is separate from claim */
+          }
+        }
+        return {
+          status: "ready",
+          profilePath: dayClaim.redirect_target || FIRST_TODAY_PATH,
+          storyRefreshRequired: dayClaim.story_refresh_required,
+        };
+      }
     }
   } catch {
     try {
@@ -76,8 +84,8 @@ async function claimDayProgressOnly(): Promise<ClaimGuestProfileResult> {
     } catch {
       /* best-effort */
     }
+    // Keep guest draft on failure — otherwise Tarot/Today ask to recreate birth data.
     clearGuestClaimCredentials();
-    clearGuestProfileDraft();
   }
   return { status: "no_draft" };
 }
@@ -96,7 +104,7 @@ export async function claimGuestProfileAfterAuth(): Promise<ClaimGuestProfileRes
 
   // Existing account must not be silently overwritten by a stale guest draft.
   if (await userAlreadyHasReadyProfile()) {
-    return claimDayProgressOnly();
+    return claimDayProgressOnly({ clearDraftOnSuccess: true });
   }
 
   // Ensure server has latest guest progress + claim token before atomic claim.

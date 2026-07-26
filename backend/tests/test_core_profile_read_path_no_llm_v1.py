@@ -77,6 +77,44 @@ def test_build_cached_or_baseline_never_calls_portrait(
     assert payload.get("numerology") is not None or payload.get("astro") is not None
 
 
+def test_read_path_is_ready_uses_hard_fields_only(
+    db_session: Session, user_with_birth: db_models.User
+) -> None:
+    """Shell readiness must match publish: soft missing fields must not force setup again."""
+    settings = (
+        db_session.query(db_models.UserSettings)
+        .filter(db_models.UserSettings.user_id == user_with_birth.id)
+        .one()
+    )
+    # Soft gaps that previously made shell is_ready=false despite birth + life path.
+    settings.first_name = None
+    settings.gender = None
+    db_session.add(
+        db_models.NumerologyProfileRecord(
+            user_id=user_with_birth.id,
+            locale="ru",
+            full_name="Anna",
+            birth_date=date(1990, 5, 15),
+            data={"life_path": {"reduced_value": 7}},
+        )
+    )
+    db_session.commit()
+
+    service = CoreProfileService()
+    with patch(
+        "todayflow_backend.services.core_profile.build_profile_portrait_v1",
+        side_effect=AssertionError("portrait LLM must not run"),
+    ):
+        payload = service.build_cached_or_baseline(db_session, user_with_birth)
+
+    assert payload.get("astro", {}).get("birth_date")
+    assert payload.get("numerology", {}).get("life_path") == 7
+    assert payload["is_ready"] is True
+    assert "first_name" in payload["missing_fields"]
+    assert "gender" in payload["missing_fields"]
+    assert "astro_birth_time" in payload["missing_fields"]
+
+
 def test_publish_portrait_calls_llm(db_session: Session, user_with_birth: db_models.User) -> None:
     service = CoreProfileService()
     service.reset_llm_call_counter()

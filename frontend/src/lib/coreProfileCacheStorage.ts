@@ -19,10 +19,18 @@ type CachedEnvelope = {
   profile: CoreProfile;
 };
 
-export function cacheKeyForCoreProfile(astroProfileId: number | null | undefined): string {
-  const scope = resolveCacheUserScope();
+export function cacheKeyForCoreProfile(
+  astroProfileId: number | null | undefined,
+  scope = resolveCacheUserScope(),
+): string {
   if (astroProfileId == null) return `${PREFIX}:${scope}:default`;
   return `${PREFIX}:${scope}:astro:${astroProfileId}`;
+}
+
+/** After login, scope may flip `u:pending` → `u:{id}`; read/write both like natal preview. */
+function candidateKeys(astroProfileId?: number | null): string[] {
+  const scopes = new Set<string>([resolveCacheUserScope(), "u:pending"]);
+  return Array.from(scopes).map((scope) => cacheKeyForCoreProfile(astroProfileId ?? null, scope));
 }
 
 function isPlausibleCoreProfile(value: unknown): value is CoreProfile {
@@ -82,26 +90,30 @@ export function resolveCoreProfileAgainstSessionCache(
 }
 
 export function readCoreProfileFromCache(astroProfileId?: number | null): CoreProfile | null {
-  const env = readEnvelope(cacheKeyForCoreProfile(astroProfileId ?? null));
-  if (!env) return null;
-  if (Date.now() - env.savedAt > CORE_PROFILE_CACHE_MAX_AGE_MS) {
-    return null;
+  let best: CachedEnvelope | null = null;
+  for (const key of candidateKeys(astroProfileId)) {
+    const env = readEnvelope(key);
+    if (!env) continue;
+    if (Date.now() - env.savedAt > CORE_PROFILE_CACHE_MAX_AGE_MS) continue;
+    if (!best || env.savedAt > best.savedAt) best = env;
   }
-  return env.profile;
+  return best?.profile ?? null;
 }
 
 export function writeCoreProfileToCache(profile: CoreProfile, astroProfileId?: number | null): void {
   if (typeof window === "undefined") return;
-  const key = cacheKeyForCoreProfile(astroProfileId ?? null);
   const envelope: CachedEnvelope = { savedAt: Date.now(), profile };
-  try {
-    localStorage.setItem(key, JSON.stringify(envelope));
-  } catch {
-    /* quota / private mode — fall back to session */
+  const raw = JSON.stringify(envelope);
+  for (const key of candidateKeys(astroProfileId ?? null)) {
     try {
-      sessionStorage.setItem(key, JSON.stringify(envelope));
+      localStorage.setItem(key, raw);
     } catch {
-      /* ignore */
+      /* quota / private mode — fall back to session */
+      try {
+        sessionStorage.setItem(key, raw);
+      } catch {
+        /* ignore */
+      }
     }
   }
 }
