@@ -1,22 +1,24 @@
 # Day Scenario Eval Golden Set C3.5c
 
-**Status:** SCAFFOLD ONLY — **0 labeled cases**  
+**Status:** BOOTSTRAP SEEDED — synthetic provisional labels; **0 human-labeled cases**  
 **Date:** 2026-07-26  
-**Depends on:** C3.5.1 hardening ([DAY_SCENARIO_EVAL_HARDENING_C351.md](./DAY_SCENARIO_EVAL_HARDENING_C351.md))
+**Depends on:** C3.5.1 hardening · C3.6.1 calibration ([DAY_SCENARIO_GATE_CALIBRATION_C361.md](./DAY_SCENARIO_GATE_CALIBRATION_C361.md))
 
 ## Purpose
 
-Human-labeled cases to calibrate provisional thresholds and validate defect codes against real (or curated) natives — **after** synthetic C3.5.1 matrix.
+Human-labeled cases to calibrate provisional thresholds and validate defect codes —
+**after** synthetic C3.5.1 matrix and C3.6.1 bootstrap metrics.
 
 ## Schema (per case)
 
 ```yaml
-case_id: string          # stable id, e.g. gs-c35c-001
+case_id: string          # stable id, e.g. gs-c35c-001 or gs-c361-*
 locale: ru | en
 profile_id: string       # one of PROFILE_IDS or free-form capture tag
 day_type: string | null  # optional DAY_TYPES label
 source: synthetic | capture | curated
-native_ref: string       # path or capture id (do not inline PII)
+label_source: synthetic_bootstrap | human
+native_ref: string       # path, factory id, or capture id (do not inline PII)
 expected:
   band: reject | review | pass
   primary_defects: [string]   # defect codes expected present (may be empty for pass)
@@ -31,22 +33,47 @@ labeled_at: YYYY-MM-DD | null
 
 ## Cases
 
+### A. Synthetic bootstrap (C3.6.1) — provisional, not human consensus
+
+Loaded by `bootstrap_golden_cases_c361()` — fixtures live in code, not PII.
+
+| case_id | locale | profile_id | source | label_source | consensus_band | primary_defects (provisional) |
+|---------|--------|------------|--------|--------------|----------------|-------------------------------|
+| gs-c361-good-ru | ru | smooth_conflict | synthetic | synthetic_bootstrap | pass | — |
+| gs-c361-good-en | en | smooth_conflict | synthetic | synthetic_bootstrap | pass | — |
+| gs-c361-neg-abstract-ru | ru | smooth_conflict | synthetic | synthetic_bootstrap | reject | SCENE_ABSTRACT, SCENE_UNIVERSAL_ADVICE |
+| gs-c361-neg-clone-ru | ru | smooth_conflict | synthetic | synthetic_bootstrap | reject | SCENE_CLONE |
+| gs-c361-neg-parallel-ru | ru | smooth_conflict | synthetic | synthetic_bootstrap | reject | CHORUS_PARALLEL_FORECAST |
+| gs-c361-neg-closure-missing-ru | ru | smooth_conflict | synthetic | synthetic_bootstrap | reject | CLOSURE_MISSING |
+| gs-c361-neg-closure-mush-ru | ru | smooth_conflict | synthetic | synthetic_bootstrap | reject | CLOSURE_WELLNESS_MUSH |
+| gs-c361-neg-conflict-ru | ru | smooth_conflict | synthetic | synthetic_bootstrap | reject | CONFLICT_NO_OPPOSITION |
+| gs-c361-neg-provenance-ru | ru | smooth_conflict | synthetic | synthetic_bootstrap | reject | PROVENANCE_REF_MISSING |
+| gs-c361-neg-locale-en | en | smooth_conflict | synthetic | synthetic_bootstrap | reject | LOCALE_LANGUAGE_MISMATCH |
+| gs-c361-neg-locale-ru | ru | smooth_conflict | synthetic | synthetic_bootstrap | reject | LOCALE_LANGUAGE_MISMATCH |
+| gs-c361-mut-universal-en | en | smooth_conflict | synthetic | synthetic_bootstrap | reject | SCENE_UNIVERSAL_ADVICE, SCENE_ABSTRACT |
+| gs-c361-mut-clone-ru | ru | smooth_conflict | synthetic | synthetic_bootstrap | reject | SCENE_CLONE |
+| gs-c361-mut-drop-closure-en | en | smooth_conflict | synthetic | synthetic_bootstrap | reject | CLOSURE_MISSING |
+
+Metrics snapshot: [DAY_SCENARIO_GATE_CALIBRATION_BASELINE_C361.md](./DAY_SCENARIO_GATE_CALIBRATION_BASELINE_C361.md)
+
+### B. Human-labeled
+
 _None yet._
 
 | case_id | locale | profile_id | source | consensus_band | labeled_at |
 |---------|--------|------------|--------|----------------|------------|
 | — | — | — | — | — | — |
 
-## Threshold calibration target
+## Next
 
-After ≥N labeled cases (product decides N):
+**C3.6.2 — Human Golden Set and Review Protocol**
 
-1. Compare pack cell bands vs consensus.  
-2. Adjust `THRESHOLDS_PROVISIONAL` / `PACK_PASS_THRESHOLD` only with Architecture impact.  
-3. Feed defect frequency into live-shadow review.
+Manual labeling + disagreement resolution among raters before any promotion.
+Synthetic bootstrap alone must not be treated as promotion evidence.
 
 ## Non-goals
 
 - Not a runtime SoT  
 - Not a substitute for Nebius live shadow  
-- No unlabeled bulk dumps in this file
+- No unlabeled bulk dumps in this file  
+- No automatic maturity promotion from synthetic labels

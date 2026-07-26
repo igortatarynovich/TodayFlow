@@ -1,0 +1,1214 @@
+{
+  "calibration_version": "c36.1",
+  "case_count": 14,
+  "locale_counts": {
+    "ru": 10,
+    "en": 4
+  },
+  "label_counts": {
+    "positive_primary_defect_cases": 12,
+    "negative_clean_cases": 2
+  },
+  "locales_present": [
+    "en",
+    "ru"
+  ],
+  "label_sources": [
+    "synthetic_bootstrap"
+  ],
+  "label_source_note": "synthetic_bootstrap only — not human/editor consensus; not authorization for maturity promotion",
+  "human_labels_complete": false,
+  "maturity_promotion_performed": false,
+  "runtime_unchanged": true,
+  "public_contract_unchanged": true,
+  "insufficient_support_codes": [
+    "CHORUS_PARALLEL_FORECAST",
+    "CHORUS_ROLE_DRIFT",
+    "CLOSURE_NO_CONFLICT_CALLBACK",
+    "CLOSURE_WELLNESS_MUSH",
+    "CONFLICT_NO_OPPOSITION",
+    "PERSONALIZATION_CONFLICT_UNCHANGED",
+    "PERSONALIZATION_DECORATIVE_ONLY",
+    "PERSONALIZATION_NATAL_OVERCLAIM",
+    "PERSONALIZATION_SCENES_UNCHANGED",
+    "PROVENANCE_REF_MISSING",
+    "THESIS_ECHO"
+  ],
+  "min_support": {
+    "positive": 2,
+    "negative": 2
+  },
+  "per_code": [
+    {
+      "code": "CHORUS_PARALLEL_FORECAST",
+      "family": "quality",
+      "maturity": "experimental",
+      "runtime_action": "score_only",
+      "is_unknown_code": false,
+      "support_positive": 1,
+      "support_negative": 13,
+      "true_positives": 1,
+      "false_positives": 0,
+      "true_negatives": 13,
+      "false_negatives": 0,
+      "precision": null,
+      "recall": null,
+      "false_positive_rate": null,
+      "metric_status": "insufficient_support",
+      "by_locale": {
+        "ru": {
+          "support_positive": 1,
+          "support_negative": 9,
+          "true_positives": 1,
+          "false_positives": 0,
+          "true_negatives": 9,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        },
+        "en": {
+          "support_positive": 0,
+          "support_negative": 4,
+          "true_positives": 0,
+          "false_positives": 0,
+          "true_negatives": 4,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        }
+      },
+      "shadow": {
+        "would_block_if_quality_promoted": 1,
+        "would_retry_if_quality_promoted": 0,
+        "false_blocks_against_labels": 0,
+        "true_blocks_against_labels": 1
+      },
+      "promotion_allowed_from_this_report": false
+    },
+    {
+      "code": "CHORUS_ROLE_DRIFT",
+      "family": "quality",
+      "maturity": "experimental",
+      "runtime_action": "score_only",
+      "is_unknown_code": false,
+      "support_positive": 0,
+      "support_negative": 14,
+      "true_positives": 0,
+      "false_positives": 1,
+      "true_negatives": 13,
+      "false_negatives": 0,
+      "precision": null,
+      "recall": null,
+      "false_positive_rate": null,
+      "metric_status": "insufficient_support",
+      "by_locale": {
+        "ru": {
+          "support_positive": 0,
+          "support_negative": 10,
+          "true_positives": 0,
+          "false_positives": 1,
+          "true_negatives": 9,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        },
+        "en": {
+          "support_positive": 0,
+          "support_negative": 4,
+          "true_positives": 0,
+          "false_positives": 0,
+          "true_negatives": 4,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        }
+      },
+      "shadow": {
+        "would_block_if_quality_promoted": 0,
+        "would_retry_if_quality_promoted": 0,
+        "false_blocks_against_labels": 0,
+        "true_blocks_against_labels": 0
+      },
+      "promotion_allowed_from_this_report": false
+    },
+    {
+      "code": "CLOSURE_MISSING",
+      "family": "quality",
+      "maturity": "experimental",
+      "runtime_action": "score_only",
+      "is_unknown_code": false,
+      "support_positive": 2,
+      "support_negative": 12,
+      "true_positives": 2,
+      "false_positives": 0,
+      "true_negatives": 12,
+      "false_negatives": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "false_positive_rate": 0.0,
+      "metric_status": "measured",
+      "by_locale": {
+        "ru": {
+          "support_positive": 1,
+          "support_negative": 9,
+          "true_positives": 1,
+          "false_positives": 0,
+          "true_negatives": 9,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        },
+        "en": {
+          "support_positive": 1,
+          "support_negative": 3,
+          "true_positives": 1,
+          "false_positives": 0,
+          "true_negatives": 3,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        }
+      },
+      "shadow": {
+        "would_block_if_quality_promoted": 2,
+        "would_retry_if_quality_promoted": 0,
+        "false_blocks_against_labels": 0,
+        "true_blocks_against_labels": 2
+      },
+      "promotion_allowed_from_this_report": false
+    },
+    {
+      "code": "CLOSURE_NO_CONFLICT_CALLBACK",
+      "family": "quality",
+      "maturity": "experimental",
+      "runtime_action": "score_only",
+      "is_unknown_code": false,
+      "support_positive": 0,
+      "support_negative": 14,
+      "true_positives": 0,
+      "false_positives": 1,
+      "true_negatives": 13,
+      "false_negatives": 0,
+      "precision": null,
+      "recall": null,
+      "false_positive_rate": null,
+      "metric_status": "insufficient_support",
+      "by_locale": {
+        "ru": {
+          "support_positive": 0,
+          "support_negative": 10,
+          "true_positives": 0,
+          "false_positives": 1,
+          "true_negatives": 9,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        },
+        "en": {
+          "support_positive": 0,
+          "support_negative": 4,
+          "true_positives": 0,
+          "false_positives": 0,
+          "true_negatives": 4,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        }
+      },
+      "shadow": {
+        "would_block_if_quality_promoted": 0,
+        "would_retry_if_quality_promoted": 0,
+        "false_blocks_against_labels": 0,
+        "true_blocks_against_labels": 0
+      },
+      "promotion_allowed_from_this_report": false
+    },
+    {
+      "code": "CLOSURE_WELLNESS_MUSH",
+      "family": "quality",
+      "maturity": "experimental",
+      "runtime_action": "score_only",
+      "is_unknown_code": false,
+      "support_positive": 1,
+      "support_negative": 13,
+      "true_positives": 1,
+      "false_positives": 0,
+      "true_negatives": 13,
+      "false_negatives": 0,
+      "precision": null,
+      "recall": null,
+      "false_positive_rate": null,
+      "metric_status": "insufficient_support",
+      "by_locale": {
+        "ru": {
+          "support_positive": 1,
+          "support_negative": 9,
+          "true_positives": 1,
+          "false_positives": 0,
+          "true_negatives": 9,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        },
+        "en": {
+          "support_positive": 0,
+          "support_negative": 4,
+          "true_positives": 0,
+          "false_positives": 0,
+          "true_negatives": 4,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        }
+      },
+      "shadow": {
+        "would_block_if_quality_promoted": 1,
+        "would_retry_if_quality_promoted": 0,
+        "false_blocks_against_labels": 0,
+        "true_blocks_against_labels": 1
+      },
+      "promotion_allowed_from_this_report": false
+    },
+    {
+      "code": "CONFLICT_NO_OPPOSITION",
+      "family": "quality",
+      "maturity": "experimental",
+      "runtime_action": "score_only",
+      "is_unknown_code": true,
+      "support_positive": 1,
+      "support_negative": 13,
+      "true_positives": 1,
+      "false_positives": 0,
+      "true_negatives": 13,
+      "false_negatives": 0,
+      "precision": null,
+      "recall": null,
+      "false_positive_rate": null,
+      "metric_status": "insufficient_support",
+      "by_locale": {
+        "ru": {
+          "support_positive": 1,
+          "support_negative": 9,
+          "true_positives": 1,
+          "false_positives": 0,
+          "true_negatives": 9,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        },
+        "en": {
+          "support_positive": 0,
+          "support_negative": 4,
+          "true_positives": 0,
+          "false_positives": 0,
+          "true_negatives": 4,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        }
+      },
+      "shadow": {
+        "would_block_if_quality_promoted": 1,
+        "would_retry_if_quality_promoted": 0,
+        "false_blocks_against_labels": 0,
+        "true_blocks_against_labels": 1
+      },
+      "promotion_allowed_from_this_report": false
+    },
+    {
+      "code": "LOCALE_LANGUAGE_MISMATCH",
+      "family": "quality",
+      "maturity": "experimental",
+      "runtime_action": "score_only",
+      "is_unknown_code": false,
+      "support_positive": 2,
+      "support_negative": 12,
+      "true_positives": 2,
+      "false_positives": 0,
+      "true_negatives": 12,
+      "false_negatives": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "false_positive_rate": 0.0,
+      "metric_status": "measured",
+      "by_locale": {
+        "ru": {
+          "support_positive": 1,
+          "support_negative": 9,
+          "true_positives": 1,
+          "false_positives": 0,
+          "true_negatives": 9,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        },
+        "en": {
+          "support_positive": 1,
+          "support_negative": 3,
+          "true_positives": 1,
+          "false_positives": 0,
+          "true_negatives": 3,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        }
+      },
+      "shadow": {
+        "would_block_if_quality_promoted": 2,
+        "would_retry_if_quality_promoted": 0,
+        "false_blocks_against_labels": 0,
+        "true_blocks_against_labels": 2
+      },
+      "promotion_allowed_from_this_report": false
+    },
+    {
+      "code": "PERSONALIZATION_CONFLICT_UNCHANGED",
+      "family": "quality",
+      "maturity": "advisory",
+      "runtime_action": "score_only",
+      "is_unknown_code": false,
+      "support_positive": 0,
+      "support_negative": 14,
+      "true_positives": 0,
+      "false_positives": 6,
+      "true_negatives": 8,
+      "false_negatives": 0,
+      "precision": null,
+      "recall": null,
+      "false_positive_rate": null,
+      "metric_status": "insufficient_support",
+      "by_locale": {
+        "ru": {
+          "support_positive": 0,
+          "support_negative": 10,
+          "true_positives": 0,
+          "false_positives": 3,
+          "true_negatives": 7,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        },
+        "en": {
+          "support_positive": 0,
+          "support_negative": 4,
+          "true_positives": 0,
+          "false_positives": 3,
+          "true_negatives": 1,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        }
+      },
+      "shadow": {
+        "would_block_if_quality_promoted": 2,
+        "would_retry_if_quality_promoted": 0,
+        "false_blocks_against_labels": 2,
+        "true_blocks_against_labels": 0
+      },
+      "promotion_allowed_from_this_report": false
+    },
+    {
+      "code": "PERSONALIZATION_DECORATIVE_ONLY",
+      "family": "quality",
+      "maturity": "advisory",
+      "runtime_action": "score_only",
+      "is_unknown_code": false,
+      "support_positive": 0,
+      "support_negative": 14,
+      "true_positives": 0,
+      "false_positives": 6,
+      "true_negatives": 8,
+      "false_negatives": 0,
+      "precision": null,
+      "recall": null,
+      "false_positive_rate": null,
+      "metric_status": "insufficient_support",
+      "by_locale": {
+        "ru": {
+          "support_positive": 0,
+          "support_negative": 10,
+          "true_positives": 0,
+          "false_positives": 3,
+          "true_negatives": 7,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        },
+        "en": {
+          "support_positive": 0,
+          "support_negative": 4,
+          "true_positives": 0,
+          "false_positives": 3,
+          "true_negatives": 1,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        }
+      },
+      "shadow": {
+        "would_block_if_quality_promoted": 2,
+        "would_retry_if_quality_promoted": 0,
+        "false_blocks_against_labels": 2,
+        "true_blocks_against_labels": 0
+      },
+      "promotion_allowed_from_this_report": false
+    },
+    {
+      "code": "PERSONALIZATION_NATAL_OVERCLAIM",
+      "family": "quality",
+      "maturity": "advisory",
+      "runtime_action": "score_only",
+      "is_unknown_code": false,
+      "support_positive": 0,
+      "support_negative": 14,
+      "true_positives": 0,
+      "false_positives": 8,
+      "true_negatives": 6,
+      "false_negatives": 0,
+      "precision": null,
+      "recall": null,
+      "false_positive_rate": null,
+      "metric_status": "insufficient_support",
+      "by_locale": {
+        "ru": {
+          "support_positive": 0,
+          "support_negative": 10,
+          "true_positives": 0,
+          "false_positives": 7,
+          "true_negatives": 3,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        },
+        "en": {
+          "support_positive": 0,
+          "support_negative": 4,
+          "true_positives": 0,
+          "false_positives": 1,
+          "true_negatives": 3,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        }
+      },
+      "shadow": {
+        "would_block_if_quality_promoted": 0,
+        "would_retry_if_quality_promoted": 0,
+        "false_blocks_against_labels": 0,
+        "true_blocks_against_labels": 0
+      },
+      "promotion_allowed_from_this_report": false
+    },
+    {
+      "code": "PERSONALIZATION_SCENES_UNCHANGED",
+      "family": "quality",
+      "maturity": "advisory",
+      "runtime_action": "score_only",
+      "is_unknown_code": false,
+      "support_positive": 0,
+      "support_negative": 14,
+      "true_positives": 0,
+      "false_positives": 6,
+      "true_negatives": 8,
+      "false_negatives": 0,
+      "precision": null,
+      "recall": null,
+      "false_positive_rate": null,
+      "metric_status": "insufficient_support",
+      "by_locale": {
+        "ru": {
+          "support_positive": 0,
+          "support_negative": 10,
+          "true_positives": 0,
+          "false_positives": 3,
+          "true_negatives": 7,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        },
+        "en": {
+          "support_positive": 0,
+          "support_negative": 4,
+          "true_positives": 0,
+          "false_positives": 3,
+          "true_negatives": 1,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        }
+      },
+      "shadow": {
+        "would_block_if_quality_promoted": 2,
+        "would_retry_if_quality_promoted": 0,
+        "false_blocks_against_labels": 2,
+        "true_blocks_against_labels": 0
+      },
+      "promotion_allowed_from_this_report": false
+    },
+    {
+      "code": "PROVENANCE_REF_MISSING",
+      "family": "quality",
+      "maturity": "experimental",
+      "runtime_action": "score_only",
+      "is_unknown_code": false,
+      "support_positive": 1,
+      "support_negative": 13,
+      "true_positives": 1,
+      "false_positives": 0,
+      "true_negatives": 13,
+      "false_negatives": 0,
+      "precision": null,
+      "recall": null,
+      "false_positive_rate": null,
+      "metric_status": "insufficient_support",
+      "by_locale": {
+        "ru": {
+          "support_positive": 1,
+          "support_negative": 9,
+          "true_positives": 1,
+          "false_positives": 0,
+          "true_negatives": 9,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        },
+        "en": {
+          "support_positive": 0,
+          "support_negative": 4,
+          "true_positives": 0,
+          "false_positives": 0,
+          "true_negatives": 4,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        }
+      },
+      "shadow": {
+        "would_block_if_quality_promoted": 1,
+        "would_retry_if_quality_promoted": 0,
+        "false_blocks_against_labels": 0,
+        "true_blocks_against_labels": 1
+      },
+      "promotion_allowed_from_this_report": false
+    },
+    {
+      "code": "SCENE_ABSTRACT",
+      "family": "quality",
+      "maturity": "experimental",
+      "runtime_action": "score_only",
+      "is_unknown_code": false,
+      "support_positive": 2,
+      "support_negative": 12,
+      "true_positives": 2,
+      "false_positives": 10,
+      "true_negatives": 2,
+      "false_negatives": 0,
+      "precision": 0.16666666666666666,
+      "recall": 1.0,
+      "false_positive_rate": 0.8333333333333334,
+      "metric_status": "measured",
+      "by_locale": {
+        "ru": {
+          "support_positive": 1,
+          "support_negative": 9,
+          "true_positives": 1,
+          "false_positives": 9,
+          "true_negatives": 0,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        },
+        "en": {
+          "support_positive": 1,
+          "support_negative": 3,
+          "true_positives": 1,
+          "false_positives": 1,
+          "true_negatives": 2,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        }
+      },
+      "shadow": {
+        "would_block_if_quality_promoted": 3,
+        "would_retry_if_quality_promoted": 0,
+        "false_blocks_against_labels": 1,
+        "true_blocks_against_labels": 2
+      },
+      "promotion_allowed_from_this_report": false
+    },
+    {
+      "code": "SCENE_CLONE",
+      "family": "quality",
+      "maturity": "experimental",
+      "runtime_action": "score_only",
+      "is_unknown_code": false,
+      "support_positive": 2,
+      "support_negative": 12,
+      "true_positives": 2,
+      "false_positives": 8,
+      "true_negatives": 4,
+      "false_negatives": 0,
+      "precision": 0.2,
+      "recall": 1.0,
+      "false_positive_rate": 0.6666666666666666,
+      "metric_status": "measured",
+      "by_locale": {
+        "ru": {
+          "support_positive": 2,
+          "support_negative": 8,
+          "true_positives": 2,
+          "false_positives": 7,
+          "true_negatives": 1,
+          "false_negatives": 0,
+          "precision": 0.2222222222222222,
+          "recall": 1.0,
+          "false_positive_rate": 0.875,
+          "metric_status": "measured"
+        },
+        "en": {
+          "support_positive": 0,
+          "support_negative": 4,
+          "true_positives": 0,
+          "false_positives": 1,
+          "true_negatives": 3,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        }
+      },
+      "shadow": {
+        "would_block_if_quality_promoted": 3,
+        "would_retry_if_quality_promoted": 0,
+        "false_blocks_against_labels": 1,
+        "true_blocks_against_labels": 2
+      },
+      "promotion_allowed_from_this_report": false
+    },
+    {
+      "code": "SCENE_UNIVERSAL_ADVICE",
+      "family": "quality",
+      "maturity": "experimental",
+      "runtime_action": "score_only",
+      "is_unknown_code": false,
+      "support_positive": 2,
+      "support_negative": 12,
+      "true_positives": 2,
+      "false_positives": 0,
+      "true_negatives": 12,
+      "false_negatives": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "false_positive_rate": 0.0,
+      "metric_status": "measured",
+      "by_locale": {
+        "ru": {
+          "support_positive": 1,
+          "support_negative": 9,
+          "true_positives": 1,
+          "false_positives": 0,
+          "true_negatives": 9,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        },
+        "en": {
+          "support_positive": 1,
+          "support_negative": 3,
+          "true_positives": 1,
+          "false_positives": 0,
+          "true_negatives": 3,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        }
+      },
+      "shadow": {
+        "would_block_if_quality_promoted": 2,
+        "would_retry_if_quality_promoted": 0,
+        "false_blocks_against_labels": 0,
+        "true_blocks_against_labels": 2
+      },
+      "promotion_allowed_from_this_report": false
+    },
+    {
+      "code": "THESIS_ECHO",
+      "family": "quality",
+      "maturity": "experimental",
+      "runtime_action": "score_only",
+      "is_unknown_code": false,
+      "support_positive": 0,
+      "support_negative": 14,
+      "true_positives": 0,
+      "false_positives": 10,
+      "true_negatives": 4,
+      "false_negatives": 0,
+      "precision": null,
+      "recall": null,
+      "false_positive_rate": null,
+      "metric_status": "insufficient_support",
+      "by_locale": {
+        "ru": {
+          "support_positive": 0,
+          "support_negative": 10,
+          "true_positives": 0,
+          "false_positives": 9,
+          "true_negatives": 1,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        },
+        "en": {
+          "support_positive": 0,
+          "support_negative": 4,
+          "true_positives": 0,
+          "false_positives": 1,
+          "true_negatives": 3,
+          "false_negatives": 0,
+          "precision": null,
+          "recall": null,
+          "false_positive_rate": null,
+          "metric_status": "insufficient_support"
+        }
+      },
+      "shadow": {
+        "would_block_if_quality_promoted": 1,
+        "would_retry_if_quality_promoted": 0,
+        "false_blocks_against_labels": 1,
+        "true_blocks_against_labels": 0
+      },
+      "promotion_allowed_from_this_report": false
+    }
+  ],
+  "shadow": {
+    "actual_runtime_blocked": 0,
+    "would_block_if_quality_promoted": 14,
+    "would_retry_if_quality_promoted": 0,
+    "false_blocks_against_labels": 2,
+    "true_blocks_against_labels": 12,
+    "note": "actual_runtime_blocked==0 is expected under C3.6 quality=observe policy; it is not a quality score. Primary shadow KPI: false_blocks_against_labels (pass/good cases that would be wrongly blocked if quality codes became blocking).",
+    "worst_false_block_codes": [
+      {
+        "code": "PERSONALIZATION_CONFLICT_UNCHANGED",
+        "false_blocks_against_labels": 2,
+        "false_positives": 6,
+        "metric_status": "insufficient_support"
+      },
+      {
+        "code": "PERSONALIZATION_DECORATIVE_ONLY",
+        "false_blocks_against_labels": 2,
+        "false_positives": 6,
+        "metric_status": "insufficient_support"
+      },
+      {
+        "code": "PERSONALIZATION_SCENES_UNCHANGED",
+        "false_blocks_against_labels": 2,
+        "false_positives": 6,
+        "metric_status": "insufficient_support"
+      },
+      {
+        "code": "SCENE_ABSTRACT",
+        "false_blocks_against_labels": 1,
+        "false_positives": 10,
+        "metric_status": "measured"
+      },
+      {
+        "code": "THESIS_ECHO",
+        "false_blocks_against_labels": 1,
+        "false_positives": 10,
+        "metric_status": "insufficient_support"
+      },
+      {
+        "code": "SCENE_CLONE",
+        "false_blocks_against_labels": 1,
+        "false_positives": 8,
+        "metric_status": "measured"
+      },
+      {
+        "code": "PERSONALIZATION_NATAL_OVERCLAIM",
+        "false_blocks_against_labels": 0,
+        "false_positives": 8,
+        "metric_status": "insufficient_support"
+      },
+      {
+        "code": "CHORUS_ROLE_DRIFT",
+        "false_blocks_against_labels": 0,
+        "false_positives": 1,
+        "metric_status": "insufficient_support"
+      },
+      {
+        "code": "CLOSURE_NO_CONFLICT_CALLBACK",
+        "false_blocks_against_labels": 0,
+        "false_positives": 1,
+        "metric_status": "insufficient_support"
+      },
+      {
+        "code": "CHORUS_PARALLEL_FORECAST",
+        "false_blocks_against_labels": 0,
+        "false_positives": 0,
+        "metric_status": "insufficient_support"
+      },
+      {
+        "code": "CLOSURE_MISSING",
+        "false_blocks_against_labels": 0,
+        "false_positives": 0,
+        "metric_status": "measured"
+      },
+      {
+        "code": "CLOSURE_WELLNESS_MUSH",
+        "false_blocks_against_labels": 0,
+        "false_positives": 0,
+        "metric_status": "insufficient_support"
+      }
+    ],
+    "per_code_false_blocks": {
+      "CHORUS_PARALLEL_FORECAST": 0,
+      "CHORUS_ROLE_DRIFT": 0,
+      "CLOSURE_MISSING": 0,
+      "CLOSURE_NO_CONFLICT_CALLBACK": 0,
+      "CLOSURE_WELLNESS_MUSH": 0,
+      "CONFLICT_NO_OPPOSITION": 0,
+      "LOCALE_LANGUAGE_MISMATCH": 0,
+      "PERSONALIZATION_CONFLICT_UNCHANGED": 2,
+      "PERSONALIZATION_DECORATIVE_ONLY": 2,
+      "PERSONALIZATION_NATAL_OVERCLAIM": 0,
+      "PERSONALIZATION_SCENES_UNCHANGED": 2,
+      "PROVENANCE_REF_MISSING": 0,
+      "SCENE_ABSTRACT": 1,
+      "SCENE_CLONE": 1,
+      "SCENE_UNIVERSAL_ADVICE": 0,
+      "THESIS_ECHO": 1
+    }
+  },
+  "promotion_criteria": {
+    "precision_min": 0.85,
+    "recall_min": 0.7,
+    "false_positive_rate_max": 0.1,
+    "requires_human_labels": true,
+    "requires_ru_and_en_comparable_support": true,
+    "requires_review_protocol": "C3.6.2 Human Golden Set and Review Protocol",
+    "synthetic_bootstrap_may_promote": false,
+    "note": "This report never sets promotion_allowed_from_this_report=true. Next: C3.6.2 human labeling + disagreement protocol, then live shadow."
+  },
+  "limitations": [
+    "Labels are synthetic_bootstrap, not human/editor consensus.",
+    "Baseline does not authorize maturity promotion.",
+    "Results verify harness wiring and surface obvious false positives only.",
+    "Thresholds and maturity remain provisional.",
+    "Many codes have insufficient_support on a 14-case bootstrap.",
+    "RU/EN metrics are not comparable without adequate support on both locales.",
+    "actual_runtime_blocked≈0 is expected under observe-only quality policy."
+  ],
+  "observations": [
+    {
+      "case_id": "gs-c361-good-ru",
+      "locale": "ru",
+      "consensus_band": "pass",
+      "label_source": "synthetic_bootstrap",
+      "expected_defects": [],
+      "observed_defects": [
+        "PERSONALIZATION_CONFLICT_UNCHANGED",
+        "PERSONALIZATION_DECORATIVE_ONLY",
+        "PERSONALIZATION_SCENES_UNCHANGED",
+        "SCENE_ABSTRACT",
+        "SCENE_CLONE",
+        "THESIS_ECHO"
+      ],
+      "cell_score": 0.952,
+      "cell_band": null
+    },
+    {
+      "case_id": "gs-c361-good-en",
+      "locale": "en",
+      "consensus_band": "pass",
+      "label_source": "synthetic_bootstrap",
+      "expected_defects": [],
+      "observed_defects": [
+        "PERSONALIZATION_CONFLICT_UNCHANGED",
+        "PERSONALIZATION_DECORATIVE_ONLY",
+        "PERSONALIZATION_SCENES_UNCHANGED"
+      ],
+      "cell_score": 0.952,
+      "cell_band": null
+    },
+    {
+      "case_id": "gs-c361-neg-abstract-ru",
+      "locale": "ru",
+      "consensus_band": "reject",
+      "label_source": "synthetic_bootstrap",
+      "expected_defects": [
+        "SCENE_ABSTRACT",
+        "SCENE_UNIVERSAL_ADVICE"
+      ],
+      "observed_defects": [
+        "PERSONALIZATION_NATAL_OVERCLAIM",
+        "SCENE_ABSTRACT",
+        "SCENE_CLONE",
+        "SCENE_UNIVERSAL_ADVICE",
+        "THESIS_ECHO"
+      ],
+      "cell_score": 0.901,
+      "cell_band": null
+    },
+    {
+      "case_id": "gs-c361-neg-clone-ru",
+      "locale": "ru",
+      "consensus_band": "reject",
+      "label_source": "synthetic_bootstrap",
+      "expected_defects": [
+        "SCENE_CLONE"
+      ],
+      "observed_defects": [
+        "PERSONALIZATION_NATAL_OVERCLAIM",
+        "SCENE_ABSTRACT",
+        "SCENE_CLONE",
+        "THESIS_ECHO"
+      ],
+      "cell_score": 0.935,
+      "cell_band": null
+    },
+    {
+      "case_id": "gs-c361-neg-parallel-ru",
+      "locale": "ru",
+      "consensus_band": "reject",
+      "label_source": "synthetic_bootstrap",
+      "expected_defects": [
+        "CHORUS_PARALLEL_FORECAST"
+      ],
+      "observed_defects": [
+        "CHORUS_PARALLEL_FORECAST",
+        "PERSONALIZATION_NATAL_OVERCLAIM",
+        "SCENE_ABSTRACT",
+        "SCENE_CLONE",
+        "THESIS_ECHO"
+      ],
+      "cell_score": 0.758,
+      "cell_band": null
+    },
+    {
+      "case_id": "gs-c361-neg-closure-missing-ru",
+      "locale": "ru",
+      "consensus_band": "reject",
+      "label_source": "synthetic_bootstrap",
+      "expected_defects": [
+        "CLOSURE_MISSING"
+      ],
+      "observed_defects": [
+        "CLOSURE_MISSING",
+        "PERSONALIZATION_NATAL_OVERCLAIM",
+        "SCENE_ABSTRACT",
+        "SCENE_CLONE",
+        "THESIS_ECHO"
+      ],
+      "cell_score": 0.82,
+      "cell_band": null
+    },
+    {
+      "case_id": "gs-c361-neg-closure-mush-ru",
+      "locale": "ru",
+      "consensus_band": "reject",
+      "label_source": "synthetic_bootstrap",
+      "expected_defects": [
+        "CLOSURE_WELLNESS_MUSH"
+      ],
+      "observed_defects": [
+        "CLOSURE_NO_CONFLICT_CALLBACK",
+        "CLOSURE_WELLNESS_MUSH",
+        "PERSONALIZATION_NATAL_OVERCLAIM",
+        "SCENE_ABSTRACT",
+        "SCENE_CLONE",
+        "THESIS_ECHO"
+      ],
+      "cell_score": 0.924,
+      "cell_band": null
+    },
+    {
+      "case_id": "gs-c361-neg-conflict-ru",
+      "locale": "ru",
+      "consensus_band": "reject",
+      "label_source": "synthetic_bootstrap",
+      "expected_defects": [
+        "CONFLICT_NO_OPPOSITION"
+      ],
+      "observed_defects": [
+        "CONFLICT_NO_OPPOSITION",
+        "PERSONALIZATION_NATAL_OVERCLAIM",
+        "SCENE_ABSTRACT",
+        "SCENE_CLONE",
+        "THESIS_ECHO"
+      ],
+      "cell_score": 0.894,
+      "cell_band": null
+    },
+    {
+      "case_id": "gs-c361-neg-provenance-ru",
+      "locale": "ru",
+      "consensus_band": "reject",
+      "label_source": "synthetic_bootstrap",
+      "expected_defects": [
+        "PROVENANCE_REF_MISSING"
+      ],
+      "observed_defects": [
+        "PERSONALIZATION_CONFLICT_UNCHANGED",
+        "PERSONALIZATION_DECORATIVE_ONLY",
+        "PERSONALIZATION_SCENES_UNCHANGED",
+        "PROVENANCE_REF_MISSING",
+        "SCENE_ABSTRACT",
+        "SCENE_CLONE",
+        "THESIS_ECHO"
+      ],
+      "cell_score": 0.924,
+      "cell_band": null
+    },
+    {
+      "case_id": "gs-c361-neg-locale-en",
+      "locale": "en",
+      "consensus_band": "reject",
+      "label_source": "synthetic_bootstrap",
+      "expected_defects": [
+        "LOCALE_LANGUAGE_MISMATCH"
+      ],
+      "observed_defects": [
+        "LOCALE_LANGUAGE_MISMATCH",
+        "PERSONALIZATION_NATAL_OVERCLAIM",
+        "SCENE_ABSTRACT",
+        "SCENE_CLONE",
+        "THESIS_ECHO"
+      ],
+      "cell_score": 0.861,
+      "cell_band": null
+    },
+    {
+      "case_id": "gs-c361-neg-locale-ru",
+      "locale": "ru",
+      "consensus_band": "reject",
+      "label_source": "synthetic_bootstrap",
+      "expected_defects": [
+        "LOCALE_LANGUAGE_MISMATCH"
+      ],
+      "observed_defects": [
+        "CHORUS_ROLE_DRIFT",
+        "LOCALE_LANGUAGE_MISMATCH",
+        "PERSONALIZATION_NATAL_OVERCLAIM",
+        "SCENE_ABSTRACT"
+      ],
+      "cell_score": 0.884,
+      "cell_band": null
+    },
+    {
+      "case_id": "gs-c361-mut-universal-en",
+      "locale": "en",
+      "consensus_band": "reject",
+      "label_source": "synthetic_bootstrap",
+      "expected_defects": [
+        "SCENE_UNIVERSAL_ADVICE",
+        "SCENE_ABSTRACT"
+      ],
+      "observed_defects": [
+        "PERSONALIZATION_CONFLICT_UNCHANGED",
+        "PERSONALIZATION_DECORATIVE_ONLY",
+        "PERSONALIZATION_SCENES_UNCHANGED",
+        "SCENE_ABSTRACT",
+        "SCENE_UNIVERSAL_ADVICE"
+      ],
+      "cell_score": 0.918,
+      "cell_band": null
+    },
+    {
+      "case_id": "gs-c361-mut-clone-ru",
+      "locale": "ru",
+      "consensus_band": "reject",
+      "label_source": "synthetic_bootstrap",
+      "expected_defects": [
+        "SCENE_CLONE"
+      ],
+      "observed_defects": [
+        "PERSONALIZATION_CONFLICT_UNCHANGED",
+        "PERSONALIZATION_DECORATIVE_ONLY",
+        "PERSONALIZATION_SCENES_UNCHANGED",
+        "SCENE_ABSTRACT",
+        "SCENE_CLONE",
+        "THESIS_ECHO"
+      ],
+      "cell_score": 0.935,
+      "cell_band": null
+    },
+    {
+      "case_id": "gs-c361-mut-drop-closure-en",
+      "locale": "en",
+      "consensus_band": "reject",
+      "label_source": "synthetic_bootstrap",
+      "expected_defects": [
+        "CLOSURE_MISSING"
+      ],
+      "observed_defects": [
+        "CLOSURE_MISSING",
+        "PERSONALIZATION_CONFLICT_UNCHANGED",
+        "PERSONALIZATION_DECORATIVE_ONLY",
+        "PERSONALIZATION_SCENES_UNCHANGED"
+      ],
+      "cell_score": 0.82,
+      "cell_band": null
+    }
+  ]
+}

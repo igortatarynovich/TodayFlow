@@ -1,6 +1,6 @@
 # DAY_SCENARIO_V1 — драматургический каркас дня
 
-**Status:** CANON DRAFT — **B1–B5 + C1 + C2 + C3.1–C3.6 landed** (gate maturity: quality observe; hard blocking)  
+**Status:** CANON DRAFT — **B1–B5 + C1 + C2 + C3.1–C3.6.1 landed** (gate maturity + calibration harness; quality observe)  
 **Date:** 2026-07-26  
 **Engine:** `day_scenario_v1.py` · `day_color_catalog_v1.py` · `day_scenario_project_v1.py` · `day_scenario_native_llm_c1.py` · `day_scenario_editorial_gate_c31.py` · `day_scenario_personalization_c33.py` · `day_scenario_sphere_selection_c33b.py` · `day_scenario_pairwise_eval_c33b.py` · `day_scenario_eval_pack_c35.py` · `day_scenario_eval_*_c351.py` · `day_scenario_gate_maturity_c36.py`  
 **Wire note:** [audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md](./audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md)  
@@ -13,7 +13,7 @@
 **Personalization:** [audits/DAY_SCENARIO_PERSONALIZATION_C33A.md](./audits/DAY_SCENARIO_PERSONALIZATION_C33A.md)  
 **Sphere selection:** [audits/DAY_SCENARIO_SPHERE_SELECTION_C33B.md](./audits/DAY_SCENARIO_SPHERE_SELECTION_C33B.md)  
 **Eval pack:** [audits/DAY_SCENARIO_EVAL_PACK_C35.md](./audits/DAY_SCENARIO_EVAL_PACK_C35.md) · [audits/DAY_SCENARIO_EVAL_HARDENING_C351.md](./audits/DAY_SCENARIO_EVAL_HARDENING_C351.md)  
-**Gate maturity:** [audits/DAY_SCENARIO_GATE_MATURITY_C36.md](./audits/DAY_SCENARIO_GATE_MATURITY_C36.md)  
+**Gate maturity:** [audits/DAY_SCENARIO_GATE_MATURITY_C36.md](./audits/DAY_SCENARIO_GATE_MATURITY_C36.md) · [audits/DAY_SCENARIO_GATE_CALIBRATION_C361.md](./audits/DAY_SCENARIO_GATE_CALIBRATION_C361.md)  
 **Capture rubric:** [audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md](./audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md)  
 **Related:** [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) · [today-language/TODAY_LANGUAGE_V1.md](./today-language/TODAY_LANGUAGE_V1.md)
 
@@ -376,11 +376,26 @@ Legacy projections remain for old clients only.
 - **Backward compatible?** yes — softer quality policy; hard still unavailable
 ```
 
-### Next — Gate calibration (golden + shadow metrics) · promote quality codes by evidence
+### C3.6.1 (landed) — Calibration harness (synthetic bootstrap · P/R/FPR · RU/EN)
 
-> **Supersedes runtime claims in C3.1–C3.3a Architecture impact** that said critical
-> editorial / soft personalization → retry → unavailable / downgrade. Those analyzers
-> remain for eval/capture; product control is C3.6 maturity
+```markdown
+## Architecture impact
+- **SoT before:** C3.6 observe-only quality; no per-code calibration metrics
+- **SoT after:** c36.1 harness + 14 synthetic golden cases; TP/FP/TN/FN;
+  measured|insufficient_support; shadow false-block KPI; baseline artifacts —
+  **no maturity promotions**
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — DAY_SCENARIO_GATE_CALIBRATION_C361
+- **Backward compatible?** yes — eval-only
+- **Runtime / Nebius / UI / retry:** untouched
+```
+
+### Next — C3.6.2 Human Golden Set and Review Protocol
+
+> Manual labeling + disagreement resolution before any maturity promotion.
+> Synthetic bootstrap alone is not promotion evidence.
+> C3.6 maturity remains sole runtime-policy owner
 > ([DAY_SCENARIO_GATE_MATURITY_C36.md](./audits/DAY_SCENARIO_GATE_MATURITY_C36.md)).
 
 ---
