@@ -325,9 +325,10 @@ Semantic profile на карту (семантика, не литература)
 
 Только после Eval: wording · ритм · длина · баланс символика/практика · голос. Не pipeline / контракт / новые слои.
 
-**Eval deltas in flight (2026-07-26):**
+**Eval deltas (Editorial Phase):**
 - semantic grounding gate (card-name ablation) — landed with live #2 uplift
-- choice: compact `question_story` + A/B in `option_*_note`; soft length ceiling raised (`tarot-interpretation-v1.6`) after `too_long:question_story` on `choice_work_leave_or_stay`
+- choice: compact `question_story` + A/B in `option_*_note`; soft length ceiling (`tarot-interpretation-v1.6`)
+- voice: ban rhetorical antithesis «не X, а Y» (e.g. «не кричит, а греет») — prompt + gate `antithesis_formula` (`tarot-interpretation-v1.7`)
 
 ---
 

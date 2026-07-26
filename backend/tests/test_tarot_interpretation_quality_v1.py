@@ -210,6 +210,57 @@ def test_quality_gates_accept_semantic_grounding_without_card_names():
     assert tarot_llm.validate_interpretation(ungrounded, pack=pack) is None
 
 
+def test_quality_gates_reject_antithesis_ne_a_formula():
+    """Owner editorial: avoid «не X, а Y» rhetoric («не кричит, а греет»)."""
+    pack = {
+        "question": "Какое направление в работе сейчас заслуживает внимания?",
+        "spread_kind": "general",
+        "profile_relevant": {},
+        "cards": [
+            {
+                "name_ru": "Девятка Жезлов",
+                "meaning_range": {
+                    "central_symbol": "усталый страж",
+                    "core_scene": "держит финальный рубеж",
+                },
+            },
+            {
+                "name_ru": "Королева Жезлов",
+                "meaning_range": {
+                    "central_symbol": "живой огонь",
+                    "core_scene": "теплое уверенное лидерство",
+                },
+            },
+        ],
+        "response_shape": {},
+    }
+    bad = {
+        "symbols_overview": (
+            "Усталый страж стоит рядом с живым огнём: измотанность держит финальный рубеж, "
+            "а рядом зреет теплое уверенное лидерство."
+        ),
+        "question_story": (
+            "Сейчас вы в режиме стража. Впереди маячит роль, где власть не кричит, а греет."
+        ),
+        "direct_answer": (
+            "Внимания заслуживает направление, где вы строите культуру вокруг себя через доверие."
+        ),
+        "next_step": "Запиши три пункта, что тянешь в одиночку, и кому это можно передать.",
+    }
+    assert tarot_llm.quality_reject_reason(bad, pack) == "antithesis_formula"
+    assert tarot_llm.validate_interpretation(bad, pack=pack) is None
+
+    good = {
+        **bad,
+        "question_story": (
+            "Сейчас вы в режиме стража у финального рубежа. Впереди зреет роль тёплого "
+            "уверенного лидерства, где власть держится на магнетизме и доверии."
+        ),
+    }
+    assert tarot_llm.quality_reject_reason(good, pack) is None
+    assert tarot_llm.validate_interpretation(good, pack=pack) is not None
+
+
 def test_choice_question_story_allows_moderate_length_from_eval_delta():
     """Live #2 reject: too_long:question_story at 900 — choice needs headroom."""
     pack = {

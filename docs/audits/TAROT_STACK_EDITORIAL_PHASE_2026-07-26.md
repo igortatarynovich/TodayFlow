@@ -57,4 +57,6 @@ After each answer, three questions:
 2. Получил ли ты ответ именно на свой вопрос?  
 3. Заплатил бы ты за такой разбор?  
 
+**Q3 voice (2026-07-26):** avoid rhetorical «не X, а Y» (owner example: «не кричит, а греет») — `tarot-interpretation-v1.7` + gate `antithesis_formula`.
+
 Fallback LLM provider: **deferred** until owner purchases and connects one.

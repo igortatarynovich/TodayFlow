@@ -22,7 +22,7 @@ from todayflow_backend.core.text_quality import is_meaningful_sentence
 
 logger = logging.getLogger(__name__)
 
-TAROT_INTERPRETATION_PROMPT_VER = "tarot-interpretation-v1.6"
+TAROT_INTERPRETATION_PROMPT_VER = "tarot-interpretation-v1.7"
 
 _BANNED_SUBSTRINGS = (
     "аркан",
@@ -43,6 +43,16 @@ _EMPTY_FORMULAS = (
     "просто доверься",
     "вселенная подсказывает",
     "энергия дня",
+)
+
+# Rhetorical antithesis «не X, а Y» (owner editorial, 2026-07-26): e.g. «не кричит, а греет».
+_ANTITHESIS_NE_A_RE = re.compile(
+    r"(?:^|[.!?…]\s+|:\s+)?(?:это\s+)?не\s+[^,]{2,48}?,\s*а\s+\w+",
+    re.IGNORECASE | re.UNICODE,
+)
+_ANTITHESIS_NOT_BUT_RE = re.compile(
+    r"\bnot\s+[^,]{2,40}?,\s*but\s+\w+",
+    re.IGNORECASE,
 )
 
 _ACTION_MARKERS = (
@@ -96,6 +106,8 @@ driving_need, shadow_pattern, growth_direction, *_lens, reversed_shift, adjacent
 - не цитируй profile_relevant дословно;
 - не выдавай карты за факты о внешнем мире («он точно…», «уволят…»);
 - не используй пустые формулы («что-то просит быть замеченным», «просто доверься»);
+- не строй фразы на антитезе «не X, а Y» / «это не …, а …» (напр. «не кричит, а греет») —
+  говори прямо, что есть, без риторического отрицания;
 - запрещено слово «Аркан» как имя карты;
 - сначала конфликт/картина, потом ответ — не наоборот;
 - соблюдай do_not каждой position_semantics и must_not_claim question_ontology;
@@ -294,6 +306,12 @@ _FIELD_MAX_CHARS = 1200
 _FIELD_MAX_CHARS_CHOICE_STORY = 1400
 
 
+def _antithesis_formula_hits(text: str) -> int:
+    """Count rhetorical «не X, а Y» / «not X, but Y» constructions."""
+    blob = str(text or "")
+    return len(_ANTITHESIS_NE_A_RE.findall(blob)) + len(_ANTITHESIS_NOT_BUT_RE.findall(blob))
+
+
 def quality_reject_reason(fields: dict[str, str], pack: dict[str, Any]) -> str | None:
     """Return reject reason or None if quality gates pass."""
     symbols = fields["symbols_overview"]
@@ -313,6 +331,11 @@ def quality_reject_reason(fields: dict[str, str], pack: dict[str, Any]) -> str |
             return f"too_long:{key}"
         if len(text) < 20 and key in {"symbols_overview", "question_story", "direct_answer"}:
             return f"too_short:{key}"
+
+    # Prose voice: antithesis in story/answer/symbols — not in option notes (choice may contrast).
+    prose = f"{symbols} {story} {answer}"
+    if _antithesis_formula_hits(prose) >= 1:
+        return "antithesis_formula"
 
     if _near_dup(symbols, story) or _near_dup(story, answer) or _near_dup(answer, step):
         return "cross_field_duplicate"
