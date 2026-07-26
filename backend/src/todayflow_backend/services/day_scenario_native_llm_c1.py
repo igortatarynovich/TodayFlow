@@ -41,7 +41,7 @@ _SPHERE_LABEL_RU: dict[str, str] = {
 }
 
 NATIVE_LLM_SCHEMA_VERSION = "day_scenario_native_llm_c1"
-NATIVE_PROMPT_VERSION = "day-scenario-native-c3.3b"
+NATIVE_PROMPT_VERSION = "day-scenario-native-c4.0"
 GENERATION_SOURCE_NATIVE = "native_llm_c1"
 GENERATION_SOURCE_DETERMINISTIC = "deterministic_engine_b5"
 
@@ -88,8 +88,16 @@ _PARALLEL_FORECAST_RE = re.compile(
 
 _NATIVE_SYS_RU = """Ты — драматург TodayFlow. Твоя задача — построить ОДИН сценарий дня, а не заполнить карточки прогноза.
 
-Смысл дня уже частично вычислен во входе (interpretation, day_events_pack, day_thesis, ritual).
-Ты связываешь факты в единую историю. Нельзя выдумывать астрономические или натальные факты вне evidence.
+Порядок (жёстко): факты дня → DRAMATURGY_BRIEF → conflict → scenes → prop_material.
+Во входе первым идёт DRAMATURGY_BRIEF (SoT «что драматизировать»). CONTEXT — уточнения.
+Нельзя выдумывать астрономические или натальные факты вне evidence / must_dramatize.
+
+ДРАМАТУРГИЧЕСКИЙ БРИФ (C4):
+- must_dramatize = конкретные факты неба/циклов, из которых строится история;
+- scene_slots = предпочтительные сферы и крючки; используй их как каркас сцен;
+- act_iii_registry_label = ярлык реестра (Акт III), НЕ сюжет: conflict.title пиши как бытовое
+  напряжение из must_dramatize (кто / где / что сталкивается), а не как слоган label_ru;
+- prop_material только из готовых сцен (цвет, цель, аффирмация, юмор — производные истории).
 
 Верни ТОЛЬКО JSON со schema_version = "day_scenario_native_llm_c1".
 
@@ -881,18 +889,37 @@ def call_day_scenario_native_llm_c1(
     )
     has_natal_evidence = str(pers_pack.get("evidence_depth") or "") == DEPTH_DEEP
 
-    # Bounded LLM input: inject pack; drop raw day_personal dump from payload copy
+    from todayflow_backend.services.day_scenario_dramaturgy_brief_c4 import (
+        build_day_dramaturgy_brief_c4,
+        format_native_user_message_c4,
+        slim_interpretation_for_native_llm,
+    )
+
+    brief = build_day_dramaturgy_brief_c4(
+        interpretation=interp,
+        ritual_context=ritual,
+        personalization_pack=pers_pack,
+    )
+
+    # Bounded LLM input: brief first (protected); slim interpretation; no raw day_personal
     llm_payload = dict(user_json) if isinstance(user_json, dict) else {}
     llm_payload["personalization_evidence"] = pers_pack
     llm_payload.pop("day_personal", None)
+    llm_payload.pop("day_thesis", None)  # demoted into brief.act_iii_registry_label
     if isinstance(llm_payload.get("interpretation"), dict):
-        interp_copy = dict(llm_payload["interpretation"])
-        interp_copy.pop("day_personal", None)
-        llm_payload["interpretation"] = interp_copy
+        llm_payload["interpretation"] = slim_interpretation_for_native_llm(
+            llm_payload["interpretation"],
+            brief=brief,
+        )
+    else:
+        llm_payload["interpretation"] = slim_interpretation_for_native_llm(interp, brief=brief)
 
     attempts = max(1, min(int(max_attempts or 1), 3))
-    user_full = json.dumps(llm_payload, ensure_ascii=False)
-    user_base = user_full[:14000]
+    user_full, user_base = format_native_user_message_c4(
+        brief=brief,
+        context=llm_payload,
+        max_chars=16000,
+    )
     user_sent = user_base
     retry_feedback = ""
     model_name = ""
@@ -910,12 +937,18 @@ def call_day_scenario_native_llm_c1(
             prompt_version=NATIVE_PROMPT_VERSION,
             model=model_name or None,
         )
+        meta = capture.pack.setdefault("generation_metadata", {})
+        if isinstance(meta, dict):
+            meta["dramaturgy_brief_c4"] = brief
+            meta["dramaturgy_brief_protected"] = True
+            meta["user_message_format"] = "dramaturgy_brief_c4_v1"
 
     last_pers_defects: list[dict[str, str]] = []
 
     for attempt_idx in range(attempts):
         if retry_feedback:
-            user_sent = f"{user_base}\n\n---\n{retry_feedback}"[:16000]
+            # Keep brief intact; append feedback after protected base
+            user_sent = f"{user_base}\n\n---\n{retry_feedback}"[:18000]
         content = chat_completion_plain(
             client,
             model=resolve_default_chat_model(),

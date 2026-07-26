@@ -110,4 +110,64 @@ describe("todayDaySpine", () => {
     expect(thesis).toMatch(/возвращения ясности/i);
     expect(thesis).not.toMatch(/перестаёт спешить/i);
   });
+
+  it("prefers ready day_scenario conflict over registry day_thesis slogan", () => {
+    const withScenario: TodayContractV1 = {
+      ...contract,
+      day_story: {
+        day_thesis: {
+          family: "truth",
+          variant: "truth_without_filter",
+          mode: "pressure",
+          label_ru: "Прямота без фильтра",
+          driver_ids: ["moon-pisces"],
+          composition_ids: [],
+        },
+        day_scenario: {
+          ready: true,
+          runtime_sot: true,
+          generation_source: "native_llm_c1",
+          conflict: {
+            short_name: "Сказать правду в переписке, не сгладить «нормально»",
+          },
+          scenes: [
+            {
+              scene_id: "scene.communication",
+              sphere: "communication",
+              what_happens: "Сообщение просит ответа, а хочется закрыться.",
+            },
+          ],
+        },
+      },
+    };
+    const thesis = buildDayThesis(withScenario, "anxious");
+    expect(thesis).toMatch(/переписке/i);
+    expect(thesis).not.toMatch(/Прямота без фильтра/i);
+  });
+
+  it("suppresses ritual unlock hint when day_scenario is ready", () => {
+    const withScenario: TodayContractV1 = {
+      ...contract,
+      day_story: {
+        day_scenario: {
+          ready: true,
+          runtime_sot: true,
+          conflict: { short_name: "Пауза перед ответом" },
+          scenes: [{ scene_id: "scene.communication", what_happens: "…" }],
+          props: { affirmations: [{ text: "Я отвечаю коротко и честно." }] },
+        },
+      },
+    };
+    const spine = buildTodayDaySpine({
+      contract: withScenario,
+      morningRitualData: null,
+      cardId: null,
+      cardName: null,
+      numerologyValue: null,
+      numerologyMeaning: null,
+      ritualComplete: false,
+    });
+    expect(spine.ritualUnlockHint).toBeNull();
+    expect(spine.themeShort).toMatch(/Пауза перед ответом/i);
+  });
 });

@@ -13,6 +13,25 @@ import { dayStoryHeadline, dayStoryPulseLine, hasAuthoritativeDayStory } from "@
 import { isRuUserFacingText, sanitizeRuCopy } from "@/lib/todaySynthesisTextPolicy";
 import { redactUnrevealedRitualProse } from "@/lib/todayRitualRevealSanitize";
 
+/** Ready day_scenario nest — Level-1 SoT when present (DAY_SCENARIO_V1). */
+export function readyDayScenario(contract: TodayContractV1) {
+  const sc = contract.day_story?.day_scenario;
+  if (!sc || typeof sc !== "object") return null;
+  if (sc.ready === false || sc.runtime_sot === false) return null;
+  const shortName = sc.conflict?.short_name?.trim();
+  if (!shortName) return null;
+  if (!Array.isArray(sc.scenes) || sc.scenes.length < 1) return null;
+  return sc;
+}
+
+/** Hero conflict from scenario (preferred over registry day_thesis slogan). */
+export function scenarioConflictLabel(contract: TodayContractV1): string | null {
+  const sc = readyDayScenario(contract);
+  const name = sc?.conflict?.short_name?.trim();
+  if (!name || !isRuUserFacingText(name)) return null;
+  return name.replace(/[.!?]+$/, "").trim() || null;
+}
+
 export type TodaySkyIconKey =
   | "moon"
   | "sparkles"
@@ -96,6 +115,11 @@ export function buildDayThesis(
   ritualComplete = true,
 ): string {
   const reveal = { numberRevealed: ritualComplete, tarotRevealed: ritualComplete };
+  // C4: scenario conflict is Level-1 SoT; day_thesis is Act III registry projection.
+  const scenarioLabel = scenarioConflictLabel(contract);
+  if (scenarioLabel) {
+    return scenarioLabel.endsWith(".") ? scenarioLabel : `${scenarioLabel}.`;
+  }
   const thesisLabel =
     contract.day_story?.day_thesis?.label_ru?.trim() ||
     contract.day_story?.day_thesis?.label?.trim() ||
@@ -125,7 +149,7 @@ export function buildDayThesis(
     }
   }
 
-  // Backend day_thesis is the single plot — do not invent a competing mood/regex thesis.
+  // Registry day_thesis only when scenario nest is not ready.
   if (thesisLabel && isRuUserFacingText(thesisLabel)) {
     return thesisLabel.endsWith(".") ? thesisLabel : `${thesisLabel}.`;
   }
@@ -157,6 +181,10 @@ export function buildDayThesis(
 }
 
 export function buildThemeShort(contract: TodayContractV1, thesis: string): string {
+  const scenarioLabel = scenarioConflictLabel(contract);
+  if (scenarioLabel && scenarioLabel.length <= 96) {
+    return scenarioLabel;
+  }
   const conflict =
     contract.day_story?.day_thesis?.label_ru?.trim() ||
     contract.day_story?.day_thesis?.label?.trim() ||
@@ -640,9 +668,12 @@ export function buildTodayDaySpine(input: {
     ritualComplete: input.ritualComplete,
   });
 
-  const ritualUnlockHint = input.ritualComplete
-    ? null
-    : "Открой карту и число — практика, медитация и аффирмация соберутся под твой день.";
+  // When day_scenario is ready, props/affirmations already come from scenes —
+  // do not replace the day with a generic ritual unlock slogan.
+  const ritualUnlockHint =
+    input.ritualComplete || Boolean(readyDayScenario(input.contract))
+      ? null
+      : "Открой карту и число — практика, медитация и аффирмация соберутся под твой день.";
 
   return {
     thesis,

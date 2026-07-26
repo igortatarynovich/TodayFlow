@@ -12,6 +12,7 @@
 
 import type { TodayContractV1 } from "@/lib/todayContract";
 import { dayStoryAvoidItems, dayStoryDoItems } from "@/lib/todayContractMapper";
+import { scenarioConflictLabel } from "@/lib/todayDaySpine";
 import { nearDuplicateClaim, scrubUserFacingText } from "@/lib/todayValueGate";
 
 export type TodayDayMap = {
@@ -124,6 +125,7 @@ function fromDayStory(contract: TodayContractV1): TodayDayMap | null {
   const direction = gate(ds.direction);
   const story = gate(ds.story);
   const thesisLabel =
+    scenarioConflictLabel(contract) ||
     gate(ds.day_thesis?.label_ru) ||
     gate(ds.day_thesis?.label) ||
     gate(ds.primary_conflict) ||
@@ -214,6 +216,7 @@ export function buildTodayDayMap(input: {
 }): TodayDayMap | null {
   const fromStory = input.contract ? fromDayStory(input.contract) : null;
   const thesisLabel =
+    (input.contract ? scenarioConflictLabel(input.contract) : null) ||
     gate(input.contract?.day_story?.day_thesis?.label_ru) ||
     gate(input.contract?.day_story?.day_thesis?.label) ||
     gate(input.contract?.day_story?.primary_conflict) ||

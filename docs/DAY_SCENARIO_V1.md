@@ -1,12 +1,13 @@
 # DAY_SCENARIO_V1 — драматургический каркас дня
 
-**Status:** CANON DRAFT — **B1–B5 + C1 + C2 + C3.1–C3.6.1 landed** (gate maturity + calibration harness; quality observe)  
+**Status:** CANON DRAFT — **B1–B5 + C1 + C2 + C3.1–C3.6.1 + C4 landed** (dramaturgy brief pre-LLM; quality observe)  
 **Date:** 2026-07-26  
-**Engine:** `day_scenario_v1.py` · `day_color_catalog_v1.py` · `day_scenario_project_v1.py` · `day_scenario_native_llm_c1.py` · `day_scenario_editorial_gate_c31.py` · `day_scenario_personalization_c33.py` · `day_scenario_sphere_selection_c33b.py` · `day_scenario_pairwise_eval_c33b.py` · `day_scenario_eval_pack_c35.py` · `day_scenario_eval_*_c351.py` · `day_scenario_gate_maturity_c36.py`  
+**Engine:** `day_scenario_v1.py` · `day_color_catalog_v1.py` · `day_scenario_project_v1.py` · `day_scenario_native_llm_c1.py` · `day_scenario_dramaturgy_brief_c4.py` · `day_scenario_editorial_gate_c31.py` · `day_scenario_personalization_c33.py` · `day_scenario_sphere_selection_c33b.py` · `day_scenario_pairwise_eval_c33b.py` · `day_scenario_eval_pack_c35.py` · `day_scenario_eval_*_c351.py` · `day_scenario_gate_maturity_c36.py`  
 **Wire note:** [audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md](./audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md)  
 **UI note:** [audits/DAY_SCENARIO_UI_PREFERENCE_B4.md](./audits/DAY_SCENARIO_UI_PREFERENCE_B4.md)  
 **Runtime SoT:** [audits/DAY_SCENARIO_RUNTIME_SOT_B5.md](./audits/DAY_SCENARIO_RUNTIME_SOT_B5.md)  
 **Native LLM:** [audits/DAY_SCENARIO_NATIVE_LLM_C1.md](./audits/DAY_SCENARIO_NATIVE_LLM_C1.md)  
+**Dramaturgy brief:** [audits/DAY_SCENARIO_DRAMATURGY_BRIEF_C4.md](./audits/DAY_SCENARIO_DRAMATURGY_BRIEF_C4.md)  
 **Chapters UI:** [audits/DAY_SCENARIO_CHAPTERS_C2.md](./audits/DAY_SCENARIO_CHAPTERS_C2.md)  
 **Everyday quality:** [audits/DAY_SCENARIO_EVERYDAY_QUALITY_C31.md](./audits/DAY_SCENARIO_EVERYDAY_QUALITY_C31.md)  
 **Chorus quality:** [audits/DAY_SCENARIO_CHORUS_QUALITY_C32.md](./audits/DAY_SCENARIO_CHORUS_QUALITY_C32.md)  
@@ -32,6 +33,8 @@
 ```text
 Факты (небо, циклы, натал, карта дня, число дня)
         ↓
+Dramaturgy brief (C4) — must_dramatize + scene_slots; day_thesis demoted to Act III label
+        ↓
 Единый интерпретационный слой  ← «почему» (Уровень 2)
         ↓
 Главный конфликт дня           ← «что» (Уровень 1)
@@ -47,7 +50,7 @@
 ## Source of Truth rule
 
 ```text
-Факты → Интерпретационный хор → Главный конфликт → Сцены → Реквизит → UI
+Факты → Dramaturgy brief (C4) → Интерпретационный хор → Главный конфликт → Сцены → Реквизит → UI
 ```
 
 **Сценарий дня (`day_scenario`) — SoT Уровня 1** для пользовательских поверхностей Today.
@@ -397,6 +400,8 @@ Legacy projections remain for old clients only.
 > Synthetic bootstrap alone is not promotion evidence.
 > C3.6 maturity remains sole runtime-policy owner
 > ([DAY_SCENARIO_GATE_MATURITY_C36.md](./audits/DAY_SCENARIO_GATE_MATURITY_C36.md)).
+
+### Next — C3.6.2 Human Golden Set and Review Protocol → live capture audit → promote by evidence
 
 ---
 
