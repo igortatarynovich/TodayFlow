@@ -936,8 +936,21 @@ def day_story_to_today_contract_v1(
             else []
         ),
         "editorial": story.get("editorial") if isinstance(story.get("editorial"), dict) else None,
-        "talisman": None if unavailable else story.get("talisman"),
-        "practice_recommendation": None if unavailable else story.get("practice_recommendation"),
+        # Wire model TodayContractDayStoryV1 requires dict (not null) for these props.
+        "talisman": (
+            {}
+            if unavailable
+            else (story.get("talisman") if isinstance(story.get("talisman"), dict) else {})
+        ),
+        "practice_recommendation": (
+            {}
+            if unavailable
+            else (
+                story.get("practice_recommendation")
+                if isinstance(story.get("practice_recommendation"), dict)
+                else {}
+            )
+        ),
         "symbolic_note": "" if unavailable else story.get("symbolic_note"),
         "supports_story": "" if unavailable else (story.get("supports_story") or ""),
         "evening_closure": "" if unavailable else (story.get("evening_closure") or ""),
@@ -978,24 +991,49 @@ def day_story_to_today_contract_v1(
     if unavailable:
         progress_out["interpretation_status"] = "unavailable"
 
+    meta_fb = DOMAIN_FALLBACKS_V1.get("_meta", {})
+    # Navigational shell must remain valid even when day_story meaning is unavailable
+    # (otherwise GET /today/contract 500 → FE offline fallback “нет связи с сервером”).
+    period_shell = (
+        (story.get("global_period") or story.get("theme") or "")
+        if not unavailable
+        else (story.get("theme") or meta_fb.get("period") or "")
+    )
+    if unavailable and not str(period_shell).strip():
+        period_shell = str(meta_fb.get("period") or "")
+    growth_shell = (
+        ""
+        if unavailable
+        else (story.get("development_point") or "")
+    )
+    primary_shell = (
+        ""
+        if unavailable
+        else (story.get("primary_action") or story.get("today_move") or "")
+    )
+    if unavailable:
+        growth_shell = str(meta_fb.get("development_point") or "")
+        primary_shell = str(meta_fb.get("primary_action") or "")
+
     contract = {
         "contract_version": TODAY_CONTRACT_V1_CONTRACT,
         "version": TODAY_CONTRACT_V1_VERSION,
-        "global_context": {
-            "period": (story.get("global_period") or story.get("theme") or "") if not unavailable else (story.get("theme") or "")
-        },
-        "personal_growth": {
-            "development_point": "" if unavailable else (story.get("development_point") or "")
-        },
+        "global_context": {"period": period_shell},
+        "personal_growth": {"development_point": growth_shell},
         "domains": domains_out,
-        "primary_action": "" if unavailable else (story.get("primary_action") or story.get("today_move") or ""),
+        "primary_action": primary_shell,
         "progress": progress_out,
         "generation_id": generation_id or "",
         "day_story": day_story_out,
     }
     if unavailable:
-        # Do not fill DOMAIN_FALLBACKS / period templates over an honest unavailable shell.
-        return contract
+        # Shell only — do not invent domain meaning over facts_only_unavailable.
+        # Still run quality normalize so meta fallbacks pass contract validate.
+        return apply_text_quality_gate_to_contract(
+            contract,
+            DOMAIN_FALLBACKS_V1,
+            skip_absent_domains=True,
+        )
     return apply_text_quality_gate_to_contract(
         contract,
         DOMAIN_FALLBACKS_V1,

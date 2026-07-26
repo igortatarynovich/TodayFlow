@@ -209,10 +209,14 @@ def internal_run_due_pushes(
     db: Session = Depends(get_session),
 ):
     """
-    Cron/worker hook: dispatch rhythm + goal nudges. Protect with PUSH_DISPATCH_SECRET.
+    Cron/worker hook: day lifecycle (pre-warm + system close) then rhythm/goal nudges.
+    Protect with PUSH_DISPATCH_SECRET.
     """
     secret = settings.push_dispatch_secret
     if not secret or not x_push_dispatch_secret or not hmac.compare_digest(x_push_dispatch_secret, secret):
         raise HTTPException(status_code=404, detail="Not found")
+    from todayflow_backend.services.day_lifecycle_jobs_c5 import run_day_lifecycle_due
+
+    lifecycle = run_day_lifecycle_due(db)
     counts = run_due_notifications(db)
-    return {"ok": True, "counts": counts}
+    return {"ok": True, "counts": counts, "lifecycle": lifecycle}

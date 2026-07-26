@@ -4,7 +4,7 @@ import type { MorningRitualData, TodayCycleData } from "@/components/today/today
 import { resolveCacheUserScope } from "@/lib/cacheUserScope";
 import type { TodayContractV1 } from "@/lib/todayContract";
 
-const PREFIX = "todayflow.today_day_bundle.v1";
+const PREFIX = "todayflow.today_day_bundle.v2";
 
 export type TodayDayBundle = {
   savedAt: number;

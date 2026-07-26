@@ -5,7 +5,7 @@ import time
 from datetime import date, datetime, timedelta
 from typing import Any, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 from sqlalchemy import and_, func
 
 from todayflow_backend.api.auth import require_user
@@ -702,20 +702,41 @@ class TodayContractPersonalGrowthV1(BaseModel):
 
 
 class TodayContractDayStoryV1(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     contract_version: str
     theme: str = ""
     direction: str = ""
     story: str = ""
+    expect: str = ""
+    trap: str = ""
+    events_lead: str = ""
+    primary_conflict: str = ""
+    headline_anchor: str = ""
+    day_thesis: dict[str, Any] | None = None
     do: list[str] = Field(default_factory=list)
     avoid: list[str] = Field(default_factory=list)
     advantage: str = ""
     abstain: str = ""
     today_move: str = ""
-    talisman: dict[str, Any] = Field(default_factory=dict)
-    practice_recommendation: dict[str, Any] = Field(default_factory=dict)
+    vibe_closing: str = ""
+    vibe_strokes: list[str] = Field(default_factory=list)
+    talisman: dict[str, Any] | None = Field(default_factory=dict)
+    practice_recommendation: dict[str, Any] | None = Field(default_factory=dict)
     symbolic_note: str = ""
     supports_story: str = ""
     day_foundation: dict[str, Any] | None = None
+    day_personal: dict[str, Any] | None = None
+    day_scenario: dict[str, Any] | None = None
+    interpretive_chorus: dict[str, Any] | None = None
+    editorial: dict[str, Any] | None = None
+    interpretation_status: str | None = None
+    interpretation_unavailable_message: str | None = None
+    domains: dict[str, Any] | None = None
+    global_period: str = ""
+    development_point: str = ""
+    primary_action: str = ""
+    evening_closure: str = ""
     trace: dict[str, Any] = Field(default_factory=dict)
 
 
@@ -736,6 +757,7 @@ class TodayContractV1Response(BaseModel):
 async def get_today_contract(
     request: Request,
     target_date: Optional[str] = None,
+    timezone: Optional[str] = None,
     user: User = Depends(require_user),
     db=Depends(get_session),
     numerology_service: NumerologyService = Depends(get_numerology_service),
@@ -745,11 +767,41 @@ async def get_today_contract(
     """
     Единый DTO для экрана Today (Model B): global_context, personal_growth, 3 DomainLens.
     Собирается на сервере из legacy inputs; клиент не должен мержить morning/fusion/narrative.
+
+    C5: before local ready_at on the current local date → day_not_ready shell (no day_story).
     """
-    if not target_date:
-        target_date = date.today().isoformat()
-    target_date_obj = parse_iso_date_or_400(target_date)
+    from todayflow_backend.services.day_lifecycle_clock_c5 import (
+        DAY_STATUS_NOT_READY,
+        build_day_not_ready_contract,
+        compute_day_lifecycle_c5,
+        local_now,
+        resolve_user_ready_time,
+        resolve_user_timezone,
+    )
+
     locale = request_locale(request)
+    tz_name = resolve_user_timezone(db, user_id=int(user.id), explicit=timezone)
+    ready_time = resolve_user_ready_time(db, user_id=int(user.id))
+    if not target_date:
+        target_date = local_now(timezone_name=tz_name).date().isoformat()
+    target_date_obj = parse_iso_date_or_400(target_date)
+    dc_for_lifecycle = (
+        db.query(db_models.DayConnection)
+        .filter(
+            db_models.DayConnection.user_id == user.id,
+            db_models.DayConnection.date == target_date_obj,
+        )
+        .first()
+    )
+    day_lifecycle = compute_day_lifecycle_c5(
+        timezone_name=tz_name,
+        ready_time=ready_time,
+        target_date=target_date_obj,
+        closed=bool(dc_for_lifecycle and dc_for_lifecycle.evening_completed),
+    )
+    if day_lifecycle.get("status") == DAY_STATUS_NOT_READY:
+        shell = build_day_not_ready_contract(lifecycle=day_lifecycle, locale=locale)
+        return TodayContractV1Response(**shell)
 
     morning = await get_morning_ritual_cached(
         request=request,
@@ -780,117 +832,126 @@ async def get_today_contract(
         raise HTTPException(status_code=500, detail="today_contract_v1 assembly failed") from exc
 
     # C1: enqueue background enrichment when story is missing/stale/fallback — never wait here.
+    # Do not recompute fingerprint without wire inputs, and never overwrite a ready
+    # native/deterministic scenario with a stale enrichment job payload.
     try:
-        from todayflow_backend.services.day_story_fingerprint_v1 import (
-            compute_expected_day_story_fingerprint,
-        )
-        from todayflow_backend.services.day_story_refresh_v1 import ensure_story_state, story_progress_meta
+        from todayflow_backend.services.day_story_refresh_v1 import story_progress_meta
         from todayflow_backend.services.day_story_wire_v1 import _ritual_from_morning_and_connection
         from todayflow_backend.services.day_symbol_state_v1 import owner_key_for_user
-        from todayflow_backend.services.generation_jobs_v0 import lifecycle_payload
+        from todayflow_backend.services.generation_jobs_v0 import get_job_by_key, lifecycle_payload
         from todayflow_backend.services.today_story_enrichment_v0 import enqueue_today_story_enrichment
         from todayflow_backend.db import models as db_models
 
         owner_key = owner_key_for_user(user.id)
-        expected_fp, _ = compute_expected_day_story_fingerprint(
-            db,
-            user_id=int(user.id),
-            owner_key=owner_key,
-            local_date=target_date_obj,
-            timezone_name="UTC",
-            locale=locale,
-        )
-        state = ensure_story_state(
-            db,
-            owner_key=owner_key,
-            local_date=target_date_obj,
-            timezone_name="UTC",
-            locale=locale,
-            user_id=int(user.id),
-        )
-        state.expected_fingerprint = expected_fp
-        if state.fingerprint and state.fingerprint != expected_fp:
-            state.stale = True
-        db.add(state)
-        db.commit()
         progress = story_progress_meta(db, owner_key=owner_key, local_date=target_date_obj)
-        from todayflow_backend.services.generation_jobs_v0 import get_job_by_key
+        story_fp = str(progress.get("story_fingerprint") or "") or None
+        day_story = contract.get("day_story") if isinstance(contract.get("day_story"), dict) else {}
+        scenario = day_story.get("day_scenario") if isinstance(day_story.get("day_scenario"), dict) else {}
+        gen_src = str(scenario.get("generation_source") or "")
+        scenario_ready = bool(scenario.get("ready") and scenario.get("scenes"))
+        native_or_det_ready = scenario_ready and gen_src in {
+            "native_llm_c1",
+            "deterministic_engine_b5",
+        }
 
-        idem = f"today_story:{int(user.id)}:{target_date_obj.isoformat()}:{expected_fp}"
-        existing_job = get_job_by_key(db, idem)
-        # Enrich when missing enriched result for this fingerprint, or story is stale.
-        needs_enrich = True
-        if existing_job is not None and existing_job.status == "enriched" and existing_job.result_payload:
-            needs_enrich = False
-        elif bool(progress.get("story_refresh_required")) or bool(state.stale):
-            needs_enrich = True
-        lifecycle = lifecycle_payload(
-            status="baseline_ready",
-            fingerprint=expected_fp,
-            source="template",
-            is_fully_personal=False,
-        )
-        if not needs_enrich and existing_job is not None:
+        if native_or_det_ready:
             lifecycle = lifecycle_payload(
                 status="enriched",
-                job_id=existing_job.id,
-                fingerprint=expected_fp,
-                source="llm",
-                is_fully_personal=True,
+                fingerprint=story_fp,
+                source="llm" if gen_src == "native_llm_c1" else "deterministic",
+                is_fully_personal=gen_src == "native_llm_c1",
             )
-            if isinstance(existing_job.result_payload, dict) and isinstance(
-                existing_job.result_payload.get("contract"), dict
-            ):
-                contract = existing_job.result_payload["contract"]
-        elif needs_enrich:
-            dc_row = (
-                db.query(db_models.DayConnection)
-                .filter(
-                    db_models.DayConnection.user_id == user.id,
-                    db_models.DayConnection.date == target_date_obj,
-                )
-                .first()
+        else:
+            idem = f"today_story:{int(user.id)}:{target_date_obj.isoformat()}:{story_fp or 'none'}"
+            existing_job = get_job_by_key(db, idem)
+            needs_enrich = True
+            if existing_job is not None and existing_job.status == "enriched" and existing_job.result_payload:
+                needs_enrich = False
+            elif bool(progress.get("story_refresh_required")):
+                needs_enrich = True
+
+            lifecycle = lifecycle_payload(
+                status="baseline_ready",
+                fingerprint=story_fp,
+                source="template",
+                is_fully_personal=False,
             )
-            ritual_norm = _ritual_from_morning_and_connection(morning, dc_row)
-            recs = morning.daily_recommendations if isinstance(morning.daily_recommendations, dict) else {}
-            job = enqueue_today_story_enrichment(
-                db,
-                user_id=int(user.id),
-                local_date=target_date_obj,
-                fingerprint=expected_fp,
-                locale=locale,
-                timezone_name="UTC",
-                ritual_norm=ritual_norm,
-                fusion_dump=fusion_dump,
-                color=str(recs.get("lucky_color") or "") if recs else "",
-                stone=str(recs.get("lucky_stone") or "") if recs else "",
-            )
-            if job.status == "enriched":
+            if not needs_enrich and existing_job is not None:
                 lifecycle = lifecycle_payload(
                     status="enriched",
-                    job_id=job.id,
-                    fingerprint=expected_fp,
+                    job_id=existing_job.id,
+                    fingerprint=story_fp,
                     source="llm",
                     is_fully_personal=True,
                 )
-                if isinstance(job.result_payload, dict) and isinstance(job.result_payload.get("contract"), dict):
-                    contract = job.result_payload["contract"]
-            else:
-                lifecycle = lifecycle_payload(
-                    status="enrichment_pending"
-                    if job.status != "enrichment_failed"
-                    else "enrichment_failed",
-                    job_id=job.id,
-                    fingerprint=expected_fp,
-                    source="template",
-                    is_fully_personal=False,
-                    error=job.error_message,
+                if isinstance(existing_job.result_payload, dict) and isinstance(
+                    existing_job.result_payload.get("contract"), dict
+                ):
+                    contract = existing_job.result_payload["contract"]
+            elif needs_enrich:
+                dc_row = (
+                    db.query(db_models.DayConnection)
+                    .filter(
+                        db_models.DayConnection.user_id == user.id,
+                        db_models.DayConnection.date == target_date_obj,
+                    )
+                    .first()
                 )
-        progress = {**(contract.get("progress") or {}), **progress, "generation_lifecycle": lifecycle}
+                ritual_norm = _ritual_from_morning_and_connection(morning, dc_row)
+                recs = morning.daily_recommendations if isinstance(morning.daily_recommendations, dict) else {}
+                job = enqueue_today_story_enrichment(
+                    db,
+                    user_id=int(user.id),
+                    local_date=target_date_obj,
+                    fingerprint=story_fp or "pending",
+                    locale=locale,
+                    timezone_name="UTC",
+                    ritual_norm=ritual_norm,
+                    fusion_dump=fusion_dump,
+                    color=str(recs.get("lucky_color") or "") if recs else "",
+                    stone=str(recs.get("lucky_stone") or "") if recs else "",
+                )
+                if job.status == "enriched":
+                    lifecycle = lifecycle_payload(
+                        status="enriched",
+                        job_id=job.id,
+                        fingerprint=story_fp,
+                        source="llm",
+                        is_fully_personal=True,
+                    )
+                    if isinstance(job.result_payload, dict) and isinstance(
+                        job.result_payload.get("contract"), dict
+                    ):
+                        contract = job.result_payload["contract"]
+                else:
+                    lifecycle = lifecycle_payload(
+                        status="enrichment_pending"
+                        if job.status != "enrichment_failed"
+                        else "enrichment_failed",
+                        job_id=job.id,
+                        fingerprint=story_fp,
+                        source="template",
+                        is_fully_personal=False,
+                        error=job.error_message,
+                    )
+
+        progress = {
+            **(contract.get("progress") or {}),
+            **progress,
+            "generation_lifecycle": lifecycle,
+            "day_lifecycle": day_lifecycle,
+        }
         contract["progress"] = progress
         _ = gen_log_id
     except Exception as enrich_exc:
         logger.warning("today contract enrichment enqueue skipped: %s", enrich_exc)
+        # Still expose C5 clock when enrichment path fails.
+        try:
+            prog = dict(contract.get("progress") or {})
+            prog["day_lifecycle"] = day_lifecycle
+            contract["progress"] = prog
+        except Exception:
+            pass
 
     return TodayContractV1Response(**contract)
 

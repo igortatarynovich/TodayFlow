@@ -132,7 +132,7 @@ Hero **Main Theme** агрегирует `global_context.period` (+ опцион
 | `global_context.period` | string | ✅ |
 | `personal_growth.development_point` | string | ✅ |
 | `primary_action` | string | ✅ главный шаг дня |
-| `progress` | object | ✅ empty OK |
+| `progress` | object | ✅ empty OK; optional `day_lifecycle` (C5: `status` / `ready_at`) · [DAY_LIFECYCLE_V1](./audits/DAY_LIFECYCLE_V1.md) |
 
 ### 3.2 Сквозные блоки Today (из [TODAY_PRODUCT_MODEL.md](./TODAY_PRODUCT_MODEL.md))
 

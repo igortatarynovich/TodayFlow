@@ -240,10 +240,11 @@ def _mark_sent(db: Session, user_id: int, local_day: date, kind: str) -> None:
 
 def _copy_rhythm(*, en: bool, phase: str) -> tuple[str, str]:
     if phase == "morning":
+        # C5.2: morning push = day is ready (not «open and set a line»).
         return (
-            ("TodayFlow — morning", "Open Today: set your line for the day.")
+            ("TodayFlow — morning", "Your day is ready — open Today.")
             if en
-            else ("TodayFlow — утро", "Зайди в Today и зафиксируй линию дня.")
+            else ("TodayFlow — утро", "Твой день готов — открой Today.")
         )
     if phase == "day":
         return (
@@ -347,6 +348,7 @@ def run_due_notifications(db: Session, *, now_utc: datetime | None = None) -> di
             "skipped",
             "blocked_quiet",
             "blocked_cap",
+            "blocked_not_ready",
         )
     }
 
@@ -381,6 +383,7 @@ def run_due_notifications(db: Session, *, now_utc: datetime | None = None) -> di
             need_rhythm: bool = False,
             need_goal: bool = False,
             route: str = "/today",
+            require_day_ready: bool = False,
         ) -> None:
             if need_rhythm and not sch["notify_rhythm_today"]:
                 return
@@ -393,6 +396,13 @@ def run_due_notifications(db: Session, *, now_utc: datetime | None = None) -> di
             if _in_quiet_hours(now_min, sch["quiet_start"], sch["quiet_end"]):
                 counts["blocked_quiet"] += 1
                 return
+            if require_day_ready:
+                from todayflow_backend.services.day_lifecycle_jobs_c5 import day_story_is_product_ready
+
+                if not day_story_is_product_ready(db, user_id=uid, local_date=local_day):
+                    # Do not mark sent — retry next cron tick within the morning window.
+                    counts["blocked_not_ready"] += 1
+                    return
             if _auto_dispatch_count(db, uid, local_day) >= int(sch["max_auto_per_day"]):
                 counts["blocked_cap"] += 1
                 return
@@ -411,7 +421,15 @@ def run_due_notifications(db: Session, *, now_utc: datetime | None = None) -> di
         dt, db_ = _copy_rhythm(en=en, phase="day")
         et, eb = _copy_rhythm(en=en, phase="evening")
 
-        try_kind("morning_rhythm", sch["morning_enabled"], sch["morning_time"], mt, mb, need_rhythm=True)
+        try_kind(
+            "morning_rhythm",
+            sch["morning_enabled"],
+            sch["morning_time"],
+            mt,
+            mb,
+            need_rhythm=True,
+            require_day_ready=True,
+        )
         try_kind("day_rhythm", sch["day_enabled"], sch["day_time"], dt, db_, need_rhythm=True)
         try_kind("evening_rhythm", sch["evening_enabled"], sch["evening_time"], et, eb, need_rhythm=True)
 

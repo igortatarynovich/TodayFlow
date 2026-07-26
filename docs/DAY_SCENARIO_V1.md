@@ -1,6 +1,6 @@
 # DAY_SCENARIO_V1 — драматургический каркас дня
 
-**Status:** CANON DRAFT — **B1–B5 + C1 + C2 + C3.1–C3.6.1 + C4 landed** (dramaturgy brief pre-LLM; quality observe)  
+**Status:** CANON DRAFT — **B1–B5 + C1 + C2 + C3.1–C3.6.2 + C4 + C4.1 delivery + C5–C5.3 lifecycle landed**  
 **Date:** 2026-07-26  
 **Engine:** `day_scenario_v1.py` · `day_color_catalog_v1.py` · `day_scenario_project_v1.py` · `day_scenario_native_llm_c1.py` · `day_scenario_dramaturgy_brief_c4.py` · `day_scenario_editorial_gate_c31.py` · `day_scenario_personalization_c33.py` · `day_scenario_sphere_selection_c33b.py` · `day_scenario_pairwise_eval_c33b.py` · `day_scenario_eval_pack_c35.py` · `day_scenario_eval_*_c351.py` · `day_scenario_gate_maturity_c36.py`  
 **Wire note:** [audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md](./audits/DAY_SCENARIO_WIRE_PROJECTION_B3.md)  
@@ -8,13 +8,14 @@
 **Runtime SoT:** [audits/DAY_SCENARIO_RUNTIME_SOT_B5.md](./audits/DAY_SCENARIO_RUNTIME_SOT_B5.md)  
 **Native LLM:** [audits/DAY_SCENARIO_NATIVE_LLM_C1.md](./audits/DAY_SCENARIO_NATIVE_LLM_C1.md)  
 **Dramaturgy brief:** [audits/DAY_SCENARIO_DRAMATURGY_BRIEF_C4.md](./audits/DAY_SCENARIO_DRAMATURGY_BRIEF_C4.md)  
+**Day lifecycle:** [audits/DAY_LIFECYCLE_V1.md](./audits/DAY_LIFECYCLE_V1.md) — assemble once · ready_at gate · pre-warm · ready push · system close  
 **Chapters UI:** [audits/DAY_SCENARIO_CHAPTERS_C2.md](./audits/DAY_SCENARIO_CHAPTERS_C2.md)  
 **Everyday quality:** [audits/DAY_SCENARIO_EVERYDAY_QUALITY_C31.md](./audits/DAY_SCENARIO_EVERYDAY_QUALITY_C31.md)  
 **Chorus quality:** [audits/DAY_SCENARIO_CHORUS_QUALITY_C32.md](./audits/DAY_SCENARIO_CHORUS_QUALITY_C32.md)  
 **Personalization:** [audits/DAY_SCENARIO_PERSONALIZATION_C33A.md](./audits/DAY_SCENARIO_PERSONALIZATION_C33A.md)  
 **Sphere selection:** [audits/DAY_SCENARIO_SPHERE_SELECTION_C33B.md](./audits/DAY_SCENARIO_SPHERE_SELECTION_C33B.md)  
 **Eval pack:** [audits/DAY_SCENARIO_EVAL_PACK_C35.md](./audits/DAY_SCENARIO_EVAL_PACK_C35.md) · [audits/DAY_SCENARIO_EVAL_HARDENING_C351.md](./audits/DAY_SCENARIO_EVAL_HARDENING_C351.md)  
-**Gate maturity:** [audits/DAY_SCENARIO_GATE_MATURITY_C36.md](./audits/DAY_SCENARIO_GATE_MATURITY_C36.md) · [audits/DAY_SCENARIO_GATE_CALIBRATION_C361.md](./audits/DAY_SCENARIO_GATE_CALIBRATION_C361.md)  
+**Gate maturity:** [audits/DAY_SCENARIO_GATE_MATURITY_C36.md](./audits/DAY_SCENARIO_GATE_MATURITY_C36.md) · [audits/DAY_SCENARIO_GATE_CALIBRATION_C361.md](./audits/DAY_SCENARIO_GATE_CALIBRATION_C361.md) · [audits/DAY_SCENARIO_HUMAN_GOLDEN_C362.md](./audits/DAY_SCENARIO_HUMAN_GOLDEN_C362.md)  
 **Capture rubric:** [audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md](./audits/DAY_PRODUCT_LOGIC_CAPTURE_PACK.md)  
 **Related:** [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) · [SCREEN_CONTRACTS_V1.md](./SCREEN_CONTRACTS_V1.md) · [today-language/TODAY_LANGUAGE_V1.md](./today-language/TODAY_LANGUAGE_V1.md)
 
@@ -401,7 +402,21 @@ Legacy projections remain for old clients only.
 > C3.6 maturity remains sole runtime-policy owner
 > ([DAY_SCENARIO_GATE_MATURITY_C36.md](./audits/DAY_SCENARIO_GATE_MATURITY_C36.md)).
 
-### Next — C3.6.2 Human Golden Set and Review Protocol → live capture audit → promote by evidence
+### C3.6.2 (landed) — Human golden protocol + tooling (0 production labels)
+
+```markdown
+## Architecture impact
+- **SoT before:** C3.5c scaffold + synthetic_bootstrap only
+- **SoT after:** human case contract, blind export, dual review, adjudication,
+  consensus, agreement metrics, consensus-only calibration adapter
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — DAY_SCENARIO_HUMAN_GOLDEN_C362 + rubric + schema
+- **Backward compatible?** yes — eval-only
+- **Runtime / maturity / Nebius / UI:** untouched; no promotions; no fake 40 labels
+```
+
+### Next — run real blind human batch (target 40) → consensus calibration → promote by evidence
 
 ---
 

@@ -153,13 +153,18 @@ def test_missing_scenes_strips_legacy_and_keeps_unavailable():
     assert projected.get("talisman") is None
     assert projected.get("day_scenario")
     assert projected.get("editorial", {}).get("runtime_source") == "scenario_meta_only"
-    contract = day_story_to_today_contract_v1(projected)
+    from todayflow_backend.services.today_contract_assembler_v1 import validate_today_contract_v1
+
+    contract = day_story_to_today_contract_v1(projected, generation_id="scenario-meta")
     assert contract["day_story"]["interpretation_status"] == "unavailable"
     assert contract["day_story"]["expect"] == ""
-    assert contract["day_story"]["talisman"] is None
+    assert contract["day_story"]["talisman"] == {}
+    assert validate_today_contract_v1(contract) == []
 
 
 def test_no_scenario_is_facts_only_unavailable():
+    from todayflow_backend.services.today_contract_assembler_v1 import validate_today_contract_v1
+
     story, _, _ = _scenario_and_fallback()
     story["expect"] = "Should vanish"
     projected = project_day_scenario_onto_day_story_v1(story, None)
@@ -167,6 +172,9 @@ def test_no_scenario_is_facts_only_unavailable():
     assert projected["expect"] == ""
     assert projected.get("day_scenario") is None
     assert projected["editorial"]["runtime_source"] == "facts_only_unavailable"
+    contract = day_story_to_today_contract_v1(projected, generation_id="facts-only")
+    assert contract["day_story"]["interpretation_status"] == "unavailable"
+    assert validate_today_contract_v1(contract) == []
 
 
 def test_props_require_origin_scene_id():

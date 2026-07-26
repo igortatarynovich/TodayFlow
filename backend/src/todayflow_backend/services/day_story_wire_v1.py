@@ -127,7 +127,8 @@ def _load_cached_day_story(
     )
     if snapshot_id is not None and not any_for_date:
         q = q.filter(db_models.GenerationLog.core_profile_snapshot_id == snapshot_id)
-    for row in q.limit(20):
+    fallback_hit: tuple[dict[str, Any], int, str | None] | None = None
+    for row in q.limit(40):
         ip = row.input_payload if isinstance(row.input_payload, dict) else {}
         if str(ip.get("target_date") or "") != target_date.isoformat():
             continue
@@ -138,8 +139,10 @@ def _load_cached_day_story(
                     continue
             elif ritual_fp and str(ip.get("ritual_context_fingerprint") or "") != ritual_fp:
                 continue
-        # Literary editor bump must not keep serving checklist-era prose.
-        if str(ip.get("prompt_version") or "") != DAY_STORY_PROMPT_VER:
+        # Accept legacy day_story prompt OR native scenario prompt (C1+).
+        # Skipping native versions caused GET to resurrect old slogan fallbacks.
+        pv = str(ip.get("prompt_version") or "")
+        if pv != DAY_STORY_PROMPT_VER and not pv.startswith("day-scenario-native-"):
             continue
         nr = row.normalized_response if isinstance(row.normalized_response, dict) else None
         if nr and nr.get("contract_version") == DAY_STORY_V1_CONTRACT:
@@ -150,8 +153,13 @@ def _load_cached_day_story(
             ok_phrase, _hits = day_story_passes_phrase_gate(scrubbed)
             if not ok_phrase:
                 continue
-            return scrubbed, int(row.id), stored_fp
-    return None
+            hit = (scrubbed, int(row.id), stored_fp)
+            # Prefer successful native/LLM over fingerprint-matched fallbacks.
+            if not bool(getattr(row, "used_fallback", False)) and str(row.status) == "success":
+                return hit
+            if fallback_hit is None:
+                fallback_hit = hit
+    return fallback_hit
 
 
 def _build_day_story_record(
@@ -550,11 +558,15 @@ def _build_day_story_record(
             )
 
         # Phase C1/B5: exclusive scenario SoT projection (deterministic; no LLM here).
+        # If native LLM was attempted and failed (provider/parse), still project
+        # deterministic B5 from ranked facts (C4 everyday short_name) — not a
+        # slogan-only unavailable shell. Unavailable remains for hard editorial rejects.
         try:
             if native_scenario is not None:
                 story = _project_scenario(story, scenario_override=native_scenario)
             elif llm_attempted:
-                story = _project_scenario(story, allow_deterministic_rebuild=False)
+                story = _project_scenario(story, allow_deterministic_rebuild=True)
+                used_fallback = True
             else:
                 story = _project_scenario(story)
         except Exception:
@@ -580,11 +592,7 @@ def _build_day_story_record(
             )
             used_fallback = True
             try:
-                # After validate failure: if LLM path failed, stay unavailable.
-                story = _project_scenario(
-                    story,
-                    allow_deterministic_rebuild=not llm_attempted,
-                )
+                story = _project_scenario(story, allow_deterministic_rebuild=True)
             except Exception:
                 logger.exception("day_scenario projection failed after fallback")
 
@@ -785,6 +793,22 @@ def build_day_story_v1_wire(
             gen_id = int(state.last_generation_log_id or 0)
         if last is not None:
             story = last
+            # Assemble-once: a ready native/deterministic scenario for this date
+            # stays the day's story. Mid-day celestial/fingerprint churn must not
+            # mark it stale (that path used to resurrect slogan fallbacks).
+            stored_sc = story.get("day_scenario") if isinstance(story.get("day_scenario"), dict) else {}
+            gen_src = str(stored_sc.get("generation_source") or "")
+            if (
+                stored_sc.get("ready")
+                and stored_sc.get("scenes")
+                and gen_src in {"native_llm_c1", "deterministic_engine_b5"}
+            ):
+                state.fingerprint = expected_fp
+                state.expected_fingerprint = expected_fp
+                state.stale = False
+                state.last_generation_log_id = int(gen_id or state.last_generation_log_id or 0) or None
+                db.add(state)
+                db.commit()
         elif allow_rebuild_on_miss:
             story, gen_id, _ = _build_day_story_record(
                 db,

@@ -494,6 +494,26 @@ def _opposing_forces(family: str, mode: str) -> tuple[str, str]:
     return (a, b)
 
 
+def _everyday_conflict_short_name(
+    *,
+    force_a: str,
+    force_b: str,
+    lead_fact: str,
+    registry_label: str,
+) -> str:
+    """C4: hero conflict from tension + fact — not registry slogan paraphrase."""
+    a = _clip(force_a, 40) or "автопилот"
+    b = _clip(force_b, 40) or "осознанный выбор"
+    fact = _clip(lead_fact, 72)
+    if fact:
+        # Everyday tension named from sky/cycle fact + choice
+        return _clip(f"{a.capitalize()} или {b} — пока {fact[0].lower() + fact[1:] if len(fact) > 1 else fact}", 96)
+    if registry_label and registry_label.lower() not in {a.lower(), b.lower()}:
+        # Still avoid shipping slogan alone as the plot
+        return _clip(f"{a.capitalize()} или {b}", 72)
+    return _clip(f"{a.capitalize()} или {b}", 72)
+
+
 def build_scenario_conflict_v1(
     *,
     foundation: dict[str, Any],
@@ -526,7 +546,7 @@ def build_scenario_conflict_v1(
     family = str(thesis.get("family") or "momentum")
     variant = str(thesis.get("variant") or "steady_productive_rhythm")
     mode = str(thesis.get("mode") or "stability")
-    label = str(thesis.get("label_ru") or thesis.get("label") or "Сюжет дня").strip()
+    registry_label = str(thesis.get("label_ru") or thesis.get("label") or "").strip()
     driver_ids = [str(x) for x in _as_list(thesis.get("driver_ids"))][:3]
     if not driver_ids:
         driver_ids = [
@@ -545,6 +565,13 @@ def build_scenario_conflict_v1(
         " · ".join(why_arose_parts)
         if why_arose_parts
         else "Факты дня собирают одну линию напряжения / возможности."
+    )
+    lead_fact = why_arose_parts[0] if why_arose_parts else ""
+    short_name = _everyday_conflict_short_name(
+        force_a=force_a,
+        force_b=force_b,
+        lead_fact=lead_fact,
+        registry_label=registry_label,
     )
 
     natal = _as_list(foundation.get("personal_natal_activations"))
@@ -572,13 +599,15 @@ def build_scenario_conflict_v1(
 
     return {
         "contract_version": "day_scenario_conflict_v1",
-        "short_name": label,
+        "short_name": short_name,
         "thesis": {
             "family": family,
             "variant": variant,
             "mode": mode,
-            "label_ru": label,
+            # Act III registry seed — not the Level-1 plot title
+            "label_ru": registry_label or short_name,
             "day_thesis": thesis,
+            "act_iii_registry_label": registry_label or None,
         },
         "opposing_forces": {"a": force_a, "b": force_b},
         "why_arose": why_arose,
@@ -587,8 +616,9 @@ def build_scenario_conflict_v1(
         "chorus_references": chorus_refs,
         "confidence": confidence,
         "foundation_rule": (
-            "Conflict is built from day facts + personal activation; "
-            "card and number refine reading/tempo, never invent a rival plot."
+            "Conflict short_name is everyday tension from ranked facts + opposing forces; "
+            "day_thesis.label_ru is Act III registry seed only. "
+            "Card and number refine reading/tempo, never invent a rival plot."
         ),
     }
 
@@ -649,13 +679,24 @@ def build_scenario_scenes_v1(
     driver_ids = list(conflict.get("driver_ids") or [])
     number_voice = _as_dict(chorus.get("day_number"))
     card_voice = _as_dict(chorus.get("day_card"))
+    lead_fact = ""
+    for d in _as_list(foundation.get("ranked_drivers")):
+        if isinstance(d, dict) and d.get("fact_ru"):
+            lead_fact = _clip(d.get("fact_ru"), 120)
+            break
 
     scenes: list[dict[str, Any]] = []
     for idx, sid in enumerate(sphere_ids):
         scene_id = f"scene.{sid}"
         sphere_label = _SPHERE_LABEL_RU.get(sid, sid)
         role = _scene_role(sid, idx)
-        what = f"В сфере «{sphere_label}» проявляется «{label}»: натяжение между «{a}» и «{b}»."
+        if lead_fact and idx == 0:
+            what = (
+                f"В «{sphere_label}» день упирается в выбор: «{a}» или «{b}». "
+                f"Тон задаёт факт: {lead_fact}"
+            )
+        else:
+            what = f"В сфере «{sphere_label}» тот же выбор — «{a}» или «{b}»."
         why = conflict.get("why_arose") or "Факты дня собираются в одну линию."
         opportunity = f"Шанс выбрать «{b}» именно здесь — один конкретный жест."
         trap = f"Ловушка — скатиться в «{a}» и сделать вид, что выбора не было."
@@ -671,6 +712,8 @@ def build_scenario_scenes_v1(
             "home": "Один бытовой контур — не весь дом сразу.",
             "rest_travel": "Смена обстановки на час, если тянет «всё бросить».",
         }.get(sid, "Одна бытовая сцена, где конфликт становится видимым.")
+        if lead_fact and idx == 0:
+            domestic = f"{domestic} (на фоне: {_clip(lead_fact, 80)})"
 
         chorus_refs: list[str] = ["conflict"]
         if driver_ids:

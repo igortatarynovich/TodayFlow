@@ -33,7 +33,9 @@ facts → native LLM scenario → validate/normalize → deterministic props →
 
 GET (no LLM): facts → deterministic `build_day_scenario_v1` → projector.
 
-LLM fail after retry: `facts_only_unavailable` — **no** legacy LLM schema fallback.
+LLM fail after retry: **deterministic B5 scenario from ranked facts** (C4 everyday
+conflict short_name) — not a slogan-only unavailable shell. Hard editorial reject
+still yields unavailable. Legacy expect/trap invent remains forbidden.
 
 ## Native schema (`day_scenario_native_llm_c1`)
 

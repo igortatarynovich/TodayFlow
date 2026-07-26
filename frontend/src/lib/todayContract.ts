@@ -588,6 +588,19 @@ export type TodayDayFoundationV1 = {
   };
 };
 
+/** C5 day clock — see docs/audits/DAY_LIFECYCLE_V1.md */
+export type DayLifecycleC5 = {
+  contract_version?: string;
+  status?: "day_not_ready" | "ready" | "closed" | string;
+  local_date?: string;
+  target_date?: string;
+  timezone?: string;
+  ready_time?: string;
+  ready_at?: string;
+  assemble_window?: { start?: string; end?: string; active?: boolean };
+  now_local?: string;
+};
+
 export type TodayContractV1 = {
   contract_version: typeof TODAY_CONTRACT_V1 | string;
   global_context: { period: string };
@@ -598,6 +611,17 @@ export type TodayContractV1 = {
   generation_id: string;
   day_story?: TodayContractDayStoryV1 | null;
 };
+
+export function readDayLifecycle(contract: TodayContractV1 | null | undefined): DayLifecycleC5 | null {
+  const raw = contract?.progress?.day_lifecycle;
+  if (!raw || typeof raw !== "object") return null;
+  return raw as DayLifecycleC5;
+}
+
+export function isDayNotReady(contract: TodayContractV1 | null | undefined): boolean {
+  if ((contract?.generation_id || "").trim() === "day-not-ready-c5") return true;
+  return readDayLifecycle(contract)?.status === "day_not_ready";
+}
 
 export type TodayContractDomainId = keyof TodayContractDomainsV1;
 
@@ -656,8 +680,27 @@ export function isTodayContractFallback(contract: TodayContractV1 | null | undef
   return (contract?.generation_id || "").trim() === "fallback-today-contract-v1";
 }
 
+function clientTimezone(): string {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+  } catch {
+    return "UTC";
+  }
+}
+
+/** Local calendar YYYY-MM-DD (not UTC ISO date). */
+export function localCalendarDateISO(d: Date = new Date()): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
 export async function fetchTodayContractV1(targetDate?: string): Promise<TodayContractV1> {
-  const qs = targetDate ? `?target_date=${encodeURIComponent(targetDate)}` : "";
+  const params = new URLSearchParams();
+  if (targetDate) params.set("target_date", targetDate);
+  params.set("timezone", clientTimezone());
+  const qs = `?${params.toString()}`;
   // Hard client budget: if contract LLM stalls, Today must paint via fallback — not hang forever.
   const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
   const timer =

@@ -126,9 +126,14 @@ def test_fallback_fills_talisman_note_from_color_why():
         fingerprint="fp-test",
     )
     assert "ясность" in (story.get("talisman") or {}).get("note", "").lower()
+    from todayflow_backend.services.today_contract_assembler_v1 import validate_today_contract_v1
+
     contract = day_story_to_today_contract_v1(story, generation_id="1")
-    assert "ясность" in ((contract["day_story"].get("talisman") or {}).get("note") or "").lower()
     assert contract["day_story"].get("interpretation_status") == "unavailable"
+    # Unavailable shell strips meaning props (empty dict, not null — Pydantic wire rejects null).
+    assert contract["day_story"].get("talisman") == {}
+    assert contract["day_story"].get("practice_recommendation") == {}
+    assert validate_today_contract_v1(contract) == []
 
 
 def test_interpretation_no_domains_without_topic():
@@ -157,11 +162,17 @@ def test_build_day_story_fallback_has_trace_and_partial_domains():
 
 
 def test_day_story_to_today_contract_marks_absent_domains():
+    from todayflow_backend.services.today_contract_assembler_v1 import validate_today_contract_v1
+
     contract = day_story_to_today_contract_v1(_sample_story(), generation_id="42", progress={})
     assert contract["contract_version"] == "today_contract_v1"
     assert contract["generation_id"] == "42"
     assert contract["day_story"]["interpretation_status"] == "unavailable"
-    assert not str(contract.get("primary_action") or "").strip()
+    # Meaning slots stay empty; navigational shell uses meta fallbacks so GET /today/contract validates.
+    assert contract["day_story"]["expect"] == ""
+    assert str(contract.get("primary_action") or "").strip()
+    assert str(contract["personal_growth"].get("development_point") or "").strip()
+    assert validate_today_contract_v1(contract) == []
     for did in ("money_work", "relationships", "family"):
         assert contract["domains"][did].get("evidence_status") == "absent"
     assert contract["day_story"]["trace"]["confidence"] is not None

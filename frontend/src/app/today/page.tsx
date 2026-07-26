@@ -78,8 +78,12 @@ import {
   fetchTodayContractV1,
   buildFallbackTodayContract,
   refreshTodayStory,
+  isDayNotReady,
+  readDayLifecycle,
+  localCalendarDateISO,
   type TodayContractV1,
 } from "@/lib/todayContract";
+import { TodayDayNotReadySurface } from "@/components/today/TodayDayNotReadySurface";
 import {
   shouldRefreshStoryAfterReveal,
   type DaySymbolPublicView,
@@ -140,7 +144,7 @@ export default function TodayPage() {
     router.replace(q ? `/today?${q}` : "/today", { scroll: false });
   }, [searchParams, router, toast]);
 
-  const todayIso = useMemo(() => new Date().toISOString().split("T")[0], []);
+  const todayIso = useMemo(() => localCalendarDateISO(), []);
   const initialBundle = useMemo(() => (typeof window !== "undefined" ? readTodayDayBundle(todayIso) : null), [todayIso]);
   const [loading, setLoading] = useState(() => !todayDayBundleIsReady(initialBundle));
   const [todayData, setTodayData] = useState<TodayCycleData | null>(() => initialBundle?.cycle ?? null);
@@ -677,7 +681,7 @@ export default function TodayPage() {
   useEffect(() => {
     if (!isAuthenticated || !cycle?.date || !todayData?.date) return;
     if (todayData.date === cycle.date) return;
-    const todayIso = new Date().toISOString().split("T")[0];
+    const todayIso = localCalendarDateISO();
     if (cycle.date !== todayIso) return;
     void loadToday();
   }, [isAuthenticated, cycle?.date, todayData?.date, loadToday]);
@@ -1136,6 +1140,7 @@ export default function TodayPage() {
   /** Cycle/contract cache can paint immediately; network soft-refreshes underneath the reveal. */
   const dayReady = Boolean(isAuthenticated && todayData && todayContract && !error);
   const showDayReveal = Boolean(isAuthenticated && !authLoading && !dayRevealDone);
+  const dayNotReady = isDayNotReady(todayContract);
 
   if (authLoading) {
     return (
@@ -1206,6 +1211,17 @@ export default function TodayPage() {
         }}
         hideDatePill
       />
+    );
+  }
+
+  if (dayNotReady) {
+    return (
+      <ProductPageScreen testId="today-not-ready-shell" title="Сегодня" hideDatePill>
+        <TodayDayNotReadySurface
+          lifecycle={readDayLifecycle(todayContract)}
+          primaryAction={todayContract.primary_action}
+        />
+      </ProductPageScreen>
     );
   }
 

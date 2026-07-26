@@ -851,7 +851,8 @@ def call_day_scenario_native_llm_c1(
 
     if not is_llm_chat_configured():
         return None
-    client = get_openai_compatible_client()
+    # Refresh/enrichment only — never GET. Use background timeout budget.
+    client = get_openai_compatible_client(operation="background")
     if client is None:
         return None
 
@@ -957,7 +958,7 @@ def call_day_scenario_native_llm_c1(
                 {"role": "user", "content": user_sent},
             ],
             temperature=0.52,
-            max_tokens=resolve_max_tokens(2400),
+            max_tokens=resolve_max_tokens(4800),
         )
         if not content:
             if capture is not None:
