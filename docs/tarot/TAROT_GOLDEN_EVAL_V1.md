@@ -1,6 +1,6 @@
 # Tarot Golden Eval v1
 
-**Статус:** ACTIVE (2026-07-25) — рубрикатор + harness; **freeze lift** только после прогона с результатами  
+**Статус:** ACTIVE (2026-07-26) — harness + live #2 gate green; **freeze lift** только после accept владельцем  
 **Тип:** quality eval / gate  
 **Связанные:** [TAROT_GOLDEN_DATASET_V1.md](./TAROT_GOLDEN_DATASET_V1.md) · [TAROT_INTERPRETATION_ENGINE_V1.md](./TAROT_INTERPRETATION_ENGINE_V1.md)
 
@@ -104,7 +104,9 @@ Human can override `paid_worth` and rubric scores in the report later; harness n
 
 Пока отчёт не принят владельцем — freeze **ACTIVE**.
 
-Первый live: [TAROT_GOLDEN_EVAL_LIVE_2026-07-25](../audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-25.md) — **7/12 LLM · freeze not lifted**.
+- Live #1: [TAROT_GOLDEN_EVAL_LIVE_2026-07-25](../audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-25.md) — **7/12 LLM · gate red**
+- Live #2: [TAROT_GOLDEN_EVAL_LIVE_2026-07-26](../audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-26.md) — **11/12 LLM · gate green**
+- Live #3: [TAROT_GOLDEN_EVAL_LIVE_2026-07-26_r3](../audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-26_r3.md) — **12/12 LLM · gate green** (timeout deploy)
 
 ---
 
@@ -113,4 +115,7 @@ Human can override `paid_worth` and rubric scores in the report later; harness n
 - [x] Rubric + result schema + scorer + CLI
 - [x] Offline tests on Dataset
 - [x] first live report recorded (2026-07-25) — llm_pass 7/12, freeze not lifted
+- [x] second live report (2026-07-26) — llm_pass 11/12, harness gate green
+- [x] third live report (2026-07-26 r3) — llm_pass 12/12 after timeout deploy
 - [ ] live report accepted by owner / freeze lift decision
+- [ ] Q3 prompt iteration from eval deltas (in progress: v1.6 choice length)

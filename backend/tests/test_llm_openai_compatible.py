@@ -12,16 +12,20 @@ from todayflow_backend.core.llm_openai_compatible import (
 )
 
 
-def test_is_llm_chat_configured_prefers_llm_chat_api_key(monkeypatch):
+def test_get_openai_compatible_client_background_uses_longer_timeout(monkeypatch):
+    from todayflow_backend.core.llm_openai_compatible import llm_operation
+
     s = config_module.Settings(
-        openai_api_key=None,
-        llm_chat_api_key="sk-custom",
-        openai_base_url="http://localhost:8000/v1",
+        openai_api_key="sk-test",
+        llm_http_timeout_seconds=12.0,
+        llm_background_timeout_seconds=45.0,
     )
     monkeypatch.setattr(config_module, "settings", s)
-    assert is_llm_chat_configured() is True
-    client = get_openai_compatible_client()
-    assert client is not None
+    sync_client = get_openai_compatible_client()
+    assert float(sync_client.timeout) == 12.0
+    with llm_operation("background"):
+        bg_client = get_openai_compatible_client()
+    assert float(bg_client.timeout) == 45.0
 
 
 def test_resolve_max_tokens_bumps_reasoning_models(monkeypatch):
@@ -53,6 +57,31 @@ def test_chat_completion_json_fallback_without_response_format(monkeypatch):
     )
     assert text and "clarity" in text
     assert mock_client.chat.completions.create.call_count == 2
+
+
+def test_chat_completion_json_does_not_plain_retry_on_timeout(monkeypatch):
+    from todayflow_backend.core.llm_openai_compatible import classify_llm_call_failure
+
+    s = config_module.Settings(openai_api_key="sk-test")
+    monkeypatch.setattr(config_module, "settings", s)
+
+    class FakeTimeout(Exception):
+        pass
+
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.side_effect = FakeTimeout("Request timed out.")
+
+    text = chat_completion_text(
+        mock_client,
+        model="my-model",
+        messages=[{"role": "user", "content": "x"}],
+        temperature=0.1,
+        max_tokens=100,
+        json_object=True,
+    )
+    assert text is None
+    assert mock_client.chat.completions.create.call_count == 1
+    assert classify_llm_call_failure(FakeTimeout("Request timed out.")) == "timeout"
 
 
 def test_chat_completion_json_retries_when_json_mode_returns_empty(monkeypatch):

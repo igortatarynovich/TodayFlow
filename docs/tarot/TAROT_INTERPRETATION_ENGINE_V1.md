@@ -302,6 +302,10 @@ Semantic profile на карту (семантика, не литература)
 
 Только после Eval: wording · ритм · длина · баланс символика/практика · голос. Не pipeline / контракт / новые слои.
 
+**Eval deltas in flight (2026-07-26):**
+- semantic grounding gate (card-name ablation) — landed with live #2 uplift
+- choice: compact `question_story` + A/B in `option_*_note`; soft length ceiling raised (`tarot-interpretation-v1.6`) after `too_long:question_story` on `choice_work_leave_or_stay`
+
 ---
 
 ## 7. Non-goals
@@ -329,5 +333,7 @@ Semantic profile на карту (семантика, не литература)
 - [x] Canon principles: LLM = one story · answer this question · card-name ablation
 - [x] Q1 Editorial deepen minors (unique archetype per card, not rank×suit)
 - [x] Golden Dataset (scenarios without scores)
-- [x] Golden Eval harness (rubric + CLI + offline tests) — live report / freeze lift still pending
+- [x] Golden Eval harness (rubric + CLI + offline tests)
+- [x] Live #2 gate green (11/12 LLM, 2026-07-26)
+- [x] Live #3 **12/12 LLM** after timeout deploy (2026-07-26 r3) — **owner freeze-lift accept still pending**
 - [ ] Q3 Prompt iteration from eval deltas only

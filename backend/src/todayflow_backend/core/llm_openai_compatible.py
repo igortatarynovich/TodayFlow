@@ -214,6 +214,44 @@ def _build_chat_kwargs(
     return kw
 
 
+def _is_timeout_like_error(exc: BaseException) -> bool:
+    """Client/server deadline — do not burn a second plain completion in the same attempt."""
+    name = type(exc).__name__.lower()
+    msg = str(exc).lower()
+    tokens = (
+        "timeout",
+        "timed out",
+        "deadline_exceeded",
+        "deadline exceeded",
+        "readtimeout",
+        "apitimeouterror",
+    )
+    if any(t in name for t in ("timeout", "deadline")):
+        return True
+    return any(t in msg for t in tokens)
+
+
+def classify_llm_call_failure(exc: BaseException | None = None, *, http_status: int | None = None) -> str:
+    """Coarse failure class for ops logs (timeout vs throttle vs upstream vs other)."""
+    if http_status == 429:
+        return "rate_limited"
+    if http_status in {408, 504}:
+        return "timeout"
+    if http_status in {502, 503}:
+        return "upstream_unavailable"
+    if exc is not None and _is_timeout_like_error(exc):
+        return "timeout"
+    if exc is not None:
+        msg = str(exc).lower()
+        if "429" in msg or "rate limit" in msg or "too many requests" in msg:
+            return "rate_limited"
+        if "finish_reason" in msg:
+            return "stream_incomplete"
+        if any(code in msg for code in ("502", "503", "504", "bad gateway", "unavailable")):
+            return "upstream_unavailable"
+    return "other"
+
+
 def chat_completion_text(
     client: Any,
     *,
@@ -223,7 +261,13 @@ def chat_completion_text(
     max_tokens: int,
     json_object: bool,
 ) -> str | None:
-    """Возвращает текст ответа ассистента или None при полном сбое."""
+    """Возвращает текст ответа ассистента или None при полном сбое.
+
+    JSON mode may fall back to plain completion when the provider rejects
+    ``response_format`` or returns empty content. **Timeouts do not fall back** —
+    a second full wait would only amplify client-side deadline cuts (esp. Nebius
+    + large packs under a short sync timeout).
+    """
     effective_max = resolve_max_tokens(max_tokens, model=model)
     reasoning_effort = _json_reasoning_effort(model) if json_object else None
     base_kw = _build_chat_kwargs(
@@ -247,15 +291,31 @@ def chat_completion_text(
                 model,
             )
         except Exception as exc:
+            kind = classify_llm_call_failure(exc)
+            if kind == "timeout":
+                logger.warning(
+                    "LLM json_object failed class=%s model=%s err=%s; skip plain retry in same attempt",
+                    kind,
+                    model,
+                    exc,
+                )
+                return None
             logger.warning(
-                "LLM chat with response_format=json_object failed (%s); retrying without JSON mode",
+                "LLM chat with response_format=json_object failed class=%s (%s); retrying without JSON mode",
+                kind,
                 exc,
             )
     try:
         resp = client.chat.completions.create(**base_kw)
         return _message_content(resp)
     except Exception as exc:
-        logger.warning("LLM chat completion failed: %s", exc, exc_info=True)
+        kind = classify_llm_call_failure(exc)
+        logger.warning(
+            "LLM chat completion failed class=%s: %s",
+            kind,
+            exc,
+            exc_info=True,
+        )
         return None
 
 

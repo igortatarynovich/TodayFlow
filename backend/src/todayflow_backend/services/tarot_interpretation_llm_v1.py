@@ -14,6 +14,7 @@ from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_text,
     get_openai_compatible_client,
     is_llm_chat_configured,
+    llm_operation,
     resolve_default_chat_model,
     resolve_max_tokens,
 )
@@ -21,7 +22,7 @@ from todayflow_backend.core.text_quality import is_meaningful_sentence
 
 logger = logging.getLogger(__name__)
 
-TAROT_INTERPRETATION_PROMPT_VER = "tarot-interpretation-v1.4"
+TAROT_INTERPRETATION_PROMPT_VER = "tarot-interpretation-v1.6"
 
 _BANNED_SUBSTRINGS = (
     "аркан",
@@ -79,6 +80,8 @@ meaning_range — семантические факты карты (central_symb
 reversed_*, intensifies_drawn / softens_drawn; для младших — Q1: core_scene, central_conflict,
 driving_need, shadow_pattern, growth_direction, *_lens, reversed_shift, adjacent_distinction).
 Используй Q1 как уникальный архетип карты, не как формулу масть×ранг.
+Не обязательно называть карты по имени: опирайся на core_scene / central_conflict / adjacent_distinction.
+Если называешь карты — только когда это помогает истории; запрещён механический список «карта 1… карта 2…».
 
 Порядок работы (обязателен):
 1) Собери конфликт расклада из символов и ролей позиций.
@@ -100,14 +103,15 @@ driving_need, shadow_pattern, growth_direction, *_lens, reversed_shift, adjacent
 - не читай мысли другого как факт при relationship_intent.
 
 Для choice (question_type=choice или spread_kind=choice):
-- в question_story явно сравни варианты (выгода / цена);
-- option_a_note и option_b_note обязательны и должны различаться;
-- затем один общий вывод в direct_answer.
+- в question_story — короткий общий конфликт выбора (2–4 предложения), без полного разбора всех позиций;
+- детали выгоды/цены A и B клади в option_a_note и option_b_note (обязательны и должны различаться);
+- затем один общий вывод в direct_answer;
+- держи question_story компактным: не раздувай сравнение внутри story, если оно уже в option_*_note.
 
 Верни ТОЛЬКО валидный JSON:
 {
   "symbols_overview": "символы и напряжения — 2–5 предложений",
-  "question_story": "единая история под вопрос; для choice — сравнение A/B",
+  "question_story": "единая история под вопрос; для choice — сжатый конфликт выбора",
   "direct_answer": "прямой ответ на вопрос без фатализма",
   "next_step": "один конкретный применимый шаг",
   "option_a_note": "null или отличие пути A",
@@ -192,20 +196,73 @@ def _profile_leaked(blob: str, pack: dict[str, Any]) -> bool:
     return False
 
 
+def _card_semantic_anchors(card: dict[str, Any]) -> list[str]:
+    """Distinctive tokens from KB/Q1 facts (+ optional name) for grounding checks."""
+    rng = card.get("meaning_range") if isinstance(card.get("meaning_range"), dict) else {}
+    texts = [
+        str(rng.get("central_symbol") or ""),
+        str(rng.get("core_scene") or ""),
+        str(rng.get("central_conflict") or ""),
+        str(rng.get("inner_conflict") or ""),
+        str(rng.get("outer_expression") or ""),
+    ]
+    for side_key in ("light_side", "shadow_side"):
+        for item in rng.get(side_key) or []:
+            texts.append(str(item))
+    name = str(card.get("name_ru") or "")
+    base = re.sub(r"\s*\(перевёрнутый\)\s*$", "", name, flags=re.I).strip()
+    if base:
+        texts.append(base)
+
+    stop = {
+        "против",
+        "через",
+        "когда",
+        "чтобы",
+        "этот",
+        "этого",
+        "эта",
+        "эти",
+        "человек",
+        "людей",
+        "карта",
+        "карты",
+        "жизнь",
+        "сейчас",
+        "может",
+        "нужно",
+        "важно",
+    }
+    anchors: list[str] = []
+    for text in texts:
+        for tok in re.findall(r"[^\W\d_]{4,}", text.lower(), flags=re.UNICODE):
+            if tok in stop:
+                continue
+            anchors.append(tok)
+    return list(dict.fromkeys(anchors))[:10]
+
+
 def _cards_linked(blob: str, pack: dict[str, Any]) -> bool:
-    names = []
-    for card in pack.get("cards") or []:
-        if not isinstance(card, dict):
-            continue
-        name = str(card.get("name_ru") or "")
-        # strip orientation suffix for matching base name
-        base = re.sub(r"\s*\(перевёрнутый\)\s*$", "", name, flags=re.I).strip()
-        if base:
-            names.append(base.lower())
-    if len(names) < 2:
+    """Grounding in card semantics — not a card-name checklist.
+
+    Card-name ablation principle: good answers may omit names if scenes/conflicts land.
+    """
+    cards = [c for c in (pack.get("cards") or []) if isinstance(c, dict)]
+    if len(cards) < 2:
         return True
-    hits = sum(1 for n in dict.fromkeys(names) if n and n in blob.lower())
-    return hits >= 2
+    low = blob.lower()
+    hits = 0
+    for card in cards:
+        anchors = _card_semantic_anchors(card)
+        if anchors and any(a in low for a in anchors):
+            hits += 1
+            continue
+        # Fallback: full name present
+        name = str(card.get("name_ru") or "")
+        base = re.sub(r"\s*\(перевёрнутый\)\s*$", "", name, flags=re.I).strip().lower()
+        if base and base in low:
+            hits += 1
+    return hits >= min(2, len(cards))
 
 
 def _step_concrete(step: str) -> bool:
@@ -231,6 +288,12 @@ def _position_title_spam(blob: str, pack: dict[str, Any]) -> bool:
     return False
 
 
+# Soft length budget: choice spreads often need slightly longer story before
+# option notes absorb A/B detail; hard reject only past this ceiling.
+_FIELD_MAX_CHARS = 1200
+_FIELD_MAX_CHARS_CHOICE_STORY = 1400
+
+
 def quality_reject_reason(fields: dict[str, str], pack: dict[str, Any]) -> str | None:
     """Return reject reason or None if quality gates pass."""
     symbols = fields["symbols_overview"]
@@ -239,8 +302,14 @@ def quality_reject_reason(fields: dict[str, str], pack: dict[str, Any]) -> str |
     step = fields["next_step"]
     blob = f"{symbols} {story} {answer} {step}"
 
+    is_choice = bool(
+        pack.get("spread_kind") == "choice" or pack.get("response_shape", {}).get("choice_compare")
+    )
     for key, text in fields.items():
-        if len(text) > 900:
+        limit = _FIELD_MAX_CHARS
+        if is_choice and key == "question_story":
+            limit = _FIELD_MAX_CHARS_CHOICE_STORY
+        if len(text) > limit:
             return f"too_long:{key}"
         if len(text) < 20 and key in {"symbols_overview", "question_story", "direct_answer"}:
             return f"too_short:{key}"
@@ -337,12 +406,17 @@ def choice_story_from_interpretation(interp: dict[str, str], pack: dict[str, Any
 def call_tarot_interpretation_llm_v1(
     pack: dict[str, Any],
     *,
-    max_attempts: int = 2,
+    max_attempts: int = 3,
 ) -> dict[str, str] | None:
-    """Generate interpretation from context pack. None if LLM unavailable/invalid."""
+    """Generate interpretation from context pack. None if LLM unavailable/invalid.
+
+    Uses ``background`` LLM timeout budget — DeepSeek-V4-Pro + ~16k pack typically
+    needs ~20s; default sync 12s was cutting successful generations mid-flight.
+    """
     if not is_llm_chat_configured():
         return None
-    client = get_openai_compatible_client()
+    with llm_operation("background"):
+        client = get_openai_compatible_client()
     if client is None:
         return None
 
@@ -370,5 +444,26 @@ def call_tarot_interpretation_llm_v1(
         validated = validate_interpretation(parsed, pack=pack)
         if validated:
             return validated
-        logger.warning("tarot_llm validation failed attempt=%s", attempt_idx)
+        # Distinguishes empty/parse/clean failures from quality rejects for ops/eval.
+        if not content:
+            reason = "empty_content"
+        elif not parsed:
+            reason = "json_parse"
+        else:
+            probe = {
+                k: _clean_field(parsed.get(k), min_words=mw)
+                for k, mw in (
+                    ("symbols_overview", 8),
+                    ("question_story", 8),
+                    ("direct_answer", 6),
+                    ("next_step", 5),
+                )
+            }
+            missing = [k for k, v in probe.items() if not v]
+            if missing:
+                reason = f"clean_failed:{','.join(missing)}"
+            else:
+                cleaned_fields = {k: str(v) for k, v in probe.items() if v}
+                reason = quality_reject_reason(cleaned_fields, pack) or "unknown_reject"
+        logger.warning("tarot_llm validation failed attempt=%s reason=%s", attempt_idx, reason)
     return None

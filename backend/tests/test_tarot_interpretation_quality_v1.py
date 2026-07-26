@@ -152,3 +152,117 @@ def test_quality_gates_require_choice_contrast():
         "option_b_note": "B сохраняет опору, но может затягивать прояснение.",
     }
     assert tarot_llm.validate_interpretation(strong, pack=pack) is not None
+
+
+def test_quality_gates_accept_semantic_grounding_without_card_names():
+    """Card-name ablation: scenes/conflicts may ground the answer without naming cards."""
+    pack = {
+        "question": "Почему я чувствую себя в ловушке мыслей?",
+        "spread_kind": "general",
+        "profile_relevant": {},
+        "cards": [
+            {
+                "name_ru": "Восьмёрка Мечей",
+                "meaning_range": {
+                    "central_symbol": "связанность снаружи",
+                    "core_scene": "ремни и верёвки вокруг тела",
+                },
+            },
+            {
+                "name_ru": "Девятка Мечей",
+                "meaning_range": {
+                    "central_symbol": "ночная тревога ума",
+                    "core_scene": "война в голове вместо сна",
+                },
+            },
+            {
+                "name_ru": "Десятка Мечей",
+                "meaning_range": {
+                    "central_symbol": "дно и конец",
+                    "core_scene": "финал истории на земле",
+                },
+            },
+        ],
+        "response_shape": {},
+    }
+    no_names = {
+        "symbols_overview": (
+            "Сначала связанность снаружи, потом ночная тревога ума — и рядом соблазн принять "
+            "дно и конец за единственный выход."
+        ),
+        "question_story": (
+            "Ловушка держится не только на верёвках: ум крутит войну в голове и путает усталость "
+            "с финалом истории, будто дальше ничего нельзя."
+        ),
+        "direct_answer": (
+            "Сначала отдели внешнюю связанность от ночной тревоги — дно ещё не приговор и не факт."
+        ),
+        "next_step": "Перед сном запиши одну мысль и один физический факт из комнаты.",
+    }
+    assert tarot_llm.validate_interpretation(no_names, pack=pack) is not None
+
+    ungrounded = {
+        "symbols_overview": "В раскладе много напряжения и общих слов без опоры на сцены карт.",
+        "question_story": "Ситуация сложная, нужно просто понять себя глубже и не торопиться.",
+        "direct_answer": "Сейчас важно действовать спокойнее и не делать резких выводов о будущем.",
+        "next_step": "Сделай паузу и запиши, что чувствуешь сегодня вечером.",
+    }
+    assert tarot_llm.validate_interpretation(ungrounded, pack=pack) is None
+
+
+def test_choice_question_story_allows_moderate_length_from_eval_delta():
+    """Live #2 reject: too_long:question_story at 900 — choice needs headroom."""
+    pack = {
+        "question": "Стоит ли менять работу — или сначала что-то прояснить здесь?",
+        "spread_kind": "choice",
+        "profile_relevant": {},
+        "cards": [
+            {
+                "name_ru": "Луна",
+                "meaning_range": {"central_symbol": "туман сомнений", "core_scene": "путь сквозь ночной берег"},
+            },
+            {
+                "name_ru": "Рыцарь Жезлов",
+                "meaning_range": {"central_symbol": "импульс движения", "core_scene": "конь уже в рыси"},
+            },
+            {
+                "name_ru": "Император",
+                "meaning_range": {"central_symbol": "порядок и опора", "core_scene": "трон и рамка правил"},
+            },
+            {
+                "name_ru": "Повешенный",
+                "meaning_range": {"central_symbol": "пауза взгляда", "core_scene": "висеть чтобы увидеть иначе"},
+            },
+        ],
+        "response_shape": {"choice_compare": True},
+    }
+    pad = (
+        "Сначала отделяй страх от фактов на берегу ночи, потом смотри на рысь коня, "
+        "рамку правил на троне и цену паузы: спешка режет опору, застой размывает критерии, "
+        "а разговор с коллегой и запись трёх условий дают проверяемую точку, не фатальный приговор. "
+        "Добавь сравнение зарплаты, нагрузки и смысла задач без драмы; отметь, где туман сильнее фактов, "
+        "и где импульс уже готов увести без карты маршрута."
+    )
+    story = (
+        "Выбор держится на тумане сомнений против импульса движения: один путь манит сменой "
+        "берега, другой требует сначала увидеть рамку правил на текущем месте. "
+        "Пауза взгляда говорит: не сжигай мост, пока не отделён страх от факта. "
+        + pad
+        + " "
+        + pad
+    )
+    fields = {
+        "symbols_overview": (
+            "Туман сомнений сталкивается с импульсом движения; рядом порядок и опора и пауза взгляда."
+        ),
+        "question_story": story,
+        "direct_answer": "Сначала проясни критерии здесь, потом решай об уходе — не наоборот.",
+        "next_step": "Запиши три критерия «остаться имеет смысл» и проверь один разговором на этой неделе.",
+        "option_a_note": "Уйти быстрее снимает туман, но риск импульса без опоры.",
+        "option_b_note": "Остаться даёт рамку, но может растянуть паузу без решения.",
+    }
+    assert 900 < len(fields["question_story"]) <= tarot_llm._FIELD_MAX_CHARS_CHOICE_STORY
+    assert tarot_llm.validate_interpretation(fields, pack=pack) is not None
+
+    too_long = {**fields, "question_story": fields["question_story"] + (" подробно" * 80)}
+    assert tarot_llm.quality_reject_reason(too_long, pack) == "too_long:question_story"

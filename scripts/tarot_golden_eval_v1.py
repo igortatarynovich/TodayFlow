@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -55,6 +56,12 @@ def main() -> int:
     parser.add_argument("--limit", type=int, default=0, help="Limit scenarios")
     parser.add_argument("--out", type=Path, help="Write JSON report")
     args = parser.parse_args()
+
+    # Live eval only: generous HTTP budget before Settings load (DeepSeek + large packs).
+    # Does not change production defaults — process env for this CLI only.
+    if args.live:
+        os.environ.setdefault("LLM_HTTP_TIMEOUT_SECONDS", "120")
+        os.environ.setdefault("LLM_BACKGROUND_TIMEOUT_SECONDS", "180")
 
     sys.path.insert(0, str(ROOT / "backend" / "src"))
     from todayflow_backend.services import tarot_golden_eval_v1 as geval

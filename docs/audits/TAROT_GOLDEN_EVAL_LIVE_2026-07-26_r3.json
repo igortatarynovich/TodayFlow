@@ -1,0 +1,321 @@
+{
+  "contract_version": "tarot_golden_eval_result_v1",
+  "dataset_contract": "tarot_golden_dataset_v1",
+  "mode": "live",
+  "generated_at": "2026-07-26T08:42:08.834218+00:00",
+  "scenarios": [
+    {
+      "id": "choice_work_leave_or_stay",
+      "pack_ok": true,
+      "llm_ok": true,
+      "shape": {
+        "compare_options": true,
+        "one_story": true,
+        "direct_answer": true,
+        "next_step": true,
+        "no_arkan_label": true
+      },
+      "rubric": {
+        "answered_question": 5,
+        "clarity": 4,
+        "story_not_card_list": 4,
+        "symbolism_natural": 4,
+        "practical_use": 4,
+        "no_repetition": 4,
+        "no_false_confidence": 4,
+        "want_to_finish": 4
+      },
+      "paid_worth": true,
+      "rubric_mean": 4.125,
+      "notes": []
+    },
+    {
+      "id": "relationship_state_three",
+      "pack_ok": true,
+      "llm_ok": true,
+      "shape": {
+        "one_story": true,
+        "direct_answer": true,
+        "next_step": true,
+        "no_arkan_label": true
+      },
+      "rubric": {
+        "answered_question": 5,
+        "clarity": 4,
+        "story_not_card_list": 4,
+        "symbolism_natural": 4,
+        "practical_use": 4,
+        "no_repetition": 4,
+        "no_false_confidence": 4,
+        "want_to_finish": 4
+      },
+      "paid_worth": true,
+      "rubric_mean": 4.125,
+      "notes": []
+    },
+    {
+      "id": "relationship_intent_other",
+      "pack_ok": true,
+      "llm_ok": true,
+      "shape": {
+        "one_story": true,
+        "direct_answer": true,
+        "next_step": true,
+        "no_other_mind_as_fact": true,
+        "no_arkan_label": true
+      },
+      "rubric": {
+        "answered_question": 4,
+        "clarity": 4,
+        "story_not_card_list": 4,
+        "symbolism_natural": 4,
+        "practical_use": 4,
+        "no_repetition": 4,
+        "no_false_confidence": 4,
+        "want_to_finish": 4
+      },
+      "paid_worth": true,
+      "rubric_mean": 4.0,
+      "notes": []
+    },
+    {
+      "id": "work_decision_burnout_minors",
+      "pack_ok": true,
+      "llm_ok": true,
+      "shape": {
+        "one_story": true,
+        "direct_answer": true,
+        "next_step": true,
+        "distinct_minors": true,
+        "no_arkan_label": true
+      },
+      "rubric": {
+        "answered_question": 5,
+        "clarity": 4,
+        "story_not_card_list": 4,
+        "symbolism_natural": 4,
+        "practical_use": 4,
+        "no_repetition": 4,
+        "no_false_confidence": 4,
+        "want_to_finish": 4
+      },
+      "paid_worth": true,
+      "rubric_mean": 4.125,
+      "notes": []
+    },
+    {
+      "id": "money_decision_calm",
+      "pack_ok": true,
+      "llm_ok": true,
+      "shape": {
+        "one_story": true,
+        "direct_answer": true,
+        "next_step": true,
+        "no_arkan_label": true
+      },
+      "rubric": {
+        "answered_question": 4,
+        "clarity": 4,
+        "story_not_card_list": 4,
+        "symbolism_natural": 4,
+        "practical_use": 4,
+        "no_repetition": 4,
+        "no_false_confidence": 4,
+        "want_to_finish": 4
+      },
+      "paid_worth": true,
+      "rubric_mean": 4.0,
+      "notes": []
+    },
+    {
+      "id": "conflict_colleague",
+      "pack_ok": true,
+      "llm_ok": true,
+      "shape": {
+        "one_story": true,
+        "direct_answer": true,
+        "next_step": true,
+        "no_arkan_label": true
+      },
+      "rubric": {
+        "answered_question": 4,
+        "clarity": 4,
+        "story_not_card_list": 4,
+        "symbolism_natural": 4,
+        "practical_use": 4,
+        "no_repetition": 4,
+        "no_false_confidence": 4,
+        "want_to_finish": 4
+      },
+      "paid_worth": true,
+      "rubric_mean": 4.0,
+      "notes": []
+    },
+    {
+      "id": "self_state_anxiety",
+      "pack_ok": true,
+      "llm_ok": true,
+      "shape": {
+        "one_story": true,
+        "direct_answer": true,
+        "next_step": true,
+        "no_arkan_label": true
+      },
+      "rubric": {
+        "answered_question": 2,
+        "clarity": 4,
+        "story_not_card_list": 4,
+        "symbolism_natural": 4,
+        "practical_use": 4,
+        "no_repetition": 4,
+        "no_false_confidence": 4,
+        "want_to_finish": 4
+      },
+      "paid_worth": false,
+      "rubric_mean": 3.75,
+      "notes": []
+    },
+    {
+      "id": "direction_creative",
+      "pack_ok": true,
+      "llm_ok": true,
+      "shape": {
+        "one_story": true,
+        "direct_answer": true,
+        "next_step": true,
+        "no_arkan_label": true
+      },
+      "rubric": {
+        "answered_question": 3,
+        "clarity": 4,
+        "story_not_card_list": 4,
+        "symbolism_natural": 4,
+        "practical_use": 4,
+        "no_repetition": 4,
+        "no_false_confidence": 4,
+        "want_to_finish": 4
+      },
+      "paid_worth": false,
+      "rubric_mean": 3.875,
+      "notes": []
+    },
+    {
+      "id": "timing_readiness_job",
+      "pack_ok": true,
+      "llm_ok": true,
+      "shape": {
+        "one_story": true,
+        "direct_answer": true,
+        "next_step": true,
+        "no_exact_date": true,
+        "no_arkan_label": true
+      },
+      "rubric": {
+        "answered_question": 4,
+        "clarity": 4,
+        "story_not_card_list": 4,
+        "symbolism_natural": 4,
+        "practical_use": 4,
+        "no_repetition": 4,
+        "no_false_confidence": 4,
+        "want_to_finish": 4
+      },
+      "paid_worth": true,
+      "rubric_mean": 4.0,
+      "notes": []
+    },
+    {
+      "id": "open_reflection_one",
+      "pack_ok": true,
+      "llm_ok": true,
+      "shape": {
+        "one_story": true,
+        "direct_answer": true,
+        "next_step": true,
+        "no_arkan_label": true
+      },
+      "rubric": {
+        "answered_question": 5,
+        "clarity": 4,
+        "story_not_card_list": 4,
+        "symbolism_natural": 4,
+        "practical_use": 4,
+        "no_repetition": 4,
+        "no_false_confidence": 4,
+        "want_to_finish": 4
+      },
+      "paid_worth": true,
+      "rubric_mean": 4.125,
+      "notes": []
+    },
+    {
+      "id": "q1_cups_8_9_10_leave",
+      "pack_ok": true,
+      "llm_ok": true,
+      "shape": {
+        "compare_options": true,
+        "one_story": true,
+        "direct_answer": true,
+        "next_step": true,
+        "distinct_minors": true,
+        "card_name_ablation_ready": true,
+        "no_arkan_label": true
+      },
+      "rubric": {
+        "answered_question": 4,
+        "clarity": 4,
+        "story_not_card_list": 4,
+        "symbolism_natural": 4,
+        "practical_use": 4,
+        "no_repetition": 4,
+        "no_false_confidence": 4,
+        "want_to_finish": 4
+      },
+      "paid_worth": true,
+      "rubric_mean": 4.0,
+      "notes": []
+    },
+    {
+      "id": "q1_swords_8_9_10_anxiety",
+      "pack_ok": true,
+      "llm_ok": true,
+      "shape": {
+        "one_story": true,
+        "direct_answer": true,
+        "next_step": true,
+        "distinct_minors": true,
+        "card_name_ablation_ready": true,
+        "no_arkan_label": true
+      },
+      "rubric": {
+        "answered_question": 3,
+        "clarity": 4,
+        "story_not_card_list": 4,
+        "symbolism_natural": 4,
+        "practical_use": 4,
+        "no_repetition": 4,
+        "no_false_confidence": 4,
+        "want_to_finish": 4
+      },
+      "paid_worth": false,
+      "rubric_mean": 3.875,
+      "notes": []
+    }
+  ],
+  "summary": {
+    "scenario_count": 12,
+    "pack_pass": 12,
+    "llm_pass": 12,
+    "shape_pass": 12,
+    "rubric_mean": 4.0,
+    "anti_sameness_mean": 0.031040104484843466,
+    "anti_sameness_pass": true,
+    "gates": {
+      "critical_shape_pass": true,
+      "anti_sameness_pass": true,
+      "rubric_mean_pass": true,
+      "llm_pass_rate_ok": true,
+      "freeze_lift_ready": true
+    }
+  }
+}
