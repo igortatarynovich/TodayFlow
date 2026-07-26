@@ -237,7 +237,15 @@ def generate_personality(
     catalog: dict[str, Any] | None = None,
     locale: str = "ru",
 ) -> dict[str, Any] | None:
-    """Run personality LLM. None when LLM missing / invalid / below minimum."""
+    """Run personality LLM. None when LLM missing / invalid / below minimum.
+
+    Killed as live SoT when CHARACTER_ENGINE_PUBLISH_READY is on (CE cutover).
+    """
+    from todayflow_backend.core.config import settings
+
+    if bool(getattr(settings, "character_engine_publish_ready", False)):
+        logger.info("personality: blocked — CHARACTER_ENGINE_PUBLISH_READY cutover")
+        return None
     if not isinstance(natal_facts, dict) or not _sun_sign(natal_facts):
         logger.info("personality: skip — natal_facts without sun")
         return None

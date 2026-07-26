@@ -274,6 +274,8 @@ class CompactUserModelIdentity(BaseModel):
     summary: str | None = None
     strengths: list[str] = Field(default_factory=list)
     constraints: list[str] = Field(default_factory=list)
+    # profile_contract_v1 | character_engine_v1 | interpretation
+    sot: str | None = None
 
 
 class CompactUserModelKnowledgeAtom(BaseModel):

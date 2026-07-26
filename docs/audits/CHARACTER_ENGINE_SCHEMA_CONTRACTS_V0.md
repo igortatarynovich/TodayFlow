@@ -372,7 +372,8 @@ If no → fix identity rules before implementing pipeline.
 8. ~~Stage 5 Compass + legacy adapters~~ → deterministic assembly · no LLM · `STAGE5_SHADOW` / `ENABLED` · consumption v0.7 prefers `legacy_map` ([CHARACTER_ENGINE_STAGE5_ASSEMBLY_V0.md](./CHARACTER_ENGINE_STAGE5_ASSEMBLY_V0.md)). **PUBLISH_READY cutover still off.**  
 9. ~~Envelope `character_engine_v1` forming nest~~ → compose from Stage 0–5 diagnostics · assemble-once on GET ([CHARACTER_ENGINE_ENVELOPE_V0.md](./CHARACTER_ENGINE_ENVELOPE_V0.md)).  
 10. ~~Owner `PUBLISH_READY` cutover~~ → [CHARACTER_ENGINE_PUBLISH_READY_CUTOVER_V0.md](./CHARACTER_ENGINE_PUBLISH_READY_CUTOVER_V0.md) · personality/funnel gated · envelope `status=ready`.  
-11. Reader migration (iOS / Today / Tarot / Compat) · file cleanup of killed generators.
+11. ~~Post-cutover kill + first readers~~ → [CHARACTER_ENGINE_POST_CUTOVER_READERS_V0.md](./CHARACTER_ENGINE_POST_CUTOVER_READERS_V0.md) (CUM · Profile Web V0 · iOS spheres/QuickMap).  
+12. Remaining readers (Compat · Tarot deepen) · delete killed generator files after evals migrate.
 ### Flag semantics
 
 | Flag | Runs stages? | Publishes CE ready SoT? |

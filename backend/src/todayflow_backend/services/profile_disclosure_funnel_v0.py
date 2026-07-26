@@ -436,6 +436,8 @@ def run_profile_disclosure_funnel_v0(
     """Returns (merged_raw_fields | None, meta).
 
     On partial failure returns whatever steps succeeded (never drops prior steps).
+
+    Killed as live SoT when CHARACTER_ENGINE_PUBLISH_READY is on (CE cutover).
     """
     versions = profile_prompt_versions()
     meta: dict[str, Any] = {
@@ -449,6 +451,10 @@ def run_profile_disclosure_funnel_v0(
         "steps": [],
         "completed_steps": [],
     }
+    if bool(getattr(settings, "character_engine_publish_ready", False)):
+        meta["reason"] = "publish_ready_cutover"
+        meta["sot"] = "character_engine_v1"
+        return None, meta
     if not prefer_multi_step_funnels():
         meta["reason"] = "quality_mode_economize"
         return None, meta

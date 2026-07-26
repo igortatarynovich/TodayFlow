@@ -1788,7 +1788,10 @@ private struct ProfileLifeSections: View {
                 LifeAreaCard(
                     title: "Любовь и отношения",
                     text: composedLifeAreaText(
-                        api: coreProfile.interpretation?.lifeAreas?.love,
+                        api: preferredSphereText(
+                            contract: coreProfile.profileContractV1?.relationshipStyle,
+                            legacy: coreProfile.interpretation?.lifeAreas?.love
+                        ),
                         fallback: "Здесь видно, как ты входишь в близость, где тебе нужна ясность, а где связь начинает забирать слишком много сил.",
                         pieces: [
                             chartHouseSummary(chart: natalChart, house: 7),
@@ -1801,7 +1804,10 @@ private struct ProfileLifeSections: View {
                 LifeAreaCard(
                     title: "Карьера и реализация",
                     text: composedLifeAreaText(
-                        api: coreProfile.interpretation?.lifeAreas?.career,
+                        api: preferredSphereText(
+                            contract: nil,
+                            legacy: coreProfile.interpretation?.lifeAreas?.career
+                        ),
                         fallback: "Этот слой показывает, в какой роли ты становишься заметной, на что реально можно опереться в работе и где не стоит жить только в режиме обслуживания чужих задач.",
                         pieces: [
                             chartHouseSummary(chart: natalChart, house: 10),
@@ -1814,7 +1820,10 @@ private struct ProfileLifeSections: View {
                 LifeAreaCard(
                     title: "Деньги и ресурсы",
                     text: composedLifeAreaText(
-                        api: coreProfile.interpretation?.lifeAreas?.money,
+                        api: preferredSphereText(
+                            contract: coreProfile.profileContractV1?.moneyStyle,
+                            legacy: coreProfile.interpretation?.lifeAreas?.money
+                        ),
                         fallback: "Через этот слой читается не только тема денег, но и чувство ценности себя, устойчивости и того, на чем тебе действительно безопасно строить рост.",
                         pieces: [
                             chartHouseSummary(chart: natalChart, house: 2),
@@ -1965,6 +1974,14 @@ private struct ProfileLifeSections: View {
         if !desc.isEmpty { return desc }
         if !theme.isEmpty { return theme }
         return nil
+    }
+
+    /// CE cutover: profile_contract_v1 slots beat legacy interpretation.life_areas.
+    private func preferredSphereText(contract: String?, legacy: String?) -> String? {
+        let c = contract?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        if !c.isEmpty { return c }
+        let l = legacy?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return l.isEmpty ? nil : l
     }
 
     private func composedLifeAreaText(api: String?, fallback: String, pieces: [String?]) -> String {

@@ -101,6 +101,6 @@ def project_profile_contract_from_character_engine_v0(
     }
     for k in ("decision_style", "relationship_style", "money_style"):
         if not contract.get(k):
-            contract[k] = None
+            contract[k] = ""
 
     return enrich_profile_contract_living(contract, living=living)

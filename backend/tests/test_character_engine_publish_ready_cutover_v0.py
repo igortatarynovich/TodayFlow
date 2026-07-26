@@ -51,3 +51,47 @@ def test_project_contract_from_ready_envelope() -> None:
     assert contract["identity_core"] == "Core line"
     assert contract["generation_meta"]["sot"] == "character_engine_v1"
     assert contract["decision_style"] == "Decide alone"
+
+
+def test_personality_and_funnel_killed_when_publish_ready() -> None:
+    from todayflow_backend.services.personality_contract_v1 import generate_personality
+    from todayflow_backend.services.profile_disclosure_funnel_v0 import (
+        run_profile_disclosure_funnel_v0,
+    )
+
+    with patch(
+        "todayflow_backend.core.config.settings.character_engine_publish_ready",
+        True,
+    ):
+        assert (
+            generate_personality(
+                natal_facts={"positions": [{"body": "Sun", "sign": "Aquarius"}]},
+                locale="ru",
+            )
+            is None
+        )
+        merged, meta = run_profile_disclosure_funnel_v0({}, locale="ru")
+    assert merged is None
+    assert meta.get("reason") == "publish_ready_cutover"
+
+
+def test_cum_identity_prefers_profile_contract() -> None:
+    from todayflow_backend.services.compact_user_model_v0 import _identity_from_core_profile
+
+    identity = _identity_from_core_profile(
+        {
+            "person": {"display_name": " ann"},
+            "astro": {"sun_sign": "Aquarius"},
+            "numerology": {"life_path": 7},
+            "baseline": {"archetype_seed": "Observer"},
+            "interpretation": {"identity": "LEGACY", "strengths": ["old"], "watchouts": ["oldc"]},
+            "profile_contract_v1": {
+                "identity_core": "CE core line",
+                "strengths": ["s1", "s2"],
+                "growth_zones": ["g1"],
+            },
+        }
+    )
+    assert identity["summary"] == "CE core line"
+    assert identity["strengths"][0] == "s1"
+    assert identity["sot"] == "profile_contract_v1"

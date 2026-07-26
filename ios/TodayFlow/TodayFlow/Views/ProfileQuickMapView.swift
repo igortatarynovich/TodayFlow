@@ -60,26 +60,32 @@ enum ProfileQuickMapBuilder {
     ) -> ProfileQuickMapViewModel {
         let interpretation = coreProfile?.interpretation
         let baseline = coreProfile?.baseline
+        let contract = coreProfile?.profileContractV1
         let lifeAreas = interpretation?.lifeAreas
 
         let archetype = baseline?.archetypeSeed?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty ?? "Личный архетип"
-        let identity = interpretation?.identity?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
+        let identity = contract?.identityCore.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
+            ?? interpretation?.identity?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
             ?? coreProfile?.natalSummary?.overview?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
 
         let strengthens = uniqueNonEmpty([
+            contract?.strengths.first,
             interpretation?.strengths?.first,
+            contract?.relationshipStyle.nilIfEmpty.map { "Близость: \($0)" },
             lifeAreas?.career.map { "Карьера: \($0)" },
             baseline?.rhythmStyle,
         ], limit: 4)
 
         let drains = uniqueNonEmpty([
+            contract?.growthZones.first,
             interpretation?.watchouts?.first,
             interpretation?.watchouts?.dropFirst().first,
+            contract?.moneyStyle.nilIfEmpty.map { "Ресурсы: \($0)" },
             lifeAreas?.money.map { "Деньги: \($0)" },
         ], limit: 4)
 
         let perceived = uniqueNonEmpty(
-            (interpretation?.strengths ?? []).map { Optional($0) },
+            (contract?.strengths.isEmpty == false ? contract?.strengths : interpretation?.strengths)?.map { Optional($0) } ?? [],
             limit: 5
         ).filter { item in
             guard let identity else { return true }
@@ -87,9 +93,9 @@ enum ProfileQuickMapBuilder {
         }
 
         let thrive = uniqueNonEmpty([
+            (contract?.relationshipStyle.isEmpty == false) ? Optional("Близость") : (lifeAreas?.love != nil ? Optional("Близость") : nil),
+            (contract?.moneyStyle.isEmpty == false) ? Optional("Реализация") : (lifeAreas?.money != nil ? Optional("Реализация") : nil),
             lifeAreas?.career != nil ? Optional("Карьера") : nil,
-            lifeAreas?.money != nil ? Optional("Реализация") : nil,
-            lifeAreas?.love != nil ? Optional("Близость") : nil,
             coreProfile?.numerology.lifePath != nil ? Optional("Стратегия") : nil,
         ], limit: 5)
 
@@ -138,10 +144,12 @@ enum ProfileQuickMapBuilder {
                 identitySummary: identity,
                 strengthens: strengthens,
                 drains: drains,
-                decisionStyle: lifeAreas?.decisions,
+                decisionStyle: contract?.decisionStyle.nilIfEmpty ?? lifeAreas?.decisions,
                 perceivedAs: perceived,
                 thriveAreas: thrive,
-                lifeMission: interpretation?.lifeAreas?.career ?? baseline?.rhythmStyle,
+                lifeMission: contract?.moneyStyle.nilIfEmpty
+                    ?? interpretation?.lifeAreas?.career
+                    ?? baseline?.rhythmStyle,
                 frameworkLead: frameworkLead,
                 frameworkAnchors: anchors,
                 frameworkCards: cards

@@ -468,7 +468,11 @@ def _confidence_by_domain_v1(
 
 
 def _identity_from_core_profile(core_profile: dict[str, Any] | None) -> dict[str, Any]:
-    """Stable identity slice for CUM §3.1 — from CoreProfile, not raw events."""
+    """Stable identity slice for CUM §3.1 — from CoreProfile, not raw events.
+
+    Prefer Character Engine / profile_contract_v1 (post PUBLISH_READY) over legacy
+    ``interpretation`` identity/strengths.
+    """
     if not isinstance(core_profile, dict):
         return {}
 
@@ -482,10 +486,52 @@ def _identity_from_core_profile(core_profile: dict[str, Any] | None) -> dict[str
     natal_summary = (
         core_profile.get("natal_summary") if isinstance(core_profile.get("natal_summary"), dict) else {}
     )
+    contract = (
+        core_profile.get("profile_contract_v1")
+        if isinstance(core_profile.get("profile_contract_v1"), dict)
+        else {}
+    )
+    ce = (
+        core_profile.get("character_engine_v1")
+        if isinstance(core_profile.get("character_engine_v1"), dict)
+        else {}
+    )
 
-    strengths_raw = interpretation.get("strengths") if isinstance(interpretation.get("strengths"), list) else []
-    constraints_raw = interpretation.get("watchouts") if isinstance(interpretation.get("watchouts"), list) else []
-    identity_text = interpretation.get("identity") if isinstance(interpretation.get("identity"), str) else None
+    strengths_raw: list[Any] = []
+    constraints_raw: list[Any] = []
+    identity_text: str | None = None
+    source = "interpretation"
+
+    # 1) Contract projection (CE adapters / consumption).
+    if str(contract.get("identity_core") or "").strip():
+        identity_text = str(contract.get("identity_core") or "").strip()
+        strengths_raw = contract.get("strengths") if isinstance(contract.get("strengths"), list) else []
+        constraints_raw = (
+            contract.get("growth_zones") if isinstance(contract.get("growth_zones"), list) else []
+        )
+        source = "profile_contract_v1"
+    # 2) Envelope legacy map / cascade surface.
+    elif str(ce.get("status") or "") in {"ready", "forming"}:
+        legacy = ce.get("legacy_projections") if isinstance(ce.get("legacy_projections"), dict) else {}
+        fields = legacy.get("fields") if isinstance(legacy.get("fields"), dict) else {}
+        id_row = fields.get("identity_core") if isinstance(fields.get("identity_core"), dict) else {}
+        identity_text = str(id_row.get("value") or "").strip() or None
+        st_row = fields.get("strengths") if isinstance(fields.get("strengths"), dict) else {}
+        strengths_raw = st_row.get("value") if isinstance(st_row.get("value"), list) else []
+        gz_row = fields.get("growth_zones") if isinstance(fields.get("growth_zones"), dict) else {}
+        constraints_raw = gz_row.get("value") if isinstance(gz_row.get("value"), list) else []
+        if not identity_text:
+            cascade = ce.get("cascade") if isinstance(ce.get("cascade"), dict) else {}
+            ic = cascade.get("identity_core") if isinstance(cascade.get("identity_core"), dict) else {}
+            identity_text = str(ic.get("surface_text") or "").strip() or None
+        if identity_text:
+            source = "character_engine_v1"
+    # 3) Legacy interpretation shim.
+    if not identity_text:
+        strengths_raw = interpretation.get("strengths") if isinstance(interpretation.get("strengths"), list) else []
+        constraints_raw = interpretation.get("watchouts") if isinstance(interpretation.get("watchouts"), list) else []
+        identity_text = interpretation.get("identity") if isinstance(interpretation.get("identity"), str) else None
+        source = "interpretation"
 
     moon_sign = (
         astro.get("moon_sign")
@@ -508,6 +554,7 @@ def _identity_from_core_profile(core_profile: dict[str, Any] | None) -> dict[str
         "summary": identity_text.strip()[:240] if isinstance(identity_text, str) and identity_text.strip() else None,
         "strengths": [str(item).strip()[:120] for item in strengths_raw if str(item).strip()][:4],
         "constraints": [str(item).strip()[:120] for item in constraints_raw if str(item).strip()][:4],
+        "sot": source,
     }
 
 

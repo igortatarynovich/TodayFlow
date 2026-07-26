@@ -93,40 +93,47 @@ _REGISTRY: dict[str, dict[str, Any]] = {
         "step": "render",
         "builder": day_disclosure_v1.deepen_render_system,
     },
-    # Profile disclosure layers
+    # Profile disclosure layers — DEPRECATED live SoT after CHARACTER_ENGINE_PUBLISH_READY.
+    # Kept for evals / rollback only; runtime gated in funnel + generate_personality.
     "profile.identity.v1": {
         "version": "1.2.0",
         "surface": "profile",
         "step": "identity",
         "builder": profile_disclosure_v1.identity_system,
+        "deprecated": "character_engine_v1",
     },
     "profile.styles.v1": {
         "version": "1.1.0",
         "surface": "profile",
         "step": "styles",
         "builder": profile_disclosure_v1.styles_system,
+        "deprecated": "character_engine_v1",
     },
     "profile.patterns.v1": {
         "version": "1.1.0",
         "surface": "profile",
         "step": "patterns",
         "builder": profile_disclosure_v1.patterns_system,
+        "deprecated": "character_engine_v1",
     },
     "profile.spheres.v1": {
         "version": "1.0.0",
         "surface": "profile",
         "step": "spheres",
         "builder": profile_disclosure_v1.spheres_system,
+        "deprecated": "character_engine_v1",
     },
     "profile.chart_reading.v1": {
         "version": "1.0.0",
         "surface": "profile",
         "step": "chart_reading",
         "builder": profile_disclosure_v1.chart_reading_system,
+        "deprecated": "character_engine_v1",
     },
-    # Per-sphere synthesis on prepared cues (target content authority for life_spheres)
+    # Per-sphere synthesis — DEPRECATED as personality generator after CE cutover.
     "profile.spheres.synthesis.v1": {
         "version": "1.0.0",
+        "deprecated": "character_engine_v1",
         "surface": "profile",
         "step": "spheres_synthesis",
         "builder": profile_spheres_synthesis_v1.synthesis_system,
@@ -138,12 +145,13 @@ _REGISTRY: dict[str, dict[str, Any]] = {
         "step": "natal_facts",
         "builder": natal_facts_v1.natal_facts_system,
     },
-    # Generation Contract: personality (interpretation from natal_facts)
+    # Generation Contract: personality — DEPRECATED live SoT after CE PUBLISH_READY.
     "profile.personality.v1": {
         "version": "1.0.0",
         "surface": "profile",
         "step": "personality",
         "builder": personality_v1.personality_system,
+        "deprecated": "character_engine_v1",
     },
     # Character Engine Stage 2 — Identity Core (LLM-first; structural validation in code)
     "profile.character_engine.stage2.v1": {

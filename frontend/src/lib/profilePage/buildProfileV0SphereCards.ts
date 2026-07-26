@@ -184,8 +184,15 @@ export function buildSocialMirrorCard(
 export function buildLoveCard(core: CoreProfile | null, ledger: ProfileContentLedger): ProfileV0LoveCard | null {
   const sunSign = trim(core?.astro?.sun_sign);
   const sign = signEntry(sunSign);
+  const contract = core?.profile_contract_v1;
   const lifeAreas = core?.interpretation?.life_areas;
-  const llmLove = trim(lifeAreas?.love);
+  // CE cutover: contract relationship_style / life_spheres beat legacy life_areas.
+  const sphereLove = trim(
+    (contract?.life_spheres as { love?: { text?: string } } | undefined)?.love?.text
+      || (contract?.life_spheres as { relationships?: { text?: string } } | undefined)?.relationships?.text
+      || "",
+  );
+  const llmLove = trim(contract?.relationship_style) || sphereLove || trim(lifeAreas?.love);
   const lp = getLifePathEntry(core?.numerology?.life_path ?? undefined);
 
   if (!sign && !isRich(llmLove)) return null;
@@ -246,9 +253,17 @@ export function buildLoveCard(core: CoreProfile | null, ledger: ProfileContentLe
 export function buildMoneyCard(core: CoreProfile | null, ledger: ProfileContentLedger): ProfileV0MoneyCard | null {
   const sunSign = trim(core?.astro?.sun_sign);
   const sign = signEntry(sunSign);
+  const contract = core?.profile_contract_v1;
   const lifeAreas = core?.interpretation?.life_areas;
-  const llmMoney = trim(lifeAreas?.money);
-  const llmCareer = trim(lifeAreas?.career);
+  const sphereMoney = trim(
+    (contract?.life_spheres as { money?: { text?: string } } | undefined)?.money?.text
+      || (contract?.life_spheres as { work?: { text?: string } } | undefined)?.work?.text
+      || "",
+  );
+  const llmMoney = trim(contract?.money_style) || sphereMoney || trim(lifeAreas?.money);
+  const llmCareer =
+    trim((contract?.life_spheres as { career?: { text?: string } } | undefined)?.career?.text || "")
+    || trim(lifeAreas?.career);
   const lp = getLifePathEntry(core?.numerology?.life_path ?? undefined);
 
   if (!sign && !isRich(llmMoney) && !isRich(llmCareer)) return null;
