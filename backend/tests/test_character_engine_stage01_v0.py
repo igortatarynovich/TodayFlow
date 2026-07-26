@@ -35,6 +35,41 @@ def _swiss_aquarius(*, with_houses: bool = False) -> dict:
     return {"positions": positions, "houses": houses}
 
 
+def _swiss_natal_facts_shaped_gemini() -> dict:
+    """Live cache shape: positions use `name`; houses dict has Asc/MC + numeric cusps."""
+    return {
+        "positions": [
+            {"name": "Sun", "sign": "gemini", "degree": 4.18, "house": 3},
+            {"name": "Moon", "sign": "aries", "degree": 14.55, "house": 1},
+            {"name": "Mercury", "sign": "gemini", "degree": 20.0, "house": 3},
+        ],
+        "houses": {
+            "Asc": {"sign": "pisces", "degree": 25.1},
+            "MC": {"sign": "sagittarius", "degree": 18.45},
+            "1": {"sign": "pisces", "degree": 25.1},
+            "10": {"sign": "sagittarius", "degree": 18.45},
+        },
+    }
+
+
+def test_stage0_accepts_name_keyed_positions_and_houses_dict() -> None:
+    pack = build_character_engine_facts_pack_v0(
+        profile_fingerprint="pf_name",
+        swiss_chart=_swiss_natal_facts_shaped_gemini(),
+        numerology={"life_path": 1},
+        capability={"natal_mode": "full", "has_birth_time": True, "has_birth_place": True},
+        birth_date="1990-06-01",
+        input_fingerprint="in_name",
+    )
+    types = {f["fact_type"] for f in pack["raw_facts"]}
+    assert "planet_sign:sun" in types
+    assert "planet_sign:moon" in types
+    assert "angle_sign:ascendant" in types
+    assert "house_cusp_sign:1" in types
+    sun = next(f for f in pack["raw_facts"] if f["fact_type"] == "planet_sign:sun")
+    assert sun["authority"] == "swiss"
+
+
 def test_stage0_same_input_same_ids() -> None:
     kwargs = dict(
         profile_fingerprint="pf1",

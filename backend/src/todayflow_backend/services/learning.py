@@ -6,6 +6,7 @@ from collections import Counter
 from datetime import date, timedelta
 from typing import Any
 
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from todayflow_backend.db import models
@@ -532,7 +533,28 @@ class LearningService:
             is_active=is_active,
         )
         db.add(prompt_version)
-        db.commit()
+        try:
+            db.commit()
+        except IntegrityError:
+            # Concurrent create of the same (module, version, prompt_kind) — reuse winner.
+            db.rollback()
+            existing = (
+                db.query(models.PromptVersion)
+                .filter_by(module=module, version=version, prompt_kind=prompt_kind)
+                .first()
+            )
+            if existing is None:
+                raise
+            return self.get_or_create_prompt_version(
+                db,
+                module=module,
+                version=version,
+                prompt_kind=prompt_kind,
+                prompt_text=prompt_text,
+                label=label,
+                metadata=metadata,
+                is_active=is_active,
+            )
         db.refresh(prompt_version)
         return prompt_version
 

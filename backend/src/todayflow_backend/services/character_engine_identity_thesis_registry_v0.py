@@ -11,6 +11,8 @@ STAGE1_TO_IDENTITY_THESIS: dict[str, str] = {
     "autonomy_high": "builds_through_autonomy",
     "analysis_before_action": "builds_through_analysis",
     "emotional_sensitivity_high": "builds_through_emotional_depth",
+    "freedom_vs_stability": "builds_through_freedom_vs_stability",
+    "presence_through_air_asc": "builds_through_air_presence",
 }
 
 ALLOWED_IDENTITY_THESIS_KEYS = frozenset(STAGE1_TO_IDENTITY_THESIS.values())

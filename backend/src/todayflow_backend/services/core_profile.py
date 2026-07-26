@@ -326,7 +326,17 @@ class CoreProfileService:
         now = time_module.time()
         cached = self._cache.get(cache_key)
         if cached and cached[0] > now:
-            return self._attach_natal_summary(db, deepcopy(cached[1]), astro_profile, settings, user)
+            payload = self._attach_natal_summary(db, deepcopy(cached[1]), astro_profile, settings, user)
+            return self._maybe_attach_character_engine_shadow(
+                db,
+                payload,
+                astro_profile=astro_profile,
+                astro_context=self._build_astro_context(astro_profile),
+                numerology_context=self._build_numerology_context(numerology_profile),
+                person_pub=self._person_public(settings, user),
+                profile_hash=payload.get("profile_hash") or "",
+                natal_facts=None,
+            )
 
         astro_context = self._build_astro_context(astro_profile)
         numerology_context = self._build_numerology_context(numerology_profile)
@@ -339,6 +349,16 @@ class CoreProfileService:
                 cached_payload["astro"]["relation"] = astro_context.get("relation")
             cached_payload["profiles"] = profiles_context
             cached_payload["living"] = living_context
+            cached_payload = self._maybe_attach_character_engine_shadow(
+                db,
+                cached_payload,
+                astro_profile=astro_profile,
+                astro_context=astro_context,
+                numerology_context=numerology_context,
+                person_pub=self._person_public(settings, user),
+                profile_hash=profile_hash,
+                natal_facts=None,
+            )
             self._cache[cache_key] = (now + self.cache_ttl_seconds, deepcopy(cached_payload))
             self._prune_cache(now)
             return self._attach_natal_summary(db, cached_payload, astro_profile, settings, user)
@@ -359,6 +379,16 @@ class CoreProfileService:
             "profiles": profiles_context,
             "living": living_context,
         }
+        shell = self._maybe_attach_character_engine_shadow(
+            db,
+            shell,
+            astro_profile=astro_profile,
+            astro_context=astro_context,
+            numerology_context=numerology_context,
+            person_pub=person_pub,
+            profile_hash=profile_hash,
+            natal_facts=None,
+        )
         return self._attach_natal_summary(db, shell, astro_profile, settings, user)
 
     def build(
@@ -494,56 +524,17 @@ class CoreProfileService:
                 "daily_interpretation": daily_interpretation,
                 "living": living_context,
             }
-            # Character Engine Stage 0–2 shadow only (diagnostics). Does not publish CE ready.
-            try:
-                from todayflow_backend.services.character_engine_stage01_shadow_v0 import (
-                    character_engine_stage01_should_run,
-                    maybe_attach_stage01_shadow,
-                )
-                from todayflow_backend.services.character_engine_stage2_shadow_v0 import (
-                    character_engine_stage2_should_run,
-                    maybe_attach_stage2_shadow,
-                )
-
-                if character_engine_stage01_should_run() or character_engine_stage2_should_run():
-                    from todayflow_backend.services.natal_chart_cache import NatalChartCacheService
-
-                    swiss_chart = None
-                    if astro_profile is not None:
-                        cached = NatalChartCacheService(db).get_cached_natal_chart(astro_profile.id)
-                        if cached is not None:
-                            swiss_chart = {
-                                "positions": cached.positions,
-                                "houses": cached.houses,
-                                "metadata": cached.metadata or {},
-                            }
-                    cap = {
-                        "natal_mode": (natal_facts or {}).get("mode")
-                        if isinstance(natal_facts, dict)
-                        else ("date_only" if astro_context.get("birth_date") else "none"),
-                        "has_name": bool(person_pub.get("display_name") or person_pub.get("first_name")),
-                        "has_birth_time": bool(astro_context.get("birth_time"))
-                        and not bool(astro_context.get("time_unknown")),
-                        "has_birth_place": bool(astro_context.get("location_name")),
-                    }
-                    if isinstance(natal_facts, dict) and natal_facts.get("mode") == "full":
-                        cap["natal_mode"] = "full"
-                    shadow_kwargs = dict(
-                        profile_fingerprint=profile_hash,
-                        swiss_chart=swiss_chart,
-                        numerology=numerology_context,
-                        catalog_facts=None,
-                        natal_facts_bridge=natal_facts if isinstance(natal_facts, dict) else None,
-                        capability=cap,
-                        birth_date=astro_context.get("birth_date"),
-                    )
-                    if character_engine_stage01_should_run():
-                        profile_payload = maybe_attach_stage01_shadow(profile_payload, **shadow_kwargs)
-                    if character_engine_stage2_should_run():
-                        profile_payload = maybe_attach_stage2_shadow(profile_payload, **shadow_kwargs)
-            except Exception:
-                # Shadow must never break portrait publish.
-                pass
+            profile_payload = self._maybe_attach_character_engine_shadow(
+                db,
+                profile_payload,
+                astro_profile=astro_profile,
+                astro_context=astro_context,
+                numerology_context=numerology_context,
+                person_pub=person_pub,
+                profile_hash=profile_hash,
+                natal_facts=natal_facts if isinstance(natal_facts, dict) else None,
+                include_stage2=True,
+            )
 
             snapshot_id = self._save_snapshot(
                 db=db,
@@ -1208,6 +1199,79 @@ class CoreProfileService:
         if isinstance(item.get("value"), int):
             return int(item["value"])
         return None
+
+    def _maybe_attach_character_engine_shadow(
+        self,
+        db: Session,
+        profile_payload: dict[str, Any],
+        *,
+        astro_profile: Any,
+        astro_context: dict[str, Any],
+        numerology_context: dict[str, Any],
+        person_pub: dict[str, Any],
+        profile_hash: str,
+        natal_facts: dict[str, Any] | None = None,
+        include_stage2: bool = False,
+    ) -> dict[str, Any]:
+        """Attach CE Stage 0–1 (cheap) and optionally Stage 2 (LLM) diagnostics.
+
+        Stage 2 must not run on ordinary GET read-path — latency/cost. Pass
+        ``include_stage2=True`` only from explicit portrait publish/refresh.
+        Never publishes character_engine_v1 ready.
+        """
+        try:
+            from todayflow_backend.services.character_engine_stage01_shadow_v0 import (
+                character_engine_stage01_should_run,
+                maybe_attach_stage01_shadow,
+            )
+            from todayflow_backend.services.character_engine_stage2_shadow_v0 import (
+                character_engine_stage2_should_run,
+                maybe_attach_stage2_shadow,
+            )
+
+            run_stage2 = bool(include_stage2) and character_engine_stage2_should_run()
+            if not (character_engine_stage01_should_run() or run_stage2):
+                return profile_payload
+
+            from todayflow_backend.services.natal_chart_cache import NatalChartCacheService
+
+            swiss_chart = None
+            if astro_profile is not None:
+                cached = NatalChartCacheService(db).get_cached_natal_chart(astro_profile.id)
+                if cached is not None:
+                    swiss_chart = {
+                        "positions": cached.positions,
+                        "houses": cached.houses,
+                        "metadata": cached.metadata or {},
+                    }
+            cap = {
+                "natal_mode": (natal_facts or {}).get("mode")
+                if isinstance(natal_facts, dict)
+                else ("date_only" if astro_context.get("birth_date") else "none"),
+                "has_name": bool(person_pub.get("display_name") or person_pub.get("first_name")),
+                "has_birth_time": bool(astro_context.get("birth_time"))
+                and not bool(astro_context.get("time_unknown")),
+                "has_birth_place": bool(astro_context.get("location_name")),
+            }
+            if isinstance(natal_facts, dict) and natal_facts.get("mode") == "full":
+                cap["natal_mode"] = "full"
+            shadow_kwargs = dict(
+                profile_fingerprint=profile_hash,
+                swiss_chart=swiss_chart,
+                numerology=numerology_context,
+                catalog_facts=None,
+                natal_facts_bridge=natal_facts if isinstance(natal_facts, dict) else None,
+                capability=cap,
+                birth_date=astro_context.get("birth_date"),
+            )
+            if character_engine_stage01_should_run():
+                profile_payload = maybe_attach_stage01_shadow(profile_payload, **shadow_kwargs)
+            if run_stage2:
+                profile_payload = maybe_attach_stage2_shadow(profile_payload, **shadow_kwargs)
+        except Exception:
+            # Shadow must never break portrait publish / read path.
+            pass
+        return profile_payload
 
     def _normalize_payload_contract(self, payload: dict[str, Any]) -> dict[str, Any]:
         interpretation = payload.get("interpretation")

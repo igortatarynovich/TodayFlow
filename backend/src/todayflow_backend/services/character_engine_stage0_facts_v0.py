@@ -181,7 +181,10 @@ def _from_swiss_positions(
     for item in positions or []:
         if not isinstance(item, dict):
             continue
-        body = _norm_body(item.get("body") or item.get("id") or item.get("planet"))
+        # Live caches vary: Swiss uses `body`; natal_facts-shaped rows use `name`.
+        body = _norm_body(
+            item.get("body") or item.get("id") or item.get("planet") or item.get("name")
+        )
         sign = _norm_sign(item.get("sign"))
         if not body or not sign:
             continue
@@ -204,6 +207,81 @@ def _from_swiss_positions(
             )
         )
     return out
+
+
+def _normalize_swiss_positions(positions: Any) -> list[Any]:
+    """Accept list rows or dict keyed by body name (legacy ChartResponse shape)."""
+    if isinstance(positions, list):
+        return positions
+    if isinstance(positions, dict):
+        out: list[Any] = []
+        for key, value in positions.items():
+            if not isinstance(value, dict):
+                continue
+            row = dict(value)
+            if not (row.get("body") or row.get("name") or row.get("id") or row.get("planet")):
+                row["name"] = key
+            out.append(row)
+        return out
+    return []
+
+
+def _normalize_swiss_houses(houses: Any) -> tuple[list[Any], list[Any]]:
+    """Return (house_cusp_rows, angle_rows_from_houses_dict).
+
+    Live caches use either list[{house,sign}] or dict with keys house_N / N / Asc / MC.
+    """
+    if isinstance(houses, list):
+        return houses, []
+    if not isinstance(houses, dict):
+        return [], []
+
+    cusp_rows: list[Any] = []
+    angle_rows: list[Any] = []
+    angle_alias = {
+        "asc": "ascendant",
+        "ascendant": "ascendant",
+        "mc": "mc",
+        "ic": "ic",
+        "dsc": "descendant",
+        "descendant": "descendant",
+    }
+    for key, value in houses.items():
+        if not isinstance(value, dict):
+            continue
+        raw_key = str(key).strip().lower()
+        if raw_key in angle_alias:
+            sign = _norm_sign(value.get("sign"))
+            if sign:
+                angle_rows.append(
+                    {
+                        "body": angle_alias[raw_key],
+                        "sign": sign,
+                        **({k: value[k] for k in ("degree", "longitude", "absolute_longitude") if k in value}),
+                    }
+                )
+            continue
+        house_num: int | None = None
+        if raw_key.startswith("house_"):
+            try:
+                house_num = int(raw_key.split("_", 1)[1])
+            except ValueError:
+                house_num = None
+        else:
+            try:
+                house_num = int(raw_key)
+            except ValueError:
+                house_num = None
+        if house_num is None:
+            continue
+        cusp_rows.append(
+            {
+                "house": house_num,
+                "sign": value.get("sign"),
+                **({k: value[k] for k in ("degree", "longitude") if k in value}),
+            }
+        )
+    return cusp_rows, angle_rows
 
 
 def _from_swiss_houses(
@@ -436,8 +514,11 @@ def build_character_engine_facts_pack_v0(
             )
         )
     if isinstance(swiss_chart, dict):
-        positions = swiss_chart.get("positions") if isinstance(swiss_chart.get("positions"), list) else []
-        houses = swiss_chart.get("houses") if isinstance(swiss_chart.get("houses"), list) else []
+        positions = _normalize_swiss_positions(swiss_chart.get("positions"))
+        houses, house_angles = _normalize_swiss_houses(swiss_chart.get("houses"))
+        if house_angles and allow_angles:
+            # Asc/MC sometimes live only under houses dict (natal_facts-shaped cache).
+            positions = list(positions) + list(house_angles)
         candidates.extend(
             _from_swiss_positions(
                 positions,
@@ -450,7 +531,7 @@ def build_character_engine_facts_pack_v0(
             candidates.extend(
                 _from_swiss_houses(houses, input_fingerprint=fp, computed_at=computed_at)
             )
-        elif houses:
+        elif houses or house_angles:
             missing_inputs.append({"key": "houses", "reason": "capability_not_full_natal"})
 
     if isinstance(numerology, dict):

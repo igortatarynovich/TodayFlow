@@ -249,6 +249,8 @@ class CoreProfileResponse(BaseModel):
     capability: dict | None = None
     profile_matrix_v0: dict | None = None
     profile_header_knowledge_v0: dict | None = None
+    # Shadow / ops diagnostics (e.g. Character Engine Stage 0–1). Not Profile SoT.
+    diagnostics: dict | None = None
 
 
 class CompactUserModelIdentity(BaseModel):
