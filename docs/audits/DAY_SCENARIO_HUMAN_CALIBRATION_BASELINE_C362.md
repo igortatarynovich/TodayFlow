@@ -21,27 +21,24 @@
 
 ## Shadow KPI
 
-- `actual_runtime_blocked`: **14**
-- `false_blocks_against_labels`: **2**
+- `actual_runtime_blocked`: **12**
+- `false_blocks_against_labels`: **0**
 - `true_blocks_against_labels`: **12**
-- `would_block_if_SCENE_UNIVERSAL_ADVICE_promoted`: **14**
-- `false_blocks_if_SCENE_UNIVERSAL_ADVICE_promoted`: **2**
+- `would_block_if_SCENE_UNIVERSAL_ADVICE_promoted`: **12**
+- `false_blocks_if_SCENE_UNIVERSAL_ADVICE_promoted`: **0**
 - `true_blocks_if_SCENE_UNIVERSAL_ADVICE_promoted`: **12**
 
 ### False-block cases (pass/acceptable hit by blocking analyzer)
 
-| case_id | locale | band | blocking_codes |
-|---------|--------|------|----------------|
-| `hg-f61a374bc5aa` | ru | pass | `ASTRO_JARGON_BARE` |
-| `hg-95113b431251` | ru | pass | `ASTRO_JARGON_BARE` |
+_none_
 
 ## Measured codes
 
 | Code | maturity | P | R | FPR | +sup | −sup |
 |------|----------|---|---|-----|------|------|
-| `ASTRO_JARGON_BARE` | blocking | 0.5 | 0.7142857142857143 | 0.15151515151515152 | 7 | 33 |
+| `ASTRO_JARGON_BARE` | blocking | 0.625 | 0.7142857142857143 | 0.09090909090909091 | 7 | 33 |
 | `CHORUS_SEMANTIC_DUPLICATION` | candidate_blocking | 1.0 | 1.0 | 0.0 | 6 | 27 |
-| `CHORUS_UNTRANSLATED_JARGON` | experimental | 0.5714285714285714 | 1.0 | 0.10344827586206896 | 4 | 29 |
+| `CHORUS_UNTRANSLATED_JARGON` | experimental | 0.6666666666666666 | 1.0 | 0.06896551724137931 | 4 | 29 |
 | `SCENE_ABSTRACT` | blocking | 1.0 | 1.0 | 0.0 | 10 | 30 |
 | `SCENE_CLONE` | blocking | 1.0 | 0.7 | 0.0 | 10 | 30 |
 | `SCENE_MISSING_CHOICE` | advisory | None | 0.0 | 0.0 | 6 | 34 |
@@ -58,7 +55,7 @@ Insufficient support codes: **33**
 | `CHORUS_SEMANTIC_DUPLICATION` | candidate_blocking | yes | perfect measured P/R on n≥4 → promote to candidate_blocking (observe) |
 | `CHORUS_UNTRANSLATED_JARGON` | experimental | no | measured but not yet recommended |
 | `SCENE_MISSING_CHOICE` | advisory | no | measured but not yet recommended |
-| `SCENE_UNIVERSAL_ADVICE` | candidate_blocking | no | keep candidate_blocking (P=1.0, R=0.18181818181818182, shadow_false=2, shadow_true=12) |
+| `SCENE_UNIVERSAL_ADVICE` | candidate_blocking | no | keep candidate_blocking (P=1.0, R=0.18181818181818182, shadow_false=0, shadow_true=12) |
 | `THESIS_ECHO` | experimental | no | measured but not yet recommended |
 
 ## Explicit limits

@@ -435,7 +435,8 @@ Legacy projections remain for old clients only.
 ([DAY_SCENARIO_HUMAN_CALIBRATION_C362.md](./audits/DAY_SCENARIO_HUMAN_CALIBRATION_C362.md)).
 `CHORUS_SEMANTIC_DUPLICATION` → candidate_blocking; `SCENE_UNIVERSAL_ADVICE` stays candidate.
 `SCENE_MISSING_EVERYDAY` lived-specificity fix landed (calib P=R=1.0).
-Next: ASTRO_JARGON FP watch.
+`ASTRO_JARGON_BARE` FP fix landed (shadow false blocks **0**).
+Next: improve `SCENE_UNIVERSAL_ADVICE` recall before any blocking promotion.
 
 ---
 

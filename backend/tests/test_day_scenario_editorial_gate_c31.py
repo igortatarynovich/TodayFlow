@@ -173,6 +173,54 @@ def test_astro_jargon_without_translation_rejected():
     assert any(d["code"] == DEFECT_ASTRO_JARGON_BARE for d in defects)
 
 
+def test_astro_lived_metaphor_is_not_bare_jargon():
+    """Rich human metaphor must not false-block (C3.6.2 shadow FP cases)."""
+    native = _valid_native_good()
+    native["interpretive_chorus"]["astrology"] = [
+        {
+            "named_factor": "Меркурий разворачивается в директное движение в знаке Лев",
+            "human_meaning": (
+                "Внешняя среда сегодня похожа на зал ожидания, где внезапно объявили посадку. "
+                "Все разговоры, которые зависли в воздухе, получают резкий импульс к завершению. "
+                "Появляется соблазн высказать всё, что накопилось, с королевской прямотой."
+            ),
+            "link_to_conflict": (
+                "Этот разворот создаёт внешнее давление и сталкивает желание спокойно "
+                "разобраться с лавиной нефильтрованных слов."
+            ),
+            "evidence_refs": ["mercury-direct"],
+        }
+    ]
+    defects = run_editorial_quality_gate_c31(
+        normalize_native_scenario_llm_c1(native), has_natal_evidence=True
+    )
+    codes = {d["code"] for d in defects}
+    assert DEFECT_ASTRO_JARGON_BARE not in codes
+    assert "CHORUS_UNTRANSLATED_JARGON" not in codes
+
+
+def test_astro_echo_template_still_counts_as_bare_jargon():
+    native = _valid_native_good()
+    native["interpretive_chorus"]["astrology"] = [
+        {
+            "named_factor": "Меркурий разворачивается в директное движение в знаке Лев",
+            "human_meaning": (
+                "Меркурий разворачивается в директное движение в знаке Лев. "
+                "Это подталкивает день к сюжету «Сгладить или сказать прямо»."
+            ),
+            "link_to_conflict": (
+                "Объясняет, почему сегодня в центре «Сгладить или сказать прямо — "
+                "пока меркурий разворачивается в директное движение»."
+            ),
+            "evidence_refs": ["mercury-direct"],
+        }
+    ]
+    defects = run_editorial_quality_gate_c31(
+        normalize_native_scenario_llm_c1(native), has_natal_evidence=True
+    )
+    assert any(d["code"] == DEFECT_ASTRO_JARGON_BARE for d in defects)
+
+
 def test_thesis_echo_across_scenes_rejected():
     native = _valid_native_good()
     thesis = "Сегодня важнее назвать точно, чем сохранить ложную гармонию."

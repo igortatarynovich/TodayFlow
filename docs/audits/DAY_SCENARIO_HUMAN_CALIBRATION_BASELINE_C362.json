@@ -87,29 +87,29 @@
       "support_positive": 7,
       "support_negative": 33,
       "true_positives": 5,
-      "false_positives": 5,
-      "true_negatives": 28,
+      "false_positives": 3,
+      "true_negatives": 30,
       "false_negatives": 2,
       "excluded_uncertain_or_na_or_unlabeled": 0,
-      "precision": 0.5,
+      "precision": 0.625,
       "recall": 0.7142857142857143,
-      "false_positive_rate": 0.15151515151515152,
+      "false_positive_rate": 0.09090909090909091,
       "metric_status": "measured",
       "by_locale": {
         "ru": {
           "tp": 5,
-          "fp": 5,
+          "fp": 3,
           "fn": 2,
-          "tn": 8,
+          "tn": 10,
           "support_positive": 7,
           "support_negative": 13,
           "true_positives": 5,
-          "false_positives": 5,
-          "true_negatives": 8,
+          "false_positives": 3,
+          "true_negatives": 10,
           "false_negatives": 2,
-          "precision": 0.5,
+          "precision": 0.625,
           "recall": 0.7142857142857143,
-          "false_positive_rate": 0.38461538461538464,
+          "false_positive_rate": 0.23076923076923078,
           "metric_status": "measured"
         },
         "en": {
@@ -543,29 +543,29 @@
       "support_positive": 4,
       "support_negative": 29,
       "true_positives": 4,
-      "false_positives": 3,
-      "true_negatives": 26,
+      "false_positives": 2,
+      "true_negatives": 27,
       "false_negatives": 0,
       "excluded_uncertain_or_na_or_unlabeled": 7,
-      "precision": 0.5714285714285714,
+      "precision": 0.6666666666666666,
       "recall": 1.0,
-      "false_positive_rate": 0.10344827586206896,
+      "false_positive_rate": 0.06896551724137931,
       "metric_status": "measured",
       "by_locale": {
         "ru": {
           "tp": 4,
-          "fp": 3,
+          "fp": 2,
           "fn": 0,
-          "tn": 6,
+          "tn": 7,
           "support_positive": 4,
           "support_negative": 9,
           "true_positives": 4,
-          "false_positives": 3,
-          "true_negatives": 6,
+          "false_positives": 2,
+          "true_negatives": 7,
           "false_negatives": 0,
-          "precision": 0.5714285714285714,
+          "precision": 0.6666666666666666,
           "recall": 1.0,
-          "false_positive_rate": 0.3333333333333333,
+          "false_positive_rate": 0.2222222222222222,
           "metric_status": "measured"
         },
         "en": {
@@ -2465,32 +2465,13 @@
   "note": "Uses sealed human consensus only. uncertain/not_applicable excluded from support. acceptable_with_issues is not auto-reject. No promotions.",
   "shadow": {
     "case_count": 40,
-    "actual_runtime_blocked": 14,
-    "false_blocks_against_labels": 2,
+    "actual_runtime_blocked": 12,
+    "false_blocks_against_labels": 0,
     "true_blocks_against_labels": 12,
-    "false_block_cases": [
-      {
-        "case_id": "hg-f61a374bc5aa",
-        "locale": "ru",
-        "overall_band": "pass",
-        "blocking_codes": [
-          "ASTRO_JARGON_BARE"
-        ],
-        "batch_id": null
-      },
-      {
-        "case_id": "hg-95113b431251",
-        "locale": "ru",
-        "overall_band": "pass",
-        "blocking_codes": [
-          "ASTRO_JARGON_BARE"
-        ],
-        "batch_id": null
-      }
-    ],
+    "false_block_cases": [],
     "would_block_if_any_quality_promoted": 24,
-    "would_block_if_SCENE_UNIVERSAL_ADVICE_promoted": 14,
-    "false_blocks_if_SCENE_UNIVERSAL_ADVICE_promoted": 2,
+    "would_block_if_SCENE_UNIVERSAL_ADVICE_promoted": 12,
+    "false_blocks_if_SCENE_UNIVERSAL_ADVICE_promoted": 0,
     "true_blocks_if_SCENE_UNIVERSAL_ADVICE_promoted": 12,
     "note": "actual_runtime_blocked uses maturity=blocking fires from analyzer on sealed cases. false_blocks = pass/acceptable wrongly blocked."
   },
@@ -2509,9 +2490,9 @@
     {
       "code": "CHORUS_UNTRANSLATED_JARGON",
       "maturity_now": "experimental",
-      "precision": 0.5714285714285714,
+      "precision": 0.6666666666666666,
       "recall": 1.0,
-      "false_positive_rate": 0.10344827586206896,
+      "false_positive_rate": 0.06896551724137931,
       "support_positive": 4,
       "support_negative": 29,
       "recommend_promote_to_blocking": false,
@@ -2537,7 +2518,7 @@
       "support_positive": 11,
       "support_negative": 29,
       "recommend_promote_to_blocking": false,
-      "reason": "keep candidate_blocking (P=1.0, R=0.18181818181818182, shadow_false=2, shadow_true=12)"
+      "reason": "keep candidate_blocking (P=1.0, R=0.18181818181818182, shadow_false=0, shadow_true=12)"
     },
     {
       "code": "THESIS_ECHO",
@@ -2556,5 +2537,5 @@
     "c362_en_expansion_20260726",
     "c362_ru_live_expansion_20260727"
   ],
-  "generated_at": "2026-07-27T05:35:50.272531+00:00"
+  "generated_at": "2026-07-27T08:20:48.226881+00:00"
 }

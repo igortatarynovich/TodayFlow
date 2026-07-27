@@ -63,5 +63,6 @@ Minimum **40** human cases after process check:
 3. ~~**RU live expansion**~~ — [c362_ru_live_expansion_20260727](./day_scenario_human_golden/batches/c362_ru_live_expansion_20260727/) sealed (13 RU) — **40/40 inventory**
 4. ~~Feed consensus into calibration~~ — [DAY_SCENARIO_HUMAN_CALIBRATION_C362.md](./DAY_SCENARIO_HUMAN_CALIBRATION_C362.md) · baseline 40 cases
 5. ~~Analyzer gaps (`SCENE_MISSING_EVERYDAY` R=0)~~ — lived-specificity fix · calib P=R=1.0
-6. Next: watch `ASTRO_JARGON_BARE` FP · keep `SCENE_UNIVERSAL_ADVICE` candidate
+6. ~~watch `ASTRO_JARGON_BARE` FP~~ — shadow false blocks = 0
+7. Next: improve `SCENE_UNIVERSAL_ADVICE` recall · keep candidate until then
 

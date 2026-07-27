@@ -9,21 +9,21 @@
 
 ```markdown
 ## Architecture impact
-- **SoT before:** MISSING_EVERYDAY = empty/short only; bare «» counted as concrete; thin tips often ABSTRACT-only or escaped
-- **SoT after:** lived-specificity (time/quote/person+act/channel/long+marker); thin tip → MISSING (+ ABSTRACT co-label);
-  bare guillemets no longer count as concrete
+- **SoT before:** thin everyday escaped; ASTRO_JARGON_BARE blocked lived metaphors (shadow FP=2)
+- **SoT after:** lived-specificity for everyday; ASTRO jargon requires missing human framing
+  or echo-template+jargon (lived metaphor OK) — shadow FP=0
 - **Public contract changed?** no
 - **Migration required?** no
-- **Canon updated?** yes — DAY_SCENARIO_EVERYDAY_QUALITY_C31 + calib baseline refresh
-- **Backward compatible?** yes — stronger quality block on thin everyday (already blocking maturity)
+- **Canon updated?** yes — C31/C32 notes + calib baseline refresh
+- **Backward compatible?** yes — fewer false runtime blocks; echo jargon still blocked
 ```
 
 ## Findings (short)
 
 | Finding | Action |
 |---------|--------|
+| `ASTRO_JARGON_BARE` blocking | lived-metaphor + echo-template guard · shadow FP **0** (was 2) · P 0.5→0.625 |
 | `SCENE_CLONE` / `SCENE_ABSTRACT` blocking | P≈1.0, FPR=0 — keep |
-| `ASTRO_JARGON_BARE` blocking | P=0.5, FPR≈0.15 — **watch**; both false blocks are this code (`hg-f61a374bc5aa`, `hg-95113b431251`) |
 | `SCENE_MISSING_EVERYDAY` blocking | lived-specificity fix · calib **P=R=1.0**, FPR=0 |
 | `SCENE_ABSTRACT` blocking | co-fires on thin everyday · calib **P=R=1.0** |
 | `SCENE_UNIVERSAL_ADVICE` candidate | P=1.0 but R≈0.18 — stay candidate |
@@ -31,6 +31,6 @@
 
 ## Next
 
-- Tighten everyday detector on projected `domestic_example` fields — **DONE** (lived-specificity; thin→MISSING)
-- Revisit `ASTRO_JARGON_BARE` FP before broader blocking confidence
+- ~~Tighten everyday detector~~ — DONE
+- ~~Revisit `ASTRO_JARGON_BARE` FP~~ — DONE (shadow false blocks = 0)
 - Do **not** promote `SCENE_UNIVERSAL_ADVICE` until recall improves

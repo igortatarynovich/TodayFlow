@@ -88,7 +88,9 @@ _EN_HUMAN_RE = re.compile(
     r"("
     r"so\s+|therefore|makes|becomes|noticeable|"
     r"you\s+want|easier|harder|louder|quieter|"
-    r"emotion|word|reply|decision|tempo|pace|pause"
+    r"emotion|word|reply|decision|tempo|pace|pause|"
+    r"atmosphere|pressure|urge|conversation|clarity|"
+    r"impulse|temptation|external|environment|conflict|choice"
     r")",
     re.I,
 )

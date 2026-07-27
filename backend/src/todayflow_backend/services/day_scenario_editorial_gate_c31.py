@@ -205,10 +205,10 @@ _ASTRO_TERM_RE = re.compile(
     r"луна\s+в\s+\w+|"
     r"солнце\s+в\s+\w+|"
     r"меркурий|венера|марс|юпитер|сатурн|уран|нептун|плутон|"
-    r"квадрат|трин|соединен|оппозиц|ретроград|аспект|транзит|"
+    r"квадрат|трин|соединен|оппозиц|ретроград|аспект|транзит|директ|"
     r"в\s+рыбах|в\s+овне|в\s+тельце|в\s+близнецах|в\s+раке|"
     r"во\s+льве|в\s+деве|в\s+весах|в\s+скорпионе|в\s+стрельце|"
-    r"в\s+козероге|в\s+водолее"
+    r"в\s+козероге|в\s+водолее|в\s+знаке"
     r")",
     re.I,
 )
@@ -217,10 +217,49 @@ _HUMAN_TRANSLATION_RE = re.compile(
     r"("
     r"поэтому|из[- ]за\s+этого|делает|становится|заметн|"
     r"хочется|легче|сложнее|сильнее|тише|резче|"
-    r"эмоц|слов|ответ|решени|темп|ритм|пауз"
+    r"эмоц|слов|ответ|решени|темп|ритм|пауз|"
+    # Lived env / conflict translation (C3.6.2 ASTRO_JARGON FP fix)
+    r"сред[аеуы]|атмосфер|давлен|желани|разговор|"
+    r"ясн|импульс|соблазн|сталкива|похож|"
+    r"внешн|мотор|напор|искр|конфликт|выбор|"
+    r"сглад|высказать|прямот"
     r")",
     re.I,
 )
+
+# LLM filler that repeats sky jargon + conflict title ≠ human translation
+_JARGON_ECHO_TEMPLATE_RE = re.compile(
+    r"("
+    r"это\s+подталкивает\s+день\s+к\s+сюжету|"
+    r"объясняет,\s+почему\s+сегодня\s+в\s+центре"
+    r")",
+    re.I,
+)
+
+
+def astrology_voice_lacks_human_translation(named: str, meaning: str, link: str) -> bool:
+    """True when chorus astrology has sky jargon without a lived translation.
+
+    Named factors may keep astro labels. Fail when meaning/link lack human framing,
+    or when meaning is the echo-template wrapping repeated jargon (calib FP/TP split).
+    """
+    jargon_blob = f"{named} {meaning} {link}"
+    if not _ASTRO_TERM_RE.search(jargon_blob):
+        return False
+    body = f"{meaning} {link}".strip()
+    if not body:
+        return True
+    named_s = (named or "").strip()
+    meaning_s = (meaning or "").strip()
+    named_echoed = bool(named_s) and named_s.lower()[: min(50, len(named_s))] in meaning_s.lower()[
+        : max(80, len(named_s) + 20)
+    ]
+    if _JARGON_ECHO_TEMPLATE_RE.search(meaning_s) and (
+        _ASTRO_TERM_RE.search(meaning_s) or named_echoed
+    ):
+        return True
+    return not bool(_HUMAN_TRANSLATION_RE.search(body))
+
 
 _PSEUDO_DIAGNOSIS_RE = re.compile(
     r"("
@@ -673,8 +712,7 @@ def run_editorial_quality_gate_c31(
             named = str(row.get("named_factor") or "")
             meaning = str(row.get("human_meaning") or "")
             link = str(row.get("link_to_conflict") or "")
-            jargon_blob = f"{named} {meaning} {link}"
-            if _ASTRO_TERM_RE.search(jargon_blob) and not _HUMAN_TRANSLATION_RE.search(meaning + " " + link):
+            if astrology_voice_lacks_human_translation(named, meaning, link):
                 defects.append(
                     _defect(
                         DEFECT_CHORUS_UNTRANSLATED_JARGON,

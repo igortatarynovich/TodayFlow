@@ -38,7 +38,7 @@ Every voice must carry `conflict_id` (slug of conflict title) + `link_to_conflic
 | `CHORUS_PARALLEL_FORECAST` | unbound voice or parallel mini-forecast |
 | `CHORUS_SEMANTIC_DUPLICATION` | near-duplicate paragraphs / term-swap |
 | `CHORUS_ROLE_DRIFT` | voice doing another voice's job |
-| `CHORUS_UNTRANSLATED_JARGON` | astro term without human translation |
+| `ASTRO_JARGON_BARE` / `CHORUS_UNTRANSLATED_JARGON` | astro term without human translation (lived metaphor OK; echo-template fails) |
 | `CHORUS_NATAL_WITHOUT_EVIDENCE` | natal voice without natal evidence |
 
 Retry uses existing `format_editorial_retry_feedback` — **no** formula rewrite.
