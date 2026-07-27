@@ -213,6 +213,17 @@ Acceptance Акта I:
 
 Дома без full natal (нет времени+места) — **не показывать** и не заменять общими описаниями «что такое дома». CTA: что именно откроется **о нём** (не определение термина).
 
+**Applied slot (ASC · MC · значимые дома):** каждый user-facing блок несёт два поля —
+
+1. `how` — как это проявляется у *этого* человека (ядро + знак куспида/ASC + якорь личных планет, если есть);
+2. `do` — один наблюдаемый жест/проверка (не «стань лучше», а конкретный шаг сегодня).
+
+**Объём emit:** ASC + MC (когда углы известны) · угловые 1/4/7/10 · дома, где стоят личные планеты (Sun/Moon/Mercury/Venus/Mars). Пустые не-угловые — **omit**, не filler и не энциклопедия 1–12.
+
+Wire: `character_engine_asc_v0` · `character_engine_house_lines_v0` (`how`/`do`, `line` = alias `how`). Swiss остаётся SoT для cusp/sign/degree.
+
+**Deep themes (L3, Paid/Trial):** подписчик выбирает 1–2 темы (sex/money/love/work/body) и получает `practical_tips[]` поверх **неизменной** базовой сферы (`how/need/risk` не переписываются). Смена выбора — не чаще раза в 7 дней. Wire: `character_engine_deep_themes_v0` · `GET/PUT /account/profile/deep-themes`. Free — soft CTA без tips body.
+
 ---
 
 ### Акт III — Internal Engine

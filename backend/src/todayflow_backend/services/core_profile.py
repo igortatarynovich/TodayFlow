@@ -258,6 +258,17 @@ class CoreProfileService:
         )
         if header_pack is not None:
             payload["profile_header_knowledge_v0"] = header_pack
+        # L3 deep themes: tips nest; never mutates base life_spheres.
+        if user is not None:
+            from todayflow_backend.services.capability_resolver_v0 import access_allows_l3
+            from todayflow_backend.services.profile_deep_themes_v0 import attach_for_user
+
+            attach_for_user(
+                db,
+                payload,
+                user=user,
+                access_allows_reveal=access_allows_l3(access),  # type: ignore[arg-type]
+            )
         payload["capability"] = matrix.get("capability") or {
             "resolver_version": cap.get("resolver_version"),
             "mode": cap.get("mode"),

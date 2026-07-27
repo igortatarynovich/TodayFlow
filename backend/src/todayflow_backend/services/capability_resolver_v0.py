@@ -30,6 +30,7 @@ SLOT_HOME = "home_and_security"
 SLOT_STRENGTHS = "strengths"
 SLOT_TENSIONS = "tensions_growth"
 SLOT_HELPS = "helps"
+SLOT_DEEP_THEME_TIPS = "deep_theme_tips"
 SLOT_LIMITATIONS = "limitations"
 SLOT_CTA_TODAY = "cta_today"
 SLOT_CTA_DEPTH = "cta_depth"
@@ -57,7 +58,7 @@ L2_STRUCTURE_SLOTS = frozenset(
         SLOT_HOME,
     }
 )
-L3_SLOTS = frozenset({SLOT_HELPS})
+L3_SLOTS = frozenset({SLOT_HELPS, SLOT_DEEP_THEME_TIPS})
 NAME_SLOTS = frozenset({SLOT_NAME_NUMEROLOGY})
 
 RESOLVER_VERSION = "capability_resolver_v0.2"
@@ -349,7 +350,10 @@ def _user_messages(
         msgs.append(
             {
                 "code": "l3_gated",
-                "text": "В trial откроются конкретные опоры и практические выводы.",
+                "text": (
+                    "В trial откроются конкретные опоры, практические выводы "
+                    "и углубление выбранных тем (секс, деньги и др.)."
+                ),
             }
         )
     return msgs

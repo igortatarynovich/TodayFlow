@@ -8,6 +8,7 @@ import {
   PROFILE_V2_COPY,
   type ProfileV2ZoneId,
 } from "@/components/profile/v2/profileV2SystemCopy";
+import { ProfileDeepThemesChooser } from "@/components/profile/v2/ProfileDeepThemesChooser";
 import { ProfileBridgeScene } from "@/components/profile/v2/scenes/ProfileBridgeScene";
 import { ProfileCharacterScene } from "@/components/profile/v2/scenes/ProfileCharacterScene";
 import { ProfileEffortScene } from "@/components/profile/v2/scenes/ProfileEffortScene";
@@ -39,6 +40,7 @@ export type ProfileV2SystemScreenProps = {
   portraitForming?: boolean;
   portraitFormingMessage?: string | null;
   coreProfile?: CoreProfile | null;
+  onDeepThemesChanged?: () => void;
 };
 
 function zoneDomId(zone: ProfileV2ZoneId): string {
@@ -65,6 +67,7 @@ export function ProfileV2SystemScreen({
   portraitForming = false,
   portraitFormingMessage: portraitFormingMessageProp = null,
   coreProfile = null,
+  onDeepThemesChanged,
 }: ProfileV2SystemScreenProps) {
   const formingMessage = portraitFormingMessageProp?.trim() || profilePortraitFormingMessage(null);
   const helps = live.helps;
@@ -181,6 +184,13 @@ export function ProfileV2SystemScreen({
               </section>
             ) : null}
 
+            <section className={styles.zone} aria-label="Углубление тем">
+              <ProfileDeepThemesChooser
+                deepFromCore={coreProfile?.character_engine_deep_themes_v0}
+                onChanged={onDeepThemesChanged}
+              />
+            </section>
+
             <ProfileBridgeScene bridgeLine={journey.bridge?.line ?? null} />
 
             {hasExploreBody ? (
@@ -216,6 +226,7 @@ export function ProfileV2SystemScreen({
             exploreOpen={exploreOpen}
             setExploreOpen={setExploreOpen}
             coreProfile={coreProfile}
+            onDeepThemesChanged={onDeepThemesChanged}
           />
         )}
       </div>
@@ -241,6 +252,7 @@ function LegacyFirstScreen({
   exploreOpen,
   setExploreOpen,
   coreProfile,
+  onDeepThemesChanged,
 }: {
   model: ProfileQuickMapScreenProps["model"];
   live: ProfileV2LiveContext;
@@ -258,6 +270,7 @@ function LegacyFirstScreen({
   exploreOpen: boolean;
   setExploreOpen: (fn: (v: boolean) => boolean) => void;
   coreProfile?: CoreProfile | null;
+  onDeepThemesChanged?: () => void;
 }) {
   const whoLine = portraitForming
     ? null
@@ -421,6 +434,13 @@ function LegacyFirstScreen({
           <p className={styles.zoneLead}>{l3Message.text}</p>
         </section>
       ) : null}
+
+      <section className={styles.zone} aria-label="Углубление тем">
+        <ProfileDeepThemesChooser
+          deepFromCore={coreProfile?.character_engine_deep_themes_v0}
+          onChanged={onDeepThemesChanged}
+        />
+      </section>
 
       <ProfileBridgeScene bridgeLine={bridgeLine} />
 

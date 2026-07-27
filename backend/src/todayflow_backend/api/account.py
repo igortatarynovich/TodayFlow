@@ -255,10 +255,18 @@ class CoreProfileResponse(BaseModel):
     character_engine_v1: dict | None = None
     # CE → Profile journey slice (recognition / why / trap). Optional.
     character_engine_consumption_v0: dict | None = None
-    # CE person-voice house lines (1–12). Optional; natal facts stay on natal preview.
+    # CE person-voice house lines (angular + occupied). Optional; natal facts stay on natal preview.
     character_engine_house_lines_v0: dict | None = None
+    # CE applied ASC/MC cards (how + do). Optional when angles known.
+    character_engine_asc_v0: dict | None = None
     # CE person-voice aspect essays. Optional.
     character_engine_aspect_lines_v0: dict | None = None
+    # L3 selectable deep-theme tips (sex/money/…). Base spheres unchanged.
+    character_engine_deep_themes_v0: dict | None = None
+
+
+class DeepThemesUpdatePayload(BaseModel):
+    selected: list[str] = Field(default_factory=list)
 
 
 class CompactUserModelIdentity(BaseModel):
@@ -434,6 +442,111 @@ def get_profile(
 ) -> dict:
     settings = _settings_or_create(db, user)
     return _settings_payload(settings, user)
+
+
+@router.get("/profile/deep-themes")
+def get_deep_themes(
+    request: Request,
+    user: db_models.User = Depends(require_user),
+    db: Session = Depends(get_session),
+) -> dict:
+    """L3 deep-theme preference + catalog (tips live on core-profile nest)."""
+    from todayflow_backend.services.capability_resolver_v0 import access_allows_l3
+    from todayflow_backend.services.profile_deep_themes_v0 import preference_payload
+    from todayflow_backend.services.profile_matrix_adapter_v0 import resolve_access_tier
+    from todayflow_backend.services.subscription_level import get_subscription_snapshot
+
+    settings = _settings_or_create(db, user)
+    snap = get_subscription_snapshot(user, db)
+    access = resolve_access_tier(
+        insight_depth_tier=get_insight_depth_tier(user, db),
+        subscription_status=snap.subscription_status,
+        billing_level=snap.level,
+    )
+    return preference_payload(
+        settings=settings,
+        billing_level=snap.level,
+        access_allows_reveal=access_allows_l3(access),  # type: ignore[arg-type]
+    )
+
+
+@router.put("/profile/deep-themes")
+def put_deep_themes(
+    payload: DeepThemesUpdatePayload,
+    request: Request,
+    user: db_models.User = Depends(require_user),
+    db: Session = Depends(get_session),
+) -> dict:
+    """Set selected deep themes (Paid/Trial). Cap + 7-day change window enforced."""
+    locale = request_locale(request)
+    from todayflow_backend.services.capability_resolver_v0 import access_allows_l3
+    from todayflow_backend.services.profile_deep_themes_v0 import set_preference
+    from todayflow_backend.services.profile_matrix_adapter_v0 import resolve_access_tier
+    from todayflow_backend.services.subscription_level import get_subscription_snapshot
+
+    settings = _settings_or_create(db, user)
+    snap = get_subscription_snapshot(user, db)
+    access = resolve_access_tier(
+        insight_depth_tier=get_insight_depth_tier(user, db),
+        subscription_status=snap.subscription_status,
+        billing_level=snap.level,
+    )
+    if not access_allows_l3(access):  # type: ignore[arg-type]
+        raise HTTPException(
+            status_code=403,
+            detail=translate(
+                "account.errors.deepThemesRequirePaid",
+                locale=locale,
+                default="Углубление тем доступно с trial или подпиской Plus/Pro.",
+            ),
+        )
+    try:
+        return set_preference(
+            db,
+            settings,
+            selected=list(payload.selected or []),
+            billing_level=snap.level,
+        )
+    except PermissionError as exc:
+        msg = str(exc)
+        if msg.startswith("deep_themes_change_locked:"):
+            unlock = msg.split(":", 1)[-1]
+            raise HTTPException(
+                status_code=429,
+                detail=translate(
+                    "account.errors.deepThemesChangeLocked",
+                    locale=locale,
+                    default=f"Сменить темы можно снова после {unlock}.",
+                ),
+            ) from exc
+        raise HTTPException(
+            status_code=403,
+            detail=translate(
+                "account.errors.deepThemesRequirePaid",
+                locale=locale,
+                default="Углубление тем доступно с trial или подпиской Plus/Pro.",
+            ),
+        ) from exc
+    except ValueError as exc:
+        msg = str(exc)
+        if msg.startswith("deep_themes_cap_exceeded:"):
+            cap = msg.split(":")[-1]
+            raise HTTPException(
+                status_code=400,
+                detail=translate(
+                    "account.errors.deepThemesCap",
+                    locale=locale,
+                    default=f"На твоём тарифе можно выбрать не больше {cap} тем(ы).",
+                ),
+            ) from exc
+        raise HTTPException(
+            status_code=400,
+            detail=translate(
+                "account.errors.deepThemesInvalid",
+                locale=locale,
+                default="Некорректный список тем глубины.",
+            ),
+        ) from exc
 
 
 @router.put("/profile")

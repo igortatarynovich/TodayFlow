@@ -2149,6 +2149,122 @@
   color: var(--tf-accent-gold, #8b6a3e);
 }
 
+.effortSphereTips {
+  margin: 0.65rem 0 0;
+}
+
+.effortSphereTipsList {
+  margin: 0.35rem 0 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.35rem;
+  color: var(--tf-ink, #1a1510);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.sphereTipsList {
+  margin: 0.35rem 0 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.deepThemesBlock {
+  margin: 0.25rem 0 0;
+  padding: 1rem 1.05rem;
+  border-radius: 1.15rem;
+  border: 1px solid var(--tf-border, #e8e2d6);
+  background: rgba(255, 252, 247, 0.92);
+}
+
+.deepThemesTitle {
+  margin: 0;
+  font-weight: 700;
+  color: var(--tf-ink, #1a1510);
+  font-size: 1rem;
+}
+
+.deepThemesLead {
+  margin: 0.4rem 0 0;
+  color: var(--tf-ink-soft, #5a5450);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.deepThemesChips {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.deepThemesChip {
+  border: 1px solid var(--tf-border, #e8e2d6);
+  background: #fff;
+  color: var(--tf-ink, #1a1510);
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.deepThemesChip:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.deepThemesChipOn {
+  border-color: var(--tf-accent-gold, #8b6a3e);
+  background: rgba(201, 169, 110, 0.18);
+}
+
+.deepThemesCta {
+  color: inherit;
+  font-weight: 600;
+  text-underline-offset: 0.15em;
+}
+
+.deepThemesHint {
+  margin: 0.65rem 0 0;
+  color: var(--tf-ink-soft, #5a5450);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.deepThemesActions {
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.deepThemesSaved {
+  color: var(--tf-accent-gold, #8b6a3e);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.deepThemesError {
+  margin: 0.55rem 0 0;
+  color: #b42318;
+  font-size: 0.8125rem;
+}
+
+.deepThemesTipsPack {
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--tf-border, #e8e2d6);
+}
+
+.deepThemesTipsTitle {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--tf-ink, #1a1510);
+}
+
 @media (min-width: 40rem) {
   .effortSphereReadGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

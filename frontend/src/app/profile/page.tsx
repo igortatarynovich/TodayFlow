@@ -416,7 +416,13 @@ function ProfileHubPageInner() {
   const risingSignId = getRisingSignId(natalPreview);
   const risingLayer = risingSignId ? getRisingSignEntry(risingSignId) : undefined;
   const risingSign = risingLayer?.ruTitle || null;
-  const risingHint = buildRisingOverviewHint(risingLayer, Boolean(risingSignId));
+  const ceAsc = coreProfile?.character_engine_asc_v0?.asc ?? null;
+  const ceMc = coreProfile?.character_engine_asc_v0?.mc ?? null;
+  const risingHint = buildRisingOverviewHint(
+    risingLayer,
+    Boolean(risingSignId),
+    ceAsc?.how ?? ceAsc?.line ?? null,
+  );
 
   const moonNarrativeLine = moonLayer?.bullets?.[0]?.trim() || "";
 
@@ -445,7 +451,11 @@ function ProfileHubPageInner() {
     risingLayer,
     risingSign,
     risingHint,
+    ascHow: ceAsc?.how ?? ceAsc?.line ?? null,
+    ascDo: ceAsc?.do ?? null,
     mcSign,
+    mcHow: ceMc?.how ?? ceMc?.line ?? null,
+    mcDo: ceMc?.do ?? null,
     sunSignDisplay: profileV0Model.header.sunSignDisplay,
     lifePath: profileV0Model.header.lifePath,
     lifePathBody: lifePathLayer?.essence ?? lifePathLayer?.driver ?? null,
@@ -577,6 +587,11 @@ function ProfileHubPageInner() {
                   lifeSpheres={profileLifeSpheres}
                   portraitForming={isProfilePortraitForming(coreProfile)}
                   portraitFormingMessage={profilePortraitFormingMessage(coreProfile)}
+                  onDeepThemesChanged={() => {
+                    void fetchCoreProfileCached({ force: true }).then((core) => {
+                      if (core) setCoreProfile(core);
+                    });
+                  }}
                   deepExpanded={deepChartExpanded}
                   deep={{
                     natalPreview,

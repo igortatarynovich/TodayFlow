@@ -167,6 +167,18 @@ export function ProfileExploreSection({
                             <p className={styles.sphereMeta}>{sphere.helps}</p>
                           </>
                         ) : null}
+                        {sphere.practicalTips?.length ? (
+                          <>
+                            <p className={styles.sphereDetailLabel}>Практические шаги</p>
+                            <ul className={styles.sphereTipsList}>
+                              {sphere.practicalTips.map((tip) => (
+                                <li key={tip} className={styles.sphereMeta}>
+                                  {tip}
+                                </li>
+                              ))}
+                            </ul>
+                          </>
+                        ) : null}
                       </div>
                     </details>
                   ))}

@@ -158,6 +158,16 @@ export function ProfileEffortScene({ effortVector, lifeSpheres = [] }: ProfileEf
                         {helps}
                       </p>
                     ) : null}
+                    {sphere.practicalTips?.length ? (
+                      <div className={styles.effortSphereTips}>
+                        <p className={styles.effortSphereMetaLabel}>Практические шаги</p>
+                        <ul className={styles.effortSphereTipsList}>
+                          {sphere.practicalTips.map((tip) => (
+                            <li key={tip}>{tip}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
                   </li>
                 );
               })}

@@ -207,7 +207,22 @@ export function buildProfileLifeSpheresFromProfileData(
   }
   const fromContract = buildSpheresFromContractOnly(contractSpheres);
   // Partial synthesis OK (love/money/decisions slice). Never pad with FE DEFAULTS.
-  return fromContract;
+  return mergeDeepThemeTips(fromContract, core?.character_engine_deep_themes_v0);
+}
+
+function mergeDeepThemeTips(
+  spheres: ProfileLifeSphere[],
+  deep: CoreProfile["character_engine_deep_themes_v0"] | null | undefined,
+): ProfileLifeSphere[] {
+  if (!deep || deep.gated || !deep.tips_by_theme) return spheres;
+  const tipsMap = deep.tips_by_theme;
+  return spheres.map((sphere) => {
+    const tips = tipsMap[sphere.id]?.tips;
+    if (!Array.isArray(tips) || !tips.length) return sphere;
+    const clean = tips.map((t) => String(t || "").trim()).filter(Boolean);
+    if (!clean.length) return sphere;
+    return { ...sphere, practicalTips: clean };
+  });
 }
 
 /** @deprecated chart/template path kept for legacy tests only — not used by Profile V2. */

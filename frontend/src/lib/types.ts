@@ -369,11 +369,39 @@ export type CoreProfile = {
     status?: string;
     visual_note?: string;
   } | null;
-  /** CE person-voice lines for houses 1–12 (cusp/sign stay on natal preview). */
+  /** CE applied house cards (angular + occupied). Cusp/sign stay on natal preview. */
   character_engine_house_lines_v0?: {
     projection_version?: string;
     identity_thesis?: string;
-    houses?: Record<string, { line?: string }>;
+    houses?: Record<
+      string,
+      {
+        line?: string;
+        how?: string;
+        do?: string;
+        anchors?: { cusp_sign?: string; planets?: string[] };
+      }
+    >;
+    note?: string;
+  } | null;
+  /** CE applied ASC/MC first-contact / role cards. */
+  character_engine_asc_v0?: {
+    projection_version?: string;
+    identity_thesis?: string;
+    asc?: {
+      sign?: string;
+      how?: string;
+      do?: string;
+      line?: string;
+      anchors?: { sign?: string };
+    } | null;
+    mc?: {
+      sign?: string;
+      how?: string;
+      do?: string;
+      line?: string;
+      anchors?: { sign?: string };
+    } | null;
     note?: string;
   } | null;
   /** CE person-voice aspect essays keyed for natal callout matching. */
@@ -381,6 +409,22 @@ export type CoreProfile = {
     projection_version?: string;
     identity_thesis?: string;
     aspects?: Record<string, { line?: string }>;
+    note?: string;
+  } | null;
+  /** L3 selectable deep-theme practical tips (base spheres unchanged). */
+  character_engine_deep_themes_v0?: {
+    projection_version?: string;
+    identity_thesis?: string | null;
+    catalog?: Array<{ id: string; label: string }>;
+    selected?: string[];
+    cap?: number;
+    gated?: boolean;
+    billing_level?: string;
+    change_window_days?: number;
+    updated_at?: string | null;
+    next_change_at?: string | null;
+    can_change?: boolean;
+    tips_by_theme?: Record<string, { tips?: string[] }>;
     note?: string;
   } | null;
   /**

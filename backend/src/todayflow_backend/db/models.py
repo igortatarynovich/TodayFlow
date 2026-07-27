@@ -340,6 +340,8 @@ class UserSettings(Base):
     text_preference = Column(String, default="detailed")  # 'brief', 'detailed', 'comprehensive'
     # DE-8: quick | normal | deep — объём одного вызова Today narrative (не тариф insight).
     today_narrative_depth_level = Column(String, default="normal", nullable=False)
+    # L3 deep themes preference: {selected: [...], updated_at: iso}
+    profile_deep_themes = Column(JSON, nullable=True)
     gender = Column(String, nullable=True)  # 'female', 'male', 'unspecified'
     created_at = Column(DateTime, default=utc_naive_now)
     updated_at = Column(DateTime, default=utc_naive_now, onupdate=utc_naive_now)
