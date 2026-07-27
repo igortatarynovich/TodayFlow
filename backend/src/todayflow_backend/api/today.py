@@ -639,7 +639,13 @@ class TodayNarrativeRequest(BaseModel):
     target_date: Optional[str] = None
     surface: str = Field("guide", description="guide | day_layer | spheres | evening | deepen")
     parent_generation_id: Optional[int] = Field(None, description="Связь с прошлым ответом today/narrative для контекста")
-    deepen_topic: Optional[str] = Field(None, description="Для surface=deepen: love | money | career | family | full_day")
+    deepen_topic: Optional[str] = Field(
+        None,
+        description=(
+            "Для surface=deepen: money | intimacy | love | career | family | full_day. "
+            "Генерация extra-слоя — Trial/Paid; Free получает CTA (base day не режется)."
+        ),
+    )
     depth_level: Optional[str] = Field(
         default=None,
         description="DE-8: quick | normal | deep. Не передавай поле — возьмётся из настроек аккаунта (`today_narrative_depth_level`).",
@@ -997,6 +1003,8 @@ def post_today_narrative(
     при сбое step3 ядро подставляется из ``guide_decision_v0``; при сбое воронки — монолитный guide.
     Цепочка: сначала surface=guide, затем day_layer/spheres/evening с тем же target_date и parent_generation_id=id ответа guide.
     Для углубления темы: surface=deepen, deepen_topic, parent_generation_id от guide.
+    **Today Depth Layer:** deepen — опциональный слой поверх полного дня. Free получает soft CTA
+    (``payload.depth_layer.access=cta``); Trial/Paid генерирует pack. Base day / day_story не режется.
     Во входном JSON к LLM для day_layer/spheres/evening/deepen передаются ``day_model`` и ``day_engine_brief`` (паритет с guide); в HTTP-ответе они есть только у guide. У guide в ``payload`` также ``narrative_hierarchy`` (O2: ``primary_anchor`` = ``day_engine_brief``).
     Поле ``depth_level`` (quick | normal | deep, DE-8) задаёт объём текста за один вызов. Если **не** передано — используется ``user_settings.today_narrative_depth_level`` (по умолчанию ``normal``). На стороне генерации ``deep`` для пользователей с ``insight_depth_tier=free`` приводится к ``normal`` (гейт DE-8). Не путать с тарифом ``insight_depth_tier``.
     """
@@ -1007,6 +1015,25 @@ def post_today_narrative(
     allowed = {"guide", "day_layer", "spheres", "evening", "deepen"}
     if surface not in allowed:
         raise HTTPException(status_code=400, detail=f"surface must be one of {sorted(allowed)}")
+
+    if surface == "deepen":
+        from todayflow_backend.services.today_depth_layer_v1 import (
+            build_depth_layer_cta_payload,
+            can_generate_depth_layer,
+            normalize_depth_topic,
+        )
+
+        topic_norm = normalize_depth_topic(body.deepen_topic)
+        if not can_generate_depth_layer(user, db):
+            return TodayNarrativeResponse(
+                generation_id=0,
+                generation_log_id=0,
+                surface="deepen",
+                used_fallback=True,
+                payload=build_depth_layer_cta_payload(topic_norm, locale=locale),
+                profile_selector=None,
+            )
+
     fusion = get_daily_fusion_index(target_date=td, current_user=user, db=db)
     fusion_dump = fusion.model_dump()
     core_profile = core_profile_service.build_cached_or_baseline(db, user)
@@ -1017,6 +1044,11 @@ def post_today_narrative(
         rc = {k: v for k, v in rc.items() if v not in (None, "", [])}
         ritual_dict = rc or None
     depth_eff = _effective_narrative_depth_level(db, user, body.depth_level)
+    deepen_topic_eff = body.deepen_topic
+    if surface == "deepen":
+        from todayflow_backend.services.today_depth_layer_v1 import normalize_depth_topic
+
+        deepen_topic_eff = normalize_depth_topic(body.deepen_topic)
     payload, gen_id, used_fb, profile_sel = run_today_narrative_pipeline(
         db,
         user_id=user.id,
@@ -1027,12 +1059,18 @@ def post_today_narrative(
         core_profile=core_profile,
         fusion_dump=fusion_dump,
         parent_generation_id=body.parent_generation_id,
-        deepen_topic=body.deepen_topic,
+        deepen_topic=deepen_topic_eff,
         policy_version=body.policy_version,
         voice_profile=body.voice_profile,
         ritual_context=ritual_dict,
         depth_level=depth_eff,
     )
+    if surface == "deepen" and isinstance(payload, dict):
+        from todayflow_backend.services.today_depth_layer_v1 import annotate_depth_layer_payload
+
+        payload = annotate_depth_layer_payload(
+            payload, topic=str(deepen_topic_eff or "full_day"), locale=locale
+        )
     return TodayNarrativeResponse(
         generation_id=gen_id,
         generation_log_id=gen_id,

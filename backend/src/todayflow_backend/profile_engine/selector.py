@@ -43,6 +43,7 @@ def narrative_surface_to_selector_params(
         dt = (deepen_topic or "").strip().lower()
         topic_domain = {
             "love": ProfileTopicDomain.INTIMACY,
+            "intimacy": ProfileTopicDomain.INTIMACY,
             "money": ProfileTopicDomain.MONEY,
             "career": ProfileTopicDomain.WORK,
             "family": ProfileTopicDomain.FAMILY,

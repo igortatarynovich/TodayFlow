@@ -1398,6 +1398,7 @@ def _fallback_deepen(topic: str, ctx: str, locale: str = "ru") -> dict[str, Any]
     en_locale = _is_en_locale(locale)
     title = {
         "love": "Love and closeness today" if en_locale else "Любовь и близость сегодня",
+        "intimacy": "Intimacy and body today" if en_locale else "Близость и тело сегодня",
         "money": "Money and value" if en_locale else "Деньги и ценность",
         "career": "Work and responsibility" if en_locale else "Работа и ответственность",
         "family": "Family and home" if en_locale else "Семья и дом",
@@ -1548,6 +1549,7 @@ _EVENING_SYS = """Ты пишешь короткие тексты для веч�
 _DEEPEN_SYS = """Ты углубляешь одну тему дня для пользователя TodayFlow. Есть topic, prior_thesis, стержень/сценарии и user_core (natal_chart при available, интерпретация, числа, знак, learning).
 В fusion передаётся компактный слой (scores, encouragement, rhythm_context с целями/привычками/аскезами/дневником): опирайся только на факты из JSON, не придумывай отметки или контракты. behavior_patterns при наличии — дополнительный фон повторяемых действий на Today, без выхода за пределы pattern_hints и счётчиков. intent при наличии — дополнительная нить «что важно человеку сегодня»; вплетай её мягко, не подменяя выбранный topic.
 Если во входном JSON есть day_engine_brief — углубление не отменяет опору дня: title/body должны развивать выбранный topic в рамках тех же нитей (anchor_summary, do_hint, avoid_hint), без конфликта с day_model/temporal; day_history — не более одной мягкой отсылки к динамике.
+Это **опциональный слой поверх уже полного дня**: конкретнее и практичнее, чем базовый рассказ. Для topic=intimacy — взрослые, откровенные, но уважительные подсказки (жест, формулировка, граница); без клиники и без порнографичности. Для money/career — один ясный ход и риск. Для love/family — что сказать / чего не делать сегодня.
 Развивай тему так, чтобы это было приземлено на этого человека, без общих гороскопов. Не мистифицируй.
 Тон: живой и конкретный. Удерживай баланс «смысл + практический шаг», без категоричных предсказаний.
 Верни только JSON:
@@ -4144,7 +4146,7 @@ def build_today_narrative(
                 payload = _fallback_evening(locale_value)
 
         elif surface == "deepen":
-            if topic_norm not in ("love", "money", "career", "family", "full_day"):
+            if topic_norm not in ("love", "money", "career", "family", "full_day", "intimacy"):
                 topic_norm = "full_day"
             deepen_pack: dict[str, Any] = {
                 "policy": policy_block,

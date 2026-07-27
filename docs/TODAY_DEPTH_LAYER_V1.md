@@ -1,22 +1,23 @@
 # Today Depth Layer (subscriber optional deepen)
 
-**Status:** ACCEPTED (product principle · contract draft)  
+**Status:** ACCEPTED · **impl step 1 LANDED** (topic catalog + deepen generate gate)  
 **Date:** 2026-07-27  
 **Parent:** [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](./UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md) · [PRODUCT_AVAILABILITY_MATRIX.md](./PRODUCT_AVAILABILITY_MATRIX.md) §3.2  
-**Related:** existing `POST /today/narrative` surface `deepen` · DE-8 `depth_level`
+**Related:** existing `POST /today/narrative` surface `deepen` · DE-8 `depth_level`  
+**Code:** `today_depth_layer_v1.py` · gate in `api/today.py` `POST /narrative`
 
 ## Architecture impact
 
 ```markdown
 ## Architecture impact
-- **SoT before:** Free/Paid both get full Today day pack; deepen API exists but is not framed as
-  optional subscriber layer; no explicit “never hide base day” Today rule for deepen topics
-- **SoT after:** Base day = full for Free and Paid. Subscription adds an **optional second layer**
-  the user chooses (franker tips / deeper analysis on a topic). Never grey-locks base content.
-- **Public contract changed?** no (yet) — deepen topics may extend later (`intimacy` etc.)
-- **Migration required?** no for principle; API/UI follow-up is a separate slice
-- **Canon updated?** yes — this note + Availability Matrix §3.2 + Understanding Progress §4
-- **Backward compatible?** yes — additive layer only
+- **SoT before:** deepen available to any signed-in user; no intimacy topic; no Free CTA shape
+- **SoT after:** Free deepen → soft CTA payload (depth_layer.access=cta); Trial/Paid generates;
+  topics include intimacy; base day unchanged
+- **Public contract changed?** yes (additive) — deepen payload may include `depth_layer`;
+  Free deepen no longer runs LLM
+- **Migration required?** no — FE should render CTA body; picker UI = later step
+- **Canon updated?** yes — this note
+- **Backward compatible?** mostly — Free clients that expected full deepen text now get CTA copy
 ```
 
 ## Principle (locked)
@@ -52,15 +53,17 @@
 
 v1 ship set can be **2–4** of these; product picks the first menu. Default recommendation may follow active day spheres, but the user may override.
 
-## Contract sketch (follow-up impl)
+## Contract sketch
 
-| Piece | Rule |
-|-------|------|
-| Base | `GET /today/contract` + day_story — **same** for Free and Paid |
-| Offer | UI after day pack: topic chips (optional) |
-| Gate | Trial/Paid: run deepen pack for chosen topic. Free: show value CTA → subscribe/trial (base day untouched) |
-| Payload | Additive nest or narrative surface — **not** overwrite of `day_story.story` / scenes |
-| Voice | Person-not-system; practical; no clinical diagnosis |
+| Piece | Rule | Status |
+|-------|------|--------|
+| Base | `GET /today/contract` + day_story — **same** for Free and Paid | unchanged |
+| Topics | `money` · `intimacy` · `love` · `career` · `family` · `full_day` | **step 1** |
+| Gate | Trial/Paid generate; Free → CTA payload | **step 1** |
+| Offer menu | chips in `depth_layer.menu` | **step 1** (in deepen response) |
+| Today contract nest | expose offer without calling deepen | step 2 |
+| FE picker | chips after day pack | step 3 |
+| Payload | Additive `depth_layer` · **not** overwrite day_story | **step 1** |
 
 ## Non-goals (this note)
 
