@@ -9,14 +9,13 @@
 
 ```markdown
 ## Architecture impact
-- **SoT before:** C3.6.1 synthetic_bootstrap only; C3.6.3 promotions from pilot evidence
-- **SoT after:** human consensus calibration over 40 sealed cases; analyzer P/R;
-  shadow false-block KPI; CHORUS_SEMANTIC_DUPLICATION → candidate_blocking (observe);
-  SCENE_UNIVERSAL_ADVICE stays candidate_blocking (low recall)
+- **SoT before:** MISSING_EVERYDAY = empty/short only; bare «» counted as concrete; thin tips often ABSTRACT-only or escaped
+- **SoT after:** lived-specificity (time/quote/person+act/channel/long+marker); thin tip → MISSING (+ ABSTRACT co-label);
+  bare guillemets no longer count as concrete
 - **Public contract changed?** no
 - **Migration required?** no
-- **Canon updated?** yes — this note + baseline + tracker + DAY_SCENARIO_V1
-- **Backward compatible?** yes — candidate_blocking remains observe-only
+- **Canon updated?** yes — DAY_SCENARIO_EVERYDAY_QUALITY_C31 + calib baseline refresh
+- **Backward compatible?** yes — stronger quality block on thin everyday (already blocking maturity)
 ```
 
 ## Findings (short)
@@ -25,12 +24,13 @@
 |---------|--------|
 | `SCENE_CLONE` / `SCENE_ABSTRACT` blocking | P≈1.0, FPR=0 — keep |
 | `ASTRO_JARGON_BARE` blocking | P=0.5, FPR≈0.15 — **watch**; both false blocks are this code (`hg-f61a374bc5aa`, `hg-95113b431251`) |
-| `SCENE_MISSING_EVERYDAY` blocking | human+ but analyzer R=0 on projected map — **analyzer gap** |
+| `SCENE_MISSING_EVERYDAY` blocking | lived-specificity fix · calib **P=R=1.0**, FPR=0 |
+| `SCENE_ABSTRACT` blocking | co-fires on thin everyday · calib **P=R=1.0** |
 | `SCENE_UNIVERSAL_ADVICE` candidate | P=1.0 but R≈0.18 — stay candidate |
 | `CHORUS_SEMANTIC_DUPLICATION` | P=R=1.0 → **candidate_blocking** |
 
 ## Next
 
-- Tighten everyday detector on projected `domestic_example` fields
+- Tighten everyday detector on projected `domestic_example` fields — **DONE** (lived-specificity; thin→MISSING)
 - Revisit `ASTRO_JARGON_BARE` FP before broader blocking confidence
 - Do **not** promote `SCENE_UNIVERSAL_ADVICE` until recall improves

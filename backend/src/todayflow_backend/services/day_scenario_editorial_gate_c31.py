@@ -143,13 +143,62 @@ _CONCRETE_MARKER_RE = re.compile(
     r"("
     r"сообщен|письм|звон|спросит|ответ|встреч|кофе|кухн|мессенджер|"
     r"чате|telegram|whatsapp|коллег|партн[её]р|мама|папа|реб[её]н|"
-    r"счёт|оплат|перевод|дедлайн|задач|созвон|кабинет|подъезд|"
+    r"счёт|оплат|перевод|дедлайн|задач|созвон|кабинет|подъезд|проект|"
     r"скажет|напишет|позвон|откроет|закроет|подожд|"
-    r"«|»|\".{3,} \"|"  # quoted dialogue-ish
+    # Quoted dialogue needs content — bare «» must not count as lived moment.
+    r"«[^»]{6,}»|\"[^\"]{6,}\"|"
     r"момент,\s+когда|именно\s+когда|в\s+тот\s+момент"
     r")",
     re.I,
 )
+
+
+def everyday_has_lived_specificity(text: str, *, locale: str = "ru") -> bool:
+    """True when everyday_example carries a lived moment, not a thin tip/template.
+
+    Specificity signals (any one): clock time, substantive quote, person+speech act,
+    named channel, or long prose with concrete markers. Bare keywords like «сообщение:»
+    without a moment are not enough (C3.6.2 human calib gap fix).
+    """
+    t = (text or "").strip()
+    if not t:
+        return False
+    loc = (locale or "ru").strip().lower()
+    if re.search(r"\d{1,2}[:.]\d{2}", t):
+        return True
+    if re.search(r"«[^»]{12,}»|\"[^\"]{12,}\"|'[^']{12,}'", t):
+        return True
+    if loc.startswith("en"):
+        if re.search(
+            r"(message|chat|email|slack|call|partner|colleague|manager|door|draft|"
+            r"jira|doc|phone|meeting|comment).{0,50}(at\s+\d|asks|writes|texts|:|\d)",
+            t,
+            re.I,
+        ):
+            return True
+        if len(t) >= 48 and re.search(
+            r"(message|chat|email|call|colleague|partner|deadline|draft|kitchen|"
+            r"door|phone|meeting|invoice|reply|slack|jira|doc|comment)",
+            t,
+            re.I,
+        ):
+            return True
+        return False
+    if re.search(
+        r"(партн|коллег|друг|подруг|мама|папа|менеджер|клиент).{0,80}"
+        r"(спрашива|пишет|говор|сообщ|звон|предлага|скажет|ответ|напис)",
+        t,
+        re.I,
+    ):
+        return True
+    if re.search(r"(напис|говор|скаж|ответ).{0,40}(коллег|партн|друг|подруг)", t, re.I):
+        return True
+    if re.search(r"(в\s+чате|в\s+почте|черновик|slack|telegram|whatsapp)", t, re.I):
+        return True
+    if len(t) >= 100 and _CONCRETE_MARKER_RE.search(t):
+        return True
+    return False
+
 
 _ASTRO_TERM_RE = re.compile(
     r"("
@@ -370,18 +419,30 @@ def run_editorial_quality_gate_c31(
                     message="everyday_example missing or too thin — need a concrete domestic moment",
                 )
             )
-
-        combined_for_concrete = f"{everyday} {setup} {opp} {trap}"
-        # everyday_example itself must carry a lived moment (not only setup)
-        if everyday and len(everyday) >= 24 and not _CONCRETE_MARKER_RE.search(everyday):
+        elif not everyday_has_lived_specificity(everyday, locale="ru") or not _CONCRETE_MARKER_RE.search(
+            everyday
+        ):
+            # Thin/generic tip with length ≠ lived moment (canon: SCENE_MISSING_EVERYDAY).
+            defects.append(
+                _defect(
+                    DEFECT_SCENE_MISSING_EVERYDAY,
+                    field=field,
+                    message="everyday_example too thin — need a lived moment (time/quote/person+act)",
+                )
+            )
+            # Human calib co-labels thin everyday as ABSTRACT as well — keep both codes.
             defects.append(
                 _defect(
                     DEFECT_SCENE_ABSTRACT,
                     field=field,
-                    message="everyday_example lacks concrete markers (message/ask/moment/object/person)",
+                    message="everyday_example lacks a lived moment (thin tip/template)",
                 )
             )
-        elif everyday and not _CONCRETE_MARKER_RE.search(combined_for_concrete):
+
+        combined_for_concrete = f"{everyday} {setup} {opp} {trap}"
+        if everyday and everyday_has_lived_specificity(everyday, locale="ru") and not _CONCRETE_MARKER_RE.search(
+            combined_for_concrete
+        ):
             defects.append(
                 _defect(
                     DEFECT_SCENE_ABSTRACT,

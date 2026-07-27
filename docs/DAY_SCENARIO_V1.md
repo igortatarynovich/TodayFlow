@@ -434,7 +434,8 @@ Legacy projections remain for old clients only.
 **Progress:** **40/40** sealed · human calibration baseline landed
 ([DAY_SCENARIO_HUMAN_CALIBRATION_C362.md](./audits/DAY_SCENARIO_HUMAN_CALIBRATION_C362.md)).
 `CHORUS_SEMANTIC_DUPLICATION` → candidate_blocking; `SCENE_UNIVERSAL_ADVICE` stays candidate.
-Next: everyday analyzer gap · ASTRO_JARGON FP watch.
+`SCENE_MISSING_EVERYDAY` lived-specificity fix landed (calib P=R=1.0).
+Next: ASTRO_JARGON FP watch.
 
 ---
 

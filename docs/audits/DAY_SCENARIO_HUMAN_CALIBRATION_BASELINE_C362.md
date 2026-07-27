@@ -42,10 +42,10 @@
 | `ASTRO_JARGON_BARE` | blocking | 0.5 | 0.7142857142857143 | 0.15151515151515152 | 7 | 33 |
 | `CHORUS_SEMANTIC_DUPLICATION` | candidate_blocking | 1.0 | 1.0 | 0.0 | 6 | 27 |
 | `CHORUS_UNTRANSLATED_JARGON` | experimental | 0.5714285714285714 | 1.0 | 0.10344827586206896 | 4 | 29 |
-| `SCENE_ABSTRACT` | blocking | 1.0 | 0.8 | 0.0 | 10 | 30 |
+| `SCENE_ABSTRACT` | blocking | 1.0 | 1.0 | 0.0 | 10 | 30 |
 | `SCENE_CLONE` | blocking | 1.0 | 0.7 | 0.0 | 10 | 30 |
 | `SCENE_MISSING_CHOICE` | advisory | None | 0.0 | 0.0 | 6 | 34 |
-| `SCENE_MISSING_EVERYDAY` | blocking | None | 0.0 | 0.0 | 10 | 30 |
+| `SCENE_MISSING_EVERYDAY` | blocking | 1.0 | 1.0 | 0.0 | 10 | 30 |
 | `SCENE_UNIVERSAL_ADVICE` | candidate_blocking | 1.0 | 0.18181818181818182 | 0.0 | 11 | 29 |
 | `THESIS_ECHO` | experimental | None | 0.0 | 0.0 | 7 | 33 |
 

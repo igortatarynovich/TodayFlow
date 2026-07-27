@@ -196,3 +196,24 @@ def test_retry_feedback_lists_defect_codes():
     feedback = format_editorial_retry_feedback(defects)
     assert "editorial quality gate" in feedback.lower() or "дефект" in feedback.lower()
     assert any(code in feedback for code in {d["code"] for d in defects})
+
+
+def test_thin_template_everyday_is_missing_not_just_abstract():
+    """Formulaic tips with bare keywords must fire SCENE_MISSING_EVERYDAY (C3.6.2 gap)."""
+    native = _valid_native_good()
+    native["scenes"][0]["everyday_example"] = "Сообщение: сначала смысл, потом скорость ответа."
+    native["scenes"][1]["everyday_example"] = "Разговор, где важно не сгладить то, что лучше проговорить."
+    defects = run_editorial_quality_gate_c31(
+        normalize_native_scenario_llm_c1(native), has_natal_evidence=True
+    )
+    codes = {d["code"] for d in defects}
+    assert DEFECT_SCENE_MISSING_EVERYDAY in codes
+
+
+def test_guillemet_alone_does_not_count_as_lived_everyday():
+    native = _valid_native_good()
+    native["scenes"][0]["everyday_example"] = "Смена обстановки на час, если тянет «всё бросить»."
+    defects = run_editorial_quality_gate_c31(
+        normalize_native_scenario_llm_c1(native), has_natal_evidence=True
+    )
+    assert any(d["code"] == DEFECT_SCENE_MISSING_EVERYDAY for d in defects)

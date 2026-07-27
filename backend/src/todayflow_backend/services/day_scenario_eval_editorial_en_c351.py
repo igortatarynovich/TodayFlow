@@ -27,6 +27,7 @@ from todayflow_backend.services.day_scenario_editorial_gate_c31 import (
     DEFECT_SCENE_MISSING_EVERYDAY,
     DEFECT_SCENE_UNIVERSAL_ADVICE,
     DEFECT_THESIS_ECHO,
+    everyday_has_lived_specificity,
     score_editorial_quality_c31,
 )
 from todayflow_backend.services.day_scenario_personalization_c33 import _as_dict, _as_list, _clip
@@ -63,7 +64,7 @@ _EN_ABSTRACT_RE = re.compile(
 _EN_CONCRETE_RE = re.compile(
     r"("
     r"message|chat|email|call|colleague|partner|deadline|draft|"
-    r"kitchen|door|phone|meeting|invoice|reply|"
+    r"kitchen|door|phone|meeting|invoice|reply|slack|jira|doc|comment|"
     r"moment\s+when|exactly\s+when|"
     r"\"[^\"]{4,}\"|"
     r"asks\s+you|texts?\s+you|writes?"
@@ -222,12 +223,21 @@ def run_editorial_quality_gate_en_c351(native: dict[str, Any] | None) -> list[di
             defects.append(
                 _defect(DEFECT_SCENE_MISSING_EVERYDAY, field=field, message="missing everyday_example")
             )
-        elif not _EN_CONCRETE_RE.search(everyday) and not _EN_CONCRETE_RE.search(blob):
+        elif not everyday_has_lived_specificity(everyday, locale="en") or not _EN_CONCRETE_RE.search(
+            everyday
+        ):
+            defects.append(
+                _defect(
+                    DEFECT_SCENE_MISSING_EVERYDAY,
+                    field=field,
+                    message="everyday_example too thin — need a lived moment (time/quote/channel)",
+                )
+            )
             defects.append(
                 _defect(
                     DEFECT_SCENE_ABSTRACT,
                     field=field,
-                    message="no concrete lived moment markers",
+                    message="everyday_example lacks a lived moment (thin tip/template)",
                 )
             )
         if _EN_ABSTRACT_RE.search(blob):

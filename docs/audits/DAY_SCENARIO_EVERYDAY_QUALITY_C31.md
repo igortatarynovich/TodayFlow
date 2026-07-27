@@ -40,7 +40,7 @@ Banned as sole content: «не торопитесь», «сохраняйте б
 |------|---------|
 | `SCENE_ABSTRACT` | no lived moment / sphere forecast |
 | `SCENE_UNIVERSAL_ADVICE` | universal tip without concrete action |
-| `SCENE_MISSING_EVERYDAY` | thin/missing everyday_example |
+| `SCENE_MISSING_EVERYDAY` | thin/missing everyday_example (incl. formulaic tips without lived specificity) |
 | `SCENE_CLONE` | near-duplicate scenes |
 | `THESIS_ECHO` | thesis dumped across scenes |
 | `ASTRO_JARGON_BARE` | astro term without human translation |
