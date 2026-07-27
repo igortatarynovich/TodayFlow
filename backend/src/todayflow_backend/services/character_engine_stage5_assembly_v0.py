@@ -158,23 +158,9 @@ def build_character_engine_assembly_v0(
                 }
             )
 
-    # Strengths from Identity Core surface (one line) — not trait laundry.
+    # Strengths stay empty in Stage5 adapters — consumption essays own them.
+    # Do not reuse Identity Core surface as "strengths" (duplicates recognition).
     core_surface = str(core.get("surface_text") or "").strip()
-    if core_surface:
-        refs = {
-            "claim_ids": support_claims[:],
-            "scene_ids": [],
-            "mechanism_slots": ["identity_core"],
-        }
-        item_id = make_compass_item_id(item_kind="strengths", source_refs=refs)
-        compass_items.append(
-            {
-                "item_id": item_id,
-                "item_kind": "strengths",
-                "value": [core_surface],
-                "derived_from": refs,
-            }
-        )
 
     intimacy = _scene_by_kind(stage4, "intimacy")
     resource = _scene_by_kind(stage4, "risk", "responsibility", "uncertainty")
@@ -235,7 +221,7 @@ def build_character_engine_assembly_v0(
             scene_ids=[str(resource["scene_id"])] if resource and resource.get("scene_id") else [],
         ),
         "strengths": _adapter_out(
-            [core_surface] if core_surface else None,
+            None,
             claim_ids=support_claims,
             compass_item_ids=_compass_ids_for("strengths"),
         ),

@@ -4,7 +4,6 @@ import type { AspectCallout } from "@/lib/types";
 import type { NatalChartPreview } from "@/components/profile/profilePanelTypes";
 import {
   ensureTwelveProfileHouses,
-  HOUSE_FALLBACK,
   HOUSE_LAYER,
 } from "@/components/profile/profileHouseConstants";
 import { PlanetIcon } from "@/components/visualIdentity/PlanetIcon";
@@ -30,7 +29,10 @@ type ProfileChartFullMapProps = {
   natalPreviewLoading?: boolean;
   onReloadPreview: () => void;
   /** CE person-voice lines keyed by house number string — preferred over encyclopedia. */
-  housePersonLines?: Record<string, { line?: string } | undefined> | null;
+  housePersonLines?: Record<
+    string,
+    { line?: string; how?: string; do?: string } | undefined
+  > | null;
   /** CE person-voice aspect essays keyed by aspect_id / normalized bodies. */
   aspectPersonLines?: Record<string, { line?: string } | undefined> | null;
 };
@@ -89,12 +91,28 @@ export function ProfileChartFullMap({
                   {signLabel ? <p className={styles.houseSign}>{signLabel}</p> : null}
                 </div>
                 <p className={styles.houseTitle}>{layer?.title ?? `Дом ${house.house}`}</p>
-                <p className={styles.houseText}>
-                  {housePersonLines?.[String(house.house)]?.line?.trim() ||
+                {(() => {
+                  const ce = housePersonLines?.[String(house.house)];
+                  const how = ce?.how?.trim() || ce?.line?.trim() || null;
+                  const doLine = ce?.do?.trim() || null;
+                  if (how) {
+                    return (
+                      <>
+                        <p className={styles.houseText}>{how}</p>
+                        {doLine ? <p className={styles.houseDo}>{doLine}</p> : null}
+                      </>
+                    );
+                  }
+                  // Empty non-CE houses: cusp + domain title only — no encyclopedia filler.
+                  if (!isKey) {
+                    return null;
+                  }
+                  const fallback =
                     interpretation?.description?.trim() ||
                     interpretation?.theme?.trim() ||
-                    HOUSE_FALLBACK[house.house]}
-                </p>
+                    null;
+                  return fallback ? <p className={styles.houseText}>{fallback}</p> : null;
+                })()}
               </article>
             );
           })}

@@ -250,6 +250,14 @@
   font-size: var(--tf-type-caption-lg-size, 0.6875rem);
 }
 
+.lifeMapDo {
+  margin: 0.4rem 0 0;
+  color: #334155;
+  line-height: 1.55;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 600;
+}
+
 .lifeMapRoute {
   margin: 0.7rem 0 0;
   font-weight: 700;
@@ -324,6 +332,14 @@
   color: #475569;
   line-height: 1.6;
   font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+}
+
+.houseDo {
+  margin: 0.45rem 0 0;
+  color: #334155;
+  line-height: 1.55;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 600;
 }
 
 .tableWrap {

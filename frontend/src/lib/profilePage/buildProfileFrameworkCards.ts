@@ -18,7 +18,12 @@ export function buildProfileFrameworkCards(input: {
   risingLayer: PlanetInSignEntry | null | undefined;
   risingSign: string | null;
   risingHint: string;
+  /** CE applied ASC how — preferred over rising encyclopedia. */
+  ascHow?: string | null;
+  ascDo?: string | null;
   mcSign: string | null;
+  mcHow?: string | null;
+  mcDo?: string | null;
   sunSignDisplay: string | null;
   lifePath: number | null;
   lifePathBody: string | null;
@@ -27,6 +32,9 @@ export function buildProfileFrameworkCards(input: {
 }): ProfileFrameworkCard[] {
   const sunSign = input.sunSignDisplay ?? layerSignLabel(input.sunLayer, "");
   const risingSign = input.risingSign ?? layerSignLabel(input.risingLayer, "");
+  const ascBody =
+    input.ascHow?.trim() ||
+    pillarSentence(input.risingLayer, input.risingHint);
 
   const cards: ProfileFrameworkCard[] = [
     {
@@ -39,7 +47,8 @@ export function buildProfileFrameworkCards(input: {
       id: "rising",
       title: "Асцендент",
       anchor: signAnchor("в", risingSign || null),
-      body: pillarSentence(input.risingLayer, input.risingHint),
+      body: ascBody,
+      do: input.ascDo?.trim() || null,
     },
     {
       id: "moon",
@@ -51,9 +60,12 @@ export function buildProfileFrameworkCards(input: {
       id: "mc",
       title: "MC",
       anchor: signAnchor("в", input.mcSign),
-      body: input.mcSign
-        ? "MC показывает, как ты реализуешь себя в карьере и публичной роли."
-        : "MC уточняется по времени рождения — это линия достижений и видимого пути.",
+      body:
+        input.mcHow?.trim() ||
+        (input.mcSign
+          ? "MC показывает, как ты реализуешь себя в карьере и публичной роли."
+          : "MC уточняется по времени рождения — это линия достижений и видимого пути."),
+      do: input.mcDo?.trim() || null,
     },
     {
       id: "archetype",

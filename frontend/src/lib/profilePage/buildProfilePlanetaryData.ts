@@ -237,13 +237,18 @@ const LIFE_MAP_BLUEPRINT: Array<{
 
 export function buildLifeMapSections(
   natalPreview: NatalChartPreview | null,
-  houseLines?: Record<string, { line?: string } | undefined> | null,
+  houseLines?: Record<
+    string,
+    { line?: string; how?: string; do?: string } | undefined
+  > | null,
 ): LifeMapSection[] {
   const houses = ensureTwelveProfileHouses(natalPreview);
   return LIFE_MAP_BLUEPRINT.map((item) => {
     const house = houses.find((entry) => entry.house === item.house);
     const interpretation = natalPreview?.interpretations?.houses?.[item.house];
-    const ceLine = houseLines?.[String(item.house)]?.line?.trim() || null;
+    const ce = houseLines?.[String(item.house)];
+    const ceHow = ce?.how?.trim() || ce?.line?.trim() || null;
+    const ceDo = ce?.do?.trim() || null;
 
     return {
       house: item.house,
@@ -252,10 +257,11 @@ export function buildLifeMapSections(
       href: item.href,
       accent: item.accent,
       summary:
-        ceLine ||
+        ceHow ||
         interpretation?.description ||
         interpretation?.theme ||
         HOUSE_FALLBACK[item.house],
+      do: ceDo,
     };
   });
 }
@@ -300,10 +306,16 @@ export function resolveMcSignLabel(preview: NatalChartPreview | null): string | 
   return entry?.ruName ?? houseTen.sign;
 }
 
-export function buildRisingOverviewHint(entry: PlanetInSignEntry | undefined, hasAscendantData: boolean) {
+export function buildRisingOverviewHint(
+  entry: PlanetInSignEntry | undefined,
+  hasAscendantData: boolean,
+  ceAscHow?: string | null,
+) {
   if (!hasAscendantData) {
     return "Асцендент появится, когда в профиле будет надёжное время рождения.";
   }
+  const ce = ceAscHow?.trim();
+  if (ce) return ce;
   if (entry?.bullets?.[0]) return entry.bullets[0];
   return "Показывает первый импульс, стиль контакта и то, как ты входишь в новые процессы.";
 }

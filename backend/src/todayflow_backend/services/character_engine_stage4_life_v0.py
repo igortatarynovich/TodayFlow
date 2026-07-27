@@ -213,23 +213,9 @@ def build_deterministic_stage4_raw_v0(
     ]
     support = [primary_claim] if primary_claim in claim_ids else claim_ids[:1]
     life = _generic_life(thesis)
-    # Prefer Stage 3 tension surface inside intimacy if present.
-    if isinstance(stage3, dict) and stage3.get("status") == "grounded":
-        pt = stage3.get("primary_tension") if isinstance(stage3.get("primary_tension"), dict) else {}
-        pt_text = str(pt.get("surface_text") or "").strip()
-        if pt_text:
-            scenes = list(life.get("scenes") or [])
-            for i, sc in enumerate(scenes):
-                if isinstance(sc, dict) and sc.get("scene_kind") == "intimacy":
-                    scenes[i] = {
-                        **sc,
-                        "surface_text": (
-                            "В близости это напряжение звучит так: " + pt_text
-                        ),
-                        "rooted_in": "primary_tension",
-                    }
-                    break
-            life = {**life, "scenes": scenes}
+    # Keep intimacy scene from life pack — do not paste primary_tension (trap) into
+    # relationship slots; trap already owns recurring_patterns / insight.
+    _ = stage3  # reserved: future tension-aware intimacy without verbatim trap paste
 
     def _with_claims(row: dict[str, Any]) -> dict[str, Any]:
         return {**row, "supporting_claim_ids": list(support)}

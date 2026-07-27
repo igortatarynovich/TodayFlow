@@ -13,6 +13,8 @@ export type LifeMapSection = {
   href: string;
   accent: string;
   summary: string;
+  /** Applied check from CE house card — optional. */
+  do?: string | null;
 };
 
 export type NatalChartPreview = {

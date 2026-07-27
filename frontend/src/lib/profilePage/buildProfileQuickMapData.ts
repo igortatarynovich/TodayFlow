@@ -25,6 +25,8 @@ export type ProfileFrameworkCard = {
   title: string;
   anchor: string | null;
   body: string;
+  /** Applied check (ASC/MC/house) — optional. */
+  do?: string | null;
 };
 
 export type ProfileQuickMapViewModel = {

@@ -618,6 +618,44 @@ def _scene_by_kind(stage4: dict[str, Any], *kinds: str) -> str | None:
     return None
 
 
+def _norm_slot(text: str) -> str:
+    return " ".join(str(text or "").lower().split())
+
+
+def _is_near_dupe(candidate: str, *forbidden: str) -> bool:
+    """True if candidate equals or heavily overlaps a slot that already owns the meaning."""
+    c = _norm_slot(candidate)
+    if not c:
+        return True
+    for raw in forbidden:
+        f = _norm_slot(raw)
+        if not f:
+            continue
+        if c == f:
+            return True
+        if len(f) >= 40 and (f in c or c in f):
+            return True
+        # Trap paste into intimacy: "В близости это напряжение звучит так: …"
+        if "напряжение звучит так" in c and f and f[:48] in c:
+            return True
+    return False
+
+
+def _dedupe_list(items: list[str], *forbidden: str) -> list[str]:
+    out: list[str] = []
+    seen: set[str] = set()
+    for item in items:
+        t = str(item or "").strip()
+        if not t or _is_near_dupe(t, *forbidden, *out):
+            continue
+        key = _norm_slot(t)
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(t)
+    return out
+
+
 def _essays_for(identity_thesis: str) -> dict[str, Any]:
     pack = _ESSAYS_BY_IDENTITY.get(identity_thesis)
     if isinstance(pack, dict):
@@ -720,54 +758,81 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
                 stage3_helps.append(_clip(t, _MAX_ESSAY))
         if stage3_helps:
             helps = stage3_helps[:3]
-    relationship = _clip(str(essays.get("relationship_style") or ""), _MAX_ESSAY)
+    essay_relationship = _clip(str(essays.get("relationship_style") or ""), _MAX_ESSAY)
+    essay_helps = list(helps)
+    relationship = essay_relationship
     money = _clip(str(essays.get("money_style") or ""), _MAX_ESSAY)
     if isinstance(stage4, dict):
         intimacy = _scene_by_kind(stage4, "intimacy")
-        if intimacy:
+        if intimacy and not _is_near_dupe(intimacy, trap, surface):
             relationship = _clip(intimacy, _MAX_ESSAY)
             relationship_source = "stage4_scene.intimacy"
         money_scene = _scene_by_kind(stage4, "risk", "responsibility", "uncertainty")
-        if money_scene:
+        if money_scene and not _is_near_dupe(money_scene, trap, surface):
             money = _clip(money_scene, _MAX_ESSAY)
             money_source = "stage4_scene.resource_proxy"
         pot = stage4.get("potential") if isinstance(stage4.get("potential"), dict) else None
         pot_text = str((pot or {}).get("surface_text") or "").strip()
-        if pot_text:
+        if pot_text and not _is_near_dupe(pot_text, trap, surface):
             pot_clean = _clip_person(pot_text, _MAX_ESSAY, identity_thesis=identity_thesis)
+            # Effort owns potential once — do not also stamp it into helps.
             growth = [pot_clean, *growth][:3]
             growth_source = "stage4_potential"
-            helps = [pot_clean, *helps][:3]
     # Stage 5 adapters preferred; when character_engine_v1.status=ready, SoT is the envelope.
     ce_root = payload.get("character_engine_v1") if isinstance(payload.get("character_engine_v1"), dict) else {}
     ce_sot = str(ce_root.get("status") or "") == "ready"
     if isinstance(stage5, dict):
         a_dec = _adapter_value(stage5, "decision_style")
-        if isinstance(a_dec, str) and a_dec.strip():
+        if isinstance(a_dec, str) and a_dec.strip() and not _is_near_dupe(a_dec, trap, surface):
             decision = _clip(a_dec, _MAX_ESSAY)
             decision_source = "character_engine_v1.legacy_map.decision_style" if ce_sot else "stage5_legacy_map.decision_style"
         a_rel = _adapter_value(stage5, "relationship_style")
-        if isinstance(a_rel, str) and a_rel.strip():
+        if isinstance(a_rel, str) and a_rel.strip() and not _is_near_dupe(a_rel, trap, surface):
             relationship = _clip(a_rel, _MAX_ESSAY)
             relationship_source = "stage5_legacy_map.relationship_style"
         a_money = _adapter_value(stage5, "money_patterns")
-        if isinstance(a_money, str) and a_money.strip():
+        if isinstance(a_money, str) and a_money.strip() and not _is_near_dupe(a_money, trap, surface):
             money = _clip(a_money, _MAX_ESSAY)
             money_source = "stage5_legacy_map.money_patterns"
         a_growth = _adapter_value(stage5, "growth_zones")
         if isinstance(a_growth, list) and a_growth:
-            growth = [_clip(str(x), _MAX_ESSAY) for x in a_growth if str(x).strip()][:3]
-            growth_source = "stage5_legacy_map.growth_zones"
+            cleaned = [
+                _clip(str(x), _MAX_ESSAY)
+                for x in a_growth
+                if str(x).strip() and not _is_near_dupe(str(x), trap, surface)
+            ]
+            if cleaned:
+                growth = cleaned[:3]
+                growth_source = "stage5_legacy_map.growth_zones"
         a_helps = _adapter_value(stage5, "helps")
         if isinstance(a_helps, list) and a_helps:
-            helps = [_clip(str(x), _MAX_ESSAY) for x in a_helps if str(x).strip()][:3]
+            cleaned_h = [
+                _clip(str(x), _MAX_ESSAY)
+                for x in a_helps
+                if str(x).strip() and not _is_near_dupe(str(x), trap, surface, *growth)
+            ]
+            if cleaned_h:
+                helps = cleaned_h[:3]
         a_trap = _adapter_value(stage5, "recurring_patterns")
         if isinstance(a_trap, list) and a_trap and str(a_trap[0]).strip():
             trap = _clip(str(a_trap[0]), _MAX_TRAP)
             trap_source = "stage5_legacy_map.recurring_patterns"
         a_strengths = _adapter_value(stage5, "strengths")
         if isinstance(a_strengths, list) and a_strengths:
-            strengths = [_clip(str(x), _MAX_ESSAY) for x in a_strengths if str(x).strip()][:4]
+            cleaned_s = [
+                _clip(str(x), _MAX_ESSAY)
+                for x in a_strengths
+                if str(x).strip() and not _is_near_dupe(str(x), trap, surface)
+            ]
+            if cleaned_s:
+                strengths = cleaned_s[:4]
+            # else keep editorial essays — Stage5 must not empty strengths with identity dupe
+    if _is_near_dupe(relationship, trap, surface):
+        relationship = essay_relationship
+        relationship_source = "editorial_bank"
+    helps = _dedupe_list(helps or essay_helps, trap, surface, *growth)[:3] or essay_helps[:3]
+    growth = _dedupe_list(growth, trap, surface, *strengths)[:3]
+    strengths = _dedupe_list(strengths, trap, surface, *growth)[:4]
     help_line = _scrub_machine_thesis(helps[0], identity_thesis) if helps else None
     if help_line:
         helps = [_scrub_machine_thesis(h, identity_thesis) for h in helps]
@@ -845,8 +910,8 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
         "selected_by": selected_by[:1],
         "portrait_influenced_by": influenced_by[:5],
         "honesty_line": (
-            "Ядро собрано из Character Engine: один механизм личности и факты, "
-            "которые его держат — не список ярлыков и не ритм дня."
+            "Портрет держится на одном ядре характера и фактах, которые его "
+            "подтверждают — не на списке ярлыков и не на ритме дня."
         ),
         "source": "character_engine_stage2",
     }
@@ -918,6 +983,7 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
             "profile_contract_v1.work_and_realization",
             "profile_contract_v1.home_and_security",
             "character_engine_house_lines_v0",
+            "character_engine_asc_v0",
             "character_engine_aspect_lines_v0",
             "natal_summary.notable_aspects.gist",
             "portrait_why_v0",

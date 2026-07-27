@@ -294,6 +294,14 @@
   line-height: 1.55;
 }
 
+.quickMapCardDo {
+  margin: 0.4rem 0 0;
+  color: var(--tf-ink, #1a1510);
+  line-height: 1.5;
+  font-weight: 600;
+  font-size: var(--tf-type-caption-lg-size, 0.8125rem);
+}
+
 .quickMapDeepWrap {
   display: grid;
   gap: 0.85rem;

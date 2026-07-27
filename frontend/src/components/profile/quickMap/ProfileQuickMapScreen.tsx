@@ -202,6 +202,7 @@ export function ProfileQuickMapScreen({
                       <p className={styles.quickMapCardTitle}>{card.title}</p>
                       {card.anchor ? <p className={styles.quickMapCardAnchor}>{card.anchor}</p> : null}
                       <p className={styles.quickMapCardBody}>{card.body}</p>
+                      {card.do ? <p className={styles.quickMapCardDo}>{card.do}</p> : null}
                     </article>
                   </MotionSettle>
                 ))}

@@ -27,7 +27,10 @@ export type ProfileChartSectionProps = {
   chartReading?: string | null;
   methodologyNote?: string | null;
   unavailableNote?: string | null;
-  housePersonLines?: Record<string, { line?: string } | undefined> | null;
+  housePersonLines?: Record<
+    string,
+    { line?: string; how?: string; do?: string } | undefined
+  > | null;
   aspectPersonLines?: Record<string, { line?: string } | undefined> | null;
 };
 
@@ -203,6 +206,7 @@ export function ProfileChartSection({
                 </p>
                 <p className={styles.lifeMapTitle}>{item.title}</p>
                 <p className={styles.lifeMapSummary}>{item.summary}</p>
+                {item.do ? <p className={styles.lifeMapDo}>{item.do}</p> : null}
                 <p className={styles.lifeMapRoute}>{item.routeTitle}</p>
               </Link>
             ))}
