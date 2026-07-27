@@ -760,6 +760,9 @@ def call_day_story_llm_v1(
     if client is None:
         return None
     system = _DAY_STORY_SYS_RU
+    from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
+
+    system = with_practitioner_persona(system, locale="ru")
     interp = interpretation or (
         user_json.get("interpretation") if isinstance(user_json.get("interpretation"), dict) else {}
     )

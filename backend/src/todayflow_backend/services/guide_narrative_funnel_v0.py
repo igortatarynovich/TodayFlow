@@ -41,9 +41,13 @@ FUNNEL_CHILD_CHAIN_CONTRACT = "guide_funnel_child_chain_v0"
 
 
 def funnel_system_prompts_for_locale(locale: str) -> tuple[str, str, str]:
+    from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
+
     if _is_en_locale(locale):
-        return _SYS_INTERP_EN, _SYS_CORE_EN, _SYS_SAT_EN
-    return _SYS_INTERP_RU, _SYS_CORE_RU, _SYS_SAT_RU
+        prompts = (_SYS_INTERP_EN, _SYS_CORE_EN, _SYS_SAT_EN)
+    else:
+        prompts = (_SYS_INTERP_RU, _SYS_CORE_RU, _SYS_SAT_RU)
+    return tuple(with_practitioner_persona(p, locale=locale) for p in prompts)  # type: ignore[return-value]
 
 
 def _parse_json_content(content: str) -> dict[str, Any] | None:

@@ -28,18 +28,20 @@
 4. **Depth kinds** (examples, not exclusives): analytic topic pass — observation → mechanism → testable step (`do` / `avoid` / wording). Person-not-system. **No** faux solemnity or empty “deeper meaning.”
 5. **Trial = Paid depth** for this layer (same as Profile L3 rule).
 
-## Voice (analytic, not theatrical)
+## Voice (practitioner-friend · analytic craft)
 
-Depth layer copy must sound like a careful brief:
+Depth layer (and all Today LLM) speaks as an experienced wise practitioner-friend
+(tarot · numerology · astrology · psychology · sexology when relevant) — SoT:
+[TODAYFLOW_VOICE_CANON.md](./content/TODAYFLOW_VOICE_CANON.md) §1 · code `llm_practitioner_persona_v1`.
 
 | Do | Don’t |
 |----|-------|
 | Observation from day/profile data | “Судьбоносный / сакральный / глубиннейший смысл” |
-| Mechanism: trigger → response → cost/benefit | Mystical energy / universe / destiny |
-| One testable step + boundary | Abstract noun-pairs with no situation |
-| Honest uncertainty when evidence is thin | Fake certainty or clinical labels |
+| Mechanism: trigger → response → cost/benefit | Mystical energy / universe / destiny-pomp |
+| Craft factor with human translation (card/number/sky) | Jargon dump or second competing forecast |
+| One testable step + boundary · friend warmth | Abstract noun-pairs · clinical labels · system voice |
 
-Prompt SoT: `_DEEPEN_SYS` in `today_narrative.py`.
+Prompt method SoT: `_DEEPEN_SYS` + persona prefix in `today_narrative.py`.
 
 ## Forbidden
 

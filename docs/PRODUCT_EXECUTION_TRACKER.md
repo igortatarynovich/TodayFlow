@@ -675,7 +675,7 @@ Source of truth: [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) §1–§13
 - [x] **Owner editorial-phase accept** — full architecture lift declined; Editorial Phase allowlist active.
 - [ ] **Human Golden Eval v2** — capture CLI + **13 cases** in fixture (1 scored owner + 12 live golden-dataset, unscored). Scorecard [TAROT_HUMAN_EVAL_V2_SCORECARD](./audits/TAROT_HUMAN_EVAL_V2_SCORECARD.md). Owner fills three questions → drive Q3. **← next (owner eyes)**
 - [x] **Paid deepen chooser (UI)** — result «Углубить тему» unlocked for paid/trial; guest → signup, free → `/pricing`. Choices: money / intimacy&sex / work / boundaries → `/tarot?source=deepen`. No new engine hop. [Editorial Phase](./audits/TAROT_STACK_EDITORIAL_PHASE_2026-07-26.md).
-- [ ] **Q3+ prompt polish** — wording only under Editorial Phase. `v1.8`: analytical voice (pattern → cost → answer → testable step); ban empty solemnity. Antithesis hard-gate remains narrow.
+- [ ] **Q3+ prompt polish** — wording only under Editorial Phase. `v1.9`: practitioner+friend persona (Voice Canon §1) + analytical voice (`v1.8` solemnity ban). Deploy needed for prod.
 - [ ] **Fallback LLM provider** — deferred until owner purchases/connects.
 - [ ] **Tarot Design Language v1** — [docs/tarot/TAROT_DESIGN_LANGUAGE_V1.md](./tarot/TAROT_DESIGN_LANGUAGE_V1.md) **DRAFT / PENDING ACCEPT** · **parked under architecture freeze**
   - Канон-объект: колода на столе; формации 1/3/5/2; один reveal-жест; рубашка = фирменный язык
@@ -1768,6 +1768,7 @@ Historical note:
 - 2026-07-26 | Today / Scenario | **Day Scenario Gate Promotion C3.6.3** | **DONE** | Canon [DAY_SCENARIO_GATE_PROMOTION_C363.md](./audits/DAY_SCENARIO_GATE_PROMOTION_C363.md) · SCENE_CLONE/MISSING_EVERYDAY/ABSTRACT/ASTRO_JARGON_BARE → **blocking** (retry→unavailable) · SCENE_UNIVERSAL_ADVICE → candidate_blocking
 - 2026-07-26 | Today / Scenario | **Day Scenario Human Golden EN expansion** | **DONE (20 EN sealed)** | Batch [c362_en_expansion_20260726](./audits/day_scenario_human_golden/batches/c362_en_expansion_20260726/) · curated EN · **20/20 sealed**
 - 2026-07-27 | Today / Scenario | **Day Scenario Human Golden RU live → 40** | **DONE** | Batch [c362_ru_live_expansion_20260727](./audits/day_scenario_human_golden/batches/c362_ru_live_expansion_20260727/) · **13/13 sealed** · inventory **40/40** (20 RU · 20 EN)
+- 2026-07-27 | Content / Voice | **LLM practitioner-friend persona** | **DONE** | Voice Canon §1 v1.7 · `llm_practitioner_persona_v1` wired into narrative / guide funnel / day_story · roles: tarot·numerology·astro·psych·sexology + friend
 - 2026-07-27 | Today / Product | **Today Depth Layer voice (analytic)** | **DONE** | Deepen prompt = observation→mechanism→testable step · no faux solemnity · FE/CTA labels aligned · [TODAY_DEPTH_LAYER_V1.md](./TODAY_DEPTH_LAYER_V1.md) Voice
 - 2026-07-27 | Today / Product | **Today Depth Layer step 3 (FE picker)** | **DONE** | `TodayDepthLayerSection` · chips from `contract.depth_layer` · Free CTA / Paid generate
 - 2026-07-27 | Today / Product | **Today Depth Layer step 2 (contract offer)** | **DONE** | `GET /today/contract` → `depth_layer` menu + can_generate · SCREEN_CONTRACTS §3.3 · **next:** FE picker
