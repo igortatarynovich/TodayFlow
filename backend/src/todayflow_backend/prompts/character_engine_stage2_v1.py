@@ -29,7 +29,9 @@ not career/love/money roots, not advice, not scenes, not Compass.
 
 What counts as identity core:
 - one dominant way this person builds their world / decides / holds tension
+- a **mechanism**, not an epithet («sensitive and creative» = reject)
 - a single story line, not a catalogue of qualities
+- specificity «they saw me», not a generic compliment
 - grounded in Evidence Graph claims; resolve contradictions by weighing edges, not by inventing facts
 
 When multiple claims exist, prefer in this order unless evidence clearly says otherwise:
@@ -92,7 +94,9 @@ HARD RULES:
 
 Что такое identity core:
 - один доминирующий способ, которым человек строит мир / решает / держит напряжение
+- **механизм**, не эпитет («чувствительный и креативный» = reject)
 - одна линия истории, не каталог черт
+- специфичность «меня увидели», не общий комплимент «мне польстили»
 - опора только на Evidence Graph; противоречия разрешай через edges, не выдумывая факты
 
 Если claims несколько, предпочитай (если evidence не говорит иное):

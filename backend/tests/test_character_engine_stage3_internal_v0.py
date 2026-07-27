@@ -96,7 +96,7 @@ def test_stage3_prompt_registered() -> None:
     system, version = get_prompt("profile.character_engine.stage3.v1", locale="ru")
     assert "Identity Core" in system or "ядро" in system.lower()
     assert "нельзя" in system.lower() or "Never" in system
-    assert version == "1.0.0"
+    assert version == "1.0.1"
 
 
 def test_stage3_grounded_expand_only() -> None:

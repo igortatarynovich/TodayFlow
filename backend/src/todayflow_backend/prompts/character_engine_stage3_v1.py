@@ -56,6 +56,8 @@ Rules:
 1. Use only claim_ids from input. No new facts.
 2. identity_thesis_echo MUST match Identity Core thesis_key.
 3. primary_tension REQUIRED if grounded; secondary_tensions 0..3.
+   primary_tension = ONE A↔B axis (daily serial), not a conflict list;
+   surface_text names the tension and preferably an honest cost/trap, not only upside.
 4. Voice: you / ты — never formal plural Вы.
 5. No career/love/money encyclopedia roots; no advice lists; no second identity logline.
 6. If Identity Core missing/insufficient → status insufficient_internal_engine.
@@ -106,6 +108,8 @@ decision, perception, stress, risk, recovery, growth, burnout
 1. Только claim_id из входа. Без новых фактов.
 2. identity_thesis_echo = thesis_key Identity Core.
 3. primary_tension обязателен при grounded; secondary_tensions 0..3.
+   primary_tension = ОДНА ось A↔B (сериал дня), не список конфликтов;
+   surface_text называет напряжение и желательно честную цену/ловушку, не только выгоду.
 4. Голос: ты — никогда «Вы».
 5. Без энциклопедии career/love/money; без списков советов; без второй identity-строки.
 6. Если ядра нет / insufficient → status insufficient_internal_engine.

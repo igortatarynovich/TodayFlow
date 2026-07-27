@@ -233,8 +233,12 @@ Legacy builders могут крутиться в фоне publish / batch → т
 
 **После web/iOS migration:** FE V0 taxonomy · sphere meaning rewrite · iOS `interpretation.life_areas` primary · Personal Lens  
 
-**После downstream:** thematic career/love roots · natal editorial character invent · numerology identity explainer · compat editorial person-fragments  
+**После downstream:** thematic career/love roots · natal editorial **как character invent** · numerology identity explainer · compat editorial person-fragments  
 
+**Natal Decode (ACCEPTED 2026-07-27):** opt-in depth projection поверх grounded Identity Core — [PROFILE_NATAL_DECODE_DEPTH_V1.md](../profile/PROFILE_NATAL_DECODE_DEPTH_V1.md).  
+- **Не** personality root · **не** dual publish · **не** GET auto.  
+- `POST /account/profile/natal-decode` only.  
+- Не заменяет kill natal-editorial-as-character; decode = разрешённый depth path с CE anchor.
 ### Transition window = milestones, не календарь
 
 - CE shadow passes  
@@ -292,3 +296,4 @@ Forming = UX/status envelope (facts ready · pending · failed · retry).
 | Date | Change |
 |------|--------|
 | 2026-07-25 | v1.0 — D1–D4 ACCEPTED from inventory; no full JSON schema yet |
+| 2026-07-27 | Natal Decode depth ACCEPTED — opt-in only · not CE SoT · PROFILE_NATAL_DECODE_DEPTH_V1 |

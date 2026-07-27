@@ -269,6 +269,13 @@ class DeepThemesUpdatePayload(BaseModel):
     selected: list[str] = Field(default_factory=list)
 
 
+class NatalDecodeRequestPayload(BaseModel):
+    """Explicit-request body for Natal Decode Depth. Empty body is fine."""
+
+    force_refresh: bool = False
+    astro_profile_id: int | None = None
+
+
 class CompactUserModelIdentity(BaseModel):
     """CUM §3.1 stable identity slice (UMTS-2 v0)."""
 
@@ -547,6 +554,62 @@ def put_deep_themes(
                 default="Некорректный список тем глубины.",
             ),
         ) from exc
+
+
+@router.get("/profile/natal-decode")
+def get_natal_decode_offer(
+    request: Request,
+    user: db_models.User = Depends(require_user),
+    db: Session = Depends(get_session),
+    core_profile_service: CoreProfileService = Depends(get_core_profile_service),
+) -> dict:
+    """Offer/CTA for Natal Decode Depth — no LLM. Generate via POST only."""
+    from todayflow_backend.services.natal_decode_depth_v0 import (
+        build_offer_payload,
+        extract_identity_core_for_decode,
+    )
+
+    core = core_profile_service.build_cached_or_baseline(db, user)
+    payload = core if isinstance(core, dict) else {}
+    identity = extract_identity_core_for_decode(payload)
+    natal = payload.get("natal_summary") if isinstance(payload.get("natal_summary"), dict) else {}
+    natal_available = bool(
+        natal.get("available")
+        or natal.get("luminaries")
+        or natal.get("personal_planets")
+        or natal.get("angles")
+    )
+    return build_offer_payload(identity_core=identity, natal_available=natal_available)
+
+
+@router.post("/profile/natal-decode")
+def post_natal_decode(
+    payload: NatalDecodeRequestPayload,
+    request: Request,
+    user: db_models.User = Depends(require_user),
+    db: Session = Depends(get_session),
+    core_profile_service: CoreProfileService = Depends(get_core_profile_service),
+) -> dict:
+    """Explicit-request Natal Decode Depth. Does not write character_engine_v1."""
+    locale = request_locale(request)
+    from todayflow_backend.services.natal_decode_depth_v0 import generate_natal_decode_depth_v0
+
+    core = core_profile_service.build_cached_or_baseline(
+        db,
+        user,
+        astro_profile_id=payload.astro_profile_id,
+    )
+    core_payload = core if isinstance(core, dict) else {}
+    return generate_natal_decode_depth_v0(
+        db,
+        user_id=int(user.id),
+        core_profile_payload=core_payload,
+        natal_summary=core_payload.get("natal_summary")
+        if isinstance(core_payload.get("natal_summary"), dict)
+        else None,
+        locale=locale,
+        force_refresh=bool(payload.force_refresh),
+    )
 
 
 @router.put("/profile")

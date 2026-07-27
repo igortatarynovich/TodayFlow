@@ -53,7 +53,7 @@ def test_stage01_staging_eval_gates_pass() -> None:
 def test_stage2_prompt_registered() -> None:
     system, version = get_prompt("profile.character_engine.stage2.v1", locale="ru")
     assert "Identity Core" in system or "ядро личности" in system
-    assert version == "1.1.0"
+    assert version == "1.1.1"
 
 
 def test_stage2_context_pack_excludes_legacy_roots() -> None:

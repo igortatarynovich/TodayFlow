@@ -1,7 +1,7 @@
 # Profile Product Surface Canon
 
 **Status:** ACTIVE — product SoT for `/profile` **reveal journey** (не composition order)  
-**Version:** 1.5 (2026-07-25)  
+**Version:** 1.5.3 (2026-07-27)  
 **Locked forms:** [PROFILE_PRODUCT_JOURNEY_FORMS_V1.md](./PROFILE_PRODUCT_JOURNEY_FORMS_V1.md) — **product sign-off YES** (samples corrected); next = mechanism deltas only  
 **Overrides:** cosmetic V2 polish · next Freeze rows as screen goal · equal-card document as «done»  
 **Composition SoT (выше reveal):** [PROFILE_EXPERIENCE_SCENARIO_V1.md](./PROFILE_EXPERIENCE_SCENARIO_V1.md) — **Character Engine** (не экран); при конфликте «что существует раньше чего» / «кто SoT личности» побеждает Scenario  
@@ -155,9 +155,26 @@
 | **Задача продукта** | Мост из Profile в живой продукт |
 | **Куда ведёт** | Today · практики · карты · наблюдения · дневник |
 | **На Profile** | Тонкий выход с ценностью («что откроется»), не day-контент внутри Profile (PR-4) |
-| **Метрика** | Есть очевидный следующий шаг вне этого экрана |
+| **Сериал** | Мост ведёт в день, где **то же** ядро + **то же** напряжение освещаются с нового ракурса — не новый портрет |
+| **Метрика** | Есть очевидный следующий шаг вне этого экрана; хочется проверить ось **завтра** |
 
 Здесь начинается продукт дня. Profile его **не заменяет**.
+
+---
+
+### Глубина по запросу — Natal Decode (не шаг journey)
+
+После базового путешествия (Шаги 1–5) Deep Sources / Personal Map могут предложить **явный** слой:
+
+> «Открыть расшифровку натальной карты»
+
+| | |
+|---|---|
+| **Роль** | Ещё одна глубина: как **структура карты** объясняет уже известное ядро |
+| **Не роль** | Второй портрет · замена Шага 1 · SoT для дня |
+| **Триггер** | Только явное действие пользователя |
+| **Дома на базовом скролле** | Короткие тезисы `how`/`do` о человеке — не эссе |
+| **Canon** | [PROFILE_NATAL_DECODE_DEPTH_V1.md](./PROFILE_NATAL_DECODE_DEPTH_V1.md) |
 
 ---
 
@@ -308,3 +325,5 @@ Target-поля смысла (сжать из identity / Content Canon): имя 
 | 2026-07-25 | v1.4 — parent composition SoT: PROFILE_EXPERIENCE_SCENARIO_V1 (характер ≠ набор слотов) |
 | 2026-07-25 | v1.5 — Scenario v1.1: Character Engine; Profile = первая проекция |
 | 2026-07-25 | v1.5.1 — Шаг 2: опоры/дома = личная польза, не энциклопедия |
+| 2026-07-27 | v1.5.2 — Natal Decode = opt-in depth (explicit request); house slots = theses |
+| 2026-07-27 | v1.5.3 — Шаг 5: сериал ядра+оси с новым ракурсом дня (Scenario §3.1) |
