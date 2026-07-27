@@ -674,6 +674,7 @@ Source of truth: [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) §1–§13
 - [x] **Golden Eval live #3** — **12/12 LLM** · `freeze_lift_ready=true`. Audit [TAROT_GOLDEN_EVAL_LIVE_2026-07-26_r3](./audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-26_r3.md).
 - [x] **Owner editorial-phase accept** — full architecture lift declined; Editorial Phase allowlist active.
 - [ ] **Human Golden Eval v2** — protocol seeded ([TAROT_GOLDEN_EVAL_HUMAN_V2](./tarot/TAROT_GOLDEN_EVAL_HUMAN_V2.md) · 1 owner case). Fill 20–30 real Q+A · three post-answer questions. **← next**
+- [x] **Signed-in deepen chooser (UI)** — result «Углубить тему» (money / intimacy&sex / work / boundaries) → `/tarot?source=deepen` prefill; guest signup teaser. No new engine hop. Note in [Editorial Phase](./audits/TAROT_STACK_EDITORIAL_PHASE_2026-07-26.md).
 - [ ] **Q3+ prompt polish** — wording only under Editorial Phase.
 - [ ] **Fallback LLM provider** — deferred until owner purchases/connects.
 - [ ] **Tarot Design Language v1** — [docs/tarot/TAROT_DESIGN_LANGUAGE_V1.md](./tarot/TAROT_DESIGN_LANGUAGE_V1.md) **DRAFT / PENDING ACCEPT** · **parked under architecture freeze**
@@ -1766,6 +1767,7 @@ Historical note:
 - 2026-07-26 | Today / Scenario | **Day Scenario Gate Promotion C3.6.3** | **DONE** | Canon [DAY_SCENARIO_GATE_PROMOTION_C363.md](./audits/DAY_SCENARIO_GATE_PROMOTION_C363.md) · SCENE_CLONE/MISSING_EVERYDAY/ABSTRACT/ASTRO_JARGON_BARE → **blocking** (retry→unavailable) · SCENE_UNIVERSAL_ADVICE → candidate_blocking
 - 2026-07-26 | Today / Scenario | **Day Scenario Human Golden EN expansion** | **DONE (20 EN sealed)** | Batch [c362_en_expansion_20260726](./audits/day_scenario_human_golden/batches/c362_en_expansion_20260726/) · curated EN · **20/20 sealed**
 - 2026-07-27 | Today / Scenario | **Day Scenario Human Golden RU live → 40** | **DONE** | Batch [c362_ru_live_expansion_20260727](./audits/day_scenario_human_golden/batches/c362_ru_live_expansion_20260727/) · **13/13 sealed** · inventory **40/40** (20 RU · 20 EN)
+- 2026-07-27 | Today / Product | **Today Depth Layer (optional deepen)** | **ACCEPTED (canon)** | [TODAY_DEPTH_LAYER_V1.md](./TODAY_DEPTH_LAYER_V1.md) · Free+Paid = полный base day · Paid/Trial = выбор темы (деньги / близость / …) поверх · **запрет** прятать главы · Matrix §3.2 + Understanding Progress §4 · **next:** topic menu v1 + gate only on extra pack
 - 2026-07-27 | Today / Scenario | **Day Scenario ASTRO_JARGON FP fix** | **DONE** | Lived-metaphor markers + echo-template guard · calib shadow false_blocks **0** (was 2) · ASTRO P 0.5→0.625 · **next:** UNIVERSAL_ADVICE recall
 - 2026-07-27 | Today / Scenario | **Day Scenario Everyday specificity gap** | **DONE** | `SCENE_MISSING_EVERYDAY` lived-specificity (thin tip/template) · calib P=R=1.0 · shadow false cleared by jargon fix above
 - 2026-07-27 | Today / Scenario | **Day Scenario Human Calibration C3.6.2** | **DONE** | Baseline [DAY_SCENARIO_HUMAN_CALIBRATION_BASELINE_C362.md](./audits/DAY_SCENARIO_HUMAN_CALIBRATION_BASELINE_C362.md) · 40 sealed · CHORUS_SEMANTIC_DUPLICATION → **candidate_blocking** · UNIVERSAL_ADVICE stays candidate

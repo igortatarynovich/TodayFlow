@@ -270,9 +270,21 @@ available_input → natal_facts (LLM) → calculated_facts + unavailable
 |------|--------|--------|----------|------|-----------|-------|
 | Главное сообщение дня | ≥ дата | Free+ | `/today/contract` · day_story | hybrid | нет базы | Смысл дня |
 | Primary action | ≥ дата | Free+ | `primary_action` | hybrid | пусто | Один шаг |
-| Domain lenses | ≥ дата; без house-claims без full natal | Free+ / Paid depth | contract domains | hybrid | house-claim без домов | Линзы дня |
-| **Цвет / камень / запах / талисман дня** | день + астро-события дня + профиль пользователя | Free+ (depth по access) | `today` / day_story interpretation | **llm on day facts** | нет day context / нет профиля | Якорь дня — **рекомендация на сегодня**, не справочник |
+| Domain lenses | ≥ дата; без house-claims без full natal | Free+ (полный базовый слой) | contract domains | hybrid | house-claim без домов | Линзы дня |
+| **Цвет / камень / запах / талисман дня** | день + астро-события дня + профиль пользователя | Free+ | `today` / day_story interpretation | **llm on day facts** | нет day context / нет профиля | Якорь дня — **рекомендация на сегодня**, не справочник |
+| **Опциональный слой углубления** (тема на выбор) | полный base day уже есть | Free: видит ценность / CTA; **Trial/Paid: генерит слой** | narrative `deepen` / depth layer | llm on day + topic | нет base day | Глубже / откровеннее по интересу; **не** замена дня · [TODAY_DEPTH_LAYER_V1.md](./TODAY_DEPTH_LAYER_V1.md) |
 | Guest / gate | нет аккаунта | Guest | preview / auth | ui | — | Ценность до bind |
+
+#### Today Free vs Trial/Paid (одно правило)
+
+| Слой | Free | Trial / Paid |
+|------|------|--------------|
+| **Base day pack** (характер · сцены · do/avoid · сферы · символы) | ✅ полный | ✅ **тот же** полный (не вторая личность дня) |
+| **Опциональное углубление темы** (деньги · близость/секс · отношения · работа…) | CTA ценности; слой не режет base | ✅ выбор темы → franker tips / deeper analysis **поверх** |
+| Paywall на главах / сценах / primary action | ❌ запрещено | ❌ запрещено |
+
+**Запрет:** серые замки на base Today. **Запрет:** «урезанный день Free / полный только Paid».  
+**Допустимо:** после полного дня — «Хотите глубже в …?» для Trial/Paid.
 
 #### Profile «камень/цвет» ≠ Today «цвет/запах дня»
 
@@ -332,7 +344,8 @@ available_input → natal_facts (LLM) → calculated_facts + unavailable
 | Claim / birth save | `natal_facts` → `personality` (+ related) | Не пишем «цвет дня» |
 | GET `/today/contract` (база дня) | `day_story` / contract `today` Implementation | Не новый fact-prompt карты; не preset-only символы |
 | После reveal карты / числа | refresh того же `today` Implementation с новыми ritual inputs | Отдельный «промпт только про карту» вне дня |
-| Смена тарифа | только reveal depth | Второй interpretation «для paid» |
+| Смена тарифа | только reveal / optional deepen access | Второй interpretation «для paid», подмена base day |
+| Углубить тему (Trial/Paid) | additive depth layer для выбранного topic | Не overwrite `day_story` / сцен; не прятать base |
 
 **CODE сейчас:** `DAY_STORY_PROMPT_VER` = `day-story-v1.2-literary-editor` · wire `day_story_wire_v1` · optional enrich after ritual.  
 **TARGET:** один авторский Implementation `today` с полным day pack; карта/число — продолжение того же текста при refresh.
@@ -366,6 +379,7 @@ available_input → natal_facts (LLM) → calculated_facts + unavailable
 | 12 | **Цвет/запах/камень дня** = рекомендация Today из (день + астро-события + профиль), не catalog lookup знака. Profile-соответствия знака остаются в базе знаний. |
 | 13 | **Today day pack** = одна история дня (не чеклист «обязательных почему»). Цель: качество, уникальность, авторский стиль. Карта/число — продолжение дня при том же `today` Implementation. |
 | 14 | **Режим подачи:** Profile = история человека · Today = история дня · Compatibility = история отношений/событий · Tarot = поиск ответа. Не витрина блоков. |
+| 15 | **Today depth layer:** Free и Paid получают **полный** base day. Подписка/trial = опциональный слой углубления выбранной темы (откровеннее / глубже), не paywall на главах. SoT: [TODAY_DEPTH_LAYER_V1.md](./TODAY_DEPTH_LAYER_V1.md). |
 
 ---
 

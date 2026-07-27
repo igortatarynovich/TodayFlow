@@ -447,3 +447,4 @@ Next: improve `SCENE_UNIVERSAL_ADVICE` recall before any blocking promotion.
 - Скрытие имён планет/знаков «чтобы было проще»  
 - Четыре независимых прогноза на одном экране  
 - Диагноз «модель плохая»
+- **Paywall / серые замки на base day_scenario** — подписка только добавляет optional depth layer ([TODAY_DEPTH_LAYER_V1.md](./TODAY_DEPTH_LAYER_V1.md))
