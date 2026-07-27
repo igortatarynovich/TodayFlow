@@ -1,17 +1,20 @@
 """CE consumption — life_spheres + house person-lines by Identity thesis.
 
 Natal cusp/sign/degree stay Swiss. These strings are person-voice essays only.
+Rules:
+- Do not stamp the same «через {mechanism}» lead on every house/aspect/sphere.
+- Angular houses (1/4/7/10) get distinct lines; other houses stay Swiss-only (no CE fill).
+- Aspects keep Swiss/natal gists — CE does not overwrite with one template.
 """
 
 from __future__ import annotations
 
-import re
 from typing import Any
 
 # Sphere IDs that Profile V2 contract builder accepts (full 6 fields required).
 _SPHERE_IDS = ("love", "money", "decisions", "work", "family", "friends", "body")
 
-# Compact mechanism tag for templates.
+# Compact mechanism tag — used sparingly (not every line).
 _MECH: dict[str, str] = {
     "builds_through_autonomy": "автономию и собственную систему",
     "builds_through_analysis": "анализ до шага",
@@ -28,48 +31,36 @@ _MECH: dict[str, str] = {
     "builds_through_water_presence": "чуткий вход",
 }
 
-_HOUSE_FOCUS: dict[int, str] = {
-    1: "как ты заходишь в мир",
-    2: "что для тебя ценно и чем ты себя держишь",
-    3: "как думаешь и общаешься",
-    4: "где ты настоящий и откуда берёшь опору",
-    5: "где живёшь ради себя и творчества",
-    6: "как устроены будни, тело и ритм дел",
-    7: "как строишь значимую связь",
-    8: "где меняешься и делишь глубину",
-    9: "как ищешь смысл и горизонт",
-    10: "как хочешь выглядеть в мире и реализовываться",
-    11: "с кем идёшь в будущее",
-    12: "где теряешь или находишь себя наедине",
-}
-
 
 def _mech(identity_thesis: str) -> str:
     return _MECH.get(identity_thesis, "своё ядро характера")
 
 
 def build_life_spheres_for_identity_v0(identity_thesis: str) -> dict[str, dict[str, str]]:
+    """Domain-first sphere copy. Mechanism appears in at most one lead per pack."""
     m = _mech(identity_thesis)
-    # Shared skeleton; wording stays «ты», mechanism-specific.
     packs: dict[str, dict[str, str]] = {
         "love": {
-            "how": f"В любви ты идёшь через {m}: сначала внутренний контур, потом открытость.",
+            "how": (
+                f"В любви сначала нужен внутренний контур, потом открытость — "
+                f"иначе связь давит на твой способ держаться через {m}."
+            ),
             "need": "Нужно пространство, где тебя не просят сдать свой основной способ быть.",
-            "risk": "Риск — держать дистанцию или анализ там, где уже пора выбрать близость.",
-            "turns_on": "Включает честный темп, уважение к твоей ясности и взаимная зрелость.",
-            "turns_off": "Выключает давление подогнать тебя под чужой ритм и растворить границы.",
+            "risk": "Риск — держать дистанцию там, где уже пора выбрать близость.",
+            "turns_on": "Включает честный темп, уважение к ясности и взаимная зрелость.",
+            "turns_off": "Выключает давление подогнать тебя под чужой ритм.",
             "helps": "Назови одно правило связи вслух — что оставляешь своим, что открываешь.",
         },
         "money": {
-            "how": f"К деньгам ты относишься через {m}: ресурс должен обслуживать твой контур выбора.",
+            "how": "К деньгам ты относишься как к ресурсу независимости: поток должен обслуживать выбор, а не чужие ожидания.",
             "need": "Нужна понятная рамка, где поток средств не ломает независимость.",
-            "risk": "Риск — копить контроль или схемы вместо ясного денежного шага.",
+            "risk": "Риск — копить схемы вместо одного ясного денежного шага.",
             "turns_on": "Включает свобода манёвра и честный обмен без скрытых ожиданий.",
             "turns_off": "Выключает зависимость от чужих условий и размытые договорённости.",
             "helps": "Зафиксируй один денежный приоритет на этот месяц — без идеальной схемы.",
         },
         "decisions": {
-            "how": f"Решения ты собираешь через {m}: внутренний «да» важнее внешнего хора.",
+            "how": "Решения зреют, когда внутренний «да» собран — внешний хор редко ускоряет ясность.",
             "need": "Нужно время дойти до ясности самому — без спешки чужого темпа.",
             "risk": "Риск — бесконечно уточнять картину вместо выбора.",
             "turns_on": "Включает тишина, структура и право на неполный, но честный шаг.",
@@ -77,7 +68,7 @@ def build_life_spheres_for_identity_v0(identity_thesis: str) -> dict[str, dict[s
             "helps": "Поставь срок сбору данных — потом сделай один видимый шаг.",
         },
         "work": {
-            "how": f"В работе ты проявляешься через {m}: смысл и контур важнее чужой повестки.",
+            "how": "В работе смысл и метод важнее чужой повестки: роль должна давать влияние без потери контура.",
             "need": "Нужна роль, где можно держать свою систему и видеть влияние.",
             "risk": "Риск — уйти в автономный перфекционизм или отложить выход в поле.",
             "turns_on": "Включает задача с ясной рамкой и свободой метода.",
@@ -85,7 +76,7 @@ def build_life_spheres_for_identity_v0(identity_thesis: str) -> dict[str, dict[s
             "helps": "Выбери один рабочий фронт на сегодня и закрой его до новых идей.",
         },
         "family": {
-            "how": f"Дом и корни ты строишь через {m}: опора должна давать воздух, а не клетку.",
+            "how": "Дом должен давать воздух для восстановления, а не клетку из чужих правил.",
             "need": "Нужен быт, где можно восстановиться без потери себя.",
             "risk": "Риск — держать порядок или дистанцию вместо живого контакта с близкими.",
             "turns_on": "Включает уважение к границам и спокойный совместный ритм.",
@@ -93,46 +84,54 @@ def build_life_spheres_for_identity_v0(identity_thesis: str) -> dict[str, dict[s
             "helps": "Скажи дома одно явное «мне нужно» — коротко и без оправданий.",
         },
         "friends": {
-            "how": f"В круге ты выбираешь через {m}: близость идей и взаимное уважение темпа.",
+            "how": "В круге важны близость идей и взаимное уважение темпа — не обязательная социальность.",
             "need": "Нужны люди, с которыми можно быть цельным, не играя роль.",
-            "risk": "Риск — держаться сети знакомств без настоящей выбранной связи.",
+            "risk": "Риск — держаться сети знакомств без настоящей взаимной связи.",
             "turns_on": "Включает честный разговор и свобода быть разным.",
             "turns_off": "Выключает обязательная социальность и скрытые долги внимания.",
             "helps": "Напиши одному человеку по делу — без поддержания «галочки» связи.",
         },
         "body": {
-            "how": f"Тело ты слышишь через {m}: сигнал «хватит / можно» приходит раньше чужих норм.",
+            "how": "Тело сигналит «хватит / можно» раньше чужих норм — если дать этому голос.",
             "need": "Нужен ритм, где нагрузка и пауза согласованы с твоим контуром.",
             "risk": "Риск — игнорировать тело, пока ум или долг ведут дальше.",
             "turns_on": "Включает ясный режим и движение без насилия над собой.",
-            "turns_off": "Выключает чужие стандарты формы и вечная гонка без восстановления.",
+            "turns_off": "Выключает чужие стандарты формы и гонка без восстановления.",
             "helps": "Сделай один телесный жест сегодня — сон, еда или прогулка — осознанно.",
         },
     }
-    # Optional sex/kids — lighter, still complete for chrome if we add later.
     return {sid: packs[sid] for sid in _SPHERE_IDS if sid in packs}
 
 
 def build_house_person_lines_for_identity_v0(identity_thesis: str) -> dict[str, dict[str, str]]:
+    """Only angular houses get CE person-voice — avoids 12× identical stamp."""
     m = _mech(identity_thesis)
-    out: dict[str, dict[str, str]] = {}
-    for num, focus in _HOUSE_FOCUS.items():
-        out[str(num)] = {
+    return {
+        "1": {
             "line": (
-                f"Через {m} здесь видно {focus}: "
-                f"это не энциклопедия знака, а то, как твоё ядро проявляется в этой зоне жизни."
+                f"Первое впечатление читается как твой контур: ты заходишь в мир, "
+                f"держа {m}, а не маску под чужой темп."
             ),
-        }
-    # Stronger specific lines for angular houses (life map cards).
-    specifics = {
-        1: f"Ты входишь в мир через {m} — первое впечатление читается как твой контур, не маска каталога.",
-        4: f"Домашняя опора собирается через {m}: здесь ты либо восстанавливаешься, либо прячешься.",
-        7: f"Связь строится через {m}: партнёрство работает, когда другой не стирает твой способ быть.",
-        10: f"В мире ты реализуешься через {m}: роль должна давать видимость без потери внутреннего контура.",
+        },
+        "4": {
+            "line": (
+                "Домашняя опора — место либо восстановления, либо прятанья. "
+                "Важно заметить, чем дом становится для тебя сейчас."
+            ),
+        },
+        "7": {
+            "line": (
+                "Связь работает, когда другой не стирает твой способ быть. "
+                "Партнёрство просит ясности границ, не растворения."
+            ),
+        },
+        "10": {
+            "line": (
+                "В мире роль должна давать видимость без потери внутреннего контура. "
+                "Реализация — про влияние, которое ты выбираешь."
+            ),
+        },
     }
-    for num, line in specifics.items():
-        out[str(num)] = {"line": line}
-    return out
 
 
 def matrix_style_fields_for_identity_v0(identity_thesis: str) -> dict[str, str]:
@@ -140,73 +139,32 @@ def matrix_style_fields_for_identity_v0(identity_thesis: str) -> dict[str, str]:
     m = _mech(identity_thesis)
     return {
         "emotional_style": (
-            f"Эмоции ты пропускаешь через {m}: сначала внутренний контур и ясность, "
-            f"потом проявление наружу. Чувства не обязаны быть красивыми для других — "
-            f"им нужно место в твоей системе."
+            f"Эмоции сначала проходят через внутренний контур — {m} — "
+            f"и только потом наружу. Им нужно место в твоей системе, не красивость для других."
         ),
         "work_and_realization": (
-            f"В работе ты реализуешься через {m}: роль должна давать влияние без потери "
-            f"собственного контура. Видимость важна, если она не требует сдать твой способ делать."
+            "В работе роль должна давать влияние без потери собственного контура. "
+            "Видимость важна, если она не требует сдать твой способ делать."
         ),
         "home_and_security": (
-            f"Дом и безопасность ты собираешь через {m}: опора должна давать воздух для "
-            f"восстановления, а не клетку из чужих правил и суеты."
+            "Дом и безопасность — воздух для восстановления, а не клетка из чужих правил и суеты."
         ),
     }
 
 
-def _norm_aspect_key(bodies: str, aspect: str) -> str:
-    body_bits = re.findall(r"[A-Za-z]+", str(bodies or ""))
-    asp = re.sub(r"[^a-z0-9]+", "_", str(aspect or "").strip().lower()).strip("_")
-    parts = [b.lower() for b in body_bits if b]
-    if asp:
-        parts.append(asp)
-    return "_".join(parts)
-
-
 def apply_aspect_lines_to_payload(payload: dict[str, Any], *, identity_thesis: str) -> None:
-    """Rewrite natal_summary aspect gists + emit FE map keyed for callout matching."""
-    m = _mech(identity_thesis)
-    ns = payload.get("natal_summary")
-    if not isinstance(ns, dict):
-        return
-    notable = ns.get("notable_aspects")
-    if not isinstance(notable, list) or not notable:
-        return
-    houses_map: dict[str, dict[str, str]] = {}
-    new_notable: list[dict[str, Any]] = []
-    for row in notable:
-        if not isinstance(row, dict):
-            continue
-        bodies = str(row.get("bodies") or "").strip()
-        aspect = str(row.get("aspect") or "").strip()
-        if not bodies:
-            new_notable.append(row)
-            continue
-        line = (
-            f"Через {m} связка {bodies}"
-            + (f" ({aspect})" if aspect else "")
-            + " показывает, где ядро проявляется в карте — "
-            "не энциклопедия аспекта, а напряжение/поток именно твоего механизма."
-        )
-        key = _norm_aspect_key(bodies, aspect)
-        if key:
-            houses_map[key] = {"line": line}
-        # Also index by raw aspect_id if already looks like sun_moon_…
-        raw_asp = aspect.lower().replace(" ", "_")
-        if raw_asp and "_" in raw_asp:
-            houses_map[raw_asp] = {"line": line}
-        updated = dict(row)
-        updated["gist"] = line
-        new_notable.append(updated)
-    ns = dict(ns)
-    ns["notable_aspects"] = new_notable
-    payload["natal_summary"] = ns
+    """Do not overwrite every aspect gist with the same CE template.
+
+    Swiss/natal descriptions stay authoritative. Empty CE map = FE uses callout text.
+    """
+    del identity_thesis  # reserved for future differentiated aspect essays
     payload["character_engine_aspect_lines_v0"] = {
-        "projection_version": "character_engine_aspect_lines_v0",
-        "identity_thesis": identity_thesis,
-        "aspects": houses_map,
-        "note": "Person-voice only; aspect geometry stays Swiss/natal engine.",
+        "projection_version": "character_engine_aspect_lines_v0.2",
+        "aspects": {},
+        "note": (
+            "No blanket CE stamp on aspects — natal/Swiss gist remains. "
+            "Differentiated aspect essays may land later."
+        ),
     }
 
 
@@ -226,9 +184,9 @@ def apply_spheres_and_houses_to_payload(
         contract.update(styles)
         payload["profile_contract_v1"] = contract
     payload["character_engine_house_lines_v0"] = {
-        "projection_version": "character_engine_house_lines_v0",
+        "projection_version": "character_engine_house_lines_v0.2",
         "identity_thesis": identity_thesis,
         "houses": houses,
-        "note": "Person-voice only; cusp/sign/degree remain Swiss natal facts.",
+        "note": "Person-voice only on angular houses; cusp/sign/degree remain Swiss.",
     }
     apply_aspect_lines_to_payload(payload, identity_thesis=identity_thesis)

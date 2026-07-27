@@ -11,7 +11,9 @@ export function withRelationshipFrame(text: string): string {
 export function withRealizationFrame(text: string): string {
   const t = text.trim();
   if (!t) return t;
-  if (/^(в реализации|в работе|в деньгах|в карьере|когда дело|ты в реализации)/i.test(t)) return t;
+  if (/^(в реализации|в работе|в деньгах|к деньгам|в карьере|когда дело|ты в реализации)/i.test(t)) {
+    return t;
+  }
   const body = t.charAt(0).toLowerCase() + t.slice(1);
   return `В реализации ${body}`;
 }
@@ -27,7 +29,7 @@ export function withCareerFrame(text: string): string {
 export function withHomeFrame(text: string): string {
   const t = text.trim();
   if (!t) return t;
-  if (/^(дома|в семье|в доме|когда дом)/i.test(t)) return t;
+  if (/^(дома|дом\b|в семье|в доме|когда дом|семья)/i.test(t)) return t;
   const body = t.charAt(0).toLowerCase() + t.slice(1);
   return `Дома ${body}`;
 }

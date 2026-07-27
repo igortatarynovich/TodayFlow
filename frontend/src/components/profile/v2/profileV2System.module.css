@@ -2210,7 +2210,7 @@
 .natalScene {
   position: relative;
   isolation: isolate;
-  overflow: hidden;
+  overflow: visible;
   scroll-margin-top: 4.5rem;
   padding: clamp(1.15rem, 3.5vw, 1.85rem);
   border-radius: 1.75rem;
