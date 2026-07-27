@@ -1732,6 +1732,7 @@ Historical note:
 - 2026-07-01 | Product | **Positive Definition §2 CLOSED (canonical)** | **CLOSED** | Два базовых закона с §1
 - 2026-07-01 | Product | **Positive Definition CLOSED** | **CLOSED** | §5.7 · Build Map E9 · spec · UX · empty states
 - 2026-07-01 | Product | **Build Map v0.5.6 — `PracticeRecommendation` spec 🟢** | **ACTIVE** | One practice · [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md)
+- 2026-07-27 | Profile / Architecture | **Applied houses emit all 12** | **LIVE** | Factor how+do for every house (domain+cusp+planet function); no empty non-angular omit · `character_engine_house_lines_v0.4`.
 - 2026-07-27 | Content / Voice | **LLM practitioner hard role (always)** | **DONE** | Voice Canon §1: always tarot+numerology+astro+psych+sexology+friend · `llm_practitioner_persona_v1.1` · wired Tarot/Compat/Profile/natal/day_scenario/CE stages/spheres + prior Today paths
 - 2026-07-27 | Profile / Architecture | **Subscriber deep themes (L3 tips)** | **LIVE** | Selectable sex/money/love/work/body tips · Plus=1 Pro=2 · 7d change window · base spheres immutable · `character_engine_deep_themes_v0` · GET/PUT `/account/profile/deep-themes`.
 - 2026-07-27 | Profile / Architecture | **Applied ASC & houses pass** | **LIVE** | ASC/MC + angular + occupied personal houses as `how`+`do` · omit empty filler · wire `character_engine_asc_v0` · canon scenario §опоры/дома · Swiss cusp/sign stay.

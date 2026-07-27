@@ -3,8 +3,7 @@
 Natal cusp/sign/degree stay Swiss. CE owns person-voice how+do only.
 Rules:
 - Do not stamp the same «через {mechanism}» lead on every house/aspect/sphere.
-- Emit ASC + MC + angular 1/4/7/10 + houses occupied by personal planets.
-- Empty non-angular houses stay omit (no encyclopedia filler).
+- Emit ASC + MC + **all 12 houses** with factor how+do (domain + cusp modality + planet function when occupied).
 - Aspects keep Swiss/natal gists — CE does not overwrite with one template.
 """
 
@@ -407,6 +406,33 @@ def extract_swiss_house_asc_anchors_v0(payload: dict[str, Any]) -> dict[str, Any
     if mc_sign and 10 not in cusp_signs:
         cusp_signs[10] = mc_sign
 
+    # Fill remaining cusps from natal_summary.houses when stage0 facts are sparse.
+    houses_raw = natal.get("houses")
+    if isinstance(houses_raw, list):
+        for item in houses_raw:
+            if not isinstance(item, dict):
+                continue
+            try:
+                house = int(item.get("house")) if item.get("house") is not None else None
+            except (TypeError, ValueError):
+                house = None
+            sign = _norm_sign(item.get("sign"))
+            if house and 1 <= house <= 12 and sign and house not in cusp_signs:
+                cusp_signs[house] = sign
+    elif isinstance(houses_raw, dict):
+        for key, item in houses_raw.items():
+            try:
+                house = int(key)
+            except (TypeError, ValueError):
+                continue
+            sign = None
+            if isinstance(item, dict):
+                sign = _norm_sign(item.get("sign"))
+            else:
+                sign = _norm_sign(item)
+            if 1 <= house <= 12 and sign and house not in cusp_signs:
+                cusp_signs[house] = sign
+
     for bucket in ("luminaries", "personal_planets"):
         rows = natal.get(bucket) if isinstance(natal.get(bucket), list) else []
         for row in rows:
@@ -518,14 +544,11 @@ def build_house_person_lines_for_identity_v0(
     cusp_signs: dict[int, str] | None = None,
     planets_by_house: dict[int, list[str]] | None = None,
 ) -> dict[str, dict[str, Any]]:
-    """Applied house cards: angular always; occupied personal houses added; empty omit."""
+    """Applied house cards for all 12 houses: domain + cusp modality + planet function when occupied."""
     cusp_signs = cusp_signs or {}
     planets_by_house = planets_by_house or {}
-    want = set(_ANGULAR) | {h for h, bodies in planets_by_house.items() if bodies}
     out: dict[str, dict[str, Any]] = {}
-    for house in sorted(want):
-        if house < 1 or house > 12:
-            continue
+    for house in range(1, 13):
         planets = [p for p in planets_by_house.get(house, []) if p in _PERSONAL_PLANETS]
         # Stable planet order
         planets = [p for p in ("Sun", "Moon", "Mercury", "Venus", "Mars") if p in planets]
@@ -602,12 +625,12 @@ def apply_spheres_and_houses_to_payload(
         contract.update(styles)
         payload["profile_contract_v1"] = contract
     payload["character_engine_house_lines_v0"] = {
-        "projection_version": "character_engine_house_lines_v0.3",
+        "projection_version": "character_engine_house_lines_v0.4",
         "identity_thesis": identity_thesis,
         "houses": houses,
         "note": (
-            "Applied how+do on ASC-linked angular houses and personal-planet occupied houses; "
-            "cusp/sign/degree remain Swiss. Empty non-angular omitted."
+            "Applied how+do on all 12 houses (domain + cusp modality + occupied personal-planet function); "
+            "cusp/sign/degree remain Swiss."
         ),
     }
     asc = build_asc_applied_v0(identity_thesis, asc_sign=anchors.get("asc_sign"))

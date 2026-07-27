@@ -183,8 +183,7 @@ def test_consumption_does_not_stamp_aspect_gists(monkeypatch) -> None:
     aspects = (out.get("character_engine_aspect_lines_v0") or {}).get("aspects") or {}
     assert aspects == {}
     houses = (out.get("character_engine_house_lines_v0") or {}).get("houses") or {}
-    assert set(houses) <= {"1", "4", "7", "10"}
-    assert "2" not in houses
+    assert set(houses) == {str(i) for i in range(1, 13)}
     assert not any("не энциклопедия" in (h.get("line") or h.get("how") or "").lower() for h in houses.values())
     for h in houses.values():
         assert h.get("do")
@@ -240,13 +239,14 @@ def test_consumption_applied_asc_and_occupied_house(monkeypatch) -> None:
     assert mc.get("sign") == "pisces" and mc.get("do")
 
     houses = (out.get("character_engine_house_lines_v0") or {}).get("houses") or {}
+    assert set(houses) == {str(i) for i in range(1, 13)}
     assert "1" in houses and houses["1"].get("do")
     assert "8" in houses  # occupied by Sun
     assert "солнце" in (houses["8"].get("how") or "").lower()
     assert "воля" in (houses["8"].get("how") or "").lower() or "самоопределен" in (houses["8"].get("how") or "").lower()
     assert "сильнее читается через них" not in (houses["8"].get("how") or "").lower()
-    assert "11" not in houses  # empty non-angular omitted
-    assert "2" not in houses
+    assert houses["2"].get("how") and houses["2"].get("do")
+    assert houses["11"].get("how") and houses["11"].get("do")
     # No mechanism stamp spam across every house.
     hows = [(h.get("how") or "") for h in houses.values()]
     assert sum("через автономию и собственную систему" in h.lower() for h in hows) <= 1
