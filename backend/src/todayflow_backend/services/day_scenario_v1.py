@@ -435,10 +435,14 @@ def build_interpretive_chorus_v1(
     for act in _as_list(foundation.get("personal_natal_activations")):
         if not isinstance(act, dict) or not act.get("text"):
             continue
+        raw = str(act.get("text") or "").strip()
+        if _is_kitchen_natal_text(raw):
+            # Keep evidence in kitchen; never dump Firdaria/ZR lists into UI chorus.
+            continue
         natal_voices.append(
             {
                 "voice": "natal",
-                "named_factor": _clip(act.get("text"), 200),
+                "named_factor": _clip(raw, 200),
                 "human_meaning": (
                     f"Личная активация усиливает «{label}»: реакция может быть сильнее средней."
                 ),
@@ -447,12 +451,32 @@ def build_interpretive_chorus_v1(
                 "evidence_ids": list(act.get("evidence_ids") or []),
             }
         )
+    if not natal_voices and any(
+        isinstance(a, dict) and a.get("text")
+        for a in _as_list(foundation.get("personal_natal_activations"))
+    ):
+        # Soft personal voice without mechanism dump when only kitchen claims exist.
+        natal_voices.append(
+            {
+                "voice": "natal",
+                "named_factor": f"Ваш личный фон усиливает «{label}».",
+                "human_meaning": (
+                    "Реакция сегодня может быть сильнее средней — это про вас, не про «всех»."
+                ),
+                "link_to_conflict": f"Почему именно вы проживаете «{label}» именно так.",
+                "evidence_ref": "personal_natal:soft",
+                "evidence_ids": [],
+            }
+        )
     if not natal_voices:
         for c in _claims_by_prefix(claims, "claim.personal.")[:3]:
+            raw = str(c.get("text") or "").strip()
+            if not raw or _is_kitchen_natal_text(raw):
+                continue
             natal_voices.append(
                 {
                     "voice": "natal",
-                    "named_factor": _clip(c.get("text"), 200),
+                    "named_factor": _clip(raw, 200),
                     "human_meaning": f"Натальный слой делает «{label}» личным.",
                     "link_to_conflict": f"Почему «{label}» задевает именно вас.",
                     "evidence_ref": c.get("id"),
@@ -473,6 +497,43 @@ def build_interpretive_chorus_v1(
         "named_language_encouraged": True,
         "parallel_forecast_forbidden": True,
     }
+
+
+# Kitchen / mechanism natal prose — never user-facing on Today.
+_KITCHEN_NATAL_RE = re.compile(
+    r"Firdaria|ZR\s*Fortune|ZR\s*Spirit|Лоты\s*soft|Vimshottari|BaZi|"
+    r"HD\s*soft|Variables\s*soft|Solar\s*return|time[_\s-]?lords|"
+    r"управител|прогрес+и|нет\s+ASC|soft:\s*Луна",
+    re.IGNORECASE,
+)
+
+# Cached mash: "Force A или Force B — пока <truncated fact…>"
+_MASHED_SHORT_NAME_RE = re.compile(
+    r"^(.+?\s+или\s+.+?)\s+[—–-]\s+пока\s+",
+    re.IGNORECASE,
+)
+
+
+def _is_kitchen_natal_text(text: str) -> bool:
+    t = (text or "").strip()
+    if not t:
+        return True
+    return bool(_KITCHEN_NATAL_RE.search(t))
+
+
+def sanitize_conflict_short_name(value: Any) -> str:
+    """User-facing conflict label: tension only, no mashed truncated sky fact."""
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    mashed = _MASHED_SHORT_NAME_RE.match(text)
+    if mashed:
+        text = mashed.group(1).strip()
+    if "…" in text and " или " in text.lower():
+        before = re.split(r"\s+[—–-]\s+", text, maxsplit=1)[0].strip()
+        if " или " in before.lower():
+            text = before
+    return _clip(text, 72)
 
 
 def _opposing_forces(family: str, mode: str) -> tuple[str, str]:
@@ -501,17 +562,34 @@ def _everyday_conflict_short_name(
     lead_fact: str,
     registry_label: str,
 ) -> str:
-    """C4: hero conflict from tension + fact — not registry slogan paraphrase."""
-    a = _clip(force_a, 40) or "автопилот"
-    b = _clip(force_b, 40) or "осознанный выбор"
-    fact = _clip(lead_fact, 72)
-    if fact:
-        # Everyday tension named from sky/cycle fact + choice
-        return _clip(f"{a.capitalize()} или {b} — пока {fact[0].lower() + fact[1:] if len(fact) > 1 else fact}", 96)
-    if registry_label and registry_label.lower() not in {a.lower(), b.lower()}:
-        # Still avoid shipping slogan alone as the plot
-        return _clip(f"{a.capitalize()} или {b}", 72)
-    return _clip(f"{a.capitalize()} или {b}", 72)
+    """Hero conflict = everyday tension only.
+
+    Sky fact belongs in ``why_arose`` / ``events_lead`` / chorus — never mashed
+    into ``short_name`` (that produced truncated hero copy: «… к це…»).
+    """
+    del lead_fact, registry_label  # kept in signature for call-site stability
+    a = _clip(force_a, 48) or "автопилот"
+    b = _clip(force_b, 48) or "осознанный выбор"
+    return sanitize_conflict_short_name(f"{a.capitalize()} или {b}")
+
+
+def _human_natal_why(
+    natal_activations: list[Any],
+    *,
+    conflict_label: str,
+) -> str:
+    """Pick first non-kitchen natal activation for why_personal."""
+    label = conflict_label or "этот сюжет"
+    for act in natal_activations:
+        if not isinstance(act, dict):
+            continue
+        text = str(act.get("text") or "").strip()
+        if text and not _is_kitchen_natal_text(text):
+            return _clip(text, 220)
+    return (
+        f"Личный ритм делает сюжет «{label}» узнаваемым именно вам — "
+        "не средним прогнозом на всех."
+    )
 
 
 def build_scenario_conflict_v1(
@@ -575,11 +653,7 @@ def build_scenario_conflict_v1(
     )
 
     natal = _as_list(foundation.get("personal_natal_activations"))
-    why_personal = (
-        _clip(natal[0].get("text"), 220)
-        if natal and isinstance(natal[0], dict) and natal[0].get("text")
-        else "Личный контекст делает этот сюжет узнаваемым именно вам — не «среднему» дню."
-    )
+    why_personal = _human_natal_why(natal, conflict_label=short_name)
 
     chorus_refs: list[str] = []
     for d in driver_ids:
@@ -918,14 +992,15 @@ def build_scenario_props_v1(
         "name": chosen.get("name"),
         "origin_scene_id": scene_id,
         "serves_conflict": label,
-        "link_to_conflict": (
-            f"В сцене «{primary.get('sphere_label_ru')}» конфликт «{label}» "
-            f"тянет к «{force_a}». {chosen.get('symbolic_property')} — "
-            f"это свойство нужно сегодня, чтобы удержать «{force_b}»."
+        "link_to_conflict": _clip(
+            f"{chosen.get('symbolic_property')} — якорь против срыва в «{force_a}» "
+            f"и в сторону «{force_b}».",
+            220,
         ),
-        "supports_or_compensates": f"Компенсирует ловушку: {_clip(trap, 160)}",
-        "expected_effect_today": (
-            f"Помогает не сорваться в «{force_a}» и сделать один жест в сторону «{force_b}»."
+        "supports_or_compensates": _clip(f"Компенсирует ловушку дня в зоне «{primary.get('sphere_label_ru')}».", 160),
+        "expected_effect_today": _clip(
+            f"Напоминает выбрать «{force_b}», когда тянет в «{force_a}».",
+            160,
         ),
         "where_to_use": {
             "clothing": apply.get("clothing"),
@@ -946,11 +1021,10 @@ def build_scenario_props_v1(
         "name": avoid_name,
         "origin_scene_id": scene_id,
         "serves_conflict": label,
-        "amplifies_trap": _clip(trap, 200),
-        "why": (
-            f"{avoid_name} сегодня нежелателен: усиливает ловушку сцены "
-            f"«{_clip(trap, 120)}» и разгоняет стратегию «{force_a}», "
-            f"вместо нужного «{force_b}»."
+        "amplifies_trap": _clip(trap, 120),
+        "why": _clip(
+            f"{avoid_name} сегодня разгоняет «{force_a}». Держи его вне поля зрения.",
+            160,
         ),
         "where_especially_avoid": (
             f"В одежде и на фоне разговора/решения в зоне «{primary.get('sphere_label_ru')}»."
@@ -963,13 +1037,14 @@ def build_scenario_props_v1(
     # Goals: 1 primary + up to 2 secondary from other scenes — not verbatim do
     goals: list[dict[str, Any]] = []
     primary_goal = {
-        "text": (
-            f"Закрыть один жест в зоне «{primary.get('sphere_label_ru')}», "
-            f"который сдвигает «{label}» к «{force_b}» — без ожидания чужой реакции."
+        "text": _clip(
+            f"Один жест в зоне «{primary.get('sphere_label_ru')}» в сторону «{force_b}» "
+            f"— без ожидания чужой реакции.",
+            200,
         ),
         "origin_scene_id": scene_id,
         "serves_conflict": label,
-        "solves": _clip(trap, 160),
+        "solves": _clip(trap, 120),
         "one_day_feasible": True,
         "duplicates_do": False,
         "role": "primary",
@@ -982,29 +1057,31 @@ def build_scenario_props_v1(
             break
         goals.append(
             {
-                "text": (
-                    f"В «{sc.get('sphere_label_ru')}» заметить момент «{force_a}» "
-                    f"и заменить его одним маленьким «{force_b}»."
+                "text": _clip(
+                    f"В «{sc.get('sphere_label_ru')}» заметить «{force_a}» "
+                    f"и заменить одним маленьким «{force_b}».",
+                    200,
                 ),
                 "origin_scene_id": sc.get("scene_id"),
                 "serves_conflict": label,
-                "solves": _clip(sc.get("trap"), 120),
+                "solves": _clip(sc.get("trap"), 100),
                 "one_day_feasible": True,
                 "duplicates_do": False,
                 "role": "secondary",
             }
         )
 
+    action_hint = _clip(primary.get("recommended_action"), 100)
     affirmations = [
         {
-            "text": (
-                f"Мне не нужно выбирать «{force_a}», чтобы сохранить лицо дня — "
-                f"я могу сделать один шаг к «{force_b}»."
+            "text": _clip(
+                f"Я делаю шаг к «{force_b}», не застревая в «{force_a}».",
+                160,
             ),
             "origin_scene_id": scene_id,
             "serves_conflict": label,
-            "compensates_trap": _clip(trap, 160),
-            "helps_action": _clip(primary.get("recommended_action"), 160),
+            "compensates_trap": _clip(trap, 120),
+            "helps_action": action_hint,
             "universal_formula": False,
         }
     ]

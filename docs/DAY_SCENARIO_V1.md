@@ -11,6 +11,7 @@
 **Day lifecycle:** [audits/DAY_LIFECYCLE_V1.md](./audits/DAY_LIFECYCLE_V1.md) — assemble once · ready_at gate · pre-warm · ready push · system close  
 **Chapters UI:** [audits/DAY_SCENARIO_CHAPTERS_C2.md](./audits/DAY_SCENARIO_CHAPTERS_C2.md)  
 **Everyday quality:** [audits/DAY_SCENARIO_EVERYDAY_QUALITY_C31.md](./audits/DAY_SCENARIO_EVERYDAY_QUALITY_C31.md)  
+**Style hook mechanics:** [audits/DAY_SCENARIO_STYLE_HOOK_MECHANICS_V1.md](./audits/DAY_SCENARIO_STYLE_HOOK_MECHANICS_V1.md) · contrast corpus [audits/day_scenario_style_calib_igor_v1/](./audits/day_scenario_style_calib_igor_v1/)  
 **Chorus quality:** [audits/DAY_SCENARIO_CHORUS_QUALITY_C32.md](./audits/DAY_SCENARIO_CHORUS_QUALITY_C32.md)  
 **Personalization:** [audits/DAY_SCENARIO_PERSONALIZATION_C33A.md](./audits/DAY_SCENARIO_PERSONALIZATION_C33A.md)  
 **Sphere selection:** [audits/DAY_SCENARIO_SPHERE_SELECTION_C33B.md](./audits/DAY_SCENARIO_SPHERE_SELECTION_C33B.md)  
@@ -180,9 +181,14 @@ Date-preset color catalog **не** meaning SoT (может остаться seed
 
 **Цвет:** не «синий успокаивает», а связь с ловушкой/конфликтом; где применить; какой avoid усиливает риск **этого** дня.
 
+**Реквизит решает trap** (не украшает день): аффирмация / практика / юмор обязаны `compensates_trap` или `serves_conflict`. Orphan «планета=цвет» и wellness-клише — reject.  
+Стиль-калибровка: [DAY_SCENARIO_STYLE_HOOK_MECHANICS_V1.md](./audits/DAY_SCENARIO_STYLE_HOOK_MECHANICS_V1.md).
+
 ### Акт VII. Развязка
 
 Если прожить день осознанно — что к вечеру? (`evening_payoff`)
+
+`evening_payoff` — отложенная проверка («завтра окажется…»), не мораль. Даёт причину открыть вечер/завтра; крючок = любопытство + маленькое полезное действие, не тревожный чекин.
 
 ---
 

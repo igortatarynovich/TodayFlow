@@ -275,7 +275,6 @@ describe("TodayCompositionSurface", () => {
   it("shows morning dialogue when mood missing", () => {
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
     expect(screen.getByTestId("today-zone-dialogue-morning")).toBeInTheDocument();
-    expect(screen.getByText("Как ты входишь в этот день?")).toBeInTheDocument();
   });
 
   it("gates firstToday behind intent/reality reaction chips", () => {

@@ -15,6 +15,25 @@ function clean(text: string | null | undefined): string {
   return (text ?? "").replace(/\s+/g, " ").trim();
 }
 
+/** Strip mashed "A или B — пока <truncated fact…>" from cached short_name / theme. */
+export function sanitizeConflictLabel(text: string | null | undefined): string {
+  let t = clean(text);
+  if (!t) return "";
+  const mashed = t.match(/^(.+?\s+или\s+.+?)\s+[—–-]\s+пока\s+/iu);
+  if (mashed?.[1]) t = mashed[1].trim();
+  if (t.includes("…") && /\sили\s/iu.test(t)) {
+    const before = t.split(/\s+[—–-]\s+/)[0]?.trim();
+    if (before && /\sили\s/iu.test(before)) t = before;
+  }
+  return t.replace(/[.!?]+$/u, "").trim();
+}
+
+function isKitchenNatalLead(text: string): boolean {
+  return /Firdaria|ZR\s*Fortune|ZR\s*Spirit|Лоты\s*soft|Vimshottari|BaZi|HD\s*soft|Variables\s*soft|Solar\s*return|time[_\s-]?lords|управител|нет\s+ASC/i.test(
+    text,
+  );
+}
+
 /** Decorative chip hex — mirrors todayDayNarrative.colorHexForDayName (no runtime import cycle). */
 function colorHexForDayName(name: string | null | undefined): string | null {
   const n = (name ?? "").trim().toLowerCase();
@@ -100,7 +119,10 @@ export function buildScenarioStoryChapters(input: {
   const used: string[] = [];
   const chapters: TodayDayNarrativeChapter[] = [];
 
-  const title = clean(conflict.short_name) || clean(dayStory.theme) || clean(dayStory.primary_conflict);
+  const title =
+    sanitizeConflictLabel(conflict.short_name) ||
+    sanitizeConflictLabel(dayStory.theme) ||
+    sanitizeConflictLabel(dayStory.primary_conflict);
   const whyArose = clean(conflict.why_arose);
   const whyPersonal = clean(conflict.why_personal);
   const forces = conflict.opposing_forces;
@@ -114,7 +136,11 @@ export function buildScenarioStoryChapters(input: {
   if (title) pushDistinct(openingParas, used, title);
   if (whyArose && !nearDuplicate(whyArose, title)) pushDistinct(openingParas, used, whyArose);
   if (forceLine) pushDistinct(openingParas, used, forceLine);
-  if (whyPersonal && !nearDuplicate(whyPersonal, whyArose)) {
+  if (
+    whyPersonal &&
+    !isKitchenNatalLead(whyPersonal) &&
+    !nearDuplicate(whyPersonal, whyArose)
+  ) {
     pushDistinct(openingParas, used, whyPersonal);
   }
   // Soft factual lead from projection if not already covered
@@ -156,7 +182,7 @@ export function buildScenarioStoryChapters(input: {
       pushDistinct(paras, used, tempo ? `${clean(number.named)}. ${tempo}` : clean(number.named));
     }
     const natal = clean(chorus.natal_lead);
-    if (natal) pushDistinct(paras, used, natal);
+    if (natal && !isKitchenNatalLead(natal)) pushDistinct(paras, used, natal);
     if (paras.length) {
       chapters.push({
         id: "chorus",
@@ -255,16 +281,19 @@ export function buildScenarioStoryChapters(input: {
     pushSupport(colorWhy ? `Цвет дня — ${colorName}. ${colorWhy}` : `Цвет дня — ${colorName}`);
   }
   const avoidColor = clean(talisman?.avoid_color) || clean(props.avoid_color?.name);
-  const avoidWhy = clean(talisman?.avoid_why) || clean(props.avoid_color?.why);
+  const avoidWhyRaw = clean(talisman?.avoid_why) || clean(props.avoid_color?.why);
+  const avoidWhy =
+    avoidWhyRaw && avoidWhyRaw.length > 140
+      ? `${avoidWhyRaw.slice(0, 137).replace(/\s+\S*$/, "")}…`
+      : avoidWhyRaw;
   if (avoidColor) {
     pushSupport(avoidWhy ? `Избегать: ${avoidColor} — ${avoidWhy}` : `Избегать: ${avoidColor}`);
   }
 
   const affirm = dayStory.practice_recommendation;
   if (affirm?.text) {
-    pushSupport(
-      clean(affirm.reason) ? `${clean(affirm.text)} (${clean(affirm.reason)})` : clean(affirm.text),
-    );
+    // Show affirmation alone — do not paste trap/reason dumps in parentheses.
+    pushSupport(clean(affirm.text));
   } else if (Array.isArray(props.affirmations) && props.affirmations[0]?.text) {
     pushSupport(props.affirmations[0].text);
   }

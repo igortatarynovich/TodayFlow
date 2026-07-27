@@ -75,6 +75,8 @@ def test_scenario_builds_one_conflict_from_drivers_not_card_alone():
 
     conflict = scenario["conflict"]
     assert conflict["short_name"]
+    assert "…" not in conflict["short_name"]
+    assert " — пока " not in conflict["short_name"]
     assert conflict["driver_ids"]
     assert "merc-direct" in conflict["driver_ids"] or "moon-pisces" in conflict["driver_ids"]
     assert conflict["opposing_forces"]["a"]
@@ -87,6 +89,56 @@ def test_scenario_builds_one_conflict_from_drivers_not_card_alone():
     assert foundation["tarot_card"]["name"] == "Отшельник"
     assert foundation["day_number"]["value"] == 7
     assert foundation["ranked_drivers"]
+
+
+def test_short_name_is_tension_only_not_mashed_truncated_fact():
+    from todayflow_backend.services.day_scenario_v1 import (
+        _everyday_conflict_short_name,
+        sanitize_conflict_short_name,
+    )
+
+    name = _everyday_conflict_short_name(
+        force_a="удержать привычное",
+        force_b="принять поворот",
+        lead_fact="Связь Солнца и Марса описывает, как ты идёшь к цели сразу после искры; это мотор напора и риска.",
+        registry_label="Перемены",
+    )
+    assert name == "Удержать привычное или принять поворот"
+    assert "…" not in name
+    healed = sanitize_conflict_short_name(
+        "Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…"
+    )
+    assert healed == "Удержать привычное или принять поворот"
+
+
+def test_kitchen_firdaria_not_in_why_personal_or_chorus():
+    pack = _pack_merc_moon()
+    thesis = build_day_thesis_v1(day_events_pack=pack)
+    foundation = build_scenario_foundation_v1(
+        day_events_pack=pack,
+        ritual_context={"tarot_name_ru": "Отшельник", "numerology_value": 7},
+    )
+    foundation["personal_natal_activations"] = [
+        {
+            "id": "claim.personal.astro.time-lords",
+            "text": (
+                "Firdaria: мажор Луна (2021-02-12 → 2030-02-12), субпериод Солнце "
+                "(до 2027-08-19). ZR Fortune→Весы: L1 Козерог/Сатурн. Лоты soft: Луна/Солнце (нет ASC)."
+            ),
+            "evidence_ids": ["personal_astrology.time_lords"],
+            "layer": "personal_astrology",
+        }
+    ]
+    conflict = build_scenario_conflict_v1(foundation=foundation, day_thesis=thesis)
+    assert "Firdaria" not in conflict["why_personal"]
+    assert "ZR Fortune" not in conflict["why_personal"]
+    chorus = build_interpretive_chorus_v1(
+        foundation=foundation,
+        conflict_label=conflict["short_name"],
+    )
+    for row in chorus.get("natal") or []:
+        assert "Firdaria" not in str(row.get("named_factor") or "")
+        assert "ZR Fortune" not in str(row.get("named_factor") or "")
 
 
 def test_chorus_names_moon_card_number():
@@ -189,8 +241,11 @@ def test_props_from_scenes_have_origin_and_conflict_link():
     assert props["affirmations"][0]["origin_scene_id"]
     assert props["affirmations"][0]["universal_formula"] is False
     assert props["strong_spheres"]
-    # Catalog is knowledge — user why must mention conflict/scene, not only catalog benefit
-    assert "конфликт" in color["link_to_conflict"].lower() or scenario["conflict"]["short_name"] in color["link_to_conflict"]
+    # Catalog is knowledge — user why must mention today's forces, not only catalog benefit
+    force_a = scenario["conflict"]["opposing_forces"]["a"]
+    force_b = scenario["conflict"]["opposing_forces"]["b"]
+    link = color["link_to_conflict"].lower()
+    assert force_a in link or force_b in link or scenario["conflict"]["short_name"].lower() in link
 
 
 def test_validate_rejects_empty_conflict_name():

@@ -27,9 +27,17 @@ export function readyDayScenario(contract: TodayContractV1) {
 /** Hero conflict from scenario (preferred over registry day_thesis slogan). */
 export function scenarioConflictLabel(contract: TodayContractV1): string | null {
   const sc = readyDayScenario(contract);
-  const name = sc?.conflict?.short_name?.trim();
-  if (!name || !isRuUserFacingText(name)) return null;
-  return name.replace(/[.!?]+$/, "").trim() || null;
+  const raw = sc?.conflict?.short_name?.trim();
+  if (!raw || !isRuUserFacingText(raw)) return null;
+  // Heal cached mashed labels: "A или B — пока <truncated…>"
+  let name = raw.replace(/[.!?]+$/u, "").trim();
+  const mashed = name.match(/^(.+?\s+или\s+.+?)\s+[—–-]\s+пока\s+/iu);
+  if (mashed?.[1]) name = mashed[1].trim();
+  if (name.includes("…") && /\sили\s/iu.test(name)) {
+    const before = name.split(/\s+[—–-]\s+/)[0]?.trim();
+    if (before && /\sили\s/iu.test(before)) name = before;
+  }
+  return name || null;
 }
 
 export type TodaySkyIconKey =
@@ -375,6 +383,15 @@ export function buildSkyInfluenceCards(input: {
     avoidColor?: string | null;
     avoidWhy?: string | null;
   } | null;
+  /** Chorus overlay — how card/number color today's conflict (same day, no rebuild). */
+  chorus?: {
+    day_card?: { named?: string | null; role?: string | null } | null;
+    day_number?: {
+      named?: string | null;
+      tempo?: string | null;
+      for_conflict?: string | null;
+    } | null;
+  } | null;
 }): TodaySkyCard[] {
   const cards: TodaySkyCard[] = [];
   const celestial = input.morningRitualData?.celestial_events;
@@ -435,7 +452,11 @@ export function buildSkyInfluenceCards(input: {
 
   if (cards.length < 3) {
     const mainTransit = celestial?.personal_transits?.[0];
-    if (mainTransit?.title && mainTransit.story_ru) {
+    if (
+      mainTransit?.title &&
+      mainTransit.story_ru &&
+      !/Firdaria|ZR\s*Fortune|Лоты\s*soft/i.test(mainTransit.story_ru)
+    ) {
       pushCard({
         id: "personal-transit",
         icon: "sparkles",
@@ -514,22 +535,36 @@ export function buildSkyInfluenceCards(input: {
 
   if (ritualComplete && input.cardName && input.cardId != null) {
     const card = getTodayTarotCardRu(input.cardId);
+    const chorusRole = input.chorus?.day_card?.role?.trim();
+    const story =
+      (chorusRole && isRuUserFacingText(chorusRole) ? chorusRole : null) ||
+      card?.focusRu ||
+      card?.leadRu ||
+      "Карта дня окрашивает уже собранный сюжет — не меняет его.";
     pushCard({
       id: "tarot",
       icon: "tarot",
       label: "Карта",
       title: card?.nameRu ?? input.cardName,
-      story: card?.focusRu ?? card?.leadRu ?? "Символ дня открывается после ритуала.",
+      story: input.registry.claim(story) ?? story,
     });
   }
 
   if (ritualComplete && input.numerologyValue && input.numerologyValue !== "—") {
+    const chorusNumber =
+      input.chorus?.day_number?.for_conflict?.trim() ||
+      input.chorus?.day_number?.tempo?.trim() ||
+      null;
+    const story =
+      (chorusNumber && isRuUserFacingText(chorusNumber) ? chorusNumber : null) ||
+      NUMBER_RHYTHM_BY_VALUE[input.numerologyValue] ||
+      "Число дня задаёт темп прохождения уже выбранного сюжета.";
     pushCard({
       id: "number",
       icon: "hash",
       label: "Число",
       title: input.numerologyValue,
-      story: NUMBER_RHYTHM_BY_VALUE[input.numerologyValue] ?? "Ритм дня через число откроется после ритуала.",
+      story: input.registry.claim(story) ?? story,
     });
   }
 
@@ -659,6 +694,7 @@ export function buildTodayDaySpine(input: {
           avoidWhy: talisman.avoid_why,
         }
       : null,
+    chorus: input.contract.day_story?.interpretive_chorus ?? null,
   });
 
   const eveningLine = buildEveningLivingLine({

@@ -4,7 +4,8 @@
 **Date:** 2026-07-25  
 **Code:** `day_scenario_editorial_gate_c31.py` · wired in `call_day_scenario_native_llm_c1`  
 **Prompt:** `day-scenario-native-c3.1`  
-**Canon:** [DAY_SCENARIO_V1.md](../DAY_SCENARIO_V1.md) · [DAY_SCENARIO_NATIVE_LLM_C1.md](./DAY_SCENARIO_NATIVE_LLM_C1.md)
+**Canon:** [DAY_SCENARIO_V1.md](../DAY_SCENARIO_V1.md) · [DAY_SCENARIO_NATIVE_LLM_C1.md](./DAY_SCENARIO_NATIVE_LLM_C1.md)  
+**Style hooks (calibration):** [DAY_SCENARIO_STYLE_HOOK_MECHANICS_V1.md](./DAY_SCENARIO_STYLE_HOOK_MECHANICS_V1.md) — moment · stakes conflict · trap-before · domestic check · trap-solving props · conflict humor · evening_payoff
 
 ## Architecture impact
 

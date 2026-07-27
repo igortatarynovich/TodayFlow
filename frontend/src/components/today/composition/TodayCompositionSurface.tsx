@@ -965,11 +965,6 @@ export function TodayCompositionSurface(props: Props) {
   const themeLoading = !singleVoice && props.guideNarrativeLoading && !props.guideNarrativePayload;
   const useProductFoundation = !isFirstToday;
   const useProductPersonalized = useProductFoundation && story.personalizedReady;
-  const storyHasDayFoundation = Boolean(
-    props.contract.day_story?.day_foundation?.essence?.story_ru ||
-      props.contract.day_story?.day_foundation?.astro?.summary_ru ||
-      props.contract.day_story?.day_foundation?.lunar?.summary_ru,
-  );
 
   if (eveningMode && continuityRecord && !dayClosed) {
     if (useProductFoundation) {
@@ -1530,7 +1525,8 @@ export function TodayCompositionSurface(props: Props) {
           />
         ) : null}
 
-        {!useProductPersonalized && showSkyCards && !storyHasDayFoundation ? (
+        {/* Sky influences stay visible after ritual — overlay card/number, do not hide foundation. */}
+        {showSkyCards ? (
           <section className={styles.skySection} data-testid="today-zone-sky-influences">
             <span className={styles.sectionEyebrow}>Что формирует день</span>
             <h2 className={styles.sectionTitle}>{copy.astroContextTitle}</h2>
@@ -1641,71 +1637,76 @@ export function TodayCompositionSurface(props: Props) {
           </section>
         ) : null}
 
-        {!useProductPersonalized && story.personalizedReady ? (
-        <div className={styles.personalSection} data-testid="today-zone-personal">
-
-        {story.tarotImpact ? (
-          <section className={styles.ritualReveal} data-testid="today-zone-tarot-impact">
-            <p className={styles.ritualRevealKind}>Символ дня</p>
-            <h2 className={styles.ritualRevealTitle}>{story.tarotImpact.title}</h2>
-            <p className={styles.ritualRevealHeadline}>{story.tarotImpact.headline}</p>
-            <p className={styles.ritualRevealBody}>{story.tarotImpact.body}</p>
-            <TodayInterpretationConfirm
-              target="tarot_impact"
-              selectedChoiceId={(engagement.tarotResonance as ProximityChoiceId | null) ?? null}
-              onSelect={(choiceId, resonance) =>
-                onInterpretationConfirm("tarot_impact", choiceId, resonance, story.tarotImpact?.headline)
-              }
-            />
-            {engagement.tarotPickedId != null ? (
-              <Link
-                href={buildTarotDeepenHref({
-                  cardId: engagement.tarotPickedId,
-                  orientation: "upright",
-                  source: "today",
-                })}
-                className={`orbit-button orbit-button-secondary ${styles.ritualDeepenCta}`}
-                data-testid="today-tarot-deepen"
-                onClick={() => {
-                  trackMeaningEvent({
-                    event_type: "tarot_deepen_started",
-                    event_source: TAROT_DEEPEN_EVENT_SOURCE,
-                    local_date: dateISO,
-                    payload: buildTarotDeepenEventPayload({
-                      cardId: engagement.tarotPickedId!,
+        {/* Card + number stay visible after personalize switch (DAY_LIFECYCLE overlay). */}
+        {story.personalizedReady && (story.tarotImpact || story.numberImpact) ? (
+          <div className={styles.personalSection} data-testid="today-zone-symbol-impacts">
+            {story.tarotImpact ? (
+              <section className={styles.ritualReveal} data-testid="today-zone-tarot-impact">
+                <p className={styles.ritualRevealKind}>Символ дня</p>
+                <h2 className={styles.ritualRevealTitle}>{story.tarotImpact.title}</h2>
+                <p className={styles.ritualRevealHeadline}>{story.tarotImpact.headline}</p>
+                <p className={styles.ritualRevealBody}>{story.tarotImpact.body}</p>
+                <TodayInterpretationConfirm
+                  target="tarot_impact"
+                  selectedChoiceId={(engagement.tarotResonance as ProximityChoiceId | null) ?? null}
+                  onSelect={(choiceId, resonance) =>
+                    onInterpretationConfirm("tarot_impact", choiceId, resonance, story.tarotImpact?.headline)
+                  }
+                />
+                {engagement.tarotPickedId != null ? (
+                  <Link
+                    href={buildTarotDeepenHref({
+                      cardId: engagement.tarotPickedId,
                       orientation: "upright",
                       source: "today",
-                    }),
-                    idempotency_key: tarotDeepenIdempotencyKey({
-                      cardId: engagement.tarotPickedId!,
-                      source: "today",
-                      localDate: dateISO,
-                    }),
-                    refreshRings: false,
-                  });
-                }}
-              >
-                Исследовать глубже →
-              </Link>
+                    })}
+                    className={`orbit-button orbit-button-secondary ${styles.ritualDeepenCta}`}
+                    data-testid="today-tarot-deepen"
+                    onClick={() => {
+                      trackMeaningEvent({
+                        event_type: "tarot_deepen_started",
+                        event_source: TAROT_DEEPEN_EVENT_SOURCE,
+                        local_date: dateISO,
+                        payload: buildTarotDeepenEventPayload({
+                          cardId: engagement.tarotPickedId!,
+                          orientation: "upright",
+                          source: "today",
+                        }),
+                        idempotency_key: tarotDeepenIdempotencyKey({
+                          cardId: engagement.tarotPickedId!,
+                          source: "today",
+                          localDate: dateISO,
+                        }),
+                        refreshRings: false,
+                      });
+                    }}
+                  >
+                    Исследовать глубже →
+                  </Link>
+                ) : null}
+              </section>
             ) : null}
-          </section>
+
+            {story.numberImpact ? (
+              <section className={styles.ritualReveal} data-testid="today-zone-number-impact">
+                <p className={styles.ritualRevealKind}>Число дня</p>
+                <h2 className={styles.ritualRevealTitle}>{story.numberImpact.title}</h2>
+                <p className={styles.ritualRevealHeadline}>{story.numberImpact.headline}</p>
+                <p className={styles.ritualRevealBody}>{story.numberImpact.body}</p>
+                <TodayInterpretationConfirm
+                  target="number_impact"
+                  selectedChoiceId={(engagement.numberResonance as ProximityChoiceId | null) ?? null}
+                  onSelect={(choiceId, resonance) =>
+                    onInterpretationConfirm("number_impact", choiceId, resonance, story.numberImpact?.headline)
+                  }
+                />
+              </section>
+            ) : null}
+          </div>
         ) : null}
 
-        {story.numberImpact ? (
-          <section className={styles.ritualReveal} data-testid="today-zone-number-impact">
-            <p className={styles.ritualRevealKind}>Число дня</p>
-            <h2 className={styles.ritualRevealTitle}>{story.numberImpact.title}</h2>
-            <p className={styles.ritualRevealHeadline}>{story.numberImpact.headline}</p>
-            <p className={styles.ritualRevealBody}>{story.numberImpact.body}</p>
-            <TodayInterpretationConfirm
-              target="number_impact"
-              selectedChoiceId={(engagement.numberResonance as ProximityChoiceId | null) ?? null}
-              onSelect={(choiceId, resonance) =>
-                onInterpretationConfirm("number_impact", choiceId, resonance, story.numberImpact?.headline)
-              }
-            />
-          </section>
-        ) : null}
+        {!useProductPersonalized && story.personalizedReady ? (
+        <div className={styles.personalSection} data-testid="today-zone-personal">
 
         {zones.whyStory && story.whyStory.length > 0 ? (
           <section className={styles.whyStory} data-testid="today-zone-why-story">

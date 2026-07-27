@@ -14,10 +14,12 @@ Canon: docs/DAY_SCENARIO_V1.md · docs/audits/DAY_SCENARIO_RUNTIME_SOT_B5.md
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from todayflow_backend.services.day_scenario_v1 import (
     PRODUCT_SPHERE_IDS,
+    sanitize_conflict_short_name,
     validate_day_scenario_v1,
 )
 
@@ -122,6 +124,21 @@ def _field_provenance(
     }
 
 
+def _is_kitchen_natal_lead(text: str) -> bool:
+    t = (text or "").strip()
+    if not t:
+        return True
+    return bool(
+        re.search(
+            r"Firdaria|ZR\s*Fortune|ZR\s*Spirit|Лоты\s*soft|Vimshottari|BaZi|"
+            r"HD\s*soft|Variables\s*soft|Solar\s*return|time[_\s-]?lords|"
+            r"управител|прогрес+и|нет\s+ASC",
+            t,
+            re.IGNORECASE,
+        )
+    )
+
+
 def _chorus_public(chorus: dict[str, Any]) -> dict[str, Any]:
     """Slim chorus for day_story public nest — explanation layer, not second plot."""
     astro = _as_list(chorus.get("astrology"))
@@ -129,7 +146,23 @@ def _chorus_public(chorus: dict[str, Any]) -> dict[str, Any]:
     card = _as_dict(chorus.get("day_card"))
     number = _as_dict(chorus.get("day_number"))
     astro0 = _as_dict(astro[0]) if astro else {}
-    natal0 = _as_dict(natal[0]) if natal else {}
+    natal0: dict[str, Any] = {}
+    for row in natal:
+        if not isinstance(row, dict):
+            continue
+        named = str(row.get("named_factor") or "").strip()
+        if named and not _is_kitchen_natal_lead(named):
+            natal0 = row
+            break
+    if not natal0 and natal:
+        # Soft fallback without dumping kitchen named_factor
+        natal0 = {
+            "named_factor": "Личный фон усиливает сегодняшний сюжет.",
+            "human_meaning": _as_dict(natal[0]).get("human_meaning"),
+            "evidence_refs": _as_dict(natal[0]).get("evidence_refs")
+            or _as_dict(natal[0]).get("evidence_ids")
+            or [],
+        }
     return {
         "astrology_lead": _clip(astro0.get("named_factor"), 220),
         "astrology_meaning": _clip(astro0.get("human_meaning"), 280),
@@ -151,12 +184,17 @@ def _chorus_public(chorus: dict[str, Any]) -> dict[str, Any]:
         }
         if number
         else None,
-        "natal_lead": _clip(natal0.get("named_factor"), 220),
+        "natal_lead": _clip(natal0.get("named_factor"), 220) if natal0 else "",
         "dialogue_rule": chorus.get("dialogue_rule"),
         "parallel_forecast_forbidden": True,
         "evidence_refs": {
             "astrology": list(astro0.get("evidence_refs") or astro0.get("event_ids") or [])[:4],
-            "natal": list(natal0.get("evidence_refs") or natal0.get("activation_ids") or [])[:4],
+            "natal": list(
+                natal0.get("evidence_refs")
+                or natal0.get("activation_ids")
+                or natal0.get("evidence_ids")
+                or []
+            )[:4],
         },
     }
 
@@ -298,7 +336,7 @@ def project_day_scenario_onto_day_story_v1(
         ]
         if facts:
             base["events_lead"] = _clip(" ".join(facts[:3]), 480)
-        label = str(conflict.get("short_name") or "").strip()
+        label = sanitize_conflict_short_name(conflict.get("short_name") or "")
         if label:
             base["theme"] = label
             base["headline_anchor"] = label
@@ -319,7 +357,15 @@ def project_day_scenario_onto_day_story_v1(
 
     # --- Exclusive overwrite path ---
     thesis = _as_dict(conflict.get("thesis"))
-    label = str(conflict.get("short_name") or thesis.get("label_ru") or "").strip()
+    label = sanitize_conflict_short_name(
+        conflict.get("short_name") or thesis.get("label_ru") or ""
+    )
+    if isinstance(base.get("day_scenario"), dict) and label:
+        # Heal cached mashed short_name on serve/reproject
+        c = dict(_as_dict(base["day_scenario"].get("conflict")))
+        if c:
+            c["short_name"] = label
+            base["day_scenario"] = {**base["day_scenario"], "conflict": c}
     scene_id = str(primary.get("scene_id") or "")
     scene_evidence = _as_list(primary.get("evidence_references")) or driver_ids
 
@@ -359,7 +405,7 @@ def project_day_scenario_onto_day_story_v1(
         ]
         if avoid.get("name"):
             note_parts.append(
-                _clip(f"Избегать: {avoid.get('name')} — {avoid.get('why')}", 160)
+                _clip(f"Избегать: {avoid.get('name')} — {_clip(avoid.get('why'), 100)}", 160)
             )
         base["talisman"] = {
             "color": str(color["name"]),
@@ -379,10 +425,12 @@ def project_day_scenario_onto_day_story_v1(
     affirms = _as_list(props.get("affirmations"))
     if affirms and isinstance(affirms[0], dict) and affirms[0].get("text"):
         a0 = affirms[0]
+        # Prefer action hint over trap dump in UI "reason"
+        reason = _clip(a0.get("helps_action"), 160) or _clip(a0.get("compensates_trap"), 120)
         base["practice_recommendation"] = {
             "kind": "affirmation",
-            "text": _clip(a0.get("text"), 240),
-            "reason": _clip(a0.get("compensates_trap") or a0.get("helps_action"), 200),
+            "text": _clip(a0.get("text"), 200),
+            "reason": reason,
             "origin_scene_id": a0.get("origin_scene_id"),
             "provenance": _field_provenance(
                 origin_scene_id=str(a0.get("origin_scene_id") or None),
