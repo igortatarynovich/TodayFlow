@@ -601,6 +601,23 @@ export type DayLifecycleC5 = {
   now_local?: string;
 };
 
+export type TodayDepthTopicId = "money" | "intimacy" | "love" | "career" | "family" | "full_day";
+
+export type TodayDepthLayerMenuItemV1 = {
+  topic: TodayDepthTopicId | string;
+  label: string;
+  value?: string;
+};
+
+/** Optional deepen offer — never hides base day (TODAY_DEPTH_LAYER_V1). */
+export type TodayContractDepthLayerV1 = {
+  version: string;
+  can_generate: boolean;
+  access: "available" | "cta" | string;
+  menu: TodayDepthLayerMenuItemV1[];
+  subscribe_path?: string;
+};
+
 export type TodayContractV1 = {
   contract_version: typeof TODAY_CONTRACT_V1 | string;
   global_context: { period: string };
@@ -610,6 +627,7 @@ export type TodayContractV1 = {
   progress: Record<string, unknown>;
   generation_id: string;
   day_story?: TodayContractDayStoryV1 | null;
+  depth_layer?: TodayContractDepthLayerV1 | null;
 };
 
 export function readDayLifecycle(contract: TodayContractV1 | null | undefined): DayLifecycleC5 | null {

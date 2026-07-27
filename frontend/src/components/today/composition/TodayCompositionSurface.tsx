@@ -20,7 +20,7 @@ import { buildTodayHeroPillars, buildTodayHeroSymbol, resolveTodaySunSignLabel }
 import type { MorningRitualData, TodayCycleData } from "@/components/today/todayPageUtils";
 import { anchorTarotTagsFromLead, RITUAL_COPY } from "@/components/today/todayRitualCopy";
 import { getTodayTarotCardRu } from "@/components/today/todayTarotCardsRu";
-import type { TodayContractV1 } from "@/lib/todayContract";
+import { isDayNotReady, type TodayContractV1 } from "@/lib/todayContract";
 import type { CoreProfile } from "@/lib/types";
 import { resolveDailyTarotDeckIndex } from "@/lib/tarotCardAssets";
 import { resolveDayPhase } from "@/lib/dayPhaseAtmosphere";
@@ -79,6 +79,7 @@ import {
 import { TodayInterpretationConfirm } from "@/components/today/composition/TodayInterpretationConfirm";
 import { TodaySkyStoryCards } from "@/components/today/composition/TodaySkyStoryCards";
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
+import { TodayDepthLayerSection } from "@/components/today/composition/TodayDepthLayerSection";
 import { buildTodayPromiseSuggestions, isLowEnergyMood } from "@/lib/todayDayDialogue";
 import {
   buildInterpretationConfirmPayload,
@@ -134,6 +135,8 @@ type Props = {
   embeddedInWebDashboard?: boolean;
   /** Day story is being rebuilt after symbol reveal — do not treat old text as updated. */
   dayStoryUpdating?: boolean;
+  /** Parent guide generation id for deepen chain. */
+  guideGenerationId?: number | null;
   onSymbolRevealResult?: (view: DaySymbolPublicView) => void;
 };
 
@@ -1450,6 +1453,17 @@ export function TodayCompositionSurface(props: Props) {
         ) : null}
 
         {dayStoryFoundation}
+
+        {!isDayNotReady(props.contract) &&
+        props.contract.depth_layer &&
+        Array.isArray(props.contract.depth_layer.menu) &&
+        props.contract.depth_layer.menu.length > 0 ? (
+          <TodayDepthLayerSection
+            dateISO={dateISO}
+            depthLayer={props.contract.depth_layer}
+            guideGenerationId={props.guideGenerationId ?? null}
+          />
+        ) : null}
 
         {useProductPersonalized ? (
           <TodayPersonalizedProductSection

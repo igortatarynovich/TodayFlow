@@ -1,6 +1,6 @@
 # Today Depth Layer (subscriber optional deepen)
 
-**Status:** ACCEPTED · **impl step 1–2 LANDED** (gate + contract offer)  
+**Status:** ACCEPTED · **impl step 1–3 LANDED** (gate · contract offer · FE picker)  
 **Date:** 2026-07-27  
 **Parent:** [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](./UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md) · [PRODUCT_AVAILABILITY_MATRIX.md](./PRODUCT_AVAILABILITY_MATRIX.md) §3.2  
 **Related:** existing `POST /today/narrative` surface `deepen` · DE-8 `depth_level`  
@@ -62,7 +62,7 @@ v1 ship set can be **2–4** of these; product picks the first menu. Default rec
 | Gate | Trial/Paid generate; Free → CTA payload | **step 1** |
 | Offer menu | chips in `depth_layer.menu` | **step 1–2** (deepen response + `GET /today/contract`) |
 | Today contract nest | expose offer without calling deepen | **step 2** |
-| FE picker | chips after day pack | step 3 |
+| FE picker | chips after day pack | **step 3** |
 | Payload | Additive `depth_layer` · **not** overwrite day_story | **step 1** |
 
 ## Non-goals (this note)

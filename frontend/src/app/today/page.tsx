@@ -1482,6 +1482,7 @@ export default function TodayPage() {
             guideNarrativeLoading={guideNarrativeLoading}
             guideNarrativePayload={guideNarrativePayload}
             guideNarrativeRequestFailed={guideNarrativeRequestFailed}
+            guideGenerationId={guideGenerationId}
             dayLayerNarrativePayload={dayLayerPayload}
             dayLayerNarrativeLoading={dayLayerLoading}
             spheresNarrativePayload={spheresPayload}
