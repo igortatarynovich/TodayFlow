@@ -66,6 +66,12 @@ SYSTEM_PROMPT = """Ты пишешь короткий editorial layer для э�
 }"""
 
 
+def _user_facing_system_prompt() -> str:
+    from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
+
+    return with_practitioner_persona(SYSTEM_PROMPT, locale="ru")
+
+
 def _build_route_from_editorial(
     editorial: dict[str, Any],
     *,
@@ -620,7 +626,7 @@ def generate_natal_chart_editorial(
             client,
             model=model_id,
             messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "system", "content": _user_facing_system_prompt()},
                 {"role": "user", "content": user_prompt},
             ],
             temperature=0.45,

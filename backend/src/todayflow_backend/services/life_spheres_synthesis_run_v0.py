@@ -185,6 +185,9 @@ def synthesize_life_spheres_v0(
     meta["gate"] = True
     locale = str(foundations.get("locale") or "ru")
     system, prompt_version = get_prompt(PROMPT_ID, locale=locale)
+    from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
+
+    system = with_practitioner_persona(system, locale=locale)
     meta["prompt_version"] = prompt_version
     natal = foundations.get("natal") if isinstance(foundations.get("natal"), dict) else {}
     houses_available = bool(natal.get("houses_available"))

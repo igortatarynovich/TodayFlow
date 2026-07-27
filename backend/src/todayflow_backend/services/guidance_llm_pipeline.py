@@ -146,11 +146,14 @@ def refine_guidance_session_answer(
         question_assessment=question_assessment,
     )
     try:
+        from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
+
+        system = with_practitioner_persona(SYSTEM_EN if is_en else SYSTEM_RU, locale="en" if is_en else "ru")
         content = chat_completion_text(
             client,
             model=model_id,
             messages=[
-                {"role": "system", "content": SYSTEM_EN if is_en else SYSTEM_RU},
+                {"role": "system", "content": system},
                 {"role": "user", "content": user_message},
             ],
             temperature=0.45,

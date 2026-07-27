@@ -288,6 +288,19 @@ def test_quality_gates_reject_antithesis_ne_a_formula():
     assert tarot_llm.quality_reject_reason(noun, pack) is None
 
 
+def test_clean_field_rejects_empty_solemnity_formulas():
+    """Analytical voice: reject faux profundity / oracle mush."""
+    assert tarot_llm._clean_field("Послание карт говорит о важном повороте судьбы прямо сейчас.", min_words=6) is None
+    assert tarot_llm._clean_field(
+        "Самый тяжёлый вес сейчас — привычная петля без названной выгоды и страха.",
+        min_words=6,
+    ) is None
+    assert tarot_llm._clean_field(
+        "Запиши три критерия решения и проверь их на одном рабочем эпизоде этой недели.",
+        min_words=6,
+    )
+
+
 def test_choice_question_story_allows_moderate_length_from_eval_delta():
     """Live #2 reject: too_long:question_story at 900 — choice needs headroom."""
     pack = {

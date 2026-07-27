@@ -255,6 +255,9 @@ def generate_personality(
 
     calculated = calculated_facts_from_natal(natal_facts)
     system, version = get_prompt(PROMPT_ID, locale=locale)
+    from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
+
+    system = with_practitioner_persona(system, locale=locale)
     user_payload = {
         "contract_id": "personality",
         "prompt_version": version,

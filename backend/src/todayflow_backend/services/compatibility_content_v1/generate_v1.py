@@ -49,11 +49,15 @@ def _extract_json(raw: str) -> dict[str, Any] | None:
 
 
 def _system_for_tier(tier: Tier, *, source_depth: str, locale: str) -> str:
+    from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
+
     if tier == "guest":
-        return system_prompt_guest_v1(source_depth=source_depth, locale=locale)
-    if tier == "registered":
-        return system_prompt_registered_v1(source_depth=source_depth, locale=locale)
-    return system_prompt_premium_v1(source_depth=source_depth, locale=locale)
+        base = system_prompt_guest_v1(source_depth=source_depth, locale=locale)
+    elif tier == "registered":
+        base = system_prompt_registered_v1(source_depth=source_depth, locale=locale)
+    else:
+        base = system_prompt_premium_v1(source_depth=source_depth, locale=locale)
+    return with_practitioner_persona(base, locale=locale)
 
 
 def build_generation_input(

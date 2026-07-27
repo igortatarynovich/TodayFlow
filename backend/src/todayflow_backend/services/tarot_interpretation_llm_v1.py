@@ -22,7 +22,7 @@ from todayflow_backend.core.text_quality import is_meaningful_sentence
 
 logger = logging.getLogger(__name__)
 
-TAROT_INTERPRETATION_PROMPT_VER = "tarot-interpretation-v1.7"
+TAROT_INTERPRETATION_PROMPT_VER = "tarot-interpretation-v1.9"
 
 _BANNED_SUBSTRINGS = (
     "аркан",
@@ -36,6 +36,7 @@ _BANNED_SUBSTRINGS = (
     "карты сообщают факт",
 )
 
+# Empty solemnity / wellness mush — cleaned fields reject if present.
 _EMPTY_FORMULAS = (
     "важно заметить",
     "что-то важное",
@@ -43,6 +44,20 @@ _EMPTY_FORMULAS = (
     "просто доверься",
     "вселенная подсказывает",
     "энергия дня",
+    "послание карт",
+    "мудрость карт",
+    "карты шепчут",
+    "судьбоносн",
+    "сакральн",
+    "предназначение зовёт",
+    "истинный путь",
+    "глубинный смысл всего",
+    "пространство смысла",
+    "энергетическ",
+    "вибрац",
+    "просит внимания вселенной",
+    "самый тяжёлый вес",
+    "на горизонте маячит",
 )
 
 # Rhetorical antithesis hard-gate (owner editorial, 2026-07-26):
@@ -83,10 +98,22 @@ _ACTION_MARKERS = (
     "отклик",
 )
 
-_SYSTEM_RU = """Ты — интерпретатор расклада Таро для TodayFlow.
+_SYSTEM_RU = """Ты — голос TodayFlow в раскладе Таро.
 
 Вход: один Context Pack = Question Ontology + Position Semantics + Knowledge Base + короткий profile tint.
 Оставайся в ОДНОМ авторском режиме — не переключайся на отдельный шаблон «под тип вопроса».
+
+Голос — мудрый аналитический разбор (Voice Canon):
+- Пиши как ясный разбор: наблюдаемый паттерн → конфликт/цена → вывод по вопросу → один проверяемый шаг.
+- Каждый абзац должен нести содержание, которое можно пересказать без пафоса: поведение, критерий, риск, цена бездействия, что проверить.
+- Метафора допустима только если сразу раскрывается в человеческий паттерн
+  (не «туман судьбы», а «откладывание решения из‑за страха ошибки»).
+- Запрещена напускная важность без смысла: торжественные формулы, «судьбоносность», пустая глубина,
+  нагнетание («самый тяжёлый вес», «на горизонте маячит судьба») без механизма.
+- «Научность» = точность, калибровка, проверяемость — не жаргон и не механизм продукта.
+- Уверенность калибруй: тенденция / гипотеза / наблюдение — не приговор и не мистический вердикт.
+- Близость/секс: спокойно, конкретно, без стыда, пошлости и медицинских советов.
+- Друг: на стороне человека; без морализаторства и без пустой поддержки («просто доверься»).
 
 question_ontology задаёт логику ответа:
 - central_task, direct_answer_means, must_show, allowed_specificity, must_not_claim, next_step_kind
@@ -101,10 +128,10 @@ driving_need, shadow_pattern, growth_direction, *_lens, reversed_shift, adjacent
 Если называешь карты — только когда это помогает истории; запрещён механический список «карта 1… карта 2…».
 
 Порядок работы (обязателен):
-1) Собери конфликт расклада из символов и ролей позиций.
+1) Собери конфликт расклада из символов и ролей позиций — назови механизм, не атмосферу.
 2) Примени логику question_ontology (сравнение для choice; гипотеза≠факт для relationship_intent; без даты для timing_readiness).
 3) Свяжи с вопросом; профиль — только тон, не цитата.
-4) Прямой (не категоричный) ответ + один шаг вида next_step_kind.
+4) Прямой (не категоричный) ответ + один шаг вида next_step_kind, который можно выполнить и проверить.
 
 Жёсткие запреты:
 - не разбирай карты механически по очереди («карта 1… карта 2…»);
@@ -112,14 +139,15 @@ driving_need, shadow_pattern, growth_direction, *_lens, reversed_shift, adjacent
 - не повторяй названия позиций в каждом абзаце;
 - не цитируй profile_relevant дословно;
 - не выдавай карты за факты о внешнем мире («он точно…», «уволят…»);
-- не используй пустые формулы («что-то просит быть замеченным», «просто доверься»);
+- не используй пустые формулы («что-то просит быть замеченным», «просто доверься», «послание карт»);
 - не строй фразы на антитезе «не X, а Y» / «это не …, а …» (напр. «не кричит, а греет») —
   говори прямо, что есть, без риторического отрицания;
 - запрещено слово «Аркан» как имя карты;
 - сначала конфликт/картина, потом ответ — не наоборот;
 - соблюдай do_not каждой position_semantics и must_not_claim question_ontology;
 - не называй точные даты при timing_readiness;
-- не читай мысли другого как факт при relationship_intent.
+- не читай мысли другого как факт при relationship_intent;
+- не ставь клинический диагноз и не давай медицинских/фармакологических советов.
 
 Для choice (question_type=choice или spread_kind=choice):
 - в question_story — короткий общий конфликт выбора (2–4 предложения), без полного разбора всех позиций;
@@ -129,10 +157,10 @@ driving_need, shadow_pattern, growth_direction, *_lens, reversed_shift, adjacent
 
 Верни ТОЛЬКО валидный JSON:
 {
-  "symbols_overview": "символы и напряжения — 2–5 предложений",
-  "question_story": "единая история под вопрос; для choice — сжатый конфликт выбора",
-  "direct_answer": "прямой ответ на вопрос без фатализма",
-  "next_step": "один конкретный применимый шаг",
+  "symbols_overview": "наблюдаемые напряжения расклада — 2–5 предложений, без пустой торжественности",
+  "question_story": "единая история под вопрос как разбор паттерна; для choice — сжатый конфликт выбора",
+  "direct_answer": "прямой ответ на вопрос: вывод + критерий; без фатализма и напускной важности",
+  "next_step": "один конкретный применимый и проверяемый шаг",
   "option_a_note": "null или отличие пути A",
   "option_b_note": "null или отличие пути B",
   "confidence_note": "короткая оговорка или null"
@@ -463,13 +491,16 @@ def call_tarot_interpretation_llm_v1(
     user_sent = user_full[:16000]
     attempts = max(1, min(int(max_attempts or 1), 3))
     model = resolve_default_chat_model()
+    from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
+
+    system = with_practitioner_persona(_SYSTEM_RU, locale="ru")
 
     for attempt_idx in range(attempts):
         content = chat_completion_text(
             client,
             model=model,
             messages=[
-                {"role": "system", "content": _SYSTEM_RU},
+                {"role": "system", "content": system},
                 {"role": "user", "content": user_sent},
             ],
             temperature=0.55,

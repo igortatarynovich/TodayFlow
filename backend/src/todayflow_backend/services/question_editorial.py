@@ -506,12 +506,15 @@ def generate_question_editorial(
 
     started_at = perf_counter()
     model_id = resolve_default_chat_model()
+    from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
+
+    system = with_practitioner_persona(SYSTEM_PROMPT, locale="ru")
     try:
         content = chat_completion_text(
             client,
             model=model_id,
             messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "system", "content": system},
                 {"role": "user", "content": user_prompt},
             ],
             temperature=0.4,

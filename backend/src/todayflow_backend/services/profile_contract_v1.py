@@ -497,11 +497,14 @@ def call_profile_contract_llm_v1(
     if client is None:
         meta["reason"] = "client_unavailable"
         return None, meta
+    from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
+
+    system = with_practitioner_persona(_PROFILE_SYS_RU, locale="ru")
     content = chat_completion_plain(
         client,
         model=resolve_default_chat_model(),
         messages=[
-            {"role": "system", "content": _PROFILE_SYS_RU},
+            {"role": "system", "content": system},
             {"role": "user", "content": json.dumps(user_json, ensure_ascii=False)[: user_json_char_budget()]},
         ],
         temperature=0.48,

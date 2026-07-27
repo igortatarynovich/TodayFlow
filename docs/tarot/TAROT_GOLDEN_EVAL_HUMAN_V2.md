@@ -45,6 +45,7 @@ Plus Editorial Phase voice flags (boolean notes, not architecture):
 - `antithesis_formula` — saw «не X, а Y»  
 - `sees_self` — person recognizes themselves  
 - `warmth_without_mush` — warm without empty wellness  
+- `analytical_not_solemn` — pattern/cost/step instead of faux importance  
 
 ## Case contract (minimal)
 

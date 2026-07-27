@@ -99,7 +99,7 @@ def test_relationship_intent_and_timing_guards_in_pack():
 
 
 def test_single_prompt_version_mentions_ontology_not_per_type_branch():
-    assert tarot_llm.TAROT_INTERPRETATION_PROMPT_VER == "tarot-interpretation-v1.7"
+    assert tarot_llm.TAROT_INTERPRETATION_PROMPT_VER == "tarot-interpretation-v1.9"
     assert "question_ontology" in tarot_llm._SYSTEM_RU
     assert "не переключайся на отдельный шаблон" in tarot_llm._SYSTEM_RU
     assert "relationship_intent" in tarot_llm._SYSTEM_RU

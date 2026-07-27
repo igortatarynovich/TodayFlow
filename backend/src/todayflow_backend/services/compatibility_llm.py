@@ -414,8 +414,11 @@ def generate_llm_base_model(
 
 
 def system_prompt_for_locale(locale: str) -> str:
+    from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
+
     loc = locale.strip().split("-")[0].lower()
-    return SYSTEM_PROMPT_EN if loc == "en" else SYSTEM_PROMPT
+    base = SYSTEM_PROMPT_EN if loc == "en" else SYSTEM_PROMPT
+    return with_practitioner_persona(base, locale=loc)
 
 
 def _parse_llm_json(raw: str) -> dict[str, Any] | None:

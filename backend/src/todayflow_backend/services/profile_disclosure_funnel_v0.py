@@ -156,6 +156,9 @@ def _call_with_retry(
     temperature: float = 0.48,
 ) -> tuple[dict[str, Any] | None, dict[str, Any]]:
     system, ver = get_prompt(prompt_id, locale=locale)
+    from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
+
+    system = with_practitioner_persona(system, locale=locale)
     user = json.dumps(user_payload, ensure_ascii=False)[: user_json_char_budget()]
     max_tokens = funnel_step_max_tokens(depth_level)
     model = resolve_default_chat_model()

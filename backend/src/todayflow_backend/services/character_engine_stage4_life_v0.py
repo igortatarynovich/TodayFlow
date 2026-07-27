@@ -566,6 +566,9 @@ def build_character_engine_life_bundle_v0(
         return _deterministic(reason=reason, prompt_ver="n/a")
 
     system, prompt_version = get_prompt(STAGE4_PROMPT_ID, locale=locale)
+    from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
+
+    system = with_practitioner_persona(system, locale=locale)
     client = get_openai_compatible_client(operation="background")
     model = resolve_default_chat_model()
     messages = [

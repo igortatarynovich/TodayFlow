@@ -185,6 +185,9 @@ def _run_two_step(
     openai_json: OpenaiJsonFn,
 ) -> tuple[dict[str, Any] | None, dict[str, Any]]:
     sys1, ver1 = get_prompt(step1_prompt_id, locale=locale_value)
+    from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
+
+    sys1 = with_practitioner_persona(sys1, locale=locale_value)
     u1 = _pack_json({"contract_version": f"{surface}_funnel_step1_input_v0", **user_pack})
     t0 = perf_counter()
     r1 = openai_json(sys1, u1, depth_level="quick" if depth_norm == "quick" else "normal")
@@ -204,6 +207,7 @@ def _run_two_step(
         return None, meta
 
     sys2, ver2 = get_prompt(step2_prompt_id, locale=locale_value)
+    sys2 = with_practitioner_persona(sys2, locale=locale_value)
     meta["step2_prompt_version"] = ver2
     u2 = _pack_json(
         {

@@ -328,7 +328,9 @@ Semantic profile на карту (семантика, не литература)
 **Eval deltas (Editorial Phase):**
 - semantic grounding gate (card-name ablation) — landed with live #2 uplift
 - choice: compact `question_story` + A/B in `option_*_note`; soft length ceiling (`tarot-interpretation-v1.6`)
-- voice: ban rhetorical antithesis «не X, а Y» (e.g. «не кричит, а греет») — prompt + gate `antithesis_formula` (`tarot-interpretation-v1.7`)
+- voice: ban rhetorical antithesis «не X, а Y» (e.g. «не кричит, а греет») — prompt + gate `antithesis_formula` (`tarot-interpretation-v1.7`; hard-gate narrowed 2026-07-27)
+- voice: analytical over faux solemnity — pattern → cost → answer → testable step (`tarot-interpretation-v1.8`)
+- voice: practitioner+friend persona (tarot · numerology · astrology · psychology · sexology · friend) — Voice Canon §1 + `tarot-interpretation-v1.9`
 
 ---
 

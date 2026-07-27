@@ -933,9 +933,12 @@ def call_day_scenario_native_llm_c1(
         model_name = ""
 
     capture = get_day_story_capture_session()
+    from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
+
+    system = with_practitioner_persona(_NATIVE_SYS_RU, locale="ru")
     if capture is not None:
         capture.record_prompt(
-            system=_NATIVE_SYS_RU,
+            system=system,
             user_full=user_full,
             user_sent=user_sent,
             prompt_version=NATIVE_PROMPT_VERSION,
@@ -957,7 +960,7 @@ def call_day_scenario_native_llm_c1(
             client,
             model=resolve_default_chat_model(),
             messages=[
-                {"role": "system", "content": _NATIVE_SYS_RU},
+                {"role": "system", "content": system},
                 {"role": "user", "content": user_sent},
             ],
             temperature=0.52,

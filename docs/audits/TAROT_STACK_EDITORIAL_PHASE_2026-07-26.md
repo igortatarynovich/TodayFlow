@@ -49,7 +49,17 @@ Human **Golden Eval v2** — protocol: [TAROT_GOLDEN_EVAL_HUMAN_V2.md](../tarot/
 - **20–30** real questions  
 - varied spreads  
 
-### Antithesis gate calibration (2026-07-27)
+### Analytical voice v1.8 (2026-07-27)
+
+Owner: texts must feel rigorous, not faux-important.  
+Prompt `tarot-interpretation-v1.8`: pattern → cost → answer → testable step; metaphor only if it unpacks into behavior; ban empty solemnity formulas in clean gate.
+
+### Practitioner + friend persona v1.9 (2026-07-27)
+
+Owner: LLM always speaks as one experienced wise practitioner and friend  
+(tarot · numerology · astrology · psychology · sexology-when-intimacy · friend).  
+SoT: [TODAYFLOW_VOICE_CANON.md](../content/TODAYFLOW_VOICE_CANON.md) §1 v1.7 · Tarot prompt `tarot-interpretation-v1.9`.  
+Not clinical diagnosis; not naming the professions in user text.
 
 Hard reject is **narrow**: short parallel **verbs/adjectives** («не кричит, а греет»).  
 Prompt still bans broader «это не …, а …». Broad regex was rejecting most live answers (~1/12 then ~6/12).
