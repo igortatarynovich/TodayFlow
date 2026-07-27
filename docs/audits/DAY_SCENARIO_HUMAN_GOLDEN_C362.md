@@ -61,5 +61,6 @@ Minimum **40** human cases after process check:
 1. ~~**Pilot blind batch**~~ — [c362_blind_pilot_20260726](./day_scenario_human_golden/batches/c362_blind_pilot_20260726/) sealed (7 RU)
 2. ~~**EN curated expansion**~~ — [c362_en_expansion_20260726](./day_scenario_human_golden/batches/c362_en_expansion_20260726/) sealed (20 EN)
 3. ~~**RU live expansion**~~ — [c362_ru_live_expansion_20260727](./day_scenario_human_golden/batches/c362_ru_live_expansion_20260727/) sealed (13 RU) — **40/40 inventory**
-4. Feed consensus into calibration → further promotions only with evidence
+4. ~~Feed consensus into calibration~~ — [DAY_SCENARIO_HUMAN_CALIBRATION_C362.md](./DAY_SCENARIO_HUMAN_CALIBRATION_C362.md) · baseline 40 cases
+5. Next: analyzer gaps (`SCENE_MISSING_EVERYDAY` R=0) · watch `ASTRO_JARGON_BARE` FP · keep `SCENE_UNIVERSAL_ADVICE` candidate
 

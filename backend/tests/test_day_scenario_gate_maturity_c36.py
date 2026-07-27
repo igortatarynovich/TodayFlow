@@ -69,6 +69,14 @@ def test_promoted_scene_quality_codes_retry_via_maturity():
         assert not should_downgrade_general([{"code": code}])
 
 
+def test_chorus_semantic_duplication_is_candidate_blocking_observe_only():
+    rule = get_rule("CHORUS_SEMANTIC_DUPLICATION")
+    assert rule.family == FAMILY_QUALITY
+    assert rule.maturity == MATURITY_CANDIDATE_BLOCKING
+    assert not should_retry_defects([{"code": "CHORUS_SEMANTIC_DUPLICATION"}])
+    assert not should_reject_story([{"code": "CHORUS_SEMANTIC_DUPLICATION"}])
+
+
 def test_soft_personalization_is_advisory_no_runtime_control():
     d = annotate_defects_with_maturity(
         [{"code": DEFECT_CLAIM_WITHOUT_EVIDENCE, "field": "x", "message": "m"}]

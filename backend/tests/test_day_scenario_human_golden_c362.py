@@ -283,10 +283,14 @@ def test_no_maturity_or_runtime_change_and_no_auto_promote():
     _ = example_review_cycle_fixture()
     after = {k: (v.maturity, v.family, runtime_action_for_rule(v)) for k, v in GATE_RULES.items()}
     assert before == after
+    # Unpromoted quality stays observe-only; C3.6.3+ may mark selected quality as blocking.
     for code, rule in GATE_RULES.items():
-        if rule.family == FAMILY_QUALITY:
+        if rule.family != FAMILY_QUALITY:
+            continue
+        if rule.maturity == MATURITY_BLOCKING:
+            assert runtime_action_for_rule(rule) in {"retry", "reject_story"}
+        else:
             assert runtime_action_for_rule(rule) == "score_only"
-            assert rule.maturity != MATURITY_BLOCKING or runtime_action_for_rule(rule) == "score_only"
 
 
 def test_analyzer_only_after_seal():

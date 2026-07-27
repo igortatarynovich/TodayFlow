@@ -429,10 +429,12 @@ Legacy projections remain for old clients only.
 - **Runtime / maturity / Nebius / UI:** untouched; no promotions; no fake 40 labels
 ```
 
-### Next — grow EN/40 human golden → consensus calibration → further promotions by evidence
+### Next — analyzer gaps from human calibration
 
-**Progress:** **40/40** human consensus sealed (20 RU live · 20 EN curated).
-Next: consensus → calibration adapter → further promotions by evidence.
+**Progress:** **40/40** sealed · human calibration baseline landed
+([DAY_SCENARIO_HUMAN_CALIBRATION_C362.md](./audits/DAY_SCENARIO_HUMAN_CALIBRATION_C362.md)).
+`CHORUS_SEMANTIC_DUPLICATION` → candidate_blocking; `SCENE_UNIVERSAL_ADVICE` stays candidate.
+Next: everyday analyzer gap · ASTRO_JARGON FP watch.
 
 ---
 

@@ -502,22 +502,23 @@ def consensus_to_calibration_case(case: dict[str, Any]) -> dict[str, Any] | None
     band = str(consensus.get("overall_band") or "")
     if band == "cannot_assess":
         return None
-    # Map overall → calibration band used by c361 (pass/reject); acceptable kept as pass-like
-    # for "clean negative" only when pass; acceptable is NOT auto-negative for every defect.
+    # Present defects always feed code-level metrics (rubric: do not derive labels only from reject).
+    present_codes = [
+        code
+        for code, row in (consensus.get("defects") or {}).items()
+        if isinstance(row, dict) and row.get("presence") == "present"
+    ]
+    # Map overall → calibration band used by c361 (pass/reject); acceptable kept as pass-like.
     if band == "pass":
         calib_band = "pass"
-        primary: list[str] = []
+        primary = list(present_codes)
     elif band == "reject":
         calib_band = "reject"
-        primary = [
-            code
-            for code, row in (consensus.get("defects") or {}).items()
-            if isinstance(row, dict) and row.get("presence") == "present"
-        ]
+        primary = list(present_codes)
     elif band == "acceptable_with_issues":
-        # Useful scenario — do not treat as reject; only explicit present defects as soft notes
+        # Useful scenario — do not treat as reject; still label present defects for P/R.
         calib_band = "pass"
-        primary = []
+        primary = list(present_codes)
     else:
         return None
 
