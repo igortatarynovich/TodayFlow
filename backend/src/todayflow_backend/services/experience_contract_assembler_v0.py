@@ -22,6 +22,7 @@ EXPERIENCE_CONTRACT_FIELDS: Final[tuple[str, ...]] = (
     "helps",
     "strengths",
     "identity_line",
+    "primary_tension",
     "life_path",
     "sun_sign",
     "rhythm",
@@ -66,6 +67,7 @@ EXPERIENCE_ALLOWLISTS: Final[dict[str, frozenset[str]]] = {
             "helps",
             "strengths",
             "identity_line",
+            "primary_tension",
             "identity_summary",
             "emotional_style",
             "relationship_style",
@@ -93,6 +95,7 @@ EXPERIENCE_ALLOWLISTS: Final[dict[str, frozenset[str]]] = {
             "helps",
             "strengths",
             "identity_line",
+            "primary_tension",
             "life_path",
             "sun_sign",
             "rhythm",
@@ -110,6 +113,7 @@ EXPERIENCE_ALLOWLISTS: Final[dict[str, frozenset[str]]] = {
             "energy_source",
             "helps",
             "identity_line",
+            "primary_tension",
             "sun_sign",
             *PROVENANCE_FIELDS,
             "is_ready",
@@ -223,6 +227,23 @@ def _identity_line_from_snapshot(
     return _clip(interp.get("identity"), 420)
 
 
+def _primary_tension_from_snapshot(
+    snapshot: Mapping[str, Any], contract: Mapping[str, Any]
+) -> str | None:
+    """CE Stage 3 primary tension → recurring_patterns[0] / inner_tension fallback."""
+    from todayflow_backend.services.character_engine_day_angle_v0 import (
+        extract_primary_tension_text,
+    )
+
+    hit = extract_primary_tension_text(dict(snapshot) if isinstance(snapshot, Mapping) else {})
+    if hit:
+        return hit
+    patterns = contract.get("recurring_patterns")
+    if isinstance(patterns, list) and patterns:
+        return _clip(patterns[0], 420)
+    return _clip(contract.get("inner_tension"), 420)
+
+
 def _rhythm_from_snapshot(snapshot: Mapping[str, Any]) -> str | None:
     baseline = _baseline(snapshot)
     hit = _clip(baseline.get("rhythm"), 280)
@@ -304,6 +325,7 @@ def assemble_experience_contract(
         "helps": _clip_list(pc.get("helps"), max_items=5, item_len=220),
         "strengths": _clip_list(pc.get("strengths"), max_items=6, item_len=200),
         "identity_line": _identity_line_from_snapshot(src, pc),
+        "primary_tension": _primary_tension_from_snapshot(src, pc),
         "life_path": life_path,
         "sun_sign": _clip(astro.get("sun_sign"), 48),
         "rhythm": _rhythm_from_snapshot(src),

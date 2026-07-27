@@ -1429,6 +1429,7 @@ def _fallback_deepen(topic: str, ctx: str, locale: str = "ru") -> dict[str, Any]
 
 _GUIDE_SYS = """Ты пишешь тексты для экрана «Главное» TodayFlow (русский язык).
 В пакете user_core — единственное фактологическое ядро профиля для этого запроса: natal_chart (резюме натала; если available=false — не придумывай карту), интерпретации, числа, знак, baseline, living_summary, урезанный signal_profile, learning. Отдельного полного profile в JSON нет — не ищи его. Плюс visible_profile и internal_profile (если есть), daily_foundation, fusion и insight_depth_tier.
+Если есть character_continuity (contract_version character_continuity_v0): это **тот же герой** каждый день — identity_line + primary_tension фиксированы; day_angle / day_angle_hint задают только сегодняшний ракурс (mind/feelings/will/growth/presence/structure). Не изобретай нового характера и не противоречь identity_line / primary_tension; подсвети ось через сегодняшний угол.
 Если во входном JSON есть behavior_patterns (агрегаты событий за скользящее окно): это фактические сигналы поведения — mood, actions, proximity choices (ritual_proximity), вопросы (guidance_questions_asked), практики, навигация по совместимости. Не выдумывай действий сверх этих данных; учитывай pattern_hints мягко в тоне и в формулировке шагов, без ярлыков и без «диагноза личности».
 Если есть intent (morning_intention, morning_focus, head_topic, ответы мини-вопросов): это явное «что важно сегодня» от пользователя. Приоритезируй смысл и action_options под эти формулировки, не противоречь им и не подменяй своим выдуманным приоритетом; если данных мало — не раздувай.
 Если во входном JSON есть day_engine_brief — серверная детерминированная «опора дня» (anchor_summary, do_hint, avoid_hint, tempo_hint). Строй headline, subline, core_message и action_options в согласии с ней: не противоречь явным нитям (ось, риск, «что важно»), расширяй и оживляй формулировками, не заменяя смысл общими фразами.
@@ -1630,6 +1631,9 @@ def _attach_profile_slices(pack: dict[str, Any], layers_dc: dict[str, Any]) -> N
         pack["visible_profile"] = vp
     if isinstance(ip, dict):
         pack["internal_profile"] = ip
+    continuity = layers_dc.get("character_continuity")
+    if isinstance(continuity, dict) and continuity.get("contract_version"):
+        pack["character_continuity"] = continuity
 
 
 def _slim_profile_selector(sel: dict[str, Any] | None) -> dict[str, Any] | None:

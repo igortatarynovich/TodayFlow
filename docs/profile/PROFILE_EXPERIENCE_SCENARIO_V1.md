@@ -408,7 +408,7 @@ Personal Model / Snapshot в коде = носитель Character Engine output
 
 Это **не** новый personality root и не повод генерировать нового героя. Today **читает** CE Snapshot; меняет только угол проекции.
 
-Wire-ориентиры: Compass derived · Natal Decode `day_hooks` (opt-in) · ExperienceSlice / day narrative consumers — без пересборки Identity Core.
+Wire-ориентиры: Compass derived · Natal Decode `day_hooks` (opt-in) · ExperienceSlice `primary_tension` · DayContext `layers.character_continuity` (`character_engine_day_angle_v0`) — без пересборки Identity Core.
 
 ---
 

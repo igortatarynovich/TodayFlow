@@ -105,6 +105,19 @@ def build_day_context_v0(
     if ritual:
         layers["ritual"] = ritual
 
+    from todayflow_backend.services.character_engine_day_angle_v0 import (
+        build_character_continuity_v0,
+    )
+
+    continuity = build_character_continuity_v0(
+        target_date=target_date,
+        experience_slice=experience_slice,
+        core_profile=core_profile if isinstance(core_profile, dict) else None,
+        locale=loc,
+    )
+    if continuity is not None:
+        layers["character_continuity"] = continuity
+
     vp = build_visible_profile_slice_v0(
         experience_slice=experience_slice,
         intent_slice=intent,

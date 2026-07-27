@@ -83,6 +83,16 @@
           "description": "Profile Selector v0 output (task, topic, mode, relevant_profile, generation_rules). See docs/PROFILE_ENGINE_AND_SELECTOR.md.",
           "type": "object",
           "additionalProperties": true
+        },
+        "experience_slice": {
+          "description": "Today ExperienceSlice (allowlisted Experience Contract projection).",
+          "type": ["object", "null"],
+          "additionalProperties": true
+        },
+        "character_continuity": {
+          "description": "CE retention: same identity_line + primary_tension; rotating day_angle (Scenario §3.1). Never a new hero.",
+          "type": ["object", "null"],
+          "additionalProperties": true
         }
       }
     }
