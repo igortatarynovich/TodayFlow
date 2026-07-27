@@ -746,6 +746,16 @@ class TodayContractDayStoryV1(BaseModel):
     trace: dict[str, Any] = Field(default_factory=dict)
 
 
+class TodayContractDepthLayerV1(BaseModel):
+    """Optional subscriber deepen offer — never hides base day."""
+
+    version: str
+    can_generate: bool
+    access: str = Field(description="available | cta")
+    menu: list[dict[str, str]] = Field(default_factory=list)
+    subscribe_path: str = "/account/subscriptions"
+
+
 class TodayContractV1Response(BaseModel):
     """P0.1 — Model B wire contract; legacy Today fields are not exposed."""
 
@@ -757,6 +767,27 @@ class TodayContractV1Response(BaseModel):
     progress: dict[str, Any] = Field(default_factory=dict)
     generation_id: str
     day_story: TodayContractDayStoryV1 | None = None
+    depth_layer: TodayContractDepthLayerV1 | None = None
+
+
+def _attach_depth_layer_offer(contract: dict[str, Any], *, user: User, db, locale: str) -> dict[str, Any]:
+    """Additive Today Depth Layer offer (canon TODAY_DEPTH_LAYER_V1)."""
+    from todayflow_backend.services.today_depth_layer_v1 import (
+        DEPTH_LAYER_VERSION,
+        build_depth_layer_menu,
+        can_generate_depth_layer,
+    )
+
+    can = can_generate_depth_layer(user, db)
+    out = dict(contract) if isinstance(contract, dict) else {}
+    out["depth_layer"] = {
+        "version": DEPTH_LAYER_VERSION,
+        "can_generate": can,
+        "access": "available" if can else "cta",
+        "menu": build_depth_layer_menu(locale=locale),
+        "subscribe_path": "/account/subscriptions",
+    }
+    return out
 
 
 @router.get("/contract", response_model=TodayContractV1Response)
@@ -808,7 +839,7 @@ async def get_today_contract(
     )
     if day_lifecycle.get("status") == DAY_STATUS_NOT_READY:
         shell = build_day_not_ready_contract(lifecycle=day_lifecycle, locale=locale)
-        return TodayContractV1Response(**shell)
+        return TodayContractV1Response(**_attach_depth_layer_offer(shell, user=user, db=db, locale=locale))
 
     morning = await get_morning_ritual_cached(
         request=request,
@@ -840,7 +871,9 @@ async def get_today_contract(
         # Assemble-once: never build on user GET — wait for cron / show assembling.
         if "day_story_missing" in str(exc):
             shell = build_day_assembling_contract(lifecycle=day_lifecycle, locale=locale)
-            return TodayContractV1Response(**shell)
+            return TodayContractV1Response(
+                **_attach_depth_layer_offer(shell, user=user, db=db, locale=locale)
+            )
         logger.error("GET /today/contract assembly failed: %s", exc)
         raise HTTPException(status_code=500, detail="today_contract_v1 assembly failed") from exc
 
@@ -852,7 +885,9 @@ async def get_today_contract(
     except Exception:
         pass
     _ = gen_log_id
-    return TodayContractV1Response(**contract)
+    return TodayContractV1Response(
+        **_attach_depth_layer_offer(contract, user=user, db=db, locale=locale)
+    )
 
 
 class TodayStoryRefreshPayload(BaseModel):

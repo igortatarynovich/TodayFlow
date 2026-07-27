@@ -181,9 +181,17 @@ today_contract_v1:
     expect?: string
     trap?: string
     # … do / avoid / vibe_closing — проекции thesis, не второй SoT
+  # Optional deepen offer (TODAY_DEPTH_LAYER_V1) — never hides base day
+  depth_layer?:
+    version: string
+    can_generate: bool             # Trial/Paid true; Free false
+    access: available|cta
+    menu: [{ topic, label, value }]
+    subscribe_path: string
 ```
 
-**Инвариант:** UI читает `day_thesis` / `day_story` как проекцию DayContext; клиент **не** собирает конкурирующий сюжет из mood/regex/funnel.
+**Инвариант:** UI читает `day_thesis` / `day_story` как проекцию DayContext; клиент **не** собирает конкурирующий сюжет из mood/regex/funnel.  
+**Инвариант depth_layer:** offer/CTA поверх полного дня; не paywall на `day_story` / domains / primary_action.
 
 **P0.1 DoD:** Today без вопроса закрывает **3 DomainLens + period + development_point + primary_action**.  
 **Anti-pattern:** период/рост как `domains.period` · family только в love slug · `tension/support` как wire ids (только UI labels → `risk/opportunity`).

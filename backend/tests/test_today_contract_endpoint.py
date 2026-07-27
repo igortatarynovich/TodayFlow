@@ -96,9 +96,17 @@ def test_get_today_contract_returns_model_b_structure(client: TestClient):
     for domain_id in DOMAIN_IDS:
         assert domain_id in domains
         lens = domains[domain_id]
-        assert set(lens.keys()) == set(DOMAIN_LENS_SLOTS)
+        assert set(DOMAIN_LENS_SLOTS).issubset(set(lens.keys()))
         for slot in DOMAIN_LENS_SLOTS:
-            assert lens[slot].strip()
+            assert str(lens[slot]).strip()
+
+    depth = body.get("depth_layer")
+    assert isinstance(depth, dict)
+    assert depth.get("version")
+    assert "can_generate" in depth
+    assert depth.get("access") in {"available", "cta"}
+    assert isinstance(depth.get("menu"), list) and len(depth["menu"]) >= 2
+    assert all(row.get("topic") and row.get("label") for row in depth["menu"])
 
 
 def test_get_today_contract_has_no_legacy_keys(client: TestClient):

@@ -1,6 +1,6 @@
 # Today Depth Layer (subscriber optional deepen)
 
-**Status:** ACCEPTED · **impl step 1 LANDED** (topic catalog + deepen generate gate)  
+**Status:** ACCEPTED · **impl step 1–2 LANDED** (gate + contract offer)  
 **Date:** 2026-07-27  
 **Parent:** [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](./UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md) · [PRODUCT_AVAILABILITY_MATRIX.md](./PRODUCT_AVAILABILITY_MATRIX.md) §3.2  
 **Related:** existing `POST /today/narrative` surface `deepen` · DE-8 `depth_level`  
@@ -13,11 +13,11 @@
 - **SoT before:** deepen available to any signed-in user; no intimacy topic; no Free CTA shape
 - **SoT after:** Free deepen → soft CTA payload (depth_layer.access=cta); Trial/Paid generates;
   topics include intimacy; base day unchanged
-- **Public contract changed?** yes (additive) — deepen payload may include `depth_layer`;
-  Free deepen no longer runs LLM
-- **Migration required?** no — FE should render CTA body; picker UI = later step
-- **Canon updated?** yes — this note
-- **Backward compatible?** mostly — Free clients that expected full deepen text now get CTA copy
+- **Public contract changed?** yes (additive) — `GET /today/contract.depth_layer`;
+  deepen payload may include `depth_layer`; Free deepen → CTA (no LLM)
+- **Migration required?** no — FE should render offer/CTA; picker UI = step 3
+- **Canon updated?** yes — this note + SCREEN_CONTRACTS §3.3
+- **Backward compatible?** yes — additive field; Free deepen text becomes CTA copy
 ```
 
 ## Principle (locked)
@@ -60,8 +60,8 @@ v1 ship set can be **2–4** of these; product picks the first menu. Default rec
 | Base | `GET /today/contract` + day_story — **same** for Free and Paid | unchanged |
 | Topics | `money` · `intimacy` · `love` · `career` · `family` · `full_day` | **step 1** |
 | Gate | Trial/Paid generate; Free → CTA payload | **step 1** |
-| Offer menu | chips in `depth_layer.menu` | **step 1** (in deepen response) |
-| Today contract nest | expose offer without calling deepen | step 2 |
+| Offer menu | chips in `depth_layer.menu` | **step 1–2** (deepen response + `GET /today/contract`) |
+| Today contract nest | expose offer without calling deepen | **step 2** |
 | FE picker | chips after day pack | step 3 |
 | Payload | Additive `depth_layer` · **not** overwrite day_story | **step 1** |
 
