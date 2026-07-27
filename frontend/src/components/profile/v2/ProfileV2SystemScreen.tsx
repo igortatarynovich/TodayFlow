@@ -9,6 +9,7 @@ import {
   type ProfileV2ZoneId,
 } from "@/components/profile/v2/profileV2SystemCopy";
 import { ProfileDeepThemesChooser } from "@/components/profile/v2/ProfileDeepThemesChooser";
+import { ProfileNatalDecodePanel } from "@/components/profile/v2/ProfileNatalDecodePanel";
 import { ProfileBridgeScene } from "@/components/profile/v2/scenes/ProfileBridgeScene";
 import { ProfileCharacterScene } from "@/components/profile/v2/scenes/ProfileCharacterScene";
 import { ProfileEffortScene } from "@/components/profile/v2/scenes/ProfileEffortScene";
@@ -189,6 +190,10 @@ export function ProfileV2SystemScreen({
                 deepFromCore={coreProfile?.character_engine_deep_themes_v0}
                 onChanged={onDeepThemesChanged}
               />
+            </section>
+
+            <section className={styles.zone} aria-label="Расшифровка натальной карты">
+              <ProfileNatalDecodePanel />
             </section>
 
             <ProfileBridgeScene bridgeLine={journey.bridge?.line ?? null} />
@@ -440,6 +445,10 @@ function LegacyFirstScreen({
           deepFromCore={coreProfile?.character_engine_deep_themes_v0}
           onChanged={onDeepThemesChanged}
         />
+      </section>
+
+      <section className={styles.zone} aria-label="Расшифровка натальной карты">
+        <ProfileNatalDecodePanel />
       </section>
 
       <ProfileBridgeScene bridgeLine={bridgeLine} />
