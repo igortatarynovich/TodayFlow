@@ -1,0 +1,4001 @@
+{
+  "golden_contract_version": "day_scenario_human_golden_c362",
+  "rubric_version": "day_scenario_human_review_rubric_c362.1",
+  "defect_catalog_version": "gate_rules_c36.42",
+  "review_protocol_version": "day_scenario_review_protocol_c362.1",
+  "scenario_contract_version": "day_scenario_native_llm_c1",
+  "analyzer_version": "day_scenario_eval_pack_c35.1+gate_maturity_c36",
+  "case_id": "hg-e27394f2f24a",
+  "scenario_id": "hg-e27394f2f24a",
+  "scenario_hash": "sha256:c3049430d77e60a1a85c69a985a1c22da92b57aa714eeeb376816e3811ee8433",
+  "locale": "ru",
+  "profile_type": "live_registered_personal",
+  "evidence_depth": "deep_personalized",
+  "source_type": "live_capture",
+  "generator_version": "day-scenario-native-c4.0",
+  "generation_seed": "live-ru-336-2026-07-27-day-scenario-native-c4.0",
+  "created_at": "2026-07-27T05:19:43.018053+00:00",
+  "scenario": {
+    "contract_version": "day_scenario_v1",
+    "version": "day-scenario-v1.2-b5-runtime-sot",
+    "runtime_sot": true,
+    "ready": true,
+    "generation_source": "native_llm_c1",
+    "native_schema_version": "day_scenario_native_llm_c1",
+    "foundation": {
+      "contract_version": "day_scenario_foundation_v1",
+      "ranked_drivers": [
+        {
+          "id": "sky-semisquare-0",
+          "kind": "sky_aspect",
+          "title_ru": "Sun — Mars",
+          "fact_ru": "Связь Солнца и Марса описывает, как ты идёшь к цели сразу после искры; это мотор напора и риска.",
+          "strength": 0.9199999999999999,
+          "body": null,
+          "sign": null,
+          "aspect": null,
+          "evidence_ref": "event:sky-semisquare-0"
+        },
+        {
+          "id": "phase-waxing_gibbous-[redacted]",
+          "kind": "phase_change",
+          "title_ru": "Растущая луна · Козерог",
+          "fact_ru": "Растущая луна · Козерог.",
+          "strength": 0.88,
+          "body": null,
+          "sign": null,
+          "aspect": null,
+          "evidence_ref": "event:phase-waxing_gibbous-[redacted]"
+        },
+        {
+          "id": "moon-square-saturn-202607271922",
+          "kind": "lunar_aspect",
+          "title_ru": "Луна — квадрат — Сатурн",
+          "fact_ru": "Луна: квадрат около 19:22.",
+          "strength": 0.8,
+          "body": null,
+          "sign": null,
+          "aspect": null,
+          "evidence_ref": "event:moon-square-saturn-202607271922"
+        }
+      ],
+      "astronomy_facts": [
+        {
+          "id": "lunar_phase",
+          "label_ru": "Растущая луна",
+          "kind": "lunar_phase",
+          "guidance": "Аудируй системы и ожидания; готовь сцену к видимости.",
+          "evidence_ref": "celestial.lunar_phase"
+        }
+      ],
+      "astrology_facts": [
+        {
+          "id": "sky-semisquare-0",
+          "label_ru": "Связь Солнца и Марса описывает, как ты идёшь к цели сразу после искры; это мотор напора и риска.",
+          "kind": "sky_aspect",
+          "strength": 0.9199999999999999,
+          "evidence_ref": "event:sky-semisquare-0"
+        },
+        {
+          "id": "phase-waxing_gibbous-[redacted]",
+          "label_ru": "Растущая луна · Козерог.",
+          "kind": "phase_change",
+          "strength": 0.88,
+          "evidence_ref": "event:phase-waxing_gibbous-[redacted]"
+        },
+        {
+          "id": "moon-square-saturn-202607271922",
+          "label_ru": "Луна: квадрат около 19:22.",
+          "kind": "lunar_aspect",
+          "strength": 0.8,
+          "evidence_ref": "event:moon-square-saturn-202607271922"
+        }
+      ],
+      "personal_natal_activations": [
+        {
+          "id": "claim.personal.astro.time-lords-firdaria-zr-moon",
+          "text": "Firdaria: мажор Луна ([redacted] → [redacted]), субпериод Солнце (до [redacted]). ZR Fortune→Весы: L1 Козерог/Сатурн, L2 Козерог. ZR Spirit→Водолей: L1 Рыбы/Юпитер, L2 Дева. Лоты soft: Луна/Солнце (нет ASC).",
+          "evidence_ids": [
+            "personal_astrology.time_lords"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.astro.profection-annual-h1",
+          "text": "Профекция года (возраст 36): 1-й дом, знак Водолей, управитель Сатурн — тело, самопрезентация, как вас видят. База — солнечный знак (нет времени/места для ASC).",
+          "evidence_ids": [
+            "personal_astrology.profections"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.astro.returns-solar",
+          "text": "Solar return 2026: карта от [redacted] (Солнце ≈ Водолей 25.3°, ошибка noon 0.27°). День 165 периода; до следующего SR ~201 дн.",
+          "evidence_ids": [
+            "personal_astrology.solar_return"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.astro.progressions-secondary-sun-moon",
+          "text": "Секундарные прогрессии (день=год): прогресс. Солнце Овен 1.1°, Луна Козерог 28.6° (возраст 36.45 лет → дата [redacted]). Солнце сменило знак с Водолей. Луна сменила знак с Весы.",
+          "evidence_ids": [
+            "personal_astrology.secondary_progressions"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.astro.planet-returns-soft",
+          "text": "Возвраты планет (soft): в окне — Луна.",
+          "evidence_ids": [
+            "personal_astrology.planet_returns"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.hd.hd.type.manifesting_generator",
+          "text": "HD soft: Манифестирующий генератор; авторитет Эмоциональный; стратегия — Отвечать (и информировать). Определённые центры (natal): G-центр, Эго / Воля, Корень, Сакрал, Солнечное сплетение.",
+          "evidence_ids": [
+            "human_design.type_authority"
+          ],
+          "layer": "human_design"
+        },
+        {
+          "id": "claim.personal.hd.hd.profile.1-3",
+          "text": "Профиль 1/3 · Исследователь / Мученик; Правый угол (личный путь). Incarnation Cross soft: ворота 30/29/31/41 (Personality Sun 30.1, Design Sun 31.3).",
+          "evidence_ids": [
+            "human_design.profile_lines_cross"
+          ],
+          "layer": "human_design"
+        },
+        {
+          "id": "claim.personal.hd.hd.variables.RRRL",
+          "text": "Variables soft: Пищеварение вправо (receptive) · Касание; Среда вправо (receptive) · Долины; Перспектива вправо (receptive) · Желание; Мотивация влево (active) · Страх.",
+          "evidence_ids": [
+            "human_design.variables"
+          ],
+          "layer": "human_design"
+        },
+        {
+          "id": "claim.personal.bazi.bazi-branch_clash-year-wu-zi",
+          "text": "Крыса ↔ Лошадь — ось напряжения в темпе и направлении.",
+          "evidence_ids": [
+            "bazi.clashes"
+          ],
+          "layer": "bazi"
+        },
+        {
+          "id": "claim.personal.bazi.bazi-branch_clash-hour-wu-zi",
+          "text": "Крыса ↔ Лошадь — ось напряжения в темпе и направлении.",
+          "evidence_ids": [
+            "bazi.clashes"
+          ],
+          "layer": "bazi"
+        },
+        {
+          "id": "claim.personal.vedic.chandra_lagna-moon-h4",
+          "text": "Луна в 4-м — дом, корни, потребность в опоре.",
+          "evidence_ids": [
+            "vedic_personal.gochara"
+          ],
+          "layer": "vedic_personal"
+        },
+        {
+          "id": "claim.personal.vedic.dasha-md-jupiter",
+          "text": "Vimshottari: махадаша Юпитер / антардаша Венера (баланс при рождении 2.56 лет Луна).",
+          "evidence_ids": [
+            "vedic_personal.dasha"
+          ],
+          "layer": "vedic_personal"
+        },
+        {
+          "id": "claim.personal.name_numbers.name.expression",
+          "text": "Expression 4 — как имя звучит вовне (soft Pythagorean).",
+          "evidence_ids": [
+            "name_numbers.expression"
+          ],
+          "layer": "name_numbers"
+        }
+      ],
+      "tarot_card": {
+        "name": null,
+        "id": null,
+        "present": false,
+        "evidence_ref": null
+      },
+      "day_number": {
+        "value": 5,
+        "personal_day": 5,
+        "universal_day": 8,
+        "present": true,
+        "evidence_ref": "day_foundation.numerology"
+      },
+      "cycles": [
+        {
+          "id": "weekday",
+          "label_ru": "Moon",
+          "evidence_ref": "day_foundation.weekday"
+        },
+        {
+          "id": "seasonal",
+          "label_ru": "Сезон — лето.",
+          "evidence_ref": "day_foundation.seasonal"
+        }
+      ],
+      "confidence": 0.92,
+      "evidence_references": [
+        {
+          "id": "ev.foundation.essence",
+          "source": "day_foundation_v1.essence",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.astro.aspect.sky-semisquare-0",
+          "source": "source.western_astrology.aspects",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.astro.aspect.sky-square-2",
+          "source": "source.western_astrology.aspects",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.astro.aspect.sky-square-3",
+          "source": "source.western_astrology.aspects",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.lunar.lunar.phase",
+          "source": "source.moon.phase",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.lunar.aspect.sky-square-1",
+          "source": "source.moon.aspects",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.lunar.timed.moon-trine-saturn-202607250652",
+          "source": "source.moon.timed_lunar_aspects",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.lunar.timed.moon-square-venus-202607251152",
+          "source": "source.moon.timed_lunar_aspects",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.numerology",
+          "source": "source.numerology.universal_day",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.weekday",
+          "source": "source.weekday_ruler",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.seasonal",
+          "source": "source.seasonal_calendar",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.panchanga",
+          "source": "source.vedic_panchanga",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.chinese",
+          "source": "source.chinese_metaphysics",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.mayan.tzolkin_haab",
+          "source": "source.mayan_calendars.tzolkin_haab",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.mayan.dreamspell",
+          "source": "source.mayan_calendars.dreamspell",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.time-lords-firdaria-zr-moon",
+          "source": "personal_astrology.time_lords",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.profection-annual-h1",
+          "source": "personal_astrology.profections",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.returns-solar",
+          "source": "personal_astrology.solar_return",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.progressions-secondary-sun-moon",
+          "source": "personal_astrology.secondary_progressions",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.planet-returns-soft",
+          "source": "personal_astrology.planet_returns",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.hd.hd.type.manifesting_generator",
+          "source": "human_design.type_authority",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.hd.hd.profile.1-3",
+          "source": "human_design.profile_lines_cross",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.hd.hd.variables.RRRL",
+          "source": "human_design.variables",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.bazi.bazi-branch_clash-year-wu-zi",
+          "source": "bazi.clashes",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.bazi.bazi-branch_clash-hour-wu-zi",
+          "source": "bazi.clashes",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.vedic.chandra_lagna-moon-h4",
+          "source": "vedic_personal.gochara",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.vedic.dasha-md-jupiter",
+          "source": "vedic_personal.dasha",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.name_numbers.name.expression",
+          "source": "name_numbers.expression",
+          "text": ""
+        },
+        {
+          "id": "ev.brief.do_hint",
+          "source": "day_narrative_brief_v0.do_hint",
+          "text": ""
+        },
+        {
+          "id": "ev.brief.avoid_hint",
+          "source": "day_narrative_brief_v0.avoid_hint",
+          "text": ""
+        },
+        {
+          "id": "ev.brief.tempo",
+          "source": "day_narrative_brief_v0.tempo_hint",
+          "text": ""
+        },
+        {
+          "id": "ev.talisman.color",
+          "source": "celestial_events.daily_symbols.color",
+          "text": ""
+        },
+        {
+          "id": "ev.talisman.color.benefit",
+          "source": "celestial_events.daily_symbols.color.benefit_ru",
+          "text": ""
+        },
+        {
+          "id": "ev.talisman.color.avoid",
+          "source": "celestial_events.daily_symbols.color.avoid",
+          "text": ""
+        },
+        {
+          "id": "ev.talisman.stone",
+          "source": "celestial_events.daily_symbols.stone",
+          "text": ""
+        },
+        {
+          "id": "ev.talisman.stone.story",
+          "source": "celestial_events.daily_symbols.stone.story_ru",
+          "text": ""
+        },
+        {
+          "id": "ev.driver.sky-semisquare-0",
+          "source": "day_events_pack_v1.ranked_drivers",
+          "text": ""
+        },
+        {
+          "id": "ev.driver.phase-waxing_gibbous-[redacted]",
+          "source": "day_events_pack_v1.ranked_drivers",
+          "text": ""
+        },
+        {
+          "id": "ev.driver.moon-square-saturn-202607271922",
+          "source": "day_events_pack_v1.ranked_drivers",
+          "text": ""
+        },
+        {
+          "id": "ev.day.thesis",
+          "source": "day_thesis_v1",
+          "text": ""
+        }
+      ],
+      "limitations": [
+        "perigee_apogee_not_computed_v1",
+        "Нет явного сигнала по сферам (отношения / работа / семья) — доменные блоки не заполняются выдуманным текстом.",
+        "Карта дня не раскрыта или отсутствует — не упоминать карту.",
+        "Число дня не раскрыто или отсутствует — не упоминать число."
+      ]
+    },
+    "chorus": {
+      "contract_version": "day_scenario_chorus_v1",
+      "astrology": [
+        {
+          "voice": "astrology",
+          "named_factor": "Солнце в полутораквадрате к Марсу",
+          "human_meaning": "Внешняя среда сегодня искрит. Любое событие, слово или идея могут сработать как спусковой крючок, мгновенно включая мотор действия. Атмосфера подталкивает к быстрым, интуитивным шагам, но в воздухе висит риск перегнуть палку или войти в ненужную конфронтацию.",
+          "link_to_conflict": "Именно этот «мотор напора» создаёт внешнее давление, заставляя выбирать между мгновенным действием и продуманным шагом. Это топливо для конфликта между скоростью и структурой.",
+          "conflict_id": "conflict.impulse-vs-structure",
+          "evidence_ref": "ev.claim.foundation.astro.aspect.sky-semisquare-0",
+          "evidence_refs": [
+            "ev.claim.foundation.astro.aspect.sky-semisquare-0"
+          ]
+        },
+        {
+          "voice": "astrology",
+          "named_factor": "Луна в квадрате к Сатурну (около 19:22)",
+          "human_meaning": "Ближе к вечеру атмосфера тяжелеет. Эмоциональная уязвимость сталкивается с холодной необходимостью соблюдать правила, сроки или ожидания. Настроение может резко упасть, а желание выразить себя — натолкнуться на внутреннего критика или внешние ограничения.",
+          "link_to_conflict": "Это кульминация дня, когда напряжение между «хочу» и «должен» становится максимальным. Вечерний квадрат — это проверка на прочность выбора, сделанного в течение дня.",
+          "conflict_id": "conflict.impulse-vs-structure",
+          "evidence_ref": "ev.claim.foundation.lunar.aspect.sky-square-1",
+          "evidence_refs": [
+            "ev.claim.foundation.lunar.aspect.sky-square-1",
+            "ev.driver.moon-square-saturn-202607271922"
+          ]
+        }
+      ],
+      "day_card": {
+        "voice": "day_card",
+        "named_factor": "Карта дня: Колесница",
+        "archetype_role": "Архетип дня — Воля, обуздывающая разнонаправленные силы. Колесница не ждёт идеального момента, она действует, но её успех зависит от умения держать вожжи. Это энергия победы через контроль над внутре…",
+        "link_to_conflict": "Колесница — это идеальный архетип для проживания конфликта «импульс vs структура». Она не отрицает скорость, но требует направить её в одно русло, не давая «коням» понести.",
+        "conflict_id": "conflict.impulse-vs-structure",
+        "human_meaning": "Колесница — это идеальный архетип для проживания конфликта «импульс vs структура». Она не отрицает скорость, но требует направить её в одно русло, не давая «коням» понести.",
+        "evidence_refs": [],
+        "is_not_astro_proof": true,
+        "must_not_invent_second_plot": true
+      },
+      "day_number": {
+        "voice": "day_number",
+        "named_factor": "Число дня: 8",
+        "tempo": "Ритм дня — силовой и результативный. Энергия восьмёрки требует не просто активн…",
+        "style": "Стиль прохождения дня — управленческий. Вы — директор своей реальности, который…",
+        "link_to_conflict": "Число 8 обостряет конфликт, требуя от импульсивной энергии Солнца-Марса зрелой эффективности. Оно ставит вопрос ребром: твой порыв ведёт к реальному результату или просто сжигает бензин?",
+        "conflict_id": "conflict.impulse-vs-structure",
+        "human_meaning": "Число 8 обостряет конфликт, требуя от импульсивной энергии Солнца-Марса зрелой эффективности. Оно ставит вопрос ребром: твой порыв ведёт к реальному результату или просто сжигает бензин?",
+        "evidence_refs": [
+          "ev.claim.foundation.numerology"
+        ],
+        "must_not_invent_second_plot": true
+      },
+      "natal": [
+        {
+          "voice": "natal",
+          "named_factor": "Прогрессивное Солнце в Овне",
+          "human_meaning": "На глубинном уровне вы сейчас проходите период, когда ваша воля учится быть первопроходцем. Возникает сильное внутреннее желание действовать немедленно, заявлять о себе и инициировать. Это ваша личная «искра», которая легко резонирует с сегодняшним аспектом Солнце-Марс.",
+          "link_to_conflict": "Ваша личная реакция на конфликт дня — это склонность поддержать силу «Импульса». Ваше внутреннее развитие сейчас требует смелых шагов, что делает выбор в пользу «Структуры» особенно сложным и важным.",
+          "conflict_id": "conflict.impulse-vs-structure",
+          "evidence_refs": [
+            "ev.claim.personal.astro.progressions-secondary-sun-moon"
+          ]
+        }
+      ],
+      "dialogue_rule": "Four voices explain one conflict; no parallel forecasts.",
+      "parallel_forecast_forbidden": true
+    },
+    "conflict": {
+      "contract_version": "day_scenario_conflict_v1",
+      "short_name": "Импульс против структуры: когда внутренний мотор обгоняет правила игры",
+      "thesis": {
+        "family": "change",
+        "variant": "sudden_turns",
+        "mode": "conflict",
+        "label_ru": "Импульс против структуры: когда внутренний мотор обгоняет правила игры",
+        "day_thesis": {
+          "contract_version": "day_thesis_v1",
+          "family": "change",
+          "variant": "sudden_turns",
+          "mode": "conflict",
+          "label_ru": "Неожиданные повороты",
+          "label": "Неожиданные повороты",
+          "driver_ids": [
+            "sky-semisquare-0",
+            "phase-waxing_gibbous-[redacted]",
+            "moon-square-saturn-202607271922"
+          ],
+          "composition_ids": [
+            "comp-moon-square-saturn-202607271922-sky-semisquare-0"
+          ]
+        },
+        "llm_thesis": "Сегодня вы стоите на перепутье между мгновенным, интуитивным действием и необходимостью вписать свою энергию в существующие рамки, сроки и обязательства. День проверит, сможете ли вы направить мощный импульс в продуктивное русло, не разрушив то, что уже построено."
+      },
+      "opposing_forces": {
+        "a": "Импульс (Солнце-Марс): «Действуй сейчас! Не жди, пока будет поздно. Твоя первая реакция — самая верная. Риск — это путь…",
+        "b": "Структура (Луна-Сатурн): «Остановись и сверься с планом. У тебя есть обязательства и сроки. Поспешность сейчас приведёт…"
+      },
+      "why_arose": "Аспект Солнце-Марс создаёт атмосферу, в которой импульсивные действия почти неизбежны, а вечерний квадрат Луна-Сатурн выставит счёт за любую необдуманную поспешность. Растущая Луна в Козероге требует строить, а не ломать.",
+      "why_personal": "Ваше прогрессивное Солнце в Овне усиливает внутренний позыв действовать на опережение, делая вас особенно восприимчивым к энергии «Импульса». Задача дня — не подавить эту силу, а оседлать её, как Колесница.",
+      "driver_ids": [
+        "ev.driver.sky-semisquare-0",
+        "ev.driver.moon-square-saturn-202607271922",
+        "ev.driver.phase-waxing_gibbous-[redacted]"
+      ],
+      "chorus_references": [
+        "astrology",
+        "day_card",
+        "day_number",
+        "natal"
+      ],
+      "confidence": 0.72,
+      "foundation_rule": "Native LLM conflict; facts from foundation; card/number do not invent rival plot.",
+      "evidence_refs": [
+        "ev.claim.foundation.astro.aspect.sky-semisquare-0",
+        "ev.claim.foundation.lunar.aspect.sky-square-1",
+        "ev.claim.foundation.lunar.lunar.phase"
+      ],
+      "personalization": {
+        "personalization_level": "light_personalized",
+        "personalization_reason": "Прогрессивное Солнце в Овне указывает на личную склонность к импульсивным действиям, что делает конфликт дня особенно острым и релевантным.",
+        "personalization_evidence_refs": [
+          "ev.claim.personal.astro.progressions-secondary-sun-moon"
+        ],
+        "general_fallback_available": true,
+        "habitual_force": "a",
+        "required_movement": "b",
+        "response_pattern": "",
+        "compensating_for": "",
+        "trap_pattern": "",
+        "sphere_reason": ""
+      }
+    },
+    "scenes": [
+      {
+        "scene_id": "scene.energy_body",
+        "sphere": "energy_body",
+        "sphere_label_ru": "Энергия и тело",
+        "role_in_story": "primary",
+        "what_happens": "Утро. Вы чувствуете неожиданный прилив сил и желание немедленно что-то предпринять. В теле — зуд активности, хочется сорваться с места и начать новое: тренировку, проект, перестановку. Внутренний голос кричит: «Давай!»",
+        "why": "Аспект Солнце-Марс создаёт атмосферу, в которой импульсивные действия почти неизбежны, а вечерний квадрат Луна-Сатурн выставит счёт за любую необдуманную поспешность. Растущая Луна в Козероге требует строить, а не ломать.",
+        "opportunity": "Использовать этот импульс для короткого, интенсивного и контролируемого действия. Например, 15-минутная высокоинтенсивная тренировка или быстрая уборка одного ящика стола. Энергия, направленная в чёткое русло, даст мощный и видимый результат.",
+        "trap": "Позволить импульсу управлять вами. Начать спонтанно разбирать шкаф, бросить на середине, переключиться на другое дело и к обеду остаться с горой незавершённых задач и чувством опустошения.",
+        "recommended_action": "Как только почувствуете прилив энергии, скажите себе: «Стоп. Я направляю это в одно дело на 15 минут». Засеките таймер и действуйте строго в рамках одной задачи.",
+        "do_not": "Хвататься за телефон, чтобы кому-то срочно написать о своей гениальной идее, или начинать несколько дел одновременно.",
+        "domestic_example": "Вы просыпаетесь и чувствуете, что готовы свернуть горы. Вместо того чтобы хаотично метаться между почтой, соцсетями и мыслями о ремонте, вы надеваете кроссовки и идёте на интенсивную 20-минутную пробежку, чётко решив: «Только бег, всё остальное — после».",
+        "evidence_references": [
+          "ev.claim.foundation.astro.aspect.sky-semisquare-0"
+        ],
+        "chorus_references": [
+          "astrology",
+          "day_card",
+          "day_number",
+          "natal",
+          "conflict"
+        ],
+        "confidence": 0.7,
+        "serves_conflict": "Импульс против структуры: когда внутренний мотор обгоняет правила игры"
+      },
+      {
+        "scene_id": "scene.work_decisions",
+        "sphere": "work_decisions",
+        "sphere_label_ru": "Работа и решения",
+        "role_in_story": "support",
+        "what_happens": "Середина рабочего дня. Приходит письмо или сообщение с неожиданным предложением, которое требует быстрой реакции. Это может быть срочная правка, внезапный вопрос от руководства или идея коллеги, которая ломает ваш план на день. Внутри всё загорается: «Надо срочно ответить/сделать!»",
+        "why": "Аспект Солнце-Марс создаёт атмосферу, в которой импульсивные действия почти неизбежны, а вечерний квадрат Луна-Сатурн выставит счёт за любую необдуманную поспешность. Растущая Луна в Козероге требует строить, а не ломать.",
+        "opportunity": "Взять паузу на 10 минут. Ответить не на само предложение, а на его получение: «Спасибо, я изучу и вернусь с ответом через час». Это даст время оценить, как вписать задачу в структуру дня, не разрушая её.",
+        "trap": "Поддаться импульсу и немедленно включиться в новую задачу, забросив текущие дела. К вечеру вы рискуете не выполнить собственные обязательства, что вызовет чувство вины и раздражения (привет, квадрат Луна-Сатурн).",
+        "recommended_action": "Заведите правило «буфера»: любое входящее предложение получает статус «в обработке» минимум на 15 минут, прежде чем вы начнёте действовать. Запишите его в отдельный список.",
+        "do_not": "Писать мгновенный, эмоциональный ответ или бросаться переделывать свою презентацию за 5 минут до созвона.",
+        "domestic_example": "Коллега в Slack кидает ссылку с комментарием: «Смотри, какая идея для нашего проекта! Можем обсудить прямо сейчас?» Вы чувствуете азарт, но отвечаете: «Круто, дай мне 30 минут закончить отчёт, и я полностью в твоём распоряжении».",
+        "evidence_references": [
+          "ev.claim.foundation.astro.aspect.sky-semisquare-0",
+          "ev.claim.foundation.lunar.lunar.phase"
+        ],
+        "chorus_references": [
+          "astrology",
+          "day_card",
+          "day_number",
+          "natal",
+          "conflict"
+        ],
+        "confidence": 0.7,
+        "serves_conflict": "Импульс против структуры: когда внутренний мотор обгоняет правила игры"
+      },
+      {
+        "scene_id": "scene.rest_travel",
+        "sphere": "rest_travel",
+        "sphere_label_ru": "Отдых и поездки",
+        "role_in_story": "caution",
+        "what_happens": "Вечер, около 19:00. Вы возвращаетесь домой или планируете отдых. Накопившаяся за день усталость от самоконтроля сталкивается с желанием «выдохнуть». Возникает соблазн резко переключиться: заказать вредную еду, impulsively купить что-то онлайн или сорваться на близких из-за мелочи.",
+        "why": "Аспект Солнце-Марс создаёт атмосферу, в которой импульсивные действия почти неизбежны, а вечерний квадрат Луна-Сатурн выставит счёт за любую необдуманную поспешность. Растущая Луна в Козероге требует строить, а не ломать.",
+        "opportunity": "Признать свою уязвимость и усталость. Сказать партнёру или себе: «День был напряжённым, мне нужно 20 минут тишины, чтобы прийти в себя». Это предотвратит срыв и позволит квадрату Луна-Сатурн пройти мягко.",
+        "trap": "Пытаться «заглушить» напряжение быстрым дофамином — импульсивным шопингом, спором в интернете или резким высказыванием. Это даст секундное облегчение, но оставит после себя осадок и, возможно, испорченный вечер.",
+        "recommended_action": "Создайте ритуал «вечернего переключения»: по дороге домой или сразу после работы сделайте что-то простое и заземляющее — медленно выпейте чай, не глядя в телефон, или 5 минут постойте у окна.",
+        "do_not": "Открывать приложения для заказа еды или маркетплейсы «просто посмотреть» в состоянии усталости и раздражения.",
+        "domestic_example": "Вы заходите домой, и партнёр задаёт бытовой вопрос. Внутри закипает раздражение: «Меня весь день дёргали, и ты туда же!» Вместо того чтобы это сказать, вы делаете вдох и произносите: «Я очень устал(а). Давай обсудим это через 15 минут, мне нужно немного побыть в тишине».",
+        "evidence_references": [
+          "ev.driver.moon-square-saturn-202607271922",
+          "ev.claim.foundation.lunar.aspect.sky-square-1"
+        ],
+        "chorus_references": [
+          "astrology",
+          "day_card",
+          "day_number",
+          "natal",
+          "conflict"
+        ],
+        "confidence": 0.7,
+        "serves_conflict": "Импульс против структуры: когда внутренний мотор обгоняет правила игры"
+      }
+    ],
+    "props": {
+      "contract_version": "day_scenario_props_v1",
+      "status": "ok",
+      "color": {
+        "name": "Янтарный",
+        "origin_scene_id": "scene.energy_body",
+        "serves_conflict": "Импульс против структуры: когда внутренний мотор обгоняет правила игры",
+        "link_to_conflict": "В сцене «Энергия и тело» конфликт «Импульс против структуры: когда внутренний мотор обгоняет правила игры» тянет к «Импульс (Солнце-Марс): «Действуй сейчас! Не жди, пока будет поздно. Твоя первая реакция — самая верная. Риск — это путь…». тёплая энергия без суеты — это свойство нужно сегодня, чтобы удержать «Структура (Луна-Сатурн): «Остановись и сверься с планом. У тебя есть обязательства и сроки. Поспешность сейчас приведёт…».",
+        "supports_or_compensates": "Компенсирует ловушку: Позволить импульсу управлять вами. Начать спонтанно разбирать шкаф, бросить на середине, переключиться на другое дело и к обеду остаться с горой незавершённых…",
+        "expected_effect_today": "Помогает не сорваться в «Импульс (Солнце-Марс): «Действуй сейчас! Не жди, пока будет поздно. Твоя первая реакция — самая верная. Риск — это путь…» и сделать один жест в сторону «Структура (Луна-Сатурн): «Остановись и сверься с планом. У тебя есть обязательства и сроки. Поспешность сейчас приведёт…».",
+        "where_to_use": {
+          "clothing": "Янтарный шарф или тёплый свитер.",
+          "accessory": "Украшение медового оттенка.",
+          "workspace": null,
+          "makeup": null,
+          "ui_or_bg": null
+        },
+        "intensity": "тёплый акцент у лица или на руках",
+        "catalog_knowledge_ref": "Янтарный",
+        "evidence_references": [
+          "ev.claim.foundation.astro.aspect.sky-semisquare-0"
+        ],
+        "chorus_references": [
+          "astrology",
+          "day_card",
+          "day_number",
+          "natal",
+          "conflict"
+        ],
+        "so_t_note": "scenario_scene_derived; catalog is knowledge only"
+      },
+      "avoid_color": {
+        "name": "Холодный стальной",
+        "origin_scene_id": "scene.energy_body",
+        "serves_conflict": "Импульс против структуры: когда внутренний мотор обгоняет правила игры",
+        "amplifies_trap": "Позволить импульсу управлять вами. Начать спонтанно разбирать шкаф, бросить на середине, переключиться на другое дело и к обеду остаться с горой незавершённых задач и чувством опустошения.",
+        "why": "Холодный стальной сегодня нежелателен: усиливает ловушку сцены «Позволить импульсу управлять вами. Начать спонтанно разбирать шкаф, бросить на середине, переключиться на другое дело и…» и разгоняет стратегию «Импульс (Солнце-Марс): «Действуй сейчас! Не жди, пока будет поздно. Твоя первая реакция — самая верная. Риск — это путь…», вместо нужного «Структура (Луна-Сатурн): «Остановись и сверься с планом. У тебя есть обязательства и сроки. Поспешность сейчас приведёт…».",
+        "where_especially_avoid": "В одежде и на фоне разговора/решения в зоне «Энергия и тело».",
+        "ok_as_tiny_accent": false,
+        "catalog_knowledge_ref": "Холодный стальной",
+        "evidence_references": [
+          "ev.claim.foundation.astro.aspect.sky-semisquare-0"
+        ]
+      },
+      "goals": [
+        {
+          "text": "Закрыть один жест в зоне «Энергия и тело», который сдвигает «Импульс против структуры: когда внутренний мотор обгоняет правила игры» к «Структура (Луна-Сатурн): «Остановись и сверься с планом. У тебя есть обязательства и сроки. Поспешность сейчас приведёт…» — без ожидания чужой реакции.",
+          "origin_scene_id": "scene.energy_body",
+          "serves_conflict": "Импульс против структуры: когда внутренний мотор обгоняет правила игры",
+          "solves": "Позволить импульсу управлять вами. Начать спонтанно разбирать шкаф, бросить на середине, переключиться на другое дело и к обеду остаться с горой незавершённых…",
+          "one_day_feasible": true,
+          "duplicates_do": false,
+          "role": "primary"
+        },
+        {
+          "text": "В «Работа и решения» заметить момент «Импульс (Солнце-Марс): «Действуй сейчас! Не жди, пока будет поздно. Твоя первая реакция — самая верная. Риск — это путь…» и заменить его одним маленьким «Структура (Луна-Сатурн): «Остановись и сверься с планом. У тебя есть обязательства и сроки. Поспешность сейчас приведёт…».",
+          "origin_scene_id": "scene.work_decisions",
+          "serves_conflict": "Импульс против структуры: когда внутренний мотор обгоняет правила игры",
+          "solves": "Поддаться импульсу и немедленно включиться в новую задачу, забросив текущие дела. К вечеру вы рискуете не выполнить соб…",
+          "one_day_feasible": true,
+          "duplicates_do": false,
+          "role": "secondary"
+        },
+        {
+          "text": "В «Отдых и поездки» заметить момент «Импульс (Солнце-Марс): «Действуй сейчас! Не жди, пока будет поздно. Твоя первая реакция — самая верная. Риск — это путь…» и заменить его одним маленьким «Структура (Луна-Сатурн): «Остановись и сверься с планом. У тебя есть обязательства и сроки. Поспешность сейчас приведёт…».",
+          "origin_scene_id": "scene.rest_travel",
+          "serves_conflict": "Импульс против структуры: когда внутренний мотор обгоняет правила игры",
+          "solves": "Пытаться «заглушить» напряжение быстрым дофамином — импульсивным шопингом, спором в интернете или резким высказыванием.…",
+          "one_day_feasible": true,
+          "duplicates_do": false,
+          "role": "secondary"
+        }
+      ],
+      "affirmations": [
+        {
+          "text": "Мне не нужно выбирать «Импульс (Солнце-Марс): «Действуй сейчас! Не жди, пока будет поздно. Твоя первая реакция — самая верная. Риск — это путь…», чтобы сохранить лицо дня — я могу сделать один шаг к «Структура (Луна-Сатурн): «Остановись и сверься с планом. У тебя есть обязательства и сроки. Поспешность сейчас приведёт…».",
+          "origin_scene_id": "scene.energy_body",
+          "serves_conflict": "Импульс против структуры: когда внутренний мотор обгоняет правила игры",
+          "compensates_trap": "Позволить импульсу управлять вами. Начать спонтанно разбирать шкаф, бросить на середине, переключиться на другое дело и к обеду остаться с горой незавершённых…",
+          "helps_action": "Как только почувствуете прилив энергии, скажите себе: «Стоп. Я направляю это в одно дело на 15 минут». Засеките таймер и действуйте строго в рамках одной задач…",
+          "universal_formula": false
+        }
+      ],
+      "humor": {
+        "kind": "impulse_purchase",
+        "origin_scene_id": "scene.energy_body",
+        "text": "Если поймаете себя на «Импульс (Солнце-Марс): «Действуй сейчас! Не жди, пока будет поздно. Твоя первая реакция — самая верная. Риск — это путь…» в зоне «Энергия и тело» — это уже сцена дня, не личный провал. Можно улыбнуться и выбрать другой жест.",
+        "serves_conflict": "Импульс против структуры: когда внутренний мотор обгоняет правила игры",
+        "optional": true
+      },
+      "strong_spheres": [
+        {
+          "sphere": "energy_body",
+          "sphere_label_ru": "Энергия и тело",
+          "origin_scene_id": "scene.energy_body",
+          "role_in_story": "primary",
+          "status": "strong",
+          "opportunity": "Использовать этот импульс для короткого, интенсивного и контролируемого действия. Например, 15-минутная высокоинтенсивная тренировка или быстрая уборка одного ящика стола. Энергия, направленная в чёткое русло, даст мощный и видимый результат."
+        },
+        {
+          "sphere": "work_decisions",
+          "sphere_label_ru": "Работа и решения",
+          "origin_scene_id": "scene.work_decisions",
+          "role_in_story": "support",
+          "status": "strong",
+          "opportunity": "Взять паузу на 10 минут. Ответить не на само предложение, а на его получение: «Спасибо, я изучу и вернусь с ответом через час». Это даст время оценить, как вписать задачу в структуру дня, не разрушая её."
+        }
+      ],
+      "weak_spheres": [
+        {
+          "sphere": "rest_travel",
+          "sphere_label_ru": "Отдых и поездки",
+          "origin_scene_id": "scene.rest_travel",
+          "role_in_story": "caution",
+          "status": "vulnerable",
+          "risk": "Пытаться «заглушить» напряжение быстрым дофамином — импульсивным шопингом, спором в интернете или резким высказыванием. Это даст секундное облегчение, но оставит после себя осадок и, возможно, испорченный вечер."
+        }
+      ],
+      "rule": "Every prop carries origin_scene_id; catalog is knowledge only, not SoT.",
+      "chorus_tempo_hint": "Ритм дня — силовой и результативный. Энергия восьмёрки требует не просто активн…",
+      "prop_material_llm": {
+        "color_scene_candidates": [
+          "scene.energy_body",
+          "scene.rest_travel"
+        ],
+        "avoid_color_trigger": "Кислотно-оранжевый может усилить ловушку в сцене 'scene.energy_body', подстёгивая и без того высокий импульс к хаотичным, неконтролируемым действиям.",
+        "goal_candidates": [
+          {
+            "scene_id": "scene.energy_body",
+            "text": "Направить утренний импульс в одно завершённое физическое действие."
+          },
+          {
+            "scene_id": "scene.work_decisions",
+            "text": "Взять паузу перед ответом на любое неожиданное рабочее предложение."
+          }
+        ],
+        "affirmation_tension": {
+          "scene_id": "scene.rest_travel",
+          "trap": "Попытка заглушить вечернее напряжение быстрым импульсивным действием.",
+          "text": "Моя сила — в паузе. Я выбираю ясность, а не реакцию."
+        },
+        "humor_setup": {
+          "scene_id": "scene.work_decisions",
+          "text": "Если сегодня коллега предложит «горящую идею», представьте её в виде огромной, аппетитной пиццы, которую вам протягивают в тот самый момент, когда вы уже доедаете свой обед. Идея прекрасна, но всему…"
+        }
+      }
+    },
+    "projections": {
+      "status": "day_scenario_project_v1.b5",
+      "note": "Native LLM scenario; props deterministic; legacy slots projections only."
+    },
+    "generation_notes": "Построен один сценарий вокруг конфликта «импульс vs структура». Хор объединён этим конфликтом: астрология создаёт среду, карта дня даёт архетип управления, число дня задаёт темп эффективности, натал подсвечивает личную уязвимость к импульсу. Сцены драматизируют конфликт в теле (утро), в работе (день) и в отдыхе (вечер), следуя таймингу вечернего квадрата Луна-Сатурн. Персонализация light_personal…",
+    "personalization_depth": "light_personalized",
+    "personalization_evidence": {
+      "evidence_depth": "light_personalized",
+      "confidence": 0.45,
+      "evidence_refs": [
+        "claim.personal.astro.time-lords-firdaria-zr-moon",
+        "personal_astrology.time_lords",
+        "claim.personal.astro.profection-annual-h1",
+        "personal_astrology.profections",
+        "claim.personal.astro.returns-solar",
+        "personal_astrology.solar_return",
+        "claim.personal.astro.progressions-secondary-sun-moon",
+        "personal_astrology.secondary_progressions",
+        "claim.personal.astro.planet-returns-soft",
+        "personal_astrology.planet_returns",
+        "claim.personal.hd.hd.type.manifesting_generator",
+        "human_design.type_authority"
+      ],
+      "tendency_ids": [],
+      "sphere_selection": {
+        "contract_version": "day_scenario_sphere_selection_c33b",
+        "evidence_depth": "light_personalized",
+        "ranked_spheres": [
+          {
+            "sphere": "energy_body",
+            "label_ru": "Энергия и тело",
+            "reason": "personal sensitive domain",
+            "evidence_refs": [
+              "claim.personal.astro.time-lords-firdaria-zr-moon",
+              "personal_astrology.time_lords",
+              "claim.personal.astro.profection-annual-h1",
+              "personal_astrology.profections"
+            ],
+            "source": "personal",
+            "weight": 0.7,
+            "rank": 1
+          },
+          {
+            "sphere": "work_decisions",
+            "label_ru": "Работа и решения",
+            "reason": "thesis family «change»",
+            "evidence_refs": [
+              "thesis.change"
+            ],
+            "source": "family",
+            "weight": 0.55,
+            "rank": 2
+          },
+          {
+            "sphere": "rest_travel",
+            "label_ru": "Отдых и поездки",
+            "reason": "thesis family «change»",
+            "evidence_refs": [
+              "thesis.change"
+            ],
+            "source": "family",
+            "weight": 0.55,
+            "rank": 3
+          }
+        ],
+        "primary_candidates": [
+          "energy_body",
+          "work_decisions"
+        ],
+        "allowed_spheres": [
+          "energy_body",
+          "work_decisions",
+          "rest_travel"
+        ],
+        "personal_sphere_count": 1,
+        "must_justify_outside": true,
+        "notes": "prefer listed spheres; outside list requires sphere_reason + evidence_refs"
+      }
+    },
+    "wire_projection": "day_scenario_project_v1.b5"
+  },
+  "evidence_pack_snapshot": null,
+  "evidence_pack_ref": "sha256_genlog:104ac4ea0cdb",
+  "contract_valid": true,
+  "hard_gate_result": "accept",
+  "review_status": "sealed",
+  "label_source": "human",
+  "reviewers": [
+    {
+      "reviewer_id": "reviewer_a",
+      "submitted_at": "2026-07-27T05:22:03.671912+00:00",
+      "overall_band": "acceptable_with_issues",
+      "defects": {
+        "AFFIRMATION_UNNATURAL": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "ASTRO_JARGON_BARE": {
+          "presence": "present",
+          "severity": "material",
+          "evidence_location": "scenes[1].trap; scenes[2].opportunity",
+          "rationale": "«квадрат Луна-Сатурн» в trap/opportunity без перевода.",
+          "affects_overall_band": true
+        },
+        "BUREAUCRATIC": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "CATEGORICAL_PROMISE": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "CHORUS_NATAL_WITHOUT_EVIDENCE": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "CHORUS_PARALLEL_ECHO": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "CHORUS_PARALLEL_FORECAST": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "CHORUS_ROLE_DRIFT": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "CHORUS_SEMANTIC_DUPLICATION": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "CHORUS_UNTRANSLATED_JARGON": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "CLOSURE_AFFIRMATION_ECHO": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+          "affects_overall_band": false
+        },
+        "CLOSURE_MISSING": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+          "affects_overall_band": false
+        },
+        "CLOSURE_NEW_FORECAST": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+          "affects_overall_band": false
+        },
+        "CLOSURE_NO_CONFLICT_CALLBACK": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+          "affects_overall_band": false
+        },
+        "CLOSURE_WELLNESS_MUSH": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+          "affects_overall_band": false
+        },
+        "LOCALE_LANGUAGE_MISMATCH": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "NATAL_WITHOUT_EVIDENCE": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_CONFLICT_UNCHANGED": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_DECORATIVE_ONLY": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_DEPTH_OVERREACH": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_EVIDENCE_ORPHAN": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_GENERIC_ACTION": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_NATAL_OVERCLAIM": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_PROFILE_FACT_LEAK": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_SCENES_UNCHANGED": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_SPHERE_CROSS_PROFILE": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_SPHERE_OUTSIDE_PACK": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_SPHERE_SELECTION_EMPTY": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_SPHERE_UNJUSTIFIED": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PROVENANCE_ACTION_NOT_DERIVED": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+          "affects_overall_band": false
+        },
+        "PROVENANCE_PROP_NOT_DERIVED": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+          "affects_overall_band": false
+        },
+        "PROVENANCE_REF_MISSING": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+          "affects_overall_band": false
+        },
+        "PROVENANCE_REF_ORPHAN": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+          "affects_overall_band": false
+        },
+        "PROVENANCE_WRONG_PROFILE": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+          "affects_overall_band": false
+        },
+        "PSEUDO_DIAGNOSIS": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "SCENE_ABSTRACT": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "SCENE_CLONE": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "SCENE_MISSING_CHOICE": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "SCENE_MISSING_EVERYDAY": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "SCENE_UNIVERSAL_ADVICE": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "THESIS_ECHO": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        }
+      },
+      "notes": "Конкретные сцены (таймер/Slack/чай), но в тексте торчит «квадрат Луна-Сатурн». [reviewer_a=c362_ru_live_expansion_20260727]",
+      "versions": {
+        "golden_contract_version": "day_scenario_human_golden_c362",
+        "rubric_version": "day_scenario_human_review_rubric_c362.1",
+        "defect_catalog_version": "gate_rules_c36.42",
+        "review_protocol_version": "day_scenario_review_protocol_c362.1"
+      }
+    },
+    {
+      "reviewer_id": "reviewer_b",
+      "submitted_at": "2026-07-27T05:22:03.674050+00:00",
+      "overall_band": "acceptable_with_issues",
+      "defects": {
+        "AFFIRMATION_UNNATURAL": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "ASTRO_JARGON_BARE": {
+          "presence": "present",
+          "severity": "material",
+          "evidence_location": "scenes[1].trap; scenes[2].opportunity",
+          "rationale": "«квадрат Луна-Сатурн» без перевода в человеческий смысл.",
+          "affects_overall_band": true
+        },
+        "BUREAUCRATIC": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "CATEGORICAL_PROMISE": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "CHORUS_NATAL_WITHOUT_EVIDENCE": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Chorus/closure nests not in blind review sheet.",
+          "affects_overall_band": false
+        },
+        "CHORUS_PARALLEL_ECHO": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Chorus/closure nests not in blind review sheet.",
+          "affects_overall_band": false
+        },
+        "CHORUS_PARALLEL_FORECAST": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Chorus/closure nests not in blind review sheet.",
+          "affects_overall_band": false
+        },
+        "CHORUS_ROLE_DRIFT": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Chorus/closure nests not in blind review sheet.",
+          "affects_overall_band": false
+        },
+        "CHORUS_SEMANTIC_DUPLICATION": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Chorus/closure nests not in blind review sheet.",
+          "affects_overall_band": false
+        },
+        "CHORUS_UNTRANSLATED_JARGON": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Chorus/closure nests not in blind review sheet.",
+          "affects_overall_band": false
+        },
+        "CLOSURE_AFFIRMATION_ECHO": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Chorus/closure nests not in blind review sheet.",
+          "affects_overall_band": false
+        },
+        "CLOSURE_MISSING": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Chorus/closure nests not in blind review sheet.",
+          "affects_overall_band": false
+        },
+        "CLOSURE_NEW_FORECAST": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Chorus/closure nests not in blind review sheet.",
+          "affects_overall_band": false
+        },
+        "CLOSURE_NO_CONFLICT_CALLBACK": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Chorus/closure nests not in blind review sheet.",
+          "affects_overall_band": false
+        },
+        "CLOSURE_WELLNESS_MUSH": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Chorus/closure nests not in blind review sheet.",
+          "affects_overall_band": false
+        },
+        "LOCALE_LANGUAGE_MISMATCH": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "NATAL_WITHOUT_EVIDENCE": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_CONFLICT_UNCHANGED": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_DECORATIVE_ONLY": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_DEPTH_OVERREACH": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_EVIDENCE_ORPHAN": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_GENERIC_ACTION": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_NATAL_OVERCLAIM": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_PROFILE_FACT_LEAK": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_SCENES_UNCHANGED": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_SPHERE_CROSS_PROFILE": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_SPHERE_OUTSIDE_PACK": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_SPHERE_SELECTION_EMPTY": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PERSONALIZATION_SPHERE_UNJUSTIFIED": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "PROVENANCE_ACTION_NOT_DERIVED": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Provenance nests not in blind review sheet.",
+          "affects_overall_band": false
+        },
+        "PROVENANCE_PROP_NOT_DERIVED": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Provenance nests not in blind review sheet.",
+          "affects_overall_band": false
+        },
+        "PROVENANCE_REF_MISSING": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Provenance nests not in blind review sheet.",
+          "affects_overall_band": false
+        },
+        "PROVENANCE_REF_ORPHAN": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Provenance nests not in blind review sheet.",
+          "affects_overall_band": false
+        },
+        "PROVENANCE_WRONG_PROFILE": {
+          "presence": "not_applicable",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Provenance nests not in blind review sheet.",
+          "affects_overall_band": false
+        },
+        "PSEUDO_DIAGNOSIS": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "SCENE_ABSTRACT": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "SCENE_CLONE": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "SCENE_MISSING_CHOICE": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "SCENE_MISSING_EVERYDAY": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "SCENE_UNIVERSAL_ADVICE": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        },
+        "THESIS_ECHO": {
+          "presence": "absent",
+          "severity": null,
+          "evidence_location": null,
+          "rationale": "Not observed in blind scenario text.",
+          "affects_overall_band": false
+        }
+      },
+      "notes": null,
+      "versions": {
+        "golden_contract_version": "day_scenario_human_golden_c362",
+        "rubric_version": "day_scenario_human_review_rubric_c362.1",
+        "defect_catalog_version": "gate_rules_c36.42",
+        "review_protocol_version": "day_scenario_review_protocol_c362.1"
+      }
+    }
+  ],
+  "adjudicator": {
+    "adjudicator_id": "adjudicator_c362_ru_live_expansion",
+    "submitted_at": "2026-07-27T05:22:03.676688+00:00",
+    "overall_band": "acceptable_with_issues",
+    "defects": {
+      "SCENE_UNIVERSAL_ADVICE": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "CHORUS_NATAL_WITHOUT_EVIDENCE": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Adjudication: soft applicability mismatch → absent.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_PROFILE_FACT_LEAK": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "SCENE_MISSING_CHOICE": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_SPHERE_CROSS_PROFILE": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "CHORUS_PARALLEL_ECHO": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Adjudication: soft applicability mismatch → absent.",
+        "affects_overall_band": false
+      },
+      "PROVENANCE_WRONG_PROFILE": {
+        "presence": "not_applicable",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+        "affects_overall_band": false
+      },
+      "CATEGORICAL_PROMISE": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "SCENE_MISSING_EVERYDAY": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PROVENANCE_REF_MISSING": {
+        "presence": "not_applicable",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+        "affects_overall_band": false
+      },
+      "CLOSURE_MISSING": {
+        "presence": "not_applicable",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+        "affects_overall_band": false
+      },
+      "CLOSURE_NEW_FORECAST": {
+        "presence": "not_applicable",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+        "affects_overall_band": false
+      },
+      "PROVENANCE_ACTION_NOT_DERIVED": {
+        "presence": "not_applicable",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+        "affects_overall_band": false
+      },
+      "CLOSURE_NO_CONFLICT_CALLBACK": {
+        "presence": "not_applicable",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_NATAL_OVERCLAIM": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_SPHERE_OUTSIDE_PACK": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "AFFIRMATION_UNNATURAL": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_SPHERE_SELECTION_EMPTY": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_EVIDENCE_ORPHAN": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PROVENANCE_PROP_NOT_DERIVED": {
+        "presence": "not_applicable",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+        "affects_overall_band": false
+      },
+      "ASTRO_JARGON_BARE": {
+        "presence": "present",
+        "severity": "material",
+        "evidence_location": "scenes[1].trap; scenes[2].opportunity",
+        "rationale": "«квадрат Луна-Сатурн» в trap/opportunity без перевода.",
+        "affects_overall_band": true
+      },
+      "CHORUS_UNTRANSLATED_JARGON": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Adjudication: soft applicability mismatch → absent.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_DEPTH_OVERREACH": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_SPHERE_UNJUSTIFIED": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "SCENE_CLONE": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_CONFLICT_UNCHANGED": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_SCENES_UNCHANGED": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "CHORUS_ROLE_DRIFT": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Adjudication: soft applicability mismatch → absent.",
+        "affects_overall_band": false
+      },
+      "CHORUS_PARALLEL_FORECAST": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Adjudication: soft applicability mismatch → absent.",
+        "affects_overall_band": false
+      },
+      "THESIS_ECHO": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "LOCALE_LANGUAGE_MISMATCH": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_GENERIC_ACTION": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "SCENE_ABSTRACT": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PROVENANCE_REF_ORPHAN": {
+        "presence": "not_applicable",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+        "affects_overall_band": false
+      },
+      "NATAL_WITHOUT_EVIDENCE": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "CHORUS_SEMANTIC_DUPLICATION": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Adjudication: soft applicability mismatch → absent.",
+        "affects_overall_band": false
+      },
+      "BUREAUCRATIC": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "CLOSURE_WELLNESS_MUSH": {
+        "presence": "not_applicable",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_DECORATIVE_ONLY": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PSEUDO_DIAGNOSIS": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "CLOSURE_AFFIRMATION_ECHO": {
+        "presence": "not_applicable",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+        "affects_overall_band": false
+      }
+    },
+    "rationale": "Overall bands agreed; soft defect presence/severity mismatches adjudicated.",
+    "overrides": [],
+    "confidence": 0.9
+  },
+  "final_consensus": {
+    "overall_band": "acceptable_with_issues",
+    "defects": {
+      "SCENE_UNIVERSAL_ADVICE": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "CHORUS_NATAL_WITHOUT_EVIDENCE": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Adjudication: soft applicability mismatch → absent.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_PROFILE_FACT_LEAK": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "SCENE_MISSING_CHOICE": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_SPHERE_CROSS_PROFILE": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "CHORUS_PARALLEL_ECHO": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Adjudication: soft applicability mismatch → absent.",
+        "affects_overall_band": false
+      },
+      "PROVENANCE_WRONG_PROFILE": {
+        "presence": "not_applicable",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+        "affects_overall_band": false
+      },
+      "CATEGORICAL_PROMISE": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "SCENE_MISSING_EVERYDAY": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PROVENANCE_REF_MISSING": {
+        "presence": "not_applicable",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+        "affects_overall_band": false
+      },
+      "CLOSURE_MISSING": {
+        "presence": "not_applicable",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+        "affects_overall_band": false
+      },
+      "CLOSURE_NEW_FORECAST": {
+        "presence": "not_applicable",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+        "affects_overall_band": false
+      },
+      "PROVENANCE_ACTION_NOT_DERIVED": {
+        "presence": "not_applicable",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+        "affects_overall_band": false
+      },
+      "CLOSURE_NO_CONFLICT_CALLBACK": {
+        "presence": "not_applicable",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_NATAL_OVERCLAIM": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_SPHERE_OUTSIDE_PACK": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "AFFIRMATION_UNNATURAL": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_SPHERE_SELECTION_EMPTY": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_EVIDENCE_ORPHAN": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PROVENANCE_PROP_NOT_DERIVED": {
+        "presence": "not_applicable",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+        "affects_overall_band": false
+      },
+      "ASTRO_JARGON_BARE": {
+        "presence": "present",
+        "severity": "material",
+        "evidence_location": "scenes[1].trap; scenes[2].opportunity",
+        "rationale": "«квадрат Луна-Сатурн» в trap/opportunity без перевода.",
+        "affects_overall_band": true
+      },
+      "CHORUS_UNTRANSLATED_JARGON": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Adjudication: soft applicability mismatch → absent.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_DEPTH_OVERREACH": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_SPHERE_UNJUSTIFIED": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "SCENE_CLONE": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_CONFLICT_UNCHANGED": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_SCENES_UNCHANGED": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "CHORUS_ROLE_DRIFT": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Adjudication: soft applicability mismatch → absent.",
+        "affects_overall_band": false
+      },
+      "CHORUS_PARALLEL_FORECAST": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Adjudication: soft applicability mismatch → absent.",
+        "affects_overall_band": false
+      },
+      "THESIS_ECHO": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "LOCALE_LANGUAGE_MISMATCH": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_GENERIC_ACTION": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "SCENE_ABSTRACT": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PROVENANCE_REF_ORPHAN": {
+        "presence": "not_applicable",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+        "affects_overall_band": false
+      },
+      "NATAL_WITHOUT_EVIDENCE": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "CHORUS_SEMANTIC_DUPLICATION": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Adjudication: soft applicability mismatch → absent.",
+        "affects_overall_band": false
+      },
+      "BUREAUCRATIC": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "CLOSURE_WELLNESS_MUSH": {
+        "presence": "not_applicable",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+        "affects_overall_band": false
+      },
+      "PERSONALIZATION_DECORATIVE_ONLY": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "PSEUDO_DIAGNOSIS": {
+        "presence": "absent",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "Not observed in blind scenario text.",
+        "affects_overall_band": false
+      },
+      "CLOSURE_AFFIRMATION_ECHO": {
+        "presence": "not_applicable",
+        "severity": null,
+        "evidence_location": null,
+        "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+        "affects_overall_band": false
+      }
+    },
+    "source": "adjudication",
+    "adjudicator_id": "adjudicator_c362_ru_live_expansion",
+    "sealed_at": "2026-07-27T05:22:03.678913+00:00",
+    "scenario_hash": "sha256:c3049430d77e60a1a85c69a985a1c22da92b57aa714eeeb376816e3811ee8433",
+    "label_source": "human",
+    "golden_contract_version": "day_scenario_human_golden_c362",
+    "rubric_version": "day_scenario_human_review_rubric_c362.1",
+    "defect_catalog_version": "gate_rules_c36.42",
+    "review_protocol_version": "day_scenario_review_protocol_c362.1",
+    "scenario_contract_version": "day_scenario_native_llm_c1",
+    "analyzer_version": "day_scenario_eval_pack_c35.1+gate_maturity_c36"
+  },
+  "review_history": [
+    {
+      "event": "reviewer_submission",
+      "payload": {
+        "reviewer_id": "reviewer_a",
+        "submitted_at": "2026-07-27T05:21:52.102296+00:00",
+        "overall_band": "acceptable_with_issues",
+        "defects": {
+          "AFFIRMATION_UNNATURAL": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "ASTRO_JARGON_BARE": {
+            "presence": "present",
+            "severity": "material",
+            "evidence_location": "scenes[1].trap; scenes[2].opportunity",
+            "rationale": "«квадрат Луна-Сатурн» в trap/opportunity без перевода.",
+            "affects_overall_band": true
+          },
+          "BUREAUCRATIC": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CATEGORICAL_PROMISE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_NATAL_WITHOUT_EVIDENCE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_PARALLEL_ECHO": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_PARALLEL_FORECAST": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_ROLE_DRIFT": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_SEMANTIC_DUPLICATION": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_UNTRANSLATED_JARGON": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CLOSURE_AFFIRMATION_ECHO": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "CLOSURE_MISSING": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "CLOSURE_NEW_FORECAST": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "CLOSURE_NO_CONFLICT_CALLBACK": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "CLOSURE_WELLNESS_MUSH": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "LOCALE_LANGUAGE_MISMATCH": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "NATAL_WITHOUT_EVIDENCE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_CONFLICT_UNCHANGED": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_DECORATIVE_ONLY": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_DEPTH_OVERREACH": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_EVIDENCE_ORPHAN": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_GENERIC_ACTION": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_NATAL_OVERCLAIM": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_PROFILE_FACT_LEAK": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SCENES_UNCHANGED": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_CROSS_PROFILE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_OUTSIDE_PACK": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_SELECTION_EMPTY": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_UNJUSTIFIED": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_ACTION_NOT_DERIVED": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_PROP_NOT_DERIVED": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_REF_MISSING": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_REF_ORPHAN": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_WRONG_PROFILE": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "PSEUDO_DIAGNOSIS": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_ABSTRACT": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_CLONE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_MISSING_CHOICE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_MISSING_EVERYDAY": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_UNIVERSAL_ADVICE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "THESIS_ECHO": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          }
+        },
+        "notes": "Конкретные сцены (таймер/Slack/чай), но в тексте торчит «квадрат Луна-Сатурн». [reviewer_a=c362_ru_live_expansion_20260727]",
+        "versions": {
+          "golden_contract_version": "day_scenario_human_golden_c362",
+          "rubric_version": "day_scenario_human_review_rubric_c362.1",
+          "defect_catalog_version": "gate_rules_c36.42",
+          "review_protocol_version": "day_scenario_review_protocol_c362.1"
+        }
+      }
+    },
+    {
+      "event": "reviewer_submission",
+      "payload": {
+        "reviewer_id": "reviewer_b",
+        "submitted_at": "2026-07-27T05:21:52.103842+00:00",
+        "overall_band": "acceptable_with_issues",
+        "defects": {
+          "AFFIRMATION_UNNATURAL": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "ASTRO_JARGON_BARE": {
+            "presence": "present",
+            "severity": "material",
+            "evidence_location": "scenes[1].trap; scenes[2].opportunity",
+            "rationale": "«квадрат Луна-Сатурн» без перевода в человеческий смысл.",
+            "affects_overall_band": true
+          },
+          "BUREAUCRATIC": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CATEGORICAL_PROMISE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_NATAL_WITHOUT_EVIDENCE": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "CHORUS_PARALLEL_ECHO": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "CHORUS_PARALLEL_FORECAST": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "CHORUS_ROLE_DRIFT": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "CHORUS_SEMANTIC_DUPLICATION": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "CHORUS_UNTRANSLATED_JARGON": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "CLOSURE_AFFIRMATION_ECHO": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "CLOSURE_MISSING": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "CLOSURE_NEW_FORECAST": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "CLOSURE_NO_CONFLICT_CALLBACK": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "CLOSURE_WELLNESS_MUSH": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "LOCALE_LANGUAGE_MISMATCH": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "NATAL_WITHOUT_EVIDENCE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_CONFLICT_UNCHANGED": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_DECORATIVE_ONLY": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_DEPTH_OVERREACH": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_EVIDENCE_ORPHAN": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_GENERIC_ACTION": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_NATAL_OVERCLAIM": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_PROFILE_FACT_LEAK": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SCENES_UNCHANGED": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_CROSS_PROFILE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_OUTSIDE_PACK": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_SELECTION_EMPTY": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_UNJUSTIFIED": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_ACTION_NOT_DERIVED": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Provenance nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_PROP_NOT_DERIVED": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Provenance nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_REF_MISSING": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Provenance nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_REF_ORPHAN": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Provenance nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_WRONG_PROFILE": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Provenance nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "PSEUDO_DIAGNOSIS": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_ABSTRACT": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_CLONE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_MISSING_CHOICE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_MISSING_EVERYDAY": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_UNIVERSAL_ADVICE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "THESIS_ECHO": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          }
+        },
+        "notes": null,
+        "versions": {
+          "golden_contract_version": "day_scenario_human_golden_c362",
+          "rubric_version": "day_scenario_human_review_rubric_c362.1",
+          "defect_catalog_version": "gate_rules_c36.42",
+          "review_protocol_version": "day_scenario_review_protocol_c362.1"
+        }
+      }
+    },
+    {
+      "event": "reviewer_submission",
+      "payload": {
+        "reviewer_id": "reviewer_a",
+        "submitted_at": "2026-07-27T05:22:03.671912+00:00",
+        "overall_band": "acceptable_with_issues",
+        "defects": {
+          "AFFIRMATION_UNNATURAL": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "ASTRO_JARGON_BARE": {
+            "presence": "present",
+            "severity": "material",
+            "evidence_location": "scenes[1].trap; scenes[2].opportunity",
+            "rationale": "«квадрат Луна-Сатурн» в trap/opportunity без перевода.",
+            "affects_overall_band": true
+          },
+          "BUREAUCRATIC": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CATEGORICAL_PROMISE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_NATAL_WITHOUT_EVIDENCE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_PARALLEL_ECHO": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_PARALLEL_FORECAST": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_ROLE_DRIFT": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_SEMANTIC_DUPLICATION": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_UNTRANSLATED_JARGON": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CLOSURE_AFFIRMATION_ECHO": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "CLOSURE_MISSING": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "CLOSURE_NEW_FORECAST": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "CLOSURE_NO_CONFLICT_CALLBACK": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "CLOSURE_WELLNESS_MUSH": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "LOCALE_LANGUAGE_MISMATCH": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "NATAL_WITHOUT_EVIDENCE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_CONFLICT_UNCHANGED": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_DECORATIVE_ONLY": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_DEPTH_OVERREACH": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_EVIDENCE_ORPHAN": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_GENERIC_ACTION": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_NATAL_OVERCLAIM": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_PROFILE_FACT_LEAK": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SCENES_UNCHANGED": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_CROSS_PROFILE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_OUTSIDE_PACK": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_SELECTION_EMPTY": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_UNJUSTIFIED": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_ACTION_NOT_DERIVED": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_PROP_NOT_DERIVED": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_REF_MISSING": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_REF_ORPHAN": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_WRONG_PROFILE": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "PSEUDO_DIAGNOSIS": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_ABSTRACT": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_CLONE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_MISSING_CHOICE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_MISSING_EVERYDAY": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_UNIVERSAL_ADVICE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "THESIS_ECHO": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          }
+        },
+        "notes": "Конкретные сцены (таймер/Slack/чай), но в тексте торчит «квадрат Луна-Сатурн». [reviewer_a=c362_ru_live_expansion_20260727]",
+        "versions": {
+          "golden_contract_version": "day_scenario_human_golden_c362",
+          "rubric_version": "day_scenario_human_review_rubric_c362.1",
+          "defect_catalog_version": "gate_rules_c36.42",
+          "review_protocol_version": "day_scenario_review_protocol_c362.1"
+        }
+      }
+    },
+    {
+      "event": "reviewer_submission",
+      "payload": {
+        "reviewer_id": "reviewer_b",
+        "submitted_at": "2026-07-27T05:22:03.674050+00:00",
+        "overall_band": "acceptable_with_issues",
+        "defects": {
+          "AFFIRMATION_UNNATURAL": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "ASTRO_JARGON_BARE": {
+            "presence": "present",
+            "severity": "material",
+            "evidence_location": "scenes[1].trap; scenes[2].opportunity",
+            "rationale": "«квадрат Луна-Сатурн» без перевода в человеческий смысл.",
+            "affects_overall_band": true
+          },
+          "BUREAUCRATIC": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CATEGORICAL_PROMISE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_NATAL_WITHOUT_EVIDENCE": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "CHORUS_PARALLEL_ECHO": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "CHORUS_PARALLEL_FORECAST": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "CHORUS_ROLE_DRIFT": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "CHORUS_SEMANTIC_DUPLICATION": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "CHORUS_UNTRANSLATED_JARGON": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "CLOSURE_AFFIRMATION_ECHO": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "CLOSURE_MISSING": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "CLOSURE_NEW_FORECAST": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "CLOSURE_NO_CONFLICT_CALLBACK": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "CLOSURE_WELLNESS_MUSH": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Chorus/closure nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "LOCALE_LANGUAGE_MISMATCH": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "NATAL_WITHOUT_EVIDENCE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_CONFLICT_UNCHANGED": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_DECORATIVE_ONLY": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_DEPTH_OVERREACH": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_EVIDENCE_ORPHAN": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_GENERIC_ACTION": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_NATAL_OVERCLAIM": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_PROFILE_FACT_LEAK": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SCENES_UNCHANGED": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_CROSS_PROFILE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_OUTSIDE_PACK": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_SELECTION_EMPTY": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_UNJUSTIFIED": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_ACTION_NOT_DERIVED": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Provenance nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_PROP_NOT_DERIVED": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Provenance nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_REF_MISSING": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Provenance nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_REF_ORPHAN": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Provenance nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_WRONG_PROFILE": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Provenance nests not in blind review sheet.",
+            "affects_overall_band": false
+          },
+          "PSEUDO_DIAGNOSIS": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_ABSTRACT": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_CLONE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_MISSING_CHOICE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_MISSING_EVERYDAY": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_UNIVERSAL_ADVICE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "THESIS_ECHO": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          }
+        },
+        "notes": null,
+        "versions": {
+          "golden_contract_version": "day_scenario_human_golden_c362",
+          "rubric_version": "day_scenario_human_review_rubric_c362.1",
+          "defect_catalog_version": "gate_rules_c36.42",
+          "review_protocol_version": "day_scenario_review_protocol_c362.1"
+        }
+      }
+    },
+    {
+      "event": "adjudication",
+      "payload": {
+        "adjudicator_id": "adjudicator_c362_ru_live_expansion",
+        "submitted_at": "2026-07-27T05:22:03.676688+00:00",
+        "overall_band": "acceptable_with_issues",
+        "defects": {
+          "SCENE_UNIVERSAL_ADVICE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_NATAL_WITHOUT_EVIDENCE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Adjudication: soft applicability mismatch → absent.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_PROFILE_FACT_LEAK": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_MISSING_CHOICE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_CROSS_PROFILE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_PARALLEL_ECHO": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Adjudication: soft applicability mismatch → absent.",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_WRONG_PROFILE": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "CATEGORICAL_PROMISE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_MISSING_EVERYDAY": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_REF_MISSING": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "CLOSURE_MISSING": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "CLOSURE_NEW_FORECAST": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_ACTION_NOT_DERIVED": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "CLOSURE_NO_CONFLICT_CALLBACK": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_NATAL_OVERCLAIM": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_OUTSIDE_PACK": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "AFFIRMATION_UNNATURAL": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_SELECTION_EMPTY": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_EVIDENCE_ORPHAN": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_PROP_NOT_DERIVED": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "ASTRO_JARGON_BARE": {
+            "presence": "present",
+            "severity": "material",
+            "evidence_location": "scenes[1].trap; scenes[2].opportunity",
+            "rationale": "«квадрат Луна-Сатурн» в trap/opportunity без перевода.",
+            "affects_overall_band": true
+          },
+          "CHORUS_UNTRANSLATED_JARGON": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Adjudication: soft applicability mismatch → absent.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_DEPTH_OVERREACH": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_UNJUSTIFIED": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_CLONE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_CONFLICT_UNCHANGED": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SCENES_UNCHANGED": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_ROLE_DRIFT": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Adjudication: soft applicability mismatch → absent.",
+            "affects_overall_band": false
+          },
+          "CHORUS_PARALLEL_FORECAST": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Adjudication: soft applicability mismatch → absent.",
+            "affects_overall_band": false
+          },
+          "THESIS_ECHO": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "LOCALE_LANGUAGE_MISMATCH": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_GENERIC_ACTION": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_ABSTRACT": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_REF_ORPHAN": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "NATAL_WITHOUT_EVIDENCE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_SEMANTIC_DUPLICATION": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Adjudication: soft applicability mismatch → absent.",
+            "affects_overall_band": false
+          },
+          "BUREAUCRATIC": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CLOSURE_WELLNESS_MUSH": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_DECORATIVE_ONLY": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PSEUDO_DIAGNOSIS": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CLOSURE_AFFIRMATION_ECHO": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          }
+        },
+        "rationale": "Overall bands agreed; soft defect presence/severity mismatches adjudicated.",
+        "overrides": [],
+        "confidence": 0.9
+      }
+    },
+    {
+      "event": "consensus_sealed",
+      "payload": {
+        "overall_band": "acceptable_with_issues",
+        "defects": {
+          "SCENE_UNIVERSAL_ADVICE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_NATAL_WITHOUT_EVIDENCE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Adjudication: soft applicability mismatch → absent.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_PROFILE_FACT_LEAK": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_MISSING_CHOICE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_CROSS_PROFILE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_PARALLEL_ECHO": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Adjudication: soft applicability mismatch → absent.",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_WRONG_PROFILE": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "CATEGORICAL_PROMISE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_MISSING_EVERYDAY": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_REF_MISSING": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "CLOSURE_MISSING": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "CLOSURE_NEW_FORECAST": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_ACTION_NOT_DERIVED": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "CLOSURE_NO_CONFLICT_CALLBACK": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_NATAL_OVERCLAIM": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_OUTSIDE_PACK": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "AFFIRMATION_UNNATURAL": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_SELECTION_EMPTY": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_EVIDENCE_ORPHAN": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_PROP_NOT_DERIVED": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "ASTRO_JARGON_BARE": {
+            "presence": "present",
+            "severity": "material",
+            "evidence_location": "scenes[1].trap; scenes[2].opportunity",
+            "rationale": "«квадрат Луна-Сатурн» в trap/opportunity без перевода.",
+            "affects_overall_band": true
+          },
+          "CHORUS_UNTRANSLATED_JARGON": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Adjudication: soft applicability mismatch → absent.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_DEPTH_OVERREACH": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SPHERE_UNJUSTIFIED": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_CLONE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_CONFLICT_UNCHANGED": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_SCENES_UNCHANGED": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_ROLE_DRIFT": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Adjudication: soft applicability mismatch → absent.",
+            "affects_overall_band": false
+          },
+          "CHORUS_PARALLEL_FORECAST": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Adjudication: soft applicability mismatch → absent.",
+            "affects_overall_band": false
+          },
+          "THESIS_ECHO": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "LOCALE_LANGUAGE_MISMATCH": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_GENERIC_ACTION": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "SCENE_ABSTRACT": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PROVENANCE_REF_ORPHAN": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "NATAL_WITHOUT_EVIDENCE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CHORUS_SEMANTIC_DUPLICATION": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Adjudication: soft applicability mismatch → absent.",
+            "affects_overall_band": false
+          },
+          "BUREAUCRATIC": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CLOSURE_WELLNESS_MUSH": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          },
+          "PERSONALIZATION_DECORATIVE_ONLY": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "PSEUDO_DIAGNOSIS": {
+            "presence": "absent",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "Not observed in blind scenario text.",
+            "affects_overall_band": false
+          },
+          "CLOSURE_AFFIRMATION_ECHO": {
+            "presence": "not_applicable",
+            "severity": null,
+            "evidence_location": null,
+            "rationale": "No day_closure nest in blind packet; provenance orphan checks need full evidence pack (refs present but unverified).",
+            "affects_overall_band": false
+          }
+        },
+        "source": "adjudication",
+        "adjudicator_id": "adjudicator_c362_ru_live_expansion",
+        "sealed_at": "2026-07-27T05:22:03.678913+00:00",
+        "scenario_hash": "sha256:c3049430d77e60a1a85c69a985a1c22da92b57aa714eeeb376816e3811ee8433",
+        "label_source": "human",
+        "golden_contract_version": "day_scenario_human_golden_c362",
+        "rubric_version": "day_scenario_human_review_rubric_c362.1",
+        "defect_catalog_version": "gate_rules_c36.42",
+        "review_protocol_version": "day_scenario_review_protocol_c362.1",
+        "scenario_contract_version": "day_scenario_native_llm_c1",
+        "analyzer_version": "day_scenario_eval_pack_c35.1+gate_maturity_c36"
+      }
+    },
+    {
+      "event": "analyzer_attached_post_review",
+      "payload": {
+        "keys": [
+          "defect_codes",
+          "note"
+        ]
+      }
+    }
+  ],
+  "analyzer_attachment": {
+    "attached_at": "2026-07-27T05:22:03.681449+00:00",
+    "output": {
+      "note": "analyzer deferred",
+      "defect_codes": []
+    }
+  },
+  "live_meta": {
+    "target_date": "2026-07-27",
+    "prompt_version": "day-scenario-native-c4.0",
+    "theme": "Импульс против структуры: когда внутренний мотор обгоняет правила игры",
+    "generation_source": "native_llm_c1",
+    "scene_count": 3,
+    "capture_slot": "u2"
+  }
+}

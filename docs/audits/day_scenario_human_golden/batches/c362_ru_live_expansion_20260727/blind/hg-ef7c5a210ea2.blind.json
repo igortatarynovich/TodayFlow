@@ -1,0 +1,861 @@
+{
+  "export_kind": "blind_human_review_c362",
+  "case_id": "hg-ef7c5a210ea2",
+  "scenario_id": "hg-ef7c5a210ea2",
+  "scenario_hash": "sha256:36780eff169b14a0ffaeae0144249538f73efc2a0e2a24a1328a506ca43e8283",
+  "locale": "ru",
+  "profile_type": "live_registered_personal",
+  "evidence_depth": "deep_personalized",
+  "source_type": "live_capture",
+  "rubric_version": "day_scenario_human_review_rubric_c362.1",
+  "golden_contract_version": "day_scenario_human_golden_c362",
+  "defect_catalog_version": "gate_rules_c36.42",
+  "review_protocol_version": "day_scenario_review_protocol_c362.1",
+  "scenario_contract_version": "day_scenario_native_llm_c1",
+  "defect_codes_for_labeling": [
+    "AFFIRMATION_UNNATURAL",
+    "ASTRO_JARGON_BARE",
+    "BUREAUCRATIC",
+    "CATEGORICAL_PROMISE",
+    "CHORUS_NATAL_WITHOUT_EVIDENCE",
+    "CHORUS_PARALLEL_ECHO",
+    "CHORUS_PARALLEL_FORECAST",
+    "CHORUS_ROLE_DRIFT",
+    "CHORUS_SEMANTIC_DUPLICATION",
+    "CHORUS_UNTRANSLATED_JARGON",
+    "CLOSURE_AFFIRMATION_ECHO",
+    "CLOSURE_MISSING",
+    "CLOSURE_NEW_FORECAST",
+    "CLOSURE_NO_CONFLICT_CALLBACK",
+    "CLOSURE_WELLNESS_MUSH",
+    "LOCALE_LANGUAGE_MISMATCH",
+    "NATAL_WITHOUT_EVIDENCE",
+    "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE",
+    "PERSONALIZATION_CONFLICT_UNCHANGED",
+    "PERSONALIZATION_DECORATIVE_ONLY",
+    "PERSONALIZATION_DEPTH_OVERREACH",
+    "PERSONALIZATION_EVIDENCE_ORPHAN",
+    "PERSONALIZATION_GENERIC_ACTION",
+    "PERSONALIZATION_NATAL_OVERCLAIM",
+    "PERSONALIZATION_PROFILE_FACT_LEAK",
+    "PERSONALIZATION_SCENES_UNCHANGED",
+    "PERSONALIZATION_SPHERE_CROSS_PROFILE",
+    "PERSONALIZATION_SPHERE_OUTSIDE_PACK",
+    "PERSONALIZATION_SPHERE_SELECTION_EMPTY",
+    "PERSONALIZATION_SPHERE_UNJUSTIFIED",
+    "PROVENANCE_ACTION_NOT_DERIVED",
+    "PROVENANCE_PROP_NOT_DERIVED",
+    "PROVENANCE_REF_MISSING",
+    "PROVENANCE_REF_ORPHAN",
+    "PROVENANCE_WRONG_PROFILE",
+    "PSEUDO_DIAGNOSIS",
+    "SCENE_ABSTRACT",
+    "SCENE_CLONE",
+    "SCENE_MISSING_CHOICE",
+    "SCENE_MISSING_EVERYDAY",
+    "SCENE_UNIVERSAL_ADVICE",
+    "THESIS_ECHO"
+  ],
+  "scenario": {
+    "contract_version": "day_scenario_v1",
+    "version": "day-scenario-v1.2-b5-runtime-sot",
+    "runtime_sot": true,
+    "ready": true,
+    "generation_source": "deterministic_engine_b5",
+    "foundation": {
+      "contract_version": "day_scenario_foundation_v1",
+      "ranked_drivers": [
+        {
+          "id": "cycle-mercury_station_direct_summer",
+          "kind": "station_direct",
+          "title_ru": "Меркурий выходит из ретрограда (Лев)",
+          "fact_ru": "Меркурий разворачивается в директное движение в знаке Лев.",
+          "strength": 0.95,
+          "body": null,
+          "sign": null,
+          "aspect": null,
+          "evidence_ref": "event:cycle-mercury_station_direct_summer"
+        },
+        {
+          "id": "sky-semisquare-1",
+          "kind": "sky_aspect",
+          "title_ru": "Sun — Mars",
+          "fact_ru": "Связь Солнца и Марса описывает, как ты идёшь к цели сразу после искры; это мотор напора и риска.",
+          "strength": 0.9199999999999999,
+          "body": null,
+          "sign": null,
+          "aspect": null,
+          "evidence_ref": "event:sky-semisquare-1"
+        },
+        {
+          "id": "phase-waxing_gibbous-[redacted]",
+          "kind": "phase_change",
+          "title_ru": "Растущая луна · Стрелец",
+          "fact_ru": "Растущая луна · Стрелец.",
+          "strength": 0.88,
+          "body": null,
+          "sign": null,
+          "aspect": null,
+          "evidence_ref": "event:phase-waxing_gibbous-[redacted]"
+        }
+      ],
+      "astronomy_facts": [
+        {
+          "id": "lunar_phase",
+          "label_ru": "Растущая луна",
+          "kind": "lunar_phase",
+          "guidance": "Аудируй системы и ожидания; готовь сцену к видимости.",
+          "evidence_ref": "celestial.lunar_phase"
+        }
+      ],
+      "astrology_facts": [
+        {
+          "id": "cycle-mercury_station_direct_summer",
+          "label_ru": "Меркурий разворачивается в директное движение в знаке Лев.",
+          "kind": "station_direct",
+          "strength": 0.95,
+          "evidence_ref": "event:cycle-mercury_station_direct_summer"
+        },
+        {
+          "id": "sky-semisquare-1",
+          "label_ru": "Связь Солнца и Марса описывает, как ты идёшь к цели сразу после искры; это мотор напора и риска.",
+          "kind": "sky_aspect",
+          "strength": 0.9199999999999999,
+          "evidence_ref": "event:sky-semisquare-1"
+        },
+        {
+          "id": "phase-waxing_gibbous-[redacted]",
+          "label_ru": "Растущая луна · Стрелец.",
+          "kind": "phase_change",
+          "strength": 0.88,
+          "evidence_ref": "event:phase-waxing_gibbous-[redacted]"
+        }
+      ],
+      "personal_natal_activations": [
+        {
+          "id": "claim.personal.astro.time-lords-firdaria-zr-moon",
+          "text": "Firdaria: мажор Луна ([redacted] → [redacted]), субпериод Солнце (до [redacted]). ZR Fortune→Весы: L1 Козерог/Сатурн, L2 Козерог. ZR Spirit→Водолей: L1 Рыбы/Юпитер, L2 Дева. Лоты soft: Луна/Солнце (нет ASC).",
+          "evidence_ids": [
+            "personal_astrology.time_lords"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.astro.profection-annual-h1",
+          "text": "Профекция года (возраст 36): 1-й дом, знак Водолей, управитель Сатурн — тело, самопрезентация, как вас видят. База — солнечный знак (нет времени/места для ASC).",
+          "evidence_ids": [
+            "personal_astrology.profections"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.astro.returns-solar",
+          "text": "Solar return 2026: карта от [redacted] (Солнце ≈ Водолей 25.3°, ошибка noon 0.27°). День 164 периода; до следующего SR ~202 дн.",
+          "evidence_ids": [
+            "personal_astrology.solar_return"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.astro.progressions-secondary-sun-moon",
+          "text": "Секундарные прогрессии (день=год): прогресс. Солнце Овен 1.1°, Луна Козерог 28.6° (возраст 36.45 лет → дата [redacted]). Солнце сменило знак с Водолей. Луна сменила знак с Весы.",
+          "evidence_ids": [
+            "personal_astrology.secondary_progressions"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.astro.planet-returns-soft",
+          "text": "Возвраты планет (soft): в окне — Луна.",
+          "evidence_ids": [
+            "personal_astrology.planet_returns"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.hd.hd.type.manifesting_generator",
+          "text": "HD soft: Манифестирующий генератор; авторитет Эмоциональный; стратегия — Отвечать (и информировать). Определённые центры (natal): G-центр, Эго / Воля, Корень, Сакрал, Солнечное сплетение.",
+          "evidence_ids": [
+            "human_design.type_authority"
+          ],
+          "layer": "human_design"
+        },
+        {
+          "id": "claim.personal.hd.hd.profile.1-2",
+          "text": "Профиль 1/2 · Исследователь / Отшельник; Угол нестандартный / soft. Incarnation Cross soft: ворота 30/29/31/41 (Personality Sun 30.1, Design Sun 31.2).",
+          "evidence_ids": [
+            "human_design.profile_lines_cross"
+          ],
+          "layer": "human_design"
+        },
+        {
+          "id": "claim.personal.hd.hd.variables.RRRL",
+          "text": "Variables soft: Пищеварение вправо (receptive) · Касание; Среда вправо (receptive) · Берега; Перспектива вправо (receptive) · Желание; Мотивация влево (active) · Страх.",
+          "evidence_ids": [
+            "human_design.variables"
+          ],
+          "layer": "human_design"
+        },
+        {
+          "id": "claim.personal.bazi.bazi-branch_combine-month-yin-hai",
+          "text": "Тигр + Свинья — поддержка движения.",
+          "evidence_ids": [
+            "bazi.clashes"
+          ],
+          "layer": "bazi"
+        },
+        {
+          "id": "claim.personal.vedic.chandra_lagna-moon-h4",
+          "text": "Луна в 4-м — дом, корни, потребность в опоре.",
+          "evidence_ids": [
+            "vedic_personal.gochara"
+          ],
+          "layer": "vedic_personal"
+        },
+        {
+          "id": "claim.personal.vedic.dasha-md-jupiter",
+          "text": "Vimshottari: махадаша Юпитер / антардаша Венера (баланс при рождении 2.56 лет Луна).",
+          "evidence_ids": [
+            "vedic_personal.dasha"
+          ],
+          "layer": "vedic_personal"
+        },
+        {
+          "id": "claim.personal.name_numbers.name.expression",
+          "text": "Expression 4 — как имя звучит вовне (soft Pythagorean).",
+          "evidence_ids": [
+            "name_numbers.expression"
+          ],
+          "layer": "name_numbers"
+        }
+      ],
+      "tarot_card": {
+        "name": null,
+        "id": null,
+        "present": false,
+        "evidence_ref": null
+      },
+      "day_number": {
+        "value": 4,
+        "personal_day": 4,
+        "universal_day": 7,
+        "present": true,
+        "evidence_ref": "day_foundation.numerology"
+      },
+      "cycles": [
+        {
+          "id": "weekday",
+          "label_ru": "Sun",
+          "evidence_ref": "day_foundation.weekday"
+        },
+        {
+          "id": "seasonal",
+          "label_ru": "Сезон — лето.",
+          "evidence_ref": "day_foundation.seasonal"
+        }
+      ],
+      "confidence": 0.92,
+      "evidence_references": [
+        {
+          "id": "ev.foundation.essence",
+          "source": "day_foundation_v1.essence",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.astro.aspect.sky-semisquare-1",
+          "source": "source.western_astrology.aspects",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.astro.aspect.sky-square-2",
+          "source": "source.western_astrology.aspects",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.astro.aspect.sky-square-3",
+          "source": "source.western_astrology.aspects",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.lunar.lunar.phase",
+          "source": "source.moon.phase",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.lunar.aspect.sky-biquintile-0",
+          "source": "source.moon.aspects",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.lunar.timed.moon-trine-sun-202607240345",
+          "source": "source.moon.timed_lunar_aspects",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.lunar.timed.moon-trine-neptune-202607240952",
+          "source": "source.moon.timed_lunar_aspects",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.numerology",
+          "source": "source.numerology.universal_day",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.weekday",
+          "source": "source.weekday_ruler",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.seasonal",
+          "source": "source.seasonal_calendar",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.panchanga",
+          "source": "source.vedic_panchanga",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.chinese",
+          "source": "source.chinese_metaphysics",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.mayan.tzolkin_haab",
+          "source": "source.mayan_calendars.tzolkin_haab",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.mayan.dreamspell",
+          "source": "source.mayan_calendars.dreamspell",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.time-lords-firdaria-zr-moon",
+          "source": "personal_astrology.time_lords",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.profection-annual-h1",
+          "source": "personal_astrology.profections",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.returns-solar",
+          "source": "personal_astrology.solar_return",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.progressions-secondary-sun-moon",
+          "source": "personal_astrology.secondary_progressions",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.planet-returns-soft",
+          "source": "personal_astrology.planet_returns",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.hd.hd.type.manifesting_generator",
+          "source": "human_design.type_authority",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.hd.hd.profile.1-2",
+          "source": "human_design.profile_lines_cross",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.hd.hd.variables.RRRL",
+          "source": "human_design.variables",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.bazi.bazi-branch_combine-month-yin-hai",
+          "source": "bazi.clashes",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.vedic.chandra_lagna-moon-h4",
+          "source": "vedic_personal.gochara",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.vedic.dasha-md-jupiter",
+          "source": "vedic_personal.dasha",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.name_numbers.name.expression",
+          "source": "name_numbers.expression",
+          "text": ""
+        },
+        {
+          "id": "ev.brief.do_hint",
+          "source": "day_narrative_brief_v0.do_hint",
+          "text": ""
+        },
+        {
+          "id": "ev.brief.avoid_hint",
+          "source": "day_narrative_brief_v0.avoid_hint",
+          "text": ""
+        },
+        {
+          "id": "ev.brief.tempo",
+          "source": "day_narrative_brief_v0.tempo_hint",
+          "text": ""
+        },
+        {
+          "id": "ev.talisman.color",
+          "source": "celestial_events.daily_symbols.color",
+          "text": ""
+        },
+        {
+          "id": "ev.talisman.color.benefit",
+          "source": "celestial_events.daily_symbols.color.benefit_ru",
+          "text": ""
+        },
+        {
+          "id": "ev.talisman.color.avoid",
+          "source": "celestial_events.daily_symbols.color.avoid",
+          "text": ""
+        },
+        {
+          "id": "ev.talisman.stone",
+          "source": "celestial_events.daily_symbols.stone",
+          "text": ""
+        },
+        {
+          "id": "ev.talisman.stone.story",
+          "source": "celestial_events.daily_symbols.stone.story_ru",
+          "text": ""
+        },
+        {
+          "id": "ev.driver.cycle-mercury_station_direct_summer",
+          "source": "day_events_pack_v1.ranked_drivers",
+          "text": ""
+        },
+        {
+          "id": "ev.driver.sky-semisquare-1",
+          "source": "day_events_pack_v1.ranked_drivers",
+          "text": ""
+        },
+        {
+          "id": "ev.driver.phase-waxing_gibbous-[redacted]",
+          "source": "day_events_pack_v1.ranked_drivers",
+          "text": ""
+        },
+        {
+          "id": "ev.day.thesis",
+          "source": "day_thesis_v1",
+          "text": ""
+        }
+      ],
+      "limitations": [
+        "perigee_apogee_not_computed_v1",
+        "Нет явного сигнала по сферам (отношения / работа / семья) — доменные блоки не заполняются выдуманным текстом.",
+        "Карта дня не раскрыта или отсутствует — не упоминать карту.",
+        "Число дня не раскрыто или отсутствует — не упоминать число."
+      ]
+    },
+    "chorus": {
+      "contract_version": "day_scenario_chorus_v1",
+      "astrology": [
+        {
+          "voice": "astrology",
+          "named_factor": "Меркурий разворачивается в директное движение в знаке Лев.",
+          "human_meaning": "Меркурий разворачивается в директное движение в знаке Лев. Это подталкивает день к сюжету «Прямота без фильтра».",
+          "link_to_conflict": "Объясняет, почему сегодня в центре «Прямота без фильтра».",
+          "evidence_ref": "event:cycle-mercury_station_direct_summer",
+          "driver_id": "cycle-mercury_station_direct_summer"
+        },
+        {
+          "voice": "astrology",
+          "named_factor": "Связь Солнца и Марса описывает, как ты идёшь к цели сразу после искры; это мотор напора и риска.",
+          "human_meaning": "Связь Солнца и Марса описывает, как ты идёшь к цели сразу после искры; это мотор напора и риска. Это подталкивает день к сюжету «Прямота без фильтра».",
+          "link_to_conflict": "Объясняет, почему сегодня в центре «Прямота без фильтра».",
+          "evidence_ref": "event:sky-semisquare-1",
+          "driver_id": "sky-semisquare-1"
+        },
+        {
+          "voice": "astrology",
+          "named_factor": "Растущая луна · Стрелец.",
+          "human_meaning": "Растущая луна · Стрелец. Это подталкивает день к сюжету «Прямота без фильтра».",
+          "link_to_conflict": "Объясняет, почему сегодня в центре «Прямота без фильтра».",
+          "evidence_ref": "event:phase-waxing_gibbous-[redacted]",
+          "driver_id": "phase-waxing_gibbous-[redacted]"
+        }
+      ],
+      "day_card": null,
+      "day_number": {
+        "voice": "day_number",
+        "named_factor": "Число дня — 4",
+        "tempo": "структура",
+        "style": "порядок и границы",
+        "lesson": "опора важнее скорости",
+        "initiative": "сдержанная, по плану",
+        "closure": "закрыть контур, не открывать новый",
+        "link_to_conflict": "Число 4 окрашивает прохождение «Прямота без фильтра»: темп — структура, способ — порядок и границы.",
+        "human_meaning": "Число 4 окрашивает прохождение «Прямота без фильтра»: темп — структура, способ — порядок и границы.",
+        "evidence_ref": "day_foundation.numerology",
+        "must_not_invent_second_plot": true
+      },
+      "natal": [
+        {
+          "voice": "natal",
+          "named_factor": "Firdaria: мажор Луна ([redacted] → [redacted]), субпериод Солнце (до [redacted]). ZR Fortune→Весы: L1 Козерог/Сатурн, L2 Козерог. ZR Spirit→Водолей: L1 Рыбы/Юпитер, L2 Дева. Лоты soft: Луна/Солнце (н…",
+          "human_meaning": "Личная активация усиливает «Прямота без фильтра»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Прямота без фильтра» именно так.",
+          "evidence_ref": "claim.personal.astro.time-lords-firdaria-zr-moon",
+          "evidence_ids": [
+            "personal_astrology.time_lords"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "Профекция года (возраст 36): 1-й дом, знак Водолей, управитель Сатурн — тело, самопрезентация, как вас видят. База — солнечный знак (нет времени/места для ASC).",
+          "human_meaning": "Личная активация усиливает «Прямота без фильтра»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Прямота без фильтра» именно так.",
+          "evidence_ref": "claim.personal.astro.profection-annual-h1",
+          "evidence_ids": [
+            "personal_astrology.profections"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "Solar return 2026: карта от [redacted] (Солнце ≈ Водолей 25.3°, ошибка noon 0.27°). День 164 периода; до следующего SR ~202 дн.",
+          "human_meaning": "Личная активация усиливает «Прямота без фильтра»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Прямота без фильтра» именно так.",
+          "evidence_ref": "claim.personal.astro.returns-solar",
+          "evidence_ids": [
+            "personal_astrology.solar_return"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "Секундарные прогрессии (день=год): прогресс. Солнце Овен 1.1°, Луна Козерог 28.6° (возраст 36.45 лет → дата [redacted]). Солнце сменило знак с Водолей. Луна сменила знак с Весы.",
+          "human_meaning": "Личная активация усиливает «Прямота без фильтра»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Прямота без фильтра» именно так.",
+          "evidence_ref": "claim.personal.astro.progressions-secondary-sun-moon",
+          "evidence_ids": [
+            "personal_astrology.secondary_progressions"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "Возвраты планет (soft): в окне — Луна.",
+          "human_meaning": "Личная активация усиливает «Прямота без фильтра»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Прямота без фильтра» именно так.",
+          "evidence_ref": "claim.personal.astro.planet-returns-soft",
+          "evidence_ids": [
+            "personal_astrology.planet_returns"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "HD soft: Манифестирующий генератор; авторитет Эмоциональный; стратегия — Отвечать (и информировать). Определённые центры (natal): G-центр, Эго / Воля, Корень, Сакрал, Солнечное сплетение.",
+          "human_meaning": "Личная активация усиливает «Прямота без фильтра»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Прямота без фильтра» именно так.",
+          "evidence_ref": "claim.personal.hd.hd.type.manifesting_generator",
+          "evidence_ids": [
+            "human_design.type_authority"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "Профиль 1/2 · Исследователь / Отшельник; Угол нестандартный / soft. Incarnation Cross soft: ворота 30/29/31/41 (Personality Sun 30.1, Design Sun 31.2).",
+          "human_meaning": "Личная активация усиливает «Прямота без фильтра»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Прямота без фильтра» именно так.",
+          "evidence_ref": "claim.personal.hd.hd.profile.1-2",
+          "evidence_ids": [
+            "human_design.profile_lines_cross"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "Variables soft: Пищеварение вправо (receptive) · Касание; Среда вправо (receptive) · Берега; Перспектива вправо (receptive) · Желание; Мотивация влево (active) · Страх.",
+          "human_meaning": "Личная активация усиливает «Прямота без фильтра»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Прямота без фильтра» именно так.",
+          "evidence_ref": "claim.personal.hd.hd.variables.RRRL",
+          "evidence_ids": [
+            "human_design.variables"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "Тигр + Свинья — поддержка движения.",
+          "human_meaning": "Личная активация усиливает «Прямота без фильтра»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Прямота без фильтра» именно так.",
+          "evidence_ref": "claim.personal.bazi.bazi-branch_combine-month-yin-hai",
+          "evidence_ids": [
+            "bazi.clashes"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "Луна в 4-м — дом, корни, потребность в опоре.",
+          "human_meaning": "Личная активация усиливает «Прямота без фильтра»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Прямота без фильтра» именно так.",
+          "evidence_ref": "claim.personal.vedic.chandra_lagna-moon-h4",
+          "evidence_ids": [
+            "vedic_personal.gochara"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "Vimshottari: махадаша Юпитер / антардаша Венера (баланс при рождении 2.56 лет Луна).",
+          "human_meaning": "Личная активация усиливает «Прямота без фильтра»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Прямота без фильтра» именно так.",
+          "evidence_ref": "claim.personal.vedic.dasha-md-jupiter",
+          "evidence_ids": [
+            "vedic_personal.dasha"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "Expression 4 — как имя звучит вовне (soft Pythagorean).",
+          "human_meaning": "Личная активация усиливает «Прямота без фильтра»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Прямота без фильтра» именно так.",
+          "evidence_ref": "claim.personal.name_numbers.name.expression",
+          "evidence_ids": [
+            "name_numbers.expression"
+          ]
+        }
+      ],
+      "dialogue_rule": "Четыре взгляда на одну историю: астрология — что снаружи; карта — архетип; число — темп; натал — почему вам.",
+      "named_language_encouraged": true,
+      "parallel_forecast_forbidden": true
+    },
+    "conflict": {
+      "contract_version": "day_scenario_conflict_v1",
+      "short_name": "Прямота без фильтра",
+      "thesis": {
+        "family": "communication",
+        "variant": "truth_without_filter",
+        "mode": "conflict",
+        "label_ru": "Прямота без фильтра",
+        "day_thesis": {
+          "contract_version": "day_thesis_v1",
+          "family": "communication",
+          "variant": "truth_without_filter",
+          "mode": "conflict",
+          "label_ru": "Прямота без фильтра",
+          "label": "Прямота без фильтра",
+          "driver_ids": [
+            "cycle-mercury_station_direct_summer",
+            "sky-semisquare-1",
+            "phase-waxing_gibbous-[redacted]"
+          ],
+          "composition_ids": []
+        }
+      },
+      "opposing_forces": {
+        "a": "сгладить",
+        "b": "сказать прямо"
+      },
+      "why_arose": "Меркурий разворачивается в директное движение в знаке Лев. · Связь Солнца и Марса описывает, как ты идёшь к цели сразу после искры; это мотор напора и риска.",
+      "why_personal": "Firdaria: мажор Луна ([redacted] → [redacted]), субпериод Солнце (до [redacted]). ZR Fortune→Весы: L1 Козерог/Сатурн, L2 Козерог. ZR Spirit→Водолей: L1 Рыбы/Юпитер, L2 Дева. Лоты soft: Луна/Солнце (нет ASC).",
+      "driver_ids": [
+        "cycle-mercury_station_direct_summer",
+        "sky-semisquare-1",
+        "phase-waxing_gibbous-[redacted]"
+      ],
+      "chorus_references": [
+        "astrology:cycle-mercury_station_direct_summer",
+        "astrology:sky-semisquare-1",
+        "astrology:phase-waxing_gibbous-[redacted]",
+        "day_number",
+        "natal"
+      ],
+      "confidence": 0.92,
+      "foundation_rule": "Conflict is built from day facts + personal activation; card and number refine reading/tempo, never invent a rival plot."
+    },
+    "scenes": [
+      {
+        "scene_id": "scene.communication",
+        "sphere": "communication",
+        "sphere_label_ru": "Общение",
+        "role_in_story": "primary",
+        "what_happens": "В сфере «Общение» проявляется «Прямота без фильтра»: натяжение между «сгладить» и «сказать прямо».",
+        "why": "Меркурий разворачивается в директное движение в знаке Лев. · Связь Солнца и Марса описывает, как ты идёшь к цели сразу после искры; это мотор напора и риска.",
+        "opportunity": "Шанс выбрать «сказать прямо» именно здесь — один конкретный жест.",
+        "trap": "Ловушка — скатиться в «сгладить» и сделать вид, что выбора не было.",
+        "recommended_action": "Сделайте один шаг в пользу «сказать прямо» в зоне «Общение». Темп дня (Число дня — 4): структура.",
+        "do_not": "Не усиливайте «сгладить» автоматическим согласием или откладыванием.",
+        "domestic_example": "Сообщение: сначала смысл, потом скорость ответа.",
+        "evidence_references": [
+          "cycle-mercury_station_direct_summer",
+          "sky-semisquare-1",
+          "phase-waxing_gibbous-[redacted]"
+        ],
+        "chorus_references": [
+          "conflict",
+          "astrology:cycle-mercury_station_direct_summer",
+          "day_number",
+          "natal"
+        ],
+        "confidence": 0.92,
+        "serves_conflict": "Прямота без фильтра"
+      },
+      {
+        "scene_id": "scene.relationships",
+        "sphere": "relationships",
+        "sphere_label_ru": "Отношения",
+        "role_in_story": "secondary",
+        "what_happens": "В сфере «Отношения» проявляется «Прямота без фильтра»: натяжение между «сгладить» и «сказать прямо».",
+        "why": "Меркурий разворачивается в директное движение в знаке Лев. · Связь Солнца и Марса описывает, как ты идёшь к цели сразу после искры; это мотор напора и риска.",
+        "opportunity": "Шанс выбрать «сказать прямо» именно здесь — один конкретный жест.",
+        "trap": "Ловушка — скатиться в «сгладить» и сделать вид, что выбора не было.",
+        "recommended_action": "Сделайте один шаг в пользу «сказать прямо» в зоне «Отношения». Темп дня (Число дня — 4): структура.",
+        "do_not": "Не усиливайте «сгладить» автоматическим согласием или откладыванием.",
+        "domestic_example": "Разговор, где важно не сгладить то, что лучше проговорить.",
+        "evidence_references": [
+          "cycle-mercury_station_direct_summer",
+          "sky-semisquare-1",
+          "phase-waxing_gibbous-[redacted]"
+        ],
+        "chorus_references": [
+          "conflict",
+          "astrology:cycle-mercury_station_direct_summer",
+          "day_number",
+          "natal"
+        ],
+        "confidence": 0.92,
+        "serves_conflict": "Прямота без фильтра"
+      }
+    ],
+    "props": {
+      "contract_version": "day_scenario_props_v1",
+      "status": "ok",
+      "color": {
+        "name": "Глубокий синий",
+        "origin_scene_id": "scene.communication",
+        "serves_conflict": "Прямота без фильтра",
+        "link_to_conflict": "В сцене «Общение» конфликт «Прямота без фильтра» тянет к «сгладить». дистанция и опора — сначала сформулировать позицию — это свойство нужно сегодня, чтобы удержать «сказать прямо».",
+        "supports_or_compensates": "Компенсирует ловушку: Ловушка — скатиться в «сгладить» и сделать вид, что выбора не было.",
+        "expected_effect_today": "Помогает не сорваться в «сгладить» и сделать один жест в сторону «сказать прямо».",
+        "where_to_use": {
+          "clothing": "Тёмно-синий свитер, пиджак или джинсы глубокого синего.",
+          "accessory": "Сумка, ремень или перстень в спокойном синем.",
+          "workspace": "Один синий предмет в зоне разговора или на столе.",
+          "makeup": "Холодный синий акцент у глаз — без «маски».",
+          "ui_or_bg": "Спокойный тёмно-синий фон в заметках дня."
+        },
+        "intensity": "один заметный элемент или два мелких",
+        "catalog_knowledge_ref": "Глубокий синий",
+        "evidence_references": [
+          "cycle-mercury_station_direct_summer",
+          "sky-semisquare-1",
+          "phase-waxing_gibbous-[redacted]"
+        ],
+        "chorus_references": [
+          "conflict",
+          "astrology:cycle-mercury_station_direct_summer",
+          "day_number",
+          "natal"
+        ],
+        "so_t_note": "scenario_scene_derived; catalog is knowledge only"
+      },
+      "avoid_color": {
+        "name": "Ярко-розовый",
+        "origin_scene_id": "scene.communication",
+        "serves_conflict": "Прямота без фильтра",
+        "amplifies_trap": "Ловушка — скатиться в «сгладить» и сделать вид, что выбора не было.",
+        "why": "Ярко-розовый сегодня нежелателен: усиливает ловушку сцены «Ловушка — скатиться в «сгладить» и сделать вид, что выбора не было.» и разгоняет стратегию «сгладить», вместо нужного «сказать прямо».",
+        "where_especially_avoid": "В одежде и на фоне разговора/решения в зоне «Общение».",
+        "ok_as_tiny_accent": false,
+        "catalog_knowledge_ref": "Ярко-розовый",
+        "evidence_references": [
+          "cycle-mercury_station_direct_summer",
+          "sky-semisquare-1",
+          "phase-waxing_gibbous-[redacted]"
+        ]
+      },
+      "goals": [
+        {
+          "text": "Закрыть один жест в зоне «Общение», который сдвигает «Прямота без фильтра» к «сказать прямо» — без ожидания чужой реакции.",
+          "origin_scene_id": "scene.communication",
+          "serves_conflict": "Прямота без фильтра",
+          "solves": "Ловушка — скатиться в «сгладить» и сделать вид, что выбора не было.",
+          "one_day_feasible": true,
+          "duplicates_do": false,
+          "role": "primary"
+        },
+        {
+          "text": "В «Отношения» заметить момент «сгладить» и заменить его одним маленьким «сказать прямо».",
+          "origin_scene_id": "scene.relationships",
+          "serves_conflict": "Прямота без фильтра",
+          "solves": "Ловушка — скатиться в «сгладить» и сделать вид, что выбора не было.",
+          "one_day_feasible": true,
+          "duplicates_do": false,
+          "role": "secondary"
+        }
+      ],
+      "affirmations": [
+        {
+          "text": "Мне не нужно выбирать «сгладить», чтобы сохранить лицо дня — я могу сделать один шаг к «сказать прямо».",
+          "origin_scene_id": "scene.communication",
+          "serves_conflict": "Прямота без фильтра",
+          "compensates_trap": "Ловушка — скатиться в «сгладить» и сделать вид, что выбора не было.",
+          "helps_action": "Сделайте один шаг в пользу «сказать прямо» в зоне «Общение». Темп дня (Число дня — 4): структура.",
+          "universal_formula": false
+        }
+      ],
+      "humor": {
+        "kind": "odd_message",
+        "origin_scene_id": "scene.communication",
+        "text": "Если поймаете себя на «сгладить» в зоне «Общение» — это уже сцена дня, не личный провал. Можно улыбнуться и выбрать другой жест.",
+        "serves_conflict": "Прямота без фильтра",
+        "optional": true
+      },
+      "strong_spheres": [
+        {
+          "sphere": "communication",
+          "sphere_label_ru": "Общение",
+          "origin_scene_id": "scene.communication",
+          "role_in_story": "primary",
+          "status": "strong",
+          "opportunity": "Шанс выбрать «сказать прямо» именно здесь — один конкретный жест."
+        },
+        {
+          "sphere": "relationships",
+          "sphere_label_ru": "Отношения",
+          "origin_scene_id": "scene.relationships",
+          "role_in_story": "secondary",
+          "status": "strong",
+          "opportunity": "Шанс выбрать «сказать прямо» именно здесь — один конкретный жест."
+        }
+      ],
+      "weak_spheres": [],
+      "rule": "Every prop carries origin_scene_id; catalog is knowledge only, not SoT.",
+      "chorus_tempo_hint": "структура"
+    },
+    "projections": {
+      "status": "day_scenario_project_v1.b5",
+      "note": "Legacy day_story slots are projections only; not meaning inputs."
+    },
+    "wire_projection": "day_scenario_project_v1.b5"
+  },
+  "instructions": {
+    "overall_band": [
+      "acceptable_with_issues",
+      "cannot_assess",
+      "pass",
+      "reject"
+    ],
+    "defect_presence": [
+      "absent",
+      "not_applicable",
+      "present",
+      "uncertain"
+    ],
+    "severity": [
+      "minor",
+      "material",
+      "severe"
+    ],
+    "blind": true,
+    "do_not_infer_from_filename": true
+  }
+}

@@ -1,0 +1,902 @@
+{
+  "export_kind": "blind_human_review_c362",
+  "case_id": "hg-eb8cc256a093",
+  "scenario_id": "hg-eb8cc256a093",
+  "scenario_hash": "sha256:edb14f28e967984e85c17c2ed9e20a4bd1907909da4b4cf430f365e0851a7e2f",
+  "locale": "ru",
+  "profile_type": "live_registered_personal",
+  "evidence_depth": "deep_personalized",
+  "source_type": "live_capture",
+  "rubric_version": "day_scenario_human_review_rubric_c362.1",
+  "golden_contract_version": "day_scenario_human_golden_c362",
+  "defect_catalog_version": "gate_rules_c36.42",
+  "review_protocol_version": "day_scenario_review_protocol_c362.1",
+  "scenario_contract_version": "day_scenario_native_llm_c1",
+  "defect_codes_for_labeling": [
+    "AFFIRMATION_UNNATURAL",
+    "ASTRO_JARGON_BARE",
+    "BUREAUCRATIC",
+    "CATEGORICAL_PROMISE",
+    "CHORUS_NATAL_WITHOUT_EVIDENCE",
+    "CHORUS_PARALLEL_ECHO",
+    "CHORUS_PARALLEL_FORECAST",
+    "CHORUS_ROLE_DRIFT",
+    "CHORUS_SEMANTIC_DUPLICATION",
+    "CHORUS_UNTRANSLATED_JARGON",
+    "CLOSURE_AFFIRMATION_ECHO",
+    "CLOSURE_MISSING",
+    "CLOSURE_NEW_FORECAST",
+    "CLOSURE_NO_CONFLICT_CALLBACK",
+    "CLOSURE_WELLNESS_MUSH",
+    "LOCALE_LANGUAGE_MISMATCH",
+    "NATAL_WITHOUT_EVIDENCE",
+    "PERSONALIZATION_CLAIM_WITHOUT_EVIDENCE",
+    "PERSONALIZATION_CONFLICT_UNCHANGED",
+    "PERSONALIZATION_DECORATIVE_ONLY",
+    "PERSONALIZATION_DEPTH_OVERREACH",
+    "PERSONALIZATION_EVIDENCE_ORPHAN",
+    "PERSONALIZATION_GENERIC_ACTION",
+    "PERSONALIZATION_NATAL_OVERCLAIM",
+    "PERSONALIZATION_PROFILE_FACT_LEAK",
+    "PERSONALIZATION_SCENES_UNCHANGED",
+    "PERSONALIZATION_SPHERE_CROSS_PROFILE",
+    "PERSONALIZATION_SPHERE_OUTSIDE_PACK",
+    "PERSONALIZATION_SPHERE_SELECTION_EMPTY",
+    "PERSONALIZATION_SPHERE_UNJUSTIFIED",
+    "PROVENANCE_ACTION_NOT_DERIVED",
+    "PROVENANCE_PROP_NOT_DERIVED",
+    "PROVENANCE_REF_MISSING",
+    "PROVENANCE_REF_ORPHAN",
+    "PROVENANCE_WRONG_PROFILE",
+    "PSEUDO_DIAGNOSIS",
+    "SCENE_ABSTRACT",
+    "SCENE_CLONE",
+    "SCENE_MISSING_CHOICE",
+    "SCENE_MISSING_EVERYDAY",
+    "SCENE_UNIVERSAL_ADVICE",
+    "THESIS_ECHO"
+  ],
+  "scenario": {
+    "contract_version": "day_scenario_v1",
+    "version": "day-scenario-v1.2-b5-runtime-sot",
+    "runtime_sot": true,
+    "ready": true,
+    "generation_source": "deterministic_engine_b5",
+    "foundation": {
+      "contract_version": "day_scenario_foundation_v1",
+      "ranked_drivers": [
+        {
+          "id": "sky-semisquare-0",
+          "kind": "sky_aspect",
+          "title_ru": "Sun — Mars",
+          "fact_ru": "Связь Солнца и Марса описывает, как ты идёшь к цели сразу после искры; это мотор напора и риска.",
+          "strength": 0.9199999999999999,
+          "body": null,
+          "sign": null,
+          "aspect": null,
+          "evidence_ref": "event:sky-semisquare-0"
+        },
+        {
+          "id": "phase-waxing_gibbous-[redacted]",
+          "kind": "phase_change",
+          "title_ru": "Растущая луна · Козерог",
+          "fact_ru": "Растущая луна · Козерог.",
+          "strength": 0.88,
+          "body": null,
+          "sign": null,
+          "aspect": null,
+          "evidence_ref": "event:phase-waxing_gibbous-[redacted]"
+        },
+        {
+          "id": "moon-square-saturn-202607271922",
+          "kind": "lunar_aspect",
+          "title_ru": "Луна — квадрат — Сатурн",
+          "fact_ru": "Луна: квадрат около 19:22.",
+          "strength": 0.8,
+          "body": null,
+          "sign": null,
+          "aspect": null,
+          "evidence_ref": "event:moon-square-saturn-202607271922"
+        }
+      ],
+      "astronomy_facts": [
+        {
+          "id": "lunar_phase",
+          "label_ru": "Растущая луна",
+          "kind": "lunar_phase",
+          "guidance": "Аудируй системы и ожидания; готовь сцену к видимости.",
+          "evidence_ref": "celestial.lunar_phase"
+        }
+      ],
+      "astrology_facts": [
+        {
+          "id": "sky-semisquare-0",
+          "label_ru": "Связь Солнца и Марса описывает, как ты идёшь к цели сразу после искры; это мотор напора и риска.",
+          "kind": "sky_aspect",
+          "strength": 0.9199999999999999,
+          "evidence_ref": "event:sky-semisquare-0"
+        },
+        {
+          "id": "phase-waxing_gibbous-[redacted]",
+          "label_ru": "Растущая луна · Козерог.",
+          "kind": "phase_change",
+          "strength": 0.88,
+          "evidence_ref": "event:phase-waxing_gibbous-[redacted]"
+        },
+        {
+          "id": "moon-square-saturn-202607271922",
+          "label_ru": "Луна: квадрат около 19:22.",
+          "kind": "lunar_aspect",
+          "strength": 0.8,
+          "evidence_ref": "event:moon-square-saturn-202607271922"
+        }
+      ],
+      "personal_natal_activations": [
+        {
+          "id": "claim.personal.astro.time-lords-firdaria-zr-moon",
+          "text": "Firdaria: мажор Луна ([redacted] → [redacted]), субпериод Луна (до [redacted]). ZR Fortune→Телец: L1 Рак/Луна, L2 Лев. ZR Spirit→Близнецы: L1 Рак/Луна, L2 Стрелец. Лоты soft: Луна/Солнце (нет ASC).",
+          "evidence_ids": [
+            "personal_astrology.time_lords"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.astro.profection-annual-h8",
+          "text": "Профекция года (возраст 31): 8-й дом, знак Козерог, управитель Сатурн — глубина, общие ресурсы, перемены. База — солнечный знак (нет времени/места для ASC).",
+          "evidence_ids": [
+            "personal_astrology.profections"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.astro.returns-solar",
+          "text": "Solar return 2026: карта от [redacted] (Солнце ≈ Близнецы 4.8°, ошибка noon 0.47°). День 64 периода; до следующего SR ~303 дн.",
+          "evidence_ids": [
+            "personal_astrology.solar_return"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.astro.progressions-secondary-sun-moon",
+          "text": "Секундарные прогрессии (день=год): прогресс. Солнце Рак 4.9°, Луна Близнецы 23.6° (возраст 31.17 лет → дата [redacted]). Солнце сменило знак с Близнецы. Луна сменила знак с Телец.",
+          "evidence_ids": [
+            "personal_astrology.secondary_progressions"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.astro.planet-returns-soft",
+          "text": "Возвраты планет (soft): в окне — Луна.",
+          "evidence_ids": [
+            "personal_astrology.planet_returns"
+          ],
+          "layer": "personal_astrology"
+        },
+        {
+          "id": "claim.personal.hd.hd.type.manifesting_generator",
+          "text": "HD soft: Манифестирующий генератор; авторитет Эмоциональный; стратегия — Отвечать (и информировать). Определённые центры (natal): Аджна, Голова, Эго / Воля, Корень, Сакрал.",
+          "evidence_ids": [
+            "human_design.type_authority"
+          ],
+          "layer": "human_design"
+        },
+        {
+          "id": "claim.personal.hd.hd.profile.6-3",
+          "text": "Профиль 6/3 · Роль-модель / Мученик; Левый угол (трансперсональный). Incarnation Cross soft: ворота 20/34/31/41 (Personality Sun 20.6, Design Sun 31.3).",
+          "evidence_ids": [
+            "human_design.profile_lines_cross"
+          ],
+          "layer": "human_design"
+        },
+        {
+          "id": "claim.personal.hd.hd.variables.RRLL",
+          "text": "Variables soft: Пищеварение вправо (receptive) · Касание; Среда вправо (receptive) · Долины; Перспектива влево (active) · Власть; Мотивация влево (active) · Надежда.",
+          "evidence_ids": [
+            "human_design.variables"
+          ],
+          "layer": "human_design"
+        },
+        {
+          "id": "claim.personal.bazi.summary",
+          "text": "BaZi: день 庚子, ваш год 乙亥 (Свинья) — без прямого clash с днём.",
+          "evidence_ids": [
+            "source.bazi"
+          ],
+          "layer": "bazi"
+        },
+        {
+          "id": "claim.personal.vedic.chandra_lagna-moon-h9",
+          "text": "Луна в 9-м — смысл, учёба, расширение горизонта.",
+          "evidence_ids": [
+            "vedic_personal.gochara"
+          ],
+          "layer": "vedic_personal"
+        },
+        {
+          "id": "claim.personal.vedic.dasha-md-moon",
+          "text": "Vimshottari: махадаша Луна / антардаша Венера (баланс при рождении 17.24 лет Венера).",
+          "evidence_ids": [
+            "vedic_personal.dasha"
+          ],
+          "layer": "vedic_personal"
+        },
+        {
+          "id": "claim.personal.name_numbers.name.expression",
+          "text": "Expression 4 — как имя звучит вовне (soft Pythagorean).",
+          "evidence_ids": [
+            "name_numbers.expression"
+          ],
+          "layer": "name_numbers"
+        }
+      ],
+      "tarot_card": {
+        "name": null,
+        "id": null,
+        "present": false,
+        "evidence_ref": null
+      },
+      "day_number": {
+        "value": 3,
+        "personal_day": 3,
+        "universal_day": 8,
+        "present": true,
+        "evidence_ref": "day_foundation.numerology"
+      },
+      "cycles": [
+        {
+          "id": "weekday",
+          "label_ru": "Moon",
+          "evidence_ref": "day_foundation.weekday"
+        },
+        {
+          "id": "seasonal",
+          "label_ru": "Сезон — лето.",
+          "evidence_ref": "day_foundation.seasonal"
+        }
+      ],
+      "confidence": 0.92,
+      "evidence_references": [
+        {
+          "id": "ev.foundation.essence",
+          "source": "day_foundation_v1.essence",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.astro.aspect.sky-semisquare-0",
+          "source": "source.western_astrology.aspects",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.astro.aspect.sky-square-2",
+          "source": "source.western_astrology.aspects",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.astro.aspect.sky-square-3",
+          "source": "source.western_astrology.aspects",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.lunar.lunar.phase",
+          "source": "source.moon.phase",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.lunar.aspect.sky-square-1",
+          "source": "source.moon.aspects",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.lunar.timed.moon-trine-saturn-202607250652",
+          "source": "source.moon.timed_lunar_aspects",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.lunar.timed.moon-square-venus-202607251152",
+          "source": "source.moon.timed_lunar_aspects",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.numerology",
+          "source": "source.numerology.universal_day",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.weekday",
+          "source": "source.weekday_ruler",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.seasonal",
+          "source": "source.seasonal_calendar",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.panchanga",
+          "source": "source.vedic_panchanga",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.chinese",
+          "source": "source.chinese_metaphysics",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.mayan.tzolkin_haab",
+          "source": "source.mayan_calendars.tzolkin_haab",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.foundation.mayan.dreamspell",
+          "source": "source.mayan_calendars.dreamspell",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.time-lords-firdaria-zr-moon",
+          "source": "personal_astrology.time_lords",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.profection-annual-h8",
+          "source": "personal_astrology.profections",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.returns-solar",
+          "source": "personal_astrology.solar_return",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.progressions-secondary-sun-moon",
+          "source": "personal_astrology.secondary_progressions",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.astro.planet-returns-soft",
+          "source": "personal_astrology.planet_returns",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.hd.hd.type.manifesting_generator",
+          "source": "human_design.type_authority",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.hd.hd.profile.6-3",
+          "source": "human_design.profile_lines_cross",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.hd.hd.variables.RRLL",
+          "source": "human_design.variables",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.bazi.summary",
+          "source": "source.bazi",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.vedic.chandra_lagna-moon-h9",
+          "source": "vedic_personal.gochara",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.vedic.dasha-md-moon",
+          "source": "vedic_personal.dasha",
+          "text": ""
+        },
+        {
+          "id": "ev.claim.personal.name_numbers.name.expression",
+          "source": "name_numbers.expression",
+          "text": ""
+        },
+        {
+          "id": "ev.brief.do_hint",
+          "source": "day_narrative_brief_v0.do_hint",
+          "text": ""
+        },
+        {
+          "id": "ev.brief.avoid_hint",
+          "source": "day_narrative_brief_v0.avoid_hint",
+          "text": ""
+        },
+        {
+          "id": "ev.brief.tempo",
+          "source": "day_narrative_brief_v0.tempo_hint",
+          "text": ""
+        },
+        {
+          "id": "ev.talisman.color",
+          "source": "celestial_events.daily_symbols.color",
+          "text": ""
+        },
+        {
+          "id": "ev.talisman.color.benefit",
+          "source": "celestial_events.daily_symbols.color.benefit_ru",
+          "text": ""
+        },
+        {
+          "id": "ev.talisman.color.avoid",
+          "source": "celestial_events.daily_symbols.color.avoid",
+          "text": ""
+        },
+        {
+          "id": "ev.talisman.stone",
+          "source": "celestial_events.daily_symbols.stone",
+          "text": ""
+        },
+        {
+          "id": "ev.talisman.stone.story",
+          "source": "celestial_events.daily_symbols.stone.story_ru",
+          "text": ""
+        },
+        {
+          "id": "ev.driver.sky-semisquare-0",
+          "source": "day_events_pack_v1.ranked_drivers",
+          "text": ""
+        },
+        {
+          "id": "ev.driver.phase-waxing_gibbous-[redacted]",
+          "source": "day_events_pack_v1.ranked_drivers",
+          "text": ""
+        },
+        {
+          "id": "ev.driver.moon-square-saturn-202607271922",
+          "source": "day_events_pack_v1.ranked_drivers",
+          "text": ""
+        },
+        {
+          "id": "ev.day.thesis",
+          "source": "day_thesis_v1",
+          "text": ""
+        }
+      ],
+      "limitations": [
+        "perigee_apogee_not_computed_v1",
+        "Нет явного сигнала по сферам (отношения / работа / семья) — доменные блоки не заполняются выдуманным текстом.",
+        "Карта дня не раскрыта или отсутствует — не упоминать карту.",
+        "Число дня не раскрыто или отсутствует — не упоминать число."
+      ]
+    },
+    "chorus": {
+      "contract_version": "day_scenario_chorus_v1",
+      "astrology": [
+        {
+          "voice": "astrology",
+          "named_factor": "Связь Солнца и Марса описывает, как ты идёшь к цели сразу после искры; это мотор напора и риска.",
+          "human_meaning": "Связь Солнца и Марса описывает, как ты идёшь к цели сразу после искры; это мотор напора и риска. Это подталкивает день к сюжету «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…».",
+          "link_to_conflict": "Объясняет, почему сегодня в центре «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…».",
+          "evidence_ref": "event:sky-semisquare-0",
+          "driver_id": "sky-semisquare-0"
+        },
+        {
+          "voice": "astrology",
+          "named_factor": "Растущая луна · Козерог.",
+          "human_meaning": "Растущая луна · Козерог. Это подталкивает день к сюжету «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…».",
+          "link_to_conflict": "Объясняет, почему сегодня в центре «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…».",
+          "evidence_ref": "event:phase-waxing_gibbous-[redacted]",
+          "driver_id": "phase-waxing_gibbous-[redacted]"
+        },
+        {
+          "voice": "astrology",
+          "named_factor": "Луна: квадрат около 19:22.",
+          "human_meaning": "Луна: квадрат около 19:22. Это подталкивает день к сюжету «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…».",
+          "link_to_conflict": "Объясняет, почему сегодня в центре «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…».",
+          "evidence_ref": "event:moon-square-saturn-202607271922",
+          "driver_id": "moon-square-saturn-202607271922"
+        }
+      ],
+      "day_card": null,
+      "day_number": {
+        "voice": "day_number",
+        "named_factor": "Число дня — 3",
+        "tempo": "выражение",
+        "style": "сказать вслух, не копить",
+        "lesson": "форма важна не меньше смысла",
+        "initiative": "лёгкая, игрово-творческая",
+        "closure": "оставить след — сообщение, набросок, жест",
+        "link_to_conflict": "Число 3 окрашивает прохождение «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…»: темп — выражение, способ — сказать вслух, не копить.",
+        "human_meaning": "Число 3 окрашивает прохождение «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…»: темп — выражение, способ — сказать вслух, не копить.",
+        "evidence_ref": "day_foundation.numerology",
+        "must_not_invent_second_plot": true
+      },
+      "natal": [
+        {
+          "voice": "natal",
+          "named_factor": "Firdaria: мажор Луна ([redacted] → [redacted]), субпериод Луна (до [redacted]). ZR Fortune→Телец: L1 Рак/Луна, L2 Лев. ZR Spirit→Близнецы: L1 Рак/Луна, L2 Стрелец. Лоты soft: Луна/Солнце (нет ASC).",
+          "human_meaning": "Личная активация усиливает «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…» именно так.",
+          "evidence_ref": "claim.personal.astro.time-lords-firdaria-zr-moon",
+          "evidence_ids": [
+            "personal_astrology.time_lords"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "Профекция года (возраст 31): 8-й дом, знак Козерог, управитель Сатурн — глубина, общие ресурсы, перемены. База — солнечный знак (нет времени/места для ASC).",
+          "human_meaning": "Личная активация усиливает «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…» именно так.",
+          "evidence_ref": "claim.personal.astro.profection-annual-h8",
+          "evidence_ids": [
+            "personal_astrology.profections"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "Solar return 2026: карта от [redacted] (Солнце ≈ Близнецы 4.8°, ошибка noon 0.47°). День 64 периода; до следующего SR ~303 дн.",
+          "human_meaning": "Личная активация усиливает «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…» именно так.",
+          "evidence_ref": "claim.personal.astro.returns-solar",
+          "evidence_ids": [
+            "personal_astrology.solar_return"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "Секундарные прогрессии (день=год): прогресс. Солнце Рак 4.9°, Луна Близнецы 23.6° (возраст 31.17 лет → дата [redacted]). Солнце сменило знак с Близнецы. Луна сменила знак с Телец.",
+          "human_meaning": "Личная активация усиливает «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…» именно так.",
+          "evidence_ref": "claim.personal.astro.progressions-secondary-sun-moon",
+          "evidence_ids": [
+            "personal_astrology.secondary_progressions"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "Возвраты планет (soft): в окне — Луна.",
+          "human_meaning": "Личная активация усиливает «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…» именно так.",
+          "evidence_ref": "claim.personal.astro.planet-returns-soft",
+          "evidence_ids": [
+            "personal_astrology.planet_returns"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "HD soft: Манифестирующий генератор; авторитет Эмоциональный; стратегия — Отвечать (и информировать). Определённые центры (natal): Аджна, Голова, Эго / Воля, Корень, Сакрал.",
+          "human_meaning": "Личная активация усиливает «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…» именно так.",
+          "evidence_ref": "claim.personal.hd.hd.type.manifesting_generator",
+          "evidence_ids": [
+            "human_design.type_authority"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "Профиль 6/3 · Роль-модель / Мученик; Левый угол (трансперсональный). Incarnation Cross soft: ворота 20/34/31/41 (Personality Sun 20.6, Design Sun 31.3).",
+          "human_meaning": "Личная активация усиливает «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…» именно так.",
+          "evidence_ref": "claim.personal.hd.hd.profile.6-3",
+          "evidence_ids": [
+            "human_design.profile_lines_cross"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "Variables soft: Пищеварение вправо (receptive) · Касание; Среда вправо (receptive) · Долины; Перспектива влево (active) · Власть; Мотивация влево (active) · Надежда.",
+          "human_meaning": "Личная активация усиливает «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…» именно так.",
+          "evidence_ref": "claim.personal.hd.hd.variables.RRLL",
+          "evidence_ids": [
+            "human_design.variables"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "BaZi: день 庚子, ваш год 乙亥 (Свинья) — без прямого clash с днём.",
+          "human_meaning": "Личная активация усиливает «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…» именно так.",
+          "evidence_ref": "claim.personal.bazi.summary",
+          "evidence_ids": [
+            "source.bazi"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "Луна в 9-м — смысл, учёба, расширение горизонта.",
+          "human_meaning": "Личная активация усиливает «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…» именно так.",
+          "evidence_ref": "claim.personal.vedic.chandra_lagna-moon-h9",
+          "evidence_ids": [
+            "vedic_personal.gochara"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "Vimshottari: махадаша Луна / антардаша Венера (баланс при рождении 17.24 лет Венера).",
+          "human_meaning": "Личная активация усиливает «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…» именно так.",
+          "evidence_ref": "claim.personal.vedic.dasha-md-moon",
+          "evidence_ids": [
+            "vedic_personal.dasha"
+          ]
+        },
+        {
+          "voice": "natal",
+          "named_factor": "Expression 4 — как имя звучит вовне (soft Pythagorean).",
+          "human_meaning": "Личная активация усиливает «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…»: реакция может быть сильнее средней.",
+          "link_to_conflict": "Почему именно вы проживаете «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…» именно так.",
+          "evidence_ref": "claim.personal.name_numbers.name.expression",
+          "evidence_ids": [
+            "name_numbers.expression"
+          ]
+        }
+      ],
+      "dialogue_rule": "Четыре взгляда на одну историю: астрология — что снаружи; карта — архетип; число — темп; натал — почему вам.",
+      "named_language_encouraged": true,
+      "parallel_forecast_forbidden": true
+    },
+    "conflict": {
+      "contract_version": "day_scenario_conflict_v1",
+      "short_name": "Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…",
+      "thesis": {
+        "family": "change",
+        "variant": "sudden_turns",
+        "mode": "conflict",
+        "label_ru": "Неожиданные повороты",
+        "day_thesis": {
+          "contract_version": "day_thesis_v1",
+          "family": "change",
+          "variant": "sudden_turns",
+          "mode": "conflict",
+          "label_ru": "Неожиданные повороты",
+          "label": "Неожиданные повороты",
+          "driver_ids": [
+            "sky-semisquare-0",
+            "phase-waxing_gibbous-[redacted]",
+            "moon-square-saturn-202607271922"
+          ],
+          "composition_ids": [
+            "comp-moon-square-saturn-202607271922-sky-semisquare-0"
+          ]
+        },
+        "act_iii_registry_label": "Неожиданные повороты"
+      },
+      "opposing_forces": {
+        "a": "удержать привычное",
+        "b": "принять поворот"
+      },
+      "why_arose": "Связь Солнца и Марса описывает, как ты идёшь к цели сразу после искры; это мотор напора и риска. · Растущая луна · Козерог.",
+      "why_personal": "Firdaria: мажор Луна ([redacted] → [redacted]), субпериод Луна (до [redacted]). ZR Fortune→Телец: L1 Рак/Луна, L2 Лев. ZR Spirit→Близнецы: L1 Рак/Луна, L2 Стрелец. Лоты soft: Луна/Солнце (нет ASC).",
+      "driver_ids": [
+        "sky-semisquare-0",
+        "phase-waxing_gibbous-[redacted]",
+        "moon-square-saturn-202607271922"
+      ],
+      "chorus_references": [
+        "astrology:sky-semisquare-0",
+        "astrology:phase-waxing_gibbous-[redacted]",
+        "astrology:moon-square-saturn-202607271922",
+        "day_number",
+        "natal"
+      ],
+      "confidence": 0.92,
+      "foundation_rule": "Conflict short_name is everyday tension from ranked facts + opposing forces; day_thesis.label_ru is Act III registry seed only. Card and number refine reading/tempo, never invent a rival plot."
+    },
+    "scenes": [
+      {
+        "scene_id": "scene.work_decisions",
+        "sphere": "work_decisions",
+        "sphere_label_ru": "Работа и решения",
+        "role_in_story": "primary",
+        "what_happens": "В «Работа и решения» день упирается в выбор: «удержать привычное» или «принять поворот». Тон задаёт факт: Связь Солнца и Марса описывает, как ты идёшь к цели сразу после искры; это мотор напора и риска.",
+        "why": "Связь Солнца и Марса описывает, как ты идёшь к цели сразу после искры; это мотор напора и риска. · Растущая луна · Козерог.",
+        "opportunity": "Шанс выбрать «принять поворот» именно здесь — один конкретный жест.",
+        "trap": "Ловушка — скатиться в «удержать привычное» и сделать вид, что выбора не было.",
+        "recommended_action": "Сделайте один шаг в пользу «принять поворот» в зоне «Работа и решения». Темп дня (Число дня — 3): выражение.",
+        "do_not": "Не усиливайте «удержать привычное» автоматическим согласием или откладыванием.",
+        "domestic_example": "Одно письмо или решение, которое вы откладывали из-за чужой реакции. (на фоне: Связь Солнца и Марса описывает, как ты идёшь к цели сразу после искры; это мото…)",
+        "evidence_references": [
+          "sky-semisquare-0",
+          "phase-waxing_gibbous-[redacted]",
+          "moon-square-saturn-202607271922"
+        ],
+        "chorus_references": [
+          "conflict",
+          "astrology:sky-semisquare-0",
+          "day_number",
+          "natal"
+        ],
+        "confidence": 0.92,
+        "serves_conflict": "Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…"
+      },
+      {
+        "scene_id": "scene.rest_travel",
+        "sphere": "rest_travel",
+        "sphere_label_ru": "Отдых и поездки",
+        "role_in_story": "support_or_risk",
+        "what_happens": "В сфере «Отдых и поездки» тот же выбор — «удержать привычное» или «принять поворот».",
+        "why": "Связь Солнца и Марса описывает, как ты идёшь к цели сразу после искры; это мотор напора и риска. · Растущая луна · Козерог.",
+        "opportunity": "Шанс выбрать «принять поворот» именно здесь — один конкретный жест.",
+        "trap": "Ловушка — скатиться в «удержать привычное» и сделать вид, что выбора не было.",
+        "recommended_action": "Сделайте один шаг в пользу «принять поворот» в зоне «Отдых и поездки». Темп дня (Число дня — 3): выражение.",
+        "do_not": "Не усиливайте «удержать привычное» автоматическим согласием или откладыванием.",
+        "domestic_example": "Смена обстановки на час, если тянет «всё бросить».",
+        "evidence_references": [
+          "sky-semisquare-0",
+          "phase-waxing_gibbous-[redacted]",
+          "moon-square-saturn-202607271922"
+        ],
+        "chorus_references": [
+          "conflict",
+          "astrology:sky-semisquare-0",
+          "day_number",
+          "natal"
+        ],
+        "confidence": 0.92,
+        "serves_conflict": "Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…"
+      },
+      {
+        "scene_id": "scene.energy_body",
+        "sphere": "energy_body",
+        "sphere_label_ru": "Энергия и тело",
+        "role_in_story": "support_or_risk",
+        "what_happens": "В сфере «Энергия и тело» тот же выбор — «удержать привычное» или «принять поворот».",
+        "why": "Связь Солнца и Марса описывает, как ты идёшь к цели сразу после искры; это мотор напора и риска. · Растущая луна · Козерог.",
+        "opportunity": "Шанс выбрать «принять поворот» именно здесь — один конкретный жест.",
+        "trap": "Ловушка — скатиться в «удержать привычное» и сделать вид, что выбора не было.",
+        "recommended_action": "Сделайте один шаг в пользу «принять поворот» в зоне «Энергия и тело». Темп дня (Число дня — 3): выражение.",
+        "do_not": "Не усиливайте «удержать привычное» автоматическим согласием или откладыванием.",
+        "domestic_example": "Пауза до усталости — вода, прогулка, сон без «ещё один час».",
+        "evidence_references": [
+          "sky-semisquare-0",
+          "phase-waxing_gibbous-[redacted]",
+          "moon-square-saturn-202607271922"
+        ],
+        "chorus_references": [
+          "conflict",
+          "astrology:sky-semisquare-0",
+          "day_number",
+          "natal"
+        ],
+        "confidence": 0.92,
+        "serves_conflict": "Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…"
+      }
+    ],
+    "props": {
+      "contract_version": "day_scenario_props_v1",
+      "status": "ok",
+      "color": {
+        "name": "Лазурь",
+        "origin_scene_id": "scene.work_decisions",
+        "serves_conflict": "Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…",
+        "link_to_conflict": "В сцене «Работа и решения» конфликт «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…» тянет к «удержать привычное». ясность ума без суеты — это свойство нужно сегодня, чтобы удержать «принять поворот».",
+        "supports_or_compensates": "Компенсирует ловушку: Ловушка — скатиться в «удержать привычное» и сделать вид, что выбора не было.",
+        "expected_effect_today": "Помогает не сорваться в «удержать привычное» и сделать один жест в сторону «принять поворот».",
+        "where_to_use": {
+          "clothing": "Светлая рубашка, шарф или носки лазурного оттенка.",
+          "accessory": "Тонкий браслет или блокнот в мягком синем.",
+          "workspace": "Лазурный стикер на одном приоритете.",
+          "makeup": null,
+          "ui_or_bg": "Мягкий голубой акцент в списке задач."
+        },
+        "intensity": "10–15% образа — один акцент",
+        "catalog_knowledge_ref": "Лазурь",
+        "evidence_references": [
+          "sky-semisquare-0",
+          "phase-waxing_gibbous-[redacted]",
+          "moon-square-saturn-202607271922"
+        ],
+        "chorus_references": [
+          "conflict",
+          "astrology:sky-semisquare-0",
+          "day_number",
+          "natal"
+        ],
+        "so_t_note": "scenario_scene_derived; catalog is knowledge only"
+      },
+      "avoid_color": {
+        "name": "Кислотно-оранжевый",
+        "origin_scene_id": "scene.work_decisions",
+        "serves_conflict": "Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…",
+        "amplifies_trap": "Ловушка — скатиться в «удержать привычное» и сделать вид, что выбора не было.",
+        "why": "Кислотно-оранжевый сегодня нежелателен: усиливает ловушку сцены «Ловушка — скатиться в «удержать привычное» и сделать вид, что выбора не было.» и разгоняет стратегию «удержать привычное», вместо нужного «принять поворот».",
+        "where_especially_avoid": "В одежде и на фоне разговора/решения в зоне «Работа и решения».",
+        "ok_as_tiny_accent": false,
+        "catalog_knowledge_ref": "Кислотно-оранжевый",
+        "evidence_references": [
+          "sky-semisquare-0",
+          "phase-waxing_gibbous-[redacted]",
+          "moon-square-saturn-202607271922"
+        ]
+      },
+      "goals": [
+        {
+          "text": "Закрыть один жест в зоне «Работа и решения», который сдвигает «Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…» к «принять поворот» — без ожидания чужой реакции.",
+          "origin_scene_id": "scene.work_decisions",
+          "serves_conflict": "Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…",
+          "solves": "Ловушка — скатиться в «удержать привычное» и сделать вид, что выбора не было.",
+          "one_day_feasible": true,
+          "duplicates_do": false,
+          "role": "primary"
+        },
+        {
+          "text": "В «Отдых и поездки» заметить момент «удержать привычное» и заменить его одним маленьким «принять поворот».",
+          "origin_scene_id": "scene.rest_travel",
+          "serves_conflict": "Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…",
+          "solves": "Ловушка — скатиться в «удержать привычное» и сделать вид, что выбора не было.",
+          "one_day_feasible": true,
+          "duplicates_do": false,
+          "role": "secondary"
+        },
+        {
+          "text": "В «Энергия и тело» заметить момент «удержать привычное» и заменить его одним маленьким «принять поворот».",
+          "origin_scene_id": "scene.energy_body",
+          "serves_conflict": "Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…",
+          "solves": "Ловушка — скатиться в «удержать привычное» и сделать вид, что выбора не было.",
+          "one_day_feasible": true,
+          "duplicates_do": false,
+          "role": "secondary"
+        }
+      ],
+      "affirmations": [
+        {
+          "text": "Мне не нужно выбирать «удержать привычное», чтобы сохранить лицо дня — я могу сделать один шаг к «принять поворот».",
+          "origin_scene_id": "scene.work_decisions",
+          "serves_conflict": "Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…",
+          "compensates_trap": "Ловушка — скатиться в «удержать привычное» и сделать вид, что выбора не было.",
+          "helps_action": "Сделайте один шаг в пользу «принять поворот» в зоне «Работа и решения». Темп дня (Число дня — 3): выражение.",
+          "universal_formula": false
+        }
+      ],
+      "humor": null,
+      "strong_spheres": [
+        {
+          "sphere": "work_decisions",
+          "sphere_label_ru": "Работа и решения",
+          "origin_scene_id": "scene.work_decisions",
+          "role_in_story": "primary",
+          "status": "strong",
+          "opportunity": "Шанс выбрать «принять поворот» именно здесь — один конкретный жест."
+        }
+      ],
+      "weak_spheres": [
+        {
+          "sphere": "rest_travel",
+          "sphere_label_ru": "Отдых и поездки",
+          "origin_scene_id": "scene.rest_travel",
+          "role_in_story": "support_or_risk",
+          "status": "vulnerable",
+          "risk": "Ловушка — скатиться в «удержать привычное» и сделать вид, что выбора не было."
+        },
+        {
+          "sphere": "energy_body",
+          "sphere_label_ru": "Энергия и тело",
+          "origin_scene_id": "scene.energy_body",
+          "role_in_story": "support_or_risk",
+          "status": "vulnerable",
+          "risk": "Ловушка — скатиться в «удержать привычное» и сделать вид, что выбора не было."
+        }
+      ],
+      "rule": "Every prop carries origin_scene_id; catalog is knowledge only, not SoT.",
+      "chorus_tempo_hint": "выражение"
+    },
+    "projections": {
+      "status": "day_scenario_project_v1.b5",
+      "note": "Legacy day_story slots are projections only; not meaning inputs."
+    },
+    "wire_projection": "day_scenario_project_v1.b5"
+  },
+  "instructions": {
+    "overall_band": [
+      "acceptable_with_issues",
+      "cannot_assess",
+      "pass",
+      "reject"
+    ],
+    "defect_presence": [
+      "absent",
+      "not_applicable",
+      "present",
+      "uncertain"
+    ],
+    "severity": [
+      "minor",
+      "material",
+      "severe"
+    ],
+    "blind": true,
+    "do_not_infer_from_filename": true
+  }
+}
