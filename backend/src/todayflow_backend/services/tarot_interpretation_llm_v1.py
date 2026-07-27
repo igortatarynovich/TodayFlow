@@ -45,13 +45,20 @@ _EMPTY_FORMULAS = (
     "энергия дня",
 )
 
-# Rhetorical antithesis «не X, а Y» (owner editorial, 2026-07-26): e.g. «не кричит, а греет».
+# Rhetorical antithesis hard-gate (owner editorial, 2026-07-26):
+# short parallel verbs «не кричит, а греет». Noun advice contrasts stay allowed.
+# Broader «это не …, а …» remains prompt-only (hard reject over-killed live).
 _ANTITHESIS_NE_A_RE = re.compile(
-    r"(?:^|[.!?…]\s+|:\s+)?(?:это\s+)?не\s+[^,]{2,48}?,\s*а\s+\w+",
+    r"(?:(?<=[\s«\"(\[{])|^)не\s+([а-яёa-z]{3,18}),\s*а\s+([а-яёa-z]{3,18})"
+    r"(?=[\s»\")\]}.,!?;:—-]|$)",
+    re.IGNORECASE | re.UNICODE,
+)
+_ANTITHESIS_VERBISH_RE = re.compile(
+    r"(?:ет|ит|ат|ут|ют|ешь|ишь|ал|ала|или|ый|ая|ое|ть)$",
     re.IGNORECASE | re.UNICODE,
 )
 _ANTITHESIS_NOT_BUT_RE = re.compile(
-    r"\bnot\s+[^,]{2,40}?,\s*but\s+\w+",
+    r"\bnot\s+([a-z]{3,18}),\s*but\s+([a-z]{3,18})\b",
     re.IGNORECASE,
 )
 
@@ -307,9 +314,18 @@ _FIELD_MAX_CHARS_CHOICE_STORY = 1400
 
 
 def _antithesis_formula_hits(text: str) -> int:
-    """Count rhetorical «не X, а Y» / «not X, but Y» constructions."""
+    """Count rhetorical short verb/adjective «не X, а Y» / «not X, but Y»."""
     blob = str(text or "")
-    return len(_ANTITHESIS_NE_A_RE.findall(blob)) + len(_ANTITHESIS_NOT_BUT_RE.findall(blob))
+    hits = 0
+    for match in _ANTITHESIS_NE_A_RE.finditer(blob):
+        left, right = match.group(1), match.group(2)
+        if _ANTITHESIS_VERBISH_RE.search(left) and _ANTITHESIS_VERBISH_RE.search(right):
+            hits += 1
+    for match in _ANTITHESIS_NOT_BUT_RE.finditer(blob):
+        left, right = match.group(1), match.group(2)
+        if len(left) >= 3 and len(right) >= 3:
+            hits += 1
+    return hits
 
 
 def quality_reject_reason(fields: dict[str, str], pack: dict[str, Any]) -> str | None:

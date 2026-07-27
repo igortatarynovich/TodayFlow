@@ -82,6 +82,11 @@ export const TAROT_REFINEMENTS: Record<TarotConcernDomain, TarotRefinementOption
   relationships: [
     { id: "specific_person", label: "Конкретный человек", questionSeed: "Что сейчас важно понять в отношениях с этим человеком?" },
     { id: "relationships_general", label: "Отношения вообще", questionSeed: "Какой новый взгляд поможет мне в теме близости прямо сейчас?" },
+    {
+      id: "intimacy_sex",
+      label: "Близость и секс",
+      questionSeed: "Какие практические шаги помогут близости и сексуальной жизни без давления и стыда?",
+    },
     { id: "ex_partner", label: "Бывший партнёр", questionSeed: "Что мне важно увидеть в истории с бывшим партнёром?" },
     { id: "new_person", label: "Новый человек", questionSeed: "Как лучше понять то, что происходит с новым человеком?" },
     { id: "two_people", label: "Выбор между двумя людьми", questionSeed: "Какой взгляд поможет мне честнее увидеть выбор между двумя людьми?" },
@@ -94,8 +99,13 @@ export const TAROT_REFINEMENTS: Record<TarotConcernDomain, TarotRefinementOption
   ],
   money: [
     { id: "big_purchase", label: "Крупная трата или вложение", questionSeed: "Какой взгляд поможет принять решение о деньгах спокойнее?" },
-    { id: "stability", label: "Стабильность и страх", questionSeed: "Где сейчас реальная опора в теме денег, а где тревога?" },
+    { id: "stability", label: "Стабильность и страх", questionSeed: "Где сейчас реальная опора в теме денег — и где тревога?" },
     { id: "income_change", label: "Изменить доход", questionSeed: "Что важно учесть, если я хочу изменить свой доход?" },
+    {
+      id: "practical_week",
+      label: "Практический шаг на неделю",
+      questionSeed: "Какой один практический шаг по деньгам стоит сделать на этой неделе?",
+    },
   ],
   family: [
     { id: "parent", label: "Родитель или старшие", questionSeed: "Что сейчас важно понять в отношениях с родителями или старшими?" },

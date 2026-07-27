@@ -673,9 +673,9 @@ Source of truth: [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) §1–§13
 - [x] **Production reliability** — background timeout · no timeout→plain double-burn · live eval budgets · commit `da03d22` · deployed.
 - [x] **Golden Eval live #3** — **12/12 LLM** · `freeze_lift_ready=true`. Audit [TAROT_GOLDEN_EVAL_LIVE_2026-07-26_r3](./audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-26_r3.md).
 - [x] **Owner editorial-phase accept** — full architecture lift declined; Editorial Phase allowlist active.
-- [ ] **Human Golden Eval v2** — protocol seeded ([TAROT_GOLDEN_EVAL_HUMAN_V2](./tarot/TAROT_GOLDEN_EVAL_HUMAN_V2.md) · 1 owner case). Fill 20–30 real Q+A · three post-answer questions. **← next**
+- [ ] **Human Golden Eval v2** — capture CLI + **13 cases** in fixture (1 scored owner + 12 live golden-dataset, unscored). Scorecard [TAROT_HUMAN_EVAL_V2_SCORECARD](./audits/TAROT_HUMAN_EVAL_V2_SCORECARD.md). Owner fills three questions → drive Q3. **← next (owner eyes)**
 - [x] **Paid deepen chooser (UI)** — result «Углубить тему» unlocked for paid/trial; guest → signup, free → `/pricing`. Choices: money / intimacy&sex / work / boundaries → `/tarot?source=deepen`. No new engine hop. [Editorial Phase](./audits/TAROT_STACK_EDITORIAL_PHASE_2026-07-26.md).
-- [ ] **Q3+ prompt polish** — wording only under Editorial Phase.
+- [ ] **Q3+ prompt polish** — wording only under Editorial Phase. Note: antithesis hard-gate narrowed to short «не слово, а слово» (broad regex was rejecting most live answers); «это не …, а …» remains prompt ban.
 - [ ] **Fallback LLM provider** — deferred until owner purchases/connects.
 - [ ] **Tarot Design Language v1** — [docs/tarot/TAROT_DESIGN_LANGUAGE_V1.md](./tarot/TAROT_DESIGN_LANGUAGE_V1.md) **DRAFT / PENDING ACCEPT** · **parked under architecture freeze**
   - Канон-объект: колода на столе; формации 1/3/5/2; один reveal-жест; рубашка = фирменный язык

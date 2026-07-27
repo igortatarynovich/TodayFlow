@@ -19,6 +19,19 @@ export function insightDepthFromProfile(profile: AccountProfile | null): Insight
   return insightDepthFromBilling(profile?.subscription_level);
 }
 
+/**
+ * Paid / trial depth access (lite|pro, legacy is_paid, active|trialing).
+ * Canon: trial = full depth experience; subscription unlocks deepen layers.
+ */
+export function hasPaidSubscriptionAccess(profile: AccountProfile | null | undefined): boolean {
+  if (!profile) return false;
+  if (profile.subscription_level === "lite" || profile.subscription_level === "pro") return true;
+  if (profile.is_paid) return true;
+  const status = (profile.subscription_status || "").toLowerCase();
+  if (status === "active" || status === "trialing") return true;
+  return insightDepthFromProfile(profile) !== "free";
+}
+
 /** Примеры для paywall / превью: один день, разная глубина. */
 export const INSIGHT_PAYWALL_COPY = {
   headline: "Платишь за ощущение, что тебя понимают",

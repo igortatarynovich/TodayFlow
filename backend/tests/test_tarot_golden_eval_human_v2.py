@@ -18,11 +18,14 @@ def test_human_eval_v2_seed_matches_schema():
     jsonschema.validate(payload, schema)
     assert payload["contract_version"] == "tarot_golden_eval_human_v2"
     assert len(payload["cases"]) >= 1
-    case = payload["cases"][0]
-    assert case["id"] == "hv2_work_direction_three"
+    by_id = {c["id"]: c for c in payload["cases"]}
+    case = by_id["hv2_work_direction_three"]
     human = case["human"]
     assert human["understood_symbols"] == "yes"
     assert human["answered_my_question"] == "yes"
     assert human["would_pay"] == "yes"
     assert human["voice_flags"]["antithesis_formula"] is True
     assert human["voice_flags"]["sees_self"] is True
+    # Live captures append unscored; scored owner seed must remain.
+    unscored = [c for c in payload["cases"] if not (c.get("human") or {}).get("scored_by")]
+    assert len(payload["cases"]) >= 1 + len(unscored)

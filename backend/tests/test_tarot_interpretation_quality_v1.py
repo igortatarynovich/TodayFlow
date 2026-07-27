@@ -250,6 +250,16 @@ def test_quality_gates_reject_antithesis_ne_a_formula():
     assert tarot_llm.quality_reject_reason(bad, pack) == "antithesis_formula"
     assert tarot_llm.validate_interpretation(bad, pack=pack) is None
 
+    # «это не …, а …» — prompt ban only; hard gate would over-reject live answers.
+    soft_eto = {
+        **bad,
+        "question_story": (
+            "Сейчас вы в режиме стража у финального рубежа. Это не героический рывок, "
+            "а переход к роли, где лидерство держится на тепле и доверии."
+        ),
+    }
+    assert tarot_llm.quality_reject_reason(soft_eto, pack) is None
+
     good = {
         **bad,
         "question_story": (
@@ -259,6 +269,23 @@ def test_quality_gates_reject_antithesis_ne_a_formula():
     }
     assert tarot_llm.quality_reject_reason(good, pack) is None
     assert tarot_llm.validate_interpretation(good, pack=pack) is not None
+
+    # Ordinary advice / noun contrast must not trip the voice gate.
+    advice = {
+        **bad,
+        "question_story": (
+            "Сейчас вы в режиме стража у финального рубежа. Важно не уходить сразу, "
+            "а сначала прояснить критерии и закрыть старый перекос в оценке вклада."
+        ),
+    }
+    assert tarot_llm.quality_reject_reason(advice, pack) is None
+    noun = {
+        **bad,
+        "question_story": (
+            "Сейчас вы в режиме стража. В центре не страх, а ясность выбора и опора на критерии."
+        ),
+    }
+    assert tarot_llm.quality_reject_reason(noun, pack) is None
 
 
 def test_choice_question_story_allows_moderate_length_from_eval_delta():

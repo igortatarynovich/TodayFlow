@@ -66,3 +66,14 @@ Meaning **liked**; voice note: antithesis «не кричит, а греет» �
 1. Capture 20–30 real Q+A into the fixture (append-only).  
 2. Score with the three questions (+ optional rubric).  
 3. Summarize yes/partial/no rates — drive Q3 wording, not new pipeline layers.
+
+### Capture tooling (2026-07-27)
+
+```bash
+set -a && source .env && set +a
+PYTHONPATH=backend/src backend/.venv/bin/python scripts/tarot_human_eval_capture_v2.py --write-fixture
+```
+
+- Writes live answers into `backend/tests/fixtures/tarot_golden_eval_human_v2.json` (**without** inventing `human` scores).  
+- Scorecard: `docs/audits/TAROT_HUMAN_EVAL_V2_SCORECARD.md`  
+- Capture dump: `docs/audits/TAROT_HUMAN_EVAL_V2_CAPTURE_*.json`

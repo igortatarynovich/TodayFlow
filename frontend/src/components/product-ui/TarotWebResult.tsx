@@ -13,6 +13,8 @@ import {
 } from "@/components/product-ui/ProductJourneyScene";
 import journeyStyles from "@/components/product-ui/ProductJourneyScene.module.css";
 import type { TarotReadingStoryModel } from "@/lib/buildTarotReadingStoryModel";
+import { guestSignupHref } from "@/lib/guestAccessStore";
+import { buildTarotDeepenHref, pickTarotDeepenOffers } from "@/lib/tarotDeepenOffers";
 import { t } from "@/lib/i18n";
 import s from "@/components/product-ui/productWebScreens.module.css";
 
@@ -23,6 +25,10 @@ export type TarotWebResultProps = {
   cardsAriaLabel?: string;
   storyEyebrow?: string;
   extraActions?: ReactNode;
+  /** Paid/trial unlocks deepen chooser; guests and free get teaser. */
+  isAuthenticated?: boolean;
+  hasPaidAccess?: boolean;
+  concernDomain?: string | null;
 };
 
 function ensurePeriod(text: string): string {
@@ -47,9 +53,16 @@ export function TarotWebResult({
   spreadTitle,
   cardsAriaLabel,
   extraActions,
+  isAuthenticated = false,
+  hasPaidAccess = false,
+  concernDomain = null,
 }: TarotWebResultProps) {
   const chrome = useMemo(() => tarotReadingStoryChromeBundle(locale), [locale]);
   const loc = locale === "ru" ? "ru" : "en";
+  const deepenOffers = useMemo(
+    () => pickTarotDeepenOffers(concernDomain, { limit: 4 }),
+    [concernDomain],
+  );
   const cardsLabel =
     cardsAriaLabel ??
     t("tarot.story.cardsSpreadAria", loc === "ru" ? "Карты расклада" : "Spread cards", undefined, loc);
@@ -186,12 +199,57 @@ export function TarotWebResult({
         lead={
           blocked
             ? "Можно пересобрать расклад или открыть карты снова."
-            : "Один контекстный шаг из этого вывода."
+            : "Один контекстный шаг из этого вывода — или углубить тему."
         }
         motif="bridge"
         bridge
         testId="tarot-journey-bridge"
       >
+        {!blocked ? (
+          <div className={s.tarotDeepenBlock} data-testid="tarot-deepen-offers">
+            {hasPaidAccess ? (
+              <>
+                <p className={s.tarotDeepenTitle}>Углубить тему</p>
+                <p className={s.tarotDeepenLead}>
+                  Выбери направление — новый расклад с практическим фокусом. Подписка открывает этот слой.
+                </p>
+                <div className={s.tarotDeepenGrid}>
+                  {deepenOffers.map((offer) => (
+                    <Link
+                      key={offer.id}
+                      href={buildTarotDeepenHref(offer)}
+                      className={s.tarotDeepenCard}
+                      data-testid={`tarot-deepen-${offer.id}`}
+                    >
+                      <span className={s.tarotDeepenCardLabel}>{offer.label}</span>
+                      <span className={s.tarotDeepenCardHint}>{offer.hint}</span>
+                    </Link>
+                  ))}
+                </div>
+              </>
+            ) : isAuthenticated ? (
+              <>
+                <p className={s.tarotDeepenTitle}>Углубить тему</p>
+                <p className={s.tarotDeepenLead}>
+                  С подпиской можно углубить деньги, близость или работу — с практическими подсказками поверх этого разбора.
+                </p>
+                <Link href="/pricing" className={journeyStyles.bridgeLink} data-testid="tarot-deepen-pricing">
+                  → Сравнить подписку
+                </Link>
+              </>
+            ) : (
+              <>
+                <p className={s.tarotDeepenTitle}>Углубить тему</p>
+                <p className={s.tarotDeepenLead}>
+                  Углубление тем (деньги, близость, работа) — слой подписки. Сначала создай аккаунт, затем открой доступ.
+                </p>
+                <Link href={guestSignupHref()} className={journeyStyles.bridgeLink}>
+                  → Создать мой Today
+                </Link>
+              </>
+            )}
+          </div>
+        ) : null}
         {model.actions.length || extraActions ? (
           <div className={journeyStyles.actionRow}>
             {model.actions.map((action) =>

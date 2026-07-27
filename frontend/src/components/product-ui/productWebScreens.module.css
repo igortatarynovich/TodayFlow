@@ -1121,6 +1121,73 @@
   gap: 0.75rem;
 }
 
+.tarotDeepenBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+  padding: 1rem 1.1rem;
+  border-radius: var(--tf-ds-radius-lg, 16px);
+  border: 1px solid var(--tf-cream-border);
+  background: var(--tf-surface-warm);
+}
+
+.tarotDeepenTitle {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--tf-ink);
+}
+
+.tarotDeepenLead {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--tf-ink-muted, rgba(30, 28, 24, 0.72));
+}
+
+.tarotDeepenGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+}
+
+@media (max-width: 520px) {
+  .tarotDeepenGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tarotDeepenCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: 14px;
+  border: 1px solid var(--tf-cream-border);
+  background: #fff;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.tarotDeepenCard:hover {
+  border-color: var(--tf-accent-gold);
+  background: var(--tf-surface-warm);
+}
+
+.tarotDeepenCardLabel {
+  font-size: 0.875rem;
+  font-weight: 650;
+  color: var(--tf-ink);
+}
+
+.tarotDeepenCardHint {
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--tf-ink-muted, rgba(30, 28, 24, 0.62));
+}
+
 .tarotWebLoading {
   display: flex;
   align-items: center;

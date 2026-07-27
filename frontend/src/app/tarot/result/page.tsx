@@ -7,6 +7,7 @@ import { LoadingSpinner } from "@/components/orbit";
 import { DsButton } from "@/design-system";
 import shell from "@/components/shell/tarotShell.module.css";
 import { TarotWebResult } from "@/components/product-ui/TarotWebResult";
+import { hasPaidSubscriptionAccess } from "@/lib/insightDepth";
 import s from "@/components/product-ui/productWebScreens.module.css";
 import { tarotSpreadResultChromeBundle } from "@/components/tarot/tarotSpreadResultChrome";
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
@@ -104,7 +105,7 @@ type SelectedCardPayload = {
 
 function TarotResultContent() {
   const searchParams = useSearchParams();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, profile } = useAuth();
   const { trackMeaningEvent } = useMeaningRuntime();
   const locale: FlowPracticesChromeLocale = getLocale() === "ru" ? "ru" : "en";
   const tc = useMemo(() => tarotSpreadResultChromeBundle(locale), [locale]);
@@ -338,6 +339,9 @@ function TarotResultContent() {
         locale={locale}
         model={storyModel}
         spreadTitle={result.title || undefined}
+        isAuthenticated={isAuthenticated}
+        hasPaidAccess={hasPaidSubscriptionAccess(profile)}
+        concernDomain={concernDomain}
         extraActions={
           <div className={s.tarotWebActions}>
             <Link href="/tarot">

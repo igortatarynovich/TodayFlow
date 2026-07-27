@@ -48,7 +48,25 @@ Human **Golden Eval v2** — protocol: [TAROT_GOLDEN_EVAL_HUMAN_V2.md](../tarot/
 
 - **20–30** real questions  
 - varied spreads  
-- real model answers  
+
+### Antithesis gate calibration (2026-07-27)
+
+Hard reject is **narrow**: short parallel **verbs/adjectives** («не кричит, а греет»).  
+Prompt still bans broader «это не …, а …». Broad regex was rejecting most live answers (~1/12 then ~6/12).
+
+### Paid deepen chooser (UI, Editorial Phase)
+
+On Tarot result, **paid / trial** users get **Углубить тему** with 3–4 choices (money practical / intimacy & sex / work / boundaries).
+
+- **Guest** → signup teaser  
+- **Auth free** → pricing teaser (`/pricing`)  
+- **Paid / trial** (`lite`|`pro`, `is_paid`, `active`|`trialing`) → unlock chooser  
+
+Reuses question-first flow via `/tarot?concern=&refine=&question=&source=deepen` — **no** new LLM hop, contract, or ontology domain. Intimacy/sex is a **relationships** refine. Soft UI gate only (no hard Tarot paid BE gate yet).
+
+### Human eval next
+
+- real model answers (13 cases in fixture)  
 - editor scores  
 
 After each answer, three questions:
@@ -57,6 +75,6 @@ After each answer, three questions:
 2. Получил ли ты ответ именно на свой вопрос?  
 3. Заплатил бы ты за такой разбор?  
 
-**Q3 voice (2026-07-26):** avoid rhetorical «не X, а Y» (owner example: «не кричит, а греет») — `tarot-interpretation-v1.7` + gate `antithesis_formula`.
+**Q3 voice (2026-07-26):** avoid rhetorical «не X, а Y» (owner example: «не кричит, а греет») — `tarot-interpretation-v1.7` + gate `antithesis_formula` (narrowed 2026-07-27).
 
 Fallback LLM provider: **deferred** until owner purchases and connects one.
