@@ -25,8 +25,21 @@
 1. **Full day for everyone with access to Today** — Free and Trial/Paid see a complete day story (scenes, do/avoid, spheres, symbols). Nothing essential is hidden behind a lock.
 2. **Subscription = optional extra layer** — after the day is already useful, the user may deepen a topic they care about (money, intimacy/sex, relationships, work…).
 3. **User chooses the focus** — not a second automatic plot competing with `day_story`.
-4. **Depth kinds** (examples, not exclusives): more frank practical tips · deeper analysis · sharper `do` / `avoid` / `what_to_say` (or gesture). Still person-not-system voice.
+4. **Depth kinds** (examples, not exclusives): analytic topic pass — observation → mechanism → testable step (`do` / `avoid` / wording). Person-not-system. **No** faux solemnity or empty “deeper meaning.”
 5. **Trial = Paid depth** for this layer (same as Profile L3 rule).
+
+## Voice (analytic, not theatrical)
+
+Depth layer copy must sound like a careful brief:
+
+| Do | Don’t |
+|----|-------|
+| Observation from day/profile data | “Судьбоносный / сакральный / глубиннейший смысл” |
+| Mechanism: trigger → response → cost/benefit | Mystical energy / universe / destiny |
+| One testable step + boundary | Abstract noun-pairs with no situation |
+| Honest uncertainty when evidence is thin | Fake certainty or clinical labels |
+
+Prompt SoT: `_DEEPEN_SYS` in `today_narrative.py`.
 
 ## Forbidden
 

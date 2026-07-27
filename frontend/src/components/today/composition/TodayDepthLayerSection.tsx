@@ -61,11 +61,11 @@ export function TodayDepthLayerSection({ dateISO, depthLayer, guideGenerationId 
         setResultText(
           text ||
             (canGenerate
-              ? "Не удалось углубить тему. Попробуйте ещё раз."
-              : "Полный день уже у вас. Углубление темы — в подписке."),
+              ? "Не удалось собрать разбор. Попробуйте ещё раз."
+              : "Полный день уже у вас. Тематический разбор — в подписке."),
         );
       } catch {
-        setResultText("Не удалось загрузить слой. Попробуйте позже.");
+        setResultText("Не удалось загрузить разбор. Попробуйте позже.");
         setIsCta(!canGenerate);
       } finally {
         setLoading(false);
@@ -78,11 +78,11 @@ export function TodayDepthLayerSection({ dateISO, depthLayer, guideGenerationId 
 
   return (
     <section className={styles.root} data-testid="today-depth-layer">
-      <p className={styles.eyebrow}>Ещё глубже</p>
-      <h2 className={styles.title}>Углубить тему дня</h2>
+      <p className={styles.eyebrow}>Тематический разбор</p>
+      <h2 className={styles.title}>Разобрать тему точнее</h2>
       <p className={styles.lead}>
-        Полный день уже здесь. Можно выбрать тему и получить более практичный или откровенный слой —
-        это дополнение, а не замена дня.
+        Полный день уже здесь. Ниже — опциональный слой: наблюдение из данных дня → механизм →
+        проверяемый шаг. Без напускной важности и без замены базового рассказа.
       </p>
       <div className={styles.chips} role="list">
         {menu.map((row) => {
@@ -104,7 +104,7 @@ export function TodayDepthLayerSection({ dateISO, depthLayer, guideGenerationId 
           );
         })}
       </div>
-      {loading ? <p className={styles.status}>Собираем слой…</p> : null}
+      {loading ? <p className={styles.status}>Собираем разбор…</p> : null}
       {resultText ? (
         <div
           className={isCta ? styles.resultCta : styles.result}

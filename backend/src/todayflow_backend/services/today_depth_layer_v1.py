@@ -47,12 +47,12 @@ def can_generate_depth_layer(user: User, db: Session) -> bool:
 def topic_label(topic: str, *, locale: str = "ru") -> str:
     en = (locale or "ru").lower().startswith("en")
     labels = {
-        "money": ("Money — practical moves", "Деньги — практичные ходы"),
-        "intimacy": ("Intimacy — franker tips", "Близость — откровеннее"),
-        "love": ("Relationships — what to say", "Отношения — что сказать"),
-        "career": ("Work — one clear decision", "Работа — одно решение"),
-        "family": ("Home circle — deeper", "Дом и близкие — глубже"),
-        "full_day": ("Whole day — deeper", "День целиком — глубже"),
+        "money": ("Money — risk, number, decision", "Деньги — риск, цифра, решение"),
+        "intimacy": ("Intimacy — clear, adult cues", "Близость — точные взрослые подсказки"),
+        "love": ("Relationships — wording and boundary", "Отношения — формулировка и граница"),
+        "career": ("Work — one decision, one check", "Работа — одно решение и проверка"),
+        "family": ("Home circle — one clear move", "Дом и близкие — один ясный ход"),
+        "full_day": ("Day thread — cause → step", "Нить дня — причина → шаг"),
     }
     pair = labels.get(topic) or ("Day topic", "Тема дня")
     return pair[0] if en else pair[1]
@@ -62,28 +62,28 @@ def topic_value_line(topic: str, *, locale: str = "ru") -> str:
     en = (locale or "ru").lower().startswith("en")
     lines = {
         "money": (
-            "A sharper money move for today: risk, number, or one decision.",
-            "Более точный денежный ход на сегодня: риск, цифра или одно решение.",
+            "Name the risk, the number, and one decision you can verify today.",
+            "Назовите риск, цифру и одно решение, которое можно проверить сегодня.",
         ),
         "intimacy": (
-            "Franker closeness tips: gesture, wording, or a clear boundary.",
-            "Откровеннее про близость: жест, формулировка или ясная граница.",
+            "A precise cue: consent, wording, gesture, or boundary — no empty mystique.",
+            "Точный сигнал: согласие, формулировка, жест или граница — без пустой мистики.",
         ),
         "love": (
-            "Deeper relationship guidance: what to say and what to skip today.",
-            "Глубже про отношения: что сказать и чего не делать сегодня.",
+            "What to say, what to skip, and how you’ll know it worked.",
+            "Что сказать, чего не делать, и как понять, что сработало.",
         ),
         "career": (
-            "One concrete work decision with a boundary.",
-            "Одно конкретное рабочее решение и граница.",
+            "One work choice plus a checkable signal (reply, deadline, scope).",
+            "Один рабочий выбор и проверяемый сигнал (ответ, срок, объём).",
         ),
         "family": (
-            "Deeper home-circle guidance for today.",
-            "Глубже про дом и близкий круг на сегодня.",
+            "One concrete move at home — wording or boundary you can test today.",
+            "Один конкретный ход дома — формулировка или граница, проверяемая сегодня.",
         ),
         "full_day": (
-            "A deeper pass on the whole day thread.",
-            "Более глубокий разбор нити всего дня.",
+            "One causal line from today’s data to one testable step.",
+            "Одна причинная нить из данных дня к одному проверяемому шагу.",
         ),
     }
     pair = lines.get(topic) or lines["full_day"]
@@ -112,14 +112,14 @@ def build_depth_layer_cta_payload(topic: str, *, locale: str = "ru") -> dict[str
     body = (
         (
             f"Your full day is already available. "
-            f"With a subscription you can deepen «{label}»: {value}\n\n"
-            "This is an optional layer — nothing in the base day is locked."
+            f"A subscription unlocks an analytic pass on «{label}»: {value}\n\n"
+            "Optional layer only — the base day stays complete and unlocked."
         )
         if en
         else (
             f"Полный день у вас уже есть. "
-            f"С подпиской можно углубить тему «{label}»: {value}\n\n"
-            "Это дополнительный слой — базовый день ничем не закрыт."
+            f"Подписка открывает аналитический разбор темы «{label}»: {value}\n\n"
+            "Это дополнительный слой — базовый день остаётся полным и открытым."
         )
     )
     return {
@@ -127,20 +127,20 @@ def build_depth_layer_cta_payload(topic: str, *, locale: str = "ru") -> dict[str
         "body": body,
         "bullets": [
             (
-                "Keep reading your full day story — it is complete."
+                "Keep reading your full day story — it is already complete."
                 if en
                 else "Читайте полный рассказ дня — он уже цельный."
             ),
             (
-                "Subscribe or start a trial to generate this deepen pack."
+                "Subscribe or start a trial to generate this analytic topic pack."
                 if en
-                else "Оформите подписку или trial, чтобы сгенерировать этот слой."
+                else "Оформите подписку или trial, чтобы получить этот тематический разбор."
             ),
         ],
         "closing_line": (
-            "Depth is a choice, not a lock on today."
+            "Extra analysis is optional — not a lock on today."
             if en
-            else "Глубина — выбор, а не замок на сегодня."
+            else "Доп. разбор опционален — это не замок на сегодня."
         ),
         "depth_layer": {
             "version": DEPTH_LAYER_VERSION,
