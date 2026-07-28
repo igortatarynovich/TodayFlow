@@ -15,22 +15,12 @@ function clean(text: string | null | undefined): string {
   return (text ?? "").replace(/\s+/g, " ").trim();
 }
 
-/** Strip mashed "A или B — пока <fact…>" / calendar glue from cached short_name / theme. */
+/** Strip mashed "A или B — пока <truncated fact…>" from cached short_name / theme. */
 export function sanitizeConflictLabel(text: string | null | undefined): string {
   let t = clean(text);
   if (!t) return "";
-  const mashed = t.match(/^(.+?\s+или\s+.+?)\s+[—–-]\s+(?:пока\s+|календарн)/iu);
+  const mashed = t.match(/^(.+?\s+или\s+.+?)\s+[—–-]\s+пока\s+/iu);
   if (mashed?.[1]) t = mashed[1].trim();
-  if (/\sили\s/iu.test(t) && /\s+[—–-]\s+/.test(t)) {
-    const [before, after = ""] = t.split(/\s+[—–-]\s+/);
-    if (
-      before &&
-      /\sили\s/iu.test(before) &&
-      (/^пока\s/iu.test(after) || /календарн/iu.test(after) || after.includes("…"))
-    ) {
-      t = before.trim();
-    }
-  }
   if (t.includes("…") && /\sили\s/iu.test(t)) {
     const before = t.split(/\s+[—–-]\s+/)[0]?.trim();
     if (before && /\sили\s/iu.test(before)) t = before;
@@ -41,13 +31,6 @@ export function sanitizeConflictLabel(text: string | null | undefined): string {
 function isKitchenNatalLead(text: string): boolean {
   return /Firdaria|ZR\s*Fortune|ZR\s*Spirit|Лоты\s*soft|Vimshottari|BaZi|HD\s*soft|Variables\s*soft|Solar\s*return|time[_\s-]?lords|управител|нет\s+ASC/i.test(
     text,
-  );
-}
-
-/** Calendar DOY — date already in greeting chrome; never user-facing day prose. */
-export function isCalendarKitchenFact(text: string | null | undefined): boolean {
-  return /календарн\w*\s+день|\d+-й\s+день\s+года|день\s+года\s+\d+|calendar-doy/i.test(
-    clean(text),
   );
 }
 
@@ -121,18 +104,9 @@ export function isDayScenarioReadyForChapters(contract: TodayContractV1): boolea
  * 4 supports — Что поможет пройти день
  * 5 vibe — Чем закончится день
  */
-export type ScenarioSymbolImpact = {
-  title?: string | null;
-  headline?: string | null;
-  body?: string | null;
-};
-
 export function buildScenarioStoryChapters(input: {
   contract: TodayContractV1;
   colorGuide?: TodayDayColorGuide | null;
-  /** Revealed ritual overlay — complements chorus; day_story is not reassembled. */
-  tarotImpact?: ScenarioSymbolImpact | null;
-  numberImpact?: ScenarioSymbolImpact | null;
 }): TodayDayNarrativeChapter[] | null {
   if (!isDayScenarioReadyForChapters(input.contract)) return null;
 
@@ -144,12 +118,6 @@ export function buildScenarioStoryChapters(input: {
   const chorus = dayStory.interpretive_chorus;
   const used: string[] = [];
   const chapters: TodayDayNarrativeChapter[] = [];
-  const tarotImpact = input.tarotImpact ?? null;
-  const numberImpact = input.numberImpact ?? null;
-  const hasLiveSymbols = Boolean(
-    (tarotImpact && (clean(tarotImpact.title) || clean(tarotImpact.body))) ||
-      (numberImpact && (clean(numberImpact.title) || clean(numberImpact.body))),
-  );
 
   const title =
     sanitizeConflictLabel(conflict.short_name) ||
@@ -166,9 +134,7 @@ export function buildScenarioStoryChapters(input: {
   // 1 — Что изменилось сегодня
   const openingParas: string[] = [];
   if (title) pushDistinct(openingParas, used, title);
-  if (whyArose && !isCalendarKitchenFact(whyArose) && !nearDuplicate(whyArose, title)) {
-    pushDistinct(openingParas, used, whyArose);
-  }
+  if (whyArose && !nearDuplicate(whyArose, title)) pushDistinct(openingParas, used, whyArose);
   if (forceLine) pushDistinct(openingParas, used, forceLine);
   if (
     whyPersonal &&
@@ -177,14 +143,9 @@ export function buildScenarioStoryChapters(input: {
   ) {
     pushDistinct(openingParas, used, whyPersonal);
   }
-  // Soft factual lead from projection if not already covered (never calendar DOY).
+  // Soft factual lead from projection if not already covered
   const eventsLead = clean(dayStory.events_lead);
-  if (
-    eventsLead &&
-    !isCalendarKitchenFact(eventsLead) &&
-    !nearDuplicate(eventsLead, whyArose) &&
-    !nearDuplicate(eventsLead, title)
-  ) {
+  if (eventsLead && !nearDuplicate(eventsLead, whyArose) && !nearDuplicate(eventsLead, title)) {
     pushDistinct(openingParas, used, eventsLead);
   }
   if (openingParas.length) {
@@ -210,18 +171,15 @@ export function buildScenarioStoryChapters(input: {
     } else if (astroMeaning) {
       pushDistinct(paras, used, astroMeaning);
     }
-    // Live reveal beats stale/redacted chorus card·number (DAY_SYMBOL_REVEAL overlay).
-    if (!hasLiveSymbols) {
-      const card = chorus.day_card;
-      if (card?.named) {
-        const role = clean(card.role);
-        pushDistinct(paras, used, role ? `${clean(card.named)}. ${role}` : clean(card.named));
-      }
-      const number = chorus.day_number;
-      if (number?.named) {
-        const tempo = clean(number.for_conflict) || clean(number.tempo);
-        pushDistinct(paras, used, tempo ? `${clean(number.named)}. ${tempo}` : clean(number.named));
-      }
+    const card = chorus.day_card;
+    if (card?.named) {
+      const role = clean(card.role);
+      pushDistinct(paras, used, role ? `${clean(card.named)}. ${role}` : clean(card.named));
+    }
+    const number = chorus.day_number;
+    if (number?.named) {
+      const tempo = clean(number.for_conflict) || clean(number.tempo);
+      pushDistinct(paras, used, tempo ? `${clean(number.named)}. ${tempo}` : clean(number.named));
     }
     const natal = clean(chorus.natal_lead);
     if (natal && !isKitchenNatalLead(natal)) pushDistinct(paras, used, natal);
@@ -233,47 +191,6 @@ export function buildScenarioStoryChapters(input: {
         paragraphs: paras.slice(1),
         accent: "sky",
         collapseAfter: paras.length > 3 ? 2 : undefined,
-      });
-    }
-  }
-
-  // 2b — Открытые символы (после reveal остаются в чтении)
-  if (hasLiveSymbols) {
-    const symbolParas: string[] = [];
-    if (tarotImpact) {
-      const title = clean(tarotImpact.title);
-      const head = clean(tarotImpact.headline);
-      const body = clean(tarotImpact.body);
-      if (title || head) {
-        pushDistinct(
-          symbolParas,
-          used,
-          title && head ? `Карта дня — ${title}. ${head}` : title ? `Карта дня — ${title}` : head,
-        );
-      }
-      if (body) pushDistinct(symbolParas, used, body);
-    }
-    if (numberImpact) {
-      const title = clean(numberImpact.title);
-      const head = clean(numberImpact.headline);
-      const body = clean(numberImpact.body);
-      if (title || head) {
-        pushDistinct(
-          symbolParas,
-          used,
-          title && head ? `Число дня — ${title}. ${head}` : title ? `Число дня — ${title}` : head,
-        );
-      }
-      if (body) pushDistinct(symbolParas, used, body);
-    }
-    if (symbolParas.length) {
-      chapters.push({
-        id: "symbols",
-        kicker: "Карта и число дня",
-        lead: symbolParas[0] ?? null,
-        paragraphs: symbolParas.slice(1),
-        accent: "default",
-        collapseAfter: symbolParas.length > 3 ? 2 : undefined,
       });
     }
   }

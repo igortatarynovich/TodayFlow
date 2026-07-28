@@ -711,9 +711,14 @@ function collectChorusChapter(
 
 function collectSymbolParagraphs(story: TodayDayStoryViewModel, contract: TodayContractV1, used: string[]): string[] {
   const out: string[] = [];
+  // When interpretive chorus is present, card/number already explain the conflict —
+  // do not stack a second independent tarot/number forecast chapter.
+  if (contract.day_story?.interpretive_chorus) {
+    pushDistinct(out, used, contract.day_story?.symbolic_note);
+    return out;
+  }
+
   const tarot = story.tarotImpact;
-  const number = story.numberImpact;
-  // Revealed impacts are SoT after ritual (DAY_SYMBOL_REVEAL). Chorus may be stale/redacted.
   if (tarot) {
     const title = clean(tarot.title);
     const head = clean(tarot.headline);
@@ -725,6 +730,7 @@ function collectSymbolParagraphs(story: TodayDayStoryViewModel, contract: TodayC
     }
   }
 
+  const number = story.numberImpact;
   if (number) {
     const title = clean(number.title);
     const head = clean(number.headline);
@@ -736,10 +742,7 @@ function collectSymbolParagraphs(story: TodayDayStoryViewModel, contract: TodayC
     }
   }
 
-  // Soft note only when no live symbols (avoid stacking a third forecast).
-  if (!tarot && !number) {
-    pushDistinct(out, used, contract.day_story?.symbolic_note);
-  }
+  pushDistinct(out, used, contract.day_story?.symbolic_note);
 
   return out;
 }
@@ -871,8 +874,6 @@ export function buildTodayDayNarrative(input: {
   const scenarioChapters = buildScenarioStoryChapters({
     contract,
     colorGuide: input.colorGuide ?? story.colorGuide,
-    tarotImpact: story.tarotImpact,
-    numberImpact: story.numberImpact,
   });
   if (scenarioChapters?.length) {
     appendElectionalChapter(scenarioChapters, contract);

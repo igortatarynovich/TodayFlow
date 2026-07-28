@@ -79,7 +79,6 @@ import {
 import { TodayInterpretationConfirm } from "@/components/today/composition/TodayInterpretationConfirm";
 import { TodaySkyStoryCards } from "@/components/today/composition/TodaySkyStoryCards";
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
-import { isDayScenarioReadyForChapters } from "@/lib/todayScenarioChapters";
 import { TodayDepthLayerSection } from "@/components/today/composition/TodayDepthLayerSection";
 import { buildTodayPromiseSuggestions, isLowEnergyMood } from "@/lib/todayDayDialogue";
 import {
@@ -324,14 +323,6 @@ export function TodayCompositionSurface(props: Props) {
     props.eveningNarrativePayload,
   ]);
 
-  const useProductFoundation = !isFirstToday;
-  /** Day reading opens when scenario is ready — ritual complements, does not unlock. */
-  const dayReadingReady =
-    useProductFoundation &&
-    (isDayScenarioReadyForChapters(props.contract) || story.personalizedReady);
-  const useProductPersonalized = dayReadingReady;
-  const showRitualAsComplement = useProductFoundation && !story.personalizedReady;
-
   useEffect(() => {
     if (singleVoice || !props.onRitualSpineComplete || !story.personalizedReady) return;
     const tarotMainId = engagement.tarotPickedId ?? anchorTarotId;
@@ -422,14 +413,14 @@ export function TodayCompositionSurface(props: Props) {
   const strengthenTools = useMemo(
     () =>
       applyRecommendedPracticeToStrengthen(
-        dayReadingReady ? story.strengthenLinked : story.strengthenPreview,
-        dayReadingReady ? recommendedPractice : null,
+        story.personalizedReady ? story.strengthenLinked : story.strengthenPreview,
+        story.personalizedReady ? recommendedPractice : null,
         {
           lowEnergy: isLowEnergyMood(engagement.morningMoodId),
         },
       ),
     [
-      dayReadingReady,
+      story.personalizedReady,
       story.strengthenLinked,
       story.strengthenPreview,
       recommendedPractice,
@@ -780,7 +771,6 @@ export function TodayCompositionSurface(props: Props) {
     });
   }, [dateISO, persistEngagement, trackMeaningEvent]);
 
-  // Persist revealed digit so interpretation stays available if morning patch lags.
   const onNumberRevealRequest = useCallback(async () => {
     const view = await revealDayNumber({
       isAuthenticated,
@@ -790,14 +780,11 @@ export function TodayCompositionSurface(props: Props) {
     props.onSymbolRevealResult?.(view);
     const value = view.number?.value ?? view.number?.reduced_value;
     const display = value != null ? String(value) : "";
-    if (display && display !== "—") {
-      persistEngagement({ numberValue: display });
-    }
     return {
       display,
       meaning: view.number?.title ?? props.numerologyMeaning ?? null,
     };
-  }, [dateISO, isAuthenticated, persistEngagement, props.numerologyMeaning, props.onSymbolRevealResult]);
+  }, [dateISO, isAuthenticated, props.numerologyMeaning, props.onSymbolRevealResult]);
 
   const onInterpretationConfirm = useCallback(
     (
@@ -976,6 +963,8 @@ export function TodayCompositionSurface(props: Props) {
   const todayHeroSymbol = useMemo(() => buildTodayHeroSymbol(props.coreProfile), [props.coreProfile]);
   const todayHeroPillars = useMemo(() => buildTodayHeroPillars(props.coreProfile), [props.coreProfile]);
   const themeLoading = !singleVoice && props.guideNarrativeLoading && !props.guideNarrativePayload;
+  const useProductFoundation = !isFirstToday;
+  const useProductPersonalized = useProductFoundation && story.personalizedReady;
 
   if (eveningMode && continuityRecord && !dayClosed) {
     if (useProductFoundation) {
@@ -1168,14 +1157,6 @@ export function TodayCompositionSurface(props: Props) {
     </section>
   ) : null;
 
-  const heroTheme =
-    (story.hero.themeShort || story.hero.centralThought || "").replace(/[.!?]+$/u, "").trim();
-  const heroSublineRaw = (story.hero.centralThought || "").replace(/[.!?]+$/u, "").trim();
-  const heroSubline =
-    heroTheme && heroSublineRaw && heroSublineRaw.toLowerCase() !== heroTheme.toLowerCase()
-      ? story.hero.centralThought
-      : null;
-
   const heroSection = zones.hero ? (
     useProductFoundation ? (
       <section
@@ -1209,9 +1190,13 @@ export function TodayCompositionSurface(props: Props) {
                 className={styles.themeDarkTitle}
                 data-testid="today-entity-daily-theme"
               >
-                {heroTheme || story.hero.centralThought}
+                {story.hero.themeShort || story.hero.centralThought}
               </h2>
-              {heroSubline ? <p className={styles.themeDarkSubline}>{heroSubline}</p> : null}
+              {story.hero.themeShort &&
+              story.hero.centralThought &&
+              story.hero.centralThought !== story.hero.themeShort ? (
+                <p className={styles.themeDarkSubline}>{story.hero.centralThought}</p>
+              ) : null}
             </>
           )}
         </div>
@@ -1228,11 +1213,17 @@ export function TodayCompositionSurface(props: Props) {
           embedded
           loading={themeLoading}
           loadingText={copy.loadingDay}
-          title={heroTheme || story.hero.centralThought}
-          subline={heroSubline ?? undefined}
+          title={story.hero.themeShort || story.hero.centralThought}
+          subline={
+            story.hero.themeShort &&
+            story.hero.centralThought &&
+            story.hero.centralThought !== story.hero.themeShort
+              ? story.hero.centralThought
+              : undefined
+          }
           symbol={todayHeroSymbol}
           pillars={todayHeroPillars}
-          ariaLabel={heroTheme || story.hero.centralThought || copy.themeLabel}
+          ariaLabel={story.hero.themeShort || story.hero.centralThought || copy.themeLabel}
           titleTestId="today-entity-daily-theme"
         />
       </div>
@@ -1413,10 +1404,16 @@ export function TodayCompositionSurface(props: Props) {
 
       <MotionReveal>{heroSection}</MotionReveal>
 
-      {dayReadingReady ? (
+      {useProductFoundation && story.personalizedReady ? (
         <>
           <MotionReveal delayMs={MOTION.staggerMs}>{pulseSection}</MotionReveal>
           <MotionReveal delayMs={MOTION.staggerMs * 2}>{glanceSection}</MotionReveal>
+          {morningDialogue}
+        </>
+      ) : !story.personalizedReady ? (
+        <>
+          <MotionReveal delayMs={MOTION.staggerMs}>{ritualGateSection}</MotionReveal>
+          {ritualTarotImpactStage}
           {morningDialogue}
         </>
       ) : (
@@ -1450,6 +1447,17 @@ export function TodayCompositionSurface(props: Props) {
         ) : null}
 
         {dayStoryFoundation}
+
+        {!isDayNotReady(props.contract) &&
+        props.contract.depth_layer &&
+        Array.isArray(props.contract.depth_layer.menu) &&
+        props.contract.depth_layer.menu.length > 0 ? (
+          <TodayDepthLayerSection
+            dateISO={dateISO}
+            depthLayer={props.contract.depth_layer}
+            guideGenerationId={props.guideGenerationId ?? null}
+          />
+        ) : null}
 
         {useProductPersonalized ? (
           <TodayPersonalizedProductSection
@@ -1516,97 +1524,10 @@ export function TodayCompositionSurface(props: Props) {
           />
         ) : null}
 
-        {/* Ritual complements the assembled day — does not gate the reading. */}
-        {showRitualAsComplement ? (
-          <>
-            <MotionReveal delayMs={MOTION.staggerMs}>{ritualGateSection}</MotionReveal>
-            {ritualTarotImpactStage}
-          </>
-        ) : null}
-
-        {/* Opened card + number stay on surface for re-reading (DAY_SYMBOL_REVEAL). */}
-        {(story.tarotImpact || story.numberImpact) &&
-        (story.personalizedReady || (!useProductFoundation && engagement.tarotPickedName)) ? (
-          <div className={styles.personalSection} data-testid="today-zone-symbol-impacts">
-            {story.tarotImpact ? (
-              <section className={styles.ritualReveal} data-testid="today-zone-tarot-impact">
-                <p className={styles.ritualRevealKind}>Символ дня · открыт</p>
-                <h2 className={styles.ritualRevealTitle}>{story.tarotImpact.title}</h2>
-                <p className={styles.ritualRevealHeadline}>{story.tarotImpact.headline}</p>
-                <p className={styles.ritualRevealBody}>{story.tarotImpact.body}</p>
-                <TodayInterpretationConfirm
-                  target="tarot_impact"
-                  selectedChoiceId={(engagement.tarotResonance as ProximityChoiceId | null) ?? null}
-                  onSelect={(choiceId, resonance) =>
-                    onInterpretationConfirm("tarot_impact", choiceId, resonance, story.tarotImpact?.headline)
-                  }
-                />
-                {engagement.tarotPickedId != null ? (
-                  <Link
-                    href={buildTarotDeepenHref({
-                      cardId: engagement.tarotPickedId,
-                      orientation: "upright",
-                      source: "today",
-                    })}
-                    className={`orbit-button orbit-button-secondary ${styles.ritualDeepenCta}`}
-                    data-testid="today-tarot-deepen"
-                    onClick={() => {
-                      trackMeaningEvent({
-                        event_type: "tarot_deepen_started",
-                        event_source: TAROT_DEEPEN_EVENT_SOURCE,
-                        local_date: dateISO,
-                        payload: buildTarotDeepenEventPayload({
-                          cardId: engagement.tarotPickedId!,
-                          orientation: "upright",
-                          source: "today",
-                        }),
-                        idempotency_key: tarotDeepenIdempotencyKey({
-                          cardId: engagement.tarotPickedId!,
-                          source: "today",
-                          localDate: dateISO,
-                        }),
-                        refreshRings: false,
-                      });
-                    }}
-                  >
-                    Исследовать глубже →
-                  </Link>
-                ) : null}
-              </section>
-            ) : null}
-
-            {story.numberImpact ? (
-              <section className={styles.ritualReveal} data-testid="today-zone-number-impact">
-                <p className={styles.ritualRevealKind}>Число дня · открыто</p>
-                <h2 className={styles.ritualRevealTitle}>{story.numberImpact.title}</h2>
-                <p className={styles.ritualRevealHeadline}>{story.numberImpact.headline}</p>
-                <p className={styles.ritualRevealBody}>{story.numberImpact.body}</p>
-                <TodayInterpretationConfirm
-                  target="number_impact"
-                  selectedChoiceId={(engagement.numberResonance as ProximityChoiceId | null) ?? null}
-                  onSelect={(choiceId, resonance) =>
-                    onInterpretationConfirm("number_impact", choiceId, resonance, story.numberImpact?.headline)
-                  }
-                />
-              </section>
-            ) : null}
-          </div>
-        ) : null}
-
-        {!isDayNotReady(props.contract) &&
-        props.contract.depth_layer &&
-        Array.isArray(props.contract.depth_layer.menu) &&
-        props.contract.depth_layer.menu.length > 0 ? (
-          <TodayDepthLayerSection
-            dateISO={dateISO}
-            depthLayer={props.contract.depth_layer}
-            guideGenerationId={props.guideGenerationId ?? null}
-          />
-        ) : null}
-
         {/* Sky influences stay visible after ritual — overlay card/number, do not hide foundation. */}
         {showSkyCards ? (
           <section className={styles.skySection} data-testid="today-zone-sky-influences">
+            <span className={styles.sectionEyebrow}>Что формирует день</span>
             <h2 className={styles.sectionTitle}>{copy.astroContextTitle}</h2>
             <TodaySkyStoryCards cards={story.skyCards} />
           </section>
@@ -1713,6 +1634,74 @@ export function TodayCompositionSurface(props: Props) {
               ) : null}
             </div>
           </section>
+        ) : null}
+
+        {/* Card + number stay visible after personalize switch (DAY_LIFECYCLE overlay). */}
+        {story.personalizedReady && (story.tarotImpact || story.numberImpact) ? (
+          <div className={styles.personalSection} data-testid="today-zone-symbol-impacts">
+            {story.tarotImpact ? (
+              <section className={styles.ritualReveal} data-testid="today-zone-tarot-impact">
+                <p className={styles.ritualRevealKind}>Символ дня</p>
+                <h2 className={styles.ritualRevealTitle}>{story.tarotImpact.title}</h2>
+                <p className={styles.ritualRevealHeadline}>{story.tarotImpact.headline}</p>
+                <p className={styles.ritualRevealBody}>{story.tarotImpact.body}</p>
+                <TodayInterpretationConfirm
+                  target="tarot_impact"
+                  selectedChoiceId={(engagement.tarotResonance as ProximityChoiceId | null) ?? null}
+                  onSelect={(choiceId, resonance) =>
+                    onInterpretationConfirm("tarot_impact", choiceId, resonance, story.tarotImpact?.headline)
+                  }
+                />
+                {engagement.tarotPickedId != null ? (
+                  <Link
+                    href={buildTarotDeepenHref({
+                      cardId: engagement.tarotPickedId,
+                      orientation: "upright",
+                      source: "today",
+                    })}
+                    className={`orbit-button orbit-button-secondary ${styles.ritualDeepenCta}`}
+                    data-testid="today-tarot-deepen"
+                    onClick={() => {
+                      trackMeaningEvent({
+                        event_type: "tarot_deepen_started",
+                        event_source: TAROT_DEEPEN_EVENT_SOURCE,
+                        local_date: dateISO,
+                        payload: buildTarotDeepenEventPayload({
+                          cardId: engagement.tarotPickedId!,
+                          orientation: "upright",
+                          source: "today",
+                        }),
+                        idempotency_key: tarotDeepenIdempotencyKey({
+                          cardId: engagement.tarotPickedId!,
+                          source: "today",
+                          localDate: dateISO,
+                        }),
+                        refreshRings: false,
+                      });
+                    }}
+                  >
+                    Исследовать глубже →
+                  </Link>
+                ) : null}
+              </section>
+            ) : null}
+
+            {story.numberImpact ? (
+              <section className={styles.ritualReveal} data-testid="today-zone-number-impact">
+                <p className={styles.ritualRevealKind}>Число дня</p>
+                <h2 className={styles.ritualRevealTitle}>{story.numberImpact.title}</h2>
+                <p className={styles.ritualRevealHeadline}>{story.numberImpact.headline}</p>
+                <p className={styles.ritualRevealBody}>{story.numberImpact.body}</p>
+                <TodayInterpretationConfirm
+                  target="number_impact"
+                  selectedChoiceId={(engagement.numberResonance as ProximityChoiceId | null) ?? null}
+                  onSelect={(choiceId, resonance) =>
+                    onInterpretationConfirm("number_impact", choiceId, resonance, story.numberImpact?.headline)
+                  }
+                />
+              </section>
+            ) : null}
+          </div>
         ) : null}
 
         {!useProductPersonalized && story.personalizedReady ? (
