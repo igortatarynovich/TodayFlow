@@ -6,8 +6,6 @@ import { DsOrbitalViz, IconCalendar, IconSun } from "@/design-system";
 import v2 from "@/design-system/layouts/productV2Surface.module.css";
 import l from "@/design-system/layouts/dsLayouts.module.css";
 import { ProductWebShellConfigBridge, type ProductWebShellConfig } from "@/components/product-ui/productWebShellConfig";
-import { MoodThemeControl } from "@/components/product-ui/MoodThemeControl";
-import { AppearanceControl } from "@/components/product-ui/AppearanceControl";
 import pl from "@/design-system/layouts/productPageLayout.module.css";
 import {
   todayWebDashboardChromeBundle,
@@ -329,22 +327,19 @@ export function TodayWebDashboard({
         <div className={v2.pageRoot}>
           <header className={`${pl.pageHeader} ${layout === "composition" ? pl.pageHeaderQuiet : ""}`.trim()}>
             <div>
-              {layout === "composition" ? (
-                <p className={v2.eyebrow}>Сегодня</p>
-              ) : null}
               <h1 className={layout === "composition" ? v2.sectionTitle : v2.displayTitle}>
                 {todayWebGreeting(chrome, displayName)}
               </h1>
-              {greetingLine ? <p className={v2.bodyLead}>{greetingLine}</p> : null}
+              {/* Composition: greeting + date only — theme lives in the day hero, not here. */}
+              {layout !== "composition" && greetingLine ? (
+                <p className={v2.bodyLead}>{greetingLine}</p>
+              ) : null}
             </div>
             <p className={`${v2.chip} ${pl.datePill}`}>
               <IconCalendar />
               {displayDate}
             </p>
           </header>
-
-          <AppearanceControl className={pl.moodThemeSlot} />
-          <MoodThemeControl className={pl.moodThemeSlot} isFirstDay={isFirstDay} />
 
           {showOverview ? (
             <TodayWebOverview

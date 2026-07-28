@@ -196,11 +196,24 @@ export function buildScenarioStoryChapters(input: {
   }
 
   // 3 — Где это проявится (scenes)
+  // Conflict axis is already in opening — scenes show lived sphere moments only.
+  // Opportunity/trap: once in dual for primary; never paste identical templates under each sphere.
   const primary =
     scenes.find((s) => s.role_in_story === "primary") ?? scenes[0] ?? null;
   const sceneParas: string[] = [];
   const strengthen: string[] = [];
   const soften: string[] = [];
+
+  const looksLikeForcePaste = (text: string | null | undefined): boolean => {
+    const t = clean(text);
+    if (!t) return false;
+    return (
+      /^Шанс выбрать «.+» именно здесь/i.test(t) ||
+      /тот же выбор — «/i.test(t) ||
+      /день упирается в выбор: «/i.test(t) ||
+      /^Ловушка — скатиться в «/i.test(t)
+    );
+  };
 
   for (const sc of scenes) {
     const label = clean(sc.sphere_label_ru) || clean(sc.sphere) || "Сфера дня";
@@ -208,19 +221,19 @@ export function buildScenarioStoryChapters(input: {
     const domestic = clean(sc.domestic_example);
     const opportunity = clean(sc.opportunity);
     const trap = clean(sc.trap);
-    const body = [what, domestic].filter(Boolean).join(" ");
-    if (body) {
-      pushDistinct(sceneParas, used, `${label}. ${body}`);
+    // Prefer lived domestic; skip what when it only restates the conflict labels.
+    const leadLine = looksLikeForcePaste(what) ? domestic : [what, domestic].filter(Boolean).join(" ");
+    if (leadLine && !looksLikeForcePaste(leadLine)) {
+      pushDistinct(sceneParas, used, `${label}. ${leadLine}`);
+    } else if (domestic) {
+      pushDistinct(sceneParas, used, `${label}. ${domestic}`);
     }
     if (sc === primary || sc.role_in_story === "primary") {
-      if (opportunity) strengthen.push(opportunity);
-      if (trap) soften.push(trap);
-    } else {
-      if (opportunity && !nearDuplicate(opportunity, what)) {
-        pushDistinct(sceneParas, used, `${label} — возможность: ${opportunity}`);
+      if (opportunity && !looksLikeForcePaste(opportunity) && !nearDuplicate(opportunity, leadLine)) {
+        strengthen.push(opportunity);
       }
-      if (trap && !nearDuplicate(trap, what)) {
-        pushDistinct(sceneParas, used, `${label} — ловушка: ${trap}`);
+      if (trap && !looksLikeForcePaste(trap) && !nearDuplicate(trap, leadLine)) {
+        soften.push(trap);
       }
     }
   }

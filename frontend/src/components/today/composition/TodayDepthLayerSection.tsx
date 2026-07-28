@@ -62,7 +62,7 @@ export function TodayDepthLayerSection({ dateISO, depthLayer, guideGenerationId 
           text ||
             (canGenerate
               ? "Не удалось собрать разбор. Попробуйте ещё раз."
-              : "Полный день уже у вас. Тематический разбор — в подписке."),
+              : "Тематический разбор доступен в подписке."),
         );
       } catch {
         setResultText("Не удалось загрузить разбор. Попробуйте позже.");
@@ -78,12 +78,7 @@ export function TodayDepthLayerSection({ dateISO, depthLayer, guideGenerationId 
 
   return (
     <section className={styles.root} data-testid="today-depth-layer">
-      <p className={styles.eyebrow}>Тематический разбор</p>
       <h2 className={styles.title}>Разобрать тему точнее</h2>
-      <p className={styles.lead}>
-        Полный день уже здесь. Ниже — опциональный слой: наблюдение из данных дня → механизм →
-        проверяемый шаг. Без напускной важности и без замены базового рассказа.
-      </p>
       <div className={styles.chips} role="list">
         {menu.map((row) => {
           const topic = row.topic as TodayDepthTopicId;

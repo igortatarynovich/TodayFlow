@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { OrientationRail } from "@/components/orbit";
 import { ProductAuxWebScreen } from "@/components/product-ui/ProductAuxWebScreen";
+import { AppearanceControl } from "@/components/product-ui/AppearanceControl";
 import pl from "@/design-system/layouts/productPageLayout.module.css";
 import { getJson, postJson, putJson } from "@/lib/api";
 import { fetchCoreProfileCached, publishCoreProfileUpdate } from "@/lib/coreProfileCache";
@@ -244,6 +245,15 @@ export default function AccountSettingsPage() {
                   ))}
                 </select>
               </label>
+              <div style={{ marginTop: "0.25rem" }}>
+                <AppearanceControl />
+                <p className="orbit-body-xs orbit-text-muted" style={{ margin: "0.35rem 0 0", lineHeight: 1.45 }}>
+                  {t(
+                    "settings.appearance.help",
+                    "По умолчанию — авто (как в системе). Тон дня задаёт Today сам — его здесь не настраивают.",
+                  )}
+                </p>
+              </div>
               <label>
                 {t("account.genderLabel", "Как согласовывать обращение на «ты»")}
                 <select

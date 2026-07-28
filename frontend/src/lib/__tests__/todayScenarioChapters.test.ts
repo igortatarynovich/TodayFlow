@@ -165,6 +165,26 @@ describe("buildScenarioStoryChapters", () => {
     expect([supports.lead, ...supports.paragraphs].join(" ")).toMatch(/Лазурь|черновик/i);
   });
 
+  it("does not repeat force-paste opportunity/trap under every sphere", () => {
+    const c = scenarioContract();
+    const scenes = c.day_story!.day_scenario!.scenes!;
+    scenes[0]!.opportunity = "Шанс выбрать «сказать прямо» именно здесь — один конкретный жест.";
+    scenes[0]!.trap = "Ловушка — скатиться в «сгладить» и сделать вид, что выбора не было.";
+    scenes[0]!.what_happens = "В сфере «Отношения» тот же выбор — «сгладить» или «сказать прямо».";
+    scenes[1]!.opportunity = scenes[0]!.opportunity;
+    scenes[1]!.trap = scenes[0]!.trap;
+    scenes[1]!.what_happens = "В сфере «Работа» тот же выбор — «сгладить» или «сказать прямо».";
+    const chapters = buildScenarioStoryChapters({ contract: c });
+    const block = chapters!.find((ch) => ch.id === "scenes")!;
+    const text = [block.lead, ...block.paragraphs, ...(block.dual?.strengthen ?? []), ...(block.dual?.soften ?? [])].join(
+      "\n",
+    );
+    expect(text).not.toMatch(/тот же выбор — «/);
+    expect(text).not.toMatch(/Шанс выбрать «/);
+    expect(text).not.toMatch(/— возможность:/);
+    expect(text).toMatch(/Ответ близкому|Письмо коллеге/i);
+  });
+
   it("does not invent chapters when scenario missing", () => {
     expect(
       buildScenarioStoryChapters({

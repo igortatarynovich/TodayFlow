@@ -732,6 +732,116 @@ def _scene_role(sphere_id: str, index: int) -> str:
     return "secondary"
 
 
+def _person_first_name(person_name: str | None) -> str | None:
+    raw = str(person_name or "").strip()
+    if not raw:
+        return None
+    token = raw.split()[0].strip(".,;:!?«»\"'")
+    return token[:40] if token else None
+
+
+def _vocative_prefix(person_name: str | None) -> str:
+    """«Игорь, …» — first name only; empty when unknown."""
+    first = _person_first_name(person_name)
+    return f"{first}, " if first else ""
+
+
+# Lived beats per sphere. Conflict axis is already named in opening —
+# do **not** paste force_a/force_b quotes into every scene line.
+_SCENE_BEATS: dict[str, dict[str, str]] = {
+    "work_decisions": {
+        "what": "{who}в работе сегодня решающий жест — остаться в привычном контуре или сделать поворот.",
+        "opportunity": "Одно письмо или решение без ожидания чужого одобрения.",
+        "trap": "Снова отложить «на потом» и сделать вид, будто выбора нет.",
+        "do": "Сделай один короткий шаг в сторону поворота — по делу, без оправданий.",
+        "avoid": "Не соглашайся автоматом, лишь бы снять напряжение.",
+        "domestic": "Письмо или звонок, который ты откладывал(а) из‑за чужой реакции.",
+    },
+    "relationships": {
+        "what": "{who}в близких отношениях сегодня важнее не сохранить видимый мир, а сказать коротко и честно.",
+        "opportunity": "Одна фраза вслух — без сглаживания и без разгона в спор.",
+        "trap": "Снова сгладить ради тишины и потом нести тяжесть недосказанного.",
+        "do": "Назови одну вещь прямо — коротко, без обвинения.",
+        "avoid": "Не делай вид, что «всё нормально», если внутри уже нет.",
+        "domestic": "Разговор, где важно не сгладить то, что лучше проговорить.",
+    },
+    "communication": {
+        "what": "{who}в сообщениях сегодня скорость ответа спорит с ясностью смысла.",
+        "opportunity": "Сначала смысл — потом кнопка «отправить».",
+        "trap": "Ответить быстро, чтобы закрыть тему, и потерять суть.",
+        "do": "Перечитай одно сообщение и убери лишнее до отправки.",
+        "avoid": "Не ускоряй ответ ради чужого спокойствия.",
+        "domestic": "Сообщение: сначала смысл, потом скорость ответа.",
+    },
+    "money": {
+        "what": "{who}в деньгах сегодня легко купить спокойствие импульсом — или выдержать паузу.",
+        "opportunity": "Одна трата или отказ: решение по смыслу, не по нерву.",
+        "trap": "Потратить «чтобы стало легче» и усилить дыру.",
+        "do": "Перед тратой спроси себя: это нужно или это анестезия?",
+        "avoid": "Не покупай облегчение на автопилоте.",
+        "domestic": "Трата или отказ: не покупать спокойствие импульсом.",
+    },
+    "energy_body": {
+        "what": "{who}тело сегодня первым чувствует, где ты держишь лишнее напряжение.",
+        "opportunity": "Пауза до усталости — вода, прогулка, сон без «ещё час».",
+        "trap": "Дожать себя «ещё чуть‑чуть» и к вечеру остаться без ресурса.",
+        "do": "Сделай одну короткую паузу до того, как тело потребует её криком.",
+        "avoid": "Не откладывай отдых до полного выгорания.",
+        "domestic": "Пауза до усталости — вода, прогулка, сон без «ещё один час».",
+    },
+    "creativity": {
+        "what": "{who}в творчестве сегодня важнее живой черновик, чем идеальная форма.",
+        "opportunity": "Набросок без требования шедевра — один конкретный жест.",
+        "trap": "Ждать идеальных условий и так ничего не начать.",
+        "do": "Сделай черновик на десять минут — без оценки.",
+        "avoid": "Не требуй от первого шага законченного результата.",
+        "domestic": "Набросок без требования шедевра.",
+    },
+    "home": {
+        "what": "{who}дома сегодня один бытовой контур важнее «навести порядок везде».",
+        "opportunity": "Один небольшой контур — стол, угол, список — доведённый до конца.",
+        "trap": "Разбросаться на весь дом и закончить ничем.",
+        "do": "Выбери один бытовой жест и закрой его сегодня.",
+        "avoid": "Не начинай пять дел сразу «чтобы стало легче».",
+        "domestic": "Один бытовой контур — не весь дом сразу.",
+    },
+    "rest_travel": {
+        "what": "{who}в отдыхе и поездках сегодня важно отличи побег от настоящей смены воздуха.",
+        "opportunity": "Смена обстановки на час — если тянет «всё бросить».",
+        "trap": "Сидеть на месте из упрямства и называть это стабильностью.",
+        "do": "Выйди из привычной обстановки хотя бы на час — без большого плана.",
+        "avoid": "Не путай привычный контур с заботой о себе.",
+        "domestic": "Смена обстановки на час, если тянет «всё бросить».",
+    },
+}
+
+_DEFAULT_SCENE_BEAT: dict[str, str] = {
+    "what": "{who}сегодня конфликт дня проявляется в одной живой сцене — не в общей теме.",
+    "opportunity": "Один конкретный жест в пользу поворота.",
+    "trap": "Сделать вид, что выбора не было, и остаться в автопилоте.",
+    "do": "Сделай один шаг — маленький, но сегодняшний.",
+    "avoid": "Не усиливай автопилот согласием «ради спокойствия».",
+    "domestic": "Одна бытовая сцена, где конфликт становится видимым.",
+}
+
+_TEMPLATE_OPP_RE = re.compile(r"^Шанс выбрать «.+» именно здесь")
+_TEMPLATE_WHAT_MARKERS = ("тот же выбор — «", "день упирается в выбор: «")
+
+
+def scene_copy_needs_heal_v1(scenes: list[Any] | None) -> bool:
+    """True when scenes still use force-paste templates (pre-variety beats)."""
+    for sc in scenes or []:
+        if not isinstance(sc, dict):
+            continue
+        opp = str(sc.get("opportunity") or "")
+        what = str(sc.get("what_happens") or "")
+        if _TEMPLATE_OPP_RE.match(opp.strip()):
+            return True
+        if any(m in what for m in _TEMPLATE_WHAT_MARKERS):
+            return True
+    return False
+
+
 def build_scenario_scenes_v1(
     *,
     conflict: dict[str, Any],
@@ -739,17 +849,20 @@ def build_scenario_scenes_v1(
     foundation: dict[str, Any],
     interpretation: dict[str, Any] | None = None,
     max_scenes: int = 4,
+    person_name: str | None = None,
 ) -> list[dict[str, Any]]:
-    """Only spheres where the conflict actually shows."""
+    """Only spheres where the conflict actually shows.
+
+    Copy rule: conflict axis is named once in opening. Scene lines paraphrase
+    into lived sphere language — no force_a/force_b quote spam. Prefer name.
+    """
     interp = _as_dict(interpretation)
     family = str((_as_dict(conflict.get("thesis")).get("family")) or "momentum")
     label = str(conflict.get("short_name") or "сюжет дня")
     domains_present = [str(d) for d in _as_list(interp.get("domains_present"))]
     sphere_ids = _select_sphere_ids(family=family, domains_present=domains_present, max_scenes=max_scenes)
 
-    force = _as_dict(conflict.get("opposing_forces"))
-    a = force.get("a") or "автопилот"
-    b = force.get("b") or "осознанный выбор"
+    who = _vocative_prefix(person_name)
     driver_ids = list(conflict.get("driver_ids") or [])
     number_voice = _as_dict(chorus.get("day_number"))
     card_voice = _as_dict(chorus.get("day_card"))
@@ -764,30 +877,17 @@ def build_scenario_scenes_v1(
         scene_id = f"scene.{sid}"
         sphere_label = _SPHERE_LABEL_RU.get(sid, sid)
         role = _scene_role(sid, idx)
+        beat = _SCENE_BEATS.get(sid) or _DEFAULT_SCENE_BEAT
+        what = beat["what"].format(who=who)
         if lead_fact and idx == 0:
-            what = (
-                f"В «{sphere_label}» день упирается в выбор: «{a}» или «{b}». "
-                f"Тон задаёт факт: {lead_fact}"
-            )
-        else:
-            what = f"В сфере «{sphere_label}» тот же выбор — «{a}» или «{b}»."
+            # One soft sky cue on primary only — not pasted into every sphere / domestic.
+            what = f"{what} {_clip(lead_fact, 110)}"
         why = conflict.get("why_arose") or "Факты дня собираются в одну линию."
-        opportunity = f"Шанс выбрать «{b}» именно здесь — один конкретный жест."
-        trap = f"Ловушка — скатиться в «{a}» и сделать вид, что выбора не было."
-        do = f"Сделайте один шаг в пользу «{b}» в зоне «{sphere_label}»."
-        avoid = f"Не усиливайте «{a}» автоматическим согласием или откладыванием."
-        domestic = {
-            "work_decisions": "Одно письмо или решение, которое вы откладывали из-за чужой реакции.",
-            "relationships": "Разговор, где важно не сгладить то, что лучше проговорить.",
-            "communication": "Сообщение: сначала смысл, потом скорость ответа.",
-            "money": "Трата или отказ: не покупать спокойствие импульсом.",
-            "energy_body": "Пауза до усталости — вода, прогулка, сон без «ещё один час».",
-            "creativity": "Набросок без требования шедевра.",
-            "home": "Один бытовой контур — не весь дом сразу.",
-            "rest_travel": "Смена обстановки на час, если тянет «всё бросить».",
-        }.get(sid, "Одна бытовая сцена, где конфликт становится видимым.")
-        if lead_fact and idx == 0:
-            domestic = f"{domestic} (на фоне: {_clip(lead_fact, 80)})"
+        opportunity = beat["opportunity"]
+        trap = beat["trap"]
+        do = beat["do"]
+        avoid = beat["avoid"]
+        domestic = beat["domestic"]
 
         chorus_refs: list[str] = ["conflict"]
         if driver_ids:
@@ -799,9 +899,8 @@ def build_scenario_scenes_v1(
         if _as_list(chorus.get("natal")):
             chorus_refs.append("natal")
 
-        # Number paints tempo into action language
         if number_voice.get("tempo"):
-            do = f"{do} Темп дня ({number_voice.get('named_factor') or 'число'}): {number_voice.get('tempo')}."
+            do = f"{do} Темп: {number_voice.get('tempo')}."
 
         scenes.append(
             {
@@ -1156,6 +1255,7 @@ def build_day_scenario_v1(
     ritual_context: dict[str, Any] | None = None,
     celestial_events: dict[str, Any] | None = None,
     max_scenes: int = 4,
+    person_name: str | None = None,
 ) -> dict[str, Any]:
     """Assemble day_scenario_v1 spine + props. Exclusive meaning SoT (B5)."""
     interp = _as_dict(interpretation)
@@ -1181,6 +1281,7 @@ def build_day_scenario_v1(
         foundation=foundation,
         interpretation=interp,
         max_scenes=max_scenes,
+        person_name=person_name,
     )
     props = build_scenario_props_v1(conflict=conflict, scenes=scenes, chorus=chorus)
     ready = bool(scenes) and bool(conflict.get("short_name"))

@@ -93,6 +93,14 @@ moment (H1) → stakes conflict (H2) → trap-before (H3)
 | SH-4 | FE: render `humor` + strengthen evening payoff in chapters | C2 |
 | SH-5 | Human consensus pass on 8 cases → sealed labels | SH-1 |
 | SH-6 | Align `personal_day` with product numerology formula | product decide |
+| RH-1 | Persist `day_hook` as open state → tomorrow generation inputs | lifecycle · continuity |
+| RH-2 | `evening_payoff` as one-tap yes/no (PIM investment), not closed advice | evening · PIM |
+| RH-3 | `practice_or_promise.window` → timed push (not only morning digest) | notifications |
+| RH-4 | Serial continuity (yesterday promise → today angle); miss has context cost | day_hook |
+| RH-5 | Visible personalization growth (confirmed days / Decode reward) | CE · Decode |
+| RH-6 | Glance ≤15–20s value; share humor/color; **no** guilt streaks | UI · ethics |
+
+**Product rule (owner):** style calib makes reading good *when opened*. Habit = memory between days + open loop tomorrow + miss cost + visible growth — architecture, not prompt alone. Motive = curiosity + small useful action, never FOMO guilt.
 
 ---
 

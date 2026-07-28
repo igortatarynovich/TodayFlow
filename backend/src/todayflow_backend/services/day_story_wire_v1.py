@@ -357,7 +357,9 @@ def _build_day_story_record(
             else:
                 stored = story.get("day_scenario") if isinstance(story.get("day_scenario"), dict) else None
                 if stored and stored.get("ready") and stored.get("scenes"):
-                    story = project_day_scenario_onto_day_story_v1(story, stored)
+                    story = project_day_scenario_onto_day_story_v1(
+                        story, stored, person_name=birth_name
+                    )
                 else:
                     trace = story.get("trace") if isinstance(story.get("trace"), dict) else {}
                     domains_map = story.get("domains") if isinstance(story.get("domains"), dict) else {}
@@ -378,6 +380,7 @@ def _build_day_story_record(
                         day_thesis=story.get("day_thesis")
                         if isinstance(story.get("day_thesis"), dict)
                         else day_thesis_layer,
+                        person_name=birth_name,
                     )
         except Exception:
             logger.exception("day_scenario exclusive projection on cache hit failed")
@@ -478,6 +481,12 @@ def _build_day_story_record(
         llm_input["insight_depth_tier"] = insight_tier
         llm_input["daily_foundation"] = foundation
         llm_input["day_story_fingerprint"] = expected_fingerprint
+        if birth_name:
+            first = str(birth_name).strip().split()[0]
+            llm_input["person"] = {
+                "display_name": birth_name,
+                "first_name": first[:40] if first else None,
+            }
         today_scores = scores_raw if isinstance(scores_raw, dict) else {}
         history_slice = build_history_layer_v0(
             db,
@@ -540,7 +549,9 @@ def _build_day_story_record(
             )
 
             if scenario_override is not None:
-                projected = project_day_scenario_onto_day_story_v1(current, scenario_override)
+                projected = project_day_scenario_onto_day_story_v1(
+                    current, scenario_override, person_name=birth_name
+                )
                 editorial = dict(projected.get("editorial") or {})
                 editorial["native_scenario_generation"] = "day_scenario_native_llm_c1"
                 editorial["runtime_source"] = editorial.get("runtime_source") or "day_scenario_v1"
@@ -555,6 +566,7 @@ def _build_day_story_record(
                 ritual_context=safe_ritual,
                 celestial_events=ce or None,
                 day_thesis=day_thesis_layer,
+                person_name=birth_name,
             )
 
         # Phase C1/B5: exclusive scenario SoT projection (deterministic; no LLM here).
@@ -732,6 +744,11 @@ def build_day_story_v1_wire(
     )
     ritual_fp = _ritual_context_fingerprint(ritual_norm)
     snapshot_id = _latest_snapshot_id(db, user.id)
+    from todayflow_backend.services.day_sources.inputs_from_profile import birth_name_from_core_profile
+
+    person_name = birth_name_from_core_profile(
+        core_profile if isinstance(core_profile, dict) else None
+    )
 
     matched = _load_cached_day_story(
         db,
@@ -851,7 +868,9 @@ def build_day_story_v1_wire(
         else:
             stored = story.get("day_scenario") if isinstance(story.get("day_scenario"), dict) else None
             if stored and stored.get("ready") and stored.get("scenes"):
-                story = project_day_scenario_onto_day_story_v1(story, stored)
+                story = project_day_scenario_onto_day_story_v1(
+                    story, stored, person_name=person_name
+                )
             else:
                 trace = story.get("trace") if isinstance(story.get("trace"), dict) else {}
                 domains_map = story.get("domains") if isinstance(story.get("domains"), dict) else {}
@@ -871,6 +890,7 @@ def build_day_story_v1_wire(
                     day_thesis=story.get("day_thesis")
                     if isinstance(story.get("day_thesis"), dict)
                     else None,
+                    person_name=person_name,
                 )
     except Exception:
         logger.exception("day_scenario exclusive projection on wire serve failed")

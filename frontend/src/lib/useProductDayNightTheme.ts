@@ -54,11 +54,12 @@ export function useProductMoodTheme(options?: { isFirstDay?: boolean }): Product
   const [appearance, setAppearance] = useState<ProductAppearance>("light");
 
   const refresh = useCallback(() => {
-    const pin = readMoodPin();
-    setPinnedMood(pin);
+    // Mood / tone is system-owned (clock + first-day). Do not honor user pins.
+    if (readMoodPin() != null) writeMoodPin(null);
+    setPinnedMood(null);
     setMood(
       resolveProductMood({
-        pinnedMood: pin,
+        pinnedMood: null,
         isFirstDay,
         timeOfDay: getTimeOfDayByHour(),
       }),
@@ -72,7 +73,7 @@ export function useProductMoodTheme(options?: { isFirstDay?: boolean }): Product
     refresh();
     const id = window.setInterval(refresh, 60_000);
     const onStorage = (e: StorageEvent) => {
-      if (e.key === "todayflow_mood_pin_v1" || e.key === "todayflow_appearance_v1") refresh();
+      if (e.key === "todayflow_appearance_v1") refresh();
     };
     const mq = window.matchMedia?.("(prefers-color-scheme: dark)");
     const onScheme = () => refresh();
@@ -85,10 +86,8 @@ export function useProductMoodTheme(options?: { isFirstDay?: boolean }): Product
     };
   }, [refresh]);
 
-  const pinMood = useCallback((next: ProductMood) => {
-    writeMoodPin(next);
-    setPinnedMood(next);
-    setMood(next);
+  const pinMood = useCallback((_next: ProductMood) => {
+    // No-op: tone is not user-configurable.
   }, []);
 
   const clearPin = useCallback(() => {

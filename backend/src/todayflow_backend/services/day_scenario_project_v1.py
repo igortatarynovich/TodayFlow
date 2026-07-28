@@ -19,7 +19,9 @@ from typing import Any
 
 from todayflow_backend.services.day_scenario_v1 import (
     PRODUCT_SPHERE_IDS,
+    build_scenario_scenes_v1,
     sanitize_conflict_short_name,
+    scene_copy_needs_heal_v1,
     validate_day_scenario_v1,
 )
 
@@ -258,11 +260,44 @@ def _strip_meaning_slots(base: dict[str, Any]) -> None:
     base["domains"] = {}
 
 
+def _heal_template_scene_copy(
+    scen: dict[str, Any],
+    *,
+    person_name: str | None = None,
+) -> dict[str, Any]:
+    """Rewrite force-paste scene templates without full scenario rebuild."""
+    scenes = scen.get("scenes")
+    if not scene_copy_needs_heal_v1(scenes if isinstance(scenes, list) else None):
+        return scen
+    conflict = _as_dict(scen.get("conflict"))
+    chorus = _as_dict(scen.get("chorus"))
+    foundation = _as_dict(scen.get("foundation"))
+    if not conflict or not foundation:
+        return scen
+    prior = [s for s in (scenes or []) if isinstance(s, dict)]
+    domains: list[str] = []
+    for s in prior:
+        wire = _SPHERE_TO_WIRE.get(str(s.get("sphere") or ""))
+        if wire and wire not in domains:
+            domains.append(wire)
+    healed = dict(scen)
+    healed["scenes"] = build_scenario_scenes_v1(
+        conflict=conflict,
+        chorus=chorus,
+        foundation=foundation,
+        interpretation={"domains_present": domains} if domains else None,
+        max_scenes=max(len(prior), 3),
+        person_name=person_name,
+    )
+    return healed
+
+
 def project_day_scenario_onto_day_story_v1(
     story: dict[str, Any] | None,
     scenario: dict[str, Any] | None,
     *,
     exclusive_runtime_sot: bool = True,
+    person_name: str | None = None,
 ) -> dict[str, Any]:
     """Merge scenario meaning into day_story slots. Returns new story dict.
 
@@ -289,6 +324,8 @@ def project_day_scenario_onto_day_story_v1(
         base.pop("day_scenario", None)
         base.pop("interpretive_chorus", None)
         return base
+
+    scen = _heal_template_scene_copy(scen, person_name=person_name)
 
     errors = validate_day_scenario_v1(scen)
     hard = [
@@ -557,6 +594,7 @@ def build_and_project_day_scenario_v1(
     ritual_context: dict[str, Any] | None = None,
     celestial_events: dict[str, Any] | None = None,
     day_thesis: dict[str, Any] | None = None,
+    person_name: str | None = None,
 ) -> dict[str, Any]:
     """Convenience: build scenario from interpretation and project onto story."""
     from todayflow_backend.services.day_scenario_v1 import build_day_scenario_v1
@@ -572,5 +610,6 @@ def build_and_project_day_scenario_v1(
         else (interp.get("day_thesis") if isinstance(interp.get("day_thesis"), dict) else None),
         ritual_context=ritual_context,
         celestial_events=celestial_events,
+        person_name=person_name,
     )
-    return project_day_scenario_onto_day_story_v1(story, scenario)
+    return project_day_scenario_onto_day_story_v1(story, scenario, person_name=person_name)

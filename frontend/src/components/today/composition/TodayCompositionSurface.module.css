@@ -561,9 +561,9 @@
 
 .themeDarkHeroSpotlight {
   min-height: min(48dvh, 24rem);
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  align-items: end;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .themeDarkVisualAccent {
@@ -592,27 +592,45 @@
 }
 
 .themeDarkHeroSpotlight .themeDarkContent {
+  position: relative;
   z-index: 2;
+  /* Readable plate over photographic wash — not a second framed column. */
+  max-width: min(36rem, 100%);
+  padding: 0.15rem 0.1rem 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(18, 16, 24, 0.18) 35%,
+    rgba(18, 16, 24, 0.42) 100%
+  );
+}
+
+.themeDarkHero[data-hero-tone="light"].themeDarkHeroSpotlight .themeDarkContent {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(247, 241, 232, 0.2) 35%,
+    rgba(247, 241, 232, 0.55) 100%
+  );
 }
 
 @media (min-width: 48rem) {
   .themeDarkHeroSpotlight {
-    grid-template-columns: minmax(0, 1.1fr) minmax(10rem, 0.7fr);
-    align-items: stretch;
+    min-height: min(44dvh, 26rem);
   }
 
   .themeDarkHeroSpotlight .themeDarkVisualAccent {
-    position: relative;
-    inset: auto;
-    opacity: 1;
-    border-radius: 1.25rem;
-    overflow: hidden;
-    margin: 1.25rem 1.25rem 1.25rem 0;
-    min-height: 14rem;
+    /* Stay absolute full-bleed — never become a side framed image. */
+    position: absolute;
+    inset: 0;
+    opacity: 0.9;
+    border-radius: 0;
+    margin: 0;
+    min-height: 0;
   }
 
   .themeDarkHeroSpotlight .themeDarkWash {
-    filter: saturate(0.95) brightness(0.95);
+    filter: saturate(0.95) brightness(0.92);
   }
 }
 

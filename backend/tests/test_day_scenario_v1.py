@@ -255,6 +255,53 @@ def test_validate_rejects_empty_conflict_name():
     assert "conflict_missing_short_name" in validate_day_scenario_v1(scenario)
 
 
+def test_scene_copy_varies_by_sphere_and_uses_name():
+    pack = _pack_merc_moon()
+    thesis = build_day_thesis_v1(day_events_pack=pack)
+    ritual = {
+        "tarot_name_ru": "Отшельник",
+        "numerology_value": 7,
+        "head_topic": "relationships",
+    }
+    interp = build_day_story_interpretation_v1(
+        day_engine_brief={
+            "anchor_summary": "Ось дня — ясность.",
+            "do_hint": "Сказать прямо.",
+            "avoid_hint": "Не сглаживать.",
+            "thread_head_topic": "relationships",
+        },
+        ritual_context=ritual,
+        celestial_events={"day_events_pack": pack},
+        day_thesis=thesis,
+        target_date=date(2026, 7, 24),
+        birth_date=date(1990, 3, 15),
+    )
+    scenario = build_day_scenario_v1(
+        interpretation=interp,
+        day_events_pack=pack,
+        day_thesis=thesis,
+        ritual_context=ritual,
+        person_name="Игорь",
+    )
+    scenes = scenario["scenes"]
+    assert scenes
+    whats = [s["what_happens"] for s in scenes]
+    opps = [s["opportunity"] for s in scenes]
+    assert any(w.startswith("Игорь,") for w in whats)
+    assert not any("тот же выбор — «" in w for w in whats)
+    assert not any("день упирается в выбор: «" in w for w in whats)
+    assert not any(o.startswith("Шанс выбрать «") for o in opps)
+    assert len(set(opps)) == len(opps) or len(opps) == 1
+    # No force-quote spam of opposing_forces across all scene lines
+    force_a = scenario["conflict"]["opposing_forces"]["a"]
+    force_b = scenario["conflict"]["opposing_forces"]["b"]
+    joined = " ".join(
+        f"{s.get('what_happens')} {s.get('opportunity')} {s.get('trap')}" for s in scenes
+    )
+    assert joined.count(f"«{force_a}»") <= 1
+    assert joined.count(f"«{force_b}»") <= 1
+
+
 def test_color_catalog_is_knowledge_not_sot():
     from todayflow_backend.services.day_color_catalog_v1 import list_color_knowledge
 

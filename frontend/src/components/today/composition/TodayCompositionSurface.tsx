@@ -1098,7 +1098,7 @@ export function TodayCompositionSurface(props: Props) {
       ) : (
         <h1 className={styles.greetingSalutation}>{story.greeting.salutation}</h1>
       )}
-      <p className={styles.greetingLine}>{story.greeting.line}</p>
+      {/* Foundation path: date lives in topRow / dashboard chrome — avoid a second date line. */}
       {!useProductFoundation ? <p className={styles.greetingDate}>{props.displayDate}</p> : null}
     </section>
   ) : null;
@@ -1117,14 +1117,13 @@ export function TodayCompositionSurface(props: Props) {
       className={useProductFoundation ? styles.pulseCard : styles.dayAnchorPulse}
       data-testid="today-zone-pulse"
     >
-      <p className={styles.pulseLabel}>{story.pulseLabel}</p>
       {props.dayStoryUpdating ? (
         <p className={styles.pulseText} data-testid="today-day-story-updating" aria-live="polite">
           Обновляем описание дня…
         </p>
-      ) : (
+      ) : pulseDisplay ? (
         <p className={styles.pulseText}>{pulseDisplay}</p>
-      )}
+      ) : null}
       {story.ritualUnlockHint && !story.personalizedReady ? (
         <p className={styles.ritualUnlockHint}>{story.ritualUnlockHint}</p>
       ) : null}
@@ -1178,10 +1177,6 @@ export function TodayCompositionSurface(props: Props) {
           </MotionDrift>
         </div>
         <div className={`${styles.themeDarkContent} ${profileMotionStyles.heroEnter}`}>
-          <p className={styles.journeyStepIndex}>
-            <span className={styles.journeyStepBadge}>1</span>
-            <span>{copy.journey.dayTitle}</span>
-          </p>
           {themeLoading ? (
             <p className={styles.themeDarkLoading}>{copy.loadingDay}</p>
           ) : (
@@ -1190,7 +1185,6 @@ export function TodayCompositionSurface(props: Props) {
                 contract={props.contract}
                 narrativeRequestFailed={props.guideNarrativeRequestFailed}
               />
-              <p className={styles.themeDarkKicker}>{copy.themeLabel}</p>
               <h2
                 id="today-day-theme-title"
                 className={styles.themeDarkTitle}
@@ -1198,9 +1192,9 @@ export function TodayCompositionSurface(props: Props) {
               >
                 {story.hero.themeShort || story.hero.centralThought}
               </h2>
-              {!story.personalizedReady && copy.journey.dayLead ? (
-                <p className={styles.themeDarkLead}>{copy.journey.dayLead}</p>
-              ) : story.hero.themeShort && story.hero.centralThought !== story.hero.themeShort ? (
+              {story.hero.themeShort &&
+              story.hero.centralThought &&
+              story.hero.centralThought !== story.hero.themeShort ? (
                 <p className={styles.themeDarkSubline}>{story.hero.centralThought}</p>
               ) : null}
             </>
@@ -1219,12 +1213,17 @@ export function TodayCompositionSurface(props: Props) {
           embedded
           loading={themeLoading}
           loadingText={copy.loadingDay}
-          kicker={isFirstToday ? undefined : copy.themeLabel}
-          title={story.hero.centralThought}
-          subline={story.hero.themeShort}
+          title={story.hero.themeShort || story.hero.centralThought}
+          subline={
+            story.hero.themeShort &&
+            story.hero.centralThought &&
+            story.hero.centralThought !== story.hero.themeShort
+              ? story.hero.centralThought
+              : undefined
+          }
           symbol={todayHeroSymbol}
           pillars={todayHeroPillars}
-          ariaLabel={copy.themeLabel}
+          ariaLabel={story.hero.themeShort || story.hero.centralThought || copy.themeLabel}
           titleTestId="today-entity-daily-theme"
         />
       </div>

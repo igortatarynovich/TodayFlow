@@ -132,7 +132,8 @@ describe("TodayCompositionSurface", () => {
     expect(screen.getByTestId("today-zone-hero")).toBeInTheDocument();
     expect(screen.queryByTestId("today-zone-pulse")).not.toBeInTheDocument();
     expect(screen.getByTestId("today-zone-ritual-gates")).toBeInTheDocument();
-    expect(screen.getByText(/Суть дня|Конфликт дня|Сюжет дня/i)).toBeInTheDocument();
+    expect(screen.getByTestId("today-entity-daily-theme")).toBeInTheDocument();
+    expect(screen.queryByText(/Сюжет дня|Главная тема дня|Пульс дня/i)).not.toBeInTheDocument();
     expect(screen.getByTestId("today-zone-hero").textContent).not.toMatch(/число дня\s*[—-]?\s*4/i);
   });
 
