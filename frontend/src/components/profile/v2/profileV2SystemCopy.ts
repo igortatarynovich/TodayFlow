@@ -25,12 +25,15 @@ export const PROFILE_V2_COPY = {
       lead: "",
       deeperLabel: "Как это звучит полнее",
       deeperHide: "Свернуть",
+      foundationLabel: "Из чего складывается суть",
     },
     why: {
       title: "Главное, что формирует тебя",
-      lead: "",
+      lead: "Откуда берётся имя портрета и чем он расширяется — с пользой, не списком ярлыков.",
       selectedLabel: "Выбрало имя",
       influencedLabel: "Расширяет портрет",
+      selectedSection: "Выбрало имя",
+      influencedSection: "Расширяет портрет",
       honestyFallbackTitle: "На чём держится",
     },
     insight: {

@@ -29,10 +29,20 @@ export function scenarioConflictLabel(contract: TodayContractV1): string | null 
   const sc = readyDayScenario(contract);
   const raw = sc?.conflict?.short_name?.trim();
   if (!raw || !isRuUserFacingText(raw)) return null;
-  // Heal cached mashed labels: "A или B — пока <truncated…>"
+  // Heal cached mashed labels: "A или B — пока <fact…>" / calendar glue
   let name = raw.replace(/[.!?]+$/u, "").trim();
-  const mashed = name.match(/^(.+?\s+или\s+.+?)\s+[—–-]\s+пока\s+/iu);
+  const mashed = name.match(/^(.+?\s+или\s+.+?)\s+[—–-]\s+(?:пока\s+|календарн)/iu);
   if (mashed?.[1]) name = mashed[1].trim();
+  if (/\sили\s/iu.test(name) && /\s+[—–-]\s+/.test(name)) {
+    const [before, after = ""] = name.split(/\s+[—–-]\s+/);
+    if (
+      before &&
+      /\sили\s/iu.test(before) &&
+      (/^пока\s/iu.test(after) || /календарн/iu.test(after) || after.includes("…"))
+    ) {
+      name = before.trim();
+    }
+  }
   if (name.includes("…") && /\sили\s/iu.test(name)) {
     const before = name.split(/\s+[—–-]\s+/)[0]?.trim();
     if (before && /\sили\s/iu.test(before)) name = before;
@@ -419,9 +429,17 @@ export function buildSkyInfluenceCards(input: {
   // Prefer ranked drivers from day_events_pack — one plot, not a fact wall.
   if (pack?.ranked_drivers?.length && pack.events?.length) {
     const byId = new Map((pack.events || []).filter((e) => e?.id).map((e) => [String(e.id), e]));
-    for (const did of pack.ranked_drivers.slice(0, 3)) {
+    for (const did of pack.ranked_drivers.slice(0, 5)) {
       const ev = byId.get(String(did));
       if (!ev?.title_ru && !ev?.fact_ru) continue;
+      if (
+        String(ev.id || "").startsWith("calendar-doy") ||
+        String(ev.kind || "") === "calendar" ||
+        /календарн\w*\s+день|\d+-й\s+день\s+года/i.test(String(ev.fact_ru || ev.title_ru || ""))
+      ) {
+        continue;
+      }
+      if (cards.length >= 3) break;
       const story = sanitizeRuCopy(
         ev.fact_ru,
         ev.title_ru || "Сигнал дня — держи один главный конфликт.",
@@ -705,11 +723,8 @@ export function buildTodayDaySpine(input: {
   });
 
   // When day_scenario is ready, props/affirmations already come from scenes —
-  // do not replace the day with a generic ritual unlock slogan.
-  const ritualUnlockHint =
-    input.ritualComplete || Boolean(readyDayScenario(input.contract))
-      ? null
-      : "Открой карту и число — практика, медитация и аффирмация соберутся под твой день.";
+  // ritual is complement, not unlock slogan.
+  const ritualUnlockHint = null;
 
   return {
     thesis,

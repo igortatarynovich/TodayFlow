@@ -8,6 +8,7 @@ import { WhyAnchorGlyph } from "@/components/profile/v2/whyAnchorVisual";
 import { ArchetypeHeroVisual } from "@/components/visualIdentity/ArchetypeHeroVisual";
 import { SacredGeometryBackdrop } from "@/components/visualIdentity/SacredGeometryBackdrop";
 import { MotionDrift } from "@/design-system/motion";
+import type { EssenceFoundationCard } from "@/lib/profilePage/buildEssenceFoundationCards";
 import { resolveArchetypeIllustrationSlug } from "@/lib/visualIdentity/registry";
 
 export type ProfileRecognitionSceneProps = {
@@ -17,6 +18,8 @@ export type ProfileRecognitionSceneProps = {
   identityCore: string | null;
   archetypeSeed: string | null;
   identityMarkers: string[];
+  /** Birth pillars with person-facing meaning — under recognition, not Explore dump. */
+  foundationCards?: EssenceFoundationCard[];
 };
 
 const recognitionNav = PROFILE_V2_DEPTH_NAV[0];
@@ -27,6 +30,7 @@ export function ProfileRecognitionScene({
   identityCore,
   archetypeSeed,
   identityMarkers,
+  foundationCards = [],
 }: ProfileRecognitionSceneProps) {
   const hasPortraitSlot = Boolean(resolveArchetypeIllustrationSlug(archetypeSeed));
   const deeper =
@@ -103,6 +107,26 @@ export function ProfileRecognitionScene({
                 <span>{marker}</span>
               </span>
             ))}
+          </div>
+        ) : null}
+
+        {foundationCards.length ? (
+          <div className={styles.essenceFoundation} data-testid="profile-v2-essence-foundation">
+            <p className={styles.essenceFoundationLabel}>{copy.foundationLabel}</p>
+            <ul className={styles.essenceFoundationGrid} role="list">
+              {foundationCards.map((card, index) => (
+                <li
+                  key={card.id}
+                  className={`${styles.essenceFoundationCard} ${profileMotionStyles.staggerItem}`}
+                  style={profileMotionStaggerDelay(index, 70)}
+                  data-testid={`profile-v2-essence-${card.id}`}
+                >
+                  <p className={styles.essenceFoundationKind}>{card.label}</p>
+                  <p className={styles.essenceFoundationFact}>{card.fact}</p>
+                  <p className={styles.essenceFoundationMeaning}>{card.meaning}</p>
+                </li>
+              ))}
+            </ul>
           </div>
         ) : null}
       </div>

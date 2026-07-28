@@ -1381,6 +1381,61 @@
   color: var(--tf-ink-soft, #5a5450);
 }
 
+.essenceFoundation {
+  margin-top: 1.35rem;
+  max-width: 40rem;
+}
+
+.essenceFoundationLabel {
+  margin: 0 0 0.65rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8b6a3e;
+}
+
+.essenceFoundationGrid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+  gap: 0.65rem;
+}
+
+.essenceFoundationCard {
+  margin: 0;
+  padding: 0.75rem 0.85rem;
+  border-radius: 0.9rem;
+  background: color-mix(in srgb, var(--tf-paper, #fff) 82%, #e8dcc8);
+  border: 1px solid color-mix(in srgb, #8b6a3e 14%, transparent);
+}
+
+.essenceFoundationKind {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8b6a3e;
+}
+
+.essenceFoundationFact {
+  margin: 0.35rem 0 0;
+  font-family: var(--tf-font-display);
+  font-size: 1.05rem;
+  line-height: 1.25;
+  color: var(--tf-ink);
+}
+
+.essenceFoundationMeaning {
+  margin: 0.4rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--tf-ink-soft, #5a5450);
+}
+
 .whyBlock {
   margin-bottom: 1.25rem;
 }
@@ -1747,6 +1802,30 @@
   line-height: 1.4;
   color: var(--tf-ink-soft, #5a5450);
   overflow-wrap: anywhere;
+}
+
+.whyProofMeaning {
+  margin: 0.55rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--tf-ink);
+}
+
+.whyFormationBlock {
+  margin-top: 1rem;
+}
+
+.whyFormationBlock + .whyFormationBlock {
+  margin-top: 1.35rem;
+}
+
+.whyFormationLabel {
+  margin: 0 0 0.65rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8b6a3e;
 }
 
 .whySecondaryRow {
@@ -2788,6 +2867,10 @@
 :global([data-theme="dark"]) .whyProofDetail,
 :global([data-theme="dark"]) .whySecondaryDetail {
   color: #c4b8a8;
+}
+
+:global([data-theme="dark"]) .whyProofMeaning {
+  color: #ece4d8;
 }
 
 :global([data-theme="dark"]) .whyProofRole {

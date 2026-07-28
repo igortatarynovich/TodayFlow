@@ -82,6 +82,7 @@ export function ProfileExploreSection({
               unavailableNote={deep.unavailableNote}
               housePersonLines={deep.housePersonLines}
               aspectPersonLines={deep.aspectPersonLines}
+              showBirthSignature={false}
             />
           </div>
         </div>

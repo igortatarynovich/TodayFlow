@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { HOUSE_FALLBACK } from "@/components/profile/profileHouseConstants";
 import { NatalChartWheel } from "@/components/natal-chart/NatalChartWheel";
 import { ProfileChartFullMap } from "@/components/profile/ProfileChartFullMap";
 import { ProfileExpandableSection } from "@/components/profile/ProfileExpandableSection";
 import type { LifeMapSection, NatalChartPreview } from "@/components/profile/profilePanelTypes";
 import { buildNumerologySignatureCards } from "@/components/profile/profileNumerologySignature";
 import type { CoreProfile } from "@/lib/types";
+import { zodiacRuName } from "@/lib/zodiacKnowledge";
 import styles from "./profileChartDeep.module.css";
 
 export type ProfileChartSectionProps = {
@@ -32,6 +34,8 @@ export type ProfileChartSectionProps = {
     { line?: string; how?: string; do?: string } | undefined
   > | null;
   aspectPersonLines?: Record<string, { line?: string } | undefined> | null;
+  /** When false, signature/numerology live on Recognition (Твоя суть); Explore keeps wheel + full map. */
+  showBirthSignature?: boolean;
 };
 
 /**
@@ -51,9 +55,10 @@ export function ProfileChartSection({
   unavailableNote = null,
   housePersonLines = null,
   aspectPersonLines = null,
+  showBirthSignature = true,
 }: ProfileChartSectionProps) {
-  const quickSignature = buildQuickSignature(natalPreview);
-  const numerologyCards = buildNumerologySignatureCards(coreNumerology);
+  const quickSignature = showBirthSignature ? buildQuickSignature(natalPreview) : [];
+  const numerologyCards = showBirthSignature ? buildNumerologySignatureCards(coreNumerology) : [];
   const aspectLines = natalPreview?.aspects?.callouts ?? [];
   const emptyState = (
     <div className={styles.emptyState}>
@@ -229,27 +234,33 @@ function buildQuickSignature(natalPreview: NatalChartPreview | null) {
 
   const sun = natalPreview.positions?.sun;
   const moon = natalPreview.positions?.moon;
-  const ascSign = natalPreview.ascendant?.sign || natalPreview.houses?.[0]?.sign || "—";
+  const ascSignRaw = natalPreview.ascendant?.sign || natalPreview.houses?.[0]?.sign || null;
+  const ascSign = ascSignRaw ? zodiacRuName(ascSignRaw) : "—";
   const ascDegree = natalPreview.ascendant?.longitude ?? natalPreview.ascendant?.degree;
-  const mcSign = natalPreview.positions?.mc?.sign || natalPreview.houses?.[9]?.sign || null;
+  const mcSignRaw = natalPreview.positions?.mc?.sign || natalPreview.houses?.[9]?.sign || null;
+  const mcSign = mcSignRaw ? zodiacRuName(mcSignRaw) : null;
 
   return [
     {
       label: "Солнце",
-      value: sun?.sign || "—",
-      hint: sun?.house ? `${sun.house} дом` : undefined,
+      value: sun?.sign ? zodiacRuName(sun.sign) : "—",
+      hint: sun?.house
+        ? `${sun.house} дом · ${HOUSE_FALLBACK[sun.house] || "зона проявления силы"}`
+        : undefined,
       weight: "sun" as const,
     },
     {
       label: "Луна",
-      value: moon?.sign || "—",
-      hint: moon?.house ? `${moon.house} дом` : undefined,
+      value: moon?.sign ? zodiacRuName(moon.sign) : "—",
+      hint: moon?.house
+        ? `${moon.house} дом · ${HOUSE_FALLBACK[moon.house] || "зона чувств и восстановления"}`
+        : undefined,
       weight: "moon" as const,
     },
     {
       label: "Асцендент",
       value: ascSign,
-      hint: typeof ascDegree === "number" ? `${Math.round(ascDegree)}°` : undefined,
+      hint: typeof ascDegree === "number" ? `${Math.round(ascDegree)}° · первый контакт` : "первый контакт",
       weight: "asc" as const,
     },
     ...(mcSign
@@ -257,7 +268,7 @@ function buildQuickSignature(natalPreview: NatalChartPreview | null) {
           {
             label: "MC",
             value: mcSign,
-            hint: undefined as string | undefined,
+            hint: "публичная роль" as string | undefined,
             weight: "mc" as const,
           },
         ]

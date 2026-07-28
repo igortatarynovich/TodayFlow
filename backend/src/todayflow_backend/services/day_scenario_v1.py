@@ -383,7 +383,7 @@ def build_interpretive_chorus_v1(
         if not isinstance(row, dict):
             continue
         fact = _clip(row.get("fact_ru") or row.get("label_ru") or row.get("title_ru"), 220)
-        if not fact:
+        if not fact or _is_calendar_kitchen_fact(fact):
             continue
         astrology_voices.append(
             {
@@ -508,8 +508,16 @@ _KITCHEN_NATAL_RE = re.compile(
 )
 
 # Cached mash: "Force A или Force B — пока <truncated fact…>"
+# Also strip calendar-day kitchen facts glued after an em dash.
 _MASHED_SHORT_NAME_RE = re.compile(
-    r"^(.+?\s+или\s+.+?)\s+[—–-]\s+пока\s+",
+    r"^(.+?\s+или\s+.+?)\s+[—–-]\s+(?:пока\s+|календарн)",
+    re.IGNORECASE,
+)
+_CALENDAR_FACT_RE = re.compile(
+    r"календарн\w*\s+день|"
+    r"\d+-й\s+день\s+года|"
+    r"день\s+года\s+\d+|"
+    r"calendar-doy",
     re.IGNORECASE,
 )
 
@@ -521,6 +529,28 @@ def _is_kitchen_natal_text(text: str) -> bool:
     return bool(_KITCHEN_NATAL_RE.search(t))
 
 
+def is_calendar_kitchen_fact(text: str) -> bool:
+    """Calendar DOY lines are kitchen — date already lives in UI chrome."""
+    return bool(_CALENDAR_FACT_RE.search(text or ""))
+
+
+def is_calendar_driver_row(row: dict[str, Any] | None) -> bool:
+    if not isinstance(row, dict):
+        return False
+    rid = str(row.get("id") or row.get("driver_id") or "")
+    kind = str(row.get("kind") or "")
+    if rid.startswith("calendar-doy") or kind == "calendar":
+        return True
+    return is_calendar_kitchen_fact(
+        str(row.get("fact_ru") or row.get("title_ru") or row.get("named_factor") or "")
+    )
+
+
+# Back-compat aliases used inside this module
+_is_calendar_kitchen_fact = is_calendar_kitchen_fact
+_is_calendar_driver_row = is_calendar_driver_row
+
+
 def sanitize_conflict_short_name(value: Any) -> str:
     """User-facing conflict label: tension only, no mashed truncated sky fact."""
     text = str(value or "").strip()
@@ -529,6 +559,15 @@ def sanitize_conflict_short_name(value: Any) -> str:
     mashed = _MASHED_SHORT_NAME_RE.match(text)
     if mashed:
         text = mashed.group(1).strip()
+    # Any leftover "— пока …" / calendar glue after tension label
+    if " или " in text.lower() and re.search(r"\s+[—–-]\s+", text):
+        before, after = re.split(r"\s+[—–-]\s+", text, maxsplit=1)
+        if " или " in before.lower() and (
+            after.lower().startswith("пока")
+            or _is_calendar_kitchen_fact(after)
+            or "…" in after
+        ):
+            text = before.strip()
     if "…" in text and " или " in text.lower():
         before = re.split(r"\s+[—–-]\s+", text, maxsplit=1)[0].strip()
         if " или " in before.lower():
@@ -637,7 +676,9 @@ def build_scenario_conflict_v1(
     why_arose_parts = [
         _clip(d.get("fact_ru"), 160)
         for d in _as_list(foundation.get("ranked_drivers"))
-        if isinstance(d, dict) and d.get("fact_ru")
+        if isinstance(d, dict)
+        and d.get("fact_ru")
+        and not _is_calendar_kitchen_fact(str(d.get("fact_ru") or ""))
     ][:2]
     why_arose = (
         " · ".join(why_arose_parts)
@@ -868,9 +909,13 @@ def build_scenario_scenes_v1(
     card_voice = _as_dict(chorus.get("day_card"))
     lead_fact = ""
     for d in _as_list(foundation.get("ranked_drivers")):
-        if isinstance(d, dict) and d.get("fact_ru"):
-            lead_fact = _clip(d.get("fact_ru"), 120)
-            break
+        if not isinstance(d, dict) or not d.get("fact_ru"):
+            continue
+        fact = str(d.get("fact_ru") or "")
+        if _is_calendar_kitchen_fact(fact):
+            continue
+        lead_fact = _clip(fact, 120)
+        break
 
     scenes: list[dict[str, Any]] = []
     for idx, sid in enumerate(sphere_ids):
@@ -1171,10 +1216,12 @@ def build_scenario_props_v1(
         )
 
     action_hint = _clip(primary.get("recommended_action"), 100)
+    sphere_label = str(primary.get("sphere_label_ru") or "сегодня")
     affirmations = [
         {
             "text": _clip(
-                f"Я делаю шаг к «{force_b}», не застревая в «{force_a}».",
+                action_hint
+                or f"В зоне «{sphere_label}» я делаю один ясный шаг — без автопилота.",
                 160,
             ),
             "origin_scene_id": scene_id,

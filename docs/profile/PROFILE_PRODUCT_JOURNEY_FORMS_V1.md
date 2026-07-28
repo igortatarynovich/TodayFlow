@@ -44,7 +44,8 @@ Eval-сценарии с `initiator` / `stabilizer` **не** SoT имени — 
 | **Visual object** | Один тип на archetype: `ArchetypeSymbol` (SVG из registry). Не pills. Не eyebrow «Профиль». | `baseline.archetype_seed` → slug → asset |
 | **recognition_name** | 1 слово/название ядра, UPPER или display weight | calc RU label (`archetypeDisplayLabel`) |
 | **recognition_line** | 1 мысль, ≤ 120 символов, 1–2 короткие строки. Узнаваемое поведение; отличает archetype от соседних; не совет «сегодня» | **обязательное поле** identity contract |
-| Запрет на Шаге 1 | второй абзац «кто ты»; список сил; натал; «Личный профиль» как смысл | — |
+| **foundation strip** | После share-core: Солнце · Луна · ASC/MC (если время) · число пути · личный год — **RU факт + 1 смысл**. Не сырой EN dump. Не дублировать ту же сетку в Explore | natal + numerology + framework/CE prose / life_path knowledge |
+| Запрет на Шаге 1 | второй абзац «кто ты»; список сил; сырой натал без смысла; «Личный профиль» как смысл | — |
 
 ### Target contract (механизм под форму)
 
@@ -121,7 +122,8 @@ Share test: имя + линия + символ на карточке — OK по
 | MC | house 10 / mc | influenced | same as ASC | **нет времени** |
 | Дома / аспекты | natal | influenced / deepen | углубление | dump всех 12 |
 
-**Роль-проза** рядом с якорем — только из существующего evidence/card field. Иначе — чистый факт.  
+**Роль-проза** рядом с якорем — из framework/CE/life_path knowledge / element bank (существующие источники). Иначе — честный fallback «расширяет портрет».  
+Каждый якорь на Шаге 2 несёт **fact + meaning** (не декоративный chip).  
 LLM не пишет «вы Овен, поэтому Архитектор».
 
 ### Honesty без времени (Case A / B)

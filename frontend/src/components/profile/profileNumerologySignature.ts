@@ -1,6 +1,19 @@
+import { getLifePathEntry } from "@/lib/zodiacKnowledge";
 import type { CoreProfile } from "@/lib/types";
 
 export type ProfileNumerologyCard = { key: string; label: string; value: string; hint?: string };
+
+const PERSONAL_YEAR_HINT: Record<number, string> = {
+  1: "год запуска и своего первого шага",
+  2: "год союза и тонкой настройки",
+  3: "год голоса и контакта",
+  4: "год фундамента и режима",
+  5: "год свободы и смены",
+  6: "год заботы и обязательств",
+  7: "год смысла и ясной дистанции",
+  8: "год силы и видимого результата",
+  9: "год завершения циклов",
+};
 
 /** Те же числа, что на экране «Карта»: путь, имя, суть, подача, личный год. */
 export function buildNumerologySignatureCards(
@@ -13,7 +26,17 @@ export function buildNumerologySignatureCards(
 
   if (numerology.life_path != null) {
     const m = numerology.is_master_life_path ? " · мастер-линия" : "";
-    out.push({ key: "lp", label: "Число пути", value: String(numerology.life_path), hint: `главный сценарий${m}`.trim() });
+    const essence = getLifePathEntry(numerology.life_path)?.essence?.trim();
+    out.push({
+      key: "lp",
+      label: "Число пути",
+      value: String(numerology.life_path),
+      hint: essence
+        ? essence.length > 110
+          ? `${essence.slice(0, 107)}…`
+          : essence
+        : `главный сценарий жизни${m}`.trim(),
+    });
   }
   if (numerology.expression != null) {
     out.push({ key: "ex", label: "Имя", value: String(numerology.expression), hint: "как ты проживаешь полное имя" });
@@ -29,7 +52,7 @@ export function buildNumerologySignatureCards(
       key: "py",
       label: "Личный год",
       value: String(py),
-      hint: `для ${refYear}, по дате рождения`,
+      hint: PERSONAL_YEAR_HINT[py] || `тон цикла ${refYear} по дате рождения`,
     });
   }
   return out;

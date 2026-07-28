@@ -117,7 +117,16 @@ function renderJourney(extra?: Partial<Parameters<typeof ProfileV2SystemScreen>[
       coreProfile={journeyCore}
       onOpenBirthData={() => {}}
       deep={{
-        natalPreview: null,
+        natalPreview: {
+          positions: {
+            sun: { sign: "Virgo", house: 10 },
+            moon: { sign: "Pisces", house: 4 },
+          },
+          houses: [{ house: 1, sign: "Leo" }],
+          ascendant: { sign: "Leo", longitude: 120 },
+          time_unknown: false,
+        },
+        coreNumerology: { life_path: 7, birth_date: "1990-02-13" },
         previewError: null,
         onReloadPreview: () => {},
         lifeMapSections: [],
@@ -170,13 +179,27 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     expect(markers).toHaveTextContent("Земля");
     expect(markers).toHaveTextContent("Путь 7");
 
+    // Essence foundation lives under Твоя суть (RU fact + meaning), not Explore dump
+    const foundation = screen.getByTestId("profile-v2-essence-foundation");
+    expect(foundation).toHaveTextContent(/Дева/);
+    expect(foundation).toHaveTextContent(/Число пути/);
+    expect(screen.getByTestId("profile-v2-essence-life_path")).toHaveTextContent(/глубин|смысл|понят/i);
+    expect(screen.queryByTestId("profile-chart-signature")).not.toBeInTheDocument();
+
     // Why + insight + character + effort in primary scroll (effort ungated)
     expect(screen.getByTestId("profile-v2-why")).toBeInTheDocument();
+    expect(screen.getByTestId("profile-v2-why-selected")).toBeInTheDocument();
+    expect(screen.getByTestId("profile-v2-why-influenced")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-why-anchor-archetype_from_life_path")).toHaveTextContent(
       /Исследовател/i,
     );
+    expect(screen.getByTestId("profile-v2-why-meaning-archetype_from_life_path")).toHaveTextContent(
+      /числа пути/i,
+    );
     expect(screen.getByTestId("profile-v2-why-anchor-sun")).toHaveTextContent(/Солнце в Деве/i);
-    expect(screen.getByTestId("profile-v2-why-secondary")).toHaveTextContent(/Стихия/i);
+    expect(screen.getByTestId("profile-v2-why-meaning-sun").textContent?.length || 0).toBeGreaterThan(20);
+    expect(screen.getByTestId("profile-v2-why-anchor-element")).toHaveTextContent(/Стихия/i);
+    expect(screen.queryByTestId("profile-v2-why-secondary")).not.toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-insight")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-insight-node")).toHaveTextContent("Ясность vs скорость");
     expect(screen.getByTestId("profile-v2-insight-living")).toHaveTextContent("поторопился");

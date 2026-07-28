@@ -18,6 +18,8 @@ export type DayEngagementState = {
   tarotPickedId: number | null;
   tarotPickedName: string | null;
   numberConfirmed: boolean;
+  /** Revealed day number digit (local SoT after ritual if morning lags). */
+  numberValue: string | null;
   affirmationRead: boolean;
   /** Growth A — habit/ascetic one-tap from Today (ids marked done today). */
   habitMarkedId: number | null;
@@ -58,6 +60,7 @@ const EMPTY: DayEngagementState = {
   tarotPickedId: null,
   tarotPickedName: null,
   numberConfirmed: false,
+  numberValue: null,
   affirmationRead: false,
   habitMarkedId: null,
   asceticMarkedId: null,
@@ -91,6 +94,7 @@ export function loadDayEngagement(dateISO: string, profileScope?: string | null)
       tarotPickedId: typeof p.tarotPickedId === "number" ? p.tarotPickedId : null,
       tarotPickedName: typeof p.tarotPickedName === "string" ? p.tarotPickedName : null,
       numberConfirmed: Boolean(p.numberConfirmed),
+      numberValue: typeof p.numberValue === "string" ? p.numberValue : null,
       affirmationRead: Boolean(p.affirmationRead),
       habitMarkedId: typeof p.habitMarkedId === "number" ? p.habitMarkedId : null,
       asceticMarkedId: typeof p.asceticMarkedId === "number" ? p.asceticMarkedId : null,
@@ -145,7 +149,11 @@ export function mergeEngagementWithDaySymbolState(
       id?: number | string | null;
       name?: string | null;
     };
-    number?: { revealed?: boolean };
+    number?: {
+      revealed?: boolean;
+      value?: number | string | null;
+      reduced_value?: number | string | null;
+    };
   } | null,
   resolveCardName?: (cardId: number) => string | null | undefined,
 ): DayEngagementState {
@@ -173,8 +181,14 @@ export function mergeEngagementWithDaySymbolState(
     }
   }
 
-  if (view.number?.revealed && !next.numberConfirmed) {
-    next = { ...next, numberConfirmed: true };
+  if (view.number?.revealed) {
+    const raw = view.number.value ?? view.number.reduced_value;
+    const digit = raw != null ? String(raw).trim() : "";
+    next = {
+      ...next,
+      numberConfirmed: true,
+      numberValue: digit && digit !== "—" ? digit : next.numberValue,
+    };
   }
 
   return next;

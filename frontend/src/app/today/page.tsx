@@ -1348,17 +1348,18 @@ export default function TodayPage() {
     dayStorySingleVoice && todayContract ? dayStoryLeadParagraph(todayContract) : null;
   const summaryTitleMerged = contractStoryHeadline || narrativeGuideHeadline || guideHeadline;
   const subtitleMerged = contractStoryLead || coreGuideLead || narrativeGuideSubline || subtitleRitual;
-  /** Dashboard chrome must stay short — full day_story belongs in the reading, not the header. */
-  const dashboardGreetingLine =
-    (todayContract?.day_story?.theme || "").trim() ||
-    (summaryTitleMerged && summaryTitleMerged.length <= 72 ? summaryTitleMerged : undefined) ||
-    undefined;
+  /** Header = greeting + date only. Theme belongs in the day hero, never here. */
+  const dashboardGreetingLine = undefined;
+  const morningNum =
+    morningRitualData?.numerology_number ?? todayData.morning?.numerology_number ?? null;
+  const morningNumExpl =
+    morningRitualData?.numerology_explanation ?? todayData.morning?.numerology_explanation ?? null;
   const numerologyValueRitual = String(
-    todayData.morning?.numerology_number?.value ?? todayData.morning?.numerology_number?.reduced_value ?? "—",
+    morningNum?.value ?? morningNum?.reduced_value ?? "—",
   );
   const numerologyMeaningRitual = String(
-    todayData.morning?.numerology_number?.title ||
-      todayData.morning?.numerology_explanation?.summary ||
+    morningNum?.title ||
+      morningNumExpl?.summary ||
       RITUAL_COPY.numerologyMeaningFallbackShort,
   );
   const apiSymbols = morningRitualData?.celestial_events?.daily_symbols;

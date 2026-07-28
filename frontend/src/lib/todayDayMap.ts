@@ -13,6 +13,7 @@
 import type { TodayContractV1 } from "@/lib/todayContract";
 import { dayStoryAvoidItems, dayStoryDoItems } from "@/lib/todayContractMapper";
 import { scenarioConflictLabel } from "@/lib/todayDaySpine";
+import { isCalendarKitchenFact } from "@/lib/todayScenarioChapters";
 import { nearDuplicateClaim, scrubUserFacingText } from "@/lib/todayValueGate";
 
 export type TodayDayMap = {
@@ -77,8 +78,9 @@ function fromFunnelInterpretation(payload: Record<string, unknown> | null | unde
     (String(payload.contract_version || "").includes("guide_funnel_interpretation") ? payload : null);
   if (!interp || typeof interp !== "object") return null;
 
+  const expectSceneRaw = firstSentences(gate(String(interp.events_lead || interp.what_happens || "")), 2);
   const expectScene = ensurePeriod(
-    firstSentences(gate(String(interp.events_lead || interp.what_happens || "")), 2),
+    isCalendarKitchenFact(expectSceneRaw) ? gate(String(interp.what_happens || "")) : expectSceneRaw,
   );
   const whatHappens = ensurePeriod(firstSentences(gate(String(interp.what_happens || "")), 2));
   if (whatHappens.length < 20 && expectScene.length < 20) return null;
@@ -100,7 +102,11 @@ function fromFunnelInterpretation(payload: Record<string, unknown> | null | unde
 
   return {
     primaryConflict: gate(String(interp.primary_conflict || "")) || null,
-    eventsLead: ensurePeriod(gate(String(interp.events_lead || ""))) || null,
+    eventsLead:
+      (() => {
+        const lead = ensurePeriod(gate(String(interp.events_lead || "")));
+        return lead && !isCalendarKitchenFact(lead) ? lead : null;
+      })(),
     whatHappens: pulse,
     whereConflict: ensurePeriod(gate(String(interp.where_conflict || ""))) || null,
     whereYouBreak: ensurePeriod(gate(String(interp.where_you_break || ""))) || null,
@@ -121,7 +127,8 @@ function fromDayStory(contract: TodayContractV1): TodayDayMap | null {
   const foundation = ds.day_foundation;
   const essence = gate(foundation?.essence?.story_ru);
   const expect = gate(ds.expect);
-  const eventsLead = gate(ds.events_lead);
+  const eventsLeadRaw = gate(ds.events_lead);
+  const eventsLead = isCalendarKitchenFact(eventsLeadRaw) ? "" : eventsLeadRaw;
   const direction = gate(ds.direction);
   const story = gate(ds.story);
   const thesisLabel =

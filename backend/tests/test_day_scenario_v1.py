@@ -109,6 +109,11 @@ def test_short_name_is_tension_only_not_mashed_truncated_fact():
         "Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…"
     )
     assert healed == "Удержать привычное или принять поворот"
+    cal = sanitize_conflict_short_name(
+        "Ломать работающее или беречь ровный ритм — пока календарный день 2026-07-28 — 209-й день года."
+    )
+    assert cal == "Ломать работающее или беречь ровный ритм"
+    assert "календар" not in cal.lower()
 
 
 def test_kitchen_firdaria_not_in_why_personal_or_chorus():

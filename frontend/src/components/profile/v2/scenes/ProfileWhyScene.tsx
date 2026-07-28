@@ -9,20 +9,71 @@ import { ProfileAtmosphere } from "@/components/profile/v2/ProfileAtmosphere";
 import { PROFILE_V2_COPY, PROFILE_V2_DEPTH_NAV } from "@/components/profile/v2/profileV2SystemCopy";
 import { WhyAnchorGlyph } from "@/components/profile/v2/whyAnchorVisual";
 import type { ProfileJourneyWhy } from "@/lib/profilePage/buildProfileJourneyProjection";
-import { presentWhyAnchors } from "@/lib/profilePage/presentWhyAnchors";
+import {
+  buildWhyFormationCards,
+  type WhyFormationCard,
+} from "@/lib/profilePage/buildWhyFormationCards";
+import type { ProfileFrameworkCard } from "@/lib/profilePage/buildProfileQuickMapData";
+import type { CoreProfile } from "@/lib/types";
 import styles from "@/components/profile/v2/profileV2System.module.css";
 
 export type ProfileWhySceneProps = {
   why: ProfileJourneyWhy;
+  coreProfile?: CoreProfile | null;
+  frameworkCards?: ProfileFrameworkCard[] | null;
 };
 
 const whyNav = PROFILE_V2_DEPTH_NAV[1];
 
-export function ProfileWhyScene({ why }: ProfileWhySceneProps) {
+function WhyCard({
+  row,
+  index,
+}: {
+  row: WhyFormationCard;
+  index: number;
+}) {
+  return (
+    <li
+      className={`${styles.whyProofCard} ${profileMotionStyles.staggerItem}`}
+      style={profileMotionStaggerDelay(index, 80)}
+      data-testid={`profile-v2-why-anchor-${row.id}`}
+      data-why-class={row.class || undefined}
+      data-why-tier="primary"
+      data-why-role={row.role}
+    >
+      <div className={styles.whyProofCardTop}>
+        <span className={styles.whyProofIcon} aria-hidden>
+          <WhyAnchorGlyph label={row.title} rowClass={row.class} size={28} />
+        </span>
+        <p className={styles.whyProofRole}>
+          {row.role === "selected"
+            ? PROFILE_V2_COPY.zones.why.selectedLabel
+            : PROFILE_V2_COPY.zones.why.influencedLabel}
+        </p>
+      </div>
+      <p className={styles.whyProofTitle}>{row.title}</p>
+      {row.detail ? <p className={styles.whyProofDetail}>{row.detail}</p> : null}
+      <p className={styles.whyProofMeaning} data-testid={`profile-v2-why-meaning-${row.id}`}>
+        {row.meaning}
+      </p>
+    </li>
+  );
+}
+
+export function ProfileWhyScene({
+  why,
+  coreProfile = null,
+  frameworkCards = null,
+}: ProfileWhySceneProps) {
   const anchors = [...why.selectedBy, ...why.influencedBy];
-  const { primary, secondary } = presentWhyAnchors(anchors);
+  const { selected, influenced } = buildWhyFormationCards(anchors, {
+    core: coreProfile,
+    frameworkCards,
+  });
   const motion = useProfileMotionInView<HTMLElement>(40);
-  if (!primary.length && !secondary.length && !why.honesty && !why.title) return null;
+  if (!selected.length && !influenced.length && !why.honesty && !why.title) return null;
+
+  const copy = PROFILE_V2_COPY.zones.why;
 
   return (
     <section
@@ -38,65 +89,35 @@ export function ProfileWhyScene({ why }: ProfileWhySceneProps) {
         <div>
           <p className={styles.journeyStepIndex}>
             <span className={styles.journeyStepBadge}>{whyNav.step.replace(/^0/, "")}</span>
-            <span id="profile-v2-why-title">{PROFILE_V2_COPY.zones.why.title}</span>
+            <span id="profile-v2-why-title">{copy.title}</span>
           </p>
-          {PROFILE_V2_COPY.zones.why.lead ? (
-            <p className={styles.zoneLead}>{PROFILE_V2_COPY.zones.why.lead}</p>
-          ) : null}
+          {copy.lead ? <p className={styles.zoneLead}>{copy.lead}</p> : null}
         </div>
       </header>
 
-      {primary.length ? (
-        <ul className={styles.whyProofGrid} data-testid="profile-v2-why-primary">
-          {primary.map((row, index) => (
-            <li
-              key={row.id}
-              className={`${styles.whyProofCard} ${profileMotionStyles.staggerItem}`}
-              style={profileMotionStaggerDelay(index, 80)}
-              data-testid={`profile-v2-why-anchor-${row.id}`}
-              data-why-class={row.class || undefined}
-              data-why-tier="primary"
-            >
-              <div className={styles.whyProofCardTop}>
-                <span className={styles.whyProofIcon} aria-hidden>
-                  <WhyAnchorGlyph label={row.title} rowClass={row.class} size={28} />
-                </span>
-                <p className={styles.whyProofRole}>
-                  {row.role === "selected"
-                    ? PROFILE_V2_COPY.zones.why.selectedLabel
-                    : PROFILE_V2_COPY.zones.why.influencedLabel}
-                </p>
-              </div>
-              <p className={styles.whyProofTitle}>{row.title}</p>
-              {row.detail ? <p className={styles.whyProofDetail}>{row.detail}</p> : null}
-            </li>
-          ))}
-        </ul>
+      {selected.length ? (
+        <div className={styles.whyFormationBlock} data-testid="profile-v2-why-selected">
+          <p className={styles.whyFormationLabel}>{copy.selectedSection}</p>
+          <ul className={styles.whyProofGrid} data-testid="profile-v2-why-primary">
+            {selected.map((row, index) => (
+              <WhyCard key={row.id} row={row} index={index} />
+            ))}
+          </ul>
+        </div>
       ) : null}
 
-      {secondary.length ? (
-        <ul className={styles.whySecondaryRow} data-testid="profile-v2-why-secondary">
-          {secondary.map((row) => (
-            <li
-              key={row.id}
-              className={styles.whySecondaryChip}
-              data-testid={`profile-v2-why-anchor-${row.id}`}
-              data-why-class={row.class || undefined}
-              data-why-tier="secondary"
-            >
-              <span className={styles.whySecondaryIcon} aria-hidden>
-                <WhyAnchorGlyph label={row.title} rowClass={row.class} size={16} />
-              </span>
-              <span className={styles.whySecondaryText}>
-                <span className={styles.whySecondaryTitle}>{row.title}</span>
-                {row.detail ? <span className={styles.whySecondaryDetail}>{row.detail}</span> : null}
-              </span>
-            </li>
-          ))}
-        </ul>
+      {influenced.length ? (
+        <div className={styles.whyFormationBlock} data-testid="profile-v2-why-influenced">
+          <p className={styles.whyFormationLabel}>{copy.influencedSection}</p>
+          <ul className={styles.whyProofGrid} data-testid="profile-v2-why-influenced-grid">
+            {influenced.map((row, index) => (
+              <WhyCard key={row.id} row={row} index={index} />
+            ))}
+          </ul>
+        </div>
       ) : null}
 
-      {why.title && why.title !== PROFILE_V2_COPY.zones.why.title ? (
+      {why.title && why.title !== copy.title ? (
         <p className={styles.whySynthesis}>{why.title}</p>
       ) : null}
       {why.honesty ? (
