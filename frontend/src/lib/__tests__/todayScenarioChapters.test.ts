@@ -221,6 +221,53 @@ describe("buildTodayDayNarrative C2 preference", () => {
     expect(narrative.chapters.find((c) => c.id === "opening")?.kicker).toMatch(/изменилось/i);
   });
 
+  it("keeps revealed card and number in scenario chapters after open", () => {
+    const chapters = buildScenarioStoryChapters({
+      contract: scenarioContract(),
+      tarotImpact: {
+        title: "Сила",
+        headline: "Мягкая сила без давления",
+        body: "Держи темп, не форсируй разговор.",
+      },
+      numberImpact: {
+        title: "Число 4",
+        headline: "Ритм дня",
+        body: "Короткие циклы и одна опора.",
+      },
+    });
+    const symbols = chapters?.find((c) => c.id === "symbols");
+    expect(symbols?.kicker).toMatch(/карта и число/i);
+    const blob = [symbols?.lead, ...(symbols?.paragraphs ?? [])].join(" ");
+    expect(blob).toMatch(/Сила/);
+    expect(blob).toMatch(/Число 4|4/);
+    expect(blob).toMatch(/Короткие циклы/);
+  });
+
+  it("drops calendar DOY from opening (date lives in greeting chrome)", () => {
+    const base = scenarioContract();
+    const ds = base.day_story!;
+    const chapters = buildScenarioStoryChapters({
+      contract: {
+        ...base,
+        day_story: {
+          ...ds,
+          events_lead: "Календарный день 2026-07-28 — 209-й день года.",
+          day_scenario: {
+            ...ds.day_scenario!,
+            conflict: {
+              ...ds.day_scenario!.conflict!,
+              why_arose: "Календарный день 2026-07-28 — 209-й день года.",
+            },
+          },
+        },
+      },
+    });
+    const opening = chapters?.find((c) => c.id === "opening");
+    const blob = [opening?.lead, ...(opening?.paragraphs ?? [])].join(" ");
+    expect(blob).not.toMatch(/календарн/i);
+    expect(blob).not.toMatch(/209-й день года/i);
+  });
+
   it("keeps Day Map path when scenario absent", () => {
     const narrative = buildTodayDayNarrative({
       contract: {

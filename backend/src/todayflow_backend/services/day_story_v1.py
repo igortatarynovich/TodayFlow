@@ -553,9 +553,20 @@ def build_day_story_fallback_v1(
         ev = by_id.get(str(did))
         if not ev:
             continue
+        eid = str(ev.get("id") or "")
+        kind = str(ev.get("kind") or "")
+        if eid.startswith("calendar-doy") or kind == "calendar":
+            continue
         fact = str(ev.get("fact_ru") or ev.get("title_ru") or "").strip()
-        if fact:
-            driver_facts.append(fact)
+        if not fact:
+            continue
+        if re.search(
+            r"календарн\w*\s+день|\d+-й\s+день\s+года|день\s+года\s+\d+",
+            fact,
+            re.IGNORECASE,
+        ):
+            continue
+        driver_facts.append(fact)
         if len(driver_facts) >= 3:
             break
     events_lead = _clip(" ".join(driver_facts), 480)

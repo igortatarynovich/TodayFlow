@@ -211,13 +211,13 @@ function buildRitualTransformBanner(input: {
   personalizedReady: boolean;
 }): string | null {
   if (input.personalizedReady) {
-    return "День собран: карта, число и практики настроены под тебя.";
+    return "Символы на месте: карта и число дополняют уже собранный день.";
   }
   if (input.numberConfirmed) {
-    return "Число подтверждено — осталось собрать практику и обещание.";
+    return "Число открыто — карта и практики остаются рядом с рассказом дня.";
   }
   if (input.tarotPicked) {
-    return "Карта выбрана — символ дня меняет практику, аффирмацию и вечерний вопрос.";
+    return "Карта выбрана — она дополняет день, а не пересобирает его.";
   }
   return null;
 }
@@ -273,6 +273,11 @@ export function buildTodayDayStoryViewModel(input: {
   const pickedCardName = input.engagement.tarotPickedName ?? input.cardName;
   const pickedCardId = input.engagement.tarotPickedId ?? input.tarotMainId ?? null;
   const tarotPicked = Boolean(input.engagement.tarotPickedName);
+  const resolvedNumber =
+    (input.numerologyValue && input.numerologyValue !== "—" ? input.numerologyValue : null) ||
+    (input.engagement.numberValue && input.engagement.numberValue !== "—"
+      ? input.engagement.numberValue
+      : null);
 
   const spine = buildTodayDaySpine({
     contract: input.contract,
@@ -281,7 +286,7 @@ export function buildTodayDayStoryViewModel(input: {
     dayGoal: input.engagement.dayGoal,
     cardId: pickedCardId,
     cardName: pickedCardName,
-    numerologyValue: input.numerologyValue,
+    numerologyValue: resolvedNumber,
     numerologyMeaning: input.numerologyMeaning,
     colorLine: input.colorLine,
     stoneLine: input.stoneLine,
@@ -354,14 +359,14 @@ export function buildTodayDayStoryViewModel(input: {
       : null;
 
   const numberImpact =
-    personalizedReady && input.numerologyValue && input.numerologyValue !== "—"
-      ? buildNumberImpactFromSpine(input.numerologyValue, spine.numberBody)
+    input.engagement.numberConfirmed && resolvedNumber
+      ? buildNumberImpactFromSpine(resolvedNumber, spine.numberBody)
       : null;
 
   const strengthenLinked = buildStrengthenLinked(input.base.strengthen, {
     cardName: pickedCardName,
     cardId: pickedCardId,
-    numerologyValue: input.numerologyValue,
+    numerologyValue: resolvedNumber,
     thesis: spine.thesis,
     weakLabel: sphereFocus.cards.find((c) => c.role === "caution")?.sphere ?? null,
     ritualComplete: personalizedReady,

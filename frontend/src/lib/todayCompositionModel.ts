@@ -223,12 +223,17 @@ function buildStrengthen(contract: TodayContractV1): TodayStrengthenTool[] {
   if (!mapped || !text || !isRuUserFacingText(text)) return [];
 
   const reason = (rec.reason || "").trim();
+  const title = firstSentence(text);
+  const detail =
+    reason && isRuUserFacingText(reason) && reason.toLowerCase() !== title.toLowerCase()
+      ? firstSentence(reason)
+      : "";
   return [
     {
       id: mapped.id,
       label: mapped.label,
-      title: firstSentence(text),
-      detail: reason && isRuUserFacingText(reason) ? firstSentence(reason) : "",
+      title,
+      detail,
       duration: mapped.id === "practice" ? "5 мин" : undefined,
     },
   ];

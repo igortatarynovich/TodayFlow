@@ -19,7 +19,10 @@ from typing import Any
 
 from todayflow_backend.services.day_scenario_v1 import (
     PRODUCT_SPHERE_IDS,
+    build_scenario_props_v1,
     build_scenario_scenes_v1,
+    is_calendar_driver_row,
+    is_calendar_kitchen_fact,
     sanitize_conflict_short_name,
     scene_copy_needs_heal_v1,
     validate_day_scenario_v1,
@@ -260,19 +263,43 @@ def _strip_meaning_slots(base: dict[str, Any]) -> None:
     base["domains"] = {}
 
 
+_FORCE_PASTE_AFFIRM_RE = re.compile(
+    r"Мне не нужно выбирать «.+», чтобы сохранить лицо дня",
+    re.IGNORECASE,
+)
+
+
 def _heal_template_scene_copy(
     scen: dict[str, Any],
     *,
     person_name: str | None = None,
 ) -> dict[str, Any]:
-    """Rewrite force-paste scene templates without full scenario rebuild."""
+    """Rewrite force-paste scene/props templates and mashed short_name on serve."""
     scenes = scen.get("scenes")
-    if not scene_copy_needs_heal_v1(scenes if isinstance(scenes, list) else None):
-        return scen
     conflict = _as_dict(scen.get("conflict"))
     chorus = _as_dict(scen.get("chorus"))
     foundation = _as_dict(scen.get("foundation"))
+    props = _as_dict(scen.get("props"))
+    raw_short = str(conflict.get("short_name") or "")
+    clean_short = sanitize_conflict_short_name(raw_short)
+    short_needs = bool(clean_short and clean_short != raw_short.strip().rstrip(".!?"))
+    affirm_blob = " ".join(
+        str(a.get("text") or "")
+        for a in _as_list(props.get("affirmations"))
+        if isinstance(a, dict)
+    )
+    props_need = bool(_FORCE_PASTE_AFFIRM_RE.search(affirm_blob))
+    scenes_need = scene_copy_needs_heal_v1(scenes if isinstance(scenes, list) else None)
+    if not (scenes_need or short_needs or props_need):
+        return scen
     if not conflict or not foundation:
+        # Still heal short_name in place when possible
+        if short_needs and conflict:
+            healed_min = dict(scen)
+            c = dict(conflict)
+            c["short_name"] = clean_short
+            healed_min["conflict"] = c
+            return healed_min
         return scen
     prior = [s for s in (scenes or []) if isinstance(s, dict)]
     domains: list[str] = []
@@ -281,14 +308,23 @@ def _heal_template_scene_copy(
         if wire and wire not in domains:
             domains.append(wire)
     healed = dict(scen)
-    healed["scenes"] = build_scenario_scenes_v1(
-        conflict=conflict,
-        chorus=chorus,
-        foundation=foundation,
-        interpretation={"domains_present": domains} if domains else None,
-        max_scenes=max(len(prior), 3),
-        person_name=person_name,
-    )
+    c = dict(conflict)
+    if clean_short:
+        c["short_name"] = clean_short
+    healed["conflict"] = c
+    if scenes_need or props_need:
+        new_scenes = build_scenario_scenes_v1(
+            conflict=c,
+            chorus=chorus,
+            foundation=foundation,
+            interpretation={"domains_present": domains} if domains else None,
+            max_scenes=max(len(prior), 3),
+            person_name=person_name,
+        )
+        healed["scenes"] = new_scenes
+        healed["props"] = build_scenario_props_v1(
+            conflict=c, scenes=new_scenes, chorus=chorus
+        )
     return healed
 
 
@@ -369,10 +405,16 @@ def project_day_scenario_onto_day_story_v1(
         facts = [
             str(d.get("fact_ru") or "").strip()
             for d in _as_list(foundation.get("ranked_drivers"))
-            if isinstance(d, dict) and d.get("fact_ru")
+            if isinstance(d, dict)
+            and d.get("fact_ru")
+            and not is_calendar_driver_row(d)
+            and not is_calendar_kitchen_fact(str(d.get("fact_ru") or ""))
         ]
         if facts:
             base["events_lead"] = _clip(" ".join(facts[:3]), 480)
+        elif "events_lead" in base:
+            # Drop cached calendar-only lead
+            base.pop("events_lead", None)
         label = sanitize_conflict_short_name(conflict.get("short_name") or "")
         if label:
             base["theme"] = label
@@ -423,10 +465,15 @@ def project_day_scenario_onto_day_story_v1(
     facts = [
         str(d.get("fact_ru") or "").strip()
         for d in _as_list(foundation.get("ranked_drivers"))
-        if isinstance(d, dict) and d.get("fact_ru")
+        if isinstance(d, dict)
+        and d.get("fact_ru")
+        and not is_calendar_driver_row(d)
+        and not is_calendar_kitchen_fact(str(d.get("fact_ru") or ""))
     ]
     if facts:
         base["events_lead"] = _clip(" ".join(facts[:3]), 480)
+    else:
+        base.pop("events_lead", None)
 
     # Domains: full overwrite from scenes (empty lenses for uncovered wire ids)
     scene_domains = _domains_from_scenes(scenes, origin_conflict_id=origin_conflict)
@@ -462,12 +509,14 @@ def project_day_scenario_onto_day_story_v1(
     affirms = _as_list(props.get("affirmations"))
     if affirms and isinstance(affirms[0], dict) and affirms[0].get("text"):
         a0 = affirms[0]
-        # Prefer action hint over trap dump in UI "reason"
-        reason = _clip(a0.get("helps_action"), 160) or _clip(a0.get("compensates_trap"), 120)
+        text = _clip(a0.get("text"), 200)
+        # Prefer trap-compensation as reason; never repeat the affirmation text.
+        reason_raw = _clip(a0.get("compensates_trap"), 120) or _clip(a0.get("helps_action"), 160)
+        reason = reason_raw if reason_raw and reason_raw.lower() != text.lower() else ""
         base["practice_recommendation"] = {
             "kind": "affirmation",
-            "text": _clip(a0.get("text"), 200),
-            "reason": reason,
+            "text": text,
+            "reason": reason or None,
             "origin_scene_id": a0.get("origin_scene_id"),
             "provenance": _field_provenance(
                 origin_scene_id=str(a0.get("origin_scene_id") or None),
