@@ -262,6 +262,7 @@ struct CoreProfileResponse: Codable {
     let profileContractV1: ProfileContractV1?
     let living: CoreProfileLiving?
     let natalSummary: CoreProfileNatalSummary?
+    let characterEngineHouseLinesV0: CharacterEngineHouseLinesV0?
 
     enum CodingKeys: String, CodingKey {
         case profileVersion = "profile_version"
@@ -279,6 +280,34 @@ struct CoreProfileResponse: Codable {
         case profileContractV1 = "profile_contract_v1"
         case living
         case natalSummary = "natal_summary"
+        case characterEngineHouseLinesV0 = "character_engine_house_lines_v0"
+    }
+}
+
+/// CE applied house theses (`how` / `do`) — person voice, not natal encyclopedia.
+struct CharacterEngineHouseLinesV0: Codable {
+    let projectionVersion: String?
+    let identityThesis: String?
+    let houses: [String: CharacterEngineHouseLine]?
+    let note: String?
+
+    enum CodingKeys: String, CodingKey {
+        case projectionVersion = "projection_version"
+        case identityThesis = "identity_thesis"
+        case houses
+        case note
+    }
+}
+
+struct CharacterEngineHouseLine: Codable {
+    let line: String?
+    let how: String?
+    let doLine: String?
+
+    enum CodingKeys: String, CodingKey {
+        case line
+        case how
+        case doLine = "do"
     }
 }
 

@@ -4,6 +4,7 @@ import type { AspectCallout } from "@/lib/types";
 import type { NatalChartPreview } from "@/components/profile/profilePanelTypes";
 import {
   ensureTwelveProfileHouses,
+  HOUSE_FALLBACK,
   HOUSE_LAYER,
 } from "@/components/profile/profileHouseConstants";
 import { PlanetIcon } from "@/components/visualIdentity/PlanetIcon";
@@ -64,7 +65,6 @@ export function ProfileChartFullMap({
   }
 
   const houses = ensureTwelveProfileHouses(natalPreview);
-  const houseInterpretations = natalPreview.interpretations?.houses ?? {};
   const callouts = natalPreview.aspects?.callouts ?? [];
   const planets = Object.entries(natalPreview.positions || {}).sort(([a], [b]) => a.localeCompare(b));
 
@@ -77,7 +77,6 @@ export function ProfileChartFullMap({
         <div className={styles.housesGrid}>
           {houses.map((house) => {
             const layer = HOUSE_LAYER[house.house];
-            const interpretation = houseInterpretations[house.house];
             const signLabel = formatHouseSign(house.sign, house.degree);
             const isKey = KEY_HOUSES.has(house.house);
 
@@ -103,15 +102,10 @@ export function ProfileChartFullMap({
                       </>
                     );
                   }
-                  // Empty non-CE houses: cusp + domain title only — no encyclopedia filler.
-                  if (!isKey) {
-                    return null;
-                  }
-                  const fallback =
-                    interpretation?.description?.trim() ||
-                    interpretation?.theme?.trim() ||
-                    null;
-                  return fallback ? <p className={styles.houseText}>{fallback}</p> : null;
+                  // No CE thesis: short person-facing fallback only — never natal encyclopedia.
+                  const short = HOUSE_FALLBACK[house.house] || null;
+                  if (!short) return null;
+                  return <p className={styles.houseText}>{short}</p>;
                 })()}
               </article>
             );

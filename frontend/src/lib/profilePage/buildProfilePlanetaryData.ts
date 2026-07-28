@@ -242,13 +242,12 @@ export function buildLifeMapSections(
     { line?: string; how?: string; do?: string } | undefined
   > | null,
 ): LifeMapSection[] {
-  const houses = ensureTwelveProfileHouses(natalPreview);
   return LIFE_MAP_BLUEPRINT.map((item) => {
-    const house = houses.find((entry) => entry.house === item.house);
-    const interpretation = natalPreview?.interpretations?.houses?.[item.house];
     const ce = houseLines?.[String(item.house)];
     const ceHow = ce?.how?.trim() || ce?.line?.trim() || null;
     const ceDo = ce?.do?.trim() || null;
+    // Prefer CE thesis; never natal-interpretation encyclopedia for Profile life map.
+    const summary = ceHow || HOUSE_FALLBACK[item.house] || "";
 
     return {
       house: item.house,
@@ -256,11 +255,7 @@ export function buildLifeMapSections(
       routeTitle: item.routeTitle,
       href: item.href,
       accent: item.accent,
-      summary:
-        ceHow ||
-        interpretation?.description ||
-        interpretation?.theme ||
-        HOUSE_FALLBACK[item.house],
+      summary,
       do: ceDo,
     };
   });

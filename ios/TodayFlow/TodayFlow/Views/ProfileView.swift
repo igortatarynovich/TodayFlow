@@ -2972,7 +2972,10 @@ struct ProfileChartSection: View {
                     isExpanded: $lifeMapExpanded
                 ) {
                     if let natalChart {
-                        ProfileLifeMapInlineSection(natalChart: natalChart)
+                        ProfileLifeMapInlineSection(
+                            natalChart: natalChart,
+                            housePersonLines: coreProfile?.characterEngineHouseLinesV0?.houses ?? [:]
+                        )
                     }
                 }
             }
@@ -2982,7 +2985,11 @@ struct ProfileChartSection: View {
                 subtitle: "12 домов, планеты в знаках и аспекты.",
                 isExpanded: $fullMapExpanded
             ) {
-                ProfileChartFullMapView(natalChart: natalChart, onReload: onReload)
+                ProfileChartFullMapView(
+                    natalChart: natalChart,
+                    onReload: onReload,
+                    housePersonLines: coreProfile?.characterEngineHouseLinesV0?.houses ?? [:]
+                )
             }
         }
         .onAppear { syncDeepExpand(fullChartOpen) }
@@ -3322,6 +3329,7 @@ private struct ProfileNatalWheel: View {
 
 private struct ProfileLifeMapInlineSection: View {
     let natalChart: NatalChartPreview
+    var housePersonLines: [String: CharacterEngineHouseLine] = [:]
     private let highlightedHouses = [1, 4, 7, 10]
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
@@ -3340,6 +3348,12 @@ private struct ProfileLifeMapInlineSection: View {
                         .font(.caption)
                         .foregroundStyle(TodayFlowTheme.ink.opacity(0.68))
                         .fixedSize(horizontal: false, vertical: true)
+                    if let doLine = entry.doLine {
+                        Text(doLine)
+                            .font(.caption.weight(.medium))
+                            .foregroundStyle(TodayFlowTheme.twilight.opacity(0.9))
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
                 .padding(14)
                 .frame(maxWidth: .infinity, minHeight: 120, alignment: .topLeading)
@@ -3349,7 +3363,7 @@ private struct ProfileLifeMapInlineSection: View {
         }
     }
 
-    private func houseEntry(_ houseNumber: Int) -> (title: String, summary: String, tint: Color) {
+    private func houseEntry(_ houseNumber: Int) -> (title: String, summary: String, doLine: String?, tint: Color) {
         let title: String
         let tint: Color
         switch houseNumber {
@@ -3358,19 +3372,21 @@ private struct ProfileLifeMapInlineSection: View {
         case 7: title = "Как ты входишь в связь"; tint = TodayFlowTheme.twilight
         default: title = "Как ты проявляешься в мире"; tint = TodayFlowTheme.gold
         }
-        let interpretation = natalChart.interpretations?.houses?["\(houseNumber)"]
-        let house = natalChart.houses.first { $0.house == houseNumber }
-        let summary = interpretation?.description
-            ?? interpretation?.theme
-            ?? house?.sign.map { "Тема дома окрашена знаком \($0)." }
+        let ce = housePersonLines["\(houseNumber)"]
+        let how = ce?.how?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
+            ?? ce?.line?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
+        let doLine = ce?.doLine?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
+        // Prefer CE thesis; never natal-interpretation encyclopedia.
+        let summary = how
             ?? ProfileHouseCopy.fallback[houseNumber]
             ?? "Этот слой карты станет частью основного профиля."
-        return (title, summary, tint)
+        return (title, summary, doLine, tint)
     }
 }
 
 private struct ProfileLifeMapSection: View {
     let natalChart: NatalChartPreview
+    var housePersonLines: [String: CharacterEngineHouseLine] = [:]
 
     private let highlightedHouses = [1, 4, 7, 10]
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -3431,12 +3447,12 @@ private struct ProfileLifeMapSection: View {
             tint = TodayFlowTheme.gold
         }
 
-        let interpretation = natalChart.interpretations?.houses?["\(houseNumber)"]
-        let house = natalChart.houses.first { $0.house == houseNumber }
-        let summary = interpretation?.description
-        ?? interpretation?.theme
-        ?? house?.sign.map { "Тема дома сейчас окрашена знаком \($0)." }
-        ?? "Этот слой карты ещё не интерпретирован, но он должен стать частью основного профиля."
+        let ce = housePersonLines["\(houseNumber)"]
+        let how = ce?.how?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
+            ?? ce?.line?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
+        let summary = how
+            ?? ProfileHouseCopy.fallback[houseNumber]
+            ?? "Этот слой карты ещё не интерпретирован, но он должен стать частью основного профиля."
         return (title, summary, tint)
     }
 }

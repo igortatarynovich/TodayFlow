@@ -4,6 +4,8 @@ import SwiftUI
 struct ProfileChartFullMapView: View {
     let natalChart: NatalChartPreview?
     let onReload: () async -> Void
+    /// CE person-voice lines keyed by house number string — preferred over short fallback.
+    var housePersonLines: [String: CharacterEngineHouseLine] = [:]
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
@@ -43,12 +45,13 @@ struct ProfileChartFullMapView: View {
     }
 
     private func houseCard(house: NatalHouse, chart: NatalChartPreview) -> some View {
-        let interpretation = chart.interpretations?.houses?["\(house.house)"]
         let title = ProfileHouseCopy.layerTitle[house.house] ?? "Дом \(house.house)"
-        let text = interpretation?.description?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
-            ?? interpretation?.theme?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
-            ?? ProfileHouseCopy.fallback[house.house]
-            ?? ""
+        let ce = housePersonLines["\(house.house)"]
+        let how = ce?.how?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
+            ?? ce?.line?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
+        let doLine = ce?.doLine?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
+        // Prefer CE thesis; never natal-interpretation encyclopedia.
+        let text = how ?? ProfileHouseCopy.fallback[house.house] ?? ""
         let isKey = ProfileHouseCopy.keyHouses.contains(house.house)
 
         return VStack(alignment: .leading, spacing: 6) {
@@ -66,10 +69,18 @@ struct ProfileChartFullMapView: View {
             Text(title)
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(TodayFlowTheme.ink)
-            Text(text)
-                .font(.caption)
-                .foregroundStyle(TodayFlowTheme.ink.opacity(0.72))
-                .fixedSize(horizontal: false, vertical: true)
+            if !text.isEmpty {
+                Text(text)
+                    .font(.caption)
+                    .foregroundStyle(TodayFlowTheme.ink.opacity(0.72))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            if let doLine {
+                Text(doLine)
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(TodayFlowTheme.twilight.opacity(0.9))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
