@@ -19,12 +19,15 @@
   position: relative;
   isolation: isolate;
   width: 100%;
-  min-height: clamp(28rem, 92vw, 42rem);
-  padding: 0.85rem 0.35rem 5.75rem;
+  max-width: 100%;
+  box-sizing: border-box;
+  /* Height follows plate + dock; no tall empty min-height wasting vertical scene. */
+  min-height: 0;
+  padding: 0.35rem 0.2rem 5.35rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   overflow: hidden;
   border-radius: 0;
   border: none;
@@ -66,7 +69,10 @@
 .stageAura {
   pointer-events: none;
   position: absolute;
-  inset: -8%;
+  /* Bound to stage (100%), never 100vw / negative inset past the clip parent. */
+  inset: 0;
+  width: 100%;
+  height: 100%;
   background:
     radial-gradient(circle at 50% 48%, rgba(255, 255, 255, 0.06) 0%, transparent 42%),
     radial-gradient(circle at 50% 100%, rgba(0, 0, 0, 0.35) 0%, transparent 55%);
@@ -86,9 +92,10 @@
     0 24px 60px rgba(0, 0, 0, 0.35);
   overflow: visible;
   aspect-ratio: 1 / 1;
-  width: min(100%, 36rem);
-  max-width: 100%;
-  align-self: center;
+  /* Fill the stage width — wheel is the hero, not a padded widget. */
+  width: 100%;
+  max-width: none;
+  align-self: stretch;
   transform-style: preserve-3d;
   will-change: transform;
   transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
@@ -151,11 +158,11 @@
 /* Controls dock — part of the object, over the stage */
 .dock {
   position: absolute;
-  left: 0.5rem;
-  right: 0.5rem;
-  bottom: 0.55rem;
+  left: 0.35rem;
+  right: 0.35rem;
+  bottom: 0.4rem;
   z-index: 2;
-  padding: 0.65rem 0.7rem 0.75rem;
+  padding: 0.55rem 0.6rem 0.65rem;
   border-radius: 1.1rem;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(14, 16, 22, 0.52);
@@ -382,16 +389,18 @@
 
 @media (min-width: 40rem) {
   .stage {
-    padding: 1.1rem 0.75rem 6.25rem;
-    min-height: clamp(32rem, 70vh, 44rem);
+    padding: 0.45rem 0.35rem 5.6rem;
+    min-height: 0;
   }
 
   .plate {
-    width: min(100%, 38rem);
+    width: 100%;
+    max-width: none;
   }
 
   .dock {
-    left: 0.85rem;
-    right: 0.85rem;
+    left: 0.55rem;
+    right: 0.55rem;
+    bottom: 0.5rem;
   }
 }

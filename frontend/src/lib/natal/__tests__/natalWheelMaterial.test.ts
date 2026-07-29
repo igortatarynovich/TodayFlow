@@ -46,6 +46,15 @@ describe("natalWheelMaterial", () => {
     expect(classifyAspectKind(null, "Трин")).toBe("trine");
   });
 
+  it("does not treat sesquiquadrate as a major square", () => {
+    expect(classifyAspectKind("sun_moon_sesquiquadrate", "Sun Sesquiquadrate Moon")).toBe("other");
+    expect(classifyAspectKind(null, "полутораквадрат")).toBe("other");
+    expect(resolveNatalAspectRenderStyle({
+      aspect_id: "sun_moon_sesquiquadrate",
+      label: "Sun Sesquiquadrate Moon",
+    }).label).toBe("Связь");
+  });
+
   it("exposes legend items from the same color SoT", () => {
     const items = natalAspectLegendItems();
     expect(items.map((i) => i.label)).toEqual([

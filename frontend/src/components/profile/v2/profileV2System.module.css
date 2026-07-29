@@ -2566,7 +2566,8 @@
 .natalScene {
   position: relative;
   isolation: isolate;
-  overflow: visible;
+  /* Same element as border-radius — clips stage aura / tilt bleed at rounded corners. */
+  overflow: hidden;
   scroll-margin-top: 4.5rem;
   padding: 0;
   border-radius: 1.35rem;

@@ -84,9 +84,9 @@ export function resolveNatalPlanetLayout(
 
   const gap = opts.gap ?? 8;
   const minDist = opts.discRadius * 2 + gap;
-  const iterations = opts.iterations ?? 18;
+  const iterations = opts.iterations ?? 24;
   const { baseRadius, minRadius, maxRadius } = opts;
-  const band = Math.max(24, maxRadius - minRadius);
+  const band = Math.max(28, maxRadius - minRadius);
 
   const items = planets.map((p) => ({
     trueAngle: p.angle,
@@ -95,7 +95,7 @@ export function resolveNatalPlanetLayout(
   }));
 
   // Wide cluster window — Capricorn-style piles often span 15–25°.
-  const threshold = Math.max(18, ((minDist * 1.15) / Math.max(baseRadius, 1)) * (180 / Math.PI) + 4);
+  const threshold = Math.max(20, ((minDist * 1.2) / Math.max(baseRadius, 1)) * (180 / Math.PI) + 5);
   const clusters = buildClusters(
     items.map((it) => it.trueAngle),
     threshold,
@@ -112,19 +112,23 @@ export function resolveNatalPlanetLayout(
     const sorted = [...cluster].sort((i, j) => items[i].trueAngle - items[j].trueAngle);
 
     // Alternate outer / inner so angular neighbors differ strongly in radius.
-    const pairs = Math.ceil(size / 2);
-    const needChord = minDist * 0.95;
-    const stepFan = Math.min(16, Math.max(5, (needChord / Math.max(baseRadius, 1)) * (180 / Math.PI) * 1.15));
+    // For 3+ bodies also stagger mid-band so we use the full radial depth.
+    const needChord = minDist * 0.98;
+    const stepFan = Math.min(18, Math.max(5.5, (needChord / Math.max(baseRadius, 1)) * (180 / Math.PI) * 1.25));
 
     for (let k = 0; k < size; k += 1) {
       const idx = sorted[k];
-      const pair = Math.floor(k / 2);
-      const pairT = pairs <= 1 ? 0 : pair / (pairs - 1);
-      if (k % 2 === 0) {
-        items[idx].radius = maxRadius - pairT * band * 0.62;
-      } else {
-        items[idx].radius = minRadius + pairT * band * 0.62;
-      }
+      const t = size <= 1 ? 0 : k / (size - 1);
+      // Spiral: outer → mid → inner → outer… across the cluster order.
+      const ringPhase = (k % 3) / 2; // 0, 0.5, 1
+      const spiral = 1 - ringPhase;
+      items[idx].radius = minRadius + spiral * band * (0.88 - t * 0.12);
+      // Keep first/last of dense piles near opposite band edges.
+      if (k === 0) items[idx].radius = maxRadius;
+      if (k === size - 1) items[idx].radius = minRadius;
+      if (k === 1 && size >= 4) items[idx].radius = minRadius + band * 0.35;
+      if (k === size - 2 && size >= 4) items[idx].radius = maxRadius - band * 0.28;
+
       const fan = (k - (size - 1) / 2) * stepFan;
       items[idx].paintAngle = (items[idx].trueAngle + fan + 360) % 360;
     }
@@ -144,12 +148,12 @@ export function resolveNatalPlanetLayout(
         if (dist >= minDist) continue;
 
         const overlap = minDist - dist;
-        const step = overlap * (0.72 + iter * 0.035);
+        const step = overlap * (0.78 + iter * 0.03);
         const preferOutI = a.radius <= b.radius ? 1 : -1;
-        pushR[i] += preferOutI * step * 0.85;
-        pushR[j] -= preferOutI * step * 0.85;
+        pushR[i] += preferOutI * step * 0.9;
+        pushR[j] -= preferOutI * step * 0.9;
 
-        const angPush = ((step * 0.55) / Math.max(a.radius, 40)) * (180 / Math.PI);
+        const angPush = ((step * 0.62) / Math.max(a.radius, 40)) * (180 / Math.PI);
         let order = ((a.trueAngle - b.trueAngle + 540) % 360) - 180;
         if (Math.abs(order) < 0.01) order = i < j ? 1 : -1;
         const sign = order > 0 ? 1 : -1;
@@ -162,7 +166,7 @@ export function resolveNatalPlanetLayout(
       items[i].radius = Math.min(maxRadius, Math.max(minRadius, items[i].radius + pushR[i]));
       const nextA = items[i].paintAngle + pushA[i];
       const delta = ((nextA - items[i].trueAngle + 540) % 360) - 180;
-      const clamped = Math.max(-20, Math.min(20, delta));
+      const clamped = Math.max(-26, Math.min(26, delta));
       items[i].paintAngle = (items[i].trueAngle + clamped + 360) % 360;
     }
   }
@@ -175,8 +179,11 @@ export function resolveNatalPlanetLayout(
       const pb = polar(items[j].paintAngle, items[j].radius);
       const dist = Math.hypot(pa.x - pb.x, pa.y - pb.y);
       if (dist < minDist * 0.92) {
-        discScale[i] = Math.min(discScale[i], 0.82);
-        discScale[j] = Math.min(discScale[j], 0.82);
+        discScale[i] = Math.min(discScale[i], 0.78);
+        discScale[j] = Math.min(discScale[j], 0.78);
+      } else if (dist < minDist) {
+        discScale[i] = Math.min(discScale[i], 0.9);
+        discScale[j] = Math.min(discScale[j], 0.9);
       }
     }
   }

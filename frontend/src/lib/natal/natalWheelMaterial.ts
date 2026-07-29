@@ -55,10 +55,38 @@ export function classifyAspectKind(aspectId: string | undefined | null, label?: 
   const hay = `${id} ${lb}`;
   if (hay.includes("conjunction") || hay.includes("соединен")) return "conjunction";
   if (hay.includes("opposition") || hay.includes("оппозиц")) return "opposition";
+  // Minors before "square"/"квадрат" — sesquiquadrate / semisquare must not become Квадрат.
+  if (
+    hay.includes("sesqui") ||
+    hay.includes("semi-square") ||
+    hay.includes("semisquare") ||
+    hay.includes("semi_square") ||
+    hay.includes("полутораквадрат") ||
+    hay.includes("полуквадрат") ||
+    hay.includes("quin") ||
+    hay.includes("inconjunct") ||
+    hay.includes("quincunx") ||
+    hay.includes("квиконс")
+  ) {
+    return "other";
+  }
   if (hay.includes("square") || hay.includes("квадрат")) return "square";
   if (hay.includes("trine") || hay.includes("трин")) return "trine";
   if (hay.includes("sextile") || hay.includes("секстил")) return "sextile";
   return "other";
+}
+
+/** Legend + wheel + decode panel SoT: five Ptolemaic majors only. */
+export const NATAL_MAJOR_ASPECT_KINDS: readonly NatalAspectKind[] = [
+  "conjunction",
+  "opposition",
+  "square",
+  "trine",
+  "sextile",
+] as const;
+
+export function isMajorNatalAspect(kind: NatalAspectKind): boolean {
+  return kind !== "other" && (NATAL_MAJOR_ASPECT_KINDS as readonly string[]).includes(kind);
 }
 
 function weightFor(
@@ -113,7 +141,8 @@ export function resolveNatalAspectRenderStyle(input: {
     dash: base.dash,
     opacity,
     width,
-    label: LABELS_RU[kind] === "Связь" && input.label?.trim() ? input.label.trim() : LABELS_RU[kind],
+    // Never surface raw EN labels (e.g. "Sun Sesquiquadrate Moon") in RU UI.
+    label: LABELS_RU[kind],
   };
 }
 

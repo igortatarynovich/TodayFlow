@@ -3,22 +3,25 @@ import {
   resolveNatalPlanetLayout,
 } from "@/lib/natal/natalWheelLayout";
 
+/** Radii matching NatalChartWheel (size 720, inner 0.22, houses in zodiac). */
+const WHEEL = {
+  baseRadius: 174,
+  minRadius: 91,
+  maxRadius: 257,
+  discRadius: 15,
+  gap: 9,
+};
+
 describe("natalWheelLayout", () => {
   it("separates a dense stellium so discs do not stack", () => {
     const angles = [10, 12, 14, 15.5, 17].map((lon) => (270 - lon + 360) % 360);
     const layout = resolveNatalPlanetLayout(
       angles.map((angle) => ({ angle })),
-      {
-        baseRadius: 200,
-        minRadius: 140,
-        maxRadius: 280,
-        discRadius: 16,
-        gap: 8,
-      },
+      WHEEL,
     );
     const minDist = minPlanetDiscDistance(layout);
     expect(layout).toHaveLength(5);
-    expect(minDist).toBeGreaterThanOrEqual(16 * 2 + 4);
+    expect(minDist).toBeGreaterThanOrEqual(WHEEL.discRadius * 2 + 4);
     const radii = new Set(layout.map((p) => Math.round(p.radius / 10)));
     expect(radii.size).toBeGreaterThanOrEqual(2);
     expect(layout.some((p) => p.leader)).toBe(true);
@@ -30,15 +33,21 @@ describe("natalWheelLayout", () => {
     const angles = longs.map((lon) => (270 - lon + 360) % 360);
     const layout = resolveNatalPlanetLayout(
       angles.map((angle) => ({ angle })),
-      {
-        baseRadius: 210,
-        minRadius: 150,
-        maxRadius: 290,
-        discRadius: 16,
-        gap: 8,
-      },
+      WHEEL,
     );
-    expect(minPlanetDiscDistance(layout)).toBeGreaterThanOrEqual(16 * 2 + 2);
+    expect(minPlanetDiscDistance(layout)).toBeGreaterThanOrEqual(WHEEL.discRadius * 2 + 2);
+  });
+
+  it("separates a seven-body pile without collapsing to one ring", () => {
+    const longs = [0, 2, 4, 6, 8, 10, 12];
+    const angles = longs.map((lon) => (270 - lon + 360) % 360);
+    const layout = resolveNatalPlanetLayout(
+      angles.map((angle) => ({ angle })),
+      WHEEL,
+    );
+    expect(minPlanetDiscDistance(layout)).toBeGreaterThanOrEqual(WHEEL.discRadius * 2);
+    const radii = layout.map((p) => p.radius);
+    expect(Math.max(...radii) - Math.min(...radii)).toBeGreaterThan(40);
   });
 
   it("leaves isolated planets near the base ring", () => {
