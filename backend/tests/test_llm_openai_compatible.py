@@ -110,3 +110,77 @@ def test_chat_completion_json_retries_when_json_mode_returns_empty(monkeypatch):
     assert "response_format" not in plain_call
     assert plain_call.get("reasoning_effort") == "none"
     assert plain_call.get("max_completion_tokens", 0) >= 8192
+
+
+def test_nebius_model_fallback_on_404(monkeypatch):
+    from todayflow_backend.core.llm_openai_compatible import (
+        classify_llm_call_failure,
+        resolve_chat_model_chain,
+    )
+
+    s = config_module.Settings(
+        llm_provider="nebius",
+        nebius_api_key="sk-test",
+        nebius_model="deepseek-ai/DeepSeek-V4-Pro",
+        nebius_fallback_model="Qwen/Qwen3-235B-A22B-Instruct-2507",
+    )
+    monkeypatch.setattr(config_module, "settings", s)
+    assert resolve_chat_model_chain("deepseek-ai/DeepSeek-V4-Pro") == [
+        "deepseek-ai/DeepSeek-V4-Pro",
+        "Qwen/Qwen3-235B-A22B-Instruct-2507",
+    ]
+
+    class FakeNotFound(Exception):
+        status_code = 404
+
+        def __str__(self) -> str:
+            return "Error code: 404 - {'detail': 'The model `deepseek-ai/DeepSeek-V4-Pro` does not exist.'}"
+
+    assert classify_llm_call_failure(FakeNotFound()) == "model_unavailable"
+
+    mock_client = MagicMock()
+    ok_msg = SimpleNamespace(content='{"direct_answer":"ok"}')
+    ok_resp = SimpleNamespace(choices=[SimpleNamespace(message=ok_msg)])
+    mock_client.chat.completions.create.side_effect = [FakeNotFound(), ok_resp]
+
+    text = chat_completion_text(
+        mock_client,
+        model="deepseek-ai/DeepSeek-V4-Pro",
+        messages=[{"role": "user", "content": "x"}],
+        temperature=0.1,
+        max_tokens=100,
+        json_object=True,
+    )
+    assert text and "direct_answer" in text
+    assert mock_client.chat.completions.create.call_count == 2
+    assert mock_client.chat.completions.create.call_args_list[0].kwargs["model"] == "deepseek-ai/DeepSeek-V4-Pro"
+    assert mock_client.chat.completions.create.call_args_list[1].kwargs["model"] == (
+        "Qwen/Qwen3-235B-A22B-Instruct-2507"
+    )
+
+
+def test_nebius_model_fallback_skips_on_timeout(monkeypatch):
+    s = config_module.Settings(
+        llm_provider="nebius",
+        nebius_api_key="sk-test",
+        nebius_model="deepseek-ai/DeepSeek-V4-Pro",
+        nebius_fallback_model="Qwen/Qwen3-235B-A22B-Instruct-2507",
+    )
+    monkeypatch.setattr(config_module, "settings", s)
+
+    class FakeTimeout(Exception):
+        pass
+
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.side_effect = FakeTimeout("Request timed out.")
+
+    text = chat_completion_text(
+        mock_client,
+        model="deepseek-ai/DeepSeek-V4-Pro",
+        messages=[{"role": "user", "content": "x"}],
+        temperature=0.1,
+        max_tokens=100,
+        json_object=True,
+    )
+    assert text is None
+    assert mock_client.chat.completions.create.call_count == 1

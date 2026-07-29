@@ -99,7 +99,9 @@ class Settings(BaseSettings):
     # Nebius Token Factory (OpenAI-compatible): https://docs.tokenfactory.nebius.com/
     nebius_api_key: str | None = None  # NEBIUS_API_KEY
     nebius_base_url: str = "https://api.tokenfactory.nebius.com/v1/"  # NEBIUS_BASE_URL
-    nebius_model: str = "deepseek-ai/DeepSeek-V4-Pro"  # NEBIUS_MODEL — id модели в Token Factory
+    nebius_model: str = "deepseek-ai/DeepSeek-V4-Pro"  # NEBIUS_MODEL — primary id в Token Factory
+    # Used when primary is missing / upstream 5xx during Nebius maintenance (not on timeouts).
+    nebius_fallback_model: str = "Qwen/Qwen3-235B-A22B-Instruct-2507"  # NEBIUS_FALLBACK_MODEL
     llm_provider: str = "openai"  # LLM_PROVIDER — openai | gemini | nebius
     # Hard HTTP timeout for OpenAI-compatible clients (Nebius/OpenAI/Gemini proxy).
     # Prevents Compatibility / Today from hanging the product UI when the provider stalls.

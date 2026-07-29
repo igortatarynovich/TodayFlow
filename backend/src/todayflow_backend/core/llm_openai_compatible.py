@@ -233,11 +233,19 @@ def _is_timeout_like_error(exc: BaseException) -> bool:
 
 def classify_llm_call_failure(exc: BaseException | None = None, *, http_status: int | None = None) -> str:
     """Coarse failure class for ops logs (timeout vs throttle vs upstream vs other)."""
-    if http_status == 429:
+    status = http_status
+    if status is None and exc is not None:
+        status = getattr(exc, "status_code", None)
+        if status is None:
+            resp = getattr(exc, "response", None)
+            status = getattr(resp, "status_code", None)
+    if status == 429:
         return "rate_limited"
-    if http_status in {408, 504}:
+    if status in {408, 504}:
         return "timeout"
-    if http_status in {502, 503}:
+    if status == 404 or (exc is not None and _is_model_not_found_error(exc)):
+        return "model_unavailable"
+    if status in {502, 503}:
         return "upstream_unavailable"
     if exc is not None and _is_timeout_like_error(exc):
         return "timeout"
@@ -250,6 +258,39 @@ def classify_llm_call_failure(exc: BaseException | None = None, *, http_status: 
         if any(code in msg for code in ("502", "503", "504", "bad gateway", "unavailable")):
             return "upstream_unavailable"
     return "other"
+
+
+def _is_model_not_found_error(exc: BaseException) -> bool:
+    msg = str(exc).lower()
+    tokens = (
+        "does not exist",
+        "model_not_found",
+        "model not found",
+        "unknown model",
+        "invalid model",
+        "no such model",
+    )
+    return any(t in msg for t in tokens)
+
+
+def resolve_chat_model_chain(primary: str) -> list[str]:
+    """Primary model, then optional Nebius fallback when catalog/maintenance drops primary."""
+    chain: list[str] = []
+    primary_id = (primary or "").strip()
+    if primary_id:
+        chain.append(primary_id)
+    provider = (settings.llm_provider or "openai").strip().lower()
+    if provider != "nebius":
+        return chain or [primary_id or settings.llm_default_model]
+    fallback = (getattr(settings, "nebius_fallback_model", None) or "").strip()
+    if fallback and fallback not in chain:
+        chain.append(fallback)
+    return chain or [settings.nebius_model]
+
+
+def _should_try_model_fallback(failure_kind: str | None) -> bool:
+    """Fallback to NEBIUS_FALLBACK_MODEL on missing model / upstream outage — not timeout/429."""
+    return failure_kind in {"model_unavailable", "upstream_unavailable", "empty", "other"}
 
 
 def chat_completion_text(
@@ -267,7 +308,55 @@ def chat_completion_text(
     ``response_format`` or returns empty content. **Timeouts do not fall back** —
     a second full wait would only amplify client-side deadline cuts (esp. Nebius
     + large packs under a short sync timeout).
+
+    When ``LLM_PROVIDER=nebius`` and primary fails as model/upstream unavailable,
+    retries once with ``NEBIUS_FALLBACK_MODEL`` (default Qwen Instruct).
     """
+    chain = resolve_chat_model_chain(model)
+    last_kind: str | None = None
+    for idx, mid in enumerate(chain):
+        text, kind = _chat_completion_text_once(
+            client,
+            model=mid,
+            messages=messages,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            json_object=json_object,
+        )
+        if text:
+            if idx > 0:
+                logger.warning(
+                    "LLM model fallback succeeded primary=%s fallback=%s",
+                    chain[0],
+                    mid,
+                )
+            return text
+        last_kind = kind
+        next_mid = chain[idx + 1] if idx + 1 < len(chain) else None
+        if next_mid and _should_try_model_fallback(kind):
+            logger.warning(
+                "LLM primary model failed kind=%s model=%s; trying fallback=%s",
+                kind,
+                mid,
+                next_mid,
+            )
+            continue
+        break
+    if last_kind:
+        logger.warning("LLM chat completion exhausted models kind=%s chain=%s", last_kind, chain)
+    return None
+
+
+def _chat_completion_text_once(
+    client: Any,
+    *,
+    model: str,
+    messages: list[dict[str, str]],
+    temperature: float,
+    max_tokens: int,
+    json_object: bool,
+) -> tuple[str | None, str | None]:
+    """Single-model attempt. Returns (text, failure_kind). failure_kind is None on success."""
     effective_max = resolve_max_tokens(max_tokens, model=model)
     reasoning_effort = _json_reasoning_effort(model) if json_object else None
     base_kw = _build_chat_kwargs(
@@ -285,7 +374,7 @@ def chat_completion_text(
             )
             text = _message_content(resp)
             if text:
-                return text
+                return text, None
             logger.warning(
                 "LLM json_object returned empty content (model=%s); retrying without JSON mode",
                 model,
@@ -299,7 +388,15 @@ def chat_completion_text(
                     model,
                     exc,
                 )
-                return None
+                return None, kind
+            if kind == "model_unavailable":
+                logger.warning(
+                    "LLM json_object failed class=%s model=%s (%s); skip plain retry",
+                    kind,
+                    model,
+                    exc,
+                )
+                return None, kind
             logger.warning(
                 "LLM chat with response_format=json_object failed class=%s (%s); retrying without JSON mode",
                 kind,
@@ -307,16 +404,20 @@ def chat_completion_text(
             )
     try:
         resp = client.chat.completions.create(**base_kw)
-        return _message_content(resp)
+        text = _message_content(resp)
+        if text:
+            return text, None
+        return None, "empty"
     except Exception as exc:
         kind = classify_llm_call_failure(exc)
         logger.warning(
-            "LLM chat completion failed class=%s: %s",
+            "LLM chat completion failed class=%s model=%s: %s",
             kind,
+            model,
             exc,
             exc_info=True,
         )
-        return None
+        return None, kind
 
 
 def chat_completion_plain(
@@ -328,15 +429,43 @@ def chat_completion_plain(
     max_tokens: int,
 ) -> str | None:
     """Обычный chat completion без `response_format` (narrative, таро, прогнозы и т.д.)."""
-    try:
-        kw = _build_chat_kwargs(
-            model=model,
-            messages=messages,
-            temperature=temperature,
-            max_tokens=resolve_max_tokens(max_tokens, model=model),
-        )
-        resp = client.chat.completions.create(**kw)
-        return _message_content(resp)
-    except Exception as exc:
-        logger.warning("LLM chat completion failed: %s", exc, exc_info=True)
-        return None
+    chain = resolve_chat_model_chain(model)
+    for idx, mid in enumerate(chain):
+        try:
+            kw = _build_chat_kwargs(
+                model=mid,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=resolve_max_tokens(max_tokens, model=mid),
+            )
+            resp = client.chat.completions.create(**kw)
+            text = _message_content(resp)
+            if text:
+                if idx > 0:
+                    logger.warning(
+                        "LLM plain model fallback succeeded primary=%s fallback=%s",
+                        chain[0],
+                        mid,
+                    )
+                return text
+            kind = "empty"
+        except Exception as exc:
+            kind = classify_llm_call_failure(exc)
+            logger.warning(
+                "LLM chat completion failed class=%s model=%s: %s",
+                kind,
+                mid,
+                exc,
+                exc_info=True,
+            )
+        next_mid = chain[idx + 1] if idx + 1 < len(chain) else None
+        if next_mid and _should_try_model_fallback(kind):
+            logger.warning(
+                "LLM plain primary failed kind=%s model=%s; trying fallback=%s",
+                kind,
+                mid,
+                next_mid,
+            )
+            continue
+        break
+    return None
