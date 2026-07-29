@@ -28,7 +28,7 @@ function polar(angleDeg: number, radius: number): { x: number; y: number } {
 function buildClusters(angles: number[], thresholdDeg: number): number[][] {
   const n = angles.length;
   if (n === 0) return [];
-  const order = [...angles.keys()].sort((i, j) => angles[i] - angles[j]);
+  const order = Array.from({ length: n }, (_, i) => i).sort((i, j) => angles[i] - angles[j]);
   const assigned = new Array(n).fill(false);
   const clusters: number[][] = [];
 
