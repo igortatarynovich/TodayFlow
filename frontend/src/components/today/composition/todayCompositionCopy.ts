@@ -86,6 +86,7 @@ export const TODAY_COMPOSITION_COPY = {
     tapError: "Не удалось сохранить. Попробуй ещё раз.",
     tapEmptyHint: "Когда сцена дня соберётся — здесь будет один короткий тап.",
     verdictSlotHint: "",
+    verdictStripLabel: "Сферы дня",
     glanceSlotHint: "",
   },
 } as const;

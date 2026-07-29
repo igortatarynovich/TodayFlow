@@ -1416,7 +1416,7 @@ export function TodayCompositionSurface(props: Props) {
         testId="today-zone-act-plot"
       >
         <MotionReveal>{heroSection}</MotionReveal>
-        <TodayVerdictStripSlot />
+        <TodayVerdictStripSlot dateISO={dateISO} />
         {dayReadingReady ? (
           <>
             <MotionReveal delayMs={MOTION.staggerMs}>{pulseSection}</MotionReveal>

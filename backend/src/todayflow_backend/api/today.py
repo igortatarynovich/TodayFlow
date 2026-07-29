@@ -1808,3 +1808,73 @@ def get_today_accuracy_summary(
         overall=AccuracyDomainBucket(**summary["overall"]),
         by_domain=by_domain,
     )
+
+
+# --- Wave 2 Phase B: domain_verdicts (top_driver_v1) ---
+
+class DomainVerdictItem(BaseModel):
+    domain: str
+    verdict: str
+    why_short: str
+    driver_ids: list[str] = Field(default_factory=list)
+    logic_source: str = "top_driver_v1"
+    top_weight: float | None = None
+
+
+class TodayDomainVerdictsResponse(BaseModel):
+    schema_version: str = "domain_verdicts_v1"
+    local_date: str
+    day_facts_id: str
+    logic_source: str = "top_driver_v1"
+    domain_verdicts: list[DomainVerdictItem]
+    degraded: bool = False
+
+
+@router.get("/domain-verdicts", response_model=TodayDomainVerdictsResponse)
+async def get_today_domain_verdicts(
+    request: Request,
+    local_date: str | None = Query(default=None, description="YYYY-MM-DD"),
+    timezone: str | None = Query(default=None),
+    user: User = Depends(require_user),
+    db=Depends(get_session),
+) -> TodayDomainVerdictsResponse:
+    """Wave 2 Phase B — four fixed domains via top_driver_v1 (not domain sum)."""
+    from todayflow_backend.services import today_domain_verdicts_v1 as verdict_svc
+    from todayflow_backend.services import today_tap_widget_v1 as tap_svc
+    from todayflow_backend.services.personal_transits import get_personal_transit_service
+    from todayflow_backend.services import astro as astro_mod
+    from todayflow_backend.services.geocode import Geocoder
+    from todayflow_backend.api import reports as reports_api
+
+    day = parse_iso_date_or_400(local_date) if local_date else date.today()
+    facts_id = tap_svc.day_facts_id_for(user.id, day)
+    locale = request_locale(request)
+
+    try:
+        transit_service = get_personal_transit_service()
+        geocoder = Geocoder()
+        astro_service = astro_mod.AstroService()
+        astro_profile = await reports_api._get_user_astro_profile(user, db, None, locale)
+        birth_data = await reports_api._prepare_birth_data(astro_profile, geocoder, locale)
+        natal_chart = await reports_api._compute_natal_chart(
+            birth_data, astro_service, astro_profile, db
+        )
+        if not natal_chart or not getattr(natal_chart, "positions", None):
+            raise RuntimeError("natal_unavailable")
+        raw_transits = await transit_service._calculate_transits(
+            natal_chart, day, birth_data=birth_data
+        )
+        activations = verdict_svc.activations_from_transit_objects(raw_transits)
+        rows = verdict_svc.compute_domain_verdicts(activations)
+        degraded = False
+    except Exception:
+        logger.exception("domain_verdicts_degraded user=%s date=%s", user.id, day.isoformat())
+        rows = verdict_svc.compute_domain_verdicts([])
+        degraded = True
+
+    return TodayDomainVerdictsResponse(
+        local_date=day.isoformat(),
+        day_facts_id=facts_id,
+        domain_verdicts=[DomainVerdictItem(**row) for row in rows],
+        degraded=degraded,
+    )

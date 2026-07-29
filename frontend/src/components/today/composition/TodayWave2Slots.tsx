@@ -1,12 +1,21 @@
 "use client";
 
 /**
- * Wave 2 slots — Verdict/Glance stubs; TapWidget Phase A live.
+ * Wave 2 slots — VerdictStrip Phase B + TapWidget Phase A; Glance stub.
  */
 import { useEffect, useState } from "react";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import styles from "@/components/today/composition/TodayWave2Slots.module.css";
 import type { TodayContractV1 } from "@/lib/todayContract";
+import {
+  DOMAIN_LABEL_RU,
+  fetchDomainVerdicts,
+  orderDomainVerdicts,
+  VERDICT_LABEL_RU,
+  type DomainKey,
+  type DomainVerdict,
+  type VerdictKey,
+} from "@/lib/todayDomainVerdicts";
 import {
   fetchAccuracySummary,
   formatAccuracyLine,
@@ -16,14 +25,64 @@ import {
   type TapResponseCode,
 } from "@/lib/todayTapWidget";
 
-export function TodayVerdictStripSlot() {
+type VerdictStripProps = {
+  dateISO: string;
+};
+
+export function TodayVerdictStripSlot({ dateISO }: VerdictStripProps) {
+  const [rows, setRows] = useState<DomainVerdict[]>(() => orderDomainVerdicts([]));
+
+  useEffect(() => {
+    let cancelled = false;
+    void fetchDomainVerdicts(dateISO)
+      .then((data) => {
+        if (!cancelled) setRows(orderDomainVerdicts(data.domain_verdicts ?? []));
+      })
+      .catch(() => {
+        if (!cancelled) setRows(orderDomainVerdicts([]));
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [dateISO]);
+
   return (
     <div
-      className={styles.slot}
+      className={styles.verdictStrip}
       data-testid="today-slot-verdict-strip"
       data-wave2-slot="verdict"
-      aria-hidden={true}
-    />
+      role="list"
+      aria-label={copy.journey.verdictStripLabel}
+    >
+      {rows.map((row) => {
+        const domain = row.domain as DomainKey;
+        const verdict = row.verdict as VerdictKey;
+        const domainLabel = DOMAIN_LABEL_RU[domain] ?? row.domain;
+        const verdictLabel = VERDICT_LABEL_RU[verdict] ?? row.verdict;
+        return (
+          <div
+            key={row.domain}
+            className={styles.verdictRow}
+            role="listitem"
+            data-domain={row.domain}
+            data-verdict={row.verdict}
+            data-testid={`today-verdict-${row.domain}`}
+          >
+            <div className={styles.verdictHead}>
+              <span className={styles.verdictDomain}>{domainLabel}</span>
+              <span className={styles.verdictKey} data-verdict={row.verdict}>
+                {verdictLabel}
+              </span>
+            </div>
+            {row.why_short ? (
+              <p className={styles.verdictWhy} data-testid={`today-verdict-why-${row.domain}`}>
+                {row.why_short}
+              </p>
+            ) : null}
+          </div>
+        );
+      })}
+    </div>
   );
 }
 

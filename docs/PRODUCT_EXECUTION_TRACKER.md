@@ -1097,6 +1097,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-07-29 | Today / Content | **Wave 2 Phase B — VerdictStrip** | **LIVE** | `GET /today/domain-verdicts` + Act 1 strip (4 domains, `top_driver_v1`). Interim until Phase D `day_facts_v1`. No motion on strip. [PLAN](./today/TODAY_WAVE2_EXECUTION_PLAN.md) · [CONTRACT §3.3](./today/TODAY_WAVE2_CONTRACT_V1.md).
 - 2026-07-29 | Today / Content | **Wave 2 Phase 0.5.2 CLOSED** | **DONE** | Full August 31d: domain **sum** freezes work (charged 29/31, 2 flips). **`top_driver_v1`** approved (work 8 / money 2 / rel 3 / energy 6 flips). Dictionary unchanged. Phase B soft-gate lifted. [CONTRACT §3.1c](./today/TODAY_WAVE2_CONTRACT_V1.md).
 - 2026-07-29 | Today / Content | **Wave 2 Phase A — TapWidget** | **LIVE** | `POST /today/tap-widget/response` + `GET /today/accuracy-summary` + FE TapWidget. Unaffected by top-driver change.
 - 2026-07-29 | Today / Content | **Wave 2 Phase 0.5 pass 2** | **SUPERSEDED → 0.5.2 CLOSED** | Dictionary approved earlier; consecutive August closed with aggregation model change (sum→top-driver).

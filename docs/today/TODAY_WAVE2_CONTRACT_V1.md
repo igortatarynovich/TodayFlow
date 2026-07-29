@@ -354,6 +354,15 @@ Tap completion = existence of `tap_event_v1` for that `day_facts_id` (no separat
 
 Opens with the **first code PR** (Phase A), not with docs lock alone.
 
+### Phase B (VerdictStrip) — code PR
+
+- **SoT before:** empty Act 1 verdict slot; domain tone not user-facing
+- **SoT after:** `domain_verdicts[4]` via **`top_driver_v1`** (max `|weight|` driver per domain); dictionary `calm|charged|friction|open`; Act 1 strip is pure view
+- **Public JSON:** yes — interim `GET /today/domain-verdicts` (until Phase D folds into `day_facts_v1`)
+- **Migration:** none
+- **Canon:** this file §3.3 · [TODAY_WAVE2_EXECUTION_PLAN](./TODAY_WAVE2_EXECUTION_PLAN.md) Phase B
+- **Backward compatible:** old clients ignore strip; no change to existing day_story / today_contract fields
+
 ---
 
 ## Related

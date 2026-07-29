@@ -1,6 +1,6 @@
 # Today Wave 2 — Execution Plan
 
-**Status:** Phase A **LIVE** · Phase 0.5.2 **CLOSED** (`top_driver_v1`) · Phase B **UNBLOCKED**  
+**Status:** Phase A **LIVE** · Phase 0.5.2 **CLOSED** (`top_driver_v1`) · Phase B **LIVE** · Phase C next
 **Depends on:** Wave 1 ActShell LIVE (`TodayActShell` + reserved slots)  
 **Canon companions:**
 - [TODAY_WAVE2_CONTRACT_V1.md](./TODAY_WAVE2_CONTRACT_V1.md) — `day_facts_v1`, slots, tap, accuracy
@@ -72,15 +72,17 @@ Trust bug to avoid: VerdictStrip says «money: friction» while Act 3 narrates a
 
 ---
 
-### Phase B — VerdictStrip (no new ranking endpoint) — **UNBLOCKED**
+### Phase B — VerdictStrip (no new ranking endpoint) — **LIVE**
 
 | Step | Work | Notes |
 |------|------|-------|
-| B.0 | Architecture impact if public JSON / meaning SoT changes | Likely yes — strip becomes user-facing SoT |
+| B.0 | Architecture impact if public JSON / meaning SoT changes | Yes — strip is user-facing SoT for domain tone |
 | B.1 | Compute `domain_verdicts[4]` via **`top_driver_v1`** (max \|weight\| driver) | Fixed order: work → money → relationships → energy; **not** domain sum |
 | B.2 | Fill Act 1 `today-slot-verdict-strip` from `domain_verdicts` only | Dictionary: calm / charged / friction / open |
-| B.3 | Provenance: `generation_provenance.verdict_driver_ids` (top id primary) | Debug only |
+| B.3 | Provenance: `generation_provenance.verdict_driver_ids` (top id primary) | Interim: `driver_ids` on each row; full `day_facts_v1` in Phase D |
 | B.4 | Visual: **no motion** on strip (idle) | Motion pilot doc |
+
+**Interim path (until Phase D day_facts):** `GET /today/domain-verdicts` projects personal transits → activations → `top_driver_v1`. Soft-gate 0.5.2 accepted.
 
 **Gate:** strip always 4 rows; August-style inside-month flips under top-driver; calib 0.5.2 accepted.
 
@@ -125,7 +127,7 @@ Trust bug to avoid: VerdictStrip says «money: friction» while Act 3 narrates a
 
 1. `Today Wave2 Phase0.5 — CLOSED (top_driver_v1 + descriptive dict)`
 2. `Today Wave2 PhaseA — TapWidget` ← **live**
-3. `Today Wave2 PhaseB — domain_verdicts + VerdictStrip` ← **unblocked now**
+3. `Today Wave2 PhaseB — domain_verdicts + VerdictStrip` ← **live**
 4. `Today Wave2 PhaseC — exact-time glance_timeline + GlanceTimeline UI`
 5. `Today Wave2 PhaseD — day-facts GET + trust audit + motion retro`
 
