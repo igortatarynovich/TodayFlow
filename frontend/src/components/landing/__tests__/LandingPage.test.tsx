@@ -2,16 +2,30 @@ import { render, screen } from "@testing-library/react";
 import { LandingPage } from "@/components/landing/LandingPage";
 
 describe("LandingPage", () => {
-  it("renders Product UI web landing sections", () => {
+  it("renders Product UI web landing sections with anchors", () => {
     render(<LandingPage signupHref="/onboarding/welcome?fresh=1" loginHref="/auth?mode=login" />);
 
     expect(screen.getByTestId("landing-page")).toBeInTheDocument();
-    expect(screen.getByText(/узнай паттерны/i)).toBeInTheDocument();
     expect(screen.getByTestId("landing-orbit-viz")).toBeInTheDocument();
-    expect(screen.getByTestId("landing-feature-map")).toBeInTheDocument();
-    expect(screen.getByTestId("landing-fragment-tarot")).toHaveTextContent(/отшельник/i);
-    expect(screen.getByText(/твоя карта ждёт/i)).toBeInTheDocument();
-    expect(screen.getAllByRole("link", { name: /начать карту/i }).length).toBeGreaterThan(0);
-    expect(screen.getByRole("link", { name: /смотреть фильм/i })).toBeInTheDocument();
+    expect(screen.getByTestId("landing-section-try")).toBeInTheDocument();
+    expect(screen.getByTestId("landing-section-today")).toBeInTheDocument();
+    expect(screen.getByTestId("landing-section-why")).toBeInTheDocument();
+    expect(screen.getByTestId("landing-section-cta")).toBeInTheDocument();
+
+    expect(screen.getByRole("heading", { name: /интересно, что/i })).toBeInTheDocument();
+    expect(screen.getByText(/попробуй сейчас/i)).toBeInTheDocument();
+    expect(screen.getByText(/твой today каждое утро/i)).toBeInTheDocument();
+    expect(screen.getByText(/зачем возвращаются/i)).toBeInTheDocument();
+
+    expect(screen.getAllByRole("link", { name: /создать мой today/i }).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole("link", { name: /^попробовать$/i }).some((el) => el.getAttribute("href") === "#try")).toBe(
+      true,
+    );
+    expect(
+      screen.getAllByRole("link", { name: /как это работает/i }).some((el) => el.getAttribute("href") === "#today"),
+    ).toBe(true);
+    expect(
+      screen.getAllByRole("link", { name: /почему возвращаются/i }).some((el) => el.getAttribute("href") === "#why"),
+    ).toBe(true);
   });
 });

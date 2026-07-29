@@ -15,13 +15,29 @@ export function DsMarketingSection({
   children,
   tight,
   testId,
+  id,
+  screen = false,
+  tone,
+  "aria-labelledby": ariaLabelledBy,
 }: {
   children: ReactNode;
   tight?: boolean;
   testId?: string;
+  id?: string;
+  /** Full-viewport marketing block (min 100dvh under sticky nav). */
+  screen?: boolean;
+  tone?: "default" | "hero" | "muted";
+  "aria-labelledby"?: string;
 }) {
+  const toneClass =
+    tone === "hero" ? l.sectionHero : tone === "muted" ? l.sectionMuted : "";
   return (
-    <section className={`${l.section} ${tight ? l.sectionTight : ""}`} data-testid={testId}>
+    <section
+      id={id}
+      className={`${l.section} ${tight ? l.sectionTight : ""} ${screen ? l.sectionScreen : ""} ${toneClass}`.trim()}
+      data-testid={testId}
+      aria-labelledby={ariaLabelledBy}
+    >
       {children}
     </section>
   );

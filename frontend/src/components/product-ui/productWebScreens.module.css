@@ -2180,6 +2180,11 @@
   font: inherit;
   font-size: 0.9375rem;
   color: var(--tf-ink);
+  box-sizing: border-box;
+}
+
+.authWebFormPasswordWrap .authWebFormInput {
+  padding-right: 4.5rem;
 }
 
 .authWebFormInput:focus {
@@ -2187,11 +2192,56 @@
   outline-offset: 2px;
 }
 
+.authWebFormInputError {
+  border-color: #c45c5c;
+  background: rgba(196, 92, 92, 0.04);
+}
+
+.authWebFormInputError:focus {
+  outline: 2px solid rgba(196, 92, 92, 0.35);
+  outline-offset: 2px;
+}
+
+.authWebFormError {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: #b42318;
+}
+
+.authWebFormPasswordWrap {
+  position: relative;
+}
+
+.authWebFormPasswordToggle {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--tf-caption);
+  font-size: 0.8125rem;
+  padding: 0.25rem;
+}
+
 .authWebFormHint {
   margin: 0;
   font-size: 0.8125rem;
   line-height: 1.5;
   color: var(--tf-caption);
+}
+
+.authWebFormSuccess {
+  margin: 0 0 1rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.75rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  color: #047857;
+  font-size: 0.875rem;
+  line-height: 1.45;
 }
 
 .authWebFormActions {

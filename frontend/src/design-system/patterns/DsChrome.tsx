@@ -18,7 +18,7 @@ export function DsMarketingNav({
   ctaLabel,
 }: {
   logoHref?: string;
-  links: NavItem[];
+  links: Array<NavItem & { active?: boolean }>;
   ctaHref: string;
   ctaLabel: string;
 }) {
@@ -29,7 +29,12 @@ export function DsMarketingNav({
       </Link>
       <nav className={p.navLinks} aria-label="Основная навигация">
         {links.map((item) => (
-          <Link key={item.href} href={item.href} className={p.navLink}>
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`${p.navLink} ${item.active ? p.navLinkActive : ""}`}
+            aria-current={item.active ? "true" : undefined}
+          >
             {item.label}
           </Link>
         ))}

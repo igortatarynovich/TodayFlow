@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 import {
+  PRODUCT_WEB_LANDING_ANCHORS,
   PRODUCT_WEB_LANDING_FINAL,
   PRODUCT_WEB_LANDING_FOOTER,
   PRODUCT_WEB_LANDING_GUEST_SECTION,
@@ -9,6 +11,7 @@ import {
   PRODUCT_WEB_LANDING_HERO,
   PRODUCT_WEB_LANDING_ORBIT_NODES,
   PRODUCT_WEB_LANDING_RETURN_REASONS,
+  PRODUCT_WEB_LANDING_SECTION_IDS,
   PRODUCT_WEB_LANDING_TODAY_PROMISE,
 } from "@/components/product-ui/productWebLandingContent";
 import { ProductWebGuestNav } from "@/components/product-ui/ProductWebGuestNav";
@@ -68,9 +71,70 @@ const PROMISE_CARD_ICONS = {
   memory: IconSparkles,
 } as const;
 
+function useLandingActiveSection(): string | null {
+  const [activeHref, setActiveHref] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof IntersectionObserver === "undefined") {
+      return;
+    }
+
+    const reduceMotion =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduceMotion) {
+      document.documentElement.style.scrollBehavior = "smooth";
+    }
+
+    const sections = PRODUCT_WEB_LANDING_SECTION_IDS.map((id) => document.getElementById(id)).filter(
+      (el): el is HTMLElement => Boolean(el),
+    );
+    if (sections.length === 0) return;
+
+    const visibility = new Map<string, number>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          visibility.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
+        }
+        let bestId: string | null = null;
+        let bestRatio = 0;
+        visibility.forEach((ratio, id) => {
+          if (ratio > bestRatio) {
+            bestRatio = ratio;
+            bestId = id;
+          }
+        });
+        if (bestId) {
+          const anchor = PRODUCT_WEB_LANDING_ANCHORS.find((item) => item.id === bestId);
+          setActiveHref(anchor ? anchor.href : null);
+        }
+      },
+      {
+        root: null,
+        rootMargin: "-28% 0px -42% 0px",
+        threshold: [0.15, 0.35, 0.55, 0.75],
+      },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => {
+      observer.disconnect();
+      document.documentElement.style.scrollBehavior = "";
+    };
+  }, []);
+
+  return activeHref;
+}
+
 export function ProductWebLanding({ signupHref, loginHref }: Props) {
   const year = new Date().getFullYear();
   const guestNavLinks = buildAppNavLinks("ru", "guest");
+  const activeHref = useLandingActiveSection();
+  const anchorLinks = useMemo(
+    () => PRODUCT_WEB_LANDING_ANCHORS.map(({ href, label }) => ({ href, label })),
+    [],
+  );
 
   const orbitNodes: DsOrbitalNode[] = PRODUCT_WEB_LANDING_ORBIT_NODES.map((node) => {
     const Icon = ORBIT_NODE_ICONS[node.id as keyof typeof ORBIT_NODE_ICONS] ?? IconSparkles;
@@ -87,6 +151,8 @@ export function ProductWebLanding({ signupHref, loginHref }: Props) {
           ctaHref={signupHref}
           ctaLabel={PRODUCT_WEB_LANDING_HERO.primaryCta}
           locale="ru"
+          extraLinks={anchorLinks}
+          activeHref={activeHref}
         />
       }
       footer={
@@ -104,6 +170,11 @@ export function ProductWebLanding({ signupHref, loginHref }: Props) {
               <div>
                 <DsEyebrow>Попробовать</DsEyebrow>
                 {guestNavLinks.map((link) => (
+                  <Link key={link.href} href={link.href} className={l.footerLink}>
+                    {link.label}
+                  </Link>
+                ))}
+                {PRODUCT_WEB_LANDING_ANCHORS.map((link) => (
                   <Link key={link.href} href={link.href} className={l.footerLink}>
                     {link.label}
                   </Link>
@@ -130,7 +201,7 @@ export function ProductWebLanding({ signupHref, loginHref }: Props) {
         </footer>
       }
     >
-      <DsMarketingSection testId="landing-page">
+      <DsMarketingSection id="hero" screen tone="hero" testId="landing-page" aria-labelledby="landing-hero-title">
         <div className={l.heroSection}>
           <div className={l.heroCopy}>
             <div>
@@ -154,7 +225,13 @@ export function ProductWebLanding({ signupHref, loginHref }: Props) {
         </div>
       </DsMarketingSection>
 
-      <DsMarketingSection tight aria-labelledby="landing-guest-title">
+      <DsMarketingSection
+        id="try"
+        screen
+        tight
+        aria-labelledby="landing-guest-title"
+        testId="landing-section-try"
+      >
         <div className={l.centerStack}>
           <DsEyebrow>{PRODUCT_WEB_LANDING_GUEST_SECTION.eyebrow}</DsEyebrow>
           <DsSectionTitle id="landing-guest-title">{PRODUCT_WEB_LANDING_GUEST_SECTION.title}</DsSectionTitle>
@@ -180,7 +257,7 @@ export function ProductWebLanding({ signupHref, loginHref }: Props) {
         </div>
       </DsMarketingSection>
 
-      <DsMarketingSection>
+      <DsMarketingSection id="today" screen tone="muted" testId="landing-section-today" aria-labelledby="landing-today-promise">
         <DsThemePanel
           variant="marketing"
           titleId="landing-today-promise"
@@ -207,7 +284,7 @@ export function ProductWebLanding({ signupHref, loginHref }: Props) {
         />
       </DsMarketingSection>
 
-      <DsMarketingSection>
+      <DsMarketingSection id="why" screen testId="landing-section-why" aria-labelledby="landing-return-reasons">
         <div className={l.centerStack}>
           <DsSectionTitle id="landing-return-reasons">{PRODUCT_WEB_LANDING_RETURN_REASONS.title}</DsSectionTitle>
           <div className={l.grid3}>
@@ -227,7 +304,7 @@ export function ProductWebLanding({ signupHref, loginHref }: Props) {
         </div>
       </DsMarketingSection>
 
-      <DsMarketingSection>
+      <DsMarketingSection id="cta" screen tone="muted" testId="landing-section-cta" aria-labelledby="landing-final-cta">
         <div className={l.centerStack}>
           <DsDisplayTitle id="landing-final-cta" size="lg">
             {PRODUCT_WEB_LANDING_FINAL.title}

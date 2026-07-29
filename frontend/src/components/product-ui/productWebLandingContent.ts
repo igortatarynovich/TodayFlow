@@ -101,6 +101,21 @@ export const PRODUCT_WEB_LANDING_FINAL = {
   cta: "Создать мой Today",
 } as const;
 
+/** In-page anchors for full-screen landing sections (nav + scroll-spy). */
+export const PRODUCT_WEB_LANDING_ANCHORS = [
+  { id: "try", href: "#try", label: "Попробовать" },
+  { id: "today", href: "#today", label: "Как это работает" },
+  { id: "why", href: "#why", label: "Почему возвращаются" },
+] as const;
+
+export const PRODUCT_WEB_LANDING_SECTION_IDS = [
+  "hero",
+  "try",
+  "today",
+  "why",
+  "cta",
+] as const;
+
 export const PRODUCT_WEB_LANDING_FOOTER = {
   tagline: "Персональный ориентир на день — с памятью о вчера.",
   companyLinks: [
