@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { LoadingSpinner } from "@/components/orbit";
 import { CardVisual } from "@/components/tarot/CardVisual";
 import { InteractiveCardDeck } from "@/components/tarot/InteractiveCardDeck";
@@ -76,27 +76,34 @@ function TarotSpreadRitualContent() {
     return [{ card: anchorCard, orientation: anchorParam.orientation }, ...deckPicks];
   }, [anchorParam, anchorCard, deckPicks]);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      return;
-    }
-
-    const deckSize = Math.max(requiredFromDeck + 5, 8);
-    const loadDeck = async () => {
+  const loadDeck = useCallback(
+    async ({ showLoader = true }: { showLoader?: boolean } = {}) => {
+      const deckSize = Math.max(requiredFromDeck + 5, 8);
+      const endpoint = isAuthenticated ? "/tarot/deck/draw" : "/tarot/deck/draw/public";
       try {
-        setLoadingDeck(true);
-        const data = await postJson<TarotCard[]>("/tarot/deck/draw", { count: deckSize });
+        if (showLoader) setLoadingDeck(true);
+        const data = await postJson<TarotCard[]>(endpoint, { count: deckSize });
         setDeckCards(Array.isArray(data) ? data : []);
+        setDeckPicks([]);
       } catch (error) {
         console.error("Failed to load tarot deck", error);
         setDeckCards([]);
       } finally {
-        setLoadingDeck(false);
+        if (showLoader) setLoadingDeck(false);
       }
-    };
+    },
+    [isAuthenticated, requiredFromDeck],
+  );
 
-    void loadDeck();
-  }, [isAuthenticated, requiredFromDeck]);
+  useEffect(() => {
+    if (authLoading) return;
+    void loadDeck({ showLoader: true });
+  }, [authLoading, loadDeck]);
+
+  const handleReshuffleDeck = useCallback(() => {
+    setDeckPicks([]);
+    void loadDeck({ showLoader: false });
+  }, [loadDeck]);
 
   useEffect(() => {
     if (!anchorParam) {
@@ -157,26 +164,6 @@ function TarotSpreadRitualContent() {
     if (refinementId) paramsOut.set("refinement", refinementId);
     return paramsOut.toString();
   }, [spreadId, selectedParam, displayQuestion, domain, refinementId]);
-
-  useEffect(() => {
-    if (isAuthenticated || authLoading) return;
-
-    const deckSize = Math.max(requiredFromDeck + 5, 8);
-    const loadDeck = async () => {
-      try {
-        setLoadingDeck(true);
-        const data = await postJson<TarotCard[]>("/tarot/deck/draw/public", { count: deckSize });
-        setDeckCards(Array.isArray(data) ? data : []);
-      } catch (error) {
-        console.error("Failed to load guest tarot deck", error);
-        setDeckCards([]);
-      } finally {
-        setLoadingDeck(false);
-      }
-    };
-
-    void loadDeck();
-  }, [isAuthenticated, authLoading, requiredFromDeck]);
 
   const locale: FlowPracticesChromeLocale = getLocale() === "ru" ? "ru" : "en";
   const tc = tarotSpreadResultChromeBundle(locale);
@@ -247,7 +234,7 @@ function TarotSpreadRitualContent() {
           <p className={s.tarotRitualLead} style={{ marginTop: "0.25rem", fontSize: "0.875rem" }}>
             {anchorParam && anchorCard
               ? `Первая карта уже на месте — возьмите ещё ${requiredFromDeck === 1 ? "одну" : requiredFromDeck}.`
-              : `Нужно ${requiredCount === 1 ? "одну карту" : `${requiredCount} карты`}: снимите верхнюю со стопки.`}
+              : `Нужно ${requiredCount === 1 ? "одну карту" : `${requiredCount} карты`}: полистайте стопку и выберите свою.`}
           </p>
           {anchorParam && anchorCard ? (
             <div className={s.tarotRitualAnchor}>
@@ -275,10 +262,11 @@ function TarotSpreadRitualContent() {
               selectionLabels={deckSelectionLabels}
               ritualIntro={
                 anchorParam
-                  ? "Добавьте карты к якорю — это продолжение разговора с днём."
-                  : "Стопка рубашек: тап или свайп снимает верхнюю карту."
+                  ? "Добавьте карты к якорю — свайп листает, тап выбирает."
+                  : "Свайп листает стопку. Тап — выбрать верхнюю карту."
               }
               variant="dark"
+              onReshuffle={handleReshuffleDeck}
             />
           )}
         </section>

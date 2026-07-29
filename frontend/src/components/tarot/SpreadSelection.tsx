@@ -100,7 +100,7 @@ export function SpreadSelection({
                   requiredCount={selectedSpread.cards}
                   onCardsSelected={onCardsSelected}
                   spreadTitle={selectedSpread.title}
-                  ritualIntro="Стопка рубашек: тап или свайп снимает верхнюю карту."
+                  ritualIntro="Свайп листает стопку. Тап — выбрать верхнюю карту."
                 />
               ) : null}
 

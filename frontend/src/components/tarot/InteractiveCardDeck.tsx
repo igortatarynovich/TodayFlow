@@ -1,6 +1,6 @@
 "use client";
 
-import type { CSSProperties, PointerEvent as ReactPointerEvent } from "react";
+import type { CSSProperties, KeyboardEvent, PointerEvent as ReactPointerEvent } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { TarotCard } from "@/lib/types";
 import { CardVisual } from "./CardVisual";
@@ -20,6 +20,8 @@ interface InteractiveCardDeckProps {
   variant?: "light" | "dark";
   /** Show wallet-stack skeleton while deck loads. */
   loading?: boolean;
+  /** Re-draw a fresh deck from the server (called on reset). */
+  onReshuffle?: () => void;
 }
 
 const FOCUS_WIDTH = 280;
@@ -42,6 +44,8 @@ type DragState = {
   dy: number;
 };
 
+type FlyIntent = "select" | "cycle";
+
 function hashSeed(seed: string): number {
   let h = 2166136261;
   for (let i = 0; i < seed.length; i += 1) {
@@ -62,6 +66,21 @@ function stackPoseAngles(seed: string, count: number): number[] {
   return out;
 }
 
+function shuffleIndices(count: number): number[] {
+  const arr = Array.from({ length: count }, (_, i) => i);
+  for (let i = arr.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = arr[i];
+    arr[i] = arr[j]!;
+    arr[j] = tmp!;
+  }
+  return arr;
+}
+
+function cardsFingerprint(cards: TarotCard[]): string {
+  return cards.map((c) => c.id).join(",");
+}
+
 export function InteractiveCardDeck({
   cards,
   requiredCount,
@@ -71,25 +90,47 @@ export function InteractiveCardDeck({
   ritualIntro,
   variant = "light",
   loading = false,
+  onReshuffle,
 }: InteractiveCardDeckProps) {
   const reduceMotion = usePrefersReducedMotion();
+  const [deckOrder, setDeckOrder] = useState<number[]>(() => shuffleIndices(cards.length));
+  const [shuffleEpoch, setShuffleEpoch] = useState(0);
   const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
   const [revealedCards, setRevealedCards] = useState<Map<number, "upright" | "reversed">>(new Map());
   const [focusIndex, setFocusIndex] = useState<number | null>(null);
   const [focusFlipped, setFocusFlipped] = useState(false);
   const [drag, setDrag] = useState<DragState | null>(null);
-  const [flyOut, setFlyOut] = useState<{ dx: number; dy: number } | null>(null);
+  const [flyOut, setFlyOut] = useState<{ dx: number; dy: number; intent: FlyIntent } | null>(null);
   const [springing, setSpringing] = useState(false);
   const [busy, setBusy] = useState(false);
   const dragRef = useRef<DragState | null>(null);
   const topCardRef = useRef<HTMLButtonElement | null>(null);
+  const cardsFpRef = useRef(cardsFingerprint(cards));
+  const selectedRef = useRef(selectedIndices);
+  selectedRef.current = selectedIndices;
 
   const focusHeight = tarotCardDisplayHeightPx(FOCUS_WIDTH);
   const stackHeight = tarotCardDisplayHeightPx(STACK_WIDTH);
 
+  // New deck from parent → reshuffle local order and clear selection.
+  useEffect(() => {
+    const fp = cardsFingerprint(cards);
+    if (fp === cardsFpRef.current && deckOrder.length === cards.length) return;
+    cardsFpRef.current = fp;
+    setDeckOrder(shuffleIndices(cards.length));
+    setShuffleEpoch((n) => n + 1);
+    setSelectedIndices([]);
+    setRevealedCards(new Map());
+    setFocusIndex(null);
+    setFlyOut(null);
+    setDrag(null);
+    dragRef.current = null;
+    setBusy(false);
+  }, [cards, deckOrder.length]);
+
   const poseSeed = useMemo(
-    () => `${requiredCount}:${cards.map((c) => c.id).join(",")}`,
-    [cards, requiredCount],
+    () => `${shuffleEpoch}:${requiredCount}:${cardsFingerprint(cards)}`,
+    [cards, requiredCount, shuffleEpoch],
   );
   const layerAngles = useMemo(() => stackPoseAngles(poseSeed, VISIBLE_STACK), [poseSeed]);
 
@@ -114,18 +155,18 @@ export function InteractiveCardDeck({
   );
 
   const remainingIndices = useMemo(
-    () => cards.map((_, index) => index).filter((index) => !selectedIndices.includes(index)),
-    [cards, selectedIndices],
+    () => deckOrder.filter((index) => !selectedIndices.includes(index)),
+    [deckOrder, selectedIndices],
   );
 
   const canSelectMore = selectedIndices.length < requiredCount && remainingIndices.length > 0;
+  const canCycle = remainingIndices.length > 1;
   const visibleRemaining = remainingIndices.slice(0, VISIBLE_STACK);
   const focusCard = focusIndex != null ? cards[focusIndex] : null;
   const focusOrientation = focusIndex != null ? revealedCards.get(focusIndex) || "upright" : "upright";
   const focusSlot = focusIndex != null ? selectedIndices.indexOf(focusIndex) : -1;
   const progressLabel = `Карта ${Math.min(selectedIndices.length + 1, requiredCount)} из ${requiredCount}`;
-  const activeStepLabel =
-    selectionLabels?.[selectedIndices.length] || progressLabel;
+  const activeStepLabel = selectionLabels?.[selectedIndices.length] || progressLabel;
 
   const emitSelection = useCallback(
     (indices: number[], revealed: Map<number, "upright" | "reversed">) => {
@@ -143,18 +184,19 @@ export function InteractiveCardDeck({
     [cards, onCardsSelected, requiredCount],
   );
 
-  const finalizeDraw = useCallback(() => {
-    if (!canSelectMore) {
+  const finalizeSelect = useCallback(() => {
+    const remaining = deckOrder.filter((index) => !selectedRef.current.includes(index));
+    if (selectedRef.current.length >= requiredCount || remaining.length === 0) {
       setBusy(false);
       return;
     }
-    const index = remainingIndices[0];
+    const index = remaining[0];
     if (index == null) {
       setBusy(false);
       return;
     }
     const orientation: "upright" | "reversed" = Math.random() < 0.5 ? "upright" : "reversed";
-    const nextIndices = [...selectedIndices, index];
+    const nextIndices = [...selectedRef.current, index];
     const nextRevealed = new Map(revealedCards);
     nextRevealed.set(index, orientation);
     setSelectedIndices(nextIndices);
@@ -166,35 +208,57 @@ export function InteractiveCardDeck({
     setSpringing(false);
     emitSelection(nextIndices, nextRevealed);
     window.setTimeout(() => setBusy(false), reduceMotion ? 160 : 420);
-  }, [canSelectMore, emitSelection, reduceMotion, remainingIndices, revealedCards, selectedIndices]);
+  }, [deckOrder, emitSelection, reduceMotion, requiredCount, revealedCards]);
 
-  const commitDraw = useCallback(() => {
+  const finalizeCycle = useCallback(() => {
+    setDeckOrder((prev) => {
+      const selected = new Set(selectedRef.current);
+      const remaining = prev.filter((index) => !selected.has(index));
+      if (remaining.length < 2) return prev;
+      const top = remaining[0]!;
+      return [...prev.filter((index) => index !== top), top];
+    });
+    setFlyOut(null);
+    setDrag(null);
+    dragRef.current = null;
+    setSpringing(false);
+    setBusy(false);
+  }, []);
+
+  const commitSelect = useCallback(() => {
     if (!canSelectMore || busy) return;
     setBusy(true);
-    finalizeDraw();
-  }, [busy, canSelectMore, finalizeDraw]);
+    finalizeSelect();
+  }, [busy, canSelectMore, finalizeSelect]);
 
-  const startFlyThenCommit = useCallback(
-    (dx: number, dy: number) => {
+  const startFly = useCallback(
+    (dx: number, dy: number, intent: FlyIntent) => {
       if (busy || !canSelectMore) return;
+      if (intent === "cycle" && !canCycle) {
+        // Only one card left — treat as select.
+        setBusy(true);
+        finalizeSelect();
+        return;
+      }
       setBusy(true);
       setDrag(null);
       dragRef.current = null;
       if (reduceMotion) {
-        setFlyOut({ dx: 0, dy: -24 });
+        setFlyOut({ dx: 0, dy: intent === "cycle" ? -18 : -24, intent });
       } else {
         const mag = Math.max(Math.hypot(dx, dy), 1);
         const boost = Math.max(STACK_WIDTH * 1.35, mag * 1.8);
-        setFlyOut({ dx: (dx / mag) * boost, dy: (dy / mag) * boost });
+        setFlyOut({ dx: (dx / mag) * boost, dy: (dy / mag) * boost, intent });
       }
       window.setTimeout(
         () => {
-          finalizeDraw();
+          if (intent === "cycle") finalizeCycle();
+          else finalizeSelect();
         },
         reduceMotion ? FLY_MS_REDUCED : FLY_MS,
       );
     },
-    [busy, canSelectMore, finalizeDraw, reduceMotion],
+    [busy, canCycle, canSelectMore, finalizeCycle, finalizeSelect, reduceMotion],
   );
 
   const handleReset = () => {
@@ -205,7 +269,12 @@ export function InteractiveCardDeck({
     setFlyOut(null);
     setDrag(null);
     dragRef.current = null;
+    setSpringing(false);
     onCardsSelected([]);
+    // Always reshuffle local order immediately; fresh draw may follow via onReshuffle.
+    setDeckOrder(shuffleIndices(cards.length));
+    setShuffleEpoch((n) => n + 1);
+    onReshuffle?.();
   };
 
   const onPointerDown = (event: ReactPointerEvent<HTMLButtonElement>) => {
@@ -254,25 +323,34 @@ export function InteractiveCardDeck({
 
     if (distance < TAP_MOVE_TOLERANCE_PX) {
       setDrag(null);
-      // Tap: flip + open in focus (no fly-off).
-      commitDraw();
+      // Tap = choose this card.
+      commitSelect();
       return;
     }
 
     if (distance >= threshold || velocity >= SWIPE_VELOCITY_PX_MS) {
-      startFlyThenCommit(dx, dy);
+      // Swipe = leaf to the next card (browse), not select.
+      startFly(dx, dy, "cycle");
       return;
     }
 
-    // Incomplete swipe — spring back to stack.
     setDrag(null);
     setSpringing(true);
     window.setTimeout(() => setSpringing(false), 300);
   };
 
-  const onKeyActivate = () => {
-    if (busy || !canSelectMore) return;
-    commitDraw();
+  const onKeyDownTop = (event: KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      commitSelect();
+      return;
+    }
+    if ((event.key === "ArrowRight" || event.key === "ArrowLeft" || event.key === "ArrowDown") && canCycle) {
+      event.preventDefault();
+      const dx = event.key === "ArrowLeft" ? -STACK_WIDTH : event.key === "ArrowRight" ? STACK_WIDTH : 0;
+      const dy = event.key === "ArrowDown" ? STACK_WIDTH * 0.6 : 0;
+      startFly(dx || 0, dy || -STACK_WIDTH * 0.4, "cycle");
+    }
   };
 
   const focusSlotLabel =
@@ -417,7 +495,7 @@ export function InteractiveCardDeck({
           ) : (
             <div className={styles.focusEmpty} aria-hidden={canSelectMore}>
               <p className={styles.focusEmptyTitle}>Карта откроется здесь</p>
-              <p className={styles.focusEmptyBody}>Снимите верхнюю карту со стопки — тапом или свайпом.</p>
+              <p className={styles.focusEmptyBody}>Листайте стопку свайпом и тапните, когда почувствуете свою карту.</p>
             </div>
           )}
         </div>
@@ -434,7 +512,6 @@ export function InteractiveCardDeck({
                   style={{ width: STACK_WIDTH, height: stackHeight + (VISIBLE_STACK - 1) * 6 }}
                   data-testid="tarot-wallet-stack"
                 >
-                  {/* deeper layers first */}
                   {[...visibleRemaining].reverse().map((cardIndex, reverseLayer) => {
                     const layerFromTop = visibleRemaining.length - 1 - reverseLayer;
                     const isTop = layerFromTop === 0;
@@ -458,7 +535,7 @@ export function InteractiveCardDeck({
                     if (!isTop) {
                       return (
                         <div
-                          key={`layer-${cardIndex}`}
+                          key={`layer-${cardIndex}-${shuffleEpoch}`}
                           className={styles.walletLayer}
                           style={layerStyle}
                           aria-hidden
@@ -470,7 +547,7 @@ export function InteractiveCardDeck({
 
                     return (
                       <button
-                        key={`layer-${cardIndex}`}
+                        key={`layer-${cardIndex}-${shuffleEpoch}`}
                         ref={topCardRef}
                         type="button"
                         className={`${styles.walletLayer} ${styles.walletTop} ${topDragging ? styles.walletDragging : ""} ${topFlying ? styles.walletFlying : ""} ${topFlying && reduceMotion ? styles.walletFlyingFade : ""} ${springing ? styles.walletSpring : ""}`.trim()}
@@ -479,13 +556,8 @@ export function InteractiveCardDeck({
                         onPointerMove={onPointerMove}
                         onPointerUp={finishPointer}
                         onPointerCancel={finishPointer}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
-                            onKeyActivate();
-                          }
-                        }}
-                        aria-label="Открыть карту"
+                        onKeyDown={onKeyDownTop}
+                        aria-label="Выбрать эту карту. Стрелки или свайп — листать стопку."
                         data-testid="tarot-deck-draw"
                         disabled={busy}
                       >
@@ -496,7 +568,11 @@ export function InteractiveCardDeck({
                 </div>
               </div>
               <p className={styles.progress}>{progressLabel}</p>
-              <p className={styles.trustHint}>Тап или свайп — снять верхнюю карту.</p>
+              <p className={styles.trustHint}>
+                {canCycle
+                  ? "Свайп — листать. Тап — выбрать эту карту."
+                  : "Тап — выбрать последнюю карту."}
+              </p>
             </>
           ) : remainingIndices.length === 0 || selectedIndices.length >= requiredCount ? (
             <p className={styles.fanDoneHint}>
@@ -506,7 +582,7 @@ export function InteractiveCardDeck({
 
           {selectedIndices.length > 0 ? (
             <button type="button" onClick={handleReset} className={styles.resetLink} disabled={busy}>
-              Сбросить выбор
+              Сбросить и перетасовать
             </button>
           ) : null}
         </div>
