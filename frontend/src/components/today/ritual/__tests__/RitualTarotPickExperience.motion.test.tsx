@@ -12,11 +12,16 @@ const pic = {
 jest.mock("@/lib/tarotCardAssets", () => ({
   TAROT_CARD_PIXEL_WIDTH: 576,
   TAROT_CARD_PIXEL_HEIGHT: 960,
+  tarotCardDisplayHeightPx: (w: number) => Math.round((w * 960) / 576),
   tarotCardBackPicture: () => pic,
   tarotCardFacePicture: () => ({
     ...pic,
     src: "/images/cards/tarot/web/faces/07-576x960.webp",
   }),
+}));
+
+jest.mock("@/lib/api", () => ({
+  postJson: jest.fn(async () => []),
 }));
 
 describe("RitualTarotPickExperience · MotionFlip", () => {
@@ -47,10 +52,10 @@ describe("RitualTarotPickExperience · MotionFlip", () => {
     );
 
     expect(screen.getByTestId("ritual-tarot-pick-grid")).toBeInTheDocument();
-    const cards = screen.getAllByRole("button");
+    expect(screen.getByTestId("ritual-tarot-pick-grid")).toHaveAttribute("data-pick-mode", "deck");
 
     act(() => {
-      fireEvent.click(cards[0]!);
+      fireEvent.click(screen.getByTestId("ritual-tarot-deck-commit"));
       jest.runOnlyPendingTimers();
     });
 

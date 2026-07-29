@@ -373,18 +373,16 @@
 
 @media (min-width: 64rem) {
   .sectionWebEmbed {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: start;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.25rem;
   }
 
   .sectionWebEmbed .synthesisCard,
-  .sectionWebEmbed .glanceRow {
-    grid-column: 1 / -1;
-  }
-
+  .sectionWebEmbed .glanceRow,
   .sectionWebEmbed .bridges {
-    grid-column: 1 / -1;
+    grid-column: auto;
   }
 }
 

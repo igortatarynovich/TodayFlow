@@ -10,10 +10,12 @@ import { TodayDayContinuityEveningClose } from "@/components/today/experience/To
 import { TodayEveningProductClose } from "@/components/today/composition/TodayEveningProductClose";
 import { TodayPersonalizedProductSection } from "@/components/today/composition/TodayPersonalizedProductSection";
 import { TodayActShell } from "@/components/today/composition/TodayActShell";
+import { TodayActNav } from "@/components/today/composition/TodayActNav";
 import {
   TodayGlanceTimelineSlot,
   TodayVerdictStripSlot,
 } from "@/components/today/composition/TodayWave2Slots";
+import { TarotPicture } from "@/components/tarot/TarotPicture";
 import { LoadingSpinner } from "@/components/orbit";
 import { HeroMedium } from "@/components/foundation/HeroMedium";
 import { profileMotionStyles } from "@/components/foundation/ProfileMotion";
@@ -27,7 +29,7 @@ import { anchorTarotTagsFromLead, RITUAL_COPY } from "@/components/today/todayRi
 import { getTodayTarotCardRu } from "@/components/today/todayTarotCardsRu";
 import { isDayNotReady, type TodayContractV1 } from "@/lib/todayContract";
 import type { CoreProfile } from "@/lib/types";
-import { resolveDailyTarotDeckIndex } from "@/lib/tarotCardAssets";
+import { tarotCardFacePicture, tarotCardFaceSrc, resolveDailyTarotDeckIndex } from "@/lib/tarotCardAssets";
 import { resolveDayPhase } from "@/lib/dayPhaseAtmosphere";
 import { resolveDayPhaseHeroWash, resolveHeroChromeTone } from "@/lib/dayPhaseHeroWash";
 import { useProductMoodTheme } from "@/lib/useProductDayNightTheme";
@@ -1264,7 +1266,7 @@ export function TodayCompositionSurface(props: Props) {
       reduceMotion={reduceMotion}
       startAtGrid
       allowSkipAnimation={false}
-      gridSize={5}
+      gridSize={12}
       gridLead={RITUAL_COPY.experiencePickCardEyebrow}
       gridSub={RITUAL_COPY.experienceTarotGridSub}
     />
@@ -1286,6 +1288,15 @@ export function TodayCompositionSurface(props: Props) {
       <div className={styles.ritualSpineStage} data-testid="today-zone-tarot-impact">
         <section className={styles.ritualReveal}>
           <p className={styles.ritualRevealKind}>Символ дня</p>
+          {engagement.tarotPickedId != null && tarotCardFaceSrc(engagement.tarotPickedId) ? (
+            <div className={styles.ritualRevealArt} data-testid="today-tarot-face-kept">
+              <TarotPicture
+                sources={tarotCardFacePicture(engagement.tarotPickedId)!}
+                alt={story.tarotImpact.title}
+                sizes="(max-width: 40rem) 52vw, 200px"
+              />
+            </div>
+          ) : null}
           <h2 className={styles.ritualRevealTitle}>{story.tarotImpact.title}</h2>
           <p className={styles.ritualRevealHeadline}>{story.tarotImpact.headline}</p>
           <p className={styles.ritualRevealBody}>{story.tarotImpact.body}</p>
@@ -1407,6 +1418,18 @@ export function TodayCompositionSurface(props: Props) {
       {!embeddedInWebDashboard ? topRowSection : null}
       {!embeddedInWebDashboard ? greetingSection : null}
 
+      {useProductFoundation ? (
+        <TodayActNav
+          items={[
+            { step: 1, label: copy.journey.actNavPlot, href: "#today-act-1" },
+            { step: 2, label: copy.journey.actNavSymbols, href: "#today-act-2" },
+            { step: 3, label: copy.journey.actNavReading, href: "#today-act-3" },
+            { step: 4, label: copy.journey.actNavMove, href: "#today-act-4" },
+            { step: 5, label: copy.journey.actNavBridge, href: "#today-act-5" },
+          ]}
+        />
+      ) : null}
+
       <TodayActShell
         step={1}
         title={copy.journey.dayTitle}
@@ -1474,6 +1497,15 @@ export function TodayCompositionSurface(props: Props) {
                   {story.tarotImpact ? (
                     <section className={styles.ritualReveal} data-testid="today-zone-tarot-impact">
                       <p className={styles.ritualRevealKind}>Символ дня · открыт</p>
+                      {engagement.tarotPickedId != null && tarotCardFaceSrc(engagement.tarotPickedId) ? (
+                        <div className={styles.ritualRevealArt} data-testid="today-tarot-face-kept">
+                          <TarotPicture
+                            sources={tarotCardFacePicture(engagement.tarotPickedId)!}
+                            alt={story.tarotImpact.title}
+                            sizes="(max-width: 40rem) 52vw, 200px"
+                          />
+                        </div>
+                      ) : null}
                       <h2 className={styles.ritualRevealTitle}>{story.tarotImpact.title}</h2>
                       <p className={styles.ritualRevealHeadline}>{story.tarotImpact.headline}</p>
                       <p className={styles.ritualRevealBody}>{story.tarotImpact.body}</p>
@@ -1521,6 +1553,9 @@ export function TodayCompositionSurface(props: Props) {
                   {story.numberImpact ? (
                     <section className={styles.ritualReveal} data-testid="today-zone-number-impact">
                       <p className={styles.ritualRevealKind}>Число дня · открыто</p>
+                      <div className={styles.ritualRevealNumber} data-testid="today-number-face-kept" aria-hidden>
+                        {props.numerologyValue || story.numberImpact.title}
+                      </div>
                       <h2 className={styles.ritualRevealTitle}>{story.numberImpact.title}</h2>
                       <p className={styles.ritualRevealHeadline}>{story.numberImpact.headline}</p>
                       <p className={styles.ritualRevealBody}>{story.numberImpact.body}</p>

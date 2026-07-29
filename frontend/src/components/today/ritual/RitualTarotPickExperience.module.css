@@ -189,6 +189,13 @@
   justify-content: center;
 }
 
+.deckStage {
+  position: relative;
+  width: 100%;
+  max-width: 28rem;
+  margin: 0.5rem auto 0;
+}
+
 .fanCard {
   position: absolute;
   left: 50%;

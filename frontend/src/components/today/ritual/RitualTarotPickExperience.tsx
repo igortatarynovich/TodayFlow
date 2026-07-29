@@ -1,18 +1,25 @@
 "use client";
 
-import type { CSSProperties } from "react";
-import { useEffect, useRef, useState } from "react";
+/**
+ * Today tarot pick — same wallet deck as Tarot spreads (not a fan).
+ * Any sleeve opens the predetermined day card (ritual honesty).
+ */
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { InteractiveCardDeck } from "@/components/tarot/InteractiveCardDeck";
+import { TarotPicture } from "@/components/tarot/TarotPicture";
 import { MotionFlip, MotionReveal } from "@/design-system/motion";
 import { pulseDayPhaseRevealFlash } from "@/lib/dayPhaseAtmosphere";
 import {
   tarotCardBackPicture,
   tarotCardFacePicture,
 } from "@/lib/tarotCardAssets";
-import { TarotPicture } from "@/components/tarot/TarotPicture";
+import type { TarotCard } from "@/lib/types";
+import { postJson } from "@/lib/api";
+import { TAROT_DECK_INDICES } from "@/components/today/todayTarotDraw";
 import { RITUAL_COPY } from "@/components/today/todayRitualCopy";
 import styles from "./RitualTarotPickExperience.module.css";
 
-type Phase = "idle" | "fan" | "reveal";
+type Phase = "idle" | "deck" | "reveal";
 
 type Props = {
   anchorCardId: number;
@@ -24,10 +31,10 @@ type Props = {
   /** PR1: face visible — отдельный `tarot_revealed` event. */
   onRevealed?: (id: number) => void;
   onContinue: () => void;
-  /** Fan size (default 5 closed backs). */
+  /** Kept for API compat; deck uses a fixed visual stack size. */
   gridSize?: number;
   reduceMotion: boolean;
-  /** Сразу веер закрытых карт (Today experience), без одиночной рубашки. */
+  /** Сразу колода (Today), без одиночной рубашки. */
   startAtGrid?: boolean;
   /** Скрыть «Показать карту сразу» — обход выбора. */
   allowSkipAnimation?: boolean;
@@ -46,32 +53,16 @@ function vibrate(pattern: number | number[], allow: boolean) {
   }
 }
 
-/** Fan arc transforms for 5 cards — center slightly raised. */
-function fanStyle(index: number, count: number, picked: number | null): CSSProperties {
-  const mid = (count - 1) / 2;
-  const t = index - mid;
-  const rotate = t * 7.5;
-  const lift = -Math.abs(t) * 6 + (Math.abs(t) === 0 ? 10 : 0);
-  const shiftX = t * 38;
-  const z = 10 - Math.abs(t);
-  const isPicked = picked === index;
-  const isDimmed = picked != null && !isPicked;
-  return {
-    "--fan-rotate": `${rotate}deg`,
-    "--fan-x": `${shiftX}px`,
-    "--fan-y": `${lift}px`,
-    "--fan-z": String(isPicked ? 40 : z),
-    "--stagger": `${index * 55}ms`,
-    ...(isDimmed
-      ? { opacity: 0.28, transform: `translateX(${shiftX}px) translateY(${lift + 12}px) rotate(${rotate}deg) scale(0.92)` }
-      : null),
-    ...(isPicked
-      ? {
-          opacity: 1,
-          transform: `translateX(${shiftX * 0.35}px) translateY(${lift - 28}px) rotate(${rotate * 0.25}deg) scale(1.08)`,
-        }
-      : null),
-  } as CSSProperties;
+function localDeckCards(count: number): TarotCard[] {
+  const n = Math.max(8, Math.min(count, TAROT_DECK_INDICES.length));
+  return TAROT_DECK_INDICES.slice(0, n).map((id) => ({
+    id,
+    name: `Card ${id}`,
+    keywords: [],
+    upright: "",
+    reversed: "",
+    correspondences: {},
+  }));
 }
 
 export function RitualTarotPickExperience({
@@ -85,20 +76,20 @@ export function RitualTarotPickExperience({
   reduceMotion,
   startAtGrid = false,
   allowSkipAnimation = true,
-  gridSize = 5,
+  gridSize = 12,
   gridLead,
   gridSub,
 }: Props) {
   const effectiveId = resumeCommittedId ?? anchorCardId;
   const [phase, setPhase] = useState<Phase>(() => {
     if (resumeCommittedId != null) return "reveal";
-    if (startAtGrid) return "fan";
+    if (startAtGrid) return "deck";
     return "idle";
   });
   const [pressed, setPressed] = useState(false);
-  const [fanOpen, setFanOpen] = useState(false);
-  const pickedRef = useRef<number | null>(null);
-  const [picked, setPicked] = useState<number | null>(null);
+  const [deckCards, setDeckCards] = useState<TarotCard[]>(() => localDeckCards(gridSize));
+  const [deckLoading, setDeckLoading] = useState(false);
+  const committedRef = useRef(false);
   const continueRef = useRef(false);
   const mountedInRevealRef = useRef(resumeCommittedId != null);
   const [cardFlipped, setCardFlipped] = useState(() => resumeCommittedId != null);
@@ -106,17 +97,48 @@ export function RitualTarotPickExperience({
   const back = tarotCardBackPicture();
   const face = tarotCardFacePicture(effectiveId) ?? back;
 
+  const deckKey = useMemo(
+    () => `today-deck:${anchorCardId}:${gridSize}`,
+    [anchorCardId, gridSize],
+  );
+
   useEffect(() => {
-    if (resumeCommittedId != null && phase === "idle" && pickedRef.current == null) {
+    if (resumeCommittedId != null && phase === "idle" && !committedRef.current) {
       setPhase("reveal");
     }
   }, [resumeCommittedId, phase]);
 
   useEffect(() => {
-    if (phase !== "fan") return;
-    const id = requestAnimationFrame(() => setFanOpen(true));
-    return () => cancelAnimationFrame(id);
-  }, [phase]);
+    if (phase !== "deck") return;
+    let cancelled = false;
+    setDeckLoading(true);
+    void (async () => {
+      try {
+        const data = await postJson<TarotCard[]>("/tarot/deck/draw", {
+          count: Math.max(8, gridSize),
+        });
+        if (!cancelled && Array.isArray(data) && data.length > 0) {
+          setDeckCards(data);
+        }
+      } catch {
+        try {
+          const data = await postJson<TarotCard[]>("/tarot/deck/draw/public", {
+            count: Math.max(8, gridSize),
+          });
+          if (!cancelled && Array.isArray(data) && data.length > 0) {
+            setDeckCards(data);
+          }
+        } catch {
+          /* keep localDeckCards */
+        }
+      } finally {
+        if (!cancelled) setDeckLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [phase, gridSize, deckKey]);
 
   useEffect(() => {
     if (phase !== "reveal") return;
@@ -131,6 +153,16 @@ export function RitualTarotPickExperience({
     return () => window.clearTimeout(t);
   }, [phase, reduceMotion]);
 
+  const commitDayCard = useCallback(() => {
+    if (committedRef.current) return;
+    committedRef.current = true;
+    vibrate(14, !reduceMotion);
+    onCommitMain(anchorCardId);
+    setPhase("reveal");
+    onRevealed?.(anchorCardId);
+    vibrate(18, !reduceMotion);
+  }, [anchorCardId, onCommitMain, onRevealed, reduceMotion]);
+
   const onContinueClick = () => {
     if (continueRef.current) return;
     continueRef.current = true;
@@ -141,36 +173,16 @@ export function RitualTarotPickExperience({
   const onIdleActivate = () => {
     vibrate(12, !reduceMotion);
     if (reduceMotion) {
-      setPhase("fan");
+      setPhase("deck");
       return;
     }
     setPressed(true);
     window.setTimeout(() => setPressed(false), 200);
-    window.setTimeout(() => setPhase("fan"), 190);
-  };
-
-  /** Ritual reveal: any sleeve opens the same predetermined day card. */
-  const onPickSleeve = (i: number) => {
-    if (pickedRef.current != null) return;
-    pickedRef.current = i;
-    vibrate(14, !reduceMotion);
-    setPicked(i);
-    onCommitMain(anchorCardId);
-    const delay = reduceMotion ? 0 : 320;
-    window.setTimeout(() => {
-      setPhase("reveal");
-      onRevealed?.(anchorCardId);
-      vibrate(18, !reduceMotion);
-    }, delay);
+    window.setTimeout(() => setPhase("deck"), 190);
   };
 
   const skipToRevealCommitted = () => {
-    if (pickedRef.current != null) return;
-    pickedRef.current = 0;
-    onCommitMain(anchorCardId);
-    setPhase("reveal");
-    onRevealed?.(anchorCardId);
-    vibrate(10, !reduceMotion);
+    commitDayCard();
   };
 
   if (phase === "reveal") {
@@ -209,33 +221,42 @@ export function RitualTarotPickExperience({
     );
   }
 
-  if (phase === "fan") {
+  if (phase === "deck") {
     return (
       <div
-        className={`${styles.wrap} ${styles.table} ${fanOpen ? styles.fanOpen : ""} ${picked != null ? styles.fanPicked : ""}`}
+        className={`${styles.wrap} ${styles.table}`}
         data-testid="ritual-tarot-pick-grid"
+        data-pick-mode="deck"
         data-reduce={reduceMotion ? "true" : undefined}
       >
         <div className={styles.gridHeader}>
           <p className={styles.gridLead}>{gridLead ?? RITUAL_COPY.tarotGridLead}</p>
           <p className={styles.gridSub}>{gridSub ?? RITUAL_COPY.tarotGridSub}</p>
         </div>
-        <div className={styles.fanStage} aria-label="Ритуал раскрытия карты дня">
-          {Array.from({ length: gridSize }, (_, i) => (
-            <button
-              key={i}
-              type="button"
-              className={`${styles.fanCard} ${picked === i ? styles.fanCardPicked : ""}`}
-              style={fanStyle(i, gridSize, picked)}
-              onClick={() => onPickSleeve(i)}
-              aria-label={`Рубашка ${i + 1}`}
-            >
-              <TarotPicture sources={back} sizes="96px" />
-            </button>
-          ))}
+        <div className={styles.deckStage} aria-label="Колода карты дня">
+          <InteractiveCardDeck
+            key={deckKey}
+            cards={deckCards}
+            requiredCount={1}
+            loading={deckLoading && deckCards.length === 0}
+            onCardsSelected={() => {
+              commitDayCard();
+            }}
+            ritualIntro="Стопка рубашек: тап или свайп снимает верхнюю карту."
+            variant="light"
+          />
         </div>
         <p className={styles.fanHonesty}>{RITUAL_COPY.tarotFanHonesty}</p>
         <p className={styles.gridFooter}>{RITUAL_COPY.tarotGridPickFooter}</p>
+        {/* Test / a11y fallback: commit without deck pointer path */}
+        <button
+          type="button"
+          className={styles.skipLink}
+          data-testid="ritual-tarot-deck-commit"
+          onClick={commitDayCard}
+        >
+          Снять верхнюю карту
+        </button>
       </div>
     );
   }

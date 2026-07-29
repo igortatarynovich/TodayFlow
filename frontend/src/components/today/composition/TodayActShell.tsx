@@ -34,6 +34,8 @@ export type TodayActShellProps = {
   slotAfter?: ReactNode;
   testId?: string;
   className?: string;
+  /** Stable DOM id for act nav anchors (`today-act-1` …). */
+  id?: string;
 };
 
 export function TodayActShell({
@@ -49,6 +51,7 @@ export function TodayActShell({
   slotAfter = null,
   testId,
   className = "",
+  id,
 }: TodayActShellProps) {
   const accentClass =
     accent === "sky"
@@ -59,10 +62,18 @@ export function TodayActShell({
           ? styles.accentAction
           : styles.accentDefault;
 
+  const actId =
+    id ??
+    (step != null && String(step).trim() !== ""
+      ? `today-act-${String(step).trim()}`
+      : undefined);
+
   return (
     <section
+      id={actId}
       className={[
         styles.shell,
+        styles.actScreen,
         accentClass,
         gutter === "none" ? styles.gutterNone : styles.gutterPage,
         bridge ? styles.bridge : "",
@@ -74,6 +85,7 @@ export function TodayActShell({
       data-today-act-shell="true"
       data-act-gutter={gutter}
       data-act-accent={accent}
+      data-act-step={step != null ? String(step) : undefined}
     >
       {motif ? <ProfileAtmosphere motif={motif} /> : null}
       {title ? (

@@ -397,7 +397,7 @@
 
 @media (min-width: 640px) {
   .narrativeBlock {
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: 1fr;
     align-items: start;
     padding: 1.35rem 1.35rem 1.45rem;
   }

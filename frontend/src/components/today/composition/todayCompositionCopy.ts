@@ -89,5 +89,10 @@ export const TODAY_COMPOSITION_COPY = {
     verdictStripLabel: "Сферы дня",
     verdictFallback: "Сферы дня пока без сигнала — не спокойный день, а нет данных.",
     glanceSlotHint: "",
+    actNavPlot: "Сюжет",
+    actNavSymbols: "Символы",
+    actNavReading: "Чтение",
+    actNavMove: "Действие",
+    actNavBridge: "Отклик",
   },
 } as const;
