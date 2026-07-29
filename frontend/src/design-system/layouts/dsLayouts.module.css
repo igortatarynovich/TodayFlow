@@ -121,6 +121,53 @@
   text-align: center;
 }
 
+.serviceSection {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.serviceCopy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  max-width: 36rem;
+}
+
+.serviceVisual {
+  display: grid;
+  place-items: center;
+  min-height: 12rem;
+}
+
+.serviceIconWrap {
+  display: grid;
+  place-items: center;
+  width: min(100%, 16rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 168, 115, 0.35);
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.92), rgba(247, 240, 228, 0.7) 55%, rgba(234, 217, 188, 0.45)),
+    linear-gradient(160deg, rgba(201, 168, 115, 0.12), transparent 60%);
+  box-shadow: 0 18px 48px rgba(90, 70, 48, 0.08);
+}
+
+.serviceIcon {
+  width: 3.5rem;
+  height: 3.5rem;
+  color: var(--tf-accent-gold);
+}
+
+@media (min-width: 48rem) {
+  .serviceSection {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 3.5rem;
+  }
+}
+
 .footer {
   border-top: 1px solid var(--tf-ds-border-gold);
   padding: var(--tf-ds-space-gutter);

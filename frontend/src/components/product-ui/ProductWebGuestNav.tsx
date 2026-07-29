@@ -16,31 +16,40 @@ export type ProductWebGuestNavProps = {
   ctaLabel: string;
   locale?: FlowPracticesChromeLocale;
   logoHref?: string;
-  /** Extra links (e.g. landing anchors) after guest product links. */
-  extraLinks?: ProductWebGuestNavLink[];
+  /**
+   * Full nav replacement (landing: all in-page anchors).
+   * When omitted, guest links point at `/#tarot` and `/#compatibility`.
+   */
+  links?: ProductWebGuestNavLink[];
   /** Currently active href for scroll-spy / route highlight. */
   activeHref?: string | null;
 };
 
-/** Guest marketing nav — same links as pre-auth product shell. */
+function hrefMatchesActive(href: string, activeHref: string | null): boolean {
+  if (!activeHref) return false;
+  if (href === activeHref) return true;
+  const normalize = (value: string) => (value.startsWith("/#") ? value.slice(1) : value);
+  return normalize(href) === normalize(activeHref);
+}
+
+/** Guest marketing nav — landing-section anchors, not direct product routes. */
 export function ProductWebGuestNav({
   ctaHref,
   ctaLabel,
   locale,
   logoHref = "/",
-  extraLinks,
+  links: linksOverride,
   activeHref = null,
 }: ProductWebGuestNavProps) {
   const resolvedLocale: FlowPracticesChromeLocale =
     locale ?? (getLocale() === "ru" ? "ru" : "en");
   const links = useMemo(() => {
-    const base = buildAppNavLinks(resolvedLocale, "guest");
-    const merged = [...base, ...(extraLinks ?? [])];
-    return merged.map((link) => ({
+    const base = linksOverride ?? buildAppNavLinks(resolvedLocale, "guest");
+    return base.map((link) => ({
       ...link,
-      active: Boolean(activeHref && activeHref === link.href),
+      active: hrefMatchesActive(link.href, activeHref),
     }));
-  }, [resolvedLocale, extraLinks, activeHref]);
+  }, [resolvedLocale, linksOverride, activeHref]);
 
   return (
     <DsMarketingNav

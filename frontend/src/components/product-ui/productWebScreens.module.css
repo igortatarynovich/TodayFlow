@@ -2162,7 +2162,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.375rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.75rem;
 }
 
 .authWebFormLabel {
@@ -2204,6 +2204,15 @@
 
 .authWebFormError {
   margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: #b42318;
+}
+
+/** Reserved line under field — keeps submit/footer from jumping when errors appear. */
+.authWebFormErrorSlot {
+  margin: 0;
+  min-height: 1.25rem;
   font-size: 0.8125rem;
   line-height: 1.45;
   color: #b42318;

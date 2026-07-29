@@ -127,13 +127,26 @@ async function performRequest<T>(path: string, options: RequestInit | undefined,
 
       // Handle specific error cases
       if (res.status === 401) {
-        // Unauthorized - clear token and let components redirect to login.
-        if (typeof window !== "undefined") {
+        // Login/signup failures must keep the API `detail` (localized invalid credentials).
+        // Clearing session on failed login would also wipe any prior guest token noise.
+        const isCredentialChallenge =
+          path.includes("/auth/login") ||
+          path.includes("/auth/email-signup") ||
+          path.includes("/auth/signup") ||
+          path.includes("/auth/magic");
+        if (!isCredentialChallenge && typeof window !== "undefined") {
           const { clearAuthSession, notifyAuthSessionChanged } = await import("@/lib/authSession");
           clearAuthSession();
           notifyAuthSessionChanged();
         }
-        throw new ApiError("Unauthorized. Please log in again.", res.status, path, details);
+        throw new ApiError(
+          message && !message.startsWith("Request failed")
+            ? message
+            : "Unauthorized. Please log in again.",
+          res.status,
+          path,
+          details,
+        );
       }
 
       if (res.status === 403) {

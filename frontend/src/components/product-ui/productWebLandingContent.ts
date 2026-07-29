@@ -1,4 +1,4 @@
-/** Product UI web landing — editorial copy (RU). Nav links: `@/lib/appNavConfig` guest order. */
+/** Product UI web landing — editorial copy (RU). */
 
 import { GUEST_ACCESS_LIMITS } from "@/lib/guestAccessLimits";
 
@@ -19,39 +19,46 @@ export const PRODUCT_WEB_LANDING_ORBIT_NODES = [
   { id: "sage", label: "Память", style: { top: "82%", left: "52%" } },
 ] as const;
 
-/** Без регистрации — то, что можно попробовать сразу. */
-export const PRODUCT_WEB_LANDING_GUEST_TRIALS = [
+export type LandingServiceSection = {
+  id: "tarot" | "compatibility" | "practices";
+  eyebrow: string;
+  title: string;
+  body: string;
+  href: string;
+  cta: string;
+  icon: "tarot" | "users" | "activity";
+};
+
+/** One viewport per guest service — nav scrolls here; CTA opens the product route. */
+export const PRODUCT_WEB_LANDING_SERVICE_SECTIONS: LandingServiceSection[] = [
   {
     id: "tarot",
+    eyebrow: "Без регистрации",
+    title: "Таро — вопрос и ясный расклад",
+    body: `${GUEST_ACCESS_LIMITS.tarotSpreads} расклад бесплатно: задай вопрос, открой карты и получи ответ, который можно унести в день.`,
     href: "/tarot",
-    title: "Расклад Таро",
-    body: `${GUEST_ACCESS_LIMITS.tarotSpreads} расклад бесплатно — задай вопрос и открой карты.`,
-    icon: "tarot" as const,
     cta: "Открыть Таро",
+    icon: "tarot",
   },
   {
     id: "compatibility",
+    eyebrow: "Без регистрации",
+    title: "Совместимость — две карты рядом",
+    body: `${GUEST_ACCESS_LIMITS.compatibilityChecks} проверки пар бесплатно: увидишь, где вы усиливаете друг друга и где лучше беречь границы.`,
     href: "/compatibility",
-    title: "Совместимость",
-    body: `${GUEST_ACCESS_LIMITS.compatibilityChecks} проверки пар бесплатно — без аккаунта.`,
-    icon: "users" as const,
     cta: "Проверить пару",
+    icon: "users",
   },
   {
     id: "practices",
+    eyebrow: "Без регистрации",
+    title: "Практики — короткий шаг в теле",
+    body: "Базовые практики для спокойного дня: дыхание, фокус и короткие ритуалы, когда нужна опора без длинного разбора.",
     href: "/practices",
-    title: "Практики",
-    body: "Базовые практики для спокойного дня — дыхание, фокус, короткие ритуалы.",
-    icon: "activity" as const,
     cta: "К практикам",
+    icon: "activity",
   },
-] as const;
-
-export const PRODUCT_WEB_LANDING_GUEST_SECTION = {
-  eyebrow: "Без регистрации",
-  title: "Попробуй сейчас",
-  lead: "Today и профиль откроются после регистрации. До этого — три инструмента, чтобы почувствовать продукт.",
-} as const;
+];
 
 /** После регистрации — обещание Today (статичное превью, без персональных данных). */
 export const PRODUCT_WEB_LANDING_TODAY_PROMISE = {
@@ -101,16 +108,22 @@ export const PRODUCT_WEB_LANDING_FINAL = {
   cta: "Создать мой Today",
 } as const;
 
-/** In-page anchors for full-screen landing sections (nav + scroll-spy). */
-export const PRODUCT_WEB_LANDING_ANCHORS = [
-  { id: "try", href: "#try", label: "Попробовать" },
+/**
+ * Top marketing nav — all in-page anchors (SoT v4).
+ * Practices has a section + CTA but no separate top-nav item.
+ */
+export const PRODUCT_WEB_LANDING_NAV = [
+  { id: "tarot", href: "#tarot", label: "Таро" },
+  { id: "compatibility", href: "#compatibility", label: "Совместимость" },
   { id: "today", href: "#today", label: "Как это работает" },
   { id: "why", href: "#why", label: "Почему возвращаются" },
 ] as const;
 
 export const PRODUCT_WEB_LANDING_SECTION_IDS = [
   "hero",
-  "try",
+  "tarot",
+  "compatibility",
+  "practices",
   "today",
   "why",
   "cta",

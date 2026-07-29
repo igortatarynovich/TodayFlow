@@ -3,19 +3,17 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import {
-  PRODUCT_WEB_LANDING_ANCHORS,
   PRODUCT_WEB_LANDING_FINAL,
   PRODUCT_WEB_LANDING_FOOTER,
-  PRODUCT_WEB_LANDING_GUEST_SECTION,
-  PRODUCT_WEB_LANDING_GUEST_TRIALS,
   PRODUCT_WEB_LANDING_HERO,
+  PRODUCT_WEB_LANDING_NAV,
   PRODUCT_WEB_LANDING_ORBIT_NODES,
   PRODUCT_WEB_LANDING_RETURN_REASONS,
   PRODUCT_WEB_LANDING_SECTION_IDS,
+  PRODUCT_WEB_LANDING_SERVICE_SECTIONS,
   PRODUCT_WEB_LANDING_TODAY_PROMISE,
 } from "@/components/product-ui/productWebLandingContent";
 import { ProductWebGuestNav } from "@/components/product-ui/ProductWebGuestNav";
-import { buildAppNavLinks } from "@/lib/appNavConfig";
 import {
   DsBody,
   DsButton,
@@ -53,7 +51,7 @@ const ORBIT_NODE_ICONS = {
   sage: IconMountain,
 } as const;
 
-const GUEST_TRIAL_ICONS = {
+const SERVICE_ICONS = {
   tarot: IconTarot,
   users: IconUsers,
   activity: IconActivity,
@@ -106,8 +104,8 @@ function useLandingActiveSection(): string | null {
           }
         });
         if (bestId) {
-          const anchor = PRODUCT_WEB_LANDING_ANCHORS.find((item) => item.id === bestId);
-          setActiveHref(anchor ? anchor.href : null);
+          const navItem = PRODUCT_WEB_LANDING_NAV.find((item) => item.id === bestId);
+          setActiveHref(navItem ? navItem.href : null);
         }
       },
       {
@@ -129,10 +127,9 @@ function useLandingActiveSection(): string | null {
 
 export function ProductWebLanding({ signupHref, loginHref }: Props) {
   const year = new Date().getFullYear();
-  const guestNavLinks = buildAppNavLinks("ru", "guest");
   const activeHref = useLandingActiveSection();
-  const anchorLinks = useMemo(
-    () => PRODUCT_WEB_LANDING_ANCHORS.map(({ href, label }) => ({ href, label })),
+  const navLinks = useMemo(
+    () => PRODUCT_WEB_LANDING_NAV.map(({ href, label }) => ({ href, label })),
     [],
   );
 
@@ -151,7 +148,7 @@ export function ProductWebLanding({ signupHref, loginHref }: Props) {
           ctaHref={signupHref}
           ctaLabel={PRODUCT_WEB_LANDING_HERO.primaryCta}
           locale="ru"
-          extraLinks={anchorLinks}
+          links={navLinks}
           activeHref={activeHref}
         />
       }
@@ -168,17 +165,15 @@ export function ProductWebLanding({ signupHref, loginHref }: Props) {
             </div>
             <div className={l.footerColumns}>
               <div>
-                <DsEyebrow>Попробовать</DsEyebrow>
-                {guestNavLinks.map((link) => (
+                <DsEyebrow>Разделы</DsEyebrow>
+                {PRODUCT_WEB_LANDING_NAV.map((link) => (
                   <Link key={link.href} href={link.href} className={l.footerLink}>
                     {link.label}
                   </Link>
                 ))}
-                {PRODUCT_WEB_LANDING_ANCHORS.map((link) => (
-                  <Link key={link.href} href={link.href} className={l.footerLink}>
-                    {link.label}
-                  </Link>
-                ))}
+                <Link href="#practices" className={l.footerLink}>
+                  Практики
+                </Link>
               </div>
               <div>
                 <DsEyebrow>Компания</DsEyebrow>
@@ -225,37 +220,37 @@ export function ProductWebLanding({ signupHref, loginHref }: Props) {
         </div>
       </DsMarketingSection>
 
-      <DsMarketingSection
-        id="try"
-        screen
-        tight
-        aria-labelledby="landing-guest-title"
-        testId="landing-section-try"
-      >
-        <div className={l.centerStack}>
-          <DsEyebrow>{PRODUCT_WEB_LANDING_GUEST_SECTION.eyebrow}</DsEyebrow>
-          <DsSectionTitle id="landing-guest-title">{PRODUCT_WEB_LANDING_GUEST_SECTION.title}</DsSectionTitle>
-          <DsBody muted>{PRODUCT_WEB_LANDING_GUEST_SECTION.lead}</DsBody>
-        </div>
-        <div className={l.grid3}>
-          {PRODUCT_WEB_LANDING_GUEST_TRIALS.map((trial) => {
-            const Icon = GUEST_TRIAL_ICONS[trial.icon] ?? IconSparkles;
-            return (
-              <div key={trial.id} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-                <DsFeatureTile
-                  testId={`landing-guest-${trial.id}`}
-                  icon={<Icon />}
-                  title={trial.title}
-                  body={trial.body}
-                />
-                <DsButton href={trial.href} variant="secondary">
-                  {trial.cta}
-                </DsButton>
+      {PRODUCT_WEB_LANDING_SERVICE_SECTIONS.map((service, index) => {
+        const Icon = SERVICE_ICONS[service.icon] ?? IconSparkles;
+        const titleId = `landing-service-${service.id}`;
+        return (
+          <DsMarketingSection
+            key={service.id}
+            id={service.id}
+            screen
+            tight
+            tone={index % 2 === 1 ? "muted" : "default"}
+            testId={`landing-section-${service.id}`}
+            aria-labelledby={titleId}
+          >
+            <div className={l.serviceSection}>
+              <div className={l.serviceCopy}>
+                <DsEyebrow>{service.eyebrow}</DsEyebrow>
+                <DsSectionTitle id={titleId}>{service.title}</DsSectionTitle>
+                <DsBody muted>{service.body}</DsBody>
+                <div className={l.heroCtas}>
+                  <DsButton href={service.href}>{service.cta}</DsButton>
+                </div>
               </div>
-            );
-          })}
-        </div>
-      </DsMarketingSection>
+              <div className={l.serviceVisual} aria-hidden>
+                <span className={l.serviceIconWrap}>
+                  <Icon className={l.serviceIcon} />
+                </span>
+              </div>
+            </div>
+          </DsMarketingSection>
+        );
+      })}
 
       <DsMarketingSection id="today" screen tone="muted" testId="landing-section-today" aria-labelledby="landing-today-promise">
         <DsThemePanel

@@ -42,8 +42,8 @@ describe("appNavConfig", () => {
   it("buildAppNavLinks returns href + label without icons", () => {
     const links = buildAppNavLinks("ru", "guest");
     expect(links).toEqual([
-      { href: "/tarot", label: "Таро" },
-      { href: "/compatibility", label: "Совместимость" },
+      { href: "/#tarot", label: "Таро" },
+      { href: "/#compatibility", label: "Совместимость" },
     ]);
   });
 

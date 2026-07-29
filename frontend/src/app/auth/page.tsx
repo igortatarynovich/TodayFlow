@@ -1,9 +1,9 @@
 "use client";
 
-import { FormEvent, Suspense, useState, useEffect } from "react";
+import { FormEvent, Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { postJson } from "@/lib/api";
+import { ApiError, postJson } from "@/lib/api";
 import { OAuthButtons } from "@/components/auth/OAuthButtons";
 import { LoadingSpinner } from "@/components/orbit";
 import { AuthWebScreen } from "@/components/product-ui/AuthWebScreen";
@@ -28,6 +28,62 @@ type FieldErrors = {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+function mapLoginFailure(err: unknown): FieldErrors {
+  const invalidCredentials = t("auth.errors.invalidCredentials", "Неверный email или пароль");
+  const networkError = t(
+    "auth.errors.network",
+    "Не удалось подключиться. Попробуйте ещё раз",
+  );
+  const rateLimited = t(
+    "auth.errors.rateLimited",
+    "Слишком много попыток. Попробуйте позже",
+  );
+  const serverError = t("auth.errors.server", "Не удалось подключиться. Попробуйте ещё раз");
+
+  if (err instanceof ApiError) {
+    if (err.status === 0) {
+      return { password: networkError };
+    }
+    if (err.status === 429) {
+      return { password: rateLimited };
+    }
+    if (err.status >= 500) {
+      return { password: serverError };
+    }
+    if (err.status === 401) {
+      return { email: invalidCredentials, password: invalidCredentials };
+    }
+  }
+
+  const errorMessage = err instanceof Error ? err.message : t("auth.login.error", "Ошибка входа");
+  const lower = errorMessage.toLowerCase();
+
+  if (
+    lower.includes("network") ||
+    lower.includes("fetch") ||
+    lower.includes("подключ") ||
+    lower.includes("connection")
+  ) {
+    return { password: networkError };
+  }
+  if (lower.includes("too many") || lower.includes("rate") || lower.includes("попыток")) {
+    return { password: rateLimited };
+  }
+  if (
+    lower.includes("unauthorized") ||
+    lower.includes("credential") ||
+    lower.includes("invalid") ||
+    lower.includes("неверн") ||
+    lower.includes("пароль") ||
+    lower.includes("password") ||
+    lower.includes("email")
+  ) {
+    return { email: invalidCredentials, password: invalidCredentials };
+  }
+
+  return { password: errorMessage };
+}
+
 function AuthPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -43,6 +99,8 @@ function AuthPageContent() {
   const [redirectTarget, setRedirectTarget] = useState("/today");
   const [postAuthTarget, setPostAuthTarget] = useState("/today");
   const softSignupHref = guestSignupHref();
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const redirectParam = searchParams?.get("redirect");
@@ -50,7 +108,6 @@ function AuthPageContent() {
     const safeRedirect = getSafeRedirectTarget(redirectParam);
     setRedirectTarget(safeRedirect);
     setPostAuthTarget(safeRedirect);
-    // Password signup retired — send new users into soft onboarding.
     if (modeParam === "signup") {
       router.replace(buildAuthHref("signup", redirectParam));
     }
@@ -91,6 +148,16 @@ function AuthPageContent() {
     return next;
   };
 
+  const focusFirstError = (next: FieldErrors) => {
+    if (next.email) {
+      emailRef.current?.focus();
+      return;
+    }
+    if (next.password) {
+      passwordRef.current?.focus();
+    }
+  };
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setSuccessMessage(null);
@@ -98,6 +165,7 @@ function AuthPageContent() {
     const nextErrors = validate();
     if (nextErrors.email || nextErrors.password) {
       setErrors(nextErrors);
+      focusFirstError(nextErrors);
       return;
     }
 
@@ -114,52 +182,15 @@ function AuthPageContent() {
       setPostAuthTarget(target);
       setSuccessMessage(t("auth.toast.loginNext", "Вход выполнен. Открываем следующий шаг."));
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : t("auth.login.error", "Ошибка входа");
-      const lower = errorMessage.toLowerCase();
-      const invalidCredentials = t(
-        "auth.errors.invalidCredentials",
-        "Неверный email или пароль",
-      );
-
-      // Backend returns one message for wrong password and unknown email (by design).
-      if (
-        lower.includes("credential") ||
-        lower.includes("invalid") ||
-        lower.includes("неверн") ||
-        lower.includes("пароль") ||
-        lower.includes("password") ||
-        lower.includes("email")
-      ) {
-        setErrors({
-          email: invalidCredentials,
-          password: invalidCredentials,
-        });
-      } else {
-        setErrors({ password: errorMessage });
-      }
+      const mapped = mapLoginFailure(err);
+      setErrors(mapped);
+      focusFirstError(mapped);
     } finally {
       setLoading(false);
     }
   };
 
-  if (authLoading) {
-    return (
-      <AuthWebScreen
-        mode={mode}
-        onSelectLogin={() => {}}
-        onSelectSignup={() => {}}
-        loginTabLabel=""
-        signupTabLabel=""
-        headline=""
-        lead=""
-        formOnly
-        loading
-      />
-    );
-  }
-
-  if (isAuthenticated) {
+  if (authLoading || isAuthenticated) {
     return (
       <AuthWebScreen
         mode={mode}
@@ -200,6 +231,7 @@ function AuthPageContent() {
               {t("auth.common.email", "Эл. почта")}
             </label>
             <input
+              ref={emailRef}
               id="email"
               type="email"
               autoComplete="email"
@@ -211,14 +243,12 @@ function AuthPageContent() {
               className={emailError ? `${s.authWebFormInput} ${s.authWebFormInputError}` : s.authWebFormInput}
               placeholder={t("auth.form.emailPlaceholder", "you@example.com")}
               aria-invalid={Boolean(emailError)}
-              aria-describedby={emailError ? "email-error" : undefined}
+              aria-describedby="email-error"
               disabled={loading}
             />
-            {emailError ? (
-              <p id="email-error" className={s.authWebFormError} role="alert">
-                {emailError}
-              </p>
-            ) : null}
+            <p id="email-error" className={s.authWebFormErrorSlot} role={emailError ? "alert" : undefined}>
+              {emailError ?? "\u00a0"}
+            </p>
           </div>
 
           <div className={s.authWebFormField}>
@@ -227,6 +257,7 @@ function AuthPageContent() {
             </label>
             <div className={s.authWebFormPasswordWrap}>
               <input
+                ref={passwordRef}
                 id="password"
                 type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
@@ -240,7 +271,7 @@ function AuthPageContent() {
                 }
                 placeholder={t("auth.form.passwordPlaceholder.login", "Введите пароль")}
                 aria-invalid={Boolean(passwordError)}
-                aria-describedby={passwordError ? "password-error" : undefined}
+                aria-describedby="password-error"
                 disabled={loading}
               />
               <button
@@ -253,11 +284,13 @@ function AuthPageContent() {
                 {showPassword ? "Скрыть" : "Показать"}
               </button>
             </div>
-            {passwordError ? (
-              <p id="password-error" className={s.authWebFormError} role="alert">
-                {passwordError}
-              </p>
-            ) : null}
+            <p
+              id="password-error"
+              className={s.authWebFormErrorSlot}
+              role={passwordError ? "alert" : undefined}
+            >
+              {passwordError ?? "\u00a0"}
+            </p>
           </div>
 
           {successMessage ? <p className={s.authWebFormSuccess}>{successMessage}</p> : null}

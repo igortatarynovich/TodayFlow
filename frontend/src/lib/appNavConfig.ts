@@ -81,6 +81,12 @@ export const APP_NAV_PRIMARY_ORDER: AppNavItemId[] = [
 /** Pre-auth: guest trials on landing, auth, marketing surfaces. */
 export const APP_NAV_GUEST_ORDER: AppNavItemId[] = ["tarot", "compatibility"];
 
+/** Guest top-nav → landing section anchors (not product routes). */
+export const APP_NAV_GUEST_LANDING_HREF: Partial<Record<AppNavItemId, string>> = {
+  tarot: "/#tarot",
+  compatibility: "/#compatibility",
+};
+
 export type AppNavMode = "authenticated" | "guest";
 
 export type AppNavItem = {
@@ -112,9 +118,10 @@ export function buildAppNavItems(
   const order = mode === "guest" ? APP_NAV_GUEST_ORDER : APP_NAV_PRIMARY_ORDER;
   return order.map((id) => {
     const def = APP_NAV_ITEM_DEFS[id];
+    const landingHref = mode === "guest" ? APP_NAV_GUEST_LANDING_HREF[id] : undefined;
     return {
       id,
-      href: def.href,
+      href: landingHref ?? def.href,
       icon: def.icon,
       label: resolveAppNavLabel(id, locale),
     };
