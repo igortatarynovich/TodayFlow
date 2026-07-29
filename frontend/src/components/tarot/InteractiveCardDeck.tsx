@@ -19,25 +19,11 @@ interface InteractiveCardDeckProps {
   variant?: "light" | "dark";
 }
 
-const FAN_WIDTH = 112;
-const FOCUS_WIDTH = 300;
-const STRIP_WIDTH = 76;
-
-function fanStyle(index: number, count: number): CSSProperties {
-  const mid = (count - 1) / 2;
-  const t = index - mid;
-  const rotate = t * 6.5;
-  const lift = -Math.abs(t) * 5 + (t === 0 ? 8 : 0);
-  const shiftX = t * 42;
-  const z = 20 - Math.abs(t);
-  return {
-    "--fan-rotate": `${rotate}deg`,
-    "--fan-x": `${shiftX}px`,
-    "--fan-y": `${lift}px`,
-    "--fan-z": String(z),
-    "--stagger": `${index * 40}ms`,
-  } as CSSProperties;
-}
+const FOCUS_WIDTH = 280;
+const STRIP_WIDTH = 72;
+const STACK_WIDTH = 132;
+/** Visible back layers in the table deck (visual depth only). */
+const STACK_LAYERS = 4;
 
 export function InteractiveCardDeck({
   cards,
@@ -51,13 +37,13 @@ export function InteractiveCardDeck({
   const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
   const [revealedCards, setRevealedCards] = useState<Map<number, "upright" | "reversed">>(new Map());
   const [focusIndex, setFocusIndex] = useState<number | null>(null);
-  const [fanOpen, setFanOpen] = useState(false);
   const [focusFlipped, setFocusFlipped] = useState(false);
+  const [deckReady, setDeckReady] = useState(false);
 
   const focusHeight = tarotCardDisplayHeightPx(FOCUS_WIDTH);
 
   useEffect(() => {
-    const id = requestAnimationFrame(() => setFanOpen(true));
+    const id = requestAnimationFrame(() => setDeckReady(true));
     return () => cancelAnimationFrame(id);
   }, []);
 
@@ -81,12 +67,12 @@ export function InteractiveCardDeck({
     [selectedIndices, cards, revealedCards],
   );
 
-  const available = useMemo(
-    () => cards.map((card, index) => ({ card, index })).filter((item) => !selectedIndices.includes(item.index)),
+  const remainingIndices = useMemo(
+    () => cards.map((_, index) => index).filter((index) => !selectedIndices.includes(index)),
     [cards, selectedIndices],
   );
 
-  const canSelectMore = selectedIndices.length < requiredCount;
+  const canSelectMore = selectedIndices.length < requiredCount && remainingIndices.length > 0;
   const focusCard = focusIndex != null ? cards[focusIndex] : null;
   const focusOrientation = focusIndex != null ? revealedCards.get(focusIndex) || "upright" : "upright";
   const focusSlot = focusIndex != null ? selectedIndices.indexOf(focusIndex) : -1;
@@ -107,8 +93,10 @@ export function InteractiveCardDeck({
     }
   };
 
-  const handlePick = (index: number) => {
-    if (selectedIndices.includes(index) || selectedIndices.length >= requiredCount) return;
+  const drawNext = () => {
+    if (!canSelectMore) return;
+    const index = remainingIndices[0];
+    if (index == null) return;
     const orientation: "upright" | "reversed" = Math.random() < 0.5 ? "upright" : "reversed";
     const nextIndices = [...selectedIndices, index];
     const nextRevealed = new Map(revealedCards);
@@ -133,8 +121,13 @@ export function InteractiveCardDeck({
         ? activeStepLabel
         : "Расклад собран";
 
+  const stackLayerCount = Math.min(STACK_LAYERS, Math.max(1, remainingIndices.length));
+
   return (
-    <div className={`${styles.root} ${variant === "dark" ? styles.rootDark : ""} ${fanOpen ? styles.fanOpen : ""}`.trim()}>
+    <div
+      className={`${styles.root} ${variant === "dark" ? styles.rootDark : ""} ${deckReady ? styles.deckReady : ""}`.trim()}
+      data-testid="tarot-interactive-deck"
+    >
       {spreadTitle ? (
         <div className={styles.header}>
           <h3 className={styles.spreadTitle}>{spreadTitle}</h3>
@@ -145,42 +138,54 @@ export function InteractiveCardDeck({
         </div>
       ) : null}
 
-      <div className={styles.stage}>
-        <div className={styles.stageLeft}>
-          <p className={styles.stepEyebrow}>Шаг</p>
-          <p className={styles.stepLabel}>
-            {canSelectMore ? `Выбери: ${activeStepLabel}` : "Готово — открой толкование или сбрось."}
-          </p>
-          {ritualIntro ? <p className={styles.intro}>{ritualIntro}</p> : null}
+      <div className={styles.strip} aria-label="Карты расклада">
+        {Array.from({ length: requiredCount }).map((_, slotIndex) => {
+          const selected = orderedSelected[slotIndex];
+          const slotLabel = selectionLabels?.[slotIndex] || `Карта ${slotIndex + 1}`;
+          const isActive = selected != null && selected.index === focusIndex;
+          const isNext = canSelectMore && slotIndex === selectedIndices.length;
 
-          {canSelectMore && available.length > 0 ? (
-            <div className={styles.fanStage} aria-label="Колода для выбора">
-              {available.slice(0, 7).map((item, fanIndex, arr) => (
-                <button
-                  key={`${item.card.id}-${item.index}`}
-                  type="button"
-                  className={styles.fanCard}
-                  style={fanStyle(fanIndex, arr.length)}
-                  onClick={() => handlePick(item.index)}
-                  aria-label={`Выбрать рубашку ${fanIndex + 1}`}
-                >
-                  <TarotCardBack widthPx={FAN_WIDTH} chrome="bare" />
-                </button>
-              ))}
-            </div>
-          ) : (
-            <p className={styles.fanDoneHint}>Все карты выбраны — смотри фокус и полосу расклада.</p>
-          )}
-
-          <p className={styles.trustHint}>Прислушайся к первому импульсу.</p>
-
-          {selectedIndices.length > 0 ? (
-            <button type="button" onClick={handleReset} className={styles.resetLink}>
-              Сбросить выбор
+          return (
+            <button
+              key={slotLabel}
+              type="button"
+              className={`${styles.stripSlot} ${selected ? styles.stripSlotFilled : ""} ${isActive ? styles.stripSlotActive : ""} ${isNext ? styles.stripSlotNext : ""}`.trim()}
+              disabled={!selected}
+              onClick={() => selected && setFocusIndex(selected.index)}
+              aria-label={selected ? `${slotLabel}: ${selected.card.name}` : `${slotLabel}: пусто`}
+              aria-pressed={isActive}
+            >
+              <p className={styles.stripLabel}>{slotLabel}</p>
+              {selected ? (
+                <>
+                  <div className={styles.stripArt}>
+                    <CardVisual
+                      card={selected.card}
+                      orientation={selected.orientation}
+                      size="xs"
+                      widthPx={STRIP_WIDTH}
+                      chrome="bare"
+                      showName={false}
+                    />
+                  </div>
+                  <p className={styles.stripName}>{selected.card.name}</p>
+                </>
+              ) : (
+                <div className={styles.stripArt}>
+                  <TarotCardBack widthPx={STRIP_WIDTH} chrome="bare" dimmed />
+                </div>
+              )}
             </button>
-          ) : null}
-        </div>
+          );
+        })}
+      </div>
 
+      <p className={styles.stepLabel}>
+        {canSelectMore ? `Сейчас: ${activeStepLabel}` : "Все карты открыты — можно смотреть толкование."}
+      </p>
+      {ritualIntro ? <p className={styles.intro}>{ritualIntro}</p> : null}
+
+      <div className={styles.stage}>
         <div className={styles.stageFocus}>
           {focusCard ? (
             <>
@@ -218,58 +223,53 @@ export function InteractiveCardDeck({
           ) : (
             <div className={styles.focusEmpty}>
               <p className={styles.focusEmptyTitle}>Карта откроется здесь</p>
-              <p className={styles.focusEmptyBody}>Выберите рубашку слева — карта откроется крупнее.</p>
+              <p className={styles.focusEmptyBody}>Коснитесь колоды ниже — или нажмите «Взять карту».</p>
             </div>
           )}
         </div>
-      </div>
 
-      <div className={styles.strip} aria-label="Карты расклада">
-        {Array.from({ length: requiredCount }).map((_, slotIndex) => {
-          const selected = orderedSelected[slotIndex];
-          const slotLabel = selectionLabels?.[slotIndex] || `Карта ${slotIndex + 1}`;
-          const isActive = selected != null && selected.index === focusIndex;
+        <div className={styles.deckColumn}>
+          {canSelectMore ? (
+            <>
+              <button
+                type="button"
+                className={styles.deckStack}
+                onClick={drawNext}
+                aria-label={`Взять карту: ${activeStepLabel}`}
+                data-testid="tarot-deck-draw"
+              >
+                {Array.from({ length: stackLayerCount }).map((_, layer) => {
+                  const fromBack = stackLayerCount - 1 - layer;
+                  const style = {
+                    "--stack-i": String(fromBack),
+                    "--stack-n": String(stackLayerCount),
+                  } as CSSProperties;
+                  return (
+                    <span key={layer} className={styles.deckLayer} style={style} aria-hidden={layer > 0}>
+                      <TarotCardBack widthPx={STACK_WIDTH} chrome="bare" />
+                    </span>
+                  );
+                })}
+              </button>
+              <button type="button" className={styles.drawCta} onClick={drawNext} data-testid="tarot-deck-draw-cta">
+                Взять карту
+              </button>
+              <p className={styles.trustHint}>Одна колода — один жест. Без веера и мелких целей.</p>
+            </>
+          ) : (
+            <p className={styles.fanDoneHint}>Расклад собран.</p>
+          )}
 
-          return (
-            <button
-              key={slotLabel}
-              type="button"
-              className={`${styles.stripSlot} ${selected ? styles.stripSlotFilled : ""} ${isActive ? styles.stripSlotActive : ""}`}
-              disabled={!selected}
-              onClick={() => selected && setFocusIndex(selected.index)}
-              aria-label={selected ? `${slotLabel}: ${selected.card.name}` : `${slotLabel}: пусто`}
-              aria-pressed={isActive}
-            >
-              <p className={styles.stripLabel}>{slotLabel}</p>
-              {selected ? (
-                <>
-                  <div className={styles.stripArt}>
-                    <CardVisual
-                      card={selected.card}
-                      orientation={selected.orientation}
-                      size="xs"
-                      widthPx={STRIP_WIDTH}
-                      chrome="bare"
-                      showName={false}
-                    />
-                  </div>
-                  <p className={styles.stripName}>{selected.card.name}</p>
-                  <p className={styles.stripOrient}>
-                    {selected.orientation === "reversed" ? "Перевёрнута" : "Прямая"}
-                  </p>
-                </>
-              ) : (
-                <div className={styles.stripArt}>
-                  <TarotCardBack widthPx={STRIP_WIDTH} chrome="bare" dimmed />
-                </div>
-              )}
+          {selectedIndices.length > 0 ? (
+            <button type="button" onClick={handleReset} className={styles.resetLink}>
+              Сбросить выбор
             </button>
-          );
-        })}
+          ) : null}
+        </div>
       </div>
 
       {selectedIndices.length === requiredCount ? (
-        <p className={styles.doneNote}>Все выбраны — открой толкование.</p>
+        <p className={styles.doneNote}>Все карты на месте — откройте толкование.</p>
       ) : null}
     </div>
   );

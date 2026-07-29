@@ -246,8 +246,8 @@ function TarotSpreadRitualContent() {
           {displayQuestion ? <p className={s.tarotRitualQuestion}>«{displayQuestion}»</p> : null}
           <p className={s.tarotRitualLead} style={{ marginTop: "0.25rem", fontSize: "0.875rem" }}>
             {anchorParam && anchorCard
-              ? `Первая карта уже на месте — добери ещё ${requiredFromDeck === 1 ? "одну" : requiredFromDeck}.`
-              : `Выберите ${requiredCount === 1 ? "одну карту" : `${requiredCount} карты`} — карта откроется крупнее.`}
+              ? `Первая карта уже на месте — возьмите ещё ${requiredFromDeck === 1 ? "одну" : requiredFromDeck}.`
+              : `Нужно ${requiredCount === 1 ? "одну карту" : `${requiredCount} карты`}: коснитесь колоды или нажмите «Взять карту».`}
           </p>
           {anchorParam && anchorCard ? (
             <div className={s.tarotRitualAnchor}>
@@ -272,7 +272,7 @@ function TarotSpreadRitualContent() {
               ritualIntro={
                 anchorParam
                   ? "Добавьте карты к якорю — это продолжение разговора с днём."
-                  : "Выберите рубашку — карта откроется крупнее."
+                  : "Колода на столе: один жест — одна карта."
               }
               variant="dark"
             />

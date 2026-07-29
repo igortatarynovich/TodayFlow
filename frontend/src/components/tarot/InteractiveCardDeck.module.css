@@ -4,7 +4,7 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.1rem;
 }
 
 .header {
@@ -25,114 +25,37 @@
   color: rgba(42, 37, 32, 0.55);
 }
 
-.stage {
-  display: grid;
-  gap: 1.5rem;
-  align-items: end;
-  min-width: 0;
-}
-
-@media (min-width: 52rem) {
-  .stage {
-    grid-template-columns: minmax(0, 1fr) minmax(17rem, 22rem);
-    align-items: center;
-  }
-}
-
-.stageLeft {
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-  min-width: 0;
-}
-
-.stepEyebrow {
-  margin: 0;
-  font-size: 0.68rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #8f6e43;
-}
-
 .stepLabel {
   margin: 0;
   font-size: 0.95rem;
-  line-height: 1.55;
+  line-height: 1.5;
   color: #5f4930;
+  font-weight: 600;
 }
 
 .intro {
   margin: 0;
   color: #7a6140;
-  line-height: 1.65;
+  line-height: 1.6;
   font-size: 0.9rem;
   max-width: 28rem;
 }
 
-.fanStage {
-  position: relative;
-  width: min(100%, 26rem);
-  height: 210px;
-  margin: 0.35rem 0 0;
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.35rem;
+  min-width: 0;
 }
 
-.fanCard {
-  position: absolute;
-  left: 50%;
-  bottom: 18px;
-  width: 112px;
-  aspect-ratio: 3 / 5;
-  margin-left: -56px;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  background: transparent;
-  border-radius: 10px;
-  opacity: 0;
-  transform: translateX(var(--fan-x, 0)) translateY(28px) rotate(var(--fan-rotate, 0deg)) scale(0.94);
-  z-index: var(--fan-z, 1);
-  transition:
-    opacity 0.45s ease-out,
-    transform 0.45s ease-out,
-    filter 0.15s ease;
-  transition-delay: var(--stagger, 0ms);
-}
-
-.fanOpen .fanCard {
-  opacity: 1;
-  transform: translateX(var(--fan-x, 0)) translateY(var(--fan-y, 0)) rotate(var(--fan-rotate, 0deg)) scale(1);
-}
-
-.fanCard:hover,
-.fanCard:focus-visible {
-  filter: brightness(1.06);
-  outline: none;
-  transform: translateX(var(--fan-x, 0)) translateY(calc(var(--fan-y, 0px) - 8px)) rotate(var(--fan-rotate, 0deg))
-    scale(1.04);
-  z-index: 40;
-}
-
-.fanDoneHint,
-.trustHint {
-  margin: 0.25rem 0 0;
-  font-size: 0.8rem;
-  line-height: 1.45;
-  color: rgba(90, 72, 48, 0.72);
-}
-
-.resetLink {
-  appearance: none;
-  border: none;
-  background: transparent;
-  padding: 0;
-  margin-top: 0.15rem;
-  align-self: flex-start;
-  color: #8f6e43;
-  font: inherit;
-  font-size: 0.8rem;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  cursor: pointer;
+@media (min-width: 52rem) {
+  .stage {
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 2.5rem;
+  }
 }
 
 .stageFocus {
@@ -141,14 +64,19 @@
   align-items: center;
   gap: 0.85rem;
   min-width: 0;
+  width: 100%;
+  max-width: 20rem;
 }
 
 .focusFrame {
-  max-width: min(100%, 300px);
-  width: 300px;
-  border-radius: 10px;
+  max-width: min(100%, 280px);
+  width: 280px;
+  border-radius: 12px;
   overflow: hidden;
   background: transparent;
+  box-shadow:
+    0 18px 40px rgba(20, 16, 12, 0.22),
+    0 2px 0 rgba(255, 255, 255, 0.06) inset;
 }
 
 .focusFill {
@@ -175,7 +103,7 @@
 .focusName {
   margin: 0.3rem 0 0;
   font-family: var(--tf-font-display, Georgia, serif);
-  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  font-size: clamp(1.25rem, 2.5vw, 1.65rem);
   font-weight: 500;
   color: #2a2520;
   line-height: 1.2;
@@ -192,13 +120,16 @@
 
 .focusEmpty {
   width: min(100%, 18rem);
-  min-height: 12rem;
+  min-height: 11rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 0.45rem;
   padding: 1.25rem;
   text-align: center;
+  border-radius: 16px;
+  border: 1px dashed rgba(143, 110, 67, 0.28);
+  background: rgba(255, 252, 247, 0.35);
 }
 
 .focusEmptyTitle {
@@ -215,74 +146,177 @@
   color: rgba(90, 72, 48, 0.7);
 }
 
+.deckColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 16rem;
+}
+
+.deckStack {
+  position: relative;
+  width: 132px;
+  height: 210px;
+  border: none;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.deckStack:focus-visible {
+  outline: 2px solid rgba(166, 124, 58, 0.55);
+  outline-offset: 6px;
+  border-radius: 12px;
+}
+
+.deckLayer {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  width: 132px;
+  margin-left: -66px;
+  border-radius: 10px;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(12px) scale(0.96);
+  box-shadow:
+    0 calc(4px + var(--stack-i, 0) * 2px) calc(12px + var(--stack-i, 0) * 4px) rgba(18, 14, 10, 0.28);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
+  transition-delay: calc(var(--stack-i, 0) * 45ms);
+  translate: calc((var(--stack-i, 0) - (var(--stack-n, 1) - 1) / 2) * 3px) calc(var(--stack-i, 0) * -5px) 0;
+}
+
+.deckReady .deckLayer {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.deckStack:active .deckLayer {
+  transform: translateY(2px) scale(0.985);
+}
+
+.drawCta {
+  appearance: none;
+  min-height: 2.75rem;
+  min-width: 10.5rem;
+  padding: 0.7rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(166, 124, 58, 0.45);
+  background: linear-gradient(180deg, #f7efe2 0%, #efe2cc 100%);
+  color: #3a2f22;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  touch-action: manipulation;
+  box-shadow: 0 8px 18px rgba(42, 32, 18, 0.12);
+}
+
+.drawCta:active {
+  transform: translateY(1px);
+}
+
+.trustHint,
+.fanDoneHint {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: rgba(90, 72, 48, 0.72);
+  text-align: center;
+  max-width: 16rem;
+}
+
+.resetLink {
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 0.25rem;
+  margin-top: 0.1rem;
+  color: #8f6e43;
+  font: inherit;
+  font-size: 0.8rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
 .strip {
   display: flex;
-  gap: 0.65rem;
+  gap: 0.55rem;
   overflow-x: auto;
-  padding: 0.35rem 0.15rem 0.55rem;
+  padding: 0.2rem 0.1rem 0.45rem;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
+  scroll-snap-type: x proximity;
 }
 
 .stripSlot {
   appearance: none;
   flex: 0 0 auto;
-  width: 6.6rem;
-  padding: 0.55rem 0.4rem 0.65rem;
+  width: 5.6rem;
+  padding: 0.5rem 0.35rem 0.55rem;
   border-radius: 12px;
   border: 1px solid rgba(195, 154, 92, 0.22);
-  background: transparent;
+  background: rgba(255, 252, 247, 0.5);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.3rem;
   cursor: default;
   color: inherit;
   font: inherit;
+  scroll-snap-align: start;
 }
 
 .stripSlot:disabled {
-  opacity: 0.72;
+  opacity: 0.78;
 }
 
 .stripSlotFilled {
   cursor: pointer;
 }
 
-.stripSlotActive {
+.stripSlotActive,
+.stripSlotNext {
   border-color: rgba(195, 154, 92, 0.7);
-  box-shadow: 0 0 0 1px rgba(195, 154, 92, 0.35);
+  box-shadow: 0 0 0 1px rgba(195, 154, 92, 0.28);
+}
+
+.stripSlotNext {
+  background: rgba(247, 239, 226, 0.9);
 }
 
 .stripLabel {
   margin: 0;
   width: 100%;
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   line-height: 1.3;
   color: #8f6e43;
   text-align: center;
 }
 
 .stripArt {
-  width: 76px;
+  width: 72px;
   border-radius: 8px;
   overflow: hidden;
 }
 
 .stripName {
   margin: 0;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 600;
   color: #2a2520;
   text-align: center;
-  line-height: 1.3;
+  line-height: 1.25;
   word-break: break-word;
-}
-
-.stripOrient {
-  margin: 0;
-  font-size: 0.65rem;
-  color: #7a6140;
 }
 
 .doneNote {
@@ -292,7 +326,6 @@
   color: rgba(120, 100, 80, 0.85);
 }
 
-/* Dark ritual shell — keep existing palette, only layout/chrome */
 .rootDark .spreadTitle,
 .rootDark .focusName,
 .rootDark .stripName {
@@ -303,12 +336,10 @@
 .rootDark .trustHint,
 .rootDark .fanDoneHint,
 .rootDark .focusEmptyBody,
-.rootDark .stripOrient,
 .rootDark .doneNote {
   color: rgba(245, 242, 237, 0.55);
 }
 
-.rootDark .stepEyebrow,
 .rootDark .focusSlot,
 .rootDark .focusOrient,
 .rootDark .stripLabel {
@@ -327,17 +358,41 @@
 
 .rootDark .stripSlot {
   border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
 }
 
-.rootDark .stripSlotActive {
+.rootDark .stripSlotActive,
+.rootDark .stripSlotNext {
   border-color: rgba(212, 175, 55, 0.55);
   box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.28);
 }
 
+.rootDark .stripSlotNext {
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.rootDark .focusEmpty {
+  border-color: rgba(212, 175, 55, 0.28);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.rootDark .focusFrame {
+  box-shadow:
+    0 22px 48px rgba(0, 0, 0, 0.45),
+    0 1px 0 rgba(255, 255, 255, 0.06) inset;
+}
+
+.rootDark .drawCta {
+  border-color: rgba(212, 175, 55, 0.45);
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.28) 0%, rgba(160, 120, 50, 0.35) 100%);
+  color: #f7f1e6;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .fanCard {
+  .deckLayer {
     transition: none !important;
     opacity: 1;
-    transform: translateX(var(--fan-x, 0)) translateY(var(--fan-y, 0)) rotate(var(--fan-rotate, 0deg));
+    transform: none;
   }
 }
