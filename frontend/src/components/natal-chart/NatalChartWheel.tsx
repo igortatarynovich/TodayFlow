@@ -5,6 +5,11 @@ import { eclipticLongitudeFromSignAndDegree, zodiacRuName } from "@/lib/zodiacKn
 import { PlanetIcon } from "@/components/visualIdentity/PlanetIcon";
 import { resolveNatalAspectRenderStyle, natalAspectLegendItems } from "@/lib/natal/natalWheelMaterial";
 import { resolveNatalPlanetLayout } from "@/lib/natal/natalWheelLayout";
+import {
+  resolveNatalAtmosphereElement,
+  sunSignFromPositions,
+  type NatalAtmosphereElement,
+} from "@/lib/natal/natalAtmosphere";
 import { PROFILE_DECODE_PATTERN_WAVE_EVENT } from "@/lib/profile/profileMotionOnce";
 import styles from "@/components/natal-chart/natalChartWheel.module.css";
 
@@ -34,6 +39,8 @@ interface NatalChartWheelProps {
    * Desktop: full aspect web + denser labels.
    */
   layout?: "auto" | "desktop" | "mobile";
+  /** Optional Decode-stage atmosphere tint; defaults from Sun sign. */
+  atmosphereElement?: NatalAtmosphereElement | null;
 }
 
 type WheelSelection =
@@ -239,18 +246,18 @@ export function NatalChartWheel({
   ascendant = 0,
   aspects: aspectsProp = [],
   layout = "auto",
+  atmosphereElement = null,
 }: NatalChartWheelProps) {
   const isMobile = useIsMobileLayout(layout);
   const size = 720;
   const center = size / 2;
-  /* Hard margin so glyphs never kiss the circular clip. */
-  const outerRadius = size / 2 - 64;
-  const zodiacInnerRadius = outerRadius - 38;
-  /* Compress dead center — planets sit closer in; aspect web fills more of the plate. */
-  const innerRadius = outerRadius * 0.38;
+  /* More of the SVG used for planets — room for stellium stagger. */
+  const outerRadius = size / 2 - 42;
+  const zodiacInnerRadius = outerRadius - 36;
+  const innerRadius = outerRadius * 0.36;
   const aspectRadius = innerRadius - 6;
   const houseRadius = (zodiacInnerRadius + innerRadius) / 2;
-  const planetDisc = isMobile ? 15 : 17;
+  const planetDisc = isMobile ? 14 : 16;
   const basePlanetRadius = (zodiacInnerRadius + innerRadius) / 2 - 2;
   const planetRadiusMin = innerRadius + planetDisc + 2;
   const planetRadiusMax = zodiacInnerRadius - planetDisc - 2;
@@ -314,6 +321,11 @@ export function NatalChartWheel({
   const selectedPlanet = selected?.kind === "planet" ? selected.body : null;
   const selectedHouse = selected?.kind === "house" ? selected.number : null;
   const activePlanet = selectedPlanet ?? hoveredPlanet;
+
+  const stageElement = useMemo(() => {
+    if (atmosphereElement) return atmosphereElement;
+    return resolveNatalAtmosphereElement(sunSignFromPositions(chartPositions));
+  }, [atmosphereElement, chartPositions]);
 
   const togglePlanet = useCallback((body: string) => {
     setSelected((prev) => (prev?.kind === "planet" && prev.body === body ? null : { kind: "planet", body }));
@@ -670,17 +682,18 @@ export function NatalChartWheel({
       data-testid="natal-chart-wheel"
       data-layout={isMobile ? "mobile" : "desktop"}
     >
-      <div className={styles.instrument}>
-      <div
-        className={[styles.plate, aspectWave ? styles.aspectWave : ""].filter(Boolean).join(" ")}
-        data-testid="natal-chart-plate"
-        data-motion={aspectWave ? "aspect-wave" : undefined}
-        onPointerMove={onPlatePointerMove}
-        onPointerLeave={onPlatePointerLeave}
-        style={{
-          transform: `perspective(920px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-        }}
-      >
+      <div className={styles.stage} data-element={stageElement} data-testid="natal-chart-stage">
+        <div className={styles.stageAura} aria-hidden />
+        <div
+          className={[styles.plate, aspectWave ? styles.aspectWave : ""].filter(Boolean).join(" ")}
+          data-testid="natal-chart-plate"
+          data-motion={aspectWave ? "aspect-wave" : undefined}
+          onPointerMove={onPlatePointerMove}
+          onPointerLeave={onPlatePointerLeave}
+          style={{
+            transform: `perspective(920px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+          }}
+        >
         <svg
           className={styles.svg}
           viewBox={`0 0 ${size} ${size}`}
@@ -1168,6 +1181,60 @@ export function NatalChartWheel({
         </svg>
       </div>
 
+        <div className={styles.dock} data-testid="natal-chart-dock">
+          <p className={styles.dockLabel}>Планеты</p>
+          <div className={styles.chipRailWrap}>
+            <div className={styles.chipRail} data-testid="natal-chart-planet-rail">
+              {planetsWithPositions.map((planet) => {
+                const isActive = selectedPlanet === planet.body;
+                return (
+                  <button
+                    key={planet.body}
+                    type="button"
+                    className={`${styles.chip} ${isActive ? styles.chipActive : ""}`.trim()}
+                    onClick={() => togglePlanet(planet.body)}
+                    aria-pressed={isActive}
+                  >
+                    <span className={styles.chipGlyph} aria-hidden>
+                      <PlanetIcon planet={planet.body} size={15} />
+                    </span>
+                    {planetRuName(planet.body)}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          {!isMobile ? (
+            <div className={styles.legend} aria-label="Типы аспектов">
+              {natalAspectLegendItems().map((item) => {
+                const count = aspectSummary.find((entry) => entry.label === item.label)?.count || 0;
+                return (
+                  <div key={item.label} className={styles.legendItem}>
+                    <svg width="32" height="12" viewBox="0 0 32 12" aria-hidden="true">
+                      <line
+                        x1="1"
+                        y1="6"
+                        x2="31"
+                        y2="6"
+                        stroke={item.color}
+                        strokeWidth="2.8"
+                        strokeDasharray={item.dash === "none" ? undefined : item.dash}
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    <span>
+                      {item.label}
+                      {count ? ` · ${count}` : ""}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          ) : null}
+        </div>
+      </div>
+
+      <div className={styles.readingSheet} data-testid="natal-chart-reading">
       <div className={styles.panel} data-testid="natal-chart-detail" aria-live="polite">
         {selectedPlanetData ? (
           <>
@@ -1219,61 +1286,9 @@ export function NatalChartWheel({
           </>
         ) : (
           <p className={styles.panelHint}>
-            Выбери планету на кольце или ниже — откроются знак, дом и связи.
+            Выбери планету на кольце или в панели карты — откроются знак, дом и связи.
           </p>
         )}
-      </div>
-
-      <div className={styles.selector}>
-        <p className={styles.selectorLabel}>Планеты</p>
-        <div className={styles.chipRailWrap}>
-          <div className={styles.chipRail} data-testid="natal-chart-planet-rail">
-            {planetsWithPositions.map((planet) => {
-              const isActive = selectedPlanet === planet.body;
-              return (
-                <button
-                  key={planet.body}
-                  type="button"
-                  className={`${styles.chip} ${isActive ? styles.chipActive : ""}`.trim()}
-                  onClick={() => togglePlanet(planet.body)}
-                  aria-pressed={isActive}
-                >
-                  <span className={styles.chipGlyph} aria-hidden>
-                    <PlanetIcon planet={planet.body} size={15} />
-                  </span>
-                  {planetRuName(planet.body)}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-        {!isMobile ? (
-          <div className={styles.legend} aria-label="Типы аспектов">
-            {natalAspectLegendItems().map((item) => {
-              const count = aspectSummary.find((entry) => entry.label === item.label)?.count || 0;
-              return (
-                <div key={item.label} className={styles.legendItem}>
-                  <svg width="32" height="12" viewBox="0 0 32 12" aria-hidden="true">
-                    <line
-                      x1="1"
-                      y1="6"
-                      x2="31"
-                      y2="6"
-                      stroke={item.color}
-                      strokeWidth="2.8"
-                      strokeDasharray={item.dash === "none" ? undefined : item.dash}
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                  <span>
-                    {item.label}
-                    {count ? ` · ${count}` : ""}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        ) : null}
       </div>
       </div>
     </div>

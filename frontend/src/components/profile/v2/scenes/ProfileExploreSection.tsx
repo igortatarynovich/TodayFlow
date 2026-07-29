@@ -66,6 +66,7 @@ export function ProfileExploreSection({
         </p>
       </header>
 
+      <div className={styles.natalSceneBody}>
       {hasNatal && deep ? (
         <div data-testid="profile-v2-natal">
           <div data-testid="profile-v2-natal-deep">
@@ -93,7 +94,7 @@ export function ProfileExploreSection({
       )}
 
       {hasExtraDetails ? (
-        <>
+        <div className={styles.natalPaperBelow}>
           <button
             type="button"
             className={styles.natalPlainToggle}
@@ -192,13 +193,16 @@ export function ProfileExploreSection({
               </p>
             </div>
           </ProfileMotionExpand>
-        </>
+        </div>
       ) : (
-        <p className={styles.zoneLead}>
-          {PROFILE_V2_COPY.mapsCtaHint}{" "}
-          <Link href="/maps/mood">{PROFILE_V2_COPY.mapsCta}</Link>
-        </p>
+        <div className={styles.natalPaperBelow}>
+          <p className={styles.zoneLead}>
+            {PROFILE_V2_COPY.mapsCtaHint}{" "}
+            <Link href="/maps/mood">{PROFILE_V2_COPY.mapsCta}</Link>
+          </p>
+        </div>
       )}
+      </div>
     </section>
   );
 }

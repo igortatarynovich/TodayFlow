@@ -191,6 +191,7 @@ export function ProfileChartSection({
         </p>
       ) : null}
 
+      <div className={styles.paperBelow} data-testid="profile-chart-paper-below">
       <ProfileExpandableSection
         title="Полный разбор"
         subtitle="Опоры жизни, 12 домов, планеты и аспекты."
@@ -225,6 +226,7 @@ export function ProfileChartSection({
           aspectPersonLines={aspectPersonLines}
         />
       </ProfileExpandableSection>
+      </div>
     </div>
   );
 }

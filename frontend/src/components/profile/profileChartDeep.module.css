@@ -132,7 +132,7 @@
   font-size: var(--tf-type-caption-lg-size, 0.6875rem);
 }
 
-/* Pass-through — never a second frame around the wheel. */
+/* Pass-through — stage owns atmosphere; paper block is below. */
 .wheelWrap {
   padding: 0;
   border: none;
@@ -140,9 +140,20 @@
   background: transparent;
 }
 
+.paperBelow {
+  padding: 0.85rem clamp(0.85rem, 2.5vw, 1.25rem) 1.15rem;
+  background: linear-gradient(180deg, #fffdf9 0%, #f7f1e6 100%);
+  border-top: 1px solid rgba(154, 132, 104, 0.14);
+}
+
 :global([data-theme="dark"]) .wheelWrap {
   background: transparent;
   border: none;
+}
+
+:global([data-theme="dark"]) .paperBelow {
+  background: linear-gradient(180deg, #221e28 0%, #1a1620 100%);
+  border-top-color: rgba(212, 184, 150, 0.14);
 }
 
 :global([data-theme="dark"]) .signatureCard,
