@@ -70,6 +70,7 @@ class User(Base):
     daily_goal_snapshots = relationship("DailyGoalSnapshot", back_populates="user", cascade="all, delete-orphan")
     push_dispatch_logs = relationship("PushDispatchLog", back_populates="user", cascade="all, delete-orphan")
     meaning_events = relationship("MeaningEvent", back_populates="user", cascade="all, delete-orphan")
+    today_tap_events = relationship("TodayTapEvent", back_populates="user", cascade="all, delete-orphan")
     active_knowledge_records = relationship(
         "UserActiveKnowledge", back_populates="user", cascade="all, delete-orphan"
     )
@@ -1286,6 +1287,30 @@ class MeaningEvent(Base):
     user = relationship("User", back_populates="meaning_events")
     __table_args__ = (
         UniqueConstraint("user_id", "idempotency_key", name="uq_meaning_event_user_idempotency"),
+    )
+
+
+class TodayTapEvent(Base):
+    """Wave 2 Phase A — tap_event_v1 (trap accuracy loop)."""
+
+    __tablename__ = "today_tap_events"
+
+    id = Column(Integer, primary_key=True)
+    event_id = Column(String(64), nullable=False, unique=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    day_facts_id = Column(String(96), nullable=False)
+    local_date = Column(Date, nullable=False)
+    scene_id = Column(String(128), nullable=False)
+    domain = Column(String(32), nullable=False, default="work")
+    prompted_text = Column(Text, nullable=False)
+    response = Column(String(32), nullable=False)
+    free_text = Column(Text, nullable=True)
+    responded_at = Column(DateTime, nullable=False, default=utc_naive_now)
+    created_at = Column(DateTime, default=utc_naive_now)
+
+    user = relationship("User", back_populates="today_tap_events")
+    __table_args__ = (
+        UniqueConstraint("user_id", "local_date", "scene_id", name="uq_today_tap_user_date_scene"),
     )
 
 

@@ -37,6 +37,9 @@ export type DayEngagementState = {
   numberResonance: string | null;
   /** Soft indirect check-in under pulse — one per day. */
   softCheckInId: string | null;
+  /** Wave 2 Phase A — trap tap (optimistic / offline mirror of tap_event_v1). */
+  tapResponse: "avoided_trap" | "fell_into_trap" | "not_applicable" | "skipped" | null;
+  tapSceneId: string | null;
 };
 
 const PREFIX = "todayflow.day_engagement.v1";
@@ -73,6 +76,8 @@ const EMPTY: DayEngagementState = {
   tarotResonance: null,
   numberResonance: null,
   softCheckInId: null,
+  tapResponse: null,
+  tapSceneId: null,
 };
 
 /** Stable empty state for SSR / pre-hydration (never read localStorage in useState initializer). */
@@ -109,6 +114,14 @@ export function loadDayEngagement(dateISO: string, profileScope?: string | null)
       tarotResonance: typeof p.tarotResonance === "string" ? p.tarotResonance : null,
       numberResonance: typeof p.numberResonance === "string" ? p.numberResonance : null,
       softCheckInId: typeof p.softCheckInId === "string" ? p.softCheckInId : null,
+      tapResponse:
+        p.tapResponse === "avoided_trap" ||
+        p.tapResponse === "fell_into_trap" ||
+        p.tapResponse === "not_applicable" ||
+        p.tapResponse === "skipped"
+          ? p.tapResponse
+          : null,
+      tapSceneId: typeof p.tapSceneId === "string" ? p.tapSceneId : null,
     };
   } catch {
     return { ...EMPTY };

@@ -13,10 +13,70 @@
   border-top: 1px solid rgba(212, 184, 150, 0.2);
 }
 
+.tapAttention {
+  animation: tapBreathe 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tapAttention {
+    animation: none;
+    box-shadow: inset 3px 0 0 var(--tf-accent-action, #8f6b3a);
+  }
+
+  .tapAttention::before {
+    content: "";
+    display: inline-block;
+    width: 0.45rem;
+    height: 0.45rem;
+    margin-bottom: 0.35rem;
+    border-radius: 999px;
+    background: var(--tf-accent-action, #8f6b3a);
+  }
+}
+
+@keyframes tapBreathe {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(143, 107, 58, 0);
+  }
+  50% {
+    transform: scale(1.01);
+    box-shadow: 0 0 18px 0 rgba(143, 107, 58, 0.18);
+  }
+}
+
+.tapCompleted .tapDone {
+  animation: tapConfirm 0.7s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tapCompleted .tapDone {
+    animation: none;
+  }
+}
+
+@keyframes tapConfirm {
+  from {
+    opacity: 0.35;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .tapLabel {
   margin: 0;
   font-size: 0.95rem;
   font-weight: 600;
+  color: var(--tf-ink, #2a2520);
+}
+
+.tapPrompt {
+  margin: 0;
+  max-width: 42ch;
+  font-size: 0.95rem;
+  line-height: 1.45;
   color: var(--tf-ink, #2a2520);
 }
 
@@ -26,7 +86,8 @@
   gap: 0.65rem;
 }
 
-.tapBtn {
+.tapBtn,
+.tapBtnSecondary {
   min-height: 44px;
   min-width: 5.5rem;
   padding: 0.55rem 1.1rem;
@@ -39,27 +100,58 @@
   cursor: pointer;
 }
 
-.tapBtn[data-selected="true"] {
+.tapBtnSecondary {
+  background: transparent;
+  color: var(--tf-ink-soft, #5c5348);
+}
+
+.tapBtn[data-selected="true"],
+.tapBtnSecondary[data-selected="true"] {
   border-color: var(--tf-accent-action, #8f6b3a);
   background: rgba(143, 107, 58, 0.12);
 }
 
-.tapHint {
+.tapBtn:disabled,
+.tapBtnSecondary:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.tapHint,
+.tapAccuracy,
+.tapDone,
+.tapError {
   margin: 0;
   font-size: 0.78rem;
   line-height: 1.4;
   color: var(--tf-ink-soft, #5c5348);
 }
 
-:global([data-theme="dark"]) .tapBtn {
+.tapDone {
+  color: var(--tf-accent-action, #8f6b3a);
+  font-weight: 600;
+}
+
+.tapError {
+  color: #a0452c;
+}
+
+.tapAccuracy {
+  padding-top: 0.15rem;
+}
+
+:global([data-theme="dark"]) .tapBtn,
+:global([data-theme="dark"]) .tapBtnSecondary {
   background: rgba(26, 23, 20, 0.55);
   color: rgba(245, 240, 232, 0.92);
 }
 
-:global([data-theme="dark"]) .tapLabel {
+:global([data-theme="dark"]) .tapLabel,
+:global([data-theme="dark"]) .tapPrompt {
   color: rgba(245, 240, 232, 0.92);
 }
 
-:global([data-theme="dark"]) .tapHint {
+:global([data-theme="dark"]) .tapHint,
+:global([data-theme="dark"]) .tapAccuracy {
   color: rgba(232, 226, 214, 0.65);
 }

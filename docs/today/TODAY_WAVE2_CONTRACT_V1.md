@@ -83,10 +83,10 @@ day_facts_v1 {
 
   domain_verdicts: [{               # VerdictStrip source
     domain: "work"|"money"|"relationships"|"energy"
-    verdict: "favorable"|"neutral"|"caution"|"avoid"
+    verdict: "calm"|"charged"|"friction"|"open"   # descriptive — NOT favorable/avoid
     why_short: string               # ≤ 10 words
     driver_ids: [string]
-    logic_source: "sphere_score_v0"
+    logic_source: "sphere_score_v0_1"   # v0 failed calib; see §3
   }]
 
   glance_timeline: [{               # GlanceTimeline source; max 3
@@ -141,38 +141,95 @@ UI order always: **work → money → relationships → energy**.
 
 ---
 
-## 3. Verdict logic — `sphere_score_v0`
+## 3. Verdict logic — `sphere_score_v0` → `sphere_score_v0_1`
 
-Draft; calibrate like `personal_day_source`. Marked `_v0` on purpose.
+### 3.1 Calib pass 1 (FAILED — do not ship)
 
-For each domain: take `natal_activations` whose `natal_point` / house is in the domain map.
+Manual run of `sphere_score_v0` (universal valence + favorable/avoid map) on all **8** dates in [`day_scenario_style_calib_igor_v1`](../audits/day_scenario_style_calib_igor_v1/):
+
+| Domain | Result |
+|--------|--------|
+| work | **avoid on 8/8** |
+| money | **avoid on 6/8** |
+| relationships | alternates favorable / caution / avoid — usable |
+| energy | alternates — usable |
+
+**Why this is a calibration failure, not a threshold tweak:** a strip that says `work: avoid` every day for months stops being scanned — today looks like yesterday. Root cause is structural for this natal, not random noise:
+
+- Capricorn stellium (Venus, Mars, Uranus, Neptune, Saturn clustered)
+- Slow transit Saturn squaring several of those points for months
+- Same background transit continuously loads **work** and **money**, independent of “what is special today”
+
+Mitigation tried (×0.3 dampen Saturn/Uranus/Neptune/Pluto): work still avoid on **7/8** — so speed/threshold alone cannot fix it.
+
+**Deeper failure:** universal valence encodes square/opposition as unconditionally “bad” (−1). For domain **work**, a Mars square is often pressure that *pushes doing* — a **charged** day, not “avoid work”. One valence table for all domains is wrong in principle.
+
+### 3.1b Calib pass 2 — dictionary works; sample bias found
+
+| Finding | Detail |
+|---------|--------|
+| Descriptive dictionary | **APPROVED.** avoid→charged / caution→friction makes a stable “work charged” season honest and safer than “avoid work for months”. |
+| Per-domain valence alone | Did **not** unlock day-to-day color changes inside the 8-date sample (work still charged 8/8). |
+| Why | Methodological, not formula: all 8 calib-igor dates sit in one ~5-week window (27.07–28.08). Transit Sun in Leo opposes natal Aquarius Sun+MC cluster for that whole month — a real **career-friction season**, not a scoring bug. |
+| Year-spread check | 12 dates, one per month: work shows calm (Jan–Feb), open (Mar–Apr, Jun), charged (May, Jul–Nov) — dictionary **does** differentiate across the year. |
+
+**Still open before fully closing 0.5.2:** consecutive-day run (10–14 days inside one charged month, e.g. August) to see if **intensity / driver_ids / why_short** move day-to-day inside the season — not only the color word. If nothing moves even in details → separate conversation: seasonal domains vs lunar/Mercurial daily domains on different refresh frequencies (not the same daily strip).
+
+Does **not** block Phase A (Tap). Dictionary lock **does** unblock Phase B vocabulary; consecutive run may still gate shipping strip UX polish.
+
+### 3.2 Required contract fixes (dictionary APPROVED; valence still open)
+
+1. **Valence is per-domain**, not universal.  
+   Example: Mars square in `work` ≠ Venus square in `relationships`.  
+   Per-domain valence alone did **not** create day-to-day variation inside one charged season (see §3.1b) — still required for meaning, not for seasonal differentiation.
+2. **Verdict vocabulary is descriptive** — **APPROVED 2026-07-29** (calib pass 2).  
+   Closed dictionary (schema keys → RU UI):
+
+| Key | RU (strip) | Intent |
+|-----|------------|--------|
+| `calm` | спокойно | low charge / even field |
+| `charged` | заряжено | pressure / drive — actable, not “bad” |
+| `friction` | трение | grit / misalignment — careful, still descriptive |
+| `open` | открыто | support / opening |
+
+**Rejected for daily strip:** `favorable` / `avoid` (and similar “good/bad day at work” framing).
+
+Pass 2 finding: swapping avoid→charged / caution→friction already makes an 8/8 “work charged” month **honest and safer** than “avoid work for two months”, even when the color word stays stable inside that season.
+
+### 3.3 `sphere_score_v0_1` (OPEN — calib pass 2)
+
+Status: **not closed**. Formula rewrite in progress; Phase B gated on pass 2.
+
+Still true from v0:
 
 ```text
-weight = valence(aspect, transiting_planet) * (1 − orb_deg / max_orb)
+weight = valence_domain(domain, aspect, transiting_planet, natal_point)
+         * (1 − orb_deg / max_orb)
+         * speed_factor(transiting_planet)   # optional; alone insufficient
 ```
 
-`max_orb`: 6° conjunction/trine/square/quincunx; 3° sextile; 8° opposition  
-(same thresholds as calib-corpus activation generation).
+`max_orb`: unchanged (6° conj/trine/square/quincunx; 3° sextile; 8° opposition).
 
-**valence(aspect, planet):**
+**Must change:**
 
-| Aspect | Valence |
-|--------|---------|
-| trine, sextile | +1 |
-| square, opposition | −1 |
-| conjunction | +1 if transit ∈ {Venus, Jupiter}; −1 if ∈ {Saturn, Mars, Pluto}; else 0 |
-| quincunx | −0.5 (tune later) |
+| Piece | v0 (rejected) | v0.1 direction |
+|-------|---------------|----------------|
+| `valence(...)` | one table for all domains | `valence_work` / `valence_money` / `valence_relationships` / `valence_energy` |
+| score → label | favorable / neutral / caution / avoid | calm / charged / friction / open |
+| slow planets | full weight | dampen *and* still require per-domain meaning (dampen alone failed) |
 
-`score` = sum of weights. Map:
+**Illustrative (not final) — work only:**
 
-| score | verdict |
-|-------|---------|
-| > 0.5 | favorable |
-| −0.5 … 0.5 | neutral |
-| −1.5 … −0.5 | caution |
-| < −1.5 | avoid |
+| Aspect → natal | Draft valence_work | Why |
+|----------------|--------------------|-----|
+| square → Mars | toward **charged** (+) | pressure to act |
+| square → Venus (work map rare) | toward **friction** (−) | style clash more than drive |
+| trine / sextile → Sun/Mars/MC | toward **open** (+) | support |
+| Saturn transit square stellium | reduced weight + prefer **friction**/**charged**, never month-long **avoid** | background weather ≠ daily ban |
 
-Thresholds = first-pass hypothesis. Wave 2 calib goal: compare to human gut on 8 calib-igor datemarks; retune weights/thresholds, **not** the 4-domain principle.
+Full per-domain tables + score→label thresholds: fill after calib pass 2 on the same 8 dates. Until then `logic_source` remains draft `sphere_score_v0_1`.
+
+**Unchanged principle:** fixed 4 domains and scan order (work → money → relationships → energy).
 
 ---
 
@@ -270,12 +327,16 @@ Tap completion = existence of `tap_event_v1` for that `day_facts_id` (no separat
 
 ## Architecture impact
 
-Opens with the **first code PR** (Phase A), not with this docs lock:
+### Phase A (Tap) — first code PR
 
-- **SoT before:** ActShell stubs; narrative from day_scenario / contract fragments  
-- **SoT after (phased):** practical strips + tap accuracy from `day_facts_v1` (+ tap store)  
-- **Public JSON:** yes when day-facts / tap / accuracy ship  
-- **Canon:** this file + execution plan + motion pilot  
+- **SoT before:** Wave 1 stub buttons; no trap accuracy store
+- **SoT after:** `tap_event_v1` via `POST /today/tap-widget/response`; prompt from `day_scenario.scenes[].trap` (alias until full `day_facts_v1`); accuracy via `GET /today/accuracy-summary`
+- **Public JSON:** yes — new endpoints
+- **Migration:** `today_tap_events` table
+- **Canon:** this file §5–6 · [TODAY_WAVE2_EXECUTION_PLAN](./TODAY_WAVE2_EXECUTION_PLAN.md) Phase A
+- **Backward compatible:** old clients ignore slots; no break of existing contract fields
+
+Opens with the **first code PR** (Phase A), not with docs lock alone.
 
 ---
 

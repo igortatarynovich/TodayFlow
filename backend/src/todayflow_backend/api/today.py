@@ -1710,3 +1710,101 @@ def _build_milestones(daily_streak: int) -> list[dict]:
         else:
             payload.append({"name": name, "target_days": days, "status": "next", "days_left": days - daily_streak})
     return payload
+
+
+# --- Wave 2 Phase A: tap_event_v1 + accuracy summary ---
+
+class TodayTapWidgetResponsePayload(BaseModel):
+    local_date: str = Field(..., description="User local date YYYY-MM-DD")
+    scene_id: str
+    prompted_text: str
+    response: str = Field(..., description="avoided_trap|fell_into_trap|not_applicable|skipped")
+    domain: str | None = Field(default=None, description="work|money|relationships|energy")
+    free_text: str | None = None
+    day_facts_id: str | None = None
+    timezone: str | None = None
+
+
+class TodayTapEventResponse(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
+    schema_version: str = "tap_event_v1"
+    event_id: str
+    user_id: str
+    day_facts_id: str
+    local_date: str
+    scene_id: str
+    domain: str
+    prompted_text: str
+    response: str
+    free_text: str | None = None
+    responded_at: str | None = None
+
+
+class AccuracyDomainBucket(BaseModel):
+    correct: int = 0
+    total: int = 0
+
+
+class TodayAccuracySummaryResponse(BaseModel):
+    schema_version: str = "accuracy_summary_v1"
+    window: str
+    from_date: str
+    to_date: str
+    overall: AccuracyDomainBucket
+    by_domain: dict[str, AccuracyDomainBucket]
+
+
+@router.post("/tap-widget/response", response_model=TodayTapEventResponse)
+def post_today_tap_widget_response(
+    payload: TodayTapWidgetResponsePayload,
+    user: User = Depends(require_user),
+    db=Depends(get_session),
+) -> TodayTapEventResponse:
+    """Wave 2 Phase A — record trap accuracy tap (tap_event_v1)."""
+    from todayflow_backend.services import today_tap_widget_v1 as tap_svc
+
+    day = parse_iso_date_or_400(payload.local_date)
+    try:
+        row = tap_svc.upsert_tap_event(
+            db,
+            user_id=user.id,
+            local_date=day,
+            scene_id=payload.scene_id,
+            prompted_text=payload.prompted_text,
+            response=payload.response,
+            domain=payload.domain or "work",
+            free_text=payload.free_text,
+            day_facts_id=payload.day_facts_id,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    return TodayTapEventResponse(**row)
+
+
+@router.get("/accuracy-summary", response_model=TodayAccuracySummaryResponse)
+def get_today_accuracy_summary(
+    window: str = Query(default="14d", description="e.g. 14d"),
+    user: User = Depends(require_user),
+    db=Depends(get_session),
+) -> TodayAccuracySummaryResponse:
+    """Wave 2 Phase A — personal trap accuracy over a rolling window."""
+    from todayflow_backend.services import today_tap_widget_v1 as tap_svc
+
+    raw = (window or "14d").strip().lower()
+    days = 14
+    if raw.endswith("d") and raw[:-1].isdigit():
+        days = int(raw[:-1])
+    summary = tap_svc.build_accuracy_summary(db, user_id=user.id, window_days=days)
+    by_domain = {
+        key: AccuracyDomainBucket(**bucket)
+        for key, bucket in (summary.get("by_domain") or {}).items()
+    }
+    return TodayAccuracySummaryResponse(
+        schema_version=summary["schema_version"],
+        window=summary["window"],
+        from_date=summary["from_date"],
+        to_date=summary["to_date"],
+        overall=AccuracyDomainBucket(**summary["overall"]),
+        by_domain=by_domain,
+    )

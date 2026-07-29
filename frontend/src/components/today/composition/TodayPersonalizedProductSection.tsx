@@ -24,7 +24,7 @@ import type { TodayDayStoryViewModel } from "@/lib/todayDayStoryModel";
 import type { CoreProfile } from "@/lib/types";
 import { buildTodayCompatibilityHook } from "@/lib/todayCompatibilityHook";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
-import { TodayTapWidgetStub } from "@/components/today/composition/TodayWave2Slots";
+import { TodayTapWidget } from "@/components/today/composition/TodayWave2Slots";
 import styles from "@/components/today/composition/TodayPersonalizedProductSection.module.css";
 
 type Props = {
@@ -51,6 +51,9 @@ type Props = {
   skyCards?: TodaySkyCard[];
   colorGuide?: TodayDayColorGuide | null;
   morningRitualData?: MorningRitualData | null;
+  dateISO?: string;
+  tapResponse?: "avoided_trap" | "fell_into_trap" | "not_applicable" | "skipped" | null;
+  onTapRecorded?: (response: "avoided_trap" | "fell_into_trap" | "not_applicable" | "skipped") => void;
   onPickPromise: (text: string) => void;
   onOpenGoalDraft: () => void;
   onGoalDraftChange: (value: string) => void;
@@ -102,6 +105,9 @@ export function TodayPersonalizedProductSection({
   skyCards = [],
   colorGuide = null,
   morningRitualData = null,
+  dateISO = "",
+  tapResponse = null,
+  onTapRecorded,
   onPickPromise,
   onOpenGoalDraft,
   onGoalDraftChange,
@@ -530,7 +536,14 @@ export function TodayPersonalizedProductSection({
         accent="action"
         bridge
         testId="today-zone-bridges-wrap"
-        slotBefore={<TodayTapWidgetStub />}
+        slotBefore={
+          <TodayTapWidget
+            contract={contract}
+          dateISO={dateISO || ""}
+          initialResponse={tapResponse}
+          onRecorded={onTapRecorded}
+        />
+        }
       >
         <nav className={styles.bridges} aria-label="Связанные разделы" data-testid="today-zone-bridges">
           <Link href="/profile" className={styles.bridgeCta}>

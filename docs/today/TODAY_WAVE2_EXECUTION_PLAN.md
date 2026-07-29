@@ -1,6 +1,6 @@
 # Today Wave 2 — Execution Plan
 
-**Status:** READY TO START (docs locked; code not started)  
+**Status:** Phase A **IN CODE** · Phase 0.5.2a dictionary **APPROVED** · 0.5.2b consecutive-month **OPEN** · Phase B **soft-gated** on 0.5.2b  
 **Depends on:** Wave 1 ActShell LIVE (`TodayActShell` + reserved slots)  
 **Canon companions:**
 - [TODAY_WAVE2_CONTRACT_V1.md](./TODAY_WAVE2_CONTRACT_V1.md) — `day_facts_v1`, slots, tap, accuracy
@@ -8,47 +8,53 @@
 
 **Rule:** one compute per user×day. Slots are views. Only Tap write + accuracy aggregate need separate endpoints.
 
+**Parallelism (2026-07-29):** Phase A (Tap) does **not** touch `domain_verdicts` / sphere score — it uses `scenes[]` / `conflict` only. Run **A in parallel** with Phase 0.5 pass 2. Do **not** start Phase B until pass 2 closes.
+
 ---
 
 ## North star
 
 Practical Today on phone: scan verdict in 1s → see when today bites → one tap that builds personal accuracy over weeks — **without** Act 3 story contradicting the strips.
 
-Trust bug to avoid: VerdictStrip says «money: avoid» while Act 3 narrates a different money story. Both must read the same `day_facts_v1.driver_ids` pool.
+Trust bug to avoid: VerdictStrip says «money: friction» while Act 3 narrates a different money story. Both must read the same `day_facts_v1.driver_ids` pool. (Evaluative «avoid work every day» is also a product trust/health failure — see contract §3.1.)
 
 ---
 
-## Phases (do in order — do not parallelize meaning)
+## Phases
 
-### Phase 0 — Spec lock (docs only) ✅ this ticket
+### Phase 0 — Spec lock (docs only) ✅
 
 | Step | Deliverable | Done when |
 |------|-------------|-----------|
-| 0.1 | `day_facts_v1` shape + sphere map + `sphere_score_v0` | Contract doc merged |
+| 0.1 | `day_facts_v1` shape + sphere map + score draft | Contract doc merged |
 | 0.2 | Tap event + accuracy summary API | Contract doc merged |
 | 0.3 | Slot data sources table (no extra ranking) | Contract doc merged |
 | 0.4 | Motion pilot scope (TapWidget only) | Motion pilot doc merged |
-| 0.5 | Tracker: Wave 2 BACKLOG → CONTRACT LOCKED | Tracker line updated |
+| 0.5 | Tracker: Wave 2 → CONTRACT LOCKED | Tracker line updated |
 
-**Gate:** owner accepts docs. No Architecture impact PR yet (opens at first code PR).
-
----
-
-### Phase 0.5 — Manual calibration (cheap, before BE)
-
-| Step | Work | Done when |
-|------|------|-----------|
-| 0.5.1 | Run `sphere_score_v0` by hand on **8** dates in [`docs/audits/day_scenario_style_calib_igor_v1/`](../audits/day_scenario_style_calib_igor_v1/) | Table: date × domain × score × proposed verdict × human gut |
-| 0.5.2 | Adjust weights/thresholds only (not the 4-domain principle) | `sphere_score_v0` note in contract updated OR calib audit sheet |
-| 0.5.3 | Confirm scene.id = `trap_id` for tap on those days | One primary/caution scene per day usable as prompt |
-
-**Gate:** at least 6/8 days feel non-absurd to human; document misses.
+**Gate:** owner accepts docs. Architecture impact opens at first **code** PR (Phase A).
 
 ---
 
-### Phase A — TapWidget + accuracy loop (FIRST code)
+### Phase 0.5 — Manual calibration (verdict formula)
 
-**Why first:** cheapest slot, highest retention payoff; motion pilot rides the same PR.
+| Step | Work | Status |
+|------|------|--------|
+| 0.5.1 | Run `sphere_score_v0` on 8 calib-igor dates | **DONE — FAILED** (work avoid 8/8; money avoid 6/8) |
+| 0.5.1b | Slow-planet dampen 0.3 retry | **DONE — insufficient** |
+| 0.5.2a | Descriptive dictionary `calm|charged|friction|open` + year-spread check | **APPROVED** (dictionary locked; year shows differentiation) |
+| 0.5.2b | Consecutive 10–14 days inside one charged month (e.g. August): intensity / drivers / why_short | **OPEN** — does not block Phase A; may inform Phase B UX (seasonal vs daily) |
+| 0.5.3 | Confirm scene.id = `trap_id` for tap | Close with Phase A (`scene_id` alias) |
+
+**Gate for Phase B vocabulary:** 0.5.2a ✅.  
+**Soft gate for Phase B ship:** prefer 0.5.2b done (or explicit product accept of stable seasonal word + changing why_short only).  
+**Does not gate Phase A.**
+
+---
+
+### Phase A — TapWidget + accuracy loop (FIRST code) — **START NOW**
+
+**Why first / why parallel:** cheapest slot, highest retention payoff; **zero dependency** on `domain_verdicts`. Motion pilot rides the same PR.
 
 | Step | Work | Notes |
 |------|------|-------|
@@ -67,17 +73,17 @@ Trust bug to avoid: VerdictStrip says «money: avoid» while Act 3 narrates a di
 
 ---
 
-### Phase B — VerdictStrip (no new ranking endpoint)
+### Phase B — VerdictStrip (no new ranking endpoint) — **BLOCKED on 0.5.2**
 
 | Step | Work | Notes |
 |------|------|-------|
 | B.0 | Architecture impact if public JSON / meaning SoT changes | Likely yes — strip becomes user-facing SoT |
-| B.1 | Compute `domain_verdicts[4]` inside day_facts generation (`sphere_score_v0`) | Fixed order: work → money → relationships → energy |
-| B.2 | Fill Act 1 `today-slot-verdict-strip` from `domain_verdicts` only | Closed dictionary UI; `why_short` ≤10 words |
+| B.1 | Compute `domain_verdicts[4]` via **`sphere_score_v0_1`** (per-domain valence) | Fixed order: work → money → relationships → energy |
+| B.2 | Fill Act 1 `today-slot-verdict-strip` from `domain_verdicts` only | Dictionary: calm / charged / friction / open |
 | B.3 | Provenance: `generation_provenance.verdict_driver_ids` | Debug only |
 | B.4 | Visual: **no motion** on strip (idle) | Motion pilot doc |
 
-**Gate:** strip always 4 rows; same drivers as conflict when overlapping; calib thresholds from Phase 0.5 applied.
+**Gate:** strip always 4 rows; day-to-day variation on work/money for stellium nativities; calib pass 2 accepted.
 
 ---
 
@@ -118,9 +124,9 @@ Trust bug to avoid: VerdictStrip says «money: avoid» while Act 3 narrates a di
 
 ## Suggested ticket titles
 
-1. `Today Wave2 Phase0.5 — sphere_score_v0 calib on 8 igor dates`
-2. `Today Wave2 PhaseA — TapWidget + tap_event_v1 + accuracy-summary + motion pilot`
-3. `Today Wave2 PhaseB — domain_verdicts + VerdictStrip`
+1. `Today Wave2 Phase0.5 — sphere_score_v0_1 per-domain + descriptive dict (pass 2)`
+2. `Today Wave2 PhaseA — TapWidget + tap_event_v1 + accuracy-summary + motion pilot` ← **now**
+3. `Today Wave2 PhaseB — domain_verdicts + VerdictStrip` ← after 0.5.2
 4. `Today Wave2 PhaseC — exact-time glance_timeline + GlanceTimeline UI`
 5. `Today Wave2 PhaseD — day-facts GET + trust audit + motion retro`
 
@@ -132,8 +138,9 @@ Trust bug to avoid: VerdictStrip says «money: avoid» while Act 3 narrates a di
 |----------|--------|
 | Single SoT | `day_facts_v1` once per user×day |
 | Slot endpoints | None for Verdict/Glance render; Tap write + accuracy GET only |
-| Wave 2 order | Tap → Verdict → Glance |
+| Wave 2 order | Tap → Verdict → Glance; **Tap parallel with calib pass 2** |
 | Domains | Fixed 4: work / money / relationships / energy |
-| Verdict labels | Closed: favorable / neutral / caution / avoid |
+| Verdict labels | Descriptive: calm / charged / friction / open (**not** favorable/avoid) |
+| Valence | **Per-domain** (`sphere_score_v0_1`); universal table rejected after calib pass 1 |
 | Motion pilot | TapWidget only; not app-wide until proven |
 | UI persistence | `today_ui_state` beside day_facts; tap completion = tap_event exists |

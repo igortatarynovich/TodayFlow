@@ -1571,6 +1571,11 @@ export function TodayCompositionSurface(props: Props) {
             skyCards={story.skyCards}
             colorGuide={story.colorGuide}
             morningRitualData={props.morningRitualData}
+            dateISO={dateISO}
+            tapResponse={engagement.tapResponse}
+            onTapRecorded={(response) => {
+              persistEngagement({ tapResponse: response });
+            }}
             tarotDeepenHref={
               engagement.tarotPickedId != null
                 ? buildTarotDeepenHref({
