@@ -1,6 +1,5 @@
 "use client";
 
-import { LoadingSpinner } from "@/components/orbit";
 import { InteractiveCardDeck } from "./InteractiveCardDeck";
 import { TarotSpread } from "./TarotSpread";
 import type { TarotCard, TarotSpreadResult, TarotSpreadHistoryResponse } from "@/lib/types";
@@ -89,23 +88,19 @@ export function SpreadSelection({
           {selectedSpread && (
             <div style={{ marginTop: "var(--orbit-space-lg)" }}>
               {loadingDeck ? (
-                <div style={{ 
-                  display: "flex", 
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center", 
-                  padding: "var(--orbit-space-xl)",
-                  gap: "var(--orbit-space-md)"
-                }}>
-                  <LoadingSpinner size="md" />
-                  <p className="orbit-body-sm orbit-text-muted">Колода…</p>
-                </div>
+                <InteractiveCardDeck
+                  cards={[]}
+                  requiredCount={selectedSpread.cards}
+                  onCardsSelected={() => {}}
+                  loading
+                />
               ) : deckCards.length > 0 ? (
                 <InteractiveCardDeck
                   cards={deckCards}
                   requiredCount={selectedSpread.cards}
                   onCardsSelected={onCardsSelected}
                   spreadTitle={selectedSpread.title}
+                  ritualIntro="Стопка рубашек: тап или свайп снимает верхнюю карту."
                 />
               ) : null}
 

@@ -19,6 +19,8 @@ type MotionFlipProps = {
   className?: string;
   reducedMotion?: boolean;
   onAnimationComplete?: () => void;
+  /** Override flip duration in ms (default MOTION.cardMs). */
+  durationMs?: number;
   /** test id on the 3D stage */
   testId?: string;
 };
@@ -34,10 +36,12 @@ export function MotionFlip({
   className,
   reducedMotion,
   onAnimationComplete,
+  durationMs,
   testId = "motion-flip",
 }: MotionFlipProps) {
   const systemReduce = usePrefersReducedMotion();
   const reduce = reducedMotion ?? systemReduce;
+  const flipMs = durationMs ?? MOTION.cardMs;
 
   if (reduce) {
     return (
@@ -54,8 +58,8 @@ export function MotionFlip({
         initial={false}
         animate={{ rotateY: flipped ? 180 : 0 }}
         transition={{
-          duration: MOTION.cardMs / 1000,
-          ease: MOTION.easeOut,
+          duration: flipMs / 1000,
+          ease: [0.42, 0, 0.58, 1],
         }}
         onAnimationComplete={() => {
           if (flipped) onAnimationComplete?.();
