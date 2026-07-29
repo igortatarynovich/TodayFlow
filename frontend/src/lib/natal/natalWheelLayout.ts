@@ -1,6 +1,6 @@
 /**
- * Natal wheel planet layout — collision avoidance for stelliums.
- * Prefer radial stagger + angular fan so discs clear; leader when offset from true ray.
+ * Natal wheel planet layout — aggressive collision avoidance for stelliums.
+ * Radial spiral + angular fan; leader marks true longitude on the planet belt.
  */
 
 export type NatalPlanetLayoutInput = {
@@ -14,6 +14,8 @@ export type NatalPlanetLayoutResult = {
   radiusOffset: number;
   angleOffset: number;
   leader: boolean;
+  /** Optional visual shrink for ultra-dense clusters (1 = full disc). */
+  discScale: number;
 };
 
 function angDist(a: number, b: number): number {
@@ -53,9 +55,7 @@ function buildClusters(angles: number[], thresholdDeg: number): number[][] {
   if (clusters.length >= 2) {
     const first = clusters[0];
     const last = clusters[clusters.length - 1];
-    const a = angles[first[0]];
-    const b = angles[last[last.length - 1]];
-    if (angDist(a, b) < thresholdDeg) {
+    if (angDist(angles[first[0]], angles[last[last.length - 1]]) < thresholdDeg) {
       clusters[0] = [...last, ...first];
       clusters.pop();
     }
@@ -64,14 +64,9 @@ function buildClusters(angles: number[], thresholdDeg: number): number[][] {
   return clusters;
 }
 
-function fanStepForClearance(minDist: number, radialStep: number, radius: number): number {
-  const chordNeed = Math.sqrt(Math.max(0, minDist * minDist - radialStep * radialStep));
-  const deg = (chordNeed / Math.max(radius, 1)) * (180 / Math.PI);
-  return Math.min(12, Math.max(2.2, deg * 1.08));
-}
-
 /**
  * Place planets so discs do not pile up in stelliums.
+ * Uses full radius band + spiral order (outer/inner alternate) + fan until clear.
  */
 export function resolveNatalPlanetLayout(
   planets: NatalPlanetLayoutInput[],
@@ -87,10 +82,11 @@ export function resolveNatalPlanetLayout(
   const n = planets.length;
   if (n === 0) return [];
 
-  const gap = opts.gap ?? 5;
+  const gap = opts.gap ?? 8;
   const minDist = opts.discRadius * 2 + gap;
-  const iterations = opts.iterations ?? 10;
+  const iterations = opts.iterations ?? 18;
   const { baseRadius, minRadius, maxRadius } = opts;
+  const band = Math.max(24, maxRadius - minRadius);
 
   const items = planets.map((p) => ({
     trueAngle: p.angle,
@@ -98,7 +94,8 @@ export function resolveNatalPlanetLayout(
     radius: baseRadius,
   }));
 
-  const threshold = Math.max(13, ((minDist * 0.85) / Math.max(baseRadius, 1)) * (180 / Math.PI) + 3);
+  // Wide cluster window — Capricorn-style piles often span 15–25°.
+  const threshold = Math.max(18, ((minDist * 1.15) / Math.max(baseRadius, 1)) * (180 / Math.PI) + 4);
   const clusters = buildClusters(
     items.map((it) => it.trueAngle),
     threshold,
@@ -112,17 +109,22 @@ export function resolveNatalPlanetLayout(
       continue;
     }
 
-    const sorted = [...cluster].sort((i, j) => {
-      // Order along short arc from median
-      return items[i].trueAngle - items[j].trueAngle;
-    });
+    const sorted = [...cluster].sort((i, j) => items[i].trueAngle - items[j].trueAngle);
 
-    const radialStep = (maxRadius - minRadius) / Math.max(1, size - 1);
-    const stepFan = fanStepForClearance(minDist, radialStep, baseRadius);
+    // Alternate outer / inner so angular neighbors differ strongly in radius.
+    const pairs = Math.ceil(size / 2);
+    const needChord = minDist * 0.95;
+    const stepFan = Math.min(16, Math.max(5, (needChord / Math.max(baseRadius, 1)) * (180 / Math.PI) * 1.15));
 
     for (let k = 0; k < size; k += 1) {
       const idx = sorted[k];
-      items[idx].radius = minRadius + k * radialStep;
+      const pair = Math.floor(k / 2);
+      const pairT = pairs <= 1 ? 0 : pair / (pairs - 1);
+      if (k % 2 === 0) {
+        items[idx].radius = maxRadius - pairT * band * 0.62;
+      } else {
+        items[idx].radius = minRadius + pairT * band * 0.62;
+      }
       const fan = (k - (size - 1) / 2) * stepFan;
       items[idx].paintAngle = (items[idx].trueAngle + fan + 360) % 360;
     }
@@ -142,12 +144,12 @@ export function resolveNatalPlanetLayout(
         if (dist >= minDist) continue;
 
         const overlap = minDist - dist;
-        const step = overlap * (0.6 + iter * 0.04);
+        const step = overlap * (0.72 + iter * 0.035);
         const preferOutI = a.radius <= b.radius ? 1 : -1;
-        pushR[i] += preferOutI * step * 0.75;
-        pushR[j] -= preferOutI * step * 0.75;
+        pushR[i] += preferOutI * step * 0.85;
+        pushR[j] -= preferOutI * step * 0.85;
 
-        const angPush = ((step * 0.45) / Math.max(a.radius, 40)) * (180 / Math.PI);
+        const angPush = ((step * 0.55) / Math.max(a.radius, 40)) * (180 / Math.PI);
         let order = ((a.trueAngle - b.trueAngle + 540) % 360) - 180;
         if (Math.abs(order) < 0.01) order = i < j ? 1 : -1;
         const sign = order > 0 ? 1 : -1;
@@ -160,16 +162,30 @@ export function resolveNatalPlanetLayout(
       items[i].radius = Math.min(maxRadius, Math.max(minRadius, items[i].radius + pushR[i]));
       const nextA = items[i].paintAngle + pushA[i];
       const delta = ((nextA - items[i].trueAngle + 540) % 360) - 180;
-      const clamped = Math.max(-14, Math.min(14, delta));
+      const clamped = Math.max(-20, Math.min(20, delta));
       items[i].paintAngle = (items[i].trueAngle + clamped + 360) % 360;
     }
   }
 
-  return items.map((it) => {
+  // If still colliding, shrink discs in the densest pairs (visual only).
+  const discScale = new Array(n).fill(1);
+  for (let i = 0; i < n; i += 1) {
+    for (let j = i + 1; j < n; j += 1) {
+      const pa = polar(items[i].paintAngle, items[i].radius);
+      const pb = polar(items[j].paintAngle, items[j].radius);
+      const dist = Math.hypot(pa.x - pb.x, pa.y - pb.y);
+      if (dist < minDist * 0.92) {
+        discScale[i] = Math.min(discScale[i], 0.82);
+        discScale[j] = Math.min(discScale[j], 0.82);
+      }
+    }
+  }
+
+  return items.map((it, i) => {
     const radiusOffset = it.radius - baseRadius;
     const angleOffset = ((it.paintAngle - it.trueAngle + 540) % 360) - 180;
     const leader =
-      Math.abs(radiusOffset) > opts.discRadius * 0.4 || Math.abs(angleOffset) > 1.6;
+      Math.abs(radiusOffset) > opts.discRadius * 0.35 || Math.abs(angleOffset) > 1.2;
     return {
       radius: it.radius,
       paintAngle: it.paintAngle,
@@ -177,6 +193,7 @@ export function resolveNatalPlanetLayout(
       radiusOffset,
       angleOffset,
       leader,
+      discScale: discScale[i],
     };
   });
 }
