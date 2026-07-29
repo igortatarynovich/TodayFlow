@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState, useCallback, useId, useEffect } from "react";
+import { useMemo, useState, useCallback, useId, useEffect, useRef, type PointerEvent as ReactPointerEvent } from "react";
 import { eclipticLongitudeFromSignAndDegree, zodiacRuName } from "@/lib/zodiacKnowledge";
 import { PlanetIcon } from "@/components/visualIdentity/PlanetIcon";
+import { resolveNatalAspectRenderStyle } from "@/lib/natal/natalWheelMaterial";
 import styles from "@/components/natal-chart/natalChartWheel.module.css";
 
 interface Aspect {
@@ -160,12 +161,13 @@ const INK = {
   silver: "#9a9590",
   white: "#ffffff",
   aspect: {
-    conjunction: { color: "#8b6a3e", dash: "none", opacity: 0.78, width: 2.2 },
-    opposition: { color: "#6b5340", dash: "8 5", opacity: 0.72, width: 2.4 },
-    square: { color: "#a67c52", dash: "6 5", opacity: 0.7, width: 2.2 },
-    trine: { color: "#c9a96e", dash: "none", opacity: 0.62, width: 1.9 },
-    sextile: { color: "#b8956a", dash: "4 4", opacity: 0.58, width: 1.7 },
-    other: { color: "#9a8b78", dash: "3 4", opacity: 0.5, width: 1.5 },
+    /** Kept for legend swatches; live strokes use resolveNatalAspectRenderStyle. */
+    conjunction: { color: "#8b6a3e", dash: "none", opacity: 0.86, width: 2.8 },
+    opposition: { color: "#6b5340", dash: "9 5", opacity: 0.8, width: 2.9 },
+    square: { color: "#a67c52", dash: "7 5", opacity: 0.78, width: 2.7 },
+    trine: { color: "#c9a96e", dash: "none", opacity: 0.48, width: 1.55 },
+    sextile: { color: "#b8956a", dash: "4 5", opacity: 0.42, width: 1.35 },
+    other: { color: "#9a8b78", dash: "3 5", opacity: 0.36, width: 1.2 },
   },
   elementFill: {
     fire: "rgba(139, 106, 62, 0.1)",
@@ -253,9 +255,40 @@ export function NatalChartWheel({
   const softGlowId = `${gradientId}-glow`;
   const webClipId = `${gradientId}-clip`;
   const planetGlowId = `${gradientId}-planet-glow`;
+  const planetLitId = `${gradientId}-planet-lit`;
+  const planetLitSelectedId = `${gradientId}-planet-lit-sel`;
+  const planetShadowId = `${gradientId}-planet-shadow`;
 
   const [selected, setSelected] = useState<WheelSelection>(null);
   const [hoveredPlanet, setHoveredPlanet] = useState<string | null>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const reduceMotionRef = useRef(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const apply = () => {
+      reduceMotionRef.current = mq.matches;
+      if (mq.matches) setTilt({ x: 0, y: 0 });
+    };
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
+  const onPlatePointerMove = useCallback((e: ReactPointerEvent<HTMLDivElement>) => {
+    if (reduceMotionRef.current) return;
+    if (e.pointerType === "touch") return; // keep mobile stable; depth from material only
+    const rect = e.currentTarget.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    const nx = (e.clientX - rect.left) / rect.width - 0.5;
+    const ny = (e.clientY - rect.top) / rect.height - 0.5;
+    setTilt({ x: Math.max(-1, Math.min(1, ny)) * -5.5, y: Math.max(-1, Math.min(1, nx)) * 5.5 });
+  }, []);
+
+  const onPlatePointerLeave = useCallback(() => {
+    setTilt({ x: 0, y: 0 });
+  }, []);
 
   const selectedPlanet = selected?.kind === "planet" ? selected.body : null;
   const selectedHouse = selected?.kind === "house" ? selected.number : null;
@@ -379,35 +412,13 @@ export function NatalChartWheel({
     return cusps;
   }, [ascendant, houses]);
 
-  const describeAspectKind = useCallback((aspect: Aspect) => {
-    const aspectId = aspect.aspect_id?.toLowerCase() || "";
-    if (aspectId.includes("conjunction")) return "Соединение";
-    if (aspectId.includes("opposition")) return "Оппозиция";
-    if (aspectId.includes("square")) return "Квадрат";
-    if (aspectId.includes("trine")) return "Трин";
-    if (aspectId.includes("sextile")) return "Секстиль";
-    return aspect.label || "Связь";
-  }, []);
-
   const aspectStyle = useCallback((aspect: Aspect) => {
-    const aspectId = aspect.aspect_id?.toLowerCase() || "";
-    if (aspectId.includes("conjunction")) {
-      return { ...INK.aspect.conjunction, label: "Соединение" };
-    }
-    if (aspectId.includes("opposition")) {
-      return { ...INK.aspect.opposition, label: "Оппозиция" };
-    }
-    if (aspectId.includes("square")) {
-      return { ...INK.aspect.square, label: "Квадрат" };
-    }
-    if (aspectId.includes("trine")) {
-      return { ...INK.aspect.trine, label: "Трин" };
-    }
-    if (aspectId.includes("sextile")) {
-      return { ...INK.aspect.sextile, label: "Секстиль" };
-    }
-    return { ...INK.aspect.other, label: describeAspectKind(aspect) };
-  }, [describeAspectKind]);
+    return resolveNatalAspectRenderStyle({
+      aspect_id: aspect.aspect_id,
+      label: aspect.label,
+      tension_level: aspect.tension_level,
+    });
+  }, []);
 
   const houseSegments = useMemo(() => {
     return houseCusps.map((cusp, i) => {
@@ -597,6 +608,8 @@ export function NatalChartWheel({
       opacity: number;
       width: number;
       label: string;
+      stack: number;
+      weight: string;
     }> = [];
 
     for (const aspect of aspectsProp) {
@@ -626,9 +639,13 @@ export function NatalChartWheel({
         opacity: style.opacity,
         width: style.width,
         label: style.label,
+        stack: style.stack,
+        weight: style.weight,
       });
     }
 
+    // Soft aspects farther (paint first); strong closer to front.
+    lines.sort((a, b) => a.stack - b.stack);
     return lines;
   }, [aspectRadius, aspectStyle, aspectsProp, getPosition, planetsWithPositions]);
 
@@ -686,7 +703,15 @@ export function NatalChartWheel({
       data-layout={isMobile ? "mobile" : "desktop"}
     >
       <div className={styles.instrument}>
-      <div className={styles.plate}>
+      <div
+        className={styles.plate}
+        data-testid="natal-chart-plate"
+        onPointerMove={onPlatePointerMove}
+        onPointerLeave={onPlatePointerLeave}
+        style={{
+          transform: `perspective(920px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+        }}
+      >
         <svg
           className={styles.svg}
           viewBox={`0 0 ${size} ${size}`}
@@ -699,19 +724,33 @@ export function NatalChartWheel({
             <stop offset="62%" stopColor={INK.parchment1} stopOpacity="1" />
             <stop offset="100%" stopColor={INK.parchment2} stopOpacity="1" />
           </radialGradient>
-          <filter id={softGlowId}>
+          <radialGradient id={planetLitId} cx="32%" cy="28%" r="68%">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.98" />
+            <stop offset="42%" stopColor="#fff8ef" stopOpacity="1" />
+            <stop offset="78%" stopColor="#f0e2cb" stopOpacity="1" />
+            <stop offset="100%" stopColor="#d8c4a4" stopOpacity="1" />
+          </radialGradient>
+          <radialGradient id={planetLitSelectedId} cx="34%" cy="30%" r="70%">
+            <stop offset="0%" stopColor="#fffdf8" stopOpacity="1" />
+            <stop offset="35%" stopColor="#f5e6c8" stopOpacity="1" />
+            <stop offset="100%" stopColor="#c9a96e" stopOpacity="1" />
+          </radialGradient>
+          <filter id={softGlowId} x="-40%" y="-40%" width="180%" height="180%">
             <feGaussianBlur stdDeviation="5" result="coloredBlur" />
             <feMerge>
               <feMergeNode in="coloredBlur" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
-          <filter id={planetGlowId}>
+          <filter id={planetGlowId} x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="3.5" result="planetBlur" />
             <feMerge>
               <feMergeNode in="planetBlur" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
+          </filter>
+          <filter id={planetShadowId} x="-60%" y="-60%" width="220%" height="220%">
+            <feDropShadow dx="1.4" dy="2.6" stdDeviation="2.1" floodColor="#3d3228" floodOpacity="0.32" />
           </filter>
           <clipPath id={webClipId}>
             <circle cx={center} cy={center} r={innerRadius - 2} />
@@ -727,6 +766,13 @@ export function NatalChartWheel({
           onClick={() => setSelected(null)}
         />
 
+        {/* Layer back: rings / zodiac / houses — slight counter-parallax */}
+        <g
+          className={styles.layerBack}
+          style={{
+            transform: `translate(${tilt.y * 0.55}px, ${-tilt.x * 0.55}px)`,
+          }}
+        >
         <circle
           cx={center}
           cy={center}
@@ -914,7 +960,15 @@ export function NatalChartWheel({
             </g>
           );
         })}
+        </g>
 
+        {/* Layer mid: aspect web + angles */}
+        <g
+          className={styles.layerMid}
+          style={{
+            transform: `translate(${tilt.y * 0.22}px, ${-tilt.x * 0.22}px)`,
+          }}
+        >
         <g clipPath={`url(#${webClipId})`}>
           {(isMobile
             ? aspectLines.filter(
@@ -936,16 +990,17 @@ export function NatalChartWheel({
                   ? Math.min(line.opacity + 0.22, 1)
                   : 0.1;
             const width = isLinked || isMobile ? line.width + 0.7 : line.width;
+            const soft = line.weight === "soft";
             return (
-              <g key={line.key}>
+              <g key={line.key} opacity={soft && activePlanet == null && !isMobile ? 0.92 : 1}>
                 <line
                   x1={line.planet1.anchor.x}
                   y1={line.planet1.anchor.y}
                   x2={line.planet2.anchor.x}
                   y2={line.planet2.anchor.y}
                   stroke={line.color}
-                  strokeWidth={width + 4}
-                  opacity={Math.max(opacity - 0.45, 0.04)}
+                  strokeWidth={width + (line.weight === "strong" ? 5 : 4)}
+                  opacity={Math.max(opacity - (line.weight === "strong" ? 0.38 : 0.5), 0.03)}
                   strokeLinecap="round"
                   filter={`url(#${softGlowId})`}
                 />
@@ -1021,7 +1076,15 @@ export function NatalChartWheel({
             />
           );
         })}
+        </g>
 
+        {/* Layer front: lit planet spheres */}
+        <g
+          className={styles.layerFront}
+          style={{
+            transform: `translate(${tilt.y * -0.4}px, ${-tilt.x * -0.4}px)`,
+          }}
+        >
         {planetsWithPositions.map((planet, idx) => {
           const isSelected = selectedPlanet === planet.body;
           const isActive = activePlanet === planet.body;
@@ -1035,30 +1098,41 @@ export function NatalChartWheel({
               onClick={() => togglePlanet(planet.body)}
               onMouseEnter={() => setHoveredPlanet(planet.body)}
               onMouseLeave={() => setHoveredPlanet(null)}
-              filter={isActive ? `url(#${planetGlowId})` : undefined}
+              filter={`url(#${planetShadowId})`}
             >
-              <circle cx={planet.position.x} cy={planet.position.y} r={planetDisc + 10} fill="transparent" />
-              <circle
-                cx={planet.position.x}
-                cy={planet.position.y}
-                r={isActive ? planetDisc + 2 : planetDisc}
-                fill={isSelected ? planetColor : isActive ? "#ffffff" : "#fffaf4"}
-                stroke={planetColor}
-                strokeWidth={isActive ? "2.25" : "1.6"}
-                style={{ transition: "all 0.3s ease" }}
-              />
-              <text
-                x={planet.position.x}
-                y={planet.position.y}
-                textAnchor="middle"
-                dominantBaseline="central"
-                fontSize={isMobile ? (isActive ? "16" : "14") : isActive ? "18" : "16"}
-                fill={isSelected ? INK.white : planetColor}
-                fontWeight="700"
-                style={{ transition: "all 0.3s ease", pointerEvents: "none" }}
-              >
-                {planet.symbol}
-              </text>
+              <g filter={isActive ? `url(#${planetGlowId})` : undefined}>
+                <circle cx={planet.position.x} cy={planet.position.y} r={planetDisc + 10} fill="transparent" />
+                <circle
+                  cx={planet.position.x}
+                  cy={planet.position.y}
+                  r={isActive ? planetDisc + 2 : planetDisc}
+                  fill={isSelected ? `url(#${planetLitSelectedId})` : `url(#${planetLitId})`}
+                  stroke={planetColor}
+                  strokeWidth={isActive ? "2.35" : "1.7"}
+                  style={{ transition: "all 0.3s ease" }}
+                />
+                {/* Specular highlight */}
+                <circle
+                  cx={planet.position.x - planetDisc * 0.28}
+                  cy={planet.position.y - planetDisc * 0.32}
+                  r={planetDisc * 0.28}
+                  fill="#ffffff"
+                  opacity={isSelected ? 0.55 : 0.42}
+                  style={{ pointerEvents: "none", transition: "all 0.3s ease" }}
+                />
+                <text
+                  x={planet.position.x}
+                  y={planet.position.y}
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  fontSize={isMobile ? (isActive ? "16" : "14") : isActive ? "18" : "16"}
+                  fill={isSelected ? INK.inkDeep : planetColor}
+                  fontWeight="700"
+                  style={{ transition: "all 0.3s ease", pointerEvents: "none" }}
+                >
+                  {planet.symbol}
+                </text>
+              </g>
             </g>
           );
         })}
@@ -1076,10 +1150,11 @@ export function NatalChartWheel({
           cx={center}
           cy={center}
           r="18"
-          fill={INK.white}
+          fill={`url(#${planetLitId})`}
           stroke={INK.gold}
           strokeWidth="1.5"
-          opacity="0.92"
+          opacity="0.96"
+          filter={`url(#${planetShadowId})`}
           onClick={() => setSelected(null)}
         />
         <circle
@@ -1090,6 +1165,7 @@ export function NatalChartWheel({
           opacity="0.85"
           style={{ pointerEvents: "none" }}
         />
+        </g>
         </svg>
       </div>
 

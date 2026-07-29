@@ -51,6 +51,25 @@
   width: min(100%, 28rem);
   max-width: 100%;
   align-self: center;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.layerBack,
+.layerMid,
+.layerFront {
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plate,
+  .layerBack,
+  .layerMid,
+  .layerFront {
+    transition: none !important;
+    transform: none !important;
+  }
 }
 
 .svg {
