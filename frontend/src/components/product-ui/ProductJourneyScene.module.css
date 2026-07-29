@@ -391,6 +391,8 @@
 .dualPanels {
   display: grid;
   gap: 0.75rem;
+  /* Wave 1: always vertical — 99% mobile; no side-by-side dual columns. */
+  grid-template-columns: 1fr;
 }
 
 @media (min-width: 640px) {
@@ -398,10 +400,6 @@
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: start;
     padding: 1.35rem 1.35rem 1.45rem;
-  }
-
-  .dualPanels {
-    grid-template-columns: 1fr 1fr;
   }
 }
 

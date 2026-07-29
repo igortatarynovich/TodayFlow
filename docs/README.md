@@ -43,6 +43,9 @@
 ## Today · Profile (experience)
 
 - [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) — **ACCEPTED** experience layer Today
+- [today/TODAY_WAVE2_EXECUTION_PLAN.md](./today/TODAY_WAVE2_EXECUTION_PLAN.md) — Wave 2 action plan (Tap → Verdict → Glance)
+- [today/TODAY_WAVE2_CONTRACT_V1.md](./today/TODAY_WAVE2_CONTRACT_V1.md) — `day_facts_v1` + slots (**CONTRACT LOCKED**)
+- [today/TODAY_MOTION_PILOT_V1.md](./today/TODAY_MOTION_PILOT_V1.md) — Today attention motion pilot (TapWidget)
 - [TODAY_LANGUAGE_V1.md](./today-language/TODAY_LANGUAGE_V1.md) — язык и quality gate копирайта
 - [TODAY_PRODUCT_MODEL.md](./TODAY_PRODUCT_MODEL.md) · [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) — **guest → onboarding → First Today** (route contract v2)
 - [TODAY_PERSONALIZATION_CORE.md](./TODAY_PERSONALIZATION_CORE.md) — контракт, events, prompts (web + iOS)

@@ -1,0 +1,65 @@
+.slot {
+  display: block;
+  width: 100%;
+  min-height: 0;
+}
+
+.tap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.85rem 0 0.25rem;
+  border-top: 1px solid rgba(212, 184, 150, 0.2);
+}
+
+.tapLabel {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--tf-ink, #2a2520);
+}
+
+.tapRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.tapBtn {
+  min-height: 44px;
+  min-width: 5.5rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: 0.85rem;
+  border: 1px solid rgba(212, 184, 150, 0.35);
+  background: rgba(255, 255, 255, 0.7);
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--tf-ink, #2a2520);
+  cursor: pointer;
+}
+
+.tapBtn[data-selected="true"] {
+  border-color: var(--tf-accent-action, #8f6b3a);
+  background: rgba(143, 107, 58, 0.12);
+}
+
+.tapHint {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--tf-ink-soft, #5c5348);
+}
+
+:global([data-theme="dark"]) .tapBtn {
+  background: rgba(26, 23, 20, 0.55);
+  color: rgba(245, 240, 232, 0.92);
+}
+
+:global([data-theme="dark"]) .tapLabel {
+  color: rgba(245, 240, 232, 0.92);
+}
+
+:global([data-theme="dark"]) .tapHint {
+  color: rgba(232, 226, 214, 0.65);
+}

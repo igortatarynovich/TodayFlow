@@ -9,6 +9,11 @@ import { TodayDayContinuityClosed } from "@/components/today/experience/TodayDay
 import { TodayDayContinuityEveningClose } from "@/components/today/experience/TodayDayContinuityEveningClose";
 import { TodayEveningProductClose } from "@/components/today/composition/TodayEveningProductClose";
 import { TodayPersonalizedProductSection } from "@/components/today/composition/TodayPersonalizedProductSection";
+import { TodayActShell } from "@/components/today/composition/TodayActShell";
+import {
+  TodayGlanceTimelineSlot,
+  TodayVerdictStripSlot,
+} from "@/components/today/composition/TodayWave2Slots";
 import { LoadingSpinner } from "@/components/orbit";
 import { HeroMedium } from "@/components/foundation/HeroMedium";
 import { profileMotionStyles } from "@/components/foundation/ProfileMotion";
@@ -1297,39 +1302,30 @@ export function TodayCompositionSurface(props: Props) {
 
   const ritualGateSection =
     useProductFoundation && showRitualSpine ? (
-      <div className={styles.journeyScene} data-testid="today-zone-open-day">
-        <header className={styles.journeySceneHeader}>
-          <p className={styles.journeyStepIndex}>
-            <span className={styles.journeyStepBadge}>2</span>
-            <span>{copy.journey.openTitle}</span>
-          </p>
-          <p className={styles.journeySceneLead}>{copy.journey.openLead}</p>
-        </header>
-        <DsRitualGateSection testId="today-zone-ritual-gates">
-          {zones.ritualTarot && !engagement.tarotPickedName ? (
-            <DsRitualGate
-              kind="tarot"
-              step="Шаг 1"
-              title={copy.ritualTarotPendingTitle}
-              body={copy.ritualTarotPendingBody}
-              cta={copy.ritualTarotOpenCta}
-              testId="today-ritual-tarot-gate"
-              onClick={() => setRitualPickOpen("tarot")}
-            />
-          ) : null}
-          {zones.ritualNumber && engagement.tarotPickedName && !engagement.numberConfirmed ? (
-            <DsRitualGate
-              kind="number"
-              step="Шаг 2"
-              title={copy.ritualNumberPendingTitle}
-              body={copy.ritualNumberPendingBody}
-              cta={copy.ritualNumberOpenCta}
-              testId="today-ritual-number-gate"
-              onClick={() => setRitualPickOpen("number")}
-            />
-          ) : null}
-        </DsRitualGateSection>
-      </div>
+      <DsRitualGateSection testId="today-zone-ritual-gates">
+        {zones.ritualTarot && !engagement.tarotPickedName ? (
+          <DsRitualGate
+            kind="tarot"
+            step="Шаг 1"
+            title={copy.ritualTarotPendingTitle}
+            body={copy.ritualTarotPendingBody}
+            cta={copy.ritualTarotOpenCta}
+            testId="today-ritual-tarot-gate"
+            onClick={() => setRitualPickOpen("tarot")}
+          />
+        ) : null}
+        {zones.ritualNumber && engagement.tarotPickedName && !engagement.numberConfirmed ? (
+          <DsRitualGate
+            kind="number"
+            step="Шаг 2"
+            title={copy.ritualNumberPendingTitle}
+            body={copy.ritualNumberPendingBody}
+            cta={copy.ritualNumberOpenCta}
+            testId="today-ritual-number-gate"
+            onClick={() => setRitualPickOpen("number")}
+          />
+        ) : null}
+      </DsRitualGateSection>
     ) : null;
 
   const ritualSpineStages = showRitualSpine ? (
@@ -1411,17 +1407,26 @@ export function TodayCompositionSurface(props: Props) {
       {!embeddedInWebDashboard ? topRowSection : null}
       {!embeddedInWebDashboard ? greetingSection : null}
 
-      <MotionReveal>{heroSection}</MotionReveal>
-
-      {dayReadingReady ? (
-        <>
-          <MotionReveal delayMs={MOTION.staggerMs}>{pulseSection}</MotionReveal>
-          <MotionReveal delayMs={MOTION.staggerMs * 2}>{glanceSection}</MotionReveal>
-          {morningDialogue}
-        </>
-      ) : (
-        morningDialogue
-      )}
+      <TodayActShell
+        step={1}
+        title={copy.journey.dayTitle}
+        lead={copy.journey.dayLead}
+        accent="action"
+        motif="today"
+        testId="today-zone-act-plot"
+      >
+        <MotionReveal>{heroSection}</MotionReveal>
+        <TodayVerdictStripSlot />
+        {dayReadingReady ? (
+          <>
+            <MotionReveal delayMs={MOTION.staggerMs}>{pulseSection}</MotionReveal>
+            <MotionReveal delayMs={MOTION.staggerMs * 2}>{glanceSection}</MotionReveal>
+            {morningDialogue}
+          </>
+        ) : (
+          morningDialogue
+        )}
+      </TodayActShell>
     </div>
   );
 
@@ -1450,6 +1455,89 @@ export function TodayCompositionSurface(props: Props) {
         ) : null}
 
         {dayStoryFoundation}
+
+        {/* Act 2 — symbols (gates or opened) before reading. GlanceTimeline slot reserved for Wave 2. */}
+        {useProductFoundation && (showRitualAsComplement || ((story.tarotImpact || story.numberImpact) && story.personalizedReady)) ? (
+          <MotionReveal delayMs={MOTION.staggerMs}>
+            <TodayActShell
+              step={2}
+              title={copy.journey.openTitle}
+              lead={copy.journey.openLead}
+              accent="sky"
+              testId="today-zone-open-day"
+              slotAfter={<TodayGlanceTimelineSlot />}
+            >
+              {showRitualAsComplement ? ritualGateSection : null}
+              {showRitualAsComplement ? ritualTarotImpactStage : null}
+              {(story.tarotImpact || story.numberImpact) && story.personalizedReady ? (
+                <div className={styles.symbolImpactsStack} data-testid="today-zone-symbol-impacts">
+                  {story.tarotImpact ? (
+                    <section className={styles.ritualReveal} data-testid="today-zone-tarot-impact">
+                      <p className={styles.ritualRevealKind}>Символ дня · открыт</p>
+                      <h2 className={styles.ritualRevealTitle}>{story.tarotImpact.title}</h2>
+                      <p className={styles.ritualRevealHeadline}>{story.tarotImpact.headline}</p>
+                      <p className={styles.ritualRevealBody}>{story.tarotImpact.body}</p>
+                      <TodayInterpretationConfirm
+                        target="tarot_impact"
+                        selectedChoiceId={(engagement.tarotResonance as ProximityChoiceId | null) ?? null}
+                        onSelect={(choiceId, resonance) =>
+                          onInterpretationConfirm("tarot_impact", choiceId, resonance, story.tarotImpact?.headline)
+                        }
+                      />
+                      {engagement.tarotPickedId != null ? (
+                        <Link
+                          href={buildTarotDeepenHref({
+                            cardId: engagement.tarotPickedId,
+                            orientation: "upright",
+                            source: "today",
+                          })}
+                          className={`orbit-button orbit-button-secondary ${styles.ritualDeepenCta}`}
+                          data-testid="today-tarot-deepen"
+                          onClick={() => {
+                            trackMeaningEvent({
+                              event_type: "tarot_deepen_started",
+                              event_source: TAROT_DEEPEN_EVENT_SOURCE,
+                              local_date: dateISO,
+                              payload: buildTarotDeepenEventPayload({
+                                cardId: engagement.tarotPickedId!,
+                                orientation: "upright",
+                                source: "today",
+                              }),
+                              idempotency_key: tarotDeepenIdempotencyKey({
+                                cardId: engagement.tarotPickedId!,
+                                source: "today",
+                                localDate: dateISO,
+                              }),
+                              refreshRings: false,
+                            });
+                          }}
+                        >
+                          Исследовать глубже →
+                        </Link>
+                      ) : null}
+                    </section>
+                  ) : null}
+
+                  {story.numberImpact ? (
+                    <section className={styles.ritualReveal} data-testid="today-zone-number-impact">
+                      <p className={styles.ritualRevealKind}>Число дня · открыто</p>
+                      <h2 className={styles.ritualRevealTitle}>{story.numberImpact.title}</h2>
+                      <p className={styles.ritualRevealHeadline}>{story.numberImpact.headline}</p>
+                      <p className={styles.ritualRevealBody}>{story.numberImpact.body}</p>
+                      <TodayInterpretationConfirm
+                        target="number_impact"
+                        selectedChoiceId={(engagement.numberResonance as ProximityChoiceId | null) ?? null}
+                        onSelect={(choiceId, resonance) =>
+                          onInterpretationConfirm("number_impact", choiceId, resonance, story.numberImpact?.headline)
+                        }
+                      />
+                    </section>
+                  ) : null}
+                </div>
+              ) : null}
+            </TodayActShell>
+          </MotionReveal>
+        ) : null}
 
         {useProductPersonalized ? (
           <TodayPersonalizedProductSection
@@ -1516,17 +1604,10 @@ export function TodayCompositionSurface(props: Props) {
           />
         ) : null}
 
-        {/* Ritual complements the assembled day — does not gate the reading. */}
-        {showRitualAsComplement ? (
-          <>
-            <MotionReveal delayMs={MOTION.staggerMs}>{ritualGateSection}</MotionReveal>
-            {ritualTarotImpactStage}
-          </>
-        ) : null}
-
-        {/* Opened card + number stay on surface for re-reading (DAY_SYMBOL_REVEAL). */}
-        {(story.tarotImpact || story.numberImpact) &&
-        (story.personalizedReady || (!useProductFoundation && engagement.tarotPickedName)) ? (
+        {/* First-today / non-foundation: opened symbols stay after spine (legacy path). */}
+        {!useProductFoundation &&
+        (story.tarotImpact || story.numberImpact) &&
+        engagement.tarotPickedName ? (
           <div className={styles.personalSection} data-testid="today-zone-symbol-impacts">
             {story.tarotImpact ? (
               <section className={styles.ritualReveal} data-testid="today-zone-tarot-impact">
@@ -1593,7 +1674,9 @@ export function TodayCompositionSurface(props: Props) {
           </div>
         ) : null}
 
-        {!isDayNotReady(props.contract) &&
+        {/* Depth/sky: hide from main scroll when Act 3 chapters already carry the day (Wave 1). */}
+        {!useProductPersonalized &&
+        !isDayNotReady(props.contract) &&
         props.contract.depth_layer &&
         Array.isArray(props.contract.depth_layer.menu) &&
         props.contract.depth_layer.menu.length > 0 ? (
@@ -1604,8 +1687,7 @@ export function TodayCompositionSurface(props: Props) {
           />
         ) : null}
 
-        {/* Sky influences stay visible after ritual — overlay card/number, do not hide foundation. */}
-        {showSkyCards ? (
+        {!useProductPersonalized && showSkyCards ? (
           <section className={styles.skySection} data-testid="today-zone-sky-influences">
             <h2 className={styles.sectionTitle}>{copy.astroContextTitle}</h2>
             <TodaySkyStoryCards cards={story.skyCards} />

@@ -1,0 +1,127 @@
+/* TodayActShell — one full-bleed act, one gutter. No nested max-width shells. */
+
+.shell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(212, 184, 150, 0.18);
+  background:
+    radial-gradient(ellipse 80% 55% at 8% 0%, rgba(201, 169, 110, 0.08) 0%, transparent 55%),
+    transparent;
+}
+
+.gutterPage {
+  padding: 1.35rem 1.15rem 1.5rem;
+}
+
+.gutterNone {
+  padding: 0;
+}
+
+.bridge {
+  margin-top: 0.25rem;
+}
+
+.accentDefault {
+  box-shadow: inset 3px 0 0 var(--tf-accent-action, #8f6b3a);
+}
+
+.accentSky {
+  box-shadow: inset 3px 0 0 rgba(91, 143, 168, 0.85);
+}
+
+.accentSupport {
+  box-shadow: inset 3px 0 0 rgba(47, 107, 79, 0.75);
+}
+
+.accentAction {
+  box-shadow: inset 3px 0 0 var(--tf-accent-action, #8f6b3a);
+}
+
+.header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0 0.15rem;
+}
+
+.stepIndex {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin: 0;
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tf-accent-gold-600, #8b6a3e);
+}
+
+.stepBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 184, 150, 0.35);
+  background: rgba(255, 255, 255, 0.55);
+  font-weight: 700;
+}
+
+.lead {
+  margin: 0;
+  max-width: 42ch;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--tf-ink-soft, #5c5348);
+}
+
+.body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+}
+
+/* Touch targets for CTAs inside acts */
+.body :is(button, a.orbit-button) {
+  min-height: 44px;
+}
+
+@media (min-width: 48rem) {
+  .gutterPage {
+    padding: 1.6rem 1.5rem 1.85rem;
+  }
+
+  .lead {
+    font-size: 1rem;
+  }
+}
+
+:global([data-theme="dark"]) .shell {
+  border-top-color: rgba(212, 184, 150, 0.12);
+  background:
+    radial-gradient(ellipse 80% 55% at 8% 0%, rgba(201, 169, 110, 0.1) 0%, transparent 55%),
+    transparent;
+}
+
+:global([data-theme="dark"]) .stepBadge {
+  background: rgba(26, 23, 20, 0.55);
+  border-color: rgba(212, 184, 150, 0.22);
+}
+
+:global([data-theme="dark"]) .lead {
+  color: rgba(232, 226, 214, 0.78);
+}

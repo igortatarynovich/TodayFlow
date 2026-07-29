@@ -1,6 +1,6 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-07-25
+Last updated: 2026-07-29
 Owner: Product + Engineering
 Status: Active working document
 
@@ -1096,6 +1096,9 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-07-29 | Today / Content | **Wave 2 — day_facts_v1 contract + execution plan** | **CONTRACT LOCKED** | Single SoT `day_facts_v1` (slots = views). Order: Tap+accuracy → VerdictStrip → GlanceTimeline. Fixed 4 domains + `sphere_score_v0`. Motion pilot = TapWidget only. Docs: [TODAY_WAVE2_EXECUTION_PLAN](./today/TODAY_WAVE2_EXECUTION_PLAN.md) · [TODAY_WAVE2_CONTRACT_V1](./today/TODAY_WAVE2_CONTRACT_V1.md) · [TODAY_MOTION_PILOT_V1](./today/TODAY_MOTION_PILOT_V1.md). Next: Phase 0.5 manual calib on 8 igor dates → Phase A code + Architecture impact.
+- 2026-07-29 | Today / Layout | **Wave 1 — ActShell page scenario** | **LIVE (layout)** | Mobile-first 5-act stack via `TodayActShell` (full-bleed + one gutter); order plot → symbols → reading → move → bridges; dual always vertical; quiet dashboard header; reserved Wave 2 slots `VerdictStrip` / `GlanceTimeline` / `TapWidget` (stubs). CI: Jest act-order + Playwright screenshots 390×844 & 768 (`e2e/today-act-shell-visual.spec.ts`). **Not** “готовым Today” — content/IA pivot is Wave 2.
+- 2026-07-29 | Today / Content | **Wave 2 — practical IA in ActShell slots** | **SUPERSEDED → CONTRACT LOCKED** | Replaced by day_facts_v1 contract + phased plan (Tap → Verdict → Glance).
 - 2026-07-08 | Web Today narrative | client-side same-day dedup (sessionStorage) | DONE | `fetchTodayNarrativeCached` в `todayNarrativeCache.ts`: ключ date/surface/parent/topic/depth/ritual_fp; hit → без POST; in-flight coalesce; `force` после ритуала. Паритет iOS `cachedNarrative` + переживает remount вкладки. Today page + LifeSpheres deepen.
 - 2026-07-08 | Today narrative cache | fix «Сегодня собирается бесконечно» — same-day reuse | DONE | `_load_narrative_cache` / `_load_funnel_step_cache`: `day_context_sha256` = предпочтение свежести, не жёсткий гейт. Причина: `get_daily_fusion_index` дрейфует от внутридневной активности пользователя → каждый заход был cache-miss + повтор LLM-воронки. Теперь переиспользуется свежий лог со стабильным ключом (date/surface/ritual_fp/intent_fp/tier/depth/snapshot), как `day_story_v1`. AMLL: `reason=GATE:cache_hit:same_day_reuse`. Backend-only, паритет web/iOS/Android через тот же REST. См. `DAY_CONTEXT_V0.md` §Промпты narrative.
 - 2026-07-08 | Web product UI | CSS convergence: domain layouts → productPageLayout | IN PROGRESS | `todayWebV2` / `tarotWebV2` / `compatibilityWebV2` удалены; Today·Tarot·Compat hub импортируют `productPageLayout.module.css`.
@@ -1733,6 +1736,7 @@ Historical note:
 - 2026-07-01 | Product | **Positive Definition CLOSED** | **CLOSED** | §5.7 · Build Map E9 · spec · UX · empty states
 - 2026-07-01 | Product | **Build Map v0.5.6 — `PracticeRecommendation` spec 🟢** | **ACTIVE** | One practice · [TODAYFLOW_PRODUCT_BUILD_MAP.md](./TODAYFLOW_PRODUCT_BUILD_MAP.md)
 - 2026-07-27 | Profile / Architecture | **Applied houses emit all 12** | **LIVE** | Factor how+do for every house (domain+cusp+planet function); no empty non-angular omit · `character_engine_house_lines_v0.4`.
+- 2026-07-28 | Today / Scenario | **Conflict short_name from day facts** | **LIVE** | Deterministic poles/stakes from ranked drivers (+natal) · family bank = fallback only · heal bank slogans on project · BE rebuilt
 - 2026-07-28 | Today / UX | **Card+number stay readable after reveal** | **LIVE** | Live impacts in scenario «Карта и число» · symbol-impacts after reading · numberValue engagement · FE rebuilt
 - 2026-07-28 | Today / UX | **Hide calendar DOY from day prose** | **LIVE** | `Календарный день … N-й день года` never in events_lead / opening / Сигналы — date stays in greeting chrome · heal pops calendar-only lead · BE+FE rebuilt
 - 2026-07-28 | Today / UX | **Day reading open before ritual** | **DONE (code)** | Scenario chapters show when `day_scenario` ready · ritual = complement («Символы дня») not unlock · hero theme once · affirm title≠detail · **needs:** FE rebuild deploy
@@ -1751,6 +1755,8 @@ Historical note:
 - 2026-07-26 | Profile / Architecture | **CE post-cutover kill + readers** | **LIVE PARTIAL** | Personality/funnel hard-killed · CUM+iOS+FE V0 prefer contract/CE · [CHARACTER_ENGINE_POST_CUTOVER_READERS_V0.md](audits/CHARACTER_ENGINE_POST_CUTOVER_READERS_V0.md). **Next:** readers pass 2 (in progress) · file cleanup.
 - 2026-07-26 | Profile / Architecture | **CE PUBLISH_READY cutover** | **LIVE** | Owner-approved · `character_engine_v1` = portrait SoT · personality/funnel/oneshot gated · [CHARACTER_ENGINE_PUBLISH_READY_CUTOVER_V0.md](audits/CHARACTER_ENGINE_PUBLISH_READY_CUTOVER_V0.md). Readers migration in progress.
 - 2026-07-26 | Profile / Architecture | **CE envelope `character_engine_v1`** | **LIVE READY** | Nest composed from Stage 0–5 · cutover promotes `forming`→`ready` · [CHARACTER_ENGINE_ENVELOPE_V0.md](audits/CHARACTER_ENGINE_ENVELOPE_V0.md).
+- 2026-07-29 | Profile / UI | **Act1 share-core + anti-dupe (#2+#6)** | **IN BRANCH** | Hero = name+line+visual only · no foundation/pills · Act2 owns facts · `journeyAntiDupe` · Act3 text draft [PROFILE_ACT3_NODE_DRAFT_V0.md](profile/PROFILE_ACT3_NODE_DRAFT_V0.md)
+- 2026-07-29 | Profile / Content | **Acts 3–5 scenario backlog** | **OPEN** | After #2+#6: Act3 node draft exists · Act4 vector · Act5 bridge still need scenarist text before Visual Modes (#4) — else polish stays two-act
 - 2026-07-28 | Profile / UI | **Why formation with meaning** | **IN BRANCH** | Шаг 2: selected vs influenced blocks · each anchor fact+meaning · no decorative chips · `buildWhyFormationCards` · Forms/Surface
 - 2026-07-28 | Profile / UI | **Essence foundation on Шаг 1** | **IN BRANCH** | Sun/Moon/ASC/MC/LP/PY move into «Твоя суть» with RU fact + meaning · Explore drops bare signature dump · Surface/Forms updated · `buildEssenceFoundationCards`
 - 2026-07-27 | Profile / UI | **House theses not encyclopedia** | **IN BRANCH** | Web life map + full map never use natal `interpretations.houses` · short `HOUSE_FALLBACK` · iOS parity + decode CE `character_engine_house_lines_v0` on chart

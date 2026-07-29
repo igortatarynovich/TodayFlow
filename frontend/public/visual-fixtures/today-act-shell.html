@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Today ActShell visual fixture</title>
+    <style>
+      :root {
+        --tf-accent-action: #8f6b3a;
+        --tf-accent-gold-600: #8b6a3e;
+        --tf-ink: #2a2520;
+        --tf-ink-soft: #5c5348;
+        --tf-font-mono: ui-monospace, monospace;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        background: #f7f4ee;
+        color: var(--tf-ink);
+      }
+      .shell {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        width: 100%;
+        max-width: none;
+        padding: 1.35rem 1.15rem 1.5rem;
+        border-top: 1px solid rgba(212, 184, 150, 0.18);
+        box-shadow: inset 3px 0 0 var(--tf-accent-action);
+        background:
+          radial-gradient(ellipse 80% 55% at 8% 0%, rgba(201, 169, 110, 0.08) 0%, transparent 55%),
+          transparent;
+      }
+      .shell[data-accent="sky"] { box-shadow: inset 3px 0 0 rgba(91, 143, 168, 0.85); }
+      .shell[data-accent="support"] { box-shadow: inset 3px 0 0 rgba(47, 107, 79, 0.75); }
+      .step {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        margin: 0;
+        font-family: var(--tf-font-mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--tf-accent-gold-600);
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 1.5rem;
+        min-height: 1.5rem;
+        border-radius: 999px;
+        border: 1px solid rgba(212, 184, 150, 0.35);
+        background: rgba(255, 255, 255, 0.55);
+        font-weight: 700;
+      }
+      .lead {
+        margin: 0.35rem 0 0;
+        max-width: 42ch;
+        font-size: 0.95rem;
+        line-height: 1.45;
+        color: var(--tf-ink-soft);
+      }
+      .hero {
+        min-height: 12rem;
+        border-radius: 1.25rem;
+        background: linear-gradient(165deg, #121018 0%, #1a1620 55%, #1e1a24 100%);
+        color: #f5f0e8;
+        padding: 1.5rem;
+        display: flex;
+        align-items: flex-end;
+        font-size: 1.35rem;
+      }
+      .slot {
+        min-height: 0.25rem;
+      }
+      .dual {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+      .panel {
+        padding: 0.85rem 0.9rem;
+        border-radius: 1rem;
+        border: 1px solid rgba(212, 184, 150, 0.22);
+        background: rgba(255, 255, 255, 0.55);
+      }
+      .tap button {
+        min-height: 44px;
+        min-width: 5.5rem;
+        margin-right: 0.5rem;
+      }
+    </style>
+  </head>
+  <body data-testid="today-act-shell-fixture">
+    <section class="shell" data-today-act-shell="true" data-accent="action">
+      <p class="step"><span class="badge">1</span><span>Сюжет дня</span></p>
+      <p class="lead">Одна главная линия — что держит день вместе.</p>
+      <div class="hero">Предложить, не продавить</div>
+      <div class="slot" data-testid="today-slot-verdict-strip"></div>
+    </section>
+    <section class="shell" data-today-act-shell="true" data-accent="sky">
+      <p class="step"><span class="badge">2</span><span>Символы дня</span></p>
+      <p class="lead">Карта и число дополнят уже собранный день.</p>
+      <div class="panel">Ритуал / открытые символы</div>
+      <div class="slot" data-testid="today-slot-glance-timeline"></div>
+    </section>
+    <section class="shell" data-today-act-shell="true" data-accent="sky">
+      <p class="step"><span class="badge">3</span><span>История дня</span></p>
+      <div class="dual">
+        <div class="panel">Возможность</div>
+        <div class="panel">Ловушка</div>
+      </div>
+    </section>
+    <section class="shell" data-today-act-shell="true" data-accent="support">
+      <p class="step"><span class="badge">4</span><span>Сделать день своим</span></p>
+      <div class="panel">Обещание и опора</div>
+    </section>
+    <section class="shell" data-today-act-shell="true" data-accent="action">
+      <p class="step"><span class="badge">5</span><span>Продолжение</span></p>
+      <div class="tap" data-testid="today-slot-tap-widget">
+        <button type="button">Да</button>
+        <button type="button">Нет</button>
+      </div>
+    </section>
+  </body>
+</html>

@@ -133,8 +133,64 @@ describe("TodayCompositionSurface", () => {
     expect(screen.queryByTestId("today-zone-pulse")).not.toBeInTheDocument();
     expect(screen.getByTestId("today-zone-ritual-gates")).toBeInTheDocument();
     expect(screen.getByTestId("today-entity-daily-theme")).toBeInTheDocument();
-    expect(screen.queryByText(/Сюжет дня|Главная тема дня|Пульс дня/i)).not.toBeInTheDocument();
+    expect(screen.getByTestId("today-zone-act-plot")).toHaveTextContent(/Сюжет дня/i);
     expect(screen.getByTestId("today-zone-hero").textContent).not.toMatch(/число дня\s*[—-]?\s*4/i);
+  });
+
+  it("Wave 1 act order: foundation → symbols → personal; reserved Wave 2 slots present", () => {
+    const contractWithScenario: TodayContractV1 = {
+      ...sampleContract,
+      day_story: {
+        contract_version: "day_story_v1",
+        interpretation_status: "ok",
+        theme: "Ломать работающее или беречь ровный ритм",
+        primary_conflict: "Ломать работающее или беречь ровный ритм",
+        day_scenario: {
+          runtime_sot: true,
+          ready: true,
+          generation_source: "deterministic_engine_b5",
+          conflict: {
+            short_name: "Ломать работающее или беречь ровный ритм",
+            why_arose: "Луна в Козероге собирает одну линию.",
+            opposing_forces: { a: "ломать работающее", b: "беречь ровный ритм" },
+          },
+          scenes: [
+            {
+              scene_id: "scene.work_decisions",
+              sphere: "work_decisions",
+              sphere_label_ru: "Работа и решения",
+              role_in_story: "primary",
+              what_happens: "В работе сегодня решающий жест.",
+              opportunity: "Одно письмо без ожидания одобрения.",
+              trap: "Отложить и сделать вид, что выбора нет.",
+              recommended_action: "Сделай один короткий шаг.",
+              domestic_example: "Письмо, которое ты откладывал.",
+            },
+          ],
+        },
+      },
+    };
+
+    render(
+      <TodayCompositionSurface {...baseProps} contract={contractWithScenario} variant="default" />,
+    );
+
+    const surface = screen.getByTestId("today-composition-surface");
+    const zoneIds = within(surface)
+      .getAllByTestId(/^today-zone-/)
+      .map((el) => el.getAttribute("data-testid"));
+
+    const foundation = zoneIds.indexOf("today-zone-foundation");
+    const openDay = zoneIds.indexOf("today-zone-open-day");
+    const personal = zoneIds.indexOf("today-zone-personal");
+    expect(foundation).toBeGreaterThanOrEqual(0);
+    expect(openDay).toBeGreaterThan(foundation);
+    expect(personal).toBeGreaterThan(openDay);
+
+    expect(screen.getByTestId("today-slot-verdict-strip")).toBeInTheDocument();
+    expect(screen.getByTestId("today-slot-glance-timeline")).toBeInTheDocument();
+    expect(screen.getByTestId("today-slot-tap-widget")).toBeInTheDocument();
+    expect(surface.querySelectorAll("[data-today-act-shell='true']").length).toBeGreaterThanOrEqual(5);
   });
 
   it("hides continuity on firstToday variant", () => {

@@ -114,7 +114,7 @@
 
 @media (min-width: 48rem) {
   .rootWebEmbed .ritualGateRow {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
   }
 }
 
@@ -377,7 +377,7 @@
 
 .glanceCardGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 0.75rem;
 }
 
@@ -388,12 +388,19 @@
 }
 
 .continuityWrap {
-  margin: 0 1.25rem;
-  padding-top: 0.5rem;
+  margin: 0;
+  padding: 0.35rem 0 0;
 }
 
 .glanceSection {
-  padding: 0 1.25rem;
+  padding: 0;
+}
+
+.symbolImpactsStack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  width: 100%;
 }
 
 .glanceColCard {
@@ -426,10 +433,10 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  margin: 0 1.25rem;
+  margin: 0;
   padding: clamp(1.75rem, 4vw, 2.5rem) clamp(1.25rem, 3vw, 1.75rem);
   min-height: min(42dvh, 22rem);
-  border-radius: 2rem;
+  border-radius: 1.25rem;
   border: 1px solid rgba(212, 184, 150, 0.14);
   background:
     radial-gradient(ellipse 70% 55% at 50% 0%, rgba(201, 169, 110, 0.2) 0%, transparent 60%),
@@ -726,7 +733,7 @@
 
 @media (min-width: 380px) {
   .ritualGateRow {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 }
 

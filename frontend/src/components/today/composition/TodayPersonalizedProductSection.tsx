@@ -7,8 +7,8 @@ import {
   profileMotionStyles,
   useProfileMotionInView,
 } from "@/components/foundation/ProfileMotion";
-import { ProfileAtmosphere } from "@/components/profile/v2/ProfileAtmosphere";
 import {
+  ProductJourneyScene,
   ProductNarrativeBlock,
   planetIconSrc,
 } from "@/components/product-ui/ProductJourneyScene";
@@ -24,6 +24,7 @@ import type { TodayDayStoryViewModel } from "@/lib/todayDayStoryModel";
 import type { CoreProfile } from "@/lib/types";
 import { buildTodayCompatibilityHook } from "@/lib/todayCompatibilityHook";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
+import { TodayTapWidgetStub } from "@/components/today/composition/TodayWave2Slots";
 import styles from "@/components/today/composition/TodayPersonalizedProductSection.module.css";
 
 type Props = {
@@ -149,22 +150,18 @@ export function TodayPersonalizedProductSection({
       style={motion.style}
       data-testid="today-zone-personal"
     >
-      <div className={styles.journeyScene} data-testid="today-zone-reading">
-        <ProfileAtmosphere motif="today" />
-        <header className={styles.journeySceneHeader}>
-          <p className={styles.journeyStepIndex}>
-            <span className={styles.journeyStepBadge}>3</span>
-            <span>
-              {narrative.composition === "scenario_chapters"
-                ? copy.journey.readingTitleStory
-                : copy.journey.readingTitle}
-            </span>
-          </p>
-          {copy.journey.readingLead ? (
-            <p className={styles.journeySceneLead}>{copy.journey.readingLead}</p>
-          ) : null}
-        </header>
-
+      <ProductJourneyScene
+        step={3}
+        title={
+          narrative.composition === "scenario_chapters"
+            ? copy.journey.readingTitleStory
+            : copy.journey.readingTitle
+        }
+        lead={copy.journey.readingLead}
+        motif="today"
+        accent="sky"
+        testId="today-zone-reading"
+      >
         {contract.day_story?.interpretation_status === "unavailable" ? (
           <p className={styles.readingParagraph} data-testid="today-interpretation-unavailable">
             {contract.day_story.interpretation_unavailable_message ||
@@ -305,20 +302,16 @@ export function TodayPersonalizedProductSection({
             </p>
           ) : null}
         </div>
-      </div>
+      </ProductJourneyScene>
 
-      <div className={styles.journeyScene} data-testid="today-zone-move">
-        <ProfileAtmosphere motif="effort" />
-        <header className={styles.journeySceneHeader}>
-          <p className={styles.journeyStepIndex}>
-            <span className={styles.journeyStepBadge}>4</span>
-            <span>{copy.journey.moveTitle}</span>
-          </p>
-          {copy.journey.moveLead ? (
-            <p className={styles.journeySceneLead}>{copy.journey.moveLead}</p>
-          ) : null}
-        </header>
-
+      <ProductJourneyScene
+        step={4}
+        title={copy.journey.moveTitle}
+        lead={copy.journey.moveLead}
+        motif="effort"
+        accent="support"
+        testId="today-zone-move"
+      >
         <article className={styles.productCard} data-testid="today-zone-promise">
           <p className={styles.cardEyebrow}>Цель на сегодня</p>
           {dayGoal && !goalDraftOpen ? (
@@ -527,19 +520,18 @@ export function TodayPersonalizedProductSection({
             </p>
           </article>
         )}
-      </div>
+      </ProductJourneyScene>
 
-      <div className={`${styles.journeyScene} ${styles.bridgeScene}`} data-testid="today-zone-bridges-wrap">
-        <ProfileAtmosphere motif="bridge" />
-        <header className={styles.journeySceneHeader}>
-          <p className={styles.journeyStepIndex}>
-            <span className={styles.journeyStepBadge}>5</span>
-            <span>{copy.journey.bridgeTitle}</span>
-          </p>
-          {copy.journey.bridgeLead ? (
-            <p className={styles.journeySceneLead}>{copy.journey.bridgeLead}</p>
-          ) : null}
-        </header>
+      <ProductJourneyScene
+        step={5}
+        title={copy.journey.bridgeTitle}
+        lead={copy.journey.bridgeLead}
+        motif="bridge"
+        accent="action"
+        bridge
+        testId="today-zone-bridges-wrap"
+        slotBefore={<TodayTapWidgetStub />}
+      >
         <nav className={styles.bridges} aria-label="Связанные разделы" data-testid="today-zone-bridges">
           <Link href="/profile" className={styles.bridgeCta}>
             Открыть карту личности
@@ -558,7 +550,7 @@ export function TodayPersonalizedProductSection({
             </Link>
           )}
         </nav>
-      </div>
+      </ProductJourneyScene>
     </section>
   );
 }

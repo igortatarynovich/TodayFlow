@@ -7,7 +7,11 @@ import {
   profileMotionStyles,
   useProfileMotionInView,
 } from "@/components/foundation/ProfileMotion";
-import { ProfileAtmosphere, type ProfileAtmosphereMotif } from "@/components/profile/v2/ProfileAtmosphere";
+import type { ProfileAtmosphereMotif } from "@/components/profile/v2/ProfileAtmosphere";
+import {
+  TodayActShell,
+  type TodayActShellAccent,
+} from "@/components/today/composition/TodayActShell";
 import styles from "@/components/product-ui/ProductJourneyScene.module.css";
 
 type ProductJourneySceneProps = {
@@ -19,8 +23,15 @@ type ProductJourneySceneProps = {
   testId?: string;
   bridge?: boolean;
   className?: string;
+  /** Wave 1 ActShell accent — default action bar for journey continuity. */
+  accent?: TodayActShellAccent;
+  slotBefore?: ReactNode;
+  slotAfter?: ReactNode;
 };
 
+/**
+ * Product journey chrome — renders through TodayActShell (one gutter, no matryoshka).
+ */
 export function ProductJourneyScene({
   step,
   title,
@@ -30,26 +41,29 @@ export function ProductJourneyScene({
   testId,
   bridge = false,
   className = "",
+  accent = "default",
+  slotBefore = null,
+  slotAfter = null,
 }: ProductJourneySceneProps) {
-  const motion = useProfileMotionInView<HTMLElement>(40);
+  const motion = useProfileMotionInView<HTMLDivElement>(40);
 
   return (
-    <section
-      ref={motion.ref}
-      className={`${styles.journeyScene} ${bridge ? styles.bridgeScene : ""} ${motion.className} ${className}`.trim()}
-      style={motion.style}
-      data-testid={testId}
-    >
-      <ProfileAtmosphere motif={motif} />
-      <header className={styles.journeySceneHeader}>
-        <p className={styles.journeyStepIndex}>
-          {step != null ? <span className={styles.journeyStepBadge}>{step}</span> : null}
-          <span>{title}</span>
-        </p>
-        {lead ? <p className={styles.journeySceneLead}>{lead}</p> : null}
-      </header>
-      {children}
-    </section>
+    <div ref={motion.ref} className={motion.className} style={motion.style}>
+      <TodayActShell
+        step={step}
+        title={title}
+        lead={lead}
+        motif={motif}
+        bridge={bridge}
+        accent={accent}
+        testId={testId}
+        className={className}
+        slotBefore={slotBefore}
+        slotAfter={slotAfter}
+      >
+        {children}
+      </TodayActShell>
+    </div>
   );
 }
 
