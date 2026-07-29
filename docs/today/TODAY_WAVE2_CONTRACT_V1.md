@@ -84,9 +84,9 @@ day_facts_v1 {
   domain_verdicts: [{               # VerdictStrip source
     domain: "work"|"money"|"relationships"|"energy"
     verdict: "calm"|"charged"|"friction"|"open"   # descriptive — NOT favorable/avoid
-    why_short: string               # ≤ 10 words
-    driver_ids: [string]
-    logic_source: "sphere_score_v0_1"   # v0 failed calib; see §3
+    why_short: string               # ≤ 10 words — from top driver transit
+    driver_ids: [string]            # primary = top_driver id; optional runners-up for debug
+    logic_source: "top_driver_v1"   # max |weight| driver sets sign+intensity; see §3
   }]
 
   glance_timeline: [{               # GlanceTimeline source; max 3
@@ -141,7 +141,7 @@ UI order always: **work → money → relationships → energy**.
 
 ---
 
-## 3. Verdict logic — `sphere_score_v0` → `sphere_score_v0_1`
+## 3. Verdict logic — `top_driver_v1` (APPROVED after 0.5.2)
 
 ### 3.1 Calib pass 1 (FAILED — do not ship)
 
@@ -164,7 +164,7 @@ Mitigation tried (×0.3 dampen Saturn/Uranus/Neptune/Pluto): work still avoid on
 
 **Deeper failure:** universal valence encodes square/opposition as unconditionally “bad” (−1). For domain **work**, a Mars square is often pressure that *pushes doing* — a **charged** day, not “avoid work”. One valence table for all domains is wrong in principle.
 
-### 3.1b Calib pass 2 — dictionary works; sample bias found
+### 3.1b Calib pass 2a — dictionary works; sample bias found
 
 | Finding | Detail |
 |---------|--------|
@@ -173,17 +173,28 @@ Mitigation tried (×0.3 dampen Saturn/Uranus/Neptune/Pluto): work still avoid on
 | Why | Methodological, not formula: all 8 calib-igor dates sit in one ~5-week window (27.07–28.08). Transit Sun in Leo opposes natal Aquarius Sun+MC cluster for that whole month — a real **career-friction season**, not a scoring bug. |
 | Year-spread check | 12 dates, one per month: work shows calm (Jan–Feb), open (Mar–Apr, Jun), charged (May, Jul–Nov) — dictionary **does** differentiate across the year. |
 
-**Still open before fully closing 0.5.2:** consecutive-day run (10–14 days inside one charged month, e.g. August) to see if **intensity / driver_ids / why_short** move day-to-day inside the season — not only the color word. If nothing moves even in details → separate conversation: seasonal domains vs lunar/Mercurial daily domains on different refresh frequencies (not the same daily strip).
+### 3.1c Calib pass 0.5.2b — full August (31 days) → **CLOSED**; aggregation model change
 
-Does **not** block Phase A (Tap). Dictionary lock **does** unblock Phase B vocabulary; consecutive run may still gate shipping strip UX polish.
+Ran **all 31 days of August** (not only 10–14) with descriptive dictionary + per-domain valence.
 
-### 3.2 Required contract fixes (dictionary APPROVED; valence still open)
+| Aggregation | work flips in August | Notes |
+|-------------|----------------------|-------|
+| **Sum** (`sphere_score_*`) | **2** (charged 29/31) | FAILS inside-month differentiation |
+| **Top-driver** (`top_driver_v1`) | **8** | usable; money 2, relationships 3, energy 6 |
 
-1. **Valence is per-domain**, not universal.  
-   Example: Mars square in `work` ≠ Venus square in `relationships`.  
-   Per-domain valence alone did **not** create day-to-day variation inside one charged season (see §3.1b) — still required for meaning, not for seasonal differentiation.
-2. **Verdict vocabulary is descriptive** — **APPROVED 2026-07-29** (calib pass 2).  
-   Closed dictionary (schema keys → RU UI):
+**Why sum fails inside one month (not just sample bias):** the four work points (Sun, Mars, Saturn, MC) are physically close for this natal (~45° span: Sun+MC Aquarius, Mars+Saturn Capricorn). A transit that hard-aspects the cluster loads **all** points at once; summing them keeps the domain score stuck for weeks. Reproducible inside a single month — structural, not “we picked a bad 8-day window again.”
+
+**Top-driver fix:** for each domain, take only the activation with max `|weight|`. That driver’s **sign** → verdict word; its **|weight|** → intensity (feeds `why_short` / provenance — already the strongest story, now also the decision).
+
+Compromise accepted: money/relationships flip less often under top-driver (2–3 vs 3–4) — feels correct (money slower than mood), not a bug.
+
+**Rejected for VerdictStrip:** domain sum aggregation.  
+**Approved:** `logic_source: "top_driver_v1"`. Dictionary + thresholds unchanged.
+
+### 3.2 Locked product rules
+
+1. **Valence is per-domain**, not universal (Mars square in `work` ≠ Venus square in `relationships`).
+2. **Verdict vocabulary is descriptive** — **APPROVED**:
 
 | Key | RU (strip) | Intent |
 |-----|------------|--------|
@@ -192,44 +203,49 @@ Does **not** block Phase A (Tap). Dictionary lock **does** unblock Phase B vocab
 | `friction` | трение | grit / misalignment — careful, still descriptive |
 | `open` | открыто | support / opening |
 
-**Rejected for daily strip:** `favorable` / `avoid` (and similar “good/bad day at work” framing).
+**Rejected for daily strip:** `favorable` / `avoid`.
 
-Pass 2 finding: swapping avoid→charged / caution→friction already makes an 8/8 “work charged” month **honest and safer** than “avoid work for two months”, even when the color word stays stable inside that season.
+3. **Aggregation is top-driver**, not sum — **APPROVED 2026-07-29 (0.5.2 closed).**
 
-### 3.3 `sphere_score_v0_1` (OPEN — calib pass 2)
-
-Status: **not closed**. Formula rewrite in progress; Phase B gated on pass 2.
-
-Still true from v0:
+### 3.3 `top_driver_v1` (APPROVED — Phase B may ship)
 
 ```text
-weight = valence_domain(domain, aspect, transiting_planet, natal_point)
-         * (1 − orb_deg / max_orb)
-         * speed_factor(transiting_planet)   # optional; alone insufficient
+for each domain D:
+  candidates = natal_activations whose natal_point/house ∈ map(D)
+  for each a in candidates:
+    weight(a) = valence_domain(D, a.aspect, a.transiting_planet, a.natal_point)
+                * (1 − a.orb_deg / max_orb)
+                * speed_factor(a.transiting_planet)   # optional dampen; alone insufficient
+  top = argmax_a |weight(a)|
+  verdict = map_signed_weight_to_label(sign(weight(top)), |weight(top)|)  # calm|charged|friction|open
+  why_short = label from top transit (≤10 words)
+  driver_ids = [top.id]   # provenance may still list runners-up for debug
 ```
 
-`max_orb`: unchanged (6° conj/trine/square/quincunx; 3° sextile; 8° opposition).
+`max_orb`: 6° conj/trine/square/quincunx; 3° sextile; 8° opposition.
 
-**Must change:**
+**Score → label** (same bands as earlier descriptive pass; tune later only if needed):
 
-| Piece | v0 (rejected) | v0.1 direction |
-|-------|---------------|----------------|
-| `valence(...)` | one table for all domains | `valence_work` / `valence_money` / `valence_relationships` / `valence_energy` |
-| score → label | favorable / neutral / caution / avoid | calm / charged / friction / open |
-| slow planets | full weight | dampen *and* still require per-domain meaning (dampen alone failed) |
+| Signed weight of top | verdict |
+|----------------------|---------|
+| strong + | open |
+| mild + / near 0 with drive aspect | charged |
+| mild − | friction |
+| near 0 / quiet | calm |
 
-**Illustrative (not final) — work only:**
+Exact numeric cutovers stay calibratable; the **aggregation rule** (top, not sum) is the locked SoT change.
+
+**Illustrative valence_work (draft, still per-domain):**
 
 | Aspect → natal | Draft valence_work | Why |
 |----------------|--------------------|-----|
 | square → Mars | toward **charged** (+) | pressure to act |
 | square → Venus (work map rare) | toward **friction** (−) | style clash more than drive |
 | trine / sextile → Sun/Mars/MC | toward **open** (+) | support |
-| Saturn transit square stellium | reduced weight + prefer **friction**/**charged**, never month-long **avoid** | background weather ≠ daily ban |
 
-Full per-domain tables + score→label thresholds: fill after calib pass 2 on the same 8 dates. Until then `logic_source` remains draft `sphere_score_v0_1`.
+**Unchanged:** fixed 4 domains and scan order (work → money → relationships → energy).
 
-**Unchanged principle:** fixed 4 domains and scan order (work → money → relationships → energy).
+**Out of scope for this close:** splitting “seasonal” vs “daily” domains onto different refresh cadences — not needed once top-driver restores inside-month flips.
 
 ---
 

@@ -1,6 +1,6 @@
 # Today Wave 2 — Execution Plan
 
-**Status:** Phase A **IN CODE** · Phase 0.5.2a dictionary **APPROVED** · 0.5.2b consecutive-month **OPEN** · Phase B **soft-gated** on 0.5.2b  
+**Status:** Phase A **LIVE** · Phase 0.5.2 **CLOSED** (`top_driver_v1`) · Phase B **UNBLOCKED**  
 **Depends on:** Wave 1 ActShell LIVE (`TodayActShell` + reserved slots)  
 **Canon companions:**
 - [TODAY_WAVE2_CONTRACT_V1.md](./TODAY_WAVE2_CONTRACT_V1.md) — `day_facts_v1`, slots, tap, accuracy
@@ -8,7 +8,7 @@
 
 **Rule:** one compute per user×day. Slots are views. Only Tap write + accuracy aggregate need separate endpoints.
 
-**Parallelism (2026-07-29):** Phase A (Tap) does **not** touch `domain_verdicts` / sphere score — it uses `scenes[]` / `conflict` only. Run **A in parallel** with Phase 0.5 pass 2. Do **not** start Phase B until pass 2 closes.
+**Parallelism note:** Phase A shipped without waiting on verdict calib. Phase B may start now — uses `top_driver_v1`, not domain sum.
 
 ---
 
@@ -36,19 +36,18 @@ Trust bug to avoid: VerdictStrip says «money: friction» while Act 3 narrates a
 
 ---
 
-### Phase 0.5 — Manual calibration (verdict formula)
+### Phase 0.5 — Manual calibration (verdict formula) ✅ CLOSED
 
 | Step | Work | Status |
 |------|------|--------|
 | 0.5.1 | Run `sphere_score_v0` on 8 calib-igor dates | **DONE — FAILED** (work avoid 8/8; money avoid 6/8) |
 | 0.5.1b | Slow-planet dampen 0.3 retry | **DONE — insufficient** |
-| 0.5.2a | Descriptive dictionary `calm|charged|friction|open` + year-spread check | **APPROVED** (dictionary locked; year shows differentiation) |
-| 0.5.2b | Consecutive 10–14 days inside one charged month (e.g. August): intensity / drivers / why_short | **OPEN** — does not block Phase A; may inform Phase B UX (seasonal vs daily) |
-| 0.5.3 | Confirm scene.id = `trap_id` for tap | Close with Phase A (`scene_id` alias) |
+| 0.5.2a | Descriptive dictionary `calm|charged|friction|open` + year-spread check | **APPROVED** |
+| 0.5.2b | Full August (31 days) consecutive inside charged month | **DONE** — sum fails (work charged 29/31, 2 flips); **top_driver_v1** approved (work 8 flips; money 2; rel 3; energy 6) |
+| 0.5.3 | Confirm scene.id = `trap_id` for tap | **DONE** with Phase A (`scene_id` alias) |
 
-**Gate for Phase B vocabulary:** 0.5.2a ✅.  
-**Soft gate for Phase B ship:** prefer 0.5.2b done (or explicit product accept of stable seasonal word + changing why_short only).  
-**Does not gate Phase A.**
+**Gate for Phase B:** 0.5.2 ✅ — dictionary + `top_driver_v1` aggregation locked.  
+**Does not gate Phase A** (already live).
 
 ---
 
@@ -73,17 +72,17 @@ Trust bug to avoid: VerdictStrip says «money: friction» while Act 3 narrates a
 
 ---
 
-### Phase B — VerdictStrip (no new ranking endpoint) — **BLOCKED on 0.5.2**
+### Phase B — VerdictStrip (no new ranking endpoint) — **UNBLOCKED**
 
 | Step | Work | Notes |
 |------|------|-------|
 | B.0 | Architecture impact if public JSON / meaning SoT changes | Likely yes — strip becomes user-facing SoT |
-| B.1 | Compute `domain_verdicts[4]` via **`sphere_score_v0_1`** (per-domain valence) | Fixed order: work → money → relationships → energy |
+| B.1 | Compute `domain_verdicts[4]` via **`top_driver_v1`** (max \|weight\| driver) | Fixed order: work → money → relationships → energy; **not** domain sum |
 | B.2 | Fill Act 1 `today-slot-verdict-strip` from `domain_verdicts` only | Dictionary: calm / charged / friction / open |
-| B.3 | Provenance: `generation_provenance.verdict_driver_ids` | Debug only |
+| B.3 | Provenance: `generation_provenance.verdict_driver_ids` (top id primary) | Debug only |
 | B.4 | Visual: **no motion** on strip (idle) | Motion pilot doc |
 
-**Gate:** strip always 4 rows; day-to-day variation on work/money for stellium nativities; calib pass 2 accepted.
+**Gate:** strip always 4 rows; August-style inside-month flips under top-driver; calib 0.5.2 accepted.
 
 ---
 
@@ -124,9 +123,9 @@ Trust bug to avoid: VerdictStrip says «money: friction» while Act 3 narrates a
 
 ## Suggested ticket titles
 
-1. `Today Wave2 Phase0.5 — sphere_score_v0_1 per-domain + descriptive dict (pass 2)`
-2. `Today Wave2 PhaseA — TapWidget + tap_event_v1 + accuracy-summary + motion pilot` ← **now**
-3. `Today Wave2 PhaseB — domain_verdicts + VerdictStrip` ← after 0.5.2
+1. `Today Wave2 Phase0.5 — CLOSED (top_driver_v1 + descriptive dict)`
+2. `Today Wave2 PhaseA — TapWidget` ← **live**
+3. `Today Wave2 PhaseB — domain_verdicts + VerdictStrip` ← **unblocked now**
 4. `Today Wave2 PhaseC — exact-time glance_timeline + GlanceTimeline UI`
 5. `Today Wave2 PhaseD — day-facts GET + trust audit + motion retro`
 
@@ -141,6 +140,7 @@ Trust bug to avoid: VerdictStrip says «money: friction» while Act 3 narrates a
 | Wave 2 order | Tap → Verdict → Glance; **Tap parallel with calib pass 2** |
 | Domains | Fixed 4: work / money / relationships / energy |
 | Verdict labels | Descriptive: calm / charged / friction / open (**not** favorable/avoid) |
-| Valence | **Per-domain** (`sphere_score_v0_1`); universal table rejected after calib pass 1 |
+| Aggregation | **`top_driver_v1`** (max \|weight\|); domain **sum rejected** after August 31-day run |
+| Valence | **Per-domain**; universal table rejected after calib pass 1 |
 | Motion pilot | TapWidget only; not app-wide until proven |
 | UI persistence | `today_ui_state` beside day_facts; tap completion = tap_event exists |
