@@ -105,7 +105,7 @@ type SelectedCardPayload = {
 
 function TarotResultContent() {
   const searchParams = useSearchParams();
-  const { isAuthenticated, profile } = useAuth();
+  const { isAuthenticated, isLoading: authLoading, profile } = useAuth();
   const { trackMeaningEvent } = useMeaningRuntime();
   const locale: FlowPracticesChromeLocale = getLocale() === "ru" ? "ru" : "en";
   const tc = useMemo(() => tarotSpreadResultChromeBundle(locale), [locale]);
@@ -115,8 +115,12 @@ function TarotResultContent() {
   const selected = searchParams?.get("selected")?.trim() || "";
   const sessionKey = `${spreadId}:${question}:${selected}`;
 
+  // Wait for auth: while loading, isAuthenticated is false and would falsely trip guest limit.
   const guestBlocked =
-    !isAuthenticated && isGuestTarotLimitReached() && !canGuestAccessTarotSpread(sessionKey);
+    !authLoading &&
+    !isAuthenticated &&
+    isGuestTarotLimitReached() &&
+    !canGuestAccessTarotSpread(sessionKey);
 
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState<TarotResult | null>(null);
@@ -147,12 +151,23 @@ function TarotResultContent() {
   };
 
   useEffect(() => {
+    if (authLoading) {
+      return;
+    }
     if (guestBlocked) {
       setLoading(false);
       return;
     }
+    if (!selected) {
+      setError(tc.tarotSpreadResultErrorNotFound);
+      setLoading(false);
+      return;
+    }
 
+    let cancelled = false;
     const loadResult = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const endpoint = isAuthenticated ? "/tarot/spread/context" : "/tarot/spread/context/public";
         const response = await postJson<TarotSpreadWithContext>(endpoint, {
@@ -161,6 +176,7 @@ function TarotResultContent() {
           concern_domain: concernDomain,
           selected_cards: parseSelectedCards(selected),
         });
+        if (cancelled) return;
         setResult(response.spread);
         setCoreProfile(response.core_profile || null);
         setReading(response.reading || null);
@@ -171,14 +187,27 @@ function TarotResultContent() {
         }
       } catch (err) {
         console.error("Failed to load result", err);
-        setError(tc.tarotSpreadResultErrorLoadFailed);
+        if (!cancelled) setError(tc.tarotSpreadResultErrorLoadFailed);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
 
     void loadResult();
-  }, [selected, spreadId, question, concernDomain, tc, isAuthenticated, sessionKey, guestBlocked]);
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    selected,
+    spreadId,
+    question,
+    concernDomain,
+    tc,
+    isAuthenticated,
+    authLoading,
+    sessionKey,
+    guestBlocked,
+  ]);
 
   useEffect(() => {
     synthesisTrackedRef.current = false;
@@ -283,6 +312,20 @@ function TarotResultContent() {
     return buildTarotReadingStoryFromSpread(spreadInput);
   }, [result, question, reading, tarotAnswer, coreProfile, concernDomain, locale, tc, journalHref]);
 
+  if (authLoading || (loading && !guestBlocked)) {
+    return (
+      <>
+        <Link href="/tarot" className={shell.shellBack}>
+          ← {tc.tarotSpreadResultModeLabel}
+        </Link>
+        <div className={s.tarotWebLoading}>
+          <LoadingSpinner size="lg" />
+          <p className={s.tarotWebLoadingHint}>Собираем разбор по вашему вопросу…</p>
+        </div>
+      </>
+    );
+  }
+
   if (guestBlocked) {
     return (
       <>
@@ -296,19 +339,6 @@ function TarotResultContent() {
           secondaryLabel={tc.tarotSpreadResultBackToTarot}
           testId="guest-tarot-result-limit"
         />
-      </>
-    );
-  }
-
-  if (loading) {
-    return (
-      <>
-        <Link href="/tarot" className={shell.shellBack}>
-          ← {tc.tarotSpreadResultModeLabel}
-        </Link>
-        <div className={s.tarotWebLoading}>
-          <LoadingSpinner size="lg" />
-        </div>
       </>
     );
   }

@@ -218,7 +218,7 @@ export function InteractiveCardDeck({
           ) : (
             <div className={styles.focusEmpty}>
               <p className={styles.focusEmptyTitle}>Карта откроется здесь</p>
-              <p className={styles.focusEmptyBody}>Выбери рубашку слева — иллюстрация раскроется крупно.</p>
+              <p className={styles.focusEmptyBody}>Выберите рубашку слева — карта откроется крупнее.</p>
             </div>
           )}
         </div>

@@ -19,9 +19,8 @@ import {
 } from "@/lib/tarotQuestionSession";
 
 /**
- * Таро — только расклады и вопросы.
- * Дневные символы (карта / число) живут исключительно в ритуале «Сегодня».
- * Одна композиция: вопрос → направление (формат) как шаги, не стена карт.
+ * Таро — вопрос и формат расклада.
+ * Карта / число дня живут в ритуале «Сегодня», не здесь.
  */
 export function TarotHubMain() {
   const router = useRouter();
@@ -64,13 +63,12 @@ export function TarotHubMain() {
       <ProductJourneyScene
         step={1}
         title="Вопрос"
-        lead="Спроси о том, что сейчас важно — не прогноз «что будет», а зеркало следующего шага."
+        lead="Сформулируйте чуткий запрос — не просто «что будет»."
         motif="today"
         testId="tarot-hub-main-question"
       >
-        <p className={journeyStyles.pairTitle}>Спроси о том, что сейчас важно.</p>
         <p className={journeyStyles.pairSub}>
-          Дневные символы открываются только в «Сегодня». Здесь — твой вопрос и направление чтения.
+          Здесь вы задаёте вопрос и выбираете формат чтения. Карта и число дня — в разделе «Сегодня».
         </p>
         <div className={journeyStyles.actionRow}>
           <Link href="/tarot/question" className={s.hubBtnPrimary}>
@@ -92,29 +90,28 @@ export function TarotHubMain() {
       <ProductJourneyScene
         step={2}
         title="Направление"
-        lead="Расклад как шаги формата — сколько карт и какой фокус, без стены карточек."
+        lead="Выберите формат расклада: сколько карт и на чём фокус."
         motif="insight"
         testId="tarot-hub-main-direction"
       >
         <ol className={s.hubSpreadStepList} aria-label="Расклады для решения">
           {TAROT_HUB_SPREADS.map((spread, index) => {
-            const selected = selectedSpreadId === spread.spreadId;
+            const active = selectedSpreadId === spread.spreadId;
             return (
               <li key={spread.spreadId}>
                 <button
                   type="button"
-                  className={`${s.hubSpreadStep} ${selected ? s.hubSpreadStepSelected : ""}`.trim()}
+                  className={`${s.hubSpreadStep} ${active ? s.hubSpreadStepActive : ""}`.trim()}
                   onClick={() => handleSpreadPick(spread.spreadId)}
-                  aria-pressed={selected}
                 >
-                  <span className={s.hubSpreadStepIndex} aria-hidden>
-                    {index + 1}
+                  <span className={s.hubSpreadStepIndex}>{index + 1}</span>
+                  <span className={s.hubSpreadStepBody}>
+                    <span className={s.hubSpreadStepTitle}>
+                      {spread.title}
+                      <span className={s.hubSpreadStepMeta}> · {spread.count} карт</span>
+                    </span>
+                    <span className={s.hubSpreadStepDesc}>{spread.description}</span>
                   </span>
-                  <span className={s.hubSpreadStepCount}>{spread.count}</span>
-                  <div className={s.hubSpreadStepBody}>
-                    <p className={s.hubSpreadCardTitle}>{spread.title}</p>
-                    <p className={s.hubSpreadCardDesc}>{spread.description}</p>
-                  </div>
                 </button>
               </li>
             );

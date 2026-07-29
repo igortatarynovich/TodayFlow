@@ -72,9 +72,14 @@ export function tarotSpreadResultChromeBundle(locale: FlowPracticesChromeLocale)
   return {
     tarotSpreadResultErrorLoadFailed: tr(
       "tarot.spreadResult.error.loadFailed",
-      "Couldn’t load the spread result",
+      loc === "ru" ? "Не удалось загрузить разбор. Попробуйте ещё раз." : "Couldn’t load the spread result",
     ),
-    tarotSpreadResultErrorNotFound: tr("tarot.spreadResult.error.notFound", "Result not found"),
+    tarotSpreadResultErrorNotFound: tr(
+      "tarot.spreadResult.error.notFound",
+      loc === "ru"
+        ? "Разбор не найден — вернитесь к раскладу и откройте карты снова."
+        : "Result not found",
+    ),
     tarotSpreadResultBackToTarot: tr("tarot.spreadResult.backToTarot", "Back to Tarot"),
     tarotSpreadResultShareTitle: tr("tarot.spreadResult.shareTitle", "Tarot"),
     tarotSpreadResultShareText: tr("tarot.spreadResult.shareText", "Spread result"),

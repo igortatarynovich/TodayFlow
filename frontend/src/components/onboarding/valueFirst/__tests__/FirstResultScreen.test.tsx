@@ -57,7 +57,7 @@ const preview: FirstResultModel = {
 };
 
 function openDeepenPanel() {
-  fireEvent.click(screen.getByRole("button", { name: "Хочешь — покажу подробнее" }));
+  fireEvent.click(screen.getByRole("button", { name: "Хотите — покажу подробнее" }));
 }
 
 describe("FirstResultScreen", () => {

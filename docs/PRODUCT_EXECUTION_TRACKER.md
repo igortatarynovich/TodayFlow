@@ -675,6 +675,7 @@ Source of truth: [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) §1–§13
 - [x] **Owner editorial-phase accept** — full architecture lift declined; Editorial Phase allowlist active.
 - [ ] **Human Golden Eval v2** — capture CLI + **13 cases** in fixture (1 scored owner + 12 live golden-dataset, unscored). Scorecard [TAROT_HUMAN_EVAL_V2_SCORECARD](./audits/TAROT_HUMAN_EVAL_V2_SCORECARD.md). Owner fills three questions → drive Q3. **← next (owner eyes)**
 - [x] **Paid deepen chooser (UI)** — result «Углубить тему» unlocked for paid/trial; guest → signup, free → `/pricing`. Choices: money / intimacy&sex / work / boundaries → `/tarot?source=deepen`. No new engine hop. [Editorial Phase](./audits/TAROT_STACK_EDITORIAL_PHASE_2026-07-26.md).
+- [ ] **Tarot UX feedback 2026-07-29** — auth race on guest gate · result load wait · hub/ritual copy · name field contrast · vy-tone soft · theme+question on refine. Partial landed in FE; deploy + live retest needed.
 - [ ] **Q3+ prompt polish** — wording only under Editorial Phase. `v1.9`: practitioner+friend persona (Voice Canon §1) + analytical voice (`v1.8` solemnity ban). Deploy needed for prod.
 - [ ] **Fallback LLM provider** — deferred until owner purchases/connects.
 - [ ] **Tarot Design Language v1** — [docs/tarot/TAROT_DESIGN_LANGUAGE_V1.md](./tarot/TAROT_DESIGN_LANGUAGE_V1.md) **DRAFT / PENDING ACCEPT** · **parked under architecture freeze**

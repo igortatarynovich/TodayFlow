@@ -57,7 +57,7 @@ function todayDayKey(): string {
 function TarotQuestionMainContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
   const entryPrefillApplied = useRef(false);
   const { trackMeaningEvent } = useMeaningRuntime();
   const [session, setSession] = useState<TarotQuestionSession | null>(null);
@@ -171,6 +171,7 @@ function TarotQuestionMainContent() {
     const previewKey = href.includes("?") ? href.split("?")[1] ?? href : href;
 
     if (
+      !authLoading &&
       !isAuthenticated &&
       isGuestTarotLimitReached() &&
       !canGuestAccessTarotSpread(previewKey)
@@ -192,7 +193,7 @@ function TarotQuestionMainContent() {
   };
 
   const guestBlocked =
-    !isAuthenticated && isGuestTarotLimitReached() && guestTarotRemaining() <= 0;
+    !authLoading && !isAuthenticated && isGuestTarotLimitReached() && guestTarotRemaining() <= 0;
 
   const handleReset = () => {
     clearTarotQuestionSession();
@@ -280,6 +281,17 @@ function TarotQuestionMainContent() {
                 );
               })}
             </div>
+            <textarea
+              className={s.questionTextarea}
+              value={customQuestion}
+              onChange={(e) => {
+                setCustomQuestion(e.target.value);
+                patchTarotQuestionSession({ customQuestion: e.target.value });
+              }}
+              placeholder={TAROT_QUESTION_FLOW_COPY.concernCustomPlaceholder}
+              rows={3}
+              aria-label={TAROT_QUESTION_FLOW_COPY.concernCustomLabel}
+            />
             <button type="button" className={s.questionLink} onClick={() => writeSession({ ...session, step: "spread" })}>
               {TAROT_QUESTION_FLOW_COPY.skipRefine}
             </button>

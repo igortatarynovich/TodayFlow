@@ -59,7 +59,7 @@ function healTarotQuestionSession(raw: TarotQuestionSession): TarotQuestionSessi
 export function TarotQuestionFlow() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
   const entryPrefillApplied = useRef(false);
   const { trackMeaningEvent } = useMeaningRuntime();
   const [session, setSession] = useState<TarotQuestionSession | null>(null);
@@ -187,6 +187,7 @@ export function TarotQuestionFlow() {
     const previewKey = href.includes("?") ? href.split("?")[1] ?? href : href;
 
     if (
+      !authLoading &&
       !isAuthenticated &&
       isGuestTarotLimitReached() &&
       !canGuestAccessTarotSpread(previewKey)
@@ -208,7 +209,7 @@ export function TarotQuestionFlow() {
   };
 
   const guestTarotBlocked =
-    !isAuthenticated && isGuestTarotLimitReached() && guestTarotRemaining() <= 0;
+    !authLoading && !isAuthenticated && isGuestTarotLimitReached() && guestTarotRemaining() <= 0;
 
   const handleResetFlow = () => {
     clearTarotQuestionSession();
@@ -269,6 +270,19 @@ export function TarotQuestionFlow() {
               );
             })}
           </div>
+          <label className={hubStyles.tarotHubSubtitle} style={{ display: "grid", gap: "0.4rem", margin: "0.75rem 0 0" }}>
+            <span>{TAROT_QUESTION_FLOW_COPY.concernCustomLabel}</span>
+            <textarea
+              className={hubStyles.tarotQuestionInput}
+              value={customQuestion}
+              onChange={(e) => {
+                setCustomQuestion(e.target.value);
+                patchTarotQuestionSession({ customQuestion: e.target.value });
+              }}
+              placeholder={TAROT_QUESTION_FLOW_COPY.concernCustomPlaceholder}
+              rows={3}
+            />
+          </label>
           {composedQuestion ? (
             <p className={hubStyles.tarotHubSubtitle} style={{ fontStyle: "italic" }}>
               «{composedQuestion}»

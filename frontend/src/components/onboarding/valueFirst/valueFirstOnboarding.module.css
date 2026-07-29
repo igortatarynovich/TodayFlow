@@ -56,9 +56,19 @@
   padding: 0.85rem 0.95rem;
   border-radius: 14px;
   border: 1px solid rgba(201, 168, 115, 0.28);
-  background: rgba(255, 253, 249, 0.96);
+  background: #fffdf9;
   font: inherit;
-  color: var(--tf-ink, #1a1510);
+  font-size: 1.05rem;
+  line-height: 1.4;
+  color: #1a1510;
+  -webkit-text-fill-color: #1a1510;
+  caret-color: #1a1510;
+}
+
+.field::placeholder {
+  color: rgba(26, 21, 16, 0.42);
+  -webkit-text-fill-color: rgba(26, 21, 16, 0.42);
+  opacity: 1;
 }
 
 .field:focus {
