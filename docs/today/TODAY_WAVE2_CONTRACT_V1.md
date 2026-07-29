@@ -372,6 +372,15 @@ Opens with the **first code PR** (Phase A), not with docs lock alone.
 - **Canon:** §6 intent (one pool) · [TODAY_WAVE2_EXECUTION_PLAN](./TODAY_WAVE2_EXECUTION_PLAN.md) Phase B′
 - **Backward compatible:** yes — extra field; FE fallback only when flagged
 
+### Phase C (GlanceTimeline) — code PR
+
+- **SoT before:** empty Act 2 glance slot
+- **SoT after:** `glance_timeline` ≤3 from activations rank 1–3 with exact-time within local day; labels without aspect jargon; live-now = static «сейчас»
+- **Public JSON:** yes — interim `GET /today/glance-timeline` (until Phase D `day_facts_v1`)
+- **Migration:** none
+- **Canon:** this file §4 · [TODAY_WAVE2_EXECUTION_PLAN](./TODAY_WAVE2_EXECUTION_PLAN.md) Phase C
+- **Backward compatible:** old clients ignore slot; no change to day_story / today_contract fields
+
 ---
 
 ## Related

@@ -229,3 +229,72 @@
 :global([data-theme="dark"]) .tapAccuracy {
   color: rgba(232, 226, 214, 0.65);
 }
+
+.glance {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  width: 100%;
+  margin: 0.25rem 0 0.1rem;
+  padding: 0.2rem 0 0.1rem;
+}
+
+.glanceRow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid rgba(212, 184, 150, 0.16);
+}
+
+.glanceRow:last-child {
+  border-bottom: none;
+}
+
+.glanceTime {
+  flex-shrink: 0;
+  min-width: 3.2rem;
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  font-size: 0.85rem;
+  color: var(--tf-ink, #2a2520);
+}
+
+.glanceLabel {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.9rem;
+  color: var(--tf-ink-muted, #5c534a);
+}
+
+.glanceRow[data-valence="favorable"] .glanceLabel {
+  color: var(--tf-accent-action, #8f6b3a);
+}
+
+.glanceRow[data-valence="caution"] .glanceLabel {
+  color: #8a4f3a;
+}
+
+.glanceNow {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  color: var(--tf-accent-action, #8f6b3a);
+  border-left: 2px solid var(--tf-accent-action, #8f6b3a);
+  padding-left: 0.4rem;
+}
+
+.glanceFallback {
+  margin: 0;
+  max-width: 42ch;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--tf-ink-muted, #7a7168);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glanceNow {
+    /* Priority 4 live indicator — static carrier only */
+    animation: none;
+  }
+}

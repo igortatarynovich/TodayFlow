@@ -1,6 +1,6 @@
 # Today Wave 2 — Execution Plan
 
-**Status:** Phase A **LIVE** · Phase 0.5.2 **CLOSED** (`top_driver_v1`) · Phase B **LIVE** · Phase C next
+**Status:** Phase A **LIVE** · Phase 0.5.2 **CLOSED** · Phase B/B′ **LIVE** · Phase C **LIVE** · Phase D next
 **Depends on:** Wave 1 ActShell LIVE (`TodayActShell` + reserved slots)  
 **Canon companions:**
 - [TODAY_WAVE2_CONTRACT_V1.md](./TODAY_WAVE2_CONTRACT_V1.md) — `day_facts_v1`, slots, tap, accuracy
@@ -109,17 +109,17 @@ Trust bug to avoid: VerdictStrip says «money: friction» while Act 3 narrates a
 
 ---
 
-### Phase C — GlanceTimeline (exact-time BE)
+### Phase C — GlanceTimeline (exact-time BE) — **LIVE**
 
 | Step | Work | Notes |
 |------|------|-------|
-| C.0 | Architecture impact — exact-time compute is new capability | |
-| C.1 | Exact-time search for `natal_activations` rank 1–3 (5‑min step / binary refine) | Null if no exact within local day → exclude from glance |
-| C.2 | Fill `glance_timeline` ≤3, sorted by `time_local`; clean `label_short` | Same top drivers as conflict — no second ranker |
+| C.0 | Architecture impact — exact-time compute is new capability | Yes — interim `GET /today/glance-timeline` until Phase D |
+| C.1 | Exact-time search for `natal_activations` rank 1–3 (30‑min samples + bisect ≤5 min) | Null if no exact within local day → exclude from glance |
+| C.2 | Fill `glance_timeline` ≤3, sorted by `time_local`; clean `label_short` | Same top drivers — no second ranker |
 | C.3 | Fill Act 2 `today-slot-glance-timeline` | Pure render |
 | C.4 | Motion: live-now = priority 4 indicator only (static «сейчас» under reduced-motion) | Does not compete with tap |
 
-**Gate:** ≤3 markers; times match Swiss Ephemeris zero-orb; labels have no degrees/aspect jargon.
+**Gate:** ≤3 markers; times from shared sky residual zero-cross; labels have no degrees/aspect jargon.
 
 ---
 
@@ -149,7 +149,7 @@ Trust bug to avoid: VerdictStrip says «money: friction» while Act 3 narrates a
 1. `Today Wave2 Phase0.5 — CLOSED (top_driver_v1 + descriptive dict)`
 2. `Today Wave2 PhaseA — TapWidget` ← **live**
 3. `Today Wave2 PhaseB — domain_verdicts + VerdictStrip` ← **live**
-4. `Today Wave2 PhaseC — exact-time glance_timeline + GlanceTimeline UI`
+4. `Today Wave2 PhaseC — exact-time glance_timeline + GlanceTimeline UI` ← **live**
 5. `Today Wave2 PhaseD — day-facts GET + trust audit + motion retro`
 
 ---

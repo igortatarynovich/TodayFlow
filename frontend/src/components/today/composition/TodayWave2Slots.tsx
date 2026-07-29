@@ -24,6 +24,12 @@ import {
   type AccuracySummaryV1,
   type TapResponseCode,
 } from "@/lib/todayTapWidget";
+import {
+  fetchGlanceTimeline,
+  formatGlanceClock,
+  isGlanceLiveNow,
+  type GlanceTimelineItem,
+} from "@/lib/todayGlanceTimeline";
 
 type VerdictStripProps = {
   dateISO: string;
@@ -110,14 +116,93 @@ export function TodayVerdictStripSlot({ dateISO }: VerdictStripProps) {
   );
 }
 
-export function TodayGlanceTimelineSlot() {
+export function TodayGlanceTimelineSlot({ dateISO }: { dateISO: string }) {
+  const [rows, setRows] = useState<GlanceTimelineItem[]>([]);
+  const [isFallback, setIsFallback] = useState(false);
+  const [nowTick, setNowTick] = useState(() => new Date());
+
+  useEffect(() => {
+    let cancelled = false;
+    void fetchGlanceTimeline(dateISO)
+      .then((data) => {
+        if (cancelled) return;
+        const fallback = Boolean(data.is_fallback ?? data.degraded);
+        setIsFallback(fallback);
+        setRows(fallback ? [] : data.glance_timeline ?? []);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setIsFallback(true);
+        setRows([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [dateISO]);
+
+  useEffect(() => {
+    if (rows.length === 0) return;
+    const id = window.setInterval(() => setNowTick(new Date()), 60_000);
+    return () => window.clearInterval(id);
+  }, [rows.length]);
+
+  if (isFallback) {
+    return (
+      <div
+        className={styles.glance}
+        data-testid="today-slot-glance-timeline"
+        data-wave2-slot="glance"
+        data-fallback="true"
+        role="status"
+      >
+        <p className={styles.glanceFallback}>{copy.journey.glanceFallback}</p>
+      </div>
+    );
+  }
+
+  if (rows.length === 0) {
+    return (
+      <div
+        className={styles.slot}
+        data-testid="today-slot-glance-timeline"
+        data-wave2-slot="glance"
+        data-empty="true"
+        aria-hidden={true}
+      />
+    );
+  }
+
   return (
     <div
-      className={styles.slot}
+      className={styles.glance}
       data-testid="today-slot-glance-timeline"
       data-wave2-slot="glance"
-      aria-hidden={true}
-    />
+      data-fallback="false"
+      role="list"
+      aria-label={copy.journey.glanceStripLabel}
+    >
+      {rows.map((row) => {
+        const live = isGlanceLiveNow(row.time_local, nowTick);
+        return (
+          <div
+            key={`${row.driver_id}-${row.time_local}`}
+            className={styles.glanceRow}
+            role="listitem"
+            data-valence={row.valence}
+            data-live={live ? "true" : "false"}
+            data-testid={`today-glance-${row.driver_id}`}
+          >
+            <span className={styles.glanceTime}>{formatGlanceClock(row.time_local)}</span>
+            <span className={styles.glanceLabel}>{row.label_short}</span>
+            {live ? (
+              <span className={styles.glanceNow} data-testid="today-glance-now">
+                {copy.journey.glanceNow}
+              </span>
+            ) : null}
+          </div>
+        );
+      })}
+    </div>
   );
 }
 

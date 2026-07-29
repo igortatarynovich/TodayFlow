@@ -1863,3 +1863,99 @@ async def get_today_domain_verdicts(
         degraded=degraded,
         is_fallback=degraded,
     )
+
+
+# --- Wave 2 Phase C: glance_timeline (exact-time on shared activations) ---
+
+class GlanceTimelineItem(BaseModel):
+    time_local: str
+    label_short: str
+    valence: str
+    driver_id: str
+
+
+class TodayGlanceTimelineResponse(BaseModel):
+    schema_version: str = "glance_timeline_v1"
+    local_date: str
+    day_facts_id: str
+    glance_timeline: list[GlanceTimelineItem]
+    degraded: bool = False
+    is_fallback: bool = False
+
+
+@router.get("/glance-timeline", response_model=TodayGlanceTimelineResponse)
+async def get_today_glance_timeline(
+    request: Request,
+    local_date: str | None = Query(default=None, description="YYYY-MM-DD"),
+    timezone: str | None = Query(default=None),
+    user: User = Depends(require_user),
+    db=Depends(get_session),
+) -> TodayGlanceTimelineResponse:
+    """Wave 2 Phase C — ≤3 exact-time markers from natal_activations rank 1–3."""
+    from todayflow_backend.services import today_natal_activations_v1 as act_svc
+    from todayflow_backend.services import today_glance_timeline_v1 as glance_svc
+    from todayflow_backend.services import today_tap_widget_v1 as tap_svc
+    from todayflow_backend.services.day_lifecycle_clock_c5 import resolve_user_timezone
+    from todayflow_backend.api import reports as reports_api
+    from todayflow_backend.services import astro as astro_mod
+    from todayflow_backend.services.geocode import Geocoder
+
+    day = parse_iso_date_or_400(local_date) if local_date else date.today()
+    facts_id = tap_svc.day_facts_id_for(user.id, day)
+    locale = request_locale(request)
+    tz_name = resolve_user_timezone(db, user_id=int(user.id), explicit=timezone)
+
+    try:
+        activations, act_degraded = await act_svc.resolve_natal_activations_for_user(
+            user=user,
+            local_date=day,
+            db=db,
+            locale=locale,
+        )
+        if act_degraded:
+            return TodayGlanceTimelineResponse(
+                local_date=day.isoformat(),
+                day_facts_id=facts_id,
+                glance_timeline=[],
+                degraded=True,
+                is_fallback=True,
+            )
+
+        geocoder = Geocoder()
+        astro_service = astro_mod.AstroService()
+        astro_profile = await reports_api._get_user_astro_profile(user, db, None, locale)
+        birth_data = await reports_api._prepare_birth_data(astro_profile, geocoder, locale)
+        natal_chart = await reports_api._compute_natal_chart(
+            birth_data, astro_service, astro_profile, db
+        )
+        coords = None
+        if birth_data and getattr(birth_data, "coordinates", None):
+            coords = {
+                "latitude": float(birth_data.coordinates.latitude),
+                "longitude": float(birth_data.coordinates.longitude),
+            }
+
+        rows, _enriched = await glance_svc.compute_glance_timeline(
+            activations=activations,
+            natal_chart=natal_chart,
+            local_date=day,
+            timezone_name=tz_name,
+            astro_service=astro_service,
+            coordinates=coords,
+        )
+        return TodayGlanceTimelineResponse(
+            local_date=day.isoformat(),
+            day_facts_id=facts_id,
+            glance_timeline=[GlanceTimelineItem(**r) for r in rows],
+            degraded=False,
+            is_fallback=False,
+        )
+    except Exception:
+        logger.exception("glance_timeline_degraded user=%s date=%s", user.id, day.isoformat())
+        return TodayGlanceTimelineResponse(
+            local_date=day.isoformat(),
+            day_facts_id=facts_id,
+            glance_timeline=[],
+            degraded=True,
+            is_fallback=True,
+        )

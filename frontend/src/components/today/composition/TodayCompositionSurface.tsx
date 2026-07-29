@@ -1488,7 +1488,7 @@ export function TodayCompositionSurface(props: Props) {
               lead={copy.journey.openLead}
               accent="sky"
               testId="today-zone-open-day"
-              slotAfter={<TodayGlanceTimelineSlot />}
+              slotAfter={<TodayGlanceTimelineSlot dateISO={dateISO} />}
             >
               {showRitualAsComplement ? ritualGateSection : null}
               {showRitualAsComplement ? ritualTarotImpactStage : null}
