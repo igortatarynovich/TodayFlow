@@ -2,6 +2,11 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { getJson, postJson } from "@/lib/api";
+import { profileMotionStyles } from "@/components/foundation/ProfileMotion";
+import {
+  PROFILE_DECODE_PATTERN_WAVE_EVENT,
+  consumeProfileMotionOnce,
+} from "@/lib/profile/profileMotionOnce";
 import styles from "@/components/profile/v2/profileV2System.module.css";
 
 export type NatalDecodeOffer = {
@@ -46,6 +51,7 @@ export function ProfileNatalDecodePanel() {
   const [result, setResult] = useState<NatalDecodeResult | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [patternWave, setPatternWave] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -67,6 +73,20 @@ export function ProfileNatalDecodePanel() {
     };
   }, []);
 
+  const grounded =
+    result?.status === "grounded" && Array.isArray(result.sections) && result.sections.length > 0;
+
+  useEffect(() => {
+    if (!grounded) return;
+    if (!consumeProfileMotionOnce("decode-pattern-wave")) return;
+    setPatternWave(true);
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent(PROFILE_DECODE_PATTERN_WAVE_EVENT));
+    }
+    const t = window.setTimeout(() => setPatternWave(false), 1300);
+    return () => window.clearTimeout(t);
+  }, [grounded]);
+
   const generate = useCallback(async () => {
     if (!offer?.can_generate || busy) return;
     setBusy(true);
@@ -86,8 +106,7 @@ export function ProfileNatalDecodePanel() {
     }
   }, [busy, offer?.can_generate]);
 
-  const grounded =
-    result?.status === "grounded" && Array.isArray(result.sections) && result.sections.length > 0;
+  const showBreathe = Boolean(offer?.can_generate && !grounded && !busy);
 
   return (
     <div className={styles.deepThemesBlock} data-testid="profile-natal-decode">
@@ -103,10 +122,16 @@ export function ProfileNatalDecodePanel() {
           {offer?.can_generate ? (
             <button
               type="button"
-              className={styles.deepThemesCta}
+              className={[
+                styles.natalDecodeCta,
+                showBreathe ? profileMotionStyles.attentionBreathe : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
               onClick={() => void generate()}
               disabled={busy}
               data-testid="profile-natal-decode-generate"
+              data-motion={showBreathe ? "attention-breathe" : undefined}
             >
               {busy ? "Собираем расшифровку…" : "Открыть расшифровку"}
             </button>
@@ -127,7 +152,18 @@ export function ProfileNatalDecodePanel() {
       {grounded ? (
         <div className={styles.natalDecodeBody} data-testid="profile-natal-decode-result">
           {result?.pattern_thesis ? (
-            <p className={styles.natalDecodePattern}>{result.pattern_thesis}</p>
+            <p
+              className={[
+                styles.natalDecodePattern,
+                patternWave ? profileMotionStyles.patternSweep : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+              data-testid="profile-natal-decode-pattern"
+              data-motion={patternWave ? "pattern-sweep" : undefined}
+            >
+              {result.pattern_thesis}
+            </p>
           ) : null}
           {(result?.sections || []).map((section, idx) => (
             <article
@@ -157,7 +193,7 @@ export function ProfileNatalDecodePanel() {
           {result?.limits ? <p className={styles.natalDecodeLimits}>{result.limits}</p> : null}
           <button
             type="button"
-            className={styles.deepThemesCta}
+            className={styles.natalDecodeCta}
             onClick={() => void generate()}
             disabled={busy}
             data-testid="profile-natal-decode-refresh"

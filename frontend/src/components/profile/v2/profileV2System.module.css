@@ -1743,6 +1743,66 @@
   background: color-mix(in srgb, var(--tf-accent-gold-wash, #f9f4e8) 70%, var(--tf-surface, #fff));
 }
 
+.whyProofCardInteractive {
+  cursor: pointer;
+  transition:
+    box-shadow var(--tf-motion-card, 320ms) var(--tf-motion-ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+    transform var(--tf-motion-micro, 150ms) var(--tf-motion-ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+    border-color var(--tf-motion-micro, 150ms) ease;
+}
+
+.whyProofCardExpanded {
+  box-shadow: 0 16px 34px rgba(61, 50, 40, 0.14);
+  border-color: color-mix(in srgb, var(--tf-accent-gold, #c9a96e) 45%, var(--tf-border, #e8e2d6));
+  transform: translateY(-1px);
+}
+
+.whyProofHit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.whyProofMeaningShell {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows var(--tf-motion-card, 320ms) var(--tf-motion-ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+}
+
+.whyProofMeaningShell[data-open="false"] {
+  grid-template-rows: 0fr;
+}
+
+.whyProofMeaningShell > .whyProofMeaning {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.whyProofExpandHint {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--tf-accent-gold-600, #8b6a3e);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whyProofCardInteractive,
+  .whyProofCardExpanded,
+  .whyProofMeaningShell {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
 .whyProofCardTop {
   display: flex;
   align-items: center;
@@ -2303,6 +2363,35 @@
   color: inherit;
   font-weight: 600;
   text-underline-offset: 0.15em;
+}
+
+.natalDecodeCta {
+  appearance: none;
+  margin: 0;
+  padding: 0.7rem 1.15rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--tf-accent-gold, #c9a96e) 55%, transparent);
+  background: color-mix(in srgb, var(--tf-accent-gold-wash, #f9f4e8) 88%, #fff);
+  color: var(--tf-ink, #1a1510);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition:
+    background var(--tf-motion-micro, 150ms) ease,
+    border-color var(--tf-motion-micro, 150ms) ease,
+    opacity var(--tf-motion-micro, 150ms) ease;
+}
+
+.natalDecodeCta:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.natalDecodeCta:not(:disabled):hover {
+  border-color: var(--tf-accent-gold, #8b6a3e);
+  background: color-mix(in srgb, var(--tf-accent-gold-wash, #f9f4e8) 70%, #fff);
 }
 
 .deepThemesHint {

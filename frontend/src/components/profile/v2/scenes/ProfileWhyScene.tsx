@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   profileMotionStaggerDelay,
   profileMotionStyles,
@@ -14,6 +15,7 @@ import {
   type WhyFormationCard,
 } from "@/lib/profilePage/buildWhyFormationCards";
 import type { ProfileFrameworkCard } from "@/lib/profilePage/buildProfileQuickMapData";
+import { consumeProfileMotionOnce } from "@/lib/profile/profileMotionOnce";
 import type { CoreProfile } from "@/lib/types";
 import styles from "@/components/profile/v2/profileV2System.module.css";
 
@@ -28,22 +30,71 @@ export type ProfileWhySceneProps = {
 
 const whyNav = PROFILE_V2_DEPTH_NAV[1];
 
+const TAP_EXPAND_IDS = new Set(["sun", "moon", "asc", "rising", "mc"]);
+
+function isTapExpandCard(row: WhyFormationCard): boolean {
+  return row.role === "influenced" && TAP_EXPAND_IDS.has(row.id.toLowerCase());
+}
+
 function WhyCard({
   row,
   index,
+  selectedOnce,
 }: {
   row: WhyFormationCard;
   index: number;
+  selectedOnce?: boolean;
 }) {
+  const tapExpand = isTapExpandCard(row);
+  const [open, setOpen] = useState(!tapExpand);
+
+  const className = [
+    styles.whyProofCard,
+    selectedOnce ? profileMotionStyles.selectedOnceReveal : profileMotionStyles.staggerItem,
+    tapExpand ? styles.whyProofCardInteractive : "",
+    tapExpand && open ? styles.whyProofCardExpanded : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <li
-      className={`${styles.whyProofCard} ${profileMotionStyles.staggerItem}`}
+      className={className}
       style={profileMotionStaggerDelay(index, 80)}
       data-testid={`profile-v2-why-anchor-${row.id}`}
       data-why-class={row.class || undefined}
       data-why-tier="primary"
       data-why-role={row.role}
+      data-expanded={tapExpand ? (open ? "true" : "false") : undefined}
     >
+      {tapExpand ? (
+        <button
+          type="button"
+          className={styles.whyProofHit}
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          data-testid={`profile-v2-why-toggle-${row.id}`}
+        >
+          <WhyCardBody row={row} open={open} collapseMeaning={!open} />
+        </button>
+      ) : (
+        <WhyCardBody row={row} open />
+      )}
+    </li>
+  );
+}
+
+function WhyCardBody({
+  row,
+  open = true,
+  collapseMeaning = false,
+}: {
+  row: WhyFormationCard;
+  open?: boolean;
+  collapseMeaning?: boolean;
+}) {
+  return (
+    <>
       <div className={styles.whyProofCardTop}>
         <span className={styles.whyProofIcon} aria-hidden>
           <WhyAnchorGlyph label={row.title} rowClass={row.class} size={28} />
@@ -56,10 +107,18 @@ function WhyCard({
       </div>
       <p className={styles.whyProofTitle}>{row.title}</p>
       {row.detail ? <p className={styles.whyProofDetail}>{row.detail}</p> : null}
-      <p className={styles.whyProofMeaning} data-testid={`profile-v2-why-meaning-${row.id}`}>
-        {row.meaning}
-      </p>
-    </li>
+      <div
+        className={styles.whyProofMeaningShell}
+        data-open={collapseMeaning ? "false" : open ? "true" : "false"}
+      >
+        <p className={styles.whyProofMeaning} data-testid={`profile-v2-why-meaning-${row.id}`}>
+          {row.meaning}
+        </p>
+      </div>
+      {collapseMeaning ? (
+        <p className={styles.whyProofExpandHint}>Нажми — смысл за фактом</p>
+      ) : null}
+    </>
   );
 }
 
@@ -78,6 +137,15 @@ export function ProfileWhyScene({
     identityCore,
   });
   const motion = useProfileMotionInView<HTMLElement>(40);
+  const [selectedOnce, setSelectedOnce] = useState(false);
+
+  useEffect(() => {
+    if (motion.className !== profileMotionStyles.reveal) return;
+    if (!selected.length) return;
+    if (!consumeProfileMotionOnce("act2-selected-by-reveal")) return;
+    setSelectedOnce(true);
+  }, [motion.className, selected.length]);
+
   if (!selected.length && !influenced.length && !why.honesty && !why.title) return null;
 
   const copy = PROFILE_V2_COPY.zones.why;
@@ -107,7 +175,7 @@ export function ProfileWhyScene({
           <p className={styles.whyFormationLabel}>{copy.selectedSection}</p>
           <ul className={styles.whyProofGrid} data-testid="profile-v2-why-primary">
             {selected.map((row, index) => (
-              <WhyCard key={row.id} row={row} index={index} />
+              <WhyCard key={row.id} row={row} index={index} selectedOnce={selectedOnce} />
             ))}
           </ul>
         </div>

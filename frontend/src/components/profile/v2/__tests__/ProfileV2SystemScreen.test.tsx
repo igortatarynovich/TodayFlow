@@ -188,7 +188,10 @@ describe("ProfileV2SystemScreen journey rewire", () => {
       /числа пути/i,
     );
     expect(screen.getByTestId("profile-v2-why-anchor-sun")).toHaveTextContent(/Солнце в Деве/i);
+    expect(screen.getByTestId("profile-v2-why-anchor-sun")).toHaveAttribute("data-expanded", "false");
     expect(screen.getByTestId("profile-v2-why-meaning-sun").textContent?.length || 0).toBeGreaterThan(20);
+    await user.click(screen.getByTestId("profile-v2-why-toggle-sun"));
+    expect(screen.getByTestId("profile-v2-why-anchor-sun")).toHaveAttribute("data-expanded", "true");
     expect(screen.getByTestId("profile-v2-why-anchor-element")).toHaveTextContent(/Стихия/i);
     expect(screen.queryByTestId("profile-v2-why-secondary")).not.toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-insight")).toBeInTheDocument();

@@ -62,6 +62,25 @@
   transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+@keyframes natalAspectWave {
+  0% {
+    filter: brightness(1);
+    opacity: 1;
+  }
+  35% {
+    filter: brightness(1.35);
+    opacity: 1;
+  }
+  100% {
+    filter: brightness(1);
+    opacity: 1;
+  }
+}
+
+.aspectWave .layerMid {
+  animation: natalAspectWave 1.15s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .plate,
   .layerBack,
@@ -69,6 +88,10 @@
   .layerFront {
     transition: none !important;
     transform: none !important;
+  }
+
+  .aspectWave .layerMid {
+    animation: none !important;
   }
 }
 

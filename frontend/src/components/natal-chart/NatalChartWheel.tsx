@@ -4,6 +4,7 @@ import { useMemo, useState, useCallback, useId, useEffect, useRef, type PointerE
 import { eclipticLongitudeFromSignAndDegree, zodiacRuName } from "@/lib/zodiacKnowledge";
 import { PlanetIcon } from "@/components/visualIdentity/PlanetIcon";
 import { resolveNatalAspectRenderStyle } from "@/lib/natal/natalWheelMaterial";
+import { PROFILE_DECODE_PATTERN_WAVE_EVENT } from "@/lib/profile/profileMotionOnce";
 import styles from "@/components/natal-chart/natalChartWheel.module.css";
 
 interface Aspect {
@@ -262,6 +263,7 @@ export function NatalChartWheel({
   const [selected, setSelected] = useState<WheelSelection>(null);
   const [hoveredPlanet, setHoveredPlanet] = useState<string | null>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [aspectWave, setAspectWave] = useState(false);
   const reduceMotionRef = useRef(false);
 
   useEffect(() => {
@@ -274,6 +276,22 @@ export function NatalChartWheel({
     apply();
     mq.addEventListener("change", apply);
     return () => mq.removeEventListener("change", apply);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    let timer: number | undefined;
+    const onWave = () => {
+      if (reduceMotionRef.current) return;
+      setAspectWave(true);
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => setAspectWave(false), 1200);
+    };
+    window.addEventListener(PROFILE_DECODE_PATTERN_WAVE_EVENT, onWave);
+    return () => {
+      window.removeEventListener(PROFILE_DECODE_PATTERN_WAVE_EVENT, onWave);
+      window.clearTimeout(timer);
+    };
   }, []);
 
   const onPlatePointerMove = useCallback((e: ReactPointerEvent<HTMLDivElement>) => {
@@ -704,8 +722,9 @@ export function NatalChartWheel({
     >
       <div className={styles.instrument}>
       <div
-        className={styles.plate}
+        className={[styles.plate, aspectWave ? styles.aspectWave : ""].filter(Boolean).join(" ")}
         data-testid="natal-chart-plate"
+        data-motion={aspectWave ? "aspect-wave" : undefined}
         onPointerMove={onPlatePointerMove}
         onPointerLeave={onPlatePointerLeave}
         style={{
