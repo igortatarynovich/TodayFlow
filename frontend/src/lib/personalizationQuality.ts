@@ -1,4 +1,5 @@
 import type { TodayContractV1 } from "@/lib/todayContract";
+import { TODAY_NO_CONNECTION_COPY } from "@/lib/todaySlotAvailability";
 
 export const TODAY_CONTRACT_FALLBACK_GENERATION_ID = "fallback-today-contract-v1";
 
@@ -14,5 +15,5 @@ export function shouldShowTodayServiceUnavailableNotice(input: {
   return isTodayContractFallback(input.contract) || Boolean(input.narrativeRequestFailed);
 }
 
-export const TODAY_SERVICE_UNAVAILABLE_MESSAGE =
-  "Сейчас нет связи с сервером — сервис недоступен. Ниже то, что можно посмотреть без подключения.";
+/** Honest transport failure — never invent day/sphere content in its place. */
+export const TODAY_SERVICE_UNAVAILABLE_MESSAGE = TODAY_NO_CONNECTION_COPY;

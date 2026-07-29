@@ -55,12 +55,46 @@ def test_snapshot_ttl_reused_by_key():
     )
     hit = act.get_snapshot(key)
     assert hit is not None
-    assert hit[0]["id"] == "pt-mars-square-sun"
+    rows, degraded = hit
+    assert degraded is False
+    assert rows[0]["id"] == "pt-mars-square-sun"
     # Mutating returned copy must not poison cache
-    hit[0]["id"] = "mutated"
+    rows[0]["id"] = "mutated"
     again = act.get_snapshot(key)
     assert again is not None
-    assert again[0]["id"] == "pt-mars-square-sun"
+    again_rows, again_degraded = again
+    assert again_degraded is False
+    assert again_rows[0]["id"] == "pt-mars-square-sun"
+
+
+def test_snapshot_preserves_degraded_flag():
+    key = act.cache_key_for(7, date(2026, 8, 1))
+    act.put_snapshot(key, [], degraded=True)
+    hit = act.get_snapshot(key)
+    assert hit == ([], True)
+
+
+def test_exception_path_must_not_poison_cache_as_success():
+    """Regression: failed resolve must not return [], False on the next hit."""
+    import asyncio
+    from types import SimpleNamespace
+
+    class BoomTransit:
+        async def _calculate_transits(self, *args, **kwargs):
+            raise RuntimeError("boom")
+
+    async def _run():
+        return await act.resolve_natal_activations(
+            user_id=2,
+            local_date=date(2026, 7, 29),
+            natal_chart=SimpleNamespace(positions={"Sun": 1}),
+            birth_data=None,
+            transit_service=BoomTransit(),
+        )
+
+    first = asyncio.run(_run())
+    assert first == ([], True)
+    assert act.get_snapshot(act.cache_key_for(2, date(2026, 7, 29))) is None
 
 
 def test_domain_verdicts_consume_shared_activations():

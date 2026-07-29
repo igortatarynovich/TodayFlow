@@ -30,48 +30,87 @@ import {
   isGlanceLiveNow,
   type GlanceTimelineItem,
 } from "@/lib/todayGlanceTimeline";
+import {
+  todaySlotFailureCopy,
+  type TodaySlotLoadFailure,
+} from "@/lib/todaySlotAvailability";
 
 type VerdictStripProps = {
   dateISO: string;
 };
 
 export function TodayVerdictStripSlot({ dateISO }: VerdictStripProps) {
-  const [rows, setRows] = useState<DomainVerdict[]>(() => orderDomainVerdicts([]));
-  const [isFallback, setIsFallback] = useState(false);
+  const [rows, setRows] = useState<DomainVerdict[] | null>(null);
+  const [failure, setFailure] = useState<TodaySlotLoadFailure | null>(null);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
+    setLoaded(false);
+    setFailure(null);
     void fetchDomainVerdicts(dateISO)
       .then((data) => {
         if (cancelled) return;
-        const fallback = Boolean(data.is_fallback ?? data.degraded);
-        setIsFallback(fallback);
-        setRows(fallback ? orderDomainVerdicts([]) : orderDomainVerdicts(data.domain_verdicts ?? []));
+        if (data.is_fallback ?? data.degraded) {
+          setFailure("unavailable");
+          setRows([]);
+        } else {
+          setFailure(null);
+          setRows(orderDomainVerdicts(data.domain_verdicts ?? []));
+        }
+        setLoaded(true);
       })
       .catch(() => {
         if (cancelled) return;
-        setIsFallback(true);
-        setRows(orderDomainVerdicts([]));
+        setFailure("no_connection");
+        setRows([]);
+        setLoaded(true);
       });
     return () => {
       cancelled = true;
     };
   }, [dateISO]);
 
-  if (isFallback) {
+  if (!loaded) {
+    return (
+      <div
+        className={styles.verdictStrip}
+        data-testid="today-slot-verdict-strip"
+        data-wave2-slot="verdict"
+        data-loading="true"
+        aria-busy="true"
+        aria-label={copy.journey.verdictStripLabel}
+      />
+    );
+  }
+
+  if (failure) {
     return (
       <div
         className={styles.verdictStrip}
         data-testid="today-slot-verdict-strip"
         data-wave2-slot="verdict"
         data-fallback="true"
+        data-failure={failure}
         role="status"
         aria-label={copy.journey.verdictStripLabel}
       >
         <p className={styles.verdictFallback} data-testid="today-verdict-fallback">
-          {copy.journey.verdictFallback}
+          {todaySlotFailureCopy(failure)}
         </p>
       </div>
+    );
+  }
+
+  if (!rows || rows.length === 0) {
+    return (
+      <div
+        className={styles.verdictStrip}
+        data-testid="today-slot-verdict-strip"
+        data-wave2-slot="verdict"
+        data-empty="true"
+        aria-hidden={true}
+      />
     );
   }
 
@@ -118,22 +157,31 @@ export function TodayVerdictStripSlot({ dateISO }: VerdictStripProps) {
 
 export function TodayGlanceTimelineSlot({ dateISO }: { dateISO: string }) {
   const [rows, setRows] = useState<GlanceTimelineItem[]>([]);
-  const [isFallback, setIsFallback] = useState(false);
+  const [failure, setFailure] = useState<TodaySlotLoadFailure | null>(null);
+  const [loaded, setLoaded] = useState(false);
   const [nowTick, setNowTick] = useState(() => new Date());
 
   useEffect(() => {
     let cancelled = false;
+    setLoaded(false);
+    setFailure(null);
     void fetchGlanceTimeline(dateISO)
       .then((data) => {
         if (cancelled) return;
-        const fallback = Boolean(data.is_fallback ?? data.degraded);
-        setIsFallback(fallback);
-        setRows(fallback ? [] : data.glance_timeline ?? []);
+        if (data.is_fallback ?? data.degraded) {
+          setFailure("unavailable");
+          setRows([]);
+        } else {
+          setFailure(null);
+          setRows(data.glance_timeline ?? []);
+        }
+        setLoaded(true);
       })
       .catch(() => {
         if (cancelled) return;
-        setIsFallback(true);
+        setFailure("no_connection");
         setRows([]);
+        setLoaded(true);
       });
     return () => {
       cancelled = true;
@@ -146,16 +194,31 @@ export function TodayGlanceTimelineSlot({ dateISO }: { dateISO: string }) {
     return () => window.clearInterval(id);
   }, [rows.length]);
 
-  if (isFallback) {
+  if (!loaded) {
+    return (
+      <div
+        className={styles.glance}
+        data-testid="today-slot-glance-timeline"
+        data-wave2-slot="glance"
+        data-loading="true"
+        aria-busy="true"
+      />
+    );
+  }
+
+  if (failure) {
     return (
       <div
         className={styles.glance}
         data-testid="today-slot-glance-timeline"
         data-wave2-slot="glance"
         data-fallback="true"
+        data-failure={failure}
         role="status"
       >
-        <p className={styles.glanceFallback}>{copy.journey.glanceFallback}</p>
+        <p className={styles.glanceFallback} data-testid="today-glance-fallback">
+          {todaySlotFailureCopy(failure)}
+        </p>
       </div>
     );
   }

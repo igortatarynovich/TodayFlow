@@ -17,8 +17,8 @@ logger = logging.getLogger(__name__)
 
 TTL_SECONDS = 7 * 60  # 5–10 min window; 7m midpoint
 _LOCK = threading.Lock()
-# key → (expires_at_monotonic, activations)
-_SNAPSHOT: dict[str, tuple[float, list[dict[str, Any]]]] = {}
+# key → (expires_at_monotonic, activations, degraded)
+_SNAPSHOT: dict[str, tuple[float, list[dict[str, Any]], bool]] = {}
 
 _STRENGTH_RANK = {"exact": 0, "strong": 1, "medium": 2, "weak": 3}
 
@@ -31,23 +31,25 @@ def cache_key_for(user_id: int, local_date: date) -> str:
     return f"{int(user_id)}:{local_date.isoformat()}"
 
 
-def get_snapshot(key: str) -> list[dict[str, Any]] | None:
+def get_snapshot(key: str) -> tuple[list[dict[str, Any]], bool] | None:
+    """Return (activations, degraded) or None on miss/expiry."""
     now = time.monotonic()
     with _LOCK:
         hit = _SNAPSHOT.get(key)
         if not hit:
             return None
-        expires_at, rows = hit
+        expires_at, rows, degraded = hit
         if now >= expires_at:
             _SNAPSHOT.pop(key, None)
             return None
-        return [dict(r) for r in rows]
+        return [dict(r) for r in rows], bool(degraded)
 
 
-def put_snapshot(key: str, rows: list[dict[str, Any]]) -> None:
+def put_snapshot(key: str, rows: list[dict[str, Any]], *, degraded: bool = False) -> None:
+    """Cache a successful (or explicitly degraded) snapshot. Do not call on unexpected exceptions."""
     payload = [dict(r) for r in rows]
     with _LOCK:
-        _SNAPSHOT[key] = (time.monotonic() + TTL_SECONDS, payload)
+        _SNAPSHOT[key] = (time.monotonic() + TTL_SECONDS, payload, bool(degraded))
 
 
 def clear_snapshots() -> None:
@@ -173,23 +175,24 @@ async def resolve_natal_activations(
     key = cache_key_for(user_id, local_date)
     hit = get_snapshot(key)
     if hit is not None:
-        return hit, False
+        return hit
 
     try:
         if not natal_chart or not getattr(natal_chart, "positions", None):
-            put_snapshot(key, [])
+            # Honest no-natal — cache as degraded so we don't flip to silent calm.
+            put_snapshot(key, [], degraded=True)
             return [], True
         raw = await transit_service._calculate_transits(
             natal_chart, local_date, birth_data=birth_data
         )
         rows = compute_natal_activations(raw)
-        put_snapshot(key, rows)
+        put_snapshot(key, rows, degraded=False)
         return [dict(r) for r in rows], False
     except Exception:
         logger.exception(
             "natal_activations_resolve_failed user=%s date=%s", user_id, local_date.isoformat()
         )
-        put_snapshot(key, [])
+        # Do NOT cache exceptions — retry next request; avoid silent calm poison.
         return [], True
 
 
@@ -204,7 +207,7 @@ async def resolve_natal_activations_for_user(
     key = cache_key_for(int(user.id), local_date)
     hit = get_snapshot(key)
     if hit is not None:
-        return hit, False
+        return hit
 
     from todayflow_backend.api import reports as reports_api
     from todayflow_backend.services import astro as astro_mod
@@ -212,7 +215,7 @@ async def resolve_natal_activations_for_user(
     from todayflow_backend.services.personal_transits import get_personal_transit_service
 
     try:
-        transit_service = get_personal_transit_service()
+        transit_service = await get_personal_transit_service()
         geocoder = Geocoder()
         astro_service = astro_mod.AstroService()
         astro_profile = await reports_api._get_user_astro_profile(user, db, None, locale)
@@ -233,5 +236,5 @@ async def resolve_natal_activations_for_user(
             getattr(user, "id", None),
             local_date.isoformat(),
         )
-        put_snapshot(key, [])
+        # Do NOT cache exceptions — next call retries.
         return [], True

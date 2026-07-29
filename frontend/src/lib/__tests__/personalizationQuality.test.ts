@@ -24,7 +24,7 @@ describe("personalizationQuality", () => {
   });
 
   it("uses network/service copy without meta language", () => {
-    expect(TODAY_SERVICE_UNAVAILABLE_MESSAGE).toMatch(/нет связи с сервером/i);
-    expect(TODAY_SERVICE_UNAVAILABLE_MESSAGE).not.toMatch(/базов|генерац|текст|ии|систем/i);
+    expect(TODAY_SERVICE_UNAVAILABLE_MESSAGE).toMatch(/нет соединения/i);
+    expect(TODAY_SERVICE_UNAVAILABLE_MESSAGE).not.toMatch(/базов|генерац|текст|ии|систем|спокойн|сигнал/i);
   });
 });

@@ -1854,14 +1854,24 @@ async def get_today_domain_verdicts(
         db=db,
         locale=locale,
     )
+    # Degraded = no inventable calm bank. Empty list + flags; FE says connection/unavailable.
+    if degraded:
+        return TodayDomainVerdictsResponse(
+            local_date=day.isoformat(),
+            day_facts_id=facts_id,
+            domain_verdicts=[],
+            degraded=True,
+            is_fallback=True,
+        )
+
     rows = verdict_svc.compute_domain_verdicts(activations)
 
     return TodayDomainVerdictsResponse(
         local_date=day.isoformat(),
         day_facts_id=facts_id,
         domain_verdicts=[DomainVerdictItem(**row) for row in rows],
-        degraded=degraded,
-        is_fallback=degraded,
+        degraded=False,
+        is_fallback=False,
     )
 
 

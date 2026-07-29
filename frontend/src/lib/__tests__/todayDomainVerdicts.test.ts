@@ -5,7 +5,7 @@ import {
 } from "@/lib/todayDomainVerdicts";
 
 describe("todayDomainVerdicts", () => {
-  it("orders fixed four domains and fills calm gaps", () => {
+  it("orders fixed domains without inventing calm fillers", () => {
     const partial: DomainVerdict[] = [
       {
         domain: "money",
@@ -16,9 +16,18 @@ describe("todayDomainVerdicts", () => {
       },
     ];
     const ordered = orderDomainVerdicts(partial);
-    expect(ordered.map((r) => r.domain)).toEqual([...DOMAIN_ORDER]);
-    expect(ordered[0].verdict).toBe("calm");
-    expect(ordered[1].verdict).toBe("friction");
-    expect(ordered[1].why_short).toContain("Сатурн");
+    expect(ordered.map((r) => r.domain)).toEqual(["money"]);
+    expect(ordered[0].verdict).toBe("friction");
+  });
+
+  it("keeps full four-domain order when API sent all four", () => {
+    const full = DOMAIN_ORDER.map((domain) => ({
+      domain,
+      verdict: "calm" as const,
+      why_short: "Без явного сигнала",
+      driver_ids: [] as string[],
+      logic_source: "top_driver_v1",
+    }));
+    expect(orderDomainVerdicts(full).map((r) => r.domain)).toEqual([...DOMAIN_ORDER]);
   });
 });

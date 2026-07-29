@@ -61,8 +61,10 @@ Do **not** unconditionally replace LLM (or event-derived) prose after generation
 
 ### Value gate placement (default)
 
-Meaning rules (leakage, system language, claim-without-evidence) live in **one backend place**.  
+Meaning rules (leakage, system language, claim-without-evidence) live in **one backend place**. 
 Frontend may keep only a defensive minimum: null, empty string, trivial exact duplicates.
+
+**Transport failure (system-wide):** never invent product content (calm rows, sphere dictionary, “нет сигнала”, offline story) when a request fails or `is_fallback`/`degraded` is set. Say the failure plainly — **«Нет соединения.»** on network/API throw; **«Не удалось загрузить.»** when the server flagged unavailable. Empty UI is allowed; fake calm is not.
 
 ## After the change (honest close-out)
 

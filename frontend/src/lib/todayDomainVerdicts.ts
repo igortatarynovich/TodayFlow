@@ -48,18 +48,16 @@ export async function fetchDomainVerdicts(dateISO: string): Promise<DomainVerdic
   return getJson<DomainVerdictsResponse>(`/today/domain-verdicts${q}`);
 }
 
+/** Order API rows by fixed domain sequence. Does **not** invent calm fillers. */
 export function orderDomainVerdicts(rows: DomainVerdict[]): DomainVerdict[] {
   const byDomain = new Map(rows.map((r) => [r.domain, r]));
-  return DOMAIN_ORDER.map((domain) => {
+  const ordered: DomainVerdict[] = [];
+  for (const domain of DOMAIN_ORDER) {
     const hit = byDomain.get(domain);
-    return (
-      hit ?? {
-        domain,
-        verdict: "calm",
-        why_short: "",
-        driver_ids: [],
-        logic_source: "top_driver_v1",
-      }
-    );
-  });
+    if (hit) ordered.push(hit);
+  }
+  for (const row of rows) {
+    if (!DOMAIN_ORDER.includes(row.domain as DomainKey)) ordered.push(row);
+  }
+  return ordered;
 }
