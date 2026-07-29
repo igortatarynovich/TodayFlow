@@ -1,36 +1,33 @@
 "use client";
 
 import { useState } from "react";
-import { profileMotionStaggerDelay, profileMotionStyles } from "@/components/foundation/ProfileMotion";
+import { profileMotionStyles } from "@/components/foundation/ProfileMotion";
 import { PROFILE_V2_COPY, PROFILE_V2_DEPTH_NAV } from "@/components/profile/v2/profileV2SystemCopy";
 import styles from "@/components/profile/v2/profileV2System.module.css";
-import { WhyAnchorGlyph } from "@/components/profile/v2/whyAnchorVisual";
 import { ArchetypeHeroVisual } from "@/components/visualIdentity/ArchetypeHeroVisual";
 import { SacredGeometryBackdrop } from "@/components/visualIdentity/SacredGeometryBackdrop";
 import { MotionDrift } from "@/design-system/motion";
-import type { EssenceFoundationCard } from "@/lib/profilePage/buildEssenceFoundationCards";
 import { resolveArchetypeIllustrationSlug } from "@/lib/visualIdentity/registry";
 
 export type ProfileRecognitionSceneProps = {
   name: string | null;
   line: string | null;
-  /** Full identity_core — shown under recognition line (existing contract text). */
+  /** Kitchen / later — collapsed by default; not part of Act 1 share-core. */
   identityCore: string | null;
   archetypeSeed: string | null;
-  identityMarkers: string[];
-  /** Birth pillars with person-facing meaning — under recognition, not Explore dump. */
-  foundationCards?: EssenceFoundationCard[];
 };
 
 const recognitionNav = PROFILE_V2_DEPTH_NAV[0];
 
+/**
+ * Act 1 share-core only: archetype name + recognition_line + visual.
+ * Facts (Sun/Moon/path…) live in Act 2 — anti-dupe with journey scenario.
+ */
 export function ProfileRecognitionScene({
   name,
   line,
   identityCore,
   archetypeSeed,
-  identityMarkers,
-  foundationCards = [],
 }: ProfileRecognitionSceneProps) {
   const hasPortraitSlot = Boolean(resolveArchetypeIllustrationSlug(archetypeSeed));
   const deeper =
@@ -39,8 +36,8 @@ export function ProfileRecognitionScene({
     identityCore.trim().length > (line?.trim().length || 0) + 12
       ? identityCore.trim()
       : null;
-  /** Open by default — profile must be readable, not hunted. */
-  const [deeperOpen, setDeeperOpen] = useState(Boolean(deeper));
+  /** Closed by default — Act 1 is recognition, not a second portrait paragraph. */
+  const [deeperOpen, setDeeperOpen] = useState(false);
   const copy = PROFILE_V2_COPY.zones.recognition;
 
   return (
@@ -92,41 +89,6 @@ export function ProfileRecognitionScene({
               <span aria-hidden> {deeperOpen ? "↑" : "↓"}</span>
             </button>
             {deeperOpen ? <p className={styles.recognitionDeeperBody}>{deeper}</p> : null}
-          </div>
-        ) : null}
-
-        {identityMarkers.length ? (
-          <div className={styles.heroPills} data-testid="profile-v2-identity-markers">
-            {identityMarkers.slice(0, 3).map((marker, index) => (
-              <span
-                key={marker}
-                className={`${styles.heroPill} ${profileMotionStyles.staggerItem}`}
-                style={profileMotionStaggerDelay(index, 140)}
-              >
-                <WhyAnchorGlyph label={marker} size={14} />
-                <span>{marker}</span>
-              </span>
-            ))}
-          </div>
-        ) : null}
-
-        {foundationCards.length ? (
-          <div className={styles.essenceFoundation} data-testid="profile-v2-essence-foundation">
-            <p className={styles.essenceFoundationLabel}>{copy.foundationLabel}</p>
-            <ul className={styles.essenceFoundationGrid} role="list">
-              {foundationCards.map((card, index) => (
-                <li
-                  key={card.id}
-                  className={`${styles.essenceFoundationCard} ${profileMotionStyles.staggerItem}`}
-                  style={profileMotionStaggerDelay(index, 70)}
-                  data-testid={`profile-v2-essence-${card.id}`}
-                >
-                  <p className={styles.essenceFoundationKind}>{card.label}</p>
-                  <p className={styles.essenceFoundationFact}>{card.fact}</p>
-                  <p className={styles.essenceFoundationMeaning}>{card.meaning}</p>
-                </li>
-              ))}
-            </ul>
           </div>
         ) : null}
       </div>

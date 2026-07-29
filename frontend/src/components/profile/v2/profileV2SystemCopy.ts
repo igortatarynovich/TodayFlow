@@ -25,7 +25,6 @@ export const PROFILE_V2_COPY = {
       lead: "",
       deeperLabel: "Как это звучит полнее",
       deeperHide: "Свернуть",
-      foundationLabel: "Из чего складывается суть",
     },
     why: {
       title: "Главное, что формирует тебя",

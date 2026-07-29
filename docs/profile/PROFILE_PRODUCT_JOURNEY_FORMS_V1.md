@@ -44,8 +44,8 @@ Eval-сценарии с `initiator` / `stabilizer` **не** SoT имени — 
 | **Visual object** | Один тип на archetype: `ArchetypeSymbol` (SVG из registry). Не pills. Не eyebrow «Профиль». | `baseline.archetype_seed` → slug → asset |
 | **recognition_name** | 1 слово/название ядра, UPPER или display weight | calc RU label (`archetypeDisplayLabel`) |
 | **recognition_line** | 1 мысль, ≤ 120 символов, 1–2 короткие строки. Узнаваемое поведение; отличает archetype от соседних; не совет «сегодня» | **обязательное поле** identity contract |
-| **foundation strip** | После share-core: Солнце · Луна · ASC/MC (если время) · число пути · личный год — **RU факт + 1 смысл**. Не сырой EN dump. Не дублировать ту же сетку в Explore | natal + numerology + framework/CE prose / life_path knowledge |
-| Запрет на Шаге 1 | второй абзац «кто ты»; список сил; сырой натал без смысла; «Личный профиль» как смысл | — |
+| Запрет на Шаге 1 | второй абзац «кто ты» как главный UI; список сил; foundation/факты карты; pills Дева/Путь; сырой натал; «Личный профиль» как смысл | — |
+| **Анти-дубль → Шаг 2** | Факт и его смысл живут один раз: в Шаге 2 как механизм. Не печатать Солнце/путь/ASC в герое «другими словами». | FE `journeyAntiDupe` + Why formation |
 
 ### Target contract (механизм под форму)
 

@@ -14,4 +14,5 @@
 | [PROFILE_SCREEN_MASTER.md](./PROFILE_SCREEN_MASTER.md) | Visual/layout master (legacy v0) |
 | [PROFILE_DAY_SOURCE_MATRIX.md](./PROFILE_DAY_SOURCE_MATRIX.md) | Profile × Day Sources gate |
 | [PROFILE_PRODUCT_JOURNEY_FORMS_V1.md](./PROFILE_PRODUCT_JOURNEY_FORMS_V1.md) | Journey forms |
+| [PROFILE_ACT3_NODE_DRAFT_V0.md](./PROFILE_ACT3_NODE_DRAFT_V0.md) | **DRAFT** Act 3 node (trap→anchor→help) — content before visual modes |
 | [PROFILE_E2E_RECONSTRUCTION.md](./PROFILE_E2E_RECONSTRUCTION.md) | E2E reconstruction |

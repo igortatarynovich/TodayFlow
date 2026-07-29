@@ -21,6 +21,9 @@ export type ProfileWhySceneProps = {
   why: ProfileJourneyWhy;
   coreProfile?: CoreProfile | null;
   frameworkCards?: ProfileFrameworkCard[] | null;
+  /** Act 1 line — used for anti-dupe against Act 2 meanings. */
+  recognitionLine?: string | null;
+  identityCore?: string | null;
 };
 
 const whyNav = PROFILE_V2_DEPTH_NAV[1];
@@ -64,11 +67,15 @@ export function ProfileWhyScene({
   why,
   coreProfile = null,
   frameworkCards = null,
+  recognitionLine = null,
+  identityCore = null,
 }: ProfileWhySceneProps) {
   const anchors = [...why.selectedBy, ...why.influencedBy];
   const { selected, influenced } = buildWhyFormationCards(anchors, {
     core: coreProfile,
     frameworkCards,
+    recognitionLine,
+    identityCore,
   });
   const motion = useProfileMotionInView<HTMLElement>(40);
   if (!selected.length && !influenced.length && !why.honesty && !why.title) return null;

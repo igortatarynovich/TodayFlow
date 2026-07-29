@@ -23,7 +23,6 @@ import { MotionDrift } from "@/design-system/motion";
 import type { ProfileV2LiveContext } from "@/lib/profilePage/buildProfileV2LiveContext";
 import { buildProfileFirstScreenProjection } from "@/lib/profilePage/buildProfileFirstScreenProjection";
 import { buildProfileJourneyProjection } from "@/lib/profilePage/buildProfileJourneyProjection";
-import { buildEssenceFoundationCards } from "@/lib/profilePage/buildEssenceFoundationCards";
 import { profilePortraitFormingMessage } from "@/lib/profilePage/profilePortraitForming";
 import { buildProfileHeroQuote } from "@/lib/product-ui/profileWebFigmaHelpers";
 import type { CoreProfile } from "@/lib/types";
@@ -117,12 +116,6 @@ export function ProfileV2SystemScreen({
     return true;
   });
 
-  const essenceFoundation = buildEssenceFoundationCards({
-    natalPreview: deep?.natalPreview ?? null,
-    numerology: deep?.coreNumerology ?? coreProfile?.numerology ?? null,
-    frameworkCards: model.frameworkCards,
-  });
-
   return (
     <div className={styles.pageRoot} data-testid="profile-v2-system">
       <div className={styles.mainColumn}>
@@ -160,8 +153,6 @@ export function ProfileV2SystemScreen({
               line={journey.recognition.line}
               identityCore={journey.recognition.identityCore}
               archetypeSeed={journey.recognition.archetypeSeed}
-              identityMarkers={journey.identityMarkers}
-              foundationCards={essenceFoundation}
             />
 
             {journey.why ? (
@@ -169,6 +160,8 @@ export function ProfileV2SystemScreen({
                 why={journey.why}
                 coreProfile={coreProfile}
                 frameworkCards={model.frameworkCards}
+                recognitionLine={journey.recognition.line}
+                identityCore={journey.recognition.identityCore}
               />
             ) : null}
 

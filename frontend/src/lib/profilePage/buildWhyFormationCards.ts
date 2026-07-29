@@ -2,6 +2,7 @@
  * Enrich Profile Step-2 why anchors with person-facing meaning.
  * SoT: PROFILE_PRODUCT_JOURNEY_FORMS_V1 §2 — never claim Sun/element chose archetype.
  */
+import { applyAct2AntiDupeMeaning } from "@/lib/profilePage/journeyAntiDupe";
 import type { ProfileFrameworkCard } from "@/lib/profilePage/buildProfileQuickMapData";
 import type { ProfileJourneyWhyRow } from "@/lib/profilePage/buildProfileJourneyProjection";
 import type { WhyAnchorPresentation } from "@/lib/profilePage/presentWhyAnchors";
@@ -173,6 +174,10 @@ export function buildWhyFormationCards(
   ctx: {
     core?: CoreProfile | null;
     frameworkCards?: ProfileFrameworkCard[] | null;
+    /** Act 1 recognition line — anti-dupe source. */
+    recognitionLine?: string | null;
+    /** Act 1 kitchen identity — anti-dupe source when opened. */
+    identityCore?: string | null;
   } = {},
 ): { selected: WhyFormationCard[]; influenced: WhyFormationCard[] } {
   const { primary, secondary } = presentWhyAnchors(rows);
@@ -182,10 +187,16 @@ export function buildWhyFormationCards(
   const influenced: WhyFormationCard[] = [];
 
   for (const row of all) {
-    const meaning =
+    const rawMeaning =
       row.role === "selected"
         ? meaningForSelected(row, ctx.core)
         : meaningForInfluenced(row, ctx);
+    const meaning = applyAct2AntiDupeMeaning({
+      meaning: rawMeaning,
+      anchorId: row.id,
+      recognitionLine: ctx.recognitionLine,
+      identityCore: ctx.identityCore,
+    });
     const card: WhyFormationCard = { ...row, meaning, tier: "primary" };
     if (row.role === "selected") selected.push(card);
     else influenced.push(card);

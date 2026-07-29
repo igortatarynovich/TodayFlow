@@ -170,23 +170,14 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     expect(screen.getByTestId("profile-v2-system")).toBeInTheDocument();
     expect(screen.queryByTestId("profile-v2-person-story")).not.toBeInTheDocument();
 
-    // Hero: archetype name as H1, recognition line separate, ≤3 markers
+    // Hero: archetype name as H1, recognition line separate — share-core only (no fact wall)
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(/Исследователь/i);
     expect(screen.getByTestId("profile-v2-recognition-line")).toHaveTextContent("структуру");
-    const markers = screen.getByTestId("profile-v2-identity-markers");
-    expect(markers.querySelectorAll(":scope > *").length).toBeLessThanOrEqual(3);
-    expect(markers).toHaveTextContent("Дева");
-    expect(markers).toHaveTextContent("Земля");
-    expect(markers).toHaveTextContent("Путь 7");
-
-    // Essence foundation lives under Твоя суть (RU fact + meaning), not Explore dump
-    const foundation = screen.getByTestId("profile-v2-essence-foundation");
-    expect(foundation).toHaveTextContent(/Дева/);
-    expect(foundation).toHaveTextContent(/Число пути/);
-    expect(screen.getByTestId("profile-v2-essence-life_path")).toHaveTextContent(/глубин|смысл|понят/i);
+    expect(screen.queryByTestId("profile-v2-identity-markers")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("profile-v2-essence-foundation")).not.toBeInTheDocument();
     expect(screen.queryByTestId("profile-chart-signature")).not.toBeInTheDocument();
 
-    // Why + insight + character + effort in primary scroll (effort ungated)
+    // Why owns mechanism facts (Act 2) — not duplicated in Act 1
     expect(screen.getByTestId("profile-v2-why")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-why-selected")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-why-influenced")).toBeInTheDocument();
@@ -258,9 +249,12 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     expect(screen.getByTestId("profile-v2-detail-cultural_catalog")).toBeInTheDocument();
   });
 
-  it("surfaces identity_core under recognition without inventing copy", () => {
+  it("keeps identity_core behind kitchen toggle on Act 1 (not share-core)", async () => {
+    const user = userEvent.setup();
     renderJourney();
     expect(screen.getByTestId("profile-v2-identity-core")).toBeInTheDocument();
+    expect(screen.queryByText(/ясный фокус/i)).not.toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /полнее/i }));
     expect(screen.getByText(/ясный фокус/i)).toBeInTheDocument();
   });
 
@@ -317,12 +311,13 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     expect(screen.getByTestId("profile-v2-effort").textContent).not.toMatch(/%/);
   });
 
-  it("keeps hero to one name, one recognition line, and ≤3 markers", () => {
+  it("keeps Act 1 to share-core only: one name, one recognition line, no fact pills", () => {
     renderJourney();
     const hero = screen.getByTestId("profile-v2-recognition");
     expect(within(hero).getAllByRole("heading", { level: 1 })).toHaveLength(1);
     expect(screen.getByTestId("profile-v2-recognition-line")).toBeInTheDocument();
-    expect(screen.getByTestId("profile-v2-identity-markers").querySelectorAll(":scope > *").length).toBeLessThanOrEqual(3);
+    expect(screen.queryByTestId("profile-v2-identity-markers")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("profile-v2-essence-foundation")).not.toBeInTheDocument();
   });
 
   it("renders why as claim anchors plus synthesis, not cusp dump", () => {
