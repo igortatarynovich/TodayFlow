@@ -82,9 +82,30 @@ Trust bug to avoid: VerdictStrip says «money: friction» while Act 3 narrates a
 | B.3 | Provenance: `generation_provenance.verdict_driver_ids` (top id primary) | Interim: `driver_ids` on each row; full `day_facts_v1` in Phase D |
 | B.4 | Visual: **no motion** on strip (idle) | Motion pilot doc |
 
-**Interim path (until Phase D day_facts):** `GET /today/domain-verdicts` projects personal transits → activations → `top_driver_v1`. Soft-gate 0.5.2 accepted.
+**Interim path (until Phase D day_facts):** `GET /today/domain-verdicts` remains a separate endpoint but **must** call shared `compute_natal_activations` (TTL snapshot), not a private `_calculate_transits` path. Soft-gate 0.5.2 accepted.
+
+**B consolidation (pre-C, 2026-07-29):** single activation pool — see acceptance checklist below.
 
 **Gate:** strip always 4 rows; August-style inside-month flips under top-driver; calib 0.5.2 accepted.
+
+---
+
+### Phase B′ — Activation SoT consolidation (pre-C) — **REQUIRED before C**
+
+| Step | Work | Notes |
+|------|------|-------|
+| B′.1 | `compute_natal_activations` pure normalize+rank | `today_natal_activations_v1.py` |
+| B′.2 | Strip + morning/day_scenario foundation share TTL snapshot | 7 min; key `user_id:date` |
+| B′.3 | FE `is_fallback` / `degraded` ≠ real `calm` | Explicit no-data copy |
+| B′.4 | Full `GET /today/day-facts` | **Deferred to Phase D** |
+
+#### Acceptance before Phase C
+
+- [x] `compute_domain_verdicts` called with activations from `compute_natal_activations` / resolve snapshot — not a private transit path in the handler
+- [x] `day_scenario` foundation prefers `celestial_events.natal_activations` from the same compute
+- [x] Snapshot TTL cache so both consumers see the same list within one Today load
+- [x] FE Strip distinguishes `degraded`/`is_fallback` from real `calm`
+- [ ] Manual: same day — Act 1/3 sign vs VerdictStrip (owner smoke)
 
 ---
 

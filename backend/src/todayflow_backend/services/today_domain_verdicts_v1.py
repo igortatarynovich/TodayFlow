@@ -304,34 +304,18 @@ def compute_domain_verdicts(
 
 
 def activations_from_transit_objects(transits: Iterable[Any]) -> list[dict[str, Any]]:
-    """Normalize TransitToNatal-like objects / dicts into activation rows."""
-    out: list[dict[str, Any]] = []
-    for i, t in enumerate(transits):
-        if isinstance(t, dict):
-            transiting = t.get("transiting_planet") or t.get("planet")
-            natal = t.get("natal_planet") or t.get("natal_point")
-            aspect = t.get("aspect") or t.get("aspect_id")
-            orb = t.get("orb_deg")
-            if orb is None:
-                orb = t.get("orb_delta")
-            tid = t.get("id")
-        else:
-            transiting = getattr(t, "transiting_planet", None)
-            natal = getattr(t, "natal_planet", None) or getattr(t, "natal_point", None)
-            aspect = getattr(t, "aspect_id", None) or getattr(t, "aspect", None)
-            orb = getattr(t, "orb_delta", None)
-            if orb is None:
-                orb = getattr(t, "orb_deg", 0.0)
-            tid = getattr(t, "id", None)
-        if not transiting or not natal or not aspect:
-            continue
-        out.append(
-            {
-                "id": str(tid) if tid else f"act.{i}.{_norm(str(transiting))}.{_norm(str(aspect))}.{_norm(str(natal))}",
-                "transiting_planet": str(transiting),
-                "aspect": str(aspect),
-                "natal_point": str(natal),
-                "orb_deg": float(orb or 0.0),
-            }
-        )
-    return out
+    """Deprecated alias — prefer today_natal_activations_v1.compute_natal_activations."""
+    from todayflow_backend.services.today_natal_activations_v1 import compute_natal_activations
+
+    rows = compute_natal_activations(transits)
+    # Drop Wave2-only fields for callers that only need verdict geometry.
+    return [
+        {
+            "id": r["id"],
+            "transiting_planet": r["transiting_planet"],
+            "aspect": r["aspect"],
+            "natal_point": r["natal_point"],
+            "orb_deg": r["orb_deg"],
+        }
+        for r in rows
+    ]

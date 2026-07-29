@@ -324,7 +324,7 @@ async def get_morning_ritual(
         geocoder=geocoder,
     )
 
-    forecast_for_sky, _, _ = await _load_daily_forecast_context(
+    forecast_for_sky, natal_chart, _transit_chart, birth_data_for_act = await _load_daily_forecast_context(
         user=user,
         target_date=target_date_obj,
         locale=locale,
@@ -333,6 +333,26 @@ async def get_morning_ritual(
         astro_service=astro_service,
         geocoder=geocoder,
     )
+    # Wave2 single activation pool — TTL snapshot shared with GET /today/domain-verdicts.
+    natal_activations: list[dict] = []
+    try:
+        from todayflow_backend.services import today_natal_activations_v1 as act_svc
+
+        natal_activations, _act_degraded = await act_svc.resolve_natal_activations(
+            user_id=int(user.id),
+            local_date=target_date_obj,
+            natal_chart=natal_chart,
+            birth_data=birth_data_for_act,
+            transit_service=transit_service,
+        )
+    except Exception:
+        import logging
+
+        logging.getLogger(__name__).exception(
+            "morning_ritual natal_activations failed user=%s", getattr(user, "id", None)
+        )
+        natal_activations = []
+
     celestial_events = await build_celestial_events(
         target_date_obj,
         locale,
@@ -340,6 +360,9 @@ async def get_morning_ritual(
         personal_transits=forecast_for_sky.transits if forecast_for_sky else [],
         astro_service=astro_service,
     )
+    if isinstance(celestial_events, dict):
+        celestial_events = dict(celestial_events)
+        celestial_events["natal_activations"] = natal_activations
     
     # Автоматически создаем day_connection, если его еще нет (для удобства пользователя)
     from todayflow_backend.db.models import DayConnection
@@ -1162,7 +1185,7 @@ async def _build_daily_decision_engine(
     astro_service: astro.AstroService,
     geocoder: Geocoder,
 ) -> dict:
-    forecast, natal_chart, transit_chart = await _load_daily_forecast_context(
+    forecast, natal_chart, transit_chart, _birth_data = await _load_daily_forecast_context(
         user=user,
         target_date=target_date,
         locale=locale,
@@ -1266,13 +1289,13 @@ async def _load_daily_forecast_context(
     transit_service: PersonalTransitService,
     astro_service: astro.AstroService,
     geocoder: Geocoder,
-) -> tuple[models.DailyForecast | None, Any | None, Any | None]:
+) -> tuple[models.DailyForecast | None, Any | None, Any | None, Any | None]:
     try:
         from todayflow_backend.services.forecast_cache import get_forecast_cache_service
 
         astro_profile = await _get_user_astro_profile(user, db, None, locale)
         if not astro_profile:
-            return None, None, None
+            return None, None, None, None
 
         cache_service = get_forecast_cache_service(db)
         cached_forecast = cache_service.get_cached_forecast(
@@ -1301,7 +1324,7 @@ async def _load_daily_forecast_context(
             )
 
         if cached_forecast:
-            return models.DailyForecast.model_validate(cached_forecast), natal_chart, transit_chart
+            return models.DailyForecast.model_validate(cached_forecast), natal_chart, transit_chart, birth_data
 
         forecast = await transit_service.get_daily_forecast(
             natal_chart=natal_chart,
@@ -1309,9 +1332,9 @@ async def _load_daily_forecast_context(
             birth_data=birth_data,
             locale=locale,
         )
-        return forecast, natal_chart, transit_chart
+        return forecast, natal_chart, transit_chart, birth_data
     except Exception:
-        return None, None, None
+        return None, None, None, None
 
 
 def _load_latest_user_state(db, user_id: int, target_date: date) -> dict[str, Any]:

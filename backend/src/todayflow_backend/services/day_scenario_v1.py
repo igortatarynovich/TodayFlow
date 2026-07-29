@@ -232,15 +232,24 @@ def build_scenario_foundation_v1(
             )
 
     natal_activations: list[dict[str, Any]] = []
-    for c in _claims_by_prefix(claims, "claim.personal."):
-        natal_activations.append(
-            {
-                "id": c.get("id"),
-                "text": _clip(c.get("text"), 280),
-                "evidence_ids": list(c.get("evidence_ids") or []),
-                "layer": c.get("layer") or "personal",
-            }
+    # Wave2 single pool: geometric activations on celestial_events (from compute_natal_activations).
+    geo = _as_list(ce.get("natal_activations"))
+    if geo:
+        from todayflow_backend.services.today_natal_activations_v1 import (
+            foundation_rows_from_activations,
         )
+
+        natal_activations = foundation_rows_from_activations(geo)
+    if not natal_activations:
+        for c in _claims_by_prefix(claims, "claim.personal."):
+            natal_activations.append(
+                {
+                    "id": c.get("id"),
+                    "text": _clip(c.get("text"), 280),
+                    "evidence_ids": list(c.get("evidence_ids") or []),
+                    "layer": c.get("layer") or "personal",
+                }
+            )
     if not natal_activations and personal_nest:
         natal_activations.append(
             {

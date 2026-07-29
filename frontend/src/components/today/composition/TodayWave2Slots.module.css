@@ -69,6 +69,15 @@
   color: var(--tf-ink-muted, #5c534a);
 }
 
+.verdictFallback {
+  margin: 0;
+  max-width: 42ch;
+  padding: 0.35rem 0;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--tf-ink-muted, #7a7168);
+}
+
 .tap {
   display: flex;
   flex-direction: column;

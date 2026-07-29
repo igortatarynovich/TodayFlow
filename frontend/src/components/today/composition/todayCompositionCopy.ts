@@ -87,6 +87,7 @@ export const TODAY_COMPOSITION_COPY = {
     tapEmptyHint: "Когда сцена дня соберётся — здесь будет один короткий тап.",
     verdictSlotHint: "",
     verdictStripLabel: "Сферы дня",
+    verdictFallback: "Сферы дня пока без сигнала — не спокойный день, а нет данных.",
     glanceSlotHint: "",
   },
 } as const;

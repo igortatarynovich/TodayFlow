@@ -31,26 +31,50 @@ type VerdictStripProps = {
 
 export function TodayVerdictStripSlot({ dateISO }: VerdictStripProps) {
   const [rows, setRows] = useState<DomainVerdict[]>(() => orderDomainVerdicts([]));
+  const [isFallback, setIsFallback] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
     void fetchDomainVerdicts(dateISO)
       .then((data) => {
-        if (!cancelled) setRows(orderDomainVerdicts(data.domain_verdicts ?? []));
+        if (cancelled) return;
+        const fallback = Boolean(data.is_fallback ?? data.degraded);
+        setIsFallback(fallback);
+        setRows(fallback ? orderDomainVerdicts([]) : orderDomainVerdicts(data.domain_verdicts ?? []));
       })
       .catch(() => {
-        if (!cancelled) setRows(orderDomainVerdicts([]));
+        if (cancelled) return;
+        setIsFallback(true);
+        setRows(orderDomainVerdicts([]));
       });
     return () => {
       cancelled = true;
     };
   }, [dateISO]);
 
+  if (isFallback) {
+    return (
+      <div
+        className={styles.verdictStrip}
+        data-testid="today-slot-verdict-strip"
+        data-wave2-slot="verdict"
+        data-fallback="true"
+        role="status"
+        aria-label={copy.journey.verdictStripLabel}
+      >
+        <p className={styles.verdictFallback} data-testid="today-verdict-fallback">
+          {copy.journey.verdictFallback}
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div
       className={styles.verdictStrip}
       data-testid="today-slot-verdict-strip"
       data-wave2-slot="verdict"
+      data-fallback="false"
       role="list"
       aria-label={copy.journey.verdictStripLabel}
     >

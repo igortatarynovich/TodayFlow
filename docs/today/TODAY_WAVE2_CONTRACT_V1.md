@@ -363,6 +363,15 @@ Opens with the **first code PR** (Phase A), not with docs lock alone.
 - **Canon:** this file §3.3 · [TODAY_WAVE2_EXECUTION_PLAN](./TODAY_WAVE2_EXECUTION_PLAN.md) Phase B
 - **Backward compatible:** old clients ignore strip; no change to existing day_story / today_contract fields
 
+### Phase B′ (activation consolidation) — pre-C
+
+- **SoT before:** Strip via private `_calculate_transits`; day_scenario `personal_natal_activations` from claim prose — two pools
+- **SoT after:** shared `compute_natal_activations` + TTL snapshot; foundation prefers `celestial_events.natal_activations`; strip uses same resolve; `is_fallback` on FE
+- **Public JSON:** `is_fallback` added (alias of `degraded`); interim GET kept
+- **Migration:** none
+- **Canon:** §6 intent (one pool) · [TODAY_WAVE2_EXECUTION_PLAN](./TODAY_WAVE2_EXECUTION_PLAN.md) Phase B′
+- **Backward compatible:** yes — extra field; FE fallback only when flagged
+
 ---
 
 ## Related

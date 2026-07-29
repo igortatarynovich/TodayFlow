@@ -22,7 +22,9 @@ export type DomainVerdictsResponse = {
   day_facts_id: string;
   logic_source: string;
   domain_verdicts: DomainVerdict[];
+  /** @deprecated prefer is_fallback */
   degraded?: boolean;
+  is_fallback?: boolean;
 };
 
 export const DOMAIN_ORDER: DomainKey[] = ["work", "money", "relationships", "energy"];
