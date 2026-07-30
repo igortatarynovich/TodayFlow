@@ -4,7 +4,7 @@ Last updated: 2026-07-30
 Owner: Product + Engineering
 Status: Active working document
 
-**IN PROGRESS (2026-07-30):** ScreenFlow Phase 2b (split Personal acts; axis lock on device) — V1 Glance-first **LIVE** after rebuild. Guest Story Surface P0 (item 11) — **DONE (LIVE)**. Evening/day-2 = slice 2.
+**IN PROGRESS (2026-07-30):** Practices Screen v1 — **C0 canon ACCEPTED** ([practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md)); next **P0** web `/practices` shell on locked need/format. ScreenFlow Phase 2b (split Personal acts; axis lock) — Glance-first **LIVE**. Guest Story Surface P0 — **DONE (LIVE)**. Evening/day-2 = slice 2.
 
 ## 1) Purpose
 
@@ -21,6 +21,7 @@ Important:
 - Product canon: [CORE_PRODUCT_CANON.md](archive/CORE_PRODUCT_CANON.md).
 - **PIM center:** [PERSONAL_INTELLIGENCE_MODEL_V1.md](pim/PERSONAL_INTELLIGENCE_MODEL_V1.md) · [USER_KNOWLEDGE_MODEL.md](pim/USER_KNOWLEDGE_MODEL.md) · [INTENT_MODEL_V1.md](./INTENT_MODEL_V1.md).
 - **Today experience (ACCEPTED):** [TODAY_SCREEN_V1_CANON.md](./TODAY_SCREEN_V1_CANON.md) · [TODAY_LANGUAGE_V1.md](today-language/TODAY_LANGUAGE_V1.md).
+- **Practices experience (ACCEPTED):** [practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) — цикл need→practice→session→check-in→Today; locked need/format IDs.
 - **Profile UI:** [PR4_PROFILE_CANON.md](./archive/PR4_PROFILE_CANON.md) (production IA; applies umbrella) · [PROFILE_EXPERIENCE_SCENARIO_V1.md](profile/PROFILE_EXPERIENCE_SCENARIO_V1.md) (**Character Engine** — SoT личности платформы) · [PROFILE_SCREEN_MASTER.md](profile/PROFILE_SCREEN_MASTER.md) (v0 visual) · [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md).
 - **Explainable Computation (platform gate):** [EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md](explainability/EXPLAINABLE_COMPUTATION_AND_INTERPRETATION.md) — выше модулей; конфликт → umbrella.
 - **Understanding progress (depth · missing · trial · sub):** [UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md](./UNDERSTANDING_PROGRESS_AND_DEPTH_CANON.md).
@@ -878,6 +879,20 @@ Source of truth: [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) §1–§13
   - [ ] keep this loop invisible in user-facing language
 - [ ] Add offline evaluation later to compare prompt quality with evidence.
 
+### Practices (state cycle — canon locked 2026-07-30)
+
+**Канон:** [practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) · [practices/_INDEX.md](./practices/_INDEX.md)
+
+**Locked needs:** `calm` · `focus` · `recover` · `sleep` · `understand` (RU: Успокоиться · Собраться · Восстановиться · Уснуть · Понять себя). **Не** «Почувствовать тело».
+
+**Locked formats:** `meditation` · `breath` · `reflection` · `affirmation` · `visualization` · `body` · `sleep`. Йога/растяжка = subtypes `body`. Музыка ≠ format chip → music layer.
+
+- [x] **C0** Canon ACCEPTED — need/format freeze + cycle principle + mockup deltas closed
+- [ ] **P0** Web `/practices` shell: need chips + «Рекомендовано сейчас» + Continue + moment rail + format chips + practice of day + conditional «Мои практики» (map/deprecate legacy catalog goals)
+- [ ] **P1** Session fullscreen + state check-in (Лучше / Без изменений / Сложнее) + «Сохранить в сегодняшний день»
+- [ ] **M0** Music layer (С голосом / Только музыка / Без звука + voice/music/nature volumes) — parallel to P0/P1
+- [ ] iOS parity after web P0+P1 stable
+
 ### UX and Navigation
 - [ ] Fully audit mobile navigation.
 - [ ] Remove duplicate or conflicting routes.
@@ -1100,6 +1115,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-07-30 | Practices | **Screen v1 canon C0 (need/format freeze)** | **ACCEPTED** | SoT [practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md): cycle need→practice→session→check-in→Today. Needs keep «Понять себя», drop mockup «Почувствовать тело». Formats: 7 chips; yoga/stretch = `body` subtypes; affirmations = format; music = §5 layer not chip. Tracker: P0 shell → P1 cycle → M0 music (parallel). README indexed.
 - 2026-07-30 | Web Guest / SEO audit | **Guest Story Surface P0 (item 11)** | **DONE (LIVE)** | Curl: landing dual CTAs · `/demo/today` SSR Theme/Focus/Practice/Memory · `/onboarding/invite` · pitch CTAs · Compat Profile bridge · guest-nav primary Today·Profile·Compatibility. Evening/day-2 = slice 2. Canon [audits/GUEST_STORY_SURFACE_P0_2026-07-30.md](./audits/GUEST_STORY_SURFACE_P0_2026-07-30.md).
 - 2026-07-30 | Web Guest / SEO audit | **/today+/profile SSR pitch body** | **DONE (LIVE)** | Independent sandbox curl: pitch SSR above bailout on /today+/profile; «Собираем стабильное…» = 0. BAILOUT remains on client widgets only. Item 11 story surface → row above.
 - 2026-07-30 | Product UI | **ScreenFlow V1 — proto + Today Glance-first** | **LIVE (redeployed)** | Was code-only: prod image lagged (Docker `npm run build` failed on TS; `tail` masked exit → stale `#today-act-` bundle). Fixed `showSymbols`/`tarotPickedId` types; rebuilt+force-recreate. Live chunk `page-bbb6669e810a4bf7.js` contains `today-screen-flow` + Glance. Hard-refresh to verify transform pager. Phase 2b = split personal; axis lock after real-device.
