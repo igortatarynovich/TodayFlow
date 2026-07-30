@@ -21,7 +21,7 @@ def test_valence_soft_hard():
     assert glance.glance_valence("square", "Mars") == "caution"
 
 
-def test_build_glance_only_timed_rank_1_to_3():
+def test_build_glance_timed_rows_sorted_by_time_max_three():
     rows = glance.build_glance_timeline_rows(
         [
             {
@@ -58,11 +58,17 @@ def test_build_glance_only_timed_rank_1_to_3():
             },
         ]
     )
-    assert len(rows) == 2
-    assert rows[0]["driver_id"] == "a3"
+    # Rank 4 fills when timed — same pool, strength walk, ≤3 by clock.
+    assert len(rows) == 3
+    assert [r["driver_id"] for r in rows] == ["a3", "a4", "a1"]
     assert rows[0]["valence"] == "favorable"
-    assert rows[1]["driver_id"] == "a1"
-    assert rows[1]["valence"] == "caution"
+    assert rows[2]["valence"] == "caution"
+
+
+def test_biquintile_has_aspect_angle():
+    assert glance.aspect_angle("biquintile") == 144.0
+    assert glance.aspect_angle("quintile") == 72.0
+
 
 
 def test_local_day_bounds_timezone():

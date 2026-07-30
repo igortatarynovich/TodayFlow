@@ -251,10 +251,10 @@ Exact numeric cutovers stay calibratable; the **aggregation rule** (top, not sum
 
 ## 4. GlanceTimeline — exact time (inside day_facts)
 
-**Input:** `natal_activations` with `rank` 1–3 (same top drivers as conflict — **no second ranking**).
+**Input:** `natal_activations` in strength `rank` order (same pool as conflict — **no second ranking**). Exact-time walk covers ranks 1…12 until ≤3 timed rows (skips aspects without a known angle or no zero-cross in the local day).
 
-**Algorithm:** step search (5 min; optional binary refine) within user local day for when  
-`|transit_longitude(t) − natal_point_longitude|` equals aspect angle (0/60/90/120/180°).
+**Algorithm:** step search (30 min samples + bisect) within user local day for when  
+`|transit_longitude(t) − natal_point_longitude|` equals aspect angle (0/60/72/90/120/144/150/180°).
 
 If no exact within local day (slow bodies): `exact_time_local = null`; activation stays in `natal_activations` / conflict but **not** in `glance_timeline`.
 

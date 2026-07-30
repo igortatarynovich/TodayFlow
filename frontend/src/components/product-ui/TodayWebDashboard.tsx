@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { DsOrbitalViz, IconCalendar, IconSun } from "@/design-system";
 import v2 from "@/design-system/layouts/productV2Surface.module.css";
 import l from "@/design-system/layouts/dsLayouts.module.css";
@@ -12,6 +12,8 @@ import {
   todayWebGreeting,
 } from "@/components/product-ui/todayWebDashboardChrome";
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
+import { buildTodayWebTimelineFromGlance } from "@/lib/buildTodayWebDashboardData";
+import { fetchDayFacts } from "@/lib/todayDayFacts";
 import { getLocale } from "@/lib/i18n";
 import { useProductMoodTheme } from "@/lib/useProductDayNightTheme";
 import type { CoreProfile } from "@/lib/types";
@@ -35,6 +37,8 @@ export type TodayWebDashboardLayout = "full" | "overview" | "composition" | "rit
 export type TodayWebDashboardProps = {
   displayName: string | null;
   displayDate: string;
+  /** ISO date for day_facts / glance rail (YYYY-MM-DD). */
+  dateISO?: string | null;
   greetingLine?: string;
   profileMeta?: string | null;
   themeTitle: string;
@@ -59,15 +63,44 @@ export type TodayWebDashboardProps = {
 
 function TodayWebRail({
   chrome,
+  dateISO,
   timelineEvents,
   weeklyActivity,
   streakDays,
 }: {
   chrome: ReturnType<typeof todayWebDashboardChromeBundle>;
+  dateISO?: string | null;
   timelineEvents: TodayWebTimelineEvent[];
   weeklyActivity: number[];
   streakDays: number;
 }) {
+  const [glanceEvents, setGlanceEvents] = useState<TodayWebTimelineEvent[]>([]);
+
+  useEffect(() => {
+    if (timelineEvents.length > 0) {
+      setGlanceEvents([]);
+      return;
+    }
+    let cancelled = false;
+    void fetchDayFacts(dateISO || "")
+      .then((data) => {
+        if (cancelled) return;
+        if (data.is_fallback ?? data.degraded) {
+          setGlanceEvents([]);
+          return;
+        }
+        setGlanceEvents(buildTodayWebTimelineFromGlance(data.glance_timeline ?? []));
+      })
+      .catch(() => {
+        if (!cancelled) setGlanceEvents([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [dateISO, timelineEvents.length]);
+
+  const resolvedTimeline = timelineEvents.length > 0 ? timelineEvents : glanceEvents;
+
   return (
     <>
       {streakDays > 0 ? (
@@ -105,17 +138,17 @@ function TodayWebRail({
         </section>
       ) : null}
 
-      {timelineEvents.length > 0 ? (
+      {resolvedTimeline.length > 0 ? (
         <section className={s.todayRailPanel} aria-labelledby="today-rail-timeline">
           <h2 id="today-rail-timeline" className={v2.eyebrow}>
             {chrome.railTimelineTitle}
           </h2>
           <ol className={s.todayTimelineList}>
-            {timelineEvents.map((event, index) => (
-              <li key={`${event.time}-${event.title}`} className={s.todayTimelineItem}>
+            {resolvedTimeline.map((event, index) => (
+              <li key={`${event.time}-${event.title}-${index}`} className={s.todayTimelineItem}>
                 <span className={s.todayTimelineTrack} aria-hidden>
                   <span className={`${s.todayTimelineDot} ${event.active ? s.todayTimelineDotActive : ""}`.trim()} />
-                  {index < timelineEvents.length - 1 ? <span className={s.todayTimelineLine} /> : null}
+                  {index < resolvedTimeline.length - 1 ? <span className={s.todayTimelineLine} /> : null}
                 </span>
                 <span className={s.todayTimelineContent}>
                   <span className={s.todayTimelineTitle}>{event.title}</span>
@@ -253,6 +286,7 @@ function TodayWebOverview({
 export function TodayWebDashboard({
   displayName,
   displayDate,
+  dateISO = null,
   greetingLine,
   profileMeta,
   themeTitle,
@@ -282,8 +316,12 @@ export function TodayWebDashboard({
   const resolvedTimeline = timelineEvents ?? [];
   const resolvedWeekly = weeklyActivity ?? [];
   const resolvedPractices = practices ?? [];
+  // dateISO → rail may asynchronously fill from glance_timeline (Wave 2 SoT).
   const hasContextRail =
-    streakDays > 0 || resolvedWeekly.length > 0 || resolvedTimeline.length > 0;
+    streakDays > 0 ||
+    resolvedWeekly.length > 0 ||
+    resolvedTimeline.length > 0 ||
+    Boolean(dateISO);
 
   const showOverview = layout === "full" || layout === "overview";
   const showComposition = layout === "full" || layout === "composition" || layout === "ritual";
@@ -301,6 +339,7 @@ export function TodayWebDashboard({
       rail: hasContextRail ? (
         <TodayWebRail
           chrome={chrome}
+          dateISO={dateISO}
           timelineEvents={resolvedTimeline}
           weeklyActivity={resolvedWeekly}
           streakDays={streakDays}
@@ -310,6 +349,7 @@ export function TodayWebDashboard({
   }, [
     chrome,
     coreProfile,
+    dateISO,
     displayName,
     hasContextRail,
     mood,

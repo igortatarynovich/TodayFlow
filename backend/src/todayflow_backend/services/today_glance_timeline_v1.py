@@ -26,12 +26,19 @@ ASPECT_ANGLE: dict[str, float] = {
     "trine": 120.0,
     "quincunx": 150.0,
     "opposition": 180.0,
+    # Harmonics — same strength pool as activations; needed so exact-time
+    # can resolve when top ranks are quintile/biquintile (else Glance stays empty).
+    "quintile": 72.0,
+    "biquintile": 144.0,
 }
 
 # Coarse shared samples; bisect refines toward ≤5 min (contract C.1).
 SAMPLE_STEP_MINUTES = 30
 BISECT_MAX_ITER = 16
 MAX_GLANCE_ROWS = 3
+# Search strength order beyond 1–3 when top ranks lack exact (minors/slow/no chart hit).
+# Still one pool / one ranker — no second ranking.
+GLANCE_SEARCH_MAX_RANK = 12
 
 _PLANET_RU = {
     "sun": "Солнце",
@@ -260,7 +267,7 @@ def build_glance_timeline_rows(
             rank_i = int(rank) if rank is not None else 99
         except (TypeError, ValueError):
             rank_i = 99
-        if rank_i < 1 or rank_i > 3:
+        if rank_i < 1 or rank_i > GLANCE_SEARCH_MAX_RANK:
             continue
         exact = act.get("exact_time_local")
         if not exact:
@@ -296,6 +303,14 @@ def build_glance_timeline_rows(
     ]
 
 
+def _rank_int(act: dict[str, Any]) -> int:
+    rank = act.get("rank")
+    try:
+        return int(rank) if rank is not None else 99
+    except (TypeError, ValueError):
+        return 99
+
+
 async def compute_glance_timeline(
     *,
     activations: list[dict[str, Any]],
@@ -307,11 +322,24 @@ async def compute_glance_timeline(
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """
     Returns (glance_timeline, activations_with_exact_times).
-    Only ranks 1–3 are searched; others keep exact_time_local=null.
+
+    Exact-time search walks strength ranks 1…GLANCE_SEARCH_MAX_RANK (same pool,
+    no second ranker). Stops early once MAX_GLANCE_ROWS have exact times.
+    Untimeable aspects (no angle / no natal lon / no zero-cross today) stay null
+    and are omitted from glance_timeline.
     """
     enriched = [dict(a) for a in activations if isinstance(a, dict)]
-    top = [a for a in enriched if isinstance(a.get("rank"), int) and 1 <= int(a["rank"]) <= 3]
-    if not top or not natal_chart:
+    for act in enriched:
+        act["exact_time_local"] = None
+
+    candidates = [
+        a
+        for a in enriched
+        if 1 <= _rank_int(a) <= GLANCE_SEARCH_MAX_RANK
+        and aspect_angle(str(a.get("aspect") or "")) is not None
+    ]
+    candidates.sort(key=_rank_int)
+    if not candidates or not natal_chart:
         return [], enriched
 
     start, end = local_day_bounds(local_date, timezone_name)
@@ -327,18 +355,12 @@ async def compute_glance_timeline(
         logger.exception("glance_sky_sample_failed date=%s", local_date.isoformat())
         return [], enriched
 
-    for act in enriched:
-        rank = act.get("rank")
-        try:
-            rank_i = int(rank) if rank is not None else 99
-        except (TypeError, ValueError):
-            rank_i = 99
-        if rank_i < 1 or rank_i > 3:
-            act["exact_time_local"] = None
-            continue
+    timed_count = 0
+    for act in candidates:
+        if timed_count >= MAX_GLANCE_ROWS:
+            break
         natal_lon = natal_longitude_from_chart(natal_chart, str(act.get("natal_point") or ""))
         if natal_lon is None:
-            act["exact_time_local"] = None
             continue
         try:
             exact = await find_exact_time_for_activation(
@@ -352,9 +374,9 @@ async def compute_glance_timeline(
             logger.exception("glance_exact_failed id=%s", act.get("id"))
             exact = None
         if exact is None:
-            act["exact_time_local"] = None
-        else:
-            # Store timezone-aware ISO for FE
-            act["exact_time_local"] = exact.isoformat(timespec="minutes")
+            continue
+        # Store timezone-aware ISO for FE
+        act["exact_time_local"] = exact.isoformat(timespec="minutes")
+        timed_count += 1
 
     return build_glance_timeline_rows(enriched), enriched

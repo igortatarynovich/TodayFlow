@@ -1448,6 +1448,7 @@ export default function TodayPage() {
         displayName={firstNameRitual}
         isFirstDay={isFirstDayMood}
         displayDate={formatDate(todayData.date)}
+        dateISO={todayData.date}
         greetingLine={dashboardGreetingLine}
         profileMeta={profileMetaDashboard}
         themeTitle={summaryTitleMerged}

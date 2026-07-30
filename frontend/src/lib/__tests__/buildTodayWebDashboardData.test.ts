@@ -1,5 +1,6 @@
 import {
   buildTodayWebTimeline,
+  buildTodayWebTimelineFromGlance,
   buildTodayWebWeeklyActivity,
 } from "@/lib/buildTodayWebDashboardData";
 
@@ -18,6 +19,22 @@ describe("buildTodayWebDashboardData PR-2 honesty", () => {
         },
       } as never),
     ).toEqual([]);
+  });
+
+  it("maps glance_timeline clocks into rail events", () => {
+    expect(
+      buildTodayWebTimelineFromGlance(
+        [
+          {
+            time_local: "2026-07-30T14:00+03:00",
+            label_short: "Есть опора",
+            valence: "favorable",
+            driver_id: "a1",
+          },
+        ],
+        new Date("2026-07-30T10:00:00+03:00"),
+      ),
+    ).toEqual([{ time: "14:00", title: "Есть опора", active: false }]);
   });
 
   it("does not invent weekly wave bars without step history", () => {

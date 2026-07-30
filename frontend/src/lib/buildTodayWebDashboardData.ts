@@ -6,19 +6,34 @@ import type {
 } from "@/components/today/todayPageUtils";
 import type { TodayWebPractice } from "@/components/product-ui/TodayWebDashboard";
 import type { DsTimelineEvent } from "@/design-system";
+import {
+  formatGlanceClock,
+  isGlanceLiveNow,
+  type GlanceTimelineItem,
+} from "@/lib/todayGlanceTimeline";
 
 /**
- * Right-rail day timeline.
+ * Right-rail day timeline from morning celestial pack.
  *
- * Morning `celestial_events.sky_aspects` / `personal_transits` have titles but
- * **no clock**. Inventing DEFAULT_TIMES (07:30 / 11:15 / …) made a decorative
- * fake timeline that contradicted Glance nearest honesty.
- *
- * SoT for timed day marks is Wave 2 `glance_timeline` (exact-time). Until the
- * rail is wired to that payload with real `time_local`, return empty.
+ * Morning sky_aspects / personal_transits have titles but **no clock**.
+ * Inventing DEFAULT_TIMES made a decorative fake timeline — always [].
+ * Prefer `buildTodayWebTimelineFromGlance` (Wave 2 exact-time SoT).
  */
 export function buildTodayWebTimeline(_morning?: MorningRitualData | null): DsTimelineEvent[] {
   return [];
+}
+
+/** Map Wave 2 glance_timeline → rail events (real clocks + experiential labels). */
+export function buildTodayWebTimelineFromGlance(
+  items: GlanceTimelineItem[] | null | undefined,
+  now: Date = new Date(),
+): DsTimelineEvent[] {
+  if (!items?.length) return [];
+  return items.slice(0, 3).map((item) => ({
+    time: formatGlanceClock(item.time_local),
+    title: (item.label_short || "").trim() || "Окно дня",
+    active: isGlanceLiveNow(item.time_local, now),
+  }));
 }
 
 /**
