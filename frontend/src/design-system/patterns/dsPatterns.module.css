@@ -60,6 +60,9 @@
 }
 
 .themePanel {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
   display: grid;
   grid-template-columns: 1fr;
   gap: 0;
