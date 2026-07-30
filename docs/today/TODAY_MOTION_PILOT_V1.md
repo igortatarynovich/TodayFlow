@@ -1,13 +1,13 @@
-# Today — Motion as attention hierarchy (pilot)
+# Today — Motion as attention hierarchy
 
-**Status:** PILOT canon for **Today only** — not app-wide until TapWidget pilot proves the pattern.  
+**Status:** **Today-only canon** (D.3 closed 2026-07-30). Not app-wide.  
 **Pairs with:** [TODAY_WAVE2_CONTRACT_V1.md](./TODAY_WAVE2_CONTRACT_V1.md) · [TODAY_WAVE2_EXECUTION_PLAN.md](./TODAY_WAVE2_EXECUTION_PLAN.md)
 
-## Principles added
+## Principles
 
 1. **Live-now is its own weak class.** GlanceTimeline “current time inside a window” is not “new result” and not “incomplete action”. Priority **below** all others (indicator, never accent).
 2. **Motion always has a static equivalent.** Color / badge / icon carry meaning; breathe/glow only amplify. `prefers-reduced-motion` = turn off one CSS layer, not a second product path.
-3. **Persistence lives beside `day_facts_v1`.** Use `today_ui_state` keyed by `day_facts_id`. Tap done = `tap_event_v1` exists.
+3. **Tap completion SoT is `tap_event_v1`.** Optional `today_ui_state` (hero/card/insight seen) stays beside `day_facts_id` when those surfaces get motion — not required for proven Tap + live-now.
 
 ```text
 today_ui_state {
@@ -27,34 +27,52 @@ today_ui_state {
 
 ## Today element table
 
-| Element | Class | Trigger | User should | Accent duration | Clears when | Priority | Reduced-motion |
-|---------|-------|---------|-------------|-----------------|-------------|----------|----------------|
-| Act 1 hero theme | new | `hero_seen = false` | read theme | one enter ~1–1.5s | shown | 3 | static color accent |
-| Act 2 card/number closed | attention | `card_opened = false` | open | breathe 4–8s loop | opened | 2 | static “new” badge |
-| Act 2 card/number opened | completed → idle | open transition | — | confirm ~0.6–1s | transition done | — | static check |
-| Personal insight (`why_personal`, deep only) | new | `insight_seen[id] = false` | read | one enter ~2–3s | seen | 3 | static atypical frame |
-| GlanceTimeline active window | active (live) | now ∈ window | notice “now” | while in window | window ends | 4 | static “сейчас” |
-| VerdictStrip | idle | — | scan | none | — | — | — |
-| TapWidget / evening check-in | attention | in `practice_or_promise.window` (or evening) AND no tap yet | one tap | breathe 4–8s | `tap_event_v1` | **1** | static nav badge |
-| TapWidget after answer | completed | event written | — | ~0.6–1s | reaction ends | — | static “учли” |
+| Element | Class | Status | Trigger | Accent | Clears when | Priority | Reduced-motion |
+|---------|-------|--------|---------|--------|-------------|----------|----------------|
+| TapWidget | attention | **PROVEN** | prompt present AND no tap yet | breathe ~6s | `tap_event_v1` | **1** | inset accent + static dot |
+| TapWidget after answer | completed | **PROVEN** | event written | ~0.7s confirm | reaction ends | — | static “учли” |
+| GlanceTimeline / nearest live | active (live) | **PROVEN** | now ∈ ±45m window | static «сейчас» | window ends | 4 | same static label |
+| VerdictStrip | idle | **PROVEN** | — | none (valence color only) | — | — | — |
+| Act 1 hero theme | new | backlog | `hero_seen = false` | one enter ~1–1.5s | shown | 3 | static color accent |
+| Act 2 card/number closed | attention | backlog | `card_opened = false` | breathe 4–8s | opened | 2 | static “new” badge |
+| Personal insight (`why_personal`) | new | backlog | `insight_seen[id] = false` | one enter ~2–3s | seen | 3 | static atypical frame |
 
-**Arbitration example:** evening, card still closed + check-in pending → only TapWidget breathes (1); card shows static “new”. After check-in, card may breathe (2) if still closed.
+**Arbitration:** if Tap attention is live, no other Today element may breathe. Live-now never competes.
 
 ## Accessibility
 
 - Breathe (scale ~1→1.01→1, soft glow) on 4–8s cycle — WCAG 2.3.1 safe by construction.
-- Insight light-wave: **one** pass, never more often than once / ≥4s; no flicker loop.
+- Insight light-wave (when built): **one** pass, never more often than once / ≥4s; no flicker loop.
 - Real protection = static carrier of meaning + optional motion layer.
 
-## Profile boundary
+## Profile / other surfaces
 
 Profile / Core: at most one-shot `new` (e.g. unread Decode badge). **Never** attention-breathe.  
-Today is the only surface allowed ambient breathe (daily / living layer).
+Practices / ScreenFlow / Compat / Tarot: **out of scope** until a separate motion retro. ScreenFlow step change is navigation, not attention motion.
 
-## Pilot decision
+Today is the only product surface allowed ambient breathe (daily / living layer).
 
-**Pilot element: TapWidget (class 1, evening check-in).**
+---
 
-Reasons: already Phase A of Wave 2; one trigger / one action / one clear event; validates persistence + reduced-motion on the simplest case before card/insight.
+## D.3 retrospective (2026-07-30)
 
-After pilot: either promote this doc to app-wide motion canon (with explicit Profile inherit list) or revise classes from what failed on Tap.
+**Pilot element was TapWidget (class 1).** Code evidence:
+
+| Check | Result |
+|-------|--------|
+| Attention breathe until tap | Yes — `tapAttention` / `tapBreathe` 6s; `data-tap-attention` |
+| Clears on `tap_event_v1` | Yes — attention = `!answered` after POST |
+| Completed confirm pulse | Yes — `tapCompleted` / `tapConfirm` ~0.7s |
+| Reduced-motion static path | Yes — animation off; inset bar + dot |
+| Live-now weak class (Glance) | Yes — «сейчас» / `data-live`; no breathe |
+| VerdictStrip stays idle | Yes — valence color/sign only |
+| Full `today_ui_state` hero/card/insight | **Not built** — deferred backlog rows above |
+
+**Decision:** **Revise, do not promote app-wide.**
+
+- Keep this doc as **Today-only** motion canon.
+- Mark Tap + live-now + Verdict idle as **proven**.
+- Leave hero/card/insight motion as **backlog** (optional; not a Wave 2 gate).
+- Do **not** inherit attention-breathe on Profile or Practices.
+
+**Next (D.4):** optional Act 4 if/then copy from `scenes[].recommended_action` — only if still needed after A–C; not blocked on motion.
