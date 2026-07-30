@@ -231,3 +231,93 @@
   opacity: 0;
   pointer-events: none;
 }
+
+.musicDock {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 26rem;
+  margin: 0 auto;
+  padding: 0 1.1rem 0.75rem;
+}
+
+.musicPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 0.9rem 1rem 1rem;
+  border-radius: 1.1rem;
+  border: 1px solid rgba(255, 252, 248, 0.28);
+  background: rgba(255, 252, 248, 0.14);
+  backdrop-filter: blur(14px);
+  text-align: left;
+  color: #fffcf8;
+}
+
+.musicPanelTitle {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(255, 252, 248, 0.92);
+}
+
+.modeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.modeChip {
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 252, 248, 0.32);
+  background: rgba(255, 252, 248, 0.08);
+  color: #fffcf8;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.modeChipActive {
+  background: var(--pls-card);
+  color: var(--pls-lavender-deep);
+  border-color: transparent;
+  font-weight: 600;
+}
+
+.sliderRow {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr auto;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.78rem;
+  color: var(--pls-muted);
+}
+
+.sliderRow input[type="range"] {
+  width: 100%;
+  accent-color: #c4b5e0;
+}
+
+.continueRow {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.8rem;
+  color: rgba(255, 252, 248, 0.9);
+  cursor: pointer;
+}
+
+.continueValue {
+  min-width: 1.5rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: #fffcf8;
+}
+
+.layerHint {
+  margin: 0.15rem 0 0;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: rgba(255, 252, 248, 0.62);
+}

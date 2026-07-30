@@ -36,6 +36,10 @@ describe("PracticeLiveSession", () => {
     expect(screen.getByTestId("practice-live-session")).toHaveAttribute("data-phase", "running");
     expect(screen.getByTestId("practice-session-timer")).toHaveTextContent("01:00");
 
+    fireEvent.click(screen.getByTestId("practice-session-sound"));
+    expect(screen.getByTestId("practice-music-layer")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Без звука" }));
+
     fireEvent.click(screen.getByTestId("practice-session-pause"));
     act(() => {
       jest.advanceTimersByTime(5000);

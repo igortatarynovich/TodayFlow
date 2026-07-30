@@ -7,6 +7,13 @@ import {
   writePracticeSessionDraft,
   type PracticeStateAfter,
 } from "@/lib/practicesPage/practiceSessionDraft";
+import {
+  readMusicLayerPrefs,
+  resolveLayerGains,
+  writeMusicLayerPrefs,
+  type PracticeMusicLayerPrefs,
+} from "@/lib/practicesPage/practiceMusicLayer";
+import { PracticeMusicLayerPanel } from "@/components/practices/session/PracticeMusicLayerPanel";
 import { practiceSessionCopy } from "@/components/practices/session/practiceSessionCopy";
 import styles from "@/components/practices/session/practiceLiveSession.module.css";
 
@@ -19,6 +26,8 @@ export type PracticeLiveSessionProps = {
   /** Resume from draft. */
   initialElapsedSeconds?: number;
   audioUrl?: string | null;
+  musicUrl?: string | null;
+  natureUrl?: string | null;
   imageUrl?: string | null;
   isAuthenticated: boolean;
   saving?: boolean;
@@ -46,6 +55,8 @@ export function PracticeLiveSession({
   durationMinutes,
   initialElapsedSeconds = 0,
   audioUrl = null,
+  musicUrl = null,
+  natureUrl = null,
   imageUrl = null,
   isAuthenticated,
   saving = false,
@@ -59,13 +70,18 @@ export function PracticeLiveSession({
     Math.min(totalSeconds, Math.max(0, Math.floor(initialElapsedSeconds))),
   );
   const [paused, setPaused] = useState(false);
-  const [soundOn, setSoundOn] = useState(true);
+  const [musicOpen, setMusicOpen] = useState(false);
+  const [prefs, setPrefs] = useState<PracticeMusicLayerPrefs>(() => readMusicLayerPrefs());
   const [stateAfter, setStateAfter] = useState<PracticeStateAfter | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [softContinueUntil, setSoftContinueUntil] = useState<number | null>(null);
+  const voiceRef = useRef<HTMLAudioElement | null>(null);
+  const musicRef = useRef<HTMLAudioElement | null>(null);
+  const natureRef = useRef<HTMLAudioElement | null>(null);
   const endedRef = useRef(false);
 
   const remaining = Math.max(0, totalSeconds - elapsed);
   const progressPct = Math.min(100, Math.round((elapsed / totalSeconds) * 100));
+  const gains = useMemo(() => resolveLayerGains(prefs), [prefs]);
 
   const persistDraft = useCallback(
     (nextElapsed: number) => {
@@ -79,6 +95,11 @@ export function PracticeLiveSession({
     },
     [practiceId, title, durationMinutes],
   );
+
+  const updatePrefs = useCallback((next: PracticeMusicLayerPrefs) => {
+    setPrefs(next);
+    writeMusicLayerPrefs(next);
+  }, []);
 
   useEffect(() => {
     persistDraft(elapsed);
@@ -104,20 +125,72 @@ export function PracticeLiveSession({
       endedRef.current = true;
     }
     if (phase === "running" && elapsed >= totalSeconds) {
+      if (prefs.continueAfter) {
+        setSoftContinueUntil(Date.now() + prefs.continueMinutes * 60_000);
+      }
       setPhase("checkin");
+      setMusicOpen(false);
     }
-  }, [elapsed, totalSeconds, phase]);
+  }, [elapsed, totalSeconds, phase, prefs.continueAfter, prefs.continueMinutes]);
 
   useEffect(() => {
-    const el = audioRef.current;
-    if (!el || !audioUrl) return;
-    el.muted = !soundOn;
-    if (phase === "running" && !paused && soundOn) {
-      void el.play().catch(() => undefined);
-    } else {
-      el.pause();
+    if (softContinueUntil == null) return;
+    const id = window.setInterval(() => {
+      if (Date.now() >= softContinueUntil) {
+        setSoftContinueUntil(null);
+      }
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, [softContinueUntil]);
+
+  const softLayersActive =
+    phase === "running" || (Boolean(prefs.continueAfter) && softContinueUntil != null);
+
+  useEffect(() => {
+    const voice = voiceRef.current;
+    const music = musicRef.current;
+    const nature = natureRef.current;
+
+    if (voice) {
+      voice.volume = gains.voice;
+      voice.muted = gains.voice <= 0;
     }
-  }, [audioUrl, soundOn, paused, phase]);
+    if (music) {
+      music.volume = gains.music;
+      music.muted = gains.music <= 0;
+    }
+    if (nature) {
+      nature.volume = gains.nature;
+      nature.muted = gains.nature <= 0;
+    }
+
+    const runningVoice = phase === "running" && !paused && gains.voice > 0 && Boolean(audioUrl);
+    const runningSoft =
+      softLayersActive && !paused && phase === "running"
+        ? true
+        : softLayersActive && phase !== "running";
+
+    if (voice) {
+      if (runningVoice) void voice.play().catch(() => undefined);
+      else voice.pause();
+    }
+    if (music) {
+      if (runningSoft && gains.music > 0 && musicUrl) void music.play().catch(() => undefined);
+      else music.pause();
+    }
+    if (nature) {
+      if (runningSoft && gains.nature > 0 && natureUrl) void nature.play().catch(() => undefined);
+      else nature.pause();
+    }
+  }, [
+    audioUrl,
+    musicUrl,
+    natureUrl,
+    gains,
+    paused,
+    phase,
+    softLayersActive,
+  ]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -133,6 +206,10 @@ export function PracticeLiveSession({
   );
 
   const finishToCheckin = () => {
+    if (prefs.continueAfter) {
+      setSoftContinueUntil(Date.now() + prefs.continueMinutes * 60_000);
+    }
+    setMusicOpen(false);
     setPhase("checkin");
   };
 
@@ -167,7 +244,13 @@ export function PracticeLiveSession({
       <div className={styles.bg} data-image={imageUrl ? "1" : "0"} aria-hidden />
 
       {audioUrl ? (
-        <audio ref={audioRef} className={styles.audioHidden} src={audioUrl} loop preload="none" />
+        <audio ref={voiceRef} className={styles.audioHidden} src={audioUrl} loop preload="none" />
+      ) : null}
+      {musicUrl ? (
+        <audio ref={musicRef} className={styles.audioHidden} src={musicUrl} loop preload="none" />
+      ) : null}
+      {natureUrl ? (
+        <audio ref={natureRef} className={styles.audioHidden} src={natureUrl} loop preload="none" />
       ) : null}
 
       <div className={styles.chrome}>
@@ -178,17 +261,28 @@ export function PracticeLiveSession({
           <button
             type="button"
             className={styles.soundBtn}
-            aria-pressed={soundOn}
-            aria-label={soundOn ? copy.soundOn : copy.soundOff}
-            onClick={() => setSoundOn((v) => !v)}
+            aria-pressed={musicOpen}
+            aria-label={copy.soundPanelAria}
+            onClick={() => setMusicOpen((v) => !v)}
             data-testid="practice-session-sound"
           >
-            {soundOn ? "♪" : "🔇"}
+            ♪
           </button>
         ) : (
           <span />
         )}
       </div>
+
+      {phase === "running" && musicOpen ? (
+        <div className={styles.musicDock}>
+          <PracticeMusicLayerPanel
+            locale={locale}
+            prefs={prefs}
+            onChange={updatePrefs}
+            open={musicOpen}
+          />
+        </div>
+      ) : null}
 
       {phase === "running" ? (
         <div className={styles.body}>

@@ -10,6 +10,7 @@ export function practiceSessionCopy(locale: "ru" | "en") {
       resume: "Resume",
       soundOn: "Sound on",
       soundOff: "Sound off",
+      soundPanelAria: "Sound and music layer",
       finishEarly: "Finish",
       instructionFallback: "Follow the pace. Pause when you need to.",
       checkinTitle: "How do you feel now?",
@@ -26,6 +27,16 @@ export function practiceSessionCopy(locale: "ru" | "en") {
       loginCta: "Sign in",
       skipSave: "Close without saving",
       timerDone: "Done",
+      musicLayerTitle: "Sound layer",
+      modeWithVoice: "With voice",
+      modeMusicOnly: "Music only",
+      modeSilent: "Silent",
+      voiceVolume: "Voice",
+      musicVolume: "Music",
+      natureVolume: "Nature",
+      continueAfter: "Keep soft sound after the session",
+      continueMinutes: "Minutes",
+      layerHint: "Voice, music, and nature mix to your preference.",
     };
   }
 
@@ -37,6 +48,7 @@ export function practiceSessionCopy(locale: "ru" | "en") {
     resume: "Продолжить",
     soundOn: "Звук вкл.",
     soundOff: "Звук выкл.",
+    soundPanelAria: "Звук и музыкальный слой",
     finishEarly: "Завершить",
     instructionFallback: "Идите в своём темпе. Пауза — когда нужно.",
     checkinTitle: "Как вы себя чувствуете сейчас?",
@@ -53,6 +65,16 @@ export function practiceSessionCopy(locale: "ru" | "en") {
     loginCta: "Войти",
     skipSave: "Закрыть без сохранения",
     timerDone: "Готово",
+    musicLayerTitle: "Звуковой слой",
+    modeWithVoice: "С голосом",
+    modeMusicOnly: "Только музыка",
+    modeSilent: "Без звука",
+    voiceVolume: "Голос",
+    musicVolume: "Музыка",
+    natureVolume: "Природа",
+    continueAfter: "Оставить мягкий звук после сессии",
+    continueMinutes: "Минут",
+    layerHint: "Голос, музыка и природа — в вашей пропорции.",
   };
 }
 
