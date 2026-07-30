@@ -12,7 +12,6 @@ import { fetchCoreProfileCached } from "@/lib/coreProfileCache";
 import { fetchCompactUserModelCached } from "@/lib/compactUserModelCache";
 import { ONBOARDING_CORE_PATH } from "@/lib/coreSetup";
 import { canClaimGuestProfile, claimGuestProfileAfterAuth } from "@/lib/claimGuestProfile";
-import { VALUE_FIRST_PATHS } from "@/lib/guestProfileDraft";
 import {
   hasCompletedFirstToday,
   markProfileDepthUnlocked,
@@ -29,7 +28,6 @@ import { useCoreSetupFlow } from "@/hooks/useCoreSetupFlow";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
-import { hasAuthSessionEnded } from "@/lib/authSession";
 import { getJson, postJson, putJson } from "@/lib/api";
 import type { AstroProfile, CoreProfile, CompactUserModel, UserSettings } from "@/lib/types";
 import {
@@ -46,8 +44,6 @@ import { ProfileV2DepthRail } from "@/components/profile/v2/ProfileV2DepthRail";
 import { ProfileV2SystemScreen } from "@/components/profile/v2/ProfileV2SystemScreen";
 import { ProfileWebScreen } from "@/components/product-ui/ProfileWebScreen";
 import { ProductPageScreen } from "@/components/product-ui/ProductPageScreen";
-import { GuestProductPitch } from "@/components/product-ui/GuestProductPitch";
-import { GUEST_PROFILE_PITCH } from "@/components/product-ui/guestProductPitches";
 import { productWebProfileMeta } from "@/lib/productWebUser";
 import {
   buildProfileIdentityPills,
@@ -367,30 +363,9 @@ function ProfileHubPageInner() {
     }, 180);
   }, [activeSection, queryChecked, showSetupFlow]);
 
-  // Guest pitch on SSR and while auth resolves — never the developer loading placeholder.
+  // SSR layout already ships GuestProfilePitchSsr for crawlers / first HTML.
   if (!isAuthenticated) {
-    const sessionEnded = hasAuthSessionEnded();
-    const pitch = GUEST_PROFILE_PITCH;
-    return (
-      <ProductPageScreen testId="profile-guest-gate" title="Профиль" hideDatePill hideHeader>
-        <GuestProductPitch
-          testId="profile-guest-pitch"
-          eyebrow={pitch.eyebrow}
-          title={pitch.title}
-          lead={pitch.lead}
-          parts={pitch.parts}
-          needs={pitch.needs}
-          primaryHref={
-            sessionEnded ? "/auth?mode=login" : `${VALUE_FIRST_PATHS.welcome}?fresh=1`
-          }
-          primaryLabel={sessionEnded ? "Войти" : pitch.ctaPrimary}
-          secondaryHref={
-            sessionEnded ? `${VALUE_FIRST_PATHS.welcome}?fresh=1` : "/auth?mode=login"
-          }
-          secondaryLabel={sessionEnded ? "Создать новый Today" : pitch.ctaSecondary}
-        />
-      </ProductPageScreen>
-    );
+    return null;
   }
 
   if (authLoading || loading || !queryChecked || !journeyChecked || !claimChecked || (!WEB_LAUNCH_MIN_PROFILE && profileIncomplete && !forceSetup && buildStage === "idle")) {

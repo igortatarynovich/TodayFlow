@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/useAuth";
 import { buildOnboardingRitualContext, readOnboardingContext, todayDayKey } from "@/lib/onboardingContext";
 import { GuestFirstTodayScreen } from "@/components/onboarding/valueFirst/GuestFirstTodayScreen";
-import { hasGuestPreview, readGuestProfileDraft, VALUE_FIRST_PATHS } from "@/lib/guestProfileDraft";
+import { hasGuestPreview, readGuestProfileDraft } from "@/lib/guestProfileDraft";
 import { hasAuthSessionEnded } from "@/lib/authSession";
 import { markFirstTodayCompleted, resolveIsFirstDay } from "@/lib/firstTodayState";
 import { ApiError, getJson, postJson, putJson } from "@/lib/api";
@@ -25,8 +25,6 @@ import {
 import { TodayNarrativeDepthControl } from "@/components/today/TodayNarrativeDepthControl";
 import { TodayWebDashboard } from "@/components/product-ui/TodayWebDashboard";
 import { ProductPageScreen } from "@/components/product-ui/ProductPageScreen";
-import { GuestProductPitch } from "@/components/product-ui/GuestProductPitch";
-import { GUEST_TODAY_PITCH } from "@/components/product-ui/guestProductPitches";
 import { DsButton } from "@/design-system";
 import { TodayDayReveal } from "@/components/today/TodayDayReveal";
 import {
@@ -1189,36 +1187,16 @@ export default function TodayPage() {
     return () => window.clearInterval(id);
   }, [isAuthenticated, dayAssembling]);
 
-  // Guest pitch first — including SSR / authLoading — so crawlers never see an empty spinner.
+  // SSR layout already ships GuestTodayPitchSsr for crawlers / first HTML.
   if (!isAuthenticated) {
-    const sessionEnded = hasAuthSessionEnded();
-    const pitch = GUEST_TODAY_PITCH;
     const guestDraftEarly = readGuestProfileDraft();
+    const sessionEnded = hasAuthSessionEnded();
     const guestFirstTodayMode =
       firstTodayMode && hasGuestPreview(guestDraftEarly) && !sessionEnded;
     if (guestFirstTodayMode && guestDraftEarly) {
       return <GuestFirstTodayScreen draft={guestDraftEarly} />;
     }
-    return (
-      <ProductPageScreen testId="today-guest-gate" title="Сегодня" hideDatePill hideHeader>
-        <GuestProductPitch
-          testId="today-guest-pitch"
-          eyebrow={pitch.eyebrow}
-          title={pitch.title}
-          lead={pitch.lead}
-          parts={pitch.parts}
-          needs={pitch.needs}
-          primaryHref={
-            sessionEnded ? "/auth?mode=login" : `${VALUE_FIRST_PATHS.welcome}?fresh=1`
-          }
-          primaryLabel={sessionEnded ? "Войти" : pitch.ctaPrimary}
-          secondaryHref={
-            sessionEnded ? `${VALUE_FIRST_PATHS.welcome}?fresh=1` : "/auth?mode=login"
-          }
-          secondaryLabel={sessionEnded ? "Создать новый Today" : pitch.ctaSecondary}
-        />
-      </ProductPageScreen>
-    );
+    return null;
   }
 
   if (authLoading) {

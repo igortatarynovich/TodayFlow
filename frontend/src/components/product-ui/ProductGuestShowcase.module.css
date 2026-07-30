@@ -157,6 +157,30 @@
   margin-top: 0.35rem;
 }
 
+.ssrCtaPrimary,
+.ssrCtaSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.ssrCtaPrimary {
+  background: var(--tf-ink, #2a2520);
+  color: #fffaf2;
+}
+
+.ssrCtaSecondary {
+  background: transparent;
+  color: var(--tf-ink, #2a2520);
+  border: 1px solid rgba(42, 37, 32, 0.18);
+}
+
 @media (min-width: 56.25rem) {
   .previewCards {
     grid-template-columns: repeat(3, minmax(0, 1fr));

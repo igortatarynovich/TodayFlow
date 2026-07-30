@@ -279,6 +279,12 @@
   width: 100%;
 }
 
+/* SSR guest pitches live in route layouts; hide once shell is authenticated. */
+.productWebFrame:not([data-guest-shell="true"]) :global([data-testid="today-guest-pitch-ssr"]),
+.productWebFrame:not([data-guest-shell="true"]) :global([data-testid="profile-guest-pitch-ssr"]) {
+  display: none;
+}
+
 .productWebMain {
   /* border-box: keep the horizontal padding INSIDE width:100% so the column
      never overflows its grid track. Without it (content-box) the V2 side
