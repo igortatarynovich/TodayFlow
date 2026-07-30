@@ -1189,30 +1189,16 @@ export default function TodayPage() {
     return () => window.clearInterval(id);
   }, [isAuthenticated, dayAssembling]);
 
-  if (authLoading) {
-    return (
-      <ProductPageScreen
-        testId="today-loading"
-        title="Сегодня"
-        loading
-        loadingLabel={RITUAL_COPY.todayPageLoadingSession}
-        hideDatePill
-      />
-    );
-  }
-
-  const guestDraft = readGuestProfileDraft();
-  // After logout/401, do not keep showing Guest First Today from leftover draft —
-  // session loss must look the same on Today and Profile (login gate).
-  const guestFirstTodayMode =
-    !isAuthenticated && firstTodayMode && hasGuestPreview(guestDraft) && !hasAuthSessionEnded();
-  if (guestFirstTodayMode && guestDraft) {
-    return <GuestFirstTodayScreen draft={guestDraft} />;
-  }
-
+  // Guest pitch first — including SSR / authLoading — so crawlers never see an empty spinner.
   if (!isAuthenticated) {
     const sessionEnded = hasAuthSessionEnded();
     const pitch = GUEST_TODAY_PITCH;
+    const guestDraftEarly = readGuestProfileDraft();
+    const guestFirstTodayMode =
+      firstTodayMode && hasGuestPreview(guestDraftEarly) && !sessionEnded;
+    if (guestFirstTodayMode && guestDraftEarly) {
+      return <GuestFirstTodayScreen draft={guestDraftEarly} />;
+    }
     return (
       <ProductPageScreen testId="today-guest-gate" title="Сегодня" hideDatePill hideHeader>
         <GuestProductPitch
@@ -1232,6 +1218,18 @@ export default function TodayPage() {
           secondaryLabel={sessionEnded ? "Создать новый Today" : pitch.ctaSecondary}
         />
       </ProductPageScreen>
+    );
+  }
+
+  if (authLoading) {
+    return (
+      <ProductPageScreen
+        testId="today-loading"
+        title="Сегодня"
+        loading
+        loadingLabel={RITUAL_COPY.todayPageLoadingSession}
+        hideDatePill
+      />
     );
   }
 

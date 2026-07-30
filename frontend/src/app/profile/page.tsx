@@ -367,8 +367,8 @@ function ProfileHubPageInner() {
     }, 180);
   }, [activeSection, queryChecked, showSetupFlow]);
 
-  // Guest: never show the authed loading placeholder — pitch is the product surface.
-  if (!authLoading && !isAuthenticated) {
+  // Guest pitch on SSR and while auth resolves — never the developer loading placeholder.
+  if (!isAuthenticated) {
     const sessionEnded = hasAuthSessionEnded();
     const pitch = GUEST_PROFILE_PITCH;
     return (
@@ -395,27 +395,6 @@ function ProfileHubPageInner() {
 
   if (authLoading || loading || !queryChecked || !journeyChecked || !claimChecked || (!WEB_LAUNCH_MIN_PROFILE && profileIncomplete && !forceSetup && buildStage === "idle")) {
     return <ProfileLoadingScreen />;
-  }
-
-  if (!isAuthenticated) {
-    // Auth resolved mid-render as guest (race) — same pitch as above.
-    const pitch = GUEST_PROFILE_PITCH;
-    return (
-      <ProductPageScreen testId="profile-guest-gate" title="Профиль" hideDatePill hideHeader>
-        <GuestProductPitch
-          testId="profile-guest-pitch"
-          eyebrow={pitch.eyebrow}
-          title={pitch.title}
-          lead={pitch.lead}
-          parts={pitch.parts}
-          needs={pitch.needs}
-          primaryHref={`${VALUE_FIRST_PATHS.welcome}?fresh=1`}
-          primaryLabel={pitch.ctaPrimary}
-          secondaryHref="/auth?mode=login"
-          secondaryLabel={pitch.ctaSecondary}
-        />
-      </ProductPageScreen>
-    );
   }
 
   const lifePath = coreProfile?.numerology?.life_path;

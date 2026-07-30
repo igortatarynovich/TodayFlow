@@ -1111,14 +1111,7 @@ export default function CompatibilityPage() {
     />
   );
 
-  if (authLoading || (isAuthenticated && loadingProfiles)) {
-    return compatWebShell(
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "40vh" }}>
-        <LoadingSpinner size="lg" />
-      </div>,
-    );
-  }
-
+  // Guest first (incl. SSR / authLoading) so crawlers see the demo, not a spinner.
   if (!isAuthenticated) {
     return compatWebShell(
       <>
@@ -1126,6 +1119,14 @@ export default function CompatibilityPage() {
         <CompatibilityLayerSelector isAuthenticated={false} />
       </>,
       { rail: hubRail ?? undefined },
+    );
+  }
+
+  if (authLoading || loadingProfiles) {
+    return compatWebShell(
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "40vh" }}>
+        <LoadingSpinner size="lg" />
+      </div>,
     );
   }
 
