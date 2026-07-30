@@ -1692,6 +1692,9 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   scroll-margin-top: 4.5rem;
   padding: clamp(1.75rem, 4vw, 2.5rem);
   border-radius: 1.75rem;
@@ -1700,6 +1703,16 @@
     radial-gradient(ellipse 70% 45% at 90% -5%, rgba(201, 169, 110, 0.1) 0%, transparent 55%),
     var(--tf-surface, #fff);
   box-shadow: var(--tf-shadow-card, 0 16px 40px rgba(42, 37, 32, 0.06));
+}
+
+.journeyScene > .zoneHeader {
+  width: 100%;
+}
+
+.journeyScene > .zoneHeader > div {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2807,6 +2820,12 @@
   .whyProofGrid {
     /* Full-width two columns — not 4 skinny left-aligned cells. */
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Single card or odd orphan fills the scene — no empty right gutter. */
+  .whyProofGrid > :only-child,
+  .whyProofGrid > :last-child:nth-child(odd) {
+    grid-column: 1 / -1;
   }
 
   .insightTriad {
