@@ -3,7 +3,7 @@
 import { FormEvent, Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { ApiError, postJson } from "@/lib/api";
+import { postJson } from "@/lib/api";
 import { OAuthButtons } from "@/components/auth/OAuthButtons";
 import { LoadingSpinner } from "@/components/orbit";
 import { AuthWebScreen } from "@/components/product-ui/AuthWebScreen";
@@ -13,6 +13,11 @@ import { buildAuthHref, getSafeRedirectTarget, resolveTargetAfterAuthSession } f
 import { beginAuthSession } from "@/lib/authSession";
 import { guestSignupHref } from "@/lib/guestAccessStore";
 import { t } from "@/lib/i18n";
+import {
+  mapLoginFailure,
+  shouldFocusLoginFieldError,
+  type LoginFieldErrors,
+} from "@/lib/mapLoginFailure";
 
 type LoginResponse = {
   user_id: number;
@@ -21,68 +26,9 @@ type LoginResponse = {
   token: string;
 };
 
-type FieldErrors = {
-  email?: string;
-  password?: string;
-};
+type FieldErrors = LoginFieldErrors;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-function mapLoginFailure(err: unknown): FieldErrors {
-  const invalidCredentials = t("auth.errors.invalidCredentials", "Неверный email или пароль");
-  const networkError = t(
-    "auth.errors.network",
-    "Не удалось подключиться. Попробуйте ещё раз",
-  );
-  const rateLimited = t(
-    "auth.errors.rateLimited",
-    "Слишком много попыток. Попробуйте позже",
-  );
-  const serverError = t("auth.errors.server", "Не удалось подключиться. Попробуйте ещё раз");
-
-  if (err instanceof ApiError) {
-    if (err.status === 0) {
-      return { password: networkError };
-    }
-    if (err.status === 429) {
-      return { password: rateLimited };
-    }
-    if (err.status >= 500) {
-      return { password: serverError };
-    }
-    if (err.status === 401) {
-      return { email: invalidCredentials, password: invalidCredentials };
-    }
-  }
-
-  const errorMessage = err instanceof Error ? err.message : t("auth.login.error", "Ошибка входа");
-  const lower = errorMessage.toLowerCase();
-
-  if (
-    lower.includes("network") ||
-    lower.includes("fetch") ||
-    lower.includes("подключ") ||
-    lower.includes("connection")
-  ) {
-    return { password: networkError };
-  }
-  if (lower.includes("too many") || lower.includes("rate") || lower.includes("попыток")) {
-    return { password: rateLimited };
-  }
-  if (
-    lower.includes("unauthorized") ||
-    lower.includes("credential") ||
-    lower.includes("invalid") ||
-    lower.includes("неверн") ||
-    lower.includes("пароль") ||
-    lower.includes("password") ||
-    lower.includes("email")
-  ) {
-    return { email: invalidCredentials, password: invalidCredentials };
-  }
-
-  return { password: errorMessage };
-}
 
 function AuthPageContent() {
   const router = useRouter();
@@ -184,7 +130,11 @@ function AuthPageContent() {
     } catch (err) {
       const mapped = mapLoginFailure(err);
       setErrors(mapped);
-      focusFirstError(mapped);
+      // Avoid focusing password on transport errors: Chrome can clear disabled/re-enabled
+      // password inputs and fire onChange(""), which would wipe the just-set error.
+      if (shouldFocusLoginFieldError(mapped, err)) {
+        focusFirstError(mapped);
+      }
     } finally {
       setLoading(false);
     }
@@ -244,7 +194,7 @@ function AuthPageContent() {
               placeholder={t("auth.form.emailPlaceholder", "you@example.com")}
               aria-invalid={Boolean(emailError)}
               aria-describedby="email-error"
-              disabled={loading}
+              readOnly={loading}
             />
             <p id="email-error" className={s.authWebFormErrorSlot} role={emailError ? "alert" : undefined}>
               {emailError ?? "\u00a0"}
@@ -272,7 +222,7 @@ function AuthPageContent() {
                 placeholder={t("auth.form.passwordPlaceholder.login", "Введите пароль")}
                 aria-invalid={Boolean(passwordError)}
                 aria-describedby="password-error"
-                disabled={loading}
+                readOnly={loading}
               />
               <button
                 type="button"

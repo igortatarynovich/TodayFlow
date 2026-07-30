@@ -28,6 +28,36 @@ export class ApiError extends Error {
   }
 }
 
+/** Fetch never reached a usable HTTP response (offline, DNS, CORS, aborted, etc.). */
+export function isTransportFailure(error: unknown): boolean {
+  if (typeof DOMException !== "undefined" && error instanceof DOMException) {
+    return error.name === "AbortError" || error.name === "NetworkError" || error.name === "TimeoutError";
+  }
+  if (error instanceof TypeError) {
+    return true;
+  }
+  if (error instanceof Error) {
+    const lower = error.message.toLowerCase();
+    return (
+      lower.includes("network") ||
+      lower.includes("fetch") ||
+      lower.includes("load failed") ||
+      lower.includes("failed to load") ||
+      lower.includes("connection") ||
+      lower.includes("offline")
+    );
+  }
+  return false;
+}
+
+function toTransportApiError(path: string, error: unknown): ApiError {
+  const message =
+    error instanceof Error && error.message
+      ? error.message
+      : "Network error. Please check your connection.";
+  return new ApiError(message, 0, path);
+}
+
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const headers = new Headers(options?.headers || {});
   headers.set("Content-Type", "application/json");
@@ -171,9 +201,8 @@ async function performRequest<T>(path: string, options: RequestInit | undefined,
       throw error;
     }
 
-    // Handle network errors
-    if (error instanceof TypeError && error.message.includes("fetch")) {
-      throw new ApiError("Network error. Please check your connection.", 0, path);
+    if (isTransportFailure(error)) {
+      throw toTransportApiError(path, error);
     }
 
     // Re-throw other errors
@@ -238,8 +267,8 @@ export async function getBinary(path: string): Promise<Blob> {
     if (error instanceof ApiError) {
       throw error;
     }
-    if (error instanceof TypeError && error.message.includes("fetch")) {
-      throw new ApiError("Network error. Please check your connection.", 0, path);
+    if (isTransportFailure(error)) {
+      throw toTransportApiError(path, error);
     }
     throw error;
   }

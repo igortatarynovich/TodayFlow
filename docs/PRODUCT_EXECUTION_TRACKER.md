@@ -1098,6 +1098,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-07-30 | Web Auth + Landing | **Plan v7: login network error fix** | **DONE (FE)** | Broaden transport failure detection (any TypeError / AbortError → ApiError status 0); mapLoginFailure always shows «Не удалось подключиться»; avoid disabled password inputs + focus steal that wiped the error. 429/401 unchanged.
 - 2026-07-30 | Web Auth + Landing | **Plan v5: mobile anchor nav** | **DONE (FE)** | Marketing nav always shows section anchors; mobile = logo+CTA row + horizontal scroll chips; desktop row unchanged. CTA `/tarot`/`/compatibility` already in prod bundle. Network/429 copy wired in auth mapLoginFailure (live 401 confirmed earlier).
 - 2026-07-29 | Web Auth + Landing | **Landing screens from scenario (anchors)** | **DONE (FE)** | `PRODUCT_WEB_LANDING_SCREENS` Plan v4 order · each section `screen` + `data-landing-screen` · `min-height` 100dvh under sticky nav · scroll-snap proximity + scroll-padding. Redeploy for prod.
 - 2026-07-29 | Web Auth + Landing | **Plan v4 SoT: all-anchor nav + login error polish** | **DONE (FE)** | Split `#try` → `#tarot/#compatibility/#practices`; top nav scrolls only; product via section CTA; guest `/#tarot`. Login: keep API 401 detail (fix EN Unauthorized overwrite); reserved error slots; RU map for network/429. No public JSON change.
