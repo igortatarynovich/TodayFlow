@@ -420,6 +420,51 @@ def test_event_pack_conflict_drivers_gate_when_pool_live():
     )
 
 
+def test_apply_act3_temporal_trust_gate_demotes_ready_when_pool_empty():
+    story = {
+        "day_scenario": {
+            "ready": True,
+            "runtime_sot": True,
+            "conflict": {
+                "short_name": "Тест",
+                "driver_ids": ["sky-semisquare-0"],
+            },
+            "scenes": [{"scene_id": "s1"}],
+        }
+    }
+    out = project.apply_act3_temporal_trust_gate(story, activations=[])
+    assert out["day_scenario"]["ready"] is False
+    assert out["day_scenario"]["runtime_sot"] is False
+    assert out["day_scenario"]["trust_gate"] == "drivers_outside_activation_pool"
+
+
+def test_apply_act3_temporal_trust_gate_keeps_ready_when_pool_live():
+    story = {
+        "day_scenario": {
+            "ready": True,
+            "runtime_sot": True,
+            "conflict": {
+                "short_name": "Тест",
+                "driver_ids": ["sky-semisquare-0"],
+            },
+            "scenes": [{"scene_id": "s1"}],
+        }
+    }
+    out = project.apply_act3_temporal_trust_gate(
+        story, activations=[{"id": "pt-venus-trine-moon"}]
+    )
+    assert out["day_scenario"]["ready"] is True
+    assert "trust_gate" not in out["day_scenario"]
+
+
+def test_activation_pool_rows_skips_claim_prose_ids():
+    rows = project.activation_pool_rows(
+        {"natal_activations": [{"id": "pt-a"}, {"id": "claim.personal.x"}]},
+        [{"id": "day_personal.summary"}, {"id": "pt-b"}],
+    )
+    assert {r["id"] for r in rows} == {"pt-a", "pt-b"}
+
+
 def test_assemble_omits_stale_narrative_keeps_fresh_strip():
     """Temporal honesty: stale conflict drivers → no narrative; strip still from fresh pool."""
     user = MagicMock()

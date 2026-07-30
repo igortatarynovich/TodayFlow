@@ -322,6 +322,8 @@ POST /today/tap-widget/response  → tap_event_v1
 
 `generation_provenance` is **not** UI. If strip vs Act 3 diverge, compare `driver_ids` — one activation pool, different top-N consumption.
 
+**D.2:** Act 3 is subject to the same temporal honesty as day_facts narrative (`narrative_drivers_in_pool`). Wire demotes `day_scenario.ready` when conflict drivers miss the natal pool; FE must not invent chapters.
+
 ---
 
 ## 8. UI state (beside day_facts — not inside it)
@@ -398,6 +400,15 @@ Opens with the **first code PR** (Phase A), not with docs lock alone.
 - **Migration:** none (long-term: conflict.driver_ids → natal SoT so gate can stay strict ⊆)
 - **Canon:** this file status · [TODAY_WAVE2_EXECUTION_PLAN](./TODAY_WAVE2_EXECUTION_PLAN.md) Phase D.1b
 - **Backward compatible:** yes — old clients ignore new fields; Act3 gap when scenario not ready = Day Map / legacy (not invent)
+
+### Phase D.2 (Act 3 trust audit) — code PR
+
+- **SoT before:** Act 3 chapters from `day_scenario` whenever `ready` + scenes; day_facts narrative gated separately (D.1b) → Strip/Glance could disagree with Act 3
+- **SoT after:** Same `narrative_drivers_in_pool` rule applied on day_story wire before contract (`apply_act3_temporal_trust_gate`). Fail → `day_scenario.ready=false` (+ `trust_gate` debug) → FE `isDayScenarioReadyForChapters` false → Day Map / legacy. No invented Act 3 prose.
+- **Public JSON:** additive optional `day_scenario.trust_gate` string when demoted; `ready` semantics unchanged for clients that already respect it
+- **Migration:** none
+- **Canon:** this file §7 · [TODAY_WAVE2_EXECUTION_PLAN](./TODAY_WAVE2_EXECUTION_PLAN.md) Phase D.2
+- **Backward compatible:** yes — only demotes ready when pool honesty fails
 
 ---
 

@@ -62,6 +62,83 @@ def narrative_drivers_in_pool(
     return False
 
 
+def activation_pool_rows(
+    *sources: Any,
+) -> list[dict[str, Any]]:
+    """Collect natal-pool activation rows (ids usable by `narrative_drivers_in_pool`).
+
+    Skips claim/prose nest ids so event-pack conflicts don't pass on a fake pool.
+    """
+    out: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for source in sources:
+        if isinstance(source, dict):
+            candidates = _as_list(source.get("natal_activations"))
+            if not candidates and _clean(source.get("id")):
+                candidates = [source]
+        elif isinstance(source, list):
+            candidates = source
+        else:
+            candidates = []
+        for row in candidates:
+            if not isinstance(row, dict):
+                continue
+            tid = _clean(row.get("id"))
+            if not tid or tid in seen:
+                continue
+            low = tid.lower()
+            # Not Strip/natal pool — claim prose or event-pack ranks.
+            if low.startswith("claim.") or low.startswith("day_personal"):
+                continue
+            if _looks_like_event_pack_driver(tid):
+                continue
+            seen.add(tid)
+            out.append(row)
+    return out
+
+
+def apply_act3_temporal_trust_gate(
+    story: dict[str, Any],
+    *,
+    activations: list[dict[str, Any]] | None,
+) -> dict[str, Any]:
+    """Wave 2 D.2 — Act 3 uses the same temporal honesty as day_facts narrative.
+
+    When conflict.driver_ids fail `narrative_drivers_in_pool`, mark scenario not ready
+    for chapters (FE falls back to Day Map / legacy). Does not invent prose.
+    """
+    if not isinstance(story, dict):
+        return story
+    sc = story.get("day_scenario")
+    if not isinstance(sc, dict):
+        return story
+    if sc.get("ready") is False:
+        return story
+    conflict = _as_dict(sc.get("conflict"))
+    driver_ids = [str(x) for x in _as_list(conflict.get("driver_ids")) if x]
+    if not driver_ids:
+        # No drivers → cannot claim temporal alignment with Strip pool.
+        story["day_scenario"] = {
+            **sc,
+            "ready": False,
+            "runtime_sot": False,
+            "trust_gate": "missing_conflict_drivers",
+        }
+        return story
+    if narrative_drivers_in_pool(driver_ids, activations):
+        if "trust_gate" in sc:
+            cleaned = {k: v for k, v in sc.items() if k != "trust_gate"}
+            story["day_scenario"] = cleaned
+        return story
+    story["day_scenario"] = {
+        **sc,
+        "ready": False,
+        "runtime_sot": False,
+        "trust_gate": "drivers_outside_activation_pool",
+    }
+    return story
+
+
 def load_ready_day_scenario(db: Any, *, user_id: int, local_date: Any) -> dict[str, Any] | None:
     """Load ready day_scenario from cached day_story for the request date (no rebuild)."""
     from todayflow_backend.services.day_story_wire_v1 import _load_cached_day_story

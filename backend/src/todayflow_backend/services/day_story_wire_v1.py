@@ -57,6 +57,32 @@ MODULE = "day_story_v1"
 SURFACE = "day_story"
 
 
+def _gate_act3_temporal_trust(
+    story: dict[str, Any],
+    *,
+    celestial_events: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Wave 2 D.2 — demote Act 3 readiness when conflict drivers miss the activation pool."""
+    try:
+        from todayflow_backend.services.today_day_facts_project_v1 import (
+            activation_pool_rows,
+            apply_act3_temporal_trust_gate,
+        )
+
+        sc = story.get("day_scenario") if isinstance(story.get("day_scenario"), dict) else {}
+        foundation = sc.get("foundation") if isinstance(sc.get("foundation"), dict) else {}
+        personal = foundation.get("personal_natal_activations")
+        pool = activation_pool_rows(
+            celestial_events if isinstance(celestial_events, dict) else {},
+            story.get("celestial_events") if isinstance(story.get("celestial_events"), dict) else {},
+            personal if isinstance(personal, list) else [],
+        )
+        return apply_act3_temporal_trust_gate(story, activations=pool)
+    except Exception:
+        logger.exception("act3 temporal trust gate failed; leaving scenario flags unchanged")
+        return story
+
+
 def _daily_symbols_from_morning(
     morning: MorningRitualResponse | None,
 ) -> tuple[str, str, dict[str, Any], dict[str, Any], dict[str, Any]]:
@@ -384,6 +410,7 @@ def _build_day_story_record(
                     )
         except Exception:
             logger.exception("day_scenario exclusive projection on cache hit failed")
+        story = _gate_act3_temporal_trust(story, celestial_events=ce or None)
         if capture is not None:
             capture.record_lifecycle(cache_hit=True, used_fallback=False)
             try:
@@ -607,6 +634,8 @@ def _build_day_story_record(
                 story = _project_scenario(story, allow_deterministic_rebuild=True)
             except Exception:
                 logger.exception("day_scenario projection failed after fallback")
+
+        story = _gate_act3_temporal_trust(story, celestial_events=ce or None)
 
         if capture is not None:
             try:
@@ -894,6 +923,8 @@ def build_day_story_v1_wire(
                 )
     except Exception:
         logger.exception("day_scenario exclusive projection on wire serve failed")
+
+    story = _gate_act3_temporal_trust(story, celestial_events=ce or None)
 
     progress = story_progress_meta(db, owner_key=owner_key, local_date=target_date)
     contract = day_story_to_today_contract_v1(
