@@ -92,34 +92,6 @@ VERDICT_LABEL_RU = {
     "open": "открыто",
 }
 
-_PLANET_RU = {
-    "sun": "Солнце",
-    "moon": "Луна",
-    "mercury": "Меркурий",
-    "venus": "Венера",
-    "mars": "Марс",
-    "jupiter": "Юпитер",
-    "saturn": "Сатурн",
-    "uranus": "Уран",
-    "neptune": "Нептун",
-    "pluto": "Плутон",
-    "ascendant": "ASC",
-    "asc": "ASC",
-    "mc": "MC",
-    "midheaven": "MC",
-    "descendant": "DSC",
-    "dsc": "DSC",
-}
-
-_ASPECT_RU = {
-    "conjunction": "соединение",
-    "sextile": "секстиль",
-    "square": "квадрат",
-    "trine": "трин",
-    "quincunx": "квинконс",
-    "opposition": "оппозиция",
-}
-
 
 def _norm(name: str | None) -> str:
     return (name or "").strip().lower().replace(" ", "_")

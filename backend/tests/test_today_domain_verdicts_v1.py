@@ -69,3 +69,11 @@ def test_activations_from_transit_dicts():
     rows = verdicts.compute_domain_verdicts(acts)
     rel = next(r for r in rows if r["domain"] == "relationships")
     assert rel["verdict"] == "open"
+
+
+def test_why_short_never_prints_planet_aspect_jargon():
+    why = verdicts.why_short_for("Venus", "trine", "Saturn", "work")
+    assert "Венера" not in why
+    assert "трин" not in why.lower()
+    assert "Сатурн" not in why
+    assert "трин к" not in why.lower()

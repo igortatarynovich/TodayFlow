@@ -76,3 +76,35 @@ export function isSilentCalmBank(rows: DomainVerdict[] | null | undefined): bool
   if (!first) return whys.every((w) => !w);
   return whys.every((w) => w === first);
 }
+
+/** Planet / aspect jargon that must never paint on VerdictStrip / Glance labels. */
+const ASTRO_JARGON_RE =
+  /(трин|тригон|секстиль|квадрат|оппозици|соединени|квинконс|biquintile|quintile|trine|sextile|square|opposition|conjunction)/i;
+const ASTRO_BODY_RE =
+  /(венера|марс|сатурн|юпитер|меркурий|плутон|уран|нептун|солнце|луна|venus|mars|saturn|jupiter|mercury|pluto|uranus|neptune|sun|moon)/i;
+
+/**
+ * Contract §2 / §3.3 — reject «Венера: трин к Сатурн» style copy.
+ * FE defense only; meaning SoT remains backend activation_copy.
+ */
+export function containsAstroJargonCopy(text: string | null | undefined): boolean {
+  const raw = (text || "").trim();
+  if (!raw) return false;
+  // Classic Task #8 shape: «Планета: аспект к Планета»
+  if (/:\s*\S.+\s+к\s+\S/i.test(raw) && (ASTRO_JARGON_RE.test(raw) || ASTRO_BODY_RE.test(raw))) {
+    return true;
+  }
+  return ASTRO_JARGON_RE.test(raw) && ASTRO_BODY_RE.test(raw);
+}
+
+/** Drop jargon why lines; keep geometry/verdict. Empty why is ok — label still shows. */
+export function scrubDomainVerdictJargon(rows: DomainVerdict[]): DomainVerdict[] {
+  return rows.map((row) =>
+    containsAstroJargonCopy(row.why_short) ? { ...row, why_short: "" } : row,
+  );
+}
+
+export function hasAstroJargonWhy(rows: DomainVerdict[] | null | undefined): boolean {
+  if (!rows?.length) return false;
+  return rows.some((r) => containsAstroJargonCopy(r.why_short));
+}

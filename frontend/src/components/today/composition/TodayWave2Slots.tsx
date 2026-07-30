@@ -12,6 +12,7 @@ import {
   DOMAIN_LABEL_RU,
   isSilentCalmBank,
   orderDomainVerdicts,
+  scrubDomainVerdictJargon,
   VERDICT_LABEL_RU,
   type DomainKey,
   type DomainVerdict,
@@ -59,7 +60,7 @@ function failureFromDayFacts(data: DayFactsSlotSlice): TodaySlotLoadFailure | nu
 export function TodayVerdictStripSlot({ dateISO, dayFacts = null }: VerdictStripProps) {
   const fromParent = dayFacts != null;
   const [rows, setRows] = useState<DomainVerdict[] | null>(() =>
-    fromParent ? orderDomainVerdicts(dayFacts?.domain_verdicts ?? []) : null,
+    fromParent ? scrubDomainVerdictJargon(orderDomainVerdicts(dayFacts?.domain_verdicts ?? [])) : null,
   );
   const [failure, setFailure] = useState<TodaySlotLoadFailure | null>(() =>
     fromParent ? failureFromDayFacts(dayFacts ?? {}) : null,
@@ -73,7 +74,7 @@ export function TodayVerdictStripSlot({ dateISO, dayFacts = null }: VerdictStrip
         setFailure(parentFail);
         setRows([]);
       } else {
-        const ordered = orderDomainVerdicts(dayFacts.domain_verdicts ?? []);
+        const ordered = scrubDomainVerdictJargon(orderDomainVerdicts(dayFacts.domain_verdicts ?? []));
         if (isSilentCalmBank(ordered)) {
           setFailure("unavailable");
           setRows([]);
@@ -96,7 +97,7 @@ export function TodayVerdictStripSlot({ dateISO, dayFacts = null }: VerdictStrip
           setFailure("unavailable");
           setRows([]);
         } else {
-          const ordered = orderDomainVerdicts(data.domain_verdicts ?? []);
+          const ordered = scrubDomainVerdictJargon(orderDomainVerdicts(data.domain_verdicts ?? []));
           if (isSilentCalmBank(ordered)) {
             setFailure("unavailable");
             setRows([]);
