@@ -10,7 +10,7 @@
 - **Tarot / Practices** are secondary (guest-nav + low-weight landing links only).
 - **Landing dual primary CTAs:** «Посмотреть, как это работает» → `/demo/today` · «Посмотреть динамику вашей связи» → `/compatibility`.
 - **Path:** Landing → `/demo/today` → `/onboarding/invite` (Profile-invite) → welcome → birth → First Today.
-- **Slice 2 (deferred):** evening Reflection / day-2 memory — review existing `day_focus_outcome` / evening rhythm, not greenfield.
+- **Slice 2:** evening Reflection / day-2 memory — [GUEST_STORY_CONTINUITY_SLICE2_2026-07-30.md](./GUEST_STORY_CONTINUITY_SLICE2_2026-07-30.md) (review `day_focus_outcome` / Day Continuity v0).
 
 ## Canon touchpoints
 

@@ -10,5 +10,6 @@ describe("GuestTodayDemoSsr", () => {
     expect(screen.getByText("Практика")).toBeInTheDocument();
     expect(screen.getByText("Память о вчера")).toBeInTheDocument();
     expect(screen.getByTestId("demo-today-cta")).toHaveAttribute("href", "/onboarding/invite");
+    expect(screen.getByText(/После первого Today вечером/)).toBeInTheDocument();
   });
 });

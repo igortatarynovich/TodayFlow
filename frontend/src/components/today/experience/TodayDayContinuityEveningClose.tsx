@@ -162,7 +162,7 @@ export function TodayDayContinuityEveningClose({
               onSubmit(outcome, highlightId, "");
             }}
           >
-            {saving ? "Сохраняем…" : "Закрыть день"}
+            {saving ? "Сохраняем…" : "Сохранить день"}
           </button>
         </>
       )}

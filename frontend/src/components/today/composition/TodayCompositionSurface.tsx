@@ -39,7 +39,7 @@ import { resolveDayPhase } from "@/lib/dayPhaseAtmosphere";
 import { resolveDayPhaseHeroWash, resolveHeroChromeTone } from "@/lib/dayPhaseHeroWash";
 import { useProductMoodTheme } from "@/lib/useProductDayNightTheme";
 import {
-  buildContinuityOpeningLine,
+  buildMemorySlotCopy,
   isDayContinuityClosed,
   loadDayContinuity,
   loadPreviousDayContinuity,
@@ -493,11 +493,9 @@ export function TodayCompositionSurface(props: Props) {
     if (!hydrated) return null;
     return loadPreviousDayContinuity(dateISO);
   }, [hydrated, dateISO]);
-  const continuityLine = useMemo(
-    () => (prevContinuity ? buildContinuityOpeningLine(prevContinuity) : null),
-    [prevContinuity],
-  );
-  const showContinuity = zones.continuity && Boolean(continuityLine);
+  const memorySlot = useMemo(() => buildMemorySlotCopy(prevContinuity), [prevContinuity]);
+  /** Day-2 recall always when yesterday closed — even on ?first=1. Stub always visible otherwise. */
+  const showMemorySlot = hydrated;
 
   const mainFocusText = story.focusTitle;
 
@@ -1560,19 +1558,28 @@ export function TodayCompositionSurface(props: Props) {
         data-testid={isFirstToday ? "today-composition-first-today" : "today-composition-surface"}
         className={`${styles.root} ${embeddedInWebDashboard ? styles.rootWebEmbed : ""}`}
       >
-        {showContinuity ? (
-          <div className={styles.continuityWrap} data-testid="today-zone-continuity">
-            <section className={styles.continuityPill} data-testid="today-entity-continuity-recall">
+        {showMemorySlot ? (
+          <div className={styles.continuityWrap} data-testid="today-zone-memory" data-memory-state={memorySlot.state}>
+            <section
+              className={styles.continuityPill}
+              data-testid={
+                memorySlot.state === "filled"
+                  ? "today-entity-continuity-recall"
+                  : "today-entity-memory-stub"
+              }
+            >
               <div className={styles.continuityInner}>
                 <span className={styles.continuityAccent} aria-hidden />
                 <div>
-                  <p className={styles.continuityEyebrow}>{copy.continuityEyebrow}</p>
-                  <p className={styles.continuityBody}>{continuityLine}</p>
+                  <p className={styles.continuityEyebrow}>{memorySlot.eyebrow}</p>
+                  <p className={styles.continuityBody}>{memorySlot.body}</p>
                 </div>
               </div>
-              <span className={styles.continuityChevron} aria-hidden>
-                ›
-              </span>
+              {memorySlot.state === "filled" ? (
+                <span className={styles.continuityChevron} aria-hidden>
+                  ›
+                </span>
+              ) : null}
             </section>
           </div>
         ) : null}

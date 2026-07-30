@@ -42,9 +42,12 @@ export const TODAY_COMPOSITION_COPY = {
   continuityNoteTitle: "Твоя история",
   continuityEyebrow: "С чего продолжить",
   loadingDay: "Слушаю, как звучит твой день…",
-  eveningHint: "Когда будешь готов — подведём итог вместе.",
+  eveningHint: "Когда будешь готов — подведём итог: получилось / частично / не получилось.",
   eveningCta: "Закрыть день",
   eveningRecapTitle: "Перед тем как завершить",
+  memoryEyebrow: "Память о вчера",
+  memoryStub:
+    "Здесь появится связь с прошлым днём. Вечером закрой сегодня — завтра начнём с того, что было.",
   practiceStart: "Начать практику",
   practiceStarted: "Практика запущена",
   practiceComplete: "Завершить практику",

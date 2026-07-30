@@ -74,22 +74,54 @@ export function isDayContinuityClosed(record: DayContinuityRecord | null): boole
 export function outcomeLabelRu(outcome: DayFocusOutcome): string {
   switch (outcome) {
     case "done":
-      return "Сделал";
+      return "Получилось";
     case "partial":
       return "Частично";
     case "not_done":
-      return "Не сделал";
+      return "Не получилось";
   }
 }
 
 export function buildTomorrowContinuityHook(): string {
-  return "Завтра начнём с того, как сегодняшний результат повлиял на ваш следующий шаг.";
+  return "День сохранён. Завтра утром TodayFlow начнёт с того, что было сегодня.";
 }
 
+/**
+ * Day-2 Memory / continuity opening — concrete link to yesterday’s focus + outcome.
+ * Returns null if yesterday was not closed (caller shows stub).
+ */
 export function buildContinuityOpeningLine(prev: DayContinuityRecord): string | null {
   if (!prev.mainFocus || !prev.outcome) return null;
   const focus = prev.mainFocus.length > 120 ? `${prev.mainFocus.slice(0, 117)}…` : prev.mainFocus;
-  return `Вчера главным было: «${focus}». Итог: ${outcomeLabelRu(prev.outcome).toLowerCase()}. Сегодня продолжим с того, как это повлияло на ваш следующий шаг.`;
+  const outcome = outcomeLabelRu(prev.outcome).toLowerCase();
+  if (prev.outcome === "done") {
+    return `Вчера главным было: «${focus}». Ты отметил(а), что получилось. Сегодня продолжим с этой нити.`;
+  }
+  if (prev.outcome === "partial") {
+    return `Вчера главным было: «${focus}». Ты отметил(а) «частично». Сегодня фокус — мягче и яснее.`;
+  }
+  return `Вчера главным было: «${focus}». Ты отметил(а), что не получилось. Сегодня фокус — мягче, без давления.`;
+}
+
+/** Memory slot copy for Today composition (day 1 stub vs day 2+ filled). */
+export function buildMemorySlotCopy(prev: DayContinuityRecord | null): {
+  eyebrow: string;
+  body: string;
+  state: "stub" | "filled";
+} {
+  const line = prev ? buildContinuityOpeningLine(prev) : null;
+  if (line) {
+    return {
+      eyebrow: "Память о вчера",
+      body: line,
+      state: "filled",
+    };
+  }
+  return {
+    eyebrow: "Память о вчера",
+    body: "Здесь появится связь с прошлым днём. Вечером закрой сегодня — завтра начнём с того, что было.",
+    state: "stub",
+  };
 }
 
 export function formatDayContinuityDateRu(dateISO: string): string {

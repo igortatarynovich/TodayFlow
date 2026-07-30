@@ -33,6 +33,6 @@ describe("ProfileMyDaysBlock", () => {
     expect(await screen.findByTestId("profile-my-days-row-2026-06-22")).toBeInTheDocument();
     expect(screen.getByText("Разговор с командой")).toBeInTheDocument();
     expect(screen.getByText("Частично")).toBeInTheDocument();
-    expect(screen.getByText("Сделал")).toBeInTheDocument();
+    expect(screen.getByText("Получилось")).toBeInTheDocument();
   });
 });

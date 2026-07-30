@@ -11,10 +11,10 @@ describe("todayCompositionZones", () => {
     expect(z.ritualTarot).toBe(true);
     expect(z.whyStory).toBe(false);
     expect(z.strengthen).toBe(false);
-    expect(z.promise).toBe(false);
+    expect(z.promise).toBe(true);
     expect(z.actions).toBe(false);
     expect(z.growthPromise).toBe(false);
-    expect(z.evening).toBe(false);
+    expect(z.evening).toBe(true);
   });
 
   it("unlocks personalized zones after card and number", () => {

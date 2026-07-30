@@ -12,9 +12,9 @@ import styles from "@/components/today/composition/TodayEveningProductClose.modu
 const OUTCOMES: DayFocusOutcome[] = ["done", "partial", "not_done"];
 
 const OUTCOME_LABELS: Record<DayFocusOutcome, string> = {
-  done: "Да ✓",
+  done: "Получилось",
   partial: "Частично",
-  not_done: "Пока нет",
+  not_done: "Не получилось",
 };
 
 type Props = {
@@ -127,7 +127,7 @@ export function TodayEveningProductClose({
         ) : (
           <>
             <article className={styles.questionCard}>
-              <h2 className={styles.questionTitle}>Намерение выполнено?</h2>
+              <h2 className={styles.questionTitle}>Как прошёл сегодняшний главный фокус?</h2>
               <div className={styles.outcomeRow} role="group" aria-label="Итог дня">
                 {OUTCOMES.map((value) => (
                   <button
@@ -279,9 +279,9 @@ export function TodayEveningProductClose({
                   onSubmit(outcome, highlightId, "");
                 }}
               >
-                {saving ? "Сохраняем…" : "Завершить день"}
+                {saving ? "Сохраняем…" : "Сохранить день"}
               </button>
-              <p className={styles.footerHint}>Завтра твой день начнётся чуть точнее.</p>
+              <p className={styles.footerHint}>Завтра утром TodayFlow начнёт с того, что было сегодня.</p>
             </div>
           </>
         )}

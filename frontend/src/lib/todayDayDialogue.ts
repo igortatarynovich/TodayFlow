@@ -256,10 +256,10 @@ export function focusLensPrefix(topicId: string | null): string {
 export function promiseOutcomeLabelRu(outcome: "done" | "partial" | "not_done"): string {
   switch (outcome) {
     case "done":
-      return "Да";
+      return "Получилось";
     case "partial":
       return "Частично";
     case "not_done":
-      return "Было непросто";
+      return "Не получилось";
   }
 }

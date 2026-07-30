@@ -4,7 +4,7 @@ Last updated: 2026-07-30
 Owner: Product + Engineering
 Status: Active working document
 
-**IN PROGRESS (2026-07-30):** Practices **P1 session cycle** (`PracticeLiveSession` + check-in + save to Today). P0 shell **DONE**. C0 ACCEPTED. ScreenFlow axis **LOCKED x** (Phase 2b LIVE). Guest Story Surface P0 — **DONE (LIVE)**.
+**IN PROGRESS (2026-07-30):** Practices **P1 session cycle** (`PracticeLiveSession` + check-in + save to Today). P0 shell **DONE**. C0 ACCEPTED. ScreenFlow axis **LOCKED x** (Phase 2b LIVE). Guest Story Surface P0 — **DONE (LIVE)**. Guest Story Continuity **slice 2** — **DONE (FE)** ([audits/GUEST_STORY_CONTINUITY_SLICE2_2026-07-30.md](./audits/GUEST_STORY_CONTINUITY_SLICE2_2026-07-30.md)).
 
 ## 1) Purpose
 
@@ -1122,6 +1122,7 @@ Historical note:
 - 2026-07-30 | Practices | **Screen v1.1 canon — axis resolution** | **ACCEPTED** | SoT [practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) v1.1: needs keep **both** «Почувствовать тело» + «Понять себя» (body vs reflective axes); «Уснуть» last. Formats: yoga/stretch/music chips (spec «Телесные» detailed); restore reflection+sleep; music = chip ⊕ layer. **C0b** mockup need-align. No parallel `practices-canon.md`. Next: C0b → P0 → P1; M0 ∥.
 - 2026-07-30 | Practices | **Screen v1.0 canon C0 (need/format freeze)** | **SUPERSEDED → v1.1** | v1.0 dropped «Почувствовать тело» and umbrella `body` format; replaced by axis logic in v1.1.
 - 2026-07-30 | Web Guest / SEO audit | **Guest Story Surface P0 (item 11)** | **DONE (LIVE)** | Curl: landing dual CTAs · `/demo/today` SSR Theme/Focus/Practice/Memory · `/onboarding/invite` · pitch CTAs · Compat Profile bridge · guest-nav primary Today·Profile·Compatibility. Evening/day-2 = slice 2. Canon [audits/GUEST_STORY_SURFACE_P0_2026-07-30.md](./audits/GUEST_STORY_SURFACE_P0_2026-07-30.md).
+- 2026-07-30 | Guest Story Continuity | **Slice 2 evening + day-2 Memory** | **DONE (FE)** | Soft close Получилось/Частично/Не получилось · First Today sticky evening · `today-zone-memory` stub→filled from Day Continuity v0 · demo Memory educational. Out of scope: server persist. Canon [audits/GUEST_STORY_CONTINUITY_SLICE2_2026-07-30.md](./audits/GUEST_STORY_CONTINUITY_SLICE2_2026-07-30.md).
 - 2026-07-30 | Web Guest / SEO audit | **/today+/profile SSR pitch body** | **DONE (LIVE)** | Independent sandbox curl: pitch SSR above bailout on /today+/profile; «Собираем стабильное…» = 0. BAILOUT remains on client widgets only. Item 11 story surface → row above.
 - 2026-07-30 | Product UI | **ScreenFlow Phase 2b — Reading/Move/Response** | **LIVE** | Split interim Personal bundle into 3 ScreenFlow steps via `actFilter`. ActNav: Чтение·Действие·Отклик. Canon [SCREEN_FLOW_V1 §4](./foundation/SCREEN_FLOW_V1.md) v1.1. Bundle `page-fe43e887cbee4689.js`. Tests: TodayProductScreenFlow indices + composition surface.
 - 2026-07-30 | Product UI | **ScreenFlow V1 — proto + Today Glance-first** | **LIVE (redeployed)** | Was code-only: prod image lagged (Docker `npm run build` failed on TS; `tail` masked exit → stale `#today-act-` bundle). Fixed `showSymbols`/`tarotPickedId` types; rebuilt+force-recreate. Live chunk `page-bbb6669e810a4bf7.js` contains `today-screen-flow` + Glance. Hard-refresh to verify transform pager. Phase 2b = split personal; axis lock after real-device.

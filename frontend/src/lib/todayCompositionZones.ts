@@ -48,10 +48,11 @@ export function todayCompositionZones(
     ritualNumber: tarotDone,
     whyStory: personalized,
     strengthen: variant !== "firstToday",
-    promise: personalized,
+    promise: personalized || variant === "firstToday",
     actions: personalized,
     growthPromise: personalized,
-    evening: personalized,
+    /** Soft evening close available on First Today (WEB_LAUNCH sticky CTA) and after ritual on default. */
+    evening: variant === "firstToday" ? true : personalized,
   };
 }
 
