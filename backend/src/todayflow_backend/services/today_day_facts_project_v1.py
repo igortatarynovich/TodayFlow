@@ -1,7 +1,8 @@
-"""Wave 2 Phase D.1b — project day_scenario nest onto day_facts_v1.
+"""Wave 2 Phase D.1b / D.2 — project day_scenario nest onto day_facts_v1.
 
-No dramaturgy regenerate. Temporal gate: natal driver ids ⊆ fresh activations;
-event-pack ids require non-empty live natal pool.
+No dramaturgy regenerate. Temporal gate (D.2): all conflict.driver_ids must be
+natal-style (`pt-…`) and ⊆ fresh activation pool. Pack ids → no project / partial.
+Act 3 stays on day_scenario nest (not demoted by this gate).
 """
 
 from __future__ import annotations
@@ -21,122 +22,28 @@ def _clean(value: Any) -> str:
     return str(value or "").strip()
 
 
-def _looks_like_event_pack_driver(driver_id: str) -> bool:
-    """day_events_pack style ids (sky-/phase-/moon-/…) vs natal activation ids (pt-…)."""
-    d = (driver_id or "").strip().lower()
-    if not d or d.startswith("pt-"):
-        return False
-    prefixes = (
-        "sky-",
-        "phase-",
-        "moon-",
-        "solar-",
-        "doy-",
-        "weekday-",
-        "ingress-",
-        "eclipse-",
-        "event:",
-        "claim.",
-    )
-    return d.startswith(prefixes)
+def _looks_like_natal_driver(driver_id: str) -> bool:
+    """Natal activation id namespace used by Strip / glance / day_facts pool."""
+    return (driver_id or "").strip().lower().startswith("pt-")
 
 
 def narrative_drivers_in_pool(
     conflict_driver_ids: list[str] | tuple[str, ...] | None,
     activations: list[dict[str, Any]] | None,
 ) -> bool:
-    """True when conflict drivers are temporally aligned with the fresh activation pool.
+    """True when conflict drivers are verifiably in the fresh natal activation pool.
 
-    - Natal-style ids: strict ⊆ pool (contract SoT).
-    - Event-pack ids (current day_scenario ranked_drivers): require non-empty fresh
-      natal pool on the same request (live Strip), not inventing a second ranker.
+    D.2: every id must be natal-style (`pt-…`) and ⊆ pool. Event-pack ids
+    (`sky-`/`phase-`/`moon-`/…) fail — uncheckable against activations, so day_facts
+    omits narrative (`partial: true`). No invent / no top-by-rank substitution.
     """
     ids = [str(x) for x in (conflict_driver_ids or []) if x]
     if not ids:
         return False
+    if not all(_looks_like_natal_driver(i) for i in ids):
+        return False
     pool = {str(a.get("id") or "") for a in (activations or []) if a.get("id")}
-    if set(ids) <= pool:
-        return True
-    if all(_looks_like_event_pack_driver(i) for i in ids):
-        return len(pool) > 0
-    return False
-
-
-def activation_pool_rows(
-    *sources: Any,
-) -> list[dict[str, Any]]:
-    """Collect natal-pool activation rows (ids usable by `narrative_drivers_in_pool`).
-
-    Skips claim/prose nest ids so event-pack conflicts don't pass on a fake pool.
-    """
-    out: list[dict[str, Any]] = []
-    seen: set[str] = set()
-    for source in sources:
-        if isinstance(source, dict):
-            candidates = _as_list(source.get("natal_activations"))
-            if not candidates and _clean(source.get("id")):
-                candidates = [source]
-        elif isinstance(source, list):
-            candidates = source
-        else:
-            candidates = []
-        for row in candidates:
-            if not isinstance(row, dict):
-                continue
-            tid = _clean(row.get("id"))
-            if not tid or tid in seen:
-                continue
-            low = tid.lower()
-            # Not Strip/natal pool — claim prose or event-pack ranks.
-            if low.startswith("claim.") or low.startswith("day_personal"):
-                continue
-            if _looks_like_event_pack_driver(tid):
-                continue
-            seen.add(tid)
-            out.append(row)
-    return out
-
-
-def apply_act3_temporal_trust_gate(
-    story: dict[str, Any],
-    *,
-    activations: list[dict[str, Any]] | None,
-) -> dict[str, Any]:
-    """Wave 2 D.2 — Act 3 uses the same temporal honesty as day_facts narrative.
-
-    When conflict.driver_ids fail `narrative_drivers_in_pool`, mark scenario not ready
-    for chapters (FE falls back to Day Map / legacy). Does not invent prose.
-    """
-    if not isinstance(story, dict):
-        return story
-    sc = story.get("day_scenario")
-    if not isinstance(sc, dict):
-        return story
-    if sc.get("ready") is False:
-        return story
-    conflict = _as_dict(sc.get("conflict"))
-    driver_ids = [str(x) for x in _as_list(conflict.get("driver_ids")) if x]
-    if not driver_ids:
-        # No drivers → cannot claim temporal alignment with Strip pool.
-        story["day_scenario"] = {
-            **sc,
-            "ready": False,
-            "runtime_sot": False,
-            "trust_gate": "missing_conflict_drivers",
-        }
-        return story
-    if narrative_drivers_in_pool(driver_ids, activations):
-        if "trust_gate" in sc:
-            cleaned = {k: v for k, v in sc.items() if k != "trust_gate"}
-            story["day_scenario"] = cleaned
-        return story
-    story["day_scenario"] = {
-        **sc,
-        "ready": False,
-        "runtime_sot": False,
-        "trust_gate": "drivers_outside_activation_pool",
-    }
-    return story
+    return set(ids) <= pool
 
 
 def load_ready_day_scenario(db: Any, *, user_id: int, local_date: Any) -> dict[str, Any] | None:

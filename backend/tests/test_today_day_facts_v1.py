@@ -336,10 +336,10 @@ def test_assemble_projects_narrative_when_drivers_in_pool():
     user = MagicMock()
     user.id = 2
     activations = [
-        {"id": "a1", "rank": 1, "transiting_planet": "Venus", "aspect": "trine", "natal_point": "Moon", "orb_deg": 1.0},
-        {"id": "a2", "rank": 2, "transiting_planet": "Mars", "aspect": "square", "natal_point": "Sun", "orb_deg": 0.5},
+        {"id": "pt-venus-trine-moon", "rank": 1, "transiting_planet": "Venus", "aspect": "trine", "natal_point": "Moon", "orb_deg": 1.0},
+        {"id": "pt-mars-square-sun", "rank": 2, "transiting_planet": "Mars", "aspect": "square", "natal_point": "Sun", "orb_deg": 0.5},
     ]
-    scenario = _ready_scenario(driver_ids=["a1", "a2"])
+    scenario = _ready_scenario(driver_ids=["pt-venus-trine-moon", "pt-mars-square-sun"])
 
     async def _run():
         with (
@@ -408,61 +408,105 @@ def test_assemble_projects_narrative_when_drivers_in_pool():
     assert len(out["domain_verdicts"]) == 4
 
 
-def test_event_pack_conflict_drivers_gate_when_pool_live():
-    """Runtime day_scenario uses sky-/phase- ids; gate requires non-empty natal pool."""
-    assert project.narrative_drivers_in_pool(
+def test_event_pack_conflict_drivers_fail_gate_even_with_live_pool():
+    """D.2: pack ids are unverifiable against natal pool → no day_facts narrative."""
+    assert not project.narrative_drivers_in_pool(
         ["sky-semisquare-0", "phase-full-2026-07-30"],
         [{"id": "pt-venus-trine-moon"}],
     )
+    assert not project.narrative_drivers_in_pool(["sky-semisquare-0"], [])
+
+
+def test_natal_conflict_drivers_gate_requires_subset():
+    pool = [{"id": "pt-venus-trine-moon"}, {"id": "pt-mars-square-sun"}]
+    assert project.narrative_drivers_in_pool(["pt-venus-trine-moon"], pool)
     assert not project.narrative_drivers_in_pool(
-        ["sky-semisquare-0"],
-        [],
+        ["pt-venus-trine-moon", "pt-missing"],
+        pool,
+    )
+    assert not project.narrative_drivers_in_pool(["gone-a"], pool)
+
+
+def test_assemble_omits_pack_narrative_keeps_fresh_strip():
+    """D.2: pack-majority conflict drivers → no day_facts narrative; strip still live."""
+    user = MagicMock()
+    user.id = 2
+    activations = [
+        {
+            "id": "pt-venus-trine-moon",
+            "rank": 1,
+            "transiting_planet": "Venus",
+            "aspect": "trine",
+            "natal_point": "Moon",
+            "orb_deg": 1.0,
+        },
+        {
+            "id": "pt-mars-square-sun",
+            "rank": 2,
+            "transiting_planet": "Mars",
+            "aspect": "square",
+            "natal_point": "Sun",
+            "orb_deg": 0.5,
+        },
+    ]
+    scenario = _ready_scenario(
+        driver_ids=["sky-semisquare-0", "phase-full-2026-07-30", "moon-sextile-saturn-202607300645"]
     )
 
+    async def _run():
+        with (
+            patch(
+                "todayflow_backend.services.personal_transits.get_personal_transit_service",
+                new_callable=AsyncMock,
+                return_value=MagicMock(),
+            ),
+            patch(
+                "todayflow_backend.api.reports._get_user_astro_profile",
+                new_callable=AsyncMock,
+                return_value=MagicMock(),
+            ),
+            patch(
+                "todayflow_backend.api.reports._prepare_birth_data",
+                new_callable=AsyncMock,
+                return_value=MagicMock(coordinates=None),
+            ),
+            patch(
+                "todayflow_backend.api.reports._compute_natal_chart",
+                new_callable=AsyncMock,
+                return_value=MagicMock(positions=[{"body": "Sun"}]),
+            ),
+            patch(
+                "todayflow_backend.services.today_natal_activations_v1.resolve_natal_activations",
+                new_callable=AsyncMock,
+                return_value=(activations, False),
+            ),
+            patch(
+                "todayflow_backend.services.today_glance_timeline_v1.compute_glance_timeline",
+                new_callable=AsyncMock,
+                return_value=([], activations),
+            ),
+            patch(
+                "todayflow_backend.services.day_lifecycle_clock_c5.resolve_user_timezone",
+                return_value="Europe/Moscow",
+            ),
+            patch(
+                "todayflow_backend.services.today_day_facts_project_v1.load_ready_day_scenario",
+                return_value=scenario,
+            ),
+        ):
+            return await day_facts.assemble_day_facts_v1(
+                user=user,
+                local_date=date(2026, 7, 30),
+                db=MagicMock(),
+                locale="ru",
+            )
 
-def test_apply_act3_temporal_trust_gate_demotes_ready_when_pool_empty():
-    story = {
-        "day_scenario": {
-            "ready": True,
-            "runtime_sot": True,
-            "conflict": {
-                "short_name": "Тест",
-                "driver_ids": ["sky-semisquare-0"],
-            },
-            "scenes": [{"scene_id": "s1"}],
-        }
-    }
-    out = project.apply_act3_temporal_trust_gate(story, activations=[])
-    assert out["day_scenario"]["ready"] is False
-    assert out["day_scenario"]["runtime_sot"] is False
-    assert out["day_scenario"]["trust_gate"] == "drivers_outside_activation_pool"
-
-
-def test_apply_act3_temporal_trust_gate_keeps_ready_when_pool_live():
-    story = {
-        "day_scenario": {
-            "ready": True,
-            "runtime_sot": True,
-            "conflict": {
-                "short_name": "Тест",
-                "driver_ids": ["sky-semisquare-0"],
-            },
-            "scenes": [{"scene_id": "s1"}],
-        }
-    }
-    out = project.apply_act3_temporal_trust_gate(
-        story, activations=[{"id": "pt-venus-trine-moon"}]
-    )
-    assert out["day_scenario"]["ready"] is True
-    assert "trust_gate" not in out["day_scenario"]
-
-
-def test_activation_pool_rows_skips_claim_prose_ids():
-    rows = project.activation_pool_rows(
-        {"natal_activations": [{"id": "pt-a"}, {"id": "claim.personal.x"}]},
-        [{"id": "day_personal.summary"}, {"id": "pt-b"}],
-    )
-    assert {r["id"] for r in rows} == {"pt-a", "pt-b"}
+    out = asyncio.run(_run())
+    assert out["partial"] is True
+    assert out["conflict"] is None
+    assert out["scenes"] == []
+    assert len(out["natal_activations"]) == 2
+    assert len(out["domain_verdicts"]) == 4
 
 
 def test_assemble_omits_stale_narrative_keeps_fresh_strip():
@@ -470,11 +514,11 @@ def test_assemble_omits_stale_narrative_keeps_fresh_strip():
     user = MagicMock()
     user.id = 2
     activations = [
-        {"id": "a1", "rank": 1, "transiting_planet": "Venus", "aspect": "trine", "natal_point": "Moon", "orb_deg": 1.0},
-        {"id": "a2", "rank": 2, "transiting_planet": "Mars", "aspect": "square", "natal_point": "Sun", "orb_deg": 0.5},
+        {"id": "pt-venus-trine-moon", "rank": 1, "transiting_planet": "Venus", "aspect": "trine", "natal_point": "Moon", "orb_deg": 1.0},
+        {"id": "pt-mars-square-sun", "rank": 2, "transiting_planet": "Mars", "aspect": "square", "natal_point": "Sun", "orb_deg": 0.5},
     ]
-    # Scenario still talks about drivers that left the pool (not event-pack prefixes)
-    scenario = _ready_scenario(driver_ids=["gone-a", "gone-b"])
+    # Stale natal-style ids that left the pool
+    scenario = _ready_scenario(driver_ids=["pt-gone-a", "pt-gone-b"])
 
     async def _run():
         with (
@@ -531,4 +575,4 @@ def test_assemble_omits_stale_narrative_keeps_fresh_strip():
     assert out["props"] is None
     assert out["generation_provenance"]["conflict_driver_ids"] == []
     assert len(out["domain_verdicts"]) == 4
-    assert {a["id"] for a in out["natal_activations"]} == {"a1", "a2"}
+    assert {a["id"] for a in out["natal_activations"]} == {"pt-venus-trine-moon", "pt-mars-square-sun"}
