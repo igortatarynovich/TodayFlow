@@ -4,7 +4,7 @@ Last updated: 2026-07-30
 Owner: Product + Engineering
 Status: Active working document
 
-**IN PROGRESS (2026-07-30):** Practices Screen v1 — **C0 canon ACCEPTED** ([practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md)); next **P0** web `/practices` shell on locked need/format. ScreenFlow Phase 2b (split Personal acts; axis lock) — Glance-first **LIVE**. Guest Story Surface P0 — **DONE (LIVE)**. Evening/day-2 = slice 2.
+**IN PROGRESS (2026-07-30):** Practices Screen v1.1 — **C0 canon ACCEPTED** ([practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md)); **C0b** mockup need-align; next **P0** web shell. ScreenFlow Phase 2b — Glance-first **LIVE**. Guest Story Surface P0 — **DONE (LIVE)**. Evening/day-2 = slice 2.
 
 ## 1) Purpose
 
@@ -883,11 +883,12 @@ Source of truth: [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) §1–§13
 
 **Канон:** [practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) · [practices/_INDEX.md](./practices/_INDEX.md)
 
-**Locked needs:** `calm` · `focus` · `recover` · `sleep` · `understand` (RU: Успокоиться · Собраться · Восстановиться · Уснуть · Понять себя). **Не** «Почувствовать тело».
+**Locked needs (order):** `calm` · `focus` · `recover` · `body` · `understand` · `sleep` — Успокоиться · Собраться · Восстановиться · Почувствовать тело · Понять себя · Уснуть (last).
 
-**Locked formats:** `meditation` · `breath` · `reflection` · `affirmation` · `visualization` · `body` · `sleep`. Йога/растяжка = subtypes `body`. Музыка ≠ format chip → music layer.
+**Locked formats (order):** `meditation` · `breath` · `yoga` · `stretch` · `visualization` · `affirmation` · `reflection` · `music` · `sleep`. Music chip = standalone practice; music **layer** §5 = accompaniment (both).
 
-- [x] **C0** Canon ACCEPTED — need/format freeze + cycle principle + mockup deltas closed
+- [x] **C0** Canon v1.1 ACCEPTED — axis resolution (body+understand needs; yoga/stretch/music formats; reflection+sleep restored)
+- [ ] **C0b** Align mockup need-ленты to canon: add «Понять себя»; move «Уснуть» to end
 - [ ] **P0** Web `/practices` shell: need chips + «Рекомендовано сейчас» + Continue + moment rail + format chips + practice of day + conditional «Мои практики» (map/deprecate legacy catalog goals)
 - [ ] **P1** Session fullscreen + state check-in (Лучше / Без изменений / Сложнее) + «Сохранить в сегодняшний день»
 - [ ] **M0** Music layer (С голосом / Только музыка / Без звука + voice/music/nature volumes) — parallel to P0/P1
@@ -1115,7 +1116,8 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
-- 2026-07-30 | Practices | **Screen v1 canon C0 (need/format freeze)** | **ACCEPTED** | SoT [practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md): cycle need→practice→session→check-in→Today. Needs keep «Понять себя», drop mockup «Почувствовать тело». Formats: 7 chips; yoga/stretch = `body` subtypes; affirmations = format; music = §5 layer not chip. Tracker: P0 shell → P1 cycle → M0 music (parallel). README indexed.
+- 2026-07-30 | Practices | **Screen v1.1 canon — axis resolution** | **ACCEPTED** | SoT [practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) v1.1: needs keep **both** «Почувствовать тело» + «Понять себя» (body vs reflective axes); «Уснуть» last. Formats: yoga/stretch/music chips (spec «Телесные» detailed); restore reflection+sleep; music = chip ⊕ layer. **C0b** mockup need-align. No parallel `practices-canon.md`. Next: C0b → P0 → P1; M0 ∥.
+- 2026-07-30 | Practices | **Screen v1.0 canon C0 (need/format freeze)** | **SUPERSEDED → v1.1** | v1.0 dropped «Почувствовать тело» and umbrella `body` format; replaced by axis logic in v1.1.
 - 2026-07-30 | Web Guest / SEO audit | **Guest Story Surface P0 (item 11)** | **DONE (LIVE)** | Curl: landing dual CTAs · `/demo/today` SSR Theme/Focus/Practice/Memory · `/onboarding/invite` · pitch CTAs · Compat Profile bridge · guest-nav primary Today·Profile·Compatibility. Evening/day-2 = slice 2. Canon [audits/GUEST_STORY_SURFACE_P0_2026-07-30.md](./audits/GUEST_STORY_SURFACE_P0_2026-07-30.md).
 - 2026-07-30 | Web Guest / SEO audit | **/today+/profile SSR pitch body** | **DONE (LIVE)** | Independent sandbox curl: pitch SSR above bailout on /today+/profile; «Собираем стабильное…» = 0. BAILOUT remains on client widgets only. Item 11 story surface → row above.
 - 2026-07-30 | Product UI | **ScreenFlow V1 — proto + Today Glance-first** | **LIVE (redeployed)** | Was code-only: prod image lagged (Docker `npm run build` failed on TS; `tail` masked exit → stale `#today-act-` bundle). Fixed `showSymbols`/`tarotPickedId` types; rebuilt+force-recreate. Live chunk `page-bbb6669e810a4bf7.js` contains `today-screen-flow` + Glance. Hard-refresh to verify transform pager. Phase 2b = split personal; axis lock after real-device.

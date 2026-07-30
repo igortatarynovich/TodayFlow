@@ -2,7 +2,7 @@
 
 | Документ | Роль |
 |----------|------|
-| [PRACTICES_SCREEN_V1.md](./PRACTICES_SCREEN_V1.md) | **SoT** экрана «Практики»: цикл состояния, locked списки need/format, сессия, чек-ин, music layer, visual |
+| [PRACTICES_SCREEN_V1.md](./PRACTICES_SCREEN_V1.md) | **SoT** (v1.1): цикл состояния; 6 needs (тело + рефлексия; Уснуть last); 9 formats (yoga/stretch/music + reflection/sleep); сессия; music layer |
 
 **Связанные (не заменяют этот пакет):**
 
