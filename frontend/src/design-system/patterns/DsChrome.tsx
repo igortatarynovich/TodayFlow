@@ -58,12 +58,18 @@ export function DsAppSidebar({
   avatarInitial,
   navItems,
   settingsLabel = "Настройки",
+  logoHref = NAV_PATHS.today,
+  footerHref = NAV_PATHS.accountSettings,
 }: {
   displayName: string;
   profileMeta?: string | null;
   avatarInitial: string;
   navItems?: NavItem[];
   settingsLabel?: string;
+  /** Brand mark target — guests go home, authed users to Today. */
+  logoHref?: string;
+  /** Sidebar footer link — guests get value-first CTA, authed get settings. */
+  footerHref?: string;
 }) {
   const pathname = usePathname();
   const items = navItems ?? buildAppNavItems("ru", "authenticated");
@@ -71,7 +77,7 @@ export function DsAppSidebar({
   return (
     <aside className={p.sidebar} aria-label="Навигация">
       <div className={p.sidebarTop}>
-        <Link href={NAV_PATHS.today} className={p.logoGroup}>
+        <Link href={logoHref} className={p.logoGroup}>
           <IconOrbitalGlyph className={p.logoGlyph} />
           <span className={p.logoText}>TodayFlow</span>
         </Link>
@@ -110,7 +116,7 @@ export function DsAppSidebar({
       </div>
 
       <div className={p.sidebarFooter}>
-        <Link href={NAV_PATHS.accountSettings} className={p.settingsLink}>
+        <Link href={footerHref} className={p.settingsLink}>
           <IconSettings className={p.navIcon} />
           {settingsLabel}
         </Link>

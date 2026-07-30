@@ -8,7 +8,8 @@ import { GuestFirstTodayScreen } from "@/components/onboarding/valueFirst/GuestF
 import { hasGuestPreview, readGuestProfileDraft, VALUE_FIRST_PATHS } from "@/lib/guestProfileDraft";
 import { hasAuthSessionEnded } from "@/lib/authSession";
 import { markFirstTodayCompleted, resolveIsFirstDay } from "@/lib/firstTodayState";
-import { getJson, postJson, putJson } from "@/lib/api";
+import { ApiError, getJson, postJson, putJson } from "@/lib/api";
+import { TODAY_NO_CONNECTION_COPY } from "@/lib/todaySlotAvailability";
 import {
   CORE_PROFILE_UPDATED_EVENT,
   type CoreProfileUpdatedDetail,
@@ -24,6 +25,7 @@ import {
 import { TodayNarrativeDepthControl } from "@/components/today/TodayNarrativeDepthControl";
 import { TodayWebDashboard } from "@/components/product-ui/TodayWebDashboard";
 import { ProductPageScreen } from "@/components/product-ui/ProductPageScreen";
+import { DsButton } from "@/design-system";
 import { TodayDayReveal } from "@/components/today/TodayDayReveal";
 import {
   readTodayDayBundle,
@@ -111,7 +113,7 @@ import { resolveDailyTarotDeckIndex } from "@/lib/tarotCardAssets";
 import { isRuUserFacingText } from "@/lib/todaySynthesisTextPolicy";
 
 export default function TodayPage() {
-  const { isAuthenticated, isLoading: authLoading } = useAuth();
+  const { isAuthenticated, isLoading: authLoading, networkDegraded } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const firstTodayMode = searchParams.get("first") === "1";
@@ -551,7 +553,14 @@ export default function TodayPage() {
           }
       } catch (err: any) {
         console.error("Error loading today:", err);
-        setError(err?.message || RITUAL_COPY.todayPageLoadError);
+        const transport =
+          (err instanceof ApiError && err.status === 0) ||
+          (typeof err?.message === "string" && /нет соединения/i.test(err.message));
+        setError(
+          transport
+            ? TODAY_NO_CONNECTION_COPY
+            : err?.message || RITUAL_COPY.todayPageLoadError,
+        );
         setLoading(false);
         setSupplementaryLoading(false);
         if (initialLoad) {
@@ -1215,9 +1224,12 @@ export default function TodayPage() {
                 secondaryCtaLabel: "Создать новый Today",
               }
             : {
+                // Value-first: cold guest sees showcase + create path, not login-only empty shell.
                 message: RITUAL_COPY.todayPageAuthRequired,
-                ctaHref: "/auth?mode=login",
-                ctaLabel: "Войти",
+                ctaHref: `${VALUE_FIRST_PATHS.welcome}?fresh=1`,
+                ctaLabel: "Создать мой Today",
+                secondaryCtaHref: "/auth?mode=login",
+                secondaryCtaLabel: "Уже есть аккаунт? Войти",
               }
         }
         hideDatePill
@@ -1236,6 +1248,31 @@ export default function TodayPage() {
   }
 
   if (error || !todayData || !todayContract) {
+    const connectionFailure =
+      networkDegraded ||
+      (typeof error === "string" && /нет соединения/i.test(error));
+    if (connectionFailure) {
+      return (
+        <ProductPageScreen
+          testId="today-connection-error"
+          title="Сегодня"
+          empty={{
+            message: TODAY_NO_CONNECTION_COPY,
+            action: (
+              <div className="tf-today-connection-actions" style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", justifyContent: "center" }}>
+                <DsButton type="button" onClick={() => void loadToday({ force: true })}>
+                  {RITUAL_COPY.todayPageRetryCta}
+                </DsButton>
+                <DsButton href="/auth?mode=login" variant="secondary">
+                  Войти
+                </DsButton>
+              </div>
+            ),
+          }}
+          hideDatePill
+        />
+      );
+    }
     return (
       <ProductPageScreen
         testId="today-error"

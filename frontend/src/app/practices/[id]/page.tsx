@@ -91,6 +91,8 @@ export default function PracticeDetailPage() {
 
   const [loading, setLoading] = useState(true);
   const [practice, setPractice] = useState<PracticeDetail | null>(null);
+  const [loadError, setLoadError] = useState<"not_found" | "transport" | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
   const [isCompleting, setIsCompleting] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [sequenceProgress, setSequenceProgress] = useState<{
@@ -131,6 +133,8 @@ export default function PracticeDetailPage() {
 
   useEffect(() => {
     const loadPractice = async () => {
+      setLoading(true);
+      setLoadError(null);
       try {
         const practiceId = params.id as string;
         const data = await getJson<PracticeDetail>(`/practices/${practiceId}`);
@@ -151,13 +155,16 @@ export default function PracticeDetailPage() {
         }
       } catch (err) {
         console.error("Error loading practice:", err);
+        setPractice(null);
+        const status = err && typeof err === "object" && "status" in err ? Number((err as { status: number }).status) : NaN;
+        setLoadError(status === 404 ? "not_found" : "transport");
       } finally {
         setLoading(false);
       }
     };
 
-    loadPractice();
-  }, [params.id, isAuthenticated]);
+    void loadPractice();
+  }, [params.id, isAuthenticated, reloadKey]);
 
   const sessionMeta = useMemo(() => {
     if (!practice) return [];
@@ -186,13 +193,22 @@ export default function PracticeDetailPage() {
   }
 
   if (!practice) {
+    const isTransport = loadError === "transport";
     return (
       <PracticeSessionWebScreen backLabel={pc.practiceDetailBackLink}>
         <div className={s.practiceSessionEmpty}>
-          <h2 className={s.practiceSessionEmptyTitle}>{pc.practiceDetailNotFoundTitle}</h2>
-          <Link href="/practices">
-            <DsButton variant="primary">{pc.practiceDetailBackToPracticesCta}</DsButton>
-          </Link>
+          <h2 className={s.practiceSessionEmptyTitle}>
+            {isTransport ? pc.practiceDetailLoadFailedTitle : pc.practiceDetailNotFoundTitle}
+          </h2>
+          {isTransport ? (
+            <DsButton variant="primary" onClick={() => setReloadKey((k) => k + 1)}>
+              {pc.practiceDetailLoadFailedRetry}
+            </DsButton>
+          ) : (
+            <Link href="/practices">
+              <DsButton variant="primary">{pc.practiceDetailBackToPracticesCta}</DsButton>
+            </Link>
+          )}
         </div>
       </PracticeSessionWebScreen>
     );

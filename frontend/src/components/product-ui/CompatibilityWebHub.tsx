@@ -7,6 +7,7 @@ import {
   compatibilityWebChromeBundle,
   type CompatWebModeSpec,
 } from "@/components/product-ui/compatibilityWebChrome";
+import { CompatibilityGuestDemo } from "@/components/product-ui/CompatibilityGuestDemo";
 import {
   ProductJourneyScene,
 } from "@/components/product-ui/ProductJourneyScene";
@@ -108,25 +109,19 @@ export function CompatibilityWebHub({
         step={2}
         title={chrome.hubPairEyebrow}
         lead={
-          resolvedLocale === "ru"
-            ? "Два человека из круга — рассказ строится вокруг этой пары."
-            : "Two people from your circle — the story is built around this pair."
+          !isAuthenticated
+            ? resolvedLocale === "ru"
+              ? "Сначала посмотри, как выглядит разбор — потом проверь свою пару по знакам."
+              : "See what a reading looks like — then check your pair by signs."
+            : resolvedLocale === "ru"
+              ? "Два человека из круга — рассказ строится вокруг этой пары."
+              : "Two people from your circle — the story is built around this pair."
         }
         motif="why"
         testId="compat-hub-pair"
       >
         {!isAuthenticated ? (
-          <div className={journeyStyles.actionRow} style={{ flexDirection: "column", alignItems: "flex-start" }}>
-            <DsBody size="sm" muted>
-              Сначала собери свой Today — имя, дата, первый разбор и email для сохранения.
-            </DsBody>
-            <div className={journeyStyles.actionRow}>
-              <DsButton href="/onboarding/welcome?fresh=1">Создать мой Today</DsButton>
-              <DsButton href="/auth?mode=login&redirect=/compatibility" variant="ghost">
-                Уже есть аккаунт? Войти
-              </DsButton>
-            </div>
-          </div>
+          <CompatibilityGuestDemo locale={resolvedLocale} />
         ) : profiles.length < 2 ? (
           <div className={journeyStyles.actionRow} style={{ flexDirection: "column", alignItems: "flex-start" }}>
             <DsBody size="sm" muted>
@@ -204,6 +199,7 @@ export function CompatibilityWebHub({
         )}
       </ProductJourneyScene>
 
+      {isAuthenticated ? (
       <ProductJourneyScene
         step={3}
         title={resolvedLocale === "ru" ? "Разбор" : "Reading"}
@@ -227,6 +223,7 @@ export function CompatibilityWebHub({
           </DsButton>
         </div>
       </ProductJourneyScene>
+      ) : null}
     </div>
   );
 }

@@ -78,9 +78,11 @@ services:
       args:
         # Prefer PUBLIC_API_URL (prod/.env) so public sites never bake localhost.
         NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-${PUBLIC_API_URL:-http://localhost:8080}}
+        NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL:-${PUBLIC_WEB_URL:-http://localhost:3000}}
         NEXT_PUBLIC_APP_LOCALE: ${NEXT_PUBLIC_APP_LOCALE:-ru}
     environment:
       NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-${PUBLIC_API_URL:-http://localhost:8080}}
+      NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL:-${PUBLIC_WEB_URL:-http://localhost:3000}}
       NEXT_PUBLIC_APP_LOCALE: ${NEXT_PUBLIC_APP_LOCALE:-ru}
     depends_on:
       - backend

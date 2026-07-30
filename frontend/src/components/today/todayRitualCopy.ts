@@ -296,7 +296,8 @@ export const RITUAL_COPY = {
   todayPageLoadingSession: "Сессия…",
   todayPageLoadingDay: "Собираю твой день…",
   todayPageRefreshingDay: "Обновляю твой день…",
-  todayPageAuthRequired: "Войдите, чтобы использовать цикл дня",
+  todayPageAuthRequired:
+    "Сначала собери свой Today: имя, дата рождения и первый разбор — без пустой оболочки. Потом сохрани через email.",
   todayPageDataMissing: "Данные не найдены",
   todayPageRetryCta: "Попробовать снова",
   todayPageLoadError: "Ошибка при загрузке дня",

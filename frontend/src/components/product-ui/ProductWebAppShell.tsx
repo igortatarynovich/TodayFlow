@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   DsAppShell,
   DsAppSidebar,
@@ -10,9 +10,12 @@ import {
 } from "@/design-system";
 import { dsAppNavItems, productWebShellChromeBundle } from "@/components/product-ui/productWebShellChrome";
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
+import { VALUE_FIRST_PATHS } from "@/lib/guestProfileDraft";
 import { resolveIsFirstDay } from "@/lib/firstTodayState";
 import { getLocale } from "@/lib/i18n";
 import type { CoreProfile } from "@/lib/types";
+import { useAuth } from "@/lib/useAuth";
+import { useProductShellDesktop } from "@/lib/useMediaQuery";
 import {
   productWebDisplayName,
   productWebProfileMeta,
@@ -40,6 +43,9 @@ export type ProductWebAppShellProps = {
   fullMain?: boolean;
 };
 
+const GUEST_SHELL_NAME = "Гость";
+const GUEST_SHELL_META = "Собери свой Today";
+
 export function ProductWebAppShell({
   testId,
   displayName,
@@ -55,6 +61,17 @@ export function ProductWebAppShell({
   fullMain = false,
 }: ProductWebAppShellProps) {
   const pathname = usePathname() ?? "/today";
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
+  // Guest product chrome: trial routes only — not empty Today/Profile as fake app.
+  const guestShell = !authLoading && !isAuthenticated;
+  const isDesktop = useProductShellDesktop();
+  const [navHydrated, setNavHydrated] = useState(false);
+  useEffect(() => {
+    setNavHydrated(true);
+  }, []);
+  // Before hydration keep both (CSS hides one). After: unmount inactive → a11y/tab-order.
+  const showSidebar = !navHydrated || isDesktop;
+  const showMobileTabBar = !navHydrated || !isDesktop;
   // Same isFirstDay signal as SectionAtmosphereBridge (html-level mood), read from
   // window.location instead of useSearchParams() — avoids forcing every consumer
   // route into a Suspense boundary just for the `?first=1` override.
@@ -78,31 +95,45 @@ export function ProductWebAppShell({
   }, [theme, mood]);
   const resolvedLocale: FlowPracticesChromeLocale =
     locale ?? (getLocale() === "ru" ? "ru" : "en");
-  // In-app sidebar always shows the full nav (Today / My map / Compatibility / Tarot /
-  // Practices) per Figma. Guest-reduced nav is only for landing/marketing surfaces;
-  // guests hitting Today/Profile see the login/onboarding state on those screens.
   const navItems = useMemo(
-    () => dsAppNavItems(resolvedLocale),
-    [resolvedLocale],
+    () => dsAppNavItems(resolvedLocale, guestShell ? { guestProduct: true } : undefined),
+    [resolvedLocale, guestShell],
   );
   const shell = useMemo(() => productWebShellChromeBundle(resolvedLocale), [resolvedLocale]);
-  const resolvedName = productWebDisplayName(coreProfile, displayName);
-  const resolvedMeta = profileMeta ?? productWebProfileMeta(coreProfile);
+  const resolvedName = guestShell
+    ? GUEST_SHELL_NAME
+    : productWebDisplayName(coreProfile, displayName);
+  const resolvedMeta = guestShell
+    ? GUEST_SHELL_META
+    : (profileMeta ?? productWebProfileMeta(coreProfile));
+  const avatarInitial = guestShell ? "·" : productWebUserInitial(coreProfile, displayName);
+  const logoHref = guestShell ? "/" : "/today";
+  const footerHref = guestShell ? `${VALUE_FIRST_PATHS.welcome}?fresh=1` : undefined;
+  const footerLabel = guestShell ? "Создать мой Today" : shell.navSettings;
+
+  const sidebarNode =
+    sidebar ??
+    (showSidebar ? (
+      <DsAppSidebar
+        displayName={resolvedName}
+        profileMeta={resolvedMeta}
+        avatarInitial={avatarInitial}
+        navItems={navItems}
+        settingsLabel={footerLabel}
+        logoHref={logoHref}
+        footerHref={footerHref}
+      />
+    ) : null);
 
   return (
-    <div ref={frameRef} className={l.productWebFrame} data-testid={testId}>
+    <div
+      ref={frameRef}
+      className={l.productWebFrame}
+      data-testid={testId}
+      data-guest-shell={guestShell ? "true" : undefined}
+    >
       <DsAppShell
-        sidebar={
-          sidebar ?? (
-            <DsAppSidebar
-              displayName={resolvedName}
-              profileMeta={resolvedMeta}
-              avatarInitial={productWebUserInitial(coreProfile, displayName)}
-              navItems={navItems}
-              settingsLabel={shell.navSettings}
-            />
-          )
-        }
+        sidebar={sidebarNode}
         main={
           <div className={`${l.productWebMain} ${mainWide ? l.productWebMainProfileV2 : ""}`.trim()}>
             {main}
@@ -111,16 +142,18 @@ export function ProductWebAppShell({
         rail={rail}
         fullMain={fullMain}
       />
-      <div className={l.mobileTabBarWrap}>
-        <DsMobileTabBar
-          items={navItems.map((item) => ({
-            href: item.href,
-            label: item.label,
-            icon: <item.icon />,
-          }))}
-          activeHref={pathname}
-        />
-      </div>
+      {showMobileTabBar ? (
+        <div className={l.mobileTabBarWrap}>
+          <DsMobileTabBar
+            items={navItems.map((item) => ({
+              href: item.href,
+              label: item.label,
+              icon: <item.icon />,
+            }))}
+            activeHref={pathname}
+          />
+        </div>
+      ) : null}
     </div>
   );
 }

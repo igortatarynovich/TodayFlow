@@ -78,8 +78,18 @@ export const APP_NAV_PRIMARY_ORDER: AppNavItemId[] = [
   "practices",
 ];
 
-/** Pre-auth: guest trials on landing, auth, marketing surfaces. */
+/** Pre-auth: guest trials on landing, auth, marketing surfaces (anchors). */
 export const APP_NAV_GUEST_ORDER: AppNavItemId[] = ["tarot", "compatibility"];
+
+/**
+ * Pre-auth in-app shell — only guest-trial product routes.
+ * Today / Profile stay out of nav (value-first / login gates, not empty shells).
+ */
+export const APP_NAV_GUEST_PRODUCT_ORDER: AppNavItemId[] = [
+  "tarot",
+  "compatibility",
+  "practices",
+];
 
 /** Guest top-nav → landing section anchors (not product routes). */
 export const APP_NAV_GUEST_LANDING_HREF: Partial<Record<AppNavItemId, string>> = {
@@ -87,7 +97,7 @@ export const APP_NAV_GUEST_LANDING_HREF: Partial<Record<AppNavItemId, string>> =
   compatibility: "/#compatibility",
 };
 
-export type AppNavMode = "authenticated" | "guest";
+export type AppNavMode = "authenticated" | "guest" | "guestProduct";
 
 export type AppNavItem = {
   id: AppNavItemId;
@@ -111,11 +121,17 @@ export function resolveAppNavLabel(id: AppNavItemId, locale: FlowPracticesChrome
   return t(def.labelKey, loc === "ru" ? def.defaultRu : def.defaultEn, undefined, loc);
 }
 
+function navOrderForMode(mode: AppNavMode): AppNavItemId[] {
+  if (mode === "guest") return APP_NAV_GUEST_ORDER;
+  if (mode === "guestProduct") return APP_NAV_GUEST_PRODUCT_ORDER;
+  return APP_NAV_PRIMARY_ORDER;
+}
+
 export function buildAppNavItems(
   locale: FlowPracticesChromeLocale,
   mode: AppNavMode = "authenticated",
 ): AppNavItem[] {
-  const order = mode === "guest" ? APP_NAV_GUEST_ORDER : APP_NAV_PRIMARY_ORDER;
+  const order = navOrderForMode(mode);
   return order.map((id) => {
     const def = APP_NAV_ITEM_DEFS[id];
     const landingHref = mode === "guest" ? APP_NAV_GUEST_LANDING_HREF[id] : undefined;

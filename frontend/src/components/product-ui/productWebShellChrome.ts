@@ -30,9 +30,13 @@ export function productWebShellChromeBundle(locale: FlowPracticesChromeLocale): 
 
 export function dsAppNavItems(
   locale: FlowPracticesChromeLocale,
-  options?: { guest?: boolean },
+  options?: { guest?: boolean; guestProduct?: boolean },
 ): DsAppNavItem[] {
-  const mode = options?.guest ? "guest" : "authenticated";
+  const mode = options?.guestProduct
+    ? "guestProduct"
+    : options?.guest
+      ? "guest"
+      : "authenticated";
   return buildAppNavItems(locale, mode);
 }
 

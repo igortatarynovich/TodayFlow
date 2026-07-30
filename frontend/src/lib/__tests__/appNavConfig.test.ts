@@ -1,5 +1,6 @@
 import {
   APP_NAV_GUEST_ORDER,
+  APP_NAV_GUEST_PRODUCT_ORDER,
   APP_NAV_PRIMARY_ORDER,
   buildAppNavItems,
   buildAppNavLinks,
@@ -37,6 +38,12 @@ describe("appNavConfig", () => {
     expect(items.map((i) => i.id)).toEqual(APP_NAV_GUEST_ORDER);
     expect(items).toHaveLength(2);
     expect(items[0].label).toBe("Tarot");
+  });
+
+  it("defines guestProduct shell nav without Today/Profile", () => {
+    const items = buildAppNavItems("ru", "guestProduct");
+    expect(items.map((i) => i.id)).toEqual(APP_NAV_GUEST_PRODUCT_ORDER);
+    expect(items.map((i) => i.href)).toEqual(["/tarot", "/compatibility", "/practices"]);
   });
 
   it("buildAppNavLinks returns href + label without icons", () => {
