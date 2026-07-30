@@ -161,7 +161,8 @@ export function CompatibilityDynamicsSurface({
           step={1}
           title="Пара"
           lead="Не «насколько вы подходите», а как вы цепляетесь, где спотыкаетесь и что с этим делать."
-          motif="insight"
+          motif="compat"
+          plate="compat_day"
           testId="compat-dynamics-pair"
         >
           <div className={journeyStyles.pairHero}>
@@ -191,7 +192,8 @@ export function CompatibilityDynamicsSurface({
         step={layerStep}
         title="История связи"
         lead="Рассказ о том, как вы звучите вместе — и почему именно так."
-        motif="why"
+        motif="compat"
+        plate="compat_night"
         testId="compat-dynamics-story"
       >
         {storyChapters.length ? (
@@ -272,7 +274,8 @@ export function CompatibilityDynamicsSurface({
         step={moveStep}
         title="Кто как ведёт себя"
         lead={`Роли ниже — про темп и защиту, не про пол. «Ты» (${youColumnLabel}) и партнёр (${partnerColumnLabel}).`}
-        motif="effort"
+        motif="compat"
+        plate="compat_love"
         testId="compat-dynamics-roles"
       >
         <ProductNarrativeBlock
@@ -338,7 +341,8 @@ export function CompatibilityDynamicsSurface({
         step={bridgeStep}
         title="Продолжение"
         lead="Если ситуация про решение — в Guidance. Если паттерн — в профиль. Другие уровни пары — рядом."
-        motif="bridge"
+        motif="compat"
+        plate="compat_map"
         bridge
         testId="compat-dynamics-bridge"
       >

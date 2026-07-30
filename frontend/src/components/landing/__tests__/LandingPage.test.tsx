@@ -8,6 +8,12 @@ describe("LandingPage", () => {
 
     expect(screen.getByTestId("landing-page")).toBeInTheDocument();
     expect(screen.getByTestId("landing-orbit-viz")).toBeInTheDocument();
+    expect(screen.getByTestId("landing-hero-plate")).toBeInTheDocument();
+    expect(screen.getByTestId("landing-service-plate-tarot")).toBeInTheDocument();
+    expect(screen.getByTestId("landing-service-plate-compatibility")).toBeInTheDocument();
+    expect(screen.getByTestId("landing-service-plate-practices")).toBeInTheDocument();
+    expect(screen.getByTestId("landing-today-plate")).toBeInTheDocument();
+    expect(screen.getByTestId("landing-cta-plate")).toBeInTheDocument();
     for (const id of PRODUCT_WEB_LANDING_SECTION_IDS) {
       const el = document.getElementById(id);
       expect(el).not.toBeNull();
@@ -20,7 +26,7 @@ describe("LandingPage", () => {
     expect(screen.getByTestId("landing-section-why")).toBeInTheDocument();
     expect(screen.getByTestId("landing-section-cta")).toBeInTheDocument();
 
-    expect(screen.getByRole("heading", { name: /интересно, что/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /todayflow видит не только твой день/i })).toBeInTheDocument();
     expect(screen.getByText(/твой today каждое утро/i)).toBeInTheDocument();
     expect(screen.getByText(/зачем возвращаются/i)).toBeInTheDocument();
 

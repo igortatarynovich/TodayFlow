@@ -8,10 +8,12 @@ import {
   useProfileMotionInView,
 } from "@/components/foundation/ProfileMotion";
 import type { ProfileAtmosphereMotif } from "@/components/profile/v2/ProfileAtmosphere";
+import { ProductScenePlate } from "@/components/product-ui/ProductScenePlate";
 import {
   TodayActShell,
   type TodayActShellAccent,
 } from "@/components/today/composition/TodayActShell";
+import type { ProductScenePlateId } from "@/lib/productScenePlates";
 import styles from "@/components/product-ui/ProductJourneyScene.module.css";
 
 type ProductJourneySceneProps = {
@@ -19,6 +21,8 @@ type ProductJourneySceneProps = {
   title?: string;
   lead?: string | null;
   motif?: ProfileAtmosphereMotif;
+  /** Visible inventory plate (cover-cropped banner) above the act body. */
+  plate?: ProductScenePlateId | null;
   children: ReactNode;
   testId?: string;
   bridge?: boolean;
@@ -37,6 +41,7 @@ export function ProductJourneyScene({
   title,
   lead,
   motif = "insight",
+  plate = null,
   children,
   testId,
   bridge = false,
@@ -58,6 +63,7 @@ export function ProductJourneyScene({
         accent={accent}
         testId={testId}
         className={className}
+        visual={plate ? <ProductScenePlate plate={plate} /> : null}
         slotBefore={slotBefore}
         slotAfter={slotAfter}
       >

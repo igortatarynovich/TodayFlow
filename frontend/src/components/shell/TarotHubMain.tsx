@@ -64,7 +64,8 @@ export function TarotHubMain() {
         step={1}
         title="Вопрос"
         lead="Сформулируйте чуткий запрос — не просто «что будет»."
-        motif="today"
+        motif="tarot"
+        plate="tarot_cards"
         testId="tarot-hub-main-question"
       >
         <p className={journeyStyles.pairSub}>
@@ -91,7 +92,8 @@ export function TarotHubMain() {
         step={2}
         title="Направление"
         lead="Выберите формат расклада: сколько карт и на чём фокус."
-        motif="insight"
+        motif="tarot"
+        plate="tarot_quiet"
         testId="tarot-hub-main-direction"
       >
         <ol className={s.hubSpreadStepList} aria-label="Расклады для решения">

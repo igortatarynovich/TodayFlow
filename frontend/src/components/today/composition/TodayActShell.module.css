@@ -47,6 +47,12 @@
   box-shadow: inset 3px 0 0 var(--tf-accent-action, #8f6b3a);
 }
 
+.visual {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
 .header {
   position: relative;
   z-index: 1;

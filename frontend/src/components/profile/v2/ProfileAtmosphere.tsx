@@ -2,7 +2,17 @@
 
 import styles from "./profileAtmosphere.module.css";
 
-export type ProfileAtmosphereMotif = "why" | "insight" | "effort" | "bridge" | "natal" | "today";
+export type ProfileAtmosphereMotif =
+  | "why"
+  | "insight"
+  | "effort"
+  | "bridge"
+  | "natal"
+  | "today"
+  /** Product-area washes — distinct inventory, not the shared cosmic set. */
+  | "tarot"
+  | "compat"
+  | "practice";
 
 export type ProfileAtmosphereProps = {
   motif: ProfileAtmosphereMotif;

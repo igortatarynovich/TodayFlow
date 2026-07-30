@@ -103,7 +103,8 @@ export function TarotWebResult({
         step={1}
         title="Вопрос"
         lead={spreadTitle || null}
-        motif="today"
+        motif="tarot"
+        plate="tarot_quiet"
         testId="tarot-journey-question"
       >
         {model.isClarification ? (
@@ -137,7 +138,8 @@ export function TarotWebResult({
             ? "Карты не удалось полностью распознать для интерпретации."
             : "Символы → связь с вопросом → ответ → шаг."
         }
-        motif="why"
+        motif="tarot"
+        plate="tarot_cards"
         testId="tarot-journey-story"
       >
         {hasStory ? (
@@ -201,7 +203,8 @@ export function TarotWebResult({
             ? "Можно пересобрать расклад или открыть карты снова."
             : "Один контекстный шаг из этого вывода — или углубить тему."
         }
-        motif="bridge"
+        motif="tarot"
+        plate="reflection"
         bridge
         testId="tarot-journey-bridge"
       >

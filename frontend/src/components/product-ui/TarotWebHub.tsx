@@ -161,7 +161,8 @@ export function TarotWebHub({
             step={1}
             title={hub.questionStepTitle}
             lead={hub.questionStepLead}
-            motif="today"
+            motif="tarot"
+            plate="tarot_cards"
             testId="tarot-hub-step-question"
           >
             <label className={pl.questionCardQuiet} htmlFor="tarot-hub-question">
@@ -181,7 +182,8 @@ export function TarotWebHub({
               step={2}
               title={hub.directionStepTitle}
               lead={hub.directionStepLead}
-              motif="insight"
+              motif="tarot"
+              plate="tarot_quiet"
               testId="tarot-hub-step-direction"
             >
               <div className={journeyStyles.tabRow} role="group" aria-label={hub.directionStepTitle}>
@@ -210,7 +212,8 @@ export function TarotWebHub({
               step={domainChips.length > 0 ? 3 : 2}
               title={hub.spreadStepTitle}
               lead={hub.spreadStepLead}
-              motif="effort"
+              motif="tarot"
+              plate="reflection"
               testId="tarot-hub-step-spread"
             >
               <ol className={pl.spreadStepList} aria-label={hub.spreadSectionTitle}>

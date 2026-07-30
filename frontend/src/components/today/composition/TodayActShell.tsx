@@ -28,6 +28,8 @@ export type TodayActShellProps = {
   motif?: ProfileAtmosphereMotif | null;
   bridge?: boolean;
   children?: ReactNode;
+  /** Media / plate above the act title (visual → text). */
+  visual?: ReactNode;
   /** Reserved Wave 2 slot above body (e.g. verdict strip). */
   slotBefore?: ReactNode;
   /** Reserved Wave 2 slot below body (e.g. tap widget). */
@@ -47,6 +49,7 @@ export function TodayActShell({
   motif = null,
   bridge = false,
   children,
+  visual = null,
   slotBefore = null,
   slotAfter = null,
   testId,
@@ -88,6 +91,7 @@ export function TodayActShell({
       data-act-step={step != null ? String(step) : undefined}
     >
       {motif ? <ProfileAtmosphere motif={motif} /> : null}
+      {visual ? <div className={styles.visual}>{visual}</div> : null}
       {title ? (
         <header className={styles.header}>
           <p className={styles.stepIndex}>

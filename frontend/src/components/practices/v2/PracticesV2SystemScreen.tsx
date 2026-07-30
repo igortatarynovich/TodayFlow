@@ -165,7 +165,8 @@ export function PracticesV2SystemScreen({
         step={1}
         title={copy.journeySupportTitle}
         lead={supportLead}
-        motif="effort"
+        motif="practice"
+        plate="practice_still"
         testId="practices-journey-support"
       >
         {practiceOfDay ? (
@@ -213,7 +214,8 @@ export function PracticesV2SystemScreen({
         step={2}
         title={copy.journeyLibraryTitle}
         lead={copy.journeyLibraryLead}
-        motif="insight"
+        motif="practice"
+        plate="practice_body"
         testId="practices-journey-library"
       >
         <div className={styles.bottomGrid}>
@@ -415,7 +417,8 @@ export function PracticesV2SystemScreen({
         step={3}
         title={copy.journeyBridgeTitle}
         lead={copy.journeyBridgeLead}
-        motif="bridge"
+        motif="practice"
+        plate="practice_stretch"
         bridge
         testId="practices-journey-bridge"
       >

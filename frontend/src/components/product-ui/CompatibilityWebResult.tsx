@@ -195,7 +195,8 @@ export function CompatibilityWebResult({
         step={1}
         title="Пара"
         lead={model.scenarioSubtitle || chrome.resultTabsAria}
-        motif="insight"
+        motif="compat"
+        plate="compat_pair"
         testId="compat-journey-pair"
       >
         <div className={journeyStyles.pairHero}>
@@ -220,7 +221,8 @@ export function CompatibilityWebResult({
         step={2}
         title="История связи"
         lead="Рассказ о том, как вы звучите вместе — и почему именно так."
-        motif="why"
+        motif="compat"
+        plate="compat_night"
         testId="compat-journey-story"
       >
         {storyChapters.length ? (
@@ -240,7 +242,8 @@ export function CompatibilityWebResult({
         step={3}
         title="Продолжение"
         lead="Другой угол той же пары — без потери контекста."
-        motif="bridge"
+        motif="compat"
+        plate="compat_map"
         bridge
         testId="compat-journey-bridge"
       >

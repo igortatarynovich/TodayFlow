@@ -14,6 +14,7 @@ import {
   PRODUCT_WEB_LANDING_TODAY_PROMISE,
 } from "@/components/product-ui/productWebLandingContent";
 import { ProductWebGuestNav } from "@/components/product-ui/ProductWebGuestNav";
+import { ProductScenePlate } from "@/components/product-ui/ProductScenePlate";
 import {
   DsBody,
   DsButton,
@@ -27,17 +28,15 @@ import {
   DsSectionTitle,
   DsThemeAsideRow,
   DsThemePanel,
-  IconActivity,
   IconEye,
   IconMountain,
   IconRoute,
   IconSparkles,
   IconSun,
-  IconTarot,
-  IconUsers,
 } from "@/design-system";
 import l from "@/design-system/layouts/dsLayouts.module.css";
 import { VALUE_FIRST_PATHS } from "@/lib/guestProfileDraft";
+import { landingServicePlate } from "@/lib/productScenePlates";
 
 type Props = {
   loginHref: string;
@@ -49,12 +48,6 @@ const ORBIT_NODE_ICONS = {
   path: IconRoute,
   star: IconSparkles,
   sage: IconMountain,
-} as const;
-
-const SERVICE_ICONS = {
-  tarot: IconTarot,
-  users: IconUsers,
-  activity: IconActivity,
 } as const;
 
 const RETURN_REASON_ICONS = {
@@ -245,13 +238,22 @@ export function ProductWebLanding({ loginHref }: Props) {
               <Link href="/practices">{PRODUCT_WEB_LANDING_HERO.toolsPracticesLabel}</Link>
             </p>
           </div>
-          <DsOrbitalViz nodes={orbitNodes} testId="landing-orbit-viz" />
+          <div className={l.heroVisual} data-testid="landing-hero-visual">
+            <ProductScenePlate
+              plate="landing_hero"
+              frame="landingHero"
+              testId="landing-hero-plate"
+            />
+            <div className={l.heroOrbitOverlay}>
+              <DsOrbitalViz nodes={orbitNodes} testId="landing-orbit-viz" />
+            </div>
+          </div>
         </div>
       </DsMarketingSection>
 
       {PRODUCT_WEB_LANDING_SERVICE_SECTIONS.map((service, index) => {
-        const Icon = SERVICE_ICONS[service.icon] ?? IconSparkles;
         const titleId = `landing-service-${service.id}`;
+        const plateId = landingServicePlate(service.id);
         return (
           <DsMarketingSection
             key={service.id}
@@ -263,7 +265,7 @@ export function ProductWebLanding({ loginHref }: Props) {
             data-landing-screen={service.id}
             aria-labelledby={titleId}
           >
-            <div className={l.serviceSection}>
+            <div className={`${l.serviceSection} ${index % 2 === 1 ? l.serviceSectionFlip : ""}`.trim()}>
               <div className={l.serviceCopy}>
                 <DsEyebrow>{service.eyebrow}</DsEyebrow>
                 <DsSectionTitle id={titleId}>{service.title}</DsSectionTitle>
@@ -273,9 +275,11 @@ export function ProductWebLanding({ loginHref }: Props) {
                 </div>
               </div>
               <div className={l.serviceVisual} aria-hidden>
-                <span className={l.serviceIconWrap}>
-                  <Icon className={l.serviceIcon} />
-                </span>
+                <ProductScenePlate
+                  plate={plateId}
+                  frame="landingService"
+                  testId={`landing-service-plate-${service.id}`}
+                />
               </div>
             </div>
           </DsMarketingSection>
@@ -283,30 +287,38 @@ export function ProductWebLanding({ loginHref }: Props) {
       })}
 
       <DsMarketingSection id="today" screen tone="muted" testId="landing-section-today" data-landing-screen="today" aria-labelledby="landing-today-promise">
-        <DsThemePanel
-          variant="marketing"
-          titleId="landing-today-promise"
-          eyebrow={PRODUCT_WEB_LANDING_TODAY_PROMISE.eyebrow}
-          title={PRODUCT_WEB_LANDING_TODAY_PROMISE.title}
-          tags={[...PRODUCT_WEB_LANDING_TODAY_PROMISE.tags]}
-          body={PRODUCT_WEB_LANDING_TODAY_PROMISE.body}
-          aside={
-            <>
-              {PRODUCT_WEB_LANDING_TODAY_PROMISE.cards.map((card) => {
-                const Icon = PROMISE_CARD_ICONS[card.id as keyof typeof PROMISE_CARD_ICONS] ?? IconSparkles;
-                return (
-                  <DsThemeAsideRow
-                    key={card.id}
-                    testId={`landing-promise-${card.id}`}
-                    icon={<Icon />}
-                    label={card.label}
-                    value={card.value}
-                  />
-                );
-              })}
-            </>
-          }
-        />
+        <div className={l.todaySection}>
+          <ProductScenePlate
+            plate="landing_today"
+            frame="landingService"
+            className={l.todayPlate}
+            testId="landing-today-plate"
+          />
+          <DsThemePanel
+            variant="marketing"
+            titleId="landing-today-promise"
+            eyebrow={PRODUCT_WEB_LANDING_TODAY_PROMISE.eyebrow}
+            title={PRODUCT_WEB_LANDING_TODAY_PROMISE.title}
+            tags={[...PRODUCT_WEB_LANDING_TODAY_PROMISE.tags]}
+            body={PRODUCT_WEB_LANDING_TODAY_PROMISE.body}
+            aside={
+              <>
+                {PRODUCT_WEB_LANDING_TODAY_PROMISE.cards.map((card) => {
+                  const Icon = PROMISE_CARD_ICONS[card.id as keyof typeof PROMISE_CARD_ICONS] ?? IconSparkles;
+                  return (
+                    <DsThemeAsideRow
+                      key={card.id}
+                      testId={`landing-promise-${card.id}`}
+                      icon={<Icon />}
+                      label={card.label}
+                      value={card.value}
+                    />
+                  );
+                })}
+              </>
+            }
+          />
+        </div>
       </DsMarketingSection>
 
       <DsMarketingSection id="why" screen testId="landing-section-why" data-landing-screen="why" aria-labelledby="landing-return-reasons">
@@ -330,12 +342,20 @@ export function ProductWebLanding({ loginHref }: Props) {
       </DsMarketingSection>
 
       <DsMarketingSection id="cta" screen tone="muted" testId="landing-section-cta" data-landing-screen="cta" aria-labelledby="landing-final-cta">
-        <div className={l.centerStack}>
-          <DsDisplayTitle id="landing-final-cta" size="lg">
-            {PRODUCT_WEB_LANDING_FINAL.title}
-          </DsDisplayTitle>
-          <DsBody muted>{PRODUCT_WEB_LANDING_FINAL.subtitle}</DsBody>
-          <DsButton href={inviteHref}>{PRODUCT_WEB_LANDING_FINAL.cta}</DsButton>
+        <div className={l.ctaSection}>
+          <ProductScenePlate
+            plate="landing_cta"
+            frame="landingService"
+            className={l.ctaPlate}
+            testId="landing-cta-plate"
+          />
+          <div className={l.centerStack}>
+            <DsDisplayTitle id="landing-final-cta" size="lg">
+              {PRODUCT_WEB_LANDING_FINAL.title}
+            </DsDisplayTitle>
+            <DsBody muted>{PRODUCT_WEB_LANDING_FINAL.subtitle}</DsBody>
+            <DsButton href={inviteHref}>{PRODUCT_WEB_LANDING_FINAL.cta}</DsButton>
+          </div>
         </div>
       </DsMarketingSection>
     </DsMarketingPage>

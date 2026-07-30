@@ -8,6 +8,6 @@ type Props = {
 };
 
 /** Product UI web landing (Figma web-landing). */
-export function LandingPage(props: Props) {
-  return <ProductWebLanding {...props} />;
+export function LandingPage({ loginHref }: Props) {
+  return <ProductWebLanding loginHref={loginHref} />;
 }

@@ -13,6 +13,7 @@ import {
 } from "@/components/product-ui/ProductJourneyScene";
 import journeyStyles from "@/components/product-ui/ProductJourneyScene.module.css";
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
+import { compatibilityModePlate } from "@/lib/productScenePlates";
 import { getLocale } from "@/lib/i18n";
 import pl from "@/design-system/layouts/productPageLayout.module.css";
 
@@ -61,6 +62,7 @@ export function CompatibilityWebHub({
   const profile1 = profiles.find((p) => p.id === profile1Id) ?? null;
   const profile2 = profiles.find((p) => p.id === profile2Id) ?? null;
   const selectedMode = chrome.modes.find((m) => m.id === selectedModeId) ?? chrome.modes[0];
+  const directionPlate = compatibilityModePlate(selectedModeId);
   const canCalculate =
     isAuthenticated &&
     profile1Id &&
@@ -78,7 +80,8 @@ export function CompatibilityWebHub({
             ? "Выбери угол связи — один тихий шаг до рассказа о паре."
             : "Pick the relationship angle — one quiet step before the pair story."
         }
-        motif="insight"
+        motif="compat"
+        plate={directionPlate}
         testId="compat-hub-direction"
       >
         <div className={journeyStyles.tabRow} role="group" aria-label={chrome.hubContextEyebrow}>
@@ -117,7 +120,8 @@ export function CompatibilityWebHub({
               ? "Два человека из круга — рассказ строится вокруг этой пары."
               : "Two people from your circle — the story is built around this pair."
         }
-        motif="why"
+        motif="compat"
+        plate="compat_night"
         testId="compat-hub-pair"
       >
         {!isAuthenticated ? (
@@ -208,7 +212,8 @@ export function CompatibilityWebHub({
             ? "Один ход — собрать историю связи в выбранном направлении."
             : "One move — build the relationship story in the chosen direction."
         }
-        motif="bridge"
+        motif="compat"
+        plate="compat_map"
         bridge
         testId="compat-hub-cta"
       >

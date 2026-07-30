@@ -113,7 +113,8 @@ export function PracticeSessionWebScreen({
               step={1}
               title={copy.leadTitle}
               lead={livingLead}
-              motif="effort"
+              motif="practice"
+              plate="practice_body"
               testId="practice-session-lead"
             >
               {title ? (
@@ -155,7 +156,8 @@ export function PracticeSessionWebScreen({
               step={2}
               title={copy.stepsTitle}
               lead={copy.stepsLead}
-              motif="today"
+              motif="practice"
+              plate="practice_still"
               testId="practice-session-steps"
             >
               <div className={s.practiceSessionCard}>{children}</div>

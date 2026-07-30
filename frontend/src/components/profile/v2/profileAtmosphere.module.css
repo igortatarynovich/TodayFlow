@@ -75,6 +75,39 @@
   opacity: 0.14;
 }
 
+/* Tarot — ritual wash distinct from shared eclipse/moon set. */
+.motif_tarot {
+  background-image:
+    url("/images/decorative/divider.svg"),
+    url("/images/cosmic/eclipse.webp");
+  background-repeat: no-repeat, no-repeat;
+  background-position: 50% 8%, 72% 68%;
+  background-size: min(14rem, 50%) auto, cover;
+  opacity: 0.2;
+}
+
+/* Compatibility — celestial map accent over night dunes wash. */
+.motif_compat {
+  background-image:
+    url("/images/cosmic/zodiac_map.webp"),
+    url("/images/cosmic/celestial_wash.webp");
+  background-repeat: no-repeat, no-repeat;
+  background-position: 94% 12%, 50% 40%;
+  background-size: min(9rem, 28%) auto, cover;
+  opacity: 0.22;
+}
+
+/* Practices — body / jungle stretch plate. */
+.motif_practice {
+  background-image:
+    url("/images/decorative/compass.svg"),
+    url("/images/cosmic/nebula.webp");
+  background-repeat: no-repeat, no-repeat;
+  background-position: 92% 14%, 40% 55%;
+  background-size: min(7rem, 22%) auto, cover;
+  opacity: 0.18;
+}
+
 :global([data-theme="dark"]) .motif_why {
   opacity: 0.22;
   color: #c9a96e;
@@ -101,5 +134,20 @@
 
 :global([data-theme="dark"]) .motif_today {
   opacity: 0.18;
+  color: #c9a96e;
+}
+
+:global([data-theme="dark"]) .motif_tarot {
+  opacity: 0.32;
+  color: #c9a96e;
+}
+
+:global([data-theme="dark"]) .motif_compat {
+  opacity: 0.3;
+  color: #c9a96e;
+}
+
+:global([data-theme="dark"]) .motif_practice {
+  opacity: 0.26;
   color: #c9a96e;
 }
