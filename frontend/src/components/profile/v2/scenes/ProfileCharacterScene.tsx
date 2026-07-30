@@ -18,6 +18,8 @@ export type ProfileCharacterSceneProps = {
   relationshipStyle?: string | null;
   moneyStyle?: string | null;
   livingChanges?: string | null;
+  /** When Act 3 owns strength/growth/pattern materials — hide warehouse triad on scroll. */
+  omitMaterialLists?: boolean;
 };
 
 const characterNav = PROFILE_V2_DEPTH_NAV.find((s) => s.id === "character");
@@ -35,13 +37,12 @@ export function ProfileCharacterScene({
   relationshipStyle = null,
   moneyStyle = null,
   livingChanges = null,
+  omitMaterialLists = false,
 }: ProfileCharacterSceneProps) {
+  const showLists = !omitMaterialLists;
   const hasBody =
-    strengthens.length ||
-    drains.length ||
-    helps.length ||
+    (showLists && (strengthens.length || drains.length || helps.length || patterns.length)) ||
     decisionStyle ||
-    patterns.length ||
     lifeMission ||
     relationshipStyle ||
     moneyStyle ||
@@ -68,7 +69,11 @@ export function ProfileCharacterScene({
             </span>
             <span id="profile-v2-character-title">{copy.title}</span>
           </p>
-          <p className={styles.zoneLead}>{copy.lead}</p>
+          <p className={styles.zoneLead}>
+            {omitMaterialLists
+              ? "Близость, деньги и стиль решений — из твоего контракта."
+              : copy.lead}
+          </p>
         </div>
       </header>
 
@@ -79,6 +84,7 @@ export function ProfileCharacterScene({
         </article>
       ) : null}
 
+      {showLists ? (
       <div className={styles.characterGrid}>
         {strengthens.length ? (
           <article
@@ -140,6 +146,7 @@ export function ProfileCharacterScene({
           </article>
         ) : null}
       </div>
+      ) : null}
 
       {decisionStyle ? (
         <article className={styles.decisionBlock} data-testid="profile-v2-character-decisions">
@@ -162,7 +169,7 @@ export function ProfileCharacterScene({
         </article>
       ) : null}
 
-      {patterns.length ? (
+      {showLists && patterns.length ? (
         <article
           className={styles.characterPanel}
           style={{ marginTop: "1rem" }}

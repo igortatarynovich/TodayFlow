@@ -1524,6 +1524,10 @@
   color: #9a9490;
 }
 
+.insightQuote .livingNote {
+  margin: 0.65rem 0 0;
+}
+
 .livingQuotes {
   list-style: none;
   margin: 0;
@@ -2021,6 +2025,14 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 0.875rem;
+}
+
+.insightCascade {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  width: 100%;
+  min-width: 0;
 }
 
 .insightSupportCard {
@@ -2830,10 +2842,6 @@
 
   .insightTriad {
     grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-  }
-
-  .insightSupportGrid[data-cols="2"] {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .effortSphereRow {

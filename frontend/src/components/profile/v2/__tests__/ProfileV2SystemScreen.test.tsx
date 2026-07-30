@@ -197,8 +197,13 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     expect(screen.getByTestId("profile-v2-insight")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-insight-node")).toHaveTextContent("Ясность vs скорость");
     expect(screen.getByTestId("profile-v2-insight-living")).toHaveTextContent("поторопился");
+    expect(screen.getByTestId("profile-v2-insight-living-note")).toHaveTextContent(/не доказательство/i);
     expect(screen.getByTestId("profile-v2-character")).toBeInTheDocument();
-    expect(screen.getByTestId("profile-v2-character-strengthens")).toHaveTextContent("система");
+    // Act 3 owns strength/growth/pattern materials — no warehouse triad on scroll.
+    expect(screen.queryByTestId("profile-v2-character-strengthens")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("profile-v2-character-drains")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("profile-v2-character-helps")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("profile-v2-character-patterns")).not.toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-effort")).toBeInTheDocument();
     expect(screen.getByTestId("profile-v2-effort-vector")).toHaveTextContent("тихий проход");
 

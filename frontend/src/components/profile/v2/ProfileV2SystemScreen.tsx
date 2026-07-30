@@ -178,6 +178,7 @@ export function ProfileV2SystemScreen({
                 relationshipStyle={model.relationshipStyle}
                 moneyStyle={model.moneyStyle}
                 livingChanges={model.frameworkLead}
+                omitMaterialLists={Boolean(insightForScroll)}
               />
             ) : null}
 

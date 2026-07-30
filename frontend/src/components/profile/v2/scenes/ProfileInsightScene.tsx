@@ -29,8 +29,8 @@ function kindClass(kind: string): string {
 }
 
 /**
- * Locked form: one node cascade (title → insight → grounded → help → living).
- * Visual accents echo the reference triad without three equal documents.
+ * Locked Forms Шаг 3: one vertical node cascade
+ * title → insight → grounded → help → living (omit empty).
  */
 export function ProfileInsightScene({ node }: ProfileInsightSceneProps) {
   const copy = PROFILE_V2_COPY.zones.insight;
@@ -75,12 +75,8 @@ export function ProfileInsightScene({ node }: ProfileInsightSceneProps) {
           <p className={styles.insightBody}>{insight}</p>
         </article>
 
-        {showGrounded || showHelp ? (
-          <div
-            className={styles.insightSupportGrid}
-            data-testid="profile-v2-insight-support"
-            data-cols={showGrounded && showHelp ? "2" : "1"}
-          >
+        {showGrounded || showHelp || showLiving ? (
+          <div className={styles.insightCascade} data-testid="profile-v2-insight-support">
             {showGrounded ? (
               <div
                 className={`${styles.insightSupportCard} ${styles.insightSupportGround}`}
@@ -100,25 +96,30 @@ export function ProfileInsightScene({ node }: ProfileInsightSceneProps) {
                 className={`${styles.insightSupportCard} ${styles.insightSupportHelp}`}
                 data-testid="profile-v2-insight-help"
               >
-                <p className={styles.insightChainLabel}>{copy.restoreLabel}</p>
+                <p className={styles.insightChainLabel}>{copy.helpLabel}</p>
                 <p className={styles.insightHelp}>{help}</p>
               </div>
             ) : null}
-          </div>
-        ) : null}
 
-        {showLiving ? (
-          <blockquote className={styles.insightQuote} data-testid="profile-v2-insight-living">
-            <span className={styles.insightQuoteMark} aria-hidden>
-              “
-            </span>
-            <p className={styles.insightChainLabel}>{copy.livingLabel}</p>
-            <ul className={styles.insightLivingList}>
-              {livingEvidence.map((q) => (
-                <li key={q}>{q}</li>
-              ))}
-            </ul>
-          </blockquote>
+            {showLiving ? (
+              <blockquote className={styles.insightQuote} data-testid="profile-v2-insight-living">
+                <span className={styles.insightQuoteMark} aria-hidden>
+                  “
+                </span>
+                <p className={styles.insightChainLabel}>{copy.livingLabel}</p>
+                <ul className={styles.insightLivingList}>
+                  {livingEvidence.map((q) => (
+                    <li key={q}>{q}</li>
+                  ))}
+                </ul>
+                {copy.livingNote ? (
+                  <p className={styles.livingNote} data-testid="profile-v2-insight-living-note">
+                    {copy.livingNote}
+                  </p>
+                ) : null}
+              </blockquote>
+            ) : null}
+          </div>
         ) : null}
       </div>
     </section>
