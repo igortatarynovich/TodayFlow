@@ -408,6 +408,18 @@ def test_assemble_projects_narrative_when_drivers_in_pool():
     assert len(out["domain_verdicts"]) == 4
 
 
+def test_event_pack_conflict_drivers_gate_when_pool_live():
+    """Runtime day_scenario uses sky-/phase- ids; gate requires non-empty natal pool."""
+    assert project.narrative_drivers_in_pool(
+        ["sky-semisquare-0", "phase-full-2026-07-30"],
+        [{"id": "pt-venus-trine-moon"}],
+    )
+    assert not project.narrative_drivers_in_pool(
+        ["sky-semisquare-0"],
+        [],
+    )
+
+
 def test_assemble_omits_stale_narrative_keeps_fresh_strip():
     """Temporal honesty: stale conflict drivers → no narrative; strip still from fresh pool."""
     user = MagicMock()
@@ -416,8 +428,8 @@ def test_assemble_omits_stale_narrative_keeps_fresh_strip():
         {"id": "a1", "rank": 1, "transiting_planet": "Venus", "aspect": "trine", "natal_point": "Moon", "orb_deg": 1.0},
         {"id": "a2", "rank": 2, "transiting_planet": "Mars", "aspect": "square", "natal_point": "Sun", "orb_deg": 0.5},
     ]
-    # Scenario still talks about moon drivers that left the pool
-    scenario = _ready_scenario(driver_ids=["stale-moon-1", "stale-moon-2"])
+    # Scenario still talks about drivers that left the pool (not event-pack prefixes)
+    scenario = _ready_scenario(driver_ids=["gone-a", "gone-b"])
 
     async def _run():
         with (

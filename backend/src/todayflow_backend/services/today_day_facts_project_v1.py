@@ -1,6 +1,7 @@
 """Wave 2 Phase D.1b — project day_scenario nest onto day_facts_v1.
 
-No dramaturgy regenerate. Temporal gate: conflict.driver_ids ⊆ fresh activations.
+No dramaturgy regenerate. Temporal gate: natal driver ids ⊆ fresh activations;
+event-pack ids require non-empty live natal pool.
 """
 
 from __future__ import annotations
@@ -20,16 +21,45 @@ def _clean(value: Any) -> str:
     return str(value or "").strip()
 
 
+def _looks_like_event_pack_driver(driver_id: str) -> bool:
+    """day_events_pack style ids (sky-/phase-/moon-/…) vs natal activation ids (pt-…)."""
+    d = (driver_id or "").strip().lower()
+    if not d or d.startswith("pt-"):
+        return False
+    prefixes = (
+        "sky-",
+        "phase-",
+        "moon-",
+        "solar-",
+        "doy-",
+        "weekday-",
+        "ingress-",
+        "eclipse-",
+        "event:",
+        "claim.",
+    )
+    return d.startswith(prefixes)
+
+
 def narrative_drivers_in_pool(
     conflict_driver_ids: list[str] | tuple[str, ...] | None,
     activations: list[dict[str, Any]] | None,
 ) -> bool:
-    """True when every conflict driver id is in the fresh activation pool."""
+    """True when conflict drivers are temporally aligned with the fresh activation pool.
+
+    - Natal-style ids: strict ⊆ pool (contract SoT).
+    - Event-pack ids (current day_scenario ranked_drivers): require non-empty fresh
+      natal pool on the same request (live Strip), not inventing a second ranker.
+    """
     ids = [str(x) for x in (conflict_driver_ids or []) if x]
     if not ids:
         return False
     pool = {str(a.get("id") or "") for a in (activations or []) if a.get("id")}
-    return set(ids) <= pool
+    if set(ids) <= pool:
+        return True
+    if all(_looks_like_event_pack_driver(i) for i in ids):
+        return len(pool) > 0
+    return False
 
 
 def load_ready_day_scenario(db: Any, *, user_id: int, local_date: Any) -> dict[str, Any] | None:
