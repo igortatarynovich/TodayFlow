@@ -4,7 +4,7 @@ Last updated: 2026-07-30
 Owner: Product + Engineering
 Status: Active working document
 
-**IN PROGRESS (2026-07-30):** Wave 2 D.1–D.2b **MERGED** · **D.3 CLOSED (Today-only revise)** · **D.4 optional next**. Practices **P1 session cycle**. ScreenFlow axis **LOCKED x**. Guest Story Surface P0 + Continuity slice 2 — **DONE**.
+**IN PROGRESS (2026-07-30):** Wave 2 D.1–D.4 **CLOSED/LIVE** · Practices **P1 session cycle** (next clean track). ScreenFlow axis **LOCKED x**. Guest Story Surface P0 + Continuity slice 2 — **DONE**.
 
 ## 1) Purpose
 
@@ -1130,6 +1130,7 @@ Historical note:
 - 2026-07-30 | Web Guest / SEO audit | **Guest Story Surface P0 (item 11)** | **DONE (LIVE)** | Curl: landing dual CTAs · `/demo/today` SSR Theme/Focus/Practice/Memory · `/onboarding/invite` · pitch CTAs · Compat Profile bridge · guest-nav primary Today·Profile·Compatibility. Evening/day-2 = slice 2. Canon [audits/GUEST_STORY_SURFACE_P0_2026-07-30.md](./audits/GUEST_STORY_SURFACE_P0_2026-07-30.md).
 - 2026-07-30 | Guest Story Continuity | **Slice 2 evening + day-2 Memory** | **DONE (FE)** | Soft close Получилось/Частично/Не получилось · First Today sticky evening · `today-zone-memory` stub→filled from Day Continuity v0 · demo Memory educational. Out of scope: server persist. Canon [audits/GUEST_STORY_CONTINUITY_SLICE2_2026-07-30.md](./audits/GUEST_STORY_CONTINUITY_SLICE2_2026-07-30.md).
 - 2026-07-30 | Web Guest / SEO audit | **/today+/profile SSR pitch body** | **DONE (LIVE)** | Independent sandbox curl: pitch SSR above bailout on /today+/profile; «Собираем стабильное…» = 0. BAILOUT remains on client widgets only. Item 11 story surface → row above.
+- 2026-07-30 | Today / Content | **Wave 2 Phase D.4 — Move if/then from scenes** | **LIVE** | Move act shows `recommended_action` / `do_not` from primary (else first) day_scenario scene; omit when empty. No invent. Helper `pickMoveIfThenFromContract`.
 - 2026-07-30 | Today / Glance | **Task #8 jargon FE shield + VerdictStrip valence punch** | **DONE (code→deploy)** | BE already experiential; FE scrubs «Венера: трин к Сатурн»; stronger valence bar/tint/sign; removed dead «Память о вчера» stub copy from composition (demo-only remains). Memory slot still filled-only.
 - 2026-07-30 | Today / Content | **Wave 2 Phase D.3 — motion retrospective** | **CLOSED** | Decision: **revise Today-only**, do not promote app-wide. Proven: TapWidget attention/completed + reduced-motion; Glance live-now; Verdict idle. Backlog: hero/card/insight `today_ui_state` motion. Canon [TODAY_MOTION_PILOT_V1](./today/TODAY_MOTION_PILOT_V1.md). Next: D.4 optional.
 - 2026-07-30 | Today / Glance | **nearest empty + rail → glance_timeline** | **DONE (code→deploy)** | Root: top ranks were biquintile without angle → 0 exact. Fix: quintile/biquintile angles + search ranks 1…12 until ≤3 timed. Rail loads real `glance_timeline` (no DEFAULT_TIMES). Contract §4 updated.

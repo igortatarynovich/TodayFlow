@@ -26,6 +26,7 @@ import { buildTodayCompatibilityHook } from "@/lib/todayCompatibilityHook";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import { TodayTapWidget } from "@/components/today/composition/TodayWave2Slots";
 import { ScreenFlowStep } from "@/design-system/primitives/ScreenFlow";
+import { pickMoveIfThenFromContract } from "@/lib/todayMoveIfThen";
 import styles from "@/components/today/composition/TodayPersonalizedProductSection.module.css";
 
 type Props = {
@@ -137,6 +138,8 @@ export function TodayPersonalizedProductSection({
   const practiceTool = strengthenTools.find((tool) => tool.id === "practice");
   const affirmationTool = strengthenTools.find((tool) => tool.id === "affirmation");
   const otherTools = strengthenTools.filter((tool) => tool.id !== "practice" && tool.id !== "affirmation");
+
+  const moveIfThen = useMemo(() => pickMoveIfThenFromContract(contract), [contract]);
 
   const narrative = useMemo(() => {
     const storyWithSky =
@@ -321,6 +324,23 @@ export function TodayPersonalizedProductSection({
         accent="support"
         testId="today-zone-move"
       >
+        {moveIfThen && (moveIfThen.do || moveIfThen.avoid) ? (
+          <article className={styles.productCard} data-testid="today-zone-move-if-then">
+            <p className={styles.cardEyebrow}>{copy.journey.moveIfThenEyebrow}</p>
+            {moveIfThen.do ? (
+              <div className={styles.moveIfThenRow} data-testid="today-move-do">
+                <p className={styles.moveIfThenLabel}>{copy.journey.moveDoLabel}</p>
+                <p className={styles.readingParagraph}>{moveIfThen.do}</p>
+              </div>
+            ) : null}
+            {moveIfThen.avoid ? (
+              <div className={styles.moveIfThenRow} data-testid="today-move-avoid">
+                <p className={styles.moveIfThenLabel}>{copy.journey.moveAvoidLabel}</p>
+                <p className={styles.readingParagraph}>{moveIfThen.avoid}</p>
+              </div>
+            ) : null}
+          </article>
+        ) : null}
         <article className={styles.productCard} data-testid="today-zone-promise">
           <p className={styles.cardEyebrow}>Цель на сегодня</p>
           {dayGoal && !goalDraftOpen ? (

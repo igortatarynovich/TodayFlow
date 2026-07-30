@@ -649,6 +649,19 @@
   color: var(--tdp-accent, #c9a96e);
 }
 
+.moveIfThenRow + .moveIfThenRow {
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(212, 184, 150, 0.28);
+}
+
+.moveIfThenLabel {
+  margin: 0 0 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--tdp-ink-muted, #7a7168);
+}
+
 .cardTitle {
   margin: 0;
   font-family: var(--tdp-font-display, "Instrument Serif", Georgia, serif);

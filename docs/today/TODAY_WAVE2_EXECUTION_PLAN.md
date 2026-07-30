@@ -1,6 +1,6 @@
 # Today Wave 2 — Execution Plan
 
-**Status:** Phase A **LIVE** · Phase 0.5.2 **CLOSED** · Phase B/B′ **LIVE** · Phase C **LIVE** · Phase D.1 **LIVE** · Phase D.1b **LIVE** · Phase D.2 **LIVE** · Phase D.2b **LIVE** · Phase D.3 **CLOSED (revise Today-only)** · D.4 next
+**Status:** Phase A **LIVE** · Phase 0.5.2 **CLOSED** · Phase B/B′ **LIVE** · Phase C **LIVE** · Phase D.1 **LIVE** · Phase D.1b **LIVE** · Phase D.2 **LIVE** · Phase D.2b **LIVE** · Phase D.3 **CLOSED (revise Today-only)** · Phase D.4 **LIVE**
 **Depends on:** Wave 1 ActShell LIVE (`TodayActShell` + reserved slots)  
 **Canon companions:**
 - [TODAY_WAVE2_CONTRACT_V1.md](./TODAY_WAVE2_CONTRACT_V1.md) — `day_facts_v1`, slots, tap, accuracy
@@ -133,7 +133,7 @@ Trust bug to avoid: VerdictStrip says «money: friction» while Act 3 narrates a
 | D.2 | day_facts narrative honesty: project only when `conflict.driver_ids` all `pt-*` ⊆ pool; revert Act3 demotion — **LIVE** |
 | D.2b | Generation SoT: `conflict.driver_ids` from natal activations (`pt-*` top-N) when present; pack stays on foundation — **LIVE** |
 | D.3 | Motion pilot retrospective: promote motion doc to app-wide or revise classes | **CLOSED** — revise Today-only; Tap + live-now + Verdict idle proven; no app-wide promote. See [TODAY_MOTION_PILOT_V1 D.3](./TODAY_MOTION_PILOT_V1.md#d3-retrospective-2026-07-30) |
-| D.4 | Optional Act 4 if/then copy from `scenes[].recommended_action` / traps (only if still needed after A–C) |
+| D.4 | Optional Act 4 if/then copy from `scenes[].recommended_action` / traps (only if still needed after A–C) | **LIVE** — Move shows if/then from primary (else first) scene `recommended_action`/`do_not`; empty = omit |
 
 ---
 
