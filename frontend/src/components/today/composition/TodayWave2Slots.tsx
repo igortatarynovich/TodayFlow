@@ -1,7 +1,8 @@
 "use client";
 
 /**
- * Wave 2 slots — VerdictStrip Phase B + TapWidget Phase A; Glance stub.
+ * Wave 2 slots — VerdictStrip Phase B + GlanceTimeline Phase C + TapWidget Phase A.
+ * Prefer parent day_facts payload (D.1); standalone fetchDayFacts as fallback.
  */
 import { useEffect, useState } from "react";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
@@ -9,7 +10,6 @@ import styles from "@/components/today/composition/TodayWave2Slots.module.css";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import {
   DOMAIN_LABEL_RU,
-  fetchDomainVerdicts,
   orderDomainVerdicts,
   VERDICT_LABEL_RU,
   type DomainKey,
@@ -25,31 +25,65 @@ import {
   type TapResponseCode,
 } from "@/lib/todayTapWidget";
 import {
-  fetchGlanceTimeline,
   formatGlanceClock,
   isGlanceLiveNow,
   type GlanceTimelineItem,
 } from "@/lib/todayGlanceTimeline";
+import { fetchDayFacts, type DayFactsResponse } from "@/lib/todayDayFacts";
 import {
   todaySlotFailureCopy,
   type TodaySlotLoadFailure,
 } from "@/lib/todaySlotAvailability";
 
-type VerdictStripProps = {
-  dateISO: string;
+export type DayFactsSlotSlice = {
+  domain_verdicts?: DomainVerdict[];
+  glance_timeline?: GlanceTimelineItem[];
+  day_facts_id?: string | null;
+  is_fallback?: boolean;
+  degraded?: boolean;
+  loadFailure?: TodaySlotLoadFailure | null;
 };
 
-export function TodayVerdictStripSlot({ dateISO }: VerdictStripProps) {
-  const [rows, setRows] = useState<DomainVerdict[] | null>(null);
-  const [failure, setFailure] = useState<TodaySlotLoadFailure | null>(null);
-  const [loaded, setLoaded] = useState(false);
+type VerdictStripProps = {
+  dateISO: string;
+  dayFacts?: DayFactsSlotSlice | null;
+};
+
+function failureFromDayFacts(data: DayFactsSlotSlice): TodaySlotLoadFailure | null {
+  if (data.loadFailure) return data.loadFailure;
+  if (data.is_fallback ?? data.degraded) return "unavailable";
+  return null;
+}
+
+export function TodayVerdictStripSlot({ dateISO, dayFacts = null }: VerdictStripProps) {
+  const fromParent = dayFacts != null;
+  const [rows, setRows] = useState<DomainVerdict[] | null>(() =>
+    fromParent ? orderDomainVerdicts(dayFacts?.domain_verdicts ?? []) : null,
+  );
+  const [failure, setFailure] = useState<TodaySlotLoadFailure | null>(() =>
+    fromParent ? failureFromDayFacts(dayFacts ?? {}) : null,
+  );
+  const [loaded, setLoaded] = useState(fromParent);
 
   useEffect(() => {
+    if (dayFacts != null) {
+      const parentFail = failureFromDayFacts(dayFacts);
+      if (parentFail) {
+        setFailure(parentFail);
+        setRows([]);
+      } else {
+        setFailure(null);
+        setRows(orderDomainVerdicts(dayFacts.domain_verdicts ?? []));
+      }
+      setLoaded(true);
+      return;
+    }
+
     let cancelled = false;
     setLoaded(false);
     setFailure(null);
-    void fetchDomainVerdicts(dateISO)
-      .then((data) => {
+    void fetchDayFacts(dateISO)
+      .then((data: DayFactsResponse) => {
         if (cancelled) return;
         if (data.is_fallback ?? data.degraded) {
           setFailure("unavailable");
@@ -69,7 +103,7 @@ export function TodayVerdictStripSlot({ dateISO }: VerdictStripProps) {
     return () => {
       cancelled = true;
     };
-  }, [dateISO]);
+  }, [dateISO, dayFacts]);
 
   if (!loaded) {
     return (
@@ -155,18 +189,42 @@ export function TodayVerdictStripSlot({ dateISO }: VerdictStripProps) {
   );
 }
 
-export function TodayGlanceTimelineSlot({ dateISO }: { dateISO: string }) {
-  const [rows, setRows] = useState<GlanceTimelineItem[]>([]);
-  const [failure, setFailure] = useState<TodaySlotLoadFailure | null>(null);
-  const [loaded, setLoaded] = useState(false);
+export function TodayGlanceTimelineSlot({
+  dateISO,
+  dayFacts = null,
+}: {
+  dateISO: string;
+  dayFacts?: DayFactsSlotSlice | null;
+}) {
+  const fromParent = dayFacts != null;
+  const [rows, setRows] = useState<GlanceTimelineItem[]>(() =>
+    fromParent ? (dayFacts?.glance_timeline ?? []) : [],
+  );
+  const [failure, setFailure] = useState<TodaySlotLoadFailure | null>(() =>
+    fromParent ? failureFromDayFacts(dayFacts ?? {}) : null,
+  );
+  const [loaded, setLoaded] = useState(fromParent);
   const [nowTick, setNowTick] = useState(() => new Date());
 
   useEffect(() => {
+    if (dayFacts != null) {
+      const parentFail = failureFromDayFacts(dayFacts);
+      if (parentFail) {
+        setFailure(parentFail);
+        setRows([]);
+      } else {
+        setFailure(null);
+        setRows(dayFacts.glance_timeline ?? []);
+      }
+      setLoaded(true);
+      return;
+    }
+
     let cancelled = false;
     setLoaded(false);
     setFailure(null);
-    void fetchGlanceTimeline(dateISO)
-      .then((data) => {
+    void fetchDayFacts(dateISO)
+      .then((data: DayFactsResponse) => {
         if (cancelled) return;
         if (data.is_fallback ?? data.degraded) {
           setFailure("unavailable");
@@ -186,7 +244,7 @@ export function TodayGlanceTimelineSlot({ dateISO }: { dateISO: string }) {
     return () => {
       cancelled = true;
     };
-  }, [dateISO]);
+  }, [dateISO, dayFacts]);
 
   useEffect(() => {
     if (rows.length === 0) return;

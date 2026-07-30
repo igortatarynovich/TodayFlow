@@ -235,11 +235,11 @@ def map_weight_to_verdict(weight: float, *, aspect: str | None = None) -> str:
 
 
 def why_short_for(transiting_planet: str, aspect: str, natal_point: str) -> str:
-    t = _PLANET_RU.get(_norm(transiting_planet), (transiting_planet or "").strip() or "Транзит")
-    a = _ASPECT_RU.get(_norm(aspect), _norm(aspect) or "аспект")
-    n = _PLANET_RU.get(_norm(natal_point), (natal_point or "").strip() or "точка")
-    # ≤ ~10 words RU
-    return f"{t}: {a} к {n}"
+    """Experiential why — no planet/aspect jargon (contract §3.3)."""
+    from todayflow_backend.services.today_activation_copy_v1 import aspect_class_why_short
+
+    _ = (transiting_planet, natal_point)  # signature kept for call sites
+    return aspect_class_why_short(aspect)
 
 
 def natal_point_in_domain(natal_point: str, domain: str) -> bool:

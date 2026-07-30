@@ -111,20 +111,11 @@ def glance_valence(aspect: str, transiting_planet: str) -> str:
 
 
 def label_short_for(transiting_planet: str, aspect: str) -> str:
-    """≤ ~4 words RU — no degrees / aspect jargon (contract §4)."""
-    planet = _PLANET_RU.get(_norm(transiting_planet), (transiting_planet or "").strip() or "Небо")
-    asp = _norm(aspect)
-    if asp in ("trine", "sextile"):
-        return f"{planet} мягче"
-    if asp == "square":
-        return f"{planet} давит"
-    if asp == "opposition":
-        return f"{planet} на пике"
-    if asp == "conjunction":
-        return f"{planet} близко"
-    if asp == "quincunx":
-        return f"{planet} скользит"
-    return f"{planet} сегодня"
+    """≤ ~4 words RU — no planet/aspect jargon (contract §4)."""
+    from todayflow_backend.services.today_activation_copy_v1 import aspect_class_label_short
+
+    _ = transiting_planet  # signature kept for call sites
+    return aspect_class_label_short(aspect)
 
 
 def local_day_bounds(local_date: date, timezone_name: str) -> tuple[datetime, datetime]:

@@ -33,7 +33,9 @@ def test_top_driver_not_sum_for_clustered_work():
     assert work["logic_source"] == "top_driver_v1"
     assert work["verdict"] == "charged"
     assert work["driver_ids"] == ["a3"]
-    assert "Марс" in work["why_short"] or "Mars" in work["why_short"]
+    assert "Марс" not in work["why_short"]
+    assert "квадрат" not in work["why_short"].lower()
+    assert work["why_short"]  # experiential bank, not empty
 
 
 def test_empty_activations_calm_all_domains():

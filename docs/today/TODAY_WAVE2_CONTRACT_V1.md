@@ -1,6 +1,6 @@
 # Today Wave 2 — Data Contract `day_facts_v1`
 
-**Status:** CONTRACT (docs only — not implemented)  
+**Status:** Phase D.1 **PARTIAL LIVE** (`GET /today/day-facts` slot envelope — activations + domain_verdicts + glance_timeline; full narrative blob deferred to D.1b)  
 **Execution order:** [TODAY_WAVE2_EXECUTION_PLAN.md](./TODAY_WAVE2_EXECUTION_PLAN.md)  
 **Motion (pilot):** [TODAY_MOTION_PILOT_V1.md](./TODAY_MOTION_PILOT_V1.md)
 
@@ -380,6 +380,15 @@ Opens with the **first code PR** (Phase A), not with docs lock alone.
 - **Migration:** none
 - **Canon:** this file §4 · [TODAY_WAVE2_EXECUTION_PLAN](./TODAY_WAVE2_EXECUTION_PLAN.md) Phase C
 - **Backward compatible:** old clients ignore slot; no change to day_story / today_contract fields
+
+### Phase D.1 (day_facts slot envelope) — code PR
+
+- **SoT before:** Strip via `GET /today/domain-verdicts`; Glance via `GET /today/glance-timeline`; both independently resolve activations
+- **SoT after:** Screen slots prefer `GET /today/day-facts?local_date=`; one `assemble_day_facts_v1` per load. Interim endpoints reimplemented as **slices** of the same assembler (no second ranker). Experiential `why_short` / `label_short` via `today_activation_copy_v1`
+- **Public JSON:** yes — new `day_facts_v1` partial envelope (`partial: true`); old endpoints backward compatible
+- **Migration:** none
+- **Canon:** this file status · [TODAY_WAVE2_EXECUTION_PLAN](./TODAY_WAVE2_EXECUTION_PLAN.md) Phase D.1
+- **Backward compatible:** yes — interim GETs remain; FE day-facts client cache dedupes Act 1/2
 
 ---
 
