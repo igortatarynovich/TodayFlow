@@ -1,7 +1,7 @@
 "use client";
 
 import type { ComponentProps, ReactNode } from "react";
-import { ScreenFlow, ScreenFlowStep } from "@/design-system/primitives/ScreenFlow";
+import { ScreenFlow, ScreenFlowStep, TODAY_SCREEN_FLOW_AXIS } from "@/design-system/primitives/ScreenFlow";
 import { TodayActShell } from "@/components/today/composition/TodayActShell";
 import { TodayActNav } from "@/components/today/composition/TodayActNav";
 import { TodayGlanceAct } from "@/components/today/composition/TodayGlanceAct";
@@ -26,13 +26,25 @@ export type TodayProductScreenFlowProps = {
   showSymbols: boolean;
   symbolsBody: ReactNode;
   showPersonalized: boolean;
-  personalizedProps: Omit<PersonalizedProps, "asScreenFlowSteps">;
+  personalizedProps: Omit<PersonalizedProps, "asScreenFlowSteps" | "actFilter">;
   activeIndex: number;
   onIndexChange: (index: number, meta: { reason: ScreenFlowChangeReason }) => void;
   embeddedInWebDashboard?: boolean;
   topRowSection?: ReactNode;
   greetingSection?: ReactNode;
 };
+
+/** Phase 2b indices: Glance → Plot → [Symbols?] → Reading → Move → Response */
+export function todayScreenFlowStepCount(opts: {
+  showSymbols: boolean;
+  showPersonalized: boolean;
+}): number {
+  return 2 + (opts.showSymbols ? 1 : 0) + (opts.showPersonalized ? 3 : 0);
+}
+
+export function todayScreenFlowReadingIndex(showSymbols: boolean): number {
+  return showSymbols ? 3 : 2;
+}
 
 export function TodayProductScreenFlow({
   dateISO,
@@ -54,12 +66,20 @@ export function TodayProductScreenFlow({
   topRowSection = null,
   greetingSection = null,
 }: TodayProductScreenFlowProps) {
+  const readingIndex = todayScreenFlowReadingIndex(showSymbols);
+  const moveIndex = readingIndex + 1;
+  const responseIndex = readingIndex + 2;
+
   const navItems = [
     { step: 0, label: copy.journey.actNavGlance },
     { step: 1, label: copy.journey.actNavPlot },
     ...(showSymbols ? [{ step: 2, label: copy.journey.actNavSymbols }] : []),
     ...(showPersonalized
-      ? [{ step: 3, label: copy.journey.actNavReading }]
+      ? [
+          { step: readingIndex, label: copy.journey.actNavReading },
+          { step: moveIndex, label: copy.journey.actNavMove },
+          { step: responseIndex, label: copy.journey.actNavBridge },
+        ]
       : []),
   ];
 
@@ -73,7 +93,7 @@ export function TodayProductScreenFlow({
           {
             id: "reading",
             label: copy.journey.actNavReading,
-            onSelect: () => onIndexChange(showSymbols ? 3 : 2, { reason: "select" as const }),
+            onSelect: () => onIndexChange(readingIndex, { reason: "select" as const }),
           },
         ]
       : []),
@@ -93,7 +113,7 @@ export function TodayProductScreenFlow({
       <ScreenFlow
         activeIndex={activeIndex}
         onIndexChange={onIndexChange}
-        axis="x"
+        axis={TODAY_SCREEN_FLOW_AXIS}
         showChrome
         testId="today-screen-flow"
       >
@@ -131,9 +151,17 @@ export function TodayProductScreenFlow({
         ) : null}
 
         {showPersonalized ? (
-          <ScreenFlowStep id="personal" label={copy.journey.actNavReading} scrollable>
-            <TodayPersonalizedProductSection {...personalizedProps} />
-          </ScreenFlowStep>
+          <>
+            <ScreenFlowStep id="reading" label={copy.journey.actNavReading} scrollable>
+              <TodayPersonalizedProductSection {...personalizedProps} actFilter="reading" />
+            </ScreenFlowStep>
+            <ScreenFlowStep id="move" label={copy.journey.actNavMove} scrollable>
+              <TodayPersonalizedProductSection {...personalizedProps} actFilter="move" />
+            </ScreenFlowStep>
+            <ScreenFlowStep id="response" label={copy.journey.actNavBridge} scrollable>
+              <TodayPersonalizedProductSection {...personalizedProps} actFilter="response" />
+            </ScreenFlowStep>
+          </>
         ) : null}
       </ScreenFlow>
     </div>

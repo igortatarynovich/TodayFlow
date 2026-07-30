@@ -247,8 +247,9 @@
       const rect = container.getBoundingClientRect();
       const x = touch.clientX - rect.left;
       const y = touch.clientY - rect.top;
-      const deadzone = 16;
-      if (axis === "x" && (x < deadzone || x > rect.width - deadzone)) return;
+      const deadzone = 24;
+      if (axis === "x" && x < deadzone) return;
+      // Right-edge ignore optional; left edge is the iOS back-gesture risk.
       if (axis === "y" && (y < deadzone || y > rect.height - deadzone)) return;
       touchStart = { x: touch.clientX, y: touch.clientY };
     });

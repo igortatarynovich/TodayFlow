@@ -26,7 +26,7 @@ export function TodayActNav({ items, activeIndex, onSelect }: Props) {
     <nav className={styles.nav} aria-label="Экраны дня" data-testid="today-act-nav">
       <ul className={styles.list}>
         {items.map((item, index) => {
-          const isActive = controlled ? activeIndex === index : index === 0;
+          const isActive = controlled ? activeIndex === item.step : index === 0;
           if (controlled) {
             return (
               <li key={`${item.label}-${item.step}`}>
@@ -34,8 +34,8 @@ export function TodayActNav({ items, activeIndex, onSelect }: Props) {
                   type="button"
                   className={isActive ? styles.linkActive : styles.link}
                   aria-current={isActive ? "true" : undefined}
-                  data-testid={`today-act-nav-${index}`}
-                  onClick={() => onSelect(index)}
+                  data-testid={`today-act-nav-${item.step}`}
+                  onClick={() => onSelect(item.step)}
                 >
                   <span className={styles.step}>{item.step}</span>
                   <span className={styles.label}>{item.label}</span>

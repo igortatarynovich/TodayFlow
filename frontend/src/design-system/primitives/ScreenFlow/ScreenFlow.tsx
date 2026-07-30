@@ -20,8 +20,14 @@ import { usePrefersReducedMotion } from "@/design-system/motion/usePrefersReduce
 import { joinClass } from "@/design-system/utils/joinClass";
 import styles from "@/design-system/primitives/ScreenFlow/ScreenFlow.module.css";
 
-/** Provisional default — confirm on real Safari/Chrome; deadzone mitigates iOS back-edge. */
+/** Product Today locks `TODAY_SCREEN_FLOW_AXIS`; primitive still accepts x|y. */
 export type ScreenFlowAxis = "x" | "y";
+
+/** Locked SoT for product Today ScreenFlow (see SCREEN_FLOW_V1 §2). */
+export const TODAY_SCREEN_FLOW_AXIS: ScreenFlowAxis = "x";
+
+/** Left-edge ignore band for axis=x — reduces clash with iOS edge-back. */
+export const SCREEN_FLOW_EDGE_DEADZONE_PX = 24;
 
 export type ScreenFlowStepStatus =
   | "pending"
@@ -141,7 +147,7 @@ export function ScreenFlow({
   axis = "x",
   children,
   className,
-  edgeDeadzonePx = 16,
+  edgeDeadzonePx = SCREEN_FLOW_EDGE_DEADZONE_PX,
   testId = "screen-flow",
   showChrome = true,
 }: ScreenFlowProps) {

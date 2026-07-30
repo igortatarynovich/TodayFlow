@@ -11,7 +11,7 @@ import { TodayEveningProductClose } from "@/components/today/composition/TodayEv
 import { TodayPersonalizedProductSection } from "@/components/today/composition/TodayPersonalizedProductSection";
 import { TodayActShell } from "@/components/today/composition/TodayActShell";
 import { TodayActNav } from "@/components/today/composition/TodayActNav";
-import { TodayProductScreenFlow } from "@/components/today/composition/TodayProductScreenFlow";
+import { TodayProductScreenFlow, todayScreenFlowStepCount } from "@/components/today/composition/TodayProductScreenFlow";
 import {
   resolveScreenFlowEntryIndex,
   type ScreenFlowChangeReason,
@@ -357,8 +357,12 @@ export function TodayCompositionSurface(props: Props) {
     screenFlowEntryApplied.current = true;
     if (typeof window === "undefined") return;
     const sp = new URLSearchParams(window.location.search);
-    setScreenFlowIndex(resolveScreenFlowEntryIndex({ searchParams: sp, stepCount: 6 }));
-  }, [useProductFoundation]);
+    const stepCount = todayScreenFlowStepCount({
+      showSymbols: showSymbolsAct,
+      showPersonalized: useProductPersonalized,
+    });
+    setScreenFlowIndex(resolveScreenFlowEntryIndex({ searchParams: sp, stepCount }));
+  }, [useProductFoundation, showSymbolsAct, useProductPersonalized]);
 
   const onScreenFlowIndexChange = useCallback(
     (index: number, meta: { reason: ScreenFlowChangeReason }) => {

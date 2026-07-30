@@ -317,7 +317,10 @@ describe("TodayCompositionSurface", () => {
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
 
     expect(screen.queryByTestId("today-zone-ritual-gates")).not.toBeInTheDocument();
-    expect(screen.getByTestId("today-zone-personal")).toBeInTheDocument();
+    expect(screen.getByTestId("today-zone-reading")).toBeInTheDocument();
+    expect(screen.getByTestId("today-zone-move")).toBeInTheDocument();
+    expect(screen.getByTestId("today-zone-bridges-wrap")).toBeInTheDocument();
+    expect(screen.queryByTestId("today-zone-personal")).not.toBeInTheDocument();
     expect(screen.queryByTestId("today-zone-strengthen")).not.toBeInTheDocument();
     expect(screen.queryByTestId("today-soft-why")).not.toBeInTheDocument();
     expect(screen.getByTestId("today-entity-synthesis")).toBeInTheDocument();
@@ -384,9 +387,12 @@ describe("TodayCompositionSurface", () => {
     );
     const user = userEvent.setup();
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
-    // ScreenFlow: promise lives on Move step — navigate via act nav when present
-    const personalNav = screen.queryByTestId("today-act-nav-3") || screen.queryByTestId("today-act-nav-2");
-    if (personalNav) await user.click(personalNav);
+    // Phase 2b: promise lives on Move — ActNav uses ScreenFlow step ids
+    const moveNav =
+      screen.queryByRole("button", { name: /Действие/i }) ||
+      screen.queryByTestId("today-act-nav-4") ||
+      screen.queryByTestId("today-act-nav-3");
+    if (moveNav) await user.click(moveNav);
     await user.click(screen.getByTestId("today-zone-promise-open"));
     expect(screen.getByTestId("today-entity-daily-goal")).toBeInTheDocument();
   });

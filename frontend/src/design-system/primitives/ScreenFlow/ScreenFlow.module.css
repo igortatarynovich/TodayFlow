@@ -10,6 +10,7 @@
   min-height: 28rem;
   overflow: hidden;
   box-sizing: border-box;
+  overscroll-behavior: none;
 }
 
 .root[data-axis="x"] { touch-action: pan-y; }
@@ -109,6 +110,7 @@
 .stepScrollable {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
 }
 
 .stepHeading {

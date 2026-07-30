@@ -38,11 +38,17 @@ describe("ScreenFlow", () => {
     expect(screen.getByTestId("screen-flow-fail-d")).toHaveTextContent("Нет соединения.");
   });
 
-  it("supports both axes", () => {
+  it("supports both axes on the primitive; Today locks x", () => {
     const { rerender } = render(<Harness axis="x" />);
     expect(screen.getByTestId("screen-flow")).toHaveAttribute("data-axis", "x");
     rerender(<Harness axis="y" />);
     expect(screen.getByTestId("screen-flow")).toHaveAttribute("data-axis", "y");
+  });
+
+  it("exports locked Today axis and edge deadzone", async () => {
+    const mod = await import("@/design-system/primitives/ScreenFlow");
+    expect(mod.TODAY_SCREEN_FLOW_AXIS).toBe("x");
+    expect(mod.SCREEN_FLOW_EDGE_DEADZONE_PX).toBe(24);
   });
 });
 

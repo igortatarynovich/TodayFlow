@@ -107,16 +107,22 @@ Meaning events: см. [TODAY_PERSONALIZATION_CORE.md](../TODAY_PERSONALIZATION_C
 
 ---
 
-## 2. Axis (provisional)
+## 2. Axis (locked)
 
-**Default (provisional):** `axis="x"` (horizontal swipe).
+**Default (locked for Today):** `axis="x"` (`TODAY_SCREEN_FLOW_AXIS`).
 
-**Реальные устройства:** требуют pilot на iOS / Android — edge gestures (iOS edge-back на left swipe) и pull-to-refresh (y axis вниз) могут конфликтовать.
+| Axis | Fits Today? | Why |
+|------|-------------|-----|
+| **x** | **Yes — locked** | Steps are `scrollable` (in-step vertical pan). `touch-action: pan-y` keeps content scroll. Transform pager on horizontal. |
+| **y** | No for Today | Conflicts with in-step overflow scroll **and** mobile pull-to-refresh. Primitive still accepts `axis="y"` for non-scrollable pilots / fixtures. |
 
-**Risk Y:** Pull-to-refresh на мобильном браузере.  
-**Risk X:** iOS edge-back gesture (left swipe) может перехватывать ScreenFlow swipe.
+**iOS edge-back (risk X):** mitigated by `SCREEN_FLOW_EDGE_DEADZONE_PX` (24) — touches starting in the left band do not change step. Nav buttons / dots / keyboard remain primary alternatives.
 
-**Decision:** После pilot на real device финализировать. Пока — x, но готовность к переключению.
+**Evidence (2026-07-30):**
+- Playwright harness `e2e/screen-flow-harness.spec.ts` — axis x **and** y: transform pager, no document overflow, @390×844; swipe + left-edge deadzone on x.
+- Product choice for Today: **x** (scrollable steps). Physical Safari/Chrome residual smoke welcome; not a gate to keep provisional.
+
+**Constants:** `TODAY_SCREEN_FLOW_AXIS`, `SCREEN_FLOW_EDGE_DEADZONE_PX` in `ScreenFlow.tsx`.
 
 ---
 
@@ -136,20 +142,22 @@ Meaning events: см. [TODAY_PERSONALIZATION_CORE.md](../TODAY_PERSONALIZATION_C
 
 ## 4. Today mapping
 
-| Index | Job | Notes (Phase 2a LIVE) |
+| Index | Job | Notes (Phase 2b LIVE) |
 |-------|-----|------------------------|
 | 0 Glance | 1с тема | title + thesis · VerdictStrip · **one** nearest Glance mark · teaser icons |
 | 1 Plot | разворот | narrative hero / pulse / dialogue |
 | 2 Symbols | ритуал | optional when gates/impacts present · full GlanceTimeline |
-| 3 Personal | чтение+действие+отклик | **interim:** Reading/Move/Response bundled in one scrollable step (TapWidget inside). Split to 3 discrete steps = Phase 2b. |
+| 3 Reading | чтение дня | narrative chapters / synthesis (`actFilter="reading"`) |
+| 4 Move | действие | promise · strengthen · habits (`actFilter="move"`) |
+| 5 Response | отклик | TapWidget + bridges (`actFilter="response"`) |
 
-Target end-state (Phase 2b): Reading / Move / Response as separate ScreenFlow steps (indices 3–5).
+When Symbols is omitted, Reading/Move/Response shift left (indices 2–4). Step count = `2 + (symbols?1:0) + (personalized?3:0)`.
 
 Re-entry: ordinary visit → **0**; deep-link only with `sf=1&step=N`.
 
 **Contract:** [TODAY_WAVE2_CONTRACT_V1.md](../today/TODAY_WAVE2_CONTRACT_V1.md) — `day_facts_v1` + `day_story` → Today Contract Assembler.
 
-**Композиция:** `TodayProductScreenFlow.tsx` — обёртка вокруг `ScreenFlow` + `TodayActNav` controlled.
+**Композиция:** `TodayProductScreenFlow.tsx` — обёртка вокруг `ScreenFlow` + `TodayActNav` controlled; personal acts via `actFilter` (not nested `asScreenFlowSteps` — ScreenFlow collects only JSX-tree `ScreenFlowStep` children).
 
 ---
 
@@ -203,13 +211,24 @@ Re-entry: ordinary visit → **0**; deep-link only with `sf=1&step=N`.
 
 ## 7. Changelog
 
+### 2026-07-30 — v1.2 (axis lock)
+
+- **Axis:** Today locks `x` (`TODAY_SCREEN_FLOW_AXIS`); edge deadzone 24px; `overscroll-behavior` on root / scrollable steps
+- **y:** remains on primitive for fixtures; not used by Today product flow
+
+### 2026-07-30 — v1.1 (Phase 2b)
+
+- **Today mapping:** Personal interim bundle → discrete Reading / Move / Response steps
+- **Nav:** ActNav chips for Чтение · Действие · Отклик when personalized ready
+- **Impl:** `actFilter` on `TodayPersonalizedProductSection` inside direct `ScreenFlowStep` children
+
 ### 2026-07-30 — v1.0 (init)
 
 - **Added:** ScreenFlow V1 canon (transform-only · viewport lock · swipe · keyboard · a11y)
 - **Mapping:** Today 6 steps (Glance → Plot → Symbols → Reading → Move → Response)
 - **Primitive:** `ScreenFlow` + `ScreenFlowStep` + tests
 - **Analytics:** `screen_flow_step_reached` meaning event
-- **Axis:** provisional `x` (pending real-device pilot)
+- **Axis:** provisional `x` → **superseded by v1.2 lock**
 - **Loading matrix:** pending/ready/empty/failed/degraded — no fake content rule
 - **Re-entry:** default index 0, deep-link via `?sf=1&step=N` optional
 - **Landing excluded:** Landing — marketing, не product steps
