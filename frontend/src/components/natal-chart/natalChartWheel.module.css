@@ -32,38 +32,60 @@
   border-radius: 0;
   border: none;
   box-shadow: none;
-  background:
-    radial-gradient(ellipse 70% 55% at 50% 42%, rgba(255, 248, 236, 0.14) 0%, transparent 58%),
-    radial-gradient(circle at 50% 50%, transparent 28%, rgba(12, 14, 20, 0.55) 100%),
-    linear-gradient(165deg, #1c222c 0%, #2a241c 48%, #17151a 100%);
+  /* Brand starfield under translucent washes — clipped by stage overflow. */
+  background-color: #0e1218;
+  background-image:
+    radial-gradient(ellipse 70% 55% at 50% 42%, rgba(255, 248, 236, 0.12) 0%, transparent 58%),
+    radial-gradient(circle at 50% 50%, transparent 24%, rgba(12, 14, 20, 0.52) 100%),
+    linear-gradient(165deg, rgba(28, 34, 44, 0.55) 0%, rgba(42, 36, 28, 0.48) 48%, rgba(23, 21, 26, 0.62) 100%),
+    url("/images/cosmic/stars.webp");
+  background-repeat: no-repeat;
+  background-position: center, center, center, center 40%;
+  background-size: auto, auto, auto, cover;
 }
 
 .stage[data-element="fire"] {
-  background:
-    radial-gradient(ellipse 65% 50% at 50% 40%, rgba(196, 120, 42, 0.28) 0%, transparent 55%),
-    radial-gradient(circle at 50% 50%, transparent 26%, rgba(18, 12, 8, 0.62) 100%),
-    linear-gradient(168deg, #2a1c14 0%, #3a2818 45%, #141018 100%);
+  background-image:
+    radial-gradient(ellipse 65% 50% at 50% 40%, rgba(196, 120, 42, 0.3) 0%, transparent 55%),
+    radial-gradient(circle at 50% 50%, transparent 22%, rgba(18, 12, 8, 0.55) 100%),
+    linear-gradient(168deg, rgba(42, 28, 20, 0.58) 0%, rgba(58, 40, 24, 0.5) 45%, rgba(20, 16, 24, 0.65) 100%),
+    url("/images/cosmic/stars.webp");
+  background-repeat: no-repeat;
+  background-position: center, center, center, center 40%;
+  background-size: auto, auto, auto, cover;
 }
 
 .stage[data-element="earth"] {
-  background:
-    radial-gradient(ellipse 65% 50% at 50% 40%, rgba(139, 106, 62, 0.26) 0%, transparent 55%),
-    radial-gradient(circle at 50% 50%, transparent 26%, rgba(14, 12, 8, 0.6) 100%),
-    linear-gradient(168deg, #241e16 0%, #32281c 46%, #12110e 100%);
+  background-image:
+    radial-gradient(ellipse 65% 50% at 50% 40%, rgba(139, 106, 62, 0.28) 0%, transparent 55%),
+    radial-gradient(circle at 50% 50%, transparent 22%, rgba(14, 12, 8, 0.52) 100%),
+    linear-gradient(168deg, rgba(36, 30, 22, 0.58) 0%, rgba(50, 40, 28, 0.5) 46%, rgba(18, 17, 14, 0.65) 100%),
+    url("/images/cosmic/stars.webp");
+  background-repeat: no-repeat;
+  background-position: center, center, center, center 40%;
+  background-size: auto, auto, auto, cover;
 }
 
 .stage[data-element="air"] {
-  background:
-    radial-gradient(ellipse 65% 50% at 50% 40%, rgba(74, 93, 115, 0.32) 0%, transparent 55%),
-    radial-gradient(circle at 50% 50%, transparent 26%, rgba(10, 14, 22, 0.64) 100%),
-    linear-gradient(168deg, #161c28 0%, #1e2836 46%, #0e1218 100%);
+  background-image:
+    radial-gradient(ellipse 65% 50% at 50% 40%, rgba(74, 93, 115, 0.34) 0%, transparent 55%),
+    radial-gradient(circle at 50% 50%, transparent 22%, rgba(10, 14, 22, 0.55) 100%),
+    linear-gradient(168deg, rgba(22, 28, 40, 0.55) 0%, rgba(30, 40, 54, 0.48) 46%, rgba(14, 18, 24, 0.65) 100%),
+    url("/images/cosmic/stars.webp");
+  background-repeat: no-repeat;
+  background-position: center, center, center, center 40%;
+  background-size: auto, auto, auto, cover;
 }
 
 .stage[data-element="water"] {
-  background:
-    radial-gradient(ellipse 65% 50% at 50% 40%, rgba(90, 104, 120, 0.3) 0%, transparent 55%),
-    radial-gradient(circle at 50% 50%, transparent 26%, rgba(8, 12, 18, 0.64) 100%),
-    linear-gradient(168deg, #121820 0%, #1a2430 46%, #0c1016 100%);
+  background-image:
+    radial-gradient(ellipse 65% 50% at 50% 40%, rgba(90, 104, 120, 0.32) 0%, transparent 55%),
+    radial-gradient(circle at 50% 50%, transparent 22%, rgba(8, 12, 18, 0.55) 100%),
+    linear-gradient(168deg, rgba(18, 24, 32, 0.55) 0%, rgba(26, 36, 48, 0.48) 46%, rgba(12, 16, 22, 0.65) 100%),
+    url("/images/cosmic/stars.webp");
+  background-repeat: no-repeat;
+  background-position: center, center, center, center 40%;
+  background-size: auto, auto, auto, cover;
 }
 
 .stageAura {
@@ -73,9 +95,16 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  background:
-    radial-gradient(circle at 50% 48%, rgba(255, 255, 255, 0.06) 0%, transparent 42%),
-    radial-gradient(circle at 50% 100%, rgba(0, 0, 0, 0.35) 0%, transparent 55%);
+  /* Second pass of the same starfield — slight scale for depth, still clipped. */
+  background-image:
+    radial-gradient(circle at 50% 48%, rgba(255, 255, 255, 0.05) 0%, transparent 42%),
+    radial-gradient(circle at 50% 100%, rgba(0, 0, 0, 0.38) 0%, transparent 55%),
+    url("/images/cosmic/stars.webp");
+  background-repeat: no-repeat;
+  background-position: center, center, 58% 28%;
+  background-size: auto, auto, 135% auto;
+  opacity: 0.45;
+  mix-blend-mode: screen;
   z-index: 0;
 }
 

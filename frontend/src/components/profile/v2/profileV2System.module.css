@@ -1621,21 +1621,27 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  align-self: stretch;
-  width: 100%;
-  min-height: 3.25rem;
-  padding: 0.85rem 1.5rem;
+  align-self: center;
+  box-sizing: border-box;
+  width: auto;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 2.65rem;
+  padding: 0.65rem 1.15rem;
   border-radius: 999px;
   border: 1px solid var(--tf-accent-gold, #c9a96e);
   background: var(--tf-accent-gold, #c9a96e);
   color: var(--tf-ink, #2a2520);
   font: inherit;
-  font-size: 1rem;
+  font-size: 0.9375rem;
   font-weight: 700;
   letter-spacing: 0.01em;
+  line-height: 1.25;
+  text-align: center;
   text-decoration: none;
+  white-space: normal;
   cursor: pointer;
-  box-shadow: var(--tf-ds-shadow-gold, 0 8px 24px rgba(201, 169, 110, 0.35));
+  box-shadow: var(--tf-ds-shadow-gold, 0 6px 18px rgba(201, 169, 110, 0.28));
   transition:
     filter var(--tf-motion-micro, 150ms) var(--tf-motion-ease-out, ease),
     transform var(--tf-motion-micro, 150ms) var(--tf-motion-ease-out, ease);
@@ -1643,9 +1649,12 @@
 
 @media (min-width: 40rem) {
   .bridgeCta {
-    width: auto;
     align-self: flex-start;
     min-width: 14rem;
+    min-height: 3.25rem;
+    padding: 0.85rem 1.5rem;
+    font-size: 1rem;
+    box-shadow: var(--tf-ds-shadow-gold, 0 8px 24px rgba(201, 169, 110, 0.35));
   }
 }
 
@@ -2110,6 +2119,7 @@
   flex-direction: column;
   gap: 0.65rem;
   align-items: stretch;
+  width: 100%;
   min-width: 0;
 }
 
@@ -2144,6 +2154,8 @@
   display: flex;
   flex-direction: column;
   gap: 1.35rem;
+  width: 100%;
+  min-width: 0;
 }
 
 .effortVector {
@@ -2161,6 +2173,8 @@
 
 .effortSpheres {
   margin-top: 0;
+  width: 100%;
+  min-width: 0;
 }
 
 .effortSpheresLabel {
@@ -2257,12 +2271,16 @@
   list-style: none;
   margin: 0.85rem 0 0;
   padding: 0;
+  width: 100%;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 0.85rem;
 }
 
 .effortSphereReadCard {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   padding: 0.95rem 1rem;
   border-radius: 1rem;
   border: none;
@@ -2507,6 +2525,7 @@
 
 @media (min-width: 40rem) {
   .effortSphereReadGrid {
+    /* Full-width two columns — not focus|spheres side-by-side (that read as 3 skinny cols). */
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -2516,7 +2535,7 @@
   isolation: isolate;
   overflow: hidden;
   scroll-margin-top: 4.5rem;
-  padding: clamp(2rem, 4.5vw, 2.75rem);
+  padding: clamp(1.35rem, 4vw, 2.75rem);
   border-radius: 1.75rem;
   border: 1px solid var(--tf-border, #e8e2d6);
   background:
@@ -2527,6 +2546,7 @@
   flex-direction: column;
   align-items: stretch;
   gap: 1.15rem;
+  min-width: 0;
 }
 
 .bridgeHeadline {
@@ -2837,13 +2857,6 @@
 
   .whyProofGrid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .effortLayout {
-    display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-    gap: 1.5rem;
-    align-items: start;
   }
 }
 

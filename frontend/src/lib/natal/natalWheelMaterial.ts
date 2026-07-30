@@ -1,6 +1,7 @@
 /**
  * Natal wheel aspect hierarchy — color + weight (not thickness alone).
- * Soft (harmonious) = warm amber; hard (tension) = cool slate — readable on cream plate.
+ * Soft (harmonious) = warm amber; hard (tension) = cool slate.
+ * Tuned for planet↔planet chords on the parchment plate (not the old center well).
  */
 
 export type NatalAspectKind =
@@ -34,6 +35,9 @@ const LABELS_RU: Record<NatalAspectKind, string> = {
   other: "Связь",
 };
 
+/** Halo understroke so long chords read across the plate. */
+export const NATAL_ASPECT_HALO = "#fff8ef";
+
 /**
  * Warm = harmonious; cool slate = tension. Contrast must read in ~0.3s on parchment.
  */
@@ -41,13 +45,102 @@ const BASE: Record<
   NatalAspectKind,
   Omit<NatalAspectRenderStyle, "kind" | "weight" | "stack" | "label">
 > = {
-  conjunction: { color: "#3d3228", dash: "none", opacity: 0.92, width: 3.0 },
-  opposition: { color: "#4a5d73", dash: "8 5", opacity: 0.9, width: 2.95 },
-  square: { color: "#5a6878", dash: "6 5", opacity: 0.88, width: 2.8 },
-  trine: { color: "#c4782a", dash: "none", opacity: 0.78, width: 2.15 },
-  sextile: { color: "#b0892e", dash: "4 4", opacity: 0.7, width: 1.85 },
+  conjunction: { color: "#3d3228", dash: "none", opacity: 0.95, width: 3.35 },
+  opposition: { color: "#3f5878", dash: "8 5", opacity: 0.94, width: 3.2 },
+  square: { color: "#4f6478", dash: "6 5", opacity: 0.92, width: 3.1 },
+  trine: { color: "#c4782a", dash: "none", opacity: 0.9, width: 2.65 },
+  sextile: { color: "#b0892e", dash: "4 4", opacity: 0.84, width: 2.35 },
   other: { color: "#7a6e5c", dash: "3 5", opacity: 0.5, width: 1.35 },
 };
+
+/** Ptolemaic majors + orbs — wheel geometry fallback when API callouts are empty/unmatched. */
+const MAJOR_ASPECT_ORBS: Array<{ aspect_id: NatalAspectKind; angle: number; orb: number }> = [
+  { aspect_id: "conjunction", angle: 0, orb: 8 },
+  { aspect_id: "sextile", angle: 60, orb: 4 },
+  { aspect_id: "square", angle: 90, orb: 6 },
+  { aspect_id: "trine", angle: 120, orb: 6 },
+  { aspect_id: "opposition", angle: 180, orb: 8 },
+];
+
+const WHEEL_ASPECT_BODY_KEYS = new Set([
+  "sun",
+  "moon",
+  "mercury",
+  "venus",
+  "mars",
+  "jupiter",
+  "saturn",
+  "uranus",
+  "neptune",
+  "pluto",
+]);
+
+export function angularSeparationDeg(left: number, right: number): number {
+  let d = Math.abs(left - right) % 360;
+  if (d > 180) d = 360 - d;
+  return d;
+}
+
+export type DerivedNatalAspectCallout = {
+  aspect_id: string;
+  label: string;
+  bodies: string;
+  tension_level?: string;
+};
+
+function titlePlanet(body: string): string {
+  return body.charAt(0).toUpperCase() + body.slice(1);
+}
+
+/** Build major callouts from ecliptic longitudes (kitchen wheel; not editorial SoT). */
+export function deriveMajorAspectCalloutsFromLongitudes(
+  positions: Array<{ body: string; longitude: number }>,
+): DerivedNatalAspectCallout[] {
+  const planets = positions
+    .map((p) => {
+      const body = String(p.body || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[\s_-]+/g, "");
+      if (!WHEEL_ASPECT_BODY_KEYS.has(body)) return null;
+      const longitude = ((Number(p.longitude) % 360) + 360) % 360;
+      if (!Number.isFinite(longitude)) return null;
+      return { body, longitude };
+    })
+    .filter((p): p is { body: string; longitude: number } => Boolean(p));
+
+  const out: DerivedNatalAspectCallout[] = [];
+  for (let i = 0; i < planets.length; i += 1) {
+    for (let j = i + 1; j < planets.length; j += 1) {
+      const a = planets[i];
+      const b = planets[j];
+      if (!a || !b) continue;
+      const sep = angularSeparationDeg(a.longitude, b.longitude);
+      let best: { aspect_id: NatalAspectKind; delta: number } | null = null;
+      for (const def of MAJOR_ASPECT_ORBS) {
+        const delta = Math.abs(sep - def.angle);
+        if (delta <= def.orb && (!best || delta < best.delta)) {
+          best = { aspect_id: def.aspect_id, delta };
+        }
+      }
+      if (!best) continue;
+      const left = titlePlanet(a.body);
+      const right = titlePlanet(b.body);
+      out.push({
+        aspect_id: best.aspect_id,
+        label: `${left} ${best.aspect_id} ${right}`,
+        bodies: `${left} · ${right}`,
+        tension_level:
+          best.aspect_id === "square" || best.aspect_id === "opposition"
+            ? "high"
+            : best.aspect_id === "trine" || best.aspect_id === "sextile"
+              ? "low"
+              : undefined,
+      });
+    }
+  }
+  return out;
+}
 
 export function classifyAspectKind(aspectId: string | undefined | null, label?: string | null): NatalAspectKind {
   const id = String(aspectId || "").toLowerCase();

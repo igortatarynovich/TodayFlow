@@ -2,6 +2,8 @@ import {
   classifyAspectKind,
   natalAspectLegendItems,
   resolveNatalAspectRenderStyle,
+  deriveMajorAspectCalloutsFromLongitudes,
+  angularSeparationDeg,
 } from "@/lib/natal/natalWheelMaterial";
 
 describe("natalWheelMaterial", () => {
@@ -65,5 +67,21 @@ describe("natalWheelMaterial", () => {
       "Оппозиция",
     ]);
     expect(items[1].color).toBe(resolveNatalAspectRenderStyle({ aspect_id: "x_trine" }).color);
+  });
+
+  it("derives major callouts from longitudes for the kitchen wheel", () => {
+    expect(angularSeparationDeg(0, 90)).toBe(90);
+    expect(angularSeparationDeg(10, 350)).toBe(20);
+    const callouts = deriveMajorAspectCalloutsFromLongitudes([
+      { body: "Sun", longitude: 0 },
+      { body: "Moon", longitude: 90 },
+      { body: "Venus", longitude: 120 },
+      { body: "Mars", longitude: 180 },
+    ]);
+    const ids = callouts.map((c) => c.aspect_id).sort();
+    expect(ids).toContain("square");
+    expect(ids).toContain("trine");
+    expect(ids).toContain("opposition");
+    expect(callouts.every((c) => c.bodies.includes("·"))).toBe(true);
   });
 });

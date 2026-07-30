@@ -8,11 +8,14 @@ import {
   resolveNatalAspectRenderStyle,
   natalAspectLegendItems,
   isMajorNatalAspect,
+  deriveMajorAspectCalloutsFromLongitudes,
+  NATAL_ASPECT_HALO,
 } from "@/lib/natal/natalWheelMaterial";
 import { resolvePlanetSlug } from "@/lib/visualIdentity/registry";
 import { resolveNatalPlanetLayout } from "@/lib/natal/natalWheelLayout";
 import {
   resolveNatalAtmosphereElement,
+  resolveNatalPlanetJewel,
   sunSignFromPositions,
   type NatalAtmosphereElement,
 } from "@/lib/natal/natalAtmosphere";
@@ -104,6 +107,26 @@ function planetTokensMatch(chartBody: string, aspectToken: string): boolean {
   return a === b || a.startsWith(b) || b.startsWith(a);
 }
 
+/** Chord between two planet discs — ends at disc edges so the stroke reads as a link, not a hub spoke. */
+function aspectChordEnds(
+  a: { x: number; y: number },
+  b: { x: number; y: number },
+  padA: number,
+  padB: number,
+): { x1: number; y1: number; x2: number; y2: number } {
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const len = Math.hypot(dx, dy) || 1;
+  const ux = dx / len;
+  const uy = dy / len;
+  return {
+    x1: a.x + ux * padA,
+    y1: a.y + uy * padA,
+    x2: b.x - ux * padB,
+    y2: b.y - uy * padB,
+  };
+}
+
 /** RU-подписи тел карты. API/движок отдаёт сырые ключи (sun, south_node, rising, lilith) —
  * в RU-интерфейсе профиля их нельзя показывать как есть. */
 const PLANET_RU: Record<string, string> = {
@@ -179,11 +202,11 @@ const INK = {
   aspectWellStroke: "rgba(74, 93, 115, 0.22)",
   aspect: {
     /** Legend mirrors natalAspectLegendItems / resolveNatalAspectRenderStyle. */
-    conjunction: { color: "#3d3228", dash: "none", opacity: 0.92, width: 3.0 },
-    opposition: { color: "#4a5d73", dash: "8 5", opacity: 0.9, width: 2.95 },
-    square: { color: "#5a6878", dash: "6 5", opacity: 0.88, width: 2.8 },
-    trine: { color: "#c4782a", dash: "none", opacity: 0.78, width: 2.15 },
-    sextile: { color: "#b0892e", dash: "4 4", opacity: 0.7, width: 1.85 },
+    conjunction: { color: "#3d3228", dash: "none", opacity: 0.95, width: 3.35 },
+    opposition: { color: "#3f5878", dash: "8 5", opacity: 0.94, width: 3.2 },
+    square: { color: "#4f6478", dash: "6 5", opacity: 0.92, width: 3.1 },
+    trine: { color: "#c4782a", dash: "none", opacity: 0.9, width: 2.65 },
+    sextile: { color: "#b0892e", dash: "4 4", opacity: 0.84, width: 2.35 },
     other: { color: "#7a6e5c", dash: "3 5", opacity: 0.5, width: 1.35 },
   },
   elementFill: {
@@ -273,7 +296,6 @@ export function NatalChartWheel({
   const houseRadius = houseLabelRadius;
   const gradientId = useId().replace(/:/g, "");
   const softGlowId = `${gradientId}-glow`;
-  const webClipId = `${gradientId}-clip`;
   const planetGlowId = `${gradientId}-planet-glow`;
   const planetLitId = `${gradientId}-planet-lit`;
   const planetLitSelectedId = `${gradientId}-planet-lit-sel`;
@@ -577,24 +599,11 @@ export function NatalChartWheel({
     });
   }, [degreeToAngle, getPosition, houseCusps, outerRadius, zodiacInnerRadius]);
 
-  const aspectSummary = useMemo(() => {
-    const counter = new Map<string, number>();
-    for (const aspect of aspectsProp) {
-      const key = aspectStyle(aspect).label;
-      counter.set(key, (counter.get(key) || 0) + 1);
-    }
-    return Array.from(counter.entries()).map(([label, count]) => ({ label, count }));
-  }, [aspectStyle, aspectsProp]);
-
   const aspectLines = useMemo(() => {
-    if (!aspectsProp || aspectsProp.length === 0) {
-      return [];
-    }
-
-    const lines: Array<{
+    type Line = {
       key: string;
-      planet1: { body: string; anchor: { x: number; y: number } };
-      planet2: { body: string; anchor: { x: number; y: number } };
+      planet1: { body: string; x: number; y: number; disc: number };
+      planet2: { body: string; x: number; y: number; disc: number };
       aspect: Aspect;
       color: string;
       dash: string;
@@ -603,48 +612,82 @@ export function NatalChartWheel({
       label: string;
       stack: number;
       weight: string;
-    }> = [];
+    };
 
-    for (const aspect of aspectsProp) {
-      const pair = parseAspectBodyPair(aspect.bodies);
-      if (!pair) {
-        continue;
+    const buildFromCallouts = (callouts: Aspect[]): Line[] => {
+      const lines: Line[] = [];
+      for (const aspect of callouts) {
+        const pair = parseAspectBodyPair(aspect.bodies);
+        if (!pair) continue;
+        const [body1, body2] = pair;
+        const planet1 = planetsWithPositions.find((p) => planetTokensMatch(String(p.body || ""), body1));
+        const planet2 = planetsWithPositions.find((p) => planetTokensMatch(String(p.body || ""), body2));
+        if (!planet1 || !planet2) continue;
+        const style = aspectStyle(aspect);
+        if (!isMajorNatalAspect(style.kind)) continue;
+        const disc1 = planetDisc * (planet1.discScale ?? 1);
+        const disc2 = planetDisc * (planet2.discScale ?? 1);
+        lines.push({
+          key: `${aspect.aspect_id}-${planet1.body}-${planet2.body}`,
+          planet1: { body: planet1.body, x: planet1.position.x, y: planet1.position.y, disc: disc1 },
+          planet2: { body: planet2.body, x: planet2.position.x, y: planet2.position.y, disc: disc2 },
+          aspect,
+          color: style.color,
+          dash: style.dash,
+          opacity: style.opacity,
+          width: style.width,
+          label: style.label,
+          stack: style.stack,
+          weight: style.weight,
+        });
       }
-      const [body1, body2] = pair;
+      lines.sort((a, b) => a.stack - b.stack);
+      return lines;
+    };
 
-      const planet1 = planetsWithPositions.find((p) => planetTokensMatch(String(p.body || ""), body1));
-      const planet2 = planetsWithPositions.find((p) => planetTokensMatch(String(p.body || ""), body2));
+    // Kitchen SoT for the painted web: majors from longitudes (full 10-planet graph).
+    // API callouts stay editorial/list SoT elsewhere; they are too sparse (BODY_PAIRS)
+    // and used to be anchored only in the shrunk center well.
+    const derived = deriveMajorAspectCalloutsFromLongitudes(
+      planetsWithPositions.map((p) => ({ body: String(p.body), longitude: Number(p.longitude) })),
+    ).map((c) => ({
+      aspect_id: c.aspect_id,
+      bodies: c.bodies,
+      label: c.label,
+      keywords: [] as string[],
+      description: "",
+      tension_level: c.tension_level,
+    }));
+    const fromLongitudes = buildFromCallouts(derived);
+    if (fromLongitudes.length > 0) return fromLongitudes;
 
-      if (!planet1 || !planet2) {
-        continue;
-      }
+    return buildFromCallouts(aspectsProp ?? []);
+  }, [aspectStyle, aspectsProp, planetDisc, planetsWithPositions]);
 
-      const style = aspectStyle(aspect);
-      // Legend / wheel / decode panel: Ptolemaic majors only (no sesqui, quincunx, …).
-      if (!isMajorNatalAspect(style.kind)) {
-        continue;
-      }
-      const anchor1 = getPosition(planet1.angle, aspectRadius);
-      const anchor2 = getPosition(planet2.angle, aspectRadius);
-      lines.push({
-        key: `${aspect.aspect_id}-${planet1.body}-${planet2.body}`,
-        planet1: { body: planet1.body, anchor: anchor1 },
-        planet2: { body: planet2.body, anchor: anchor2 },
-        aspect,
-        color: style.color,
-        dash: style.dash,
-        opacity: style.opacity,
-        width: style.width,
-        label: style.label,
-        stack: style.stack,
-        weight: style.weight,
-      });
+  const aspectSummary = useMemo(() => {
+    const counter = new Map<string, number>();
+    for (const line of aspectLines) {
+      counter.set(line.label, (counter.get(line.label) || 0) + 1);
     }
+    return Array.from(counter.entries()).map(([label, count]) => ({ label, count }));
+  }, [aspectLines]);
 
-    // Soft aspects farther (paint first); strong closer to front.
-    lines.sort((a, b) => a.stack - b.stack);
-    return lines;
-  }, [aspectRadius, aspectStyle, aspectsProp, getPosition, planetsWithPositions]);
+  /** Selection (or desktop hover) organizes the wheel: only this planet’s major links light up. */
+  const focusPlanet = selectedPlanet ?? (isMobile ? null : hoveredPlanet);
+
+  const focusBodies = useMemo(() => {
+    if (!focusPlanet) return null;
+    const set = new Set<string>([focusPlanet]);
+    for (const line of aspectLines) {
+      if (line.planet1.body === focusPlanet || line.planet2.body === focusPlanet) {
+        set.add(line.planet1.body);
+        set.add(line.planet2.body);
+      }
+    }
+    return set;
+  }, [aspectLines, focusPlanet]);
+
+  const visibleAspectLines = aspectLines;
 
   const selectedPlanetData = useMemo(
     () => (selectedPlanet ? planetsWithPositions.find((p) => p.body === selectedPlanet) ?? null : null),
@@ -757,23 +800,6 @@ export function NatalChartWheel({
           <filter id={planetShadowId} x="-60%" y="-60%" width="220%" height="220%">
             <feDropShadow dx="1.4" dy="2.6" stdDeviation="2.1" floodColor="#3d3228" floodOpacity="0.32" />
           </filter>
-          {/* Donut: keep aspect chords in the well, but punch out the hub
-              so opposition/square dashes never read as a spoke from center. */}
-          <clipPath id={webClipId} clipPathUnits="userSpaceOnUse">
-            <path
-              clipRule="evenodd"
-              fillRule="evenodd"
-              d={[
-                `M ${center} ${center - (innerRadius - 2)}`,
-                `A ${innerRadius - 2} ${innerRadius - 2} 0 1 1 ${center} ${center + (innerRadius - 2)}`,
-                `A ${innerRadius - 2} ${innerRadius - 2} 0 1 1 ${center} ${center - (innerRadius - 2)}`,
-                `M ${center} ${center - aspectHubRadius}`,
-                `A ${aspectHubRadius} ${aspectHubRadius} 0 1 0 ${center} ${center + aspectHubRadius}`,
-                `A ${aspectHubRadius} ${aspectHubRadius} 0 1 0 ${center} ${center - aspectHubRadius}`,
-                "Z",
-              ].join(" ")}
-            />
-          </clipPath>
         </defs>
 
         {/* Background circle doubles as the tap-to-deselect surface */}
@@ -826,8 +852,8 @@ export function NatalChartWheel({
           r={innerRadius}
           fill="none"
           stroke={INK.ringInner}
-          strokeWidth="1.5"
-          opacity="0.84"
+          strokeWidth="1"
+          opacity="0.35"
         />
 
         <circle
@@ -835,8 +861,7 @@ export function NatalChartWheel({
           cy={center}
           r={aspectRadius}
           fill={INK.aspectWell}
-          stroke={INK.aspectWellStroke}
-          strokeWidth="1.25"
+          stroke="none"
           onClick={() => setSelected(null)}
         />
         <circle
@@ -879,8 +904,8 @@ export function NatalChartWheel({
                 x2={outerPos.x}
                 y2={outerPos.y}
                 stroke={INK.ringSoft}
-                strokeWidth="1.5"
-                opacity={0.7}
+                strokeWidth="1"
+                opacity={focusPlanet ? 0.14 : 0.28}
               />
             </g>
           );
@@ -988,74 +1013,15 @@ export function NatalChartWheel({
         })}
         </g>
 
-        {/* Layer mid: aspect web + angles */}
+        {/* Layer mid: angle markers only — aspect chords live under planets (not in the old hub well). */}
         <g
           className={styles.layerMid}
           style={{
             transform: `translate(${tilt.y * 0.22}px, ${-tilt.x * 0.22}px)`,
           }}
         >
-        <g clipPath={`url(#${webClipId})`}>
-          {/* Mobile: no aspect stubs in the hub on select — majors live in the reading sheet.
-              Desktop: full major web; selection only fades unrelated lines. */}
-          {(isMobile
-            ? []
-            : aspectLines
-          ).map((line) => {
-            const isLinked =
-              activePlanet != null &&
-              (line.planet1.body === activePlanet || line.planet2.body === activePlanet);
-            // Mobile: only the selected planet's aspects. Desktop: full web with focus fade.
-            const opacity = isMobile
-              ? Math.min(line.opacity + 0.2, 1)
-              : activePlanet == null
-                ? line.opacity
-                : isLinked
-                  ? Math.min(line.opacity + 0.22, 1)
-                  : 0.1;
-            const width = isLinked || isMobile ? line.width + 0.7 : line.width;
-            const soft = line.weight === "soft";
-            return (
-              <g key={line.key} opacity={soft && activePlanet == null && !isMobile ? 0.92 : 1}>
-                <line
-                  x1={line.planet1.anchor.x}
-                  y1={line.planet1.anchor.y}
-                  x2={line.planet2.anchor.x}
-                  y2={line.planet2.anchor.y}
-                  stroke={line.color}
-                  strokeWidth={width + (line.weight === "strong" ? 5 : 4)}
-                  opacity={Math.max(opacity - (line.weight === "strong" ? 0.38 : 0.5), 0.03)}
-                  strokeLinecap="round"
-                  filter={`url(#${softGlowId})`}
-                />
-                <line
-                  x1={line.planet1.anchor.x}
-                  y1={line.planet1.anchor.y}
-                  x2={line.planet2.anchor.x}
-                  y2={line.planet2.anchor.y}
-                  stroke={line.color}
-                  strokeWidth={width}
-                  opacity={opacity}
-                  strokeDasharray={line.dash}
-                  strokeLinecap="round"
-                />
-              </g>
-            );
-          })}
-
-          <circle
-            cx={center}
-            cy={center}
-            r={aspectHubRadius}
-            fill="rgba(44, 38, 32, 0.05)"
-            stroke="rgba(74, 93, 115, 0.14)"
-            strokeWidth="1"
-            onClick={() => setSelected(null)}
-          />
-        </g>
-
         {angleMarkers.map((marker) => (
-          <g key={marker.key}>
+          <g key={marker.key} opacity={focusPlanet ? 0.45 : 0.7}>
             <line
               x1={marker.inner.x}
               y1={marker.inner.y}
@@ -1079,75 +1045,194 @@ export function NatalChartWheel({
             </text>
           </g>
         ))}
-
-        {planetsWithPositions.map((planet, index) => {
-          if (!planet.leader) return null;
-          // Short whisker on the planet belt only — tick at true longitude, stub toward disc.
-          // Never span the full gap (that read as a dashed spoke toward the hub).
-          const dx = planet.position.x - planet.trueTick.x;
-          const dy = planet.position.y - planet.trueTick.y;
-          const len = Math.hypot(dx, dy) || 1;
-          const stub = Math.min(len * 0.42, planetDisc * 1.15);
-          const tipX = planet.trueTick.x + (dx / len) * stub;
-          const tipY = planet.trueTick.y + (dy / len) * stub;
-          return (
-            <g key={`planet-leader-${planet.body}-${index}`} style={{ pointerEvents: "none" }}>
-              <circle
-                cx={planet.trueTick.x}
-                cy={planet.trueTick.y}
-                r="2"
-                fill={INK.ink}
-                opacity={0.4}
-              />
-              <line
-                x1={planet.trueTick.x}
-                y1={planet.trueTick.y}
-                x2={tipX}
-                y2={tipY}
-                stroke={INK.ink}
-                strokeWidth="1"
-                opacity={0.22}
-                strokeLinecap="round"
-              />
-            </g>
-          );
-        })}
         </g>
 
-        {/* Layer front: lit planet spheres */}
+        {/* Layer front: major chords → hub → lit discs (chords no longer live in the old center well). */}
         <g
           className={styles.layerFront}
           style={{
             transform: `translate(${tilt.y * -0.4}px, ${-tilt.x * -0.4}px)`,
           }}
         >
+        {/* Major aspect chords: disc-to-disc across the plate (halo + legend color). */}
+        <g data-testid="natal-aspect-web" style={{ pointerEvents: "none" }}>
+          {visibleAspectLines.map((line) => {
+            const isLinked =
+              !focusPlanet ||
+              line.planet1.body === focusPlanet ||
+              line.planet2.body === focusPlanet;
+            const opacity = !focusPlanet
+              ? Math.min(line.opacity * 0.92, 0.96)
+              : isLinked
+                ? Math.min(line.opacity + 0.08, 1)
+                : 0.1;
+            const width = !focusPlanet
+              ? line.width
+              : isLinked
+                ? line.width + 1.1
+                : Math.max(line.width - 0.45, 1);
+            const chord = aspectChordEnds(
+              { x: line.planet1.x, y: line.planet1.y },
+              { x: line.planet2.x, y: line.planet2.y },
+              line.planet1.disc * 0.88,
+              line.planet2.disc * 0.88,
+            );
+            return (
+              <g
+                key={line.key}
+                data-testid={focusPlanet && isLinked ? "natal-aspect-focus" : "natal-aspect-line"}
+              >
+                <line
+                  x1={chord.x1}
+                  y1={chord.y1}
+                  x2={chord.x2}
+                  y2={chord.y2}
+                  stroke={NATAL_ASPECT_HALO}
+                  strokeWidth={width + (isLinked && focusPlanet ? 4.2 : 3.2)}
+                  opacity={isLinked || !focusPlanet ? 0.88 : 0.2}
+                  strokeLinecap="round"
+                />
+                {isLinked && focusPlanet ? (
+                  <line
+                    x1={chord.x1}
+                    y1={chord.y1}
+                    x2={chord.x2}
+                    y2={chord.y2}
+                    stroke={line.color}
+                    strokeWidth={width + (line.weight === "strong" ? 4.5 : 3.2)}
+                    opacity={Math.max(opacity - 0.42, 0.06)}
+                    strokeLinecap="round"
+                    filter={`url(#${softGlowId})`}
+                  />
+                ) : null}
+                <line
+                  x1={chord.x1}
+                  y1={chord.y1}
+                  x2={chord.x2}
+                  y2={chord.y2}
+                  stroke={line.color}
+                  strokeWidth={width}
+                  opacity={opacity}
+                  strokeDasharray={line.dash === "none" ? undefined : line.dash}
+                  strokeLinecap="round"
+                />
+              </g>
+            );
+          })}
+        </g>
+
+        {/* Element hub — one badge; sits above chord crossings, under planet discs. */}
+        <g
+          data-wheel-hit
+          onClick={() => setSelected(null)}
+          style={{ cursor: "pointer" }}
+        >
+          <circle
+            cx={center}
+            cy={center}
+            r={Math.max(aspectHubRadius * 0.78, 36)}
+            fill="rgba(255, 252, 246, 0.92)"
+            stroke={INK.gold}
+            strokeWidth="1.25"
+          />
+          <foreignObject
+            x={center - Math.max(aspectHubRadius * 0.78, 36)}
+            y={center - Math.max(aspectHubRadius * 0.78, 36)}
+            width={Math.max(aspectHubRadius * 0.78, 36) * 2}
+            height={Math.max(aspectHubRadius * 0.78, 36) * 2}
+            style={{ pointerEvents: "none", overflow: "visible" }}
+          >
+            <div
+              data-testid="natal-chart-element-hub"
+              style={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "0.15rem",
+                fontFamily: "var(--tf-font-display, Georgia, serif)",
+              }}
+            >
+              <ElementIcon element={stageElement} size={20} stroke={INK.gold} />
+              <span
+                style={{
+                  fontSize: "0.9rem",
+                  fontWeight: 600,
+                  letterSpacing: "0.06em",
+                  color: INK.inkDeep,
+                  lineHeight: 1.1,
+                }}
+              >
+                {stageElement === "fire"
+                  ? "Огонь"
+                  : stageElement === "water"
+                    ? "Вода"
+                    : stageElement === "air"
+                      ? "Воздух"
+                      : "Земля"}
+              </span>
+            </div>
+          </foreignObject>
+        </g>
+
         {planetsWithPositions.map((planet, idx) => {
           const isSelected = selectedPlanet === planet.body;
           const isActive = activePlanet === planet.body;
+          const inFocus = !focusBodies || focusBodies.has(planet.body);
           const planetColors = INK.planet;
           const planetColor = planetColors[planet.body as keyof typeof planetColors] || INK.gold;
+          const jewel = resolveNatalPlanetJewel(planet.sign);
+          const rimColor = jewel?.stroke || planetColor;
           const disc = planetDisc * (planet.discScale ?? 1);
 
           return (
             <g
               key={`planet-${planet.body}-${idx}`}
               data-wheel-hit
+              data-element={jewel?.element || undefined}
               onClick={() => togglePlanet(planet.body)}
               onMouseEnter={() => setHoveredPlanet(planet.body)}
               onMouseLeave={() => setHoveredPlanet(null)}
               filter={`url(#${planetShadowId})`}
+              opacity={inFocus ? 1 : 0.28}
+              style={{ transition: "opacity 0.25s ease" }}
             >
               <g filter={isActive ? `url(#${planetGlowId})` : undefined}>
                 <circle cx={planet.position.x} cy={planet.position.y} r={disc + 10} fill="transparent" />
+                {/* Soft element bloom — reads as jewel, not one cream tone */}
+                {jewel ? (
+                  <circle
+                    cx={planet.position.x}
+                    cy={planet.position.y}
+                    r={disc + (isActive ? 7 : 5.5)}
+                    fill={jewel.glow}
+                    opacity={isSelected ? 0.85 : isActive ? 0.7 : 0.5}
+                    style={{ pointerEvents: "none", transition: "all 0.3s ease" }}
+                  />
+                ) : null}
                 <circle
                   cx={planet.position.x}
                   cy={planet.position.y}
                   r={isActive ? disc + 2 : disc}
                   fill={isSelected ? `url(#${planetLitSelectedId})` : `url(#${planetLitId})`}
-                  stroke={planetColor}
-                  strokeWidth={isActive ? "2.35" : "1.7"}
+                  stroke={rimColor}
+                  strokeWidth={isActive ? "2.4" : "1.75"}
                   style={{ transition: "all 0.3s ease" }}
                 />
+                {jewel ? (
+                  <circle
+                    cx={planet.position.x}
+                    cy={planet.position.y}
+                    r={isActive ? disc + 0.4 : disc - 0.6}
+                    fill="none"
+                    stroke={jewel.wash}
+                    strokeWidth="2.2"
+                    opacity={0.55}
+                    style={{ pointerEvents: "none" }}
+                  />
+                ) : null}
                 {/* Specular highlight */}
                 <circle
                   cx={planet.position.x - disc * 0.28}
@@ -1177,7 +1262,7 @@ export function NatalChartWheel({
                       <PlanetIcon
                         planet={planet.body}
                         size={Math.max(12, Math.round(disc * 1.05))}
-                        stroke={isSelected ? INK.inkDeep : planetColor}
+                        stroke={isSelected ? INK.inkDeep : rimColor}
                       />
                     </div>
                   </foreignObject>
@@ -1188,7 +1273,7 @@ export function NatalChartWheel({
                     textAnchor="middle"
                     dominantBaseline="central"
                     fontSize={isMobile ? (isActive ? "15" : "13") : isActive ? "17" : "15"}
-                    fill={isSelected ? INK.inkDeep : planetColor}
+                    fill={isSelected ? INK.inkDeep : rimColor}
                     fontWeight="700"
                     style={{ transition: "all 0.3s ease", pointerEvents: "none" }}
                   >
@@ -1199,70 +1284,6 @@ export function NatalChartWheel({
             </g>
           );
         })}
-
-        {/* Element hub — editorial badge, not a service caption or tick scale. */}
-        <g
-          data-wheel-hit
-          onClick={() => setSelected(null)}
-          style={{ cursor: "pointer" }}
-        >
-          <circle
-            cx={center}
-            cy={center}
-            r={Math.max(aspectHubRadius * 0.92, 44)}
-            fill="rgba(255, 252, 246, 0.9)"
-            stroke={INK.gold}
-            strokeWidth="1.4"
-          />
-          <circle
-            cx={center}
-            cy={center}
-            r={Math.max(aspectHubRadius * 0.92, 44) - 4}
-            fill="none"
-            stroke="rgba(139, 106, 62, 0.28)"
-            strokeWidth="0.85"
-          />
-          <foreignObject
-            x={center - Math.max(aspectHubRadius * 0.92, 44)}
-            y={center - Math.max(aspectHubRadius * 0.92, 44)}
-            width={Math.max(aspectHubRadius * 0.92, 44) * 2}
-            height={Math.max(aspectHubRadius * 0.92, 44) * 2}
-            style={{ pointerEvents: "none", overflow: "visible" }}
-          >
-            <div
-              data-testid="natal-chart-element-hub"
-              style={{
-                width: "100%",
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "0.2rem",
-                fontFamily: "var(--tf-font-display, Georgia, serif)",
-              }}
-            >
-              <ElementIcon element={stageElement} size={22} stroke={INK.gold} />
-              <span
-                style={{
-                  fontSize: "0.95rem",
-                  fontWeight: 600,
-                  letterSpacing: "0.06em",
-                  color: INK.inkDeep,
-                  lineHeight: 1.1,
-                }}
-              >
-                {stageElement === "fire"
-                  ? "Огонь"
-                  : stageElement === "air"
-                    ? "Воздух"
-                    : stageElement === "water"
-                      ? "Вода"
-                      : "Земля"}
-              </span>
-            </div>
-          </foreignObject>
-        </g>
         </g>
         </svg>
       </div>
@@ -1290,7 +1311,7 @@ export function NatalChartWheel({
               })}
             </div>
           </div>
-          {!isMobile ? (
+          {!isMobile || selectedPlanet ? (
             <div className={styles.legend} aria-label="Типы аспектов">
               {natalAspectLegendItems().map((item) => {
                 const count = aspectSummary.find((entry) => entry.label === item.label)?.count || 0;
@@ -1372,7 +1393,7 @@ export function NatalChartWheel({
           </>
         ) : (
           <p className={styles.panelHint}>
-            Выбери планету на кольце или в панели карты — откроются знак, дом и связи.
+            Выбери планету — между дисками загорятся её мажорные связи (цвета как в легенде), ниже — знак, дом и список.
           </p>
         )}
       </div>
