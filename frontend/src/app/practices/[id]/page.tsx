@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import {
   practicesExperienceChromeBundle,
   type FlowPracticesChromeLocale,
@@ -11,6 +11,8 @@ import {
 import { DsButton, MotionReveal, MotionSettle } from "@/design-system";
 import { MOTION } from "@/design-system/motion/tokens";
 import { PracticeSessionWebScreen } from "@/components/product-ui/PracticeSessionWebScreen";
+import { PracticeLiveSession } from "@/components/practices/session/PracticeLiveSession";
+import { practiceSessionCopy } from "@/components/practices/session/practiceSessionCopy";
 import s from "@/components/product-ui/productWebScreens.module.css";
 import { useToastContext } from "@/components/ToastProvider";
 import { getJson, postJson } from "@/lib/api";
@@ -23,6 +25,12 @@ import { useAuth } from "@/lib/useAuth";
 import { GuestAccessLimitGate } from "@/components/guest/GuestAccessLimitGate";
 import { GUEST_ACCESS_COPY } from "@/components/guest/guestAccessCopy";
 import { isGuestPracticeAllowed } from "@/lib/guestAccessStore";
+import { useMeaningRuntime } from "@/hooks/useMeaningRuntime";
+import {
+  clearPracticeSessionDraft,
+  readPracticeSessionDraft,
+  type PracticeStateAfter,
+} from "@/lib/practicesPage/practiceSessionDraft";
 
 function tpl(s: string, vars: Record<string, string | number>) {
   return s.replace(/\{\{(\w+)\}\}/g, (_, k) => String(vars[k] ?? ""));
@@ -83,11 +91,15 @@ type PracticeDetail = {
 
 export default function PracticeDetailPage() {
   const params = useParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { isAuthenticated } = useAuth();
   const { refetchToday } = useTodayCycle();
+  const { trackMeaningEvent } = useMeaningRuntime();
   const toast = useToastContext();
   const locale: FlowPracticesChromeLocale = getLocale() === "ru" ? "ru" : "en";
   const pc = useMemo(() => practicesExperienceChromeBundle(locale), [locale]);
+  const sessionCopy = useMemo(() => practiceSessionCopy(locale), [locale]);
 
   const [loading, setLoading] = useState(true);
   const [practice, setPractice] = useState<PracticeDetail | null>(null);
@@ -95,6 +107,8 @@ export default function PracticeDetailPage() {
   const [reloadKey, setReloadKey] = useState(0);
   const [isCompleting, setIsCompleting] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [sessionOpen, setSessionOpen] = useState(false);
+  const [sessionSaving, setSessionSaving] = useState(false);
   const [sequenceProgress, setSequenceProgress] = useState<{
     completed_steps: number;
     total_steps: number;
@@ -188,6 +202,73 @@ export default function PracticeDetailPage() {
     return items.filter((item): item is NonNullable<typeof item> => item !== null);
   }, [practice, pc]);
 
+  const draftElapsed = useMemo(() => {
+    if (!practice) return 0;
+    const draft = readPracticeSessionDraft();
+    if (!draft || draft.practiceId !== practice.id) return 0;
+    return draft.elapsedSeconds;
+  }, [practice, sessionOpen]);
+
+  useEffect(() => {
+    if (!practice) return;
+    if (searchParams.get("run") === "1") {
+      setSessionOpen(true);
+    }
+  }, [practice, searchParams]);
+
+  const closeSession = useCallback(() => {
+    setSessionOpen(false);
+    if (searchParams.get("run") === "1") {
+      router.replace(`/practices/${practice?.id ?? ""}`);
+    }
+  }, [router, searchParams, practice?.id]);
+
+  const handleSaveSessionToToday = useCallback(
+    async (input: { stateAfter: PracticeStateAfter; elapsedSeconds: number }) => {
+      if (!practice || !isAuthenticated) return;
+      setSessionSaving(true);
+      try {
+        await postJson(`/practices/${practice.id}/complete`, {});
+        const localDate = new Date().toISOString().slice(0, 10);
+        trackMeaningEvent({
+          event_type: "practice_completed",
+          event_source: "today",
+          local_date: localDate,
+          payload: {
+            practice_id: practice.id,
+            duration_minutes: practice.duration_minutes ?? null,
+            elapsed_seconds: input.elapsedSeconds,
+            state_after: input.stateAfter,
+            surface: "practices_session_p1",
+          },
+          refreshRings: true,
+        });
+        setIsCompleted(true);
+        clearPracticeSessionDraft(practice.id);
+        const data = await refetchToday({ force: true });
+        setRewardsAfterCompletion(data?.rewards ?? null);
+        setRewardMilestones(Array.isArray(data?.reward_milestones) ? data.reward_milestones : []);
+      } catch (err: unknown) {
+        console.error("Error saving practice session:", err);
+        const anyErr = err as { response?: { data?: { detail?: string } }; message?: string };
+        const errorMsg =
+          anyErr?.response?.data?.detail || anyErr?.message || pc.practiceDetailCompleteErrorFallback;
+        toast.error(errorMsg);
+        throw err;
+      } finally {
+        setSessionSaving(false);
+      }
+    },
+    [
+      practice,
+      isAuthenticated,
+      trackMeaningEvent,
+      refetchToday,
+      pc.practiceDetailCompleteErrorFallback,
+      toast,
+    ],
+  );
+
   if (loading) {
     return <PracticeSessionWebScreen backLabel={pc.practiceDetailBackLink} loading />;
   }
@@ -250,14 +331,48 @@ export default function PracticeDetailPage() {
   }
 
   return (
-    <PracticeSessionWebScreen
-      title={practice.title}
-      subtitle={practice.personalized_reason?.trim() || practice.description}
-      dayWhy={dayWhy}
-      meta={sessionMeta}
-      backLabel={pc.practiceDetailBackLink}
-    >
+    <>
+      {sessionOpen && practice ? (
+        <PracticeLiveSession
+          locale={locale}
+          practiceId={practice.id}
+          title={practice.title}
+          instruction={
+            practice.instructions?.[0]?.trim() ||
+            practice.prompt?.trim() ||
+            practice.description
+          }
+          durationMinutes={practice.duration_minutes && practice.duration_minutes > 0 ? practice.duration_minutes : 5}
+          initialElapsedSeconds={draftElapsed}
+          audioUrl={practice.audio_url ?? null}
+          imageUrl="/images/praktiki_banner.png"
+          isAuthenticated={isAuthenticated}
+          saving={sessionSaving}
+          onClose={closeSession}
+          onSaveToToday={handleSaveSessionToToday}
+        />
+      ) : null}
+      <PracticeSessionWebScreen
+        title={practice.title}
+        subtitle={practice.personalized_reason?.trim() || practice.description}
+        dayWhy={dayWhy}
+        meta={sessionMeta}
+        backLabel={pc.practiceDetailBackLink}
+      >
           <>
+            {!isCompleted ? (
+              <div className={s.practiceSessionActions}>
+                <DsButton
+                  variant="primary"
+                  size="block"
+                  onClick={() => setSessionOpen(true)}
+                  data-testid="practice-start-session"
+                >
+                  {draftElapsed > 0 ? sessionCopy.resumeCta : sessionCopy.startCta}
+                </DsButton>
+              </div>
+            ) : null}
+
             {practice.is_personalized && practice.personalized_reason && !dayWhy && (
               <MotionReveal className={s.practiceSessionHighlight}>
                 <p className={s.practiceSessionHighlightText}>
@@ -530,6 +645,7 @@ export default function PracticeDetailPage() {
             )}
           </>
     </PracticeSessionWebScreen>
+    </>
   );
 
   async function handleCompletePractice() {

@@ -2,13 +2,14 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { practicesExperienceChromeBundle, type FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
+import { practicesStateCycleCopy } from "@/components/practices/stateCycle/practicesStateCycleCopy";
 import {
   PracticesStateCycleScreen,
+  type StateCycleContinue,
   type StateCycleMyItem,
   type StateCyclePracticeCard,
   type StateCycleTodayRail,
 } from "@/components/practices/stateCycle/PracticesStateCycleScreen";
-import { practicesStateCycleCopy } from "@/components/practices/stateCycle/practicesStateCycleCopy";
 import { LoadingSpinner } from "@/components/orbit";
 import { PracticesWebScreen } from "@/components/product-ui/PracticesWebScreen";
 import { getJson } from "@/lib/api";
@@ -23,6 +24,7 @@ import {
   type PracticeFormatId,
   type PracticeNeedId,
 } from "@/lib/practicesPage/practicesCanon";
+import { readPracticeSessionDraft } from "@/lib/practicesPage/practiceSessionDraft";
 import {
   type PracticeCatalogItem,
   type PracticeLimitsSnapshot,
@@ -38,7 +40,7 @@ const RECOMMEND_IMAGE = "/images/praktiki_banner.png";
 function toCard(practice: PracticeCatalogItem, imageUrl?: string | null): StateCyclePracticeCard {
   return {
     id: practice.id,
-    href: `/practices/${practice.id}`,
+    href: `/practices/${practice.id}?run=1`,
     title: practice.title,
     description:
       practice.personalized_reason?.trim() || practice.description?.trim() || "",
@@ -83,6 +85,28 @@ export default function PracticesPage() {
   const [activeNeed, setActiveNeed] = useState<PracticeNeedId>("calm");
   const [activeFormat, setActiveFormat] = useState<PracticeFormatId | null>(null);
   const [todayRail, setTodayRail] = useState<StateCycleTodayRail | null>(null);
+  const [continueSession, setContinueSession] = useState<StateCycleContinue | null>(null);
+
+  useEffect(() => {
+    const syncDraft = () => {
+      const draft = readPracticeSessionDraft();
+      if (!draft || draft.elapsedSeconds <= 0) {
+        setContinueSession(null);
+        return;
+      }
+      const total = Math.max(1, Math.round(draft.durationMinutes));
+      const done = Math.min(total, Math.floor(draft.elapsedSeconds / 60));
+      setContinueSession({
+        href: `/practices/${draft.practiceId}?run=1`,
+        title: draft.title,
+        minutesDone: done,
+        minutesTotal: total,
+      });
+    };
+    syncDraft();
+    window.addEventListener("focus", syncDraft);
+    return () => window.removeEventListener("focus", syncDraft);
+  }, [loading]);
 
   const loadPractices = useCallback(async () => {
     try {
@@ -328,7 +352,7 @@ export default function PracticesPage() {
         activeFormat={activeFormat}
         onFormatChange={setActiveFormat}
         recommended={recommended}
-        continueSession={null}
+        continueSession={continueSession}
         momentCards={momentCards}
         practiceOfDay={practiceOfDay.card}
         practiceOfDaySource={practiceOfDay.source}

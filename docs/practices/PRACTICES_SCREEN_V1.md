@@ -215,8 +215,8 @@ Need первичен; format уточняет каталог.
 |---|-----------|------------|--------|
 | **C0** | Канон locked need/format (v1.1) | — | **DONE** |
 | **C0b** | Привести макет need-ленты к канону (добавить «Понять себя»; «Уснуть» в конец) | C0 | TODO |
-| **P0** | Web `/practices` shell на locked IDs | C0 | **IN PROGRESS** (FE shell) |
-| **P1** | Сессия + чек-ин + save to Today | C0 + P0 | TODO |
+| **P0** | Web `/practices` shell на locked IDs | C0 | **DONE** (FE shell) |
+| **P1** | Сессия + чек-ин + save to Today | C0 + P0 | **IN PROGRESS** (FE) |
 | **M0** | Music layer (режимы + громкости) | C0; ∥ P0/P1 | TODO |
 
 iOS parity — после web P0+P1.

@@ -4,7 +4,7 @@ Last updated: 2026-07-30
 Owner: Product + Engineering
 Status: Active working document
 
-**IN PROGRESS (2026-07-30):** Practices **P0 web shell** (`PracticesStateCycleScreen` on locked need/format v1.1). C0 ACCEPTED. ScreenFlow Phase 2b — Glance-first **LIVE**. Guest Story Surface P0 — **DONE (LIVE)**. Evening/day-2 = slice 2.
+**IN PROGRESS (2026-07-30):** Practices **P1 session cycle** (`PracticeLiveSession` + check-in + save to Today). P0 shell **DONE**. C0 ACCEPTED. ScreenFlow axis **LOCKED x** (Phase 2b LIVE). Guest Story Surface P0 — **DONE (LIVE)**.
 
 ## 1) Purpose
 
@@ -889,8 +889,8 @@ Source of truth: [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) §1–§13
 
 - [x] **C0** Canon v1.1 ACCEPTED — axis resolution (body+understand needs; yoga/stretch/music formats; reflection+sleep restored)
 - [ ] **C0b** Align mockup need-ленты to canon: add «Понять себя»; move «Уснуть» to end
-- [ ] **P0** Web `/practices` shell: need chips + «Рекомендовано сейчас» + Continue + moment rail + format chips + practice of day + conditional «Мои практики» — **IN PROGRESS (FE)** `PracticesStateCycleScreen`
-- [ ] **P1** Session fullscreen + state check-in (Лучше / Без изменений / Сложнее) + «Сохранить в сегодняшний день»
+- [x] **P0** Web `/practices` shell: need chips + recommend + Continue + moment + formats + practice of day + conditional my library
+- [ ] **P1** Session fullscreen + state check-in + «Сохранить в сегодняшний день» — **IN PROGRESS (FE)** `PracticeLiveSession` · draft → Continue · `?run=1`
 - [ ] **M0** Music layer (С голосом / Только музыка / Без звука + voice/music/nature volumes) — parallel to P0/P1
 - [ ] iOS parity after web P0+P1 stable
 
@@ -1116,13 +1116,17 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
-- 2026-07-30 | Practices | **P0 web state-cycle shell** | **IN PROGRESS (FE)** | `/practices` → `PracticesStateCycleScreen`: 6 need chips · recommend · moment rail · 9 format chips · practice of day · conditional my library · desktop Today rail. Client keyword filter until API needs. Images: `/images/praktiki_banner.png` + CSS gradient placeholders. Continue hidden (no in-progress API). Tests: practicesCanon + StateCycleScreen.
+- 2026-07-30 | Practices | **P1 live session + check-in + save to Today** | **IN PROGRESS (FE)** | `PracticeLiveSession`: fullscreen timer/pause/mute · check-in better/same/harder · POST `/complete` + meaning `practice_completed` (`state_after`, `surface=practices_session_p1`) · local draft powers hub Continue · hub links `?run=1`. Tests: PracticeLiveSession + practiceSessionDraft.
+- 2026-07-30 | Practices | **P0 web state-cycle shell** | **DONE (FE)** | `/practices` → `PracticesStateCycleScreen`: 6 need chips · recommend · moment rail · 9 format chips · practice of day · conditional my library · desktop Today rail. Client keyword filter until API needs. Images: `/images/praktiki_banner.png` + CSS gradient placeholders. Continue via session draft (P1). Tests: practicesCanon + StateCycleScreen.
 - 2026-07-30 | Practices | **Screen v1.1 canon — axis resolution** | **ACCEPTED** | SoT [practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) v1.1: needs keep **both** «Почувствовать тело» + «Понять себя» (body vs reflective axes); «Уснуть» last. Formats: yoga/stretch/music chips (spec «Телесные» detailed); restore reflection+sleep; music = chip ⊕ layer. **C0b** mockup need-align. No parallel `practices-canon.md`. Next: C0b → P0 → P1; M0 ∥.
 - 2026-07-30 | Practices | **Screen v1.0 canon C0 (need/format freeze)** | **SUPERSEDED → v1.1** | v1.0 dropped «Почувствовать тело» and umbrella `body` format; replaced by axis logic in v1.1.
 - 2026-07-30 | Web Guest / SEO audit | **Guest Story Surface P0 (item 11)** | **DONE (LIVE)** | Curl: landing dual CTAs · `/demo/today` SSR Theme/Focus/Practice/Memory · `/onboarding/invite` · pitch CTAs · Compat Profile bridge · guest-nav primary Today·Profile·Compatibility. Evening/day-2 = slice 2. Canon [audits/GUEST_STORY_SURFACE_P0_2026-07-30.md](./audits/GUEST_STORY_SURFACE_P0_2026-07-30.md).
 - 2026-07-30 | Web Guest / SEO audit | **/today+/profile SSR pitch body** | **DONE (LIVE)** | Independent sandbox curl: pitch SSR above bailout on /today+/profile; «Собираем стабильное…» = 0. BAILOUT remains on client widgets only. Item 11 story surface → row above.
+- 2026-07-30 | Product UI | **ScreenFlow Phase 2b — Reading/Move/Response** | **LIVE** | Split interim Personal bundle into 3 ScreenFlow steps via `actFilter`. ActNav: Чтение·Действие·Отклик. Canon [SCREEN_FLOW_V1 §4](./foundation/SCREEN_FLOW_V1.md) v1.1. Bundle `page-fe43e887cbee4689.js`. Tests: TodayProductScreenFlow indices + composition surface.
 - 2026-07-30 | Product UI | **ScreenFlow V1 — proto + Today Glance-first** | **LIVE (redeployed)** | Was code-only: prod image lagged (Docker `npm run build` failed on TS; `tail` masked exit → stale `#today-act-` bundle). Fixed `showSymbols`/`tarotPickedId` types; rebuilt+force-recreate. Live chunk `page-bbb6669e810a4bf7.js` contains `today-screen-flow` + Glance. Hard-refresh to verify transform pager. Phase 2b = split personal; axis lock after real-device.
-- 2026-07-30 | Today / Content | **VerdictStrip `why_short` jargon removal** | **LIVE** | `why_short_for` no longer prints «Венера: трин к Сатурн» — experiential aspect-class lines; provenance stays in `driver_ids`. Canon [TODAY_WAVE2_CONTRACT_V1 §3.3](./today/TODAY_WAVE2_CONTRACT_V1.md). Cached strip rows may need TTL expiry or re-fetch.
+- 2026-07-30 | Today / Content | **Strip+Glance experiential labels (no jargon)** | **LIVE** | Shared `today_activation_copy_v1`: `why_short` + `label_short` from aspect class only — no planet/aspect names/degrees. Canon [TODAY_WAVE2_CONTRACT_V1 §3.3 §4](./today/TODAY_WAVE2_CONTRACT_V1.md). Restart clears 7m activation TTL.
+- 2026-07-30 | Web Auth + Landing | **Landing hash-nav restore after Guest Story P0** | **LIVE** | Guest Story rewrite dropped `landingHashNav`; re-wired instant scrollTop + `<a>` hash clicks (no Next Link / no native smooth).
+- 2026-07-30 | Today / Content | **VerdictStrip `why_short` jargon removal** | **SUPERSEDED → Strip+Glance bank** | Earlier strip-only fix folded into shared copy module with GlanceTimeline.
 - 2026-07-30 | Web Guest / SEO audit | **Re-audit P0–P2 pack** | **DONE (LIVE)** | Owner curl confirmed: `/` landing+unique meta · `/today` pitch · `/profile` pitch · `/compatibility` guest · `/practices` SSR catalog · LK body · tarot «Три карты». P0/P1/P2 closed except item 11 (hierarchy).
 - 2026-07-30 | Web Guest / SEO audit | **Guest shell SSR fix** | **DONE (FE)** | Live check: practice HTML still showed «Путник»+full nav. Cause: `guestShell = !authLoading && !isAuthenticated` → SSR authLoading=true → authed chrome. Fix: `guestShell = !isAuthenticated`. Redeploy required.
 - 2026-07-30 | Web Guest / SEO audit | **P0–P2 public audit pack** | **DONE (FE)** | Guest `/today` value-first + showcase; guest shell (tarot/compat/practices, «Гость»); practice hard-404 + unique meta + transport≠not-found; robots/sitemap/noindex policy + segment titles; dual-nav unmount after hydrate; compatibility guest demo. Deploy needs `PUBLIC_WEB_URL` bake for OG. Tests: appNavConfig, publicSeoPolicy, fetchPracticeDetailServer, CompatibilityGuestDemo.
@@ -1805,6 +1809,7 @@ Historical note:
 - 2026-07-26 | Profile / Architecture | **CE PUBLISH_READY cutover** | **LIVE** | Owner-approved · `character_engine_v1` = portrait SoT · personality/funnel/oneshot gated · [CHARACTER_ENGINE_PUBLISH_READY_CUTOVER_V0.md](audits/CHARACTER_ENGINE_PUBLISH_READY_CUTOVER_V0.md). Readers migration in progress.
 - 2026-07-26 | Profile / Architecture | **CE envelope `character_engine_v1`** | **LIVE READY** | Nest composed from Stage 0–5 · cutover promotes `forming`→`ready` · [CHARACTER_ENGINE_ENVELOPE_V0.md](audits/CHARACTER_ENGINE_ENVELOPE_V0.md).
 - 2026-07-29 | Profile / UI | **Act1 share-core + anti-dupe (#2+#6)** | **IN BRANCH** | Hero = name+line+visual only · no foundation/pills · Act2 owns facts · `journeyAntiDupe` · Act3 text draft [PROFILE_ACT3_NODE_DRAFT_V0.md](profile/PROFILE_ACT3_NODE_DRAFT_V0.md)
+- 2026-07-30 | Profile / UI | **Natal chart object track closed** | **ACCEPTED** | Owner: карта ок · stop material/layout polish on wheel · 3D remains no-go · next Profile work = Motion B live accept (accents, not chart) or Acts 3–5 journey (content → then Visual Modes #4)
 - 2026-07-30 | Profile / UI | **Natal 3D closed + no plate tilt** | **ACCEPTED** | Owner QA: chart reads as atmospheric object (starfield · focus chords · seal icons) — **WebGL/3D no-go** · remove pointer tilt/parallax · zodiac markers tint all four elements (jewel family), not fire-only
 - 2026-07-30 | Profile / UI | **Why formation full-width 2-col** | **IN BRANCH** | Step 2 cards: drop desktop 4-col (left-clustered skinny cells) · 1 col mobile / 2 col desktop stretch scene width — same pattern as Effort spheres · odd/only orphan spans full row so selected/leftover cards are not left-guttered
 - 2026-07-30 | Profile / UI | **Natal planet seal icons** | **IN BRANCH** | Heavier mask-optimized SVGs (`planets/*.svg` stroke 2.75 + filled cores) · inline/`PLANET_STROKE` parity · slightly larger disc glyph · iOS stroke weight · **3D closed** (see row above)

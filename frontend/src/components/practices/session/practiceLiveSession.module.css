@@ -1,0 +1,233 @@
+.overlay {
+  --pls-ink: #2a2520;
+  --pls-muted: rgba(255, 252, 248, 0.78);
+  --pls-lavender: #8b7bb8;
+  --pls-lavender-deep: #6b5a9a;
+  --pls-card: rgba(255, 252, 248, 0.94);
+
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  color: #fffcf8;
+  overflow: hidden;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(165deg, rgba(42, 37, 32, 0.45), rgba(42, 37, 32, 0.72)),
+    linear-gradient(135deg, #b8a8d4 0%, #8b7bb8 42%, #6b8a9e 100%);
+  background-size: cover;
+  background-position: center;
+}
+
+.bg[data-image="1"] {
+  background-image:
+    linear-gradient(165deg, rgba(42, 37, 32, 0.42), rgba(42, 37, 32, 0.78)),
+    var(--pls-bg-image);
+}
+
+.chrome {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.1rem;
+}
+
+.closeBtn,
+.soundBtn {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 252, 248, 0.28);
+  background: rgba(255, 252, 248, 0.12);
+  color: #fffcf8;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 0.95rem;
+}
+
+.body {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 1rem 1.35rem 2rem;
+  text-align: center;
+  max-width: 28rem;
+  margin-inline: auto;
+  width: 100%;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--tf-font-display, Georgia, "Times New Roman", serif);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.instruction {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--pls-muted);
+  max-width: 22rem;
+}
+
+.timer {
+  margin: 0.5rem 0 0;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(2.75rem, 10vw, 3.75rem);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.progressTrack {
+  width: min(16rem, 70vw);
+  height: 0.35rem;
+  border-radius: 999px;
+  background: rgba(255, 252, 248, 0.22);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 999px;
+  background: rgba(255, 252, 248, 0.85);
+  transition: width 0.35s linear;
+}
+
+.pauseBtn {
+  margin-top: 0.75rem;
+  min-width: 9.5rem;
+  min-height: 9.5rem;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 252, 248, 0.55);
+  background: rgba(255, 252, 248, 0.14);
+  color: #fffcf8;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+
+.pauseBtn:hover {
+  background: rgba(255, 252, 248, 0.22);
+}
+
+.finishBtn {
+  margin-top: 0.25rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 252, 248, 0.35);
+  background: transparent;
+  color: var(--pls-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.panel {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem 1.25rem 2rem;
+  text-align: center;
+  max-width: 26rem;
+  margin-inline: auto;
+  width: 100%;
+}
+
+.panelTitle {
+  margin: 0;
+  font-family: var(--tf-font-display, Georgia, serif);
+  font-size: clamp(1.35rem, 3.5vw, 1.75rem);
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.panelBody {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--pls-muted);
+}
+
+.checkinRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.55rem;
+  margin-top: 0.5rem;
+}
+
+.checkinChip {
+  padding: 0.7rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 252, 248, 0.35);
+  background: rgba(255, 252, 248, 0.1);
+  color: #fffcf8;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.checkinChipActive {
+  background: var(--pls-card);
+  color: var(--pls-lavender-deep);
+  border-color: transparent;
+  font-weight: 600;
+}
+
+.primaryCta {
+  margin-top: 0.75rem;
+  width: 100%;
+  max-width: 22rem;
+  padding: 0.85rem 1.25rem;
+  border-radius: 999px;
+  border: none;
+  background: var(--pls-card);
+  color: var(--pls-lavender-deep);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+}
+
+.primaryCta:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.secondaryCta {
+  padding: 0.55rem 1rem;
+  border: none;
+  background: transparent;
+  color: var(--pls-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.audioHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
