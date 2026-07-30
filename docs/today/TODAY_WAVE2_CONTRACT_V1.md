@@ -1,6 +1,6 @@
 # Today Wave 2 — Data Contract `day_facts_v1`
 
-**Status:** Phase D.2 **LIVE** (`GET /today/day-facts` — narrative only when `conflict.driver_ids` all `pt-*` ⊆ pool; else `partial: true`. Act 3 stays on `day_scenario`)  
+**Status:** Phase D.2 **LIVE** · D.2b generation SoT **IN PROGRESS** (`conflict.driver_ids` ← natal `pt-*` when present)  
 **Execution order:** [TODAY_WAVE2_EXECUTION_PLAN.md](./TODAY_WAVE2_EXECUTION_PLAN.md)  
 **Motion (pilot):** [TODAY_MOTION_PILOT_V1.md](./TODAY_MOTION_PILOT_V1.md)
 
@@ -322,7 +322,9 @@ POST /today/tap-widget/response  → tap_event_v1
 
 `generation_provenance` is **not** UI. If strip vs Act 3 diverge, compare `driver_ids` — one activation pool, different top-N consumption.
 
-**D.2 (day_facts honesty, not Act 3 readiness):** Project conflict/scenes onto day_facts **only** when every `conflict.driver_id` is natal-style (`pt-…`) and ⊆ the same-request activation pool. Pack-ranked ids (`sky-`/`phase-`/`moon-`/…) fail the gate → omit narrative, `partial: true`. Act 3 continues to read `day_story.day_scenario` (no demotion by this gate). Long-term: generation writes natal driver_ids as SoT (tracker backlog).
+**D.2 (day_facts honesty, not Act 3 readiness):** Project conflict/scenes onto day_facts **only** when every `conflict.driver_id` is natal-style (`pt-…`) and ⊆ the same-request activation pool. Pack-ranked ids (`sky-`/`phase-`/`moon-`/…) fail the gate → omit narrative, `partial: true`. Act 3 continues to read `day_story.day_scenario` (no demotion by this gate).
+
+**D.2b (generation SoT):** When `foundation.personal_natal_activations` has `pt-*` rows, `build_scenario_conflict_v1` / native LLM map set `conflict.driver_ids` to top-N natal ids (same pool as Strip). Pack ranked_drivers stay on foundation for dramaturgy provenance. Stale cached scenarios with pack ids remain gated by D.2 until regenerate — no serve-time invent.
 
 ---
 
@@ -404,11 +406,20 @@ Opens with the **first code PR** (Phase A), not with docs lock alone.
 ### Phase D.2 (day_facts narrative gate — pt-* ⊆ pool) — code PR
 
 - **SoT before:** D.1b soft gate allowed event-pack conflict ids when natal pool non-empty; commit `69bfa59` also demoted Act 3 `ready` via the same rule (live regression risk on pack-majority days)
-- **SoT after:** day_facts projects narrative **only** if all `conflict.driver_ids` are `pt-…` and ⊆ fresh activation pool; else omit conflict/scenes/props, `partial: true`. Act 3 demotion **removed** — chapters stay on day_scenario nest. No `trust_ok`. No pack→natal invent. Generation SoT (ranked drivers → natal ids) = separate backlog ticket.
+- **SoT after:** day_facts projects narrative **only** if all `conflict.driver_ids` are `pt-…` and ⊆ fresh activation pool; else omit conflict/scenes/props, `partial: true`. Act 3 demotion **removed** — chapters stay on day_scenario nest. No `trust_ok`. No pack→natal invent. Generation SoT → **D.2b**.
 - **Public JSON:** `partial: true` more often on day_facts when pack ranks win; **no live UI impact today** (FE does not consume `day_facts.conflict`/`.scenes`; Act 3 uses nest). When FE starts reading those fields, re-check product-facing copy.
 - **Migration:** none
 - **Canon:** this file §7 · [TODAY_WAVE2_EXECUTION_PLAN](./TODAY_WAVE2_EXECUTION_PLAN.md) Phase D.2
 - **Backward compatible:** yes — additive omission only on day_facts; Act 3 path restored to pre-`69bfa59`
+
+### Phase D.2b (conflict.driver_ids generation SoT) — code PR
+
+- **SoT before:** `conflict.driver_ids` from thesis/pack `ranked_drivers` (sky-/phase-/moon- majority)
+- **SoT after:** When foundation has natal `pt-*` activations, conflict.driver_ids = top-N by rank (same pool as Strip). Pack remains on `foundation.ranked_drivers` / thesis for dramaturgy. D.2 serve gate unchanged for stale caches.
+- **Public JSON:** after regenerate, day_facts more often `partial: false` with narrative; Act 3 nest driver_ids become natal when rebuilt
+- **Migration:** none required; natural regen / force_rebuild clears pack-id caches
+- **Canon:** this file §7 · [TODAY_WAVE2_EXECUTION_PLAN](./TODAY_WAVE2_EXECUTION_PLAN.md) D.2b
+- **Backward compatible:** yes — pack fallback when no natal pool; no invent on serve
 
 ---
 
