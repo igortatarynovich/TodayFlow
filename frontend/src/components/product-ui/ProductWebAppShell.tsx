@@ -44,7 +44,7 @@ export type ProductWebAppShellProps = {
 };
 
 const GUEST_SHELL_NAME = "Гость";
-const GUEST_SHELL_META = "Собери свой Today";
+const GUEST_SHELL_META = "Картина твоего дня";
 
 export function ProductWebAppShell({
   testId,
@@ -71,9 +71,13 @@ export function ProductWebAppShell({
   useEffect(() => {
     setNavHydrated(true);
   }, []);
-  // Before hydration keep both (CSS hides one). After: unmount inactive → a11y/tab-order.
+  // Before hydration keep both (CSS hides one); mark CSS-hidden nav for a11y.
+  // After: unmount inactive → clean tab-order / screen readers.
   const showSidebar = !navHydrated || isDesktop;
   const showMobileTabBar = !navHydrated || !isDesktop;
+  // Mobile-first until matchMedia: hide sidebar from AT on first paint.
+  const sidebarAriaHidden = !navHydrated ? true : undefined;
+  const mobileAriaHidden = navHydrated && isDesktop ? true : undefined;
   // Same isFirstDay signal as SectionAtmosphereBridge (html-level mood), read from
   // window.location instead of useSearchParams() — avoids forcing every consumer
   // route into a Suspense boundary just for the `?first=1` override.
@@ -116,15 +120,17 @@ export function ProductWebAppShell({
   const sidebarNode =
     sidebar ??
     (showSidebar ? (
-      <DsAppSidebar
-        displayName={resolvedName}
-        profileMeta={resolvedMeta}
-        avatarInitial={avatarInitial}
-        navItems={navItems}
-        settingsLabel={footerLabel}
-        logoHref={logoHref}
-        footerHref={footerHref}
-      />
+      <div aria-hidden={sidebarAriaHidden || undefined}>
+        <DsAppSidebar
+          displayName={resolvedName}
+          profileMeta={resolvedMeta}
+          avatarInitial={avatarInitial}
+          navItems={navItems}
+          settingsLabel={footerLabel}
+          logoHref={logoHref}
+          footerHref={footerHref}
+        />
+      </div>
     ) : null);
 
   return (
@@ -145,7 +151,7 @@ export function ProductWebAppShell({
         fullMain={fullMain}
       />
       {showMobileTabBar ? (
-        <div className={l.mobileTabBarWrap}>
+        <div className={l.mobileTabBarWrap} aria-hidden={mobileAriaHidden || undefined}>
           <DsMobileTabBar
             items={navItems.map((item) => ({
               href: item.href,

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { lookupPracticeDetail } from "@/lib/practices/fetchPracticeDetailServer";
+import styles from "@/app/practices/PracticesPage.module.css";
 
 type Params = { id: string };
 
@@ -45,7 +46,7 @@ export async function generateMetadata({
   };
 }
 
-/** Hard 404 when the catalog has no such id — avoids indexing empty «Практика не найдена» shells. */
+/** Hard 404 when missing; SSR body so crawlers see the practice, not only the shell. */
 export default async function PracticeDetailLayout({
   children,
   params,
@@ -53,11 +54,41 @@ export default async function PracticeDetailLayout({
   children: ReactNode;
   params: Params;
 }) {
-  const lookup: Awaited<ReturnType<typeof lookupPracticeDetail>> = await lookupPracticeDetail(
-    params.id,
-  );
+  const lookup = await lookupPracticeDetail(params.id);
   if (lookup.status === "missing") {
     notFound();
   }
-  return <>{children}</>;
+
+  const practice = lookup.status === "ok" ? lookup.practice : null;
+  const instructions = (practice?.instructions || []).filter((step) => step?.trim());
+
+  return (
+    <>
+      {practice ? (
+        <article className={styles.ssrPracticeArticle} data-testid="practice-ssr-body">
+          <h1 className={styles.ssrPracticeTitle}>{practice.title}</h1>
+          {practice.description ? (
+            <p className={styles.ssrPracticeLead}>{practice.description}</p>
+          ) : null}
+          <p className={styles.ssrPracticeMeta}>
+            {[
+              practice.duration_minutes != null ? `${practice.duration_minutes} мин` : null,
+              practice.difficulty || null,
+              practice.is_free ? "бесплатно" : null,
+            ]
+              .filter(Boolean)
+              .join(" · ")}
+          </p>
+          {instructions.length > 0 ? (
+            <ol className={styles.ssrPracticeSteps}>
+              {instructions.map((step, index) => (
+                <li key={`${practice.id}-step-${index}`}>{step}</li>
+              ))}
+            </ol>
+          ) : null}
+        </article>
+      ) : null}
+      {children}
+    </>
+  );
 }

@@ -11,7 +11,7 @@ describe("publicSeoPolicy", () => {
   it("keeps unique titles for closed routes", () => {
     expect(metadataForSegment("today").title).toBe("Сегодня");
     expect(metadataForSegment("auth").title).toBe("Вход");
-    expect(metadataForSegment("compatibility").description).toMatch(/Динамика связи/);
+    expect(metadataForSegment("compatibility").description).toMatch(/Динамика между двумя/);
   });
 
   it("disallows app prefixes in robots policy", () => {

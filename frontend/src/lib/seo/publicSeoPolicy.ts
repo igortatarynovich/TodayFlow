@@ -35,13 +35,15 @@ export type PublicSeoRoute = {
 export const PUBLIC_SEO_BY_SEGMENT: Record<string, PublicSeoRoute> = {
   today: {
     title: "Сегодня",
-    description: "Персональный сценарий дня: тема, фокус, практика и память о вчера.",
+    description:
+      "Персональная картина дня: тема, фокус, практика и память о вчера — не общий гороскоп.",
     sitemap: false,
     robots: SEO_NOINDEX,
   },
   profile: {
     title: "Моя карта",
-    description: "Личный профиль и карта личности TodayFlow.",
+    description:
+      "Цельный портрет личности: ядро, противоречия, решения, отношения и жизненные циклы.",
     sitemap: false,
     robots: SEO_NOINDEX,
   },
@@ -66,19 +68,21 @@ export const PUBLIC_SEO_BY_SEGMENT: Record<string, PublicSeoRoute> = {
   compatibility: {
     title: "Совместимость",
     description:
-      "Динамика связи — не приговор, а карта для разговора и выбора. Проверь пару в TodayFlow.",
+      "Динамика между двумя людьми: что сближает, где напряжение и что сделать на практике.",
     sitemap: true,
     robots: SEO_INDEX,
   },
   tarot: {
     title: "Таро",
-    description: "Задай вопрос, открой расклад и получи ясный ответ, который можно унести в день.",
+    description:
+      "Сформулируй вопрос, выбери расклад и получи ответ, который можно унести в день.",
     sitemap: true,
     robots: SEO_INDEX,
   },
   practices: {
     title: "Практики",
-    description: "Короткие практики для спокойного дня: дыхание, фокус и ритуалы без длинного разбора.",
+    description:
+      "Короткие практики под состояние: дыхание, медитация и ритуалы с длительностью и уровнем.",
     sitemap: true,
     robots: SEO_INDEX,
   },

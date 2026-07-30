@@ -25,6 +25,8 @@ import {
 import { TodayNarrativeDepthControl } from "@/components/today/TodayNarrativeDepthControl";
 import { TodayWebDashboard } from "@/components/product-ui/TodayWebDashboard";
 import { ProductPageScreen } from "@/components/product-ui/ProductPageScreen";
+import { GuestProductPitch } from "@/components/product-ui/GuestProductPitch";
+import { GUEST_TODAY_PITCH } from "@/components/product-ui/guestProductPitches";
 import { DsButton } from "@/design-system";
 import { TodayDayReveal } from "@/components/today/TodayDayReveal";
 import {
@@ -1210,30 +1212,26 @@ export default function TodayPage() {
 
   if (!isAuthenticated) {
     const sessionEnded = hasAuthSessionEnded();
+    const pitch = GUEST_TODAY_PITCH;
     return (
-      <ProductPageScreen
-        testId="today-guest-gate"
-        title="Сегодня"
-        guest={
-          sessionEnded
-            ? {
-                message: "Сессия завершилась. Войди снова — Today и Профиль откроются с твоими данными.",
-                ctaHref: "/auth?mode=login",
-                ctaLabel: "Войти",
-                secondaryCtaHref: `${VALUE_FIRST_PATHS.welcome}?fresh=1`,
-                secondaryCtaLabel: "Создать новый Today",
-              }
-            : {
-                // Value-first: cold guest sees showcase + create path, not login-only empty shell.
-                message: RITUAL_COPY.todayPageAuthRequired,
-                ctaHref: `${VALUE_FIRST_PATHS.welcome}?fresh=1`,
-                ctaLabel: "Создать мой Today",
-                secondaryCtaHref: "/auth?mode=login",
-                secondaryCtaLabel: "Уже есть аккаунт? Войти",
-              }
-        }
-        hideDatePill
-      />
+      <ProductPageScreen testId="today-guest-gate" title="Сегодня" hideDatePill hideHeader>
+        <GuestProductPitch
+          testId="today-guest-pitch"
+          eyebrow={pitch.eyebrow}
+          title={pitch.title}
+          lead={pitch.lead}
+          parts={pitch.parts}
+          needs={pitch.needs}
+          primaryHref={
+            sessionEnded ? "/auth?mode=login" : `${VALUE_FIRST_PATHS.welcome}?fresh=1`
+          }
+          primaryLabel={sessionEnded ? "Войти" : pitch.ctaPrimary}
+          secondaryHref={
+            sessionEnded ? `${VALUE_FIRST_PATHS.welcome}?fresh=1` : "/auth?mode=login"
+          }
+          secondaryLabel={sessionEnded ? "Создать новый Today" : pitch.ctaSecondary}
+        />
+      </ProductPageScreen>
     );
   }
 

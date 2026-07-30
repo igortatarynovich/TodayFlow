@@ -46,6 +46,8 @@ import { ProfileV2DepthRail } from "@/components/profile/v2/ProfileV2DepthRail";
 import { ProfileV2SystemScreen } from "@/components/profile/v2/ProfileV2SystemScreen";
 import { ProfileWebScreen } from "@/components/product-ui/ProfileWebScreen";
 import { ProductPageScreen } from "@/components/product-ui/ProductPageScreen";
+import { GuestProductPitch } from "@/components/product-ui/GuestProductPitch";
+import { GUEST_PROFILE_PITCH } from "@/components/product-ui/guestProductPitches";
 import { productWebProfileMeta } from "@/lib/productWebUser";
 import {
   buildProfileIdentityPills,
@@ -102,7 +104,7 @@ function ProfileLoadingScreen() {
       testId="profile-loading"
       title="Профиль"
       loading
-      loadingLabel="Собираем стабильное состояние профиля"
+      loadingLabel="Открываем профиль"
       hideDatePill
     />
   );
@@ -365,36 +367,54 @@ function ProfileHubPageInner() {
     }, 180);
   }, [activeSection, queryChecked, showSetupFlow]);
 
+  // Guest: never show the authed loading placeholder — pitch is the product surface.
+  if (!authLoading && !isAuthenticated) {
+    const sessionEnded = hasAuthSessionEnded();
+    const pitch = GUEST_PROFILE_PITCH;
+    return (
+      <ProductPageScreen testId="profile-guest-gate" title="Профиль" hideDatePill hideHeader>
+        <GuestProductPitch
+          testId="profile-guest-pitch"
+          eyebrow={pitch.eyebrow}
+          title={pitch.title}
+          lead={pitch.lead}
+          parts={pitch.parts}
+          needs={pitch.needs}
+          primaryHref={
+            sessionEnded ? "/auth?mode=login" : `${VALUE_FIRST_PATHS.welcome}?fresh=1`
+          }
+          primaryLabel={sessionEnded ? "Войти" : pitch.ctaPrimary}
+          secondaryHref={
+            sessionEnded ? `${VALUE_FIRST_PATHS.welcome}?fresh=1` : "/auth?mode=login"
+          }
+          secondaryLabel={sessionEnded ? "Создать новый Today" : pitch.ctaSecondary}
+        />
+      </ProductPageScreen>
+    );
+  }
+
   if (authLoading || loading || !queryChecked || !journeyChecked || !claimChecked || (!WEB_LAUNCH_MIN_PROFILE && profileIncomplete && !forceSetup && buildStage === "idle")) {
     return <ProfileLoadingScreen />;
   }
 
   if (!isAuthenticated) {
-    const sessionEnded = hasAuthSessionEnded();
+    // Auth resolved mid-render as guest (race) — same pitch as above.
+    const pitch = GUEST_PROFILE_PITCH;
     return (
-      <ProductPageScreen
-        testId="profile-guest-gate"
-        title="Профиль"
-        hideDatePill
-        guest={
-          sessionEnded
-            ? {
-                message: "Сессия завершилась. Войди снова — Профиль и Today откроются с твоими данными.",
-                ctaHref: "/auth?mode=login",
-                ctaLabel: "Войти",
-                secondaryCtaHref: `${VALUE_FIRST_PATHS.welcome}?fresh=1`,
-                secondaryCtaLabel: "Создать новый Today",
-              }
-            : {
-                message:
-                  "Профиль и Today открываются после мягкой регистрации: имя, дата рождения, первый разбор — и email, чтобы сохранить.",
-                ctaHref: `${VALUE_FIRST_PATHS.welcome}?fresh=1`,
-                ctaLabel: "Создать мой Today",
-                secondaryCtaHref: "/auth?mode=login",
-                secondaryCtaLabel: "Уже есть аккаунт? Войти",
-              }
-        }
-      />
+      <ProductPageScreen testId="profile-guest-gate" title="Профиль" hideDatePill hideHeader>
+        <GuestProductPitch
+          testId="profile-guest-pitch"
+          eyebrow={pitch.eyebrow}
+          title={pitch.title}
+          lead={pitch.lead}
+          parts={pitch.parts}
+          needs={pitch.needs}
+          primaryHref={`${VALUE_FIRST_PATHS.welcome}?fresh=1`}
+          primaryLabel={pitch.ctaPrimary}
+          secondaryHref="/auth?mode=login"
+          secondaryLabel={pitch.ctaSecondary}
+        />
+      </ProductPageScreen>
     );
   }
 

@@ -151,3 +151,95 @@
   font-size: 0.875rem;
   color: var(--section-text-muted, var(--tf-caption));
 }
+
+/* SSR catalog + practice body — crawler-readable first HTML */
+.ssrCatalog {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 1.25rem 1.15rem 0.5rem;
+}
+
+.ssrCatalogTitle {
+  margin: 0 0 0.35rem;
+  font-size: 1.35rem;
+  font-weight: 650;
+  color: var(--tf-ink, #2a2520);
+}
+
+.ssrCatalogLead {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--tf-ink-soft, #5a5450);
+}
+
+.ssrCatalogList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.ssrCatalogLink {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.85rem;
+  border: 1px solid rgba(201, 169, 110, 0.22);
+  background: rgba(255, 250, 242, 0.9);
+  text-decoration: none;
+  color: inherit;
+}
+
+.ssrCatalogName {
+  font-weight: 650;
+  color: var(--tf-ink, #2a2520);
+}
+
+.ssrCatalogMeta {
+  font-size: 0.75rem;
+  color: var(--tf-caption, #9a8468);
+}
+
+.ssrCatalogDesc {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--tf-ink-soft, #5a5450);
+}
+
+.ssrPracticeArticle {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 1.25rem 1.15rem 0.35rem;
+}
+
+.ssrPracticeTitle {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  font-weight: 650;
+  color: var(--tf-ink, #2a2520);
+}
+
+.ssrPracticeLead {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--tf-ink-soft, #5a5450);
+}
+
+.ssrPracticeMeta {
+  margin: 0 0 0.85rem;
+  font-size: 0.75rem;
+  color: var(--tf-caption, #9a8468);
+}
+
+.ssrPracticeSteps {
+  margin: 0 0 1rem;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--tf-ink-soft, #5a5450);
+}

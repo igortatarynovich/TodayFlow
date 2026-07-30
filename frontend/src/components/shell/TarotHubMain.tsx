@@ -108,7 +108,11 @@ export function TarotHubMain() {
                   <span className={s.hubSpreadStepBody}>
                     <span className={s.hubSpreadStepTitle}>
                       {spread.title}
-                      <span className={s.hubSpreadStepMeta}> · {spread.count} карт</span>
+                      <span className={s.hubSpreadStepMeta}>
+                        {" "}
+                        · {spread.count}{" "}
+                        {spread.count === 1 ? "карта" : spread.count >= 2 && spread.count <= 4 ? "карты" : "карт"}
+                      </span>
                     </span>
                     <span className={s.hubSpreadStepDesc}>{spread.description}</span>
                   </span>

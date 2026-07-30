@@ -35,11 +35,11 @@ export const viewport: Viewport = {
 
 export const metadata = {
   title: {
-    default: "TodayFlow - Эра самопознания",
+    default: "TodayFlow",
     template: "%s | TodayFlow"
   },
-  description: "Понимай себя. Живи осознанно. Персонализированные астрологические инсайты для самопознания и личностного роста.",
-  keywords: ["астрология", "карта рождения", "натальная карта", "самопознание", "личность", "TodayFlow"],
+  description: "Персональный ориентир на день: тема, фокус, практика и память о вчера — не общий гороскоп.",
+  keywords: ["самопознание", "персональный день", "TodayFlow", "профиль", "таро", "совместимость"],
   authors: [{ name: "TodayFlow" }],
   creator: "TodayFlow",
   publisher: "TodayFlow",
@@ -65,8 +65,8 @@ export const metadata = {
     locale: "ru_RU",
     url: "/",
     siteName: "TodayFlow",
-    title: "TodayFlow - Эра самопознания",
-    description: "Понимай себя. Живи осознанно. Персонализированные астрологические инсайты для самопознания и личностного роста.",
+    title: "TodayFlow",
+    description: "Персональный ориентир на день: тема, фокус, практика и память о вчера — не общий гороскоп.",
     images: [
       {
         url: "/images/hero-meditation.png",
@@ -78,8 +78,8 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "TodayFlow - Эра самопознания",
-    description: "Понимай себя. Живи осознанно.",
+    title: "TodayFlow",
+    description: "Персональный ориентир на день — тема, фокус и память о вчера.",
     images: ["/images/hero-meditation.png"],
   },
   robots: {

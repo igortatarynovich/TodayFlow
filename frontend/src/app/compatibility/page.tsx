@@ -11,6 +11,7 @@ import {
   useCompatibilityHubRail,
   type CompatWebModeId,
 } from "@/components/product-ui/CompatibilityWebHub";
+import { CompatibilityGuestDemo } from "@/components/product-ui/CompatibilityGuestDemo";
 import {
   compatibilityWebChromeBundle,
 } from "@/components/product-ui/compatibilityWebChrome";
@@ -1121,6 +1122,7 @@ export default function CompatibilityPage() {
   if (!isAuthenticated) {
     return compatWebShell(
       <>
+        <CompatibilityGuestDemo locale={compatLocale} />
         <CompatibilityLayerSelector isAuthenticated={false} />
       </>,
       { rail: hubRail ?? undefined },
