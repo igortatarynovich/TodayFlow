@@ -20,7 +20,11 @@ export default async function PracticesLayout({ children }: { children: ReactNod
   return (
     <>
       {catalog.length > 0 ? (
-        <nav className={styles.ssrCatalog} aria-label="Каталог практик" data-testid="practices-ssr-catalog">
+        <nav
+          className={styles.ssrCatalog}
+          aria-hidden="true"
+          data-testid="practices-ssr-catalog"
+        >
           <h2 className={styles.ssrCatalogTitle}>Практики</h2>
           <p className={styles.ssrCatalogLead}>
             Короткие шаги для спокойного дня — дыхание, медитация и ритуалы.

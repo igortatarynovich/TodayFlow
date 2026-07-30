@@ -65,7 +65,11 @@ export default async function PracticeDetailLayout({
   return (
     <>
       {practice ? (
-        <article className={styles.ssrPracticeArticle} data-testid="practice-ssr-body">
+        <article
+          className={styles.ssrPracticeArticle}
+          data-testid="practice-ssr-body"
+          aria-hidden="true"
+        >
           <h1 className={styles.ssrPracticeTitle}>{practice.title}</h1>
           {practice.description ? (
             <p className={styles.ssrPracticeLead}>{practice.description}</p>

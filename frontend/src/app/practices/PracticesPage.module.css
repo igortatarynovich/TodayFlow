@@ -152,11 +152,20 @@
   color: var(--section-text-muted, var(--tf-caption));
 }
 
-/* SSR catalog + practice body — crawler-readable first HTML */
-.ssrCatalog {
-  max-width: 42rem;
-  margin: 0 auto;
-  padding: 1.25rem 1.15rem 0.5rem;
+/* SSR catalog + practice body — crawler-readable HTML, not product UI
+   (state-cycle / session screens own the visible experience). */
+.ssrCatalog,
+.ssrPracticeArticle {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+  pointer-events: none;
 }
 
 .ssrCatalogTitle {
@@ -206,12 +215,6 @@
   font-size: 0.8125rem;
   line-height: 1.45;
   color: var(--tf-ink-soft, #5a5450);
-}
-
-.ssrPracticeArticle {
-  max-width: 42rem;
-  margin: 0 auto;
-  padding: 1.25rem 1.15rem 0.35rem;
 }
 
 .ssrPracticeTitle {
