@@ -109,25 +109,39 @@ export const PRODUCT_WEB_LANDING_FINAL = {
 } as const;
 
 /**
+ * Landing screens — Plan v4 SoT (tracker 2026-07-29).
+ * One viewport screen per id; top nav anchors scroll to these only.
+ * Guest trials split from legacy `#try` → tarot / compatibility / practices.
+ */
+export const PRODUCT_WEB_LANDING_SCREENS = [
+  { id: "hero", role: "curiosity", nav: false },
+  { id: "tarot", role: "guest-trial", nav: true, navLabel: "Таро" },
+  { id: "compatibility", role: "guest-trial", nav: true, navLabel: "Совместимость" },
+  { id: "practices", role: "guest-trial", nav: false },
+  { id: "today", role: "promise", nav: true, navLabel: "Как это работает" },
+  { id: "why", role: "return", nav: true, navLabel: "Почему возвращаются" },
+  { id: "cta", role: "close", nav: false },
+] as const;
+
+export type LandingScreenId = (typeof PRODUCT_WEB_LANDING_SCREENS)[number]["id"];
+
+export const PRODUCT_WEB_LANDING_SECTION_IDS: LandingScreenId[] = PRODUCT_WEB_LANDING_SCREENS.map(
+  (screen) => screen.id,
+);
+
+type LandingNavScreen = Extract<(typeof PRODUCT_WEB_LANDING_SCREENS)[number], { nav: true }>;
+
+/**
  * Top marketing nav — all in-page anchors (SoT v4).
  * Practices has a section + CTA but no separate top-nav item.
  */
-export const PRODUCT_WEB_LANDING_NAV = [
-  { id: "tarot", href: "#tarot", label: "Таро" },
-  { id: "compatibility", href: "#compatibility", label: "Совместимость" },
-  { id: "today", href: "#today", label: "Как это работает" },
-  { id: "why", href: "#why", label: "Почему возвращаются" },
-] as const;
-
-export const PRODUCT_WEB_LANDING_SECTION_IDS = [
-  "hero",
-  "tarot",
-  "compatibility",
-  "practices",
-  "today",
-  "why",
-  "cta",
-] as const;
+export const PRODUCT_WEB_LANDING_NAV = (
+  PRODUCT_WEB_LANDING_SCREENS.filter((s): s is LandingNavScreen => s.nav) as LandingNavScreen[]
+).map((s) => ({
+  id: s.id,
+  href: `#${s.id}` as const,
+  label: s.navLabel,
+}));
 
 export const PRODUCT_WEB_LANDING_FOOTER = {
   tagline: "Персональный ориентир на день — с памятью о вчера.",

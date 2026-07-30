@@ -1,12 +1,18 @@
 import { render, screen } from "@testing-library/react";
 import { LandingPage } from "@/components/landing/LandingPage";
+import { PRODUCT_WEB_LANDING_SECTION_IDS } from "@/components/product-ui/productWebLandingContent";
 
 describe("LandingPage", () => {
-  it("renders service sections and all-anchor top nav (SoT v4)", () => {
+  it("renders scenario screens as viewport sections with all-anchor top nav (SoT v4)", () => {
     render(<LandingPage signupHref="/onboarding/welcome?fresh=1" loginHref="/auth?mode=login" />);
 
     expect(screen.getByTestId("landing-page")).toBeInTheDocument();
     expect(screen.getByTestId("landing-orbit-viz")).toBeInTheDocument();
+    for (const id of PRODUCT_WEB_LANDING_SECTION_IDS) {
+      const el = document.getElementById(id);
+      expect(el).not.toBeNull();
+      expect(el).toHaveAttribute("data-landing-screen", id);
+    }
     expect(screen.getByTestId("landing-section-tarot")).toBeInTheDocument();
     expect(screen.getByTestId("landing-section-compatibility")).toBeInTheDocument();
     expect(screen.getByTestId("landing-section-practices")).toBeInTheDocument();

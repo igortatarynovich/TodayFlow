@@ -77,11 +77,19 @@ function useLandingActiveSection(): string | null {
       return;
     }
 
+    const root = document.documentElement;
+    const page = document.querySelector("[data-landing-page]");
+    const navH =
+      (page instanceof HTMLElement && getComputedStyle(page).getPropertyValue("--tf-ds-nav-h").trim()) ||
+      "4.5rem";
+    root.style.scrollPaddingTop = navH;
+
     const reduceMotion =
       typeof window.matchMedia === "function" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!reduceMotion) {
-      document.documentElement.style.scrollBehavior = "smooth";
+      root.style.scrollBehavior = "smooth";
+      root.style.scrollSnapType = "y proximity";
     }
 
     const sections = PRODUCT_WEB_LANDING_SECTION_IDS.map((id) => document.getElementById(id)).filter(
@@ -118,7 +126,9 @@ function useLandingActiveSection(): string | null {
     sections.forEach((section) => observer.observe(section));
     return () => {
       observer.disconnect();
-      document.documentElement.style.scrollBehavior = "";
+      root.style.scrollBehavior = "";
+      root.style.scrollSnapType = "";
+      root.style.scrollPaddingTop = "";
     };
   }, []);
 
@@ -143,6 +153,7 @@ export function ProductWebLanding({ signupHref, loginHref }: Props) {
 
   return (
     <DsMarketingPage
+      data-landing-page
       nav={
         <ProductWebGuestNav
           ctaHref={signupHref}
@@ -196,7 +207,7 @@ export function ProductWebLanding({ signupHref, loginHref }: Props) {
         </footer>
       }
     >
-      <DsMarketingSection id="hero" screen tone="hero" testId="landing-page" aria-labelledby="landing-hero-title">
+      <DsMarketingSection id="hero" screen tone="hero" testId="landing-page" data-landing-screen="hero" aria-labelledby="landing-hero-title">
         <div className={l.heroSection}>
           <div className={l.heroCopy}>
             <div>
@@ -231,6 +242,7 @@ export function ProductWebLanding({ signupHref, loginHref }: Props) {
             tight
             tone={index % 2 === 1 ? "muted" : "default"}
             testId={`landing-section-${service.id}`}
+            data-landing-screen={service.id}
             aria-labelledby={titleId}
           >
             <div className={l.serviceSection}>
@@ -252,7 +264,7 @@ export function ProductWebLanding({ signupHref, loginHref }: Props) {
         );
       })}
 
-      <DsMarketingSection id="today" screen tone="muted" testId="landing-section-today" aria-labelledby="landing-today-promise">
+      <DsMarketingSection id="today" screen tone="muted" testId="landing-section-today" data-landing-screen="today" aria-labelledby="landing-today-promise">
         <DsThemePanel
           variant="marketing"
           titleId="landing-today-promise"
@@ -279,7 +291,7 @@ export function ProductWebLanding({ signupHref, loginHref }: Props) {
         />
       </DsMarketingSection>
 
-      <DsMarketingSection id="why" screen testId="landing-section-why" aria-labelledby="landing-return-reasons">
+      <DsMarketingSection id="why" screen testId="landing-section-why" data-landing-screen="why" aria-labelledby="landing-return-reasons">
         <div className={l.centerStack}>
           <DsSectionTitle id="landing-return-reasons">{PRODUCT_WEB_LANDING_RETURN_REASONS.title}</DsSectionTitle>
           <div className={l.grid3}>
@@ -299,7 +311,7 @@ export function ProductWebLanding({ signupHref, loginHref }: Props) {
         </div>
       </DsMarketingSection>
 
-      <DsMarketingSection id="cta" screen tone="muted" testId="landing-section-cta" aria-labelledby="landing-final-cta">
+      <DsMarketingSection id="cta" screen tone="muted" testId="landing-section-cta" data-landing-screen="cta" aria-labelledby="landing-final-cta">
         <div className={l.centerStack}>
           <DsDisplayTitle id="landing-final-cta" size="lg">
             {PRODUCT_WEB_LANDING_FINAL.title}

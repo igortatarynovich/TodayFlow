@@ -1,5 +1,7 @@
 import {
   PRODUCT_WEB_LANDING_RETURN_REASONS,
+  PRODUCT_WEB_LANDING_SCREENS,
+  PRODUCT_WEB_LANDING_SECTION_IDS,
   PRODUCT_WEB_LANDING_TODAY_PROMISE,
 } from "@/components/product-ui/productWebLandingContent";
 
@@ -29,5 +31,18 @@ describe("productWebLandingContent · copy antipatterns", () => {
     const theme = PRODUCT_WEB_LANDING_TODAY_PROMISE.cards.find((c) => c.id === "theme");
     expect(theme?.value).toMatch(/Если с утра/);
     expect(theme?.value).not.toMatch(/^«?Сегодня лучше не спешить/);
+  });
+
+  it("landing screens follow Plan v4 scenario order", () => {
+    expect(PRODUCT_WEB_LANDING_SECTION_IDS).toEqual([
+      "hero",
+      "tarot",
+      "compatibility",
+      "practices",
+      "today",
+      "why",
+      "cta",
+    ]);
+    expect(PRODUCT_WEB_LANDING_SCREENS).toHaveLength(PRODUCT_WEB_LANDING_SECTION_IDS.length);
   });
 });

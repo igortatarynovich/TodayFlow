@@ -27,21 +27,27 @@ export function DsMarketingNav({
       <Link href={logoHref} className={p.logo}>
         TodayFlow
       </Link>
-      <nav className={p.navLinks} aria-label="Основная навигация">
-        {links.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`${p.navLink} ${item.active ? p.navLinkActive : ""}`}
-            aria-current={item.active ? "true" : undefined}
-          >
-            {item.label}
-          </Link>
-        ))}
-      </nav>
-      <DsButton href={ctaHref} size="sm">
-        {ctaLabel}
-      </DsButton>
+      {links.length > 0 ? (
+        <nav className={p.navLinks} aria-label="Основная навигация">
+          {links.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`${p.navLink} ${item.active ? p.navLinkActive : ""}`}
+              aria-current={item.active ? "true" : undefined}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+      ) : (
+        <span className={p.navLinksSpacer} aria-hidden="true" />
+      )}
+      <div className={p.marketingNavCta}>
+        <DsButton href={ctaHref} size="sm">
+          {ctaLabel}
+        </DsButton>
+      </div>
     </header>
   );
 }

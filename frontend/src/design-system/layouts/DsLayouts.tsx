@@ -1,9 +1,19 @@
 import type { ReactNode } from "react";
 import l from "@/design-system/layouts/dsLayouts.module.css";
 
-export function DsMarketingPage({ nav, children, footer }: { nav: ReactNode; children: ReactNode; footer?: ReactNode }) {
+export function DsMarketingPage({
+  nav,
+  children,
+  footer,
+  "data-landing-page": dataLandingPage,
+}: {
+  nav: ReactNode;
+  children: ReactNode;
+  footer?: ReactNode;
+  "data-landing-page"?: boolean | string;
+}) {
   return (
-    <div className={l.page}>
+    <div className={l.page} data-landing-page={dataLandingPage ? "" : undefined}>
       {nav}
       {children}
       {footer}
@@ -19,6 +29,7 @@ export function DsMarketingSection({
   screen = false,
   tone,
   "aria-labelledby": ariaLabelledBy,
+  "data-landing-screen": dataLandingScreen,
 }: {
   children: ReactNode;
   tight?: boolean;
@@ -28,6 +39,8 @@ export function DsMarketingSection({
   screen?: boolean;
   tone?: "default" | "hero" | "muted";
   "aria-labelledby"?: string;
+  /** Landing scenario screen id (Plan v4). */
+  "data-landing-screen"?: string;
 }) {
   const toneClass =
     tone === "hero" ? l.sectionHero : tone === "muted" ? l.sectionMuted : "";
@@ -36,6 +49,7 @@ export function DsMarketingSection({
       id={id}
       className={`${l.section} ${tight ? l.sectionTight : ""} ${screen ? l.sectionScreen : ""} ${toneClass}`.trim()}
       data-testid={testId}
+      data-landing-screen={dataLandingScreen}
       aria-labelledby={ariaLabelledBy}
     >
       {children}
