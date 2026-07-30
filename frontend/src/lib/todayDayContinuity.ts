@@ -112,14 +112,15 @@ export function buildMemorySlotCopy(prev: DayContinuityRecord | null): {
   const line = prev ? buildContinuityOpeningLine(prev) : null;
   if (line) {
     return {
-      eyebrow: "Память о вчера",
+      eyebrow: "С чего продолжить",
       body: line,
       state: "filled",
     };
   }
+  // Stub must never render as product copy — UI hides `state: "stub"`.
   return {
-    eyebrow: "Память о вчера",
-    body: "Здесь появится связь с прошлым днём. Вечером закрой сегодня — завтра начнём с того, что было.",
+    eyebrow: "",
+    body: "",
     state: "stub",
   };
 }

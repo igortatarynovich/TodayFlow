@@ -17,6 +17,7 @@ import { todaySlotFailureCopy, type TodaySlotLoadFailure } from "@/lib/todaySlot
 export type TodayGlanceTeaser = {
   id: string;
   label: string;
+  hook?: string;
   onSelect?: () => void;
 };
 
@@ -160,7 +161,11 @@ export function TodayGlanceAct({
             ) : null}
           </div>
         ) : null}
-        {loaded && !failure && !nearest ? <div className={styles.nearestEmpty} data-empty="true" aria-hidden /> : null}
+        {loaded && !failure && !nearest ? (
+          <p className={styles.nearestEmptyCopy} data-empty="true" data-testid="today-glance-nearest-empty">
+            {copy.journey.glanceNearestEmpty}
+          </p>
+        ) : null}
       </div>
 
       {teasers.length > 0 ? (
@@ -169,7 +174,10 @@ export function TodayGlanceAct({
             <li key={t.id}>
               <button type="button" className={styles.teaser} data-testid={`today-glance-teaser-${t.id}`} onClick={t.onSelect}>
                 <span className={styles.teaserMark} aria-hidden>·</span>
-                <span className={styles.teaserLabel}>{t.label}</span>
+                <span className={styles.teaserText}>
+                  <span className={styles.teaserLabel}>{t.label}</span>
+                  {t.hook ? <span className={styles.teaserHook}>{t.hook}</span> : null}
+                </span>
               </button>
             </li>
           ))}

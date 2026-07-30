@@ -59,7 +59,7 @@ describe("todayDayContinuity", () => {
   it("buildMemorySlotCopy stubs without yesterday and fills when closed", () => {
     const stub = buildMemorySlotCopy(null);
     expect(stub.state).toBe("stub");
-    expect(stub.body).toMatch(/вечером закрой/i);
+    expect(stub.body).toBe("");
 
     const filled = buildMemorySlotCopy({
       dateISO: "2026-06-22",
@@ -68,6 +68,7 @@ describe("todayDayContinuity", () => {
       closedAt: "2026-06-22T20:00:00.000Z",
     });
     expect(filled.state).toBe("filled");
+    expect(filled.eyebrow).toMatch(/продолжить/i);
     expect(filled.body).toContain("Один шаг");
     expect(filled.body).toMatch(/получилось/i);
   });

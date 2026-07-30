@@ -84,15 +84,28 @@ export function TodayProductScreenFlow({
   ];
 
   const teasers = [
-    { id: "plot", label: copy.journey.actNavPlot, onSelect: () => onIndexChange(1, { reason: "select" as const }) },
+    {
+      id: "plot",
+      label: copy.journey.actNavPlot,
+      hook: copy.journey.teaserPlotHook,
+      onSelect: () => onIndexChange(1, { reason: "select" as const }),
+    },
     ...(showSymbols
-      ? [{ id: "symbols", label: copy.journey.actNavSymbols, onSelect: () => onIndexChange(2, { reason: "select" as const }) }]
+      ? [
+          {
+            id: "symbols",
+            label: copy.journey.actNavSymbols,
+            hook: copy.journey.teaserSymbolsHook,
+            onSelect: () => onIndexChange(2, { reason: "select" as const }),
+          },
+        ]
       : []),
     ...(showPersonalized
       ? [
           {
             id: "reading",
             label: copy.journey.actNavReading,
+            hook: copy.journey.teaserReadingHook,
             onSelect: () => onIndexChange(readingIndex, { reason: "select" as const }),
           },
         ]

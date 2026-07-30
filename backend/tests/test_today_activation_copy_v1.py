@@ -17,3 +17,14 @@ def test_why_and_label_share_aspect_classes_without_jargon():
         assert "квадрат" not in low
         assert "венера" not in low
         assert "марс" not in low
+
+
+def test_soft_why_is_domain_distinct():
+    whys = [aspect_class_why_short("trine", d) for d in ("work", "money", "relationships", "energy")]
+    assert len(set(whys)) == 4
+    assert "Есть опора — можно опереться" not in whys
+
+
+def test_hard_why_is_domain_distinct():
+    whys = [aspect_class_why_short("square", d) for d in ("work", "money", "relationships", "energy")]
+    assert len(set(whys)) == 4

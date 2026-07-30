@@ -10,6 +10,7 @@ import styles from "@/components/today/composition/TodayWave2Slots.module.css";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import {
   DOMAIN_LABEL_RU,
+  isSilentCalmBank,
   orderDomainVerdicts,
   VERDICT_LABEL_RU,
   type DomainKey,
@@ -72,8 +73,14 @@ export function TodayVerdictStripSlot({ dateISO, dayFacts = null }: VerdictStrip
         setFailure(parentFail);
         setRows([]);
       } else {
-        setFailure(null);
-        setRows(orderDomainVerdicts(dayFacts.domain_verdicts ?? []));
+        const ordered = orderDomainVerdicts(dayFacts.domain_verdicts ?? []);
+        if (isSilentCalmBank(ordered)) {
+          setFailure("unavailable");
+          setRows([]);
+        } else {
+          setFailure(null);
+          setRows(ordered);
+        }
       }
       setLoaded(true);
       return;
@@ -89,8 +96,14 @@ export function TodayVerdictStripSlot({ dateISO, dayFacts = null }: VerdictStrip
           setFailure("unavailable");
           setRows([]);
         } else {
-          setFailure(null);
-          setRows(orderDomainVerdicts(data.domain_verdicts ?? []));
+          const ordered = orderDomainVerdicts(data.domain_verdicts ?? []);
+          if (isSilentCalmBank(ordered)) {
+            setFailure("unavailable");
+            setRows([]);
+          } else {
+            setFailure(null);
+            setRows(ordered);
+          }
         }
         setLoaded(true);
       })
@@ -171,17 +184,22 @@ export function TodayVerdictStripSlot({ dateISO, dayFacts = null }: VerdictStrip
             data-verdict={row.verdict}
             data-testid={`today-verdict-${row.domain}`}
           >
-            <div className={styles.verdictHead}>
-              <span className={styles.verdictDomain}>{domainLabel}</span>
-              <span className={styles.verdictKey} data-verdict={row.verdict}>
-                {verdictLabel}
-              </span>
+            <span className={styles.verdictSign} data-verdict={row.verdict} aria-hidden>
+              {verdict === "open" ? "◇" : verdict === "charged" ? "▲" : verdict === "friction" ? "×" : "·"}
+            </span>
+            <div className={styles.verdictCopy}>
+              <div className={styles.verdictHead}>
+                <span className={styles.verdictDomain}>{domainLabel}</span>
+                <span className={styles.verdictKey} data-verdict={row.verdict}>
+                  {verdictLabel}
+                </span>
+              </div>
+              {row.why_short ? (
+                <p className={styles.verdictWhy} data-testid={`today-verdict-why-${row.domain}`}>
+                  {row.why_short}
+                </p>
+              ) : null}
             </div>
-            {row.why_short ? (
-              <p className={styles.verdictWhy} data-testid={`today-verdict-why-${row.domain}`}>
-                {row.why_short}
-              </p>
-            ) : null}
           </div>
         );
       })}

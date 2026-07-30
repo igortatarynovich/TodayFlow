@@ -42,6 +42,9 @@ def test_empty_activations_calm_all_domains():
     rows = verdicts.compute_domain_verdicts([])
     assert [r["domain"] for r in rows] == ["work", "money", "relationships", "energy"]
     assert all(r["verdict"] == "calm" for r in rows)
+    whys = [r["why_short"] for r in rows]
+    assert len(set(whys)) == 4
+    assert "Без явного сигнала" not in whys
 
 
 def test_map_weight_bands():

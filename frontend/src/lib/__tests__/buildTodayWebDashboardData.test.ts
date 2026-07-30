@@ -9,6 +9,17 @@ describe("buildTodayWebDashboardData PR-2 honesty", () => {
     expect(buildTodayWebTimeline({} as never)).toEqual([]);
   });
 
+  it("does not invent clock times for sky aspects without time_local", () => {
+    expect(
+      buildTodayWebTimeline({
+        celestial_events: {
+          sky_aspects: [{ title: "Sun — Mars", aspect: "trine" }],
+          personal_transits: [{ title: "Луна — квадрат — Плутон" }],
+        },
+      } as never),
+    ).toEqual([]);
+  });
+
   it("does not invent weekly wave bars without step history", () => {
     expect(buildTodayWebWeeklyActivity({ dailySteps: [] })).toBeNull();
   });

@@ -61,3 +61,18 @@ export function orderDomainVerdicts(rows: DomainVerdict[]): DomainVerdict[] {
   }
   return ordered;
 }
+
+/**
+ * Silent / collapsed bank: four domains with identical why_short.
+ * Covers empty-driver calm poison and aspect-class formula collapse
+ * (e.g. 4× «открыто / Есть опора»). FE must not present as day meaning.
+ */
+export function isSilentCalmBank(rows: DomainVerdict[] | null | undefined): boolean {
+  if (!rows || rows.length < 4) return false;
+  const ordered = orderDomainVerdicts(rows);
+  if (ordered.length < 4) return false;
+  const whys = ordered.map((r) => (r.why_short || "").trim().toLowerCase());
+  const first = whys[0];
+  if (!first) return whys.every((w) => !w);
+  return whys.every((w) => w === first);
+}

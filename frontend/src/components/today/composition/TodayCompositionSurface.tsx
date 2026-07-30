@@ -498,8 +498,8 @@ export function TodayCompositionSurface(props: Props) {
     return loadPreviousDayContinuity(dateISO);
   }, [hydrated, dateISO]);
   const memorySlot = useMemo(() => buildMemorySlotCopy(prevContinuity), [prevContinuity]);
-  /** Day-2 recall always when yesterday closed — even on ?first=1. Stub always visible otherwise. */
-  const showMemorySlot = hydrated;
+    /** Only filled yesterday recall — never ship developer stub copy. */
+  const showMemorySlot = hydrated && !isFirstToday && memorySlot.state === "filled";
 
   const mainFocusText = story.focusTitle;
 

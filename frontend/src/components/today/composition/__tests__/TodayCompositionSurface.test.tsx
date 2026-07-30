@@ -107,7 +107,13 @@ describe("TodayCompositionSurface", () => {
       .getAllByTestId(/^today-zone-/)
       .map((el) => el.getAttribute("data-testid"));
 
-    expect(zoneIds.indexOf("today-zone-continuity")).toBeLessThan(zoneIds.indexOf("today-zone-greeting"));
+    expect(zoneIds.indexOf("today-zone-memory")).toBeLessThan(zoneIds.indexOf("today-zone-greeting"));
+  });
+
+  it("hides memory stub when yesterday was not closed", () => {
+    render(<TodayCompositionSurface {...baseProps} variant="default" />);
+    expect(screen.queryByTestId("today-entity-memory-stub")).not.toBeInTheDocument();
+    expect(screen.queryByText(/Здесь появится связь/i)).not.toBeInTheDocument();
   });
 
   it("renders day story greeting and foundation before ritual", () => {

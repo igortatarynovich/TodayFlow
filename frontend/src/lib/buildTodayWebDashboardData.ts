@@ -1,4 +1,3 @@
-import type { DsTimelineEvent } from "@/design-system";
 import type {
   FusionResponse,
   MorningRitualData,
@@ -6,33 +5,20 @@ import type {
   TodayCycleData,
 } from "@/components/today/todayPageUtils";
 import type { TodayWebPractice } from "@/components/product-ui/TodayWebDashboard";
+import type { DsTimelineEvent } from "@/design-system";
 
-const DEFAULT_TIMES = ["07:30", "11:15", "15:00", "19:30"];
-
-export function buildTodayWebTimeline(morning?: MorningRitualData | null): DsTimelineEvent[] {
-  const celestial = morning?.celestial_events;
-  const events: DsTimelineEvent[] = [];
-  let timeIndex = 0;
-
-  for (const aspect of celestial?.sky_aspects?.slice(0, 3) ?? []) {
-    events.push({
-      time: DEFAULT_TIMES[timeIndex] ?? "12:00",
-      title: aspect.title?.trim() || aspect.aspect?.trim() || "Небесный аспект",
-      active: timeIndex === 0,
-    });
-    timeIndex += 1;
-  }
-
-  for (const transit of celestial?.personal_transits?.slice(0, 2) ?? []) {
-    events.push({
-      time: DEFAULT_TIMES[timeIndex] ?? "18:00",
-      title: transit.title?.trim() || "Персональный транзит",
-    });
-    timeIndex += 1;
-  }
-
-  // PR-2: no generic Утро/День/Вечер filler when sky data is absent.
-  return events;
+/**
+ * Right-rail day timeline.
+ *
+ * Morning `celestial_events.sky_aspects` / `personal_transits` have titles but
+ * **no clock**. Inventing DEFAULT_TIMES (07:30 / 11:15 / …) made a decorative
+ * fake timeline that contradicted Glance nearest honesty.
+ *
+ * SoT for timed day marks is Wave 2 `glance_timeline` (exact-time). Until the
+ * rail is wired to that payload with real `time_local`, return empty.
+ */
+export function buildTodayWebTimeline(_morning?: MorningRitualData | null): DsTimelineEvent[] {
+  return [];
 }
 
 /**

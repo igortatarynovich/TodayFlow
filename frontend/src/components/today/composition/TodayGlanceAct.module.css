@@ -42,14 +42,40 @@
 
 .nearestEmpty { min-height: 0.5rem; }
 
+.nearestEmptyCopy {
+  margin: 0;
+  padding: 0.45rem 0.15rem;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: var(--tf-ink-soft, #5c5348);
+  border-top: 1px solid rgba(212, 184, 150, 0.18);
+}
+
 .nearestRow {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.5rem 0.75rem;
-  padding: 0.55rem 0.15rem;
-  border-top: 1px solid rgba(212, 184, 150, 0.22);
-  border-bottom: 1px solid rgba(212, 184, 150, 0.22);
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.65rem;
+  border: 1px solid rgba(212, 184, 150, 0.28);
+  background: rgba(143, 107, 58, 0.07);
+}
+
+.nearestRow[data-valence="support"],
+.nearestRow[data-valence="open"] {
+  border-color: rgba(143, 107, 58, 0.35);
+  background: rgba(143, 107, 58, 0.1);
+}
+
+.nearestRow[data-valence="friction"],
+.nearestRow[data-valence="challenge"] {
+  border-color: rgba(138, 79, 58, 0.35);
+  background: rgba(138, 79, 58, 0.08);
+}
+
+.nearestRow[data-live="true"] {
+  box-shadow: inset 3px 0 0 var(--tf-accent-action, #8f6b3a);
 }
 
 .nearestTime {
@@ -75,26 +101,45 @@
 
 .teasers {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 0.45rem;
-  margin: 0.25rem 0 0;
+  margin: 0.35rem 0 0;
   padding: 0;
   list-style: none;
 }
 
 .teaser {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.35rem 0.65rem;
-  border-radius: 999px;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border-radius: 0.65rem;
   border: 1px solid rgba(212, 184, 150, 0.28);
-  background: rgba(255, 255, 255, 0.45);
-  color: var(--tf-ink-muted, #5c534a);
-  font-size: 0.78rem;
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--tf-ink, #2a2520);
+  font-size: 0.86rem;
   cursor: pointer;
   font-family: inherit;
+  text-align: left;
 }
 
-.teaserMark { color: var(--tf-accent-action, #8f6b3a); }
-.teaserLabel { font-weight: 560; }
+.teaserMark {
+  margin-top: 0.15rem;
+  color: var(--tf-accent-action, #8f6b3a);
+}
+
+.teaserText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.teaserLabel { font-weight: 600; }
+
+.teaserHook {
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: var(--tf-ink-soft, #5c5348);
+}

@@ -78,6 +78,13 @@ DOMAIN_LABEL_RU = {
     "energy": "Энергия",
 }
 
+DOMAIN_QUIET_WHY_RU = {
+    "work": "Поле ровное — без лишнего давления",
+    "money": "Тише обычного — без резких ходов",
+    "relationships": "Мягкий фон — без острых углов",
+    "energy": "Ровный ритм — без всплесков",
+}
+
 VERDICT_LABEL_RU = {
     "calm": "спокойно",
     "charged": "заряжено",
@@ -234,12 +241,17 @@ def map_weight_to_verdict(weight: float, *, aspect: str | None = None) -> str:
     return "friction"
 
 
-def why_short_for(transiting_planet: str, aspect: str, natal_point: str) -> str:
+def why_short_for(
+    transiting_planet: str,
+    aspect: str,
+    natal_point: str,
+    domain: str | None = None,
+) -> str:
     """Experiential why — no planet/aspect jargon (contract §3.3)."""
     from todayflow_backend.services.today_activation_copy_v1 import aspect_class_why_short
 
     _ = (transiting_planet, natal_point)  # signature kept for call sites
-    return aspect_class_why_short(aspect)
+    return aspect_class_why_short(aspect, domain)
 
 
 def natal_point_in_domain(natal_point: str, domain: str) -> bool:
@@ -275,7 +287,7 @@ def compute_domain_verdicts(
                 {
                     "domain": domain,
                     "verdict": "calm",
-                    "why_short": "Без явного сигнала",
+                    "why_short": DOMAIN_QUIET_WHY_RU.get(domain, "День без явного сдвига"),
                     "driver_ids": [],
                     "logic_source": "top_driver_v1",
                     "top_weight": 0.0,
@@ -294,6 +306,7 @@ def compute_domain_verdicts(
                     str(top_act.get("transiting_planet") or ""),
                     str(top_act.get("aspect") or ""),
                     str(top_act.get("natal_point") or ""),
+                    domain,
                 ),
                 "driver_ids": [driver_id] if driver_id else [],
                 "logic_source": "top_driver_v1",
