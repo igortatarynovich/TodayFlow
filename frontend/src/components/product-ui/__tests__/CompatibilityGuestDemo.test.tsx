@@ -13,5 +13,10 @@ describe("CompatibilityGuestDemo", () => {
       "href",
       "/compatibility/analyze",
     );
+    expect(screen.getByTestId("compatibility-profile-bridge")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Собрать мой Profile" })).toHaveAttribute(
+      "href",
+      "/onboarding/invite",
+    );
   });
 });

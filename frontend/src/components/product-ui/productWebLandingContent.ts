@@ -1,14 +1,24 @@
-/** Product UI web landing — editorial copy (RU). */
+/** Product UI web landing — editorial copy (RU). Guest Story Surface P0. */
 
 import { GUEST_ACCESS_LIMITS } from "@/lib/guestAccessLimits";
 
 export const PRODUCT_WEB_LANDING_HERO = {
-  titleLead: "Интересно, что",
-  titleTail: "сегодня для тебя?",
+  titleLead: "TodayFlow видит не только твой день,",
+  titleTail: "а то, как дни складываются в тебя",
   subtitle:
-    "TodayFlow — персональный ориентир на день: тема, фокус, практика и память о вчера. Сначала попробуй бесплатно — потом собери свой Today.",
-  primaryCta: "Создать мой Today",
-  secondaryCta: "Войти",
+    "Не предсказание на сегодня, а история, которая помнит вчера. Тема, фокус и короткий шаг — в том же формате, что будет у твоего Today.",
+  fragmentEyebrow: "Пример дня",
+  fragmentThemeLabel: "Тема",
+  fragmentTheme:
+    "Если с утра уже пять «срочных» дел — день скорее про одно главное, не про все сразу",
+  fragmentFocusLabel: "Фокус",
+  fragmentFocus: "Где действовать · где беречь силы",
+  primaryCtaDemo: "Посмотреть, как это работает",
+  primaryCtaCompat: "Посмотреть динамику вашей связи",
+  loginCta: "Войти",
+  toolsEyebrow: "Инструменты для момента",
+  toolsTarotLabel: "Таро",
+  toolsPracticesLabel: "Практики",
 } as const;
 
 export const PRODUCT_WEB_LANDING_ORBIT_NODES = [
@@ -32,15 +42,6 @@ export type LandingServiceSection = {
 /** One viewport per guest service — nav scrolls here; CTA opens the product route. */
 export const PRODUCT_WEB_LANDING_SERVICE_SECTIONS: LandingServiceSection[] = [
   {
-    id: "tarot",
-    eyebrow: "Без регистрации",
-    title: "Таро — вопрос и ясный расклад",
-    body: `${GUEST_ACCESS_LIMITS.tarotSpreads} расклад бесплатно: задай вопрос, открой карты и получи ответ, который можно унести в день.`,
-    href: "/tarot",
-    cta: "Открыть Таро",
-    icon: "tarot",
-  },
-  {
     id: "compatibility",
     eyebrow: "Без регистрации",
     title: "Совместимость — две карты рядом",
@@ -50,8 +51,17 @@ export const PRODUCT_WEB_LANDING_SERVICE_SECTIONS: LandingServiceSection[] = [
     icon: "users",
   },
   {
+    id: "tarot",
+    eyebrow: "Инструмент для момента",
+    title: "Таро — вопрос и ясный расклад",
+    body: `${GUEST_ACCESS_LIMITS.tarotSpreads} расклад бесплатно: задай вопрос, открой карты и получи ответ, который можно унести в день.`,
+    href: "/tarot",
+    cta: "Открыть Таро",
+    icon: "tarot",
+  },
+  {
     id: "practices",
-    eyebrow: "Без регистрации",
+    eyebrow: "Инструмент для момента",
     title: "Практики — короткий шаг в теле",
     body: "Базовые практики для спокойного дня: дыхание, фокус и короткие ритуалы, когда нужна опора без длинного разбора.",
     href: "/practices",
@@ -62,7 +72,7 @@ export const PRODUCT_WEB_LANDING_SERVICE_SECTIONS: LandingServiceSection[] = [
 
 /** После регистрации — обещание Today (статичное превью, без персональных данных). */
 export const PRODUCT_WEB_LANDING_TODAY_PROMISE = {
-  eyebrow: "После регистрации",
+  eyebrow: "После демо и Profile",
   title: "Твой Today каждое утро",
   tags: ["Тема дня", "Фокус", "Память о вчера"],
   body: "Не общий гороскоп. Персональный экран дня: на что обратить внимание, один главный шаг и вечернее закрытие — чтобы завтра продолжить с того, что было.",
@@ -104,19 +114,18 @@ export const PRODUCT_WEB_LANDING_RETURN_REASONS = {
 
 export const PRODUCT_WEB_LANDING_FINAL = {
   title: "Завтра утром TodayFlow вспомнит сегодня.",
-  subtitle: "Создай свой Today — тема, фокус и история дня начнут складываться с первого утра.",
-  cta: "Создать мой Today",
+  subtitle: "Сначала посмотри демо-день — потом собери Profile, который сделает Today твоим.",
+  cta: "Собрать мой Today",
 } as const;
 
 /**
- * Landing screens — Plan v4 SoT (tracker 2026-07-29).
- * One viewport screen per id; top nav anchors scroll to these only.
- * Guest trials split from legacy `#try` → tarot / compatibility / practices.
+ * Landing screens — Guest Story Surface P0.
+ * Compatibility stays strong in nav; Tarot is nav; Practices section only (low-weight).
  */
 export const PRODUCT_WEB_LANDING_SCREENS = [
   { id: "hero", role: "curiosity", nav: false },
-  { id: "tarot", role: "guest-trial", nav: true, navLabel: "Таро" },
   { id: "compatibility", role: "guest-trial", nav: true, navLabel: "Совместимость" },
+  { id: "tarot", role: "guest-trial", nav: true, navLabel: "Таро" },
   { id: "practices", role: "guest-trial", nav: false },
   { id: "today", role: "promise", nav: true, navLabel: "Как это работает" },
   { id: "why", role: "return", nav: true, navLabel: "Почему возвращаются" },
@@ -132,8 +141,8 @@ export const PRODUCT_WEB_LANDING_SECTION_IDS: LandingScreenId[] = PRODUCT_WEB_LA
 type LandingNavScreen = Extract<(typeof PRODUCT_WEB_LANDING_SCREENS)[number], { nav: true }>;
 
 /**
- * Top marketing nav — all in-page anchors (SoT v4).
- * Practices has a section + CTA but no separate top-nav item.
+ * Top marketing nav — in-page anchors.
+ * Practices has a section + CTA but no separate top-nav item (secondary tool).
  */
 export const PRODUCT_WEB_LANDING_NAV = (
   PRODUCT_WEB_LANDING_SCREENS.filter((s): s is LandingNavScreen => s.nav) as LandingNavScreen[]
@@ -144,10 +153,9 @@ export const PRODUCT_WEB_LANDING_NAV = (
 }));
 
 export const PRODUCT_WEB_LANDING_FOOTER = {
-  tagline: "Персональный ориентир на день — с памятью о вчера.",
+  tagline: "Не только день — история, которая помнит вчера.",
   companyLinks: [
     { href: "/help", label: "О нас" },
     { href: "/help", label: "Философия" },
-    { href: "/privacy", label: "Конфиденциальность" },
   ],
 } as const;

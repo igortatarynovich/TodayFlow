@@ -3,10 +3,12 @@
 /**
  * Static guest demo for Compatibility hub — shows what the product creates
  * before auth (no invented personal pair; editorial example only).
+ * Profile bridge is non-blocking enhancement, not a gate.
  */
 import { DsBody, DsButton } from "@/design-system";
 import journeyStyles from "@/components/product-ui/ProductJourneyScene.module.css";
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
+import { VALUE_FIRST_PATHS } from "@/lib/guestProfileDraft";
 
 const DEMO_RU = {
   eyebrow: "Пример результата",
@@ -21,8 +23,10 @@ const DEMO_RU = {
   tipLabel: "Практический совет",
   tip: "Перед важным разговором договоритесь о времени и цели — не о том, «кто прав».",
   note: "Это демонстрация формата. Свой расчёт — по знакам или после создания Today.",
+  profileBridge:
+    "Разбор точнее, если у обоих есть Profile — не обязательно сейчас: можно проверить пару и собрать карту позже.",
   ctaAnalyze: "Проверить свою пару",
-  ctaToday: "Создать мой Today",
+  ctaProfile: "Собрать мой Profile",
 } as const;
 
 const DEMO_EN = {
@@ -38,8 +42,10 @@ const DEMO_EN = {
   tipLabel: "Practical tip",
   tip: "Before an important talk, agree on time and purpose — not on who is right.",
   note: "This is a format demo. Your reading is by signs or after creating Today.",
+  profileBridge:
+    "The reading is sharper when both people have a Profile — optional now: check the pair first, build your map later.",
   ctaAnalyze: "Check your pair",
-  ctaToday: "Create my Today",
+  ctaProfile: "Build my Profile",
 } as const;
 
 export function CompatibilityGuestDemo({
@@ -77,10 +83,14 @@ export function CompatibilityGuestDemo({
         {copy.note}
       </DsBody>
 
+      <p className={journeyStyles.pairSub} data-testid="compatibility-profile-bridge">
+        {copy.profileBridge}
+      </p>
+
       <div className={journeyStyles.actionRow}>
         <DsButton href="/compatibility/analyze">{copy.ctaAnalyze}</DsButton>
-        <DsButton href="/onboarding/welcome?fresh=1" variant="secondary">
-          {copy.ctaToday}
+        <DsButton href={VALUE_FIRST_PATHS.invite} variant="secondary">
+          {copy.ctaProfile}
         </DsButton>
       </div>
     </div>

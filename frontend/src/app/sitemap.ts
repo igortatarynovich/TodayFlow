@@ -8,6 +8,7 @@ function siteOrigin(): string {
 /** Marketing + guest-trial share surfaces only — personal shells stay out. */
 const SITEMAP_PATHS: Array<{ path: string; changeFrequency: MetadataRoute.Sitemap[0]["changeFrequency"]; priority: number }> = [
   { path: "/", changeFrequency: "weekly", priority: 1 },
+  { path: "/demo/today", changeFrequency: "weekly", priority: 0.9 },
   { path: "/compatibility", changeFrequency: "weekly", priority: 0.8 },
   { path: "/tarot", changeFrequency: "weekly", priority: 0.8 },
   { path: "/practices", changeFrequency: "weekly", priority: 0.8 },
@@ -20,13 +21,14 @@ const SITEMAP_PATHS: Array<{ path: string; changeFrequency: MetadataRoute.Sitema
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const origin = siteOrigin();
-  // Guard: only paths marked sitemap:true in policy (home is always included).
+  // Guard: only paths marked sitemap:true in policy (home + demo always included).
   const allowed = new Set(
     Object.entries(PUBLIC_SEO_BY_SEGMENT)
       .filter(([, route]) => route.sitemap)
       .map(([segment]) => `/${segment}`),
   );
   allowed.add("/");
+  allowed.add("/demo/today");
 
   return SITEMAP_PATHS.filter((entry) => allowed.has(entry.path)).map((entry) => ({
     url: `${origin}${entry.path === "/" ? "" : entry.path}`,

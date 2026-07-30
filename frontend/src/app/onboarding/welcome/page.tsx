@@ -49,7 +49,7 @@ function WelcomeForm() {
       turnId="welcome_name"
       title={copy.welcome.title}
       lead={copy.welcome.lead}
-      backHref="/"
+      backHref={VALUE_FIRST_PATHS.invite}
     >
       <form onSubmit={onSubmit}>
         <input

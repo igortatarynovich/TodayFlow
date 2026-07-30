@@ -4,7 +4,6 @@ import {
   GUEST_TODAY_PITCH,
 } from "@/components/product-ui/guestProductPitches";
 import styles from "@/components/product-ui/ProductGuestShowcase.module.css";
-import { VALUE_FIRST_PATHS } from "@/lib/guestProfileDraft";
 
 type Pitch = typeof GUEST_TODAY_PITCH | typeof GUEST_PROFILE_PITCH;
 
@@ -34,10 +33,10 @@ export function GuestProductPitchSsr({
           <p className={styles.readableNeeds}>{pitch.needs}</p>
         ) : null}
         <div className={styles.readableCtas}>
-          <Link href={`${VALUE_FIRST_PATHS.welcome}?fresh=1`} className={styles.ssrCtaPrimary}>
+          <Link href={pitch.ctaPrimaryHref} className={styles.ssrCtaPrimary}>
             {pitch.ctaPrimary}
           </Link>
-          <Link href="/auth?mode=login" className={styles.ssrCtaSecondary}>
+          <Link href={pitch.ctaSecondaryHref} className={styles.ssrCtaSecondary}>
             {pitch.ctaSecondary}
           </Link>
         </div>

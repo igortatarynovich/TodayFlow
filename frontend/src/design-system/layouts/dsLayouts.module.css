@@ -107,6 +107,35 @@
   gap: 1.25rem;
 }
 
+.heroFragment {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  max-width: 36rem;
+}
+
+.heroFragmentLine {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--tf-ink-soft, #5b4630);
+}
+
+.heroTools {
+  margin: 0.35rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--tf-caption, #9a8468);
+}
+
+.heroTools a {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
 .grid3 {
   display: grid;
   grid-template-columns: 1fr;

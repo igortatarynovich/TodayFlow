@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   PRODUCT_WEB_LANDING_FINAL,
   PRODUCT_WEB_LANDING_FOOTER,
@@ -37,9 +37,9 @@ import {
   IconUsers,
 } from "@/design-system";
 import l from "@/design-system/layouts/dsLayouts.module.css";
+import { VALUE_FIRST_PATHS } from "@/lib/guestProfileDraft";
 
 type Props = {
-  signupHref: string;
   loginHref: string;
 };
 
@@ -135,13 +135,13 @@ function useLandingActiveSection(): string | null {
   return activeHref;
 }
 
-export function ProductWebLanding({ signupHref, loginHref }: Props) {
+export function ProductWebLanding({ loginHref }: Props) {
   const year = new Date().getFullYear();
   const activeHref = useLandingActiveSection();
-  const navLinks = useMemo(
-    () => PRODUCT_WEB_LANDING_NAV.map(({ href, label }) => ({ href, label })),
-    [],
-  );
+  const navLinks = PRODUCT_WEB_LANDING_NAV.map(({ href, label }) => ({ href, label }));
+  const demoHref = VALUE_FIRST_PATHS.demoToday;
+  const inviteHref = VALUE_FIRST_PATHS.invite;
+  const compatHref = "/compatibility";
 
   const orbitNodes: DsOrbitalNode[] = PRODUCT_WEB_LANDING_ORBIT_NODES.map((node) => {
     const Icon = ORBIT_NODE_ICONS[node.id as keyof typeof ORBIT_NODE_ICONS] ?? IconSparkles;
@@ -156,8 +156,8 @@ export function ProductWebLanding({ signupHref, loginHref }: Props) {
       data-landing-page
       nav={
         <ProductWebGuestNav
-          ctaHref={signupHref}
-          ctaLabel={PRODUCT_WEB_LANDING_HERO.primaryCta}
+          ctaHref={demoHref}
+          ctaLabel={PRODUCT_WEB_LANDING_HERO.primaryCtaDemo}
           locale="ru"
           links={navLinks}
           activeHref={activeHref}
@@ -219,13 +219,31 @@ export function ProductWebLanding({ signupHref, loginHref }: Props) {
               <DsBody size="lg" muted>
                 {PRODUCT_WEB_LANDING_HERO.subtitle}
               </DsBody>
+              <div className={l.heroFragment} data-testid="landing-hero-fragment">
+                <DsEyebrow>{PRODUCT_WEB_LANDING_HERO.fragmentEyebrow}</DsEyebrow>
+                <p className={l.heroFragmentLine}>
+                  <strong>{PRODUCT_WEB_LANDING_HERO.fragmentThemeLabel}.</strong>{" "}
+                  {PRODUCT_WEB_LANDING_HERO.fragmentTheme}
+                </p>
+                <p className={l.heroFragmentLine}>
+                  <strong>{PRODUCT_WEB_LANDING_HERO.fragmentFocusLabel}.</strong>{" "}
+                  {PRODUCT_WEB_LANDING_HERO.fragmentFocus}
+                </p>
+              </div>
             </div>
-            <div className={l.heroCtas}>
-              <DsButton href={signupHref}>{PRODUCT_WEB_LANDING_HERO.primaryCta}</DsButton>
+            <div className={l.heroCtas} data-testid="landing-hero-ctas">
+              <DsButton href={demoHref}>{PRODUCT_WEB_LANDING_HERO.primaryCtaDemo}</DsButton>
+              <DsButton href={compatHref}>{PRODUCT_WEB_LANDING_HERO.primaryCtaCompat}</DsButton>
               <DsButton href={loginHref} variant="secondary">
-                {PRODUCT_WEB_LANDING_HERO.secondaryCta}
+                {PRODUCT_WEB_LANDING_HERO.loginCta}
               </DsButton>
             </div>
+            <p className={l.heroTools} data-testid="landing-hero-tools">
+              <span>{PRODUCT_WEB_LANDING_HERO.toolsEyebrow}: </span>
+              <Link href="/tarot">{PRODUCT_WEB_LANDING_HERO.toolsTarotLabel}</Link>
+              {" · "}
+              <Link href="/practices">{PRODUCT_WEB_LANDING_HERO.toolsPracticesLabel}</Link>
+            </p>
           </div>
           <DsOrbitalViz nodes={orbitNodes} testId="landing-orbit-viz" />
         </div>
@@ -317,7 +335,7 @@ export function ProductWebLanding({ signupHref, loginHref }: Props) {
             {PRODUCT_WEB_LANDING_FINAL.title}
           </DsDisplayTitle>
           <DsBody muted>{PRODUCT_WEB_LANDING_FINAL.subtitle}</DsBody>
-          <DsButton href={signupHref}>{PRODUCT_WEB_LANDING_FINAL.cta}</DsButton>
+          <DsButton href={inviteHref}>{PRODUCT_WEB_LANDING_FINAL.cta}</DsButton>
         </div>
       </DsMarketingSection>
     </DsMarketingPage>

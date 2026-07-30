@@ -1,6 +1,8 @@
 import {
   APP_NAV_GUEST_ORDER,
   APP_NAV_GUEST_PRODUCT_ORDER,
+  APP_NAV_GUEST_PRODUCT_PRIMARY,
+  APP_NAV_GUEST_PRODUCT_SECONDARY,
   APP_NAV_PRIMARY_ORDER,
   buildAppNavItems,
   buildAppNavLinks,
@@ -33,24 +35,33 @@ describe("appNavConfig", () => {
     expect(en.find((i) => i.id === "practices")?.href).toBe("/practices");
   });
 
-  it("defines two guest nav items", () => {
+  it("defines two guest marketing nav items with Compatibility first", () => {
     const items = buildAppNavItems("en", "guest");
     expect(items.map((i) => i.id)).toEqual(APP_NAV_GUEST_ORDER);
     expect(items).toHaveLength(2);
-    expect(items[0].label).toBe("Tarot");
+    expect(items[0].label).toBe("Compatibility");
+    expect(items[1].label).toBe("Tarot");
   });
 
-  it("defines guestProduct shell nav without Today/Profile", () => {
+  it("defines guestProduct shell nav with Today·Profile·Compatibility primary", () => {
     const items = buildAppNavItems("ru", "guestProduct");
+    expect(APP_NAV_GUEST_PRODUCT_PRIMARY).toEqual(["today", "profile", "compatibility"]);
+    expect(APP_NAV_GUEST_PRODUCT_SECONDARY).toEqual(["tarot", "practices"]);
     expect(items.map((i) => i.id)).toEqual(APP_NAV_GUEST_PRODUCT_ORDER);
-    expect(items.map((i) => i.href)).toEqual(["/tarot", "/compatibility", "/practices"]);
+    expect(items.map((i) => i.href)).toEqual([
+      "/today",
+      "/profile",
+      "/compatibility",
+      "/tarot",
+      "/practices",
+    ]);
   });
 
   it("buildAppNavLinks returns href + label without icons", () => {
     const links = buildAppNavLinks("ru", "guest");
     expect(links).toEqual([
-      { href: "/#tarot", label: "Таро" },
       { href: "/#compatibility", label: "Совместимость" },
+      { href: "/#tarot", label: "Таро" },
     ]);
   });
 

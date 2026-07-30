@@ -6,6 +6,7 @@ const PRODUCT_WEB_CHROME_PREFIXES = [
   "/compatibility",
   "/tarot",
   "/practices",
+  "/demo",
   "/onboarding",
   "/auth",
   "/account",
@@ -56,7 +57,6 @@ const LEGACY_MARKETING_PREFIXES = [
   "/design-system",
   "/admin",
   "/dev",
-  "/demo",
   "/generate",
 ] as const;
 

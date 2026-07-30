@@ -114,8 +114,8 @@ export function ProductWebAppShell({
     : (profileMeta ?? productWebProfileMeta(coreProfile));
   const avatarInitial = guestShell ? "·" : productWebUserInitial(coreProfile, displayName);
   const logoHref = guestShell ? "/" : "/today";
-  const footerHref = guestShell ? `${VALUE_FIRST_PATHS.welcome}?fresh=1` : undefined;
-  const footerLabel = guestShell ? "Создать мой Today" : shell.navSettings;
+  const footerHref = guestShell ? VALUE_FIRST_PATHS.invite : undefined;
+  const footerLabel = guestShell ? "Собрать мой Today" : shell.navSettings;
 
   const sidebarNode =
     sidebar ??

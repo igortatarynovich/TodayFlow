@@ -21,12 +21,14 @@ export type GuestProfileDraft = {
 };
 
 export const VALUE_FIRST_PATHS = {
+  invite: "/onboarding/invite",
   welcome: "/onboarding/welcome",
   birth: "/onboarding/birth",
   preview: "/onboarding/preview",
   refine: "/onboarding/refine",
   save: "/onboarding/save",
   firstToday: "/today?first=1",
+  demoToday: "/demo/today",
 } as const;
 
 function isBrowser(): boolean {

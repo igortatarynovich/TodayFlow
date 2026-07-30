@@ -5,9 +5,7 @@ import { useRouter } from "next/navigation";
 import { ProductWebLanding } from "@/components/product-ui/ProductWebLanding";
 import { useAuth } from "@/lib/useAuth";
 import { buildAuthHref, resolveTargetAfterAuthSession } from "@/lib/authRedirect";
-import { VALUE_FIRST_PATHS } from "@/lib/guestProfileDraft";
 
-const SIGNUP_HREF = `${VALUE_FIRST_PATHS.welcome}?fresh=1`;
 const LOGIN_HREF = buildAuthHref("login");
 
 /**
@@ -25,5 +23,5 @@ export default function HomePage() {
     }
   }, [isAuthenticated, authLoading, router]);
 
-  return <ProductWebLanding signupHref={SIGNUP_HREF} loginHref={LOGIN_HREF} />;
+  return <ProductWebLanding loginHref={LOGIN_HREF} />;
 }

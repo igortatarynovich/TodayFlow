@@ -24,16 +24,18 @@ export const GUEST_TODAY_PITCH = {
       body: "Вечер и завтра: «вчера главным было…» — день не обнуляется.",
     },
   ],
-  needs: "Нужны имя и дата рождения. Сохранение — через email, когда захочешь продолжить.",
-  ctaPrimary: "Создать мой Today",
+  needs: "Нужны имя и дата рождения. Сначала посмотри демо — потом собери Profile.",
+  ctaPrimary: "Посмотреть демо-день",
+  ctaPrimaryHref: "/demo/today",
   ctaSecondary: "Уже есть аккаунт? Войти",
+  ctaSecondaryHref: "/auth?mode=login",
 } as const;
 
 export const GUEST_PROFILE_PITCH = {
   eyebrow: "Что такое профиль",
   title: "Цельная история о том, кто ты",
   lead:
-    "Не набор характеристик и не просто натальная карта. Профиль — портрет: что тобой движет, как ты принимаешь решения, где сила и где трение.",
+    "Не набор характеристик и не просто натальная карта. Профиль — фундамент: собирается один раз и делает Today, Совместимость и Таро точнее.",
   parts: [
     {
       id: "core",
@@ -56,7 +58,9 @@ export const GUEST_PROFILE_PITCH = {
       body: "Энергия и периоды — что сейчас на подъёме, а что просит тишины.",
     },
   ],
-  needs: "Профиль открывается после первого Today: имя, дата рождения и первый разбор.",
-  ctaPrimary: "Создать мой Today",
+  needs: "Profile открывает точный Today. Сначала коротко — зачем карта, потом имя и дата рождения.",
+  ctaPrimary: "Построить мой Profile",
+  ctaPrimaryHref: "/onboarding/invite",
   ctaSecondary: "Уже есть аккаунт? Войти",
+  ctaSecondaryHref: "/auth?mode=login",
 } as const;

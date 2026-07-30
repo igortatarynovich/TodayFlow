@@ -79,22 +79,29 @@ export const APP_NAV_PRIMARY_ORDER: AppNavItemId[] = [
 ];
 
 /** Pre-auth: guest trials on landing, auth, marketing surfaces (anchors). */
-export const APP_NAV_GUEST_ORDER: AppNavItemId[] = ["tarot", "compatibility"];
+export const APP_NAV_GUEST_ORDER: AppNavItemId[] = ["compatibility", "tarot"];
 
 /**
- * Pre-auth in-app shell — only guest-trial product routes.
- * Today / Profile stay out of nav (value-first / login gates, not empty shells).
+ * Pre-auth in-app shell — core loop + Compatibility (L1) primary;
+ * Tarot / Practices secondary (tools by occasion).
  */
-export const APP_NAV_GUEST_PRODUCT_ORDER: AppNavItemId[] = [
-  "tarot",
+export const APP_NAV_GUEST_PRODUCT_PRIMARY: AppNavItemId[] = [
+  "today",
+  "profile",
   "compatibility",
-  "practices",
+];
+
+export const APP_NAV_GUEST_PRODUCT_SECONDARY: AppNavItemId[] = ["tarot", "practices"];
+
+export const APP_NAV_GUEST_PRODUCT_ORDER: AppNavItemId[] = [
+  ...APP_NAV_GUEST_PRODUCT_PRIMARY,
+  ...APP_NAV_GUEST_PRODUCT_SECONDARY,
 ];
 
 /** Guest top-nav → landing section anchors (not product routes). */
 export const APP_NAV_GUEST_LANDING_HREF: Partial<Record<AppNavItemId, string>> = {
-  tarot: "/#tarot",
   compatibility: "/#compatibility",
+  tarot: "/#tarot",
 };
 
 export type AppNavMode = "authenticated" | "guest" | "guestProduct";

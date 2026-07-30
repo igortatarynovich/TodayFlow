@@ -64,14 +64,20 @@ v2 → одна строка в трекер, **не обсуждаем**.
 
 **Launch Story Script · DoD · Decision Log:** [WEB_LAUNCH_EXECUTION_PLAN.md](./WEB_LAUNCH_EXECUTION_PLAN.md)
 
-**Supersedes для web launch** *(не удалять архивные каноны, но не строить launch по ним):*
+**Guest Story Surface P0 (2026-07-30)** — [GUEST_STORY_SURFACE_P0_2026-07-30.md](../audits/GUEST_STORY_SURFACE_P0_2026-07-30.md):
 
-| Документ | Что устарело для launch |
+- Landing: continuity thesis + **dual primary CTAs** (demo Today + Compatibility). Tarot/Practices = low-weight only.
+- `/demo/today` **re-activated** (honest labeled demo → Profile-invite → value-first chain).
+- Guest product nav: **Today · Profile · Compatibility** (primary) · Tarot · Practices (secondary).
+- Evening / day-2 continuity UI = **slice 2** (not this P0).
+
+**Ранее superseded для launch v1** *(историческая таблица; demo path снова в силе для P0 выше):*
+
+| Документ | Что устарело на launch freeze 2026-07-01 |
 |----------|-------------------------|
-| [FIRST_DAY_EXPERIENCE.md](../FIRST_DAY_EXPERIENCE.md) §1 | `/demo/today` как guest value; auth-first |
-| [FIRST_DAY_EXPERIENCE.md](../FIRST_DAY_EXPERIENCE.md) §2 | маршрут `Landing → Demo → Signup` |
+| [FIRST_DAY_EXPERIENCE.md](../FIRST_DAY_EXPERIENCE.md) §1–2 | временно без `/demo/today` — **снято P0 2026-07-30** |
 | [BEHAVIOR_CHANGE_TEST_V0.md](./BEHAVIOR_CHANGE_TEST_V0.md) ship gate row | «Demo» в минимальном пути |
-| [PRODUCT_EXECUTION_TRACKER.md](../PRODUCT_EXECUTION_TRACKER.md) P0.1 | «DONE demo today» — **reverse для launch** |
+| [PRODUCT_EXECUTION_TRACKER.md](../PRODUCT_EXECUTION_TRACKER.md) P0.1 | «DONE demo today» — reverse на freeze; **demo again for story surface** |
 
 **Сохраняет силу:** [EXPLAIN_MEANING_NOT_MECHANISM.md](../explainability/EXPLAIN_MEANING_NOT_MECHANISM.md), [MARKET_ATTENTION_AND_SCREEN_JOBS.md](../MARKET_ATTENTION_AND_SCREEN_JOBS.md) (совместимость = L1), evening/continuity intent в [BEHAVIOR_CHANGE_TEST_V0.md](./BEHAVIOR_CHANGE_TEST_V0.md).
 
@@ -92,14 +98,13 @@ v2 → одна строка в трекер, **не обсуждаем**.
 
 ### Цель (5 секунд)
 
-**Почувствовать:** curiosity — «интересно, что **сегодня для меня**».
+**Почувствовать:** continuity — «дни складываются в меня», не разовый гороскоп.
 
-**Не:** понять продукт, прочитать features, увидеть demo-ответ.
+**Не:** равный feature grid из пяти продуктов; не signup-first без демо.
 
 ### Почему нажмёт CTA
 
-Не потому что «бесплатно» или «регистрация».  
-Потому что хочет **свой** Today — с картой, числом, настроением и **памятью о вчера** (обещание на будущее, не proof сейчас).
+Либо хочет **увидеть формат Today** (demo), либо пришёл за **совместимостью** (L1 hook) — оба CTA на hero одного веса.
 
 ### Layout — блок за блоком
 
@@ -108,11 +113,11 @@ v2 → одна строка в трекер, **не обсуждаем**.
 | Пиксель / зона | Содержание | Зачем | Если убрать |
 |----------------|------------|-------|-------------|
 | Top | Logo TodayFlow | Узнаваемость | − brand trust |
-| H1 | **Интересно, что сегодня для тебя?** | Curiosity hook | − причина остаться |
-| Sub | Персональный ориентир на день — с картой, числом, настроением, рекомендациями и **памятью о вчера** | Язык рынка (гороскоп/таро/GPT) + отличие | − непонятно чем не ChatGPT |
-| Primary CTA | **Создать мой Today** | Действие, не «signup» | − conversion |
-| Secondary | Уже есть аккаунт → Войти | Returning users | − friction для old users |
-| **Нет** | Demo, «Как это работает», feature grid, «Начать бесплатно» | — | + шум, − curiosity |
+| H1 | Continuity thesis (дни складываются в тебя) | Дифференциатор | − «ещё один гороскоп» |
+| Sub + fragment | Одна строка vs гороскоп + пример Тема/Фокус | Proof формата | − абстракция |
+| Dual primary CTA | **Посмотреть, как это работает** → `/demo/today` · **Посмотреть динамику вашей связи** → `/compatibility` | Core loop + L1 hook | − теряем один из входов |
+| Tertiary | Войти (text / quieter) | Returning users | − friction для old users |
+| Low-weight | Таро · Практики (не в одном bucket с Compat) | Tools by occasion | — |
 
 **Feel:** спокойно, тепло, не «SaaS 2010», не «астро-шум».
 

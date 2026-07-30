@@ -12,6 +12,7 @@ describe("GuestProductPitch", () => {
         lead={pitch.lead}
         parts={pitch.parts}
         needs={pitch.needs}
+        primaryHref={pitch.ctaPrimaryHref}
         primaryLabel={pitch.ctaPrimary}
         secondaryLabel={pitch.ctaSecondary}
       />,
@@ -21,7 +22,7 @@ describe("GuestProductPitch", () => {
     expect(screen.getByText("Тема")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: pitch.ctaPrimary })).toHaveAttribute(
       "href",
-      "/onboarding/welcome?fresh=1",
+      pitch.ctaPrimaryHref,
     );
   });
 
@@ -33,10 +34,15 @@ describe("GuestProductPitch", () => {
         title={pitch.title}
         lead={pitch.lead}
         parts={pitch.parts}
+        primaryHref={pitch.ctaPrimaryHref}
         primaryLabel={pitch.ctaPrimary}
       />,
     );
     expect(screen.queryByText(/стабильное состояние/i)).not.toBeInTheDocument();
     expect(screen.getByText(/Цельная история/)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: pitch.ctaPrimary })).toHaveAttribute(
+      "href",
+      "/onboarding/invite",
+    );
   });
 });

@@ -118,6 +118,15 @@
   color: var(--tf-caption, #9a8468);
 }
 
+.textLink {
+  align-self: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--tf-caption, #9a8468);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
 .previewIntro {
   margin: 0;
   line-height: 1.55;

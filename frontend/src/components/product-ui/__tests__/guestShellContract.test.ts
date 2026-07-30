@@ -1,5 +1,6 @@
 import {
   APP_NAV_GUEST_PRODUCT_ORDER,
+  APP_NAV_GUEST_PRODUCT_PRIMARY,
   buildAppNavItems,
 } from "@/lib/appNavConfig";
 
@@ -9,11 +10,11 @@ import {
  * Do not gate on authLoading — that baked «Путник» + full nav into HTML.
  */
 describe("guest product shell contract", () => {
-  it("guestProduct nav excludes Today and Profile", () => {
+  it("guestProduct nav includes Today, Profile, and Compatibility as primary", () => {
     const items = buildAppNavItems("ru", "guestProduct");
     expect(items.map((i) => i.id)).toEqual(APP_NAV_GUEST_PRODUCT_ORDER);
-    expect(items.map((i) => i.id)).not.toContain("today");
-    expect(items.map((i) => i.id)).not.toContain("profile");
+    expect(APP_NAV_GUEST_PRODUCT_PRIMARY).toEqual(["today", "profile", "compatibility"]);
+    expect(items.map((i) => i.id).slice(0, 3)).toEqual(["today", "profile", "compatibility"]);
   });
 
   it("authenticated nav keeps the five primary items", () => {

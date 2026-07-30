@@ -346,10 +346,11 @@ export function TodayCompositionSurface(props: Props) {
   const useProductPersonalized = dayReadingReady;
   const showRitualAsComplement = useProductFoundation && !story.personalizedReady;
 
-  const showSymbolsAct =
+  const showSymbolsAct = Boolean(
     useProductFoundation &&
-    (showRitualAsComplement ||
-      ((story.tarotImpact || story.numberImpact) && story.personalizedReady));
+      (showRitualAsComplement ||
+        ((story.tarotImpact || story.numberImpact) && story.personalizedReady)),
+  );
 
   useEffect(() => {
     if (!useProductFoundation || screenFlowEntryApplied.current) return;
@@ -1289,10 +1290,12 @@ export function TodayCompositionSurface(props: Props) {
       </section>
     ) : null;
 
+  const tarotPickedId = engagement.tarotPickedId;
+
   const tarotPickExperience = (
     <RitualTarotPickExperience
       anchorCardId={anchorTarotId}
-      resumeCommittedId={tarotPendingId ?? engagement.tarotPickedId}
+      resumeCommittedId={tarotPendingId ?? tarotPickedId}
       cardTitleRu={anchorTarotRecord?.nameRu ?? props.cardName}
       tagLabels={anchorTarotTags}
       onCommitMain={onTarotCommit}
@@ -1323,10 +1326,10 @@ export function TodayCompositionSurface(props: Props) {
       <div className={styles.ritualSpineStage} data-testid="today-zone-tarot-impact">
         <section className={styles.ritualReveal}>
           <p className={styles.ritualRevealKind}>Символ дня</p>
-          {engagement.tarotPickedId != null && tarotCardFaceSrc(engagement.tarotPickedId) ? (
+          {tarotPickedId != null && tarotCardFaceSrc(tarotPickedId) ? (
             <div className={styles.ritualRevealArt} data-testid="today-tarot-face-kept">
               <TarotPicture
-                sources={tarotCardFacePicture(engagement.tarotPickedId)!}
+                sources={tarotCardFacePicture(tarotPickedId)!}
                 alt={story.tarotImpact.title}
                 sizes="(max-width: 40rem) 52vw, 200px"
               />
@@ -1575,101 +1578,6 @@ export function TodayCompositionSurface(props: Props) {
         ) : null}
 
         {dayStoryFoundation}
-
-        {/* Act 2 — symbols (gates or opened) before reading. GlanceTimeline slot reserved for Wave 2. */}
-        {false && useProductFoundation && (showRitualAsComplement || ((story.tarotImpact || story.numberImpact) && story.personalizedReady)) ? (
-          <MotionReveal delayMs={MOTION.staggerMs}>
-            <TodayActShell
-              step={2}
-              title={copy.journey.openTitle}
-              lead={copy.journey.openLead}
-              accent="sky"
-              testId="today-zone-open-day"
-              slotAfter={<TodayGlanceTimelineSlot dateISO={dateISO} />}
-            >
-              {showRitualAsComplement ? ritualGateSection : null}
-              {showRitualAsComplement ? ritualTarotImpactStage : null}
-              {(story.tarotImpact || story.numberImpact) && story.personalizedReady ? (
-                <div className={styles.symbolImpactsStack} data-testid="today-zone-symbol-impacts">
-                  {story.tarotImpact ? (
-                    <section className={styles.ritualReveal} data-testid="today-zone-tarot-impact">
-                      <p className={styles.ritualRevealKind}>Символ дня · открыт</p>
-                      {engagement.tarotPickedId != null && tarotCardFaceSrc(engagement.tarotPickedId) ? (
-                        <div className={styles.ritualRevealArt} data-testid="today-tarot-face-kept">
-                          <TarotPicture
-                            sources={tarotCardFacePicture(engagement.tarotPickedId)!}
-                            alt={story.tarotImpact.title}
-                            sizes="(max-width: 40rem) 52vw, 200px"
-                          />
-                        </div>
-                      ) : null}
-                      <h2 className={styles.ritualRevealTitle}>{story.tarotImpact.title}</h2>
-                      <p className={styles.ritualRevealHeadline}>{story.tarotImpact.headline}</p>
-                      <p className={styles.ritualRevealBody}>{story.tarotImpact.body}</p>
-                      <TodayInterpretationConfirm
-                        target="tarot_impact"
-                        selectedChoiceId={(engagement.tarotResonance as ProximityChoiceId | null) ?? null}
-                        onSelect={(choiceId, resonance) =>
-                          onInterpretationConfirm("tarot_impact", choiceId, resonance, story.tarotImpact?.headline)
-                        }
-                      />
-                      {engagement.tarotPickedId != null ? (
-                        <Link
-                          href={buildTarotDeepenHref({
-                            cardId: engagement.tarotPickedId,
-                            orientation: "upright",
-                            source: "today",
-                          })}
-                          className={`orbit-button orbit-button-secondary ${styles.ritualDeepenCta}`}
-                          data-testid="today-tarot-deepen"
-                          onClick={() => {
-                            trackMeaningEvent({
-                              event_type: "tarot_deepen_started",
-                              event_source: TAROT_DEEPEN_EVENT_SOURCE,
-                              local_date: dateISO,
-                              payload: buildTarotDeepenEventPayload({
-                                cardId: engagement.tarotPickedId!,
-                                orientation: "upright",
-                                source: "today",
-                              }),
-                              idempotency_key: tarotDeepenIdempotencyKey({
-                                cardId: engagement.tarotPickedId!,
-                                source: "today",
-                                localDate: dateISO,
-                              }),
-                              refreshRings: false,
-                            });
-                          }}
-                        >
-                          Исследовать глубже →
-                        </Link>
-                      ) : null}
-                    </section>
-                  ) : null}
-
-                  {story.numberImpact ? (
-                    <section className={styles.ritualReveal} data-testid="today-zone-number-impact">
-                      <p className={styles.ritualRevealKind}>Число дня · открыто</p>
-                      <div className={styles.ritualRevealNumber} data-testid="today-number-face-kept" aria-hidden>
-                        {props.numerologyValue || story.numberImpact.title}
-                      </div>
-                      <h2 className={styles.ritualRevealTitle}>{story.numberImpact.title}</h2>
-                      <p className={styles.ritualRevealHeadline}>{story.numberImpact.headline}</p>
-                      <p className={styles.ritualRevealBody}>{story.numberImpact.body}</p>
-                      <TodayInterpretationConfirm
-                        target="number_impact"
-                        selectedChoiceId={(engagement.numberResonance as ProximityChoiceId | null) ?? null}
-                        onSelect={(choiceId, resonance) =>
-                          onInterpretationConfirm("number_impact", choiceId, resonance, story.numberImpact?.headline)
-                        }
-                      />
-                    </section>
-                  ) : null}
-                </div>
-              ) : null}
-            </TodayActShell>
-          </MotionReveal>
-        ) : null}
 
         {!useProductFoundation && useProductPersonalized ? (
           <TodayPersonalizedProductSection

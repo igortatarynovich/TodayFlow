@@ -38,7 +38,8 @@ export const metadata = {
     default: "TodayFlow",
     template: "%s | TodayFlow"
   },
-  description: "Персональный ориентир на день: тема, фокус, практика и память о вчера — не общий гороскоп.",
+  description:
+    "TodayFlow видит не только твой день, а то, как дни складываются в тебя — с памятью о вчера, не общий гороскоп.",
   keywords: ["самопознание", "персональный день", "TodayFlow", "профиль", "таро", "совместимость"],
   authors: [{ name: "TodayFlow" }],
   creator: "TodayFlow",
@@ -66,20 +67,21 @@ export const metadata = {
     url: "/",
     siteName: "TodayFlow",
     title: "TodayFlow",
-    description: "Персональный ориентир на день: тема, фокус, практика и память о вчера — не общий гороскоп.",
+    description:
+      "TodayFlow видит не только твой день, а то, как дни складываются в тебя — с памятью о вчера, не общий гороскоп.",
     images: [
       {
         url: "/images/hero-meditation.png",
         width: 1920,
         height: 1080,
-        alt: "TodayFlow - Эра самопознания",
+        alt: "TodayFlow — персональный день с памятью о вчера",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title: "TodayFlow",
-    description: "Персональный ориентир на день — тема, фокус и память о вчера.",
+    description: "Не только день — история, которая помнит вчера.",
     images: ["/images/hero-meditation.png"],
   },
   robots: {

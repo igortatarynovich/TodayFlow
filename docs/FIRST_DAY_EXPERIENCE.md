@@ -4,7 +4,7 @@
 **Версия:** 2.0 (2026-06-23).  
 **Владелец:** Product + Engineering.
 
-**Web launch (2026-07-01):** маршрут guest `/demo/today`, auth-first и landing demo — **superseded**. Источник истины: [status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md](./status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md) (UX) + [status/WEB_LAUNCH_EXECUTION_PLAN.md](./status/WEB_LAUNCH_EXECUTION_PLAN.md) (работы, код).
+**Web launch (2026-07-01):** маршрут guest `/demo/today` был временно **superseded** (CTA сразу в value-first welcome). **2026-07-30 re-activated** for Guest Story Surface P0: Landing → `/demo/today` → `/onboarding/invite` → welcome/birth. See [audits/GUEST_STORY_SURFACE_P0_2026-07-30.md](./audits/GUEST_STORY_SURFACE_P0_2026-07-30.md) · [status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md](./status/WEB_LAUNCH_PRODUCT_BLUEPRINT.md).
 
 **Scope:** полный user journey до первого персонального Today + First Day Package.  
 **Не входит:** реализация экранов (см. §13 Execution backlog), новые API без обоснования, C1.7 / causal graph.
