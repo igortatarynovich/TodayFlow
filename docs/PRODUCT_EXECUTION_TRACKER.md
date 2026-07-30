@@ -4,7 +4,7 @@ Last updated: 2026-07-30
 Owner: Product + Engineering
 Status: Active working document
 
-**IN PROGRESS (2026-07-30):** Wave 2 Phase D.2b generation SoT (conflict.driver_ids ← natal pt-*) · D.1–D.2 **MERGED** (PR #5). D.3 next after D.2b. Practices **P1 session cycle**. ScreenFlow axis **LOCKED x**. Guest Story Surface P0 + Continuity slice 2 — **DONE**.
+**IN PROGRESS (2026-07-30):** Wave 2 D.1–D.2b **MERGED** · **D.3 motion retrospective next**. Practices **P1 session cycle**. Practices **P1 session cycle**. ScreenFlow axis **LOCKED x**. Guest Story Surface P0 + Continuity slice 2 — **DONE**.
 
 ## 1) Purpose
 
@@ -1121,7 +1121,7 @@ Historical note:
 - 2026-07-30 | Practices | **P0 web state-cycle shell** | **DONE (FE)** | `/practices` → `PracticesStateCycleScreen`: 6 need chips · recommend · moment rail · 9 format chips · practice of day · conditional my library · desktop Today rail. Client keyword filter until API needs. Images: `/images/praktiki_banner.png` + CSS gradient placeholders. Continue via session draft (P1). Tests: practicesCanon + StateCycleScreen.
 - 2026-07-30 | Practices | **Screen v1.1 canon — axis resolution** | **ACCEPTED** | SoT [practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) v1.1: needs keep **both** «Почувствовать тело» + «Понять себя» (body vs reflective axes); «Уснуть» last. Formats: yoga/stretch/music chips (spec «Телесные» detailed); restore reflection+sleep; music = chip ⊕ layer. **C0b** mockup need-align. No parallel `practices-canon.md`. Next: C0b → P0 → P1; M0 ∥.
 - 2026-07-30 | Practices | **Screen v1.0 canon C0 (need/format freeze)** | **SUPERSEDED → v1.1** | v1.0 dropped «Почувствовать тело» and umbrella `body` format; replaced by axis logic in v1.1.
-- 2026-07-30 | Today / Content | **Wave 2 Phase D.2b — conflict.driver_ids generation SoT** | **IN PROGRESS** | `build_scenario_conflict_v1` + native LLM map: when foundation has `pt-*`, conflict.driver_ids = top-N natal (Strip pool). Pack stays on foundation.ranked_drivers. Stale caches still D.2-gated until regen. [CONTRACT §7](./today/TODAY_WAVE2_CONTRACT_V1.md) · [PLAN D.2b](./today/TODAY_WAVE2_EXECUTION_PLAN.md).
+- 2026-07-30 | Today / Content | **Wave 2 Phase D.2b — conflict.driver_ids generation SoT** | **LIVE (MERGED)** | `build_scenario_conflict_v1` + native LLM map: when foundation has `pt-*`, conflict.driver_ids = top-N natal (Strip pool). Pack stays on foundation.ranked_drivers. Stale caches still D.2-gated until regen. [CONTRACT §7](./today/TODAY_WAVE2_CONTRACT_V1.md) · [PLAN D.2b](./today/TODAY_WAVE2_EXECUTION_PLAN.md).
 - 2026-07-30 | Today / Content | **Wave 2 Phase D.1–D.2 PR #5** | **MERGED** | day-facts slots + narrative project + `pt-*` ⊆ gate; Act3 demotion reverted. Base `design/profile-journey-premium` @ `2db2c03`.
 - 2026-07-30 | Today / Content | **Wave 2 — conflict.driver_ids generation SoT** | **SUPERSEDED → D.2b** | Was BACKLOG; active as D.2b row above.
 - 2026-07-30 | Today / Content | **Wave 2 Phase D.2 — day_facts `pt-*` ⊆ gate** | **LIVE** | Project narrative only when all conflict.driver_ids are `pt-*` and ⊆ fresh pool; pack → `partial: true`. Revert Act3 demotion from `69bfa59` (Act3 stays on day_scenario). No trust_ok / no invent. FE today does not read day_facts.conflict/scenes. [CONTRACT §7](./today/TODAY_WAVE2_CONTRACT_V1.md) · [PLAN D.2](./today/TODAY_WAVE2_EXECUTION_PLAN.md).

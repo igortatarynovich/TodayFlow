@@ -1,6 +1,6 @@
 # Today Wave 2 — Data Contract `day_facts_v1`
 
-**Status:** Phase D.2 **LIVE** · D.2b generation SoT **IN PROGRESS** (`conflict.driver_ids` ← natal `pt-*` when present)  
+**Status:** Phase D.2 **LIVE** · D.2b generation SoT **LIVE** (`conflict.driver_ids` ← natal `pt-*` when present)  
 **Execution order:** [TODAY_WAVE2_EXECUTION_PLAN.md](./TODAY_WAVE2_EXECUTION_PLAN.md)  
 **Motion (pilot):** [TODAY_MOTION_PILOT_V1.md](./TODAY_MOTION_PILOT_V1.md)
 
