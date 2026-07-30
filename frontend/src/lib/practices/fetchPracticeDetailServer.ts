@@ -74,7 +74,7 @@ export async function lookupPracticesCatalogServer(): Promise<PracticeCatalogEnt
         description: String(item.description || ""),
         duration_minutes: item.duration_minutes ?? null,
         difficulty: item.difficulty ?? null,
-        is_free: item.is_free !== false,
+        is_free: true,
       });
       if (out.length >= 24) break;
     }
