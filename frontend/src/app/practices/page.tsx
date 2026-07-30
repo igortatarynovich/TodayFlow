@@ -2,14 +2,13 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { practicesExperienceChromeBundle, type FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
-import { practicesV2Copy } from "@/components/practices/v2/practicesV2SystemCopy";
 import {
-  PracticesV2SystemScreen,
-  type PracticesDayStoryRecommendation,
-  type PracticesV2ProgramCard,
-  type PracticesV2QuickItem,
-  type PracticesV2Tab,
-} from "@/components/practices/v2/PracticesV2SystemScreen";
+  PracticesStateCycleScreen,
+  type StateCycleMyItem,
+  type StateCyclePracticeCard,
+  type StateCycleTodayRail,
+} from "@/components/practices/stateCycle/PracticesStateCycleScreen";
+import { practicesStateCycleCopy } from "@/components/practices/stateCycle/practicesStateCycleCopy";
 import { LoadingSpinner } from "@/components/orbit";
 import { PracticesWebScreen } from "@/components/product-ui/PracticesWebScreen";
 import { getJson } from "@/lib/api";
@@ -18,49 +17,57 @@ import { isGuestPracticeAllowed } from "@/lib/guestAccessStore";
 import { getLocale } from "@/lib/i18n";
 import { buildPracticesV2LiveContext } from "@/lib/practicesPage/buildPracticesV2LiveContext";
 import {
-  matchesPracticeSearch,
-  PRACTICE_BACKEND_CATEGORY_IDS,
-  programCardsFromCatalog,
-  quickItemsFromCatalog,
-  practiceStepsCount,
-  progressSummaryFromApi,
+  inferPracticeFormat,
+  practiceMatchesFormat,
+  practiceMatchesNeed,
+  type PracticeFormatId,
+  type PracticeNeedId,
+} from "@/lib/practicesPage/practicesCanon";
+import {
   type PracticeCatalogItem,
-  type PracticeCategoryOption,
   type PracticeLimitsSnapshot,
 } from "@/lib/practicesPage/practicesCatalogModel";
-import {
-  productWebDisplayName,
-  productWebProfileMeta,
-  productWebUserInitial,
-} from "@/lib/productWebUser";
+import { productWebDisplayName } from "@/lib/productWebUser";
 import type { CoreProfile, PracticeHistoryResponse, PracticeProgressResponse } from "@/lib/types";
 import { fetchTodayContractV1 } from "@/lib/todayContract";
 import { useAuth } from "@/lib/useAuth";
 import styles from "@/app/practices/PracticesPage.module.css";
-function formatDuration(minutes: number | undefined, minutesShort: string): string {
-  if (minutes == null) return "—";
-  return `${minutes} ${minutesShort}`;
+
+const RECOMMEND_IMAGE = "/images/praktiki_banner.png";
+
+function toCard(practice: PracticeCatalogItem, imageUrl?: string | null): StateCyclePracticeCard {
+  return {
+    id: practice.id,
+    href: `/practices/${practice.id}`,
+    title: practice.title,
+    description:
+      practice.personalized_reason?.trim() || practice.description?.trim() || "",
+    minutes: practice.duration_minutes ?? null,
+    formatId: inferPracticeFormat(practice),
+    imageUrl: imageUrl ?? null,
+  };
 }
 
-function buildCategoryTabs(
-  categories: PracticeCategoryOption[],
-  allLabel: string,
-): PracticesV2Tab[] {
-  return [
-    { id: "all", label: allLabel, tone: "dark" },
-    ...categories.map((category, index) => ({
-      id: category.id,
-      label: category.name,
-      tone: index === 0 ? ("gold" as const) : undefined,
-    })),
-  ];
+function pickPoolForNeed(
+  pool: PracticeCatalogItem[],
+  need: PracticeNeedId,
+  format: PracticeFormatId | null,
+): PracticeCatalogItem[] {
+  let list = pool;
+  if (format) {
+    const byFormat = list.filter((p) => practiceMatchesFormat(p, format));
+    if (byFormat.length > 0) list = byFormat;
+  }
+  const byNeed = list.filter((p) => practiceMatchesNeed(p, need));
+  if (byNeed.length > 0) return byNeed;
+  return list;
 }
 
 export default function PracticesPage() {
   const { isAuthenticated, isLoading: authLoading } = useAuth();
   const locale: FlowPracticesChromeLocale = getLocale() === "ru" ? "ru" : "en";
   const pc = useMemo(() => practicesExperienceChromeBundle(locale), [locale]);
-  const v2Copy = useMemo(() => practicesV2Copy(locale), [locale]);
+  const copy = useMemo(() => practicesStateCycleCopy(locale), [locale]);
   const sortLocale = locale === "ru" ? "ru" : "en";
 
   const [loading, setLoading] = useState(true);
@@ -70,45 +77,31 @@ export default function PracticesPage() {
   const [progress, setProgress] = useState<PracticeProgressResponse | null>(null);
   const [history, setHistory] = useState<PracticeHistoryResponse | null>(null);
   const [limits, setLimits] = useState<PracticeLimitsSnapshot | null>(null);
-  const [categories, setCategories] = useState<PracticeCategoryOption[]>([]);
-  const [sequences, setSequences] = useState<PracticeCatalogItem[]>([]);
   const [shortAlternatives, setShortAlternatives] = useState<PracticeCatalogItem[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [catalogStatus, setCatalogStatus] = useState<"loaded" | "empty" | "failed">("loaded");
-  const [catalogTab, setCatalogTab] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [practiceRecommendation, setPracticeRecommendation] =
-    useState<PracticesDayStoryRecommendation | null>(null);
+  const [activeNeed, setActiveNeed] = useState<PracticeNeedId>("calm");
+  const [activeFormat, setActiveFormat] = useState<PracticeFormatId | null>(null);
+  const [todayRail, setTodayRail] = useState<StateCycleTodayRail | null>(null);
 
   const loadPractices = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
 
-      const categoryParam =
-        catalogTab !== "all" && PRACTICE_BACKEND_CATEGORY_IDS.has(catalogTab)
-          ? `?category=${encodeURIComponent(catalogTab)}`
-          : "";
-
-      const catalogResult = await getJson<PracticeCatalogItem[]>(`/practices${categoryParam || "/"}`)
+      const catalogResult = await getJson<PracticeCatalogItem[]>(`/practices/`)
         .then((data) => ({ ok: true as const, data }))
         .catch((err) => {
           console.error("Practices catalog failed", err);
           return { ok: false as const, data: [] as PracticeCatalogItem[] };
         });
 
-      const [currentResult, categoriesResult, shortAltResult] = await Promise.all([
+      const [currentResult, shortAltResult] = await Promise.all([
         getJson<PracticeCatalogItem>("/practices/current")
           .then((data) => ({ ok: true as const, data }))
           .catch((err) => {
             console.error("Practices current failed", err);
             return { ok: false as const, data: null as PracticeCatalogItem | null };
-          }),
-        getJson<{ categories: PracticeCategoryOption[] }>("/practices/categories/list")
-          .then((data) => ({ ok: true as const, data }))
-          .catch((err) => {
-            console.error("Practices categories failed", err);
-            return { ok: false as const, data: { categories: [] as PracticeCategoryOption[] } };
           }),
         getJson<PracticeCatalogItem[]>("/practices/short-alternatives")
           .then((data) => ({ ok: true as const, data }))
@@ -122,7 +115,7 @@ export default function PracticesPage() {
         setCatalogStatus("failed");
         setPractices([]);
         setCurrentPractice(null);
-        setError(v2Copy.catalogLoadFailed);
+        setError(copy.catalogFailed);
       } else {
         const catalogPool = isAuthenticated
           ? catalogResult.data
@@ -135,12 +128,10 @@ export default function PracticesPage() {
 
         setPractices(sorted);
         setCatalogStatus(sorted.length === 0 ? "empty" : "loaded");
-        // Never promote catalog[0] into "current" — that looks personal when it isn't.
         setCurrentPractice(currentResult.data);
         setError(null);
       }
 
-      setCategories(categoriesResult.data.categories ?? []);
       setShortAlternatives(
         isAuthenticated
           ? shortAltResult.data
@@ -148,7 +139,7 @@ export default function PracticesPage() {
       );
 
       if (isAuthenticated) {
-        const [progressResp, historyResp, limitsResp, sequencesResp] = await Promise.all([
+        const [progressResp, historyResp, limitsResp] = await Promise.all([
           getJson<PracticeProgressResponse>("/practices/progress").catch((err) => {
             console.error("Practices progress failed", err);
             return null;
@@ -161,20 +152,14 @@ export default function PracticesPage() {
             console.error("Practices limits failed", err);
             return null;
           }),
-          getJson<PracticeCatalogItem[]>("/practices/sequences").catch((err) => {
-            console.error("Practices sequences failed", err);
-            return [];
-          }),
         ]);
         setProgress(progressResp);
         setHistory(historyResp);
         setLimits(limitsResp);
-        setSequences(sequencesResp);
       } else {
         setProgress(null);
         setHistory(null);
         setLimits(null);
-        setSequences([]);
       }
     } catch (err) {
       console.error("Error loading practices:", err);
@@ -183,7 +168,7 @@ export default function PracticesPage() {
     } finally {
       setLoading(false);
     }
-  }, [catalogTab, isAuthenticated, sortLocale, pc.practicesCatalogLoadError, v2Copy.catalogLoadFailed]);
+  }, [isAuthenticated, sortLocale, pc.practicesCatalogLoadError, copy.catalogFailed]);
 
   useEffect(() => {
     void loadPractices();
@@ -201,110 +186,94 @@ export default function PracticesPage() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      setPracticeRecommendation(null);
+      setTodayRail(null);
       return;
     }
     let cancelled = false;
     void fetchTodayContractV1()
       .then((contract) => {
         if (cancelled) return;
-        const rec = contract.day_story?.practice_recommendation;
-        const kind = (rec?.kind || "").trim().toLowerCase();
-        if (!rec || !kind || kind === "none") {
-          setPracticeRecommendation(null);
-          return;
-        }
-        setPracticeRecommendation({
-          kind: rec.kind,
-          text: rec.text,
-          reason: rec.reason,
+        const story = contract.day_story;
+        const mood = story?.theme || story?.headline_anchor || null;
+        const goal = story?.today_move || story?.direction || null;
+        const practiceDone = story?.practice_recommendation?.text || null;
+        setTodayRail({
+          mood: typeof mood === "string" && mood.trim() ? mood.trim() : null,
+          goal: typeof goal === "string" && goal.trim() ? goal.trim() : null,
+          practiceDone:
+            typeof practiceDone === "string" && practiceDone.trim() ? practiceDone.trim() : null,
         });
       })
       .catch((err) => {
-        console.error("Failed to load today contract for practices journey", err);
-        if (!cancelled) setPracticeRecommendation(null);
+        console.error("Failed to load today contract for practices rail", err);
+        if (!cancelled) setTodayRail(null);
       });
     return () => {
       cancelled = true;
     };
   }, [isAuthenticated]);
 
-  const filteredPractices = useMemo(() => {
-    return practices.filter((practice) => matchesPracticeSearch(practice, searchQuery));
-  }, [practices, searchQuery]);
-
-  const tabs = useMemo(
-    () => buildCategoryTabs(categories, v2Copy.tabAll),
-    [categories, v2Copy.tabAll],
+  const filteredPool = useMemo(
+    () => pickPoolForNeed(practices, activeNeed, activeFormat),
+    [practices, activeNeed, activeFormat],
   );
 
-  const programCards = useMemo((): PracticesV2ProgramCard[] => {
-    const useSequences =
-      isAuthenticated && sequences.length > 0 && catalogTab === "all" && !searchQuery.trim();
-    const source = useSequences ? sequences : filteredPractices;
-    return programCardsFromCatalog(source, {
-      locale,
-      minutesShort: v2Copy.minutesShort,
-      max: 3,
-      preferSequences: false,
-    });
-  }, [filteredPractices, sequences, isAuthenticated, catalogTab, searchQuery, v2Copy.minutesShort, locale]);
+  const recommended = useMemo((): StateCyclePracticeCard | null => {
+    if (currentPractice && practiceMatchesNeed(currentPractice, activeNeed)) {
+      return toCard(currentPractice, RECOMMEND_IMAGE);
+    }
+    if (currentPractice && !activeFormat) {
+      // Prefer current when format filter off — still honest "recommended now"
+      return toCard(currentPractice, RECOMMEND_IMAGE);
+    }
+    const first = filteredPool[0] ?? practices[0];
+    return first ? toCard(first, RECOMMEND_IMAGE) : null;
+  }, [currentPractice, filteredPool, practices, activeNeed, activeFormat]);
 
-  const quickItems = useMemo((): PracticesV2QuickItem[] => {
-    const excludeIds = new Set(programCards.map((card) => card.id));
+  const momentCards = useMemo((): StateCyclePracticeCard[] => {
+    const exclude = new Set(recommended ? [recommended.id] : []);
     const altPool =
       shortAlternatives.length > 0
-        ? shortAlternatives
-        : filteredPractices.filter((practice) => !excludeIds.has(practice.id));
-    return quickItemsFromCatalog(altPool, {
-      locale,
-      minutesShort: v2Copy.minutesShort,
-      max: 3,
-      excludeIds,
-    });
-  }, [programCards, shortAlternatives, filteredPractices, v2Copy.minutesShort, locale]);
+        ? pickPoolForNeed(shortAlternatives, activeNeed, activeFormat)
+        : filteredPool;
+    return altPool
+      .filter((p) => !exclude.has(p.id))
+      .slice(0, 8)
+      .map((p) => toCard(p));
+  }, [shortAlternatives, filteredPool, recommended, activeNeed, activeFormat]);
 
-  const practiceOfDay = useMemo(() => {
+  const practiceOfDay = useMemo((): {
+    card: StateCyclePracticeCard | null;
+    source: "personalized" | "current" | "catalog_fallback" | null;
+  } => {
     if (currentPractice) {
-      const recommendationSource: "personalized" | "current" = currentPractice.is_personalized
-        ? "personalized"
-        : "current";
       return {
-        title: currentPractice.title,
-        description:
-          currentPractice.personalized_reason?.trim() || currentPractice.description,
-        minutes: currentPractice.duration_minutes ?? null,
-        steps: practiceStepsCount(currentPractice),
-        href: `/practices/${currentPractice.id}`,
-        recommendationSource,
+        card: toCard(currentPractice),
+        source: currentPractice.is_personalized ? "personalized" : "current",
       };
     }
+    const fallback = practices[0];
+    if (!fallback) return { card: null, source: null };
+    return { card: toCard(fallback), source: "catalog_fallback" };
+  }, [currentPractice, practices]);
 
-    const fallback = filteredPractices[0] ?? practices[0];
-    if (!fallback) return null;
-    return {
-      title: fallback.title,
-      description: fallback.description,
-      minutes: fallback.duration_minutes ?? null,
-      steps: practiceStepsCount(fallback),
-      href: `/practices/${fallback.id}`,
-      recommendationSource: "catalog_fallback" as const,
-    };
-  }, [currentPractice, filteredPractices, practices]);
-
-  const heroPrimaryHref = practiceOfDay?.href ?? "/practices";
-  const heroSecondaryHref = "#practices-v2-library";
-  const heroDurationSuffix = practiceOfDay?.minutes
-    ? `${practiceOfDay.minutes} ${v2Copy.minutesShort.toUpperCase()}`
-    : null;
-  const heroBody =
-    practiceOfDay?.recommendationSource === "catalog_fallback"
-      ? "Рекомендуем начать с этой практики — она из каталога, не персональная подборка."
-      : currentPractice?.personalized_reason?.trim() ||
-        currentPractice?.description?.trim() ||
-        v2Copy.heroBodyFallback;
-
-  const activeProgramsCount = sequences.length > 0 ? sequences.length : null;
+  const myItems = useMemo((): StateCycleMyItem[] => {
+    const rows = history?.history ?? [];
+    if (rows.length === 0) return [];
+    const seen = new Set<string>();
+    const out: StateCycleMyItem[] = [];
+    for (const row of rows) {
+      if (!row.practice_id || seen.has(row.practice_id)) continue;
+      seen.add(row.practice_id);
+      out.push({
+        id: row.practice_id,
+        href: `/practices/${row.practice_id}`,
+        title: row.practice_title || row.practice_id,
+      });
+      if (out.length >= 5) break;
+    }
+    return out;
+  }, [history]);
 
   const live = useMemo(
     () =>
@@ -315,27 +284,17 @@ export default function PracticesPage() {
     [progress, history],
   );
 
-  const progressSummary = useMemo(
-    () => progressSummaryFromApi(progress, categories, locale),
-    [progress, categories, locale],
-  );
-
   const displayName = productWebDisplayName(coreProfile, null);
-  const userInitial = productWebUserInitial(coreProfile, null);
-  const statusLabel = productWebProfileMeta(coreProfile);
-
-  const monthLabel = new Intl.DateTimeFormat(locale === "ru" ? "ru-RU" : "en-US", {
-    month: "long",
-  }).format(new Date());
 
   if (authLoading || loading) {
     return (
       <PracticesWebScreen
         variant="v2"
         locale={locale}
-        title={pc.practicesCatalogPageTitle}
-        subtitle={pc.practicesCatalogPageSubtitle}
+        title={copy.pageTitle}
+        subtitle={copy.pageSubtitle}
         coreProfile={coreProfile}
+        rail={null}
       >
         <div className={styles.loaderWrap}>
           <LoadingSpinner size="lg" />
@@ -348,48 +307,33 @@ export default function PracticesPage() {
     <PracticesWebScreen
       variant="v2"
       locale={locale}
-      title={pc.practicesCatalogPageTitle}
-      subtitle={pc.practicesCatalogPageSubtitle}
+      title={copy.pageTitle}
+      subtitle={copy.pageSubtitle}
       coreProfile={coreProfile}
       displayName={displayName}
-      activePractices={activeProgramsCount ?? 0}
+      activePractices={limits?.used_this_week ?? 0}
       streakDays={live.streakDays}
-      showProgressRail={(progress?.total_completed ?? 0) > 0 || live.streakDays > 0}
-      weeklyRhythm={
-        (progress?.total_completed ?? 0) > 0
-          ? live.weekCells.map((cell) => (cell.closed ? 1 : 0))
-          : []
-      }
+      showProgressRail={false}
+      rail={null}
     >
       {error && catalogStatus !== "failed" ? (
         <div className={styles.errorBanner} role="alert">
           {error}
         </div>
       ) : null}
-      <PracticesV2SystemScreen
+      <PracticesStateCycleScreen
         locale={locale}
-        displayName={displayName}
-        userInitial={userInitial}
-        statusLabel={statusLabel}
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        tabs={tabs.length > 1 ? tabs : [{ id: "all", label: v2Copy.tabAll, tone: "dark" }]}
-        activeTabId={catalogTab}
-        onTabChange={setCatalogTab}
-        heroBody={heroBody}
-        heroEyebrowSuffix={heroDurationSuffix}
-        heroPrimaryHref={heroPrimaryHref}
-        heroSecondaryHref={heroSecondaryHref}
-        practiceOfDay={practiceOfDay}
-        practiceRecommendation={practiceRecommendation}
-        programCards={programCards}
-        quickItems={quickItems}
-        live={live}
-        monthLabel={monthLabel}
-        progressSummary={progressSummary}
-        limitsRemaining={limits?.remaining_this_week ?? null}
-        showGuestProgressHint={!isAuthenticated}
-        emptyLibraryMessage={pc.practicesCatalogEmptyFilter}
+        activeNeed={activeNeed}
+        onNeedChange={setActiveNeed}
+        activeFormat={activeFormat}
+        onFormatChange={setActiveFormat}
+        recommended={recommended}
+        continueSession={null}
+        momentCards={momentCards}
+        practiceOfDay={practiceOfDay.card}
+        practiceOfDaySource={practiceOfDay.source}
+        myItems={myItems}
+        todayRail={todayRail}
         catalogFailed={catalogStatus === "failed"}
         onRetryCatalog={() => void loadPractices()}
       />

@@ -4,7 +4,7 @@ Last updated: 2026-07-30
 Owner: Product + Engineering
 Status: Active working document
 
-**IN PROGRESS (2026-07-30):** Practices Screen v1.1 — **C0 canon ACCEPTED** ([practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md)); **C0b** mockup need-align; next **P0** web shell. ScreenFlow Phase 2b — Glance-first **LIVE**. Guest Story Surface P0 — **DONE (LIVE)**. Evening/day-2 = slice 2.
+**IN PROGRESS (2026-07-30):** Practices **P0 web shell** (`PracticesStateCycleScreen` on locked need/format v1.1). C0 ACCEPTED. ScreenFlow Phase 2b — Glance-first **LIVE**. Guest Story Surface P0 — **DONE (LIVE)**. Evening/day-2 = slice 2.
 
 ## 1) Purpose
 
@@ -889,7 +889,7 @@ Source of truth: [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) §1–§13
 
 - [x] **C0** Canon v1.1 ACCEPTED — axis resolution (body+understand needs; yoga/stretch/music formats; reflection+sleep restored)
 - [ ] **C0b** Align mockup need-ленты to canon: add «Понять себя»; move «Уснуть» to end
-- [ ] **P0** Web `/practices` shell: need chips + «Рекомендовано сейчас» + Continue + moment rail + format chips + practice of day + conditional «Мои практики» (map/deprecate legacy catalog goals)
+- [ ] **P0** Web `/practices` shell: need chips + «Рекомендовано сейчас» + Continue + moment rail + format chips + practice of day + conditional «Мои практики» — **IN PROGRESS (FE)** `PracticesStateCycleScreen`
 - [ ] **P1** Session fullscreen + state check-in (Лучше / Без изменений / Сложнее) + «Сохранить в сегодняшний день»
 - [ ] **M0** Music layer (С голосом / Только музыка / Без звука + voice/music/nature volumes) — parallel to P0/P1
 - [ ] iOS parity after web P0+P1 stable
@@ -1116,6 +1116,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-07-30 | Practices | **P0 web state-cycle shell** | **IN PROGRESS (FE)** | `/practices` → `PracticesStateCycleScreen`: 6 need chips · recommend · moment rail · 9 format chips · practice of day · conditional my library · desktop Today rail. Client keyword filter until API needs. Images: `/images/praktiki_banner.png` + CSS gradient placeholders. Continue hidden (no in-progress API). Tests: practicesCanon + StateCycleScreen.
 - 2026-07-30 | Practices | **Screen v1.1 canon — axis resolution** | **ACCEPTED** | SoT [practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) v1.1: needs keep **both** «Почувствовать тело» + «Понять себя» (body vs reflective axes); «Уснуть» last. Formats: yoga/stretch/music chips (spec «Телесные» detailed); restore reflection+sleep; music = chip ⊕ layer. **C0b** mockup need-align. No parallel `practices-canon.md`. Next: C0b → P0 → P1; M0 ∥.
 - 2026-07-30 | Practices | **Screen v1.0 canon C0 (need/format freeze)** | **SUPERSEDED → v1.1** | v1.0 dropped «Почувствовать тело» and umbrella `body` format; replaced by axis logic in v1.1.
 - 2026-07-30 | Web Guest / SEO audit | **Guest Story Surface P0 (item 11)** | **DONE (LIVE)** | Curl: landing dual CTAs · `/demo/today` SSR Theme/Focus/Practice/Memory · `/onboarding/invite` · pitch CTAs · Compat Profile bridge · guest-nav primary Today·Profile·Compatibility. Evening/day-2 = slice 2. Canon [audits/GUEST_STORY_SURFACE_P0_2026-07-30.md](./audits/GUEST_STORY_SURFACE_P0_2026-07-30.md).
