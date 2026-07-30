@@ -1,7 +1,7 @@
-"""Wave 2 Phase D.1 — assemble day_facts_v1 slot envelope.
+"""Wave 2 Phase D.1 / D.1b — assemble day_facts_v1.
 
-One activation resolve → domain_verdicts + glance_timeline.
-Full narrative (conflict/scenes/props) deferred to D.1b.
+D.1: activations + domain_verdicts + glance_timeline.
+D.1b: project cached day_scenario narrative when conflict drivers ⊆ fresh pool.
 """
 
 from __future__ import annotations
@@ -33,6 +33,12 @@ def _empty_envelope(
         "natal_activations": [],
         "domain_verdicts": [],
         "glance_timeline": [],
+        "conflict": None,
+        "scenes": [],
+        "props": None,
+        "sky_drivers": [],
+        "moon_phase": None,
+        "numerology": None,
         "generation_provenance": {
             "conflict_driver_ids": [],
             "verdict_driver_ids": {
@@ -72,9 +78,10 @@ async def assemble_day_facts_v1(
     locale: str,
     timezone_name: str | None = None,
 ) -> dict[str, Any]:
-    """Build D.1 partial day_facts_v1 for Wave2 slots (Strip + Glance)."""
+    """Build day_facts_v1: slots always; narrative when temporal gate passes."""
     from todayflow_backend.api import reports as reports_api
     from todayflow_backend.services import astro as astro_mod
+    from todayflow_backend.services import today_day_facts_project_v1 as project_svc
     from todayflow_backend.services import today_domain_verdicts_v1 as verdict_svc
     from todayflow_backend.services import today_glance_timeline_v1 as glance_svc
     from todayflow_backend.services import today_natal_activations_v1 as act_svc
@@ -153,6 +160,37 @@ async def assemble_day_facts_v1(
 
     timeline_ids = [str(r.get("driver_id") or "") for r in glance_rows if r.get("driver_id")]
 
+    conflict = None
+    scenes: list[dict[str, Any]] = []
+    props = None
+    sky_drivers: list[dict[str, Any]] = []
+    moon_phase = None
+    numerology = None
+    conflict_driver_ids: list[str] = []
+    partial = True
+
+    try:
+        scenario = project_svc.load_ready_day_scenario(
+            db, user_id=user_id, local_date=local_date
+        )
+        if scenario:
+            blob = project_svc.project_narrative_blob(scenario, activations=enriched)
+            if blob:
+                conflict = blob.get("conflict")
+                scenes = list(blob.get("scenes") or [])
+                props = blob.get("props")
+                sky_drivers = list(blob.get("sky_drivers") or [])
+                moon_phase = blob.get("moon_phase")
+                numerology = blob.get("numerology")
+                conflict_driver_ids = list((conflict or {}).get("driver_ids") or [])
+                partial = False
+    except Exception:
+        logger.exception(
+            "day_facts_narrative_project_failed user=%s date=%s",
+            user_id,
+            local_date.isoformat(),
+        )
+
     return {
         "schema_version": SCHEMA_VERSION,
         "id": facts_id,
@@ -163,12 +201,18 @@ async def assemble_day_facts_v1(
         "natal_activations": [dict(a) for a in enriched],
         "domain_verdicts": domain_verdicts,
         "glance_timeline": glance_rows,
+        "conflict": conflict,
+        "scenes": scenes,
+        "props": props,
+        "sky_drivers": sky_drivers,
+        "moon_phase": moon_phase,
+        "numerology": numerology,
         "generation_provenance": {
-            "conflict_driver_ids": [],
+            "conflict_driver_ids": conflict_driver_ids,
             "verdict_driver_ids": _verdict_provenance(domain_verdicts),
             "timeline_driver_ids": timeline_ids,
         },
         "degraded": False,
         "is_fallback": False,
-        "partial": True,
+        "partial": partial,
     }

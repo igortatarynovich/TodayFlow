@@ -1,6 +1,6 @@
 # Today Wave 2 — Data Contract `day_facts_v1`
 
-**Status:** Phase D.1 **PARTIAL LIVE** (`GET /today/day-facts` slot envelope — activations + domain_verdicts + glance_timeline; full narrative blob deferred to D.1b)  
+**Status:** Phase D.1b **LIVE** (`GET /today/day-facts` — slots + projected narrative when conflict drivers ⊆ fresh activations; else `partial: true`)  
 **Execution order:** [TODAY_WAVE2_EXECUTION_PLAN.md](./TODAY_WAVE2_EXECUTION_PLAN.md)  
 **Motion (pilot):** [TODAY_MOTION_PILOT_V1.md](./TODAY_MOTION_PILOT_V1.md)
 
@@ -389,6 +389,15 @@ Opens with the **first code PR** (Phase A), not with docs lock alone.
 - **Migration:** none
 - **Canon:** this file status · [TODAY_WAVE2_EXECUTION_PLAN](./TODAY_WAVE2_EXECUTION_PLAN.md) Phase D.1
 - **Backward compatible:** yes — interim GETs remain; FE day-facts client cache dedupes Act 1/2
+
+### Phase D.1b (narrative projection) — code PR
+
+- **SoT before:** Narrative only on `day_story.day_scenario`; day-facts = slots only (`partial: true`)
+- **SoT after:** Cached day_scenario projected onto day-facts **iff** `conflict.driver_ids ⊆` fresh natal activations (same-request temporal gate). Else omit conflict/scenes/props, keep `partial: true`. Act 3 still reads day_scenario nest. `thesis` = `label_ru` or null (no filler); `evening_payoff` null until SH-4.
+- **Public JSON:** yes — additive conflict/scenes/props/sky/moon/numerology; `partial` semantics tightened
+- **Migration:** none
+- **Canon:** this file status · [TODAY_WAVE2_EXECUTION_PLAN](./TODAY_WAVE2_EXECUTION_PLAN.md) Phase D.1b
+- **Backward compatible:** yes — old clients ignore new fields; Act3 gap when scenario not ready = Day Map / legacy (not invent)
 
 ---
 

@@ -1834,6 +1834,88 @@ class DayFactsProvenance(BaseModel):
     timeline_driver_ids: list[str] = Field(default_factory=list)
 
 
+class DayFactsOpposingForces(BaseModel):
+    a: str = ""
+    b: str = ""
+
+
+class DayFactsConflict(BaseModel):
+    short_name: str
+    thesis: str | None = None
+    opposing_forces: DayFactsOpposingForces = Field(default_factory=DayFactsOpposingForces)
+    why_arose: str = ""
+    why_personal: str | None = None
+    driver_ids: list[str] = Field(default_factory=list)
+
+
+class DayFactsScene(BaseModel):
+    id: str
+    sphere: str = ""
+    role_in_story: str = "support"
+    what_happens: str = ""
+    opportunity: str = ""
+    trap: str = ""
+    recommended_action: str = ""
+    do_not: str = ""
+    domestic_example: str | None = None
+    driver_ids: list[str] = Field(default_factory=list)
+
+
+class DayFactsColorProp(BaseModel):
+    name: str
+    link_to_conflict: str | None = None
+    where_to_use: str | None = None
+
+
+class DayFactsAvoidColorProp(BaseModel):
+    name: str
+    amplifies_trap: str | None = None
+
+
+class DayFactsPracticeProp(BaseModel):
+    text: str
+    window: str | None = None
+    serves_conflict: str | None = None
+
+
+class DayFactsAffirmationProp(BaseModel):
+    text: str
+    compensates_trap: str | None = None
+
+
+class DayFactsHumorProp(BaseModel):
+    text: str
+    serves_conflict: str | None = None
+
+
+class DayFactsProps(BaseModel):
+    color: DayFactsColorProp | None = None
+    avoid_color: DayFactsAvoidColorProp | None = None
+    practice_or_promise: DayFactsPracticeProp | None = None
+    affirmation: DayFactsAffirmationProp | None = None
+    humor: DayFactsHumorProp | None = None
+    evening_payoff: str | None = None
+
+
+class DayFactsSkyDriver(BaseModel):
+    planet: str
+    sign: str
+    degree_in_sign: float
+    retrograde: bool = False
+
+
+class DayFactsMoonPhase(BaseModel):
+    illumination_pct: float | None = None
+    phase: str | None = None
+    is_new: bool = False
+    is_full: bool = False
+
+
+class DayFactsNumerology(BaseModel):
+    personal_day: int
+    source: str = "classic_reduce_v0"
+
+
 class TodayDayFactsResponse(BaseModel):
     schema_version: str = "day_facts_v1"
     id: str
@@ -1844,6 +1926,12 @@ class TodayDayFactsResponse(BaseModel):
     natal_activations: list[dict[str, Any]] = Field(default_factory=list)
     domain_verdicts: list[DomainVerdictItem] = Field(default_factory=list)
     glance_timeline: list[GlanceTimelineItem] = Field(default_factory=list)
+    conflict: DayFactsConflict | None = None
+    scenes: list[DayFactsScene] = Field(default_factory=list)
+    props: DayFactsProps | None = None
+    sky_drivers: list[DayFactsSkyDriver] = Field(default_factory=list)
+    moon_phase: DayFactsMoonPhase | None = None
+    numerology: DayFactsNumerology | None = None
     generation_provenance: DayFactsProvenance = Field(default_factory=DayFactsProvenance)
     degraded: bool = False
     is_fallback: bool = False
@@ -1853,7 +1941,17 @@ class TodayDayFactsResponse(BaseModel):
 def _day_facts_response_from_payload(payload: dict[str, Any]) -> TodayDayFactsResponse:
     verdicts = [DomainVerdictItem(**row) for row in (payload.get("domain_verdicts") or [])]
     glance = [GlanceTimelineItem(**row) for row in (payload.get("glance_timeline") or [])]
+    scenes = [DayFactsScene(**row) for row in (payload.get("scenes") or [])]
+    sky = [DayFactsSkyDriver(**row) for row in (payload.get("sky_drivers") or [])]
     prov_raw = payload.get("generation_provenance") or {}
+    conflict_raw = payload.get("conflict")
+    conflict = DayFactsConflict(**conflict_raw) if isinstance(conflict_raw, dict) else None
+    props_raw = payload.get("props")
+    props = DayFactsProps(**props_raw) if isinstance(props_raw, dict) else None
+    moon_raw = payload.get("moon_phase")
+    moon = DayFactsMoonPhase(**moon_raw) if isinstance(moon_raw, dict) else None
+    num_raw = payload.get("numerology")
+    numerology = DayFactsNumerology(**num_raw) if isinstance(num_raw, dict) else None
     return TodayDayFactsResponse(
         schema_version=str(payload.get("schema_version") or "day_facts_v1"),
         id=str(payload.get("id") or ""),
@@ -1864,6 +1962,12 @@ def _day_facts_response_from_payload(payload: dict[str, Any]) -> TodayDayFactsRe
         natal_activations=list(payload.get("natal_activations") or []),
         domain_verdicts=verdicts,
         glance_timeline=glance,
+        conflict=conflict,
+        scenes=scenes,
+        props=props,
+        sky_drivers=sky,
+        moon_phase=moon,
+        numerology=numerology,
         generation_provenance=DayFactsProvenance(
             conflict_driver_ids=list(prov_raw.get("conflict_driver_ids") or []),
             verdict_driver_ids=dict(prov_raw.get("verdict_driver_ids") or {}),
@@ -1904,7 +2008,7 @@ async def get_today_day_facts(
     user: User = Depends(require_user),
     db=Depends(get_session),
 ) -> TodayDayFactsResponse:
-    """Wave 2 Phase D.1 — single day_facts slot envelope (activations + verdicts + glance)."""
+    """Wave 2 Phase D.1/D.1b — day_facts slot envelope + projected narrative when gated."""
     payload = await _assemble_day_facts_for_request(
         request=request,
         local_date=local_date,
