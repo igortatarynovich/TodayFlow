@@ -313,3 +313,35 @@ def test_color_catalog_is_knowledge_not_sot():
     rows = list_color_knowledge()
     assert len(rows) >= 5
     assert all("tags" in r and "name" in r for r in rows)
+
+
+def test_conflict_driver_ids_prefer_natal_pt_over_pack():
+    """Wave 2 D.2b: when personal_natal_activations has pt-*, those become conflict.driver_ids."""
+    pack = _pack_merc_moon()
+    thesis = build_day_thesis_v1(day_events_pack=pack)
+    foundation = build_scenario_foundation_v1(
+        day_events_pack=pack,
+        ritual_context={"tarot_name_ru": "Отшельник", "numerology_value": 7},
+    )
+    foundation["personal_natal_activations"] = [
+        {
+            "id": "pt-mars-square-sun",
+            "rank": 1,
+            "text": "Марс давит",
+            "evidence_ids": ["pt-mars-square-sun"],
+            "layer": "personal",
+        },
+        {
+            "id": "pt-venus-trine-moon",
+            "rank": 2,
+            "text": "Венера мягче",
+            "evidence_ids": ["pt-venus-trine-moon"],
+            "layer": "personal",
+        },
+    ]
+    conflict = build_scenario_conflict_v1(foundation=foundation, day_thesis=thesis)
+    assert conflict["driver_ids"] == ["pt-mars-square-sun", "pt-venus-trine-moon"]
+    # Pack evidence remains on foundation for dramaturgy provenance
+    pack_ids = [d["id"] for d in foundation["ranked_drivers"] if isinstance(d, dict) and d.get("id")]
+    assert pack_ids
+    assert conflict["driver_ids"] != pack_ids[:2]

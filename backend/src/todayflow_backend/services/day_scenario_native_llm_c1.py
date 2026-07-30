@@ -668,6 +668,11 @@ def native_llm_to_day_scenario_v1(
         "evidence_refs": list(conflict_n.get("evidence_refs") or []),
         "personalization": _as_dict(conflict_n.get("personalization")),
     }
+    from todayflow_backend.services.today_natal_activations_v1 import natal_conflict_driver_ids
+
+    natal_ids = natal_conflict_driver_ids(foundation.get("personal_natal_activations"))
+    if natal_ids:
+        conflict["driver_ids"] = natal_ids
 
     chorus_n = _as_dict(norm.get("interpretive_chorus"))
     astrology = []

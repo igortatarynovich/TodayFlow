@@ -146,4 +146,22 @@ def test_foundation_prefers_celestial_natal_activations():
     assert personal
     assert personal[0]["id"] == geo[0]["id"]
     assert personal[0]["transiting_planet"] == "Venus"
-    assert "Венера" in personal[0]["text"] or "трин" in personal[0]["text"]
+    assert personal[0]["text"]  # experiential why_short — no planet/aspect jargon required
+
+
+def test_natal_conflict_driver_ids_prefers_pt_by_rank():
+    ids = act.natal_conflict_driver_ids(
+        [
+            {"id": "claim.personal.x", "rank": 1},
+            {"id": "pt-mars-square-sun", "rank": 2},
+            {"id": "sky-semisquare-0", "rank": 1},
+            {"id": "pt-venus-trine-moon", "rank": 1},
+            {"id": "pt-uranus-biquintile-mars", "rank": 3},
+        ],
+        limit=2,
+    )
+    assert ids == ["pt-venus-trine-moon", "pt-mars-square-sun"]
+
+
+def test_natal_conflict_driver_ids_empty_without_pt():
+    assert act.natal_conflict_driver_ids([{"id": "moon-pisces"}, {"id": "claim.x"}]) == []

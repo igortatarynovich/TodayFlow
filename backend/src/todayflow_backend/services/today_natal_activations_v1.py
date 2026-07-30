@@ -160,6 +160,47 @@ def foundation_rows_from_activations(activations: Iterable[dict[str, Any]]) -> l
     return out
 
 
+def natal_conflict_driver_ids(
+    personal_natal_activations: Iterable[dict[str, Any]] | None,
+    *,
+    limit: int = 3,
+) -> list[str]:
+    """Wave 2 D.2b — conflict.driver_ids SoT = top natal activation ids (`pt-*`).
+
+    Pack ranked_drivers stay on foundation for dramaturgy provenance. Claim/prose
+    ids (claim.*, day_personal.*) are not Strip pool members — skip them.
+    """
+    rows: list[dict[str, Any]] = []
+    for row in personal_natal_activations or []:
+        if not isinstance(row, dict):
+            continue
+        tid = str(row.get("id") or "").strip()
+        if not tid.lower().startswith("pt-"):
+            continue
+        rows.append(row)
+
+    def _rank_key(row: dict[str, Any]) -> tuple[int, str]:
+        raw = row.get("rank")
+        try:
+            rk = int(raw) if raw is not None else 10_000
+        except (TypeError, ValueError):
+            rk = 10_000
+        return (rk, str(row.get("id") or ""))
+
+    rows.sort(key=_rank_key)
+    out: list[str] = []
+    seen: set[str] = set()
+    for row in rows:
+        tid = str(row.get("id") or "").strip()
+        if not tid or tid in seen:
+            continue
+        seen.add(tid)
+        out.append(tid)
+        if len(out) >= max(1, int(limit)):
+            break
+    return out
+
+
 async def resolve_natal_activations(
     *,
     user_id: int,

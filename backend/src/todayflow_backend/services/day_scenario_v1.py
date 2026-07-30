@@ -673,13 +673,20 @@ def build_scenario_conflict_v1(
     variant = str(thesis.get("variant") or "steady_productive_rhythm")
     mode = str(thesis.get("mode") or "stability")
     registry_label = str(thesis.get("label_ru") or thesis.get("label") or "").strip()
-    driver_ids = [str(x) for x in _as_list(thesis.get("driver_ids"))][:3]
-    if not driver_ids:
-        driver_ids = [
-            str(d.get("id"))
-            for d in _as_list(foundation.get("ranked_drivers"))
-            if isinstance(d, dict) and d.get("id")
-        ][:3]
+    # Wave 2 D.2b: conflict.driver_ids SoT = natal pt-* when present; pack stays on foundation.
+    from todayflow_backend.services.today_natal_activations_v1 import natal_conflict_driver_ids
+
+    natal_driver_ids = natal_conflict_driver_ids(foundation.get("personal_natal_activations"))
+    if natal_driver_ids:
+        driver_ids = natal_driver_ids
+    else:
+        driver_ids = [str(x) for x in _as_list(thesis.get("driver_ids"))][:3]
+        if not driver_ids:
+            driver_ids = [
+                str(d.get("id"))
+                for d in _as_list(foundation.get("ranked_drivers"))
+                if isinstance(d, dict) and d.get("id")
+            ][:3]
 
     force_a, force_b = _opposing_forces(family, mode)
     why_arose_parts = [
