@@ -63,22 +63,22 @@ export async function lookupPracticesCatalogServer(): Promise<PracticeCatalogEnt
     if (!res.ok) return [];
     const data = (await res.json()) as unknown;
     const list = Array.isArray(data) ? data : [];
-    return list
-      .map((raw) => {
-        const item = raw as PracticeCatalogEntry;
-        if (!item?.id || !item?.title) return null;
-        return {
-          id: String(item.id),
-          title: String(item.title),
-          description: String(item.description || ""),
-          duration_minutes: item.duration_minutes ?? null,
-          difficulty: item.difficulty ?? null,
-          is_free: item.is_free !== false,
-        };
-      })
-      .filter((item): item is PracticeCatalogEntry => item != null)
-      .filter((item) => item.is_free !== false)
-      .slice(0, 24);
+    const out: PracticeCatalogEntry[] = [];
+    for (const raw of list) {
+      const item = raw as PracticeCatalogEntry;
+      if (!item?.id || !item?.title) continue;
+      if (item.is_free === false) continue;
+      out.push({
+        id: String(item.id),
+        title: String(item.title),
+        description: String(item.description || ""),
+        duration_minutes: item.duration_minutes ?? null,
+        difficulty: item.difficulty ?? null,
+        is_free: item.is_free !== false,
+      });
+      if (out.length >= 24) break;
+    }
+    return out;
   } catch {
     return [];
   }
