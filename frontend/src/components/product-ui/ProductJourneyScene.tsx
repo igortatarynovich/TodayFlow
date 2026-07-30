@@ -16,7 +16,7 @@ import styles from "@/components/product-ui/ProductJourneyScene.module.css";
 
 type ProductJourneySceneProps = {
   step?: string | number;
-  title: string;
+  title?: string;
   lead?: string | null;
   motif?: ProfileAtmosphereMotif;
   children: ReactNode;

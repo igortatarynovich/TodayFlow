@@ -85,3 +85,6 @@ export {
   usePrefersReducedMotion,
 } from "@/design-system/motion";
 export type { MotionEase } from "@/design-system/motion";
+
+export { ScreenFlow, ScreenFlowStep, resolveScreenFlowEntryIndex } from "@/design-system/primitives/ScreenFlow";
+export type { ScreenFlowAxis, ScreenFlowChangeReason, ScreenFlowStepStatus, ScreenFlowStepProps, ScreenFlowProps } from "@/design-system/primitives/ScreenFlow";

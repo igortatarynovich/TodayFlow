@@ -132,12 +132,12 @@ describe("TodayCompositionSurface", () => {
     expect(screen.getByTestId("today-zone-hero")).toBeInTheDocument();
     expect(screen.queryByTestId("today-zone-pulse")).not.toBeInTheDocument();
     expect(screen.getByTestId("today-zone-ritual-gates")).toBeInTheDocument();
-    expect(screen.getByTestId("today-entity-daily-theme")).toBeInTheDocument();
-    expect(screen.getByTestId("today-zone-act-plot")).toHaveTextContent(/Сюжет дня/i);
+    expect(screen.getByTestId("today-zone-glance-act")).toBeInTheDocument();
+    expect(screen.getByTestId("today-screen-flow")).toBeInTheDocument();
     expect(screen.getByTestId("today-zone-hero").textContent).not.toMatch(/число дня\s*[—-]?\s*4/i);
   });
 
-  it("Wave 1 act order: foundation → symbols → personal; reserved Wave 2 slots present", () => {
+  it("ScreenFlow Glance-first hosts steps with verdict on glance", () => {
     const contractWithScenario: TodayContractV1 = {
       ...sampleContract,
       day_story: {
@@ -175,22 +175,12 @@ describe("TodayCompositionSurface", () => {
       <TodayCompositionSurface {...baseProps} contract={contractWithScenario} variant="default" />,
     );
 
-    const surface = screen.getByTestId("today-composition-surface");
-    const zoneIds = within(surface)
-      .getAllByTestId(/^today-zone-/)
-      .map((el) => el.getAttribute("data-testid"));
-
-    const foundation = zoneIds.indexOf("today-zone-foundation");
-    const openDay = zoneIds.indexOf("today-zone-open-day");
-    const personal = zoneIds.indexOf("today-zone-personal");
-    expect(foundation).toBeGreaterThanOrEqual(0);
-    expect(openDay).toBeGreaterThan(foundation);
-    expect(personal).toBeGreaterThan(openDay);
-
+    expect(screen.getByTestId("today-zone-foundation")).toBeInTheDocument();
+    expect(screen.getByTestId("today-screen-flow")).toBeInTheDocument();
+    expect(screen.getByTestId("today-zone-glance-act")).toBeInTheDocument();
     expect(screen.getByTestId("today-slot-verdict-strip")).toBeInTheDocument();
-    expect(screen.getByTestId("today-slot-glance-timeline")).toBeInTheDocument();
-    expect(screen.getByTestId("today-slot-tap-widget")).toBeInTheDocument();
-    expect(surface.querySelectorAll("[data-today-act-shell='true']").length).toBeGreaterThanOrEqual(5);
+    expect(screen.getByTestId("today-slot-glance-nearest")).toBeInTheDocument();
+    expect(screen.getByTestId("today-composition-surface").querySelectorAll("[data-screen-flow-step]").length).toBeGreaterThanOrEqual(3);
   });
 
   it("hides continuity on firstToday variant", () => {
@@ -278,10 +268,10 @@ describe("TodayCompositionSurface", () => {
       <TodayCompositionSurface {...baseProps} contract={contractWithScenario} variant="default" />,
     );
 
-    expect(screen.getByTestId("today-zone-personal")).toBeInTheDocument();
+    expect(screen.getByTestId("today-screen-flow")).toBeInTheDocument();
+    // Personal acts live on a later ScreenFlow step — still in DOM
     expect(screen.getByTestId("today-entity-synthesis")).toBeInTheDocument();
     expect(screen.getByTestId("today-zone-ritual-gates")).toBeInTheDocument();
-    expect(screen.getByTestId("today-zone-open-day").textContent).toMatch(/Символы дня|дополнят уже собранный день/i);
     const hero = screen.getByTestId("today-zone-hero").textContent || "";
     const themeHits = hero.match(/Ломать работающее или беречь ровный ритм/g) || [];
     expect(themeHits.length).toBe(1);
@@ -394,7 +384,9 @@ describe("TodayCompositionSurface", () => {
     );
     const user = userEvent.setup();
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
-
+    // ScreenFlow: promise lives on Move step — navigate via act nav when present
+    const personalNav = screen.queryByTestId("today-act-nav-3") || screen.queryByTestId("today-act-nav-2");
+    if (personalNav) await user.click(personalNav);
     await user.click(screen.getByTestId("today-zone-promise-open"));
     expect(screen.getByTestId("today-entity-daily-goal")).toBeInTheDocument();
   });

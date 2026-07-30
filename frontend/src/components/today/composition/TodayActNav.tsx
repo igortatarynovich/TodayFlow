@@ -1,62 +1,60 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import styles from "@/components/today/composition/TodayActNav.module.css";
 
 export type TodayActNavItem = {
   step: number;
   label: string;
-  href: string;
+  /** Optional legacy hash — ignored when onSelect is provided. */
+  href?: string;
 };
 
 type Props = {
   items: TodayActNavItem[];
+  /** Controlled active index (ScreenFlow). */
+  activeIndex?: number;
+  /** When set, nav uses buttons + onSelect instead of scrollIntoView. */
+  onSelect?: (index: number) => void;
 };
 
-export function TodayActNav({ items }: Props) {
-  const [active, setActive] = useState<string | null>(items[0]?.href ?? null);
-
-  useEffect(() => {
-    if (typeof window === "undefined" || items.length === 0) return;
-    const nodes = items
-      .map((item) => document.getElementById(item.href.replace(/^#/, "")))
-      .filter((n): n is HTMLElement => Boolean(n));
-    if (nodes.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        const top = visible[0];
-        if (top?.target?.id) setActive(`#${top.target.id}`);
-      },
-      { rootMargin: "-30% 0px -45% 0px", threshold: [0.15, 0.35, 0.55] },
-    );
-    nodes.forEach((n) => observer.observe(n));
-    return () => observer.disconnect();
-  }, [items]);
-
+export function TodayActNav({ items, activeIndex, onSelect }: Props) {
   if (items.length === 0) return null;
+
+  const controlled = typeof onSelect === "function";
 
   return (
     <nav className={styles.nav} aria-label="Экраны дня" data-testid="today-act-nav">
       <ul className={styles.list}>
-        {items.map((item) => {
-          const isActive = active === item.href;
+        {items.map((item, index) => {
+          const isActive = controlled ? activeIndex === index : index === 0;
+          if (controlled) {
+            return (
+              <li key={`${item.label}-${item.step}`}>
+                <button
+                  type="button"
+                  className={isActive ? styles.linkActive : styles.link}
+                  aria-current={isActive ? "true" : undefined}
+                  data-testid={`today-act-nav-${index}`}
+                  onClick={() => onSelect(index)}
+                >
+                  <span className={styles.step}>{item.step}</span>
+                  <span className={styles.label}>{item.label}</span>
+                </button>
+              </li>
+            );
+          }
           return (
-            <li key={item.href}>
+            <li key={item.href ?? `${item.label}-${item.step}`}>
               <a
                 href={item.href}
                 className={isActive ? styles.linkActive : styles.link}
                 aria-current={isActive ? "true" : undefined}
                 onClick={(e) => {
-                  const id = item.href.replace(/^#/, "");
+                  const id = (item.href || "").replace(/^#/, "");
                   const el = document.getElementById(id);
                   if (!el) return;
                   e.preventDefault();
                   el.scrollIntoView({ behavior: "smooth", block: "start" });
-                  setActive(item.href);
                   if (typeof window !== "undefined" && window.history?.replaceState) {
                     window.history.replaceState(null, "", item.href);
                   }

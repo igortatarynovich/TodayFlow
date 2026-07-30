@@ -665,7 +665,8 @@ export type MeaningEventType =
   | "onboarding_recognition_shown"
   | "day_focus_outcome"
   | "profile_atom_correction"
-  | "interpretation_instance_confirm";
+  | "interpretation_instance_confirm"
+  | "screen_flow_step_reached";
 
 export type MeaningEventSource = "today" | "flow" | "insight" | "compatibility" | "profile" | "onboarding";
 

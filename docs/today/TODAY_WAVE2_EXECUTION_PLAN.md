@@ -5,6 +5,7 @@
 **Canon companions:**
 - [TODAY_WAVE2_CONTRACT_V1.md](./TODAY_WAVE2_CONTRACT_V1.md) — `day_facts_v1`, slots, tap, accuracy
 - [TODAY_MOTION_PILOT_V1.md](./TODAY_MOTION_PILOT_V1.md) — attention hierarchy; pilot = TapWidget
+- [../foundation/SCREEN_FLOW_V1.md](../foundation/SCREEN_FLOW_V1.md) — ScreenFlow V1 primitive (viewport lock · transform · swipe · keyboard · a11y); Today mapping: Glance → Plot → Symbols → Reading → Move → Response
 
 **Rule:** one compute per user×day. Slots are views. Only Tap write + accuracy aggregate need separate endpoints.
 

@@ -1,0 +1,100 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.themeBlock { display: flex; flex-direction: column; gap: 0.35rem; }
+
+.title {
+  margin: 0;
+  font-family: var(--tf-font-display, Georgia, serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--tf-ink, #2a2520);
+}
+
+.thesis {
+  margin: 0;
+  max-width: 42ch;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--tf-ink-soft, #5c5348);
+}
+
+.loading { margin: 0; color: var(--tf-ink-muted, #5c534a); }
+
+.nearest { min-height: 2.5rem; }
+
+.nearestSkeleton {
+  min-height: 2.25rem;
+  border-radius: 0.75rem;
+  background: rgba(212, 184, 150, 0.18);
+}
+
+.nearestFail {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--tf-ink-soft, #5c5348);
+}
+
+.nearestEmpty { min-height: 0.5rem; }
+
+.nearestRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.75rem;
+  padding: 0.55rem 0.15rem;
+  border-top: 1px solid rgba(212, 184, 150, 0.22);
+  border-bottom: 1px solid rgba(212, 184, 150, 0.22);
+}
+
+.nearestTime {
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  color: var(--tf-accent-action, #8f6b3a);
+}
+
+.nearestLabel {
+  flex: 1 1 12rem;
+  font-size: 0.95rem;
+  font-weight: 560;
+  color: var(--tf-ink, #2a2520);
+}
+
+.nearestNow {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tf-accent-action, #8f6b3a);
+}
+
+.teasers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.teaser {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 184, 150, 0.28);
+  background: rgba(255, 255, 255, 0.45);
+  color: var(--tf-ink-muted, #5c534a);
+  font-size: 0.78rem;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.teaserMark { color: var(--tf-accent-action, #8f6b3a); }
+.teaserLabel { font-weight: 560; }

@@ -38,6 +38,8 @@
   color: var(--tf-ink-muted, #5c534a);
   border: 1px solid rgba(212, 184, 150, 0.28);
   background: rgba(255, 255, 255, 0.55);
+  font-family: inherit;
+  cursor: pointer;
 }
 
 .linkActive {

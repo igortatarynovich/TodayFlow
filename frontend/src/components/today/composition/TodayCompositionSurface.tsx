@@ -11,6 +11,11 @@ import { TodayEveningProductClose } from "@/components/today/composition/TodayEv
 import { TodayPersonalizedProductSection } from "@/components/today/composition/TodayPersonalizedProductSection";
 import { TodayActShell } from "@/components/today/composition/TodayActShell";
 import { TodayActNav } from "@/components/today/composition/TodayActNav";
+import { TodayProductScreenFlow } from "@/components/today/composition/TodayProductScreenFlow";
+import {
+  resolveScreenFlowEntryIndex,
+  type ScreenFlowChangeReason,
+} from "@/design-system/primitives/ScreenFlow";
 import {
   TodayGlanceTimelineSlot,
   TodayVerdictStripSlot,
@@ -222,6 +227,8 @@ export function TodayCompositionSurface(props: Props) {
   const [habitMarking, setHabitMarking] = useState(false);
   const [asceticMarking, setAsceticMarking] = useState(false);
   const [ritualPickOpen, setRitualPickOpen] = useState<"tarot" | "number" | null>(null);
+  const [screenFlowIndex, setScreenFlowIndex] = useState(0);
+  const screenFlowEntryApplied = useRef(false);
 
   const anchorTarotId = useMemo(
     () =>
@@ -338,6 +345,34 @@ export function TodayCompositionSurface(props: Props) {
     (isDayScenarioReadyForChapters(props.contract) || story.personalizedReady);
   const useProductPersonalized = dayReadingReady;
   const showRitualAsComplement = useProductFoundation && !story.personalizedReady;
+
+  const showSymbolsAct =
+    useProductFoundation &&
+    (showRitualAsComplement ||
+      ((story.tarotImpact || story.numberImpact) && story.personalizedReady));
+
+  useEffect(() => {
+    if (!useProductFoundation || screenFlowEntryApplied.current) return;
+    screenFlowEntryApplied.current = true;
+    if (typeof window === "undefined") return;
+    const sp = new URLSearchParams(window.location.search);
+    setScreenFlowIndex(resolveScreenFlowEntryIndex({ searchParams: sp, stepCount: 6 }));
+  }, [useProductFoundation]);
+
+  const onScreenFlowIndexChange = useCallback(
+    (index: number, meta: { reason: ScreenFlowChangeReason }) => {
+      setScreenFlowIndex(index);
+      trackMeaningEvent({
+        event_type: "screen_flow_step_reached",
+        event_source: "today",
+        local_date: dateISO,
+        payload: { index, reason: meta.reason, surface: "today_screen_flow" },
+        idempotency_key: `screen_flow_step_reached:${dateISO}:${index}:${meta.reason}`,
+        refreshRings: false,
+      });
+    },
+    [dateISO, trackMeaningEvent],
+  );
 
   useEffect(() => {
     if (singleVoice || !props.onRitualSpineComplete || !story.personalizedReady) return;
@@ -1413,44 +1448,106 @@ export function TodayCompositionSurface(props: Props) {
       {ritualSpineSection}
     </ConversationThread>
   ) : (
-    <div className={styles.foundationStack} data-testid="today-zone-foundation">
-      {/* Dashboard owns greeting chrome when embedded; day hero still leads the story. */}
-      {!embeddedInWebDashboard ? topRowSection : null}
-      {!embeddedInWebDashboard ? greetingSection : null}
+    <TodayProductScreenFlow
+      dateISO={dateISO}
+      themeTitle={heroTheme || story.hero.centralThought || copy.themeLabel}
+      themeThesis={heroSubline}
+      themeLoading={themeLoading}
+      heroSection={heroSection}
+      pulseSection={pulseSection}
+      glanceSection={glanceSection}
+      morningDialogue={morningDialogue}
+      dayReadingReady={dayReadingReady}
+      showSymbols={showSymbolsAct}
+      symbolsBody={
+        <>
+          {showRitualAsComplement ? ritualGateSection : null}
+          {showRitualAsComplement ? ritualTarotImpactStage : null}
+          {(story.tarotImpact || story.numberImpact) && story.personalizedReady ? (
+            <div className={styles.symbolImpactsStack} data-testid="today-zone-symbol-impacts">
+              {story.tarotImpact ? (
+                <section className={styles.ritualReveal} data-testid="today-zone-tarot-impact">
+                  <p className={styles.ritualRevealKind}>Символ дня · открыт</p>
+                  <h2 className={styles.ritualRevealTitle}>{story.tarotImpact.title}</h2>
+                  <p className={styles.ritualRevealHeadline}>{story.tarotImpact.headline}</p>
+                  <p className={styles.ritualRevealBody}>{story.tarotImpact.body}</p>
+                </section>
+              ) : null}
+              {story.numberImpact ? (
+                <section className={styles.ritualReveal} data-testid="today-zone-number-impact">
+                  <p className={styles.ritualRevealKind}>Число дня · открыто</p>
+                  <h2 className={styles.ritualRevealTitle}>{story.numberImpact.title}</h2>
+                  <p className={styles.ritualRevealHeadline}>{story.numberImpact.headline}</p>
+                  <p className={styles.ritualRevealBody}>{story.numberImpact.body}</p>
+                </section>
+              ) : null}
+            </div>
+          ) : null}
+          <TodayGlanceTimelineSlot dateISO={dateISO} />
+        </>
+      }
+      showPersonalized={useProductPersonalized}
+      personalizedProps={{
+        embeddedInWebDashboard,
+        story,
+        contract: props.contract,
+        strengthenTools,
+        promiseSuggestions,
+        dayGoal: engagement.dayGoal,
+        practiceCompleted: engagement.practiceCompleted,
+        practiceStarted: engagement.practiceStarted,
+        affirmationRead: engagement.affirmationRead,
+        practiceCompleting,
+        activeHabit,
+        activeAscetic,
+        habitMarked:
+          engagement.habitMarkedId != null &&
+          activeHabit != null &&
+          engagement.habitMarkedId === activeHabit.id,
+        asceticMarked:
+          engagement.asceticMarkedId != null &&
+          activeAscetic != null &&
+          engagement.asceticMarkedId === activeAscetic.id,
+        habitMarking,
+        asceticMarking,
+        goalDraftOpen,
+        goalDraft,
+        coreProfile: props.coreProfile,
+        skyCards: story.skyCards,
+        colorGuide: story.colorGuide,
+        morningRitualData: props.morningRitualData,
+        dateISO,
+        tapResponse: engagement.tapResponse,
+        onTapRecorded: (response) => persistEngagement({ tapResponse: response }),
+        tarotDeepenHref:
+          engagement.tarotPickedId != null
+            ? buildTarotDeepenHref({ cardId: engagement.tarotPickedId, orientation: "upright", source: "today" })
+            : null,
+        onPickPromise: (text) => {
+          persistEngagement({ dayGoal: text });
+          trackMeaningEvent({
+            event_type: "action_option_selected",
+            event_source: "today",
+            local_date: dateISO,
+            payload: { action: "day_promise_set", promise_text: text.slice(0, 200), surface: "today_day_story_v3" },
+            refreshRings: false,
+          });
+        },
+        onOpenGoalDraft: () => setGoalDraftOpen(true),
+        onGoalDraftChange: setGoalDraft,
+        onSaveGoal,
+        onPracticeAction: () => void onPracticeAction(),
+        onAffirmationDone,
+        onHabitMark: () => void onHabitMark(),
+        onAsceticMark: () => void onAsceticMark(),
+      }}
+      activeIndex={screenFlowIndex}
+      onIndexChange={onScreenFlowIndexChange}
+      embeddedInWebDashboard={embeddedInWebDashboard}
+      topRowSection={topRowSection}
+      greetingSection={greetingSection}
+    />
 
-      {useProductFoundation ? (
-        <TodayActNav
-          items={[
-            { step: 1, label: copy.journey.actNavPlot, href: "#today-act-1" },
-            { step: 2, label: copy.journey.actNavSymbols, href: "#today-act-2" },
-            { step: 3, label: copy.journey.actNavReading, href: "#today-act-3" },
-            { step: 4, label: copy.journey.actNavMove, href: "#today-act-4" },
-            { step: 5, label: copy.journey.actNavBridge, href: "#today-act-5" },
-          ]}
-        />
-      ) : null}
-
-      <TodayActShell
-        step={1}
-        title={copy.journey.dayTitle}
-        lead={copy.journey.dayLead}
-        accent="action"
-        motif="today"
-        testId="today-zone-act-plot"
-      >
-        <MotionReveal>{heroSection}</MotionReveal>
-        <TodayVerdictStripSlot dateISO={dateISO} />
-        {dayReadingReady ? (
-          <>
-            <MotionReveal delayMs={MOTION.staggerMs}>{pulseSection}</MotionReveal>
-            <MotionReveal delayMs={MOTION.staggerMs * 2}>{glanceSection}</MotionReveal>
-            {morningDialogue}
-          </>
-        ) : (
-          morningDialogue
-        )}
-      </TodayActShell>
-    </div>
   );
 
   return (
@@ -1480,7 +1577,7 @@ export function TodayCompositionSurface(props: Props) {
         {dayStoryFoundation}
 
         {/* Act 2 — symbols (gates or opened) before reading. GlanceTimeline slot reserved for Wave 2. */}
-        {useProductFoundation && (showRitualAsComplement || ((story.tarotImpact || story.numberImpact) && story.personalizedReady)) ? (
+        {false && useProductFoundation && (showRitualAsComplement || ((story.tarotImpact || story.numberImpact) && story.personalizedReady)) ? (
           <MotionReveal delayMs={MOTION.staggerMs}>
             <TodayActShell
               step={2}
@@ -1574,7 +1671,7 @@ export function TodayCompositionSurface(props: Props) {
           </MotionReveal>
         ) : null}
 
-        {useProductPersonalized ? (
+        {!useProductFoundation && useProductPersonalized ? (
           <TodayPersonalizedProductSection
             embeddedInWebDashboard={embeddedInWebDashboard}
             story={story}

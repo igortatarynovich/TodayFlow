@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>ScreenFlow Visual Fixture</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #f7f4ee;
+      color: #2a2520;
+      overflow: hidden;
+      height: 100dvh;
+      width: 100vw;
+    }
+    .container {
+      position: relative;
+      width: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      touch-action: pan-y;
+    }
+    .container.axis-y {
+      touch-action: pan-x;
+    }
+    .track {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      will-change: transform;
+      transition: transform 320ms ease-out;
+    }
+    .track.axis-x {
+      flex-direction: row;
+    }
+    .track.axis-y {
+      flex-direction: column;
+    }
+    .step {
+      flex: 0 0 100%;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      border: 2px solid rgba(143, 107, 58, 0.15);
+      box-sizing: border-box;
+    }
+    .step h2 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+      color: #2a2520;
+    }
+    .step p {
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #5c534a;
+      text-align: center;
+      max-width: 320px;
+    }
+    .step[data-status="pending"] {
+      background: repeating-linear-gradient(45deg, #f7f4ee, #f7f4ee 10px, #ede9dd 10px, #ede9dd 20px);
+    }
+    .step[data-status="failed"] {
+      background: #fff0f0;
+      color: #a83232;
+    }
+    .step[data-status="empty"] {
+      background: #f9f8f5;
+      color: #8a8078;
+    }
+    .chrome {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(143, 107, 58, 0.25);
+      border-radius: 999px;
+      box-shadow: 0 2px 12px rgba(42, 37, 32, 0.12);
+    }
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: #ffffff;
+      color: #2a2520;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background 180ms ease;
+    }
+    button:hover:not(:disabled) {
+      background: #f0ece5;
+    }
+    button:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    .indicator {
+      font-size: 0.85rem;
+      font-weight: 600;
+      font-family: ui-monospace, monospace;
+      letter-spacing: 0.04em;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+    .controls {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 60;
+      padding: 0.5rem 0.8rem;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(143, 107, 58, 0.25);
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+    .controls label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+    }
+    .controls select {
+      padding: 0.25rem 0.5rem;
+      border: 1px solid rgba(143, 107, 58, 0.3);
+      border-radius: 4px;
+      background: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="controls">
+    <label for="axis-select">Axis:</label>
+    <select id="axis-select">
+      <option value="x">x (horizontal)</option>
+      <option value="y">y (vertical)</option>
+    </select>
+  </div>
+  <div class="container axis-x" id="container">
+    <div class="track axis-x" id="track">
+      <div class="step" data-step-id="step-0" data-status="ready" tabindex="-1">
+        <h2>Step 0 — Ready</h2>
+        <p>Full viewport, ready status. Swipe or use keyboard arrows to navigate.</p>
+      </div>
+      <div class="step" data-step-id="step-1" data-status="pending" tabindex="-1">
+        <h2>Step 1 — Pending</h2>
+        <p>Skeleton loading state. Navigation still allowed.</p>
+      </div>
+      <div class="step" data-step-id="step-2" data-status="failed" tabindex="-1">
+        <h2>Step 2 — Failed</h2>
+        <p>Нет соединения.</p>
+      </div>
+      <div class="step" data-step-id="step-3" data-status="empty" tabindex="-1">
+        <h2>Step 3 — Empty</h2>
+        <p>Нет данных для этого шага</p>
+      </div>
+      <div class="step" data-step-id="step-4" data-status="ready" tabindex="-1">
+        <h2>Step 4 — Ready</h2>
+        <p>Another ready step. This tests multi-step navigation.</p>
+      </div>
+    </div>
+  </div>
+  <div class="chrome">
+    <button id="prev-btn" aria-label="Previous step">←</button>
+    <span class="indicator" id="indicator">1 / 5</span>
+    <button id="next-btn" aria-label="Next step">→</button>
+  </div>
+  <div class="sr-only" role="status" aria-live="polite" id="announce"></div>
+
+  <script>
+    const container = document.getElementById("container");
+    const track = document.getElementById("track");
+    const prevBtn = document.getElementById("prev-btn");
+    const nextBtn = document.getElementById("next-btn");
+    const indicator = document.getElementById("indicator");
+    const announce = document.getElementById("announce");
+    const axisSelect = document.getElementById("axis-select");
+    const steps = Array.from(track.querySelectorAll(".step"));
+    const stepCount = steps.length;
+    let activeIndex = 0;
+    let axis = "x";
+    let touchStart = null;
+    let dragOffset = 0;
+
+    function updateUI() {
+      const isHorizontal = axis === "x";
+      const prop = isHorizontal ? "translateX" : "translateY";
+      const percent = -(activeIndex * 100) + (dragOffset / (isHorizontal ? container.offsetWidth : container.offsetHeight)) * 100;
+      track.style.transform = `${prop}(${percent}%)`;
+      track.style.transition = dragOffset === 0 ? "transform 320ms ease-out" : "none";
+      indicator.textContent = `${activeIndex + 1} / ${stepCount}`;
+      prevBtn.disabled = activeIndex === 0;
+      nextBtn.disabled = activeIndex === stepCount - 1;
+      steps.forEach((step, i) => {
+        const isActive = i === activeIndex;
+        step.setAttribute("aria-hidden", isActive ? "false" : "true");
+        if (isActive) {
+          step.removeAttribute("inert");
+          const heading = step.querySelector("h2");
+          if (heading) heading.focus();
+          announce.textContent = `Step ${i + 1} of ${stepCount} — ${heading?.textContent ?? "Step"}`;
+        } else {
+          step.setAttribute("inert", "");
+        }
+      });
+    }
+
+    function navigate(delta) {
+      const newIndex = activeIndex + delta;
+      if (newIndex >= 0 && newIndex < stepCount) {
+        activeIndex = newIndex;
+        updateUI();
+      }
+    }
+
+    prevBtn.addEventListener("click", () => navigate(-1));
+    nextBtn.addEventListener("click", () => navigate(1));
+
+    container.addEventListener("touchstart", (e) => {
+      const touch = e.touches[0];
+      if (!touch) return;
+      const rect = container.getBoundingClientRect();
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+      const deadzone = 16;
+      if (axis === "x" && (x < deadzone || x > rect.width - deadzone)) return;
+      if (axis === "y" && (y < deadzone || y > rect.height - deadzone)) return;
+      touchStart = { x: touch.clientX, y: touch.clientY };
+    });
+
+    container.addEventListener("touchmove", (e) => {
+      if (!touchStart) return;
+      const touch = e.touches[0];
+      if (!touch) return;
+      const dx = touch.clientX - touchStart.x;
+      const dy = touch.clientY - touchStart.y;
+      const delta = axis === "x" ? dx : dy;
+      if ((activeIndex === 0 && delta > 0) || (activeIndex === stepCount - 1 && delta < 0)) {
+        dragOffset = 0;
+        return;
+      }
+      dragOffset = delta;
+      updateUI();
+    });
+
+    function handleTouchEnd() {
+      if (!touchStart) return;
+      const threshold = 60;
+      if (Math.abs(dragOffset) > threshold) {
+        const direction = dragOffset > 0 ? -1 : 1;
+        navigate(direction);
+      }
+      touchStart = null;
+      dragOffset = 0;
+      updateUI();
+    }
+
+    container.addEventListener("touchend", handleTouchEnd);
+    container.addEventListener("touchcancel", handleTouchEnd);
+
+    window.addEventListener("keydown", (e) => {
+      if ((axis === "x" && e.key === "ArrowLeft") || (axis === "y" && e.key === "ArrowUp")) {
+        e.preventDefault();
+        navigate(-1);
+      } else if ((axis === "x" && e.key === "ArrowRight") || (axis === "y" && e.key === "ArrowDown")) {
+        e.preventDefault();
+        navigate(1);
+      }
+    });
+
+    axisSelect.addEventListener("change", (e) => {
+      axis = e.target.value;
+      container.className = `container axis-${axis}`;
+      track.className = `track axis-${axis}`;
+      activeIndex = 0;
+      dragOffset = 0;
+      touchStart = null;
+      updateUI();
+    });
+
+    // URL query support: ?axis=x|y
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlAxis = urlParams.get("axis");
+    if (urlAxis === "x" || urlAxis === "y") {
+      axis = urlAxis;
+      axisSelect.value = axis;
+      container.className = `container axis-${axis}`;
+      track.className = `track axis-${axis}`;
+    }
+
+    updateUI();
+  </script>
+</body>
+</html>

@@ -25,6 +25,7 @@ import type { CoreProfile } from "@/lib/types";
 import { buildTodayCompatibilityHook } from "@/lib/todayCompatibilityHook";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import { TodayTapWidget } from "@/components/today/composition/TodayWave2Slots";
+import { ScreenFlowStep } from "@/design-system/primitives/ScreenFlow";
 import styles from "@/components/today/composition/TodayPersonalizedProductSection.module.css";
 
 type Props = {
@@ -62,6 +63,9 @@ type Props = {
   onAffirmationDone: () => void;
   onHabitMark?: () => void;
   onAsceticMark?: () => void;
+  asScreenFlowSteps?: boolean;
+  /** When set, render only one act (for ScreenFlow parent wrappers). */
+  actFilter?: "reading" | "move" | "response" | "all";
 };
 
 function electionalStatusLabel(status: string): string {
@@ -116,6 +120,8 @@ export function TodayPersonalizedProductSection({
   onAffirmationDone,
   onHabitMark,
   onAsceticMark,
+  asScreenFlowSteps = false,
+  actFilter = "all",
 }: Props) {
   const compatibility = buildTodayCompatibilityHook(coreProfile);
   const practiceRec = contract.day_story?.practice_recommendation;
@@ -149,21 +155,16 @@ export function TodayPersonalizedProductSection({
 
   const motion = useProfileMotionInView<HTMLElement>(40);
 
-  return (
-    <section
-      ref={motion.ref}
-      className={`${styles.section} ${embeddedInWebDashboard ? styles.sectionWebEmbed : ""} ${motion.className}`.trim()}
-      style={motion.style}
-      data-testid="today-zone-personal"
-    >
+  const readingLabel =
+    narrative.composition === "scenario_chapters"
+      ? copy.journey.readingTitleStory
+      : copy.journey.readingTitle;
+
+  const readingScene = (
       <ProductJourneyScene
         step={3}
-        title={
-          narrative.composition === "scenario_chapters"
-            ? copy.journey.readingTitleStory
-            : copy.journey.readingTitle
-        }
-        lead={copy.journey.readingLead}
+        title={asScreenFlowSteps ? undefined : (narrative.composition === "scenario_chapters" ? copy.journey.readingTitleStory : copy.journey.readingTitle)}
+        lead={asScreenFlowSteps ? null : copy.journey.readingLead}
         motif="today"
         accent="sky"
         testId="today-zone-reading"
@@ -213,7 +214,7 @@ export function TodayPersonalizedProductSection({
                 <ProductNarrativeBlock
                   id={chapter.id}
                   kicker={chapter.kicker}
-                  lead={softWhyInBody ? null : chapter.lead}
+        lead={asScreenFlowSteps ? null : copy.journey.readingLead}
                   paragraphs={
                     softWhyInBody
                       ? bodyParagraphs.filter((p) => p !== narrative.softWhy)
@@ -309,11 +310,13 @@ export function TodayPersonalizedProductSection({
           ) : null}
         </div>
       </ProductJourneyScene>
+  );
 
+  const moveScene = (
       <ProductJourneyScene
         step={4}
-        title={copy.journey.moveTitle}
-        lead={copy.journey.moveLead}
+        title={asScreenFlowSteps ? undefined : copy.journey.moveTitle}
+        lead={asScreenFlowSteps ? null : copy.journey.moveLead}
         motif="effort"
         accent="support"
         testId="today-zone-move"
@@ -527,11 +530,13 @@ export function TodayPersonalizedProductSection({
           </article>
         )}
       </ProductJourneyScene>
+  );
 
+  const bridgeScene = (
       <ProductJourneyScene
         step={5}
-        title={copy.journey.bridgeTitle}
-        lead={copy.journey.bridgeLead}
+        title={asScreenFlowSteps ? undefined : copy.journey.bridgeTitle}
+        lead={asScreenFlowSteps ? null : copy.journey.bridgeLead}
         motif="bridge"
         accent="action"
         bridge
@@ -564,6 +569,42 @@ export function TodayPersonalizedProductSection({
           )}
         </nav>
       </ProductJourneyScene>
+  );
+
+  if (asScreenFlowSteps) {
+    return (
+      <>
+        <ScreenFlowStep id="reading" label={readingLabel} scrollable>{readingScene}</ScreenFlowStep>
+        <ScreenFlowStep id="move" label={copy.journey.moveTitle} scrollable>{moveScene}</ScreenFlowStep>
+        <ScreenFlowStep id="response" label={copy.journey.bridgeTitle} scrollable>{bridgeScene}</ScreenFlowStep>
+      </>
+    );
+  }
+
+  const showReading = actFilter === "all" || actFilter === "reading";
+  const showMove = actFilter === "all" || actFilter === "move";
+  const showResponse = actFilter === "all" || actFilter === "response";
+
+  if (actFilter !== "all") {
+    return (
+      <>
+        {showReading ? readingScene : null}
+        {showMove ? moveScene : null}
+        {showResponse ? bridgeScene : null}
+      </>
+    );
+  }
+
+  return (
+    <section
+      ref={motion.ref}
+      className={`${styles.section} ${embeddedInWebDashboard ? styles.sectionWebEmbed : ""} ${motion.className}`.trim()}
+      style={motion.style}
+      data-testid="today-zone-personal"
+    >
+      {readingScene}
+      {moveScene}
+      {bridgeScene}
     </section>
   );
 }

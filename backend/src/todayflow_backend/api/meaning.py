@@ -107,6 +107,7 @@ VALID_EVENT_TYPES = frozenset(
         "tarot_spread_viewed",
         "profile_atom_correction",
         "interpretation_instance_confirm",
+        "screen_flow_step_reached",
     }
 )
 

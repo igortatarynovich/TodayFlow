@@ -1,8 +1,10 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-07-29
+Last updated: 2026-07-30
 Owner: Product + Engineering
 Status: Active working document
+
+**IN PROGRESS (2026-07-30):** ScreenFlow V1 primitive — discrete product steps via transform (Today Wave 2: Glance → Plot → Symbols → Reading → Move → Response). Canon: [foundation/SCREEN_FLOW_V1.md](./foundation/SCREEN_FLOW_V1.md). Primitive + tests + Today integration. Axis provisional x (pending real-device pilot).
 
 ## 1) Purpose
 
@@ -1099,6 +1101,7 @@ Historical note:
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
 - 2026-07-30 | Web Guest / SEO audit | **/today+/profile SSR pitch body** | **DONE (FE)** | Layouts ship GuestToday/ProfilePitchSsr (no useSearchParams bailout). Client guest returns null; authed shell hides pitch via data-guest-shell. Item 11 (IA hierarchy) deferred. Deploy + curl verify next.
+- 2026-07-30 | Product UI | **ScreenFlow V1 — proto + Today Glance-first** | **IN PROGRESS (code)** | Canon [foundation/SCREEN_FLOW_V1.md](./foundation/SCREEN_FLOW_V1.md). Primitive transform pager (axis provisional `x`, a11y focus+aria-live, status skeleton/fail, re-entry Glance-default, `sf=1&step=` deep-link). Today: Glance step 0 (verdict + nearest mark) → Plot → Symbols → Personal (Reading/Move/Response interim-bundled). `screen_flow_step_reached` meaning event. Landing excluded. Tests: ScreenFlow unit + composition + glanceNearest. Phase 2b = split personal acts; axis lock after real-device harness.
 - 2026-07-30 | Web Guest / SEO audit | **Re-audit P0–P2 pack** | **DONE (FE)** | Profile: remove «стабильное состояние» · GuestProductPitch for /today+/profile · landing always SSR (no auth spinner) · compat mounts CompatibilityGuestDemo · practices SSR catalog+detail body · «3 карты» · unique descriptions · guest meta «Картина твоего дня» · nav aria-hidden before hydrate. Deploy + curl verify next.
 - 2026-07-30 | Web Guest / SEO audit | **Guest shell SSR fix** | **DONE (FE)** | Live check: practice HTML still showed «Путник»+full nav. Cause: `guestShell = !authLoading && !isAuthenticated` → SSR authLoading=true → authed chrome. Fix: `guestShell = !isAuthenticated`. Redeploy required.
 - 2026-07-30 | Web Guest / SEO audit | **P0–P2 public audit pack** | **DONE (FE)** | Guest `/today` value-first + showcase; guest shell (tarot/compat/practices, «Гость»); practice hard-404 + unique meta + transport≠not-found; robots/sitemap/noindex policy + segment titles; dual-nav unmount after hydrate; compatibility guest demo. Deploy needs `PUBLIC_WEB_URL` bake for OG. Tests: appNavConfig, publicSeoPolicy, fetchPracticeDetailServer, CompatibilityGuestDemo.
