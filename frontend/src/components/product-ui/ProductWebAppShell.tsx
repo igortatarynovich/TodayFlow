@@ -61,9 +61,11 @@ export function ProductWebAppShell({
   fullMain = false,
 }: ProductWebAppShellProps) {
   const pathname = usePathname() ?? "/today";
-  const { isAuthenticated, isLoading: authLoading } = useAuth();
-  // Guest product chrome: trial routes only — not empty Today/Profile as fake app.
-  const guestShell = !authLoading && !isAuthenticated;
+  const { isAuthenticated } = useAuth();
+  // Prefer guest chrome until auth is positively confirmed.
+  // Waiting on authLoading forced SSR/crawlers (and first paint) into full
+  // «Путник» + Today/Profile nav — the bug confirmed on live practice pages.
+  const guestShell = !isAuthenticated;
   const isDesktop = useProductShellDesktop();
   const [navHydrated, setNavHydrated] = useState(false);
   useEffect(() => {
