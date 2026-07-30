@@ -1810,7 +1810,7 @@ def get_today_accuracy_summary(
     )
 
 
-# --- Wave 2 Phase B: domain_verdicts (top_driver_v1) ---
+# --- Wave 2 Phase D.1: day_facts_v1 (slot envelope) ---
 
 class DomainVerdictItem(BaseModel):
     domain: str
@@ -1820,6 +1820,206 @@ class DomainVerdictItem(BaseModel):
     logic_source: str = "top_driver_v1"
     top_weight: float | None = None
 
+
+class GlanceTimelineItem(BaseModel):
+    time_local: str
+    label_short: str
+    valence: str
+    driver_id: str
+
+
+class DayFactsProvenance(BaseModel):
+    conflict_driver_ids: list[str] = Field(default_factory=list)
+    verdict_driver_ids: dict[str, list[str]] = Field(default_factory=dict)
+    timeline_driver_ids: list[str] = Field(default_factory=list)
+
+
+class DayFactsOpposingForces(BaseModel):
+    a: str = ""
+    b: str = ""
+
+
+class DayFactsConflict(BaseModel):
+    short_name: str
+    thesis: str | None = None
+    opposing_forces: DayFactsOpposingForces = Field(default_factory=DayFactsOpposingForces)
+    why_arose: str = ""
+    why_personal: str | None = None
+    driver_ids: list[str] = Field(default_factory=list)
+
+
+class DayFactsScene(BaseModel):
+    id: str
+    sphere: str = ""
+    role_in_story: str = "support"
+    what_happens: str = ""
+    opportunity: str = ""
+    trap: str = ""
+    recommended_action: str = ""
+    do_not: str = ""
+    domestic_example: str | None = None
+    driver_ids: list[str] = Field(default_factory=list)
+
+
+class DayFactsColorProp(BaseModel):
+    name: str
+    link_to_conflict: str | None = None
+    where_to_use: str | None = None
+
+
+class DayFactsAvoidColorProp(BaseModel):
+    name: str
+    amplifies_trap: str | None = None
+
+
+class DayFactsPracticeProp(BaseModel):
+    text: str
+    window: str | None = None
+    serves_conflict: str | None = None
+
+
+class DayFactsAffirmationProp(BaseModel):
+    text: str
+    compensates_trap: str | None = None
+
+
+class DayFactsHumorProp(BaseModel):
+    text: str
+    serves_conflict: str | None = None
+
+
+class DayFactsProps(BaseModel):
+    color: DayFactsColorProp | None = None
+    avoid_color: DayFactsAvoidColorProp | None = None
+    practice_or_promise: DayFactsPracticeProp | None = None
+    affirmation: DayFactsAffirmationProp | None = None
+    humor: DayFactsHumorProp | None = None
+    evening_payoff: str | None = None
+
+
+class DayFactsSkyDriver(BaseModel):
+    planet: str
+    sign: str
+    degree_in_sign: float
+    retrograde: bool = False
+
+
+class DayFactsMoonPhase(BaseModel):
+    illumination_pct: float | None = None
+    phase: str | None = None
+    is_new: bool = False
+    is_full: bool = False
+
+
+class DayFactsNumerology(BaseModel):
+    personal_day: int
+    source: str = "classic_reduce_v0"
+
+
+class TodayDayFactsResponse(BaseModel):
+    schema_version: str = "day_facts_v1"
+    id: str
+    user_id: str
+    date: str
+    timezone: str
+    generated_at: str
+    natal_activations: list[dict[str, Any]] = Field(default_factory=list)
+    domain_verdicts: list[DomainVerdictItem] = Field(default_factory=list)
+    glance_timeline: list[GlanceTimelineItem] = Field(default_factory=list)
+    conflict: DayFactsConflict | None = None
+    scenes: list[DayFactsScene] = Field(default_factory=list)
+    props: DayFactsProps | None = None
+    sky_drivers: list[DayFactsSkyDriver] = Field(default_factory=list)
+    moon_phase: DayFactsMoonPhase | None = None
+    numerology: DayFactsNumerology | None = None
+    generation_provenance: DayFactsProvenance = Field(default_factory=DayFactsProvenance)
+    degraded: bool = False
+    is_fallback: bool = False
+    partial: bool = True
+
+
+def _day_facts_response_from_payload(payload: dict[str, Any]) -> TodayDayFactsResponse:
+    verdicts = [DomainVerdictItem(**row) for row in (payload.get("domain_verdicts") or [])]
+    glance = [GlanceTimelineItem(**row) for row in (payload.get("glance_timeline") or [])]
+    scenes = [DayFactsScene(**row) for row in (payload.get("scenes") or [])]
+    sky = [DayFactsSkyDriver(**row) for row in (payload.get("sky_drivers") or [])]
+    prov_raw = payload.get("generation_provenance") or {}
+    conflict_raw = payload.get("conflict")
+    conflict = DayFactsConflict(**conflict_raw) if isinstance(conflict_raw, dict) else None
+    props_raw = payload.get("props")
+    props = DayFactsProps(**props_raw) if isinstance(props_raw, dict) else None
+    moon_raw = payload.get("moon_phase")
+    moon = DayFactsMoonPhase(**moon_raw) if isinstance(moon_raw, dict) else None
+    num_raw = payload.get("numerology")
+    numerology = DayFactsNumerology(**num_raw) if isinstance(num_raw, dict) else None
+    return TodayDayFactsResponse(
+        schema_version=str(payload.get("schema_version") or "day_facts_v1"),
+        id=str(payload.get("id") or ""),
+        user_id=str(payload.get("user_id") or ""),
+        date=str(payload.get("date") or ""),
+        timezone=str(payload.get("timezone") or ""),
+        generated_at=str(payload.get("generated_at") or ""),
+        natal_activations=list(payload.get("natal_activations") or []),
+        domain_verdicts=verdicts,
+        glance_timeline=glance,
+        conflict=conflict,
+        scenes=scenes,
+        props=props,
+        sky_drivers=sky,
+        moon_phase=moon,
+        numerology=numerology,
+        generation_provenance=DayFactsProvenance(
+            conflict_driver_ids=list(prov_raw.get("conflict_driver_ids") or []),
+            verdict_driver_ids=dict(prov_raw.get("verdict_driver_ids") or {}),
+            timeline_driver_ids=list(prov_raw.get("timeline_driver_ids") or []),
+        ),
+        degraded=bool(payload.get("degraded")),
+        is_fallback=bool(payload.get("is_fallback")),
+        partial=bool(payload.get("partial", True)),
+    )
+
+
+async def _assemble_day_facts_for_request(
+    *,
+    request: Request,
+    local_date: str | None,
+    timezone: str | None,
+    user: User,
+    db,
+) -> dict[str, Any]:
+    from todayflow_backend.services import today_day_facts_v1 as day_facts_svc
+
+    day = parse_iso_date_or_400(local_date) if local_date else date.today()
+    locale = request_locale(request)
+    return await day_facts_svc.assemble_day_facts_v1(
+        user=user,
+        local_date=day,
+        db=db,
+        locale=locale,
+        timezone_name=timezone,
+    )
+
+
+@router.get("/day-facts", response_model=TodayDayFactsResponse)
+async def get_today_day_facts(
+    request: Request,
+    local_date: str | None = Query(default=None, description="YYYY-MM-DD"),
+    timezone: str | None = Query(default=None),
+    user: User = Depends(require_user),
+    db=Depends(get_session),
+) -> TodayDayFactsResponse:
+    """Wave 2 Phase D.1/D.1b — day_facts slot envelope + projected narrative when gated."""
+    payload = await _assemble_day_facts_for_request(
+        request=request,
+        local_date=local_date,
+        timezone=timezone,
+        user=user,
+        db=db,
+    )
+    return _day_facts_response_from_payload(payload)
+
+
+# --- Wave 2 Phase B: domain_verdicts — thin slice of day_facts ---
 
 class TodayDomainVerdictsResponse(BaseModel):
     schema_version: str = "domain_verdicts_v1"
@@ -1839,50 +2039,25 @@ async def get_today_domain_verdicts(
     user: User = Depends(require_user),
     db=Depends(get_session),
 ) -> TodayDomainVerdictsResponse:
-    """Wave 2 Phase B — four fixed domains via top_driver_v1 on shared natal activations."""
-    from todayflow_backend.services import today_domain_verdicts_v1 as verdict_svc
-    from todayflow_backend.services import today_natal_activations_v1 as act_svc
-    from todayflow_backend.services import today_tap_widget_v1 as tap_svc
-
-    day = parse_iso_date_or_400(local_date) if local_date else date.today()
-    facts_id = tap_svc.day_facts_id_for(user.id, day)
-    locale = request_locale(request)
-
-    activations, degraded = await act_svc.resolve_natal_activations_for_user(
+    """Wave 2 Phase B — slice of assemble_day_facts_v1 (backward compatible)."""
+    payload = await _assemble_day_facts_for_request(
+        request=request,
+        local_date=local_date,
+        timezone=timezone,
         user=user,
-        local_date=day,
         db=db,
-        locale=locale,
     )
-    # Degraded = no inventable calm bank. Empty list + flags; FE says connection/unavailable.
-    if degraded:
-        return TodayDomainVerdictsResponse(
-            local_date=day.isoformat(),
-            day_facts_id=facts_id,
-            domain_verdicts=[],
-            degraded=True,
-            is_fallback=True,
-        )
-
-    rows = verdict_svc.compute_domain_verdicts(activations)
-
+    day_iso = str(payload.get("date") or "")
     return TodayDomainVerdictsResponse(
-        local_date=day.isoformat(),
-        day_facts_id=facts_id,
-        domain_verdicts=[DomainVerdictItem(**row) for row in rows],
-        degraded=False,
-        is_fallback=False,
+        local_date=day_iso,
+        day_facts_id=str(payload.get("id") or ""),
+        domain_verdicts=[DomainVerdictItem(**row) for row in (payload.get("domain_verdicts") or [])],
+        degraded=bool(payload.get("degraded")),
+        is_fallback=bool(payload.get("is_fallback")),
     )
 
 
-# --- Wave 2 Phase C: glance_timeline (exact-time on shared activations) ---
-
-class GlanceTimelineItem(BaseModel):
-    time_local: str
-    label_short: str
-    valence: str
-    driver_id: str
-
+# --- Wave 2 Phase C: glance_timeline — thin slice of day_facts ---
 
 class TodayGlanceTimelineResponse(BaseModel):
     schema_version: str = "glance_timeline_v1"
@@ -1901,71 +2076,18 @@ async def get_today_glance_timeline(
     user: User = Depends(require_user),
     db=Depends(get_session),
 ) -> TodayGlanceTimelineResponse:
-    """Wave 2 Phase C — ≤3 exact-time markers from natal_activations rank 1–3."""
-    from todayflow_backend.services import today_natal_activations_v1 as act_svc
-    from todayflow_backend.services import today_glance_timeline_v1 as glance_svc
-    from todayflow_backend.services import today_tap_widget_v1 as tap_svc
-    from todayflow_backend.services.day_lifecycle_clock_c5 import resolve_user_timezone
-    from todayflow_backend.api import reports as reports_api
-    from todayflow_backend.services import astro as astro_mod
-    from todayflow_backend.services.geocode import Geocoder
-
-    day = parse_iso_date_or_400(local_date) if local_date else date.today()
-    facts_id = tap_svc.day_facts_id_for(user.id, day)
-    locale = request_locale(request)
-    tz_name = resolve_user_timezone(db, user_id=int(user.id), explicit=timezone)
-
-    try:
-        activations, act_degraded = await act_svc.resolve_natal_activations_for_user(
-            user=user,
-            local_date=day,
-            db=db,
-            locale=locale,
-        )
-        if act_degraded:
-            return TodayGlanceTimelineResponse(
-                local_date=day.isoformat(),
-                day_facts_id=facts_id,
-                glance_timeline=[],
-                degraded=True,
-                is_fallback=True,
-            )
-
-        geocoder = Geocoder()
-        astro_service = astro_mod.AstroService()
-        astro_profile = await reports_api._get_user_astro_profile(user, db, None, locale)
-        birth_data = await reports_api._prepare_birth_data(astro_profile, geocoder, locale)
-        natal_chart = await reports_api._compute_natal_chart(
-            birth_data, astro_service, astro_profile, db
-        )
-        coords = None
-        if birth_data and getattr(birth_data, "coordinates", None):
-            coords = {
-                "latitude": float(birth_data.coordinates.latitude),
-                "longitude": float(birth_data.coordinates.longitude),
-            }
-
-        rows, _enriched = await glance_svc.compute_glance_timeline(
-            activations=activations,
-            natal_chart=natal_chart,
-            local_date=day,
-            timezone_name=tz_name,
-            astro_service=astro_service,
-            coordinates=coords,
-        )
-        return TodayGlanceTimelineResponse(
-            local_date=day.isoformat(),
-            day_facts_id=facts_id,
-            glance_timeline=[GlanceTimelineItem(**r) for r in rows],
-            degraded=False,
-            is_fallback=False,
-        )
-    except Exception:
-        logger.exception("glance_timeline_degraded user=%s date=%s", user.id, day.isoformat())
-        return TodayGlanceTimelineResponse(
-            local_date=day.isoformat(),
-            day_facts_id=facts_id,
-            glance_timeline=[],
-            degraded=True,
-            is_fallback=True,
-        )
+    """Wave 2 Phase C — slice of assemble_day_facts_v1 (backward compatible)."""
+    payload = await _assemble_day_facts_for_request(
+        request=request,
+        local_date=local_date,
+        timezone=timezone,
+        user=user,
+        db=db,
+    )
+    return TodayGlanceTimelineResponse(
+        local_date=str(payload.get("date") or ""),
+        day_facts_id=str(payload.get("id") or ""),
+        glance_timeline=[GlanceTimelineItem(**r) for r in (payload.get("glance_timeline") or [])],
+        degraded=bool(payload.get("degraded")),
+        is_fallback=bool(payload.get("is_fallback")),
+    )

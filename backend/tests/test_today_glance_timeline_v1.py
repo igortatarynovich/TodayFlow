@@ -7,11 +7,13 @@ from todayflow_backend.services import today_glance_timeline_v1 as glance
 
 
 def test_label_short_no_aspect_jargon():
-    assert "°" not in glance.label_short_for("Mars", "square")
-    assert "квадрат" not in glance.label_short_for("Mars", "square").lower()
-    assert "Марс" in glance.label_short_for("Mars", "square")
-    words = glance.label_short_for("Venus", "trine").split()
-    assert len(words) <= 4
+    hard = glance.label_short_for("Mars", "square")
+    soft = glance.label_short_for("Venus", "trine")
+    assert "°" not in hard
+    assert "квадрат" not in hard.lower()
+    assert "Марс" not in hard
+    assert "Венера" not in soft
+    assert len(soft.split()) <= 4
 
 
 def test_valence_soft_hard():

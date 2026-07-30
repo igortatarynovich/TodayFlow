@@ -1,15 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { TodayVerdictStripSlot } from "@/components/today/composition/TodayWave2Slots";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import styles from "@/components/today/composition/TodayGlanceAct.module.css";
 import {
-  fetchGlanceTimeline,
   formatGlanceClock,
   isGlanceLiveNow,
   type GlanceTimelineItem,
 } from "@/lib/todayGlanceTimeline";
+import { fetchDayFacts } from "@/lib/todayDayFacts";
+import type { DomainVerdict } from "@/lib/todayDomainVerdicts";
 import { pickNearestGlanceItem } from "@/lib/todayGlanceNearest";
 import { todaySlotFailureCopy, type TodaySlotLoadFailure } from "@/lib/todaySlotAvailability";
 
@@ -38,14 +39,30 @@ export function TodayGlanceAct({
   const [failure, setFailure] = useState<TodaySlotLoadFailure | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [nowTick, setNowTick] = useState(() => new Date());
+  const [dayFactsSlice, setDayFactsSlice] = useState<{
+    domain_verdicts: DomainVerdict[];
+    glance_timeline: GlanceTimelineItem[];
+    day_facts_id: string | null;
+    is_fallback?: boolean;
+    degraded?: boolean;
+  } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
     setLoaded(false);
     setFailure(null);
-    void fetchGlanceTimeline(dateISO)
+    setDayFactsSlice(null);
+    void fetchDayFacts(dateISO)
       .then((data) => {
         if (cancelled) return;
+        const slice = {
+          domain_verdicts: data.domain_verdicts ?? [],
+          glance_timeline: data.glance_timeline ?? [],
+          day_facts_id: data.id ?? null,
+          is_fallback: data.is_fallback,
+          degraded: data.degraded,
+        };
+        setDayFactsSlice(slice);
         if (data.is_fallback ?? data.degraded) {
           setFailure("unavailable");
           setNearest(null);
@@ -59,6 +76,7 @@ export function TodayGlanceAct({
         if (cancelled) return;
         setFailure("no_connection");
         setNearest(null);
+        setDayFactsSlice(null);
         setLoaded(true);
       });
     return () => {
@@ -73,6 +91,20 @@ export function TodayGlanceAct({
   }, [nearest]);
 
   const live = nearest ? isGlanceLiveNow(nearest.time_local, nowTick) : false;
+
+  const stripFacts = useMemo(() => {
+    if (!loaded) return undefined;
+    if (failure) {
+      return {
+        domain_verdicts: [] as DomainVerdict[],
+        glance_timeline: [] as GlanceTimelineItem[],
+        day_facts_id: null as string | null,
+        loadFailure: failure,
+      };
+    }
+    if (dayFactsSlice) return dayFactsSlice;
+    return undefined;
+  }, [loaded, failure, dayFactsSlice]);
 
   return (
     <div className={styles.root} data-testid="today-zone-glance-act">
@@ -93,7 +125,17 @@ export function TodayGlanceAct({
         )}
       </div>
 
-      <TodayVerdictStripSlot dateISO={dateISO} />
+      {stripFacts !== undefined ? (
+        <TodayVerdictStripSlot dateISO={dateISO} dayFacts={stripFacts} />
+      ) : (
+        <div
+          className={styles.nearestSkeleton}
+          data-testid="today-slot-verdict-strip"
+          data-wave2-slot="verdict"
+          data-loading="true"
+          aria-busy="true"
+        />
+      )}
 
       <div className={styles.nearest} data-testid="today-slot-glance-nearest" data-wave2-slot="glance-nearest">
         {!loaded ? <div className={styles.nearestSkeleton} aria-busy="true" data-loading="true" /> : null}

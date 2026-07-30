@@ -1,6 +1,6 @@
 # Today Wave 2 — Data Contract `day_facts_v1`
 
-**Status:** CONTRACT (docs only — not implemented)  
+**Status:** Phase D.2 **LIVE** (`GET /today/day-facts` — narrative only when `conflict.driver_ids` all `pt-*` ⊆ pool; else `partial: true`. Act 3 stays on `day_scenario`)  
 **Execution order:** [TODAY_WAVE2_EXECUTION_PLAN.md](./TODAY_WAVE2_EXECUTION_PLAN.md)  
 **Motion (pilot):** [TODAY_MOTION_PILOT_V1.md](./TODAY_MOTION_PILOT_V1.md)
 
@@ -322,6 +322,8 @@ POST /today/tap-widget/response  → tap_event_v1
 
 `generation_provenance` is **not** UI. If strip vs Act 3 diverge, compare `driver_ids` — one activation pool, different top-N consumption.
 
+**D.2 (day_facts honesty, not Act 3 readiness):** Project conflict/scenes onto day_facts **only** when every `conflict.driver_id` is natal-style (`pt-…`) and ⊆ the same-request activation pool. Pack-ranked ids (`sky-`/`phase-`/`moon-`/…) fail the gate → omit narrative, `partial: true`. Act 3 continues to read `day_story.day_scenario` (no demotion by this gate). Long-term: generation writes natal driver_ids as SoT (tracker backlog).
+
 ---
 
 ## 8. UI state (beside day_facts — not inside it)
@@ -380,6 +382,33 @@ Opens with the **first code PR** (Phase A), not with docs lock alone.
 - **Migration:** none
 - **Canon:** this file §4 · [TODAY_WAVE2_EXECUTION_PLAN](./TODAY_WAVE2_EXECUTION_PLAN.md) Phase C
 - **Backward compatible:** old clients ignore slot; no change to day_story / today_contract fields
+
+### Phase D.1 (day_facts slot envelope) — code PR
+
+- **SoT before:** Strip via `GET /today/domain-verdicts`; Glance via `GET /today/glance-timeline`; both independently resolve activations
+- **SoT after:** Screen slots prefer `GET /today/day-facts?local_date=`; one `assemble_day_facts_v1` per load. Interim endpoints reimplemented as **slices** of the same assembler (no second ranker). Experiential `why_short` / `label_short` via `today_activation_copy_v1`
+- **Public JSON:** yes — new `day_facts_v1` partial envelope (`partial: true`); old endpoints backward compatible
+- **Migration:** none
+- **Canon:** this file status · [TODAY_WAVE2_EXECUTION_PLAN](./TODAY_WAVE2_EXECUTION_PLAN.md) Phase D.1
+- **Backward compatible:** yes — interim GETs remain; FE day-facts client cache dedupes Act 1/2
+
+### Phase D.1b (narrative projection) — code PR
+
+- **SoT before:** Narrative only on `day_story.day_scenario`; day-facts = slots only (`partial: true`)
+- **SoT after:** Cached day_scenario projected onto day-facts when temporal gate passes. Superseded gate semantics: see **Phase D.2**. Act 3 still reads day_scenario nest. `thesis` = `label_ru` or null (no filler); `evening_payoff` null until SH-4. Natal chart body labels indexed with aliases so activations are non-empty when chart rows use lowercase `body`.
+- **Public JSON:** yes — additive conflict/scenes/props/sky/moon/numerology; `partial` semantics
+- **Migration:** none
+- **Canon:** this file status · [TODAY_WAVE2_EXECUTION_PLAN](./TODAY_WAVE2_EXECUTION_PLAN.md) Phase D.1b
+- **Backward compatible:** yes — old clients ignore new fields; Act3 gap when scenario not ready = Day Map / legacy (not invent)
+
+### Phase D.2 (day_facts narrative gate — pt-* ⊆ pool) — code PR
+
+- **SoT before:** D.1b soft gate allowed event-pack conflict ids when natal pool non-empty; commit `69bfa59` also demoted Act 3 `ready` via the same rule (live regression risk on pack-majority days)
+- **SoT after:** day_facts projects narrative **only** if all `conflict.driver_ids` are `pt-…` and ⊆ fresh activation pool; else omit conflict/scenes/props, `partial: true`. Act 3 demotion **removed** — chapters stay on day_scenario nest. No `trust_ok`. No pack→natal invent. Generation SoT (ranked drivers → natal ids) = separate backlog ticket.
+- **Public JSON:** `partial: true` more often on day_facts when pack ranks win; **no live UI impact today** (FE does not consume `day_facts.conflict`/`.scenes`; Act 3 uses nest). When FE starts reading those fields, re-check product-facing copy.
+- **Migration:** none
+- **Canon:** this file §7 · [TODAY_WAVE2_EXECUTION_PLAN](./TODAY_WAVE2_EXECUTION_PLAN.md) Phase D.2
+- **Backward compatible:** yes — additive omission only on day_facts; Act 3 path restored to pre-`69bfa59`
 
 ---
 

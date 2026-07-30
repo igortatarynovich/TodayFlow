@@ -21,6 +21,56 @@ except ImportError:
     HumanLayer = None
 
 
+# Chart JSON uses lowercase body ids (sun, north_node, rising); transit loops use labels (Sun, North Node, Ascendant).
+_BODY_LABEL_ALIASES: dict[str, tuple[str, ...]] = {
+    "sun": ("Sun",),
+    "moon": ("Moon",),
+    "mercury": ("Mercury",),
+    "venus": ("Venus",),
+    "mars": ("Mars",),
+    "jupiter": ("Jupiter",),
+    "saturn": ("Saturn",),
+    "uranus": ("Uranus",),
+    "neptune": ("Neptune",),
+    "pluto": ("Pluto",),
+    "chiron": ("Chiron",),
+    "north_node": ("North Node", "NorthNode", "true_node"),
+    "south_node": ("South Node", "SouthNode"),
+    "rising": ("Ascendant", "ASC", "asc"),
+    "ascendant": ("Ascendant", "ASC", "rising"),
+    "mc": ("MC", "Midheaven"),
+    "midheaven": ("MC", "Midheaven"),
+    "lilith": ("Lilith",),
+    "part_of_fortune": ("Part of Fortune", "Fortune"),
+}
+
+
+def index_chart_positions_by_label(positions: list[Any] | None) -> dict[str, dict[str, Any]]:
+    """Map Title-Case / alias labels → position dicts from lowercase `body` chart rows."""
+    out: dict[str, dict[str, Any]] = {}
+    for p in positions or []:
+        if not isinstance(p, dict) or "longitude" not in p:
+            continue
+        body = str(p.get("body") or "").strip()
+        if not body:
+            continue
+        key = body.lower().replace(" ", "_")
+        out[body] = p
+        out[key] = p
+        # Title-ish
+        out[body.title()] = p
+        for label in _BODY_LABEL_ALIASES.get(key, ()):
+            out[label] = p
+        # Direct common labels from body string
+        if key == "rising":
+            out["Ascendant"] = p
+        if key == "north_node":
+            out["North Node"] = p
+        if key == "south_node":
+            out["South Node"] = p
+    return out
+
+
 class TransitToNatal:
     """A single transit aspect from a transiting planet to a natal planet."""
     
@@ -909,8 +959,10 @@ class PersonalTransitService:
         
         transits: List[TransitToNatal] = []
         
-        # Extract natal planet positions
-        natal_positions = {p["body"]: p for p in natal_chart.positions if "body" in p and "longitude" in p}
+        # Extract natal planet positions (normalize body ids → lookup labels)
+        natal_positions = index_chart_positions_by_label(
+            list(natal_chart.positions) if natal_chart and natal_chart.positions else []
+        )
         if not natal_positions:
             return transits
         
@@ -939,8 +991,10 @@ class PersonalTransitService:
             # Fallback: can't calculate transits without location
             return transits
         
-        # Extract transiting planet positions
-        transit_positions = {p["body"]: p for p in transit_chart.positions if "body" in p and "longitude" in p}
+        # Extract transiting planet positions (same body-id normalization)
+        transit_positions = index_chart_positions_by_label(
+            list(transit_chart.positions) if transit_chart.positions else []
+        )
         
         # Key transiting planets to check (including Chiron and Nodes if available)
         transiting_planets = ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "Chiron", "North Node", "South Node"]

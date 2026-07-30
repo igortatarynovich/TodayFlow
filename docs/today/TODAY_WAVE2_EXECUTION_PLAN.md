@@ -1,6 +1,6 @@
 # Today Wave 2 — Execution Plan
 
-**Status:** Phase A **LIVE** · Phase 0.5.2 **CLOSED** · Phase B/B′ **LIVE** · Phase C **LIVE** · Phase D next
+**Status:** Phase A **LIVE** · Phase 0.5.2 **CLOSED** · Phase B/B′ **LIVE** · Phase C **LIVE** · Phase D.1 **LIVE** · Phase D.1b **LIVE** · Phase D.2 **LIVE** · D.3–D.4 next
 **Depends on:** Wave 1 ActShell LIVE (`TodayActShell` + reserved slots)  
 **Canon companions:**
 - [TODAY_WAVE2_CONTRACT_V1.md](./TODAY_WAVE2_CONTRACT_V1.md) — `day_facts_v1`, slots, tap, accuracy
@@ -128,8 +128,10 @@ Trust bug to avoid: VerdictStrip says «money: friction» while Act 3 narrates a
 
 | Step | Work |
 |------|------|
-| D.1 | Single `GET /today/day-facts?date=` for screen; three slots client-render |
-| D.2 | Trust audit: Act 3 conflict.driver_ids ⊆ same pool as verdict/timeline provenance |
+| D.1 | Single `GET /today/day-facts?local_date=` for screen; Strip + Glance from one assemble — **LIVE** (slot envelope; interim endpoints = thin slices) |
+| D.1b | Narrative materialization on day_facts (`conflict`, `scenes[]`, props, sky/moon) via **project** from cached day_scenario + temporal gate — **LIVE** (gate tightened in D.2) |
+| D.2 | day_facts narrative honesty: project only when `conflict.driver_ids` all `pt-*` ⊆ pool; revert Act3 demotion — **LIVE** |
+| D.2b | BACKLOG: generation SoT — `conflict.driver_ids` from natal activations (not pack ranker) so strict ⊆ is the common path |
 | D.3 | Motion pilot retrospective: promote motion doc to app-wide or revise classes |
 | D.4 | Optional Act 4 if/then copy from `scenes[].recommended_action` / traps (only if still needed after A–C) |
 
