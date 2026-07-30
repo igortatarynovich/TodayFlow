@@ -1,7 +1,8 @@
 <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
   <title>Sun</title>
-  <g stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="28" cy="28" r="12"/>
-    <circle cx="28" cy="28" r="4"/>
+  <!-- Seal-weight mark for ~12–18px disc masks: solid core + stout ring. -->
+  <g stroke="#000" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="28" cy="28" r="13.5"/>
   </g>
+  <circle cx="28" cy="28" r="5" fill="#000"/>
 </svg>

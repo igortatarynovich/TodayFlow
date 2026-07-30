@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useCallback, useId, useEffect, useRef, type PointerEvent as ReactPointerEvent } from "react";
+import { useMemo, useState, useCallback, useId, useEffect, useRef } from "react";
 import { eclipticLongitudeFromSignAndDegree, zodiacRuName } from "@/lib/zodiacKnowledge";
 import { PlanetIcon } from "@/components/visualIdentity/PlanetIcon";
 import { ElementIcon } from "@/components/visualIdentity/ElementIcon";
@@ -211,15 +211,22 @@ const INK = {
   },
   elementFill: {
     fire: "rgba(196, 120, 42, 0.14)",
-    earth: "rgba(83, 64, 42, 0.12)",
-    air: "rgba(74, 93, 115, 0.1)",
-    water: "rgba(90, 104, 120, 0.11)",
+    earth: "rgba(139, 106, 62, 0.14)",
+    air: "rgba(106, 132, 158, 0.14)",
+    water: "rgba(90, 122, 140, 0.15)",
   } as Record<string, string>,
+  /** Same family as planet jewels — all four elements must read on cream markers. */
   elementStroke: {
     fire: "#c4782a",
-    earth: "#53402a",
-    air: "#4a5d73",
-    water: "#5a6878",
+    earth: "#8b6a3e",
+    air: "#6a849e",
+    water: "#5a7a8c",
+  } as Record<string, string>,
+  elementWash: {
+    fire: "rgba(255, 186, 110, 0.28)",
+    earth: "rgba(210, 180, 130, 0.28)",
+    air: "rgba(170, 198, 220, 0.3)",
+    water: "rgba(130, 175, 200, 0.3)",
   } as Record<string, string>,
   angle: {
     ASC: "#8b6a3e",
@@ -304,7 +311,6 @@ export function NatalChartWheel({
 
   const [selected, setSelected] = useState<WheelSelection>(null);
   const [hoveredPlanet, setHoveredPlanet] = useState<string | null>(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [aspectWave, setAspectWave] = useState(false);
   const reduceMotionRef = useRef(false);
 
@@ -313,7 +319,6 @@ export function NatalChartWheel({
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     const apply = () => {
       reduceMotionRef.current = mq.matches;
-      if (mq.matches) setTilt({ x: 0, y: 0 });
     };
     apply();
     mq.addEventListener("change", apply);
@@ -334,20 +339,6 @@ export function NatalChartWheel({
       window.removeEventListener(PROFILE_DECODE_PATTERN_WAVE_EVENT, onWave);
       window.clearTimeout(timer);
     };
-  }, []);
-
-  const onPlatePointerMove = useCallback((e: ReactPointerEvent<HTMLDivElement>) => {
-    if (reduceMotionRef.current) return;
-    if (e.pointerType === "touch") return; // keep mobile stable; depth from material only
-    const rect = e.currentTarget.getBoundingClientRect();
-    if (!rect.width || !rect.height) return;
-    const nx = (e.clientX - rect.left) / rect.width - 0.5;
-    const ny = (e.clientY - rect.top) / rect.height - 0.5;
-    setTilt({ x: Math.max(-1, Math.min(1, ny)) * -5.5, y: Math.max(-1, Math.min(1, nx)) * 5.5 });
-  }, []);
-
-  const onPlatePointerLeave = useCallback(() => {
-    setTilt({ x: 0, y: 0 });
   }, []);
 
   const selectedPlanet = selected?.kind === "planet" ? selected.body : null;
@@ -748,11 +739,6 @@ export function NatalChartWheel({
           className={[styles.plate, aspectWave ? styles.aspectWave : ""].filter(Boolean).join(" ")}
           data-testid="natal-chart-plate"
           data-motion={aspectWave ? "aspect-wave" : undefined}
-          onPointerMove={onPlatePointerMove}
-          onPointerLeave={onPlatePointerLeave}
-          style={{
-            transform: `perspective(920px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-          }}
         >
         <svg
           className={styles.svg}
@@ -811,13 +797,8 @@ export function NatalChartWheel({
           onClick={() => setSelected(null)}
         />
 
-        {/* Layer back: rings / zodiac / houses — slight counter-parallax */}
-        <g
-          className={styles.layerBack}
-          style={{
-            transform: `translate(${tilt.y * 0.55}px, ${-tilt.x * 0.55}px)`,
-          }}
-        >
+        {/* Layer back: rings / zodiac / houses */}
+        <g className={styles.layerBack}>
         <circle
           cx={center}
           cy={center}
@@ -984,7 +965,8 @@ export function NatalChartWheel({
           const signAngle = degreeToAngle(i * 30 + 15);
           const bandRadius = (outerRadius + zodiacInnerRadius) / 2;
           const pos = getPosition(signAngle, bandRadius);
-          const elementColors = INK.elementStroke;
+          const stroke = INK.elementStroke[sign.element] || INK.gold;
+          const wash = INK.elementWash[sign.element] || "rgba(255,250,242,0.88)";
           const markerR = isMobile ? 13 : 16;
           return (
             <g key={sign.name}>
@@ -992,10 +974,10 @@ export function NatalChartWheel({
                 cx={pos.x}
                 cy={pos.y}
                 r={markerR}
-                fill={INK.white}
-                stroke={elementColors[sign.element] || INK.gold}
-                strokeWidth="1.5"
-                opacity="0.92"
+                fill={wash}
+                stroke={stroke}
+                strokeWidth="2"
+                opacity="0.96"
               />
               <text
                 x={pos.x}
@@ -1003,7 +985,7 @@ export function NatalChartWheel({
                 textAnchor="middle"
                 dominantBaseline="central"
                 fontSize={isMobile ? "14" : "17"}
-                fill={elementColors[sign.element] || INK.gold}
+                fill={stroke}
                 fontWeight="700"
               >
                 {sign.glyph}
@@ -1014,12 +996,7 @@ export function NatalChartWheel({
         </g>
 
         {/* Layer mid: angle markers only — aspect chords live under planets (not in the old hub well). */}
-        <g
-          className={styles.layerMid}
-          style={{
-            transform: `translate(${tilt.y * 0.22}px, ${-tilt.x * 0.22}px)`,
-          }}
-        >
+        <g className={styles.layerMid}>
         {angleMarkers.map((marker) => (
           <g key={marker.key} opacity={focusPlanet ? 0.45 : 0.7}>
             <line
@@ -1047,13 +1024,8 @@ export function NatalChartWheel({
         ))}
         </g>
 
-        {/* Layer front: major chords → hub → lit discs (chords no longer live in the old center well). */}
-        <g
-          className={styles.layerFront}
-          style={{
-            transform: `translate(${tilt.y * -0.4}px, ${-tilt.x * -0.4}px)`,
-          }}
-        >
+        {/* Layer front: major chords → hub → lit discs */}
+        <g className={styles.layerFront}>
         {/* Major aspect chords: disc-to-disc across the plate (halo + legend color). */}
         <g data-testid="natal-aspect-web" style={{ pointerEvents: "none" }}>
           {visibleAspectLines.map((line) => {
@@ -1244,10 +1216,10 @@ export function NatalChartWheel({
                 />
                 {resolvePlanetSlug(planet.body) ? (
                   <foreignObject
-                    x={planet.position.x - disc * 0.7}
-                    y={planet.position.y - disc * 0.7}
-                    width={disc * 1.4}
-                    height={disc * 1.4}
+                    x={planet.position.x - disc * 0.72}
+                    y={planet.position.y - disc * 0.72}
+                    width={disc * 1.44}
+                    height={disc * 1.44}
                     style={{ pointerEvents: "none", overflow: "visible" }}
                   >
                     <div
@@ -1261,7 +1233,7 @@ export function NatalChartWheel({
                     >
                       <PlanetIcon
                         planet={planet.body}
-                        size={Math.max(12, Math.round(disc * 1.05))}
+                        size={Math.max(13, Math.round(disc * 1.22))}
                         stroke={isSelected ? INK.inkDeep : rimColor}
                       />
                     </div>
@@ -1303,7 +1275,7 @@ export function NatalChartWheel({
                     aria-pressed={isActive}
                   >
                     <span className={styles.chipGlyph} aria-hidden>
-                      <PlanetIcon planet={planet.body} size={15} />
+                      <PlanetIcon planet={planet.body} size={17} />
                     </span>
                     {planetRuName(planet.body)}
                   </button>
@@ -1347,7 +1319,7 @@ export function NatalChartWheel({
           <>
             <div className={styles.panelHeader}>
               <span className={styles.panelGlyph} aria-hidden>
-                <PlanetIcon planet={selectedPlanetData.body} size={22} />
+                <PlanetIcon planet={selectedPlanetData.body} size={24} />
               </span>
               <h3 className={styles.panelTitle}>{planetRuName(selectedPlanetData.body)}</h3>
               <p className={styles.panelMeta}>

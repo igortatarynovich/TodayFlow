@@ -1728,6 +1728,7 @@
   list-style: none;
   margin: 0;
   padding: 0;
+  width: 100%;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 0.875rem;
@@ -1735,6 +1736,9 @@
 
 .whyProofCard {
   margin: 0;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   min-height: 8.5rem;
   padding: 1.15rem 1.2rem 1.25rem;
   border-radius: 1.35rem;
@@ -1882,6 +1886,8 @@
 
 .whyFormationBlock {
   margin-top: 1rem;
+  width: 100%;
+  min-width: 0;
 }
 
 .whyFormationBlock + .whyFormationBlock {
@@ -2799,6 +2805,7 @@
 
 @media (min-width: 40rem) {
   .whyProofGrid {
+    /* Full-width two columns — not 4 skinny left-aligned cells. */
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -2822,10 +2829,6 @@
 }
 
 @media (min-width: 56.25rem) {
-  .whyProofGrid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
   .journeyHero {
     grid-template-columns: minmax(0, 1.1fr) minmax(16rem, 21rem);
     align-items: center;
@@ -2853,10 +2856,6 @@
 
   .heroPills {
     justify-content: flex-start;
-  }
-
-  .whyProofGrid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 

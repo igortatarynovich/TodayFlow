@@ -125,15 +125,6 @@
   width: 100%;
   max-width: none;
   align-self: stretch;
-  transform-style: preserve-3d;
-  will-change: transform;
-  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.layerBack,
-.layerMid,
-.layerFront {
-  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @keyframes natalAspectWave {
@@ -151,20 +142,13 @@
   }
 }
 
-.aspectWave .layerMid {
+/* Wave must hit the aspect web (layerFront), not angle markers in layerMid. */
+.aspectWave [data-testid="natal-aspect-web"] {
   animation: natalAspectWave 1.15s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .plate,
-  .layerBack,
-  .layerMid,
-  .layerFront {
-    transition: none !important;
-    transform: none !important;
-  }
-
-  .aspectWave .layerMid {
+  .aspectWave [data-testid="natal-aspect-web"] {
     animation: none !important;
   }
 }

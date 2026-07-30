@@ -59,6 +59,43 @@ describe("ProfileNatalDecodePanel", () => {
     expect(screen.queryByTestId("profile-natal-decode-generate")).not.toBeInTheDocument();
   });
 
+  it("does not re-fire pattern-sweep after profileMotionOnce is consumed", async () => {
+    const user = userEvent.setup();
+    getJson.mockResolvedValue({ access: "offer", can_generate: true, cta: "Открыть" });
+    postJson.mockResolvedValue({
+      status: "grounded",
+      pattern_thesis: "Узор один.",
+      sections: [{ id: "work", title: "Дело", thesis: "Тезис" }],
+    });
+    const { unmount } = render(<ProfileNatalDecodePanel />);
+    await waitFor(() => {
+      expect(screen.getByTestId("profile-natal-decode-generate")).toBeInTheDocument();
+    });
+    await user.click(screen.getByTestId("profile-natal-decode-generate"));
+    await waitFor(() => {
+      expect(screen.getByTestId("profile-natal-decode-pattern")).toHaveAttribute(
+        "data-motion",
+        "pattern-sweep",
+      );
+    });
+    unmount();
+
+    // Second mount with already-grounded result path: offer still can_generate but
+    // generate again after remount — once key stays consumed.
+    render(<ProfileNatalDecodePanel />);
+    await waitFor(() => {
+      expect(screen.getByTestId("profile-natal-decode-generate")).toBeInTheDocument();
+    });
+    await user.click(screen.getByTestId("profile-natal-decode-generate"));
+    await waitFor(() => {
+      expect(screen.getByTestId("profile-natal-decode-pattern")).toBeInTheDocument();
+    });
+    expect(screen.getByTestId("profile-natal-decode-pattern")).not.toHaveAttribute(
+      "data-motion",
+      "pattern-sweep",
+    );
+  });
+
   it("shows blocked copy when cannot generate", async () => {
     getJson.mockResolvedValue({
       access: "blocked",

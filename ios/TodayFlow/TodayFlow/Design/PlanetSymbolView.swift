@@ -65,7 +65,7 @@ struct PlanetSymbolView: View {
         .accessibilityHidden(true)
     }
 
-    private var strokeWidth: CGFloat { max(1.25, size / 56 * 1.5) }
+    private var strokeWidth: CGFloat { max(1.75, size / 56 * 2.75) }
 
     @ViewBuilder
     private func planetPaths(_ slug: PlanetSlug) -> some View {

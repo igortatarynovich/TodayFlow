@@ -112,7 +112,7 @@
 | M | 48 |
 | S | 24 |
 
-**Stroke:** 1.25px (S) · 1.5px (M–XL) · color `--tf-ink-soft` / on-dark `--tf-on-dark`.
+**Stroke:** 1.25px (S) · 1.5px (M–XL) for Zodiac / Element / Archetype · Planet seals use **2.75** optical weight for natal discs (`PLANET_STROKE` / `planets/*.svg`) · color `--tf-ink-soft` / on-dark `--tf-on-dark`.
 
 **Figma pages:** `Symbols / Archetype` · `Zodiac` · `Element` · `Planet` · grid 4×3 each.
 
