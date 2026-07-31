@@ -900,8 +900,9 @@ Source of truth: [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) §1–§13
 - [x] **C0** Canon v1.1 ACCEPTED — axis resolution (body+understand needs; yoga/stretch/music formats; reflection+sleep restored)
 - [ ] **C0b** Align mockup need-ленты to canon: add «Понять себя»; move «Уснуть» to end
 - [x] **P0** Web `/practices` shell: need chips + recommend + Continue + moment + formats + practice of day + conditional my library
-- [ ] **P1** Session fullscreen + state check-in + «Сохранить в сегодняшний день» — **LIVE (FE close-out)** `PracticeLiveSession` · draft → Continue · `?run=1` · mark-done bypass removed (2026-07-31). Optional follow-up: rail `practiceDone` from usage/`state_after` not recommendation text.
-- [ ] **M0** Music layer (С голосом / Только музыка / Без звука + voice/music/nature volumes) — parallel to P0/P1
+- [x] **P1** Session fullscreen + state check-in + «Сохранить в сегодняшний день» — `PracticeLiveSession` · draft → Continue · `?run=1` · meaning `practice_completed`
+- [x] **C1** Rich catalog — `need_ids` / `format_id` / `outcome_label` + gap-fill (yoga/stretch/visualization/music/sleep); hub ranks by primary need (`9d770f3`)
+- [x] **M0** Music layer UI (С голосом / Только музыка / Без звука + volumes) — FE prefs/panel; audio assets still optional
 - [ ] iOS parity after web P0+P1 stable
 
 ### UX and Navigation
@@ -1126,7 +1127,8 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
-- 2026-07-30 | Practices | **M0 music layer (session)** | **IN PROGRESS (FE)** | Modes С голосом / Только музыка / Без звука · voice/music/nature volumes · continue-after toggle · prefs `localStorage`. Panel in `PracticeLiveSession`. Tracks play when `audioUrl`/`musicUrl`/`natureUrl` present. SSR catalog clipped from product UI (`286e7f3`).
+- 2026-07-31 | Practices | **C1 rich catalog (need/format tags)** | **DONE** | Overlay + 12 gap-fill free practices; public optional `need_ids`/`format_id`/`outcome_label`; hub match/rank by tags + outcome card titles. `practice_state_cycle_catalog_v1` · `9d770f3`.
+- 2026-07-30 | Practices | **M0 music layer (session)** | **DONE (FE UI)** | Modes С голосом / Только музыка / Без звука · volumes · prefs `localStorage`. Panel in `PracticeLiveSession`. Tracks when URLs present. SSR catalog clipped (`286e7f3`).
 - 2026-07-30 | Practices | **P1 live session + check-in + save to Today** | **DONE (FE)** | `PracticeLiveSession`: fullscreen timer/pause · check-in better/same/harder · POST `/complete` + meaning `practice_completed` (`state_after`, `surface=practices_session_p1`) · local draft powers hub Continue · hub links `?run=1`. Tests: PracticeLiveSession + practiceSessionDraft.
 - 2026-07-30 | Practices | **P0 web state-cycle shell** | **DONE (FE)** | `/practices` → `PracticesStateCycleScreen`: 6 need chips · recommend · moment rail · 9 format chips · practice of day · conditional my library · desktop Today rail. Client keyword filter until API needs. Images: `/images/praktiki_banner.png` + CSS gradient placeholders. Continue via session draft (P1). Tests: practicesCanon + StateCycleScreen.
 - 2026-07-30 | Practices | **Screen v1.1 canon — axis resolution** | **ACCEPTED** | SoT [practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) v1.1: needs keep **both** «Почувствовать тело» + «Понять себя» (body vs reflective axes); «Уснуть» last. Formats: yoga/stretch/music chips (spec «Телесные» detailed); restore reflection+sleep; music = chip ⊕ layer. **C0b** mockup need-align. No parallel `practices-canon.md`. Next: C0b → P0 → P1; M0 ∥.
