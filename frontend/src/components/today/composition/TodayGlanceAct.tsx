@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { TodayVerdictStripSlot } from "@/components/today/composition/TodayWave2Slots";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import styles from "@/components/today/composition/TodayGlanceAct.module.css";
 import {
@@ -10,7 +9,17 @@ import {
   type GlanceTimelineItem,
 } from "@/lib/todayGlanceTimeline";
 import { fetchDayFacts } from "@/lib/todayDayFacts";
-import type { DomainVerdict } from "@/lib/todayDomainVerdicts";
+import {
+  DOMAIN_LABEL_RU,
+  DOMAIN_ORDER,
+  isSilentCalmBank,
+  orderDomainVerdicts,
+  scrubDomainVerdictJargon,
+  VERDICT_LABEL_RU,
+  type DomainKey,
+  type DomainVerdict,
+  type VerdictKey,
+} from "@/lib/todayDomainVerdicts";
 import { pickNearestGlanceItem } from "@/lib/todayGlanceNearest";
 import { todaySlotFailureCopy, type TodaySlotLoadFailure } from "@/lib/todaySlotAvailability";
 
@@ -23,61 +32,73 @@ export type TodayGlanceTeaser = {
 
 type Props = {
   dateISO: string;
-  title: string;
+  /** short_name eyebrow — optional */
+  title?: string | null;
+  /** Texture: why_arose (dominates). Falls back to thesis/title. */
+  dayTexture?: string | null;
   thesis?: string | null;
   teasers: TodayGlanceTeaser[];
   themeLoading?: boolean;
+  onSphereSelect?: (domain: DomainKey) => void;
 };
+
+function verdictMark(verdict: VerdictKey): string {
+  if (verdict === "open") return "◇";
+  if (verdict === "charged") return "▲";
+  if (verdict === "friction") return "×";
+  return "·";
+}
 
 export function TodayGlanceAct({
   dateISO,
-  title,
+  title = null,
+  dayTexture = null,
   thesis = null,
   teasers,
   themeLoading = false,
+  onSphereSelect,
 }: Props) {
   const [nearest, setNearest] = useState<GlanceTimelineItem | null>(null);
-  const [failure, setFailure] = useState<TodaySlotLoadFailure | null>(null);
+  const [loadFailure, setLoadFailure] = useState<TodaySlotLoadFailure | null>(null);
+  const [sphereFailure, setSphereFailure] = useState<TodaySlotLoadFailure | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [nowTick, setNowTick] = useState(() => new Date());
-  const [dayFactsSlice, setDayFactsSlice] = useState<{
-    domain_verdicts: DomainVerdict[];
-    glance_timeline: GlanceTimelineItem[];
-    day_facts_id: string | null;
-    is_fallback?: boolean;
-    degraded?: boolean;
-  } | null>(null);
+  const [domainRows, setDomainRows] = useState<DomainVerdict[]>([]);
 
   useEffect(() => {
     let cancelled = false;
     setLoaded(false);
-    setFailure(null);
-    setDayFactsSlice(null);
+    setLoadFailure(null);
+    setSphereFailure(null);
+    setDomainRows([]);
     void fetchDayFacts(dateISO)
       .then((data) => {
         if (cancelled) return;
-        const slice = {
-          domain_verdicts: data.domain_verdicts ?? [],
-          glance_timeline: data.glance_timeline ?? [],
-          day_facts_id: data.id ?? null,
-          is_fallback: data.is_fallback,
-          degraded: data.degraded,
-        };
-        setDayFactsSlice(slice);
         if (data.is_fallback ?? data.degraded) {
-          setFailure("unavailable");
+          setLoadFailure("unavailable");
+          setSphereFailure("unavailable");
           setNearest(null);
+          setDomainRows([]);
         } else {
-          setFailure(null);
+          setLoadFailure(null);
           setNearest(pickNearestGlanceItem(data.glance_timeline ?? [], new Date()));
+          const ordered = scrubDomainVerdictJargon(orderDomainVerdicts(data.domain_verdicts ?? []));
+          if (isSilentCalmBank(ordered)) {
+            setSphereFailure("unavailable");
+            setDomainRows([]);
+          } else {
+            setSphereFailure(null);
+            setDomainRows(ordered);
+          }
         }
         setLoaded(true);
       })
       .catch(() => {
         if (cancelled) return;
-        setFailure("no_connection");
+        setLoadFailure("no_connection");
+        setSphereFailure("no_connection");
         setNearest(null);
-        setDayFactsSlice(null);
+        setDomainRows([]);
         setLoaded(true);
       });
     return () => {
@@ -93,19 +114,18 @@ export function TodayGlanceAct({
 
   const live = nearest ? isGlanceLiveNow(nearest.time_local, nowTick) : false;
 
-  const stripFacts = useMemo(() => {
-    if (!loaded) return undefined;
-    if (failure) {
-      return {
-        domain_verdicts: [] as DomainVerdict[],
-        glance_timeline: [] as GlanceTimelineItem[],
-        day_facts_id: null as string | null,
-        loadFailure: failure,
-      };
-    }
-    if (dayFactsSlice) return dayFactsSlice;
-    return undefined;
-  }, [loaded, failure, dayFactsSlice]);
+  const texture =
+    (dayTexture || "").trim() || (thesis || "").trim() || (title || "").trim() || null;
+  const eyebrow =
+    title && texture && title.trim().toLowerCase() !== texture.trim().toLowerCase()
+      ? title.trim()
+      : null;
+
+  const tokenRows = useMemo(() => {
+    if (!loaded || sphereFailure) return [];
+    const byDomain = new Map(domainRows.map((r) => [r.domain, r]));
+    return DOMAIN_ORDER.map((domain) => byDomain.get(domain)).filter(Boolean) as DomainVerdict[];
+  }, [loaded, sphereFailure, domainRows]);
 
   return (
     <div className={styles.root} data-testid="today-zone-glance-act">
@@ -114,58 +134,124 @@ export function TodayGlanceAct({
           <p className={styles.loading}>{copy.loadingDay}</p>
         ) : (
           <>
-            <h3 className={styles.title} data-testid="today-entity-daily-theme-glance">
-              {title}
-            </h3>
-            {thesis ? (
-              <p className={styles.thesis} data-testid="today-glance-thesis">
-                {thesis}
+            {eyebrow ? (
+              <p className={styles.eyebrow} data-testid="today-entity-daily-theme-glance">
+                {eyebrow}
               </p>
             ) : null}
+            {texture ? (
+              <h3 className={styles.thesis} data-testid="today-glance-thesis">
+                {texture}
+              </h3>
+            ) : (
+              <h3 className={styles.thesis} data-testid="today-entity-daily-theme-glance">
+                {copy.journey.glanceTitle}
+              </h3>
+            )}
           </>
         )}
       </div>
 
-      {stripFacts !== undefined ? (
-        <TodayVerdictStripSlot dateISO={dateISO} dayFacts={stripFacts} />
-      ) : (
+      <div className={styles.metaRow} data-testid="today-glance-meta">
+        {loaded && (sphereFailure || loadFailure) ? (
+          <p
+            className={styles.metaFail}
+            role="status"
+            data-testid="today-glance-meta-fallback"
+            data-fallback="true"
+            data-failure={sphereFailure || loadFailure || undefined}
+          >
+            {todaySlotFailureCopy((sphereFailure || loadFailure)!)}
+          </p>
+        ) : null}
         <div
-          className={styles.nearestSkeleton}
+          className={styles.sphereTokens}
           data-testid="today-slot-verdict-strip"
           data-wave2-slot="verdict"
-          data-loading="true"
-          aria-busy="true"
-        />
-      )}
+          data-variant="tokens"
+          data-fallback={sphereFailure ? "true" : "false"}
+          data-failure={sphereFailure || undefined}
+          aria-label={copy.journey.verdictStripLabel}
+        >
+          {!loaded ? <div className={styles.nearestSkeleton} data-loading="true" aria-busy="true" /> : null}
+          {loaded && !sphereFailure
+            ? tokenRows.map((row) => {
+                const domain = row.domain as DomainKey;
+                const verdict = row.verdict as VerdictKey;
+                const label = DOMAIN_LABEL_RU[domain] ?? row.domain;
+                const verdictLabel = VERDICT_LABEL_RU[verdict] ?? row.verdict;
+                const interactive = Boolean(onSphereSelect);
+                if (interactive) {
+                  return (
+                    <button
+                      key={row.domain}
+                      type="button"
+                      className={styles.sphereToken}
+                      data-domain={row.domain}
+                      data-verdict={row.verdict}
+                      data-testid={`today-verdict-token-${row.domain}`}
+                      aria-label={`${label}: ${verdictLabel}`}
+                      onClick={() => onSphereSelect?.(domain)}
+                    >
+                      <span className={styles.sphereTokenMark} aria-hidden>
+                        {verdictMark(verdict)}
+                      </span>
+                      <span className={styles.sphereTokenLabel}>{label}</span>
+                    </button>
+                  );
+                }
+                return (
+                  <span
+                    key={row.domain}
+                    className={styles.sphereToken}
+                    data-domain={row.domain}
+                    data-verdict={row.verdict}
+                    data-testid={`today-verdict-token-${row.domain}`}
+                    aria-label={`${label}: ${verdictLabel}`}
+                  >
+                    <span className={styles.sphereTokenMark} aria-hidden>
+                      {verdictMark(verdict)}
+                    </span>
+                    <span className={styles.sphereTokenLabel}>{label}</span>
+                  </span>
+                );
+              })
+            : null}
+        </div>
 
-      <div className={styles.nearest} data-testid="today-slot-glance-nearest" data-wave2-slot="glance-nearest">
-        {!loaded ? <div className={styles.nearestSkeleton} aria-busy="true" data-loading="true" /> : null}
-        {loaded && failure ? (
-          <p className={styles.nearestFail} role="status" data-testid="today-glance-nearest-fallback">
-            {todaySlotFailureCopy(failure)}
-          </p>
-        ) : null}
-        {loaded && !failure && nearest ? (
-          <div
-            className={styles.nearestRow}
-            data-valence={nearest.valence}
-            data-live={live ? "true" : "false"}
-            data-testid={`today-glance-nearest-${nearest.driver_id}`}
-          >
-            <span className={styles.nearestTime}>{formatGlanceClock(nearest.time_local)}</span>
-            <span className={styles.nearestLabel}>{nearest.label_short}</span>
-            {live ? (
-              <span className={styles.nearestNow} data-testid="today-glance-now">
-                {copy.journey.glanceNow}
+        <div
+          className={styles.nearestInline}
+          data-testid="today-slot-glance-nearest"
+          data-wave2-slot="glance-nearest"
+          data-inline="true"
+          data-fallback={loadFailure ? "true" : "false"}
+          data-failure={loadFailure || undefined}
+        >
+          {loaded && !loadFailure && nearest ? (
+            <p
+              className={styles.nearestInlineText}
+              data-valence={nearest.valence}
+              data-live={live ? "true" : "false"}
+              data-testid={`today-glance-nearest-${nearest.driver_id}`}
+            >
+              <span className={styles.nearestTime}>{formatGlanceClock(nearest.time_local)}</span>
+              <span className={styles.nearestDot} aria-hidden>
+                ·
               </span>
-            ) : null}
-          </div>
-        ) : null}
-        {loaded && !failure && !nearest ? (
-          <p className={styles.nearestEmptyCopy} data-empty="true" data-testid="today-glance-nearest-empty">
-            {copy.journey.glanceNearestEmpty}
-          </p>
-        ) : null}
+              <span className={styles.nearestLabel}>{nearest.label_short}</span>
+              {live ? (
+                <span className={styles.nearestNow} data-testid="today-glance-now">
+                  {copy.journey.glanceNow}
+                </span>
+              ) : null}
+            </p>
+          ) : null}
+          {loaded && !loadFailure && !nearest ? (
+            <p className={styles.nearestEmptyCopy} data-empty="true" data-testid="today-glance-nearest-empty">
+              {copy.journey.glanceNearestEmpty}
+            </p>
+          ) : null}
+        </div>
       </div>
 
       {teasers.length > 0 ? (
@@ -173,7 +259,9 @@ export function TodayGlanceAct({
           {teasers.map((t) => (
             <li key={t.id}>
               <button type="button" className={styles.teaser} data-testid={`today-glance-teaser-${t.id}`} onClick={t.onSelect}>
-                <span className={styles.teaserMark} aria-hidden>·</span>
+                <span className={styles.teaserMark} aria-hidden>
+                  ·
+                </span>
                 <span className={styles.teaserText}>
                   <span className={styles.teaserLabel}>{t.label}</span>
                   {t.hook ? <span className={styles.teaserHook}>{t.hook}</span> : null}

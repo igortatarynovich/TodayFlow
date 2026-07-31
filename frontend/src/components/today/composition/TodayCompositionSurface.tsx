@@ -92,6 +92,9 @@ import { TodayInterpretationConfirm } from "@/components/today/composition/Today
 import { TodaySkyStoryCards } from "@/components/today/composition/TodaySkyStoryCards";
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
 import { isDayScenarioReadyForChapters } from "@/lib/todayScenarioChapters";
+import { buildGlanceDayTexture, buildGlanceThemeEyebrow } from "@/lib/todayGlanceTexture";
+import { buildPlotConflictNarrative } from "@/lib/todayPlotNarrative";
+import { TODAY_NO_CONNECTION_COPY } from "@/lib/todaySlotAvailability";
 import { TodayDepthLayerSection } from "@/components/today/composition/TodayDepthLayerSection";
 import { buildTodayPromiseSuggestions, isLowEnergyMood } from "@/lib/todayDayDialogue";
 import {
@@ -132,6 +135,8 @@ type Props = {
   guideNarrativeLoading: boolean;
   guideNarrativePayload: Record<string, unknown> | null;
   guideNarrativeRequestFailed?: boolean;
+  /** Auth/API transport degraded — personal acts must not render silent empty */
+  networkDegraded?: boolean;
   dayLayerNarrativePayload?: Record<string, unknown> | null;
   dayLayerNarrativeLoading?: boolean;
   spheresNarrativePayload?: Record<string, unknown> | null;
@@ -228,6 +233,7 @@ export function TodayCompositionSurface(props: Props) {
   const [asceticMarking, setAsceticMarking] = useState(false);
   const [ritualPickOpen, setRitualPickOpen] = useState<"tarot" | "number" | null>(null);
   const [screenFlowIndex, setScreenFlowIndex] = useState(0);
+  const [focusSphere, setFocusSphere] = useState<string | null>(null);
   const screenFlowEntryApplied = useRef(false);
 
   const anchorTarotId = useMemo(
@@ -1022,6 +1028,9 @@ export function TodayCompositionSurface(props: Props) {
   const todayHeroPillars = useMemo(() => buildTodayHeroPillars(props.coreProfile), [props.coreProfile]);
   const themeLoading = !singleVoice && props.guideNarrativeLoading && !props.guideNarrativePayload;
 
+  const dayTexture = useMemo(() => buildGlanceDayTexture(props.contract), [props.contract]);
+  const plotNarrative = useMemo(() => buildPlotConflictNarrative(props.contract), [props.contract]);
+
   if (eveningMode && continuityRecord && !dayClosed) {
     if (useProductFoundation) {
       return (
@@ -1221,10 +1230,33 @@ export function TodayCompositionSurface(props: Props) {
       ? story.hero.centralThought
       : null;
 
+  const glanceEyebrow =
+    buildGlanceThemeEyebrow(props.contract) || heroTheme || story.hero.centralThought || copy.themeLabel;
+
+  const plotNarrativeSection = plotNarrative ? (
+    <section className={styles.plotNarrative} data-testid="today-zone-plot-narrative">
+      {plotNarrative.tension ? (
+        <p className={styles.plotNarrativeTension} data-testid="today-plot-tension">
+          {plotNarrative.tension}
+        </p>
+      ) : null}
+      {plotNarrative.why ? (
+        <p className={styles.plotNarrativeWhy} data-testid="today-plot-why">
+          {plotNarrative.why}
+        </p>
+      ) : null}
+      {plotNarrative.personal ? (
+        <p className={styles.plotNarrativePersonal} data-testid="today-plot-personal">
+          {plotNarrative.personal}
+        </p>
+      ) : null}
+    </section>
+  ) : null;
+
   const heroSection = zones.hero ? (
     useProductFoundation ? (
       <section
-        className={`${styles.themeDarkHero} ${styles.themeDarkHeroSpotlight}`.trim()}
+        className={`${styles.themeDarkHero} ${styles.themeDarkHeroSpotlight} ${plotNarrative ? styles.themeDarkHeroCompact : ""}`.trim()}
         data-testid="today-zone-hero"
         data-hero-tone={heroWash.tone}
         data-hero-plate={heroWash.plate}
@@ -1243,6 +1275,16 @@ export function TodayCompositionSurface(props: Props) {
         <div className={`${styles.themeDarkContent} ${profileMotionStyles.heroEnter}`}>
           {themeLoading ? (
             <p className={styles.themeDarkLoading}>{copy.loadingDay}</p>
+          ) : plotNarrative ? (
+            <>
+              <PersonalizationDegradedBadge
+                contract={props.contract}
+                narrativeRequestFailed={props.guideNarrativeRequestFailed}
+              />
+              <p className={styles.plotNarrativeEyebrow} id="today-day-theme-title">
+                {copy.journey.actNavPlot}
+              </p>
+            </>
           ) : (
             <>
               <PersonalizationDegradedBadge
@@ -1455,20 +1497,34 @@ export function TodayCompositionSurface(props: Props) {
   ) : (
     <TodayProductScreenFlow
       dateISO={dateISO}
-      themeTitle={heroTheme || story.hero.centralThought || copy.themeLabel}
+      themeTitle={glanceEyebrow}
       themeThesis={heroSubline}
+      dayTexture={dayTexture}
       themeLoading={themeLoading}
       heroSection={heroSection}
+      plotNarrativeSection={plotNarrativeSection}
       pulseSection={pulseSection}
-      glanceSection={glanceSection}
+      glanceSection={useProductFoundation ? null : glanceSection}
       morningDialogue={morningDialogue}
       dayReadingReady={dayReadingReady}
       showSymbols={showSymbolsAct}
       symbolsBody={
         <>
-          {showRitualAsComplement ? ritualGateSection : null}
-          {showRitualAsComplement ? ritualTarotImpactStage : null}
-          {(story.tarotImpact || story.numberImpact) && story.personalizedReady ? (
+          {props.networkDegraded ? (
+            <p
+              className={styles.plotNarrativeWhy}
+              role="status"
+              data-testid="today-symbols-fallback"
+              data-fallback="true"
+              data-failure="no_connection"
+            >
+              {TODAY_NO_CONNECTION_COPY}
+            </p>
+          ) : null}
+          {!props.networkDegraded && showRitualAsComplement ? ritualGateSection : null}
+          {!props.networkDegraded && showRitualAsComplement ? ritualTarotImpactStage : null}
+          {/* v3: show day card open when already revealed / available — no extra click */}
+          {!props.networkDegraded && !showRitualAsComplement && (props.cardName || story.tarotImpact) ? (
             <div className={styles.symbolImpactsStack} data-testid="today-zone-symbol-impacts">
               {story.tarotImpact ? (
                 <section className={styles.ritualReveal} data-testid="today-zone-tarot-impact">
@@ -1476,6 +1532,14 @@ export function TodayCompositionSurface(props: Props) {
                   <h2 className={styles.ritualRevealTitle}>{story.tarotImpact.title}</h2>
                   <p className={styles.ritualRevealHeadline}>{story.tarotImpact.headline}</p>
                   <p className={styles.ritualRevealBody}>{story.tarotImpact.body}</p>
+                </section>
+              ) : props.cardName ? (
+                <section className={styles.ritualReveal} data-testid="today-zone-tarot-impact">
+                  <p className={styles.ritualRevealKind}>Символ дня · открыт</p>
+                  <h2 className={styles.ritualRevealTitle}>{props.cardName}</h2>
+                  {props.cardMeaning ? (
+                    <p className={styles.ritualRevealBody}>{props.cardMeaning}</p>
+                  ) : null}
                 </section>
               ) : null}
               {story.numberImpact ? (
@@ -1485,10 +1549,34 @@ export function TodayCompositionSurface(props: Props) {
                   <p className={styles.ritualRevealHeadline}>{story.numberImpact.headline}</p>
                   <p className={styles.ritualRevealBody}>{story.numberImpact.body}</p>
                 </section>
+              ) : props.numerologyValue ? (
+                <section className={styles.ritualReveal} data-testid="today-zone-number-impact">
+                  <p className={styles.ritualRevealKind}>Число дня · открыто</p>
+                  <h2 className={styles.ritualRevealTitle}>{props.numerologyValue}</h2>
+                  {props.numerologyMeaning ? (
+                    <p className={styles.ritualRevealBody}>{props.numerologyMeaning}</p>
+                  ) : null}
+                </section>
+              ) : null}
+              {props.contract.day_story?.interpretive_chorus?.astrology_lead ||
+              props.contract.day_story?.interpretive_chorus?.astrology_meaning ? (
+                <section className={styles.ritualReveal} data-testid="today-zone-sky-events">
+                  <p className={styles.ritualRevealKind}>Небо сегодня</p>
+                  {props.contract.day_story?.interpretive_chorus?.astrology_lead ? (
+                    <h2 className={styles.ritualRevealTitle}>
+                      {props.contract.day_story.interpretive_chorus.astrology_lead}
+                    </h2>
+                  ) : null}
+                  {props.contract.day_story?.interpretive_chorus?.astrology_meaning ? (
+                    <p className={styles.ritualRevealBody}>
+                      {props.contract.day_story.interpretive_chorus.astrology_meaning}
+                    </p>
+                  ) : null}
+                </section>
               ) : null}
             </div>
           ) : null}
-          <TodayGlanceTimelineSlot dateISO={dateISO} />
+          {!props.networkDegraded ? <TodayGlanceTimelineSlot dateISO={dateISO} /> : null}
         </>
       }
       showPersonalized={useProductPersonalized}
@@ -1522,6 +1610,12 @@ export function TodayCompositionSurface(props: Props) {
         colorGuide: story.colorGuide,
         morningRitualData: props.morningRitualData,
         dateISO,
+        focusSphere,
+        contentFailure: props.networkDegraded
+          ? ("no_connection" as const)
+          : props.guideNarrativeRequestFailed
+            ? ("unavailable" as const)
+            : null,
         tapResponse: engagement.tapResponse,
         onTapRecorded: (response) => persistEngagement({ tapResponse: response }),
         tarotDeepenHref:
@@ -1548,6 +1642,7 @@ export function TodayCompositionSurface(props: Props) {
       }}
       activeIndex={screenFlowIndex}
       onIndexChange={onScreenFlowIndexChange}
+      onSphereSelect={(domain) => setFocusSphere(domain)}
       embeddedInWebDashboard={embeddedInWebDashboard}
       topRowSection={topRowSection}
       greetingSection={greetingSection}

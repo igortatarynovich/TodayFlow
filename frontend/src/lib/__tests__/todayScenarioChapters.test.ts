@@ -1,4 +1,4 @@
-/** Phase C2 — scenario story chapters tests. */
+/** Reading Screen 3 (v3) — sphere cards from day_scenario. */
 
 import type { TodayContractV1 } from "@/lib/todayContract";
 import { buildTodayDayNarrative } from "@/lib/todayDayNarrative";
@@ -148,24 +148,20 @@ describe("isDayScenarioReadyForChapters", () => {
 });
 
 describe("buildScenarioStoryChapters", () => {
-  it("builds five product chapters from scenario + chorus", () => {
+  it("builds sphere cards only (v3 Reading)", () => {
     const chapters = buildScenarioStoryChapters({ contract: scenarioContract() });
     expect(chapters).toBeTruthy();
-    const ids = chapters!.map((c) => c.id);
-    expect(ids).toEqual(["opening", "chorus", "scenes", "supports", "vibe"]);
-    expect(chapters!.find((c) => c.id === "opening")?.kicker).toBe("Что изменилось сегодня");
-    expect(chapters!.find((c) => c.id === "chorus")?.kicker).toBe("Почему именно так");
-    expect(chapters!.find((c) => c.id === "scenes")?.kicker).toBe("Где это проявится");
-    expect(chapters!.find((c) => c.id === "supports")?.kicker).toBe("Что поможет пройти день");
-    expect(chapters!.find((c) => c.id === "vibe")?.kicker).toBe("Чем закончится день");
-    const scenes = chapters!.find((c) => c.id === "scenes")!;
-    expect(scenes.dual?.strengthen.join(" ")).toMatch(/короткое сообщение/i);
-    expect(scenes.dual?.soften.join(" ")).toMatch(/согласиться/i);
-    const supports = chapters!.find((c) => c.id === "supports")!;
-    expect([supports.lead, ...supports.paragraphs].join(" ")).toMatch(/Лазурь|черновик/i);
+    expect(chapters!.map((c) => c.id)).toEqual(["sphere-relationships", "sphere-work_decisions"]);
+    const primary = chapters!.find((c) => c.id === "sphere-relationships")!;
+    expect(primary.kicker).toBe("Отношения");
+    expect(primary.dual?.strengthen.join(" ")).toMatch(/короткое сообщение/i);
+    expect(primary.dual?.soften.join(" ")).toMatch(/согласиться/i);
+    const blob = chapters!.map((c) => [c.lead, ...c.paragraphs].join(" ")).join("\n");
+    expect(blob).not.toMatch(/Лазурь|Избегать:/i);
+    expect(blob).not.toMatch(/Луна в Рыбах/);
   });
 
-  it("does not repeat force-paste opportunity/trap under every sphere", () => {
+  it("does not paste force-template opportunity/trap into sphere cards", () => {
     const c = scenarioContract();
     const scenes = c.day_story!.day_scenario!.scenes!;
     scenes[0]!.opportunity = "Шанс выбрать «сказать прямо» именно здесь — один конкретный жест.";
@@ -175,14 +171,35 @@ describe("buildScenarioStoryChapters", () => {
     scenes[1]!.trap = scenes[0]!.trap;
     scenes[1]!.what_happens = "В сфере «Работа» тот же выбор — «сгладить» или «сказать прямо».";
     const chapters = buildScenarioStoryChapters({ contract: c });
-    const block = chapters!.find((ch) => ch.id === "scenes")!;
-    const text = [block.lead, ...block.paragraphs, ...(block.dual?.strengthen ?? []), ...(block.dual?.soften ?? [])].join(
-      "\n",
-    );
+    const text = chapters!
+      .map((block) =>
+        [block.lead, ...block.paragraphs, ...(block.dual?.strengthen ?? []), ...(block.dual?.soften ?? [])].join(
+          "\n",
+        ),
+      )
+      .join("\n");
     expect(text).not.toMatch(/тот же выбор — «/);
     expect(text).not.toMatch(/Шанс выбрать «/);
-    expect(text).not.toMatch(/— возможность:/);
     expect(text).toMatch(/Ответ близкому|Письмо коллеге/i);
+  });
+
+  it("ignores tarot/number impacts in Reading (Symbols screen owns them)", () => {
+    const chapters = buildScenarioStoryChapters({
+      contract: scenarioContract(),
+      tarotImpact: {
+        title: "Сила",
+        headline: "Мягкая сила без давления",
+        body: "Держи темп, не форсируй разговор.",
+      },
+      numberImpact: {
+        title: "Число 4",
+        headline: "Ритм дня",
+        body: "Короткие циклы и одна опора.",
+      },
+    });
+    expect(chapters?.find((c) => c.id === "symbols")).toBeUndefined();
+    const blob = chapters!.map((c) => [c.lead, ...c.paragraphs].join(" ")).join(" ");
+    expect(blob).not.toMatch(/Сила|Число 4/);
   });
 
   it("does not invent chapters when scenario missing", () => {
@@ -204,68 +221,16 @@ describe("buildScenarioStoryChapters", () => {
 });
 
 describe("buildTodayDayNarrative C2 preference", () => {
-  it("prefers scenario chapters over Day Map when scenario ready", () => {
+  it("prefers scenario sphere chapters over Day Map when scenario ready", () => {
     const narrative = buildTodayDayNarrative({
       contract: scenarioContract(),
       story: storyStub,
     });
     expect(narrative.composition).toBe("scenario_chapters");
     expect(narrative.chapters.map((c) => c.id)).toEqual([
-      "opening",
-      "chorus",
-      "scenes",
-      "supports",
-      "vibe",
+      "sphere-relationships",
+      "sphere-work_decisions",
     ]);
-    expect(narrative.chapters.find((c) => c.id === "force")).toBeUndefined();
-    expect(narrative.chapters.find((c) => c.id === "opening")?.kicker).toMatch(/изменилось/i);
-  });
-
-  it("keeps revealed card and number in scenario chapters after open", () => {
-    const chapters = buildScenarioStoryChapters({
-      contract: scenarioContract(),
-      tarotImpact: {
-        title: "Сила",
-        headline: "Мягкая сила без давления",
-        body: "Держи темп, не форсируй разговор.",
-      },
-      numberImpact: {
-        title: "Число 4",
-        headline: "Ритм дня",
-        body: "Короткие циклы и одна опора.",
-      },
-    });
-    const symbols = chapters?.find((c) => c.id === "symbols");
-    expect(symbols?.kicker).toMatch(/карта и число/i);
-    const blob = [symbols?.lead, ...(symbols?.paragraphs ?? [])].join(" ");
-    expect(blob).toMatch(/Сила/);
-    expect(blob).toMatch(/Число 4|4/);
-    expect(blob).toMatch(/Короткие циклы/);
-  });
-
-  it("drops calendar DOY from opening (date lives in greeting chrome)", () => {
-    const base = scenarioContract();
-    const ds = base.day_story!;
-    const chapters = buildScenarioStoryChapters({
-      contract: {
-        ...base,
-        day_story: {
-          ...ds,
-          events_lead: "Календарный день 2026-07-28 — 209-й день года.",
-          day_scenario: {
-            ...ds.day_scenario!,
-            conflict: {
-              ...ds.day_scenario!.conflict!,
-              why_arose: "Календарный день 2026-07-28 — 209-й день года.",
-            },
-          },
-        },
-      },
-    });
-    const opening = chapters?.find((c) => c.id === "opening");
-    const blob = [opening?.lead, ...(opening?.paragraphs ?? [])].join(" ");
-    expect(blob).not.toMatch(/календарн/i);
-    expect(blob).not.toMatch(/209-й день года/i);
   });
 
   it("keeps Day Map path when scenario absent", () => {
@@ -287,6 +252,5 @@ describe("buildTodayDayNarrative C2 preference", () => {
     });
     expect(narrative.composition).toBe("day_map");
     expect(narrative.chapters.map((c) => c.id)).toContain("force");
-    expect(narrative.chapters.map((c) => c.id)).not.toContain("scenes");
   });
 });

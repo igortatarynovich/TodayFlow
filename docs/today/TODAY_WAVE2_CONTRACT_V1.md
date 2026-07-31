@@ -11,7 +11,7 @@
 | Consumer | Role |
 |----------|------|
 | Act 3 chapters | Narrative over `conflict` + `scenes` |
-| VerdictStrip | Pure view of `domain_verdicts` |
+| VerdictStrip | View of `domain_verdicts` — **full 4-row** when used standalone; **Glance Screen 0** applies presentation compression (see §3.4 / SCREEN_FLOW) |
 | GlanceTimeline | Pure view of `glance_timeline` |
 | TapWidget | Reads `scenes[]`; writes `tap_event_v1` |
 
@@ -246,6 +246,22 @@ Exact numeric cutovers stay calibratable; the **aggregation rule** (top, not sum
 **Unchanged:** fixed 4 domains and scan order (work → money → relationships → energy).
 
 **Out of scope for this close:** splitting “seasonal” vs “daily” domains onto different refresh cadences — not needed once top-driver restores inside-month flips.
+
+### 3.4 Glance Screen 0 — presentation compression (FE)
+
+**Data SoT unchanged:** still fixed-4 `domain_verdicts` from `top_driver_v1`. No new domain inventory in this change (expanding past 4 = separate Architecture + contract).
+
+**Composition SoT (Glance only):** summary ≠ four equal cards.
+
+1. Thesis is the primary summary (visual hero).
+2. If **≥3** domains share the same `verdict` → those collapse to **one compact line** (`Работа · Деньги · Энергия — открыто`); only **outliers** get a full card.
+3. If **all** domains share the same verdict → **one unanimous line** (no cards) — e.g. open → «День ровный по всем направлениям…».
+4. If no majority of 3+ → keep full cards (mixed day).
+5. Space freed by collapsed cards → **promoted nearest** timed signal (actionable).
+6. Teasers 1–5 unchanged.
+7. Identical `why_short` across 4 (silent bank) still → transport honesty, not fake meaning.
+
+Canon UI: [SCREEN_FLOW_V1 §4](../foundation/SCREEN_FLOW_V1.md). Helper: `compressGlanceDomainVerdicts`.
 
 ---
 

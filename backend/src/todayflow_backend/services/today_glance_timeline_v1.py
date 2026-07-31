@@ -118,11 +118,10 @@ def glance_valence(aspect: str, transiting_planet: str) -> str:
 
 
 def label_short_for(transiting_planet: str, aspect: str) -> str:
-    """≤ ~4 words RU — no planet/aspect jargon (contract §4)."""
+    """≤ ~4 words RU — no planet/aspect jargon (contract §4); distinct by body+aspect."""
     from todayflow_backend.services.today_activation_copy_v1 import aspect_class_label_short
 
-    _ = transiting_planet  # signature kept for call sites
-    return aspect_class_label_short(aspect)
+    return aspect_class_label_short(aspect, transiting_planet)
 
 
 def local_day_bounds(local_date: date, timezone_name: str) -> tuple[datetime, datetime]:

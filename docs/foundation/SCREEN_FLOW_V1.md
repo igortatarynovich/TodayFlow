@@ -144,12 +144,12 @@ Meaning events: см. [TODAY_PERSONALIZATION_CORE.md](../TODAY_PERSONALIZATION_C
 
 | Index | Job | Notes (Phase 2b LIVE) |
 |-------|-----|------------------------|
-| 0 Glance | 1с тема | title + thesis · VerdictStrip · **one** nearest Glance mark · teaser icons |
-| 1 Plot | разворот | narrative hero / pulse / dialogue |
-| 2 Symbols | ритуал | optional when gates/impacts present · full GlanceTimeline |
-| 3 Reading | чтение дня | narrative chapters / synthesis (`actFilter="reading"`) |
-| 4 Move | действие | promise · strengthen · habits (`actFilter="move"`) |
-| 5 Response | отклик | TapWidget + bridges (`actFilter="response"`) |
+| 0 Glance | 2с ощущение дня | **texture** (`why_arose`) доминирует · 4 sphere **tokens** (тап → Reading) · nearest **inline** · teasers. Canon [TODAY_SCREEN_SCENARIO_V3](../today/TODAY_SCREEN_SCENARIO_V3.md) |
+| 1 Plot | нарратив конфликта | opposing_forces + why_arose (+ why_personal deep) — не дубль Glance short_name |
+| 2 Symbols | знаки дня | карта **открыта** · число · небо (chorus astro) · timeline rail |
+| 3 Reading | сферы | 4 карточки scenes (что → возможность → ловушка → действие); без цвета/астро |
+| 4 Move | действие | if/then · цель · практики · **цвет/ритуал** |
+| 5 Response | отклик | TapWidget only — без кросс-сейла |
 
 When Symbols is omitted, Reading/Move/Response shift left (indices 2–4). Step count = `2 + (symbols?1:0) + (personalized?3:0)`.
 
@@ -186,6 +186,15 @@ Re-entry: ordinary visit → **0**; deep-link only with `sf=1&step=N`.
 ### Backward compatible?
 
 **Да** — сервер не меняется, только FE UI pattern. Старая `/today` page остаётся до полного rollout.
+
+### Glance Screen 0 compression (2026-07-31)
+
+- **SoT before:** Glance = title + thesis + fixed 4 VerdictStrip cards + nearest + teasers (four equal cards competed with thesis).
+- **SoT after:** thesis hero · `domain_verdicts` compressed (majority collapse / unanimous line / outlier cards) · promoted nearest · teasers. Data remains Wave2 fixed-4 ([TODAY_WAVE2_CONTRACT_V1 §3.4](../today/TODAY_WAVE2_CONTRACT_V1.md)).
+- **Public contract changed?** no — presentation only.
+- **Migration required?** no.
+- **Canon updated?** yes — this §4 row + Wave2 §3.4 + tracker.
+- **Backward compatible?** yes.
 
 ---
 

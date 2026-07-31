@@ -43,13 +43,59 @@ def aspect_class_why_short(aspect: str, domain: str | None = None) -> str:
     return "Сигнал есть — без лишнего шума"
 
 
-def aspect_class_label_short(aspect: str) -> str:
-    """GlanceTimeline `label_short` — ≤ ~4 words RU."""
+# Body tone for Glance labels — experiential, no planet names in output.
+_BODY_TONE_RU = {
+    "sun": "ясность",
+    "moon": "настроение",
+    "mercury": "слова",
+    "venus": "контакт",
+    "mars": "импульс",
+    "jupiter": "размах",
+    "saturn": "границы",
+    "uranus": "сдвиг",
+    "neptune": "туман",
+    "pluto": "глубина",
+}
+
+
+def aspect_class_label_short(aspect: str, planet: str | None = None) -> str:
+    """GlanceTimeline `label_short` — ≤ ~4 words RU; distinct by body+aspect class."""
     asp = _norm(aspect)
+    tone = _BODY_TONE_RU.get(_norm(planet or ""), "")
     if asp in ("trine", "sextile"):
+        if tone == "контакт":
+            return "Контакт мягче"
+        if tone == "импульс":
+            return "Ход легче"
+        if tone == "настроение":
+            return "Настроение ровнее"
+        if tone == "слова":
+            return "Слова легче"
+        if tone:
+            return f"{tone.capitalize()} в опоре"
         return "Есть опора"
     if asp in ("square", "opposition", "quincunx"):
+        if tone == "импульс":
+            return "Импульс острее"
+        if tone == "контакт":
+            return "Контакт жёстче"
+        if tone == "настроение":
+            return "Настроение вразнос"
+        if tone == "слова":
+            return "Слова режут"
+        if tone == "границы":
+            return "Границы давят"
+        if tone:
+            return f"{tone.capitalize()} в трении"
         return "Короче шаг"
     if asp == "conjunction":
+        if tone == "импульс":
+            return "Импульс сгущается"
+        if tone == "слова":
+            return "Слова сгущаются"
+        if tone:
+            return f"{tone.capitalize()} сгущается"
         return "Тема сгущается"
-    return "Сигнал дня"
+    if tone:
+        return f"Окно: {tone}"
+    return "Окно дня"

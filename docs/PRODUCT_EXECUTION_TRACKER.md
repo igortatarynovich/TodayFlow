@@ -4,7 +4,17 @@ Last updated: 2026-07-30
 Owner: Product + Engineering
 Status: Active working document
 
-**IN PROGRESS (2026-07-31):** Wave 2 D.1–D.4 **CLOSED/LIVE** · Practices **P1 LIVE (FE close-out)** · M0 music layer parallel. ScreenFlow axis **LOCKED x**.
+**IN PROGRESS (2026-07-31):** Today Screen Scenario **v3 LIVE** (hard-refresh) · Practices P1 LIVE. ScreenFlow axis **LOCKED x**.
+
+## Architecture impact — Screen scenario v3
+
+- **SoT before:** ScreenFlow steps existed; content dumped into Reading chapters; Glance = label + domains + nearest.
+- **SoT after:** [TODAY_SCREEN_SCENARIO_V3.md](./today/TODAY_SCREEN_SCENARIO_V3.md) — composition of existing contract fields per screen job.
+- **Public contract changed?** no new required JSON; timeline `label_short` bank more distinct (body+aspect, still no jargon).
+- **Migration required?** no.
+- **Canon updated?** yes — TODAY_SCREEN_SCENARIO_V3 + SCREEN_FLOW §4 + README.
+- **Backward compatible?** yes.
+- **Server check:** FE rebuilt+force-recreate; BE restarted earlier for label bank; chunk contains `today-verdict-token` + `today-zone-plot-narrative`. Hard-refresh `/today`.
 
 ## 1) Purpose
 
@@ -1130,6 +1140,10 @@ Historical note:
 - 2026-07-30 | Web Guest / SEO audit | **Guest Story Surface P0 (item 11)** | **DONE (LIVE)** | Curl: landing dual CTAs · `/demo/today` SSR Theme/Focus/Practice/Memory · `/onboarding/invite` · pitch CTAs · Compat Profile bridge · guest-nav primary Today·Profile·Compatibility. Evening/day-2 = slice 2. Canon [audits/GUEST_STORY_SURFACE_P0_2026-07-30.md](./audits/GUEST_STORY_SURFACE_P0_2026-07-30.md).
 - 2026-07-30 | Guest Story Continuity | **Slice 2 evening + day-2 Memory** | **DONE (FE)** | Soft close Получилось/Частично/Не получилось · First Today sticky evening · `today-zone-memory` stub→filled from Day Continuity v0 · demo Memory educational. Out of scope: server persist. Canon [audits/GUEST_STORY_CONTINUITY_SLICE2_2026-07-30.md](./audits/GUEST_STORY_CONTINUITY_SLICE2_2026-07-30.md).
 - 2026-07-30 | Web Guest / SEO audit | **/today+/profile SSR pitch body** | **DONE (LIVE)** | Independent sandbox curl: pitch SSR above bailout on /today+/profile; «Собираем стабильное…» = 0. BAILOUT remains on client widgets only. Item 11 story surface → row above.
+- 2026-07-31 | Today / ScreenFlow | **no-silent-fallback on acts 2–5 + Glance texture split** | **DONE (FE)** | Reading/Move/Response/Symbols: `data-fallback` + «Нет соединения.» / «Не удалось загрузить.» (not silent empty). Glance meta failure once; Symbols hides ritual gate + timeline under degrade. Glance texture = opposing_forces when why_arose is aspect-bank; Plot keeps full why. **Open:** sticky why_arose = B5 `ranked_drivers.fact_ru` join — generation SoT, needs Architecture impact (not FE polish).
+- 2026-07-31 | Today / Generation | **Sticky Sun–Mars why_arose (B5 fact_ru)** | **OPEN** | Same «Связь Солнца и Марса…» across days from deterministic driver bank on normal `/today/contract` (no native LLM). FE only splits Glance short vs Plot full. Fix = regen/LLM gate or stop serving aspect-bank as lived why — Architecture impact required.
+- 2026-07-31 | Today / ScreenFlow | **Screen scenario v3 (texture · plot · spheres · bugs)** | **LIVE** | Glance = why_arose texture + sphere tokens + inline nearest; Plot = conflict narrative; Reading = sphere cards; Move += color; Response − cross-sell; readingLead stub fixed; timeline labels body+aspect. Canon [TODAY_SCREEN_SCENARIO_V3](./today/TODAY_SCREEN_SCENARIO_V3.md). Hard-refresh.
+- 2026-07-31 | Today / Glance | **Screen 0 compression (thesis · collapse · nearest)** | **SUPERSEDED → v3** | Compression was interim; v3 replaces equal-card strip with tokens + texture.
 - 2026-07-31 | Practices | **P1 close-out: no mark-done bypass** | **LIVE** | Detail «Отметить как выполненное» removed — complete only via session check-in → «Сохранить…». Sequence step complete unchanged. Continue fixture asserts `?run=1`.
 - 2026-07-31 | Today / Glance | **top_driver_v1 soft-day audit + open/friction contrast** | **DONE** | Live user2 4× open = real soft winners (`mars-trine-sun` / `moon-trine-jupiter` / `sun-sextile-moon`×2), `logic_source=top_driver_v1`; clustered-hard regression still `charged` on Mars square. Open→olive `#6b8f5a`, friction→rust `#b04a2e` for 2s scan.
 - 2026-07-30 | Today / Content | **Wave 2 Phase D.4 — Move if/then from scenes** | **LIVE** | Move act shows `recommended_action` / `do_not` from primary (else first) day_scenario scene; omit when empty. No invent. Helper `pickMoveIfThenFromContract`.

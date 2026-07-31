@@ -17,8 +17,12 @@ export type TodayProductScreenFlowProps = {
   dateISO: string;
   themeTitle: string;
   themeThesis?: string | null;
+  /** Conflict why_arose texture for Glance hero (v3) */
+  dayTexture?: string | null;
   themeLoading?: boolean;
   heroSection: ReactNode;
+  /** Conflict narrative under photo — Plot Screen 1 (v3) */
+  plotNarrativeSection?: ReactNode;
   pulseSection: ReactNode;
   glanceSection: ReactNode;
   morningDialogue: ReactNode;
@@ -29,6 +33,7 @@ export type TodayProductScreenFlowProps = {
   personalizedProps: Omit<PersonalizedProps, "asScreenFlowSteps" | "actFilter">;
   activeIndex: number;
   onIndexChange: (index: number, meta: { reason: ScreenFlowChangeReason }) => void;
+  onSphereSelect?: (domain: string) => void;
   embeddedInWebDashboard?: boolean;
   topRowSection?: ReactNode;
   greetingSection?: ReactNode;
@@ -50,8 +55,10 @@ export function TodayProductScreenFlow({
   dateISO,
   themeTitle,
   themeThesis = null,
+  dayTexture = null,
   themeLoading = false,
   heroSection,
+  plotNarrativeSection = null,
   pulseSection,
   glanceSection,
   morningDialogue,
@@ -62,6 +69,7 @@ export function TodayProductScreenFlow({
   personalizedProps,
   activeIndex,
   onIndexChange,
+  onSphereSelect,
   embeddedInWebDashboard = false,
   topRowSection = null,
   greetingSection = null,
@@ -134,19 +142,29 @@ export function TodayProductScreenFlow({
           <TodayGlanceAct
             dateISO={dateISO}
             title={themeTitle}
+            dayTexture={dayTexture}
             thesis={themeThesis}
             themeLoading={themeLoading}
             teasers={teasers}
+            onSphereSelect={
+              showPersonalized
+                ? (domain) => {
+                    onSphereSelect?.(domain);
+                    onIndexChange(readingIndex, { reason: "select" });
+                  }
+                : undefined
+            }
           />
         </ScreenFlowStep>
 
         <ScreenFlowStep id="plot" label={copy.journey.dayTitle} scrollable>
           <TodayActShell step={1} title={undefined} lead={null} accent="action" motif="today" testId="today-zone-act-plot">
             <MotionReveal>{heroSection}</MotionReveal>
+            {plotNarrativeSection ? <MotionReveal delayMs={MOTION.staggerMs}>{plotNarrativeSection}</MotionReveal> : null}
             {dayReadingReady ? (
               <>
-                <MotionReveal delayMs={MOTION.staggerMs}>{pulseSection}</MotionReveal>
-                <MotionReveal delayMs={MOTION.staggerMs * 2}>{glanceSection}</MotionReveal>
+                <MotionReveal delayMs={MOTION.staggerMs * 2}>{pulseSection}</MotionReveal>
+                <MotionReveal delayMs={MOTION.staggerMs * 3}>{glanceSection}</MotionReveal>
                 {morningDialogue}
               </>
             ) : (

@@ -278,9 +278,11 @@ describe("TodayCompositionSurface", () => {
     // Personal acts live on a later ScreenFlow step — still in DOM
     expect(screen.getByTestId("today-entity-synthesis")).toBeInTheDocument();
     expect(screen.getByTestId("today-zone-ritual-gates")).toBeInTheDocument();
+    // Plot owns conflict narrative — not a duplicate short_name in the hero chrome
+    expect(screen.getByTestId("today-zone-plot-narrative")).toBeInTheDocument();
+    expect(screen.getByTestId("today-plot-why").textContent).toMatch(/Луна в Козероге/i);
     const hero = screen.getByTestId("today-zone-hero").textContent || "";
-    const themeHits = hero.match(/Ломать работающее или беречь ровный ритм/g) || [];
-    expect(themeHits.length).toBe(1);
+    expect(hero).not.toMatch(/Ломать работающее или беречь ровный ритм/);
   });
 
   it("shows opened card and number interpretation after ritual", () => {

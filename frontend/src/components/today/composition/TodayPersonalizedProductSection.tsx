@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, type CSSProperties } from "react";
+import { useEffect, useMemo, type CSSProperties } from "react";
 import {
   profileMotionStaggerDelay,
   profileMotionStyles,
@@ -22,11 +22,15 @@ import type { TodaySkyCard } from "@/lib/todayDaySpine";
 import { buildTodayDayNarrative } from "@/lib/todayDayNarrative";
 import type { TodayDayStoryViewModel } from "@/lib/todayDayStoryModel";
 import type { CoreProfile } from "@/lib/types";
-import { buildTodayCompatibilityHook } from "@/lib/todayCompatibilityHook";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
+import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
 import { TodayTapWidget } from "@/components/today/composition/TodayWave2Slots";
 import { ScreenFlowStep } from "@/design-system/primitives/ScreenFlow";
 import { pickMoveIfThenFromContract } from "@/lib/todayMoveIfThen";
+import {
+  todaySlotFailureCopy,
+  type TodaySlotLoadFailure,
+} from "@/lib/todaySlotAvailability";
 import styles from "@/components/today/composition/TodayPersonalizedProductSection.module.css";
 
 type Props = {
@@ -54,6 +58,10 @@ type Props = {
   colorGuide?: TodayDayColorGuide | null;
   morningRitualData?: MorningRitualData | null;
   dateISO?: string;
+  /** Deep-link from Glance sphere token — scroll/highlight matching Reading card */
+  focusSphere?: string | null;
+  /** Transport / degraded — never leave Reading/Move/Response silently empty */
+  contentFailure?: TodaySlotLoadFailure | null;
   tapResponse?: "avoided_trap" | "fell_into_trap" | "not_applicable" | "skipped" | null;
   onTapRecorded?: (response: "avoided_trap" | "fell_into_trap" | "not_applicable" | "skipped") => void;
   onPickPromise: (text: string) => void;
@@ -104,13 +112,15 @@ export function TodayPersonalizedProductSection({
   asceticMarking = false,
   goalDraftOpen,
   goalDraft,
-  coreProfile,
-  tarotDeepenHref,
+  coreProfile: _coreProfile,
+  tarotDeepenHref: _tarotDeepenHref,
   embeddedInWebDashboard = false,
   skyCards = [],
   colorGuide = null,
   morningRitualData = null,
   dateISO = "",
+  focusSphere = null,
+  contentFailure = null,
   tapResponse = null,
   onTapRecorded,
   onPickPromise,
@@ -124,8 +134,16 @@ export function TodayPersonalizedProductSection({
   asScreenFlowSteps = false,
   actFilter = "all",
 }: Props) {
-  const compatibility = buildTodayCompatibilityHook(coreProfile);
   const practiceRec = contract.day_story?.practice_recommendation;
+
+  useEffect(() => {
+    if (!focusSphere || actFilter === "move" || actFilter === "response") return;
+    const id = `today-narrative-sphere-${focusSphere}`;
+    const el = document.querySelector(`[data-testid="today-narrative-block-${id}"], [data-testid="today-narrative-${id}"]`);
+    if (el && "scrollIntoView" in el) {
+      (el as HTMLElement).scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }, [focusSphere, actFilter]);
 
   const completedCount =
     (practiceCompleted ? 1 : 0) +
@@ -172,13 +190,40 @@ export function TodayPersonalizedProductSection({
         accent="sky"
         testId="today-zone-reading"
       >
-        {contract.day_story?.interpretation_status === "unavailable" ? (
+        {contentFailure ? (
+          <p
+            className={styles.readingParagraph}
+            role="status"
+            data-testid="today-reading-fallback"
+            data-fallback="true"
+            data-failure={contentFailure}
+          >
+            {todaySlotFailureCopy(contentFailure)}
+          </p>
+        ) : null}
+
+        {!contentFailure && contract.day_story?.interpretation_status === "unavailable" ? (
           <p className={styles.readingParagraph} data-testid="today-interpretation-unavailable">
             {contract.day_story.interpretation_unavailable_message ||
               "Мы не смогли подготовить персональную интерпретацию дня. Попробуйте обновить экран через несколько минут."}
           </p>
         ) : null}
 
+        {!contentFailure &&
+        contract.day_story?.interpretation_status !== "unavailable" &&
+        narrative.chapters.length === 0 ? (
+          <p
+            className={styles.readingParagraph}
+            role="status"
+            data-testid="today-reading-fallback"
+            data-fallback="true"
+            data-failure="unavailable"
+          >
+            {todaySlotFailureCopy("unavailable")}
+          </p>
+        ) : null}
+
+        {!contentFailure && narrative.chapters.length > 0 ? (
         <div
           className={`${styles.narrativeBlocks} ${profileMotionStyles.staggerItem}`}
           style={profileMotionStaggerDelay(0, 60) as CSSProperties}
@@ -217,7 +262,7 @@ export function TodayPersonalizedProductSection({
                 <ProductNarrativeBlock
                   id={chapter.id}
                   kicker={chapter.kicker}
-        lead={asScreenFlowSteps ? null : copy.journey.readingLead}
+                  lead={chapter.lead}
                   paragraphs={
                     softWhyInBody
                       ? bodyParagraphs.filter((p) => p !== narrative.softWhy)
@@ -272,7 +317,7 @@ export function TodayPersonalizedProductSection({
                           <p className={journeyStyles.dualPanelTitle}>
                             {chapter.id === "force"
                               ? copy.expectLabel
-                              : chapter.id === "scenes"
+                              : chapter.id === "scenes" || chapter.id.startsWith("sphere-")
                                 ? copy.journey.sceneOpportunityLabel
                                 : "Сильнее"}
                           </p>
@@ -288,7 +333,7 @@ export function TodayPersonalizedProductSection({
                           <p className={journeyStyles.dualPanelTitle}>
                             {chapter.id === "force"
                               ? copy.trapLabel
-                              : chapter.id === "scenes"
+                              : chapter.id === "scenes" || chapter.id.startsWith("sphere-")
                                 ? copy.journey.sceneTrapLabel
                                 : "Мягче / не дожимать"}
                           </p>
@@ -312,6 +357,7 @@ export function TodayPersonalizedProductSection({
             </p>
           ) : null}
         </div>
+        ) : null}
       </ProductJourneyScene>
   );
 
@@ -324,6 +370,18 @@ export function TodayPersonalizedProductSection({
         accent="support"
         testId="today-zone-move"
       >
+        {contentFailure ? (
+          <p
+            className={styles.readingParagraph}
+            role="status"
+            data-testid="today-move-fallback"
+            data-fallback="true"
+            data-failure={contentFailure}
+          >
+            {todaySlotFailureCopy(contentFailure)}
+          </p>
+        ) : (
+          <>
         {moveIfThen && (moveIfThen.do || moveIfThen.avoid) ? (
           <article className={styles.productCard} data-testid="today-zone-move-if-then">
             <p className={styles.cardEyebrow}>{copy.journey.moveIfThenEyebrow}</p>
@@ -341,6 +399,7 @@ export function TodayPersonalizedProductSection({
             ) : null}
           </article>
         ) : null}
+        {colorGuide ? <TodayDayColorGuideSection guide={colorGuide} /> : null}
         <article className={styles.productCard} data-testid="today-zone-promise">
           <p className={styles.cardEyebrow}>Цель на сегодня</p>
           {dayGoal && !goalDraftOpen ? (
@@ -549,6 +608,8 @@ export function TodayPersonalizedProductSection({
             </p>
           </article>
         )}
+          </>
+        )}
       </ProductJourneyScene>
   );
 
@@ -561,33 +622,25 @@ export function TodayPersonalizedProductSection({
         accent="action"
         bridge
         testId="today-zone-bridges-wrap"
-        slotBefore={
+      >
+        {contentFailure ? (
+          <p
+            className={styles.readingParagraph}
+            role="status"
+            data-testid="today-response-fallback"
+            data-fallback="true"
+            data-failure={contentFailure}
+          >
+            {todaySlotFailureCopy(contentFailure)}
+          </p>
+        ) : (
           <TodayTapWidget
             contract={contract}
-          dateISO={dateISO || ""}
-          initialResponse={tapResponse}
-          onRecorded={onTapRecorded}
-        />
-        }
-      >
-        <nav className={styles.bridges} aria-label="Связанные разделы" data-testid="today-zone-bridges">
-          <Link href="/profile" className={styles.bridgeCta}>
-            Открыть карту личности
-            <span aria-hidden> →</span>
-          </Link>
-          <Link href={compatibility.href} className={styles.bridgeLink}>
-            → {compatibility.hasSavedPerson ? "Совместимость с партнёром" : "Проверить совместимость"}
-          </Link>
-          {tarotDeepenHref ? (
-            <Link href={tarotDeepenHref} className={styles.bridgeLink} data-testid="today-tarot-deepen">
-              → Исследовать тему: Таро
-            </Link>
-          ) : (
-            <Link href="/tarot" className={styles.bridgeLink}>
-              → Исследовать тему: Таро
-            </Link>
-          )}
-        </nav>
+            dateISO={dateISO || ""}
+            initialResponse={tapResponse}
+            onRecorded={onTapRecorded}
+          />
+        )}
       </ProductJourneyScene>
   );
 

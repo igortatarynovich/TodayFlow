@@ -96,6 +96,7 @@ export const TODAY_COMPOSITION_COPY = {
     glanceLead: "Тема, сферы и ближайший момент — без простыни.",
     glanceTeasersLabel: "Дальше в дне",
     glanceNow: "сейчас",
+    glanceNearestLabel: "Сигнал дня",
     glanceNearestEmpty: "Ближайшее окно сегодня не выделено.",
     teaserPlotHook: "одна линия, что держит день",
     teaserSymbolsHook: "карта и число поверх основы",

@@ -55,6 +55,7 @@
 - [DAY_SOURCE_REGISTRY.md](./DAY_SOURCE_REGISTRY.md) · [PROFILE_DAY_SOURCE_MATRIX.md](./profile/PROFILE_DAY_SOURCE_MATRIX.md)
 - [PROFILE_SCREEN_MASTER.md](./profile/PROFILE_SCREEN_MASTER.md) · [profile/PROFILE_EXPERIENCE_SCENARIO_V1.md](./profile/PROFILE_EXPERIENCE_SCENARIO_V1.md) — **Character Engine** (единая модель личности) · [profile/PROFILE_NATAL_DECODE_DEPTH_V1.md](./profile/PROFILE_NATAL_DECODE_DEPTH_V1.md) — Natal Decode (opt-in depth) · [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — **visual SoT** (статика + motion · mood · day-phase · guest showcase; v0.3)
 - [foundation/SCREEN_FLOW_V1.md](./foundation/SCREEN_FLOW_V1.md) — **ScreenFlow** product step pager (transform · Glance-first · landing excluded)
+- [today/TODAY_SCREEN_SCENARIO_V3.md](./today/TODAY_SCREEN_SCENARIO_V3.md) — ScreenFlow **content jobs** per step (v3 after live audit)
 - [practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) — **Практики** SoT: цикл состояния · locked need/format · сессия · music layer ([index](./practices/_INDEX.md))
 - [DAILY_NAVIGATION_MODEL.md](./DAILY_NAVIGATION_MODEL.md) · [CORE_USER_LOOP.md](./CORE_USER_LOOP.md) · [MARKET_ATTENTION_AND_SCREEN_JOBS.md](./MARKET_ATTENTION_AND_SCREEN_JOBS.md)
 - [EXPLAIN_MEANING_NOT_MECHANISM.md](./explainability/EXPLAIN_MEANING_NOT_MECHANISM.md)
