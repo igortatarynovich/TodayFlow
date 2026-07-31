@@ -25,9 +25,9 @@
 }
 
 .verdictRow[data-verdict="open"] {
-  box-shadow: inset 4px 0 0 var(--tf-accent-action, #8f6b3a);
-  background: rgba(143, 107, 58, 0.14);
-  border-color: rgba(143, 107, 58, 0.28);
+  box-shadow: inset 4px 0 0 #6b8f5a;
+  background: rgba(107, 143, 90, 0.12);
+  border-color: rgba(107, 143, 90, 0.32);
 }
 
 .verdictRow[data-verdict="charged"] {
@@ -37,9 +37,9 @@
 }
 
 .verdictRow[data-verdict="friction"] {
-  box-shadow: inset 4px 0 0 #8a4f3a;
-  background: rgba(138, 79, 58, 0.14);
-  border-color: rgba(138, 79, 58, 0.3);
+  box-shadow: inset 4px 0 0 #b04a2e;
+  background: rgba(176, 74, 46, 0.12);
+  border-color: rgba(176, 74, 46, 0.34);
 }
 
 .verdictRow[data-verdict="calm"] {
@@ -58,9 +58,9 @@
   font-weight: 700;
 }
 
-.verdictSign[data-verdict="open"] { color: var(--tf-accent-action, #8f6b3a); }
+.verdictSign[data-verdict="open"] { color: #5f7f50; }
 .verdictSign[data-verdict="charged"] { color: #2a2520; }
-.verdictSign[data-verdict="friction"] { color: #8a4f3a; }
+.verdictSign[data-verdict="friction"] { color: #b04a2e; }
 .verdictSign[data-verdict="calm"] { color: #7a7168; }
 
 .verdictCopy {
@@ -93,7 +93,7 @@
 }
 
 .verdictKey[data-verdict="open"] {
-  color: var(--tf-accent-action, #8f6b3a);
+  color: #5f7f50;
 }
 
 .verdictKey[data-verdict="charged"] {
@@ -101,7 +101,7 @@
 }
 
 .verdictKey[data-verdict="friction"] {
-  color: #8a4f3a;
+  color: #b04a2e;
 }
 
 .verdictKey[data-verdict="calm"] {

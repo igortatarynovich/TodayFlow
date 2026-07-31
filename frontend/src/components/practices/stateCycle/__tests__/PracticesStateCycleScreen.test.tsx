@@ -72,7 +72,7 @@ describe("PracticesStateCycleScreen", () => {
         onFormatChange={() => {}}
         recommended={null}
         continueSession={{
-          href: "/practices/p9",
+          href: "/practices/p9?run=1",
           title: "Вечернее отпускание",
           minutesDone: 4,
           minutesTotal: 7,
@@ -83,6 +83,7 @@ describe("PracticesStateCycleScreen", () => {
       />,
     );
 
+    expect(screen.getByTestId("practices-continue")).toHaveAttribute("href", "/practices/p9?run=1");
     expect(screen.getByTestId("practices-continue")).toHaveTextContent("Вечернее отпускание");
     expect(screen.getByTestId("practices-my")).toHaveTextContent("Мои практики");
   });

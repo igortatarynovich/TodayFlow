@@ -4,7 +4,7 @@ Last updated: 2026-07-30
 Owner: Product + Engineering
 Status: Active working document
 
-**IN PROGRESS (2026-07-30):** Wave 2 D.1–D.4 **CLOSED/LIVE** · Practices **P1 session cycle** (next clean track). ScreenFlow axis **LOCKED x**. Guest Story Surface P0 + Continuity slice 2 — **DONE**.
+**IN PROGRESS (2026-07-31):** Wave 2 D.1–D.4 **CLOSED/LIVE** · Practices **P1 LIVE (FE close-out)** · M0 music layer parallel. ScreenFlow axis **LOCKED x**.
 
 ## 1) Purpose
 
@@ -890,7 +890,7 @@ Source of truth: [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) §1–§13
 - [x] **C0** Canon v1.1 ACCEPTED — axis resolution (body+understand needs; yoga/stretch/music formats; reflection+sleep restored)
 - [ ] **C0b** Align mockup need-ленты to canon: add «Понять себя»; move «Уснуть» to end
 - [x] **P0** Web `/practices` shell: need chips + recommend + Continue + moment + formats + practice of day + conditional my library
-- [ ] **P1** Session fullscreen + state check-in + «Сохранить в сегодняшний день» — **IN PROGRESS (FE)** `PracticeLiveSession` · draft → Continue · `?run=1`
+- [ ] **P1** Session fullscreen + state check-in + «Сохранить в сегодняшний день» — **LIVE (FE close-out)** `PracticeLiveSession` · draft → Continue · `?run=1` · mark-done bypass removed (2026-07-31). Optional follow-up: rail `practiceDone` from usage/`state_after` not recommendation text.
 - [ ] **M0** Music layer (С голосом / Только музыка / Без звука + voice/music/nature volumes) — parallel to P0/P1
 - [ ] iOS parity after web P0+P1 stable
 
@@ -1130,6 +1130,8 @@ Historical note:
 - 2026-07-30 | Web Guest / SEO audit | **Guest Story Surface P0 (item 11)** | **DONE (LIVE)** | Curl: landing dual CTAs · `/demo/today` SSR Theme/Focus/Practice/Memory · `/onboarding/invite` · pitch CTAs · Compat Profile bridge · guest-nav primary Today·Profile·Compatibility. Evening/day-2 = slice 2. Canon [audits/GUEST_STORY_SURFACE_P0_2026-07-30.md](./audits/GUEST_STORY_SURFACE_P0_2026-07-30.md).
 - 2026-07-30 | Guest Story Continuity | **Slice 2 evening + day-2 Memory** | **DONE (FE)** | Soft close Получилось/Частично/Не получилось · First Today sticky evening · `today-zone-memory` stub→filled from Day Continuity v0 · demo Memory educational. Out of scope: server persist. Canon [audits/GUEST_STORY_CONTINUITY_SLICE2_2026-07-30.md](./audits/GUEST_STORY_CONTINUITY_SLICE2_2026-07-30.md).
 - 2026-07-30 | Web Guest / SEO audit | **/today+/profile SSR pitch body** | **DONE (LIVE)** | Independent sandbox curl: pitch SSR above bailout on /today+/profile; «Собираем стабильное…» = 0. BAILOUT remains on client widgets only. Item 11 story surface → row above.
+- 2026-07-31 | Practices | **P1 close-out: no mark-done bypass** | **LIVE** | Detail «Отметить как выполненное» removed — complete only via session check-in → «Сохранить…». Sequence step complete unchanged. Continue fixture asserts `?run=1`.
+- 2026-07-31 | Today / Glance | **top_driver_v1 soft-day audit + open/friction contrast** | **DONE** | Live user2 4× open = real soft winners (`mars-trine-sun` / `moon-trine-jupiter` / `sun-sextile-moon`×2), `logic_source=top_driver_v1`; clustered-hard regression still `charged` on Mars square. Open→olive `#6b8f5a`, friction→rust `#b04a2e` for 2s scan.
 - 2026-07-30 | Today / Content | **Wave 2 Phase D.4 — Move if/then from scenes** | **LIVE** | Move act shows `recommended_action` / `do_not` from primary (else first) day_scenario scene; omit when empty. No invent. Helper `pickMoveIfThenFromContract`.
 - 2026-07-30 | Today / Glance | **Task #8 jargon FE shield + VerdictStrip valence punch** | **DONE (code→deploy)** | BE already experiential; FE scrubs «Венера: трин к Сатурн»; stronger valence bar/tint/sign; removed dead «Память о вчера» stub copy from composition (demo-only remains). Memory slot still filled-only.
 - 2026-07-30 | Today / Content | **Wave 2 Phase D.3 — motion retrospective** | **CLOSED** | Decision: **revise Today-only**, do not promote app-wide. Proven: TapWidget attention/completed + reduced-motion; Glance live-now; Verdict idle. Backlog: hero/card/insight `today_ui_state` motion. Canon [TODAY_MOTION_PILOT_V1](./today/TODAY_MOTION_PILOT_V1.md). Next: D.4 optional.

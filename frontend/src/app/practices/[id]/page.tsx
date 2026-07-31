@@ -538,13 +538,7 @@ export default function PracticeDetailPage() {
               </div>
             )}
 
-            {isAuthenticated && practice.practice_type !== "guided_sequence" && !isCompleted && (
-              <div className={s.practiceSessionActions}>
-                <DsButton variant="primary" size="block" onClick={handleCompletePractice} disabled={isCompleting}>
-                  {isCompleting ? pc.practiceDetailMarkingShort : pc.practiceDetailMarkCompleteCta}
-                </DsButton>
-              </div>
-            )}
+            {/* P1: completion only via session check-in (Start/Resume above) — no mark-done bypass. */}
 
             {isCompleted && practice.target_axis && (
               <div style={{
@@ -647,24 +641,6 @@ export default function PracticeDetailPage() {
     </PracticeSessionWebScreen>
     </>
   );
-
-  async function handleCompletePractice() {
-    if (!practice || !isAuthenticated) return;
-
-    setIsCompleting(true);
-    try {
-      await postJson(`/practices/${practice.id}/complete`, {});
-      setIsCompleted(true);
-      await loadRewardsSnapshot();
-    } catch (err: unknown) {
-      console.error("Error completing practice:", err);
-      const anyErr = err as { response?: { data?: { detail?: string } }; message?: string };
-      const errorMsg = anyErr?.response?.data?.detail || anyErr?.message || pc.practiceDetailCompleteErrorFallback;
-      toast.error(errorMsg);
-    } finally {
-      setIsCompleting(false);
-    }
-  }
 
   async function loadRewardsSnapshot() {
     if (!isAuthenticated) return;
