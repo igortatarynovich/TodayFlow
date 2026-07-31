@@ -1128,6 +1128,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-07-31 | Practices | **C1+ server catalog enrich** | **DONE / DEPLOYING** | Free GENERAL library ~47 tagged practices; `GET /practices?need=&format_id=`; `/practices/state-cycle/coverage`; complete accepts `state_after`. `99d6e85`.
 - 2026-07-31 | Practices | **C0b mockup need-лента** | **DONE (FE)** | Visual SoT = [`practices_screen_mockup_v1.png`](./practices/practices_screen_mockup_v1.png). Need icons + canon order (+Понять себя, sleep last); recommend/moment chrome; hub «Музыкальное сопровождение»; formats keep reflection+sleep.
 - 2026-07-31 | Practices | **C1 rich catalog (need/format tags)** | **DONE** | Overlay + 12 gap-fill free practices; public optional `need_ids`/`format_id`/`outcome_label`; hub match/rank by tags + outcome card titles. `practice_state_cycle_catalog_v1` · `9d770f3`.
 - 2026-07-30 | Practices | **M0 music layer (session)** | **DONE (FE UI)** | Modes С голосом / Только музыка / Без звука · volumes · prefs `localStorage`. Panel in `PracticeLiveSession`. Tracks when URLs present. SSR catalog clipped (`286e7f3`).
