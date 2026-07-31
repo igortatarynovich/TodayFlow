@@ -228,7 +228,11 @@ export default function PracticeDetailPage() {
       if (!practice || !isAuthenticated) return;
       setSessionSaving(true);
       try {
-        await postJson(`/practices/${practice.id}/complete`, {});
+        await postJson(`/practices/${practice.id}/complete`, {
+          state_after: input.stateAfter,
+          elapsed_seconds: input.elapsedSeconds,
+          surface: "practices_session_p1",
+        });
         const localDate = new Date().toISOString().slice(0, 10);
         trackMeaningEvent({
           event_type: "practice_completed",

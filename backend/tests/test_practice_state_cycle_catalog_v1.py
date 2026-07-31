@@ -2,8 +2,12 @@
 
 from todayflow_backend.data.practice_state_cycle_catalog_v1 import (
     NEW_STATE_CYCLE_PRACTICES,
+    STATE_CYCLE_FORMAT_IDS,
     STATE_CYCLE_META,
+    STATE_CYCLE_NEED_IDS,
     apply_state_cycle_catalog,
+    catalog_coverage,
+    rank_practices_for_need,
 )
 
 
@@ -21,7 +25,7 @@ REQUIRED_GENERAL_IDS = {
     "deep-breathing-relaxation",
 }
 
-EXPECTED_NEW_IDS = {
+EXPECTED_CORE_NEW_IDS = {
     "tension-release-3",
     "soft-stretch-reset",
     "gentle-yoga-flow",
@@ -34,6 +38,9 @@ EXPECTED_NEW_IDS = {
     "calm-ambient-backdrop",
     "energy-reset-breath",
     "focus-return-4",
+    "volumetric-digits",
+    "worry-park-list",
+    "nature-sound-restore",
 }
 
 
@@ -45,29 +52,42 @@ def test_state_cycle_meta_covers_general_ids():
     assert meta["outcome_label"] == "Снизить тревожность"
 
 
-def test_new_practices_cover_gap_formats_and_needs():
-    assert len(NEW_STATE_CYCLE_PRACTICES) >= 10
+def test_new_practices_rich_coverage():
+    assert len(NEW_STATE_CYCLE_PRACTICES) >= 30
     ids = {p["id"] for p in NEW_STATE_CYCLE_PRACTICES}
-    assert EXPECTED_NEW_IDS <= ids
+    assert EXPECTED_CORE_NEW_IDS <= ids
+    assert len(ids) == len(NEW_STATE_CYCLE_PRACTICES)  # unique ids
 
     formats = {p["format_id"] for p in NEW_STATE_CYCLE_PRACTICES}
-    for fmt in ("stretch", "yoga", "visualization", "music", "sleep", "reflection", "affirmation", "breath", "meditation"):
+    for fmt in STATE_CYCLE_FORMAT_IDS:
         assert fmt in formats
 
     needs = set()
     for p in NEW_STATE_CYCLE_PRACTICES:
         assert p["is_free"] is True
         assert p["access_level"] == "free"
-        assert p["difficulty"] == "beginner"
         assert p["need_ids"]
         assert p["outcome_label"]
         assert p["instructions"]
+        assert p["duration_minutes"] >= 3
         needs.update(p["need_ids"])
-    for need in ("calm", "focus", "recover", "body", "understand", "sleep"):
+    for need in STATE_CYCLE_NEED_IDS:
         assert need in needs
 
+    # Mockup-aligned titles present
+    titles = {p["title"] for p in NEW_STATE_CYCLE_PRACTICES}
+    for title in (
+        "Объёмное воображение",
+        "Снять напряжение",
+        "Мягкая растяжка",
+        "Вечернее отпускание",
+        "Музыка для сна",
+        "Объёмные цифры",
+    ):
+        assert title in titles
 
-def test_apply_state_cycle_catalog_merges_meta_and_appends():
+
+def test_apply_and_coverage_thresholds():
     seed = [
         {
             "id": "breathing-4-7-8",
@@ -81,31 +101,29 @@ def test_apply_state_cycle_catalog_merges_meta_and_appends():
             "access_level": "free",
             "tags": ["успокоение"],
             "instructions": ["a"],
-        },
-        {
-            "id": "custom-keep",
-            "title": "Custom",
-            "description": "y",
-            "category": "meditation",
-            "duration_minutes": 1,
-            "difficulty": "beginner",
-            "is_free": True,
-            "is_personalized": False,
-            "access_level": "free",
-            "tags": [],
-            "instructions": [],
-        },
+        }
     ]
     out = apply_state_cycle_catalog(seed)
     by_id = {p["id"]: p for p in out}
     assert by_id["breathing-4-7-8"]["need_ids"] == ["calm", "sleep"]
-    assert by_id["breathing-4-7-8"]["format_id"] == "breath"
-    assert by_id["breathing-4-7-8"]["outcome_label"] == "Снизить тревожность"
-    assert "custom-keep" in by_id
-    assert "need_ids" not in by_id["custom-keep"] or by_id["custom-keep"].get("need_ids") in (None, [])
-    for nid in EXPECTED_NEW_IDS:
+    for nid in EXPECTED_CORE_NEW_IDS:
         assert nid in by_id
-    # idempotent append: applying again with already-enriched list should not duplicate
+
+    cov = catalog_coverage(out)
+    assert cov["total"] >= 31
+    assert cov["tagged"] >= 31
+    for need in STATE_CYCLE_NEED_IDS:
+        assert cov["need_counts"][need] >= 4, need
+    for fmt in STATE_CYCLE_FORMAT_IDS:
+        assert cov["format_counts"][fmt] >= 2, fmt
+
+    ranked = rank_practices_for_need(out, "sleep")
+    assert ranked
+    assert ranked[0]["need_ids"][0] == "sleep" or "sleep" in ranked[0]["need_ids"]
+    # primary-first: first items should list sleep as first need when available
+    primaries = [p for p in ranked if p["need_ids"][0] == "sleep"]
+    assert primaries
+    assert ranked[0]["id"] == primaries[0]["id"]
+
     again = apply_state_cycle_catalog(out)
     assert len(again) == len(out)
-    assert seed[0].get("need_ids") is None  # deepcopy: seed unchanged

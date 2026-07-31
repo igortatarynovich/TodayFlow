@@ -16,7 +16,15 @@ from todayflow_backend.db.session import get_session
 from todayflow_backend.db.models import User, PracticeUsage, Subscription, utc_naive_now
 from todayflow_backend.services.subscription_level import get_subscription_level
 from todayflow_backend.core.content_loader import load_asceticisms, load_affirmations
-from todayflow_backend.data.practice_state_cycle_catalog_v1 import apply_state_cycle_catalog
+from todayflow_backend.data.practice_state_cycle_catalog_v1 import (
+    STATE_CYCLE_FORMAT_IDS,
+    STATE_CYCLE_NEED_IDS,
+    apply_state_cycle_catalog,
+    catalog_coverage,
+    practice_matches_format,
+    practice_matches_need,
+    rank_practices_for_need,
+)
 
 router = APIRouter(prefix="/practices", tags=["practices"])
 
@@ -82,9 +90,29 @@ class SequenceProgressResponse(BaseModel):
     is_completed: bool
 
 
+class PracticeCompleteRequest(BaseModel):
+    """Optional session close-out payload (state check-in). Meaning layer may also receive this."""
+
+    state_after: Optional[str] = None  # better | same | harder
+    elapsed_seconds: Optional[int] = None
+    surface: Optional[str] = None
+
+
+class PracticeStateCycleCoverageResponse(BaseModel):
+    total: int
+    tagged: int
+    need_counts: dict
+    format_counts: dict
+    need_ids: List[str]
+    format_ids: List[str]
+
+
 class PracticeUsageResponse(BaseModel):
     practice_id: str
     completed_at: datetime
+    state_after: Optional[str] = None
+    elapsed_seconds: Optional[int] = None
+    surface: Optional[str] = None
 
 
 class PracticeLimitsResponse(BaseModel):
@@ -1763,16 +1791,20 @@ async def get_practice_limits_endpoint(
 @router.post("/{practice_id}/complete", response_model=PracticeUsageResponse)
 async def complete_practice(
     practice_id: str,
+    body: PracticeCompleteRequest = PracticeCompleteRequest(),
     user: User = Depends(require_user),
     db: Session = Depends(get_session),
 ):
     """
     Отметить практику как выполненную.
     Автоматически отслеживает использование для контроля лимитов.
+    Optional body: state_after / elapsed_seconds (echoed in response; meaning event may also carry them).
     """
     
     # Проверяем, существует ли практика
     practice = next((p for p in GENERAL_PRACTICES if p["id"] == practice_id), None)
+    if not practice:
+        practice = next((p for p in PERSONALIZED_PRACTICES if p["id"] == practice_id), None)
     if not practice:
         raise HTTPException(status_code=404, detail="Practice not found")
     
@@ -1803,10 +1835,18 @@ async def complete_practice(
     db.add(usage)
     db.commit()
     db.refresh(usage)
+
+    state_after = None
+    raw_state = (body.state_after or "").strip().lower()
+    if raw_state in {"better", "same", "harder"}:
+        state_after = raw_state
     
     return PracticeUsageResponse(
         practice_id=practice_id,
-        completed_at=usage.completed_at
+        completed_at=usage.completed_at,
+        state_after=state_after,
+        elapsed_seconds=body.elapsed_seconds,
+        surface=body.surface,
     )
 
 
@@ -1906,14 +1946,20 @@ async def get_short_alternatives(
 @router.get("/", response_model=List[PracticeResponse])
 async def get_practices(
     category: Optional[str] = None,
+    need: Optional[str] = None,
+    format_id: Optional[str] = None,
     limit: Optional[int] = None,
     user: Optional[User] = Depends(get_optional_user),
     db: Session = Depends(get_session),
 ):
     """
-    Получить список практик (для архива/категорий).
+    Получить список практик (для архива/категорий / state-cycle hub).
     Для гостей - общие практики.
     Для зарегистрированных - персонализированные рекомендации с учетом текущего периода и карты дня.
+
+    Optional filters (state-cycle):
+      need — calm|focus|recover|body|understand|sleep (ranked primary-first)
+      format_id — meditation|breath|yoga|stretch|visualization|affirmation|reflection|music|sleep
     """
     practices = []
     
@@ -1924,23 +1970,50 @@ async def get_practices(
         # Если лимит исчерпан, возвращаем только бесплатные практики
         if limits["remaining_this_week"] <= 0 and limits["subscription_level"] != "pro":
             practices = [p for p in GENERAL_PRACTICES.copy() if p.get("is_free", True)]
-            if category:
-                practices = [p for p in practices if p["category"] == category]
-            if limit:
-                practices = practices[:limit]
-            return practices
-        
-        # Персонализированные практики для зарегистрированных пользователей
-        practices = get_personalized_practices(user, db, category, limit, limits)
+        else:
+            # Персонализированные практики для зарегистрированных пользователей
+            practices = get_personalized_practices(user, db, category, None, limits)
     else:
         # Общие практики для гостей
         practices = GENERAL_PRACTICES.copy()
-        if category:
-            practices = [p for p in practices if p["category"] == category]
-        if limit:
-            practices = practices[:limit]
+
+    if category:
+        practices = [p for p in practices if p.get("category") == category]
+
+    need_key = (need or "").strip().lower() or None
+    format_key = (format_id or "").strip().lower() or None
+    if need_key:
+        if need_key not in STATE_CYCLE_NEED_IDS:
+            raise HTTPException(status_code=400, detail=f"Unknown need: {need}")
+        practices = rank_practices_for_need(
+            [p for p in practices if practice_matches_need(p, need_key)],
+            need_key,
+        )
+    if format_key:
+        if format_key not in STATE_CYCLE_FORMAT_IDS:
+            raise HTTPException(status_code=400, detail=f"Unknown format_id: {format_id}")
+        practices = [p for p in practices if practice_matches_format(p, format_key)]
+
+    if limit:
+        practices = practices[:limit]
     
     return practices
+
+
+@router.get("/state-cycle/coverage", response_model=PracticeStateCycleCoverageResponse)
+async def get_state_cycle_coverage(
+    user: Optional[User] = Depends(get_optional_user),
+):
+    """Coverage of free GENERAL catalog for state-cycle needs/formats (ops + FE sanity)."""
+    cov = catalog_coverage(GENERAL_PRACTICES)
+    return PracticeStateCycleCoverageResponse(
+        total=cov["total"],
+        tagged=cov["tagged"],
+        need_counts=cov["need_counts"],
+        format_counts=cov["format_counts"],
+        need_ids=list(STATE_CYCLE_NEED_IDS),
+        format_ids=list(STATE_CYCLE_FORMAT_IDS),
+    )
 
 
 def select_pattern_for_day1(internal_model) -> Optional[dict]:
