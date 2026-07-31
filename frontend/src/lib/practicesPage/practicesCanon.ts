@@ -173,9 +173,14 @@ export function formatPracticeMetaLine(
   minutes: number | null | undefined,
   formatId: PracticeFormatId | null,
   minutesShort: string,
+  accompaniment?: string | null,
 ): string {
   const parts: string[] = [];
-  if (minutes != null && minutes > 0) parts.push(`${minutes} ${minutesShort}`);
+  if (minutes != null && minutes > 0) {
+    parts.push(locale === "ru" ? `${minutes} минут` : `${minutes} ${minutesShort}`);
+  }
   if (formatId) parts.push(practiceFormatLabel(locale, formatId));
+  const extra = accompaniment?.trim();
+  if (extra) parts.push(extra);
   return parts.join(" · ") || (locale === "ru" ? "Практика" : "Practice");
 }

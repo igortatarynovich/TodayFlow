@@ -15,6 +15,11 @@ import {
   practicesStateCycleCopy,
   type PracticesStateCycleCopy,
 } from "@/components/practices/stateCycle/practicesStateCycleCopy";
+import { HubMusicLayer } from "@/components/practices/stateCycle/HubMusicLayer";
+import {
+  PracticeFormatIcon,
+  PracticeNeedIcon,
+} from "@/components/practices/stateCycle/practiceNeedIcons";
 import styles from "@/components/practices/stateCycle/practicesStateCycle.module.css";
 
 export type StateCyclePracticeCard = {
@@ -64,23 +69,6 @@ export type PracticesStateCycleScreenProps = {
   onRetryCatalog?: () => void;
   favoritesHref?: string;
 };
-
-const FORMAT_GLYPH: Record<PracticeFormatId, string> = {
-  meditation: "◐",
-  breath: "◌",
-  yoga: "yoga",
-  stretch: "↝",
-  visualization: "✧",
-  affirmation: "◇",
-  reflection: "✎",
-  music: "♪",
-  sleep: "☾",
-};
-
-function glyphFor(format: PracticeFormatId): string {
-  if (format === "yoga") return "☯";
-  return FORMAT_GLYPH[format];
-}
 
 export function PracticesStateCycleScreen({
   locale,
@@ -135,7 +123,8 @@ export function PracticesStateCycleScreen({
                 aria-pressed={activeNeed === id}
                 onClick={() => onNeedChange(id)}
               >
-                {practiceNeedLabel(locale, id)}
+                <PracticeNeedIcon id={id} className={styles.chipIcon} />
+                <span>{practiceNeedLabel(locale, id)}</span>
               </button>
             ))}
           </nav>
@@ -153,15 +142,15 @@ export function PracticesStateCycleScreen({
 
           {recommended ? (
             <section aria-labelledby="psc-recommend-title" data-testid="practices-recommended">
-              <div
-                className={styles.recommend}
-                style={recommendStyle}
-              >
+              <div className={styles.recommend} style={recommendStyle}>
                 <div
                   className={styles.recommendBg}
                   data-image={recommended.imageUrl ? "1" : "0"}
                   aria-hidden
                 />
+                <span className={styles.recommendPlay} aria-hidden>
+                  ▶
+                </span>
                 <div className={styles.recommendBody}>
                   <p className={styles.recommendEyebrow}>{copy.recommendedEyebrow}</p>
                   <h2 id="psc-recommend-title" className={styles.recommendTitle}>
@@ -173,6 +162,7 @@ export function PracticesStateCycleScreen({
                       recommended.minutes,
                       recommended.formatId,
                       minutesShort,
+                      copy.audioMusicMeta,
                     )}
                   </p>
                   {recommended.description ? (
@@ -249,6 +239,9 @@ export function PracticesStateCycleScreen({
                           ? practiceFormatLabel(locale, card.formatId)
                           : copy.resultLineFallback}
                       </p>
+                      <span className={styles.momentPlay} aria-hidden>
+                        ▶
+                      </span>
                     </div>
                   </Link>
                 ))}
@@ -277,7 +270,7 @@ export function PracticesStateCycleScreen({
                     onClick={() => onFormatChange(active ? null : id)}
                   >
                     <span className={styles.formatGlyph} aria-hidden>
-                      {glyphFor(id)}
+                      <PracticeFormatIcon id={id} />
                     </span>
                     {practiceFormatLabel(locale, id)}
                   </button>
@@ -285,6 +278,8 @@ export function PracticesStateCycleScreen({
               })}
             </div>
           </section>
+
+          <HubMusicLayer locale={locale} />
 
           {practiceOfDay ? (
             <Link

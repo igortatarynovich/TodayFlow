@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { PracticesStateCycleScreen } from "@/components/practices/stateCycle/PracticesStateCycleScreen";
 
 describe("PracticesStateCycleScreen", () => {
-  it("renders need chips in canon order and recommended card", () => {
+  it("renders need chips in canon order and recommended card", async () => {
     const onNeedChange = jest.fn();
     const onFormatChange = jest.fn();
 
@@ -54,6 +54,8 @@ describe("PracticesStateCycleScreen", () => {
     expect(screen.getByTestId("practices-of-day")).toHaveTextContent("Дыхание 4–7–8");
     expect(screen.queryByTestId("practices-continue")).not.toBeInTheDocument();
     expect(screen.queryByTestId("practices-my")).not.toBeInTheDocument();
+    expect(await screen.findByTestId("practices-music-hub")).toHaveTextContent("Музыкальное сопровождение");
+    expect(screen.getByTestId("practices-music-hub")).toHaveTextContent("С голосом");
 
     fireEvent.click(screen.getByRole("button", { name: "Понять себя" }));
     expect(onNeedChange).toHaveBeenCalledWith("understand");

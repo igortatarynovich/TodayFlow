@@ -84,6 +84,9 @@
 
 .chip {
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   padding: 0.55rem 1rem;
   border-radius: 999px;
   border: 1px solid var(--psc-border);
@@ -93,6 +96,11 @@
   line-height: 1.2;
   cursor: pointer;
   white-space: nowrap;
+}
+
+.chipIcon {
+  flex-shrink: 0;
+  opacity: 0.9;
 }
 
 .chipActive {
@@ -105,7 +113,7 @@
   position: relative;
   overflow: hidden;
   border-radius: var(--psc-radius-lg);
-  min-height: 16rem;
+  min-height: 17.5rem;
   padding: 1.35rem 1.35rem 1.25rem;
   display: flex;
   flex-direction: column;
@@ -121,7 +129,7 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(165deg, rgba(107, 90, 154, 0.55), rgba(42, 37, 32, 0.55)),
+    linear-gradient(165deg, rgba(107, 90, 154, 0.45), rgba(42, 37, 32, 0.62)),
     linear-gradient(135deg, #b8a8d4 0%, #8b7bb8 45%, #6b8a9e 100%);
   background-size: cover;
   background-position: center;
@@ -129,8 +137,24 @@
 
 .recommendBg[data-image="1"] {
   background-image:
-    linear-gradient(165deg, rgba(42, 37, 32, 0.35), rgba(42, 37, 32, 0.65)),
+    linear-gradient(165deg, rgba(42, 37, 32, 0.28), rgba(42, 37, 32, 0.68)),
     var(--psc-recommend-image);
+}
+
+.recommendPlay {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  z-index: 1;
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: 999px;
+  background: rgba(255, 252, 248, 0.92);
+  color: var(--psc-lavender-deep);
+  display: grid;
+  place-items: center;
+  font-size: 0.7rem;
+  box-shadow: 0 6px 16px rgba(42, 37, 32, 0.12);
 }
 
 .recommendBody {
@@ -144,17 +168,21 @@
 
 .recommendEyebrow {
   margin: 0;
-  font-size: 0.6875rem;
+  align-self: flex-start;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(139, 123, 184, 0.92);
+  font-size: 0.65rem;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  opacity: 0.9;
+  opacity: 1;
 }
 
 .recommendTitle {
   margin: 0;
   font-family: var(--tf-font-display, Georgia, serif);
-  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  font-size: clamp(1.35rem, 3vw, 1.85rem);
   font-weight: 500;
   line-height: 1.2;
 }
@@ -172,19 +200,20 @@
   z-index: 1;
   align-self: flex-start;
   margin-top: 0.35rem;
-  padding: 0.7rem 1.35rem;
+  padding: 0.75rem 1.45rem;
   border-radius: 999px;
   border: none;
-  background: rgba(255, 252, 248, 0.95);
-  color: var(--psc-lavender-deep);
+  background: var(--psc-lavender);
+  color: #fff;
   font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
   text-decoration: none;
+  box-shadow: 0 10px 22px rgba(107, 90, 154, 0.28);
 }
 
 .startBtn:hover {
-  background: #fff;
+  background: var(--psc-lavender-deep);
 }
 
 .continue {
@@ -345,6 +374,7 @@
 }
 
 .momentBody {
+  position: relative;
   padding: 0.75rem 0.85rem 0.9rem;
   display: flex;
   flex-direction: column;
@@ -357,12 +387,27 @@
   font-size: 0.95rem;
   font-weight: 600;
   line-height: 1.25;
+  padding-right: 1.75rem;
 }
 
 .momentMeta {
   margin: 0;
   font-size: 0.75rem;
   color: var(--psc-muted);
+}
+
+.momentPlay {
+  position: absolute;
+  right: 0.7rem;
+  bottom: 0.7rem;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 999px;
+  background: var(--psc-lavender);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 0.6rem;
 }
 
 .formatSection {
@@ -404,13 +449,67 @@
 }
 
 .formatGlyph {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 0.65rem;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 0.85rem;
   display: grid;
   place-items: center;
   background: linear-gradient(145deg, rgba(201, 189, 223, 0.55), rgba(168, 196, 216, 0.45));
-  font-size: 0.85rem;
+  color: var(--psc-lavender-deep);
+}
+
+.musicHub {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1.1rem 1.15rem;
+  border-radius: var(--psc-radius);
+  background: var(--psc-card);
+  border: 1px solid var(--psc-border);
+  box-shadow: 0 10px 22px rgba(42, 37, 32, 0.04);
+}
+
+.musicModeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.musicMode {
+  padding: 0.5rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--psc-border);
+  background: #fff;
+  color: var(--psc-ink);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.musicModeActive {
+  background: var(--psc-lavender);
+  color: #fff;
+  border-color: transparent;
+}
+
+.musicSlider {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr) 2.5rem;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.8rem;
+  color: var(--psc-muted);
+}
+
+.musicSlider input[type="range"] {
+  width: 100%;
+  accent-color: var(--psc-lavender);
+}
+
+.musicPct {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--psc-ink);
+  font-size: 0.75rem;
 }
 
 .dayCard {
