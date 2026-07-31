@@ -1,6 +1,6 @@
 /**
  * Practices Screen v1.1 — locked need/format IDs (SoT: docs/practices/PRACTICES_SCREEN_V1.md).
- * Legacy catalog keys are not SoT; map via keywords for client filter until API supports needs.
+ * Prefer API need_ids / format_id / outcome_label; fall back to keywords for untagged catalog.
  */
 
 export const PRACTICE_NEED_IDS = [
@@ -87,6 +87,9 @@ export type PracticeMatchable = {
   category?: string;
   tags?: string[];
   practice_type?: string;
+  need_ids?: string[];
+  format_id?: string | null;
+  outcome_label?: string | null;
 };
 
 function haystackOf(practice: PracticeMatchable): string {
@@ -107,6 +110,10 @@ function matchesKeywords(haystack: string, keywords: string[]): boolean {
 }
 
 export function practiceMatchesNeed(practice: PracticeMatchable, need: PracticeNeedId): boolean {
+  const tagged = practice.need_ids;
+  if (tagged && tagged.length > 0) {
+    return tagged.includes(need);
+  }
   return matchesKeywords(haystackOf(practice), PRACTICE_NEED_KEYWORDS[need]);
 }
 
@@ -114,6 +121,9 @@ export function practiceMatchesFormat(
   practice: PracticeMatchable,
   format: PracticeFormatId,
 ): boolean {
+  if (practice.format_id) {
+    return practice.format_id === format;
+  }
   const haystack = haystackOf(practice);
   if (matchesKeywords(haystack, PRACTICE_FORMAT_KEYWORDS[format])) return true;
   // Backend categories often equal format-ish ids
@@ -128,10 +138,33 @@ export function practiceMatchesFormat(
 }
 
 export function inferPracticeFormat(practice: PracticeMatchable): PracticeFormatId | null {
+  if (practice.format_id) {
+    const id = practice.format_id as PracticeFormatId;
+    if ((PRACTICE_FORMAT_IDS as readonly string[]).includes(id)) return id;
+  }
   for (const id of PRACTICE_FORMAT_IDS) {
     if (practiceMatchesFormat(practice, id)) return id;
   }
   return null;
+}
+
+/** Rank so practices whose primary need_ids[0] matches `need` come first. */
+export function rankPracticesForNeed<T extends PracticeMatchable>(
+  practices: T[],
+  need: PracticeNeedId,
+): T[] {
+  return [...practices].sort((a, b) => {
+    const aPrimary = a.need_ids?.[0] === need ? 0 : practiceMatchesNeed(a, need) ? 1 : 2;
+    const bPrimary = b.need_ids?.[0] === need ? 0 : practiceMatchesNeed(b, need) ? 1 : 2;
+    return aPrimary - bPrimary;
+  });
+}
+
+/** Hub card title: outcome-first when API provides outcome_label. */
+export function practiceCardTitle(practice: PracticeMatchable): string {
+  const outcome = practice.outcome_label?.trim();
+  if (outcome) return outcome;
+  return practice.title;
 }
 
 /** Outcome-first card title hint when catalog title is technical — keep catalog title; use for subtitle line. */

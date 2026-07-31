@@ -2,10 +2,12 @@ import {
   PRACTICE_FORMAT_IDS,
   PRACTICE_NEED_IDS,
   inferPracticeFormat,
+  practiceCardTitle,
   practiceFormatLabel,
   practiceMatchesFormat,
   practiceMatchesNeed,
   practiceNeedLabel,
+  rankPracticesForNeed,
 } from "@/lib/practicesPage/practicesCanon";
 
 describe("practicesCanon", () => {
@@ -54,6 +56,43 @@ describe("practicesCanon", () => {
     ).toBe(true);
     expect(inferPracticeFormat({ title: "Дневник ясности", category: "reflection", tags: [] })).toBe(
       "reflection",
+    );
+  });
+
+  it("prefers need_ids and format_id tags over keywords", () => {
+    const tagged = {
+      title: "Капалабхати",
+      description: "энергия",
+      category: "breathing",
+      tags: ["энергия"],
+      need_ids: ["recover", "focus"],
+      format_id: "breath",
+      outcome_label: "Пробудить ясность",
+    };
+    expect(practiceMatchesNeed(tagged, "recover")).toBe(true);
+    expect(practiceMatchesNeed(tagged, "calm")).toBe(false);
+    expect(practiceMatchesFormat(tagged, "breath")).toBe(true);
+    expect(practiceMatchesFormat(tagged, "meditation")).toBe(false);
+    expect(inferPracticeFormat(tagged)).toBe("breath");
+    expect(practiceCardTitle(tagged)).toBe("Пробудить ясность");
+  });
+
+  it("ranks practices with primary need first", () => {
+    const pool = [
+      { title: "A", need_ids: ["focus", "calm"] },
+      { title: "B", need_ids: ["calm"] },
+      { title: "C", need_ids: ["sleep", "calm"] },
+      { title: "D", description: "спокойствие" },
+    ] as Array<{ title: string; need_ids?: string[]; description?: string }>;
+    const ranked = rankPracticesForNeed(pool, "calm");
+    expect(ranked[0].title).toBe("B");
+    expect(ranked.map((p) => p.title).slice(0, 3)).toEqual(["B", "A", "C"]);
+  });
+
+  it("practiceCardTitle falls back to title", () => {
+    expect(practiceCardTitle({ title: "Дыхание 4-7-8" })).toBe("Дыхание 4-7-8");
+    expect(practiceCardTitle({ title: "X", outcome_label: "  Снизить тревожность  " })).toBe(
+      "Снизить тревожность",
     );
   });
 });

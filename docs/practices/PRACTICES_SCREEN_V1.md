@@ -216,8 +216,9 @@ Need первичен; format уточняет каталог.
 | **C0** | Канон locked need/format (v1.1) | — | **DONE** |
 | **C0b** | Привести макет need-ленты к канону (добавить «Понять себя»; «Уснуть» в конец) | C0 | TODO |
 | **P0** | Web `/practices` shell на locked IDs | C0 | **DONE** (FE shell) |
-| **P1** | Сессия + чек-ин + save to Today | C0 + P0 | **IN PROGRESS** (FE) |
-| **M0** | Music layer (режимы + громкости) | C0; ∥ P0/P1 | TODO |
+| **P1** | Сессия + чек-ин + save to Today | C0 + P0 | **DONE** (FE) |
+| **M0** | Music layer (режимы + громкости) | C0; ∥ P0/P1 | **DONE** (FE) |
+| **C1** | Rich Practices catalog: need_ids / format_id / outcome_label + gap-fill | C0 + P0 | **DONE** |
 
 iOS parity — после web P0+P1.
 
@@ -227,7 +228,7 @@ iOS parity — после web P0+P1.
 
 - **SoT before (v1.0):** 5 needs без «Почувствовать тело»; formats с umbrella `body`; music только §5.
 - **SoT after (v1.1):** 6 needs (§1, sleep last); 9 formats (§2: yoga/stretch/music chips + reflection/sleep); music = format **и** layer.
-- **Public JSON changed?** no (docs). P0/P1 — отдельный impact в PR кода.
+- **Public JSON changed?** C1: optional `need_ids[]`, `format_id`, `outcome_label` on PracticeResponse (backward compatible). P0/P1 — FE shell/session.
 - **Migration required?** yes FE map legacy → new IDs; v1.0 `body` format → `yoga`|`stretch`; mockup needs → §1.
 - **Canon updated?** yes — этот файл v1.1
 - **Backward compatible?** catalog UI до P0; после P0 старые goal-chips не SoT
@@ -238,5 +239,6 @@ iOS parity — после web P0+P1.
 
 | Дата | Изменение |
 |------|-----------|
+| 2026-07-31 | **C1** — rich catalog: backend `practice_state_cycle_catalog_v1` meta + gap-fill; FE tagged match/rank + outcome card titles; P1/M0 marked DONE (FE) |
 | 2026-07-30 | **v1.1** — needs: обе оси (`body` + `understand`), `sleep` last; formats: yoga/stretch/music chips + reflection/sleep; music = chip ⊕ layer; C0b mockup align; отказ от parallel `practices-canon.md` |
 | 2026-07-30 | v1.0 ACCEPTED (superseded lists in §1–2 by v1.1) |

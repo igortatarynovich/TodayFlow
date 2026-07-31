@@ -14,6 +14,9 @@ export type PracticeCatalogItem = {
   personalized_reason?: string;
   access_level: string;
   tags: string[];
+  need_ids?: string[];
+  format_id?: string | null;
+  outcome_label?: string | null;
   target_axis?: string;
   sequence_id?: string;
   step_number?: number;

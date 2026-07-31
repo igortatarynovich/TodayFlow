@@ -16,6 +16,7 @@ from todayflow_backend.db.session import get_session
 from todayflow_backend.db.models import User, PracticeUsage, Subscription, utc_naive_now
 from todayflow_backend.services.subscription_level import get_subscription_level
 from todayflow_backend.core.content_loader import load_asceticisms, load_affirmations
+from todayflow_backend.data.practice_state_cycle_catalog_v1 import apply_state_cycle_catalog
 
 router = APIRouter(prefix="/practices", tags=["practices"])
 
@@ -33,6 +34,9 @@ class PracticeResponse(BaseModel):
     personalized_reason: Optional[str] = None  # Почему эта практика рекомендована
     access_level: str  # "free", "lite", "pro"
     tags: List[str] = []
+    need_ids: List[str] = []
+    format_id: Optional[str] = None
+    outcome_label: Optional[str] = None
     # Персонализация
     target_axis: Optional[str] = None  # A1-A7
     target_modulator: Optional[str] = None  # M1-M4
@@ -337,6 +341,8 @@ GENERAL_PRACTICES = [
         ]
     }
 ]
+
+GENERAL_PRACTICES = apply_state_cycle_catalog(GENERAL_PRACTICES)
 
 # Персонализированные практики с привязкой к паттернам
 # Эти практики доступны только для зарегистрированных пользователей

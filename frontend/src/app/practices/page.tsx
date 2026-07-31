@@ -19,8 +19,10 @@ import { getLocale } from "@/lib/i18n";
 import { buildPracticesV2LiveContext } from "@/lib/practicesPage/buildPracticesV2LiveContext";
 import {
   inferPracticeFormat,
+  practiceCardTitle,
   practiceMatchesFormat,
   practiceMatchesNeed,
+  rankPracticesForNeed,
   type PracticeFormatId,
   type PracticeNeedId,
 } from "@/lib/practicesPage/practicesCanon";
@@ -38,12 +40,19 @@ import styles from "@/app/practices/PracticesPage.module.css";
 const RECOMMEND_IMAGE = "/images/praktiki_banner.png";
 
 function toCard(practice: PracticeCatalogItem, imageUrl?: string | null): StateCyclePracticeCard {
+  const cardTitle = practiceCardTitle(practice);
+  const technical = practice.title?.trim() || "";
+  const reason = practice.personalized_reason?.trim() || "";
+  const desc = practice.description?.trim() || "";
+  let description = reason || desc;
+  if (!reason && technical && cardTitle !== technical) {
+    description = description ? `${technical}. ${description}` : technical;
+  }
   return {
     id: practice.id,
     href: `/practices/${practice.id}?run=1`,
-    title: practice.title,
-    description:
-      practice.personalized_reason?.trim() || practice.description?.trim() || "",
+    title: cardTitle,
+    description,
     minutes: practice.duration_minutes ?? null,
     formatId: inferPracticeFormat(practice),
     imageUrl: imageUrl ?? null,
@@ -61,8 +70,8 @@ function pickPoolForNeed(
     if (byFormat.length > 0) list = byFormat;
   }
   const byNeed = list.filter((p) => practiceMatchesNeed(p, need));
-  if (byNeed.length > 0) return byNeed;
-  return list;
+  if (byNeed.length > 0) list = byNeed;
+  return rankPracticesForNeed(list, need);
 }
 
 export default function PracticesPage() {
