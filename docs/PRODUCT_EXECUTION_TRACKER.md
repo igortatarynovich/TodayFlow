@@ -898,13 +898,13 @@ Source of truth: [FIRST_DAY_EXPERIENCE.md](./FIRST_DAY_EXPERIENCE.md) §1–§13
 **Locked formats (order):** `meditation` · `breath` · `yoga` · `stretch` · `visualization` · `affirmation` · `reflection` · `music` · `sleep`. Music chip = standalone practice; music **layer** §5 = accompaniment (both).
 
 - [x] **C0** Canon v1.1 ACCEPTED — axis resolution (body+understand needs; yoga/stretch/music formats; reflection+sleep restored)
-- [x] **C0b** Align mockup need-ленты to canon: + «Понять себя»; «Уснуть» last — Figma `Practices / need rail` ([FOUNDATION_UI](https://www.figma.com/design/pWdevqQqOi6wvoVc6hFWHa?node-id=7-2)); FE already on §1
+- [ ] **C0b** UI-паритет need-ленты со скрина [`practices_screen_mockup_v1.png`](./practices/practices_screen_mockup_v1.png): + «Понять себя»; «Уснуть» last (не Figma)
 - [x] **P0** Web `/practices` shell: need chips + recommend + Continue + moment + formats + practice of day + conditional my library
 - [x] **P1** Session fullscreen + state check-in + «Сохранить в сегодняшний день» — `PracticeLiveSession` · draft → Continue · `?run=1` · meaning `practice_completed`
 - [x] **C1** Rich catalog — `need_ids` / `format_id` / `outcome_label` + gap-fill (yoga/stretch/visualization/music/sleep); hub ranks by primary need (`9d770f3`)
 - [x] **M0** Music layer UI (С голосом / Только музыка / Без звука + volumes) — FE prefs/panel; audio assets still optional
 - [ ] iOS parity after web P0+P1 stable
-- [ ] **Deploy** state-cycle `/practices` + C1 catalog to production (prod still legacy catalog SSR as of 2026-07-31)
+- [ ] **Deploy** state-cycle `/practices` + C1 catalog freshness to production if backend image lags C1 tags
 
 ### UX and Navigation
 - [ ] Fully audit mobile navigation.
@@ -1128,7 +1128,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
-- 2026-07-31 | Practices | **C0b mockup need-лента** | **DONE** | Figma `Practices / need rail` in [FOUNDATION_UI](https://www.figma.com/design/pWdevqQqOi6wvoVc6hFWHa?node-id=7-2): + «Понять себя»; Уснуть last. FE already §1. Prod deploy of state-cycle still open.
+- 2026-07-31 | Practices | **C0b mockup need-лента** | **IN PROGRESS** | Visual SoT = user screenshot [`practices_screen_mockup_v1.png`](./practices/practices_screen_mockup_v1.png) (not Figma). Delta vs canon: add «Понять себя»; Уснуть last — apply in UI parity pass. Figma detour removed.
 - 2026-07-31 | Practices | **C1 rich catalog (need/format tags)** | **DONE** | Overlay + 12 gap-fill free practices; public optional `need_ids`/`format_id`/`outcome_label`; hub match/rank by tags + outcome card titles. `practice_state_cycle_catalog_v1` · `9d770f3`.
 - 2026-07-30 | Practices | **M0 music layer (session)** | **DONE (FE UI)** | Modes С голосом / Только музыка / Без звука · volumes · prefs `localStorage`. Panel in `PracticeLiveSession`. Tracks when URLs present. SSR catalog clipped (`286e7f3`).
 - 2026-07-30 | Practices | **P1 live session + check-in + save to Today** | **DONE (FE)** | `PracticeLiveSession`: fullscreen timer/pause · check-in better/same/harder · POST `/complete` + meaning `practice_completed` (`state_after`, `surface=practices_session_p1`) · local draft powers hub Continue · hub links `?run=1`. Tests: PracticeLiveSession + practiceSessionDraft.

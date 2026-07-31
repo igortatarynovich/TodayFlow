@@ -7,7 +7,7 @@
 **Это не:** Figma-пиксели, CSS, wireframe.  
 **Это:** принцип экрана, locked навигация (need / format), структура блоков, сессия + чек-ин, граница music layer.
 
-**Визуальный родитель:** [TODAYFLOW_FOUNDATION_UI.md](../TODAYFLOW_FOUNDATION_UI.md). Practices **не** заводит второй visual-канон; §6 ниже уточняет иерархию внутри экрана.
+**Визуальный родитель:** загруженный макет-скрин [`practices_screen_mockup_v1.png`](./practices_screen_mockup_v1.png) (продуктовая спека v1.0). Practices **не** заводит второй visual-канон в Figma; Foundation UI — только токены ([TODAYFLOW_FOUNDATION_UI.md](../TODAYFLOW_FOUNDATION_UI.md)). §6 уточняет иерархию внутри экрана.
 
 **Единый файл SoT:** этот документ (`docs/practices/PRACTICES_SCREEN_V1.md`). Не плодить `docs/practices-canon.md` или параллельные списки.
 
@@ -58,7 +58,7 @@ need → practice → session → state check-in → save into Today
 | Текст спеки §3.1 | «Понять себя» |
 | Канон порядка | «Уснуть» в конец ряда |
 
-**Следствие для макета (C0b DONE):** добавить чип «Понять себя»; переставить «Уснуть» в конец. Reference: Figma page `Practices / need rail` in [TODAYFLOW_FOUNDATION_UI](https://www.figma.com/design/pWdevqQqOi6wvoVc6hFWHa?node-id=7-2) · live FE `PRACTICE_NEED_IDS` / `PracticesStateCycleScreen`.
+**Следствие для макета (C0b):** на скрине need-лента ещё без «Понять себя», «Уснуть» сразу после тела. При сборке UI со скрина: вставить «Понять себя»; «Уснуть» в конец. Не править отдельный Figma-файл — SoT визуала = этот скрин + locked IDs §1.
 
 **Запрещено в need-ленте:** типы контента как замена need (медитация / йога / музыка как «состояние»); произвольные legacy goal-keys (`energy`, `growth`, …) вместо этой шестёрки.
 
@@ -214,7 +214,7 @@ Need первичен; format уточняет каталог.
 | # | Инкремент | Зависит от | Статус |
 |---|-----------|------------|--------|
 | **C0** | Канон locked need/format (v1.1) | — | **DONE** |
-| **C0b** | Привести макет need-ленты к канону (добавить «Понять себя»; «Уснуть» в конец) | C0 | **DONE** |
+| **C0b** | Need-лента со скрина → канон (+ «Понять себя»; «Уснуть» в конец) при UI-паритете | C0 | **IN PROGRESS** — визуал = `practices_screen_mockup_v1.png` |
 | **P0** | Web `/practices` shell на locked IDs | C0 | **DONE** (FE shell) |
 | **P1** | Сессия + чек-ин + save to Today | C0 + P0 | **DONE** (FE) |
 | **M0** | Music layer (режимы + громкости) | C0; ∥ P0/P1 | **DONE** (FE) |
@@ -239,7 +239,7 @@ iOS parity — после web P0+P1.
 
 | Дата | Изменение |
 |------|-----------|
-| 2026-07-31 | **C0b** — mockup need-лента aligned: Figma `Practices / need rail` in [TODAYFLOW_FOUNDATION_UI](https://www.figma.com/design/pWdevqQqOi6wvoVc6hFWHa) (+ «Понять себя»; `sleep` last); live FE already on §1 order |
+| 2026-07-31 | **C0b** — откат Figma-обхода: визуальный SoT = загруженный скрин `practices_screen_mockup_v1.png`; need-лента на скрине ещё без «Понять себя» → правим при UI-паритете |
 | 2026-07-31 | **C1** — rich catalog: backend `practice_state_cycle_catalog_v1` meta + gap-fill; FE tagged match/rank + outcome card titles; P1/M0 marked DONE (FE) |
 | 2026-07-30 | **v1.1** — needs: обе оси (`body` + `understand`), `sleep` last; formats: yoga/stretch/music chips + reflection/sleep; music = chip ⊕ layer; C0b mockup align; отказ от parallel `practices-canon.md` |
 | 2026-07-30 | v1.0 ACCEPTED (superseded lists in §1–2 by v1.1) |
