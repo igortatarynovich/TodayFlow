@@ -32,6 +32,8 @@
 
 ## Data · Reference (фаза 1)
 
+- [foundation_v1.md](./foundation_v1.md) — **Foundation v1** (геометрия ✅ · константы · единый SoT для генераторов) · gate перед hooks/семантикой
+- [audits/GEOMETRY_FOUNDATION_CLOSEOUT_V1.md](./audits/GEOMETRY_FOUNDATION_CLOSEOUT_V1.md) — geometry closeout (coords → UTC → bodies → angles)
 - [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md)
 - [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md)
 - [REFERENCE_LAYER_AND_BUILD_ORDER.md](./REFERENCE_LAYER_AND_BUILD_ORDER.md)

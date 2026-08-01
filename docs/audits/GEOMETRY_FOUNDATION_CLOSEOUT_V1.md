@@ -1,6 +1,7 @@
 # Geometry foundation closeout (coords → UTC → bodies → angles)
 
-**Status:** closed 2026-08-01 (foundation only — not interpretation / hooks / knowledge bases)
+**Status:** closed 2026-08-01 (foundation only — not interpretation / hooks / knowledge bases)  
+**Parent:** [Foundation v1](../foundation_v1.md) — geometry is layer 1; constants + routing still open.
 
 ## Checklist
 
