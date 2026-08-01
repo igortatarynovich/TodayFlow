@@ -224,6 +224,7 @@ export type MorningRitualData = {
     name?: string;
     orientation?: string;
     meaning?: string;
+    keywords?: string[];
   } | null;
   tarot_explanation?: {
     meaning?: string;

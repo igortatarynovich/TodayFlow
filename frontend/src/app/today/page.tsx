@@ -1381,7 +1381,9 @@ export default function TodayPage() {
     color: colorLineResolved ?? "",
     stone: stoneLineResolved ?? "",
   };
-  const mTarot = todayData.morning as { tarot_card?: { name?: string; id?: number | string } } | undefined;
+  const mTarot = todayData.morning as {
+    tarot_card?: { name?: string; id?: number | string; meaning?: string };
+  } | undefined;
   const rawTarotName = String(morningRitualData?.tarot_card?.name || mTarot?.tarot_card?.name || RITUAL_COPY.cardEyebrow);
   const tarotAnchorId = resolveDailyTarotDeckIndex({
     morningTarotCardId: morningRitualData?.tarot_card?.id ?? mTarot?.tarot_card?.id ?? null,
@@ -1391,8 +1393,14 @@ export default function TodayPage() {
   });
   const tarotRu = getTodayTarotCardRu(tarotAnchorId);
   const cardNameRitual = tarotRu?.nameRu ?? rawTarotName;
-  const apiMeaning = morningRitualData?.tarot_explanation?.meaning || morningRitualData?.tarot_explanation?.summary || null;
-  const cardMeaningRitual = isRuUserFacingText(apiMeaning) ? apiMeaning : tarotRu?.leadRu ?? null;
+  const apiMeaning =
+    morningRitualData?.tarot_explanation?.meaning ||
+    morningRitualData?.tarot_explanation?.summary ||
+    morningRitualData?.tarot_card?.meaning ||
+    mTarot?.tarot_card?.meaning ||
+    null;
+  // FE bank is labels-only — no leadRu prose fallback.
+  const cardMeaningRitual = isRuUserFacingText(apiMeaning) ? apiMeaning : null;
   const possibleRitual = buildRitualPossibleSignals(todayData.morning);
   const avoidRitual = buildRitualAvoidSignals(todayData.morning);
   const supportRitual = buildRitualSupportSignals(bestModeRitual, guidanceSummaryRitual);
@@ -1520,6 +1528,7 @@ export default function TodayPage() {
             contract={todayContract}
             fusion={fusionData}
             cardName={cardNameRitual}
+            cardMeaning={cardMeaningRitual}
             numerologyValue={numerologyValueRitual}
             numerologyMeaning={numerologyMeaningRitual}
             guideNarrativeLoading={guideNarrativeLoading}

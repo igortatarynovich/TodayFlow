@@ -85,7 +85,7 @@ import {
   personalDayRhythmBridgeSuffix,
   pickFirstDistinctLine,
   lineRedundantWithAny,
-  anchorTarotTagsFromLead,
+  anchorTarotTags,
   numberDayTagTriad,
   rhythmTierLabelForScore,
   ritualGoalSuggestions,
@@ -524,16 +524,38 @@ export function TodayRitualFlow(props: Props) {
     ],
   );
 
-  const anchorTarotRecord = useMemo(() => getTodayTarotCardRu(anchorTarotId), [anchorTarotId]);
+  const ritualCardMeaning = useMemo(() => {
+    const candidates = [
+      props.cardMeaning,
+      props.morningRitualData?.tarot_card?.meaning,
+      props.morningRitualData?.tarot_explanation?.meaning,
+      props.morningRitualData?.tarot_explanation?.summary,
+    ];
+    for (const c of candidates) {
+      if (typeof c === "string" && c.trim().length >= 8) return c.trim();
+    }
+    return null;
+  }, [
+    props.cardMeaning,
+    props.morningRitualData?.tarot_card?.meaning,
+    props.morningRitualData?.tarot_explanation?.meaning,
+    props.morningRitualData?.tarot_explanation?.summary,
+  ]);
 
-  const anchorTarotTags = useMemo(() => anchorTarotTagsFromLead(anchorTarotRecord?.leadRu ?? ""), [anchorTarotRecord]);
+  const ritualCardKeywords = useMemo(() => {
+    const kws =
+      props.morningRitualData?.tarot_card?.keywords ??
+      props.morningRitualData?.tarot_explanation?.keywords ??
+      null;
+    return Array.isArray(kws) ? kws.filter((x): x is string => typeof x === "string" && x.trim().length > 0) : [];
+  }, [
+    props.morningRitualData?.tarot_card?.keywords,
+    props.morningRitualData?.tarot_explanation?.keywords,
+  ]);
 
-  const displayActionItems = useMemo(() => {
-    if (!tarotApplied || !drawnTarotMain?.focusRu) return props.actionItems;
-    const hint = drawnTarotMain.focusRu.trim();
-    if (!hint) return props.actionItems;
-    return [{ text: hint, ring: RITUAL_COPY.todayActionPlanRingTarot }, ...props.actionItems];
-  }, [props.actionItems, tarotApplied, drawnTarotMain]);
+  const ritualTarotTags = useMemo(() => anchorTarotTags(ritualCardKeywords), [ritualCardKeywords]);
+
+  const displayActionItems = useMemo(() => props.actionItems, [props.actionItems]);
 
   const guidePayload = guideNarrativePayload;
 
@@ -592,9 +614,8 @@ export function TodayRitualFlow(props: Props) {
   }, [props.morningRitualData, props.todayData.morning?.numerology_explanation]);
 
   const dayFocusLine = useMemo(() => {
-    if (tarotApplied && drawnTarotMain?.focusRu?.trim()) return drawnTarotMain.focusRu.trim();
     return spine?.best_mode?.trim() || props.summaryTitle || "—";
-  }, [tarotApplied, drawnTarotMain, spine, props.summaryTitle]);
+  }, [spine, props.summaryTitle]);
 
   const coreTextsForDedup = useMemo(() => {
     if (singleVoice && props.todayContract) {
@@ -780,11 +801,7 @@ export function TodayRitualFlow(props: Props) {
     return !lineRedundantWithAny(effectiveCardNumberBridge, pool);
   }, [effectiveCardNumberBridge, ritualNarrativeAvoidPool, dayWhyContent.headline, dayWhyContent.lines]);
 
-  const eveningTarotLine = useMemo(() => {
-    if (!tarotApplied || !drawnTarotMain?.eveningRu) return null;
-    const cl = drawnTarotClarifier?.eveningRu?.trim();
-    return cl ? `${drawnTarotMain.eveningRu} ${cl}` : drawnTarotMain.eveningRu;
-  }, [tarotApplied, drawnTarotMain, drawnTarotClarifier]);
+  const eveningTarotLine = useMemo(() => null as string | null, []);
 
   const essentialsList = useMemo(() => essentialsForMood(mood), [mood]);
 
@@ -1753,8 +1770,8 @@ export function TodayRitualFlow(props: Props) {
                 <RitualTarotPickExperience
                   anchorCardId={anchorTarotId}
                   resumeCommittedId={tarotMainId}
-                  cardTitleRu={anchorTarotRecord?.nameRu ?? props.cardName}
-                  tagLabels={anchorTarotTags}
+                  cardTitleRu={getTodayTarotCardRu(anchorTarotId)?.nameRu ?? props.cardName}
+                  tagLabels={ritualTarotTags}
                   reduceMotion={reduceMotion}
                   onCommitMain={commitTarotMain}
                   onContinue={onContinueFromTarotReveal}
@@ -2070,7 +2087,7 @@ export function TodayRitualFlow(props: Props) {
               >
                 {drawnTarotMain.nameRu}
               </p>
-              {anchorTarotTagsFromLead(drawnTarotMain.leadRu).length > 0 ? (
+              {ritualTarotTags.length > 0 ? (
                 <div
                   style={{
                     display: "flex",
@@ -2080,7 +2097,7 @@ export function TodayRitualFlow(props: Props) {
                     marginBottom: "0.45rem",
                   }}
                 >
-                  {anchorTarotTagsFromLead(drawnTarotMain.leadRu).map((t) => (
+                  {ritualTarotTags.map((t) => (
                     <span
                       key={t}
                       style={{
@@ -2098,12 +2115,11 @@ export function TodayRitualFlow(props: Props) {
                   ))}
                 </div>
               ) : null}
-              <p className="orbit-body-sm" style={{ margin: 0, lineHeight: 1.55, color: "#3f3428", ...ritualTextWrap }}>
-                {drawnTarotMain.leadRu}
-              </p>
-              <p className="orbit-body-sm" style={{ margin: "0.35rem 0 0", lineHeight: 1.55, color: "#4a3d2e", ...ritualTextWrap }}>
-                {drawnTarotMain.bodyRu}
-              </p>
+              {ritualCardMeaning ? (
+                <p className="orbit-body-sm" style={{ margin: 0, lineHeight: 1.55, color: "#3f3428", ...ritualTextWrap }}>
+                  {ritualCardMeaning}
+                </p>
+              ) : null}
               {drawnTarotClarifier ? (
                 <div
                   style={{
@@ -2124,14 +2140,8 @@ export function TodayRitualFlow(props: Props) {
                   >
                     {RITUAL_COPY.tarotClarifierEyebrow}: {drawnTarotClarifier.nameRu}
                   </p>
-                  <p className="orbit-body-xs" style={{ margin: 0, color: "#5f4930", lineHeight: 1.55, ...ritualTextWrap }}>
-                    {drawnTarotClarifier.leadRu} {drawnTarotClarifier.bodyRu}
-                  </p>
                 </div>
               ) : null}
-              <p className="orbit-body-xs" style={{ margin: "0.35rem 0 0", color: "#7a6242", lineHeight: 1.5, ...ritualTextWrap }}>
-                {RITUAL_COPY.tarotQuestionEyebrow}: {drawnTarotMain.questionRu}
-              </p>
               <p className="orbit-body-xs" style={{ margin: 0, color: "#7a6242", lineHeight: 1.5, ...ritualTextWrap }}>
                 {RITUAL_COPY.cardRevealedHint}
               </p>
@@ -2423,9 +2433,11 @@ export function TodayRitualFlow(props: Props) {
             <p className="orbit-body-sm" style={{ margin: "0 0 0.35rem", fontWeight: 700, color: "#2d241c", ...ritualTextWrap }}>
               {drawnTarotMain.nameRu}
             </p>
-            <p className="orbit-body-sm" style={{ margin: "0 0 0.75rem", color: "#3f3428", lineHeight: 1.55, ...ritualTextWrap }}>
-              {drawnTarotMain.leadRu} {drawnTarotMain.bodyRu}
-            </p>
+            {ritualCardMeaning ? (
+              <p className="orbit-body-sm" style={{ margin: "0 0 0.75rem", color: "#3f3428", lineHeight: 1.55, ...ritualTextWrap }}>
+                {ritualCardMeaning}
+              </p>
+            ) : null}
             <p className="todayflow-eyebrow" style={{ margin: "0 0 0.35rem", ...ritualTextWrap }}>
               {formatRitualCardNumberDetailEyebrow(props.numerologyValue)}
             </p>

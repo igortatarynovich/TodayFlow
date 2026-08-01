@@ -80,6 +80,7 @@ export function buildTarotWeaveParagraph(
   card: TodayTarotCardRu,
   cardId: number,
   periodStable: boolean,
+  cardMeaning?: string | null,
 ): string {
   const name = card.nameRu;
   if (tarotSignalsChange(cardId) && periodStable) {
@@ -89,12 +90,9 @@ export function buildTarotWeaveParagraph(
       "Вместо новых направлений сосредоточься на том, что уже находится перед тобой."
     );
   }
-  const lead = norm(card.leadRu);
-  const body = norm(card.bodyRu);
-  if (lead && body && lead !== body) {
-    return `${lead} ${body}`;
-  }
-  return lead || body;
+  const meaning = norm(cardMeaning ?? "");
+  if (meaning && isRuUserFacingText(meaning)) return meaning;
+  return `Карта дня — ${name}.`;
 }
 
 export function buildNumberWeaveParagraph(numerologyValue: string, numerologyMeaning: string): string | null {
@@ -129,14 +127,11 @@ const EVENING_PROMPTS_THEMATIC = [
 
 export function buildEveningPrompt({
   dateISO,
-  tarotCard,
 }: {
   dateISO: string;
-  tarotCard: TodayTarotCardRu | undefined;
+  /** @deprecated FE bank no longer carries eveningRu — day_story.evening_closure is preferred upstream. */
+  tarotCard?: TodayTarotCardRu | undefined;
 }): string {
-  if (tarotCard?.eveningRu && isRuUserFacingText(tarotCard.eveningRu)) {
-    return tarotCard.eveningRu.trim();
-  }
   const seed = dateISO.split("-").reduce((acc, p) => acc + Number(p || 0), 0);
   return EVENING_PROMPTS_THEMATIC[Math.abs(seed) % EVENING_PROMPTS_THEMATIC.length];
 }

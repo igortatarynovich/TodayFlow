@@ -2,9 +2,10 @@ import { composeTarotPersonalLayer } from "@/lib/todayTarotPersonalLayer";
 import { mergeTarotTrapIntoDailyFocus, type DailyFocusModel } from "@/lib/todayDailyFocus";
 
 describe("composeTarotPersonalLayer", () => {
-  it("uses card risk as trap and folds daily focus + decision style into one scene", () => {
+  it("folds daily focus + decision style with BE card meaning", () => {
     const layer = composeTarotPersonalLayer({
       cardId: 12,
+      cardMeaning: "пауза меняет угол зрения, а не саму ситуацию.",
       dailyFocusTitle: "День про короткие договорённости и ясный тон.",
       dailyFocusId: "communication",
       decisionStyle: "Сначала чувствую, потом решаю",
@@ -14,19 +15,18 @@ describe("composeTarotPersonalLayer", () => {
     expect(layer).not.toBeNull();
     expect(layer!.cardName).toBe("Повешенный");
     expect(layer!.personalized).toBe(true);
-    expect(layer!.trapLine).toMatch(/стиле|Повешенный|застревание|жертве/i);
+    expect(layer!.trapLine).toMatch(/стиле|Повешенный|угол зрения/i);
     expect(layer!.sceneBody).toMatch(/договорённост/i);
-    expect(layer!.sceneBody).toMatch(/Повешенный|пауза|застревание/i);
-    expect(layer!.sceneBody).toMatch(/паузу|поворот/i);
+    expect(layer!.sceneBody).toMatch(/Повешенный|пауза|угол/i);
     expect(layer!.headline).toMatch(/договорённост/i);
   });
 
-  it("still returns card-quality copy without profile (personalized false)", () => {
+  it("returns name-anchored copy without inventing FE prose when meaning missing", () => {
     const layer = composeTarotPersonalLayer({ cardId: 12 });
     expect(layer).not.toBeNull();
     expect(layer!.personalized).toBe(false);
-    expect(layer!.trapLine).toMatch(/Повешенный|застревание/i);
-    expect(layer!.sceneBody.length).toBeGreaterThan(40);
+    expect(layer!.trapLine).toMatch(/Повешенный/);
+    expect(layer!.sceneBody).toMatch(/Повешенный/);
   });
 
   it("returns null for unknown card id", () => {
@@ -43,9 +43,9 @@ describe("mergeTarotTrapIntoDailyFocus", () => {
     };
     const merged = mergeTarotTrapIntoDailyFocus(
       focus,
-      "Ловушка «Повешенный»: застревание в жертве и ожидании спасения.",
+      "«Повешенный» сегодня задаёт другой угол зрения.",
     );
     expect(merged.lines).toHaveLength(2);
-    expect(merged.lines[1]).toMatch(/Повешенный|застревание/i);
+    expect(merged.lines[1]).toMatch(/Повешенный/i);
   });
 });

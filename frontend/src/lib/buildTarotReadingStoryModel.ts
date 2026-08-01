@@ -132,14 +132,7 @@ function buildCardStoryLine(
   const cleaned = cleanTarotCardMeaning(meaning);
   if (cleaned.length >= 24) return cleaned;
 
-  if (locale === "ru" && cardId != null) {
-    const ru = getTodayTarotCardRu(cardId);
-    if (ru) {
-      const orientLine = orientation === "reversed" ? ru.riskRu || ru.bodyRu : ru.bodyRu || ru.leadRu;
-      if (orientLine) return sanitizeTarotStoryText(orientLine);
-    }
-  }
-
+  // FE bank is labels-only — no prose fallback. Prefer API upright/reversed text.
   const fallback = orientation === "reversed" ? reversedText : uprightText;
   if (fallback?.trim()) return sanitizeTarotStoryText(fallback);
   return cleaned;

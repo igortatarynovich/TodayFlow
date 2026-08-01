@@ -1925,13 +1925,20 @@ export type RitualEssentialItem = { id: string; label: string; explanation: stri
 
 /** Какой чеклист «базы дня» показать в зависимости от настроения. */
 /** Три тега под «твоё число дня» — визуальный паритет с макетом, если в API нет отдельных ключевых слов. */
-/** Три коротких тега под картой — из lead RU (как iOS `anchorTarotTags`). */
-export function anchorTarotTagsFromLead(leadRu: string): string[] {
-  return leadRu
-    .split(/[,;.]/)
+/** Три коротких тега под картой — из BE keywords (или legacy lead string). */
+export function anchorTarotTags(source: string | string[] | null | undefined): string[] {
+  const parts = Array.isArray(source)
+    ? source.map((s) => String(s ?? ""))
+    : String(source ?? "").split(/[,;.—–-]/);
+  return parts
     .map((s) => s.trim())
     .filter((s) => s.length > 2 && s.length < 38)
     .slice(0, 3);
+}
+
+/** @deprecated use `anchorTarotTags` with BE keywords */
+export function anchorTarotTagsFromLead(leadRu: string): string[] {
+  return anchorTarotTags(leadRu);
 }
 
 export function numberDayTagTriad(numerologyValue: string): string[] {

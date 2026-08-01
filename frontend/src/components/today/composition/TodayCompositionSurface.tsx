@@ -27,7 +27,7 @@ import { MOTION } from "@/design-system/motion/tokens";
 import { SacredGeometryBackdrop } from "@/components/visualIdentity/SacredGeometryBackdrop";
 import { buildTodayHeroPillars, buildTodayHeroSymbol, resolveTodaySunSignLabel } from "@/lib/todayHeroMedium";
 import type { MorningRitualData, TodayCycleData } from "@/components/today/todayPageUtils";
-import { anchorTarotTagsFromLead, RITUAL_COPY } from "@/components/today/todayRitualCopy";
+import { anchorTarotTags, RITUAL_COPY } from "@/components/today/todayRitualCopy";
 import { getTodayTarotCardRu } from "@/components/today/todayTarotCardsRu";
 import { isDayNotReady, type TodayContractV1 } from "@/lib/todayContract";
 import type { CoreProfile } from "@/lib/types";
@@ -247,11 +247,21 @@ export function TodayCompositionSurface(props: Props) {
     [props.dateISO, props.cardName, props.morningRitualData?.tarot_card?.id, props.morningRitualData?.tarot_card?.name],
   );
 
-  const anchorTarotRecord = useMemo(() => getTodayTarotCardRu(anchorTarotId), [anchorTarotId]);
-  const anchorTarotTags = useMemo(
-    () => anchorTarotTagsFromLead(anchorTarotRecord?.leadRu ?? ""),
-    [anchorTarotRecord],
-  );
+  const compositionTarotTags = useMemo(() => {
+    const fromSymbols =
+      symbolHooksView?.card?.hook_reveal?.base?.keywords ?? symbolHooksView?.card?.keywords ?? null;
+    const fromMorning =
+      props.morningRitualData?.tarot_card?.keywords ??
+      props.morningRitualData?.tarot_explanation?.keywords ??
+      null;
+    const kws = Array.isArray(fromSymbols) && fromSymbols.length ? fromSymbols : fromMorning;
+    return anchorTarotTags(Array.isArray(kws) ? kws : []);
+  }, [
+    symbolHooksView?.card?.hook_reveal?.base?.keywords,
+    symbolHooksView?.card?.keywords,
+    props.morningRitualData?.tarot_card?.keywords,
+    props.morningRitualData?.tarot_explanation?.keywords,
+  ]);
 
   const ritualNarrativePostKeyRef = useRef<string | null>(null);
   const singleVoice = usesDayStorySingleVoice(props.contract);
@@ -1361,8 +1371,8 @@ export function TodayCompositionSurface(props: Props) {
     <RitualTarotPickExperience
       anchorCardId={anchorTarotId}
       resumeCommittedId={tarotPendingId ?? tarotPickedId}
-      cardTitleRu={anchorTarotRecord?.nameRu ?? props.cardName}
-      tagLabels={anchorTarotTags}
+      cardTitleRu={getTodayTarotCardRu(anchorTarotId)?.nameRu ?? props.cardName}
+      tagLabels={compositionTarotTags}
       onCommitMain={onTarotCommit}
       onRevealed={onTarotRevealed}
       onContinue={onTarotContinue}

@@ -1,8 +1,8 @@
 /**
  * Tarot personal layer — card × daily focus × Personal Model slice.
  *
- * Generic copy stays in `todayTarotCardsRu.ts`. This composer folds the card
- * into the day as the trap turn (§0.3), not as a separate “влияние карты” block.
+ * Card meaning comes from BE (`card_base_v1`), not FE theater bank.
+ * Bank supplies name only.
  */
 
 import { getTodayTarotCardRu } from "@/components/today/todayTarotCardsRu";
@@ -48,16 +48,18 @@ function clip(text: string, max: number): string {
 function softenStyle(style: string): string {
   const t = clean(style).replace(/[.!?…]+$/g, "");
   if (!t) return "";
-  // Keep a short clause usable inside «при твоём стиле …»
   return clip(t.charAt(0).toLowerCase() + t.slice(1), 90);
 }
 
 /**
  * Compose personal tarot layer. Returns null only when card id is unknown.
- * Without focus/profile still returns card-quality copy (`personalized: false`).
+ * Without focus/profile still returns a name-anchored line (`personalized: false`).
+ * Does not invent card prose when `cardMeaning` is missing.
  */
 export function composeTarotPersonalLayer(input: {
   cardId: number;
+  /** BE card_base meaning when available. */
+  cardMeaning?: string | null;
   dailyFocusTitle?: string | null;
   dailyFocusId?: string | null;
   decisionStyle?: string | null;
@@ -66,57 +68,50 @@ export function composeTarotPersonalLayer(input: {
   const card = getTodayTarotCardRu(input.cardId);
   if (!card) return null;
 
-  const risk = clean(card.riskRu);
-  const move = clean(card.focusRu);
-  const lead = clean(card.leadRu);
-  const body = clean(card.bodyRu);
+  const meaning = clean(input.cardMeaning);
   const dayFocus = clean(input.dailyFocusTitle);
   const style = softenStyle(input.decisionStyle ?? "");
   const help = clean(input.helpsFirst);
   const personalized = Boolean(dayFocus || style || help);
 
   let trapLine: string;
-  if (risk && style) {
+  if (style && meaning) {
     trapLine = ensurePeriod(
-      `При твоём стиле («${style}») «${card.nameRu}» легко скатывается в ${risk}`,
+      `При твоём стиле («${style}») «${card.nameRu}» звучит так: ${firstSentence(meaning).replace(/[.!?…]$/, "")}`,
     );
-  } else if (risk) {
-    trapLine = ensurePeriod(`Ловушка «${card.nameRu}»: ${risk}`);
   } else if (style) {
-    trapLine = ensurePeriod(
-      `«${card.nameRu}» сегодня проверяет стиль «${style}» — ${firstSentence(body || lead).replace(/[.!?…]$/, "")}`,
-    );
+    trapLine = ensurePeriod(`«${card.nameRu}» сегодня проверяет стиль «${style}»`);
+  } else if (meaning) {
+    trapLine = ensurePeriod(`«${card.nameRu}»: ${firstSentence(meaning).replace(/[.!?…]$/, "")}`);
   } else {
-    trapLine = ensurePeriod(
-      firstSentence(body || lead) || `«${card.nameRu}» сегодня задаёт другой угол зрения`,
-    );
+    trapLine = ensurePeriod(`«${card.nameRu}» сегодня задаёт другой угол зрения`);
   }
 
   const sceneBits: string[] = [];
   if (dayFocus) {
     sceneBits.push(firstSentence(dayFocus));
-  } else if (lead) {
-    sceneBits.push(firstSentence(lead));
+  } else if (meaning) {
+    sceneBits.push(firstSentence(meaning));
   }
 
-  // Card body as scene middle — one sentence, not a second block.
-  const bodyBit = firstSentence(body);
-  if (bodyBit && !sceneBits.some((b) => b.toLowerCase().includes(bodyBit.slice(0, 24).toLowerCase()))) {
-    sceneBits.push(bodyBit);
+  if (
+    meaning &&
+    dayFocus &&
+    !sceneBits.some((b) => b.toLowerCase().includes(firstSentence(meaning).slice(0, 24).toLowerCase()))
+  ) {
+    sceneBits.push(firstSentence(meaning));
   }
 
   sceneBits.push(trapLine);
 
-  if (move) {
-    sceneBits.push(ensurePeriod(move.charAt(0).toUpperCase() + move.slice(1)));
-  } else if (help) {
+  if (help) {
     sceneBits.push(ensurePeriod(`Опора: ${clip(help, 120)}`));
   }
 
   const sceneBody = clip(sceneBits.join(" "), 420);
   const headline = dayFocus
     ? clip(firstSentence(dayFocus).replace(/[.!?…]$/, ""), 72)
-    : clip(firstSentence(lead).replace(/[.!?…]$/, "") || card.nameRu, 72);
+    : clip(firstSentence(meaning).replace(/[.!?…]$/, "") || card.nameRu, 72);
 
   return {
     cardId: input.cardId,

@@ -315,22 +315,11 @@ function buildPulseFacet(input: {
   return out.join(" ");
 }
 
-const TAROT_SYMBOL_INTRO: Partial<Record<number, string>> = {
-  12: "Повешенный редко появляется в дни, когда нужно действовать быстрее. Сегодня он предлагает изменить не ситуацию, а угол зрения.",
-  9: "Отшельник приходит, когда внешний шум мешает услышать себя. Он не про изоляцию — про честный разговор с собой.",
-  16: "Башня — не про катастрофу, а про момент, когда старая схема больше не держится. Сегодня важнее не спасать конструкцию, а увидеть правду.",
-  0: "Шут открывает день, где можно пробовать без обещания идеального результата.",
-};
-
 export function buildTarotSymbolFacet(cardId: number, registry: SpineRegistry): string | null {
   const card = getTodayTarotCardRu(cardId);
   if (!card) return null;
-
-  const intro =
-    TAROT_SYMBOL_INTRO[cardId] ??
-    `${card.nameRu} сегодня — архетип дня: он говорит о другом слое, чем общая тема.`;
-  const detail = card.bodyRu?.trim() || card.questionRu;
-  const raw = `${intro} ${detail}`.replace(/\s+/g, " ").trim();
+  // Name-only facet — card prose SoT is BE card_base / chorus, not FE bank.
+  const raw = `${card.nameRu} сегодня — архетип дня: он говорит о другом слое, чем общая тема.`;
   return registry.claim(raw);
 }
 
@@ -554,18 +543,16 @@ export function buildSkyInfluenceCards(input: {
   if (ritualComplete && input.cardName && input.cardId != null) {
     const card = getTodayTarotCardRu(input.cardId);
     const chorusRole = input.chorus?.day_card?.role?.trim();
-    const story =
-      (chorusRole && isRuUserFacingText(chorusRole) ? chorusRole : null) ||
-      card?.focusRu ||
-      card?.leadRu ||
-      "Карта дня окрашивает уже собранный сюжет — не меняет его.";
-    pushCard({
-      id: "tarot",
-      icon: "tarot",
-      label: "Карта",
-      title: card?.nameRu ?? input.cardName,
-      story: input.registry.claim(story) ?? story,
-    });
+    const story = chorusRole && isRuUserFacingText(chorusRole) ? chorusRole : null;
+    if (story) {
+      pushCard({
+        id: "tarot",
+        icon: "tarot",
+        label: "Карта",
+        title: card?.nameRu ?? input.cardName,
+        story: input.registry.claim(story) ?? story,
+      });
+    }
   }
 
   if (ritualComplete && input.numerologyValue && input.numerologyValue !== "—") {

@@ -55,7 +55,9 @@ Lookup API: `get_base_meaning(card_id, orientation) → { meaning, keywords, nam
 - Question-tarot interpretation pack catalog strings (`upright_meaning` / `reversed_meaning`)
 - Daily card explainer — `meaning` forced from bank; LLM only personalization fields (`tarot-explainer-v4`)
 
-Deprecated as parallel meaning SoT: FE `TODAY_TAROT_CARDS_RU` (labels/sphereBump only until FE cleanup), ad-hoc explainer `meaning` as dictionary, EN `tarot_full_deck` upright/reversed as product prose.
+Deprecated as parallel meaning SoT: ad-hoc explainer `meaning` as dictionary, EN `tarot_full_deck` upright/reversed as product prose.
+
+FE `TODAY_TAROT_CARDS_RU` is **labels + sphereBump only** (no lead/body/risk/focus/evening/question). User-facing card prose comes from BE `card_base_v1` via symbols/morning/explainer.
 
 ---
 

@@ -58,7 +58,7 @@ describe("todayDaySpine", () => {
 
     expect(spine.thesis).toMatch(/спеш|пауз|ритм/i);
     expect(spine.thesis.split(/[.!?]/).filter(Boolean)).toHaveLength(1);
-    expect(spine.tarotBody).toMatch(/Повешенный|угол зрения/i);
+    expect(spine.tarotBody).toMatch(/Повешенный/);
     expect(spine.numberBody).toMatch(/20|терпен/i);
     expect(spine.numberBody).not.toMatch(/Путь жизни/i);
     expect(spine.skyCards.some((c) => c.id === "personal-transit")).toBe(true);
@@ -73,11 +73,11 @@ describe("todayDaySpine", () => {
     expect(second).toBeNull();
   });
 
-  it("builds tarot symbol from bodyRu not leadRu", () => {
+  it("builds tarot symbol from name label only (no FE prose bank)", () => {
     const registry = new SpineRegistry();
     const body = buildTarotSymbolFacet(12, registry);
-    expect(body).toMatch(/Повешенный|угол зрения/i);
-    expect(body).not.toMatch(/^Иногда пауза — это ход\./);
+    expect(body).toMatch(/Повешенный/);
+    expect(body).toMatch(/архетип дня/i);
   });
 
   it("builds number rhythm for weak numerology meaning", () => {

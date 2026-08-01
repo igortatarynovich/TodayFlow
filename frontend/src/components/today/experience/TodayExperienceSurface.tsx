@@ -37,7 +37,7 @@ import type { FusionResponse, MorningRitualData, TodayCycleData } from "@/compon
 import { buildDayEventsForNarrative } from "@/components/today/todayPageUtils";
 import { canShowTarotCardName } from "@/lib/todayRevealGate";
 import { getTodayTarotCardRu } from "@/components/today/todayTarotCardsRu";
-import { anchorTarotTagsFromLead, RITUAL_COPY } from "@/components/today/todayRitualCopy";
+import { anchorTarotTags, RITUAL_COPY } from "@/components/today/todayRitualCopy";
 
 function buildRitualSpineSnapshotWeb(input: {
   dayOpened: boolean;
@@ -69,6 +69,8 @@ type Props = {
   contract: TodayContractV1;
   fusion: FusionResponse | null;
   cardName: string;
+  /** BE card_base meaning when already resolved upstream. */
+  cardMeaning?: string | null;
   numerologyValue: string;
   numerologyMeaning: string;
   guideNarrativeLoading: boolean;
@@ -123,11 +125,12 @@ export function TodayExperienceSurface(props: Props) {
     if (tarotMainId == null) return base;
     const layer = composeTarotPersonalLayer({
       cardId: tarotMainId,
+      cardMeaning: props.cardMeaning,
       dailyFocusTitle: base.title,
       dailyFocusId: base.dailyFocusId,
     });
     return mergeTarotTrapIntoDailyFocus(base, layer?.trapLine);
-  }, [props.contract, guideNarrativePayload, tarotMainId]);
+  }, [props.contract, guideNarrativePayload, tarotMainId, props.cardMeaning]);
 
   const dayClosed = isDayContinuityClosed(continuityRecord);
   const continuityOpeningLine = useMemo(() => {
@@ -400,12 +403,31 @@ export function TodayExperienceSurface(props: Props) {
     [props.dateISO, props.cardName, props.morningRitualData?.tarot_card?.id, props.morningRitualData?.tarot_card?.name],
   );
 
-  const anchorTarotRecord = useMemo(() => getTodayTarotCardRu(anchorTarotId), [anchorTarotId]);
-  const anchorTarotTags = useMemo(
-    () => anchorTarotTagsFromLead(anchorTarotRecord?.leadRu ?? ""),
-    [anchorTarotRecord],
-  );
   const drawnTarot = tarotMainId != null ? getTodayTarotCardRu(tarotMainId) : undefined;
+  const experienceTarotTags = useMemo(() => {
+    const kws =
+      props.morningRitualData?.tarot_card?.keywords ??
+      props.morningRitualData?.tarot_explanation?.keywords ??
+      null;
+    return anchorTarotTags(Array.isArray(kws) ? kws : []);
+  }, [
+    props.morningRitualData?.tarot_card?.keywords,
+    props.morningRitualData?.tarot_explanation?.keywords,
+  ]);
+  const experienceCardMeaning = useMemo(() => {
+    const c =
+      props.cardMeaning ||
+      props.morningRitualData?.tarot_card?.meaning ||
+      props.morningRitualData?.tarot_explanation?.meaning ||
+      props.morningRitualData?.tarot_explanation?.summary ||
+      null;
+    return typeof c === "string" && c.trim() ? c.trim() : null;
+  }, [
+    props.cardMeaning,
+    props.morningRitualData?.tarot_card?.meaning,
+    props.morningRitualData?.tarot_explanation?.meaning,
+    props.morningRitualData?.tarot_explanation?.summary,
+  ]);
   const tarotNameVisible = canShowTarotCardName(tarotMainId);
 
   if (!hydrated) {
@@ -488,7 +510,7 @@ export function TodayExperienceSurface(props: Props) {
               anchorCardId={anchorTarotId}
               resumeCommittedId={tarotMainId}
               cardTitleRu={tarotNameVisible && drawnTarot ? drawnTarot.nameRu : ""}
-              tagLabels={tarotNameVisible ? anchorTarotTags : []}
+              tagLabels={tarotNameVisible ? experienceTarotTags : []}
               reduceMotion={reduceMotion}
               startAtGrid
               allowSkipAnimation={false}
@@ -499,9 +521,9 @@ export function TodayExperienceSurface(props: Props) {
               onRevealed={onTarotRevealed}
               onContinue={onContinueFromTarot}
             />
-            {tarotNameVisible && !tarotContinueAck && drawnTarot?.leadRu ? (
+            {tarotNameVisible && !tarotContinueAck && experienceCardMeaning ? (
               <p className="orbit-body-sm" style={{ margin: "0.65rem 0 0", lineHeight: 1.55, color: "#3d3228" }}>
-                {drawnTarot.leadRu}
+                {experienceCardMeaning}
               </p>
             ) : null}
           </section>

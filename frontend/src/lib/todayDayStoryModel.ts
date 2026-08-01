@@ -167,11 +167,7 @@ function buildTarotImpactFromSpine(
   return {
     title: card?.nameRu ?? cardName,
     headline: personal?.headline || "Символ дня",
-    body:
-      personal?.sceneBody ||
-      body ||
-      card?.bodyRu ||
-      "Карта открывает другой слой смысла — не повторяя общую тему.",
+    body: personal?.sceneBody || body || "",
   };
 }
 
@@ -336,6 +332,7 @@ export function buildTodayDayStoryViewModel(input: {
     pickedCardId != null && ritualPhase !== "tarot_pending"
       ? composeTarotPersonalLayer({
           cardId: pickedCardId,
+          cardMeaning: input.cardMeaning,
           dailyFocusTitle: focusTitle,
           dailyFocusId: dailyFocus.dailyFocusId,
           decisionStyle: input.decisionStyle,
