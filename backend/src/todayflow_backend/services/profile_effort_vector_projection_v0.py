@@ -10,9 +10,22 @@ from __future__ import annotations
 import re
 from typing import Any
 
-PROJECTION_VERSION = "profile_effort_vector_v0.1"
+PROJECTION_VERSION = "profile_effort_vector_v0.2"
 _MAX_VECTOR = 140
 _MIN_VECTOR = 8
+
+# Forms § Шаг 4: starts with action; no day agenda on Profile.
+_DAY_AGENDA_RE = re.compile(r"\b(сегодня|завтра|на сегодня)\b", re.I)
+_ACTION_START_RE = re.compile(
+    r"^(?:"
+    r"доводить|довести|называть|назвать|сделать|выбрать|поставить|оставить|"
+    r"начать|закрыть|спросить|отделить|снять|сказать|ограничить|добавить|"
+    r"перевести|закрепить|открыть|"
+    r"сделай|выбери|поставь|оставь|назови|спроси|скажи|ограничь|добавь|"
+    r"начни|закрой|отдели|сними"
+    r")\b",
+    re.I,
+)
 
 
 def _clip(text: str, limit: int) -> str:
@@ -45,6 +58,15 @@ def _is_near_duplicate(a: str, b: str) -> bool:
     return overlap >= 0.72
 
 
+def _is_safe_effort_line(text: str) -> bool:
+    t = (text or "").strip()
+    if len(t) < _MIN_VECTOR:
+        return False
+    if _DAY_AGENDA_RE.search(t):
+        return False
+    return bool(_ACTION_START_RE.search(t))
+
+
 def project_effort_vector_v0(
     *,
     insight_nodes: dict[str, Any] | None,
@@ -63,6 +85,8 @@ def project_effort_vector_v0(
             "forbid_life_mission": True,
             "forbid_today_astrology_rec_lists": True,
             "null_when_no_safe_help": True,
+            "require_action_start": True,
+            "forbid_day_agenda": True,
         },
     }
     if not nodes or not isinstance(nodes[0], dict):
@@ -76,7 +100,10 @@ def project_effort_vector_v0(
 
     # Safe deterministic path: node.help that adds direction beyond restating insight.
     # No formula that invents action from insight alone — null instead of generic advice.
-    if len(help_line) < _MIN_VECTOR or _is_near_duplicate(help_line, insight):
+    if (
+        not _is_safe_effort_line(help_line)
+        or _is_near_duplicate(help_line, insight)
+    ):
         return {
             **empty,
             "source_node_id": node_id,
@@ -107,6 +134,8 @@ def project_effort_vector_v0(
             "forbid_life_mission": True,
             "forbid_today_astrology_rec_lists": True,
             "null_when_no_safe_help": True,
+            "require_action_start": True,
+            "forbid_day_agenda": True,
             "insight_is_context_not_vector": True,
         },
     }

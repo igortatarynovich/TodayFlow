@@ -13,11 +13,11 @@ export type ProfileInsightSceneProps = {
 
 const insightNav = PROFILE_V2_DEPTH_NAV.find((s) => s.id === "insight") ?? PROFILE_V2_DEPTH_NAV[2];
 
-function kindEyebrow(kind: string): string {
+/** Forms titles («Главное напряжение» / «Самая большая ловушка») are the only heading. */
+function kindEyebrow(kind: string): string | null {
   const k = kind.toLowerCase();
   if (k === "strength") return PROFILE_V2_COPY.zones.insight.giftLabel;
-  if (k === "repeat") return PROFILE_V2_COPY.zones.insight.trapLabel;
-  if (k === "tension") return PROFILE_V2_COPY.zones.insight.trapLabel;
+  if (k === "repeat" || k === "tension") return null;
   return PROFILE_V2_COPY.zones.insight.title;
 }
 
@@ -42,6 +42,7 @@ export function ProfileInsightScene({ node }: ProfileInsightSceneProps) {
   const help = scrubUserFacingText(node.help);
   const showHelp = Boolean(help);
   const insight = scrubUserFacingText(node.insight) || node.insight;
+  const eyebrow = kindEyebrow(node.kind);
   const motion = useProfileMotionInView<HTMLElement>(60);
 
   return (
@@ -70,7 +71,7 @@ export function ProfileInsightScene({ node }: ProfileInsightSceneProps) {
           data-testid="profile-v2-insight-node"
           data-insight-kind={node.kind}
         >
-          <p className={styles.insightKind}>{kindEyebrow(node.kind)}</p>
+          {eyebrow ? <p className={styles.insightKind}>{eyebrow}</p> : null}
           <h2 className={styles.insightTitle}>{node.title}</h2>
           <p className={styles.insightBody}>{insight}</p>
         </article>

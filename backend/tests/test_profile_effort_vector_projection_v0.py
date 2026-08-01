@@ -31,7 +31,26 @@ def test_repeat_uses_help_as_effort_vector() -> None:
     assert "insight_nodes_v0.nodes[0].help" in out["source_fields"]
 
 
-def test_tension_uses_help_not_insight_copy() -> None:
+def test_tension_uses_action_help_not_insight_copy() -> None:
+    """Forms Case A: effort is action-start, not descriptive Act-3 help."""
+    out = project_effort_vector_v0(
+        insight_nodes={
+            "nodes": [
+                {
+                    "id": "node_tension_0",
+                    "kind": "tension",
+                    "insight": "Ты легко открываешь новый контур, но устойчивость появляется только после закрепления.",
+                    "help": "Доводить один начатый контур до видимого результата, прежде чем открывать следующий.",
+                }
+            ]
+        }
+    )
+    assert out["role"] == "steer_main_tension"
+    assert out["effort_vector"].startswith("Доводить")
+    assert len(out["effort_vector"] or "") <= 140
+
+
+def test_null_when_help_is_descriptive_not_action() -> None:
     out = project_effort_vector_v0(
         insight_nodes={
             "nodes": [
@@ -44,9 +63,25 @@ def test_tension_uses_help_not_insight_copy() -> None:
             ]
         }
     )
-    assert out["role"] == "steer_main_tension"
-    assert out["effort_vector"] == "Один завершённый контур важнее трёх новых начал."
-    assert len(out["effort_vector"]) <= 140
+    assert out["effort_vector"] is None
+    assert out["rules"]["require_action_start"] is True
+
+
+def test_null_when_help_has_day_agenda() -> None:
+    out = project_effort_vector_v0(
+        insight_nodes={
+            "nodes": [
+                {
+                    "id": "node_tension_0",
+                    "kind": "tension",
+                    "insight": "Напряжение достаточно длинное как контекст узла.",
+                    "help": "Сделать один явный выбор сегодня без согласования.",
+                }
+            ]
+        }
+    )
+    assert out["effort_vector"] is None
+    assert out["rules"]["forbid_day_agenda"] is True
 
 
 def test_null_when_help_missing() -> None:

@@ -1,6 +1,6 @@
 # Profile Act 5 — Bridge draft (text + form)
 
-**Status:** FORM ALIGNED · projection v0.2 (2026-07-30)  
+**Status:** FORM ALIGNED · lexicon polish 2026-08-01  
 **Parent:** [PROFILE_PRODUCT_JOURNEY_FORMS_V1.md](./PROFILE_PRODUCT_JOURNEY_FORMS_V1.md) § Шаг 5  
 
 ## Job
@@ -13,13 +13,17 @@
 bridge_line → CTA /today
 ```
 
-Запрет: императив · дубль effort · прогноз дня.
+Запрет: императив · дубль effort · прогноз дня · «сегодня» в chrome-смысле дня.
 
 ## Live
 
 | Check | Status |
 |-------|--------|
-| Why-Today templates | OK |
+| Why-Today templates A/C | OK — tension vs repeat (CE sets kind from living) |
 | Guards vs effort/imperative | OK |
 | CTA «Открыть Today» | OK |
-| Template polish | CONTENT optional |
+| No «сегодня» in repeat template | OK |
+
+## Remaining
+
+Optional scenarist tone pass on templates only.

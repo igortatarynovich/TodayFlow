@@ -25,7 +25,7 @@ from typing import Any
 
 from todayflow_backend.core.config import settings
 
-PROJECTION_VERSION = "character_engine_profile_consumption_v0.7"
+PROJECTION_VERSION = "character_engine_profile_consumption_v0.8"
 _MAX_RECOGNITION = 160
 _MAX_CORE = 420
 _MAX_TRAP = 220
@@ -101,8 +101,8 @@ _ESSAYS_BY_IDENTITY: dict[str, dict[str, Any]] = {
             "Замечать, когда дистанция уже не ясность, а отсрочка контакта.",
         ],
         "helps": [
-            "Сделай один явный выбор сегодня — без полного согласования со всеми.",
-            "Назови границу вслух: что ты оставляешь своим, а что открываешь.",
+            "Сделать один явный выбор — без полного согласования со всеми.",
+            "Назвать границу вслух: что ты оставляешь своим, а что открываешь.",
         ],
         "decision_style": (
             "Ты решаешь через собственную систему: сначала внутренний контур и смысл, "
@@ -217,8 +217,8 @@ _ESSAYS_BY_IDENTITY: dict[str, dict[str, Any]] = {
             "Называть свои желания так же ясно, как чужие.",
         ],
         "helps": [
-            "Спроси себя, чего хочешь ты — до ответа «чем помочь».",
-            "Поставь одну мягкую, но явную границу сегодня.",
+            "Спросить себя, чего хочешь ты — до ответа «чем помочь».",
+            "Поставить одну мягкую, но явную границу.",
         ],
         "decision_style": (
             "Ты решаешь через чувственное поле: что бережёт связь и что ранит. "
@@ -329,8 +329,8 @@ _ESSAYS_BY_IDENTITY: dict[str, dict[str, Any]] = {
             "Слышать тело и паузу рядом с напором.",
         ],
         "helps": [
-            "Назови цель импульса одним предложением — и сделай первый шаг.",
-            "Оставь один огонь, погаси остальные на сегодня.",
+            "Назвать цель импульса одним предложением — и сделать первый шаг.",
+            "Оставить один огонь — погасить остальные.",
         ],
         "decision_style": (
             "Ты решаешь через искру: тело уже знает «да» раньше длинного разбора. "
@@ -514,6 +514,34 @@ def _scrub_machine_thesis(text: str, identity_thesis: str | None = None) -> str:
     if thesis and thesis in out:
         out = out.replace(thesis, label)
     out = re.sub(r"builds_through_[a-z0-9_]+", label, out)
+    return out
+
+
+# Profile journey forbids day agenda in Act 3–4 helps (Forms + PROFILE_V2 lexicon).
+_DAY_AGENDA_RE = re.compile(r"\b(сегодня|завтра|на сегодня)\b", re.I)
+
+
+def _scrub_day_agenda(text: str) -> str | None:
+    """Drop or soften day-agenda tokens; null if the line collapses."""
+    t = re.sub(r"\s+", " ", str(text or "").strip())
+    if not t:
+        return None
+    if not _DAY_AGENDA_RE.search(t):
+        return t
+    cleaned = _DAY_AGENDA_RE.sub("", t)
+    cleaned = re.sub(r"\s{2,}", " ", cleaned)
+    cleaned = re.sub(r"\s+([,.—–-])", r"\1", cleaned).strip(" ,.—–-")
+    if len(cleaned) < 12 or _DAY_AGENDA_RE.search(cleaned):
+        return None
+    return cleaned
+
+
+def _scrub_day_agenda_list(items: list[str]) -> list[str]:
+    out: list[str] = []
+    for item in items:
+        scrubbed = _scrub_day_agenda(item)
+        if scrubbed and scrubbed not in out:
+            out.append(scrubbed)
     return out
 
 
@@ -831,11 +859,14 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
         relationship = essay_relationship
         relationship_source = "editorial_bank"
     helps = _dedupe_list(helps or essay_helps, trap, surface, *growth)[:3] or essay_helps[:3]
+    helps = [
+        scrubbed
+        for h in (_scrub_day_agenda_list(helps) or _scrub_day_agenda_list(essay_helps))
+        if (scrubbed := _scrub_day_agenda(_scrub_machine_thesis(h, identity_thesis)))
+    ]
+    help_line = helps[0] if helps else None
     growth = _dedupe_list(growth, trap, surface, *strengths)[:3]
     strengths = _dedupe_list(strengths, trap, surface, *growth)[:4]
-    help_line = _scrub_machine_thesis(helps[0], identity_thesis) if helps else None
-    if help_line:
-        helps = [_scrub_machine_thesis(h, identity_thesis) for h in helps]
     growth = [_scrub_machine_thesis(g, identity_thesis) for g in growth]
     trap = _scrub_machine_thesis(trap, identity_thesis)
     decision = _scrub_machine_thesis(decision, identity_thesis)
@@ -927,27 +958,47 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
             }
         )
 
+    # Forms: birth-only → «Главное напряжение»; living quotes → «Самая большая ловушка».
+    from todayflow_backend.services.profile_insight_nodes_projection_v0 import _living_quotes
+
+    living_quotes = _living_quotes(
+        payload.get("living") if isinstance(payload.get("living"), dict) else None
+    )
+    if living_quotes:
+        node_kind = "repeat"
+        node_title = "Самая большая ловушка"
+        node_id = "node_ce_repeat_0"
+    else:
+        node_kind = "tension"
+        node_title = "Главное напряжение"
+        node_id = "node_ce_tension_0"
+    node_source_fields = [
+        "character_engine_stage2.identity_core",
+        "character_engine_stage1.claims",
+        "character_engine_stage3.primary_tension",
+    ]
+    ce_node: dict[str, Any] = {
+        "id": node_id,
+        "kind": node_kind,
+        "title": node_title,
+        "insight": trap,
+        "grounded_on": grounded_on,
+        "help": help_line,
+        "source_fields": list(node_source_fields),
+    }
+    if living_quotes:
+        ce_node["living_evidence"] = living_quotes
+        ce_node["source_fields"] = [*node_source_fields, "living.signals.note"]
+
     payload["insight_nodes_v0"] = {
         "projection_version": f"{PROJECTION_VERSION}.insight",
-        "nodes": [
-            {
-                "id": "node_ce_trap_0",
-                "kind": "tension",
-                "title": "Самая большая ловушка",
-                "insight": trap,
-                "grounded_on": grounded_on,
-                "help": help_line,
-                "source_fields": [
-                    "character_engine_stage2.identity_core",
-                    "character_engine_stage1.claims",
-                    "character_engine_stage3.primary_tension",
-                ],
-            }
-        ],
+        "nodes": [ce_node],
         "rules": {
             "source": "character_engine_identity_core",
             "trap_source": trap_source,
             "forbids_living_day_rhythm_as_identity_trap": True,
+            "living_evidence_is_adjacent_context_not_proof": True,
+            "titles_follow_forms_case_a_c": True,
             "snapshot_materials_may_differ": True,
         },
     }

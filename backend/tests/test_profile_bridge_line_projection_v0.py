@@ -47,6 +47,7 @@ def test_repeat_bridge_is_path_not_action() -> None:
     assert out["bridge_line"] == _BRIDGE_REPEAT_RU
     assert "Отметь" not in (out["bridge_line"] or "")
     assert "Назвать тему" not in (out["bridge_line"] or "")
+    assert "сегодня" not in (out["bridge_line"] or "").lower()
     assert out["leads_to"] == "today"
     assert out["cta"] == "today"
 

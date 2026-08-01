@@ -145,7 +145,33 @@ def test_consumption_overwrites_recognition_why_trap(monkeypatch) -> None:
 
     node = out["insight_nodes_v0"]["nodes"][0]
     assert "Ритм дня" not in node["insight"]
+    assert node["kind"] == "tension"
+    assert node["title"] == "Главное напряжение"
+    assert "living_evidence" not in node
+    assert "сегодня" not in (node.get("help") or "").lower()
     assert out["insight_nodes_v0"]["rules"]["forbids_living_day_rhythm_as_identity_trap"] is True
+    assert out["insight_nodes_v0"]["rules"]["titles_follow_forms_case_a_c"] is True
+
+
+def test_consumption_preserves_living_as_repeat_node(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "todayflow_backend.services.character_engine_profile_consumption_v0.settings",
+        type("S", (), {"character_engine_profile_consumption": True})(),
+    )
+    payload = _payload()
+    payload["living"] = {
+        "signals": [
+            {"note": "Не стала писать коллеге"},
+            {"note": "Разговор с партнёром перенесла"},
+        ]
+    }
+    out = apply_character_engine_profile_consumption_v0(payload)
+    node = out["insight_nodes_v0"]["nodes"][0]
+    assert node["kind"] == "repeat"
+    assert node["title"] == "Самая большая ловушка"
+    assert node.get("living_evidence")
+    assert any("коллеге" in q for q in node["living_evidence"])
+    assert "сегодня" not in (node.get("help") or "").lower()
 
 
 def test_consumption_skips_when_not_grounded(monkeypatch) -> None:

@@ -1,6 +1,6 @@
 # Profile Act 4 — Effort draft (text + form)
 
-**Status:** FORM ALIGNED · swipe sphere cards + tap expand (2026-07-30)  
+**Status:** FORM ALIGNED · prose QA guards 2026-08-01  
 **Parent:** [PROFILE_PRODUCT_JOURNEY_FORMS_V1.md](./PROFILE_PRODUCT_JOURNEY_FORMS_V1.md) § Шаг 4  
 
 ## Job
@@ -11,22 +11,20 @@
 
 ```text
 Куда прикладывать усилия
-  {effort_vector}
+  {effort_vector — action-start, ≤140, без «сегодня»}
 
   [горизонтальный свайп карточек]
   свёрнуто: название + тизер
   тап: how / need / risk / tips
 ```
 
-Forms «1–2 сферы» = видимый фокус без скролла, не жёсткий лимит ассортимента.
-
 ## Live
 
 | Check | Status |
 |-------|--------|
-| Vector hero | OK |
-| Swipe rail + snap | OK |
+| Vector hero + swipe rail | OK |
 | Tap expand (one open) | OK |
-| Prose vs samples | CONTENT |
+| action-start + no day agenda | OK — `profile_effort_vector_v0.2` nulls unsafe help |
+| CE helps → vector | OK after day-agenda scrub; still CONTENT if bank voice ≠ Forms samples |
 
-## Samples — see Forms Case A / C
+## Samples — Forms Case A / C
