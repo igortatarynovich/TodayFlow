@@ -222,12 +222,18 @@ async def get_morning_ritual(
 
     tarot_explanation: dict = {"status": "not_revealed", "personalized": False}
     if card_revealed and is_paid and not fast_mode:
+        _card_id_raw = tarot_card_payload.get("id")
+        try:
+            _card_id = int(_card_id_raw) if _card_id_raw is not None else None
+        except (TypeError, ValueError):
+            _card_id = None
         tarot_explanation = explain_tarot_card(
             user=user,
             db=db,
             card_name=str(tarot_card_payload.get("name") or ""),
             orientation=str(tarot_card_payload.get("orientation") or "upright"),
             target_date=target_date,
+            card_id=_card_id,
         )
     elif card_revealed:
         tarot_explanation = {

@@ -208,19 +208,22 @@ async def explain_daily_tarot_card(
     if not daily_draw or not daily_draw.card or daily_draw.selection_status != "selected":
         raise HTTPException(status_code=409, detail="card_of_day_not_selected")
     
-    # Объясняем через ИИ
+    # Personalization via LLM; traditional meaning forced from card_base_v1.
+    draw_orientation = getattr(daily_draw, "orientation", None) or "upright"
     explanation = explain_tarot_card(
         user=user,
         db=db,
         card_name=daily_draw.card.name,
-        orientation=daily_draw.card.orientation or "upright",
-        target_date=target_date
+        orientation=str(draw_orientation),
+        target_date=target_date,
+        card_id=int(daily_draw.card.id) if daily_draw.card and daily_draw.card.id is not None else None,
     )
     
     return {
         "card": {
             "name": daily_draw.card.name,
-            "orientation": daily_draw.card.orientation,
+            "orientation": draw_orientation,
+            "id": daily_draw.card.id,
         },
         "explanation": explanation,
         "date": target_date

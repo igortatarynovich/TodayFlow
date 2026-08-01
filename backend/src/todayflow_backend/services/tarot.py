@@ -13,6 +13,7 @@ from sqlalchemy.exc import IntegrityError
 
 from todayflow_backend.core import models as api_models
 from todayflow_backend.data import astrology as astrology_ref
+from todayflow_backend.data import card_base_v1
 from todayflow_backend.data import content_system
 from todayflow_backend.db import models as db_models
 from todayflow_backend.db.models import utc_naive_now
@@ -27,6 +28,7 @@ DEFAULT_REMINDER_MINUTE = 0
 class TarotService:
     def __init__(self) -> None:
         # Full 78-card deck — PNG faces in frontend map 0…77 via tarotCardFaceSrc.
+        # Meaning prose SoT: card_base_v1 (canon TAROT_CARD_BASE_V1); deck keeps id/name/corr.
         self.cards = astrology_ref.tarot_full_deck()
         self.card_map = {str(card["id"]): card for card in self.cards}
         spreads = astrology_ref.tarot_spreads()
@@ -34,6 +36,38 @@ class TarotService:
         self.default_spread_id = spreads[0]["id"] if spreads else None
         self.mantras = astrology_ref.mantras()
         self.rituals = astrology_ref.rituals()
+
+    @staticmethod
+    def _prose_from_card_base(card_data: dict[str, Any]) -> tuple[str, str, list[str]]:
+        """Return (upright, reversed, keywords) preferring card_base_v1."""
+        try:
+            cid = int(card_data["id"])
+        except (KeyError, TypeError, ValueError):
+            return (
+                str(card_data.get("upright") or ""),
+                str(card_data.get("reversed") or ""),
+                list(card_data.get("keywords") or []),
+            )
+        sides = card_base_v1.prose_sides(cid)
+        if not sides:
+            return (
+                str(card_data.get("upright") or ""),
+                str(card_data.get("reversed") or ""),
+                list(card_data.get("keywords") or []),
+            )
+        keywords = list(sides.get("keywords_upright") or []) or list(card_data.get("keywords") or [])
+        return str(sides["upright"]), str(sides["reversed"]), keywords
+
+    def _to_card_model(self, card_data: dict[str, Any]) -> api_models.TarotCard:
+        upright, reversed_, keywords = self._prose_from_card_base(card_data)
+        return api_models.TarotCard(
+            id=int(card_data["id"]),
+            name=str(card_data.get("name") or ""),
+            keywords=keywords,
+            upright=upright,
+            reversed=reversed_,
+            correspondences=dict(card_data.get("correspondences") or {}),
+        )
 
     def not_selected_daily_draw(self, *, draw_date: date | None = None) -> api_models.TarotDailyDraw:
         """Gate payload: no card name/id/image-identifying fields before user action."""
@@ -94,19 +128,12 @@ class TarotService:
         return model
 
     def get_card_by_id(self, card_id: int, *, locale: str | None = None) -> api_models.TarotCard | None:
-        """Return a single major arcana card from reference data (for library / SEO pages)."""
+        """Return a card from reference data (library / SEO); meaning from card_base_v1."""
         _ = locale  # reserved for future localized decks
         card_data = self.card_map.get(str(card_id))
         if not card_data:
             return None
-        return api_models.TarotCard(
-            id=card_data["id"],
-            name=card_data["name"],
-            keywords=list(card_data.get("keywords") or []),
-            upright=str(card_data.get("upright") or ""),
-            reversed=str(card_data.get("reversed") or ""),
-            correspondences=dict(card_data.get("correspondences") or {}),
-        )
+        return self._to_card_model(card_data)
 
     def get_history(
         self, user: db_models.User, limit: int = 30, *, locale: str | None = None
@@ -494,15 +521,8 @@ class TarotService:
         mantra_data = self._pick_item(self.mantras, axes, 0, draw_date, "mantra")
         ritual_data = self._pick_item(self.rituals, axes, 0, draw_date, "ritual")
         
-        card_model = api_models.TarotCard(
-            id=card["id"],
-            name=card["name"],
-            keywords=card.get("keywords", []),
-            upright=card.get("upright", ""),
-            reversed=card.get("reversed", ""),
-            correspondences=card.get("correspondences", {}),
-        )
-        
+        card_model = self._to_card_model(card)
+
         # Localize and add human_text (same approach as _to_model)
         mantra_dict = localize_mantra(mantra_data, locale=locale) if mantra_data else None
         ritual_dict = localize_ritual(ritual_data, locale=locale) if ritual_data else None
@@ -571,7 +591,7 @@ class TarotService:
         return api_models.TarotDailyDraw(
             date=draw.draw_date.isoformat(),
             selection_status="selected",
-            card=api_models.TarotCard(**card_data),
+            card=self._to_card_model(card_data),
             orientation=draw.orientation,
             mantra=api_models.Mantra(**mantra_dict) if mantra_dict else None,
             ritual=api_models.Ritual(**ritual_dict) if ritual_dict else None,
@@ -635,14 +655,7 @@ class TarotService:
         cards: List[api_models.TarotSpreadCard] = []
         for idx, position in enumerate(positions):
             card_data = deck[idx]
-            card_model = api_models.TarotCard(
-                id=int(card_data["id"]),
-                name=str(card_data.get("name") or ""),
-                keywords=list(card_data.get("keywords") or []),
-                upright=str(card_data.get("upright") or ""),
-                reversed=str(card_data.get("reversed") or ""),
-                correspondences=dict(card_data.get("correspondences") or {}),
-            )
+            card_model = self._to_card_model(card_data)
             selected_orientation = None
             if selected_cards and idx < len(selected_cards):
                 selected_orientation = str(selected_cards[idx].orientation or "").strip().lower()
@@ -651,7 +664,7 @@ class TarotService:
                 if selected_orientation in {"upright", "reversed"}
                 else ("reversed" if self._stable_seed(user.id, f"{token}:{position['id']}", "spread") % 2 else "upright")
             )
-            meaning = card_data["reversed"] if orientation == "reversed" else card_data["upright"]
+            meaning = card_model.reversed if orientation == "reversed" else card_model.upright
 
             axes = list(
                 set(position.get("axes", []))
@@ -726,17 +739,7 @@ class TarotService:
         
         cards: List[api_models.TarotCard] = []
         for card_data in deck:
-            # Карты уже локализованы в данных, используем напрямую
-            cards.append(
-                api_models.TarotCard(
-                    id=card_data["id"],
-                    name=card_data["name"],
-                    keywords=card_data.get("keywords", []),
-                    upright=card_data.get("upright", ""),
-                    reversed=card_data.get("reversed", ""),
-                    correspondences=card_data.get("correspondences", {}),
-                )
-            )
+            cards.append(self._to_card_model(card_data))
         return cards
 
 

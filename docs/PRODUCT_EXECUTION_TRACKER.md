@@ -6,6 +6,16 @@ Status: Active working document
 
 **IN PROGRESS (2026-08-01):** card_base_v1 cutover done in code (explainer + TarotService + pack catalog) · next editorial pass on 156 base texts · FE `TODAY_TAROT_CARDS_RU` cleanup.
 
+## Architecture impact — card_base_v1 cutover (explainer / question-tarot) (2026-08-01)
+
+- **SoT before:** Public `TarotCard.upright`/`reversed`/spread `meaning` from EN `tarot_full_deck`; explainer `meaning` LLM/template; pack `upright_meaning`/`reversed_meaning` from deck EN.
+- **SoT after:** Same fields from RU `card_base_v1` (`prose_sides` / `get_base_meaning`); explainer `tarot-explainer-v4` injects bank `meaning` and does not let LLM overwrite it; `knowledge_v1` stays pack facts only.
+- **Public contract changed?** yes — semantics/locale of `upright`/`reversed`/`meaning` on card & spread payloads (EN→RU bank); explainer JSON may omit generative `meaning` (server fills from bank) + additive `meaning_source`.
+- **Migration required?** no version bump; clients already display these strings.
+- **Canon updated?** yes — [TAROT_CARD_BASE_V1.md](./tarot/TAROT_CARD_BASE_V1.md) §3.
+- **Backward compatible?** yes for shape; text language of catalog fields flips to product RU.
+- **Server check:** unit `tests/test_card_base_cutover_v1.py` 5/5; BE compose recreate; live `GET /tarot/cards/21` upright matches `card_base_v1` RU prose.
+
 ## Architecture impact — Day hooks + Glance overview (2026-08-01)
 
 - **SoT before:** Glance hero = theme + 4 spheres + nearest; card/number meanings from FE major bank + EN deck + LLM explainers; color as talisman prop without hook shell; prebake orientation hardcoded upright.

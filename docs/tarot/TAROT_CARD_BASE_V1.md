@@ -50,11 +50,12 @@ Lookup API: `get_base_meaning(card_id, orientation) → { meaning, keywords, nam
 ## 3. Consumers (must not fork)
 
 - Day symbol reveal / `hook_reveal` base layer
-- Morning ritual card display
-- Question-tarot result (base layer before pack/LLM)
-- Library / card detail
+- Morning ritual card display (`tarot_card.meaning` / free `tarot_explanation.summary`)
+- Card-of-day / library / spread strip — `TarotService` `upright`/`reversed`/`meaning` via `card_base_v1.prose_sides`
+- Question-tarot interpretation pack catalog strings (`upright_meaning` / `reversed_meaning`)
+- Daily card explainer — `meaning` forced from bank; LLM only personalization fields (`tarot-explainer-v4`)
 
-Deprecated as parallel meaning SoT: FE `TODAY_TAROT_CARDS_RU`, ad-hoc explainer `meaning` as dictionary, duplicate upright/reversed prose banks.
+Deprecated as parallel meaning SoT: FE `TODAY_TAROT_CARDS_RU` (labels/sphereBump only until FE cleanup), ad-hoc explainer `meaning` as dictionary, EN `tarot_full_deck` upright/reversed as product prose.
 
 ---
 

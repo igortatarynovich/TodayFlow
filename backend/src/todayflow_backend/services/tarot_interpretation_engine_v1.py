@@ -225,11 +225,21 @@ def _meaning_range(
     *,
     question_domain: str | None = None,
 ) -> dict[str, Any]:
+    from todayflow_backend.data import card_base_v1
+
     corr = row.get("correspondences") if isinstance(row.get("correspondences"), dict) else {}
     element = str(corr.get("element") or "") or None
     keywords = [str(k).strip() for k in (row.get("keywords") or []) if str(k).strip()]
-    catalog_up = str(row.get("upright") or "").strip()
-    catalog_rev = str(row.get("reversed") or "").strip()
+    # Product base prose SoT = card_base_v1; deck EN upright/reversed is fallback only.
+    sides = card_base_v1.prose_sides(int(card_id))
+    if sides:
+        catalog_up = str(sides.get("upright") or "").strip()
+        catalog_rev = str(sides.get("reversed") or "").strip()
+        if sides.get("keywords_upright"):
+            keywords = list(sides["keywords_upright"])
+    else:
+        catalog_up = str(row.get("upright") or "").strip()
+        catalog_rev = str(row.get("reversed") or "").strip()
     element_ru = _ELEMENT_RU.get(element or "", None)
 
     kb = tarot_kb.get_card(int(card_id))

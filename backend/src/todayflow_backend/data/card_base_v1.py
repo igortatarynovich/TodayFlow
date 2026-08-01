@@ -101,6 +101,51 @@ def get_base_meaning(
     }
 
 
+def prose_sides(card_id: int) -> dict[str, Any] | None:
+    """Upright + reversed base prose for public card/spread payloads.
+
+    Returns None when the card is missing from card_base_v1 (caller keeps deck fallback).
+    """
+    card = get_card(card_id)
+    if not card:
+        return None
+    up = get_base_meaning(int(card_id), "upright")
+    rev = get_base_meaning(int(card_id), "reversed")
+    if not up or not rev:
+        return None
+    return {
+        "id": int(card_id),
+        "name_ru": str(card.get("name_ru") or "").strip(),
+        "upright": up["meaning"],
+        "reversed": rev["meaning"],
+        "keywords_upright": list(up.get("keywords") or []),
+        "keywords_reversed": list(rev.get("keywords") or []),
+    }
+
+
+def resolve_card_id_by_name(name: str | None) -> int | None:
+    """Match deck/product name (RU or EN) to card_base id."""
+    needle = str(name or "").strip().lower()
+    if not needle:
+        return None
+    for cid, row in cards_by_id().items():
+        name_ru = str(row.get("name_ru") or "").strip().lower()
+        if name_ru and name_ru == needle:
+            return int(cid)
+    # EN names live on tarot_full_deck — soft import to avoid circular package init cost elsewhere
+    try:
+        from todayflow_backend.data import astrology as astrology_ref
+
+        for row in astrology_ref.tarot_full_deck():
+            if str(row.get("name") or "").strip().lower() == needle:
+                return int(row["id"])
+            if str(row.get("name_ru") or "").strip().lower() == needle:
+                return int(row["id"])
+    except Exception:
+        logger.debug("resolve_card_id_by_name deck lookup failed", exc_info=True)
+    return None
+
+
 def validate_card_base_v1() -> list[str]:
     errors: list[str] = []
     payload = _load_payload()

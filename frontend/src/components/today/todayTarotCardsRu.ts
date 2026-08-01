@@ -1,6 +1,6 @@
 /**
- * @deprecated as meaning SoT — Foundation v1 §3: BE `card_base_v1` / `hook_reveal.base`
- * (78×upright/reversed). Kept for ritual pick theater labels / sphereBump until FE cutover.
+ * @deprecated as meaning SoT — BE cutover done (`card_base_v1` via TarotService / hook_reveal).
+ * Kept only for ritual pick theater labels / sphereBump until FE cleanup.
  * Do not add new card prose here.
  */
 export type TarotSphereBump = Partial<Record<"love" | "work" | "money" | "energy", number>>;

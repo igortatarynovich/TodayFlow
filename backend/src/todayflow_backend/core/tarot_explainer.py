@@ -1,4 +1,9 @@
-"""Объяснение карт таро через ИИ с учётом натальной карты пользователя."""
+"""Объяснение карт таро через ИИ с учётом натальной карты пользователя.
+
+Base meaning SoT: card_base_v1 (canon TAROT_CARD_BASE_V1).
+LLM may personalize what_to_do / avoid / events / how_day_looks / why_this_card —
+never overwrite traditional base meaning.
+"""
 
 from typing import Optional, Dict, Any
 import logging
@@ -6,7 +11,6 @@ import json
 import re
 from time import perf_counter
 
-from todayflow_backend.core.config import settings
 from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_plain,
     get_openai_compatible_client,
@@ -16,19 +20,21 @@ from todayflow_backend.core.llm_openai_compatible import (
 )
 from todayflow_backend.core.text_quality import is_meaningful_sentence
 from todayflow_backend.core.user_context import get_user_context
+from todayflow_backend.data import card_base_v1
 from todayflow_backend.db import models as db_models
 from todayflow_backend.services.learning import get_learning_service
 
 logger = logging.getLogger(__name__)
 
-PROMPT_VERSION = "tarot-explainer-v3"
+PROMPT_VERSION = "tarot-explainer-v4"
 
 TAROT_EXPLAINER_SYSTEM_PROMPT = """Ты пишешь персональное объяснение карты дня для TodayFlow.
 
-Твоя задача:
-- объяснить, почему именно эта карта важна сегодня для конкретного человека;
-- связать карту с его профилем и текущим днем;
-- показать, как это проявится в обычной жизни.
+Традиционное значение карты уже зафиксировано системой (поле base_meaning в контексте).
+Не переписывай и не заменяй его. Твоя задача — только персональный слой:
+- почему эта карта важна сегодня для конкретного человека;
+- как это проявится в обычной жизни;
+- что делать / чего избегать.
 
 Пиши:
 - конкретно;
@@ -50,7 +56,6 @@ TAROT_EXPLAINER_SYSTEM_PROMPT = """Ты пишешь персональное о
 
 Верни только валидный JSON:
 {
-  "meaning": "...",
   "what_to_do": "...",
   "what_to_avoid": "...",
   "possible_events": "...",
@@ -60,24 +65,63 @@ TAROT_EXPLAINER_SYSTEM_PROMPT = """Ты пишешь персональное о
 """
 
 
-def _fallback_tarot_explanation(card_name: str, orientation: str, user_context: Dict[str, Any]) -> Dict[str, Any]:
+def _base_meaning_text(card_id: int | None, card_name: str, orientation: str) -> str | None:
+    cid = card_id
+    if cid is None:
+        cid = card_base_v1.resolve_card_id_by_name(card_name)
+    if cid is None:
+        return None
+    row = card_base_v1.get_base_meaning(int(cid), orientation)
+    if not row:
+        return None
+    return str(row.get("meaning") or "").strip() or None
+
+
+def _apply_base_meaning(
+    explanation: Dict[str, Any],
+    *,
+    card_id: int | None,
+    card_name: str,
+    orientation: str,
+) -> Dict[str, Any]:
+    """Force meaning from card_base_v1 when available (SoT for traditional prose)."""
+    base = _base_meaning_text(card_id, card_name, orientation)
+    if not base:
+        return explanation
+    out = dict(explanation)
+    out["meaning"] = base
+    out["meaning_source"] = "card_base_v1"
+    return out
+
+
+def _fallback_tarot_explanation(
+    card_name: str,
+    orientation: str,
+    user_context: Dict[str, Any],
+    *,
+    card_id: int | None = None,
+) -> Dict[str, Any]:
     natal = user_context.get("natal_chart") or {}
     sun = natal.get("sun_sign")
     moon = natal.get("moon_sign")
     natal_anchor = f"через сочетание Солнца в {sun} и Луны в {moon}" if sun and moon else "через твой текущий способ реагировать на день"
     orient = "в прямом положении" if (orientation or "").lower() == "upright" else "в перевернутом положении"
+    base = _base_meaning_text(card_id, card_name, orientation)
     return {
-        "meaning": f"Карта {card_name} {orient} выводит на первый план тему выбора и того, куда сегодня уходит твое лучшее внимание {natal_anchor}.",
+        "meaning": base
+        or f"Карта {card_name} {orient} выводит на первый план тему выбора и того, куда сегодня уходит твое лучшее внимание {natal_anchor}.",
         "what_to_do": "Перед важным разговором или задачей спроси себя, что здесь действительно стоит довести до результата именно сегодня.",
         "what_to_avoid": "Не отвечай слишком быстро и не обещай лишнего только потому, что хочешь сразу снять напряжение.",
         "possible_events": "Может возникнуть момент, где придется выбрать между удобным решением на сейчас и более честным шагом с прицелом дальше.",
         "how_day_looks": "День складывается удачнее, когда ты не суетишься и не берешь на себя больше, чем реально можешь удержать.",
         "why_this_card": "Эта карта приходит в дни, когда важнее не скорость, а точность: как в решениях, так и в том, кому и чему ты сегодня отдаешь силы.",
+        "meaning_source": "card_base_v1" if base else "fallback_template",
     }
 
 
 def _is_valid_tarot_explanation(explanation: Dict[str, Any]) -> bool:
-    required = ("meaning", "what_to_do", "what_to_avoid", "possible_events", "how_day_looks", "why_this_card")
+    # meaning is injected from card_base_v1 — validate personalization fields only.
+    required = ("what_to_do", "what_to_avoid", "possible_events", "how_day_looks", "why_this_card")
     for key in required:
         value = explanation.get(key)
         if not isinstance(value, str):
@@ -93,10 +137,12 @@ def explain_tarot_card(
     db,
     card_name: str,
     orientation: str = "upright",
-    target_date: Optional[str] = None
+    target_date: Optional[str] = None,
+    card_id: Optional[int] = None,
 ) -> Dict[str, Any]:
     """
     Объясняет карту таро через призму натальной карты пользователя.
+    Traditional meaning always comes from card_base_v1 when resolvable.
     """
     learning_service = get_learning_service()
     prompt_version = learning_service.get_or_create_prompt_version(
@@ -106,8 +152,10 @@ def explain_tarot_card(
         prompt_kind="system",
         prompt_text=TAROT_EXPLAINER_SYSTEM_PROMPT,
         label="Daily tarot explanation",
-        metadata={"surface": "daily_card_explainer"},
+        metadata={"surface": "daily_card_explainer", "base_meaning_sot": "card_base_v1"},
     )
+    resolved_id = card_id if card_id is not None else card_base_v1.resolve_card_id_by_name(card_name)
+    base_meaning = _base_meaning_text(resolved_id, card_name, orientation)
     latest_snapshot = (
         db.query(db_models.CoreProfileSnapshot)
         .filter(db_models.CoreProfileSnapshot.user_id == user.id)
@@ -115,25 +163,39 @@ def explain_tarot_card(
         .first()
     )
 
-    if not is_llm_chat_configured():
-        logger.warning("LLM not configured, cannot explain tarot card")
-        return {}
-
-    client = get_openai_compatible_client()
-    if client is None:
-        logger.warning("OpenAI client not available")
-        return {}
-    
     if not target_date:
         from datetime import date
         target_date = date.today().isoformat()
-    
+
     # Собираем контекст пользователя (натальная карта обязательна)
     try:
         user_context = get_user_context(user, target_date, db)
     except Exception as e:
         logger.warning(f"Failed to get user context for tarot explanation: {e}", exc_info=True)
         user_context = {}
+
+    if not is_llm_chat_configured():
+        logger.warning("LLM not configured, cannot explain tarot card")
+        return _apply_base_meaning(
+            _fallback_tarot_explanation(
+                card_name, orientation, user_context if isinstance(user_context, dict) else {}, card_id=resolved_id
+            ),
+            card_id=resolved_id,
+            card_name=card_name,
+            orientation=orientation,
+        )
+
+    client = get_openai_compatible_client()
+    if client is None:
+        logger.warning("OpenAI client not available")
+        return _apply_base_meaning(
+            _fallback_tarot_explanation(
+                card_name, orientation, user_context if isinstance(user_context, dict) else {}, card_id=resolved_id
+            ),
+            card_id=resolved_id,
+            card_name=card_name,
+            orientation=orientation,
+        )
     
     # Строим промпт
     prompt_parts = [
@@ -141,6 +203,8 @@ def explain_tarot_card(
         f"Ориентация: {orientation}",
         f"Дата: {target_date}",
     ]
+    if base_meaning:
+        prompt_parts.append(f"base_meaning (не переписывать): {base_meaning}")
     
     if user_context.get("natal_chart"):
         natal = user_context["natal_chart"]
@@ -196,14 +260,29 @@ def explain_tarot_card(
                 prompt_version_id=prompt_version.id,
                 model=model_id,
                 locale="ru",
-                input_payload={"card_name": card_name, "orientation": orientation, "target_date": target_date},
+                input_payload={
+                    "card_name": card_name,
+                    "card_id": resolved_id,
+                    "orientation": orientation,
+                    "target_date": target_date,
+                },
                 system_prompt=TAROT_EXPLAINER_SYSTEM_PROMPT,
                 user_prompt=user_prompt,
                 status="empty",
                 used_fallback=True,
                 duration_ms=int((perf_counter() - started_at) * 1000),
             )
-            return {}
+            return _apply_base_meaning(
+                _fallback_tarot_explanation(
+                    card_name,
+                    orientation,
+                    user_context if isinstance(user_context, dict) else {},
+                    card_id=resolved_id,
+                ),
+                card_id=resolved_id,
+                card_name=card_name,
+                orientation=orientation,
+            )
         
         # Парсим JSON
         m = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", content)
@@ -214,6 +293,12 @@ def explain_tarot_card(
             explanation = json.loads(content)
             if isinstance(explanation, dict):
                 if _is_valid_tarot_explanation(explanation):
+                    explanation = _apply_base_meaning(
+                        explanation,
+                        card_id=resolved_id,
+                        card_name=card_name,
+                        orientation=orientation,
+                    )
                     learning_service.log_generation(
                         db,
                         module="tarot",
@@ -223,7 +308,12 @@ def explain_tarot_card(
                         prompt_version_id=prompt_version.id,
                         model=model_id,
                         locale="ru",
-                        input_payload={"card_name": card_name, "orientation": orientation, "target_date": target_date},
+                        input_payload={
+                            "card_name": card_name,
+                            "card_id": resolved_id,
+                            "orientation": orientation,
+                            "target_date": target_date,
+                        },
                         system_prompt=TAROT_EXPLAINER_SYSTEM_PROMPT,
                         user_prompt=user_prompt,
                         raw_response=content,
@@ -236,7 +326,17 @@ def explain_tarot_card(
         except json.JSONDecodeError:
             logger.warning(f"Failed to parse tarot explanation JSON: {content}")
 
-        fallback = _fallback_tarot_explanation(card_name, orientation, user_context if isinstance(user_context, dict) else {})
+        fallback = _apply_base_meaning(
+            _fallback_tarot_explanation(
+                card_name,
+                orientation,
+                user_context if isinstance(user_context, dict) else {},
+                card_id=resolved_id,
+            ),
+            card_id=resolved_id,
+            card_name=card_name,
+            orientation=orientation,
+        )
         learning_service.log_generation(
             db,
             module="tarot",
@@ -246,7 +346,12 @@ def explain_tarot_card(
             prompt_version_id=prompt_version.id,
             model=model_id,
             locale="ru",
-            input_payload={"card_name": card_name, "orientation": orientation, "target_date": target_date},
+            input_payload={
+                "card_name": card_name,
+                "card_id": resolved_id,
+                "orientation": orientation,
+                "target_date": target_date,
+            },
             system_prompt=TAROT_EXPLAINER_SYSTEM_PROMPT,
             user_prompt=user_prompt,
             raw_response=content,
@@ -259,7 +364,17 @@ def explain_tarot_card(
         return fallback
     except Exception as e:
         logger.warning(f"OpenAI API error explaining tarot card: {e}", exc_info=True)
-        fallback = _fallback_tarot_explanation(card_name, orientation, user_context if isinstance(user_context, dict) else {})
+        fallback = _apply_base_meaning(
+            _fallback_tarot_explanation(
+                card_name,
+                orientation,
+                user_context if isinstance(user_context, dict) else {},
+                card_id=resolved_id,
+            ),
+            card_id=resolved_id,
+            card_name=card_name,
+            orientation=orientation,
+        )
         learning_service.log_generation(
             db,
             module="tarot",
@@ -269,7 +384,12 @@ def explain_tarot_card(
             prompt_version_id=prompt_version.id,
             model=model_id,
             locale="ru",
-            input_payload={"card_name": card_name, "orientation": orientation, "target_date": target_date},
+            input_payload={
+                "card_name": card_name,
+                "card_id": resolved_id,
+                "orientation": orientation,
+                "target_date": target_date,
+            },
             system_prompt=TAROT_EXPLAINER_SYSTEM_PROMPT,
             user_prompt=user_prompt,
             normalized_response=fallback,
