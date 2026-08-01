@@ -363,6 +363,16 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     expect(screen.queryByTestId("profile-v2-chapter-tensions_growth")).not.toBeInTheDocument();
     expect(screen.queryByTestId("profile-v2-chapter-helps")).not.toBeInTheDocument();
   });
+
+  it("uses Act 3 visual mode spine, not Act 2 proof-grid cards", () => {
+    renderJourney();
+    const scene = screen.getByTestId("profile-v2-insight");
+    expect(scene).toHaveAttribute("data-visual-mode", "insight-spine");
+    expect(screen.getByTestId("profile-v2-insight-spine")).toBeInTheDocument();
+    expect(screen.getByTestId("profile-v2-insight-support").className).toMatch(/insightSpine/);
+    // Act 2 keeps the evidentiary grid — mode contrast for Visual Modes #4.
+    expect(screen.getByTestId("profile-v2-why-primary")).toBeInTheDocument();
+  });
 });
 
 describe("PROFILE_V2_COPY lexicon gate", () => {

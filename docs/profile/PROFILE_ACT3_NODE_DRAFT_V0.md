@@ -84,6 +84,8 @@ Effort (Act 4) from this node must be action-start, e.g.
 
 ## Handoff to #4 (visual modes)
 
+Shipped spine: [PROFILE_VISUAL_MODES_V0.md](./PROFILE_VISUAL_MODES_V0.md) · `data-visual-mode="insight-spine"`.
+
 - режим 3 ≠ сетка карточек Акта 2  
 - режим 3 ≠ hero Акта 1  
 - вертикальная связь «ловушка → якоря → помощь» читается без чтения copy
