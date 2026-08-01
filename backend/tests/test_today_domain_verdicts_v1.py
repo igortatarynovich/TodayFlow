@@ -77,3 +77,27 @@ def test_why_short_never_prints_planet_aspect_jargon():
     assert "трин" not in why.lower()
     assert "Сатурн" not in why
     assert "трин к" not in why.lower()
+
+
+def test_conjunction_valence_stays_planet_dependent_not_binary_character():
+    """Regression: conjunction is foundation character=neutral_amplifying — not
+    harmonious/challenging. Signed valence still depends on transit planet."""
+    from todayflow_backend.data.foundation_constants_v1 import (
+        aspect_character,
+        aspect_is_challenging,
+        aspect_is_harmonious,
+    )
+
+    assert aspect_character("conjunction") == "neutral_amplifying"
+    assert not aspect_is_harmonious("conjunction")
+    assert not aspect_is_challenging("conjunction")
+
+    assert verdicts.valence_domain("work", "conjunction", "venus", "sun") == 0.8
+    assert verdicts.valence_domain("work", "conjunction", "jupiter", "mars") == 0.8
+    assert verdicts.valence_domain("work", "conjunction", "saturn", "sun") == -0.55
+    assert verdicts.valence_domain("work", "conjunction", "mars", "sun") == 0.75
+    assert verdicts.valence_domain("work", "conjunction", "pluto", "sun") == 0.75
+    assert verdicts.valence_domain("work", "conjunction", "mercury", "sun") == 0.0
+    assert verdicts.valence_domain("money", "conjunction", "saturn", "venus") == -0.7
+    assert verdicts.valence_domain("relationships", "conjunction", "mars", "venus") == -0.75
+    assert verdicts.valence_domain("energy", "conjunction", "mars", "sun") == 0.85
