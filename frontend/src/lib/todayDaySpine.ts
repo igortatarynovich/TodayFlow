@@ -608,20 +608,28 @@ export function buildSkyInfluenceCards(input: {
     });
   }
 
+  const scenarioColorName =
+    typeof input.scenarioColor?.name === "string" ? input.scenarioColor.name.trim() : "";
   const colorName =
-    input.scenarioColor?.name?.trim() ||
-    apiSymbols?.color?.name ||
-    input.colorLine?.trim();
+    scenarioColorName ||
+    (typeof apiSymbols?.color?.name === "string" ? apiSymbols.color.name : "") ||
+    (typeof input.colorLine === "string" ? input.colorLine.trim() : "");
   if (colorName) {
     const guide = resolveTodayDayColorGuide({
       name: colorName,
       api: apiSymbols?.color,
-      scenario: input.scenarioColor?.name
+      scenario: scenarioColorName
         ? {
-            name: input.scenarioColor.name,
-            note: input.scenarioColor.note,
-            avoidColor: input.scenarioColor.avoidColor,
-            avoidWhy: input.scenarioColor.avoidWhy,
+            name: scenarioColorName,
+            note: typeof input.scenarioColor?.note === "string" ? input.scenarioColor.note : null,
+            avoidColor:
+              typeof input.scenarioColor?.avoidColor === "string"
+                ? input.scenarioColor.avoidColor
+                : null,
+            avoidWhy:
+              typeof input.scenarioColor?.avoidWhy === "string"
+                ? input.scenarioColor.avoidWhy
+                : null,
           }
         : null,
     });

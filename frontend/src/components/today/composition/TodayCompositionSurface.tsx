@@ -78,6 +78,7 @@ import {
   revealDayNumber,
   type DaySymbolPublicView,
 } from "@/lib/daySymbolReveal";
+import { formatColorWhereToUse } from "@/lib/hookRevealText";
 import { TodayDayDialogueMorning } from "@/components/today/composition/TodayDayDialogueMorning";
 import { ConversationThread } from "@/components/conversation/ConversationThread";
 import { ConversationTurn } from "@/components/conversation/ConversationTurn";
@@ -1597,8 +1598,10 @@ export function TodayCompositionSurface(props: Props) {
                         ? "ok"
                         : "unavailable",
                       bridge_fail_copy: "Не удалось раскрыть день для этого цвета.",
-                      instruction:
-                        props.contract.day_story?.day_scenario?.props?.color?.where_to_use || null,
+                      // where_to_use is an object in day_scenario props — never pass raw to .trim()
+                      instruction: formatColorWhereToUse(
+                        props.contract.day_story?.day_scenario?.props?.color?.where_to_use,
+                      ),
                     }
                   }
                   testId="today-zone-color-hook"

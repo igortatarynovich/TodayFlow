@@ -1,6 +1,7 @@
 "use client";
 
 import styles from "@/components/today/composition/TodayHookRevealShell.module.css";
+import { asTrimmedText, formatColorWhereToUse } from "@/lib/hookRevealText";
 
 export type HookRevealPayload = {
   kind?: string;
@@ -16,7 +17,8 @@ export type HookRevealPayload = {
   bridge_to_day?: string | null;
   bridge_status?: "ok" | "unavailable" | string;
   bridge_fail_copy?: string | null;
-  instruction?: string | null;
+  /** String SoT; object where_to_use may leak before symbols hydrate — coerced safely. */
+  instruction?: string | Record<string, unknown> | null;
   instruction_status?: string;
 };
 
@@ -42,13 +44,15 @@ export function TodayHookRevealShell({
   fallbackBody = null,
   testId,
 }: Props) {
-  const baseMeaning = hook?.base?.meaning?.trim() || null;
-  const bridgeOk = hook?.bridge_status === "ok" && Boolean(hook?.bridge_to_day?.trim());
+  const baseMeaning = asTrimmedText(hook?.base?.meaning);
+  const bridgeText = asTrimmedText(hook?.bridge_to_day);
+  const bridgeOk = hook?.bridge_status === "ok" && Boolean(bridgeText);
   const bridgeFail =
     hook && hook.bridge_status === "unavailable"
-      ? (hook.bridge_fail_copy || "Не удалось раскрыть день.").trim()
+      ? asTrimmedText(hook.bridge_fail_copy) || "Не удалось раскрыть день."
       : null;
-  const instruction = hook?.instruction?.trim() || null;
+  const instruction =
+    asTrimmedText(hook?.instruction) || formatColorWhereToUse(hook?.instruction);
   const orientation =
     hook?.identity?.orientation === "reversed"
       ? "перевёрнутая"
@@ -77,7 +81,7 @@ export function TodayHookRevealShell({
       {bridgeOk ? (
         <div className={styles.layer} data-layer="bridge">
           <p className={styles.layerLabel}>Почему сегодня</p>
-          <p className={styles.layerBody}>{hook!.bridge_to_day}</p>
+          <p className={styles.layerBody}>{bridgeText}</p>
         </div>
       ) : bridgeFail ? (
         <p className={styles.fail} role="status" data-bridge-status="unavailable">

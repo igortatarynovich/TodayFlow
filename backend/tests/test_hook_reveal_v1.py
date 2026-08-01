@@ -65,6 +65,25 @@ def test_card_hook_does_not_use_parallel_bridge_fields_as_base():
     assert hook["base"]["meaning"] == bank["meaning"]
 
 
+def test_card_hook_rejects_conflict_id_slug_as_bridge():
+    """Regression: LLM stuffed conflict_id into link_to_conflict → raw id on Symbols."""
+    hook = hooks.build_card_hook_reveal(
+        card_id=0,
+        orientation="upright",
+        chorus={
+            "day_card": {
+                "link_to_conflict": "conflict.intensity_without_drama",
+                "conflict_id": "conflict.intensity_without_drama",
+                "archetype_role": "intensity_without_drama",
+            }
+        },
+    )
+    assert hook["bridge_status"] == "unavailable"
+    assert hook["bridge_to_day"] is None
+    assert "Не удалось раскрыть" in (hook.get("bridge_fail_copy") or "")
+    assert hook["base"]["meaning"]  # base still shown
+
+
 def test_color_hook_uses_props_link():
     hook = hooks.build_color_hook_reveal(
         color_name="Лазурь",
@@ -78,3 +97,22 @@ def test_color_hook_uses_props_link():
     assert hook["bridge_status"] == "ok"
     assert hook["bridge_to_day"] == "якорь ясности против срыва"
     assert hook["instruction"]
+
+
+def test_color_hook_formats_where_to_use_object():
+    """Regression: where_to_use is a dict in day_scenario props — never str(dict)."""
+    hook = hooks.build_color_hook_reveal(
+        color_name="Янтарный",
+        props_color={
+            "name": "Янтарный",
+            "link_to_conflict": "тёплая энергия без суеты",
+            "where_to_use": {
+                "clothing": "Янтарный шарф",
+                "accessory": "Украшение медового оттенка",
+                "workspace": None,
+            },
+        },
+    )
+    assert hook["bridge_status"] == "ok"
+    assert hook["instruction"] == "Янтарный шарф · Украшение медового оттенка"
+    assert "{" not in (hook["instruction"] or "")

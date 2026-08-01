@@ -28,18 +28,56 @@ def _as_dict(value: Any) -> dict[str, Any]:
 
 
 def _clean(text: Any) -> str:
-    return str(text or "").strip()
+    if text is None:
+        return ""
+    if isinstance(text, (dict, list, tuple, set)):
+        # Never str(dict) into UI — callers must format structured fields explicitly.
+        return ""
+    return str(text).strip()
+
+
+def _is_machine_token(text: str) -> bool:
+    """True for enum/slug leaks like ``conflict.intensity_without_drama`` — not user prose."""
+    t = (text or "").strip()
+    if not t:
+        return False
+    # Cyrillic / spaces → human prose (even if short).
+    if any("\u0400" <= ch <= "\u04FF" for ch in t) or " " in t:
+        return False
+    lower = t.lower()
+    if lower.startswith("conflict."):
+        return True
+    # dotted or snake machine ids (ascii, no spaces)
+    if "." in lower and all(part.replace("_", "").isalnum() for part in lower.split(".")):
+        return True
+    if "_" in lower and lower.replace("_", "").isalnum() and lower.isascii():
+        return True
+    return False
+
+
+def _format_where_to_use(value: Any) -> str:
+    """props.color.where_to_use is usually {clothing, accessory, ...}."""
+    if isinstance(value, dict):
+        parts: list[str] = []
+        for key in ("clothing", "accessory", "workspace", "makeup", "ui_or_bg"):
+            piece = _clean(value.get(key))
+            if piece:
+                parts.append(piece)
+        return " · ".join(parts)
+    return _clean(value)
 
 
 def _bridge_from_voice(voice: dict[str, Any]) -> str:
-    link = _clean(voice.get("link_to_conflict"))
-    if link:
-        return link
-    # Accept projected chorus shapes (role / for_conflict / tempo as weak bridge)
-    for key in ("role", "for_conflict", "archetype_role", "human_meaning"):
+    """Pick human bridge prose; never surface conflict_id / thesis variant slugs."""
+    for key in ("link_to_conflict", "role", "for_conflict", "archetype_role", "human_meaning"):
         alt = _clean(voice.get(key))
-        if alt:
-            return alt
+        if not alt or _is_machine_token(alt):
+            continue
+        # Also reject when LLM stuffed conflict_id into the prose field verbatim.
+        cid = _clean(voice.get("conflict_id"))
+        if cid and alt == cid:
+            continue
+        return alt
     return ""
 
 
@@ -175,7 +213,7 @@ def build_color_hook_reveal(
     # Apply hints as instruction fallback when bridge ok and no explicit instruction
     instr = _clean(instruction)
     if not instr and bridge_ok:
-        where = _clean(props.get("where_to_use"))
+        where = _format_where_to_use(props.get("where_to_use"))
         if where:
             instr = where
         elif intensity:

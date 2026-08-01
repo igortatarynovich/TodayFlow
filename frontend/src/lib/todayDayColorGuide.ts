@@ -168,34 +168,32 @@ export function resolveTodayDayColorGuide(input: {
     avoidWhy?: string | null;
   } | null;
 }): TodayDayColorGuide | null {
-  const name = (
-    input.scenario?.name ??
-    input.api?.name ??
-    input.name ??
-    ""
-  ).trim();
+  const asText = (value: unknown): string =>
+    typeof value === "string" ? value.trim() : "";
+
+  const name = asText(input.scenario?.name) || asText(input.api?.name) || asText(input.name);
   if (!name) return null;
 
   const preset = COLOR_GUIDE[name] ?? { ...DEFAULT_COLOR, name };
   const scenarioBenefit = [input.scenario?.benefit, input.scenario?.note]
-    .map((s) => (s ?? "").trim())
+    .map((s) => asText(s))
     .filter(Boolean)
     .join(" ");
 
   return {
     name,
     hex: preset.hex,
-    benefit: scenarioBenefit || input.api?.benefit_ru?.trim() || preset.benefit,
-    clothing: input.api?.clothing_ru?.trim() || preset.clothing,
-    accessory: input.api?.accessory_ru?.trim() || preset.accessory,
-    amount: input.api?.amount_ru?.trim() || preset.amount,
+    benefit: scenarioBenefit || asText(input.api?.benefit_ru) || preset.benefit,
+    clothing: asText(input.api?.clothing_ru) || preset.clothing,
+    accessory: asText(input.api?.accessory_ru) || preset.accessory,
+    amount: asText(input.api?.amount_ru) || preset.amount,
     avoidColor:
-      input.scenario?.avoidColor?.trim() ||
-      input.api?.avoid_color_ru?.trim() ||
+      asText(input.scenario?.avoidColor) ||
+      asText(input.api?.avoid_color_ru) ||
       preset.avoidColor,
     avoidWhy:
-      input.scenario?.avoidWhy?.trim() ||
-      input.api?.avoid_why_ru?.trim() ||
+      asText(input.scenario?.avoidWhy) ||
+      asText(input.api?.avoid_why_ru) ||
       preset.avoidWhy,
   };
 }

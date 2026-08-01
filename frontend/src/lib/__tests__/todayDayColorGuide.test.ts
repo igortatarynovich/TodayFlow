@@ -35,6 +35,12 @@ describe("resolveTodayDayColorGuide", () => {
 
   it("returns null when name missing", () => {
     expect(resolveTodayDayColorGuide({ name: null })).toBeNull();
+    // Non-string name must not throw (object leak from scenario props).
+    expect(
+      resolveTodayDayColorGuide({
+        scenario: { name: { clothing: "x" } as unknown as string },
+      }),
+    ).toBeNull();
   });
 
   it("uses default preset for unknown color name", () => {

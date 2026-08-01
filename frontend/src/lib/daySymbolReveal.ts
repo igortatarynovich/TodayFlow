@@ -29,7 +29,7 @@ export type HookRevealPayload = {
   bridge_to_day?: string | null;
   bridge_status?: "ok" | "unavailable" | string;
   bridge_fail_copy?: string | null;
-  instruction?: string | null;
+  instruction?: string | Record<string, unknown> | null;
   instruction_status?: string;
   personal_angle?: string | null;
   result_loop?: string;
