@@ -1,0 +1,60 @@
+{
+  "batch": "color_catalog_v1_editorial",
+  "mechanism": "scene/conflict tag match via day_scenario_v1 — not independent daily draw. Catalog is knowledge only; props require origin_scene_id + conflict link.",
+  "palette": "8 colors cover 100% of _needed_color_tags + _amplify_tags_for_trap; deepen, do not expand without Architecture impact.",
+  "merged_into": [
+    "backend/src/todayflow_backend/services/day_color_catalog_v1.py"
+  ],
+  "avoid_candidates_fix": "Remapped decorative amplify tags heavy/numb/flat/overwork (never emitted by _amplify_tags_for_trap) to live set: coral→all_or_nothing/pressure/over_control; emerald→pressure/over_control/harsh.",
+  "schema": "symbolic_property = short scene phrase (live B2 bridge); apply = short Action-screen lines; canon_grounding = editorial ledger only (not product payload).",
+  "colors": [
+    {
+      "name": "Глубокий синий",
+      "tags": ["hold_distance", "depth", "boundaries", "slow_reply", "clarity"],
+      "canon_grounding": "Тёмный/глубокий синий физиологически снижает возбуждение и способствует концентрации; визуально «отступает», создавая ощущение дистанции — не холодность, а эффект отдаления.",
+      "symbolic_property": "дистанция, которая снижает реактивность, — сформулировать позицию раньше, чем ответить"
+    },
+    {
+      "name": "Лазурь",
+      "tags": ["calm_clarity", "decision", "focus", "cool_mind"],
+      "canon_grounding": "Азур читается как устойчивый «прозрачный» цвет без груза тёмно-синего — спокойная сосредоточенность перед решением, не дистанция.",
+      "symbolic_property": "ясность без тяжести — ровный фон для решения, не для дистанцирования"
+    },
+    {
+      "name": "Индиго",
+      "tags": ["inner_honesty", "pause_before_act", "intuition", "depth"],
+      "canon_grounding": "Между логическим синим и интуитивным фиолетовым — тихое сосредоточение для паузы перед действием, не для внешней коммуникации.",
+      "symbolic_property": "пауза внутрь, не наружу — услышать свою честную реакцию до того, как её озвучить"
+    },
+    {
+      "name": "Коралловый",
+      "tags": ["soft_speech", "connection", "warm_contact", "communication"],
+      "canon_grounding": "Тёплое принятие и социальная уверенность без напора: тепло красного смягчено розовым.",
+      "symbolic_property": "тёплый контакт без напора — говорить прямо, но не колко"
+    },
+    {
+      "name": "Изумрудный",
+      "tags": ["restore", "growth", "body", "relationships", "ground_soft"],
+      "canon_grounding": "Рост/баланс/восстановление — мягкое возвращение к телу и отношениям после нагрузки, не жёсткое заземление.",
+      "symbolic_property": "мягкое восстановление через тело и связь, не через изоляцию"
+    },
+    {
+      "name": "Оливковый",
+      "tags": ["ground", "steady", "work", "no_jerk"],
+      "canon_grounding": "Приглушённый земляной зелёный — ровная рабочая опора без яркости и без демонстрации усилия.",
+      "symbolic_property": "заземление в рабочем темпе — устойчивость без рывков и без демонстрации усилия"
+    },
+    {
+      "name": "Бордовый",
+      "tags": ["focus", "depth", "boundaries", "serious"],
+      "canon_grounding": "Интенсивность красного, приглушённая до серьёзности — собранная граница, не яркий сигнал тревоги.",
+      "symbolic_property": "серьёзная собранность — граница, которая не кричит, а просто есть"
+    },
+    {
+      "name": "Янтарный",
+      "tags": ["warm_energy", "restore", "body", "tempo_gentle"],
+      "canon_grounding": "Тепло/витальность без резкости — мягкая поддержка энергии тела; контраст изумрудному (тело+тепло vs тело+связь).",
+      "symbolic_property": "тёплая поддержка энергии тела без разгона и без суеты"
+    }
+  ]
+}

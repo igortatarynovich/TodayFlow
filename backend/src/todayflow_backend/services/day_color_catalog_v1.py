@@ -4,6 +4,10 @@ Phase B2: scenario props pick a color from this catalog *because* a scene needs
 a quality; catalog copy is never shipped as the day's meaning without
 origin_scene_id + conflict link.
 
+Color is NOT an independent daily draw (unlike card/number). Tag coverage for
+`_needed_color_tags` / `_amplify_tags_for_trap` is intentionally closed at 8
+entries — deepen meaning, do not expand the palette without Architecture impact.
+
 Legacy `celestial_events_builder` presets remain a seed/index path until B3 wire
 projection replaces them.
 """
@@ -12,13 +16,32 @@ from __future__ import annotations
 
 from typing import Any
 
+# Amplify tags that `_amplify_tags_for_trap` can actually emit (live scoring set).
+LIVE_AVOID_AMPLIFY_TAGS: frozenset[str] = frozenset(
+    {
+        "please",
+        "harmony_at_any_cost",
+        "soft_over_truth",
+        "rush",
+        "react_first",
+        "impulse",
+        "alarm",
+        "scatter",
+        "noise",
+        "pressure",
+        "all_or_nothing",
+        "over_control",
+        "harsh",
+    }
+)
+
 # Symbolic qualities used to match conflict/scene needs.
 # Catalog is knowledge: names, tags, apply hints, avoid candidates.
 COLOR_CATALOG_V1: list[dict[str, Any]] = [
     {
         "name": "Глубокий синий",
         "tags": ("hold_distance", "depth", "boundaries", "slow_reply", "clarity"),
-        "symbolic_property": "дистанция и опора — сначала сформулировать позицию",
+        "symbolic_property": "дистанция, которая снижает реактивность, — сформулировать позицию раньше, чем ответить",
         "apply": {
             "clothing": "Тёмно-синий свитер, пиджак или джинсы глубокого синего.",
             "accessory": "Сумка, ремень или перстень в спокойном синем.",
@@ -35,7 +58,7 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
     {
         "name": "Лазурь",
         "tags": ("calm_clarity", "decision", "focus", "cool_mind"),
-        "symbolic_property": "ясность ума без суеты",
+        "symbolic_property": "ясность без тяжести — ровный фон для решения, не для дистанцирования",
         "apply": {
             "clothing": "Светлая рубашка, шарф или носки лазурного оттенка.",
             "accessory": "Тонкий браслет или блокнот в мягком синем.",
@@ -51,7 +74,7 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
     {
         "name": "Индиго",
         "tags": ("inner_honesty", "pause_before_act", "intuition", "depth"),
-        "symbolic_property": "услышать себя до действия",
+        "symbolic_property": "пауза внутрь, не наружу — услышать свою честную реакцию до того, как её озвучить",
         "apply": {
             "clothing": "Индиго в нижнем слое ближе к телу.",
             "accessory": "Платок или обложка телефона.",
@@ -67,7 +90,7 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
     {
         "name": "Коралловый",
         "tags": ("soft_speech", "connection", "warm_contact", "communication"),
-        "symbolic_property": "мягкий контакт без давления",
+        "symbolic_property": "тёплый контакт без напора — говорить прямо, но не колко",
         "apply": {
             "clothing": "Коралловый топ под пиджак или шарф.",
             "accessory": "Небольшая брошь или чехол.",
@@ -77,13 +100,14 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         },
         "intensity_default": "небольшой тёплый штрих",
         "avoid_candidates": (
-            {"name": "Чёрный «всё или ничего»", "amplifies": ("heavy", "all_or_nothing", "pressure")},
+            # was decorative heavy — remapped to live amplify set
+            {"name": "Чёрный «всё или ничего»", "amplifies": ("all_or_nothing", "pressure", "over_control")},
         ),
     },
     {
         "name": "Изумрудный",
         "tags": ("restore", "growth", "body", "relationships", "ground_soft"),
-        "symbolic_property": "восстановление и мягкий рост",
+        "symbolic_property": "мягкое восстановление через тело и связь, не через изоляцию",
         "apply": {
             "clothing": "Изумрудный шарф или кардиган.",
             "accessory": "Маленький зелёный якорь.",
@@ -93,13 +117,14 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         },
         "intensity_default": "один живой акцент",
         "avoid_candidates": (
-            {"name": "Серый «офисный бетон»", "amplifies": ("numb", "flat", "overwork")},
+            # was decorative numb/flat/overwork — remapped to live amplify set
+            {"name": "Серый «офисный бетон»", "amplifies": ("pressure", "over_control", "harsh")},
         ),
     },
     {
         "name": "Оливковый",
         "tags": ("ground", "steady", "work", "no_jerk"),
-        "symbolic_property": "заземление без рывков",
+        "symbolic_property": "заземление в рабочем темпе — устойчивость без рывков и без демонстрации усилия",
         "apply": {
             "clothing": "Оливковый слой outerwear или брюки.",
             "accessory": "Ремень или сумка спокойного оливкового.",
@@ -115,7 +140,7 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
     {
         "name": "Бордовый",
         "tags": ("focus", "depth", "boundaries", "serious"),
-        "symbolic_property": "собранность и глубина",
+        "symbolic_property": "серьёзная собранность — граница, которая не кричит, а просто есть",
         "apply": {
             "clothing": "Бордовый шарф или один слой outerwear.",
             "accessory": "Кожаный аксессуар винного тона.",
@@ -131,7 +156,7 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
     {
         "name": "Янтарный",
         "tags": ("warm_energy", "restore", "body", "tempo_gentle"),
-        "symbolic_property": "тёплая энергия без суеты",
+        "symbolic_property": "тёплая поддержка энергии тела без разгона и без суеты",
         "apply": {
             "clothing": "Янтарный шарф или тёплый свитер.",
             "accessory": "Украшение медового оттенка.",
@@ -177,3 +202,29 @@ def color_hook_base(name: str) -> dict[str, Any] | None:
 def score_color_for_needs(entry: dict[str, Any], needed_tags: set[str]) -> int:
     tags = set(entry.get("tags") or ())
     return len(tags & needed_tags)
+
+
+def validate_color_catalog_v1() -> list[str]:
+    """Structural + scoring-tag hygiene for the knowledge catalog."""
+    errors: list[str] = []
+    names: set[str] = set()
+    for i, row in enumerate(COLOR_CATALOG_V1):
+        name = str(row.get("name") or "").strip()
+        if not name:
+            errors.append(f"row[{i}]: empty name")
+            continue
+        if name in names:
+            errors.append(f"duplicate name: {name}")
+        names.add(name)
+        prop = str(row.get("symbolic_property") or "").strip()
+        if len(prop) < 12:
+            errors.append(f"{name}: symbolic_property too short")
+        tags = tuple(row.get("tags") or ())
+        if len(tags) < 2:
+            errors.append(f"{name}: need ≥2 tags")
+        for cand in row.get("avoid_candidates") or ():
+            amplifies = tuple((cand or {}).get("amplifies") or ())
+            dead = [a for a in amplifies if a not in LIVE_AVOID_AMPLIFY_TAGS]
+            if dead:
+                errors.append(f"{name}: dead avoid amplifies {dead}")
+    return errors

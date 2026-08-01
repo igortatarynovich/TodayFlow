@@ -308,11 +308,15 @@ def test_scene_copy_varies_by_sphere_and_uses_name():
 
 
 def test_color_catalog_is_knowledge_not_sot():
-    from todayflow_backend.services.day_color_catalog_v1 import list_color_knowledge
+    from todayflow_backend.services.day_color_catalog_v1 import (
+        list_color_knowledge,
+        validate_color_catalog_v1,
+    )
 
     rows = list_color_knowledge()
-    assert len(rows) >= 5
-    assert all("tags" in r and "name" in r for r in rows)
+    assert len(rows) == 8
+    assert all("tags" in r and "name" in r and "symbolic_property" in r for r in rows)
+    assert validate_color_catalog_v1() == []
 
 
 def test_conflict_driver_ids_prefer_natal_pt_over_pack():
