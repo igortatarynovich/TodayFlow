@@ -184,7 +184,8 @@ describe("TodayCompositionSurface", () => {
     expect(screen.getByTestId("today-zone-foundation")).toBeInTheDocument();
     expect(screen.getByTestId("today-screen-flow")).toBeInTheDocument();
     expect(screen.getByTestId("today-zone-glance-act")).toBeInTheDocument();
-    expect(screen.getByTestId("today-slot-verdict-strip")).toBeInTheDocument();
+    // Glance hero is day overview — not four-sphere VerdictStrip (2026-08-01).
+    expect(screen.queryByTestId("today-slot-verdict-strip")).not.toBeInTheDocument();
     expect(screen.getByTestId("today-slot-glance-nearest")).toBeInTheDocument();
     expect(screen.getByTestId("today-composition-surface").querySelectorAll("[data-screen-flow-step]").length).toBeGreaterThanOrEqual(3);
   });

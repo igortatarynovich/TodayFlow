@@ -16,10 +16,7 @@ import {
   resolveScreenFlowEntryIndex,
   type ScreenFlowChangeReason,
 } from "@/design-system/primitives/ScreenFlow";
-import {
-  TodayGlanceTimelineSlot,
-  TodayVerdictStripSlot,
-} from "@/components/today/composition/TodayWave2Slots";
+import { TodayGlanceTimelineSlot } from "@/components/today/composition/TodayWave2Slots";
 import { TarotPicture } from "@/components/tarot/TarotPicture";
 import { LoadingSpinner } from "@/components/orbit";
 import { HeroMedium } from "@/components/foundation/HeroMedium";
@@ -91,6 +88,7 @@ import {
 import { TodayInterpretationConfirm } from "@/components/today/composition/TodayInterpretationConfirm";
 import { TodaySkyStoryCards } from "@/components/today/composition/TodaySkyStoryCards";
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
+import { TodayHookRevealShell } from "@/components/today/composition/TodayHookRevealShell";
 import { isDayScenarioReadyForChapters } from "@/lib/todayScenarioChapters";
 import { buildGlanceDayTexture, buildGlanceThemeEyebrow } from "@/lib/todayGlanceTexture";
 import { buildPlotConflictNarrative } from "@/lib/todayPlotNarrative";
@@ -222,6 +220,7 @@ export function TodayCompositionSurface(props: Props) {
   const [continuityRecord, setContinuityRecord] = useState<DayContinuityRecord | null>(null);
   const [continuitySaving, setContinuitySaving] = useState(false);
   const [engagement, setEngagement] = useState(createEmptyDayEngagement);
+  const [symbolHooksView, setSymbolHooksView] = useState<DaySymbolPublicView | null>(null);
   const [tarotPendingId, setTarotPendingId] = useState<number | null>(null);
   const [goalDraftOpen, setGoalDraftOpen] = useState(false);
   const [goalDraft, setGoalDraft] = useState("");
@@ -537,11 +536,13 @@ export function TodayCompositionSurface(props: Props) {
     void fetchDaySymbolState(isAuthenticated)
       .then((view) => {
         if (cancelled || !view) return;
+        setSymbolHooksView(view);
         setEngagement((prev) => {
           const merged = mergeEngagementWithDaySymbolState(prev, view, (id) => getTodayTarotCardRu(id)?.nameRu);
           if (
             merged.tarotPickedId === prev.tarotPickedId &&
             merged.tarotPickedName === prev.tarotPickedName &&
+            merged.tarotOrientation === prev.tarotOrientation &&
             merged.numberConfirmed === prev.numberConfirmed
           ) {
             return prev;
@@ -757,11 +758,22 @@ export function TodayCompositionSurface(props: Props) {
       persistEngagement({ tarotPickedId: id });
       void revealDayCard({
         cardId: id,
+        orientation: engagement.tarotOrientation ?? undefined,
         isAuthenticated,
         source: "today_ritual",
         idempotencyKey: `tarot_reveal:${dateISO}:${id}:${isAuthenticated ? "u" : "g"}`,
       })
-        .then((view) => props.onSymbolRevealResult?.(view))
+        .then((view) => {
+          setSymbolHooksView(view);
+          const orient =
+            view.card?.orientation === "reversed"
+              ? "reversed"
+              : view.card?.orientation === "upright"
+                ? "upright"
+                : null;
+          if (orient) persistEngagement({ tarotOrientation: orient });
+          props.onSymbolRevealResult?.(view);
+        })
         .catch(() => {
           /* local engagement still tracks pick; server SoT retries on continue */
         });
@@ -773,7 +785,14 @@ export function TodayCompositionSurface(props: Props) {
         refreshRings: false,
       });
     },
-    [dateISO, isAuthenticated, persistEngagement, props.onSymbolRevealResult, trackMeaningEvent],
+    [
+      dateISO,
+      engagement.tarotOrientation,
+      isAuthenticated,
+      persistEngagement,
+      props.onSymbolRevealResult,
+      trackMeaningEvent,
+    ],
   );
 
   const onTarotRevealed = useCallback(
@@ -838,6 +857,7 @@ export function TodayCompositionSurface(props: Props) {
       source: "today_ritual",
       idempotencyKey: `number_reveal:${dateISO}:${isAuthenticated ? "u" : "g"}`,
     });
+    setSymbolHooksView(view);
     props.onSymbolRevealResult?.(view);
     const value = view.number?.value ?? view.number?.reduced_value;
     const display = value != null ? String(value) : "";
@@ -1524,39 +1544,90 @@ export function TodayCompositionSurface(props: Props) {
           {!props.networkDegraded && showRitualAsComplement ? ritualGateSection : null}
           {!props.networkDegraded && showRitualAsComplement ? ritualTarotImpactStage : null}
           {/* v3: show day card open when already revealed / available — no extra click */}
-          {!props.networkDegraded && !showRitualAsComplement && (props.cardName || story.tarotImpact) ? (
+          {!props.networkDegraded && !showRitualAsComplement && (props.cardName || story.tarotImpact || props.numerologyValue || story.numberImpact) ? (
             <div className={styles.symbolImpactsStack} data-testid="today-zone-symbol-impacts">
-              {story.tarotImpact ? (
-                <section className={styles.ritualReveal} data-testid="today-zone-tarot-impact">
-                  <p className={styles.ritualRevealKind}>Символ дня · открыт</p>
-                  <h2 className={styles.ritualRevealTitle}>{story.tarotImpact.title}</h2>
-                  <p className={styles.ritualRevealHeadline}>{story.tarotImpact.headline}</p>
-                  <p className={styles.ritualRevealBody}>{story.tarotImpact.body}</p>
-                </section>
-              ) : props.cardName ? (
-                <section className={styles.ritualReveal} data-testid="today-zone-tarot-impact">
-                  <p className={styles.ritualRevealKind}>Символ дня · открыт</p>
-                  <h2 className={styles.ritualRevealTitle}>{props.cardName}</h2>
-                  {props.cardMeaning ? (
-                    <p className={styles.ritualRevealBody}>{props.cardMeaning}</p>
-                  ) : null}
-                </section>
+              {story.tarotImpact || props.cardName || symbolHooksView?.card?.hook_reveal ? (
+                <TodayHookRevealShell
+                  kindLabel="Карта дня · открыта"
+                  title={
+                    symbolHooksView?.card?.name ||
+                    story.tarotImpact?.title ||
+                    props.cardName ||
+                    "Карта дня"
+                  }
+                  subtitle={story.tarotImpact?.headline || null}
+                  hook={symbolHooksView?.card?.hook_reveal || null}
+                  fallbackBody={
+                    symbolHooksView?.card?.meaning ||
+                    story.tarotImpact?.body ||
+                    props.cardMeaning ||
+                    null
+                  }
+                  testId="today-zone-tarot-impact"
+                />
               ) : null}
-              {story.numberImpact ? (
-                <section className={styles.ritualReveal} data-testid="today-zone-number-impact">
-                  <p className={styles.ritualRevealKind}>Число дня · открыто</p>
-                  <h2 className={styles.ritualRevealTitle}>{story.numberImpact.title}</h2>
-                  <p className={styles.ritualRevealHeadline}>{story.numberImpact.headline}</p>
-                  <p className={styles.ritualRevealBody}>{story.numberImpact.body}</p>
-                </section>
-              ) : props.numerologyValue ? (
-                <section className={styles.ritualReveal} data-testid="today-zone-number-impact">
-                  <p className={styles.ritualRevealKind}>Число дня · открыто</p>
-                  <h2 className={styles.ritualRevealTitle}>{props.numerologyValue}</h2>
-                  {props.numerologyMeaning ? (
-                    <p className={styles.ritualRevealBody}>{props.numerologyMeaning}</p>
-                  ) : null}
-                </section>
+              {symbolHooksView?.color_hook_reveal ||
+              props.contract.day_story?.talisman?.color ||
+              props.contract.day_story?.day_scenario?.props?.color?.name ? (
+                <TodayHookRevealShell
+                  kindLabel={copy.journey.hookColorKind}
+                  title={
+                    String(
+                      symbolHooksView?.color_hook_reveal?.identity?.name ||
+                        props.contract.day_story?.talisman?.color ||
+                        props.contract.day_story?.day_scenario?.props?.color?.name ||
+                        "Цвет дня",
+                    )
+                  }
+                  hook={
+                    symbolHooksView?.color_hook_reveal || {
+                      kind: "color",
+                      base: {
+                        meaning:
+                          props.contract.day_story?.talisman?.note ||
+                          props.contract.day_story?.day_scenario?.props?.color?.link_to_conflict ||
+                          null,
+                      },
+                      bridge_to_day:
+                        props.contract.day_story?.day_scenario?.props?.color?.link_to_conflict ||
+                        props.contract.day_story?.talisman?.note ||
+                        null,
+                      bridge_status: props.contract.day_story?.day_scenario?.props?.color
+                        ?.link_to_conflict
+                        ? "ok"
+                        : "unavailable",
+                      bridge_fail_copy: "Не удалось раскрыть день для этого цвета.",
+                      instruction:
+                        props.contract.day_story?.day_scenario?.props?.color?.where_to_use || null,
+                    }
+                  }
+                  testId="today-zone-color-hook"
+                />
+              ) : null}
+              {story.numberImpact || props.numerologyValue || symbolHooksView?.number?.hook_reveal ? (
+                <TodayHookRevealShell
+                  kindLabel="Число дня · открыто"
+                  title={
+                    String(
+                      symbolHooksView?.number?.reduced_value ??
+                        symbolHooksView?.number?.value ??
+                        story.numberImpact?.title ??
+                        props.numerologyValue ??
+                        "",
+                    )
+                  }
+                  subtitle={
+                    symbolHooksView?.number?.title || story.numberImpact?.headline || null
+                  }
+                  hook={symbolHooksView?.number?.hook_reveal || null}
+                  fallbackBody={
+                    symbolHooksView?.number?.summary ||
+                    story.numberImpact?.body ||
+                    props.numerologyMeaning ||
+                    null
+                  }
+                  testId="today-zone-number-impact"
+                />
               ) : null}
               {props.contract.day_story?.interpretive_chorus?.astrology_lead ||
               props.contract.day_story?.interpretive_chorus?.astrology_meaning ? (
@@ -1620,7 +1691,11 @@ export function TodayCompositionSurface(props: Props) {
         onTapRecorded: (response) => persistEngagement({ tapResponse: response }),
         tarotDeepenHref:
           engagement.tarotPickedId != null
-            ? buildTarotDeepenHref({ cardId: engagement.tarotPickedId, orientation: "upright", source: "today" })
+            ? buildTarotDeepenHref({
+                cardId: engagement.tarotPickedId,
+                orientation: engagement.tarotOrientation ?? "upright",
+                source: "today",
+              })
             : null,
         onPickPromise: (text) => {
           persistEngagement({ dayGoal: text });
@@ -1726,7 +1801,7 @@ export function TodayCompositionSurface(props: Props) {
               engagement.tarotPickedId != null
                 ? buildTarotDeepenHref({
                     cardId: engagement.tarotPickedId,
-                    orientation: "upright",
+                    orientation: engagement.tarotOrientation ?? "upright",
                     source: "today",
                   })
                 : null
@@ -1777,7 +1852,7 @@ export function TodayCompositionSurface(props: Props) {
                   <Link
                     href={buildTarotDeepenHref({
                       cardId: engagement.tarotPickedId,
-                      orientation: "upright",
+                      orientation: engagement.tarotOrientation ?? "upright",
                       source: "today",
                     })}
                     className={`orbit-button orbit-button-secondary ${styles.ritualDeepenCta}`}
@@ -1789,7 +1864,7 @@ export function TodayCompositionSurface(props: Props) {
                         local_date: dateISO,
                         payload: buildTarotDeepenEventPayload({
                           cardId: engagement.tarotPickedId!,
-                          orientation: "upright",
+                          orientation: engagement.tarotOrientation ?? "upright",
                           source: "today",
                         }),
                         idempotency_key: tarotDeepenIdempotencyKey({

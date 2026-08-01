@@ -19,11 +19,15 @@ Knowledge Base = факты для LLM. **Не** готовые абзацы о�
 
 | Слой | Путь | Роль |
 |------|------|------|
-| Card identity | `DATA/astrology_reference/tarot_full_deck.json` | id, `name_ru`, suit, catalog upright/reversed |
-| **Semantic facts (KB v1)** | `DATA/reference/tarot/knowledge_v1/cards.json` | архетип + Q1 profile fields |
+| Card identity | `DATA/astrology_reference/tarot_full_deck.json` | id, `name_ru`, suit |
+| **Base meanings (system)** | `DATA/reference/tarot/card_base_v1/cards.json` | upright/reversed **user-facing base** — [TAROT_CARD_BASE_V1.md](./TAROT_CARD_BASE_V1.md) |
+| **Semantic facts (KB v1)** | `DATA/reference/tarot/knowledge_v1/cards.json` | архетип + Q1 profile fields for packs |
 | Machine vectors | `DATA/reference/tarot/machine/` | DayModel / numeric axes — **не** текст интерпретации |
 | Pack builder | `tarot_interpretation_engine_v1._meaning_range` | merge KB → pack `meaning_range` |
-| User prose | LLM | единственный author ответа |
+| Day-bridge / instruction | chorus + optional gen | не переписывает `card_base_v1` |
+| Question answer prose | LLM | author ответа на вопрос — поверх base + pack |
+
+`card_base_v1` — единственный словарь базовых значений для всех tarot-поверхностей. KB не заменяет его.
 
 Rebuild: `scripts/build_tarot_knowledge_v1.py` (committed JSON = runtime SoT).
 

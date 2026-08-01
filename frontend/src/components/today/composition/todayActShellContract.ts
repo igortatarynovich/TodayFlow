@@ -10,9 +10,9 @@
  * 6. QA: remove text — composition must still look intentional (Foundation UI).
  *
  * Reserved Wave 2 slots (do not remove testids):
- * - today-slot-verdict-strip (Act 1)
- * - today-slot-glance-timeline (Act 2)
- * - today-slot-tap-widget (Act 5)
+ * - today-slot-verdict-strip (deeper acts / Plot — not Glance hero)
+ * - today-slot-glance-nearest / today-slot-glance-timeline
+ * - today-slot-tap-widget (Response)
  */
 export const TODAY_ACT_SHELL_REVIEW_CHECKLIST = [
   "Uses TodayActShell for the act",

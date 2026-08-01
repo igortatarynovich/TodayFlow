@@ -247,21 +247,20 @@ Exact numeric cutovers stay calibratable; the **aggregation rule** (top, not sum
 
 **Out of scope for this close:** splitting “seasonal” vs “daily” domains onto different refresh cadences — not needed once top-driver restores inside-month flips.
 
-### 3.4 Glance Screen 0 — presentation compression (FE)
+### 3.4 Glance Screen 0 — day overview (FE) · 2026-08-01
 
-**Data SoT unchanged:** still fixed-4 `domain_verdicts` from `top_driver_v1`. No new domain inventory in this change (expanding past 4 = separate Architecture + contract).
+**Data SoT for domains unchanged:** fixed-4 `domain_verdicts` remain on `day_facts_v1` for deeper acts (Plot/Reading). Expanding past 4 = separate Architecture + contract.
 
-**Composition SoT (Glance only):** summary ≠ four equal cards.
+**Composition SoT (Glance):** summary = **2-second day overview**, not four spheres.
 
-1. Thesis is the primary summary (visual hero).
-2. If **≥3** domains share the same `verdict` → those collapse to **one compact line** (`Работа · Деньги · Энергия — открыто`); only **outliers** get a full card.
-3. If **all** domains share the same verdict → **one unanimous line** (no cards) — e.g. open → «День ровный по всем направлениям…».
-4. If no majority of 3+ → keep full cards (mixed day).
-5. Space freed by collapsed cards → **promoted nearest** timed signal (actionable).
-6. Teasers 1–5 unchanged.
-7. Identical `why_short` across 4 (silent bank) still → transport honesty, not fake meaning.
+1. **Hero:** short theme — `conflict.short_name` / compact texture (not a `why_arose` sheet; not VerdictStrip as center).
+2. **Optional:** one nearest timed signal from `glance_timeline`.
+3. **CTA:** into ritual hooks (card / number / color) — not equal teasers for Plot/Reading as the primary job.
+4. **Four spheres** — not the Glance hero; may appear after hooks (Plot/Reading). Legacy helpers (`compressGlanceDomainVerdicts`) are not the Glance composition SoT.
+5. Identical silent calm bank / transport failure → honesty («Нет соединения.» / «Не удалось загрузить.»), not fake calm.
 
-Canon UI: [SCREEN_FLOW_V1 §4](../foundation/SCREEN_FLOW_V1.md). Helper: `compressGlanceDomainVerdicts`.
+Hooks contract: [DAY_SYMBOL_REVEAL_CANON_V1](../audits/DAY_SYMBOL_REVEAL_CANON_V1.md).  
+Canon UI flow: [SCREEN_FLOW_V1 §4](../foundation/SCREEN_FLOW_V1.md) · [TODAY_SCREEN_SCENARIO_V3](./TODAY_SCREEN_SCENARIO_V3.md).
 
 ---
 

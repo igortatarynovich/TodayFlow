@@ -59,6 +59,33 @@ def _owner_from_request(
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
+def _enrich_with_hook_reveal(
+    db: Session,
+    view: dict,
+    *,
+    user_id: int | None,
+    local_date,
+) -> dict:
+    """Attach hook_reveal (base + chorus/props bridge). Explainer is not a bridge source."""
+    from todayflow_backend.services import hook_reveal_v1 as hooks
+    from todayflow_backend.services.today_day_facts_project_v1 import load_ready_day_scenario
+
+    chorus = None
+    props = None
+    if user_id is not None:
+        try:
+            scenario = load_ready_day_scenario(db, user_id=user_id, local_date=local_date)
+        except Exception:
+            scenario = None
+        if isinstance(scenario, dict):
+            chorus = scenario.get("chorus") if isinstance(scenario.get("chorus"), dict) else None
+            props = scenario.get("props") if isinstance(scenario.get("props"), dict) else None
+            # Also accept projected public nest shape
+            if chorus is None and isinstance(scenario.get("interpretive_chorus"), dict):
+                chorus = scenario.get("interpretive_chorus")
+    return hooks.attach_hooks_to_symbol_view(view, chorus=chorus, props=props)
+
+
 @router.get("/state")
 def get_symbol_state(
     request: Request,
@@ -70,10 +97,11 @@ def get_symbol_state(
 ) -> dict:
     """Read-only. Never creates or reveals."""
     _ = request
-    owner_key, _, _ = _owner_from_request(user, x_guest_session_id)
+    owner_key, user_id, _ = _owner_from_request(user, x_guest_session_id)
     day = symbols.resolve_local_date(local_date=local_date, timezone_name=timezone)
     row = symbols.get_state_row(db, owner_key=owner_key, local_date=day)
-    return symbols.public_view(row, local_date=day, timezone_name=timezone)
+    view = symbols.public_view(row, local_date=day, timezone_name=timezone)
+    return _enrich_with_hook_reveal(db, view, user_id=user_id, local_date=day)
 
 
 def _with_story_refresh_meta(
@@ -143,6 +171,7 @@ def reveal_card_symbol(
         code = str(exc)
         status = 400 if code != "unknown_tarot_card" else 404
         raise HTTPException(status_code=status, detail=code) from exc
+    view = _enrich_with_hook_reveal(db, view, user_id=user_id, local_date=day)
     return _with_story_refresh_meta(
         db,
         view=view,
@@ -178,6 +207,7 @@ def reveal_number_symbol(
         )
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
+    view = _enrich_with_hook_reveal(db, view, user_id=user_id, local_date=day)
     return _with_story_refresh_meta(
         db,
         view=view,

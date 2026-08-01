@@ -5,6 +5,7 @@ import {
   applyRecommendedPracticeToStrengthen,
   buildTodayCompositionViewModel,
 } from "@/lib/todayCompositionModel";
+import { createEmptyDayEngagement } from "@/lib/todayDayEngagement";
 
 const sampleContract: TodayContractV1 = {
   contract_version: "today_contract_v1",
@@ -102,22 +103,9 @@ describe("buildTodayCompositionViewModel", () => {
     });
 
     const adjusted = applyEngagementToViewModel(vm, {
-      dayGoal: null,
-      practiceStarted: false,
-      practiceCompleted: false,
-      recommendedPracticeId: null,
+      ...createEmptyDayEngagement(),
       tarotPickedId: 8,
       tarotPickedName: "Отшельник",
-      numberConfirmed: false,
-      affirmationRead: false,
-      todayOpened: false,
-      morningMoodId: null,
-      morningMoodCapturedAtMs: null,
-      focusTopicId: null,
-      focusTopicCapturedAtMs: null,
-      eveningHighlightId: null,
-      tarotResonance: null,
-      numberResonance: null,
     });
 
     expect(adjusted.strengthen.find((t) => t.id === "affirmation")).toBeUndefined();

@@ -1,6 +1,7 @@
 /**
- * Локальный слой для интерактивной «Карты дня» в Today: пользователь вытягивает карту,
- * текст не должен звучать как «система выбрала». Паритет с iOS `TodayTarotTodayRu.swift` + `today_tarot_today_ru.json`.
+ * @deprecated as meaning SoT — use BE `card_base_v1` / `hook_reveal.base` (78×upright/reversed).
+ * Kept for ritual pick theater labels / sphereBump until FE cutover completes.
+ * Локальный слой для интерактивной «Карты дня» в Today (major-only legacy).
  */
 export type TarotSphereBump = Partial<Record<"love" | "work" | "money" | "energy", number>>;
 

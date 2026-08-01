@@ -20,6 +20,7 @@ from zoneinfo import ZoneInfo
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from todayflow_backend.data import card_base_v1, number_base_v1
 from todayflow_backend.db import models as db_models
 from todayflow_backend.db.models import utc_naive_now
 from todayflow_backend.services.numerology import NumerologyService, get_numerology_service
@@ -132,35 +133,46 @@ def public_view(
     }
 
     if is_card_revealed(row):
+        card_id = int(row.card_id) if str(row.card_id).isdigit() else None
+        orientation = row.card_orientation or "upright"
+        base = card_base_v1.get_base_meaning(card_id, orientation) if card_id is not None else None
         svc = tarot_service or TarotService()
         card = None
         try:
-            card = svc.get_card_by_id(int(str(row.card_id)))
+            if card_id is not None:
+                card = svc.get_card_by_id(card_id)
         except Exception:
             card = None
+        name = (base or {}).get("name_ru") or (card.name if card else None)
+        keywords = list((base or {}).get("keywords") or [])
+        if not keywords and card:
+            keywords = list(card.keywords or [])
+        meaning = (base or {}).get("meaning")
+        if not meaning and card:
+            meaning = (
+                card.upright if card_base_v1.normalize_orientation(orientation) == "upright" else card.reversed
+            )
         out["card"].update(
             {
-                "id": int(row.card_id) if str(row.card_id).isdigit() else row.card_id,
-                "orientation": row.card_orientation or "upright",
-                "name": card.name if card else None,
-                "keywords": list(card.keywords or []) if card else [],
-                "meaning": (
-                    (card.upright if (row.card_orientation or "upright") == "upright" else card.reversed)
-                    if card
-                    else None
-                ),
+                "id": card_id if card_id is not None else row.card_id,
+                "orientation": card_base_v1.normalize_orientation(orientation),
+                "name": name,
+                "keywords": keywords,
+                "meaning": meaning,
                 "generated_at": row.card_generated_at.isoformat() if row.card_generated_at else None,
             }
         )
 
     if is_number_revealed(row):
+        reduced = int(row.number_reduced) if row.number_reduced is not None else None
+        num_base = number_base_v1.get_number_base(reduced) if reduced is not None else None
         out["number"].update(
             {
                 "value": row.number_value,
                 "reduced_value": row.number_reduced,
                 "is_master": bool(row.number_is_master),
-                "title": row.number_title,
-                "summary": row.number_summary,
+                "title": (num_base or {}).get("title") or row.number_title,
+                "summary": (num_base or {}).get("base_meaning") or row.number_summary,
                 "generated_at": row.number_generated_at.isoformat() if row.number_generated_at else None,
             }
         )
@@ -246,6 +258,14 @@ def _stable_day_card_id(*, owner_key: str, local_date: date) -> int:
     return int(digest[:8], 16) % 78
 
 
+def _stable_day_card_orientation(*, owner_key: str, local_date: date) -> str:
+    """Stable upright/reversed from the same day-card digest family (not hardcode upright)."""
+    digest = hashlib.sha256(
+        f"{owner_key}|{local_date.isoformat()}|day_card_orientation".encode()
+    ).hexdigest()
+    return "reversed" if (int(digest[:8], 16) % 2) == 1 else "upright"
+
+
 def ensure_symbols_prebaked(
     db: Session,
     *,
@@ -287,10 +307,17 @@ def ensure_symbols_prebaked(
 
     if not row.card_id and not is_card_revealed(row):
         row.card_id = str(_stable_day_card_id(owner_key=owner_key, local_date=local_date))
-        row.card_orientation = "upright"
+        row.card_orientation = _stable_day_card_orientation(
+            owner_key=owner_key, local_date=local_date
+        )
         row.card_generated_at = now
         row.card_status = STATUS_NOT_REVEALED
         row.card_revealed_at = None
+        changed = True
+    elif row.card_id and not row.card_orientation and not is_card_revealed(row):
+        row.card_orientation = _stable_day_card_orientation(
+            owner_key=owner_key, local_date=local_date
+        )
         changed = True
 
     if changed:

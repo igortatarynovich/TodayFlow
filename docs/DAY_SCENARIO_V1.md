@@ -123,6 +123,20 @@ Date-preset color catalog **не** meaning SoT (может остаться seed
 
 Это авторский язык Today: не набор функций рядом, а единый хор.
 
+### Chorus = sole bridge for day hooks (2026-08-01)
+
+Для крючков «карта / число / цвет» поле **`bridge_to_day`** в `hook_reveal` берётся **только** из хора / props assemble-once:
+
+| Крючок | Sole SoT моста |
+|--------|----------------|
+| Карта | `interpretive_chorus.day_card.link_to_conflict` (+ роль из того же voice) |
+| Число | `interpretive_chorus.day_number.link_to_conflict` (+ tempo/style) |
+| Цвет | `props.color.link_to_conflict` |
+
+`tarot_explainer` / `numerology_explainer` **не** пишут параллельный мост и **не** переписывают канонический `base` (см. [DAY_SYMBOL_REVEAL_CANON_V1](./audits/DAY_SYMBOL_REVEAL_CANON_V1.md)). Пустой chorus → `bridge_status=unavailable`, не «догенерировать другим путём».
+
+Базовые значения карт — единый `card_base_v1` (78×upright/reversed); числа — `number_base_v1`; цвет — `COLOR_CATALOG_V1`.
+
 ---
 
 ## Структура сценария (Уровень 1)

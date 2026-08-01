@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import styles from "@/components/today/composition/TodayGlanceAct.module.css";
 import {
@@ -9,17 +9,6 @@ import {
   type GlanceTimelineItem,
 } from "@/lib/todayGlanceTimeline";
 import { fetchDayFacts } from "@/lib/todayDayFacts";
-import {
-  DOMAIN_LABEL_RU,
-  DOMAIN_ORDER,
-  isSilentCalmBank,
-  orderDomainVerdicts,
-  scrubDomainVerdictJargon,
-  VERDICT_LABEL_RU,
-  type DomainKey,
-  type DomainVerdict,
-  type VerdictKey,
-} from "@/lib/todayDomainVerdicts";
 import { pickNearestGlanceItem } from "@/lib/todayGlanceNearest";
 import { todaySlotFailureCopy, type TodaySlotLoadFailure } from "@/lib/todaySlotAvailability";
 
@@ -34,21 +23,19 @@ type Props = {
   dateISO: string;
   /** short_name eyebrow — optional */
   title?: string | null;
-  /** Texture: why_arose (dominates). Falls back to thesis/title. */
+  /** Texture: short day overview (dominates). Falls back to thesis/title. */
   dayTexture?: string | null;
   thesis?: string | null;
   teasers: TodayGlanceTeaser[];
   themeLoading?: boolean;
-  onSphereSelect?: (domain: DomainKey) => void;
+  /** @deprecated spheres are not Glance hero — kept for call-site compat */
+  onSphereSelect?: (domain: string) => void;
 };
 
-function verdictMark(verdict: VerdictKey): string {
-  if (verdict === "open") return "◇";
-  if (verdict === "charged") return "▲";
-  if (verdict === "friction") return "×";
-  return "·";
-}
-
+/**
+ * Glance / Сводка — 2-second day overview.
+ * Not four spheres. Hooks live in Symbols ritual act.
+ */
 export function TodayGlanceAct({
   dateISO,
   title = null,
@@ -56,49 +43,32 @@ export function TodayGlanceAct({
   thesis = null,
   teasers,
   themeLoading = false,
-  onSphereSelect,
 }: Props) {
   const [nearest, setNearest] = useState<GlanceTimelineItem | null>(null);
   const [loadFailure, setLoadFailure] = useState<TodaySlotLoadFailure | null>(null);
-  const [sphereFailure, setSphereFailure] = useState<TodaySlotLoadFailure | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [nowTick, setNowTick] = useState(() => new Date());
-  const [domainRows, setDomainRows] = useState<DomainVerdict[]>([]);
 
   useEffect(() => {
     let cancelled = false;
     setLoaded(false);
     setLoadFailure(null);
-    setSphereFailure(null);
-    setDomainRows([]);
     void fetchDayFacts(dateISO)
       .then((data) => {
         if (cancelled) return;
         if (data.is_fallback ?? data.degraded) {
           setLoadFailure("unavailable");
-          setSphereFailure("unavailable");
           setNearest(null);
-          setDomainRows([]);
         } else {
           setLoadFailure(null);
           setNearest(pickNearestGlanceItem(data.glance_timeline ?? [], new Date()));
-          const ordered = scrubDomainVerdictJargon(orderDomainVerdicts(data.domain_verdicts ?? []));
-          if (isSilentCalmBank(ordered)) {
-            setSphereFailure("unavailable");
-            setDomainRows([]);
-          } else {
-            setSphereFailure(null);
-            setDomainRows(ordered);
-          }
         }
         setLoaded(true);
       })
       .catch(() => {
         if (cancelled) return;
         setLoadFailure("no_connection");
-        setSphereFailure("no_connection");
         setNearest(null);
-        setDomainRows([]);
         setLoaded(true);
       });
     return () => {
@@ -121,11 +91,12 @@ export function TodayGlanceAct({
       ? title.trim()
       : null;
 
-  const tokenRows = useMemo(() => {
-    if (!loaded || sphereFailure) return [];
-    const byDomain = new Map(domainRows.map((r) => [r.domain, r]));
-    return DOMAIN_ORDER.map((domain) => byDomain.get(domain)).filter(Boolean) as DomainVerdict[];
-  }, [loaded, sphereFailure, domainRows]);
+  // Prefer symbols teaser first — hooks are the next center after overview.
+  const orderedTeasers = (() => {
+    const symbols = teasers.filter((t) => t.id === "symbols");
+    const rest = teasers.filter((t) => t.id !== "symbols");
+    return [...symbols, ...rest];
+  })();
 
   return (
     <div className={styles.root} data-testid="today-zone-glance-act">
@@ -148,76 +119,25 @@ export function TodayGlanceAct({
                 {copy.journey.glanceTitle}
               </h3>
             )}
+            <p className={styles.glanceLead} data-testid="today-glance-lead">
+              {copy.journey.glanceLead}
+            </p>
           </>
         )}
       </div>
 
       <div className={styles.metaRow} data-testid="today-glance-meta">
-        {loaded && (sphereFailure || loadFailure) ? (
+        {loaded && loadFailure ? (
           <p
             className={styles.metaFail}
             role="status"
             data-testid="today-glance-meta-fallback"
             data-fallback="true"
-            data-failure={sphereFailure || loadFailure || undefined}
+            data-failure={loadFailure}
           >
-            {todaySlotFailureCopy((sphereFailure || loadFailure)!)}
+            {todaySlotFailureCopy(loadFailure)}
           </p>
         ) : null}
-        <div
-          className={styles.sphereTokens}
-          data-testid="today-slot-verdict-strip"
-          data-wave2-slot="verdict"
-          data-variant="tokens"
-          data-fallback={sphereFailure ? "true" : "false"}
-          data-failure={sphereFailure || undefined}
-          aria-label={copy.journey.verdictStripLabel}
-        >
-          {!loaded ? <div className={styles.nearestSkeleton} data-loading="true" aria-busy="true" /> : null}
-          {loaded && !sphereFailure
-            ? tokenRows.map((row) => {
-                const domain = row.domain as DomainKey;
-                const verdict = row.verdict as VerdictKey;
-                const label = DOMAIN_LABEL_RU[domain] ?? row.domain;
-                const verdictLabel = VERDICT_LABEL_RU[verdict] ?? row.verdict;
-                const interactive = Boolean(onSphereSelect);
-                if (interactive) {
-                  return (
-                    <button
-                      key={row.domain}
-                      type="button"
-                      className={styles.sphereToken}
-                      data-domain={row.domain}
-                      data-verdict={row.verdict}
-                      data-testid={`today-verdict-token-${row.domain}`}
-                      aria-label={`${label}: ${verdictLabel}`}
-                      onClick={() => onSphereSelect?.(domain)}
-                    >
-                      <span className={styles.sphereTokenMark} aria-hidden>
-                        {verdictMark(verdict)}
-                      </span>
-                      <span className={styles.sphereTokenLabel}>{label}</span>
-                    </button>
-                  );
-                }
-                return (
-                  <span
-                    key={row.domain}
-                    className={styles.sphereToken}
-                    data-domain={row.domain}
-                    data-verdict={row.verdict}
-                    data-testid={`today-verdict-token-${row.domain}`}
-                    aria-label={`${label}: ${verdictLabel}`}
-                  >
-                    <span className={styles.sphereTokenMark} aria-hidden>
-                      {verdictMark(verdict)}
-                    </span>
-                    <span className={styles.sphereTokenLabel}>{label}</span>
-                  </span>
-                );
-              })
-            : null}
-        </div>
 
         <div
           className={styles.nearestInline}
@@ -227,6 +147,7 @@ export function TodayGlanceAct({
           data-fallback={loadFailure ? "true" : "false"}
           data-failure={loadFailure || undefined}
         >
+          {!loaded ? <div className={styles.nearestSkeleton} data-loading="true" aria-busy="true" /> : null}
           {loaded && !loadFailure && nearest ? (
             <p
               className={styles.nearestInlineText}
@@ -254,11 +175,17 @@ export function TodayGlanceAct({
         </div>
       </div>
 
-      {teasers.length > 0 ? (
+      {orderedTeasers.length > 0 ? (
         <ul className={styles.teasers} aria-label={copy.journey.glanceTeasersLabel} data-testid="today-glance-teasers">
-          {teasers.map((t) => (
+          {orderedTeasers.map((t) => (
             <li key={t.id}>
-              <button type="button" className={styles.teaser} data-testid={`today-glance-teaser-${t.id}`} onClick={t.onSelect}>
+              <button
+                type="button"
+                className={styles.teaser}
+                data-testid={`today-glance-teaser-${t.id}`}
+                data-primary={t.id === "symbols" ? "true" : undefined}
+                onClick={t.onSelect}
+              >
                 <span className={styles.teaserMark} aria-hidden>
                   ·
                 </span>

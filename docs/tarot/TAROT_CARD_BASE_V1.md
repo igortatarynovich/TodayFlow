@@ -1,0 +1,63 @@
+# Tarot Card Base v1 — system meaning SoT
+
+**Status:** ACTIVE (2026-08-01)  
+**Type:** static user-facing base meanings (lookup)  
+**Data:** `DATA/reference/tarot/card_base_v1/cards.json`  
+**Loader:** `todayflow_backend.data.card_base_v1`  
+**Related:** [TAROT_KNOWLEDGE_BASE_V1.md](./TAROT_KNOWLEDGE_BASE_V1.md) (semantic facts for LLM packs) · [DAY_SYMBOL_REVEAL_CANON_V1.md](../audits/DAY_SYMBOL_REVEAL_CANON_V1.md)
+
+---
+
+## 0. Why
+
+Day card, morning ritual, question tarot, and library must show the **same** traditional meaning for `(card_id, orientation)`. That text is **not** generated per day.
+
+Knowledge Base (`knowledge_v1`) remains facts for interpretation packs — not a second prose dictionary for day hooks.
+
+---
+
+## 1. Scope
+
+| | |
+|--|--|
+| Cards | **78** (ids 0…77) |
+| Orientations | **upright** and **reversed** (both required) |
+| Locale | `ru` (product) |
+| Identity | aligned with `tarot_full_deck.json` ids / `name_ru` |
+
+---
+
+## 2. Record shape
+
+```text
+card_base_v1 {
+  contract_version: "card_base_v1"
+  locale: "ru"
+  cards: [{
+    id: int                 # 0…77
+    name_ru: string
+    type: "major" | "minor"
+    upright: { base_meaning: string, keywords: [string] }
+    reversed: { base_meaning: string, keywords: [string] }
+  }]
+}
+```
+
+Lookup API: `get_base_meaning(card_id, orientation) → { meaning, keywords, name_ru }`.
+
+---
+
+## 3. Consumers (must not fork)
+
+- Day symbol reveal / `hook_reveal` base layer
+- Morning ritual card display
+- Question-tarot result (base layer before pack/LLM)
+- Library / card detail
+
+Deprecated as parallel meaning SoT: FE `TODAY_TAROT_CARDS_RU`, ad-hoc explainer `meaning` as dictionary, duplicate upright/reversed prose banks.
+
+---
+
+## 4. What LLM may still do
+
+Only **bridge_to_day** (from chorus), **instruction**, **personal_angle** — never rewrite `base_meaning`.

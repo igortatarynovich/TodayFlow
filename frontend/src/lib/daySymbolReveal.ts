@@ -22,6 +22,19 @@ async function symbolsRequest<T>(path: string, init?: RequestInit & { guest?: bo
   return res.json() as Promise<T>;
 }
 
+export type HookRevealPayload = {
+  kind?: string;
+  identity?: Record<string, unknown>;
+  base?: { meaning?: string | null; keywords?: string[]; name?: string | null } | null;
+  bridge_to_day?: string | null;
+  bridge_status?: "ok" | "unavailable" | string;
+  bridge_fail_copy?: string | null;
+  instruction?: string | null;
+  instruction_status?: string;
+  personal_angle?: string | null;
+  result_loop?: string;
+};
+
 export type DaySymbolPublicView = {
   contract_version?: string;
   local_date: string;
@@ -32,6 +45,9 @@ export type DaySymbolPublicView = {
     id?: number | string | null;
     name?: string | null;
     orientation?: string | null;
+    meaning?: string | null;
+    keywords?: string[] | null;
+    hook_reveal?: HookRevealPayload | null;
   };
   number: {
     status: string;
@@ -39,7 +55,10 @@ export type DaySymbolPublicView = {
     value?: number | null;
     reduced_value?: number | null;
     title?: string | null;
+    summary?: string | null;
+    hook_reveal?: HookRevealPayload | null;
   };
+  color_hook_reveal?: HookRevealPayload | null;
   story_refresh_required?: boolean;
   story_status?: string;
   story_fingerprint?: string | null;

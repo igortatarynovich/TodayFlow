@@ -38,6 +38,14 @@
   color: var(--tf-ink-muted, #5c534a);
 }
 
+.glanceLead {
+  margin: 0.15rem 0 0;
+  max-width: 40ch;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--tf-ink-soft, #5c5348);
+}
+
 .metaRow {
   display: flex;
   flex-direction: column;
@@ -45,10 +53,7 @@
 }
 
 .sphereTokens {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  width: 100%;
+  display: none; /* spheres are not Glance hero (2026-08-01) */
 }
 
 .sphereToken {

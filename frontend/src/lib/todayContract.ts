@@ -417,7 +417,13 @@ export type TodayContractDayStoryV1 = {
     }>;
     props?: {
       status?: string;
-      color?: { name?: string; origin_scene_id?: string; link_to_conflict?: string };
+      color?: {
+        name?: string;
+        origin_scene_id?: string;
+        link_to_conflict?: string;
+        where_to_use?: string;
+        expected_effect_today?: string;
+      };
       avoid_color?: { name?: string; why?: string; origin_scene_id?: string };
       goals?: Array<{ text?: string; origin_scene_id?: string }>;
       affirmations?: Array<{ text?: string; origin_scene_id?: string }>;

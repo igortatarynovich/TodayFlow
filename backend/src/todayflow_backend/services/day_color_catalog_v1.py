@@ -159,6 +159,21 @@ def get_color_entry(name: str) -> dict[str, Any] | None:
     return None
 
 
+def color_hook_base(name: str) -> dict[str, Any] | None:
+    """Project catalog row into hook_reveal.base shape (static archetype + apply)."""
+    entry = get_color_entry(name)
+    if not entry:
+        return None
+    return {
+        "name": str(entry.get("name") or "").strip(),
+        "base_archetype": str(entry.get("symbolic_property") or "").strip(),
+        "meaning": str(entry.get("symbolic_property") or "").strip(),
+        "apply": dict(entry.get("apply") or {}),
+        "intensity_default": str(entry.get("intensity_default") or "").strip() or None,
+        "avoid_candidates": list(entry.get("avoid_candidates") or ()),
+    }
+
+
 def score_color_for_needs(entry: dict[str, Any], needed_tags: set[str]) -> int:
     tags = set(entry.get("tags") or ())
     return len(tags & needed_tags)

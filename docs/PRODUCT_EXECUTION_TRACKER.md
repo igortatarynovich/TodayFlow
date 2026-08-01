@@ -1,15 +1,25 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-07-30
+Last updated: 2026-08-01
 Owner: Product + Engineering
 Status: Active working document
 
-**IN PROGRESS (2026-07-31):** Today Screen Scenario **v3 LIVE** (hard-refresh) · Practices P1 LIVE. ScreenFlow axis **LOCKED x**.
+**IN PROGRESS (2026-08-01):** Day hooks summary — Glance overview + `hook_reveal` (base static / bridge=chorus) · card_base_v1 78×upright/reversed · number_base_v1.
+
+## Architecture impact — Day hooks + Glance overview (2026-08-01)
+
+- **SoT before:** Glance hero = theme + 4 spheres + nearest; card/number meanings from FE major bank + EN deck + LLM explainers; color as talisman prop without hook shell; prebake orientation hardcoded upright.
+- **SoT after:** Glance = 2-sec day overview (no VerdictStrip hero); hooks center on Symbols with ritual→reveal→instruction; `card_base_v1` / `number_base_v1` / COLOR_CATALOG = static base; `bridge_to_day` sole SoT = interpretive_chorus / props.color; explainer must not parallel bridge; orientation prebaked upright|reversed from digest.
+- **Public contract changed?** yes — additive `hook_reveal` / `color_hook_reveal` on `/today/symbols/*` when revealed; card `meaning` prefers RU `card_base_v1`; Glance presentation (no new required day_facts fields).
+- **Migration required?** no forced client bump; old clients ignore new nests. FE major bank becomes non-SoT consumer.
+- **Canon updated?** yes — [DAY_SYMBOL_REVEAL_CANON_V1](./audits/DAY_SYMBOL_REVEAL_CANON_V1.md) · [TAROT_CARD_BASE_V1](./tarot/TAROT_CARD_BASE_V1.md) · DAY_SCENARIO · TODAY_WAVE2 §3.4 · TODAY_SCREEN_SCENARIO_V3.
+- **Backward compatible?** yes for JSON; Glance UI no longer shows sphere tokens (intentional).
+- **Server check:** unit `tests/test_hook_reveal_v1.py` green (7); live deploy/UI verify pending on stack.
 
 ## Architecture impact — Screen scenario v3
 
 - **SoT before:** ScreenFlow steps existed; content dumped into Reading chapters; Glance = label + domains + nearest.
-- **SoT after:** [TODAY_SCREEN_SCENARIO_V3.md](./today/TODAY_SCREEN_SCENARIO_V3.md) — composition of existing contract fields per screen job.
+- **SoT after:** [TODAY_SCREEN_SCENARIO_V3.md](./today/TODAY_SCREEN_SCENARIO_V3.md) — composition of existing contract fields per screen job · **updated 2026-08-01** for Glance overview + Symbols hook arc.
 - **Public contract changed?** no new required JSON; timeline `label_short` bank more distinct (body+aspect, still no jargon).
 - **Migration required?** no.
 - **Canon updated?** yes — TODAY_SCREEN_SCENARIO_V3 + SCREEN_FLOW §4 + README.
@@ -1128,6 +1138,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-01 | Today / Hooks | **Glance overview + hook_reveal (base/chorus)** | **DONE (code)** | Glance без 4 сфер · `number_base_v1` · `card_base_v1` 78×up/rev · COLOR catalog hook base · chorus=sole bridge · bridge-fail UX · prebake orientation · FE `TodayHookRevealShell` · tests `test_hook_reveal_v1` 7/7 · deploy/UI live verify pending · canon DAY_SYMBOL_REVEAL + TAROT_CARD_BASE_V1
 - 2026-07-31 | Practices | **C1+ server catalog enrich** | **DONE / DEPLOYING** | Free GENERAL library ~47 tagged practices; `GET /practices?need=&format_id=`; `/practices/state-cycle/coverage`; complete accepts `state_after`. `99d6e85`.
 - 2026-07-31 | Practices | **C0b mockup need-лента** | **DONE (FE)** | Visual SoT = [`practices_screen_mockup_v1.png`](./practices/practices_screen_mockup_v1.png). Need icons + canon order (+Понять себя, sleep last); recommend/moment chrome; hub «Музыкальное сопровождение»; formats keep reflection+sleep.
 - 2026-07-31 | Practices | **C1 rich catalog (need/format tags)** | **DONE** | Overlay + 12 gap-fill free practices; public optional `need_ids`/`format_id`/`outcome_label`; hub match/rank by tags + outcome card titles. `practice_state_cycle_catalog_v1` · `9d770f3`.

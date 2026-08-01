@@ -17,6 +17,8 @@ export type DayEngagementState = {
   recommendedPracticeId: string | null;
   tarotPickedId: number | null;
   tarotPickedName: string | null;
+  /** Server prebake orientation — upright | reversed */
+  tarotOrientation: "upright" | "reversed" | null;
   numberConfirmed: boolean;
   /** Revealed day number digit (local SoT after ritual if morning lags). */
   numberValue: string | null;
@@ -62,6 +64,7 @@ const EMPTY: DayEngagementState = {
   recommendedPracticeId: null,
   tarotPickedId: null,
   tarotPickedName: null,
+  tarotOrientation: null,
   numberConfirmed: false,
   numberValue: null,
   affirmationRead: false,
@@ -98,6 +101,10 @@ export function loadDayEngagement(dateISO: string, profileScope?: string | null)
       recommendedPracticeId: typeof p.recommendedPracticeId === "string" ? p.recommendedPracticeId : null,
       tarotPickedId: typeof p.tarotPickedId === "number" ? p.tarotPickedId : null,
       tarotPickedName: typeof p.tarotPickedName === "string" ? p.tarotPickedName : null,
+      tarotOrientation:
+        p.tarotOrientation === "upright" || p.tarotOrientation === "reversed"
+          ? p.tarotOrientation
+          : null,
       numberConfirmed: Boolean(p.numberConfirmed),
       numberValue: typeof p.numberValue === "string" ? p.numberValue : null,
       affirmationRead: Boolean(p.affirmationRead),
@@ -161,6 +168,7 @@ export function mergeEngagementWithDaySymbolState(
       revealed?: boolean;
       id?: number | string | null;
       name?: string | null;
+      orientation?: string | null;
     };
     number?: {
       revealed?: boolean;
@@ -184,10 +192,14 @@ export function mergeEngagementWithDaySymbolState(
     if (cardId != null) {
       const fromServer = typeof view.card.name === "string" && view.card.name.trim() ? view.card.name.trim() : null;
       const fromLocal = resolveCardName?.(cardId) ?? null;
+      const orientRaw = typeof view.card.orientation === "string" ? view.card.orientation.trim().toLowerCase() : "";
+      const orient =
+        orientRaw === "reversed" ? ("reversed" as const) : orientRaw === "upright" ? ("upright" as const) : null;
       next = {
         ...next,
         tarotPickedId: cardId,
         tarotPickedName: fromServer || fromLocal || next.tarotPickedName || `Карта ${cardId}`,
+        tarotOrientation: orient ?? next.tarotOrientation,
       };
     } else if (typeof view.card.name === "string" && view.card.name.trim() && !next.tarotPickedName) {
       next = { ...next, tarotPickedName: view.card.name.trim() };
