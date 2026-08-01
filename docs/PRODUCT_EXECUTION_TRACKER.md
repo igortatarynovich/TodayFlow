@@ -14,7 +14,7 @@ Status: Active working document
 - **Migration required?** no forced client bump; old clients ignore new nests. FE major bank becomes non-SoT consumer.
 - **Canon updated?** yes — [DAY_SYMBOL_REVEAL_CANON_V1](./audits/DAY_SYMBOL_REVEAL_CANON_V1.md) · [TAROT_CARD_BASE_V1](./tarot/TAROT_CARD_BASE_V1.md) · DAY_SCENARIO · TODAY_WAVE2 §3.4 · TODAY_SCREEN_SCENARIO_V3.
 - **Backward compatible?** yes for JSON; Glance UI no longer shows sphere tokens (intentional).
-- **Server check:** unit `tests/test_hook_reveal_v1.py` green (7); live deploy/UI verify pending on stack.
+- **Server check (2026-08-01):** `docker compose -f docker-compose.prod.yml up -d --build --force-recreate backend frontend` · SHA `7dc7e8a` · BE healthy + `card_base_v1` 78 in container · live chunk `page-aa3d721a26e1734a.js` has Glance/hook shell markers · guest reveal API: `hook_reveal.base` + `bridge_status=unavailable` + fail copy (no silent empty) · `/today` guest gate blocks ScreenFlow without login (authed UI hard-refresh recommended).
 
 ## Architecture impact — Screen scenario v3
 
@@ -1138,7 +1138,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
-- 2026-08-01 | Today / Hooks | **Glance overview + hook_reveal (base/chorus)** | **DONE (code)** | Glance без 4 сфер · `number_base_v1` · `card_base_v1` 78×up/rev · COLOR catalog hook base · chorus=sole bridge · bridge-fail UX · prebake orientation · FE `TodayHookRevealShell` · tests `test_hook_reveal_v1` 7/7 · deploy/UI live verify pending · canon DAY_SYMBOL_REVEAL + TAROT_CARD_BASE_V1
+- 2026-08-01 | Today / Hooks | **Glance overview + hook_reveal (base/chorus)** | **LIVE (deployed)** | Compose rebuild BE+FE `7dc7e8a` · live chunk + guest `/today/symbols/*` hook_reveal smoke · Glance/hook markers in prod JS · authed ScreenFlow hard-refresh recommended · next: cutover explainer/question-tarot to `card_base_v1`
 - 2026-07-31 | Practices | **C1+ server catalog enrich** | **DONE / DEPLOYING** | Free GENERAL library ~47 tagged practices; `GET /practices?need=&format_id=`; `/practices/state-cycle/coverage`; complete accepts `state_after`. `99d6e85`.
 - 2026-07-31 | Practices | **C0b mockup need-лента** | **DONE (FE)** | Visual SoT = [`practices_screen_mockup_v1.png`](./practices/practices_screen_mockup_v1.png). Need icons + canon order (+Понять себя, sleep last); recommend/moment chrome; hub «Музыкальное сопровождение»; formats keep reflection+sleep.
 - 2026-07-31 | Practices | **C1 rich catalog (need/format tags)** | **DONE** | Overlay + 12 gap-fill free practices; public optional `need_ids`/`format_id`/`outcome_label`; hub match/rank by tags + outcome card titles. `practice_state_cycle_catalog_v1` · `9d770f3`.
