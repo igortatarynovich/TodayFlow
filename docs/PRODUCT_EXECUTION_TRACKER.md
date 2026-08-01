@@ -4,7 +4,7 @@ Last updated: 2026-08-01
 Owner: Product + Engineering
 Status: Active working document
 
-**IN PROGRESS (2026-08-01):** card_base_v1 cutover done in code (explainer + TarotService + pack catalog) · next editorial pass on 156 base texts · FE `TODAY_TAROT_CARDS_RU` cleanup.
+**IN PROGRESS (2026-08-01):** card_base_v1 cutover live · **minor reversed glue bug fixed** (rebuild script: no `central—themes` double for blob centrals; atomic keywords; `парanoia`→`паранойя`) · next: editorial polish minors + FE `TODAY_TAROT_CARDS_RU` cleanup.
 
 ## Architecture impact — card_base_v1 cutover (explainer / question-tarot) (2026-08-01)
 

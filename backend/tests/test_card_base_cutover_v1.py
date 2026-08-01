@@ -18,6 +18,21 @@ def test_prose_sides_covers_full_deck():
         assert sides["upright"] != sides["reversed"]
 
 
+def test_minor_reversed_has_no_central_themes_glue():
+    """Regression: id 22–77 must not show «blob — blob; …» or semicolon keywords."""
+    for cid in range(22, 78):
+        rev = card_base_v1.get_base_meaning(cid, "reversed")
+        assert rev, cid
+        meaning = rev["meaning"]
+        assert " — " not in meaning or not meaning.split(" — ", 1)[1].startswith(
+            meaning.split(" — ", 1)[0].strip()
+        )
+        for kw in rev["keywords"]:
+            assert ";" not in kw, (cid, kw)
+        assert "парanoia" not in meaning
+        assert "paranoia" not in meaning.lower()
+
+
 def test_tarot_service_meanings_from_card_base():
     svc = TarotService()
     card = svc.get_card_by_id(21)

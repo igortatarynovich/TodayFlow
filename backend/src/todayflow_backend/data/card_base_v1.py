@@ -163,6 +163,21 @@ def validate_card_base_v1() -> list[str]:
             continue
         for orient in ("upright", "reversed"):
             side = card.get(orient) if isinstance(card.get(orient), dict) else {}
-            if not str(side.get("base_meaning") or "").strip():
+            meaning = str(side.get("base_meaning") or "").strip()
+            if not meaning:
                 errors.append(f"empty_{orient}_{cid}")
+                continue
+            # Minor-arcana glue bug: "blob — blob; …"
+            if " — " in meaning:
+                left, right = meaning.split(" — ", 1)
+                if left.strip() and right.strip().startswith(left.strip()):
+                    errors.append(f"duplicated_glue_{orient}_{cid}")
+            for kw in side.get("keywords") or []:
+                tag = str(kw).strip()
+                if ";" in tag:
+                    errors.append(f"blob_keyword_{orient}_{cid}")
+                if "парanoia" in tag or "paranoia" in tag.lower():
+                    errors.append(f"mixed_alphabet_typo_{orient}_{cid}")
+            if "парanoia" in meaning or "paranoia" in meaning.lower():
+                errors.append(f"mixed_alphabet_typo_meaning_{orient}_{cid}")
     return errors

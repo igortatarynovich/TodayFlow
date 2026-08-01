@@ -62,3 +62,13 @@ Deprecated as parallel meaning SoT: FE `TODAY_TAROT_CARDS_RU` (labels/sphereBump
 ## 4. What LLM may still do
 
 Only **bridge_to_day** (from chorus), **instruction**, **personal_angle** — never rewrite `base_meaning`.
+
+---
+
+## 5. Rebuild note (minor-arcana glue, 2026-08-01)
+
+`scripts/build_card_base_v1.py` is the only writer for `cards.json`.
+
+**Bug (fixed):** minor KB rows store semicolon-blobs in both `reversed.central` and `themes[0]`. The first builder did `central + " — " + join(themes)`, producing duplicated prose and blob keywords. Majors were fine (`central` = distinct sentence, `themes` = atomic tags).
+
+**Builder rules now:** atomicize tags on `;`; if central is a blob / equals `themes[0]`, synthesize meaning from tags only (no re-append); never keep `;` inside a keyword; normalize `парanoia` → `паранойя`. Validate via `card_base_v1.validate_card_base_v1()`.
