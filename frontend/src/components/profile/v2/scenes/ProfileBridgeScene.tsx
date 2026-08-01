@@ -12,34 +12,40 @@ export type ProfileBridgeSceneProps = {
 
 const bridgeNav = PROFILE_V2_DEPTH_NAV.find((s) => s.id === "bridge") ?? PROFILE_V2_DEPTH_NAV[5];
 
+/**
+ * Visual Modes #4 — Act 5 CTA-portal: why Today + one CTA (no second effort).
+ */
 export function ProfileBridgeScene({ bridgeLine }: ProfileBridgeSceneProps) {
   const motion = useProfileMotionInView<HTMLElement>(100);
+  const copy = PROFILE_V2_COPY.zones.bridge;
+  const line = bridgeLine?.trim() || copy.lead?.trim() || "";
 
   return (
     <section
       id="profile-v2-bridge"
       ref={motion.ref}
-      className={`${styles.bridgeScene} ${motion.className}`}
+      className={`${styles.bridgeScene} ${styles.bridgeSceneModePortal} ${motion.className}`}
       style={motion.style}
       aria-labelledby="profile-v2-bridge-title"
       data-testid="profile-v2-bridge"
+      data-visual-mode="bridge-portal"
     >
       <ProfileAtmosphere motif="bridge" />
-      <p className={styles.journeyStepIndex}>
-        <span className={styles.journeyStepBadge}>{bridgeNav.step.replace(/^0/, "")}</span>
-        <span id="profile-v2-bridge-title">{PROFILE_V2_COPY.zones.bridge.title}</span>
-      </p>
-      {bridgeLine ? (
-        <p className={styles.bridgeHeadline} data-testid="profile-v2-bridge-line">
-          {bridgeLine}
+      <div className={styles.bridgePortalBody}>
+        <p className={styles.journeyStepIndex}>
+          <span className={styles.journeyStepBadge}>{bridgeNav.step.replace(/^0/, "")}</span>
+          <span id="profile-v2-bridge-title">{copy.title}</span>
         </p>
-      ) : PROFILE_V2_COPY.zones.bridge.lead ? (
-        <p className={styles.bridgeHeadline}>{PROFILE_V2_COPY.zones.bridge.lead}</p>
-      ) : null}
-      <Link href="/today" className={styles.bridgeCta} data-testid="profile-v2-open-today">
-        {PROFILE_V2_COPY.zones.bridge.cta}
-        <span aria-hidden> →</span>
-      </Link>
+        {line ? (
+          <p className={styles.bridgeHeadline} data-testid="profile-v2-bridge-line">
+            {line}
+          </p>
+        ) : null}
+        <Link href="/today" className={styles.bridgeCta} data-testid="profile-v2-open-today">
+          {copy.cta}
+          <span aria-hidden> →</span>
+        </Link>
+      </div>
     </section>
   );
 }

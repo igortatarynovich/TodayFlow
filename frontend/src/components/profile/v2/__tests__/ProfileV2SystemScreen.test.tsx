@@ -373,6 +373,20 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     // Act 2 keeps the evidentiary grid — mode contrast for Visual Modes #4.
     expect(screen.getByTestId("profile-v2-why-primary")).toBeInTheDocument();
   });
+
+  it("uses Act 4 direction and Act 5 portal visual modes", () => {
+    renderJourney();
+    expect(screen.getByTestId("profile-v2-effort")).toHaveAttribute(
+      "data-visual-mode",
+      "effort-direction",
+    );
+    expect(screen.getByTestId("profile-v2-effort-direction")).toBeInTheDocument();
+    expect(screen.getByTestId("profile-v2-bridge")).toHaveAttribute(
+      "data-visual-mode",
+      "bridge-portal",
+    );
+    expect(screen.getByTestId("profile-v2-open-today")).toBeInTheDocument();
+  });
 });
 
 describe("PROFILE_V2_COPY lexicon gate", () => {

@@ -162,7 +162,8 @@ function SphereSwipeCard({
 }
 
 /**
- * Forms Шаг 4: one effort_vector + swipeable sphere cards (tap to expand).
+ * Visual Modes #4 — Act 4 direction: one vector + optional where-spheres.
+ * Forms Шаг 4: effort_vector + swipe cards (tap to expand).
  */
 export function ProfileEffortScene({ effortVector, lifeSpheres = [] }: ProfileEffortSceneProps) {
   const spheres = lifeSpheres
@@ -176,10 +177,11 @@ export function ProfileEffortScene({ effortVector, lifeSpheres = [] }: ProfileEf
     <section
       id="profile-v2-effort"
       ref={motion.ref}
-      className={`${styles.journeyScene} ${motion.className}`}
+      className={`${styles.journeyScene} ${styles.journeySceneModeEffort} ${motion.className}`}
       style={motion.style}
       aria-labelledby="profile-v2-effort-title"
       data-testid="profile-v2-effort"
+      data-visual-mode="effort-direction"
     >
       <ProfileAtmosphere motif="effort" />
       <header className={styles.zoneHeader}>
@@ -195,12 +197,16 @@ export function ProfileEffortScene({ effortVector, lifeSpheres = [] }: ProfileEf
       <div className={styles.effortLayout}>
         <div className={styles.effortFocus}>
           {copy.focusLabel ? <p className={styles.effortFocusLabel}>{copy.focusLabel}</p> : null}
-          <div className={styles.effortFocusCard}>
-            <span className={styles.effortCompass} aria-hidden>
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                <circle cx="14" cy="14" r="12.5" stroke="currentColor" strokeWidth="1.25" />
-                <path d="M14 6.5v15M6.5 14h15" stroke="currentColor" strokeWidth="1.25" />
-                <path d="M14 5.5l2.2 5.2L14 14l-2.2-3.3L14 5.5z" fill="currentColor" />
+          <div className={styles.effortFocusCard} data-testid="profile-v2-effort-direction">
+            <span className={styles.effortDirectionMark} aria-hidden>
+              <svg width="36" height="20" viewBox="0 0 36 20" fill="none">
+                <path
+                  d="M1 10h28M22 3l10 7-10 7"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </span>
             <p className={styles.effortVector} data-testid="profile-v2-effort-vector">

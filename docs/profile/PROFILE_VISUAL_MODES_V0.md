@@ -1,6 +1,6 @@
 # Profile Visual Modes — draft v0
 
-**Status:** IN BRANCH · Act 3 spine shipped 2026-08-01  
+**Status:** IN BRANCH · Acts 3–5 modes shipped 2026-08-01  
 **Parent:** Profile Journey UX backlog item **#4** («тематические декорации актов»)  
 **Not:** new content / LLM / contract fields
 
@@ -8,27 +8,35 @@
 
 Scroll Profile as **chapter changes by décor**, not by another wall of the same cream cards.
 
-| Act | Mode | Signal |
-|-----|------|--------|
-| 1 | Hero / air + symbol | already `journeyHero` |
-| 2 | Evidentiary grid | `whyProofGrid` cards |
-| 3 | Vertical story spine | `data-visual-mode="insight-spine"` |
-| 4 | Direction | vector + swipe spheres (form done; décor polish OPEN) |
-| 5 | CTA-minimal | bridge scene (décor polish OPEN) |
+| Act | Mode | `data-visual-mode` | Signal |
+|-----|------|--------------------|--------|
+| 1 | Hero / air + symbol | (hero) | `journeyHero` |
+| 2 | Evidentiary grid | (why) | `whyProofGrid` cards |
+| 3 | Vertical story spine | `insight-spine` | rail + step dots |
+| 4 | Direction | `effort-direction` | forward mark + open vector strip; spheres as where |
+| 5 | CTA-portal | `bridge-portal` | centered air + one CTA |
 
-## Act 3 acceptance (from PROFILE_ACT3_NODE_DRAFT_V0)
+## Acceptance
 
-- режим 3 ≠ сетка карточек Акта 2  
-- режим 3 ≠ hero Акта 1  
-- вертикальная связь «ловушка → якоря → помощь» читается без чтения copy  
+**Act 3** (from PROFILE_ACT3_NODE_DRAFT_V0):
+- ≠ Act 2 grid · ≠ Act 1 hero · cascade readable without copy  
+
+**Act 4:**
+- vector reads as direction (not another proof card)  
+- spheres secondary “where”, not encyclopedia  
+
+**Act 5:**
+- minimal: why-line + CTA  
+- ≠ second effort chapter · portal gravity toward Today  
 
 ## Live
 
 | Check | Status |
 |-------|--------|
-| Act 3 spine rail + step dots | OK |
-| No nested proof-card stack on Act 3 | OK |
-| Acts 4–5 distinct modes | OPEN |
+| Act 3 spine | OK |
+| Act 4 direction strip + grow wash | OK |
+| Act 5 portal center + CTA | OK |
+| Owner glance accept (scroll Acts 1–5) | OPEN |
 
 ## Out of scope
 

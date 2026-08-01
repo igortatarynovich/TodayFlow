@@ -2246,6 +2246,20 @@
   opacity: 0.7;
 }
 
+/* Visual Modes #4 — Act 4 direction (forward vector, spheres as where-apps). */
+.journeySceneModeEffort {
+  border-color: color-mix(in srgb, var(--tf-semantic-grow, #3d5a80) 32%, var(--tf-border, #e8e2d6));
+  background:
+    linear-gradient(
+      105deg,
+      color-mix(in srgb, var(--tf-semantic-grow, #3d5a80) 9%, transparent) 0%,
+      transparent 48%
+    ),
+    radial-gradient(ellipse 70% 45% at 100% 0%, rgba(201, 169, 110, 0.12) 0%, transparent 55%),
+    var(--tf-surface, #fff);
+  box-shadow: none;
+}
+
 .effortFocus {
   display: flex;
   flex-direction: column;
@@ -2267,25 +2281,25 @@
 .effortFocusCard {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 0.75rem;
   align-items: flex-start;
-  padding: 1.25rem 1.35rem;
-  border-radius: 1.5rem;
-  border: 1px solid var(--tf-border, #e8e2d6);
-  background:
-    radial-gradient(ellipse 80% 60% at 0% 0%, rgba(201, 169, 110, 0.14) 0%, transparent 55%),
-    var(--tf-surface-muted, #f7f4ee);
+  padding: 0.35rem 0 0.35rem 1.15rem;
+  border-radius: 0;
+  border: none;
+  border-left: 3px solid color-mix(in srgb, var(--tf-semantic-grow, #3d5a80) 65%, var(--tf-accent-gold, #c9a96e));
+  background: transparent;
 }
 
+.effortDirectionMark,
 .effortCompass {
   display: inline-flex;
-  color: var(--tf-accent-gold, #c9a96e);
+  color: var(--tf-semantic-grow, #3d5a80);
 }
 
 .effortLayout {
   display: flex;
   flex-direction: column;
-  gap: 1.35rem;
+  gap: 1.6rem;
   width: 100%;
   min-width: 0;
 }
@@ -2297,10 +2311,11 @@
   background: transparent;
   color: var(--tf-ink, #2a2520);
   font-family: var(--tf-font-display);
-  font-size: clamp(1.2rem, 2.4vw, 1.55rem);
-  line-height: 1.3;
-  letter-spacing: -0.01em;
+  font-size: clamp(1.35rem, 2.8vw, 1.85rem);
+  line-height: 1.28;
+  letter-spacing: -0.015em;
   width: 100%;
+  max-width: 34rem;
 }
 
 .effortSpheres {
@@ -2350,6 +2365,14 @@
   scrollbar-width: thin;
   scroll-snap-type: x mandatory;
   overscroll-behavior-x: contain;
+}
+
+.journeySceneModeEffort .effortSphereSnapCard {
+  border-color: color-mix(in srgb, var(--tf-semantic-grow, #3d5a80) 18%, var(--tf-border, #e8e2d6));
+  background:
+    radial-gradient(ellipse 90% 70% at 10% 0%, rgba(61, 90, 128, 0.08) 0%, transparent 55%),
+    var(--tf-surface, #fff);
+  box-shadow: 0 10px 22px rgba(42, 37, 32, 0.05);
 }
 
 .effortSphereSnapCard {
@@ -2788,6 +2811,42 @@
   min-width: 0;
 }
 
+/* Visual Modes #4 — Act 5 CTA-portal (air + one action, not another content chapter). */
+.bridgeSceneModePortal {
+  min-height: clamp(14rem, 36vw, 18rem);
+  padding: clamp(2rem, 5vw, 3.25rem) clamp(1.35rem, 4vw, 2.75rem);
+  border-color: color-mix(in srgb, var(--tf-accent-gold, #c9a96e) 45%, var(--tf-border, #e8e2d6));
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 110%, rgba(201, 169, 110, 0.28) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 50% -10%, rgba(201, 169, 110, 0.1) 0%, transparent 50%),
+    var(--tf-surface, #fff);
+  box-shadow: none;
+  justify-content: center;
+}
+
+.bridgePortalBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+.bridgeSceneModePortal .journeyStepIndex {
+  justify-content: center;
+}
+
+.bridgeSceneModePortal .bridgeCta {
+  align-self: center;
+  min-width: min(16rem, 100%);
+  min-height: 3.15rem;
+  margin-top: 0.35rem;
+  font-size: 1.05rem;
+}
+
 .bridgeHeadline {
   margin: 0;
   font-family: var(--tf-font-display);
@@ -2796,6 +2855,13 @@
   letter-spacing: -0.02em;
   color: var(--tf-ink);
   max-width: 28rem;
+}
+
+.bridgeSceneModePortal .bridgeHeadline {
+  font-size: clamp(1.35rem, 2.8vw, 1.75rem);
+  line-height: 1.35;
+  font-weight: 500;
+  color: var(--tf-ink-soft, #5a5450);
 }
 
 .exploreDetails {
@@ -3299,7 +3365,6 @@
 :global([data-theme="dark"]) .effortSphereChip,
 :global([data-theme="dark"]) .effortSphereReadCard,
 :global([data-theme="dark"]) .effortSphereSnapCard,
-:global([data-theme="dark"]) .effortFocusCard,
 :global([data-theme="dark"]) .characterPanel,
 :global([data-theme="dark"]) .mobileDepthChip {
   background: rgba(255, 255, 255, 0.05);
@@ -3314,6 +3379,38 @@
     radial-gradient(ellipse 80% 50% at 0% 0%, rgba(201, 169, 110, 0.1) 0%, transparent 55%),
     #1e1a24;
   box-shadow: none;
+}
+
+:global([data-theme="dark"]) .journeySceneModeEffort {
+  border-color: rgba(122, 156, 196, 0.35);
+  background:
+    linear-gradient(105deg, rgba(61, 90, 128, 0.22) 0%, transparent 48%),
+    radial-gradient(ellipse 70% 45% at 100% 0%, rgba(201, 169, 110, 0.1) 0%, transparent 55%),
+    #1e1a24;
+  box-shadow: none;
+}
+
+:global([data-theme="dark"]) .effortFocusCard {
+  background: transparent;
+  border-color: transparent;
+  border-left-color: rgba(122, 156, 196, 0.65);
+}
+
+:global([data-theme="dark"]) .effortDirectionMark {
+  color: #7a9cc4;
+}
+
+:global([data-theme="dark"]) .bridgeSceneModePortal {
+  border-color: rgba(212, 184, 150, 0.35);
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 110%, rgba(201, 169, 110, 0.22) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 50% -10%, rgba(201, 169, 110, 0.08) 0%, transparent 50%),
+    #1e1a24;
+  box-shadow: none;
+}
+
+:global([data-theme="dark"]) .bridgeSceneModePortal .bridgeHeadline {
+  color: #c4b8a8;
 }
 
 :global([data-theme="dark"]) .insightNode,
@@ -3345,13 +3442,6 @@
   background: rgba(255, 255, 255, 0.04);
 }
 
-:global([data-theme="dark"]) .effortFocusCard {
-  border-color: rgba(212, 184, 150, 0.28);
-  background:
-    radial-gradient(ellipse 80% 60% at 0% 0%, rgba(201, 169, 110, 0.16) 0%, transparent 55%),
-    rgba(253, 251, 247, 0.05);
-}
-
 :global([data-theme="dark"]) .effortVector {
   background: transparent;
   border: none;
@@ -3359,7 +3449,7 @@
 }
 
 :global([data-theme="dark"]) .effortCompass {
-  color: #d4b896;
+  color: #7a9cc4;
 }
 
 :global([data-theme="dark"]) .effortSphereChip {
