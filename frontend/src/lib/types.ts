@@ -710,6 +710,8 @@ export type AstroProfile = {
   birth_facts_corrections_remaining?: number;
   /** Сколько секунд ждать до следующего изменения даты/времени/места; 0 — можно менять. */
   birth_facts_cooldown_remaining_seconds?: number;
+  /** Precise birth time without resolvable IANA/offset — natal geometry refused. */
+  needs_timezone?: boolean;
 };
 
 /** Ответ POST/PUT /account/astro-data и POST /account/astro-data/:id/primary после сохранения и прогрева натала. */

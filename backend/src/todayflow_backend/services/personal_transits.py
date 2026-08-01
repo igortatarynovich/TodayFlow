@@ -976,9 +976,15 @@ class PersonalTransitService:
                 # Use noon on forecast_date at birth location
                 transit_birth_payload = {
                     "date": forecast_date.isoformat(),
-                    "time": "12:00",  # Use noon for transits
+                    "time": "12:00",  # Local noon at birth place
                     "location": birth_data.location,
                 }
+                tz_name = getattr(birth_data, "timezone_name", None)
+                if tz_name:
+                    transit_birth_payload["timezone_name"] = tz_name
+                tz_off = getattr(birth_data, "timezone_offset_minutes", None)
+                if tz_off is not None:
+                    transit_birth_payload["timezone_offset_minutes"] = tz_off
                 transit_chart = await self.astro_service.compute_chart(
                     birth_payload=transit_birth_payload,
                     coordinates={"latitude": birth_data.coordinates.latitude, "longitude": birth_data.coordinates.longitude}

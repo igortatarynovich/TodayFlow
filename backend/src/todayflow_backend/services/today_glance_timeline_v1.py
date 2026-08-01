@@ -24,12 +24,12 @@ ASPECT_ANGLE: dict[str, float] = {
     "sextile": 60.0,
     "square": 90.0,
     "trine": 120.0,
-    "quincunx": 150.0,
     "opposition": 180.0,
     # Harmonics — same strength pool as activations; needed so exact-time
     # can resolve when top ranks are quintile/biquintile (else Glance stays empty).
     "quintile": 72.0,
     "biquintile": 144.0,
+    # quincunx (150°) out of scope v1 — not in aspects.json
 }
 
 # Coarse shared samples; bisect refines toward ≤5 min (contract C.1).

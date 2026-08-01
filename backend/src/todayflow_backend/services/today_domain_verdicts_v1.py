@@ -66,7 +66,7 @@ ASPECT_MAX_ORB: dict[str, float] = {
     "conjunction": 6.0,
     "trine": 6.0,
     "square": 6.0,
-    "quincunx": 6.0,
+    # quincunx: out of scope v1 (not in aspects.json / no calib)
     "sextile": 3.0,
     "opposition": 8.0,
 }
@@ -115,8 +115,7 @@ def valence_domain(
     # Soft aspects
     if asp in ("trine", "sextile"):
         return 1.0
-    if asp == "quincunx":
-        return -0.5
+    # quincunx intentionally ignored (OOS v1) — falls through to 0.0
 
     if domain == "work":
         if asp == "square" and natal == "mars":

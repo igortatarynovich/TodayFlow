@@ -10,6 +10,7 @@ from zoneinfo import ZoneInfo
 import swisseph as swe
 
 from todayflow_astro.core import models
+from todayflow_astro.services.errors import TimezoneRequiredError
 
 ZODIAC = [
     "Aries",
@@ -52,7 +53,7 @@ class AstroEngine:
             swe.set_ephe_path(ephe_path)
 
     def compute_chart(self, payload: models.ChartRequest) -> models.ChartResponse:
-        birth_dt_utc, precise = self._parse_birth_datetime_utc(payload)
+        birth_dt_utc, precise, tz_meta = self._parse_birth_datetime_utc(payload)
         julian_day = self._julian_day(birth_dt_utc)
 
         rising, houses, cusp_longitudes = self._resolve_rising_and_houses(julian_day, precise, payload)
@@ -103,7 +104,9 @@ class AstroEngine:
             "bodies": [p.body for p in positions],
             "time_unknown": not precise,
             "ascendant_precision": "exact" if (precise and cusp_longitudes) else "unavailable",
-            "timezone_name": self._resolve_timezone_name(payload),
+            "timezone_name": tz_meta.get("timezone_name") or self._resolve_timezone_name(payload),
+            "timezone_source": tz_meta.get("timezone_source"),
+            "timezone_offset_minutes": tz_meta.get("timezone_offset_minutes"),
         }
         meta = {k: v for k, v in meta.items() if v is not None}
 
@@ -222,8 +225,14 @@ class AstroEngine:
                 return name
         return None
 
-    def _parse_birth_datetime_utc(self, payload: models.ChartRequest) -> Tuple[datetime, bool]:
-        """Return (UTC naive datetime for Swiss Ephemeris, precise_time_flag)."""
+    def _parse_birth_datetime_utc(
+        self, payload: models.ChartRequest
+    ) -> Tuple[datetime, bool, dict]:
+        """Return (UTC naive datetime, precise_time_flag, tz_meta).
+
+        Precise civil birth time without IANA TZ or offset raises TimezoneRequiredError —
+        never treat civil clock as UT (silent wrong ASC/houses).
+        """
         date_str = payload.birth.date
         time_str = payload.birth.time
         precise = bool(time_str and str(time_str).strip())
@@ -243,18 +252,22 @@ class AstroEngine:
         try:
             local_naive = datetime(int(date_str[0:4]), int(date_str[5:7]), int(date_str[8:10]), h, m, s)
         except (ValueError, TypeError, IndexError):
-            return datetime.now(timezone.utc).replace(tzinfo=None), False
+            return datetime.now(timezone.utc).replace(tzinfo=None), False, {"timezone_source": "fallback_now"}
 
         if not precise:
             # Midday UT for planetary positions when time is unknown — no houses/ASC.
-            return local_naive.replace(tzinfo=None), False
+            return local_naive.replace(tzinfo=None), False, {"timezone_source": "midday_ut_unknown_time"}
 
         tz_name = self._resolve_timezone_name(payload)
         if tz_name:
             try:
                 tz = ZoneInfo(tz_name)
                 local_aware = local_naive.replace(tzinfo=tz)
-                return local_aware.astimezone(timezone.utc).replace(tzinfo=None), True
+                return (
+                    local_aware.astimezone(timezone.utc).replace(tzinfo=None),
+                    True,
+                    {"timezone_source": "iana", "timezone_name": tz.key},
+                )
             except Exception:
                 pass
 
@@ -263,14 +276,20 @@ class AstroEngine:
             offset = payload.birth.timezone_offset_minutes
         if offset is not None:
             try:
-                delta = timedelta(minutes=int(offset))
-                return (local_naive - delta).replace(tzinfo=None), True
+                minutes = int(offset)
+                delta = timedelta(minutes=minutes)
+                return (
+                    (local_naive - delta).replace(tzinfo=None),
+                    True,
+                    {
+                        "timezone_source": "offset",
+                        "timezone_offset_minutes": minutes,
+                    },
+                )
             except (TypeError, ValueError):
                 pass
 
-        # Last resort: treat civil clock as UT (legacy behavior) but still mark precise
-        # only when time was provided — houses still need coordinates.
-        return local_naive.replace(tzinfo=None), True
+        raise TimezoneRequiredError()
 
     def _julian_day(self, dt: datetime) -> float:
         decimal_hours = dt.hour + dt.minute / 60.0 + dt.second / 3600.0

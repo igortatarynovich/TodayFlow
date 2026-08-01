@@ -398,7 +398,7 @@ def test_assemble_projects_narrative_when_drivers_in_pool():
     assert out["props"]["evening_payoff"] is None
     assert out["props"]["practice_or_promise"]["text"] == "Одна пауза перед send"
     assert out["numerology"] == {"personal_day": 7, "source": "classic_reduce_v0"}
-    assert out["sky_drivers"][0]["planet"] == "Moon"
+    assert out["sky_drivers"] == []  # removed from contract 2026-08-01
     assert out["moon_phase"] is not None
     assert out["moon_phase"]["phase"] == "waxing"
     assert out["moon_phase"]["illumination_pct"] == 42.0

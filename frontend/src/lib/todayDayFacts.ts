@@ -61,12 +61,8 @@ export type DayFactsResponse = {
   conflict?: DayFactsConflict | null;
   scenes?: DayFactsScene[];
   props?: DayFactsProps | null;
-  sky_drivers?: Array<{
-    planet: string;
-    sign: string;
-    degree_in_sign: number;
-    retrograde: boolean;
-  }>;
+  /** Removed from contract 2026-08-01 — wire may still send []; ignore. */
+  sky_drivers?: Array<Record<string, unknown>>;
   moon_phase?: {
     illumination_pct: number | null;
     phase: string | null;

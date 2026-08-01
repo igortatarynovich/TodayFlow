@@ -36,10 +36,10 @@ day_facts_v1 {
   profile_depth: "light" | "deep"
   day_card: "not_revealed" | string
 
-  sky_drivers: [{
-    planet: string, sign: string, degree_in_sign: float,
-    retrograde: bool
-  }]
+  # sky_drivers REMOVED 2026-08-01 — never had a writer; sky SoT = day_scenario
+  # foundation / chorus (ranked_drivers, astronomy_facts). Do not reintroduce a
+  # parallel empty list that reads as «no sky today».
+
   moon_phase: {
     illumination_pct: number
     phase: "waxing" | "waning"
@@ -50,10 +50,12 @@ day_facts_v1 {
   natal_activations: [{
     id: string                      # stable; referenced by conflict/scenes/verdicts/timeline
     transiting_planet: string
-    aspect: "conjunction"|"sextile"|"square"|"trine"|"quincunx"|"opposition"
+    aspect: "conjunction"|"sextile"|"square"|"trine"|"opposition"
+      # quincunx OUT OF SCOPE v1 — not in aspects.json; no live calib. Re-add only
+      # with the same calibration bar as majors (separate Architecture impact).
     natal_point: string             # planet | ASC | MC | Node | house_cusp_N
-    orb_deg: float
-    exact_time_local: datetime | null   # null until exact-time pass; may stay null
+    orb_deg: float                  # noon-snapshot proximity to exact (°); NOT time-of-day
+    exact_time_local: datetime | null   # separate civil-day zero-cross pass; may stay null
     rank: int                       # 1 = strongest day signal
   }]
 
@@ -222,7 +224,8 @@ for each domain D:
   driver_ids = [top.id]   # provenance may still list runners-up for debug
 ```
 
-`max_orb`: 6° conj/trine/square/quincunx; 3° sextile; 8° opposition.
+`max_orb`: 6° conj/trine/square; 3° sextile; 8° opposition.  
+**Out of scope v1:** quincunx (150°) — not in activation geometry; do not assign valence.
 
 **Score → label** (same bands as earlier descriptive pass; tune later only if needed):
 
@@ -269,9 +272,12 @@ Canon UI flow: [SCREEN_FLOW_V1 §4](../foundation/SCREEN_FLOW_V1.md) · [TODAY_S
 **Input:** `natal_activations` in strength `rank` order (same pool as conflict — **no second ranking**). Exact-time walk covers ranks 1…12 until ≤3 timed rows (skips aspects without a known angle or no zero-cross in the local day).
 
 **Algorithm:** step search (30 min samples + bisect) within user local day for when  
-`|transit_longitude(t) − natal_point_longitude|` equals aspect angle (0/60/72/90/120/144/150/180°).
+`|transit_longitude(t) − natal_point_longitude|` equals aspect angle (0/60/72/90/120/144/180°).  
+Samples must pass IANA / offset into Swiss (civil clock ≠ UT).
 
 If no exact within local day (slow bodies): `exact_time_local = null`; activation stays in `natal_activations` / conflict but **not** in `glance_timeline`.
+
+**orb ≠ time:** small `orb_deg` (noon snapshot) does **not** mean exact happens today. Timing language requires `exact_time_local`; otherwise omit «скоро / в … часов».
 
 `glance_timeline`: ≤ **3** rows, sorted by `time_local`.  
 `label_short`: no degrees, no aspect names (calib corpus purity §2).

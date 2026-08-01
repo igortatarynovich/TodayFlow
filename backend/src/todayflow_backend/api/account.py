@@ -407,6 +407,7 @@ class AstroProfileSaveResponse(BaseModel):
     time_unknown: bool
     timezone_offset_minutes: int | None = None
     timezone_name: str | None = None
+    needs_timezone: bool = False
     location_name: str | None = None
     latitude: float | None = None
     longitude: float | None = None
@@ -919,6 +920,7 @@ def _astro_profile_to_dict(profile: db_models.AstroProfile) -> dict:
         "time_unknown": profile.time_unknown,
         "timezone_offset_minutes": profile.timezone_offset_minutes,
         "timezone_name": profile.timezone_name,
+        "needs_timezone": _profile_needs_timezone_flag(profile),
         "location_name": profile.location_name,
         "latitude": profile.latitude,
         "longitude": profile.longitude,
@@ -928,6 +930,17 @@ def _astro_profile_to_dict(profile: db_models.AstroProfile) -> dict:
         **_birth_facts_corrections_meta(profile),
         **_birth_facts_cooldown_meta(profile),
     }
+
+
+def _profile_needs_timezone_flag(profile: db_models.AstroProfile) -> bool:
+    from todayflow_backend.services.birth_timezone_resolve_v1 import profile_needs_timezone
+
+    return profile_needs_timezone(
+        time_unknown=bool(profile.time_unknown),
+        birth_time=profile.birth_time,
+        timezone_name=profile.timezone_name,
+        timezone_offset_minutes=profile.timezone_offset_minutes,
+    )
 
 
 def _astro_profile_save_response(
@@ -1001,6 +1014,29 @@ def _resolve_coordinates(
     if geo:
         return float(geo["latitude"]), float(geo["longitude"])
     return latitude, longitude
+
+
+def _fill_profile_timezone(profile: db_models.AstroProfile) -> str | None:
+    """Persist IANA TZ from place/coords when precise time is set and TZ missing.
+
+    Returns timezone_name (or None). Does not invent offset; leaves need_tz when
+    unresolved so natal warm refuses civil-as-UT.
+    """
+    from todayflow_backend.services.birth_timezone_resolve_v1 import resolve_birth_timezone
+
+    if getattr(profile, "time_unknown", False) or not profile.birth_time:
+        return profile.timezone_name
+    resolved = resolve_birth_timezone(
+        timezone_name=profile.timezone_name,
+        timezone_offset_minutes=profile.timezone_offset_minutes,
+        location_name=profile.location_name,
+        latitude=profile.latitude,
+        longitude=profile.longitude,
+    )
+    tz = resolved.get("timezone_name")
+    if tz:
+        profile.timezone_name = str(tz)
+    return profile.timezone_name
 
 
 def _normalize_numerology_name(value: str) -> str:
@@ -1106,6 +1142,7 @@ async def create_astro_profile(
         notes=payload.notes,
         is_primary=payload.is_primary,
     )
+    _fill_profile_timezone(profile)
     db.add(profile)
     db.commit()
     if payload.is_primary:
@@ -1182,6 +1219,7 @@ async def upsert_core_setup(
             notes=payload.notes,
             is_primary=True,
         )
+        _fill_profile_timezone(primary)
         db.add(primary)
     else:
         snapshot_before = _birth_facts_snapshot_from_profile(primary)
@@ -1221,6 +1259,7 @@ async def upsert_core_setup(
         primary.longitude = longitude
         primary.notes = payload.notes
         primary.is_primary = True
+        _fill_profile_timezone(primary)
         if facts_would_change:
             primary.birth_facts_last_changed_at = utc_naive_now()
         db.add(primary)
@@ -1398,6 +1437,7 @@ async def update_astro_profile(
         profile.latitude,
         profile.longitude,
     )
+    _fill_profile_timezone(profile)
 
     snapshot_after = _birth_facts_snapshot_from_profile(profile)
     if snapshot_before != snapshot_after:

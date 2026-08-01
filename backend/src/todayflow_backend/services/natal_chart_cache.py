@@ -31,22 +31,33 @@ class NatalChartCacheService:
             CachedNatalChart.astro_profile_id == astro_profile.id
         ).first()
         
-        if cached:
-            # Возвращаем из кеша
+        if cached and self._cache_usable_for_birth(astro_profile, cached, birth_data):
             return ChartResponse(
                 mode="natal",
                 positions=cached.positions,
                 houses=cached.houses,
                 metadata=cached.chart_metadata or {}
             )
-        
+        if cached:
+            # Stale / TZ-less precise cache — drop rather than serve wrong ASC/houses.
+            self.db.delete(cached)
+            self.db.commit()
+
         # Вычисляем натальную карту
         chart = await astro_service.compute_chart(
             birth_payload=birth_data,
             coordinates=coordinates
         )
-        
-        # Сохраняем в кеш
+
+        # Never cache timezone_required / empty precise failures — would poison ASC/houses.
+        meta = chart.metadata if isinstance(chart.metadata, dict) else {}
+        if (
+            str(getattr(chart, "mode", "") or "") == "timezone_required"
+            or meta.get("timezone_required")
+            or not (chart.positions or [])
+        ):
+            return chart
+
         cached_chart = CachedNatalChart(
             astro_profile_id=astro_profile.id,
             positions=chart.positions,
@@ -56,7 +67,7 @@ class NatalChartCacheService:
         self.db.add(cached_chart)
         self.db.commit()
         self.db.refresh(cached_chart)
-        
+
         return chart
     
     def get_cached_natal_chart(self, astro_profile_id: int) -> Optional[ChartResponse]:
@@ -83,6 +94,31 @@ class NatalChartCacheService:
         if cached:
             self.db.delete(cached)
             self.db.commit()
+
+    @staticmethod
+    def _cache_usable_for_birth(
+        astro_profile: AstroProfile,
+        cached: CachedNatalChart,
+        birth_data: dict,
+    ) -> bool:
+        """Reject precise-time caches computed without timezone (civil-as-UT poison)."""
+        time_unknown = bool(getattr(astro_profile, "time_unknown", False))
+        has_time = bool(birth_data.get("time") or getattr(astro_profile, "birth_time", None))
+        if time_unknown or not has_time:
+            return True
+        meta = cached.chart_metadata if isinstance(cached.chart_metadata, dict) else {}
+        # Only trust conversion provenance on the cache itself — never borrow from
+        # current birth_data (that would re-serve civil-as-UT poison after TZ backfill).
+        source = str(meta.get("timezone_source") or "").strip()
+        cached_tz = str(meta.get("timezone_name") or "").strip()
+        profile_tz = (
+            getattr(astro_profile, "timezone_name", None) or birth_data.get("timezone_name") or ""
+        ).strip()
+        if source not in {"iana", "offset"} and not cached_tz:
+            return False
+        if profile_tz and cached_tz and profile_tz != cached_tz:
+            return False
+        return True
 
 
 def get_natal_chart_cache_service(db: Session) -> NatalChartCacheService:

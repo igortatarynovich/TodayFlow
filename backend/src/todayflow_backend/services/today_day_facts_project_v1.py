@@ -272,29 +272,13 @@ def project_moon_phase(scenario: dict[str, Any] | None) -> dict[str, Any] | None
 
 
 def project_sky_drivers(scenario: dict[str, Any] | None) -> list[dict[str, Any]]:
-    """Thin sky list from foundation transit rows — empty if shape unavailable."""
-    foundation = _as_dict(_as_dict(scenario).get("foundation"))
-    out: list[dict[str, Any]] = []
-    for row in _as_list(foundation.get("sky_drivers")):
-        if not isinstance(row, dict):
-            continue
-        planet = _clean(row.get("planet") or row.get("body"))
-        sign = _clean(row.get("sign"))
-        if not planet or not sign:
-            continue
-        try:
-            degree = float(row.get("degree_in_sign"))
-        except (TypeError, ValueError):
-            continue
-        out.append(
-            {
-                "planet": planet,
-                "sign": sign,
-                "degree_in_sign": degree,
-                "retrograde": bool(row.get("retrograde")),
-            }
-        )
-    return out
+    """Deprecated: sky_drivers removed from day_facts_v1 (2026-08-01).
+
+    Always empty — sky SoT is day_scenario foundation/chorus, not this parallel list.
+    Kept as a no-op so older callers do not invent rows.
+    """
+    _ = scenario
+    return []
 
 
 def project_narrative_blob(

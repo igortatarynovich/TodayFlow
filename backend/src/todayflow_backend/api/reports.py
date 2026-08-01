@@ -1188,7 +1188,13 @@ async def _prepare_birth_data(
     geocoder: Geocoder,
     locale: str,
 ) -> models.BirthData:
-    """Prepare BirthData from AstroProfile."""
+    """Prepare BirthData from AstroProfile.
+
+    Resolves IANA TZ from location/coords when missing. Precise birth time without
+    resolvable TZ keeps timezone_name=None — astro engine refuses civil-as-UT.
+    """
+    from todayflow_backend.services.birth_timezone_resolve_v1 import resolve_birth_timezone
+
     effective_time = None
     if not getattr(astro_profile, "time_unknown", False) and astro_profile.birth_time:
         effective_time = astro_profile.birth_time.isoformat()
@@ -1219,7 +1225,21 @@ async def _prepare_birth_data(
             status_code=400,
             detail=translate("reports.errors.noCoordinates", locale=locale, default="Location coordinates are required for forecast")
         )
-    
+
+    if effective_time:
+        resolved = resolve_birth_timezone(
+            timezone_name=birth_data.timezone_name,
+            timezone_offset_minutes=birth_data.timezone_offset_minutes,
+            location_name=birth_data.location,
+            latitude=birth_data.coordinates.latitude if birth_data.coordinates else None,
+            longitude=birth_data.coordinates.longitude if birth_data.coordinates else None,
+        )
+        if resolved.get("timezone_name"):
+            birth_data.timezone_name = str(resolved["timezone_name"])
+        elif resolved.get("need_tz"):
+            # Honest: leave unset; engine / cache warm will refuse silent UT.
+            birth_data.timezone_name = None
+
     return birth_data
 
 

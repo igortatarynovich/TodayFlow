@@ -101,12 +101,22 @@ async def _longitudes_at(
     *,
     coordinates: dict[str, float] | None = None,
 ) -> dict[str, float]:
+    birth_payload: dict[str, Any] = {
+        "date": when.date().isoformat(),
+        "time": when.strftime("%H:%M:%S"),
+        "location": "Equator",
+    }
+    # Prefer IANA from aware datetime — never treat local civil as UT.
+    tzinfo = when.tzinfo
+    tz_name = getattr(tzinfo, "key", None) if tzinfo is not None else None
+    if isinstance(tz_name, str) and tz_name.strip():
+        birth_payload["timezone_name"] = tz_name.strip()
+    elif tzinfo is not None:
+        offset = when.utcoffset()
+        if offset is not None:
+            birth_payload["timezone_offset_minutes"] = int(offset.total_seconds() // 60)
     chart = await astro_service.compute_chart(
-        birth_payload={
-            "date": when.date().isoformat(),
-            "time": when.strftime("%H:%M:%S"),
-            "location": "Equator",
-        },
+        birth_payload=birth_payload,
         coordinates=coordinates or {"latitude": 0.0, "longitude": 0.0},
     )
     positions = getattr(chart, "positions", None) or []

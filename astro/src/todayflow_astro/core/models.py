@@ -56,7 +56,8 @@ class PlanetPosition(BaseModel):
 
 
 class ChartResponse(BaseModel):
-    mode: Literal["precise", "unknown_time"]
+    # timezone_required: precise civil time without resolvable TZ — no geometry (no silent UT).
+    mode: Literal["precise", "unknown_time", "timezone_required"]
     positions: List[PlanetPosition] = Field(default_factory=list)
     houses: dict = Field(default_factory=dict)
     metadata: dict = Field(default_factory=dict)
