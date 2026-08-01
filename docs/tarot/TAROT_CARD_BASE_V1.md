@@ -69,6 +69,12 @@ Only **bridge_to_day** (from chorus), **instruction**, **personal_angle** — ne
 
 `scripts/build_card_base_v1.py` is the only writer for `cards.json`.
 
-**Bug (fixed):** minor KB rows store semicolon-blobs in both `reversed.central` and `themes[0]`. The first builder did `central + " — " + join(themes)`, producing duplicated prose and blob keywords. Majors were fine (`central` = distinct sentence, `themes` = atomic tags).
+**Bug (fixed):** minor KB rows store semicolon-blobs in both `reversed.central` and `themes[0]`. The first builder did `central + " — " + join(themes)`, producing duplicated prose and blob keywords.
 
-**Builder rules now:** atomicize tags on `;`; if central is a blob / equals `themes[0]`, synthesize meaning from tags only (no re-append); never keep `;` inside a keyword; normalize `парanoia` → `паранойя`. Validate via `card_base_v1.validate_card_base_v1()`.
+**Editorial schema (wands 22–35 done; cups/swords/pentacles pending):** `central` = short scene (1 sentence), must **not** equal `themes[0]`; `themes` = 3–5 atomic tags. No borrowing between the two fields.
+
+**Reversed school (whole deck):** classical RWS **тень / блок / перекос** — not the softer modern “same theme, internalized” school (e.g. Biddy soft reverses). Majors already use this; minors editorial batches must match. Soft-internalized reverse is out of scope for `card_base` / KB scene+themes.
+
+**Calibration:** upright/reversed scenes must stay on the RWS archetype (cross-check Biddy/Golden Dawn for *identity*, not for soft-reverse tone). One locked correction: Three of Wands upright = horizon expansion / look beyond the threshold — not patience-only.
+
+**Builder rules now:** atomicize tags on `;`; if `central` is a distinct scene → `base_meaning = central` only and `keywords = themes` (no theme re-append); if `central` is still a legacy blob → synthesize meaning from tags only; never keep `;` inside a keyword; normalize `парanoia` → `паранойя`. Validate via `card_base_v1.validate_card_base_v1()`.

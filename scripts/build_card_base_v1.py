@@ -69,14 +69,14 @@ def _is_blob_central(central: str, theme_atoms: list[str]) -> bool:
 
 
 def build_upright_meaning(arch: str, light_atoms: list[str], deck_upright: str) -> str:
+    """Editorial schema: base_meaning = central scene only; themes → keywords."""
     arch = _fix_typos(arch.strip())
-    if arch and light_atoms:
-        extras = [a for a in light_atoms[:3] if a.casefold() not in arch.casefold()]
-        meaning = (arch + " — " if extras else arch) + ("; ".join(extras) if extras else "")
-    elif arch:
+    if arch and not _is_blob_central(arch, light_atoms):
         meaning = arch
     elif light_atoms:
         meaning = "; ".join(light_atoms[:3])
+    elif arch:
+        meaning = arch
     else:
         meaning = str(deck_upright or "Канонический смысл карты.").strip()
     meaning = meaning.strip()
@@ -86,15 +86,12 @@ def build_upright_meaning(arch: str, light_atoms: list[str], deck_upright: str) 
 
 
 def build_reversed_meaning(rev: dict, theme_atoms: list[str]) -> str:
+    """Editorial schema: base_meaning = central scene only; themes → keywords."""
     central = _fix_typos(str(rev.get("central") or "").strip())
     if not _is_blob_central(central, theme_atoms):
-        # Major path: distinct sentence; append only novel theme atoms.
-        extras = [a for a in theme_atoms[:2] if a.casefold() not in central.casefold()]
         meaning = central
-        if extras:
-            meaning = f"{meaning} — {'; '.join(extras)}"
     elif theme_atoms:
-        # Minor path: synthesize short scene from atomic tags (no central—themes glue).
+        # Legacy blob central: synthesize short scene from atomic tags.
         meaning = "; ".join(theme_atoms[:3])
     else:
         meaning = "Перевернутое положение усиливает тень архетипа."

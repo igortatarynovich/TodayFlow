@@ -47,6 +47,8 @@ Rebuild: `scripts/build_tarot_knowledge_v1.py` (committed JSON = runtime SoT).
 | `amplifies_questions` / `intensifies_with` / `softens_with` | связи |
 | `upright_themes` / `reversed_themes` | короткие темы |
 
+**Editorial reverse school:** `reversed.central` / `reversed.themes` = classical **тень / блок / перекос** (as majors). Do **not** switch suit-by-suit to soft “internalized same theme” reverses. Scene (`central`) ≠ first theme tag. Detail: [TAROT_CARD_BASE_V1.md](./TAROT_CARD_BASE_V1.md) §5.
+
 ### 2.2 Q1 semantic profile (minors — editorial deepen)
 
 **Цель Q1:** каждая из 56 младших карт — **уникальный психологический архетип**, не комбинация rank × suit.
