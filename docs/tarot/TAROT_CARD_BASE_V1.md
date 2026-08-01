@@ -71,7 +71,7 @@ Only **bridge_to_day** (from chorus), **instruction**, **personal_angle** — ne
 
 **Bug (fixed):** minor KB rows store semicolon-blobs in both `reversed.central` and `themes[0]`. The first builder did `central + " — " + join(themes)`, producing duplicated prose and blob keywords.
 
-**Editorial schema (wands 22–35 + cups 36–49 + swords 50–63 done; pentacles pending):** `central` = short scene (1 sentence), must **not** equal `themes[0]`; `themes` = 3–5 atomic tags. No borrowing between the two fields.
+**Editorial schema (all minors 22–77 done — wands/cups/swords/pentacles):** `central` = short scene (1 sentence), must **not** equal `themes[0]`; `themes` = 3–5 atomic tags. No borrowing between the two fields. Ledgers: `docs/tarot_editorial_{cups,swords,pentacles}_v1.json` (+ wands in KB history).
 
 **Reversed school (whole deck):** classical RWS **тень / блок / перекос** — not the softer modern “same theme, internalized” school (e.g. Biddy soft reverses). Majors already use this; minors editorial batches must match. Soft-internalized reverse is out of scope for `card_base` / KB scene+themes.
 
