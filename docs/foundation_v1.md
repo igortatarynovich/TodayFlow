@@ -288,9 +288,9 @@ Owner: подтвердил остальное as-is; эти три пункта
 - [x] Геометрия — §1.2.
 - [x] Атомарные таблицы в §2 + DATA lookup `DATA/foundation_v1/` + `foundation_constants_v1` (L1–L3). Таро/цвет — отдельный трек.
 - [x] Квинконс: **OOS v1** одинаково в контракте и §2.4 (не в `aspects.json`).
-- [ ] Нет литералов валентности/значения аспекта, планеты, знака в формулах — только lookup из фундамента.
-- [ ] Таро / цвет: один авторитетный SoT; остальные deprecated или удалены.
-- [ ] Документ + тест: новые генераторы читают константы из фундамента.
+- [~] Валентность аспектов в `top_driver_v1` / activation copy — через `aspect_is_harmonious|challenging` (foundation). Domain magnitude tables ещё локальны (не character). Classical rulers: house_rulers + profections → `ruler_classical`.
+- [~] Цвет: FE `todayDayColorGuide` помечен deprecated (SoT = BE catalog / props). Таро FE-банк — deprecated pointer; cutover на `card_base_v1` / KB — следующий шаг.
+- [~] Документ + тесты foundation_constants_v1; генераторы постепенно на lookup (не все).
 
 ---
 

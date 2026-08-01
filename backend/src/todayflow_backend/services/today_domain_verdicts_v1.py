@@ -4,6 +4,11 @@ from __future__ import annotations
 
 from typing import Any, Iterable
 
+from todayflow_backend.data.foundation_constants_v1 import (
+    aspect_is_challenging,
+    aspect_is_harmonious,
+)
+
 VERDICT_KEYS = ("calm", "charged", "friction", "open")
 DOMAINS = ("work", "money", "relationships", "energy")
 
@@ -112,17 +117,19 @@ def valence_domain(
     transit = _norm(transiting_planet)
     natal = _norm(natal_point)
 
-    # Soft aspects
-    if asp in ("trine", "sextile"):
+    # Soft aspects — character from foundation_constants_v1 (not id literals).
+    if aspect_is_harmonious(asp):
         return 1.0
-    # quincunx intentionally ignored (OOS v1) — falls through to 0.0
+    # quincunx OOS v1 — not in foundation aspects → not harmonious/challenging → 0.0
+
+    challenging = aspect_is_challenging(asp)
 
     if domain == "work":
         if asp == "square" and natal == "mars":
             return 0.85  # pressure to act → charged
         if asp == "opposition" and natal in ("sun", "mc", "midheaven"):
             return -0.55  # career axis stretch → friction, not ban
-        if asp in ("square", "opposition") and natal in ("saturn",):
+        if challenging and natal in ("saturn",):
             return -0.7
         if asp == "conjunction":
             if transit in ("venus", "jupiter"):
@@ -130,12 +137,12 @@ def valence_domain(
             if transit in ("saturn", "mars", "pluto"):
                 return -0.55 if transit == "saturn" else 0.75  # mars conj → charged drive
             return 0.0
-        if asp in ("square", "opposition"):
+        if challenging:
             return -0.65
         return 0.0
 
     if domain == "money":
-        if asp in ("trine", "sextile"):
+        if aspect_is_harmonious(asp):
             return 1.0
         if asp == "conjunction":
             if transit in ("venus", "jupiter"):
@@ -143,7 +150,7 @@ def valence_domain(
             if transit in ("saturn", "pluto", "mars"):
                 return -0.7
             return 0.0
-        if asp in ("square", "opposition"):
+        if challenging:
             return -0.75
         return 0.0
 
@@ -158,7 +165,7 @@ def valence_domain(
             if transit in ("saturn", "mars", "pluto"):
                 return -0.75
             return 0.0
-        if asp in ("square", "opposition"):
+        if challenging:
             return -0.7
         return 0.0
 
@@ -173,7 +180,7 @@ def valence_domain(
         if transit in ("saturn", "pluto"):
             return -0.65
         return 0.0
-    if asp in ("square", "opposition"):
+    if challenging:
         return -0.6
     return 0.0
 
@@ -202,7 +209,7 @@ def map_weight_to_verdict(weight: float, *, aspect: str | None = None) -> str:
     if mag < 0.18:
         return "calm"
     # Soft support always reads as open when it wins the domain.
-    if w > 0 and _norm(aspect) in ("trine", "sextile"):
+    if w > 0 and aspect_is_harmonious(_norm(aspect)):
         return "open"
     # Strong soft-ish support without soft aspect id (rare) → open.
     if w >= 0.85:

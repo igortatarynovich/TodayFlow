@@ -39,3 +39,15 @@ def test_aspect_lookup_no_quincunx():
     assert "quincunx" not in fc.aspects_by_id()
     assert fc.aspect_character("trine") == "harmonious"
     assert fc.aspects_by_id()["conjunction"]["orb"] == 8
+    assert fc.aspect_is_harmonious("trine")
+    assert fc.aspect_is_challenging("square")
+    assert not fc.aspect_is_harmonious("quincunx")
+    assert not fc.aspect_is_challenging("quincunx")
+
+
+def test_classical_ruler_en_ru_matches_traditional_table():
+    # Scorpio/Aquarius/Pisces classical ≠ modern
+    assert fc.classical_ruler_en_ru(7) == ("Mars", "Марс")  # scorpio
+    assert fc.classical_ruler_en_ru(10) == ("Saturn", "Сатурн")  # aquarius
+    assert fc.classical_ruler_en_ru(11) == ("Jupiter", "Юпитер")  # pisces
+    assert fc.classical_ruler_en_ru(0) == ("Mars", "Марс")  # aries

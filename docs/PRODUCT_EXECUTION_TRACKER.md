@@ -4,7 +4,7 @@ Last updated: 2026-08-01
 Owner: Product + Engineering
 Status: Active working document
 
-**IN PROGRESS (2026-08-01):** Day hooks summary — Glance overview + `hook_reveal` (base static / bridge=chorus) · card_base_v1 78×upright/reversed · number_base_v1.
+**IN PROGRESS (2026-08-01):** card_base_v1 cutover done in code (explainer + TarotService + pack catalog) · next editorial pass on 156 base texts · FE `TODAY_TAROT_CARDS_RU` cleanup.
 
 ## Architecture impact — Day hooks + Glance overview (2026-08-01)
 
@@ -1138,11 +1138,12 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
-- 2026-08-01 | Astro / Foundation | **Foundation v1 (единый канон)** | **IN PROGRESS** | [foundation_v1.md](./foundation_v1.md) + `DATA/foundation_v1/` + `foundation_constants_v1` (L1–L3). Next: wire house_rulers/profections → `ruler_classical`; formulas → aspect lookup; consolidate tarot/color. Quincunx OOS v1.
+- 2026-08-01 | Astro / Foundation | **Foundation v1 (единый канон)** | **IN PROGRESS** | DATA pack live; house_rulers+profections → `ruler_classical`; top_driver/activation copy → `aspect_is_*`; FE color guide deprecated. Next: tarot FE→card_base cutover; drop FE color prose; domain magnitude tables. Canon [foundation_v1.md](./foundation_v1.md).
 - 2026-08-01 | Today / Hooks | **Bridge machine-id leak** | **LIVE (deployed)** | Reject `conflict.*` / snake slugs in `hook_reveal` bridge + native chorus normalize + FE `isMachineToken`. Regression: `conflict.intensity_without_drama` → bridge unavailable (base kept).
 - 2026-08-01 | Astro / Foundation | **Geometry closeout (coords/Swiss/angles)** | **DONE** | Evidence folded into [foundation_v1.md](./foundation_v1.md) §1. Swiss live; TZ+caches; Einstein ≤1′; taps held.
 - 2026-08-01 | Astro / Natal | **No civil-as-UT + birth TZ resolve** | **LIVE (deployed)** | Engine 422 `timezone_required` (no silent UT). Backend resolves IANA from city/coords on save; `needs_timezone` on profile. Cache rejects TZ-less precise charts. Blast was **2** precise NULL-TZ profiles (Igor→`Europe/Minsk` ASC Gemini 14.77; Kyiv→`Europe/Kyiv`); caches rewarmed; `today_tap_events` count unchanged (1). Also: sky_drivers out of day_facts contract; quincunx OOS v1; orb≠time bridge constraint; `_longitudes_at`/noon-transit pass TZ.
-- 2026-08-01 | Today / Hooks | **Glance overview + hook_reveal (base/chorus)** | **LIVE (deployed)** | Compose rebuild BE+FE `7dc7e8a` · live chunk + guest `/today/symbols/*` hook_reveal smoke · Glance/hook markers in prod JS · authed ScreenFlow hard-refresh recommended · next: cutover explainer/question-tarot to `card_base_v1`
+- 2026-08-01 | Tarot / SoT | **card_base_v1 cutover (explainer + question-tarot)** | **CODE** | `TarotService` upright/reversed/meaning ← `card_base_v1.prose_sides`; interpretation pack catalog strings same; explainer `tarot-explainer-v4` forces `meaning` from bank (LLM = personalization only). Tests `test_card_base_cutover_v1` 5/5. Canon [TAROT_CARD_BASE_V1](./tarot/TAROT_CARD_BASE_V1.md) §3. Next: editorial pass on 156 bank texts; FE `TODAY_TAROT_CARDS_RU` cleanup.
+- 2026-08-01 | Today / Hooks | **Glance overview + hook_reveal (base/chorus)** | **LIVE (deployed)** | Compose rebuild BE+FE `7dc7e8a` · live chunk + guest `/today/symbols/*` hook_reveal smoke · Glance/hook markers in prod JS · cutover explainer/question-tarot → row above
 - 2026-07-31 | Practices | **C1+ server catalog enrich** | **DONE / DEPLOYING** | Free GENERAL library ~47 tagged practices; `GET /practices?need=&format_id=`; `/practices/state-cycle/coverage`; complete accepts `state_after`. `99d6e85`.
 - 2026-07-31 | Practices | **C0b mockup need-лента** | **DONE (FE)** | Visual SoT = [`practices_screen_mockup_v1.png`](./practices/practices_screen_mockup_v1.png). Need icons + canon order (+Понять себя, sleep last); recommend/moment chrome; hub «Музыкальное сопровождение»; formats keep reflection+sleep.
 - 2026-07-31 | Practices | **C1 rich catalog (need/format tags)** | **DONE** | Overlay + 12 gap-fill free practices; public optional `need_ids`/`format_id`/`outcome_label`; hub match/rank by tags + outcome card titles. `practice_state_cycle_catalog_v1` · `9d770f3`.

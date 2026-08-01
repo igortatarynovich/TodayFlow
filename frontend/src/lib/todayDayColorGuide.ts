@@ -1,4 +1,10 @@
-/** Color of the day — benefit, wear, amount, avoid (RU catalog, API may override). */
+/**
+ * Color of the day — thin FE resolve (hex + fill gaps).
+ *
+ * @deprecated Meaning SoT = BE `day_color_catalog_v1` / `props.color` / `color_hook_reveal`
+ * (Foundation v1 §3). Do not add new prose rows here; prefer API/scenario fields.
+ * Local `COLOR_GUIDE` is a visual/hex fallback only until full cutover.
+ */
 
 export type TodayDayColorGuide = {
   name: string;

@@ -9,6 +9,7 @@ from __future__ import annotations
 from datetime import date, time
 from typing import Any
 
+from todayflow_backend.data.foundation_constants_v1 import classical_ruler_en_ru
 from todayflow_backend.services.day_sources.panchanga import tropical_sun_longitude
 from todayflow_backend.services.day_sources.vedic_personal import compute_sidereal_lagna
 
@@ -27,21 +28,7 @@ _SIGN_RU = [
     "Рыбы",
 ]
 
-# Traditional domicile rulers (tropical whole-sign).
-_SIGN_RULERS: list[tuple[str, str]] = [
-    ("Mars", "Марс"),
-    ("Venus", "Венера"),
-    ("Mercury", "Меркурий"),
-    ("Moon", "Луна"),
-    ("Sun", "Солнце"),
-    ("Mercury", "Меркурий"),
-    ("Venus", "Венера"),
-    ("Mars", "Марс"),
-    ("Jupiter", "Юпитер"),
-    ("Saturn", "Сатурн"),
-    ("Saturn", "Сатурн"),
-    ("Jupiter", "Юпитер"),
-]
+# Traditional domicile rulers — SoT = foundation_constants_v1 ruler_classical (L1).
 
 _HOUSE_THEME_RU: dict[int, str] = {
     1: "тело, самопрезентация, как вас видят",
@@ -134,12 +121,12 @@ def build_profections(
     )
     annual_house = (age % 12) + 1
     annual_sign_i = (int(first["sign_index"]) + annual_house - 1) % 12
-    lord_id, lord_ru = _SIGN_RULERS[annual_sign_i]
+    lord_id, lord_ru = classical_ruler_en_ru(annual_sign_i)
 
     months = months_since_birthday(birth_date, target_date)
     month_house = ((annual_house - 1 + months) % 12) + 1
     month_sign_i = (int(first["sign_index"]) + month_house - 1) % 12
-    month_lord_id, month_lord_ru = _SIGN_RULERS[month_sign_i]
+    month_lord_id, month_lord_ru = classical_ruler_en_ru(month_sign_i)
 
     depth = "asc_whole_sign" if first["method"] == "tropical_asc_whole_sign" else "solar_proxy"
 

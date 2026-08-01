@@ -11,6 +11,7 @@ from __future__ import annotations
 from datetime import date, time
 from typing import Any
 
+from todayflow_backend.data.foundation_constants_v1 import classical_ruler_en_ru
 from todayflow_backend.services.day_sources.vedic_personal import compute_sidereal_lagna
 
 _SIGN_RU = [
@@ -28,21 +29,7 @@ _SIGN_RU = [
     "Рыбы",
 ]
 
-# Traditional domicile rulers (tropical).
-_SIGN_RULERS: list[tuple[str, str]] = [
-    ("Mars", "Марс"),
-    ("Venus", "Венера"),
-    ("Mercury", "Меркурий"),
-    ("Moon", "Луна"),
-    ("Sun", "Солнце"),
-    ("Mercury", "Меркурий"),
-    ("Venus", "Венера"),
-    ("Mars", "Марс"),
-    ("Jupiter", "Юпитер"),
-    ("Saturn", "Сатурн"),
-    ("Saturn", "Сатурн"),
-    ("Jupiter", "Юпитер"),
-]
+# Traditional domicile rulers — SoT = foundation_constants_v1 ruler_classical (L1).
 
 _HOUSE_THEME_RU: dict[int, str] = {
     1: "тело, самопрезентация",
@@ -102,7 +89,7 @@ def build_house_rulers(
     out: list[dict[str, Any]] = []
     for house in range(1, 13):
         sign_i = (asc_sign + house - 1) % 12
-        lord, lord_ru = _SIGN_RULERS[sign_i]
+        lord, lord_ru = classical_ruler_en_ru(sign_i)
         out.append(
             {
                 "house": house,
@@ -147,7 +134,7 @@ def dispositor_chain(
                 }
             )
             break
-        next_lord, next_ru = _SIGN_RULERS[sign_i]
+        next_lord, next_ru = classical_ruler_en_ru(sign_i)
         steps.append(
             {
                 "planet": planet,

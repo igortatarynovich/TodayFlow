@@ -1,7 +1,7 @@
 /**
- * @deprecated as meaning SoT — use BE `card_base_v1` / `hook_reveal.base` (78×upright/reversed).
- * Kept for ritual pick theater labels / sphereBump until FE cutover completes.
- * Локальный слой для интерактивной «Карты дня» в Today (major-only legacy).
+ * @deprecated as meaning SoT — Foundation v1 §3: BE `card_base_v1` / `hook_reveal.base`
+ * (78×upright/reversed). Kept for ritual pick theater labels / sphereBump until FE cutover.
+ * Do not add new card prose here.
  */
 export type TarotSphereBump = Partial<Record<"love" | "work" | "money" | "energy", number>>;
 

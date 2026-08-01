@@ -213,8 +213,14 @@ def test_assemble_happy_path_provenance_subset():
     timeline_ids = out["generation_provenance"]["timeline_driver_ids"]
     assert timeline_ids == ["a1"]
     assert set(timeline_ids) <= act_ids
-    soft_why = aspect_class_why_short("trine")
-    assert any(r["why_short"] == soft_why for r in out["domain_verdicts"] if r.get("driver_ids"))
+    soft_whys = {
+        aspect_class_why_short("trine", d)
+        for d in ("work", "money", "relationships", "energy")
+    }
+    soft_whys.add(aspect_class_why_short("trine"))
+    assert any(
+        r["why_short"] in soft_whys for r in out["domain_verdicts"] if r.get("driver_ids")
+    )
 
 
 def _ready_scenario(*, driver_ids: list[str], thesis_label: str | None = "Тема дня"):

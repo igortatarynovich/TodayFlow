@@ -96,6 +96,51 @@ def numbers_by_value() -> dict[int, dict[str, Any]]:
     return out
 
 
+SIGN_ORDER_TROPICAL: tuple[str, ...] = (
+    "aries",
+    "taurus",
+    "gemini",
+    "cancer",
+    "leo",
+    "virgo",
+    "libra",
+    "scorpio",
+    "sagittarius",
+    "capricorn",
+    "aquarius",
+    "pisces",
+)
+
+_PLANET_EN_TITLE: dict[str, str] = {
+    "sun": "Sun",
+    "moon": "Moon",
+    "mercury": "Mercury",
+    "venus": "Venus",
+    "mars": "Mars",
+    "jupiter": "Jupiter",
+    "saturn": "Saturn",
+    "uranus": "Uranus",
+    "neptune": "Neptune",
+    "pluto": "Pluto",
+}
+
+_PLANET_RU_TITLE: dict[str, str] = {
+    "sun": "Солнце",
+    "moon": "Луна",
+    "mercury": "Меркурий",
+    "venus": "Венера",
+    "mars": "Марс",
+    "jupiter": "Юпитер",
+    "saturn": "Сатурн",
+    "uranus": "Уран",
+    "neptune": "Нептун",
+    "pluto": "Плутон",
+}
+
+_HARMONIOUS = frozenset({"harmonious", "weak_harmonious"})
+_CHALLENGING = frozenset({"challenging", "weak_challenging"})
+
+
 def sign_ruler(sign_id: str, *, mode: RulerMode = "modern") -> str | None:
     """L1: modern by default; classical for house_rulers / profections."""
     row = signs_by_id().get(str(sign_id).lower())
@@ -106,11 +151,29 @@ def sign_ruler(sign_id: str, *, mode: RulerMode = "modern") -> str | None:
     return str(row.get("ruler") or "") or None
 
 
+def classical_ruler_en_ru(sign_index: int) -> tuple[str, str]:
+    """Legacy Title-case pair for house_rulers / profections (classical only)."""
+    sid = SIGN_ORDER_TROPICAL[int(sign_index) % 12]
+    pid = sign_ruler(sid, mode="classical") or "mars"
+    return (
+        _PLANET_EN_TITLE.get(pid, pid.title()),
+        _PLANET_RU_TITLE.get(pid, pid),
+    )
+
+
 def aspect_character(aspect_id: str) -> str | None:
     row = aspects_by_id().get(str(aspect_id).lower())
     if not row:
         return None
     return str(row.get("character") or "") or None
+
+
+def aspect_is_harmonious(aspect_id: str) -> bool:
+    return aspect_character(aspect_id) in _HARMONIOUS
+
+
+def aspect_is_challenging(aspect_id: str) -> bool:
+    return aspect_character(aspect_id) in _CHALLENGING
 
 
 def calibrated_dignity(planet_id: str) -> dict[str, Any] | None:
