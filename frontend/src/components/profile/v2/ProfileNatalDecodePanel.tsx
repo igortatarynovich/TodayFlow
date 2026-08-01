@@ -107,14 +107,15 @@ export function ProfileNatalDecodePanel() {
   }, [busy, offer?.can_generate]);
 
   const showBreathe = Boolean(offer?.can_generate && !grounded && !busy);
+  const leadDefault =
+    "Ещё один слой глубины: как структура карты объясняет уже известное ядро характера — не второй портрет.";
+  // Offer CTA may educate in the lead; blocked CTA belongs only in the status slot (no dupe).
+  const lead = offer?.can_generate && offer.cta ? offer.cta : leadDefault;
 
   return (
     <div className={styles.deepThemesBlock} data-testid="profile-natal-decode">
       <p className={styles.deepThemesTitle}>Расшифровка натальной карты</p>
-      <p className={styles.deepThemesLead}>
-        {offer?.cta ||
-          "Ещё один слой глубины: как структура карты объясняет уже известное ядро характера — не второй портрет."}
-      </p>
+      <p className={styles.deepThemesLead}>{lead}</p>
       {offer?.note ? <p className={styles.deepThemesHint}>{offer.note}</p> : null}
 
       {!grounded ? (

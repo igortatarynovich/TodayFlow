@@ -1,6 +1,6 @@
 # Profile Visual Modes — draft v0
 
-**Status:** IN BRANCH · Acts 3–5 modes shipped 2026-08-01  
+**Status:** IN BRANCH · Acts 3–5 modes + glance 2026-08-01  
 **Parent:** Profile Journey UX backlog item **#4** («тематические декорации актов»)  
 **Not:** new content / LLM / contract fields
 
@@ -36,8 +36,9 @@ Scroll Profile as **chapter changes by décor**, not by another wall of the same
 | Act 3 spine | OK |
 | Act 4 direction strip + grow wash | OK |
 | Act 5 portal center + CTA | OK |
-| Owner glance accept (scroll Acts 1–5) | OPEN |
+| Glance scroll Acts 1–5 @390 | **OK** — `/dev/profile-journey-preview` · modes distinct · decode blocked CTA no longer doubles in lead |
 
 ## Out of scope
 
 Content / CE rewrite · natal 3D · Motion B live accept (separate track).
+Human owner final accept on prod `/profile` optional.
