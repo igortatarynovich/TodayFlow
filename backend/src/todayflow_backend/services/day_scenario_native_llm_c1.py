@@ -359,12 +359,22 @@ def normalize_native_scenario_llm_c1(raw: dict[str, Any] | None) -> dict[str, An
         if not named:
             return None
         cid = _clip(d.get("conflict_id"), 80) or default_conflict_id
+        from todayflow_backend.services.hook_reveal_v1 import _is_machine_token
+
+        def _human_field(raw: Any, *, limit: int) -> str:
+            text = _clip(raw, limit)
+            if not text or _is_machine_token(text) or (cid and text == cid):
+                return ""
+            return text
+
         return {
             "named_factor": named,
-            "human_meaning": _clip(d.get("human_meaning") or d.get("meaning"), 280),
-            "link_to_conflict": _clip(d.get("link_to_conflict") or d.get("for_conflict"), 240),
+            "human_meaning": _human_field(d.get("human_meaning") or d.get("meaning"), limit=280),
+            "link_to_conflict": _human_field(
+                d.get("link_to_conflict") or d.get("for_conflict"), limit=240
+            ),
             "conflict_id": cid,
-            "archetype_role": _clip(d.get("archetype_role") or d.get("role"), 200),
+            "archetype_role": _human_field(d.get("archetype_role") or d.get("role"), limit=200),
             "tempo": _clip(d.get("tempo"), 80),
             "style": _clip(d.get("style"), 80),
             "evidence_refs": [

@@ -80,6 +80,7 @@ Report facts, not literary summary:
 
 ## Related canons (start here; do not invent a fifth)
 
+- `docs/foundation_v1.md` — **Foundation v1** (geometry · atomic constants · single-source routing); gate before hooks/semantics
 - `docs/SCREEN_CONTRACTS_V1.md` — screen / today_contract / day_story nests
 - `docs/content/TODAYFLOW_VOICE_CANON.md` — person-not-system
 - `docs/DAY_ENGINE_AND_COHERENCE.md` / `docs/DAY_SOURCES_CANON.md` — day calculation SoT

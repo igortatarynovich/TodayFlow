@@ -1,0 +1,263 @@
+{
+  "contract_version": "foundation_constants_v1",
+  "signs": [
+    {
+      "id": "aries",
+      "name_ru": "Овен",
+      "element": "fire",
+      "modality": "cardinal",
+      "polarity": "masculine",
+      "ruler": "mars",
+      "ruler_classical": "mars",
+      "symbol_ru": "Баран",
+      "themes_ru": [
+        "инициатива",
+        "скорость",
+        "лидерство",
+        "конкуренция"
+      ],
+      "keywords_ru": [
+        "смелость",
+        "импульс",
+        "начало",
+        "напор"
+      ]
+    },
+    {
+      "id": "taurus",
+      "name_ru": "Телец",
+      "element": "earth",
+      "modality": "fixed",
+      "polarity": "feminine",
+      "ruler": "venus",
+      "ruler_classical": "venus",
+      "symbol_ru": "Бык",
+      "themes_ru": [
+        "стабильность",
+        "ресурсы",
+        "чувственность",
+        "упорство"
+      ],
+      "keywords_ru": [
+        "комфорт",
+        "ценность",
+        "терпение",
+        "надёжность"
+      ]
+    },
+    {
+      "id": "gemini",
+      "name_ru": "Близнецы",
+      "element": "air",
+      "modality": "mutable",
+      "polarity": "masculine",
+      "ruler": "mercury",
+      "ruler_classical": "mercury",
+      "symbol_ru": "Близнецы",
+      "themes_ru": [
+        "коммуникация",
+        "любопытство",
+        "обмен информацией"
+      ],
+      "keywords_ru": [
+        "гибкость",
+        "речь",
+        "разнообразие",
+        "скорость мысли"
+      ]
+    },
+    {
+      "id": "cancer",
+      "name_ru": "Рак",
+      "element": "water",
+      "modality": "cardinal",
+      "polarity": "feminine",
+      "ruler": "moon",
+      "ruler_classical": "moon",
+      "symbol_ru": "Краб",
+      "themes_ru": [
+        "дом",
+        "семья",
+        "забота",
+        "эмоциональная память"
+      ],
+      "keywords_ru": [
+        "защита",
+        "привязанность",
+        "чувствительность",
+        "корни"
+      ]
+    },
+    {
+      "id": "leo",
+      "name_ru": "Лев",
+      "element": "fire",
+      "modality": "fixed",
+      "polarity": "masculine",
+      "ruler": "sun",
+      "ruler_classical": "sun",
+      "symbol_ru": "Лев",
+      "themes_ru": [
+        "самовыражение",
+        "творчество",
+        "признание"
+      ],
+      "keywords_ru": [
+        "гордость",
+        "щедрость",
+        "драма",
+        "лидерство через сердце"
+      ]
+    },
+    {
+      "id": "virgo",
+      "name_ru": "Дева",
+      "element": "earth",
+      "modality": "mutable",
+      "polarity": "feminine",
+      "ruler": "mercury",
+      "ruler_classical": "mercury",
+      "symbol_ru": "Дева",
+      "themes_ru": [
+        "анализ",
+        "порядок",
+        "служение",
+        "детали"
+      ],
+      "keywords_ru": [
+        "точность",
+        "полезность",
+        "критичность",
+        "скромность"
+      ]
+    },
+    {
+      "id": "libra",
+      "name_ru": "Весы",
+      "element": "air",
+      "modality": "cardinal",
+      "polarity": "masculine",
+      "ruler": "venus",
+      "ruler_classical": "venus",
+      "symbol_ru": "Весы",
+      "themes_ru": [
+        "баланс",
+        "партнёрство",
+        "справедливость"
+      ],
+      "keywords_ru": [
+        "гармония",
+        "дипломатия",
+        "эстетика",
+        "компромисс"
+      ]
+    },
+    {
+      "id": "scorpio",
+      "name_ru": "Скорпион",
+      "element": "water",
+      "modality": "fixed",
+      "polarity": "feminine",
+      "ruler": "pluto",
+      "ruler_classical": "mars",
+      "symbol_ru": "Скорпион",
+      "themes_ru": [
+        "трансформация",
+        "интенсивность",
+        "контроль"
+      ],
+      "keywords_ru": [
+        "глубина",
+        "тайна",
+        "воля",
+        "регенерация"
+      ]
+    },
+    {
+      "id": "sagittarius",
+      "name_ru": "Стрелец",
+      "element": "fire",
+      "modality": "mutable",
+      "polarity": "masculine",
+      "ruler": "jupiter",
+      "ruler_classical": "jupiter",
+      "symbol_ru": "Стрелец",
+      "themes_ru": [
+        "расширение",
+        "смысл",
+        "путешествия",
+        "философия"
+      ],
+      "keywords_ru": [
+        "оптимизм",
+        "свобода",
+        "экспансия",
+        "прямота"
+      ]
+    },
+    {
+      "id": "capricorn",
+      "name_ru": "Козерог",
+      "element": "earth",
+      "modality": "cardinal",
+      "polarity": "feminine",
+      "ruler": "saturn",
+      "ruler_classical": "saturn",
+      "symbol_ru": "Козерог",
+      "themes_ru": [
+        "структура",
+        "дисциплина",
+        "статус",
+        "долгий путь"
+      ],
+      "keywords_ru": [
+        "ответственность",
+        "амбиция",
+        "терпение",
+        "авторитет"
+      ]
+    },
+    {
+      "id": "aquarius",
+      "name_ru": "Водолей",
+      "element": "air",
+      "modality": "fixed",
+      "polarity": "masculine",
+      "ruler": "uranus",
+      "ruler_classical": "saturn",
+      "symbol_ru": "Водолей",
+      "themes_ru": [
+        "инновации",
+        "независимость",
+        "коллектив"
+      ],
+      "keywords_ru": [
+        "отстранённость",
+        "оригинальность",
+        "идея",
+        "будущее"
+      ]
+    },
+    {
+      "id": "pisces",
+      "name_ru": "Рыбы",
+      "element": "water",
+      "modality": "mutable",
+      "polarity": "feminine",
+      "ruler": "neptune",
+      "ruler_classical": "jupiter",
+      "symbol_ru": "Рыбы",
+      "themes_ru": [
+        "интуиция",
+        "сострадание",
+        "растворение границ"
+      ],
+      "keywords_ru": [
+        "воображение",
+        "чувствительность",
+        "жертвенность",
+        "мечта"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "contract_version": "foundation_constants_v1",
+  "calibrated": [
+    {
+      "planet": "sun",
+      "domicile": [
+        "leo"
+      ],
+      "exaltation": "aries",
+      "detriment": [
+        "aquarius"
+      ],
+      "fall": "libra",
+      "calibrated": true
+    },
+    {
+      "planet": "moon",
+      "domicile": [
+        "cancer"
+      ],
+      "exaltation": "taurus",
+      "detriment": [
+        "capricorn"
+      ],
+      "fall": "scorpio",
+      "calibrated": true
+    },
+    {
+      "planet": "mercury",
+      "domicile": [
+        "gemini",
+        "virgo"
+      ],
+      "exaltation": "virgo",
+      "detriment": [
+        "sagittarius",
+        "pisces"
+      ],
+      "fall": "pisces",
+      "calibrated": true
+    },
+    {
+      "planet": "venus",
+      "domicile": [
+        "taurus",
+        "libra"
+      ],
+      "exaltation": "pisces",
+      "detriment": [
+        "aries",
+        "scorpio"
+      ],
+      "fall": "virgo",
+      "calibrated": true
+    },
+    {
+      "planet": "mars",
+      "domicile": [
+        "aries",
+        "scorpio"
+      ],
+      "exaltation": "capricorn",
+      "detriment": [
+        "libra",
+        "taurus"
+      ],
+      "fall": "cancer",
+      "calibrated": true
+    },
+    {
+      "planet": "jupiter",
+      "domicile": [
+        "sagittarius",
+        "pisces"
+      ],
+      "exaltation": "cancer",
+      "detriment": [
+        "gemini",
+        "virgo"
+      ],
+      "fall": "capricorn",
+      "calibrated": true
+    },
+    {
+      "planet": "saturn",
+      "domicile": [
+        "capricorn",
+        "aquarius"
+      ],
+      "exaltation": "libra",
+      "detriment": [
+        "cancer",
+        "leo"
+      ],
+      "fall": "aries",
+      "calibrated": true
+    }
+  ],
+  "reference_only": [
+    {
+      "planet": "uranus",
+      "domicile": [
+        "aquarius"
+      ],
+      "exaltation": "scorpio",
+      "detriment": [
+        "leo"
+      ],
+      "fall": "taurus",
+      "calibrated": false,
+      "note": "reference_only — school variance; do not feed formulas"
+    },
+    {
+      "planet": "neptune",
+      "domicile": [
+        "pisces"
+      ],
+      "exaltation": "leo",
+      "detriment": [
+        "virgo"
+      ],
+      "fall": "aquarius",
+      "calibrated": false,
+      "note": "reference_only — school variance; do not feed formulas"
+    },
+    {
+      "planet": "pluto",
+      "domicile": [
+        "scorpio"
+      ],
+      "exaltation": "aries",
+      "detriment": [
+        "taurus"
+      ],
+      "fall": "libra",
+      "calibrated": false,
+      "note": "reference_only — school variance; do not feed formulas"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "contract_version": "foundation_constants_v1",
+  "canon": "docs/foundation_v1.md",
+  "locks": [
+    "L1_ruler_modern_plus_classical",
+    "L2_natural_houses_list",
+    "L3_outer_dignities_not_calibrated"
+  ],
+  "quincunx": "out_of_scope_v1",
+  "retrograde_general_ru": "Ретроградность — оптическая иллюзия: планета не движется назад физически, а кажется движущейся назад с точки зрения Земли. Общий смысл для любой ретроградной планеты — тема этой планеты уходит внутрь и требует пересмотра, а не нового старта: то, что обычно направлено вовне (действие, общение, рост — в зависимости от планеты), в ретро-период разворачивается на переосмысление, доработку или встречу с прошлым. Это не «плохой» период, а период с приставкой «пере-»: пересмотреть, переделать, перепроверить, а не запускать новое в этой сфере.",
+  "reduction_rule_ru": "Одинаковый алгоритм редукции с сохранением мастер-чисел 11/22/33 без дальнейшего сведения — во всех циклах.",
+  "ruler_consumers_classical": [
+    "backend/.../day_sources/house_rulers.py",
+    "backend/.../day_sources/profections.py"
+  ],
+  "note": "Tarot/color not in this pack — separate track per foundation_v1 §2."
+}

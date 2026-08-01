@@ -1,0 +1,222 @@
+{
+  "contract_version": "foundation_constants_v1",
+  "planets": [
+    {
+      "id": "sun",
+      "name_ru": "Солнце",
+      "archetype_ru": "Идентичность, воля",
+      "psych_function_ru": "ядро личности, куда направлена жизненная сила",
+      "speed_ru": "медленная (1°/сутки)",
+      "natural_houses": [
+        5
+      ],
+      "natural_house_primary": 5,
+      "keywords_ru": [
+        "воля",
+        "эго",
+        "витальность",
+        "цель"
+      ]
+    },
+    {
+      "id": "moon",
+      "name_ru": "Луна",
+      "archetype_ru": "Эмоции, привычка",
+      "psych_function_ru": "как человек реагирует и заботится о себе",
+      "speed_ru": "быстрая (~13°/сутки)",
+      "natural_houses": [
+        4
+      ],
+      "natural_house_primary": 4,
+      "keywords_ru": [
+        "чувства",
+        "память",
+        "безопасность",
+        "привычки"
+      ]
+    },
+    {
+      "id": "mercury",
+      "name_ru": "Меркурий",
+      "archetype_ru": "Мышление, обмен",
+      "psych_function_ru": "как человек думает и общается",
+      "speed_ru": "быстрая (переменная, ретро часто)",
+      "natural_houses": [
+        3,
+        6
+      ],
+      "natural_house_primary": 3,
+      "keywords_ru": [
+        "речь",
+        "логика",
+        "обучение",
+        "связь"
+      ]
+    },
+    {
+      "id": "venus",
+      "name_ru": "Венера",
+      "archetype_ru": "Ценность, притяжение",
+      "psych_function_ru": "что человек любит и ценит",
+      "speed_ru": "средняя",
+      "natural_houses": [
+        2,
+        7
+      ],
+      "natural_house_primary": 2,
+      "keywords_ru": [
+        "отношения",
+        "красота",
+        "деньги",
+        "удовольствие"
+      ]
+    },
+    {
+      "id": "mars",
+      "name_ru": "Марс",
+      "archetype_ru": "Действие, воля к борьбе",
+      "psych_function_ru": "как человек действует и отстаивает себя",
+      "speed_ru": "средняя",
+      "natural_houses": [
+        1,
+        8
+      ],
+      "natural_house_primary": 1,
+      "keywords_ru": [
+        "энергия",
+        "конфликт",
+        "инициатива",
+        "желание"
+      ]
+    },
+    {
+      "id": "jupiter",
+      "name_ru": "Юпитер",
+      "archetype_ru": "Рост, смысл",
+      "psych_function_ru": "где человек расширяется и верит",
+      "speed_ru": "медленная (~1 год/знак)",
+      "natural_houses": [
+        9,
+        12
+      ],
+      "natural_house_primary": 9,
+      "keywords_ru": [
+        "удача",
+        "экспансия",
+        "философия",
+        "избыток"
+      ]
+    },
+    {
+      "id": "saturn",
+      "name_ru": "Сатурн",
+      "archetype_ru": "Структура, ограничение",
+      "psych_function_ru": "где человек взрослеет через дисциплину",
+      "speed_ru": "очень медленная (~2.5 года/знак)",
+      "natural_houses": [
+        10,
+        11
+      ],
+      "natural_house_primary": 10,
+      "keywords_ru": [
+        "ответственность",
+        "страх",
+        "время",
+        "мастерство"
+      ]
+    },
+    {
+      "id": "uranus",
+      "name_ru": "Уран",
+      "archetype_ru": "Разрыв, пробуждение",
+      "psych_function_ru": "где человек ищет свободу и перемены",
+      "speed_ru": "очень медленная (~7 лет/знак)",
+      "natural_houses": [
+        11
+      ],
+      "natural_house_primary": 11,
+      "keywords_ru": [
+        "бунт",
+        "внезапность",
+        "оригинальность"
+      ]
+    },
+    {
+      "id": "neptune",
+      "name_ru": "Нептун",
+      "archetype_ru": "Растворение, идеал",
+      "psych_function_ru": "где человек мечтает и теряет границы",
+      "speed_ru": "сверхмедленная (~14 лет/знак)",
+      "natural_houses": [
+        12
+      ],
+      "natural_house_primary": 12,
+      "keywords_ru": [
+        "иллюзия",
+        "духовность",
+        "сострадание",
+        "туман"
+      ]
+    },
+    {
+      "id": "pluto",
+      "name_ru": "Плутон",
+      "archetype_ru": "Трансформация, власть",
+      "psych_function_ru": "где человек проходит через кризис и возрождение",
+      "speed_ru": "сверхмедленная (~12–30 лет/знак)",
+      "natural_houses": [
+        8
+      ],
+      "natural_house_primary": 8,
+      "keywords_ru": [
+        "сила",
+        "одержимость",
+        "регенерация",
+        "тень"
+      ]
+    },
+    {
+      "id": "north_node",
+      "name_ru": "Северный узел",
+      "archetype_ru": "Развитие",
+      "psych_function_ru": "направление роста в этой жизни",
+      "speed_ru": "очень медленная, ретроградна большую часть времени",
+      "natural_houses": [],
+      "natural_house_primary": null,
+      "keywords_ru": [
+        "предназначение",
+        "вызов",
+        "непривычное"
+      ]
+    },
+    {
+      "id": "lilith",
+      "name_ru": "Лилит",
+      "archetype_ru": "Табу, вытесненное",
+      "psych_function_ru": "что человек скрывает или стыдится",
+      "speed_ru": "медленная",
+      "natural_houses": [],
+      "natural_house_primary": null,
+      "keywords_ru": [
+        "дикость",
+        "отвержение",
+        "скрытая сила"
+      ],
+      "note": "Mean Apogee"
+    },
+    {
+      "id": "chiron",
+      "name_ru": "Хирон",
+      "archetype_ru": "Рана-целитель",
+      "psych_function_ru": "где боль становится источником мудрости",
+      "speed_ru": "медленная, орбита неравномерная",
+      "natural_houses": [],
+      "natural_house_primary": null,
+      "keywords_ru": [
+        "уязвимость",
+        "исцеление",
+        "учительство через боль"
+      ]
+    }
+  ]
+}
