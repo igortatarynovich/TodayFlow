@@ -110,7 +110,9 @@ export function BirthProfileIntakeFields({
           onChange={(value) => patch({ location_name: value, latitude: null, longitude: null })}
           onSelect={(item) =>
             patch({
-              location_name: (item.local_name || item.name || "").trim(),
+              location_name: (
+                item.display_name || `${item.local_name || item.name}, ${item.country}`
+              ).trim(),
               latitude: item.latitude,
               longitude: item.longitude,
             })

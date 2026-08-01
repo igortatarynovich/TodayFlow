@@ -1011,7 +1011,8 @@ def _resolve_coordinates(
     if latitude is not None and longitude is not None:
         return latitude, longitude
     geo = geocoder.lookup(location_name)
-    if geo:
+    # Ambiguous lookup must not invent coords (need_choice / missing lat).
+    if geo and not geo.get("need_choice") and geo.get("latitude") is not None and geo.get("longitude") is not None:
         return float(geo["latitude"]), float(geo["longitude"])
     return latitude, longitude
 

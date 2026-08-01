@@ -12,6 +12,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY astro/pyproject.toml .
 COPY astro/src ./src
+# Swiss Ephemeris compressed files (sepl/semo/seas) — required for FLG_SWIEPH.
+COPY astro/ephe ./ephe
+
+ENV SWISS_EPHEMERIS_PATH=/app/ephe
 
 # Сборка через setuptools (см. pyproject.toml). Всегда bootstrap setuptools + --no-build-isolation (см. backend/Dockerfile).
 # PIP_TRUSTED_HOSTS=1: curl -k и --trusted-host при перехвате TLS.
@@ -28,6 +32,8 @@ RUN set -eux; \
     fi; \
     pip install --no-cache-dir --no-deps /tmp/setuptools-82.0.1-py3-none-any.whl; \
     rm -f /tmp/setuptools-82.0.1-py3-none-any.whl; \
-    pip install $opts --no-build-isolation .
+    pip install $opts --no-build-isolation .; \
+    test -f /app/ephe/sepl_18.se1; \
+    test -f /app/ephe/semo_18.se1
 
 CMD ["uvicorn", "todayflow_astro.main:app", "--host", "0.0.0.0", "--port", "8081"]

@@ -22,6 +22,8 @@ services:
       context: .
       dockerfile: astro/Dockerfile
     restart: unless-stopped
+    environment:
+      SWISS_EPHEMERIS_PATH: /app/ephe
     dns:
       - 8.8.8.8
       - 8.8.4.4

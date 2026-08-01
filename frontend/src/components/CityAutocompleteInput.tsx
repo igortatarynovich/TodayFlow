@@ -121,11 +121,12 @@ export function CityAutocompleteInput({
           ) : (
             visibleSuggestions.map((item) => (
               <button
-                key={`${item.name}-${item.country}`}
+                key={`${item.name}-${item.country}-${item.latitude}-${item.longitude}`}
                 type="button"
                 onClick={() => {
-                  // Persist a clean place label (not bilingual "Город / City, Country").
-                  const label = (item.local_name || item.name || "").trim();
+                  // Persist city + country/region so same-name towns stay unambiguous.
+                  const label =
+                    (item.display_name || `${item.local_name || item.name}, ${item.country}` || "").trim();
                   onChange(label);
                   onSelect(item);
                   setOpen(false);
@@ -143,7 +144,9 @@ export function CityAutocompleteInput({
                 <div style={{ fontWeight: 600, color: "#1f2937" }}>
                   {item.local_name && item.local_name !== item.name ? `${item.local_name} / ${item.name}` : item.name}
                 </div>
-                <div style={{ marginTop: "0.15rem", fontSize: "0.84rem", color: "#64748b" }}>{item.country}</div>
+                <div style={{ marginTop: "0.15rem", fontSize: "0.84rem", color: "#64748b" }}>
+                  {[item.region, item.country].filter(Boolean).join(", ")}
+                </div>
               </button>
             ))
           )}

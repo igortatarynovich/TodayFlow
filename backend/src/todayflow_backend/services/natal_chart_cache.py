@@ -49,11 +49,13 @@ class NatalChartCacheService:
             coordinates=coordinates
         )
 
-        # Never cache timezone_required / empty precise failures — would poison ASC/houses.
+        # Never cache TZ/ephemeris failures or empty precise charts — would poison ASC/houses.
         meta = chart.metadata if isinstance(chart.metadata, dict) else {}
+        mode = str(getattr(chart, "mode", "") or "")
         if (
-            str(getattr(chart, "mode", "") or "") == "timezone_required"
+            mode in ("timezone_required", "ephemeris_degraded")
             or meta.get("timezone_required")
+            or meta.get("ephemeris_degraded")
             or not (chart.positions or [])
         ):
             return chart

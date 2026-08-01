@@ -17,6 +17,8 @@ services:
       args:
         # 1 = --trusted-host для PyPI (сети с SSL inspection, см. backend/Dockerfile)
         PIP_TRUSTED_HOSTS: ${PIP_TRUSTED_HOSTS:-0}
+    environment:
+      SWISS_EPHEMERIS_PATH: /app/ephe
     ports:
       - "8081:8081"
 

@@ -37,25 +37,41 @@ class AstroService:
         if birth.get("timezone_offset_minutes") is not None:
             payload["timezone_offset_minutes"] = birth.get("timezone_offset_minutes")
         response = await self._client.post("/chart", json=payload)
-        if response.status_code == 422:
-            detail = response.json().get("detail") if response.headers.get("content-type", "").startswith("application/json") else None
-            code = None
-            if isinstance(detail, dict):
-                code = detail.get("code")
-            elif isinstance(detail, list) and detail and isinstance(detail[0], dict):
-                code = detail[0].get("code")
-            if code == "timezone_required":
-                # Honest empty chart — callers must not invent geometry.
-                return ChartResponse(
-                    mode="timezone_required",
-                    positions=[],
-                    houses={},
-                    metadata={
-                        "timezone_required": True,
-                        "ascendant_precision": "unavailable",
-                        "time_unknown": False,
-                    },
-                )
+        detail = None
+        if response.headers.get("content-type", "").startswith("application/json"):
+            try:
+                detail = response.json().get("detail")
+            except Exception:
+                detail = None
+        code = None
+        if isinstance(detail, dict):
+            code = detail.get("code")
+        elif isinstance(detail, list) and detail and isinstance(detail[0], dict):
+            code = detail[0].get("code")
+        if response.status_code == 422 and code == "timezone_required":
+            # Honest empty chart — callers must not invent geometry.
+            return ChartResponse(
+                mode="timezone_required",
+                positions=[],
+                houses={},
+                metadata={
+                    "timezone_required": True,
+                    "ascendant_precision": "unavailable",
+                    "time_unknown": False,
+                },
+            )
+        if response.status_code == 503 and code == "ephemeris_degraded":
+            return ChartResponse(
+                mode="ephemeris_degraded",
+                positions=[],
+                houses={},
+                metadata={
+                    "ephemeris_degraded": True,
+                    "ephemeris_source": "moshier_refused",
+                    "ascendant_precision": "unavailable",
+                    "time_unknown": False,
+                },
+            )
         response.raise_for_status()
         return ChartResponse.model_validate(response.json())
 

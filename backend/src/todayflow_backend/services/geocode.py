@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import math
 import unicodedata
 from functools import lru_cache
 from urllib.parse import quote
@@ -215,6 +216,12 @@ class Geocoder:
         self.data = _load_dataset()
 
     def lookup(self, query: str | None) -> Optional[dict]:
+        """Resolve a place — never silently pick among ambiguous countries/regions.
+
+        Unique curated/offline match with country in query → ok.
+        Multiple distinct candidates → ``need_choice`` + ``candidates`` (caller must
+        present UI choice). Silent first-hit is forbidden (same class as TZ bug).
+        """
         if not query:
             return None
         normalized = _normalize(query)
@@ -222,14 +229,33 @@ class Geocoder:
 
         if record is None and "," in normalized:
             city_only = normalized.split(",")[0].strip()
-            record = self.data.get(city_only)
+            # Only auto-use city-only offline hit when query already disambiguates country.
+            country_hint = normalized.split(",", 1)[1].strip()
+            city_rec = self.data.get(city_only)
+            if city_rec and country_hint and _normalize(str(city_rec.get("country") or "")) in country_hint:
+                record = city_rec
+            elif city_rec and "," in query:
+                # "City, Country" form — accept offline if country token matches.
+                if _normalize(str(city_rec.get("country") or "")) and any(
+                    tok and tok in _normalize(str(city_rec.get("country") or ""))
+                    for tok in country_hint.split()
+                ):
+                    record = city_rec
 
-        if record:
+        candidates = self.suggest(query, limit=8)
+        if record and not _is_ambiguous(candidates):
             return self._serialize_record(record)
-        online = _lookup_online(query.strip())
-        if online:
-            return online
-        return None
+
+        if not candidates:
+            return None
+        if _is_ambiguous(candidates):
+            return {
+                "need_choice": True,
+                "query": query.strip(),
+                "candidates": candidates,
+                "message": "Multiple places match — choose country/region explicitly.",
+            }
+        return candidates[0]
 
     def suggest(self, query: str | None, limit: int = 8) -> list[dict]:
         if not query:
@@ -281,19 +307,15 @@ class Geocoder:
 
         scored.sort(key=lambda item: (-item[0], item[1]))
         offline = [self._serialize_record(record) for _, _, record in scored[:limit]]
-        if len(offline) >= min(3, limit):
-            return offline
+        # Always merge Nominatim — small towns + same-name other countries must surface.
         online = _suggest_online(query.strip(), limit=limit)
-        if not online:
-            return offline
-        # Prefer offline hits first, then fill from Nominatim without duplicates.
         merged: list[dict] = list(offline)
         seen_keys = {
-            f"{_normalize(str(item.get('name') or ''))}|{_normalize(str(item.get('country') or ''))}"
+            _place_key(item)
             for item in merged
         }
         for item in online:
-            key = f"{_normalize(str(item.get('name') or ''))}|{_normalize(str(item.get('country') or ''))}"
+            key = _place_key(item)
             if key in seen_keys:
                 continue
             seen_keys.add(key)
@@ -306,6 +328,8 @@ class Geocoder:
         local_name = record.get("local_name")
         # Prefer a clean single-language label for persistence; keep bilingual only as display hint.
         display_name = f"{local_name or record['name']}, {record['country']}"
+        from todayflow_backend.services.birth_timezone_resolve_v1 import timezone_for_city_name
+
         return {
             "name": record["name"],
             "local_name": local_name,
@@ -313,7 +337,48 @@ class Geocoder:
             "country": record["country"],
             "latitude": record["latitude"],
             "longitude": record["longitude"],
+            "timezone_name": timezone_for_city_name(str(record.get("name") or "")),
         }
+
+
+def _place_key(item: dict) -> str:
+    return (
+        f"{_normalize(str(item.get('name') or ''))}|"
+        f"{_normalize(str(item.get('country') or ''))}|"
+        f"{round(float(item.get('latitude') or 0.0), 2)}|"
+        f"{round(float(item.get('longitude') or 0.0), 2)}"
+    )
+
+
+def _is_ambiguous(candidates: list[dict]) -> bool:
+    """True when ≥2 hits differ by country or are >80 km apart (same-name towns)."""
+    if len(candidates) < 2:
+        return False
+    countries = {
+        _normalize(str(c.get("country") or ""))
+        for c in candidates
+        if str(c.get("country") or "").strip()
+    }
+    if len(countries) >= 2:
+        return True
+    try:
+        lat0 = float(candidates[0]["latitude"])
+        lon0 = float(candidates[0]["longitude"])
+        for c in candidates[1:]:
+            if _haversine_km(lat0, lon0, float(c["latitude"]), float(c["longitude"])) > 80.0:
+                return True
+    except (TypeError, ValueError, KeyError):
+        return True
+    return False
+
+
+def _haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    r = 6371.0
+    p1, p2 = math.radians(lat1), math.radians(lat2)
+    dphi = math.radians(lat2 - lat1)
+    dlmb = math.radians(lon2 - lon1)
+    a = math.sin(dphi / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dlmb / 2) ** 2
+    return 2 * r * math.asin(min(1.0, math.sqrt(a)))
 
 
 def _map_nominatim_hit(first: dict, *, query: str) -> Optional[dict]:
@@ -321,36 +386,45 @@ def _map_nominatim_hit(first: dict, *, query: str) -> Optional[dict]:
     lon = first.get("lon")
     if lat is None or lon is None:
         return None
+    # Prefer city/town/village from addressdetails over raw display first token.
+    addr = first.get("address") if isinstance(first.get("address"), dict) else {}
+    city = (
+        addr.get("city")
+        or addr.get("town")
+        or addr.get("village")
+        or addr.get("municipality")
+        or addr.get("hamlet")
+    )
     display_name = str(first.get("display_name") or query)
     parts = [p.strip() for p in display_name.split(",") if p.strip()]
-    city = parts[0] if parts else query
-    country = parts[-1] if len(parts) > 1 else "Unknown"
+    if not city:
+        city = parts[0] if parts else query
+    country = addr.get("country") or (parts[-1] if len(parts) > 1 else "Unknown")
+    state = addr.get("state") or addr.get("region")
+    label_bits = [str(city)]
+    if state and _normalize(str(state)) not in _normalize(str(country)):
+        label_bits.append(str(state))
+    label_bits.append(str(country))
     return {
-        "name": city,
-        "local_name": city,
-        "display_name": f"{city}, {country}",
-        "country": country,
+        "name": str(city),
+        "local_name": str(city),
+        "display_name": ", ".join(label_bits),
+        "country": str(country),
+        "region": str(state) if state else None,
         "latitude": float(lat),
         "longitude": float(lon),
     }
 
 
-@lru_cache(maxsize=512)
-def _lookup_online(query: str) -> Optional[dict]:
-    if not query:
-        return None
-    hits = _suggest_online(query, limit=1)
-    return hits[0] if hits else None
-
-
 @lru_cache(maxsize=256)
 def _suggest_online(query: str, limit: int = 8) -> tuple:
-    """Nominatim multi-result fallback for cities outside the offline set."""
+    """Nominatim multi-result — coverage for small towns beyond curated CITY_DATA."""
     if not query:
         return ()
     url = (
         "https://nominatim.openstreetmap.org/search"
-        f"?format=jsonv2&addressdetails=1&limit={max(1, min(int(limit), 12))}&q={quote(query)}"
+        f"?format=jsonv2&addressdetails=1&featuretype=city"
+        f"&limit={max(1, min(int(limit), 12))}&q={quote(query)}"
     )
     request = Request(
         url,
@@ -360,13 +434,25 @@ def _suggest_online(query: str, limit: int = 8) -> tuple:
         },
     )
     try:
-        with urlopen(request, timeout=2.4) as response:
+        with urlopen(request, timeout=3.5) as response:
             payload = json.loads(response.read().decode("utf-8"))
             if not isinstance(payload, list) or not payload:
                 return ()
             out: list[dict] = []
             for row in payload:
                 if not isinstance(row, dict):
+                    continue
+                # Skip pure POI/street noise when class present.
+                cls = str(row.get("class") or "")
+                typ = str(row.get("type") or "")
+                if cls and cls not in {"place", "boundary"} and typ not in {
+                    "city",
+                    "town",
+                    "village",
+                    "hamlet",
+                    "municipality",
+                    "administrative",
+                }:
                     continue
                 mapped = _map_nominatim_hit(row, query=query)
                 if mapped:

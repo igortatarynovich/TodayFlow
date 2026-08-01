@@ -773,6 +773,8 @@ export type GeocodeResult = {
   local_name?: string | null;
   display_name?: string | null;
   country: string;
+  region?: string | null;
+  timezone_name?: string | null;
   latitude: number;
   longitude: number;
 };

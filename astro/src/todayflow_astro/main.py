@@ -4,15 +4,20 @@ from fastapi import FastAPI, HTTPException
 
 from todayflow_astro.core import models
 from todayflow_astro.services.engine import AstroEngine
-from todayflow_astro.services.errors import TimezoneRequiredError
+from todayflow_astro.services.errors import EphemerisDegradedError, TimezoneRequiredError
 
 app = FastAPI(title="TodayFlow Astrology Service")
+# Fail fast at import/startup if Swiss files missing (no silent Moshier process).
 engine = AstroEngine()
 
 
 @app.get("/health", tags=["ops"])
 def health() -> dict:
-    return {"status": "ok"}
+    return {
+        "status": "ok",
+        "ephemeris_source": "swiss_swieph",
+        "ephemeris_path": getattr(engine, "_ephe_path", None),
+    }
 
 
 @app.post("/chart", response_model=models.ChartResponse, tags=["charts"])
@@ -28,6 +33,14 @@ def compute_chart(payload: models.ChartRequest) -> models.ChartResponse:
             status_code=422,
             detail={
                 "code": TimezoneRequiredError.code,
+                "message": str(exc),
+            },
+        ) from exc
+    except EphemerisDegradedError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "code": EphemerisDegradedError.code,
                 "message": str(exc),
             },
         ) from exc

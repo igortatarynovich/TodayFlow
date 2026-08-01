@@ -10,7 +10,7 @@ from zoneinfo import ZoneInfo
 import swisseph as swe
 
 from todayflow_astro.core import models
-from todayflow_astro.services.errors import TimezoneRequiredError
+from todayflow_astro.services.errors import EphemerisDegradedError, TimezoneRequiredError
 
 ZODIAC = [
     "Aries",
@@ -28,7 +28,9 @@ ZODIAC = [
 ]
 
 # Единый флаг эфемерид для планет и чувствительных точек.
-_CALC_FLAG = getattr(swe, "FLG_SWIEPH", 0)
+_CALC_FLAG = int(getattr(swe, "FLG_SWIEPH", 2))
+_FLG_MOSEPH = int(getattr(swe, "FLG_MOSEPH", 4))
+_FLG_SWIEPH = int(getattr(swe, "FLG_SWIEPH", 2))
 
 
 class AstroEngine:
@@ -48,11 +50,36 @@ class AstroEngine:
     ]
 
     def __init__(self) -> None:
-        ephe_path = os.getenv("SWISS_EPHEMERIS_PATH")
-        if ephe_path:
+        ephe_path = (
+            os.getenv("SWISS_EPHEMERIS_PATH")
+            or os.getenv("SE_EPHE_PATH")
+            or "/app/ephe"
+        )
+        self._ephe_path = ephe_path
+        if ephe_path and os.path.isdir(ephe_path):
             swe.set_ephe_path(ephe_path)
+        self._assert_swiss_ephemeris_usable()
+
+    def _assert_swiss_ephemeris_usable(self) -> None:
+        """Fail closed if calc would use Moshier instead of Swiss files."""
+        try:
+            jd = swe.julday(2000, 1, 1, 12.0)
+            result = swe.calc_ut(jd, swe.SUN, _CALC_FLAG)
+        except swe.Error as exc:
+            raise EphemerisDegradedError(f"Swiss calc_ut failed: {exc}") from exc
+        retflag = 0
+        if isinstance(result, tuple) and len(result) == 2 and isinstance(result[1], int):
+            retflag = int(result[1])
+        if retflag & _FLG_MOSEPH and not (retflag & _FLG_SWIEPH):
+            raise EphemerisDegradedError(
+                f"calc_ut returned Moshier (retflag={retflag}); "
+                f"ephe path={self._ephe_path!r} missing sepl/semo files"
+            )
 
     def compute_chart(self, payload: models.ChartRequest) -> models.ChartResponse:
+        # pyswisseph keeps ephe path in process globals; re-assert before each chart.
+        if self._ephe_path and os.path.isdir(self._ephe_path):
+            swe.set_ephe_path(self._ephe_path)
         birth_dt_utc, precise, tz_meta = self._parse_birth_datetime_utc(payload)
         julian_day = self._julian_day(birth_dt_utc)
 
@@ -107,6 +134,8 @@ class AstroEngine:
             "timezone_name": tz_meta.get("timezone_name") or self._resolve_timezone_name(payload),
             "timezone_source": tz_meta.get("timezone_source"),
             "timezone_offset_minutes": tz_meta.get("timezone_offset_minutes"),
+            "ephemeris_source": "swiss_swieph",
+            "ephemeris_path": self._ephe_path,
         }
         meta = {k: v for k, v in meta.items() if v is not None}
 
@@ -148,10 +177,17 @@ class AstroEngine:
             result = swe.calc_ut(julian_day, body, _CALC_FLAG)
         except swe.Error:
             return None
+        retflag = 0
         if isinstance(result, tuple) and len(result) == 2 and isinstance(result[0], (list, tuple)):
             values = result[0]
+            if isinstance(result[1], int):
+                retflag = int(result[1])
         else:
             values = result
+        if retflag & _FLG_MOSEPH and not (retflag & _FLG_SWIEPH):
+            raise EphemerisDegradedError(
+                f"body={label} calc_ut fell back to Moshier (retflag={retflag})"
+            )
         longitude = float(values[0]) % 360.0
         sign, degree = self._sign_from_longitude(longitude)
         return models.PlanetPosition(body=label, sign=sign, degree=round(degree, 2), longitude=longitude)
@@ -174,7 +210,8 @@ class AstroEngine:
         self, julian_day: float, latitude: float, longitude: float
     ) -> Tuple[models.PlanetPosition | None, dict, list[float] | None]:
         try:
-            cusps, ascmc = swe.houses_ex(julian_day, swe.FLG_SWIEPH, latitude, longitude, b"P")
+            # pyswisseph: houses_ex(tjdut, lat, lon, hsys=b'P', flags=0)
+            cusps, ascmc = swe.houses_ex(julian_day, latitude, longitude, b"P", _FLG_SWIEPH)
         except TypeError:
             cusps, ascmc = swe.houses_ex(julian_day, latitude, longitude, b"P")
         except swe.Error:

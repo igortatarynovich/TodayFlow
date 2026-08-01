@@ -124,10 +124,14 @@ export function useCoreSetupFlow(options: UseCoreSetupFlowOptions = {}) {
           place.length >= 2 &&
           (typeof next.latitude !== "number" || typeof next.longitude !== "number")
         ) {
-          void getJson<{ latitude?: number; longitude?: number; local_name?: string; name?: string }>(
-            `/astro/geocode?q=${encodeURIComponent(place)}`,
-          )
-            .then((hit) => {
+          // Only auto-fill coords when suggest has a single unambiguous hit —
+          // never silent first-of-many (same class as TZ civil-as-UT bug).
+          void getJson<
+            Array<{ latitude?: number; longitude?: number; display_name?: string; country?: string }>
+          >(`/astro/geocode/suggest?q=${encodeURIComponent(place)}&limit=6`)
+            .then((hits) => {
+              if (!Array.isArray(hits) || hits.length !== 1) return;
+              const hit = hits[0];
               if (typeof hit?.latitude !== "number" || typeof hit?.longitude !== "number") return;
               setSetupForm((current) => {
                 if ((current.location_name || "").trim().toLowerCase() !== place.toLowerCase()) {
@@ -137,11 +141,12 @@ export function useCoreSetupFlow(options: UseCoreSetupFlowOptions = {}) {
                   ...current,
                   latitude: hit.latitude!,
                   longitude: hit.longitude!,
+                  location_name: (hit.display_name || current.location_name || "").trim(),
                 };
               });
             })
             .catch(() => {
-              /* suggest/lookup soft-fail — user can re-pick city */
+              /* suggest soft-fail — user can re-pick city */
             });
         }
         return next;
