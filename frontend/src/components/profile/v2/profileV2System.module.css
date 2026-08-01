@@ -2237,6 +2237,106 @@
   scroll-snap-type: x proximity;
 }
 
+.effortSphereRail {
+  list-style: none;
+  margin: 0.85rem 0 0;
+  padding: 0.2rem 0.1rem 0.95rem;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.85rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+}
+
+.effortSphereSnapCard {
+  flex: 0 0 min(17.75rem, 78vw);
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  margin: 0;
+  min-width: 0;
+  box-sizing: border-box;
+  border-radius: 1.35rem;
+  border: 1px solid var(--tf-border, #e8e2d6);
+  background:
+    radial-gradient(ellipse 90% 70% at 10% 0%, rgba(201, 169, 110, 0.14) 0%, transparent 55%),
+    var(--tf-surface, #fff);
+  box-shadow: 0 12px 28px rgba(42, 37, 32, 0.06);
+  transition:
+    box-shadow var(--tf-motion-card, 320ms) var(--tf-motion-ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+    border-color var(--tf-motion-micro, 150ms) ease,
+    flex-basis var(--tf-motion-card, 320ms) var(--tf-motion-ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+    transform var(--tf-motion-micro, 150ms) var(--tf-motion-ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+}
+
+.effortSphereSnapCardExpanded {
+  flex-basis: min(21.5rem, 86vw);
+  border-color: color-mix(in srgb, var(--tf-accent-gold, #c9a96e) 45%, var(--tf-border, #e8e2d6));
+  box-shadow: 0 16px 34px rgba(61, 50, 40, 0.14);
+  transform: translateY(-1px);
+}
+
+.effortSphereSnapHit {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.55rem;
+  width: 100%;
+  min-height: 9.25rem;
+  margin: 0;
+  padding: 1.1rem 1.15rem 1.15rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.effortSphereSnapHit:disabled {
+  cursor: default;
+}
+
+.effortSphereTeaser {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--tf-ink-soft, #5a5450);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.effortSphereExpandHint {
+  margin: auto 0 0;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--tf-accent-gold-600, #8b6a3e);
+}
+
+.effortSphereDetail {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.effortSphereTitleText {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .effortSphereSnapCard,
+  .effortSphereSnapCardExpanded {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
 .effortSphereChip {
   display: inline-flex;
   align-items: flex-start;
@@ -2252,9 +2352,10 @@
 }
 
 .effortSphereDot {
-  width: 0.55rem;
-  height: 0.55rem;
-  margin-top: 0.35rem;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-top: 0;
+  margin-left: 0.25rem;
   border-radius: 999px;
   background: var(--tf-accent-gold, #c9a96e);
   flex: 0 0 auto;
@@ -2268,24 +2369,30 @@
 }
 
 .effortSphereTitle {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  line-height: 1.3;
+  margin: 0;
+  font-family: var(--tf-font-display);
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.25;
   color: var(--tf-ink);
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.45rem;
+  width: 100%;
 }
 
 .effortSphereMotif {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.35rem;
-  height: 1.35rem;
+  width: 2rem;
+  height: 2rem;
   flex: 0 0 auto;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--tf-accent-gold, #c9a96e) 45%, transparent);
+  background: color-mix(in srgb, var(--tf-accent-gold-wash, #f9f4e8) 75%, transparent);
   color: var(--tf-accent-gold, #8b6a3e);
-  opacity: 0.88;
+  opacity: 1;
 }
 
 .effortSphereNeed {
@@ -3091,6 +3198,7 @@
 :global([data-theme="dark"]) .insightQuote,
 :global([data-theme="dark"]) .effortSphereChip,
 :global([data-theme="dark"]) .effortSphereReadCard,
+:global([data-theme="dark"]) .effortSphereSnapCard,
 :global([data-theme="dark"]) .effortFocusCard,
 :global([data-theme="dark"]) .characterPanel,
 :global([data-theme="dark"]) .mobileDepthChip {
@@ -3151,6 +3259,20 @@
 :global([data-theme="dark"]) .effortSphereChip {
   border-color: rgba(212, 184, 150, 0.28);
   background: rgba(253, 251, 247, 0.05);
+}
+
+:global([data-theme="dark"]) .effortSphereMotif {
+  border-color: rgba(212, 184, 150, 0.4);
+  background: rgba(201, 169, 110, 0.12);
+  color: #d4b896;
+}
+
+:global([data-theme="dark"]) .effortSphereTeaser {
+  color: #c4b8a8;
+}
+
+:global([data-theme="dark"]) .effortSphereExpandHint {
+  color: #d4b896;
 }
 
 :global([data-theme="dark"]) .effortSphereTitle {

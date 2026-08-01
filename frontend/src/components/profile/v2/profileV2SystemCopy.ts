@@ -47,10 +47,11 @@ export const PROFILE_V2_COPY = {
       livingNote: "Контекст из отметок — не доказательство этого узла.",
     },
     effort: {
-      title: "Твой вектор на развитие",
-      lead: "Одно направление усилия — и где оно проявляется в сферах жизни.",
-      focusLabel: "Фокус периода",
+      title: "Куда прикладывать усилия",
+      lead: "Одно направление — не ещё одно описание «кто ты».",
+      focusLabel: "",
       spheresLabel: "Где это проявится сильнее",
+      sphereExpandHint: "Нажми — подробнее",
       sphereHow: "Как проявляется",
       sphereNeed: "Нужно",
       sphereRisk: "Риск",
@@ -59,7 +60,7 @@ export const PROFILE_V2_COPY = {
     },
     bridge: {
       title: "Мост в день",
-      cta: "Открыть историю дня",
+      cta: "Открыть Today",
       lead: "",
     },
     explore: {

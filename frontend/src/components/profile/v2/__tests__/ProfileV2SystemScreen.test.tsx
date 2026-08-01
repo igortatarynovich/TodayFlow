@@ -274,6 +274,22 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     expect(screen.getByTestId("profile-v2-effort-sphere-mission")).toHaveTextContent(/Миссия/i);
   });
 
+  it("swipes effort spheres as cards and expands detail on tap", async () => {
+    const user = userEvent.setup();
+    renderJourney();
+    expect(screen.getByTestId("profile-v2-effort-sphere-rail")).toBeInTheDocument();
+    expect(screen.getByTestId("profile-v2-effort-sphere-mission")).toHaveAttribute(
+      "data-expanded",
+      "false",
+    );
+    await user.click(screen.getByTestId("profile-v2-effort-sphere-toggle-mission"));
+    expect(screen.getByTestId("profile-v2-effort-sphere-mission")).toHaveAttribute(
+      "data-expanded",
+      "true",
+    );
+    expect(screen.getByTestId("profile-v2-effort-sphere-detail-mission")).toBeInTheDocument();
+  });
+
   it("does not duplicate insight help when it matches effort vector", () => {
     renderJourney();
     expect(screen.getByTestId("profile-v2-effort-vector")).toHaveTextContent("тихий проход");
