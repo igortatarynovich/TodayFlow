@@ -18,7 +18,7 @@ export type TodayDayColorGuide = {
   unavailable: boolean;
 };
 
-/** Canonical 8 — matches BE COLOR_CATALOG_V1. */
+/** Canonical palette — matches BE COLOR_CATALOG_V1 (hex visual only). */
 export const COLOR_HEX: Record<string, string> = {
   Лазурь: "#4A9FD8",
   "Глубокий синий": "#1F3A6B",
@@ -28,6 +28,13 @@ export const COLOR_HEX: Record<string, string> = {
   Коралловый: "#F27A5E",
   Бордовый: "#6E1F35",
   Оливковый: "#71773A",
+  // Layer A expansion
+  Малахитовый: "#0B6E4F",
+  "Пыльная роза": "#C9A7A0",
+  Мускатный: "#8B5A2B",
+  Аметистовый: "#6B3FA0",
+  Кобальтовый: "#0047AB",
+  "Слоновая кость": "#F3EDE0",
 };
 
 export const COLOR_DAY_UNAVAILABLE_RU = "Цвет дня не определён.";

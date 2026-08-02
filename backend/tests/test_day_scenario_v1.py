@@ -314,9 +314,20 @@ def test_color_catalog_is_knowledge_not_sot():
     )
 
     rows = list_color_knowledge()
-    assert len(rows) == 8
+    assert len(rows) == 14  # 8 core + 6 layer-A expansion
     assert all("tags" in r and "name" in r and "symbolic_property" in r for r in rows)
     assert validate_color_catalog_v1() == []
+    names = {str(r["name"]) for r in rows}
+    assert {"Малахитовый", "Пыльная роза", "Мускатный", "Аметистовый", "Кобальтовый", "Слоновая кость"} <= names
+    # Layer B must not land until generator emits their tags
+    assert not names & {
+        "Шафрановый",
+        "Терракотовый",
+        "Гранатовый",
+        "Хризолитовый",
+        "Шампань",
+        "Дымчато-сиреневый",
+    }
 
 
 def test_celestial_daily_symbol_presets_use_catalog_colors_only():

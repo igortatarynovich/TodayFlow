@@ -1,0 +1,64 @@
+{
+  "batch": "color_catalog_expansion_v1",
+  "decision": "Merge layer A only (14 colors). Layer B stays proposal until _needed_color_tags grows — no orphan rows.",
+  "merged_into": [
+    "backend/src/todayflow_backend/services/day_color_catalog_v1.py",
+    "frontend/src/lib/todayDayColorGuide.ts (COLOR_HEX)"
+  ],
+  "layer_a_merged": [
+    "Малахитовый",
+    "Пыльная роза",
+    "Мускатный",
+    "Аметистовый",
+    "Кобальтовый",
+    "Слоновая кость"
+  ],
+  "layer_b_deferred": {
+    "reason": "Requires generator branches for creativity/home + emotional poles; merging now would recreate unreachable catalog rows.",
+    "colors": [
+      {
+        "name": "Шафрановый",
+        "proposed_tags": ["creative_spark", "generous_warmth"],
+        "target_sphere": "creativity",
+        "symbolic_property": "искра без спешки — творческий импульс, которому не нужно оправдание",
+        "generator_hint": "if sphere == 'creativity': tags.update({'creative_spark', 'generous_warmth'})"
+      },
+      {
+        "name": "Терракотовый",
+        "proposed_tags": ["home_warmth", "belonging"],
+        "target_sphere": "home",
+        "symbolic_property": "тепло дома как опора — принадлежность месту, не просто устойчивость",
+        "generator_hint": "if sphere == 'home': tags.update({'home_warmth', 'belonging'})"
+      },
+      {
+        "name": "Гранатовый",
+        "proposed_tags": ["passionate_assertion", "vital_courage"],
+        "target_sphere": "relationships",
+        "symbolic_property": "честная страсть — показать желание, а не смягчать его до вежливости",
+        "generator_hint": "keyword blob: страст/влечен/желан → passionate_assertion, vital_courage"
+      },
+      {
+        "name": "Хризолитовый",
+        "proposed_tags": ["confident_abundance", "steady_growth"],
+        "target_sphere": "money",
+        "symbolic_property": "уверенность в росте — не только решение, но и спокойное ощущение достатка",
+        "generator_hint": "expand money sphere branch with confident_abundance"
+      },
+      {
+        "name": "Шампань",
+        "proposed_tags": ["quiet_celebration", "light_gratitude"],
+        "target_sphere": "any (favorable resolution)",
+        "symbolic_property": "тихая благодарность — отметить, что получилось, без громкого жеста",
+        "generator_hint": "hook on conflict resolution / favorable verdict — not trap-only dictionary"
+      },
+      {
+        "name": "Дымчато-сиреневый",
+        "proposed_tags": ["gentle_closure", "honor_loss"],
+        "target_sphere": "any (closure/loss)",
+        "symbolic_property": "мягкое прощание — закрыть тему честно, не пряча и не драматизируя",
+        "generator_hint": "keyword blob: конец/заверш/отпус/потер → gentle_closure, honor_loss"
+      }
+    ]
+  },
+  "avoid_note": "Layer A avoid amplifies remapped to LIVE_AVOID_AMPLIFY_TAGS (no numb/flat)."
+}

@@ -4,9 +4,10 @@ Phase B2: scenario props pick a color from this catalog *because* a scene needs
 a quality; catalog copy is never shipped as the day's meaning without
 origin_scene_id + conflict link.
 
-Color is NOT an independent daily draw (unlike card/number). Tag coverage for
-`_needed_color_tags` / `_amplify_tags_for_trap` is intentionally closed at 8
-entries — deepen meaning, do not expand the palette without Architecture impact.
+Color is NOT an independent daily draw (unlike card/number). Palette may deepen
+for ritual richness when new rows reuse existing `_needed_color_tags` only
+(layer A). New tag vocabulary (layer B: creativity/home/…) requires generator
+changes first — never ship unreachable catalog rows (orphan risk).
 
 Legacy `celestial_events_builder` presets remain a seed/index path until B3 wire
 projection replaces them.
@@ -167,6 +168,103 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "intensity_default": "тёплый акцент у лица или на руках",
         "avoid_candidates": (
             {"name": "Холодный стальной", "amplifies": ("harsh", "over_control")},
+        ),
+    },
+    # --- Layer A expansion (existing tags only; 2026-08-02) ---
+    {
+        "name": "Малахитовый",
+        "tags": ("restore", "ground", "depth"),
+        "symbolic_property": "глубокое восстановление под защитой — не отдых на бегу, а настоящая пауза",
+        "apply": {
+            "clothing": "Малахитовый свитер или тёмно-зелёный слой outerwear.",
+            "accessory": "Кольцо или подвеска с малахитовым отливом.",
+            "workspace": "Тёмно-зелёный предмет на столе, не растение — камень или ткань.",
+            "makeup": None,
+            "ui_or_bg": None,
+        },
+        "intensity_default": "один глубокий акцент, не россыпь мелочей",
+        "avoid_candidates": (
+            {"name": "Плоский белый «стерильность»", "amplifies": ("pressure", "harsh")},
+        ),
+    },
+    {
+        "name": "Пыльная роза",
+        "tags": ("soft_speech", "tempo_gentle", "communication"),
+        "symbolic_property": "контакт на самом тихом регистре — мягче, чем тепло, ближе к бережности",
+        "apply": {
+            "clothing": "Пыльно-розовый свитер, шарф или блуза.",
+            "accessory": "Лёгкий шёлковый платок того же тона.",
+            "workspace": None,
+            "makeup": "Приглушённая розовая помада без блеска.",
+            "ui_or_bg": None,
+        },
+        "intensity_default": "мягкий, почти незаметный тон — не яркое пятно",
+        "avoid_candidates": (
+            {"name": "Кислотно-красный", "amplifies": ("alarm", "harsh")},
+        ),
+    },
+    {
+        "name": "Мускатный",
+        "tags": ("ground", "steady", "body"),
+        "symbolic_property": "тёплая устойчивость через тело — заземление, которое греет, а не просто держит",
+        "apply": {
+            "clothing": "Мускатный свитер или пальто тёплого коричневого.",
+            "accessory": "Кожаный аксессуар цвета мускатного ореха.",
+            "workspace": None,
+            "makeup": None,
+            "ui_or_bg": None,
+        },
+        "intensity_default": "один тёплый слой",
+        "avoid_candidates": (
+            {"name": "Ледяной серебристый", "amplifies": ("harsh", "over_control")},
+        ),
+    },
+    {
+        "name": "Аметистовый",
+        "tags": ("inner_honesty", "pause_before_act", "clarity", "depth"),
+        "symbolic_property": "ясность, добытая через паузу, — не просто «подожди», а «теперь видно»",
+        "apply": {
+            "clothing": "Аметистовый шарф или свитер глубокого фиолетового.",
+            "accessory": "Кольцо или серьги с фиолетовым камнем.",
+            "workspace": None,
+            "makeup": None,
+            "ui_or_bg": None,
+        },
+        "intensity_default": "один насыщенный акцент",
+        "avoid_candidates": (
+            {"name": "Кричащий фуксия", "amplifies": ("scatter", "noise")},
+        ),
+    },
+    {
+        "name": "Кобальтовый",
+        "tags": ("calm_clarity", "decision", "focus"),
+        "symbolic_property": "решительная ясность — не фон для решения, а сам толчок его принять",
+        "apply": {
+            "clothing": "Кобальтовая рубашка или свитер.",
+            "accessory": "Ручка, часы или чехол насыщенного синего.",
+            "workspace": "Кобальтовый стикер на самом важном пункте дня.",
+            "makeup": None,
+            "ui_or_bg": "Кобальтовый акцент на главной задаче.",
+        },
+        "intensity_default": "один яркий, но не кричащий акцент",
+        "avoid_candidates": (
+            {"name": "Блёклый бежевый «размытость»", "amplifies": ("scatter", "noise")},
+        ),
+    },
+    {
+        "name": "Слоновая кость",
+        "tags": ("hold_distance", "boundaries", "slow_reply", "clarity"),
+        "symbolic_property": "лёгкая дистанция — граница, которая не давит и не тяжелеет",
+        "apply": {
+            "clothing": "Молочно-белый свитер или рубашка цвета слоновой кости.",
+            "accessory": "Светлый шарф или сумка нейтрального тона.",
+            "workspace": "Один светлый нейтральный предмет на столе.",
+            "makeup": None,
+            "ui_or_bg": "Светлый нейтральный фон в заметках дня.",
+        },
+        "intensity_default": "фон, не акцент — можно взять базой образа",
+        "avoid_candidates": (
+            {"name": "Тяжёлый чёрный «давление»", "amplifies": ("pressure", "harsh")},
         ),
     },
 ]
