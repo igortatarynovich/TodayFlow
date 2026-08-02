@@ -319,6 +319,29 @@ def test_color_catalog_is_knowledge_not_sot():
     assert validate_color_catalog_v1() == []
 
 
+def test_celestial_daily_symbol_presets_use_catalog_colors_only():
+    """Legacy seed path must not reintroduce orphan color names outside COLOR_CATALOG_V1."""
+    from todayflow_backend.services.celestial_events_builder import (
+        _DAILY_SYMBOL_PRESETS,
+        _build_color_symbol,
+    )
+    from todayflow_backend.services.day_color_catalog_v1 import COLOR_CATALOG_V1
+
+    canon = {str(r["name"]) for r in COLOR_CATALOG_V1}
+    orphans = {"Перламутровый", "Сливовый", "Песочный", "Серебряный"}
+    preset_colors = {p["color"] for p in _DAILY_SYMBOL_PRESETS}
+    assert not (preset_colors & orphans)
+    assert preset_colors <= canon
+    for name in canon:
+        sym = _build_color_symbol(name)
+        assert sym["benefit_ru"]
+        assert sym["name"] == name
+    # Unknown name: no invented calm prose
+    empty = _build_color_symbol("Перламутровый")
+    assert empty["benefit_ru"] == ""
+    assert empty["clothing_ru"] == ""
+
+
 def test_conflict_driver_ids_prefer_natal_pt_over_pack():
     """Wave 2 D.2b: when personal_natal_activations has pt-*, those become conflict.driver_ids."""
     pack = _pack_merc_moon()

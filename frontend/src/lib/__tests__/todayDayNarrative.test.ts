@@ -107,13 +107,15 @@ describe("buildTodayDayNarrative", () => {
     hero: { themeHeadline: contract.day_story!.theme!, themeShort: contract.day_story!.theme! },
     skyCards: [] as TodaySkyCard[],
     colorGuide: {
-      name: "синий",
+      name: "Глубокий синий",
+      hex: "#1F3A6B",
       benefit: "Сдерживает спешку и помогает говорить точнее.",
       clothing: "В деталях одежды или аксессуаре.",
       accessory: "Браслет.",
       amount: "Один акцент.",
       avoidColor: "Яркий красный",
       avoidWhy: "Разгоняет темп в переговорах.",
+      unavailable: false,
     } as TodayDayColorGuide,
     tarotImpact: {
       title: "Сила",

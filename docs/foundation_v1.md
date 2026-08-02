@@ -259,7 +259,7 @@ Owner: подтвердил остальное as-is; эти три пункта
 | Домен | Конкуренты | Цель |
 |-------|------------|------|
 | Таро | FE `todayTarotCardsRu.ts` vs `tarot_full_deck.json` vs `DATA/reference/tarot/knowledge_v1/` vs смысл из `tarot_explainer.py` | Один SoT; остальное — производные или deprecated |
-| Цвет | BE `day_color_catalog_v1.py` vs FE `todayDayColorGuide.ts` | BE catalog SoT (8 colors, scene-tag pick); FE hex/fallback only — editorial `docs/color_editorial_v1.json` |
+| Цвет | BE `day_color_catalog_v1.py` vs FE `todayDayColorGuide.ts` | BE catalog SoT (8 colors); FE = `COLOR_HEX` only + honest unavailable; orphans remapped in celestial seed; editorial `docs/color_editorial_v1.json` |
 | Нумерология | Векторы ритма без прозы (`NUMBER_RHYTHM_BY_VALUE`) + machine cores | Заполнить/заменить атомарной прозой из §2.8 |
 | Астро reference | `DATA/astrology_reference/*`, `DATA/reference/astrology/machine/*` | Свести к lookup из §2 (после sign-off) |
 | Валентность аспектов | Литералы в `sphere_score_v0` / `top_driver_v1` | Lookup из §2.4 / `aspects.json` |

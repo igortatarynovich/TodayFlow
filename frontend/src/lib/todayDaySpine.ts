@@ -8,7 +8,11 @@ import type { MorningRitualData } from "@/components/today/todayPageUtils";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import { isDomainLensPresent } from "@/lib/todayContract";
 import { focusTopicLabel, moodLabelRu } from "@/lib/todayDayDialogue";
-import { colorGuideSkyStory, resolveTodayDayColorGuide } from "@/lib/todayDayColorGuide";
+import {
+  COLOR_DAY_UNAVAILABLE_RU,
+  colorGuideSkyStory,
+  resolveTodayDayColorGuide,
+} from "@/lib/todayDayColorGuide";
 import { dayStoryHeadline, dayStoryPulseLine, hasAuthoritativeDayStory } from "@/lib/todayContractMapper";
 import { isRuUserFacingText, sanitizeRuCopy } from "@/lib/todaySynthesisTextPolicy";
 import { redactUnrevealedRitualProse } from "@/lib/todayRitualRevealSanitize";
@@ -625,7 +629,11 @@ export function buildSkyInfluenceCards(input: {
       icon: "palette",
       label: "Цвет",
       title: colorName,
-      story: guide ? colorGuideSkyStory(guide) : apiSymbols?.color?.story_ru ?? "Оттенок, который помогает удержать сегодняшний ритм.",
+      story: guide
+        ? colorGuideSkyStory(guide)
+        : typeof apiSymbols?.color?.story_ru === "string" && apiSymbols.color.story_ru.trim()
+          ? apiSymbols.color.story_ru.trim()
+          : COLOR_DAY_UNAVAILABLE_RU,
     });
   }
 

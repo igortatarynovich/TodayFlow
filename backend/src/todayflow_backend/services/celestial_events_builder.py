@@ -15,6 +15,7 @@ from todayflow_backend.services.day_sources.timed_lunar_aspects import (
 from todayflow_backend.services.day_sources.void_of_course import build_void_of_course_v0
 from todayflow_backend.services.lunar import LunarService
 from todayflow_backend.services.retrograde import RetrogradeService
+from todayflow_backend.services.day_color_catalog_v1 import get_color_entry
 
 _LUNAR_ASPECT_STORY: dict[str, str] = {
     "conjunction": "Луна сливается с темой планеты — эмоции и событие звучат в одной тональности.",
@@ -75,6 +76,9 @@ _SIGN_RU: dict[str, str] = {
     "Pisces": "Рыбы",
 }
 
+# Seed presets only — colors must be the 8 from day_color_catalog_v1.
+# Orphans Перламутровый/Сливовый/Песочный/Серебряный remapped (2026-08-02) to catalog names;
+# totem/stone kept for seed variety.
 _DAILY_SYMBOL_PRESETS: list[dict[str, str]] = [
     {"color": "Лазурь", "stone": "Сапфир", "totem_id": "eagle", "totem_name": "Орёл", "totem_emoji": "🦅",
      "totem_story": "Орёл напоминает смотреть на день с высоты — один приоритет важнее десяти суетных."},
@@ -90,57 +94,58 @@ _DAILY_SYMBOL_PRESETS: list[dict[str, str]] = [
      "totem_story": "Дельфин — про лёгкость связи: разговор может снять напряжение быстрее давления."},
     {"color": "Бордовый", "stone": "Гранат", "totem_id": "fox", "totem_name": "Лиса", "totem_emoji": "🦊",
      "totem_story": "Лиса учит гибкости — обойти препятствие иногда мудрее, чем ломать его."},
-    {"color": "Перламутровый", "stone": "Жемчуг", "totem_id": "whale", "totem_name": "Кит", "totem_emoji": "🐋",
+    # was Перламутровый → Индиго (depth / pause)
+    {"color": "Индиго", "stone": "Жемчуг", "totem_id": "whale", "totem_name": "Кит", "totem_emoji": "🐋",
      "totem_story": "Кит напоминает о глубине: большие смыслы не терпят спешки."},
     {"color": "Оливковый", "stone": "Нефрит", "totem_id": "turtle", "totem_name": "Черепаха", "totem_emoji": "🐢",
      "totem_story": "Черепаха — символ терпения: медленный шаг всё равно двигает вперёд."},
-    {"color": "Сливовый", "stone": "Обсидиан", "totem_id": "panther", "totem_name": "Пантера", "totem_emoji": "🐆",
+    # was Сливовый → Бордовый (focus / boundaries)
+    {"color": "Бордовый", "stone": "Обсидиан", "totem_id": "panther", "totem_name": "Пантера", "totem_emoji": "🐆",
      "totem_story": "Пантера усиливает концентрацию — один точный ход лучше шумной активности."},
-    {"color": "Песочный", "stone": "Яшма", "totem_id": "horse", "totem_name": "Конь", "totem_emoji": "🐴",
+    # was Песочный → Оливковый (ground / steady)
+    {"color": "Оливковый", "stone": "Яшма", "totem_id": "horse", "totem_name": "Конь", "totem_emoji": "🐴",
      "totem_story": "Конь несёт энергию движения — направь её в одну дорогу, не в десять."},
-    {"color": "Серебряный", "stone": "Лунный камень", "totem_id": "swan", "totem_name": "Лебедь", "totem_emoji": "🦢",
+    # was Серебряный → Глубокий синий (distance / cool clarity)
+    {"color": "Глубокий синий", "stone": "Лунный камень", "totem_id": "swan", "totem_name": "Лебедь", "totem_emoji": "🦢",
      "totem_story": "Лебедь — про достоинство в простом: спокойная ясность сильнее демонстрации."},
 ]
 
-_COLOR_DAY_GUIDE: dict[str, dict[str, str]] = {
-    "Лазурь": {
-        "benefit_ru": "Успокаивает ум и помогает держать ясность, когда день требует решений.",
-        "clothing_ru": "Светлая рубашка, шарф или носки лазурного оттенка.",
-        "accessory_ru": "Тонкий браслет, часы с голубым циферблатом или блокнот в мягком синем.",
-        "amount_ru": "Достаточно одного акцента — 10–15% образа.",
-        "avoid_color_ru": "Кислотно-оранжевый",
-        "avoid_why_ru": "Разгоняет темп и мешает спокойному фокусу лазури.",
-    },
-    "Глубокий синий": {
-        "benefit_ru": "Даёт опору и глубину — легче не сорваться на суету.",
-        "clothing_ru": "Тёмно-синий свитер, пиджак или джинсы глубокого синего.",
-        "accessory_ru": "Сумка, ремень или перстень в спокойном синем.",
-        "amount_ru": "Один заметный элемент или два мелких.",
-        "avoid_color_ru": "Неоновый жёлтый",
-        "avoid_why_ru": "Резкий контраст перегружает день, который просит собранности.",
-    },
-    "Индиго": {
-        "benefit_ru": "Усиливает интуицию — услышать себя до действия.",
-        "clothing_ru": "Индиго в нижнем слое: футболка, носки.",
-        "accessory_ru": "Платок, шарф или обложка телефона.",
-        "amount_ru": "Мягкий акцент ближе к телу — достаточно почувствовать.",
-        "avoid_color_ru": "Красный «сигнал тревоги»",
-        "avoid_why_ru": "Толкает к реакции раньше, чем успеешь понять, что важно.",
-    },
-}
-
 
 def _build_color_symbol(color_name: str) -> dict[str, str]:
-    guide = _COLOR_DAY_GUIDE.get(color_name, {})
+    """Project day_color_catalog_v1 into morning daily_symbols.color — no invented prose."""
+    name = (color_name or "").strip()
+    entry = get_color_entry(name)
+    if not entry:
+        return {
+            "name": name,
+            "story_ru": "",
+            "benefit_ru": "",
+            "clothing_ru": "",
+            "accessory_ru": "",
+            "amount_ru": "",
+            "avoid_color_ru": "",
+            "avoid_why_ru": "",
+        }
+    apply = dict(entry.get("apply") or {})
+    avoid = list(entry.get("avoid_candidates") or ())
+    first_avoid = avoid[0] if avoid else {}
+    avoid_name = str((first_avoid or {}).get("name") or "").strip()
+    amplifies = tuple((first_avoid or {}).get("amplifies") or ())
+    avoid_why = (
+        f"Усиливает срыв в «{' / '.join(amplifies[:2])}»."
+        if amplifies
+        else ""
+    )
+    benefit = str(entry.get("symbolic_property") or "").strip()
     return {
-        "name": color_name,
-        "story_ru": guide.get("benefit_ru") or "Оттенок, который помогает удержать сегодняшний ритм.",
-        "benefit_ru": guide.get("benefit_ru") or "Поддерживает спокойный фокус на день.",
-        "clothing_ru": guide.get("clothing_ru") or "Один предмет одежды этого оттенка.",
-        "accessory_ru": guide.get("accessory_ru") or "Небольшой аксессуар того же тона.",
-        "amount_ru": guide.get("amount_ru") or "Достаточно одного акцента — цвет дня не костюм.",
-        "avoid_color_ru": guide.get("avoid_color_ru") or "Слишком кричащий неон",
-        "avoid_why_ru": guide.get("avoid_why_ru") or "Перегружает день и мешает выбранному ритму.",
+        "name": str(entry.get("name") or name).strip(),
+        "story_ru": benefit,
+        "benefit_ru": benefit,
+        "clothing_ru": str(apply.get("clothing") or "").strip(),
+        "accessory_ru": str(apply.get("accessory") or "").strip(),
+        "amount_ru": str(entry.get("intensity_default") or "").strip(),
+        "avoid_color_ru": avoid_name,
+        "avoid_why_ru": avoid_why,
     }
 
 

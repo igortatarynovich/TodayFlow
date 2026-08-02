@@ -6,6 +6,7 @@
     "backend/src/todayflow_backend/services/day_color_catalog_v1.py"
   ],
   "avoid_candidates_fix": "Remapped decorative amplify tags heavy/numb/flat/overwork (never emitted by _amplify_tags_for_trap) to live set: coral→all_or_nothing/pressure/over_control; emerald→pressure/over_control/harsh.",
+  "fe_cutover": "todayDayColorGuide.ts → COLOR_HEX only; prose from api/scenario. Orphan FE colors deleted after celestial_events_builder remapped Перламутровый→Индиго, Сливовый→Бордовый, Песочный→Оливковый, Серебряный→Глубокий синий. _build_color_symbol reads day_color_catalog_v1 (no silent invent).",
   "schema": "symbolic_property = short scene phrase (live B2 bridge); apply = short Action-screen lines; canon_grounding = editorial ledger only (not product payload).",
   "colors": [
     {
