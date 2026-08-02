@@ -50,7 +50,7 @@ describe("todayDaySpine", () => {
       },
       cardId: 12,
       cardName: "Повешенный",
-      numerologyValue: "20",
+      numerologyValue: "2",
       numerologyMeaning: "Путь жизни",
       ritualComplete: true,
       tarotPicked: true,
@@ -59,7 +59,7 @@ describe("todayDaySpine", () => {
     expect(spine.thesis).toMatch(/спеш|пауз|ритм/i);
     expect(spine.thesis.split(/[.!?]/).filter(Boolean)).toHaveLength(1);
     expect(spine.tarotBody).toMatch(/Повешенный/);
-    expect(spine.numberBody).toMatch(/20|терпен/i);
+    expect(spine.numberBody).toMatch(/баланс|договорённ/i);
     expect(spine.numberBody).not.toMatch(/Путь жизни/i);
     expect(spine.skyCards.some((c) => c.id === "personal-transit")).toBe(true);
     expect(spine.skyCards.some((c) => c.id === "totem")).toBe(true);
@@ -80,11 +80,17 @@ describe("todayDaySpine", () => {
     expect(body).toMatch(/архетип дня/i);
   });
 
-  it("builds number rhythm for weak numerology meaning", () => {
+  it("builds number rhythm for weak numerology meaning from number_base", () => {
+    const registry = new SpineRegistry();
+    const line = buildNumberRhythmFacet("2", "Путь жизни", registry);
+    expect(line).toMatch(/баланс|договорённ/i);
+    expect(line).not.toMatch(/Путь жизни/i);
+  });
+
+  it("does not invent rhythm for bogus value 20", () => {
     const registry = new SpineRegistry();
     const line = buildNumberRhythmFacet("20", "Путь жизни", registry);
-    expect(line).toMatch(/20|терпен/i);
-    expect(line).not.toMatch(/Путь жизни/i);
+    expect(line).toBeNull();
   });
 
   it("adjusts thesis for anxious mood", () => {

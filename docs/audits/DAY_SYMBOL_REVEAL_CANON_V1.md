@@ -63,7 +63,7 @@ See [TAROT_CARD_BASE_V1.md](../tarot/TAROT_CARD_BASE_V1.md).
 
 ## Number / color base
 
-- `number_base_v1` — values 1–9, 11, 22, 33 (static meaning).
+- `number_base_v1` — values 1–9, masters **11/22/33** in use, karmic debts 13/14/16/19 as lookup; **44** documented `in_use=false` (see [NUMBER_BASE_V1.md](../numerology/NUMBER_BASE_V1.md)). Explainer + FE rhythm must not invent digit meaning outside this bank. Bogus FE key `20` removed (never emitted by BE `_reduce`).
 - Color — `COLOR_CATALOG_V1.symbolic_property` (+ apply) as base; bridge = `props.color.link_to_conflict`.
 
 ## Server SoT

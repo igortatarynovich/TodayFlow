@@ -40,6 +40,7 @@
 - [ASTROLOGY_MACHINE_CONTRACT.md](./ASTROLOGY_MACHINE_CONTRACT.md) · [ASTROLOGY_COMPOSITION_MODEL.md](./ASTROLOGY_COMPOSITION_MODEL.md) · [CROSS_DOMAIN_MACHINE_VALIDATION.md](./CROSS_DOMAIN_MACHINE_VALIDATION.md)
 - [EVOLUTION_CALCULATION_CONTRACT.md](./EVOLUTION_CALCULATION_CONTRACT.md) — **запрет `evolution_stage` в API** до UEM-2
 - Tarot: [tarot/TAROT_INTERPRETATION_ENGINE_V1.md](./tarot/TAROT_INTERPRETATION_ENGINE_V1.md) · [tarot/TAROT_CARD_BASE_V1.md](./tarot/TAROT_CARD_BASE_V1.md) (base meanings SoT) · [tarot/TAROT_DESIGN_LANGUAGE_V1.md](./tarot/TAROT_DESIGN_LANGUAGE_V1.md)
+- Numerology: [numerology/NUMBER_BASE_V1.md](./numerology/NUMBER_BASE_V1.md) (digit SoT) · [numerology/NUMEROLOGY_INTEGRATION_SPEC_V1.md](./numerology/NUMEROLOGY_INTEGRATION_SPEC_V1.md)
 - Day hooks reveal: [audits/DAY_SYMBOL_REVEAL_CANON_V1.md](./audits/DAY_SYMBOL_REVEAL_CANON_V1.md) — `hook_reveal` · chorus = sole bridge
 
 ## Today · Profile (experience)
