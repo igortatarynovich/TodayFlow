@@ -126,16 +126,8 @@ html[data-day-mode="depth"] {
 }
 
 /* —— Visible product surface (FOUNDATION_UI §13) ——
-   Day Atmosphere must beat day-phase peach on --tf-page-atmosphere
-   (specificity ≥ html[data-atmosphere][data-day-phase]). .appShell paints that token. */
-html[data-day-mode][data-atmosphere="today"],
-html[data-day-mode][data-atmosphere="today"][data-day-phase],
-html[data-day-mode][data-atmosphere="today"][data-day-phase="morning"],
-html[data-day-mode][data-atmosphere="today"][data-day-phase="day"],
-html[data-day-mode][data-atmosphere="today"][data-day-phase="evening"],
-html[data-day-mode][data-atmosphere="today"][data-day-phase="night"],
-html[data-day-mode][data-atmosphere="today"][data-day-phase="first"],
-html[data-day-mode][data-atmosphere="home"] {
+   Day Atmosphere beats section/route presets on product shell when data-day-mode is set. */
+html[data-day-mode] {
   --tf-page: var(--day-bg-base);
   --section-page-bg: var(--day-bg-base);
   --tf-page-atmosphere:
@@ -143,10 +135,47 @@ html[data-day-mode][data-atmosphere="home"] {
     radial-gradient(ellipse 70% 45% at 92% 8%, var(--day-bg-glow-secondary), transparent 55%),
     var(--day-bg-base);
   --section-page-gradient: var(--tf-page-atmosphere);
+  --section-accent: var(--day-decor-color);
+  --section-accent-soft: var(--day-accent-soft);
+  --section-panel-bg: color-mix(in srgb, var(--day-surface-tint) 88%, transparent);
+  --section-nav-bg: color-mix(in srgb, var(--day-surface-tint) 94%, transparent);
+  --tf-ds-glass: color-mix(in srgb, var(--day-surface-tint) 82%, rgba(255, 255, 255, 0.35));
+  --tf-ds-border-ink: color-mix(in srgb, var(--day-decor-color) 28%, transparent);
 }
 
-html[data-day-mode] body {
-  background-color: var(--day-bg-base);
+/* Beat route-specific void/dark section presets (e.g. tarot) once day-mode is active. */
+html[data-day-mode][data-atmosphere="tarot"],
+html[data-day-mode][data-atmosphere="practices"],
+html[data-day-mode][data-atmosphere="profile"],
+html[data-day-mode][data-atmosphere="compatibility"],
+html[data-day-mode][data-atmosphere="flow"] {
+  --section-page-bg: var(--day-bg-base);
+  --section-page-gradient: var(--tf-page-atmosphere);
+  --section-text: var(--tf-ink, #2a2520);
+  --section-text-muted: var(--tf-body, #5c5348);
+  --section-nav-bg: color-mix(in srgb, var(--day-surface-tint) 94%, transparent);
+  --section-nav-ink: var(--tf-ink, #2a2520);
+  --section-panel-bg: color-mix(in srgb, var(--day-surface-tint) 88%, transparent);
+  --section-panel-border: color-mix(in srgb, var(--day-decor-color) 22%, transparent);
+  --section-accent: var(--day-decor-color);
+  --section-accent-soft: var(--day-accent-soft);
+  --section-footer-bg: color-mix(in srgb, var(--day-surface-tint) 92%, transparent);
+  --section-footer-ink: var(--tf-caption, #7a7168);
+}
+
+/* Tarot module aliases follow day shell — no ritual void while day-mode is on. */
+html[data-day-mode][data-atmosphere="tarot"] {
+  --tarot-void: var(--day-bg-base);
+  --tarot-bg: var(--day-bg-base);
+  --tarot-surface: var(--section-panel-bg);
+  --tarot-surface-strong: color-mix(in srgb, var(--day-surface-tint) 94%, transparent);
+  --tarot-border: var(--section-panel-border);
+  --tarot-border-gold: color-mix(in srgb, var(--day-decor-color) 32%, transparent);
+  --tarot-gold: var(--day-decor-color);
+  --tarot-gold-soft: var(--day-accent-soft);
+  --tarot-text: var(--tf-ink, #2a2520);
+  --tarot-muted: var(--tf-body, #5c5348);
+  --tarot-glow: var(--day-bg-glow-primary);
 }
 
 html[data-day-mode][data-product-web-shell] .tf-content {
@@ -173,6 +202,32 @@ html[data-day-mode] [data-product-web-frame] {
 
 html[data-day-mode] [data-product-web-frame] > [data-ds-app-shell] {
   background: transparent;
+}
+
+/* Day mood owns product chrome — beat frame data-theme="dark" sidebar/main washes. */
+html[data-day-mode] [data-product-web-frame][data-theme="dark"] > [data-ds-app-shell] {
+  background: transparent;
+  color: var(--tf-ink, #2a2520);
+}
+
+html[data-day-mode] [data-product-web-frame][data-theme="dark"] [class*="appMain"],
+html[data-day-mode] [data-product-web-frame][data-theme="dark"] [class*="productWebMain"] {
+  background: transparent;
+}
+
+html[data-day-mode] [data-product-web-frame] [class*="sidebar"],
+html[data-day-mode] [data-product-web-frame][data-theme="dark"] [class*="sidebar"] {
+  background: color-mix(in srgb, var(--day-surface-tint) 90%, transparent);
+  border-right-color: color-mix(in srgb, var(--day-decor-color) 22%, transparent);
+  backdrop-filter: blur(18px);
+  color: var(--tf-ink, #2a2520);
+}
+
+@media (min-width: 64rem) {
+  html[data-day-mode] [data-product-web-frame] [class*="sidebar"],
+  html[data-day-mode] [data-product-web-frame][data-theme="dark"] [class*="sidebar"] {
+    background: color-mix(in srgb, var(--day-surface-tint) 92%, transparent);
+  }
 }
 
 html[data-day-mode] [data-product-web-frame] > .day-atmosphere-decor {

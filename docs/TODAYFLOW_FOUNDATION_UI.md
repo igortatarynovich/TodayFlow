@@ -344,15 +344,14 @@ TODAYFLOW_FOUNDATION_UI
 
 ### 11.1 Три независимых слоя атмосферы — не путать
 
-На ветке `design/profile-journey-premium` уже существуют два слоя, оба управляются часами. Day Atmosphere — третий, управляется **сюжетом дня**, не часами.
-
 | Слой | Атрибут | Драйвер | Что меняет | Статус |
 |------|---------|---------|-------------|--------|
-| **Mood** | `data-mood` (`calm` / `focus` / `night` / `clarity`) | время суток + ручной pin | палитра `--tf-*` (ink, accent), независимо от appearance | существует (WIP-ветка), `productMoodTheme.ts` |
-| **Day-phase** | `data-day-phase` (`morning` / `day` / `evening` / `night`) | время суток, сейчас scoped на `[data-atmosphere="today"]` | процедурная текстура фона (лучи утром, звёзды ночью) | существует (WIP-ветка), `day-phase-atmosphere.css` |
-| **Day Atmosphere** *(этот раздел)* | `data-day-mode` (8 значений, §11.3) + `data-day-intensity` | **сюжет дня** от движка (см. §11.5), не часы | фон-композиция, декор, свет/контраст, motion | контракт §12 · first pass §13 |
+| **Section** | `data-atmosphere` | **роут** | мягкий route-пресет; **на product routes уступает Day Atmosphere**, когда `data-day-mode` задан | route-atmosphere |
+| **Mood** | `data-mood` | время + pin | ink/accent (WIP) | `productMoodTheme.ts` |
+| **Day-phase** | `data-day-phase` | часы на `/today` | процедурная текстура | WIP |
+| **Day Atmosphere** | `data-day-mode` (8) | **сюжет дня** | фон, декор, motion · **сквозной шелл** (sidebar/frame) на всех product routes | §12–§13 |
 
-Day Atmosphere **не заменяет** Mood и Day-phase и **не выбирает тему по знаку/элементу** (это зона `ElementAtmosphere`, отдельная и статичная). Три слоя комбинируются: Mood задаёт базовую палитру ink/accent, Day-phase — который час дня подсвечивает Today, Day Atmosphere — какой сюжет у дня в целом. При конфликте токенов приоритет: Day Atmosphere → Day-phase → Mood (сюжет дня важнее часов).
+**Продуктовый SoT (2026-08-03):** на app shell день один — не выделяем разделы отдельными dark/void темами (Tarot immersive dark снят). Экранные акты Today = плоские glass Block как Glance (без ActShell-матрёшки). Totem color / heatmap mood — не шелл.
 
 ### 11.2 Оси, из которых собирается режим (внутренние, не CSS)
 

@@ -95,6 +95,12 @@ describe("DayAtmosphereBridge", () => {
     expect(document.documentElement.style.getPropertyValue("--day-bg-base")).toBe("");
   });
 
+  it("applies day-mode on Tarot so shell follows day atmosphere app-wide", () => {
+    mockPathname.mockReturnValue("/tarot");
+    render(<DayAtmosphereBridge />);
+    expect(document.documentElement.getAttribute("data-day-mode")).toBe("clarity");
+  });
+
   it("applies a pin already present at mount immediately", () => {
     writeDayModePin("grounded");
     render(<DayAtmosphereBridge />);

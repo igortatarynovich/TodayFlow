@@ -343,6 +343,18 @@
   color: var(--tf-accent-gold);
 }
 
+.sidebarSlot {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.sidebarSlot > * {
+  flex: 1 1 auto;
+  min-height: 100%;
+}
+
 .appShell {
   display: flex;
   min-height: 100dvh;
@@ -577,6 +589,8 @@
 @media (min-width: 64rem) {
   .productWebFrame[data-theme="dark"] :global([class*="sidebar"]) {
     width: 16.25rem;
+    min-height: 100%;
+    height: 100%;
     background:
       linear-gradient(180deg, rgba(24, 20, 30, 0.98) 0%, rgba(18, 16, 24, 0.98) 100%);
     border-right-color: rgba(212, 184, 150, 0.12);

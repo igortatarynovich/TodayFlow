@@ -2,7 +2,6 @@
 
 import type { ComponentProps, ReactNode } from "react";
 import { ScreenFlow, ScreenFlowStep, TODAY_SCREEN_FLOW_AXIS } from "@/design-system/primitives/ScreenFlow";
-import { TodayActShell } from "@/components/today/composition/TodayActShell";
 import { TodayGlanceAct } from "@/components/today/composition/TodayGlanceAct";
 import { TodayPersonalizedProductSection } from "@/components/today/composition/TodayPersonalizedProductSection";
 import { TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
@@ -147,28 +146,23 @@ export function TodayProductScreenFlow({
         </ScreenFlowStep>
 
         <ScreenFlowStep id="plot" label={copy.journey.dayTitle} scrollable>
-          <TodayActShell step={1} title={undefined} lead={null} accent="action" motif="today" testId="today-zone-act-plot">
-            <TodayScreenBlockStack>
-              <MotionReveal>{heroSection}</MotionReveal>
-              {plotNarrativeSection ? <MotionReveal delayMs={MOTION.staggerMs}>{plotNarrativeSection}</MotionReveal> : null}
-              {dayReadingReady ? (
-                <>
-                  {/* Pulse / «Энергия дня» lives on Glance — avoid duplicate on Plot. */}
-                  <MotionReveal delayMs={MOTION.staggerMs * 2}>{glanceSection}</MotionReveal>
-                  {morningDialogue}
-                </>
-              ) : (
-                morningDialogue
-              )}
-            </TodayScreenBlockStack>
-          </TodayActShell>
+          <TodayScreenBlockStack testId="today-zone-act-plot">
+            <MotionReveal>{heroSection}</MotionReveal>
+            {plotNarrativeSection ? <MotionReveal delayMs={MOTION.staggerMs}>{plotNarrativeSection}</MotionReveal> : null}
+            {dayReadingReady ? (
+              <>
+                <MotionReveal delayMs={MOTION.staggerMs * 2}>{glanceSection}</MotionReveal>
+                {morningDialogue}
+              </>
+            ) : (
+              morningDialogue
+            )}
+          </TodayScreenBlockStack>
         </ScreenFlowStep>
 
         {showSymbols ? (
           <ScreenFlowStep id="symbols" label={copy.journey.openTitle} scrollable>
-            <TodayActShell step={2} title={undefined} lead={null} accent="sky" testId="today-zone-open-day">
-              {symbolsBody}
-            </TodayActShell>
+            <div data-testid="today-zone-open-day">{symbolsBody}</div>
           </ScreenFlowStep>
         ) : null}
 

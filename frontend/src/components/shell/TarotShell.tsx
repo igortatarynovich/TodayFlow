@@ -20,7 +20,7 @@ export function TarotShell({ children }: TarotShellProps) {
     const rail = activeStep < 0 ? undefined : <TarotRail activeStep={activeStep} />;
     return {
       testId: "tarot-immersive-shell",
-      theme: "dark",
+      // Day Atmosphere is app-wide — do not force a separate dark Tarot shell.
       mainWide: true,
       fullMain: false,
       rail,

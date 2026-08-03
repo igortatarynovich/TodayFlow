@@ -69,6 +69,7 @@ Per §1.4, nav bar/buttons are **optional** — swipe + keyboard are the mandato
 
 - **Today product:** no labeled act strip (`TodayActNav`) and no «Назад»/«Далее» text controls. Progress chrome = `ScreenFlow` dots · swipe · keyboard. Step titles stay in `aria-live` / `srOnly` on dots — not a visible name row. Primitive keeps `showStepControls` for fixtures only (default `false`).
 - **No raw step numbers as the primary visual.** Ordinals `0–5` stay out of chrome (same as pre-2026-08-03 §1.5).
+- **Flat act surface:** every ScreenFlow act uses Glance Block grammar (`TodayScreenBlock` / glass stack). No ActShell motif plate on the product path (`ProductJourneyScene chrome={false}`); Plot hero is a Block, not a dark wash plate.
 - **Swipe remains untouched.** `ScreenFlow.tsx` touch handling, `SWIPE_THRESHOLD_PX`, and `reason: "swipe"` are not affected.
 - **Legacy:** `TodayActNav` component may remain in tree for fixtures; product path does not render it.
 

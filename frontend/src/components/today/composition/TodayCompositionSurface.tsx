@@ -9,7 +9,6 @@ import { TodayDayContinuityClosed } from "@/components/today/experience/TodayDay
 import { TodayDayContinuityEveningClose } from "@/components/today/experience/TodayDayContinuityEveningClose";
 import { TodayEveningProductClose } from "@/components/today/composition/TodayEveningProductClose";
 import { TodayPersonalizedProductSection } from "@/components/today/composition/TodayPersonalizedProductSection";
-import { TodayActShell } from "@/components/today/composition/TodayActShell";
 import { TodayScreenBlock, TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
 import { TodayProductScreenFlow, todayScreenFlowReadingIndex, todayScreenFlowStepCount } from "@/components/today/composition/TodayProductScreenFlow";
 import {
@@ -20,11 +19,8 @@ import { TodayGlanceTimelineSlot } from "@/components/today/composition/TodayWav
 import { TarotPicture } from "@/components/tarot/TarotPicture";
 import { LoadingSpinner } from "@/components/orbit";
 import { HeroMedium } from "@/components/foundation/HeroMedium";
-import { profileMotionStyles } from "@/components/foundation/ProfileMotion";
 import { MotionReveal } from "@/design-system/motion/MotionReveal";
-import { MotionDrift } from "@/design-system/motion/MotionDrift";
 import { MOTION } from "@/design-system/motion/tokens";
-import { SacredGeometryBackdrop } from "@/components/visualIdentity/SacredGeometryBackdrop";
 import { buildTodayHeroPillars, buildTodayHeroSymbol, resolveTodaySunSignLabel } from "@/lib/todayHeroMedium";
 import type { MorningRitualData, TodayCycleData } from "@/components/today/todayPageUtils";
 import { anchorTarotTags, RITUAL_COPY } from "@/components/today/todayRitualCopy";
@@ -32,13 +28,6 @@ import { getTodayTarotCardRu } from "@/components/today/todayTarotCardsRu";
 import { isDayNotReady, type TodayContractV1 } from "@/lib/todayContract";
 import type { CoreProfile } from "@/lib/types";
 import { tarotCardFacePicture, tarotCardFaceSrc, resolveDailyTarotDeckIndex } from "@/lib/tarotCardAssets";
-import { resolveDayPhase } from "@/lib/dayPhaseAtmosphere";
-import {
-  dynamicsClassFromThesisMode,
-  resolveHeroChromeTone,
-  resolvePlotHeroWash,
-} from "@/lib/dayPhaseHeroWash";
-import { useProductMoodTheme } from "@/lib/useProductDayNightTheme";
 import {
   buildMemorySlotCopy,
   isDayContinuityClosed,
@@ -199,26 +188,6 @@ export function TodayCompositionSurface(props: Props) {
   const { onVisible, onDayClosed, dateISO, embeddedInWebDashboard = false } = props;
   const variant = props.variant ?? "default";
   const isFirstToday = variant === "firstToday";
-  const { appearance } = useProductMoodTheme({ isFirstDay: isFirstToday });
-  const heroWash = useMemo(() => {
-    const phase = resolveDayPhase({
-      pathname: "/today",
-      isFirstDay: isFirstToday,
-      hour: typeof Date !== "undefined" ? new Date().getHours() : 12,
-    });
-    const story = props.contract.day_story;
-    const conflictThesis = (
-      story?.day_scenario?.conflict as { thesis?: { mode?: string | null } | null } | null | undefined
-    )?.thesis;
-    const mode = (conflictThesis?.mode || story?.day_thesis?.mode || "").trim() || null;
-    const wash = resolvePlotHeroWash(mode, phase);
-    return {
-      ...wash,
-      tone: resolveHeroChromeTone(wash, appearance),
-      phase,
-      dynamics: dynamicsClassFromThesisMode(mode) ?? undefined,
-    };
-  }, [isFirstToday, appearance, props.contract.day_story]);
   const { trackMeaningEvent } = useMeaningRuntime();
   const { isAuthenticated } = useAuth();
   const reduceMotion = useReduceMotion();
@@ -1297,55 +1266,36 @@ export function TodayCompositionSurface(props: Props) {
 
   const heroSection = zones.hero ? (
     useProductFoundation ? (
-      <section
-        className={`${styles.themeDarkHero} ${styles.themeDarkHeroSpotlight} ${plotNarrative ? styles.themeDarkHeroCompact : ""}`.trim()}
-        data-testid="today-zone-hero"
-        data-hero-tone={heroWash.tone}
-        data-hero-plate={heroWash.plate}
-        data-day-phase={heroWash.phase ?? undefined}
-        data-dynamics-class={heroWash.dynamics ?? undefined}
-        aria-labelledby="today-day-theme-title"
-      >
-        <div className={styles.themeDarkAtmosphere} aria-hidden>
-          <SacredGeometryBackdrop emphasis="soft" preset="today" />
-        </div>
-        <div className={styles.themeDarkVisualAccent} aria-hidden>
-          <MotionDrift className={styles.themeDarkWashDrift} durationSec={22} reducedMotion={reduceMotion}>
-            {/* eslint-disable-next-line @next/next/no-img-element -- static wash plate */}
-            <img src={heroWash.src} alt="" className={styles.themeDarkWash} />
-          </MotionDrift>
-        </div>
-        <div className={`${styles.themeDarkContent} ${profileMotionStyles.heroEnter}`}>
-          {themeLoading ? (
-            <p className={styles.themeDarkLoading}>{copy.loadingDay}</p>
-          ) : plotNarrative ? (
-            <>
-              <PersonalizationDegradedBadge
-                contract={props.contract}
-                narrativeRequestFailed={props.guideNarrativeRequestFailed}
-              />
-              <p className={styles.plotNarrativeEyebrow} id="today-day-theme-title">
-                {copy.journey.actNavPlot}
-              </p>
-            </>
-          ) : (
-            <>
-              <PersonalizationDegradedBadge
-                contract={props.contract}
-                narrativeRequestFailed={props.guideNarrativeRequestFailed}
-              />
-              <h2
-                id="today-day-theme-title"
-                className={styles.themeDarkTitle}
-                data-testid="today-entity-daily-theme"
-              >
-                {heroTheme || story.hero.centralThought}
-              </h2>
-              {heroSubline ? <p className={styles.themeDarkSubline}>{heroSubline}</p> : null}
-            </>
-          )}
-        </div>
-      </section>
+      <TodayScreenBlock testId="today-zone-hero">
+        {themeLoading ? (
+          <p className={styles.themeDarkLoading}>{copy.loadingDay}</p>
+        ) : plotNarrative ? (
+          <>
+            <PersonalizationDegradedBadge
+              contract={props.contract}
+              narrativeRequestFailed={props.guideNarrativeRequestFailed}
+            />
+            <p className={styles.plotNarrativeEyebrow} id="today-day-theme-title">
+              {copy.journey.actNavPlot}
+            </p>
+          </>
+        ) : (
+          <>
+            <PersonalizationDegradedBadge
+              contract={props.contract}
+              narrativeRequestFailed={props.guideNarrativeRequestFailed}
+            />
+            <h2
+              id="today-day-theme-title"
+              className={styles.themeDarkTitle}
+              data-testid="today-entity-daily-theme"
+            >
+              {heroTheme || story.hero.centralThought}
+            </h2>
+            {heroSubline ? <p className={styles.themeDarkSubline}>{heroSubline}</p> : null}
+          </>
+        )}
+      </TodayScreenBlock>
     ) : (
       <div className={styles.dayAnchorHero} data-testid="today-zone-hero">
         {!themeLoading ? (

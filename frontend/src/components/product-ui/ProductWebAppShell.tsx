@@ -86,8 +86,10 @@ export function ProductWebAppShell({
     pathname,
     typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null,
   );
-  const { mood: hookMood, theme: hookTheme } = useProductMoodTheme({ isFirstDay });
-  const theme = themeProp ?? hookTheme;
+  const { mood: hookMood } = useProductMoodTheme({ isFirstDay });
+  // Day Atmosphere owns product chrome tint — do not flip the frame to system dark
+  // (that was painting Tarot/sidebar as a separate void theme). Explicit themeProp still wins.
+  const theme = themeProp ?? "light";
   const mood = moodProp ?? hookMood;
   // data-theme/data-mood depend on clock + localStorage, which SSR can't see —
   // rendering them as JSX props bakes a value at SSR time that then mismatches the
@@ -121,7 +123,7 @@ export function ProductWebAppShell({
   const sidebarNode =
     sidebar ??
     (showSidebar ? (
-      <div aria-hidden={sidebarAriaHidden || undefined}>
+      <div className={l.sidebarSlot} aria-hidden={sidebarAriaHidden || undefined}>
         <DsAppSidebar
           displayName={resolvedName}
           profileMeta={resolvedMeta}

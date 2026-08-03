@@ -22,7 +22,8 @@ import { readTodayDayBundle } from "@/lib/todayDayBundleCache";
 /**
  * Day Atmosphere bridge (FOUNDATION_UI §13).
  *
- * Writes `data-day-mode` + inline `--day-*` on `<html>` for product routes.
+ * Writes `data-day-mode` + inline `--day-*` on `<html>` for **all product routes**.
+ * Day mood is app-wide shell SoT — not scoped to /today only.
  * Resolves: pin → engine nest (`day_atmosphere` from Today contract) → default clarity.
  */
 

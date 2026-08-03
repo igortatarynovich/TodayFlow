@@ -29,12 +29,17 @@ type ProductJourneySceneProps = {
   className?: string;
   /** Wave 1 ActShell accent — default action bar for journey continuity. */
   accent?: TodayActShellAccent;
+  /**
+   * When false, skip ActShell/motif chrome — flat Glance-like Block stack only
+   * (ScreenFlow product path).
+   */
+  chrome?: boolean;
   slotBefore?: ReactNode;
   slotAfter?: ReactNode;
 };
 
 /**
- * Product journey chrome — renders through TodayActShell (one gutter, no matryoshka).
+ * Product journey chrome — ActShell by default; ScreenFlow uses chrome={false}.
  */
 export function ProductJourneyScene({
   step,
@@ -47,10 +52,26 @@ export function ProductJourneyScene({
   bridge = false,
   className = "",
   accent = "default",
+  chrome = true,
   slotBefore = null,
   slotAfter = null,
 }: ProductJourneySceneProps) {
   const motion = useProfileMotionInView<HTMLDivElement>(40);
+
+  if (!chrome) {
+    return (
+      <div
+        ref={motion.ref}
+        className={[motion.className, className].filter(Boolean).join(" ")}
+        style={motion.style}
+        data-testid={testId}
+      >
+        {slotBefore}
+        {children}
+        {slotAfter}
+      </div>
+    );
+  }
 
   return (
     <div ref={motion.ref} className={motion.className} style={motion.style}>

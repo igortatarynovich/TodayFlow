@@ -260,6 +260,7 @@ export function TodayPersonalizedProductSection({
         lead={asScreenFlowSteps ? null : copy.journey.readingLead}
         motif="today"
         accent="sky"
+        chrome={!asScreenFlowSteps}
         testId="today-zone-reading"
       >
         {contentFailure ? (
@@ -501,6 +502,7 @@ export function TodayPersonalizedProductSection({
         lead={asScreenFlowSteps ? null : copy.journey.moveLead}
         motif="effort"
         accent="support"
+        chrome={!asScreenFlowSteps}
         testId="today-zone-move"
       >
         {contentFailure ? (
@@ -759,6 +761,7 @@ export function TodayPersonalizedProductSection({
         motif="bridge"
         accent="action"
         bridge
+        chrome={!asScreenFlowSteps}
         testId="today-zone-bridges-wrap"
       >
         {contentFailure ? (
