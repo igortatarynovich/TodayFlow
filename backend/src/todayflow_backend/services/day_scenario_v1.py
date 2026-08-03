@@ -337,21 +337,70 @@ def _looks_like_binary_force_label(text: Any) -> bool:
     return len(t) < 80
 
 
+def _looks_like_sky_fact_label(text: Any) -> bool:
+    """Raw astronomy/astrology fact — Plot why material, not a conflict short_name."""
+    t = _clip(text, 160).lower()
+    if not t or len(t) < 12:
+        return False
+    markers = (
+        "меркурий",
+        "венера",
+        "марс",
+        "юпитер",
+        "сатурн",
+        "луна",
+        "солнц",
+        "разворачива",
+        "ретроград",
+        "директ",
+        "вошла в",
+        "вошёл в",
+        "аспект",
+        "соединен",
+        "оппозиц",
+        "квадрат",
+        "трин",
+        "ingress",
+        "station",
+    )
+    return any(m in t for m in markers)
+
+
 def _day_tone_anchor(conflict_label: str) -> str:
-    """Opaque day bind for serves_conflict — never a force-pair quote."""
-    label = _clip(conflict_label, 72)
-    if not label or _looks_like_binary_force_label(label):
-        return "тон дня"
-    return label
+    """Opaque day bind for serves_conflict — never quote short_name / sky fact / A|B."""
+    del conflict_label
+    return "тон дня"
+
+
+_MODE_TONE_SHORT: dict[str, str] = {
+    "stability": "Ровный темп дня",
+    "opportunity": "Окно для одного шага",
+    "recovery": "День на восстановление",
+    "conflict": "День с острой мерой",
+    "transition": "День перехода",
+    "pressure": "День с давлением",
+    "change": "День перемен",
+}
 
 
 def _human_meaning_for_driver(row: dict[str, Any], conflict_label: str) -> str:
-    # v3.1 seed-kill: do not paste conflict short_name into sky meaning.
+    """Lived atmosphere from the factor — must not echo named_factor / short_name."""
     del conflict_label
-    fact = _clip(row.get("fact_ru") or row.get("title_ru"), 200)
-    if not fact:
-        return "Фактор дня задаёт атмосферу сегодня."
-    return f"{fact} — ощутимый фон дня."
+    kind = str(row.get("kind") or "").lower()
+    body = str(row.get("body") or row.get("planet") or "").lower()
+    fact = str(row.get("fact_ru") or row.get("title_ru") or "").lower()
+    blob = f"{kind} {body} {fact}"
+    if any(k in blob for k in ("station", "direct", "ретро", "разворач", "директ")):
+        return "То, что долго крутилось без решения, сегодня легче довести до ясности."
+    if any(k in blob for k in ("moon", "луна", "ingress", "рыб", "рак", "скорпион")):
+        return "Эмоциональный подтекст заметнее прямых слов — не ускоряй ответ."
+    if any(k in blob for k in ("mercury", "меркурий", "сообщ", "письм")):
+        return "В переписке и разговорах сегодня важнее смысл, чем скорость."
+    if any(k in blob for k in ("mars", "марс", "давлени", "impuls")):
+        return "Импульс сильный — один ясный жест лучше трёх резких."
+    if any(k in blob for k in ("venus", "венера", "отношен")):
+        return "В контакте сегодня дороже тёплая точность, чем красивая картинка."
+    return "Небесный фактор задаёт атмосферу — замечайте его в бытовых жестах, не в ярлыках."
 
 
 def _card_archetype_voice(card_name: str, conflict_label: str) -> dict[str, str]:
@@ -632,21 +681,25 @@ def _everyday_conflict_short_name(
     force_b: str,
     lead_fact: str,
     registry_label: str,
+    mode: str = "",
 ) -> str:
     """Hero label without forced A-or-B drama (v3.1).
 
-    Prefer lead fact / registry. Binary «A или B» only when both forces are real.
+    Order: real forces → thesis registry/mode tone → never raw sky fact_ru
+    (facts belong in why_arose / chorus named_factor only).
     """
     a = _clip(force_a, 48)
     b = _clip(force_b, 48)
     if a and b:
         return sanitize_conflict_short_name(f"{a.capitalize()} или {b}")
-    lead = _clip(lead_fact, 72)
-    if lead:
-        return sanitize_conflict_short_name(lead)
     reg = _clip(registry_label, 72)
-    if reg:
+    if reg and not _looks_like_sky_fact_label(reg) and not _looks_like_binary_force_label(reg):
         return sanitize_conflict_short_name(reg)
+    mode_label = _MODE_TONE_SHORT.get(str(mode or "").strip().lower(), "")
+    if mode_label:
+        return sanitize_conflict_short_name(mode_label)
+    # lead_fact is Plot evidence, not the hero title — refuse to promote it.
+    del lead_fact
     return sanitize_conflict_short_name("тон дня")
 
 
@@ -737,6 +790,7 @@ def build_scenario_conflict_v1(
         force_b=force_b,
         lead_fact=lead_fact,
         registry_label=registry_label,
+        mode=mode,
     )
 
     natal = _as_list(foundation.get("personal_natal_activations"))
@@ -959,15 +1013,6 @@ def build_scenario_scenes_v1(
     driver_ids = list(conflict.get("driver_ids") or [])
     number_voice = _as_dict(chorus.get("day_number"))
     card_voice = _as_dict(chorus.get("day_card"))
-    lead_fact = ""
-    for d in _as_list(foundation.get("ranked_drivers")):
-        if not isinstance(d, dict) or not d.get("fact_ru"):
-            continue
-        fact = str(d.get("fact_ru") or "")
-        if _is_calendar_kitchen_fact(fact):
-            continue
-        lead_fact = _clip(fact, 120)
-        break
 
     scenes: list[dict[str, Any]] = []
     for idx, sid in enumerate(sphere_ids):
@@ -976,9 +1021,7 @@ def build_scenario_scenes_v1(
         role = _scene_role(sid, idx)
         beat = _SCENE_BEATS.get(sid) or _DEFAULT_SCENE_BEAT
         what = beat["what"].format(who=who)
-        if lead_fact and idx == 0:
-            # One soft sky cue on primary only — not pasted into every sphere / domestic.
-            what = f"{what} {_clip(lead_fact, 110)}"
+        # Plot owns why_arose / sky facts — do not paste lead_fact into scene what.
         opportunity = beat["opportunity"]
         trap = beat["trap"]
         do = beat["do"]
@@ -995,9 +1038,7 @@ def build_scenario_scenes_v1(
         if _as_list(chorus.get("natal")):
             chorus_refs.append("natal")
 
-        if number_voice.get("tempo"):
-            do = f"{do} Темп: {number_voice.get('tempo')}."
-
+        # Number tempo lives in chorus.day_number only — never append to every do.
         scenes.append(
             {
                 "scene_id": scene_id,
@@ -1456,6 +1497,100 @@ def build_day_scenario_v1(
     }
 
 
+def _word_ngrams(text: str, *, min_words: int = 6) -> set[str]:
+    words = re.findall(r"[А-Яа-яA-Za-z0-9ёЁ\-]+", str(text or "").lower())
+    if len(words) < min_words:
+        return set()
+    return {
+        " ".join(words[i : i + min_words])
+        for i in range(len(words) - min_words + 1)
+    }
+
+
+def find_verbatim_seed_leaks_v1(scenario: dict[str, Any] | None) -> list[str]:
+    """Detect 6+ word spans that leak across act surfaces.
+
+    Catches: short_name / why_arose pasted into chorus meaning or scenes;
+    identical recommended_action tails across scenes.
+    Does **not** flag intentional shared templates inside one chorus voice
+    (human_meaning == link) or boilerplate sibling links.
+    """
+    if not isinstance(scenario, dict):
+        return []
+    conflict = _as_dict(scenario.get("conflict"))
+    chorus = _as_dict(scenario.get("chorus"))
+    scenes = _as_list(scenario.get("scenes"))
+    props = _as_dict(scenario.get("props"))
+
+    # Cross-act surfaces only (one text sample per logical voice).
+    surfaces: list[tuple[str, str]] = [
+        ("conflict.short_name", str(conflict.get("short_name") or "")),
+        ("conflict.why_arose", str(conflict.get("why_arose") or "")),
+    ]
+    for i, row in enumerate(_as_list(chorus.get("astrology"))):
+        if isinstance(row, dict):
+            # Prefer lived meaning over boilerplate link for leak detection
+            surfaces.append(
+                (
+                    f"chorus.astrology[{i}].human_meaning",
+                    str(row.get("human_meaning") or ""),
+                )
+            )
+    card = _as_dict(chorus.get("day_card"))
+    if card:
+        surfaces.append(
+            (
+                "chorus.day_card.voice",
+                str(card.get("human_meaning") or card.get("link_to_conflict") or ""),
+            )
+        )
+    number = _as_dict(chorus.get("day_number"))
+    if number:
+        surfaces.append(
+            (
+                "chorus.day_number.voice",
+                str(number.get("link_to_conflict") or number.get("human_meaning") or ""),
+            )
+        )
+    for i, sc in enumerate(scenes):
+        if not isinstance(sc, dict):
+            continue
+        surfaces.append((f"scenes[{i}].serves_conflict", str(sc.get("serves_conflict") or "")))
+        surfaces.append((f"scenes[{i}].what_happens", str(sc.get("what_happens") or "")))
+        surfaces.append((f"scenes[{i}].recommended_action", str(sc.get("recommended_action") or "")))
+        surfaces.append((f"scenes[{i}].why", str(sc.get("why") or "")))
+    color = _as_dict(props.get("color"))
+    if color:
+        surfaces.append(("props.color.link_to_conflict", str(color.get("link_to_conflict") or "")))
+
+    plot_keys = {"conflict.short_name", "conflict.why_arose"}
+    ngram_owners: dict[str, list[str]] = {}
+    for key, text in surfaces:
+        for ng in _word_ngrams(text, min_words=6):
+            ngram_owners.setdefault(ng, []).append(key)
+
+    leaks: list[str] = []
+    seen_ng: set[str] = set()
+    for ng, owners in ngram_owners.items():
+        uniq = sorted(set(owners))
+        if len(uniq) < 2:
+            continue
+        non_plot = [o for o in uniq if o not in plot_keys]
+        short_hit = any(o == "conflict.short_name" for o in uniq) and bool(non_plot)
+        why_hit = any(o == "conflict.why_arose" for o in uniq) and bool(non_plot)
+        # Same boilerplate across astrology meanings only if they share lived prose
+        multi_non_plot = len(non_plot) >= 2
+        if not (short_hit or why_hit or multi_non_plot):
+            continue
+        if ng in seen_ng:
+            continue
+        seen_ng.add(ng)
+        leaks.append(f"verbatim_seed_leak:{ng!r}@{'+'.join(uniq[:4])}")
+        if len(leaks) >= 8:
+            break
+    return leaks
+
+
 def validate_day_scenario_v1(scenario: dict[str, Any] | None) -> list[str]:
     """Structural validation — architectural invariants for B1+B2."""
     errors: list[str] = []
@@ -1470,6 +1605,8 @@ def validate_day_scenario_v1(scenario: dict[str, Any] | None) -> list[str]:
 
     if not conflict.get("short_name"):
         errors.append("conflict_missing_short_name")
+    elif _looks_like_sky_fact_label(conflict.get("short_name")):
+        errors.append("conflict_short_name_is_sky_fact")
     if not conflict.get("driver_ids") and not _as_list(foundation.get("ranked_drivers")):
         errors.append("conflict_without_drivers_or_foundation")
     # v3.1: opposing_forces optional — empty / omit is valid (even day).
@@ -1507,6 +1644,12 @@ def validate_day_scenario_v1(scenario: dict[str, Any] | None) -> list[str]:
             errors.append(f"scene_bad_sphere:{sc.get('sphere')}")
         if not sc.get("serves_conflict"):
             errors.append(f"scene_missing_serves_conflict:{sc.get('scene_id')}")
+        elif str(sc.get("serves_conflict") or "").strip() != "тон дня":
+            # Opaque bind only — short_name / sky fact paste is a seed leak.
+            errors.append(f"scene_serves_conflict_not_opaque:{sc.get('scene_id')}")
+        do = str(sc.get("recommended_action") or "")
+        if re.search(r"\bТемп:\s*", do):
+            errors.append(f"scene_tempo_paste:{sc.get('scene_id')}")
 
     props = _as_dict(scenario.get("props"))
     if props.get("status") == "ok":
@@ -1536,4 +1679,5 @@ def validate_day_scenario_v1(scenario: dict[str, Any] | None) -> list[str]:
         if isinstance(humor, dict) and humor and not humor.get("origin_scene_id"):
             errors.append("prop_humor_without_origin_scene")
 
+    errors.extend(find_verbatim_seed_leaks_v1(scenario))
     return errors

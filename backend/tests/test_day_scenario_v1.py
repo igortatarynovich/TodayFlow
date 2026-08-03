@@ -11,6 +11,7 @@ from todayflow_backend.services.day_scenario_v1 import (
     build_interpretive_chorus_v1,
     build_scenario_conflict_v1,
     build_scenario_foundation_v1,
+    find_verbatim_seed_leaks_v1,
     validate_day_scenario_v1,
 )
 from todayflow_backend.services.day_story_interpretation_v1 import build_day_story_interpretation_v1
@@ -92,7 +93,7 @@ def test_scenario_builds_one_conflict_from_drivers_not_card_alone():
     assert foundation["ranked_drivers"]
 
 
-def test_short_name_prefers_forces_when_present_else_lead_fact():
+def test_short_name_prefers_forces_then_registry_never_raw_sky_fact():
     from todayflow_backend.services.day_scenario_v1 import (
         _everyday_conflict_short_name,
         sanitize_conflict_short_name,
@@ -109,11 +110,21 @@ def test_short_name_prefers_forces_when_present_else_lead_fact():
     even = _everyday_conflict_short_name(
         force_a="",
         force_b="",
-        lead_fact="Убывающая луна собирает тихий темп дня.",
+        lead_fact="Меркурий разворачивается в директное движение.",
         registry_label="Перемены",
+        mode="stability",
     )
     assert "или" not in even.lower()
-    assert "луна" in even.lower() or "темп" in even.lower()
+    assert "меркурий" not in even.lower()
+    assert "перемен" in even.lower()
+    sky_only = _everyday_conflict_short_name(
+        force_a="",
+        force_b="",
+        lead_fact="Меркурий разворачивается в директное движение.",
+        registry_label="",
+        mode="stability",
+    )
+    assert sky_only == "Ровный темп дня"
     healed = sanitize_conflict_short_name(
         "Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…"
     )
@@ -203,7 +214,10 @@ def test_scenes_are_relevant_and_serve_conflict():
     scenes = scenario["scenes"]
     assert 1 <= len(scenes) <= 4
     labels = {s["serves_conflict"] for s in scenes}
-    assert labels == {scenario["conflict"]["short_name"]}
+    assert labels == {"тон дня"}
+    short = scenario["conflict"]["short_name"]
+    assert "меркурий" not in short.lower()
+    assert "разворач" not in short.lower()
     spheres = {s["sphere"] for s in scenes}
     # relationships topic should pull relationship/communication spheres
     assert spheres & {"relationships", "communication", "work_decisions"}
@@ -212,6 +226,8 @@ def test_scenes_are_relevant_and_serve_conflict():
         assert s["opportunity"]
         assert s["trap"]
         assert s["chorus_references"]
+        assert "Темп:" not in (s.get("recommended_action") or "")
+        assert short not in (s.get("what_happens") or "")
 
 
 def test_props_from_scenes_have_origin_and_conflict_link():
@@ -390,6 +406,7 @@ def test_chorus_and_scenes_do_not_paste_short_name_seed():
     assert f"«{force_a}»" not in joined_chorus
     assert f"«{force_b}»" not in joined_chorus
     assert f"«{seed}»" not in joined_chorus
+    assert "ощутимый фон дня" not in joined_chorus
 
     scenes = build_scenario_scenes_v1(
         conflict=conflict,
@@ -418,6 +435,9 @@ def test_chorus_and_scenes_do_not_paste_short_name_seed():
     assert not (forces.get("a") and forces.get("b"))
     short = str(scenario["conflict"].get("short_name") or "")
     assert "тащить старое" not in short.lower()
+    assert "меркурий" not in short.lower()
+    assert find_verbatim_seed_leaks_v1(scenario) == []
+    assert validate_day_scenario_v1(scenario) == []
 
 
 def test_color_catalog_is_knowledge_not_sot():
