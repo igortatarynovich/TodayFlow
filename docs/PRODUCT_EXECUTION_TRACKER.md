@@ -5,9 +5,27 @@ Owner: Product + Engineering
 Status: Active working document
 
 **DONE (2026-08-03):** ScreenFlow content jobs **v3.1** — P0+P1+P2 gap plan closed on branch (seed-kill · domain4 · Plot wash · serve heal · LLM hard-gate · native opaque `serves_conflict`).  
-**IN PROGRESS:** **Glance/Plot/clip compliance** — central `prose_clip_v1` · avoid-color name scrub · hide classification tag · ≤2 sphere chips · no FE binary tension opener · native prompt anti-default-binary. Soft-heal canary + v3.1b concreteness continue.  
+**IN PROGRESS:** **Reading why-step** — `scene.why` / `domain_verdicts.why_short` before narrative; progressive expand for scene+dual. Glance/Plot/clip slice shipped. Soft-heal canary + v3.1b concreteness continue.  
 **ALSO IN PROGRESS:** **Soft-heal one-field gates** — `healed:<rule>` for conflict_link / incomplete forces / broken props / scenes_too_many; seed-kill + structural + scenes_too_few stay hard.  
 Prior: card_base_v1 cutover live · editorial polish minors ongoing.
+
+## Architecture impact — Reading why-step before narrative (2026-08-03)
+
+- **SoT before:** Reading sphere cards opened on domestic `what_happens` narrative; `scene.why` wire existed but native/v1 always emptied it; progressive expand only for opportunity/trap.
+- **SoT after:** Reading step 1 = why this sphere (`scene.why` from native `why_sphere` / bank beat, else `domain_verdicts.why_short`); never Plot `why_arose` paste. Step 2 on expand = narrative + opportunity/trap. Canon TODAY_SCREEN_SCENARIO_V3 Экран 3.
+- **Public contract changed?** additive — `scenes[].why` may be non-empty (was present empty); LLM JSON adds `why_sphere`
+- **Migration required?** no — FE omit-tolerant; empty why keeps prior narrative-first + dual expand
+- **Canon updated?** no new file — aligns SCENARIO_V3 Экран 3 + DAY_SCENARIO Act V; tracker SoT for this slice
+- **Backward compatible?** yes — old caches without why still render; domain_verdicts fallback when available
+
+## Architecture impact — ActNav / ScreenFlow day-accent chrome (2026-08-03)
+
+- **SoT before:** `TodayActNav` + ScreenFlow dots/controls used fixed peach/gold chrome, independent of `visual_mode`.
+- **SoT after:** Nav accent consumes `--day-decor-color` / `--day-accent-soft` / `--day-surface-tint` (FOUNDATION_UI §11.4); gold fallbacks when `--day-*` unset. No ordinals; jobs/order unchanged (SCREEN_FLOW_V1 §1.5).
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — FOUNDATION_UI §11.4 ActNav/ScreenFlow accent note
+- **Backward compatible?** yes — CSS fallbacks outside Day Atmosphere
 
 ## Architecture impact — Glance/Plot/clip compliance (2026-08-03)
 

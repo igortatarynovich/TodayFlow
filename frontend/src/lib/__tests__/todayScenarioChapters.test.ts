@@ -170,6 +170,26 @@ describe("buildScenarioStoryChapters", () => {
     expect(blob).not.toMatch(/Написать черновик|Сглаживать смысл|Одно письмо с точной/i);
   });
 
+  it("prefers scene.why for Reading step 1 and rejects Plot paste", () => {
+    const c = scenarioContract();
+    c.day_story!.day_scenario!.scenes![0]!.why =
+      "Сегодня близкий контакт сильнее обычного тянет внимание.";
+    const chapters = buildScenarioStoryChapters({ contract: c });
+    expect(chapters![0]!.why).toMatch(/близкий контакт/i);
+    const plotPaste = scenarioContract();
+    plotPaste.day_story!.day_scenario!.scenes![0]!.why =
+      plotPaste.day_story!.day_scenario!.conflict!.why_arose;
+    expect(buildScenarioStoryChapters({ contract: plotPaste })![0]!.why).toBeNull();
+  });
+
+  it("falls back to domainWhys when scene.why empty", () => {
+    const chapters = buildScenarioStoryChapters({
+      contract: scenarioContract(),
+      domainWhys: { relationships: "В контакте мягче — есть на что опереться" },
+    });
+    expect(chapters![0]!.why).toMatch(/контакте/i);
+  });
+
   it("caps Reading at two spheres (v3.1)", () => {
     const c = scenarioContract();
     c.day_story!.day_scenario!.scenes!.push({

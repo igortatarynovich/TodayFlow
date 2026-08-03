@@ -253,6 +253,7 @@ _NATIVE_SYS_RU = """Ты — драматург TodayFlow. Твоя задача
       "sphere": "relationships|work_decisions|communication|money|energy_body|creativity|home|rest_travel",
       "role_in_story": "primary|support|caution",
       "setup": "...",
+      "why_sphere": "...",
       "opportunity": "...",
       "trap": "...",
       "recommended_action": "...",
@@ -296,12 +297,14 @@ _NATIVE_SYS_RU = """Ты — драматург TodayFlow. Твоя задача
 BYTOVAЯ КОНКРЕТИКА СЦЕН (C3.1) — обязательно:
 Каждая сцена = узнаваемый момент, не абстрактная сфера.
 В каждой сцене явно:
-1) конкретный бытовой момент (кто / где / что сказано или сделано);
-2) внутренний импульс;
-3) внешняя ситуация;
-4) возможность и ловушка — из фактов сферы, НЕ копируя force_a/force_b/title дословно;
-5) наблюдаемое последствие;
-6) действие, которое реально выполнить сегодня (recommended_action).
+1) why_sphere — почему ИМЕННО эта сфера сегодня (сырой сигнал домена / роль в дне),
+   1–2 предложения; НЕ копия why_today / conflict.title / force_a|b; не «натяжение между»;
+2) конкретный бытовой момент (кто / где / что сказано или сделано) — setup + everyday_example;
+3) внутренний импульс;
+4) внешняя ситуация;
+5) возможность и ловушка — из фактов сферы, НЕ копируя force_a/force_b/title дословно;
+6) наблюдаемое последствие;
+7) действие, которое реально выполнить сегодня (recommended_action).
 everyday_example обязателен и конкретен (сообщение, вопрос, письмо, пауза перед ответом, счёт, созвон…).
 
 ЗАПРЕТ ПОВТОРОВ ОСИ / SEED-KILL (v3.1):
@@ -545,6 +548,7 @@ def normalize_native_scenario_llm_c1(raw: dict[str, Any] | None) -> dict[str, An
                 "sphere": sphere,
                 "role_in_story": _clip(sc.get("role_in_story") or ("primary" if idx == 0 else "support"), 32),
                 "setup": _clip(sc.get("setup") or sc.get("what_happens"), 320),
+                "why_sphere": _clip(sc.get("why_sphere") or sc.get("why"), 220),
                 "opportunity": _clip(sc.get("opportunity"), 280),
                 "trap": _clip(sc.get("trap"), 280),
                 "recommended_action": _clip(sc.get("recommended_action") or sc.get("do"), 240),
@@ -882,10 +886,17 @@ def native_llm_to_day_scenario_v1(
     }
 
     scenes: list[dict[str, Any]] = []
+    why_today = str(conflict_n.get("why_today") or "").strip().lower()
     for idx, sc in enumerate(_as_list(norm.get("scenes"))):
         if not isinstance(sc, dict):
             continue
         sphere = str(sc.get("sphere") or "")
+        why_sphere = str(sc.get("why_sphere") or sc.get("why") or "").strip()
+        # Never paste Plot why_arose / why_today into scene.why (seed leak).
+        if why_sphere and why_today and why_sphere.lower() == why_today:
+            why_sphere = ""
+        if why_sphere and title and why_sphere.lower() == title.lower():
+            why_sphere = ""
         scenes.append(
             {
                 "scene_id": sc.get("scene_id"),
@@ -893,8 +904,8 @@ def native_llm_to_day_scenario_v1(
                 "sphere_label_ru": _SPHERE_LABEL_RU.get(sphere, sphere),
                 "role_in_story": sc.get("role_in_story") or ("primary" if idx == 0 else "support"),
                 "what_happens": sc.get("setup"),
-                # Plot owns why_arose — scenes must not restate it (seed leak).
-                "why": "",
+                # Reading step 1 — why this sphere today (not Plot why_arose).
+                "why": why_sphere,
                 "opportunity": sc.get("opportunity"),
                 "trap": sc.get("trap"),
                 "recommended_action": sc.get("recommended_action"),

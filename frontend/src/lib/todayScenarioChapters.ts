@@ -1,7 +1,7 @@
 /**
  * Reading Screen 3 (v3.1) — sphere cards from day_scenario.scenes.
  * Conflict → Plot; symbols/astro → Symbols; color + day action → Move.
- * Per sphere: why / opportunity / trap only — no recommended_action (Move owns do/avoid).
+ * Per sphere progressive: why → narrative → opportunity / trap.
  * Canon: docs/today/TODAY_SCREEN_SCENARIO_V3.md · docs/DAY_SCENARIO_V1.md
  */
 
@@ -75,9 +75,35 @@ export type ScenarioSymbolImpact = {
 
 const READING_CHAPTER_CAP = 2;
 
+function looksLikeForcePaste(text: string | null | undefined): boolean {
+  const t = clean(text);
+  if (!t) return false;
+  return (
+    /^Шанс выбрать «.+» именно здесь/i.test(t) ||
+    /тот же выбор — «/i.test(t) ||
+    /день упирается в выбор: «/i.test(t) ||
+    /^Ловушка — скатиться в «/i.test(t)
+  );
+}
+
+/** Reject Plot paste / binary opener as sphere why. */
+export function sanitizeSphereWhy(
+  raw: string | null | undefined,
+  plotWhy: string | null | undefined,
+): string | null {
+  const why = clean(raw);
+  if (!why || looksLikeForcePaste(why) || isCalendarKitchenFact(why)) return null;
+  const plot = clean(plotWhy).toLowerCase();
+  if (plot && why.toLowerCase() === plot) return null;
+  if (/^натяжение\s+между\s+«/i.test(why) || /^напряжение\s+между\s+«/i.test(why)) return null;
+  return why;
+}
+
 export function buildScenarioStoryChapters(input: {
   contract: TodayContractV1;
   colorGuide?: TodayDayColorGuide | null;
+  /** Optional domain_verdicts.why_short by domain id — raw domain signal fallback. */
+  domainWhys?: Partial<Record<TodayContractDomainId | string, string>> | null;
   /** @deprecated v3 — symbols live on Symbols screen; kept for call-site compat */
   tarotImpact?: ScenarioSymbolImpact | null;
   numberImpact?: ScenarioSymbolImpact | null;
@@ -88,17 +114,7 @@ export function buildScenarioStoryChapters(input: {
   const scenario = dayStory.day_scenario!;
   const scenes = (scenario.scenes ?? []).filter((s) => s && typeof s === "object");
   const chapters: TodayDayNarrativeChapter[] = [];
-
-  const looksLikeForcePaste = (text: string | null | undefined): boolean => {
-    const t = clean(text);
-    if (!t) return false;
-    return (
-      /^Шанс выбрать «.+» именно здесь/i.test(t) ||
-      /тот же выбор — «/i.test(t) ||
-      /день упирается в выбор: «/i.test(t) ||
-      /^Ловушка — скатиться в «/i.test(t)
-    );
-  };
+  const plotWhy = clean(scenario.conflict?.why_arose);
 
   const ranked = [...scenes].sort(
     (a, b) =>
@@ -135,6 +151,10 @@ export function buildScenarioStoryChapters(input: {
     const trap = clean(sc.trap);
     // v3.1: recommended_action / do_not belong on Move — never paste into Reading.
 
+    const sceneWhy = sanitizeSphereWhy(sc.why, plotWhy);
+    const domainWhy = sanitizeSphereWhy(input.domainWhys?.[domainId], plotWhy);
+    const why = sceneWhy || domainWhy;
+
     const leadLine = looksLikeForcePaste(what) ? domestic : [what, domestic].filter(Boolean).join(" ");
     const paras: string[] = [];
     if (leadLine && !looksLikeForcePaste(leadLine)) {
@@ -148,11 +168,12 @@ export function buildScenarioStoryChapters(input: {
     if (opportunity && !looksLikeForcePaste(opportunity)) strengthen.push(opportunity);
     if (trap && !looksLikeForcePaste(trap)) soften.push(trap);
 
-    if (!paras.length && !strengthen.length && !soften.length) continue;
+    if (!why && !paras.length && !strengthen.length && !soften.length) continue;
 
     chapters.push({
       id: `sphere-${sphereKey}`,
       kicker: label,
+      why: why ?? null,
       lead: paras[0] ?? null,
       paragraphs: paras.slice(1),
       accent: strengthen.length || soften.length ? "dual" : "default",

@@ -33,6 +33,13 @@ import {
   isDayScenarioReadyForChapters,
 } from "@/lib/todayScenarioChapters";
 import {
+  fetchDomainVerdicts,
+  isSilentCalmBank,
+  orderDomainVerdicts,
+  scrubDomainVerdictJargon,
+  type DomainKey,
+} from "@/lib/todayDomainVerdicts";
+import {
   todaySlotFailureCopy,
   type TodaySlotLoadFailure,
 } from "@/lib/todaySlotAvailability";
@@ -154,6 +161,31 @@ export function TodayPersonalizedProductSection({
 }: Props) {
   const practiceRec = contract.day_story?.practice_recommendation;
   const [expandedSphereIds, setExpandedSphereIds] = useState<Record<string, boolean>>({});
+  const [domainWhys, setDomainWhys] = useState<Partial<Record<string, string>>>({});
+
+  useEffect(() => {
+    if (!dateISO || actFilter === "move" || actFilter === "response") return;
+    let cancelled = false;
+    void fetchDomainVerdicts(dateISO)
+      .then((data) => {
+        if (cancelled || data.is_fallback || data.degraded) return;
+        const ordered = scrubDomainVerdictJargon(orderDomainVerdicts(data.domain_verdicts ?? []));
+        if (isSilentCalmBank(ordered)) return;
+        const next: Partial<Record<string, string>> = {};
+        for (const row of ordered) {
+          const why = (row.why_short || "").trim();
+          if (!why) continue;
+          next[row.domain as DomainKey] = why;
+        }
+        if (Object.keys(next).length) setDomainWhys(next);
+      })
+      .catch(() => {
+        /* Reading may still use scene.why — no invented fallback. */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [dateISO, actFilter]);
 
   useEffect(() => {
     if (!focusSphere || actFilter === "move" || actFilter === "response") return;
@@ -215,8 +247,9 @@ export function TodayPersonalizedProductSection({
       story: storyWithSky,
       morningRitualData,
       colorGuide: colorGuide ?? story.colorGuide,
+      domainWhys,
     });
-  }, [contract, story, skyCards, morningRitualData, colorGuide]);
+  }, [contract, story, skyCards, morningRitualData, colorGuide, domainWhys]);
 
   const motion = useProfileMotionInView<HTMLElement>(40);
 
@@ -296,7 +329,14 @@ export function TodayPersonalizedProductSection({
             const hasDual = Boolean(
               chapter.dual && (chapter.dual.strengthen.length || chapter.dual.soften.length),
             );
+            const hasNarrative = Boolean(
+              (chapter.lead || "").trim() || chapter.paragraphs.some((p) => (p || "").trim()),
+            );
+            const sphereWhy = isSphereChapter ? (chapter.why || "").trim() || null : null;
+            // Progressive (SCENARIO_V3): why first; narrative + dual behind expand when why present.
+            const needsProgressive = isSphereChapter && Boolean(sphereWhy) && (hasNarrative || hasDual);
             const dualExpanded = !isSphereChapter || expandedSphereIds[chapter.id] === true;
+            const showNarrative = !needsProgressive || dualExpanded;
             const DomainIcon = domainIconForChapterId(chapter.id);
 
             return (
@@ -316,20 +356,41 @@ export function TodayPersonalizedProductSection({
                       </span>
                     ) : null
                   }
-                  lead={chapter.lead}
+                  lead={isSphereChapter ? null : chapter.lead}
                   paragraphs={
-                    softWhyInBody
-                      ? bodyParagraphs.filter((p) => p !== narrative.softWhy)
-                      : chapter.lead
-                        ? chapter.paragraphs
-                        : bodyParagraphs
+                    isSphereChapter
+                      ? []
+                      : softWhyInBody
+                        ? bodyParagraphs.filter((p) => p !== narrative.softWhy)
+                        : chapter.lead
+                          ? chapter.paragraphs
+                          : bodyParagraphs
                   }
                   accent={chapter.accent ?? "default"}
-                  media={media}
-                  collapseAfter={chapter.collapseAfter}
+                  media={showNarrative ? media : null}
+                  collapseAfter={isSphereChapter ? undefined : chapter.collapseAfter}
                   surface="plain"
                   testId={`today-narrative-block-${chapter.id}`}
                 >
+                  {sphereWhy ? (
+                    <p
+                      className={`${journeyStyles.narrativeBlockBody} ${styles.narrativeWhy}`}
+                      data-testid={`today-reading-sphere-why-${chapter.id}`}
+                    >
+                      <span className={styles.softWhyLabel}>{copy.journey.readingSphereWhyLabel}</span>
+                      {sphereWhy}
+                    </p>
+                  ) : null}
+                  {isSphereChapter && showNarrative && chapter.lead ? (
+                    <p className={journeyStyles.narrativeBlockLead}>{chapter.lead}</p>
+                  ) : null}
+                  {isSphereChapter && showNarrative
+                    ? chapter.paragraphs.map((para) => (
+                        <p key={para.slice(0, 48)} className={journeyStyles.narrativeBlockBody}>
+                          {para}
+                        </p>
+                      ))
+                    : null}
                   {softWhyInBody && narrative.softWhy ? (
                     <p className={`${journeyStyles.narrativeBlockBody} ${styles.narrativeWhy}`} data-testid="today-soft-why">
                       <span className={styles.softWhyLabel}>Почему это важно сегодня</span>
@@ -365,7 +426,7 @@ export function TodayPersonalizedProductSection({
                       ))}
                     </dl>
                   ) : null}
-                  {isSphereChapter && hasDual && !dualExpanded ? (
+                  {isSphereChapter && (hasDual || needsProgressive) && !dualExpanded ? (
                     <button
                       type="button"
                       className={`orbit-button orbit-button-secondary ${styles.practiceAction}`}
@@ -374,7 +435,9 @@ export function TodayPersonalizedProductSection({
                         setExpandedSphereIds((prev) => ({ ...prev, [chapter.id]: true }))
                       }
                     >
-                      Возможность и ловушка
+                      {needsProgressive
+                        ? copy.journey.readingExpandLabel
+                        : "Возможность и ловушка"}
                     </button>
                   ) : null}
                   {dualExpanded &&

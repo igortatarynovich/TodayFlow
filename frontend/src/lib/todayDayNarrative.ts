@@ -53,6 +53,11 @@ export type TodayDayNarrativeChapter = {
   kicker: string;
   paragraphs: string[];
   lead?: string | null;
+  /**
+   * Reading step 1 — why this sphere today (raw domain signal).
+   * Shown before narrative; never a Plot why_arose paste.
+   */
+  why?: string | null;
   /** Visual accent for ProductNarrativeBlock. */
   accent?: "default" | "dual" | "support" | "sky";
   planetHint?: string | null;
@@ -838,6 +843,8 @@ export function buildTodayDayNarrative(input: {
   morningRitualData?: MorningRitualData | null;
   colorGuide?: TodayDayColorGuide | null;
   guideNarrativePayload?: Record<string, unknown> | null;
+  /** Optional domain_verdicts.why_short by domain — Reading step-1 fallback. */
+  domainWhys?: Partial<Record<string, string>> | null;
 }): TodayDayNarrative {
   const { contract, story } = input;
   const literary = buildTodayLiteraryReading(story, contract);
@@ -873,6 +880,7 @@ export function buildTodayDayNarrative(input: {
   const scenarioChapters = buildScenarioStoryChapters({
     contract,
     colorGuide: input.colorGuide ?? story.colorGuide,
+    domainWhys: input.domainWhys,
     tarotImpact: story.tarotImpact,
     numberImpact: story.numberImpact,
   });

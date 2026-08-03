@@ -233,6 +233,7 @@ Re-entry: ordinary visit → **0**; deep-link only with `sf=1&step=N`.
 ### 2026-08-03 — Chrome: drop visible step numbers (§1.5)
 
 - **Added §1.5** — nav bar is optional per §1.4; `TodayActNav` visible ordinal (`{item.step}`) replaced with non-numeric indicator, swipe stays the primary path.
+- **Day accent (same day):** `TodayActNav` + ScreenFlow dots/controls consume `--day-*` for tint (FOUNDATION_UI §11.4); shape/labels/no-ordinals unchanged.
 - **No mechanics change** — `ScreenFlow.tsx` swipe/keyboard untouched; this is `TodayActNav` chrome only.
 - **Related:** [TODAYFLOW_FOUNDATION_UI.md §16](../TODAYFLOW_FOUNDATION_UI.md) — Today block/panel visual grammar (new).
 

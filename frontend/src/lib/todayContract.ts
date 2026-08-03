@@ -481,6 +481,8 @@ export type TodayContractDayStoryV1 = {
       sphere?: string;
       sphere_label_ru?: string;
       role_in_story?: string;
+      /** Reading step 1 — why this sphere today (not Plot why_arose). */
+      why?: string;
       what_happens?: string;
       opportunity?: string;
       trap?: string;
