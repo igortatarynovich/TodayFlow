@@ -162,6 +162,56 @@ def _load_cached_day_story(
     return fallback_hit
 
 
+def _load_prior_native_day_story_same_date(
+    db: Session,
+    *,
+    user_id: int,
+    target_date: date,
+) -> tuple[dict[str, Any], int] | None:
+    """Last successful native (or kept-prior) story for this calendar date only.
+
+    Never returns another day's content — that would lie about «сегодня».
+    """
+    q = (
+        db.query(db_models.GenerationLog)
+        .filter(
+            db_models.GenerationLog.user_id == user_id,
+            db_models.GenerationLog.module == MODULE,
+            db_models.GenerationLog.surface == SURFACE,
+            db_models.GenerationLog.status == "success",
+            db_models.GenerationLog.used_fallback.is_(False),
+        )
+        .order_by(db_models.GenerationLog.created_at.desc())
+    )
+    for row in q.limit(40):
+        ip = row.input_payload if isinstance(row.input_payload, dict) else {}
+        if str(ip.get("target_date") or "") != target_date.isoformat():
+            continue
+        src = str(ip.get("generation_source") or "")
+        if src not in {"native_llm_c1", "kept_prior_native"}:
+            continue
+        nr = row.normalized_response if isinstance(row.normalized_response, dict) else None
+        if not nr or nr.get("contract_version") != DAY_STORY_V1_CONTRACT:
+            continue
+        if str(nr.get("interpretation_status") or "") == "unavailable":
+            continue
+        scen = nr.get("day_scenario") if isinstance(nr.get("day_scenario"), dict) else {}
+        if not (scen.get("ready") and scen.get("scenes")):
+            continue
+        return dict(nr), int(row.id)
+    return None
+
+
+def _mark_kept_prior_native(story: dict[str, Any]) -> dict[str, Any]:
+    out = dict(story)
+    editorial = dict(out.get("editorial") or {})
+    editorial["kept_prior_native"] = True
+    editorial["story_refresh_required"] = True
+    editorial["runtime_source"] = "kept_prior_native"
+    out["editorial"] = editorial
+    return out
+
+
 def _build_day_story_record(
     db: Session,
     *,
@@ -504,6 +554,8 @@ def _build_day_story_record(
         native_scenario = None
         native_meta: dict[str, Any] = {}
         llm_attempted = bool(force_rebuild and is_llm_chat_configured())
+        kept_prior_native = False
+        generation_source = "deterministic_no_llm"
         if llm_attempted:
             from todayflow_backend.services.day_scenario_native_llm_c1 import (
                 call_day_scenario_native_llm_c1,
@@ -529,23 +581,6 @@ def _build_day_story_record(
                 "attempt2_policy": None,
             }
 
-        if story is None:
-            story = build_day_story_fallback_v1(
-                day_engine_brief=day_engine_brief,
-                color=color,
-                stone=stone,
-                locale=locale_value,
-                interpretation=interpretation,
-                fingerprint=expected_fingerprint,
-                ritual_context=safe_ritual,
-                intent_slice=intent_slice,
-                celestial_events=ce or None,
-                color_symbol=color_sym or None,
-                stone_symbol=stone_sym or None,
-                target_date=target_date,
-                birth_date=birth_date,
-            )
-
         def _project_scenario(
             current: dict[str, Any],
             *,
@@ -567,7 +602,7 @@ def _build_day_story_record(
                 projected["editorial"] = editorial
                 return projected
             if not allow_deterministic_rebuild:
-                # LLM attempted and failed — facts_only_unavailable; no deterministic invent.
+                # LLM attempted and failed — facts_only_unavailable; no B5 invent.
                 return project_day_scenario_onto_day_story_v1(current, None)
             return build_and_project_day_scenario_v1(
                 story=current,
@@ -578,25 +613,8 @@ def _build_day_story_record(
                 person_name=birth_name,
             )
 
-        # Phase C1/B5: exclusive scenario SoT projection (deterministic; no LLM here).
-        # If native LLM was attempted and failed (provider/parse), still project
-        # deterministic B5 from ranked facts (C4 everyday short_name) — not a
-        # slogan-only unavailable shell. Unavailable remains for hard editorial rejects.
-        try:
-            if native_scenario is not None:
-                story = _project_scenario(story, scenario_override=native_scenario)
-            elif llm_attempted:
-                story = _project_scenario(story, allow_deterministic_rebuild=True)
-                used_fallback = True
-            else:
-                story = _project_scenario(story)
-        except Exception:
-            logger.exception("day_scenario exclusive projection failed; keeping unprojected story")
-
-        story_errors = validate_day_story_v1(story)
-        if story_errors:
-            logger.warning("day_story_v1 validation failed, using fallback: %s", story_errors)
-            story = build_day_story_fallback_v1(
+        def _facts_shell() -> dict[str, Any]:
+            return build_day_story_fallback_v1(
                 day_engine_brief=day_engine_brief,
                 color=color,
                 stone=stone,
@@ -611,11 +629,74 @@ def _build_day_story_record(
                 target_date=target_date,
                 birth_date=birth_date,
             )
-            used_fallback = True
-            try:
-                story = _project_scenario(story, allow_deterministic_rebuild=True)
-            except Exception:
-                logger.exception("day_scenario projection failed after fallback")
+
+        # Native success → project LLM scenario. LLM fail → keep last good native
+        # for this local_date, else unavailable (never invent B5 templates).
+        try:
+            if native_scenario is not None:
+                story = _project_scenario(_facts_shell(), scenario_override=native_scenario)
+                used_fallback = False
+                generation_source = "native_llm_c1"
+            elif llm_attempted:
+                prior = _load_prior_native_day_story_same_date(
+                    db, user_id=int(user.id), target_date=target_date
+                )
+                if prior is not None:
+                    story, _prior_gen_id = prior
+                    story = _mark_kept_prior_native(story)
+                    kept_prior_native = True
+                    used_fallback = False
+                    generation_source = "kept_prior_native"
+                else:
+                    story = _project_scenario(
+                        _facts_shell(), allow_deterministic_rebuild=False
+                    )
+                    used_fallback = True
+                    generation_source = "unavailable_after_llm"
+            else:
+                story = _project_scenario(_facts_shell())
+                generation_source = "deterministic_no_llm"
+        except Exception:
+            logger.exception("day_scenario exclusive projection failed; keeping unprojected story")
+            if story is None:
+                story = _facts_shell()
+            if llm_attempted and generation_source == "deterministic_no_llm":
+                generation_source = "unavailable_after_llm"
+                used_fallback = True
+
+        story_errors = validate_day_story_v1(story)
+        if story_errors:
+            logger.warning("day_story_v1 validation failed, using fallback: %s", story_errors)
+            if llm_attempted:
+                # Never invent B5 after an LLM attempt — keep prior or strip to unavailable.
+                if not kept_prior_native:
+                    prior = _load_prior_native_day_story_same_date(
+                        db, user_id=int(user.id), target_date=target_date
+                    )
+                    if prior is not None:
+                        story, _prior_gen_id = prior
+                        story = _mark_kept_prior_native(story)
+                        kept_prior_native = True
+                        used_fallback = False
+                        generation_source = "kept_prior_native"
+                    else:
+                        try:
+                            story = _project_scenario(
+                                _facts_shell(), allow_deterministic_rebuild=False
+                            )
+                        except Exception:
+                            logger.exception("unavailable project failed after validation")
+                            story = _facts_shell()
+                        used_fallback = True
+                        generation_source = "unavailable_after_llm"
+            else:
+                story = _facts_shell()
+                used_fallback = True
+                try:
+                    story = _project_scenario(story, allow_deterministic_rebuild=True)
+                except Exception:
+                    logger.exception("day_scenario projection failed after fallback")
+                generation_source = "deterministic_no_llm"
 
         if capture is not None:
             try:
@@ -645,19 +726,13 @@ def _build_day_story_record(
             label="day_scenario_native_c1" if llm_attempted else "day_story_v1",
             metadata={"contract": DAY_STORY_V1_CONTRACT, "native_c1": llm_attempted},
         )
-        if llm_attempted and native_scenario is not None:
-            generation_source = "native_llm_c1"
-        elif llm_attempted:
-            generation_source = "deterministic_fallback_after_llm"
-        else:
-            generation_source = "deterministic_no_llm"
         # Product metric fields (not one-off diagnostics): track native share over time.
         native_ok = bool(native_scenario)
         model_for_log = None
         if llm_attempted:
             model_for_log = native_meta.get("model") or resolve_default_chat_model()
         err_bits = []
-        if llm_attempted and not native_ok:
+        if llm_attempted and not native_ok and not kept_prior_native:
             if native_meta.get("failure_class"):
                 err_bits.append(str(native_meta["failure_class"]))
             if native_meta.get("reject_reason"):
@@ -678,6 +753,7 @@ def _build_day_story_record(
             "native_scenario_c1": native_ok,
             "generation_source": generation_source,
             "llm_attempted": llm_attempted,
+            "kept_prior_native": kept_prior_native,
             "native_llm_c1_meta": {
                 "success": native_ok,
                 "failure_class": native_meta.get("failure_class"),
@@ -699,6 +775,8 @@ def _build_day_story_record(
                 "model": model_for_log,
                 "no_retry_on_timeout": native_meta.get("no_retry_on_timeout"),
                 "attempt2_policy": native_meta.get("attempt2_policy"),
+                "kept_prior_native": kept_prior_native,
+                "healed_rules": list(native_meta.get("healed_rules") or []),
             },
             **slice_log_fields(user_core),
         }
@@ -742,7 +820,8 @@ def _build_day_story_record(
             )
             state.fingerprint = expected_fingerprint
             state.expected_fingerprint = expected_fingerprint
-            state.stale = False
+            # Keep-last-good: surface as stale / refresh_required until a fresh native lands.
+            state.stale = bool(kept_prior_native)
             state.last_generation_log_id = gen_id
             db.add(state)
             db.commit()

@@ -5,9 +5,39 @@ Owner: Product + Engineering
 Status: Active working document
 
 **DONE (2026-08-03):** ScreenFlow content jobs **v3.1** — P0+P1+P2 gap plan closed on branch (seed-kill · domain4 · Plot wash · serve heal · LLM hard-gate · native opaque `serves_conflict`).  
-**IN PROGRESS:** **P0 native day_story reliability** — instrumentation + no-retry-on-timeout (immediate fallback after timeout; slim/alt attempt-2 = later slice). Re-measure failure_class in 2–3d, then budget/slim.  
+**IN PROGRESS:** **Soft-heal one-field gates** — `healed:<rule>` for conflict_link / incomplete forces / broken props / scenes_too_many; seed-kill + structural + scenes_too_few stay hard. Canary rebuild after BE deploy.  
 **ALSO IN PROGRESS:** **v3.1b concreteness** — kill generation-meta / tag-dump / color mash in user-facing chorus+Move; PR #7 draft.  
 Prior: card_base_v1 cutover live · editorial polish minors ongoing.
+
+## Architecture impact — soft-heal one-field native/scenario gates (2026-08-03)
+
+- **SoT before:** `HARD_NATIVE_VALIDATE_MARKERS` / `HARD_SCENARIO_VALIDATE_ERRORS` hard-rejected on empty `link_to_conflict`, incomplete `opposing_forces`, any prop missing `origin_scene_id`, and `scenes_too_many` — entire native day dropped (retry → unavailable / keep-prior).
+- **SoT after:** Those one-field misses are **auto-healed** before hard reject: opaque `link_to_conflict`/`serves_conflict` = «тон дня» when voice/scene otherwise present; incomplete force pair → clear both; broken props → drop that prop; `scenes_too_many` → trim to 4. Each heal logged as `failure_class=healed:<rule>` (+ `healed_rules[]`) — not silent success. **Still hard:** all seed-kill markers, structural schema, `scenes_too_few`, `scene_missing_setup`.
+- **Public contract changed?** no (same scenario shape; more days may accept with optional props omitted)
+- **Migration required?** no
+- **Canon updated?** no — policy in `day_scenario_gate_maturity_c36.py`; tracker SoT for this slice (aligns DAY_SCENARIO / v3.1 optional opposing_forces)
+- **Backward compatible?** yes
+
+## Architecture impact — DeepSeek→Kimi + no B5 invent (2026-08-03)
+
+- **SoT before:** Primary often Qwen; on native fail wire used `allow_deterministic_rebuild=True` → B5 template invent (`deterministic_fallback_after_llm`). Timeout skipped model fallback.
+- **SoT after:** Primary `deepseek-ai/DeepSeek-V4-Pro`; provider-fail (incl. timeout) → Kimi `moonshotai/Kimi-K2.6` once on attempt0; attempt≥1 = **Kimi-only**; wall `LLM_BACKGROUND_TIMEOUT_SECONDS=180`. On LLM fail: **keep last good native same `(user, local_date)`** (`generation_source=kept_prior_native`, stale/refresh) else **`unavailable_after_llm`** (strip meaning). **No B5 user-facing invent** after LLM attempt. Kill-switch back to B5 is not allowed.
+- **Public contract changed?** no (additive `generation_source` values; progress may stay `stale` when kept prior)
+- **Migration required?** no — canary force_rebuild users 1/2 then watch; broader prewarm only if native/kept OK
+- **Canon updated?** no (aligns with DAY_SCENARIO critical-fail → unavailable; tracker is ops SoT for model chain)
+- **Backward compatible?** yes for GET cache; old `deterministic_fallback_after_llm` rows remain queryable
+
+### Gap plan (native reliability) — update
+
+| Pri | Gap | Notes |
+|-----|-----|-------|
+| P0 | Instrumentation | **DONE** |
+| P0 | No-retry-on-timeout (same model) | **DONE** — attempt0 may still switch DeepSeek→Kimi once |
+| P0 | Product metric native share | **DONE** — also tracks `kept_prior_native` / `unavailable_after_llm` |
+| P0 | Kill B5 after LLM + keep-last-good | **THIS SLICE** |
+| P0 | Soft-heal one-field gates + `healed:<rule>` | **THIS SLICE** — conflict_link / forces / props / scenes_too_many |
+| P1 | Soft-fill `day_card_missing_conflict_link` | **superseded** by soft-heal above |
+| P1 | Re-run taxonomy (a) | After canary |
 
 ## Architecture impact — native day_story P0 instrumentation + no-retry-on-timeout (2026-08-03)
 
@@ -1200,6 +1230,8 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-03 | Today / Ops | **Soft-heal one-field gates** | **LIVE canary** | BE redeployed. User2 gen480 → `native_llm_c1` clean accept (DeepSeek, 2 scenes, no B5). User1 gen479 → still `unavailable_after_llm` (attempt0 editorial SEED_CHORUS_PASTE/SCENE_*; attempt1 Kimi empty) — heal path not reached. Broader prewarm still held.
+- 2026-08-03 | Today / Ops | **DeepSeek→Kimi + no B5 invent** | **LIVE canary** | BE redeployed. Canary rebuild users 1/2 (`2026-08-03`): gen 477/478 → `unavailable_after_llm` (empty/parse on Kimi path); **no B5** («Сделай один короткий шаг» absent; expect/do empty). Broader prewarm **held** until native/kept improves. Soft-fill conflict_link = next slice.
 - 2026-08-03 | Today / Ops | **Native day_story P0: instrumentation + no-retry-on-timeout** | **CODE** | Timeout → immediate deterministic fallback (no 2×45s). Logs: `generation_source`, `native_llm_c1_meta` (failure_class/attempts/chars), model kept on fallback, `error_message`. Product metric: `report_day_story_native_share.py` (+ alert <30% among llm_attempted). Attempt-2 slim/alt = later. Test `test_native_llm_no_retry_on_timeout_p0`. Not live until BE deploy.
 - 2026-08-03 | Today / Live QA | **Atmosphere paint + Glance chrome + content mash fixes** | **LIVE (deployed)** | Day CSS now beats day-phase peach on `--tf-page-atmosphere`; decor inside product frame; Glance «Шаг n/m» (no SCREENFLOW/TodayFlow brand). Reading stub suppressed (`asScreenFlowSteps`); sphere kickers → DomainLens labels; color clothing only when name matches / props.where_to_use; number voice uses reduced digit; evening CTA gated to Response; lunar pulse skip if already in why; serve-heal marker «проживите день в ключе». Hard-refresh; stale Symbols may need contract refresh for heal.
 - 2026-08-03 | Today / Day Atmosphere | **Visible pass + Glance mockup IA** | **LIVE (deployed)** | Auto `day_atmosphere` nest from thesis.mode (BE `day_atmosphere_v1`) · bridge nest+pin · shell `--day-*` + CSS decor · Glance glass-hero + ScreenFlow gauge. Compose rebuild BE+FE · health 200 · mapper smoke `conflict→tension`. Canon FOUNDATION_UI §11.9/§13 · TODAY_SCREEN_SCENARIO_V3 Экран 0. **Architecture impact:** public nest `day_atmosphere`; Glance layout SoT; section wash demoted under `data-day-mode`.

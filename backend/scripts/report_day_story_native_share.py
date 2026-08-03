@@ -99,6 +99,8 @@ def main() -> int:
         if attempted is None:
             attempted = bool(meta) or src in {
                 "native_llm_c1",
+                "kept_prior_native",
+                "unavailable_after_llm",
                 "deterministic_fallback_after_llm",
             }
         if attempted:
@@ -108,8 +110,12 @@ def main() -> int:
             fc = meta.get("failure_class") or (
                 (r["error_message"] or "").split("|", 1)[0].strip() or "unknown"
             )
-            if src != "native_llm_c1":
+            if str(fc).startswith("healed:"):
                 failure_c[str(fc)] += 1
+            elif src not in {"native_llm_c1", "kept_prior_native"}:
+                failure_c[str(fc)] += 1
+            elif src == "kept_prior_native":
+                failure_c["kept_prior_native"] += 1
 
     share = (native_ok_n / llm_attempted_n) if llm_attempted_n else None
     report = {

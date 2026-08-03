@@ -119,8 +119,10 @@ def test_scene_abstract_retries_when_promoted():
 
 def test_hard_scenario_validate_markers():
     assert is_hard_scenario_validate_error("scenes_empty")
-    assert is_hard_scenario_validate_error("prop_color_origin_not_in_scenes")
-    assert not is_hard_scenario_validate_error("some_soft_warning")
+    assert not is_hard_scenario_validate_error("prop_color_origin_not_in_scenes")
+    assert not is_hard_scenario_validate_error("conflict_opposing_forces_incomplete")
+    assert not is_hard_scenario_validate_error("prop_color_without_origin_scene")
+    assert is_hard_scenario_validate_error("conflict_opposing_forces_not_dict")
     # v3.1 seed-kill — must hard-block LLM accept / trigger retry
     assert is_hard_scenario_validate_error("conflict.short_name:invented_bank_binary")
     assert is_hard_scenario_validate_error("chorus:seed_paste_bridge")
@@ -149,6 +151,11 @@ def test_hard_native_validate_markers():
     assert is_hard_native_validate_error("unknown_evidence:foo")
     assert is_hard_native_validate_error("legacy_keys:expect")
     assert is_hard_native_validate_error("orphan_prop_goal:scene_x")
+    assert is_hard_native_validate_error("scenes_too_few")
+    assert is_hard_native_validate_error("scene_missing_setup:s1")
+    assert not is_hard_native_validate_error("scenes_too_many")
+    assert not is_hard_native_validate_error("day_card_missing_conflict_link")
+    assert not is_hard_native_validate_error("scene_missing_conflict_link:s1")
     assert not is_hard_native_validate_error("unrelated_soft_check")
     # Subjective chorus check must not hard-block (quality analyzer owns it).
     assert not is_hard_native_validate_error("parallel_forecast:day_card")

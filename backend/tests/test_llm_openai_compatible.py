@@ -12,6 +12,13 @@ from todayflow_backend.core.llm_openai_compatible import (
 )
 
 
+def _patch_settings(monkeypatch, s) -> None:
+    from todayflow_backend.core import llm_openai_compatible as llm_mod
+
+    monkeypatch.setattr(config_module, "settings", s)
+    monkeypatch.setattr(llm_mod, "settings", s)
+
+
 def test_get_openai_compatible_client_background_uses_longer_timeout(monkeypatch):
     from todayflow_backend.core.llm_openai_compatible import llm_operation
 
@@ -20,7 +27,7 @@ def test_get_openai_compatible_client_background_uses_longer_timeout(monkeypatch
         llm_http_timeout_seconds=12.0,
         llm_background_timeout_seconds=45.0,
     )
-    monkeypatch.setattr(config_module, "settings", s)
+    _patch_settings(monkeypatch, s)
     sync_client = get_openai_compatible_client()
     assert float(sync_client.timeout) == 12.0
     with llm_operation("background"):
@@ -30,13 +37,17 @@ def test_get_openai_compatible_client_background_uses_longer_timeout(monkeypatch
 
 def test_resolve_max_tokens_bumps_reasoning_models(monkeypatch):
     s = config_module.Settings(openai_api_key="sk-test", llm_default_model="gpt-5.5")
-    monkeypatch.setattr(config_module, "settings", s)
+    _patch_settings(monkeypatch, s)
     assert resolve_max_tokens(2800, model="gpt-5.5") >= 8192
 
 
 def test_chat_completion_json_fallback_without_response_format(monkeypatch):
-    s = config_module.Settings(openai_api_key="sk-test")
-    monkeypatch.setattr(config_module, "settings", s)
+    s = config_module.Settings(
+        openai_api_key="sk-test",
+        llm_provider="openai",
+        nebius_fallback_model="",
+    )
+    _patch_settings(monkeypatch, s)
 
     mock_client = MagicMock()
     first = MagicMock()
@@ -62,8 +73,13 @@ def test_chat_completion_json_fallback_without_response_format(monkeypatch):
 def test_chat_completion_json_does_not_plain_retry_on_timeout(monkeypatch):
     from todayflow_backend.core.llm_openai_compatible import classify_llm_call_failure
 
-    s = config_module.Settings(openai_api_key="sk-test")
-    monkeypatch.setattr(config_module, "settings", s)
+    # No Nebius fallback chain — assert only that timeout skips plain retry.
+    s = config_module.Settings(
+        openai_api_key="sk-test",
+        llm_provider="openai",
+        nebius_fallback_model="",
+    )
+    _patch_settings(monkeypatch, s)
 
     class FakeTimeout(Exception):
         pass
@@ -85,8 +101,13 @@ def test_chat_completion_json_does_not_plain_retry_on_timeout(monkeypatch):
 
 
 def test_chat_completion_json_retries_when_json_mode_returns_empty(monkeypatch):
-    s = config_module.Settings(openai_api_key="sk-test", llm_default_model="gpt-5.5")
-    monkeypatch.setattr(config_module, "settings", s)
+    s = config_module.Settings(
+        openai_api_key="sk-test",
+        llm_default_model="gpt-5.5",
+        llm_provider="openai",
+        nebius_fallback_model="",
+    )
+    _patch_settings(monkeypatch, s)
 
     mock_client = MagicMock()
     empty_msg = SimpleNamespace(content=None)
@@ -122,12 +143,12 @@ def test_nebius_model_fallback_on_404(monkeypatch):
         llm_provider="nebius",
         nebius_api_key="sk-test",
         nebius_model="deepseek-ai/DeepSeek-V4-Pro",
-        nebius_fallback_model="Qwen/Qwen3-235B-A22B-Instruct-2507",
+        nebius_fallback_model="moonshotai/Kimi-K2.6",
     )
-    monkeypatch.setattr(config_module, "settings", s)
+    _patch_settings(monkeypatch, s)
     assert resolve_chat_model_chain("deepseek-ai/DeepSeek-V4-Pro") == [
         "deepseek-ai/DeepSeek-V4-Pro",
-        "Qwen/Qwen3-235B-A22B-Instruct-2507",
+        "moonshotai/Kimi-K2.6",
     ]
 
     class FakeNotFound(Exception):
@@ -155,24 +176,26 @@ def test_nebius_model_fallback_on_404(monkeypatch):
     assert mock_client.chat.completions.create.call_count == 2
     assert mock_client.chat.completions.create.call_args_list[0].kwargs["model"] == "deepseek-ai/DeepSeek-V4-Pro"
     assert mock_client.chat.completions.create.call_args_list[1].kwargs["model"] == (
-        "Qwen/Qwen3-235B-A22B-Instruct-2507"
+        "moonshotai/Kimi-K2.6"
     )
 
 
-def test_nebius_model_fallback_skips_on_timeout(monkeypatch):
+def test_nebius_model_fallback_on_timeout_tries_kimi(monkeypatch):
     s = config_module.Settings(
         llm_provider="nebius",
         nebius_api_key="sk-test",
         nebius_model="deepseek-ai/DeepSeek-V4-Pro",
-        nebius_fallback_model="Qwen/Qwen3-235B-A22B-Instruct-2507",
+        nebius_fallback_model="moonshotai/Kimi-K2.6",
     )
-    monkeypatch.setattr(config_module, "settings", s)
+    _patch_settings(monkeypatch, s)
 
     class FakeTimeout(Exception):
         pass
 
     mock_client = MagicMock()
-    mock_client.chat.completions.create.side_effect = FakeTimeout("Request timed out.")
+    ok_msg = SimpleNamespace(content='{"ok":true}')
+    ok_resp = SimpleNamespace(choices=[SimpleNamespace(message=ok_msg)])
+    mock_client.chat.completions.create.side_effect = [FakeTimeout("Request timed out."), ok_resp]
 
     text = chat_completion_text(
         mock_client,
@@ -182,5 +205,12 @@ def test_nebius_model_fallback_skips_on_timeout(monkeypatch):
         max_tokens=100,
         json_object=True,
     )
-    assert text is None
-    assert mock_client.chat.completions.create.call_count == 1
+    assert text and "ok" in text
+    assert mock_client.chat.completions.create.call_count == 2
+    assert mock_client.chat.completions.create.call_args_list[1].kwargs["model"] == "moonshotai/Kimi-K2.6"
+
+
+def test_is_llm_chat_configured_nebius(monkeypatch):
+    s = config_module.Settings(llm_provider="nebius", nebius_api_key="sk-test")
+    _patch_settings(monkeypatch, s)
+    assert is_llm_chat_configured() is True

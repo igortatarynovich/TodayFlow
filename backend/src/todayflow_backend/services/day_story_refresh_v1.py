@@ -308,16 +308,19 @@ def refresh_day_story_for_user(
 
             state.fingerprint = build_fp
             state.expected_fingerprint = build_fp
-            state.stale = False
+            editorial = story.get("editorial") if isinstance(story.get("editorial"), dict) else {}
+            kept_prior = bool(editorial.get("kept_prior_native"))
+            # Keep-last-good same date: show prior native but mark refresh still required.
+            state.stale = bool(kept_prior)
             state.last_generation_log_id = int(gen_id)
             state.updated_at = utc_naive_now()
             db.add(state)
             db.commit()
             return {
                 "rebuilt": True,
-                "story_status": "fresh",
+                "story_status": "stale" if kept_prior else "fresh",
                 "story_fingerprint": build_fp,
-                "story_refresh_required": False,
+                "story_refresh_required": bool(kept_prior),
                 "generation_id": str(gen_id),
                 "story": story,
                 "used_fallback": used_fallback,

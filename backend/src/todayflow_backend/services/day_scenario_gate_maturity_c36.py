@@ -202,6 +202,7 @@ GATE_RULES: dict[str, GateRule] = {
 }
 
 # Structural scenario validate errors treated as hard (contract / SoT assemble).
+# Soft-healable one-field issues live in apply_soft_scenario_heals (not here).
 HARD_SCENARIO_VALIDATE_ERRORS = frozenset(
     {
         "scenario_not_dict",
@@ -212,15 +213,8 @@ HARD_SCENARIO_VALIDATE_ERRORS = frozenset(
         # v3.1 seed-kill codes from find_verbatim_seed_leaks_v1
         "conflict.short_name:invented_bank_binary",
         "chorus:seed_paste_bridge",
-        # v3.1: opposing_forces may be empty — even day is valid
-        "conflict_opposing_forces_incomplete",
+        # Malformed opposing_forces type (not incomplete pair — that is healable).
         "conflict_opposing_forces_not_dict",
-        "prop_color_without_origin_scene",
-        "prop_color_origin_not_in_scenes",
-        "prop_avoid_without_origin_scene",
-        "prop_goal_without_origin_scene",
-        "prop_affirmation_without_origin_scene",
-        "prop_humor_without_origin_scene",
     }
 )
 
@@ -233,23 +227,205 @@ HARD_SCENARIO_VALIDATE_PREFIXES = (
 # Native schema error prefixes / tokens that stay hard-blocking (retry).
 # Intentionally excludes subjective checks (e.g. parallel_forecast regex) —
 # those live in editorial analyzers under quality maturity.
+# Soft-healable one-field issues: day_*_missing_conflict_link, scene_missing_conflict_link,
+# scenes_too_many, conflict_forces_incomplete — see apply_soft_native_heals.
 HARD_NATIVE_VALIDATE_MARKERS = (
     "payload_not_dict",
     "bad_schema_version",
     "legacy_keys:",
     "conflict_missing_",
-    "scenes_too_",
+    "scenes_too_few",  # content fullness — keep hard; scenes_too_many is heal-trim
     "scene_not_dict",
     "scene_bad_sphere:",
     "scene_missing_id",
     "scene_duplicate_id:",
     "scene_missing_setup:",
-    "scene_missing_conflict_link:",
     "unknown_evidence:",
     "orphan_prop_",
-    "day_card_missing_conflict_link",
-    "day_number_missing_conflict_link",
 )
+
+# Max scenes kept when soft-healing scenes_too_many (matches validate ceiling).
+SOFT_HEAL_MAX_SCENES = 4
+
+
+def healed_failure_class(healed_rules: list[str] | None) -> str | None:
+    """``healed:<primary_rule>`` so soft-heal is never silent success."""
+    rules = [str(r).strip() for r in (healed_rules or []) if str(r).strip()]
+    if not rules:
+        return None
+    primary = rules[0]
+    if len(primary) > 96:
+        primary = primary[:96]
+    return f"healed:{primary}"
+
+
+def apply_soft_native_heals(payload: dict[str, Any] | None) -> tuple[dict[str, Any], list[str]]:
+    """Auto-fix cheap one-field native misses before hard reject.
+
+    Does **not** invent meaning: only opaque «тон дня» anchors, trim extras,
+    or clear incomplete force pairs.
+    """
+    from todayflow_backend.services.day_scenario_v1 import _day_tone_anchor
+
+    if not isinstance(payload, dict):
+        return {}, []
+    out = dict(payload)
+    heals: list[str] = []
+
+    conflict = dict(out.get("conflict") or {}) if isinstance(out.get("conflict"), dict) else {}
+    force_a = str(conflict.get("force_a") or "").strip()
+    force_b = str(conflict.get("force_b") or "").strip()
+    if (force_a and not force_b) or (force_b and not force_a):
+        conflict["force_a"] = ""
+        conflict["force_b"] = ""
+        out["conflict"] = conflict
+        heals.append("conflict_forces_incomplete")
+
+    scenes_in = out.get("scenes")
+    if isinstance(scenes_in, list) and len(scenes_in) > SOFT_HEAL_MAX_SCENES:
+        out["scenes"] = list(scenes_in[:SOFT_HEAL_MAX_SCENES])
+        heals.append("scenes_too_many")
+
+    chorus = dict(out.get("interpretive_chorus") or {}) if isinstance(out.get("interpretive_chorus"), dict) else {}
+    chorus_changed = False
+    for label in ("day_card", "day_number"):
+        voice_raw = chorus.get(label)
+        if not isinstance(voice_raw, dict) or not voice_raw:
+            continue
+        voice = dict(voice_raw)
+        if str(voice.get("link_to_conflict") or "").strip():
+            continue
+        has_voice = bool(str(voice.get("human_meaning") or "").strip()) or bool(
+            str(voice.get("archetype_role") or "").strip()
+        )
+        if not has_voice:
+            continue
+        voice["link_to_conflict"] = _day_tone_anchor(str(conflict.get("title") or ""))
+        chorus[label] = voice
+        chorus_changed = True
+        heals.append(f"{label}_missing_conflict_link")
+    if chorus_changed:
+        out["interpretive_chorus"] = chorus
+
+    scenes = out.get("scenes")
+    if isinstance(scenes, list):
+        title = str((out.get("conflict") or {}).get("title") or "") if isinstance(out.get("conflict"), dict) else ""
+        new_scenes: list[Any] = []
+        scenes_changed = False
+        for sc in scenes:
+            if not isinstance(sc, dict):
+                new_scenes.append(sc)
+                continue
+            row = dict(sc)
+            sid = str(row.get("scene_id") or "")
+            sphere = str(row.get("sphere") or "")
+            setup = str(row.get("setup") or "")
+            linked = False
+            if title and title[:12].lower() in (
+                setup + str(row.get("opportunity") or "") + str(row.get("trap") or "")
+            ).lower():
+                linked = True
+            refs = row.get("chorus_refs") if isinstance(row.get("chorus_refs"), list) else []
+            if "conflict" in [str(x).lower() for x in refs]:
+                linked = True
+            if str(row.get("serves_conflict") or "").strip():
+                linked = True
+            if not linked and title:
+                row["serves_conflict"] = _day_tone_anchor(title)
+                scenes_changed = True
+                heals.append(f"scene_missing_conflict_link:{sid or sphere}")
+            new_scenes.append(row)
+        if scenes_changed:
+            out["scenes"] = new_scenes
+
+    return out, heals
+
+
+def apply_soft_scenario_heals(scenario: dict[str, Any] | None) -> tuple[dict[str, Any], list[str]]:
+    """Auto-fix cheap scenario validate misses (props / incomplete forces)."""
+    if not isinstance(scenario, dict):
+        return {}, []
+    out = dict(scenario)
+    heals: list[str] = []
+
+    conflict = dict(out.get("conflict") or {}) if isinstance(out.get("conflict"), dict) else {}
+    forces = conflict.get("opposing_forces")
+    if isinstance(forces, dict):
+        a = str(forces.get("a") or "").strip()
+        b = str(forces.get("b") or "").strip()
+        if (a and not b) or (b and not a):
+            conflict["opposing_forces"] = {"a": "", "b": ""}
+            out["conflict"] = conflict
+            heals.append("conflict_opposing_forces_incomplete")
+
+    props = dict(out.get("props") or {}) if isinstance(out.get("props"), dict) else {}
+    if props.get("status") != "ok":
+        return out, heals
+
+    scenes = out.get("scenes") if isinstance(out.get("scenes"), list) else []
+    scene_ids = {
+        str(sc.get("scene_id"))
+        for sc in scenes
+        if isinstance(sc, dict) and sc.get("scene_id")
+    }
+    props_changed = False
+
+    color = props.get("color") if isinstance(props.get("color"), dict) else None
+    if color:
+        oid = str(color.get("origin_scene_id") or "").strip()
+        if not oid:
+            props.pop("color", None)
+            props_changed = True
+            heals.append("prop_color_without_origin_scene")
+        elif oid not in scene_ids:
+            props.pop("color", None)
+            props_changed = True
+            heals.append("prop_color_origin_not_in_scenes")
+
+    avoid = props.get("avoid_color") if isinstance(props.get("avoid_color"), dict) else None
+    if avoid and not str(avoid.get("origin_scene_id") or "").strip():
+        props.pop("avoid_color", None)
+        props_changed = True
+        heals.append("prop_avoid_without_origin_scene")
+
+    goals = props.get("goals") if isinstance(props.get("goals"), list) else None
+    if goals is not None:
+        kept = [
+            g
+            for g in goals
+            if not isinstance(g, dict) or str(g.get("origin_scene_id") or "").strip()
+        ]
+        dropped = len(goals) - len(kept)
+        if dropped:
+            props["goals"] = kept
+            props_changed = True
+            for _ in range(dropped):
+                heals.append("prop_goal_without_origin_scene")
+
+    affirms = props.get("affirmations") if isinstance(props.get("affirmations"), list) else None
+    if affirms is not None:
+        kept_a = [
+            a
+            for a in affirms
+            if not isinstance(a, dict) or str(a.get("origin_scene_id") or "").strip()
+        ]
+        dropped_a = len(affirms) - len(kept_a)
+        if dropped_a:
+            props["affirmations"] = kept_a
+            props_changed = True
+            for _ in range(dropped_a):
+                heals.append("prop_affirmation_without_origin_scene")
+
+    humor = props.get("humor")
+    if isinstance(humor, dict) and humor and not str(humor.get("origin_scene_id") or "").strip():
+        props.pop("humor", None)
+        props_changed = True
+        heals.append("prop_humor_without_origin_scene")
+
+    if props_changed:
+        out["props"] = props
+
+    return out, heals
 
 
 def get_rule(code: str | None) -> GateRule:

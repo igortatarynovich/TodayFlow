@@ -15,6 +15,7 @@ import re
 from time import perf_counter
 from typing import Any
 
+from todayflow_backend.core.config import settings
 from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_plain_with_status,
     get_openai_compatible_client,
@@ -35,10 +36,9 @@ NATIVE_FAILURE_PARSE = "parse"
 NATIVE_FAILURE_GATE = "gate"
 NATIVE_FAILURE_OTHER = "other"
 
-# After provider timeout: do not burn attempt 2 as-is (almost always second timeout).
-# Gate/parse retries with feedback remain. Slim-prompt / alternate-model attempt-2
-# is a separate slice — not this P0.
-ATTEMPT2_POLICY_TIMEOUT = "skip_identical_on_timeout_immediate_fallback"
+# After provider timeout on the same model: do not burn a second identical wait.
+# Attempt 0 may switch DeepSeek → Kimi once; attempt ≥1 is Kimi-only (gate feedback).
+ATTEMPT2_POLICY_TIMEOUT = "attempt0_deepseek_then_kimi_attempt1_kimi_only"
 
 
 def _map_provider_kind_to_failure_class(kind: str | None) -> str:
@@ -68,6 +68,15 @@ def gate_failure_class(reject_reason: str | None) -> str:
     return f"{NATIVE_FAILURE_GATE}:{primary}"
 
 
+def resolve_native_attempt_model(attempt_idx: int) -> str:
+    """Attempt 0: DeepSeek (chain may add Kimi). Attempt ≥1: Kimi-only."""
+    if int(attempt_idx) >= 1:
+        fb = (getattr(settings, "nebius_fallback_model", None) or "").strip()
+        if fb:
+            return fb
+    return str(resolve_default_chat_model() or "")
+
+
 def _write_native_call_meta(
     meta_out: dict[str, Any] | None,
     *,
@@ -78,10 +87,15 @@ def _write_native_call_meta(
     attempts: list[dict[str, Any]],
     terminal_failure_class: str | None = None,
     terminal_reject_reason: str | None = None,
+    healed_rules: list[str] | None = None,
 ) -> None:
     if meta_out is None:
         return
+    from todayflow_backend.services.day_scenario_gate_maturity_c36 import healed_failure_class
+
     last = attempts[-1] if attempts else {}
+    heals = [str(r).strip() for r in (healed_rules or []) if str(r).strip()]
+    heal_fc = healed_failure_class(heals)
     meta_out.clear()
     meta_out.update(
         {
@@ -92,12 +106,26 @@ def _write_native_call_meta(
             "user_sent_chars": int(user_sent_chars),
             "attempt_count": len(attempts),
             "attempts": list(attempts),
-            "failure_class": None
-            if success
-            else (terminal_failure_class or last.get("failure_class") or NATIVE_FAILURE_OTHER),
-            "reject_reason": None
-            if success
-            else (terminal_reject_reason or last.get("reject_reason")),
+            # Soft-heal is success for product, but failure_class stays visible.
+            "failure_class": (
+                heal_fc
+                if success and heal_fc
+                else (
+                    None
+                    if success
+                    else (terminal_failure_class or last.get("failure_class") or NATIVE_FAILURE_OTHER)
+                )
+            ),
+            "reject_reason": (
+                ";".join(heals)
+                if success and heals
+                else (
+                    None
+                    if success
+                    else (terminal_reject_reason or last.get("reject_reason"))
+                )
+            ),
+            "healed_rules": heals,
             "no_retry_on_timeout": True,
             "attempt2_policy": ATTEMPT2_POLICY_TIMEOUT,
         }
@@ -969,6 +997,9 @@ def call_day_scenario_native_llm_c1(
     )
     from todayflow_backend.services.day_scenario_gate_maturity_c36 import (
         annotate_defects_with_maturity,
+        apply_soft_native_heals,
+        apply_soft_scenario_heals,
+        healed_failure_class,
         is_hard_native_validate_error,
         is_hard_scenario_validate_error,
         maturity_summary,
@@ -1117,9 +1148,10 @@ def call_day_scenario_native_llm_c1(
             user_sent = f"{user_base}\n\n---\n{retry_feedback}"[:18000]
             user_sent_chars = len(user_sent)
         attempt_t0 = perf_counter()
+        attempt_model = resolve_native_attempt_model(attempt_idx)
         content, provider_kind, used_model = chat_completion_plain_with_status(
             client,
-            model=resolve_default_chat_model(),
+            model=attempt_model,
             messages=[
                 {"role": "system", "content": system},
                 {"role": "user", "content": user_sent},
@@ -1141,6 +1173,7 @@ def call_day_scenario_native_llm_c1(
                     "reject_reason": reject_reason,
                     "provider_kind": provider_kind,
                     "model": model_name or None,
+                    "attempt_model": attempt_model,
                     "user_sent_chars": len(user_sent or ""),
                 }
             )
@@ -1154,16 +1187,16 @@ def call_day_scenario_native_llm_c1(
                     status="empty_response",
                     reject_reason=reject_reason,
                 )
-            # P0: timeout → immediate fallback (no identical second burn).
-            if failure_class == NATIVE_FAILURE_TIMEOUT:
-                logger.warning(
-                    "native_llm_c1 timeout on attempt=%s duration_ms=%s; skipping retry",
-                    attempt_idx,
-                    attempt_ms,
-                )
-                _fail(failure_class=NATIVE_FAILURE_TIMEOUT, reject_reason=reject_reason)
-                return None
-            continue
+            # Provider chain exhausted (attempt0 DeepSeek→Kimi, or Kimi-only later).
+            # Do not start another attempt without parse/gate feedback.
+            logger.warning(
+                "native_llm_c1 provider fail attempt=%s class=%s duration_ms=%s; stopping",
+                attempt_idx,
+                failure_class,
+                attempt_ms,
+            )
+            _fail(failure_class=failure_class, reject_reason=reject_reason)
+            return None
         parsed = _parse_json_content(content)
         if not parsed:
             attempt_rows.append(
@@ -1198,6 +1231,10 @@ def call_day_scenario_native_llm_c1(
                 "pack_confidence": pers_pack.get("confidence"),
             }
 
+        # Soft-heal one-field misses before hard reject (visible as healed:<rule>).
+        normalized, native_heals = apply_soft_native_heals(normalized)
+        attempt_heals: list[str] = list(native_heals)
+
         errors = validate_native_scenario_llm_c1(normalized, allowed_evidence_ids=allowed)
         legacy_raw = find_legacy_keys(parsed)
         if legacy_raw:
@@ -1215,6 +1252,7 @@ def call_day_scenario_native_llm_c1(
                     "model": model_name or None,
                     "user_sent_chars": len(user_sent or ""),
                     "status": "native_validation_reject",
+                    "healed_rules": list(attempt_heals),
                 }
             )
             if capture is not None:
@@ -1236,6 +1274,16 @@ def call_day_scenario_native_llm_c1(
                     capture.add_defect(
                         "NATIVE_SOFT_VALIDATE",
                         f"{e}|maturity=experimental|action=score_only",
+                        cls="VALIDATION",
+                    )
+            except Exception:
+                pass
+        if attempt_heals and capture is not None:
+            try:
+                for rule in attempt_heals[:12]:
+                    capture.add_defect(
+                        "NATIVE_SOFT_HEAL",
+                        f"healed:{rule}|maturity=blocking|action=heal",
                         cls="VALIDATION",
                     )
             except Exception:
@@ -1517,6 +1565,18 @@ def call_day_scenario_native_llm_c1(
             celestial_events=celestial_events,
             day_thesis=_as_dict(interp.get("day_thesis")),
         )
+        scenario, scenario_heals = apply_soft_scenario_heals(scenario)
+        attempt_heals.extend(scenario_heals)
+        if scenario_heals and capture is not None:
+            try:
+                for rule in scenario_heals[:12]:
+                    capture.add_defect(
+                        "SCENARIO_SOFT_HEAL",
+                        f"healed:{rule}|maturity=blocking|action=heal",
+                        cls="VALIDATION",
+                    )
+            except Exception:
+                pass
         scen_errors = validate_day_scenario_v1(scenario)
         hard = [e for e in scen_errors if is_hard_scenario_validate_error(e)]
         if hard:
@@ -1529,6 +1589,7 @@ def call_day_scenario_native_llm_c1(
                     "reject_reason": reason,
                     "model": model_name or None,
                     "status": "scenario_validate_reject",
+                    "healed_rules": list(attempt_heals),
                 }
             )
             if capture is not None:
@@ -1543,15 +1604,17 @@ def call_day_scenario_native_llm_c1(
                 )
             retry_feedback = "Исправь structural/SoT ошибки: " + "; ".join(hard[:6])
             continue
+        heal_fc = healed_failure_class(attempt_heals)
         attempt_rows.append(
             {
                 "attempt_index": attempt_idx,
                 "attempt_duration_ms": attempt_ms,
-                "failure_class": None,
-                "reject_reason": None,
+                "failure_class": heal_fc,
+                "reject_reason": (";".join(attempt_heals) if attempt_heals else None),
                 "model": model_name or None,
                 "status": "accepted_native_c36",
                 "user_sent_chars": len(user_sent or ""),
+                "healed_rules": list(attempt_heals),
             }
         )
         if capture is not None:
@@ -1597,6 +1660,7 @@ def call_day_scenario_native_llm_c1(
             "personalization_score": pers_score,
             "personalization_defects": public_defect_view(last_pers_defects),
             "personalization_depth": scenario["personalization_depth"],
+            "healed_rules": list(attempt_heals),
         }
         _write_native_call_meta(
             meta_out,
@@ -1605,6 +1669,7 @@ def call_day_scenario_native_llm_c1(
             system_chars=system_chars,
             user_sent_chars=user_sent_chars,
             attempts=attempt_rows,
+            healed_rules=attempt_heals,
         )
         return scenario
     _fail(

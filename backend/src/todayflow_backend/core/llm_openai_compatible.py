@@ -94,7 +94,7 @@ def get_openai_compatible_client(*, operation: str | None = None) -> Any | None:
     op = (operation or _llm_operation_ctx.get() or "sync").strip().lower()
     base_timeout = float(getattr(settings, "llm_http_timeout_seconds", 12.0) or 12.0)
     if op == "background":
-        timeout_s = float(getattr(settings, "llm_background_timeout_seconds", 45.0) or 45.0)
+        timeout_s = float(getattr(settings, "llm_background_timeout_seconds", 180.0) or 180.0)
     else:
         timeout_s = base_timeout
     kw: dict[str, Any] = {"api_key": key, "timeout": timeout_s, "max_retries": 0}
@@ -289,8 +289,20 @@ def resolve_chat_model_chain(primary: str) -> list[str]:
 
 
 def _should_try_model_fallback(failure_kind: str | None) -> bool:
-    """Fallback to NEBIUS_FALLBACK_MODEL on missing model / upstream outage — not timeout/429."""
-    return failure_kind in {"model_unavailable", "upstream_unavailable", "empty", "other"}
+    """Fallback to NEBIUS_FALLBACK_MODEL (Kimi) when primary has a provider problem.
+
+    Includes timeout/empty/upstream/missing-model. Does **not** include throttle (429)
+    — a second model under rate limit usually fails the same way.
+    Identical retry of the same model on timeout is still forbidden at the native
+    attempt loop; this only switches DeepSeek → Kimi once.
+    """
+    return failure_kind in {
+        "model_unavailable",
+        "upstream_unavailable",
+        "empty",
+        "timeout",
+        "other",
+    }
 
 
 def chat_completion_text(
@@ -305,12 +317,11 @@ def chat_completion_text(
     """Возвращает текст ответа ассистента или None при полном сбое.
 
     JSON mode may fall back to plain completion when the provider rejects
-    ``response_format`` or returns empty content. **Timeouts do not fall back** —
-    a second full wait would only amplify client-side deadline cuts (esp. Nebius
-    + large packs under a short sync timeout).
+    ``response_format`` or returns empty content.
 
-    When ``LLM_PROVIDER=nebius`` and primary fails as model/upstream unavailable,
-    retries once with ``NEBIUS_FALLBACK_MODEL`` (default Qwen Instruct).
+    When ``LLM_PROVIDER=nebius``, primary is DeepSeek-V4-Pro; on provider failure
+    (including timeout/empty/upstream/missing model) retries once with
+    ``NEBIUS_FALLBACK_MODEL`` (Kimi-K2.6). Throttle (429) does not switch models.
     """
     chain = resolve_chat_model_chain(model)
     last_kind: str | None = None
@@ -452,7 +463,8 @@ def chat_completion_plain_with_status(
     Returns ``(text, failure_class, model_id)``.
     ``failure_class`` is set when text is None: timeout | empty | throttle |
     model_unavailable | upstream_unavailable | other.
-    On timeout, does **not** try NEBIUS_FALLBACK_MODEL (same rule as json path).
+    Nebius chain: primary then Kimi on provider failure including timeout
+    (via ``_should_try_model_fallback``).
     """
     chain = resolve_chat_model_chain(model)
     last_kind: str | None = None
