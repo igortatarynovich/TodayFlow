@@ -265,3 +265,89 @@ def test_guillemet_alone_does_not_count_as_lived_everyday():
         normalize_native_scenario_llm_c1(native), has_natal_evidence=True
     )
     assert any(d["code"] == DEFECT_SCENE_MISSING_EVERYDAY for d in defects)
+
+
+def test_seed_bank_binary_and_chorus_paste_emit_hard_codes():
+    from todayflow_backend.services.day_scenario_editorial_gate_c31 import (
+        DEFECT_SEED_BANK_BINARY_SHORT_NAME,
+        DEFECT_SEED_CHORUS_PASTE,
+    )
+    from todayflow_backend.services.day_scenario_gate_maturity_c36 import (
+        annotate_defects_with_maturity,
+        should_retry_defects,
+    )
+
+    short = "Тащить старое или отпустить и восстановиться"
+    native = _valid_native_good()
+    native["conflict"]["title"] = short
+    native["interpretive_chorus"]["astrology"][0]["human_meaning"] = (
+        f"Убывающая луна. Это подталкивает день к сюжету «{short}»."
+    )
+    native["interpretive_chorus"]["day_card"]["link_to_conflict"] = (
+        f"Архетип «Девятка жезлов» лучше всего описывает, какой ролью пройти «{short}»."
+    )
+    native["interpretive_chorus"]["day_number"]["link_to_conflict"] = (
+        f"Число 21 окрашивает прохождение «{short}»: темп — выражение."
+    )
+    defects = run_editorial_quality_gate_c31(
+        normalize_native_scenario_llm_c1(native), has_natal_evidence=True
+    )
+    codes = {d["code"] for d in defects}
+    assert DEFECT_SEED_BANK_BINARY_SHORT_NAME in codes
+    assert DEFECT_SEED_CHORUS_PASTE in codes
+    annotated = annotate_defects_with_maturity(defects)
+    assert should_retry_defects(annotated)
+    feedback = format_editorial_retry_feedback(defects)
+    assert "SEED-KILL" in feedback
+    assert DEFECT_SEED_CHORUS_PASTE in feedback
+
+
+def test_seed_leaks_are_hard_after_scenario_validate():
+    """Mapped scenario with old bridges must hard-fail LLM accept path."""
+    from todayflow_backend.services.day_scenario_gate_maturity_c36 import (
+        is_hard_scenario_validate_error,
+    )
+    from todayflow_backend.services.day_scenario_v1 import (
+        find_verbatim_seed_leaks_v1,
+        validate_day_scenario_v1,
+    )
+
+    short = "Тащить старое или отпустить и восстановиться"
+    scenario = {
+        "contract_version": "day_scenario_v1",
+        "conflict": {"short_name": short, "driver_ids": ["x"], "opposing_forces": {"a": "", "b": ""}},
+        "foundation": {"ranked_drivers": [{"id": "x", "fact_ru": "Убывающая луна."}]},
+        "chorus": {
+            "astrology": [
+                {
+                    "human_meaning": f"Убывающая луна. Это подталкивает день к сюжету «{short}».",
+                }
+            ],
+            "day_card": {
+                "link_to_conflict": f"какой ролью пройти «{short}»",
+                "must_not_invent_second_plot": True,
+            },
+            "day_number": {
+                "link_to_conflict": f"Число 21 окрашивает прохождение «{short}»",
+                "must_not_invent_second_plot": True,
+            },
+            "natal": [],
+        },
+        "scenes": [
+            {
+                "scene_id": "scene.relationships",
+                "sphere": "relationships",
+                "what_happens": "разговор",
+                "opportunity": "сказать",
+                "trap": "сгладить",
+                "recommended_action": "написать",
+                "do_not": "молчать",
+            }
+        ],
+        "props": {},
+    }
+    leaks = find_verbatim_seed_leaks_v1(scenario)
+    assert any("invented_bank_binary" in x or "seed_paste" in x or "verbatim_seed_leak" in x for x in leaks)
+    errors = validate_day_scenario_v1(scenario)
+    hard = [e for e in errors if is_hard_scenario_validate_error(e)]
+    assert hard, f"expected hard seed errors, got errors={errors}"

@@ -32,7 +32,7 @@ Prior: card_base_v1 cutover live · editorial polish minors ongoing.
 | P2 | Domain dictionary unify 3→4 on contract | Wave2 / day_story | **DONE** wire = work\|money\|relationships\|energy |
 | P2 | Practice\|affirmation rotation single slot | Move | **DONE** (date hash XOR) |
 | P2 | Plot visual tied to classification | FE hero | **DONE** `resolvePlotHeroWash(thesis.mode)` |
-| P2 | Chorus/scenes stop quoting short_name A\|B | generation | **DONE** seed-kill (chorus · scenes · native LLM · project · editorial gate) |
+| P2 | Chorus/scenes stop quoting short_name A\|B | generation | **DONE** seed-kill + serve heal (`48b589c`) + **LLM hard-gate** (`SEED_*` + validate hard prefixes) |
 
 ## Architecture impact — card_base_v1 cutover (explainer / question-tarot) (2026-08-01)
 
@@ -1953,6 +1953,7 @@ Historical note:
 - 2026-07-25 | Ops / Agents | **SoT stack clarified** | **ACTIVE** | Authority: **canon → backlog/tracker → server (live)**. Git = ledger only. Root `AGENTS.md` + `.cursor/rules/architecture-impact.mdc` updated.
 - 2026-07-25 | Profile / UI | **Premium Profile pass · natal instrument + book scroll** | **ON SERVER** | Canon: Foundation UI «дорого без текста» · PROFILE_SCREEN_MASTER §0.2–0.3. Natal = one `instrument` bezel (plate+dial+selector) · planets angular fan inside rim · Journey/Bridge/Natal scenes stitched as chapters (hairline + air, no card stack). Today untouched. **Next:** owner mobile QA.
 - 2026-07-25 | Today / Architecture | **day_thesis + evidence pack in DayContext** | **IN_PROGRESS** | Evidence + FE parity · formula bank + **SP links** + `vibe_strokes` · TL-1 blocked · next: TL-0C.3 editorial marking · linked: [TODAY_LANGUAGE_STRONG_PATTERNS_V0.md](./today-language/TODAY_LANGUAGE_STRONG_PATTERNS_V0.md)
+- 2026-08-03 | Today / Ops | **DB pool starvation from sync prewarm** | **DONE** | Cron/GET no longer hold request session on LLM · enqueue `day_prewarm` ≤2 concurrent · pool_size 12 · FE: clear session only on `/auth/me` 401 · login claim fire-and-forget · `/auth/me` 10s abort
 - 2026-08-03 | Today / Lifecycle | **ready_at 05:00 + catch-up/auth harden** | **DONE** | ready **05:00** · assemble **03–05** · candidates+=AstroProfile/activity · GET assembling→`day_prewarm` job · cron max-time 600 · guest-claim soft 401 no longer wipes JWT · login no longer awaits story refresh · canon [DAY_LIFECYCLE_V1.md](./audits/DAY_LIFECYCLE_V1.md)
 - 2026-08-03 | Today / Lifecycle | **ready_at → 05:00** | **SUPERSEDED → row above** | Clock **03:00–05:00 assemble / ready 05:00** · push `morning_time`+`quiet_end` **05:00** · canon [DAY_LIFECYCLE_V1.md](./audits/DAY_LIFECYCLE_V1.md)
 - 2026-07-26 | Today / Lifecycle | **Day Lifecycle V1 (assemble once)** | **DONE** | Clock was 05:00–07:00 / 08:30 → superseded by ready_at 05:00 row · GET never assembles · calm open from cache · pre-warm + catch-up · canon [DAY_LIFECYCLE_V1.md](./audits/DAY_LIFECYCLE_V1.md)

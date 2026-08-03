@@ -121,6 +121,19 @@ GATE_RULES: dict[str, GateRule] = {
         allow_reject=True,
         note="broken evidence_refs / provenance — hard retry then unavailable",
     ),
+    # ScreenFlow v3.1 seed-kill — hard SoT, not quality polish.
+    "SEED_BANK_BINARY_SHORT_NAME": _h_block(
+        "SEED_BANK_BINARY_SHORT_NAME",
+        allow_retry=True,
+        allow_reject=True,
+        note="v3.1: invented opposing-forces bank title as Plot short_name — retry then unavailable",
+    ),
+    "SEED_CHORUS_PASTE": _h_block(
+        "SEED_CHORUS_PASTE",
+        allow_retry=True,
+        allow_reject=True,
+        note="v3.1: chorus pastes short_name / old bridge templates — retry then unavailable",
+    ),
     # --- Quality promoted (C3.6.3 · sealed C3.6.2 pilot evidence) ---
     # Dual-agreed reject drivers on B5-template cases: clone / missing everyday /
     # abstract scene / bare astro jargon. Retry then reject_story (unavailable).
@@ -195,6 +208,10 @@ HARD_SCENARIO_VALIDATE_ERRORS = frozenset(
         "bad_contract_version",
         "scenes_empty",
         "conflict_missing_short_name",
+        "conflict_short_name_is_sky_fact",
+        # v3.1 seed-kill codes from find_verbatim_seed_leaks_v1
+        "conflict.short_name:invented_bank_binary",
+        "chorus:seed_paste_bridge",
         # v3.1: opposing_forces may be empty — even day is valid
         "conflict_opposing_forces_incomplete",
         "conflict_opposing_forces_not_dict",
@@ -205,6 +222,11 @@ HARD_SCENARIO_VALIDATE_ERRORS = frozenset(
         "prop_affirmation_without_origin_scene",
         "prop_humor_without_origin_scene",
     }
+)
+
+# Prefixes from find_verbatim_seed_leaks_v1 (ngram spans are dynamic).
+HARD_SCENARIO_VALIDATE_PREFIXES = (
+    "verbatim_seed_leak:",
 )
 
 # Native schema error prefixes / tokens that stay hard-blocking (retry).
@@ -301,7 +323,10 @@ def should_downgrade_general(defects: list[dict[str, Any]] | None) -> bool:
 
 
 def is_hard_scenario_validate_error(error: str) -> bool:
-    return str(error or "") in HARD_SCENARIO_VALIDATE_ERRORS
+    e = str(error or "")
+    if e in HARD_SCENARIO_VALIDATE_ERRORS:
+        return True
+    return any(e.startswith(p) for p in HARD_SCENARIO_VALIDATE_PREFIXES)
 
 
 def is_hard_native_validate_error(error: str) -> bool:

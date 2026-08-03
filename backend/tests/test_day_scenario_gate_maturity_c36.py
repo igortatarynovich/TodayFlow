@@ -121,7 +121,28 @@ def test_hard_scenario_validate_markers():
     assert is_hard_scenario_validate_error("scenes_empty")
     assert is_hard_scenario_validate_error("prop_color_origin_not_in_scenes")
     assert not is_hard_scenario_validate_error("some_soft_warning")
+    # v3.1 seed-kill — must hard-block LLM accept / trigger retry
+    assert is_hard_scenario_validate_error("conflict.short_name:invented_bank_binary")
+    assert is_hard_scenario_validate_error("chorus:seed_paste_bridge")
+    assert is_hard_scenario_validate_error("conflict_short_name_is_sky_fact")
+    assert is_hard_scenario_validate_error(
+        "verbatim_seed_leak:'тащить старое или отпустить'@conflict.short_name+chorus.day_number.voice"
+    )
 
+
+def test_seed_kill_codes_are_hard_retry():
+    from todayflow_backend.services.day_scenario_editorial_gate_c31 import (
+        DEFECT_SEED_BANK_BINARY_SHORT_NAME,
+        DEFECT_SEED_CHORUS_PASTE,
+    )
+
+    for code in (DEFECT_SEED_BANK_BINARY_SHORT_NAME, DEFECT_SEED_CHORUS_PASTE):
+        annotated = annotate_defects_with_maturity([{"code": code, "field": "x", "message": "m"}])
+        assert annotated[0]["gate_family"] == "hard"
+        assert annotated[0]["gate_maturity"] == MATURITY_BLOCKING
+        assert annotated[0]["runtime_action"] == "retry"
+        assert should_retry_defects(annotated)
+        assert not should_reject_story(annotated)  # reject only after retries exhausted
 
 def test_hard_native_validate_markers():
     assert is_hard_native_validate_error("unknown_evidence:foo")

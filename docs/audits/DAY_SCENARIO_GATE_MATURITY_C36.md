@@ -44,10 +44,27 @@ Only `blocking` may change the user answer. `candidate_blocking` does **not** bl
 |------|-------|--------|-------|
 | Native schema / SoT markers | yes | after attempts | broken contract assemble |
 | Broken `origin_scene_id` / orphan props | yes | after attempts | hard validate |
+| Seed-kill validate codes (`invented_bank_binary`, `chorus:seed_paste_bridge`, `verbatim_seed_leak:*`, sky-fact short_name) | yes | after attempts | v3.1 — was soft accept gap |
+| `SEED_BANK_BINARY_SHORT_NAME` / `SEED_CHORUS_PASTE` (editorial) | yes | after attempts | same seed-kill; earlier feedback on native JSON |
 | `PERSONALIZATION_EVIDENCE_ORPHAN` | yes | after attempts | evidence pack only in feedback |
 | `PERSONALIZATION_PROFILE_FACT_LEAK` | **no** | immediate | leaked text never shipped; never quality-rewrite |
 
 After hard retries exhausted → `None` → wire `facts_only_unavailable`.
+
+## Architecture impact (seed-kill hard-gate, 2026-08-03)
+
+```markdown
+## Architecture impact
+- **SoT before:** find_verbatim_seed_leaks_v1 / bank-binary / chorus paste markers
+  appeared in validate_day_scenario_v1 but were **not** in HARD_SCENARIO_VALIDATE_ERRORS —
+  native LLM could accept seed-paste after map (serve heal cleaned cache only).
+- **SoT after:** those validate strings are hard (retry→unavailable); editorial emits
+  SEED_BANK_BINARY_SHORT_NAME / SEED_CHORUS_PASTE as family=hard blocking with retry.
+- **Public contract changed?** no
+- **Migration required?** no — serve heal still covers old caches
+- **Canon updated?** yes — this note
+- **Backward compatible?** yes for clients; more native LLM retries/unavailable on seed paste
+```
 
 ## Quality — default observe; selective blocking (C3.6.3)
 

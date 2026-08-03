@@ -40,6 +40,10 @@ DEFECT_CHORUS_ROLE_DRIFT = "CHORUS_ROLE_DRIFT"
 DEFECT_CHORUS_UNTRANSLATED_JARGON = "CHORUS_UNTRANSLATED_JARGON"
 DEFECT_CHORUS_NATAL_WITHOUT_EVIDENCE = "CHORUS_NATAL_WITHOUT_EVIDENCE"
 
+# ScreenFlow v3.1 seed-kill (hard via C3.6 maturity — not score_only quality)
+DEFECT_SEED_BANK_BINARY_SHORT_NAME = "SEED_BANK_BINARY_SHORT_NAME"
+DEFECT_SEED_CHORUS_PASTE = "SEED_CHORUS_PASTE"
+
 CRITICAL_DEFECTS = frozenset(
     {
         # Severity labels for eval/scoring — NOT runtime blockers (see C3.6 maturity).
@@ -865,6 +869,38 @@ def run_editorial_quality_gate_c31(
             )
         )
 
+    # v3.1 seed-kill hard detectors (runtime via C3.6 GATE_RULES, not CRITICAL_DEFECTS score).
+    from todayflow_backend.services.day_scenario_v1 import (
+        chorus_seed_paste_needs_heal_v1,
+        invented_bank_short_name_needs_heal_v1,
+    )
+
+    plot_title = str(conflict.get("title") or conflict.get("short_name") or "").strip()
+    if invented_bank_short_name_needs_heal_v1(plot_title):
+        defects.append(
+            _defect(
+                DEFECT_SEED_BANK_BINARY_SHORT_NAME,
+                field="conflict.title",
+                message=(
+                    "Plot title is a legacy opposing-forces bank binary "
+                    "(e.g. «тащить старое или…») — inventing A|B drama is forbidden; "
+                    "use tone/registry short_name without pasting forces"
+                ),
+            )
+        )
+    if chorus_seed_paste_needs_heal_v1(chorus, short_name=plot_title):
+        defects.append(
+            _defect(
+                DEFECT_SEED_CHORUS_PASTE,
+                field="interpretive_chorus",
+                message=(
+                    "Chorus pastes conflict short_name or old bridge templates "
+                    "(«подталкивает день к сюжету», «окрашивает прохождение», "
+                    "«какой ролью пройти») — each voice must speak from its own factor"
+                ),
+            )
+        )
+
     # de-dupe identical codes+field
     seen: set[str] = set()
     unique: list[dict[str, str]] = []
@@ -896,6 +932,14 @@ def format_editorial_retry_feedback(defects: list[dict[str, str]], *, limit: int
         "Каждый голос: conflict_id + link_to_conflict к тому же conflict; без смысловых повторов и без жаргона без перевода.",
         "Дефекты:",
     ]
+    seed_codes = {DEFECT_SEED_BANK_BINARY_SHORT_NAME, DEFECT_SEED_CHORUS_PASTE}
+    if any(str(d.get("code") or "") in seed_codes for d in defects):
+        lines.insert(
+            1,
+            "SEED-KILL: не цитируй short_name/A|B в chorus; не используй шаблоны "
+            "«подталкивает день к сюжету» / «окрашивает прохождение» / «какой ролью пройти»; "
+            "не ставь bank-binary («тащить старое или…») в title.",
+        )
     for d in defects[:limit]:
         lines.append(f"- [{d.get('code')}] {d.get('field')}: {d.get('message')}")
     return "\n".join(lines)
