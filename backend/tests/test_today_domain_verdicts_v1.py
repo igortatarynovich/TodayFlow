@@ -113,6 +113,16 @@ def test_domain_magnitude_table_pins_draft_specials_unchanged():
     assert mag.DOMAIN_MAGNITUDE_V1["work"]["challenging_fallback"] == -0.65
     assert mag.DOMAIN_MAGNITUDE_V1["relationships"]["challenging_fallback"] == -0.7
     assert mag.DOMAIN_MAGNITUDE_V1["energy"]["challenging_fallback"] == -0.6
+    # Irreversibility scale: money > relationships > work > energy, step 0.05
+    order = mag.CHALLENGING_FALLBACK_IRREVERSIBILITY_ORDER
+    fallbacks = [
+        mag.DOMAIN_MAGNITUDE_V1[d]["challenging_fallback"] for d in order
+    ]
+    assert fallbacks == [-0.75, -0.7, -0.65, -0.6]
+    assert all(
+        abs((fallbacks[i + 1] - fallbacks[i]) - mag.CHALLENGING_FALLBACK_STEP) < 1e-9
+        for i in range(len(fallbacks) - 1)
+    )
 
     # Mars conjunction rule (documented): charge work/energy, friction relationships
     assert verdicts.valence_domain("work", "conjunction", "mars", "sun") == 0.75
@@ -130,3 +140,50 @@ def test_domain_magnitude_table_pins_draft_specials_unchanged():
     assert verdicts.valence_domain("work", "square", "saturn", "saturn") == -0.7
     # Harmonious still global 1.0
     assert verdicts.valence_domain("money", "trine", "saturn", "venus") == 1.0
+
+
+def test_is_day_favorable_heuristic():
+    assert not verdicts.is_day_favorable([])
+    assert not verdicts.is_day_favorable(
+        [
+            {"domain": "work", "verdict": "open"},
+            {"domain": "money", "verdict": "friction"},
+            {"domain": "relationships", "verdict": "open"},
+            {"domain": "energy", "verdict": "calm"},
+        ]
+    )
+    assert not verdicts.is_day_favorable(
+        [
+            {"domain": "work", "verdict": "open"},
+            {"domain": "money", "verdict": "calm"},
+            {"domain": "relationships", "verdict": "calm"},
+            {"domain": "energy", "verdict": "calm"},
+        ]
+    )
+    assert verdicts.is_day_favorable(
+        [
+            {"domain": "work", "verdict": "open"},
+            {"domain": "money", "verdict": "open"},
+            {"domain": "relationships", "verdict": "calm"},
+            {"domain": "energy", "verdict": "charged"},
+        ]
+    )
+    # Soft aspects → open on matching domains
+    assert verdicts.day_favorable_from_activations(
+        [
+            {
+                "id": "a1",
+                "transiting_planet": "Venus",
+                "aspect": "trine",
+                "natal_point": "Moon",
+                "orb_deg": 1.0,
+            },
+            {
+                "id": "a2",
+                "transiting_planet": "Jupiter",
+                "aspect": "sextile",
+                "natal_point": "Venus",
+                "orb_deg": 1.0,
+            },
+        ]
+    )

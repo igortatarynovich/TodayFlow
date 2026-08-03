@@ -780,7 +780,17 @@ def native_llm_to_day_scenario_v1(
             }
         )
 
-    props = build_scenario_props_v1(conflict=conflict, scenes=scenes, chorus=chorus)
+    from todayflow_backend.services.today_domain_verdicts_v1 import day_favorable_from_activations
+
+    day_favorable = day_favorable_from_activations(
+        foundation.get("personal_natal_activations") or []
+    )
+    props = build_scenario_props_v1(
+        conflict=conflict,
+        scenes=scenes,
+        chorus=chorus,
+        day_favorable=day_favorable,
+    )
     # Attach LLM prop_material as diagnostics only (not SoT for final color)
     props["prop_material_llm"] = norm.get("prop_material")
 

@@ -227,6 +227,35 @@ def compute_domain_verdicts(
     return out
 
 
+# Starting calibration for Champagne / quiet_celebration — tune on live days.
+# Not a second SoT for verdicts; only gates day_favorable → color tags.
+DAY_FAVORABLE_MIN_OPEN = 2
+
+
+def is_day_favorable(
+    domain_verdicts: list[dict[str, Any]] | None,
+    *,
+    min_open: int = DAY_FAVORABLE_MIN_OPEN,
+) -> bool:
+    """Heuristic: quiet celebration when enough domains read open and none friction.
+
+    Used at scenario-generation time (same activations as live top_driver).
+    Threshold is a calibration starting point — adjust min_open, not magnitude tables.
+    """
+    rows = [r for r in (domain_verdicts or []) if isinstance(r, dict)]
+    if not rows:
+        return False
+    verdicts = [str(r.get("verdict") or "") for r in rows]
+    if any(v == "friction" for v in verdicts):
+        return False
+    return sum(1 for v in verdicts if v == "open") >= max(1, int(min_open))
+
+
+def day_favorable_from_activations(activations: Iterable[dict[str, Any]] | None) -> bool:
+    """Compute domain_verdicts then is_day_favorable — for scenario props wiring."""
+    return is_day_favorable(compute_domain_verdicts(activations or []))
+
+
 def activations_from_transit_objects(transits: Iterable[Any]) -> list[dict[str, Any]]:
     """Deprecated alias — prefer today_natal_activations_v1.compute_natal_activations."""
     from todayflow_backend.services.today_natal_activations_v1 import compute_natal_activations

@@ -44,24 +44,31 @@ Formalized as text only — magnitudes unchanged.
 
 ---
 
-## 3. Open calibration questions (numbers frozen)
+## 3. Open / closed calibration notes
 
-### 3.1 Money — no square+planet specials
+### 3.1 Money — no square+planet specials — OPEN
 
 Other domains have square/challenging specials (work: mars/saturn; relationships: venus/moon; energy: mars). Money has empty `special_cases` and only `challenging_fallback = -0.75`, despite `DOMAIN_NATAL_POINTS["money"]` including venus/jupiter/pluto.
 
-**Decision now:** treat as **open gap** — leave empty. Do not invent money specials without a calibration pass.
+**Decision:** leave empty. Do not invent money specials without a calibration pass.
 
-### 3.2 challenging_fallback scale
+### 3.2 `challenging_fallback` — domain irreversibility scale — DOCUMENTED
 
-| domain | fallback |
-|--|--|
-| work | −0.65 |
-| money | −0.75 |
-| relationships | −0.7 |
-| energy | −0.6 |
+| order (harshest → softest) | domain | fallback |
+|--|--|--|
+| 1 | money | −0.75 |
+| 2 | relationships | −0.70 |
+| 3 | work | −0.65 |
+| 4 | energy | −0.60 |
 
-**Decision now:** preserve. Unifying “principle vs four independent picks” is a future product pass — not part of this storage migration.
+Arithmetic progression, **step 0.05**. Principle: **шкала необратимости домена** — how hard a bad day is to undo in that sphere:
+
+- money — most irreversible consequences
+- relationships — trust repairs slowly
+- work — usually fixable in days–weeks
+- energy — most reversible (rest resets)
+
+Numbers unchanged; the scale is named so it is no longer a silent coincidence.
 
 ---
 

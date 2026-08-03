@@ -317,7 +317,7 @@ def test_color_catalog_is_knowledge_not_sot():
     from todayflow_backend.services.day_scenario_v1 import _needed_color_tags
 
     rows = list_color_knowledge()
-    assert len(rows) == 19  # 8 core + 6 layer-A + 5 layer-B (Champagne held)
+    assert len(rows) == 20  # 8 core + 6 layer-A + 6 layer-B
     assert all("tags" in r and "name" in r and "symbolic_property" in r for r in rows)
     assert validate_color_catalog_v1() == []
     names = {str(r["name"]) for r in rows}
@@ -335,12 +335,11 @@ def test_color_catalog_is_knowledge_not_sot():
         "Гранатовый",
         "Хризолитовый",
         "Дымчато-сиреневый",
+        "Шампань",
     } <= names
-    # Champagne: no favorable-outcome signal in conflict — must stay pending
-    assert names.isdisjoint(PENDING_LAYER_B_COLORS)
-    assert "Шампань" not in names
+    assert PENDING_LAYER_B_COLORS == frozenset()
 
-    # Layer-B primary tags must be reachable from generator (anti-orphan)
+    # Sphere/keyword Layer-B tags reachable from _needed_color_tags
     probes = [
         _needed_color_tags(trap="", force_a="", sphere="creativity", mode=""),
         _needed_color_tags(trap="", force_a="", sphere="home", mode=""),
@@ -349,7 +348,10 @@ def test_color_catalog_is_knowledge_not_sot():
         _needed_color_tags(trap="отпустить тему и завершить", force_a="", sphere="home", mode=""),
     ]
     reachable = set().union(*probes)
-    assert LAYER_B_PRIMARY_TAGS <= reachable
+    sphere_kw_tags = LAYER_B_PRIMARY_TAGS - {"quiet_celebration", "light_gratitude"}
+    assert sphere_kw_tags <= reachable
+    # Celebration tags are live in the catalog bank (unlocked via day_favorable)
+    assert {"quiet_celebration", "light_gratitude"} <= LAYER_B_PRIMARY_TAGS
 
     # «отпуск» / rest_travel must NOT fire gentle_closure (false positive guard)
     vacation = _needed_color_tags(
@@ -376,7 +378,10 @@ def test_layer_b_colors_win_scoring_on_their_triggers():
         list_color_knowledge,
         score_color_for_needs,
     )
-    from todayflow_backend.services.day_scenario_v1 import _needed_color_tags
+    from todayflow_backend.services.day_scenario_v1 import (
+        _needed_color_tags,
+        build_scenario_props_v1,
+    )
 
     cases = [
         ("creativity", "", "Шафрановый"),
@@ -396,6 +401,26 @@ def test_layer_b_colors_win_scoring_on_their_triggers():
         )
         assert ranked[0]["name"] == expected, (sphere, trap, ranked[0]["name"], needed)
         assert get_color_entry(expected) is not None
+
+    # day_favorable unlocks Champagne when no competing specialty trap
+    props = build_scenario_props_v1(
+        conflict={
+            "short_name": "лёгкий день",
+            "opposing_forces": {"a": "автопилот", "b": "выбор"},
+            "thesis": {"mode": "stability"},
+        },
+        scenes=[
+            {
+                "scene_id": "s1",
+                "role_in_story": "primary",
+                "sphere": "relationships",
+                "sphere_label_ru": "Отношения",
+                "trap": "мягкий фон без острого конфликта",
+            }
+        ],
+        day_favorable=True,
+    )
+    assert props.get("color", {}).get("name") == "Шампань"
 
 
 def test_celestial_daily_symbol_presets_use_catalog_colors_only():

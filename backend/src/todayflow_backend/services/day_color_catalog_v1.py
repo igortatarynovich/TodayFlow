@@ -7,8 +7,8 @@ origin_scene_id + conflict link.
 Color is NOT an independent daily draw (unlike card/number).
 Layer A reused existing `_needed_color_tags`. Layer B (creativity/home/money
 abundance/passion/closure) shipped only with matching generator branches —
-never catalog-only orphans. Champagne / quiet_celebration held until conflict
-gains a favorable-outcome signal.
+never catalog-only orphans. Champagne unlocks via ``day_favorable`` from
+domain_verdicts computed on the same natal activations at scenario generation.
 
 Legacy `celestial_events_builder` presets remain a seed/index path until B3 wire
 projection replaces them.
@@ -69,6 +69,8 @@ LIVE_NEEDED_COLOR_TAGS: frozenset[str] = frozenset(
         "vital_courage",
         "gentle_closure",
         "honor_loss",
+        "quiet_celebration",
+        "light_gratitude",
         # Catalog-only flavor tags still used on core/layer-A rows (scoring bonus
         # when present in needed — some are never emitted; allowed as secondary).
         "cool_mind",
@@ -85,10 +87,10 @@ LIVE_NEEDED_COLOR_TAGS: frozenset[str] = frozenset(
     }
 )
 
-# Pending until conflict exposes a favorable-outcome / resolution signal.
-PENDING_LAYER_B_COLORS: frozenset[str] = frozenset({"Шампань"})
+# Empty when all layer-B rows are live; kept for validator anti-premature-merge.
+PENDING_LAYER_B_COLORS: frozenset[str] = frozenset()
 
-# Primary Layer-B tags that must be reachable from _needed_color_tags.
+# Primary Layer-B tags that must be reachable from generator / day_favorable.
 LAYER_B_PRIMARY_TAGS: frozenset[str] = frozenset(
     {
         "creative_spark",
@@ -101,6 +103,8 @@ LAYER_B_PRIMARY_TAGS: frozenset[str] = frozenset(
         "vital_courage",
         "gentle_closure",
         "honor_loss",
+        "quiet_celebration",
+        "light_gratitude",
     }
 )
 
@@ -417,6 +421,22 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "intensity_default": "мягкий, приглушённый тон",
         "avoid_candidates": (
             {"name": "Ярко-красный «драма»", "amplifies": ("alarm", "rush")},
+        ),
+    },
+    {
+        "name": "Шампань",
+        "tags": ("quiet_celebration", "light_gratitude"),
+        "symbolic_property": "тихая благодарность — отметить, что получилось, без громкого жеста",
+        "apply": {
+            "clothing": "Шампань-оттенок в одном предмете — блуза, шарф.",
+            "accessory": "Лёгкое украшение с перламутровым отливом.",
+            "workspace": None,
+            "makeup": "Шампань-хайлайтер или тени.",
+            "ui_or_bg": None,
+        },
+        "intensity_default": "лёгкий блеск — одна деталь",
+        "avoid_candidates": (
+            {"name": "Тяжёлый чёрный «серьёзность любой ценой»", "amplifies": ("pressure",)},
         ),
     },
 ]

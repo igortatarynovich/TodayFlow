@@ -143,11 +143,23 @@ OPEN_CALIBRATION_QUESTIONS: tuple[dict[str, str], ...] = (
     },
     {
         "id": "challenging_fallback_scale",
-        "issue": "challenging_fallback differs by domain without stated scale",
-        "status": "open",
-        "decision_now": "preserve work−0.65 money−0.75 relationships−0.7 energy−0.6",
+        "issue": "challenging_fallback by domain",
+        "status": "documented_principle",
+        "decision_now": (
+            "domain irreversibility scale step 0.05: "
+            "money−0.75 > relationships−0.70 > work−0.65 > energy−0.60"
+        ),
     },
 )
+
+# Canonical order for the irreversibility scale (harshest → softest fallback).
+CHALLENGING_FALLBACK_IRREVERSIBILITY_ORDER: tuple[str, ...] = (
+    "money",
+    "relationships",
+    "work",
+    "energy",
+)
+CHALLENGING_FALLBACK_STEP = 0.05
 
 
 def _norm(name: str | None) -> str:

@@ -1051,10 +1051,6 @@ def _needed_color_tags(*, trap: str, force_a: str, sphere: str, mode: str) -> se
         tags.update({"home_warmth", "belonging"})
     if sphere == "money":
         tags.update({"confident_abundance", "steady_growth"})
-    # quiet_celebration / light_gratitude intentionally omitted: conflict model
-    # has no favorable-outcome / resolution signal (thesis.mode is conflict|
-    # transition|recovery|stability). Champagne stays out of catalog until that
-    # feature exists — see docs/color/COLOR_LAYER_B_V1.md.
     return tags
 
 
@@ -1118,10 +1114,13 @@ def build_scenario_props_v1(
     conflict: dict[str, Any],
     scenes: list[dict[str, Any]],
     chorus: dict[str, Any] | None = None,
+    day_favorable: bool = False,
 ) -> dict[str, Any]:
     """Derive color/avoid/goals/affirmations/humor from scenes (B2).
 
     Color catalog = knowledge only. Selection + user-facing why come from conflict/scene.
+    ``day_favorable`` (from domain_verdicts on the same natal activations) unlocks
+    quiet_celebration / light_gratitude → Champagne when scoring wins.
     """
     from todayflow_backend.services.day_color_catalog_v1 import (
         list_color_knowledge,
@@ -1143,6 +1142,8 @@ def build_scenario_props_v1(
     label = str(conflict.get("short_name") or "сюжет дня")
 
     needed = _needed_color_tags(trap=trap, force_a=force_a, sphere=sphere, mode=mode)
+    if day_favorable:
+        needed.update({"quiet_celebration", "light_gratitude"})
     amplify = _amplify_tags_for_trap(trap, force_a)
 
     catalog = list_color_knowledge()
@@ -1375,7 +1376,17 @@ def build_day_scenario_v1(
         max_scenes=max_scenes,
         person_name=person_name,
     )
-    props = build_scenario_props_v1(conflict=conflict, scenes=scenes, chorus=chorus)
+    from todayflow_backend.services.today_domain_verdicts_v1 import day_favorable_from_activations
+
+    day_favorable = day_favorable_from_activations(
+        foundation.get("personal_natal_activations") or []
+    )
+    props = build_scenario_props_v1(
+        conflict=conflict,
+        scenes=scenes,
+        chorus=chorus,
+        day_favorable=day_favorable,
+    )
     ready = bool(scenes) and bool(conflict.get("short_name"))
     return {
         "contract_version": DAY_SCENARIO_V1_CONTRACT,

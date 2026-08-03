@@ -322,8 +322,17 @@ def _heal_template_scene_copy(
             person_name=person_name,
         )
         healed["scenes"] = new_scenes
+        from todayflow_backend.services.today_domain_verdicts_v1 import (
+            day_favorable_from_activations,
+        )
+
         healed["props"] = build_scenario_props_v1(
-            conflict=c, scenes=new_scenes, chorus=chorus
+            conflict=c,
+            scenes=new_scenes,
+            chorus=chorus,
+            day_favorable=day_favorable_from_activations(
+                foundation.get("personal_natal_activations") or []
+            ),
         )
     return healed
 
