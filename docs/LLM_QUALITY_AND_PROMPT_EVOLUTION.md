@@ -25,11 +25,13 @@ OpenAI-compatible client:
 LLM_PROVIDER=nebius
 NEBIUS_API_KEY=...
 NEBIUS_BASE_URL=https://api.tokenfactory.nebius.com/v1/
-NEBIUS_MODEL=moonshotai/Kimi-K3
-NEBIUS_FALLBACK_MODEL=deepseek-ai/DeepSeek-V4-Pro
+NEBIUS_MODEL=moonshotai/Kimi-K2.6
+NEBIUS_FALLBACK_MODEL=
+LLM_STREAM_COMPLETIONS=1
+LLM_STREAM_READ_TIMEOUT_SECONDS=120
 ```
 
-Preferred voice model is Kimi-K3 (human tone, metaphor, psych↔planets). DeepSeek-V4-Pro remains provider fallback only.
+Kimi primary (voice trial). **K3 on Nebius** measured TTFT ≈160s even for a 1-word reply — use K2.6 for product latency, or raise stream read ≥180–300s for K3. Streaming is required for thinking models (Moonshot). Empty fallback = no silent DeepSeek hop.
 
 Equivalent manual wiring:
 

@@ -94,7 +94,20 @@ def get_openai_compatible_client(*, operation: str | None = None) -> Any | None:
     op = (operation or _llm_operation_ctx.get() or "sync").strip().lower()
     base_timeout = float(getattr(settings, "llm_http_timeout_seconds", 12.0) or 12.0)
     if op == "background":
-        timeout_s = float(getattr(settings, "llm_background_timeout_seconds", 180.0) or 180.0)
+        # Streaming Kimi: read = idle between SSE chunks (not total wall).
+        # Non-stream still uses the same read budget as a full-response wait.
+        read_s = float(getattr(settings, "llm_stream_read_timeout_seconds", 90.0) or 90.0)
+        try:
+            import httpx
+
+            timeout_s: Any = httpx.Timeout(
+                connect=30.0,
+                read=read_s,
+                write=read_s,
+                pool=30.0,
+            )
+        except ImportError:
+            timeout_s = read_s
     else:
         timeout_s = base_timeout
     kw: dict[str, Any] = {"api_key": key, "timeout": timeout_s, "max_retries": 0}
@@ -158,11 +171,31 @@ def resolve_max_tokens(requested: int, *, model: str | None = None) -> int:
     if _uses_max_completion_tokens(mid):
         # GPT-5 / o-series: reasoning tokens входят в max_completion_tokens.
         return max(requested + 4096, 8192)
-    if mid.startswith("moonshotai/kimi") or "/kimi" in mid:
+    if _is_kimi_k3(mid):
+        # K3 always-on thinking shares the completion budget with content (Moonshot: ≥16k).
+        return max(requested * 2 + 800, 16000)
+    if _is_kimi_model(mid):
         # Kimi often spends a large share of the budget on hidden reasoning before content;
         # truncated JSON is common below ~3.5–4k completion tokens for rich day_story contracts.
         return max(requested * 2 + 800, 4000)
     return requested
+
+
+def _is_kimi_model(model: str) -> bool:
+    mid = (model or "").strip().lower()
+    return mid.startswith("moonshotai/kimi") or "/kimi" in mid or mid.startswith("kimi-")
+
+
+def _is_kimi_k3(model: str) -> bool:
+    mid = (model or "").strip().lower()
+    return "kimi-k3" in mid
+
+
+def _should_stream_completion(model: str) -> bool:
+    """Moonshot: thinking models sit silent until done unless streamed — use SSE."""
+    if not bool(getattr(settings, "llm_stream_completions", True)):
+        return False
+    return _is_kimi_model(model)
 
 
 def _uses_max_completion_tokens(model: str) -> bool:
@@ -178,10 +211,15 @@ def _apply_token_limit(kw: dict[str, Any], *, model: str, max_tokens: int) -> No
         kw["max_tokens"] = max_tokens
 
 
-def _json_reasoning_effort(model: str) -> str | None:
-    """Снижаем reasoning budget для structured JSON — иначе content может быть пустым."""
+def _reasoning_effort_for_model(model: str, *, json_object: bool = False) -> str | None:
+    """Cap always-on / heavy reasoning so content arrives before idle timeouts."""
     mid = (model or "").strip().lower()
+    if _is_kimi_k3(mid):
+        # K3 thinking cannot be disabled; low keeps product JSON latency usable.
+        return "low"
     if not mid.startswith("gpt-5"):
+        return None
+    if not json_object:
         return None
     # gpt-5.1+ поддерживают none; базовый gpt-5 — только low/medium/high.
     if mid.startswith(("gpt-5.1", "gpt-5.2", "gpt-5.5")):
@@ -189,11 +227,31 @@ def _json_reasoning_effort(model: str) -> str | None:
     return "low"
 
 
+def _json_reasoning_effort(model: str) -> str | None:
+    """Back-compat alias for structured JSON paths."""
+    return _reasoning_effort_for_model(model, json_object=True)
+
+
 def _message_content(resp: Any) -> str | None:
     try:
         return (resp.choices[0].message.content or "").strip() or None
     except (AttributeError, IndexError, TypeError):
         return None
+
+
+def _consume_chat_stream(stream: Any) -> str | None:
+    """Accumulate assistant ``content`` deltas; ignore ``reasoning_content`` (Kimi thinking)."""
+    parts: list[str] = []
+    for chunk in stream:
+        try:
+            delta = chunk.choices[0].delta
+        except (AttributeError, IndexError, TypeError):
+            continue
+        piece = getattr(delta, "content", None)
+        if piece:
+            parts.append(str(piece))
+    text = "".join(parts).strip()
+    return text or None
 
 
 def _build_chat_kwargs(
@@ -206,12 +264,40 @@ def _build_chat_kwargs(
 ) -> dict[str, Any]:
     kw: dict[str, Any] = {"model": model, "messages": messages}
     _apply_token_limit(kw, model=model, max_tokens=max_tokens)
-    # GPT-5+ chat accepts only the default temperature; omit custom values.
-    if not _uses_max_completion_tokens(model):
+    # GPT-5+ and Kimi-K3: omit custom temperature (provider-fixed / rejected).
+    if not _uses_max_completion_tokens(model) and not _is_kimi_k3(model):
         kw["temperature"] = temperature
-    if reasoning_effort and _uses_max_completion_tokens(model):
+    if reasoning_effort and (_uses_max_completion_tokens(model) or _is_kimi_k3(model)):
         kw["reasoning_effort"] = reasoning_effort
     return kw
+
+
+def _create_chat_collect(
+    client: Any,
+    *,
+    model: str,
+    messages: list[dict[str, str]],
+    temperature: float,
+    max_tokens: int,
+    reasoning_effort: str | None = None,
+    response_format: dict[str, Any] | None = None,
+) -> str | None:
+    """One provider call; streams Kimi to avoid idle ReadTimeout during thinking."""
+    kw = _build_chat_kwargs(
+        model=model,
+        messages=messages,
+        temperature=temperature,
+        max_tokens=max_tokens,
+        reasoning_effort=reasoning_effort,
+    )
+    if response_format is not None:
+        kw["response_format"] = response_format
+    if _should_stream_completion(model):
+        kw["stream"] = True
+        stream = client.chat.completions.create(**kw)
+        return _consume_chat_stream(stream)
+    resp = client.chat.completions.create(**kw)
+    return _message_content(resp)
 
 
 def _is_timeout_like_error(exc: BaseException) -> bool:
@@ -319,9 +405,9 @@ def chat_completion_text(
     JSON mode may fall back to plain completion when the provider rejects
     ``response_format`` or returns empty content.
 
-    When ``LLM_PROVIDER=nebius``, primary is Kimi-K3; on provider failure
-    (including timeout/empty/upstream/missing model) retries once with
-    ``NEBIUS_FALLBACK_MODEL`` (DeepSeek-V4-Pro). Throttle (429) does not switch models.
+    When ``LLM_PROVIDER=nebius``, primary is Kimi-K3. Optional
+    ``NEBIUS_FALLBACK_MODEL`` retries once on provider failure when set.
+    Throttle (429) does not switch models. Kimi calls stream by default.
     """
     chain = resolve_chat_model_chain(model)
     last_kind: str | None = None
@@ -369,21 +455,18 @@ def _chat_completion_text_once(
 ) -> tuple[str | None, str | None]:
     """Single-model attempt. Returns (text, failure_kind). failure_kind is None on success."""
     effective_max = resolve_max_tokens(max_tokens, model=model)
-    reasoning_effort = _json_reasoning_effort(model) if json_object else None
-    base_kw = _build_chat_kwargs(
-        model=model,
-        messages=messages,
-        temperature=temperature,
-        max_tokens=effective_max,
-        reasoning_effort=reasoning_effort,
-    )
+    reasoning_effort = _reasoning_effort_for_model(model, json_object=json_object)
     if json_object:
         try:
-            resp = client.chat.completions.create(
-                **base_kw,
+            text = _create_chat_collect(
+                client,
+                model=model,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=effective_max,
+                reasoning_effort=reasoning_effort,
                 response_format={"type": "json_object"},
             )
-            text = _message_content(resp)
             if text:
                 return text, None
             logger.warning(
@@ -414,8 +497,14 @@ def _chat_completion_text_once(
                 exc,
             )
     try:
-        resp = client.chat.completions.create(**base_kw)
-        text = _message_content(resp)
+        text = _create_chat_collect(
+            client,
+            model=model,
+            messages=messages,
+            temperature=temperature,
+            max_tokens=effective_max,
+            reasoning_effort=reasoning_effort,
+        )
         if text:
             return text, None
         return None, "empty"
@@ -466,8 +555,9 @@ def chat_completion_plain_with_status(
     Returns ``(text, failure_class, model_id)``.
     ``failure_class`` is set when text is None: timeout | empty | throttle |
     model_unavailable | upstream_unavailable | other.
-    Nebius chain (when ``allow_model_fallback``): primary then fallback on
-    provider failure including timeout (via ``_should_try_model_fallback``).
+    Nebius chain (when ``allow_model_fallback`` and fallback configured):
+    primary then fallback on provider failure including timeout.
+    Kimi uses SSE streaming so thinking does not idle-timeout the HTTP client.
     """
     mid0 = (model or "").strip()
     chain = resolve_chat_model_chain(mid0) if allow_model_fallback else ([mid0] if mid0 else [])
@@ -476,14 +566,14 @@ def chat_completion_plain_with_status(
     for idx, mid in enumerate(chain):
         last_mid = mid
         try:
-            kw = _build_chat_kwargs(
+            text = _create_chat_collect(
+                client,
                 model=mid,
                 messages=messages,
                 temperature=temperature,
                 max_tokens=resolve_max_tokens(max_tokens, model=mid),
+                reasoning_effort=_reasoning_effort_for_model(mid, json_object=False),
             )
-            resp = client.chat.completions.create(**kw)
-            text = _message_content(resp)
             if text:
                 if idx > 0:
                     logger.warning(

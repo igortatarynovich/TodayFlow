@@ -20,20 +20,61 @@ def _patch_settings(monkeypatch, s) -> None:
     monkeypatch.setattr(llm_mod, "settings", s)
 
 
-def test_get_openai_compatible_client_background_uses_longer_timeout(monkeypatch):
+def test_get_openai_compatible_client_background_uses_stream_read_timeout(monkeypatch):
     from todayflow_backend.core.llm_openai_compatible import llm_operation
 
     s = config_module.Settings(
         openai_api_key="sk-test",
         llm_http_timeout_seconds=12.0,
-        llm_background_timeout_seconds=45.0,
+        llm_background_timeout_seconds=180.0,
+        llm_stream_read_timeout_seconds=90.0,
     )
     _patch_settings(monkeypatch, s)
     sync_client = get_openai_compatible_client()
     assert float(sync_client.timeout) == 12.0
     with llm_operation("background"):
         bg_client = get_openai_compatible_client()
-    assert float(bg_client.timeout) == 45.0
+    # Background uses httpx.Timeout: read = idle between SSE chunks (Kimi thinking).
+    assert float(bg_client.timeout.read) == 90.0
+    assert float(bg_client.timeout.connect) == 30.0
+
+
+def test_kimi_stream_collects_content_ignores_reasoning(monkeypatch):
+    s = config_module.Settings(
+        llm_provider="nebius",
+        nebius_api_key="sk-test",
+        nebius_model="moonshotai/Kimi-K3",
+        nebius_fallback_model="",
+        llm_stream_completions=True,
+    )
+    _patch_settings(monkeypatch, s)
+
+    def _chunk(content=None, reasoning=None):
+        delta = SimpleNamespace(content=content, reasoning_content=reasoning)
+        return SimpleNamespace(choices=[SimpleNamespace(delta=delta)])
+
+    stream = [
+        _chunk(reasoning="thinking…"),
+        _chunk(content='{"ok":'),
+        _chunk(content="true}"),
+    ]
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.return_value = iter(stream)
+
+    text = chat_completion_text(
+        mock_client,
+        model="moonshotai/Kimi-K3",
+        messages=[{"role": "user", "content": "x"}],
+        temperature=0.1,
+        max_tokens=100,
+        json_object=False,
+    )
+    assert text == '{"ok":true}'
+    kw = mock_client.chat.completions.create.call_args.kwargs
+    assert kw.get("stream") is True
+    assert kw.get("reasoning_effort") == "low"
+    assert "temperature" not in kw
+    assert kw.get("max_tokens", 0) >= 16000
 
 
 def test_resolve_max_tokens_bumps_reasoning_models(monkeypatch):

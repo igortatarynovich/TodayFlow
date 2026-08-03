@@ -18,6 +18,24 @@ Prior: card_base_v1 cutover live · editorial polish minors ongoing.
 - **Canon updated?** no new file — aligns SCENARIO_V3 Экран 3 + DAY_SCENARIO Act V; tracker SoT for this slice
 - **Backward compatible?** yes — old caches without why still render; domain_verdicts fallback when available
 
+## Architecture impact — app-wide Day Atmosphere + flat Today acts (2026-08-03)
+
+- **SoT before:** Day Atmosphere gated to `/today`; Tarot forced `theme:"dark"` + void section; product frame followed system appearance dark; Plot/Symbols/Reading/Move/Response wrapped in ActShell/motif chrome (nested vs Glance).
+- **SoT after:** `data-day-mode` on all product routes; Tarot shell no longer forces dark; product frame defaults to light (day tint owns chrome); section void / tarot aliases yield to day tokens; ScreenFlow acts use flat Block stacks (`ProductJourneyScene chrome={false}`; Plot/Symbols without ActShell; Plot hero = glass Block).
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — FOUNDATION_UI §11.1 · SCREEN_FLOW_V1 §1.5 flat act surface
+- **Backward compatible?** yes — non-ScreenFlow journey paths may still use ActShell chrome; explicit `themeProp` still overrides frame light default
+
+## Architecture impact — shell soft-tint from Day Atmosphere (2026-08-03)
+
+- **SoT before:** Product sidebar/rail stayed on static route `section-atmosphere` / glass tokens while main frame used `data-day-mode` art — visual “inset” of one UI in another. Diagnosis sometimes pointed at totem color / `MOOD_CELL_COLORS` as shell drivers (incorrect).
+- **SoT after:** On Today only, `html[data-day-mode][data-atmosphere="today"]` aliases `--section-accent*` / glass / sidebar surface to `--day-*` (FOUNDATION_UI §11.1/§11.4). Bridge clears `data-day-mode` off `/today` (Tarot keeps Section dark). Totem color name and heatmap moods remain non-shell. Sidebar wrapper uses `sidebarSlot` stretch so rail is full-height.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — FOUNDATION_UI §11.1 clarifies Section vs Day Atmosphere vs content color
+- **Backward compatible?** yes — off Today / without `data-day-mode`, section presets unchanged
+
 ## Architecture impact — Glance energy + day art backgrounds (2026-08-03)
 
 - **SoT before:** Pulse («Энергия дня») on Plot only; Day Atmosphere used CSS geometric decor without `public/images/backgrounds/{1–5}.png` art seeds; live frontend could lag chrome unmount.
@@ -1311,7 +1329,8 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
-- 2026-08-03 | Today / Ops | **Kimi-K3 primary + DeepSeek fallback** | **LIVE canary** | BE redeployed. Nebius primary=`moonshotai/Kimi-K3`, fallback=`deepseek-ai/DeepSeek-V4-Pro`. Native attempt≥1 Kimi-only. Goal: warmer voice / metaphor. Cost: K3 ≫ K2.6. Next: force_rebuild canary + human QA tone.
+- 2026-08-03 | Today / Ops | **Kimi stream + no DeepSeek hop** | **LIVE canary** | Probe: K3 TTFT **157s** / K2.6 **0.6s** on Nebius. SSE + empty fallback. Primary **Kimi-K2.6**. Force_rebuild: user1 gen487 / user2 gen488 → `native_llm_c1` model=`moonshotai/Kimi-K2.6` (no DeepSeek).
+- 2026-08-03 | Today / Ops | **Kimi-K3 primary + DeepSeek fallback** | **SUPERSEDED** | K3 primary impractical on Nebius TTFT; see stream+K2.6 row.
 - 2026-08-03 | Content / Voice | **Practitioner persona v1.2 — pro crafts + informal** | **LIVE** | Voice Canon §1 → v1.8 · `llm_practitioner_persona_v1.2` on BE · professional tarot/astro/numerology + friendly informal (emotion · metaphor) · `common_v1` aligned. Force_rebuild to taste new voice.
 - 2026-08-03 | Today / Ops | **Soft-heal one-field gates** | **LIVE canary** | BE redeployed. User2 gen480 → `native_llm_c1` clean accept (DeepSeek, 2 scenes, no B5). User1 gen479 → still `unavailable_after_llm` (attempt0 editorial SEED_CHORUS_PASTE/SCENE_*; attempt1 Kimi empty) — heal path not reached. Broader prewarm still held.
 - 2026-08-03 | Today / Ops | **DeepSeek→Kimi + no B5 invent** | **LIVE canary** | BE redeployed. Canary rebuild users 1/2 (`2026-08-03`): gen 477/478 → `unavailable_after_llm` (empty/parse on Kimi path); **no B5** («Сделай один короткий шаг» absent; expect/do empty). Broader prewarm **held** until native/kept improves. Soft-fill conflict_link = next slice.

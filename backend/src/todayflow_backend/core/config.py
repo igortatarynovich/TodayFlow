@@ -99,16 +99,21 @@ class Settings(BaseSettings):
     # Nebius Token Factory (OpenAI-compatible): https://docs.tokenfactory.nebius.com/
     nebius_api_key: str | None = None  # NEBIUS_API_KEY
     nebius_base_url: str = "https://api.tokenfactory.nebius.com/v1/"  # NEBIUS_BASE_URL
-    nebius_model: str = "moonshotai/Kimi-K3"  # NEBIUS_MODEL — primary id в Token Factory (voice/metaphor)
-    # Second model when primary fails (timeout/empty/upstream/missing). Not Qwen; not hardcode prose.
-    nebius_fallback_model: str = "deepseek-ai/DeepSeek-V4-Pro"  # NEBIUS_FALLBACK_MODEL
+    nebius_model: str = "moonshotai/Kimi-K2.6"  # NEBIUS_MODEL — Kimi voice trial (K3 TTFT ~160s+ on Nebius)
+    # Empty during Kimi primary trial — do not silently hop to DeepSeek and “pass” the test.
+    # Set NEBIUS_FALLBACK_MODEL=deepseek-ai/DeepSeek-V4-Pro to re-enable provider failover.
+    nebius_fallback_model: str = ""  # NEBIUS_FALLBACK_MODEL
     llm_provider: str = "openai"  # LLM_PROVIDER — openai | gemini | nebius
     # Hard HTTP timeout for OpenAI-compatible clients (Nebius/OpenAI/Gemini proxy).
     # Prevents Compatibility / Today from hanging the product UI when the provider stalls.
-    # Sync/read path: short. Background jobs use llm_background_timeout_seconds.
+    # Sync/read path: short. Background jobs use stream read idle (Kimi) or this wall.
     llm_http_timeout_seconds: float = 12.0  # LLM_HTTP_TIMEOUT_SECONDS
-    # Budget covers Kimi→DeepSeek on attempt0 (+ Kimi-only gate retry); not 2× full chain.
+    # Legacy non-stream wall for background. Kimi uses streaming + llm_stream_read_timeout_seconds.
     llm_background_timeout_seconds: float = 180.0  # LLM_BACKGROUND_TIMEOUT_SECONDS
+    # Idle between SSE chunks (httpx read). K3 on Nebius needs ≥180s TTFT; K2.6 is sub-second.
+    llm_stream_read_timeout_seconds: float = 120.0  # LLM_STREAM_READ_TIMEOUT_SECONDS
+    # Stream chat completions for Kimi (and when True). Avoids idle wait until full thinking finishes.
+    llm_stream_completions: bool = True  # LLM_STREAM_COMPLETIONS
     # LLM_QUALITY_MODE:
     #   economize — legacy: tight max_tokens, cheap tiers, clipped context (AMLL cost control);
     #   rich — quality-first: full context, multi-step funnels, generous max_tokens, no cheap-tier preference.

@@ -48,8 +48,10 @@ services:
       LLM_QUALITY_MODE: ${LLM_QUALITY_MODE:-rich}
       NEBIUS_API_KEY: ${NEBIUS_API_KEY:-}
       NEBIUS_BASE_URL: ${NEBIUS_BASE_URL:-https://api.tokenfactory.nebius.com/v1/}
-      NEBIUS_MODEL: ${NEBIUS_MODEL:-moonshotai/Kimi-K3}
-      NEBIUS_FALLBACK_MODEL: ${NEBIUS_FALLBACK_MODEL:-deepseek-ai/DeepSeek-V4-Pro}
+      NEBIUS_MODEL: ${NEBIUS_MODEL:-moonshotai/Kimi-K2.6}
+      NEBIUS_FALLBACK_MODEL: ${NEBIUS_FALLBACK_MODEL:-}
+      LLM_STREAM_COMPLETIONS: ${LLM_STREAM_COMPLETIONS:-1}
+      LLM_STREAM_READ_TIMEOUT_SECONDS: ${LLM_STREAM_READ_TIMEOUT_SECONDS:-120}
       # Guest+registered content v1.1 after human review; premium still not wide-enabled.
       COMPATIBILITY_CONTENT_V1: ${COMPATIBILITY_CONTENT_V1:-1}
       # Character Engine — must be explicit here or recreate drops flags (defaults match live .env).
