@@ -526,7 +526,7 @@ interface DayAtmosphereContract {
 
 ### 13.4 Backlog
 
-- Dark-appearance значения палитры (`data-theme="dark"` × `data-day-mode`) — сейчас day-mode не меняется под тёмной темой.
+- Dark-appearance значения палитры (`data-theme="dark"` × `data-day-mode`) — сейчас day-mode не меняется под тёмной темой. Вместе с этим: `color-scheme` для Tension/Depth **намеренно не выставляется** в `day-atmosphere.css` (убрано из first pass), чтобы тёмные `--day-*` цвета не красили нативные скроллбары/формы при светлом `data-theme`; native `color-scheme` трогаем только в той же dark-appearance доводке.
 - Decor-ассеты: 16 SVG/CSS-композиций (`DAY_MODE_DECOR_VARIANTS`, 2 на режим) — сейчас `decor_variant` в контракте валиден, но не отрисован.
 - День-нарратив движок: `DayAtmosphereBridge` резолвит только pin → дефолт `clarity`; интеграция реального источника сюжета дня — отдельная задача, меняющая один аргумент в `resolveDayAtmosphere()`, не архитектуру.
 - Потребление `--day-*` токенов в реальной композиции фона `.todayflow-section` / Hero — пока токены существуют и обновляются, но ни одна поверхность их не читает.

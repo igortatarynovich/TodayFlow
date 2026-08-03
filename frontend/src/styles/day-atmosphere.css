@@ -77,7 +77,8 @@ html[data-day-mode="clarity"] {
 }
 
 html[data-day-mode="tension"] {
-  color-scheme: dark;
+  /* No color-scheme here — native scrollbars/forms stay with data-theme /
+     user appearance until dark-appearance palette lands (§13.4). */
   --day-bg-base: #221f22;
   --day-bg-glow-primary: rgba(120, 40, 50, 0.28);
   --day-bg-glow-secondary: rgba(70, 60, 90, 0.16);
@@ -96,7 +97,7 @@ html[data-day-mode="renewal"] {
 }
 
 html[data-day-mode="depth"] {
-  color-scheme: dark;
+  /* No color-scheme — see tension note / FOUNDATION_UI §13.4. */
   --day-bg-base: #171622;
   --day-bg-glow-primary: rgba(70, 60, 110, 0.22);
   --day-bg-glow-secondary: rgba(40, 45, 70, 0.16);
