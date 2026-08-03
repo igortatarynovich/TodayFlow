@@ -84,16 +84,25 @@ export async function resolvePostAuthTarget(explicitRedirect?: string | null): P
   }
 }
 
-/** After token is set: claim value-first guest draft, then fall back to normal routing. */
+/** After token is set: route immediately; guest claim is best-effort and must not block login. */
 export async function resolveTargetAfterAuthSession(explicitRedirect?: string | null): Promise<string> {
+  // Sync refine gate — no network. Returning users without a draft skip this.
   try {
-    const claim = await claimGuestProfileAfterAuth();
-    if (claim.status === "ready") return claim.profilePath;
-    if (claim.status === "needs_refine") return claim.refinePath;
+    const { canClaimGuestProfile, prepareGuestClaimBeforeAuth } = await import("@/lib/claimGuestProfile");
+    const { readGuestProfileDraft } = await import("@/lib/guestProfileDraft");
+    const draft = readGuestProfileDraft();
+    if (canClaimGuestProfile(draft) && draft && !draft.location_name?.trim()) {
+      void prepareGuestClaimBeforeAuth().catch(() => {});
+      return "/onboarding/refine?after=save";
+    }
   } catch {
-    // Guest claim is best-effort; auth session remains valid.
+    /* ignore */
   }
-  return resolvePostAuthTarget(explicitRedirect);
+
+  const target = await resolvePostAuthTarget(explicitRedirect);
+  // Fire-and-forget — never hold the login spinner / navigation on claim or story refresh.
+  void claimGuestProfileAfterAuth().catch(() => {});
+  return target;
 }
 
 export { ONBOARDING_CORE_PATH, FIRST_TODAY_PATH };

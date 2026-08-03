@@ -323,6 +323,7 @@ def run_day_lifecycle_due(
         "prewarm_skipped_ready": 0,
         "prewarm_unchanged": 0,
         "prewarm_error": 0,
+        "prewarm_enqueued": 0,
         "prewarm_candidates": 0,
         "system_closed": 0,
         "system_already_closed": 0,
@@ -361,7 +362,7 @@ def run_day_lifecycle_due(
             elif outcome == "already_closed":
                 counts["system_already_closed"] += 1
 
-        # C5.1 pre-warm — assemble window, or catch-up after ready_at if package missing
+        # C5.1 pre-warm — enqueue background jobs (never hold cron DB session on LLM).
         if prewarm_budget <= 0:
             continue
         ready_t = parse_hhmm(sch.get("morning_time"), fallback=DEFAULT_READY_TIME)
@@ -376,21 +377,19 @@ def run_day_lifecycle_due(
         ) and not needs_catchup:
             continue
         counts["prewarm_candidates"] += 1
-        outcome = prewarm_assemble_user_day(
+        if day_story_is_product_ready(db, user_id=uid, local_date=local_date):
+            counts["prewarm_skipped_ready"] += 1
+            continue
+        from todayflow_backend.services.day_prewarm_job_c5 import enqueue_day_prewarm
+
+        enqueue_day_prewarm(
             db,
-            user=user,
+            user_id=uid,
             local_date=local_date,
-            timezone_name=tz_name,
             locale=locale,
+            timezone_name=tz_name,
         )
-        key = {
-            "rebuilt": "prewarm_rebuilt",
-            "skipped_ready": "prewarm_skipped_ready",
-            "unchanged": "prewarm_unchanged",
-            "error": "prewarm_error",
-        }.get(outcome, "prewarm_error")
-        counts[key] += 1
-        if outcome == "rebuilt":
-            prewarm_budget -= 1
+        counts["prewarm_enqueued"] += 1
+        prewarm_budget -= 1
 
     return counts

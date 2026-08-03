@@ -13,6 +13,17 @@ if _db_url.startswith("sqlite"):
     # Один общий in-memory SQLite на процесс (pytest без файловой БД).
     if _db_url in ("sqlite://", "sqlite:///:memory:"):
         _engine_kwargs["poolclass"] = StaticPool
+else:
+    # Prewarm/LLM must not starve interactive requests (auth/me, practices).
+    _engine_kwargs.update(
+        {
+            "pool_size": 12,
+            "max_overflow": 18,
+            "pool_timeout": 8,
+            "pool_pre_ping": True,
+            "pool_recycle": 1800,
+        }
+    )
 
 engine = create_engine(_db_url, **_engine_kwargs)
 SessionLocal = sessionmaker(bind=engine, expire_on_commit=False, autoflush=False)

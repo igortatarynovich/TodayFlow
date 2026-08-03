@@ -117,12 +117,20 @@ export function getStoredAccessToken(): string | null {
 }
 
 async function performRequest<T>(path: string, options: RequestInit | undefined, headers: Headers): Promise<T> {
+  const AUTH_ME_TIMEOUT_MS = 10_000;
+  const needsAuthMeTimeout = path === "/auth/me" || path.startsWith("/auth/me?");
+  const timeoutController = needsAuthMeTimeout && !options?.signal ? new AbortController() : null;
+  const timeoutId =
+    timeoutController != null
+      ? setTimeout(() => timeoutController.abort(), AUTH_ME_TIMEOUT_MS)
+      : null;
 
   try {
     const res = await fetch(`${API_BASE}${path}`, {
       ...options,
       headers,
       credentials: "include",
+      signal: options?.signal ?? timeoutController?.signal,
     });
 
     if (!res.ok) {
@@ -158,33 +166,16 @@ async function performRequest<T>(path: string, options: RequestInit | undefined,
       // Handle specific error cases
       if (res.status === 401) {
         // Login/signup failures must keep the API `detail` (localized invalid credentials).
-        // Clearing session on failed login would also wipe any prior guest token noise.
         const isCredentialChallenge =
           path.includes("/auth/login") ||
           path.includes("/auth/email-signup") ||
           path.includes("/auth/signup") ||
           path.includes("/auth/magic");
-        // Guest-claim soft failures are claim-token errors, not a dead JWT.
-        // Clearing the session here logged users out on refresh / post-login claim.
-        const isGuestClaimSoft =
-          path.includes("/today/guest/") ||
-          path.includes("/guest/");
-        const detailCode =
-          details && typeof details === "object" && "detail" in (details as object)
-            ? String((details as { detail?: unknown }).detail || "")
-            : typeof details === "string"
-              ? details
-              : "";
-        const softClaimCodes = new Set([
-          "invalid_claim_token",
-          "claim_token_expired",
-          "invalid_guest_secret",
-          "claim_token_required",
-        ]);
-        const shouldClearSession =
-          !isCredentialChallenge &&
-          !isGuestClaimSoft &&
-          !softClaimCodes.has(detailCode);
+        // Only /auth/me proves the JWT is dead. Other 401s (guest claim, optional
+        // endpoints, race conditions) must not wipe a still-usable session —
+        // especially on mobile refresh when the DB pool is under load.
+        const isAuthMeProbe = path === "/auth/me" || path.startsWith("/auth/me?");
+        const shouldClearSession = !isCredentialChallenge && isAuthMeProbe;
         if (shouldClearSession && typeof window !== "undefined") {
           const { clearAuthSession, notifyAuthSessionChanged } = await import("@/lib/authSession");
           clearAuthSession();
@@ -228,6 +219,10 @@ async function performRequest<T>(path: string, options: RequestInit | undefined,
 
     // Re-throw other errors
     throw error;
+  } finally {
+    if (timeoutId != null) {
+      clearTimeout(timeoutId);
+    }
   }
 }
 

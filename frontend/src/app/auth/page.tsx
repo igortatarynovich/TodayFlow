@@ -140,7 +140,23 @@ function AuthPageContent() {
     }
   };
 
-  if (authLoading || isAuthenticated) {
+  if (authLoading) {
+    return (
+      <AuthWebScreen
+        mode={mode}
+        onSelectLogin={() => {}}
+        onSelectSignup={() => {}}
+        loginTabLabel=""
+        signupTabLabel=""
+        headline=""
+        lead=""
+        formOnly
+        loading
+      />
+    );
+  }
+
+  if (isAuthenticated) {
     return (
       <AuthWebScreen
         mode={mode}

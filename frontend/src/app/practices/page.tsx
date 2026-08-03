@@ -204,8 +204,9 @@ export default function PracticesPage() {
   }, [isAuthenticated, sortLocale, pc.practicesCatalogLoadError, copy.catalogFailed]);
 
   useEffect(() => {
+    if (authLoading) return;
     void loadPractices();
-  }, [loadPractices]);
+  }, [authLoading, loadPractices]);
 
   useEffect(() => {
     if (!isAuthenticated) {

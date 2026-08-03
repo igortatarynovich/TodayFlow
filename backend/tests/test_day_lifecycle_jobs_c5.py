@@ -143,20 +143,23 @@ def test_run_day_lifecycle_due_calls_prewarm_in_window() -> None:
     now = datetime(2026, 7, 27, 4, 15, tzinfo=ZoneInfo("Europe/Moscow"))
 
     with patch(
-        "todayflow_backend.services.day_lifecycle_jobs_c5.prewarm_assemble_user_day",
-        return_value="rebuilt",
-    ) as prewarm:
+        "todayflow_backend.services.day_lifecycle_jobs_c5.day_story_is_product_ready",
+        return_value=False,
+    ):
         with patch(
-            "todayflow_backend.services.day_lifecycle_jobs_c5._schedule_row",
-            return_value={
-                "timezone": "Europe/Moscow",
-                "morning_time": "05:00",
-            },
-        ):
-            counts = run_day_lifecycle_due(db, now_utc=now.astimezone(ZoneInfo("UTC")), max_prewarm=2)
+            "todayflow_backend.services.day_prewarm_job_c5.enqueue_day_prewarm",
+        ) as enqueue:
+            with patch(
+                "todayflow_backend.services.day_lifecycle_jobs_c5._schedule_row",
+                return_value={
+                    "timezone": "Europe/Moscow",
+                    "morning_time": "05:00",
+                },
+            ):
+                counts = run_day_lifecycle_due(db, now_utc=now.astimezone(ZoneInfo("UTC")), max_prewarm=2)
     assert counts["prewarm_candidates"] >= 1
-    assert counts["prewarm_rebuilt"] >= 1
-    assert prewarm.called
+    assert counts["prewarm_enqueued"] >= 1
+    assert enqueue.called
 
 
 def test_prewarm_skips_when_ready_but_still_prebakes_symbols() -> None:

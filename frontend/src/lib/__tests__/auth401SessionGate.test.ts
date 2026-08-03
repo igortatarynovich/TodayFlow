@@ -4,30 +4,18 @@ import { ApiError } from "@/lib/api";
  * Mirrors the session-clear gate in api.ts performRequest (401 branch).
  * Keep in sync when changing logout-on-401 rules.
  */
-function shouldClearAuthSessionOn401(path: string, details?: unknown): boolean {
+function shouldClearAuthSessionOn401(path: string): boolean {
   const isCredentialChallenge =
     path.includes("/auth/login") ||
     path.includes("/auth/email-signup") ||
     path.includes("/auth/signup") ||
     path.includes("/auth/magic");
-  const isGuestClaimSoft = path.includes("/today/guest/") || path.includes("/guest/");
-  const detailCode =
-    details && typeof details === "object" && details !== null && "detail" in details
-      ? String((details as { detail?: unknown }).detail || "")
-      : typeof details === "string"
-        ? details
-        : "";
-  const softClaimCodes = new Set([
-    "invalid_claim_token",
-    "claim_token_expired",
-    "invalid_guest_secret",
-    "claim_token_required",
-  ]);
-  return !isCredentialChallenge && !isGuestClaimSoft && !softClaimCodes.has(detailCode);
+  const isAuthMeProbe = path === "/auth/me" || path.startsWith("/auth/me?");
+  return !isCredentialChallenge && isAuthMeProbe;
 }
 
 describe("401 session clear gate", () => {
-  it("clears on /auth/me 401", () => {
+  it("clears only on /auth/me 401", () => {
     expect(shouldClearAuthSessionOn401("/auth/me")).toBe(true);
   });
 
@@ -35,13 +23,10 @@ describe("401 session clear gate", () => {
     expect(shouldClearAuthSessionOn401("/auth/login")).toBe(false);
   });
 
-  it("does not clear on guest claim soft failures", () => {
-    expect(shouldClearAuthSessionOn401("/today/guest/claim", { detail: "invalid_claim_token" })).toBe(
-      false,
-    );
-    expect(shouldClearAuthSessionOn401("/today/guest/claim-token", { detail: "claim_token_expired" })).toBe(
-      false,
-    );
+  it("does not clear on practices or guest claim 401", () => {
+    expect(shouldClearAuthSessionOn401("/practices/progress")).toBe(false);
+    expect(shouldClearAuthSessionOn401("/today/guest/claim")).toBe(false);
+    expect(shouldClearAuthSessionOn401("/today/contract")).toBe(false);
   });
 
   it("ApiError still carries guest claim detail without implying session wipe", () => {
