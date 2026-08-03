@@ -84,6 +84,20 @@
   color: var(--tf-ink, #2a2520);
 }
 
+.verdictDomainGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.verdictDomainIcon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  color: var(--tf-ink-muted, #7a7168);
+}
+
 .verdictKey {
   flex-shrink: 0;
   font-size: 0.85rem;

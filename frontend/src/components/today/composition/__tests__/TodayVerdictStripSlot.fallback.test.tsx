@@ -84,4 +84,50 @@ describe("TodayVerdictStripSlot transport honesty", () => {
     expect(fetchMock).not.toHaveBeenCalled();
     expect(screen.getByTestId("today-verdict-why-work")).toHaveTextContent("короче шаг");
   });
+
+  it("renders a domain icon for a known domain (FOUNDATION_UI §16.6)", async () => {
+    render(
+      <TodayVerdictStripSlot
+        dateISO="2026-07-30"
+        dayFacts={{
+          domain_verdicts: [
+            { domain: "work", verdict: "charged", why_short: "", driver_ids: [], logic_source: "top_driver_v1" },
+            { domain: "money", verdict: "calm", why_short: "", driver_ids: [], logic_source: "top_driver_v1" },
+          ],
+          glance_timeline: [],
+          day_facts_id: "1:2026-07-30",
+        }}
+      />,
+    );
+    await waitFor(() => {
+      expect(screen.getByTestId("today-verdict-work")).toBeInTheDocument();
+    });
+    expect(screen.getByTestId("today-verdict-work").querySelector("svg")).not.toBeNull();
+    expect(screen.getByTestId("today-verdict-money").querySelector("svg")).not.toBeNull();
+  });
+
+  it("omits the icon (not the row) for an unknown/legacy domain string", async () => {
+    render(
+      <TodayVerdictStripSlot
+        dateISO="2026-07-30"
+        dayFacts={{
+          domain_verdicts: [
+            {
+              domain: "money_work" as never,
+              verdict: "calm",
+              why_short: "",
+              driver_ids: [],
+              logic_source: "top_driver_v1",
+            },
+          ],
+          glance_timeline: [],
+          day_facts_id: "1:2026-07-30",
+        }}
+      />,
+    );
+    await waitFor(() => {
+      expect(screen.getByTestId("today-verdict-money_work")).toBeInTheDocument();
+    });
+    expect(screen.getByTestId("today-verdict-money_work").querySelector("svg")).toBeNull();
+  });
 });

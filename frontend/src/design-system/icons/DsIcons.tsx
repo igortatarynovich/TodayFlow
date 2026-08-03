@@ -131,6 +131,17 @@ export function IconWalletCards({ className }: IconProps) {
   );
 }
 
+/** Today domain `work` — briefcase (FOUNDATION_UI §16.6). Same stroke family as wallet/heart/activity. */
+export function IconBriefcase({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect x="3" y="8" width="18" height="12" rx="2" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M3 14h18" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
 /** Figma nav canon: activity pulse (Практики). */
 export function IconActivity({ className }: IconProps) {
   return (
@@ -259,3 +270,16 @@ export const DS_NAV_ICON_MAP = {
   "wallet-cards": IconWalletCards,
   activity: IconActivity,
 } as const;
+
+/**
+ * Today domain → icon (FOUNDATION_UI §16.6). Keyed against `DomainKey`
+ * (`@/lib/todayDomainVerdicts`) — the type the actual consumer
+ * (`TodayVerdictStripSlot`) uses, not `TodayContractDomainId`.
+ * `satisfies` checks completeness without exporting a new component type.
+ */
+export const TODAY_DOMAIN_ICON_MAP = {
+  work: IconBriefcase,
+  money: IconWalletCards,
+  relationships: IconHeart,
+  energy: IconActivity,
+} satisfies Record<"work" | "money" | "relationships" | "energy", typeof IconHeart>;

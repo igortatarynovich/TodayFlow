@@ -7,6 +7,7 @@
 import { useEffect, useState } from "react";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import styles from "@/components/today/composition/TodayWave2Slots.module.css";
+import { TODAY_DOMAIN_ICON_MAP } from "@/design-system/icons/DsIcons";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import {
   DOMAIN_LABEL_RU,
@@ -176,6 +177,10 @@ export function TodayVerdictStripSlot({ dateISO, dayFacts = null }: VerdictStrip
         const verdict = row.verdict as VerdictKey;
         const domainLabel = DOMAIN_LABEL_RU[domain] ?? row.domain;
         const verdictLabel = VERDICT_LABEL_RU[verdict] ?? row.verdict;
+        // Unknown/legacy domain string (not in the closed DomainKey map) → no icon, label still renders.
+        const DomainIcon = (TODAY_DOMAIN_ICON_MAP as Partial<Record<string, typeof TODAY_DOMAIN_ICON_MAP.work>>)[
+          domain
+        ];
         return (
           <div
             key={row.domain}
@@ -190,7 +195,10 @@ export function TodayVerdictStripSlot({ dateISO, dayFacts = null }: VerdictStrip
             </span>
             <div className={styles.verdictCopy}>
               <div className={styles.verdictHead}>
-                <span className={styles.verdictDomain}>{domainLabel}</span>
+                <span className={styles.verdictDomainGroup}>
+                  {DomainIcon ? <DomainIcon className={styles.verdictDomainIcon} /> : null}
+                  <span className={styles.verdictDomain}>{domainLabel}</span>
+                </span>
                 <span className={styles.verdictKey} data-verdict={row.verdict}>
                   {verdictLabel}
                 </span>

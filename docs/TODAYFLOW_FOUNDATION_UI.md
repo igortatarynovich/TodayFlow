@@ -680,7 +680,7 @@ interface DayAtmosphereContract {
 
 ## 16. Today Screen — Block Composition
 
-**Статус:** канон; Glance + Plot/Symbols/Reading/Move/Response на `DsCard size="compact"` / `TodayScreenBlock` — first pass. Отвечает на запрос «подача должна быть красиво разбита на блоки, легко читаться» — независимо от точного контента экрана. Не заменяет и не меняет [TODAY_SCREEN_SCENARIO_V3](today/TODAY_SCREEN_SCENARIO_V3.md) (SoT содержания каждого из 6 шагов ScreenFlow) — этот раздел только про то, **как** любой из шести шагов визуально организован. Навигационный chrome (свайп/цифры) — не здесь, см. [SCREEN_FLOW_V1 §1.5](foundation/SCREEN_FLOW_V1.md).
+**Статус:** канон реализован (Glance…Response Block + domain icons §16.6). Отвечает на запрос «подача должна быть красиво разбита на блоки, легко читаться» — независимо от точного контента экрана. Не заменяет и не меняет [TODAY_SCREEN_SCENARIO_V3](today/TODAY_SCREEN_SCENARIO_V3.md) (SoT содержания каждого из 6 шагов ScreenFlow) — этот раздел только про то, **как** любой из шести шагов визуально организован. Навигационный chrome (свайп/цифры) — не здесь, см. [SCREEN_FLOW_V1 §1.5](foundation/SCREEN_FLOW_V1.md).
 
 ### 16.1 Проблема, зафиксированная в коде
 
@@ -717,10 +717,22 @@ interface DayAtmosphereContract {
 - Цвета CTA/error/success/warning (§0/§4).
 - Навигационная механика (свайп/keyboard/analytics) — SCREEN_FLOW_V1 §1.1–§1.4, §1.7–§1.9 без изменений.
 
-### 16.6 Открытые вопросы (не в этом проходе)
+### 16.6 Domain icons (закрыто)
 
-- Точный набор иконок для 2×2-сетки сфер (work/money/relationships/energy) — нет решения, не проверено в `DsIcons`.
-- Останется ли `metaRow`/nearest-строка отдельным Block или сольётся с тизерами — **решено при Glance first pass:** nearest = отдельный Block («Сигнал дня»).
+Сетка сфер `work / money / relationships / energy` (`DomainKey` в `todayDomainVerdicts.ts` — тот же словарь, что контракт):
+
+| Domain | Icon | Источник |
+|--------|------|----------|
+| `work` | `IconBriefcase` | **новый** в `DsIcons.tsx` (тот же stroke-стиль 24×24 / 1.5) |
+| `money` | `IconWalletCards` | уже был |
+| `relationships` | `IconHeart` | уже был |
+| `energy` | `IconActivity` | уже был |
+
+Карта: `TODAY_DOMAIN_ICON_MAP` (`as const` + `satisfies`, рядом с `DS_NAV_ICON_MAP`). Потребитель: `TodayVerdictStripSlot` — иконка рядом с `domainLabel`; неизвестный/legacy domain → строка без иконки, без падения.
+
+### 16.7 Решённые ранее
+
+- `metaRow`/nearest vs тизеры — **Glance first pass:** nearest = отдельный Block («Сигнал дня»).
 
 ---
 
