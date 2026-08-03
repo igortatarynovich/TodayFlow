@@ -5,6 +5,7 @@ from unittest.mock import MagicMock
 
 from todayflow_backend.core import config as config_module
 from todayflow_backend.core.llm_openai_compatible import (
+    chat_completion_plain_with_status,
     chat_completion_text,
     get_openai_compatible_client,
     is_llm_chat_configured,
@@ -142,20 +143,20 @@ def test_nebius_model_fallback_on_404(monkeypatch):
     s = config_module.Settings(
         llm_provider="nebius",
         nebius_api_key="sk-test",
-        nebius_model="deepseek-ai/DeepSeek-V4-Pro",
-        nebius_fallback_model="moonshotai/Kimi-K2.6",
+        nebius_model="moonshotai/Kimi-K3",
+        nebius_fallback_model="deepseek-ai/DeepSeek-V4-Pro",
     )
     _patch_settings(monkeypatch, s)
-    assert resolve_chat_model_chain("deepseek-ai/DeepSeek-V4-Pro") == [
+    assert resolve_chat_model_chain("moonshotai/Kimi-K3") == [
+        "moonshotai/Kimi-K3",
         "deepseek-ai/DeepSeek-V4-Pro",
-        "moonshotai/Kimi-K2.6",
     ]
 
     class FakeNotFound(Exception):
         status_code = 404
 
         def __str__(self) -> str:
-            return "Error code: 404 - {'detail': 'The model `deepseek-ai/DeepSeek-V4-Pro` does not exist.'}"
+            return "Error code: 404 - {'detail': 'The model `moonshotai/Kimi-K3` does not exist.'}"
 
     assert classify_llm_call_failure(FakeNotFound()) == "model_unavailable"
 
@@ -166,7 +167,7 @@ def test_nebius_model_fallback_on_404(monkeypatch):
 
     text = chat_completion_text(
         mock_client,
-        model="deepseek-ai/DeepSeek-V4-Pro",
+        model="moonshotai/Kimi-K3",
         messages=[{"role": "user", "content": "x"}],
         temperature=0.1,
         max_tokens=100,
@@ -174,18 +175,18 @@ def test_nebius_model_fallback_on_404(monkeypatch):
     )
     assert text and "direct_answer" in text
     assert mock_client.chat.completions.create.call_count == 2
-    assert mock_client.chat.completions.create.call_args_list[0].kwargs["model"] == "deepseek-ai/DeepSeek-V4-Pro"
+    assert mock_client.chat.completions.create.call_args_list[0].kwargs["model"] == "moonshotai/Kimi-K3"
     assert mock_client.chat.completions.create.call_args_list[1].kwargs["model"] == (
-        "moonshotai/Kimi-K2.6"
+        "deepseek-ai/DeepSeek-V4-Pro"
     )
 
 
-def test_nebius_model_fallback_on_timeout_tries_kimi(monkeypatch):
+def test_nebius_model_fallback_on_timeout_tries_deepseek(monkeypatch):
     s = config_module.Settings(
         llm_provider="nebius",
         nebius_api_key="sk-test",
-        nebius_model="deepseek-ai/DeepSeek-V4-Pro",
-        nebius_fallback_model="moonshotai/Kimi-K2.6",
+        nebius_model="moonshotai/Kimi-K3",
+        nebius_fallback_model="deepseek-ai/DeepSeek-V4-Pro",
     )
     _patch_settings(monkeypatch, s)
 
@@ -199,7 +200,7 @@ def test_nebius_model_fallback_on_timeout_tries_kimi(monkeypatch):
 
     text = chat_completion_text(
         mock_client,
-        model="deepseek-ai/DeepSeek-V4-Pro",
+        model="moonshotai/Kimi-K3",
         messages=[{"role": "user", "content": "x"}],
         temperature=0.1,
         max_tokens=100,
@@ -207,7 +208,39 @@ def test_nebius_model_fallback_on_timeout_tries_kimi(monkeypatch):
     )
     assert text and "ok" in text
     assert mock_client.chat.completions.create.call_count == 2
-    assert mock_client.chat.completions.create.call_args_list[1].kwargs["model"] == "moonshotai/Kimi-K2.6"
+    assert mock_client.chat.completions.create.call_args_list[1].kwargs["model"] == (
+        "deepseek-ai/DeepSeek-V4-Pro"
+    )
+
+
+def test_plain_allow_model_fallback_false_skips_chain(monkeypatch):
+    s = config_module.Settings(
+        llm_provider="nebius",
+        nebius_api_key="sk-test",
+        nebius_model="moonshotai/Kimi-K3",
+        nebius_fallback_model="deepseek-ai/DeepSeek-V4-Pro",
+    )
+    _patch_settings(monkeypatch, s)
+
+    class FakeTimeout(Exception):
+        pass
+
+    mock_client = MagicMock()
+    mock_client.chat.completions.create.side_effect = FakeTimeout("Request timed out.")
+
+    text, kind, mid = chat_completion_plain_with_status(
+        mock_client,
+        model="moonshotai/Kimi-K3",
+        messages=[{"role": "user", "content": "x"}],
+        temperature=0.1,
+        max_tokens=100,
+        allow_model_fallback=False,
+    )
+    assert text is None
+    assert kind == "timeout"
+    assert mid == "moonshotai/Kimi-K3"
+    assert mock_client.chat.completions.create.call_count == 1
+
 
 
 def test_is_llm_chat_configured_nebius(monkeypatch):

@@ -289,12 +289,12 @@ def resolve_chat_model_chain(primary: str) -> list[str]:
 
 
 def _should_try_model_fallback(failure_kind: str | None) -> bool:
-    """Fallback to NEBIUS_FALLBACK_MODEL (Kimi) when primary has a provider problem.
+    """Fallback to NEBIUS_FALLBACK_MODEL when primary has a provider problem.
 
     Includes timeout/empty/upstream/missing-model. Does **not** include throttle (429)
     — a second model under rate limit usually fails the same way.
     Identical retry of the same model on timeout is still forbidden at the native
-    attempt loop; this only switches DeepSeek → Kimi once.
+    attempt loop; this only switches primary → fallback once on attempt0.
     """
     return failure_kind in {
         "model_unavailable",
@@ -319,9 +319,9 @@ def chat_completion_text(
     JSON mode may fall back to plain completion when the provider rejects
     ``response_format`` or returns empty content.
 
-    When ``LLM_PROVIDER=nebius``, primary is DeepSeek-V4-Pro; on provider failure
+    When ``LLM_PROVIDER=nebius``, primary is Kimi-K3; on provider failure
     (including timeout/empty/upstream/missing model) retries once with
-    ``NEBIUS_FALLBACK_MODEL`` (Kimi-K2.6). Throttle (429) does not switch models.
+    ``NEBIUS_FALLBACK_MODEL`` (DeepSeek-V4-Pro). Throttle (429) does not switch models.
     """
     chain = resolve_chat_model_chain(model)
     last_kind: str | None = None
@@ -438,6 +438,7 @@ def chat_completion_plain(
     messages: list[dict[str, str]],
     temperature: float,
     max_tokens: int,
+    allow_model_fallback: bool = True,
 ) -> str | None:
     """Обычный chat completion без `response_format` (narrative, таро, прогнозы и т.д.)."""
     text, _kind, _mid = chat_completion_plain_with_status(
@@ -446,6 +447,7 @@ def chat_completion_plain(
         messages=messages,
         temperature=temperature,
         max_tokens=max_tokens,
+        allow_model_fallback=allow_model_fallback,
     )
     return text
 
@@ -457,16 +459,18 @@ def chat_completion_plain_with_status(
     messages: list[dict[str, str]],
     temperature: float,
     max_tokens: int,
+    allow_model_fallback: bool = True,
 ) -> tuple[str | None, str | None, str | None]:
     """Plain chat completion with failure class for ops instrumentation.
 
     Returns ``(text, failure_class, model_id)``.
     ``failure_class`` is set when text is None: timeout | empty | throttle |
     model_unavailable | upstream_unavailable | other.
-    Nebius chain: primary then Kimi on provider failure including timeout
-    (via ``_should_try_model_fallback``).
+    Nebius chain (when ``allow_model_fallback``): primary then fallback on
+    provider failure including timeout (via ``_should_try_model_fallback``).
     """
-    chain = resolve_chat_model_chain(model)
+    mid0 = (model or "").strip()
+    chain = resolve_chat_model_chain(mid0) if allow_model_fallback else ([mid0] if mid0 else [])
     last_kind: str | None = None
     last_mid: str | None = None
     for idx, mid in enumerate(chain):

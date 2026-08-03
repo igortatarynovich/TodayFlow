@@ -15,7 +15,6 @@ import re
 from time import perf_counter
 from typing import Any
 
-from todayflow_backend.core.config import settings
 from todayflow_backend.core.llm_openai_compatible import (
     chat_completion_plain_with_status,
     get_openai_compatible_client,
@@ -37,8 +36,8 @@ NATIVE_FAILURE_GATE = "gate"
 NATIVE_FAILURE_OTHER = "other"
 
 # After provider timeout on the same model: do not burn a second identical wait.
-# Attempt 0 may switch DeepSeek → Kimi once; attempt ≥1 is Kimi-only (gate feedback).
-ATTEMPT2_POLICY_TIMEOUT = "attempt0_deepseek_then_kimi_attempt1_kimi_only"
+# Attempt 0 may switch Kimi → DeepSeek once; attempt ≥1 is Kimi-only (gate feedback).
+ATTEMPT2_POLICY_TIMEOUT = "attempt0_kimi_then_deepseek_attempt1_kimi_only"
 
 
 def _map_provider_kind_to_failure_class(kind: str | None) -> str:
@@ -69,11 +68,13 @@ def gate_failure_class(reject_reason: str | None) -> str:
 
 
 def resolve_native_attempt_model(attempt_idx: int) -> str:
-    """Attempt 0: DeepSeek (chain may add Kimi). Attempt ≥1: Kimi-only."""
-    if int(attempt_idx) >= 1:
-        fb = (getattr(settings, "nebius_fallback_model", None) or "").strip()
-        if fb:
-            return fb
+    """Nebius primary (Kimi) for every attempt.
+
+    Attempt 0 may still chain to NEBIUS_FALLBACK_MODEL via ``allow_model_fallback``.
+    Attempt ≥1 stays on primary only (gate feedback keeps the preferred voice).
+    ``attempt_idx`` kept for call-site / meta clarity.
+    """
+    _ = attempt_idx
     return str(resolve_default_chat_model() or "")
 
 
@@ -1174,6 +1175,8 @@ def call_day_scenario_native_llm_c1(
             ],
             temperature=0.52,
             max_tokens=resolve_max_tokens(4800),
+            # Gate/parse retries stay on Kimi — do not hop to dry DeepSeek.
+            allow_model_fallback=int(attempt_idx) == 0,
         )
         if used_model:
             model_name = str(used_model)
@@ -1203,7 +1206,7 @@ def call_day_scenario_native_llm_c1(
                     status="empty_response",
                     reject_reason=reject_reason,
                 )
-            # Provider chain exhausted (attempt0 DeepSeek→Kimi, or Kimi-only later).
+            # Provider chain exhausted (attempt0 Kimi→DeepSeek, or Kimi-only later).
             # Do not start another attempt without parse/gate feedback.
             logger.warning(
                 "native_llm_c1 provider fail attempt=%s class=%s duration_ms=%s; stopping",

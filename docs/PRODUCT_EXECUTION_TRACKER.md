@@ -18,6 +18,23 @@ Prior: card_base_v1 cutover live · editorial polish minors ongoing.
 - **Canon updated?** no new file — aligns SCENARIO_V3 Экран 3 + DAY_SCENARIO Act V; tracker SoT for this slice
 - **Backward compatible?** yes — old caches without why still render; domain_verdicts fallback when available
 
+## Architecture impact — Response tap → DsButton §17c (2026-08-03)
+
+- **SoT before:** Response `TodayTapWidget` used ad-hoc `.tapBtn` / `.tapBtnSecondary` in module.css.
+- **SoT after:** Choices render via `DsButton` (secondary/ghost + selected class); layout/selected only in consumer CSS (FOUNDATION_UI §17c). Jobs/tap API unchanged.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — FOUNDATION_UI §15.6 / §17c status
+- **Backward compatible?** yes — same testids / postTap payload
+
+## Architecture impact — unmount labeled ActNav strip (2026-08-03)
+
+- **SoT before:** Today mounted `TodayActNav` name row (Сводка·Сюжет·Символы·Чтение·Действие·Отклик) above ScreenFlow; ScreenFlow chrome also showed «Назад»/«Далее».
+- **SoT after:** Labeled strip not mounted; `showStepControls` default false — progress = ScreenFlow dots + swipe/keyboard (SCREEN_FLOW_V1 §1.5; SCENARIO_V3 Экран 0). Prev/next opt-in on primitive only.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — SCREEN_FLOW_V1 §1.5/§4 · SCENARIO_V3 Экран 0 chrome wording
+- **Backward compatible?** yes — swipe/dots/keyboard remain; fixtures may pass `showStepControls`
 ## Architecture impact — ActNav / ScreenFlow day-accent chrome (2026-08-03)
 
 - **SoT before:** `TodayActNav` + ScreenFlow dots/controls used fixed peach/gold chrome, independent of `visual_mode`.
@@ -63,6 +80,15 @@ Prior: card_base_v1 cutover live · editorial polish minors ongoing.
 - **Canon updated?** no — policy in `day_scenario_gate_maturity_c36.py`; tracker SoT for this slice (aligns DAY_SCENARIO / v3.1 optional opposing_forces)
 - **Backward compatible?** yes
 
+## Architecture impact — Kimi-K3 primary + DeepSeek fallback (2026-08-03)
+
+- **SoT before:** Primary `deepseek-ai/DeepSeek-V4-Pro`; provider-fail → Kimi `moonshotai/Kimi-K2.6` once on attempt0; attempt≥1 = Kimi-only (via `nebius_fallback_model`).
+- **SoT after:** Primary `moonshotai/Kimi-K3` (voice/metaphor quality); provider-fail → DeepSeek `deepseek-ai/DeepSeek-V4-Pro` once on attempt0; attempt≥1 = **Kimi-only** (primary, `allow_model_fallback=False` — no hop to dry DeepSeek on gate retry). Wall `LLM_BACKGROUND_TIMEOUT_SECONDS=180` unchanged. Keep-last-good / `unavailable_after_llm` / no B5 invent unchanged.
+- **Public contract changed?** no
+- **Migration required?** no — env/compose swap; force_rebuild canary to taste new voice
+- **Canon updated?** yes — `docs/LLM_QUALITY_AND_PROMPT_EVOLUTION.md` Nebius defaults; tracker ops SoT for model chain
+- **Backward compatible?** yes for GET cache; old DeepSeek-primary rows remain queryable
+
 ## Architecture impact — DeepSeek→Kimi + no B5 invent (2026-08-03)
 
 - **SoT before:** Primary often Qwen; on native fail wire used `allow_deterministic_rebuild=True` → B5 template invent (`deterministic_fallback_after_llm`). Timeout skipped model fallback.
@@ -75,14 +101,15 @@ Prior: card_base_v1 cutover live · editorial polish minors ongoing.
 ### Gap plan (native reliability) — update
 
 | Pri | Gap | Notes |
-|-----|-----|-------|
+|-----|-----|
 | P0 | Instrumentation | **DONE** |
-| P0 | No-retry-on-timeout (same model) | **DONE** — attempt0 may still switch DeepSeek→Kimi once |
+| P0 | No-retry-on-timeout (same model) | **DONE** — attempt0 may still switch primary→fallback once |
 | P0 | Product metric native share | **DONE** — also tracks `kept_prior_native` / `unavailable_after_llm` |
 | P0 | Kill B5 after LLM + keep-last-good | **THIS SLICE** |
 | P0 | Soft-heal one-field gates + `healed:<rule>` | **THIS SLICE** — conflict_link / forces / props / scenes_too_many |
 | P1 | Soft-fill `day_card_missing_conflict_link` | **superseded** by soft-heal above |
 | P1 | Re-run taxonomy (a) | After canary |
+| P1 | **Kimi-K3 primary voice trial** | **THIS SLICE** — swap vs DeepSeek; human tone / metaphor QA |
 
 ## Architecture impact — native day_story P0 instrumentation + no-retry-on-timeout (2026-08-03)
 
@@ -1275,6 +1302,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-03 | Today / Ops | **Kimi-K3 primary + DeepSeek fallback** | **LIVE canary** | BE redeployed. Nebius primary=`moonshotai/Kimi-K3`, fallback=`deepseek-ai/DeepSeek-V4-Pro`. Native attempt≥1 Kimi-only. Goal: warmer voice / metaphor. Cost: K3 ≫ K2.6. Next: force_rebuild canary + human QA tone.
 - 2026-08-03 | Today / Ops | **Soft-heal one-field gates** | **LIVE canary** | BE redeployed. User2 gen480 → `native_llm_c1` clean accept (DeepSeek, 2 scenes, no B5). User1 gen479 → still `unavailable_after_llm` (attempt0 editorial SEED_CHORUS_PASTE/SCENE_*; attempt1 Kimi empty) — heal path not reached. Broader prewarm still held.
 - 2026-08-03 | Today / Ops | **DeepSeek→Kimi + no B5 invent** | **LIVE canary** | BE redeployed. Canary rebuild users 1/2 (`2026-08-03`): gen 477/478 → `unavailable_after_llm` (empty/parse on Kimi path); **no B5** («Сделай один короткий шаг» absent; expect/do empty). Broader prewarm **held** until native/kept improves. Soft-fill conflict_link = next slice.
 - 2026-08-03 | Today / Ops | **Native day_story P0: instrumentation + no-retry-on-timeout** | **CODE** | Timeout → immediate deterministic fallback (no 2×45s). Logs: `generation_source`, `native_llm_c1_meta` (failure_class/attempts/chars), model kept on fallback, `error_message`. Product metric: `report_day_story_native_share.py` (+ alert <30% among llm_attempted). Attempt-2 slim/alt = later. Test `test_native_llm_no_retry_on_timeout_p0`. Not live until BE deploy.

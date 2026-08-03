@@ -1,4 +1,4 @@
-"""DeepSeek→Kimi chain, attempt1 Kimi-only, no B5 invent after LLM fail."""
+"""Kimi primary → DeepSeek fallback; attempt1 Kimi-only; no B5 invent after LLM fail."""
 
 from __future__ import annotations
 
@@ -19,33 +19,27 @@ from todayflow_backend.services.day_story_wire_v1 import (
 )
 
 
-def test_resolve_native_attempt_model_attempt0_primary_attempt1_kimi(monkeypatch) -> None:
-    monkeypatch.setattr(
-        "todayflow_backend.services.day_scenario_native_llm_c1.settings",
-        SimpleNamespace(nebius_fallback_model="moonshotai/Kimi-K2.6"),
-    )
+def test_resolve_native_attempt_model_always_primary(monkeypatch) -> None:
     with patch(
         "todayflow_backend.services.day_scenario_native_llm_c1.resolve_default_chat_model",
-        return_value="deepseek-ai/DeepSeek-V4-Pro",
+        return_value="moonshotai/Kimi-K3",
     ):
-        assert resolve_native_attempt_model(0) == "deepseek-ai/DeepSeek-V4-Pro"
-        assert resolve_native_attempt_model(1) == "moonshotai/Kimi-K2.6"
+        assert resolve_native_attempt_model(0) == "moonshotai/Kimi-K3"
+        assert resolve_native_attempt_model(1) == "moonshotai/Kimi-K3"
 
 
-def test_attempt1_uses_kimi_only_after_parse_fail(monkeypatch) -> None:
+def test_attempt1_kimi_only_no_deepseek_fallback(monkeypatch) -> None:
     meta: dict[str, Any] = {}
     models: list[str] = []
+    fallback_flags: list[bool] = []
 
-    def _chat(_client, *, model, messages, **_kwargs):
+    def _chat(_client, *, model, messages, allow_model_fallback=True, **_kwargs):
         models.append(str(model))
+        fallback_flags.append(bool(allow_model_fallback))
         if len(models) == 1:
             return ("{not-json", None, model)
         return (None, "empty", model)
 
-    monkeypatch.setattr(
-        "todayflow_backend.services.day_scenario_native_llm_c1.settings",
-        SimpleNamespace(nebius_fallback_model="moonshotai/Kimi-K2.6"),
-    )
     with (
         patch(
             "todayflow_backend.services.day_scenario_native_llm_c1.is_llm_chat_configured",
@@ -57,7 +51,7 @@ def test_attempt1_uses_kimi_only_after_parse_fail(monkeypatch) -> None:
         ),
         patch(
             "todayflow_backend.services.day_scenario_native_llm_c1.resolve_default_chat_model",
-            return_value="deepseek-ai/DeepSeek-V4-Pro",
+            return_value="moonshotai/Kimi-K3",
         ),
         patch(
             "todayflow_backend.services.day_scenario_native_llm_c1.chat_completion_plain_with_status",
@@ -77,9 +71,10 @@ def test_attempt1_uses_kimi_only_after_parse_fail(monkeypatch) -> None:
 
     assert result is None
     assert models == [
-        "deepseek-ai/DeepSeek-V4-Pro",
-        "moonshotai/Kimi-K2.6",
+        "moonshotai/Kimi-K3",
+        "moonshotai/Kimi-K3",
     ]
+    assert fallback_flags == [True, False]
     assert meta.get("attempt2_policy") == ATTEMPT2_POLICY_TIMEOUT
 
 

@@ -25,8 +25,11 @@ OpenAI-compatible client:
 LLM_PROVIDER=nebius
 NEBIUS_API_KEY=...
 NEBIUS_BASE_URL=https://api.tokenfactory.nebius.com/v1/
-NEBIUS_MODEL=deepseek-ai/DeepSeek-V4-Pro
+NEBIUS_MODEL=moonshotai/Kimi-K3
+NEBIUS_FALLBACK_MODEL=deepseek-ai/DeepSeek-V4-Pro
 ```
+
+Preferred voice model is Kimi-K3 (human tone, metaphor, psych↔planets). DeepSeek-V4-Pro remains provider fallback only.
 
 Equivalent manual wiring:
 

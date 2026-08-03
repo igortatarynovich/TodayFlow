@@ -99,15 +99,15 @@ class Settings(BaseSettings):
     # Nebius Token Factory (OpenAI-compatible): https://docs.tokenfactory.nebius.com/
     nebius_api_key: str | None = None  # NEBIUS_API_KEY
     nebius_base_url: str = "https://api.tokenfactory.nebius.com/v1/"  # NEBIUS_BASE_URL
-    nebius_model: str = "deepseek-ai/DeepSeek-V4-Pro"  # NEBIUS_MODEL — primary id в Token Factory
+    nebius_model: str = "moonshotai/Kimi-K3"  # NEBIUS_MODEL — primary id в Token Factory (voice/metaphor)
     # Second model when primary fails (timeout/empty/upstream/missing). Not Qwen; not hardcode prose.
-    nebius_fallback_model: str = "moonshotai/Kimi-K2.6"  # NEBIUS_FALLBACK_MODEL
+    nebius_fallback_model: str = "deepseek-ai/DeepSeek-V4-Pro"  # NEBIUS_FALLBACK_MODEL
     llm_provider: str = "openai"  # LLM_PROVIDER — openai | gemini | nebius
     # Hard HTTP timeout for OpenAI-compatible clients (Nebius/OpenAI/Gemini proxy).
     # Prevents Compatibility / Today from hanging the product UI when the provider stalls.
     # Sync/read path: short. Background jobs use llm_background_timeout_seconds.
     llm_http_timeout_seconds: float = 12.0  # LLM_HTTP_TIMEOUT_SECONDS
-    # Budget covers DeepSeek→Kimi on attempt0 (+ Kimi-only gate retry); not 2× full chain.
+    # Budget covers Kimi→DeepSeek on attempt0 (+ Kimi-only gate retry); not 2× full chain.
     llm_background_timeout_seconds: float = 180.0  # LLM_BACKGROUND_TIMEOUT_SECONDS
     # LLM_QUALITY_MODE:
     #   economize — legacy: tight max_tokens, cheap tiers, clipped context (AMLL cost control);
