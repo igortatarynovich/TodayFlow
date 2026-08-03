@@ -26,6 +26,9 @@ from todayflow_backend.core.llm_openai_compatible import (
 logger = logging.getLogger(__name__)
 
 # Ops failure_class for generation_logs / product native-success metric (P0).
+# Coarse families: timeout | empty | parse | gate | other.
+# Gate rejects use ``gate:<primary_rule>`` so taxonomy (a) can see live rule shares
+# without joining reject_reason (e.g. gate:day_card_missing_conflict_link).
 NATIVE_FAILURE_TIMEOUT = "timeout"
 NATIVE_FAILURE_EMPTY = "empty"
 NATIVE_FAILURE_PARSE = "parse"
@@ -44,6 +47,25 @@ def _map_provider_kind_to_failure_class(kind: str | None) -> str:
     if kind == "empty":
         return NATIVE_FAILURE_EMPTY
     return NATIVE_FAILURE_OTHER
+
+
+def gate_failure_class(reject_reason: str | None) -> str:
+    """Build ``gate:<primary_rule>`` from a ``;``-joined reject_reason list.
+
+    Live evidence (2026-08-03): model returned JSON but left chorus day_card /
+    day_number ``link_to_conflict`` empty → ``day_card_missing_conflict_link``.
+    That is a real gate class, not timeout — taxonomy must not collapse it into
+    a bare ``gate`` bucket.
+    """
+    raw = str(reject_reason or "").strip()
+    if not raw:
+        return NATIVE_FAILURE_GATE
+    primary = raw.split(";")[0].strip()
+    if not primary:
+        return NATIVE_FAILURE_GATE
+    if len(primary) > 96:
+        primary = primary[:96]
+    return f"{NATIVE_FAILURE_GATE}:{primary}"
 
 
 def _write_native_call_meta(
@@ -1188,7 +1210,7 @@ def call_day_scenario_native_llm_c1(
                 {
                     "attempt_index": attempt_idx,
                     "attempt_duration_ms": attempt_ms,
-                    "failure_class": NATIVE_FAILURE_GATE,
+                    "failure_class": gate_failure_class(reason),
                     "reject_reason": reason,
                     "model": model_name or None,
                     "user_sent_chars": len(user_sent or ""),
@@ -1234,7 +1256,7 @@ def call_day_scenario_native_llm_c1(
                 {
                     "attempt_index": attempt_idx,
                     "attempt_duration_ms": attempt_ms,
-                    "failure_class": NATIVE_FAILURE_GATE,
+                    "failure_class": gate_failure_class(reason),
                     "reject_reason": reason,
                     "model": model_name or None,
                     "status": "personalization_reject_story",
@@ -1265,7 +1287,7 @@ def call_day_scenario_native_llm_c1(
                         )
                 except Exception:
                     pass
-            _fail(failure_class=NATIVE_FAILURE_GATE, reject_reason=reason)
+            _fail(failure_class=gate_failure_class(reason), reject_reason=reason)
             return None
         if should_retry_defects(pers_defects):
             # Hard orphan/refs only — never include PROFILE_FACT_LEAK in retry feedback.
@@ -1282,7 +1304,7 @@ def call_day_scenario_native_llm_c1(
                     {
                         "attempt_index": attempt_idx,
                         "attempt_duration_ms": attempt_ms,
-                        "failure_class": NATIVE_FAILURE_GATE,
+                        "failure_class": gate_failure_class(reason),
                         "reject_reason": reason,
                         "model": model_name or None,
                         "status": "personalization_hard_retry",
@@ -1319,7 +1341,7 @@ def call_day_scenario_native_llm_c1(
                 {
                     "attempt_index": attempt_idx,
                     "attempt_duration_ms": attempt_ms,
-                    "failure_class": NATIVE_FAILURE_GATE,
+                    "failure_class": gate_failure_class(reason),
                     "reject_reason": reason,
                     "model": model_name or None,
                     "status": "personalization_reject_story",
@@ -1335,7 +1357,7 @@ def call_day_scenario_native_llm_c1(
                     status="personalization_reject_story",
                     reject_reason=reason,
                 )
-            _fail(failure_class=NATIVE_FAILURE_GATE, reject_reason=reason)
+            _fail(failure_class=gate_failure_class(reason), reject_reason=reason)
             return None
         # Quality personalization defects (non-blocking maturity): keep first valid story.
 
@@ -1356,7 +1378,7 @@ def call_day_scenario_native_llm_c1(
                 {
                     "attempt_index": attempt_idx,
                     "attempt_duration_ms": attempt_ms,
-                    "failure_class": NATIVE_FAILURE_GATE,
+                    "failure_class": gate_failure_class(reason),
                     "reject_reason": reason,
                     "model": model_name or None,
                     "status": "editorial_reject_story",
@@ -1387,7 +1409,7 @@ def call_day_scenario_native_llm_c1(
                         )
                 except Exception:
                     pass
-            _fail(failure_class=NATIVE_FAILURE_GATE, reject_reason=reason)
+            _fail(failure_class=gate_failure_class(reason), reject_reason=reason)
             return None
         if should_retry_defects(editorial):
             retryable = [d for d in editorial if str(d.get("runtime_action")) == "retry"]
@@ -1398,7 +1420,7 @@ def call_day_scenario_native_llm_c1(
                     {
                         "attempt_index": attempt_idx,
                         "attempt_duration_ms": attempt_ms,
-                        "failure_class": NATIVE_FAILURE_GATE,
+                        "failure_class": gate_failure_class(reason),
                         "reject_reason": reason,
                         "model": model_name or None,
                         "status": "editorial_quality_retry",
@@ -1436,7 +1458,7 @@ def call_day_scenario_native_llm_c1(
                 {
                     "attempt_index": attempt_idx,
                     "attempt_duration_ms": attempt_ms,
-                    "failure_class": NATIVE_FAILURE_GATE,
+                    "failure_class": gate_failure_class(reason),
                     "reject_reason": reason,
                     "model": model_name or None,
                     "status": "editorial_reject_story",
@@ -1457,7 +1479,7 @@ def call_day_scenario_native_llm_c1(
                     status="editorial_reject_story",
                     reject_reason=reason,
                 )
-            _fail(failure_class=NATIVE_FAILURE_GATE, reject_reason=reason)
+            _fail(failure_class=gate_failure_class(reason), reject_reason=reason)
             return None
 
         # Remaining editorial defects: observe only (score + capture).
@@ -1503,7 +1525,7 @@ def call_day_scenario_native_llm_c1(
                 {
                     "attempt_index": attempt_idx,
                     "attempt_duration_ms": attempt_ms,
-                    "failure_class": NATIVE_FAILURE_GATE,
+                    "failure_class": gate_failure_class(reason),
                     "reject_reason": reason,
                     "model": model_name or None,
                     "status": "scenario_validate_reject",

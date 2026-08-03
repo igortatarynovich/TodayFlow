@@ -1,4 +1,4 @@
-"""P0: no second native attempt after provider timeout."""
+"""P0: no second native attempt after provider timeout + gate failure_class shape."""
 
 from __future__ import annotations
 
@@ -7,9 +7,20 @@ from unittest.mock import MagicMock, patch
 
 from todayflow_backend.services.day_scenario_native_llm_c1 import (
     ATTEMPT2_POLICY_TIMEOUT,
+    NATIVE_FAILURE_GATE,
     NATIVE_FAILURE_TIMEOUT,
     call_day_scenario_native_llm_c1,
+    gate_failure_class,
 )
+
+
+def test_gate_failure_class_uses_primary_rule() -> None:
+    assert gate_failure_class(None) == NATIVE_FAILURE_GATE
+    assert gate_failure_class("") == NATIVE_FAILURE_GATE
+    assert (
+        gate_failure_class("day_card_missing_conflict_link;day_number_missing_conflict_link")
+        == "gate:day_card_missing_conflict_link"
+    )
 
 
 def test_native_llm_no_retry_on_timeout_fills_meta() -> None:

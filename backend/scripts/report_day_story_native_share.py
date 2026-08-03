@@ -3,6 +3,10 @@
 
 Reports generation_source / used_fallback / failure_class for module=day_story_v1.
 
+``failure_class`` buckets include coarse families (timeout, empty, parse, other)
+and gate primary rules as ``gate:<rule>`` (e.g. gate:day_card_missing_conflict_link)
+so taxonomy (a) can separate provider timeout from schema/quality rejects.
+
 Usage:
   DATABASE_URL=postgresql+psycopg://... PYTHONPATH=backend/src \\
     backend/.venv/bin/python backend/scripts/report_day_story_native_share.py --days 7

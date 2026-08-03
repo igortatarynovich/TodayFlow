@@ -12,7 +12,7 @@ Prior: card_base_v1 cutover live · editorial polish minors ongoing.
 ## Architecture impact — native day_story P0 instrumentation + no-retry-on-timeout (2026-08-03)
 
 - **SoT before:** Native C1 up to 2 identical attempts; `generation_logs` stored `native_scenario_c1` bool only, cleared `model` on fallback, no `failure_class` / attempt durations.
-- **SoT after:** Timeout → **immediate deterministic fallback** (no attempt-2 as-is). Gate/parse retries with feedback still allowed. Logs carry `generation_source`, `native_llm_c1_meta` (failure_class, attempts[], chars, model kept on fallback). Product metric script: `backend/scripts/report_day_story_native_share.py`.
+- **SoT after:** Timeout → **immediate deterministic fallback** (no attempt-2 as-is). Gate/parse retries with feedback still allowed. Logs carry `generation_source`, `native_llm_c1_meta` (`failure_class` = `timeout` \| `empty` \| `parse` \| `gate:<primary_rule>` \| `other`; full markers in `reject_reason`; attempts[]; chars; model kept on fallback). Product metric script: `backend/scripts/report_day_story_native_share.py`.
 - **Public contract changed?** no
 - **Migration required?** no — additive log fields; old rows still queryable via `used_fallback` / bool
 - **Canon updated?** no (ops/runtime policy; tracker + script SoT for metric)
@@ -22,7 +22,7 @@ Prior: card_base_v1 cutover live · editorial polish minors ongoing.
 
 | Pri | Gap | Notes |
 |-----|-----|-------|
-| P0 | Instrumentation | **DONE** this slice — `failure_class` timeout\|empty\|parse\|gate\|other |
+| P0 | Instrumentation | **DONE** — `failure_class` = `timeout` \| `empty` \| `parse` \| `gate:<rule>` \| `other`; full list in `reject_reason`. Live proof 2026-08-03: `gate:day_card_missing_conflict_link` (not timeout). |
 | P0 | No-retry-on-timeout | **DONE** — `attempt2_policy=skip_identical_on_timeout_immediate_fallback` |
 | P0 | Product metric native share | **DONE** — script + structured `day_story_native_metric` log line; alert default <30% among llm_attempted |
 | P1 | Re-run taxonomy (a) | After 2–3 days of instrumented logs |
