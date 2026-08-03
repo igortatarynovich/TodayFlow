@@ -327,7 +327,10 @@ export function buildTodayDayStoryViewModel(input: {
         ? {
             name: talisman?.color ?? propsColor?.name ?? null,
             note: talisman?.note ?? propsColor?.link_to_conflict ?? null,
-            benefit: propsColor?.link_to_conflict ?? null,
+            // Prefer talisman.note when present — avoid joining identical link twice.
+            benefit: talisman?.note
+              ? null
+              : (propsColor?.link_to_conflict ?? null),
             avoidColor: talisman?.avoid_color,
             avoidWhy: talisman?.avoid_why,
             intensity: propsColor?.intensity ?? null,

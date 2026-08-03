@@ -525,21 +525,16 @@ def project_day_scenario_onto_day_story_v1(
     scene_domains = _domains_from_scenes(scenes, origin_conflict_id=origin_conflict)
     base["domains"] = scene_domains
 
-    # Color / avoid from props only
+    # Color / avoid from props only — note = one why, not link+effect+avoid mash.
     color = _as_dict(props.get("color"))
     avoid = _as_dict(props.get("avoid_color"))
     if color.get("name"):
-        note_parts = [
-            _clip(color.get("link_to_conflict"), 160),
-            _clip(color.get("expected_effect_today"), 120),
-        ]
-        if avoid.get("name"):
-            note_parts.append(
-                _clip(f"Избегать: {avoid.get('name')} — {_clip(avoid.get('why'), 100)}", 160)
-            )
+        note = _clip(color.get("link_to_conflict"), 220) or _clip(
+            color.get("expected_effect_today"), 160
+        )
         base["talisman"] = {
             "color": str(color["name"]),
-            "note": _clip(" ".join(p for p in note_parts if p), 280),
+            "note": note,
             "origin_scene_id": color.get("origin_scene_id"),
             "avoid_color": avoid.get("name"),
             "avoid_why": avoid.get("why"),

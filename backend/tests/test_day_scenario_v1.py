@@ -440,6 +440,90 @@ def test_chorus_and_scenes_do_not_paste_short_name_seed():
     assert validate_day_scenario_v1(scenario) == []
 
 
+def test_chorus_bridges_are_lived_not_generation_meta():
+    """v3.1b: no meta rules / tempo tag-dumps in user-facing chorus bridges."""
+    from todayflow_backend.services.day_scenario_v1 import (
+        build_scenario_props_v1,
+        chorus_seed_paste_needs_heal_v1,
+    )
+
+    pack = _pack_merc_moon()
+    ritual = {
+        "tarot_name_ru": "Отшельник",
+        "tarot_main_id": 9,
+        "numerology_value": 7,
+        "numerology_personal_day": 7,
+    }
+    foundation = build_scenario_foundation_v1(
+        day_events_pack=pack,
+        ritual_context=ritual,
+        interpretation=None,
+    )
+    conflict = build_scenario_conflict_v1(foundation=foundation, day_thesis=None, interpretation=None)
+    chorus = build_interpretive_chorus_v1(
+        foundation=foundation,
+        conflict_label=str(conflict.get("short_name") or ""),
+        interpretation=None,
+    )
+    blob = " ".join(
+        [
+            str((chorus.get("day_card") or {}).get("human_meaning") or ""),
+            str((chorus.get("day_card") or {}).get("way_to_relate") or ""),
+            str((chorus.get("day_card") or {}).get("archetype_role") or ""),
+            str((chorus.get("day_number") or {}).get("link_to_conflict") or ""),
+            str((chorus.get("day_number") or {}).get("human_meaning") or ""),
+            " ".join(
+                str(r.get("human_meaning") or "")
+                for r in (chorus.get("astrology") or [])
+                if isinstance(r, dict)
+            ),
+        ]
+    ).lower()
+    banned = (
+        "параллельного сюжета",
+        "не отдельный прогноз",
+        "не второй сюжет",
+        "темп —",
+        "способ —",
+        "связывает этот небесный фактор",
+        "проживите день в ключе",
+        "без параллельного",
+    )
+    for phrase in banned:
+        assert phrase not in blob, phrase
+    number_bridge = str((chorus.get("day_number") or {}).get("human_meaning") or "")
+    assert "число 7" in number_bridge.lower()
+    assert "темп —" not in number_bridge.lower()
+    assert "просит:" in number_bridge.lower()
+    assert not chorus_seed_paste_needs_heal_v1(
+        chorus, short_name=str(conflict.get("short_name") or "")
+    )
+
+    scenes = [
+        {
+            "scene_id": "s1",
+            "sphere": "work",
+            "sphere_label_ru": "Работа и решения",
+            "trap": "спешка в ответе",
+            "recommended_action": "Один ясный ответ до обеда.",
+            "evidence_references": [],
+            "chorus_references": [],
+        }
+    ]
+    props = build_scenario_props_v1(conflict=conflict, scenes=scenes, chorus=chorus)
+    color = props.get("color") or {}
+    link = str(color.get("link_to_conflict") or "")
+    effect = str(color.get("expected_effect_today") or "")
+    assert link
+    assert "помогает удержать" in effect.lower()
+    assert link not in effect
+    avoid = props.get("avoid_color") or {}
+    why = str(avoid.get("why") or "")
+    name = str(avoid.get("name") or "")
+    if name and why:
+        assert not why.lower().startswith(name.lower())
+
+
 def test_color_catalog_is_knowledge_not_sot():
     from todayflow_backend.services.day_color_catalog_v1 import (
         LAYER_B_PRIMARY_TAGS,

@@ -35,6 +35,12 @@ def test_timeline_labels_distinct_by_body():
     assert "сигнал дня" not in hard_a.lower()
 
 
+def test_sun_square_is_lived_not_noun_pair():
+    label = aspect_class_label_short("square", "sun")
+    assert "в трении" not in label.lower()
+    assert "ясность" in label.lower()
+
+
 def test_soft_why_is_domain_distinct():
     whys = [aspect_class_why_short("trine", d) for d in ("work", "money", "relationships", "energy")]
     assert len(set(whys)) == 4

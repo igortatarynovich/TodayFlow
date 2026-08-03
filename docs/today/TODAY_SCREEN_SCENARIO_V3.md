@@ -17,6 +17,8 @@
 4. **Внутренняя классификация динамики** (`напряжение | усиление | доминанта | ровный день`) управляет тоном формулировок и выбором визуала. **Не** рендерится ярлыком на UI.
 5. **Честный omit.** Нет сигнала → не выдумывать конфликт / сферу / ловушку / связку «ради заполнения».
 6. **Домены Reading/Response/Glance chips:** четыре — `work` · `money` · `relationships` · `energy`. Wire DomainLens = тот же словарь (legacy `money_work`/`family` — только read-compat).
+7. **Конкретность.** User-facing строка называет действие, объект или момент («три вдоха до „отправить“», «одна фраза вместо трёх») — иначе **omit**. Абстрактные пары существительных («ясность в трении») и дампы тегов через тире («темп — …, способ — …») = баг генерации.
+8. **No generation-meta leakage.** Внутренние правила пайплайна («не второй сюжет», «не отдельный прогноз», «без параллельного сюжета», «связывает фактор с тоном») **никогда** не попадают в user-facing текст — симметрично seed-leak, другой класс утечки.
 
 ---
 
@@ -24,14 +26,17 @@
 
 **Job:** за 2 секунды ориентация и вход дальше — сжатая проекция уже определённых актов, не отдельный сюжет.
 
+**Каркас показа (Day Atmosphere surface — FOUNDATION_UI §11.9):** full-bleed фон/декор по `day_atmosphere.visual_mode` · стеклянная hero-карточка · gauge прогресса ScreenFlow (текущий акт / 6, не «score дня») · sparse chrome. Jobs смысла ниже **не** меняются — только композиция.
+
 **На экране:**
 
-1. **Текстура** — 1–2 предложения: фраза-синтез **тона** (внутренняя классификация). Не факты, не ярлык категории, не `short_name` «A или B».
-2. **Индикатор сфер** — до 2 чипов из Reading (`work/money/relationships/energy`). Если Reading без сигнала — тот же honest-текст «без острого фокуса» (**один** shared copy с Reading, без второй метки «ровный день»). Тап → Reading на эту сферу.
+1. **Текстура** — 1–2 предложения в glass hero: фраза-синтез **тона** (внутренняя классификация). Не факты, не ярлык категории, не `short_name` «A или B».
+2. **ScreenFlow gauge** — прогресс актов (шаг 0…5 из 6). Не выдуманный балл дня.
 3. **Nearest** — одно событие glance timeline (`label_short` + valence).
-4. **Тизер ритуала** — CTA в Symbols·A без identity/base/bridge на Glance.
+4. **Тизер ритуала** — один CTA в Symbols·A без identity/base/bridge на Glance.
+5. **Индикатор сфер** (опц., secondary) — до 2 чипов из Reading; если без сигнала — shared honest-текст с Reading. Не конкурирует с texture в hero.
 
-**Нет:** фактов Plot, why, карты/числа/астро/полного timeline, **цвета дня**, if/then, цели, практики, ловушки Response.
+**Нет:** фактов Plot, why, карты/числа/астро/полного timeline, **цвета дня как контент-блока** (атмосфера = shell, не «цвет дня» слот), if/then, цели, практики, ловушки Response.
 
 **Граница:** Glance не seed — сжимает согласованную модель, не генерирует заново.
 
@@ -174,6 +179,10 @@ Reveal API / prebake: [DAY_SYMBOL_REVEAL_CANON_V1](../audits/DAY_SYMBOL_REVEAL_C
 ---
 
 ## Changelog
+
+### 2026-08-03 — v3.1b (concreteness)
+
+§0.7–0.8: concreteness gate intent + ban on generation-meta leakage. Chorus bridges / number tempo / color note mash rewritten to lived tips; serve-heal markers extended.
 
 ### 2026-08-03 — v3.1
 

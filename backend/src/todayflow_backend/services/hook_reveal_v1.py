@@ -56,20 +56,30 @@ def _is_machine_token(text: str) -> bool:
 
 
 def _format_where_to_use(value: Any) -> str:
-    """props.color.where_to_use is usually {clothing, accessory, ...}."""
+    """props.color.where_to_use is usually {clothing, accessory, ...}.
+
+    One concrete tip — do not mash шарф · стикер · браслет into one line.
+    """
     if isinstance(value, dict):
-        parts: list[str] = []
         for key in ("clothing", "accessory", "workspace", "makeup", "ui_or_bg"):
             piece = _clean(value.get(key))
             if piece:
-                parts.append(piece)
-        return " · ".join(parts)
+                return piece
+        return ""
     return _clean(value)
 
 
 def _bridge_from_voice(voice: dict[str, Any]) -> str:
     """Pick human bridge prose; never surface conflict_id / thesis variant slugs."""
-    for key in ("link_to_conflict", "role", "for_conflict", "archetype_role", "human_meaning"):
+    # Prefer lived meaning over role/link meta fields.
+    for key in (
+        "human_meaning",
+        "way_to_relate",
+        "for_conflict",
+        "link_to_conflict",
+        "archetype_role",
+        "role",
+    ):
         alt = _clean(voice.get(key))
         if not alt or _is_machine_token(alt):
             continue

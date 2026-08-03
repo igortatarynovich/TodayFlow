@@ -89,10 +89,26 @@ export function resolveTodayDayColorGuide(input: {
   const name = asText(input.scenario?.name) || asText(input.api?.name) || asText(input.name);
   if (!name) return null;
 
-  const scenarioBenefit = [input.scenario?.benefit, input.scenario?.note]
+  const scenarioBenefitRaw = [input.scenario?.benefit, input.scenario?.note]
     .map((s) => asText(s))
-    .filter(Boolean)
-    .join(" ");
+    .filter(Boolean);
+  // Dedupe when talisman.note already contains link_to_conflict (or vice versa).
+  const scenarioBenefitParts: string[] = [];
+  for (const part of scenarioBenefitRaw) {
+    const lower = part.toLowerCase();
+    if (scenarioBenefitParts.some((p) => p.toLowerCase().includes(lower) || lower.includes(p.toLowerCase()))) {
+      // Keep the longer unique phrasing.
+      const idx = scenarioBenefitParts.findIndex(
+        (p) => p.toLowerCase().includes(lower) || lower.includes(p.toLowerCase()),
+      );
+      if (idx >= 0 && part.length > scenarioBenefitParts[idx].length) {
+        scenarioBenefitParts[idx] = part;
+      }
+      continue;
+    }
+    scenarioBenefitParts.push(part);
+  }
+  const scenarioBenefit = scenarioBenefitParts.join(" ");
 
   const benefit = scenarioBenefit || asText(input.api?.benefit_ru) || asText(input.api?.story_ru);
   const clothing = asText(input.api?.clothing_ru);

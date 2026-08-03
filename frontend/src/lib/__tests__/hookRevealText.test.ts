@@ -9,7 +9,7 @@ describe("hookRevealText", () => {
     expect(asTrimmedText(7)).toBeNull();
   });
 
-  it("formatColorWhereToUse joins clothing/accessory object (Igor crash fixture)", () => {
+  it("formatColorWhereToUse picks one tip — clothing first, no mash", () => {
     expect(
       formatColorWhereToUse({
         clothing: "Янтарный шарф или тёплый свитер.",
@@ -18,7 +18,17 @@ describe("hookRevealText", () => {
         makeup: null,
         ui_or_bg: null,
       }),
-    ).toBe("Янтарный шарф или тёплый свитер. · Украшение медового оттенка.");
+    ).toBe("Янтарный шарф или тёплый свитер.");
+  });
+
+  it("formatColorWhereToUse falls back to accessory when clothing empty", () => {
+    expect(
+      formatColorWhereToUse({
+        clothing: null,
+        accessory: "Тонкий браслет.",
+        workspace: "Стикер на приоритете.",
+      }),
+    ).toBe("Тонкий браслет.");
   });
 
   it("formatColorWhereToUse keeps plain strings", () => {

@@ -27,12 +27,18 @@ export function asTrimmedText(value: unknown): string | null {
   return null;
 }
 
-/** Format day_scenario.props.color.where_to_use (object or string) for UI. */
+/** Format day_scenario.props.color.where_to_use (object or string) for UI.
+
+ * One concrete tip — clothing first, then accessory/workspace/… No «шарф · стикер» mash.
+ */
 export function formatColorWhereToUse(value: unknown): string | null {
   const asString = asTrimmedText(value);
   if (asString) return asString;
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
   const row = value as Record<string, unknown>;
-  const parts = WHERE_KEYS.map((k) => asTrimmedText(row[k])).filter(Boolean) as string[];
-  return parts.length ? parts.join(" · ") : null;
+  for (const k of WHERE_KEYS) {
+    const part = asTrimmedText(row[k]);
+    if (part) return part;
+  }
+  return null;
 }

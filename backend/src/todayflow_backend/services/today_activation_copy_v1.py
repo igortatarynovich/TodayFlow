@@ -90,8 +90,19 @@ def aspect_class_label_short(aspect: str, planet: str | None = None) -> str:
             return "Слова режут"
         if tone == "границы":
             return "Границы давят"
+        # Avoid «X в трении» noun-pair labels — name the lived pressure.
+        if tone == "ясность":
+            return "Ясность с усилием"
+        if tone == "размах":
+            return "Размах встречает упор"
+        if tone == "глубина":
+            return "Глубина давит"
+        if tone == "туман":
+            return "Туман гуще"
+        if tone == "сдвиг":
+            return "Сдвиг через упор"
         if tone:
-            return f"{tone.capitalize()} в трении"
+            return f"{tone.capitalize()} требует меры"
         return "Короче шаг"
     if asp == "conjunction":
         if tone == "импульс":

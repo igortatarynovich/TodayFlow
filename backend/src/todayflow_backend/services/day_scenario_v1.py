@@ -391,30 +391,35 @@ def _human_meaning_for_driver(row: dict[str, Any], conflict_label: str) -> str:
     fact = str(row.get("fact_ru") or row.get("title_ru") or "").lower()
     blob = f"{kind} {body} {fact}"
     if any(k in blob for k in ("station", "direct", "ретро", "разворач", "директ")):
-        return "То, что долго крутилось без решения, сегодня легче довести до ясности."
+        return "То, что долго крутилось без решения, сегодня легче довести до ясности — один закрытый контур."
     if any(k in blob for k in ("moon", "луна", "ingress", "рыб", "рак", "скорпион")):
-        return "Эмоциональный подтекст заметнее прямых слов — не ускоряй ответ."
+        return "В разговоре сначала уловите тон, потом отвечайте — три вдоха до «отправить»."
     if any(k in blob for k in ("mercury", "меркурий", "сообщ", "письм")):
-        return "В переписке и разговорах сегодня важнее смысл, чем скорость."
+        return "В переписке сегодня важнее смысл, чем скорость: одна ясная фраза вместо трёх."
     if any(k in blob for k in ("mars", "марс", "давлени", "impuls")):
         return "Импульс сильный — один ясный жест лучше трёх резких."
     if any(k in blob for k in ("venus", "венера", "отношен")):
         return "В контакте сегодня дороже тёплая точность, чем красивая картинка."
-    return "Небесный фактор задаёт атмосферу — замечайте его в бытовых жестах, не в ярлыках."
+    return "Где день тянет ускориться — оставьте один шаг вместо трёх."
 
 
 def _card_archetype_voice(card_name: str, conflict_label: str) -> dict[str, str]:
     # v3.1: card speaks its archetype — not «пройти {A или B}».
+    # v3.1b: no generation-meta («не второй сюжет»); lived tip for today.
     del conflict_label
     name = card_name.strip()
     return {
         "named": f"Карта дня — {name}",
         "role_for_conflict": (
-            f"Архетип «{name}» — способ пройти сегодняшний тон, "
-            f"не отдельный прогноз и не второй сюжет."
+            f"«{name}» сегодня: сначала ясность себе — потом ответ другим."
         ),
-        "hidden_side": f"«{name}» может открыть скрытую сторону дня, а не новую тему.",
-        "way_to_relate": f"Проживите день в ключе «{name}»: одна роль, без параллельного сюжета.",
+        "hidden_side": (
+            f"«{name}» может подсветить то, что вы уже чувствуете, "
+            f"но ещё не назвали вслух."
+        ),
+        "way_to_relate": (
+            f"Сегодня в ключе «{name}»: один честный шаг важнее трёх показных."
+        ),
     }
 
 
@@ -426,17 +431,18 @@ def _number_voice(value: Any, conflict_label: str) -> dict[str, Any]:
         n = 0
     tempo = _NUMBER_TEMPO_RU.get(n) or {
         "tempo": "ровный",
-        "style": "без лишних параллельных сюжетов",
+        "style": "одна линия без разгона",
         "lesson": "держаться одной линии",
         "initiative": "умеренная",
         "closure": "закрыть день осознанно",
     }
+    # Lived sentence — not a tag dump («темп — …, способ — …»).
     return {
         "named": f"Число дня — {value}",
         "reduced": n or None,
         **tempo,
         "for_conflict": (
-            f"Число {value}: темп — {tempo['tempo']}, способ — {tempo['style']}."
+            f"Число {value} сегодня просит: {tempo['lesson']} — {tempo['closure']}."
         ),
     }
 
@@ -464,12 +470,14 @@ def build_interpretive_chorus_v1(
         fact = _clip(row.get("fact_ru") or row.get("label_ru") or row.get("title_ru"), 220)
         if not fact or _is_calendar_kitchen_fact(fact):
             continue
+        meaning = _human_meaning_for_driver(row, "")
         astrology_voices.append(
             {
                 "voice": "astrology",
                 "named_factor": fact,
-                "human_meaning": _human_meaning_for_driver(row, ""),
-                "link_to_conflict": "Связывает этот небесный фактор с тоном дня.",
+                "human_meaning": meaning,
+                # Same lived tip — no meta «связывает фактор с тоном».
+                "link_to_conflict": meaning,
                 "evidence_ref": row.get("evidence_ref") or row.get("id"),
                 "driver_id": row.get("id"),
             }
@@ -978,6 +986,14 @@ _CHORUS_SEED_PASTE_MARKERS = (
     "окрашивает прохождение",
     "какой ролью пройти",
     "пройти «",
+    # Generation-meta / tag-dump leakage (v3.1b concreteness) — heal on serve.
+    "параллельного сюжета",
+    "параллельных сюжетов",
+    "не отдельный прогноз",
+    "не второй сюжет",
+    "темп —",
+    "способ —",
+    "связывает этот небесный фактор",
 )
 
 # Exact hero labels invented by legacy ``_opposing_forces`` bank (mode/family).
@@ -1328,15 +1344,13 @@ def build_scenario_props_v1(
     apply = _as_dict(chosen.get("apply"))
     symbolic = str(chosen.get("symbolic_property") or chosen.get("name") or "цвет дня")
     sphere_label = str(primary.get("sphere_label_ru") or "дня")
+    # One lived why once — do not paste symbolic into link + effect + note mash.
     color_prop = {
         "name": chosen.get("name"),
         "origin_scene_id": scene_id,
         "serves_conflict": label,
         # v3.1: no force_a/force_b paste — color speaks from catalog + sphere, not Plot seed
-        "link_to_conflict": _clip(
-            f"{symbolic} — опора ясности в зоне «{sphere_label}».",
-            220,
-        ),
+        "link_to_conflict": _clip(symbolic, 220),
         "supports_or_compensates": _clip(
             f"Компенсирует ловушку дня в зоне «{sphere_label}».",
             160,
@@ -1344,7 +1358,7 @@ def build_scenario_props_v1(
         if trap
         else _clip(f"Поддерживает тон дня в зоне «{sphere_label}».", 160),
         "expected_effect_today": _clip(
-            f"{symbolic} — удерживает внимание на главном жесте сегодня.",
+            f"Помогает удержать один жест в зоне «{sphere_label}».",
             160,
         ),
         "where_to_use": {
@@ -1362,6 +1376,7 @@ def build_scenario_props_v1(
     }
 
     avoid_name = str((avoid_pick or {}).get("name") or "Кислотный неон")
+    # why without leading color name — UI already prints «Избегать: {name} — {why}».
     avoid_prop = {
         "name": avoid_name,
         "origin_scene_id": scene_id,
@@ -1369,9 +1384,9 @@ def build_scenario_props_v1(
         "amplifies_trap": _clip(trap, 120),
         "why": _clip(
             (
-                f"{avoid_name} сегодня усиливает ловушку «{_clip(trap, 80)}». Держи его вне поля зрения."
+                f"сегодня усиливает ловушку «{_clip(trap, 80)}». Держи вне поля зрения."
                 if trap
-                else f"{avoid_name} сегодня шумит сильнее нужного. Держи его вне поля зрения."
+                else "сегодня шумит сильнее нужного. Держи вне поля зрения."
             ),
             160,
         ),

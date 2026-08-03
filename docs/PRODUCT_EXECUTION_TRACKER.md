@@ -5,7 +5,7 @@ Owner: Product + Engineering
 Status: Active working document
 
 **DONE (2026-08-03):** ScreenFlow content jobs **v3.1** — P0+P1+P2 gap plan closed on branch (seed-kill · domain4 · Plot wash · serve heal · LLM hard-gate · native opaque `serves_conflict`).  
-**IN PROGRESS:** Design-system / Day Atmosphere polish on same branch; PR #7 draft.  
+**IN PROGRESS:** **v3.1b concreteness** — kill generation-meta / tag-dump / color mash in user-facing chorus+Move; PR #7 draft.  
 Prior: card_base_v1 cutover live · editorial polish minors ongoing.
 
 ## Architecture impact — ScreenFlow content jobs v3.1 (2026-08-03)
@@ -1179,6 +1179,8 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-03 | Today / Day Atmosphere | **Visible pass + Glance mockup IA** | **IN PROGRESS** | Auto `day_atmosphere` from thesis.mode (BE nest) · shell `--day-*` + decor · Glance glass-hero + ScreenFlow gauge. Canon FOUNDATION_UI §11.9/§13 · TODAY_SCREEN_SCENARIO_V3 Экран 0. Architecture impact: public nest + Glance layout SoT.
+- 2026-08-03 | Today / ScreenFlow | **v3.1b concreteness (meta-leak + tag-dump + color mash)** | **CODE** | Chorus card/number/sky bridges → lived tips; number no longer «темп — / способ —»; color link once (no symbolic×3); avoid why без дубля имени; timeline без «X в трении»; serve-heal markers for generation-meta; FE where_to_use = one tip + benefit dedupe. Canon TODAY_SCREEN_SCENARIO_V3 §0.7–0.8. Not live until deploy.
 - 2026-08-03 | Today / ScreenFlow | **Content jobs v3.1 + seed-kill closeout** | **LIVE (deployed)** | Gap plan P0–P2 closed. Seed-kill three layers: generation · native map (`serves_conflict`=`тон дня`, `why`="") · defense (serve heal `48b589c` + hard-gate `b2d8203`/`fa4d915`). Prod compose tip `7a653a0` · health 200 · live DB 17/17 seed_left=0 · user2 Plot/Symbols bridges clean · `serves=['тон дня']`. PR #7 still draft; CI blockers pre-existing (iOS Copy Policy · Validate i18n) — not merge yet. Canon TODAY_SCREEN_SCENARIO_V3 · SCREEN_FLOW §4 · GATE_MATURITY C36.
 - 2026-08-01 | Astro / Foundation | **Foundation v1 (единый канон)** | **IN PROGRESS** | DATA pack live; house_rulers+profections → `ruler_classical`; top_driver/activation copy → `aspect_is_*`; FE color guide deprecated. Next: tarot FE→card_base cutover; drop FE color prose; domain magnitude tables. Canon [foundation_v1.md](./foundation_v1.md).
 - 2026-08-01 | Today / Hooks | **Bridge machine-id leak** | **LIVE (deployed)** | Reject `conflict.*` / snake slugs in `hook_reveal` bridge + native chorus normalize + FE `isMachineToken`. Regression: `conflict.intensity_without_drama` → bridge unavailable (base kept).
