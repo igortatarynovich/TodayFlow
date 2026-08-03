@@ -20,14 +20,16 @@ function Harness({ axis = "x" as const, initial = 0 }: { axis?: "x" | "y"; initi
 }
 
 describe("ScreenFlow", () => {
-  it("moves focus to heading and updates aria-live on next", async () => {
+  it("moves focus to heading and updates aria-live on dot select", async () => {
     const user = userEvent.setup();
     render(<Harness />);
-    await user.click(screen.getByTestId("screen-flow-next"));
+    await user.click(screen.getByTestId("screen-flow-dot-1"));
     await waitFor(() => {
       expect(document.activeElement).toBe(screen.getByTestId("screen-flow-heading-b"));
     });
     expect(screen.getByTestId("screen-flow-live")).toHaveTextContent("Шаг 2 из 4: Бета");
+    expect(screen.queryByTestId("screen-flow-next")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("screen-flow-prev")).not.toBeInTheDocument();
   });
 
   it("does not invent content for failed/pending steps", () => {

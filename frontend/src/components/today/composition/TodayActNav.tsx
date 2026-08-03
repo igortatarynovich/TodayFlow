@@ -17,6 +17,10 @@ type Props = {
   onSelect?: (index: number) => void;
 };
 
+/**
+ * @deprecated Product Today does not mount this strip (SCREEN_FLOW_V1 §1.5).
+ * Progress chrome = ScreenFlow dots + swipe. Kept for fixtures / possible reuse.
+ */
 export function TodayActNav({ items, activeIndex, onSelect }: Props) {
   if (items.length === 0) return null;
 

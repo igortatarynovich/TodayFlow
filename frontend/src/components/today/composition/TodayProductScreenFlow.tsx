@@ -3,7 +3,6 @@
 import type { ComponentProps, ReactNode } from "react";
 import { ScreenFlow, ScreenFlowStep, TODAY_SCREEN_FLOW_AXIS } from "@/design-system/primitives/ScreenFlow";
 import { TodayActShell } from "@/components/today/composition/TodayActShell";
-import { TodayActNav } from "@/components/today/composition/TodayActNav";
 import { TodayGlanceAct } from "@/components/today/composition/TodayGlanceAct";
 import { TodayPersonalizedProductSection } from "@/components/today/composition/TodayPersonalizedProductSection";
 import { TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
@@ -80,21 +79,6 @@ export function TodayProductScreenFlow({
   greetingSection = null,
 }: TodayProductScreenFlowProps) {
   const readingIndex = todayScreenFlowReadingIndex(showSymbols);
-  const moveIndex = readingIndex + 1;
-  const responseIndex = readingIndex + 2;
-
-  const navItems = [
-    { step: 0, label: copy.journey.actNavGlance },
-    { step: 1, label: copy.journey.actNavPlot },
-    ...(showSymbols ? [{ step: 2, label: copy.journey.actNavSymbols }] : []),
-    ...(showPersonalized
-      ? [
-          { step: readingIndex, label: copy.journey.actNavReading },
-          { step: moveIndex, label: copy.journey.actNavMove },
-          { step: responseIndex, label: copy.journey.actNavBridge },
-        ]
-      : []),
-  ];
 
   const teasers = [
     {
@@ -129,12 +113,6 @@ export function TodayProductScreenFlow({
     <div data-testid="today-zone-foundation">
       {!embeddedInWebDashboard ? topRowSection : null}
       {!embeddedInWebDashboard ? greetingSection : null}
-
-      <TodayActNav
-        items={navItems}
-        activeIndex={activeIndex}
-        onSelect={(index) => onIndexChange(index, { reason: "select" })}
-      />
 
       <ScreenFlow
         activeIndex={activeIndex}

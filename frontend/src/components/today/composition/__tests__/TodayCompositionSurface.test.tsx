@@ -402,12 +402,11 @@ describe("TodayCompositionSurface", () => {
     );
     const user = userEvent.setup();
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
-    // Phase 2b: promise lives on Move — ActNav uses ScreenFlow step ids
-    const moveNav =
-      screen.queryByRole("button", { name: /Действие/i }) ||
-      screen.queryByTestId("today-act-nav-4") ||
-      screen.queryByTestId("today-act-nav-3");
-    if (moveNav) await user.click(moveNav);
+    // Phase 2b: promise lives on Move — jump via ScreenFlow dots (no labeled ActNav)
+    const moveDot =
+      screen.queryByTestId("screen-flow-dot-4") ||
+      screen.queryByTestId("screen-flow-dot-3");
+    if (moveDot) await user.click(moveDot);
     await user.click(screen.getByTestId("today-zone-promise-open"));
     expect(screen.getByTestId("today-entity-daily-goal")).toBeInTheDocument();
   });

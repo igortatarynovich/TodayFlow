@@ -69,6 +69,8 @@ export type ScreenFlowProps = {
   edgeDeadzonePx?: number;
   testId?: string;
   showChrome?: boolean;
+  /** Prev/Next text buttons — optional per SCREEN_FLOW_V1 §1.4; Today product keeps false. */
+  showStepControls?: boolean;
 };
 
 const FAILURE_COPY: Record<"failed" | "degraded", string> = {
@@ -150,6 +152,7 @@ export function ScreenFlow({
   edgeDeadzonePx = SCREEN_FLOW_EDGE_DEADZONE_PX,
   testId = "screen-flow",
   showChrome = true,
+  showStepControls = false,
 }: ScreenFlowProps) {
   const reduceMotion = usePrefersReducedMotion();
   const liveId = useId();
@@ -262,7 +265,10 @@ export function ScreenFlow({
       </div>
 
       {showChrome ? (
-        <div className={styles.chrome}>
+        <div
+          className={styles.chrome}
+          data-controls={showStepControls ? "true" : "false"}
+        >
           <div className={styles.dots} role="tablist" aria-label="Шаги">
             {steps.map((step, i) => (
               <button
@@ -278,14 +284,28 @@ export function ScreenFlow({
               </button>
             ))}
           </div>
-          <div className={styles.controls}>
-            <button type="button" className={styles.controlBtn} data-testid="screen-flow-prev" disabled={clamped <= 0} onClick={() => goTo(clamped - 1, "prev")}>
-              Назад
-            </button>
-            <button type="button" className={styles.controlBtn} data-testid="screen-flow-next" disabled={clamped >= count - 1} onClick={() => goTo(clamped + 1, "next")}>
-              Далее
-            </button>
-          </div>
+          {showStepControls ? (
+            <div className={styles.controls}>
+              <button
+                type="button"
+                className={styles.controlBtn}
+                data-testid="screen-flow-prev"
+                disabled={clamped <= 0}
+                onClick={() => goTo(clamped - 1, "prev")}
+              >
+                Назад
+              </button>
+              <button
+                type="button"
+                className={styles.controlBtn}
+                data-testid="screen-flow-next"
+                disabled={clamped >= count - 1}
+                onClick={() => goTo(clamped + 1, "next")}
+              >
+                Далее
+              </button>
+            </div>
+          ) : null}
         </div>
       ) : null}
 

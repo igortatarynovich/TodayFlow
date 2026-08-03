@@ -67,9 +67,10 @@ ScreenFlow высотой **100dvh** (или другой полный viewport)
 
 Per §1.4, nav bar/buttons are **optional** — swipe + keyboard are the mandatory contract. Chrome should read that way:
 
-- **No raw step numbers as the primary visual.** `TodayActNav` currently renders `{item.step}` (0/1/2/3/4/5) as visible text next to each label — that reads as "tap here to count through pages," which fights the swipe-first intent of §1.4. Replace with a minimal, non-numeric indicator (dots / short labels only) — same `activeIndex` wiring, same `onSelect`, no behavior change.
-- **Swipe remains untouched.** This is a chrome-only change to `TodayActNav.tsx` / its `.module.css` — `ScreenFlow.tsx` touch handling, `SWIPE_THRESHOLD_PX`, and `reason: "swipe"` are not affected.
-- **Labels stay meaningful, numbers don't.** "Сводка · Сюжет · Символы · Чтение · Действие · Отклик" carry meaning on their own; the ordinal `0–5` in front of them doesn't add information a swipe gesture doesn't already provide.
+- **Today product:** no labeled act strip (`TodayActNav`) and no «Назад»/«Далее» text controls. Progress chrome = `ScreenFlow` dots · swipe · keyboard. Step titles stay in `aria-live` / `srOnly` on dots — not a visible name row. Primitive keeps `showStepControls` for fixtures only (default `false`).
+- **No raw step numbers as the primary visual.** Ordinals `0–5` stay out of chrome (same as pre-2026-08-03 §1.5).
+- **Swipe remains untouched.** `ScreenFlow.tsx` touch handling, `SWIPE_THRESHOLD_PX`, and `reason: "swipe"` are not affected.
+- **Legacy:** `TodayActNav` component may remain in tree for fixtures; product path does not render it.
 
 ### 1.6 A11y
 
@@ -167,7 +168,7 @@ Re-entry: ordinary visit → **0**; deep-link only with `sf=1&step=N`.
 
 **Contract:** [TODAY_WAVE2_CONTRACT_V1.md](../today/TODAY_WAVE2_CONTRACT_V1.md) — `day_facts_v1` + `day_story` → Today Contract Assembler.
 
-**Композиция:** `TodayProductScreenFlow.tsx` — обёртка вокруг `ScreenFlow` + `TodayActNav` controlled; personal acts via `actFilter` (not nested `asScreenFlowSteps` — ScreenFlow collects only JSX-tree `ScreenFlowStep` children).
+**Композиция:** `TodayProductScreenFlow.tsx` — обёртка вокруг `ScreenFlow` (dots + swipe; labeled `TodayActNav` not mounted); personal acts via `actFilter` (not nested `asScreenFlowSteps` — ScreenFlow collects only JSX-tree `ScreenFlowStep` children).
 
 ---
 
@@ -235,6 +236,14 @@ Re-entry: ordinary visit → **0**; deep-link only with `sf=1&step=N`.
 - **Added §1.5** — nav bar is optional per §1.4; `TodayActNav` visible ordinal (`{item.step}`) replaced with non-numeric indicator, swipe stays the primary path.
 - **Day accent (same day):** `TodayActNav` + ScreenFlow dots/controls consume `--day-*` for tint (FOUNDATION_UI §11.4); shape/labels/no-ordinals unchanged.
 - **No mechanics change** — `ScreenFlow.tsx` swipe/keyboard untouched; this is `TodayActNav` chrome only.
+
+### 2026-08-03 — Chrome: unmount labeled ActNav strip
+
+- **Product Today** no longer mounts `TodayActNav` name row. Progress = ScreenFlow dots + swipe/keyboard (§1.5).
+
+### 2026-08-03 — Chrome: hide Назад/Далее by default
+
+- `showStepControls` default `false`; Today product chrome = dots only. Prev/next remain optional on the primitive for fixtures.
 - **Related:** [TODAYFLOW_FOUNDATION_UI.md §16](../TODAYFLOW_FOUNDATION_UI.md) — Today block/panel visual grammar (new).
 
 ### 2026-08-03 — Today mapping → SCENARIO v3.1

@@ -384,7 +384,7 @@ Day Atmosphere **не заменяет** Mood и Day-phase и **не выбир�
 
 1. **Главный фон** — три уровня: базовый цвет, большой размытый градиент, локальное свечение за контентом. Свечение стоит ниже и почти не движется для тихих режимов (Grounded, Depth), смещается вверх и контрастнее для активных (Momentum, Radiance).
 2. **Декоративный слой** — отдельно от фона, под контентом: линии, дуги, световые пятна, частицы, полупрозрачные формы. Не находится под текстом, не снижает читаемость.
-3. **Акцентная подсветка** — можно менять halo вокруг темы дня, тон ScreenFlow-индикатора / `TodayActNav` (active pill + dots через `--day-decor-color` / `--day-accent-soft` / `--day-surface-tint`), подсветку выбранных chips, тон разделителей. **Нельзя** менять цвета CTA/error/success/warning ежедневно — их значение должно быть постоянным. Форма chrome и отсутствие ordinals (`0–5`) — [SCREEN_FLOW_V1 §1.5](foundation/SCREEN_FLOW_V1.md); меняется только тон.
+3. **Акцентная подсветка** — можно менять halo вокруг темы дня, тон ScreenFlow-индикатора (dots через `--day-decor-color` / `--day-accent-soft` / `--day-surface-tint`), подсветку выбранных chips, тон разделителей. **Нельзя** менять цвета CTA/error/success/warning ежедневно — их значение должно быть постоянным. Форма chrome (dots only; без ordinals / labeled act strip / Назад·Далее) — [SCREEN_FLOW_V1 §1.5](foundation/SCREEN_FLOW_V1.md); меняется только тон.
 4. **Motion** — только атмосферный: цикл 15–40 сек, смещение на несколько px, никаких быстрых бесконечных частиц, обязателен `prefers-reduced-motion`, останавливается или упрощается вне активного экрана.
 
 ### 11.5 Как движок выбирает режим — приоритет
@@ -439,7 +439,7 @@ Figma не используется в разработке — не источ�
 
 Типографика (§5) · размеры карточек вне Day Atmosphere surface (§4) · цвета ошибок/успеха/предупреждений · основные CTA (§4 Surface C) · логика навигации ScreenFlow (порядок актов) · форма интерактивных компонентов вне атмосферы.
 
-**Исключение — Glance / Day Atmosphere surface:** каркас первого viewport Today **может** менять плотность и композицию под full-bleed атмосферу дня (стекло-блоки §16, sparse chrome; прогресс = нижний ScreenFlow chrome, не gauge в hero) — см. [TODAY_SCREEN_SCENARIO_V3](./today/TODAY_SCREEN_SCENARIO_V3.md) Экран 0. Jobs смысла акта (тон / nearest / teaser / no Plot facts) не меняются; меняется только показ. Это сознательный SoT-сдвиг относительно ранней формулировки «иерархия всегда стабильна».
+**Исключение — Glance / Day Atmosphere surface:** каркас первого viewport Today **может** менять плотность и композицию под full-bleed атмосферу дня (стекло-блоки §16, sparse chrome; прогресс = ScreenFlow dots + свайп, не gauge и не ряд названий актов) — см. [TODAY_SCREEN_SCENARIO_V3](./today/TODAY_SCREEN_SCENARIO_V3.md) Экран 0. Jobs смысла акта (тон / nearest / teaser / no Plot facts) не меняются; меняется только показ. Это сознательный SoT-сдвиг относительно ранней формулировки «иерархия всегда стабильна».
 
 ### 11.10 Следующие шаги
 
@@ -674,7 +674,7 @@ interface DayAtmosphereContract {
 - **§17b pass 1 (готово):** solid `background: #fff` → `var(--tf-surface, #fff)` на топ-экранах (Practices/Challenges/Profile v2/Today composition/product web layouts + profileV0 gradient stops). ~63 solid + card-wash gradients.
 - **`--product-*`:** уточнено — это layout-токены (radius/content-max), не палитра; dark-пара не нужна.
 - **Остаток §17b:** декоративные `#fff` в border/box-shadow/orb highlights; оставшиеся хардкоды вне топ-списка; ручной QA dark на Profile/Practices/Challenges.
-- **§17c:** запрет новых ad-hoc CTA / lint checklist.
+- **§17c:** запрет новых ad-hoc CTA / lint checklist. **Today Response pass:** `TodayTapWidget` → `DsButton` (ad-hoc `.tapBtn` removed).
 
 ---
 
@@ -742,7 +742,7 @@ interface DayAtmosphereContract {
 
 - **§17a** — foundation: dark-пара `--product-*` уточнена как layout (не нужна); Surface B / `dsPrimitives` / `--section-*` dark — см. §15.6 (готово Slice 0–2).
 - **§17b** — топ-баговые экраны с хардкод `#fff` вне `DsCard` (pass 1 готово; остаток: декоративные highlights + вне списка + ручной QA dark).
-- **§17c** — запрет ad-hoc CTA в ревью; постепенный перевод на `DsButton`.
+- **§17c** — запрет ad-hoc CTA в ревью; постепенный перевод на `DsButton` (**Today Response** `TodayTapWidget` — done).
 
 ---
 

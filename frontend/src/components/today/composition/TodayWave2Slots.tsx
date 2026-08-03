@@ -7,7 +7,9 @@
 import { useEffect, useState } from "react";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import styles from "@/components/today/composition/TodayWave2Slots.module.css";
+import { DsButton } from "@/design-system/primitives/DsButton";
 import { TODAY_DOMAIN_ICON_MAP } from "@/design-system/icons/DsIcons";
+import { joinClass } from "@/design-system/utils/joinClass";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import {
   DOMAIN_LABEL_RU,
@@ -458,36 +460,52 @@ export function TodayTapWidget({
         {prompt.promptedText}
       </p>
       <div className={styles.tapRow} role="group" aria-label={copy.journey.tapQuestion}>
-        <button
-          type="button"
-          className={styles.tapBtn}
+        <DsButton
+          variant="secondary"
+          size="sm"
+          className={joinClass(
+            styles.tapChoice,
+            response === "avoided_trap" ? styles.tapChoiceSelected : null,
+          )}
           data-testid="today-tap-avoided"
           data-selected={response === "avoided_trap" ? "true" : undefined}
+          aria-pressed={response === "avoided_trap"}
           disabled={pending}
           onClick={() => void submit("avoided_trap")}
         >
           {copy.journey.tapAvoided}
-        </button>
-        <button
-          type="button"
-          className={styles.tapBtn}
+        </DsButton>
+        <DsButton
+          variant="secondary"
+          size="sm"
+          className={joinClass(
+            styles.tapChoice,
+            response === "fell_into_trap" ? styles.tapChoiceSelected : null,
+          )}
           data-testid="today-tap-fell"
           data-selected={response === "fell_into_trap" ? "true" : undefined}
+          aria-pressed={response === "fell_into_trap"}
           disabled={pending}
           onClick={() => void submit("fell_into_trap")}
         >
           {copy.journey.tapFell}
-        </button>
-        <button
-          type="button"
-          className={styles.tapBtnSecondary}
+        </DsButton>
+        <DsButton
+          variant="ghost"
+          size="sm"
+          className={joinClass(
+            styles.tapChoice,
+            styles.tapChoiceGhost,
+            response === "not_applicable" ? styles.tapChoiceSelected : null,
+          )}
           data-testid="today-tap-na"
           data-selected={response === "not_applicable" ? "true" : undefined}
+          aria-pressed={response === "not_applicable"}
           disabled={pending}
           onClick={() => void submit("not_applicable")}
         >
           {copy.journey.tapNotApplicable}
-        </button>
+        </DsButton>
       </div>
       {answered ? (
         <p className={styles.tapDone} data-testid="today-tap-recorded">
@@ -514,12 +532,24 @@ export function TodayTapWidgetStub(props: { onTap?: () => void; answered?: boole
     <div className={styles.tap} data-testid="today-slot-tap-widget" data-wave2-slot="tap">
       <p className={styles.tapLabel}>{copy.journey.tapStubLabel}</p>
       <div className={styles.tapRow}>
-        <button type="button" className={styles.tapBtn} data-testid="today-tap-yes" onClick={() => props.onTap?.()}>
+        <DsButton
+          variant="secondary"
+          size="sm"
+          className={styles.tapChoice}
+          data-testid="today-tap-yes"
+          onClick={() => props.onTap?.()}
+        >
           Да
-        </button>
-        <button type="button" className={styles.tapBtn} data-testid="today-tap-no" onClick={() => props.onTap?.()}>
+        </DsButton>
+        <DsButton
+          variant="ghost"
+          size="sm"
+          className={joinClass(styles.tapChoice, styles.tapChoiceGhost)}
+          data-testid="today-tap-no"
+          onClick={() => props.onTap?.()}
+        >
           Нет
-        </button>
+        </DsButton>
       </div>
       <p className={styles.tapHint}>{copy.journey.tapStubHint}</p>
     </div>

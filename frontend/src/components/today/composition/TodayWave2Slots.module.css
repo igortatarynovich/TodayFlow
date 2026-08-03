@@ -221,35 +221,25 @@
   gap: 0.65rem;
 }
 
-.tapBtn,
-.tapBtnSecondary {
+/* Layout/selected only — surface from DsButton (FOUNDATION_UI §17c). */
+.tapChoice {
   min-height: 44px;
   min-width: 5.5rem;
-  padding: 0.55rem 1.1rem;
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 560;
   border-radius: 0.85rem;
-  border: 1px solid rgba(212, 184, 150, 0.35);
-  background: rgba(255, 255, 255, 0.7);
-  font: inherit;
-  font-size: 0.95rem;
-  color: var(--tf-ink, #2a2520);
-  cursor: pointer;
 }
 
-.tapBtnSecondary {
-  background: transparent;
+.tapChoiceGhost {
+  border: 1px solid color-mix(in srgb, var(--day-decor-color, #8f6b3a) 28%, transparent);
   color: var(--tf-ink-soft, #5c5348);
 }
 
-.tapBtn[data-selected="true"],
-.tapBtnSecondary[data-selected="true"] {
+.tapChoiceSelected {
   border-color: var(--tf-accent-action, #8f6b3a);
-  background: rgba(143, 107, 58, 0.12);
-}
-
-.tapBtn:disabled,
-.tapBtnSecondary:disabled {
-  opacity: 0.6;
-  cursor: wait;
+  background: color-mix(in srgb, var(--tf-accent-action, #8f6b3a) 12%, transparent);
+  color: var(--tf-ink, #2a2520);
 }
 
 .tapHint,
@@ -275,12 +265,6 @@
   padding-top: 0.15rem;
 }
 
-:global([data-theme="dark"]) .tapBtn,
-:global([data-theme="dark"]) .tapBtnSecondary {
-  background: rgba(26, 23, 20, 0.55);
-  color: rgba(245, 240, 232, 0.92);
-}
-
 :global([data-theme="dark"]) .tapLabel,
 :global([data-theme="dark"]) .tapPrompt {
   color: rgba(245, 240, 232, 0.92);
@@ -289,6 +273,10 @@
 :global([data-theme="dark"]) .tapHint,
 :global([data-theme="dark"]) .tapAccuracy {
   color: rgba(232, 226, 214, 0.65);
+}
+
+:global([data-theme="dark"]) .tapChoiceGhost {
+  color: rgba(245, 240, 232, 0.85);
 }
 
 .glance {

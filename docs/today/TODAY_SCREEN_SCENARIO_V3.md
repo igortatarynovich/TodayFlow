@@ -26,7 +26,7 @@
 
 **Job:** за 2 секунды ориентация и вход дальше — сжатая проекция уже определённых актов, не отдельный сюжет.
 
-**Каркас показа (Day Atmosphere surface — FOUNDATION_UI §11.9):** full-bleed фон/декор по `day_atmosphere.visual_mode` · стеклянные Block-панели (§16) · sparse chrome. **Прогресс актов = нижний ScreenFlow chrome** (точки + лейблы / свайп) — не отдельный виджет в hero. Jobs смысла ниже **не** меняются — только композиция.
+**Каркас показа (Day Atmosphere surface — FOUNDATION_UI §11.9):** full-bleed фон/декор по `day_atmosphere.visual_mode` · стеклянные Block-панели (§16) · sparse chrome. **Прогресс актов = ScreenFlow chrome** (точки + свайп/клавиатура; без ряда названий актов) — не отдельный виджет в hero. Jobs смысла ниже **не** меняются — только композиция.
 
 **На экране:**
 
@@ -181,7 +181,7 @@ Reveal API / prebake: [DAY_SYMBOL_REVEAL_CANON_V1](../audits/DAY_SYMBOL_REVEAL_C
 
 ### 2026-08-03 — Glance: drop ScreenFlow gauge (chrome owns progress)
 
-- **Каркас Экран 0:** убран обязательный gauge «шаг N/6» в hero; прогресс = нижний ScreenFlow chrome (точки + лейблы / свайп) — см. [SCREEN_FLOW_V1 §1.5](../foundation/SCREEN_FLOW_V1.md).
+- **Каркас Экран 0:** убран обязательный gauge «шаг N/6» в hero; прогресс = ScreenFlow chrome (точки + свайп; без ряда названий актов) — см. [SCREEN_FLOW_V1 §1.5](../foundation/SCREEN_FLOW_V1.md).
 - Jobs смысла (texture / nearest / teaser / ≤2 sphere chips) без изменений.
 
 ### 2026-08-03 — v3.1b (concreteness)
