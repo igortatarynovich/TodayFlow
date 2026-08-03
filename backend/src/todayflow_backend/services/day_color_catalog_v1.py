@@ -4,10 +4,11 @@ Phase B2: scenario props pick a color from this catalog *because* a scene needs
 a quality; catalog copy is never shipped as the day's meaning without
 origin_scene_id + conflict link.
 
-Color is NOT an independent daily draw (unlike card/number). Palette may deepen
-for ritual richness when new rows reuse existing `_needed_color_tags` only
-(layer A). New tag vocabulary (layer B: creativity/home/…) requires generator
-changes first — never ship unreachable catalog rows (orphan risk).
+Color is NOT an independent daily draw (unlike card/number).
+Layer A reused existing `_needed_color_tags`. Layer B (creativity/home/money
+abundance/passion/closure) shipped only with matching generator branches —
+never catalog-only orphans. Champagne / quiet_celebration held until conflict
+gains a favorable-outcome signal.
 
 Legacy `celestial_events_builder` presets remain a seed/index path until B3 wire
 projection replaces them.
@@ -33,6 +34,73 @@ LIVE_AVOID_AMPLIFY_TAGS: frozenset[str] = frozenset(
         "all_or_nothing",
         "over_control",
         "harsh",
+    }
+)
+
+# Tags `_needed_color_tags` may request. Catalog tags must ⊆ this set (anti-orphan).
+# Keep in sync with day_scenario_v1._needed_color_tags (+ tests).
+LIVE_NEEDED_COLOR_TAGS: frozenset[str] = frozenset(
+    {
+        "hold_distance",
+        "boundaries",
+        "slow_reply",
+        "clarity",
+        "calm_clarity",
+        "pause_before_act",
+        "depth",
+        "soft_speech",
+        "communication",
+        "inner_honesty",
+        "restore",
+        "body",
+        "tempo_gentle",
+        "ground",
+        "focus",
+        "steady",
+        "decision",
+        # Layer B
+        "creative_spark",
+        "generous_warmth",
+        "home_warmth",
+        "belonging",
+        "confident_abundance",
+        "steady_growth",
+        "passionate_assertion",
+        "vital_courage",
+        "gentle_closure",
+        "honor_loss",
+        # Catalog-only flavor tags still used on core/layer-A rows (scoring bonus
+        # when present in needed — some are never emitted; allowed as secondary).
+        "cool_mind",
+        "intuition",
+        "connection",
+        "warm_contact",
+        "growth",
+        "relationships",
+        "ground_soft",
+        "work",
+        "no_jerk",
+        "serious",
+        "warm_energy",
+    }
+)
+
+# Pending until conflict exposes a favorable-outcome / resolution signal.
+PENDING_LAYER_B_COLORS: frozenset[str] = frozenset({"Шампань"})
+
+# Primary Layer-B tags that must be reachable from _needed_color_tags.
+LAYER_B_PRIMARY_TAGS: frozenset[str] = frozenset(
+    {
+        "creative_spark",
+        "generous_warmth",
+        "home_warmth",
+        "belonging",
+        "confident_abundance",
+        "steady_growth",
+        "passionate_assertion",
+        "vital_courage",
+        "gentle_closure",
+        "honor_loss",
     }
 )
 
@@ -267,6 +335,90 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
             {"name": "Тяжёлый чёрный «давление»", "amplifies": ("pressure", "harsh")},
         ),
     },
+    # --- Layer B (generator tags + catalog together; 2026-08-02) ---
+    # Champagne held — no quiet_celebration signal in conflict model.
+    {
+        "name": "Шафрановый",
+        "tags": ("creative_spark", "generous_warmth"),
+        "symbolic_property": "искра без спешки — творческий импульс, которому не нужно оправдание",
+        "apply": {
+            "clothing": "Шафрановый шарф, свитер или яркий акцент в одежде.",
+            "accessory": "Украшение или чехол медово-оранжевого тона.",
+            "workspace": "Шафрановый стикер на творческой задаче.",
+            "makeup": None,
+            "ui_or_bg": "Тёплый оранжевый акцент в заметках творческой сферы.",
+        },
+        "intensity_default": "один яркий акцент — шафран не любит разбавления",
+        "avoid_candidates": (
+            # editorial numb/flat → live amplify set
+            {"name": "Блёклый серый «осторожность»", "amplifies": ("scatter", "noise")},
+        ),
+    },
+    {
+        "name": "Терракотовый",
+        "tags": ("home_warmth", "belonging"),
+        "symbolic_property": "тепло дома как опора — принадлежность месту, не просто устойчивость",
+        "apply": {
+            "clothing": "Терракотовый свитер, платье или слой outerwear.",
+            "accessory": "Керамическое украшение или сумка терракотового тона.",
+            "workspace": "Терракотовый предмет или ткань дома, не на рабочем столе.",
+            "makeup": None,
+            "ui_or_bg": None,
+        },
+        "intensity_default": "один тёплый слой, лучше дома, чем на работе",
+        "avoid_candidates": (
+            {"name": "Холодный стальной", "amplifies": ("harsh", "over_control")},
+        ),
+    },
+    {
+        "name": "Гранатовый",
+        "tags": ("passionate_assertion", "vital_courage"),
+        "symbolic_property": "честная страсть — показать желание, а не смягчать его до вежливости",
+        "apply": {
+            "clothing": "Гранатовый топ, платье или шарф.",
+            "accessory": "Украшение глубокого красного тона.",
+            "workspace": None,
+            "makeup": "Помада или тени глубокого гранатового.",
+            "ui_or_bg": None,
+        },
+        "intensity_default": "один насыщенный акцент — не костюм целиком",
+        "avoid_candidates": (
+            {"name": "Блёклый пастельный «вежливость»", "amplifies": ("please", "soft_over_truth")},
+        ),
+    },
+    {
+        "name": "Хризолитовый",
+        "tags": ("confident_abundance", "steady_growth"),
+        "symbolic_property": "уверенность в росте — не только решение, но и спокойное ощущение достатка",
+        "apply": {
+            "clothing": "Хризолитовый шарф или акцент в одежде.",
+            "accessory": "Украшение светло-зелёного камня.",
+            "workspace": "Хризолитовый стикер на финансовой задаче.",
+            "makeup": None,
+            "ui_or_bg": "Светло-зелёный акцент в финансовой заметке.",
+        },
+        "intensity_default": "один спокойный акцент",
+        "avoid_candidates": (
+            # editorial numb → live amplify set
+            {"name": "Тусклый коричневый «нехватка»", "amplifies": ("pressure", "harsh")},
+        ),
+    },
+    {
+        "name": "Дымчато-сиреневый",
+        "tags": ("gentle_closure", "honor_loss"),
+        "symbolic_property": "мягкое прощание — закрыть тему честно, не пряча и не драматизируя",
+        "apply": {
+            "clothing": "Дымчато-сиреневый свитер или шарф.",
+            "accessory": "Приглушённое украшение сиреневого тона.",
+            "workspace": None,
+            "makeup": None,
+            "ui_or_bg": "Приглушённый лиловый фон в заметке дня.",
+        },
+        "intensity_default": "мягкий, приглушённый тон",
+        "avoid_candidates": (
+            {"name": "Ярко-красный «драма»", "amplifies": ("alarm", "rush")},
+        ),
+    },
 ]
 
 
@@ -298,8 +450,18 @@ def color_hook_base(name: str) -> dict[str, Any] | None:
 
 
 def score_color_for_needs(entry: dict[str, Any], needed_tags: set[str]) -> int:
+    """Score catalog row against needed tags.
+
+    Layer-B primary tags are sparse sphere/keyword triggers. Without a specialty
+    bonus, broad core rows that only share default calm/clarity would always
+    win ties and leave Layer-B colors unreachable in practice.
+    """
     tags = set(entry.get("tags") or ())
-    return len(tags & needed_tags)
+    overlap = tags & needed_tags
+    if not overlap:
+        return 0
+    specialty = len(overlap & LAYER_B_PRIMARY_TAGS)
+    return len(overlap) + 5 * specialty
 
 
 def validate_color_catalog_v1() -> list[str]:
@@ -314,12 +476,17 @@ def validate_color_catalog_v1() -> list[str]:
         if name in names:
             errors.append(f"duplicate name: {name}")
         names.add(name)
+        if name in PENDING_LAYER_B_COLORS:
+            errors.append(f"{name}: pending color must not be in live catalog")
         prop = str(row.get("symbolic_property") or "").strip()
         if len(prop) < 12:
             errors.append(f"{name}: symbolic_property too short")
         tags = tuple(row.get("tags") or ())
         if len(tags) < 2:
             errors.append(f"{name}: need ≥2 tags")
+        unknown = [t for t in tags if t not in LIVE_NEEDED_COLOR_TAGS]
+        if unknown:
+            errors.append(f"{name}: tags not in LIVE_NEEDED_COLOR_TAGS {unknown}")
         for cand in row.get("avoid_candidates") or ():
             amplifies = tuple((cand or {}).get("amplifies") or ())
             dead = [a for a in amplifies if a not in LIVE_AVOID_AMPLIFY_TAGS]

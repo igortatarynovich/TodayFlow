@@ -309,25 +309,93 @@ def test_scene_copy_varies_by_sphere_and_uses_name():
 
 def test_color_catalog_is_knowledge_not_sot():
     from todayflow_backend.services.day_color_catalog_v1 import (
+        LAYER_B_PRIMARY_TAGS,
+        PENDING_LAYER_B_COLORS,
         list_color_knowledge,
         validate_color_catalog_v1,
     )
+    from todayflow_backend.services.day_scenario_v1 import _needed_color_tags
 
     rows = list_color_knowledge()
-    assert len(rows) == 14  # 8 core + 6 layer-A expansion
+    assert len(rows) == 19  # 8 core + 6 layer-A + 5 layer-B (Champagne held)
     assert all("tags" in r and "name" in r and "symbolic_property" in r for r in rows)
     assert validate_color_catalog_v1() == []
     names = {str(r["name"]) for r in rows}
-    assert {"Малахитовый", "Пыльная роза", "Мускатный", "Аметистовый", "Кобальтовый", "Слоновая кость"} <= names
-    # Layer B must not land until generator emits their tags
-    assert not names & {
+    assert {
+        "Малахитовый",
+        "Пыльная роза",
+        "Мускатный",
+        "Аметистовый",
+        "Кобальтовый",
+        "Слоновая кость",
+    } <= names
+    assert {
         "Шафрановый",
         "Терракотовый",
         "Гранатовый",
         "Хризолитовый",
-        "Шампань",
         "Дымчато-сиреневый",
-    }
+    } <= names
+    # Champagne: no favorable-outcome signal in conflict — must stay pending
+    assert names.isdisjoint(PENDING_LAYER_B_COLORS)
+    assert "Шампань" not in names
+
+    # Layer-B primary tags must be reachable from generator (anti-orphan)
+    probes = [
+        _needed_color_tags(trap="", force_a="", sphere="creativity", mode=""),
+        _needed_color_tags(trap="", force_a="", sphere="home", mode=""),
+        _needed_color_tags(trap="", force_a="", sphere="money", mode=""),
+        _needed_color_tags(trap="страсть и желание", force_a="", sphere="relationships", mode=""),
+        _needed_color_tags(trap="отпустить тему и завершить", force_a="", sphere="home", mode=""),
+    ]
+    reachable = set().union(*probes)
+    assert LAYER_B_PRIMARY_TAGS <= reachable
+
+    # «отпуск» / rest_travel must NOT fire gentle_closure (false positive guard)
+    vacation = _needed_color_tags(
+        trap="хочется в отпуск на море",
+        force_a="",
+        sphere="rest_travel",
+        mode="recovery",
+    )
+    assert "gentle_closure" not in vacation
+    assert "honor_loss" not in vacation
+    # Verb form must fire closure
+    release = _needed_color_tags(
+        trap="пора отпустить старую обиду",
+        force_a="",
+        sphere="relationships",
+        mode="",
+    )
+    assert {"gentle_closure", "honor_loss"} <= release
+
+
+def test_layer_b_colors_win_scoring_on_their_triggers():
+    from todayflow_backend.services.day_color_catalog_v1 import (
+        get_color_entry,
+        list_color_knowledge,
+        score_color_for_needs,
+    )
+    from todayflow_backend.services.day_scenario_v1 import _needed_color_tags
+
+    cases = [
+        ("creativity", "", "Шафрановый"),
+        ("home", "", "Терракотовый"),
+        ("money", "", "Хризолитовый"),
+        ("relationships", "страсть и желание", "Гранатовый"),
+        # relationships (not home) so closure specialty is not tied with Терракотовый
+        ("relationships", "пора отпустить и завершить", "Дымчато-сиреневый"),
+    ]
+    catalog = list_color_knowledge()
+    for sphere, trap, expected in cases:
+        needed = _needed_color_tags(trap=trap, force_a="", sphere=sphere, mode="")
+        ranked = sorted(
+            catalog,
+            key=lambda e: score_color_for_needs(e, needed),
+            reverse=True,
+        )
+        assert ranked[0]["name"] == expected, (sphere, trap, ranked[0]["name"], needed)
+        assert get_color_entry(expected) is not None
 
 
 def test_celestial_daily_symbol_presets_use_catalog_colors_only():

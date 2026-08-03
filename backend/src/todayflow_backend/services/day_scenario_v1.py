@@ -1016,6 +1016,24 @@ def _needed_color_tags(*, trap: str, force_a: str, sphere: str, mode: str) -> se
         tags.update({"boundaries", "ground", "focus"})
     if any(k in blob for k in ("распыл", "сует", "шум")):
         tags.update({"focus", "calm_clarity", "steady"})
+    # Layer B emotional range — verb/closure forms only (never bare «отпус»:
+    # that substring false-positives on «отпуск» / rest_travel).
+    if any(k in blob for k in ("страст", "влечен", "желан")):
+        tags.update({"passionate_assertion", "vital_courage"})
+    if any(
+        k in blob
+        for k in (
+            "конец",
+            "заверш",
+            "потер",
+            "отпустить",
+            "отпускать",
+            "отпустил",
+            "отпускаю",
+            "отпусти",
+        )
+    ):
+        tags.update({"gentle_closure", "honor_loss"})
     if mode in {"recovery", "stability"}:
         tags.update({"restore", "steady", "ground"})
     if not tags:
@@ -1026,6 +1044,17 @@ def _needed_color_tags(*, trap: str, force_a: str, sphere: str, mode: str) -> se
         tags.update({"restore", "body"})
     if sphere in {"work_decisions", "money"}:
         tags.update({"focus", "decision", "calm_clarity"})
+    # Layer B sphere clusters (additive — money keeps work focus above).
+    if sphere == "creativity":
+        tags.update({"creative_spark", "generous_warmth"})
+    if sphere == "home":
+        tags.update({"home_warmth", "belonging"})
+    if sphere == "money":
+        tags.update({"confident_abundance", "steady_growth"})
+    # quiet_celebration / light_gratitude intentionally omitted: conflict model
+    # has no favorable-outcome / resolution signal (thesis.mode is conflict|
+    # transition|recovery|stability). Champagne stays out of catalog until that
+    # feature exists — see docs/color/COLOR_LAYER_B_V1.md.
     return tags
 
 

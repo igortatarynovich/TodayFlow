@@ -1,0 +1,20 @@
+{
+  "status": "pending",
+  "reason": "conflict model has no favorable-outcome / resolution signal for quiet_celebration|light_gratitude; thesis.mode is trap/force oriented (conflict|transition|recovery|stability). Separate feature — do not merge into COLOR_CATALOG_V1 until wiring exists.",
+  "color": {
+    "name": "Шампань",
+    "tags": ["quiet_celebration", "light_gratitude"],
+    "symbolic_property": "тихая благодарность — отметить, что получилось, без громкого жеста",
+    "apply": {
+      "clothing": "Шампань-оттенок в одном предмете — блуза, шарф.",
+      "accessory": "Лёгкое украшение с перламутровым отливом.",
+      "workspace": null,
+      "makeup": "Шампань-хайлайтер или тени.",
+      "ui_or_bg": null
+    },
+    "intensity_default": "лёгкий блеск — одна деталь",
+    "avoid_candidates": [
+      {"name": "Тяжёлый чёрный «серьёзность любой ценой»", "amplifies": ["pressure"]}
+    ]
+  }
+}

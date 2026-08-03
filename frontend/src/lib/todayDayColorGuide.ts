@@ -35,6 +35,12 @@ export const COLOR_HEX: Record<string, string> = {
   Аметистовый: "#6B3FA0",
   Кобальтовый: "#0047AB",
   "Слоновая кость": "#F3EDE0",
+  // Layer B (Champagne pending — no favorable-outcome signal in conflict)
+  Шафрановый: "#E39B2E",
+  Терракотовый: "#C65D3B",
+  Гранатовый: "#7B1E3A",
+  Хризолитовый: "#A8C256",
+  "Дымчато-сиреневый": "#A89BB0",
 };
 
 export const COLOR_DAY_UNAVAILABLE_RU = "Цвет дня не определён.";

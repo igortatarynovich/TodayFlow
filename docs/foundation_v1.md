@@ -259,7 +259,7 @@ Owner: подтвердил остальное as-is; эти три пункта
 | Домен | Конкуренты | Цель |
 |-------|------------|------|
 | Таро | FE `todayTarotCardsRu.ts` vs `tarot_full_deck.json` vs `DATA/reference/tarot/knowledge_v1/` vs смысл из `tarot_explainer.py` | Один SoT; остальное — производные или deprecated |
-| Цвет | BE `day_color_catalog_v1.py` vs FE `todayDayColorGuide.ts` | BE catalog SoT (14 colors = 8+layer A); FE = `COLOR_HEX` only + honest unavailable; layer B deferred (`docs/color_catalog_expansion_v1.json`) until generator tags exist |
+| Цвет | BE `day_color_catalog_v1.py` vs FE `todayDayColorGuide.ts` | BE catalog SoT (**19** = 8+A6+B5); FE = `COLOR_HEX` only + honest unavailable; layer B live except **Шампань** pending favorable-outcome signal ([COLOR_LAYER_B_V1.md](./color/COLOR_LAYER_B_V1.md)) |
 | Нумерология | Векторы ритма без прозы (`NUMBER_RHYTHM_BY_VALUE`) + machine cores | Заполнить/заменить атомарной прозой из §2.8 |
 | Астро reference | `DATA/astrology_reference/*`, `DATA/reference/astrology/machine/*` | Свести к lookup из §2 (после sign-off) |
 | Валентность аспектов | Литералы в `sphere_score_v0` / `top_driver_v1` | Lookup из §2.4 / `aspects.json` |
@@ -289,7 +289,7 @@ Owner: подтвердил остальное as-is; эти три пункта
 - [x] Атомарные таблицы в §2 + DATA lookup `DATA/foundation_v1/` + `foundation_constants_v1` (L1–L3). Таро/цвет — отдельный трек.
 - [x] Квинконс: **OOS v1** одинаково в контракте и §2.4 (не в `aspects.json`).
 - [~] Валентность аспектов в `top_driver_v1` / activation copy — через `aspect_is_harmonious|challenging` (foundation). Domain magnitude tables ещё локальны (не character). Classical rulers: house_rulers + profections → `ruler_classical`.
-- [~] Цвет: FE `todayDayColorGuide` помечен deprecated (SoT = BE catalog / props). Таро FE-банк — deprecated pointer; cutover на `card_base_v1` / KB — следующий шаг.
+- [x] Цвет/таро/числа: FE prose cutover done; BE `card_base` / `COLOR_CATALOG` (19, Champagne pending) / `number_base` SoT. Layer B colors + `_needed_color_tags` shipped except quiet_celebration.
 - [~] Документ + тесты foundation_constants_v1; генераторы постепенно на lookup (не все).
 
 ---
