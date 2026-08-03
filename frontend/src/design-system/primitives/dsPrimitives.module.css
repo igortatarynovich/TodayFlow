@@ -135,7 +135,7 @@
 }
 
 .elevated {
-  background: #fff;
+  background: var(--tf-surface, #fff);
   border-radius: var(--tf-ds-radius-xl);
   box-shadow: var(--tf-ds-shadow-soft);
 }
@@ -154,7 +154,7 @@
 }
 
 .card {
-  background: #fff;
+  background: var(--tf-surface, #fff);
   border: 1px solid var(--tf-ds-border-ink);
   border-radius: var(--tf-ds-radius-lg);
   box-shadow: var(--tf-ds-shadow-card);
@@ -342,7 +342,7 @@
 }
 
 .cardInsight {
-  background: #fff;
+  background: var(--tf-surface, #fff);
   border: 1px solid var(--tf-ds-border-ink);
   border-radius: var(--tf-ds-radius-lg);
   padding: var(--tf-ds-space-5);
@@ -442,7 +442,7 @@
   border: 1.5px solid rgba(42, 37, 32, 0.15);
   flex-shrink: 0;
   appearance: none;
-  background: #fff;
+  background: var(--tf-page, #fff);
   cursor: pointer;
 }
 
