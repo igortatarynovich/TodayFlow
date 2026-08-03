@@ -200,6 +200,8 @@
   --tf-surface-warm: #241f2c;
   --tf-surface: #1e1a24;
   --tf-surface-muted: #241f2c;
+  --tf-surface-insight-bg: rgba(30, 26, 36, 0.92);
+  --tf-surface-insight-shadow: 0 14px 48px rgba(0, 0, 0, 0.32);
   --tf-border: rgba(255, 255, 255, 0.1);
   --tf-border-strong: rgba(212, 184, 150, 0.28);
   --tf-border-subtle: rgba(255, 255, 255, 0.06);

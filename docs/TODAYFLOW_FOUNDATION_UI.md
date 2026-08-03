@@ -173,9 +173,9 @@
 
 | Token | Value |
 |-------|-------|
-| Background | `rgba(255,253,249,0.88)` |
-| Radius | **28px** |
-| Shadow | `0 14px 48px rgba(91,67,35,0.06)` |
+| Background | `var(--tf-surface-insight-bg)` — light `rgba(255,253,249,0.88)` · dark `rgba(30,26,36,0.92)` (см. `todayflow-foundation.css` `[data-theme="dark"]`) |
+| Radius | **28px** (`--tf-surface-insight-radius`) |
+| Shadow | `var(--tf-surface-insight-shadow)` |
 | Padding | 22 × 21 |
 | Variants | `insight-neutral` · `insight-love` *(soft blush)* · `insight-money` *(grid)* |
 
@@ -650,7 +650,7 @@ interface DayAtmosphereContract {
 | `.card` *(дефолтный `variant="card"`)* | 157 | `background: #fff` | `background: var(--tf-surface, #fff)` |
 | `.cardInsight` | 345 | `background: #fff` | `background: var(--tf-surface, #fff)` |
 | `.elevated` | 138 | `background: #fff` | `background: var(--tf-surface, #fff)` |
-| `.checkbox` | 445 | `background: #fff` | `background: var(--tf-page, #fff)` |
+| `.checkbox` | 445 | `background: #fff` | `background: var(--tf-surface, #fff)` *(не `--tf-page`: чекбокс сидит на surface-карточке; `--tf-page` в dark почти совпадает с фоном страницы)* |
 | `.btnPrimary` / `.btnDestructive` / `.pill` | 33, 284, 200 | `color: #fff` | оставить в этом проходе — текст на насыщенном accent-фоне; `--tf-on-dark` при следующей правке файла, не блокер |
 
 Починка четырёх фонов в одном файле чинит dark-контраст везде, где уже используется `DsCard` — раньше остальной миграции.
@@ -665,9 +665,12 @@ interface DayAtmosphereContract {
 - **Dark-пара для `--section-*`** — назначена в §16a, не спроектирована здесь.
 - **`--day-*` dark-палитра** — остаётся backlog §13.4, не расширяется этим разделом.
 
-### 15.6 §16a slice 0 — статус
+### 15.6 §16a — статус
 
-Четыре фона в `dsPrimitives.module.css` (`.elevated` / `.card` / `.cardInsight` / `.checkbox`) → `--tf-surface` / `--tf-page` — **сделано** в том же проходе, что и запись §15 (см. код). Остальное §16a (Surface B dark-пара в каноне §4, `--section-*` dark) — следующий тикет.
+- **Slice 0 (готово):** четыре фона в `dsPrimitives.module.css` (`.elevated` / `.card` / `.cardInsight` / `.checkbox`) → `--tf-surface`. Checkbox осознанно на `--tf-surface`, не `--tf-page` (контраст на карточке в dark).
+- **Slice 1 (в коде):** dark-пара `--tf-surface-insight-bg` / `--tf-surface-insight-shadow` в `[data-theme="dark"]` foundation (Surface B).
+- **Остаток §16a:** dark-пара `--section-*`; канон §4 Surface B текст → ссылка на токены вместо литерала `rgba(255,253,249,0.88)`.
+- **§16b / §16c:** топ-экраны с хардкод `#fff`; запрет ad-hoc CTA.
 
 ---
 
