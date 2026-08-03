@@ -96,8 +96,11 @@ export const TODAY_COMPOSITION_COPY = {
     glanceLead: "Что сегодня ждать — коротко. Дальше — ритуал крючков.",
     glanceTeasersLabel: "Дальше в дне",
     glanceNow: "сейчас",
-    glanceNearestLabel: "Сигнал дня",
+    /** House label for texture Block — mockup mood (FOUNDATION_UI §16), not short_name. */
+    glanceThemeLabel: "Тема дня",
+    glanceNearestLabel: "Ближайшее окно",
     glanceNearestEmpty: "Ближайшее окно сегодня не выделено.",
+    glanceSpheresLabel: "Сферы дня",
     teaserPlotHook: "одна линия, что держит день",
     teaserSymbolsHook: "карта, число и цвет дня",
     teaserReadingHook: "как проживать без перегруза",

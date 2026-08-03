@@ -17,13 +17,23 @@
 .chrome {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.15rem;
   padding-inline: 0.15rem;
+}
+
+.todayWord {
+  margin: 0;
+  font-family: var(--tf-font-display, Georgia, serif);
+  font-size: clamp(1.55rem, 5vw, 1.85rem);
+  font-weight: 650;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--tf-ink, #2a2520);
 }
 
 .dateLine {
   margin: 0;
-  font-size: 0.82rem;
+  font-size: 0.88rem;
   line-height: 1.35;
   color: var(--tf-ink-muted, #7a7168);
 }
@@ -146,4 +156,39 @@
     rgba(255, 255, 255, 0.25)
   );
   background-size: 200% 100%;
+}
+
+.sphereChips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.sphereChip {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding: 0.28rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--day-decor-color, #5b6472) 28%, transparent);
+  border-radius: 0.55rem;
+  background: color-mix(in srgb, var(--day-accent-soft, rgba(120, 130, 145, 0.18)) 70%, transparent);
+  font-family: var(--tf-font-body, inherit);
+  font-size: 0.82rem;
+  font-weight: 560;
+  line-height: 1.25;
+  color: var(--tf-ink, #2a2520);
+  cursor: default;
+}
+
+button.sphereChip {
+  cursor: pointer;
+  font: inherit;
+}
+
+button.sphereChip:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--day-decor-color, #5b6472) 55%, transparent);
+  outline-offset: 2px;
 }

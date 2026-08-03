@@ -29,10 +29,10 @@ def _as_list(value: Any) -> list[Any]:
 
 
 def _clip(text: Any, n: int) -> str:
+    from todayflow_backend.services.prose_clip_v1 import clip_prose
+
     s = " ".join(str(text or "").split()).strip()
-    if len(s) <= n:
-        return s
-    return s[: max(0, n - 1)].rstrip() + "…"
+    return clip_prose(s, n)
 
 
 def _event_rows(pack: dict[str, Any]) -> list[dict[str, Any]]:

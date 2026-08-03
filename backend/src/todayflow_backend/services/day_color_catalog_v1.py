@@ -16,6 +16,7 @@ projection replaces them.
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 # Amplify tags that `_amplify_tags_for_trap` can actually emit (live scoring set).
@@ -157,7 +158,7 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         },
         "intensity_default": "мягкий акцент ближе к телу",
         "avoid_candidates": (
-            {"name": "Красный «сигнал тревоги»", "amplifies": ("react_first", "rush", "alarm")},
+            {"name": "Красный", "amplifies": ("react_first", "rush", "alarm")},
         ),
     },
     {
@@ -174,7 +175,7 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "intensity_default": "небольшой тёплый штрих",
         "avoid_candidates": (
             # was decorative heavy — remapped to live amplify set
-            {"name": "Чёрный «всё или ничего»", "amplifies": ("all_or_nothing", "pressure", "over_control")},
+            {"name": "Чёрный", "amplifies": ("all_or_nothing", "pressure", "over_control")},
         ),
     },
     {
@@ -191,7 +192,7 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "intensity_default": "один живой акцент",
         "avoid_candidates": (
             # was decorative numb/flat/overwork — remapped to live amplify set
-            {"name": "Серый «офисный бетон»", "amplifies": ("pressure", "over_control", "harsh")},
+            {"name": "Серый", "amplifies": ("pressure", "over_control", "harsh")},
         ),
     },
     {
@@ -256,7 +257,7 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         },
         "intensity_default": "один глубокий акцент, не россыпь мелочей",
         "avoid_candidates": (
-            {"name": "Плоский белый «стерильность»", "amplifies": ("pressure", "harsh")},
+            {"name": "Плоский белый", "amplifies": ("pressure", "harsh")},
         ),
     },
     {
@@ -320,7 +321,7 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         },
         "intensity_default": "один яркий, но не кричащий акцент",
         "avoid_candidates": (
-            {"name": "Блёклый бежевый «размытость»", "amplifies": ("scatter", "noise")},
+            {"name": "Блёклый бежевый", "amplifies": ("scatter", "noise")},
         ),
     },
     {
@@ -336,7 +337,7 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         },
         "intensity_default": "фон, не акцент — можно взять базой образа",
         "avoid_candidates": (
-            {"name": "Тяжёлый чёрный «давление»", "amplifies": ("pressure", "harsh")},
+            {"name": "Тяжёлый чёрный", "amplifies": ("pressure", "harsh")},
         ),
     },
     # --- Layer B (generator tags + catalog together; 2026-08-02) ---
@@ -355,7 +356,7 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "intensity_default": "один яркий акцент — шафран не любит разбавления",
         "avoid_candidates": (
             # editorial numb/flat → live amplify set
-            {"name": "Блёклый серый «осторожность»", "amplifies": ("scatter", "noise")},
+            {"name": "Блёклый серый", "amplifies": ("scatter", "noise")},
         ),
     },
     {
@@ -387,7 +388,7 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         },
         "intensity_default": "один насыщенный акцент — не костюм целиком",
         "avoid_candidates": (
-            {"name": "Блёклый пастельный «вежливость»", "amplifies": ("please", "soft_over_truth")},
+            {"name": "Блёклый пастельный", "amplifies": ("please", "soft_over_truth")},
         ),
     },
     {
@@ -404,7 +405,7 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "intensity_default": "один спокойный акцент",
         "avoid_candidates": (
             # editorial numb → live amplify set
-            {"name": "Тусклый коричневый «нехватка»", "amplifies": ("pressure", "harsh")},
+            {"name": "Тусклый коричневый", "amplifies": ("pressure", "harsh")},
         ),
     },
     {
@@ -420,7 +421,7 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         },
         "intensity_default": "мягкий, приглушённый тон",
         "avoid_candidates": (
-            {"name": "Ярко-красный «драма»", "amplifies": ("alarm", "rush")},
+            {"name": "Ярко-красный", "amplifies": ("alarm", "rush")},
         ),
     },
     {
@@ -436,7 +437,7 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         },
         "intensity_default": "лёгкий блеск — одна деталь",
         "avoid_candidates": (
-            {"name": "Тяжёлый чёрный «серьёзность любой ценой»", "amplifies": ("pressure",)},
+            {"name": "Тяжёлый чёрный", "amplifies": ("pressure",)},
         ),
     },
 ]
@@ -444,6 +445,19 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
 
 def list_color_knowledge() -> list[dict[str, Any]]:
     return list(COLOR_CATALOG_V1)
+
+
+def sanitize_color_display_name(name: str | None) -> str:
+    """Strip trap-theme glue from color names (legacy «вежливость» mash).
+
+    Color name and trap theme are separate fields — never embed theme in name.
+    """
+    t = str(name or "").strip()
+    if not t:
+        return ""
+    t = re.sub(r"\s*«[^»]*»\s*", " ", t)
+    t = re.sub(r"\s*[\"“”][^\"“”]*[\"“”]\s*", " ", t)
+    return re.sub(r"\s+", " ", t).strip()
 
 
 def get_color_entry(name: str) -> dict[str, Any] | None:

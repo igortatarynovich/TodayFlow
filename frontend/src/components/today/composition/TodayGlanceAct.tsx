@@ -11,6 +11,8 @@ import {
 } from "@/lib/todayGlanceTimeline";
 import { fetchDayFacts } from "@/lib/todayDayFacts";
 import { pickNearestGlanceItem } from "@/lib/todayGlanceNearest";
+import type { GlanceSphereChip } from "@/lib/todayGlanceSphereChips";
+import { TODAY_NO_SHARP_FOCUS_COPY } from "@/lib/todayGlanceTexture";
 import { todaySlotFailureCopy, type TodaySlotLoadFailure } from "@/lib/todaySlotAvailability";
 
 export type TodayGlanceTeaser = {
@@ -22,13 +24,18 @@ export type TodayGlanceTeaser = {
 
 type Props = {
   dateISO: string;
-  /** short_name eyebrow — optional */
+  /**
+   * @deprecated Classification / short_name must not print on Glance.
+   * Kept for call-site compat; ignored for visible chrome.
+   */
   title?: string | null;
-  /** Texture: short day overview (dominates). Falls back to thesis/title. */
+  /** Texture: short day overview (dominates). Falls back to thesis only — never title. */
   dayTexture?: string | null;
   thesis?: string | null;
   teasers: TodayGlanceTeaser[];
   themeLoading?: boolean;
+  /** ≤2 Reading domain chips (SCENARIO_V3 Экран 0). */
+  sphereChips?: GlanceSphereChip[];
   /** @deprecated spheres are not Glance hero — kept for call-site compat */
   onSphereSelect?: (domain: string) => void;
 };
@@ -64,11 +71,12 @@ function formatGlanceDateRu(dateISO: string): string {
  */
 export function TodayGlanceAct({
   dateISO,
-  title = null,
   dayTexture = null,
   thesis = null,
   teasers,
   themeLoading = false,
+  sphereChips = [],
+  onSphereSelect,
 }: Props) {
   const [nearest, setNearest] = useState<GlanceTimelineItem | null>(null);
   const [loadFailure, setLoadFailure] = useState<TodaySlotLoadFailure | null>(null);
@@ -110,12 +118,11 @@ export function TodayGlanceAct({
 
   const live = nearest ? isGlanceLiveNow(nearest.time_local, nowTick) : false;
 
-  const texture =
-    (dayTexture || "").trim() || (thesis || "").trim() || (title || "").trim() || null;
-  const modeLabel =
-    title && texture && title.trim().toLowerCase() !== texture.trim().toLowerCase()
-      ? title.trim()
-      : null;
+  // Never fall back to title/short_name — classification is internal only (SCENARIO_V3).
+  const texture = (dayTexture || "").trim() || (thesis || "").trim() || null;
+  const thesisLine = (thesis || "").trim() || null;
+  const detailLine =
+    thesisLine && texture && thesisLine.toLowerCase() !== texture.toLowerCase() ? thesisLine : null;
 
   const dateLabel = useMemo(() => formatGlanceDateRu(dateISO), [dateISO]);
 
@@ -126,8 +133,11 @@ export function TodayGlanceAct({
   return (
     <div className={styles.root} data-testid="today-zone-glance-act">
       <header className={styles.chrome}>
+        <p className={styles.todayWord} data-testid="today-glance-today">
+          Сегодня
+        </p>
         <p className={styles.dateLine} data-testid="today-glance-date">
-          Сегодня · {dateLabel}
+          {dateLabel}
         </p>
       </header>
 
@@ -136,13 +146,9 @@ export function TodayGlanceAct({
           <p className={styles.loading}>{copy.loadingDay}</p>
         ) : (
           <>
-            {modeLabel ? (
-              <p className={styles.eyebrow} data-testid="today-entity-daily-theme-glance">
-                {modeLabel}
-              </p>
-            ) : texture ? (
-              <p className={styles.eyebrow}>{copy.journey.glanceTitle}</p>
-            ) : null}
+            <p className={styles.eyebrow} data-testid="today-glance-theme-label">
+              {copy.journey.glanceThemeLabel}
+            </p>
             {texture ? (
               <h3 className={styles.primary} data-testid="today-glance-thesis">
                 {texture}
@@ -152,7 +158,45 @@ export function TodayGlanceAct({
                 {copy.journey.glanceTitle}
               </h3>
             )}
+            {detailLine ? (
+              <p className={styles.detail} data-testid="today-glance-theme-detail">
+                {detailLine}
+              </p>
+            ) : null}
           </>
+        )}
+      </DsCard>
+
+      <DsCard variant="glass" size="compact" className={styles.block} testId="today-glance-spheres">
+        <p className={styles.eyebrow}>{copy.journey.glanceSpheresLabel}</p>
+        {sphereChips.length > 0 ? (
+          <ul className={styles.sphereChips} data-testid="today-glance-sphere-chips">
+            {sphereChips.map((chip) => (
+              <li key={chip.domain}>
+                {onSphereSelect ? (
+                  <button
+                    type="button"
+                    className={styles.sphereChip}
+                    data-testid={`today-glance-sphere-${chip.domain}`}
+                    onClick={() => onSphereSelect(chip.domain)}
+                  >
+                    {chip.label}
+                  </button>
+                ) : (
+                  <span
+                    className={styles.sphereChip}
+                    data-testid={`today-glance-sphere-${chip.domain}`}
+                  >
+                    {chip.label}
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className={styles.detail} data-testid="today-glance-spheres-empty">
+            {TODAY_NO_SHARP_FOCUS_COPY}
+          </p>
         )}
       </DsCard>
 

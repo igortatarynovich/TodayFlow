@@ -69,6 +69,9 @@ def _format_where_to_use(value: Any) -> str:
     return _clean(value)
 
 
+from todayflow_backend.services.prose_clip_v1 import heal_ellipsis_midword as _heal_ellipsis_midword
+
+
 def _bridge_from_voice(voice: dict[str, Any]) -> str:
     """Pick human bridge prose; never surface conflict_id / thesis variant slugs."""
     # Prefer lived meaning over role/link meta fields.
@@ -80,7 +83,7 @@ def _bridge_from_voice(voice: dict[str, Any]) -> str:
         "archetype_role",
         "role",
     ):
-        alt = _clean(voice.get(key))
+        alt = _heal_ellipsis_midword(_clean(voice.get(key)))
         if not alt or _is_machine_token(alt):
             continue
         # Also reject when LLM stuffed conflict_id into the prose field verbatim.

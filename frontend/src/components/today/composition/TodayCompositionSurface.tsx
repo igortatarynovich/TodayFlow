@@ -96,6 +96,7 @@ import { TodayDayColorGuideSection } from "@/components/today/composition/TodayD
 import { TodayHookRevealShell } from "@/components/today/composition/TodayHookRevealShell";
 import { isDayScenarioReadyForChapters } from "@/lib/todayScenarioChapters";
 import { buildGlanceDayTexture, buildGlanceThemeEyebrow } from "@/lib/todayGlanceTexture";
+import { pickGlanceSphereChips } from "@/lib/todayGlanceSphereChips";
 import { buildPlotConflictNarrative } from "@/lib/todayPlotNarrative";
 import { TODAY_NO_CONNECTION_COPY } from "@/lib/todaySlotAvailability";
 import { TodayDepthLayerSection } from "@/components/today/composition/TodayDepthLayerSection";
@@ -1070,6 +1071,10 @@ export function TodayCompositionSurface(props: Props) {
   const themeLoading = !singleVoice && props.guideNarrativeLoading && !props.guideNarrativePayload;
 
   const dayTexture = useMemo(() => buildGlanceDayTexture(props.contract), [props.contract]);
+  const glanceSphereChips = useMemo(
+    () => pickGlanceSphereChips(props.contract),
+    [props.contract],
+  );
   const plotNarrative = useMemo(() => buildPlotConflictNarrative(props.contract), [props.contract]);
 
   if (eveningMode && continuityRecord && !dayClosed) {
@@ -1539,6 +1544,7 @@ export function TodayCompositionSurface(props: Props) {
       themeTitle={glanceEyebrow}
       themeThesis={heroSubline}
       dayTexture={dayTexture}
+      sphereChips={glanceSphereChips}
       themeLoading={themeLoading}
       heroSection={heroSection}
       plotNarrativeSection={plotNarrativeSection}

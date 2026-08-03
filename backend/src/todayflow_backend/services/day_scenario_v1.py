@@ -123,10 +123,9 @@ _NUMBER_TEMPO_RU: dict[int, dict[str, str]] = {
 
 
 def _clip(value: Any, n: int = 400) -> str:
-    text = str(value or "").strip()
-    if len(text) <= n:
-        return text
-    return text[: n - 1].rstrip() + "…"
+    from todayflow_backend.services.prose_clip_v1 import clip_prose
+
+    return clip_prose(value, n)
 
 
 def _as_dict(value: Any) -> dict[str, Any]:
@@ -1378,7 +1377,11 @@ def build_scenario_props_v1(
         "so_t_note": "scenario_scene_derived; catalog is knowledge only; v3.1 no force-seed",
     }
 
-    avoid_name = str((avoid_pick or {}).get("name") or "Кислотный неон")
+    from todayflow_backend.services.day_color_catalog_v1 import sanitize_color_display_name
+
+    avoid_name = sanitize_color_display_name(
+        str((avoid_pick or {}).get("name") or "Кислотный неон")
+    ) or "Кислотный неон"
     # why without leading color name — UI already prints «Избегать: {name} — {why}».
     avoid_prop = {
         "name": avoid_name,
@@ -1387,11 +1390,11 @@ def build_scenario_props_v1(
         "amplifies_trap": _clip(trap, 120),
         "why": _clip(
             (
-                f"сегодня усиливает ловушку «{_clip(trap, 80)}». Держи вне поля зрения."
+                f"сегодня усиливает ловушку «{_clip(trap, 120)}». Держи вне поля зрения."
                 if trap
                 else "сегодня шумит сильнее нужного. Держи вне поля зрения."
             ),
-            160,
+            280,
         ),
         "where_especially_avoid": (
             f"В одежде и на фоне разговора/решения в зоне «{sphere_label}»."

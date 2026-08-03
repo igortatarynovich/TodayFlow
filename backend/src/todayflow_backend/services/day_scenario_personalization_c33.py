@@ -175,10 +175,10 @@ def _as_list(value: Any) -> list[Any]:
 
 
 def _clip(value: Any, n: int = 240) -> str:
+    from todayflow_backend.services.prose_clip_v1 import clip_prose
+
     text = re.sub(r"\s+", " ", str(value or "").strip())
-    if len(text) <= n:
-        return text
-    return text[: n - 1].rstrip() + "…"
+    return clip_prose(text, n)
 
 
 def _defect(code: str, *, field: str, message: str, severity: str = "critical") -> dict[str, str]:

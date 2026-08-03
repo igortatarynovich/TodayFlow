@@ -81,11 +81,16 @@ def _as_list(value: Any) -> list[Any]:
     return value if isinstance(value, list) else []
 
 
+def _heal_ellipsis_midword(text: str) -> str:
+    from todayflow_backend.services.prose_clip_v1 import heal_ellipsis_midword
+
+    return heal_ellipsis_midword(text)
+
+
 def _clip(value: Any, n: int = 400) -> str:
-    text = str(value or "").strip()
-    if len(text) <= n:
-        return text
-    return text[: n - 1].rstrip() + "…"
+    from todayflow_backend.services.prose_clip_v1 import clip_prose
+
+    return clip_prose(value, n)
 
 
 def _primary_scene(scenes: list[Any]) -> dict[str, Any] | None:
@@ -164,11 +169,14 @@ def _chorus_public(chorus: dict[str, Any]) -> dict[str, Any]:
             or [],
         }
     return {
-        "astrology_lead": _clip(astro0.get("named_factor"), 220),
-        "astrology_meaning": _clip(astro0.get("human_meaning"), 280),
+        "astrology_lead": _heal_ellipsis_midword(_clip(astro0.get("named_factor"), 220)),
+        "astrology_meaning": _heal_ellipsis_midword(_clip(astro0.get("human_meaning"), 450)),
         "day_card": {
             "named": card.get("named_factor"),
-            "role": card.get("archetype_role") or card.get("link_to_conflict"),
+            "role": _heal_ellipsis_midword(
+                str(card.get("archetype_role") or card.get("link_to_conflict") or "")
+            )
+            or None,
             "evidence_refs": list(card.get("evidence_refs") or card.get("evidence_references") or [])[:4],
         }
         if card
@@ -177,14 +185,16 @@ def _chorus_public(chorus: dict[str, Any]) -> dict[str, Any]:
             "named": number.get("named_factor"),
             "tempo": number.get("tempo"),
             "style": number.get("style"),
-            "for_conflict": number.get("link_to_conflict") or number.get("human_meaning"),
+            "for_conflict": _heal_ellipsis_midword(
+                str(number.get("link_to_conflict") or number.get("human_meaning") or "")
+            ),
             "evidence_refs": list(
                 number.get("evidence_refs") or number.get("evidence_references") or []
             )[:4],
         }
         if number
         else None,
-        "natal_lead": _clip(natal0.get("named_factor"), 220) if natal0 else "",
+        "natal_lead": _heal_ellipsis_midword(_clip(natal0.get("named_factor"), 220)) if natal0 else "",
         "dialogue_rule": chorus.get("dialogue_rule"),
         "parallel_forecast_forbidden": True,
         "evidence_refs": {
@@ -526,8 +536,19 @@ def project_day_scenario_onto_day_story_v1(
     base["domains"] = scene_domains
 
     # Color / avoid from props only — note = one why, not link+effect+avoid mash.
+    from todayflow_backend.services.day_color_catalog_v1 import sanitize_color_display_name
+
     color = _as_dict(props.get("color"))
     avoid = _as_dict(props.get("avoid_color"))
+    if avoid:
+        clean_avoid_name = sanitize_color_display_name(str(avoid.get("name") or ""))
+        avoid_why = _heal_ellipsis_midword(_clip(avoid.get("why"), 280))
+        if clean_avoid_name or avoid_why:
+            avoid = {
+                **avoid,
+                **({"name": clean_avoid_name} if clean_avoid_name else {}),
+                **({"why": avoid_why} if avoid_why else {}),
+            }
     if color.get("name"):
         note = _clip(color.get("link_to_conflict"), 220) or _clip(
             color.get("expected_effect_today"), 160

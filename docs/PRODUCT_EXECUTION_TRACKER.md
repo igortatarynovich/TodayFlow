@@ -5,9 +5,27 @@ Owner: Product + Engineering
 Status: Active working document
 
 **DONE (2026-08-03):** ScreenFlow content jobs **v3.1** — P0+P1+P2 gap plan closed on branch (seed-kill · domain4 · Plot wash · serve heal · LLM hard-gate · native opaque `serves_conflict`).  
-**IN PROGRESS:** **Soft-heal one-field gates** — `healed:<rule>` for conflict_link / incomplete forces / broken props / scenes_too_many; seed-kill + structural + scenes_too_few stay hard. Canary rebuild after BE deploy.  
-**ALSO IN PROGRESS:** **v3.1b concreteness** — kill generation-meta / tag-dump / color mash in user-facing chorus+Move; PR #7 draft.  
+**IN PROGRESS:** **Glance/Plot/clip compliance** — central `prose_clip_v1` · avoid-color name scrub · hide classification tag · ≤2 sphere chips · no FE binary tension opener · native prompt anti-default-binary. Soft-heal canary + v3.1b concreteness continue.  
+**ALSO IN PROGRESS:** **Soft-heal one-field gates** — `healed:<rule>` for conflict_link / incomplete forces / broken props / scenes_too_many; seed-kill + structural + scenes_too_few stay hard.  
 Prior: card_base_v1 cutover live · editorial polish minors ongoing.
+
+## Architecture impact — Glance/Plot/clip compliance (2026-08-03)
+
+- **SoT before:** Mid-word `_clip` on day_scenario surfaces; avoid catalog names glued with «theme»; Glance printed `short_name`/registry label as uppercase mode tag; sphere chips missing; FE always rendered `Натяжение между A и B` when forces present.
+- **SoT after:** Shared `prose_clip_v1` (sentence/word boundary + midword heal) on native/v1/project/personalization/dramaturgy/day_story/hook; catalog + serve + FE strip theme from avoid names; Glance never prints classification/`short_name` (house labels only) + ≤2 Reading chips; Plot leads with `why_arose` only (no invented tension opener; strips baked binary opener); native prompt forbids default X-vs-Y.
+- **Public contract changed?** no (presentation + clip quality; opposing_forces still optional in wire)
+- **Migration required?** no — serve-heal cleans legacy avoid names / midword `…`; regenerate for fresh native prose
+- **Canon updated?** no new canon file — aligns TODAY_SCREEN_SCENARIO_V3 Экран 0/1; tracker SoT for this slice
+- **Backward compatible?** yes — FE omit-tolerant; old cached force pairs no longer force binary UI opener
+
+## Architecture impact — Glance house labels (Тема дня / Ближайшее окно) (2026-08-03)
+
+- **SoT before:** Glance texture Block eyebrow = `short_name`/«Сводка дня»; nearest Block = «Сигнал дня».
+- **SoT after:** Stable house labels «Тема дня» + «Ближайшее окно» (FOUNDATION_UI §16); texture still tone synthesis (SCENARIO_V3 Экран 0); thesis as detail when ≠ texture; date chrome = «Сегодня» + date line.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — FOUNDATION_UI §16 nearest/theme house labels
+- **Backward compatible?** yes — copy/UI only
 
 ## Architecture impact — Glance drop ScreenFlow gauge (2026-08-03)
 

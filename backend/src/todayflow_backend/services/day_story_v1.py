@@ -148,14 +148,10 @@ _DAY_STORY_SYS_RU = """Ты — литературный редактор TodayF
 
 
 def _clip(text: str, limit: int) -> str:
+    from todayflow_backend.services.prose_clip_v1 import clip_prose
+
     t = re.sub(r"\s+", " ", str(text or "").strip())
-    if len(t) <= limit:
-        return t
-    cut = t[: limit - 1]
-    last_space = cut.rfind(" ")
-    if last_space > 0:
-        cut = cut[:last_space]
-    return cut.rstrip() + "…"
+    return clip_prose(t, limit)
 
 
 def _voice_soften_line(text: str) -> str:

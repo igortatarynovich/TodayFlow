@@ -11,6 +11,7 @@ import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/t
 import { MotionReveal } from "@/design-system/motion/MotionReveal";
 import { MOTION } from "@/design-system/motion/tokens";
 import type { ScreenFlowChangeReason } from "@/design-system/primitives/ScreenFlow";
+import type { GlanceSphereChip } from "@/lib/todayGlanceSphereChips";
 
 type PersonalizedProps = ComponentProps<typeof TodayPersonalizedProductSection>;
 
@@ -21,6 +22,8 @@ export type TodayProductScreenFlowProps = {
   /** Conflict why_arose texture for Glance hero (v3) */
   dayTexture?: string | null;
   themeLoading?: boolean;
+  /** Glance ≤2 domain chips from Reading magnitude set */
+  sphereChips?: GlanceSphereChip[];
   heroSection: ReactNode;
   /** Conflict narrative under photo — Plot Screen 1 (v3) */
   plotNarrativeSection?: ReactNode;
@@ -58,6 +61,7 @@ export function TodayProductScreenFlow({
   themeThesis = null,
   dayTexture = null,
   themeLoading = false,
+  sphereChips = [],
   heroSection,
   plotNarrativeSection = null,
   pulseSection,
@@ -146,6 +150,7 @@ export function TodayProductScreenFlow({
             dayTexture={dayTexture}
             thesis={themeThesis}
             themeLoading={themeLoading}
+            sphereChips={sphereChips}
             teasers={teasers}
             onSphereSelect={
               showPersonalized

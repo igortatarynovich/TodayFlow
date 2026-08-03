@@ -206,8 +206,11 @@ _NATIVE_SYS_RU = """Ты — драматург TodayFlow. Твоя задача
 ДРАМАТУРГИЧЕСКИЙ БРИФ (C4):
 - must_dramatize = конкретные факты неба/циклов, из которых строится история;
 - scene_slots = предпочтительные сферы и крючки; используй их как каркас сцен;
-- act_iii_registry_label = ярлык реестра (Акт III), НЕ сюжет: conflict.title пиши как бытовое
-  напряжение из must_dramatize (кто / где / что сталкивается), а не как слоган label_ru;
+- act_iii_registry_label = ярлык реестра (Акт III), НЕ сюжет и НЕ UI-тег: conflict.title —
+  живая бытовая формулировка из must_dramatize, не слоган label_ru и не «РАСЧИСТКА…»;
+- динамика дня — один из 4 исходов (напряжение / усиление / доминанта / ровный день).
+  Не делай дефолтом «X против Y» / «натяжение между A и B». Ровный день валиден:
+  why_today без бинарных полюсов, force_a/force_b пустые;
 - prop_material только из готовых сцен (цвет, цель, аффирмация, юмор — производные истории).
 
 Верни ТОЛЬКО JSON со schema_version = "day_scenario_native_llm_c1".
@@ -307,7 +310,9 @@ conflict.title / force_a / force_b — если заданы — называю�
 - копировать «тот же выбор — «force_a» или «force_b»»;
 - шаблоны «Шанс выбрать «force_b»…» / «Ловушка — скатиться в «force_a»…»;
 - вставлять short_name / title в каждую сферу или голос хора.
-Если у дня нет двух разнонаправленных сил — оставь force_a и force_b пустыми (не выдумывай «автопилот» vs «выбор»).
+Если у дня нет двух разнонаправленных сил — оставь force_a и force_b пустыми
+(не выдумывай «автопилот» vs «выбор», не пиши why_today как «натяжение между A и B»).
+why_today — lived «почему тон сегодня такой» (как ровный абзац про фактор неба), не опенер «X против Y».
 Перефразируй ось своими словами под быт сферы; opportunity/trap — разные по смыслу и лексике.
 Если во входе есть person.first_name / display_name — обращайся по имени (ты + имя), не «вы».
 
@@ -362,10 +367,9 @@ def _as_list(value: Any) -> list[Any]:
 
 
 def _clip(value: Any, n: int = 400) -> str:
-    text = str(value or "").strip()
-    if len(text) <= n:
-        return text
-    return text[: n - 1].rstrip() + "…"
+    from todayflow_backend.services.prose_clip_v1 import clip_prose
+
+    return clip_prose(value, n)
 
 
 def _normalize_personalization_trace(raw: Any) -> dict[str, Any]:
@@ -483,12 +487,13 @@ def normalize_native_scenario_llm_c1(raw: dict[str, Any] | None) -> dict[str, An
 
         return {
             "named_factor": named,
-            "human_meaning": _human_field(d.get("human_meaning") or d.get("meaning"), limit=280),
+            # Native models write ~350–450+ char voice lines; mid-word 240/280 was a hard bug.
+            "human_meaning": _human_field(d.get("human_meaning") or d.get("meaning"), limit=450),
             "link_to_conflict": _human_field(
-                d.get("link_to_conflict") or d.get("for_conflict"), limit=240
+                d.get("link_to_conflict") or d.get("for_conflict"), limit=420
             ),
             "conflict_id": cid,
-            "archetype_role": _human_field(d.get("archetype_role") or d.get("role"), limit=200),
+            "archetype_role": _human_field(d.get("archetype_role") or d.get("role"), limit=280),
             "tempo": _clip(d.get("tempo"), 80),
             "style": _clip(d.get("style"), 80),
             "evidence_refs": [

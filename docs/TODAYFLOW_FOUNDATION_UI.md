@@ -732,7 +732,7 @@ interface DayAtmosphereContract {
 
 ### 16.7 Решённые ранее
 
-- `metaRow`/nearest vs тизеры — **Glance first pass:** nearest = отдельный Block («Сигнал дня»).
+- `metaRow`/nearest vs тизеры — **Glance:** nearest = отдельный Block («Ближайшее окно»); texture Block eyebrow = «Тема дня».
 
 ---
 

@@ -64,6 +64,15 @@ function asText(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
+/** Strip trap-theme glue («вежливость») from avoid color names. */
+function sanitizeAvoidColorName(name: string): string {
+  return name
+    .replace(/\s*«[^»]*»\s*/g, " ")
+    .replace(/\s*[\"“”][^\"“”]*[\"“”]\s*/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export function resolveTodayDayColorGuide(input: {
   name?: string | null;
   api?: {
@@ -122,7 +131,9 @@ export function resolveTodayDayColorGuide(input: {
   const accessory =
     asText(input.scenario?.accessory) || (apiMatchesName ? asText(input.api?.accessory_ru) : "");
   const amount = apiMatchesName ? asText(input.api?.amount_ru) : "";
-  const avoidColor = asText(input.scenario?.avoidColor) || asText(input.api?.avoid_color_ru);
+  const avoidColor = sanitizeAvoidColorName(
+    asText(input.scenario?.avoidColor) || asText(input.api?.avoid_color_ru),
+  );
   const avoidWhy = asText(input.scenario?.avoidWhy) || asText(input.api?.avoid_why_ru);
   const intensity = resolveColorIntensityLabel(
     asText(input.scenario?.intensity) || amount,

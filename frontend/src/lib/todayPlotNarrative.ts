@@ -1,6 +1,9 @@
 /**
  * Plot Screen 1 — conflict narrative (not Glance short_name duplicate).
  * Canon: docs/today/TODAY_SCREEN_SCENARIO_V3.md
+ *
+ * opposing_forces is an optional data outcome — never invent a default
+ * «Натяжение между A и B» opener when both poles exist. why_arose leads.
  */
 
 import type { TodayContractV1 } from "@/lib/todayContract";
@@ -17,7 +20,10 @@ function isKitchenNatalLead(text: string): boolean {
 }
 
 export type PlotConflictNarrative = {
-  /** Optional tension line from opposing_forces */
+  /**
+   * @deprecated Always null — FE must not invent binary tension openers.
+   * Kept for call-site compat / tests that still read the field.
+   */
   tension: string | null;
   /** why_arose — main story */
   why: string | null;
@@ -35,9 +41,8 @@ export function buildPlotConflictNarrative(contract: TodayContractV1 | null | un
   )
     .trim()
     .toLowerCase();
-  const forceA = clean(conflict.opposing_forces?.a);
-  const forceB = clean(conflict.opposing_forces?.b);
-  const tension = forceA && forceB ? `Натяжение между «${forceA}» и «${forceB}».` : null;
+  // v3.1: do not render opposing_forces as default «X против Y» dramaturgy.
+  const tension = null;
 
   const whyRaw = clean(conflict.why_arose);
   const whyDeduped = whyRaw
@@ -51,7 +56,23 @@ export function buildPlotConflictNarrative(contract: TodayContractV1 | null | un
         })
         .join(" ")
     : "";
-  const why = whyDeduped && !isCalendarKitchenFact(whyDeduped) ? whyDeduped : null;
+  // Drop invented binary openers already baked into why_arose by older models.
+  const whySansBinaryOpener = whyDeduped
+    ? whyDeduped
+        .replace(
+          /^Натяжение\s+между\s+«[^»]+»\s+и\s+«[^»]+»\.?\s*/iu,
+          "",
+        )
+        .replace(
+          /^Напряжение\s+между\s+«[^»]+»\s+и\s+«[^»]+»\.?\s*/iu,
+          "",
+        )
+        .trim()
+    : "";
+  const why =
+    whySansBinaryOpener && !isCalendarKitchenFact(whySansBinaryOpener)
+      ? whySansBinaryOpener
+      : null;
 
   const personalRaw = clean(conflict.why_personal);
   const personal =
