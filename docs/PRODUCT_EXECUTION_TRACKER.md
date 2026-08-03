@@ -4,7 +4,7 @@ Last updated: 2026-08-03
 Owner: Product + Engineering
 Status: Active working document
 
-**IN PROGRESS (2026-08-03):** ScreenFlow content jobs **v3.1** — P0+P1 cutover on branch; P2 open (domain 3→4 unify · Plot visual · chorus A|B seed).  
+**IN PROGRESS (2026-08-03):** ScreenFlow content jobs **v3.1** — P0+P1+seed-kill on branch; P2 remaining (domain 3→4 unify · Plot visual).  
 Prior: card_base_v1 cutover live · editorial polish minors ongoing.
 
 ## Architecture impact — ScreenFlow content jobs v3.1 (2026-08-03)
@@ -32,7 +32,7 @@ Prior: card_base_v1 cutover live · editorial polish minors ongoing.
 | P2 | Domain dictionary unify 3→4 on contract | Wave2 / day_story | Architecture |
 | P2 | Practice\|affirmation rotation single slot | Move | **DONE** (date hash XOR) |
 | P2 | Plot visual tied to classification | FE hero | Open |
-| P2 | Chorus/scenes stop quoting short_name A\|B | generation | Seed kill across modules |
+| P2 | Chorus/scenes stop quoting short_name A\|B | generation | **DONE** seed-kill (chorus · scenes · native LLM · project · editorial gate) |
 
 ## Architecture impact — card_base_v1 cutover (explainer / question-tarot) (2026-08-01)
 

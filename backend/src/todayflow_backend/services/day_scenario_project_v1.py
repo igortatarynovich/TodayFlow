@@ -569,10 +569,8 @@ def project_day_scenario_onto_day_story_v1(
         if alt and alt not in do_list:
             do_list.append(alt)
     if len(do_list) == 1:
-        force_a = str(_as_dict(conflict.get("opposing_forces")).get("a") or "автопилот")
-        do_list.append(
-            _clip(f"Заметить момент «{force_a}» и не усилить его.", 240)
-        )
+        # v3.1 seed-kill: no opposing_forces quote as filler do-line
+        do_list.append(_clip("Заметить момент автопилота и не усилить его.", 240))
     base["do"] = do_list
     base["today_move"] = _clip(do_list[0] if do_list else do_text, 200)
     base["primary_action"] = _clip(do_list[0] if do_list else do_text, 200)
@@ -581,14 +579,14 @@ def project_day_scenario_onto_day_story_v1(
     avoid_text = _clip(primary.get("do_not"), 240)
     if avoid_text:
         avoid_list.append(avoid_text)
-    force_a = str(_as_dict(conflict.get("opposing_forces")).get("a") or "автопилот")
+    # v3.1: generic avoid — never paste force_a / short_name into day_story avoid
     avoid_list.append(
-        _clip(f"Не усиливать стратегию «{force_a}» ради ложной гармонии.", 240)
+        _clip("Не усиливать привычный автопилот ради ложной гармонии.", 240)
     )
     base["avoid"] = avoid_list[:3]
 
     base["evening_closure"] = _clip(
-        f"Если удержали «{label}» — к вечеру яснее, где выбрали осознанно.",
+        "Если удержали тон дня — к вечеру яснее, где выбрали осознанно.",
         280,
     )
 

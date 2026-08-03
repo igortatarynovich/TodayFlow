@@ -185,15 +185,18 @@ BYTOVAЯ КОНКРЕТИКА СЦЕН (C3.1) — обязательно:
 1) конкретный бытовой момент (кто / где / что сказано или сделано);
 2) внутренний импульс;
 3) внешняя ситуация;
-4) выбор между двумя стратегиями (opportunity vs trap / force_a vs force_b);
+4) возможность и ловушка — из фактов сферы, НЕ копируя force_a/force_b/title дословно;
 5) наблюдаемое последствие;
 6) действие, которое реально выполнить сегодня (recommended_action).
 everyday_example обязателен и конкретен (сообщение, вопрос, письмо, пауза перед ответом, счёт, созвон…).
 
-ЗАПРЕТ ПОВТОРОВ ОСИ КОНФЛИКТА В СЦЕНАХ:
-Конфликт (force_a / force_b / title) уже назван в conflict — один раз.
-В scenes НЕ копируй «тот же выбор — «force_a» или «force_b»» и шаблоны
-«Шанс выбрать «force_b» именно здесь» / «Ловушка — скатиться в «force_a»…» в каждую сферу.
+ЗАПРЕТ ПОВТОРОВ ОСИ / SEED-KILL (v3.1):
+conflict.title / force_a / force_b — если заданы — называются ОДИН раз в conflict.
+В scenes, interpretive_chorus.link_to_conflict, prop_material ЗАПРЕЩЕНО:
+- копировать «тот же выбор — «force_a» или «force_b»»;
+- шаблоны «Шанс выбрать «force_b»…» / «Ловушка — скатиться в «force_a»…»;
+- вставлять short_name / title в каждую сферу или голос хора.
+Если у дня нет двух разнонаправленных сил — оставь force_a и force_b пустыми (не выдумывай «автопилот» vs «выбор»).
 Перефразируй ось своими словами под быт сферы; opportunity/trap — разные по смыслу и лексике.
 Если во входе есть person.first_name / display_name — обращайся по имени (ты + имя), не «вы».
 
@@ -205,12 +208,12 @@ everyday_example обязателен и конкретен (сообщение,
 если они не встроены в конкретный момент и действие.
 
 Хор — одна причинная линия (C3.2), не четыре мини-прогноза:
-1) астрология = внешняя среда (небо → атмосфера дня для ЭТОГО conflict);
-2) карта дня = архетип реакции (как проживать conflict);
-3) число дня = темп / способ прохождения conflict;
+1) астрология = внешняя среда (небо → атмосфера дня);
+2) карта дня = архетип реакции (как проживать тон дня);
+3) число дня = темп / способ прохождения;
 4) натал = личная уязвимость или ресурс (только при evidence).
 Каждый голос ОБЯЗАН иметь один и тот же conflict_id (slug от conflict.title, вида conflict.<slug>)
-и link_to_conflict, явно связанный с conflict.
+и link_to_conflict из СВОИХ данных голоса — без дословной цитаты title/force_a/force_b.
 Запрещены: смысловые повторы между голосами; одинаковые абзацы с заменой терминов;
 параллельные прогнозы («в работе… / в отношениях…» как отдельные истории).
 Без натальных evidence не выдумывай глубокую персонализацию (natal=[]).
@@ -534,8 +537,11 @@ def validate_native_scenario_llm_c1(
     conflict = _as_dict(payload.get("conflict"))
     if not conflict.get("title"):
         errors.append("conflict_missing_title")
-    if not conflict.get("force_a") or not conflict.get("force_b"):
-        errors.append("conflict_missing_forces")
+    # v3.1: force_a/force_b optional — even day must not invent a pair
+    force_a = str(conflict.get("force_a") or "").strip()
+    force_b = str(conflict.get("force_b") or "").strip()
+    if (force_a and not force_b) or (force_b and not force_a):
+        errors.append("conflict_forces_incomplete")
     # Exactly one conflict object — reject if scenes try to declare rival titles
     scenes = _as_list(payload.get("scenes"))
     if len(scenes) < 2:
@@ -657,6 +663,10 @@ def native_llm_to_day_scenario_v1(
     thesis_in = day_thesis if isinstance(day_thesis, dict) else _as_dict(interp.get("day_thesis"))
     conflict_n = _as_dict(norm.get("conflict"))
     title = str(conflict_n.get("title") or thesis_in.get("label_ru") or "Сюжет дня").strip()
+    force_a = str(conflict_n.get("force_a") or "").strip()
+    force_b = str(conflict_n.get("force_b") or "").strip()
+    # v3.1: never invent автопилот/выбор defaults
+    opposing = {"a": force_a, "b": force_b} if force_a and force_b else {"a": "", "b": ""}
     conflict = {
         "contract_version": "day_scenario_conflict_v1",
         "short_name": title,
@@ -668,16 +678,16 @@ def native_llm_to_day_scenario_v1(
             "day_thesis": thesis_in,
             "llm_thesis": conflict_n.get("thesis"),
         },
-        "opposing_forces": {
-            "a": conflict_n.get("force_a") or "автопилот",
-            "b": conflict_n.get("force_b") or "осознанный выбор",
-        },
+        "opposing_forces": opposing,
         "why_arose": conflict_n.get("why_today") or "",
         "why_personal": conflict_n.get("why_personal") or "",
         "driver_ids": list(conflict_n.get("driver_refs") or thesis_in.get("driver_ids") or [])[:3],
         "chorus_references": ["astrology", "day_card", "day_number", "natal"],
         "confidence": 0.72,
-        "foundation_rule": "Native LLM conflict; facts from foundation; card/number do not invent rival plot.",
+        "foundation_rule": (
+            "Native LLM conflict; v3.1 no invented opposing_forces; "
+            "card/number do not invent rival plot or paste short_name."
+        ),
         "evidence_refs": list(conflict_n.get("evidence_refs") or []),
         "personalization": _as_dict(conflict_n.get("personalization")),
     }

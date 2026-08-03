@@ -333,27 +333,48 @@ def build_scenario_foundation_v1(
     }
 
 
+def _looks_like_binary_force_label(text: Any) -> bool:
+    """True for dramaturgy labels like «A или B» — must not seed chorus/scenes."""
+    t = _clip(text, 120)
+    if not t or " или " not in t.lower():
+        return False
+    return len(t) < 80
+
+
+def _day_tone_anchor(conflict_label: str) -> str:
+    """Opaque day bind for serves_conflict — never a force-pair quote."""
+    label = _clip(conflict_label, 72)
+    if not label or _looks_like_binary_force_label(label):
+        return "тон дня"
+    return label
+
+
 def _human_meaning_for_driver(row: dict[str, Any], conflict_label: str) -> str:
+    # v3.1 seed-kill: do not paste conflict short_name into sky meaning.
+    del conflict_label
     fact = _clip(row.get("fact_ru") or row.get("title_ru"), 200)
     if not fact:
-        return f"Фактор дня усиливает линию «{conflict_label}»."
-    return f"{fact} Это подталкивает день к сюжету «{conflict_label}»."
+        return "Фактор дня задаёт атмосферу сегодня."
+    return f"{fact} — ощутимый фон дня."
 
 
 def _card_archetype_voice(card_name: str, conflict_label: str) -> dict[str, str]:
+    # v3.1: card speaks its archetype — not «пройти {A или B}».
+    del conflict_label
     name = card_name.strip()
     return {
         "named": f"Карта дня — {name}",
         "role_for_conflict": (
-            f"Архетип «{name}» лучше всего описывает, какой ролью пройти «{conflict_label}» — "
-            f"не как отдельный прогноз, а как способ отношения к уже названному конфликту."
+            f"Архетип «{name}» — способ пройти сегодняшний тон, "
+            f"не отдельный прогноз и не второй сюжет."
         ),
-        "hidden_side": f"«{name}» может открыть скрытую сторону того же конфликта, а не новую тему дня.",
-        "way_to_relate": f"Проживите день в ключе «{name}»: держите одну роль, не собирайте второй сюжет.",
+        "hidden_side": f"«{name}» может открыть скрытую сторону дня, а не новую тему.",
+        "way_to_relate": f"Проживите день в ключе «{name}»: одна роль, без параллельного сюжета.",
     }
 
 
 def _number_voice(value: Any, conflict_label: str) -> dict[str, Any]:
+    del conflict_label
     try:
         n = int(value) % 9 or 9
     except (TypeError, ValueError):
@@ -370,8 +391,7 @@ def _number_voice(value: Any, conflict_label: str) -> dict[str, Any]:
         "reduced": n or None,
         **tempo,
         "for_conflict": (
-            f"Число {value} окрашивает прохождение «{conflict_label}»: "
-            f"темп — {tempo['tempo']}, способ — {tempo['style']}."
+            f"Число {value}: темп — {tempo['tempo']}, способ — {tempo['style']}."
         ),
     }
 
@@ -382,10 +402,15 @@ def build_interpretive_chorus_v1(
     conflict_label: str,
     interpretation: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Four voices for one story — explain, do not compete."""
+    """Four voices for one story — explain, do not compete.
+
+    v3.1 seed-kill: voices speak from their own factor. Do not paste conflict
+    short_name / opposing_forces into link_to_conflict or human_meaning.
+    """
     interp = _as_dict(interpretation)
     claims = _as_list(interp.get("derived_claims"))
-    label = conflict_label or "главный сюжет дня"
+    # label kept for call-site compat; not quoted into user-facing chorus lines
+    _ = conflict_label
 
     astrology_voices: list[dict[str, Any]] = []
     for row in _as_list(foundation.get("ranked_drivers")) or _as_list(foundation.get("astrology_facts")):
@@ -398,8 +423,8 @@ def build_interpretive_chorus_v1(
             {
                 "voice": "astrology",
                 "named_factor": fact,
-                "human_meaning": _human_meaning_for_driver(row, label),
-                "link_to_conflict": f"Объясняет, почему сегодня в центре «{label}».",
+                "human_meaning": _human_meaning_for_driver(row, ""),
+                "link_to_conflict": "Связывает этот небесный фактор с тоном дня.",
                 "evidence_ref": row.get("evidence_ref") or row.get("id"),
                 "driver_id": row.get("id"),
             }
@@ -408,7 +433,7 @@ def build_interpretive_chorus_v1(
     card = _as_dict(foundation.get("tarot_card"))
     card_voice = None
     if card.get("present") and card.get("name"):
-        voices = _card_archetype_voice(str(card["name"]), label)
+        voices = _card_archetype_voice(str(card["name"]), "")
         card_voice = {
             "voice": "day_card",
             "named_factor": voices["named"],
@@ -425,7 +450,7 @@ def build_interpretive_chorus_v1(
     number = _as_dict(foundation.get("day_number"))
     number_voice = None
     if number.get("present") and number.get("value") is not None:
-        nv = _number_voice(number.get("value"), label)
+        nv = _number_voice(number.get("value"), "")
         number_voice = {
             "voice": "day_number",
             "named_factor": nv["named"],
@@ -452,10 +477,8 @@ def build_interpretive_chorus_v1(
             {
                 "voice": "natal",
                 "named_factor": _clip(raw, 200),
-                "human_meaning": (
-                    f"Личная активация усиливает «{label}»: реакция может быть сильнее средней."
-                ),
-                "link_to_conflict": f"Почему именно вы проживаете «{label}» именно так.",
+                "human_meaning": "Личная активация делает реакцию сегодня сильнее средней.",
+                "link_to_conflict": "Почему этот тон дня ощущается узнаваемым именно вам.",
                 "evidence_ref": act.get("id"),
                 "evidence_ids": list(act.get("evidence_ids") or []),
             }
@@ -468,11 +491,11 @@ def build_interpretive_chorus_v1(
         natal_voices.append(
             {
                 "voice": "natal",
-                "named_factor": f"Ваш личный фон усиливает «{label}».",
+                "named_factor": "Ваш личный фон усиливает сегодняшний тон.",
                 "human_meaning": (
                     "Реакция сегодня может быть сильнее средней — это про вас, не про «всех»."
                 ),
-                "link_to_conflict": f"Почему именно вы проживаете «{label}» именно так.",
+                "link_to_conflict": "Почему этот тон дня ощущается узнаваемым именно вам.",
                 "evidence_ref": "personal_natal:soft",
                 "evidence_ids": [],
             }
@@ -486,8 +509,8 @@ def build_interpretive_chorus_v1(
                 {
                     "voice": "natal",
                     "named_factor": _clip(raw, 200),
-                    "human_meaning": f"Натальный слой делает «{label}» личным.",
-                    "link_to_conflict": f"Почему «{label}» задевает именно вас.",
+                    "human_meaning": "Натальный слой делает сегодняшний тон личным.",
+                    "link_to_conflict": "Почему этот тон дня задевает именно вас.",
                     "evidence_ref": c.get("id"),
                     "evidence_ids": list(c.get("evidence_ids") or []),
                 }
@@ -636,8 +659,11 @@ def _human_natal_why(
     *,
     conflict_label: str,
 ) -> str:
-    """Pick first non-kitchen natal activation for why_personal."""
-    label = conflict_label or "этот сюжет"
+    """Pick first non-kitchen natal activation for why_personal.
+
+    v3.1 seed-kill: do not paste conflict short_name into the fallback line.
+    """
+    del conflict_label
     for act in natal_activations:
         if not isinstance(act, dict):
             continue
@@ -645,7 +671,7 @@ def _human_natal_why(
         if text and not _is_kitchen_natal_text(text):
             return _clip(text, 220)
     return (
-        f"Личный ритм делает сюжет «{label}» узнаваемым именно вам — "
+        "Личный ритм делает сегодняшний тон узнаваемым именно вам — "
         "не средним прогнозом на всех."
     )
 
@@ -922,12 +948,14 @@ def build_scenario_scenes_v1(
 ) -> list[dict[str, Any]]:
     """Only spheres where the conflict actually shows.
 
-    Copy rule: conflict axis is named once in opening. Scene lines paraphrase
-    into lived sphere language — no force_a/force_b quote spam. Prefer name.
+    Copy rule: conflict axis is named once on Plot. Scene lines paraphrase
+    into lived sphere language — no force_a/force_b or short_name quote spam.
+    Prefer name. v3.1: do not paste why_arose into every sphere.
     """
     interp = _as_dict(interpretation)
     family = str((_as_dict(conflict.get("thesis")).get("family")) or "momentum")
     label = str(conflict.get("short_name") or "сюжет дня")
+    serves = _day_tone_anchor(label)
     domains_present = [str(d) for d in _as_list(interp.get("domains_present"))]
     sphere_ids = _select_sphere_ids(family=family, domains_present=domains_present, max_scenes=max_scenes)
 
@@ -955,7 +983,6 @@ def build_scenario_scenes_v1(
         if lead_fact and idx == 0:
             # One soft sky cue on primary only — not pasted into every sphere / domestic.
             what = f"{what} {_clip(lead_fact, 110)}"
-        why = conflict.get("why_arose") or "Факты дня собираются в одну линию."
         opportunity = beat["opportunity"]
         trap = beat["trap"]
         do = beat["do"]
@@ -982,7 +1009,8 @@ def build_scenario_scenes_v1(
                 "sphere_label_ru": sphere_label,
                 "role_in_story": role,
                 "what_happens": what,
-                "why": why,
+                # Plot owns why_arose — scenes must not restate it (seed leak).
+                "why": "",
                 "opportunity": opportunity,
                 "trap": trap,
                 "recommended_action": do,
@@ -991,7 +1019,7 @@ def build_scenario_scenes_v1(
                 "evidence_references": list(driver_ids),
                 "chorus_references": chorus_refs,
                 "confidence": float(conflict.get("confidence") or 0.5),
-                "serves_conflict": label,
+                "serves_conflict": serves,
             }
         )
     return scenes
@@ -1115,7 +1143,7 @@ def _humor_opportunity(scene: dict[str, Any], conflict: dict[str, Any]) -> dict[
                     f"в зоне «{scene.get('sphere_label_ru')}» — это уже сцена дня, не личный провал. "
                     f"Можно улыбнуться и выбрать другой жест."
                 ),
-                "serves_conflict": conflict.get("short_name"),
+                "serves_conflict": _day_tone_anchor(str(conflict.get("short_name") or "")),
                 "optional": True,
             }
     return None
@@ -1151,8 +1179,7 @@ def build_scenario_props_v1(
     mode = str(thesis.get("mode") or "")
     sphere = str(primary.get("sphere") or "")
     scene_id = str(primary.get("scene_id") or "")
-    label = str(conflict.get("short_name") or "сюжет дня")
-
+    label = _day_tone_anchor(str(conflict.get("short_name") or "сюжет дня"))
     needed = _needed_color_tags(trap=trap, force_a=force_a, sphere=sphere, mode=mode)
     if day_favorable:
         needed.update({"quiet_celebration", "light_gratitude"})

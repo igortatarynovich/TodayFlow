@@ -240,6 +240,44 @@ def test_unknown_evidence_rejected():
     assert any("unknown_evidence" in e for e in errors)
 
 
+def test_native_forces_optional_empty_ok_incomplete_rejected():
+    """v3.1: force_a/force_b may both be empty; one-sided pair is incomplete; no автопилот defaults."""
+    allowed = {
+        "moon-pisces",
+        "merc-direct",
+        "day_card",
+        "day_number",
+        "natal",
+        "astrology",
+        "conflict",
+    }
+    even = _valid_native()
+    even["conflict"]["force_a"] = ""
+    even["conflict"]["force_b"] = ""
+    norm = normalize_native_scenario_llm_c1(even)
+    assert validate_native_scenario_llm_c1(norm, allowed_evidence_ids=allowed) == []
+
+    incomplete = _valid_native()
+    incomplete["conflict"]["force_b"] = ""
+    errors = validate_native_scenario_llm_c1(
+        normalize_native_scenario_llm_c1(incomplete),
+        allowed_evidence_ids=allowed,
+    )
+    assert any("conflict_forces_incomplete" in e for e in errors)
+
+    pack, thesis, ritual, interp, _allowed = _interp_and_allowed()
+    scenario = native_llm_to_day_scenario_v1(
+        norm,
+        interpretation=interp,
+        ritual_context=ritual,
+        celestial_events={"day_events_pack": pack},
+        day_thesis=thesis,
+    )
+    opposing = (scenario.get("conflict") or {}).get("opposing_forces") or {}
+    assert opposing.get("a") == ""
+    assert opposing.get("b") == ""
+
+
 def test_native_maps_to_scenario_and_b5_projector():
     pack, thesis, ritual, interp, allowed = _interp_and_allowed()
     native = normalize_native_scenario_llm_c1(_valid_native())

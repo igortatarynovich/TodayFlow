@@ -593,7 +593,6 @@ def run_editorial_quality_gate_c31(
 
     # --- chorus (C3.2 causal chain) ---
     conflict_id_expected = conflict_anchor_id(conflict)
-    conflict_tokens = _tokens(f"{title} {thesis} {conflict.get('force_a')} {conflict.get('force_b')}")
 
     def _voice_text(row: dict[str, Any]) -> str:
         return " ".join(
@@ -637,22 +636,9 @@ def run_editorial_quality_gate_c31(
                     message="missing link_to_conflict — voice must explain its role in the conflict",
                 )
             )
-        elif not cid:
-            # Without conflict_id, require link to share substance with conflict
-            link_toks = _tokens(link)
-            if (
-                conflict_tokens
-                and len(link) >= 24
-                and _jaccard(link_toks, conflict_tokens) == 0
-                and not any(t in _norm(link) for t in list(conflict_tokens)[:8] if len(t) >= 5)
-            ):
-                defects.append(
-                    _defect(
-                        DEFECT_CHORUS_PARALLEL_FORECAST,
-                        field=field,
-                        message="link_to_conflict does not reference the day's conflict",
-                    )
-                )
+        # v3.1 seed-kill: do NOT require link_to_conflict to share tokens with
+        # conflict title / force_a / force_b — that recreates the nine-repeat seed.
+        # Binding is conflict_id (+ non-empty link). Tone phrasing is enough.
 
     voice_entries: list[tuple[str, str, dict[str, Any]]] = []
     # (role, field, row)

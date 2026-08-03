@@ -322,6 +322,104 @@ def test_scene_copy_varies_by_sphere_and_uses_name():
         assert joined.count(f"«{force_b}»") <= 1
 
 
+def test_chorus_and_scenes_do_not_paste_short_name_seed():
+    """v3.1 seed-kill: short_name / A|B must not seed chorus link_to_conflict or scene why."""
+    from todayflow_backend.services.day_scenario_v1 import build_scenario_scenes_v1
+
+    pack = _pack_merc_moon()
+    thesis = build_day_thesis_v1(day_events_pack=pack)
+    ritual = {
+        "tarot_name_ru": "Отшельник",
+        "numerology_value": 7,
+        "head_topic": "relationships",
+    }
+    interp = build_day_story_interpretation_v1(
+        day_engine_brief={
+            "anchor_summary": "Ось дня — ясность.",
+            "do_hint": "Сказать прямо.",
+            "avoid_hint": "Не сглаживать.",
+            "thread_head_topic": "relationships",
+        },
+        ritual_context=ritual,
+        celestial_events={"day_events_pack": pack},
+        day_thesis=thesis,
+        target_date=date(2026, 7, 24),
+        birth_date=date(1990, 3, 15),
+    )
+    foundation = build_scenario_foundation_v1(
+        day_events_pack=pack,
+        ritual_context=ritual,
+        interpretation=interp,
+    )
+    conflict = build_scenario_conflict_v1(
+        foundation=foundation,
+        day_thesis=thesis,
+        interpretation=interp,
+    )
+    # Inject a classic binary seed as if an old cache / LLM pasted it
+    conflict = {
+        **conflict,
+        "short_name": "Тащить старое или отпустить и восстановиться",
+        "opposing_forces": {"a": "тащить старое", "b": "отпустить и восстановиться"},
+    }
+    chorus = build_interpretive_chorus_v1(
+        foundation=foundation,
+        conflict_label=conflict["short_name"],
+        interpretation=interp,
+    )
+    seed = conflict["short_name"]
+    force_a = conflict["opposing_forces"]["a"]
+    force_b = conflict["opposing_forces"]["b"]
+    blobs: list[str] = []
+    for row in chorus.get("astrology") or []:
+        if isinstance(row, dict):
+            blobs.append(f"{row.get('human_meaning')} {row.get('link_to_conflict')}")
+    card = chorus.get("day_card") or {}
+    if isinstance(card, dict):
+        blobs.append(
+            f"{card.get('link_to_conflict')} {card.get('archetype_role')} {card.get('human_meaning')}"
+        )
+    number = chorus.get("day_number") or {}
+    if isinstance(number, dict):
+        blobs.append(f"{number.get('link_to_conflict')} {number.get('human_meaning')}")
+    for row in chorus.get("natal") or []:
+        if isinstance(row, dict):
+            blobs.append(f"{row.get('human_meaning')} {row.get('link_to_conflict')}")
+    joined_chorus = " ".join(blobs)
+    assert seed not in joined_chorus
+    assert f"«{force_a}»" not in joined_chorus
+    assert f"«{force_b}»" not in joined_chorus
+    assert f"«{seed}»" not in joined_chorus
+
+    scenes = build_scenario_scenes_v1(
+        conflict=conflict,
+        chorus=chorus,
+        foundation=foundation,
+        interpretation=interp,
+        person_name="Игорь",
+    )
+    assert scenes
+    for sc in scenes:
+        assert sc.get("why") == ""
+        assert sc.get("serves_conflict") == "тон дня"
+        assert seed not in str(sc.get("what_happens") or "")
+        assert seed not in str(sc.get("opportunity") or "")
+        assert seed not in str(sc.get("trap") or "")
+
+    scenario = build_day_scenario_v1(
+        interpretation=interp,
+        day_events_pack=pack,
+        day_thesis=thesis,
+        ritual_context=ritual,
+        person_name="Игорь",
+    )
+    # Deterministic path: empty forces → short_name is not A|B bank paste
+    forces = scenario["conflict"].get("opposing_forces") or {}
+    assert not (forces.get("a") and forces.get("b"))
+    short = str(scenario["conflict"].get("short_name") or "")
+    assert "тащить старое" not in short.lower()
+
+
 def test_color_catalog_is_knowledge_not_sot():
     from todayflow_backend.services.day_color_catalog_v1 import (
         LAYER_B_PRIMARY_TAGS,
