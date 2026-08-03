@@ -1,5 +1,6 @@
 import type { TodayContractV1 } from "@/lib/todayContract";
 import {
+  TODAY_NO_SHARP_FOCUS_COPY,
   buildGlanceDayTexture,
   buildGlanceThemeEyebrow,
   looksLikeAspectBankWhy,
@@ -19,6 +20,7 @@ const base = {
         short_name: "Сорваться или удержать меру",
         why_arose: bankWhy,
         opposing_forces: { a: "сорваться", b: "удержать меру" },
+        thesis: { mode: "stability", family: "pressure" },
       },
       scenes: [{ sphere: "work", what_happens: "x", role_in_story: "primary" }],
     },
@@ -30,14 +32,14 @@ describe("buildGlanceDayTexture", () => {
     expect(looksLikeAspectBankWhy(bankWhy)).toBe(true);
   });
 
-  it("prefers opposing_forces over aspect-bank why on Glance", () => {
+  it("uses thesis.mode tone — not opposing_forces A|B seed", () => {
     const texture = buildGlanceDayTexture(base);
-    expect(texture).toContain("сорваться");
-    expect(texture).toContain("удержать меру");
+    expect(texture).toMatch(/ровный темп/i);
+    expect(texture).not.toContain("сорваться");
     expect(texture).not.toMatch(/Солнца и Марса/i);
   });
 
-  it("uses first sentence of lived why when not aspect-bank", () => {
+  it("uses lived short why when mode missing and why is feel-language", () => {
     const c = {
       ...base,
       day_story: {
@@ -45,8 +47,10 @@ describe("buildGlanceDayTexture", () => {
         day_scenario: {
           ...base.day_story!.day_scenario!,
           conflict: {
-            ...base.day_story!.day_scenario!.conflict!,
+            short_name: "День",
             why_arose: "День тянет на привычные рельсы. К вечеру давление вырастет.",
+            opposing_forces: { a: "", b: "" },
+            thesis: { mode: "", family: "momentum" },
           },
         },
       },
@@ -55,7 +59,11 @@ describe("buildGlanceDayTexture", () => {
     expect(texture).toBe("День тянет на привычные рельсы.");
   });
 
-  it("eyebrow stays the short label", () => {
-    expect(buildGlanceThemeEyebrow(base)).toBe("Сорваться или удержать меру");
+  it("hides binary dramaturgy from eyebrow on stability", () => {
+    expect(buildGlanceThemeEyebrow(base)).toBeNull();
+  });
+
+  it("exports shared no-focus copy", () => {
+    expect(TODAY_NO_SHARP_FOCUS_COPY).toMatch(/без острого фокуса/i);
   });
 });

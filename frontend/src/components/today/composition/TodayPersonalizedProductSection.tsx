@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, type CSSProperties } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import {
   profileMotionStaggerDelay,
   profileMotionStyles,
@@ -27,6 +27,10 @@ import { TodayDayColorGuideSection } from "@/components/today/composition/TodayD
 import { TodayTapWidget } from "@/components/today/composition/TodayWave2Slots";
 import { ScreenFlowStep } from "@/design-system/primitives/ScreenFlow";
 import { pickMoveIfThenFromContract } from "@/lib/todayMoveIfThen";
+import { TODAY_NO_SHARP_FOCUS_COPY } from "@/lib/todayGlanceTexture";
+import {
+  isDayScenarioReadyForChapters,
+} from "@/lib/todayScenarioChapters";
 import {
   todaySlotFailureCopy,
   type TodaySlotLoadFailure,
@@ -135,6 +139,7 @@ export function TodayPersonalizedProductSection({
   actFilter = "all",
 }: Props) {
   const practiceRec = contract.day_story?.practice_recommendation;
+  const [expandedSphereIds, setExpandedSphereIds] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     if (!focusSphere || actFilter === "move" || actFilter === "response") return;
@@ -143,6 +148,8 @@ export function TodayPersonalizedProductSection({
     if (el && "scrollIntoView" in el) {
       (el as HTMLElement).scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
+    // Deep-link from Glance opens opportunity/trap for that sphere
+    setExpandedSphereIds((prev) => ({ ...prev, [`sphere-${focusSphere}`]: true, [focusSphere]: true }));
   }, [focusSphere, actFilter]);
 
   const completedCount =
@@ -156,6 +163,29 @@ export function TodayPersonalizedProductSection({
   const practiceTool = strengthenTools.find((tool) => tool.id === "practice");
   const affirmationTool = strengthenTools.find((tool) => tool.id === "affirmation");
   const otherTools = strengthenTools.filter((tool) => tool.id !== "practice" && tool.id !== "affirmation");
+
+  /** v3.1: one support slot — practice XOR affirmation (rotate by local date). */
+  const preferAffirmationSlot = useMemo(() => {
+    const key = dateISO || "0";
+    let h = 0;
+    for (let i = 0; i < key.length; i += 1) h = (h * 31 + key.charCodeAt(i)) >>> 0;
+    return h % 2 === 1;
+  }, [dateISO]);
+
+  const showAffirmationSupport = Boolean(
+    (practiceRec?.kind === "affirmation" && practiceRec.text) || affirmationTool,
+  );
+  const showPracticeSupport = Boolean(practiceTool || (practiceRec?.kind === "practice" && practiceRec.text));
+  const supportSlot: "affirmation" | "practice" | null =
+    showAffirmationSupport && showPracticeSupport
+      ? preferAffirmationSlot
+        ? "affirmation"
+        : "practice"
+      : showAffirmationSupport
+        ? "affirmation"
+        : showPracticeSupport
+          ? "practice"
+          : null;
 
   const moveIfThen = useMemo(() => pickMoveIfThenFromContract(contract), [contract]);
 
@@ -215,11 +245,11 @@ export function TodayPersonalizedProductSection({
           <p
             className={styles.readingParagraph}
             role="status"
-            data-testid="today-reading-fallback"
-            data-fallback="true"
-            data-failure="unavailable"
+            data-testid="today-reading-no-focus"
           >
-            {todaySlotFailureCopy("unavailable")}
+            {isDayScenarioReadyForChapters(contract)
+              ? TODAY_NO_SHARP_FOCUS_COPY
+              : todaySlotFailureCopy("unavailable")}
           </p>
         ) : null}
 
@@ -252,6 +282,12 @@ export function TodayPersonalizedProductSection({
               chapter.id === "opening" && narrative.softWhy
                 ? bodyParagraphs.includes(narrative.softWhy)
                 : false;
+
+            const isSphereChapter = chapter.id.startsWith("sphere-");
+            const hasDual = Boolean(
+              chapter.dual && (chapter.dual.strengthen.length || chapter.dual.soften.length),
+            );
+            const dualExpanded = !isSphereChapter || expandedSphereIds[chapter.id] === true;
 
             return (
               <div
@@ -310,7 +346,21 @@ export function TodayPersonalizedProductSection({
                       ))}
                     </dl>
                   ) : null}
-                  {chapter.dual && (chapter.dual.strengthen.length || chapter.dual.soften.length) ? (
+                  {isSphereChapter && hasDual && !dualExpanded ? (
+                    <button
+                      type="button"
+                      className={`orbit-button orbit-button-secondary ${styles.practiceAction}`}
+                      data-testid={`today-reading-expand-${chapter.id}`}
+                      onClick={() =>
+                        setExpandedSphereIds((prev) => ({ ...prev, [chapter.id]: true }))
+                      }
+                    >
+                      Возможность и ловушка
+                    </button>
+                  ) : null}
+                  {dualExpanded &&
+                  chapter.dual &&
+                  (chapter.dual.strengthen.length || chapter.dual.soften.length) ? (
                     <div className={journeyStyles.dualPanels}>
                       {chapter.dual.strengthen.length ? (
                         <div className={journeyStyles.dualPanel}>
@@ -458,7 +508,10 @@ export function TodayPersonalizedProductSection({
               ) : null}
             </div>
 
-            {practiceRec?.text && practiceRec.kind === "affirmation" && !affirmationTool ? (
+            {supportSlot === "affirmation" &&
+            practiceRec?.text &&
+            practiceRec.kind === "affirmation" &&
+            !affirmationTool ? (
               <div className={styles.practiceRow}>
                 <span
                   className={affirmationRead ? styles.practiceCheckDone : styles.practiceCheck}
@@ -483,7 +536,7 @@ export function TodayPersonalizedProductSection({
               </div>
             ) : null}
 
-            {practiceTool ? (
+            {supportSlot === "practice" && practiceTool ? (
               <div className={styles.practiceRow}>
                 <span
                   className={practiceCompleted ? styles.practiceCheckDone : styles.practiceCheck}
@@ -512,7 +565,7 @@ export function TodayPersonalizedProductSection({
               </div>
             ) : null}
 
-            {affirmationTool ? (
+            {supportSlot === "affirmation" && affirmationTool ? (
               <div className={styles.practiceRow}>
                 <span className={affirmationRead ? styles.practiceCheckDone : styles.practiceCheck} aria-hidden />
                 <div className={styles.practiceBody}>

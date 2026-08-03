@@ -60,6 +60,45 @@ describe("todayTapWidget", () => {
     expect(prompt?.promptedText).toMatch(/Отложить/);
   });
 
+  it("picks higher-magnitude domain trap when two highlighted (money > work)", () => {
+    const contract: TodayContractV1 = {
+      ...baseContract,
+      day_story: {
+        contract_version: "day_story_v1",
+        interpretation_status: "ok",
+        theme: "T",
+        day_scenario: {
+          runtime_sot: true,
+          ready: true,
+          conflict: {
+            short_name: "День",
+            why_arose: "why",
+            opposing_forces: { a: "", b: "" },
+          },
+          scenes: [
+            {
+              scene_id: "scene.work",
+              sphere: "work",
+              role_in_story: "primary",
+              trap: "Дожать ещё одну задачу.",
+              opportunity: "Закрыть одно письмо.",
+            },
+            {
+              scene_id: "scene.money",
+              sphere: "money",
+              role_in_story: "primary",
+              trap: "Импульсная трата «для спокойствия».",
+              opportunity: "Одна граница по трате.",
+            },
+          ],
+        },
+      },
+    };
+    const prompt = resolveTapPromptFromContract(contract);
+    expect(prompt?.sceneId).toBe("scene.money");
+    expect(prompt?.domain).toBe("money");
+  });
+
   it("formats accuracy line", () => {
     expect(
       formatAccuracyLine({

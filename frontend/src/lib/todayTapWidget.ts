@@ -1,10 +1,12 @@
 /**
  * Wave 2 Phase A — TapWidget prompt from day_scenario + API client.
+ * v3.1: trap from strongest-magnitude Reading scene (DOMAIN_MAGNITUDE irreversibility).
  */
 
 import { postJson, getJson } from "@/lib/api";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import { readyDayScenario } from "@/lib/todayDaySpine";
+import { mapSphereToDomain, sceneMagnitudeScore } from "@/lib/todayDomainSignal";
 
 export type TapResponseCode = "avoided_trap" | "fell_into_trap" | "not_applicable" | "skipped";
 
@@ -40,59 +42,62 @@ export type AccuracySummaryV1 = {
   by_domain: Record<string, AccuracyBucket>;
 };
 
-const SPHERE_TO_DOMAIN: Record<string, string> = {
-  work: "work",
-  work_decisions: "work",
-  career: "work",
-  money: "money",
-  finances: "money",
-  money_work: "money",
-  relationships: "relationships",
-  love: "relationships",
-  family: "relationships",
-  energy: "energy",
-  health: "energy",
-  body: "energy",
-};
-
-export function mapSphereToDomain(sphere: string | null | undefined): string {
-  const key = (sphere || "").trim().toLowerCase();
-  if (key === "work" || key === "money" || key === "relationships" || key === "energy") return key;
-  return SPHERE_TO_DOMAIN[key] ?? "work";
-}
+export { mapSphereToDomain } from "@/lib/todayDomainSignal";
 
 export function dayFactsIdAlias(userId: string | number | null | undefined, dateISO: string): string {
   return `${userId ?? "anon"}:${dateISO}`;
 }
 
-/** Pick primary, else caution, with explicit trap text — Wave 2 tap prompt. */
+/**
+ * Pick trap for Response: among scenes with trap text, highest magnitude wins.
+ * Aligns with Reading ≤2 highlight set (same score). No trap → null (honest empty UI).
+ */
 export function resolveTapPromptFromContract(contract: TodayContractV1): TapPromptScene | null {
   const sc = readyDayScenario(contract);
   if (!sc?.scenes?.length) return null;
   const scenes = sc.scenes as Array<Record<string, unknown>>;
-  const ranked = [...scenes].sort((a, b) => {
-    const rank = (role: unknown) =>
-      role === "primary" ? 0 : role === "caution" ? 1 : role === "peak" ? 2 : 3;
-    return rank(a.role_in_story) - rank(b.role_in_story);
-  });
-  for (const scene of ranked) {
-    const role = String(scene.role_in_story || "");
-    if (role !== "primary" && role !== "caution" && role !== "peak") continue;
-    const trap = typeof scene.trap === "string" ? scene.trap.trim() : "";
-    if (!trap) continue;
-    const sceneId =
-      (typeof scene.scene_id === "string" && scene.scene_id.trim()) ||
-      (typeof scene.id === "string" && scene.id.trim()) ||
-      "";
-    if (!sceneId) continue;
-    return {
-      sceneId,
-      domain: mapSphereToDomain(typeof scene.sphere === "string" ? scene.sphere : null),
-      promptedText: trap,
-      roleInStory: role,
-    };
-  }
-  return null;
+
+  const withTrap = scenes
+    .map((scene) => {
+      const trap = typeof scene.trap === "string" ? scene.trap.trim() : "";
+      const sceneId =
+        (typeof scene.scene_id === "string" && scene.scene_id.trim()) ||
+        (typeof scene.id === "string" && scene.id.trim()) ||
+        "";
+      if (!trap || !sceneId) return null;
+      const sphere = typeof scene.sphere === "string" ? scene.sphere : null;
+      const role = String(scene.role_in_story || "");
+      return {
+        sceneId,
+        trap,
+        sphere,
+        role,
+        score: sceneMagnitudeScore({
+          sphere,
+          role_in_story: role,
+          trap,
+          opportunity: typeof scene.opportunity === "string" ? scene.opportunity : null,
+          what_happens: typeof scene.what_happens === "string" ? scene.what_happens : null,
+        }),
+      };
+    })
+    .filter(Boolean) as Array<{
+    sceneId: string;
+    trap: string;
+    sphere: string | null;
+    role: string;
+    score: number;
+  }>;
+
+  if (!withTrap.length) return null;
+  withTrap.sort((a, b) => b.score - a.score);
+  const top = withTrap.slice(0, 2)[0]!;
+  return {
+    sceneId: top.sceneId,
+    domain: mapSphereToDomain(top.sphere),
+    promptedText: top.trap,
+    roleInStory: top.role || "primary",
+  };
 }
 
 export async function postTapWidgetResponse(input: {

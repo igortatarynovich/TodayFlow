@@ -8,6 +8,7 @@
 import type { TodayContractV1 } from "@/lib/todayContract";
 import type { TodayDayColorGuide } from "@/lib/todayDayColorGuide";
 import type { TodayDayNarrativeChapter } from "@/lib/todayDayNarrative";
+import { sceneMagnitudeScore } from "@/lib/todayDomainSignal";
 
 function clean(text: string | null | undefined): string {
   return (text ?? "").replace(/\s+/g, " ").trim();
@@ -70,22 +71,6 @@ export type ScenarioSymbolImpact = {
 
 const READING_CHAPTER_CAP = 2;
 
-function sceneSignalScore(sc: {
-  opportunity?: string | null;
-  trap?: string | null;
-  what_happens?: string | null;
-  role_in_story?: string | null;
-}): number {
-  let score = 0;
-  if (clean(sc.trap)) score += 3;
-  if (clean(sc.opportunity)) score += 2;
-  if (clean(sc.what_happens)) score += 1;
-  const role = clean(sc.role_in_story).toLowerCase();
-  if (role === "primary") score += 2;
-  else if (role === "caution" || role === "peak") score += 1;
-  return score;
-}
-
 export function buildScenarioStoryChapters(input: {
   contract: TodayContractV1;
   colorGuide?: TodayDayColorGuide | null;
@@ -111,7 +96,24 @@ export function buildScenarioStoryChapters(input: {
     );
   };
 
-  const ranked = [...scenes].sort((a, b) => sceneSignalScore(b) - sceneSignalScore(a));
+  const ranked = [...scenes].sort(
+    (a, b) =>
+      sceneMagnitudeScore({
+        sphere: a.sphere,
+        role_in_story: a.role_in_story,
+        trap: a.trap,
+        opportunity: a.opportunity,
+        what_happens: a.what_happens,
+      }) -
+      sceneMagnitudeScore({
+        sphere: b.sphere,
+        role_in_story: b.role_in_story,
+        trap: b.trap,
+        opportunity: b.opportunity,
+        what_happens: b.what_happens,
+      }),
+  );
+  ranked.reverse();
 
   for (const sc of ranked) {
     if (chapters.length >= READING_CHAPTER_CAP) break;
