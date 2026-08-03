@@ -49,11 +49,18 @@ export function TodayDayColorGuideSection({ guide }: Props) {
             ) : null}
             <span className={styles.sectionTitle}>{guide.name}</span>
           </h2>
+          <p
+            className={styles.colorGuideBenefit}
+            data-testid="today-color-intensity"
+            data-intensity={guide.intensity}
+          >
+            Интенсивность: {guide.intensity}
+          </p>
           <p className={styles.colorGuideBenefit}>{guide.benefit}</p>
           <dl className={styles.colorGuideList}>
             {guide.clothing ? (
               <div className={styles.colorGuideRow}>
-                <dt>В одежде</dt>
+                <dt>В одежде{guide.intensity === "мягко" ? " (мягко)" : " (ярче)"}</dt>
                 <dd>{guide.clothing}</dd>
               </div>
             ) : null}

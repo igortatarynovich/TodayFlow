@@ -87,7 +87,7 @@ export const TODAY_COMPOSITION_COPY = {
     tapNotApplicable: "Не про это",
     tapRecorded: "Учли — это копит твою точность.",
     tapError: "Не удалось сохранить. Попробуй ещё раз.",
-    tapEmptyHint: "Когда сцена дня соберётся — здесь будет один короткий тап.",
+    tapEmptyHint: "Сегодня без острой ловушки.",
     verdictSlotHint: "",
     verdictStripLabel: "Сферы дня",
     glanceSlotHint: "",

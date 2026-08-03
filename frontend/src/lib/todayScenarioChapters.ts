@@ -1,6 +1,7 @@
 /**
- * Reading Screen 3 (v3) — sphere cards from day_scenario.scenes.
- * Conflict → Plot; symbols/astro → Symbols; color → Move.
+ * Reading Screen 3 (v3.1) — sphere cards from day_scenario.scenes.
+ * Conflict → Plot; symbols/astro → Symbols; color + day action → Move.
+ * Per sphere: why / opportunity / trap only — no recommended_action (Move owns do/avoid).
  * Canon: docs/today/TODAY_SCREEN_SCENARIO_V3.md · docs/DAY_SCENARIO_V1.md
  */
 
@@ -57,15 +58,33 @@ export function isDayScenarioReadyForChapters(contract: TodayContractV1): boolea
 }
 
 /**
- * Reading Screen 3 (v3) — sphere cards only.
- * Conflict narrative → Plot; symbols/astro → Symbols; color → Move.
- * Canon: docs/today/TODAY_SCREEN_SCENARIO_V3.md
+ * Reading Screen 3 (v3.1) — sphere cards only (why → opportunity → trap).
+ * Conflict → Plot; symbols/astro → Symbols; color + day action → Move.
+ * Cap: at most 2 chapters (canon). Prefer scenes with opportunity or trap signal.
  */
 export type ScenarioSymbolImpact = {
   title?: string | null;
   headline?: string | null;
   body?: string | null;
 };
+
+const READING_CHAPTER_CAP = 2;
+
+function sceneSignalScore(sc: {
+  opportunity?: string | null;
+  trap?: string | null;
+  what_happens?: string | null;
+  role_in_story?: string | null;
+}): number {
+  let score = 0;
+  if (clean(sc.trap)) score += 3;
+  if (clean(sc.opportunity)) score += 2;
+  if (clean(sc.what_happens)) score += 1;
+  const role = clean(sc.role_in_story).toLowerCase();
+  if (role === "primary") score += 2;
+  else if (role === "caution" || role === "peak") score += 1;
+  return score;
+}
 
 export function buildScenarioStoryChapters(input: {
   contract: TodayContractV1;
@@ -92,15 +111,18 @@ export function buildScenarioStoryChapters(input: {
     );
   };
 
-  for (const sc of scenes) {
+  const ranked = [...scenes].sort((a, b) => sceneSignalScore(b) - sceneSignalScore(a));
+
+  for (const sc of ranked) {
+    if (chapters.length >= READING_CHAPTER_CAP) break;
+
     const sphereKey = clean(sc.sphere) || "sphere";
     const label = clean(sc.sphere_label_ru) || clean(sc.sphere) || "Сфера дня";
     const what = clean(sc.what_happens);
     const domestic = clean(sc.domestic_example);
     const opportunity = clean(sc.opportunity);
     const trap = clean(sc.trap);
-    const action = clean(sc.recommended_action);
-    const avoid = clean(sc.do_not);
+    // v3.1: recommended_action / do_not belong on Move — never paste into Reading.
 
     const leadLine = looksLikeForcePaste(what) ? domestic : [what, domestic].filter(Boolean).join(" ");
     const paras: string[] = [];
@@ -114,16 +136,6 @@ export function buildScenarioStoryChapters(input: {
     const soften: string[] = [];
     if (opportunity && !looksLikeForcePaste(opportunity)) strengthen.push(opportunity);
     if (trap && !looksLikeForcePaste(trap)) soften.push(trap);
-    if (action) {
-      paras.push(action.endsWith(".") || action.endsWith("!") ? action : `${action}.`);
-    }
-    if (avoid) {
-      const avoidLine =
-        avoid.startsWith("Не ") || avoid.startsWith("не ")
-          ? avoid
-          : `Не ${avoid.replace(/[.!?]+$/, "")}`;
-      paras.push(avoidLine.endsWith(".") ? avoidLine : `${avoidLine}.`);
-    }
 
     if (!paras.length && !strengthen.length && !soften.length) continue;
 

@@ -79,8 +79,9 @@ def test_scenario_builds_one_conflict_from_drivers_not_card_alone():
     assert " — пока " not in conflict["short_name"]
     assert conflict["driver_ids"]
     assert "merc-direct" in conflict["driver_ids"] or "moon-pisces" in conflict["driver_ids"]
-    assert conflict["opposing_forces"]["a"]
-    assert conflict["opposing_forces"]["b"]
+    # v3.1: opposing_forces may be empty — not invented from family/mode bank
+    forces = conflict.get("opposing_forces") or {}
+    assert isinstance(forces, dict)
     assert "day_card" in conflict["chorus_references"]
     assert "day_number" in conflict["chorus_references"]
 
@@ -91,7 +92,7 @@ def test_scenario_builds_one_conflict_from_drivers_not_card_alone():
     assert foundation["ranked_drivers"]
 
 
-def test_short_name_is_tension_only_not_mashed_truncated_fact():
+def test_short_name_prefers_forces_when_present_else_lead_fact():
     from todayflow_backend.services.day_scenario_v1 import (
         _everyday_conflict_short_name,
         sanitize_conflict_short_name,
@@ -105,6 +106,14 @@ def test_short_name_is_tension_only_not_mashed_truncated_fact():
     )
     assert name == "Удержать привычное или принять поворот"
     assert "…" not in name
+    even = _everyday_conflict_short_name(
+        force_a="",
+        force_b="",
+        lead_fact="Убывающая луна собирает тихий темп дня.",
+        registry_label="Перемены",
+    )
+    assert "или" not in even.lower()
+    assert "луна" in even.lower() or "темп" in even.lower()
     healed = sanitize_conflict_short_name(
         "Удержать привычное или принять поворот — пока связь Солнца и Марса описывает, как ты идёшь к це…"
     )
@@ -246,11 +255,15 @@ def test_props_from_scenes_have_origin_and_conflict_link():
     assert props["affirmations"][0]["origin_scene_id"]
     assert props["affirmations"][0]["universal_formula"] is False
     assert props["strong_spheres"]
-    # Catalog is knowledge — user why must mention today's forces, not only catalog benefit
-    force_a = scenario["conflict"]["opposing_forces"]["a"]
-    force_b = scenario["conflict"]["opposing_forces"]["b"]
+    # v3.1: color why must not paste opposing_forces seed
+    force_a = (scenario["conflict"].get("opposing_forces") or {}).get("a") or ""
+    force_b = (scenario["conflict"].get("opposing_forces") or {}).get("b") or ""
     link = color["link_to_conflict"].lower()
-    assert force_a in link or force_b in link or scenario["conflict"]["short_name"].lower() in link
+    if force_a:
+        assert force_a.lower() not in link
+    if force_b:
+        assert force_b.lower() not in link
+    assert "якорь" in link or "опора" in link or color["name"].lower() in link
 
 
 def test_validate_rejects_empty_conflict_name():
@@ -297,14 +310,16 @@ def test_scene_copy_varies_by_sphere_and_uses_name():
     assert not any("день упирается в выбор: «" in w for w in whats)
     assert not any(o.startswith("Шанс выбрать «") for o in opps)
     assert len(set(opps)) == len(opps) or len(opps) == 1
-    # No force-quote spam of opposing_forces across all scene lines
-    force_a = scenario["conflict"]["opposing_forces"]["a"]
-    force_b = scenario["conflict"]["opposing_forces"]["b"]
+    # v3.1: no force-quote spam (forces often empty; when present still ≤1)
+    force_a = (scenario["conflict"].get("opposing_forces") or {}).get("a") or ""
+    force_b = (scenario["conflict"].get("opposing_forces") or {}).get("b") or ""
     joined = " ".join(
         f"{s.get('what_happens')} {s.get('opportunity')} {s.get('trap')}" for s in scenes
     )
-    assert joined.count(f"«{force_a}»") <= 1
-    assert joined.count(f"«{force_b}»") <= 1
+    if force_a:
+        assert joined.count(f"«{force_a}»") <= 1
+    if force_b:
+        assert joined.count(f"«{force_b}»") <= 1
 
 
 def test_color_catalog_is_knowledge_not_sot():

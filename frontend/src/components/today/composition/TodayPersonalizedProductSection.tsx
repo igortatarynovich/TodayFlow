@@ -382,6 +382,7 @@ export function TodayPersonalizedProductSection({
           </p>
         ) : (
           <>
+        {colorGuide ? <TodayDayColorGuideSection guide={colorGuide} /> : null}
         {moveIfThen && (moveIfThen.do || moveIfThen.avoid) ? (
           <article className={styles.productCard} data-testid="today-zone-move-if-then">
             <p className={styles.cardEyebrow}>{copy.journey.moveIfThenEyebrow}</p>
@@ -399,7 +400,6 @@ export function TodayPersonalizedProductSection({
             ) : null}
           </article>
         ) : null}
-        {colorGuide ? <TodayDayColorGuideSection guide={colorGuide} /> : null}
         <article className={styles.productCard} data-testid="today-zone-promise">
           <p className={styles.cardEyebrow}>Цель на сегодня</p>
           {dayGoal && !goalDraftOpen ? (

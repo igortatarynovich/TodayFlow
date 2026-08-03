@@ -195,7 +195,9 @@ HARD_SCENARIO_VALIDATE_ERRORS = frozenset(
         "bad_contract_version",
         "scenes_empty",
         "conflict_missing_short_name",
-        "conflict_missing_opposing_forces",
+        # v3.1: opposing_forces may be empty — even day is valid
+        "conflict_opposing_forces_incomplete",
+        "conflict_opposing_forces_not_dict",
         "prop_color_without_origin_scene",
         "prop_color_origin_not_in_scenes",
         "prop_avoid_without_origin_scene",

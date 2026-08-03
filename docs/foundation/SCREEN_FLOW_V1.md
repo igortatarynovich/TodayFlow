@@ -142,14 +142,16 @@ Meaning events: см. [TODAY_PERSONALIZATION_CORE.md](../TODAY_PERSONALIZATION_C
 
 ## 4. Today mapping
 
-| Index | Job | Notes (Phase 2b LIVE) |
-|-------|-----|------------------------|
-| 0 Glance | 2с ощущение дня | **texture** (`why_arose`) доминирует · 4 sphere **tokens** (тап → Reading) · nearest **inline** · teasers. Canon [TODAY_SCREEN_SCENARIO_V3](../today/TODAY_SCREEN_SCENARIO_V3.md) |
-| 1 Plot | нарратив конфликта | opposing_forces + why_arose (+ why_personal deep) — не дубль Glance short_name |
-| 2 Symbols | знаки дня | карта **открыта** · число · небо (chorus astro) · timeline rail |
-| 3 Reading | сферы | 4 карточки scenes (что → возможность → ловушка → действие); без цвета/астро |
-| 4 Move | действие | if/then · цель · практики · **цвет/ритуал** |
-| 5 Response | отклик | TapWidget only — без кросс-сейла |
+Content jobs SoT: [TODAY_SCREEN_SCENARIO_V3.md](../today/TODAY_SCREEN_SCENARIO_V3.md) **v3.1**.
+
+| Index | Job | Notes (v3.1) |
+|-------|-----|----------------|
+| 0 Glance | 2с ориентация | **текстура = тон** (не факты) · ≤2 sphere chips из Reading · shared honest «без острого фокуса» · nearest · CTA Symbols·A · **без цвета** |
+| 1 Plot | откуда тон | спина фактов 0…2 · optional why_arose · why_personal deep · opposing_forces **только если данные** · не seed |
+| 2 Symbols | ритуал + синтез | **A** карта→число (base+bridge; fail=баннер) · **B** ниже: астро + полный timeline · раскрытое не пропадает · **без цвета** |
+| 3 Reading | что важно | ≤2 из 4 (`work/money/relationships/energy`) · поэтапно: почему → возможность → ловушка · **без действия** |
+| 4 Move | что делать | **цвет первым** + интенсивность мягко/ярко · if/then глобально · цель · опора практика\|аффирмация |
+| 5 Response | отклик | ловушка сильнейшей магнитуды · или «без острой ловушки» без тапа · Обошёл/Попал/Не про это |
 
 When Symbols is omitted, Reading/Move/Response shift left (indices 2–4). Step count = `2 + (symbols?1:0) + (personalized?3:0)`.
 
@@ -219,6 +221,11 @@ Re-entry: ordinary visit → **0**; deep-link only with `sf=1&step=N`.
 ---
 
 ## 7. Changelog
+
+### 2026-08-03 — Today mapping → SCENARIO v3.1
+
+- **§4 rows** replaced to match locked content jobs (no seed leakage · color house = Move · Reading ≤2 no action).
+- Content SoT remains [TODAY_SCREEN_SCENARIO_V3](../today/TODAY_SCREEN_SCENARIO_V3.md); this file = pager mechanics + index map.
 
 ### 2026-07-30 — v1.2 (axis lock)
 

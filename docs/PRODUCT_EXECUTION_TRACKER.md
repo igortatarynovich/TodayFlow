@@ -1,10 +1,40 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-08-01
+Last updated: 2026-08-03
 Owner: Product + Engineering
 Status: Active working document
 
-**IN PROGRESS (2026-08-01):** card_base_v1 cutover live · **minor reversed glue bug fixed** (rebuild script: no `central—themes` double for blob centrals; atomic keywords; `парanoia`→`паранойя`) · next: editorial polish minors + FE `TODAY_TAROT_CARDS_RU` cleanup.
+**IN PROGRESS (2026-08-03):** ScreenFlow content jobs **v3.1 locked** · canon + gap plan · P0 FE/BE cutover started.  
+Prior: card_base_v1 cutover live · editorial polish minors ongoing.
+
+## Architecture impact — ScreenFlow content jobs v3.1 (2026-08-03)
+
+- **SoT before:** [TODAY_SCREEN_SCENARIO_V3](./today/TODAY_SCREEN_SCENARIO_V3.md) v3.0 — conflict/`opposing_forces` as day spine; color on Symbols; Reading = all scenes + action; Glance ≈ conflict texture.
+- **SoT after:** v3.1 — per-act jobs; **no seed leakage**; opposing_forces optional; color house = Move + intensity; Reading ≤2 + no action; Response magnitude trap / honest no-trap; Glance = tone synthesis.
+- **Public contract changed?** yes (phased) — omit `opposing_forces`; Reading domains → `work|money|relationships|energy`; color intensity; FE presentation homes.
+- **Migration required?** yes — generation gates + FE composition; cached A/B scenarios until regenerate.
+- **Canon updated?** yes — TODAY_SCREEN_SCENARIO_V3 · SCREEN_FLOW §4 · DAY_SYMBOL_REVEAL §7–8.
+- **Backward compatible?** partial — FE must tolerate omit; old clients keep showing forced conflict until BE ships.
+
+### Gap plan (priority)
+
+| Pri | Gap | Where | Notes |
+|-----|-----|-------|-------|
+| P0 | Color out of Symbols UI | `TodayCompositionSurface` symbolsBody | Keep Move `TodayDayColorGuideSection` |
+| P0 | Reading: drop action/avoid from chapters | `todayScenarioChapters.ts` | Action only Move |
+| P0 | Stop inventing opposing_forces + allow omit in gate | `day_scenario_v1.py` · maturity gate | Even day valid; Architecture |
+| P0 | Color `link_to_conflict` без paste force_a/b | `build_scenario_props_v1` | No seed into color |
+| P1 | Reading ≤2 by magnitude + progressive reveal | FE Reading + magnitude | DOMAIN_MAGNITUDE_V1 |
+| P1 | Color intensity soft/bright in UI + apply copy | catalog/FE Move | Always show color |
+| P1 | Response: no-trap UI; pick trap by magnitude | `TodayTapWidget` | Shared honest copy |
+| P1 | Glance texture = tone not facts/short_name | `todayGlanceTexture` | |
+| P1 | Symbols: no card/number instruction; fail banner only | HookRevealShell already close | |
+| P2 | Domain dictionary unify 3→4 on contract | Wave2 / day_story | Architecture |
+| P2 | Practice\|affirmation rotation single slot | Move | |
+| P2 | Plot visual tied to classification | FE hero | |
+| P2 | Chorus/scenes stop quoting short_name A\|B | generation | Seed kill across modules |
+
+## Architecture impact — card_base_v1 cutover (explainer / question-tarot) (2026-08-01)
 
 ## Architecture impact — card_base_v1 cutover (explainer / question-tarot) (2026-08-01)
 

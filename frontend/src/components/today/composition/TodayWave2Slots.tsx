@@ -388,8 +388,16 @@ export function TodayTapWidget({
 
   if (!prompt) {
     return (
-      <div className={styles.tap} data-testid="today-slot-tap-widget" data-wave2-slot="tap" data-empty="true">
-        <p className={styles.tapHint}>{copy.journey.tapEmptyHint}</p>
+      <div
+        className={styles.tap}
+        data-testid="today-slot-tap-widget"
+        data-wave2-slot="tap"
+        data-empty="true"
+        data-no-trap="true"
+      >
+        <p className={styles.tapHint} role="status">
+          {copy.journey.tapEmptyHint}
+        </p>
       </div>
     );
   }

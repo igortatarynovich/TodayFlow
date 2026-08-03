@@ -305,18 +305,30 @@ export function buildTodayDayStoryViewModel(input: {
   const dayMap = buildTodayDayMap({ contract: input.contract });
   const apiColor = input.morningRitualData?.celestial_events?.daily_symbols?.color;
   const talisman = input.contract.day_story?.talisman;
+  const propsColor = input.contract.day_story?.day_scenario?.props?.color as
+    | {
+        name?: string | null;
+        link_to_conflict?: string | null;
+        intensity?: string | null;
+        where_to_use?: { clothing?: string | null; accessory?: string | null } | null;
+      }
+    | null
+    | undefined;
   const colorGuide = resolveTodayDayColorGuide({
-    // Scenario talisman wins over morning catalog name (B4).
-    name: talisman?.color ?? input.colorLine ?? apiColor?.name,
+    // Scenario talisman / props color wins over morning catalog name (B4 / v3.1).
+    name: talisman?.color ?? propsColor?.name ?? input.colorLine ?? apiColor?.name,
     api: apiColor,
-    scenario: talisman?.color
-      ? {
-          name: talisman.color,
-          note: talisman.note,
-          avoidColor: talisman.avoid_color,
-          avoidWhy: talisman.avoid_why,
-        }
-      : null,
+    scenario:
+      talisman?.color || propsColor?.name
+        ? {
+            name: talisman?.color ?? propsColor?.name ?? null,
+            note: talisman?.note ?? propsColor?.link_to_conflict ?? null,
+            benefit: propsColor?.link_to_conflict ?? null,
+            avoidColor: talisman?.avoid_color,
+            avoidWhy: talisman?.avoid_why,
+            intensity: propsColor?.intensity ?? null,
+          }
+        : null,
   });
   const pulseLabel = "Пульс дня";
   const pulseFromMap = dayMap?.whatHappens?.trim() || null;

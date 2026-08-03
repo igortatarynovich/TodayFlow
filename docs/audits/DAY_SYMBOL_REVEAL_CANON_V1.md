@@ -10,8 +10,8 @@
 4. **Weight** — card and number **complement** the base day story; they do **not** replace it and must **not** reassemble `day_story` / `day_scenario` (DAY_LIFECYCLE_V1 assemble-once).
 5. **Date** — canonical day key is the user’s local date + timezone (client-supplied on reveal; stored on `day_symbol_states`).
 6. **After reveal** — UI shows how this card/number may land on *this already assembled* day; `story_refresh_required` stays false (`symbol_overlay_only`). Content already on screen must not disappear.
-7. **Color** — not a third reveal click; bundled with card reveal (talisman / props). Same `hook_reveal` shell.
-8. **Ritual clicks** for card/number stay — ritual ≠ friction.
+7. **Color** — not a third reveal click; may still ride card reveal on API (`color_hook_reveal` / props). **Presentation house = Move only** (identity + intensity soft/bright + apply/avoid) — not Symbols. See [TODAY_SCREEN_SCENARIO_V3](../today/TODAY_SCREEN_SCENARIO_V3.md) v3.1.
+8. **Ritual clicks** for card/number stay — ritual ≠ friction. Symbols·A keeps revealed content visible; Symbols·B (astro + full timeline) appends below — revealed never disappears.
 
 ## Product arc (Today)
 

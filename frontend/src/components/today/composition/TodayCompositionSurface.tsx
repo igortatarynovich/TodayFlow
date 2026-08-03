@@ -78,7 +78,6 @@ import {
   revealDayNumber,
   type DaySymbolPublicView,
 } from "@/lib/daySymbolReveal";
-import { formatColorWhereToUse } from "@/lib/hookRevealText";
 import { TodayDayDialogueMorning } from "@/components/today/composition/TodayDayDialogueMorning";
 import { ConversationThread } from "@/components/conversation/ConversationThread";
 import { ConversationTurn } from "@/components/conversation/ConversationTurn";
@@ -1577,46 +1576,7 @@ export function TodayCompositionSurface(props: Props) {
                   testId="today-zone-tarot-impact"
                 />
               ) : null}
-              {symbolHooksView?.color_hook_reveal ||
-              props.contract.day_story?.talisman?.color ||
-              props.contract.day_story?.day_scenario?.props?.color?.name ? (
-                <TodayHookRevealShell
-                  kindLabel={copy.journey.hookColorKind}
-                  title={
-                    String(
-                      symbolHooksView?.color_hook_reveal?.identity?.name ||
-                        props.contract.day_story?.talisman?.color ||
-                        props.contract.day_story?.day_scenario?.props?.color?.name ||
-                        "Цвет дня",
-                    )
-                  }
-                  hook={
-                    symbolHooksView?.color_hook_reveal || {
-                      kind: "color",
-                      base: {
-                        meaning:
-                          props.contract.day_story?.talisman?.note ||
-                          props.contract.day_story?.day_scenario?.props?.color?.link_to_conflict ||
-                          null,
-                      },
-                      bridge_to_day:
-                        props.contract.day_story?.day_scenario?.props?.color?.link_to_conflict ||
-                        props.contract.day_story?.talisman?.note ||
-                        null,
-                      bridge_status: props.contract.day_story?.day_scenario?.props?.color
-                        ?.link_to_conflict
-                        ? "ok"
-                        : "unavailable",
-                      bridge_fail_copy: "Не удалось раскрыть день для этого цвета.",
-                      // where_to_use is an object in day_scenario props — never pass raw to .trim()
-                      instruction: formatColorWhereToUse(
-                        props.contract.day_story?.day_scenario?.props?.color?.where_to_use,
-                      ),
-                    }
-                  }
-                  testId="today-zone-color-hook"
-                />
-              ) : null}
+              {/* v3.1: color house = Move only — never render color shell on Symbols */}
               {story.numberImpact || props.numerologyValue || symbolHooksView?.number?.hook_reveal ? (
                 <TodayHookRevealShell
                   kindLabel="Число дня · открыто"

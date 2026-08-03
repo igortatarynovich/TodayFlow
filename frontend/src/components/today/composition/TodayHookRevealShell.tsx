@@ -53,6 +53,8 @@ export function TodayHookRevealShell({
       : null;
   const instruction =
     asTrimmedText(hook?.instruction) || formatColorWhereToUse(hook?.instruction);
+  // v3.1: card/number have no instruction slot (Move owns action; color apply lives on Move guide).
+  const showInstruction = Boolean(instruction && bridgeOk && hook?.kind === "color");
   const orientation =
     hook?.identity?.orientation === "reversed"
       ? "перевёрнутая"
@@ -89,7 +91,7 @@ export function TodayHookRevealShell({
         </p>
       ) : null}
 
-      {instruction && bridgeOk ? (
+      {showInstruction ? (
         <div className={styles.layer} data-layer="instruction">
           <p className={styles.layerLabel}>Как применить</p>
           <p className={styles.layerBody}>{instruction}</p>

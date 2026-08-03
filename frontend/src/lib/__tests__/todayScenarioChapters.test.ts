@@ -159,6 +159,26 @@ describe("buildScenarioStoryChapters", () => {
     const blob = chapters!.map((c) => [c.lead, ...c.paragraphs].join(" ")).join("\n");
     expect(blob).not.toMatch(/Лазурь|Избегать:/i);
     expect(blob).not.toMatch(/Луна в Рыбах/);
+    // v3.1: recommended_action / do_not stay on Move — never in Reading chapters
+    expect(blob).not.toMatch(/Написать черновик|Сглаживать смысл|Одно письмо с точной/i);
+  });
+
+  it("caps Reading at two spheres (v3.1)", () => {
+    const c = scenarioContract();
+    c.day_story!.day_scenario!.scenes!.push({
+      scene_id: "scene.energy",
+      sphere: "energy",
+      sphere_label_ru: "Энергия",
+      role_in_story: "support",
+      what_happens: "Тело чувствует темп.",
+      opportunity: "Короткая пауза.",
+      trap: "Дожать ещё час.",
+      recommended_action: "Вода и прогулка.",
+      do_not: "Игнорировать усталость.",
+      domestic_example: "Пауза до усталости.",
+    } as never);
+    const chapters = buildScenarioStoryChapters({ contract: c });
+    expect(chapters).toHaveLength(2);
   });
 
   it("does not paste force-template opportunity/trap into sphere cards", () => {

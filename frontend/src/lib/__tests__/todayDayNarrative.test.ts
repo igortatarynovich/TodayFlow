@@ -115,6 +115,7 @@ describe("buildTodayDayNarrative", () => {
       amount: "Один акцент.",
       avoidColor: "Яркий красный",
       avoidWhy: "Разгоняет темп в переговорах.",
+      intensity: "мягко",
       unavailable: false,
     } as TodayDayColorGuide,
     tarotImpact: {
@@ -440,6 +441,8 @@ describe("buildTodayDayNarrative", () => {
         amount: "один акцент",
         avoidColor: "оранжевый",
         avoidWhy: "шум",
+        intensity: "ярко",
+        unavailable: false,
       },
     });
     const supports = narrative.chapters.find((c) => c.id === "supports")!;

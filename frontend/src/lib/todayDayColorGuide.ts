@@ -5,6 +5,8 @@
  * via `input.api.*_ru` / `input.scenario.*`. No FE prose dictionary.
  */
 
+export type TodayDayColorIntensity = "мягко" | "ярко";
+
 export type TodayDayColorGuide = {
   name: string;
   hex: string;
@@ -14,9 +16,21 @@ export type TodayDayColorGuide = {
   amount: string;
   avoidColor: string;
   avoidWhy: string;
+  /** v3.1 Move — visible intensity; drives how-to-apply emphasis */
+  intensity: TodayDayColorIntensity;
   /** True when BE did not supply usable prose — UI must show honest absence, not invent. */
   unavailable: boolean;
 };
+
+/** Map catalog intensity / amount prose → soft|bright label for Move UI. */
+export function resolveColorIntensityLabel(
+  raw: string | null | undefined,
+): TodayDayColorIntensity {
+  const t = (raw || "").toLowerCase();
+  if (/мягк|незамет|приглуш|лёгк|легк|фон|баз|почти/.test(t)) return "мягко";
+  if (/ярк|насыщ|заметн|крича|акцент/.test(t)) return "ярко";
+  return "мягко";
+}
 
 /** Canonical palette — matches BE COLOR_CATALOG_V1 (hex visual only). */
 export const COLOR_HEX: Record<string, string> = {
@@ -69,6 +83,7 @@ export function resolveTodayDayColorGuide(input: {
     note?: string | null;
     avoidColor?: string | null;
     avoidWhy?: string | null;
+    intensity?: string | null;
   } | null;
 }): TodayDayColorGuide | null {
   const name = asText(input.scenario?.name) || asText(input.api?.name) || asText(input.name);
@@ -85,6 +100,9 @@ export function resolveTodayDayColorGuide(input: {
   const amount = asText(input.api?.amount_ru);
   const avoidColor = asText(input.scenario?.avoidColor) || asText(input.api?.avoid_color_ru);
   const avoidWhy = asText(input.scenario?.avoidWhy) || asText(input.api?.avoid_why_ru);
+  const intensity = resolveColorIntensityLabel(
+    asText(input.scenario?.intensity) || amount,
+  );
   const hex = COLOR_HEX[name] ?? "";
 
   const hasProse = Boolean(benefit || clothing || accessory || amount || (avoidColor && avoidWhy));
@@ -99,6 +117,7 @@ export function resolveTodayDayColorGuide(input: {
       amount: "",
       avoidColor: "",
       avoidWhy: "",
+      intensity: "мягко",
       unavailable: true,
     };
   }
@@ -112,6 +131,7 @@ export function resolveTodayDayColorGuide(input: {
     amount,
     avoidColor,
     avoidWhy,
+    intensity,
     unavailable: !hasProse,
   };
 }

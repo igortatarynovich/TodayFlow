@@ -585,6 +585,10 @@ def sanitize_conflict_short_name(value: Any) -> str:
 
 
 def _opposing_forces(family: str, mode: str) -> tuple[str, str]:
+    """Legacy bank — retained for future *evidence-based* opposition detection only.
+
+    v3.1: ``build_scenario_conflict_v1`` must **not** call this to invent drama.
+    """
     pairs: dict[str, tuple[str, str]] = {
         "decision": ("угодить всем", "выбрать своё"),
         "communication": ("сгладить", "сказать прямо"),
@@ -610,15 +614,21 @@ def _everyday_conflict_short_name(
     lead_fact: str,
     registry_label: str,
 ) -> str:
-    """Hero conflict = everyday tension only.
+    """Hero label without forced A-or-B drama (v3.1).
 
-    Sky fact belongs in ``why_arose`` / ``events_lead`` / chorus — never mashed
-    into ``short_name`` (that produced truncated hero copy: «… к це…»).
+    Prefer lead fact / registry. Binary «A или B» only when both forces are real.
     """
-    del lead_fact, registry_label  # kept in signature for call-site stability
-    a = _clip(force_a, 48) or "автопилот"
-    b = _clip(force_b, 48) or "осознанный выбор"
-    return sanitize_conflict_short_name(f"{a.capitalize()} или {b}")
+    a = _clip(force_a, 48)
+    b = _clip(force_b, 48)
+    if a and b:
+        return sanitize_conflict_short_name(f"{a.capitalize()} или {b}")
+    lead = _clip(lead_fact, 72)
+    if lead:
+        return sanitize_conflict_short_name(lead)
+    reg = _clip(registry_label, 72)
+    if reg:
+        return sanitize_conflict_short_name(reg)
+    return sanitize_conflict_short_name("тон дня")
 
 
 def _human_natal_why(
@@ -688,7 +698,9 @@ def build_scenario_conflict_v1(
                 if isinstance(d, dict) and d.get("id")
             ][:3]
 
-    force_a, force_b = _opposing_forces(family, mode)
+    # v3.1: do not invent opposing_forces from family/mode bank.
+    # Real opposition detection is a later gap; until then omit the pair.
+    force_a, force_b = "", ""
     why_arose_parts = [
         _clip(d.get("fact_ru"), 160)
         for d in _as_list(foundation.get("ranked_drivers"))
@@ -696,11 +708,7 @@ def build_scenario_conflict_v1(
         and d.get("fact_ru")
         and not _is_calendar_kitchen_fact(str(d.get("fact_ru") or ""))
     ][:2]
-    why_arose = (
-        " · ".join(why_arose_parts)
-        if why_arose_parts
-        else "Факты дня собирают одну линию напряжения / возможности."
-    )
+    why_arose = " · ".join(why_arose_parts) if why_arose_parts else ""
     lead_fact = why_arose_parts[0] if why_arose_parts else ""
     short_name = _everyday_conflict_short_name(
         force_a=force_a,
@@ -710,7 +718,7 @@ def build_scenario_conflict_v1(
     )
 
     natal = _as_list(foundation.get("personal_natal_activations"))
-    why_personal = _human_natal_why(natal, conflict_label=short_name)
+    why_personal = _human_natal_why(natal, conflict_label=short_name) if short_name else ""
 
     chorus_refs: list[str] = []
     for d in driver_ids:
@@ -728,6 +736,10 @@ def build_scenario_conflict_v1(
     if not driver_ids:
         confidence = min(confidence, 0.4)
 
+    opposing: dict[str, str] | None = None
+    if force_a and force_b:
+        opposing = {"a": force_a, "b": force_b}
+
     return {
         "contract_version": "day_scenario_conflict_v1",
         "short_name": short_name,
@@ -740,15 +752,15 @@ def build_scenario_conflict_v1(
             "day_thesis": thesis,
             "act_iii_registry_label": registry_label or None,
         },
-        "opposing_forces": {"a": force_a, "b": force_b},
+        "opposing_forces": opposing or {"a": "", "b": ""},
         "why_arose": why_arose,
         "why_personal": why_personal,
         "driver_ids": driver_ids,
         "chorus_references": chorus_refs,
         "confidence": confidence,
         "foundation_rule": (
-            "Conflict short_name is everyday tension from ranked facts + opposing forces; "
-            "day_thesis.label_ru is Act III registry seed only. "
+            "v3.1: opposing_forces only when evidence supports two poles — never invent "
+            "from family/mode bank. short_name prefers lead fact / registry. "
             "Card and number refine reading/tempo, never invent a rival plot."
         ),
     }
@@ -1099,7 +1111,7 @@ def _humor_opportunity(scene: dict[str, Any], conflict: dict[str, Any]) -> dict[
                 "kind": kind,
                 "origin_scene_id": scene.get("scene_id"),
                 "text": (
-                    f"Если поймаете себя на «{conflict.get('opposing_forces', {}).get('a') or 'автопилоте'}» "
+                    f"Если поймаете себя на автопилоте "
                     f"в зоне «{scene.get('sphere_label_ru')}» — это уже сцена дня, не личный провал. "
                     f"Можно улыбнуться и выбрать другой жест."
                 ),
@@ -1178,18 +1190,25 @@ def build_scenario_props_v1(
                     avoid_pick = cand
 
     apply = _as_dict(chosen.get("apply"))
+    symbolic = str(chosen.get("symbolic_property") or chosen.get("name") or "цвет дня")
+    sphere_label = str(primary.get("sphere_label_ru") or "дня")
     color_prop = {
         "name": chosen.get("name"),
         "origin_scene_id": scene_id,
         "serves_conflict": label,
+        # v3.1: no force_a/force_b paste — color speaks from catalog + sphere, not Plot seed
         "link_to_conflict": _clip(
-            f"{chosen.get('symbolic_property')} — якорь против срыва в «{force_a}» "
-            f"и в сторону «{force_b}».",
+            f"{symbolic} — опора ясности в зоне «{sphere_label}».",
             220,
         ),
-        "supports_or_compensates": _clip(f"Компенсирует ловушку дня в зоне «{primary.get('sphere_label_ru')}».", 160),
+        "supports_or_compensates": _clip(
+            f"Компенсирует ловушку дня в зоне «{sphere_label}».",
+            160,
+        )
+        if trap
+        else _clip(f"Поддерживает тон дня в зоне «{sphere_label}».", 160),
         "expected_effect_today": _clip(
-            f"Напоминает выбрать «{force_b}», когда тянет в «{force_a}».",
+            f"{symbolic} — удерживает внимание на главном жесте сегодня.",
             160,
         ),
         "where_to_use": {
@@ -1203,7 +1222,7 @@ def build_scenario_props_v1(
         "catalog_knowledge_ref": chosen.get("name"),
         "evidence_references": list(primary.get("evidence_references") or []),
         "chorus_references": list(primary.get("chorus_references") or []),
-        "so_t_note": "scenario_scene_derived; catalog is knowledge only",
+        "so_t_note": "scenario_scene_derived; catalog is knowledge only; v3.1 no force-seed",
     }
 
     avoid_name = str((avoid_pick or {}).get("name") or "Кислотный неон")
@@ -1213,23 +1232,30 @@ def build_scenario_props_v1(
         "serves_conflict": label,
         "amplifies_trap": _clip(trap, 120),
         "why": _clip(
-            f"{avoid_name} сегодня разгоняет «{force_a}». Держи его вне поля зрения.",
+            (
+                f"{avoid_name} сегодня усиливает ловушку «{_clip(trap, 80)}». Держи его вне поля зрения."
+                if trap
+                else f"{avoid_name} сегодня шумит сильнее нужного. Держи его вне поля зрения."
+            ),
             160,
         ),
         "where_especially_avoid": (
-            f"В одежде и на фоне разговора/решения в зоне «{primary.get('sphere_label_ru')}»."
+            f"В одежде и на фоне разговора/решения в зоне «{sphere_label}»."
         ),
         "ok_as_tiny_accent": False,
         "catalog_knowledge_ref": avoid_name,
         "evidence_references": list(primary.get("evidence_references") or []),
     }
 
-    # Goals: 1 primary + up to 2 secondary from other scenes — not verbatim do
+    # Goals: 1 primary + up to 2 secondary from other scenes — not force_a/b paste (v3.1)
     goals: list[dict[str, Any]] = []
+    primary_action = _clip(primary.get("recommended_action"), 160)
     primary_goal = {
         "text": _clip(
-            f"Один жест в зоне «{primary.get('sphere_label_ru')}» в сторону «{force_b}» "
-            f"— без ожидания чужой реакции.",
+            primary_action
+            or (
+                f"Один ясный жест в зоне «{sphere_label}» — без ожидания чужой реакции."
+            ),
             200,
         ),
         "origin_scene_id": scene_id,
@@ -1245,11 +1271,13 @@ def build_scenario_props_v1(
             continue
         if len(goals) >= 3:
             break
+        sc_label = str(sc.get("sphere_label_ru") or "сфере")
+        sc_action = _clip(sc.get("recommended_action"), 140)
         goals.append(
             {
                 "text": _clip(
-                    f"В «{sc.get('sphere_label_ru')}» заметить «{force_a}» "
-                    f"и заменить одним маленьким «{force_b}».",
+                    sc_action
+                    or f"В «{sc_label}» — один короткий шаг без автопилота.",
                     200,
                 ),
                 "origin_scene_id": sc.get("scene_id"),
@@ -1262,7 +1290,6 @@ def build_scenario_props_v1(
         )
 
     action_hint = _clip(primary.get("recommended_action"), 100)
-    sphere_label = str(primary.get("sphere_label_ru") or "сегодня")
     affirmations = [
         {
             "text": _clip(
@@ -1422,8 +1449,15 @@ def validate_day_scenario_v1(scenario: dict[str, Any] | None) -> list[str]:
         errors.append("conflict_missing_short_name")
     if not conflict.get("driver_ids") and not _as_list(foundation.get("ranked_drivers")):
         errors.append("conflict_without_drivers_or_foundation")
-    if not isinstance(conflict.get("opposing_forces"), dict):
-        errors.append("conflict_missing_opposing_forces")
+    # v3.1: opposing_forces optional — empty / omit is valid (even day).
+    forces = conflict.get("opposing_forces")
+    if forces is not None and not isinstance(forces, dict):
+        errors.append("conflict_opposing_forces_not_dict")
+    elif isinstance(forces, dict):
+        a = str(forces.get("a") or "").strip()
+        b = str(forces.get("b") or "").strip()
+        if (a and not b) or (b and not a):
+            errors.append("conflict_opposing_forces_incomplete")
 
     drivers = _as_list(conflict.get("driver_ids"))
     if not drivers and (foundation.get("tarot_card") or {}).get("present"):
