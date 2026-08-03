@@ -24,6 +24,7 @@ from todayflow_backend.services.day_scenario_v1 import (
     DAY_SCENARIO_V1_CONTRACT,
     DAY_SCENARIO_V1_VERSION,
     PRODUCT_SPHERE_IDS,
+    _day_tone_anchor,
     build_scenario_foundation_v1,
     build_scenario_props_v1,
     validate_day_scenario_v1,
@@ -777,7 +778,8 @@ def native_llm_to_day_scenario_v1(
                 "sphere_label_ru": _SPHERE_LABEL_RU.get(sphere, sphere),
                 "role_in_story": sc.get("role_in_story") or ("primary" if idx == 0 else "support"),
                 "what_happens": sc.get("setup"),
-                "why": conflict.get("why_arose"),
+                # Plot owns why_arose — scenes must not restate it (seed leak).
+                "why": "",
                 "opportunity": sc.get("opportunity"),
                 "trap": sc.get("trap"),
                 "recommended_action": sc.get("recommended_action"),
@@ -786,7 +788,8 @@ def native_llm_to_day_scenario_v1(
                 "evidence_references": list(sc.get("evidence_refs") or []),
                 "chorus_references": list(sc.get("chorus_refs") or ["conflict"]),
                 "confidence": 0.7,
-                "serves_conflict": title,
+                # v3.1: opaque bind — never paste conflict title / short_name into scenes
+                "serves_conflict": _day_tone_anchor(title),
             }
         )
 

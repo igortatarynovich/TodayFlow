@@ -1052,6 +1052,10 @@ def scene_copy_needs_heal_v1(scenes: list[Any] | None) -> bool:
             return True
         if any(m in what for m in _TEMPLATE_WHAT_MARKERS):
             return True
+        # v3.1: serves_conflict must stay opaque («тон дня»), never quote title/short_name
+        serves = str(sc.get("serves_conflict") or "").strip()
+        if serves and serves != "тон дня":
+            return True
     return False
 
 

@@ -128,6 +128,7 @@ def test_hard_scenario_validate_markers():
     assert is_hard_scenario_validate_error(
         "verbatim_seed_leak:'тащить старое или отпустить'@conflict.short_name+chorus.day_number.voice"
     )
+    assert is_hard_scenario_validate_error("scene_serves_conflict_not_opaque:scene.relationships")
 
 
 def test_seed_kill_codes_are_hard_retry():

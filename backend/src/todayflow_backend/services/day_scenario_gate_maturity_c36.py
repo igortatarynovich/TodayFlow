@@ -227,6 +227,7 @@ HARD_SCENARIO_VALIDATE_ERRORS = frozenset(
 # Prefixes from find_verbatim_seed_leaks_v1 (ngram spans are dynamic).
 HARD_SCENARIO_VALIDATE_PREFIXES = (
     "verbatim_seed_leak:",
+    "scene_serves_conflict_not_opaque:",
 )
 
 # Native schema error prefixes / tokens that stay hard-blocking (retry).

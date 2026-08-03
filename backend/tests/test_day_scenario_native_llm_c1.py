@@ -291,6 +291,11 @@ def test_native_maps_to_scenario_and_b5_projector():
     )
     assert scenario["generation_source"] == GENERATION_SOURCE_NATIVE
     assert validate_day_scenario_v1(scenario) == []
+    assert all(
+        str(sc.get("serves_conflict") or "") == "тон дня"
+        for sc in (scenario.get("scenes") or [])
+        if isinstance(sc, dict)
+    )
     assert scenario["props"]["color"]["origin_scene_id"]
 
     story = build_day_story_fallback_v1(
