@@ -533,4 +533,77 @@ interface DayAtmosphereContract {
 
 ---
 
-*Документ (§11) → контракты (§12) → реализация first pass (§13) — все три готовы. Дальше — backlog §13.4. Figma нигде не участвует.*
+## 14. Design System Audit (2026-08-03)
+
+**Статус:** аудит, не канон. Основание для §15 (канон примитивов / токенов / dark-контраста). Проверено на `design/profile-journey-premium` (`fa48d9a`+); числа ниже пересчитаны по дереву `frontend/src`, не скопированы из чужого прогона без сверки.
+
+### 14.1 Симптом
+
+В тёмной теме: светлые карточки со светлым (нечитаемым) текстом; разные кнопки/баннеры/размеры блоков. Это не один CSS-баг — следствие отсутствия *обязательного* единого слоя токенов + примитивов.
+
+### 14.2 Токены — семь параллельных систем вместо одной
+
+Уникальные custom properties по префиксу (скан `frontend/src`, 2026-08-03):
+
+| Namespace | Уник. props | Dark-aware файлы (есть `data-theme="dark"` и префикс) | Заметка |
+|-----------|-------------:|------------------------------------------------------:|---------|
+| `--tf-*` (`todayflow-foundation.css`, канон §4/§6) | **149** | 18 | полный блок `[data-theme="dark"]` — **единственный полно покрытый** |
+| `--orbit-*` | 97 | 2 | legacy |
+| `--todayflow-*` | 36 | 2 | legacy / marketing |
+| `--tdp-*` (приватный Today) | 23 | 2 | оверрайд вручную в каждом файле |
+| `--section-*` | 17 | **0** | нет тёмного варианта |
+| `--day-*` (§11–§13) | 9 | 1* | dark backlog §13.4 (*файл моста/CSS упоминает, палитры dark нет) |
+| `--product-*` | 7 | **0** | нет тёмного варианта |
+
+Семантика дублируется: «ink» = `--tf-ink` / `--orbit-color-ink` / `--todayflow-color-ink-warm`; «surface» = `--tf-surface` / `--orbit-color-surface` / `--todayflow-surface` / `--tdp-surface`. Синхронность не гарантирована.
+
+**Вывод:** экраны на `--section-*` / `--product-*` не адаптируются под dark по определению. `--tdp-*` хрупок: где забыли ручной оверрайд — ломается контраст.
+
+### 14.3 Механизм бага (светлый текст на светлой карточке)
+
+~**19** из **74** `.module.css` задают фон хардкодом `#fff` / `white` / `#ffffff` (не через `--tf-surface` / Surface B). Среди них: `profileV0`, `profileV2System`, `practicesV2System`, `practicesV2History`, `practicesStateCycle`, `PracticesPage`, `challenges`, `TodayCompositionSurface` (частично), `TodayPersonalizedProductSection`, `TodayEveningProductClose`, `productWebScreens`, `ProductJourneyScene`, плюс несколько `design-system/*` (включая `dsPrimitives.module.css` — primary button `color: #fff`).
+
+Типичный паттерн: фон **не** подписан на `data-theme="dark"`, а цвет текста наследует dark-aware `--tf-ink` → в dark ink светлеет, карточка остаётся `#fff` → нечитаемо.
+
+### 14.4 Примитивы — слой есть, обязательности нет
+
+В репозитории **уже есть** зачаток DS:
+
+| Примитив | Код | Проблема |
+|----------|-----|----------|
+| Button | `design-system/primitives/DsButton.tsx` (variants: primary/secondary/ghost/destructive/icon) | adoption частичная; десятки экранов всё ещё свои `.actionButton` / `.submitButton` / ad-hoc CTA |
+| Card / surface | `DsCard.tsx` + Surface A–N в §4 | Surface B в каноне с хардкод `rgba(255,253,249,0.88)` без dark-пары; многие экраны игнорируют и пишут `#fff` |
+| Type | `DsTypography.tsx` + §5 `--tf-type-*` | параллельно живёт `--orbit-text-*` (частично alias) |
+| Form | `DsForm.tsx` | узкое использование |
+| Auth buttons | `OAuthButtons.tsx` | отдельный кейс, не общий Button |
+
+То есть проблема **не** «кнопки нет совсем», а: (1) примитив не канонизирован как *единственный* путь, (2) локальные кнопки/баннеры разрешены по факту, (3) сами DS-примитивы местами хардкодят светлые значения (`#fff` на primary).
+
+**Radius:** 20+ хардкод-значений + массовый pill `999px`, при том что §4 уже фиксирует Surface-радиусы (24/28/36). Шкала `--tf-ds-radius-*` / `--tf-ds-space-*` в foundation есть — код её не обязан использовать.
+
+### 14.5 Конфликт с §0 (надо закрыть в §15)
+
+§0 сейчас говорит: «Это — визуальные примитивы · **Не это** — Design system компонентов (Button, Input…)». Цель продукта — полная дизайн-система с обязательными Button/Card/Banner. §15 должен **переписать §0**: Foundation UI = токены + **закрытые** React-примитивы; ad-hoc CSS поверх `#fff` — запрещён.
+
+### 14.6 Что должен решить §15 (канон, ещё не написан)
+
+1. **Один namespace-победитель:** `--tf-*`. Остальные (`--orbit-*`, `--todayflow-*`, `--section-*`, `--product-*`, `--tdp-*`) — legacy-алиасы на `--tf-*` или явная deprecation с датой удаления. `--day-*` остаётся отдельным *атмосферным* слоем (§11), не дублирует ink/surface.
+2. **Закрытые контракты примитивов:** `DsButton` / `DsCard` (Surface) / Banner — варианты, размеры, состояния (default/hover/disabled/loading), **обязательные** light+dark токены; без права экрану изобретать параллельный button CSS.
+3. **Единая шкала** radius + spacing (`--tf-ds-*`); запрет произвольных `border-radius` / padding вне шкалы (исключения — списком).
+4. **Dark-контракт surfaces:** каждая Surface A–N и каждый Card-вариант имеют пару light/dark; запрет `#fff`/`white` как фона интерактивной/контентной карточки.
+5. **Migration checklist** по `.module.css` с хардкодом — вход в §16, не содержимое §15.
+
+**Не входит в §15:** массовая правка всех 74 module.css (это §16). Не входит полная dark-палитра `--day-*` (остаётся §13.4).
+
+### 14.7 Рекомендуемый scope первого прохода §15 → §16
+
+Не «весь продукт за один PR». Минимальный полезный срез:
+
+1. §15 канон (токены + примитивы + запреты).
+2. §16a — foundation: добить dark для Surface B / `--tf-surface*` / алиасы `--section-*`→`--tf-*` где дешево.
+3. §16b — вычистить хардкод `#fff` в топ-баговых экранах (Profile v0/v2, Practices, Challenges, ключевые Today composition surfaces).
+4. §16c — запретить новые ad-hoc buttons в review (lint/checklist); постепенно свести CTA на `DsButton`.
+
+---
+
+*Документ (§11) → контракты (§12) → реализация first pass (§13) → аудит (§14) → канон дизайн-системы (§15, следующий) → миграция (§16). Figma нигде не участвует.*
