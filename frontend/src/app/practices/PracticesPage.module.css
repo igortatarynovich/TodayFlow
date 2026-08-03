@@ -61,7 +61,7 @@
   padding: 0.55rem 1rem;
   border-radius: 999px;
   border: 1px solid rgba(214, 142, 122, 0.35);
-  background: #fff;
+  background: var(--tf-surface, #fff);
   color: var(--orbit-color-ink);
   cursor: pointer;
 }
@@ -105,7 +105,7 @@
 
 .practiceCard {
   padding: var(--orbit-space-lg);
-  background: #fff;
+  background: var(--tf-surface, #fff);
   border-radius: 14px;
   border: 1px solid var(--section-panel-border);
 }
@@ -139,7 +139,7 @@
   padding: 0.5rem 0.875rem;
   border: 1px solid var(--tf-cream-border, rgba(214, 142, 122, 0.35));
   border-radius: 999px;
-  background: #fff;
+  background: var(--tf-surface, #fff);
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--tf-ink, var(--orbit-color-ink));

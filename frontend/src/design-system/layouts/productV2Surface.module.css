@@ -29,7 +29,7 @@
   padding: 2.3125rem;
   border-radius: 2rem;
   border: 1px solid #e8e2d6;
-  background: #fff;
+  background: var(--tf-surface, #fff);
   box-shadow: 0 24px 35px rgba(42, 37, 32, 0.08);
 }
 
@@ -37,7 +37,7 @@
   padding: 1.75rem;
   border-radius: 1.75rem;
   border: 1px solid #e8e2d6;
-  background: #fff;
+  background: var(--tf-surface, #fff);
   box-shadow: 0 18px 28px rgba(42, 37, 32, 0.06);
 }
 

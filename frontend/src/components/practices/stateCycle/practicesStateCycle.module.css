@@ -479,7 +479,7 @@
   padding: 0.5rem 0.85rem;
   border-radius: 999px;
   border: 1px solid var(--psc-border);
-  background: #fff;
+  background: var(--tf-surface, #fff);
   color: var(--psc-ink);
   font-size: 0.8rem;
   cursor: pointer;

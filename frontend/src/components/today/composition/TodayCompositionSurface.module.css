@@ -1163,7 +1163,7 @@
 .ritualStepActive {
   composes: ritualStepItem;
   color: var(--tdp-ink);
-  background: #fff;
+  background: var(--tf-surface, #fff);
   border-color: rgba(184, 95, 74, 0.35);
   box-shadow: var(--tdp-shadow-sm);
 }

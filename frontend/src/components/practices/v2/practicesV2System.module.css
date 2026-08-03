@@ -298,7 +298,7 @@
   padding: 0 0.9375rem;
   border-radius: 999px;
   border: 1px solid #ede8de;
-  background: #fff;
+  background: var(--tf-surface, #fff);
   font-size: 0.8125rem;
   font-weight: 700;
   color: #5a5450;
@@ -334,7 +334,7 @@
   padding: 1.25rem;
   border-radius: 1.75rem;
   border: 1px solid rgba(226, 217, 200, 0.8);
-  background: #fff;
+  background: var(--tf-surface, #fff);
   text-decoration: none;
   color: inherit;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -454,7 +454,7 @@
   padding: 0.8125rem 1rem;
   border-radius: 1.125rem;
   border: 1px solid rgba(226, 217, 200, 0.8);
-  background: #fff;
+  background: var(--tf-surface, #fff);
 }
 
 .quickIcon {
@@ -499,7 +499,7 @@
   padding: 0 0.75rem;
   border-radius: 999px;
   border: 1px solid #ede8de;
-  background: #fff;
+  background: var(--tf-surface, #fff);
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--tf-ink);
@@ -529,7 +529,7 @@
   padding: 1.25rem;
   border-radius: 1.75rem;
   border: 1px solid rgba(226, 217, 200, 0.8);
-  background: #fff;
+  background: var(--tf-surface, #fff);
   margin-bottom: 1.125rem;
 }
 
@@ -614,7 +614,7 @@
   height: 2.125rem;
   border-radius: 999px;
   border: 1px solid #ede8de;
-  background: #fff;
+  background: var(--tf-surface, #fff);
   font-size: 0.6875rem;
   font-weight: 600;
   color: var(--tf-caption);
@@ -644,7 +644,7 @@
   padding: 0.875rem 1rem;
   border-radius: 1.125rem;
   border: 1px solid rgba(226, 217, 200, 0.8);
-  background: #fff;
+  background: var(--tf-surface, #fff);
 }
 
 .progressStat dt {
@@ -748,7 +748,7 @@
   padding: 0.9375rem;
   border-radius: 1.125rem;
   border: 1px solid rgba(226, 217, 200, 0.8);
-  background: #fff;
+  background: var(--tf-surface, #fff);
 }
 
 .flowStepNum {

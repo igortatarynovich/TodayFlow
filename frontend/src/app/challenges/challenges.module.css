@@ -19,7 +19,7 @@
   padding: 1.5rem;
   border-radius: 1.75rem;
   border: 1px solid rgba(226, 217, 200, 0.8);
-  background: #fff;
+  background: var(--tf-surface, #fff);
   box-shadow: 0 18px 28px rgba(42, 37, 32, 0.06);
   text-decoration: none;
   color: inherit;
@@ -34,7 +34,7 @@
 
 .cardLocked {
   border-color: rgba(201, 169, 110, 0.5);
-  background: linear-gradient(160deg, #fffaf2 0%, #fff 60%);
+  background: linear-gradient(160deg, var(--tf-surface-warm, #fffaf2) 0%, var(--tf-surface, #fff) 60%);
 }
 
 .proBadge {

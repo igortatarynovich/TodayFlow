@@ -555,11 +555,11 @@ interface DayAtmosphereContract {
 | `--tdp-*` (приватный Today) | 23 | 2 | оверрайд вручную в каждом файле |
 | `--section-*` | 17 | **1** (`section-atmosphere.css` `[data-theme="dark"]`, §16a) | route-atmosphere; ink/panel alias `--tf-*` |
 | `--day-*` (§11–§13) | 9 | 1* | dark backlog §13.4 (*файл моста/CSS упоминает, палитры dark нет) |
-| `--product-*` | 7 | **0** | нет тёмного варианта |
+| `--product-*` | 7 | n/a | **layout** (radius/max-width/eyebrow), не цвета — dark-пара не требуется; при правке файла можно оставить как есть |
 
 Семантика дублируется: «ink» = `--tf-ink` / `--orbit-color-ink` / `--todayflow-color-ink-warm`; «surface» = `--tf-surface` / `--orbit-color-surface` / `--todayflow-surface` / `--tdp-surface`. Синхронность не гарантирована.
 
-**Вывод (на момент аудита):** экраны на `--section-*` / `--product-*` не адаптировались под dark. **§16a:** `--section-*` получил dark-пару + light atmosphere washes gated `:not([data-theme="dark"])`. `--product-*` и хардкод `#fff` на экранах — §16b. `--tdp-*` хрупок: где забыли ручной оверрайд — ломается контраст.
+**Вывод (на момент аудита):** экраны на `--section-*` / `--product-*` не адаптировались под dark. **§16a:** `--section-*` получил dark-пару + light atmosphere washes gated `:not([data-theme="dark"])`. **§16b pass 1:** топ-экраны с solid `#fff` → `var(--tf-surface)`. `--product-*` уточнено как layout (не color gap). `--tdp-*` хрупок: где забыли ручной оверрайд — ломается контраст.
 
 ### 14.3 Механизм бага (светлый текст на светлой карточке)
 
@@ -602,8 +602,8 @@ interface DayAtmosphereContract {
 Не «весь продукт за один PR». Минимальный полезный срез:
 
 1. §15 канон (токены + примитивы + запреты) — **готово**.
-2. §16a — foundation: починить хардкод в `dsPrimitives.module.css` + dark для Surface B / `--tf-surface*` / алиасы `--section-*` где дешево.
-3. §16b — вычистить хардкод `#fff` в топ-баговых экранах (Profile v0/v2, Practices, Challenges, ключевые Today composition surfaces).
+2. §16a — foundation: починить хардкод в `dsPrimitives.module.css` + dark для Surface B / `--tf-surface*` / алиасы `--section-*` где дешево — **готово**.
+3. §16b — вычистить хардкод `#fff` в топ-баговых экранах (Profile v0/v2, Practices, Challenges, ключевые Today composition surfaces) — **pass 1 готово**; остаток: декоративные highlights + вне списка.
 4. §16c — запретить новые ad-hoc buttons в review (lint/checklist); постепенно свести CTA на `DsButton`.
 
 ---
@@ -665,12 +665,13 @@ interface DayAtmosphereContract {
 - **Dark-пара для `--section-*`** — **готово** (§16a): `html[data-theme="dark"]` в `section-atmosphere.css`; light route washes через `:not([data-theme="dark"])`.
 - **`--day-*` dark-палитра** — остаётся backlog §13.4, не расширяется этим разделом.
 
-### 15.6 §16a — статус
+### 15.6 §16a / §16b — статус
 
-- **Slice 0 (готово):** четыре фона в `dsPrimitives.module.css` → `--tf-surface` / insight-bg.
-- **Slice 1 (готово):** dark-пара `--tf-surface-insight-bg` / shadow; `.cardInsight` на insight-bg.
-- **Slice 2 (готово):** dark-пара `--section-*` в `section-atmosphere.css` — базовые токены на `--tf-*`, `html[data-theme="dark"]` полный набор, light atmosphere page washes под `:not([data-theme="dark"])`, dark route glows на `--tf-page`. Tarot без изменений (уже void).
-- **§16b / §16c:** топ-экраны с хардкод `#fff`; запрет ad-hoc CTA.
+- **§16a Slice 0–2 (готово):** `dsPrimitives` surfaces · Surface B insight dark · `--section-*` dark pair.
+- **§16b pass 1 (готово):** solid `background: #fff` → `var(--tf-surface, #fff)` на топ-экранах (Practices/Challenges/Profile v2/Today composition/product web layouts + profileV0 gradient stops). ~63 solid + card-wash gradients.
+- **`--product-*`:** уточнено — это layout-токены (radius/content-max), не палитра; dark-пара не нужна.
+- **Остаток §16b:** декоративные `#fff` в border/box-shadow/orb highlights; оставшиеся хардкоды вне топ-списка; ручной QA dark на Profile/Practices/Challenges.
+- **§16c:** запрет новых ad-hoc CTA / lint checklist.
 
 ---
 

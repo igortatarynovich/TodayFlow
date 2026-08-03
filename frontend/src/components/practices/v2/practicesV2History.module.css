@@ -41,7 +41,7 @@
   padding: 0.875rem 1rem;
   border-radius: 1.125rem;
   border: 1px solid #e8e2d6;
-  background: #fff;
+  background: var(--tf-surface, #fff);
 }
 
 .statLabel {
@@ -120,7 +120,7 @@
   padding: 1rem 1.125rem;
   border-radius: 1.125rem;
   border: 1px solid #e8e2d6;
-  background: #fff;
+  background: var(--tf-surface, #fff);
 }
 
 .historyMain {

@@ -183,7 +183,7 @@
 .insightRow {
   padding: var(--tf-ds-space-4) var(--tf-ds-space-5);
   border-radius: var(--tf-ds-radius-md);
-  background: #fff;
+  background: var(--tf-surface, #fff);
   border: 1px solid var(--tf-ds-border-ink);
 }
 

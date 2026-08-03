@@ -72,7 +72,7 @@
   height: 1.75rem;
   border-radius: 0.875rem;
   border: 1px solid #c9a96e;
-  background: #fff;
+  background: var(--tf-surface, #fff);
   font-family: var(--tf-font-mono, ui-monospace, monospace);
   font-size: 0.625rem;
   font-weight: 600;
@@ -136,7 +136,7 @@
   padding: 0.25rem 0.75rem;
   border-radius: 999px;
   border: 1px solid #e8e2d6;
-  background: #fff;
+  background: var(--tf-surface, #fff);
   font-size: 0.75rem;
   font-weight: 600;
   color: #5a5450;
@@ -170,7 +170,7 @@
   padding: 2.3125rem;
   border-radius: 2rem;
   border: 1px solid #e8e2d6;
-  background: #fff;
+  background: var(--tf-surface, #fff);
   box-shadow: 0 24px 35px rgba(42, 37, 32, 0.08);
 }
 
@@ -253,7 +253,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: #fff;
+  background: var(--tf-surface, #fff);
   font-family: var(--tf-font-mono, ui-monospace, monospace);
   font-size: 1.125rem;
   font-weight: 600;
@@ -478,14 +478,14 @@
   padding: 1.25rem;
   border-radius: 1.125rem;
   border: 1px solid #e8e2d6;
-  background: #fff;
+  background: var(--tf-surface, #fff);
 }
 
 .missionCard {
   padding: 1.5rem;
   border-radius: 1.125rem;
   border: 1px solid #e8e2d6;
-  background: linear-gradient(135deg, #f7f4ee 0%, #fff 100%);
+  background: linear-gradient(135deg, var(--tf-surface-muted, #f7f4ee) 0%, var(--tf-surface, #fff) 100%);
 }
 
 .missionText {
@@ -505,7 +505,7 @@
 .sphereCard {
   border-radius: 1.375rem;
   border: 1px solid #e8e2d6;
-  background: #fff;
+  background: var(--tf-surface, #fff);
   min-height: 5.5rem;
   overflow: hidden;
 }
@@ -644,7 +644,7 @@
   padding: 0.9375rem 0.5rem 0.75rem;
   border-radius: 1rem;
   border: 1px solid #e8e2d6;
-  background: #fff;
+  background: var(--tf-surface, #fff);
   text-align: center;
 }
 
@@ -1476,14 +1476,14 @@
 
 .whyItemInfluenced {
   border: 1px solid #e8e2d6;
-  background: #fff;
+  background: var(--tf-surface, #fff);
 }
 
 .insightCard {
   padding: 1.5rem;
   border-radius: 1.25rem;
   border: 1px solid #e8e2d6;
-  background: #fff;
+  background: var(--tf-surface, #fff);
   box-shadow: 0 12px 24px rgba(42, 37, 32, 0.06);
 }
 
@@ -2620,7 +2620,7 @@
 
 .deepThemesChip {
   border: 1px solid var(--tf-border, #e8e2d6);
-  background: #fff;
+  background: var(--tf-surface, #fff);
   color: var(--tf-ink, #1a1510);
   border-radius: 999px;
   padding: 0.4rem 0.85rem;

@@ -40,7 +40,7 @@
 .questionCard {
   padding: 1.5rem;
   border-radius: 24px;
-  background: #fff;
+  background: var(--tf-surface, #fff);
   box-shadow: var(--tdp-shadow-sm);
 }
 
