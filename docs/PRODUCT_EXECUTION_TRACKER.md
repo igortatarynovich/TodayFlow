@@ -9,6 +9,15 @@ Status: Active working document
 **ALSO IN PROGRESS:** **v3.1b concreteness** — kill generation-meta / tag-dump / color mash in user-facing chorus+Move; PR #7 draft.  
 Prior: card_base_v1 cutover live · editorial polish minors ongoing.
 
+## Architecture impact — Glance drop ScreenFlow gauge (2026-08-03)
+
+- **SoT before:** TODAY_SCREEN_SCENARIO_V3 Экран 0 + FOUNDATION_UI §11.9 — Glance hero required ScreenFlow gauge (шаг N/6) as progress chrome inside the act.
+- **SoT after:** Progress = bottom ScreenFlow chrome only (dots + labels / swipe per SCREEN_FLOW_V1 §1.5); no gauge widget in Glance hero. Jobs (texture / nearest / teaser / ≤2 chips) unchanged.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — TODAY_SCREEN_SCENARIO_V3 Экран 0 · FOUNDATION_UI §11.9 · this tracker
+- **Backward compatible?** yes — FE presentation only
+
 ## Architecture impact — soft-heal one-field native/scenario gates (2026-08-03)
 
 - **SoT before:** `HARD_NATIVE_VALIDATE_MARKERS` / `HARD_SCENARIO_VALIDATE_ERRORS` hard-rejected on empty `link_to_conflict`, incomplete `opposing_forces`, any prop missing `origin_scene_id`, and `scenes_too_many` — entire native day dropped (retry → unavailable / keep-prior).

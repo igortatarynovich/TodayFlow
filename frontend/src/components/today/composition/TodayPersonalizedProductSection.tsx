@@ -26,6 +26,7 @@ import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/t
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
 import { TodayScreenBlock, TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
 import { TodayTapWidget } from "@/components/today/composition/TodayWave2Slots";
+import { domainIconForChapterId } from "@/lib/todayReadingDomainIcon";
 import { pickMoveIfThenFromContract } from "@/lib/todayMoveIfThen";
 import { TODAY_NO_SHARP_FOCUS_COPY } from "@/lib/todayGlanceTexture";
 import {
@@ -296,6 +297,7 @@ export function TodayPersonalizedProductSection({
               chapter.dual && (chapter.dual.strengthen.length || chapter.dual.soften.length),
             );
             const dualExpanded = !isSphereChapter || expandedSphereIds[chapter.id] === true;
+            const DomainIcon = domainIconForChapterId(chapter.id);
 
             return (
               <div
@@ -307,6 +309,13 @@ export function TodayPersonalizedProductSection({
                 <ProductNarrativeBlock
                   id={chapter.id}
                   kicker={chapter.kicker}
+                  kickerIcon={
+                    DomainIcon ? (
+                      <span data-testid={`today-reading-domain-icon-${chapter.id}`}>
+                        <DomainIcon />
+                      </span>
+                    ) : null
+                  }
                   lead={chapter.lead}
                   paragraphs={
                     softWhyInBody

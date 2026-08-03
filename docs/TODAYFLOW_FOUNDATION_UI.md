@@ -439,7 +439,7 @@ Figma не используется в разработке — не источ�
 
 Типографика (§5) · размеры карточек вне Day Atmosphere surface (§4) · цвета ошибок/успеха/предупреждений · основные CTA (§4 Surface C) · логика навигации ScreenFlow (порядок актов) · форма интерактивных компонентов вне атмосферы.
 
-**Исключение — Glance / Day Atmosphere surface:** каркас первого viewport Today **может** менять плотность и композицию под full-bleed атмосферу дня (стекло-hero, ScreenFlow gauge, sparse chrome) — см. [TODAY_SCREEN_SCENARIO_V3](./today/TODAY_SCREEN_SCENARIO_V3.md) Экран 0. Jobs смысла акта (тон / nearest / teaser / no Plot facts) не меняются; меняется только показ. Это сознательный SoT-сдвиг относительно ранней формулировки «иерархия всегда стабильна».
+**Исключение — Glance / Day Atmosphere surface:** каркас первого viewport Today **может** менять плотность и композицию под full-bleed атмосферу дня (стекло-блоки §16, sparse chrome; прогресс = нижний ScreenFlow chrome, не gauge в hero) — см. [TODAY_SCREEN_SCENARIO_V3](./today/TODAY_SCREEN_SCENARIO_V3.md) Экран 0. Jobs смысла акта (тон / nearest / teaser / no Plot facts) не меняются; меняется только показ. Это сознательный SoT-сдвиг относительно ранней формулировки «иерархия всегда стабильна».
 
 ### 11.10 Следующие шаги
 
@@ -728,7 +728,7 @@ interface DayAtmosphereContract {
 | `relationships` | `IconHeart` | уже был |
 | `energy` | `IconActivity` | уже был |
 
-Карта: `TODAY_DOMAIN_ICON_MAP` (`as const` + `satisfies`, рядом с `DS_NAV_ICON_MAP`). Потребитель: `TodayVerdictStripSlot` — иконка рядом с `domainLabel`; неизвестный/legacy domain → строка без иконки, без падения.
+Карта: `TODAY_DOMAIN_ICON_MAP` (`as const` + `satisfies`, рядом с `DS_NAV_ICON_MAP`). **Primary consumer:** Reading sphere-главы (`sphere-{domain}` в `TodayPersonalizedProductSection`) — иконка рядом с kicker. `TodayVerdictStripSlot` остаётся Wave2/test consumer (тот же map); неизвестный/legacy domain → без иконки, без падения.
 
 ### 16.7 Решённые ранее
 

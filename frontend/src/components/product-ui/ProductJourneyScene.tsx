@@ -138,6 +138,8 @@ export type ProductNarrativeMedia =
 export type ProductNarrativeBlockProps = {
   id?: string;
   kicker: string;
+  /** Optional leading icon (e.g. Reading domain icon beside kicker). */
+  kickerIcon?: ReactNode;
   lead?: string | null;
   paragraphs?: string[];
   /** Extra body when paragraphs alone are not enough (chips, dual panels). */
@@ -161,6 +163,7 @@ export type ProductNarrativeBlockProps = {
 export function ProductNarrativeBlock({
   id,
   kicker,
+  kickerIcon = null,
   lead = null,
   paragraphs = [],
   children,
@@ -200,7 +203,14 @@ export function ProductNarrativeBlock({
       style={style}
     >
       <div className={styles.narrativeBlockMain}>
-        <p className={styles.narrativeBlockKicker}>{kicker}</p>
+        <div className={styles.narrativeBlockKickerRow}>
+          {kickerIcon ? (
+            <span className={styles.narrativeBlockKickerIcon} aria-hidden>
+              {kickerIcon}
+            </span>
+          ) : null}
+          <p className={styles.narrativeBlockKicker}>{kicker}</p>
+        </div>
         {lead ? <p className={styles.narrativeBlockLead}>{lead}</p> : null}
         {visibleParagraphs.map((paragraph) => (
           <p key={`${panelId}-${paragraph.slice(0, 48)}`} className={styles.narrativeBlockBody}>

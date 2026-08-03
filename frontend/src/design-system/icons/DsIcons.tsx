@@ -273,8 +273,9 @@ export const DS_NAV_ICON_MAP = {
 
 /**
  * Today domain → icon (FOUNDATION_UI §16.6). Keyed against `DomainKey`
- * (`@/lib/todayDomainVerdicts`) — the type the actual consumer
- * (`TodayVerdictStripSlot`) uses, not `TodayContractDomainId`.
+ * (`@/lib/todayDomainVerdicts`). Primary consumer: Reading `sphere-*` chapters
+ * via `domainIconForChapterId` (maps raw scene sphere through `mapSphereToDomain`).
+ * `TodayVerdictStripSlot` remains a Wave2/test consumer of the same map.
  * `satisfies` checks completeness without exporting a new component type.
  */
 export const TODAY_DOMAIN_ICON_MAP = {

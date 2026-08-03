@@ -29,9 +29,6 @@ type Props = {
   thesis?: string | null;
   teasers: TodayGlanceTeaser[];
   themeLoading?: boolean;
-  /** ScreenFlow progress — act index 0-based; display = currentStep / stepCount */
-  screenFlowStep?: number;
-  screenFlowStepCount?: number;
   /** @deprecated spheres are not Glance hero — kept for call-site compat */
   onSphereSelect?: (domain: string) => void;
 };
@@ -62,7 +59,8 @@ function formatGlanceDateRu(dateISO: string): string {
 
 /**
  * Glance / Сводка — Day Atmosphere + Block Composition (FOUNDATION_UI §16).
- * Jobs of meaning: TODAY_SCREEN_SCENARIO_V3 — unchanged.
+ * Progress = ScreenFlow chrome (SCREEN_FLOW §1.5) — no in-hero gauge.
+ * Jobs of meaning: TODAY_SCREEN_SCENARIO_V3.
  */
 export function TodayGlanceAct({
   dateISO,
@@ -71,8 +69,6 @@ export function TodayGlanceAct({
   thesis = null,
   teasers,
   themeLoading = false,
-  screenFlowStep = 0,
-  screenFlowStepCount = 6,
 }: Props) {
   const [nearest, setNearest] = useState<GlanceTimelineItem | null>(null);
   const [loadFailure, setLoadFailure] = useState<TodaySlotLoadFailure | null>(null);
@@ -122,17 +118,10 @@ export function TodayGlanceAct({
       : null;
 
   const dateLabel = useMemo(() => formatGlanceDateRu(dateISO), [dateISO]);
-  const stepCount = Math.max(1, screenFlowStepCount);
-  const currentStep = Math.min(stepCount, Math.max(1, screenFlowStep + 1));
-  const gaugePct = currentStep / stepCount;
 
   // Sparse: prefer symbols ritual teaser only on Glance hero chrome
   const primaryTeaser =
     teasers.find((t) => t.id === "symbols") ?? teasers.find((t) => t.id === "plot") ?? teasers[0] ?? null;
-
-  const gaugeStyle = {
-    background: `conic-gradient(var(--day-accent-soft, rgba(120,130,145,0.55)) ${gaugePct * 360}deg, rgba(255,255,255,0.22) 0)`,
-  };
 
   return (
     <div className={styles.root} data-testid="today-zone-glance-act">
@@ -163,23 +152,6 @@ export function TodayGlanceAct({
                 {copy.journey.glanceTitle}
               </h3>
             )}
-
-            <div
-              className={styles.gauge}
-              style={gaugeStyle}
-              role="img"
-              aria-label={`Шаг ${currentStep} из ${stepCount}`}
-              data-testid="today-glance-screenflow-gauge"
-              data-step={currentStep}
-              data-step-count={stepCount}
-            >
-              <div className={styles.gaugeInner}>
-                <span className={styles.gaugeLabel}>Шаг</span>
-                <span className={styles.gaugeValue}>
-                  {currentStep}/{stepCount}
-                </span>
-              </div>
-            </div>
           </>
         )}
       </DsCard>

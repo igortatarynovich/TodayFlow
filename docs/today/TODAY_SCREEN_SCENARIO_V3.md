@@ -26,15 +26,14 @@
 
 **Job:** за 2 секунды ориентация и вход дальше — сжатая проекция уже определённых актов, не отдельный сюжет.
 
-**Каркас показа (Day Atmosphere surface — FOUNDATION_UI §11.9):** full-bleed фон/декор по `day_atmosphere.visual_mode` · стеклянная hero-карточка · gauge прогресса ScreenFlow (текущий акт / 6, не «score дня») · sparse chrome. Jobs смысла ниже **не** меняются — только композиция.
+**Каркас показа (Day Atmosphere surface — FOUNDATION_UI §11.9):** full-bleed фон/декор по `day_atmosphere.visual_mode` · стеклянные Block-панели (§16) · sparse chrome. **Прогресс актов = нижний ScreenFlow chrome** (точки + лейблы / свайп) — не отдельный виджет в hero. Jobs смысла ниже **не** меняются — только композиция.
 
 **На экране:**
 
-1. **Текстура** — 1–2 предложения в glass hero: фраза-синтез **тона** (внутренняя классификация). Не факты, не ярлык категории, не `short_name` «A или B».
-2. **ScreenFlow gauge** — прогресс актов (шаг 0…5 из 6). Не выдуманный балл дня.
-3. **Nearest** — одно событие glance timeline (`label_short` + valence).
-4. **Тизер ритуала** — один CTA в Symbols·A без identity/base/bridge на Glance.
-5. **Индикатор сфер** (опц., secondary) — до 2 чипов из Reading; если без сигнала — shared honest-текст с Reading. Не конкурирует с texture в hero.
+1. **Текстура** — 1–2 предложения в glass Block: фраза-синтез **тона** (внутренняя классификация). Не факты, не ярлык категории, не `short_name` «A или B».
+2. **Nearest** — одно событие glance timeline (`label_short` + valence).
+3. **Тизер ритуала** — один CTA в Symbols·A без identity/base/bridge на Glance.
+4. **Индикатор сфер** (опц., secondary) — до 2 чипов из Reading; если без сигнала — shared honest-текст с Reading. Не конкурирует с texture в hero.
 
 **Нет:** фактов Plot, why, карты/числа/астро/полного timeline, **цвета дня как контент-блока** (атмосфера = shell, не «цвет дня» слот), if/then, цели, практики, ловушки Response.
 
@@ -179,6 +178,11 @@ Reveal API / prebake: [DAY_SYMBOL_REVEAL_CANON_V1](../audits/DAY_SYMBOL_REVEAL_C
 ---
 
 ## Changelog
+
+### 2026-08-03 — Glance: drop ScreenFlow gauge (chrome owns progress)
+
+- **Каркас Экран 0:** убран обязательный gauge «шаг N/6» в hero; прогресс = нижний ScreenFlow chrome (точки + лейблы / свайп) — см. [SCREEN_FLOW_V1 §1.5](../foundation/SCREEN_FLOW_V1.md).
+- Jobs смысла (texture / nearest / teaser / ≤2 sphere chips) без изменений.
 
 ### 2026-08-03 — v3.1b (concreteness)
 
