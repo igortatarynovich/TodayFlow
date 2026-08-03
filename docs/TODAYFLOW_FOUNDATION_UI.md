@@ -553,13 +553,13 @@ interface DayAtmosphereContract {
 | `--orbit-*` | 97 | 2 | legacy |
 | `--todayflow-*` | 36 | 2 | legacy / marketing |
 | `--tdp-*` (приватный Today) | 23 | 2 | оверрайд вручную в каждом файле |
-| `--section-*` | 17 | **0** | нет тёмного варианта |
+| `--section-*` | 17 | **1** (`section-atmosphere.css` `[data-theme="dark"]`, §16a) | route-atmosphere; ink/panel alias `--tf-*` |
 | `--day-*` (§11–§13) | 9 | 1* | dark backlog §13.4 (*файл моста/CSS упоминает, палитры dark нет) |
 | `--product-*` | 7 | **0** | нет тёмного варианта |
 
 Семантика дублируется: «ink» = `--tf-ink` / `--orbit-color-ink` / `--todayflow-color-ink-warm`; «surface» = `--tf-surface` / `--orbit-color-surface` / `--todayflow-surface` / `--tdp-surface`. Синхронность не гарантирована.
 
-**Вывод:** экраны на `--section-*` / `--product-*` не адаптируются под dark по определению. `--tdp-*` хрупок: где забыли ручной оверрайд — ломается контраст.
+**Вывод (на момент аудита):** экраны на `--section-*` / `--product-*` не адаптировались под dark. **§16a:** `--section-*` получил dark-пару + light atmosphere washes gated `:not([data-theme="dark"])`. `--product-*` и хардкод `#fff` на экранах — §16b. `--tdp-*` хрупок: где забыли ручной оверрайд — ломается контраст.
 
 ### 14.3 Механизм бага (светлый текст на светлой карточке)
 
@@ -648,7 +648,7 @@ interface DayAtmosphereContract {
 | Селектор | Строка (на `21ee896`) | Сейчас | Чем заменить |
 |----------|----------------------:|--------|--------------|
 | `.card` *(дефолтный `variant="card"`)* | 157 | `background: #fff` | `background: var(--tf-surface, #fff)` |
-| `.cardInsight` | 345 | `background: #fff` | `background: var(--tf-surface, #fff)` |
+| `.cardInsight` | 345 | `background: #fff` | `background: var(--tf-surface-insight-bg, var(--tf-surface, #fff))` |
 | `.elevated` | 138 | `background: #fff` | `background: var(--tf-surface, #fff)` |
 | `.checkbox` | 445 | `background: #fff` | `background: var(--tf-surface, #fff)` *(не `--tf-page`: чекбокс сидит на surface-карточке; `--tf-page` в dark почти совпадает с фоном страницы)* |
 | `.btnPrimary` / `.btnDestructive` / `.pill` | 33, 284, 200 | `color: #fff` | оставить в этом проходе — текст на насыщенном accent-фоне; `--tf-on-dark` при следующей правке файла, не блокер |
@@ -662,14 +662,14 @@ interface DayAtmosphereContract {
 ### 15.5 Явные гэпы (не в этом проходе)
 
 - **Banner-примитив** — нет контракта, нет решения по форме; нужен отдельный проход по существующим реализациям, прежде чем проектировать API.
-- **Dark-пара для `--section-*`** — назначена в §16a, не спроектирована здесь.
+- **Dark-пара для `--section-*`** — **готово** (§16a): `html[data-theme="dark"]` в `section-atmosphere.css`; light route washes через `:not([data-theme="dark"])`.
 - **`--day-*` dark-палитра** — остаётся backlog §13.4, не расширяется этим разделом.
 
 ### 15.6 §16a — статус
 
-- **Slice 0 (готово):** четыре фона в `dsPrimitives.module.css` (`.elevated` / `.card` / `.cardInsight` / `.checkbox`) → `--tf-surface`. Checkbox осознанно на `--tf-surface`, не `--tf-page` (контраст на карточке в dark).
-- **Slice 1 (в коде):** dark-пара `--tf-surface-insight-bg` / `--tf-surface-insight-shadow` в `[data-theme="dark"]` foundation (Surface B).
-- **Остаток §16a:** dark-пара `--section-*`; канон §4 Surface B текст → ссылка на токены вместо литерала `rgba(255,253,249,0.88)`.
+- **Slice 0 (готово):** четыре фона в `dsPrimitives.module.css` → `--tf-surface` / insight-bg.
+- **Slice 1 (готово):** dark-пара `--tf-surface-insight-bg` / shadow; `.cardInsight` на insight-bg.
+- **Slice 2 (готово):** dark-пара `--section-*` в `section-atmosphere.css` — базовые токены на `--tf-*`, `html[data-theme="dark"]` полный набор, light atmosphere page washes под `:not([data-theme="dark"])`, dark route glows на `--tf-page`. Tarot без изменений (уже void).
 - **§16b / §16c:** топ-экраны с хардкод `#fff`; запрет ad-hoc CTA.
 
 ---
