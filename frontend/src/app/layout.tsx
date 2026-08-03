@@ -17,7 +17,6 @@ import { PWAInstaller } from "@/components/PWAInstaller";
 import { JTBDRouteArrivalLogger } from "@/components/questions/JTBDRouteArrivalLogger";
 import { SectionAtmosphereBridge } from "@/components/SectionAtmosphereBridge";
 import { DayAtmosphereBridge } from "@/components/DayAtmosphereBridge";
-import { DayAtmosphereDecor } from "@/components/DayAtmosphereDecor";
 import { ProductWebShellBridge } from "@/components/product-ui/ProductWebShellBridge";
 import { ProductWebShellConfigProvider } from "@/components/product-ui/productWebShellConfig";
 import { ProductWebShellLayout } from "@/components/product-ui/ProductWebShellLayout";
@@ -119,7 +118,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               <JTBDRouteArrivalLogger />
               <SectionAtmosphereBridge />
               <DayAtmosphereBridge />
-              <DayAtmosphereDecor />
               <ProductWebShellBridge />
             </Suspense>
             <TodayCycleProvider>

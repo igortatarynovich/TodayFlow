@@ -40,7 +40,18 @@ export function buildPlotConflictNarrative(contract: TodayContractV1 | null | un
   const tension = forceA && forceB ? `Натяжение между «${forceA}» и «${forceB}».` : null;
 
   const whyRaw = clean(conflict.why_arose);
-  const why = whyRaw && !isCalendarKitchenFact(whyRaw) ? whyRaw : null;
+  const whyDeduped = whyRaw
+    ? whyRaw
+        .split(/(?<=[.!?])\s+/)
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .filter((s, i, arr) => {
+          const key = s.toLowerCase().replace(/[.!?]+$/u, "");
+          return arr.findIndex((x) => x.toLowerCase().replace(/[.!?]+$/u, "") === key) === i;
+        })
+        .join(" ")
+    : "";
+  const why = whyDeduped && !isCalendarKitchenFact(whyDeduped) ? whyDeduped : null;
 
   const personalRaw = clean(conflict.why_personal);
   const personal =

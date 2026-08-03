@@ -73,7 +73,7 @@ export function DsAppShell({
 }) {
   const hasRail = Boolean(rail) && !fullMain;
   return (
-    <div className={l.appShell} data-testid={testId}>
+    <div className={l.appShell} data-ds-app-shell="" data-testid={testId}>
       {sidebar}
       <div className={`${l.appBody} ${hasRail ? l.appBodyWithRail : ""}`.trim()}>
         <div className={`${l.appMain} ${fullMain ? l.appMainFull : ""}`.trim()}>{main}</div>

@@ -392,6 +392,8 @@
   flex-direction: column;
   min-height: 100dvh;
   width: 100%;
+  position: relative;
+  isolation: isolate;
 }
 
 /* SSR guest pitches live in route layouts; hide once shell is authenticated. */

@@ -11,7 +11,7 @@ import { TodayEveningProductClose } from "@/components/today/composition/TodayEv
 import { TodayPersonalizedProductSection } from "@/components/today/composition/TodayPersonalizedProductSection";
 import { TodayActShell } from "@/components/today/composition/TodayActShell";
 import { TodayActNav } from "@/components/today/composition/TodayActNav";
-import { TodayProductScreenFlow, todayScreenFlowStepCount } from "@/components/today/composition/TodayProductScreenFlow";
+import { TodayProductScreenFlow, todayScreenFlowReadingIndex, todayScreenFlowStepCount } from "@/components/today/composition/TodayProductScreenFlow";
 import {
   resolveScreenFlowEntryIndex,
   type ScreenFlowChangeReason,
@@ -2142,7 +2142,9 @@ export function TodayCompositionSurface(props: Props) {
         </div>
         ) : null}
 
-        {useProductPersonalized && zones.evening ? (
+        {useProductPersonalized &&
+        zones.evening &&
+        screenFlowIndex >= todayScreenFlowReadingIndex(showSymbolsAct) + 2 ? (
           <div className={styles.eveningZone} data-testid="today-zone-evening-entry">
             <p className={styles.eveningHint}>{copy.eveningHint}</p>
             <button

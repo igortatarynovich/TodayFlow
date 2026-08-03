@@ -136,9 +136,6 @@ export function TodayGlanceAct({
   return (
     <div className={styles.root} data-testid="today-zone-glance-act">
       <header className={styles.chrome}>
-        <p className={styles.brand} data-testid="today-glance-brand">
-          TodayFlow
-        </p>
         <p className={styles.dateLine} data-testid="today-glance-date">
           Сегодня · {dateLabel}
         </p>
@@ -168,13 +165,13 @@ export function TodayGlanceAct({
               className={styles.gauge}
               style={gaugeStyle}
               role="img"
-              aria-label={`ScreenFlow ${currentStep} из ${stepCount}`}
+              aria-label={`Шаг ${currentStep} из ${stepCount}`}
               data-testid="today-glance-screenflow-gauge"
               data-step={currentStep}
               data-step-count={stepCount}
             >
               <div className={styles.gaugeInner}>
-                <span className={styles.gaugeLabel}>ScreenFlow</span>
+                <span className={styles.gaugeLabel}>Шаг</span>
                 <span className={styles.gaugeValue}>
                   {currentStep}/{stepCount}
                 </span>

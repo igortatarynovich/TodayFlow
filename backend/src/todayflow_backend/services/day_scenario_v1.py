@@ -437,12 +437,14 @@ def _number_voice(value: Any, conflict_label: str) -> dict[str, Any]:
         "closure": "закрыть день осознанно",
     }
     # Lived sentence — not a tag dump («темп — …, способ — …»).
+    # User-facing number is always the reduced digit (1–9), never raw compound.
+    display_n = n if n else value
     return {
-        "named": f"Число дня — {value}",
+        "named": f"Число дня — {display_n}",
         "reduced": n or None,
         **tempo,
         "for_conflict": (
-            f"Число {value} сегодня просит: {tempo['lesson']} — {tempo['closure']}."
+            f"Число {display_n} сегодня просит: {tempo['lesson']} — {tempo['closure']}."
         ),
     }
 
@@ -994,6 +996,7 @@ _CHORUS_SEED_PASTE_MARKERS = (
     "темп —",
     "способ —",
     "связывает этот небесный фактор",
+    "проживите день в ключе",
 )
 
 # Exact hero labels invented by legacy ``_opposing_forces`` bank (mode/family).

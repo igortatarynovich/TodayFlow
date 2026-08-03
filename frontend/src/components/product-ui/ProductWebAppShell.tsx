@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { DayAtmosphereDecor } from "@/components/DayAtmosphereDecor";
 import {
   DsAppShell,
   DsAppSidebar,
@@ -137,9 +138,11 @@ export function ProductWebAppShell({
     <div
       ref={frameRef}
       className={l.productWebFrame}
+      data-product-web-frame=""
       data-testid={testId}
       data-guest-shell={guestShell ? "true" : undefined}
     >
+      <DayAtmosphereDecor />
       <DsAppShell
         sidebar={sidebarNode}
         main={
@@ -151,7 +154,11 @@ export function ProductWebAppShell({
         fullMain={fullMain}
       />
       {showMobileTabBar ? (
-        <div className={l.mobileTabBarWrap} aria-hidden={mobileAriaHidden || undefined}>
+        <div
+          className={l.mobileTabBarWrap}
+          data-product-web-chrome=""
+          aria-hidden={mobileAriaHidden || undefined}
+        >
           <DsMobileTabBar
             items={navItems.map((item) => ({
               href: item.href,

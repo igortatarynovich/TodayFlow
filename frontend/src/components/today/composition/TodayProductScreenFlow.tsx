@@ -189,13 +189,25 @@ export function TodayProductScreenFlow({
         {showPersonalized ? (
           <>
             <ScreenFlowStep id="reading" label={copy.journey.actNavReading} scrollable>
-              <TodayPersonalizedProductSection {...personalizedProps} actFilter="reading" />
+              <TodayPersonalizedProductSection
+                {...personalizedProps}
+                actFilter="reading"
+                asScreenFlowSteps
+              />
             </ScreenFlowStep>
             <ScreenFlowStep id="move" label={copy.journey.actNavMove} scrollable>
-              <TodayPersonalizedProductSection {...personalizedProps} actFilter="move" />
+              <TodayPersonalizedProductSection
+                {...personalizedProps}
+                actFilter="move"
+                asScreenFlowSteps
+              />
             </ScreenFlowStep>
             <ScreenFlowStep id="response" label={copy.journey.actNavBridge} scrollable>
-              <TodayPersonalizedProductSection {...personalizedProps} actFilter="response" />
+              <TodayPersonalizedProductSection
+                {...personalizedProps}
+                actFilter="response"
+                asScreenFlowSteps
+              />
             </ScreenFlowStep>
           </>
         ) : null}

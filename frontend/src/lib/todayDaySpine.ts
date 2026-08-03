@@ -276,17 +276,25 @@ function buildPulseFacet(input: {
   }
 
   if (lunar?.name) {
-    const guidance = sanitizeRuCopy(
-      lunar.guidance ?? lunar.themes,
-      "день просит внимательности к тому, что обычно остаётся в фоне",
-    );
-    candidates.push(
-      `${lunar.name} сегодня задаёт фон: ${guidance.replace(/[.!?]+$/, "").toLowerCase()}.`,
-    );
-    if (lunar.next_phase?.name && lunar.next_phase.in_days != null && lunar.next_phase.in_days <= 3) {
-      candidates.push(
-        `Через ${lunar.next_phase.in_days} дн. фаза сменится на «${lunar.next_phase.name}» — сегодня удобно подвести промежуточный итог.`,
+    const whyBlob = String(
+      (input.contract.day_story?.day_scenario as { conflict?: { why_arose?: string } } | undefined)
+        ?.conflict?.why_arose || "",
+    ).toLowerCase();
+    const lunarKey = lunar.name.toLowerCase();
+    // Plot already surfaces lunar fact_ru in why_arose — don't restate in pulse.
+    if (!whyBlob.includes(lunarKey)) {
+      const guidance = sanitizeRuCopy(
+        lunar.guidance ?? lunar.themes,
+        "день просит внимательности к тому, что обычно остаётся в фоне",
       );
+      candidates.push(
+        `${lunar.name} сегодня задаёт фон: ${guidance.replace(/[.!?]+$/, "").toLowerCase()}.`,
+      );
+      if (lunar.next_phase?.name && lunar.next_phase.in_days != null && lunar.next_phase.in_days <= 3) {
+        candidates.push(
+          `Через ${lunar.next_phase.in_days} дн. фаза сменится на «${lunar.next_phase.name}» — сегодня удобно подвести промежуточный итог.`,
+        );
+      }
     }
   }
 

@@ -84,6 +84,8 @@ export function resolveTodayDayColorGuide(input: {
     avoidColor?: string | null;
     avoidWhy?: string | null;
     intensity?: string | null;
+    clothing?: string | null;
+    accessory?: string | null;
   } | null;
 }): TodayDayColorGuide | null {
   const name = asText(input.scenario?.name) || asText(input.api?.name) || asText(input.name);
@@ -111,9 +113,15 @@ export function resolveTodayDayColorGuide(input: {
   const scenarioBenefit = scenarioBenefitParts.join(" ");
 
   const benefit = scenarioBenefit || asText(input.api?.benefit_ru) || asText(input.api?.story_ru);
-  const clothing = asText(input.api?.clothing_ru);
-  const accessory = asText(input.api?.accessory_ru);
-  const amount = asText(input.api?.amount_ru);
+  // Never mash clothing from a different morning color under a scenario color name.
+  const apiName = asText(input.api?.name);
+  const apiMatchesName =
+    !apiName || !name || apiName.localeCompare(name, "ru", { sensitivity: "base" }) === 0;
+  const clothing =
+    asText(input.scenario?.clothing) || (apiMatchesName ? asText(input.api?.clothing_ru) : "");
+  const accessory =
+    asText(input.scenario?.accessory) || (apiMatchesName ? asText(input.api?.accessory_ru) : "");
+  const amount = apiMatchesName ? asText(input.api?.amount_ru) : "";
   const avoidColor = asText(input.scenario?.avoidColor) || asText(input.api?.avoid_color_ru);
   const avoidWhy = asText(input.scenario?.avoidWhy) || asText(input.api?.avoid_why_ru);
   const intensity = resolveColorIntensityLabel(

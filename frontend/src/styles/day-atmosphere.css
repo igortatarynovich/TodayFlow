@@ -117,18 +117,23 @@ html[data-day-mode="depth"] {
 }
 
 /* —— Visible product surface (FOUNDATION_UI §13) ——
-   Consume --day-* on product shell; demote route peach washes when day-mode is live. */
-html[data-day-mode] {
-  --tf-page-atmosphere: var(--day-bg-base);
-}
-
+   Day Atmosphere must beat day-phase peach on --tf-page-atmosphere
+   (specificity ≥ html[data-atmosphere][data-day-phase]). .appShell paints that token. */
 html[data-day-mode][data-atmosphere="today"],
+html[data-day-mode][data-atmosphere="today"][data-day-phase],
+html[data-day-mode][data-atmosphere="today"][data-day-phase="morning"],
+html[data-day-mode][data-atmosphere="today"][data-day-phase="day"],
+html[data-day-mode][data-atmosphere="today"][data-day-phase="evening"],
+html[data-day-mode][data-atmosphere="today"][data-day-phase="night"],
+html[data-day-mode][data-atmosphere="today"][data-day-phase="first"],
 html[data-day-mode][data-atmosphere="home"] {
+  --tf-page: var(--day-bg-base);
   --section-page-bg: var(--day-bg-base);
-  --section-page-gradient:
+  --tf-page-atmosphere:
     radial-gradient(ellipse 85% 55% at 12% -8%, var(--day-bg-glow-primary), transparent 58%),
     radial-gradient(ellipse 70% 45% at 92% 8%, var(--day-bg-glow-secondary), transparent 55%),
     var(--day-bg-base);
+  --section-page-gradient: var(--tf-page-atmosphere);
 }
 
 html[data-day-mode] body {
@@ -136,25 +141,48 @@ html[data-day-mode] body {
 }
 
 html[data-day-mode][data-product-web-shell] .tf-content {
-  background:
-    radial-gradient(ellipse 90% 60% at 10% -10%, var(--day-bg-glow-primary), transparent 55%),
-    radial-gradient(ellipse 70% 50% at 95% 0%, var(--day-bg-glow-secondary), transparent 50%),
-    transparent;
+  background: transparent;
 }
 
-/* Decor layer host — sibling under shell content */
+/* Frame paints atmosphere; shell stays transparent so decor can sit between bg and UI. */
+html[data-day-mode] [data-product-web-frame] {
+  background: var(--tf-page-atmosphere, var(--day-bg-base));
+  position: relative;
+  isolation: isolate;
+}
+
+html[data-day-mode] [data-product-web-frame] > [data-ds-app-shell] {
+  background: transparent;
+}
+
+html[data-day-mode] [data-product-web-frame] > .day-atmosphere-decor {
+  z-index: 0;
+}
+
+html[data-day-mode] [data-product-web-frame] > [data-ds-app-shell],
+html[data-day-mode] [data-product-web-frame] > [data-product-web-chrome] {
+  position: relative;
+  z-index: 1;
+}
+
+/* Decor layer — inside frame, under content */
 .day-atmosphere-decor {
   pointer-events: none;
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 0;
   overflow: hidden;
-  opacity: var(--day-decor-opacity, 0.12);
+  opacity: var(--day-decor-opacity, 0.18);
   color: var(--day-decor-color, #5b6472);
 }
 
 html:not([data-day-mode]) .day-atmosphere-decor {
   display: none;
+}
+
+.day-atmosphere-decor--fixed {
+  position: fixed;
+  z-index: 0;
 }
 
 .day-atmosphere-decor__art {

@@ -76,6 +76,25 @@ describe("resolveTodayDayColorGuide", () => {
     expect(guide?.benefit).toMatch(/тёплая поддержка/i);
     expect(guide?.clothing).toMatch(/шарф/i);
   });
+
+  it("does not mash olive clothing under azure scenario name", () => {
+    const guide = resolveTodayDayColorGuide({
+      name: "Лазурь",
+      api: {
+        name: "Оливковый",
+        clothing_ru: "Оливковый слой outerwear или брюки.",
+        accessory_ru: "Ремень или сумка спокойного оливкового.",
+      },
+      scenario: {
+        name: "Лазурь",
+        note: "Ясность без тяжести.",
+        clothing: "Светлая рубашка, шарф или носки лазурного оттенка.",
+      },
+    });
+    expect(guide?.name).toBe("Лазурь");
+    expect(guide?.clothing).toMatch(/лазурн/i);
+    expect(guide?.clothing).not.toMatch(/оливк/i);
+  });
 });
 
 describe("colorGuideSkyStory", () => {

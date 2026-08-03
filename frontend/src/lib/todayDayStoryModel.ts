@@ -334,6 +334,8 @@ export function buildTodayDayStoryViewModel(input: {
             avoidColor: talisman?.avoid_color,
             avoidWhy: talisman?.avoid_why,
             intensity: propsColor?.intensity ?? null,
+            clothing: propsColor?.where_to_use?.clothing ?? null,
+            accessory: propsColor?.where_to_use?.accessory ?? null,
           }
         : null,
   });

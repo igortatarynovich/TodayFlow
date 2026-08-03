@@ -5,10 +5,14 @@
  * Canon: docs/today/TODAY_SCREEN_SCENARIO_V3.md · docs/DAY_SCENARIO_V1.md
  */
 
-import type { TodayContractV1 } from "@/lib/todayContract";
+import {
+  TODAY_CONTRACT_DOMAIN_LABEL_RU,
+  type TodayContractDomainId,
+  type TodayContractV1,
+} from "@/lib/todayContract";
 import type { TodayDayColorGuide } from "@/lib/todayDayColorGuide";
 import type { TodayDayNarrativeChapter } from "@/lib/todayDayNarrative";
-import { sceneMagnitudeScore } from "@/lib/todayDomainSignal";
+import { mapSphereToDomain, sceneMagnitudeScore } from "@/lib/todayDomainSignal";
 
 function clean(text: string | null | undefined): string {
   return (text ?? "").replace(/\s+/g, " ").trim();
@@ -119,7 +123,12 @@ export function buildScenarioStoryChapters(input: {
     if (chapters.length >= READING_CHAPTER_CAP) break;
 
     const sphereKey = clean(sc.sphere) || "sphere";
-    const label = clean(sc.sphere_label_ru) || clean(sc.sphere) || "Сфера дня";
+    const domainId = mapSphereToDomain(sphereKey) as TodayContractDomainId;
+    const label =
+      TODAY_CONTRACT_DOMAIN_LABEL_RU[domainId] ||
+      clean(sc.sphere_label_ru) ||
+      clean(sc.sphere) ||
+      "Сфера дня";
     const what = clean(sc.what_happens);
     const domestic = clean(sc.domestic_example);
     const opportunity = clean(sc.opportunity);
