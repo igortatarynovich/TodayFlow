@@ -870,6 +870,24 @@ async def get_today_contract(
     except ValueError as exc:
         # Assemble-once: never build on user GET — wait for cron / show assembling.
         if "day_story_missing" in str(exc):
+            # Kick background catch-up for this opener (daemon; no LLM on this request).
+            try:
+                from todayflow_backend.services.day_prewarm_job_c5 import enqueue_day_prewarm
+
+                enqueue_day_prewarm(
+                    db,
+                    user_id=int(user.id),
+                    local_date=target_date_obj,
+                    locale=locale,
+                    timezone_name=tz_name,
+                )
+            except Exception as enqueue_exc:
+                logger.warning(
+                    "day_prewarm enqueue failed user=%s date=%s: %s",
+                    user.id,
+                    target_date_obj,
+                    enqueue_exc,
+                )
             shell = build_day_assembling_contract(lifecycle=day_lifecycle, locale=locale)
             return TodayContractV1Response(
                 **_attach_depth_layer_offer(shell, user=user, db=db, locale=locale)
@@ -877,7 +895,7 @@ async def get_today_contract(
         logger.error("GET /today/contract assembly failed: %s", exc)
         raise HTTPException(status_code=500, detail="today_contract_v1 assembly failed") from exc
 
-    # Attach lifecycle; do not enqueue enrichment from user GET (cron owns assemble).
+    # Attach lifecycle; GET never awaits assemble (cron + background catch-up own it).
     try:
         progress = dict(contract.get("progress") or {})
         progress["day_lifecycle"] = day_lifecycle

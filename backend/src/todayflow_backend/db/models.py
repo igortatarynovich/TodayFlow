@@ -1043,7 +1043,7 @@ class UserPushSchedule(Base):
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
     timezone = Column(String(64), nullable=False, default="Europe/Moscow")
     morning_enabled = Column(Boolean, nullable=False, default=True)
-    morning_time = Column(String(5), nullable=False, default="08:30")
+    morning_time = Column(String(5), nullable=False, default="05:00")
     day_enabled = Column(Boolean, nullable=False, default=True)
     day_time = Column(String(5), nullable=False, default="13:00")
     evening_enabled = Column(Boolean, nullable=False, default=True)
@@ -1054,7 +1054,7 @@ class UserPushSchedule(Base):
     goal_afternoon_time = Column(String(5), nullable=False, default="16:00")
     # Тихие часы (локальное время): не слать ритм/цель из крона; мгновенный goal_ack — по notify_goal_ack + тихие часы
     quiet_start = Column(String(5), nullable=False, default="22:00")
-    quiet_end = Column(String(5), nullable=False, default="08:00")
+    quiet_end = Column(String(5), nullable=False, default="05:00")
     max_auto_per_day = Column(Integer, nullable=False, default=5)
     # Категории (будущие хуки читают те же флаги)
     notify_rhythm_today = Column(Boolean, nullable=False, default=True)

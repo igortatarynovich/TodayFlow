@@ -64,11 +64,8 @@ async function claimDayProgressOnly(options?: {
       }
       if (dayClaim.transferred_blocks.length > 0) {
         if (dayClaim.story_refresh_required) {
-          try {
-            await refreshTodayStory({ localDate: dayClaim.local_date });
-          } catch {
-            /* refresh is separate from claim */
-          }
+          // Assemble-once: never block login/navigation on LLM rebuild.
+          void refreshTodayStory({ localDate: dayClaim.local_date }).catch(() => {});
         }
         return {
           status: "ready",
@@ -125,11 +122,8 @@ export async function claimGuestProfileAfterAuth(): Promise<ClaimGuestProfileRes
     redirect = dayClaim.redirect_target || FIRST_TODAY_PATH;
     storyRefreshRequired = Boolean(dayClaim.story_refresh_required);
     if (storyRefreshRequired) {
-      try {
-        await refreshTodayStory({ localDate: dayClaim.local_date });
-      } catch {
-        /* FE may refresh on Today mount */
-      }
+      // Fire-and-forget — Today assembling / catch-up owns the package.
+      void refreshTodayStory({ localDate: dayClaim.local_date }).catch(() => {});
     }
   } catch {
     // Fallback: legacy symbols-only claim

@@ -3,7 +3,7 @@
 Canon: docs/audits/DAY_LIFECYCLE_V1.md
 
 Status vocabulary (progress.day_lifecycle.status):
-  - day_not_ready — local midnight → ready_at (default morning_time 08:30)
+  - day_not_ready — local midnight → ready_at (default morning_time 05:00)
   - ready — at/after ready_at (story may still be assembling elsewhere)
   - closed — user or system evening close (C5.3)
 """
@@ -15,10 +15,11 @@ from typing import Any
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 # Defaults aligned with push DEFAULT_SCHEDULE + DAY_LIFECYCLE_V1.
+# Assemble finishes before ready so the package is product-ready at 05:00.
 DEFAULT_TIMEZONE = "Europe/Moscow"
-DEFAULT_READY_TIME = "08:30"
-DEFAULT_ASSEMBLE_START = "05:00"
-DEFAULT_ASSEMBLE_END = "07:00"
+DEFAULT_READY_TIME = "05:00"
+DEFAULT_ASSEMBLE_START = "03:00"
+DEFAULT_ASSEMBLE_END = "05:00"
 DEFAULT_CLOSE_TIME = "23:00"
 
 DAY_STATUS_NOT_READY = "day_not_ready"

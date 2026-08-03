@@ -50,14 +50,15 @@ class GuestClaimPayload(BaseModel):
 
 def _map_guest_error(exc: ValueError) -> HTTPException:
     code = str(exc)
+    # Claim-token failures are not JWT death — use 4xx that must not wipe the session.
     status = {
         "guest_auth_required": 401,
         "unknown_guest_session": 404,
-        "invalid_guest_secret": 401,
+        "invalid_guest_secret": 400,
         "guest_session_sealed": 409,
         "claim_token_required": 400,
-        "invalid_claim_token": 401,
-        "claim_token_expired": 401,
+        "invalid_claim_token": 400,
+        "claim_token_expired": 400,
         "guest_session_already_claimed": 409,
         "invalid_guest_session_id": 400,
     }.get(code, 400)

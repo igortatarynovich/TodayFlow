@@ -17,8 +17,10 @@ if [[ -z "$SECRET" ]]; then
   exit 1
 fi
 URL="${TODAYFLOW_INTERNAL_PUSH_URL:-http://127.0.0.1:8080/internal/push/run-due}"
+# Prewarm can LLM for several users; 120s was timing out mid-assemble.
 curl -sS -X POST "$URL" \
   -H "X-Push-Dispatch-Secret: ${SECRET}" \
   -H "Content-Type: application/json" \
-  --max-time 120
+  -d '{"max_prewarm":8}' \
+  --max-time 600
 echo

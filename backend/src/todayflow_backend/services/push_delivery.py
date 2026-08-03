@@ -22,7 +22,7 @@ WINDOW_MINUTES = 14
 DEFAULT_SCHEDULE: dict[str, Any] = {
     "timezone": "Europe/Moscow",
     "morning_enabled": True,
-    "morning_time": "08:30",
+    "morning_time": "05:00",
     "day_enabled": True,
     "day_time": "13:00",
     "evening_enabled": True,
@@ -32,7 +32,8 @@ DEFAULT_SCHEDULE: dict[str, Any] = {
     "goal_afternoon_enabled": True,
     "goal_afternoon_time": "16:00",
     "quiet_start": "22:00",
-    "quiet_end": "08:00",
+    # Ends at ready_at so morning «день готов» is not quiet-blocked.
+    "quiet_end": "05:00",
     "max_auto_per_day": 5,
     "notify_rhythm_today": True,
     "notify_goal_nudges": True,

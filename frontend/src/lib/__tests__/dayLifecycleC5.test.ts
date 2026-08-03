@@ -15,10 +15,10 @@ describe("day lifecycle C5 helpers", () => {
 
     const byStatus = {
       generation_id: "329",
-      progress: { day_lifecycle: { status: "day_not_ready", ready_time: "08:30" } },
+      progress: { day_lifecycle: { status: "day_not_ready", ready_time: "05:00" } },
     } as TodayContractV1;
     expect(isDayNotReady(byStatus)).toBe(true);
-    expect(readDayLifecycle(byStatus)?.ready_time).toBe("08:30");
+    expect(readDayLifecycle(byStatus)?.ready_time).toBe("05:00");
 
     const ready = {
       generation_id: "329",

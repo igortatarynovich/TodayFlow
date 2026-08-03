@@ -252,7 +252,7 @@ def system_close_user_day(db: Session, *, user_id: int, local_date: date) -> str
 
 
 def _candidate_user_ids(db: Session) -> list[int]:
-    """Users who should receive assemble-once: push surface and recent Today activity."""
+    """Users who should receive assemble-once: profile-ready + push + recent activity."""
     ids: set[int] = set()
     for (uid,) in db.query(db_models.PushDevice.user_id).distinct().all():
         if uid is not None:
@@ -260,11 +260,45 @@ def _candidate_user_ids(db: Session) -> list[int]:
     for (uid,) in db.query(db_models.UserPushSchedule.user_id).distinct().all():
         if uid is not None:
             ids.add(int(uid))
+    # Profile-capable accounts (birth facts) — morning package even without recent open.
+    for (uid,) in (
+        db.query(db_models.AstroProfile.user_id)
+        .filter(
+            (db_models.AstroProfile.is_primary.is_(True))
+            | (db_models.AstroProfile.relation.is_(None))
+            | (db_models.AstroProfile.relation == "self")
+        )
+        .distinct()
+        .all()
+    ):
+        if uid is not None:
+            ids.add(int(uid))
     # Recent day engagement — don't leave active users without a morning package.
     recent_cut = date.today() - timedelta(days=3)
     for (uid,) in (
         db.query(db_models.DayConnection.user_id)
         .filter(db_models.DayConnection.date >= recent_cut)
+        .distinct()
+        .all()
+    ):
+        if uid is not None:
+            ids.add(int(uid))
+    # Broader activity signals (14d) — MeaningEvent / day_story pipeline.
+    activity_cut = date.today() - timedelta(days=14)
+    for (uid,) in (
+        db.query(db_models.MeaningEvent.user_id)
+        .filter(db_models.MeaningEvent.local_date >= activity_cut)
+        .distinct()
+        .all()
+    ):
+        if uid is not None:
+            ids.add(int(uid))
+    for (uid,) in (
+        db.query(db_models.DayStoryState.user_id)
+        .filter(
+            db_models.DayStoryState.user_id.isnot(None),
+            db_models.DayStoryState.local_date >= activity_cut,
+        )
         .distinct()
         .all()
     ):

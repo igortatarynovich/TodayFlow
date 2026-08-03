@@ -10,6 +10,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from todayflow_backend.db.models import Base, DayConnection, DayRitual, DaySymbolState, PushDevice, User
+from todayflow_backend.db import models as db_models
 from todayflow_backend.services.day_lifecycle_clock_c5 import (
     DAY_STATUS_ASSEMBLING,
     DAY_STATUS_CLOSED,
@@ -23,6 +24,7 @@ from todayflow_backend.services.day_lifecycle_clock_c5 import (
 )
 from todayflow_backend.services.day_lifecycle_jobs_c5 import (
     SYSTEM_CLOSE_MARKER,
+    _candidate_user_ids,
     prewarm_assemble_user_day,
     run_day_lifecycle_due,
     system_close_user_day,
@@ -52,9 +54,9 @@ def test_closed_status_wins() -> None:
 
 def test_assemble_window_and_close_deadline() -> None:
     tz = ZoneInfo("Europe/Moscow")
-    morning = datetime(2026, 7, 27, 6, 0, tzinfo=tz)
+    morning = datetime(2026, 7, 27, 4, 0, tzinfo=tz)
     assert in_assemble_window(morning) is True
-    assert DEFAULT_ASSEMBLE_END == "07:00"
+    assert DEFAULT_ASSEMBLE_END == "05:00"
     assert should_system_close_date(now_local=morning, candidate=morning.date()) is False
     assert should_system_close_date(
         now_local=morning,
@@ -138,7 +140,7 @@ def test_run_day_lifecycle_due_calls_prewarm_in_window() -> None:
     db.add(user)
     db.add(PushDevice(user_id=33, platform="web", token="tok-prewarm-33"))
     db.commit()
-    now = datetime(2026, 7, 27, 6, 15, tzinfo=ZoneInfo("Europe/Moscow"))
+    now = datetime(2026, 7, 27, 4, 15, tzinfo=ZoneInfo("Europe/Moscow"))
 
     with patch(
         "todayflow_backend.services.day_lifecycle_jobs_c5.prewarm_assemble_user_day",
@@ -148,7 +150,7 @@ def test_run_day_lifecycle_due_calls_prewarm_in_window() -> None:
             "todayflow_backend.services.day_lifecycle_jobs_c5._schedule_row",
             return_value={
                 "timezone": "Europe/Moscow",
-                "morning_time": "08:30",
+                "morning_time": "05:00",
             },
         ):
             counts = run_day_lifecycle_due(db, now_utc=now.astimezone(ZoneInfo("UTC")), max_prewarm=2)
@@ -180,3 +182,44 @@ def test_prewarm_skips_when_ready_but_still_prebakes_symbols() -> None:
     row = db.query(DaySymbolState).filter(DaySymbolState.owner_key == owner, DaySymbolState.local_date == day).one()
     assert row.number_reduced is not None
     assert row.card_id is not None
+
+
+def test_candidate_user_ids_includes_astro_profile() -> None:
+    db = _session()
+    db.add(User(id=71, email="astro@test.local", password_hash="x"))
+    db.add(User(id=72, email="idle@test.local", password_hash="x"))
+    db.add(
+        db_models.AstroProfile(
+            user_id=71,
+            label="self",
+            birth_date=date(1990, 1, 15),
+            relation="self",
+            is_primary=True,
+        )
+    )
+    db.commit()
+    ids = _candidate_user_ids(db)
+    assert 71 in ids
+    assert 72 not in ids
+
+
+def test_enqueue_day_prewarm_schedules_runner() -> None:
+    db = _session()
+    db.add(User(id=81, email="catchup@test.local", password_hash="x"))
+    db.commit()
+    from todayflow_backend.services.day_prewarm_job_c5 import enqueue_day_prewarm
+
+    with patch(
+        "todayflow_backend.services.day_prewarm_job_c5.schedule_job_runner"
+    ) as schedule:
+        job = enqueue_day_prewarm(
+            db,
+            user_id=81,
+            local_date=date(2026, 8, 3),
+            locale="ru",
+            timezone_name="Europe/Moscow",
+        )
+    assert job.user_id == 81
+    assert job.module == "day_lifecycle"
+    assert job.surface == "prewarm"
+    assert schedule.called

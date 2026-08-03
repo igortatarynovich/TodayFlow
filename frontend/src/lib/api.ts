@@ -164,7 +164,28 @@ async function performRequest<T>(path: string, options: RequestInit | undefined,
           path.includes("/auth/email-signup") ||
           path.includes("/auth/signup") ||
           path.includes("/auth/magic");
-        if (!isCredentialChallenge && typeof window !== "undefined") {
+        // Guest-claim soft failures are claim-token errors, not a dead JWT.
+        // Clearing the session here logged users out on refresh / post-login claim.
+        const isGuestClaimSoft =
+          path.includes("/today/guest/") ||
+          path.includes("/guest/");
+        const detailCode =
+          details && typeof details === "object" && "detail" in (details as object)
+            ? String((details as { detail?: unknown }).detail || "")
+            : typeof details === "string"
+              ? details
+              : "";
+        const softClaimCodes = new Set([
+          "invalid_claim_token",
+          "claim_token_expired",
+          "invalid_guest_secret",
+          "claim_token_required",
+        ]);
+        const shouldClearSession =
+          !isCredentialChallenge &&
+          !isGuestClaimSoft &&
+          !softClaimCodes.has(detailCode);
+        if (shouldClearSession && typeof window !== "undefined") {
           const { clearAuthSession, notifyAuthSessionChanged } = await import("@/lib/authSession");
           clearAuthSession();
           notifyAuthSessionChanged();

@@ -3,7 +3,7 @@
 import type { DayLifecycleC5 } from "@/lib/todayContract";
 
 function formatReadyAt(lifecycle: DayLifecycleC5 | null): string {
-  const clock = (lifecycle?.ready_time || "08:30").trim();
+  const clock = (lifecycle?.ready_time || "05:00").trim();
   const iso = lifecycle?.ready_at;
   if (!iso) return clock;
   try {

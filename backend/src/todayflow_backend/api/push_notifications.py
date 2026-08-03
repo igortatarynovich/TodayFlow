@@ -20,6 +20,9 @@ router = APIRouter(prefix="/notifications", tags=["notifications"])
 internal_router = APIRouter(prefix="/internal", tags=["internal"])
 
 
+class RunDueBody(BaseModel):
+    max_prewarm: Optional[int] = Field(default=8, ge=0, le=32)
+
 class PushDeviceRegister(BaseModel):
     platform: str = Field(..., description="ios | android | web")
     token: str = Field(..., min_length=8)
@@ -205,6 +208,7 @@ def update_push_schedule(
 
 @internal_router.post("/push/run-due")
 def internal_run_due_pushes(
+    body: Optional[RunDueBody] = None,
     x_push_dispatch_secret: Optional[str] = Header(None, alias="X-Push-Dispatch-Secret"),
     db: Session = Depends(get_session),
 ):
@@ -217,6 +221,7 @@ def internal_run_due_pushes(
         raise HTTPException(status_code=404, detail="Not found")
     from todayflow_backend.services.day_lifecycle_jobs_c5 import run_day_lifecycle_due
 
-    lifecycle = run_day_lifecycle_due(db)
+    max_prewarm = 8 if body is None or body.max_prewarm is None else int(body.max_prewarm)
+    lifecycle = run_day_lifecycle_due(db, max_prewarm=max_prewarm)
     counts = run_due_notifications(db)
     return {"ok": True, "counts": counts, "lifecycle": lifecycle}
