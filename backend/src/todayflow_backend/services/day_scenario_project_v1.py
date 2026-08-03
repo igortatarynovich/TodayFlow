@@ -19,8 +19,12 @@ from typing import Any
 
 from todayflow_backend.services.day_scenario_v1 import (
     PRODUCT_SPHERE_IDS,
+    build_interpretive_chorus_v1,
+    build_scenario_conflict_v1,
     build_scenario_props_v1,
     build_scenario_scenes_v1,
+    chorus_seed_paste_needs_heal_v1,
+    invented_bank_short_name_needs_heal_v1,
     is_calendar_driver_row,
     is_calendar_kitchen_fact,
     sanitize_conflict_short_name,
@@ -265,7 +269,12 @@ def _heal_template_scene_copy(
     *,
     person_name: str | None = None,
 ) -> dict[str, Any]:
-    """Rewrite force-paste scene/props templates and mashed short_name on serve."""
+    """Rewrite force-paste scene/props/chorus templates and bank short_name on serve.
+
+    Cached ``generation_logs`` from before seed-kill still store old chorus bridges
+    («подталкивает день к сюжету», «окрашивает прохождение», bank A|B titles).
+    Heal on project so GET/cache-hit does not resurrect them into Symbols.
+    """
     scenes = scen.get("scenes")
     conflict = _as_dict(scen.get("conflict"))
     chorus = _as_dict(scen.get("chorus"))
@@ -274,6 +283,10 @@ def _heal_template_scene_copy(
     raw_short = str(conflict.get("short_name") or "")
     clean_short = sanitize_conflict_short_name(raw_short)
     short_needs = bool(clean_short and clean_short != raw_short.strip().rstrip(".!?"))
+    bank_short_needs = invented_bank_short_name_needs_heal_v1(raw_short) or (
+        invented_bank_short_name_needs_heal_v1(clean_short) if clean_short else False
+    )
+    chorus_need = chorus_seed_paste_needs_heal_v1(chorus, short_name=raw_short or clean_short)
     affirm_blob = " ".join(
         str(a.get("text") or "")
         for a in _as_list(props.get("affirmations"))
@@ -281,11 +294,11 @@ def _heal_template_scene_copy(
     )
     props_need = bool(_FORCE_PASTE_AFFIRM_RE.search(affirm_blob))
     scenes_need = scene_copy_needs_heal_v1(scenes if isinstance(scenes, list) else None)
-    if not (scenes_need or short_needs or props_need):
+    if not (scenes_need or short_needs or props_need or chorus_need or bank_short_needs):
         return scen
     if not conflict or not foundation:
         # Still heal short_name in place when possible
-        if short_needs and conflict:
+        if short_needs and conflict and not bank_short_needs:
             healed_min = dict(scen)
             c = dict(conflict)
             c["short_name"] = clean_short
@@ -300,16 +313,49 @@ def _heal_template_scene_copy(
             domains.append(wire)
     healed = dict(scen)
     c = dict(conflict)
-    if clean_short:
+    if bank_short_needs:
+        thesis = _as_dict(c.get("thesis"))
+        day_thesis = _as_dict(thesis.get("day_thesis")) or {
+            "family": thesis.get("family"),
+            "variant": thesis.get("variant"),
+            "mode": thesis.get("mode"),
+            "label_ru": thesis.get("label_ru") or thesis.get("act_iii_registry_label"),
+            "driver_ids": list(c.get("driver_ids") or []),
+        }
+        rebuilt_conflict = build_scenario_conflict_v1(
+            foundation=foundation,
+            day_thesis=day_thesis if day_thesis.get("family") or day_thesis.get("mode") else None,
+            interpretation={"day_thesis": day_thesis} if day_thesis else None,
+        )
+        # Preserve evidence/driver ids from the stored nest when rebuild empties them.
+        if c.get("driver_ids") and not rebuilt_conflict.get("driver_ids"):
+            rebuilt_conflict["driver_ids"] = list(c.get("driver_ids") or [])
+        if c.get("why_arose") and not rebuilt_conflict.get("why_arose"):
+            rebuilt_conflict["why_arose"] = c.get("why_arose")
+        c = rebuilt_conflict
+        chorus_need = True
+        scenes_need = True
+        props_need = True
+    elif clean_short:
         c["short_name"] = clean_short
     healed["conflict"] = c
-    if scenes_need or props_need:
+
+    active_chorus = chorus
+    if chorus_need:
+        active_chorus = build_interpretive_chorus_v1(
+            foundation=foundation,
+            conflict_label=str(c.get("short_name") or ""),
+            interpretation={"domains_present": domains} if domains else None,
+        )
+        healed["chorus"] = active_chorus
+
+    if scenes_need or props_need or chorus_need or bank_short_needs:
         new_scenes = build_scenario_scenes_v1(
             conflict=c,
-            chorus=chorus,
+            chorus=active_chorus,
             foundation=foundation,
             interpretation={"domains_present": domains} if domains else None,
-            max_scenes=max(len(prior), 3),
+            max_scenes=max(len(prior), 3) if prior else 3,
             person_name=person_name,
         )
         healed["scenes"] = new_scenes
@@ -320,7 +366,7 @@ def _heal_template_scene_copy(
         healed["props"] = build_scenario_props_v1(
             conflict=c,
             scenes=new_scenes,
-            chorus=chorus,
+            chorus=active_chorus,
             day_favorable=day_favorable_from_activations(
                 foundation.get("personal_natal_activations") or []
             ),

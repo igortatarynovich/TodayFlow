@@ -191,3 +191,76 @@ def test_projection_map_documents_legacy():
     assert "talisman.color" in PROJECTION_MAP
     assert any("formula" in x for x in LEGACY_NON_SOT)
     assert any("LLM" in x for x in LEGACY_NON_SOT)
+
+
+def test_serve_heal_kills_cached_seed_paste_chorus():
+    """Pre–seed-kill generation_logs must not survive project onto Symbols."""
+    story, scenario, _ = _scenario_and_fallback()
+    short = "Тащить старое или отпустить и восстановиться"
+    scenario = dict(scenario)
+    scenario["conflict"] = {
+        **scenario["conflict"],
+        "short_name": short,
+        "opposing_forces": {"a": "тащить старое", "b": "отпустить и восстановиться"},
+        "thesis": {
+            **(scenario["conflict"].get("thesis") or {}),
+            "mode": "recovery",
+            "family": "change",
+            "label_ru": "Восстановление",
+            "day_thesis": {
+                "family": "change",
+                "variant": "release_old",
+                "mode": "recovery",
+                "label_ru": "Восстановление",
+                "driver_ids": list(scenario["conflict"].get("driver_ids") or []),
+            },
+        },
+    }
+    scenario["chorus"] = {
+        "astrology": [
+            {
+                "named_factor": "Убывающая луна.",
+                "human_meaning": (
+                    f"Убывающая луна. Это подталкивает день к сюжету «{short}»."
+                ),
+                "link_to_conflict": f"Связь с «{short}».",
+            }
+        ],
+        "day_card": {
+            "named_factor": "Карта дня — Девятка жезлов",
+            "link_to_conflict": (
+                f"Архетип «Девятка жезлов» лучше всего описывает, какой ролью "
+                f"пройти «{short}» — не как отдельный прогноз."
+            ),
+            "human_meaning": f"Проживите «{short}».",
+        },
+        "day_number": {
+            "named_factor": "Число дня — 21",
+            "link_to_conflict": (
+                f"Число 21 окрашивает прохождение «{short}»: темп — выражение, "
+                f"способ — сказать вслух, не копить."
+            ),
+            "human_meaning": (
+                f"Число 21 окрашивает прохождение «{short}»: темп — выражение, "
+                f"способ — сказать вслух, не копить."
+            ),
+        },
+        "natal": [],
+    }
+    projected = project_day_scenario_onto_day_story_v1(story, scenario)
+    assert projected["interpretation_status"] == "ok"
+    theme = str(projected.get("theme") or projected["day_scenario"]["conflict"]["short_name"])
+    assert "тащить старое" not in theme.lower()
+    assert "или" not in theme.lower()
+    chorus = projected["interpretive_chorus"]
+    blob = " ".join(
+        [
+            str(chorus.get("astrology_meaning") or ""),
+            str((chorus.get("day_card") or {}).get("role") or ""),
+            str((chorus.get("day_number") or {}).get("for_conflict") or ""),
+        ]
+    ).lower()
+    assert "подталкивает день к сюжету" not in blob
+    assert "окрашивает прохождение" not in blob
+    assert "какой ролью пройти" not in blob
+    assert short.lower() not in blob

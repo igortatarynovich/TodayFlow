@@ -972,6 +972,74 @@ _DEFAULT_SCENE_BEAT: dict[str, str] = {
 _TEMPLATE_OPP_RE = re.compile(r"^Шанс выбрать «.+» именно здесь")
 _TEMPLATE_WHAT_MARKERS = ("тот же выбор — «", "день упирается в выбор: «")
 
+# Pre–seed-kill chorus bridges (cached generation_logs still serve these).
+_CHORUS_SEED_PASTE_MARKERS = (
+    "подталкивает день к сюжету",
+    "окрашивает прохождение",
+    "какой ролью пройти",
+    "пройти «",
+)
+
+# Exact hero labels invented by legacy ``_opposing_forces`` bank (mode/family).
+_INVENTED_BANK_BINARY_SHORT = frozenset(
+    {
+        "тащить старое или отпустить и восстановиться",
+        "упустить окно или сделать один ясный шаг",
+        "ломать работающее или беречь ровный ритм",
+        "угодить всем или выбрать своё",
+        "сгладить или сказать прямо",
+        "удержать привычное или принять поворот",
+        "сорваться или удержать меру",
+        "распылиться или держать ритм",
+        "закрыться или войти в контакт",
+        "автопилот или осознанный выбор",
+    }
+)
+
+
+def invented_bank_short_name_needs_heal_v1(short_name: Any) -> bool:
+    """True when Plot title is a legacy family/mode opposing-forces bank label."""
+    t = _clip(short_name, 120).lower().rstrip(".!?")
+    return bool(t) and t in _INVENTED_BANK_BINARY_SHORT
+
+
+def chorus_seed_paste_needs_heal_v1(
+    chorus: dict[str, Any] | None,
+    *,
+    short_name: str = "",
+) -> bool:
+    """True when chorus still pastes conflict short_name / old bridge templates."""
+    if not isinstance(chorus, dict) or not chorus:
+        return False
+    chunks: list[str] = []
+    for row in _as_list(chorus.get("astrology")):
+        if isinstance(row, dict):
+            chunks.append(str(row.get("human_meaning") or ""))
+            chunks.append(str(row.get("link_to_conflict") or ""))
+    for key in ("day_card", "day_number"):
+        voice = _as_dict(chorus.get(key))
+        if voice:
+            for field in (
+                "human_meaning",
+                "link_to_conflict",
+                "archetype_role",
+                "way_to_relate",
+            ):
+                chunks.append(str(voice.get(field) or ""))
+    for row in _as_list(chorus.get("natal")):
+        if isinstance(row, dict):
+            chunks.append(str(row.get("human_meaning") or ""))
+            chunks.append(str(row.get("link_to_conflict") or ""))
+    blob = " ".join(chunks).lower()
+    if not blob.strip():
+        return False
+    if any(m in blob for m in _CHORUS_SEED_PASTE_MARKERS):
+        return True
+    label = _clip(short_name, 120)
+    if label and len(label) >= 12 and label.lower() in blob:
+        return True
+    return False
+
 
 def scene_copy_needs_heal_v1(scenes: list[Any] | None) -> bool:
     """True when scenes still use force-paste templates (pre-variety beats)."""
@@ -1522,9 +1590,16 @@ def find_verbatim_seed_leaks_v1(scenario: dict[str, Any] | None) -> list[str]:
     scenes = _as_list(scenario.get("scenes"))
     props = _as_dict(scenario.get("props"))
 
+    leaks: list[str] = []
+    short = str(conflict.get("short_name") or "")
+    if invented_bank_short_name_needs_heal_v1(short):
+        leaks.append("conflict.short_name:invented_bank_binary")
+    if chorus_seed_paste_needs_heal_v1(chorus, short_name=short):
+        leaks.append("chorus:seed_paste_bridge")
+
     # Cross-act surfaces only (one text sample per logical voice).
     surfaces: list[tuple[str, str]] = [
-        ("conflict.short_name", str(conflict.get("short_name") or "")),
+        ("conflict.short_name", short),
         ("conflict.why_arose", str(conflict.get("why_arose") or "")),
     ]
     for i, row in enumerate(_as_list(chorus.get("astrology"))):
@@ -1569,7 +1644,6 @@ def find_verbatim_seed_leaks_v1(scenario: dict[str, Any] | None) -> list[str]:
         for ng in _word_ngrams(text, min_words=6):
             ngram_owners.setdefault(ng, []).append(key)
 
-    leaks: list[str] = []
     seen_ng: set[str] = set()
     for ng, owners in ngram_owners.items():
         uniq = sorted(set(owners))
@@ -1586,7 +1660,7 @@ def find_verbatim_seed_leaks_v1(scenario: dict[str, Any] | None) -> list[str]:
             continue
         seen_ng.add(ng)
         leaks.append(f"verbatim_seed_leak:{ng!r}@{'+'.join(uniq[:4])}")
-        if len(leaks) >= 8:
+        if len(leaks) >= 12:
             break
     return leaks
 
