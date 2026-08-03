@@ -4,7 +4,8 @@ Last updated: 2026-08-03
 Owner: Product + Engineering
 Status: Active working document
 
-**IN PROGRESS (2026-08-03):** ScreenFlow content jobs **v3.1** — P0+P1+seed-kill+domain4+Plot visual on branch; remaining polish minors.  
+**DONE (2026-08-03):** ScreenFlow content jobs **v3.1** — P0+P1+P2 gap plan closed on branch (seed-kill · domain4 · Plot wash · serve heal · LLM hard-gate · native opaque `serves_conflict`).  
+**IN PROGRESS:** Design-system / Day Atmosphere polish on same branch; PR #7 draft.  
 Prior: card_base_v1 cutover live · editorial polish minors ongoing.
 
 ## Architecture impact — ScreenFlow content jobs v3.1 (2026-08-03)
@@ -32,7 +33,7 @@ Prior: card_base_v1 cutover live · editorial polish minors ongoing.
 | P2 | Domain dictionary unify 3→4 on contract | Wave2 / day_story | **DONE** wire = work\|money\|relationships\|energy |
 | P2 | Practice\|affirmation rotation single slot | Move | **DONE** (date hash XOR) |
 | P2 | Plot visual tied to classification | FE hero | **DONE** `resolvePlotHeroWash(thesis.mode)` |
-| P2 | Chorus/scenes stop quoting short_name A\|B | generation | **DONE** seed-kill + serve heal (`48b589c`) + **LLM hard-gate** (`SEED_*` + validate hard prefixes) |
+| P2 | Chorus/scenes stop quoting short_name A\|B | generation | **DONE** seed-kill + serve heal (`48b589c`) + LLM hard-gate (`b2d8203`) + native opaque serves/why (`fa4d915`); cluster 56/56 |
 
 ## Architecture impact — card_base_v1 cutover (explainer / question-tarot) (2026-08-01)
 
