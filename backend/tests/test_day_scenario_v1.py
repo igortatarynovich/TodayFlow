@@ -279,7 +279,10 @@ def test_props_from_scenes_have_origin_and_conflict_link():
         assert force_a.lower() not in link
     if force_b:
         assert force_b.lower() not in link
-    assert "якорь" in link or "опора" in link or color["name"].lower() in link
+    # v3.1b: link is catalog symbolic_property once — lived tip, not «опора ясности» mash.
+    assert isinstance(color["link_to_conflict"], str) and len(color["link_to_conflict"].strip()) > 8
+    effect = str(color.get("expected_effect_today") or "")
+    assert effect and color["link_to_conflict"] not in effect
 
 
 def test_validate_rejects_empty_conflict_name():
