@@ -180,7 +180,7 @@ function fromDayStory(contract: TodayContractV1): TodayDayMap | null {
   // whereYouBreak stays domain risk only — never tarot/profile dumps.
   let whereYouBreak: string | null = null;
   const domains = contract.domains;
-  for (const key of ["money_work", "relationships", "family"] as const) {
+  for (const key of ["work", "money", "relationships", "energy"] as const) {
     const lens = domains?.[key];
     const risk = lens && typeof lens === "object" ? gate((lens as { risk?: string }).risk) : "";
     if (risk && risk.length >= 12 && !nearDuplicate(risk, trap)) {

@@ -19,9 +19,10 @@ const CONTRACT_FIXTURE: TodayContractV1 = {
   global_context: { period: "июнь" },
   personal_growth: { development_point: "ясность" },
   domains: {
+    work: { status: "фокус", opportunity: "одно решение", risk: "распыление", action: "закрыть задачу" },
+    money: { status: "фокус", opportunity: "одно решение", risk: "распыление", action: "закрыть задачу" },
     relationships: { status: "контакт", opportunity: "мягкий разговор", risk: "давление", action: "написать" },
-    money_work: { status: "фокус", opportunity: "одно решение", risk: "распыление", action: "закрыть задачу" },
-    family: { status: "опора", opportunity: "домашний ритм", risk: "усталость", action: "отдых" },
+    energy: { status: "опора", opportunity: "домашний ритм", risk: "усталость", action: "отдых" },
   },
   primary_action: "Закрой одну задачу до обеда.",
   progress: {},
@@ -41,7 +42,7 @@ describe("buildFirstTodayPackage", () => {
     expect(pkg.theme.headline).toMatch(/ясность|решений/i);
     expect(pkg.theme.body).toMatch(/Овен/);
     expect(pkg.progress.statusLabel).toMatch(/День 1/);
-    expect(pkg.insight.spheres).toHaveLength(3);
+    expect(pkg.insight.spheres).toHaveLength(4);
     expect(pkg.action.primary).toContain("Закрой одну задачу");
     expect(pkg.why.lines.some((l) => l.includes("ясность"))).toBe(true);
   });

@@ -26,7 +26,7 @@ Projection implementation    ← Reference / engines / Assembler
 
 | Tier | ID | Одна фокусная цель |
 |------|-----|-------------------|
-| **P0.1** | `today_contract_v1` | **3 жизненных домена** + глобальный контекст + рост — не «красивый прогноз» |
+| **P0.1** | `today_contract_v1` | **4 жизненных домена** (`work`·`money`·`relationships`·`energy`) + глобальный контекст + рост — не «красивый прогноз» |
 | **P0.2** | Compatibility `potential` | «Есть смысл продолжать?» — tier + **условия**, не % |
 | **P1** | Living Profile | Паттерны + что меняется во времени (Calendar → Profile) |
 | — | Calendar UI | **Не отдельный приоритет** — ценность = влияние на Today завтра |
@@ -161,10 +161,11 @@ today_contract_v1:
   personal_growth:
     development_point: string      # не DomainLens
   domains:
+    work: DomainLens
+    money: DomainLens
     relationships: DomainLens
-    money_work: DomainLens
-    family: DomainLens
-  primary_action: string           # echo strongest domain action или отдельный synthesis
+    energy: DomainLens
+  # Legacy money_work / family: read-compat only (normalize → fixed-4); never write.  primary_action: string           # echo strongest domain action или отдельный synthesis
   progress: object
   generation_id: string
   # Optional narrative nest (post-P0.1 wire)

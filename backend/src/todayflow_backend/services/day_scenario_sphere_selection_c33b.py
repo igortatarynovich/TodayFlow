@@ -24,6 +24,10 @@ from todayflow_backend.services.day_scenario_v1 import (
     _FAMILY_SPHERES,
     _SPHERE_LABEL_RU,
 )
+from todayflow_backend.services.today_domain_wire_v1 import (
+    normalize_domain_id,
+    normalize_domains_present,
+)
 
 CONTRACT_VERSION = "day_scenario_sphere_selection_c33b"
 
@@ -84,9 +88,10 @@ def build_sphere_selection_c33b(
     """
     p = _as_dict(pack)
     depth = str(p.get("evidence_depth") or DEPTH_GENERAL)
-    domains = [str(d) for d in (day_domains or []) if str(d).strip()]
+    domains = normalize_domains_present(day_domains or [])
     family = str(thesis_family or "momentum").strip() or "momentum"
     head = str(ritual_head_topic or "").strip()
+    head_wire = normalize_domain_id(head)
 
     ranked: list[dict[str, Any]] = []
     seen: set[str] = set()
@@ -113,13 +118,13 @@ def build_sphere_selection_c33b(
             source="day",
             weight=0.85,
         )
-    elif head in WIRE_DOMAIN_TO_SPHERES:
-        for sid in WIRE_DOMAIN_TO_SPHERES[head]:
+    elif head_wire and head_wire in WIRE_DOMAIN_TO_SPHERES:
+        for sid in WIRE_DOMAIN_TO_SPHERES[head_wire]:
             _add_ranked(
                 ranked,
                 seen,
                 sphere=sid,
-                reason=f"ritual head domain «{head}»",
+                reason=f"ritual head domain «{head_wire}»",
                 evidence_refs=["ritual.head_topic"],
                 source="day",
                 weight=0.85,

@@ -1,7 +1,11 @@
 /** Soft sphere accents from contract prose — no checklist wrappers. */
 
 import type { TodayContractV1, TodayContractDomainId } from "@/lib/todayContract";
-import { isDomainLensPresent } from "@/lib/todayContract";
+import {
+  isDomainLensPresent,
+  TODAY_CONTRACT_DOMAIN_LABEL_RU,
+  TODAY_CONTRACT_DOMAIN_ORDER,
+} from "@/lib/todayContract";
 import { isRuUserFacingText } from "@/lib/todaySynthesisTextPolicy";
 
 export type TodaySphereFocusCard = {
@@ -19,13 +23,8 @@ export type TodaySphereFocus = {
   neutralNote: string;
 };
 
-const DOMAIN_ORDER: TodayContractDomainId[] = ["money_work", "relationships", "family"];
-
-const SPHERE_LABEL: Record<TodayContractDomainId, string> = {
-  money_work: "Работа и деньги",
-  relationships: "Отношения",
-  family: "Дом и семья",
-};
+const DOMAIN_ORDER = TODAY_CONTRACT_DOMAIN_ORDER;
+const SPHERE_LABEL = TODAY_CONTRACT_DOMAIN_LABEL_RU;
 
 function stripTodayLead(text: string): string {
   return text.replace(/^сегодня\s+[^.]{0,40}[.:]\s*/i, "").replace(/[.!?]+$/, "").trim();

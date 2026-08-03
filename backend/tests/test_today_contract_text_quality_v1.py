@@ -78,18 +78,18 @@ def test_family_profile_leak_fixture_navigation_copy():
     errors = validate_today_contract_v1(contract)
     assert errors == []
 
-    family = contract["domains"]["family"]
-    status_low = family["status"].lower()
-    assert "игорь" not in status_low
-    assert "стремится" not in status_low
-    assert "заботится" not in status_low
-    assert "дома" in status_low or "семье" in status_low
+    # Profile trait dumps must not land in relationships / energy status
+    for domain_id in ("relationships", "energy"):
+        status_low = contract["domains"][domain_id]["status"].lower()
+        assert "игорь" not in status_low
+        assert "стремится" not in status_low
+        assert "заботится" not in status_low
 
     assert contract["personal_growth"]["development_point"] != contract["global_context"]["period"]
 
     rel_action = contract["domains"]["relationships"]["action"].lower()
-    money_action = contract["domains"]["money_work"]["action"].lower()
-    assert rel_action != money_action
+    work_action = contract["domains"]["work"]["action"].lower()
+    assert rel_action != work_action
 
 
 def test_headline_label_not_action():
@@ -134,24 +134,24 @@ def test_profile_trait_leak_fixture_navigation_copy():
     errors = validate_today_contract_v1(contract)
     assert errors == []
 
-    money_status = contract["domains"]["money_work"]["status"].lower()
-    assert "игорь" not in money_status
-    assert "проявляет" not in money_status
-    assert money_status.startswith("сегодня") or "сегодня" in money_status
+    work_status = contract["domains"]["work"]["status"].lower()
+    assert "игорь" not in work_status
+    assert "проявляет" not in work_status
+    assert work_status.startswith("сегодня") or "сегодня" in work_status
 
-    family = contract["domains"]["family"]
-    assert family["status"] != family["opportunity"]
-    assert family["opportunity"] != family["risk"]
-    assert family["risk"] != family["action"]
+    energy = contract["domains"]["energy"]
+    assert energy["status"] != energy["opportunity"]
+    assert energy["opportunity"] != energy["risk"]
+    assert energy["risk"] != energy["action"]
 
-    for domain_id in ("relationships", "money_work", "family"):
+    for domain_id in ("relationships", "work", "money", "energy"):
         action = contract["domains"][domain_id]["action"]
         assert is_valid_action_text(action)
 
 
 def test_status_frames_with_today_prefix():
     out = normalize_domain_status(
-        "money_work",
+        "work",
         "не распыляться и держать один понятный вектор",
         "fallback",
     )

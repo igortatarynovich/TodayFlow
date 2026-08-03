@@ -6,19 +6,25 @@ const baseContract: TodayContractV1 = {
   global_context: { period: "День ясности." },
   personal_growth: { development_point: "Замедлиться." },
   domains: {
+    work: {
+      status: "сегодня в работе — ясность",
+      opportunity: "планирование и закрытие задач",
+      risk: "импulsive решения",
+      action: "Одна задача.",
+    },
+    money: {
+      status: "сегодня в работе — ясность",
+      opportunity: "планирование и закрытие задач",
+      risk: "импulsive решения",
+      action: "Одна задача.",
+    },
     relationships: {
       status: "сегодня в отношениях — слушать",
       opportunity: "глубокие разговоры",
       risk: "конфликты и спешка",
       action: "Напиши близкому.",
     },
-    money_work: {
-      status: "сегодня в работе — ясность",
-      opportunity: "планирование и закрытие задач",
-      risk: "импulsive решения",
-      action: "Одна задача.",
-    },
-    family: {
+    energy: {
       status: "сегодня дома — тишина",
       opportunity: "короткий разговор",
       risk: "перегруз",
@@ -52,6 +58,14 @@ describe("buildTodaySphereFocus", () => {
     const contract: TodayContractV1 = {
       ...baseContract,
       domains: {
+        work: {
+          ...baseContract.domains.money,
+          evidence_status: "present",
+        },
+        money: {
+          ...baseContract.domains.money,
+          evidence_status: "present",
+        },
         relationships: {
           ...baseContract.domains.relationships,
           evidence_status: "absent",
@@ -60,12 +74,8 @@ describe("buildTodaySphereFocus", () => {
           risk: "",
           action: "",
         },
-        money_work: {
-          ...baseContract.domains.money_work,
-          evidence_status: "present",
-        },
-        family: {
-          ...baseContract.domains.family,
+        energy: {
+          ...baseContract.domains.energy,
           evidence_status: "absent",
           status: "",
           opportunity: "",
@@ -75,17 +85,18 @@ describe("buildTodaySphereFocus", () => {
       },
     };
     const focus = buildTodaySphereFocus(contract);
-    expect(focus.cards.every((c) => c.id.includes("money_work"))).toBe(true);
-    expect(focus.cards.some((c) => /relationships|family/.test(c.id))).toBe(false);
+    expect(focus.cards.every((c) => /work|money/.test(c.id))).toBe(true);
+    expect(focus.cards.some((c) => /relationships|energy/.test(c.id))).toBe(false);
   });
 
   it("falls back to day_scenario scenes when domains are empty", () => {
     const contract: TodayContractV1 = {
       ...baseContract,
       domains: {
+        work: { status: "", opportunity: "", risk: "", action: "", evidence_status: "absent" },
+        money: { status: "", opportunity: "", risk: "", action: "", evidence_status: "absent" },
         relationships: { status: "", opportunity: "", risk: "", action: "", evidence_status: "absent" },
-        money_work: { status: "", opportunity: "", risk: "", action: "", evidence_status: "absent" },
-        family: { status: "", opportunity: "", risk: "", action: "", evidence_status: "absent" },
+        energy: { status: "", opportunity: "", risk: "", action: "", evidence_status: "absent" },
       },
       day_story: {
         contract_version: "day_story_v1",

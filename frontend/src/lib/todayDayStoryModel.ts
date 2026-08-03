@@ -139,13 +139,17 @@ function buildGlanceCards(
       ? firstSentence(peak.body)
       : isDomainLensPresent(contract.domains.relationships)
         ? firstSentence(contract.domains.relationships.opportunity ?? "")
-        : "";
+        : isDomainLensPresent(contract.domains.work)
+          ? firstSentence(contract.domains.work.opportunity ?? "")
+          : "";
   const helpfulComment =
     caution?.body != null
       ? firstSentence(caution.body)
-      : isDomainLensPresent(contract.domains.money_work)
-        ? firstSentence(contract.domains.money_work.risk ?? "")
-        : "";
+      : isDomainLensPresent(contract.domains.money)
+        ? firstSentence(contract.domains.money.risk ?? "")
+        : isDomainLensPresent(contract.domains.work)
+          ? firstSentence(contract.domains.work.risk ?? "")
+          : "";
 
   return {
     supported: supportedComment
@@ -438,7 +442,7 @@ function narrativeField(payload: Record<string, unknown> | null | undefined, key
 }
 
 function sphereCardDomainId(card: TodaySphereFocusCard): TodayContractDomainId | null {
-  const match = card.id.match(/^(?:peak2?|caution)-(money_work|relationships|family)$/);
+  const match = card.id.match(/^(?:peak2?|caution)-(work|money|relationships|energy)$/);
   return match ? (match[1] as TodayContractDomainId) : null;
 }
 
@@ -451,16 +455,19 @@ function scenarioTieInForCard(
   if (domain === "relationships") {
     return narrativeField(tieIns as Record<string, unknown>, "love");
   }
-  if (domain === "family") {
-    return narrativeField(tieIns as Record<string, unknown>, "family");
+  if (domain === "money") {
+    return narrativeField(tieIns as Record<string, unknown>, "money");
   }
-  if (card.role === "caution") {
+  if (domain === "work") {
+    return narrativeField(tieIns as Record<string, unknown>, "career");
+  }
+  if (domain === "energy") {
     return (
-      narrativeField(tieIns as Record<string, unknown>, "money") ??
-      narrativeField(tieIns as Record<string, unknown>, "career")
+      narrativeField(tieIns as Record<string, unknown>, "family") ??
+      narrativeField(tieIns as Record<string, unknown>, "body")
     );
   }
-  return narrativeField(tieIns as Record<string, unknown>, "career");
+  return null;
 }
 
 /** Подмешивает day_layer / spheres / evening поверх contract + guide story. */

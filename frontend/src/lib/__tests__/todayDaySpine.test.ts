@@ -12,9 +12,10 @@ const contract: TodayContractV1 = {
   global_context: { period: "День паузы — когда ускорение идёт из тревоги." },
   personal_growth: { development_point: "Замедлиться и услышать себя." },
   domains: {
+    work: { status: "ясность", opportunity: "планирование", risk: "импульс", action: "Одна задача." },
+    money: { status: "ясность", opportunity: "планирование", risk: "импульс", action: "Одна задача." },
     relationships: { status: "слушать", opportunity: "глубокие разговоры", risk: "конфликты", action: "Напиши близкому." },
-    money_work: { status: "ясность", opportunity: "планирование", risk: "импульс", action: "Одна задача." },
-    family: { status: "тишина", opportunity: "разговор", risk: "перегруз", action: "10 минут семье." },
+    energy: { status: "тишина", opportunity: "разговор", risk: "перегруз", action: "10 минут семье." },
   },
   primary_action: "Сделай одну главную задачу.",
   progress: {},

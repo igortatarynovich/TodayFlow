@@ -30,19 +30,25 @@ const sampleContract: TodayContractV1 = {
   global_context: { period: "День ясности — спокойный ритм и одна главная линия." },
   personal_growth: { development_point: "Замедлиться и услышать себя." },
   domains: {
+    work: {
+      status: "сегодня в работе — ясность",
+      opportunity: "закрыть одну задачу",
+      risk: "распыление",
+      action: "Выбери одну задачу.",
+    },
+    money: {
+      status: "сегодня в работе — ясность",
+      opportunity: "закрыть одну задачу",
+      risk: "распыление",
+      action: "Выбери одну задачу.",
+    },
     relationships: {
       status: "сегодня в отношениях — больше слушать",
       opportunity: "мягкий контакт",
       risk: "спешить",
       action: "Напиши одному близкому человеку.",
     },
-    money_work: {
-      status: "сегодня в работе — ясность",
-      opportunity: "закрыть одну задачу",
-      risk: "распыление",
-      action: "Выбери одну задачу.",
-    },
-    family: {
+    energy: {
       status: "сегодня дома — тишина",
       opportunity: "короткий разговор",
       risk: "перегруз",

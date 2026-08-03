@@ -7,19 +7,25 @@ const minimalContract: TodayContractV1 = {
   global_context: { period: "день ясности" },
   personal_growth: { development_point: "Точка роста — ясность в общении." },
   domains: {
+    work: {
+      status: "сегодня в работе — один вектор",
+      opportunity: "завершение",
+      risk: "распыление",
+      action: "один приоритет",
+    },
+    money: {
+      status: "сегодня в работе — один вектор",
+      opportunity: "завершение",
+      risk: "распыление",
+      action: "один приоритет",
+    },
     relationships: {
       status: "сегодня в отношениях — ясность",
       opportunity: "открытый контакт",
       risk: "догадки",
       action: "одна честная фраза",
     },
-    money_work: {
-      status: "сегодня в работе — один вектор",
-      opportunity: "завершение",
-      risk: "распыление",
-      action: "один приоритет",
-    },
-    family: {
+    energy: {
       status: "сегодня дома — спокойный тон",
       opportunity: "поддержка",
       risk: "давление",

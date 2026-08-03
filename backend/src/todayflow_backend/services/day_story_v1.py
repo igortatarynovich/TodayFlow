@@ -38,6 +38,11 @@ from todayflow_backend.services.today_contract_fallbacks_v1 import DOMAIN_FALLBA
 from todayflow_backend.services.today_contract_text_quality_v1 import (
     apply_text_quality_gate_to_contract,
 )
+from todayflow_backend.services.today_domain_wire_v1 import (
+    DOMAIN_WIRE_IDS as _DOMAIN_IDS,
+    expand_legacy_domain_lenses,
+    normalize_domains_present,
+)
 
 DAY_STORY_V1_CONTRACT = "day_story_v1"
 DAY_STORY_PROMPT_VER = "day-story-v1.10-no-formula-runtime"
@@ -48,8 +53,6 @@ INTERPRETATION_UNAVAILABLE_RU = (
 )
 
 PracticeKind = Literal["promise", "ascetic", "affirmation", "practice", "none"]
-
-_DOMAIN_IDS = ("relationships", "money_work", "family")
 
 _DAY_STORY_SYS_RU = """Ты — литературный редактор TodayFlow: пишешь единую историю дня только по evidence.
 
@@ -322,6 +325,7 @@ def validate_day_story_v1(payload: dict[str, Any]) -> list[str]:
     if not isinstance(domains, dict):
         errors.append("domains must be object")
     else:
+        domains = expand_legacy_domain_lenses(domains)
         for did, lens in domains.items():
             if did not in _DOMAIN_IDS:
                 errors.append(f"unknown domain: {did}")
@@ -361,7 +365,9 @@ def _normalize_day_story_payload(
     *,
     domains_present: list[str] | None = None,
 ) -> dict[str, Any]:
-    domains_in = raw.get("domains") if isinstance(raw.get("domains"), dict) else {}
+    domains_in = expand_legacy_domain_lenses(
+        raw.get("domains") if isinstance(raw.get("domains"), dict) else {}
+    )
     talisman_in = raw.get("talisman") if isinstance(raw.get("talisman"), dict) else {}
     practice_in = (
         raw.get("practice_recommendation")
@@ -375,7 +381,10 @@ def _normalize_day_story_payload(
     do_raw = raw.get("do") if isinstance(raw.get("do"), list) else []
     avoid_raw = raw.get("avoid") if isinstance(raw.get("avoid"), list) else []
 
-    allowed = set(domains_present) if domains_present is not None else set(_DOMAIN_IDS)
+    present_norm = (
+        normalize_domains_present(domains_present) if domains_present is not None else None
+    )
+    allowed = set(present_norm) if present_norm is not None else set(_DOMAIN_IDS)
     domains_out: dict[str, Any] = {}
     for did in _DOMAIN_IDS:
         if did not in allowed:
@@ -903,10 +912,14 @@ def day_story_to_today_contract_v1(
     progress: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Map day_story_v1 → today_contract_v1 (direct, no legacy assembler)."""
-    domains_in = story.get("domains") if isinstance(story.get("domains"), dict) else {}
+    domains_in = expand_legacy_domain_lenses(
+        story.get("domains") if isinstance(story.get("domains"), dict) else {}
+    )
     trace = story.get("trace") if isinstance(story.get("trace"), dict) else {}
     unavailable = str(story.get("interpretation_status") or "").strip() == "unavailable"
-    present = set(trace.get("domains_present") or domains_in.keys())
+    present = set(
+        normalize_domains_present(trace.get("domains_present") or list(domains_in.keys()))
+    )
     domains_out: dict[str, Any] = {}
     for did in _DOMAIN_IDS:
         if unavailable:
@@ -1057,10 +1070,13 @@ def day_story_to_today_contract_v1(
 
 def day_story_to_legacy_narrative(story: dict[str, Any], *, generation_id: str | None = None) -> dict[str, Any]:
     """Derive legacy guide/spheres/day_layer/evening payloads — no LLM."""
-    domains = story.get("domains") if isinstance(story.get("domains"), dict) else {}
+    domains = expand_legacy_domain_lenses(
+        story.get("domains") if isinstance(story.get("domains"), dict) else {}
+    )
     rel = _domain_lens(domains.get("relationships")) if "relationships" in domains else _empty_domain_lens()
-    mw = _domain_lens(domains.get("money_work")) if "money_work" in domains else _empty_domain_lens()
-    fam = _domain_lens(domains.get("family")) if "family" in domains else _empty_domain_lens()
+    work = _domain_lens(domains.get("work")) if "work" in domains else _empty_domain_lens()
+    money = _domain_lens(domains.get("money")) if "money" in domains else _empty_domain_lens()
+    energy = _domain_lens(domains.get("energy")) if "energy" in domains else _empty_domain_lens()
     do_items = story.get("do") if isinstance(story.get("do"), list) else []
     avoid_items = story.get("avoid") if isinstance(story.get("avoid"), list) else []
     practice = (
@@ -1072,7 +1088,7 @@ def day_story_to_legacy_narrative(story: dict[str, Any], *, generation_id: str |
     guide: dict[str, Any] = {
         "headline": story.get("primary_conflict") or story.get("headline_anchor") or story.get("theme"),
         "subline": story.get("expect") or story.get("direction"),
-        "energy_line": story.get("advantage"),
+        "energy_line": story.get("advantage") or energy.get("opportunity"),
         "focus_line": story.get("direction"),
         "risk_line": _clip(str(avoid_items[0] if avoid_items else story.get("trap") or story.get("abstain")), 120),
         "risk_detail": story.get("trap") or story.get("abstain"),
@@ -1089,9 +1105,9 @@ def day_story_to_legacy_narrative(story: dict[str, Any], *, generation_id: str |
             do_items[2] if len(do_items) > 2 else "",
         ],
         "sphere_triad": [
-            {"area": "work", "stance": "up", "line": mw.get("action") or mw.get("opportunity")},
+            {"area": "work", "stance": "up", "line": work.get("action") or work.get("opportunity")},
             {"area": "love", "stance": "neutral", "line": rel.get("action") or rel.get("opportunity")},
-            {"area": "money", "stance": "neutral", "line": mw.get("status") or mw.get("risk")},
+            {"area": "money", "stance": "neutral", "line": money.get("status") or money.get("risk")},
         ],
         "support_hooks": [x for x in [practice.get("text"), story.get("primary_action")] if x][:2],
         "day_story_source": DAY_STORY_V1_CONTRACT,
@@ -1102,9 +1118,9 @@ def day_story_to_legacy_narrative(story: dict[str, Any], *, generation_id: str |
         "thesis_reminder": story.get("theme"),
         "scenario_tie_ins": {
             "love": rel.get("action") or rel.get("opportunity"),
-            "family": fam.get("action") or fam.get("opportunity"),
-            "career": mw.get("action") or mw.get("opportunity"),
-            "money": mw.get("opportunity") or mw.get("status"),
+            "family": rel.get("status") or energy.get("action") or energy.get("opportunity"),
+            "career": work.get("action") or work.get("opportunity"),
+            "money": money.get("opportunity") or money.get("status"),
         },
     }
 

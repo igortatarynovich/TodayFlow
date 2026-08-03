@@ -77,18 +77,19 @@ const REALITY_LABEL: Record<RealityState, string> = {
 };
 
 const DOMAIN_LABEL: Record<TodayContractDomainId, string> = {
+  work: "Работа",
+  money: "Деньги",
   relationships: "Отношения",
-  money_work: "Деньги и работа",
-  family: "Дом и опора",
+  energy: "Энергия",
 };
 
 const INTENT_DOMAIN_ORDER: Record<IntentTheme, TodayContractDomainId[]> = {
-  focus: ["money_work", "relationships", "family"],
-  energy: ["family", "money_work", "relationships"],
-  relationships: ["relationships", "family", "money_work"],
-  money: ["money_work", "relationships", "family"],
-  clarity: ["money_work", "family", "relationships"],
-  calm: ["family", "relationships", "money_work"],
+  focus: ["work", "money", "relationships", "energy"],
+  energy: ["energy", "work", "relationships", "money"],
+  relationships: ["relationships", "energy", "work", "money"],
+  money: ["money", "work", "relationships", "energy"],
+  clarity: ["work", "money", "energy", "relationships"],
+  calm: ["energy", "relationships", "work", "money"],
 };
 
 const REALITY_THEME_TAIL: Partial<Record<RealityState, string>> = {
@@ -130,8 +131,9 @@ function domainLine(contract: TodayContractV1 | null | undefined, id: TodayContr
   const candidate = domain?.opportunity?.trim() || domain?.status?.trim();
   if (candidate) return candidate;
   if (id === "relationships") return "Контакт и близость — зона, где сегодня полезно быть внимательнее.";
-  if (id === "money_work") return "Работа и ресурсы — место для одного ясного решения.";
-  return "Дом и опора — опирайся на то, что уже поддерживает.";
+  if (id === "work") return "Работа — место для одного ясного решения.";
+  if (id === "money") return "Ресурсы — место для одного конкретного шага.";
+  return "Энергия и ритм — опирайся на то, что уже поддерживает.";
 }
 
 function depthCta(intent: IntentTheme): { label: string; href: string } {

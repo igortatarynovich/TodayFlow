@@ -127,8 +127,11 @@ export function buildTodayLiteraryReading(
     isDomainLensPresent(contract.domains.relationships)
       ? clean(contract.domains.relationships.opportunity)
       : "",
-    isDomainLensPresent(contract.domains.money_work)
-      ? clean(contract.domains.money_work.opportunity)
+    isDomainLensPresent(contract.domains.work)
+      ? clean(contract.domains.work.opportunity)
+      : "",
+    isDomainLensPresent(contract.domains.money)
+      ? clean(contract.domains.money.opportunity)
       : "",
   ].find((t) => t && isRuUserFacingText(t) && distinctEnough(t, used));
 
@@ -140,7 +143,7 @@ export function buildTodayLiteraryReading(
     clean(dayStory?.abstain),
     clean(caution?.releaseLine),
     clean(caution?.body),
-    isDomainLensPresent(contract.domains.family) ? clean(contract.domains.family.risk) : "",
+    isDomainLensPresent(contract.domains.energy) ? clean(contract.domains.energy.risk) : "",
   ].find((t) => t && isRuUserFacingText(t) && distinctEnough(t, used));
 
   const ease = easeRaw ? firstParagraph(easeRaw, 2) : null;

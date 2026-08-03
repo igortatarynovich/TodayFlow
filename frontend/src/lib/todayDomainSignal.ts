@@ -14,9 +14,14 @@ const SPHERE_TO_DOMAIN: Record<string, string> = {
   relationships: "relationships",
   love: "relationships",
   family: "relationships",
+  communication: "relationships",
+  home: "relationships",
   energy: "energy",
   health: "energy",
   body: "energy",
+  energy_body: "energy",
+  creativity: "energy",
+  rest_travel: "energy",
 };
 
 export function mapSphereToDomain(sphere: string | null | undefined): string {

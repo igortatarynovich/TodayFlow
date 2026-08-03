@@ -12,6 +12,20 @@ describe("buildTodayDayNarrative", () => {
     global_context: { period: "День коротких договорённостей." },
     personal_growth: { development_point: "Не торопить ответ." },
     domains: {
+      work: {
+        status: "",
+        opportunity: "",
+        risk: "",
+        action: "",
+        evidence_status: "absent",
+      },
+      money: {
+        status: "",
+        opportunity: "",
+        risk: "",
+        action: "",
+        evidence_status: "absent",
+      },
       relationships: {
         status: "",
         opportunity: "Одно короткое сообщение иногда меняет больше длинного разговора.",
@@ -19,14 +33,7 @@ describe("buildTodayDayNarrative", () => {
         action: "",
         evidence_status: "present",
       },
-      money_work: {
-        status: "",
-        opportunity: "",
-        risk: "",
-        action: "",
-        evidence_status: "absent",
-      },
-      family: {
+      energy: {
         status: "",
         opportunity: "",
         risk: "Лишние домашние обязательства сегодня легко перегружают.",
@@ -138,12 +145,12 @@ describe("buildTodayDayNarrative", () => {
           body: contract.domains.relationships.opportunity,
         },
         {
-          id: "caution-family",
-          sphere: "Дом и семья",
+          id: "caution-energy",
+          sphere: "Энергия",
           role: "caution" as const,
-          headline: "Дом и семья",
-          body: contract.domains.family.risk,
-          releaseLine: contract.domains.family.action,
+          headline: "Энергия",
+          body: contract.domains.energy.risk,
+          releaseLine: contract.domains.energy.action,
         },
       ],
       neutralNote: "",

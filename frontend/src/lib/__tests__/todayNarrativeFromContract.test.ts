@@ -10,19 +10,25 @@ const sampleContract: TodayContractV1 = {
     development_point: "Сегодня полезно замечать момент, когда ты начинаешь ускоряться из тревоги.",
   },
   domains: {
+    work: {
+      status: "Сегодня в работе и деньгах — один вектор.",
+      opportunity: "Один завершённый результат сегодня полезнее пяти начатых задач.",
+      risk: "Не бери новые обязательства из импульса.",
+      action: "Выбери одну задачу и доведи её до видимого результата.",
+    },
+    money: {
+      status: "Сегодня в работе и деньгах — один вектор.",
+      opportunity: "Один завершённый результат сегодня полезнее пяти начатых задач.",
+      risk: "Не бери новые обязательства из импульса.",
+      action: "Выбери одну задачу и доведи её до видимого результата.",
+    },
     relationships: {
       status: "Сегодня в отношениях — прямой и спокойный контакт.",
       opportunity: "Прямой разговор поможет больше, чем попытка угадать настроение.",
       risk: "Молчание сегодня строит дистанцию.",
       action: "Скажи прямо одну вещь, которую обычно обходишь.",
     },
-    money_work: {
-      status: "Сегодня в работе и деньгах — один вектор.",
-      opportunity: "Один завершённый результат сегодня полезнее пяти начатых задач.",
-      risk: "Не бери новые обязательства из импульса.",
-      action: "Выбери одну задачу и доведи её до видимого результата.",
-    },
-    family: {
+    energy: {
       status: "Сегодня дома полезнее создавать спокойный ритм.",
       opportunity: "Спокойный ритм даст больше, чем контроль.",
       risk: "Не тащи контроль на близких.",
@@ -47,10 +53,11 @@ describe("splitPeriodNarrative", () => {
 describe("buildTodayNarrativeV1", () => {
   it("builds unified story without slot labels", () => {
     const narrative = buildTodayNarrativeV1(sampleContract);
-    expect(narrative.manifestations.length).toBe(3);
-    expect(narrative.manifestations[0].line.toLowerCase()).toContain("отношения");
-    expect(narrative.manifestations[1].line.toLowerCase()).toContain("работе");
-    expect(narrative.manifestations[2].line.toLowerCase()).toContain("дома");
+    expect(narrative.manifestations.length).toBe(4);
+    expect(narrative.manifestations[0].line.toLowerCase()).toContain("работе");
+    expect(narrative.manifestations[1].line.toLowerCase()).toContain("деньг");
+    expect(narrative.manifestations[2].line.toLowerCase()).toContain("отношения");
+    expect(narrative.manifestations[3].line.toLowerCase()).toContain("энерг");
     expect(narrative.growthPoint.toLowerCase()).toContain("замечать");
     expect(narrative.primaryAction).toBe(sampleContract.primary_action);
   });

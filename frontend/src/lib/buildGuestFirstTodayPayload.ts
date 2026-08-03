@@ -38,22 +38,29 @@ function pseudoCoreFromDraft(draft: GuestProfileDraft): CoreProfile {
 function contractFromPackage(
   pkg: ReturnType<typeof buildFirstTodayPackage>,
 ): TodayContractV1 {
-  const [rel, money, family] = pkg.insight.spheres;
-  const lens = (line: string) => ({
-    status: "",
-    opportunity: line,
-    risk: "",
-    action: line,
-  });
+  const byId = new Map(pkg.insight.spheres.map((s) => [s.id, s.line] as const));
+  const lens = (line: string | undefined) => {
+    const text = (line || "").trim();
+    if (!text) {
+      return { status: "", opportunity: "", risk: "", action: "", evidence_status: "absent" as const };
+    }
+    return {
+      status: "",
+      opportunity: text,
+      risk: "",
+      action: text,
+    };
+  };
 
   return {
     contract_version: TODAY_CONTRACT_V1,
     global_context: { period: pkg.theme.headline },
     personal_growth: { development_point: pkg.why.lines[0] || "Один честный шаг сегодня." },
     domains: {
-      relationships: lens(rel.line),
-      money_work: lens(money.line),
-      family: lens(family.line),
+      work: lens(byId.get("work")),
+      money: lens(byId.get("money")),
+      relationships: lens(byId.get("relationships")),
+      energy: lens(byId.get("energy")),
     },
     primary_action: pkg.action.primary,
     progress: {},

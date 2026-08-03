@@ -4,14 +4,14 @@ Last updated: 2026-08-03
 Owner: Product + Engineering
 Status: Active working document
 
-**IN PROGRESS (2026-08-03):** ScreenFlow content jobs **v3.1** — P0+P1+seed-kill on branch; P2 remaining (domain 3→4 unify · Plot visual).  
+**IN PROGRESS (2026-08-03):** ScreenFlow content jobs **v3.1** — P0+P1+seed-kill+domain4+Plot visual on branch; remaining polish minors.  
 Prior: card_base_v1 cutover live · editorial polish minors ongoing.
 
 ## Architecture impact — ScreenFlow content jobs v3.1 (2026-08-03)
 
 - **SoT before:** [TODAY_SCREEN_SCENARIO_V3](./today/TODAY_SCREEN_SCENARIO_V3.md) v3.0 — conflict/`opposing_forces` as day spine; color on Symbols; Reading = all scenes + action; Glance ≈ conflict texture.
 - **SoT after:** v3.1 — per-act jobs; **no seed leakage**; opposing_forces optional; color house = Move + intensity; Reading ≤2 + no action; Response magnitude trap / honest no-trap; Glance = tone synthesis.
-- **Public contract changed?** yes (phased) — omit `opposing_forces`; Reading domains → `work|money|relationships|energy`; color intensity; FE presentation homes.
+- **Public contract changed?** yes (phased) — omit `opposing_forces`; Reading/DomainLens domains → `work|money|relationships|energy`; color intensity; FE presentation homes; Plot hero wash ← `thesis.mode`.
 - **Migration required?** yes — generation gates + FE composition; cached A/B scenarios until regenerate.
 - **Canon updated?** yes — TODAY_SCREEN_SCENARIO_V3 · SCREEN_FLOW §4 · DAY_SYMBOL_REVEAL §7–8.
 - **Backward compatible?** partial — FE must tolerate omit; old clients keep showing forced conflict until BE ships.
@@ -29,9 +29,9 @@ Prior: card_base_v1 cutover live · editorial polish minors ongoing.
 | P1 | Response: no-trap UI; pick trap by magnitude | `TodayTapWidget` | **DONE** |
 | P1 | Glance texture = tone not facts/short_name | `todayGlanceTexture` | **DONE** |
 | P1 | Symbols: no card/number instruction; fail banner only | HookRevealShell | **DONE** |
-| P2 | Domain dictionary unify 3→4 on contract | Wave2 / day_story | Architecture |
+| P2 | Domain dictionary unify 3→4 on contract | Wave2 / day_story | **DONE** wire = work\|money\|relationships\|energy |
 | P2 | Practice\|affirmation rotation single slot | Move | **DONE** (date hash XOR) |
-| P2 | Plot visual tied to classification | FE hero | Open |
+| P2 | Plot visual tied to classification | FE hero | **DONE** `resolvePlotHeroWash(thesis.mode)` |
 | P2 | Chorus/scenes stop quoting short_name A\|B | generation | **DONE** seed-kill (chorus · scenes · native LLM · project · editorial gate) |
 
 ## Architecture impact — card_base_v1 cutover (explainer / question-tarot) (2026-08-01)

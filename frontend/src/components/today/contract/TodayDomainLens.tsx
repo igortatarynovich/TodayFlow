@@ -4,16 +4,15 @@ import type { DomainLensV1, TodayContractDomainId } from "@/lib/todayContract";
 import { TODAY_CONTRACT_COPY } from "@/components/today/contract/todayContractCopy";
 
 const DOMAIN_TITLE: Record<TodayContractDomainId, string> = {
+  work: TODAY_CONTRACT_COPY.domainWork,
+  money: TODAY_CONTRACT_COPY.domainMoney,
   relationships: TODAY_CONTRACT_COPY.domainRelationships,
-  money_work: TODAY_CONTRACT_COPY.domainMoneyWork,
-  family: TODAY_CONTRACT_COPY.domainFamily,
+  energy: TODAY_CONTRACT_COPY.domainEnergy,
 };
 
 type SlotKey = keyof DomainLensV1;
 
-function slotLabel(domain: TodayContractDomainId, slot: SlotKey): string {
-  if (domain === "family" && slot === "opportunity") return TODAY_CONTRACT_COPY.slotFamilyOpportunity;
-  if (domain === "family" && slot === "risk") return TODAY_CONTRACT_COPY.slotFamilyRisk;
+function slotLabel(slot: SlotKey): string {
   if (slot === "status") return TODAY_CONTRACT_COPY.slotStatus;
   if (slot === "opportunity") return TODAY_CONTRACT_COPY.slotOpportunity;
   if (slot === "risk") return TODAY_CONTRACT_COPY.slotRisk;
@@ -46,7 +45,7 @@ export function TodayDomainLens({ domain, lens }: Props) {
         {SLOT_ORDER.map((slot) => (
           <div key={slot}>
             <p className="orbit-body-xs" style={{ margin: 0, fontWeight: 700, color: "#8a6a42" }}>
-              {slotLabel(domain, slot)}
+              {slotLabel(slot)}
             </p>
             <p className="orbit-body-sm" style={{ margin: "0.2rem 0 0", lineHeight: 1.5, color: "#2d241c" }}>
               {lens[slot]}

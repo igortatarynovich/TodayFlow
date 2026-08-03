@@ -1,6 +1,10 @@
 import type { MorningRitualData } from "@/components/today/todayPageUtils";
-import type { TodayContractV1, TodayContractDomainId } from "@/lib/todayContract";
-import { isDomainLensPresent } from "@/lib/todayContract";
+import type { TodayContractV1 } from "@/lib/todayContract";
+import {
+  isDomainLensPresent,
+  TODAY_CONTRACT_DOMAIN_LABEL_RU,
+  TODAY_CONTRACT_DOMAIN_ORDER,
+} from "@/lib/todayContract";
 import { buildTodayNarrativeV1 } from "@/lib/todayNarrativeFromContract";
 import {
   buildCentralDayThought,
@@ -15,13 +19,8 @@ import {
   parseCoreMessageForUi,
 } from "@/components/today/todayGuideActionable";
 
-const DOMAIN_ORDER: TodayContractDomainId[] = ["money_work", "relationships", "family"];
-
-const DOMAIN_SPHERE_LABEL: Record<TodayContractDomainId, string> = {
-  money_work: "Работа",
-  relationships: "Отношения",
-  family: "Дом и семья",
-};
+const DOMAIN_ORDER = TODAY_CONTRACT_DOMAIN_ORDER;
+const DOMAIN_SPHERE_LABEL = TODAY_CONTRACT_DOMAIN_LABEL_RU;
 
 export type TodayInfluenceCard = {
   id: string;

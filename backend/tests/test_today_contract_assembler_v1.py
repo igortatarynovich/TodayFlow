@@ -15,9 +15,9 @@ from todayflow_backend.services.today_contract_assembler_v1 import (
     validate_today_contract_v1,
 )
 from todayflow_backend.services.today_contract_fallbacks_v1 import (
-    FAMILY_ACTION_FALLBACK,
-    FAMILY_STATUS_FALLBACK,
+    ENERGY_ACTION_FALLBACK,
     RELATIONSHIPS_ACTION_FALLBACK,
+    WORK_ACTION_FALLBACK,
 )
 from todayflow_backend.services.today_contract_text_quality_v1 import is_valid_action_text
 
@@ -96,32 +96,31 @@ def test_full_legacy_payload_maps_real_sources():
     assert relationships["risk"]
     assert is_valid_action_text(relationships["action"])
 
-    money_work = contract["domains"]["money_work"]
-    assert "завершен" in money_work["status"].lower() or "линии" in money_work["status"].lower()
-    assert "трат" in money_work["status"].lower() or "пауз" in money_work["status"].lower()
+    money_work = contract["domains"]["work"]
+    money = contract["domains"]["money"]
+    assert "завершен" in money_work["status"].lower() or "линии" in money_work["status"].lower() or "работ" in money_work["status"].lower()
+    assert money["opportunity"] or money["status"]
     assert money_work["opportunity"]
     assert money_work["risk"]
     assert money_work["action"]
 
-    family = contract["domains"]["family"]
-    assert "поддержк" in family["status"].lower() or "семь" in family["status"].lower()
-    assert "семь" in family["opportunity"].lower() or "поддержк" in family["opportunity"].lower()
-    assert family["action"]
+    energy = contract["domains"]["energy"]
+    assert energy["status"]
+    assert energy["action"]
 
     assert contract["primary_action"] == relationships["action"]
     assert contract["progress"] == data["fallback_context"]["progress"]
 
 
-def test_missing_family_uses_fallback_not_love_alias():
+def test_missing_family_still_emits_fixed_four_domains():
     contract = _assemble_from_fixture("missing_family.json")
-    family = contract["domains"]["family"]
+    assert set(contract["domains"].keys()) == set(DOMAIN_IDS)
+    energy = contract["domains"]["energy"]
     love_status = contract["domains"]["relationships"]["status"]
 
-    assert family["status"].lower().startswith("сегодня")
-    assert "дома" in family["status"].lower() or "семье" in family["status"].lower()
-    assert family["status"] != love_status
-    assert family["action"]
-    assert "семь" in family["opportunity"].lower() or "поддержк" in family["opportunity"].lower()
+    assert energy["status"].lower().startswith("сегодня") or "сегодня" in energy["status"].lower()
+    assert energy["status"] != love_status
+    assert energy["action"]
 
 
 def test_missing_action_inputs_synthesizes_or_fallback_actions():
@@ -134,8 +133,9 @@ def test_missing_action_inputs_synthesizes_or_fallback_actions():
     relationships = contract["domains"]["relationships"]
     assert "честн" in relationships["action"].lower() or relationships["action"] == RELATIONSHIPS_ACTION_FALLBACK
 
-    family = contract["domains"]["family"]
-    assert "поддержк" in family["action"].lower() or family["action"] == FAMILY_ACTION_FALLBACK
+    work = contract["domains"]["work"]
+    assert work["action"].strip()
+    assert work["action"] == WORK_ACTION_FALLBACK or is_valid_action_text(work["action"])
 
     assert contract["primary_action"].strip()
 

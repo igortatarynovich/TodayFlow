@@ -4,7 +4,10 @@
  */
 
 import type { DomainLensV1, TodayContractDomainId, TodayContractV1 } from "@/lib/todayContract";
-import { isDomainLensPresent } from "@/lib/todayContract";
+import {
+  isDomainLensPresent,
+  TODAY_CONTRACT_DOMAIN_ORDER,
+} from "@/lib/todayContract";
 
 export type TodayNarrativeManifestation = {
   domainId: TodayContractDomainId;
@@ -25,16 +28,20 @@ export type TodayNarrativeV1 = {
 };
 
 const DOMAIN_MANIFEST_LABEL: Record<TodayContractDomainId, string> = {
+  work: "В работе",
+  money: "В деньгах",
   relationships: "В отношениях",
-  money_work: "В работе",
-  family: "Дома",
+  energy: "В энергии",
 };
 
-const DOMAIN_ORDER: TodayContractDomainId[] = ["relationships", "money_work", "family"];
+const DOMAIN_ORDER = TODAY_CONTRACT_DOMAIN_ORDER;
 
 const STATUS_PREFIXES = [
   "сегодня в отношениях — ",
   "сегодня в работе и деньгах — ",
+  "сегодня в работе — ",
+  "сегодня в деньгах — ",
+  "сегодня в энергии — ",
   "сегодня в семье — ",
   "сегодня дома ",
   "сегодня в семье ",

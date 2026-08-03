@@ -17,20 +17,24 @@ from todayflow_backend.services.ritual_cue_sanitize import (
 from todayflow_backend.services.today_contract_fallbacks_v1 import (
     DEVELOPMENT_POINT_FALLBACK,
     DOMAIN_FALLBACKS_V1,
-    FAMILY_ACTION_FALLBACK,
-    FAMILY_OPPORTUNITY_FALLBACK,
-    FAMILY_RISK_FALLBACK,
-    FAMILY_STATUS_FALLBACK,
-    MONEY_WORK_ACTION_FALLBACK,
-    MONEY_WORK_OPPORTUNITY_FALLBACK,
-    MONEY_WORK_RISK_FALLBACK,
-    MONEY_WORK_STATUS_FALLBACK,
+    ENERGY_ACTION_FALLBACK,
+    ENERGY_OPPORTUNITY_FALLBACK,
+    ENERGY_RISK_FALLBACK,
+    ENERGY_STATUS_FALLBACK,
+    MONEY_ACTION_FALLBACK,
+    MONEY_OPPORTUNITY_FALLBACK,
+    MONEY_RISK_FALLBACK,
+    MONEY_STATUS_FALLBACK,
     PERIOD_FALLBACK,
     PRIMARY_ACTION_FALLBACK,
     RELATIONSHIPS_ACTION_FALLBACK,
     RELATIONSHIPS_OPPORTUNITY_FALLBACK,
     RELATIONSHIPS_RISK_FALLBACK,
     RELATIONSHIPS_STATUS_FALLBACK,
+    WORK_ACTION_FALLBACK,
+    WORK_OPPORTUNITY_FALLBACK,
+    WORK_RISK_FALLBACK,
+    WORK_STATUS_FALLBACK,
 )
 from todayflow_backend.services.today_contract_growth_v1 import (
     accept_growth_source,
@@ -50,20 +54,21 @@ TODAY_CONTRACT_V1_CONTRACT = "today_contract_v1"
 TODAY_CONTRACT_V1_VERSION = "1.0.0"
 
 DOMAIN_LENS_SLOTS = frozenset({"status", "opportunity", "risk", "action"})
-DOMAIN_IDS = frozenset({"relationships", "money_work", "family"})
+DOMAIN_IDS = frozenset({"work", "money", "relationships", "energy"})
 
-# Legacy keys that must not appear anywhere in contract output.
+# Legacy keys that must not appear anywhere in contract output
+# (except under domains.* where work|money|energy are fixed-4 wire ids).
 _FORBIDDEN_OUTPUT_KEYS = frozenset(
     {
         "insight",
         "watch",
         "reason",
-        "energy",
         "theme",
         "spheres",
         "love",
         "work",
         "money",
+        "energy",
         "todayHeadline",
         "todayDetail",
         "today_headline",
@@ -72,10 +77,12 @@ _FORBIDDEN_OUTPUT_KEYS = frozenset(
         "rhythmTier",
         "rhythm_tier",
         "score",
+        "money_work",
+        "family",
     }
 )
 
-_DOMAIN_ACTION_PRIORITY = ("relationships", "money_work", "family")
+_DOMAIN_ACTION_PRIORITY = ("relationships", "work", "money", "energy")
 
 
 def _clean_text(raw: str | None) -> str:
@@ -194,12 +201,12 @@ def _synthesize_action(
 
 def _status_from_scenario(
     domain_id: str,
-    scenario: dict[str, Any],
+    scenario: dict[str, Any] | None,
     sphere_headline: str,
     sphere_detail: str,
     fallback: str,
 ) -> str:
-    headline, detail = _scenario_parts(scenario)
+    headline, detail = _scenario_parts(scenario) if scenario else ("", "")
     if not headline:
         headline = accept_status_source(sphere_headline) or ""
         detail = accept_status_source(sphere_detail) or ""
@@ -207,7 +214,7 @@ def _status_from_scenario(
         headline = accept_status_source(headline) or ""
         detail = accept_status_source(detail) or ""
     merged = _merge_status(headline, detail, "")
-    if domain_id == "family" and (is_profile_trait_text(merged) or not merged):
+    if domain_id in {"relationships", "energy"} and (is_profile_trait_text(merged) or not merged):
         return fallback
     return merged or fallback
 
@@ -401,7 +408,7 @@ def assemble_today_contract_v1(
         fallback=RELATIONSHIPS_ACTION_FALLBACK,
     )
 
-    # --- domains.money_work ---
+    # --- domains.work / money / energy (fixed-4 v3.1; money_work/family retired) ---
     work_score = _sphere_score(work)
     money_score = _sphere_score(money)
     work_h, work_d = _scenario_parts(work_scenario)
@@ -412,11 +419,6 @@ def assemble_today_contract_v1(
     if not money_h:
         money_h = accept_status_source(_field(money, "todayHeadline", "today_headline"))
         money_d = accept_status_source(_field(money, "todayDetail", "today_detail"))
-    money_work_status = _merge_status(
-        _dedupe_join([work_h, money_h]),
-        _dedupe_join([work_d, money_d]),
-        MONEY_WORK_STATUS_FALLBACK,
-    )
 
     work_insight = accept_narrative_source(_field(work, "insight")) or _pick_safe_narrative(
         narrative, "spheres", ("work_insight", "career_insight", "purpose_insight")
@@ -424,50 +426,69 @@ def assemble_today_contract_v1(
     money_insight = accept_narrative_source(_field(money, "insight")) or _pick_safe_narrative(
         narrative, "spheres", ("money_insight", "wealth_insight", "resource_insight")
     )
-    if work_insight and money_insight and work_insight != money_insight:
-        money_work_opportunity = _dedupe_join(
-            [money_insight if money_score >= work_score else work_insight, work_insight, money_insight]
-        )
-    else:
-        money_work_opportunity = money_insight or work_insight or MONEY_WORK_OPPORTUNITY_FALLBACK
 
-    money_work_risk = (
-        accept_narrative_source(_field(money, "watch"))
-        or accept_narrative_source(_field(work, "watch"))
+    work_status = _merge_status(work_h, work_d, WORK_STATUS_FALLBACK)
+    work_opportunity = work_insight or WORK_OPPORTUNITY_FALLBACK
+    work_risk = (
+        accept_narrative_source(_field(work, "watch"))
         or accept_narrative_source(what_to_avoid)
-        or MONEY_WORK_RISK_FALLBACK
+        or WORK_RISK_FALLBACK
+    )
+    work_action = _synthesize_action(
+        reason=_field(work, "reason")
+        or _pick_narrative_text(narrative, "spheres", ("work_reason", "career_reason")),
+        insight=work_opportunity,
+        scenario_focus=_field(work_scenario, "focus"),
+        spine_first_move=first_move,
+        fallback=WORK_ACTION_FALLBACK,
     )
 
-    money_work_action = _synthesize_action(
+    money_status = _merge_status(money_h, money_d, MONEY_STATUS_FALLBACK)
+    money_opportunity = money_insight or MONEY_OPPORTUNITY_FALLBACK
+    money_risk = (
+        accept_narrative_source(_field(money, "watch"))
+        or MONEY_RISK_FALLBACK
+    )
+    money_action = _synthesize_action(
         reason=_field(money, "reason", "wealth_reason")
-        or _field(work, "reason")
-        or _pick_narrative_text(narrative, "spheres", ("money_reason", "work_reason")),
-        insight=money_work_opportunity,
-        scenario_focus=_field(money_scenario, "focus") if money_score >= work_score else _field(work_scenario, "focus"),
+        or _pick_narrative_text(narrative, "spheres", ("money_reason",)),
+        insight=money_opportunity,
+        scenario_focus=_field(money_scenario, "focus"),
         spine_first_move=first_move,
-        fallback=MONEY_WORK_ACTION_FALLBACK,
+        fallback=MONEY_ACTION_FALLBACK,
     )
 
-    # --- domains.family (independent — never alias love scenario alone) ---
-    family_status = _status_from_scenario("family", family_scenario, "", "", FAMILY_STATUS_FALLBACK)
-
-    family_opportunity = (
-        _pick_safe_narrative(narrative, "spheres", ("family_support", "family_insight"))
-        or accept_narrative_source(_field(family_scenario, "focus"))
-        or FAMILY_OPPORTUNITY_FALLBACK
+    energy_status = _status_from_scenario(
+        "energy",
+        None,
+        _field(energy, "todayHeadline", "today_headline"),
+        _field(energy, "todayDetail", "today_detail"),
+        ENERGY_STATUS_FALLBACK,
     )
-    family_risk = (
-        _pick_safe_narrative(narrative, "spheres", ("family_risk", "family_tension"))
-        or accept_narrative_source(main_risk)
-        or FAMILY_RISK_FALLBACK
+    energy_opportunity = (
+        _pick_safe_narrative(narrative, "spheres", ("energy_insight", "body_insight"))
+        or accept_narrative_source(_field(energy, "insight"))
+        or ENERGY_OPPORTUNITY_FALLBACK
     )
-    family_action = _synthesize_action(
-        reason=_pick_safe_narrative(narrative, "spheres", ("family_reason")),
-        scenario_focus=accept_narrative_source(_field(family_scenario, "focus")),
-        insight=family_opportunity,
+    energy_risk = (
+        accept_narrative_source(_field(energy, "watch"))
+        or _pick_safe_narrative(narrative, "spheres", ("energy_watch", "body_watch"))
+        or ENERGY_RISK_FALLBACK
+    )
+    energy_action = _synthesize_action(
+        reason=_field(energy, "reason")
+        or _pick_narrative_text(narrative, "spheres", ("energy_reason",)),
+        insight=energy_opportunity,
+        scenario_focus="",
         spine_first_move=first_move,
-        fallback=FAMILY_ACTION_FALLBACK,
+        fallback=ENERGY_ACTION_FALLBACK,
     )
+
+    # Fold legacy family scenario into relationships when love lens is thin
+    if family_scenario and relationships_opportunity == RELATIONSHIPS_OPPORTUNITY_FALLBACK:
+        fam_focus = accept_narrative_source(_field(family_scenario, "focus"))
+        if fam_focus:
+            relationships_opportunity = fam_focus
 
     domains = {
         "relationships": _build_domain_lens(
@@ -476,24 +497,31 @@ def assemble_today_contract_v1(
             risk=relationships_risk,
             action=relationships_action,
         ),
-        "money_work": _build_domain_lens(
-            status=money_work_status,
-            opportunity=money_work_opportunity,
-            risk=money_work_risk,
-            action=money_work_action,
+        "work": _build_domain_lens(
+            status=work_status,
+            opportunity=work_opportunity,
+            risk=work_risk,
+            action=work_action,
         ),
-        "family": _build_domain_lens(
-            status=family_status,
-            opportunity=family_opportunity,
-            risk=family_risk,
-            action=family_action,
+        "money": _build_domain_lens(
+            status=money_status,
+            opportunity=money_opportunity,
+            risk=money_risk,
+            action=money_action,
+        ),
+        "energy": _build_domain_lens(
+            status=energy_status,
+            opportunity=energy_opportunity,
+            risk=energy_risk,
+            action=energy_action,
         ),
     }
 
     domain_scores = {
         "relationships": _sphere_score(love, 72),
-        "money_work": max(work_score, money_score, 64),
-        "family": 58 if family_scenario else 50,
+        "work": max(work_score, 64),
+        "money": max(money_score, 64),
+        "energy": _sphere_score(energy, 58),
     }
 
     best_score = max(domain_scores.values())
@@ -542,7 +570,10 @@ def _collect_forbidden_keys(obj: Any, path: str = "") -> list[str]:
             child_path = f"{path}.{key_s}" if path else key_s
             if key_s == "day_story":
                 continue
-            if key_s in _FORBIDDEN_OUTPUT_KEYS:
+            # Fixed-4 wire ids are legal under domains.*
+            if key_s in _FORBIDDEN_OUTPUT_KEYS and not (
+                path == "domains" or path.startswith("domains.")
+            ):
                 hits.append(child_path)
             hits.extend(_collect_forbidden_keys(value, child_path))
     elif isinstance(obj, list):

@@ -33,20 +33,11 @@ _UNAVAILABLE_RU = (
     "Попробуйте обновить экран через несколько минут."
 )
 
-# Product sphere → wire DomainLens id (Model B)
-_SPHERE_TO_WIRE: dict[str, str] = {
-    "work_decisions": "money_work",
-    "money": "money_work",
-    "relationships": "relationships",
-    "communication": "relationships",
-    "home": "family",
-    # energy/creativity/travel have no dedicated wire lens — fold softly
-    "energy_body": "money_work",
-    "creativity": "money_work",
-    "rest_travel": "family",
-}
-
-_WIRE_DOMAIN_IDS = ("relationships", "money_work", "family")
+# Product sphere → wire DomainLens id (fixed-4 v3.1)
+from todayflow_backend.services.today_domain_wire_v1 import (
+    DOMAIN_WIRE_IDS as _WIRE_DOMAIN_IDS,
+    SPHERE_TO_WIRE as _SPHERE_TO_WIRE,
+)
 
 PROJECTION_VERSION = "day_scenario_project_v1.b5"
 

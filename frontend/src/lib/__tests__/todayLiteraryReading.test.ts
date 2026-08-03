@@ -7,19 +7,25 @@ const contract: TodayContractV1 = {
   global_context: { period: "День коротких договорённостей." },
   personal_growth: { development_point: "Не торопить ответ." },
   domains: {
+    work: {
+      status: "",
+      opportunity: "Одно маленькое улучшение в процессе важнее попытки разгрести всё.",
+      risk: "",
+      action: "",
+    },
+    money: {
+      status: "",
+      opportunity: "Одно маленькое улучшение в процессе важнее попытки разгрести всё.",
+      risk: "",
+      action: "",
+    },
     relationships: {
       status: "",
       opportunity: "Одно короткое сообщение иногда меняет больше длинного разговора.",
       risk: "",
       action: "",
     },
-    money_work: {
-      status: "",
-      opportunity: "Одно маленькое улучшение в процессе важнее попытки разгрести всё.",
-      risk: "",
-      action: "",
-    },
-    family: {
+    energy: {
       status: "",
       opportunity: "",
       risk: "Лишние домашние обязательства сегодня легко перегружают.",
@@ -74,12 +80,12 @@ const story = {
         body: contract.domains.relationships.opportunity,
       },
       {
-        id: "caution-family",
-        sphere: "Дом и семья",
+        id: "caution-energy",
+        sphere: "Энергия",
         role: "caution" as const,
-        headline: "Дом и семья",
-        body: contract.domains.family.risk,
-        releaseLine: contract.domains.family.action,
+        headline: "Энергия",
+        body: contract.domains.energy.risk,
+        releaseLine: contract.domains.energy.action,
       },
     ],
     neutralNote: "",

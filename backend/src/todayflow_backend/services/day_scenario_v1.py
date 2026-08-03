@@ -31,11 +31,7 @@ PRODUCT_SPHERE_IDS: tuple[str, ...] = (
     "rest_travel",
 )
 
-WIRE_DOMAIN_TO_SPHERES: dict[str, tuple[str, ...]] = {
-    "money_work": ("work_decisions", "money"),
-    "relationships": ("relationships", "communication"),
-    "family": ("home", "relationships"),
-}
+from todayflow_backend.services.today_domain_wire_v1 import WIRE_DOMAIN_TO_SPHERES
 
 # thesis family → default spheres when domain evidence is thin
 _FAMILY_SPHERES: dict[str, tuple[str, ...]] = {

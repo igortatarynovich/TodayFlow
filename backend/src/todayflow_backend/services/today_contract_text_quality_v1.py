@@ -20,12 +20,13 @@ MAX_ACTION_SENTENCES = 1
 MAX_PERIOD_CHARS = 200
 MAX_GROWTH_CHARS = 180
 
-DOMAIN_ORDER = ("relationships", "money_work", "family")
+DOMAIN_ORDER = ("work", "money", "relationships", "energy")
 
 _DOMAIN_STATUS_PREFIX: dict[str, str] = {
     "relationships": "Сегодня в отношениях",
-    "money_work": "Сегодня в работе и деньгах",
-    "family": "Сегодня в семье",
+    "work": "Сегодня в работе",
+    "money": "Сегодня в деньгах",
+    "energy": "Сегодня в энергии",
 }
 
 _TODAY_MARKERS = (
@@ -279,7 +280,7 @@ def accept_narrative_source(text: str | None) -> str:
 
 
 def normalize_domain_status(domain_id: str, text: str, fallback: str) -> str:
-    if domain_id == "family" and is_profile_trait_text(text):
+    if domain_id in {"relationships", "energy"} and is_profile_trait_text(text):
         return fallback
     src = accept_status_source(text)
     if not src:

@@ -82,9 +82,10 @@ export type TodayDayNarrative = {
 };
 
 const DOMAIN_LABELS: Record<string, string> = {
+  work: "В работе",
+  money: "В деньгах",
   relationships: "В отношениях",
-  money_work: "В работе и деньгах",
-  family: "В семье и доме",
+  energy: "В энергии",
 };
 
 /** Best-effort chip color from catalog name — decorative only, not meaning. */
@@ -633,7 +634,7 @@ function collectForceDual(
   if (literary.lean) pushDistinct(strengthen, used, literary.lean);
   if (literary.ease) pushDistinct(soften, used, literary.ease);
 
-  for (const id of ["relationships", "money_work", "family"] as const) {
+  for (const id of ["work", "money", "relationships", "energy"] as const) {
     const lens = contract.domains[id];
     if (!isDomainLensPresent(lens)) continue;
     const label = DOMAIN_LABELS[id];

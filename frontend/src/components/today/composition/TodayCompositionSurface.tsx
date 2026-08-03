@@ -33,7 +33,11 @@ import { isDayNotReady, type TodayContractV1 } from "@/lib/todayContract";
 import type { CoreProfile } from "@/lib/types";
 import { tarotCardFacePicture, tarotCardFaceSrc, resolveDailyTarotDeckIndex } from "@/lib/tarotCardAssets";
 import { resolveDayPhase } from "@/lib/dayPhaseAtmosphere";
-import { resolveDayPhaseHeroWash, resolveHeroChromeTone } from "@/lib/dayPhaseHeroWash";
+import {
+  dynamicsClassFromThesisMode,
+  resolveHeroChromeTone,
+  resolvePlotHeroWash,
+} from "@/lib/dayPhaseHeroWash";
 import { useProductMoodTheme } from "@/lib/useProductDayNightTheme";
 import {
   buildMemorySlotCopy,
@@ -201,13 +205,19 @@ export function TodayCompositionSurface(props: Props) {
       isFirstDay: isFirstToday,
       hour: typeof Date !== "undefined" ? new Date().getHours() : 12,
     });
-    const wash = resolveDayPhaseHeroWash(phase);
+    const story = props.contract.day_story;
+    const conflictThesis = (
+      story?.day_scenario?.conflict as { thesis?: { mode?: string | null } | null } | null | undefined
+    )?.thesis;
+    const mode = (conflictThesis?.mode || story?.day_thesis?.mode || "").trim() || null;
+    const wash = resolvePlotHeroWash(mode, phase);
     return {
       ...wash,
       tone: resolveHeroChromeTone(wash, appearance),
       phase,
+      dynamics: dynamicsClassFromThesisMode(mode) ?? undefined,
     };
-  }, [isFirstToday, appearance]);
+  }, [isFirstToday, appearance, props.contract.day_story]);
   const { trackMeaningEvent } = useMeaningRuntime();
   const { isAuthenticated } = useAuth();
   const reduceMotion = useReduceMotion();
@@ -1291,6 +1301,7 @@ export function TodayCompositionSurface(props: Props) {
         data-hero-tone={heroWash.tone}
         data-hero-plate={heroWash.plate}
         data-day-phase={heroWash.phase ?? undefined}
+        data-dynamics-class={heroWash.dynamics ?? undefined}
         aria-labelledby="today-day-theme-title"
       >
         <div className={styles.themeDarkAtmosphere} aria-hidden>

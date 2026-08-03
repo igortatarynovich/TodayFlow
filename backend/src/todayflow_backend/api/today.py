@@ -694,9 +694,10 @@ class DomainLensContractV1(BaseModel):
 
 
 class TodayContractDomainsV1(BaseModel):
+    work: DomainLensContractV1
+    money: DomainLensContractV1
     relationships: DomainLensContractV1
-    money_work: DomainLensContractV1
-    family: DomainLensContractV1
+    energy: DomainLensContractV1
 
 
 class TodayContractGlobalContextV1(BaseModel):

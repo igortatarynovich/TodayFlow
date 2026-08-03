@@ -13,6 +13,20 @@ const baseContract: TodayContractV1 = {
   global_context: { period: "День коротких договорённостей." },
   personal_growth: { development_point: "Не торопить ответ." },
   domains: {
+    work: {
+      status: "",
+      opportunity: "",
+      risk: "",
+      action: "",
+      evidence_status: "absent",
+    },
+    money: {
+      status: "",
+      opportunity: "",
+      risk: "",
+      action: "",
+      evidence_status: "absent",
+    },
     relationships: {
       status: "",
       opportunity: "Одно короткое сообщение.",
@@ -20,14 +34,7 @@ const baseContract: TodayContractV1 = {
       action: "",
       evidence_status: "present",
     },
-    money_work: {
-      status: "",
-      opportunity: "",
-      risk: "",
-      action: "",
-      evidence_status: "absent",
-    },
-    family: {
+    energy: {
       status: "",
       opportunity: "",
       risk: "",

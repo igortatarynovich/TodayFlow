@@ -51,7 +51,7 @@ function capitalizeFirst(text: string): string {
 }
 
 function pickDomainHeadline(contract: TodayContractV1): string | null {
-  for (const id of ["money_work", "relationships", "family"] as const) {
+  for (const id of ["work", "money", "relationships", "energy"] as const) {
     const domain = contract.domains[id];
     if (!isDomainLensPresent(domain)) continue;
     const opp = domain.opportunity?.trim();

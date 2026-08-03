@@ -15,27 +15,12 @@ from typing import Any
 DAY_STORY_INTERPRETATION_V1 = "day_story_interpretation_v1"
 DAY_STORY_CALCULATION_VERSION = "day-story-interpretation-v1.3"
 
-_DOMAIN_IDS = ("relationships", "money_work", "family")
-
-# head_topic / intent keywords → domain evidence
-_TOPIC_TO_DOMAIN: dict[str, str] = {
-    "love": "relationships",
-    "dialogue": "relationships",
-    "relationships": "relationships",
-    "близость": "relationships",
-    "отношен": "relationships",
-    "общен": "relationships",
-    "контакт": "relationships",
-    "family": "family",
-    "семья": "family",
-    "дом": "family",
-    "money": "money_work",
-    "career": "money_work",
-    "деньг": "money_work",
-    "работ": "money_work",
-    "дела": "money_work",
-    "body": "money_work",  # energy/work tempo — not a social domain claim
-}
+from todayflow_backend.services.today_domain_wire_v1 import (
+    DOMAIN_WIRE_IDS as _DOMAIN_IDS,
+    TOPIC_TO_DOMAIN as _TOPIC_TO_DOMAIN,
+    normalize_domain_id,
+    normalize_domains_present,
+)
 
 
 def _clip(text: str, limit: int) -> str:
@@ -73,7 +58,7 @@ def _resolve_domain_from_topic(topic: str) -> str | None:
     for key, domain in _TOPIC_TO_DOMAIN.items():
         if key in low:
             return domain
-    return None
+    return normalize_domain_id(low)
 
 
 def _slim_day_sky(celestial_events: dict[str, Any] | None) -> dict[str, Any]:
@@ -625,7 +610,7 @@ def build_day_story_interpretation_v1(
                 kind="support",
             )
 
-    present_domains = [d for d in _DOMAIN_IDS if domain_evidence[d]]
+    present_domains = normalize_domains_present([d for d in _DOMAIN_IDS if domain_evidence[d]])
     absent_domains = [d for d in _DOMAIN_IDS if d not in present_domains]
 
     # --- Primary conflict + ranked drivers (one plot for the whole Today) ---

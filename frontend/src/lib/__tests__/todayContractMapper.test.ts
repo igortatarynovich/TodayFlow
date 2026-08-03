@@ -12,9 +12,10 @@ const base: TodayContractV1 = {
   global_context: { period: "Период" },
   personal_growth: { development_point: "Рост" },
   domains: {
+    work: { status: "", opportunity: "", risk: "", action: "b" },
+    money: { status: "", opportunity: "", risk: "", action: "b" },
     relationships: { status: "", opportunity: "", risk: "", action: "a" },
-    money_work: { status: "", opportunity: "", risk: "", action: "b" },
-    family: { status: "", opportunity: "", risk: "", action: "c" },
+    energy: { status: "", opportunity: "", risk: "", action: "c" },
   },
   primary_action: "Шаг",
   progress: {},

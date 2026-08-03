@@ -15,10 +15,83 @@ export type DomainLensV1 = {
 };
 
 export type TodayContractDomainsV1 = {
+  work: DomainLensV1;
+  money: DomainLensV1;
   relationships: DomainLensV1;
-  money_work: DomainLensV1;
-  family: DomainLensV1;
+  energy: DomainLensV1;
 };
+
+export type TodayContractDomainId = keyof TodayContractDomainsV1;
+
+/** Fixed-4 DomainLens wire order (ScreenFlow v3.1). */
+export const TODAY_CONTRACT_DOMAIN_ORDER: TodayContractDomainId[] = [
+  "work",
+  "money",
+  "relationships",
+  "energy",
+];
+
+export const TODAY_CONTRACT_DOMAIN_LABEL_RU: Record<TodayContractDomainId, string> = {
+  work: "Работа",
+  money: "Деньги",
+  relationships: "Отношения",
+  energy: "Энергия",
+};
+
+const ABSENT_DOMAIN_LENS: DomainLensV1 = {
+  status: "",
+  opportunity: "",
+  risk: "",
+  action: "",
+  evidence_status: "absent",
+};
+
+function isDomainLensObject(value: unknown): value is DomainLensV1 {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+/**
+ * Prefer fixed-4 keys; fold legacy money_work → work+money and family → relationships
+ * only when the target keys are missing. Always returns all 4 keys.
+ */
+export function normalizeTodayContractDomains(raw: unknown): TodayContractDomainsV1 {
+  const src =
+    raw && typeof raw === "object" && !Array.isArray(raw)
+      ? (raw as Record<string, unknown>)
+      : {};
+  const out: Partial<TodayContractDomainsV1> = {};
+
+  for (const id of TODAY_CONTRACT_DOMAIN_ORDER) {
+    if (isDomainLensObject(src[id])) {
+      out[id] = src[id] as DomainLensV1;
+    }
+  }
+
+  const moneyWork = src.money_work;
+  if (isDomainLensObject(moneyWork)) {
+    if (!out.work) out.work = moneyWork;
+    if (!out.money) out.money = moneyWork;
+  }
+
+  const family = src.family;
+  if (isDomainLensObject(family) && !out.relationships) {
+    out.relationships = family;
+  }
+
+  return {
+    work: out.work ?? { ...ABSENT_DOMAIN_LENS },
+    money: out.money ?? { ...ABSENT_DOMAIN_LENS },
+    relationships: out.relationships ?? { ...ABSENT_DOMAIN_LENS },
+    energy: out.energy ?? { ...ABSENT_DOMAIN_LENS },
+  };
+}
+
+export function normalizeTodayContractV1(contract: TodayContractV1): TodayContractV1 {
+  return {
+    ...contract,
+    domains: normalizeTodayContractDomains(contract.domains),
+  };
+}
 
 export type TodayContractDayStoryTraceClaimV1 = {
   id?: string;
@@ -655,8 +728,6 @@ export function isDayAssembling(contract: TodayContractV1 | null | undefined): b
   return storyStatus === "assembling";
 }
 
-export type TodayContractDomainId = keyof TodayContractDomainsV1;
-
 /** PR-3: domain is showable only with present evidence and non-empty copy. */
 export function isDomainLensPresent(lens: DomainLensV1 | null | undefined): boolean {
   if (!lens) return false;
@@ -669,25 +740,31 @@ export function isDomainLensPresent(lens: DomainLensV1 | null | undefined): bool
   );
 }
 
+function lensFromLine(line: string | undefined): DomainLensV1 {
+  const text = (line || "").trim();
+  if (!text) return { ...ABSENT_DOMAIN_LENS };
+  return {
+    status: "",
+    opportunity: text,
+    risk: "",
+    action: text,
+  };
+}
+
 function contractFromFirstTodayPackage(
   pkg: ReturnType<typeof buildFirstTodayPackage>,
 ): TodayContractV1 {
-  const [rel, money, family] = pkg.insight.spheres;
-  const lens = (line: string) => ({
-    status: "",
-    opportunity: line,
-    risk: "",
-    action: line,
-  });
+  const byId = new Map(pkg.insight.spheres.map((s) => [s.id, s.line] as const));
 
   return {
     contract_version: TODAY_CONTRACT_V1,
     global_context: { period: pkg.theme.headline },
     personal_growth: { development_point: pkg.why.lines[0] || "Один честный шаг сегодня." },
     domains: {
-      relationships: lens(rel.line),
-      money_work: lens(money.line),
-      family: lens(family.line),
+      work: lensFromLine(byId.get("work")),
+      money: lensFromLine(byId.get("money")),
+      relationships: lensFromLine(byId.get("relationships")),
+      energy: lensFromLine(byId.get("energy")),
     },
     primary_action: pkg.action.primary,
     progress: {},
@@ -740,9 +817,10 @@ export async function fetchTodayContractV1(targetDate?: string): Promise<TodayCo
       ? window.setTimeout(() => controller.abort(), 12_000)
       : null;
   try {
-    return await getJson<TodayContractV1>(`/today/contract${qs}`, {
+    const raw = await getJson<TodayContractV1>(`/today/contract${qs}`, {
       signal: controller?.signal,
     });
+    return normalizeTodayContractV1(raw);
   } finally {
     if (timer != null) window.clearTimeout(timer);
   }
@@ -772,11 +850,15 @@ export async function refreshTodayStory(input?: {
       timezone = "UTC";
     }
   }
-  return postJson<TodayStoryRefreshResult>("/today/story/refresh", {
+  const result = await postJson<TodayStoryRefreshResult>("/today/story/refresh", {
     local_date: input?.localDate,
     timezone,
     force: Boolean(input?.force),
   });
+  if (result.contract) {
+    return { ...result, contract: normalizeTodayContractV1(result.contract) };
+  }
+  return result;
 }
 
 export function isTodayStoryStale(contract: TodayContractV1 | null | undefined): boolean {

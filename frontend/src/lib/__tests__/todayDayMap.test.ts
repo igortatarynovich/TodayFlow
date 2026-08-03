@@ -8,15 +8,22 @@ describe("buildTodayDayMap", () => {
       global_context: { period: "" },
       personal_growth: { development_point: "" },
       domains: {
-        relationships: { evidence_status: "absent" },
-        money_work: {
+        work: {
           status: "",
           opportunity: "",
           risk: "Легко пережать сроки на работе.",
           action: "",
           evidence_status: "present",
         },
-        family: { evidence_status: "absent" },
+        money: {
+          status: "",
+          opportunity: "",
+          risk: "Легко пережать сроки на работе.",
+          action: "",
+          evidence_status: "present",
+        },
+        relationships: { evidence_status: "absent" },
+        energy: { evidence_status: "absent" },
       },
       primary_action: "",
       progress: {},
@@ -62,9 +69,10 @@ describe("buildTodayDayMap", () => {
       global_context: { period: "" },
       personal_growth: { development_point: "" },
       domains: {
+        work: { evidence_status: "absent" },
+        money: { evidence_status: "absent" },
         relationships: { evidence_status: "absent" },
-        money_work: { evidence_status: "absent" },
-        family: { evidence_status: "absent" },
+        energy: { evidence_status: "absent" },
       },
       primary_action: "",
       progress: {},

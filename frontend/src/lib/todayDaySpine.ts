@@ -296,7 +296,7 @@ function buildPulseFacet(input: {
     candidates.push(axis.endsWith(".") ? axis : `${axis}.`);
   }
 
-  for (const id of ["money_work", "relationships", "family"] as const) {
+  for (const id of ["work", "money", "relationships", "energy"] as const) {
     const domain = input.contract.domains[id];
     if (!isDomainLensPresent(domain)) continue;
     const opp = domain.opportunity?.trim();
