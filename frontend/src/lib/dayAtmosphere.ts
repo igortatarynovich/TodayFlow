@@ -151,7 +151,8 @@ export function resolveDayAtmosphere(input: ResolveDayAtmosphereInput = {}): Day
  * Manual pin — mirrors `productMoodTheme.ts`'s readMoodPin/writeMoodPin.
  * ————————————————————————————————————————————————————————————————————— */
 
-const DAY_MODE_PIN_STORAGE_KEY = "todayflow_day_mode_pin_v1";
+/** Exported so DayAtmosphereBridge can listen for cross-tab pin changes. */
+export const DAY_MODE_PIN_STORAGE_KEY = "todayflow_day_mode_pin_v1";
 
 export function readDayModePin(): DayVisualMode | null {
   if (typeof window === "undefined") return null;
@@ -191,6 +192,19 @@ export interface DayAtmosphereTokens {
   "--day-motion-distance": string;
   "--day-surface-tint": string;
 }
+
+/** Stable key list — for applying/cleaning up inline custom properties (DayAtmosphereBridge). */
+export const DAY_ATMOSPHERE_TOKEN_KEYS: readonly (keyof DayAtmosphereTokens)[] = [
+  "--day-bg-base",
+  "--day-bg-glow-primary",
+  "--day-bg-glow-secondary",
+  "--day-decor-color",
+  "--day-decor-opacity",
+  "--day-accent-soft",
+  "--day-motion-duration",
+  "--day-motion-distance",
+  "--day-surface-tint",
+] as const;
 
 type DayModeBaseTokens = Omit<
   DayAtmosphereTokens,

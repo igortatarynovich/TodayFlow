@@ -1,0 +1,116 @@
+/**
+ * Day Atmosphere — static per-mode palette (FOUNDATION_UI §13).
+ *
+ * Set via `html[data-day-mode]` from `DayAtmosphereBridge`, mirroring the
+ * `[data-mood]` / `html[data-atmosphere][data-day-phase]` pattern in
+ * `mood-themes.css` / `day-phase-atmosphere.css`. Independent of both —
+ * see FOUNDATION_UI §11.1 for the layer model and priority.
+ *
+ * Values here are the light-appearance base tokens from
+ * `dayAtmosphereTokens()` (frontend/src/lib/dayAtmosphere.ts) — kept in sync
+ * by hand for now. `--day-decor-opacity` / `--day-motion-duration` /
+ * `--day-motion-distance` are NOT set here: they depend on `intensity` /
+ * `contrast` / `motion`, which are continuous, not one of 8 fixed states —
+ * `DayAtmosphereBridge` applies those as inline custom properties on
+ * `documentElement.style` after computing them.
+ *
+ * Dark appearance variant is not in this pass — day-mode currently reads the
+ * same tokens under `data-theme="dark"`; see FOUNDATION_UI §13 backlog.
+ */
+
+:root {
+  /* Neutral fallback so nothing is unstyled before the bridge runs (SSR / no-JS). */
+  --day-bg-base: #f1f2f4;
+  --day-bg-glow-primary: rgba(120, 130, 145, 0.12);
+  --day-bg-glow-secondary: rgba(120, 130, 145, 0.06);
+  --day-decor-color: #5b6472;
+  --day-decor-opacity: 0.1;
+  --day-accent-soft: rgba(120, 130, 145, 0.2);
+  --day-motion-duration: 28s;
+  --day-motion-distance: 3px;
+  --day-surface-tint: rgba(241, 242, 244, 0.92);
+}
+
+html[data-day-mode="grounded"] {
+  --day-bg-base: #f3ede1;
+  --day-bg-glow-primary: rgba(155, 138, 94, 0.22);
+  --day-bg-glow-secondary: rgba(107, 122, 90, 0.12);
+  --day-decor-color: #6b5a3f;
+  --day-accent-soft: rgba(155, 138, 94, 0.28);
+  --day-surface-tint: rgba(243, 237, 225, 0.9);
+}
+
+html[data-day-mode="flow"] {
+  --day-bg-base: #eef1f5;
+  --day-bg-glow-primary: rgba(140, 165, 196, 0.24);
+  --day-bg-glow-secondary: rgba(176, 158, 201, 0.14);
+  --day-decor-color: #5b7590;
+  --day-accent-soft: rgba(140, 165, 196, 0.3);
+  --day-surface-tint: rgba(238, 241, 245, 0.9);
+}
+
+html[data-day-mode="radiance"] {
+  --day-bg-base: #fdf1e0;
+  --day-bg-glow-primary: rgba(230, 175, 100, 0.32);
+  --day-bg-glow-secondary: rgba(240, 140, 110, 0.14);
+  --day-decor-color: #c9873a;
+  --day-accent-soft: rgba(230, 175, 100, 0.32);
+  --day-surface-tint: rgba(253, 241, 224, 0.9);
+}
+
+html[data-day-mode="momentum"] {
+  --day-bg-base: #f6e2d8;
+  --day-bg-glow-primary: rgba(196, 90, 60, 0.34);
+  --day-bg-glow-secondary: rgba(150, 60, 45, 0.18);
+  --day-decor-color: #a4432a;
+  --day-accent-soft: rgba(196, 90, 60, 0.32);
+  --day-surface-tint: rgba(246, 226, 216, 0.9);
+}
+
+html[data-day-mode="clarity"] {
+  --day-bg-base: #f1f2f4;
+  --day-bg-glow-primary: rgba(120, 130, 145, 0.12);
+  --day-bg-glow-secondary: rgba(120, 130, 145, 0.06);
+  --day-decor-color: #5b6472;
+  --day-accent-soft: rgba(120, 130, 145, 0.2);
+  --day-surface-tint: rgba(241, 242, 244, 0.92);
+}
+
+html[data-day-mode="tension"] {
+  color-scheme: dark;
+  --day-bg-base: #221f22;
+  --day-bg-glow-primary: rgba(120, 40, 50, 0.28);
+  --day-bg-glow-secondary: rgba(70, 60, 90, 0.16);
+  --day-decor-color: #8a5a63;
+  --day-accent-soft: rgba(120, 40, 50, 0.22);
+  --day-surface-tint: rgba(34, 31, 34, 0.9);
+}
+
+html[data-day-mode="renewal"] {
+  --day-bg-base: #fdf6ee;
+  --day-bg-glow-primary: rgba(240, 200, 190, 0.26);
+  --day-bg-glow-secondary: rgba(190, 215, 175, 0.18);
+  --day-decor-color: #a3b592;
+  --day-accent-soft: rgba(240, 200, 190, 0.28);
+  --day-surface-tint: rgba(253, 246, 238, 0.92);
+}
+
+html[data-day-mode="depth"] {
+  color-scheme: dark;
+  --day-bg-base: #171622;
+  --day-bg-glow-primary: rgba(70, 60, 110, 0.22);
+  --day-bg-glow-secondary: rgba(40, 45, 70, 0.16);
+  --day-decor-color: #524a72;
+  --day-accent-soft: rgba(90, 80, 140, 0.2);
+  --day-surface-tint: rgba(23, 22, 34, 0.9);
+}
+
+/* FOUNDATION_UI §11.4 — atmosphere motion is decorative only, never required
+   to understand the page; honor the user's reduced-motion preference by
+   collapsing to the static state regardless of what the bridge computed. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    --day-motion-duration: 0s !important;
+    --day-motion-distance: 0px !important;
+  }
+}

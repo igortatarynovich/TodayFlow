@@ -1,6 +1,7 @@
 import "./globals.css";
 import "@/styles/section-atmosphere.css";
 import "@/styles/day-phase-atmosphere.css";
+import "@/styles/day-atmosphere.css";
 import "@/styles/mood-themes.css";
 import "@/styles/premium-ui.css";
 import { fontVariables } from "./fonts";
@@ -15,6 +16,7 @@ import { Footer } from "@/components/Footer";
 import { PWAInstaller } from "@/components/PWAInstaller";
 import { JTBDRouteArrivalLogger } from "@/components/questions/JTBDRouteArrivalLogger";
 import { SectionAtmosphereBridge } from "@/components/SectionAtmosphereBridge";
+import { DayAtmosphereBridge } from "@/components/DayAtmosphereBridge";
 import { ProductWebShellBridge } from "@/components/product-ui/ProductWebShellBridge";
 import { ProductWebShellConfigProvider } from "@/components/product-ui/productWebShellConfig";
 import { ProductWebShellLayout } from "@/components/product-ui/ProductWebShellLayout";
@@ -115,6 +117,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <Suspense fallback={null}>
               <JTBDRouteArrivalLogger />
               <SectionAtmosphereBridge />
+              <DayAtmosphereBridge />
               <ProductWebShellBridge />
             </Suspense>
             <TodayCycleProvider>

@@ -330,7 +330,7 @@ TODAYFLOW_FOUNDATION_UI
 
 ## 11. Day Atmosphere System
 
-**Статус:** канон смысла; контракты — §12 (реализованы и покрыты тестами); UI-wiring — §13. Раздел новый (main на 2026-08-03 не содержал дневного слоя); заменяет собой WIP `productMoodTheme.ts` / `mood-themes.css` / `dayPhaseAtmosphere.ts` с ветки `design/profile-journey-premium` как **источник смысла** — тот код остаётся как справочный материал по токенам/паттерну, не как канон.
+**Статус:** канон смысла; контракты — §12; UI first pass — §13. Раздел новый (main на 2026-08-03 не содержал дневного слоя); заменяет собой WIP `productMoodTheme.ts` / `mood-themes.css` / `dayPhaseAtmosphere.ts` с ветки `design/profile-journey-premium` как **источник смысла** — тот код остаётся как справочный материал по токенам/паттерну, не как канон.
 
 ### 11.0 Принцип
 
@@ -348,7 +348,7 @@ TODAYFLOW_FOUNDATION_UI
 |------|---------|---------|-------------|--------|
 | **Mood** | `data-mood` (`calm` / `focus` / `night` / `clarity`) | время суток + ручной pin | палитра `--tf-*` (ink, accent), независимо от appearance | существует (WIP-ветка), `productMoodTheme.ts` |
 | **Day-phase** | `data-day-phase` (`morning` / `day` / `evening` / `night`) | время суток, сейчас scoped на `[data-atmosphere="today"]` | процедурная текстура фона (лучи утром, звёзды ночью) | существует (WIP-ветка), `day-phase-atmosphere.css` |
-| **Day Atmosphere** *(этот раздел)* | `data-day-mode` (8 значений, §11.3) + `data-day-intensity` | **сюжет дня** от движка (см. §11.5), не часы | фон-композиция, декор, свет/контраст, motion | контракт §12 · UI §13 |
+| **Day Atmosphere** *(этот раздел)* | `data-day-mode` (8 значений, §11.3) + `data-day-intensity` | **сюжет дня** от движка (см. §11.5), не часы | фон-композиция, декор, свет/контраст, motion | контракт §12 · first pass §13 |
 
 Day Atmosphere **не заменяет** Mood и Day-phase и **не выбирает тему по знаку/элементу** (это зона `ElementAtmosphere`, отдельная и статичная). Три слоя комбинируются: Mood задаёт базовую палитру ink/accent, Day-phase — который час дня подсвечивает Today, Day Atmosphere — какой сюжет у дня в целом. При конфликте токенов приоритет: Day Atmosphere → Day-phase → Mood (сюжет дня важнее часов).
 
@@ -440,13 +440,13 @@ Figma не используется в разработке — не источ�
 ### 11.10 Следующие шаги
 
 - §12 «Day Atmosphere — Contracts» — **готово**, см. ниже.
-- §13 «Day Atmosphere — Implementation» (не в этом документе): `DayAtmosphereBridge.tsx`, `day-atmosphere.css` (реальные CSS-правила из значений §12.3), миграция полезного из WIP-ветки, dark-вариант палитры, реальные SVG/CSS для decor-вариантов.
+- §13 «Day Atmosphere — Implementation» — **first pass готово**, см. ниже; backlog в §13.4.
 
 ---
 
 ## 12. Day Atmosphere — Contracts
 
-**Статус:** реализовано и покрыто тестами. **Код:** `frontend/src/lib/dayAtmosphere.ts` · тесты `frontend/src/lib/__tests__/dayAtmosphere.test.ts` (18/18 green, 100% line/func coverage на модуль). Чистые функции — без React, без DOM (кроме pin-хелперов), без CSS-файла и без Bridge-компонента: это осознанно оставлено §13.
+**Статус:** реализовано и покрыто тестами. **Код:** `frontend/src/lib/dayAtmosphere.ts` · тесты `frontend/src/lib/__tests__/dayAtmosphere.test.ts`. Чистые функции — без React, без DOM (кроме pin-хелперов). CSS-файл и Bridge-компонент — §13.
 
 ### 12.1 Типы
 
@@ -496,8 +496,41 @@ interface DayAtmosphereContract {
 
 ### 12.4 Manual pin
 
-`readDayModePin()` / `writeDayModePin()` — зеркало `readMoodPin`/`writeMoodPin` из `productMoodTheme.ts`, свой storage-ключ `todayflow_day_mode_pin_v1`, тот же контракт «испорченное хранилище не должно ронять приложение».
+`readDayModePin()` / `writeDayModePin()` — зеркало `readMoodPin`/`writeMoodPin` из `productMoodTheme.ts`, свой storage-ключ `todayflow_day_mode_pin_v1` (`DAY_MODE_PIN_STORAGE_KEY`), тот же контракт «испорченное хранилище не должно ронять приложение».
 
 ---
 
-*Документ (§11) → контракты (§12, готово) → реализация (§13, следующий шаг). Figma нигде не участвует.*
+## 13. Day Atmosphere — Implementation (first pass)
+
+**Статус:** вкатано в shell. Dark-appearance доводка палитры, реальные decor-ассеты (SVG на 16 id из `DAY_MODE_DECOR_VARIANTS`) и wiring day-narrative движка — не входят в этот проход, остаются backlog (§13.4).
+
+### 13.1 Код
+
+| Файл | Роль |
+|------|------|
+| `frontend/src/styles/day-atmosphere.css` | Статическая light-палитра на 8 `html[data-day-mode="…"]`, значения = `DAY_MODE_BASE_TOKENS` из §12.3. `:root` — нейтральный fallback до гидратации. `prefers-reduced-motion` зануляет motion-токены через `!important` — побеждает даже инлайн-стили от моста. |
+| `frontend/src/components/DayAtmosphereBridge.tsx` | Мост: `data-day-mode` + инлайн `--day-*` на `documentElement`. Читает pin, слушает `storage` (другая вкладка) и `prefers-reduced-motion` (`change`). Скоуп — `isAppProductRoute` (те же роуты, что и остальной shell). Очищает атрибут/токены на анмаунте. |
+| `frontend/src/components/__tests__/DayAtmosphereBridge.test.tsx` | Тесты: дефолт на продуктовом роуте, отсутствие атрибута на маркетинговом, немедленный pin, реакция на `storage`, игнор чужих ключей, zero-motion при reduced-motion (статично и live), cleanup на анмаунте, clear при уходе с product route. |
+
+**Wiring** (`frontend/src/app/layout.tsx`): импорт `@/styles/day-atmosphere.css` рядом с `section-atmosphere.css`; `<DayAtmosphereBridge />` рядом с `<SectionAtmosphereBridge />` в том же `<Suspense>`.
+
+### 13.2 Почему статика (CSS) + инлайн (JS) вместе
+
+Базовая палитра режима фиксирована на 8 значений → живёт в CSS по `data-day-mode`, работает уже на SSR/до гидратации. Но `intensity` / `contrast` / `motion` от движка — непрерывные, не одно из 8 состояний → их не закодировать статическими CSS-блоками; мост считает `dayAtmosphereTokens()` и пишет их инлайн на `documentElement.style`. Мост пишет туда же и базовые токены (не только динамические) — так `dayAtmosphere.ts` остаётся единственным источником истины, а CSS-файл — просто safety-фолбэк, если JS ещё не отработал.
+
+### 13.3 Проверено
+
+- `jest` — контракт `dayAtmosphere.test.ts` + мост `DayAtmosphereBridge.test.tsx`.
+- `dayAtmosphere.ts` / `DayAtmosphereBridge.tsx` / `layout.tsx` — без новых type errors по модулю.
+- Diff в `layout.tsx`: импорт CSS + импорт моста + одна JSX-строка; существующие `day-phase-atmosphere` / `mood-themes` на feature-ветке не тронуты.
+
+### 13.4 Backlog
+
+- Dark-appearance значения палитры (`data-theme="dark"` × `data-day-mode`) — сейчас day-mode не меняется под тёмной темой.
+- Decor-ассеты: 16 SVG/CSS-композиций (`DAY_MODE_DECOR_VARIANTS`, 2 на режим) — сейчас `decor_variant` в контракте валиден, но не отрисован.
+- День-нарратив движок: `DayAtmosphereBridge` резолвит только pin → дефолт `clarity`; интеграция реального источника сюжета дня — отдельная задача, меняющая один аргумент в `resolveDayAtmosphere()`, не архитектуру.
+- Потребление `--day-*` токенов в реальной композиции фона `.todayflow-section` / Hero — пока токены существуют и обновляются, но ни одна поверхность их не читает.
+
+---
+
+*Документ (§11) → контракты (§12) → реализация first pass (§13) — все три готовы. Дальше — backlog §13.4. Figma нигде не участвует.*

@@ -1,5 +1,6 @@
 import {
   DAY_ATMOSPHERE_DEFAULT,
+  DAY_ATMOSPHERE_TOKEN_KEYS,
   DAY_MODE_DECOR_VARIANTS,
   DAY_VISUAL_MODES,
   dayAtmosphereTokens,
@@ -83,6 +84,11 @@ describe("dayAtmosphereTokens", () => {
       const tokens = dayAtmosphereTokens(resolveDayAtmosphere({ visual_mode: mode }));
       expect(Object.keys(tokens).sort()).toEqual(expectedKeys);
     }
+  });
+
+  it("keeps DAY_ATMOSPHERE_TOKEN_KEYS in sync with the actual output shape (used by DayAtmosphereBridge cleanup)", () => {
+    const tokens = dayAtmosphereTokens(resolveDayAtmosphere());
+    expect([...DAY_ATMOSPHERE_TOKEN_KEYS].sort()).toEqual(Object.keys(tokens).sort());
   });
 
   it("is deterministic — same contract in, same tokens out", () => {

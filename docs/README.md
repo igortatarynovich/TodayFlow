@@ -90,7 +90,7 @@
 
 Screen-level и PIM-слой (`pim/`, `today-language/`, `explainability/`) — уточняют unified, не заменяют его.
 
-**Visual SoT:** [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — статика + §11 Day Atmosphere + §12 contracts (`dayAtmosphere.ts`). Параллельный premium/design-канон не заводить. Figma вне рабочего контура.
+**Visual SoT:** [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — статика + §11–§13 Day Atmosphere (`dayAtmosphere.ts` · `DayAtmosphereBridge`). Параллельный premium/design-канон не заводить. Figma вне рабочего контура.
 
 ## Правило записи (обязательно)
 
