@@ -429,8 +429,36 @@ def chat_completion_plain(
     max_tokens: int,
 ) -> str | None:
     """Обычный chat completion без `response_format` (narrative, таро, прогнозы и т.д.)."""
+    text, _kind, _mid = chat_completion_plain_with_status(
+        client,
+        model=model,
+        messages=messages,
+        temperature=temperature,
+        max_tokens=max_tokens,
+    )
+    return text
+
+
+def chat_completion_plain_with_status(
+    client: Any,
+    *,
+    model: str,
+    messages: list[dict[str, str]],
+    temperature: float,
+    max_tokens: int,
+) -> tuple[str | None, str | None, str | None]:
+    """Plain chat completion with failure class for ops instrumentation.
+
+    Returns ``(text, failure_class, model_id)``.
+    ``failure_class`` is set when text is None: timeout | empty | throttle |
+    model_unavailable | upstream_unavailable | other.
+    On timeout, does **not** try NEBIUS_FALLBACK_MODEL (same rule as json path).
+    """
     chain = resolve_chat_model_chain(model)
+    last_kind: str | None = None
+    last_mid: str | None = None
     for idx, mid in enumerate(chain):
+        last_mid = mid
         try:
             kw = _build_chat_kwargs(
                 model=mid,
@@ -447,25 +475,25 @@ def chat_completion_plain(
                         chain[0],
                         mid,
                     )
-                return text
-            kind = "empty"
+                return text, None, mid
+            last_kind = "empty"
         except Exception as exc:
-            kind = classify_llm_call_failure(exc)
+            last_kind = classify_llm_call_failure(exc)
             logger.warning(
                 "LLM chat completion failed class=%s model=%s: %s",
-                kind,
+                last_kind,
                 mid,
                 exc,
                 exc_info=True,
             )
         next_mid = chain[idx + 1] if idx + 1 < len(chain) else None
-        if next_mid and _should_try_model_fallback(kind):
+        if next_mid and _should_try_model_fallback(last_kind):
             logger.warning(
                 "LLM plain primary failed kind=%s model=%s; trying fallback=%s",
-                kind,
+                last_kind,
                 mid,
                 next_mid,
             )
             continue
         break
-    return None
+    return None, last_kind or "other", last_mid

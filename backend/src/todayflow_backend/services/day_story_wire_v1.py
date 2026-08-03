@@ -502,6 +502,7 @@ def _build_day_story_record(
         # P0: GET /today/contract must not block on Nebius.
         # C1: force_rebuild uses native scenario LLM (not legacy expect/trap schema).
         native_scenario = None
+        native_meta: dict[str, Any] = {}
         llm_attempted = bool(force_rebuild and is_llm_chat_configured())
         if llm_attempted:
             from todayflow_backend.services.day_scenario_native_llm_c1 import (
@@ -513,12 +514,20 @@ def _build_day_story_record(
                 interpretation=interpretation,
                 ritual_context=safe_ritual,
                 celestial_events=ce or None,
+                meta_out=native_meta,
             )
             used_fallback = native_scenario is None
             story = None
         else:
             story = None
             used_fallback = True
+            native_meta = {
+                "llm_attempted": False,
+                "success": False,
+                "failure_class": None,
+                "reject_reason": "llm_not_attempted_get_path",
+                "attempt2_policy": None,
+            }
 
         if story is None:
             story = build_day_story_fallback_v1(
@@ -636,6 +645,23 @@ def _build_day_story_record(
             label="day_scenario_native_c1" if llm_attempted else "day_story_v1",
             metadata={"contract": DAY_STORY_V1_CONTRACT, "native_c1": llm_attempted},
         )
+        if llm_attempted and native_scenario is not None:
+            generation_source = "native_llm_c1"
+        elif llm_attempted:
+            generation_source = "deterministic_fallback_after_llm"
+        else:
+            generation_source = "deterministic_no_llm"
+        # Product metric fields (not one-off diagnostics): track native share over time.
+        native_ok = bool(native_scenario)
+        model_for_log = None
+        if llm_attempted:
+            model_for_log = native_meta.get("model") or resolve_default_chat_model()
+        err_bits = []
+        if llm_attempted and not native_ok:
+            if native_meta.get("failure_class"):
+                err_bits.append(str(native_meta["failure_class"]))
+            if native_meta.get("reject_reason"):
+                err_bits.append(str(native_meta["reject_reason"])[:400])
         input_payload: dict[str, Any] = {
             "target_date": target_date.isoformat(),
             "locale": locale_value,
@@ -648,9 +674,44 @@ def _build_day_story_record(
             "contract": DAY_STORY_V1_CONTRACT,
             "prompt_version": prompt_ver,
             "llm_input_keys": sorted(llm_input.keys()),
-            "native_scenario_c1": bool(native_scenario),
+            # Legacy bool kept for old queries; prefer generation_source + native_llm_c1_meta.
+            "native_scenario_c1": native_ok,
+            "generation_source": generation_source,
+            "llm_attempted": llm_attempted,
+            "native_llm_c1_meta": {
+                "success": native_ok,
+                "failure_class": native_meta.get("failure_class"),
+                "reject_reason": native_meta.get("reject_reason"),
+                "attempt_count": native_meta.get("attempt_count"),
+                "attempt_index": (
+                    (native_meta.get("attempts") or [{}])[-1].get("attempt_index")
+                    if native_meta.get("attempts")
+                    else None
+                ),
+                "attempt_duration_ms": (
+                    (native_meta.get("attempts") or [{}])[-1].get("attempt_duration_ms")
+                    if native_meta.get("attempts")
+                    else None
+                ),
+                "attempts": native_meta.get("attempts") or [],
+                "system_chars": native_meta.get("system_chars"),
+                "user_sent_chars": native_meta.get("user_sent_chars"),
+                "model": model_for_log,
+                "no_retry_on_timeout": native_meta.get("no_retry_on_timeout"),
+                "attempt2_policy": native_meta.get("attempt2_policy"),
+            },
             **slice_log_fields(user_core),
         }
+        logger.info(
+            "day_story_native_metric generation_source=%s used_fallback=%s "
+            "llm_attempted=%s failure_class=%s attempt_count=%s duration_ms=%s",
+            generation_source,
+            used_fallback,
+            llm_attempted,
+            native_meta.get("failure_class"),
+            native_meta.get("attempt_count"),
+            int((perf_counter() - started) * 1000),
+        )
         gen = learning.log_generation(
             db,
             module=MODULE,
@@ -658,15 +719,15 @@ def _build_day_story_record(
             user_id=user.id,
             core_profile_snapshot_id=snapshot_id,
             prompt_version_id=pv.id,
-            model=resolve_default_chat_model()
-            if is_llm_chat_configured() and not used_fallback
-            else None,
+            # Keep model on fallback so ops can attribute timeouts / gate rejects.
+            model=model_for_log,
             locale=locale_value,
             input_payload=input_payload,
             system_prompt=_DAY_STORY_SYS_RU[:2000],
             normalized_response=story,
             status="success" if not used_fallback else "fallback",
             used_fallback=used_fallback,
+            error_message=(" | ".join(err_bits)[:500] if err_bits else None),
             duration_ms=int((perf_counter() - started) * 1000),
         )
         gen_id = gen.id

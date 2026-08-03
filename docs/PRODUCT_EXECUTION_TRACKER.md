@@ -5,8 +5,29 @@ Owner: Product + Engineering
 Status: Active working document
 
 **DONE (2026-08-03):** ScreenFlow content jobs **v3.1** — P0+P1+P2 gap plan closed on branch (seed-kill · domain4 · Plot wash · serve heal · LLM hard-gate · native opaque `serves_conflict`).  
-**IN PROGRESS:** **v3.1b concreteness** — kill generation-meta / tag-dump / color mash in user-facing chorus+Move; PR #7 draft.  
+**IN PROGRESS:** **P0 native day_story reliability** — instrumentation + no-retry-on-timeout (immediate fallback after timeout; slim/alt attempt-2 = later slice). Re-measure failure_class in 2–3d, then budget/slim.  
+**ALSO IN PROGRESS:** **v3.1b concreteness** — kill generation-meta / tag-dump / color mash in user-facing chorus+Move; PR #7 draft.  
 Prior: card_base_v1 cutover live · editorial polish minors ongoing.
+
+## Architecture impact — native day_story P0 instrumentation + no-retry-on-timeout (2026-08-03)
+
+- **SoT before:** Native C1 up to 2 identical attempts; `generation_logs` stored `native_scenario_c1` bool only, cleared `model` on fallback, no `failure_class` / attempt durations.
+- **SoT after:** Timeout → **immediate deterministic fallback** (no attempt-2 as-is). Gate/parse retries with feedback still allowed. Logs carry `generation_source`, `native_llm_c1_meta` (failure_class, attempts[], chars, model kept on fallback). Product metric script: `backend/scripts/report_day_story_native_share.py`.
+- **Public contract changed?** no
+- **Migration required?** no — additive log fields; old rows still queryable via `used_fallback` / bool
+- **Canon updated?** no (ops/runtime policy; tracker + script SoT for metric)
+- **Backward compatible?** yes
+
+### Gap plan (native reliability)
+
+| Pri | Gap | Notes |
+|-----|-----|-------|
+| P0 | Instrumentation | **DONE** this slice — `failure_class` timeout\|empty\|parse\|gate\|other |
+| P0 | No-retry-on-timeout | **DONE** — `attempt2_policy=skip_identical_on_timeout_immediate_fallback` |
+| P0 | Product metric native share | **DONE** — script + structured `day_story_native_metric` log line; alert default <30% among llm_attempted |
+| P1 | Re-run taxonomy (a) | After 2–3 days of instrumented logs |
+| P1 | Budget / slim prompt (b) | Only after real failure_class shares — not duration heuristics |
+| P2 | Attempt-2 alternate strategy | Slim prompt / other model — **not** this P0 |
 
 ## Architecture impact — ScreenFlow content jobs v3.1 (2026-08-03)
 
@@ -1179,6 +1200,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-03 | Today / Ops | **Native day_story P0: instrumentation + no-retry-on-timeout** | **CODE** | Timeout → immediate deterministic fallback (no 2×45s). Logs: `generation_source`, `native_llm_c1_meta` (failure_class/attempts/chars), model kept on fallback, `error_message`. Product metric: `report_day_story_native_share.py` (+ alert <30% among llm_attempted). Attempt-2 slim/alt = later. Test `test_native_llm_no_retry_on_timeout_p0`. Not live until BE deploy.
 - 2026-08-03 | Today / Live QA | **Atmosphere paint + Glance chrome + content mash fixes** | **LIVE (deployed)** | Day CSS now beats day-phase peach on `--tf-page-atmosphere`; decor inside product frame; Glance «Шаг n/m» (no SCREENFLOW/TodayFlow brand). Reading stub suppressed (`asScreenFlowSteps`); sphere kickers → DomainLens labels; color clothing only when name matches / props.where_to_use; number voice uses reduced digit; evening CTA gated to Response; lunar pulse skip if already in why; serve-heal marker «проживите день в ключе». Hard-refresh; stale Symbols may need contract refresh for heal.
 - 2026-08-03 | Today / Day Atmosphere | **Visible pass + Glance mockup IA** | **LIVE (deployed)** | Auto `day_atmosphere` nest from thesis.mode (BE `day_atmosphere_v1`) · bridge nest+pin · shell `--day-*` + CSS decor · Glance glass-hero + ScreenFlow gauge. Compose rebuild BE+FE · health 200 · mapper smoke `conflict→tension`. Canon FOUNDATION_UI §11.9/§13 · TODAY_SCREEN_SCENARIO_V3 Экран 0. **Architecture impact:** public nest `day_atmosphere`; Glance layout SoT; section wash demoted under `data-day-mode`.
 - 2026-08-03 | Today / ScreenFlow | **v3.1b concreteness (meta-leak + tag-dump + color mash)** | **CODE** | Chorus card/number/sky bridges → lived tips; number no longer «темп — / способ —»; color link once (no symbolic×3); avoid why без дубля имени; timeline без «X в трении»; serve-heal markers for generation-meta; FE where_to_use = one tip + benefit dedupe. Canon TODAY_SCREEN_SCENARIO_V3 §0.7–0.8. Not live until deploy.

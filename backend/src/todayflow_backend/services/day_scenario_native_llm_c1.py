@@ -10,16 +10,76 @@ Canon: docs/DAY_SCENARIO_V1.md · docs/audits/DAY_SCENARIO_NATIVE_LLM_C1.md
 from __future__ import annotations
 
 import json
+import logging
 import re
+from time import perf_counter
 from typing import Any
 
 from todayflow_backend.core.llm_openai_compatible import (
-    chat_completion_plain,
+    chat_completion_plain_with_status,
     get_openai_compatible_client,
     is_llm_chat_configured,
     resolve_default_chat_model,
     resolve_max_tokens,
 )
+
+logger = logging.getLogger(__name__)
+
+# Ops failure_class for generation_logs / product native-success metric (P0).
+NATIVE_FAILURE_TIMEOUT = "timeout"
+NATIVE_FAILURE_EMPTY = "empty"
+NATIVE_FAILURE_PARSE = "parse"
+NATIVE_FAILURE_GATE = "gate"
+NATIVE_FAILURE_OTHER = "other"
+
+# After provider timeout: do not burn attempt 2 as-is (almost always second timeout).
+# Gate/parse retries with feedback remain. Slim-prompt / alternate-model attempt-2
+# is a separate slice — not this P0.
+ATTEMPT2_POLICY_TIMEOUT = "skip_identical_on_timeout_immediate_fallback"
+
+
+def _map_provider_kind_to_failure_class(kind: str | None) -> str:
+    if kind == "timeout":
+        return NATIVE_FAILURE_TIMEOUT
+    if kind == "empty":
+        return NATIVE_FAILURE_EMPTY
+    return NATIVE_FAILURE_OTHER
+
+
+def _write_native_call_meta(
+    meta_out: dict[str, Any] | None,
+    *,
+    success: bool,
+    model: str | None,
+    system_chars: int,
+    user_sent_chars: int,
+    attempts: list[dict[str, Any]],
+    terminal_failure_class: str | None = None,
+    terminal_reject_reason: str | None = None,
+) -> None:
+    if meta_out is None:
+        return
+    last = attempts[-1] if attempts else {}
+    meta_out.clear()
+    meta_out.update(
+        {
+            "llm_attempted": True,
+            "success": bool(success),
+            "model": model,
+            "system_chars": int(system_chars),
+            "user_sent_chars": int(user_sent_chars),
+            "attempt_count": len(attempts),
+            "attempts": list(attempts),
+            "failure_class": None
+            if success
+            else (terminal_failure_class or last.get("failure_class") or NATIVE_FAILURE_OTHER),
+            "reject_reason": None
+            if success
+            else (terminal_reject_reason or last.get("reject_reason")),
+            "no_retry_on_timeout": True,
+            "attempt2_policy": ATTEMPT2_POLICY_TIMEOUT,
+        }
+    )
 from todayflow_backend.services.day_scenario_v1 import (
     DAY_SCENARIO_V1_CONTRACT,
     DAY_SCENARIO_V1_VERSION,
@@ -862,6 +922,7 @@ def call_day_scenario_native_llm_c1(
     ritual_context: dict[str, Any] | None = None,
     celestial_events: dict[str, Any] | None = None,
     max_attempts: int = 2,
+    meta_out: dict[str, Any] | None = None,
 ) -> dict[str, Any] | None:
     """Generate native scenario via LLM. Returns day_scenario_v1 or None after hard fails.
 
@@ -874,6 +935,10 @@ def call_day_scenario_native_llm_c1(
     SCENE_MISSING_EVERYDAY / SCENE_ABSTRACT / ASTRO_JARGON_BARE to blocking
     (retry then unavailable). Still no quality→general downgrade.
     Hard: PROFILE_FACT_LEAK, broken evidence refs, schema/SoT.
+
+    ``meta_out`` (optional): filled with attempt-level ops fields for generation_logs
+    (failure_class, durations, char counts, model). On provider timeout, attempt 2
+    is skipped (immediate deterministic fallback) — see ATTEMPT2_POLICY_TIMEOUT.
     """
     from todayflow_backend.services.day_scenario_editorial_gate_c31 import (
         format_editorial_retry_feedback,
@@ -900,11 +965,34 @@ def call_day_scenario_native_llm_c1(
     )
     from todayflow_backend.services.day_story_capture_session_v0 import get_day_story_capture_session
 
+    attempt_rows: list[dict[str, Any]] = []
+    system_chars = 0
+    user_sent_chars = 0
+    model_name = ""
+
+    def _fail(
+        *,
+        failure_class: str,
+        reject_reason: str | None,
+    ) -> None:
+        _write_native_call_meta(
+            meta_out,
+            success=False,
+            model=model_name or None,
+            system_chars=system_chars,
+            user_sent_chars=user_sent_chars,
+            attempts=attempt_rows,
+            terminal_failure_class=failure_class,
+            terminal_reject_reason=reject_reason,
+        )
+
     if not is_llm_chat_configured():
+        _fail(failure_class=NATIVE_FAILURE_OTHER, reject_reason="llm_not_configured")
         return None
     # Refresh/enrichment only — never GET. Use background timeout budget.
     client = get_openai_compatible_client(operation="background")
     if client is None:
+        _fail(failure_class=NATIVE_FAILURE_OTHER, reject_reason="llm_client_unavailable")
         return None
 
     interp = interpretation or (
@@ -974,7 +1062,6 @@ def call_day_scenario_native_llm_c1(
     )
     user_sent = user_base
     retry_feedback = ""
-    model_name = ""
     try:
         model_name = str(resolve_default_chat_model() or "")
     except Exception:
@@ -984,6 +1071,8 @@ def call_day_scenario_native_llm_c1(
     from todayflow_backend.services.llm_practitioner_persona_v1 import with_practitioner_persona
 
     system = with_practitioner_persona(_NATIVE_SYS_RU, locale="ru")
+    system_chars = len(system or "")
+    user_sent_chars = len(user_sent or "")
     if capture is not None:
         capture.record_prompt(
             system=system,
@@ -1004,7 +1093,9 @@ def call_day_scenario_native_llm_c1(
         if retry_feedback:
             # Keep brief intact; append feedback after protected base
             user_sent = f"{user_base}\n\n---\n{retry_feedback}"[:18000]
-        content = chat_completion_plain(
+            user_sent_chars = len(user_sent)
+        attempt_t0 = perf_counter()
+        content, provider_kind, used_model = chat_completion_plain_with_status(
             client,
             model=resolve_default_chat_model(),
             messages=[
@@ -1014,7 +1105,23 @@ def call_day_scenario_native_llm_c1(
             temperature=0.52,
             max_tokens=resolve_max_tokens(4800),
         )
+        if used_model:
+            model_name = str(used_model)
+        attempt_ms = int((perf_counter() - attempt_t0) * 1000)
         if not content:
+            failure_class = _map_provider_kind_to_failure_class(provider_kind)
+            reject_reason = f"empty_llm_content:{provider_kind or 'unknown'}"
+            attempt_rows.append(
+                {
+                    "attempt_index": attempt_idx,
+                    "attempt_duration_ms": attempt_ms,
+                    "failure_class": failure_class,
+                    "reject_reason": reject_reason,
+                    "provider_kind": provider_kind,
+                    "model": model_name or None,
+                    "user_sent_chars": len(user_sent or ""),
+                }
+            )
             if capture is not None:
                 capture.record_attempt(
                     attempt_index=attempt_idx,
@@ -1023,11 +1130,31 @@ def call_day_scenario_native_llm_c1(
                     after_normalize=None,
                     after_gate=None,
                     status="empty_response",
-                    reject_reason="empty_llm_content",
+                    reject_reason=reject_reason,
                 )
+            # P0: timeout → immediate fallback (no identical second burn).
+            if failure_class == NATIVE_FAILURE_TIMEOUT:
+                logger.warning(
+                    "native_llm_c1 timeout on attempt=%s duration_ms=%s; skipping retry",
+                    attempt_idx,
+                    attempt_ms,
+                )
+                _fail(failure_class=NATIVE_FAILURE_TIMEOUT, reject_reason=reject_reason)
+                return None
             continue
         parsed = _parse_json_content(content)
         if not parsed:
+            attempt_rows.append(
+                {
+                    "attempt_index": attempt_idx,
+                    "attempt_duration_ms": attempt_ms,
+                    "failure_class": NATIVE_FAILURE_PARSE,
+                    "reject_reason": "json_parse_failed",
+                    "model": model_name or None,
+                    "user_sent_chars": len(user_sent or ""),
+                    "raw_chars": len(content),
+                }
+            )
             if capture is not None:
                 capture.record_attempt(
                     attempt_index=attempt_idx,
@@ -1056,6 +1183,18 @@ def call_day_scenario_native_llm_c1(
         hard_errors = [e for e in errors if is_hard_native_validate_error(e)]
         soft_native = [e for e in errors if not is_hard_native_validate_error(e)]
         if hard_errors:
+            reason = ";".join(hard_errors[:8])
+            attempt_rows.append(
+                {
+                    "attempt_index": attempt_idx,
+                    "attempt_duration_ms": attempt_ms,
+                    "failure_class": NATIVE_FAILURE_GATE,
+                    "reject_reason": reason,
+                    "model": model_name or None,
+                    "user_sent_chars": len(user_sent or ""),
+                    "status": "native_validation_reject",
+                }
+            )
             if capture is not None:
                 capture.record_attempt(
                     attempt_index=attempt_idx,
@@ -1064,7 +1203,7 @@ def call_day_scenario_native_llm_c1(
                     after_normalize=normalized,
                     after_gate=None,
                     status="native_validation_reject",
-                    reject_reason=";".join(hard_errors[:8]),
+                    reject_reason=reason,
                 )
             retry_feedback = "Исправь schema/validation ошибки: " + "; ".join(hard_errors[:6])
             continue
@@ -1090,6 +1229,17 @@ def call_day_scenario_native_llm_c1(
         # Hard personalization: reject_story (e.g. PROFILE_FACT_LEAK) wins over retry.
         # Leaked prose must never reach the user or a quality-rewrite retry prompt.
         if should_reject_story(pers_defects):
+            reason = ";".join(str(d.get("code")) for d in pers_defects[:8])
+            attempt_rows.append(
+                {
+                    "attempt_index": attempt_idx,
+                    "attempt_duration_ms": attempt_ms,
+                    "failure_class": NATIVE_FAILURE_GATE,
+                    "reject_reason": reason,
+                    "model": model_name or None,
+                    "status": "personalization_reject_story",
+                }
+            )
             if capture is not None:
                 capture.record_attempt(
                     attempt_index=attempt_idx,
@@ -1103,7 +1253,7 @@ def call_day_scenario_native_llm_c1(
                     },
                     after_gate=None,
                     status="personalization_reject_story",
-                    reject_reason=";".join(str(d.get("code")) for d in pers_defects[:8]),
+                    reject_reason=reason,
                 )
                 try:
                     for d in pers_defects:
@@ -1115,6 +1265,7 @@ def call_day_scenario_native_llm_c1(
                         )
                 except Exception:
                     pass
+            _fail(failure_class=NATIVE_FAILURE_GATE, reject_reason=reason)
             return None
         if should_retry_defects(pers_defects):
             # Hard orphan/refs only — never include PROFILE_FACT_LEAK in retry feedback.
@@ -1126,6 +1277,17 @@ def call_day_scenario_native_llm_c1(
             ]
             if attempt_idx + 1 < attempts and retryable:
                 feedback = format_personalization_retry_feedback(retryable, pack=pers_pack)
+                reason = ";".join(str(d.get("code")) for d in retryable[:8])
+                attempt_rows.append(
+                    {
+                        "attempt_index": attempt_idx,
+                        "attempt_duration_ms": attempt_ms,
+                        "failure_class": NATIVE_FAILURE_GATE,
+                        "reject_reason": reason,
+                        "model": model_name or None,
+                        "status": "personalization_hard_retry",
+                    }
+                )
                 if capture is not None:
                     capture.record_attempt(
                         attempt_index=attempt_idx,
@@ -1139,7 +1301,7 @@ def call_day_scenario_native_llm_c1(
                         },
                         after_gate=None,
                         status="personalization_hard_retry",
-                        reject_reason=";".join(str(d.get("code")) for d in retryable[:8]),
+                        reject_reason=reason,
                     )
                     try:
                         for d in pers_defects:
@@ -1152,6 +1314,17 @@ def call_day_scenario_native_llm_c1(
                         pass
                 retry_feedback = feedback
                 continue
+            reason = ";".join(str(d.get("code")) for d in pers_defects[:8])
+            attempt_rows.append(
+                {
+                    "attempt_index": attempt_idx,
+                    "attempt_duration_ms": attempt_ms,
+                    "failure_class": NATIVE_FAILURE_GATE,
+                    "reject_reason": reason,
+                    "model": model_name or None,
+                    "status": "personalization_reject_story",
+                }
+            )
             if capture is not None:
                 capture.record_attempt(
                     attempt_index=attempt_idx,
@@ -1160,8 +1333,9 @@ def call_day_scenario_native_llm_c1(
                     after_normalize=normalized,
                     after_gate=None,
                     status="personalization_reject_story",
-                    reject_reason=";".join(str(d.get("code")) for d in pers_defects[:8]),
+                    reject_reason=reason,
                 )
+            _fail(failure_class=NATIVE_FAILURE_GATE, reject_reason=reason)
             return None
         # Quality personalization defects (non-blocking maturity): keep first valid story.
 
@@ -1177,6 +1351,17 @@ def call_day_scenario_native_llm_c1(
 
         # C3.6.3: promoted quality codes may retry / reject via maturity registry.
         if should_reject_story(editorial):
+            reason = ";".join(str(d.get("code")) for d in editorial[:8])
+            attempt_rows.append(
+                {
+                    "attempt_index": attempt_idx,
+                    "attempt_duration_ms": attempt_ms,
+                    "failure_class": NATIVE_FAILURE_GATE,
+                    "reject_reason": reason,
+                    "model": model_name or None,
+                    "status": "editorial_reject_story",
+                }
+            )
             if capture is not None:
                 capture.record_attempt(
                     attempt_index=attempt_idx,
@@ -1190,7 +1375,7 @@ def call_day_scenario_native_llm_c1(
                     },
                     after_gate=None,
                     status="editorial_reject_story",
-                    reject_reason=";".join(str(d.get("code")) for d in editorial[:8]),
+                    reject_reason=reason,
                 )
                 try:
                     for d in editorial:
@@ -1202,11 +1387,23 @@ def call_day_scenario_native_llm_c1(
                         )
                 except Exception:
                     pass
+            _fail(failure_class=NATIVE_FAILURE_GATE, reject_reason=reason)
             return None
         if should_retry_defects(editorial):
             retryable = [d for d in editorial if str(d.get("runtime_action")) == "retry"]
             if attempt_idx + 1 < attempts and retryable:
                 feedback = format_editorial_retry_feedback(retryable)
+                reason = ";".join(str(d.get("code")) for d in retryable[:8])
+                attempt_rows.append(
+                    {
+                        "attempt_index": attempt_idx,
+                        "attempt_duration_ms": attempt_ms,
+                        "failure_class": NATIVE_FAILURE_GATE,
+                        "reject_reason": reason,
+                        "model": model_name or None,
+                        "status": "editorial_quality_retry",
+                    }
+                )
                 if capture is not None:
                     capture.record_attempt(
                         attempt_index=attempt_idx,
@@ -1220,7 +1417,7 @@ def call_day_scenario_native_llm_c1(
                         },
                         after_gate=None,
                         status="editorial_quality_retry",
-                        reject_reason=";".join(str(d.get("code")) for d in retryable[:8]),
+                        reject_reason=reason,
                     )
                     try:
                         for d in editorial:
@@ -1234,6 +1431,17 @@ def call_day_scenario_native_llm_c1(
                         pass
                 retry_feedback = feedback
                 continue
+            reason = ";".join(str(d.get("code")) for d in editorial[:8])
+            attempt_rows.append(
+                {
+                    "attempt_index": attempt_idx,
+                    "attempt_duration_ms": attempt_ms,
+                    "failure_class": NATIVE_FAILURE_GATE,
+                    "reject_reason": reason,
+                    "model": model_name or None,
+                    "status": "editorial_reject_story",
+                }
+            )
             if capture is not None:
                 capture.record_attempt(
                     attempt_index=attempt_idx,
@@ -1247,8 +1455,9 @@ def call_day_scenario_native_llm_c1(
                     },
                     after_gate=None,
                     status="editorial_reject_story",
-                    reject_reason=";".join(str(d.get("code")) for d in editorial[:8]),
+                    reject_reason=reason,
                 )
+            _fail(failure_class=NATIVE_FAILURE_GATE, reject_reason=reason)
             return None
 
         # Remaining editorial defects: observe only (score + capture).
@@ -1289,6 +1498,17 @@ def call_day_scenario_native_llm_c1(
         scen_errors = validate_day_scenario_v1(scenario)
         hard = [e for e in scen_errors if is_hard_scenario_validate_error(e)]
         if hard:
+            reason = ";".join(hard)
+            attempt_rows.append(
+                {
+                    "attempt_index": attempt_idx,
+                    "attempt_duration_ms": attempt_ms,
+                    "failure_class": NATIVE_FAILURE_GATE,
+                    "reject_reason": reason,
+                    "model": model_name or None,
+                    "status": "scenario_validate_reject",
+                }
+            )
             if capture is not None:
                 capture.record_attempt(
                     attempt_index=attempt_idx,
@@ -1297,10 +1517,21 @@ def call_day_scenario_native_llm_c1(
                     after_normalize=normalized,
                     after_gate=scenario,
                     status="scenario_validate_reject",
-                    reject_reason=";".join(hard),
+                    reject_reason=reason,
                 )
             retry_feedback = "Исправь structural/SoT ошибки: " + "; ".join(hard[:6])
             continue
+        attempt_rows.append(
+            {
+                "attempt_index": attempt_idx,
+                "attempt_duration_ms": attempt_ms,
+                "failure_class": None,
+                "reject_reason": None,
+                "model": model_name or None,
+                "status": "accepted_native_c36",
+                "user_sent_chars": len(user_sent or ""),
+            }
+        )
         if capture is not None:
             capture.record_attempt(
                 attempt_index=attempt_idx,
@@ -1345,5 +1576,18 @@ def call_day_scenario_native_llm_c1(
             "personalization_defects": public_defect_view(last_pers_defects),
             "personalization_depth": scenario["personalization_depth"],
         }
+        _write_native_call_meta(
+            meta_out,
+            success=True,
+            model=model_name or None,
+            system_chars=system_chars,
+            user_sent_chars=user_sent_chars,
+            attempts=attempt_rows,
+        )
         return scenario
+    _fail(
+        failure_class=(attempt_rows[-1].get("failure_class") if attempt_rows else NATIVE_FAILURE_OTHER)
+        or NATIVE_FAILURE_OTHER,
+        reject_reason=(attempt_rows[-1].get("reject_reason") if attempt_rows else "exhausted_attempts"),
+    )
     return None
