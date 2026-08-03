@@ -25,7 +25,6 @@ import type { CoreProfile } from "@/lib/types";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
 import { TodayTapWidget } from "@/components/today/composition/TodayWave2Slots";
-import { ScreenFlowStep } from "@/design-system/primitives/ScreenFlow";
 import { pickMoveIfThenFromContract } from "@/lib/todayMoveIfThen";
 import { TODAY_NO_SHARP_FOCUS_COPY } from "@/lib/todayGlanceTexture";
 import {
@@ -36,6 +35,19 @@ import {
   type TodaySlotLoadFailure,
 } from "@/lib/todaySlotAvailability";
 import styles from "@/components/today/composition/TodayPersonalizedProductSection.module.css";
+
+export type TodayPersonalActFilter = "reading" | "move" | "response" | "all";
+
+/** Which personal acts to mount for a given ScreenFlow slide filter. */
+export function resolveTodayPersonalActVisibility(
+  actFilter: TodayPersonalActFilter = "all",
+): { showReading: boolean; showMove: boolean; showResponse: boolean } {
+  return {
+    showReading: actFilter === "all" || actFilter === "reading",
+    showMove: actFilter === "all" || actFilter === "move",
+    showResponse: actFilter === "all" || actFilter === "response",
+  };
+}
 
 type Props = {
   story: TodayDayStoryViewModel;
@@ -78,7 +90,7 @@ type Props = {
   onAsceticMark?: () => void;
   asScreenFlowSteps?: boolean;
   /** When set, render only one act (for ScreenFlow parent wrappers). */
-  actFilter?: "reading" | "move" | "response" | "all";
+  actFilter?: TodayPersonalActFilter;
 };
 
 function electionalStatusLabel(status: string): string {
@@ -205,11 +217,6 @@ export function TodayPersonalizedProductSection({
   }, [contract, story, skyCards, morningRitualData, colorGuide]);
 
   const motion = useProfileMotionInView<HTMLElement>(40);
-
-  const readingLabel =
-    narrative.composition === "scenario_chapters"
-      ? copy.journey.readingTitleStory
-      : copy.journey.readingTitle;
 
   const readingScene = (
       <ProductJourneyScene
@@ -697,21 +704,13 @@ export function TodayPersonalizedProductSection({
       </ProductJourneyScene>
   );
 
-  if (asScreenFlowSteps) {
-    return (
-      <>
-        <ScreenFlowStep id="reading" label={readingLabel} scrollable>{readingScene}</ScreenFlowStep>
-        <ScreenFlowStep id="move" label={copy.journey.moveTitle} scrollable>{moveScene}</ScreenFlowStep>
-        <ScreenFlowStep id="response" label={copy.journey.bridgeTitle} scrollable>{bridgeScene}</ScreenFlowStep>
-      </>
-    );
-  }
-
-  const showReading = actFilter === "all" || actFilter === "reading";
-  const showMove = actFilter === "all" || actFilter === "move";
-  const showResponse = actFilter === "all" || actFilter === "response";
-
-  if (actFilter !== "all") {
+  // Parent ScreenFlow (TodayProductScreenFlow) already owns Reading/Move/Response
+  // steps. When asScreenFlowSteps is set, strip section chrome and render only
+  // the filtered act — do NOT nest another trio of ScreenFlowSteps (that made
+  // steps 3–5 look identical).
+  if (asScreenFlowSteps || actFilter !== "all") {
+    const { showReading, showMove, showResponse } =
+      resolveTodayPersonalActVisibility(actFilter);
     return (
       <>
         {showReading ? readingScene : null}
