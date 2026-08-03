@@ -101,3 +101,32 @@ def test_conjunction_valence_stays_planet_dependent_not_binary_character():
     assert verdicts.valence_domain("money", "conjunction", "saturn", "venus") == -0.7
     assert verdicts.valence_domain("relationships", "conjunction", "mars", "venus") == -0.75
     assert verdicts.valence_domain("energy", "conjunction", "mars", "sun") == 0.85
+
+
+def test_domain_magnitude_table_pins_draft_specials_unchanged():
+    """Storage extract must not recalibrate draft weights."""
+    from todayflow_backend.data import domain_magnitude_v1 as mag
+
+    assert mag.CONTRACT_VERSION == "domain_magnitude_v1"
+    assert mag.DOMAIN_MAGNITUDE_V1["money"]["special_cases"] == ()
+    assert mag.DOMAIN_MAGNITUDE_V1["money"]["challenging_fallback"] == -0.75
+    assert mag.DOMAIN_MAGNITUDE_V1["work"]["challenging_fallback"] == -0.65
+    assert mag.DOMAIN_MAGNITUDE_V1["relationships"]["challenging_fallback"] == -0.7
+    assert mag.DOMAIN_MAGNITUDE_V1["energy"]["challenging_fallback"] == -0.6
+
+    # Mars conjunction rule (documented): charge work/energy, friction relationships
+    assert verdicts.valence_domain("work", "conjunction", "mars", "sun") == 0.75
+    assert verdicts.valence_domain("energy", "conjunction", "mars", "sun") == 0.85
+    assert verdicts.valence_domain("relationships", "conjunction", "mars", "venus") == -0.75
+    assert verdicts.valence_domain("money", "conjunction", "mars", "venus") == -0.7
+
+    # Money: no square special — falls to challenging_fallback
+    assert verdicts.valence_domain("money", "square", "saturn", "venus") == -0.75
+    # Work / energy square+mars specials preserved
+    assert verdicts.valence_domain("work", "square", "mars", "mars") == 0.85
+    assert verdicts.valence_domain("energy", "square", "mars", "mars") == 0.9
+    assert verdicts.valence_domain("relationships", "square", "venus", "venus") == -0.8
+    assert verdicts.valence_domain("work", "opposition", "saturn", "mc") == -0.55
+    assert verdicts.valence_domain("work", "square", "saturn", "saturn") == -0.7
+    # Harmonious still global 1.0
+    assert verdicts.valence_domain("money", "trine", "saturn", "venus") == 1.0

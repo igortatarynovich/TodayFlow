@@ -288,7 +288,7 @@ Owner: подтвердил остальное as-is; эти три пункта
 - [x] Геометрия — §1.2.
 - [x] Атомарные таблицы в §2 + DATA lookup `DATA/foundation_v1/` + `foundation_constants_v1` (L1–L3). Таро/цвет — отдельный трек.
 - [x] Квинконс: **OOS v1** одинаково в контракте и §2.4 (не в `aspects.json`).
-- [~] Валентность аспектов в `top_driver_v1` / activation copy — через `aspect_is_harmonious|challenging` (foundation). Domain magnitude tables ещё локальны (не character). Classical rulers: house_rulers + profections → `ruler_classical`.
+- [x] Валентность аспектов в `top_driver_v1` / activation copy — через `aspect_is_harmonious|challenging` (foundation). Domain magnitude tables extracted to [`domain_magnitude_v1`](./foundation/DOMAIN_MAGNITUDE_V1.md) (numbers frozen; open calibration questions documented). Classical rulers: house_rulers + profections → `ruler_classical`.
 - [x] Цвет/таро/числа: FE prose cutover done; BE `card_base` / `COLOR_CATALOG` (19, Champagne pending) / `number_base` SoT. Layer B colors + `_needed_color_tags` shipped except quiet_celebration.
 - [~] Документ + тесты foundation_constants_v1; генераторы постепенно на lookup (не все).
 

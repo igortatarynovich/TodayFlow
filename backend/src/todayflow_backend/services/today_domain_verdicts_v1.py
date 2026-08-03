@@ -4,10 +4,8 @@ from __future__ import annotations
 
 from typing import Any, Iterable
 
-from todayflow_backend.data.foundation_constants_v1 import (
-    aspect_is_challenging,
-    aspect_is_harmonious,
-)
+from todayflow_backend.data.foundation_constants_v1 import aspect_is_harmonious
+from todayflow_backend.data.domain_magnitude_v1 import resolve_valence
 
 VERDICT_KEYS = ("calm", "charged", "friction", "open")
 DOMAINS = ("work", "money", "relationships", "energy")
@@ -112,77 +110,12 @@ def valence_domain(
     transiting_planet: str,
     natal_point: str,
 ) -> float:
-    """Per-domain signed valence (contract §3). Draft tables; top_driver uses sign+magnitude."""
-    asp = _norm(aspect)
-    transit = _norm(transiting_planet)
-    natal = _norm(natal_point)
+    """Per-domain signed valence (contract §3).
 
-    # Soft aspects — character from foundation_constants_v1 (not id literals).
-    if aspect_is_harmonious(asp):
-        return 1.0
-    # quincunx OOS v1 — not in foundation aspects → not harmonious/challenging → 0.0
-
-    challenging = aspect_is_challenging(asp)
-
-    if domain == "work":
-        if asp == "square" and natal == "mars":
-            return 0.85  # pressure to act → charged
-        if asp == "opposition" and natal in ("sun", "mc", "midheaven"):
-            return -0.55  # career axis stretch → friction, not ban
-        if challenging and natal in ("saturn",):
-            return -0.7
-        if asp == "conjunction":
-            if transit in ("venus", "jupiter"):
-                return 0.8
-            if transit in ("saturn", "mars", "pluto"):
-                return -0.55 if transit == "saturn" else 0.75  # mars conj → charged drive
-            return 0.0
-        if challenging:
-            return -0.65
-        return 0.0
-
-    if domain == "money":
-        if aspect_is_harmonious(asp):
-            return 1.0
-        if asp == "conjunction":
-            if transit in ("venus", "jupiter"):
-                return 1.0
-            if transit in ("saturn", "pluto", "mars"):
-                return -0.7
-            return 0.0
-        if challenging:
-            return -0.75
-        return 0.0
-
-    if domain == "relationships":
-        if asp == "square" and natal == "venus":
-            return -0.8
-        if asp == "square" and natal == "moon":
-            return -0.7
-        if asp == "conjunction":
-            if transit in ("venus", "jupiter"):
-                return 1.0
-            if transit in ("saturn", "mars", "pluto"):
-                return -0.75
-            return 0.0
-        if challenging:
-            return -0.7
-        return 0.0
-
-    # energy
-    if asp == "square" and natal == "mars":
-        return 0.9
-    if asp == "conjunction":
-        if transit in ("venus", "jupiter"):
-            return 0.8
-        if transit in ("mars",):
-            return 0.85
-        if transit in ("saturn", "pluto"):
-            return -0.65
-        return 0.0
-    if challenging:
-        return -0.6
-    return 0.0
+    Magnitudes: domain_magnitude_v1 (calibrated product table).
+    Aspect character: foundation_constants_v1 (harmonious / challenging).
+    """
+    return resolve_valence(domain, aspect, transiting_planet, natal_point)
 
 
 def activation_weight(

@@ -33,6 +33,7 @@
 ## Data · Reference (фаза 1)
 
 - [foundation_v1.md](./foundation_v1.md) — **Foundation v1 (единый SoT)** — геометрия ✅ · константы · маршрутизация · gate перед hooks/семантикой
+- Domain magnitude: [foundation/DOMAIN_MAGNITUDE_V1.md](./foundation/DOMAIN_MAGNITUDE_V1.md) — calibrated valence weights (frozen extract)
 - Color layer B: [color/COLOR_LAYER_B_V1.md](./color/COLOR_LAYER_B_V1.md) — 5 live + Champagne pending
 - [DATA_ORIGINATION_AND_LIFECYCLE.md](./DATA_ORIGINATION_AND_LIFECYCLE.md)
 - [DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md](./DATA_OWNERSHIP_AND_CONSUMPTION_MAP.md)
