@@ -31,9 +31,10 @@
 **На экране:**
 
 1. **Текстура** — 1–2 предложения в glass Block: фраза-синтез **тона** (внутренняя классификация). Не факты, не ярлык категории, не `short_name` «A или B».
-2. **Nearest** — одно событие glance timeline (`label_short` + valence).
-3. **Тизер ритуала** — один CTA в Symbols·A без identity/base/bridge на Glance.
-4. **Индикатор сфер** (опц., secondary) — до 2 чипов из Reading; если без сигнала — shared honest-текст с Reading. Не конкурирует с texture в hero.
+2. **Энергия дня** (опц.) — pulse facet в отдельном Block; honest omit если пусто. Не invent на transport failure.
+3. **Nearest** — одно событие glance timeline (`label_short` + valence).
+4. **Тизер ритуала** — один CTA в Symbols·A без identity/base/bridge на Glance.
+5. **Индикатор сфер** (опц., secondary) — до 2 чипов из Reading; если без сигнала — shared honest-текст с Reading. Не конкурирует с texture в hero.
 
 **Нет:** фактов Plot, why, карты/числа/астро/полного timeline, **цвета дня как контент-блока** (атмосфера = shell, не «цвет дня» слот), if/then, цели, практики, ловушки Response.
 

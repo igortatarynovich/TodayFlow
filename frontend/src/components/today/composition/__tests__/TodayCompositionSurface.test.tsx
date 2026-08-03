@@ -339,7 +339,7 @@ describe("TodayCompositionSurface", () => {
     expect(screen.queryByTestId("today-zone-strengthen")).not.toBeInTheDocument();
     expect(screen.queryByTestId("today-soft-why")).not.toBeInTheDocument();
     expect(screen.getByTestId("today-entity-synthesis")).toBeInTheDocument();
-    expect(screen.queryByText("Энергия дня")).not.toBeInTheDocument();
+    // «Энергия дня» may appear on Glance when pulse is present — not a Plot-only label anymore.
   });
 
   it("shows strengthen and soft why when day_story supplies recommendation and claims", () => {

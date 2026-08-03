@@ -38,6 +38,7 @@ html[data-day-mode="grounded"] {
   --day-decor-color: #6b5a3f;
   --day-accent-soft: rgba(155, 138, 94, 0.28);
   --day-surface-tint: rgba(243, 237, 225, 0.9);
+  --day-bg-art: url("/images/backgrounds/1.png");
 }
 
 html[data-day-mode="flow"] {
@@ -47,6 +48,7 @@ html[data-day-mode="flow"] {
   --day-decor-color: #5b7590;
   --day-accent-soft: rgba(140, 165, 196, 0.3);
   --day-surface-tint: rgba(238, 241, 245, 0.9);
+  --day-bg-art: url("/images/backgrounds/2.png");
 }
 
 html[data-day-mode="radiance"] {
@@ -56,6 +58,7 @@ html[data-day-mode="radiance"] {
   --day-decor-color: #c9873a;
   --day-accent-soft: rgba(230, 175, 100, 0.32);
   --day-surface-tint: rgba(253, 241, 224, 0.9);
+  --day-bg-art: url("/images/backgrounds/3.png");
 }
 
 html[data-day-mode="momentum"] {
@@ -65,6 +68,7 @@ html[data-day-mode="momentum"] {
   --day-decor-color: #a4432a;
   --day-accent-soft: rgba(196, 90, 60, 0.32);
   --day-surface-tint: rgba(246, 226, 216, 0.9);
+  --day-bg-art: url("/images/backgrounds/4.png");
 }
 
 html[data-day-mode="clarity"] {
@@ -74,6 +78,7 @@ html[data-day-mode="clarity"] {
   --day-decor-color: #5b6472;
   --day-accent-soft: rgba(120, 130, 145, 0.2);
   --day-surface-tint: rgba(241, 242, 244, 0.92);
+  --day-bg-art: url("/images/backgrounds/5.png");
 }
 
 html[data-day-mode="tension"] {
@@ -85,6 +90,8 @@ html[data-day-mode="tension"] {
   --day-decor-color: #8a5a63;
   --day-accent-soft: rgba(120, 40, 50, 0.22);
   --day-surface-tint: rgba(34, 31, 34, 0.9);
+  /* Closest art seed until dedicated tension asset (§13.4). */
+  --day-bg-art: url("/images/backgrounds/4.png");
 }
 
 html[data-day-mode="renewal"] {
@@ -94,6 +101,7 @@ html[data-day-mode="renewal"] {
   --day-decor-color: #a3b592;
   --day-accent-soft: rgba(240, 200, 190, 0.28);
   --day-surface-tint: rgba(253, 246, 238, 0.92);
+  --day-bg-art: url("/images/backgrounds/1.png");
 }
 
 html[data-day-mode="depth"] {
@@ -104,6 +112,7 @@ html[data-day-mode="depth"] {
   --day-decor-color: #524a72;
   --day-accent-soft: rgba(90, 80, 140, 0.2);
   --day-surface-tint: rgba(23, 22, 34, 0.9);
+  --day-bg-art: url("/images/backgrounds/2.png");
 }
 
 /* FOUNDATION_UI §11.4 — atmosphere motion is decorative only, never required
@@ -144,9 +153,20 @@ html[data-day-mode][data-product-web-shell] .tf-content {
   background: transparent;
 }
 
-/* Frame paints atmosphere; shell stays transparent so decor can sit between bg and UI. */
+/* Frame paints atmosphere art + wash; shell stays transparent so decor can sit between bg and UI. */
 html[data-day-mode] [data-product-web-frame] {
-  background: var(--tf-page-atmosphere, var(--day-bg-base));
+  background-color: var(--day-bg-base);
+  background-image:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--day-surface-tint, rgba(255, 255, 255, 0.88)) 78%, transparent) 0%,
+      color-mix(in srgb, var(--day-bg-base) 42%, transparent) 42%,
+      color-mix(in srgb, var(--day-bg-base) 28%, transparent) 100%
+    ),
+    var(--day-bg-art, none);
+  background-size: cover, cover;
+  background-position: center top, center top;
+  background-repeat: no-repeat;
   position: relative;
   isolation: isolate;
 }
@@ -187,91 +207,49 @@ html:not([data-day-mode]) .day-atmosphere-decor {
 
 .day-atmosphere-decor__art {
   position: absolute;
-  inset: -8% -4% auto;
-  width: 108%;
-  height: 72%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   background-repeat: no-repeat;
   background-position: center top;
   background-size: cover;
+  background-image: var(--day-bg-art, none);
+  opacity: 0.22;
   transform: translate3d(0, 0, 0);
   animation: day-decor-drift var(--day-motion-duration, 28s) ease-in-out infinite alternate;
 }
 
+/* Geometric fallbacks only when no art seed is mapped for the mode. */
 html[data-day-mode="grounded"] .day-atmosphere-decor__art,
-html[data-day-decor="contour"] .day-atmosphere-decor__art,
-html[data-day-decor="stones"] .day-atmosphere-decor__art {
-  background-image:
-    radial-gradient(ellipse 80% 45% at 50% 100%, currentColor 0%, transparent 70%),
-    linear-gradient(180deg, transparent 40%, color-mix(in srgb, currentColor 35%, transparent) 100%);
-  opacity: 0.55;
-}
-
 html[data-day-mode="flow"] .day-atmosphere-decor__art,
-html[data-day-decor="ripple"] .day-atmosphere-decor__art,
-html[data-day-decor="current"] .day-atmosphere-decor__art {
-  background-image:
-    radial-gradient(ellipse 120% 40% at 20% 30%, currentColor 0%, transparent 55%),
-    radial-gradient(ellipse 100% 35% at 80% 55%, currentColor 0%, transparent 50%);
-  opacity: 0.45;
-}
-
 html[data-day-mode="radiance"] .day-atmosphere-decor__art,
-html[data-day-decor="rays"] .day-atmosphere-decor__art,
-html[data-day-decor="bloom"] .day-atmosphere-decor__art {
-  background-image:
-    radial-gradient(circle at 70% 18%, currentColor 0%, transparent 42%),
-    radial-gradient(circle at 70% 18%, transparent 28%, color-mix(in srgb, currentColor 25%, transparent) 29%, transparent 60%);
-  opacity: 0.5;
-}
-
 html[data-day-mode="momentum"] .day-atmosphere-decor__art,
-html[data-day-decor="diagonal"] .day-atmosphere-decor__art,
-html[data-day-decor="trail"] .day-atmosphere-decor__art {
-  background-image:
-    repeating-linear-gradient(
-      -28deg,
-      transparent 0 28px,
-      color-mix(in srgb, currentColor 40%, transparent) 28px 30px
-    );
-  opacity: 0.35;
-}
-
 html[data-day-mode="clarity"] .day-atmosphere-decor__art,
-html[data-day-decor="grid"] .day-atmosphere-decor__art,
-html[data-day-decor="orbit"] .day-atmosphere-decor__art {
-  background-image:
-    radial-gradient(circle at 50% 20%, transparent 18%, currentColor 19%, transparent 20%),
-    linear-gradient(90deg, color-mix(in srgb, currentColor 22%, transparent) 1px, transparent 1px),
-    linear-gradient(0deg, color-mix(in srgb, currentColor 22%, transparent) 1px, transparent 1px);
-  background-size: auto, 48px 48px, 48px 48px;
-  opacity: 0.4;
-}
-
 html[data-day-mode="tension"] .day-atmosphere-decor__art,
-html[data-day-decor="fracture"] .day-atmosphere-decor__art,
-html[data-day-decor="crossline"] .day-atmosphere-decor__art {
-  background-image:
-    linear-gradient(125deg, transparent 42%, currentColor 42.5%, transparent 43.5%),
-    linear-gradient(55deg, transparent 58%, currentColor 58.5%, transparent 59.5%);
-  opacity: 0.4;
-}
-
 html[data-day-mode="renewal"] .day-atmosphere-decor__art,
-html[data-day-decor="sprout"] .day-atmosphere-decor__art,
-html[data-day-decor="horizon"] .day-atmosphere-decor__art {
-  background-image:
-    radial-gradient(ellipse 70% 35% at 50% 100%, currentColor 0%, transparent 65%),
-    radial-gradient(circle at 22% 72%, currentColor 0 2px, transparent 3px),
-    radial-gradient(circle at 78% 68%, currentColor 0 2px, transparent 3px);
-  opacity: 0.5;
+html[data-day-mode="depth"] .day-atmosphere-decor__art {
+  background-image: var(--day-bg-art);
+  opacity: calc(var(--day-decor-opacity, 0.18) + 0.12);
 }
 
-html[data-day-mode="depth"] .day-atmosphere-decor__art,
+html[data-day-decor="contour"] .day-atmosphere-decor__art,
+html[data-day-decor="stones"] .day-atmosphere-decor__art,
+html[data-day-decor="ripple"] .day-atmosphere-decor__art,
+html[data-day-decor="current"] .day-atmosphere-decor__art,
+html[data-day-decor="rays"] .day-atmosphere-decor__art,
+html[data-day-decor="bloom"] .day-atmosphere-decor__art,
+html[data-day-decor="diagonal"] .day-atmosphere-decor__art,
+html[data-day-decor="trail"] .day-atmosphere-decor__art,
+html[data-day-decor="grid"] .day-atmosphere-decor__art,
+html[data-day-decor="orbit"] .day-atmosphere-decor__art,
+html[data-day-decor="fracture"] .day-atmosphere-decor__art,
+html[data-day-decor="crossline"] .day-atmosphere-decor__art,
+html[data-day-decor="sprout"] .day-atmosphere-decor__art,
+html[data-day-decor="horizon"] .day-atmosphere-decor__art,
 html[data-day-decor="still"] .day-atmosphere-decor__art,
 html[data-day-decor="drift"] .day-atmosphere-decor__art {
-  background-image:
-    radial-gradient(ellipse 90% 60% at 50% 0%, currentColor 0%, transparent 55%);
-  opacity: 0.35;
+  /* Prefer mode art seed; geometric CSS kept only if --day-bg-art missing. */
+  background-image: var(--day-bg-art, none);
 }
 
 @keyframes day-decor-drift {

@@ -36,6 +36,8 @@ type Props = {
   themeLoading?: boolean;
   /** ≤2 Reading domain chips (SCENARIO_V3 Экран 0). */
   sphereChips?: GlanceSphereChip[];
+  /** Pulse facet — shown as «Энергия дня» when non-empty (honest omit). */
+  energyLine?: string | null;
   /** @deprecated spheres are not Glance hero — kept for call-site compat */
   onSphereSelect?: (domain: string) => void;
 };
@@ -76,6 +78,7 @@ export function TodayGlanceAct({
   teasers,
   themeLoading = false,
   sphereChips = [],
+  energyLine = null,
   onSphereSelect,
 }: Props) {
   const [nearest, setNearest] = useState<GlanceTimelineItem | null>(null);
@@ -125,6 +128,7 @@ export function TodayGlanceAct({
     thesisLine && texture && thesisLine.toLowerCase() !== texture.toLowerCase() ? thesisLine : null;
 
   const dateLabel = useMemo(() => formatGlanceDateRu(dateISO), [dateISO]);
+  const energyText = (energyLine || "").trim() || null;
 
   // Sparse: prefer symbols ritual teaser only on Glance hero chrome
   const primaryTeaser =
@@ -166,6 +170,15 @@ export function TodayGlanceAct({
           </>
         )}
       </DsCard>
+
+      {energyText ? (
+        <DsCard variant="glass" size="compact" className={styles.block} testId="today-glance-energy">
+          <p className={styles.eyebrow}>{copy.pulseLabel}</p>
+          <p className={styles.primaryCompact} data-testid="today-glance-energy-text">
+            {energyText}
+          </p>
+        </DsCard>
+      ) : null}
 
       <DsCard variant="glass" size="compact" className={styles.block} testId="today-glance-spheres">
         <p className={styles.eyebrow}>{copy.journey.glanceSpheresLabel}</p>

@@ -533,7 +533,7 @@ interface DayAtmosphereContract {
 ### 13.4 Backlog
 
 - Dark-appearance значения палитры (`data-theme="dark"` × `data-day-mode`) — day-mode пока не имеет полной dark-пары; `color-scheme` для Tension/Depth не выставляется при светлом `data-theme`.
-- Decor-ассеты: полный набор 16 polished SVG (`DAY_MODE_DECOR_VARIANTS`) — сейчас минимум 1 working art/CSS на режим; art direction seed = `public/images/backgrounds/` (не raw SoT).
+- Decor-ассеты: полный набор 16 polished SVG (`DAY_MODE_DECOR_VARIANTS`) — сейчас art seed = `public/images/backgrounds/{1–5}.png` mapped to 8 `visual_mode` via `--day-bg-art` (tension/renewal/depth reuse nearest seed until dedicated assets).
 - Plot photo-wash vs day-mode — дальнейшее подчинение phase-hero day-токенам (избежать тройной атмосферы).
 
 ---

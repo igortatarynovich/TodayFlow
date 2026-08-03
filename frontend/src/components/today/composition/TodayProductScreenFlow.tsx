@@ -23,10 +23,13 @@ export type TodayProductScreenFlowProps = {
   themeLoading?: boolean;
   /** Glance ≤2 domain chips from Reading magnitude set */
   sphereChips?: GlanceSphereChip[];
+  /** Pulse text for Glance «Энергия дня» */
+  energyLine?: string | null;
   heroSection: ReactNode;
   /** Conflict narrative under photo — Plot Screen 1 (v3) */
   plotNarrativeSection?: ReactNode;
-  pulseSection: ReactNode;
+  /** @deprecated Pulse moved to Glance `energyLine`; kept for call-site compat. */
+  pulseSection?: ReactNode;
   glanceSection: ReactNode;
   morningDialogue: ReactNode;
   dayReadingReady: boolean;
@@ -61,9 +64,10 @@ export function TodayProductScreenFlow({
   dayTexture = null,
   themeLoading = false,
   sphereChips = [],
+  energyLine = null,
   heroSection,
   plotNarrativeSection = null,
-  pulseSection,
+  pulseSection: _pulseSection = null,
   glanceSection,
   morningDialogue,
   dayReadingReady,
@@ -129,6 +133,7 @@ export function TodayProductScreenFlow({
             thesis={themeThesis}
             themeLoading={themeLoading}
             sphereChips={sphereChips}
+            energyLine={energyLine}
             teasers={teasers}
             onSphereSelect={
               showPersonalized
@@ -148,8 +153,8 @@ export function TodayProductScreenFlow({
               {plotNarrativeSection ? <MotionReveal delayMs={MOTION.staggerMs}>{plotNarrativeSection}</MotionReveal> : null}
               {dayReadingReady ? (
                 <>
-                  <MotionReveal delayMs={MOTION.staggerMs * 2}>{pulseSection}</MotionReveal>
-                  <MotionReveal delayMs={MOTION.staggerMs * 3}>{glanceSection}</MotionReveal>
+                  {/* Pulse / «Энергия дня» lives on Glance — avoid duplicate on Plot. */}
+                  <MotionReveal delayMs={MOTION.staggerMs * 2}>{glanceSection}</MotionReveal>
                   {morningDialogue}
                 </>
               ) : (

@@ -18,6 +18,15 @@ Prior: card_base_v1 cutover live · editorial polish minors ongoing.
 - **Canon updated?** no new file — aligns SCENARIO_V3 Экран 3 + DAY_SCENARIO Act V; tracker SoT for this slice
 - **Backward compatible?** yes — old caches without why still render; domain_verdicts fallback when available
 
+## Architecture impact — Glance energy + day art backgrounds (2026-08-03)
+
+- **SoT before:** Pulse («Энергия дня») on Plot only; Day Atmosphere used CSS geometric decor without `public/images/backgrounds/{1–5}.png` art seeds; live frontend could lag chrome unmount.
+- **SoT after:** Glance shows optional pulse Block (SCENARIO_V3 Экран 0); `--day-bg-art` maps visual_mode → art PNGs on product frame (FOUNDATION_UI §13.4 seed wiring); ScreenFlow step titles sr-only by default.
+- **Public contract changed?** no
+- **Migration required?** no — empty pulse = omit; missing art falls back to wash/base
+- **Canon updated?** yes — SCENARIO_V3 Экран 0 energy slot; day-atmosphere.css art map
+- **Backward compatible?** yes
+
 ## Architecture impact — Response tap → DsButton §17c (2026-08-03)
 
 - **SoT before:** Response `TodayTapWidget` used ad-hoc `.tapBtn` / `.tapBtnSecondary` in module.css.

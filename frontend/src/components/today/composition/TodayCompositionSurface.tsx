@@ -1544,6 +1544,7 @@ export function TodayCompositionSurface(props: Props) {
       themeThesis={heroSubline}
       dayTexture={dayTexture}
       sphereChips={glanceSphereChips}
+      energyLine={pulseDisplay}
       themeLoading={themeLoading}
       heroSection={heroSection}
       plotNarrativeSection={plotNarrativeSection}

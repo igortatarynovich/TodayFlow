@@ -50,6 +50,8 @@ export type ScreenFlowStepProps = {
   status?: ScreenFlowStepStatus;
   scrollable?: boolean;
   children?: ReactNode;
+  /** When false, step title is sr-only (Today product chrome). */
+  showTitle?: boolean;
   __sfIndex?: number;
   __sfActive?: boolean;
   __sfAxis?: ScreenFlowAxis;
@@ -86,6 +88,7 @@ export function ScreenFlowStep({
   status = "ready",
   scrollable = false,
   children,
+  showTitle = false,
   __sfIndex = 0,
   __sfActive = false,
   __sfAxis = "x",
@@ -114,7 +117,7 @@ export function ScreenFlowStep({
       <h2
         id={__sfHeadingId}
         ref={__sfHeadingRef}
-        className={styles.stepHeading}
+        className={joinClass(styles.stepHeading, showTitle ? null : styles.srOnly)}
         tabIndex={-1}
         data-testid={`screen-flow-heading-${id}`}
       >
