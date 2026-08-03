@@ -556,13 +556,13 @@ interface DayAtmosphereContract {
 | `--orbit-*` | 97 | 2 | legacy |
 | `--todayflow-*` | 36 | 2 | legacy / marketing |
 | `--tdp-*` (приватный Today) | 23 | 2 | оверрайд вручную в каждом файле |
-| `--section-*` | 17 | **1** (`section-atmosphere.css` `[data-theme="dark"]`, §16a) | route-atmosphere; ink/panel alias `--tf-*` |
+| `--section-*` | 17 | **1** (`section-atmosphere.css` `[data-theme="dark"]`, §17a) | route-atmosphere; ink/panel alias `--tf-*` |
 | `--day-*` (§11–§13) | 9 | 1* | dark backlog §13.4 (*файл моста/CSS упоминает, палитры dark нет) |
 | `--product-*` | 7 | n/a | **layout** (radius/max-width/eyebrow), не цвета — dark-пара не требуется; при правке файла можно оставить как есть |
 
 Семантика дублируется: «ink» = `--tf-ink` / `--orbit-color-ink` / `--todayflow-color-ink-warm`; «surface» = `--tf-surface` / `--orbit-color-surface` / `--todayflow-surface` / `--tdp-surface`. Синхронность не гарантирована.
 
-**Вывод (на момент аудита):** экраны на `--section-*` / `--product-*` не адаптировались под dark. **§16a:** `--section-*` получил dark-пару + light atmosphere washes gated `:not([data-theme="dark"])`. **§16b pass 1:** топ-экраны с solid `#fff` → `var(--tf-surface)`. `--product-*` уточнено как layout (не color gap). `--tdp-*` хрупок: где забыли ручной оверрайд — ломается контраст.
+**Вывод (на момент аудита):** экраны на `--section-*` / `--product-*` не адаптировались под dark. **§17a:** `--section-*` получил dark-пару + light atmosphere washes gated `:not([data-theme="dark"])`. **§17b pass 1:** топ-экраны с solid `#fff` → `var(--tf-surface)`. `--product-*` уточнено как layout (не color gap). `--tdp-*` хрупок: где забыли ручной оверрайд — ломается контраст.
 
 ### 14.3 Механизм бага (светлый текст на светлой карточке)
 
@@ -596,24 +596,24 @@ interface DayAtmosphereContract {
 2. **Закрытые контракты примитивов:** `DsButton` / `DsCard` / Typography / Form — обязательны; Banner — гэп (§15.5).
 3. **Единая шкала** radius + spacing (`--tf-ds-*`).
 4. **Dark-контракт surfaces** + запрет `#fff` как фона карточки.
-5. **Migration checklist** — вход в §16.
+5. **Migration checklist** — вход в §17.
 
-**Не входит в §15:** массовая правка всех 74 module.css (это §16). Не входит полная dark-палитра `--day-*` (остаётся §13.4).
+**Не входит в §15:** массовая правка всех 74 module.css (это §17). Не входит полная dark-палитра `--day-*` (остаётся §13.4).
 
-### 14.7 Рекомендуемый scope первого прохода §15 → §16
+### 14.7 Рекомендуемый scope первого прохода §15 → §17
 
 Не «весь продукт за один PR». Минимальный полезный срез:
 
 1. §15 канон (токены + примитивы + запреты) — **готово**.
-2. §16a — foundation: починить хардкод в `dsPrimitives.module.css` + dark для Surface B / `--tf-surface*` / алиасы `--section-*` где дешево — **готово**.
-3. §16b — вычистить хардкод `#fff` в топ-баговых экранах (Profile v0/v2, Practices, Challenges, ключевые Today composition surfaces) — **pass 1 готово**; остаток: декоративные highlights + вне списка.
-4. §16c — запретить новые ad-hoc buttons в review (lint/checklist); постепенно свести CTA на `DsButton`.
+2. §17a — foundation: починить хардкод в `dsPrimitives.module.css` + dark для Surface B / `--tf-surface*` / алиасы `--section-*` где дешево — **готово**.
+3. §17b — вычистить хардкод `#fff` в топ-баговых экранах (Profile v0/v2, Practices, Challenges, ключевые Today composition surfaces) — **pass 1 готово**; остаток: декоративные highlights + вне списка.
+4. §17c — запретить новые ad-hoc buttons в review (lint/checklist); постепенно свести CTA на `DsButton`.
 
 ---
 
 ## 15. Design System Canon
 
-**Статус:** канон; реализация — §16 (по фазам §14.7). Отвечает на пять пунктов §14.6 и снимает конфликт §0/§14.5. Не переизобретает примитивы — они уже есть в `frontend/src/design-system/`; канонизирует их как обязательные и фиксирует, что именно в них нужно починить.
+**Статус:** канон; реализация — §17 (по фазам §14.7). Отвечает на пять пунктов §14.6 и снимает конфликт §0/§14.5. Не переизобретает примитивы — они уже есть в `frontend/src/design-system/`; канонизирует их как обязательные и фиксирует, что именно в них нужно починить.
 
 ### 15.1 Namespace — победитель `--tf-*`
 
@@ -624,7 +624,7 @@ interface DayAtmosphereContract {
 | `--orbit-*` | legacy | alias на `--tf-*` там, где 1:1 соответствие есть (`--orbit-color-ink` → `--tf-ink` и т. п.); удаление — отдельный тикет, не в этом проходе |
 | `--todayflow-*` | legacy (marketing) | не трогать вне marketing-страниц; новые product-экраны — только `--tf-*` |
 | `--tdp-*` | legacy, приватный Today | не копировать в новые компоненты; существующий уже держит свой dark-оверрайд, трогаем только если меняем сам файл |
-| `--section-*` | сохраняется для route-atmosphere (§11.1), но получает dark-пару (§16a) | не убирать — другая ось, не дублирует ink/surface |
+| `--section-*` | сохраняется для route-atmosphere (§11.1), но получает dark-пару (§17a) | не убирать — другая ось, не дублирует ink/surface |
 | `--product-*` | legacy | заменить на `--tf-*` при следующей правке файла, который его использует |
 | `--day-*` | отдельный атмосферный слой (§11), не участвует в этом namespace-споре | без изменений |
 
@@ -636,7 +636,7 @@ interface DayAtmosphereContract {
 
 | Примитив | Экспорт | Варианты | Правило |
 |----------|---------|----------|---------|
-| **Button** | `DsButton` (`design-system/primitives/DsButton.tsx`) | `primary · secondary · ghost · destructive · icon` × `size: sm · md · block` | Единственный способ сделать CTA/кнопку. Новый `.actionButton`/`.submitButton`-класс в `.module.css` — запрещён (см. §16c) |
+| **Button** | `DsButton` (`design-system/primitives/DsButton.tsx`) | `primary · secondary · ghost · destructive · icon` × `size: sm · md · block` | Единственный способ сделать CTA/кнопку. Новый `.actionButton`/`.submitButton`-класс в `.module.css` — запрещён (см. §17c) |
 | **Card / Surface** | `DsCard` (+ `DsStatusBadge`) | `standard · glass · orbital · feature · dark · insight · elevated · outline · card` — соответствуют Surface A–N §4 и `card--*` в Figma-карте (`figmaMap.ts`) | Контентная/интерактивная карточка — только через `DsCard`, не `<div className={styles.card}>` с собственным CSS |
 | **Typography** | `DsTypography` (`DsDisplayTitle`/`DsHeadline`/`DsTitle`/`DsSubtitle`/`DsBody`/`DsCaption`/…) | соответствует ролям §5 | Новый `font-size` вне `--tf-type-*` — запрещён |
 | **Form** | `DsForm` (`DsTextField`/`DsSearchField`/`DsCheckbox`/`DsChipField`/`DsClassifier`) | — | Инпуты — только отсюда |
@@ -644,7 +644,7 @@ interface DayAtmosphereContract {
 
 Живой каталог — `/design-system` (`DsCatalog.tsx`), Figma-имена → код — `design-system/registry/figmaMap.ts`. Оба уже существуют; структуру не ломаем.
 
-### 15.3 Известные баги внутри самих примитивов — чинить первыми (§16a)
+### 15.3 Известные баги внутри самих примитивов — чинить первыми (§17a)
 
 `dsPrimitives.module.css` сам нарушает правило §15.1 — хардкод-литералы без токена, в т.ч. в **дефолтном** варианте `DsCard`:
 
@@ -665,17 +665,69 @@ interface DayAtmosphereContract {
 ### 15.5 Явные гэпы (не в этом проходе)
 
 - **Banner-примитив** — нет контракта, нет решения по форме; нужен отдельный проход по существующим реализациям, прежде чем проектировать API.
-- **Dark-пара для `--section-*`** — **готово** (§16a): `html[data-theme="dark"]` в `section-atmosphere.css`; light route washes через `:not([data-theme="dark"])`.
+- **Dark-пара для `--section-*`** — **готово** (§17a): `html[data-theme="dark"]` в `section-atmosphere.css`; light route washes через `:not([data-theme="dark"])`.
 - **`--day-*` dark-палитра** — остаётся backlog §13.4, не расширяется этим разделом.
 
-### 15.6 §16a / §16b — статус
+### 15.6 §17a — статус *(перенумеровано с §16a — см. §16/§17 ниже)*
 
-- **§16a Slice 0–2 (готово):** `dsPrimitives` surfaces · Surface B insight dark · `--section-*` dark pair.
-- **§16b pass 1 (готово):** solid `background: #fff` → `var(--tf-surface, #fff)` на топ-экранах (Practices/Challenges/Profile v2/Today composition/product web layouts + profileV0 gradient stops). ~63 solid + card-wash gradients.
+- **§17a Slice 0–2 (готово):** `dsPrimitives` surfaces · Surface B insight dark · `--section-*` dark pair.
+- **§17b pass 1 (готово):** solid `background: #fff` → `var(--tf-surface, #fff)` на топ-экранах (Practices/Challenges/Profile v2/Today composition/product web layouts + profileV0 gradient stops). ~63 solid + card-wash gradients.
 - **`--product-*`:** уточнено — это layout-токены (radius/content-max), не палитра; dark-пара не нужна.
-- **Остаток §16b:** декоративные `#fff` в border/box-shadow/orb highlights; оставшиеся хардкоды вне топ-списка; ручной QA dark на Profile/Practices/Challenges.
-- **§16c:** запрет новых ad-hoc CTA / lint checklist.
+- **Остаток §17b:** декоративные `#fff` в border/box-shadow/orb highlights; оставшиеся хардкоды вне топ-списка; ручной QA dark на Profile/Practices/Challenges.
+- **§17c:** запрет новых ad-hoc CTA / lint checklist.
 
 ---
 
-*Документ (§11) → контракты (§12) → реализация first pass (§13) → аудит (§14) → канон дизайн-системы (§15, готово) → миграция (§16: §16a foundation → §16b топ-экраны → §16c запрет ad-hoc CTA). Figma нигде не участвует, кроме `figmaMap.ts` как справочной таблицы имён.*
+## 16. Today Screen — Block Composition
+
+**Статус:** канон; Glance (`TodayGlanceAct`) + chrome (`TodayActNav`, SCREEN_FLOW §1.5) — first pass; остальные 5 шагов ScreenFlow — следующим проходом. Отвечает на запрос «подача должна быть красиво разбита на блоки, легко читаться» — независимо от точного контента экрана. Не заменяет и не меняет [TODAY_SCREEN_SCENARIO_V3](today/TODAY_SCREEN_SCENARIO_V3.md) (SoT содержания каждого из 6 шагов ScreenFlow) — этот раздел только про то, **как** любой из шести шагов визуально организован. Навигационный chrome (свайп/цифры) — не здесь, см. [SCREEN_FLOW_V1 §1.5](foundation/SCREEN_FLOW_V1.md).
+
+### 16.1 Проблема, зафиксированная в коде
+
+`TodayGlanceAct.tsx` (шаг 0) сейчас — непрерывный вертикальный поток: один `themeBlock` (эйброу + заголовок + абзац), затем `metaRow` как инлайн-строка текста через точку («14:20 · Label», без карточки), затем плоский `<ul>` тизеров с «·» вместо иконок. Нет визуальной группировки, нет панелей, нет единой сетки отступов между смысловыми блоками.
+
+### 16.2 Паттерн «Block» — единица подачи
+
+Один блок = **закрытая единица информации**, всегда в одном порядке:
+
+1. **Eyebrow** — маленький, приглушённый лейбл, что это за блок (уже есть как стиль в `TodayGlanceAct.module.css` `.eyebrow` — формализуется здесь, не переизобретается).
+2. **Primary** — одно главное значение блока, крупно (роль **Section** или **Hero**, §5) — короткая фраза, время, статус-слово. Не абзац.
+3. **Detail** *(опционально)* — одна строка/абзац пояснения, приглушённый тон (роль **Body**/**Caption**, §5).
+
+Блок — это `DsCard` (вариант `glass`, `--tf-ds-glass`/`--tf-ds-glass-on-dark`) поверх Day Atmosphere фона (§11–§13): полупрозрачная поверхность, а не сплошная заливка — атмосфера дня должна читаться сквозь панель, не исчезать под ней.
+
+### 16.3 Сетка и ритм
+
+- Отступ **между** блоками — единый токен, не «на глаз»: `--tf-ds-space-5` (1.25rem) как база, `--tf-ds-space-6` (1.5rem) на широких экранах — те же токены, что уже в foundation (§15.4), новых не создаём.
+- Внутренний padding блока — `--tf-ds-space-4`–`--tf-ds-space-5` (соответствует Surface B §4: 22×21).
+- Radius блока — из существующей шкалы Surface (24/28px), не хардкод.
+- **2×2 сетка** (как «Статус по сферам» на референсе) — это частный случай Block: eyebrow на уровне секции, дальше N мини-блоков без вложенного padding друг в друга (иконка + label + Primary-значение, без Detail).
+
+### 16.4 Применимость — все 6 шагов, не только Glance
+
+Паттерн Block — общая визуальная грамматика для Glance / Plot / Symbols / Reading / Move / Response. Контент каждого шага (что именно показывается) не меняется — меняется только то, что любой фрагмент контента заворачивается в Block вместо голого абзаца/инлайн-строки. Это делает шаги визуально семьёй, даже когда состав полей на каждом разный (см. TODAY_SCREEN_SCENARIO_V3 §0.2 «один дом на сущность»).
+
+### 16.5 Явно не меняется
+
+- Состав и honest-omit правила контента (TODAY_SCREEN_SCENARIO_V3 — не трогается).
+- Цвета CTA/error/success/warning (§0/§4).
+- Навигационная механика (свайп/keyboard/analytics) — SCREEN_FLOW_V1 §1.1–§1.4, §1.7–§1.9 без изменений.
+
+### 16.6 Открытые вопросы (не в этом проходе)
+
+- Точный набор иконок для 2×2-сетки сфер (work/money/relationships/energy) — нет решения, не проверено в `DsIcons`.
+- Останется ли `metaRow`/nearest-строка отдельным Block или сольётся с тизерами — решается при реализации на `TodayGlanceAct`, не в каноне.
+
+---
+
+## 17. Design System Migration (module.css)
+
+**Статус:** backlog, не начато полностью. Содержимое прежнего §16 (миграция module.css) переехало сюда под новым номером — конфликта с только что добавленным §16 (Today Block Composition) не осталось. Детали готовности — §15.6.
+
+- **§17a** — foundation: dark-пара `--product-*` уточнена как layout (не нужна); Surface B / `dsPrimitives` / `--section-*` dark — см. §15.6 (готово Slice 0–2).
+- **§17b** — топ-баговые экраны с хардкод `#fff` вне `DsCard` (pass 1 готово; остаток: декоративные highlights + вне списка + ручной QA dark).
+- **§17c** — запрет ad-hoc CTA в ревью; постепенный перевод на `DsButton`.
+
+---
+
+*Документ (§11) → контракты (§12) → реализация first pass (§13) → аудит (§14) → канон дизайн-системы (§15) → Today block-подача (§16, канон, реализация следующим шагом) → миграция module.css (§17, backlog). Figma нигде не участвует, кроме `figmaMap.ts` как справочной таблицы имён.*

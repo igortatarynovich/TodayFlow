@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import styles from "@/components/today/composition/TodayGlanceAct.module.css";
+import { DsCard } from "@/design-system/primitives/DsCard";
 import {
   formatGlanceClock,
   isGlanceLiveNow,
@@ -60,8 +61,8 @@ function formatGlanceDateRu(dateISO: string): string {
 }
 
 /**
- * Glance / Сводка — Day Atmosphere surface (FOUNDATION_UI §11.9 + TODAY_SCREEN_SCENARIO_V3).
- * Glass hero + ScreenFlow gauge + sparse chrome — jobs of meaning unchanged.
+ * Glance / Сводка — Day Atmosphere + Block Composition (FOUNDATION_UI §16).
+ * Jobs of meaning: TODAY_SCREEN_SCENARIO_V3 — unchanged.
  */
 export function TodayGlanceAct({
   dateISO,
@@ -141,7 +142,7 @@ export function TodayGlanceAct({
         </p>
       </header>
 
-      <div className={styles.glass} data-testid="today-glance-glass">
+      <DsCard variant="glass" className={styles.block} testId="today-glance-glass">
         {themeLoading ? (
           <p className={styles.loading}>{copy.loadingDay}</p>
         ) : (
@@ -150,13 +151,15 @@ export function TodayGlanceAct({
               <p className={styles.eyebrow} data-testid="today-entity-daily-theme-glance">
                 {modeLabel}
               </p>
+            ) : texture ? (
+              <p className={styles.eyebrow}>{copy.journey.glanceTitle}</p>
             ) : null}
             {texture ? (
-              <h3 className={styles.thesis} data-testid="today-glance-thesis">
+              <h3 className={styles.primary} data-testid="today-glance-thesis">
                 {texture}
               </h3>
             ) : (
-              <h3 className={styles.thesis} data-testid="today-entity-daily-theme-glance">
+              <h3 className={styles.primary} data-testid="today-entity-daily-theme-glance">
                 {copy.journey.glanceTitle}
               </h3>
             )}
@@ -179,12 +182,14 @@ export function TodayGlanceAct({
             </div>
           </>
         )}
-      </div>
+      </DsCard>
 
-      <div className={styles.metaRow} data-testid="today-glance-meta">
+      <DsCard variant="glass" className={styles.block} testId="today-glance-meta">
+        <p className={styles.eyebrow}>{copy.journey.glanceNearestLabel}</p>
+
         {loaded && loadFailure ? (
           <p
-            className={styles.metaFail}
+            className={styles.detail}
             role="status"
             data-testid="today-glance-meta-fallback"
             data-fallback="true"
@@ -195,25 +200,21 @@ export function TodayGlanceAct({
         ) : null}
 
         <div
-          className={styles.nearestInline}
+          className={styles.nearestSlot}
           data-testid="today-slot-glance-nearest"
           data-wave2-slot="glance-nearest"
-          data-inline="true"
           data-fallback={loadFailure ? "true" : "false"}
           data-failure={loadFailure || undefined}
         >
           {!loaded ? <div className={styles.nearestSkeleton} data-loading="true" aria-busy="true" /> : null}
           {loaded && !loadFailure && nearest ? (
             <p
-              className={styles.nearestInlineText}
+              className={styles.nearestPrimary}
               data-valence={nearest.valence}
               data-live={live ? "true" : "false"}
               data-testid={`today-glance-nearest-${nearest.driver_id}`}
             >
               <span className={styles.nearestTime}>{formatGlanceClock(nearest.time_local)}</span>
-              <span className={styles.nearestDot} aria-hidden>
-                ·
-              </span>
               <span className={styles.nearestLabel}>{nearest.label_short}</span>
               {live ? (
                 <span className={styles.nearestNow} data-testid="today-glance-now">
@@ -223,35 +224,27 @@ export function TodayGlanceAct({
             </p>
           ) : null}
           {loaded && !loadFailure && !nearest ? (
-            <p className={styles.nearestEmptyCopy} data-empty="true" data-testid="today-glance-nearest-empty">
+            <p className={styles.detail} data-empty="true" data-testid="today-glance-nearest-empty">
               {copy.journey.glanceNearestEmpty}
             </p>
           ) : null}
         </div>
-      </div>
+      </DsCard>
 
       {primaryTeaser ? (
-        <ul className={styles.teasers} aria-label={copy.journey.glanceTeasersLabel} data-testid="today-glance-teasers">
-          <li>
-            <button
-              type="button"
-              className={styles.teaser}
-              data-testid={`today-glance-teaser-${primaryTeaser.id}`}
-              data-primary="true"
-              onClick={primaryTeaser.onSelect}
-            >
-              <span className={styles.teaserMark} aria-hidden>
-                ·
-              </span>
-              <span className={styles.teaserText}>
-                <span className={styles.teaserLabel}>{primaryTeaser.label}</span>
-                {primaryTeaser.hook ? (
-                  <span className={styles.teaserHook}>{primaryTeaser.hook}</span>
-                ) : null}
-              </span>
-            </button>
-          </li>
-        </ul>
+        <div data-testid="today-glance-teasers">
+          <DsCard
+            variant="glass"
+            as="button"
+            className={styles.blockTeaser}
+            testId={`today-glance-teaser-${primaryTeaser.id}`}
+            onClick={primaryTeaser.onSelect}
+          >
+            <p className={styles.eyebrow}>{copy.journey.glanceTeasersLabel}</p>
+            <span className={styles.primaryCompact}>{primaryTeaser.label}</span>
+            {primaryTeaser.hook ? <span className={styles.detail}>{primaryTeaser.hook}</span> : null}
+          </DsCard>
+        </div>
       ) : null}
     </div>
   );

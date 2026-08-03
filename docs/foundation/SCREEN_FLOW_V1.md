@@ -63,14 +63,22 @@ ScreenFlow высотой **100dvh** (или другой полный viewport)
 - **Next/Prev UI (optional):** кнопки или nav bar
 - **Keyboard:** `ArrowLeft` / `ArrowRight` (или `ArrowUp` / `ArrowDown` для `axis="y"`)
 
-### 1.5 A11y
+### 1.5 Chrome — swipe is primary, visible nav is a fallback
+
+Per §1.4, nav bar/buttons are **optional** — swipe + keyboard are the mandatory contract. Chrome should read that way:
+
+- **No raw step numbers as the primary visual.** `TodayActNav` currently renders `{item.step}` (0/1/2/3/4/5) as visible text next to each label — that reads as "tap here to count through pages," which fights the swipe-first intent of §1.4. Replace with a minimal, non-numeric indicator (dots / short labels only) — same `activeIndex` wiring, same `onSelect`, no behavior change.
+- **Swipe remains untouched.** This is a chrome-only change to `TodayActNav.tsx` / its `.module.css` — `ScreenFlow.tsx` touch handling, `SWIPE_THRESHOLD_PX`, and `reason: "swipe"` are not affected.
+- **Labels stay meaningful, numbers don't.** "Сводка · Сюжет · Символы · Чтение · Действие · Отклик" carry meaning on their own; the ordinal `0–5` in front of them doesn't add information a swipe gesture doesn't already provide.
+
+### 1.6 A11y
 
 При смене шага:
 1. **Focus heading** первого текстового заголовка в новом step (`<h2>` или `aria-labelledby`)
 2. **`aria-live="polite"` announcement:** "Step N of M — Step Title"
 3. **Inert на inactive шагах** (только активный доступен для tab/screen reader)
 
-### 1.6 Step status
+### 1.7 Step status
 
 Каждый шаг может быть:
 - **pending:** загружается → skeleton UI, prev/next разрешены
@@ -81,13 +89,13 @@ ScreenFlow высотой **100dvh** (или другой полный viewport)
 
 **Не изобретать:** Fake calm rows, фальшивая витрина, «нет сигнала» ≠ «Нет соединения.» — см. [AGENTS.md](../AGENTS.md) "Value gate placement".
 
-### 1.7 Re-entry always 0 unless explicit deep-link
+### 1.8 Re-entry always 0 unless explicit deep-link
 
 По умолчанию ScreenFlow открывается на **step 0**. Если URL имеет `?sf=1&step=N` (или другой роут-признак), можно открыть прямо на `N`.
 
 Повторный возврат на `/today` без query → снова step 0, не сохранённый last index.
 
-### 1.8 onIndexChange analytics
+### 1.9 onIndexChange analytics
 
 При каждом изменении activeIndex → analytics event:
 
@@ -221,6 +229,12 @@ Re-entry: ordinary visit → **0**; deep-link only with `sf=1&step=N`.
 ---
 
 ## 7. Changelog
+
+### 2026-08-03 — Chrome: drop visible step numbers (§1.5)
+
+- **Added §1.5** — nav bar is optional per §1.4; `TodayActNav` visible ordinal (`{item.step}`) replaced with non-numeric indicator, swipe stays the primary path.
+- **No mechanics change** — `ScreenFlow.tsx` swipe/keyboard untouched; this is `TodayActNav` chrome only.
+- **Related:** [TODAYFLOW_FOUNDATION_UI.md §16](../TODAYFLOW_FOUNDATION_UI.md) — Today block/panel visual grammar (new).
 
 ### 2026-08-03 — Today mapping → SCENARIO v3.1
 

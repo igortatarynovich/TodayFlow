@@ -37,7 +37,7 @@ export function TodayActNav({ items, activeIndex, onSelect }: Props) {
                   data-testid={`today-act-nav-${item.step}`}
                   onClick={() => onSelect(item.step)}
                 >
-                  <span className={styles.step}>{item.step}</span>
+                  <span className={styles.dot} aria-hidden />
                   <span className={styles.label}>{item.label}</span>
                 </button>
               </li>
@@ -60,7 +60,7 @@ export function TodayActNav({ items, activeIndex, onSelect }: Props) {
                   }
                 }}
               >
-                <span className={styles.step}>{item.step}</span>
+                <span className={styles.dot} aria-hidden />
                 <span className={styles.label}>{item.label}</span>
               </a>
             </li>
