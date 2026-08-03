@@ -649,6 +649,15 @@
   color: var(--tdp-accent, #c9a96e);
 }
 
+.eyebrowInline {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 560;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--tf-ink-muted, #7a7168);
+}
+
 .moveIfThenRow + .moveIfThenRow {
   margin-top: 0.85rem;
   padding-top: 0.85rem;

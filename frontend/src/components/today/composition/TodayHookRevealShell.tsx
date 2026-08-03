@@ -1,6 +1,7 @@
 "use client";
 
 import styles from "@/components/today/composition/TodayHookRevealShell.module.css";
+import { DsCard } from "@/design-system/primitives/DsCard";
 import { asTrimmedText, formatColorWhereToUse } from "@/lib/hookRevealText";
 
 export type HookRevealPayload = {
@@ -35,6 +36,7 @@ type Props = {
 /**
  * Shared shell: base (static) → bridge | fail → instruction.
  * Never invents bridge prose when unavailable.
+ * Surface: Today Block = DsCard glass compact (FOUNDATION_UI §16).
  */
 export function TodayHookRevealShell({
   kindLabel,
@@ -63,40 +65,48 @@ export function TodayHookRevealShell({
         : null;
 
   return (
-    <section className={styles.root} data-testid={testId} data-hook-kind={hook?.kind || undefined}>
-      <p className={styles.kind}>{kindLabel}</p>
-      <h2 className={styles.title}>
-        {title}
-        {orientation ? <span className={styles.orient}> · {orientation}</span> : null}
-      </h2>
-      {subtitle ? <p className={styles.subtitle}>{subtitle}</p> : null}
+    <DsCard
+      variant="glass"
+      size="compact"
+      as="section"
+      className={styles.root}
+      testId={testId}
+    >
+      <div data-hook-kind={hook?.kind || undefined}>
+        <p className={styles.kind}>{kindLabel}</p>
+        <h2 className={styles.title}>
+          {title}
+          {orientation ? <span className={styles.orient}> · {orientation}</span> : null}
+        </h2>
+        {subtitle ? <p className={styles.subtitle}>{subtitle}</p> : null}
 
-      {baseMeaning ? (
-        <div className={styles.layer} data-layer="base">
-          <p className={styles.layerLabel}>Значение</p>
-          <p className={styles.layerBody}>{baseMeaning}</p>
-        </div>
-      ) : fallbackBody ? (
-        <p className={styles.layerBody}>{fallbackBody}</p>
-      ) : null}
+        {baseMeaning ? (
+          <div className={styles.layer} data-layer="base">
+            <p className={styles.layerLabel}>Значение</p>
+            <p className={styles.layerBody}>{baseMeaning}</p>
+          </div>
+        ) : fallbackBody ? (
+          <p className={styles.layerBody}>{fallbackBody}</p>
+        ) : null}
 
-      {bridgeOk ? (
-        <div className={styles.layer} data-layer="bridge">
-          <p className={styles.layerLabel}>Почему сегодня</p>
-          <p className={styles.layerBody}>{bridgeText}</p>
-        </div>
-      ) : bridgeFail ? (
-        <p className={styles.fail} role="status" data-bridge-status="unavailable">
-          {bridgeFail}
-        </p>
-      ) : null}
+        {bridgeOk ? (
+          <div className={styles.layer} data-layer="bridge">
+            <p className={styles.layerLabel}>Почему сегодня</p>
+            <p className={styles.layerBody}>{bridgeText}</p>
+          </div>
+        ) : bridgeFail ? (
+          <p className={styles.fail} role="status" data-bridge-status="unavailable">
+            {bridgeFail}
+          </p>
+        ) : null}
 
-      {showInstruction ? (
-        <div className={styles.layer} data-layer="instruction">
-          <p className={styles.layerLabel}>Как применить</p>
-          <p className={styles.layerBody}>{instruction}</p>
-        </div>
-      ) : null}
-    </section>
+        {showInstruction ? (
+          <div className={styles.layer} data-layer="instruction">
+            <p className={styles.layerLabel}>Как применить</p>
+            <p className={styles.layerBody}>{instruction}</p>
+          </div>
+        ) : null}
+      </div>
+    </DsCard>
   );
 }

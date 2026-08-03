@@ -24,6 +24,7 @@ import type { TodayDayStoryViewModel } from "@/lib/todayDayStoryModel";
 import type { CoreProfile } from "@/lib/types";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
+import { TodayScreenBlock, TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
 import { TodayTapWidget } from "@/components/today/composition/TodayWave2Slots";
 import { pickMoveIfThenFromContract } from "@/lib/todayMoveIfThen";
 import { TODAY_NO_SHARP_FOCUS_COPY } from "@/lib/todayGlanceTexture";
@@ -228,43 +229,43 @@ export function TodayPersonalizedProductSection({
         testId="today-zone-reading"
       >
         {contentFailure ? (
-          <p
-            className={styles.readingParagraph}
-            role="status"
-            data-testid="today-reading-fallback"
-            data-fallback="true"
-            data-failure={contentFailure}
-          >
-            {todaySlotFailureCopy(contentFailure)}
-          </p>
+          <TodayScreenBlock testId="today-reading-fallback">
+            <p
+              className={styles.readingParagraph}
+              role="status"
+              data-fallback="true"
+              data-failure={contentFailure}
+            >
+              {todaySlotFailureCopy(contentFailure)}
+            </p>
+          </TodayScreenBlock>
         ) : null}
 
         {!contentFailure && contract.day_story?.interpretation_status === "unavailable" ? (
-          <p className={styles.readingParagraph} data-testid="today-interpretation-unavailable">
-            {contract.day_story.interpretation_unavailable_message ||
-              "Мы не смогли подготовить персональную интерпретацию дня. Попробуйте обновить экран через несколько минут."}
-          </p>
+          <TodayScreenBlock testId="today-interpretation-unavailable">
+            <p className={styles.readingParagraph}>
+              {contract.day_story.interpretation_unavailable_message ||
+                "Мы не смогли подготовить персональную интерпретацию дня. Попробуйте обновить экран через несколько минут."}
+            </p>
+          </TodayScreenBlock>
         ) : null}
 
         {!contentFailure &&
         contract.day_story?.interpretation_status !== "unavailable" &&
         narrative.chapters.length === 0 ? (
-          <p
-            className={styles.readingParagraph}
-            role="status"
-            data-testid="today-reading-no-focus"
-          >
-            {isDayScenarioReadyForChapters(contract)
-              ? TODAY_NO_SHARP_FOCUS_COPY
-              : todaySlotFailureCopy("unavailable")}
-          </p>
+          <TodayScreenBlock testId="today-reading-no-focus">
+            <p className={styles.readingParagraph} role="status">
+              {isDayScenarioReadyForChapters(contract)
+                ? TODAY_NO_SHARP_FOCUS_COPY
+                : todaySlotFailureCopy("unavailable")}
+            </p>
+          </TodayScreenBlock>
         ) : null}
 
         {!contentFailure && narrative.chapters.length > 0 ? (
-        <div
-          className={`${styles.narrativeBlocks} ${profileMotionStyles.staggerItem}`}
-          style={profileMotionStaggerDelay(0, 60) as CSSProperties}
-          data-testid="today-entity-synthesis"
+        <TodayScreenBlockStack
+          className={profileMotionStyles.staggerItem}
+          testId="today-entity-synthesis"
         >
           {narrative.chapters.map((chapter, chapterIndex) => {
             const planetSrc = planetIconSrc(chapter.planetHint);
@@ -302,6 +303,7 @@ export function TodayPersonalizedProductSection({
                 style={profileMotionStaggerDelay(chapterIndex + 1, 70) as CSSProperties}
                 data-testid={`today-narrative-${chapter.id}`}
               >
+                <TodayScreenBlock>
                 <ProductNarrativeBlock
                   id={chapter.id}
                   kicker={chapter.kicker}
@@ -316,6 +318,7 @@ export function TodayPersonalizedProductSection({
                   accent={chapter.accent ?? "default"}
                   media={media}
                   collapseAfter={chapter.collapseAfter}
+                  surface="plain"
                   testId={`today-narrative-block-${chapter.id}`}
                 >
                   {softWhyInBody && narrative.softWhy ? (
@@ -404,6 +407,7 @@ export function TodayPersonalizedProductSection({
                     </div>
                   ) : null}
                 </ProductNarrativeBlock>
+                </TodayScreenBlock>
               </div>
             );
           })}
@@ -413,7 +417,7 @@ export function TodayPersonalizedProductSection({
               {narrative.vibeClosing}
             </p>
           ) : null}
-        </div>
+        </TodayScreenBlockStack>
         ) : null}
       </ProductJourneyScene>
   );
@@ -428,21 +432,25 @@ export function TodayPersonalizedProductSection({
         testId="today-zone-move"
       >
         {contentFailure ? (
-          <p
-            className={styles.readingParagraph}
-            role="status"
-            data-testid="today-move-fallback"
-            data-fallback="true"
-            data-failure={contentFailure}
-          >
-            {todaySlotFailureCopy(contentFailure)}
-          </p>
+          <TodayScreenBlock testId="today-move-fallback">
+            <p
+              className={styles.readingParagraph}
+              role="status"
+              data-fallback="true"
+              data-failure={contentFailure}
+            >
+              {todaySlotFailureCopy(contentFailure)}
+            </p>
+          </TodayScreenBlock>
         ) : (
-          <>
-        {colorGuide ? <TodayDayColorGuideSection guide={colorGuide} /> : null}
+          <TodayScreenBlockStack>
+        {colorGuide ? (
+          <TodayScreenBlock testId="today-zone-color-guide">
+            <TodayDayColorGuideSection guide={colorGuide} />
+          </TodayScreenBlock>
+        ) : null}
         {moveIfThen && (moveIfThen.do || moveIfThen.avoid) ? (
-          <article className={styles.productCard} data-testid="today-zone-move-if-then">
-            <p className={styles.cardEyebrow}>{copy.journey.moveIfThenEyebrow}</p>
+          <TodayScreenBlock eyebrow={copy.journey.moveIfThenEyebrow} testId="today-zone-move-if-then">
             {moveIfThen.do ? (
               <div className={styles.moveIfThenRow} data-testid="today-move-do">
                 <p className={styles.moveIfThenLabel}>{copy.journey.moveDoLabel}</p>
@@ -455,10 +463,9 @@ export function TodayPersonalizedProductSection({
                 <p className={styles.readingParagraph}>{moveIfThen.avoid}</p>
               </div>
             ) : null}
-          </article>
+          </TodayScreenBlock>
         ) : null}
-        <article className={styles.productCard} data-testid="today-zone-promise">
-          <p className={styles.cardEyebrow}>Цель на сегодня</p>
+        <TodayScreenBlock eyebrow="Цель на сегодня" testId="today-zone-promise">
           {dayGoal && !goalDraftOpen ? (
             <p className={styles.readingParagraph} data-testid="today-promise-active">
               {dayGoal}
@@ -502,12 +509,12 @@ export function TodayPersonalizedProductSection({
               {dayGoal ? "Изменить своими словами…" : "+ Своя цель"}
             </button>
           )}
-        </article>
+        </TodayScreenBlock>
 
         {strengthenTools.length > 0 || practiceRec?.text || activeHabit || activeAscetic ? (
-          <article className={styles.productCard} data-testid="today-zone-strengthen">
+          <TodayScreenBlock testId="today-zone-strengthen">
             <div className={styles.practicesHeader}>
-              <p className={styles.cardEyebrow}>Практики и опоры</p>
+              <p className={styles.eyebrowInline}>Практики и опоры</p>
               {totalTools > 1 ? (
                 <p className={styles.practicesProgress}>
                   {completedCount} из {totalTools}
@@ -657,18 +664,17 @@ export function TodayPersonalizedProductSection({
                 {copy.setupPracticesLink} →
               </Link>
             </p>
-          </article>
+          </TodayScreenBlock>
         ) : (
-          <article className={styles.productCard} data-testid="today-zone-strengthen-empty">
-            <p className={styles.cardEyebrow}>Практики и опоры</p>
+          <TodayScreenBlock eyebrow="Практики и опоры" testId="today-zone-strengthen-empty">
             <p className={styles.practiceMeta}>
               <Link href="/practices" data-testid="today-setup-practices-link">
                 {copy.setupPracticesLink} →
               </Link>
             </p>
-          </article>
+          </TodayScreenBlock>
         )}
-          </>
+          </TodayScreenBlockStack>
         )}
       </ProductJourneyScene>
   );
@@ -684,22 +690,25 @@ export function TodayPersonalizedProductSection({
         testId="today-zone-bridges-wrap"
       >
         {contentFailure ? (
-          <p
-            className={styles.readingParagraph}
-            role="status"
-            data-testid="today-response-fallback"
-            data-fallback="true"
-            data-failure={contentFailure}
-          >
-            {todaySlotFailureCopy(contentFailure)}
-          </p>
+          <TodayScreenBlock testId="today-response-fallback">
+            <p
+              className={styles.readingParagraph}
+              role="status"
+              data-fallback="true"
+              data-failure={contentFailure}
+            >
+              {todaySlotFailureCopy(contentFailure)}
+            </p>
+          </TodayScreenBlock>
         ) : (
-          <TodayTapWidget
-            contract={contract}
-            dateISO={dateISO || ""}
-            initialResponse={tapResponse}
-            onRecorded={onTapRecorded}
-          />
+          <TodayScreenBlock testId="today-slot-tap-wrap">
+            <TodayTapWidget
+              contract={contract}
+              dateISO={dateISO || ""}
+              initialResponse={tapResponse}
+              onRecorded={onTapRecorded}
+            />
+          </TodayScreenBlock>
         )}
       </ProductJourneyScene>
   );

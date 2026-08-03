@@ -14,6 +14,14 @@ export type DsCardVariant =
   | "outline"
   | "card";
 
+/**
+ * Density / Surface pad scale.
+ * - `default` — variant's own padding (often `--tf-ds-space-10` on glass/standard).
+ * - `compact` — Surface B rhythm (§4 / FOUNDATION_UI §16.3): pad 4–5, insight radius.
+ *   Prefer this for Today ScreenFlow Block panels instead of consumer `!important` overrides.
+ */
+export type DsCardSize = "default" | "compact";
+
 const CARD_CLASS: Record<DsCardVariant, string> = {
   standard: p.cardStandard,
   glass: p.cardGlass,
@@ -28,6 +36,8 @@ const CARD_CLASS: Record<DsCardVariant, string> = {
 
 type DsCardProps = {
   variant?: DsCardVariant;
+  /** Surface density. `compact` = Today Block / Surface B pad+radius. */
+  size?: DsCardSize;
   children: ReactNode;
   className?: string;
   as?: "div" | "section" | "article" | "button";
@@ -37,6 +47,7 @@ type DsCardProps = {
 
 export function DsCard({
   variant = "card",
+  size = "default",
   children,
   className,
   as: Tag = "div",
@@ -46,7 +57,12 @@ export function DsCard({
   const isButton = Tag === "button";
   return (
     <Tag
-      className={joinClass(p.surface, CARD_CLASS[variant], className)}
+      className={joinClass(
+        p.surface,
+        CARD_CLASS[variant],
+        size === "compact" ? p.cardSizeCompact : undefined,
+        className,
+      )}
       data-testid={testId}
       onClick={onClick}
       type={isButton ? "button" : undefined}

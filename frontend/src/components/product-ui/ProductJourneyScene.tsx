@@ -151,6 +151,11 @@ export type ProductNarrativeBlockProps = {
   testId?: string;
   className?: string;
   style?: CSSProperties;
+  /**
+   * `card` (default) — self-contained panel.
+   * `plain` — content only; parent supplies surface (Today Screen Block / DsCard).
+   */
+  surface?: "card" | "plain";
 };
 
 export function ProductNarrativeBlock({
@@ -167,6 +172,7 @@ export function ProductNarrativeBlock({
   testId,
   className = "",
   style,
+  surface = "card",
 }: ProductNarrativeBlockProps) {
   const reactId = useId();
   const panelId = id ?? `narrative-block-${reactId}`;
@@ -177,17 +183,19 @@ export function ProductNarrativeBlock({
   const [expanded, setExpanded] = useState(!canCollapse);
   const visibleParagraphs = canCollapse && !expanded ? paragraphs.slice(0, collapseAfter) : paragraphs;
   const accentClass =
-    accent === "dual"
-      ? styles.narrativeBlockDual
-      : accent === "support"
-        ? styles.narrativeBlockSupport
-        : accent === "sky"
-          ? styles.narrativeBlockSky
-          : "";
+    surface === "plain"
+      ? ""
+      : accent === "dual"
+        ? styles.narrativeBlockDual
+        : accent === "support"
+          ? styles.narrativeBlockSupport
+          : accent === "sky"
+            ? styles.narrativeBlockSky
+            : "";
 
   return (
     <section
-      className={`${styles.narrativeBlock} ${accentClass} ${profileMotionStyles.staggerItem} ${className}`.trim()}
+      className={`${surface === "plain" ? styles.narrativeBlockPlain : styles.narrativeBlock} ${accentClass} ${profileMotionStyles.staggerItem} ${className}`.trim()}
       data-testid={testId ?? `product-narrative-block-${panelId}`}
       style={style}
     >

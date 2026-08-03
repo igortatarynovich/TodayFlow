@@ -6,6 +6,12 @@
   max-width: 40rem;
 }
 
+.root > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
 .kind {
   margin: 0;
   font-size: 0.72rem;

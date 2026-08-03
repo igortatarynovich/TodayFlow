@@ -309,6 +309,27 @@
   padding: var(--tf-ds-space-10);
 }
 
+/* Surface B density — FOUNDATION_UI §16.3 / §4 Insight pad+radius */
+.cardSizeCompact {
+  padding: var(--tf-ds-space-4) var(--tf-ds-space-5);
+  border-radius: var(--tf-surface-insight-radius, 28px);
+}
+
+/* Glass + compact = Today Block panel: atmosphere reads through */
+.cardGlass.cardSizeCompact {
+  background: color-mix(
+    in srgb,
+    var(--tf-ds-glass, rgba(255, 255, 255, 0.5)) 88%,
+    var(--day-surface-tint, transparent)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow:
+    0 14px 40px rgba(42, 37, 32, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
 .cardOrbital {
   position: relative;
   overflow: hidden;

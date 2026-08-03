@@ -142,7 +142,7 @@ export function TodayGlanceAct({
         </p>
       </header>
 
-      <DsCard variant="glass" className={styles.block} testId="today-glance-glass">
+      <DsCard variant="glass" size="compact" className={styles.block} testId="today-glance-glass">
         {themeLoading ? (
           <p className={styles.loading}>{copy.loadingDay}</p>
         ) : (
@@ -184,7 +184,7 @@ export function TodayGlanceAct({
         )}
       </DsCard>
 
-      <DsCard variant="glass" className={styles.block} testId="today-glance-meta">
+      <DsCard variant="glass" size="compact" className={styles.block} testId="today-glance-meta">
         <p className={styles.eyebrow}>{copy.journey.glanceNearestLabel}</p>
 
         {loaded && loadFailure ? (
@@ -235,6 +235,7 @@ export function TodayGlanceAct({
         <div data-testid="today-glance-teasers">
           <DsCard
             variant="glass"
+            size="compact"
             as="button"
             className={styles.blockTeaser}
             testId={`today-glance-teaser-${primaryTeaser.id}`}

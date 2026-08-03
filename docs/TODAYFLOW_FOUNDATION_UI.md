@@ -637,7 +637,7 @@ interface DayAtmosphereContract {
 | Примитив | Экспорт | Варианты | Правило |
 |----------|---------|----------|---------|
 | **Button** | `DsButton` (`design-system/primitives/DsButton.tsx`) | `primary · secondary · ghost · destructive · icon` × `size: sm · md · block` | Единственный способ сделать CTA/кнопку. Новый `.actionButton`/`.submitButton`-класс в `.module.css` — запрещён (см. §17c) |
-| **Card / Surface** | `DsCard` (+ `DsStatusBadge`) | `standard · glass · orbital · feature · dark · insight · elevated · outline · card` — соответствуют Surface A–N §4 и `card--*` в Figma-карте (`figmaMap.ts`) | Контентная/интерактивная карточка — только через `DsCard`, не `<div className={styles.card}>` с собственным CSS |
+| **Card / Surface** | `DsCard` (+ `DsStatusBadge`) | `standard · glass · orbital · feature · dark · insight · elevated · outline · card` × `size: default · compact` — соответствуют Surface A–N §4 и `card--*` в Figma-карте (`figmaMap.ts`). **`compact`** = Surface B pad/radius (§16.3) для Today Block-панелей | Контентная/интерактивная карточка — только через `DsCard`, не `<div className={styles.card}>` с собственным CSS. Today Block: `variant="glass" size="compact"` — без `!important`-override в потребителе |
 | **Typography** | `DsTypography` (`DsDisplayTitle`/`DsHeadline`/`DsTitle`/`DsSubtitle`/`DsBody`/`DsCaption`/…) | соответствует ролям §5 | Новый `font-size` вне `--tf-type-*` — запрещён |
 | **Form** | `DsForm` (`DsTextField`/`DsSearchField`/`DsCheckbox`/`DsChipField`/`DsClassifier`) | — | Инпуты — только отсюда |
 | **Banner** | — **нет примитива** | — | Гэп, не входит в этот проход. Существующие реализации (§14) остаются как есть до отдельного контракта — не изобретаем форму без опоры на реальные кейсы (backlog, см. §15.5) |
@@ -680,7 +680,7 @@ interface DayAtmosphereContract {
 
 ## 16. Today Screen — Block Composition
 
-**Статус:** канон; Glance (`TodayGlanceAct`) + chrome (`TodayActNav`, SCREEN_FLOW §1.5) — first pass; остальные 5 шагов ScreenFlow — следующим проходом. Отвечает на запрос «подача должна быть красиво разбита на блоки, легко читаться» — независимо от точного контента экрана. Не заменяет и не меняет [TODAY_SCREEN_SCENARIO_V3](today/TODAY_SCREEN_SCENARIO_V3.md) (SoT содержания каждого из 6 шагов ScreenFlow) — этот раздел только про то, **как** любой из шести шагов визуально организован. Навигационный chrome (свайп/цифры) — не здесь, см. [SCREEN_FLOW_V1 §1.5](foundation/SCREEN_FLOW_V1.md).
+**Статус:** канон; Glance + Plot/Symbols/Reading/Move/Response на `DsCard size="compact"` / `TodayScreenBlock` — first pass. Отвечает на запрос «подача должна быть красиво разбита на блоки, легко читаться» — независимо от точного контента экрана. Не заменяет и не меняет [TODAY_SCREEN_SCENARIO_V3](today/TODAY_SCREEN_SCENARIO_V3.md) (SoT содержания каждого из 6 шагов ScreenFlow) — этот раздел только про то, **как** любой из шести шагов визуально организован. Навигационный chrome (свайп/цифры) — не здесь, см. [SCREEN_FLOW_V1 §1.5](foundation/SCREEN_FLOW_V1.md).
 
 ### 16.1 Проблема, зафиксированная в коде
 
@@ -694,14 +694,18 @@ interface DayAtmosphereContract {
 2. **Primary** — одно главное значение блока, крупно (роль **Section** или **Hero**, §5) — короткая фраза, время, статус-слово. Не абзац.
 3. **Detail** *(опционально)* — одна строка/абзац пояснения, приглушённый тон (роль **Body**/**Caption**, §5).
 
-Блок — это `DsCard` (вариант `glass`, `--tf-ds-glass`/`--tf-ds-glass-on-dark`) поверх Day Atmosphere фона (§11–§13): полупрозрачная поверхность, а не сплошная заливка — атмосфера дня должна читаться сквозь панель, не исчезать под ней.
+Блок — это `DsCard` (`variant="glass"` **`size="compact"`**, `--tf-ds-glass`/`--tf-ds-glass-on-dark` + Day Atmosphere tint) поверх Day Atmosphere фона (§11–§13): полупрозрачная поверхность, а не сплошная заливка — атмосфера дня должна читаться сквозь панель, не исчезать под ней. Плотность Surface B (pad/radius) живёт в примитиве (`dsPrimitives.module.css` `.cardSizeCompact`), не в consumer `!important`.
 
 ### 16.3 Сетка и ритм
 
 - Отступ **между** блоками — единый токен, не «на глаз»: `--tf-ds-space-5` (1.25rem) как база, `--tf-ds-space-6` (1.5rem) на широких экранах — те же токены, что уже в foundation (§15.4), новых не создаём.
-- Внутренний padding блока — `--tf-ds-space-4`–`--tf-ds-space-5` (соответствует Surface B §4: 22×21).
-- Radius блока — из существующей шкалы Surface (24/28px), не хардкод.
+- Внутренний padding блока — `--tf-ds-space-4`–`--tf-ds-space-5` (соответствует Surface B §4: 22×21) — через `DsCard size="compact"`, не локальный override.
+- Radius блока — `--tf-surface-insight-radius` (28px) через тот же `compact`, не хардкод.
 - **2×2 сетка** (как «Статус по сферам» на референсе) — это частный случай Block: eyebrow на уровне секции, дальше N мини-блоков без вложенного padding друг в друга (иконка + label + Primary-значение, без Detail).
+
+### 16.3.1 Решение: `size="compact"` вместо consumer overrides
+
+При first pass Glance временно перебивал pad/radius/фон `glass` через `!important` в `TodayGlanceAct.module.css`. Это закрыто: `DsCard` принимает `size="compact"`; комбинация `.cardGlass.cardSizeCompact` задаёт Surface B + `--tf-ds-glass` (+ `--day-surface-tint` если задан). Дальнейшие шаги ScreenFlow (§16.4) используют тот же API — без копирования override в пять файлов.
 
 ### 16.4 Применимость — все 6 шагов, не только Glance
 
@@ -716,7 +720,7 @@ interface DayAtmosphereContract {
 ### 16.6 Открытые вопросы (не в этом проходе)
 
 - Точный набор иконок для 2×2-сетки сфер (work/money/relationships/energy) — нет решения, не проверено в `DsIcons`.
-- Останется ли `metaRow`/nearest-строка отдельным Block или сольётся с тизерами — решается при реализации на `TodayGlanceAct`, не в каноне.
+- Останется ли `metaRow`/nearest-строка отдельным Block или сольётся с тизерами — **решено при Glance first pass:** nearest = отдельный Block («Сигнал дня»).
 
 ---
 

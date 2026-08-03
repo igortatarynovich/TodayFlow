@@ -124,6 +124,10 @@ export function DsCatalog() {
             <DsTitle>Frosted Clarity</DsTitle>
             <DsBody muted>Translucent layers for overlaying insights.</DsBody>
           </DsCard>
+          <DsCard variant="glass" size="compact">
+            <DsTitle>Today Block</DsTitle>
+            <DsBody muted>Compact Surface B pad — ScreenFlow panels without consumer overrides.</DsBody>
+          </DsCard>
           <DsCard variant="orbital">
             <DsTitle>Cosmic Map</DsTitle>
             <DsBody muted>Background concentric rings represent cycles.</DsBody>

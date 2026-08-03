@@ -11,7 +11,7 @@ export type { DsFigmaCategory } from "@/design-system/registry/figmaMap";
 
 export { DsButton } from "@/design-system/primitives/DsButton";
 export { DsCard, DsStatusBadge } from "@/design-system/primitives/DsCard";
-export type { DsCardVariant } from "@/design-system/primitives/DsCard";
+export type { DsCardSize, DsCardVariant } from "@/design-system/primitives/DsCard";
 export {
   DsCheckbox,
   DsChipField,

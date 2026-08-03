@@ -11,6 +11,7 @@ import { TodayEveningProductClose } from "@/components/today/composition/TodayEv
 import { TodayPersonalizedProductSection } from "@/components/today/composition/TodayPersonalizedProductSection";
 import { TodayActShell } from "@/components/today/composition/TodayActShell";
 import { TodayActNav } from "@/components/today/composition/TodayActNav";
+import { TodayScreenBlock, TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
 import { TodayProductScreenFlow, todayScreenFlowReadingIndex, todayScreenFlowStepCount } from "@/components/today/composition/TodayProductScreenFlow";
 import {
   resolveScreenFlowEntryIndex,
@@ -1218,10 +1219,7 @@ export function TodayCompositionSurface(props: Props) {
   ) : null;
 
   const pulseSection = zones.pulse ? (
-    <div
-      className={useProductFoundation ? styles.pulseCard : styles.dayAnchorPulse}
-      data-testid="today-zone-pulse"
-    >
+    <TodayScreenBlock testId="today-zone-pulse">
       {props.dayStoryUpdating ? (
         <p className={styles.pulseText} data-testid="today-day-story-updating" aria-live="polite">
           Обновляем описание дня…
@@ -1232,7 +1230,7 @@ export function TodayCompositionSurface(props: Props) {
       {story.ritualUnlockHint && !story.personalizedReady ? (
         <p className={styles.ritualUnlockHint}>{story.ritualUnlockHint}</p>
       ) : null}
-    </div>
+    </TodayScreenBlock>
   ) : null;
 
   const glanceSection = showGlance ? (
@@ -1274,7 +1272,7 @@ export function TodayCompositionSurface(props: Props) {
     buildGlanceThemeEyebrow(props.contract) || heroTheme || story.hero.centralThought || copy.themeLabel;
 
   const plotNarrativeSection = plotNarrative ? (
-    <section className={styles.plotNarrative} data-testid="today-zone-plot-narrative">
+    <TodayScreenBlock eyebrow={copy.conflictLabel} testId="today-zone-plot-narrative">
       {plotNarrative.tension ? (
         <p className={styles.plotNarrativeTension} data-testid="today-plot-tension">
           {plotNarrative.tension}
@@ -1290,7 +1288,7 @@ export function TodayCompositionSurface(props: Props) {
           {plotNarrative.personal}
         </p>
       ) : null}
-    </section>
+    </TodayScreenBlock>
   ) : null;
 
   const heroSection = zones.hero ? (
@@ -1550,23 +1548,24 @@ export function TodayCompositionSurface(props: Props) {
       dayReadingReady={dayReadingReady}
       showSymbols={showSymbolsAct}
       symbolsBody={
-        <>
+        <TodayScreenBlockStack testId="today-zone-symbols-stack">
           {props.networkDegraded ? (
-            <p
-              className={styles.plotNarrativeWhy}
-              role="status"
-              data-testid="today-symbols-fallback"
-              data-fallback="true"
-              data-failure="no_connection"
-            >
-              {TODAY_NO_CONNECTION_COPY}
-            </p>
+            <TodayScreenBlock testId="today-symbols-fallback">
+              <p
+                className={styles.plotNarrativeWhy}
+                role="status"
+                data-fallback="true"
+                data-failure="no_connection"
+              >
+                {TODAY_NO_CONNECTION_COPY}
+              </p>
+            </TodayScreenBlock>
           ) : null}
           {!props.networkDegraded && showRitualAsComplement ? ritualGateSection : null}
           {!props.networkDegraded && showRitualAsComplement ? ritualTarotImpactStage : null}
           {/* v3: show day card open when already revealed / available — no extra click */}
           {!props.networkDegraded && !showRitualAsComplement && (props.cardName || story.tarotImpact || props.numerologyValue || story.numberImpact) ? (
-            <div className={styles.symbolImpactsStack} data-testid="today-zone-symbol-impacts">
+            <div data-testid="today-zone-symbol-impacts">
               {story.tarotImpact || props.cardName || symbolHooksView?.card?.hook_reveal ? (
                 <TodayHookRevealShell
                   kindLabel="Карта дня · открыта"
@@ -1615,24 +1614,23 @@ export function TodayCompositionSurface(props: Props) {
               ) : null}
               {props.contract.day_story?.interpretive_chorus?.astrology_lead ||
               props.contract.day_story?.interpretive_chorus?.astrology_meaning ? (
-                <section className={styles.ritualReveal} data-testid="today-zone-sky-events">
-                  <p className={styles.ritualRevealKind}>Небо сегодня</p>
+                <TodayScreenBlock eyebrow="Небо сегодня" testId="today-zone-sky-events">
                   {props.contract.day_story?.interpretive_chorus?.astrology_lead ? (
-                    <h2 className={styles.ritualRevealTitle}>
+                    <p className={styles.ritualRevealTitle}>
                       {props.contract.day_story.interpretive_chorus.astrology_lead}
-                    </h2>
+                    </p>
                   ) : null}
                   {props.contract.day_story?.interpretive_chorus?.astrology_meaning ? (
                     <p className={styles.ritualRevealBody}>
                       {props.contract.day_story.interpretive_chorus.astrology_meaning}
                     </p>
                   ) : null}
-                </section>
+                </TodayScreenBlock>
               ) : null}
             </div>
           ) : null}
           {!props.networkDegraded ? <TodayGlanceTimelineSlot dateISO={dateISO} /> : null}
-        </>
+        </TodayScreenBlockStack>
       }
       showPersonalized={useProductPersonalized}
       personalizedProps={{
