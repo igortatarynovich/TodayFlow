@@ -1,8 +1,11 @@
 "use client";
 
-import type { MorningRitualData, TodayCycleData } from "@/components/today/todayPageUtils";
 import { resolveCacheUserScope } from "@/lib/cacheUserScope";
-import type { TodayContractV1 } from "@/lib/todayContract";
+import {
+  publishDayAtmosphereEngine,
+  type TodayContractV1,
+} from "@/lib/todayContract";
+import type { MorningRitualData, TodayCycleData } from "@/components/today/todayPageUtils";
 
 const PREFIX = "todayflow.today_day_bundle.v2";
 
@@ -70,6 +73,9 @@ export function writeTodayDayBundle(
     }
   } catch {
     /* ignore */
+  }
+  if (patch.contract !== undefined) {
+    publishDayAtmosphereEngine(next.contract?.day_atmosphere ?? null);
   }
   return next;
 }

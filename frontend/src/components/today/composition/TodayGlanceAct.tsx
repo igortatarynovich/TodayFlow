@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import styles from "@/components/today/composition/TodayGlanceAct.module.css";
 import {
@@ -28,13 +28,40 @@ type Props = {
   thesis?: string | null;
   teasers: TodayGlanceTeaser[];
   themeLoading?: boolean;
+  /** ScreenFlow progress — act index 0-based; display = currentStep / stepCount */
+  screenFlowStep?: number;
+  screenFlowStepCount?: number;
   /** @deprecated spheres are not Glance hero — kept for call-site compat */
   onSphereSelect?: (domain: string) => void;
 };
 
+const MONTHS_RU = [
+  "января",
+  "февраля",
+  "марта",
+  "апреля",
+  "мая",
+  "июня",
+  "июля",
+  "августа",
+  "сентября",
+  "октября",
+  "ноября",
+  "декабря",
+];
+
+function formatGlanceDateRu(dateISO: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(dateISO.trim());
+  if (!m) return dateISO;
+  const day = Number(m[3]);
+  const month = Number(m[2]) - 1;
+  if (month < 0 || month > 11 || !day) return dateISO;
+  return `${day} ${MONTHS_RU[month]}`;
+}
+
 /**
- * Glance / Сводка — 2-second day overview.
- * Not four spheres. Hooks live in Symbols ritual act.
+ * Glance / Сводка — Day Atmosphere surface (FOUNDATION_UI §11.9 + TODAY_SCREEN_SCENARIO_V3).
+ * Glass hero + ScreenFlow gauge + sparse chrome — jobs of meaning unchanged.
  */
 export function TodayGlanceAct({
   dateISO,
@@ -43,6 +70,8 @@ export function TodayGlanceAct({
   thesis = null,
   teasers,
   themeLoading = false,
+  screenFlowStep = 0,
+  screenFlowStepCount = 6,
 }: Props) {
   const [nearest, setNearest] = useState<GlanceTimelineItem | null>(null);
   const [loadFailure, setLoadFailure] = useState<TodaySlotLoadFailure | null>(null);
@@ -86,28 +115,43 @@ export function TodayGlanceAct({
 
   const texture =
     (dayTexture || "").trim() || (thesis || "").trim() || (title || "").trim() || null;
-  const eyebrow =
+  const modeLabel =
     title && texture && title.trim().toLowerCase() !== texture.trim().toLowerCase()
       ? title.trim()
       : null;
 
-  // Prefer symbols teaser first — hooks are the next center after overview.
-  const orderedTeasers = (() => {
-    const symbols = teasers.filter((t) => t.id === "symbols");
-    const rest = teasers.filter((t) => t.id !== "symbols");
-    return [...symbols, ...rest];
-  })();
+  const dateLabel = useMemo(() => formatGlanceDateRu(dateISO), [dateISO]);
+  const stepCount = Math.max(1, screenFlowStepCount);
+  const currentStep = Math.min(stepCount, Math.max(1, screenFlowStep + 1));
+  const gaugePct = currentStep / stepCount;
+
+  // Sparse: prefer symbols ritual teaser only on Glance hero chrome
+  const primaryTeaser =
+    teasers.find((t) => t.id === "symbols") ?? teasers.find((t) => t.id === "plot") ?? teasers[0] ?? null;
+
+  const gaugeStyle = {
+    background: `conic-gradient(var(--day-accent-soft, rgba(120,130,145,0.55)) ${gaugePct * 360}deg, rgba(255,255,255,0.22) 0)`,
+  };
 
   return (
     <div className={styles.root} data-testid="today-zone-glance-act">
-      <div className={styles.themeBlock}>
+      <header className={styles.chrome}>
+        <p className={styles.brand} data-testid="today-glance-brand">
+          TodayFlow
+        </p>
+        <p className={styles.dateLine} data-testid="today-glance-date">
+          Сегодня · {dateLabel}
+        </p>
+      </header>
+
+      <div className={styles.glass} data-testid="today-glance-glass">
         {themeLoading ? (
           <p className={styles.loading}>{copy.loadingDay}</p>
         ) : (
           <>
-            {eyebrow ? (
+            {modeLabel ? (
               <p className={styles.eyebrow} data-testid="today-entity-daily-theme-glance">
-                {eyebrow}
+                {modeLabel}
               </p>
             ) : null}
             {texture ? (
@@ -119,9 +163,23 @@ export function TodayGlanceAct({
                 {copy.journey.glanceTitle}
               </h3>
             )}
-            <p className={styles.glanceLead} data-testid="today-glance-lead">
-              {copy.journey.glanceLead}
-            </p>
+
+            <div
+              className={styles.gauge}
+              style={gaugeStyle}
+              role="img"
+              aria-label={`ScreenFlow ${currentStep} из ${stepCount}`}
+              data-testid="today-glance-screenflow-gauge"
+              data-step={currentStep}
+              data-step-count={stepCount}
+            >
+              <div className={styles.gaugeInner}>
+                <span className={styles.gaugeLabel}>ScreenFlow</span>
+                <span className={styles.gaugeValue}>
+                  {currentStep}/{stepCount}
+                </span>
+              </div>
+            </div>
           </>
         )}
       </div>
@@ -175,27 +233,27 @@ export function TodayGlanceAct({
         </div>
       </div>
 
-      {orderedTeasers.length > 0 ? (
+      {primaryTeaser ? (
         <ul className={styles.teasers} aria-label={copy.journey.glanceTeasersLabel} data-testid="today-glance-teasers">
-          {orderedTeasers.map((t) => (
-            <li key={t.id}>
-              <button
-                type="button"
-                className={styles.teaser}
-                data-testid={`today-glance-teaser-${t.id}`}
-                data-primary={t.id === "symbols" ? "true" : undefined}
-                onClick={t.onSelect}
-              >
-                <span className={styles.teaserMark} aria-hidden>
-                  ·
-                </span>
-                <span className={styles.teaserText}>
-                  <span className={styles.teaserLabel}>{t.label}</span>
-                  {t.hook ? <span className={styles.teaserHook}>{t.hook}</span> : null}
-                </span>
-              </button>
-            </li>
-          ))}
+          <li>
+            <button
+              type="button"
+              className={styles.teaser}
+              data-testid={`today-glance-teaser-${primaryTeaser.id}`}
+              data-primary="true"
+              onClick={primaryTeaser.onSelect}
+            >
+              <span className={styles.teaserMark} aria-hidden>
+                ·
+              </span>
+              <span className={styles.teaserText}>
+                <span className={styles.teaserLabel}>{primaryTeaser.label}</span>
+                {primaryTeaser.hook ? (
+                  <span className={styles.teaserHook}>{primaryTeaser.hook}</span>
+                ) : null}
+              </span>
+            </button>
+          </li>
         </ul>
       ) : null}
     </div>

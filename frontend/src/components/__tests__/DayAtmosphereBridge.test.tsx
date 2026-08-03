@@ -169,4 +169,39 @@ describe("DayAtmosphereBridge", () => {
 
     expect(document.documentElement.hasAttribute("data-day-mode")).toBe(false);
   });
+
+  it("applies engine nest from custom event; pin still wins", () => {
+    const { DAY_ATMOSPHERE_ENGINE_EVENT } = require("@/lib/todayContract");
+    render(<DayAtmosphereBridge />);
+    expect(document.documentElement.getAttribute("data-day-mode")).toBe("clarity");
+
+    act(() => {
+      window.dispatchEvent(
+        new CustomEvent(DAY_ATMOSPHERE_ENGINE_EVENT, {
+          detail: {
+            visual_mode: "tension",
+            intensity: 0.7,
+            warmth: 0.3,
+            motion: "low",
+            contrast: "strong",
+            decor_variant: "fracture",
+            time_phase: "day",
+          },
+        }),
+      );
+    });
+    expect(document.documentElement.getAttribute("data-day-mode")).toBe("tension");
+    expect(document.documentElement.getAttribute("data-day-decor")).toBe("fracture");
+
+    writeDayModePin("renewal");
+    act(() => {
+      window.dispatchEvent(
+        new StorageEvent("storage", {
+          key: DAY_MODE_PIN_STORAGE_KEY,
+          newValue: JSON.stringify({ mode: "renewal" }),
+        }),
+      );
+    });
+    expect(document.documentElement.getAttribute("data-day-mode")).toBe("renewal");
+  });
 });

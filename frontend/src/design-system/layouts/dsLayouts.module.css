@@ -348,6 +348,8 @@
   min-height: 100dvh;
   width: 100%;
   background: var(--tf-page-atmosphere, var(--tf-page));
+  position: relative;
+  z-index: 1;
   color: var(--tf-ink);
   font-family: var(--tf-font-body);
 }

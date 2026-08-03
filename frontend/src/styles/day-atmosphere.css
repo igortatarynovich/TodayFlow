@@ -115,3 +115,148 @@ html[data-day-mode="depth"] {
     --day-motion-distance: 0px !important;
   }
 }
+
+/* —— Visible product surface (FOUNDATION_UI §13) ——
+   Consume --day-* on product shell; demote route peach washes when day-mode is live. */
+html[data-day-mode] {
+  --tf-page-atmosphere: var(--day-bg-base);
+}
+
+html[data-day-mode][data-atmosphere="today"],
+html[data-day-mode][data-atmosphere="home"] {
+  --section-page-bg: var(--day-bg-base);
+  --section-page-gradient:
+    radial-gradient(ellipse 85% 55% at 12% -8%, var(--day-bg-glow-primary), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 92% 8%, var(--day-bg-glow-secondary), transparent 55%),
+    var(--day-bg-base);
+}
+
+html[data-day-mode] body {
+  background-color: var(--day-bg-base);
+}
+
+html[data-day-mode][data-product-web-shell] .tf-content {
+  background:
+    radial-gradient(ellipse 90% 60% at 10% -10%, var(--day-bg-glow-primary), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 95% 0%, var(--day-bg-glow-secondary), transparent 50%),
+    transparent;
+}
+
+/* Decor layer host — sibling under shell content */
+.day-atmosphere-decor {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  opacity: var(--day-decor-opacity, 0.12);
+  color: var(--day-decor-color, #5b6472);
+}
+
+html:not([data-day-mode]) .day-atmosphere-decor {
+  display: none;
+}
+
+.day-atmosphere-decor__art {
+  position: absolute;
+  inset: -8% -4% auto;
+  width: 108%;
+  height: 72%;
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: cover;
+  transform: translate3d(0, 0, 0);
+  animation: day-decor-drift var(--day-motion-duration, 28s) ease-in-out infinite alternate;
+}
+
+html[data-day-mode="grounded"] .day-atmosphere-decor__art,
+html[data-day-decor="contour"] .day-atmosphere-decor__art,
+html[data-day-decor="stones"] .day-atmosphere-decor__art {
+  background-image:
+    radial-gradient(ellipse 80% 45% at 50% 100%, currentColor 0%, transparent 70%),
+    linear-gradient(180deg, transparent 40%, color-mix(in srgb, currentColor 35%, transparent) 100%);
+  opacity: 0.55;
+}
+
+html[data-day-mode="flow"] .day-atmosphere-decor__art,
+html[data-day-decor="ripple"] .day-atmosphere-decor__art,
+html[data-day-decor="current"] .day-atmosphere-decor__art {
+  background-image:
+    radial-gradient(ellipse 120% 40% at 20% 30%, currentColor 0%, transparent 55%),
+    radial-gradient(ellipse 100% 35% at 80% 55%, currentColor 0%, transparent 50%);
+  opacity: 0.45;
+}
+
+html[data-day-mode="radiance"] .day-atmosphere-decor__art,
+html[data-day-decor="rays"] .day-atmosphere-decor__art,
+html[data-day-decor="bloom"] .day-atmosphere-decor__art {
+  background-image:
+    radial-gradient(circle at 70% 18%, currentColor 0%, transparent 42%),
+    radial-gradient(circle at 70% 18%, transparent 28%, color-mix(in srgb, currentColor 25%, transparent) 29%, transparent 60%);
+  opacity: 0.5;
+}
+
+html[data-day-mode="momentum"] .day-atmosphere-decor__art,
+html[data-day-decor="diagonal"] .day-atmosphere-decor__art,
+html[data-day-decor="trail"] .day-atmosphere-decor__art {
+  background-image:
+    repeating-linear-gradient(
+      -28deg,
+      transparent 0 28px,
+      color-mix(in srgb, currentColor 40%, transparent) 28px 30px
+    );
+  opacity: 0.35;
+}
+
+html[data-day-mode="clarity"] .day-atmosphere-decor__art,
+html[data-day-decor="grid"] .day-atmosphere-decor__art,
+html[data-day-decor="orbit"] .day-atmosphere-decor__art {
+  background-image:
+    radial-gradient(circle at 50% 20%, transparent 18%, currentColor 19%, transparent 20%),
+    linear-gradient(90deg, color-mix(in srgb, currentColor 22%, transparent) 1px, transparent 1px),
+    linear-gradient(0deg, color-mix(in srgb, currentColor 22%, transparent) 1px, transparent 1px);
+  background-size: auto, 48px 48px, 48px 48px;
+  opacity: 0.4;
+}
+
+html[data-day-mode="tension"] .day-atmosphere-decor__art,
+html[data-day-decor="fracture"] .day-atmosphere-decor__art,
+html[data-day-decor="crossline"] .day-atmosphere-decor__art {
+  background-image:
+    linear-gradient(125deg, transparent 42%, currentColor 42.5%, transparent 43.5%),
+    linear-gradient(55deg, transparent 58%, currentColor 58.5%, transparent 59.5%);
+  opacity: 0.4;
+}
+
+html[data-day-mode="renewal"] .day-atmosphere-decor__art,
+html[data-day-decor="sprout"] .day-atmosphere-decor__art,
+html[data-day-decor="horizon"] .day-atmosphere-decor__art {
+  background-image:
+    radial-gradient(ellipse 70% 35% at 50% 100%, currentColor 0%, transparent 65%),
+    radial-gradient(circle at 22% 72%, currentColor 0 2px, transparent 3px),
+    radial-gradient(circle at 78% 68%, currentColor 0 2px, transparent 3px);
+  opacity: 0.5;
+}
+
+html[data-day-mode="depth"] .day-atmosphere-decor__art,
+html[data-day-decor="still"] .day-atmosphere-decor__art,
+html[data-day-decor="drift"] .day-atmosphere-decor__art {
+  background-image:
+    radial-gradient(ellipse 90% 60% at 50% 0%, currentColor 0%, transparent 55%);
+  opacity: 0.35;
+}
+
+@keyframes day-decor-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, var(--day-motion-distance, 3px), 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .day-atmosphere-decor__art {
+    animation: none !important;
+  }
+}

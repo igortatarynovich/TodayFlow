@@ -697,6 +697,18 @@ export type TodayContractDepthLayerV1 = {
   subscribe_path?: string;
 };
 
+/** Wire shape for `/today/contract.day_atmosphere` — mirrors FE DayAtmosphereContract. */
+export type DayAtmosphereContractWire = {
+  version?: string;
+  visual_mode: string;
+  intensity?: number;
+  warmth?: number;
+  motion?: string;
+  contrast?: string;
+  decor_variant?: string;
+  time_phase?: string;
+};
+
 export type TodayContractV1 = {
   contract_version: typeof TODAY_CONTRACT_V1 | string;
   global_context: { period: string };
@@ -706,8 +718,29 @@ export type TodayContractV1 = {
   progress: Record<string, unknown>;
   generation_id: string;
   day_story?: TodayContractDayStoryV1 | null;
+  /** Closed Day Atmosphere config from BE (FOUNDATION_UI §11–§12). */
+  day_atmosphere?: DayAtmosphereContractWire | null;
   depth_layer?: TodayContractDepthLayerV1 | null;
 };
+
+export const DAY_ATMOSPHERE_ENGINE_EVENT = "todayflow:day-atmosphere";
+
+/**
+ * Publish engine day_atmosphere for DayAtmosphereBridge (same payload as contract nest).
+ * Fired when Today bundle writes a contract — no second invented fetch.
+ */
+export function publishDayAtmosphereEngine(
+  nest: DayAtmosphereContractWire | null | undefined,
+): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.dispatchEvent(
+      new CustomEvent(DAY_ATMOSPHERE_ENGINE_EVENT, { detail: nest ?? null }),
+    );
+  } catch {
+    /* ignore */
+  }
+}
 
 export function readDayLifecycle(contract: TodayContractV1 | null | undefined): DayLifecycleC5 | null {
   const raw = contract?.progress?.day_lifecycle;

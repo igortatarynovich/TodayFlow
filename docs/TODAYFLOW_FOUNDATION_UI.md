@@ -437,12 +437,14 @@ Figma не используется в разработке — не источ�
 
 ### 11.9 Что остаётся стабильным (напоминание из §0/§7)
 
-Структура экранов · типографика (§5) · размеры карточек (§4) · цвета ошибок/успеха/предупреждений · основные CTA (§4 Surface C) · логика навигации · форма интерактивных компонентов · информационная иерархия.
+Типографика (§5) · размеры карточек вне Day Atmosphere surface (§4) · цвета ошибок/успеха/предупреждений · основные CTA (§4 Surface C) · логика навигации ScreenFlow (порядок актов) · форма интерактивных компонентов вне атмосферы.
+
+**Исключение — Glance / Day Atmosphere surface:** каркас первого viewport Today **может** менять плотность и композицию под full-bleed атмосферу дня (стекло-hero, ScreenFlow gauge, sparse chrome) — см. [TODAY_SCREEN_SCENARIO_V3](./today/TODAY_SCREEN_SCENARIO_V3.md) Экран 0. Jobs смысла акта (тон / nearest / teaser / no Plot facts) не меняются; меняется только показ. Это сознательный SoT-сдвиг относительно ранней формулировки «иерархия всегда стабильна».
 
 ### 11.10 Следующие шаги
 
 - §12 «Day Atmosphere — Contracts» — **готово**, см. ниже.
-- §13 «Day Atmosphere — Implementation» — **first pass готово**, см. ниже; backlog в §13.4.
+- §13 «Day Atmosphere — Implementation» — **visible product pass** (engine nest + shell paint + Glance IA); backlog в §13.4.
 
 ---
 
@@ -502,17 +504,19 @@ interface DayAtmosphereContract {
 
 ---
 
-## 13. Day Atmosphere — Implementation (first pass)
+## 13. Day Atmosphere — Implementation
 
-**Статус:** вкатано в shell. Dark-appearance доводка палитры, реальные decor-ассеты (SVG на 16 id из `DAY_MODE_DECOR_VARIANTS`) и wiring day-narrative движка — не входят в этот проход, остаются backlog (§13.4).
+**Статус:** visible product pass — BE nest `day_atmosphere` из сюжета дня · bridge потребляет nest · shell/`--day-*` фон · decor layer · Glance glass-hero IA. Dark-appearance палитры и полный набор 16 polished SVG — backlog (§13.4).
 
 ### 13.1 Код
 
 | Файл | Роль |
 |------|------|
-| `frontend/src/styles/day-atmosphere.css` | Статическая light-палитра на 8 `html[data-day-mode="…"]`, значения = `DAY_MODE_BASE_TOKENS` из §12.3. `:root` — нейтральный fallback до гидратации. `prefers-reduced-motion` зануляет motion-токены через `!important` — побеждает даже инлайн-стили от моста. |
-| `frontend/src/components/DayAtmosphereBridge.tsx` | Мост: `data-day-mode` + инлайн `--day-*` на `documentElement`. Читает pin, слушает `storage` (другая вкладка) и `prefers-reduced-motion` (`change`). Скоуп — `isAppProductRoute` (те же роуты, что и остальной shell). Очищает атрибут/токены на анмаунте. |
-| `frontend/src/components/__tests__/DayAtmosphereBridge.test.tsx` | Тесты: дефолт на продуктовом роуте, отсутствие атрибута на маркетинговом, немедленный pin, реакция на `storage`, игнор чужих ключей, zero-motion при reduced-motion (статично и live), cleanup на анмаунте, clear при уходе с product route. |
+| `frontend/src/styles/day-atmosphere.css` | Статическая light-палитра на 8 `html[data-day-mode="…"]`, значения = `DAY_MODE_BASE_TOKENS` из §12.3. `:root` — нейтральный fallback до гидратации. `prefers-reduced-motion` зануляет motion-токены через `!important` — побеждает даже инлайн-стили от моста. Product shell читает `--day-bg-*` / decor. |
+| `frontend/src/components/DayAtmosphereBridge.tsx` | Мост: `data-day-mode` + инлайн `--day-*` на `documentElement`. Читает pin + `day_atmosphere` из Today payload; pin побеждает. Скоуп — `isAppProductRoute`. |
+| `backend/.../day_atmosphere_v1.py` | Детерминированный mapper `thesis.mode` → closed `DayAtmosphereContract` (без LLM-цветов); nest на today wire. |
+| `frontend/src/components/DayAtmosphereDecor.tsx` | Decor layer по `decor_variant` / `data-day-mode`. |
+| `frontend/src/components/__tests__/DayAtmosphereBridge.test.tsx` | Bridge + engine nest + pin. |
 
 **Wiring** (`frontend/src/app/layout.tsx`): импорт `@/styles/day-atmosphere.css` рядом с `section-atmosphere.css`; `<DayAtmosphereBridge />` рядом с `<SectionAtmosphereBridge />` в том же `<Suspense>`.
 
@@ -528,10 +532,9 @@ interface DayAtmosphereContract {
 
 ### 13.4 Backlog
 
-- Dark-appearance значения палитры (`data-theme="dark"` × `data-day-mode`) — сейчас day-mode не меняется под тёмной темой. Вместе с этим: `color-scheme` для Tension/Depth **намеренно не выставляется** в `day-atmosphere.css` (убрано из first pass), чтобы тёмные `--day-*` цвета не красили нативные скроллбары/формы при светлом `data-theme`; native `color-scheme` трогаем только в той же dark-appearance доводке.
-- Decor-ассеты: 16 SVG/CSS-композиций (`DAY_MODE_DECOR_VARIANTS`, 2 на режим) — сейчас `decor_variant` в контракте валиден, но не отрисован.
-- День-нарратив движок: `DayAtmosphereBridge` резолвит только pin → дефолт `clarity`; интеграция реального источника сюжета дня — отдельная задача, меняющая один аргумент в `resolveDayAtmosphere()`, не архитектуру.
-- Потребление `--day-*` токенов в реальной композиции фона `.todayflow-section` / Hero — пока токены существуют и обновляются, но ни одна поверхность их не читает.
+- Dark-appearance значения палитры (`data-theme="dark"` × `data-day-mode`) — day-mode пока не имеет полной dark-пары; `color-scheme` для Tension/Depth не выставляется при светлом `data-theme`.
+- Decor-ассеты: полный набор 16 polished SVG (`DAY_MODE_DECOR_VARIANTS`) — сейчас минимум 1 working art/CSS на режим; art direction seed = `public/images/backgrounds/` (не raw SoT).
+- Plot photo-wash vs day-mode — дальнейшее подчинение phase-hero day-токенам (избежать тройной атмосферы).
 
 ---
 

@@ -146,6 +146,11 @@ export function TodayProductScreenFlow({
             thesis={themeThesis}
             themeLoading={themeLoading}
             teasers={teasers}
+            screenFlowStep={activeIndex}
+            screenFlowStepCount={todayScreenFlowStepCount({
+              showSymbols,
+              showPersonalized,
+            })}
             onSphereSelect={
               showPersonalized
                 ? (domain) => {

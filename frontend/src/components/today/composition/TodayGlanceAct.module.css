@@ -1,19 +1,58 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
+  gap: 1.15rem;
   width: 100%;
+  min-height: min(72dvh, 640px);
+  position: relative;
+  z-index: 1;
 }
 
-.themeBlock {
+.chrome {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.2rem;
+  padding-inline: 0.15rem;
+}
+
+.brand {
+  margin: 0;
+  font-family: var(--tf-font-display, Georgia, serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--tf-ink, #2a2520);
+}
+
+.dateLine {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  color: var(--tf-ink-muted, #7a7168);
+}
+
+.glass {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  margin-inline: auto;
+  width: min(100%, 22rem);
+  padding: 1.35rem 1.25rem 1.5rem;
+  border-radius: 1.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: color-mix(in srgb, var(--day-surface-tint, rgba(255, 255, 255, 0.72)) 88%, transparent);
+  box-shadow:
+    0 18px 48px rgba(42, 37, 32, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  text-align: center;
 }
 
 .eyebrow {
   margin: 0;
-  max-width: 42ch;
+  max-width: 28ch;
   font-size: 0.72rem;
   font-weight: 560;
   letter-spacing: 0.05em;
@@ -24,9 +63,9 @@
 
 .thesis {
   margin: 0;
-  max-width: 34ch;
+  max-width: 22ch;
   font-family: var(--tf-font-display, Georgia, serif);
-  font-size: clamp(1.35rem, 4.2vw, 1.75rem);
+  font-size: clamp(1.2rem, 3.8vw, 1.55rem);
   font-weight: 600;
   line-height: 1.28;
   letter-spacing: -0.01em;
@@ -38,69 +77,48 @@
   color: var(--tf-ink-muted, #5c534a);
 }
 
-.glanceLead {
-  margin: 0.15rem 0 0;
-  max-width: 40ch;
-  font-size: 0.9rem;
-  line-height: 1.4;
-  color: var(--tf-ink-soft, #5c5348);
+.gauge {
+  margin-top: 0.35rem;
+  width: 7.5rem;
+  height: 7.5rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.gaugeInner {
+  width: 5.6rem;
+  height: 5.6rem;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  background: color-mix(in srgb, var(--day-surface-tint, #fff) 92%, transparent);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+
+.gaugeLabel {
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tf-ink-muted, #7a7168);
+}
+
+.gaugeValue {
+  font-family: var(--tf-font-display, Georgia, serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--tf-ink, #2a2520);
 }
 
 .metaRow {
   display: flex;
   flex-direction: column;
   gap: 0.55rem;
-}
-
-.sphereTokens {
-  display: none; /* spheres are not Glance hero (2026-08-01) */
-}
-
-.sphereToken {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  margin: 0;
-  padding: 0.28rem 0.55rem;
-  border-radius: 999px;
-  border: 1px solid rgba(212, 184, 150, 0.28);
-  background: rgba(255, 255, 255, 0.45);
-  color: var(--tf-ink-soft, #5c5348);
-  font-size: 0.75rem;
-  font-family: inherit;
-  line-height: 1.2;
-  cursor: default;
-}
-
-button.sphereToken {
-  cursor: pointer;
-}
-
-.sphereToken[data-verdict="open"] {
-  border-color: rgba(107, 143, 90, 0.35);
-  color: #5f7f50;
-  box-shadow: inset 2px 0 0 #6b8f5a;
-}
-
-.sphereToken[data-verdict="friction"] {
-  border-color: rgba(176, 74, 46, 0.35);
-  color: #b04a2e;
-  box-shadow: inset 2px 0 0 #b04a2e;
-}
-
-.sphereToken[data-verdict="charged"] {
-  border-color: rgba(42, 37, 32, 0.25);
-  color: var(--tf-ink, #2a2520);
-  box-shadow: inset 2px 0 0 #2a2520;
-}
-
-.sphereTokenMark {
-  font-size: 0.7rem;
-  line-height: 1;
-}
-
-.sphereTokenLabel {
-  font-weight: 600;
+  padding-inline: 0.15rem;
 }
 
 .nearestInline {
@@ -119,49 +137,59 @@ button.sphereToken {
 }
 
 .nearestTime {
-  font-family: var(--tf-font-mono, ui-monospace, monospace);
-  font-size: 0.8rem;
-  letter-spacing: 0.03em;
-  color: var(--tf-accent-action, #8f6b3a);
-}
-
-.nearestDot {
-  opacity: 0.5;
-}
-
-.nearestLabel {
-  font-weight: 560;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
   color: var(--tf-ink, #2a2520);
 }
 
+.nearestDot {
+  opacity: 0.45;
+}
+
+.nearestLabel {
+  font-weight: 500;
+}
+
 .nearestNow {
+  margin-left: 0.15rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
   font-size: 0.68rem;
-  letter-spacing: 0.06em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--tf-accent-action, #8f6b3a);
+  background: var(--day-accent-soft, rgba(120, 130, 145, 0.22));
+  color: var(--tf-ink, #2a2520);
 }
 
 .nearestSkeleton {
-  min-height: 1.75rem;
-  border-radius: 0.65rem;
-  background: rgba(212, 184, 150, 0.18);
+  height: 0.95rem;
+  width: min(70%, 16rem);
+  border-radius: 0.4rem;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.25),
+    rgba(255, 255, 255, 0.55),
+    rgba(255, 255, 255, 0.25)
+  );
+  background-size: 200% 100%;
 }
 
-.metaFail,
-.nearestEmptyCopy {
+.nearestEmptyCopy,
+.metaFail {
   margin: 0;
   font-size: 0.82rem;
   line-height: 1.4;
-  color: var(--tf-ink-soft, #5c5348);
+  color: var(--tf-ink-muted, #7a7168);
 }
 
 .teasers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
-  margin: 0.1rem 0 0;
-  padding: 0;
-  list-style: none;
 }
 
 .teaser {
@@ -169,31 +197,38 @@ button.sphereToken {
   align-items: flex-start;
   gap: 0.45rem;
   width: 100%;
-  padding: 0.55rem 0.7rem;
-  border-radius: 0.65rem;
-  border: 1px solid rgba(212, 184, 150, 0.28);
-  background: rgba(255, 255, 255, 0.5);
-  color: var(--tf-ink, #2a2520);
-  font-size: 0.86rem;
-  cursor: pointer;
-  font-family: inherit;
+  margin: 0;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.95rem;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: color-mix(in srgb, var(--day-surface-tint, rgba(255, 255, 255, 0.55)) 80%, transparent);
   text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.teaser[data-primary="true"] {
+  border-color: color-mix(in srgb, var(--day-decor-color, #5b6472) 28%, transparent);
+  box-shadow: 0 10px 28px rgba(42, 37, 32, 0.06);
 }
 
 .teaserMark {
   margin-top: 0.15rem;
-  color: var(--tf-accent-action, #8f6b3a);
+  opacity: 0.55;
 }
 
 .teaserText {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0.15rem;
   min-width: 0;
 }
 
 .teaserLabel {
   font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--tf-ink, #2a2520);
 }
 
 .teaserHook {

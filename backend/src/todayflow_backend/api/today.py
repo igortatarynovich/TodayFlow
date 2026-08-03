@@ -757,6 +757,21 @@ class TodayContractDepthLayerV1(BaseModel):
     subscribe_path: str = "/account/subscriptions"
 
 
+class TodayContractDayAtmosphereV1(BaseModel):
+    """Closed Day Atmosphere config (FOUNDATION_UI §11–§12) — never colors/CSS."""
+
+    model_config = ConfigDict(extra="allow")
+
+    version: str | None = None
+    visual_mode: str
+    intensity: float = 0.4
+    warmth: float = 0.5
+    motion: str = "low"
+    contrast: str = "medium"
+    decor_variant: str = "grid"
+    time_phase: str = "day"
+
+
 class TodayContractV1Response(BaseModel):
     """P0.1 — Model B wire contract; legacy Today fields are not exposed."""
 
@@ -768,6 +783,7 @@ class TodayContractV1Response(BaseModel):
     progress: dict[str, Any] = Field(default_factory=dict)
     generation_id: str
     day_story: TodayContractDayStoryV1 | None = None
+    day_atmosphere: TodayContractDayAtmosphereV1 | None = None
     depth_layer: TodayContractDepthLayerV1 | None = None
 
 

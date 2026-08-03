@@ -1042,7 +1042,7 @@ def day_story_to_today_contract_v1(
         growth_shell = str(meta_fb.get("development_point") or "")
         primary_shell = str(meta_fb.get("primary_action") or "")
 
-    contract = {
+    contract: dict[str, Any] = {
         "contract_version": TODAY_CONTRACT_V1_CONTRACT,
         "version": TODAY_CONTRACT_V1_VERSION,
         "global_context": {"period": period_shell},
@@ -1053,6 +1053,13 @@ def day_story_to_today_contract_v1(
         "generation_id": generation_id or "",
         "day_story": day_story_out,
     }
+    # Day Atmosphere nest (FOUNDATION_UI §11–§13) — closed visual config, not colors.
+    if not unavailable:
+        from todayflow_backend.services.day_atmosphere_v1 import day_atmosphere_from_story
+
+        atmosphere = day_atmosphere_from_story(story)
+        if atmosphere is not None:
+            contract["day_atmosphere"] = atmosphere
     if unavailable:
         # Shell only — do not invent domain meaning over facts_only_unavailable.
         # Still run quality normalize so meta fallbacks pass contract validate.
