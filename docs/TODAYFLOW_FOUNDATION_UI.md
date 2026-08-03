@@ -1,21 +1,19 @@
 # TODAYFLOW_FOUNDATION_UI
 
 **Статус:** **ACTIVE** — канон визуала **всего сервиса** (web · iOS · Android).  
-**Версия:** 0.3 (2026-07-24).  
+**Версия:** 0.3 (2026-08-03).  
 **Владелец:** Design + Product.
 
-**Figma-файл:** [TODAYFLOW_FOUNDATION_UI](https://www.figma.com/design/pWdevqQqOi6wvoVc6hFWHa) · `file_key` `pWdevqQqOi6wvoVc6hFWHa` *(Cover v1 — living portal + orbit; design iteration, не sign-off)*.
+**Figma-файл:** [TODAYFLOW_FOUNDATION_UI](https://www.figma.com/design/pWdevqQqOi6wvoVc6hFWHa) · `file_key` `pWdevqQqOi6wvoVc6hFWHa` *(Cover v1 — living portal + orbit; design iteration, не sign-off; Figma не используется как обязательный источник правды — см. §11.7)*.
 
 **Главный тест Profile (и всего продукта):**
 
 > Убрать весь текст. Осталась только композиция. **Выглядит ли дорого?**  
 > Пока **нет** → не открываем Today · не CD · не Love · не новые docs.
 
-Тот же тест применяется к **динамическим** состояниям: экран в покое с Drift · гостевая витрина без CTA-текста · переключение mood / day-phase. Если «без текста» не дорого — слой не готов.
-
 **Код:** `frontend/src/styles/todayflow-foundation.css` — подключён в `globals.css` · классы `.tf-shell` / `.tf-shell-grid-2`.
 
-**Экран Profile:** [PROFILE_SCREEN_MASTER.md](profile/PROFILE_SCREEN_MASTER.md) — **заморожен** до sign-off §15 здесь.
+**Экран Profile:** [PROFILE_SCREEN_MASTER.md](profile/PROFILE_SCREEN_MASTER.md) — **заморожен** до sign-off §9 здесь.
 
 ---
 
@@ -25,10 +23,9 @@
 |-----|--------|
 | Визуальные **примитивы** продукта | Design system компонентов (Button, Input…) |
 | Поверхности · герои · символы · геометрия | [PROFILE_SCREEN_MASTER.md](profile/PROFILE_SCREEN_MASTER.md) · §2 Symbols |
-| **Динамика:** motion · mood themes · day-phase atmosphere · guest showcase | Отдельный «премиум-канон» / параллельный SoT-файл |
-| Один Figma-источник правды | Moodboard 100 UI · «TodayFlow is…» |
+| Один Figma-источник правды *(исторически; см. §8, §11.7)* | Moodboard 100 UI · «TodayFlow is…» |
 
-**Порядок:** Foundation UI (Figma + этот документ) → Profile снова → Today. Динамические слои (§7–§12) — часть того же канона, не отдельная дисциплина.
+**Порядок:** Foundation UI (канон + код) → Profile снова → Today. Figma не в рабочем контуре (§11.7).
 
 **Product Truth First:** визуал не опережает продукт. Нет backend-источника / нет реальных данных — нет заполненного production-блока. Канон: [PRODUCT_TRUTH_FIRST.md](./PRODUCT_TRUTH_FIRST.md).
 
@@ -112,7 +109,7 @@
 | M | 48 |
 | S | 24 |
 
-**Stroke:** 1.25px (S) · 1.5px (M–XL) for Zodiac / Element / Archetype · Planet seals use **2.75** optical weight for natal discs (`PLANET_STROKE` / `planets/*.svg`) · color `--tf-ink-soft` / on-dark `--tf-on-dark`.
+**Stroke:** 1.25px (S) · 1.5px (M–XL) · color `--tf-ink-soft` / on-dark `--tf-on-dark`.
 
 **Figma pages:** `Symbols / Archetype` · `Zodiac` · `Element` · `Planet` · grid 4×3 each.
 
@@ -257,157 +254,7 @@
 
 ---
 
-## 7. Motion
-
-Токены уже объявлены в `todayflow-foundation.css` (`--tf-motion-*`, DS-4 · parity iOS `TodayFlowTheme.Motion`). **Не менять значения** без явного bump версии канона. Проблема не в токенах — в системном применении.
-
-| Токен | Значение | Когда применять |
-|-------|----------|-----------------|
-| `--tf-motion-micro` | 150ms | Hover, нажатие кнопки, чекбокс |
-| `--tf-motion-reveal` | 280ms | Появление текста/инсайта после действия |
-| `--tf-motion-card` | 320ms | Переворот карты Таро, раскрытие числа дня |
-| `--tf-motion-page` | 420ms | Переход между экранами ритуала |
-| `--tf-motion-stagger` | 45ms | Задержка между элементами списка при появлении |
-| `--tf-motion-ease-out` | `cubic-bezier(0.22, 1, 0.36, 1)` | Появление (быстрый старт, мягкое торможение) |
-| `--tf-motion-ease-in-out` | `cubic-bezier(0.45, 0, 0.55, 1)` | Переходы между состояниями |
-
-### 7.1 Именованные паттерны
-
-Реализовать **один раз** как переиспользуемые хуки/компоненты в `frontend/src/design-system/motion/` — не как одноразовый CSS на каждом экране.
-
-| Паттерн | Поведение | Токены | Где |
-|---------|-----------|--------|-----|
-| **Reveal** | Текст/инсайт снизу-вверх + лёгкий fade | `--tf-motion-reveal`, ease-out | Daily Focus, S9, любой «синтез» |
-| **Flip** | 3D-поворот по Y (ощущение переворота, не кроссфейд) | `--tf-motion-card` | Таро в `/today` (`RitualTarotPickExperience` ← `TodayRitualFlow`), число дня |
-| **Settle** | Лёгкое «падение» + пружинная остановка | `--tf-motion-card` / spring | Карточки практик/трекеров |
-| **Drift** | Очень медленное движение фона без взаимодействия | длинный loop | Орбита лендинга, частицы атмосферы |
-| **Pulse** | Тихая пульсация CTA, ждущего действия | `--tf-motion-reveal` loop soft | «Раскрыть карту дня», если ещё не открыта |
-
-### 7.2 Инструмент и правило
-
-- **Инструмент (фаза реализации motion):** `framer-motion` поверх тех же `--tf-motion-*`. Сейчас анимационных библиотек в зависимостях фронтенда нет.
-- **Прецедент:** Profile Motion Kit (`profileMotion.module.css`) — CSS-only DS-4; при переходе на общий kit паттерны Profile мапятся на Reveal / Settle, не дублируются.
-- **Незыблемо:** ни одна новая анимация не пишется как inline-`@keyframes` / ad-hoc CSS на конкретном экране. Только через `design-system/motion/`.
-
----
-
-## 8. Mood Themes
-
-Существующая база (`--tf-page` / cream · ink · gold accents в foundation) — **дефолт**. Её не ломаем. Бинарный `light` / `dark` в коде сегодня — **clock-driven** (`frontend/src/lib/time-of-day.ts` → `useProductDayNightTheme.ts` → `data-theme` на product shell), не тумблер в меню.
-
-**Эволюция:** вместо двух технических режимов — **эмоциональные настроения**. Переключение мягко следует фазе дня; пользователь может **закрепить** mood вручную.
-
-| Тема | Когда предлагается | Направление палитры |
-|------|--------------------|---------------------|
-| **Спокойствие** (дефолт) | Всегда доступна · утро | Тёплый parchment/cream + золото + ink — текущая база |
-| **Фокус** | День (11:00–18:00) или когда отмечена цель дня | Холоднее и собраннее: приглушённый графит вместо ink, акцент — приглушённая медь |
-| **Ночь** | Вечерний ритуал (после 18:00 / до 05:00) | Тёмная поверхность как основной фон; золото — единственный тёплый акцент |
-| **Ясность** | Первый день / онбординг | Максимально светлая, минимум текстур — не перегружать атмосферой до понимания продукта |
-
-Mood **не** заменяет шрифты и spacing-токены — только цветовые / surface / atmosphere overrides.
-
-**Код-якоря (фаза реализации themes):** `time-of-day.ts`, `productMoodTheme.ts`, `useProductDayNightTheme.ts` / `useProductMoodTheme`, `ProductWebAppShell` (`data-theme` + `data-mood`).
-
-### 8.1 Конфликт с day-phase (§9) — зафиксированные правила
-
-| Слой | Где | Что делает |
-|------|-----|------------|
-| `data-mood` | product shell · все product-роуты | Палитра (calm/focus/night/clarity) |
-| `data-day-phase` | только `/today` | Текстура фона (gradients/stars) |
-| `data-theme` | shell | light\|dark — **legacy**, выводится из mood (night→dark) |
-
-- **Авто (нет pin):** mood и day-phase из одного сигнала (утро↔calm/morning, день↔focus/day, вечер↔night/evening, первый день↔clarity/first).
-- **Pin:** mood = pin на всех роутах; на `/today` day-phase = `dayPhaseFromMood(pin)` — текстуры не спорят с палитрой.
-- **Не-/today:** day-phase = null (как раньше); mood всё равно действует на shell.
-- **Лендинг:** без product shell mood-токенов; `data-atmosphere=home` без day-phase.
-
----
-
-## 9. Day-Phase Atmosphere
-
-`time-of-day.ts` уже умеет morning / day / evening (с приоритетом действий пользователя над часами). Дыра — **рендерить нечего** в папках атмосферы суток (`public/images/backgrounds/`, `patterns/`, ритуальный entry): в основном README/спеки.
-
-**Не путать слои:**
-
-| Слой | Примеры | Роль |
-|------|---------|------|
-| Контентные ассеты | `cosmic/`, `archetypes/`, `decorative/`, icons | Символы · washes контента — **не** замена атмосферы суток |
-| Day-phase atmosphere | procedural CSS/SVG по фазе дня | Фон момента · связка с mood |
-
-Вместо стоковых фото — **процедурные фоны**: слоистый градиент + тонкая геометрия/частицы (язык обложки: орбиты, созвездие). Дешевле, легче, ложится на ink/gold.
-
-### 9.1 Минимальный набор (первая итерация)
-
-1. **Утро** — крем → золотая дымка снизу, редкие тонкие лучи  
-2. **День** — почти плоский, минимум украшений (день = действие)  
-3. **Вечер** — тёмный surface, золотые точки-звёзды; допустим медленный Drift / существующий дух `float-silk`  
-4. **Первый день** — самое лёгкое состояние, без тяжёлой темы (см. mood **Ясность**)  
-5. **Раскрытие карты/числа** — вспышка 2–3 сек на момент реакции, не постоянный фон  
-
-Все пять — **SVG/CSS**, не растровые файлы.
-
-### 9.2 Код-якоря (фаза реализации atmosphere)
-
-Опираться на уже существующие `frontend/src/lib/sectionAtmosphere.ts`, `SectionAtmosphereBridge`, `frontend/src/styles/section-atmosphere.css` — **достроить** day-phase, не изобретать второй atmosphere-слой с нуля.
-
-**Реализовано (2026-07-24):**
-- `frontend/src/lib/dayPhaseAtmosphere.ts` — `resolveDayPhase` / `pulseDayPhaseRevealFlash`
-- `frontend/src/styles/day-phase-atmosphere.css` — morning · day · evening · first + reveal flash
-- `SectionAtmosphereBridge` пишет `data-day-phase` только на `/today` (first ← `?first=1` или `!hasCompletedFirstToday()`)
-- Product shell берёт фон через `--tf-page-atmosphere` (`.appShell`)
-- Вспышка раскрытия: `RitualTarotPickExperience` + `RitualNumberPickExperience`
-- Лендинг (`data-atmosphere=home`) **не** получает day-phase — нет конфликта с guest blur-preview copy
-
----
-
-## 10. Guest Showcase
-
-**Правило:** ни один product-экран не показывает пустую gate-карточку на большом viewport. Вместо этого — **blur-preview** реального контента позади карточки входа (паттерн секции лендинга «Твой Today каждое утро» — переиспользовать, не изобретать заново).
-
-**Экраны фазы реализации (guest gate):**
-
-| Route | Поведение |
-|-------|-----------|
-| `/today` | Guest gate → blur-preview + CTA (`ProductPageScreen` / `today-guest-gate`) |
-| `/profile` | Guest gate → blur-preview + CTA (`profile-guest-gate`) |
-| `/dashboard` | **Не отдельный UI** — редирект на `/today` |
-
-**Загрузка:** состояния вроде «Сессия…» — skeleton с геометрией итогового контента, никогда голый текст без каркаса. Тот же уровень внимания, что и финальный экран.
-
----
-
-## 11. Sound *(optional tactile)*
-
-Не замена утилитарного `<audio>` для практик/медитаций.
-
-Отдельно: **1–2** коротких тихих cue на ключевые точки ритуала — открытие карты дня · закрытие вечера. Один toggle вкл/выкл. **Default:** выкл на web · вкл на native (где tactile ожидаем).
-
----
-
-## 12. Antipatterns *(этот канон)*
-
-- Не писать новый CSS в монолитный `globals.css` (~6884 строк) — только модули / `todayflow-foundation.css` / `design-system/`.
-  - **Phase 6 (2026-07-24):** legacy monolith split → `frontend/src/styles/globals/01–06-*.css`, orchestrator `app/globals.css` (import order locked). New product CSS still goes to foundation / design-system / feature modules — **not** back into the 01–06 legacy packs unless fixing those exact rules.
-- Не использовать фейковые testimonials (имя + должность без реального источника).
-- Не создавать параллельный SoT (`PREMIUM_DESIGN_CANON.md` и аналоги) — motion / mood / atmosphere / guest **живут здесь**.
-- Не добавлять анимацию точечно на один экран — только через `design-system/motion/` (§7).
-- Не подменять day-phase atmosphere стоковыми фото или контентными `cosmic/` washes без явной привязки к фазе дня.
-
-### 12.1 Copy revision (фаза 5 · 2026-07-24)
-
-Сверка с [TODAY_LANGUAGE_ANTI_PATTERNS_V0.md](./today-language/TODAY_LANGUAGE_ANTI_PATTERNS_V0.md) + §12 выше. Scope: marketing landing (не генеративный Today narrative).
-
-| Место | Было | Стало | Почему |
-|-------|------|-------|--------|
-| Лендинг · секция «Зачем возвращаются» (`PRODUCT_WEB_LANDING_TESTIMONIALS`) | Цитаты от «Елена Р., креативный директор» / «Юлиан В.» / «Сара Л., клинический психолог» | `PRODUCT_WEB_LANDING_RETURN_REASONS` — три product-reason карточки без имени и должности | §12: фейковый testimonial; нет реального источника |
-| Лендинг · promise card «Тема» | «Сегодня лучше не спешить — выбери одно главное» (императив-плакат) | «Если с утра уже пять „срочных“ дел — день скорее про одно главное…» | AP-006 / AP-008: императив без сцены → сцена с узнаваемым паттерном |
-| `DsQuoteTile` | Использовался только под фейковые отзывы | Остаётся в DS; лендинг переведён на `DsFeatureTile` | Компонент не запрещён — запрещены вымышленные атрибуции |
-
-**Не трогали в этой фазе:** генеративный Today/guide copy (отдельный TL-gate), iOS strings, help pages.
-
----
-
-## 13. Layout shell *(весь продукт)*
+## 7. Layout shell *(весь продукт)*
 
 **Ошибка:** узкая «колонка телефона» на ноутбуке. **Правило:** mobile-first ≠ phone-width на desktop.
 
@@ -431,31 +278,27 @@ Mood **не** заменяет шрифты и spacing-токены — толь
 
 ---
 
-## 14. Figma file structure
+## 8. Figma file structure
 
 ```
 TODAYFLOW_FOUNDATION_UI
-├── Cover (test: composition without text · idle Drift · guest blur)
+├── Cover (test: composition without text)
 ├── 01 Hero (Large / Medium / Small)
 ├── 02 Symbols (Archetype · Zodiac · Element · Planet)
 ├── 03 Geometry (G1–G5 · 3 compositions)
 ├── 04 Surfaces (A · B · C · D · N — textless mocks)
 ├── 05 Typography
 ├── 06 Colors
-├── 07 Motion (Reveal · Flip · Settle · Drift · Pulse)
-├── 08 Mood Themes (Calm · Focus · Night · Clarity)
-├── 09 Day-Phase Atmosphere (morning · day · evening · first · reveal flash)
-├── 10 Guest Showcase (today · profile blur-preview)
-└── 11 Reference · Profile wireframe (no copy, shapes only)
+└── 07 Reference · Profile wireframe (no copy, shapes only)
 ```
+
+*Figma не участвует в разработке (см. §11.7) — раздел сохранён как исторический артефакт первой итерации канона, не как рабочий процесс.*
 
 ---
 
-## 15. Sign-off checklist
+## 9. Sign-off checklist
 
 **Code implementation (2026-07-03):** DS-2 HeroLarge · DS-3 surfaces · DS-4 motion · DS-1 lite archetype SVG · `--tf-*` tokens in `todayflow-foundation.css`. **Figma v0 (2026-07-03):** [file](https://www.figma.com/design/pWdevqQqOi6wvoVc6hFWHa) — Cover · Hero · Symbols · Geometry · Surfaces · Typography · Colors · Platforms; variables `TF / *`.
-
-**Canon v0.3 (2026-07-24):** §7–§12 зафиксированы как принципы (документ). Реализация — фазы 1–6 вне этого checklist; не отмечать ✓ до кода.
 
 - [x] Hero L/M/S — frames on **390** (`01 Hero`: Large 680 · Medium 420 · Small 200; symbols 120/80/48) *(size annotations — polish pass)*
 - [x] Hero L — code §1.1 (`88dvh`, 120px symbol, 36px radius, fade 45%) — `HeroLarge.tsx` + iOS
@@ -467,13 +310,6 @@ TODAYFLOW_FOUNDATION_UI
 - [x] Typography — `--tf-type-*` roles in foundation CSS · legacy `--orbit-text-*` aliased in `globals.css` (DS-10)
 - [x] Colors — ≤12 core tokens in `todayflow-foundation.css`
 - [ ] Profile «без текста» frame — **pass** дорого/нет *(Cover v1: `Cover / TodayFlow — Living Portal` — portal + 10 systems + convergence; **design review**, не gate)*
-- [x] Motion kit (`design-system/motion/` + framer-motion) — Reveal / Flip / Settle / Drift / Pulse *(code 2026-07-24 · Flip wired to live `RitualTarotPickExperience` via `/today` → `TodayRitualFlow`; dead `today-ritual-cardface` CSS removed)*
-- [x] Mood themes Calm / Focus / Night / Clarity wired to day-phase + manual pin *(code 2026-07-24 · `data-mood` + `mood-themes.css`; pin via `MoodThemeControl`; day-phase follows mood on `/today`)*
-- [x] Day-phase atmosphere CSS/SVG (5 states) on `time-of-day` + section atmosphere *(code 2026-07-24 · `data-day-phase` + `day-phase-atmosphere.css`; reveal flash via `pulseDayPhaseRevealFlash`; landing stays `data-atmosphere=home` — no conflict)*
-- [x] Guest showcase blur-preview on `/today` + `/profile`; loading skeletons *(code 2026-07-24 · `ProductGuestShowcase` + `ProductShellLoading`)*
-- [x] Copy antipatterns — fake landing testimonials removed; promise theme card de-plakatized *(2026-07-24 · §12.1)*
-- [x] `globals.css` split into ordered modules *(2026-07-24 · `styles/globals/01–06` + cascade fixture test; visual checklist: `/`, `/today`, `/profile`, `/tarot`)*
-- [ ] Sound cues (optional; default off web)
 
 **Code sign-off (2026-07-03):** all checklist items except Figma frames — see [status/PROFILE_FOUNDATION_QA.md](./status/PROFILE_FOUNDATION_QA.md).
 
@@ -481,16 +317,131 @@ TODAYFLOW_FOUNDATION_UI
 
 ---
 
-## 16. Explicitly paused
+## 10. Explicitly paused
 
 | | |
 |---|---|
 | Today Screen Master | **unblocked (code)** — Figma Foundation frames still open · см. [TODAY_CANON_VS_CODE_DIFF.md](./status/TODAY_CANON_VS_CODE_DIFF.md) |
 | Love / Money / CD / data | |
-| Новые product docs | параллельный premium/design SoT **запрещён** — дополнять этот файл |
+| Новые product docs | |
 | Profile feature code | только hotfix · не новые карточки |
-| Фазы 1–6 реализации (§7–§12) | ждут отдельного go после канона v0.3 |
 
 ---
 
-*Сначала Figma foundation + канон динамики (§7–§12). Потом Profile снова проходит тест «без текста» — в том числе idle Drift и guest showcase.*
+## 11. Day Atmosphere System
+
+**Статус:** канон, документ до контрактов и кода. Раздел новый (main на 2026-08-03 не содержал дневного слоя); заменяет собой WIP `productMoodTheme.ts` / `mood-themes.css` / `dayPhaseAtmosphere.ts` с ветки `design/profile-journey-premium` как **источник смысла** — тот код остаётся как справочный материал по токенам/паттерну, не как канон.
+
+### 11.0 Принцип
+
+День меняет **атмосферу** TodayFlow, а не его **личность**. Карточки, типографика, навигация, размеры, CTA, форма интерактивных компонентов и информационная иерархия — стабильны и не входят в контур этого раздела. Пользователь узнаёт TodayFlow даже без фона.
+
+Меняются только: (1) фон, (2) декоративный слой, (3) интенсивность света/контраста, (4) едва заметное движение.
+
+**Запрещено:** оформлять интерфейс буквально под конкретный транзит («Луна в Тельце», «Марс в квадрате») или под отдельный знак — это плодит десятки несогласованных тем. День сначала сводится к небольшому набору характеристик, из которых **движок дня** выбирает один из 8 режимов ниже — LLM/движок не возвращает произвольные цвета или CSS.
+
+### 11.1 Три независимых слоя атмосферы — не путать
+
+На ветке `design/profile-journey-premium` уже существуют два слоя, оба управляются часами. Day Atmosphere — третий, управляется **сюжетом дня**, не часами.
+
+| Слой | Атрибут | Драйвер | Что меняет | Статус |
+|------|---------|---------|-------------|--------|
+| **Mood** | `data-mood` (`calm` / `focus` / `night` / `clarity`) | время суток + ручной pin | палитра `--tf-*` (ink, accent), независимо от appearance | существует (WIP-ветка), `productMoodTheme.ts` |
+| **Day-phase** | `data-day-phase` (`morning` / `day` / `evening` / `night`) | время суток, сейчас scoped на `[data-atmosphere="today"]` | процедурная текстура фона (лучи утром, звёзды ночью) | существует (WIP-ветка), `day-phase-atmosphere.css` |
+| **Day Atmosphere** *(этот раздел)* | `data-day-mode` (8 значений, §11.3) + `data-day-intensity` | **сюжет дня** от движка (см. §11.5), не часы | фон-композиция, декор, свет/контраст, motion | новый |
+
+Day Atmosphere **не заменяет** Mood и Day-phase и **не выбирает тему по знаку/элементу** (это зона `ElementAtmosphere`, отдельная и статичная). Три слоя комбинируются: Mood задаёт базовую палитру ink/accent, Day-phase — который час дня подсвечивает Today, Day Atmosphere — какой сюжет у дня в целом. При конфликте токенов приоритет: Day Atmosphere → Day-phase → Mood (сюжет дня важнее часов).
+
+### 11.2 Оси, из которых собирается режим (внутренние, не CSS)
+
+Эти оси — язык движка для выбора режима, они не превращаются в токены напрямую:
+
+- температура — холодная / нейтральная / тёплая;
+- интенсивность — тихая / умеренная / высокая;
+- темп — замедленный / ровный / динамичный;
+- структура — мягкая / собранная / хаотичная;
+- направление — внутрь / наружу;
+- эмоциональный тон — спокойный / напряжённый / вдохновляющий / восстанавливающий / интроспективный.
+
+### 11.3 Восемь режимов
+
+| # | Режим | Оси (темп./интенс./темп/структура/направление/тон) | Для каких дней | Ощущение |
+|---|-------|------------------------------------------------------|-----------------|----------|
+| 1 | **Grounded** | тёплая / тихая / замедл. / собранная / внутрь / спокойный | устойчивые, практичные, медленные | надёжность, материальность |
+| 2 | **Flow** | нейтр.-холодная / тихая / замедл. / мягкая / внутрь | чувствительные, интуитивные, эмоциональные | глубина, восприимчивость, плавность |
+| 3 | **Radiance** | тёплая / умеренная / динамичная / собранная / наружу | яркие, социальные, творческие, уверенные | открытость, желание проявляться |
+| 4 | **Momentum** | тёплая-интенс. / высокая / динамичная / собранная / наружу | быстрые, активные, решительные | импульс и концентрация, не тревожность |
+| 5 | **Clarity** | холодная / умеренная / ровный / собранная / внутрь | рациональные, планирование, анализ | порядок, чистота, собранность |
+| 6 | **Tension** | холодная-тёмная / высокая / ровный / хаотичная / внутрь | конфликтные, нестабильные, перегруженные | собранность и защита, не опасность |
+| 7 | **Renewal** | нейтральная-светлая / тихая / замедл. / мягкая / наружу | завершение, отдых, новое начало | облегчение, пространство для начала |
+| 8 | **Depth** | холодная / тихая / замедл. / мягкая / внутрь / интроспективный | сон, подсознание, уединение, пауза без цели что-то решить | тишина, погружение, отсутствие срочности |
+
+**Depth vs соседи:** в отличие от Grounded — не про устойчивость и дела, в отличие от Clarity — не про анализ и решения, в отличие от Tension — без конфликта. Ближайший сосед — Flow, но Flow восприимчив и эмоционально проницаем наружу-к-миру, Depth — закрыт и обращён внутрь, ближе к тишине сна, чем к течению чувств.
+
+### 11.4 Что регулирует каждый режим
+
+1. **Главный фон** — три уровня: базовый цвет, большой размытый градиент, локальное свечение за контентом. Свечение стоит ниже и почти не движется для тихих режимов (Grounded, Depth), смещается вверх и контрастнее для активных (Momentum, Radiance).
+2. **Декоративный слой** — отдельно от фона, под контентом: линии, дуги, световые пятна, частицы, полупрозрачные формы. Не находится под текстом, не снижает читаемость.
+3. **Акцентная подсветка** — можно менять halo вокруг темы дня, тон ScreenFlow-индикатора, подсветку выбранных chips, тон разделителей. **Нельзя** менять цвета CTA/error/success/warning ежедневно — их значение должно быть постоянным.
+4. **Motion** — только атмосферный: цикл 15–40 сек, смещение на несколько px, никаких быстрых бесконечных частиц, обязателен `prefers-reduced-motion`, останавливается или упрощается вне активного экрана.
+
+### 11.5 Как движок выбирает режим — приоритет
+
+1. Общий эмоциональный сюжет дня.
+2. Уровень интенсивности.
+3. Доминирующее качество/элемент дня.
+4. Время суток (день ↔ Day-phase, см. §11.1).
+5. Персональная поправка пользователя (аналог pin в Mood).
+
+Движок **не** выбирает режим только по положению Луны — иначе оформление слишком примитивно отражает содержание дня.
+
+### 11.6 Контракт движка (концепт, не финальные типы — см. §12 «Контракты»)
+
+Движок выдаёт **ограниченную конфигурацию**, не цвета и не CSS:
+
+```
+visual_mode: grounded | flow | radiance | momentum | clarity | tension | renewal | depth
+intensity: 0..1
+warmth: 0..1
+motion: none | low
+contrast: soft | medium | strong
+decor_variant: <per-mode id>
+time_phase: morning | day | evening | night   // сверяется с Day-phase, не дублирует его логику
+```
+
+Frontend преобразует эту конфигурацию в дизайн-токены (§11.8) детерминированно — без свободной генерации цвета.
+
+### 11.7 Figma и время суток
+
+Figma не используется в разработке — не источник правды, не рабочий процесс (см. правку §0 и §8). Day Atmosphere специфицируется только кодом и этим документом.
+
+Одна тема дня естественно развивается по времени суток через **уже существующий** `data-day-phase` — утро больше света и воздуха, день — максимум контраста, вечер — глубже фон и локальное свечение, ночь — тёмная версия той же темы, а не отдельный случайный дизайн. Day Atmosphere не переопределяет эту логику, а работает поверх неё через `time_phase` в контракте (§11.6) как сверочный, а не порождающий параметр.
+
+### 11.8 Токены (имена зафиксированы, значения — в §12/13)
+
+Расширение существующих `--tf-*` / `--section-*`, не новая система:
+
+- `--day-bg-base`
+- `--day-bg-glow-primary`
+- `--day-bg-glow-secondary`
+- `--day-decor-color`
+- `--day-decor-opacity`
+- `--day-accent-soft`
+- `--day-motion-duration`
+- `--day-motion-distance`
+- `--day-surface-tint`
+
+Применяются через `html[data-day-mode="…"]`, по аналогии с `html[data-atmosphere="…"]` (`SectionAtmosphereBridge`) и `[data-mood="…"]`. Компонент-мост — `DayAtmosphereBridge`, ставится рядом с `SectionAtmosphereBridge` в shell, не в каждой странице отдельно.
+
+### 11.9 Что остаётся стабильным (напоминание из §0/§7)
+
+Структура экранов · типографика (§5) · размеры карточек (§4) · цвета ошибок/успеха/предупреждений · основные CTA (§4 Surface C) · логика навигации · форма интерактивных компонентов · информационная иерархия.
+
+### 11.10 Следующие шаги (не в этом документе)
+
+- §12 «Day Atmosphere — Contracts»: TS-типы `DayVisualMode`, `DayAtmosphereConfig`, функции `resolveDayAtmosphere()`, маппинг `visual_mode → --day-*`.
+- §13 «Day Atmosphere — Implementation»: `DayAtmosphereBridge.tsx`, `day-atmosphere.css`, миграция полезного из WIP-ветки, декор-варианты (2 на режим), light/dark на каждый из 8 режимов.
+
+---
+
+*Сначала документ (§11) → потом контракты (§12) → потом реализация (§13). Figma нигде не участвует.*

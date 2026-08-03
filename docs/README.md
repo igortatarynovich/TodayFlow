@@ -58,7 +58,7 @@
 - [DAY_ENGINE_AND_COHERENCE.md](./DAY_ENGINE_AND_COHERENCE.md) · [DAY_CONTEXT_V0.md](./DAY_CONTEXT_V0.md)
 - [DAY_SOURCES_CANON.md](./DAY_SOURCES_CANON.md) — **SoT Source Families** · Sources → Foundation → Story
 - [DAY_SOURCE_REGISTRY.md](./DAY_SOURCE_REGISTRY.md) · [PROFILE_DAY_SOURCE_MATRIX.md](./profile/PROFILE_DAY_SOURCE_MATRIX.md)
-- [PROFILE_SCREEN_MASTER.md](./profile/PROFILE_SCREEN_MASTER.md) · [profile/PROFILE_EXPERIENCE_SCENARIO_V1.md](./profile/PROFILE_EXPERIENCE_SCENARIO_V1.md) — **Character Engine** (единая модель личности) · [profile/PROFILE_NATAL_DECODE_DEPTH_V1.md](./profile/PROFILE_NATAL_DECODE_DEPTH_V1.md) — Natal Decode (opt-in depth) · [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — **visual SoT** (статика + motion · mood · day-phase · guest showcase; v0.3)
+- [PROFILE_SCREEN_MASTER.md](./profile/PROFILE_SCREEN_MASTER.md) · [profile/PROFILE_EXPERIENCE_SCENARIO_V1.md](./profile/PROFILE_EXPERIENCE_SCENARIO_V1.md) — **Character Engine** (единая модель личности) · [profile/PROFILE_NATAL_DECODE_DEPTH_V1.md](./profile/PROFILE_NATAL_DECODE_DEPTH_V1.md) — Natal Decode (opt-in depth) · [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — **visual SoT** (статика + §11 Day Atmosphere; Figma вне контура; v0.3 · 2026-08-03)
 - [foundation/SCREEN_FLOW_V1.md](./foundation/SCREEN_FLOW_V1.md) — **ScreenFlow** product step pager (transform · Glance-first · landing excluded)
 - [today/TODAY_SCREEN_SCENARIO_V3.md](./today/TODAY_SCREEN_SCENARIO_V3.md) — ScreenFlow **content jobs** per step (**v3.1 locked 2026-08-03**)
 - [practices/PRACTICES_SCREEN_V1.md](./practices/PRACTICES_SCREEN_V1.md) — **Практики** SoT: цикл состояния · locked need/format · сессия · music layer ([index](./practices/_INDEX.md))
@@ -90,7 +90,7 @@
 
 Screen-level и PIM-слой (`pim/`, `today-language/`, `explainability/`) — уточняют unified, не заменяют его.
 
-**Visual SoT:** [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — статика + динамика (motion · mood · day-phase · guest). Параллельный premium/design-канон не заводить.
+**Visual SoT:** [TODAYFLOW_FOUNDATION_UI.md](./TODAYFLOW_FOUNDATION_UI.md) — статика + §11 Day Atmosphere (`data-day-mode` · `--day-*`). Параллельный premium/design-канон не заводить. Figma вне рабочего контура.
 
 ## Правило записи (обязательно)
 
