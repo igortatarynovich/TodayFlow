@@ -40,8 +40,8 @@
 .statCard {
   padding: 0.875rem 1rem;
   border-radius: 1.125rem;
-  border: 1px solid #e8e2d6;
-  background: var(--tf-surface, #fff);
+  border: 1px solid var(--tf-border);
+  background: var(--tf-surface);
 }
 
 .statLabel {
@@ -100,7 +100,7 @@
 .categoryFill {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #d4b896, #8b6a3e);
+  background: linear-gradient(90deg, var(--tf-accent-gold), var(--tf-accent-gold-600, var(--tf-accent-gold)));
 }
 
 .historyList {
@@ -119,8 +119,8 @@
   gap: 1rem;
   padding: 1rem 1.125rem;
   border-radius: 1.125rem;
-  border: 1px solid #e8e2d6;
-  background: var(--tf-surface, #fff);
+  border: 1px solid var(--tf-border);
+  background: var(--tf-surface);
 }
 
 .historyMain {
@@ -150,7 +150,7 @@
   font-size: 0.6875rem;
   font-weight: 600;
   background: rgba(139, 106, 62, 0.12);
-  color: #8b6a3e;
+  color: var(--tf-accent-gold-600, var(--tf-accent-gold));
 }
 
 .historyMeta {
@@ -167,8 +167,8 @@
   min-height: 2rem;
   padding: 0 0.875rem;
   border-radius: 999px;
-  border: 1px solid #e8e2d6;
-  background: #fdfbf7;
+  border: 1px solid var(--tf-border);
+  background: var(--tf-surface);
   color: var(--tf-ink);
   font-size: 0.75rem;
   font-weight: 600;
@@ -192,7 +192,7 @@
 .emptyBody {
   margin: 0 0 1rem;
   font-size: 0.875rem;
-  color: #5a5450;
+  color: var(--tf-caption);
 }
 
 .emptyCta {
@@ -203,7 +203,7 @@
   padding: 0 1rem;
   border-radius: 999px;
   background: var(--tf-ink);
-  color: #fdfbf7;
+  color: var(--tf-surface);
   font-size: 0.8125rem;
   font-weight: 600;
   text-decoration: none;
