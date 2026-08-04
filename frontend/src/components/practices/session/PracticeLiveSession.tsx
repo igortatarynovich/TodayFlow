@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import {
   clearPracticeSessionDraft,
@@ -15,6 +14,7 @@ import {
 } from "@/lib/practicesPage/practiceMusicLayer";
 import { PracticeMusicLayerPanel } from "@/components/practices/session/PracticeMusicLayerPanel";
 import { practiceSessionCopy } from "@/components/practices/session/practiceSessionCopy";
+import { DsButton } from "@/design-system";
 import styles from "@/components/practices/session/practiceLiveSession.module.css";
 
 export type PracticeLiveSessionProps = {
@@ -331,26 +331,27 @@ export function PracticeLiveSession({
             ))}
           </div>
           {isAuthenticated ? (
-            <button
-              type="button"
-              className={styles.primaryCta}
+            <DsButton
+              variant="primary"
+              size="block"
+              className={styles.sessionPrimary}
               disabled={!stateAfter || saving}
               onClick={() => void handleSave()}
               data-testid="practice-session-save"
             >
               {saving ? copy.saving : copy.saveToToday}
-            </button>
+            </DsButton>
           ) : (
             <>
               <p className={styles.panelBody}>{copy.loginToSave}</p>
-              <Link href="/auth" className={styles.primaryCta}>
+              <DsButton href="/auth" variant="primary" size="block" className={styles.sessionPrimary}>
                 {copy.loginCta}
-              </Link>
+              </DsButton>
             </>
           )}
-          <button type="button" className={styles.secondaryCta} onClick={handleClose}>
+          <DsButton variant="ghost" className={styles.sessionSecondary} onClick={handleClose}>
             {copy.skipSave}
-          </button>
+          </DsButton>
         </div>
       ) : null}
 
@@ -358,12 +359,12 @@ export function PracticeLiveSession({
         <div className={styles.panel} data-testid="practice-session-saved">
           <h2 className={styles.panelTitle}>{copy.savedTitle}</h2>
           <p className={styles.panelBody}>{copy.savedBody}</p>
-          <Link href="/today" className={styles.primaryCta}>
+          <DsButton href="/today" variant="primary" size="block" className={styles.sessionPrimary}>
             {copy.openToday}
-          </Link>
-          <Link href="/practices" className={styles.secondaryCta}>
+          </DsButton>
+          <DsButton href="/practices" variant="ghost" className={styles.sessionSecondary}>
             {copy.backToPractices}
-          </Link>
+          </DsButton>
         </div>
       ) : null}
     </div>

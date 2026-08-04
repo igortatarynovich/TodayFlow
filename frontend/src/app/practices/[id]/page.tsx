@@ -575,20 +575,16 @@ export default function PracticeDetailPage() {
                     flexDirection: "column",
                     gap: "var(--orbit-space-md)"
                   }}>
-                    <Link
-                      href="/journal"
-                      className="orbit-button orbit-button-primary"
-                      style={{ width: "100%" }}
-                    >
+                    <DsButton href="/journal" variant="primary" size="block">
                       {pc.practiceDetailJournalFixFeelingCta}
-                    </Link>
-                    <Link
+                    </DsButton>
+                    <DsButton
                       href={`/discover/pattern/${practice.target_axis}`}
-                      className="orbit-button orbit-button-secondary"
-                      style={{ width: "100%" }}
+                      variant="secondary"
+                      size="block"
                     >
                       {pc.practiceDetailPatternExploreCta}
-                    </Link>
+                    </DsButton>
                   </div>
 
                   {rewardsAfterCompletion && (
@@ -618,13 +614,9 @@ export default function PracticeDetailPage() {
                       <RewardsContourCard rewards={rewardsAfterCompletion} milestones={rewardMilestones || []} compact />
                     </div>
                   )}
-                  <Link
-                    href="/profile"
-                    className="orbit-button orbit-button-secondary"
-                    style={{ width: "100%" }}
-                  >
+                  <DsButton href="/profile" variant="secondary" size="block">
                     {pc.practiceDetailOpenProfileRewardsCta}
-                  </Link>
+                  </DsButton>
                 </div>
               </div>
             )}

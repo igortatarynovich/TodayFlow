@@ -1,16 +1,16 @@
 .overlay {
-  --pls-ink: #2a2520;
-  --pls-muted: rgba(255, 252, 248, 0.78);
-  --pls-lavender: #8b7bb8;
-  --pls-lavender-deep: #6b5a9a;
-  --pls-card: rgba(255, 252, 248, 0.94);
+  --pls-ink: var(--tf-ink);
+  --pls-muted: color-mix(in srgb, var(--tf-surface) 78%, transparent);
+  --pls-lavender: var(--day-decor-color, var(--tf-accent-action));
+  --pls-lavender-deep: var(--day-decor-color, var(--tf-ink));
+  --pls-card: color-mix(in srgb, var(--tf-surface) 94%, transparent);
 
   position: fixed;
   inset: 0;
   z-index: 80;
   display: flex;
   flex-direction: column;
-  color: #fffcf8;
+  color: var(--tf-surface);
   overflow: hidden;
 }
 
@@ -18,8 +18,17 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(165deg, rgba(42, 37, 32, 0.45), rgba(42, 37, 32, 0.72)),
-    linear-gradient(135deg, #b8a8d4 0%, #8b7bb8 42%, #6b8a9e 100%);
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--tf-ink) 45%, transparent),
+      color-mix(in srgb, var(--tf-ink) 72%, transparent)
+    ),
+    linear-gradient(
+      135deg,
+      var(--day-accent-soft, var(--tf-surface-warm)) 0%,
+      var(--day-decor-color, var(--tf-accent-action)) 42%,
+      var(--day-bg-base, var(--tf-page)) 100%
+    );
   background-size: cover;
   background-position: center;
 }
@@ -46,7 +55,7 @@
   border-radius: 999px;
   border: 1px solid rgba(255, 252, 248, 0.28);
   background: rgba(255, 252, 248, 0.12);
-  color: #fffcf8;
+  color: var(--tf-surface);
   cursor: pointer;
   display: grid;
   place-items: center;
@@ -115,7 +124,7 @@
   border-radius: 999px;
   border: 2px solid rgba(255, 252, 248, 0.55);
   background: rgba(255, 252, 248, 0.14);
-  color: #fffcf8;
+  color: var(--tf-surface);
   font-size: 1.05rem;
   font-weight: 600;
   cursor: pointer;
@@ -181,7 +190,7 @@
   border-radius: 999px;
   border: 1px solid rgba(255, 252, 248, 0.35);
   background: rgba(255, 252, 248, 0.1);
-  color: #fffcf8;
+  color: var(--tf-surface);
   font-size: 0.9rem;
   cursor: pointer;
 }
@@ -193,35 +202,14 @@
   font-weight: 600;
 }
 
-.primaryCta {
+.sessionPrimary {
   margin-top: 0.75rem;
   width: 100%;
   max-width: 22rem;
-  padding: 0.85rem 1.25rem;
-  border-radius: 999px;
-  border: none;
-  background: var(--pls-card);
-  color: var(--pls-lavender-deep);
-  font-weight: 600;
-  font-size: 0.95rem;
-  cursor: pointer;
-  text-decoration: none;
-  text-align: center;
 }
 
-.primaryCta:disabled {
-  opacity: 0.55;
-  cursor: wait;
-}
-
-.secondaryCta {
-  padding: 0.55rem 1rem;
-  border: none;
-  background: transparent;
-  color: var(--pls-muted);
-  font-size: 0.85rem;
-  cursor: pointer;
-  text-decoration: none;
+.sessionSecondary {
+  margin-top: 0.35rem;
 }
 
 .audioHidden {
@@ -251,7 +239,7 @@
   background: rgba(255, 252, 248, 0.14);
   backdrop-filter: blur(14px);
   text-align: left;
-  color: #fffcf8;
+  color: var(--tf-surface);
 }
 
 .musicPanelTitle {
@@ -273,7 +261,7 @@
   border-radius: 999px;
   border: 1px solid rgba(255, 252, 248, 0.32);
   background: rgba(255, 252, 248, 0.08);
-  color: #fffcf8;
+  color: var(--tf-surface);
   font-size: 0.78rem;
   cursor: pointer;
 }
@@ -296,7 +284,7 @@
 
 .sliderRow input[type="range"] {
   width: 100%;
-  accent-color: #c4b5e0;
+  accent-color: var(--pls-lavender);
 }
 
 .continueRow {
@@ -312,7 +300,7 @@
   min-width: 1.5rem;
   text-align: right;
   font-variant-numeric: tabular-nums;
-  color: #fffcf8;
+  color: var(--tf-surface);
 }
 
 .layerHint {

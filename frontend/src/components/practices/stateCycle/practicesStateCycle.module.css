@@ -1,22 +1,21 @@
 /**
- * Practices state-cycle shell — visual: milk-beige + lavender accents (canon §6).
- * Atmosphere images optional; gradient placeholders always present.
+ * Practices state-cycle — tokens from --tf-* / --day-* (no zone purple).
+ * Decorative accents follow Day Atmosphere; primary CTA = DsButton gold.
  */
-
 .root {
-  --psc-bg: #f6f1ea;
-  --psc-ink: #2a2520;
-  --psc-muted: #7a6a5c;
-  --psc-lavender: #8b7bb8;
-  --psc-lavender-soft: #c9bddf;
-  --psc-lavender-deep: #6b5a9a;
-  --psc-rose: #d4a8b8;
-  --psc-sky: #a8c4d8;
-  --psc-card: #fffcf8;
-  --psc-border: rgba(42, 37, 32, 0.08);
+  --psc-bg: var(--day-bg-base, var(--tf-page));
+  --psc-ink: var(--tf-ink);
+  --psc-muted: var(--tf-caption);
+  --psc-lavender: var(--day-decor-color, var(--tf-accent-action));
+  --psc-lavender-soft: var(--day-accent-soft, var(--tf-surface-warm));
+  --psc-lavender-deep: var(--day-decor-color, var(--tf-ink));
+  --psc-rose: var(--day-accent-soft, var(--tf-surface-warm));
+  --psc-sky: var(--day-surface-tint, var(--tf-surface));
+  --psc-card: var(--day-surface-tint, var(--tf-surface));
+  --psc-border: var(--tf-border);
   --psc-radius: 1.5rem;
   --psc-radius-lg: 1.75rem;
-  --psc-shadow: 0 14px 32px rgba(42, 37, 32, 0.07);
+  --psc-shadow: 0 14px 32px color-mix(in srgb, var(--tf-ink) 7%, transparent);
 
   width: 100%;
   min-width: 0;
@@ -105,7 +104,7 @@
 
 .chipActive {
   background: var(--psc-lavender);
-  color: #fff;
+  color: var(--tf-surface);
   border-color: transparent;
 }
 
@@ -121,7 +120,7 @@
   gap: 0.65rem;
   box-shadow: var(--psc-shadow);
   border: 1px solid var(--psc-border);
-  color: #fff;
+  color: var(--tf-surface);
   text-decoration: none;
 }
 
@@ -129,8 +128,17 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(165deg, rgba(107, 90, 154, 0.45), rgba(42, 37, 32, 0.62)),
-    linear-gradient(135deg, #b8a8d4 0%, #8b7bb8 45%, #6b8a9e 100%);
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--day-decor-color, var(--tf-ink)) 35%, transparent),
+      color-mix(in srgb, var(--tf-ink) 55%, transparent)
+    ),
+    linear-gradient(
+      135deg,
+      var(--day-accent-soft, var(--tf-surface-warm)) 0%,
+      var(--day-decor-color, var(--tf-accent-action)) 45%,
+      var(--day-bg-base, var(--tf-page)) 100%
+    );
   background-size: cover;
   background-position: center;
 }
@@ -195,25 +203,11 @@
   opacity: 0.92;
 }
 
-.startBtn {
+.recommendStart {
   position: relative;
   z-index: 1;
   align-self: flex-start;
   margin-top: 0.35rem;
-  padding: 0.75rem 1.45rem;
-  border-radius: 999px;
-  border: none;
-  background: var(--psc-lavender);
-  color: #fff;
-  font-weight: 600;
-  font-size: 0.95rem;
-  cursor: pointer;
-  text-decoration: none;
-  box-shadow: 0 10px 22px rgba(107, 90, 154, 0.28);
-}
-
-.startBtn:hover {
-  background: var(--psc-lavender-deep);
 }
 
 .continue {
@@ -284,7 +278,7 @@
   height: 2.25rem;
   border-radius: 999px;
   background: var(--psc-lavender);
-  color: #fff;
+  color: var(--tf-surface);
   display: grid;
   place-items: center;
   flex-shrink: 0;
@@ -346,19 +340,36 @@
 .momentMedia {
   position: relative;
   height: 6.5rem;
-  background: linear-gradient(145deg, #d8cee8, #c5d6e4 55%, #e8d4dc);
+  background: linear-gradient(
+    145deg,
+    var(--day-accent-soft, var(--tf-surface-warm)),
+    var(--day-surface-tint, var(--tf-surface)) 55%,
+    color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 18%, var(--tf-surface))
+  );
 }
 
 .momentMedia[data-tone="1"] {
-  background: linear-gradient(145deg, #c9bddf, #a8c4d8);
+  background: linear-gradient(
+    145deg,
+    var(--day-surface-tint, var(--tf-surface)),
+    var(--day-accent-soft, var(--tf-surface-warm))
+  );
 }
 
 .momentMedia[data-tone="2"] {
-  background: linear-gradient(160deg, #d4a8b8, #c9bddf);
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--day-decor-color, var(--tf-accent-action)) 22%, var(--tf-surface)),
+    var(--day-accent-soft, var(--tf-surface-warm))
+  );
 }
 
 .momentMedia[data-tone="3"] {
-  background: linear-gradient(150deg, #a8c4d8, #e2d8c8);
+  background: linear-gradient(
+    150deg,
+    var(--day-accent-soft, var(--tf-surface-warm)),
+    var(--tf-surface-warm, var(--tf-surface))
+  );
 }
 
 .momentBadge {
@@ -404,7 +415,7 @@
   height: 1.85rem;
   border-radius: 999px;
   background: var(--psc-lavender);
-  color: #fff;
+  color: var(--tf-surface);
   display: grid;
   place-items: center;
   font-size: 0.6rem;
@@ -479,7 +490,7 @@
   padding: 0.5rem 0.85rem;
   border-radius: 999px;
   border: 1px solid var(--psc-border);
-  background: var(--tf-surface, #fff);
+  background: var(--tf-surface);
   color: var(--psc-ink);
   font-size: 0.8rem;
   cursor: pointer;
@@ -487,7 +498,7 @@
 
 .musicModeActive {
   background: var(--psc-lavender);
-  color: #fff;
+  color: var(--tf-surface);
   border-color: transparent;
 }
 
@@ -530,7 +541,7 @@
   height: 2.75rem;
   border-radius: 999px;
   flex-shrink: 0;
-  background: linear-gradient(145deg, #e8d9a8, #d4a8b8);
+  background: linear-gradient(145deg, var(--day-accent-soft, var(--tf-surface-warm)), color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 28%, var(--tf-surface)));
   display: grid;
   place-items: center;
   font-size: 1.1rem;
@@ -610,12 +621,8 @@
   gap: 0.75rem;
 }
 
-.retryBtn {
-  padding: 0.45rem 0.9rem;
-  border-radius: 999px;
-  border: 1px solid var(--psc-border);
-  background: var(--psc-card);
-  cursor: pointer;
+.failRetry {
+  align-self: flex-start;
 }
 
 .layout {

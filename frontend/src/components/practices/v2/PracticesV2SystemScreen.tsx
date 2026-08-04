@@ -5,6 +5,7 @@ import type { CSSProperties } from "react";
 import { IconSparkles } from "@/design-system/icons/DsIcons";
 import { MotionSettle } from "@/design-system/motion";
 import { MOTION } from "@/design-system/motion/tokens";
+import { DsButton } from "@/design-system";
 import p from "@/design-system/primitives/dsPrimitives.module.css";
 import v2 from "@/design-system/layouts/productV2Surface.module.css";
 import {
@@ -254,9 +255,9 @@ export function PracticesV2SystemScreen({
               <div className={styles.emptyState} role="alert">
                 <p>{copy.catalogLoadFailed}</p>
                 {onRetryCatalog ? (
-                  <button type="button" className={styles.heroPrimaryBtn} onClick={onRetryCatalog}>
+                  <DsButton variant="primary" onClick={onRetryCatalog}>
                     Повторить
-                  </button>
+                  </DsButton>
                 ) : null}
               </div>
             ) : programCards.length > 0 ? (
@@ -306,9 +307,9 @@ export function PracticesV2SystemScreen({
                           <p className={styles.quickSubtitle}>{item.subtitle}</p>
                         </div>
                         <span className={styles.quickDuration}>{item.durationLabel}</span>
-                        <Link href={item.href} className={styles.quickOpenBtn}>
+                        <DsButton href={item.href} variant="secondary" size="sm" className={styles.quickOpen}>
                           {copy.openCta}
-                        </Link>
+                        </DsButton>
                       </div>
                     </MotionSettle>
                   ))}

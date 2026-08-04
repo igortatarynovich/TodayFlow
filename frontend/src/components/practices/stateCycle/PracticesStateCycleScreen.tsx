@@ -20,6 +20,7 @@ import {
   PracticeFormatIcon,
   PracticeNeedIcon,
 } from "@/components/practices/stateCycle/practiceNeedIcons";
+import { DsButton } from "@/design-system";
 import styles from "@/components/practices/stateCycle/practicesStateCycle.module.css";
 
 export type StateCyclePracticeCard = {
@@ -133,9 +134,14 @@ export function PracticesStateCycleScreen({
             <div className={styles.failBox} role="alert">
               <span>{copy.catalogFailed}</span>
               {onRetryCatalog ? (
-                <button type="button" className={styles.retryBtn} onClick={onRetryCatalog}>
+                <DsButton
+                  variant="secondary"
+                  size="sm"
+                  className={styles.failRetry}
+                  onClick={onRetryCatalog}
+                >
                   {copy.retry}
-                </button>
+                </DsButton>
               ) : null}
             </div>
           ) : null}
@@ -169,9 +175,9 @@ export function PracticesStateCycleScreen({
                     <p className={styles.recommendDesc}>{recommended.description}</p>
                   ) : null}
                 </div>
-                <Link href={recommended.href} className={styles.startBtn}>
+                <DsButton href={recommended.href} variant="primary" className={styles.recommendStart}>
                   {copy.startCta}
-                </Link>
+                </DsButton>
               </div>
             </section>
           ) : null}
