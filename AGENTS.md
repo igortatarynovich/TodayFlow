@@ -12,6 +12,28 @@ Product authority is **not** Git. Use this stack, top wins on conflict:
 
 When code, canon, and server disagree: **fix the mismatch**, then fix toward **canon + backlog intent**, verify on **server**.
 
+## Git branch policy (2026-08-04)
+
+- **Default / only product base:** `main`.
+- Feature work opens short-lived branches from `main` and returns via PR (or owner-directed FF). Do **not** park product trains on long-lived `design/*` branches.
+- Historical: `design/profile-journey-premium` was promoted into `main` (FF at tip `6a4e2ae`+) and is **retired** as a parallel base.
+
+## Production deploy (`todayflow.today`)
+
+GitHub Actions `.github/workflows/deploy.yml` is a **stub** (echo only). Live site is this host’s Docker Compose stack:
+
+```bash
+# from /opt/TodayFlow (server workspace)
+docker compose -f docker-compose.prod.yml up -d --build
+# or recreate one service after a code change:
+docker compose -f docker-compose.prod.yml up -d --build --force-recreate frontend
+docker compose -f docker-compose.prod.yml up -d --build --force-recreate backend
+```
+
+- Compose file: `docker-compose.prod.yml` · env: `.env` (from `.env.production.example`).
+- Frontend `:3000` · backend `:8080` · postgres · astro; nginx/Caddy terminates `todayflow.today`.
+- **Ledger ≠ server:** pushing `main` does not auto-deploy. After code lands, agents rebuild/recreate the affected compose services and verify on the live URL.
+
 ## Before changing generation / contracts / UI narrative
 
 1. Name the **canonical documents and current contracts** you actually opened (paths + sections).
