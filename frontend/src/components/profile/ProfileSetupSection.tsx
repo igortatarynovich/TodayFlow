@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { PROFILE_CHART_DEEP_PATH } from "@/lib/profileRoutes";
 import { type FormEvent } from "react";
 import { LoadingSpinner } from "@/components/orbit";
 import { CityAutocompleteInput } from "@/components/CityAutocompleteInput";
 import { SurfaceInsight, surfaceInsightStyles } from "@/components/foundation/SurfaceInsight";
+import { DsButton } from "@/design-system";
 import type { GeocodeResult } from "@/lib/types";
 
 type ProfileSetupFormData = {
@@ -175,17 +175,17 @@ export function ProfileSetupSection({
             </div>
 
             <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap" }}>
-              <button type="button" className="orbit-button orbit-button-primary" onClick={onFinishSetupFlow}>
+              <DsButton variant="primary" onClick={onFinishSetupFlow}>
                 {isOnboarding ? "Дальше" : "Перейти к карте"}
-              </button>
+              </DsButton>
               {!isOnboarding ? (
-                <Link href="/today" className="orbit-button orbit-button-secondary" style={{ textDecoration: "none" }}>
+                <DsButton href="/today" variant="secondary">
                   Открыть Today
-                </Link>
+                </DsButton>
               ) : null}
-              <button type="button" className="orbit-button orbit-button-secondary" onClick={onReopenSetupForm}>
+              <DsButton variant="secondary" onClick={onReopenSetupForm}>
                 Изменить данные
-              </button>
+              </DsButton>
             </div>
           </div>
         ) : (
@@ -284,13 +284,13 @@ export function ProfileSetupSection({
           </div>
 
           <div style={{ marginTop: "0.95rem", display: "flex", gap: "0.6rem", flexWrap: "wrap" }}>
-            <button type="submit" className="orbit-button orbit-button-primary" disabled={isBuilding}>
+            <DsButton type="submit" variant="primary" disabled={isBuilding}>
               {isBuilding ? "Собираем карту..." : isOnboarding ? "Сохранить и продолжить" : "Построить карту жизни"}
-            </button>
+            </DsButton>
             {!isOnboarding ? (
-              <Link href="/today" className="orbit-button orbit-button-secondary" style={{ textDecoration: "none" }}>
+              <DsButton href="/today" variant="secondary">
                 Пока открыть Today
-              </Link>
+              </DsButton>
             ) : null}
           </div>
 
@@ -302,8 +302,8 @@ export function ProfileSetupSection({
                 Теперь не нужно возвращаться в форму. Следующий правильный шаг — открыть день или перейти в полную карту личности.
               </p>
               <div style={{ marginTop: "0.7rem", display: "flex", gap: "0.55rem", flexWrap: "wrap" }}>
-                <Link href="/today" className="orbit-button orbit-button-primary orbit-button-sm" style={{ textDecoration: "none" }}>Открыть Today</Link>
-                <Link href={PROFILE_CHART_DEEP_PATH} className="orbit-button orbit-button-secondary orbit-button-sm" style={{ textDecoration: "none" }}>Открыть карту</Link>
+                <DsButton href="/today" variant="primary" size="sm">Открыть Today</DsButton>
+                <DsButton href={PROFILE_CHART_DEEP_PATH} variant="secondary" size="sm">Открыть карту</DsButton>
               </div>
             </div>
           ) : null}

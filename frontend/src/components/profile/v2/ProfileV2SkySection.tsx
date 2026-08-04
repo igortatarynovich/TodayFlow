@@ -2,6 +2,7 @@
 
 import type { NatalChartPreview } from "@/components/profile/profilePanelTypes";
 import type { ProfileFrameworkAnchor, ProfileFrameworkCard } from "@/lib/profilePage/buildProfileQuickMapData";
+import { DsButton } from "@/design-system";
 import styles from "@/components/profile/v2/profileV2System.module.css";
 import { PROFILE_V2_COPY } from "@/components/profile/v2/profileV2SystemCopy";
 
@@ -129,9 +130,9 @@ export function ProfileV2SkySection({
           <p className={styles.skyAspectBody}>
             Сигнатуры появятся после сохранения данных рождения. Полная карта — за «Исследовать глубже».
           </p>
-          <button type="button" className={styles.skyReloadBtn} onClick={onReloadPreview}>
+          <DsButton variant="secondary" size="sm" className={styles.skyReloadAction} onClick={onReloadPreview}>
             Обновить карту
-          </button>
+          </DsButton>
         </div>
       )}
 

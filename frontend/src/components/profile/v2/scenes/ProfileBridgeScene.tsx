@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useProfileMotionInView } from "@/components/foundation/ProfileMotion";
 import { ProfileAtmosphere } from "@/components/profile/v2/ProfileAtmosphere";
 import { PROFILE_V2_COPY, PROFILE_V2_DEPTH_NAV } from "@/components/profile/v2/profileV2SystemCopy";
+import { DsButton } from "@/design-system";
 import styles from "@/components/profile/v2/profileV2System.module.css";
 
 export type ProfileBridgeSceneProps = {
@@ -41,10 +41,15 @@ export function ProfileBridgeScene({ bridgeLine }: ProfileBridgeSceneProps) {
             {line}
           </p>
         ) : null}
-        <Link href="/today" className={styles.bridgeCta} data-testid="profile-v2-open-today">
+        <DsButton
+          href="/today"
+          variant="primary"
+          className={styles.bridgeAction}
+          data-testid="profile-v2-open-today"
+        >
           {copy.cta}
           <span aria-hidden> →</span>
-        </Link>
+        </DsButton>
       </div>
     </section>
   );

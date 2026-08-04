@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { buildDayContinuityWeekCells } from "@/lib/todayDayContinuityHeatmap";
+import { DsButton } from "@/design-system";
 import styles from "@/components/profile/v2/profileV2System.module.css";
 
 export function ProfileV2MyDays() {
@@ -23,9 +23,9 @@ export function ProfileV2MyDays() {
         <p id="profile-v2-my-days-title" className={styles.myDaysPanelEyebrow}>
           Мои дни · последняя неделя
         </p>
-        <Link href="/today" className={styles.myDaysPanelLink}>
+        <DsButton href="/today" variant="ghost" size="sm" className={styles.myDaysPanelAction}>
           Открыть Today →
-        </Link>
+        </DsButton>
       </div>
       <div className={styles.myDaysWeekGrid} aria-label="Закрытые дни за последнюю неделю">
         {cells.map((cell) => (

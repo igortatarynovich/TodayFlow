@@ -56,6 +56,7 @@ import {
   SurfaceInsightBody,
   surfaceInsightStyles,
 } from "@/components/foundation/SurfaceInsight";
+import { DsButton } from "@/design-system";
 import routeStyles from "./profileRoute.module.css";
 import v0RouteStyles from "@/components/profile/v0/profileV0.module.css";
 import "@/components/profile/editorial/profileEditorialRoute.css";
@@ -590,16 +591,12 @@ function ProfileHubPageInner() {
                             полностью.
                           </SurfaceInsightBody>
                           <SurfaceInsightActions>
-                            <Link href="/onboarding/refine?after=save" className="orbit-button orbit-button-primary orbit-button-sm">
+                            <DsButton href="/onboarding/refine?after=save" variant="primary" size="sm">
                               Дополнить карту
-                            </Link>
-                            <button
-                              type="button"
-                              className="orbit-button orbit-button-secondary orbit-button-sm"
-                              onClick={() => setForceSetup(true)}
-                            >
+                            </DsButton>
+                            <DsButton variant="secondary" size="sm" onClick={() => setForceSetup(true)}>
                               Ввести данные здесь
-                            </button>
+                            </DsButton>
                           </SurfaceInsightActions>
                         </SurfaceInsight>
                       ) : null}
@@ -614,9 +611,9 @@ function ProfileHubPageInner() {
                             личности.
                           </SurfaceInsightBody>
                           <SurfaceInsightActions>
-                            <Link href={FIRST_TODAY_PATH} className="orbit-button orbit-button-primary orbit-button-sm">
+                            <DsButton href={FIRST_TODAY_PATH} variant="primary" size="sm">
                               Открыть первый Today
-                            </Link>
+                            </DsButton>
                           </SurfaceInsightActions>
                         </SurfaceInsight>
                       ) : null}

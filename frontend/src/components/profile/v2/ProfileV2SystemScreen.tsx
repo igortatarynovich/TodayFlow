@@ -20,6 +20,7 @@ import { ProfileWhyScene } from "@/components/profile/v2/scenes/ProfileWhyScene"
 import { ArchetypeHeroVisual } from "@/components/visualIdentity/ArchetypeHeroVisual";
 import { resolveArchetypeIllustrationSlug } from "@/lib/visualIdentity/registry";
 import { MotionDrift } from "@/design-system/motion";
+import { DsButton } from "@/design-system";
 import type { ProfileV2LiveContext } from "@/lib/profilePage/buildProfileV2LiveContext";
 import { buildProfileFirstScreenProjection } from "@/lib/profilePage/buildProfileFirstScreenProjection";
 import { buildProfileJourneyProjection } from "@/lib/profilePage/buildProfileJourneyProjection";
@@ -137,9 +138,9 @@ export function ProfileV2SystemScreen({
               {dataMessages.map((msg) => (
                 <li key={msg.code || msg.text} className={styles.traitCard}>
                   <p className={styles.traitLine}>{msg.text}</p>
-                  <button type="button" className={styles.secondaryCta} onClick={onOpenBirthData}>
+                  <DsButton variant="secondary" size="sm" onClick={onOpenBirthData}>
                     Данные рождения
-                  </button>
+                  </DsButton>
                 </li>
               ))}
             </ul>

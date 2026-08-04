@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { getJson, putJson } from "@/lib/api";
 import type { CoreProfile } from "@/lib/types";
+import { DsButton } from "@/design-system";
 import styles from "@/components/profile/v2/profileV2System.module.css";
 
 export type DeepThemesApiState = {
@@ -172,9 +172,9 @@ export function ProfileDeepThemesChooser({ deepFromCore, onChanged }: ProfileDee
       </div>
       {state.gated ? (
         <p className={styles.deepThemesHint}>
-          <Link href="/pricing" className={styles.deepThemesCta}>
+          <DsButton href="/pricing" variant="ghost" size="sm" className={styles.deepThemesAction}>
             Открыть trial или Plus/Pro
-          </Link>
+          </DsButton>
           {" — и выбрать, куда углубить практику."}
         </p>
       ) : null}
@@ -183,14 +183,14 @@ export function ProfileDeepThemesChooser({ deepFromCore, onChanged }: ProfileDee
       ) : null}
       {!state.gated ? (
         <div className={styles.deepThemesActions}>
-          <button
-            type="button"
-            className="orbit-button orbit-button-secondary orbit-button-sm"
+          <DsButton
+            variant="secondary"
+            size="sm"
             disabled={!dirty || busy || state.can_change === false}
             onClick={() => void save()}
           >
             {busy ? "Сохраняю…" : "Сохранить выбор"}
-          </button>
+          </DsButton>
           {savedFlash ? <span className={styles.deepThemesSaved}>Сохранено</span> : null}
         </div>
       ) : null}

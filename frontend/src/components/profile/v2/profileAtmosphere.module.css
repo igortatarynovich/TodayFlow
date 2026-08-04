@@ -7,7 +7,7 @@
   pointer-events: none;
   overflow: hidden;
   border-radius: inherit;
-  color: #8b6a3e;
+  color: var(--tf-accent-gold-600, var(--tf-accent-gold));
 }
 
 /* Scene content stacks above atmosphere when parent is relative. */
@@ -110,17 +110,17 @@
 
 :global([data-theme="dark"]) .motif_why {
   opacity: 0.22;
-  color: #c9a96e;
+  color: var(--tf-accent-gold);
 }
 
 :global([data-theme="dark"]) .motif_insight {
   opacity: 0.2;
-  color: #c9a96e;
+  color: var(--tf-accent-gold);
 }
 
 :global([data-theme="dark"]) .motif_effort {
   opacity: 0.2;
-  color: #c9a96e;
+  color: var(--tf-accent-gold);
 }
 
 :global([data-theme="dark"]) .motif_bridge {
@@ -134,20 +134,20 @@
 
 :global([data-theme="dark"]) .motif_today {
   opacity: 0.18;
-  color: #c9a96e;
+  color: var(--tf-accent-gold);
 }
 
 :global([data-theme="dark"]) .motif_tarot {
   opacity: 0.32;
-  color: #c9a96e;
+  color: var(--tf-accent-gold);
 }
 
 :global([data-theme="dark"]) .motif_compat {
   opacity: 0.3;
-  color: #c9a96e;
+  color: var(--tf-accent-gold);
 }
 
 :global([data-theme="dark"]) .motif_practice {
   opacity: 0.26;
-  color: #c9a96e;
+  color: var(--tf-accent-gold);
 }

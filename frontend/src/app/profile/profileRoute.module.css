@@ -1,7 +1,7 @@
 .profileRouteShell {
   min-height: 100vh;
-  background: var(--tf-page, #f3efe8);
-  color: var(--tf-ink, #1a1510);
+  background: var(--tf-page, var(--tf-surface-warm, var(--tf-surface)));
+  color: var(--tf-ink, var(--tf-ink));
   font-family: var(--tf-font-body, "Inter", system-ui, sans-serif);
 }
 
@@ -32,14 +32,14 @@
   font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
   font-size: var(--tf-type-section-size, 1.25rem);
   font-weight: var(--tf-type-section-weight, 600);
-  color: var(--tf-ink, #1a1510);
+  color: var(--tf-ink, var(--tf-ink));
 }
 
 .loadingLead {
   margin: 0.6rem 0 0;
   font-size: var(--tf-type-body-size, 0.9375rem);
   line-height: 1.55;
-  color: var(--tf-ink-soft, #5b4630);
+  color: var(--tf-ink-soft, var(--tf-caption));
   max-width: 42rem;
 }
 
@@ -54,7 +54,7 @@
   margin: 0;
   font-size: var(--tf-type-body-size, 0.9375rem);
   font-weight: 700;
-  color: var(--tf-ink-soft, #5b4630);
+  color: var(--tf-ink-soft, var(--tf-caption));
 }
 
 .loadingSteps {
@@ -68,7 +68,7 @@
   padding: 0.46rem 0.7rem;
   border: 1px solid rgba(201, 168, 115, 0.24);
   background: rgba(255, 255, 255, 0.88);
-  color: var(--tf-ink-soft, #5b4630);
+  color: var(--tf-ink-soft, var(--tf-caption));
   font-size: var(--tf-type-caption-lg-size, 0.6875rem);
   font-weight: 700;
 }
@@ -89,7 +89,7 @@
   margin: 0 0 1.5rem;
   font-size: var(--tf-type-body-size, 0.9375rem);
   line-height: 1.55;
-  color: var(--tf-ink-soft, #5b4630);
+  color: var(--tf-ink-soft, var(--tf-caption));
 }
 
 .noticeSpaced {

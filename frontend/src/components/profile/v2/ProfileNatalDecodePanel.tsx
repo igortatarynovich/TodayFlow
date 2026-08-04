@@ -7,6 +7,8 @@ import {
   PROFILE_DECODE_PATTERN_WAVE_EVENT,
   consumeProfileMotionOnce,
 } from "@/lib/profile/profileMotionOnce";
+import { DsButton } from "@/design-system";
+import { joinClass } from "@/design-system/utils/joinClass";
 import styles from "@/components/profile/v2/profileV2System.module.css";
 
 export type NatalDecodeOffer = {
@@ -121,21 +123,16 @@ export function ProfileNatalDecodePanel() {
       {!grounded ? (
         <div className={styles.deepThemesActions}>
           {offer?.can_generate ? (
-            <button
-              type="button"
-              className={[
-                styles.natalDecodeCta,
-                showBreathe ? profileMotionStyles.attentionBreathe : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
+            <DsButton
+              variant="primary"
+              className={joinClass(styles.natalDecodeAction, showBreathe ? profileMotionStyles.attentionBreathe : null)}
               onClick={() => void generate()}
               disabled={busy}
               data-testid="profile-natal-decode-generate"
               data-motion={showBreathe ? "attention-breathe" : undefined}
             >
               {busy ? "Собираем расшифровку…" : "Открыть расшифровку"}
-            </button>
+            </DsButton>
           ) : (
             <p className={styles.deepThemesHint} data-testid="profile-natal-decode-blocked">
               {offer?.cta || "Пока недоступно."}
@@ -192,15 +189,15 @@ export function ProfileNatalDecodePanel() {
             </div>
           ) : null}
           {result?.limits ? <p className={styles.natalDecodeLimits}>{result.limits}</p> : null}
-          <button
-            type="button"
-            className={styles.natalDecodeCta}
+          <DsButton
+            variant="secondary"
+            className={styles.natalDecodeAction}
             onClick={() => void generate()}
             disabled={busy}
             data-testid="profile-natal-decode-refresh"
           >
             {busy ? "Обновляем…" : "Собрать ещё раз"}
-          </button>
+          </DsButton>
         </div>
       ) : null}
     </div>
