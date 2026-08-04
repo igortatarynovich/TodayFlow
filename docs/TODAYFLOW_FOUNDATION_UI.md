@@ -743,7 +743,7 @@ interface DayAtmosphereContract {
 
 - **§17a** — foundation: dark-пара `--product-*` уточнена как layout (не нужна); Surface B / `dsPrimitives` / `--section-*` dark — см. §15.6 (готово Slice 0–2).
 - **§17b** — топ-баговые экраны с хардкод `#fff` вне `DsCard` (pass 1 готово; остаток: декоративные highlights + вне списка + ручной QA dark).
-- **§17c** — запрет ad-hoc CTA в ревью; постепенный перевод на `DsButton` (**Today Response** `TodayTapWidget` — done; **gate** `scripts/check_ds_style_gate.py` в `npm test` — Task 1 / PR #8). **Task 2 pilot (in progress):** Weekly + Challenges → `DsCard`/`DsButton` + `--day-*` decorative (Task 1.5 folded here; см. §11.4).
+- **§17c** — запрет ad-hoc CTA в ревью; постепенный перевод на `DsButton` (**Today Response** `TodayTapWidget` — done; **gate** `scripts/check_ds_style_gate.py` в `npm test` — Task 1 / PR #8). **Task 2 pilot (done, PR #9):** Weekly + Challenges. **Task 3 (in progress):** Today composition CTAs + `--day-*` decorative.
 
 ---
 

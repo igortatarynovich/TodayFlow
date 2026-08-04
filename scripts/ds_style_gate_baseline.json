@@ -3,11 +3,11 @@
   "description": "DS Task 1 baseline — existing module.css violations. New keys fail CI; listed keys warn only. Shrink this file as Task 2–3 migrations land.",
   "generated_by": "scripts/check_ds_style_gate.py --write-baseline",
   "counts": {
-    "keys": 615,
-    "occurrences": 1554,
+    "keys": 614,
+    "occurrences": 1549,
     "by_rule": {
-      "hex-literal": 1458,
-      "adhoc-class": 65,
+      "hex-literal": 1455,
+      "adhoc-class": 63,
       "legacy-token-def": 31
     }
   },
@@ -539,7 +539,6 @@
     "frontend/src/components/today/composition/TodayDepthLayerSection.module.css|hex-literal|#e8e2d6",
     "frontend/src/components/today/composition/TodayDepthLayerSection.module.css|hex-literal|#fff",
     "frontend/src/components/today/composition/TodayDepthLayerSection.module.css|hex-literal|#fff8ee",
-    "frontend/src/components/today/composition/TodayEveningProductClose.module.css|adhoc-class|.submitButton",
     "frontend/src/components/today/composition/TodayEveningProductClose.module.css|hex-literal|#1a1714",
     "frontend/src/components/today/composition/TodayEveningProductClose.module.css|hex-literal|#2a2520",
     "frontend/src/components/today/composition/TodayEveningProductClose.module.css|hex-literal|#9a9490",

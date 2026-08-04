@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { DsButton } from "@/design-system";
 import {
   profileMotionStaggerDelay,
   profileMotionStyles,
@@ -428,9 +429,10 @@ export function TodayPersonalizedProductSection({
                     </dl>
                   ) : null}
                   {isSphereChapter && (hasDual || needsProgressive) && !dualExpanded ? (
-                    <button
+                    <DsButton
                       type="button"
-                      className={`orbit-button orbit-button-secondary ${styles.practiceAction}`}
+                      variant="secondary"
+                      className={styles.practiceAction}
                       data-testid={`today-reading-expand-${chapter.id}`}
                       onClick={() =>
                         setExpandedSphereIds((prev) => ({ ...prev, [chapter.id]: true }))
@@ -439,7 +441,7 @@ export function TodayPersonalizedProductSection({
                       {needsProgressive
                         ? copy.journey.readingExpandLabel
                         : "Возможность и ловушка"}
-                    </button>
+                    </DsButton>
                   ) : null}
                   {dualExpanded &&
                   chapter.dual &&
@@ -569,9 +571,9 @@ export function TodayPersonalizedProductSection({
                 maxLength={200}
                 placeholder="Своими словами — из того, что уже звучит в дне"
               />
-              <button type="button" className="orbit-button orbit-button-primary" onClick={onSaveGoal}>
+              <DsButton type="button" variant="primary" onClick={onSaveGoal}>
                 {copy.goalSave}
-              </button>
+              </DsButton>
             </div>
           ) : (
             <button
@@ -609,14 +611,15 @@ export function TodayPersonalizedProductSection({
                   <p className={styles.practiceTitle}>{practiceRec.text}</p>
                   {practiceRec.reason ? <p className={styles.practiceMeta}>{practiceRec.reason}</p> : null}
                   {!affirmationRead ? (
-                    <button
+                    <DsButton
                       type="button"
-                      className={`orbit-button orbit-button-secondary ${styles.practiceAction}`}
+                      variant="secondary"
+                      className={styles.practiceAction}
                       data-testid="today-tool-affirmation-done"
                       onClick={onAffirmationDone}
                     >
                       {copy.markAffirmationDone}
-                    </button>
+                    </DsButton>
                   ) : (
                     <p className={styles.practiceMeta}>{copy.affirmationDone}</p>
                   )}
@@ -637,15 +640,16 @@ export function TodayPersonalizedProductSection({
                     <p className={styles.practiceMeta}>{practiceRec.reason}</p>
                   ) : null}
                   {!practiceCompleted ? (
-                    <button
+                    <DsButton
                       type="button"
-                      className={`orbit-button orbit-button-secondary ${styles.practiceAction}`}
+                      variant="secondary"
+                      className={styles.practiceAction}
                       data-testid="today-tool-practice"
                       disabled={practiceCompleting}
                       onClick={() => void onPracticeAction()}
                     >
                       {practiceStarted ? copy.practiceComplete : copy.practiceStart}
-                    </button>
+                    </DsButton>
                   ) : (
                     <p className={styles.practiceMeta}>{copy.practiceCompleted}</p>
                   )}
@@ -662,14 +666,15 @@ export function TodayPersonalizedProductSection({
                     <p className={styles.practiceMeta}>{practiceRec.reason}</p>
                   ) : null}
                   {!affirmationRead ? (
-                    <button
+                    <DsButton
                       type="button"
-                      className={`orbit-button orbit-button-secondary ${styles.practiceAction}`}
+                      variant="secondary"
+                      className={styles.practiceAction}
                       data-testid="today-tool-affirmation-done"
                       onClick={onAffirmationDone}
                     >
                       {copy.markAffirmationDone}
-                    </button>
+                    </DsButton>
                   ) : (
                     <p className={styles.practiceMeta}>{copy.affirmationDone}</p>
                   )}
@@ -684,15 +689,16 @@ export function TodayPersonalizedProductSection({
                   <p className={styles.practiceTitle}>{activeHabit.name}</p>
                   <p className={styles.practiceMeta}>Привычка</p>
                   {!habitMarked ? (
-                    <button
+                    <DsButton
                       type="button"
-                      className={`orbit-button orbit-button-secondary ${styles.practiceAction}`}
+                      variant="secondary"
+                      className={styles.practiceAction}
                       data-testid="today-tool-habit-done"
                       disabled={habitMarking || !onHabitMark}
                       onClick={() => onHabitMark?.()}
                     >
                       {copy.markHabitDone}
-                    </button>
+                    </DsButton>
                   ) : (
                     <p className={styles.practiceMeta}>{copy.habitDone}</p>
                   )}
@@ -707,15 +713,16 @@ export function TodayPersonalizedProductSection({
                   <p className={styles.practiceTitle}>{activeAscetic.title}</p>
                   <p className={styles.practiceMeta}>Аскеза</p>
                   {!asceticMarked ? (
-                    <button
+                    <DsButton
                       type="button"
-                      className={`orbit-button orbit-button-secondary ${styles.practiceAction}`}
+                      variant="secondary"
+                      className={styles.practiceAction}
                       data-testid="today-tool-ascetic-done"
                       disabled={asceticMarking || !onAsceticMark}
                       onClick={() => onAsceticMark?.()}
                     >
                       {copy.markAsceticDone}
-                    </button>
+                    </DsButton>
                   ) : (
                     <p className={styles.practiceMeta}>{copy.asceticDone}</p>
                   )}
