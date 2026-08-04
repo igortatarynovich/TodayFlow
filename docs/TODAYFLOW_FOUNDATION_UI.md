@@ -383,7 +383,9 @@ TODAYFLOW_FOUNDATION_UI
 
 1. **Главный фон** — три уровня: базовый цвет, большой размытый градиент, локальное свечение за контентом. Свечение стоит ниже и почти не движется для тихих режимов (Grounded, Depth), смещается вверх и контрастнее для активных (Momentum, Radiance).
 2. **Декоративный слой** — отдельно от фона, под контентом: линии, дуги, световые пятна, частицы, полупрозрачные формы. Не находится под текстом, не снижает читаемость.
-3. **Акцентная подсветка** — можно менять halo вокруг темы дня, тон ScreenFlow-индикатора (dots через `--day-decor-color` / `--day-accent-soft` / `--day-surface-tint`), подсветку выбранных chips, тон разделителей. **Нельзя** менять цвета CTA/error/success/warning ежедневно — их значение должно быть постоянным. Форма chrome (dots only; без ordinals / labeled act strip / Назад·Далее) — [SCREEN_FLOW_V1 §1.5](foundation/SCREEN_FLOW_V1.md); меняется только тон.
+3. **Акцентная подсветка** — можно менять halo вокруг темы дня, тон ScreenFlow-индикатора (dots через `--day-decor-color` / `--day-accent-soft` / `--day-surface-tint`), подсветку выбранных chips, тон разделителей, **декоративные поверхности consumer-экранов** (границы / soft panels / progress fill). **Нельзя** менять цвета CTA/error/success/warning ежедневно — их значение должно быть постоянным. Primary CTA = `DsButton` → `--tf-accent-gold` (option A). Форма chrome (dots only; без ordinals / labeled act strip / Назад·Далее) — [SCREEN_FLOW_V1 §1.5](foundation/SCREEN_FLOW_V1.md); меняется только тон.
+
+**Миграция consumers (2026-08-04):** отдельный «Task 1.5» four-screen pass **не делаем**. Day-atmosphere decorative wiring входит в каждый DsCard-wave PR. Пилот — Weekly + Challenges; дальше Today / Practices / Compatibility / Onboarding / Tarot / Landing / Profile повторяют тот же паттерн (§17).
 4. **Motion** — только атмосферный: цикл 15–40 сек, смещение на несколько px, никаких быстрых бесконечных частиц, обязателен `prefers-reduced-motion`, останавливается или упрощается вне активного экрана.
 
 ### 11.5 Как движок выбирает режим — приоритет
@@ -741,7 +743,7 @@ interface DayAtmosphereContract {
 
 - **§17a** — foundation: dark-пара `--product-*` уточнена как layout (не нужна); Surface B / `dsPrimitives` / `--section-*` dark — см. §15.6 (готово Slice 0–2).
 - **§17b** — топ-баговые экраны с хардкод `#fff` вне `DsCard` (pass 1 готово; остаток: декоративные highlights + вне списка + ручной QA dark).
-- **§17c** — запрет ad-hoc CTA в ревью; постепенный перевод на `DsButton` (**Today Response** `TodayTapWidget` — done).
+- **§17c** — запрет ad-hoc CTA в ревью; постепенный перевод на `DsButton` (**Today Response** `TodayTapWidget` — done; **gate** `scripts/check_ds_style_gate.py` в `npm test` — Task 1 / PR #8). **Task 2 pilot (in progress):** Weekly + Challenges → `DsCard`/`DsButton` + `--day-*` decorative (Task 1.5 folded here; см. §11.4).
 
 ---
 

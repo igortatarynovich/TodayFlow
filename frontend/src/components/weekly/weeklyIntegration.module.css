@@ -1,0 +1,144 @@
+/**
+ * Weekly integration — layout + --day-* decorative surfaces.
+ * Primary CTA = DsButton (static gold). No zone accents.
+ */
+
+.toolbar {
+  display: flex;
+  gap: var(--tf-ds-space-3, 0.75rem);
+  flex-wrap: wrap;
+  margin-bottom: var(--tf-ds-space-5, 1.25rem);
+}
+
+.controls {
+  margin-bottom: var(--tf-ds-space-6, 1.5rem);
+  display: flex;
+  gap: var(--tf-ds-space-4, 1rem);
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.field {
+  flex: 1 1 16rem;
+}
+
+.fieldLabel {
+  display: block;
+  margin-bottom: var(--tf-ds-space-2, 0.5rem);
+  font-weight: 600;
+  color: var(--tf-ink);
+}
+
+.dateInput {
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid var(--tf-border);
+  border-radius: var(--tf-ds-radius-sm, 0.75rem);
+  width: 100%;
+  max-width: 300px;
+  background: var(--tf-surface);
+  color: var(--tf-ink);
+}
+
+.rangeHint {
+  font-size: 0.9rem;
+  color: var(--tf-caption);
+  margin-top: var(--tf-ds-space-2, 0.5rem);
+}
+
+.emptyShell {
+  text-align: center;
+  background: var(--day-surface-tint, var(--tf-surface));
+  border-color: color-mix(in srgb, var(--day-decor-color, var(--tf-border)) 22%, transparent);
+}
+
+.resultShell {
+  background: var(--day-surface-tint, var(--tf-surface));
+  border-color: color-mix(in srgb, var(--day-decor-color, var(--tf-border)) 35%, transparent);
+}
+
+.resultHead {
+  margin-bottom: var(--tf-ds-space-5, 1.25rem);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--tf-ds-space-3, 0.75rem);
+  flex-wrap: wrap;
+}
+
+.story {
+  white-space: pre-line;
+}
+
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.85rem;
+  margin-top: var(--tf-ds-space-6, 1.5rem);
+}
+
+.statTile {
+  padding: var(--tf-ds-space-4, 1rem);
+  border-radius: var(--tf-ds-radius-md, 0.75rem);
+  background: var(--day-accent-soft, var(--tf-surface-warm));
+  border: 1px solid color-mix(in srgb, var(--day-decor-color, var(--tf-border)) 18%, transparent);
+}
+
+.statLabel {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--tf-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.statValue {
+  margin: 0.35rem 0 0;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--tf-ink);
+  line-height: 1.45;
+}
+
+.statValueSm {
+  margin: 0.35rem 0 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--tf-ink);
+  line-height: 1.45;
+}
+
+.statHint {
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
+  color: var(--tf-caption);
+}
+
+.focusPanel {
+  margin-top: var(--tf-ds-space-4, 1rem);
+  padding: 1rem 1.1rem;
+  border-radius: var(--tf-ds-radius-md, 0.75rem);
+  background: var(--day-accent-soft, var(--tf-surface-warm));
+  border: 1px solid color-mix(in srgb, var(--day-decor-color, var(--tf-border)) 16%, transparent);
+}
+
+.focusLabel {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--tf-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.focusBody {
+  margin: 0.45rem 0 0;
+  font-size: 0.98rem;
+  color: var(--tf-ink);
+  line-height: 1.6;
+}
+
+.authStack {
+  display: grid;
+  gap: 0.85rem;
+  justify-items: start;
+}

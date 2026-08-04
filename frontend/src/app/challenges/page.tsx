@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/useAuth";
 import { CrossSectionLinks } from "@/components/CrossSectionLinks";
 import { ProductPageScreen } from "@/components/product-ui/ProductPageScreen";
 import { LoadingSpinner } from "@/components/orbit";
+import { DsBody, DsButton, DsCard, DsPill, DsTitle } from "@/design-system";
 import { getJson, postJson } from "@/lib/api";
 import { t } from "@/lib/i18n";
 import type { AccountProfile } from "@/lib/types";
@@ -111,83 +112,87 @@ export default function ChallengesPage() {
           const priceInRubles = challenge.price ? Math.round(challenge.price / 100) : null;
 
           return (
-            <Link
-              key={challenge.id}
-              href={`/challenges/${challenge.id}`}
-              className={`${c.card} ${locked ? c.cardLocked : ""}`}
-            >
-              {locked && <span className={c.proBadge}>PRO</span>}
+            <Link key={challenge.id} href={`/challenges/${challenge.id}`} className={c.itemLink}>
+              <DsCard variant="elevated" className={`${c.shell} ${locked ? c.locked : ""}`}>
+                {locked ? (
+                  <span className={c.proBadge}>
+                    <DsPill>PRO</DsPill>
+                  </span>
+                ) : null}
 
-              <div className={c.icon}>{challenge.icon || "🎯"}</div>
-
-              <h3 className={c.title}>{challenge.title}</h3>
-              <p className={c.body}>{challenge.description}</p>
-
-              <div className={c.meta}>
-                <div className={c.metaRow}>
-                  <span className={c.metaLabel}>Длительность</span>
-                  <span className={c.metaValue}>{challenge.duration} дней</span>
+                <div className={c.icon} aria-hidden>
+                  {challenge.icon || "🎯"}
                 </div>
-                <div className={c.metaRow}>
-                  <span className={c.metaLabel}>Цель</span>
-                  <span className={c.metaValue}>{challenge.goal}</span>
-                </div>
-              </div>
 
-              <div className={c.action}>
-                {isAvailable ? (
-                  <button
-                    type="button"
-                    className={`${c.cta} ${c.ctaPrimary}`}
-                    disabled={joining === challenge.id}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleJoin(challenge.id);
-                    }}
-                  >
-                    {joining === challenge.id ? (
-                      <span className={c.ctaInline}>
-                        <LoadingSpinner size="sm" />
-                        Присоединение…
-                      </span>
-                    ) : isFree ? (
-                      t("challenges.startFree", "Начать бесплатно")
-                    ) : priceInRubles ? (
-                      `${t("challenges.joinFor", "Присоединиться за")} ${priceInRubles} ₽`
-                    ) : (
-                      t("challenges.join", "Присоединиться")
-                    )}
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    className={`${c.cta} ${c.ctaSecondary}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      window.location.href = "/pricing";
-                    }}
-                  >
-                    Требуется Pro подписка
-                  </button>
-                )}
-              </div>
+                <DsTitle as="h3">{challenge.title}</DsTitle>
+                <DsBody muted>{challenge.description}</DsBody>
+
+                <div className={c.meta}>
+                  <div className={c.metaRow}>
+                    <span className={c.metaLabel}>Длительность</span>
+                    <span className={c.metaValue}>{challenge.duration} дней</span>
+                  </div>
+                  <div className={c.metaRow}>
+                    <span className={c.metaLabel}>Цель</span>
+                    <span className={c.metaValue}>{challenge.goal}</span>
+                  </div>
+                </div>
+
+                <div className={c.action}>
+                  {isAvailable ? (
+                    <DsButton
+                      variant="primary"
+                      size="block"
+                      disabled={joining === challenge.id}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleJoin(challenge.id);
+                      }}
+                    >
+                      {joining === challenge.id ? (
+                        <span className={c.actionInline}>
+                          <LoadingSpinner size="sm" />
+                          Присоединение…
+                        </span>
+                      ) : isFree ? (
+                        t("challenges.startFree", "Начать бесплатно")
+                      ) : priceInRubles ? (
+                        `${t("challenges.joinFor", "Присоединиться за")} ${priceInRubles} ₽`
+                      ) : (
+                        t("challenges.join", "Присоединиться")
+                      )}
+                    </DsButton>
+                  ) : (
+                    <DsButton
+                      variant="secondary"
+                      size="block"
+                      href="/pricing"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                    >
+                      Требуется Pro подписка
+                    </DsButton>
+                  )}
+                </div>
+              </DsCard>
             </Link>
           );
         })}
       </div>
 
       {!isAuthenticated && (
-        <section className={c.joinPanel}>
-          <h3 className={c.joinTitle}>Присоединяйся к марафонам</h3>
-          <p className={c.joinBody}>
+        <DsCard variant="insight" className={c.joinShell}>
+          <DsTitle as="h3">Присоединяйся к марафонам</DsTitle>
+          <DsBody muted className={c.joinBodyMax}>
             Зарегистрируйся, чтобы участвовать в марафонах и отслеживать свой прогресс.
-          </p>
-          <Link href="/onboarding/welcome?fresh=1" className={`${c.cta} ${c.ctaPrimary}`} style={{ width: "auto", paddingInline: "2rem" }}>
+          </DsBody>
+          <DsButton variant="primary" href="/onboarding/welcome?fresh=1">
             Начать
-          </Link>
-        </section>
+          </DsButton>
+        </DsCard>
       )}
 
       {isAuthenticated && (
