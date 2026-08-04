@@ -1,6 +1,7 @@
 "use client";
 
 import { pickSoftDayCheckIn } from "@/lib/todayDayDialogue";
+import { DsButton } from "@/design-system";
 import styles from "@/components/today/composition/TodayCompositionSurface.module.css";
 
 type Props = {
@@ -20,19 +21,17 @@ export function TodaySoftDayCheckIn({ dateISO, selectedOptionId, onSelect }: Pro
         {checkIn.options.map((option) => {
           const active = selectedOptionId === option.id;
           return (
-            <button
+            <DsButton
               key={option.id}
               type="button"
+              variant={active ? "primary" : "secondary"}
+              size="sm"
+              className={styles.softCheckInChip}
               data-testid={`soft-checkin-${checkIn.id}-${option.id}`}
-              className={
-                active
-                  ? `orbit-button orbit-button-primary ${styles.softCheckInChip}`
-                  : `orbit-button orbit-button-secondary ${styles.softCheckInChip}`
-              }
               onClick={() => onSelect(checkIn.id, option.id, option.label)}
             >
               {option.label}
-            </button>
+            </DsButton>
           );
         })}
       </div>

@@ -106,8 +106,8 @@
   min-width: 0;
 }
 
-/* Touch targets for CTAs inside acts */
-.body :is(button, a.orbit-button) {
+/* Touch targets for CTAs inside acts (DsButton + native) */
+.body :is(button, a[class*="btn"]) {
   min-height: 44px;
 }
 

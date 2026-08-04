@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { DsButton } from "@/design-system";
 import type { DayFocusOutcome } from "@/lib/todayDayContinuity";
 import type { TodayPromiseSuggestion } from "@/lib/todayDayDialogue";
 import {
@@ -103,26 +104,26 @@ export function TodayEveningProductClose({
         {showPromisePicker ? (
           <div className={styles.promisePicker} data-testid="evening-promise-picker">
             {promiseSuggestions.map((suggestion) => (
-              <button
+              <DsButton
                 key={suggestion.id}
                 type="button"
+                variant="secondary"
                 data-testid={`evening-promise-${suggestion.id}`}
-                className="orbit-button orbit-button-secondary"
                 disabled={saving}
                 onClick={() => onPickPromise?.(suggestion.text)}
               >
                 {suggestion.text}
-              </button>
+              </DsButton>
             ))}
-            <button
+            <DsButton
               type="button"
-              className="orbit-button orbit-button-ghost"
+              variant="ghost"
               disabled={saving}
               onClick={() => setSkippedPromise(true)}
               data-testid="evening-promise-skip"
             >
               Продолжить без обещания
-            </button>
+            </DsButton>
           </div>
         ) : (
           <>
@@ -269,9 +270,9 @@ export function TodayEveningProductClose({
             </article>
 
             <div className={styles.actions}>
-              <button
+              <DsButton
                 type="button"
-                className={styles.submitButton}
+                variant="primary"
                 data-testid="day-continuity-submit"
                 disabled={saving || outcome == null}
                 onClick={() => {
@@ -280,21 +281,22 @@ export function TodayEveningProductClose({
                 }}
               >
                 {saving ? "Сохраняем…" : "Сохранить день"}
-              </button>
+              </DsButton>
               <p className={styles.footerHint}>Завтра утром TodayFlow начнёт с того, что было сегодня.</p>
             </div>
           </>
         )}
 
         {onBack ? (
-          <button
+          <DsButton
             type="button"
-            className={`orbit-button orbit-button-ghost ${styles.backButton}`}
+            variant="ghost"
+            className={styles.backButton}
             disabled={saving}
             onClick={onBack}
           >
             Назад к дню
-          </button>
+          </DsButton>
         ) : null}
       </section>
     </div>

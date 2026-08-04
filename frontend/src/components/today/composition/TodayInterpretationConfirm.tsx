@@ -7,6 +7,7 @@ import {
   type InterpretationResonance,
   type ProximityChoiceId,
 } from "@/lib/todayInterpretationConfirm";
+import { DsButton } from "@/design-system";
 import styles from "@/components/today/composition/TodayCompositionSurface.module.css";
 
 type Props = {
@@ -27,20 +28,18 @@ export function TodayInterpretationConfirm({ target, selectedChoiceId, disabled 
         {options.map((option) => {
           const active = selectedChoiceId === option.choiceId;
           return (
-            <button
+            <DsButton
               key={option.choiceId}
               type="button"
+              variant={active ? "primary" : "secondary"}
+              size="sm"
+              className={styles.interpretationConfirmChip}
               data-testid={`interpretation-confirm-${target}-${option.choiceId}`}
-              className={
-                active
-                  ? `orbit-button orbit-button-primary ${styles.interpretationConfirmChip}`
-                  : `orbit-button orbit-button-secondary ${styles.interpretationConfirmChip}`
-              }
               disabled={disabled}
               onClick={() => onSelect(option.choiceId, option.resonance)}
             >
               {option.label}
-            </button>
+            </DsButton>
           );
         })}
       </div>

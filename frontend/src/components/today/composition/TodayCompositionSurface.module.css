@@ -1722,7 +1722,7 @@
   overflow-y: auto;
   padding: 1.25rem 1rem 1.5rem;
   border-radius: var(--tdp-radius) var(--tdp-radius) 0 0;
-  background: #fffbf7;
+  background: var(--day-surface-tint, var(--tf-surface));
   box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.15);
 }
 

@@ -103,7 +103,9 @@ import {
   TAROT_DEEPEN_EVENT_SOURCE,
 } from "@/lib/tarotDeepenEvents";
 import styles from "@/components/today/composition/TodayCompositionSurface.module.css";
-import { DsRitualGate, DsRitualGateSection } from "@/design-system";
+import { DsButton, DsRitualGate, DsRitualGateSection } from "@/design-system";
+import { joinClass } from "@/design-system/utils/joinClass";
+import ds from "@/design-system/primitives/dsPrimitives.module.css";
 import { getJson, postJson } from "@/lib/api";
 import { PersonalizationDegradedBadge } from "@/components/product-ui/PersonalizationDegradedBadge";
 import { buildDayEventsForNarrative } from "@/components/today/todayPageUtils";
@@ -1858,7 +1860,7 @@ export function TodayCompositionSurface(props: Props) {
                       orientation: engagement.tarotOrientation ?? "upright",
                       source: "today",
                     })}
-                    className={`orbit-button orbit-button-secondary ${styles.ritualDeepenCta}`}
+                    className={joinClass(ds.btn, ds.btnMd, ds.btnSecondary, styles.ritualDeepenCta)}
                     data-testid="today-tarot-deepen"
                     onClick={() => {
                       trackMeaningEvent({
@@ -1980,9 +1982,10 @@ export function TodayCompositionSurface(props: Props) {
                   <p className={styles.toolTitle}>{practiceTool.title}</p>
                   <p className={styles.toolDetail}>{practiceTool.detail}</p>
                   {practiceTool.duration ? <p className={styles.toolMeta}>{practiceTool.duration}</p> : null}
-                  <button
+                  <DsButton
                     type="button"
-                    className={`orbit-button orbit-button-primary ${styles.toolActionPrimary}`}
+                    variant="primary"
+                    className={styles.toolActionPrimary}
                     disabled={!story.personalizedReady || engagement.practiceCompleted || practiceCompleting}
                     onClick={() => void onPracticeAction()}
                   >
@@ -1993,7 +1996,7 @@ export function TodayCompositionSurface(props: Props) {
                         : story.personalizedReady
                           ? copy.practiceStart
                           : "Откроется после ритуала"}
-                  </button>
+                  </DsButton>
                 </article>
               ) : null}
               {supportTools.length > 0 ? (
@@ -2008,15 +2011,16 @@ export function TodayCompositionSurface(props: Props) {
                       <p className={styles.toolTitle}>{tool.title}</p>
                       <p className={styles.toolDetail}>{tool.detail}</p>
                       {tool.id === "affirmation" && story.personalizedReady ? (
-                        <button
+                        <DsButton
                           type="button"
-                          className={`orbit-button orbit-button-secondary ${styles.toolAction}`}
+                          variant="secondary"
+                          className={styles.toolAction}
                           disabled={engagement.affirmationRead}
                           data-testid="today-tool-affirmation-done"
                           onClick={onAffirmationDone}
                         >
                           {engagement.affirmationRead ? copy.affirmationDone : copy.markAffirmationDone}
-                        </button>
+                        </DsButton>
                       ) : null}
                     </article>
                   ))}
@@ -2091,14 +2095,14 @@ export function TodayCompositionSurface(props: Props) {
                   onChange={(e) => setGoalDraft(e.target.value)}
                   maxLength={200}
                 />
-                <button type="button" className="orbit-button orbit-button-primary" onClick={onSaveGoal}>
+                <DsButton type="button" variant="primary" onClick={onSaveGoal}>
                   {copy.goalSave}
-                </button>
+                </DsButton>
               </div>
             ) : (
-              <button type="button" className={`orbit-button orbit-button-secondary ${styles.promiseCustom}`} onClick={() => setGoalDraftOpen(true)}>
+              <DsButton type="button" variant="secondary" className={styles.promiseCustom} onClick={() => setGoalDraftOpen(true)}>
                 Написать своё
-              </button>
+              </DsButton>
             )}
             {engagement.dayGoal ? (
               <p className={styles.promiseChosen} data-testid="today-promise-chosen">
@@ -2166,14 +2170,15 @@ export function TodayCompositionSurface(props: Props) {
         screenFlowIndex >= todayScreenFlowReadingIndex(showSymbolsAct) + 2 ? (
           <div className={styles.eveningZone} data-testid="today-zone-evening-entry">
             <p className={styles.eveningHint}>{copy.eveningHint}</p>
-            <button
+            <DsButton
               type="button"
-              className={`orbit-button orbit-button-primary ${styles.eveningButton}`}
+              variant="primary"
+              className={styles.eveningButton}
               data-testid="today-evening-open"
               onClick={onOpenEvening}
             >
               {copy.eveningCta}
-            </button>
+            </DsButton>
           </div>
         ) : null}
 
@@ -2207,14 +2212,15 @@ export function TodayCompositionSurface(props: Props) {
         {!useProductPersonalized && zones.evening ? (
           <div className={styles.eveningZone} data-testid="today-zone-evening-entry">
             <p className={styles.eveningHint}>{story.isEveningSurface ? copy.eveningRecapTitle : copy.eveningHint}</p>
-            <button
+            <DsButton
               type="button"
-              className={`orbit-button orbit-button-primary ${styles.eveningButton}`}
+              variant="primary"
+              className={styles.eveningButton}
               data-testid="today-evening-open"
               onClick={onOpenEvening}
             >
               {copy.eveningCta}
-            </button>
+            </DsButton>
           </div>
         ) : null}
 
@@ -2236,9 +2242,9 @@ export function TodayCompositionSurface(props: Props) {
         >
           <div className={styles.pickSheet}>
             <div data-testid="today-ritual-tarot-pick">{tarotPickExperience}</div>
-            <button type="button" className={`orbit-button orbit-button-secondary ${styles.pickClose}`} onClick={() => setRitualPickOpen(null)}>
+            <DsButton type="button" variant="secondary" className={styles.pickClose} onClick={() => setRitualPickOpen(null)}>
               Закрыть
-            </button>
+            </DsButton>
           </div>
         </div>
       ) : null}
@@ -2253,9 +2259,9 @@ export function TodayCompositionSurface(props: Props) {
         >
           <div className={styles.pickSheet}>
             <div data-testid="today-ritual-number-pick">{numberPickExperience}</div>
-            <button type="button" className={`orbit-button orbit-button-secondary ${styles.pickClose}`} onClick={() => setRitualPickOpen(null)}>
+            <DsButton type="button" variant="secondary" className={styles.pickClose} onClick={() => setRitualPickOpen(null)}>
               Закрыть
-            </button>
+            </DsButton>
           </div>
         </div>
       ) : null}
