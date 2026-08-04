@@ -13,7 +13,8 @@
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:ui": "playwright test --ui",
-    "build:tarot-assets": "python3 ../scripts/build-tarot-assets.py"
+    "build:tarot-assets": "python3 ../scripts/build-tarot-assets.py",
+    "check:ds-gate": "python3 ../scripts/check_ds_style_gate.py --quiet"
   },
   "dependencies": {
     "framer-motion": "^11.18.2",
