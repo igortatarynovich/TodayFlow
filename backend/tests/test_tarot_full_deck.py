@@ -30,3 +30,14 @@ def test_tarot_service_uses_full_deck_and_draws_minors():
     assert len(minors) >= 20, f"expected many minors in draws, got {sorted(minors)[:10]}"
     assert len(majors) >= 8
     assert max(seen) >= 22
+
+
+def test_interactive_deck_draw_is_fresh_each_call():
+    """Same user + same day must not get a fixed deck order across reshuffles."""
+    service = TarotService()
+    user = User(id=7, email="reshuffle@test.local")
+    orders = [
+        tuple(int(c.id) for c in service.draw_cards_from_deck(user, count=10))
+        for _ in range(12)
+    ]
+    assert len(set(orders)) >= 2, f"expected varying shuffle, got identical: {orders[0]}"

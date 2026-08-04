@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import secrets
 from datetime import date, datetime, timedelta, timezone
 from random import Random
 from typing import Any, Dict, List
@@ -732,15 +733,17 @@ class TarotService:
     def draw_cards_from_deck(
         self, user: db_models.User, count: int = 10, *, locale: str | None = None
     ) -> List[api_models.TarotCard]:
-        """Draw cards from deck for interactive selection."""
-        from datetime import date
-        token = f"{user.id}:{date.today().isoformat()}:deck"
-        deck = self._deal_cards(count, user.id, token)
-        
-        cards: List[api_models.TarotCard] = []
-        for card_data in deck:
-            cards.append(self._to_card_model(card_data))
-        return cards
+        """Draw cards from deck for interactive selection.
+
+        Fresh shuffle every call — not date-seeded. Daily ritual draws stay
+        deterministic via ``_deal_cards``; interactive /tarot/deck/draw must not
+        repeat the same order for one user all day.
+        """
+        _ = user  # auth/context only; order is intentionally non-deterministic
+        n = max(1, min(int(count or 10), len(self.cards)))
+        deck = list(self.cards)
+        Random(secrets.randbits(64)).shuffle(deck)
+        return [self._to_card_model(card_data) for card_data in deck[:n]]
 
 
 async def get_tarot_service() -> TarotService:
