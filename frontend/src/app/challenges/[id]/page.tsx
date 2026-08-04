@@ -11,7 +11,7 @@ import { DsBody, DsButton, DsCard, DsPill, DsTitle } from "@/design-system";
 import { getJson, postJson } from "@/lib/api";
 import type { AccountProfile } from "@/lib/types";
 import { useToast } from "@/components/ToastProvider";
-import c from "./challenges.module.css";
+import c from "../challenges.module.css";
 
 type Challenge = {
   id: string;

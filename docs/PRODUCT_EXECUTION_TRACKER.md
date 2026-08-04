@@ -5,7 +5,7 @@ Owner: Product + Engineering
 Status: Active working document
 
 **DONE (2026-08-04):** DS Task 1 — style gate merged PR #8 (`scripts/check_ds_style_gate.py` · Jest in `npm test` · PR checklist). Separate CI workflow job **not** required — gate already blocks new debt inside Frontend Tests.  
-**IN PROGRESS (2026-08-04):** DS Task 2 — DsCard/DsButton pilot **Weekly + Challenges**, including day-atmosphere consumer wiring (`--day-*` decorative · primary CTA = static gold `DsButton`). **Task 1.5 not a separate four-screen pass** — folded into each wave PR; Task 3 repeats the same pattern on Today/Practices/Compatibility/Onboarding/Tarot/Landing/Profile.  
+**IN PROGRESS (2026-08-04):** DS Task 2 — DsCard/DsButton pilot **Weekly + Challenges** + `--day-*` decorative (Task 1.5 folded). Owner approved commit → PR → `docker compose … --force-recreate frontend`. Visual acceptance: before/after screenshots vs `/design-system` attached on PR before merge — see `docs/audits/ds-task2-screenshots/`.  
 **DONE (2026-08-04):** DS Task 0 — `design/profile-journey-premium` promoted → `main` (FF, PR #7). Deploy SoT: `docker compose -f docker-compose.prod.yml up -d --build` on this host (GitHub deploy workflow = stub). Branch policy in root `AGENTS.md`.  
 **DONE (2026-08-04):** Today Screen fix pack — Daily Focus · nearest→practice · chorus energy · plot beats · seasonal color · trap≠avoid · hook variants.  
 **DONE (2026-08-04):** Glance P0 — **Daily Focus** replaces «Сферы дня» chips; dead `TodayLifeSpheresSection` removed (V1 R15–R17).  
