@@ -1,11 +1,15 @@
 /**
- * Day-phase procedural atmospheres (FOUNDATION_UI §9).
+ * Day-phase procedural atmospheres (FOUNDATION_UI §9 / §11.1).
  * Driven by html[data-day-phase] from SectionAtmosphereBridge.
- * Paints via --tf-page-atmosphere (product shell) + section tokens (marketing).
+ *
+ * When Day Atmosphere is active (`html[data-day-mode]`), these rules MUST NOT
+ * recolor product chrome — day energy owns the shell for the whole calendar day
+ * (FOUNDATION_UI §11.1 SoT). Phase paints only apply outside day-mode (rare /
+ * non-shell contexts).
  */
 
 /* —— Morning: cream → gold haze + thin rays —— */
-html[data-atmosphere="today"][data-day-phase="morning"] {
+html:not([data-day-mode])[data-atmosphere="today"][data-day-phase="morning"] {
   --tf-page: #fdf8f0;
   --section-page-bg: #fdf8f0;
   --section-page-gradient:
@@ -25,7 +29,7 @@ html[data-atmosphere="today"][data-day-phase="morning"] {
 }
 
 /* —— Day: almost flat — action over atmosphere —— */
-html[data-atmosphere="today"][data-day-phase="day"] {
+html:not([data-day-mode])[data-atmosphere="today"][data-day-phase="day"] {
   --tf-page: #f9f3ee;
   --section-page-bg: #f9f3ee;
   --section-page-gradient:
@@ -37,7 +41,7 @@ html[data-atmosphere="today"][data-day-phase="day"] {
 }
 
 /* —— Evening: dark surface + gold star points —— */
-html[data-atmosphere="today"][data-day-phase="evening"] {
+html:not([data-day-mode])[data-atmosphere="today"][data-day-phase="evening"] {
   --tf-page: #1a1714;
   --tf-ink: #f5f0e8;
   --tf-ink-soft: #c9b8a0;
@@ -65,7 +69,7 @@ html[data-atmosphere="today"][data-day-phase="evening"] {
 }
 
 /* —— Night: deeper dark + quieter stars (clock phase, not appearance) —— */
-html[data-atmosphere="today"][data-day-phase="night"] {
+html:not([data-day-mode])[data-atmosphere="today"][data-day-phase="night"] {
   --tf-page: #121018;
   --tf-ink: #f5f0e8;
   --tf-ink-soft: #c9b8a0;
@@ -89,7 +93,7 @@ html[data-atmosphere="today"][data-day-phase="night"] {
 }
 
 /* —— First day: maximum clarity, minimal texture —— */
-html[data-atmosphere="today"][data-day-phase="first"] {
+html:not([data-day-mode])[data-atmosphere="today"][data-day-phase="first"] {
   --tf-page: #fffdfb;
   --section-page-bg: #fffdfb;
   --section-page-gradient: linear-gradient(180deg, #fffdfb 0%, #faf7f2 100%);
@@ -136,7 +140,7 @@ html[data-day-phase-flash="1"]::after {
   }
 }
 
-/* Product shell already dark via data-theme — keep evening stars visible on frame path */
-html[data-product-web-shell][data-atmosphere="today"][data-day-phase="evening"] {
+/* Legacy: product shell dark evening — never under day-mode */
+html:not([data-day-mode])[data-product-web-shell][data-atmosphere="today"][data-day-phase="evening"] {
   color-scheme: dark;
 }

@@ -160,7 +160,8 @@ html[data-day-mode] {
   --tf-ds-border-ink: color-mix(in srgb, var(--day-decor-color) 28%, transparent);
 }
 
-/* Same ink lock with higher specificity vs mood / phase / legacy theme attrs. */
+/* Same ink lock with higher specificity vs mood / phase / legacy theme attrs.
+   Full chrome reset — evening/night phase must not leave dark nav/panel tokens. */
 html[data-day-mode][data-mood],
 html[data-day-mode][data-mood="night"],
 html[data-day-mode][data-theme="dark"],
@@ -180,9 +181,18 @@ html[data-day-mode][data-atmosphere="today"][data-day-phase="night"] {
     radial-gradient(ellipse 85% 55% at 12% -8%, var(--day-bg-glow-primary), transparent 58%),
     radial-gradient(ellipse 70% 45% at 92% 8%, var(--day-bg-glow-secondary), transparent 55%),
     var(--day-bg-base);
+  --section-page-bg: var(--day-bg-base);
+  --section-page-gradient: var(--tf-page-atmosphere);
   --tf-ds-glass: color-mix(in srgb, var(--day-surface-tint) 82%, rgba(255, 255, 255, 0.42));
+  --tf-ds-border-ink: color-mix(in srgb, var(--day-decor-color) 28%, transparent);
+  --section-nav-bg: color-mix(in srgb, var(--day-surface-tint) 94%, transparent);
   --section-nav-ink: #2a2520;
   --section-text: #2a2520;
+  --section-text-muted: #4a4540;
+  --section-panel-bg: color-mix(in srgb, var(--day-surface-tint) 88%, transparent);
+  --section-panel-border: color-mix(in srgb, var(--day-decor-color) 22%, transparent);
+  --section-footer-bg: color-mix(in srgb, var(--day-surface-tint) 92%, transparent);
+  --section-footer-ink: #7a7168;
 }
 
 /* Beat route-specific void/dark section presets (e.g. tarot) once day-mode is active. */
