@@ -348,7 +348,7 @@ TODAYFLOW_FOUNDATION_UI
 |------|---------|---------|-------------|--------|
 | **Section** | `data-atmosphere` | **роут** | мягкий route-пресет; **на product routes уступает Day Atmosphere**, когда `data-day-mode` задан | route-atmosphere |
 | **Mood** | `data-mood` | время + pin | ink/accent (WIP) | `productMoodTheme.ts` |
-| **Day-phase** | `data-day-phase` | часы на `/today` | процедурная текстура | WIP |
+| **Day-phase** | `data-day-phase` | часы на `/today` | процедурная текстура **только вне** `data-day-mode` (не перекрашивает шелл вечером) | `day-phase-atmosphere.css` gated `:not([data-day-mode])` |
 | **Day Atmosphere** | `data-day-mode` (8) | **сюжет дня** | фон, декор, motion · **сквозной шелл** (sidebar/frame) на всех product routes | §12–§13 |
 
 **Продуктовый SoT (2026-08-03):** на app shell день один — не выделяем разделы отдельными dark/void темами (Tarot immersive dark снят). Экранные акты Today = плоские glass Block как Glance (без ActShell-матрёшки). Totem color / heatmap mood — не шелл. Сайдбар / ink / glass blocks — одни `--day-*` + `--tf-ink` (тёмный читаемый ink) на всех product routes; `html[data-theme]` не задаётся (только frame); mood `night` / clock evening не перекрашивают chrome.

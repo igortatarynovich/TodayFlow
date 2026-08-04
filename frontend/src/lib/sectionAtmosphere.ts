@@ -1,5 +1,7 @@
 /** Route → visual atmosphere. Shared shell, per-section mood via CSS vars on `html[data-atmosphere]`. */
 
+import { usesProductWebAppShell } from "@/lib/productWebShell";
+
 export type SectionAtmosphere =
   | "home"
   | "today"
@@ -34,16 +36,10 @@ export const SECTION_THEME_COLORS: Record<SectionAtmosphere, string> = {
   default: "#fff9f5",
 };
 
-/** Product routes — minimal footer, no newsletter block. */
+/**
+ * Product chrome routes — Day Atmosphere + minimal footer.
+ * SoT = `usesProductWebAppShell` (same surface as sidebar shell).
+ */
 export function isAppProductRoute(pathname: string | null | undefined): boolean {
-  if (!pathname) return false;
-  return (
-    pathname.startsWith("/today") ||
-    pathname.startsWith("/flow") ||
-    pathname.startsWith("/tracking/calendar") ||
-    pathname.startsWith("/profile") ||
-    pathname.startsWith("/compatibility") ||
-    pathname.startsWith("/tarot") ||
-    pathname.startsWith("/practices")
-  );
+  return usesProductWebAppShell(pathname);
 }

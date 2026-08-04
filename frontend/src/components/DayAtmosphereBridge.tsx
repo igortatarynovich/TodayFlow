@@ -113,7 +113,9 @@ export function DayAtmosphereBridge() {
       window.removeEventListener("storage", onStorage);
       window.removeEventListener(DAY_ATMOSPHERE_ENGINE_EVENT, onEngine);
       mq?.removeEventListener?.("change", onMotionPref);
-      clearDayAtmosphere(root);
+      // Do not clearDayAtmosphere here: pathname cleanup would flash non-day chrome
+      // between product routes. `apply()` clears when leaving product shell; true
+      // unmount leaves attrs until next mount apply (acceptable).
     };
   }, [pathname]);
 

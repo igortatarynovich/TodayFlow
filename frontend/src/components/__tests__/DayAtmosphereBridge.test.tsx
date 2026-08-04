@@ -158,12 +158,18 @@ describe("DayAtmosphereBridge", () => {
     expect(document.documentElement.style.getPropertyValue("--day-motion-distance")).toBe("0px");
   });
 
-  it("clears data-day-mode and inline tokens on unmount", () => {
+  it("keeps data-day-mode on unmount so product→product nav does not flash clear", () => {
     const { unmount } = render(<DayAtmosphereBridge />);
     expect(document.documentElement.getAttribute("data-day-mode")).toBe("clarity");
     unmount();
-    expect(document.documentElement.hasAttribute("data-day-mode")).toBe(false);
-    expect(document.documentElement.style.getPropertyValue("--day-bg-base")).toBe("");
+    // Cleanup no longer clears — marketing navigate clears via apply().
+    expect(document.documentElement.getAttribute("data-day-mode")).toBe("clarity");
+  });
+
+  it("applies day-mode on weekly/account shell routes (not only hub five)", () => {
+    mockPathname.mockReturnValue("/weekly");
+    render(<DayAtmosphereBridge />);
+    expect(document.documentElement.getAttribute("data-day-mode")).toBe("clarity");
   });
 
   it("clears product atmosphere when navigating to a marketing route", () => {
@@ -174,6 +180,19 @@ describe("DayAtmosphereBridge", () => {
     rerender(<DayAtmosphereBridge />);
 
     expect(document.documentElement.hasAttribute("data-day-mode")).toBe(false);
+  });
+
+  it("keeps day-mode when navigating between product routes", () => {
+    const { rerender } = render(<DayAtmosphereBridge />);
+    expect(document.documentElement.getAttribute("data-day-mode")).toBe("clarity");
+
+    mockPathname.mockReturnValue("/profile");
+    rerender(<DayAtmosphereBridge />);
+    expect(document.documentElement.getAttribute("data-day-mode")).toBe("clarity");
+
+    mockPathname.mockReturnValue("/account/settings");
+    rerender(<DayAtmosphereBridge />);
+    expect(document.documentElement.getAttribute("data-day-mode")).toBe("clarity");
   });
 
   it("applies engine nest from custom event; pin still wins", () => {
