@@ -98,7 +98,7 @@ class Settings(BaseSettings):
     gemini_max_tokens: int = 4096  # GEMINI_MAX_TOKENS — Gemini 2.5 резервирует budget на thinking
     # Nebius Token Factory (OpenAI-compatible): https://docs.tokenfactory.nebius.com/
     nebius_api_key: str | None = None  # NEBIUS_API_KEY
-    nebius_base_url: str = "https://api.tokenfactory.nebius.com/v1/"  # NEBIUS_BASE_URL
+    nebius_base_url: str = "https://api.tokenfactory.eu-west2.nebius.com/v1/"  # NEBIUS_BASE_URL
     nebius_model: str = "moonshotai/Kimi-K2.6"  # NEBIUS_MODEL — Kimi voice trial (K3 TTFT ~160s+ on Nebius)
     # Empty during Kimi primary trial — do not silently hop to DeepSeek and “pass” the test.
     # Set NEBIUS_FALLBACK_MODEL=deepseek-ai/DeepSeek-V4-Pro to re-enable provider failover.

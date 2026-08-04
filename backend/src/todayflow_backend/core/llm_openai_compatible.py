@@ -58,7 +58,7 @@ def _resolve_llm_credentials() -> tuple[str, str] | None:
         key = (settings.nebius_api_key or "").strip()
         if not key:
             return None
-        base = (settings.nebius_base_url or "https://api.tokenfactory.nebius.com/v1/").strip()
+        base = (settings.nebius_base_url or "https://api.tokenfactory.eu-west2.nebius.com/v1/").strip()
         return key, base.rstrip("/")
 
     key = (settings.llm_chat_api_key or settings.openai_api_key or "").strip()

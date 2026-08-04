@@ -24,19 +24,19 @@ OpenAI-compatible client:
 ```bash
 LLM_PROVIDER=nebius
 NEBIUS_API_KEY=...
-NEBIUS_BASE_URL=https://api.tokenfactory.nebius.com/v1/
-NEBIUS_MODEL=moonshotai/Kimi-K2.6
+NEBIUS_BASE_URL=https://api.tokenfactory.eu-west2.nebius.com/v1/
+NEBIUS_MODEL=moonshotai/Kimi-K3
 NEBIUS_FALLBACK_MODEL=
 LLM_STREAM_COMPLETIONS=1
 LLM_STREAM_READ_TIMEOUT_SECONDS=120
 ```
 
-Kimi primary (voice trial). **K3 on Nebius** measured TTFT ≈160s even for a 1-word reply — use K2.6 for product latency, or raise stream read ≥180–300s for K3. Streaming is required for thinking models (Moonshot). Empty fallback = no silent DeepSeek hop.
+Kimi primary (voice trial). Prefer the **regional** Token Factory host (`eu-west2`) — K3 TTFT there is ~1s; the global `api.tokenfactory.nebius.com` host measured ~160s TTFT for the same model. Streaming is required for thinking models (Moonshot). Empty fallback = no silent DeepSeek hop. Note: some models (e.g. K2.6) may be 404 on the regional host only.
 
 Equivalent manual wiring:
 
 ```bash
-OPENAI_BASE_URL=https://api.tokenfactory.nebius.com/v1/
+OPENAI_BASE_URL=https://api.tokenfactory.eu-west2.nebius.com/v1/
 OPENAI_API_KEY=$NEBIUS_API_KEY
 LLM_DEFAULT_MODEL=<model_id>
 ```
