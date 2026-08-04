@@ -8,7 +8,7 @@ Status: Active working document
 **DONE (2026-08-04):** DS Task 3 — Today composition wave (`DsButton` CTAs + day-tint). PR #10 merged.  
 **DONE (2026-08-04):** DS Task 3 — Practices wave (`DsButton` · kill lavender · `--day-*`). PR #11 merged.  
 **DONE (2026-08-04):** DS Task 3 — Profile wave (`DsButton` hub/setup CTAs · `profileV2System` → `--tf-*`/`--day-*`). PR #12 merged + frontend rebuild.
-**DONE (2026-08-04):** Day shell chrome — day-mode on all product routes; evening phase no longer recolors shell; sidebar stretch fix.
+**DONE (2026-08-04):** Day shell chrome — day-mode on all product routes; evening phase no longer recolors shell; sidebar stretch fix. PR #14 merged + frontend rebuild.
 **DONE (2026-08-04):** DS Task 3 — Compatibility wave (`DsButton` · chips/layer cards · tokenize exploration CSS). PR #13 merged + frontend rebuild.  
 **DONE (2026-08-04):** DS Task 1 — style gate merged PR #8 (`scripts/check_ds_style_gate.py` · Jest in `npm test` · PR checklist). Separate CI workflow job **not** required.  
 **DONE (2026-08-04):** DS Task 0 — `design/profile-journey-premium` promoted → `main` (FF, PR #7). Deploy SoT: `docker compose -f docker-compose.prod.yml up -d --build` on this host.  
@@ -1377,7 +1377,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
-- 2026-08-04 | Design System | **Day shell chrome fix** | **IN PROGRESS** | `isAppProductRoute` = shell surface; day-phase color gated `:not([data-day-mode])`; bridge no longer clears on product→product; sidebar `height:100%` → stretch.
+- 2026-08-04 | Design System | **Day shell chrome fix** | **DONE (LIVE)** | PR #14 merged · frontend rebuild. Day-mode = shell routes; evening phase gated; sidebar stretch.
 - 2026-08-04 | Design System | **Task 3 Compatibility wave** | **DONE (LIVE)** | PR #13 merged · frontend rebuild. Hub/analyze/signs/birthdates → `DsButton`; baseline 495→447. Orphan Encyclopedia/DesktopWireframe deferred.
 - 2026-08-04 | Design System | **Task 3 Profile wave** | **DONE (LIVE)** | PR #12 merged (`eb4e281`) · frontend rebuild. Hub/setup CTAs → `DsButton`; `profileV2System` tokenized; baseline 567→495. v0/editorial/quickMap deferred.
 - 2026-08-04 | Design System | **Task 3 Practices wave** | **DONE** | PR #11 merged. Hub/session/detail CTAs → `DsButton`; lavender zone killed.
