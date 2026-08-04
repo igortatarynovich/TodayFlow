@@ -16,7 +16,7 @@ from todayflow_backend.services.day_story_refresh_v1 import refresh_day_story_fo
 from todayflow_backend.services.day_story_wire_v1 import build_day_story_record_for_refresh
 
 USER_IDS = [1, 2]
-LOCAL_DATE = date(2026, 8, 3)
+LOCAL_DATE = date(2026, 8, 4)
 TZ = "Europe/Berlin"
 LOCALE = "ru"
 
