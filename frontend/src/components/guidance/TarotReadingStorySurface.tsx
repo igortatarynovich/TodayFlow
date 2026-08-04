@@ -35,6 +35,8 @@ export function TarotReadingStorySurface({
     { key: "attention" as const, title: chrome.insightAttentionTitle, text: model.insights.attention },
   ].filter((item) => item.text?.trim());
 
+  const hasWhy = Boolean(model.storyNarrative?.trim()) || model.cardInsights.length > 0;
+
   const handleFollowUp = async (chip: TarotFollowUpChip) => {
     if (followUpSaved) return;
     setSelectedChipId(chip.id);
@@ -71,60 +73,19 @@ export function TarotReadingStorySurface({
 
       {model.mainAnswer ? (
         <section className={styles.blockMainAnswer} aria-labelledby="tarot-story-answer">
-          {chrome.mainAnswerEyebrow ? (
-            <p id="tarot-story-answer" className={styles.eyebrow}>
-              {chrome.mainAnswerEyebrow}
-            </p>
-          ) : (
-            <p id="tarot-story-answer" className={styles.srOnly}>
-              Главный ответ
-            </p>
-          )}
+          <p id="tarot-story-answer" className={styles.eyebrow}>
+            {chrome.mainAnswerKicker}
+          </p>
           <p className={styles.mainAnswer}>{model.mainAnswer}</p>
         </section>
       ) : null}
 
-      {model.storyNarrative ? (
-        <section className={styles.block} aria-labelledby="tarot-story-why">
-          {chrome.storyEyebrow ? (
-            <p id="tarot-story-why" className={styles.eyebrow}>
-              {chrome.storyEyebrow}
-            </p>
-          ) : null}
-          <p className={styles.bodyText}>{model.storyNarrative}</p>
-        </section>
-      ) : null}
-
-      {model.cardInsights.length ? (
-        <section className={styles.blockCards} aria-labelledby="tarot-story-cards">
-          <p id="tarot-story-cards" className={styles.eyebrow}>
-            {chrome.cardsEyebrow}
+      {model.todaySuggestion ? (
+        <section className={styles.blockToday} aria-labelledby="tarot-story-today">
+          <p id="tarot-story-today" className={styles.eyebrow}>
+            {chrome.todayEyebrow}
           </p>
-          <div className={styles.cardInsightList}>
-            {model.cardInsights.map((card) => {
-              const thumbW = 56;
-              const thumbH = tarotCardDisplayHeightPx(thumbW);
-              const faceSrc = Number.isFinite(card.cardId) ? tarotCardFaceSrc(card.cardId) : null;
-              const imgSrc = faceSrc ?? tarotCardBackSrc();
-              const isReversed = card.orientation === "reversed";
-              return (
-                <article key={`${card.cardId}-${card.positionLabel}`} className={styles.cardInsightRow}>
-                  <div
-                    className={`${styles.cardInsightThumb} ${isReversed && faceSrc ? styles.cardInsightThumbReversed : ""}`}
-                    style={{ width: `${thumbW}px`, height: `${thumbH}px` }}
-                  >
-                    <Image src={imgSrc} alt="" fill sizes={`${thumbW}px`} draggable={false} style={{ objectFit: "contain" }} />
-                  </div>
-                  <div className={styles.cardInsightBody}>
-                    <p className={styles.cardInsightMeta}>
-                      {card.positionLabel} · {card.cardNameRu}
-                    </p>
-                    <p className={styles.cardInsightLine}>{card.line}</p>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
+          <p className={styles.todayText}>{model.todaySuggestion}</p>
         </section>
       ) : null}
 
@@ -144,13 +105,53 @@ export function TarotReadingStorySurface({
         </section>
       ) : null}
 
-      {model.todaySuggestion ? (
-        <section className={styles.blockToday} aria-labelledby="tarot-story-today">
-          <p id="tarot-story-today" className={styles.eyebrow}>
-            {chrome.todayEyebrow}
-          </p>
-          <p className={styles.todayText}>{model.todaySuggestion}</p>
-        </section>
+      {hasWhy ? (
+        <details className={styles.whyDetails} data-testid="tarot-story-why-details">
+          <summary className={styles.whySummary}>{chrome.whyDetailsSummary}</summary>
+          <div className={styles.whyBody}>
+            {model.storyNarrative ? (
+              <section className={styles.block} aria-labelledby="tarot-story-why">
+                <p id="tarot-story-why" className={styles.eyebrow}>
+                  {chrome.storyKicker}
+                </p>
+                <p className={styles.bodyText}>{model.storyNarrative}</p>
+              </section>
+            ) : null}
+
+            {model.cardInsights.length ? (
+              <section className={styles.blockCards} aria-labelledby="tarot-story-cards">
+                <p id="tarot-story-cards" className={styles.eyebrow}>
+                  {chrome.cardsEyebrow}
+                </p>
+                <div className={styles.cardInsightList}>
+                  {model.cardInsights.map((card) => {
+                    const thumbW = 56;
+                    const thumbH = tarotCardDisplayHeightPx(thumbW);
+                    const faceSrc = Number.isFinite(card.cardId) ? tarotCardFaceSrc(card.cardId) : null;
+                    const imgSrc = faceSrc ?? tarotCardBackSrc();
+                    const isReversed = card.orientation === "reversed";
+                    return (
+                      <article key={`${card.cardId}-${card.positionLabel}`} className={styles.cardInsightRow}>
+                        <div
+                          className={`${styles.cardInsightThumb} ${isReversed && faceSrc ? styles.cardInsightThumbReversed : ""}`}
+                          style={{ width: `${thumbW}px`, height: `${thumbH}px` }}
+                        >
+                          <Image src={imgSrc} alt="" fill sizes={`${thumbW}px`} draggable={false} style={{ objectFit: "contain" }} />
+                        </div>
+                        <div className={styles.cardInsightBody}>
+                          <p className={styles.cardInsightMeta}>
+                            {card.positionLabel} · {card.cardNameRu}
+                          </p>
+                          <p className={styles.cardInsightLine}>{card.line}</p>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+              </section>
+            ) : null}
+          </div>
+        </details>
       ) : null}
 
       {model.followUpChips.length ? (

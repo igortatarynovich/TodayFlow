@@ -47,6 +47,26 @@ function splitParagraphs(text: string): string[] {
   return [parts.slice(0, 2).join(" "), ...parts.slice(2)].filter(Boolean);
 }
 
+/** Split choice option prose into ≤2 short lines (gives / costs). */
+function splitChoiceLines(text: string | undefined | null): string[] {
+  const raw = (text || "").replace(/\s+/g, " ").trim();
+  if (!raw) return [];
+  const labeled = raw.match(
+    /(?:даёт|дает|gain)\s*[:—-]?\s*(.+?)(?:\s*(?:стоит|цена|риск|cost|risk)\s*[:—-]?\s*(.+))?$/i,
+  );
+  if (labeled?.[1]) {
+    const lines = [ensurePeriod(labeled[1].trim())];
+    if (labeled[2]?.trim()) lines.push(ensurePeriod(labeled[2].trim()));
+    return lines.slice(0, 2);
+  }
+  const parts = raw
+    .split(/(?<=[.!?…;])\s+|\s+[—–-]\s+/)
+    .map((p) => ensurePeriod(p.replace(/^даёт\s*[:—-]?\s*/i, "").replace(/^стоит\s*[:—-]?\s*/i, "")))
+    .filter(Boolean);
+  if (parts.length <= 2) return parts;
+  return [parts[0], parts.slice(1).join(" ")].filter(Boolean).slice(0, 2);
+}
+
 export function TarotWebResult({
   model,
   locale = "ru",
@@ -78,24 +98,39 @@ export function TarotWebResult({
 
   const storyParas = useMemo(() => {
     if (blocked) return [];
-    if (choice?.option_a_summary || choice?.option_b_summary) {
-      return [choice.option_a_summary, choice.option_b_summary, model.storyNarrative]
-        .map((p) => (p ? ensurePeriod(p) : ""))
-        .filter(Boolean);
-    }
     return model.storyNarrative?.trim() ? splitParagraphs(model.storyNarrative) : [];
-  }, [blocked, choice, model.storyNarrative]);
+  }, [blocked, model.storyNarrative]);
 
   const answerParas = useMemo(
     () => (model.mainAnswer?.trim() ? splitParagraphs(model.mainAnswer) : []),
     [model.mainAnswer],
   );
 
+  const choiceALines = useMemo(
+    () => (!blocked ? splitChoiceLines(choice?.option_a_summary) : []),
+    [blocked, choice?.option_a_summary],
+  );
+  const choiceBLines = useMemo(
+    () => (!blocked ? splitChoiceLines(choice?.option_b_summary) : []),
+    [blocked, choice?.option_b_summary],
+  );
+  const confidenceNote = (!blocked && choice?.confidence_note?.trim()) || "";
+
+  const hasWhy =
+    symbolsParas.length > 0 || storyParas.length > 0 || model.cardInsights.length > 0;
+
   const hasStory =
-    symbolsParas.length > 0 ||
-    storyParas.length > 0 ||
     answerParas.length > 0 ||
-    Boolean(model.todaySuggestion?.trim());
+    Boolean(model.todaySuggestion?.trim()) ||
+    choiceALines.length > 0 ||
+    choiceBLines.length > 0 ||
+    Boolean(confidenceNote) ||
+    hasWhy;
+
+  const pathALabel = loc === "ru" ? "Путь A" : "Path A";
+  const pathBLabel = loc === "ru" ? "Путь B" : "Path B";
+  const givesLabel = loc === "ru" ? "даёт" : "gives";
+  const costsLabel = loc === "ru" ? "стоит" : "costs";
 
   return (
     <div className={s.tarotWebLayout} data-testid="tarot-web-result">
@@ -136,7 +171,7 @@ export function TarotWebResult({
         lead={
           blocked
             ? "Карты не удалось полностью распознать для интерпретации."
-            : "Символы → связь с вопросом → ответ → шаг."
+            : chrome.answerFirstLead
         }
         motif="tarot"
         plate="tarot_cards"
@@ -144,38 +179,14 @@ export function TarotWebResult({
       >
         {hasStory ? (
           <div className={s.tarotResultNarrativeStack}>
-            {symbolsParas.length ? (
-              <ProductNarrativeBlock
-                id="symbols"
-                kicker="Что здесь показывают карты"
-                lead={symbolsParas[0]}
-                paragraphs={symbolsParas.slice(1)}
-                accent="sky"
-                collapseAfter={symbolsParas.length > 3 ? 2 : undefined}
-                testId="tarot-narrative-symbols"
-              />
-            ) : null}
-
-            {storyParas.length ? (
-              <ProductNarrativeBlock
-                id="story"
-                kicker="Как это связано с твоим вопросом"
-                lead={storyParas[0]}
-                paragraphs={storyParas.slice(1)}
-                accent="default"
-                collapseAfter={storyParas.length > 3 ? 2 : undefined}
-                testId="tarot-narrative-why"
-              />
-            ) : null}
-
             {answerParas.length ? (
               <ProductNarrativeBlock
                 id="answer"
-                kicker="Ответ на вопрос"
+                kicker={chrome.mainAnswerKicker}
                 lead={answerParas[0]}
                 paragraphs={answerParas.slice(1)}
                 accent="support"
-                collapseAfter={answerParas.length > 3 ? 1 : undefined}
+                collapseAfter={answerParas.length > 2 ? 1 : undefined}
                 testId="tarot-narrative-answer"
               />
             ) : null}
@@ -183,11 +194,85 @@ export function TarotWebResult({
             {model.todaySuggestion?.trim() ? (
               <ProductNarrativeBlock
                 id="today"
-                kicker="Что сделать дальше"
+                kicker={chrome.todayEyebrow}
                 paragraphs={[ensurePeriod(model.todaySuggestion)]}
                 accent="support"
                 testId="tarot-narrative-today"
               />
+            ) : null}
+
+            {choiceALines.length || choiceBLines.length ? (
+              <div className={s.tarotChoiceCompare} data-testid="tarot-choice-compare">
+                <p className={s.tarotChoiceCompareKicker}>{chrome.choiceCompareKicker}</p>
+                <div className={s.tarotChoiceCompareGrid}>
+                  {choiceALines.length ? (
+                    <article className={s.tarotChoicePath} data-testid="tarot-choice-a">
+                      <p className={s.tarotChoicePathTitle}>{pathALabel}</p>
+                      <ul className={s.tarotChoicePathLines}>
+                        {choiceALines.map((line, idx) => (
+                          <li key={`a-${idx}`}>
+                            <span className={s.tarotChoicePathCue}>
+                              {idx === 0 ? givesLabel : costsLabel}
+                            </span>{" "}
+                            {line}
+                          </li>
+                        ))}
+                      </ul>
+                    </article>
+                  ) : null}
+                  {choiceBLines.length ? (
+                    <article className={s.tarotChoicePath} data-testid="tarot-choice-b">
+                      <p className={s.tarotChoicePathTitle}>{pathBLabel}</p>
+                      <ul className={s.tarotChoicePathLines}>
+                        {choiceBLines.map((line, idx) => (
+                          <li key={`b-${idx}`}>
+                            <span className={s.tarotChoicePathCue}>
+                              {idx === 0 ? givesLabel : costsLabel}
+                            </span>{" "}
+                            {line}
+                          </li>
+                        ))}
+                      </ul>
+                    </article>
+                  ) : null}
+                </div>
+              </div>
+            ) : null}
+
+            {confidenceNote ? (
+              <p className={s.tarotConfidenceNote} data-testid="tarot-confidence-note">
+                {ensurePeriod(confidenceNote)}
+              </p>
+            ) : null}
+
+            {hasWhy ? (
+              <details className={s.tarotWhyDetails} data-testid="tarot-why-details">
+                <summary className={s.tarotWhySummary}>{chrome.whyDetailsSummary}</summary>
+                <div className={s.tarotWhyBody}>
+                  {symbolsParas.length ? (
+                    <ProductNarrativeBlock
+                      id="symbols"
+                      kicker={chrome.symbolsKicker}
+                      lead={symbolsParas[0]}
+                      paragraphs={symbolsParas.slice(1)}
+                      accent="sky"
+                      collapseAfter={symbolsParas.length > 3 ? 2 : undefined}
+                      testId="tarot-narrative-symbols"
+                    />
+                  ) : null}
+                  {storyParas.length ? (
+                    <ProductNarrativeBlock
+                      id="story"
+                      kicker={chrome.storyKicker}
+                      lead={storyParas[0]}
+                      paragraphs={storyParas.slice(1)}
+                      accent="default"
+                      collapseAfter={storyParas.length > 3 ? 2 : undefined}
+                      testId="tarot-narrative-why"
+                    />
+                  ) : null}
+                </div>
+              </details>
             ) : null}
           </div>
         ) : (

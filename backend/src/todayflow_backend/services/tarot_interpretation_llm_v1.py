@@ -22,7 +22,7 @@ from todayflow_backend.core.text_quality import is_meaningful_sentence
 
 logger = logging.getLogger(__name__)
 
-TAROT_INTERPRETATION_PROMPT_VER = "tarot-interpretation-v1.9"
+TAROT_INTERPRETATION_PROMPT_VER = "tarot-interpretation-v1.10"
 
 _BANNED_SUBSTRINGS = (
     "аркан",
@@ -35,6 +35,28 @@ _BANNED_SUBSTRINGS = (
     "карты говорят тебе факт",
     "карты сообщают факт",
 )
+
+# Lexicon banned in direct_answer / next_step (user-facing first fields).
+_USER_FACING_JARGON = (
+    "аркан",
+    "расклад",
+    "перевёрнут",
+    "перевернут",
+    "масть",
+    "позиции",
+    "позиция ",
+    "кубков",
+    "жезлов",
+    "мечей",
+    "пентакл",
+    "мажорн",
+    "минорн",
+    "старший аркан",
+    "младший аркан",
+)
+
+_NEXT_STEP_MAX_CHARS = 220
+_OPTION_NOTE_MAX_CHARS = 180
 
 # Empty solemnity / wellness mush — cleaned fields reject if present.
 _EMPTY_FORMULAS = (
@@ -125,13 +147,24 @@ reversed_*, intensifies_drawn / softens_drawn; для младших — Q1: cor
 driving_need, shadow_pattern, growth_direction, *_lens, reversed_shift, adjacent_distinction).
 Используй Q1 как уникальный архетип карты, не как формулу масть×ранг.
 Не обязательно называть карты по имени: опирайся на core_scene / central_conflict / adjacent_distinction.
-Если называешь карты — только когда это помогает истории; запрещён механический список «карта 1… карта 2…».
+Если называешь карты — только в symbols_overview / question_story; запрещён механический список «карта 1… карта 2…».
 
-Порядок работы (обязателен):
+Порядок рассуждения (внутренний, обязателен):
 1) Собери конфликт расклада из символов и ролей позиций — назови механизм, не атмосферу.
 2) Примени логику question_ontology (сравнение для choice; гипотеза≠факт для relationship_intent; без даты для timing_readiness).
 3) Свяжи с вопросом; профиль — только тон, не цитата.
-4) Прямой (не категоричный) ответ + один шаг вида next_step_kind, который можно выполнить и проверить.
+4) Сформулируй прямой ответ и один шаг для человека — уже без таро-жаргона.
+
+Порядок полей для человека (answer-first): сначала direct_answer и next_step понятны без карт;
+тарология и имена карт — только в symbols_overview / question_story.
+
+Поля direct_answer и next_step (жёстко):
+- пиши так, чтобы человек, который НЕ видел карт и НЕ знает таро, сразу понял вывод и шаг;
+- запрещены имена карт, масти (кубков/жезлов/мечей/пентаклей), «аркан», «перевёрнут*», «расклад»,
+  «позиция», отсылки вроде «картина десятки кубков», «умеренность говорит»;
+- direct_answer: 1–2 короткие фразы — вывод + критерий проверки, без фатализма;
+- next_step: ОДИН конкретный шаг + один критерий «как понять, что сработало»; 1–2 предложения.
+  Многонедельные протоколы («три раза по 15 минут на неделю…») клади в question_story, не сюда.
 
 Жёсткие запреты:
 - не разбирай карты механически по очереди («карта 1… карта 2…»);
@@ -143,7 +176,6 @@ driving_need, shadow_pattern, growth_direction, *_lens, reversed_shift, adjacent
 - не строй фразы на антитезе «не X, а Y» / «это не …, а …» (напр. «не кричит, а греет») —
   говори прямо, что есть, без риторического отрицания;
 - запрещено слово «Аркан» как имя карты;
-- сначала конфликт/картина, потом ответ — не наоборот;
 - соблюдай do_not каждой position_semantics и must_not_claim question_ontology;
 - не называй точные даты при timing_readiness;
 - не читай мысли другого как факт при relationship_intent;
@@ -151,18 +183,19 @@ driving_need, shadow_pattern, growth_direction, *_lens, reversed_shift, adjacent
 
 Для choice (question_type=choice или spread_kind=choice):
 - в question_story — короткий общий конфликт выбора (2–4 предложения), без полного разбора всех позиций;
-- детали выгоды/цены A и B клади в option_a_note и option_b_note (обязательны и должны различаться);
-- затем один общий вывод в direct_answer;
+- option_a_note / option_b_note: ровно две короткие клаузы без украшений —
+  «Даёт: … Стоит: …» (или два коротких предложения). Без прилагательных вроде «непроштампованный», «живой»;
+- затем один общий вывод в direct_answer (без имён карт);
 - держи question_story компактным: не раздувай сравнение внутри story, если оно уже в option_*_note.
 
 Верни ТОЛЬКО валидный JSON:
 {
   "symbols_overview": "наблюдаемые напряжения расклада — 2–5 предложений, без пустой торжественности",
   "question_story": "единая история под вопрос как разбор паттерна; для choice — сжатый конфликт выбора",
-  "direct_answer": "прямой ответ на вопрос: вывод + критерий; без фатализма и напускной важности",
-  "next_step": "один конкретный применимый и проверяемый шаг",
-  "option_a_note": "null или отличие пути A",
-  "option_b_note": "null или отличие пути B",
+  "direct_answer": "прямой ответ без таро-жаргона: вывод + критерий",
+  "next_step": "один короткий применимый и проверяемый шаг без таро-жаргона",
+  "option_a_note": "null или «Даёт: … Стоит: …»",
+  "option_b_note": "null или «Даёт: … Стоит: …»",
   "confidence_note": "короткая оговорка или null"
 }
 """
@@ -243,50 +276,116 @@ def _profile_leaked(blob: str, pack: dict[str, Any]) -> bool:
     return False
 
 
-def _card_semantic_anchors(card: dict[str, Any]) -> list[str]:
-    """Distinctive tokens from KB/Q1 facts (+ optional name) for grounding checks."""
-    rng = card.get("meaning_range") if isinstance(card.get("meaning_range"), dict) else {}
-    texts = [
+_ANCHOR_STOP = {
+    "против",
+    "через",
+    "когда",
+    "чтобы",
+    "этот",
+    "этого",
+    "эта",
+    "эти",
+    "человек",
+    "людей",
+    "карта",
+    "карты",
+    "жизнь",
+    "сейчас",
+    "может",
+    "нужно",
+    "важно",
+}
+
+
+def _tokens_from_texts(texts: list[str], *, limit: int = 10) -> list[str]:
+    anchors: list[str] = []
+    for text in texts:
+        for tok in re.findall(r"[^\W\d_]{4,}", str(text or "").lower(), flags=re.UNICODE):
+            if tok in _ANCHOR_STOP:
+                continue
+            anchors.append(tok)
+    return list(dict.fromkeys(anchors))[:limit]
+
+
+def _list_texts(value: Any) -> list[str]:
+    if isinstance(value, list):
+        return [str(item) for item in value if str(item or "").strip()]
+    text = str(value or "").strip()
+    return [text] if text else []
+
+
+def _upright_anchor_texts(rng: dict[str, Any]) -> list[str]:
+    """Upright / shared-scene pole — excludes reverse-only KB fields."""
+    # Q1 / themes first so distinctive tokens survive the cap; catalog prose last.
+    texts: list[str] = [
         str(rng.get("central_symbol") or ""),
         str(rng.get("core_scene") or ""),
         str(rng.get("central_conflict") or ""),
+        str(rng.get("driving_need") or ""),
+        str(rng.get("growth_direction") or ""),
+    ]
+    texts.extend(_list_texts(rng.get("light_side")))
+    texts.extend(_list_texts(rng.get("upright_themes")))
+    texts.append(str(rng.get("upright_meaning") or ""))
+    return [t for t in texts if str(t).strip()]
+
+
+def _reversed_anchor_texts(rng: dict[str, Any]) -> list[str]:
+    """Reverse pole — minors Q1 + majors reversed.* projected into meaning_range."""
+    texts: list[str] = [
+        str(rng.get("reversed_shift") or ""),
+        str(rng.get("reversed_central") or ""),
+        str(rng.get("reversed_trap") or ""),
+    ]
+    texts.extend(_list_texts(rng.get("reversed_themes")))
+    texts.append(str(rng.get("reversed_meaning") or ""))
+    return [t for t in texts if str(t).strip()]
+
+
+def _card_display_base(card: dict[str, Any]) -> str:
+    name = str(card.get("name_ru") or "")
+    return re.sub(r"\s*\(перевёрнутый\)\s*$", "", name, flags=re.I).strip()
+
+
+def _card_semantic_anchors(card: dict[str, Any]) -> list[str]:
+    """Distinctive tokens from KB/Q1 facts (+ optional name) for grounding checks."""
+    rng = card.get("meaning_range") if isinstance(card.get("meaning_range"), dict) else {}
+    # Prefer Q1 / conflict tokens before long catalog prose (cap otherwise drops them).
+    texts = [
+        str(rng.get("core_scene") or ""),
+        str(rng.get("central_conflict") or ""),
+        str(rng.get("central_symbol") or ""),
+        str(rng.get("driving_need") or ""),
+        str(rng.get("growth_direction") or ""),
         str(rng.get("inner_conflict") or ""),
         str(rng.get("outer_expression") or ""),
+        *_list_texts(rng.get("light_side")),
+        *_list_texts(rng.get("shadow_side")),
+        *_list_texts(rng.get("upright_themes")),
+        *_list_texts(rng.get("reversed_themes")),
+        str(rng.get("reversed_shift") or ""),
+        str(rng.get("reversed_central") or ""),
+        str(rng.get("reversed_trap") or ""),
+        str(rng.get("shadow_pattern") or ""),
+        str(rng.get("upright_meaning") or ""),
+        str(rng.get("reversed_meaning") or ""),
     ]
-    for side_key in ("light_side", "shadow_side"):
-        for item in rng.get(side_key) or []:
-            texts.append(str(item))
-    name = str(card.get("name_ru") or "")
-    base = re.sub(r"\s*\(перевёрнутый\)\s*$", "", name, flags=re.I).strip()
+    base = _card_display_base(card)
     if base:
         texts.append(base)
+    return _tokens_from_texts(texts, limit=24)
 
-    stop = {
-        "против",
-        "через",
-        "когда",
-        "чтобы",
-        "этот",
-        "этого",
-        "эта",
-        "эти",
-        "человек",
-        "людей",
-        "карта",
-        "карты",
-        "жизнь",
-        "сейчас",
-        "может",
-        "нужно",
-        "важно",
-    }
-    anchors: list[str] = []
-    for text in texts:
-        for tok in re.findall(r"[^\W\d_]{4,}", text.lower(), flags=re.UNICODE):
-            if tok in stop:
-                continue
-            anchors.append(tok)
-    return list(dict.fromkeys(anchors))[:10]
+
+def _card_pole_anchors(card: dict[str, Any]) -> tuple[list[str], list[str]]:
+    """Return (upright_anchors, reversed_anchors) without shared name tokens."""
+    rng = card.get("meaning_range") if isinstance(card.get("meaning_range"), dict) else {}
+    upright = _tokens_from_texts(_upright_anchor_texts(rng), limit=24)
+    reversed_ = _tokens_from_texts(_reversed_anchor_texts(rng), limit=24)
+    # Tokens that appear in both poles cannot prove orientation either way.
+    shared = set(upright) & set(reversed_)
+    upright = [t for t in upright if t not in shared]
+    reversed_ = [t for t in reversed_ if t not in shared]
+    return upright, reversed_
 
 
 def _cards_linked(blob: str, pack: dict[str, Any]) -> bool:
@@ -305,11 +404,39 @@ def _cards_linked(blob: str, pack: dict[str, Any]) -> bool:
             hits += 1
             continue
         # Fallback: full name present
-        name = str(card.get("name_ru") or "")
-        base = re.sub(r"\s*\(перевёрнутый\)\s*$", "", name, flags=re.I).strip().lower()
+        base = _card_display_base(card).lower()
         if base and base in low:
             hits += 1
     return hits >= min(2, len(cards))
+
+
+def _orientation_grounded(blob: str, pack: dict[str, Any]) -> bool:
+    """Reject upright-pole prose for reversed cards (and the reverse).
+
+    A card is orientation-mismatched when the blob hits only the wrong pole's
+    distinctive anchors. Unmentioned cards are ignored here; ``_cards_linked``
+    still enforces overall semantic presence.
+    """
+    cards = [c for c in (pack.get("cards") or []) if isinstance(c, dict)]
+    if not cards:
+        return True
+    low = blob.lower()
+    for card in cards:
+        upright, reversed_ = _card_pole_anchors(card)
+        orient = str(card.get("orientation") or "upright").strip().lower()
+        hits_up = bool(upright) and any(a in low for a in upright)
+        hits_rev = bool(reversed_) and any(a in low for a in reversed_)
+        if orient == "reversed":
+            if not reversed_:
+                continue
+            if hits_up and not hits_rev:
+                return False
+        else:
+            if not upright:
+                continue
+            if hits_rev and not hits_up:
+                return False
+    return True
 
 
 def _step_concrete(step: str) -> bool:
@@ -331,6 +458,38 @@ def _position_title_spam(blob: str, pack: dict[str, Any]) -> bool:
                 titles.append(t.lower())
     for title in dict.fromkeys(titles):
         if blob.lower().count(title) >= 3:
+            return True
+    return False
+
+
+def _card_name_needles(pack: dict[str, Any]) -> list[str]:
+    needles: list[str] = []
+    for card in pack.get("cards") or []:
+        if not isinstance(card, dict):
+            continue
+        for key in ("name_ru", "name"):
+            raw = str(card.get(key) or "").strip()
+            base = re.sub(r"\s*\(перевёрнутый\)\s*$", "", raw, flags=re.I).strip().lower()
+            if len(base) >= 4:
+                needles.append(base)
+            # Distinctive last token: «десятка кубков» → «кубков» already in lexicon;
+            # keep full name and first significant word ≥4.
+            for tok in re.findall(r"[^\W\d_]{4,}", base, flags=re.UNICODE):
+                if tok not in _ANCHOR_STOP and tok not in {"карта", "карты"}:
+                    needles.append(tok)
+    return list(dict.fromkeys(needles))
+
+
+def _user_facing_jargon_hit(answer: str, step: str, pack: dict[str, Any]) -> bool:
+    """True when direct_answer / next_step leak tarot jargon or card names."""
+    blob = f"{answer} {step}".lower()
+    if any(j in blob for j in _USER_FACING_JARGON):
+        return True
+    # Spread metaphors that require knowing the draw.
+    if re.search(r"картин\w*\s+(десятк|паж|рыцар|корол|дам|туз)", blob):
+        return True
+    for needle in _card_name_needles(pack):
+        if needle and needle in blob:
             return True
     return False
 
@@ -362,7 +521,9 @@ def quality_reject_reason(fields: dict[str, str], pack: dict[str, Any]) -> str |
     story = fields["question_story"]
     answer = fields["direct_answer"]
     step = fields["next_step"]
-    blob = f"{symbols} {story} {answer} {step}"
+    option_a = fields.get("option_a_note") or ""
+    option_b = fields.get("option_b_note") or ""
+    blob = f"{symbols} {story} {answer} {step} {option_a} {option_b}"
 
     is_choice = bool(
         pack.get("spread_kind") == "choice" or pack.get("response_shape", {}).get("choice_compare")
@@ -371,6 +532,10 @@ def quality_reject_reason(fields: dict[str, str], pack: dict[str, Any]) -> str |
         limit = _FIELD_MAX_CHARS
         if is_choice and key == "question_story":
             limit = _FIELD_MAX_CHARS_CHOICE_STORY
+        if key == "next_step":
+            limit = _NEXT_STEP_MAX_CHARS
+        if key in {"option_a_note", "option_b_note"}:
+            limit = _OPTION_NOTE_MAX_CHARS
         if len(text) > limit:
             return f"too_long:{key}"
         if len(text) < 20 and key in {"symbols_overview", "question_story", "direct_answer"}:
@@ -393,6 +558,12 @@ def quality_reject_reason(fields: dict[str, str], pack: dict[str, Any]) -> str |
 
     if not _cards_linked(blob, pack):
         return "cards_not_linked"
+
+    if not _orientation_grounded(blob, pack):
+        return "orientation_not_grounded"
+
+    if _user_facing_jargon_hit(answer, step, pack):
+        return "user_facing_jargon"
 
     if not _step_concrete(step):
         return "next_step_vague"

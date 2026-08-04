@@ -186,10 +186,12 @@ Prompt ver: `tarot-interpretation-v1.4` (single author prompt: ontology + positi
 | bans | нет «Аркан», «просит быть замеченным», empty formulas |
 | no profile paste | profile_relevant не скопирован дословно |
 | question once | вопрос ≤1 раз во всём ответе |
-| cards linked | ≥2 имён карт в тексте (если карт ≥2) |
-| concrete step | next_step с действием / критерием |
+| cards linked | ≥2 карт привязаны к KB/Q1-якорям (имена необязательны) |
+| orientation grounded | reversed/upright: нельзя опираться только на чужой полюс KB (`orientation_not_grounded`) |
+| user-facing jargon | `direct_answer` / `next_step` без имён карт, мастей, «аркан», «перевёрнут*», «расклад» (`user_facing_jargon`) |
+| concrete step | next_step с действием / критерием; короткий (не многонедельный протокол) |
 | no cross-dup | блоки не дублируют друг друга |
-| length | разумные пределы |
+| length | разумные пределы; choice `option_*` короткие |
 | choice | A/B notes различимы (или явный контраст в story) |
 
 Reject → retry → иначе `tarot_fallback_v1`.
@@ -231,12 +233,15 @@ tarot_answer_v1:
   profile_lens_applied: boolean
 ```
 
-UI blocks (any spread):
+UI blocks (any spread) — **answer-first** (prompt `tarot-interpretation-v1.10`):
 
-1. Что здесь показывают карты (`symbols_overview`)
-2. Как это связано с твоим вопросом (`story_narrative` / choice notes)
-3. Ответ на вопрос (`main_answer`)
-4. Что сделать дальше (`today_suggestion`)
+1. Ответ на вопрос (`main_answer`) — plain language, no tarot jargon
+2. Что сделать дальше (`today_suggestion`) — one short checkable step
+3. Выбор A/B (`choice_story.option_*`) — parallel short gives/costs (choice only)
+4. Оговорка (`confidence_note`) — one line if present
+5. Почему так (collapsed) — `symbols_overview` + `story_narrative` (+ card visuals)
+
+LLM may *reason* conflict-first; JSON fields above are ordered for the human, not for the analyst.
 
 ---
 
@@ -331,6 +336,7 @@ Semantic profile на карту (семантика, не литература)
 - voice: ban rhetorical antithesis «не X, а Y» (e.g. «не кричит, а греет») — prompt + gate `antithesis_formula` (`tarot-interpretation-v1.7`; hard-gate narrowed 2026-07-27)
 - voice: analytical over faux solemnity — pattern → cost → answer → testable step (`tarot-interpretation-v1.8`)
 - voice: practitioner+friend persona (tarot · numerology · astrology · psychology · sexology · friend) — Voice Canon §1 + `tarot-interpretation-v1.9`
+- UX: answer-first composition; `direct_answer` / `next_step` jargon-free; choice notes short gives/costs (`tarot-interpretation-v1.10`)
 
 ---
 

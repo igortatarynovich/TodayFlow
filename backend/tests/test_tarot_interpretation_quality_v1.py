@@ -357,3 +357,148 @@ def test_choice_question_story_allows_moderate_length_from_eval_delta():
 
     too_long = {**fields, "question_story": fields["question_story"] + (" подробно" * 80)}
     assert tarot_llm.quality_reject_reason(too_long, pack) == "too_long:question_story"
+
+
+def test_quality_gates_reject_wrong_orientation_pole_ten_swords():
+    """Reversed card grounded only on upright KB pole → orientation_not_grounded.
+
+    Reproduces reading-518 class failure: Ten of Swords reversed described as
+    «уже изжит / боль прожита» while KB reversed_shift says the wound stays open.
+    """
+    from todayflow_backend.data import card_base_v1
+    from todayflow_backend.data import tarot_knowledge_v1 as kb
+
+    row = kb.get_card(59)
+    assert row is not None
+    sides = card_base_v1.prose_sides(59) or {}
+    rng = kb.meaning_range_from_kb(
+        row,
+        catalog_up=str(sides.get("upright") or ""),
+        catalog_rev=str(sides.get("reversed") or ""),
+    )
+    pack = {
+        "question": "Какой взгляд поможет мне быть ближе к ребёнку без давления?",
+        "spread_kind": "choice",
+        "profile_relevant": {},
+        "cards": [
+            {
+                "card_id": 59,
+                "name_ru": "Десятка Мечей",
+                "orientation": "reversed",
+                "meaning_range": rng,
+            },
+            {
+                "card_id": 41,
+                "name_ru": "Шестёрка Кубков",
+                "orientation": "upright",
+                "meaning_range": {
+                    "core_scene": "детский двор и тёплая память",
+                    "central_conflict": "ностальгия против жизни сейчас",
+                    "light_side": ["простота", "тепло"],
+                    "upright_themes": ["доброта из памяти"],
+                },
+            },
+        ],
+        "response_shape": {"choice_compare": True},
+    }
+    upright_only = {
+        "symbols_overview": (
+            "В раскладе детский двор и тёплая память спорят со старым мёртвым сценарием "
+            "контроля: тепло простоты рядом с дном, которое уже пора отпустить."
+        ),
+        "question_story": (
+            "Конфликт выбора такой: сближение через мягкую память двора или через "
+            "осознанное отпускание способа быть правильным родителем. По B — старый "
+            "мёртвый сценарий контроля фактически дожат, боль уже прожита, и взгляд "
+            "«отпустить мёртвое» даёт воздух, будто финал уже честный."
+        ),
+        "direct_answer": (
+            "Сейчас честнее взгляд через тепло памяти и один проверяемый жест без "
+            "оценки результата — иначе сценарий правильности снова станет мерой."
+        ),
+        "next_step": (
+            "Три раза по пятнадцать минут сделай то, что выбирает ребёнок, и запиши, "
+            "была ли внутри оценка."
+        ),
+        "option_a_note": "Двор и простота дают живой контакт без взрослой правильности.",
+        "option_b_note": (
+            "Старый сценарий уже изжит и боль прожита — формально отпустить легче, "
+            "чем менять привычку контроля."
+        ),
+    }
+    assert tarot_llm.quality_reject_reason(upright_only, pack) == "orientation_not_grounded"
+    assert tarot_llm.validate_interpretation(upright_only, pack=pack) is None
+
+    reverse_grounded = {
+        **upright_only,
+        "question_story": (
+            "Конфликт выбора такой: сближение через мягкую память двора или через "
+            "честное признание, что клинки почти вынуты, но рана держится открытой — "
+            "конец случился, а признать его до сих пор нечем. Отрицание конца здесь "
+            "дороже, чем сам финал."
+        ),
+        "option_b_note": (
+            "Путь B даёт облегчение только если не драматизировать уже прожитое и "
+            "не объявлять закрытие формально, пока рана ещё открыта."
+        ),
+    }
+    assert tarot_llm.quality_reject_reason(reverse_grounded, pack) is None
+    assert tarot_llm.validate_interpretation(reverse_grounded, pack=pack) is not None
+
+
+def test_quality_gates_reject_user_facing_jargon_in_answer_and_step():
+    """direct_answer / next_step must stay readable without tarot vocabulary."""
+    pack = {
+        "question": "Какой взгляд поможет мне быть ближе к ребёнку без давления?",
+        "spread_kind": "choice",
+        "profile_relevant": {},
+        "cards": [
+            {
+                "name_ru": "Десятка Кубков",
+                "orientation": "upright",
+                "meaning_range": {
+                    "core_scene": "радуга над домом",
+                    "central_conflict": "общее счастье против потери голоса",
+                    "light_side": ["принадлежность"],
+                },
+            },
+            {
+                "name_ru": "Шестёрка Кубков",
+                "orientation": "upright",
+                "meaning_range": {
+                    "core_scene": "детский двор",
+                    "central_conflict": "ностальгия против жизни сейчас",
+                    "light_side": ["тепло", "простота"],
+                },
+            },
+        ],
+        "response_shape": {"choice_compare": True},
+    }
+    jargon = {
+        "symbols_overview": (
+            "Радуга над домом рядом с детским двором: идеал семьи спорит с простой теплотой."
+        ),
+        "question_story": (
+            "Конфликт выбора: строить близость через картинку идеальной семьи или через "
+            "простую теплоту двора без оценки результата."
+        ),
+        "direct_answer": (
+            "Сейчас честнее взгляд интереса без сценария — иначе ты снова в картине десятки кубков."
+        ),
+        "next_step": "Сделай один жест тепла сегодня и проверь, ушла ли оценка результата.",
+        "option_a_note": "Даёт: живой контакт. Стоит: уязвимость ожидания.",
+        "option_b_note": "Даёт: облегчение от старого сценария. Стоит: формальное «отпустила».",
+    }
+    assert tarot_llm.quality_reject_reason(jargon, pack) == "user_facing_jargon"
+    assert tarot_llm.validate_interpretation(jargon, pack=pack) is None
+
+    clean = {
+        **jargon,
+        "direct_answer": (
+            "Сейчас честнее интерес без сценария: смотри на момент, а не на то, "
+            "стало ли «правильнее» между вами."
+        ),
+        "next_step": "Один жест тепла сегодня — и после него одна фраза: была ли внутри оценка.",
+    }
+    assert tarot_llm.quality_reject_reason(clean, pack) is None
+    assert tarot_llm.validate_interpretation(clean, pack=pack) is not None

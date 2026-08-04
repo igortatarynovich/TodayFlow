@@ -307,12 +307,24 @@ async def generate_tarot_spread_with_context(
     try:
         from todayflow_backend.services.snapshot_provenance_v1 import merge_snapshot_provenance
 
+        engine_meta = {}
+        if hasattr(reading, "__dict__"):
+            raw_meta = reading.__dict__.get("_engine_meta")
+            if isinstance(raw_meta, dict):
+                engine_meta = raw_meta
+        llm_model = engine_meta.get("llm_model") or engine_meta.get("attempted_model")
+        if isinstance(llm_model, str):
+            llm_model = llm_model.strip() or None
+        else:
+            llm_model = None
+
         gen = get_learning_service().log_generation(
             db,
             module="tarot_answer_v1",
             surface="tarot_answer",
             user_id=user.id,
             core_profile_snapshot_id=snapshot_id,
+            model=llm_model,
             input_payload=merge_snapshot_provenance(
                 {
                     "spread_id": spread.spread_id,
@@ -321,6 +333,10 @@ async def generate_tarot_spread_with_context(
                     "card_ids": [c.card.id for c in spread.cards],
                     "contract": TAROT_ANSWER_V1_CONTRACT,
                     "person_sot": person_sot,
+                    "prompt_version": engine_meta.get("prompt_version"),
+                    "llm_model": llm_model,
+                    "synthesis_mode": engine_meta.get("synthesis_mode")
+                    or tarot_answer.get("synthesis_mode"),
                     **slice_log_fields(experience_slice),
                 },
                 core_payload if isinstance(core_payload, dict) else None,

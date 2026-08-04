@@ -279,6 +279,41 @@
   border: 0;
 }
 
+.whyDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.whySummary {
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--trs-gold);
+  list-style: none;
+}
+
+.whySummary::-webkit-details-marker {
+  display: none;
+}
+
+.whySummary::before {
+  content: "▸ ";
+  display: inline-block;
+  transition: transform 0.15s ease;
+}
+
+.whyDetails[open] > .whySummary::before {
+  transform: rotate(90deg);
+}
+
+.whyBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--trs-stack);
+  margin-top: 0.35rem;
+}
+
 @media (min-width: 560px) {
   .insightGrid {
     grid-template-columns: repeat(3, minmax(0, 1fr));

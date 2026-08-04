@@ -941,6 +941,104 @@
   z-index: 1;
 }
 
+.tarotChoiceCompare {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.tarotChoiceCompareKicker {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--tf-ink, #1a1a1a) 55%, transparent);
+}
+
+.tarotChoiceCompareGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .tarotChoiceCompareGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tarotChoicePath {
+  margin: 0;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--tf-ink, #1a1a1a) 12%, transparent);
+  border-radius: 0;
+  background: color-mix(in srgb, var(--tf-surface, #fff) 88%, transparent);
+}
+
+.tarotChoicePathTitle {
+  margin: 0 0 0.45rem;
+  font-size: 0.8125rem;
+  font-weight: 650;
+}
+
+.tarotChoicePathLines {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+}
+
+.tarotChoicePathCue {
+  font-weight: 600;
+  color: color-mix(in srgb, var(--tf-ink, #1a1a1a) 62%, transparent);
+}
+
+.tarotConfidenceNote {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: color-mix(in srgb, var(--tf-ink, #1a1a1a) 72%, transparent);
+  font-style: italic;
+}
+
+.tarotWhyDetails {
+  margin: 0.25rem 0 0;
+  border-top: 1px solid color-mix(in srgb, var(--tf-ink, #1a1a1a) 10%, transparent);
+  padding-top: 0.65rem;
+}
+
+.tarotWhySummary {
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  list-style: none;
+}
+
+.tarotWhySummary::-webkit-details-marker {
+  display: none;
+}
+
+.tarotWhySummary::before {
+  content: "▸ ";
+  display: inline-block;
+  transition: transform 0.15s ease;
+}
+
+.tarotWhyDetails[open] > .tarotWhySummary::before {
+  transform: rotate(90deg);
+}
+
+.tarotWhyBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-top: 0.75rem;
+}
+
 .tarotWebCards {
   display: flex;
   flex-direction: column;

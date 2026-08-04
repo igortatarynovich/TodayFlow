@@ -593,6 +593,9 @@ def compose_question_first_reading(
             "unresolved_cards": unresolved,
             "choice_story": None,
             "symbols_overview": reading.synthesis_why,
+            "llm_model": None,
+            "prompt_version": tarot_llm.TAROT_INTERPRETATION_PROMPT_VER,
+            "attempted_model": None,
         }
         return reading
 
@@ -609,14 +612,19 @@ def compose_question_first_reading(
     lens = pack.get("profile_lens")
     lens_applied = bool(lens)
 
+    from todayflow_backend.core.llm_openai_compatible import resolve_default_chat_model
+
+    attempted_model = resolve_default_chat_model()
     interp = tarot_llm.call_tarot_interpretation_llm_v1(pack)
     if interp:
         mode = engine.SYNTHESIS_MODE_LLM
         status = engine.STATUS_OK
         choice_story = tarot_llm.choice_story_from_interpretation(interp, pack)
+        used_model = attempted_model
     else:
         mode = engine.SYNTHESIS_MODE_FALLBACK
         status = engine.STATUS_LLM_UNAVAILABLE
+        used_model = None
         interp = engine.thin_fallback_from_pack(pack)
         choice_story = None
         if pack.get("spread_kind") == "choice":
@@ -643,5 +651,8 @@ def compose_question_first_reading(
         "choice_story": choice_story,
         "symbols_overview": interp.get("symbols_overview") or "",
         "context_pack_card_ids": [c.get("card_id") for c in pack.get("cards") or []],
+        "llm_model": used_model,
+        "prompt_version": tarot_llm.TAROT_INTERPRETATION_PROMPT_VER,
+        "attempted_model": attempted_model,
     }
     return reading

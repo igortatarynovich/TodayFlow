@@ -9,6 +9,17 @@ Status: Active working document
 **ALSO IN PROGRESS:** **Soft-heal one-field gates** — `healed:<rule>` for conflict_link / incomplete forces / broken props / scenes_too_many; seed-kill + structural + scenes_too_few stay hard.  
 Prior: card_base_v1 cutover live · editorial polish minors ongoing.
 
+## Architecture impact — Tarot answer-first composition (2026-08-04)
+
+- **SoT before:** UI order symbols → story → answer → step; `direct_answer`/`next_step` could carry card jargon.
+- **SoT after:** UI order answer → step → A/B → confidence → why (collapsed). Prompt `tarot-interpretation-v1.10` + gate `user_facing_jargon`. Public fields unchanged.
+- **Public contract changed?** no (semantics of answer/step tightened)
+- **Migration required?** no
+- **Canon updated?** yes — `SCREEN_CONTRACTS_V1` §6.5 · `TAROT_INTERPRETATION_ENGINE_V1` §4.1/§5
+- **Backward compatible?** yes for old generations; new gens gated
+
+---
+
 ## Architecture impact — Reading why-step before narrative (2026-08-03)
 
 - **SoT before:** Reading sphere cards opened on domestic `what_happens` narrative; `scene.why` wire existed but native/v1 always emptied it; progressive expand only for opportunity/trap.
@@ -1425,6 +1436,7 @@ Historical note:
 - 2026-07-08 | Web product UI | calendar / profile-summary / subscriptions / discover pattern → ProductPageScreen | IN PROGRESS | `/calendar`, `/profile-summary`, `/subscriptions`, `/discover/pattern/[axis_id]` — orbit-page и hero images убраны; v2 header + pl.panel + legacyHost.
 - 2026-07-08 | Web product UI | challenges / reports / help / tarot cards → ProductPageScreen | IN PROGRESS | `/challenges`, `/challenges/[id]`, `/reports/full`, `/reports/thematic`, `/reports/thematic/[theme]`, `/help`, `/help/*`, `/tarot/cards/[slug]` — orbit-page и hero images убраны; metadata help → layout.tsx; inner forms/viewer в legacyHost.
 - 2026-07-07 | Web product UI | Today dashboard v2 aligned to Profile reference | IN PROGRESS | Today dashboard на `productPageLayout` + `productV2Surface` tokens; wide canvas `mainWide`; cards/type/spacing match profile v2.
+- 2026-08-04 | Tarot | **Answer-first composition** | **DONE** | UI: answer → step → A/B → confidence → why collapsed. Prompt `tarot-interpretation-v1.10` + gate `user_facing_jargon`. Canon SCREEN_CONTRACTS §6.5 · ENGINE §4.1/§5. No new public fields.
 - 2026-07-26 | Tarot | **Architecture Frozen / Editorial Phase** | **ACTIVE** | Owner: full freeze lift declined after live r3 12/12. Allow: KB · prompt · editorial · eval · reliability. New layers/contracts/pipeline → RFC. [note](./audits/TAROT_STACK_EDITORIAL_PHASE_2026-07-26.md). Next: human Golden Eval v2.
 - 2026-07-26 | Tarot | **Golden Eval live #3 + reliability** | **DONE (12/12)** | Timeout/background fix deployed · commit `da03d22` · **12/12 LLM**. Audit [TAROT_GOLDEN_EVAL_LIVE_2026-07-26_r3](./audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-26_r3.md).
 - 2026-07-26 | Tarot | **Golden Eval live #2** | **DONE (gate green)** | 12/12 pack · **11/12 LLM** · anti-sameness OK · `freeze_lift_ready=true`. Fail: `choice_work_leave_or_stay` (`too_long` / quality). Audit [TAROT_GOLDEN_EVAL_LIVE_2026-07-26](./audits/TAROT_GOLDEN_EVAL_LIVE_2026-07-26.md). Next: owner freeze-lift · Q3.
