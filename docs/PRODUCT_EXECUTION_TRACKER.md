@@ -4,7 +4,8 @@ Last updated: 2026-08-04
 Owner: Product + Engineering
 Status: Active working document
 
-**DONE (2026-08-04):** DS Task 0 — `design/profile-journey-premium` promoted → `main` (FF). Deploy SoT: `docker compose -f docker-compose.prod.yml up -d --build` on this host (GitHub deploy workflow = stub). Branch policy in root `AGENTS.md`. Next: Task 1 gate · Task 1.5 day-accent consumers (option A soft) · Task 2 DsCard pilot.  
+**IN PROGRESS (2026-08-04):** DS Task 1 — style gate PR https://github.com/igortatarynovich/TodayFlow/pull/8 (`scripts/check_ds_style_gate.py` + baseline 628 keys · Jest hook · PR checklist). OAuth нельзя патчить workflows — gate в Frontend Tests.  
+**DONE (2026-08-04):** DS Task 0 — `design/profile-journey-premium` promoted → `main` (FF). Deploy SoT: `docker compose -f docker-compose.prod.yml up -d --build` on this host (GitHub deploy workflow = stub). Branch policy in root `AGENTS.md`. Next after Task 1: Task 1.5 day-accent consumers (option A soft) · Task 2 DsCard pilot.  
 **DONE (2026-08-04):** Today Screen fix pack — Daily Focus · nearest→practice · chorus energy · plot beats · seasonal color · trap≠avoid · hook variants.  
 **DONE (2026-08-04):** Glance P0 — **Daily Focus** replaces «Сферы дня» chips; dead `TodayLifeSpheresSection` removed (V1 R15–R17).  
 **DONE (2026-08-03):** ScreenFlow content jobs **v3.1** — P0+P1+P2 gap plan closed on branch (seed-kill · domain4 · Plot wash · serve heal · LLM hard-gate · native opaque `serves_conflict`).  
