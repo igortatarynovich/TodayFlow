@@ -15,8 +15,8 @@ Prior: card_base_v1 cutover live · editorial polish minors ongoing.
 
 ## Architecture impact — Glance Daily Focus replaces sphere chips (2026-08-04)
 
-- **SoT before:** Glance Экран 0 secondary = ≤2 domain chips («Сферы дня») from Reading magnitude; dead `TodayLifeSpheresSection` file still in tree; legacy peak/caution sphere grid on non-product path.
-- **SoT after:** Glance secondary = one **Фокус дня** (`buildGlanceDailyFocus`: title + prioritize/avoid from `day_story`); no equal sphere chips; `TodayLifeSpheresSection` deleted; legacy context sphere grid gated off.
+- **SoT before:** Glance Экран 0 secondary = ≤2 domain chips («Сферы дня») from Reading magnitude; dead `TodayLifeSpheresSection` file still in tree; legacy peak/caution sphere grid on non-product path; legacy `?experience=1` synthesis used title+lines Daily Focus without prioritize/avoid.
+- **SoT after:** Glance secondary = one **Фокус дня** (`buildGlanceDailyFocus`: title + prioritize/avoid from `day_story`); no equal sphere chips; `TodayLifeSpheresSection` deleted; legacy context sphere grid gated off; legacy `?experience=1` day_synthesis uses the same Glance Daily Focus model (+ tarot trap only fills empty avoid).
 - **Public contract changed?** no — FE composition only
 - **Migration required?** no
 - **Canon updated?** yes — `docs/today/TODAY_SCREEN_SCENARIO_V3.md` Экран 0 §5 + changelog; aligns `TODAY_SCREEN_V1_CANON.md` §7.7 / R15–R17

@@ -1,4 +1,8 @@
-import { buildDailyFocusModel, buildGlanceDailyFocus } from "@/lib/todayDailyFocus";
+import {
+  buildDailyFocusModel,
+  buildGlanceDailyFocus,
+  mergeTarotTrapIntoGlanceDailyFocus,
+} from "@/lib/todayDailyFocus";
 import { isDailyFocusGuidanceLeak, filterDailyFocusLines } from "@/lib/todayDailyFocusBoundary";
 import type { TodayContractV1 } from "@/lib/todayContract";
 
@@ -134,5 +138,42 @@ describe("Glance Daily Focus — prioritize / avoid", () => {
     expect(focus.title).toMatch(/договорённост|лини/i);
     expect(focus.prioritize).toMatch(/конкретн/i);
     expect(focus.avoid).toMatch(/тредов|конфликт/i);
+  });
+
+  it("folds tarot trap into empty avoid only; keeps day_story avoid", () => {
+    const withAvoid = buildGlanceDailyFocus(
+      {
+        ...minimalContract,
+        day_story: {
+          contract_version: "day_story_v1",
+          theme: "День коротких договорённостей.",
+          story: "Держи тон коротким.",
+          do: ["Скажи одну конкретную просьбу."],
+          avoid: ["Не тяни несколько тредов сразу."],
+        },
+      },
+      null,
+    );
+    expect(
+      mergeTarotTrapIntoGlanceDailyFocus(withAvoid, "Карточная ловушка — раздуть сцену."),
+    ).toEqual(withAvoid);
+
+    const noAvoid = buildGlanceDailyFocus(
+      {
+        ...minimalContract,
+        day_story: {
+          contract_version: "day_story_v1",
+          theme: "День коротких договорённостей.",
+          story: "Держи тон коротким.",
+          do: ["Скажи одну конкретную просьбу."],
+        },
+      },
+      null,
+    );
+    const merged = mergeTarotTrapIntoGlanceDailyFocus(
+      noAvoid,
+      "Карточная ловушка — раздуть сцену.",
+    );
+    expect(merged.avoid).toMatch(/карточн|раздуть/i);
   });
 });

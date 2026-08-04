@@ -226,6 +226,7 @@ function cleanDirectionLine(raw: string | null | undefined, title: string): stri
 /**
  * Single Glance focus: title + direction (priority / avoid).
  * Canon: TODAY_SCREEN_V1 §7.7 / R15–R17 — not equal sphere chips.
+ * Also used by legacy `?experience=1` synthesis (TodayDailyFocusBlock).
  */
 export function buildGlanceDailyFocus(
   contract: TodayContractV1,
@@ -250,4 +251,18 @@ export function buildGlanceDailyFocus(
     prioritize,
     avoid: avoid && avoid !== prioritize ? avoid : null,
   };
+}
+
+/**
+ * Fold card trap into Glance avoid — only when day_story left avoid empty.
+ * Does not overwrite day_story avoid (SoT).
+ */
+export function mergeTarotTrapIntoGlanceDailyFocus(
+  focus: GlanceDailyFocusModel,
+  trapLine: string | null | undefined,
+): GlanceDailyFocusModel {
+  if (focus.avoid) return focus;
+  const trap = cleanDirectionLine(trapLine, focus.title);
+  if (!trap || trap === focus.prioritize) return focus;
+  return { ...focus, avoid: trap };
 }

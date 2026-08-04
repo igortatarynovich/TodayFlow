@@ -1,14 +1,18 @@
 "use client";
 
 import { LoadingSpinner } from "@/components/orbit";
-import type { DailyFocusModel } from "@/lib/todayDailyFocus";
+import { TODAY_COMPOSITION_COPY } from "@/components/today/composition/todayCompositionCopy";
+import type { GlanceDailyFocusModel } from "@/lib/todayDailyFocus";
+import { TODAY_NO_SHARP_FOCUS_COPY } from "@/lib/todayGlanceTexture";
 
 type Props = {
-  model: DailyFocusModel;
+  model: GlanceDailyFocusModel;
   loading?: boolean;
   loadingLabel?: string;
   surfaceClassName?: string;
 };
+
+const copy = TODAY_COMPOSITION_COPY;
 
 export function TodayDailyFocusBlock({
   model,
@@ -16,6 +20,11 @@ export function TodayDailyFocusBlock({
   loadingLabel = "Уточняем фокус дня…",
   surfaceClassName,
 }: Props) {
+  const title = (model.title || "").trim() || null;
+  const prioritize = (model.prioritize || "").trim() || null;
+  const avoid = (model.avoid || "").trim() || null;
+  const hasFocus = Boolean(title || prioritize || avoid);
+
   return (
     <section
       className={`todayflow-surface-primary todayflow-inset ${surfaceClassName ?? ""}`.trim()}
@@ -33,7 +42,7 @@ export function TodayDailyFocusBlock({
       }
     >
       <p className="todayflow-eyebrow" style={{ margin: 0 }}>
-        Фокус дня
+        {copy.journey.glanceFocusLabel}
       </p>
       {loading ? (
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.65rem" }}>
@@ -42,21 +51,46 @@ export function TodayDailyFocusBlock({
             {loadingLabel}
           </span>
         </div>
-      ) : (
+      ) : hasFocus ? (
         <>
-          <h2 className="orbit-heading-2" style={{ margin: "0.35rem 0 0", lineHeight: 1.35, color: "#1f1a16" }}>
-            {model.title}
-          </h2>
-          {model.lines.map((line) => (
+          {title ? (
+            <h2
+              className="orbit-heading-2"
+              style={{ margin: "0.35rem 0 0", lineHeight: 1.35, color: "#1f1a16" }}
+              data-testid="today-experience-focus-title"
+            >
+              {title}
+            </h2>
+          ) : null}
+          {prioritize ? (
             <p
-              key={line}
               className="orbit-body-sm"
               style={{ margin: "0.55rem 0 0", lineHeight: 1.58, color: "#3d3228" }}
+              data-testid="today-experience-focus-prioritize"
             >
-              {line}
+              <span style={{ color: "#6a5132" }}>{copy.journey.glanceFocusPrioritize}</span>
+              {prioritize}
             </p>
-          ))}
+          ) : null}
+          {avoid ? (
+            <p
+              className="orbit-body-sm"
+              style={{ margin: "0.55rem 0 0", lineHeight: 1.58, color: "#3d3228" }}
+              data-testid="today-experience-focus-avoid"
+            >
+              <span style={{ color: "#6a5132" }}>{copy.journey.glanceFocusAvoid}</span>
+              {avoid}
+            </p>
+          ) : null}
         </>
+      ) : (
+        <p
+          className="orbit-body-sm"
+          style={{ margin: "0.55rem 0 0", lineHeight: 1.58, color: "#3d3228" }}
+          data-testid="today-experience-focus-empty"
+        >
+          {TODAY_NO_SHARP_FOCUS_COPY}
+        </p>
       )}
     </section>
   );

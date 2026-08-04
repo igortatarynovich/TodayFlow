@@ -20,7 +20,10 @@ import {
 import { loadRitualPersisted, saveRitualPersisted, type RitualPersistedState } from "@/lib/todayRitualPersisted";
 import { todayExperiencePhase } from "@/lib/todayExperiencePhase";
 import { isExperienceSpineComplete } from "@/lib/todayExperienceSpine";
-import { buildDailyFocusModel, mergeTarotTrapIntoDailyFocus } from "@/lib/todayDailyFocus";
+import {
+  buildGlanceDailyFocus,
+  mergeTarotTrapIntoGlanceDailyFocus,
+} from "@/lib/todayDailyFocus";
 import { composeTarotPersonalLayer } from "@/lib/todayTarotPersonalLayer";
 import {
   buildContinuityOpeningLine,
@@ -121,7 +124,7 @@ export function TodayExperienceSurface(props: Props) {
   const synthesisReady = spineComplete && !guideNarrativeLoading;
 
   const dailyFocus = useMemo(() => {
-    const base = buildDailyFocusModel(props.contract, guideNarrativePayload);
+    const base = buildGlanceDailyFocus(props.contract, guideNarrativePayload);
     if (tarotMainId == null) return base;
     const layer = composeTarotPersonalLayer({
       cardId: tarotMainId,
@@ -129,7 +132,7 @@ export function TodayExperienceSurface(props: Props) {
       dailyFocusTitle: base.title,
       dailyFocusId: base.dailyFocusId,
     });
-    return mergeTarotTrapIntoDailyFocus(base, layer?.trapLine);
+    return mergeTarotTrapIntoGlanceDailyFocus(base, layer?.trapLine);
   }, [props.contract, guideNarrativePayload, tarotMainId, props.cardMeaning]);
 
   const dayClosed = isDayContinuityClosed(continuityRecord);
@@ -140,7 +143,11 @@ export function TodayExperienceSurface(props: Props) {
     return buildContinuityOpeningLine(prev);
   }, [hydrated, props.dateISO]);
 
-  const mainFocusText = dailyFocus.title.trim() || dailyFocus.lines[0]?.trim() || "";
+  const mainFocusText =
+    dailyFocus.title.trim() ||
+    dailyFocus.prioritize?.trim() ||
+    dailyFocus.avoid?.trim() ||
+    "";
 
   useEffect(() => {
     props.onVisible?.();

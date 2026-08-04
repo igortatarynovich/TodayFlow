@@ -183,6 +183,7 @@ Reveal API / prebake: [DAY_SYMBOL_REVEAL_CANON_V1](../audits/DAY_SYMBOL_REVEAL_C
 ### 2026-08-04 — Glance: Daily Focus replaces sphere chips
 
 - Экран 0: вместо ≤2 domain chips — один **Фокус дня** (title + prioritize/avoid) из `day_story` / Daily Focus model. Aligns V1 R15–R17; removes live «Сферы дня» chip pattern on product Glance. Dead `TodayLifeSpheresSection` deleted.
+- Legacy `?experience=1` (`TodayExperienceSurface` day_synthesis): тот же `buildGlanceDailyFocus` + prioritize/avoid UI; tarot trap только заполняет пустой avoid.
 
 ### 2026-08-03 — Glance: drop ScreenFlow gauge (chrome owns progress)
 
