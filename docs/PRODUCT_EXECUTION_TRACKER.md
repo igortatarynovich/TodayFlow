@@ -7,7 +7,8 @@ Status: Active working document
 **DONE (2026-08-04):** DS Task 2 — Weekly + Challenges DsCard pilot + `--day-*` decorative (Task 1.5 folded). PR #9 merged. Screenshots: `docs/audits/ds-task2-screenshots/`.  
 **DONE (2026-08-04):** DS Task 3 — Today composition wave (`DsButton` CTAs + day-tint). PR #10 merged.  
 **DONE (2026-08-04):** DS Task 3 — Practices wave (`DsButton` · kill lavender · `--day-*`). PR #11 merged.  
-**DONE (2026-08-04):** DS Task 3 — Profile wave (`DsButton` hub/setup CTAs · `profileV2System` → `--tf-*`/`--day-*`). PR #12 merged + frontend rebuild.  
+**DONE (2026-08-04):** DS Task 3 — Profile wave (`DsButton` hub/setup CTAs · `profileV2System` → `--tf-*`/`--day-*`). PR #12 merged + frontend rebuild.
+**IN PROGRESS (2026-08-04):** DS Task 3 — Compatibility wave (`DsButton` · chips/layer cards · tokenize exploration CSS).  
 **DONE (2026-08-04):** DS Task 1 — style gate merged PR #8 (`scripts/check_ds_style_gate.py` · Jest in `npm test` · PR checklist). Separate CI workflow job **not** required.  
 **DONE (2026-08-04):** DS Task 0 — `design/profile-journey-premium` promoted → `main` (FF, PR #7). Deploy SoT: `docker compose -f docker-compose.prod.yml up -d --build` on this host.  
 **DONE (2026-08-04):** Today Screen fix pack — Daily Focus · nearest→practice · chorus energy · plot beats · seasonal color · trap≠avoid · hook variants.  
@@ -1375,6 +1376,7 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-04 | Design System | **Task 3 Compatibility wave** | **IN PROGRESS (PR)** | Hub/analyze/signs/birthdates CTAs → `DsButton`; chips/layer cards; AccessDisclosure `.cta*` killed; exploration CSS → `--tf-*`/`--day-*`; gate baseline 495→447.
 - 2026-08-04 | Design System | **Task 3 Profile wave** | **DONE (LIVE)** | PR #12 merged (`eb4e281`) · frontend rebuild. Hub/setup CTAs → `DsButton`; `profileV2System` tokenized; baseline 567→495. v0/editorial/quickMap deferred.
 - 2026-08-04 | Design System | **Task 3 Practices wave** | **DONE** | PR #11 merged. Hub/session/detail CTAs → `DsButton`; lavender zone killed.
 - 2026-08-04 | Design System | **Task 3 Today wave** | **DONE** | PR #10 merged (`de9dfed`). Composition ScreenFlow CTAs → `DsButton`; pick sheet `--day-surface-tint`.

@@ -9,7 +9,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #8b7355;
+  color: var(--tf-caption);
 }
 
 .guidance {
@@ -27,7 +27,7 @@
   margin: 0;
   font-size: clamp(1.35rem, 3vw, 1.7rem);
   font-weight: 700;
-  color: #1c1917;
+  color: var(--tf-ink);
   letter-spacing: -0.02em;
 }
 
@@ -35,7 +35,7 @@
   margin: 0.45rem 0 0;
   font-size: 0.95rem;
   line-height: 1.55;
-  color: #44403c;
+  color: var(--tf-ink);
   max-width: 36rem;
 }
 
@@ -74,7 +74,7 @@
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #78716c;
+  color: var(--tf-caption);
 }
 
 .triadCard ul {
@@ -87,7 +87,7 @@
 .triadCard li {
   font-size: 0.88rem;
   line-height: 1.45;
-  color: #292524;
+  color: var(--tf-ink);
 }
 
 .upsell {
@@ -101,14 +101,14 @@
   margin: 0;
   font-size: 1.05rem;
   font-weight: 700;
-  color: #1c1917;
+  color: var(--tf-ink);
 }
 
 .upsellBody {
   margin: 0.45rem 0 0;
   font-size: 0.9rem;
   line-height: 1.55;
-  color: #57534e;
+  color: var(--tf-caption);
   max-width: 40rem;
 }
 
@@ -119,25 +119,5 @@
   gap: 0.55rem;
 }
 
-.ctaPrimary,
-.ctaSecondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.55rem 1rem;
-  border-radius: 999px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-decoration: none;
-}
 
-.ctaPrimary {
-  background: #1c1917;
-  color: #fafaf9;
-}
 
-.ctaSecondary {
-  background: transparent;
-  color: #44403c;
-  border: 1px solid rgba(120, 113, 108, 0.35);
-}

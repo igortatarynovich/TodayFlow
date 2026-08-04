@@ -1,5 +1,7 @@
 "use client";
 
+import { DsButton } from "@/design-system";
+
 import "./compatibility-premium.css";
 
 import { useEffect, useMemo, useRef, useState, useCallback, type CSSProperties, type ReactNode } from "react";
@@ -254,13 +256,9 @@ function CompatibilityLayerSelector({
         С подпиской — да/нет, что делать, чего не делать и как.
       </p>
       <div style={{ marginBottom: "1rem" }}>
-        <Link
-          href="/compatibility/analyze"
-          className="orbit-button orbit-button-primary orbit-button-sm"
-          style={{ textDecoration: "none" }}
-        >
+        <DsButton href="/compatibility/analyze" variant="primary" size="sm">
           Собрать разбор по знакам
-        </Link>
+        </DsButton>
       </div>
       <div className="todayflow-layer-grid">
         {COMPATIBILITY_LAYER_CARDS.map((card) => {
@@ -271,19 +269,7 @@ function CompatibilityLayerSelector({
             <Link
               key={card.id}
               href={href}
-              className="orbit-button orbit-button-secondary orbit-button-sm"
-              style={{
-                textDecoration: "none",
-                borderRadius: "18px",
-                border: highlighted ? "2px solid rgba(190, 148, 88, 0.45)" : "1px solid rgba(198, 166, 119, 0.22)",
-                background: highlighted
-                  ? "linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,248,236,0.92) 100%)"
-                  : "rgba(255,255,255,0.9)",
-                padding: "0.9rem",
-                display: "block",
-                textAlign: "left",
-                boxSizing: "border-box",
-              }}
+              className={highlighted ? "compat-layer-card compat-layer-card--focus" : "compat-layer-card"}
             >
               <p className="orbit-body-sm" style={{ margin: 0, fontWeight: 700, color: "#0f172a" }}>
                 {card.title}

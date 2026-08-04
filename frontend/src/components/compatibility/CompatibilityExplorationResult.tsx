@@ -1,5 +1,7 @@
 "use client";
 
+import { DsButton } from "@/design-system";
+
 import Link from "next/link";
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import type { CompatibilityExplorationModel } from "@/lib/buildCompatibilityExplorationModel";
@@ -224,11 +226,11 @@ export function CompatibilityExplorationResult({
           {funnelArtifact ? <CompatibilityFunnelSection artifact={funnelArtifact} /> : null}
 
           {!deepOpen && accessDisclosure?.tier !== "guest" ? (
-            <div className={styles.deepCta}>
-              <button type="button" className="orbit-button orbit-button-primary" onClick={openDeep}>
+            <div className={styles.deepOpenWrap}>
+              <DsButton variant="primary" onClick={openDeep}>
                 Посмотреть глубже
-              </button>
-              <p className={styles.deepCtaHint}>Длинный разбор — только если захочешь копать дальше.</p>
+              </DsButton>
+              <p className={styles.deepOpenHint}>Длинный разбор — только если захочешь копать дальше.</p>
             </div>
           ) : null}
           {deepOpen && accessDisclosure?.tier !== "guest" ? (
@@ -318,24 +320,24 @@ export function CompatibilityExplorationResult({
 
       <div className={styles.footerActions}>
         {onRefresh ? (
-          <button type="button" className="orbit-button orbit-button-secondary orbit-button-sm" disabled={refreshing} onClick={onRefresh}>
+          <DsButton variant="secondary" size="sm" disabled={refreshing} onClick={onRefresh}>
             {refreshing ? "Обновляю…" : "Обновить разбор"}
-          </button>
+          </DsButton>
         ) : null}
-        <Link
+        <DsButton
           href="/tarot?from=compatibility"
-          className="orbit-button orbit-button-primary orbit-button-sm"
-          style={{ textDecoration: "none" }}
+          variant="primary"
+          size="sm"
           onClick={() => {
             if (guidancePrefill) stashGuidanceCompatibilityPrefill(guidancePrefill);
             onGuidanceClick?.();
           }}
         >
           Задать вопрос про эту пару
-        </Link>
-        <Link href="/compatibility" className="orbit-button orbit-button-secondary orbit-button-sm" style={{ textDecoration: "none" }}>
+        </DsButton>
+        <DsButton href="/compatibility" variant="secondary" size="sm">
           К исследованию
-        </Link>
+        </DsButton>
       </div>
     </div>
   );

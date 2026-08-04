@@ -11,7 +11,7 @@
   margin: 0;
   font-size: 0.72rem;
   font-weight: 600;
-  color: #8b7355;
+  color: var(--tf-caption);
   letter-spacing: 0.02em;
 }
 
@@ -24,7 +24,7 @@
 .chip {
   border: 1px solid rgba(167, 123, 55, 0.28);
   background: rgba(255, 253, 249, 0.92);
-  color: #5f4323;
+  color: var(--tf-caption);
   border-radius: 999px;
   padding: 0.28rem 0.65rem;
   font-size: 0.74rem;
@@ -46,7 +46,7 @@
 .giveback {
   margin: 0;
   font-size: 0.72rem;
-  color: #166534;
+  color: var(--day-decor-color, var(--tf-accent-action));
   line-height: 1.45;
   animation: ceGivebackFade 2.4s ease forwards;
 }

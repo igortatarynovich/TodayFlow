@@ -2,10 +2,10 @@
   --cp-stack: 1.75rem;
   --cp-radius: 22px;
   --cp-border: rgba(166, 124, 58, 0.22);
-  --cp-ink: #1a1512;
-  --cp-body: #3d3228;
-  --cp-muted: #6b7280;
-  --cp-accent: #8f6b3a;
+  --cp-ink: var(--tf-ink);
+  --cp-body: var(--tf-ink);
+  --cp-muted: var(--tf-caption);
+  --cp-accent: var(--tf-accent-gold-600, var(--tf-accent-gold));
   --cp-surface: rgba(255, 255, 255, 0.96);
   --cp-warm: rgba(255, 251, 245, 0.98);
 

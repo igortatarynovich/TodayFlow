@@ -3,11 +3,11 @@
   --ce-radius: 24px;
   --ce-radius-md: 18px;
   --ce-border: rgba(166, 124, 58, 0.22);
-  --ce-ink: #1a1512;
-  --ce-body: #3d3228;
-  --ce-muted: #6b7280;
-  --ce-accent: #8f6b3a;
-  --ce-gold: #c9a873;
+  --ce-ink: var(--tf-ink);
+  --ce-body: var(--tf-ink);
+  --ce-muted: var(--tf-caption);
+  --ce-accent: var(--tf-accent-gold-600, var(--tf-accent-gold));
+  --ce-gold: var(--tf-accent-gold);
   --ce-surface: rgba(255, 255, 255, 0.96);
   --ce-warm: rgba(255, 251, 245, 0.98);
 
@@ -69,7 +69,7 @@
   border-radius: 50%;
   top: 42%;
   right: 18%;
-  background: radial-gradient(circle, #e8c88a 0%, #c9a873 100%);
+  background: radial-gradient(circle, var(--day-accent-soft, var(--tf-surface-warm)) 0%, var(--tf-accent-gold) 100%);
   box-shadow: 0 0 24px rgba(201, 168, 115, 0.55);
   animation: ceCorePulse 3s ease-in-out infinite;
 }
@@ -190,7 +190,7 @@
   align-self: flex-start;
   border: none;
   background: transparent;
-  color: #8b7355;
+  color: var(--tf-caption);
   font-size: 0.72rem;
   font-weight: 600;
   padding: 0.15rem 0.35rem;
@@ -405,7 +405,7 @@
   margin-top: auto;
   font-size: 0.72rem;
   font-weight: 700;
-  color: #9a6700;
+  color: var(--tf-accent-gold-600, var(--tf-accent-gold));
   letter-spacing: 0.02em;
 }
 
