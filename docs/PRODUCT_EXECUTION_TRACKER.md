@@ -1,13 +1,33 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-08-03
+Last updated: 2026-08-04
 Owner: Product + Engineering
 Status: Active working document
 
+**DONE (2026-08-04):** Today Screen fix pack — Daily Focus · nearest→practice · chorus energy · plot beats · seasonal color · trap≠avoid · hook variants.  
+**DONE (2026-08-04):** Glance P0 — **Daily Focus** replaces «Сферы дня» chips; dead `TodayLifeSpheresSection` removed (V1 R15–R17).  
 **DONE (2026-08-03):** ScreenFlow content jobs **v3.1** — P0+P1+P2 gap plan closed on branch (seed-kill · domain4 · Plot wash · serve heal · LLM hard-gate · native opaque `serves_conflict`).  
 **IN PROGRESS:** **Reading why-step** — `scene.why` / `domain_verdicts.why_short` before narrative; progressive expand for scene+dual. Glance/Plot/clip slice shipped. Soft-heal canary + v3.1b concreteness continue.  
 **ALSO IN PROGRESS:** **Soft-heal one-field gates** — `healed:<rule>` for conflict_link / incomplete forces / broken props / scenes_too_many; seed-kill + structural + scenes_too_few stay hard.  
 Prior: card_base_v1 cutover live · editorial polish minors ongoing.
+
+## Architecture impact — Glance Daily Focus replaces sphere chips (2026-08-04)
+
+- **SoT before:** Glance Экран 0 secondary = ≤2 domain chips («Сферы дня») from Reading magnitude; dead `TodayLifeSpheresSection` file still in tree; legacy peak/caution sphere grid on non-product path.
+- **SoT after:** Glance secondary = one **Фокус дня** (`buildGlanceDailyFocus`: title + prioritize/avoid from `day_story`); no equal sphere chips; `TodayLifeSpheresSection` deleted; legacy context sphere grid gated off.
+- **Public contract changed?** no — FE composition only
+- **Migration required?** no
+- **Canon updated?** yes — `docs/today/TODAY_SCREEN_SCENARIO_V3.md` Экран 0 §5 + changelog; aligns `TODAY_SCREEN_V1_CANON.md` §7.7 / R15–R17
+- **Backward compatible?** yes — Reading chapters unchanged; chip deep-link to Reading removed
+
+## Architecture impact — Today Screen fix pack P0.2 + P1 + P2 (2026-08-04)
+
+- **SoT before:** Nearest = timed label only; energy = pulse/score path; Plot = conflict why paragraph; color clothing flat; `avoid_color.why` pasted scene trap; opportunity/trap allowed «ярлык: список».
+- **SoT after:** Nearest keeps timed signal + tap → `/practices/{id}?run=1` (or Move); Glance energy prefers `interpretive_chorus` effect+cause; Plot renders `scenes[]` as setup/tension/turn beats; color `where_to_use` seasonal warm/cold clothing+accessory by month; avoid why = catalog color psychology (no trap paste); native prompt bans list-label trap/opportunity style; HookRevealShell `variant` tarot|numerology.
+- **Public contract changed?** no additive required — props.where_to_use keys unchanged after seasonal pick; avoid.why semantics tightened
+- **Migration required?** no — regenerates on next day_scenario build
+- **Canon updated?** yes — SCENARIO_V3 Экран 0; tracker
+- **Backward compatible?** yes — old caches without seasonal keys still use flat clothing; FE omit-tolerant
 
 ## Architecture impact — Tarot answer-first composition (2026-08-04)
 

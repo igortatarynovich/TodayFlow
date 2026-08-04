@@ -84,8 +84,9 @@ import { TodayDayColorGuideSection } from "@/components/today/composition/TodayD
 import { TodayHookRevealShell } from "@/components/today/composition/TodayHookRevealShell";
 import { isDayScenarioReadyForChapters } from "@/lib/todayScenarioChapters";
 import { buildGlanceDayTexture, buildGlanceThemeEyebrow } from "@/lib/todayGlanceTexture";
-import { pickGlanceSphereChips } from "@/lib/todayGlanceSphereChips";
-import { buildPlotConflictNarrative } from "@/lib/todayPlotNarrative";
+import { buildGlanceDailyFocus } from "@/lib/todayDailyFocus";
+import { buildGlanceEnergyFromChorus } from "@/lib/todayGlanceEnergy";
+import { buildPlotConflictNarrative, buildPlotStoryBeats } from "@/lib/todayPlotNarrative";
 import { TODAY_NO_CONNECTION_COPY } from "@/lib/todaySlotAvailability";
 import { TodayDepthLayerSection } from "@/components/today/composition/TodayDepthLayerSection";
 import { buildTodayPromiseSuggestions, isLowEnergyMood } from "@/lib/todayDayDialogue";
@@ -212,7 +213,6 @@ export function TodayCompositionSurface(props: Props) {
   const [asceticMarking, setAsceticMarking] = useState(false);
   const [ritualPickOpen, setRitualPickOpen] = useState<"tarot" | "number" | null>(null);
   const [screenFlowIndex, setScreenFlowIndex] = useState(0);
-  const [focusSphere, setFocusSphere] = useState<string | null>(null);
   const screenFlowEntryApplied = useRef(false);
 
   const anchorTarotId = useMemo(
@@ -432,10 +432,8 @@ export function TodayCompositionSurface(props: Props) {
     return story.pulse;
   }, [showRitualSpine, story.pulse]);
 
-  const showContextPanel = useMemo(
-    () => zones.glance && story.sphereFocus.cards.length > 0,
-    [zones.glance, story.sphereFocus.cards.length],
-  );
+  // Legacy peak/caution sphere grid — removed (TODAY_SCREEN_V1 R15–R17). Daily Focus lives on Glance.
+  const showContextPanel = false;
 
   const showSkyCards = zones.astroContext && story.skyCards.length > 0;
   // Color lives in the sky summary grid (tap to expand) — never also as a full sibling card.
@@ -603,7 +601,7 @@ export function TodayCompositionSurface(props: Props) {
   }, [dateISO, engagementProfileKey]);
 
   useEffect(() => {
-    if (!hydrated || !engagement.tarotPickedName || !engagement.numberConfirmed) return;
+    if (!hydrated) return;
     let cancelled = false;
     void getJson<PracticeResponse>("/practices/current")
       .catch(async () => {
@@ -617,7 +615,7 @@ export function TodayCompositionSurface(props: Props) {
     return () => {
       cancelled = true;
     };
-  }, [hydrated, engagement.tarotPickedName, engagement.numberConfirmed, dateISO]);
+  }, [hydrated, dateISO]);
 
   useEffect(() => {
     if (!hydrated || !isAuthenticated) {
@@ -967,6 +965,44 @@ export function TodayCompositionSurface(props: Props) {
     trackMeaningEvent,
   ]);
 
+  const onNearestSelect = useCallback(
+    (item: { driver_id: string; label_short: string; time_local: string }) => {
+      trackMeaningEvent({
+        event_type: "action_option_selected",
+        event_source: "today",
+        local_date: dateISO,
+        payload: {
+          action: "glance_nearest_practice",
+          driver_id: item.driver_id,
+          label_short: item.label_short.slice(0, 80),
+          time_local: item.time_local,
+          practice_id: recommendedPractice?.id ?? null,
+          surface: "today_glance_nearest",
+        },
+        refreshRings: false,
+      });
+      if (recommendedPractice?.id) {
+        void onPracticeAction();
+        if (typeof window !== "undefined") {
+          window.location.assign(`/practices/${recommendedPractice.id}?run=1`);
+        }
+        return;
+      }
+      if (useProductPersonalized) {
+        const moveIndex = todayScreenFlowReadingIndex(showSymbolsAct) + 1;
+        setScreenFlowIndex(moveIndex);
+      }
+    },
+    [
+      dateISO,
+      onPracticeAction,
+      recommendedPractice?.id,
+      showSymbolsAct,
+      trackMeaningEvent,
+      useProductPersonalized,
+    ],
+  );
+
   const onAffirmationDone = useCallback(() => {
     if (engagement.affirmationRead) return;
     persistEngagement({ affirmationRead: true });
@@ -1039,11 +1075,15 @@ export function TodayCompositionSurface(props: Props) {
   const themeLoading = !singleVoice && props.guideNarrativeLoading && !props.guideNarrativePayload;
 
   const dayTexture = useMemo(() => buildGlanceDayTexture(props.contract), [props.contract]);
-  const glanceSphereChips = useMemo(
-    () => pickGlanceSphereChips(props.contract),
-    [props.contract],
+  const glanceDailyFocus = useMemo(
+    () => buildGlanceDailyFocus(props.contract, props.guideNarrativePayload ?? null),
+    [props.contract, props.guideNarrativePayload],
   );
+  const glanceEnergy = useMemo(() => buildGlanceEnergyFromChorus(props.contract), [props.contract]);
   const plotNarrative = useMemo(() => buildPlotConflictNarrative(props.contract), [props.contract]);
+  const plotBeats = useMemo(() => buildPlotStoryBeats(props.contract), [props.contract]);
+  const energyLineDisplay = glanceEnergy?.effect || pulseDisplay;
+  const energyCauseDisplay = glanceEnergy?.cause || null;
 
   if (eveningMode && continuityRecord && !dayClosed) {
     if (useProductFoundation) {
@@ -1244,25 +1284,47 @@ export function TodayCompositionSurface(props: Props) {
   const glanceEyebrow =
     buildGlanceThemeEyebrow(props.contract) || heroTheme || story.hero.centralThought || copy.themeLabel;
 
-  const plotNarrativeSection = plotNarrative ? (
-    <TodayScreenBlock eyebrow={copy.conflictLabel} testId="today-zone-plot-narrative">
-      {plotNarrative.tension ? (
-        <p className={styles.plotNarrativeTension} data-testid="today-plot-tension">
-          {plotNarrative.tension}
-        </p>
-      ) : null}
-      {plotNarrative.why ? (
-        <p className={styles.plotNarrativeWhy} data-testid="today-plot-why">
-          {plotNarrative.why}
-        </p>
-      ) : null}
-      {plotNarrative.personal ? (
-        <p className={styles.plotNarrativePersonal} data-testid="today-plot-personal">
-          {plotNarrative.personal}
-        </p>
-      ) : null}
-    </TodayScreenBlock>
-  ) : null;
+  const plotNarrativeSection =
+    plotBeats.length > 0 ? (
+      <TodayScreenBlock eyebrow={copy.conflictLabel} testId="today-zone-plot-narrative">
+        <div className={styles.plotBeats} data-testid="today-plot-beats">
+          {plotBeats.map((beat) => (
+            <article
+              key={beat.id}
+              className={styles.plotBeat}
+              data-beat-role={beat.role}
+              data-testid={`today-plot-beat-${beat.role}`}
+            >
+              <p className={styles.plotBeatLabel}>{beat.label}</p>
+              <p className={styles.plotBeatBody}>{beat.body}</p>
+            </article>
+          ))}
+        </div>
+        {plotNarrative?.personal ? (
+          <p className={styles.plotNarrativePersonal} data-testid="today-plot-personal">
+            {plotNarrative.personal}
+          </p>
+        ) : null}
+      </TodayScreenBlock>
+    ) : plotNarrative ? (
+      <TodayScreenBlock eyebrow={copy.conflictLabel} testId="today-zone-plot-narrative">
+        {plotNarrative.tension ? (
+          <p className={styles.plotNarrativeTension} data-testid="today-plot-tension">
+            {plotNarrative.tension}
+          </p>
+        ) : null}
+        {plotNarrative.why ? (
+          <p className={styles.plotNarrativeWhy} data-testid="today-plot-why">
+            {plotNarrative.why}
+          </p>
+        ) : null}
+        {plotNarrative.personal ? (
+          <p className={styles.plotNarrativePersonal} data-testid="today-plot-personal">
+            {plotNarrative.personal}
+          </p>
+        ) : null}
+      </TodayScreenBlock>
+    ) : null;
 
   const heroSection = zones.hero ? (
     useProductFoundation ? (
@@ -1493,8 +1555,10 @@ export function TodayCompositionSurface(props: Props) {
       themeTitle={glanceEyebrow}
       themeThesis={heroSubline}
       dayTexture={dayTexture}
-      sphereChips={glanceSphereChips}
-      energyLine={pulseDisplay}
+      dailyFocus={glanceDailyFocus}
+      energyLine={energyLineDisplay}
+      energyCause={energyCauseDisplay}
+      onNearestSelect={onNearestSelect}
       themeLoading={themeLoading}
       heroSection={heroSection}
       plotNarrativeSection={plotNarrativeSection}
@@ -1524,6 +1588,7 @@ export function TodayCompositionSurface(props: Props) {
             <div data-testid="today-zone-symbol-impacts">
               {story.tarotImpact || props.cardName || symbolHooksView?.card?.hook_reveal ? (
                 <TodayHookRevealShell
+                  variant="tarot"
                   kindLabel="Карта дня · открыта"
                   title={
                     symbolHooksView?.card?.name ||
@@ -1545,6 +1610,7 @@ export function TodayCompositionSurface(props: Props) {
               {/* v3.1: color house = Move only — never render color shell on Symbols */}
               {story.numberImpact || props.numerologyValue || symbolHooksView?.number?.hook_reveal ? (
                 <TodayHookRevealShell
+                  variant="numerology"
                   kindLabel="Число дня · открыто"
                   title={
                     String(
@@ -1619,7 +1685,7 @@ export function TodayCompositionSurface(props: Props) {
         colorGuide: story.colorGuide,
         morningRitualData: props.morningRitualData,
         dateISO,
-        focusSphere,
+        focusSphere: null,
         contentFailure: props.networkDegraded
           ? ("no_connection" as const)
           : props.guideNarrativeRequestFailed
@@ -1655,7 +1721,6 @@ export function TodayCompositionSurface(props: Props) {
       }}
       activeIndex={screenFlowIndex}
       onIndexChange={onScreenFlowIndexChange}
-      onSphereSelect={(domain) => setFocusSphere(domain)}
       embeddedInWebDashboard={embeddedInWebDashboard}
       topRowSection={topRowSection}
       greetingSection={greetingSection}

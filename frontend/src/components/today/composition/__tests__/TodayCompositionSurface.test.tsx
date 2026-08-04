@@ -285,9 +285,12 @@ describe("TodayCompositionSurface", () => {
     // Personal acts live on a later ScreenFlow step — still in DOM
     expect(screen.getByTestId("today-entity-synthesis")).toBeInTheDocument();
     expect(screen.getByTestId("today-zone-ritual-gates")).toBeInTheDocument();
-    // Plot owns conflict narrative — not a duplicate short_name in the hero chrome
+    // Plot owns conflict narrative as scene beats — not a duplicate short_name in the hero chrome
     expect(screen.getByTestId("today-zone-plot-narrative")).toBeInTheDocument();
-    expect(screen.getByTestId("today-plot-why").textContent).toMatch(/Луна в Козероге/i);
+    expect(screen.getByTestId("today-plot-beats")).toBeInTheDocument();
+    expect(screen.getByTestId("today-plot-beat-setup").textContent).toMatch(/решающий жест/i);
+    expect(screen.getByTestId("today-plot-beat-tension").textContent).toMatch(/Отложить/i);
+    expect(screen.getByTestId("today-plot-beat-turn").textContent).toMatch(/письмо/i);
     const hero = screen.getByTestId("today-zone-hero").textContent || "";
     expect(hero).not.toMatch(/Ломать работающее или беречь ровный ритм/);
   });

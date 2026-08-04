@@ -31,6 +31,8 @@ type Props = {
   /** Fallback body when hook_reveal absent (legacy impact). */
   fallbackBody?: string | null;
   testId: string;
+  /** Visual differentiation — tarot image accent vs numerology digit. */
+  variant?: "tarot" | "numerology" | "default";
 };
 
 /**
@@ -45,6 +47,7 @@ export function TodayHookRevealShell({
   hook = null,
   fallbackBody = null,
   testId,
+  variant = "default",
 }: Props) {
   const baseMeaning = asTrimmedText(hook?.base?.meaning);
   const bridgeText = asTrimmedText(hook?.bridge_to_day);
@@ -69,10 +72,10 @@ export function TodayHookRevealShell({
       variant="glass"
       size="compact"
       as="section"
-      className={styles.root}
+      className={`${styles.root} ${variant === "tarot" ? styles.variantTarot : ""} ${variant === "numerology" ? styles.variantNumerology : ""}`.trim()}
       testId={testId}
     >
-      <div data-hook-kind={hook?.kind || undefined}>
+      <div data-hook-kind={hook?.kind || undefined} data-hook-variant={variant !== "default" ? variant : undefined}>
         <p className={styles.kind}>{kindLabel}</p>
         <h2 className={styles.title}>
           {title}

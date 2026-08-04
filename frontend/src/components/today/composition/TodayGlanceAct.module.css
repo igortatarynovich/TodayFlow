@@ -111,7 +111,8 @@
   min-height: 1.25rem;
 }
 
-.nearestPrimary {
+.nearestPrimary,
+.nearestPrimaryButton {
   margin: 0;
   display: flex;
   flex-wrap: wrap;
@@ -122,6 +123,31 @@
   font-weight: 600;
   line-height: 1.3;
   color: var(--tf-ink, #2a2520);
+}
+
+.nearestPrimaryButton {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.nearestPrimaryButton:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--day-decor-color, #5b6472) 55%, transparent);
+  outline-offset: 3px;
+  border-radius: 0.35rem;
+}
+
+.nearestPracticeHint {
+  margin-left: auto;
+  font-family: var(--tf-font-body, inherit);
+  font-size: 0.72rem;
+  font-weight: 560;
+  letter-spacing: 0.02em;
+  color: var(--tf-ink-muted, #7a7168);
 }
 
 .nearestTime {
@@ -158,37 +184,14 @@
   background-size: 200% 100%;
 }
 
-.sphereChips {
-  list-style: none;
+.focusDirection {
   margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-}
-
-.sphereChip {
-  display: inline-flex;
-  align-items: center;
-  margin: 0;
-  padding: 0.28rem 0.7rem;
-  border: 1px solid color-mix(in srgb, var(--day-decor-color, #5b6472) 28%, transparent);
-  border-radius: 0.55rem;
-  background: color-mix(in srgb, var(--day-accent-soft, rgba(120, 130, 145, 0.18)) 70%, transparent);
-  font-family: var(--tf-font-body, inherit);
   font-size: 0.82rem;
-  font-weight: 560;
-  line-height: 1.25;
+  line-height: 1.45;
+  color: var(--tf-ink-muted, #7a7168);
+}
+
+.focusDirectionLabel {
+  font-weight: 600;
   color: var(--tf-ink, #2a2520);
-  cursor: default;
-}
-
-button.sphereChip {
-  cursor: pointer;
-  font: inherit;
-}
-
-button.sphereChip:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--day-decor-color, #5b6472) 55%, transparent);
-  outline-offset: 2px;
 }

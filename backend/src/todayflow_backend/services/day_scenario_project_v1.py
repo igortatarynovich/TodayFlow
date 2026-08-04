@@ -19,6 +19,7 @@ from typing import Any
 
 from todayflow_backend.services.day_scenario_v1 import (
     PRODUCT_SPHERE_IDS,
+    _month_from_ritual_or_today,
     build_interpretive_chorus_v1,
     build_scenario_conflict_v1,
     build_scenario_props_v1,
@@ -380,6 +381,7 @@ def _heal_template_scene_copy(
             day_favorable=day_favorable_from_activations(
                 foundation.get("personal_natal_activations") or []
             ),
+            target_month=_month_from_ritual_or_today(None, foundation),
         )
     return healed
 

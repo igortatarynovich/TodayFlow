@@ -136,6 +136,7 @@ from todayflow_backend.services.day_scenario_v1 import (
     DAY_SCENARIO_V1_VERSION,
     PRODUCT_SPHERE_IDS,
     _day_tone_anchor,
+    _month_from_ritual_or_today,
     build_scenario_foundation_v1,
     build_scenario_props_v1,
     validate_day_scenario_v1,
@@ -318,6 +319,11 @@ conflict.title / force_a / force_b — если заданы — называю�
 (не выдумывай «автопилот» vs «выбор», не пиши why_today как «натяжение между A и B»).
 why_today — lived «почему тон сегодня такой» (как ровный абзац про фактор неба), не опенер «X против Y».
 Перефразируй ось своими словами под быт сферы; opportunity/trap — разные по смыслу и лексике.
+СТИЛЬ opportunity / trap (обязательно):
+- одна текучая фраза с конкретной поведенческой деталью (кто / жест / момент), живой голос без ярлыков;
+- ЗАПРЕЩЕНА конструкция «ярлык: перечисление через запятую»
+  (плохо: «Форсировать бодрость: второй кофе, громкая музыка, ещё один созвон»);
+- хорошо: «Тянет сделать второй кофе и включить громкую музыку, лишь бы не заметить, что тело уже просит паузы».
 Если во входе есть person.first_name / display_name — обращайся по имени (ты + имя), не «вы».
 
 Плохо: «В отношениях возможна напряжённость. Сохраняйте границы.»
@@ -930,6 +936,7 @@ def native_llm_to_day_scenario_v1(
         scenes=scenes,
         chorus=chorus,
         day_favorable=day_favorable,
+        target_month=_month_from_ritual_or_today(ritual_context, foundation),
     )
     # Attach LLM prop_material as diagnostics only (not SoT for final color)
     props["prop_material_llm"] = norm.get("prop_material")

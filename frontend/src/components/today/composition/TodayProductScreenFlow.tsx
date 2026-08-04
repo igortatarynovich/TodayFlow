@@ -9,7 +9,8 @@ import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/t
 import { MotionReveal } from "@/design-system/motion/MotionReveal";
 import { MOTION } from "@/design-system/motion/tokens";
 import type { ScreenFlowChangeReason } from "@/design-system/primitives/ScreenFlow";
-import type { GlanceSphereChip } from "@/lib/todayGlanceSphereChips";
+import type { GlanceDailyFocusModel } from "@/lib/todayDailyFocus";
+import type { GlanceTimelineItem } from "@/lib/todayGlanceTimeline";
 
 type PersonalizedProps = ComponentProps<typeof TodayPersonalizedProductSection>;
 
@@ -20,10 +21,14 @@ export type TodayProductScreenFlowProps = {
   /** Conflict why_arose texture for Glance hero (v3) */
   dayTexture?: string | null;
   themeLoading?: boolean;
-  /** Glance ≤2 domain chips from Reading magnitude set */
-  sphereChips?: GlanceSphereChip[];
+  /** Glance Daily Focus (canon R15–R17 — replaces sphere chips) */
+  dailyFocus?: GlanceDailyFocusModel | null;
   /** Pulse text for Glance «Энергия дня» */
   energyLine?: string | null;
+  /** Cause under energy effect */
+  energyCause?: string | null;
+  /** Glance nearest timed window → practice */
+  onNearestSelect?: (item: GlanceTimelineItem) => void;
   heroSection: ReactNode;
   /** Conflict narrative under photo — Plot Screen 1 (v3) */
   plotNarrativeSection?: ReactNode;
@@ -38,7 +43,6 @@ export type TodayProductScreenFlowProps = {
   personalizedProps: Omit<PersonalizedProps, "asScreenFlowSteps" | "actFilter">;
   activeIndex: number;
   onIndexChange: (index: number, meta: { reason: ScreenFlowChangeReason }) => void;
-  onSphereSelect?: (domain: string) => void;
   embeddedInWebDashboard?: boolean;
   topRowSection?: ReactNode;
   greetingSection?: ReactNode;
@@ -62,8 +66,10 @@ export function TodayProductScreenFlow({
   themeThesis = null,
   dayTexture = null,
   themeLoading = false,
-  sphereChips = [],
+  dailyFocus = null,
   energyLine = null,
+  energyCause = null,
+  onNearestSelect,
   heroSection,
   plotNarrativeSection = null,
   pulseSection: _pulseSection = null,
@@ -76,7 +82,6 @@ export function TodayProductScreenFlow({
   personalizedProps,
   activeIndex,
   onIndexChange,
-  onSphereSelect,
   embeddedInWebDashboard = false,
   topRowSection = null,
   greetingSection = null,
@@ -131,17 +136,11 @@ export function TodayProductScreenFlow({
             dayTexture={dayTexture}
             thesis={themeThesis}
             themeLoading={themeLoading}
-            sphereChips={sphereChips}
+            dailyFocus={dailyFocus}
             energyLine={energyLine}
+            energyCause={energyCause}
+            onNearestSelect={onNearestSelect}
             teasers={teasers}
-            onSphereSelect={
-              showPersonalized
-                ? (domain) => {
-                    onSphereSelect?.(domain);
-                    onIndexChange(readingIndex, { reason: "select" });
-                  }
-                : undefined
-            }
           />
         </ScreenFlowStep>
 

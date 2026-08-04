@@ -1,4 +1,4 @@
-import { buildDailyFocusModel } from "@/lib/todayDailyFocus";
+import { buildDailyFocusModel, buildGlanceDailyFocus } from "@/lib/todayDailyFocus";
 import { isDailyFocusGuidanceLeak, filterDailyFocusLines } from "@/lib/todayDailyFocusBoundary";
 import type { TodayContractV1 } from "@/lib/todayContract";
 
@@ -113,5 +113,26 @@ describe("PR1 S5 boundary — Daily Focus", () => {
     expect(model.title).toMatch(/один фокус/i);
     expect(model.lines.join(" ")).toMatch(/ясность|линию/i);
     expect(model.title).not.toMatch(/чужой guide/i);
+  });
+});
+
+describe("Glance Daily Focus — prioritize / avoid", () => {
+  it("surfaces day_story do/avoid as direction, not domain chips", () => {
+    const contract: TodayContractV1 = {
+      ...minimalContract,
+      day_story: {
+        contract_version: "day_story_v1",
+        theme: "День коротких договорённостей.",
+        direction: "Одна ясная линия в разговорах.",
+        story: "Держи тон коротким. Не раздувай тему.",
+        do: ["Скажи одну конкретную просьбу без списка условий."],
+        avoid: ["Не тяни несколько тредов сразу."],
+        trap: "Раздуть мелкий конфликт до вечера.",
+      },
+    };
+    const focus = buildGlanceDailyFocus(contract, null);
+    expect(focus.title).toMatch(/договорённост|лини/i);
+    expect(focus.prioritize).toMatch(/конкретн/i);
+    expect(focus.avoid).toMatch(/тредов|конфликт/i);
   });
 });

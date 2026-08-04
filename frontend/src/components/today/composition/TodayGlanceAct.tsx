@@ -11,7 +11,7 @@ import {
 } from "@/lib/todayGlanceTimeline";
 import { fetchDayFacts } from "@/lib/todayDayFacts";
 import { pickNearestGlanceItem } from "@/lib/todayGlanceNearest";
-import type { GlanceSphereChip } from "@/lib/todayGlanceSphereChips";
+import type { GlanceDailyFocusModel } from "@/lib/todayDailyFocus";
 import { TODAY_NO_SHARP_FOCUS_COPY } from "@/lib/todayGlanceTexture";
 import { todaySlotFailureCopy, type TodaySlotLoadFailure } from "@/lib/todaySlotAvailability";
 
@@ -34,12 +34,17 @@ type Props = {
   thesis?: string | null;
   teasers: TodayGlanceTeaser[];
   themeLoading?: boolean;
-  /** ≤2 Reading domain chips (SCENARIO_V3 Экран 0). */
-  sphereChips?: GlanceSphereChip[];
+  /**
+   * One Daily Focus with prioritize / avoid (canon R15–R17).
+   * Replaces legacy ≤2 domain sphere chips.
+   */
+  dailyFocus?: GlanceDailyFocusModel | null;
   /** Pulse facet — shown as «Энергия дня» when non-empty (honest omit). */
   energyLine?: string | null;
-  /** @deprecated spheres are not Glance hero — kept for call-site compat */
-  onSphereSelect?: (domain: string) => void;
+  /** Optional cause under energy effect (chorus). */
+  energyCause?: string | null;
+  /** Tap nearest timed window → micro-practice (keeps clock/label signal). */
+  onNearestSelect?: (item: GlanceTimelineItem) => void;
 };
 
 const MONTHS_RU = [
@@ -77,9 +82,10 @@ export function TodayGlanceAct({
   thesis = null,
   teasers,
   themeLoading = false,
-  sphereChips = [],
+  dailyFocus = null,
   energyLine = null,
-  onSphereSelect,
+  energyCause = null,
+  onNearestSelect,
 }: Props) {
   const [nearest, setNearest] = useState<GlanceTimelineItem | null>(null);
   const [loadFailure, setLoadFailure] = useState<TodaySlotLoadFailure | null>(null);
@@ -129,6 +135,11 @@ export function TodayGlanceAct({
 
   const dateLabel = useMemo(() => formatGlanceDateRu(dateISO), [dateISO]);
   const energyText = (energyLine || "").trim() || null;
+  const energyCauseText = (energyCause || "").trim() || null;
+  const focusTitle = (dailyFocus?.title || "").trim() || null;
+  const prioritize = (dailyFocus?.prioritize || "").trim() || null;
+  const avoid = (dailyFocus?.avoid || "").trim() || null;
+  const hasFocus = Boolean(focusTitle || prioritize || avoid);
 
   // Sparse: prefer symbols ritual teaser only on Glance hero chrome
   const primaryTeaser =
@@ -177,37 +188,42 @@ export function TodayGlanceAct({
           <p className={styles.primaryCompact} data-testid="today-glance-energy-text">
             {energyText}
           </p>
+          {energyCauseText ? (
+            <p className={styles.detail} data-testid="today-glance-energy-cause">
+              {energyCauseText}
+            </p>
+          ) : null}
         </DsCard>
       ) : null}
 
-      <DsCard variant="glass" size="compact" className={styles.block} testId="today-glance-spheres">
-        <p className={styles.eyebrow}>{copy.journey.glanceSpheresLabel}</p>
-        {sphereChips.length > 0 ? (
-          <ul className={styles.sphereChips} data-testid="today-glance-sphere-chips">
-            {sphereChips.map((chip) => (
-              <li key={chip.domain}>
-                {onSphereSelect ? (
-                  <button
-                    type="button"
-                    className={styles.sphereChip}
-                    data-testid={`today-glance-sphere-${chip.domain}`}
-                    onClick={() => onSphereSelect(chip.domain)}
-                  >
-                    {chip.label}
-                  </button>
-                ) : (
-                  <span
-                    className={styles.sphereChip}
-                    data-testid={`today-glance-sphere-${chip.domain}`}
-                  >
-                    {chip.label}
-                  </span>
-                )}
-              </li>
-            ))}
-          </ul>
+      <DsCard variant="glass" size="compact" className={styles.block} testId="today-glance-daily-focus">
+        <p className={styles.eyebrow}>{copy.journey.glanceFocusLabel}</p>
+        {hasFocus ? (
+          <>
+            {focusTitle ? (
+              <p
+                className={styles.primaryCompact}
+                data-testid="today-glance-focus-title"
+                data-daily-focus-id={dailyFocus?.dailyFocusId}
+              >
+                {focusTitle}
+              </p>
+            ) : null}
+            {prioritize ? (
+              <p className={styles.focusDirection} data-testid="today-glance-focus-prioritize">
+                <span className={styles.focusDirectionLabel}>{copy.journey.glanceFocusPrioritize}</span>
+                {prioritize}
+              </p>
+            ) : null}
+            {avoid ? (
+              <p className={styles.focusDirection} data-testid="today-glance-focus-avoid">
+                <span className={styles.focusDirectionLabel}>{copy.journey.glanceFocusAvoid}</span>
+                {avoid}
+              </p>
+            ) : null}
+          </>
         ) : (
-          <p className={styles.detail} data-testid="today-glance-spheres-empty">
+          <p className={styles.detail} data-testid="today-glance-focus-empty">
             {TODAY_NO_SHARP_FOCUS_COPY}
           </p>
         )}
@@ -237,20 +253,40 @@ export function TodayGlanceAct({
         >
           {!loaded ? <div className={styles.nearestSkeleton} data-loading="true" aria-busy="true" /> : null}
           {loaded && !loadFailure && nearest ? (
-            <p
-              className={styles.nearestPrimary}
-              data-valence={nearest.valence}
-              data-live={live ? "true" : "false"}
-              data-testid={`today-glance-nearest-${nearest.driver_id}`}
-            >
-              <span className={styles.nearestTime}>{formatGlanceClock(nearest.time_local)}</span>
-              <span className={styles.nearestLabel}>{nearest.label_short}</span>
-              {live ? (
-                <span className={styles.nearestNow} data-testid="today-glance-now">
-                  {copy.journey.glanceNow}
-                </span>
-              ) : null}
-            </p>
+            onNearestSelect ? (
+              <button
+                type="button"
+                className={styles.nearestPrimaryButton}
+                data-valence={nearest.valence}
+                data-live={live ? "true" : "false"}
+                data-testid={`today-glance-nearest-${nearest.driver_id}`}
+                onClick={() => onNearestSelect(nearest)}
+              >
+                <span className={styles.nearestTime}>{formatGlanceClock(nearest.time_local)}</span>
+                <span className={styles.nearestLabel}>{nearest.label_short}</span>
+                {live ? (
+                  <span className={styles.nearestNow} data-testid="today-glance-now">
+                    {copy.journey.glanceNow}
+                  </span>
+                ) : null}
+                <span className={styles.nearestPracticeHint}>{copy.journey.glanceNearestPracticeHint}</span>
+              </button>
+            ) : (
+              <p
+                className={styles.nearestPrimary}
+                data-valence={nearest.valence}
+                data-live={live ? "true" : "false"}
+                data-testid={`today-glance-nearest-${nearest.driver_id}`}
+              >
+                <span className={styles.nearestTime}>{formatGlanceClock(nearest.time_local)}</span>
+                <span className={styles.nearestLabel}>{nearest.label_short}</span>
+                {live ? (
+                  <span className={styles.nearestNow} data-testid="today-glance-now">
+                    {copy.journey.glanceNow}
+                  </span>
+                ) : null}
+              </p>
+            )
           ) : null}
           {loaded && !loadFailure && !nearest ? (
             <p className={styles.detail} data-empty="true" data-testid="today-glance-nearest-empty">

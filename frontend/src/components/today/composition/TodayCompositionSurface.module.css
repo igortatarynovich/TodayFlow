@@ -680,6 +680,45 @@
   color: var(--tf-ink-soft, #5c5348);
 }
 
+.plotBeats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.plotBeat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid color-mix(in srgb, var(--day-decor-color, #5b6472) 35%, transparent);
+}
+
+.plotBeat[data-beat-role="tension"] {
+  border-left-color: color-mix(in srgb, #8b5a3c 45%, transparent);
+}
+
+.plotBeat[data-beat-role="turn"] {
+  border-left-color: color-mix(in srgb, #3d6b5a 45%, transparent);
+}
+
+.plotBeatLabel {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--tf-ink-muted, #8a8178);
+}
+
+.plotBeatBody {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--tf-ink, #2a2520);
+  max-width: 42ch;
+}
+
 .journeyScene {
   position: relative;
   isolation: isolate;

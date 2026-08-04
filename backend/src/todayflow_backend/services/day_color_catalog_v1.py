@@ -118,15 +118,19 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "symbolic_property": "дистанция, которая снижает реактивность, — сформулировать позицию раньше, чем ответить",
         "apply": {
             "clothing": "Тёмно-синий свитер, пиджак или джинсы глубокого синего.",
+            "clothing_warm": "Тёмно-синяя рубашка, льняной пиджак или джинсы глубокого синего.",
+            "clothing_cold": "Тёмно-синий свитер, шерстяной пиджак или джинсы глубокого синего.",
             "accessory": "Сумка, ремень или перстень в спокойном синем.",
+            "accessory_warm": "Лёгкая сумка или тонкий браслет в спокойном синем.",
+            "accessory_cold": "Шерстяной шарф, ремень или перстень в спокойном синем.",
             "workspace": "Один синий предмет в зоне разговора или на столе.",
             "makeup": "Холодный синий акцент у глаз — без «маски».",
             "ui_or_bg": "Спокойный тёмно-синий фон в заметках дня.",
         },
         "intensity_default": "один заметный элемент или два мелких",
         "avoid_candidates": (
-            {"name": "Ярко-розовый", "amplifies": ("please", "harmony_at_any_cost", "soft_over_truth")},
-            {"name": "Неоновый жёлтый", "amplifies": ("rush", "scatter", "noise")},
+            {"name": "Ярко-розовый", "why": "розовый тон усиливает желание сгладить и угодить — сегодня это не союзник", "amplifies": ("please", "harmony_at_any_cost", "soft_over_truth")},
+            {"name": "Неоновый жёлтый", "why": "кислотный тон усиливает суету и спешку — не твой сегодня союзник", "amplifies": ("rush", "scatter", "noise")},
         ),
     },
     {
@@ -135,14 +139,18 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "symbolic_property": "ясность без тяжести — ровный фон для решения, не для дистанцирования",
         "apply": {
             "clothing": "Светлая рубашка, шарф или носки лазурного оттенка.",
+            "clothing_warm": "Светлая рубашка или тонкий шарф лазурного оттенка.",
+            "clothing_cold": "Лазурный свитер, шарф или носки.",
             "accessory": "Тонкий браслет или блокнот в мягком синем.",
+            "accessory_warm": "Тонкий браслет или блокнот в мягком синем.",
+            "accessory_cold": "Тёплый шарф или чехол телефона в мягком синем.",
             "workspace": "Лазурный стикер на одном приоритете.",
             "makeup": None,
             "ui_or_bg": "Мягкий голубой акцент в списке задач.",
         },
         "intensity_default": "10–15% образа — один акцент",
         "avoid_candidates": (
-            {"name": "Кислотно-оранжевый", "amplifies": ("rush", "impulse", "scatter")},
+            {"name": "Кислотно-оранжевый", "why": "кислотный тон усиливает суету и спешку — не твой сегодня союзник", "amplifies": ("rush", "impulse", "scatter")},
         ),
     },
     {
@@ -151,14 +159,18 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "symbolic_property": "пауза внутрь, не наружу — услышать свою честную реакцию до того, как её озвучить",
         "apply": {
             "clothing": "Индиго в нижнем слое ближе к телу.",
+            "clothing_warm": "Индиго в лёгком нижнем слое ближе к телу.",
+            "clothing_cold": "Индиго в тёплом нижнем слое ближе к телу.",
             "accessory": "Платок или обложка телефона.",
+            "accessory_warm": "Лёгкий платок или обложка телефона.",
+            "accessory_cold": "Тёплый платок или обложка телефона.",
             "workspace": None,
             "makeup": None,
             "ui_or_bg": None,
         },
         "intensity_default": "мягкий акцент ближе к телу",
         "avoid_candidates": (
-            {"name": "Красный", "amplifies": ("react_first", "rush", "alarm")},
+            {"name": "Красный", "why": "резкий акцент толкает отвечать раньше, чем подумать", "amplifies": ("react_first", "rush", "alarm")},
         ),
     },
     {
@@ -167,7 +179,11 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "symbolic_property": "тёплый контакт без напора — говорить прямо, но не колко",
         "apply": {
             "clothing": "Коралловый топ под пиджак или шарф.",
+            "clothing_warm": "Коралловый топ или лёгкий шарф.",
+            "clothing_cold": "Коралловый свитер или тёплый шарф.",
             "accessory": "Небольшая брошь или чехол.",
+            "accessory_warm": "Тонкий коралловый аксессуар — серьги или браслет.",
+            "accessory_cold": "Коралловый шарф или перчатки.",
             "workspace": None,
             "makeup": "Помада мягкого коралла.",
             "ui_or_bg": None,
@@ -175,7 +191,7 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "intensity_default": "небольшой тёплый штрих",
         "avoid_candidates": (
             # was decorative heavy — remapped to live amplify set
-            {"name": "Чёрный", "amplifies": ("all_or_nothing", "pressure", "over_control")},
+            {"name": "Чёрный", "why": "контрастный тон толкает к крайностям вместо меры", "amplifies": ("all_or_nothing", "pressure", "over_control")},
         ),
     },
     {
@@ -184,7 +200,11 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "symbolic_property": "мягкое восстановление через тело и связь, не через изоляцию",
         "apply": {
             "clothing": "Изумрудный шарф или кардиган.",
+            "clothing_warm": "Изумрудный шарф или лёгкий кардиган.",
+            "clothing_cold": "Изумрудный свитер или плотный кардиган.",
             "accessory": "Маленький зелёный якорь.",
+            "accessory_warm": "Изумрудный браслет или тонкий ремень.",
+            "accessory_cold": "Изумрудный шарф или сумка.",
             "workspace": "Растение или зелёный предмет на столе.",
             "makeup": None,
             "ui_or_bg": None,
@@ -192,7 +212,7 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "intensity_default": "один живой акцент",
         "avoid_candidates": (
             # was decorative numb/flat/overwork — remapped to live amplify set
-            {"name": "Серый", "amplifies": ("pressure", "over_control", "harsh")},
+            {"name": "Серый", "why": "тяжёлый акцент усиливает давление «надо уже»", "amplifies": ("pressure", "over_control", "harsh")},
         ),
     },
     {
@@ -201,14 +221,18 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "symbolic_property": "заземление в рабочем темпе — устойчивость без рывков и без демонстрации усилия",
         "apply": {
             "clothing": "Оливковый слой outerwear или брюки.",
+            "clothing_warm": "Оливковая рубашка, жилет или брюки.",
+            "clothing_cold": "Оливковый слой outerwear или брюки.",
             "accessory": "Ремень или сумка спокойного оливкового.",
+            "accessory_warm": "Оливковый ремень или лёгкая сумка.",
+            "accessory_cold": "Оливковый шарф или плотная сумка.",
             "workspace": None,
             "makeup": None,
             "ui_or_bg": None,
         },
         "intensity_default": "один спокойный слой",
         "avoid_candidates": (
-            {"name": "Неоновый жёлтый", "amplifies": ("rush", "scatter")},
+            {"name": "Неоновый жёлтый", "why": "кислотный тон усиливает суету и спешку — не твой сегодня союзник", "amplifies": ("rush", "scatter")},
         ),
     },
     {
@@ -217,14 +241,18 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "symbolic_property": "серьёзная собранность — граница, которая не кричит, а просто есть",
         "apply": {
             "clothing": "Бордовый шарф или один слой outerwear.",
+            "clothing_warm": "Бордовый шарф или лёгкий слой в образе.",
+            "clothing_cold": "Бордовый шарф или один слой outerwear.",
             "accessory": "Кожаный аксессуар винного тона.",
+            "accessory_warm": "Бордовый браслет или тонкий ремень.",
+            "accessory_cold": "Бордовый шарф или перчатки.",
             "workspace": None,
             "makeup": None,
             "ui_or_bg": None,
         },
         "intensity_default": "один насыщенный акцент",
         "avoid_candidates": (
-            {"name": "Кислотно-розовый", "amplifies": ("scatter", "please", "noise")},
+            {"name": "Кислотно-розовый", "why": "дробный яркий тон разбрасывает внимание по мелочам", "amplifies": ("scatter", "please", "noise")},
         ),
     },
     {
@@ -233,14 +261,18 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "symbolic_property": "тёплая поддержка энергии тела без разгона и без суеты",
         "apply": {
             "clothing": "Янтарный шарф или тёплый свитер.",
+            "clothing_warm": "Янтарный шарф или лёгкий кардиган.",
+            "clothing_cold": "Янтарный шарф или тёплый свитер.",
             "accessory": "Украшение медового оттенка.",
+            "accessory_warm": "Янтарный браслет или тонкая цепочка.",
+            "accessory_cold": "Янтарный шарф или варежки.",
             "workspace": None,
             "makeup": None,
             "ui_or_bg": None,
         },
         "intensity_default": "тёплый акцент у лица или на руках",
         "avoid_candidates": (
-            {"name": "Холодный стальной", "amplifies": ("harsh", "over_control")},
+            {"name": "Холодный стальной", "why": "резкий тон делает общение суше и острее, чем нужно сегодня", "amplifies": ("harsh", "over_control")},
         ),
     },
     # --- Layer A expansion (existing tags only; 2026-08-02) ---
@@ -250,14 +282,18 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "symbolic_property": "глубокое восстановление под защитой — не отдых на бегу, а настоящая пауза",
         "apply": {
             "clothing": "Малахитовый свитер или тёмно-зелёный слой outerwear.",
+            "clothing_warm": "Малахитовая рубашка или лёгкий тёмно-зелёный слой.",
+            "clothing_cold": "Малахитовый свитер или тёмно-зелёный слой outerwear.",
             "accessory": "Кольцо или подвеска с малахитовым отливом.",
+            "accessory_warm": "Малахитовый браслет или тонкий ремень.",
+            "accessory_cold": "Малахитовый шарф или плотная сумка.",
             "workspace": "Тёмно-зелёный предмет на столе, не растение — камень или ткань.",
             "makeup": None,
             "ui_or_bg": None,
         },
         "intensity_default": "один глубокий акцент, не россыпь мелочей",
         "avoid_candidates": (
-            {"name": "Плоский белый", "amplifies": ("pressure", "harsh")},
+            {"name": "Плоский белый", "why": "тяжёлый акцент усиливает давление «надо уже»", "amplifies": ("pressure", "harsh")},
         ),
     },
     {
@@ -266,14 +302,18 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "symbolic_property": "контакт на самом тихом регистре — мягче, чем тепло, ближе к бережности",
         "apply": {
             "clothing": "Пыльно-розовый свитер, шарф или блуза.",
+            "clothing_warm": "Пыльно-розовая блуза или лёгкий шарф.",
+            "clothing_cold": "Пыльно-розовый свитер или шарф.",
             "accessory": "Лёгкий шёлковый платок того же тона.",
+            "accessory_warm": "Пыльно-розовый браслет или тонкий платок.",
+            "accessory_cold": "Пыльно-розовый шарф или перчатки.",
             "workspace": None,
             "makeup": "Приглушённая розовая помада без блеска.",
             "ui_or_bg": None,
         },
         "intensity_default": "мягкий, почти незаметный тон — не яркое пятно",
         "avoid_candidates": (
-            {"name": "Кислотно-красный", "amplifies": ("alarm", "harsh")},
+            {"name": "Кислотно-красный", "why": "тревожный акцент держит нервную готовность на взводе", "amplifies": ("alarm", "harsh")},
         ),
     },
     {
@@ -282,14 +322,18 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "symbolic_property": "тёплая устойчивость через тело — заземление, которое греет, а не просто держит",
         "apply": {
             "clothing": "Мускатный свитер или пальто тёплого коричневого.",
+            "clothing_warm": "Мускатная рубашка или лёгкий жакет.",
+            "clothing_cold": "Мускатный свитер или пальто тёплого коричневого.",
             "accessory": "Кожаный аксессуар цвета мускатного ореха.",
+            "accessory_warm": "Мускатный ремень или лёгкая сумка.",
+            "accessory_cold": "Мускатный шарф или плотные перчатки.",
             "workspace": None,
             "makeup": None,
             "ui_or_bg": None,
         },
         "intensity_default": "один тёплый слой",
         "avoid_candidates": (
-            {"name": "Ледяной серебристый", "amplifies": ("harsh", "over_control")},
+            {"name": "Ледяной серебристый", "why": "резкий тон делает общение суше и острее, чем нужно сегодня", "amplifies": ("harsh", "over_control")},
         ),
     },
     {
@@ -298,14 +342,18 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "symbolic_property": "ясность, добытая через паузу, — не просто «подожди», а «теперь видно»",
         "apply": {
             "clothing": "Аметистовый шарф или свитер глубокого фиолетового.",
+            "clothing_warm": "Аметистовый шарф или лёгкий кардиган.",
+            "clothing_cold": "Аметистовый шарф или свитер глубокого фиолетового.",
             "accessory": "Кольцо или серьги с фиолетовым камнем.",
+            "accessory_warm": "Аметистовый браслет или тонкий платок.",
+            "accessory_cold": "Аметистовый шарф или тёплые перчатки.",
             "workspace": None,
             "makeup": None,
             "ui_or_bg": None,
         },
         "intensity_default": "один насыщенный акцент",
         "avoid_candidates": (
-            {"name": "Кричащий фуксия", "amplifies": ("scatter", "noise")},
+            {"name": "Кричащий фуксия", "why": "дробный яркий тон разбрасывает внимание по мелочам", "amplifies": ("scatter", "noise")},
         ),
     },
     {
@@ -314,14 +362,18 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "symbolic_property": "решительная ясность — не фон для решения, а сам толчок его принять",
         "apply": {
             "clothing": "Кобальтовая рубашка или свитер.",
+            "clothing_warm": "Кобальтовая рубашка или лёгкий слой.",
+            "clothing_cold": "Кобальтовый свитер или плотная рубашка.",
             "accessory": "Ручка, часы или чехол насыщенного синего.",
+            "accessory_warm": "Кобальтовый браслет или тонкий ремень.",
+            "accessory_cold": "Кобальтовый шарф или сумка.",
             "workspace": "Кобальтовый стикер на самом важном пункте дня.",
             "makeup": None,
             "ui_or_bg": "Кобальтовый акцент на главной задаче.",
         },
         "intensity_default": "один яркий, но не кричащий акцент",
         "avoid_candidates": (
-            {"name": "Блёклый бежевый", "amplifies": ("scatter", "noise")},
+            {"name": "Блёклый бежевый", "why": "дробный яркий тон разбрасывает внимание по мелочам", "amplifies": ("scatter", "noise")},
         ),
     },
     {
@@ -330,14 +382,18 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "symbolic_property": "лёгкая дистанция — граница, которая не давит и не тяжелеет",
         "apply": {
             "clothing": "Молочно-белый свитер или рубашка цвета слоновой кости.",
+            "clothing_warm": "Молочно-белая рубашка или лёгкий слой цвета слоновой кости.",
+            "clothing_cold": "Молочно-белый свитер или плотная рубашка цвета слоновой кости.",
             "accessory": "Светлый шарф или сумка нейтрального тона.",
+            "accessory_warm": "Светлый браслет или тонкий платок.",
+            "accessory_cold": "Светлый шарф или перчатки.",
             "workspace": "Один светлый нейтральный предмет на столе.",
             "makeup": None,
             "ui_or_bg": "Светлый нейтральный фон в заметках дня.",
         },
         "intensity_default": "фон, не акцент — можно взять базой образа",
         "avoid_candidates": (
-            {"name": "Тяжёлый чёрный", "amplifies": ("pressure", "harsh")},
+            {"name": "Тяжёлый чёрный", "why": "тяжёлый акцент усиливает давление «надо уже»", "amplifies": ("pressure", "harsh")},
         ),
     },
     # --- Layer B (generator tags + catalog together; 2026-08-02) ---
@@ -348,7 +404,11 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "symbolic_property": "искра без спешки — творческий импульс, которому не нужно оправдание",
         "apply": {
             "clothing": "Шафрановый шарф, свитер или яркий акцент в одежде.",
+            "clothing_warm": "Шафрановый шарф или яркий акцент в лёгкой одежде.",
+            "clothing_cold": "Шафрановый шарф, свитер или яркий акцент в одежде.",
             "accessory": "Украшение или чехол медово-оранжевого тона.",
+            "accessory_warm": "Шафрановый браслет или тонкий платок.",
+            "accessory_cold": "Шафрановый шарф или тёплые перчатки.",
             "workspace": "Шафрановый стикер на творческой задаче.",
             "makeup": None,
             "ui_or_bg": "Тёплый оранжевый акцент в заметках творческой сферы.",
@@ -356,7 +416,7 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "intensity_default": "один яркий акцент — шафран не любит разбавления",
         "avoid_candidates": (
             # editorial numb/flat → live amplify set
-            {"name": "Блёклый серый", "amplifies": ("scatter", "noise")},
+            {"name": "Блёклый серый", "why": "дробный яркий тон разбрасывает внимание по мелочам", "amplifies": ("scatter", "noise")},
         ),
     },
     {
@@ -365,14 +425,18 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "symbolic_property": "тепло дома как опора — принадлежность месту, не просто устойчивость",
         "apply": {
             "clothing": "Терракотовый свитер, платье или слой outerwear.",
+            "clothing_warm": "Терракотовое платье, топ или лёгкий слой.",
+            "clothing_cold": "Терракотовый свитер, платье или слой outerwear.",
             "accessory": "Керамическое украшение или сумка терракотового тона.",
+            "accessory_warm": "Терракотовый браслет или лёгкая сумка.",
+            "accessory_cold": "Терракотовый шарф или плотная сумка.",
             "workspace": "Терракотовый предмет или ткань дома, не на рабочем столе.",
             "makeup": None,
             "ui_or_bg": None,
         },
         "intensity_default": "один тёплый слой, лучше дома, чем на работе",
         "avoid_candidates": (
-            {"name": "Холодный стальной", "amplifies": ("harsh", "over_control")},
+            {"name": "Холодный стальной", "why": "резкий тон делает общение суше и острее, чем нужно сегодня", "amplifies": ("harsh", "over_control")},
         ),
     },
     {
@@ -381,14 +445,18 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "symbolic_property": "честная страсть — показать желание, а не смягчать его до вежливости",
         "apply": {
             "clothing": "Гранатовый топ, платье или шарф.",
+            "clothing_warm": "Гранатовый топ, платье или лёгкий шарф.",
+            "clothing_cold": "Гранатовый свитер, платье или тёплый шарф.",
             "accessory": "Украшение глубокого красного тона.",
+            "accessory_warm": "Гранатовый браслет или тонкий платок.",
+            "accessory_cold": "Гранатовый шарф или перчатки.",
             "workspace": None,
             "makeup": "Помада или тени глубокого гранатового.",
             "ui_or_bg": None,
         },
         "intensity_default": "один насыщенный акцент — не костюм целиком",
         "avoid_candidates": (
-            {"name": "Блёклый пастельный", "amplifies": ("please", "soft_over_truth")},
+            {"name": "Блёклый пастельный", "why": "розовый тон усиливает желание сгладить и угодить — сегодня это не союзник", "amplifies": ("please", "soft_over_truth")},
         ),
     },
     {
@@ -397,7 +465,11 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "symbolic_property": "уверенность в росте — не только решение, но и спокойное ощущение достатка",
         "apply": {
             "clothing": "Хризолитовый шарф или акцент в одежде.",
+            "clothing_warm": "Хризолитовый шарф или лёгкий акцент в одежде.",
+            "clothing_cold": "Хризолитовый шарф, свитер или акцент в одежде.",
             "accessory": "Украшение светло-зелёного камня.",
+            "accessory_warm": "Хризолитовый браслет или тонкий платок.",
+            "accessory_cold": "Хризолитовый шарф или тёплые перчатки.",
             "workspace": "Хризолитовый стикер на финансовой задаче.",
             "makeup": None,
             "ui_or_bg": "Светло-зелёный акцент в финансовой заметке.",
@@ -405,7 +477,7 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "intensity_default": "один спокойный акцент",
         "avoid_candidates": (
             # editorial numb → live amplify set
-            {"name": "Тусклый коричневый", "amplifies": ("pressure", "harsh")},
+            {"name": "Тусклый коричневый", "why": "тяжёлый акцент усиливает давление «надо уже»", "amplifies": ("pressure", "harsh")},
         ),
     },
     {
@@ -414,14 +486,18 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "symbolic_property": "мягкое прощание — закрыть тему честно, не пряча и не драматизируя",
         "apply": {
             "clothing": "Дымчато-сиреневый свитер или шарф.",
+            "clothing_warm": "Дымчато-сиреневая блуза или лёгкий шарф.",
+            "clothing_cold": "Дымчато-сиреневый свитер или шарф.",
             "accessory": "Приглушённое украшение сиреневого тона.",
+            "accessory_warm": "Сиреневый браслет или тонкий платок.",
+            "accessory_cold": "Сиреневый шарф или перчатки.",
             "workspace": None,
             "makeup": None,
             "ui_or_bg": "Приглушённый лиловый фон в заметке дня.",
         },
         "intensity_default": "мягкий, приглушённый тон",
         "avoid_candidates": (
-            {"name": "Ярко-красный", "amplifies": ("alarm", "rush")},
+            {"name": "Ярко-красный", "why": "тревожный акцент держит нервную готовность на взводе", "amplifies": ("alarm", "rush")},
         ),
     },
     {
@@ -430,14 +506,18 @@ COLOR_CATALOG_V1: list[dict[str, Any]] = [
         "symbolic_property": "тихая благодарность — отметить, что получилось, без громкого жеста",
         "apply": {
             "clothing": "Шампань-оттенок в одном предмете — блуза, шарф.",
+            "clothing_warm": "Шампань-оттенок в одном предмете — блуза или лёгкий шарф.",
+            "clothing_cold": "Шампань-оттенок в одном предмете — свитер или шарф.",
             "accessory": "Лёгкое украшение с перламутровым отливом.",
+            "accessory_warm": "Шампань-акцент в браслете или тонком платке.",
+            "accessory_cold": "Шампань-акцент в шарфе или перчатках.",
             "workspace": None,
             "makeup": "Шампань-хайлайтер или тени.",
             "ui_or_bg": None,
         },
         "intensity_default": "лёгкий блеск — одна деталь",
         "avoid_candidates": (
-            {"name": "Тяжёлый чёрный", "amplifies": ("pressure",)},
+            {"name": "Тяжёлый чёрный", "why": "тяжёлый акцент усиливает давление «надо уже»", "amplifies": ("pressure",)},
         ),
     },
 ]
@@ -458,6 +538,39 @@ def sanitize_color_display_name(name: str | None) -> str:
     t = re.sub(r"\s*«[^»]*»\s*", " ", t)
     t = re.sub(r"\s*[\"“”][^\"“”]*[\"“”]\s*", " ", t)
     return re.sub(r"\s+", " ", t).strip()
+
+
+def clothing_season_bucket(month: int | None) -> str:
+    """NH meteorological warm (Apr–Sep) vs cold (Oct–Mar) for clothing copy."""
+    m = int(month or 0)
+    if m in (4, 5, 6, 7, 8, 9):
+        return "warm"
+    return "cold"
+
+
+def resolve_seasonal_apply(apply: dict[str, Any] | None, *, month: int | None) -> dict[str, Any]:
+    """Pick clothing/accessory for current season; keep other surfaces flat."""
+    src = dict(apply or {})
+    bucket = clothing_season_bucket(month)
+    clothing = src.get(f"clothing_{bucket}") or src.get("clothing")
+    accessory = src.get(f"accessory_{bucket}") or src.get("accessory")
+    out = {
+        "clothing": clothing,
+        "accessory": accessory,
+        "workspace": src.get("workspace"),
+        "makeup": src.get("makeup"),
+        "ui_or_bg": src.get("ui_or_bg"),
+    }
+    return out
+
+
+def avoid_psychology_why(candidate: dict[str, Any] | None) -> str:
+    """Color-psychology avoid justification — never paste scene trap prose."""
+    cand = candidate or {}
+    why = str(cand.get("why") or "").strip()
+    if why:
+        return why
+    return "этот акцент усиливает визуальный шум — сегодня лучше держать его вне поля"
 
 
 def get_color_entry(name: str) -> dict[str, Any] | None:
@@ -526,4 +639,7 @@ def validate_color_catalog_v1() -> list[str]:
             dead = [a for a in amplifies if a not in LIVE_AVOID_AMPLIFY_TAGS]
             if dead:
                 errors.append(f"{name}: dead avoid amplifies {dead}")
+            why = str((cand or {}).get("why") or "").strip()
+            if len(why) < 12:
+                errors.append(f"{name}: avoid candidate needs psychology why (≥12 chars)")
     return errors

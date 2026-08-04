@@ -14,6 +14,7 @@ Canon: docs/DAY_SCENARIO_V1.md
 from __future__ import annotations
 
 import re
+from datetime import date, datetime
 from typing import Any
 
 DAY_SCENARIO_V1_CONTRACT = "day_scenario_v1"
@@ -130,6 +131,41 @@ def _clip(value: Any, n: int = 400) -> str:
 
 def _as_dict(value: Any) -> dict[str, Any]:
     return value if isinstance(value, dict) else {}
+
+
+def _month_from_ritual_or_today(
+    ritual_context: dict[str, Any] | None = None,
+    foundation: dict[str, Any] | None = None,
+) -> int:
+    """Resolve calendar month for seasonal clothing (NH warm/cold bucket)."""
+    ritual = _as_dict(ritual_context)
+    foundation_d = _as_dict(foundation)
+    for blob in (ritual, foundation_d, _as_dict(foundation_d.get("day_foundation"))):
+        for key in ("local_date", "date", "target_date"):
+            raw = blob.get(key)
+            if isinstance(raw, date) and not isinstance(raw, datetime):
+                return int(raw.month)
+            if isinstance(raw, datetime):
+                return int(raw.month)
+            if isinstance(raw, str) and len(raw) >= 7 and raw[4] == "-":
+                try:
+                    return int(raw[5:7])
+                except ValueError:
+                    pass
+    seasonal = _as_dict(
+        foundation_d.get("seasonal")
+        or _as_dict(foundation_d.get("day_foundation")).get("seasonal")
+    )
+    season = str(seasonal.get("season") or "").strip().lower()
+    if season == "summer":
+        return 7
+    if season == "winter":
+        return 1
+    if season == "spring":
+        return 4
+    if season == "autumn":
+        return 10
+    return date.today().month
 
 
 def _as_list(value: Any) -> list[Any]:
@@ -1292,15 +1328,19 @@ def build_scenario_props_v1(
     scenes: list[dict[str, Any]],
     chorus: dict[str, Any] | None = None,
     day_favorable: bool = False,
+    target_month: int | None = None,
 ) -> dict[str, Any]:
     """Derive color/avoid/goals/affirmations/humor from scenes (B2).
 
     Color catalog = knowledge only. Selection + user-facing why come from conflict/scene.
     ``day_favorable`` (from domain_verdicts on the same natal activations) unlocks
     quiet_celebration / light_gratitude → Champagne when scoring wins.
+    ``target_month`` selects warm/cold clothing + accessory copy.
     """
     from todayflow_backend.services.day_color_catalog_v1 import (
+        avoid_psychology_why,
         list_color_knowledge,
+        resolve_seasonal_apply,
         score_color_for_needs,
     )
 
@@ -1353,7 +1393,7 @@ def build_scenario_props_v1(
                     best_avoid_score = score
                     avoid_pick = cand
 
-    apply = _as_dict(chosen.get("apply"))
+    apply = resolve_seasonal_apply(_as_dict(chosen.get("apply")), month=target_month)
     symbolic = str(chosen.get("symbolic_property") or chosen.get("name") or "цвет дня")
     sphere_label = str(primary.get("sphere_label_ru") or "дня")
     # One lived why once — do not paste symbolic into link + effect + note mash.
@@ -1392,20 +1432,14 @@ def build_scenario_props_v1(
     avoid_name = sanitize_color_display_name(
         str((avoid_pick or {}).get("name") or "Кислотный неон")
     ) or "Кислотный неон"
-    # why without leading color name — UI already prints «Избегать: {name} — {why}».
+    amplify_tags = sorted(set((avoid_pick or {}).get("amplifies") or ()) & amplify) or sorted(amplify)
+    # Color psychology SoT — never paste scenes[].trap into avoid why (P1.7).
     avoid_prop = {
         "name": avoid_name,
         "origin_scene_id": scene_id,
         "serves_conflict": label,
-        "amplifies_trap": _clip(trap, 120),
-        "why": _clip(
-            (
-                f"сегодня усиливает ловушку «{_clip(trap, 120)}». Держи вне поля зрения."
-                if trap
-                else "сегодня шумит сильнее нужного. Держи вне поля зрения."
-            ),
-            280,
-        ),
+        "amplifies_trap": _clip(", ".join(amplify_tags) or "rush", 120),
+        "why": _clip(avoid_psychology_why(avoid_pick if isinstance(avoid_pick, dict) else None), 280),
         "where_especially_avoid": (
             f"В одежде и на фоне разговора/решения в зоне «{sphere_label}»."
         ),
@@ -1580,6 +1614,7 @@ def build_day_scenario_v1(
         scenes=scenes,
         chorus=chorus,
         day_favorable=day_favorable,
+        target_month=_month_from_ritual_or_today(ritual_context, foundation),
     )
     ready = bool(scenes) and bool(conflict.get("short_name"))
     return {

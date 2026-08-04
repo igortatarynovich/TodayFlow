@@ -16,7 +16,7 @@
 3. **No seed leakage.** Каждый акт формулирует текст из **своих** сырых данных. Ни один акт не является источником текста для другого. Дословный или перефразированный повтор чужой формулировки = **баг генерации**, не «сквозная персонализация».
 4. **Внутренняя классификация динамики** (`напряжение | усиление | доминанта | ровный день`) управляет тоном формулировок и выбором визуала. **Не** рендерится ярлыком на UI.
 5. **Честный omit.** Нет сигнала → не выдумывать конфликт / сферу / ловушку / связку «ради заполнения».
-6. **Домены Reading/Response/Glance chips:** четыре — `work` · `money` · `relationships` · `energy`. Wire DomainLens = тот же словарь (legacy `money_work`/`family` — только read-compat).
+6. **Домены Reading/Response:** четыре — `work` · `money` · `relationships` · `energy`. Wire DomainLens = тот же словарь (legacy `money_work`/`family` — только read-compat). Glance больше не показывает domain chips — один Daily Focus.
 7. **Конкретность.** User-facing строка называет действие, объект или момент («три вдоха до „отправить“», «одна фраза вместо трёх») — иначе **omit**. Абстрактные пары существительных («ясность в трении») и дампы тегов через тире («темп — …, способ — …») = баг генерации.
 8. **No generation-meta leakage.** Внутренние правила пайплайна («не второй сюжет», «не отдельный прогноз», «без параллельного сюжета», «связывает фактор с тоном») **никогда** не попадают в user-facing текст — симметрично seed-leak, другой класс утечки.
 
@@ -34,7 +34,7 @@
 2. **Энергия дня** (опц.) — pulse facet в отдельном Block; honest omit если пусто. Не invent на transport failure.
 3. **Nearest** — одно событие glance timeline (`label_short` + valence).
 4. **Тизер ритуала** — один CTA в Symbols·A без identity/base/bridge на Glance.
-5. **Индикатор сфер** (опц., secondary) — до 2 чипов из Reading; если без сигнала — shared honest-текст с Reading. Не конкурирует с texture в hero.
+5. **Фокус дня** — один Daily Focus (`buildGlanceDailyFocus`): заголовок + направление (в приоритете / избегать) из `day_story`. Не список доменов, не равные чипы сфер (R15–R17). Нет сигнала → shared honest-текст. Не конкурирует с texture в hero.
 
 **Нет:** фактов Plot, why, карты/числа/астро/полного timeline, **цвета дня как контент-блока** (атмосфера = shell, не «цвет дня» слот), if/then, цели, практики, ловушки Response.
 
@@ -180,10 +180,14 @@ Reveal API / prebake: [DAY_SYMBOL_REVEAL_CANON_V1](../audits/DAY_SYMBOL_REVEAL_C
 
 ## Changelog
 
+### 2026-08-04 — Glance: Daily Focus replaces sphere chips
+
+- Экран 0: вместо ≤2 domain chips — один **Фокус дня** (title + prioritize/avoid) из `day_story` / Daily Focus model. Aligns V1 R15–R17; removes live «Сферы дня» chip pattern on product Glance. Dead `TodayLifeSpheresSection` deleted.
+
 ### 2026-08-03 — Glance: drop ScreenFlow gauge (chrome owns progress)
 
 - **Каркас Экран 0:** убран обязательный gauge «шаг N/6» в hero; прогресс = ScreenFlow chrome (точки + свайп; без ряда названий актов) — см. [SCREEN_FLOW_V1 §1.5](../foundation/SCREEN_FLOW_V1.md).
-- Jobs смысла (texture / nearest / teaser / ≤2 sphere chips) без изменений.
+- Jobs смысла: texture / nearest / teaser / Daily Focus (supersedes ≤2 sphere chips).
 
 ### 2026-08-03 — v3.1b (concreteness)
 

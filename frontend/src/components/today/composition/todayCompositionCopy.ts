@@ -102,7 +102,13 @@ export const TODAY_COMPOSITION_COPY = {
     glanceThemeLabel: "Тема дня",
     glanceNearestLabel: "Ближайшее окно",
     glanceNearestEmpty: "Ближайшее окно сегодня не выделено.",
-    glanceSpheresLabel: "Сферы дня",
+    glanceNearestPracticeHint: "практика →",
+    /** One Daily Focus — replaces legacy «Сферы дня» chips (R15–R17). */
+    glanceFocusLabel: "Фокус дня",
+    glanceFocusPrioritize: "В приоритете · ",
+    glanceFocusAvoid: "Избегать · ",
+    /** @deprecated Prefer glanceFocusLabel — kept for mid-migration strings. */
+    glanceSpheresLabel: "Фокус дня",
     teaserPlotHook: "одна линия, что держит день",
     teaserSymbolsHook: "карта, число и цвет дня",
     teaserReadingHook: "как проживать без перегруза",

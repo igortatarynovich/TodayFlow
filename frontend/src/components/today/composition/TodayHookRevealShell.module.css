@@ -74,3 +74,32 @@
   color: var(--tf-ink-soft, #5c5348);
   max-width: 42ch;
 }
+
+.variantTarot {
+  border-left: 3px solid color-mix(in srgb, #8b6b4a 55%, transparent);
+}
+
+.variantTarot .kind {
+  color: #8b6b4a;
+}
+
+.variantTarot .title {
+  font-style: italic;
+  letter-spacing: -0.015em;
+}
+
+.variantNumerology {
+  border-left: 3px solid color-mix(in srgb, #3d5a6c 55%, transparent);
+}
+
+.variantNumerology .kind {
+  color: #3d5a6c;
+}
+
+.variantNumerology .title {
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(1.85rem, 6vw, 2.45rem);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}

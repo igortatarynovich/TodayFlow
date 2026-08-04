@@ -646,7 +646,7 @@ export const RITUAL_COPY = {
   workingLayerInsufficientData: "недостаточно данных",
   workingLayerRecommendationPrefix: "Рекомендация:",
 
-  // --- Сферы на `/today` (`TodayLifeSpheresSection.tsx`) ---
+  // --- Legacy copy for removed Today life-spheres UI (R15) ---
   lifeSpheresDeepenFallbackBody: "Текст пока не готов.",
   lifeSpheresDeepenLoadError: "Не удалось загрузить текст. Попробуй еще раз.",
   lifeSpheresMorningRefreshHint: "Сферы дня загружаются. Открой «Утро» и нажми «Обновить день».",

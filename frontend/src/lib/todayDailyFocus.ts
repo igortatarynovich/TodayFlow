@@ -202,3 +202,52 @@ export function mergeTarotTrapIntoDailyFocus(
     lines: [...focus.lines.filter(Boolean).slice(0, 2), trap].slice(0, 3),
   };
 }
+
+/** Glance Screen 0 — one Daily Focus with prioritize / avoid (replaces ≤2 domain chips). */
+export type GlanceDailyFocusModel = {
+  dailyFocusId: string;
+  title: string;
+  /** What to keep in priority today — from day_story, not guide do_hint. */
+  prioritize: string | null;
+  /** What to avoid — from day_story.avoid / trap, not guide avoid_hint. */
+  avoid: string | null;
+};
+
+function cleanDirectionLine(raw: string | null | undefined, title: string): string | null {
+  const text = (raw ?? "").replace(/\s+/g, " ").trim();
+  if (!text || text.length < 8) return null;
+  // day_story do/avoid/trap are intentional direction — not guide do_hint / avoid_hint.
+  const titleKey = title.replace(/[.!?]+$/u, "").trim().toLowerCase();
+  if (titleKey && text.toLowerCase().startsWith(titleKey)) return null;
+  if (titleKey && text.toLowerCase() === titleKey) return null;
+  return text.endsWith(".") || text.endsWith("!") || text.endsWith("?") ? text : `${text}.`;
+}
+
+/**
+ * Single Glance focus: title + direction (priority / avoid).
+ * Canon: TODAY_SCREEN_V1 §7.7 / R15–R17 — not equal sphere chips.
+ */
+export function buildGlanceDailyFocus(
+  contract: TodayContractV1,
+  guidePayload: Record<string, unknown> | null,
+): GlanceDailyFocusModel {
+  const base = buildDailyFocusModel(contract, guidePayload);
+  const ds = contract.day_story;
+  const prioritize =
+    cleanDirectionLine(ds?.do?.[0], base.title) ||
+    cleanDirectionLine(ds?.today_move, base.title) ||
+    cleanDirectionLine(ds?.expect, base.title) ||
+    cleanDirectionLine(base.lines[0], base.title);
+
+  const avoid =
+    cleanDirectionLine(ds?.avoid?.[0], base.title) ||
+    cleanDirectionLine(ds?.trap, base.title) ||
+    cleanDirectionLine(ds?.abstain, base.title);
+
+  return {
+    dailyFocusId: base.dailyFocusId,
+    title: base.title,
+    prioritize,
+    avoid: avoid && avoid !== prioritize ? avoid : null,
+  };
+}
