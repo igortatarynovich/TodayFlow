@@ -126,8 +126,10 @@ html[data-day-mode="depth"] {
 }
 
 /* —— Visible product surface (FOUNDATION_UI §13) ——
-   Day Atmosphere beats section/route presets on product shell when data-day-mode is set. */
+   Day Atmosphere owns product chrome ink + glass on every route — beats mood night,
+   clock evening/night phase, and legacy data-theme dark tokens. */
 html[data-day-mode] {
+  color-scheme: light;
   --tf-page: var(--day-bg-base);
   --section-page-bg: var(--day-bg-base);
   --tf-page-atmosphere:
@@ -135,12 +137,52 @@ html[data-day-mode] {
     radial-gradient(ellipse 70% 45% at 92% 8%, var(--day-bg-glow-secondary), transparent 55%),
     var(--day-bg-base);
   --section-page-gradient: var(--tf-page-atmosphere);
+  /* Readable shell ink — never inherit mood-night / theme-dark light ink. */
+  --tf-ink: #2a2520;
+  --tf-ink-muted: #4a4540;
+  --tf-ink-soft: #5c5348;
+  --tf-ink-100: #e8e2d6;
+  --tf-body: #4a4540;
+  --tf-caption: #7a7168;
+  --tf-surface: color-mix(in srgb, var(--day-surface-tint) 92%, #ffffff);
+  --tf-surface-muted: color-mix(in srgb, var(--day-surface-tint) 86%, #ffffff);
+  --tf-border: color-mix(in srgb, var(--day-decor-color) 22%, transparent);
+  --tf-border-subtle: color-mix(in srgb, var(--day-decor-color) 14%, transparent);
   --section-accent: var(--day-decor-color);
   --section-accent-soft: var(--day-accent-soft);
   --section-panel-bg: color-mix(in srgb, var(--day-surface-tint) 88%, transparent);
+  --section-panel-border: color-mix(in srgb, var(--day-decor-color) 22%, transparent);
   --section-nav-bg: color-mix(in srgb, var(--day-surface-tint) 94%, transparent);
-  --tf-ds-glass: color-mix(in srgb, var(--day-surface-tint) 82%, rgba(255, 255, 255, 0.35));
+  --section-nav-ink: var(--tf-ink);
+  --section-text: var(--tf-ink);
+  --section-text-muted: var(--tf-body);
+  --tf-ds-glass: color-mix(in srgb, var(--day-surface-tint) 82%, rgba(255, 255, 255, 0.42));
   --tf-ds-border-ink: color-mix(in srgb, var(--day-decor-color) 28%, transparent);
+}
+
+/* Same ink lock with higher specificity vs mood / phase / legacy theme attrs. */
+html[data-day-mode][data-mood],
+html[data-day-mode][data-mood="night"],
+html[data-day-mode][data-theme="dark"],
+html[data-day-mode][data-day-phase],
+html[data-day-mode][data-day-phase="evening"],
+html[data-day-mode][data-day-phase="night"],
+html[data-day-mode][data-atmosphere="today"][data-day-phase="evening"],
+html[data-day-mode][data-atmosphere="today"][data-day-phase="night"] {
+  color-scheme: light;
+  --tf-ink: #2a2520;
+  --tf-ink-muted: #4a4540;
+  --tf-ink-soft: #5c5348;
+  --tf-body: #4a4540;
+  --tf-caption: #7a7168;
+  --tf-page: var(--day-bg-base);
+  --tf-page-atmosphere:
+    radial-gradient(ellipse 85% 55% at 12% -8%, var(--day-bg-glow-primary), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 92% 8%, var(--day-bg-glow-secondary), transparent 55%),
+    var(--day-bg-base);
+  --tf-ds-glass: color-mix(in srgb, var(--day-surface-tint) 82%, rgba(255, 255, 255, 0.42));
+  --section-nav-ink: #2a2520;
+  --section-text: #2a2520;
 }
 
 /* Beat route-specific void/dark section presets (e.g. tarot) once day-mode is active. */

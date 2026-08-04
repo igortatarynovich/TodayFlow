@@ -18,6 +18,15 @@ Prior: card_base_v1 cutover live · editorial polish minors ongoing.
 - **Canon updated?** no new file — aligns SCENARIO_V3 Экран 3 + DAY_SCENARIO Act V; tracker SoT for this slice
 - **Backward compatible?** yes — old caches without why still render; domain_verdicts fallback when available
 
+## Architecture impact — unified day sidebar ink (2026-08-03)
+
+- **SoT before:** `SectionAtmosphereBridge` set `html[data-theme]` from system appearance; mood `night` / day-phase evening flipped `--tf-ink` to light; sidebar nav used hardcoded dark rgba + white overrides under `[data-theme=dark]` → dark-on-dark or white-on-day (Profile).
+- **SoT after:** no `data-theme` on `<html>`; `html[data-day-mode]` locks readable dark ink + day glass; sidebar nav/meta/settings use `--tf-ink` tokens; dark nav overrides only when day-mode absent.
+- **Public contract changed?** no
+- **Migration required?** no
+- **Canon updated?** yes — FOUNDATION_UI §11.1
+- **Backward compatible?** yes — non-day fixtures keep dark nav fallback
+
 ## Architecture impact — app-wide Day Atmosphere + flat Today acts (2026-08-03)
 
 - **SoT before:** Day Atmosphere gated to `/today`; Tarot forced `theme:"dark"` + void section; product frame followed system appearance dark; Plot/Symbols/Reading/Move/Response wrapped in ActShell/motif chrome (nested vs Glance).
@@ -1329,6 +1338,8 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
+- 2026-08-03 | Profile / Ops | **Force-publish profile via Kimi-K3** | **LIVE canary** | `force_rebuild_profile_ops.py` users 1/2 · CE publish_portrait · contract+ce `ready` · identity rewritten (Kimi stream). Stage 3–5 still diagnostics-only on this cutover; Stage 2 LLM path used.
+- 2026-08-03 | Today / Ops | **Kimi-K3 force_rebuild (stream idle 300s)** | **LIVE canary** | Redeploy env K3 + read=300, no DeepSeek. gen489 user1 / gen490 user2 → `native_llm_c1` model=`moonshotai/Kimi-K3` (~23m / ~2m). Streaming held connection; first attempt via docker exec OOM/137 — used compose run job.
 - 2026-08-03 | Today / Ops | **Kimi stream + no DeepSeek hop** | **LIVE canary** | Probe: K3 TTFT **157s** / K2.6 **0.6s** on Nebius. SSE + empty fallback. Primary **Kimi-K2.6**. Force_rebuild: user1 gen487 / user2 gen488 → `native_llm_c1` model=`moonshotai/Kimi-K2.6` (no DeepSeek).
 - 2026-08-03 | Today / Ops | **Kimi-K3 primary + DeepSeek fallback** | **SUPERSEDED** | K3 primary impractical on Nebius TTFT; see stream+K2.6 row.
 - 2026-08-03 | Content / Voice | **Practitioner persona v1.2 — pro crafts + informal** | **LIVE** | Voice Canon §1 → v1.8 · `llm_practitioner_persona_v1.2` on BE · professional tarot/astro/numerology + friendly informal (emotion · metaphor) · `common_v1` aligned. Force_rebuild to taste new voice.

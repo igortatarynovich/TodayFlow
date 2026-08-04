@@ -1,8 +1,9 @@
 import "./globals.css";
 import "@/styles/section-atmosphere.css";
 import "@/styles/day-phase-atmosphere.css";
-import "@/styles/day-atmosphere.css";
 import "@/styles/mood-themes.css";
+/* Day Atmosphere last among atmosphere layers — owns product chrome ink/glass. */
+import "@/styles/day-atmosphere.css";
 import "@/styles/premium-ui.css";
 import { fontVariables } from "./fonts";
 import type { ReactNode } from "react";

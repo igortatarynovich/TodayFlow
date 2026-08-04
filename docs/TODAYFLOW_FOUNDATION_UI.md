@@ -351,7 +351,7 @@ TODAYFLOW_FOUNDATION_UI
 | **Day-phase** | `data-day-phase` | часы на `/today` | процедурная текстура | WIP |
 | **Day Atmosphere** | `data-day-mode` (8) | **сюжет дня** | фон, декор, motion · **сквозной шелл** (sidebar/frame) на всех product routes | §12–§13 |
 
-**Продуктовый SoT (2026-08-03):** на app shell день один — не выделяем разделы отдельными dark/void темами (Tarot immersive dark снят). Экранные акты Today = плоские glass Block как Glance (без ActShell-матрёшки). Totem color / heatmap mood — не шелл.
+**Продуктовый SoT (2026-08-03):** на app shell день один — не выделяем разделы отдельными dark/void темами (Tarot immersive dark снят). Экранные акты Today = плоские glass Block как Glance (без ActShell-матрёшки). Totem color / heatmap mood — не шелл. Сайдбар / ink / glass blocks — одни `--day-*` + `--tf-ink` (тёмный читаемый ink) на всех product routes; `html[data-theme]` не задаётся (только frame); mood `night` / clock evening не перекрашивают chrome.
 
 ### 11.2 Оси, из которых собирается режим (внутренние, не CSS)
 

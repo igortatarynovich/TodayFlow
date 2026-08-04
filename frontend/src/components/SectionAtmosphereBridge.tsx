@@ -24,7 +24,9 @@ import { getTimeOfDayByHour } from "@/lib/time-of-day";
  * Syncs route atmosphere + day-phase + mood on `<html>`.
  *
  * Day-phase only on `/today`, from clock / first-day — never from mood.
- * Appearance (data-theme) is applied on the product shell frame, not here.
+ * Appearance (`data-theme`) is applied on the product shell frame only
+ * (ProductWebAppShell) — do not set it on `<html>` or mood/night + system dark
+ * will fight Day Atmosphere ink/sidebar chrome.
  */
 export function SectionAtmosphereBridge() {
   const pathname = usePathname();
@@ -56,16 +58,21 @@ export function SectionAtmosphereBridge() {
         document.documentElement.removeAttribute("data-day-phase");
       }
 
+      // Clear legacy html theme — product chrome follows Day Atmosphere / frame theme.
+      document.documentElement.removeAttribute("data-theme");
+
       const appearance = resolveAppearance({
         mode: readAppearanceMode(),
         systemDark: systemPrefersDark(),
       });
-      document.documentElement.setAttribute("data-theme", appearance);
 
       const meta = document.querySelector('meta[name="theme-color"]');
       if (meta) {
-        const content =
-          appearance === "dark"
+        const dayMode = document.documentElement.getAttribute("data-day-mode");
+        // Product chrome is day-tinted light — do not push evening/night dark into theme-color.
+        const content = dayMode
+          ? SECTION_THEME_COLORS.today ?? SECTION_THEME_COLORS[atmosphere]
+          : appearance === "dark"
             ? "#121018"
             : dayPhase
               ? DAY_PHASE_THEME_COLORS[dayPhase]
