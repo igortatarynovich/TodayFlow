@@ -1,5 +1,7 @@
 "use client";
 
+import { DsButton } from "@/design-system";
+
 import Link from "next/link";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -170,12 +172,8 @@ function ResultContent() {
                 {error || "Выбери пару знаков снова."}
               </p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", marginTop: "1rem" }}>
-                <Link href="/compatibility/signs" className="orbit-button orbit-button-primary" style={{ textDecoration: "none" }}>
-                  К знакам
-                </Link>
-                <Link href="/compatibility" className="orbit-button orbit-button-secondary" style={{ textDecoration: "none" }}>
-                  По профилям
-                </Link>
+                <DsButton href="/compatibility/signs" variant="primary">К знакам</DsButton>
+                <DsButton href="/compatibility" variant="secondary">По профилям</DsButton>
               </div>
             </div>
           </div>

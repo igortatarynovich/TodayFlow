@@ -1,5 +1,7 @@
 "use client";
 
+import { DsButton } from "@/design-system";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -62,7 +64,7 @@ function GenderPicker({
               key={item.id}
               type="button"
               onClick={() => onChange(item.id)}
-              className="orbit-button orbit-button-secondary orbit-button-sm"
+              className="compat-chip"
               style={{
                 borderColor: active ? "rgba(167, 123, 55, 0.88)" : undefined,
                 background: active ? "rgba(242, 220, 181, 0.32)" : undefined,
@@ -356,7 +358,7 @@ export default function CompatibilitySignsPage() {
                   <button
                     key={opt.id}
                     type="button"
-                    className="orbit-button orbit-button-secondary orbit-button-sm"
+                    className="compat-chip"
                     onClick={() => setRelationshipContext(active ? "" : opt.id)}
                     style={{
                       borderColor: active ? "rgba(167, 123, 55, 0.88)" : undefined,
@@ -393,9 +395,8 @@ export default function CompatibilitySignsPage() {
               </div>
 
               <div className="compat-desktop-card" style={{ display: "grid", gap: "0.8rem" }}>
-                <button
-                  type="button"
-                  className="orbit-button orbit-button-primary"
+                <DsButton
+                  variant="primary"
                   disabled={!canContinue}
                   onClick={() => {
                     if (!canContinue) return;
@@ -417,10 +418,10 @@ export default function CompatibilitySignsPage() {
                   style={{ width: "100%", opacity: canContinue ? 1 : 0.56 }}
                 >
                   {canContinue ? "Посмотреть совместимость" : "Выбери оба знака"}
-                </button>
-                <Link href="/compatibility" className="orbit-button orbit-button-secondary" style={{ textDecoration: "none", textAlign: "center" }}>
+                </DsButton>
+                <DsButton href="/compatibility" variant="secondary">
                   Совместимость по профилям
-                </Link>
+                </DsButton>
                 <Link href="/compatibility/birthdates" className="compat-analyze-back" style={{ textAlign: "center" }}>
                   Точный разбор по датам
                 </Link>

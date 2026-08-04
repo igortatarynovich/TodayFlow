@@ -1,5 +1,7 @@
 "use client";
 
+import { DsButton } from "@/design-system";
+
 import Link from "next/link";
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -258,12 +260,8 @@ function CompatibilityBirthdatesResultContent() {
                 {error || "Проверь даты и попробуй снова."}
               </p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", marginTop: "1rem" }}>
-                <Link href="/compatibility/birthdates" className="orbit-button orbit-button-primary" style={{ textDecoration: "none" }}>
-                  К форме
-                </Link>
-                <Link href="/compatibility" className="orbit-button orbit-button-secondary" style={{ textDecoration: "none" }}>
-                  По профилям
-                </Link>
+                <DsButton href="/compatibility/birthdates" variant="primary">К форме</DsButton>
+                <DsButton href="/compatibility" variant="secondary">По профилям</DsButton>
               </div>
             </div>
           </div>

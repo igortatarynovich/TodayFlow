@@ -1,5 +1,7 @@
 "use client";
 
+import { DsButton } from "@/design-system";
+
 import Link from "next/link";
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -502,7 +504,7 @@ function CompatibilityAnalyzeContent() {
             <div className="compat-desktop-entry-tabs" style={{ marginTop: "1rem" }}>
               <button
                 type="button"
-                className="orbit-button orbit-button-secondary orbit-button-sm"
+                className="compat-chip"
                 onClick={() => setEntryMode("quick")}
                 style={{
                   borderColor: entryMode === "quick" ? "rgba(167, 123, 55, 0.88)" : undefined,
@@ -513,7 +515,7 @@ function CompatibilityAnalyzeContent() {
               </button>
               <button
                 type="button"
-                className="orbit-button orbit-button-secondary orbit-button-sm"
+                className="compat-chip"
                 onClick={() => setEntryMode("precise")}
                 style={{
                   borderColor: entryMode === "precise" ? "rgba(167, 123, 55, 0.88)" : undefined,
@@ -563,15 +565,15 @@ function CompatibilityAnalyzeContent() {
                     </select>
                   </label>
                 </div>
-                <button
-                  type="button"
-                  className="orbit-button orbit-button-primary orbit-button-sm"
-                  style={{ marginTop: "0.85rem" }}
+                <DsButton
+                  variant="primary"
+                  size="sm"
+                  className="compat-submit-gap"
                   disabled={entryMode !== "quick" || !canQuickSubmit || busy}
                   onClick={() => void submitQuick()}
                 >
                   {busy && entryMode === "quick" ? "Считаем…" : "Посмотреть совместимость"}
-                </button>
+                </DsButton>
               </div>
 
               <div className="compat-desktop-col-6">
@@ -608,15 +610,15 @@ function CompatibilityAnalyzeContent() {
                     />
                   </label>
                 </div>
-                <button
-                  type="button"
-                  className="orbit-button orbit-button-primary orbit-button-sm"
-                  style={{ marginTop: "0.85rem" }}
+                <DsButton
+                  variant="primary"
+                  size="sm"
+                  className="compat-submit-gap"
                   disabled={entryMode !== "precise" || !canPreciseSubmit || busy}
                   onClick={() => void submitPrecise()}
                 >
                   {busy && entryMode === "precise" ? "Считаем…" : "Точный разбор"}
-                </button>
+                </DsButton>
               </div>
 
               <div className="compat-desktop-col-12" style={{ marginTop: "0.5rem" }}>
@@ -626,7 +628,7 @@ function CompatibilityAnalyzeContent() {
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "0.45rem" }}>
                   <button
                     type="button"
-                    className="orbit-button orbit-button-secondary orbit-button-sm"
+                    className="compat-chip"
                     onClick={() => setRelationshipContext("")}
                     style={{
                       borderColor: relationshipContext === "" ? "rgba(167, 123, 55, 0.88)" : undefined,
@@ -641,7 +643,7 @@ function CompatibilityAnalyzeContent() {
                       <button
                         key={opt.id}
                         type="button"
-                        className="orbit-button orbit-button-secondary orbit-button-sm"
+                        className="compat-chip"
                         onClick={() => setRelationshipContext(opt.id)}
                         style={{
                           borderColor: active ? "rgba(167, 123, 55, 0.88)" : undefined,
@@ -672,9 +674,8 @@ function CompatibilityAnalyzeContent() {
                 {lifecycle.status === "enrichment_failed" && typeof lifecycle.job_id === "number" ? (
                   <>
                     {" "}
-                    <button
-                      type="button"
-                      className="orbit-button orbit-button-ghost"
+                    <DsButton
+                      variant="ghost"
                       onClick={() => {
                         const id = lifecycle.job_id;
                         if (typeof id !== "number") return;
@@ -704,7 +705,7 @@ function CompatibilityAnalyzeContent() {
                       }}
                     >
                       Повторить
-                    </button>
+                    </DsButton>
                   </>
                 ) : null}
               </p>

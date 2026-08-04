@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import { DsButton } from "@/design-system";
+
 import { guestSignupHref } from "@/lib/guestAccessStore";
 import styles from "@/components/compatibility/CompatibilityAccessDisclosure.module.css";
 
@@ -92,17 +93,18 @@ export function CompatibilityAccessDisclosure({ access }: Props) {
           {upsell.body ? <p className={styles.upsellBody}>{upsell.body}</p> : null}
           <div className={styles.upsellActions}>
             {access.tier === "guest" && upsell.cta_register ? (
-              <Link href={guestSignupHref()} className={styles.ctaPrimary}>
+              <DsButton href={guestSignupHref()} variant="primary" size="sm">
                 {upsell.cta_register}
-              </Link>
+              </DsButton>
             ) : null}
             {upsell.cta_subscribe ? (
-              <Link
+              <DsButton
                 href="/account/subscription"
-                className={access.tier === "guest" ? styles.ctaSecondary : styles.ctaPrimary}
+                variant={access.tier === "guest" ? "secondary" : "primary"}
+                size="sm"
               >
                 {upsell.cta_subscribe}
-              </Link>
+              </DsButton>
             ) : null}
           </div>
         </div>

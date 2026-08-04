@@ -1,5 +1,7 @@
 "use client";
 
+import { DsButton } from "@/design-system";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -335,7 +337,7 @@ export default function CompatibilityBirthdatesPage() {
                   <button
                     key={opt.id}
                     type="button"
-                    className="orbit-button orbit-button-secondary orbit-button-sm"
+                    className="compat-chip"
                     onClick={() => setRelationshipContext(active ? "" : opt.id)}
                     style={{
                       borderColor: active ? "rgba(167, 123, 55, 0.88)" : undefined,
@@ -369,17 +371,18 @@ export default function CompatibilityBirthdatesPage() {
               </div>
 
               <div className="compat-desktop-card" style={{ display: "grid", gap: "0.8rem" }}>
-                <button
+                <DsButton
                   type="submit"
-                  className="orbit-button orbit-button-primary"
+                  variant="primary"
+                  size="block"
                   disabled={!canContinue || loading}
-                  style={{ width: "100%", opacity: canContinue && !loading ? 1 : 0.56 }}
+                  style={{ opacity: canContinue && !loading ? 1 : 0.56 }}
                 >
                   {loading ? <LoadingSpinner size="sm" /> : canContinue ? "Разбор" : "Две даты"}
-                </button>
-                <Link href="/compatibility" className="orbit-button orbit-button-secondary" style={{ textDecoration: "none", textAlign: "center" }}>
+                </DsButton>
+                <DsButton href="/compatibility" variant="secondary">
                   Совместимость по профилям
-                </Link>
+                </DsButton>
                 <Link href="/compatibility/signs" className="compat-analyze-back" style={{ textAlign: "center" }}>
                   К знакам
                 </Link>
