@@ -10,7 +10,9 @@ import { useToastContext } from "@/components/ToastProvider";
 import type { AccountProfile, WeeklyInsightResponse, TransitFeedResponse, PlanetaryTimeline } from "@/lib/types";
 import { formatHabitMapStatsLine } from "@/components/today/flowPracticesMainTabChrome";
 import { ProductAuxWebScreen } from "@/components/product-ui/ProductAuxWebScreen";
+import { DsButton, DsCard } from "@/design-system";
 import pl from "@/design-system/layouts/productPageLayout.module.css";
+import wf from "./weeklyFocus.module.css";
 
 type FusionResponse = {
   scores: {
@@ -326,15 +328,10 @@ function WeeklyContent() {
         <div className="orbit-hero-content-container">
 
           {/* Weekly Insight Card */}
-          <section 
-            className="orbit-card" 
-            style={{ 
-              background: "rgba(255, 255, 255, 0.95)", 
-              boxShadow: "0 4px 16px rgba(0, 0, 0, 0.08)",
-              opacity: showContent ? 1 : 0,
-              transform: showContent ? "translateY(0)" : "translateY(30px)",
-              transition: "opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s"
-            }}
+          <DsCard
+            as="section"
+            variant="elevated"
+            className={`${wf.surface} ${showContent ? wf.revealOn : wf.reveal}`}
           >
             <OrientationRail
               sectionLabel="Недельный фокус"
@@ -407,12 +404,8 @@ function WeeklyContent() {
                   </div>
                 )}
                 <div style={{ marginTop: "var(--orbit-space-md)", display: "flex", gap: "var(--orbit-space-sm)", flexWrap: "wrap" }}>
-                  <Link href="/today" className="orbit-button orbit-button-secondary orbit-button-sm">
-                    Дневной обзор →
-                  </Link>
-                  <Link href="/lunar/today" className="orbit-button orbit-button-secondary orbit-button-sm">
-                    Небесные события →
-                  </Link>
+                  <DsButton variant="secondary" size="sm" href="/today">Дневной обзор →</DsButton>
+                  <DsButton variant="secondary" size="sm" href="/lunar/today">Небесные события →</DsButton>
                 </div>
               </div>
             ) : (
@@ -426,24 +419,16 @@ function WeeklyContent() {
                 <p className="orbit-body-sm orbit-text-muted" style={{ marginBottom: "var(--orbit-space-md)" }}>
                   {t("dashboard.weekly.insight.noData", "Недельный фокус появится после заполнения профиля.")}
                 </p>
-                  <Link href="/onboarding/core" className="orbit-button orbit-button-primary">
-                    {t("dashboard.weekly.insight.createChart", "Собрать профиль")}
-                  </Link>
+                  <DsButton variant="primary" size="md" href="/onboarding/core">{t("dashboard.weekly.insight.createChart", "Собрать профиль")}</DsButton>
                 </div>
               </div>
             )}
-          </section>
+          </DsCard>
 
-          <section
-            className="orbit-card"
-            style={{
-              background: "rgba(255, 255, 255, 0.95)",
-              boxShadow: "0 4px 16px rgba(0, 0, 0, 0.08)",
-              marginTop: "var(--orbit-space-xl)",
-              opacity: showContent ? 1 : 0,
-              transform: showContent ? "translateY(0)" : "translateY(30px)",
-              transition: "opacity 0.8s ease 0.25s, transform 0.8s ease 0.25s",
-            }}
+          <DsCard
+            as="section"
+            variant="elevated"
+            className={`${wf.surface} ${showContent ? wf.revealOn : wf.reveal}`}
           >
             <OrientationRail
               sectionLabel={t("dashboard.weekly.rhythm.section", "Недельный ритм")}
@@ -458,9 +443,9 @@ function WeeklyContent() {
             <div style={{ marginTop: "var(--orbit-space-md)", display: "grid", gap: "var(--orbit-space-md)" }}>
               {weekPoints.length ? (
                 <>
-                  <MetricTrendRow label="Энергия" color="#0ea5e9" values={weekPoints.map((item) => item.energy)} />
-                  <MetricTrendRow label="Баланс" color="#14b8a6" values={weekPoints.map((item) => item.emotional_balance)} />
-                  <MetricTrendRow label="Фокус" color="#f59e0b" values={weekPoints.map((item) => item.focus)} />
+                  <MetricTrendRow label="Энергия" values={weekPoints.map((item) => item.energy)} />
+                  <MetricTrendRow label="Баланс" values={weekPoints.map((item) => item.emotional_balance)} />
+                  <MetricTrendRow label="Фокус" values={weekPoints.map((item) => item.focus)} />
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(7, minmax(0, 1fr))", gap: "6px", color: "var(--orbit-color-text-muted)", fontSize: "0.72rem" }}>
                     {weekPoints.map((item) => (
                       <span key={`week-label-${item.date}`} style={{ textAlign: "center" }}>
@@ -502,28 +487,21 @@ function WeeklyContent() {
                         key={`risk-day-${day.date}`}
                         type="button"
                         onClick={() => setSelectedRiskDate(day.date)}
-                        style={{
-                          borderRadius: "8px",
-                          border: selectedRisk?.date === day.date ? "2px solid #0f172a" : "1px solid #cbd5e1",
-                          background: day.level === "high" ? "#fee2e2" : day.level === "medium" ? "#fef3c7" : "#dcfce7",
-                          color: "#0f172a",
-                          fontSize: "0.76rem",
-                          padding: "0.35rem 0.15rem",
-                          fontWeight: 700,
-                          cursor: "pointer",
-                        }}
+                        className={`${wf.riskDayBtn} ${
+                          day.level === "high" ? wf.riskHigh : day.level === "medium" ? wf.riskMedium : wf.riskLow
+                        } ${selectedRisk?.date === day.date ? wf.riskDayBtnSelected : ""}`}
                       >
                         {new Date(day.date + "T12:00:00").toLocaleDateString("ru-RU", { weekday: "short" })}
                       </button>
                     ))}
                   </div>
                   {selectedRisk && (
-                    <div style={{ marginTop: "var(--orbit-space-sm)", borderRadius: "8px", border: "1px solid #dbe4ee", background: "#fff", padding: "0.7rem" }}>
+                    <div className={wf.riskDetail}>
                       <div style={{ display: "flex", justifyContent: "space-between", gap: "0.55rem", alignItems: "center", flexWrap: "wrap" }}>
                         <span className="orbit-body-sm" style={{ fontWeight: 700 }}>
                           {new Date(selectedRisk.date + "T12:00:00").toLocaleDateString("ru-RU", { weekday: "long", day: "numeric", month: "short" })}
                         </span>
-                        <span className="orbit-body-xs" style={{ borderRadius: "999px", padding: "0.1rem 0.5rem", border: "1px solid #cbd5e1", background: "#f8fafc" }}>
+                        <span className="orbit-body-xs" style={{ borderRadius: "999px", padding: "0.1rem 0.5rem", border: "1px solid var(--tf-border)", background: "var(--day-accent-soft, var(--tf-surface-warm))" }}>
                           Риск {selectedRisk.level === "high" ? "высокий" : selectedRisk.level === "medium" ? "средний" : "низкий"} ({selectedRisk.score})
                         </span>
                       </div>
@@ -536,25 +514,22 @@ function WeeklyContent() {
                         Действие дня: {selectedRisk.action}
                       </p>
                       {topPriorityGoal && (
-                        <p className="orbit-body-sm" style={{ marginTop: "0.35rem", color: "#0f172a", fontWeight: 600 }}>
+                        <p className="orbit-body-sm" style={{ marginTop: "0.35rem", color: "var(--tf-ink)", fontWeight: 600 }}>
                           Приоритетная цель: {topPriorityGoal.title}
                         </p>
                       )}
                       <div style={{ marginTop: "0.45rem", display: "flex", gap: "0.45rem", flexWrap: "wrap" }}>
-                        <Link href={selectedRisk.actionHref} className="orbit-button orbit-button-secondary orbit-button-sm">
+                        <DsButton variant="secondary" size="sm" href={selectedRisk.actionHref}>
                           Выполнить действие
-                        </Link>
+                        </DsButton>
                         {topPriorityGoal && (
-                          <button
-                            type="button"
+                          <DsButton variant="secondary" size="sm" type="button"
                             onClick={handleStepPriorityGoalToday}
                             disabled={
                               goalBusyId !== null ||
                               topPriorityGoal.completed ||
                               topPriorityGoal.last_progress_date === todayIso
-                            }
-                            className="orbit-button orbit-button-secondary orbit-button-sm"
-                          >
+                            }>
                             {topPriorityGoal.completed
                               ? "Цель уже выполнена"
                               : topPriorityGoal.last_progress_date === todayIso
@@ -562,7 +537,7 @@ function WeeklyContent() {
                               : goalBusyId === topPriorityGoal.id
                               ? "..."
                               : "Сделал шаг по цели"}
-                          </button>
+                          </DsButton>
                         )}
                       </div>
                     </div>
@@ -575,14 +550,14 @@ function WeeklyContent() {
               )}
             </div>
 
-            <div style={{ marginTop: "var(--orbit-space-md)", border: "1px solid var(--orbit-color-border)", borderRadius: "var(--orbit-radius-sm)", padding: "var(--orbit-space-md)", background: "#fff" }}>
+            <div className={wf.panel}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
                 <p className="orbit-body-sm" style={{ fontWeight: 700, margin: 0 }}>
                   Цели недели
                 </p>
                 <span className="orbit-body-xs orbit-text-muted">{weeklyGoals.filter((item) => item.completed).length}/{weeklyGoals.length || 0} выполнено</span>
               </div>
-              <div style={{ marginTop: "0.55rem", border: "1px solid #e2e8f0", borderRadius: "8px", padding: "0.55rem", background: "#f8fafc" }}>
+              <div className={wf.hintPanel}>
                 <p className="orbit-body-xs orbit-text-muted" style={{ margin: 0 }}>
                   Подсказка на неделю
                 </p>
@@ -598,14 +573,15 @@ function WeeklyContent() {
                   )}
                 </div>
                 <div style={{ marginTop: "0.45rem" }}>
-                  <button
+                  <DsButton
+                    variant="secondary"
+                    size="sm"
                     type="button"
                     onClick={handleAddSuggestedGoals}
                     disabled={creatingGoal || !availableSuggestions.length || weeklyGoals.length >= 3}
-                    className="orbit-button orbit-button-secondary orbit-button-sm"
                   >
                     {creatingGoal ? "..." : "Добавить предложенные"}
-                  </button>
+                  </DsButton>
                 </div>
               </div>
               <div style={{ marginTop: "0.55rem", display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
@@ -614,39 +590,24 @@ function WeeklyContent() {
                   onChange={(event) => setNewWeeklyGoal(event.target.value)}
                   placeholder={weeklyGoals.length >= 3 ? "Лимит 3 цели на неделю" : "Новая цель недели"}
                   disabled={creatingGoal || weeklyGoals.length >= 3}
-                  style={{
-                    flex: "1 1 260px",
-                    border: "1px solid #cbd5e1",
-                    borderRadius: "8px",
-                    padding: "0.45rem 0.55rem",
-                    fontSize: "0.9rem",
-                    background: "#fff",
-                  }}
+                  className={wf.goalInput}
                 />
-                <button
+                <DsButton
+                  variant="secondary"
+                  size="sm"
                   type="button"
                   onClick={handleCreateWeeklyGoal}
                   disabled={creatingGoal || !newWeeklyGoal.trim() || weeklyGoals.length >= 3}
-                  className="orbit-button orbit-button-secondary orbit-button-sm"
                 >
                   {creatingGoal ? "..." : "Добавить"}
-                </button>
+                </DsButton>
               </div>
               <div style={{ marginTop: "0.6rem", display: "grid", gap: "0.45rem" }}>
                 {sortedWeeklyGoals.length ? (
                   sortedWeeklyGoals.map((goal, index) => (
                     <div
                       key={goal.id}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        gap: "0.55rem",
-                        border: "1px solid #e2e8f0",
-                        borderRadius: "8px",
-                        padding: "0.45rem 0.55rem",
-                        background: goal.completed ? "#f0fdf4" : "#f8fafc",
-                      }}
+                      className={`${wf.goalRow} ${goal.completed ? wf.goalRowDone : ""}`}
                     >
                       <label style={{ display: "flex", alignItems: "center", gap: "0.45rem", flex: 1, cursor: "pointer" }}>
                         <input
@@ -655,7 +616,7 @@ function WeeklyContent() {
                           disabled={goalBusyId === goal.id}
                           onChange={() => handleToggleWeeklyGoal(goal)}
                         />
-                        <span className="orbit-body-sm" style={{ textDecoration: goal.completed ? "line-through" : "none", color: "#334155" }}>
+                        <span className="orbit-body-sm" style={{ textDecoration: goal.completed ? "line-through" : "none", color: "var(--tf-ink)" }}>
                           {goal.title}
                         </span>
                         {!goal.completed && index === 0 && (
@@ -664,14 +625,15 @@ function WeeklyContent() {
                           </span>
                         )}
                       </label>
-                      <button
+                      <DsButton
+                        variant="secondary"
+                        size="sm"
                         type="button"
                         onClick={() => handleDeleteWeeklyGoal(goal.id)}
                         disabled={goalBusyId === goal.id}
-                        className="orbit-button orbit-button-secondary orbit-button-sm"
                       >
                         удалить
-                      </button>
+                      </DsButton>
                     </div>
                   ))
                 ) : (
@@ -694,34 +656,26 @@ function WeeklyContent() {
               <p className="orbit-body-sm" style={{ margin: 0, lineHeight: 1.65 }}>{weeklyGuidance}</p>
             </div>
             <div style={{ marginTop: "var(--orbit-space-md)", display: "flex", gap: "var(--orbit-space-sm)", flexWrap: "wrap" }}>
-              <Link href="/today" className="orbit-button orbit-button-secondary orbit-button-sm">Открыть Сегодня</Link>
-              <Link href="/cycle" className="orbit-button orbit-button-secondary orbit-button-sm">Открыть цикл</Link>
-              <Link href="/habits" className="orbit-button orbit-button-secondary orbit-button-sm">Карта привычек</Link>
-              <Link href="/weekly/integration" className="orbit-button orbit-button-secondary orbit-button-sm">Открыть интеграцию недели</Link>
-              <button
-                type="button"
-                className="orbit-button orbit-button-secondary orbit-button-sm"
+              <DsButton variant="secondary" size="sm" href="/today">Открыть Сегодня</DsButton>
+              <DsButton variant="secondary" size="sm" href="/cycle">Открыть цикл</DsButton>
+              <DsButton variant="secondary" size="sm" href="/habits">Карта привычек</DsButton>
+              <DsButton variant="secondary" size="sm" href="/weekly/integration">Открыть интеграцию недели</DsButton>
+              <DsButton variant="secondary" size="sm" type="button"
                 onClick={() => setShowExtendedAnalysis((prev) => !prev)}
               >
                 {showExtendedAnalysis ? "Скрыть расширенный анализ" : "Показать расширенный анализ"}
-              </button>
+              </DsButton>
             </div>
-          </section>
+          </DsCard>
 
           {showExtendedAnalysis && (
             <>
               {/* Transit Feed */}
-              <section 
-                className="orbit-card" 
-                style={{ 
-                  background: "rgba(255, 255, 255, 0.95)", 
-                  boxShadow: "0 4px 16px rgba(0, 0, 0, 0.08)", 
-                  marginTop: "var(--orbit-space-xl)",
-                  opacity: showContent ? 1 : 0,
-                  transform: showContent ? "translateY(0)" : "translateY(30px)",
-                  transition: "opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s"
-                }}
-              >
+              <DsCard
+            as="section"
+            variant="elevated"
+            className={`${wf.surface} ${showContent ? wf.revealOn : wf.reveal}`}
+          >
             <OrientationRail
               sectionLabel="Транзиты недели"
               metaLabel="Сейчас"
@@ -802,25 +756,17 @@ function WeeklyContent() {
                 <p className="orbit-body-sm orbit-text-muted" style={{ marginBottom: "var(--orbit-space-md)" }}>
                   {t("dashboard.weekly.transits.noData", "Нет активных транзитов на данный момент.")}
                 </p>
-                <Link href="/lunar/today" className="orbit-button orbit-button-secondary orbit-button-sm">
-                  Посмотреть небесные события →
-                </Link>
+                <DsButton variant="secondary" size="sm" href="/lunar/today">Посмотреть небесные события →</DsButton>
               </div>
             )}
-              </section>
+              </DsCard>
 
               {/* Solar System Strip */}
-              <section 
-                className="orbit-card" 
-                style={{ 
-                  background: "rgba(255, 255, 255, 0.95)", 
-                  boxShadow: "0 4px 16px rgba(0, 0, 0, 0.08)", 
-                  marginTop: "var(--orbit-space-xl)",
-                  opacity: showContent ? 1 : 0,
-                  transform: showContent ? "translateY(0)" : "translateY(30px)",
-                  transition: "opacity 0.8s ease 0.4s, transform 0.8s ease 0.4s"
-                }}
-              >
+              <DsCard
+            as="section"
+            variant="elevated"
+            className={`${wf.surface} ${showContent ? wf.revealOn : wf.reveal}`}
+          >
             <OrientationRail
               sectionLabel="Планетарная картина"
               metaLabel="Обзор"
@@ -899,42 +845,46 @@ function WeeklyContent() {
                   {t("dashboard.weekly.solar.noData", "Нет активных планетарных окон на данный момент.")}
                 </p>
                 <div style={{ display: "flex", gap: "var(--orbit-space-sm)", justifyContent: "center", flexWrap: "wrap" }}>
-                  <Link href="/today" className="orbit-button orbit-button-secondary orbit-button-sm">
-                    Дневной обзор →
-                  </Link>
-                  <Link href="/lunar/today" className="orbit-button orbit-button-secondary orbit-button-sm">
-                    Небесные события →
-                  </Link>
+                  <DsButton variant="secondary" size="sm" href="/today">Дневной обзор →</DsButton>
+                  <DsButton variant="secondary" size="sm" href="/lunar/today">Небесные события →</DsButton>
                 </div>
               </div>
             )}
-              </section>
+              </DsCard>
 
               {/* Navigation */}
-              <section className="orbit-card" style={{ background: "rgba(255, 255, 255, 0.95)", boxShadow: "0 4px 16px rgba(0, 0, 0, 0.08)", marginTop: "var(--orbit-space-xl)" }}>
+              <DsCard as="section" variant="elevated" className={wf.surface}>
             <OrientationRail
               sectionLabel={t("dashboard.weekly.nav.section", "Куда идти дальше")}
               metaLabel={t("dashboard.weekly.nav.meta", "Следующие экраны")}
             />
-            <div className="orbit-card-grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", marginTop: "var(--orbit-space-md)" }}>
-              <Link href="/profile" className="orbit-card orbit-card-link">
-                <h3 className="orbit-display-xs">{t("dashboard.weekly.nav.dashboard", "Профиль")}</h3>
-                <p className="orbit-body-sm orbit-text-muted">{t("dashboard.weekly.nav.dashboardDesc", "Твоя опора")}</p>
+            <div className={wf.navGrid}>
+              <Link href="/profile" className={wf.navTile}>
+                <DsCard variant="outline" size="compact">
+                  <h3 className="orbit-display-xs">{t("dashboard.weekly.nav.dashboard", "Профиль")}</h3>
+                  <p className="orbit-body-sm orbit-text-muted">{t("dashboard.weekly.nav.dashboardDesc", "Твоя опора")}</p>
+                </DsCard>
               </Link>
-              <Link href="/today" className="orbit-card orbit-card-link">
-                <h3 className="orbit-display-xs">{t("dashboard.weekly.nav.daily", "Сегодня")}</h3>
-                <p className="orbit-body-sm orbit-text-muted">{t("dashboard.weekly.nav.dailyDesc", "Дневной поток")}</p>
+              <Link href="/today" className={wf.navTile}>
+                <DsCard variant="outline" size="compact">
+                  <h3 className="orbit-display-xs">{t("dashboard.weekly.nav.daily", "Сегодня")}</h3>
+                  <p className="orbit-body-sm orbit-text-muted">{t("dashboard.weekly.nav.dailyDesc", "Дневной поток")}</p>
+                </DsCard>
               </Link>
-              <Link href={PROFILE_CHART_DEEP_PATH} className="orbit-card orbit-card-link">
-                <h3 className="orbit-display-xs">{t("dashboard.weekly.nav.birthChart", "Натальная карта")}</h3>
-                <p className="orbit-body-sm orbit-text-muted">{t("dashboard.weekly.nav.birthChartDesc", "Глубже в основу")}</p>
+              <Link href={PROFILE_CHART_DEEP_PATH} className={wf.navTile}>
+                <DsCard variant="outline" size="compact">
+                  <h3 className="orbit-display-xs">{t("dashboard.weekly.nav.birthChart", "Натальная карта")}</h3>
+                  <p className="orbit-body-sm orbit-text-muted">{t("dashboard.weekly.nav.birthChartDesc", "Глубже в основу")}</p>
+                </DsCard>
               </Link>
-              <Link href="/catalog" className="orbit-card orbit-card-link">
-                <h3 className="orbit-display-xs">{t("dashboard.weekly.nav.explore", "Сервисы")}</h3>
-                <p className="orbit-body-sm orbit-text-muted">{t("dashboard.weekly.nav.exploreDesc", "Куда углубиться")}</p>
+              <Link href="/catalog" className={wf.navTile}>
+                <DsCard variant="outline" size="compact">
+                  <h3 className="orbit-display-xs">{t("dashboard.weekly.nav.explore", "Сервисы")}</h3>
+                  <p className="orbit-body-sm orbit-text-muted">{t("dashboard.weekly.nav.exploreDesc", "Куда углубиться")}</p>
+                </DsCard>
               </Link>
             </div>
-              </section>
+              </DsCard>
             </>
           )}
         </div>
@@ -1022,7 +972,7 @@ function getWeekStart(isoDate: string): string {
   return date.toISOString().split("T")[0];
 }
 
-function MetricTrendRow({ label, color, values }: { label: string; color: string; values: number[] }) {
+function MetricTrendRow({ label, values }: { label: string; values: number[] }) {
   return (
     <div style={{ display: "grid", gap: "6px" }}>
       <span className="orbit-body-sm" style={{ fontWeight: 600 }}>{label}</span>
@@ -1031,13 +981,8 @@ function MetricTrendRow({ label, color, values }: { label: string; color: string
           <span
             key={`${label}-${idx}`}
             title={String(value)}
-            style={{
-              height: `${Math.max(8, Math.min(100, value))}%`,
-              background: color,
-              borderRadius: "5px 5px 0 0",
-              opacity: 0.9,
-              display: "block",
-            }}
+            className={wf.metricBar}
+            style={{ height: `${Math.max(8, Math.min(100, value))}%` }}
           />
         ))}
       </div>

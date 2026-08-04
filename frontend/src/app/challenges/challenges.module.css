@@ -1,55 +1,49 @@
 /**
- * Challenges — card grid in the Product v2 language.
- * Mirrors practicesV2System program cards (warm surface, rounded, gold accent).
- * Tokens: productV2Surface.module.css / global --tf-* vars.
+ * Challenges — layout only. Cards/CTAs = DsCard / DsButton.
+ * Decorative tints from --day-* (FOUNDATION_UI §11.4 option A).
  */
 
 .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1rem;
+  gap: var(--tf-ds-space-4, 1rem);
 }
 
-.card {
+.itemLink {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.shell {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--tf-ds-space-3, 0.75rem);
   min-height: 15rem;
-  padding: 1.5rem;
-  border-radius: 1.75rem;
-  border: 1px solid rgba(226, 217, 200, 0.8);
-  background: var(--tf-surface, #fff);
-  box-shadow: 0 18px 28px rgba(42, 37, 32, 0.06);
-  text-decoration: none;
-  color: inherit;
+  height: 100%;
+  border-color: color-mix(in srgb, var(--day-decor-color, var(--tf-border)) 28%, transparent);
+  background: var(--day-surface-tint, var(--tf-surface));
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-.card:hover {
+.itemLink:hover .shell {
   transform: translateY(-2px);
-  box-shadow: 0 20px 40px rgba(42, 37, 32, 0.1);
-  border-color: #c9a96e;
+  border-color: color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 45%, transparent);
 }
 
-.cardLocked {
-  border-color: rgba(201, 169, 110, 0.5);
-  background: linear-gradient(160deg, var(--tf-surface-warm, #fffaf2) 0%, var(--tf-surface, #fff) 60%);
+.locked {
+  background: linear-gradient(
+    160deg,
+    var(--day-accent-soft, var(--tf-surface-warm)) 0%,
+    var(--day-surface-tint, var(--tf-surface)) 60%
+  );
 }
 
 .proBadge {
   position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
-  display: inline-flex;
-  padding: 0.25rem 0.625rem;
-  border-radius: 999px;
-  background: var(--tf-ink);
-  color: #fdfbf7;
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  top: var(--tf-ds-space-4, 1rem);
+  right: var(--tf-ds-space-4, 1rem);
 }
 
 .icon {
@@ -58,26 +52,9 @@
   justify-content: center;
   width: 3rem;
   height: 3rem;
-  border-radius: 1.125rem;
-  background: var(--tf-surface-warm, #f7f4ee);
+  border-radius: var(--tf-ds-radius-md, 1.125rem);
+  background: var(--day-accent-soft, var(--tf-surface-warm));
   font-size: 1.5rem;
-}
-
-.title {
-  margin: 0;
-  font-family: var(--tf-font-display);
-  font-size: 1.25rem;
-  font-weight: 500;
-  line-height: 1.2;
-  color: var(--tf-ink);
-}
-
-.body {
-  margin: 0;
-  font-size: 0.875rem;
-  line-height: 1.55;
-  color: #5a5450;
-  flex: 1;
 }
 
 .meta {
@@ -85,8 +62,8 @@
   flex-direction: column;
   gap: 0.375rem;
   padding: 0.875rem 1rem;
-  border-radius: 1.125rem;
-  background: var(--tf-surface-warm, #f7f4ee);
+  border-radius: var(--tf-ds-radius-md, 1.125rem);
+  background: var(--day-accent-soft, var(--tf-surface-warm));
   font-size: 0.8125rem;
 }
 
@@ -98,7 +75,7 @@
 }
 
 .metaLabel {
-  color: var(--tf-caption, #8b8580);
+  color: var(--tf-caption);
 }
 
 .metaValue {
@@ -111,67 +88,115 @@
   margin-top: auto;
 }
 
-.cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 3rem;
-  padding: 0 1.25rem;
-  border-radius: 999px;
-  border: none;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  transition: opacity 0.2s ease;
-}
-
-.cta:disabled {
-  opacity: 0.6;
-  cursor: default;
-}
-
-.ctaPrimary {
-  background: var(--tf-ink);
-  color: #fdfbf7;
-}
-
-.ctaSecondary {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(226, 217, 200, 0.9);
-  color: var(--tf-ink);
-}
-
-.ctaInline {
+.actionInline {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
 }
 
-.joinPanel {
-  composes: panel from "../../design-system/layouts/productPageLayout.module.css";
+.joinShell {
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--tf-ds-space-3, 0.75rem);
+  margin-top: var(--tf-ds-space-6, 1.5rem);
+  background: var(--day-surface-tint, var(--tf-surface));
+  border-color: color-mix(in srgb, var(--day-decor-color, var(--tf-border)) 22%, transparent);
 }
 
-.joinTitle {
-  margin: 0;
-  font-family: var(--tf-font-display);
-  font-size: 1.375rem;
-  font-weight: 500;
+.joinBodyMax {
+  max-width: 32rem;
+}
+
+/* Detail page */
+.backRow {
+  margin-bottom: var(--tf-ds-space-5, 1.25rem);
+}
+
+.proWrap {
+  margin-bottom: var(--tf-ds-space-5, 1.25rem);
+}
+
+.statGrid {
+  margin-bottom: var(--tf-ds-space-6, 1.5rem);
+}
+
+.statShell {
+  background: var(--day-surface-tint, var(--tf-surface));
+  border-color: color-mix(in srgb, var(--day-decor-color, var(--tf-border)) 22%, transparent);
+}
+
+.progressBlock {
+  margin-bottom: var(--tf-ds-space-6, 1.5rem);
+}
+
+.progressMeta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--tf-ds-space-2, 0.5rem);
+  font-size: 0.875rem;
+  font-weight: 600;
   color: var(--tf-ink);
 }
 
-.joinBody {
-  margin: 0;
-  max-width: 32rem;
-  font-size: 0.875rem;
-  line-height: 1.55;
-  color: #5a5450;
+.progressTrack {
+  width: 100%;
+  height: 8px;
+  background: var(--day-accent-soft, var(--tf-surface-warm));
+  border-radius: var(--tf-ds-radius-sm, 0.75rem);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--day-decor-color, var(--tf-accent-gold));
+  transition: width 0.3s ease;
+}
+
+.actionRow {
+  display: flex;
+  gap: var(--tf-ds-space-3, 0.75rem);
+  flex-wrap: wrap;
+  margin-bottom: var(--tf-ds-space-6, 1.5rem);
+  align-items: center;
+}
+
+.statusShell {
+  flex: 1;
+  background: var(--day-accent-soft, var(--tf-surface-warm));
+  border-color: color-mix(in srgb, var(--day-decor-color, var(--tf-border)) 18%, transparent);
+}
+
+.taskStack {
+  display: grid;
+  gap: var(--tf-ds-space-5, 1.25rem);
+}
+
+.taskShell {
+  background: var(--day-surface-tint, var(--tf-surface));
+  border-color: color-mix(in srgb, var(--day-decor-color, var(--tf-border)) 22%, transparent);
+}
+
+.taskShellDone {
+  border-color: color-mix(in srgb, var(--tf-semantic-success) 55%, transparent);
+  background: color-mix(in srgb, var(--tf-semantic-success) 8%, var(--tf-surface));
+}
+
+.taskRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--tf-ds-space-4, 1rem);
+}
+
+.taskType {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: var(--tf-ds-radius-sm, 0.5rem);
+  background: var(--day-accent-soft, var(--tf-surface-warm));
+  color: var(--tf-caption);
+  text-transform: capitalize;
 }
 
 @media (min-width: 48rem) {

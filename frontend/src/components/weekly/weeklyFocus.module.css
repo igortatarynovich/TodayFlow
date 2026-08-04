@@ -1,0 +1,129 @@
+/**
+ * Weekly focus — shared surfaces. Decorative from --day-*; CTA via DsButton.
+ */
+
+.surface {
+  background: var(--day-surface-tint, var(--tf-surface));
+  border: 1px solid color-mix(in srgb, var(--day-decor-color, var(--tf-border)) 22%, transparent);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+}
+
+.revealOn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mistPanel {
+  padding: var(--tf-ds-space-5, 1.25rem);
+  border-radius: var(--tf-ds-radius-md, 1rem);
+  background: var(--day-accent-soft, var(--tf-surface-warm));
+  border: 1px solid color-mix(in srgb, var(--day-decor-color, var(--tf-border)) 18%, transparent);
+}
+
+.panel {
+  margin-top: var(--tf-ds-space-4, 1rem);
+  border: 1px solid var(--tf-border);
+  border-radius: var(--tf-ds-radius-sm, 0.75rem);
+  padding: var(--tf-ds-space-4, 1rem);
+  background: var(--day-surface-tint, var(--tf-surface));
+}
+
+.hintPanel {
+  margin-top: 0.55rem;
+  border: 1px solid var(--tf-border);
+  border-radius: var(--tf-ds-radius-sm, 0.75rem);
+  padding: 0.55rem;
+  background: var(--day-accent-soft, var(--tf-surface-warm));
+}
+
+.goalRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.55rem;
+  border: 1px solid var(--tf-border);
+  border-radius: var(--tf-ds-radius-sm, 0.75rem);
+  padding: 0.45rem 0.55rem;
+  background: var(--day-accent-soft, var(--tf-surface-warm));
+}
+
+.goalRowDone {
+  background: color-mix(in srgb, var(--tf-semantic-success) 14%, var(--tf-surface));
+}
+
+.goalInput {
+  flex: 1 1 16rem;
+  border: 1px solid var(--tf-border);
+  border-radius: var(--tf-ds-radius-sm, 0.75rem);
+  padding: 0.45rem 0.55rem;
+  font-size: 0.9rem;
+  background: var(--tf-surface);
+  color: var(--tf-ink);
+}
+
+.riskHigh {
+  background: color-mix(in srgb, var(--tf-semantic-error) 18%, var(--tf-surface));
+}
+
+.riskMedium {
+  background: color-mix(in srgb, var(--tf-semantic-alert) 22%, var(--tf-surface));
+}
+
+.riskLow {
+  background: color-mix(in srgb, var(--tf-semantic-success) 18%, var(--tf-surface));
+}
+
+.riskDayBtn {
+  border-radius: var(--tf-ds-radius-sm, 0.75rem);
+  border: 1px solid var(--tf-border);
+  color: var(--tf-ink);
+  font-size: 0.76rem;
+  padding: 0.35rem 0.15rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.riskDayBtnSelected {
+  border: 2px solid var(--day-decor-color, var(--tf-ink));
+}
+
+.riskDetail {
+  margin-top: var(--tf-ds-space-2, 0.5rem);
+  border-radius: var(--tf-ds-radius-sm, 0.75rem);
+  border: 1px solid var(--tf-border);
+  background: var(--tf-surface);
+  padding: 0.7rem;
+}
+
+.metricBar {
+  border-radius: 5px 5px 0 0;
+  opacity: 0.9;
+  display: block;
+  background: var(--day-decor-color, var(--tf-accent-action));
+}
+
+.navGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--tf-ds-space-3, 0.75rem);
+  margin-top: var(--tf-ds-space-4, 1rem);
+}
+
+.navTile {
+  text-decoration: none;
+  color: inherit;
+}
+
+.actions {
+  margin-top: var(--tf-ds-space-4, 1rem);
+  display: flex;
+  gap: var(--tf-ds-space-2, 0.5rem);
+  flex-wrap: wrap;
+}

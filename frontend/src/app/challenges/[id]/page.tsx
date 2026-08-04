@@ -2,16 +2,16 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Link from "next/link";
 import { buildAuthHref } from "@/lib/authRedirect";
 import { useAuth } from "@/lib/useAuth";
 import { LoadingSpinner } from "@/components/orbit";
 import { ProductPageScreen } from "@/components/product-ui/ProductPageScreen";
 import pl from "@/design-system/layouts/productPageLayout.module.css";
-import { DsButton } from "@/design-system";
+import { DsBody, DsButton, DsCard, DsPill, DsTitle } from "@/design-system";
 import { getJson, postJson } from "@/lib/api";
 import type { AccountProfile } from "@/lib/types";
 import { useToast } from "@/components/ToastProvider";
+import c from "./challenges.module.css";
 
 type Challenge = {
   id: string;
@@ -198,11 +198,11 @@ export default function ChallengeDetailPage() {
         subtitle="Марафон с таким ID не существует или был удалён."
         contentClassName={`${pl.content} ${pl.legacyHost}`}
       >
-        <section className={pl.panel} style={{ textAlign: "center" }}>
-          <Link href="/challenges">
-            <DsButton variant="primary">Вернуться к списку марафонов</DsButton>
-          </Link>
-        </section>
+        <DsCard variant="outline" className={c.joinShell}>
+          <DsButton variant="primary" href="/challenges">
+            Вернуться к списку марафонов
+          </DsButton>
+        </DsCard>
       </ProductPageScreen>
     );
   }
@@ -225,116 +225,67 @@ export default function ChallengeDetailPage() {
           transition: "opacity 0.8s ease, transform 0.8s ease",
         }}
       >
-        <p className="orbit-body-sm" style={{ marginBottom: "var(--orbit-space-lg)" }}>
-          <Link href="/challenges" style={{ color: "var(--orbit-color-slate)", textDecoration: "none" }}>
+        <p className={c.backRow}>
+          <DsButton variant="ghost" size="sm" href="/challenges">
             ← Вернуться к марафонам
-          </Link>
+          </DsButton>
         </p>
 
-        {challenge.is_pro_only && (
-          <span
-            style={{
-              display: "inline-block",
-              background: "var(--orbit-color-lock)",
-              color: "var(--orbit-color-page)",
-              padding: "4px 8px",
-              borderRadius: "var(--orbit-radius-sm)",
-              fontSize: "0.75rem",
-              fontWeight: 600,
-              textTransform: "uppercase",
-              marginBottom: "var(--orbit-space-lg)",
-            }}
-          >
-            PRO
-          </span>
-        )}
+        {challenge.is_pro_only ? (
+          <div className={c.proWrap}>
+            <DsPill>PRO</DsPill>
+          </div>
+        ) : null}
 
-        <div
-          className={pl.grid2}
-          style={{ marginBottom: "var(--orbit-space-xl)" }}
-        >
-          <div className="orbit-card" style={{ padding: "var(--orbit-space-lg)" }}>
-            <div className="orbit-body-xs orbit-text-muted" style={{ marginBottom: "var(--orbit-space-xs)" }}>
-              Длительность
-            </div>
-            <div className="orbit-body" style={{ fontWeight: 600 }}>
-              {challenge.duration} дней
-            </div>
-          </div>
-          <div className="orbit-card" style={{ padding: "var(--orbit-space-lg)" }}>
-            <div className="orbit-body-xs orbit-text-muted" style={{ marginBottom: "var(--orbit-space-xs)" }}>
-              Цель
-            </div>
-            <div className="orbit-body" style={{ fontWeight: 600 }}>
-              {challenge.goal}
-            </div>
-          </div>
-          {challenge.price !== null && (
-            <div className="orbit-card" style={{ padding: "var(--orbit-space-lg)" }}>
-              <div className="orbit-body-xs orbit-text-muted" style={{ marginBottom: "var(--orbit-space-xs)" }}>
-                Стоимость
-              </div>
-              <div className="orbit-body" style={{ fontWeight: 600 }}>
-                {challenge.price / 100} ₽
-              </div>
-            </div>
-          )}
+        <div className={`${pl.grid2} ${c.statGrid}`}>
+          <DsCard variant="elevated" size="compact" className={c.statShell}>
+            <DsBody muted>Длительность</DsBody>
+            <DsTitle as="h3">{challenge.duration} дней</DsTitle>
+          </DsCard>
+          <DsCard variant="elevated" size="compact" className={c.statShell}>
+            <DsBody muted>Цель</DsBody>
+            <DsTitle as="h3">{challenge.goal}</DsTitle>
+          </DsCard>
+          {challenge.price !== null ? (
+            <DsCard variant="elevated" size="compact" className={c.statShell}>
+              <DsBody muted>Стоимость</DsBody>
+              <DsTitle as="h3">{challenge.price / 100} ₽</DsTitle>
+            </DsCard>
+          ) : null}
         </div>
 
-        {isParticipating && (
-          <div style={{ marginBottom: "var(--orbit-space-xl)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "var(--orbit-space-xs)" }}>
-              <span className="orbit-body-sm" style={{ fontWeight: 600 }}>
+        {isParticipating ? (
+          <div className={c.progressBlock}>
+            <div className={c.progressMeta}>
+              <span>
                 День {participation.current_day} из {challenge.duration}
               </span>
-              <span className="orbit-body-sm orbit-text-muted">{progress}%</span>
+              <span>{progress}%</span>
             </div>
-            <div
-              style={{
-                width: "100%",
-                height: "8px",
-                background: "var(--orbit-color-mist)",
-                borderRadius: "var(--orbit-radius-sm)",
-                overflow: "hidden",
-              }}
-            >
-              <div
-                style={{
-                  width: `${progress}%`,
-                  height: "100%",
-                  background: "var(--orbit-color-primary)",
-                  transition: "width 0.3s ease",
-                }}
-              />
+            <div className={c.progressTrack}>
+              <div className={c.progressFill} style={{ width: `${progress}%` }} />
             </div>
           </div>
-        )}
+        ) : null}
 
-        <div style={{ display: "flex", gap: "var(--orbit-space-md)", flexWrap: "wrap", marginBottom: "var(--orbit-space-xl)" }}>
+        <div className={c.actionRow}>
           {!isAuthenticated ? (
-            <Link href="/onboarding/welcome?fresh=1" className="orbit-button orbit-button-primary">
+            <DsButton variant="primary" href="/onboarding/welcome?fresh=1">
               Зарегистрироваться для участия
-            </Link>
+            </DsButton>
           ) : isParticipating ? (
             <>
-              <button onClick={handleLeave} className="orbit-button orbit-button-secondary">
+              <DsButton variant="secondary" onClick={handleLeave}>
                 Покинуть марафон
-              </button>
-              <div className="orbit-card" style={{ padding: "var(--orbit-space-md)", flex: 1 }}>
-                <p className="orbit-body-sm" style={{ margin: 0, color: "var(--orbit-color-success)" }}>
-                  ✓ Вы участвуете в этом марафоне
-                </p>
-              </div>
+              </DsButton>
+              <DsCard variant="outline" size="compact" className={c.statusShell}>
+                <DsBody>✓ Вы участвуете в этом марафоне</DsBody>
+              </DsCard>
             </>
           ) : isAvailable ? (
-            <button
-              onClick={handleJoin}
-              className="orbit-button orbit-button-primary"
-              disabled={joining}
-              style={{ minWidth: "200px" }}
-            >
+            <DsButton variant="primary" onClick={handleJoin} disabled={joining}>
               {joining ? (
-                <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "var(--orbit-space-xs)" }}>
+                <span className={c.actionInline}>
                   <LoadingSpinner size="sm" />
                   Присоединение...
                 </span>
@@ -345,16 +296,16 @@ export default function ChallengeDetailPage() {
               ) : (
                 "Присоединиться"
               )}
-            </button>
+            </DsButton>
           ) : (
-            <Link href="/pricing" className="orbit-button orbit-button-secondary">
+            <DsButton variant="secondary" href="/pricing">
               Требуется Pro подписка
-            </Link>
+            </DsButton>
           )}
         </div>
       </div>
 
-      {isParticipating && participation && (
+      {isParticipating && participation ? (
         <section
           style={{
             opacity: showContent ? 1 : 0,
@@ -362,88 +313,73 @@ export default function ChallengeDetailPage() {
             transition: "opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s",
           }}
         >
-          <h2 className="orbit-display-sm" style={{ marginBottom: "var(--orbit-space-xl)" }}>
-            Задания дня {participation.current_day}
-          </h2>
+          <DsTitle as="h2">Задания дня {participation.current_day}</DsTitle>
 
           {tasks.length === 0 ? (
-            <div className="orbit-card" style={{ padding: "var(--orbit-space-xl)" }}>
-              <p className="orbit-body" style={{ color: "var(--orbit-color-slate)", textAlign: "center" }}>
-                Задания для этого дня пока не добавлены.
-              </p>
-            </div>
+            <DsCard variant="outline" className={c.statShell}>
+              <DsBody muted>Задания для этого дня пока не добавлены.</DsBody>
+            </DsCard>
           ) : (
-            <div style={{ display: "grid", gap: "var(--orbit-space-lg)" }}>
+            <div className={c.taskStack}>
               {tasks.map((task, index) => (
                 <div
                   key={task.id}
-                  className="orbit-card"
                   style={{
-                    padding: "var(--orbit-space-xl)",
-                    border: task.is_completed
-                      ? "2px solid var(--orbit-color-success)"
-                      : "1px solid var(--orbit-color-border)",
-                    background: task.is_completed
-                      ? "linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(16, 185, 129, 0.02))"
-                      : "var(--orbit-color-card)",
                     opacity: showContent ? 1 : 0,
                     transform: showContent ? "translateY(0)" : "translateY(20px)",
                     transition: `opacity 0.8s ease ${0.3 + index * 0.1}s, transform 0.8s ease ${0.3 + index * 0.1}s`,
                   }}
                 >
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "var(--orbit-space-md)" }}>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: "var(--orbit-space-sm)", marginBottom: "var(--orbit-space-sm)" }}>
-                        {task.is_completed && <span style={{ fontSize: "1.5rem" }}>✓</span>}
-                        <h3 className="orbit-body" style={{ fontWeight: 600, margin: 0 }}>
-                          {task.title}
-                        </h3>
-                        {task.task_type && (
-                          <span
-                            style={{
-                              fontSize: "0.75rem",
-                              padding: "2px 8px",
-                              borderRadius: "var(--orbit-radius-sm)",
-                              background: "var(--orbit-color-mist)",
-                              color: "var(--orbit-color-slate)",
-                              textTransform: "capitalize",
-                            }}
-                          >
-                            {task.task_type === "reflection" ? "Размышление" :
-                             task.task_type === "action" ? "Действие" :
-                             task.task_type === "journal" ? "Дневник" :
-                             task.task_type === "meditation" ? "Медитация" :
-                             task.task_type}
-                          </span>
-                        )}
+                  <DsCard
+                    variant="elevated"
+                    className={`${c.taskShell} ${task.is_completed ? c.taskShellDone : ""}`}
+                  >
+                    <div className={c.taskRow}>
+                      <div style={{ flex: 1 }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "0.5rem",
+                            marginBottom: "0.5rem",
+                            flexWrap: "wrap",
+                          }}
+                        >
+                          {task.is_completed ? <span aria-hidden>✓</span> : null}
+                          <DsTitle as="h3">{task.title}</DsTitle>
+                          {task.task_type ? (
+                            <span className={c.taskType}>
+                              {task.task_type === "reflection"
+                                ? "Размышление"
+                                : task.task_type === "action"
+                                  ? "Действие"
+                                  : task.task_type === "journal"
+                                    ? "Дневник"
+                                    : task.task_type === "meditation"
+                                      ? "Медитация"
+                                      : task.task_type}
+                            </span>
+                          ) : null}
+                        </div>
+                        <DsBody muted>{task.description}</DsBody>
                       </div>
-                      <p className="orbit-body-sm" style={{ color: "var(--orbit-color-slate)", lineHeight: 1.6 }}>
-                        {task.description}
-                      </p>
+                      {!task.is_completed ? (
+                        <DsButton
+                          variant="primary"
+                          onClick={() => handleCompleteTask(task.id)}
+                          disabled={completingTask === task.id}
+                        >
+                          {completingTask === task.id ? <LoadingSpinner size="sm" /> : "Выполнено"}
+                        </DsButton>
+                      ) : null}
                     </div>
-                    {!task.is_completed && (
-                      <button
-                        onClick={() => handleCompleteTask(task.id)}
-                        className="orbit-button orbit-button-primary"
-                        disabled={completingTask === task.id}
-                        style={{ minWidth: "120px", flexShrink: 0 }}
-                      >
-                        {completingTask === task.id ? (
-                          <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "var(--orbit-space-xs)" }}>
-                            <LoadingSpinner size="sm" />
-                          </span>
-                        ) : (
-                          "Выполнено"
-                        )}
-                      </button>
-                    )}
-                  </div>
+                  </DsCard>
                 </div>
               ))}
             </div>
           )}
         </section>
-      )}
+      ) : null}
     </ProductPageScreen>
   );
 }

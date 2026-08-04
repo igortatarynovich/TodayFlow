@@ -3,28 +3,15 @@
   "description": "DS Task 1 baseline — existing module.css violations. New keys fail CI; listed keys warn only. Shrink this file as Task 2–3 migrations land.",
   "generated_by": "scripts/check_ds_style_gate.py --write-baseline",
   "counts": {
-    "keys": 628,
-    "occurrences": 1573,
+    "keys": 615,
+    "occurrences": 1554,
     "by_rule": {
-      "adhoc-class": 73,
-      "hex-literal": 1469,
+      "hex-literal": 1458,
+      "adhoc-class": 65,
       "legacy-token-def": 31
     }
   },
   "keys": [
-    "frontend/src/app/challenges/challenges.module.css|adhoc-class|.card",
-    "frontend/src/app/challenges/challenges.module.css|adhoc-class|.cardLocked",
-    "frontend/src/app/challenges/challenges.module.css|adhoc-class|.cta",
-    "frontend/src/app/challenges/challenges.module.css|adhoc-class|.ctaInline",
-    "frontend/src/app/challenges/challenges.module.css|adhoc-class|.ctaPrimary",
-    "frontend/src/app/challenges/challenges.module.css|adhoc-class|.ctaSecondary",
-    "frontend/src/app/challenges/challenges.module.css|hex-literal|#5a5450",
-    "frontend/src/app/challenges/challenges.module.css|hex-literal|#8b8580",
-    "frontend/src/app/challenges/challenges.module.css|hex-literal|#c9a96e",
-    "frontend/src/app/challenges/challenges.module.css|hex-literal|#f7f4ee",
-    "frontend/src/app/challenges/challenges.module.css|hex-literal|#fdfbf7",
-    "frontend/src/app/challenges/challenges.module.css|hex-literal|#fff",
-    "frontend/src/app/challenges/challenges.module.css|hex-literal|#fffaf2",
     "frontend/src/app/practices/PracticesPage.module.css|hex-literal|#2a2520",
     "frontend/src/app/practices/PracticesPage.module.css|hex-literal|#5a5450",
     "frontend/src/app/practices/PracticesPage.module.css|hex-literal|#9a3412",
