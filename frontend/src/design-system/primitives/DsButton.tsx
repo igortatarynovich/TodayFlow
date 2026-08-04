@@ -29,6 +29,20 @@ function buttonClass(variant: DsButtonProps["variant"], size: DsButtonProps["siz
   );
 }
 
+/** Button-only props that must not land on Next `<Link>`. */
+const BUTTON_ONLY_KEYS = new Set([
+  "type",
+  "form",
+  "formAction",
+  "formEncType",
+  "formMethod",
+  "formNoValidate",
+  "formTarget",
+  "name",
+  "value",
+  "autoFocus",
+]);
+
 export function DsButton({
   variant = "primary",
   size = "md",
@@ -41,8 +55,13 @@ export function DsButton({
   const cls = joinClass(buttonClass(variant, size, disabled), className);
 
   if (href && !disabled) {
+    const linkProps: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(rest)) {
+      if (BUTTON_ONLY_KEYS.has(key)) continue;
+      linkProps[key] = value;
+    }
     return (
-      <Link href={href} className={cls}>
+      <Link href={href} className={cls} {...linkProps}>
         {children}
       </Link>
     );

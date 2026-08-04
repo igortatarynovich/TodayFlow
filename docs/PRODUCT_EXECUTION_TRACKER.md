@@ -6,7 +6,8 @@ Status: Active working document
 
 **DONE (2026-08-04):** DS Task 2 — Weekly + Challenges DsCard pilot + `--day-*` decorative (Task 1.5 folded). PR #9 merged. Screenshots: `docs/audits/ds-task2-screenshots/`.  
 **DONE (2026-08-04):** DS Task 3 — Today composition wave (`DsButton` CTAs + day-tint). PR #10 merged.  
-**IN PROGRESS (2026-08-04):** DS Task 3 — Practices wave (`DsButton` CTAs · kill lavender zone · `--day-*` decorative · session CTAs). Profile next.  
+**DONE (2026-08-04):** DS Task 3 — Practices wave (`DsButton` · kill lavender · `--day-*`). PR #11 merged.  
+**IN PROGRESS (2026-08-04):** DS Task 3 — Profile wave (`DsButton` hub/setup CTAs · `profileV2System` → `--tf-*`/`--day-*`).  
 **DONE (2026-08-04):** DS Task 1 — style gate merged PR #8 (`scripts/check_ds_style_gate.py` · Jest in `npm test` · PR checklist). Separate CI workflow job **not** required.  
 **DONE (2026-08-04):** DS Task 0 — `design/profile-journey-premium` promoted → `main` (FF, PR #7). Deploy SoT: `docker compose -f docker-compose.prod.yml up -d --build` on this host.  
 **DONE (2026-08-04):** Today Screen fix pack — Daily Focus · nearest→practice · chorus energy · plot beats · seasonal color · trap≠avoid · hook variants.  
@@ -1374,7 +1375,8 @@ Historical note:
 - older entries may mention the legacy `5-section` IA model;
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
-- 2026-08-04 | Design System | **Task 3 Practices wave** | **IN PROGRESS (PR)** | Hub state-cycle + live session + detail CTAs → `DsButton` (static gold); lavender `--psc-*`/`--pls-*` → `--day-*`/`--tf-*`; V2/history/PracticesPage hex → tokens; gate baseline 614→567 (practices keys cleared). Profile next.
+- 2026-08-04 | Design System | **Task 3 Profile wave** | **IN PROGRESS (PR)** | Hub bridge/my-days/birth/setup/notices/deep-themes/natal/sky → `DsButton`; `DsButton` href forwards test/a11y attrs; `profileV2System` hex→`--tf-*`/`--day-*`; gate baseline 567→495 (v2 system keys cleared). v0/editorial/quickMap deferred.
+- 2026-08-04 | Design System | **Task 3 Practices wave** | **DONE** | PR #11 merged. Hub/session/detail CTAs → `DsButton`; lavender zone killed.
 - 2026-08-04 | Design System | **Task 3 Today wave** | **DONE** | PR #10 merged (`de9dfed`). Composition ScreenFlow CTAs → `DsButton`; pick sheet `--day-surface-tint`.
 - 2026-08-03 | Profile / Ops | **Force-publish profile via Kimi-K3** | **LIVE canary** | `force_rebuild_profile_ops.py` users 1/2 · CE publish_portrait · contract+ce `ready` · identity rewritten (Kimi stream). Stage 3–5 still diagnostics-only on this cutover; Stage 2 LLM path used.
 - 2026-08-03 | Today / Ops | **Kimi-K3 force_rebuild (stream idle 300s)** | **LIVE canary** | Redeploy env K3 + read=300, no DeepSeek. gen489 user1 / gen490 user2 → `native_llm_c1` model=`moonshotai/Kimi-K3` (~23m / ~2m). Streaming held connection; first attempt via docker exec OOM/137 — used compose run job.
