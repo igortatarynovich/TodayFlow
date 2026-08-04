@@ -2,10 +2,36 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 import httpx
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 from todayflow_backend.core.config import settings
+
+
+def coerce_chart_positions(positions: Any) -> list[dict]:
+    """Accept list rows or legacy dict keyed by body name (old natal cache rows)."""
+    if isinstance(positions, list):
+        return [p for p in positions if isinstance(p, dict)]
+    if isinstance(positions, dict):
+        out: list[dict] = []
+        for key, value in positions.items():
+            if not isinstance(value, dict):
+                continue
+            row = dict(value)
+            if not (row.get("body") or row.get("name") or row.get("id") or row.get("planet")):
+                row["body"] = key
+            out.append(row)
+        return out
+    return []
+
+
+def coerce_chart_houses(houses: Any) -> dict:
+    """ChartResponse stores houses as a dict; drop unusable legacy list shapes."""
+    if isinstance(houses, dict):
+        return houses
+    return {}
 
 
 class ChartResponse(BaseModel):
@@ -13,6 +39,21 @@ class ChartResponse(BaseModel):
     positions: list[dict]
     houses: dict
     metadata: dict
+
+    @field_validator("positions", mode="before")
+    @classmethod
+    def _coerce_positions(cls, value: Any) -> list[dict]:
+        return coerce_chart_positions(value)
+
+    @field_validator("houses", mode="before")
+    @classmethod
+    def _coerce_houses(cls, value: Any) -> dict:
+        return coerce_chart_houses(value)
+
+    @field_validator("metadata", mode="before")
+    @classmethod
+    def _coerce_metadata(cls, value: Any) -> dict:
+        return value if isinstance(value, dict) else {}
 
 
 class AstroService:

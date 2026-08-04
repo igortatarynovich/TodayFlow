@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { ApiError, getJson, getStoredAccessToken } from "./api";
+import { ApiError, getJson, getStoredAccessToken, isRequestAborted } from "./api";
 import { clearCoreProfileCache } from "./coreProfileCacheStorage";
 import type { AccountProfile } from "./types";
 
@@ -214,7 +214,9 @@ export function useAuth() {
           lastSnapshotSavedAt: readTimestamp(AUTH_LAST_SNAPSHOT_SAVED_AT_KEY),
         });
       }
-      console.error("Failed to resolve auth snapshot", error);
+      if (!isRequestAborted(error)) {
+        console.error("Failed to resolve auth snapshot", error);
+      }
     }
     setIsLoading(false);
   }, []);

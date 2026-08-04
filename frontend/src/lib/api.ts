@@ -44,18 +44,57 @@ export function isTransportFailure(error: unknown): boolean {
       lower.includes("load failed") ||
       lower.includes("failed to load") ||
       lower.includes("connection") ||
-      lower.includes("offline")
+      lower.includes("offline") ||
+      lower.includes("aborted") ||
+      lower.includes("timeout")
+    );
+  }
+  return false;
+}
+
+/** Client AbortController timeout / navigation cancel — not a product auth failure. */
+export function isRequestAborted(error: unknown): boolean {
+  const looksAborted = (message: string) => {
+    const lower = message.toLowerCase();
+    return lower.includes("abort") || lower.includes("timeout") || lower.includes("timed out");
+  };
+  if (typeof DOMException !== "undefined" && error instanceof DOMException) {
+    return error.name === "AbortError" || error.name === "TimeoutError";
+  }
+  if (error instanceof ApiError && error.status === 0) {
+    return looksAborted(error.message);
+  }
+  if (error instanceof Error) {
+    return (
+      error.name === "AbortError" ||
+      error.name === "TimeoutError" ||
+      looksAborted(error.message)
     );
   }
   return false;
 }
 
 function toTransportApiError(path: string, error: unknown): ApiError {
+  if (isRequestAborted(error)) {
+    return new ApiError("Request timed out.", 0, path);
+  }
   const message =
     error instanceof Error && error.message
       ? error.message
       : "Network error. Please check your connection.";
   return new ApiError(message, 0, path);
+}
+
+function abortWithTimeout(controller: AbortController) {
+  try {
+    controller.abort(
+      typeof DOMException !== "undefined"
+        ? new DOMException("Request timed out.", "TimeoutError")
+        : undefined,
+    );
+  } catch {
+    controller.abort();
+  }
 }
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
@@ -122,7 +161,7 @@ async function performRequest<T>(path: string, options: RequestInit | undefined,
   const timeoutController = needsAuthMeTimeout && !options?.signal ? new AbortController() : null;
   const timeoutId =
     timeoutController != null
-      ? setTimeout(() => timeoutController.abort(), AUTH_ME_TIMEOUT_MS)
+      ? setTimeout(() => abortWithTimeout(timeoutController), AUTH_ME_TIMEOUT_MS)
       : null;
 
   try {

@@ -12,7 +12,7 @@ import {
 } from "@/components/practices/stateCycle/PracticesStateCycleScreen";
 import { LoadingSpinner } from "@/components/orbit";
 import { PracticesWebScreen } from "@/components/product-ui/PracticesWebScreen";
-import { getJson } from "@/lib/api";
+import { getJson, isRequestAborted } from "@/lib/api";
 import { fetchCoreProfileCached } from "@/lib/coreProfileCache";
 import { isGuestPracticeAllowed } from "@/lib/guestAccessStore";
 import { getLocale } from "@/lib/i18n";
@@ -239,7 +239,9 @@ export default function PracticesPage() {
         });
       })
       .catch((err) => {
-        console.error("Failed to load today contract for practices rail", err);
+        if (!isRequestAborted(err)) {
+          console.error("Failed to load today contract for practices rail", err);
+        }
         if (!cancelled) setTodayRail(null);
       });
     return () => {

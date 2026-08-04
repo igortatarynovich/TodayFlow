@@ -849,7 +849,17 @@ export async function fetchTodayContractV1(targetDate?: string): Promise<TodayCo
   const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
   const timer =
     controller && typeof window !== "undefined"
-      ? window.setTimeout(() => controller.abort(), 12_000)
+      ? window.setTimeout(() => {
+          try {
+            controller.abort(
+              typeof DOMException !== "undefined"
+                ? new DOMException("Request timed out.", "TimeoutError")
+                : undefined,
+            );
+          } catch {
+            controller.abort();
+          }
+        }, 12_000)
       : null;
   try {
     const raw = await getJson<TodayContractV1>(`/today/contract${qs}`, {
