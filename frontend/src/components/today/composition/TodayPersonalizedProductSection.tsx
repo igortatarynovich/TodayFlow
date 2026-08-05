@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
-import { DsButton } from "@/design-system";
+import { DsButton, DsCallout, DsQuote } from "@/design-system";
 import {
   profileMotionStaggerDelay,
   profileMotionStyles,
@@ -28,6 +28,7 @@ import { TodayDayColorGuideSection } from "@/components/today/composition/TodayD
 import { TodayScreenBlock, TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
 import { TodayTapWidget } from "@/components/today/composition/TodayWave2Slots";
 import { domainIconForChapterId } from "@/lib/todayReadingDomainIcon";
+import { calloutLabelForChapterId } from "@/lib/todayReadingCallout";
 import { pickMoveIfThenFromContract } from "@/lib/todayMoveIfThen";
 import { TODAY_NO_SHARP_FOCUS_COPY } from "@/lib/todayGlanceTexture";
 import {
@@ -375,16 +376,20 @@ export function TodayPersonalizedProductSection({
                   testId={`today-narrative-block-${chapter.id}`}
                 >
                   {sphereWhy ? (
-                    <p
-                      className={`${journeyStyles.narrativeBlockBody} ${styles.narrativeWhy}`}
-                      data-testid={`today-reading-sphere-why-${chapter.id}`}
+                    <DsCallout
+                      tone="insight"
+                      label={calloutLabelForChapterId(chapter.id)}
+                      icon="spark"
+                      className={styles.narrativeWhy}
+                      testId={`today-reading-sphere-why-${chapter.id}`}
                     >
-                      <span className={styles.softWhyLabel}>{copy.journey.readingSphereWhyLabel}</span>
-                      {sphereWhy}
-                    </p>
+                      <p>{sphereWhy}</p>
+                    </DsCallout>
                   ) : null}
                   {isSphereChapter && showNarrative && chapter.lead ? (
-                    <p className={journeyStyles.narrativeBlockLead}>{chapter.lead}</p>
+                    <DsQuote kicker={chapter.kicker || copy.journey.readingSphereWhyLabel}>
+                      {chapter.lead}
+                    </DsQuote>
                   ) : null}
                   {isSphereChapter && showNarrative
                     ? chapter.paragraphs.map((para) => (
@@ -394,10 +399,9 @@ export function TodayPersonalizedProductSection({
                       ))
                     : null}
                   {softWhyInBody && narrative.softWhy ? (
-                    <p className={`${journeyStyles.narrativeBlockBody} ${styles.narrativeWhy}`} data-testid="today-soft-why">
-                      <span className={styles.softWhyLabel}>Почему это важно сегодня</span>
-                      {narrative.softWhy}
-                    </p>
+                    <DsCallout tone="insight" label="attention" icon="flag" testId="today-soft-why">
+                      <p>{narrative.softWhy}</p>
+                    </DsCallout>
                   ) : null}
                   {chapter.id === "personal" && chapter.signals?.length ? (
                     <dl className={styles.personalSignals} data-testid="today-personal-signals">
@@ -446,38 +450,42 @@ export function TodayPersonalizedProductSection({
                   {dualExpanded &&
                   chapter.dual &&
                   (chapter.dual.strengthen.length || chapter.dual.soften.length) ? (
-                    <div className={journeyStyles.dualPanels}>
+                    <div className={journeyStyles.dualPanels} data-testid={`today-reading-dual-${chapter.id}`}>
                       {chapter.dual.strengthen.length ? (
-                        <div className={journeyStyles.dualPanel}>
-                          <p className={journeyStyles.dualPanelTitle}>
-                            {chapter.id === "force"
-                              ? copy.expectLabel
-                              : chapter.id === "scenes" || chapter.id.startsWith("sphere-")
-                                ? copy.journey.sceneOpportunityLabel
-                                : "Сильнее"}
-                          </p>
-                          {chapter.dual.strengthen.map((line) => (
-                            <p key={line.slice(0, 40)} className={journeyStyles.dualPanelBody}>
-                              {line}
-                            </p>
-                          ))}
-                        </div>
+                        <DsCallout
+                          tone={chapter.id === "force" ? "insight" : "help"}
+                          label={
+                            chapter.id === "force"
+                              ? "main"
+                              : chapter.id.startsWith("sphere-")
+                                ? calloutLabelForChapterId(chapter.id)
+                                : "help"
+                          }
+                          icon={chapter.id === "force" ? "spark" : "sun"}
+                          title={chapter.dual.strengthen[0]}
+                          testId={`today-reading-dual-strengthen-${chapter.id}`}
+                        >
+                          {chapter.dual.strengthen.length > 1
+                            ? chapter.dual.strengthen.slice(1).map((line) => (
+                                <p key={line.slice(0, 40)}>{line}</p>
+                              ))
+                            : null}
+                        </DsCallout>
                       ) : null}
                       {chapter.dual.soften.length ? (
-                        <div className={journeyStyles.dualPanel}>
-                          <p className={journeyStyles.dualPanelTitle}>
-                            {chapter.id === "force"
-                              ? copy.trapLabel
-                              : chapter.id === "scenes" || chapter.id.startsWith("sphere-")
-                                ? copy.journey.sceneTrapLabel
-                                : "Мягче / не дожимать"}
-                          </p>
-                          {chapter.dual.soften.map((line) => (
-                            <p key={line.slice(0, 40)} className={journeyStyles.dualPanelBody}>
-                              {line}
-                            </p>
-                          ))}
-                        </div>
+                        <DsCallout
+                          tone="avoid"
+                          label="attention"
+                          icon="flag"
+                          title={chapter.dual.soften[0]}
+                          testId={`today-reading-dual-soften-${chapter.id}`}
+                        >
+                          {chapter.dual.soften.length > 1
+                            ? chapter.dual.soften.slice(1).map((line) => (
+                                <p key={line.slice(0, 40)}>{line}</p>
+                              ))
+                            : null}
+                        </DsCallout>
                       ) : null}
                     </div>
                   ) : null}
@@ -488,9 +496,9 @@ export function TodayPersonalizedProductSection({
           })}
 
           {narrative.vibeClosing && !narrative.chapters.some((c) => c.id === "vibe") ? (
-            <p className={styles.vibeClosing} data-testid="today-vibe-closing">
+            <DsQuote kicker="Сегодня" testId="today-vibe-closing">
               {narrative.vibeClosing}
-            </p>
+            </DsQuote>
           ) : null}
         </TodayScreenBlockStack>
         ) : null}
@@ -528,16 +536,22 @@ export function TodayPersonalizedProductSection({
         {moveIfThen && (moveIfThen.do || moveIfThen.avoid) ? (
           <TodayScreenBlock eyebrow={copy.journey.moveIfThenEyebrow} testId="today-zone-move-if-then">
             {moveIfThen.do ? (
-              <div className={styles.moveIfThenRow} data-testid="today-move-do">
-                <p className={styles.moveIfThenLabel}>{copy.journey.moveDoLabel}</p>
-                <p className={styles.readingParagraph}>{moveIfThen.do}</p>
-              </div>
+              <DsCallout
+                tone="practice"
+                label="next_step"
+                icon="arrowDown"
+                title={moveIfThen.do}
+                testId="today-move-do"
+              />
             ) : null}
             {moveIfThen.avoid ? (
-              <div className={styles.moveIfThenRow} data-testid="today-move-avoid">
-                <p className={styles.moveIfThenLabel}>{copy.journey.moveAvoidLabel}</p>
-                <p className={styles.readingParagraph}>{moveIfThen.avoid}</p>
-              </div>
+              <DsCallout
+                tone="avoid"
+                label="attention"
+                icon="flag"
+                title={moveIfThen.avoid}
+                testId="today-move-avoid"
+              />
             ) : null}
           </TodayScreenBlock>
         ) : null}
