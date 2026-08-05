@@ -34,15 +34,22 @@ function apiBase(): string {
   ).replace(/\/$/, "");
 }
 
+/** Fail fast during Docker/SSG when API is unreachable (avoids 60s static gen hangs). */
+function fetchInit(extra?: RequestInit): RequestInit {
+  return {
+    headers: { Accept: "application/json", "Accept-Language": "ru" },
+    cache: "force-cache",
+    signal: AbortSignal.timeout(5_000),
+    ...extra,
+  };
+}
+
 export async function lookupPracticeDetail(practiceId: string): Promise<PracticeDetailLookup> {
   const id = practiceId.trim();
   if (!id) return { status: "missing" };
 
   try {
-    const res = await fetch(`${apiBase()}/practices/${encodeURIComponent(id)}`, {
-      headers: { Accept: "application/json", "Accept-Language": "ru" },
-      cache: "force-cache",
-    } satisfies RequestInit);
+    const res = await fetch(`${apiBase()}/practices/${encodeURIComponent(id)}`, fetchInit());
     if (res.status === 404) return { status: "missing" };
     if (!res.ok) return { status: "unavailable" };
     const data = (await res.json()) as PracticeDetailMeta;
@@ -56,10 +63,7 @@ export async function lookupPracticeDetail(practiceId: string): Promise<Practice
 /** Free/public practices for SSR catalog (crawlers + first paint). */
 export async function lookupPracticesCatalogServer(): Promise<PracticeCatalogEntry[]> {
   try {
-    const res = await fetch(`${apiBase()}/practices?limit=40`, {
-      headers: { Accept: "application/json", "Accept-Language": "ru" },
-      cache: "force-cache",
-    } satisfies RequestInit);
+    const res = await fetch(`${apiBase()}/practices?limit=40`, fetchInit());
     if (!res.ok) return [];
     const data = (await res.json()) as unknown;
     const list = Array.isArray(data) ? data : [];
