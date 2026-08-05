@@ -41,7 +41,7 @@
   font-weight: 650;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--tf-caption, #9a8468);
+  color: var(--tf-caption);
 }
 
 .journeyFlatBadge {
