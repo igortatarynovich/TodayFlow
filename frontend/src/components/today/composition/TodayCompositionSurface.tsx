@@ -10,12 +10,12 @@ import { TodayDayContinuityEveningClose } from "@/components/today/experience/To
 import { TodayEveningProductClose } from "@/components/today/composition/TodayEveningProductClose";
 import { TodayPersonalizedProductSection } from "@/components/today/composition/TodayPersonalizedProductSection";
 import { TodayScreenBlock, TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
-import { TodayProductScreenFlow, todayScreenFlowReadingIndex, todayScreenFlowStepCount } from "@/components/today/composition/TodayProductScreenFlow";
+import { TodayProductScreenFlow, todayScreenFlowPracticeIndex, todayScreenFlowStepCount, todayScreenFlowCloseIndex } from "@/components/today/composition/TodayProductScreenFlow";
+import { pickMoveIfThenFromContract } from "@/lib/todayMoveIfThen";
 import {
   resolveScreenFlowEntryIndex,
   type ScreenFlowChangeReason,
 } from "@/design-system/primitives/ScreenFlow";
-import { TodayGlanceTimelineSlot } from "@/components/today/composition/TodayWave2Slots";
 import { TarotPicture } from "@/components/tarot/TarotPicture";
 import { LoadingSpinner } from "@/components/orbit";
 import { HeroMedium } from "@/components/foundation/HeroMedium";
@@ -483,10 +483,59 @@ export function TodayCompositionSurface(props: Props) {
     () => strengthenTools.find((tool) => tool.id === "practice") ?? null,
     [strengthenTools],
   );
+  const affirmationTool = useMemo(
+    () => strengthenTools.find((tool) => tool.id === "affirmation") ?? null,
+    [strengthenTools],
+  );
   const supportTools = useMemo(
     () => strengthenTools.filter((tool) => tool.id !== "practice"),
     [strengthenTools],
   );
+
+  const practiceRec = props.contract.day_story?.practice_recommendation;
+  const preferAffirmationSlot = useMemo(() => {
+    const key = dateISO || "0";
+    let h = 0;
+    for (let i = 0; i < key.length; i += 1) h = (h * 31 + key.charCodeAt(i)) >>> 0;
+    return h % 2 === 1;
+  }, [dateISO]);
+  const showAffirmationSupport = Boolean(
+    (practiceRec?.kind === "affirmation" && practiceRec.text) || affirmationTool,
+  );
+  const showPracticeSupport = Boolean(practiceTool || (practiceRec?.kind === "practice" && practiceRec.text));
+  const supportSlot: "affirmation" | "practice" | null =
+    showAffirmationSupport && showPracticeSupport
+      ? preferAffirmationSlot
+        ? "affirmation"
+        : "practice"
+      : showAffirmationSupport
+        ? "affirmation"
+        : showPracticeSupport
+          ? "practice"
+          : null;
+
+  const practiceFrameTitle =
+    supportSlot === "affirmation"
+      ? (practiceRec?.kind === "affirmation" && practiceRec.text) || affirmationTool?.title || null
+      : supportSlot === "practice"
+        ? practiceTool?.title || (practiceRec?.kind === "practice" ? practiceRec.text : null) || null
+        : null;
+  const practiceFrameMeta =
+    supportSlot === "practice"
+      ? practiceTool?.duration || (practiceRec?.kind === "practice" ? practiceRec.reason : null) || null
+      : supportSlot === "affirmation"
+        ? (practiceRec?.kind === "affirmation" ? practiceRec.reason : null) || null
+        : null;
+  const practiceFrameCompleted =
+    supportSlot === "affirmation" ? engagement.affirmationRead : engagement.practiceCompleted;
+  const practiceFrameActionLabel =
+    supportSlot === "affirmation"
+      ? copy.markAffirmationDone
+      : engagement.practiceStarted
+        ? copy.practiceComplete
+        : copy.practiceStart;
+
+  const moveIfThen = useMemo(() => pickMoveIfThenFromContract(props.contract), [props.contract]);
 
   const prevContinuity = useMemo(() => {
     if (!hydrated) return null;
@@ -991,8 +1040,8 @@ export function TodayCompositionSurface(props: Props) {
         return;
       }
       if (useProductPersonalized) {
-        const moveIndex = todayScreenFlowReadingIndex(showSymbolsAct) + 1;
-        setScreenFlowIndex(moveIndex);
+        const practiceIndex = todayScreenFlowPracticeIndex(showSymbolsAct);
+        setScreenFlowIndex(practiceIndex);
       }
     },
     [
@@ -1559,20 +1608,20 @@ export function TodayCompositionSurface(props: Props) {
   ) : (
     <TodayProductScreenFlow
       dateISO={dateISO}
-      themeTitle={glanceEyebrow}
-      themeThesis={heroSubline}
+      dateLabel={props.displayDate}
+      greetingSalutation={story.greeting.salutation}
+      greetingHeadline={story.greeting.line || dayTexture || glanceEyebrow}
+      themeTitle={copy.journey.glanceThemeLabel}
       dayTexture={dayTexture}
       dailyFocus={glanceDailyFocus}
       energyLine={energyLineDisplay}
       energyCause={energyCauseDisplay}
-      onNearestSelect={onNearestSelect}
       themeLoading={themeLoading}
-      heroSection={heroSection}
+      colorGuide={story.colorGuide}
+      moveDo={moveIfThen?.do ?? null}
+      moveAvoid={moveIfThen?.avoid ?? null}
       plotNarrativeSection={plotNarrativeSection}
-      pulseSection={pulseSection}
-      glanceSection={useProductFoundation ? null : glanceSection}
       morningDialogue={morningDialogue}
-      dayReadingReady={dayReadingReady}
       showSymbols={showSymbolsAct}
       symbolsBody={
         <TodayScreenBlockStack testId="today-zone-symbols-stack">
@@ -1590,7 +1639,6 @@ export function TodayCompositionSurface(props: Props) {
           ) : null}
           {!props.networkDegraded && showRitualAsComplement ? ritualGateSection : null}
           {!props.networkDegraded && showRitualAsComplement ? ritualTarotImpactStage : null}
-          {/* v3: show day card open when already revealed / available — no extra click */}
           {!props.networkDegraded && !showRitualAsComplement && (props.cardName || story.tarotImpact || props.numerologyValue || story.numberImpact) ? (
             <div className={styles.symbolsRevealStack} data-testid="today-zone-symbol-impacts">
               {story.tarotImpact || props.cardName || symbolHooksView?.card?.hook_reveal ? (
@@ -1611,10 +1659,23 @@ export function TodayCompositionSurface(props: Props) {
                     props.cardMeaning ||
                     null
                   }
+                  visual={
+                    tarotPickedId != null && tarotCardFaceSrc(tarotPickedId) ? (
+                      <TarotPicture
+                        sources={tarotCardFacePicture(tarotPickedId)!}
+                        alt={
+                          symbolHooksView?.card?.name ||
+                          story.tarotImpact?.title ||
+                          props.cardName ||
+                          "Карта дня"
+                        }
+                        sizes="(max-width: 40rem) 42vw, 180px"
+                      />
+                    ) : null
+                  }
                   testId="today-zone-tarot-impact"
                 />
               ) : null}
-              {/* v3.1: color house = Move only — never render color shell on Symbols */}
               {story.numberImpact || props.numerologyValue || symbolHooksView?.number?.hook_reveal ? (
                 <TodayHookRevealShell
                   variant="numerology"
@@ -1641,92 +1702,28 @@ export function TodayCompositionSurface(props: Props) {
                   testId="today-zone-number-impact"
                 />
               ) : null}
-              {props.contract.day_story?.interpretive_chorus?.astrology_lead ||
-              props.contract.day_story?.interpretive_chorus?.astrology_meaning ? (
-                <section className={styles.symbolsSky} data-testid="today-zone-sky-events">
-                  <p className={styles.plotNarrativeEyebrow}>Небо сегодня</p>
-                  {props.contract.day_story?.interpretive_chorus?.astrology_lead ? (
-                    <p className={styles.ritualRevealTitle}>
-                      {props.contract.day_story.interpretive_chorus.astrology_lead}
-                    </p>
-                  ) : null}
-                  {props.contract.day_story?.interpretive_chorus?.astrology_meaning ? (
-                    <p className={styles.ritualRevealBody}>
-                      {props.contract.day_story.interpretive_chorus.astrology_meaning}
-                    </p>
-                  ) : null}
-                </section>
-              ) : null}
             </div>
           ) : null}
-          {!props.networkDegraded ? <TodayGlanceTimelineSlot dateISO={dateISO} /> : null}
         </TodayScreenBlockStack>
       }
       showPersonalized={useProductPersonalized}
-      personalizedProps={{
-        embeddedInWebDashboard,
-        story,
-        contract: props.contract,
-        strengthenTools,
-        promiseSuggestions,
-        dayGoal: engagement.dayGoal,
-        practiceCompleted: engagement.practiceCompleted,
-        practiceStarted: engagement.practiceStarted,
-        affirmationRead: engagement.affirmationRead,
-        practiceCompleting,
-        activeHabit,
-        activeAscetic,
-        habitMarked:
-          engagement.habitMarkedId != null &&
-          activeHabit != null &&
-          engagement.habitMarkedId === activeHabit.id,
-        asceticMarked:
-          engagement.asceticMarkedId != null &&
-          activeAscetic != null &&
-          engagement.asceticMarkedId === activeAscetic.id,
-        habitMarking,
-        asceticMarking,
-        goalDraftOpen,
-        goalDraft,
-        coreProfile: props.coreProfile,
-        skyCards: story.skyCards,
-        colorGuide: story.colorGuide,
-        morningRitualData: props.morningRitualData,
-        dateISO,
-        focusSphere: null,
-        contentFailure: props.networkDegraded
-          ? ("no_connection" as const)
-          : props.guideNarrativeRequestFailed
-            ? ("unavailable" as const)
-            : null,
-        tapResponse: engagement.tapResponse,
-        onTapRecorded: (response) => persistEngagement({ tapResponse: response }),
-        tarotDeepenHref:
-          engagement.tarotPickedId != null
-            ? buildTarotDeepenHref({
-                cardId: engagement.tarotPickedId,
-                orientation: engagement.tarotOrientation ?? "upright",
-                source: "today",
-              })
-            : null,
-        onPickPromise: (text) => {
-          persistEngagement({ dayGoal: text });
-          trackMeaningEvent({
-            event_type: "action_option_selected",
-            event_source: "today",
-            local_date: dateISO,
-            payload: { action: "day_promise_set", promise_text: text.slice(0, 200), surface: "today_day_story_v3" },
-            refreshRings: false,
-          });
-        },
-        onOpenGoalDraft: () => setGoalDraftOpen(true),
-        onGoalDraftChange: setGoalDraft,
-        onSaveGoal,
-        onPracticeAction: () => void onPracticeAction(),
-        onAffirmationDone,
-        onHabitMark: () => void onHabitMark(),
-        onAsceticMark: () => void onAsceticMark(),
+      practiceTitle={practiceFrameTitle}
+      practiceMeta={practiceFrameMeta}
+      practiceActionLabel={practiceFrameActionLabel}
+      practiceCompleted={practiceFrameCompleted}
+      practiceCompleting={practiceCompleting}
+      onPracticeAction={() => {
+        if (supportSlot === "affirmation") {
+          onAffirmationDone();
+          return;
+        }
+        void onPracticeAction();
       }}
+      eveningQuestion={story.eveningQuestion}
+      contract={props.contract}
+      tapResponse={engagement.tapResponse}
+      onTapRecorded={(response) => persistEngagement({ tapResponse: response })}
+      onOpenEvening={onOpenEvening}
       activeIndex={screenFlowIndex}
       onIndexChange={onScreenFlowIndexChange}
       embeddedInWebDashboard={embeddedInWebDashboard}
@@ -2173,14 +2170,14 @@ export function TodayCompositionSurface(props: Props) {
 
         {useProductPersonalized &&
         zones.evening &&
-        screenFlowIndex >= todayScreenFlowReadingIndex(showSymbolsAct) + 2 ? (
+        screenFlowIndex >= todayScreenFlowCloseIndex(showSymbolsAct) ? (
           <div className={styles.eveningZone} data-testid="today-zone-evening-entry">
             <p className={styles.eveningHint}>{copy.eveningHint}</p>
             <DsButton
               type="button"
               variant="primary"
               className={styles.eveningButton}
-              data-testid="today-evening-open"
+              data-testid="today-evening-open-footer"
               onClick={onOpenEvening}
             >
               {copy.eveningCta}

@@ -148,6 +148,15 @@
 
 .stepBody { flex: 1 1 auto; min-height: 0; }
 
+.stepActive {
+  pointer-events: auto;
+}
+
+.stepInactive {
+  pointer-events: none;
+  user-select: none;
+}
+
 .skeleton {
   min-height: 6rem;
   border-radius: 0.85rem;

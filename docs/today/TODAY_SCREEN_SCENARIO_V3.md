@@ -1,28 +1,48 @@
-# Today — сценарий страницы (v3.1)
+# Today — сценарий страницы (v3.2 story deck)
 
-**Status:** ACTIVE · **Locked 2026-08-03** (semantic design pass on `design/profile-journey-premium`)
+**Status:** ACTIVE · **Updated 2026-08-05** (mockup story-deck cuts on ScreenFlow)  
+**Prior lock:** v3.1 content jobs 2026-08-03
 
-Контекст: ScreenFlow (Glance → Plot → Symbols → Reading → Move → Response).  
-Навигация: Glance = шаг 0 (читают первым). Проектирование спеки шло от содержания к сводке.
+**Presentation ScreenFlow (product):**  
+**Greeting → Energy+Flow → [Symbols] → Attributes → Practice → Insight → Close**
 
-Связанные каноны: [SCREEN_FLOW_V1.md](../foundation/SCREEN_FLOW_V1.md) · [TODAY_WAVE2_CONTRACT_V1.md](./TODAY_WAVE2_CONTRACT_V1.md) · [DAY_SYMBOL_REVEAL_CANON_V1.md](../audits/DAY_SYMBOL_REVEAL_CANON_V1.md) · [DOMAIN_MAGNITUDE_V1.md](../foundation/DOMAIN_MAGNITUDE_V1.md)
+Content houses ниже (v3.1) остаются источником смысла; меняется **нарезка кадров**.  
+Навигация: Greeting = шаг 0. Progress = ScreenFlow dots + swipe + keyboard.
+
+Связанные каноны: [SCREEN_FLOW_V1.md](../foundation/SCREEN_FLOW_V1.md) · [TODAY_WAVE2_CONTRACT_V1.md](./TODAY_WAVE2_CONTRACT_V1.md) · [DAY_SYMBOL_REVEAL_CANON_V1.md](../audits/DAY_SYMBOL_REVEAL_CANON_V1.md) · [DOMAIN_MAGNITUDE_V1.md](../foundation/DOMAIN_MAGNITUDE_V1.md) · [TODAYFLOW_FOUNDATION_UI.md](../TODAYFLOW_FOUNDATION_UI.md) §16
+
+### Presentation map (v3.2)
+
+| Story frame | Склеивает / показывает | Content house (v3.1) |
+|-------------|------------------------|----------------------|
+| Greeting | salutation · date · CTA | greeting chrome |
+| Energy+Flow | энергия + полный timeline | Glance energy + Symbols·B timeline |
+| Symbols | карта (лицо остаётся) + число | Symbols·A |
+| Attributes | цвет + тема + фокус + избегать | Move color + Glance texture/focus + Move if/then |
+| Practice | practice XOR affirmation | Move support slot |
+| Insight | сюжет / why / beats | Plot |
+| Close | evening question + trap tap + close CTA | Response + evening |
 
 ---
 
 ## 0. Сквозные правила
 
-1. **Экран = одна задача.** Свайп = продолжение.
-2. **Один дом на сущность.** Цвет — только Move. Карта/число/астро — Symbols. Действие дня — только Move. Ловушка-тап — только Response.
+1. **Экран = одна задача (или одна осознанная склейка из макета).** Свайп = продолжение.
+2. **Один дом на сущность (данные).** Карта/число — Symbols. Цвет — **Attributes** (presentation; данные те же, что раньше жили в Move). Практика — Practice. Ловушка-тап — Close. Сюжет why — Insight. Reading-сферы остаются в данных, отдельного swipe-шага нет.
 3. **No seed leakage.** Каждый акт формулирует текст из **своих** сырых данных. Ни один акт не является источником текста для другого. Дословный или перефразированный повтор чужой формулировки = **баг генерации**, не «сквозная персонализация».
 4. **Внутренняя классификация динамики** (`напряжение | усиление | доминанта | ровный день`) управляет тоном формулировок и выбором визуала. **Не** рендерится ярлыком на UI.
 5. **Честный omit.** Нет сигнала → не выдумывать конфликт / сферу / ловушку / связку «ради заполнения».
-6. **Домены Reading/Response:** четыре — `work` · `money` · `relationships` · `energy`. Wire DomainLens = тот же словарь (legacy `money_work`/`family` — только read-compat). Glance больше не показывает domain chips — один Daily Focus.
+6. **Домены Reading/Response:** четыре — `work` · `money` · `relationships` · `energy`. Wire DomainLens = тот же словарь (legacy `money_work`/`family` — только read-compat).
 7. **Конкретность.** User-facing строка называет действие, объект или момент («три вдоха до „отправить“», «одна фраза вместо трёх») — иначе **omit**. Абстрактные пары существительных («ясность в трении») и дампы тегов через тире («темп — …, способ — …») = баг генерации.
 8. **No generation-meta leakage.** Внутренние правила пайплайна («не второй сюжет», «не отдельный прогноз», «без параллельного сюжета», «связывает фактор с тоном») **никогда** не попадают в user-facing текст — симметрично seed-leak, другой класс утечки.
 
 ---
 
-## Экран 0 — Сводка (Glance)
+## Content jobs (v3.1 — источники смысла)
+
+Ниже — **что** должно быть сказано (дома данных). **Как** это нарезано в swipe — таблица Presentation map выше.
+
+## Экран 0 — Сводка (Glance) *(content; presentation → Greeting / Energy / Attributes)*
 
 **Job:** за 2 секунды ориентация и вход дальше — сжатая проекция уже определённых актов, не отдельный сюжет.
 
@@ -30,13 +50,12 @@
 
 **На экране:**
 
-1. **Текстура** — 1–2 предложения в glass Block: фраза-синтез **тона** (внутренняя классификация). Не факты, не ярлык категории, не `short_name` «A или B».
-2. **Энергия дня** (опц.) — pulse facet в отдельном Block; honest omit если пусто. Не invent на transport failure.
-3. **Nearest** — одно событие glance timeline (`label_short` + valence).
-4. **Тизер ритуала** — один CTA в Symbols·A без identity/base/bridge на Glance.
-5. **Фокус дня** — один Daily Focus (`buildGlanceDailyFocus`): заголовок + направление (в приоритете / избегать) из `day_story`. Не список доменов, не равные чипы сфер (R15–R17). Нет сигнала → shared honest-текст. Не конкурирует с texture в hero.
+1. **Текстура** — 1–2 предложения: фраза-синтез **тона** (внутренняя классификация). Не факты, не ярлык категории, не `short_name` «A или B».
+2. **Энергия дня** (опц.) — pulse facet; honest omit если пусто. Не invent на transport failure.
+3. **Nearest / timeline** — glance timeline.
+4. **Фокус дня** — один Daily Focus (`buildGlanceDailyFocus`): заголовок + направление (в приоритете / избегать) из `day_story`.
 
-**Нет:** фактов Plot, why, карты/числа/астро/полного timeline, **цвета дня как контент-блока** (атмосфера = shell, не «цвет дня» слот), if/then, цели, практики, ловушки Response.
+**Нет:** фактов Plot, why, карты/числа как identity на этом кадре в presentation Greeting; if/then практики на Greeting.
 
 **Граница:** Glance не seed — сжимает согласованную модель, не генерирует заново.
 
@@ -179,6 +198,13 @@ Reveal API / prebake: [DAY_SYMBOL_REVEAL_CANON_V1](../audits/DAY_SYMBOL_REVEAL_C
 ---
 
 ## Changelog
+
+### 2026-08-05 — v3.2 story deck presentation
+
+- ScreenFlow cuts: Greeting → Energy+Flow → Symbols → Attributes → Practice → Insight → Close.
+- Color presentation home → Attributes (data house unchanged).
+- Reading not a separate swipe step; Close hosts trap tap + evening entry.
+- Card face kept visible after pick on Symbols.
 
 ### 2026-08-04 — Glance: Daily Focus replaces sphere chips
 

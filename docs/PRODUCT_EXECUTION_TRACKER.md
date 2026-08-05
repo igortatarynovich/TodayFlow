@@ -4,6 +4,7 @@ Last updated: 2026-08-05
 Owner: Product + Engineering
 Status: Active working document
 
+**DONE (CODE, 2026-08-05):** **Today Story Deck v3.2** — ScreenFlow cuts Greeting→Energy+Flow→Symbols→Attributes→Practice→Insight→Close; color presentation→Attributes; card face kept on Symbols; overlap fix via one-job frames. Canon: SCENARIO_V3 + FOUNDATION_UI §16. Architecture impact: composition pipeline presentation.
 **DONE (CODE, 2026-08-05):** **Today Story Frames** — composition presentation: ScreenFlow acts as full-bleed story frames (typography-first; glass only on interactive clusters); `layout=composition` strips dashboard header/rail; Glance scrollable=false. Jobs/houses unchanged (SCENARIO_V3). Canon: FOUNDATION_UI §16. Zone still open under 6-axis DoD (screenshot review).
 **IN PROGRESS (2026-08-05):** **Task 2.9b Compatibility result** — exploration / funnel / analyze·signs personalized → `DsCallout`/`DsQuote`. Zone still open under 6-axis DoD.
 **DONE (CODE, 2026-08-05):** **Task 2.9b Tarot result** — answer / next_step / A·B / confidence / why → `DsCallout`/`DsQuote`. Zone still open under 6-axis DoD.
