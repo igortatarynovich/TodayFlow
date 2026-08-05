@@ -10,28 +10,29 @@ import {
 import { DAY_VISUAL_MODES } from "@/lib/dayAtmosphere";
 
 describe("todayStoryFrameArt", () => {
-  it("uses phase assets for greeting and cosmic wash for energy", () => {
+  it("uses dedicated phase greeting backgrounds and cosmic wash for energy", () => {
     expect(resolveTodayStoryFrameArt("energy", "radiance")).toMatch(
       /\/images\/cosmic\/(moon_wash|celestial_wash|eclipse_wash|nebula)/,
     );
-    expect(resolveTodayStoryFrameArt("greeting", "renewal", "morning")).toMatch(
-      /today-ritual-entry\/default-morning|hero-meditation/,
+    expect(resolveTodayStoryFrameArt("greeting", "renewal", "morning")).toBe(
+      "/images/backgrounds/greetings/greetings_morning.png",
     );
-    expect(resolveTodayStoryFrameArt("greeting", "renewal", "day")).toMatch(
-      /today-ritual-entry\/default-day|day_girl_banner|journal/,
+    expect(resolveTodayStoryFrameArt("greeting", "renewal", "day")).toBe(
+      "/images/backgrounds/greetings/greetings_day.png",
     );
-    expect(resolveTodayStoryFrameArt("greeting", "renewal", "evening")).toMatch(
-      /today-ritual-entry\/default-evening|night_banner|Diary/,
+    expect(resolveTodayStoryFrameArt("greeting", "renewal", "evening")).toBe(
+      "/images/backgrounds/greetings/greetings_evening.png",
+    );
+    expect(resolveTodayStoryFrameArt("greeting", "renewal", "night")).toBe(
+      "/images/backgrounds/greetings/greetings_evening.png",
     );
     expect(resolveTodayStoryFrameArt("practice", "momentum")).toMatch(/praktiki_banner/);
   });
 
-  it("rotates greeting art within a phase across days", () => {
-    const a = resolveGreetingArt("morning", 1);
-    const b = resolveGreetingArt("morning", 2);
-    const c = resolveGreetingArt("morning", 3);
-    expect([a, b, c].every((p) => p.includes("/images/"))).toBe(true);
-    expect(new Set([a, b, c]).size).toBeGreaterThanOrEqual(2);
+  it("maps each phase to its greeting pack asset", () => {
+    expect(resolveGreetingArt("morning")).toContain("greetings_morning");
+    expect(resolveGreetingArt("day")).toContain("greetings_day");
+    expect(resolveGreetingArt("evening")).toContain("greetings_evening");
   });
 
   it("rotates praktiki banners across days", () => {

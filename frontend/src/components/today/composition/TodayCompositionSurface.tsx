@@ -1655,9 +1655,10 @@ export function TodayCompositionSurface(props: Props) {
               </p>
             </TodayScreenBlock>
           ) : null}
-          {!props.networkDegraded && showRitualAsComplement ? ritualGateSection : null}
-          {!props.networkDegraded && showRitualAsComplement ? ritualTarotImpactStage : null}
-          {!props.networkDegraded && !showRitualAsComplement && (props.cardName || story.tarotImpact || props.numerologyValue || story.numberImpact) ? (
+          {/* Keep card/number from already-loaded props when session is degraded — do not blank the pane. */}
+          {showRitualAsComplement && !props.networkDegraded ? ritualGateSection : null}
+          {showRitualAsComplement && !props.networkDegraded ? ritualTarotImpactStage : null}
+          {!showRitualAsComplement && (props.cardName || story.tarotImpact || props.numerologyValue || story.numberImpact) ? (
             <div className={styles.symbolsRevealStack} data-testid="today-zone-symbol-impacts">
               {story.tarotImpact || props.cardName || symbolHooksView?.card?.hook_reveal ? (
                 <section className={styles.symbolCardHero} data-story-block="symbols-card" data-story-pane="">

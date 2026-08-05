@@ -35,8 +35,8 @@ ASPECT_ANGLE: dict[str, float] = {
 # Coarse shared samples; bisect refines toward ≤5 min (contract C.1).
 SAMPLE_STEP_MINUTES = 30
 BISECT_MAX_ITER = 16
-MAX_GLANCE_ROWS = 3
-# Search strength order beyond 1–3 when top ranks lack exact (minors/slow/no chart hit).
+MAX_GLANCE_ROWS = 5
+# Search strength order beyond top ranks when they lack exact (minors/slow/no chart hit).
 # Still one pool / one ranker — no second ranking.
 GLANCE_SEARCH_MAX_RANK = 12
 
@@ -54,7 +54,7 @@ _PLANET_RU = {
 }
 
 # Soft / hard for glance valence (favorable | caution) — not VerdictStrip dictionary.
-_SOFT = frozenset({"trine", "sextile"})
+_SOFT = frozenset({"trine", "sextile", "quintile", "biquintile"})
 _HARD = frozenset({"square", "opposition", "quincunx"})
 
 

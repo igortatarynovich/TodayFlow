@@ -91,7 +91,7 @@ day_facts_v1 {
     logic_source: "top_driver_v1"   # max |weight| driver sets sign+intensity; see §3
   }]
 
-  glance_timeline: [{               # GlanceTimeline source; max 3
+  glance_timeline: [{               # GlanceTimeline source; max 5
     time_local: datetime
     label_short: string             # ≤ 4 words
     valence: "favorable"|"caution"
@@ -269,7 +269,7 @@ Canon UI flow: [SCREEN_FLOW_V1 §4](../foundation/SCREEN_FLOW_V1.md) · [TODAY_S
 
 ## 4. GlanceTimeline — exact time (inside day_facts)
 
-**Input:** `natal_activations` in strength `rank` order (same pool as conflict — **no second ranking**). Exact-time walk covers ranks 1…12 until ≤3 timed rows (skips aspects without a known angle or no zero-cross in the local day).
+**Input:** `natal_activations` in strength `rank` order (same pool as conflict — **no second ranking**). Exact-time walk covers ranks 1…12 until ≤5 timed rows (skips aspects without a known angle or no zero-cross in the local day).
 
 **Algorithm:** step search (30 min samples + bisect) within user local day for when  
 `|transit_longitude(t) − natal_point_longitude|` equals aspect angle (0/60/72/90/120/144/180°).  
@@ -279,7 +279,7 @@ If no exact within local day (slow bodies): `exact_time_local = null`; activatio
 
 **orb ≠ time:** small `orb_deg` (noon snapshot) does **not** mean exact happens today. Timing language requires `exact_time_local`; otherwise omit «скоро / в … часов».
 
-`glance_timeline`: ≤ **3** rows, sorted by `time_local`.  
+`glance_timeline`: ≤ **5** rows, sorted by `time_local`.  
 `label_short`: no degrees, no aspect names (calib corpus purity §2).
 
 ---

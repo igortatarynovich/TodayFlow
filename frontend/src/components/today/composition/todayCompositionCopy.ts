@@ -114,8 +114,8 @@ export const TODAY_COMPOSITION_COPY = {
     verdictStripLabel: "Сферы дня",
     glanceSlotHint: "",
     glanceStripLabel: "Моменты дня",
-    glanceFavorable: "Лучше для",
-    glanceCaution: "Тише с",
+    glanceFavorable: "Благоприятно",
+    glanceCaution: "Осторожнее",
     glanceWindow: "Окно",
     glanceTitle: "Сводка дня",
     glanceLead: "Что сегодня ждать — коротко. Дальше — ритуал крючков.",
@@ -124,7 +124,7 @@ export const TODAY_COMPOSITION_COPY = {
     /** House label for texture Block — mockup mood (FOUNDATION_UI §16), not short_name. */
     glanceThemeLabel: "Тема дня",
     glanceNearestLabel: "Ближайшее окно",
-    glanceNearestEmpty: "Ближайшее окно сегодня не выделено.",
+    glanceNearestEmpty: "Сегодня точные окна по сигналам не выделены.",
     glanceNearestPracticeHint: "практика →",
     /** One Daily Focus — replaces legacy «Сферы дня» chips (R15–R17). */
     glanceFocusLabel: "Фокус дня",

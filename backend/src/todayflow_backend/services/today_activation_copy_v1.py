@@ -62,6 +62,20 @@ _BODY_TONE_RU = {
     "pluto": "глубина",
 }
 
+# Opportunity / minor harmonics — actionable «для чего» (not opaque «Окно: …»).
+_WINDOW_FOR_RU = {
+    "ясность": "Ясность — решения",
+    "настроение": "Настроение — пауза",
+    "слова": "Диалоги и письма",
+    "контакт": "Живой контакт",
+    "импульс": "Короткие задачи",
+    "размах": "Крупный шаг",
+    "границы": "Границы и стоп",
+    "сдвиг": "Смена курса",
+    "туман": "Без жёстких решений",
+    "глубина": "Глубокая тема",
+}
+
 
 def aspect_class_label_short(aspect: str, planet: str | None = None) -> str:
     """GlanceTimeline `label_short` — ≤ ~4 words RU; distinct by body+aspect class."""
@@ -112,6 +126,7 @@ def aspect_class_label_short(aspect: str, planet: str | None = None) -> str:
         if tone:
             return f"{tone.capitalize()} сгущается"
         return "Тема сгущается"
+    # Quintile / biquintile / unknown — name the lived window, not «Окно: …».
     if tone:
-        return f"Окно: {tone}"
-    return "Окно дня"
+        return _WINDOW_FOR_RU.get(tone, f"Тема: {tone}")
+    return "Сигнал дня"

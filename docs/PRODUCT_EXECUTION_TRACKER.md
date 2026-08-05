@@ -4,6 +4,7 @@ Last updated: 2026-08-05
 Owner: Product + Engineering
 Status: Active working document
 
+**DONE (CODE, 2026-08-05):** **Поток дня ← real glance_timeline** — story pane uses timed `day_facts.glance_timeline` again (no invented phase copy); labels name lived use (not «Окно: …»); max rows 3→5; symbols keep card/number when `networkDegraded`. Canon: TODAY_WAVE2_CONTRACT_V1 §4.
 **DONE (CODE, 2026-08-05):** **Today story anchors polish** — distinct art pools; `StoryBlockCue` (in-step scroll) + `StoryNextAnchor` (foreshadow); block orders Energy/Symbols/Attributes/Insight/Close. Canon: FOUNDATION_UI §16.1 · SCENARIO_V3. Presentation only.
 **DONE (CODE, 2026-08-05):** **Today Story Deck art + ↓ cues** — Greeting/Energy/Practice immersive photos (existing ritual-entry/cosmic/bg); other frames = Day Atmosphere theme; ↓ between multi-block sections. Canon: FOUNDATION_UI §16.1 · SCENARIO_V3 changelog.
 **DONE (CODE, 2026-08-05):** **Today Story Deck v3.2** — ScreenFlow cuts Greeting→Energy+Flow→Symbols→Attributes→Practice→Insight→Close; color presentation→Attributes; card face kept on Symbols; overlap fix via one-job frames. Canon: SCENARIO_V3 + FOUNDATION_UI §16. Architecture impact: composition pipeline presentation.
@@ -42,6 +43,15 @@ A product zone is **DONE** only when **all** are true:
 6. **Screenshot parity** — side-by-side reads as one system (owner review)
 
 **Process:** After Wave 1 alone → `layout DoD ✅`, zones stay **IN PROGRESS**. Real DONE only after Wave 1 + Wave 2 + screenshot review. Onboarding after that. Task 3.5 Atmosphere picker on `/design-system` = between later waves, non-blocking. **Task 2.9 foundation ≠ zone DONE**; Task **2.9b+** (Today / Tarot / Compatibility / Profile / Practices) uses this same 6-axis DoD.
+
+## Architecture impact — Glance timeline max 5 + actionable labels (2026-08-05)
+
+- **SoT before:** `glance_timeline` ≤3; minor harmonics often rendered as opaque «Окно: импульс/слова»; story Поток дня briefly used invented phase copy.
+- **SoT after:** `glance_timeline` ≤5 from same natal activation pool + exact-time; labels name lived use (tasks/dialogues/…); story Поток дня = pure render of glance_timeline; symbols keep local card/number under networkDegraded.
+- **Public contract changed?** yes — max glance rows 3→5; `label_short` bank wording (still no planet/aspect jargon)
+- **Migration required?** no — regenerates on next day_facts assemble (clear activation TTL / hard refresh)
+- **Canon updated?** yes — `docs/today/TODAY_WAVE2_CONTRACT_V1.md` §1 / §4
+- **Backward compatible?** yes for old caches with ≤3 rows; FE tolerant
 
 ## Architecture impact — Task 2.9 semantic meaning layers (2026-08-05)
 

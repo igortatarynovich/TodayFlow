@@ -41,7 +41,11 @@ def test_sun_square_is_lived_not_noun_pair():
     assert "ясность" in label.lower()
 
 
-def test_soft_why_is_domain_distinct():
+def test_opportunity_windows_name_lived_use_not_opaque_okno():
+    assert aspect_class_label_short("quintile", "mars") == "Короткие задачи"
+    assert aspect_class_label_short("biquintile", "mercury") == "Диалоги и письма"
+    assert "окно:" not in aspect_class_label_short("quintile", "venus").lower()
+
     whys = [aspect_class_why_short("trine", d) for d in ("work", "money", "relationships", "energy")]
     assert len(set(whys)) == 4
     assert "Есть опора — можно опереться" not in whys

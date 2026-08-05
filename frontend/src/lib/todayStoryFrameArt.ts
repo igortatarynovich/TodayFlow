@@ -27,30 +27,14 @@ const MODE_BG: Record<DayVisualMode, string> = {
 };
 
 /**
- * Greeting — time-of-day heroes (ritual-entry packs + warm terrestrial).
- * Rotates within the phase by calendar day so the opener is not always identical.
+ * Greeting — dedicated phase backgrounds under `/images/backgrounds/greetings/`.
+ * Night reuses evening (closest pack until a night asset ships).
  */
-const PHASE_GREETING: Record<TodayDayPhase, readonly string[]> = {
-  morning: [
-    "/images/today-ritual-entry/default-morning.webp",
-    "/images/hero-meditation.png",
-    "/images/today-ritual-entry/default-morning.png",
-  ],
-  day: [
-    "/images/today-ritual-entry/default-day.png",
-    "/images/day_girl_banner.png",
-    "/images/journal.png",
-  ],
-  evening: [
-    "/images/today-ritual-entry/default-evening.webp",
-    "/images/night_banner.png",
-    "/images/Diary.png",
-  ],
-  night: [
-    "/images/night_banner.png",
-    "/images/today-ritual-entry/default-evening.webp",
-    "/images/Diary.png",
-  ],
+const PHASE_GREETING: Record<TodayDayPhase, string> = {
+  morning: "/images/backgrounds/greetings/greetings_morning.png",
+  day: "/images/backgrounds/greetings/greetings_day.png",
+  evening: "/images/backgrounds/greetings/greetings_evening.png",
+  night: "/images/backgrounds/greetings/greetings_evening.png",
 };
 
 /**
@@ -94,19 +78,13 @@ function calendarDaySeed(): number {
   return d.getFullYear() * 372 + d.getMonth() * 31 + d.getDate();
 }
 
-function pickFromPool(pool: readonly string[], seed: number): string {
-  if (pool.length === 0) return "/images/hero-meditation.png";
-  return pool[Math.abs(seed) % pool.length]!;
-}
-
-/** Greeting art for a clock phase (stable within the day, varies across days). */
+/** Greeting art for a clock phase — one dedicated background per phase. */
 export function resolveGreetingArt(
   phase?: TodayDayPhase | null,
-  daySeed?: number,
+  _daySeed?: number,
 ): string {
   const p = phase ?? readDayPhase();
-  const seed = (daySeed ?? calendarDaySeed()) + (p === "morning" ? 0 : p === "day" ? 11 : p === "evening" ? 23 : 37);
-  return pickFromPool(PHASE_GREETING[p], seed);
+  return PHASE_GREETING[p];
 }
 
 /** Pick a praktiki banner for the practice frame (stable per day+mode). */

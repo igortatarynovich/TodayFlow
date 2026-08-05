@@ -9,13 +9,12 @@ import { DsButton } from "@/design-system/primitives/DsButton";
 import { DsCard } from "@/design-system/primitives/DsCard";
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
-import { TodayTapWidget } from "@/components/today/composition/TodayWave2Slots";
+import { TodayGlanceTimelineSlot, TodayTapWidget } from "@/components/today/composition/TodayWave2Slots";
 import type { TodayDayColorGuide } from "@/lib/todayDayColorGuide";
 import type { GlanceDailyFocusModel } from "@/lib/todayDailyFocus";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import type { TapResponseCode } from "@/lib/todayTapWidget";
 import { TODAY_NO_SHARP_FOCUS_COPY } from "@/lib/todayGlanceTexture";
-import { buildStoryDayFlow } from "@/lib/todayStoryDayFlow";
 import {
   resolveTodayStoryFrameArt,
   type TodayStoryArtRole,
@@ -170,33 +169,20 @@ export function TodayGreetingFrame({
 export function TodayEnergyFlowFrame({
   energyLine,
   energyCause,
-  prioritize,
-  avoid,
-  moveDo,
-  moveAvoid,
+  dateISO,
   onGoNext,
   nextTitle = copy.storyNext.symbols,
   nextHint = copy.storyNext.symbolsHint,
 }: {
   energyLine: string | null;
   energyCause: string | null;
-  prioritize?: string | null;
-  avoid?: string | null;
-  moveDo?: string | null;
-  moveAvoid?: string | null;
+  dateISO: string;
   onGoNext: () => void;
   nextTitle?: string;
   nextHint?: string;
 }) {
   const energy = (energyLine || "").trim() || null;
   const cause = (energyCause || "").trim() || null;
-  const dayFlow = buildStoryDayFlow({
-    energyLine: energy,
-    prioritize,
-    avoid,
-    moveDo,
-    moveAvoid,
-  });
   return (
     <div
       className={immersiveClass("energy", styles.frame)}
@@ -238,31 +224,12 @@ export function TodayEnergyFlowFrame({
               <header className={styles.flowHeader}>
                 <p className={styles.eyebrowOnArt}>Поток дня</p>
                 <p className={styles.flowLeadOnArt}>
-                  Как пройти день: старт, задачи, диалоги, итог и отдых.
+                  Реальные окна дня: во сколько и для чего удобнее опереться.
                 </p>
               </header>
-              <ol className={styles.dayFlow} data-testid="today-story-day-flow">
-                {dayFlow.map((point, index) => (
-                  <li
-                    key={point.id}
-                    className={styles.dayFlowItem}
-                    data-valence={point.valence}
-                    data-testid={`today-day-flow-${point.id}`}
-                  >
-                    <div className={styles.dayFlowRail} aria-hidden>
-                      <span className={styles.dayFlowDot} />
-                      {index < dayFlow.length - 1 ? <span className={styles.dayFlowLine} /> : null}
-                    </div>
-                    <div className={styles.dayFlowCopy}>
-                      <p className={styles.dayFlowPhase}>{point.phase}</p>
-                      <p className={styles.dayFlowCue} data-valence={point.valence}>
-                        {point.cue}
-                      </p>
-                      <p className={styles.dayFlowBody}>{point.body}</p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
+              <div className={styles.flowOnArt}>
+                <TodayGlanceTimelineSlot dateISO={dateISO} variant="story" />
+              </div>
             </div>
           </div>
           <StoryNextAnchor title={nextTitle} hint={nextHint} onNext={onGoNext} />
