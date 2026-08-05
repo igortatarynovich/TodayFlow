@@ -51,17 +51,21 @@
   padding: calc(var(--sf-chrome-h, 3.25rem) + 0.35rem) 1.15rem 1.65rem;
 }
 
-.storyFrame :global([data-testid="today-story-block-cue"]),
-.storyFrame :global([data-testid="today-story-next-anchor"]) {
-  margin-top: auto;
-  flex-shrink: 0;
-}
-
 .storyFrame :global([data-story-block]) > :not([data-testid="today-story-block-cue"]):not([data-testid="today-story-next-anchor"]),
 .storyFrame :global([data-story-pane]) > :not([data-testid="today-story-block-cue"]):not([data-testid="today-story-next-anchor"]) {
   width: 100%;
   max-width: 22rem;
   flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+}
+
+.storyFrame :global([data-testid="today-story-block-cue"]),
+.storyFrame :global([data-testid="today-story-next-anchor"]) {
+  margin-top: auto;
+  flex-shrink: 0;
 }
 
 .practiceLink {

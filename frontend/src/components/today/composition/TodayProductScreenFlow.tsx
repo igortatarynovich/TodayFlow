@@ -8,7 +8,6 @@ import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/t
 import flowStyles from "@/components/today/composition/TodayProductScreenFlow.module.css";
 import sfStyles from "@/design-system/primitives/ScreenFlow/ScreenFlow.module.css";
 import {
-  StoryNextAnchor,
   TodayAttributesFrame,
   TodayCloseFrame,
   TodayEnergyFlowFrame,
@@ -36,6 +35,9 @@ export type TodayProductScreenFlowProps = {
   colorGuide?: TodayDayColorGuide | null;
   moveDo?: string | null;
   moveAvoid?: string | null;
+  /** Short «Главный сюжет» line for the merged Опора compass pane. */
+  plotLabel?: string;
+  plotText?: string | null;
   insightHeroText?: string | null;
   plotNarrativeSection?: ReactNode;
   morningDialogue?: ReactNode;
@@ -113,6 +115,8 @@ export function TodayProductScreenFlow({
   colorGuide = null,
   moveDo = null,
   moveAvoid = null,
+  plotLabel = copy.conflictLabel,
+  plotText = null,
   insightHeroText = null,
   plotNarrativeSection = null,
   morningDialogue = null,
@@ -187,15 +191,6 @@ export function TodayProductScreenFlow({
               data-story-scroll="pane"
             >
               {symbolsBody}
-              {showPersonalized ? (
-                <section data-story-pane="" data-story-block="symbols-next">
-                  <StoryNextAnchor
-                    title={copy.storyNext.attributes}
-                    hint={copy.storyNext.attributesHint}
-                    onNext={() => go(todayScreenFlowAttributesIndex(true))}
-                  />
-                </section>
-              ) : null}
             </div>
           </ScreenFlowStep>
         ) : null}
@@ -206,6 +201,8 @@ export function TodayProductScreenFlow({
               <TodayAttributesFrame
                 themeLabel={themeTitle || copy.journey.glanceThemeLabel}
                 themeText={themeText}
+                plotLabel={plotLabel}
+                plotText={plotText}
                 dailyFocus={dailyFocus}
                 colorGuide={colorGuide}
                 moveDo={moveDo}

@@ -166,7 +166,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Mockup: copy in the upper band, ↓ / CTA pinned to the bottom. */
   justify-content: flex-start;
   text-align: center;
   gap: 0;
@@ -185,6 +184,18 @@
   flex: 1 1 auto;
   min-height: 0;
   padding-top: 0.35rem;
+}
+
+/* Greeting / Energy: copy sits in the upper-middle band, not under the dots. */
+.storyPaneLift .storyPaneBody {
+  padding-top: clamp(3.25rem, 14cqh, 6.5rem);
+  justify-content: flex-start;
+}
+
+/* Color / number / theme / avoid: content vertically centered in the pane. */
+.storyPaneCenter .storyPaneBody {
+  justify-content: center;
+  padding-top: 0;
 }
 
 .storyPane > .centerStack,
@@ -490,6 +501,30 @@
   color: rgba(255, 248, 240, 0.78);
 }
 
+.compassBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.15rem;
+  width: 100%;
+  max-width: 22rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.compassSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+}
+
+.compassSection + .compassSection {
+  padding-top: 0.85rem;
+  border-top: 1px solid color-mix(in srgb, var(--day-decor-color, #8f6b3a) 16%, transparent);
+}
+
 .flowBlock,
 .listBlock,
 .colorAnchor,
@@ -498,6 +533,15 @@
   max-width: 28rem;
   margin-inline: auto;
   flex: 0 0 auto;
+}
+
+.flowLeadOnArt {
+  margin: 0 0 0.35rem;
+  max-width: 28ch;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: rgba(255, 248, 240, 0.72);
+  text-align: center;
 }
 
 .colorHero {

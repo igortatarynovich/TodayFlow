@@ -10,7 +10,7 @@ import { TodayDayContinuityEveningClose } from "@/components/today/experience/To
 import { TodayEveningProductClose } from "@/components/today/composition/TodayEveningProductClose";
 import { TodayPersonalizedProductSection } from "@/components/today/composition/TodayPersonalizedProductSection";
 import { TodayScreenBlock, TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
-import { TodayProductScreenFlow, todayScreenFlowPracticeIndex, todayScreenFlowStepCount, todayScreenFlowCloseIndex } from "@/components/today/composition/TodayProductScreenFlow";
+import { TodayProductScreenFlow, todayScreenFlowAttributesIndex, todayScreenFlowPracticeIndex, todayScreenFlowStepCount, todayScreenFlowCloseIndex } from "@/components/today/composition/TodayProductScreenFlow";
 import { pickMoveIfThenFromContract } from "@/lib/todayMoveIfThen";
 import {
   resolveScreenFlowEntryIndex,
@@ -82,7 +82,7 @@ import { TodayInterpretationConfirm } from "@/components/today/composition/Today
 import { TodaySkyStoryCards } from "@/components/today/composition/TodaySkyStoryCards";
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
 import { TodayHookRevealShell } from "@/components/today/composition/TodayHookRevealShell";
-import { StoryBlockCue } from "@/components/today/composition/TodayStoryDeckFrames";
+import { StoryBlockCue, StoryNextAnchor } from "@/components/today/composition/TodayStoryDeckFrames";
 import { isDayScenarioReadyForChapters } from "@/lib/todayScenarioChapters";
 import { buildGlanceDayTexture, buildGlanceThemeEyebrow } from "@/lib/todayGlanceTexture";
 import { buildGlanceDailyFocus } from "@/lib/todayDailyFocus";
@@ -1637,6 +1637,8 @@ export function TodayCompositionSurface(props: Props) {
       colorGuide={story.colorGuide}
       moveDo={moveIfThen?.do ?? null}
       moveAvoid={moveIfThen?.avoid ?? null}
+      plotLabel={copy.conflictLabel}
+      plotText={(plotNarrative?.why || plotNarrative?.tension || "").trim() || null}
       plotNarrativeSection={plotNarrativeSection}
       insightHeroText={insightHeroText}
       morningDialogue={morningDialogue}
@@ -1697,7 +1699,13 @@ export function TodayCompositionSurface(props: Props) {
                   {(story.numberImpact || props.numerologyValue || symbolHooksView?.number?.hook_reveal) ? (
                     <StoryBlockCue targetId="symbols-number" label={copy.storyNext.scrollMore} />
                   ) : useProductPersonalized ? (
-                    <StoryBlockCue targetId="symbols-next" label={copy.storyNext.scrollMore} />
+                    <StoryNextAnchor
+                      title={copy.storyNext.attributes}
+                      hint={copy.storyNext.attributesHint}
+                      onNext={() =>
+                        onScreenFlowIndexChange(todayScreenFlowAttributesIndex(true), { reason: "select" })
+                      }
+                    />
                   ) : null}
                 </section>
               ) : null}
@@ -1728,7 +1736,13 @@ export function TodayCompositionSurface(props: Props) {
                     testId="today-zone-number-impact"
                   />
                   {useProductPersonalized ? (
-                    <StoryBlockCue targetId="symbols-next" label={copy.storyNext.scrollMore} />
+                    <StoryNextAnchor
+                      title={copy.storyNext.attributes}
+                      hint={copy.storyNext.attributesHint}
+                      onNext={() =>
+                        onScreenFlowIndexChange(todayScreenFlowAttributesIndex(true), { reason: "select" })
+                      }
+                    />
                   ) : null}
                 </section>
               ) : null}
