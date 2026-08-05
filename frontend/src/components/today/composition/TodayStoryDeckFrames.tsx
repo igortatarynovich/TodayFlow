@@ -145,17 +145,21 @@ export function TodayGreetingFrame({
       <ImmersiveArtPlane role="greeting" testId="today-frame-art-greeting" />
       <div className={styles.immersiveContent}>
         <section className={styles.storyPane} data-story-block="greeting-hero">
-          <p className={styles.salutation}>{salutation}</p>
-          <h2 className={styles.greetingHeadline}>
-            {loading ? copy.loadingDay : headline || "Сегодня — твой день"}
-          </h2>
-          <p className={styles.dateLine}>{dateLabel}</p>
+          <div className={styles.storyPaneBody}>
+            <p className={styles.salutation}>{salutation}</p>
+            <h2 className={styles.greetingHeadline}>
+              {loading ? copy.loadingDay : headline || "Сегодня — твой день"}
+            </h2>
+            <p className={styles.dateLine}>{dateLabel}</p>
+          </div>
           <button type="button" className={styles.startCta} data-testid="today-greeting-start" onClick={onStart}>
             <span className={styles.startArrow} aria-hidden>
               →
             </span>
-            <span>Начать день</span>
-            <span className={styles.startHint}>{copy.storyNext.energy}</span>
+            <span className={styles.startCtaText}>
+              <span className={styles.startCtaLabel}>Начать день</span>
+              <span className={styles.startHint}>{copy.storyNext.energy}</span>
+            </span>
           </button>
         </section>
       </div>
@@ -189,24 +193,26 @@ export function TodayEnergyFlowFrame({
       <ImmersiveArtPlane role="energy" testId="today-frame-art-energy" />
       <div className={`${styles.immersiveContent} ${styles.storyScroll}`} data-story-scroll="pane">
         <section className={styles.storyPane} data-story-block="energy-hero">
-          <div className={styles.centerStack}>
-            <p className={styles.eyebrowOnArt}>{copy.pulseLabel}</p>
-            {energy ? (
-              <h2 className={styles.energyPrimaryOnArt} data-testid="today-glance-energy-text">
-                {energy}
-              </h2>
-            ) : (
-              <p className={styles.mutedOnArt} data-testid="today-energy-empty">
-                Энергия дня сегодня без отдельной формулировки.
-              </p>
-            )}
-            {cause ? (
-              <p className={styles.detailOnArt} data-testid="today-glance-energy-cause">
-                {cause}
-              </p>
-            ) : null}
+          <div className={styles.storyPaneBody}>
+            <div className={styles.centerStack}>
+              <p className={styles.eyebrowOnArt}>{copy.pulseLabel}</p>
+              {energy ? (
+                <h2 className={styles.energyPrimaryOnArt} data-testid="today-glance-energy-text">
+                  {energy}
+                </h2>
+              ) : (
+                <p className={styles.mutedOnArt} data-testid="today-energy-empty">
+                  Энергия дня сегодня без отдельной формулировки.
+                </p>
+              )}
+              {cause ? (
+                <p className={styles.detailOnArt} data-testid="today-glance-energy-cause">
+                  {cause}
+                </p>
+              ) : null}
+            </div>
           </div>
-          <StoryBlockCue targetId="energy-flow" label={copy.storyNext.flowCue} />
+          <StoryBlockCue targetId="energy-flow" label={copy.storyNext.scrollMore} />
         </section>
 
         <section
@@ -214,10 +220,12 @@ export function TodayEnergyFlowFrame({
           data-story-block="energy-flow"
           data-testid="today-frame-day-flow"
         >
-          <div className={styles.flowBlock}>
-            <p className={styles.eyebrowOnArt}>Поток дня</p>
-            <div className={styles.flowOnArt}>
-              <TodayGlanceTimelineSlot dateISO={dateISO} />
+          <div className={styles.storyPaneBody}>
+            <div className={styles.flowBlock}>
+              <p className={styles.eyebrowOnArt}>Поток дня</p>
+              <div className={styles.flowOnArt}>
+                <TodayGlanceTimelineSlot dateISO={dateISO} />
+              </div>
             </div>
           </div>
           <StoryNextAnchor title={nextTitle} hint={nextHint} onNext={onGoNext} />
@@ -255,11 +263,13 @@ export function TodayAttributesFrame({
     <div className={`${styles.frame} ${styles.storyScroll}`} data-story-scroll="pane" data-testid="today-frame-attributes">
       {colorGuide ? (
         <section className={styles.storyPane} data-story-block="attr-color">
-          <div className={styles.colorHero}>
-            <TodayDayColorGuideSection guide={colorGuide} />
+          <div className={styles.storyPaneBody}>
+            <div className={styles.colorHero}>
+              <TodayDayColorGuideSection guide={colorGuide} />
+            </div>
           </div>
           {hasTheme || hasFocus || hasAvoid ? (
-            <StoryBlockCue targetId={hasTheme ? "attr-theme" : hasFocus ? "attr-focus" : "attr-avoid"} />
+            <StoryBlockCue targetId={hasTheme ? "attr-theme" : hasFocus ? "attr-focus" : "attr-avoid"} label={copy.storyNext.scrollMore} />
           ) : (
             <StoryNextAnchor
               title={copy.storyNext.practice}
@@ -272,14 +282,16 @@ export function TodayAttributesFrame({
 
       {hasTheme ? (
         <section className={styles.storyPane} data-story-block="attr-theme">
-          <div className={styles.centerStack}>
-            <p className={styles.eyebrow}>{themeLabel}</p>
-            <h2 className={styles.themePrimary} data-testid="today-attributes-theme">
-              {themeText}
-            </h2>
+          <div className={styles.storyPaneBody}>
+            <div className={styles.centerStack}>
+              <p className={styles.eyebrow}>{themeLabel}</p>
+              <h2 className={styles.themePrimary} data-testid="today-attributes-theme">
+                {themeText}
+              </h2>
+            </div>
           </div>
           {hasFocus || hasAvoid ? (
-            <StoryBlockCue targetId={hasFocus ? "attr-focus" : "attr-avoid"} />
+            <StoryBlockCue targetId={hasFocus ? "attr-focus" : "attr-avoid"} label={copy.storyNext.scrollMore} />
           ) : (
             <StoryNextAnchor
               title={copy.storyNext.practice}
@@ -296,30 +308,32 @@ export function TodayAttributesFrame({
           data-story-block="attr-focus"
           data-testid="today-glance-daily-focus"
         >
-          <div className={styles.listBlock}>
-            <p className={styles.eyebrow}>{copy.journey.glanceFocusLabel}</p>
-            {focusTitle ? (
-              <p className={styles.focusTitle} data-testid="today-glance-focus-title">
-                {focusTitle}
-              </p>
-            ) : null}
-            {prioritize ? (
-              <ul className={styles.cardList}>
-                <li className={styles.cardItem} data-testid="today-glance-focus-prioritize">
-                  <span className={styles.cardItemLabel}>
-                    {copy.journey.glanceFocusPrioritize.replace(" · ", "")}
-                  </span>
-                  <span>{prioritize}</span>
-                </li>
-              </ul>
-            ) : !focusTitle ? (
-              <p className={styles.muted} data-testid="today-glance-focus-empty">
-                {TODAY_NO_SHARP_FOCUS_COPY}
-              </p>
-            ) : null}
+          <div className={styles.storyPaneBody}>
+            <div className={styles.listBlock}>
+              <p className={styles.eyebrow}>{copy.journey.glanceFocusLabel}</p>
+              {focusTitle ? (
+                <p className={styles.focusTitle} data-testid="today-glance-focus-title">
+                  {focusTitle}
+                </p>
+              ) : null}
+              {prioritize ? (
+                <ul className={styles.cardList}>
+                  <li className={styles.cardItem} data-testid="today-glance-focus-prioritize">
+                    <span className={styles.cardItemLabel}>
+                      {copy.journey.glanceFocusPrioritize.replace(" · ", "")}
+                    </span>
+                    <span>{prioritize}</span>
+                  </li>
+                </ul>
+              ) : !focusTitle ? (
+                <p className={styles.muted} data-testid="today-glance-focus-empty">
+                  {TODAY_NO_SHARP_FOCUS_COPY}
+                </p>
+              ) : null}
+            </div>
           </div>
           {hasAvoid ? (
-            <StoryBlockCue targetId="attr-avoid" label={copy.storyNext.avoidLabel} />
+            <StoryBlockCue targetId="attr-avoid" label={copy.storyNext.scrollMore} />
           ) : (
             <StoryNextAnchor
               title={copy.storyNext.practice}
@@ -336,16 +350,18 @@ export function TodayAttributesFrame({
           data-story-block="attr-avoid"
           data-testid="today-attributes-avoid"
         >
-          <div className={styles.listBlock}>
-            <p className={styles.eyebrow}>{copy.storyNext.avoidLabel}</p>
-            <ul className={styles.cardList}>
-              <li className={styles.cardItem} data-testid="today-glance-focus-avoid">
-                <span className={styles.cardItemLabel}>
-                  {copy.journey.glanceFocusAvoid.replace(" · ", "")}
-                </span>
-                <span>{avoid}</span>
-              </li>
-            </ul>
+          <div className={styles.storyPaneBody}>
+            <div className={styles.listBlock}>
+              <p className={styles.eyebrow}>{copy.storyNext.avoidLabel}</p>
+              <ul className={styles.cardList}>
+                <li className={styles.cardItem} data-testid="today-glance-focus-avoid">
+                  <span className={styles.cardItemLabel}>
+                    {copy.journey.glanceFocusAvoid.replace(" · ", "")}
+                  </span>
+                  <span>{avoid}</span>
+                </li>
+              </ul>
+            </div>
           </div>
           <StoryNextAnchor
             title={copy.storyNext.practice}
@@ -396,34 +412,38 @@ export function TodayPracticeFrame({
       <ImmersiveArtPlane role="practice" testId="today-frame-art-practice" />
       <div className={styles.immersiveContent}>
         <section className={styles.storyPane} data-story-block="practice-hero">
-          <p className={styles.eyebrowOnArt}>Практика дня</p>
-          {title ? (
-            <h2 className={styles.practiceTitleOnArt} data-testid="today-practice-title">
-              {title}
-            </h2>
-          ) : (
-            <p className={styles.mutedOnArt}>Сегодня без отдельной практики — держи ритм дня.</p>
-          )}
-          {meta ? <p className={styles.detailOnArt}>{meta}</p> : null}
-          {title && !completed ? (
-            <DsButton
-              type="button"
-              variant="primary"
-              className={styles.practiceCta}
-              data-testid="today-tool-practice"
-              disabled={completing}
-              onClick={onAction}
-            >
-              {actionLabel}
-            </DsButton>
-          ) : null}
-          {completed ? <p className={styles.detailOnArt}>{copy.practiceCompleted}</p> : null}
-          {linkSlot ? <div className={styles.linkOnArt}>{linkSlot}</div> : null}
-          <StoryNextAnchor
-            title={copy.storyNext.insight}
-            hint={copy.storyNext.insightHint}
-            onNext={onGoNext}
-          />
+          <div className={styles.storyPaneBody}>
+            <p className={styles.eyebrowOnArt}>Практика дня</p>
+            {title ? (
+              <h2 className={styles.practiceTitleOnArt} data-testid="today-practice-title">
+                {title}
+              </h2>
+            ) : (
+              <p className={styles.mutedOnArt}>Сегодня без отдельной практики — держи ритм дня.</p>
+            )}
+            {meta ? <p className={styles.detailOnArt}>{meta}</p> : null}
+            {completed ? <p className={styles.detailOnArt}>{copy.practiceCompleted}</p> : null}
+            {linkSlot ? <div className={styles.linkOnArt}>{linkSlot}</div> : null}
+          </div>
+          <div className={styles.storyPaneFooter}>
+            {title && !completed ? (
+              <DsButton
+                type="button"
+                variant="primary"
+                className={styles.practiceCta}
+                data-testid="today-tool-practice"
+                disabled={completing}
+                onClick={onAction}
+              >
+                {actionLabel}
+              </DsButton>
+            ) : null}
+            <StoryNextAnchor
+              title={copy.storyNext.insight}
+              hint={copy.storyNext.insightHint}
+              onNext={onGoNext}
+            />
+          </div>
         </section>
       </div>
     </div>
@@ -454,21 +474,23 @@ export function TodayInsightFrame({
       data-testid="today-frame-insight"
     >
       <section className={styles.storyPane} data-story-block="insight-hero">
-        <div className={styles.insightHero}>
-          <span className={styles.quoteMark} aria-hidden>
-            “
-          </span>
-          <p className={styles.eyebrow}>Инсайт дня</p>
-          {hero ? (
-            <h2 className={styles.insightPrimary} data-testid="today-insight-hero">
-              {hero}
-            </h2>
-          ) : null}
+        <div className={styles.storyPaneBody}>
+          <div className={styles.insightHero}>
+            <span className={styles.quoteMark} aria-hidden>
+              “
+            </span>
+            <p className={styles.eyebrow}>Инсайт дня</p>
+            {hero ? (
+              <h2 className={styles.insightPrimary} data-testid="today-insight-hero">
+                {hero}
+              </h2>
+            ) : null}
+          </div>
         </div>
         {hasStory ? (
-          <StoryBlockCue targetId="insight-story" />
+          <StoryBlockCue targetId="insight-story" label={copy.storyNext.scrollMore} />
         ) : hasDialogue ? (
-          <StoryBlockCue targetId="insight-dialogue" />
+          <StoryBlockCue targetId="insight-dialogue" label={copy.storyNext.scrollMore} />
         ) : (
           <StoryNextAnchor
             title={copy.storyNext.close}
@@ -480,9 +502,11 @@ export function TodayInsightFrame({
 
       {hasStory ? (
         <section className={styles.storyPane} data-story-block="insight-story">
-          <div className={styles.insightBody}>{story}</div>
+          <div className={styles.storyPaneBody}>
+            <div className={styles.insightBody}>{story}</div>
+          </div>
           {hasDialogue ? (
-            <StoryBlockCue targetId="insight-dialogue" />
+            <StoryBlockCue targetId="insight-dialogue" label={copy.storyNext.scrollMore} />
           ) : (
             <StoryNextAnchor
               title={copy.storyNext.close}
@@ -495,7 +519,9 @@ export function TodayInsightFrame({
 
       {hasDialogue ? (
         <section className={styles.storyPane} data-story-block="insight-dialogue">
-          <div className={styles.insightBody}>{dialogue}</div>
+          <div className={styles.storyPaneBody}>
+            <div className={styles.insightBody}>{dialogue}</div>
+          </div>
           <StoryNextAnchor
             title={copy.storyNext.close}
             hint={copy.storyNext.closeHint}
@@ -529,13 +555,15 @@ export function TodayCloseFrame({
       data-testid="today-frame-close"
     >
       <section className={styles.storyPane} data-story-block="close-question">
-        <div className={styles.centerStack}>
-          <p className={styles.eyebrow}>Вопрос на вечер</p>
-          <h2 className={styles.eveningQuestion} data-testid="today-evening-question">
-            {eveningQuestion?.trim() || "Что сегодня было по-настоящему важным?"}
-          </h2>
+        <div className={styles.storyPaneBody}>
+          <div className={styles.centerStack}>
+            <p className={styles.eyebrow}>Вопрос на вечер</p>
+            <h2 className={styles.eveningQuestion} data-testid="today-evening-question">
+              {eveningQuestion?.trim() || "Что сегодня было по-настоящему важным?"}
+            </h2>
+          </div>
         </div>
-        <StoryBlockCue targetId="close-response" />
+        <StoryBlockCue targetId="close-response" label={copy.storyNext.scrollMore} />
       </section>
 
       <section
@@ -543,29 +571,34 @@ export function TodayCloseFrame({
         data-story-block="close-response"
         data-testid="today-slot-tap-wrap"
       >
-        <div className={styles.responseWrap}>
-          <TodayTapWidget
-            contract={contract}
-            dateISO={dateISO}
-            initialResponse={tapResponse}
-            onRecorded={onTapRecorded}
-          />
+        <div className={styles.storyPaneBody}>
+          <div className={styles.responseWrap}>
+            <TodayTapWidget
+              contract={contract}
+              dateISO={dateISO}
+              initialResponse={tapResponse}
+              onRecorded={onTapRecorded}
+            />
+          </div>
         </div>
-        <StoryBlockCue targetId="close-cta" label={copy.eveningCta} />
+        <StoryBlockCue targetId="close-cta" label={copy.storyNext.scrollMore} />
       </section>
 
       <section className={styles.storyPane} data-story-block="close-cta">
-        <DsCard
-          variant="glass"
-          size="compact"
-          as="button"
-          className={styles.eveningCta}
-          testId="today-evening-open"
-          onClick={onOpenEvening}
-        >
-          <span className={styles.teaserLabel}>{copy.eveningCta}</span>
-          <span className={styles.teaserHook}>{copy.eveningHint}</span>
-        </DsCard>
+        <div className={styles.storyPaneBody} />
+        <div className={styles.storyPaneFooter}>
+          <DsCard
+            variant="glass"
+            size="compact"
+            as="button"
+            className={styles.eveningCta}
+            testId="today-evening-open"
+            onClick={onOpenEvening}
+          >
+            <span className={styles.teaserLabel}>{copy.eveningCta}</span>
+            <span className={styles.teaserHook}>{copy.eveningHint}</span>
+          </DsCard>
+        </div>
       </section>
     </div>
   );

@@ -1695,7 +1695,9 @@ export function TodayCompositionSurface(props: Props) {
                     testId="today-zone-tarot-impact"
                   />
                   {(story.numberImpact || props.numerologyValue || symbolHooksView?.number?.hook_reveal) ? (
-                    <StoryBlockCue targetId="symbols-number" label={copy.storyNext.numberCue} />
+                    <StoryBlockCue targetId="symbols-number" label={copy.storyNext.scrollMore} />
+                  ) : useProductPersonalized ? (
+                    <StoryBlockCue targetId="symbols-next" label={copy.storyNext.scrollMore} />
                   ) : null}
                 </section>
               ) : null}
@@ -1725,6 +1727,9 @@ export function TodayCompositionSurface(props: Props) {
                     }
                     testId="today-zone-number-impact"
                   />
+                  {useProductPersonalized ? (
+                    <StoryBlockCue targetId="symbols-next" label={copy.storyNext.scrollMore} />
+                  ) : null}
                 </section>
               ) : null}
             </div>

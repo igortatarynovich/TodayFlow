@@ -64,6 +64,7 @@ export const TODAY_COMPOSITION_COPY = {
   /** Story next-anchor foreshadow (presentation only). */
   storyNext: {
     further: "Дальше",
+    scrollMore: "Листайте дальше",
     energy: "Энергия дня",
     energyHint: "Какой сегодня день.",
     symbols: "Символы дня",

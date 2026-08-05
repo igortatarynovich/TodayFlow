@@ -46,20 +46,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  padding: var(--sf-chrome-h, 3.25rem) 1rem 1.5rem;
-}
-
-.storyFrame :global([data-story-block]) > *,
-.storyFrame :global([data-story-pane]) > *:not([data-testid="today-story-block-cue"]):not([data-testid="today-story-next-anchor"]) {
-  width: 100%;
-  max-width: 28rem;
+  justify-content: flex-start;
+  gap: 0;
+  padding: calc(var(--sf-chrome-h, 3.25rem) + 0.35rem) 1.15rem 1.65rem;
 }
 
 .storyFrame :global([data-testid="today-story-block-cue"]),
 .storyFrame :global([data-testid="today-story-next-anchor"]) {
   margin-top: auto;
+  flex-shrink: 0;
+}
+
+.storyFrame :global([data-story-block]) > :not([data-testid="today-story-block-cue"]):not([data-testid="today-story-next-anchor"]),
+.storyFrame :global([data-story-pane]) > :not([data-testid="today-story-block-cue"]):not([data-testid="today-story-next-anchor"]) {
+  width: 100%;
+  max-width: 22rem;
+  flex: 1 1 auto;
 }
 
 .practiceLink {
