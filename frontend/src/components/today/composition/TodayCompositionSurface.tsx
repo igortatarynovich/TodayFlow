@@ -1627,7 +1627,7 @@ export function TodayCompositionSurface(props: Props) {
       dateISO={dateISO}
       dateLabel={props.displayDate}
       greetingSalutation={story.greeting.salutation}
-      greetingHeadline={story.greeting.line || dayTexture || glanceEyebrow}
+      greetingHeadline={story.greeting.line}
       themeTitle={copy.journey.glanceThemeLabel}
       dayTexture={dayTexture}
       dailyFocus={glanceDailyFocus}
@@ -1761,7 +1761,6 @@ export function TodayCompositionSurface(props: Props) {
         }
         void onPracticeAction();
       }}
-      eveningQuestion={story.eveningQuestion}
       contract={props.contract}
       tapResponse={engagement.tapResponse}
       onTapRecorded={(response) => persistEngagement({ tapResponse: response })}

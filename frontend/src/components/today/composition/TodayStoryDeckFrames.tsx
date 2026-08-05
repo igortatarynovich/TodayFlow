@@ -9,13 +9,13 @@ import { DsButton } from "@/design-system/primitives/DsButton";
 import { DsCard } from "@/design-system/primitives/DsCard";
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
-import { TodayGlanceTimelineSlot } from "@/components/today/composition/TodayWave2Slots";
 import { TodayTapWidget } from "@/components/today/composition/TodayWave2Slots";
 import type { TodayDayColorGuide } from "@/lib/todayDayColorGuide";
 import type { GlanceDailyFocusModel } from "@/lib/todayDailyFocus";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import type { TapResponseCode } from "@/lib/todayTapWidget";
 import { TODAY_NO_SHARP_FOCUS_COPY } from "@/lib/todayGlanceTexture";
+import { buildStoryDayFlow } from "@/lib/todayStoryDayFlow";
 import {
   resolveTodayStoryFrameArt,
   type TodayStoryArtRole,
@@ -170,20 +170,33 @@ export function TodayGreetingFrame({
 export function TodayEnergyFlowFrame({
   energyLine,
   energyCause,
-  dateISO,
+  prioritize,
+  avoid,
+  moveDo,
+  moveAvoid,
   onGoNext,
   nextTitle = copy.storyNext.symbols,
   nextHint = copy.storyNext.symbolsHint,
 }: {
   energyLine: string | null;
   energyCause: string | null;
-  dateISO: string;
+  prioritize?: string | null;
+  avoid?: string | null;
+  moveDo?: string | null;
+  moveAvoid?: string | null;
   onGoNext: () => void;
   nextTitle?: string;
   nextHint?: string;
 }) {
   const energy = (energyLine || "").trim() || null;
   const cause = (energyCause || "").trim() || null;
+  const dayFlow = buildStoryDayFlow({
+    energyLine: energy,
+    prioritize,
+    avoid,
+    moveDo,
+    moveAvoid,
+  });
   return (
     <div
       className={immersiveClass("energy", styles.frame)}
@@ -216,17 +229,40 @@ export function TodayEnergyFlowFrame({
         </section>
 
         <section
-          className={`${styles.storyPane} ${styles.storyPaneCenter}`}
+          className={`${styles.storyPane} ${styles.storyPaneStack}`}
           data-story-block="energy-flow"
           data-testid="today-frame-day-flow"
         >
           <div className={styles.storyPaneBody}>
             <div className={styles.flowBlock}>
-              <p className={styles.eyebrowOnArt}>Поток дня</p>
-              <p className={styles.flowLeadOnArt}>Лучшие часы — для чего сегодня удобнее опереться.</p>
-              <div className={styles.flowOnArt}>
-                <TodayGlanceTimelineSlot dateISO={dateISO} variant="story" />
-              </div>
+              <header className={styles.flowHeader}>
+                <p className={styles.eyebrowOnArt}>Поток дня</p>
+                <p className={styles.flowLeadOnArt}>
+                  Как пройти день: старт, задачи, диалоги, итог и отдых.
+                </p>
+              </header>
+              <ol className={styles.dayFlow} data-testid="today-story-day-flow">
+                {dayFlow.map((point, index) => (
+                  <li
+                    key={point.id}
+                    className={styles.dayFlowItem}
+                    data-valence={point.valence}
+                    data-testid={`today-day-flow-${point.id}`}
+                  >
+                    <div className={styles.dayFlowRail} aria-hidden>
+                      <span className={styles.dayFlowDot} />
+                      {index < dayFlow.length - 1 ? <span className={styles.dayFlowLine} /> : null}
+                    </div>
+                    <div className={styles.dayFlowCopy}>
+                      <p className={styles.dayFlowPhase}>{point.phase}</p>
+                      <p className={styles.dayFlowCue} data-valence={point.valence}>
+                        {point.cue}
+                      </p>
+                      <p className={styles.dayFlowBody}>{point.body}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
             </div>
           </div>
           <StoryNextAnchor title={nextTitle} hint={nextHint} onNext={onGoNext} />
@@ -544,14 +580,12 @@ export function TodayInsightFrame({
 }
 
 export function TodayCloseFrame({
-  eveningQuestion,
   contract,
   dateISO,
   tapResponse,
   onTapRecorded,
   onOpenEvening,
 }: {
-  eveningQuestion: string | null;
   contract: TodayContractV1;
   dateISO: string;
   tapResponse?: TapResponseCode | null;
@@ -564,18 +598,6 @@ export function TodayCloseFrame({
       data-story-scroll="pane"
       data-testid="today-frame-close"
     >
-      <section className={styles.storyPane} data-story-block="close-question">
-        <div className={styles.storyPaneBody}>
-          <div className={styles.centerStack}>
-            <p className={styles.eyebrow}>Вопрос на вечер</p>
-            <h2 className={styles.eveningQuestion} data-testid="today-evening-question">
-              {eveningQuestion?.trim() || "Что сегодня было по-настоящему важным?"}
-            </h2>
-          </div>
-        </div>
-        <StoryBlockCue targetId="close-response" label={copy.storyNext.scrollMore} />
-      </section>
-
       <section
         className={styles.storyPane}
         data-story-block="close-response"

@@ -300,7 +300,7 @@ export function buildTodayDayStoryViewModel(input: {
   const greeting = buildTodayDayGreeting({
     phase,
     userName: input.userName,
-    tagline: spine.thesis,
+    dateISO: input.dateISO,
     yesterdayClosed: input.yesterdayClosed,
     todayOpened: input.todayOpened,
     isEveningSurface,

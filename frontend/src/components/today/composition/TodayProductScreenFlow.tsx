@@ -49,7 +49,6 @@ export type TodayProductScreenFlowProps = {
   practiceCompleted?: boolean;
   practiceCompleting?: boolean;
   onPracticeAction?: () => void;
-  eveningQuestion?: string | null;
   contract: TodayContractV1;
   tapResponse?: TapResponseCode | null;
   onTapRecorded?: (response: TapResponseCode) => void;
@@ -126,7 +125,6 @@ export function TodayProductScreenFlow({
   practiceCompleted = false,
   practiceCompleting = false,
   onPracticeAction,
-  eveningQuestion = null,
   contract,
   tapResponse = null,
   onTapRecorded,
@@ -172,7 +170,10 @@ export function TodayProductScreenFlow({
             <TodayEnergyFlowFrame
               energyLine={energyLine}
               energyCause={energyCause}
-              dateISO={dateISO}
+              prioritize={dailyFocus?.prioritize}
+              avoid={dailyFocus?.avoid}
+              moveDo={moveDo}
+              moveAvoid={moveAvoid}
               onGoNext={() => go(energyNextIndex)}
               nextTitle={energyNextTitle}
               nextHint={energyNextHint}
@@ -236,7 +237,6 @@ export function TodayProductScreenFlow({
 
             <ScreenFlowStep id="close" label="Вечер" scrollable={false}>
               <TodayCloseFrame
-                eveningQuestion={eveningQuestion}
                 contract={contract}
                 dateISO={dateISO}
                 tapResponse={tapResponse}

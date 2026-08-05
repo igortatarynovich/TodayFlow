@@ -555,12 +555,21 @@
   flex: 0 0 auto;
 }
 
+.flowHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 0 1rem;
+  text-align: center;
+}
+
 .flowLeadOnArt {
-  margin: 0 0 0.35rem;
+  margin: 0;
   max-width: 28ch;
-  font-size: 0.88rem;
-  line-height: 1.4;
-  color: rgba(255, 248, 240, 0.72);
+  font-size: 0.98rem;
+  line-height: 1.45;
+  color: rgba(255, 248, 240, 0.78);
   text-align: center;
 }
 
@@ -572,18 +581,106 @@
   text-align: left;
 }
 
-.flowOnArt {
-  margin-top: 0.35rem;
-  padding: 0.85rem 0.9rem;
-  border-radius: var(--tf-surface-insight-radius, 28px);
-  background: color-mix(in srgb, #0a0e18 42%, transparent);
-  border: 1px solid color-mix(in srgb, #fff 14%, transparent);
-  backdrop-filter: blur(10px);
-  color: rgba(255, 248, 240, 0.92);
+.dayFlow {
+  list-style: none;
+  margin: 0;
+  padding: 0.35rem 0.15rem 0.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
-.flowOnArt :global(*) {
-  color: inherit;
+.dayFlowItem {
+  display: grid;
+  grid-template-columns: 1.1rem minmax(0, 1fr);
+  gap: 0.85rem;
+  align-items: stretch;
+  min-height: 0;
+}
+
+.dayFlowRail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 0.35rem;
+}
+
+.dayFlowDot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, #e6c98a 88%, #fff);
+  box-shadow: 0 0 0 3px color-mix(in srgb, #e6c98a 22%, transparent);
+  flex-shrink: 0;
+}
+
+.dayFlowItem[data-valence="caution"] .dayFlowDot {
+  background: color-mix(in srgb, #e0a88a 88%, #fff);
+  box-shadow: 0 0 0 3px color-mix(in srgb, #e0a88a 22%, transparent);
+}
+
+.dayFlowItem[data-valence="neutral"] .dayFlowDot {
+  background: rgba(255, 248, 240, 0.55);
+  box-shadow: 0 0 0 3px color-mix(in srgb, #fff 10%, transparent);
+}
+
+.dayFlowLine {
+  flex: 1 1 auto;
+  width: 1px;
+  min-height: 1.1rem;
+  margin: 0.35rem 0 0.1rem;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, #fff 34%, transparent),
+    color-mix(in srgb, #fff 10%, transparent)
+  );
+}
+
+.dayFlowCopy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  padding: 0 0 1.05rem;
+  min-width: 0;
+}
+
+.dayFlowItem:last-child .dayFlowCopy {
+  padding-bottom: 0.15rem;
+}
+
+.dayFlowPhase {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 248, 240, 0.62);
+}
+
+.dayFlowCue {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, #e6c98a 80%, #fff);
+}
+
+.dayFlowCue[data-valence="caution"] {
+  color: color-mix(in srgb, #e0a88a 88%, #fff);
+}
+
+.dayFlowCue[data-valence="neutral"] {
+  color: rgba(255, 248, 240, 0.55);
+}
+
+.dayFlowBody {
+  margin: 0.1rem 0 0;
+  font-size: 1.02rem;
+  font-weight: 520;
+  line-height: 1.4;
+  color: rgba(255, 248, 240, 0.94);
 }
 
 .cardList {
@@ -708,16 +805,6 @@
   flex-direction: column;
   align-items: center;
   gap: 0.75rem;
-}
-
-.eveningQuestion {
-  margin: 0;
-  max-width: 16ch;
-  font-family: var(--tf-font-display, Georgia, serif);
-  font-size: clamp(1.55rem, 6vw, 2.05rem);
-  font-weight: 600;
-  line-height: 1.2;
-  color: var(--tf-ink, #2a2520);
 }
 
 .responseWrap {
