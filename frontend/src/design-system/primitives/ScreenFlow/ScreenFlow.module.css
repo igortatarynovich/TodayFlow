@@ -13,6 +13,40 @@
   overscroll-behavior: none;
 }
 
+/** Today story deck — fill the product main pane; chrome floats over the step. */
+.storyBleed {
+  max-width: none;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  flex: 1 1 auto;
+  margin-inline: 0;
+}
+
+.storyBleed > .chrome {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: transparent;
+}
+
+.storyBleed > .chrome button {
+  pointer-events: auto;
+}
+
+.storyBleed > .viewport {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+}
+
+.storyBleed .step {
+  padding: 0;
+}
+
 .root[data-axis="x"] { touch-action: pan-y; }
 .root[data-axis="y"] { touch-action: pan-x; }
 

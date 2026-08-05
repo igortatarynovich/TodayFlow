@@ -3,8 +3,10 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { ScreenFlow, ScreenFlowStep, TODAY_SCREEN_FLOW_AXIS } from "@/design-system/primitives/ScreenFlow";
+import { joinClass } from "@/design-system/utils/joinClass";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import flowStyles from "@/components/today/composition/TodayProductScreenFlow.module.css";
+import sfStyles from "@/design-system/primitives/ScreenFlow/ScreenFlow.module.css";
 import {
   StoryNextAnchor,
   TodayAttributesFrame,
@@ -151,6 +153,7 @@ export function TodayProductScreenFlow({
         onIndexChange={onIndexChange}
         axis={TODAY_SCREEN_FLOW_AXIS}
         showChrome
+        className={joinClass(flowStyles.screenFlowStory, sfStyles.storyBleed)}
         testId="today-screen-flow"
       >
         <ScreenFlowStep id="greeting" label="Приветствие" scrollable={false}>

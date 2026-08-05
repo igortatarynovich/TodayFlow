@@ -41,19 +41,18 @@
   scroll-margin-top: 1.25rem;
 }
 
-/* Immersive photo = the frame's own opaque background (not a layer on Day Atmosphere).
- * Full-bleed against ScreenFlow .step padding (0.5 / 1 / 0.85). */
+/* Immersive photo = opaque background of this frame (fills the ScreenFlow step). */
 .immersive {
   position: relative;
   isolation: isolate;
   z-index: 1;
-  margin: -0.5rem -1rem -0.85rem;
-  width: calc(100% + 2rem);
-  min-height: calc(100% + 1.35rem);
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+  height: 100%;
   padding: 0;
   overflow: hidden;
   box-sizing: border-box;
-  /* Solid base so theme art never shows through */
   background-color: #0c0a12;
   background-image: var(--story-art);
   background-size: cover;
@@ -115,7 +114,8 @@
   width: 100%;
   min-height: 100%;
   box-sizing: border-box;
-  padding: 1.1rem 1rem 1.35rem;
+  /* Top pad clears overlaid ScreenFlow dots chrome */
+  padding: 3.25rem 1.25rem 1.35rem;
   gap: 1rem;
 }
 

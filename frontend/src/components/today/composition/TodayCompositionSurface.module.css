@@ -44,8 +44,13 @@
   margin: 0;
   padding: 0;
   background: transparent;
-  min-height: auto;
+  min-height: 0;
+  height: 100%;
+  flex: 1 1 auto;
   gap: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .rootWebEmbed .continuityWrap {
@@ -2187,6 +2192,9 @@
 .ritualTransformBanner {
   margin: 0.75rem 0 0;
   padding: 0.75rem 1rem;
+  border: none;
+  outline: none;
+  box-shadow: none;
   border-radius: 10px;
   background: #f3ebe0;
   font-size: 0.9375rem;

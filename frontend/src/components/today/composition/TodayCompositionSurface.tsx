@@ -1954,7 +1954,7 @@ export function TodayCompositionSurface(props: Props) {
           </section>
         ) : null}
 
-        {story.ritualTransformBanner ? (
+        {!useProductFoundation && story.ritualTransformBanner ? (
           <p className={styles.ritualTransformBanner} data-testid="today-ritual-transform">
             {story.ritualTransformBanner}
           </p>

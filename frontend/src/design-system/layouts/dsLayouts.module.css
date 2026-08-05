@@ -482,6 +482,15 @@
   flex-direction: column;
 }
 
+/* Story deck: no side gutters — immersive photos are the pane background. */
+.productWebMain:has(.productWebContentStory) {
+  padding-inline: 0;
+  gap: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .compatWebResultContent {
   width: 100%;
   max-width: none;
