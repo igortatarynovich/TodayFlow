@@ -1,19 +1,27 @@
 /**
- * Story-deck «Поток дня» — 4–5 phase points across the whole day.
- * Not glance_timeline (exact aspect windows). Presentation from day signals only.
+ * Story-deck «Поток дня» — full day arc + real glance timed windows.
+ *
+ * Always: Утро → (окна / дневной ритм) → Вечер → Ночь.
+ * Timed rows come from `glance_timeline` (exact sky windows). Morning/evening/night
+ * come from day energy / focus signals — framing, not invented fake calm on transport fail.
  */
+
+import type { GlanceTimelineItem } from "@/lib/todayGlanceTimeline";
+import { formatGlanceClock } from "@/lib/todayGlanceTimeline";
 
 export type StoryDayFlowValence = "favorable" | "caution" | "neutral";
 
 export type StoryDayFlowPoint = {
   id: string;
-  /** Утро / День / Диалоги / Вечер / Ночь */
+  /** Left rail: «Утро» / «04:45» / «Вечер» / «Ночь». */
   phase: string;
-  /** Clear human guidance — what this part of the day is for. */
+  /** What this part of the day is for. */
   body: string;
   valence: StoryDayFlowValence;
-  /** Short cue above the body (Благоприятно / Осторожнее / Старт …). */
+  /** Cue: Старт / Благоприятно / Осторожнее / Итог / Отдых. */
   cue: string;
+  /** True when phase is a clock from glance_timeline. */
+  timed?: boolean;
 };
 
 export type BuildStoryDayFlowInput = {
@@ -22,7 +30,11 @@ export type BuildStoryDayFlowInput = {
   avoid?: string | null;
   moveDo?: string | null;
   moveAvoid?: string | null;
+  /** Real exact-time windows from day_facts.glance_timeline. */
+  glanceWindows?: GlanceTimelineItem[] | null;
 };
+
+const MAX_TIMED_WINDOWS = 3;
 
 function clean(text: string | null | undefined): string {
   return (text || "").replace(/\s+/g, " ").trim();
@@ -53,79 +65,136 @@ function taskFocus(prioritize: string, moveDo: string): string | null {
   return raw || null;
 }
 
-/**
- * Always returns 5 points: start → tasks → dialogues → evening close → night rest.
- * Bodies adapt to energy / focus / avoid when present; otherwise calm defaults.
- */
-export function buildStoryDayFlow(input: BuildStoryDayFlowInput = {}): StoryDayFlowPoint[] {
-  const energy = clean(input.energyLine);
-  const prioritize = clean(input.prioritize);
-  const avoid = clean(input.avoid);
-  const moveDo = clean(input.moveDo);
-  const moveAvoid = clean(input.moveAvoid);
-  const tone = energyTone(energy);
-  const task = taskFocus(prioritize, moveDo);
-  const softTalk = talkCaution(avoid, moveAvoid);
+function asValence(raw: string | undefined): StoryDayFlowValence {
+  if (raw === "favorable") return "favorable";
+  if (raw === "caution") return "caution";
+  return "neutral";
+}
 
-  const start: StoryDayFlowPoint =
-    tone === "soft"
-      ? {
-          id: "start",
-          phase: "Утро",
-          cue: "Старт",
-          valence: "caution",
-          body: "Тяжёлый или медленный старт — без разгона: сначала тело, потом дела.",
-        }
-      : tone === "fast"
-        ? {
-            id: "start",
-            phase: "Утро",
-            cue: "Старт",
-            valence: "favorable",
-            body: "Быстрый старт: энергия уже есть — направь её в одно ясное дело.",
-          }
-        : {
-            id: "start",
-            phase: "Утро",
-            cue: "Старт",
-            valence: "favorable",
-            body: "Лёгкий старт, без спешки — день ещё открыт.",
-          };
+function expandWindowBody(label: string, valence: StoryDayFlowValence): string {
+  const t = clean(label);
+  if (!t) return valence === "caution" ? "В это окно лучше короче шаг." : "В это окно удобнее опереться.";
+  const low = t.toLowerCase();
+  if (/задач|импульс|ход/.test(low)) {
+    return valence === "caution"
+      ? `${t} — без разгона и лишних фронтов.`
+      : `${t} — удобное окно для быстрых дел.`;
+  }
+  if (/диалог|письм|слов|контакт/.test(low)) {
+    return valence === "caution"
+      ? `${t} — мягче и короче, без острых тем.`
+      : `${t} — хорошее окно для разговоров.`;
+  }
+  if (/отдых|пауза|настроен/.test(low)) {
+    return `${t} — лучше снизить темп.`;
+  }
+  return valence === "caution" ? `${t} — тише и короче.` : `${t} — окно, на которое можно опереться.`;
+}
 
-  const tasks: StoryDayFlowPoint = {
-    id: "tasks",
-    phase: "День",
-    cue: tone === "soft" ? "Осторожнее" : "Благоприятно",
-    valence: tone === "soft" ? "caution" : "favorable",
-    body: task
-      ? `Задачи: ${task[0]!.toLowerCase()}${task.slice(1)}.`
-      : tone === "soft"
-        ? "Задачи покороче и по одному фронту — без гонки за объёмом."
-        : "Задачи, где нужна ясность — удобнее в середине дня.",
+function morningPoint(tone: "soft" | "fast" | "steady"): StoryDayFlowPoint {
+  if (tone === "soft") {
+    return {
+      id: "morning",
+      phase: "Утро",
+      cue: "Старт",
+      valence: "caution",
+      body: "Тяжёлое или медленное утро — без разгона: сначала тело, потом дела.",
+    };
+  }
+  if (tone === "fast") {
+    return {
+      id: "morning",
+      phase: "Утро",
+      cue: "Старт",
+      valence: "favorable",
+      body: "Быстрое утро: энергия уже есть — направь её в одно ясное дело.",
+    };
+  }
+  return {
+    id: "morning",
+    phase: "Утро",
+    cue: "Старт",
+    valence: "favorable",
+    body: "Лёгкое утро, без спешки — день ещё открыт.",
   };
+}
 
-  const dialogues: StoryDayFlowPoint = softTalk
+function dayFallbackPoints(input: {
+  tone: "soft" | "fast" | "steady";
+  task: string | null;
+  softTalk: boolean;
+}): StoryDayFlowPoint[] {
+  const tasks: StoryDayFlowPoint = {
+    id: "day-tasks",
+    phase: "День",
+    cue: input.tone === "soft" ? "Осторожнее" : "Благоприятно",
+    valence: input.tone === "soft" ? "caution" : "favorable",
+    body: input.task
+      ? `Задачи: ${input.task[0]!.toLowerCase()}${input.task.slice(1)}.`
+      : input.tone === "soft"
+        ? "Днём — задачи покороче и по одному фронту."
+        : "Днём удобнее задачи, где нужна ясность.",
+  };
+  const dialogues: StoryDayFlowPoint = input.softTalk
     ? {
-        id: "dialogues",
+        id: "day-talk",
         phase: "Диалоги",
         cue: "Осторожнее",
         valence: "caution",
         body: "Разговоры — короче и мягче; острые темы лучше не разгонять.",
       }
     : {
-        id: "dialogues",
+        id: "day-talk",
         phase: "Диалоги",
         cue: "Благоприятно",
         valence: "favorable",
-        body: "Диалоги и гибкость — хорошее окно для живых разговоров.",
+        body: "Днём хорошо идут диалоги и гибкость в общении.",
       };
+  return [tasks, dialogues];
+}
+
+function timedPoints(windows: GlanceTimelineItem[]): StoryDayFlowPoint[] {
+  const sorted = [...windows].sort((a, b) =>
+    formatGlanceClock(a.time_local).localeCompare(formatGlanceClock(b.time_local)),
+  );
+  return sorted.slice(0, MAX_TIMED_WINDOWS).map((row, i) => {
+    const valence = asValence(String(row.valence || ""));
+    const label = clean(row.label_short) || "Окно дня";
+    return {
+      id: `window-${row.driver_id || i}`,
+      phase: formatGlanceClock(row.time_local),
+      cue: valence === "favorable" ? "Благоприятно" : valence === "caution" ? "Осторожнее" : "Окно",
+      valence,
+      body: expandWindowBody(label, valence),
+      timed: true,
+    };
+  });
+}
+
+/**
+ * Full-day Поток: morning + real timed windows (or day fallback) + evening + night rest.
+ */
+export function buildStoryDayFlow(input: BuildStoryDayFlowInput = {}): StoryDayFlowPoint[] {
+  const tone = energyTone(input.energyLine);
+  const prioritize = clean(input.prioritize);
+  const avoid = clean(input.avoid);
+  const moveDo = clean(input.moveDo);
+  const moveAvoid = clean(input.moveAvoid);
+  const task = taskFocus(prioritize, moveDo);
+  const softTalk = talkCaution(avoid, moveAvoid);
+  const windows = (input.glanceWindows || []).filter((w) => clean(w.time_local));
+
+  const mid =
+    windows.length > 0
+      ? timedPoints(windows)
+      : dayFallbackPoints({ tone, task, softTalk });
 
   const evening: StoryDayFlowPoint = {
     id: "evening",
     phase: "Вечер",
     cue: "Итог",
     valence: "neutral",
-    body: "Подведение итогов и благодарность — что сработало, что можно отпустить.",
+    body: "Вечер — подведение итогов и благодарность: что сработало, что отпустить.",
   };
 
   const night: StoryDayFlowPoint = {
@@ -133,8 +202,8 @@ export function buildStoryDayFlow(input: BuildStoryDayFlowInput = {}): StoryDayF
     phase: "Ночь",
     cue: "Отдых",
     valence: "neutral",
-    body: "Отпускание и отдых — день уже сделал своё.",
+    body: "Ночь — отпускание и отдых; день уже сделал своё.",
   };
 
-  return [start, tasks, dialogues, evening, night];
+  return [morningPoint(tone), ...mid, evening, night];
 }

@@ -595,13 +595,26 @@
   color: inherit;
 }
 
+.flowFail {
+  margin: 0;
+  padding: 0.5rem 0.25rem;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  text-align: center;
+  color: rgba(255, 248, 240, 0.78);
+}
+
 .dayFlow {
   list-style: none;
   margin: 0;
-  padding: 0.35rem 0.15rem 0.15rem;
   display: flex;
   flex-direction: column;
   gap: 0;
+  border-radius: var(--tf-surface-insight-radius, 28px);
+  background: color-mix(in srgb, #0a0e18 42%, transparent);
+  border: 1px solid color-mix(in srgb, #fff 14%, transparent);
+  backdrop-filter: blur(10px);
+  padding: 0.95rem 0.95rem 0.75rem;
 }
 
 .dayFlowItem {
@@ -665,11 +678,19 @@
 
 .dayFlowPhase {
   margin: 0;
-  font-size: 0.72rem;
-  font-weight: 650;
-  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(255, 248, 240, 0.62);
+  color: rgba(255, 248, 240, 0.7);
+  font-variant-numeric: tabular-nums;
+}
+
+.dayFlowItem[data-timed="true"] .dayFlowPhase {
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  letter-spacing: 0.04em;
+  font-size: 0.95rem;
+  color: rgba(255, 248, 240, 0.92);
 }
 
 .dayFlowCue {

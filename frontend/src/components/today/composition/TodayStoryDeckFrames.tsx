@@ -9,17 +9,24 @@ import { DsButton } from "@/design-system/primitives/DsButton";
 import { DsCard } from "@/design-system/primitives/DsCard";
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
-import { TodayGlanceTimelineSlot, TodayTapWidget } from "@/components/today/composition/TodayWave2Slots";
+import { TodayTapWidget } from "@/components/today/composition/TodayWave2Slots";
 import type { TodayDayColorGuide } from "@/lib/todayDayColorGuide";
 import type { GlanceDailyFocusModel } from "@/lib/todayDailyFocus";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import type { TapResponseCode } from "@/lib/todayTapWidget";
 import { TODAY_NO_SHARP_FOCUS_COPY } from "@/lib/todayGlanceTexture";
+import { fetchDayFacts } from "@/lib/todayDayFacts";
+import type { GlanceTimelineItem } from "@/lib/todayGlanceTimeline";
+import { buildStoryDayFlow, type StoryDayFlowPoint } from "@/lib/todayStoryDayFlow";
 import {
   resolveTodayStoryFrameArt,
   type TodayStoryArtRole,
 } from "@/lib/todayStoryFrameArt";
 import { findStoryBlockInStep, scrollStoryBlockIntoStep } from "@/lib/todayStoryScroll";
+import {
+  todaySlotFailureCopy,
+  type TodaySlotLoadFailure,
+} from "@/lib/todaySlotAvailability";
 import styles from "@/components/today/composition/TodayStoryDeckFrames.module.css";
 
 type StoryArtTone = "photo" | "energy" | "practice";
@@ -170,6 +177,10 @@ export function TodayEnergyFlowFrame({
   energyLine,
   energyCause,
   dateISO,
+  prioritize,
+  avoid,
+  moveDo,
+  moveAvoid,
   onGoNext,
   nextTitle = copy.storyNext.symbols,
   nextHint = copy.storyNext.symbolsHint,
@@ -177,6 +188,10 @@ export function TodayEnergyFlowFrame({
   energyLine: string | null;
   energyCause: string | null;
   dateISO: string;
+  prioritize?: string | null;
+  avoid?: string | null;
+  moveDo?: string | null;
+  moveAvoid?: string | null;
   onGoNext: () => void;
   nextTitle?: string;
   nextHint?: string;
@@ -224,18 +239,124 @@ export function TodayEnergyFlowFrame({
               <header className={styles.flowHeader}>
                 <p className={styles.eyebrowOnArt}>Поток дня</p>
                 <p className={styles.flowLeadOnArt}>
-                  Реальные окна дня: во сколько и для чего удобнее опереться.
+                  Утро, окна дня, вечер и отдых — как пройти сутки целиком.
                 </p>
               </header>
-              <div className={styles.flowOnArt}>
-                <TodayGlanceTimelineSlot dateISO={dateISO} variant="story" />
-              </div>
+              <TodayStoryDayFlowPane
+                dateISO={dateISO}
+                energyLine={energy}
+                prioritize={prioritize}
+                avoid={avoid}
+                moveDo={moveDo}
+                moveAvoid={moveAvoid}
+              />
             </div>
           </div>
           <StoryNextAnchor title={nextTitle} hint={nextHint} onNext={onGoNext} />
         </section>
       </div>
     </div>
+  );
+}
+
+function TodayStoryDayFlowPane({
+  dateISO,
+  energyLine,
+  prioritize,
+  avoid,
+  moveDo,
+  moveAvoid,
+}: {
+  dateISO: string;
+  energyLine: string | null;
+  prioritize?: string | null;
+  avoid?: string | null;
+  moveDo?: string | null;
+  moveAvoid?: string | null;
+}) {
+  const [windows, setWindows] = useState<GlanceTimelineItem[] | null>(null);
+  const [failure, setFailure] = useState<TodaySlotLoadFailure | null>(null);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoaded(false);
+    setFailure(null);
+    void fetchDayFacts(dateISO)
+      .then((data) => {
+        if (cancelled) return;
+        if (data.is_fallback ?? data.degraded) {
+          setFailure("unavailable");
+          setWindows([]);
+        } else {
+          setFailure(null);
+          setWindows(data.glance_timeline ?? []);
+        }
+        setLoaded(true);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setFailure("no_connection");
+        setWindows([]);
+        setLoaded(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [dateISO]);
+
+  if (!loaded) {
+    return (
+      <div className={styles.flowOnArt} data-testid="today-story-day-flow" data-loading="true" aria-busy />
+    );
+  }
+
+  if (failure === "no_connection") {
+    return (
+      <div className={styles.flowOnArt} data-testid="today-story-day-flow" data-failure="no_connection" role="status">
+        <p className={styles.flowFail}>{todaySlotFailureCopy("no_connection")}</p>
+      </div>
+    );
+  }
+
+  // Unavailable / empty windows: still show morning→evening→night from day signals.
+  const points = buildStoryDayFlow({
+    energyLine,
+    prioritize,
+    avoid,
+    moveDo,
+    moveAvoid,
+    glanceWindows: failure ? [] : windows,
+  });
+
+  return <StoryDayFlowList points={points} />;
+}
+
+function StoryDayFlowList({ points }: { points: StoryDayFlowPoint[] }) {
+  return (
+    <ol className={styles.dayFlow} data-testid="today-story-day-flow">
+      {points.map((point, index) => (
+        <li
+          key={point.id}
+          className={styles.dayFlowItem}
+          data-valence={point.valence}
+          data-timed={point.timed ? "true" : "false"}
+          data-testid={`today-day-flow-${point.id}`}
+        >
+          <div className={styles.dayFlowRail} aria-hidden>
+            <span className={styles.dayFlowDot} />
+            {index < points.length - 1 ? <span className={styles.dayFlowLine} /> : null}
+          </div>
+          <div className={styles.dayFlowCopy}>
+            <p className={styles.dayFlowPhase}>{point.phase}</p>
+            <p className={styles.dayFlowCue} data-valence={point.valence}>
+              {point.cue}
+            </p>
+            <p className={styles.dayFlowBody}>{point.body}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
   );
 }
 

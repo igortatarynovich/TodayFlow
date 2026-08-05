@@ -1,35 +1,50 @@
 import { buildStoryDayFlow } from "@/lib/todayStoryDayFlow";
+import type { GlanceTimelineItem } from "@/lib/todayGlanceTimeline";
 
 describe("todayStoryDayFlow", () => {
-  it("always returns five phase points covering the whole day", () => {
-    const points = buildStoryDayFlow();
-    expect(points).toHaveLength(5);
-    expect(points.map((p) => p.phase)).toEqual(["Утро", "День", "Диалоги", "Вечер", "Ночь"]);
-    expect(points[0]!.body).toMatch(/старт/i);
-    expect(points[3]!.body).toMatch(/итог|благодарност/i);
-    expect(points[4]!.body).toMatch(/отдых|отпускан/i);
+  it("always frames the day with morning, evening, and night rest", () => {
+    const points = buildStoryDayFlow({
+      energyLine: "Фаза луны минус энергия — спад честный.",
+    });
+    expect(points[0]?.phase).toBe("Утро");
+    expect(points[0]?.body).toMatch(/тяжёл|медленн/i);
+    expect(points[points.length - 2]?.phase).toBe("Вечер");
+    expect(points[points.length - 2]?.body).toMatch(/итог|благодарност/i);
+    expect(points[points.length - 1]?.phase).toBe("Ночь");
+    expect(points[points.length - 1]?.body).toMatch(/отдых|отпускан/i);
   });
 
-  it("soft energy yields a heavier morning start", () => {
+  it("inserts real glance windows between morning and evening", () => {
+    const windows: GlanceTimelineItem[] = [
+      {
+        time_local: "2026-08-05T16:15:00",
+        label_short: "Диалоги и письма",
+        valence: "favorable",
+        driver_id: "a",
+      },
+      {
+        time_local: "2026-08-05T04:45:00",
+        label_short: "Короткие задачи",
+        valence: "favorable",
+        driver_id: "b",
+      },
+    ];
     const points = buildStoryDayFlow({
-      energyLine: "Фаза луны минус энергия — спад честный и громкий.",
+      energyLine: "Ровный темп",
+      glanceWindows: windows,
     });
-    expect(points[0]!.valence).toBe("caution");
-    expect(points[0]!.body).toMatch(/тяжёл|медленн|без разгона/i);
+    expect(points.map((p) => p.phase)).toEqual(["Утро", "04:45", "16:15", "Вечер", "Ночь"]);
+    expect(points[1]?.body).toMatch(/Короткие задачи/i);
+    expect(points[1]?.timed).toBe(true);
+    expect(points[2]?.body).toMatch(/Диалоги/i);
   });
 
-  it("uses prioritize for the day tasks point", () => {
+  it("falls back to day tasks/dialogues when no timed windows", () => {
     const points = buildStoryDayFlow({
-      prioritize: "Закрыть один важный разговор без давления",
+      prioritize: "Закрыть один важный разговор",
+      avoid: "Не ввязываться в острые споры",
     });
-    expect(points[1]!.body).toMatch(/Закрыть один важный разговор/i);
-  });
-
-  it("marks dialogues caution when avoid is about words", () => {
-    const points = buildStoryDayFlow({
-      avoid: "Не ввязываться в острые споры и переписку на эмоциях",
-    });
-    expect(points[2]!.valence).toBe("caution");
-    expect(points[2]!.body).toMatch(/Разговоры|острые/i);
+    expect(points.some((p) => /Задачи:/i.test(p.body))).toBe(true);
+    expect(points.some((p) => p.phase === "Диалоги" && p.valence === "caution")).toBe(true);
   });
 });
