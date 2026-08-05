@@ -472,6 +472,16 @@
   margin-inline: auto;
 }
 
+/** Today composition story frames — bleed to shell edges; ScreenFlow owns height. */
+.productWebContentStory {
+  max-width: none;
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .compatWebResultContent {
   width: 100%;
   max-width: none;

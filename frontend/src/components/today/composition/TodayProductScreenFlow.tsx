@@ -4,8 +4,8 @@ import type { ComponentProps, ReactNode } from "react";
 import { ScreenFlow, ScreenFlowStep, TODAY_SCREEN_FLOW_AXIS } from "@/design-system/primitives/ScreenFlow";
 import { TodayGlanceAct } from "@/components/today/composition/TodayGlanceAct";
 import { TodayPersonalizedProductSection } from "@/components/today/composition/TodayPersonalizedProductSection";
-import { TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
+import flowStyles from "@/components/today/composition/TodayProductScreenFlow.module.css";
 import { MotionReveal } from "@/design-system/motion/MotionReveal";
 import { MOTION } from "@/design-system/motion/tokens";
 import type { ScreenFlowChangeReason } from "@/design-system/primitives/ScreenFlow";
@@ -118,7 +118,7 @@ export function TodayProductScreenFlow({
   ];
 
   return (
-    <div data-testid="today-zone-foundation">
+    <div data-testid="today-zone-foundation" className={flowStyles.foundation}>
       {!embeddedInWebDashboard ? topRowSection : null}
       {!embeddedInWebDashboard ? greetingSection : null}
 
@@ -129,7 +129,7 @@ export function TodayProductScreenFlow({
         showChrome
         testId="today-screen-flow"
       >
-        <ScreenFlowStep id="glance" label={copy.journey.glanceTitle} scrollable>
+        <ScreenFlowStep id="glance" label={copy.journey.glanceTitle} scrollable={false}>
           <TodayGlanceAct
             dateISO={dateISO}
             title={themeTitle}
@@ -145,7 +145,7 @@ export function TodayProductScreenFlow({
         </ScreenFlowStep>
 
         <ScreenFlowStep id="plot" label={copy.journey.dayTitle} scrollable>
-          <TodayScreenBlockStack testId="today-zone-act-plot">
+          <div className={flowStyles.storyFrame} data-testid="today-zone-act-plot">
             <MotionReveal>{heroSection}</MotionReveal>
             {plotNarrativeSection ? <MotionReveal delayMs={MOTION.staggerMs}>{plotNarrativeSection}</MotionReveal> : null}
             {dayReadingReady ? (
@@ -156,12 +156,14 @@ export function TodayProductScreenFlow({
             ) : (
               morningDialogue
             )}
-          </TodayScreenBlockStack>
+          </div>
         </ScreenFlowStep>
 
         {showSymbols ? (
           <ScreenFlowStep id="symbols" label={copy.journey.openTitle} scrollable>
-            <div data-testid="today-zone-open-day">{symbolsBody}</div>
+            <div className={flowStyles.storyFrame} data-testid="today-zone-open-day">
+              {symbolsBody}
+            </div>
           </ScreenFlowStep>
         ) : null}
 

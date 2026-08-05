@@ -1288,7 +1288,8 @@ export function TodayCompositionSurface(props: Props) {
 
   const plotNarrativeSection =
     plotBeats.length > 0 ? (
-      <TodayScreenBlock eyebrow={copy.conflictLabel} testId="today-zone-plot-narrative">
+      <section className={styles.plotStory} data-testid="today-zone-plot-narrative">
+        <p className={styles.plotNarrativeEyebrow}>{copy.conflictLabel}</p>
         <div className={styles.plotBeats} data-testid="today-plot-beats">
           {plotBeats.map((beat) => (
             <article
@@ -1307,9 +1308,10 @@ export function TodayCompositionSurface(props: Props) {
             {plotNarrative.personal}
           </p>
         ) : null}
-      </TodayScreenBlock>
+      </section>
     ) : plotNarrative ? (
-      <TodayScreenBlock eyebrow={copy.conflictLabel} testId="today-zone-plot-narrative">
+      <section className={styles.plotStory} data-testid="today-zone-plot-narrative">
+        <p className={styles.plotNarrativeEyebrow}>{copy.conflictLabel}</p>
         {plotNarrative.tension ? (
           <p className={styles.plotNarrativeTension} data-testid="today-plot-tension">
             {plotNarrative.tension}
@@ -1325,12 +1327,12 @@ export function TodayCompositionSurface(props: Props) {
             {plotNarrative.personal}
           </p>
         ) : null}
-      </TodayScreenBlock>
+      </section>
     ) : null;
 
   const heroSection = zones.hero ? (
     useProductFoundation ? (
-      <TodayScreenBlock testId="today-zone-hero">
+      <section className={styles.plotHero} data-testid="today-zone-hero">
         {themeLoading ? (
           <p className={styles.themeDarkLoading}>{copy.loadingDay}</p>
         ) : plotNarrative ? (
@@ -1342,6 +1344,9 @@ export function TodayCompositionSurface(props: Props) {
             <p className={styles.plotNarrativeEyebrow} id="today-day-theme-title">
               {copy.journey.actNavPlot}
             </p>
+            <span className={styles.plotQuoteMark} aria-hidden>
+              “
+            </span>
           </>
         ) : (
           <>
@@ -1359,7 +1364,7 @@ export function TodayCompositionSurface(props: Props) {
             {heroSubline ? <p className={styles.themeDarkSubline}>{heroSubline}</p> : null}
           </>
         )}
-      </TodayScreenBlock>
+      </section>
     ) : (
       <div className={styles.dayAnchorHero} data-testid="today-zone-hero">
         {!themeLoading ? (
@@ -1587,7 +1592,7 @@ export function TodayCompositionSurface(props: Props) {
           {!props.networkDegraded && showRitualAsComplement ? ritualTarotImpactStage : null}
           {/* v3: show day card open when already revealed / available — no extra click */}
           {!props.networkDegraded && !showRitualAsComplement && (props.cardName || story.tarotImpact || props.numerologyValue || story.numberImpact) ? (
-            <div data-testid="today-zone-symbol-impacts">
+            <div className={styles.symbolsRevealStack} data-testid="today-zone-symbol-impacts">
               {story.tarotImpact || props.cardName || symbolHooksView?.card?.hook_reveal ? (
                 <TodayHookRevealShell
                   variant="tarot"
@@ -1638,7 +1643,8 @@ export function TodayCompositionSurface(props: Props) {
               ) : null}
               {props.contract.day_story?.interpretive_chorus?.astrology_lead ||
               props.contract.day_story?.interpretive_chorus?.astrology_meaning ? (
-                <TodayScreenBlock eyebrow="Небо сегодня" testId="today-zone-sky-events">
+                <section className={styles.symbolsSky} data-testid="today-zone-sky-events">
+                  <p className={styles.plotNarrativeEyebrow}>Небо сегодня</p>
                   {props.contract.day_story?.interpretive_chorus?.astrology_lead ? (
                     <p className={styles.ritualRevealTitle}>
                       {props.contract.day_story.interpretive_chorus.astrology_lead}
@@ -1649,7 +1655,7 @@ export function TodayCompositionSurface(props: Props) {
                       {props.contract.day_story.interpretive_chorus.astrology_meaning}
                     </p>
                   ) : null}
-                </TodayScreenBlock>
+                </section>
               ) : null}
             </div>
           ) : null}

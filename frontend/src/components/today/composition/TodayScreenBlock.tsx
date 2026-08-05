@@ -1,3 +1,7 @@
+/**
+ * TodayScreenBlock — glass only when wrapping an interactive cluster (FOUNDATION_UI §16).
+ * Prefer typography-first story frames; do not wrap every eyebrow/primary.
+ */
 "use client";
 
 import type { ReactNode } from "react";
@@ -20,7 +24,7 @@ type BlockProps = {
 };
 
 /**
- * Today ScreenFlow Block — `DsCard glass + compact` (FOUNDATION_UI §16).
+ * Interactive cluster surface — `DsCard glass + compact` (FOUNDATION_UI §16).
  * Content SoT stays in TODAY_SCREEN_SCENARIO_V3; this is visual grammar only.
  */
 export function TodayScreenBlock({
@@ -60,7 +64,7 @@ type StackProps = {
   testId?: string;
 };
 
-/** Vertical rhythm between Blocks — `--tf-ds-space-5` / `6` (§16.3). */
+/** Vertical rhythm between clusters — `--tf-ds-space-5` / `6` (§16.3). */
 export function TodayScreenBlockStack({ children, className, testId }: StackProps) {
   return (
     <div className={joinClass(styles.stack, className)} data-testid={testId}>

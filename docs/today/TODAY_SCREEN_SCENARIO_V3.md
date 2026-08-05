@@ -26,7 +26,7 @@
 
 **Job:** за 2 секунды ориентация и вход дальше — сжатая проекция уже определённых актов, не отдельный сюжет.
 
-**Каркас показа (Day Atmosphere surface — FOUNDATION_UI §11.9):** full-bleed фон/декор по `day_atmosphere.visual_mode` · стеклянные Block-панели (§16) · sparse chrome. **Прогресс актов = ScreenFlow chrome** (точки + свайп/клавиатура; без ряда названий актов) — не отдельный виджет в hero. Jobs смысла ниже **не** меняются — только композиция.
+**Каркас показа (Day Atmosphere surface — FOUNDATION_UI §11.9 / §16 Story Frame):** full-bleed фон/декор по `day_atmosphere.visual_mode` · typography-first кадр · glass только на interactive clusters (§16) · sparse chrome. **Прогресс актов = ScreenFlow chrome** (точки + свайп/клавиатура; без ряда названий актов) — не отдельный виджет в hero. Jobs смысла ниже **не** меняются — только композиция.
 
 **На экране:**
 

@@ -263,6 +263,7 @@ export function TodayPersonalizedProductSection({
         motif="today"
         accent="sky"
         chrome={!asScreenFlowSteps}
+        className={asScreenFlowSteps ? styles.storyAct : undefined}
         testId="today-zone-reading"
       >
         {contentFailure ? (
@@ -506,6 +507,7 @@ export function TodayPersonalizedProductSection({
         motif="effort"
         accent="support"
         chrome={!asScreenFlowSteps}
+        className={asScreenFlowSteps ? styles.storyAct : undefined}
         testId="today-zone-move"
       >
         {contentFailure ? (
@@ -520,14 +522,15 @@ export function TodayPersonalizedProductSection({
             </p>
           </TodayScreenBlock>
         ) : (
-          <TodayScreenBlockStack>
+          <TodayScreenBlockStack className={styles.moveStack}>
         {colorGuide ? (
-          <TodayScreenBlock testId="today-zone-color-guide">
+          <div className={styles.moveColorAnchor}>
             <TodayDayColorGuideSection guide={colorGuide} />
-          </TodayScreenBlock>
+          </div>
         ) : null}
         {moveIfThen && (moveIfThen.do || moveIfThen.avoid) ? (
-          <TodayScreenBlock eyebrow={copy.journey.moveIfThenEyebrow} testId="today-zone-move-if-then">
+          <div className={styles.moveDirections} data-testid="today-zone-move-if-then">
+            <p className={styles.moveEyebrow}>{copy.journey.moveIfThenEyebrow}</p>
             {moveIfThen.do ? (
               <DsCallout
                 tone="practice"
@@ -546,7 +549,7 @@ export function TodayPersonalizedProductSection({
                 testId="today-move-avoid"
               />
             ) : null}
-          </TodayScreenBlock>
+          </div>
         ) : null}
         <TodayScreenBlock eyebrow="Цель на сегодня" testId="today-zone-promise">
           {dayGoal && !goalDraftOpen ? (
@@ -595,7 +598,7 @@ export function TodayPersonalizedProductSection({
         </TodayScreenBlock>
 
         {strengthenTools.length > 0 || practiceRec?.text || activeHabit || activeAscetic ? (
-          <TodayScreenBlock testId="today-zone-strengthen">
+          <TodayScreenBlock testId="today-zone-strengthen" className={styles.practiceCluster}>
             <div className={styles.practicesHeader}>
               <p className={styles.eyebrowInline}>Практики и опоры</p>
               {totalTools > 1 ? (
@@ -776,6 +779,7 @@ export function TodayPersonalizedProductSection({
         accent="action"
         bridge
         chrome={!asScreenFlowSteps}
+        className={asScreenFlowSteps ? styles.storyActResponse : undefined}
         testId="today-zone-bridges-wrap"
       >
         {contentFailure ? (
@@ -790,14 +794,14 @@ export function TodayPersonalizedProductSection({
             </p>
           </TodayScreenBlock>
         ) : (
-          <TodayScreenBlock testId="today-slot-tap-wrap">
+          <div className={styles.responseStage} data-testid="today-slot-tap-wrap">
             <TodayTapWidget
               contract={contract}
               dateISO={dateISO || ""}
               initialResponse={tapResponse}
               onRecorded={onTapRecorded}
             />
-          </TodayScreenBlock>
+          </div>
         )}
       </ProductJourneyScene>
   );

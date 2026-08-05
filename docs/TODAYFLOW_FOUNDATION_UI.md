@@ -727,44 +727,50 @@ interface DayAtmosphereContract {
 
 ---
 
-## 16. Today Screen — Block Composition
+## 16. Today Screen — Story Frame Composition
 
-**Статус:** канон реализован (Glance…Response Block + domain icons §16.6). Отвечает на запрос «подача должна быть красиво разбита на блоки, легко читаться» — независимо от точного контента экрана. Не заменяет и не меняет [TODAY_SCREEN_SCENARIO_V3](today/TODAY_SCREEN_SCENARIO_V3.md) (SoT содержания каждого из 6 шагов ScreenFlow) — этот раздел только про то, **как** любой из шести шагов визуально организован. Навигационный chrome (свайп/цифры) — не здесь, см. [SCREEN_FLOW_V1 §1.5](foundation/SCREEN_FLOW_V1.md).
+**Статус:** канон обновлён (2026-08-05) — story-frame presentation. Jobs смысла по-прежнему [TODAY_SCREEN_SCENARIO_V3](today/TODAY_SCREEN_SCENARIO_V3.md). Навигационный chrome — [SCREEN_FLOW_V1 §1.5](foundation/SCREEN_FLOW_V1.md).
 
-### 16.1 Проблема, зафиксированная в коде
+### 16.1 Единица подачи — Story Frame
 
-`TodayGlanceAct.tsx` (шаг 0) сейчас — непрерывный вертикальный поток: один `themeBlock` (эйброу + заголовок + абзац), затем `metaRow` как инлайн-строка текста через точку («14:20 · Label», без карточки), затем плоский `<ul>` тизеров с «·» вместо иконок. Нет визуальной группировки, нет панелей, нет единой сетки отступов между смысловыми блоками.
+Один акт ScreenFlow = **один full-bleed кадр** на Day Atmosphere (§11–§13):
 
-### 16.2 Паттерн «Block» — единица подачи
+1. **Primary typography** — центрированный или иерархически явный текст (eyebrow → display/serif primary → body detail). Не каждый смысловой фрагмент обязан жить в панели.
+2. **Sparse cluster** *(опционально)* — компактный список / nearest / expand-row / CTA, когда нужна интерактивная группа.
+3. **Glass Block** (`DsCard` `variant="glass"` `size="compact"`) — **только** для интерактивных кластеров (teaser CTA, expand rows, practice CTA, nearest button group). Не оборачивать каждый eyebrow/primary в glass «ради блоков».
 
-Один блок = **закрытая единица информации**, всегда в одном порядке:
+Атмосфера дня должна читаться сквозь кадр. Вертикальный scroll внутри шага — только когда раскрытие добавляет контент (Symbols A→B, Reading expand); Glance без expand не должен требовать scroll.
 
-1. **Eyebrow** — маленький, приглушённый лейбл, что это за блок (уже есть как стиль в `TodayGlanceAct.module.css` `.eyebrow` — формализуется здесь, не переизобретается).
-2. **Primary** — одно главное значение блока, крупно (роль **Section** или **Hero**, §5) — короткая фраза, время, статус-слово. Не абзац.
-3. **Detail** *(опционально)* — одна строка/абзац пояснения, приглушённый тон (роль **Body**/**Caption**, §5).
+### 16.2 Паттерн «Block» внутри cluster
 
-Блок — это `DsCard` (`variant="glass"` **`size="compact"`**, `--tf-ds-glass`/`--tf-ds-glass-on-dark` + Day Atmosphere tint) поверх Day Atmosphere фона (§11–§13): полупрозрачная поверхность, а не сплошная заливка — атмосфера дня должна читаться сквозь панель, не исчезать под ней. Плотность Surface B (pad/radius) живёт в примитиве (`dsPrimitives.module.css` `.cardSizeCompact`), не в consumer `!important`.
+Когда cluster нужен, единица внутри него:
+
+1. **Eyebrow** — маленький приглушённый лейбл.
+2. **Primary** — одно главное значение, крупно (роль **Section** / **Hero**, §5).
+3. **Detail** *(опционально)* — одна строка пояснения.
+
+Плотность Surface B (pad/radius) — через `DsCard size="compact"`, не consumer `!important`.
 
 ### 16.3 Сетка и ритм
 
-- Отступ **между** блоками — единый токен, не «на глаз»: `--tf-ds-space-5` (1.25rem) как база, `--tf-ds-space-6` (1.5rem) на широких экранах — те же токены, что уже в foundation (§15.4), новых не создаём.
-- Внутренний padding блока — `--tf-ds-space-4`–`--tf-ds-space-5` (соответствует Surface B §4: 22×21) — через `DsCard size="compact"`, не локальный override.
-- Radius блока — `--tf-surface-insight-radius` (28px) через тот же `compact`, не хардкод.
-- **2×2 сетка** (как «Статус по сферам» на референсе) — это частный случай Block: eyebrow на уровне секции, дальше N мини-блоков без вложенного padding друг в друга (иконка + label + Primary-значение, без Detail).
+- Между элементами кадра — `--tf-ds-space-5` (база) / `--tf-ds-space-6` на широких экранах.
+- Max readable column внутри кадра ≈ `28rem` / `~34ch` для body.
+- Progress chrome = ScreenFlow dots + swipe (+ keyboard); без ряда названий актов в hero.
 
 ### 16.3.1 Решение: `size="compact"` вместо consumer overrides
 
-При first pass Glance временно перебивал pad/radius/фон `glass` через `!important` в `TodayGlanceAct.module.css`. Это закрыто: `DsCard` принимает `size="compact"`; комбинация `.cardGlass.cardSizeCompact` задаёт Surface B + `--tf-ds-glass` (+ `--day-surface-tint` если задан). Дальнейшие шаги ScreenFlow (§16.4) используют тот же API — без копирования override в пять файлов.
+`DsCard` принимает `size="compact"`; комбинация `.cardGlass.cardSizeCompact` задаёт Surface B + `--tf-ds-glass` (+ `--day-surface-tint`). Story-frame consumers не копируют override в пять файлов.
 
-### 16.4 Применимость — все 6 шагов, не только Glance
+### 16.4 Применимость — все 6 шагов
 
-Паттерн Block — общая визуальная грамматика для Glance / Plot / Symbols / Reading / Move / Response. Контент каждого шага (что именно показывается) не меняется — меняется только то, что любой фрагмент контента заворачивается в Block вместо голого абзаца/инлайн-строки. Это делает шаги визуально семьёй, даже когда состав полей на каждом разный (см. TODAY_SCREEN_SCENARIO_V3 §0.2 «один дом на сущность»).
+Story frame — общая визуальная грамматика для Glance / Plot / Symbols / Reading / Move / Response. Контент каждого шага (что именно показывается) не меняется — меняется только подача: кадр + typography-first + glass только на interactive clusters. Дома сущностей (цвет = Move, карта/число = Symbols, ловушка = Response) — без изменений.
 
 ### 16.5 Явно не меняется
 
 - Состав и honest-omit правила контента (TODAY_SCREEN_SCENARIO_V3 — не трогается).
 - Цвета CTA/error/success/warning (§0/§4).
 - Навигационная механика (свайп/keyboard/analytics) — SCREEN_FLOW_V1 §1.1–§1.4, §1.7–§1.9 без изменений.
+- Product bottom tab bar (`DsMobileTabBar`) всегда доступен; ScreenFlow высота = `100dvh − nav`.
 
 ### 16.6 Domain icons (закрыто)
 
@@ -781,7 +787,8 @@ interface DayAtmosphereContract {
 
 ### 16.7 Решённые ранее
 
-- `metaRow`/nearest vs тизеры — **Glance:** nearest = отдельный Block («Ближайшее окно»); texture Block eyebrow = «Тема дня».
+- Glance house labels: «Тема дня» + «Ближайшее окно» + Daily Focus.
+- **2026-08-05:** Block-stack → Story Frame (typography-first; glass только interactive). Composition `TodayWebDashboard layout=composition` без page header / context rail — ScreenFlow владеет viewport.
 
 ---
 

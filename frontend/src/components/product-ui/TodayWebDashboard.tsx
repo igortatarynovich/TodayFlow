@@ -325,7 +325,11 @@ export function TodayWebDashboard({
 
   const showOverview = layout === "full" || layout === "overview";
   const showComposition = layout === "full" || layout === "composition" || layout === "ritual";
-  const slotClassName = layout === "ritual" ? pl.ritualSlot : pl.compositionSlot;
+  /** Story-frame composition: ScreenFlow owns the viewport — no dashboard chrome. */
+  const storyComposition = layout === "composition";
+  const slotClassName = layout === "ritual" ? pl.ritualSlot : storyComposition ? pl.compositionSlotStory : pl.compositionSlot;
+  // Composition = ScreenFlow story frames; rail duplicates Symbols/Glance and fights full-bleed.
+  const showRail = !storyComposition && hasContextRail;
 
   const shellConfig = useMemo((): ProductWebShellConfig => {
     return {
@@ -336,7 +340,7 @@ export function TodayWebDashboard({
       theme,
       mood,
       mainWide: true,
-      rail: hasContextRail ? (
+      rail: showRail ? (
         <TodayWebRail
           chrome={chrome}
           dateISO={dateISO}
@@ -351,11 +355,11 @@ export function TodayWebDashboard({
     coreProfile,
     dateISO,
     displayName,
-    hasContextRail,
     mood,
     profileMeta,
     resolvedTimeline,
     resolvedWeekly,
+    showRail,
     streakDays,
     theme,
   ]);
@@ -363,23 +367,20 @@ export function TodayWebDashboard({
   return (
     <>
       <ProductWebShellConfigBridge config={shellConfig} />
-      <div className={l.productWebContentV2}>
-        <div className={v2.pageRoot}>
-          <header className={layout === "composition" ? pl.pageHeaderFlat : pl.pageHeader}>
-            <div>
-              <h1 className={layout === "composition" ? v2.sectionTitle : v2.displayTitle}>
-                {todayWebGreeting(chrome, displayName)}
-              </h1>
-              {/* Composition: greeting + date only — theme lives in the day hero, not here. */}
-              {layout !== "composition" && greetingLine ? (
-                <p className={v2.bodyLead}>{greetingLine}</p>
-              ) : null}
-            </div>
-            <p className={`${v2.chip} ${pl.datePill}`}>
-              <IconCalendar />
-              {displayDate}
-            </p>
-          </header>
+      <div className={`${l.productWebContentV2} ${storyComposition ? l.productWebContentStory : ""}`.trim()}>
+        <div className={`${v2.pageRoot} ${storyComposition ? pl.pageRootStory : ""}`.trim()}>
+          {!storyComposition ? (
+            <header className={pl.pageHeader}>
+              <div>
+                <h1 className={v2.displayTitle}>{todayWebGreeting(chrome, displayName)}</h1>
+                {greetingLine ? <p className={v2.bodyLead}>{greetingLine}</p> : null}
+              </div>
+              <p className={`${v2.chip} ${pl.datePill}`}>
+                <IconCalendar />
+                {displayDate}
+              </p>
+            </header>
+          ) : null}
 
           {showOverview ? (
             <TodayWebOverview
