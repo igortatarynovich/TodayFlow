@@ -20,41 +20,38 @@ const MODE_BG: Record<DayVisualMode, string> = {
   depth: "/images/backgrounds/2.png",
 };
 
-/** Lived photo / banner — never cosmic, never practices banners. */
+/**
+ * Greeting — former practice heroes (meditation / journal), not cosmic, not praktiki banners.
+ */
 const MODE_GREETING: Record<DayVisualMode, string> = {
-  grounded: "/images/day_girl_banner.png",
-  flow: "/images/day_banner.png",
-  radiance: "/images/self-discovery.png",
-  momentum: "/images/hero/inner_reflection.webp",
-  clarity: "/images/today-ritual-entry/default-day.webp",
-  tension: "/images/night_banner.png",
-  renewal: "/images/today-ritual-entry/default-morning.webp",
-  depth: "/images/today-ritual-entry/default-evening.webp",
-};
-
-/** Cosmic only — energy screen. */
-const MODE_ENERGY: Record<DayVisualMode, string> = {
-  grounded: "/images/cosmic/moon_wash.webp",
-  flow: "/images/cosmic/celestial_wash.webp",
-  radiance: "/images/cosmic/moon_orb.webp",
-  momentum: "/images/cosmic/eclipse_wash.webp",
-  clarity: "/images/cosmic/moon.webp",
-  tension: "/images/cosmic/eclipse.webp",
-  renewal: "/images/cosmic/nebula.webp",
-  depth: "/images/cosmic/stars.webp",
-};
-
-/** Practice / affirmation — practices & journal heroes only. */
-const MODE_PRACTICE: Record<DayVisualMode, string> = {
-  grounded: "/images/praktiki_banner.png",
-  flow: "/images/praktiki_banner_2.png",
+  grounded: "/images/hero-meditation.png",
+  flow: "/images/journal.png",
   radiance: "/images/hero-meditation.png",
-  momentum: "/images/praktiki_banner_3.png",
+  momentum: "/images/Diary.png",
   clarity: "/images/journal.png",
   tension: "/images/Diary.png",
   renewal: "/images/hero-meditation.png",
-  depth: "/images/praktiki_banner.png",
+  depth: "/images/hero-meditation.png",
 };
+
+/** Energy — moon family only. */
+const MODE_ENERGY: Record<DayVisualMode, string> = {
+  grounded: "/images/cosmic/moon_wash.webp",
+  flow: "/images/cosmic/moon.webp",
+  radiance: "/images/cosmic/moon_orb.webp",
+  momentum: "/images/cosmic/moon_cutout.webp",
+  clarity: "/images/cosmic/moon.webp",
+  tension: "/images/cosmic/moon_orb.webp",
+  renewal: "/images/cosmic/moon_wash.webp",
+  depth: "/images/cosmic/moon.webp",
+};
+
+/** Practice — praktiki banners only; rotate by calendar day + mode. */
+export const PRAKTIKI_STORY_BANNERS = [
+  "/images/praktiki_banner.png",
+  "/images/praktiki_banner_2.png",
+  "/images/praktiki_banner_3.png",
+] as const;
 
 function readDayMode(): DayVisualMode {
   if (typeof document === "undefined") return "clarity";
@@ -63,24 +60,26 @@ function readDayMode(): DayVisualMode {
   return "clarity";
 }
 
-function greetingByPhase(mode: DayVisualMode): string {
-  if (typeof document === "undefined") return MODE_GREETING[mode];
-  const phase = document.documentElement.getAttribute("data-day-phase");
-  if (phase === "morning" || phase === "first") {
-    return "/images/today-ritual-entry/default-morning.webp";
-  }
-  if (phase === "evening" || phase === "night") {
-    return "/images/today-ritual-entry/default-evening.webp";
-  }
-  return MODE_GREETING[mode];
+function calendarDaySeed(): number {
+  const d = new Date();
+  return d.getFullYear() * 372 + d.getMonth() * 31 + d.getDate();
+}
+
+/** Pick a praktiki banner for the practice frame (stable per day+mode). */
+export function resolvePracticeBanner(mode?: DayVisualMode | null, daySeed?: number): string {
+  const m = mode && mode in MODE_BG ? mode : readDayMode();
+  const modeIdx = Math.max(0, DAY_VISUAL_MODES.indexOf(m));
+  const seed = daySeed ?? calendarDaySeed();
+  const i = Math.abs(seed + modeIdx) % PRAKTIKI_STORY_BANNERS.length;
+  return PRAKTIKI_STORY_BANNERS[i]!;
 }
 
 /** Resolve immersive photo for greeting / energy / practice frames. */
 export function resolveTodayStoryFrameArt(role: TodayStoryArtRole, mode?: DayVisualMode | null): string {
   const m = mode && mode in MODE_BG ? mode : readDayMode();
-  if (role === "greeting") return greetingByPhase(m);
+  if (role === "greeting") return MODE_GREETING[m];
   if (role === "energy") return MODE_ENERGY[m];
-  return MODE_PRACTICE[m];
+  return resolvePracticeBanner(m);
 }
 
 /** Theme-shared pages use Day Atmosphere `--day-bg-art` (no separate immersive). */

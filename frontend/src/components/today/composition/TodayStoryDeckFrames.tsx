@@ -28,7 +28,7 @@ function TodayStoryArtBackdrop({
   tone = "photo",
 }: {
   role: TodayStoryArtRole;
-  tone?: "photo" | "energy";
+  tone?: "photo" | "energy" | "practice";
 }) {
   const [src, setSrc] = useState(() => resolveTodayStoryFrameArt(role));
   useEffect(() => {
@@ -40,9 +40,12 @@ function TodayStoryArtBackdrop({
     return () => obs.disconnect();
   }, [role]);
 
+  const artClass =
+    tone === "energy" ? styles.artEnergy : tone === "practice" ? styles.artPractice : styles.artPhoto;
+
   return (
     <div
-      className={tone === "energy" ? styles.artEnergy : styles.artPhoto}
+      className={artClass}
       style={{ "--story-art": `url("${src}")` } as CSSProperties}
       aria-hidden
       data-testid={`today-frame-art-${role}`}
@@ -322,7 +325,7 @@ export function TodayPracticeFrame({
 }) {
   return (
     <div className={`${styles.practice} ${styles.immersive}`} data-testid="today-frame-practice">
-      <TodayStoryArtBackdrop role="practice" />
+      <TodayStoryArtBackdrop role="practice" tone="practice" />
       <div className={styles.immersiveContent}>
         <p className={styles.eyebrowOnArt}>Практика дня</p>
         {title ? (

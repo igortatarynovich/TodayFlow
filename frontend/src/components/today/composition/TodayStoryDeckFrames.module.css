@@ -52,7 +52,8 @@
 }
 
 .artPhoto,
-.artEnergy {
+.artEnergy,
+.artPractice {
   position: absolute;
   inset: 0;
   z-index: 0;
@@ -61,6 +62,12 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+/* Praktiki banners are wide — crop to a portrait-friendly focal band. */
+.artPractice {
+  background-position: center 28%;
+  background-size: cover;
 }
 
 .artPhoto::after {
@@ -87,6 +94,19 @@
       color-mix(in srgb, #070b14 55%, transparent) 0%,
       color-mix(in srgb, #070b14 70%, transparent) 55%,
       color-mix(in srgb, #070b14 82%, transparent) 100%
+    );
+}
+
+.artPractice::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, #1a1410 48%, transparent) 0%,
+      color-mix(in srgb, #1a1410 58%, transparent) 50%,
+      color-mix(in srgb, #1a1410 72%, transparent) 100%
     );
 }
 

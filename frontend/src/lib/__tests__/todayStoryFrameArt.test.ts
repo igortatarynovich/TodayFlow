@@ -1,20 +1,30 @@
 import {
   allTodayStoryArtModesDistinct,
   assertTodayStoryArtPoolsDistinct,
+  PRAKTIKI_STORY_BANNERS,
+  resolvePracticeBanner,
   resolveTodayStoryFrameArt,
   resolveTodayThemeArt,
 } from "@/lib/todayStoryFrameArt";
 import { DAY_VISUAL_MODES } from "@/lib/dayAtmosphere";
 
 describe("todayStoryFrameArt", () => {
-  it("keeps greeting / energy / practice in distinct pools", () => {
-    expect(resolveTodayStoryFrameArt("energy", "radiance")).toMatch(/\/images\/cosmic\//);
-    expect(resolveTodayStoryFrameArt("practice", "momentum")).toMatch(
-      /praktiki_banner|hero-meditation|journal|Diary/,
+  it("uses moon art for energy, meditation/journal for greeting, praktiki for practice", () => {
+    expect(resolveTodayStoryFrameArt("energy", "radiance")).toMatch(/\/images\/cosmic\/moon/);
+    expect(resolveTodayStoryFrameArt("greeting", "renewal")).toMatch(
+      /hero-meditation|journal|Diary/,
     );
-    expect(resolveTodayStoryFrameArt("greeting", "flow")).toMatch(
-      /day_banner|day_girl|self-discovery|inner_reflection|ritual-entry|night_banner/,
-    );
+    expect(resolveTodayStoryFrameArt("practice", "momentum")).toMatch(/praktiki_banner/);
+  });
+
+  it("rotates praktiki banners across days", () => {
+    const a = resolvePracticeBanner("clarity", 1);
+    const b = resolvePracticeBanner("clarity", 2);
+    const c = resolvePracticeBanner("clarity", 3);
+    expect(PRAKTIKI_STORY_BANNERS).toContain(a);
+    expect(PRAKTIKI_STORY_BANNERS).toContain(b);
+    expect(PRAKTIKI_STORY_BANNERS).toContain(c);
+    expect(new Set([a, b, c]).size).toBe(3);
   });
 
   it("never reuses the same path across roles for any mode", () => {
