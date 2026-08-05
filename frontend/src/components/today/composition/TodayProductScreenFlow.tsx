@@ -6,6 +6,7 @@ import { ScreenFlow, ScreenFlowStep, TODAY_SCREEN_FLOW_AXIS } from "@/design-sys
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
 import flowStyles from "@/components/today/composition/TodayProductScreenFlow.module.css";
 import {
+  StoryNextAnchor,
   TodayAttributesFrame,
   TodayCloseFrame,
   TodayEnergyFlowFrame,
@@ -33,6 +34,7 @@ export type TodayProductScreenFlowProps = {
   colorGuide?: TodayDayColorGuide | null;
   moveDo?: string | null;
   moveAvoid?: string | null;
+  insightHeroText?: string | null;
   plotNarrativeSection?: ReactNode;
   morningDialogue?: ReactNode;
   showSymbols: boolean;
@@ -75,6 +77,10 @@ export function todayScreenFlowReadingIndex(showSymbols: boolean): number {
   return todayScreenFlowAttributesIndex(showSymbols);
 }
 
+export function todayScreenFlowSymbolsIndex(): number {
+  return 2;
+}
+
 export function todayScreenFlowAttributesIndex(showSymbols: boolean): number {
   return showSymbols ? 3 : 2;
 }
@@ -105,6 +111,7 @@ export function TodayProductScreenFlow({
   colorGuide = null,
   moveDo = null,
   moveAvoid = null,
+  insightHeroText = null,
   plotNarrativeSection = null,
   morningDialogue = null,
   showSymbols,
@@ -128,6 +135,11 @@ export function TodayProductScreenFlow({
   greetingSection = null,
 }: TodayProductScreenFlowProps) {
   const themeText = (dayTexture || "").trim() || null;
+  const go = (index: number) => onIndexChange(index, { reason: "select" });
+
+  const energyNextIndex = showSymbols ? todayScreenFlowSymbolsIndex() : todayScreenFlowAttributesIndex(false);
+  const energyNextTitle = showSymbols ? copy.storyNext.symbols : copy.storyNext.attributes;
+  const energyNextHint = showSymbols ? copy.storyNext.symbolsHint : copy.storyNext.attributesHint;
 
   return (
     <div data-testid="today-zone-foundation" className={flowStyles.foundation}>
@@ -147,7 +159,7 @@ export function TodayProductScreenFlow({
             dateLabel={dateLabel}
             headline={greetingHeadline}
             loading={themeLoading}
-            onStart={() => onIndexChange(1, { reason: "select" })}
+            onStart={() => go(1)}
           />
         </ScreenFlowStep>
 
@@ -157,6 +169,9 @@ export function TodayProductScreenFlow({
               energyLine={energyLine}
               energyCause={energyCause}
               dateISO={dateISO}
+              onGoNext={() => go(energyNextIndex)}
+              nextTitle={energyNextTitle}
+              nextHint={energyNextHint}
             />
           </ScreenFlowStep>
         ) : null}
@@ -165,6 +180,13 @@ export function TodayProductScreenFlow({
           <ScreenFlowStep id="symbols" label={copy.journey.openTitle} scrollable>
             <div className={flowStyles.storyFrame} data-testid="today-zone-open-day">
               {symbolsBody}
+              {showPersonalized ? (
+                <StoryNextAnchor
+                  title={copy.storyNext.attributes}
+                  hint={copy.storyNext.attributesHint}
+                  onNext={() => go(todayScreenFlowAttributesIndex(true))}
+                />
+              ) : null}
             </div>
           </ScreenFlowStep>
         ) : null}
@@ -179,10 +201,11 @@ export function TodayProductScreenFlow({
                 colorGuide={colorGuide}
                 moveDo={moveDo}
                 moveAvoid={moveAvoid}
+                onGoNext={() => go(todayScreenFlowPracticeIndex(showSymbols))}
               />
             </ScreenFlowStep>
 
-            <ScreenFlowStep id="practice" label="Практика дня" scrollable={false}>
+            <ScreenFlowStep id="practice" label="Практика дня" scrollable>
               <TodayPracticeFrame
                 title={practiceTitle}
                 meta={practiceMeta}
@@ -190,6 +213,7 @@ export function TodayProductScreenFlow({
                 completed={practiceCompleted}
                 completing={practiceCompleting}
                 onAction={() => onPracticeAction?.()}
+                onGoNext={() => go(todayScreenFlowInsightIndex(showSymbols))}
                 linkSlot={
                   <p className={flowStyles.practiceLink}>
                     <Link href="/practices" data-testid="today-setup-practices-link">
@@ -201,7 +225,12 @@ export function TodayProductScreenFlow({
             </ScreenFlowStep>
 
             <ScreenFlowStep id="insight" label="Инсайт дня" scrollable>
-              <TodayInsightFrame plot={plotNarrativeSection} dialogue={morningDialogue} />
+              <TodayInsightFrame
+                heroText={insightHeroText}
+                story={plotNarrativeSection}
+                dialogue={morningDialogue}
+                onGoNext={() => go(todayScreenFlowCloseIndex(showSymbols))}
+              />
             </ScreenFlowStep>
 
             <ScreenFlowStep id="close" label="Вечер" scrollable>

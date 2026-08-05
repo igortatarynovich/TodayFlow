@@ -2286,6 +2286,28 @@
   width: 100%;
 }
 
+.symbolsRevealStack :global([data-story-block]) {
+  scroll-margin-top: 1.25rem;
+}
+
+.symbolCardHero {
+  width: 100%;
+}
+
+.symbolCardHero :global([data-testid="today-zone-tarot-impact"] img),
+.symbolCardHero :global([data-testid="today-zone-tarot-impact"] picture) {
+  width: min(100%, 12.5rem);
+}
+
+.symbolNumberMoment {
+  width: 100%;
+  padding: 1.1rem 1rem 1.25rem;
+  border-radius: var(--tf-surface-insight-radius, 28px);
+  background: color-mix(in srgb, var(--day-surface-tint, rgba(255, 255, 255, 0.72)) 88%, #fff);
+  border: 1px solid color-mix(in srgb, var(--day-decor-color, #8f6b3a) 16%, transparent);
+  box-sizing: border-box;
+}
+
 .symbolsSky {
   display: flex;
   flex-direction: column;

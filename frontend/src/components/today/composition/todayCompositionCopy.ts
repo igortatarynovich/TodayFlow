@@ -61,6 +61,25 @@ export const TODAY_COMPOSITION_COPY = {
   ritualSpineTitle: "Твой ритуал дня",
   ritualSpineLead: "Два шага — и Today соберёт рекомендации под тебя.",
   contextPanelTitle: "Контекст дня",
+  /** Story next-anchor foreshadow (presentation only). */
+  storyNext: {
+    further: "Дальше",
+    energy: "Энергия дня",
+    energyHint: "Какой сегодня день.",
+    symbols: "Символы дня",
+    symbolsHint: "Теперь посмотрим, какой символ сопровождает этот день.",
+    attributes: "Опора дня",
+    attributesHint: "Переведём это в реальные ориентиры.",
+    practice: "Практика дня",
+    practiceHint: "Что сделать сегодня.",
+    insight: "Инсайт дня",
+    insightHint: "Что почувствовать в этом дне.",
+    close: "Вечер",
+    closeHint: "Вопрос, которым можно закрыть день.",
+    numberCue: "Число дня",
+    flowCue: "Поток дня",
+    avoidLabel: "Чего избегать",
+  },
   /** Journey scene chrome — same family as Profile · Wave 1 ActShell. */
   journey: {
     dayTitle: "Сюжет дня",

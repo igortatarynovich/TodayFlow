@@ -283,7 +283,9 @@ describe("TodayCompositionSurface", () => {
     expect(screen.getByTestId("today-plot-beats")).toBeInTheDocument();
     expect(screen.getByTestId("today-plot-beat-setup").textContent).toMatch(/решающий жест/i);
     expect(screen.getByTestId("today-plot-beat-tension").textContent).toMatch(/Отложить/i);
-    expect(screen.getByTestId("today-plot-beat-turn").textContent).toMatch(/письмо/i);
+    // Turn beat is Insight hero (вывод), not repeated in plot story stack.
+    expect(screen.getByTestId("today-insight-hero").textContent).toMatch(/письмо/i);
+    expect(screen.queryByTestId("today-plot-beat-turn")).not.toBeInTheDocument();
   });
 
   it("shows opened card and number interpretation after ritual", () => {

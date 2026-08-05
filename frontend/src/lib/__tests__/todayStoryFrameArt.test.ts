@@ -1,12 +1,27 @@
-import { resolveTodayStoryFrameArt, resolveTodayThemeArt } from "@/lib/todayStoryFrameArt";
+import {
+  allTodayStoryArtModesDistinct,
+  assertTodayStoryArtPoolsDistinct,
+  resolveTodayStoryFrameArt,
+  resolveTodayThemeArt,
+} from "@/lib/todayStoryFrameArt";
+import { DAY_VISUAL_MODES } from "@/lib/dayAtmosphere";
 
 describe("todayStoryFrameArt", () => {
-  it("maps greeting / energy / practice to existing public assets", () => {
-    expect(resolveTodayStoryFrameArt("greeting", "clarity")).toMatch(/\/images\//);
-    expect(resolveTodayStoryFrameArt("energy", "radiance")).toBe("/images/cosmic/moon_orb.webp");
-    expect(resolveTodayStoryFrameArt("practice", "momentum")).toBe(
-      "/images/today-ritual-entry/default-evening.webp",
+  it("keeps greeting / energy / practice in distinct pools", () => {
+    expect(resolveTodayStoryFrameArt("energy", "radiance")).toMatch(/\/images\/cosmic\//);
+    expect(resolveTodayStoryFrameArt("practice", "momentum")).toMatch(
+      /praktiki_banner|hero-meditation|journal|Diary/,
     );
+    expect(resolveTodayStoryFrameArt("greeting", "flow")).toMatch(
+      /day_banner|day_girl|self-discovery|inner_reflection|ritual-entry|night_banner/,
+    );
+  });
+
+  it("never reuses the same path across roles for any mode", () => {
+    for (const mode of DAY_VISUAL_MODES) {
+      expect(assertTodayStoryArtPoolsDistinct(mode)).toBe(true);
+    }
+    expect(allTodayStoryArtModesDistinct()).toBe(true);
   });
 
   it("theme art follows day-atmosphere background seeds", () => {

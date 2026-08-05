@@ -735,13 +735,15 @@ interface DayAtmosphereContract {
 
 Один акт ScreenFlow = **один full-bleed кадр**:
 
-1. **Photo frames** (Greeting · Energy+Flow · Practice/affirmation): immersive full-bleed фото из существующих public assets (`todayStoryFrameArt` → ritual-entry / cosmic / later per-mode catalog). Читаемость — wash overlay, не карточки поверх hero.
-2. **Theme frames** (Symbols · Attributes · Insight · Close): Day Atmosphere surface (§11–§13) — `--day-bg-art` / `--day-*` shell, без отдельного immersive фото.
-3. **Down cue** (`↓`) — явное разделение между блоками **внутри** многоблочного кадра (energy→flow, color→theme→focus, card→number, insight plot→dialogue, close sections).
-4. **Primary typography** — eyebrow → display/serif primary → body detail.
-5. **Glass Block** — **только** interactive clusters (CTA, expand, nearest). Не оборачивать каждый eyebrow/primary.
+1. **Экран ≠ блок.** Экран отвечает на один вопрос / держит одного героя. Внутри экрана — сценарий блоков со скроллом (`StoryBlockCue`). Swipe / `StoryNextAnchor` — смена экрана.
+2. **Photo frames** (Greeting · Energy+Flow · Practice/affirmation): immersive full-bleed из непересекающихся пулов (`todayStoryFrameArt`). Wash overlay для читаемости.
+3. **Theme frames** (Symbols · Attributes · Insight · Close): Day Atmosphere `--day-bg-art` / `--day-*`.
+4. **`StoryBlockCue`** — только внутри шага (scroll контейнера `data-story-scroll=step` + `scroll-margin-top`). Не после последнего внутреннего блока.
+5. **`StoryNextAnchor`** — только foreshadow → следующий шаг (нет на Close).
+6. **Primary typography** — eyebrow → display/serif primary → body detail.
+7. **Glass Block** — только interactive clusters.
 
-Вертикальный scroll внутри шага — только когда раскрытие / второй блок требует места.
+Вертикальный scroll внутри шага — когда второй блок / раскрытие требует места. Hero первого viewport виден без предварительного скролла.
 
 ### 16.2 Паттерн «Block» внутри cluster
 

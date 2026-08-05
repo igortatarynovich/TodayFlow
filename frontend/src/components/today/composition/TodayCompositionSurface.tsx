@@ -82,7 +82,7 @@ import { TodayInterpretationConfirm } from "@/components/today/composition/Today
 import { TodaySkyStoryCards } from "@/components/today/composition/TodaySkyStoryCards";
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
 import { TodayHookRevealShell } from "@/components/today/composition/TodayHookRevealShell";
-import { TodayStoryDownCue } from "@/components/today/composition/TodayStoryDeckFrames";
+import { StoryBlockCue } from "@/components/today/composition/TodayStoryDeckFrames";
 import { isDayScenarioReadyForChapters } from "@/lib/todayScenarioChapters";
 import { buildGlanceDayTexture, buildGlanceThemeEyebrow } from "@/lib/todayGlanceTexture";
 import { buildGlanceDailyFocus } from "@/lib/todayDailyFocus";
@@ -1336,12 +1336,22 @@ export function TodayCompositionSurface(props: Props) {
   const glanceEyebrow =
     buildGlanceThemeEyebrow(props.contract) || heroTheme || story.hero.centralThought || copy.themeLabel;
 
+  const insightHeroText =
+    plotBeats.find((b) => b.role === "turn")?.body ||
+    plotNarrative?.why ||
+    dayTexture ||
+    null;
+
+  const plotBeatsForStory = insightHeroText
+    ? plotBeats.filter((b) => b.body !== insightHeroText)
+    : plotBeats;
+
   const plotNarrativeSection =
-    plotBeats.length > 0 ? (
+    plotBeatsForStory.length > 0 ? (
       <section className={styles.plotStory} data-testid="today-zone-plot-narrative">
         <p className={styles.plotNarrativeEyebrow}>{copy.conflictLabel}</p>
         <div className={styles.plotBeats} data-testid="today-plot-beats">
-          {plotBeats.map((beat) => (
+          {plotBeatsForStory.map((beat) => (
             <article
               key={beat.id}
               className={styles.plotBeat}
@@ -1359,7 +1369,7 @@ export function TodayCompositionSurface(props: Props) {
           </p>
         ) : null}
       </section>
-    ) : plotNarrative ? (
+    ) : plotNarrative && plotNarrative.why !== insightHeroText ? (
       <section className={styles.plotStory} data-testid="today-zone-plot-narrative">
         <p className={styles.plotNarrativeEyebrow}>{copy.conflictLabel}</p>
         {plotNarrative.tension ? (
@@ -1377,6 +1387,12 @@ export function TodayCompositionSurface(props: Props) {
             {plotNarrative.personal}
           </p>
         ) : null}
+      </section>
+    ) : plotNarrative?.personal ? (
+      <section className={styles.plotStory} data-testid="today-zone-plot-narrative">
+        <p className={styles.plotNarrativePersonal} data-testid="today-plot-personal">
+          {plotNarrative.personal}
+        </p>
       </section>
     ) : null;
 
@@ -1622,6 +1638,7 @@ export function TodayCompositionSurface(props: Props) {
       moveDo={moveIfThen?.do ?? null}
       moveAvoid={moveIfThen?.avoid ?? null}
       plotNarrativeSection={plotNarrativeSection}
+      insightHeroText={insightHeroText}
       morningDialogue={morningDialogue}
       showSymbols={showSymbolsAct}
       symbolsBody={
@@ -1643,69 +1660,73 @@ export function TodayCompositionSurface(props: Props) {
           {!props.networkDegraded && !showRitualAsComplement && (props.cardName || story.tarotImpact || props.numerologyValue || story.numberImpact) ? (
             <div className={styles.symbolsRevealStack} data-testid="today-zone-symbol-impacts">
               {story.tarotImpact || props.cardName || symbolHooksView?.card?.hook_reveal ? (
-                <TodayHookRevealShell
-                  variant="tarot"
-                  kindLabel="Карта дня · открыта"
-                  title={
-                    symbolHooksView?.card?.name ||
-                    story.tarotImpact?.title ||
-                    props.cardName ||
-                    "Карта дня"
-                  }
-                  subtitle={story.tarotImpact?.headline || null}
-                  hook={symbolHooksView?.card?.hook_reveal || null}
-                  fallbackBody={
-                    symbolHooksView?.card?.meaning ||
-                    story.tarotImpact?.body ||
-                    props.cardMeaning ||
-                    null
-                  }
-                  visual={
-                    tarotPickedId != null && tarotCardFaceSrc(tarotPickedId) ? (
-                      <TarotPicture
-                        sources={tarotCardFacePicture(tarotPickedId)!}
-                        alt={
-                          symbolHooksView?.card?.name ||
-                          story.tarotImpact?.title ||
-                          props.cardName ||
-                          "Карта дня"
-                        }
-                        sizes="(max-width: 40rem) 42vw, 180px"
-                      />
-                    ) : null
-                  }
-                  testId="today-zone-tarot-impact"
-                />
+                <div className={styles.symbolCardHero} data-story-block="symbols-card">
+                  <TodayHookRevealShell
+                    variant="tarot"
+                    kindLabel="Карта дня · открыта"
+                    title={
+                      symbolHooksView?.card?.name ||
+                      story.tarotImpact?.title ||
+                      props.cardName ||
+                      "Карта дня"
+                    }
+                    subtitle={story.tarotImpact?.headline || null}
+                    hook={symbolHooksView?.card?.hook_reveal || null}
+                    fallbackBody={
+                      symbolHooksView?.card?.meaning ||
+                      story.tarotImpact?.body ||
+                      props.cardMeaning ||
+                      null
+                    }
+                    visual={
+                      tarotPickedId != null && tarotCardFaceSrc(tarotPickedId) ? (
+                        <TarotPicture
+                          sources={tarotCardFacePicture(tarotPickedId)!}
+                          alt={
+                            symbolHooksView?.card?.name ||
+                            story.tarotImpact?.title ||
+                            props.cardName ||
+                            "Карта дня"
+                          }
+                          sizes="(max-width: 40rem) 48vw, 200px"
+                        />
+                      ) : null
+                    }
+                    testId="today-zone-tarot-impact"
+                  />
+                </div>
               ) : null}
               {(story.tarotImpact || props.cardName || symbolHooksView?.card?.hook_reveal) &&
               (story.numberImpact || props.numerologyValue || symbolHooksView?.number?.hook_reveal) ? (
-                <TodayStoryDownCue />
+                <StoryBlockCue targetId="symbols-number" label={copy.storyNext.numberCue} />
               ) : null}
               {story.numberImpact || props.numerologyValue || symbolHooksView?.number?.hook_reveal ? (
-                <TodayHookRevealShell
-                  variant="numerology"
-                  kindLabel="Число дня · открыто"
-                  title={
-                    String(
-                      symbolHooksView?.number?.reduced_value ??
-                        symbolHooksView?.number?.value ??
-                        story.numberImpact?.title ??
-                        props.numerologyValue ??
-                        "",
-                    )
-                  }
-                  subtitle={
-                    symbolHooksView?.number?.title || story.numberImpact?.headline || null
-                  }
-                  hook={symbolHooksView?.number?.hook_reveal || null}
-                  fallbackBody={
-                    symbolHooksView?.number?.summary ||
-                    story.numberImpact?.body ||
-                    props.numerologyMeaning ||
-                    null
-                  }
-                  testId="today-zone-number-impact"
-                />
+                <div className={styles.symbolNumberMoment} data-story-block="symbols-number">
+                  <TodayHookRevealShell
+                    variant="numerology"
+                    kindLabel="Число дня · открыто"
+                    title={
+                      String(
+                        symbolHooksView?.number?.reduced_value ??
+                          symbolHooksView?.number?.value ??
+                          story.numberImpact?.title ??
+                          props.numerologyValue ??
+                          "",
+                      )
+                    }
+                    subtitle={
+                      symbolHooksView?.number?.title || story.numberImpact?.headline || null
+                    }
+                    hook={symbolHooksView?.number?.hook_reveal || null}
+                    fallbackBody={
+                      symbolHooksView?.number?.summary ||
+                      story.numberImpact?.body ||
+                      props.numerologyMeaning ||
+                      null
+                    }
+                    testId="today-zone-number-impact"
+                  />
+                </div>
               ) : null}
             </div>
           ) : null}

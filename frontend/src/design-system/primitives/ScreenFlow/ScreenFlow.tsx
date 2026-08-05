@@ -107,6 +107,7 @@ export function ScreenFlowStep({
         __sfActive ? styles.stepActive : styles.stepInactive,
       )}
       data-screen-flow-step={id}
+      data-story-scroll={scrollable ? "step" : undefined}
       data-step-index={__sfIndex}
       data-step-status={status}
       data-step-active={__sfActive ? "true" : "false"}
