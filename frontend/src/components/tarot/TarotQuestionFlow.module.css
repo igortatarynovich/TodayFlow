@@ -30,11 +30,13 @@
 .shell {
   position: relative;
   z-index: 1;
-  max-width: var(--tf-shell-max, 52rem);
-  margin: 0 auto;
-  padding: 2rem var(--orbit-space-xl) 4rem;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 1.25rem 0 3rem;
   display: grid;
   gap: 1.5rem;
+  box-sizing: border-box;
 }
 
 /* —— Progress —— */

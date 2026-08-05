@@ -61,7 +61,7 @@ export function TarotHubMain() {
   return (
     <div className={s.hubQuietRoot} data-testid="tarot-hub-main-journey">
       <ProductJourneyScene
-        step={1}
+        variant="flat" step={1}
         title="Вопрос"
         lead="Сформулируйте чуткий запрос — не просто «что будет»."
         motif="tarot"
@@ -89,7 +89,7 @@ export function TarotHubMain() {
       </ProductJourneyScene>
 
       <ProductJourneyScene
-        step={2}
+        variant="flat" step={2}
         title="Направление"
         lead="Выберите формат расклада: сколько карт и на чём фокус."
         motif="tarot"

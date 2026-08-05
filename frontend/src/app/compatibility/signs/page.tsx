@@ -249,7 +249,7 @@ export default function CompatibilitySignsPage() {
       contentClassName={`${pl.content} ${pl.legacyHost}`}
     >
       {limitBlocked ? (
-        <section className="tf-shell" style={{ paddingTop: "2rem", paddingBottom: "4.5rem" }}>
+        <section className="compat-flow-section" style={{ paddingTop: "2rem", paddingBottom: "4.5rem" }}>
           <GuestAccessLimitGate
             title={GUEST_ACCESS_COPY.compatLimitTitle}
             body={GUEST_ACCESS_COPY.compatLimitBody}
@@ -259,7 +259,7 @@ export default function CompatibilitySignsPage() {
           />
         </section>
       ) : (
-      <section className="tf-shell" style={{ paddingTop: "2rem", paddingBottom: "4.5rem" }}>
+      <section className="compat-flow-section" style={{ paddingTop: "2rem", paddingBottom: "4.5rem" }}>
         <div
           className="tf-surface"
           style={{

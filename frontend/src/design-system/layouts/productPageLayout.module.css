@@ -11,6 +11,17 @@
   gap: 0.75rem;
 }
 
+/** No glass card — title sits on the shell background (Practices-like). */
+.pageHeaderFlat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
 .pageHeaderQuiet {
   gap: 0.35rem;
   padding-block: 0.15rem 0.35rem;

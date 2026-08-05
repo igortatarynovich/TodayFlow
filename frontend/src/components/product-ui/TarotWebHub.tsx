@@ -158,7 +158,7 @@ export function TarotWebHub({
           </header>
 
           <ProductJourneyScene
-            step={1}
+            variant="flat" step={1}
             title={hub.questionStepTitle}
             lead={hub.questionStepLead}
             motif="tarot"
@@ -179,7 +179,7 @@ export function TarotWebHub({
 
           {domainChips.length > 0 ? (
             <ProductJourneyScene
-              step={2}
+              variant="flat" step={2}
               title={hub.directionStepTitle}
               lead={hub.directionStepLead}
               motif="tarot"
@@ -209,7 +209,7 @@ export function TarotWebHub({
 
           {showSpreads ? (
             <ProductJourneyScene
-              step={domainChips.length > 0 ? 3 : 2}
+              variant="flat" step={domainChips.length > 0 ? 3 : 2}
               title={hub.spreadStepTitle}
               lead={hub.spreadStepLead}
               motif="tarot"
@@ -269,7 +269,7 @@ export function TarotWebHub({
 
           {onSubmitQuestion ? (
             <ProductJourneyScene
-              step={(domainChips.length > 0 ? 3 : 2) + (showSpreads ? 1 : 0)}
+              variant="flat" step={(domainChips.length > 0 ? 3 : 2) + (showSpreads ? 1 : 0)}
               title="Дальше"
               lead="Когда вопрос и формат ясны — к ритуалу."
               motif="bridge"

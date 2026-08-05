@@ -67,6 +67,8 @@ export type ProductPageScreenProps = {
   railHint?: string;
   hideHeader?: boolean;
   hideDatePill?: boolean;
+  /** Flat title stack without surfaceGlass card — hubs match Practices. */
+  quietHeader?: boolean;
   mainWide?: boolean;
   contentClassName?: string;
   loading?: boolean;
@@ -110,6 +112,7 @@ export function ProductPageScreen({
   railHint,
   hideHeader = false,
   hideDatePill = false,
+  quietHeader = false,
   mainWide = true,
   contentClassName,
   loading = false,
@@ -191,13 +194,13 @@ export function ProductPageScreen({
     return (
       <>
         {hideHeader ? null : (
-          <header className={pl.pageHeader}>
+          <header className={quietHeader ? pl.pageHeaderFlat : pl.pageHeader}>
             <div>
               {eyebrow ? <p className={v2.eyebrow}>{eyebrow}</p> : null}
               <h1 className={v2.displayTitle}>{title}</h1>
               {subtitle ? <p className={v2.bodyLead}>{subtitle}</p> : null}
             </div>
-            {hideDatePill ? null : (
+            {hideDatePill || quietHeader ? null : (
               <p className={`${v2.chip} ${pl.datePill}`}>
                 <IconCalendar aria-hidden />
                 {todayLabel}

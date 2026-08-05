@@ -73,7 +73,7 @@ export function CompatibilityWebHub({
   return (
     <div data-testid="compatibility-web-hub">
       <ProductJourneyScene
-        step={1}
+        variant="flat" step={1}
         title={chrome.hubContextEyebrow}
         lead={
           resolvedLocale === "ru"
@@ -109,7 +109,7 @@ export function CompatibilityWebHub({
       </ProductJourneyScene>
 
       <ProductJourneyScene
-        step={2}
+        variant="flat" step={2}
         title={chrome.hubPairEyebrow}
         lead={
           !isAuthenticated
@@ -205,7 +205,7 @@ export function CompatibilityWebHub({
 
       {isAuthenticated ? (
       <ProductJourneyScene
-        step={3}
+        variant="flat" step={3}
         title={resolvedLocale === "ru" ? "Разбор" : "Reading"}
         lead={
           resolvedLocale === "ru"

@@ -5,9 +5,11 @@
 }
 
 .shell {
-  max-width: var(--tf-shell-max, 52rem);
-  margin: 0 auto;
-  padding: 0 1rem 3.25rem;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0 0 3.25rem;
+  box-sizing: border-box;
 }
 
 .heroPanel {

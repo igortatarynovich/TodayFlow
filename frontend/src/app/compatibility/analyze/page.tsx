@@ -444,7 +444,7 @@ function CompatibilityAnalyzeContent() {
       contentClassName={`${pl.content} ${pl.legacyHost}`}
     >
       {limitBlocked ? (
-        <section className="tf-shell" style={{ paddingTop: "1.75rem", paddingBottom: "3rem" }}>
+        <section className="compat-flow-section" style={{ paddingTop: "1.75rem", paddingBottom: "3rem" }}>
           <GuestAccessLimitGate
             title={GUEST_ACCESS_COPY.compatLimitTitle}
             body={GUEST_ACCESS_COPY.compatLimitBody}
@@ -454,7 +454,7 @@ function CompatibilityAnalyzeContent() {
           />
         </section>
       ) : (
-      <section className="tf-shell" style={{ paddingTop: "1.75rem", paddingBottom: "3rem" }}>
+      <section className="compat-flow-section" style={{ paddingTop: "1.75rem", paddingBottom: "3rem" }}>
         <div className="compat-desktop-shell compat-desktop-stack">
           <div className="compat-analyze-topbar">
             <Link href="/compatibility" className="compat-analyze-back">

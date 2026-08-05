@@ -436,6 +436,18 @@
   padding-inline: clamp(1.25rem, 4vw, 6rem);
 }
 
+/* Phone-first: appMain already supplies gutters — don't stack a second horizontal pad. */
+@media (max-width: 48rem) {
+  .appMain {
+    padding: clamp(0.85rem, 3.5vw, 1.25rem);
+  }
+
+  .productWebMainProfileV2,
+  .productWebMainV2 {
+    padding-inline: 0;
+  }
+}
+
 .mobileTabBarWrap {
   display: block;
   position: sticky;

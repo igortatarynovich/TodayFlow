@@ -246,7 +246,7 @@ function CompatibilityLayerSelector({
   emphasizeProfiles?: boolean;
 }) {
   return (
-    <section className="compat-desktop-card">
+    <section className="compat-desktop-section">
       <p className="compat-hero-eyebrow">С чего начать</p>
       <h2 className="compat-section-title" style={{ margin: "0.35rem 0 0.65rem" }}>
         Разбор пары по слоям
@@ -922,7 +922,7 @@ export default function CompatibilityPage() {
       {options?.hideHeader ? (
         content
       ) : (
-        <div className="compat-desktop-shell compat-desktop-stack" style={{ paddingBottom: "1.5rem" }}>
+        <div className="compat-desktop-shell compat-desktop-stack">
           {content}
         </div>
       )}

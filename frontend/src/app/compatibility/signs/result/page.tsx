@@ -132,7 +132,7 @@ function ResultContent() {
         mainWide
         contentClassName={`${pl.content} ${pl.legacyHost}`}
       >
-        <section className="tf-shell" style={{ paddingTop: "2rem", paddingBottom: "4.5rem" }}>
+        <section className="compat-flow-section" style={{ paddingTop: "2rem", paddingBottom: "4.5rem" }}>
           <GuestAccessLimitGate
             title={GUEST_ACCESS_COPY.compatLimitTitle}
             body={GUEST_ACCESS_COPY.compatLimitBody}
@@ -154,7 +154,7 @@ function ResultContent() {
         mainWide
         contentClassName={`${pl.content} ${pl.legacyHost}`}
       >
-        <section className="tf-shell" style={{ paddingTop: "2rem", paddingBottom: "3rem" }}>
+        <section className="compat-flow-section" style={{ paddingTop: "2rem", paddingBottom: "3rem" }}>
           <div className="compat-desktop-shell compat-desktop-stack">
             <div className="compat-analyze-topbar">
               <Link href="/compatibility/signs" className="compat-analyze-back">
@@ -262,7 +262,7 @@ function ResultContent() {
       mainWide
       contentClassName={`${pl.content} ${pl.legacyHost}`}
     >
-      <section className="tf-shell" style={{ paddingTop: "2rem", paddingBottom: "4.5rem" }}>
+      <section className="compat-flow-section" style={{ paddingTop: "2rem", paddingBottom: "4.5rem" }}>
         <div
           className="tf-surface"
           style={{

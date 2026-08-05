@@ -1,25 +1,36 @@
 /*
- * Compatibility — editorial layout (narrow column, single hero, calm cards).
- * Aligns with common patterns: one focal reading width (~72ch), score as focal graphic,
- * vertical sections instead of uneven split columns.
+ * Compatibility — tokens + vertical stack only.
+ * Column width/gutters come from ProductPageScreen → productWebContentV2
+ * (same as Practices/Profile). Do not re-cap max-width or add horizontal pad here.
  */
 .compat-desktop-shell {
-  max-width: var(--tf-shell-max, 52rem);
-  margin: 0 auto;
-  padding: 0 clamp(16px, 4vw, 28px) 56px;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0 0 2.5rem;
   --compat-ink: var(--tf-ink);
   --compat-ink-soft: var(--tf-ink);
   --compat-muted: var(--tf-caption);
   --compat-accent: var(--tf-accent-gold);
   --compat-accent-strong: var(--tf-accent-gold-600, var(--tf-accent-gold));
-  --compat-surface: linear-gradient(145deg, rgba(255, 253, 249, 0.99) 0%, rgba(252, 247, 238, 0.97) 100%);
-  --compat-surface-muted: rgba(248, 250, 252, 0.94);
-  --compat-border: rgba(191, 151, 95, 0.2);
-  --compat-col-gap: 20px;
-  --compat-block-gap: clamp(28px, 4vw, 40px);
+  --compat-surface: var(--day-surface-tint, var(--tf-surface-insight-bg, var(--tf-surface)));
+  --compat-surface-muted: var(--tf-surface-muted, var(--tf-surface));
+  --compat-border: var(--tf-ds-border-gold, var(--tf-border));
+  --compat-col-gap: 1.25rem;
+  --compat-block-gap: clamp(1.5rem, 4vw, 2.5rem);
   --compat-card-radius: 22px;
-  --compat-card-pad: clamp(22px, 3vw, 28px);
+  --compat-card-pad: clamp(1.1rem, 3vw, 1.75rem);
   --compat-inner-radius: 16px;
+}
+
+
+/* Sub-page vertical rhythm only — column owned by productWebContentV2 */
+.compat-flow-section {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding-inline: 0;
+  box-sizing: border-box;
 }
 
 .compat-desktop-stack {
@@ -34,6 +45,17 @@
   background: var(--compat-surface);
   border: 1px solid var(--compat-border);
   box-shadow: 0 10px 36px rgba(55, 42, 28, 0.07);
+}
+
+/* Page section — no outer paper card (column already owned by product shell). */
+.compat-desktop-section {
+  width: 100%;
+  margin: 0;
+  padding: 0.25rem 0 0.5rem;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  box-sizing: border-box;
 }
 
 /* Slim top bar — avoid duplicating global Header */
@@ -466,7 +488,7 @@
 
 @media (max-width: 960px) {
   .compat-desktop-shell {
-    padding: 0 16px 40px;
+    padding: 0 0 2rem;
   }
 
   .compat-signs-hero-grid,
