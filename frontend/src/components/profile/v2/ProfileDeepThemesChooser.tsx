@@ -150,8 +150,8 @@ export function ProfileDeepThemesChooser({ deepFromCore, onChanged }: ProfileDee
       <p className={styles.deepThemesTitle}>Углубить тему</p>
       <p className={styles.deepThemesLead}>
         {state.gated
-          ? "С подпиской можно выбрать тему и получить практические подсказки — без переписывания базового портрета."
-          : `Выбери до ${state.cap} тем${state.cap === 1 ? "ы" : ""} — появятся прикладные шаги. Базовый текст сферы не меняется. Смена выбора — раз в ${state.change_window_days ?? 7} дней.`}
+          ? "С подпиской можно выбрать тему и получить прямые подсказки под твой портрет."
+          : `Выбери до ${state.cap} тем${state.cap === 1 ? "ы" : ""} — появятся конкретные подсказки.`}
       </p>
       <div className={styles.deepThemesChips} role="group" aria-label="Темы глубины">
         {state.catalog.map((theme) => {
@@ -202,8 +202,8 @@ export function ProfileDeepThemesChooser({ deepFromCore, onChanged }: ProfileDee
             const label = state.catalog.find((c) => c.id === themeId)?.label ?? themeId;
             return (
               <div key={themeId} className={styles.deepThemesTipsPack} data-testid={`profile-deep-tips-${themeId}`}>
-                <p className={styles.deepThemesTipsTitle}>{label}: практические шаги</p>
-                <ul className={styles.effortSphereTipsList}>
+                <p className={styles.deepThemesTipsTitle}>{label}: прямые подсказки</p>
+                <ul className={styles.deepThemesTipsList}>
                   {tips.map((tip) => (
                     <li key={tip}>{tip}</li>
                   ))}

@@ -461,19 +461,19 @@ _ESSAYS_BY_IDENTITY: dict[str, dict[str, Any]] = {
 }
 
 _CLAIM_WHY_LABEL: dict[str, str] = {
-    "autonomy_high": "Автономия — главный механизм ядра",
-    "analysis_before_action": "Сначала анализ, потом шаг — рабочий механизм ядра",
-    "direction_through_air_mind": "Путь через идеи и связи задаёт направление ядра",
-    "stability_through_earth": "Опора на осязаемое и прочное держит ядро",
-    "care_through_water_sun": "Забота и проницаемость — способ строить мир",
-    "emotional_sensitivity_high": "Эмоциональная глубина окрашивает ядро",
-    "anchor_through_earth_moon": "Земная луна якорит ритм и даёт устойчивость",
-    "freedom_vs_stability": "Напряжение свободы и опоры — ось характера",
-    "drive_through_fire_mars": "Огненный марс усиливает импульс действия",
-    "presence_through_air_asc": "Воздушный ASC задаёт способ первого контакта",
-    "presence_through_fire_asc": "Огненный ASC задаёт способ первого контакта",
-    "presence_through_earth_asc": "Земной ASC задаёт способ первого контакта",
-    "presence_through_water_asc": "Водный ASC задаёт способ первого контакта",
+    "autonomy_high": "Автономия",
+    "analysis_before_action": "Сначала понять — потом шаг",
+    "direction_through_air_mind": "Путь через идеи и связи",
+    "stability_through_earth": "Опора на осязаемое и прочное",
+    "care_through_water_sun": "Забота и проницаемость",
+    "emotional_sensitivity_high": "Эмоциональная глубина",
+    "anchor_through_earth_moon": "Земной якорь ритма",
+    "freedom_vs_stability": "Свобода и опора рядом",
+    "drive_through_fire_mars": "Огненный импульс действия",
+    "presence_through_air_asc": "Первый контакт через вопросы, разговор и лёгкую дистанцию",
+    "presence_through_fire_asc": "Первый контакт через прямой заход и тепло",
+    "presence_through_earth_asc": "Первый контакт через плотный спокойный темп",
+    "presence_through_water_asc": "Первый контакт через чуткость поля",
 }
 
 _RECOGNITION_LABEL: dict[str, str] = {
@@ -692,12 +692,12 @@ def _essays_for(identity_thesis: str) -> dict[str, Any]:
     # Generic fallback — still CE-owned, still «ты».
     return {
         "strengths": [
-            "Ты держишь ясный внутренний механизм — это опора характера.",
+            "Ты держишь ясный внутренний контур — это опора характера.",
             "Способность видеть свою линию среди чужих ожиданий.",
         ],
         "growth_zones": [
             "Переводить ядро характера в явный выбор, а не только в понимание.",
-            "Замечать, где сила механизма становится отсрочкой жизни.",
+            "Замечать, где сила контура становится отсрочкой жизни.",
         ],
         "helps": [
             "Сделай один шаг из ядра — маленький, но названный.",
@@ -706,7 +706,7 @@ def _essays_for(identity_thesis: str) -> dict[str, Any]:
             "Ты решаешь из своего ядра характера: сначала внутренняя ясность, потом внешняя форма."
         ),
         "relationship_style": (
-            "В близости тебе важно, чтобы связь не стирала твой основной механизм — "
+            "В близости тебе важно, чтобы связь не стирала твой основной способ быть — "
             "а давала ему место рядом с другим."
         ),
         "money_style": (

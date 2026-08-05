@@ -7,19 +7,20 @@ describe("journeyAntiDupe", () => {
     expect(textOverlapRatio(line, paraphrase)).toBeGreaterThan(0.35);
   });
 
-  it("replaces overlapping Act-2 meaning with mechanism fallback", () => {
+  it("replaces overlapping Act-2 meaning with fact fallback", () => {
     const out = applyAct2AntiDupeMeaning({
       meaning: "Ты первым видишь структуру там, где остальные пока видят только хаос.",
       anchorId: "sun",
       recognitionLine: "Ты первым видишь структуру там, где остальные пока видят только хаос.",
     });
-    expect(out).toMatch(/механизм|не повтор/i);
+    expect(out).toMatch(/Солнце окрашивает|проявляешь силу/i);
     expect(out).not.toMatch(/видишь структуру/i);
+    expect(out).not.toMatch(/механизм|берётся только/i);
   });
 
-  it("keeps distinct mechanism prose", () => {
+  it("keeps distinct person prose", () => {
     const out = applyAct2AntiDupeMeaning({
-      meaning: "Расширяет портрет: как ты проявляешь силу через систему и точность.",
+      meaning: "Ты проявляешь силу через систему и точность.",
       anchorId: "sun",
       recognitionLine: "Ты первым видишь структуру там, где остальные видят хаос.",
     });

@@ -32,7 +32,7 @@ describe("buildWhyFormationCards", () => {
 
     expect(selected).toHaveLength(1);
     expect(selected[0]?.meaning).toMatch(/глубин|смысл|понят/i);
-    expect(selected[0]?.meaning).toMatch(/только из числа пути/i);
+    expect(selected[0]?.meaning).not.toMatch(/только из числа пути|берётся|механизм/i);
     expect(selected[0]?.meaning).not.toMatch(/Солнца.*выбира/i);
 
     expect(influenced.map((r) => r.id)).toEqual(["sun", "element", "rhythm"]);

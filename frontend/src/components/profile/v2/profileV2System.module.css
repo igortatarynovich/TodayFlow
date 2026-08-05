@@ -2617,15 +2617,32 @@
 
 .deepThemesTipsPack {
   margin-top: 0.85rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--tf-border, var(--tf-border));
+  padding: 0.85rem 0.9rem 0.95rem;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(40, 32, 24, 0.12);
+  background: #fffdf9;
+  color: #1a1510;
 }
 
 .deepThemesTipsTitle {
   margin: 0;
   font-size: var(--tf-type-label-size);
   font-weight: 700;
-  color: var(--tf-ink, var(--tf-ink));
+  color: #1a1510;
+}
+
+.deepThemesTipsList {
+  margin: 0.45rem 0 0;
+  padding-left: 1.15rem;
+  display: grid;
+  gap: 0.45rem;
+  color: #1a1510;
+  font-size: var(--tf-type-body-size);
+  line-height: 1.5;
+}
+
+.deepThemesTipsList li {
+  color: #1a1510;
 }
 
 .natalDecodeBody {

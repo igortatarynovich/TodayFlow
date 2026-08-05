@@ -1,6 +1,6 @@
 /**
  * Enrich Profile Step-2 why anchors with person-facing meaning.
- * SoT: PROFILE_PRODUCT_JOURNEY_FORMS_V1 §2 — never claim Sun/element chose archetype.
+ * Facts and lived meaning only — never explain product/engine mechanisms.
  */
 import { applyAct2AntiDupeMeaning } from "@/lib/profilePage/journeyAntiDupe";
 import type { ProfileFrameworkCard } from "@/lib/profilePage/buildProfileQuickMapData";
@@ -22,17 +22,40 @@ export type WhyFormationCard = WhyAnchorPresentation & {
 };
 
 const ELEMENT_PORTRAIT_MEANING: Record<string, string> = {
-  fire: "В портрете больше импульса, тепла и прямой реакции — не через долгое обдумывание.",
-  earth: "В портрете больше опоры на практику, тело и ощутимый результат.",
-  air: "В портрете больше мысли, дистанции и обмена идеями, прежде чем «войти» эмоцией.",
-  water: "В портрете больше чувствительности: сначала проживание, потом формулировка.",
-  огонь: "В портрете больше импульса, тепла и прямой реакции — не через долгое обдумывание.",
-  земля: "В портрете больше опоры на практику, тело и ощутимый результат.",
-  воздух: "В портрете больше мысли, дистанции и обмена идеями, прежде чем «войти» эмоцией.",
-  вода: "В портрете больше чувствительности: сначала проживание, потом формулировка.",
+  fire: "В тебе больше импульса, тепла и прямой реакции — не через долгое обдумывание.",
+  earth: "В тебе больше опоры на практику, тело и ощутимый результат.",
+  air: "В тебе больше мысли, дистанции и обмена идеями, прежде чем «войти» эмоцией.",
+  water: "В тебе больше чувствительности: сначала проживание, потом формулировка.",
+  огонь: "В тебе больше импульса, тепла и прямой реакции — не через долгое обдумывание.",
+  земля: "В тебе больше опоры на практику, тело и ощутимый результат.",
+  воздух: "В тебе больше мысли, дистанции и обмена идеями, прежде чем «войти» эмоцией.",
+  вода: "В тебе больше чувствительности: сначала проживание, потом формулировка.",
 };
 
-function clip(text: string, max = 170): string {
+const ASC_CONTACT_BY_ELEMENT: Record<string, string> = {
+  air: "В первом контакте тебя считывают по разговору, вопросам и лёгкой дистанции — ещё до близости.",
+  fire: "В первом контакте тебя считывают по прямому заходу и теплу — без долгой разведки.",
+  earth: "В первом контакте тебя считывают по плотности и спокойному темпу — сначала опора, потом открытость.",
+  water: "В первом контакте тебя считывают по мягкой оболочке и чутью поля — тон раньше правил.",
+};
+
+/** Sign-specific first-contact (preferred over element when known). */
+const ASC_CONTACT_BY_SIGN: Record<string, string> = {
+  gemini: "В первом контакте — вопросы, варианты и лёгкая дистанция: тебя считывают по разговору, ещё до близости.",
+  libra: "В первом контакте — баланс и взаимность: тебя считывают по тому, как ты держишь двоих.",
+  aquarius: "В первом контакте — дистанция идей и свой метод: близость не равна сдаче контура.",
+  aries: "В первом контакте — прямой старт без разведки: тепло и темп раньше осторожности.",
+  leo: "В первом контакте — тепло и право быть увиденным: тебя считывают по присутствию.",
+  sagittarius: "В первом контакте — смысл и горизонт: разговор про «зачем», не только про «как».",
+  taurus: "В первом контакте — спокойная плотность: сначала опора, потом открытость.",
+  virgo: "В первом контакте — точность и проверка: детали раньше большой открытости.",
+  capricorn: "В первом контакте — обязательства и статус: серьёзность раньше лёгкости.",
+  cancer: "В первом контакте — сначала «свои», потом открытость: тон поля раньше правил.",
+  scorpio: "В первом контакте — дозированный доступ: глубину дают не сразу.",
+  pisces: "В первом контакте — эмпатия и мягкие границы: чуткость раньше жёстких правил.",
+};
+
+function clip(text: string, max = 200): string {
   const clean = text.replace(/\s+/g, " ").trim();
   if (clean.length <= max) return clean;
   const cut = clean.slice(0, max - 1);
@@ -55,17 +78,13 @@ function meaningForSelected(
     null;
   const entry = lp != null ? getLifePathEntry(lp) : null;
   const essence = entry?.essence?.trim();
-  const seedLabel = row.title.replace(/^Архетип\s+/i, "").trim() || "портрета";
-  const honesty = `Имя «${seedLabel}» берётся только из числа пути — не из Солнца и не из стихии.`;
   if (essence) {
-    const head = essence.length > 130 ? clip(essence, 130) : essence;
-    return `${head} ${honesty}`;
+    return essence.length > 180 ? clip(essence, 180) : essence;
   }
-  return clip(
-    row.detail
-      ? `${row.detail[0]?.toUpperCase()}${row.detail.slice(1)}. ${honesty}`
-      : honesty,
-  );
+  if (row.detail) {
+    return clip(`${row.detail[0]?.toUpperCase()}${row.detail.slice(1)}.`);
+  }
+  return clip(row.title || "Опора имени в портрете.");
 }
 
 function meaningForInfluenced(
@@ -87,7 +106,7 @@ function meaningForInfluenced(
     return clip(
       fromCard ||
         fromKnowledge ||
-        "Расширяет портрет: как ты проявляешь силу и себя в мире.",
+        "Ты проявляешь силу и себя в мире так, как это видно окружающим без объяснений.",
     );
   }
 
@@ -101,7 +120,7 @@ function meaningForInfluenced(
     return clip(
       fromCard ||
         fromKnowledge ||
-        "Расширяет портрет: как ты чувствуешь, восстанавливаешься и реагируешь изнутри.",
+        "Ты чувствуешь, восстанавливаешься и реагируешь изнутри — это видно рядом с тобой.",
     );
   }
 
@@ -110,14 +129,29 @@ function meaningForInfluenced(
     const ascHow = ctx.core?.character_engine_asc_v0?.asc?.how?.trim();
     const ascValue = ctx.core?.portrait_why_v0?.portrait_influenced_by?.find((r) => r.id === "asc")
       ?.value;
-    const fromKnowledge = ascValue
-      ? getRisingSignEntry(normalizeSignId(String(ascValue)))?.bullets?.[0]?.trim()
+    const signId = ascValue ? normalizeSignId(String(ascValue)) : null;
+    const fromKnowledge = signId
+      ? getRisingSignEntry(signId)?.bullets?.[0]?.trim()
       : null;
+    const bySign = signId ? ASC_CONTACT_BY_SIGN[signId] : null;
+    const byElement =
+      signId && ["gemini", "libra", "aquarius"].includes(signId)
+        ? ASC_CONTACT_BY_ELEMENT.air
+        : signId && ["aries", "leo", "sagittarius"].includes(signId)
+          ? ASC_CONTACT_BY_ELEMENT.fire
+          : signId && ["taurus", "virgo", "capricorn"].includes(signId)
+            ? ASC_CONTACT_BY_ELEMENT.earth
+            : signId && ["cancer", "scorpio", "pisces"].includes(signId)
+              ? ASC_CONTACT_BY_ELEMENT.water
+              : null;
+    // Prefer concrete contact meaning; avoid repeating the same vague ASC line twice.
     return clip(
-      fromCard ||
-        ascHow ||
+      bySign ||
         fromKnowledge ||
-        "Расширяет портрет: первый контакт — как тебя считывают до слов.",
+        byElement ||
+        fromCard ||
+        ascHow ||
+        "В первом контакте тебя считывают по темпу и дистанции — до знакомства с ядром.",
     );
   }
 
@@ -127,7 +161,7 @@ function meaningForInfluenced(
     return clip(
       fromCard ||
         mcHow ||
-        "Расширяет портрет: публичная роль и след, по которому судят о результате.",
+        "Публичная роль и след результата — то, по чему тебя судят снаружи.",
     );
   }
 
@@ -139,19 +173,17 @@ function meaningForInfluenced(
     return clip(
       ELEMENT_PORTRAIT_MEANING[raw] ||
         (row.detail
-          ? `Стихия «${row.detail}» задаёт фон темперамента в портрете — без права выбирать имя архетипа.`
-          : "Стихия Солнца задаёт фон темперамента в портрете."),
+          ? `Стихия «${row.detail}» окрашивает темперамент в портрете.`
+          : "Стихия Солнца окрашивает темперамент в портрете."),
     );
   }
 
   if (id === "rhythm") {
     const rhythm = ctx.core?.baseline?.rhythm_style?.trim() || row.detail;
     if (rhythm) {
-      return clip(
-        `Ритм развития из карты: ${rhythm[0]?.toLowerCase()}${rhythm.slice(1)}. Это способ двигаться, не причина имени архетипа.`,
-      );
+      return clip(`Ритм развития: ${rhythm[0]?.toLowerCase()}${rhythm.slice(1)}.`);
     }
-    return "Ритм развития из стихии и модальности — как ты обычно стартуешь и держишь темп.";
+    return "Ритм развития — как ты обычно стартуешь и держишь темп.";
   }
 
   if (id === "life_path") {
@@ -160,23 +192,20 @@ function meaningForInfluenced(
 
   return clip(
     row.detail
-      ? `В портрете учитывается: ${row.detail}.`
-      : "Опора расширяет чтение портрета рядом с именем.",
+      ? `${row.detail[0]?.toUpperCase()}${row.detail.slice(1)}.`
+      : "Опора рядом с именем в портрете.",
   );
 }
 
 /**
  * Present Step-2 as formation cards: selected vs influenced, each with meaning.
- * Secondary chips are retired — every influenced anchor gets a full described card.
  */
 export function buildWhyFormationCards(
   rows: ProfileJourneyWhyRow[],
   ctx: {
     core?: CoreProfile | null;
     frameworkCards?: ProfileFrameworkCard[] | null;
-    /** Act 1 recognition line — anti-dupe source. */
     recognitionLine?: string | null;
-    /** Act 1 kitchen identity — anti-dupe source when opened. */
     identityCore?: string | null;
   } = {},
 ): { selected: WhyFormationCard[]; influenced: WhyFormationCard[] } {
@@ -202,7 +231,6 @@ export function buildWhyFormationCards(
     else influenced.push(card);
   }
 
-  // Stable influenced order: sun → moon → asc → mc → element → rhythm → other
   const order = ["sun", "moon", "asc", "rising", "mc", "element", "rhythm"];
   influenced.sort((a, b) => {
     const ai = order.indexOf(a.id.toLowerCase());
