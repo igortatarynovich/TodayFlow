@@ -55,49 +55,54 @@
 .displayXl {
   margin: 0;
   font-family: var(--tf-font-display);
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-size: clamp(var(--tf-type-display-l-size), 5vw, var(--tf-type-display-xl-size));
   line-height: 1.1;
   font-weight: 400;
+  color: var(--tf-ink);
 }
 
 .displayLg {
   margin: 0;
   font-family: var(--tf-font-display);
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(var(--tf-type-hero-size), 4vw, var(--tf-type-display-l-size));
   line-height: 1.05;
   font-weight: 400;
+  color: var(--tf-ink);
 }
 
 .displayMd {
   margin: 0;
   font-family: var(--tf-font-display);
-  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-size: var(--tf-type-hero-size);
   line-height: 1.08;
   font-weight: 400;
+  color: var(--tf-ink);
 }
 
 .displaySm {
   margin: 0;
   font-family: var(--tf-font-display);
-  font-size: 1.75rem;
+  font-size: var(--tf-type-section-size);
   line-height: 1.15;
   font-weight: 400;
+  color: var(--tf-ink);
 }
 
 .sectionTitle {
   margin: 0;
   font-family: var(--tf-font-display);
-  font-size: 1.5rem;
+  font-size: var(--tf-type-section-size);
   font-weight: 400;
+  color: var(--tf-ink);
 }
 
 .eyebrow {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--tf-accent-gold);
+  color: var(--tf-ink-accent);
 }
 
 .eyebrowOnDark {
@@ -106,24 +111,39 @@
 
 .bodyLg {
   margin: 0;
-  font-size: clamp(1.125rem, 2vw, 1.375rem);
+  font-size: var(--tf-type-h3-size);
   line-height: 1.5;
+  color: var(--tf-ink);
 }
 
 .bodyMd {
   margin: 0;
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: var(--tf-type-body-size);
+  line-height: var(--tf-type-body-line);
+  color: var(--tf-ink);
 }
 
 .bodySm {
   margin: 0;
-  font-size: 0.875rem;
-  line-height: 1.55;
+  font-size: var(--tf-type-comment-size);
+  line-height: 1.5;
+  color: var(--tf-ink-secondary);
 }
 
 .muted {
-  opacity: 0.6;
+  color: var(--tf-ink-secondary);
+}
+
+.inkQuiet {
+  color: var(--tf-ink-quiet);
+}
+
+.inkAccent {
+  color: var(--tf-ink-accent);
+}
+
+.inkAction {
+  color: var(--tf-ink-action);
 }
 
 .mutedOnDark {
@@ -230,6 +250,7 @@
   font-size: var(--tf-type-h1-size);
   line-height: 1.15;
   font-weight: 400;
+  color: var(--tf-ink);
 }
 
 .title {
@@ -238,6 +259,7 @@
   font-size: var(--tf-type-h2-size);
   line-height: 1.2;
   font-weight: 400;
+  color: var(--tf-ink);
 }
 
 .subtitle {
@@ -246,20 +268,21 @@
   font-size: var(--tf-type-h3-size);
   line-height: 1.3;
   font-weight: 600;
+  color: var(--tf-ink);
 }
 
 .caption {
   margin: 0;
-  font-size: var(--tf-type-caption-lg-size);
+  font-size: var(--tf-type-label-size);
   line-height: 1.4;
-  color: var(--tf-caption);
+  color: var(--tf-ink-quiet);
 }
 
 .label {
   margin: 0;
   font-size: var(--tf-type-label-size);
   font-weight: 600;
-  color: var(--tf-ink-muted);
+  color: var(--tf-ink-quiet);
 }
 
 .mono {

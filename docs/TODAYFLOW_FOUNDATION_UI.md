@@ -214,45 +214,89 @@
 
 ## 5. Typography Hierarchy
 
-**Пять ролей** — жёсткие px на 390 viewport. Один шрифт display, один body.
+**Семь ролей** — жёсткие px на 390 viewport. Один шрифт display, один body.  
+*(Task 2.9, 2026-08-05 — заменяет шкалу Display 40 / Hero 33 / Section 20 / Body 15 / Caption 10–11. Параллельной второй шкалы нет.)*
 
 | Role | Font | Size | Line | Weight | Use |
 |------|------|------|------|--------|-----|
-| **Display** | Playfair Display | **40px** | 1.15 | 600 | marketing · empty states |
-| **Hero** | Playfair Display | **33px** | 1.08 | 700 | Hero Large name |
-| **Section** | Playfair Display | **20px** | 1.2 | 600 | card titles · Portal title 26px* |
-| **Body** | Inter | **15px** | 1.55 | 400 | digest · insight values |
-| **Caption** | Inter | **10–11px** | 1.35 | 600 | labels · pillars · caps |
+| **Display** | Playfair Display | **48–60px** | 1.1 | 400–600 | marketing · empty states · pull-quotes |
+| **Hero** *(card title)* | Playfair Display | **34px** | 1.08 | 700 | Hero Large name · крупный вывод карточки |
+| **Section** | Playfair Display | **24px** | 1.2 | 600 | название раздела · card section |
+| **Subtitle** | Manrope / Inter | **18px** | 1.3 | 600 | подзаголовок |
+| **Body** | Manrope / Inter | **16px** | 1.55 | 400 | основной текст |
+| **Comment** | Manrope / Inter | **14px** | 1.5 | 400 | пояснение · secondary body |
+| **Label** | Manrope / Inter | **12px** | 1.35 | 600 | метки · caps · нумерация · даты |
 
-*Portal title = Section + 6px (26px) — исключение, зафиксировать одним токеном `--tf-type-portal-title`.*
+*Portal title* — исключение: `--tf-type-portal-title` (≈26px), не отдельная продуктовая роль.
 
-**Запрещено:** всё Body 15px · три serif на одном экране · Inter для Hero name.
+**Запрещено:** плоский «всё одного размера» · три serif на одном экране · Inter для Hero name · жирнить целые предложения (макс. **2–3 слова**).
 
 **Figma page:** `Typography / Scale` — specimen RU + EN.
 
 **Свести с кодом:** `--orbit-text-*` → aliases на `--tf-type-*` в `globals.css` (DS-10); новый код — только `--tf-type-*`.
 
+### 5.1 Semantic layers *(смысловые слои, не «раскрашенный текст»)*
+
+Цвет и композиция — **язык интерфейса**, не декор. Цель: глаз сразу видит заголовок → большой вывод → расшифровку; длинные трактовки — как ритм остановок, не полотно.
+
+#### Пять цветов текста *(ровно пять)*
+
+| Role | Token | Value | Use |
+|------|-------|-------|-----|
+| **Primary** | `--tf-ink` | `#2A211B` | почти весь основной текст |
+| **Secondary** | `--tf-ink-secondary` | `rgba(42,33,27,.68)` | пояснения · подписи · контекст |
+| **Quiet** | `--tf-ink-quiet` | `rgba(42,33,27,.42)` | метки · нумерация · даты · навигация |
+| **Accent** | `--tf-ink-accent` | `#A57A3D` | только короткие: ключевые слова · названия · номера этапов · важные цифры — **не** длинные предложения |
+| **Action** | `--tf-ink-action` | `var(--tf-accent-numerology)` `#4a3270` | текстовые ссылки · интерактивный текст · text CTA — **не** fill primary `DsButton` (кнопка остаётся золотой) |
+
+Legacy aliases: `--tf-body` → secondary · `--tf-caption` / `--tf-ink-muted` / `--tf-ink-soft` → quiet (или soft visual only). Не вводить шестой ink.
+
+#### Смысловая иерархия блока
+
+1. **Label / eyebrow** (Label 12 · quiet или capsule) — что это за блок  
+2. **Takeaway** (Hero/Section) — один крупный вывод, не абзац  
+3. **Body** — расшифровка  
+
+#### `DsCallout` — две независимые оси
+
+| Axis | Values | Visual |
+|------|--------|--------|
+| **tone** *(тип вывода)* | `insight` · `practice` · `help` · `avoid` | вертикальная линия золотая / сиреневая / зелёная / красная + мягкий wash фона |
+| **label** *(тема жизни)* | `main` · `attention` · `help` · `practice` · `relations` · `money` · `thought` · `emotions` · `next_step` | капсула: ГЛАВНОЕ · НА ЧТО ОБРАТИТЬ ВНИМАНИЕ · … |
+
+Линия — основной акцент; цветной фон карточки целиком — нет. Иконки у блоков — маленькие **линейные SVG** (`DsIcons`), без эмодзи.
+
+Также: `DsQuote` (крупная цитата), `DsCapsule` (standalone лейбл). Повторяющиеся паттерны одни и те же на Today / Tarot / Compatibility / Profile / Practices.
+
+#### Ритм чтения *(длинные трактовки)*
+
+Каждые 2–3 абзаца — смена ритма: крупная цитата · callout с выводом · список 3–5 · горизонтальный разделитель с подписью · мини-таблица «Риск / Возможность» · блок «Что делать сегодня».
+
+**PR1 (Task 2.9 foundation):** канон + токены + примитивы + каталог + один пилот. **Не** закрывает зоны. Task **2.9b+** по зоне — тот же 6-axis DoD, что Task 2.7 / 3.
+
 ---
 
 ## 6. Colors
 
-**Минимальный набор** — не расширять до 40 swatches.
+**Минимальный набор** — не расширять до 40 swatches. Ink-квинтет — §5.1 (единственный SoT для цвета текста).
 
-| Token | Hex | Role |
-|-------|-----|------|
+| Token | Hex / value | Role |
+|-------|-------------|------|
 | `--tf-page` | `#f3efe8` | Profile page *(warm parchment)* |
 | `--tf-page-cream` | `#fff9f5` | Today default |
-| `--tf-ink` | `#1a1510` | primary text |
-| `--tf-ink-soft` | `#5b4630` | symbols |
-| `--tf-body` | `#475569` | secondary text |
-| `--tf-caption` | `#9a8468` | labels |
-| `--tf-accent-numerology` | `#4a3270` | LP digit |
+| `--tf-ink` | `#2A211B` | primary text (§5.1) |
+| `--tf-ink-secondary` | `rgba(42,33,27,.68)` | secondary text |
+| `--tf-ink-quiet` | `rgba(42,33,27,.42)` | quiet / meta |
+| `--tf-ink-accent` | `#A57A3D` | short accent words only |
+| `--tf-ink-action` | `#4a3270` | interactive text (= numerology) |
+| `--tf-accent-gold` | `#c9a96e` | CTA / chrome gold *(не text accent)* |
+| `--tf-accent-numerology` | `#4a3270` | LP digit · action text base |
 | `--tf-accent-action` | `#8f6b3a` | Action bar |
 | `--tf-on-dark` | `#faf8f5` | Portal |
 | `--tf-insight-love-bg` | blush gradient | Surface B variant |
 | `--tf-insight-money-grid` | `#6b5344` @ 4% | Surface B variant |
 
-**Figma page:** `Colors / Core` — 10 chips + on-surface pairs.
+**Figma page:** `Colors / Core` — 10 chips + on-surface pairs + ink quintet.
 
 ---
 
@@ -642,7 +686,8 @@ interface DayAtmosphereContract {
 |----------|---------|----------|---------|
 | **Button** | `DsButton` (`design-system/primitives/DsButton.tsx`) | `primary · secondary · ghost · destructive · icon` × `size: sm · md · block` | Единственный способ сделать CTA/кнопку. Новый `.actionButton`/`.submitButton`-класс в `.module.css` — запрещён (см. §17c) |
 | **Card / Surface** | `DsCard` (+ `DsStatusBadge`) | `standard · glass · orbital · feature · dark · insight · elevated · outline · card` × `size: default · compact` — соответствуют Surface A–N §4 и `card--*` в Figma-карте (`figmaMap.ts`). **`compact`** = Surface B pad/radius (§16.3) для Today Block-панелей | Контентная/интерактивная карточка — только через `DsCard`, не `<div className={styles.card}>` с собственным CSS. Today Block: `variant="glass" size="compact"` — без `!important`-override в потребителе |
-| **Typography** | `DsTypography` (`DsDisplayTitle`/`DsHeadline`/`DsTitle`/`DsSubtitle`/`DsBody`/`DsCaption`/…) | соответствует ролям §5 | Новый `font-size` вне `--tf-type-*` — запрещён |
+| **Typography** | `DsTypography` (`DsDisplayTitle`/`DsHeadline`/`DsTitle`/`DsSubtitle`/`DsBody`/`DsCaption`/`DsEmph`/…) | соответствует ролям §5 | Новый `font-size` вне `--tf-type-*` — запрещён; ink — только квинтет §5.1 |
+| **Callout / Quote** | `DsCallout` · `DsQuote` · `DsCapsule` | tone × label (§5.1) | Смысловые блоки длинного текста — только отсюда; ad-hoc `border-left` + emoji-лейбл — запрещены в новом коде |
 | **Form** | `DsForm` (`DsTextField`/`DsSearchField`/`DsCheckbox`/`DsChipField`/`DsClassifier`) | — | Инпуты — только отсюда |
 | **Banner** | — **нет примитива** | — | Гэп, не входит в этот проход. Существующие реализации (§14) остаются как есть до отдельного контракта — не изобретаем форму без опоры на реальные кейсы (backlog, см. §15.5) |
 

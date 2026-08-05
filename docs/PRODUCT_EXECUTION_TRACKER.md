@@ -4,6 +4,7 @@ Last updated: 2026-08-05
 Owner: Product + Engineering
 Status: Active working document
 
+**IN PROGRESS (2026-08-05):** **Task 2.9 foundation (PR1)** — semantic meaning layers: §5 type ladder + 5 ink colors + `DsCallout`/`DsQuote`/`DsCapsule` + catalog + `TodayDayLogicCallout` pilot. **Does not close Today or any zone.** Zone rollout = Task **2.9b+** under the same 6-axis DoD as Task 2.7 / 3.
 **IN PROGRESS (2026-08-05):** **DS unification** — Practices / Profile / Compatibility still **IN PROGRESS** (not DONE). Wave 1+2 code live. Live column check @1920: Practices/Profile/Compatibility/Tarot content = **832px** (`--tf-shell-max`). Owner screenshot parity still required before zone DONE / Onboarding.
 **layout DoD ✅ (2026-08-05):** Task 2.7 — hub wrappers → `--tf-shell-max`; Practices/Profile/Compatibility/Tarot column literals tokenized; width rule in `check_ds_style_gate.py`. Zones still **IN PROGRESS**.
 **Wave 2 code ✅ (2026-08-05):** Task 2.6 rgba/color-mix gate + Compatibility local cards → `--day-*`/`--tf-*`; Task 2.6b ~382 font-size → `--tf-type-*` on three zones + Tarot. Baseline rewritten (v2). Screenshot review still required for zone DONE.
@@ -28,12 +29,21 @@ A product zone is **DONE** only when **all** are true:
 
 1. **Color / hex+CTA** — existing DS style gate clean for the zone  
 2. **Color / rgba honesty** — no hardcoded `rgba()`/`color-mix()` paints under zone-local vars; surfaces → `--tf-*` / `--day-*` (Task 2.6)  
-3. **Typography** — Foundation roles Display / Hero / Section / Body / Caption (+ portal-title); no private `font-size` scale (Task 2.6b)  
+3. **Typography** — Foundation roles Display / Hero / Section / Subtitle / Body / Comment / Label (+ portal-title); no private `font-size` scale (Task 2.6b); ink quintet + semantic blocks when Task 2.9b applies  
 4. **Day Atmosphere** — product route under day-mode; phase clock does not recolor shell when mode pinned  
 5. **Shell / layout** — `--tf-shell-max` / `--tf-shell-readable`; no phone-column / random px; no double-shell (Task 2.7)  
 6. **Screenshot parity** — side-by-side reads as one system (owner review)
 
-**Process:** After Wave 1 alone → `layout DoD ✅`, zones stay **IN PROGRESS**. Real DONE only after Wave 1 + Wave 2 + screenshot review. Onboarding after that. Task 3.5 Atmosphere picker on `/design-system` = between later waves, non-blocking.
+**Process:** After Wave 1 alone → `layout DoD ✅`, zones stay **IN PROGRESS**. Real DONE only after Wave 1 + Wave 2 + screenshot review. Onboarding after that. Task 3.5 Atmosphere picker on `/design-system` = between later waves, non-blocking. **Task 2.9 foundation ≠ zone DONE**; Task **2.9b+** (Today / Tarot / Compatibility / Profile / Practices) uses this same 6-axis DoD.
+
+## Architecture impact — Task 2.9 semantic meaning layers (2026-08-05)
+
+- **SoT before:** FOUNDATION_UI §5 at Display 40 / Hero 33 / Section 20 / Body 15 / Caption 10–11; ink via scattered `--tf-ink` / `--tf-body` / `--tf-caption`; meaning blocks ad-hoc (inline styles, local `border-left`, freeform labels).
+- **SoT after:** §5 ladder **48–60 / 34 / 24 / 18 / 16 / 14 / 12**; **exactly 5 text colors** (§5.1); `DsCallout` (tone × label) / `DsQuote` / `DsCapsule` as shared semantic blocks; vertical rail primary accent. Primary CTA fill remains gold; action *text* = `--tf-accent-numerology`.
+- **Public contract changed?** no
+- **Migration required?** no (visual/token only); zone rollouts = Task 2.9b+ under 6-axis DoD
+- **Canon updated?** yes — `docs/TODAYFLOW_FOUNDATION_UI.md` §5 / §5.1 / §6 / §15.2
+- **Backward compatible?** yes for JSON; visual type sizes jump via `--tf-type-*`
 
 ## Architecture impact — Glance Daily Focus replaces sphere chips (2026-08-04)
 
@@ -750,6 +760,8 @@ Status: `IN_PROGRESS`
 - [x] **Task 2.7 Wave 1** — Shell/layout unification (`--tf-shell-max` / readable; kill phone columns). Practices/Profile/Compatibility + Tarot hub. Exit: `layout DoD ✅`, zones still IN PROGRESS.
 - [x] **Task 2.6 Wave 2** — Expand DS gate for `rgba()` / `color-mix()`; rewrite Compatibility local rgba cards to `--tf-*`/`--day-*`.
 - [x] **Task 2.6b Wave 2** — Typography on same three zones + Tarot hub → Foundation `--tf-type-*` roles.
+- [ ] **Task 2.9 foundation (PR1)** — Semantic meaning layers: rewrite §5 ladder (48–60/34/24/18/16/14/12) · 5 ink colors · `DsCallout` (tone × label) · `DsQuote` · `DsCapsule` · linear icons · `/design-system` specimen · pilot `TodayDayLogicCallout`. **Exit: foundation only — zones stay open.**
+- [ ] **Task 2.9b+ zone pilots** — Today Reading · Tarot result · Compatibility result · Profile editorial · Practices session → `DsCallout` + reading rhythm; each zone still needs full 6-axis DoD.
 - [ ] **Screenshot parity** — owner side-by-side review closes Practices/Profile/Compatibility (6-axis DoD).
 - [ ] **Task 3.5** — Day Atmosphere mode picker on `/design-system` (after Onboarding; non-blocking).
 - [ ] Audit all key screens for visual/system consistency (screenshot parity = zone close).
@@ -1399,6 +1411,7 @@ Historical note:
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
 - 2026-08-04 | Design System | **Day shell chrome fix** | **DONE (LIVE)** | PR #14 merged · frontend rebuild. Day-mode = shell routes; evening phase gated; sidebar stretch.
+- 2026-08-05 | Design System | **Task 2.9 foundation (PR1)** | **IN PROGRESS** | Semantic layers SoT: FOUNDATION_UI §5/§5.1; ink quintet; `DsCallout` tone×label; `DsQuote`/`DsCapsule`; type ladder 48–60/34/24/18/16/14/12. Pilot `TodayDayLogicCallout`. Does **not** close zones — 2.9b+ under 6-axis DoD.
 - 2026-08-05 | Design System | **Task 2.7 + 2.6 + 2.6b Wave 1–2** | **CODE (layout DoD ✅; zones IN PROGRESS)** | Shell wrappers → `--tf-shell-max`; zone columns tokenized; gate v2 (rgba/color-mix/font-size/max-width); Compatibility cards → `--day-*`/`--tf-*`; ~382 type literals → `--tf-type-*`. Baseline 1964 keys. Screenshot parity still required before zone DONE / Onboarding.
 - 2026-08-05 | Design System | **DS unification reopen** | **IN PROGRESS** | Practices/Profile/Compatibility not DONE on color-only gate. 6-axis DoD. Wave 1 = Task 2.7 layout; Wave 2 = Task 2.6 rgba gate + 2.6b type; then screenshots; then Onboarding.
 - 2026-08-04 | Design System | **Task 3 Compatibility wave** | **REOPENED (color partial)** | PR #13 merged · Hub/analyze/signs/birthdates → `DsButton`; baseline 495→447. Layout/rgba/type/screenshots pending under DS unification.

@@ -16,9 +16,15 @@ export const DS_FIGMA_MAP = {
   },
   colors: {
     "bg--cream-*": "--tf-page, --tf-page-cream, --tf-cream-300/400",
-    "accent--gold-*": "--tf-accent-gold, --tf-accent-gold-200/600",
-    "ink--*": "--tf-ink, --tf-ink-soft, --tf-ink-100",
+    "accent--gold-*": "--tf-accent-gold, --tf-accent-gold-200/600 (CTA chrome — not text accent)",
+    "ink--quintet": "--tf-ink | --tf-ink-secondary | --tf-ink-quiet | --tf-ink-accent | --tf-ink-action",
     "semantic--*": "--tf-semantic-success|alert|error",
+  },
+  semantic: {
+    "callout--insight|practice|help|avoid": "DsCallout tone=… (rail + wash)",
+    "capsule--life-theme": "DsCapsule / DsCallout label=main|attention|…",
+    "quote--pull": "DsQuote",
+    "emph--2-3-words": "DsEmph",
   },
   cards: {
     "card--standard": "DsCard variant=standard",

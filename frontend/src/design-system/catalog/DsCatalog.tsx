@@ -4,12 +4,14 @@ import { dsAppNavItemsRu } from "@/components/product-ui/productWebShellChrome";
 import {
   DsBody,
   DsButton,
+  DsCallout,
   DsCaption,
   DsCard,
   DsCheckbox,
   DsChipField,
   DsClassifier,
   DsDisplayTitle,
+  DsEmph,
   DsEyebrow,
   DsFeatureTile,
   DsHeadline,
@@ -18,6 +20,7 @@ import {
   DsMobileTabBar,
   DsOrbitalViz,
   DsPulseCard,
+  DsQuote,
   DsRitualGate,
   DsRitualGateSection,
   DsSearchField,
@@ -93,15 +96,41 @@ export function DsCatalog() {
 
       <CatalogSection title="2. Colors">
         <div className={cat.colorGrid}>
+          <ColorSwatch name="Ink primary" token="--tf-ink" />
+          <ColorSwatch name="Ink secondary" token="--tf-ink-secondary" />
+          <ColorSwatch name="Ink quiet" token="--tf-ink-quiet" />
+          <ColorSwatch name="Ink accent" token="--tf-ink-accent" />
+          <ColorSwatch name="Ink action" token="--tf-ink-action" />
           <ColorSwatch name="Page" token="--tf-page" />
-          <ColorSwatch name="Cream 300" token="--tf-cream-300" />
-          <ColorSwatch name="Gold" token="--tf-accent-gold" />
-          <ColorSwatch name="Ink" token="--tf-ink" />
-          <ColorSwatch name="Dark" token="--tf-surface-dark" />
+          <ColorSwatch name="Gold CTA" token="--tf-accent-gold" />
           <ColorSwatch name="Success" token="--tf-semantic-success" />
-          <ColorSwatch name="Alert" token="--tf-semantic-alert" />
-          <ColorSwatch name="Error" token="--tf-semantic-error" />
         </div>
+      </CatalogSection>
+
+      <CatalogSection title="2b. Semantic layers">
+        <DsQuote kicker="Сегодня">Иногда лучший следующий шаг — перестать искать идеальный.</DsQuote>
+        <div className={cat.cardGrid} style={{ marginTop: "1.25rem" }}>
+          <DsCallout tone="insight" label="main" icon="spark" title="Сегодня не стоит принимать решение быстро.">
+            <p>
+              Импульс и осторожность сейчас находятся в конфликте. Выбери{" "}
+              <DsEmph>стабильность</DsEmph>, а не скорость.
+            </p>
+          </DsCallout>
+          <DsCallout
+            tone="avoid"
+            label="attention"
+            icon="flag"
+            title="Ты можешь перепутать желание ускориться с необходимостью действовать."
+          />
+          <DsCallout tone="help" label="help" icon="sun" title="Разговор окажется важнее действий." />
+          <DsCallout tone="practice" label="next_step" icon="arrowDown" title="Сделай один короткий шаг до обеда.">
+            <p>Практика — не список задач. Один конкретный жест.</p>
+          </DsCallout>
+        </div>
+        <DsBody size="sm" tone="quiet" className={cat.registry}>
+          Tone (rail) и label (capsule) — независимые оси. Primary CTA остаётся золотой; action-ink — только
+          ссылки/интерактивный текст.
+        </DsBody>
       </CatalogSection>
 
       <CatalogSection title="3. Spacing">

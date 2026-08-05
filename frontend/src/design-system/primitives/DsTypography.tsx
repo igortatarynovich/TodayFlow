@@ -1,6 +1,8 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { joinClass } from "@/design-system/utils/joinClass";
 import p from "@/design-system/primitives/dsPrimitives.module.css";
+
+export type DsInkTone = "primary" | "secondary" | "quiet" | "accent" | "action";
 
 type TextProps = {
   children: ReactNode;
@@ -9,7 +11,18 @@ type TextProps = {
   muted?: boolean;
   onDark?: boolean;
   id?: string;
+  style?: CSSProperties;
+  /** Ink quintet (§5.1). `muted` maps to secondary when tone omitted. */
+  tone?: DsInkTone;
 };
+
+function inkToneClass(tone?: DsInkTone, muted?: boolean): string | null {
+  if (tone === "secondary" || (!tone && muted)) return p.muted;
+  if (tone === "quiet") return p.inkQuiet;
+  if (tone === "accent") return p.inkAccent;
+  if (tone === "action") return p.inkAction;
+  return null;
+}
 
 export function DsDisplayTitle({
   children,
@@ -45,17 +58,27 @@ export function DsBody({
   size = "md",
   muted,
   onDark,
+  tone,
+  style,
 }: TextProps & { size?: "lg" | "md" | "sm" }) {
   const sizeClass = size === "lg" ? p.bodyLg : size === "sm" ? p.bodySm : p.bodyMd;
   return (
-    <p className={joinClass(sizeClass, muted ? p.muted : null, onDark ? p.mutedOnDark : null, className)}>
+    <p
+      style={style}
+      className={joinClass(
+        sizeClass,
+        inkToneClass(tone, muted),
+        onDark ? p.mutedOnDark : null,
+        className,
+      )}
+    >
       {children}
     </p>
   );
 }
 
-export function DsLabel({ children, className }: TextProps) {
-  return <p className={joinClass(p.label, className)}>{children}</p>;
+export function DsLabel({ children, className, tone }: TextProps) {
+  return <p className={joinClass(p.label, inkToneClass(tone), className)}>{children}</p>;
 }
 
 export function DsHeadline({ children, className, as: Tag = "h1", id }: TextProps) {
@@ -82,8 +105,10 @@ export function DsSubtitle({ children, className, as: Tag = "h3", id }: TextProp
   );
 }
 
-export function DsCaption({ children, className, muted }: TextProps) {
-  return <p className={joinClass(p.caption, muted ? p.muted : null, className)}>{children}</p>;
+export function DsCaption({ children, className, muted, tone }: TextProps) {
+  return (
+    <p className={joinClass(p.caption, inkToneClass(tone, muted), className)}>{children}</p>
+  );
 }
 
 export function DsPill({ children, className }: { children: ReactNode; className?: string }) {

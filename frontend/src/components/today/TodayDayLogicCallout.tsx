@@ -1,26 +1,9 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import type { DayEngineBriefForUi, DayModelBriefForUi } from "@/components/today/todayGuideActionable";
 import { RITUAL_COPY } from "@/components/today/todayRitualCopy";
-
-const shellRitual: CSSProperties = {
-  marginTop: "0.65rem",
-  padding: "0.65rem 0.75rem",
-  borderRadius: 14,
-  border: "1px solid rgba(214,142,122,0.28)",
-  background: "rgba(255, 248, 242, 0.72)",
-  maxWidth: "40rem",
-};
-
-const shellGuide: CSSProperties = {
-  marginTop: "0.65rem",
-  padding: "0.55rem 0.7rem",
-  borderRadius: 12,
-  border: "1px solid rgba(214,142,122,0.26)",
-  background: "rgba(255, 248, 242, 0.65)",
-  maxWidth: "42rem",
-};
+import { DsBody, DsCallout, DsEmph } from "@/design-system";
 
 type Props = {
   variant: "ritual" | "guide";
@@ -30,83 +13,84 @@ type Props = {
   wrap?: CSSProperties;
 };
 
+function HintList({
+  hints,
+  style,
+}: {
+  hints: string[];
+  style?: CSSProperties;
+}) {
+  if (!hints.length) return null;
+  return (
+    <>
+      {hints.map((h, i) => (
+        <DsBody key={`hint-${i}-${h.slice(0, 24)}`} size="sm" tone="secondary" style={style}>
+          {h}
+        </DsBody>
+      ))}
+    </>
+  );
+}
+
+function FocusLine({ focus, style }: { focus: string; style?: CSSProperties }) {
+  return (
+    <DsBody size="sm" tone="secondary" style={style}>
+      <DsEmph>{RITUAL_COPY.dayModelOneFocusLabel}:</DsEmph> {focus}
+    </DsBody>
+  );
+}
+
+function CalloutShell({
+  title,
+  children,
+  style,
+}: {
+  title: ReactNode;
+  children?: ReactNode;
+  style?: CSSProperties;
+}) {
+  return (
+    <DsCallout
+      tone="insight"
+      label="main"
+      icon="spark"
+      title={title}
+      style={{ marginTop: "0.65rem", ...style }}
+      testId="today-day-logic-callout"
+    >
+      {children}
+    </DsCallout>
+  );
+}
+
 /** Блок «Опора дня» + опционально day_model; иначе только «Логика дня». Паритет ритуал / вкладка Guide. */
 export function TodayDayLogicCallout({ variant, dayEngineBrief, dayModelBrief, wrap = {} }: Props) {
-  const shell = variant === "ritual" ? shellRitual : shellGuide;
-  const isRitual = variant === "ritual";
+  void variant;
 
   if (dayEngineBrief) {
     return (
-      <div style={shell}>
-        {isRitual ? (
-          <p className="todayflow-eyebrow" style={{ margin: "0 0 0.35rem", ...wrap }}>
-            {RITUAL_COPY.dayEngineBriefEyebrow}
-          </p>
-        ) : (
-          <p className="orbit-body-xs" style={{ margin: "0 0 0.3rem", color: "#8a6c45", fontWeight: 700 }}>
-            {RITUAL_COPY.dayEngineBriefEyebrow}
-          </p>
-        )}
-        <p className="orbit-body-sm" style={{ margin: 0, color: "#3f3428", lineHeight: 1.55, ...(isRitual ? wrap : {}) }}>
-          {dayEngineBrief.anchor}
-        </p>
-        {dayEngineBrief.hints.map((h, i) => (
-          <p
-            key={`${variant}-de-hint-${i}-${h.slice(0, 24)}`}
-            className="orbit-body-xs"
-            style={{ margin: isRitual ? "0.35rem 0 0" : "0.3rem 0 0", color: "#5f4930", lineHeight: 1.45, ...(isRitual ? wrap : {}) }}
-          >
-            {h}
-          </p>
-        ))}
+      <CalloutShell title={dayEngineBrief.anchor} style={wrap}>
+        <HintList hints={dayEngineBrief.hints} style={wrap} />
         {dayModelBrief ? (
           <>
             {dayModelBrief.vectorSummary ? (
-              <p
-                className="orbit-body-xs"
-                style={{
-                  margin: isRitual ? "0.4rem 0 0" : "0.35rem 0 0",
-                  color: "#5f4930",
-                  lineHeight: 1.45,
-                  ...(isRitual ? wrap : {}),
-                }}
-              >
+              <DsBody size="sm" tone="secondary" style={wrap}>
                 {dayModelBrief.vectorSummary}
-              </p>
+              </DsBody>
             ) : null}
-            <p
-              className="orbit-body-xs"
-              style={{ margin: "0.35rem 0 0", color: "#5f4930", lineHeight: 1.45, ...(isRitual ? wrap : {}) }}
-            >
-              <strong style={{ color: "#a89880" }}>{RITUAL_COPY.dayModelOneFocusLabel}:</strong> {dayModelBrief.oneFocus}
-            </p>
+            <FocusLine focus={dayModelBrief.oneFocus} style={wrap} />
           </>
         ) : null}
-      </div>
+      </CalloutShell>
     );
   }
 
   if (dayModelBrief) {
+    const takeaway = dayModelBrief.vectorSummary || dayModelBrief.oneFocus;
     return (
-      <div style={shell}>
-        {isRitual ? (
-          <p className="todayflow-eyebrow" style={{ margin: "0 0 0.35rem", ...wrap }}>
-            {RITUAL_COPY.dayModelBriefEyebrow}
-          </p>
-        ) : (
-          <p className="orbit-body-xs" style={{ margin: "0 0 0.3rem", color: "#8a6c45", fontWeight: 700 }}>
-            {RITUAL_COPY.dayModelBriefEyebrow}
-          </p>
-        )}
-        {dayModelBrief.vectorSummary ? (
-          <p className="orbit-body-sm" style={{ margin: "0 0 0.35rem", color: "#3f3428", lineHeight: 1.55, ...(isRitual ? wrap : {}) }}>
-            {dayModelBrief.vectorSummary}
-          </p>
-        ) : null}
-        <p className="orbit-body-sm" style={{ margin: 0, color: "#3f3428", lineHeight: 1.55, ...(isRitual ? wrap : {}) }}>
-          <strong style={{ color: "#a89880" }}>{RITUAL_COPY.dayModelOneFocusLabel}:</strong> {dayModelBrief.oneFocus}
-        </p>
-      </div>
+      <CalloutShell title={takeaway} style={wrap}>
+        {dayModelBrief.vectorSummary ? <FocusLine focus={dayModelBrief.oneFocus} style={wrap} /> : null}
+      </CalloutShell>
     );
   }
 
