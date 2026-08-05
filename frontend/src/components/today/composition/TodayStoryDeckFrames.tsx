@@ -239,8 +239,7 @@ export function TodayEnergyFlowFrame({
 export function TodayAttributesFrame({
   themeLabel,
   themeText,
-  plotLabel,
-  plotText,
+  plotSlot,
   dailyFocus,
   colorGuide,
   moveDo,
@@ -249,9 +248,8 @@ export function TodayAttributesFrame({
 }: {
   themeLabel: string;
   themeText: string | null;
-  /** «Главный сюжет дня» — short line merged with theme/focus. */
-  plotLabel?: string;
-  plotText?: string | null;
+  /** Full «Главный сюжет» (beats) — lives with theme, not a short substitute line. */
+  plotSlot?: ReactNode;
   dailyFocus: GlanceDailyFocusModel | null;
   colorGuide: TodayDayColorGuide | null;
   moveDo: string | null;
@@ -261,12 +259,12 @@ export function TodayAttributesFrame({
   const focusTitle = (dailyFocus?.title || "").trim() || null;
   const prioritize = (dailyFocus?.prioritize || "").trim() || moveDo;
   const avoid = (dailyFocus?.avoid || "").trim() || moveAvoid;
-  const plot = (plotText || "").trim() || null;
   const hasTheme = Boolean(themeText);
-  const hasPlot = Boolean(plot);
+  const hasPlot = Boolean(plotSlot);
+  const hasThemePlot = hasTheme || hasPlot;
   const hasFocus = Boolean(focusTitle || prioritize);
-  const hasCompass = hasTheme || hasPlot || hasFocus;
   const hasAvoid = Boolean(avoid);
+  const hasFocusAvoid = hasFocus || hasAvoid;
 
   return (
     <div className={`${styles.frame} ${styles.storyScroll}`} data-story-scroll="pane" data-testid="today-frame-attributes">
@@ -280,9 +278,9 @@ export function TodayAttributesFrame({
               <TodayDayColorGuideSection guide={colorGuide} />
             </div>
           </div>
-          {hasCompass || hasAvoid ? (
+          {hasThemePlot || hasFocusAvoid ? (
             <StoryBlockCue
-              targetId={hasCompass ? "attr-compass" : "attr-avoid"}
+              targetId={hasThemePlot ? "attr-theme-plot" : "attr-focus-avoid"}
               label={copy.storyNext.scrollMore}
             />
           ) : (
@@ -295,11 +293,11 @@ export function TodayAttributesFrame({
         </section>
       ) : null}
 
-      {hasCompass ? (
+      {hasThemePlot ? (
         <section
-          className={`${styles.storyPane} ${styles.storyPaneCenter}`}
-          data-story-block="attr-compass"
-          data-testid="today-attributes-compass"
+          className={`${styles.storyPane} ${styles.storyPaneStack}`}
+          data-story-block="attr-theme-plot"
+          data-testid="today-attributes-theme-plot"
         >
           <div className={styles.storyPaneBody}>
             <div className={styles.compassBlock}>
@@ -311,15 +309,33 @@ export function TodayAttributesFrame({
               ) : null}
               {hasPlot ? (
                 <div className={styles.compassSection} data-testid="today-attributes-plot">
-                  <p className={styles.eyebrow}>{plotLabel || copy.conflictLabel}</p>
-                  <p className={styles.detail}>{plot}</p>
+                  {plotSlot}
                 </div>
               ) : null}
+            </div>
+          </div>
+          {hasFocusAvoid ? (
+            <StoryBlockCue targetId="attr-focus-avoid" label={copy.storyNext.scrollMore} />
+          ) : (
+            <StoryNextAnchor
+              title={copy.storyNext.practice}
+              hint={copy.storyNext.practiceHint}
+              onNext={onGoNext}
+            />
+          )}
+        </section>
+      ) : null}
+
+      {hasFocusAvoid ? (
+        <section
+          className={`${styles.storyPane} ${styles.storyPaneCenter}`}
+          data-story-block="attr-focus-avoid"
+          data-testid="today-attributes-focus-avoid"
+        >
+          <div className={styles.storyPaneBody}>
+            <div className={styles.compassBlock}>
               {hasFocus ? (
-                <div
-                  className={styles.compassSection}
-                  data-testid="today-glance-daily-focus"
-                >
+                <div className={styles.compassSection} data-testid="today-glance-daily-focus">
                   <p className={styles.eyebrow}>{copy.journey.glanceFocusLabel}</p>
                   {focusTitle ? (
                     <p className={styles.focusTitle} data-testid="today-glance-focus-title">
@@ -342,37 +358,19 @@ export function TodayAttributesFrame({
                   ) : null}
                 </div>
               ) : null}
-            </div>
-          </div>
-          {hasAvoid ? (
-            <StoryBlockCue targetId="attr-avoid" label={copy.storyNext.scrollMore} />
-          ) : (
-            <StoryNextAnchor
-              title={copy.storyNext.practice}
-              hint={copy.storyNext.practiceHint}
-              onNext={onGoNext}
-            />
-          )}
-        </section>
-      ) : null}
-
-      {hasAvoid ? (
-        <section
-          className={`${styles.storyPane} ${styles.storyPaneCenter}`}
-          data-story-block="attr-avoid"
-          data-testid="today-attributes-avoid"
-        >
-          <div className={styles.storyPaneBody}>
-            <div className={styles.listBlock}>
-              <p className={styles.eyebrow}>{copy.storyNext.avoidLabel}</p>
-              <ul className={styles.cardList}>
-                <li className={styles.cardItem} data-testid="today-glance-focus-avoid">
-                  <span className={styles.cardItemLabel}>
-                    {copy.journey.glanceFocusAvoid.replace(" · ", "")}
-                  </span>
-                  <span>{avoid}</span>
-                </li>
-              </ul>
+              {hasAvoid ? (
+                <div className={styles.compassSection} data-testid="today-attributes-avoid">
+                  <p className={styles.eyebrow}>{copy.storyNext.avoidLabel}</p>
+                  <ul className={styles.cardList}>
+                    <li className={styles.cardItem} data-testid="today-glance-focus-avoid">
+                      <span className={styles.cardItemLabel}>
+                        {copy.journey.glanceFocusAvoid.replace(" · ", "")}
+                      </span>
+                      <span>{avoid}</span>
+                    </li>
+                  </ul>
+                </div>
+              ) : null}
             </div>
           </div>
           <StoryNextAnchor
@@ -383,7 +381,7 @@ export function TodayAttributesFrame({
         </section>
       ) : null}
 
-      {!colorGuide && !hasCompass && !hasAvoid ? (
+      {!colorGuide && !hasThemePlot && !hasFocusAvoid ? (
         <section className={`${styles.storyPane} ${styles.storyPaneCenter}`}>
           <StoryNextAnchor
             title={copy.storyNext.practice}

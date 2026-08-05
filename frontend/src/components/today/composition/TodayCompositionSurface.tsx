@@ -1637,9 +1637,7 @@ export function TodayCompositionSurface(props: Props) {
       colorGuide={story.colorGuide}
       moveDo={moveIfThen?.do ?? null}
       moveAvoid={moveIfThen?.avoid ?? null}
-      plotLabel={copy.conflictLabel}
-      plotText={(plotNarrative?.why || plotNarrative?.tension || "").trim() || null}
-      plotNarrativeSection={plotNarrativeSection}
+      plotSlot={plotNarrativeSection}
       insightHeroText={insightHeroText}
       morningDialogue={morningDialogue}
       showSymbols={showSymbolsAct}

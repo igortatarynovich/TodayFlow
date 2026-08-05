@@ -35,11 +35,10 @@ export type TodayProductScreenFlowProps = {
   colorGuide?: TodayDayColorGuide | null;
   moveDo?: string | null;
   moveAvoid?: string | null;
-  /** Short «Главный сюжет» line for the merged Опора compass pane. */
-  plotLabel?: string;
-  plotText?: string | null;
+  /** Full «Главный сюжет» node for the theme+plot pane (not a short substitute). */
+  plotSlot?: ReactNode;
   insightHeroText?: string | null;
-  plotNarrativeSection?: ReactNode;
+  /** Extra insight body (dialogue); plot lives in Attributes now. */
   morningDialogue?: ReactNode;
   showSymbols: boolean;
   symbolsBody: ReactNode;
@@ -115,10 +114,8 @@ export function TodayProductScreenFlow({
   colorGuide = null,
   moveDo = null,
   moveAvoid = null,
-  plotLabel = copy.conflictLabel,
-  plotText = null,
+  plotSlot = null,
   insightHeroText = null,
-  plotNarrativeSection = null,
   morningDialogue = null,
   showSymbols,
   symbolsBody,
@@ -201,8 +198,7 @@ export function TodayProductScreenFlow({
               <TodayAttributesFrame
                 themeLabel={themeTitle || copy.journey.glanceThemeLabel}
                 themeText={themeText}
-                plotLabel={plotLabel}
-                plotText={plotText}
+                plotSlot={plotSlot}
                 dailyFocus={dailyFocus}
                 colorGuide={colorGuide}
                 moveDo={moveDo}
@@ -233,7 +229,6 @@ export function TodayProductScreenFlow({
             <ScreenFlowStep id="insight" label="Инсайт дня" scrollable={false}>
               <TodayInsightFrame
                 heroText={insightHeroText}
-                story={plotNarrativeSection}
                 dialogue={morningDialogue}
                 onGoNext={() => go(todayScreenFlowCloseIndex(showSymbols))}
               />

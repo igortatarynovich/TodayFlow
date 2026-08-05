@@ -525,6 +525,26 @@
   border-top: 1px solid color-mix(in srgb, var(--day-decor-color, #8f6b3a) 16%, transparent);
 }
 
+/* Theme + full plot can run long — stack from top and scroll inside the pane. */
+.storyPaneStack .storyPaneBody {
+  justify-content: flex-start;
+  padding-top: 0.25rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.compassSection :global([data-testid="today-zone-plot-narrative"]) {
+  width: 100%;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  gap: 0.75rem;
+}
+
+.compassSection :global([data-testid="today-zone-plot-narrative"] > p:first-child) {
+  text-align: center;
+}
+
 .flowBlock,
 .listBlock,
 .colorAnchor,
