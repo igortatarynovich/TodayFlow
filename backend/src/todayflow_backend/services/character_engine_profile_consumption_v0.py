@@ -25,11 +25,12 @@ from typing import Any
 
 from todayflow_backend.core.config import settings
 
-PROJECTION_VERSION = "character_engine_profile_consumption_v0.8"
-_MAX_RECOGNITION = 160
-_MAX_CORE = 420
-_MAX_TRAP = 220
-_MAX_ESSAY = 360
+PROJECTION_VERSION = "character_engine_profile_consumption_v0.9"
+# Soft ceilings only — clip_prose prefers sentence end; never mid-word stumps for UI.
+_MAX_RECOGNITION = 900
+_MAX_CORE = 900
+_MAX_TRAP = 900
+_MAX_ESSAY = 480
 
 # Deterministic trap lines — editorial SoT for this slice (Architecture impact: overwrite trap).
 _TRAP_BY_IDENTITY_THESIS: dict[str, str] = {
@@ -497,10 +498,10 @@ def character_engine_profile_consumption_enabled() -> bool:
 
 
 def _clip(text: str, limit: int) -> str:
+    from todayflow_backend.services.prose_clip_v1 import clip_prose
+
     t = re.sub(r"\s+", " ", str(text or "").strip())
-    if len(t) <= limit:
-        return t
-    return t[: max(0, limit - 1)].rstrip() + "…"
+    return clip_prose(t, limit)
 
 
 def _scrub_machine_thesis(text: str, identity_thesis: str | None = None) -> str:
@@ -746,7 +747,8 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
     if not surface or not identity_thesis:
         return payload
 
-    recognition = _clip(surface, _MAX_RECOGNITION)
+    # One person story — recognition_line matches full identity_core (no short duplicate).
+    recognition = surface
     stage3 = _stage3_internal(payload)
     stage4 = _stage4_life(payload)
     stage5 = _stage5_assembly(payload)
@@ -937,13 +939,8 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
 
     payload["portrait_why_v0"] = {
         "projection_version": f"{PROJECTION_VERSION}.why",
-        "title": "Почему портрет звучит именно так",
         "selected_by": selected_by[:1],
         "portrait_influenced_by": influenced_by[:5],
-        "honesty_line": (
-            "Портрет держится на одном ядре характера и фактах, которые его "
-            "подтверждают — не на списке ярлыков и не на ритме дня."
-        ),
         "source": "character_engine_stage2",
     }
 

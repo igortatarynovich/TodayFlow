@@ -64,7 +64,8 @@ Rules:
 5. blind_spots: 0..4 patterns rooted in the same core/tension.
 6. Voice: you / ты — never formal plural Вы.
 7. No career/love/money encyclopedia essays; UI may group scenes later via adapters.
-8. If Stage 2/3 insufficient → status insufficient_life_bundle.
+8. Scenes/potential/blind_spots are lived beats of one person-story — not a fact catalogue or astro labels.
+9. If Stage 2/3 insufficient → status insufficient_life_bundle.
 """
         )
     return (
@@ -119,6 +120,7 @@ responsibility · intimacy · risk · success · uncertainty · competition · r
 5. blind_spots: 0..4 паттерна того же ядра/напряжения.
 6. Голос: ты — никогда «Вы».
 7. Без энциклопедии career/love/money; UI сгруппирует scenes позже через adapters.
-8. Если Stage 2/3 insufficient → status insufficient_life_bundle.
+8. Сцены/potential/blind_spots — живые ситуации одной истории человека, не каталог фактов или астроярлыков.
+9. Если Stage 2/3 insufficient → status insufficient_life_bundle.
 """
     )

@@ -22,7 +22,7 @@
 
 1. **CE остаётся единственным SoT личности.** Decode не переопределяет ядро, напряжение, компас.
 2. **Только слой глубины** — «как карта объясняет уже известное ядро», не второй портрет.
-3. **Только по явному запросу** — `POST` / UI CTA. Запрещено: publish профиля, GET `/core-profile`, фоновый job «на всякий случай».
+3. **Один раз по fingerprint** — первый явный `POST` / UI CTA собирает историю; `GET` отдаёт готовый артефакт (`access: ready`, `can_generate: false`). Повторный LLM запрещён, пока не сменится fingerprint (birth/natal/numerology) или ops one-shot. Запрещено: publish профиля, GET `/core-profile`, фоновый job «на всякий случай», кнопка «собрать ещё раз».
 4. **Дома в базовом Profile** — короткие **тезисы о человеке** (`how`/`do`), не абзацы и не энциклопедия. Длинная планетарная проза живёт только здесь.
 5. **Acceptance строки decode:** убрав имя планеты/дома, фраза всё ещё про **этого** человека и то же Identity Core.
 6. **Day hooks** — инструкции **на сейчас** (жест / пауза / проверка), не пересказ характера. Без hooks decode остаётся интересным чтением; с ними — вещью, которую применяют и проверяют.
@@ -40,19 +40,19 @@
 
 ## Allowed
 
-- Soft CTA в Deep Sources / Personal Map: «Открыть расшифровку карты»  
-- LLM prose, который **цитирует** Identity Core + Evidence / natal facts  
-- Кеш ответа decode по fingerprint (identity + natal calc), reuse на повторный explicit request  
+- Soft CTA в Deep Sources / Personal Map: «Открыть расшифровку карты» — **только пока decode ещё не собран**  
+- LLM prose: целостная история человека (планеты + углы + дома + нумерология) поверх fixed Identity Core  
+- Persist decode по fingerprint; reuse на GET и повторный POST (без LLM)  
 - Старый `include_editorial` на Map — остаётся map editorial; **не** CE SoT; новый decode preferred когда CE grounded  
 
 ## Contract sketch
 
 | Piece | Rule |
 |-------|------|
-| Trigger | `POST /account/profile/natal-decode` only |
+| Trigger | First `POST` when no cache; `GET` returns ready artifact when persisted |
 | Gate | CE Identity Core `grounded` + natal facts available; else status + CTA |
-| Input | Fixed identity_core (thesis + surface) · primary tension if any · natal structure pack |
-| Output nest | `natal_decode_depth_v0` — additive; not nested into CE SoT |
+| Input | Fixed identity_core · primary tension · natal pack · numerology pack |
+| Output nest | `natal_decode_depth_v0` — additive; persisted in `generation_logs` by fingerprint |
 | Consumers | Profile Deep Sources / Personal Map UI only; `day_hooks` могут **информировать** Today как derived tips, не как personality SoT |
 | Non-consumers | Day Engine as character root · ExperienceSlice personality rewrite · Compat person root |
 

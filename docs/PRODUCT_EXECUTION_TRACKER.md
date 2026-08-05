@@ -4,6 +4,8 @@ Last updated: 2026-08-05
 Owner: Product + Engineering
 Status: Active working document
 
+**DONE (LIVE, 2026-08-05):** **Profile UX pack** — full identity body (no dupe/collapse); drop portrait_why honesty; unclipped tension; house person-theses; natal decode = one-shot holistic story (persist by fingerprint, no re-generate CTA); canary users 1/2 `trialing`. Canon: PROFILE_NATAL_DECODE_DEPTH_V1 one-shot.
+
 **DONE (CODE, 2026-08-05):** **Поток дня ← real glance_timeline** — story pane uses timed `day_facts.glance_timeline` again (no invented phase copy); labels name lived use (not «Окно: …»); max rows 3→5; symbols keep card/number when `networkDegraded`. Canon: TODAY_WAVE2_CONTRACT_V1 §4.
 **DONE (CODE, 2026-08-05):** **Today story anchors polish** — distinct art pools; `StoryBlockCue` (in-step scroll) + `StoryNextAnchor` (foreshadow); block orders Energy/Symbols/Attributes/Insight/Close. Canon: FOUNDATION_UI §16.1 · SCENARIO_V3. Presentation only.
 **DONE (CODE, 2026-08-05):** **Today Story Deck art + ↓ cues** — Greeting/Energy/Practice immersive photos (existing ritual-entry/cosmic/bg); other frames = Day Atmosphere theme; ↓ between multi-block sections. Canon: FOUNDATION_UI §16.1 · SCENARIO_V3 changelog.
@@ -43,6 +45,15 @@ A product zone is **DONE** only when **all** are true:
 6. **Screenshot parity** — side-by-side reads as one system (owner review)
 
 **Process:** After Wave 1 alone → `layout DoD ✅`, zones stay **IN PROGRESS**. Real DONE only after Wave 1 + Wave 2 + screenshot review. Onboarding after that. Task 3.5 Atmosphere picker on `/design-system` = between later waves, non-blocking. **Task 2.9 foundation ≠ zone DONE**; Task **2.9b+** (Today / Tarot / Compatibility / Profile / Practices) uses this same 6-axis DoD.
+
+## Architecture impact — Profile UX pack (identity / trap / houses / natal decode one-shot) (2026-08-05)
+
+- **SoT before:** CE portrait + mid-word clips (`_MAX_CORE`/`_MAX_TRAP`); recognition_line = short duplicate; portrait_why honesty meta; houses = encyclopedia tags; natal decode re-POST LLM each click/reload.
+- **SoT after:** CE unchanged as personality SoT; full identity body; unclipped trap/insight (prose_clip); houses = person theses; natal decode = richer CE-grounded life story (planets + numerology), **persisted one-shot** per fingerprint.
+- **Public contract changed?** yes (additive/soft) — GET natal-decode may return ready artifact; POST idempotent when cached; portrait_why drops title/honesty.
+- **Migration required?** no — re-publish canary + one ops decode; trial ops for users 1/2.
+- **Canon updated?** yes — PROFILE_NATAL_DECODE_DEPTH_V1 one-shot + fingerprint invalidation.
+- **Backward compatible?** yes — old clients re-POST get cached body.
 
 ## Architecture impact — Glance timeline max 5 + actionable labels (2026-08-05)
 

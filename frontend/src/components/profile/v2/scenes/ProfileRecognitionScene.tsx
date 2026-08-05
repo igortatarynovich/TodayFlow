@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { profileMotionStyles } from "@/components/foundation/ProfileMotion";
 import { PROFILE_V2_COPY, PROFILE_V2_DEPTH_NAV } from "@/components/profile/v2/profileV2SystemCopy";
 import styles from "@/components/profile/v2/profileV2System.module.css";
@@ -12,7 +11,7 @@ import { resolveArchetypeIllustrationSlug } from "@/lib/visualIdentity/registry"
 export type ProfileRecognitionSceneProps = {
   name: string | null;
   line: string | null;
-  /** Kitchen / later — collapsed by default; not part of Act 1 share-core. */
+  /** Full identity_core — preferred body when present (no collapse / no duplicate). */
   identityCore: string | null;
   archetypeSeed: string | null;
 };
@@ -20,8 +19,8 @@ export type ProfileRecognitionSceneProps = {
 const recognitionNav = PROFILE_V2_DEPTH_NAV[0];
 
 /**
- * Act 1 share-core only: archetype name + recognition_line + visual.
- * Facts (Sun/Moon/path…) live in Act 2 — anti-dupe with journey scenario.
+ * Act 1: archetype name + one full identity body + visual.
+ * Prefer identity_core; fall back to recognition_line. No toggle / no dupe.
  */
 export function ProfileRecognitionScene({
   name,
@@ -30,14 +29,7 @@ export function ProfileRecognitionScene({
   archetypeSeed,
 }: ProfileRecognitionSceneProps) {
   const hasPortraitSlot = Boolean(resolveArchetypeIllustrationSlug(archetypeSeed));
-  const deeper =
-    identityCore?.trim() &&
-    identityCore.trim() !== line?.trim() &&
-    identityCore.trim().length > (line?.trim().length || 0) + 12
-      ? identityCore.trim()
-      : null;
-  /** Closed by default — Act 1 is recognition, not a second portrait paragraph. */
-  const [deeperOpen, setDeeperOpen] = useState(false);
+  const body = (identityCore?.trim() || line?.trim() || "") || null;
   const copy = PROFILE_V2_COPY.zones.recognition;
 
   return (
@@ -71,25 +63,10 @@ export function ProfileRecognitionScene({
             {copy.title}
           </h1>
         )}
-        {line ? (
+        {body ? (
           <p className={styles.journeyRecognitionLine} data-testid="profile-v2-recognition-line">
-            {line}
+            {body}
           </p>
-        ) : null}
-
-        {deeper ? (
-          <div className={styles.recognitionDeeper} data-testid="profile-v2-identity-core">
-            <button
-              type="button"
-              className={styles.recognitionDeeperToggle}
-              aria-expanded={deeperOpen}
-              onClick={() => setDeeperOpen((v) => !v)}
-            >
-              {deeperOpen ? copy.deeperHide : copy.deeperLabel}
-              <span aria-hidden> {deeperOpen ? "↑" : "↓"}</span>
-            </button>
-            {deeperOpen ? <p className={styles.recognitionDeeperBody}>{deeper}</p> : null}
-          </div>
         ) : null}
       </div>
 

@@ -169,10 +169,10 @@ export function buildProfileJourneyProjection(
   const whyRaw = core?.portrait_why_v0 ?? null;
   const whySelectedBy = mapWhyRows(whyRaw?.selected_by);
   const whyInfluencedBy = mapWhyRows(whyRaw?.portrait_influenced_by);
-  const whyTitle = whyRaw?.title?.trim() || null;
-  const whyHonesty = whyRaw?.honesty_line?.trim() || null;
+  const whyTitle = null;
+  const whyHonesty = null;
   const why: ProfileJourneyWhy | null =
-    whySelectedBy.length || whyInfluencedBy.length || whyTitle || whyHonesty
+    whySelectedBy.length || whyInfluencedBy.length
       ? {
           title: whyTitle,
           selectedBy: whySelectedBy,

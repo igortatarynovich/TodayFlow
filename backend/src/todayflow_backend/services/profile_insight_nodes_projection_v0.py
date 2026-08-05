@@ -12,19 +12,19 @@ from __future__ import annotations
 import re
 from typing import Any
 
-PROJECTION_VERSION = "profile_insight_nodes_v0.1"
+PROJECTION_VERSION = "profile_insight_nodes_v0.2"
 _MAX_NODES_FIRST_RELEASE = 1
 _MAX_LIVING_QUOTES = 2
-_MAX_INSIGHT = 220
-_MAX_HELP = 180
-_MAX_QUOTE = 160
+_MAX_INSIGHT = 900
+_MAX_HELP = 360
+_MAX_QUOTE = 240
 
 
 def _clip(text: str, limit: int) -> str:
+    from todayflow_backend.services.prose_clip_v1 import clip_prose
+
     t = re.sub(r"\s+", " ", str(text or "").strip())
-    if len(t) <= limit:
-        return t
-    return t[: limit - 1].rstrip() + "…"
+    return clip_prose(t, limit)
 
 
 def _first_nonempty(items: Any) -> str | None:
