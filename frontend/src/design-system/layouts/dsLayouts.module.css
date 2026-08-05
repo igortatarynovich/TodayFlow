@@ -444,25 +444,20 @@
 }
 
 .profileWebContent,
-.compatWebContent {
-  width: 100%;
-  max-width: 47rem;
-}
+.compatWebContent,
 .practicesWebContent {
   width: 100%;
+  max-width: var(--tf-shell-max, 52rem);
+  margin-inline: auto;
 }
 
-/** Shared v2 main column canvas (profile is reference). */
+/** Shared v2 main content column (Foundation §7 — not marketing page-max). */
 .profileWebContentV2,
 .practicesWebContentV2,
 .productWebContentV2 {
   width: 100%;
-  max-width: min(var(--tf-ds-page-max, 90rem), 100%);
+  max-width: var(--tf-shell-max, 52rem);
   margin-inline: auto;
-}
-
-.compatWebContent {
-  max-width: var(--tf-ds-main-max-wide, 52rem);
 }
 
 .compatWebResultContent {

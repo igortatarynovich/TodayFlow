@@ -266,6 +266,7 @@
 | `--tf-shell-gutter` | `clamp(1.25rem, 4vw, 2rem)` | боковые поля |
 | `--tf-shell-gap` | `clamp(2rem, 5vw, 2.75rem)` | между секциями |
 | `--tf-shell-readable` | **36rem** | длинный текст внутри shell |
+| `--tf-ds-page-max` | **90rem** | marketing / catalog canvas **only** — not in-app hubs |
 | `--tf-breakpoint-lg` | **56.25rem (900px)** | 2 колонки (Numbers+Name · Love+Money) |
 
 | Viewport | Поведение |
@@ -274,7 +275,9 @@
 | **≥ 900px** | shell до 832px по центру · 2-col bands где уместно |
 | **Native** | те же токены в Swift/Kotlin · не отдельный «десктоп-дизайн» |
 
-**Запрещено:** `max-width: 26rem` на product screens · случайные `820px` / `760px` в компонентах.
+**Product chrome (`data-product-web-shell`):** outer `.tf-shell` is intentionally full-bleed (sidebar + main track). That does **not** waive the content column — every primary reading/CTA stack inside main uses `max-width: var(--tf-shell-max)` (+ gutter). Long prose / leads use `var(--tf-shell-readable)`. `--tf-ds-page-max` stays on landing/catalog sections only.
+
+**Запрещено:** `max-width: 26rem` на product screens · случайные `820px` / `760px` / `880px` / `22–28rem` как колонка страницы · хаб на `90rem` вместо shell-max.
 
 **Продукт ведёт пользователя:** секция = вопрос → визуальный якорь → **полный** ответ → CTA раскрытия. Не список label+число без meaning.
 

@@ -1,15 +1,18 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-08-04
+Last updated: 2026-08-05
 Owner: Product + Engineering
 Status: Active working document
 
+**IN PROGRESS (2026-08-05):** **DS unification** — Practices / Profile / Compatibility still **IN PROGRESS** (not DONE). Wave 1+2 code live. Live column check @1920: Practices/Profile/Compatibility/Tarot content = **832px** (`--tf-shell-max`). Owner screenshot parity still required before zone DONE / Onboarding.
+**layout DoD ✅ (2026-08-05):** Task 2.7 — hub wrappers → `--tf-shell-max`; Practices/Profile/Compatibility/Tarot column literals tokenized; width rule in `check_ds_style_gate.py`. Zones still **IN PROGRESS**.
+**Wave 2 code ✅ (2026-08-05):** Task 2.6 rgba/color-mix gate + Compatibility local cards → `--day-*`/`--tf-*`; Task 2.6b ~382 font-size → `--tf-type-*` on three zones + Tarot. Baseline rewritten (v2). Screenshot review still required for zone DONE.
 **DONE (2026-08-04):** DS Task 2 — Weekly + Challenges DsCard pilot + `--day-*` decorative (Task 1.5 folded). PR #9 merged. Screenshots: `docs/audits/ds-task2-screenshots/`.  
-**DONE (2026-08-04):** DS Task 3 — Today composition wave (`DsButton` CTAs + day-tint). PR #10 merged.  
-**DONE (2026-08-04):** DS Task 3 — Practices wave (`DsButton` · kill lavender · `--day-*`). PR #11 merged.  
-**DONE (2026-08-04):** DS Task 3 — Profile wave (`DsButton` hub/setup CTAs · `profileV2System` → `--tf-*`/`--day-*`). PR #12 merged + frontend rebuild.
+**PARTIAL (2026-08-04):** DS Task 3 — Today composition wave (`DsButton` CTAs + day-tint). PR #10 merged — color/CTA only; layout+type still open under DS unification.  
+**IN PROGRESS (reopened):** DS Task 3 — Practices wave — PR #11 color/CTA landed; layout / rgba honesty / typography / screenshots pending.  
+**IN PROGRESS (reopened):** DS Task 3 — Profile wave — PR #12 color/CTA landed; same reopen.  
+**IN PROGRESS (reopened):** DS Task 3 — Compatibility wave — PR #13 color/CTA landed; rgba local cards still present; same reopen.
 **DONE (2026-08-04):** Day shell chrome — day-mode on all product routes; evening phase no longer recolors shell; sidebar stretch fix. PR #14 merged + frontend rebuild.
-**DONE (2026-08-04):** DS Task 3 — Compatibility wave (`DsButton` · chips/layer cards · tokenize exploration CSS). PR #13 merged + frontend rebuild.  
 **DONE (2026-08-04):** DS Task 1 — style gate merged PR #8 (`scripts/check_ds_style_gate.py` · Jest in `npm test` · PR checklist). Separate CI workflow job **not** required.  
 **DONE (2026-08-04):** DS Task 0 — `design/profile-journey-premium` promoted → `main` (FF, PR #7). Deploy SoT: `docker compose -f docker-compose.prod.yml up -d --build` on this host.  
 **DONE (2026-08-04):** Today Screen fix pack — Daily Focus · nearest→practice · chorus energy · plot beats · seasonal color · trap≠avoid · hook variants.  
@@ -18,6 +21,19 @@ Status: Active working document
 **IN PROGRESS:** **Reading why-step** — `scene.why` / `domain_verdicts.why_short` before narrative; progressive expand for scene+dual. Glance/Plot/clip slice shipped. Soft-heal canary + v3.1b concreteness continue.  
 **ALSO IN PROGRESS:** **Soft-heal one-field gates** — `healed:<rule>` for conflict_link / incomplete forces / broken props / scenes_too_many; seed-kill + structural + scenes_too_few stay hard.  
 Prior: card_base_v1 cutover live · editorial polish minors ongoing.
+
+### DS zone Definition of Done (6 axes — 2026-08-05)
+
+A product zone is **DONE** only when **all** are true:
+
+1. **Color / hex+CTA** — existing DS style gate clean for the zone  
+2. **Color / rgba honesty** — no hardcoded `rgba()`/`color-mix()` paints under zone-local vars; surfaces → `--tf-*` / `--day-*` (Task 2.6)  
+3. **Typography** — Foundation roles Display / Hero / Section / Body / Caption (+ portal-title); no private `font-size` scale (Task 2.6b)  
+4. **Day Atmosphere** — product route under day-mode; phase clock does not recolor shell when mode pinned  
+5. **Shell / layout** — `--tf-shell-max` / `--tf-shell-readable`; no phone-column / random px; no double-shell (Task 2.7)  
+6. **Screenshot parity** — side-by-side reads as one system (owner review)
+
+**Process:** After Wave 1 alone → `layout DoD ✅`, zones stay **IN PROGRESS**. Real DONE only after Wave 1 + Wave 2 + screenshot review. Onboarding after that. Task 3.5 Atmosphere picker on `/design-system` = between later waves, non-blocking.
 
 ## Architecture impact — Glance Daily Focus replaces sphere chips (2026-08-04)
 
@@ -731,7 +747,12 @@ Status: `IN_PROGRESS`
 - [x] Lock color tokens, typography scale, spacing grid.
 - [x] Standardize button/card/input variants.
 - [x] Unify icon style and tarot cover style.
-- [ ] Audit all key screens for visual/system consistency.
+- [x] **Task 2.7 Wave 1** — Shell/layout unification (`--tf-shell-max` / readable; kill phone columns). Practices/Profile/Compatibility + Tarot hub. Exit: `layout DoD ✅`, zones still IN PROGRESS.
+- [x] **Task 2.6 Wave 2** — Expand DS gate for `rgba()` / `color-mix()`; rewrite Compatibility local rgba cards to `--tf-*`/`--day-*`.
+- [x] **Task 2.6b Wave 2** — Typography on same three zones + Tarot hub → Foundation `--tf-type-*` roles.
+- [ ] **Screenshot parity** — owner side-by-side review closes Practices/Profile/Compatibility (6-axis DoD).
+- [ ] **Task 3.5** — Day Atmosphere mode picker on `/design-system` (after Onboarding; non-blocking).
+- [ ] Audit all key screens for visual/system consistency (screenshot parity = zone close).
 - [ ] Mobile + desktop QA pass for primary flows.
 - [ ] Normalize Profile and Today into the canonical 2-surface mental model.
 
@@ -1378,9 +1399,11 @@ Historical note:
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
 - 2026-08-04 | Design System | **Day shell chrome fix** | **DONE (LIVE)** | PR #14 merged · frontend rebuild. Day-mode = shell routes; evening phase gated; sidebar stretch.
-- 2026-08-04 | Design System | **Task 3 Compatibility wave** | **DONE (LIVE)** | PR #13 merged · frontend rebuild. Hub/analyze/signs/birthdates → `DsButton`; baseline 495→447. Orphan Encyclopedia/DesktopWireframe deferred.
-- 2026-08-04 | Design System | **Task 3 Profile wave** | **DONE (LIVE)** | PR #12 merged (`eb4e281`) · frontend rebuild. Hub/setup CTAs → `DsButton`; `profileV2System` tokenized; baseline 567→495. v0/editorial/quickMap deferred.
-- 2026-08-04 | Design System | **Task 3 Practices wave** | **DONE** | PR #11 merged. Hub/session/detail CTAs → `DsButton`; lavender zone killed.
+- 2026-08-05 | Design System | **Task 2.7 + 2.6 + 2.6b Wave 1–2** | **CODE (layout DoD ✅; zones IN PROGRESS)** | Shell wrappers → `--tf-shell-max`; zone columns tokenized; gate v2 (rgba/color-mix/font-size/max-width); Compatibility cards → `--day-*`/`--tf-*`; ~382 type literals → `--tf-type-*`. Baseline 1964 keys. Screenshot parity still required before zone DONE / Onboarding.
+- 2026-08-05 | Design System | **DS unification reopen** | **IN PROGRESS** | Practices/Profile/Compatibility not DONE on color-only gate. 6-axis DoD. Wave 1 = Task 2.7 layout; Wave 2 = Task 2.6 rgba gate + 2.6b type; then screenshots; then Onboarding.
+- 2026-08-04 | Design System | **Task 3 Compatibility wave** | **REOPENED (color partial)** | PR #13 merged · Hub/analyze/signs/birthdates → `DsButton`; baseline 495→447. Layout/rgba/type/screenshots pending under DS unification.
+- 2026-08-04 | Design System | **Task 3 Profile wave** | **REOPENED (color partial)** | PR #12 merged (`eb4e281`) · Hub/setup CTAs → `DsButton`; `profileV2System` tokenized. Layout/type/screenshots pending.
+- 2026-08-04 | Design System | **Task 3 Practices wave** | **REOPENED (color partial)** | PR #11 merged. Hub/session/detail CTAs → `DsButton`; lavender zone killed. Layout/type/screenshots pending.
 - 2026-08-04 | Design System | **Task 3 Today wave** | **DONE** | PR #10 merged (`de9dfed`). Composition ScreenFlow CTAs → `DsButton`; pick sheet `--day-surface-tint`.
 - 2026-08-03 | Profile / Ops | **Force-publish profile via Kimi-K3** | **LIVE canary** | `force_rebuild_profile_ops.py` users 1/2 · CE publish_portrait · contract+ce `ready` · identity rewritten (Kimi stream). Stage 3–5 still diagnostics-only on this cutover; Stage 2 LLM path used.
 - 2026-08-03 | Today / Ops | **Kimi-K3 force_rebuild (stream idle 300s)** | **LIVE canary** | Redeploy env K3 + read=300, no DeepSeek. gen489 user1 / gen490 user2 → `native_llm_c1` model=`moonshotai/Kimi-K3` (~23m / ~2m). Streaming held connection; first attempt via docker exec OOM/137 — used compose run job.

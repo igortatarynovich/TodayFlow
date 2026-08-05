@@ -5,7 +5,7 @@
  *
  * Anatomy:
  *   ProductWebShellLayout (sidebar + identity)
- *     └─ productWebContentV2 (max-width canvas)
+ *     └─ productWebContentV2 (Foundation --tf-shell-max content column)
  *         └─ pageRoot
  *             ├─ pageHeader — title, subtitle, date chip (optional)
  *             └─ content — screen-specific blocks

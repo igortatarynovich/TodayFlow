@@ -1,19 +1,19 @@
 .root {
   --cp-stack: 1.75rem;
   --cp-radius: 22px;
-  --cp-border: rgba(166, 124, 58, 0.22);
+  --cp-border: var(--tf-ds-border-gold, var(--tf-border));
   --cp-ink: var(--tf-ink);
   --cp-body: var(--tf-ink);
   --cp-muted: var(--tf-caption);
   --cp-accent: var(--tf-accent-gold-600, var(--tf-accent-gold));
-  --cp-surface: rgba(255, 255, 255, 0.96);
-  --cp-warm: rgba(255, 251, 245, 0.98);
+  --cp-surface: var(--day-surface-tint, var(--tf-surface-insight-bg, var(--tf-surface)));
+  --cp-warm: var(--tf-page-cream, var(--tf-page));
 
   display: flex;
   flex-direction: column;
   gap: var(--cp-stack);
   width: 100%;
-  max-width: 760px;
+  max-width: var(--tf-shell-max, 52rem);
   margin: 0 auto;
 }
 
@@ -21,13 +21,13 @@
   padding: 1.5rem 1.35rem;
   border-radius: var(--cp-radius);
   border: 1px solid var(--cp-border);
-  background: linear-gradient(180deg, var(--cp-warm) 0%, var(--cp-surface) 100%);
-  box-shadow: 0 12px 36px rgba(91, 67, 35, 0.07);
+  background: var(--cp-surface);
+  box-shadow: var(--tf-surface-insight-shadow, var(--tf-shadow-card));
 }
 
 .pairLine {
   margin: 0;
-  font-size: clamp(1.35rem, 4vw, 1.75rem);
+  font-size: var(--tf-type-section-size);
   font-weight: 700;
   color: var(--cp-ink);
   letter-spacing: -0.02em;
@@ -48,7 +48,7 @@
 
 .scoreValue {
   margin: 0;
-  font-size: clamp(2rem, 6vw, 2.75rem);
+  font-size: var(--tf-type-display-size);
   font-weight: 700;
   line-height: 1;
   color: var(--cp-ink);
@@ -56,14 +56,14 @@
 
 .scoreLabel {
   margin: 0.35rem 0 0;
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 700;
   color: var(--cp-accent);
 }
 
 .mainConclusion {
   margin: 1rem 0 0;
-  font-size: 1.0625rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.75;
   color: var(--cp-body);
 }
@@ -77,7 +77,7 @@
 
 .sectionTitle {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -86,7 +86,7 @@
 
 .sectionBody {
   margin: 0.55rem 0 0;
-  font-size: 0.9875rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.72;
   color: var(--cp-body);
 }
@@ -96,7 +96,7 @@
   padding-left: 1.1rem;
   color: var(--cp-body);
   line-height: 1.65;
-  font-size: 0.9375rem;
+  font-size: var(--tf-type-body-size);
 }
 
 .actions {

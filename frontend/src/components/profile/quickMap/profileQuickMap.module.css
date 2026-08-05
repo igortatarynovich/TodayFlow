@@ -99,7 +99,7 @@
 .quickMapArchetype {
   margin: 0;
   font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
-  font-size: clamp(2rem, 9vw, var(--tf-type-display-size, 2.5rem));
+  font-size: var(--tf-type-display-size);
   font-weight: var(--tf-type-hero-weight, 700);
   line-height: var(--tf-type-hero-line, 1.08);
   letter-spacing: 0.04em;
@@ -339,7 +339,7 @@
 .quickMapPortraitLead {
   margin: 0;
   max-width: 36rem;
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.5;
   color: var(--tf-ink-soft, #5b4630);
 }
@@ -361,7 +361,7 @@
 .quickMapMapsTitle {
   margin: 0.35rem 0 0;
   font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
-  font-size: clamp(1.35rem, 4vw, 1.65rem);
+  font-size: var(--tf-type-section-size);
   font-weight: 600;
   line-height: 1.15;
   color: var(--tf-ink, #1a1510);
@@ -384,7 +384,7 @@
   border-left: 3px solid var(--tf-twilight, #4a3270);
   color: var(--tf-ink-soft, #5b4630);
   line-height: 1.5;
-  font-size: 0.9rem;
+  font-size: var(--tf-type-body-size);
 }
 
 .profileMapHeatmapStack {
@@ -457,13 +457,13 @@
   background: rgba(74, 50, 112, 0.05);
   border-left: 3px solid rgba(74, 50, 112, 0.35);
   color: var(--tf-ink-soft, #5b4630);
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.5;
 }
 
 .profileHabitWeaveMeta {
   margin: 0.15rem 0 0;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   color: var(--tf-caption, #9a8468);
 }
 
@@ -502,7 +502,7 @@
 
 .cumInsightsScore {
   margin: 0;
-  font-size: 2rem;
+  font-size: var(--tf-type-hero-size);
   font-weight: 700;
   line-height: 1;
   color: var(--tf-ink, #1a1510);
@@ -510,7 +510,7 @@
 
 .cumInsightsScoreCaption {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   color: var(--tf-caption, #9a8468);
 }
 
@@ -525,7 +525,7 @@
   display: inline-flex;
   padding: 0.25rem 0.55rem;
   border-radius: 999px;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 600;
 }
 
@@ -561,7 +561,7 @@
 
 .cumInsightsSparkCaption {
   margin: 0;
-  font-size: 0.72rem;
+  font-size: var(--tf-type-caption-lg-size);
   color: var(--tf-caption, #9a8468);
 }
 
@@ -579,7 +579,7 @@
 }
 
 .cumInsightsDomainLabel {
-  font-size: 0.72rem;
+  font-size: var(--tf-type-caption-lg-size);
   color: var(--tf-caption, #9a8468);
 }
 
@@ -598,7 +598,7 @@
 }
 
 .cumInsightsDomainValue {
-  font-size: 0.72rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 600;
   color: var(--tf-ink-soft, #5b4630);
 }
@@ -612,7 +612,7 @@
 
 .cumInsightsRecLabel {
   margin: 0 0 0.35rem;
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -621,14 +621,14 @@
 
 .cumInsightsRecText {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.5;
   color: var(--tf-ink, #1a1510);
 }
 
 .cumInsightsRecMeta {
   margin: 0.25rem 0 0;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   color: var(--tf-caption, #9a8468);
 }
 
@@ -654,7 +654,7 @@
   padding: 0.55rem 0.65rem;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.55);
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.45;
   color: var(--tf-ink-soft, #5b4630);
 }
@@ -663,13 +663,13 @@
   margin: 0;
   padding-left: 1rem;
   color: var(--tf-caption, #9a8468);
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.45;
 }
 
 .cumInsightsTodayLink {
   align-self: flex-start;
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 600;
   color: var(--tf-ink-soft, #5b4630);
   text-decoration: underline;
@@ -713,7 +713,7 @@
 .quickMapLivingMapsLead {
   margin: 0;
   max-width: 36rem;
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.5;
   color: var(--tf-ink-soft, #5b4630);
 }
@@ -745,13 +745,13 @@
 }
 
 .mapsExploreCardTitle {
-  font-size: 0.88rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 600;
   color: #352515;
 }
 
 .mapsExploreCardDesc {
-  font-size: 0.72rem;
+  font-size: var(--tf-type-caption-lg-size);
   line-height: 1.35;
   color: #7c6241;
 }

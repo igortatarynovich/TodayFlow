@@ -82,7 +82,7 @@
 .archetype {
   margin: 0;
   font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
-  font-size: clamp(2rem, 9vw, var(--tf-type-display-size, 2.5rem));
+  font-size: var(--tf-type-display-size);
   font-weight: var(--tf-type-hero-weight, 700);
   line-height: var(--tf-type-hero-line, 1.08);
   letter-spacing: 0.04em;
@@ -306,7 +306,7 @@
 .portraitLead {
   margin: 0;
   max-width: 36rem;
-  font-size: 0.9375rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.55;
   color: var(--profile-ink-soft, #5b4630);
 }
@@ -323,7 +323,7 @@
   padding-left: 1rem;
   border-left: 3px solid var(--profile-accent-twilight, #4a3270);
   font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
-  font-size: 1.05rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.55;
   color: var(--profile-ink-soft, #5b4630);
 }
@@ -359,7 +359,7 @@
   border-radius: 999px;
   border: 1px solid rgba(154, 132, 104, 0.35);
   background: rgba(255, 253, 249, 0.9);
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 600;
   color: var(--profile-ink-soft, #5b4630);
   cursor: pointer;
@@ -380,7 +380,7 @@
 
 .socialMirrorDetailLabel {
   margin: 0;
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -516,7 +516,7 @@
 }
 
 .mapsExploreLink {
-  font-size: 0.92rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 500;
   color: #5b4335;
   text-decoration: none;
@@ -561,13 +561,13 @@
 }
 
 .mapsExploreCardTitle {
-  font-size: 0.88rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 600;
   color: #352515;
 }
 
 .mapsExploreCardDesc {
-  font-size: 0.72rem;
+  font-size: var(--tf-type-caption-lg-size);
   line-height: 1.35;
   color: #7c6241;
 }
@@ -646,13 +646,13 @@
   background: rgba(74, 50, 112, 0.05);
   border-left: 3px solid rgba(74, 50, 112, 0.35);
   color: var(--tf-ink-soft, #5b4630);
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.5;
 }
 
 .profileHabitWeaveMeta {
   margin: 0.15rem 0 0;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   color: var(--tf-caption, #9a8468);
 }
 
@@ -667,7 +667,7 @@
 
 .sectionSubtitle {
   margin: 0.15rem 0 0;
-  font-size: 0.95rem;
+  font-size: var(--tf-type-body-size);
   color: #7c6241;
   font-weight: 500;
 }
@@ -741,7 +741,7 @@
 
 .numOrbitCoreValue {
   font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
-  font-size: 2.35rem;
+  font-size: var(--tf-type-display-size);
   font-weight: 700;
   line-height: 1;
 }
@@ -853,7 +853,7 @@
 .numbersMeaningDigit {
   margin-right: 0.45rem;
   font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
-  font-size: 1.125rem;
+  font-size: var(--tf-type-h3-size);
   font-weight: 700;
   color: var(--tf-accent-numerology, #4a3270);
   letter-spacing: 0;
@@ -917,7 +917,7 @@
 .nameDisplay {
   margin: 0;
   font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
-  font-size: 1.75rem;
+  font-size: var(--tf-type-hero-size);
   font-weight: 600;
   line-height: 1.15;
 }
@@ -1049,7 +1049,7 @@
 .mapsCta {
   margin: 0;
   padding: 0 0.15rem;
-  font-size: 0.92rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.55;
   color: rgba(26, 21, 16, 0.62);
 }
@@ -1243,7 +1243,7 @@
 
 .compatArrow {
   color: var(--tf-caption, #9a8468);
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
 }
 
 .launchCtaRow {

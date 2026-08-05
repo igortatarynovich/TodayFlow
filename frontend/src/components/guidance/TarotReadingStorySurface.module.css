@@ -15,7 +15,7 @@
   flex-direction: column;
   gap: var(--trs-stack);
   width: 100%;
-  max-width: 680px;
+  max-width: var(--tf-shell-max, 52rem);
   margin: 0 auto;
 }
 
@@ -104,7 +104,7 @@
 
 .cardInsightMeta {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 700;
   color: var(--trs-gold);
   line-height: 1.45;
@@ -112,7 +112,7 @@
 
 .cardInsightLine {
   margin: 0.35rem 0 0;
-  font-size: 0.9375rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.65;
   color: var(--trs-body);
 }
@@ -130,7 +130,7 @@
 
 .eyebrow {
   margin: 0;
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -148,7 +148,7 @@
 
 .mainAnswer {
   margin: 0.65rem 0 0;
-  font-size: clamp(1.05rem, 3.6vw, 1.2rem);
+  font-size: var(--tf-type-section-size);
   line-height: 1.72;
   color: var(--trs-body);
   font-weight: 500;
@@ -158,19 +158,19 @@
 .todayText,
 .insightText {
   margin: 0.55rem 0 0;
-  font-size: 0.9875rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.75;
   color: var(--trs-body);
 }
 
 .todayText {
   margin-top: 0.65rem;
-  font-size: 1rem;
+  font-size: var(--tf-type-body-size);
 }
 
 .insightTitle {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 700;
   letter-spacing: 0.03em;
   text-transform: uppercase;
@@ -179,7 +179,7 @@
 
 .followUpPrompt {
   margin: 0;
-  font-size: 1.0625rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 600;
   line-height: 1.5;
   color: var(--trs-ink);
@@ -199,7 +199,7 @@
   color: var(--trs-body);
   border-radius: 999px;
   padding: 0.45rem 0.9rem;
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.35;
   cursor: pointer;
   transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
@@ -224,7 +224,7 @@
 
 .followUpThanks {
   margin: 0.7rem 0 0;
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   color: var(--trs-muted);
 }
 
@@ -233,7 +233,7 @@
   margin-bottom: 0.65rem;
   padding: 0.2rem 0.55rem;
   border-radius: 999px;
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -262,7 +262,7 @@
 
 .actionDescription {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.55;
   color: var(--trs-muted);
 }
@@ -287,7 +287,7 @@
 
 .whySummary {
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 600;
   color: var(--trs-gold);
   list-style: none;

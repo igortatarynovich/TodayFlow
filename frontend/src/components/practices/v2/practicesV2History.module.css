@@ -4,7 +4,7 @@
 
 .backLink {
   align-self: flex-start;
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   color: var(--tf-caption);
   text-decoration: none;
 }
@@ -46,7 +46,7 @@
 
 .statLabel {
   margin: 0 0 0.25rem;
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--tf-caption);
@@ -55,7 +55,7 @@
 .statValue {
   margin: 0;
   font-family: var(--tf-font-display);
-  font-size: 1.5rem;
+  font-size: var(--tf-type-h1-size);
   color: var(--tf-ink);
 }
 
@@ -79,7 +79,7 @@
   display: flex;
   justify-content: space-between;
   gap: 0.5rem;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
 }
 
 .categoryLabel {
@@ -138,7 +138,7 @@
 
 .historyTitle {
   margin: 0;
-  font-size: 0.9375rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 600;
   color: var(--tf-ink);
 }
@@ -147,7 +147,7 @@
   display: inline-flex;
   padding: 0.125rem 0.5rem;
   border-radius: 999px;
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 600;
   background: rgba(139, 106, 62, 0.12);
   color: var(--tf-accent-gold-600, var(--tf-accent-gold));
@@ -155,7 +155,7 @@
 
 .historyMeta {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   color: var(--tf-caption);
 }
 
@@ -170,7 +170,7 @@
   border: 1px solid var(--tf-border);
   background: var(--tf-surface);
   color: var(--tf-ink);
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 600;
   text-decoration: none;
 }
@@ -184,14 +184,14 @@
 
 .emptyTitle {
   margin: 0 0 0.5rem;
-  font-size: 1rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 600;
   color: var(--tf-ink);
 }
 
 .emptyBody {
   margin: 0 0 1rem;
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   color: var(--tf-caption);
 }
 
@@ -204,7 +204,7 @@
   border-radius: 999px;
   background: var(--tf-ink);
   color: var(--tf-surface);
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 600;
   text-decoration: none;
 }

@@ -42,7 +42,7 @@
 .title {
   margin: 0;
   font-family: var(--tf-font-display, Georgia, "Times New Roman", serif);
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-size: var(--tf-type-hero-size);
   font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1.15;
@@ -50,7 +50,7 @@
 
 .subtitle {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.45;
   color: var(--psc-muted);
 }
@@ -91,7 +91,7 @@
   border: 1px solid var(--psc-border);
   background: var(--psc-card);
   color: var(--psc-ink);
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.2;
   cursor: pointer;
   white-space: nowrap;
@@ -161,7 +161,7 @@
   color: var(--psc-lavender-deep);
   display: grid;
   place-items: center;
-  font-size: 0.7rem;
+  font-size: var(--tf-type-caption-lg-size);
   box-shadow: 0 6px 16px rgba(42, 37, 32, 0.12);
 }
 
@@ -171,7 +171,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  max-width: 36rem;
+  max-width: var(--tf-shell-readable, 36rem);
 }
 
 .recommendEyebrow {
@@ -180,7 +180,7 @@
   padding: 0.28rem 0.7rem;
   border-radius: 999px;
   background: rgba(139, 123, 184, 0.92);
-  font-size: 0.65rem;
+  font-size: var(--tf-type-caption-size);
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -190,7 +190,7 @@
 .recommendTitle {
   margin: 0;
   font-family: var(--tf-font-display, Georgia, serif);
-  font-size: clamp(1.35rem, 3vw, 1.85rem);
+  font-size: var(--tf-type-section-size);
   font-weight: 500;
   line-height: 1.2;
 }
@@ -198,7 +198,7 @@
 .recommendMeta,
 .recommendDesc {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.45;
   opacity: 0.92;
 }
@@ -241,7 +241,7 @@
 
 .continueEyebrow {
   margin: 0;
-  font-size: 0.65rem;
+  font-size: var(--tf-type-caption-size);
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -250,7 +250,7 @@
 
 .continueTitle {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 600;
 }
 
@@ -269,7 +269,7 @@
 
 .continueProgress {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   color: var(--psc-muted);
 }
 
@@ -282,7 +282,7 @@
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
 }
 
 .sectionHead {
@@ -296,12 +296,12 @@
 .sectionTitle {
   margin: 0;
   font-family: var(--tf-font-display, Georgia, serif);
-  font-size: 1.15rem;
+  font-size: var(--tf-type-h3-size);
   font-weight: 500;
 }
 
 .seeAll {
-  font-size: 0.85rem;
+  font-size: var(--tf-type-body-size);
   color: var(--psc-lavender-deep);
   text-decoration: none;
   white-space: nowrap;
@@ -379,7 +379,7 @@
   padding: 0.2rem 0.5rem;
   border-radius: 999px;
   background: rgba(255, 252, 248, 0.92);
-  font-size: 0.7rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 600;
   color: var(--psc-ink);
 }
@@ -395,7 +395,7 @@
 
 .momentTitle {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 600;
   line-height: 1.25;
   padding-right: 1.75rem;
@@ -403,7 +403,7 @@
 
 .momentMeta {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   color: var(--psc-muted);
 }
 
@@ -448,7 +448,7 @@
   background: var(--psc-card);
   color: var(--psc-ink);
   cursor: pointer;
-  font-size: 0.7rem;
+  font-size: var(--tf-type-caption-lg-size);
   line-height: 1.2;
   text-align: center;
 }
@@ -492,7 +492,7 @@
   border: 1px solid var(--psc-border);
   background: var(--tf-surface);
   color: var(--psc-ink);
-  font-size: 0.8rem;
+  font-size: var(--tf-type-label-size);
   cursor: pointer;
 }
 
@@ -507,7 +507,7 @@
   grid-template-columns: 6.5rem minmax(0, 1fr) 2.5rem;
   align-items: center;
   gap: 0.65rem;
-  font-size: 0.8rem;
+  font-size: var(--tf-type-label-size);
   color: var(--psc-muted);
 }
 
@@ -520,7 +520,7 @@
   text-align: right;
   font-variant-numeric: tabular-nums;
   color: var(--psc-ink);
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
 }
 
 .dayCard {
@@ -544,7 +544,7 @@
   background: linear-gradient(145deg, var(--day-accent-soft, var(--tf-surface-warm)), color-mix(in srgb, var(--day-decor-color, var(--tf-accent-gold)) 28%, var(--tf-surface)));
   display: grid;
   place-items: center;
-  font-size: 1.1rem;
+  font-size: var(--tf-type-h3-size);
 }
 
 .dayBody {
@@ -557,7 +557,7 @@
 
 .dayEyebrow {
   margin: 0;
-  font-size: 0.65rem;
+  font-size: var(--tf-type-caption-size);
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -566,13 +566,13 @@
 
 .dayTitle {
   margin: 0;
-  font-size: 1rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 600;
 }
 
 .dayDesc {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: var(--tf-type-body-size);
   color: var(--psc-muted);
   line-height: 1.4;
 }
@@ -599,13 +599,13 @@
   border: 1px solid var(--psc-border);
   text-decoration: none;
   color: inherit;
-  font-size: 0.9rem;
+  font-size: var(--tf-type-body-size);
 }
 
 .emptyHint {
   margin: 0;
   padding: 0.85rem 0;
-  font-size: 0.9rem;
+  font-size: var(--tf-type-body-size);
   color: var(--psc-muted);
   line-height: 1.45;
 }
@@ -630,7 +630,7 @@
   grid-template-columns: minmax(0, 1fr);
   gap: 1.5rem;
   width: 100%;
-  max-width: 68rem;
+  max-width: var(--tf-shell-max, 52rem);
   margin-inline: auto;
 }
 
@@ -666,7 +666,7 @@
 
   .railTitle {
     margin: 0;
-    font-size: 0.7rem;
+    font-size: var(--tf-type-caption-lg-size);
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -675,7 +675,7 @@
 
   .railLine {
     margin: 0;
-    font-size: 0.85rem;
+    font-size: var(--tf-type-body-size);
     line-height: 1.4;
     color: var(--psc-ink);
   }

@@ -5,7 +5,7 @@
 }
 
 .shell {
-  max-width: 900px;
+  max-width: var(--tf-shell-max, 52rem);
   margin: 0 auto;
   padding: var(--orbit-space-3xl) var(--orbit-space-xl);
 }
@@ -123,7 +123,7 @@
   background: rgba(254, 236, 232, 0.92);
   border: 1px solid rgba(214, 142, 122, 0.25);
   color: var(--tf-accent-action);
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
 }
 
 .catalogToolbar {
@@ -140,7 +140,7 @@
   border: 1px solid var(--tf-cream-border, rgba(214, 142, 122, 0.35));
   border-radius: 999px;
   background: var(--tf-surface);
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 600;
   color: var(--tf-ink, var(--orbit-color-ink));
   cursor: pointer;
@@ -148,7 +148,7 @@
 
 .catalogToolbarHint {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   color: var(--section-text-muted, var(--tf-caption));
 }
 
@@ -170,14 +170,14 @@
 
 .ssrCatalogTitle {
   margin: 0 0 0.35rem;
-  font-size: 1.35rem;
+  font-size: var(--tf-type-section-size);
   font-weight: 650;
   color: var(--tf-ink, var(--tf-ink));
 }
 
 .ssrCatalogLead {
   margin: 0 0 1rem;
-  font-size: 0.9rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.5;
   color: var(--tf-ink-soft, var(--tf-caption));
 }
@@ -207,33 +207,33 @@
 }
 
 .ssrCatalogMeta {
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   color: var(--tf-caption, var(--tf-accent-gold));
 }
 
 .ssrCatalogDesc {
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.45;
   color: var(--tf-ink-soft, var(--tf-caption));
 }
 
 .ssrPracticeTitle {
   margin: 0 0 0.5rem;
-  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  font-size: var(--tf-type-section-size);
   font-weight: 650;
   color: var(--tf-ink, var(--tf-ink));
 }
 
 .ssrPracticeLead {
   margin: 0 0 0.5rem;
-  font-size: 0.95rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.55;
   color: var(--tf-ink-soft, var(--tf-caption));
 }
 
 .ssrPracticeMeta {
   margin: 0 0 0.85rem;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   color: var(--tf-caption, var(--tf-accent-gold));
 }
 
@@ -242,7 +242,7 @@
   padding-left: 1.25rem;
   display: grid;
   gap: 0.35rem;
-  font-size: 0.9rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.5;
   color: var(--tf-ink-soft, var(--tf-caption));
 }

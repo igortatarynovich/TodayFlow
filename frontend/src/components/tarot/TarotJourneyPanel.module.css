@@ -13,7 +13,7 @@
 
 .eyebrow {
   margin: 0;
-  font-size: 0.68rem;
+  font-size: var(--tf-type-caption-size);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: rgba(210, 190, 170, 0.68);
@@ -40,7 +40,7 @@
 
 .sectionLabel {
   margin: 0 0 0.4rem;
-  font-size: 0.72rem;
+  font-size: var(--tf-type-caption-lg-size);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 600;
@@ -61,7 +61,7 @@
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.04);
-  font-size: 0.8rem;
+  font-size: var(--tf-type-label-size);
   color: rgba(230, 224, 212, 0.9);
 }
 

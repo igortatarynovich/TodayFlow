@@ -4,7 +4,7 @@
  * vertical sections instead of uneven split columns.
  */
 .compat-desktop-shell {
-  max-width: 880px;
+  max-width: var(--tf-shell-max, 52rem);
   margin: 0 auto;
   padding: 0 clamp(16px, 4vw, 28px) 56px;
   --compat-ink: var(--tf-ink);
@@ -127,7 +127,7 @@
   font-size: 0.92rem;
   line-height: 1.72;
   color: var(--compat-ink-soft);
-  max-width: 54rem;
+  max-width: var(--tf-shell-readable, 36rem);
 }
 
 .compat-hero-side {
@@ -144,7 +144,7 @@
 }
 
 .compat-hero-side--standalone .compat-metrics-grid {
-  max-width: 520px;
+  max-width: var(--tf-shell-readable, 36rem);
   margin-left: auto;
   margin-right: auto;
 }
@@ -160,7 +160,7 @@
   margin: 0;
   color: var(--compat-ink-soft);
   line-height: 1.7;
-  max-width: 54rem;
+  max-width: var(--tf-shell-readable, 36rem);
   font-size: 0.95rem;
 }
 

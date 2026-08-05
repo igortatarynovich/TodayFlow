@@ -9,7 +9,7 @@
 
 .label {
   margin: 0;
-  font-size: 0.72rem;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
   font-weight: 600;
   color: var(--tf-caption);
   letter-spacing: 0.02em;
@@ -22,30 +22,30 @@
 }
 
 .chip {
-  border: 1px solid rgba(167, 123, 55, 0.28);
-  background: rgba(255, 253, 249, 0.92);
+  border: 1px solid var(--tf-ds-border-gold, var(--tf-border));
+  background: var(--day-surface-tint, var(--tf-surface-insight-bg, var(--tf-surface)));
   color: var(--tf-caption);
   border-radius: 999px;
   padding: 0.28rem 0.65rem;
-  font-size: 0.74rem;
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 .chip:hover {
-  border-color: rgba(167, 123, 55, 0.55);
-  background: rgba(242, 220, 181, 0.25);
+  border-color: var(--tf-border-strong, var(--tf-accent-gold));
+  background: var(--tf-accent-gold-wash, var(--tf-surface-muted));
 }
 
 .chipActive {
-  border-color: rgba(167, 123, 55, 0.88);
+  border-color: var(--tf-ds-border-gold, var(--tf-border));
   background: rgba(242, 220, 181, 0.38);
 }
 
 .giveback {
   margin: 0;
-  font-size: 0.72rem;
+  font-size: var(--tf-type-caption-lg-size);
   color: var(--day-decor-color, var(--tf-accent-action));
   line-height: 1.45;
   animation: ceGivebackFade 2.4s ease forwards;

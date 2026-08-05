@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-Design-system style gate for frontend CSS modules (DS Task 1).
+Design-system style gate for frontend CSS modules (DS Task 1 + 2.6 + 2.7).
 
-Canon: docs/TODAYFLOW_FOUNDATION_UI.md §15 / §17c — new product CSS must use
-Ds* primitives + --tf-* / --day-* tokens; no ad-hoc CTA/card classes, no raw
-hex surfaces, no new legacy token namespaces.
+Canon: docs/TODAYFLOW_FOUNDATION_UI.md §5 / §6 / §7 / §15 / §17c —
+product CSS must use Ds* primitives + --tf-* / --day-* tokens; no ad-hoc
+CTA/card classes; no raw hex / rgba / color-mix paints; no private font-size
+or max-width column scales.
 
 Modes:
   (default)     Fail on violations not listed in the baseline file.
@@ -47,6 +48,39 @@ LEGACY_DEF_RE = re.compile(
 )
 ALLOW_RE = re.compile(r"ds-gate:\s*allow\b", re.IGNORECASE)
 
+# Task 2.6 — hardcoded channel paints (gate was blind to these)
+RGBA_RE = re.compile(r"\b(?:rgba?|hsla?)\s*\(", re.IGNORECASE)
+COLOR_MIX_RE = re.compile(r"\bcolor-mix\s*\(", re.IGNORECASE)
+
+# Task 2.6b — private type scales
+FONT_SIZE_PROP_RE = re.compile(r"font-size\s*:\s*([^;}+]+)", re.IGNORECASE)
+FONT_SIZE_OK_RE = re.compile(
+    r"^(?:"
+    r"var\(\s*--tf-type-[a-z0-9-]+"
+    r"|var\(\s*--tf-ds-[a-z0-9-]+"
+    r"|inherit|unset|initial|revert|revert-layer"
+    r"|0|0px|0rem|0em"
+    r"|smaller|larger|xx-small|x-small|small|medium|large|x-large|xx-large|xxx-large"
+    r")",
+    re.IGNORECASE,
+)
+
+# Task 2.7 — column width literals
+MAX_WIDTH_PROP_RE = re.compile(r"max-width\s*:\s*([^;}+]+)", re.IGNORECASE)
+MAX_WIDTH_OK_RE = re.compile(
+    r"^(?:"
+    r"var\(\s*--tf-shell-(?:max|readable|gutter|gap)"
+    r"|var\(\s*--tf-ds-(?:page-max|mobile-max|main-max(?:-wide)?)"
+    r"|var\(\s*--tf-hero-[a-z0-9-]+"
+    r"|var\(\s*--pe-max"  # profile editorial alias → shell-max
+    r"|100%|none|0|0px|0rem|min-content|max-content|fit-content|inherit|unset|initial"
+    r"|min\s*\("
+    r")",
+    re.IGNORECASE,
+)
+# @media (max-width: …) is a breakpoint, not a content column
+MEDIA_MAX_WIDTH_RE = re.compile(r"@media[^{]*max-width", re.IGNORECASE)
+
 # Selectors we never flag even without allow comment (structural BEM from DS consumers
 # that are not inventing a parallel button/card system). Kept empty — baseline covers legacy.
 ALWAYS_ALLOW_CLASSES: frozenset[str] = frozenset()
@@ -83,6 +117,10 @@ def line_allowed(lines: list[str], idx: int) -> bool:
     return False
 
 
+def normalize_css_value(raw: str) -> str:
+    return re.sub(r"\s+", " ", raw.strip().rstrip(";").strip())
+
+
 def scan_file(path: Path) -> list[Violation]:
     text = path.read_text(encoding="utf-8", errors="replace")
     lines = text.splitlines()
@@ -92,12 +130,29 @@ def scan_file(path: Path) -> list[Violation]:
     for i, line in enumerate(lines):
         if line_allowed(lines, i):
             continue
-        # Strip block comments on the line for class matching noise reduction later if needed
         stripped = line.strip()
         if not stripped or stripped.startswith("/*") and "*/" in stripped and stripped.endswith("*/"):
-            # still scan hex inside rare one-line comments? skip pure comment lines
             if stripped.startswith("/*") and stripped.endswith("*/"):
                 continue
+
+        # Breakpoint lines are not content-column debt
+        if MEDIA_MAX_WIDTH_RE.search(line):
+            # Still scan hex/rgba/font on the same line if present, but skip max-width rule
+            pass
+        else:
+            for m in MAX_WIDTH_PROP_RE.finditer(line):
+                value = normalize_css_value(m.group(1))
+                if MAX_WIDTH_OK_RE.match(value):
+                    continue
+                # Ignore pure breakpoint-looking values only when on @media — already skipped
+                out.append(
+                    Violation(
+                        rule="max-width-literal",
+                        path=rel,
+                        line=i + 1,
+                        detail=value[:80],
+                    )
+                )
 
         for m in HEX_RE.finditer(line):
             out.append(
@@ -109,12 +164,46 @@ def scan_file(path: Path) -> list[Violation]:
                 )
             )
 
+        for m in RGBA_RE.finditer(line):
+            # Capture a short snippet for stable baseline identity
+            snippet = normalize_css_value(line[m.start() : m.start() + 48])
+            out.append(
+                Violation(
+                    rule="rgba-literal",
+                    path=rel,
+                    line=i + 1,
+                    detail=snippet[:80],
+                )
+            )
+
+        for m in COLOR_MIX_RE.finditer(line):
+            snippet = normalize_css_value(line[m.start() : m.start() + 48])
+            out.append(
+                Violation(
+                    rule="color-mix-literal",
+                    path=rel,
+                    line=i + 1,
+                    detail=snippet[:80],
+                )
+            )
+
+        for m in FONT_SIZE_PROP_RE.finditer(line):
+            value = normalize_css_value(m.group(1))
+            if FONT_SIZE_OK_RE.match(value):
+                continue
+            out.append(
+                Violation(
+                    rule="font-size-literal",
+                    path=rel,
+                    line=i + 1,
+                    detail=value[:80],
+                )
+            )
+
         for m in ADHOC_CLASS_RE.finditer(line):
             cls = m.group(1)
             if cls in ALWAYS_ALLOW_CLASSES:
                 continue
-            # Only flag selector definitions (line has `{` ahead or is a selector line)
-            # Avoid matching inside content/strings roughly: require `.Class` as selector start-ish
             before = line[: m.start()]
             if re.search(r'["\']', before[max(0, len(before) - 2) :]):
                 continue
@@ -168,10 +257,11 @@ def write_baseline(path: Path, violations: list[Violation]) -> None:
     for v in violations:
         by_rule[v.rule] = by_rule.get(v.rule, 0) + 1
     payload = {
-        "version": 1,
+        "version": 2,
         "description": (
-            "DS Task 1 baseline — existing module.css violations. New keys fail CI; "
-            "listed keys warn only. Shrink this file as Task 2–3 migrations land."
+            "DS style gate baseline — hex/adhoc/legacy + rgba/color-mix + font-size + "
+            "max-width debt. New keys fail CI; listed keys warn only. Shrink as "
+            "Task 2.6 / 2.6b / 2.7 migrations land."
         ),
         "generated_by": "scripts/check_ds_style_gate.py --write-baseline",
         "counts": {
@@ -275,7 +365,7 @@ def main(argv: list[str] | None = None) -> int:
         if errors:
             print(
                 "New design-system gate violations. Use DsButton/DsCard/DsTypography + --tf-*/--day-* "
-                "or add `/* ds-gate: allow — <ticket> */` with explicit justification."
+                "/ --tf-type-* / --tf-shell-* or add `/* ds-gate: allow — <ticket> */` with justification."
             )
 
     if args.warn_only:
