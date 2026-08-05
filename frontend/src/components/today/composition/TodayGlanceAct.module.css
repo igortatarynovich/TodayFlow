@@ -172,16 +172,32 @@
 }
 
 .nearestSkeleton {
-  height: 0.95rem;
+  display: block;
+  height: 1.1rem;
   width: min(70%, 16rem);
   border-radius: 0.4rem;
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.25),
-    rgba(255, 255, 255, 0.55),
-    rgba(255, 255, 255, 0.25)
+    color-mix(in srgb, var(--tf-ink-muted, #7a7168) 12%, transparent),
+    color-mix(in srgb, var(--tf-ink-muted, #7a7168) 28%, transparent),
+    color-mix(in srgb, var(--tf-ink-muted, #7a7168) 12%, transparent)
   );
   background-size: 200% 100%;
+  animation: nearestSkeletonPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes nearestSkeletonPulse {
+  0% {
+    background-position: 100% 0;
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    background-position: -100% 0;
+    opacity: 0.55;
+  }
 }
 
 .focusDirection {

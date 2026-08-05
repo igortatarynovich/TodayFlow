@@ -27,7 +27,9 @@ const SPHERE_TO_DOMAIN: Record<string, string> = {
 export function mapSphereToDomain(sphere: string | null | undefined): string {
   const key = (sphere || "").trim().toLowerCase();
   if (key === "work" || key === "money" || key === "relationships" || key === "energy") return key;
-  return SPHERE_TO_DOMAIN[key] ?? "work";
+  if (SPHERE_TO_DOMAIN[key]) return SPHERE_TO_DOMAIN[key];
+  // Unmapped keys must not become «Работа» — keep raw key so labels can fall through to sphere_label_ru.
+  return key || "energy";
 }
 
 /** |challenging_fallback| from DOMAIN_MAGNITUDE_V1 — higher = stronger day claim. */

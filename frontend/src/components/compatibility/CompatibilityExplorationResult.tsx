@@ -1,6 +1,6 @@
 "use client";
 
-import { DsButton } from "@/design-system";
+import { DsButton, DsCallout, DsQuote } from "@/design-system";
 
 import Link from "next/link";
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
@@ -119,8 +119,13 @@ export function CompatibilityExplorationResult({
         <p className={styles.pairLine}>{model.pairLine}</p>
         <div className={styles.heroGrid}>
           <div className={styles.heroMain}>
-            <p className={styles.mainThoughtLabel}>{isPlayful ? "Вердикт" : "Главная мысль"}</p>
-            <p className={styles.mainThought}>{model.mainThought}</p>
+            <DsCallout
+              tone="insight"
+              label="main"
+              icon="spark"
+              title={model.mainThought}
+              testId="compat-exploration-main-thought"
+            />
             <p className={styles.scoreLabel}>{model.scoreLabel}</p>
           </div>
           <div className={styles.ringWrap} style={ringStyle}>
@@ -156,8 +161,11 @@ export function CompatibilityExplorationResult({
         <>
           {model.narrative.length ? (
             <section className={styles.playfulPunchline}>
-              {model.narrative.map((p, i) => (
-                <MotionSettle key={i} delayMs={i * MOTION.staggerMs}>
+              <DsQuote kicker="Вердикт" testId="compat-exploration-playful-quote">
+                {model.narrative[0]}
+              </DsQuote>
+              {model.narrative.slice(1).map((p, i) => (
+                <MotionSettle key={i} delayMs={(i + 1) * MOTION.staggerMs}>
                   <p className={styles.playfulPunchlineText}>{p}</p>
                 </MotionSettle>
               ))}
@@ -165,16 +173,22 @@ export function CompatibilityExplorationResult({
           ) : null}
           <section className={styles.insights}>
             <MotionSettle delayMs={0}>
-              <div className={styles.insightCard}>
-                <p className={styles.insightLabel}>🏆 Лидер stat</p>
-                <p className={styles.insightBody}>{model.strongestResource}</p>
-              </div>
+              <DsCallout
+                tone="help"
+                label="relations"
+                icon="heart"
+                title={model.strongestResource}
+                testId="compat-exploration-strongest"
+              />
             </MotionSettle>
             <MotionSettle delayMs={MOTION.staggerMs}>
-              <div className={`${styles.insightCard} ${styles.insightCardRisk}`}>
-                <p className={styles.insightLabel}>📉 Слабое звено</p>
-                <p className={styles.insightBody}>{model.mainRisk}</p>
-              </div>
+              <DsCallout
+                tone="avoid"
+                label="attention"
+                icon="flag"
+                title={model.mainRisk}
+                testId="compat-exploration-risk"
+              />
             </MotionSettle>
           </section>
         </>
@@ -183,8 +197,11 @@ export function CompatibilityExplorationResult({
           {model.narrative.length ? (
             <section className={styles.narrative}>
               <h3 className={styles.blockTitle}>Что произойдёт, если сценарий случится завтра?</h3>
-              {model.narrative.map((p, i) => (
-                <MotionSettle key={i} delayMs={i * MOTION.staggerMs}>
+              <DsQuote kicker="Сценарий" testId="compat-exploration-narrative-quote">
+                {model.narrative[0]}
+              </DsQuote>
+              {model.narrative.slice(1).map((p, i) => (
+                <MotionSettle key={i} delayMs={(i + 1) * MOTION.staggerMs}>
                   <p className={styles.narrativeP}>{p}</p>
                 </MotionSettle>
               ))}
@@ -193,29 +210,37 @@ export function CompatibilityExplorationResult({
 
           <section className={styles.insights}>
             <MotionSettle delayMs={0}>
-              <div className={styles.insightCard}>
-                <p className={styles.insightLabel}>💎 Самый сильный ресурс</p>
-                <p className={styles.insightBody}>{model.strongestResource}</p>
-              </div>
+              <DsCallout
+                tone="help"
+                label="relations"
+                icon="heart"
+                title={model.strongestResource}
+                testId="compat-exploration-strongest"
+              />
             </MotionSettle>
             <MotionSettle delayMs={MOTION.staggerMs}>
-              <div className={`${styles.insightCard} ${styles.insightCardRisk}`}>
-                <p className={styles.insightLabel}>⚠ Главный риск</p>
-                <p className={styles.insightBody}>{model.mainRisk}</p>
-              </div>
+              <DsCallout
+                tone="avoid"
+                label="attention"
+                icon="flag"
+                title={model.mainRisk}
+                testId="compat-exploration-risk"
+              />
             </MotionSettle>
           </section>
 
           {model.tips.length ? (
             <section className={styles.tips}>
-              <h3 className={styles.blockTitle}>Что поможет именно вам</h3>
-              <ul className={styles.tipsList}>
-                {model.tips.map((tip, i) => (
-                  <li key={tip}>
-                    <MotionSettle delayMs={i * MOTION.staggerMs}>{tip}</MotionSettle>
-                  </li>
+              <DsCallout
+                tone="practice"
+                label="next_step"
+                icon="arrowDown"
+                testId="compat-exploration-tips"
+              >
+                {model.tips.map((tip) => (
+                  <p key={tip}>{tip}</p>
                 ))}
-              </ul>
+              </DsCallout>
             </section>
           ) : null}
 
@@ -248,14 +273,22 @@ export function CompatibilityExplorationResult({
                         <p className={styles.deepTakeaway}>{section.takeaway}</p>
                         {section.detail ? <p className={styles.deepDetail}>{section.detail}</p> : null}
                         {section.risk ? (
-                          <div className={styles.deepRisk}>
-                            <strong>Риск:</strong> {section.risk}
-                          </div>
+                          <DsCallout
+                            tone="avoid"
+                            label="attention"
+                            icon="flag"
+                            title={section.risk}
+                            testId={`compat-exploration-deep-risk-${section.id}`}
+                          />
                         ) : null}
                         {section.action ? (
-                          <div className={styles.deepAction}>
-                            <strong>Как действовать:</strong> {section.action}
-                          </div>
+                          <DsCallout
+                            tone="practice"
+                            label="next_step"
+                            icon="arrowDown"
+                            title={section.action}
+                            testId={`compat-exploration-deep-action-${section.id}`}
+                          />
                         ) : null}
                       </div>
                     </details>

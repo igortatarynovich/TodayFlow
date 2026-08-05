@@ -78,6 +78,7 @@ export type DayFactsResponse = {
 };
 
 const TTL_MS = 60_000;
+const FETCH_TIMEOUT_MS = 8_000;
 const cache = new Map<string, { at: number; data: DayFactsResponse }>();
 const inFlight = new Map<string, Promise<DayFactsResponse>>();
 
@@ -100,12 +101,26 @@ export async function fetchDayFacts(dateISO: string): Promise<DayFactsResponse> 
   if (pending) return pending;
 
   const q = dateISO ? `?local_date=${encodeURIComponent(dateISO)}` : "";
-  const promise = getJson<DayFactsResponse>(`/today/day-facts${q}`)
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => {
+    try {
+      controller.abort(
+        typeof DOMException !== "undefined"
+          ? new DOMException("Request timed out.", "TimeoutError")
+          : undefined,
+      );
+    } catch {
+      controller.abort();
+    }
+  }, FETCH_TIMEOUT_MS);
+
+  const promise = getJson<DayFactsResponse>(`/today/day-facts${q}`, { signal: controller.signal })
     .then((data) => {
       cache.set(key, { at: Date.now(), data });
       return data;
     })
     .finally(() => {
+      clearTimeout(timeoutId);
       inFlight.delete(key);
     });
 

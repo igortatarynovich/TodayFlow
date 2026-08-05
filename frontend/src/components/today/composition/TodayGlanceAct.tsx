@@ -251,7 +251,11 @@ export function TodayGlanceAct({
           data-fallback={loadFailure ? "true" : "false"}
           data-failure={loadFailure || undefined}
         >
-          {!loaded ? <div className={styles.nearestSkeleton} data-loading="true" aria-busy="true" /> : null}
+          {!loaded ? (
+            <p className={styles.detail} data-loading="true" aria-busy="true">
+              <span className={styles.nearestSkeleton} />
+            </p>
+          ) : null}
           {loaded && !loadFailure && nearest ? (
             onNearestSelect ? (
               <button

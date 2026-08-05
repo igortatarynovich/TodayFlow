@@ -365,7 +365,7 @@ export function TodayWebDashboard({
       <ProductWebShellConfigBridge config={shellConfig} />
       <div className={l.productWebContentV2}>
         <div className={v2.pageRoot}>
-          <header className={`${pl.pageHeader} ${layout === "composition" ? pl.pageHeaderQuiet : ""}`.trim()}>
+          <header className={layout === "composition" ? pl.pageHeaderFlat : pl.pageHeader}>
             <div>
               <h1 className={layout === "composition" ? v2.sectionTitle : v2.displayTitle}>
                 {todayWebGreeting(chrome, displayName)}

@@ -1,6 +1,6 @@
 "use client";
 
-import { DsButton } from "@/design-system";
+import { DsButton, DsCallout } from "@/design-system";
 
 import Link from "next/link";
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -407,14 +407,20 @@ function CompatibilityAnalyzeContent() {
               {p.headline}
             </p>
             {p.do_focus ? (
-              <p className="orbit-body-xs" style={{ margin: "0.55rem 0 0", color: "#166534", lineHeight: 1.55 }}>
-                Усилить: {p.do_focus}
-              </p>
+              <div style={{ marginTop: "0.55rem" }}>
+                <DsCallout tone="help" label="help" icon="sun" title={p.do_focus} testId="compat-analyze-do" />
+              </div>
             ) : null}
             {p.avoid_focus ? (
-              <p className="orbit-body-xs" style={{ margin: "0.35rem 0 0", color: "#9a3412", lineHeight: 1.55 }}>
-                Осторожнее с: {p.avoid_focus}
-              </p>
+              <div style={{ marginTop: "0.35rem" }}>
+                <DsCallout
+                  tone="avoid"
+                  label="attention"
+                  icon="flag"
+                  title={p.avoid_focus}
+                  testId="compat-analyze-avoid"
+                />
+              </div>
             ) : null}
           </>
         ) : null}

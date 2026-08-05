@@ -386,10 +386,9 @@ export function TodayPersonalizedProductSection({
                       <p>{sphereWhy}</p>
                     </DsCallout>
                   ) : null}
+                  {/* Sphere lead/body stay at Body size — DsQuote is pull-quote only (vibe). */}
                   {isSphereChapter && showNarrative && chapter.lead ? (
-                    <DsQuote kicker={chapter.kicker || copy.journey.readingSphereWhyLabel}>
-                      {chapter.lead}
-                    </DsQuote>
+                    <p className={journeyStyles.narrativeBlockLead}>{chapter.lead}</p>
                   ) : null}
                   {isSphereChapter && showNarrative
                     ? chapter.paragraphs.map((para) => (
@@ -462,14 +461,11 @@ export function TodayPersonalizedProductSection({
                                 : "help"
                           }
                           icon={chapter.id === "force" ? "spark" : "sun"}
-                          title={chapter.dual.strengthen[0]}
                           testId={`today-reading-dual-strengthen-${chapter.id}`}
                         >
-                          {chapter.dual.strengthen.length > 1
-                            ? chapter.dual.strengthen.slice(1).map((line) => (
-                                <p key={line.slice(0, 40)}>{line}</p>
-                              ))
-                            : null}
+                          {chapter.dual.strengthen.map((line) => (
+                            <p key={line.slice(0, 40)}>{line}</p>
+                          ))}
                         </DsCallout>
                       ) : null}
                       {chapter.dual.soften.length ? (
@@ -477,14 +473,11 @@ export function TodayPersonalizedProductSection({
                           tone="avoid"
                           label="attention"
                           icon="flag"
-                          title={chapter.dual.soften[0]}
                           testId={`today-reading-dual-soften-${chapter.id}`}
                         >
-                          {chapter.dual.soften.length > 1
-                            ? chapter.dual.soften.slice(1).map((line) => (
-                                <p key={line.slice(0, 40)}>{line}</p>
-                              ))
-                            : null}
+                          {chapter.dual.soften.map((line) => (
+                            <p key={line.slice(0, 40)}>{line}</p>
+                          ))}
                         </DsCallout>
                       ) : null}
                     </div>
