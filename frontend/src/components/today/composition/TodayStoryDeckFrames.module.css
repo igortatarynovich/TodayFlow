@@ -24,6 +24,128 @@
   min-height: 100%;
 }
 
+/* Immersive photo frames: edge-to-edge art inside the story step. */
+.immersive {
+  padding: 0;
+  overflow: hidden;
+}
+
+.immersive.frameScroll {
+  overflow-y: auto;
+}
+
+.artPhoto,
+.artEnergy {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--story-art);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.artPhoto::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, #1a1410 42%, transparent) 0%,
+      color-mix(in srgb, #1a1410 55%, transparent) 45%,
+      color-mix(in srgb, #1a1410 68%, transparent) 100%
+    );
+}
+
+.artEnergy::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 55% at 50% 18%, color-mix(in srgb, #0a0e18 25%, transparent), transparent 70%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, #070b14 55%, transparent) 0%,
+      color-mix(in srgb, #070b14 70%, transparent) 55%,
+      color-mix(in srgb, #070b14 82%, transparent) 100%
+    );
+}
+
+.immersiveContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+  padding: 1.1rem 1rem 1.35rem;
+  gap: 1rem;
+}
+
+.greeting .immersiveContent {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+.practice .immersiveContent {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.85rem;
+}
+
+.downCue {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 auto;
+  padding: 0.35rem 0;
+  opacity: 0.72;
+}
+
+.downCueArrow {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  font-size: 1rem;
+  line-height: 1;
+  color: color-mix(in srgb, var(--tf-ink, #2a2520) 70%, transparent);
+  border: 1px solid color-mix(in srgb, var(--day-decor-color, #8f6b3a) 22%, transparent);
+  background: color-mix(in srgb, var(--day-surface-tint, #fff) 55%, transparent);
+  animation: todayDownCue 1.8s ease-in-out infinite;
+}
+
+.immersive .downCueArrow {
+  color: rgba(255, 248, 240, 0.88);
+  border-color: color-mix(in srgb, #fff 28%, transparent);
+  background: color-mix(in srgb, #fff 10%, transparent);
+}
+
+@keyframes todayDownCue {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateY(4px);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .downCueArrow {
+    animation: none;
+  }
+}
+
 .greeting {
   align-items: center;
   justify-content: center;
@@ -37,7 +159,7 @@
   font-weight: 560;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--tf-ink-muted, #7a7168);
+  color: rgba(255, 248, 240, 0.78);
 }
 
 .greetingHeadline {
@@ -48,13 +170,14 @@
   font-weight: 650;
   line-height: 1.15;
   letter-spacing: -0.02em;
-  color: var(--tf-ink, #2a2520);
+  color: #fff8f0;
+  text-shadow: 0 1px 18px color-mix(in srgb, #000 35%, transparent);
 }
 
 .dateLine {
   margin: 0;
   font-size: 0.95rem;
-  color: var(--tf-ink-muted, #7a7168);
+  color: rgba(255, 248, 240, 0.72);
 }
 
 .startCta {
@@ -68,7 +191,7 @@
   background: transparent;
   cursor: pointer;
   font: inherit;
-  color: var(--tf-ink, #2a2520);
+  color: #fff8f0;
 }
 
 .startArrow {
@@ -77,14 +200,16 @@
   width: 3.25rem;
   height: 3.25rem;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--day-surface-tint, #fff) 75%, transparent);
-  border: 1px solid color-mix(in srgb, var(--day-decor-color, #8f6b3a) 22%, transparent);
+  background: color-mix(in srgb, #fff 16%, transparent);
+  border: 1px solid color-mix(in srgb, #fff 35%, transparent);
   font-size: 1.25rem;
   line-height: 1;
+  color: #fff8f0;
+  backdrop-filter: blur(8px);
 }
 
 .startCta:focus-visible .startArrow {
-  outline: 2px solid color-mix(in srgb, var(--day-decor-color, #5b6472) 55%, transparent);
+  outline: 2px solid color-mix(in srgb, #fff 55%, transparent);
   outline-offset: 3px;
 }
 
@@ -111,6 +236,11 @@
   color: var(--tf-ink-muted, #7a7168);
 }
 
+.eyebrowOnArt {
+  composes: eyebrow;
+  color: rgba(255, 248, 240, 0.72);
+}
+
 .energyPrimary,
 .themePrimary {
   margin: 0;
@@ -122,6 +252,12 @@
   color: var(--tf-ink, #2a2520);
 }
 
+.energyPrimaryOnArt {
+  composes: energyPrimary;
+  color: #fff8f0;
+  text-shadow: 0 1px 16px color-mix(in srgb, #000 40%, transparent);
+}
+
 .detail,
 .muted {
   margin: 0;
@@ -130,6 +266,12 @@
   line-height: 1.45;
   color: var(--tf-ink-muted, #7a7168);
   text-align: center;
+}
+
+.detailOnArt,
+.mutedOnArt {
+  composes: detail;
+  color: rgba(255, 248, 240, 0.78);
 }
 
 .flowBlock,
@@ -143,6 +285,20 @@
 
 .flowBlock {
   text-align: left;
+}
+
+.flowOnArt {
+  margin-top: 0.35rem;
+  padding: 0.85rem 0.9rem;
+  border-radius: var(--tf-surface-insight-radius, 28px);
+  background: color-mix(in srgb, #0a0e18 42%, transparent);
+  border: 1px solid color-mix(in srgb, #fff 14%, transparent);
+  backdrop-filter: blur(10px);
+  color: rgba(255, 248, 240, 0.92);
+}
+
+.flowOnArt :global(*) {
+  color: inherit;
 }
 
 .cardList {
@@ -203,9 +359,24 @@
   color: var(--tf-ink, #2a2520);
 }
 
+.practiceTitleOnArt {
+  composes: practiceTitle;
+  color: #fff8f0;
+  text-shadow: 0 1px 18px color-mix(in srgb, #000 35%, transparent);
+}
+
 .practiceCta {
   margin-top: 1rem;
   min-width: min(100%, 16rem);
+}
+
+.linkOnArt {
+  margin-top: 0.35rem;
+}
+
+.linkOnArt :global(a),
+.linkOnArt :global(p) {
+  color: rgba(255, 248, 240, 0.78);
 }
 
 .insight {

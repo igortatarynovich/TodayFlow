@@ -37,32 +37,35 @@
   min-height: var(--sf-chrome-h);
   padding: 0.35rem 0.75rem;
   box-sizing: border-box;
-  /* Day Atmosphere accent when --day-* is set (FOUNDATION_UI §11.4); gold fallbacks elsewhere. */
-  background: linear-gradient(
-    0deg,
-    var(--day-surface-tint, transparent) 0%,
-    transparent 100%
-  );
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 .chrome[data-controls="true"] {
   justify-content: space-between;
 }
 
-.dots { display: flex; gap: 0.4rem; align-items: center; }
+.dots {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
 
 .dot, .dotActive {
-  width: 0.55rem;
-  height: 0.55rem;
+  width: 0.5rem;
+  height: 0.5rem;
   padding: 0;
   border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--day-decor-color, #8f6b3a) 35%, transparent);
-  background: color-mix(
-    in srgb,
-    var(--day-accent-soft, rgba(255, 255, 255, 0.35)) 40%,
-    rgba(255, 255, 255, 0.45)
-  );
+  border: 1px solid color-mix(in srgb, var(--day-decor-color, #8f6b3a) 40%, transparent);
+  background: color-mix(in srgb, var(--day-decor-color, #8f6b3a) 18%, transparent);
   cursor: pointer;
+  box-shadow: none;
 }
 
 .dotActive {

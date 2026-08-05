@@ -4,7 +4,7 @@
  */
 "use client";
 
-import type { ReactNode } from "react";
+import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { DsButton } from "@/design-system/primitives/DsButton";
 import { DsCard } from "@/design-system/primitives/DsCard";
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
@@ -16,7 +16,48 @@ import type { GlanceDailyFocusModel } from "@/lib/todayDailyFocus";
 import type { TodayContractV1 } from "@/lib/todayContract";
 import type { TapResponseCode } from "@/lib/todayTapWidget";
 import { TODAY_NO_SHARP_FOCUS_COPY } from "@/lib/todayGlanceTexture";
+import {
+  resolveTodayStoryFrameArt,
+  type TodayStoryArtRole,
+} from "@/lib/todayStoryFrameArt";
 import styles from "@/components/today/composition/TodayStoryDeckFrames.module.css";
+
+function TodayStoryArtBackdrop({
+  role,
+  tone = "photo",
+}: {
+  role: TodayStoryArtRole;
+  /** photo = immersive full-bleed; theme pages omit this. */
+  tone?: "photo" | "energy";
+}) {
+  const [src, setSrc] = useState(() => resolveTodayStoryFrameArt(role));
+  useEffect(() => {
+    setSrc(resolveTodayStoryFrameArt(role));
+    const root = document.documentElement;
+    const sync = () => setSrc(resolveTodayStoryFrameArt(role));
+    const obs = new MutationObserver(sync);
+    obs.observe(root, { attributes: true, attributeFilter: ["data-day-mode", "data-day-phase"] });
+    return () => obs.disconnect();
+  }, [role]);
+
+  return (
+    <div
+      className={tone === "energy" ? styles.artEnergy : styles.artPhoto}
+      style={{ "--story-art": `url("${src}")` } as CSSProperties}
+      aria-hidden
+      data-testid={`today-frame-art-${role}`}
+    />
+  );
+}
+
+/** Mockup cue between stacked blocks inside one story frame. */
+export function TodayStoryDownCue() {
+  return (
+    <div className={styles.downCue} data-testid="today-story-down-cue" aria-hidden>
+      <span className={styles.downCueArrow}>↓</span>
+    </div>
+  );
+}
 
 export function TodayGreetingFrame({
   salutation,
@@ -32,18 +73,21 @@ export function TodayGreetingFrame({
   onStart: () => void;
 }) {
   return (
-    <div className={styles.greeting} data-testid="today-frame-greeting">
-      <p className={styles.salutation}>{salutation}</p>
-      <h2 className={styles.greetingHeadline}>
-        {loading ? copy.loadingDay : headline || "Сегодня — твой день"}
-      </h2>
-      <p className={styles.dateLine}>{dateLabel}</p>
-      <button type="button" className={styles.startCta} data-testid="today-greeting-start" onClick={onStart}>
-        <span className={styles.startArrow} aria-hidden>
-          →
-        </span>
-        <span>Начать день</span>
-      </button>
+    <div className={`${styles.greeting} ${styles.immersive}`} data-testid="today-frame-greeting">
+      <TodayStoryArtBackdrop role="greeting" />
+      <div className={styles.immersiveContent}>
+        <p className={styles.salutation}>{salutation}</p>
+        <h2 className={styles.greetingHeadline}>
+          {loading ? copy.loadingDay : headline || "Сегодня — твой день"}
+        </h2>
+        <p className={styles.dateLine}>{dateLabel}</p>
+        <button type="button" className={styles.startCta} data-testid="today-greeting-start" onClick={onStart}>
+          <span className={styles.startArrow} aria-hidden>
+            →
+          </span>
+          <span>Начать день</span>
+        </button>
+      </div>
     </div>
   );
 }
@@ -60,27 +104,38 @@ export function TodayEnergyFlowFrame({
   const energy = (energyLine || "").trim() || null;
   const cause = (energyCause || "").trim() || null;
   return (
-    <div className={styles.frame} data-testid="today-frame-energy-flow">
-      <div className={styles.centerStack}>
-        <p className={styles.eyebrow}>{copy.pulseLabel}</p>
-        {energy ? (
-          <h2 className={styles.energyPrimary} data-testid="today-glance-energy-text">
-            {energy}
-          </h2>
-        ) : (
-          <p className={styles.muted} data-testid="today-energy-empty">
-            Энергия дня сегодня без отдельной формулировки.
-          </p>
-        )}
-        {cause ? (
-          <p className={styles.detail} data-testid="today-glance-energy-cause">
-            {cause}
-          </p>
-        ) : null}
-      </div>
-      <div className={styles.flowBlock} data-testid="today-frame-day-flow">
-        <p className={styles.eyebrow}>Поток дня</p>
-        <TodayGlanceTimelineSlot dateISO={dateISO} />
+    <div
+      className={`${styles.frame} ${styles.frameScroll} ${styles.immersive}`}
+      data-testid="today-frame-energy-flow"
+    >
+      <TodayStoryArtBackdrop role="energy" tone="energy" />
+      <div className={styles.immersiveContent}>
+        <div className={styles.centerStack}>
+          <p className={styles.eyebrowOnArt}>{copy.pulseLabel}</p>
+          {energy ? (
+            <h2 className={styles.energyPrimaryOnArt} data-testid="today-glance-energy-text">
+              {energy}
+            </h2>
+          ) : (
+            <p className={styles.mutedOnArt} data-testid="today-energy-empty">
+              Энергия дня сегодня без отдельной формулировки.
+            </p>
+          )}
+          {cause ? (
+            <p className={styles.detailOnArt} data-testid="today-glance-energy-cause">
+              {cause}
+            </p>
+          ) : null}
+        </div>
+
+        <TodayStoryDownCue />
+
+        <div className={styles.flowBlock} data-testid="today-frame-day-flow">
+          <p className={styles.eyebrowOnArt}>Поток дня</p>
+          <div className={styles.flowOnArt}>
+            <TodayGlanceTimelineSlot dateISO={dateISO} />
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -108,9 +163,12 @@ export function TodayAttributesFrame({
   return (
     <div className={`${styles.frame} ${styles.frameScroll}`} data-testid="today-frame-attributes">
       {colorGuide ? (
-        <div className={styles.colorAnchor}>
-          <TodayDayColorGuideSection guide={colorGuide} />
-        </div>
+        <>
+          <div className={styles.colorAnchor}>
+            <TodayDayColorGuideSection guide={colorGuide} />
+          </div>
+          <TodayStoryDownCue />
+        </>
       ) : null}
 
       <div className={styles.centerStack}>
@@ -121,6 +179,8 @@ export function TodayAttributesFrame({
           </h2>
         ) : null}
       </div>
+
+      {(focusTitle || prioritize || avoid) && <TodayStoryDownCue />}
 
       <div className={styles.listBlock} data-testid="today-glance-daily-focus">
         <p className={styles.eyebrow}>{copy.journey.glanceFocusLabel}</p>
@@ -172,42 +232,57 @@ export function TodayPracticeFrame({
   linkSlot?: ReactNode;
 }) {
   return (
-    <div className={styles.practice} data-testid="today-frame-practice">
-      <p className={styles.eyebrow}>Практика дня</p>
-      {title ? (
-        <h2 className={styles.practiceTitle} data-testid="today-practice-title">
-          {title}
-        </h2>
-      ) : (
-        <p className={styles.muted}>Сегодня без отдельной практики — держи ритм дня.</p>
-      )}
-      {meta ? <p className={styles.detail}>{meta}</p> : null}
-      {title && !completed ? (
-        <DsButton
-          type="button"
-          variant="primary"
-          className={styles.practiceCta}
-          data-testid="today-tool-practice"
-          disabled={completing}
-          onClick={onAction}
-        >
-          {actionLabel}
-        </DsButton>
-      ) : null}
-      {completed ? <p className={styles.detail}>{copy.practiceCompleted}</p> : null}
-      {linkSlot}
+    <div className={`${styles.practice} ${styles.immersive}`} data-testid="today-frame-practice">
+      <TodayStoryArtBackdrop role="practice" />
+      <div className={styles.immersiveContent}>
+        <p className={styles.eyebrowOnArt}>Практика дня</p>
+        {title ? (
+          <h2 className={styles.practiceTitleOnArt} data-testid="today-practice-title">
+            {title}
+          </h2>
+        ) : (
+          <p className={styles.mutedOnArt}>Сегодня без отдельной практики — держи ритм дня.</p>
+        )}
+        {meta ? <p className={styles.detailOnArt}>{meta}</p> : null}
+        {title && !completed ? (
+          <DsButton
+            type="button"
+            variant="primary"
+            className={styles.practiceCta}
+            data-testid="today-tool-practice"
+            disabled={completing}
+            onClick={onAction}
+          >
+            {actionLabel}
+          </DsButton>
+        ) : null}
+        {completed ? <p className={styles.detailOnArt}>{copy.practiceCompleted}</p> : null}
+        {linkSlot ? <div className={styles.linkOnArt}>{linkSlot}</div> : null}
+      </div>
     </div>
   );
 }
 
-export function TodayInsightFrame({ children }: { children: ReactNode }) {
+export function TodayInsightFrame({
+  plot,
+  dialogue,
+}: {
+  plot?: ReactNode;
+  dialogue?: ReactNode;
+}) {
+  const hasPlot = Boolean(plot);
+  const hasDialogue = Boolean(dialogue);
   return (
-    <div className={styles.insight} data-testid="today-frame-insight">
+    <div className={`${styles.insight} ${styles.frameScroll}`} data-testid="today-frame-insight">
       <span className={styles.quoteMark} aria-hidden>
         “
       </span>
       <p className={styles.eyebrow}>Инсайт дня</p>
-      <div className={styles.insightBody}>{children}</div>
+      <div className={styles.insightBody}>
+        {hasPlot ? plot : null}
+        {hasPlot && hasDialogue ? <TodayStoryDownCue /> : null}
+        {hasDialogue ? dialogue : null}
+      </div>
     </div>
   );
 }
@@ -235,6 +310,7 @@ export function TodayCloseFrame({
           {eveningQuestion?.trim() || "Что сегодня было по-настоящему важным?"}
         </h2>
       </div>
+      <TodayStoryDownCue />
       <div className={styles.responseWrap} data-testid="today-slot-tap-wrap">
         <TodayTapWidget
           contract={contract}
@@ -243,6 +319,7 @@ export function TodayCloseFrame({
           onRecorded={onTapRecorded}
         />
       </div>
+      <TodayStoryDownCue />
       <DsCard
         variant="glass"
         size="compact"

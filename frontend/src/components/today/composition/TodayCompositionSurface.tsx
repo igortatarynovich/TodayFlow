@@ -82,6 +82,7 @@ import { TodayInterpretationConfirm } from "@/components/today/composition/Today
 import { TodaySkyStoryCards } from "@/components/today/composition/TodaySkyStoryCards";
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
 import { TodayHookRevealShell } from "@/components/today/composition/TodayHookRevealShell";
+import { TodayStoryDownCue } from "@/components/today/composition/TodayStoryDeckFrames";
 import { isDayScenarioReadyForChapters } from "@/lib/todayScenarioChapters";
 import { buildGlanceDayTexture, buildGlanceThemeEyebrow } from "@/lib/todayGlanceTexture";
 import { buildGlanceDailyFocus } from "@/lib/todayDailyFocus";
@@ -1675,6 +1676,10 @@ export function TodayCompositionSurface(props: Props) {
                   }
                   testId="today-zone-tarot-impact"
                 />
+              ) : null}
+              {(story.tarotImpact || props.cardName || symbolHooksView?.card?.hook_reveal) &&
+              (story.numberImpact || props.numerologyValue || symbolHooksView?.number?.hook_reveal) ? (
+                <TodayStoryDownCue />
               ) : null}
               {story.numberImpact || props.numerologyValue || symbolHooksView?.number?.hook_reveal ? (
                 <TodayHookRevealShell

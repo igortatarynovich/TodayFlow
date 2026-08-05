@@ -201,10 +201,7 @@ export function TodayProductScreenFlow({
             </ScreenFlowStep>
 
             <ScreenFlowStep id="insight" label="Инсайт дня" scrollable>
-              <TodayInsightFrame>
-                {plotNarrativeSection}
-                {morningDialogue}
-              </TodayInsightFrame>
+              <TodayInsightFrame plot={plotNarrativeSection} dialogue={morningDialogue} />
             </ScreenFlowStep>
 
             <ScreenFlowStep id="close" label="Вечер" scrollable>

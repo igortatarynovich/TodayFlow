@@ -205,6 +205,7 @@ Reveal API / prebake: [DAY_SYMBOL_REVEAL_CANON_V1](../audits/DAY_SYMBOL_REVEAL_C
 - Color presentation home → Attributes (data house unchanged).
 - Reading not a separate swipe step; Close hosts trap tap + evening entry.
 - Card face kept visible after pick on Symbols.
+- **Photo vs theme frames:** Greeting / Energy+Flow / Practice = immersive photos (existing assets); other steps = Day Atmosphere theme bg. Multi-block frames use ↓ cue between sections.
 
 ### 2026-08-04 — Glance: Daily Focus replaces sphere chips
 

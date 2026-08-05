@@ -733,13 +733,15 @@ interface DayAtmosphereContract {
 
 ### 16.1 Единица подачи — Story Frame
 
-Один акт ScreenFlow = **один full-bleed кадр** на Day Atmosphere (§11–§13):
+Один акт ScreenFlow = **один full-bleed кадр**:
 
-1. **Primary typography** — центрированный или иерархически явный текст (eyebrow → display/serif primary → body detail). Не каждый смысловой фрагмент обязан жить в панели.
-2. **Sparse cluster** *(опционально)* — компактный список / nearest / expand-row / CTA, когда нужна интерактивная группа.
-3. **Glass Block** (`DsCard` `variant="glass"` `size="compact"`) — **только** для интерактивных кластеров (teaser CTA, expand rows, practice CTA, nearest button group). Не оборачивать каждый eyebrow/primary в glass «ради блоков».
+1. **Photo frames** (Greeting · Energy+Flow · Practice/affirmation): immersive full-bleed фото из существующих public assets (`todayStoryFrameArt` → ritual-entry / cosmic / later per-mode catalog). Читаемость — wash overlay, не карточки поверх hero.
+2. **Theme frames** (Symbols · Attributes · Insight · Close): Day Atmosphere surface (§11–§13) — `--day-bg-art` / `--day-*` shell, без отдельного immersive фото.
+3. **Down cue** (`↓`) — явное разделение между блоками **внутри** многоблочного кадра (energy→flow, color→theme→focus, card→number, insight plot→dialogue, close sections).
+4. **Primary typography** — eyebrow → display/serif primary → body detail.
+5. **Glass Block** — **только** interactive clusters (CTA, expand, nearest). Не оборачивать каждый eyebrow/primary.
 
-Атмосфера дня должна читаться сквозь кадр. Вертикальный scroll внутри шага — только когда раскрытие добавляет контент (Symbols A→B, Reading expand); Glance без expand не должен требовать scroll.
+Вертикальный scroll внутри шага — только когда раскрытие / второй блок требует места.
 
 ### 16.2 Паттерн «Block» внутри cluster
 
