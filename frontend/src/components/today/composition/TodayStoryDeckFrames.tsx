@@ -25,7 +25,7 @@ import styles from "@/components/today/composition/TodayStoryDeckFrames.module.c
 
 type StoryArtTone = "photo" | "energy" | "practice";
 
-/** Resolve art URL and bind it as the frame's own background (not a layer over Day Atmosphere). */
+/** Resolve art URL and bind it as this block's own background (not Day Atmosphere theme). */
 function useStoryFrameArt(role: TodayStoryArtRole): CSSProperties {
   const [src, setSrc] = useState(() => resolveTodayStoryFrameArt(role));
   useEffect(() => {
@@ -43,6 +43,20 @@ function immersiveClass(tone: StoryArtTone, ...extra: Array<string | false | nul
   return [styles.immersive, tone === "energy" ? styles.immersiveEnergy : null, tone === "practice" ? styles.immersivePractice : null, ...extra]
     .filter(Boolean)
     .join(" ");
+}
+
+/** Full-bleed photo plane for the ScreenFlow step — stays pinned while content scrolls. */
+function ImmersiveArtPlane({ role, testId }: { role: TodayStoryArtRole; testId: string }) {
+  const artStyle = useStoryFrameArt(role);
+  return (
+    <div
+      className={styles.immersiveArt}
+      style={artStyle}
+      data-testid={testId}
+      data-frame-art={role}
+      aria-hidden
+    />
+  );
 }
 
 /** Within-screen cue — scrolls to `targetId` inside the active step. Never advances ScreenFlow. */
@@ -122,17 +136,13 @@ export function TodayGreetingFrame({
   loading?: boolean;
   onStart: () => void;
 }) {
-  const artStyle = useStoryFrameArt("greeting");
   return (
     <div
       className={immersiveClass("photo", styles.greeting)}
-      style={artStyle}
       data-testid="today-frame-greeting"
       data-frame-art="greeting"
     >
-      <span className={styles.srOnly} data-testid="today-frame-art-greeting" aria-hidden>
-        greeting-art
-      </span>
+      <ImmersiveArtPlane role="greeting" testId="today-frame-art-greeting" />
       <div className={styles.immersiveContent}>
         <p className={styles.salutation}>{salutation}</p>
         <h2 className={styles.greetingHeadline}>
@@ -166,19 +176,15 @@ export function TodayEnergyFlowFrame({
   nextTitle?: string;
   nextHint?: string;
 }) {
-  const artStyle = useStoryFrameArt("energy");
   const energy = (energyLine || "").trim() || null;
   const cause = (energyCause || "").trim() || null;
   return (
     <div
       className={immersiveClass("energy", styles.frame, styles.frameGrow)}
-      style={artStyle}
       data-testid="today-frame-energy-flow"
       data-frame-art="energy"
     >
-      <span className={styles.srOnly} data-testid="today-frame-art-energy" aria-hidden>
-        energy-art
-      </span>
+      <ImmersiveArtPlane role="energy" testId="today-frame-art-energy" />
       <div className={styles.immersiveContent}>
         <div className={styles.centerStack} data-story-block="energy-hero">
           <p className={styles.eyebrowOnArt}>{copy.pulseLabel}</p>
@@ -331,17 +337,13 @@ export function TodayPracticeFrame({
   linkSlot?: ReactNode;
   onGoNext: () => void;
 }) {
-  const artStyle = useStoryFrameArt("practice");
   return (
     <div
       className={immersiveClass("practice", styles.practice)}
-      style={artStyle}
       data-testid="today-frame-practice"
       data-frame-art="practice"
     >
-      <span className={styles.srOnly} data-testid="today-frame-art-practice" aria-hidden>
-        practice-art
-      </span>
+      <ImmersiveArtPlane role="practice" testId="today-frame-art-practice" />
       <div className={styles.immersiveContent}>
         <p className={styles.eyebrowOnArt}>Практика дня</p>
         {title ? (

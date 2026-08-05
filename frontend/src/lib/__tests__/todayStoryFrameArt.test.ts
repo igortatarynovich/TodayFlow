@@ -9,8 +9,10 @@ import {
 import { DAY_VISUAL_MODES } from "@/lib/dayAtmosphere";
 
 describe("todayStoryFrameArt", () => {
-  it("uses moon art for energy, meditation/journal for greeting, praktiki for practice", () => {
-    expect(resolveTodayStoryFrameArt("energy", "radiance")).toMatch(/\/images\/cosmic\/moon/);
+  it("uses cosmic wash art for energy, meditation/journal for greeting, praktiki for practice", () => {
+    expect(resolveTodayStoryFrameArt("energy", "radiance")).toMatch(
+      /\/images\/cosmic\/(moon_wash|celestial_wash|eclipse_wash|nebula)/,
+    );
     expect(resolveTodayStoryFrameArt("greeting", "renewal")).toMatch(
       /hero-meditation|journal|Diary/,
     );

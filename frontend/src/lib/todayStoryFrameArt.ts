@@ -1,7 +1,11 @@
 /**
- * Story-deck photo art — reuse existing public images.
- * Three non-overlapping pools so Greeting / Energy / Practice never share art.
- * Theme frames keep Day Atmosphere `--day-bg-art` (MODE_BG).
+ * Story-deck photo art — per-block backgrounds (not Day Atmosphere theme).
+ *
+ * Roles with their own art: greeting · energy · practice.
+ * Other steps keep theme `--day-bg-art` (MODE_BG).
+ *
+ * Maps are keyed by `DayVisualMode` so each energy/design variant can later
+ * swap in its own asset pack without changing frame layout.
  */
 
 import type { DayVisualMode } from "@/lib/dayAtmosphere";
@@ -9,6 +13,7 @@ import { DAY_VISUAL_MODES } from "@/lib/dayAtmosphere";
 
 export type TodayStoryArtRole = "greeting" | "energy" | "practice";
 
+/** Shared theme shell (Symbols / Attributes / Insight / Close). */
 const MODE_BG: Record<DayVisualMode, string> = {
   grounded: "/images/backgrounds/1.png",
   flow: "/images/backgrounds/2.png",
@@ -21,7 +26,8 @@ const MODE_BG: Record<DayVisualMode, string> = {
 };
 
 /**
- * Greeting — former practice heroes (meditation / journal), not cosmic, not praktiki banners.
+ * Greeting — calm terrestrial heroes (meditation / journal).
+ * Future: per-mode pack under e.g. /images/story/{mode}/greeting.*
  */
 const MODE_GREETING: Record<DayVisualMode, string> = {
   grounded: "/images/hero-meditation.png",
@@ -34,19 +40,22 @@ const MODE_GREETING: Record<DayVisualMode, string> = {
   depth: "/images/hero-meditation.png",
 };
 
-/** Energy — moon family only. */
+/**
+ * Energy — full-bleed cosmic washes (not cutout orbs — those read as cards on black).
+ * Future: per-mode energy pack.
+ */
 const MODE_ENERGY: Record<DayVisualMode, string> = {
   grounded: "/images/cosmic/moon_wash.webp",
-  flow: "/images/cosmic/moon.webp",
-  radiance: "/images/cosmic/moon_orb.webp",
-  momentum: "/images/cosmic/moon_cutout.webp",
-  clarity: "/images/cosmic/moon.webp",
-  tension: "/images/cosmic/moon_orb.webp",
+  flow: "/images/cosmic/celestial_wash.webp",
+  radiance: "/images/cosmic/moon_wash.webp",
+  momentum: "/images/cosmic/nebula.webp",
+  clarity: "/images/cosmic/moon_wash.webp",
+  tension: "/images/cosmic/eclipse_wash.webp",
   renewal: "/images/cosmic/moon_wash.webp",
-  depth: "/images/cosmic/moon.webp",
+  depth: "/images/cosmic/celestial_wash.webp",
 };
 
-/** Practice — praktiki banners only; rotate by calendar day + mode. */
+/** Practice — praktiki banners; rotate by calendar day + mode. */
 export const PRAKTIKI_STORY_BANNERS = [
   "/images/praktiki_banner.png",
   "/images/praktiki_banner_2.png",

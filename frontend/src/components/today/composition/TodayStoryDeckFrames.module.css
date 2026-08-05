@@ -31,28 +31,36 @@
   overflow: visible;
 }
 
-.frameGrow.immersive {
-  overflow: hidden;
-}
-
 .frameGrow :global([data-story-block]),
 .immersiveContent :global([data-story-block]),
 .insight :global([data-story-block]) {
   scroll-margin-top: 1.25rem;
 }
 
-/* Immersive photo = opaque background of this frame (fills the ScreenFlow step). */
+/* Per-block photo background (not Day Atmosphere theme).
+ * Shell fills the ScreenFlow step; art is pinned; content scrolls in .immersiveContent. */
 .immersive {
-  position: relative;
-  isolation: isolate;
+  position: absolute;
+  inset: 0;
   z-index: 1;
-  margin: 0;
-  width: 100%;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  height: auto;
   min-height: 100%;
-  height: 100%;
+  margin: 0;
   padding: 0;
   overflow: hidden;
   box-sizing: border-box;
+  background-color: #0c0a12;
+}
+
+.immersiveArt {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
   background-color: #0c0a12;
   background-image: var(--story-art);
   background-size: cover;
@@ -60,15 +68,10 @@
   background-repeat: no-repeat;
 }
 
-.immersivePractice {
-  background-position: center 28%;
-}
-
-.immersive::after {
+.immersiveArt::after {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 0;
   pointer-events: none;
   background:
     linear-gradient(
@@ -79,19 +82,27 @@
     );
 }
 
-.immersiveEnergy::after {
+.immersiveEnergy .immersiveArt::after {
   background:
-    radial-gradient(ellipse 80% 55% at 50% 18%, rgba(7, 11, 20, 0.35), transparent 70%),
+    radial-gradient(ellipse 80% 55% at 50% 22%, rgba(7, 11, 20, 0.2), transparent 65%),
     linear-gradient(
       180deg,
-      rgba(7, 11, 20, 0.62) 0%,
-      rgba(7, 11, 20, 0.72) 55%,
-      rgba(5, 8, 14, 0.88) 100%
+      rgba(7, 11, 20, 0.45) 0%,
+      rgba(7, 11, 20, 0.62) 50%,
+      rgba(5, 8, 14, 0.82) 100%
     );
 }
 
-.immersive.frameScroll {
-  overflow-y: auto;
+.immersivePractice .immersiveArt {
+  background-position: center 28%;
+}
+
+.frameGrow.immersive {
+  position: absolute;
+  inset: 0;
+  height: auto;
+  min-height: 100%;
+  overflow: hidden;
 }
 
 .srOnly {
@@ -111,9 +122,15 @@
   z-index: 1;
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
   width: 100%;
   min-height: 100%;
+  height: 100%;
   box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
   /* Top pad clears overlaid ScreenFlow dots chrome */
   padding: 3.25rem 1.25rem 1.35rem;
   gap: 1rem;
