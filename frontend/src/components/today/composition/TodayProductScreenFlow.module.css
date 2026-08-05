@@ -15,22 +15,51 @@
 .storyFrame {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   justify-content: flex-start;
-  gap: var(--tf-ds-space-5, 1.25rem);
+  gap: 0;
   width: 100%;
-  min-height: 100%;
+  height: 100%;
+  min-height: 0;
   text-align: center;
   box-sizing: border-box;
-  padding: 3.25rem 1rem 0.75rem;
+  padding: 0;
+  overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  scroll-snap-type: y mandatory;
+  container-type: size;
 }
 
-.storyFrame > * {
+.storyFrame :global([data-story-block]),
+.storyFrame :global([data-story-pane]) {
+  box-sizing: border-box;
+  flex: none;
+  min-height: 100cqh;
+  height: 100cqh;
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: var(--sf-chrome-h, 3.25rem) 1rem 1.5rem;
+}
+
+.storyFrame :global([data-story-block]) > *,
+.storyFrame :global([data-story-pane]) > *:not([data-testid="today-story-block-cue"]):not([data-testid="today-story-next-anchor"]) {
   width: 100%;
   max-width: 28rem;
-  margin-inline: auto;
+}
+
+.storyFrame :global([data-testid="today-story-block-cue"]),
+.storyFrame :global([data-testid="today-story-next-anchor"]) {
+  margin-top: auto;
 }
 
 .practiceLink {

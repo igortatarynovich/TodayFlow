@@ -1642,7 +1642,7 @@ export function TodayCompositionSurface(props: Props) {
       morningDialogue={morningDialogue}
       showSymbols={showSymbolsAct}
       symbolsBody={
-        <TodayScreenBlockStack testId="today-zone-symbols-stack">
+        <TodayScreenBlockStack testId="today-zone-symbols-stack" className={styles.symbolsStackBleed}>
           {props.networkDegraded ? (
             <TodayScreenBlock testId="today-symbols-fallback">
               <p
@@ -1660,7 +1660,7 @@ export function TodayCompositionSurface(props: Props) {
           {!props.networkDegraded && !showRitualAsComplement && (props.cardName || story.tarotImpact || props.numerologyValue || story.numberImpact) ? (
             <div className={styles.symbolsRevealStack} data-testid="today-zone-symbol-impacts">
               {story.tarotImpact || props.cardName || symbolHooksView?.card?.hook_reveal ? (
-                <div className={styles.symbolCardHero} data-story-block="symbols-card">
+                <section className={styles.symbolCardHero} data-story-block="symbols-card" data-story-pane="">
                   <TodayHookRevealShell
                     variant="tarot"
                     kindLabel="Карта дня · открыта"
@@ -1694,14 +1694,13 @@ export function TodayCompositionSurface(props: Props) {
                     }
                     testId="today-zone-tarot-impact"
                   />
-                </div>
-              ) : null}
-              {(story.tarotImpact || props.cardName || symbolHooksView?.card?.hook_reveal) &&
-              (story.numberImpact || props.numerologyValue || symbolHooksView?.number?.hook_reveal) ? (
-                <StoryBlockCue targetId="symbols-number" label={copy.storyNext.numberCue} />
+                  {(story.numberImpact || props.numerologyValue || symbolHooksView?.number?.hook_reveal) ? (
+                    <StoryBlockCue targetId="symbols-number" label={copy.storyNext.numberCue} />
+                  ) : null}
+                </section>
               ) : null}
               {story.numberImpact || props.numerologyValue || symbolHooksView?.number?.hook_reveal ? (
-                <div className={styles.symbolNumberMoment} data-story-block="symbols-number">
+                <section className={styles.symbolNumberMoment} data-story-block="symbols-number" data-story-pane="">
                   <TodayHookRevealShell
                     variant="numerology"
                     kindLabel="Число дня · открыто"
@@ -1726,7 +1725,7 @@ export function TodayCompositionSurface(props: Props) {
                     }
                     testId="today-zone-number-impact"
                   />
-                </div>
+                </section>
               ) : null}
             </div>
           ) : null}

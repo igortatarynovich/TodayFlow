@@ -380,6 +380,8 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  border-radius: 0;
+  overflow: hidden;
 }
 
 .compositionSlotStory {
@@ -392,6 +394,7 @@
   min-height: 0;
   height: 100%;
   overflow: hidden;
+  border-radius: 0;
 }
 
 /* —— Compatibility hub —— */

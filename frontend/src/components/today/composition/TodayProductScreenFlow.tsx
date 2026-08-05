@@ -167,7 +167,7 @@ export function TodayProductScreenFlow({
         </ScreenFlowStep>
 
         {showPersonalized ? (
-          <ScreenFlowStep id="energy_flow" label={copy.pulseLabel} scrollable>
+          <ScreenFlowStep id="energy_flow" label={copy.pulseLabel} scrollable={false}>
             <TodayEnergyFlowFrame
               energyLine={energyLine}
               energyCause={energyCause}
@@ -180,15 +180,21 @@ export function TodayProductScreenFlow({
         ) : null}
 
         {showSymbols ? (
-          <ScreenFlowStep id="symbols" label={copy.journey.openTitle} scrollable>
-            <div className={flowStyles.storyFrame} data-testid="today-zone-open-day">
+          <ScreenFlowStep id="symbols" label={copy.journey.openTitle} scrollable={false}>
+            <div
+              className={flowStyles.storyFrame}
+              data-testid="today-zone-open-day"
+              data-story-scroll="pane"
+            >
               {symbolsBody}
               {showPersonalized ? (
-                <StoryNextAnchor
-                  title={copy.storyNext.attributes}
-                  hint={copy.storyNext.attributesHint}
-                  onNext={() => go(todayScreenFlowAttributesIndex(true))}
-                />
+                <section data-story-pane="" data-story-block="symbols-next">
+                  <StoryNextAnchor
+                    title={copy.storyNext.attributes}
+                    hint={copy.storyNext.attributesHint}
+                    onNext={() => go(todayScreenFlowAttributesIndex(true))}
+                  />
+                </section>
               ) : null}
             </div>
           </ScreenFlowStep>
@@ -196,7 +202,7 @@ export function TodayProductScreenFlow({
 
         {showPersonalized ? (
           <>
-            <ScreenFlowStep id="attributes" label="Опора дня" scrollable>
+            <ScreenFlowStep id="attributes" label="Опора дня" scrollable={false}>
               <TodayAttributesFrame
                 themeLabel={themeTitle || copy.journey.glanceThemeLabel}
                 themeText={themeText}
@@ -208,7 +214,7 @@ export function TodayProductScreenFlow({
               />
             </ScreenFlowStep>
 
-            <ScreenFlowStep id="practice" label="Практика дня" scrollable>
+            <ScreenFlowStep id="practice" label="Практика дня" scrollable={false}>
               <TodayPracticeFrame
                 title={practiceTitle}
                 meta={practiceMeta}
@@ -227,7 +233,7 @@ export function TodayProductScreenFlow({
               />
             </ScreenFlowStep>
 
-            <ScreenFlowStep id="insight" label="Инсайт дня" scrollable>
+            <ScreenFlowStep id="insight" label="Инсайт дня" scrollable={false}>
               <TodayInsightFrame
                 heroText={insightHeroText}
                 story={plotNarrativeSection}
@@ -236,7 +242,7 @@ export function TodayProductScreenFlow({
               />
             </ScreenFlowStep>
 
-            <ScreenFlowStep id="close" label="Вечер" scrollable>
+            <ScreenFlowStep id="close" label="Вечер" scrollable={false}>
               <TodayCloseFrame
                 eveningQuestion={eveningQuestion}
                 contract={contract}
