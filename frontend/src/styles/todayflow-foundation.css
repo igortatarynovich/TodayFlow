@@ -199,8 +199,11 @@
   --tf-ds-mobile-max: 24.375rem;
 }
 
-/* Dark product theme — Profile Journey / product web shell */
-[data-theme="dark"] {
+/* Dark product theme — Profile Journey / product web shell.
+   Gated: Day Atmosphere owns chrome ink (FOUNDATION_UI §11.1); do not let
+   appearance-dark reopen light --tf-ink on light --day-* surfaces. */
+html:not([data-day-mode]) [data-theme="dark"],
+html:not([data-day-mode])[data-theme="dark"] {
   color-scheme: dark;
   --tf-page: #121018;
   --tf-page-cream: #1a1620;

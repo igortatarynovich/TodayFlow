@@ -1,11 +1,14 @@
 /**
- * Mood theme color overrides (FOUNDATION_UI §8).
+ * Mood theme color overrides (FOUNDATION_UI §8 / §11.1).
  * Applied via [data-mood] on product shell. Does not replace fonts/spacing.
  * `data-theme` light|dark stays for legacy selectors; night mood also sets dark.
+ *
+ * Gated behind :not([data-day-mode]): when Day Atmosphere is active, mood must
+ * not recolor product chrome (ink / page / surface) — day-atmosphere.css owns those.
  */
 
 /* Calm = warm parchment baseline — mostly inherits foundation tokens */
-[data-mood="calm"] {
+html:not([data-day-mode]) [data-mood="calm"] {
   --tf-page: #fdf8f0;
   --tf-ink: #1a1510;
   --tf-ink-soft: #5b4630;
@@ -14,7 +17,7 @@
 }
 
 /* Focus = cooler, collected — graphite ink, muted copper accent */
-[data-mood="focus"] {
+html:not([data-day-mode]) [data-mood="focus"] {
   --tf-page: #f4f2ef;
   --tf-page-cream: #f7f5f2;
   --tf-ink: #2c2a28;
@@ -31,7 +34,7 @@
 }
 
 /* Night = dark surface; gold is the only warm accent */
-[data-mood="night"] {
+html:not([data-day-mode]) [data-mood="night"] {
   color-scheme: dark;
   --tf-page: #1a1714;
   --tf-page-cream: #221e1a;
@@ -53,7 +56,7 @@
 }
 
 /* Clarity = first day — max light, min texture */
-[data-mood="clarity"] {
+html:not([data-day-mode]) [data-mood="clarity"] {
   --tf-page: #fffdfb;
   --tf-page-cream: #fffdfb;
   --tf-ink: #1a1510;

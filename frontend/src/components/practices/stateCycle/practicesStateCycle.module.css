@@ -5,10 +5,16 @@
 .root {
   --psc-bg: var(--day-bg-base, var(--tf-page));
   --psc-ink: var(--tf-ink);
-  --psc-muted: var(--tf-caption);
+  /* Solid body-adjacent mute — caption alone washes out on cream day surfaces. */
+  --psc-muted: var(--tf-body, #4a4540);
   --psc-lavender: var(--day-decor-color, var(--tf-accent-action));
   --psc-lavender-soft: var(--day-accent-soft, var(--tf-surface-warm));
-  --psc-lavender-deep: var(--day-decor-color, var(--tf-ink));
+  /* Decor can be light (renewal sage); mix with ink so eyebrows stay readable. */
+  --psc-lavender-deep: color-mix(
+    in srgb,
+    var(--day-decor-color, var(--tf-ink-soft)) 38%,
+    var(--tf-ink, #2a2520)
+  );
   --psc-rose: var(--day-accent-soft, var(--tf-surface-warm));
   --psc-sky: var(--day-surface-tint, var(--tf-surface));
   --psc-card: var(--day-surface-tint, var(--tf-surface));
@@ -104,7 +110,8 @@
 
 .chipActive {
   background: var(--psc-lavender);
-  color: var(--tf-surface);
+  /* Fixed cream — not --tf-surface (day-mode remaps surface to light tint). */
+  color: var(--tf-on-dark, #faf8f5);
   border-color: transparent;
 }
 
@@ -120,7 +127,7 @@
   gap: 0.65rem;
   box-shadow: var(--psc-shadow);
   border: 1px solid var(--psc-border);
-  color: var(--tf-surface);
+  color: var(--tf-on-dark, #faf8f5);
   text-decoration: none;
 }
 
@@ -278,7 +285,7 @@
   height: 2.25rem;
   border-radius: 999px;
   background: var(--psc-lavender);
-  color: var(--tf-surface);
+  color: var(--tf-on-dark, #faf8f5);
   display: grid;
   place-items: center;
   flex-shrink: 0;
@@ -415,7 +422,7 @@
   height: 1.85rem;
   border-radius: 999px;
   background: var(--psc-lavender);
-  color: var(--tf-surface);
+  color: var(--tf-on-dark, #faf8f5);
   display: grid;
   place-items: center;
   font-size: 0.6rem;
@@ -498,7 +505,7 @@
 
 .musicModeActive {
   background: var(--psc-lavender);
-  color: var(--tf-surface);
+  color: var(--tf-on-dark, #faf8f5);
   border-color: transparent;
 }
 

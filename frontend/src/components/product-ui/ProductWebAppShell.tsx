@@ -87,8 +87,9 @@ export function ProductWebAppShell({
     typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null,
   );
   const { mood: hookMood } = useProductMoodTheme({ isFirstDay });
-  // Day Atmosphere owns product chrome tint — do not flip the frame to system dark
-  // (that was painting Tarot/sidebar as a separate void theme). Explicit themeProp still wins.
+  // Day Atmosphere owns product chrome tint (FOUNDATION_UI §11.1). When day-mode is
+  // active, never paint the frame as appearance-dark — that re-opened light --tf-ink
+  // on light --day-* surfaces (sidebar / Practices). themeProp only applies outside day-mode.
   const theme = themeProp ?? "light";
   const mood = moodProp ?? hookMood;
   // data-theme/data-mood depend on clock + localStorage, which SSR can't see —
@@ -99,8 +100,20 @@ export function ProductWebAppShell({
   // <html>) sidesteps the mismatch entirely instead of fighting it.
   const frameRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    frameRef.current?.setAttribute("data-theme", theme);
-    frameRef.current?.setAttribute("data-mood", mood);
+    const frame = frameRef.current;
+    if (!frame) return;
+    const syncFrameTheme = () => {
+      const dayModeActive = document.documentElement.hasAttribute("data-day-mode");
+      frame.setAttribute("data-theme", dayModeActive ? "light" : theme);
+      frame.setAttribute("data-mood", mood);
+    };
+    syncFrameTheme();
+    const obs = new MutationObserver(syncFrameTheme);
+    obs.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-day-mode"],
+    });
+    return () => obs.disconnect();
   }, [theme, mood]);
   const resolvedLocale: FlowPracticesChromeLocale =
     locale ?? (getLocale() === "ru" ? "ru" : "en");
