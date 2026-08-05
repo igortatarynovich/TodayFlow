@@ -41,73 +41,70 @@
   scroll-margin-top: 1.25rem;
 }
 
-/* Immersive photo frames: edge-to-edge art inside the story step. */
+/* Immersive photo = the frame's own opaque background (not a layer on Day Atmosphere).
+ * Full-bleed against ScreenFlow .step padding (0.5 / 1 / 0.85). */
 .immersive {
+  position: relative;
+  isolation: isolate;
+  z-index: 1;
+  margin: -0.5rem -1rem -0.85rem;
+  width: calc(100% + 2rem);
+  min-height: calc(100% + 1.35rem);
   padding: 0;
   overflow: hidden;
-}
-
-.immersive.frameScroll {
-  overflow-y: auto;
-}
-
-.artPhoto,
-.artEnergy,
-.artPractice {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
+  box-sizing: border-box;
+  /* Solid base so theme art never shows through */
+  background-color: #0c0a12;
   background-image: var(--story-art);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-/* Praktiki banners are wide — crop to a portrait-friendly focal band. */
-.artPractice {
+.immersivePractice {
   background-position: center 28%;
-  background-size: cover;
 }
 
-.artPhoto::after {
+.immersive::after {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 0;
+  pointer-events: none;
   background:
     linear-gradient(
       180deg,
-      color-mix(in srgb, #1a1410 42%, transparent) 0%,
-      color-mix(in srgb, #1a1410 55%, transparent) 45%,
-      color-mix(in srgb, #1a1410 68%, transparent) 100%
+      rgba(18, 14, 12, 0.55) 0%,
+      rgba(18, 14, 12, 0.62) 45%,
+      rgba(12, 10, 14, 0.78) 100%
     );
 }
 
-.artEnergy::after {
-  content: "";
-  position: absolute;
-  inset: 0;
+.immersiveEnergy::after {
   background:
-    radial-gradient(ellipse 80% 55% at 50% 18%, color-mix(in srgb, #0a0e18 25%, transparent), transparent 70%),
+    radial-gradient(ellipse 80% 55% at 50% 18%, rgba(7, 11, 20, 0.35), transparent 70%),
     linear-gradient(
       180deg,
-      color-mix(in srgb, #070b14 55%, transparent) 0%,
-      color-mix(in srgb, #070b14 70%, transparent) 55%,
-      color-mix(in srgb, #070b14 82%, transparent) 100%
+      rgba(7, 11, 20, 0.62) 0%,
+      rgba(7, 11, 20, 0.72) 55%,
+      rgba(5, 8, 14, 0.88) 100%
     );
 }
 
-.artPractice::after {
-  content: "";
+.immersive.frameScroll {
+  overflow-y: auto;
+}
+
+.srOnly {
   position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, #1a1410 48%, transparent) 0%,
-      color-mix(in srgb, #1a1410 58%, transparent) 50%,
-      color-mix(in srgb, #1a1410 72%, transparent) 100%
-    );
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .immersiveContent {

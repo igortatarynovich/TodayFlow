@@ -23,13 +23,10 @@ import {
 import { scrollStoryBlockIntoStep } from "@/lib/todayStoryScroll";
 import styles from "@/components/today/composition/TodayStoryDeckFrames.module.css";
 
-function TodayStoryArtBackdrop({
-  role,
-  tone = "photo",
-}: {
-  role: TodayStoryArtRole;
-  tone?: "photo" | "energy" | "practice";
-}) {
+type StoryArtTone = "photo" | "energy" | "practice";
+
+/** Resolve art URL and bind it as the frame's own background (not a layer over Day Atmosphere). */
+function useStoryFrameArt(role: TodayStoryArtRole): CSSProperties {
   const [src, setSrc] = useState(() => resolveTodayStoryFrameArt(role));
   useEffect(() => {
     setSrc(resolveTodayStoryFrameArt(role));
@@ -39,18 +36,13 @@ function TodayStoryArtBackdrop({
     obs.observe(root, { attributes: true, attributeFilter: ["data-day-mode", "data-day-phase"] });
     return () => obs.disconnect();
   }, [role]);
+  return { "--story-art": `url("${src}")` } as CSSProperties;
+}
 
-  const artClass =
-    tone === "energy" ? styles.artEnergy : tone === "practice" ? styles.artPractice : styles.artPhoto;
-
-  return (
-    <div
-      className={artClass}
-      style={{ "--story-art": `url("${src}")` } as CSSProperties}
-      aria-hidden
-      data-testid={`today-frame-art-${role}`}
-    />
-  );
+function immersiveClass(tone: StoryArtTone, ...extra: Array<string | false | null | undefined>) {
+  return [styles.immersive, tone === "energy" ? styles.immersiveEnergy : null, tone === "practice" ? styles.immersivePractice : null, ...extra]
+    .filter(Boolean)
+    .join(" ");
 }
 
 /** Within-screen cue — scrolls to `targetId` inside the active step. Never advances ScreenFlow. */
@@ -130,9 +122,17 @@ export function TodayGreetingFrame({
   loading?: boolean;
   onStart: () => void;
 }) {
+  const artStyle = useStoryFrameArt("greeting");
   return (
-    <div className={`${styles.greeting} ${styles.immersive}`} data-testid="today-frame-greeting">
-      <TodayStoryArtBackdrop role="greeting" />
+    <div
+      className={immersiveClass("photo", styles.greeting)}
+      style={artStyle}
+      data-testid="today-frame-greeting"
+      data-frame-art="greeting"
+    >
+      <span className={styles.srOnly} data-testid="today-frame-art-greeting" aria-hidden>
+        greeting-art
+      </span>
       <div className={styles.immersiveContent}>
         <p className={styles.salutation}>{salutation}</p>
         <h2 className={styles.greetingHeadline}>
@@ -166,11 +166,19 @@ export function TodayEnergyFlowFrame({
   nextTitle?: string;
   nextHint?: string;
 }) {
+  const artStyle = useStoryFrameArt("energy");
   const energy = (energyLine || "").trim() || null;
   const cause = (energyCause || "").trim() || null;
   return (
-    <div className={`${styles.frame} ${styles.frameGrow} ${styles.immersive}`} data-testid="today-frame-energy-flow">
-      <TodayStoryArtBackdrop role="energy" tone="energy" />
+    <div
+      className={immersiveClass("energy", styles.frame, styles.frameGrow)}
+      style={artStyle}
+      data-testid="today-frame-energy-flow"
+      data-frame-art="energy"
+    >
+      <span className={styles.srOnly} data-testid="today-frame-art-energy" aria-hidden>
+        energy-art
+      </span>
       <div className={styles.immersiveContent}>
         <div className={styles.centerStack} data-story-block="energy-hero">
           <p className={styles.eyebrowOnArt}>{copy.pulseLabel}</p>
@@ -323,9 +331,17 @@ export function TodayPracticeFrame({
   linkSlot?: ReactNode;
   onGoNext: () => void;
 }) {
+  const artStyle = useStoryFrameArt("practice");
   return (
-    <div className={`${styles.practice} ${styles.immersive}`} data-testid="today-frame-practice">
-      <TodayStoryArtBackdrop role="practice" tone="practice" />
+    <div
+      className={immersiveClass("practice", styles.practice)}
+      style={artStyle}
+      data-testid="today-frame-practice"
+      data-frame-art="practice"
+    >
+      <span className={styles.srOnly} data-testid="today-frame-art-practice" aria-hidden>
+        practice-art
+      </span>
       <div className={styles.immersiveContent}>
         <p className={styles.eyebrowOnArt}>Практика дня</p>
         {title ? (
