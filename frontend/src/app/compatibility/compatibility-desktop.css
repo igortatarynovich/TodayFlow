@@ -570,3 +570,149 @@
 .compat-submit-gap {
   margin-top: 0.85rem;
 }
+
+/* Entry forms (birthdates / signs) — flat stack, phone-first */
+.compat-chip.is-active {
+  border-color: color-mix(in srgb, var(--tf-accent-gold) 70%, transparent);
+  background: color-mix(in srgb, var(--day-accent-soft, var(--tf-accent-gold)) 28%, var(--tf-surface));
+}
+
+.compat-form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  width: 100%;
+}
+
+.compat-actions-stack {
+  display: grid;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.compat-readiness {
+  display: grid;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.compat-readiness-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.compat-readiness-chip {
+  min-width: 9rem;
+  padding: 0.65rem 0.8rem;
+  border-radius: 14px;
+  border: 1px solid var(--compat-border, var(--tf-border));
+  background: var(--day-surface-tint, var(--tf-surface-muted, var(--tf-surface)));
+  box-sizing: border-box;
+}
+
+.compat-readiness-chip.is-empty {
+  border-style: dashed;
+  background: transparent;
+}
+
+.compat-field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.compat-field input[type="text"],
+.compat-field input[type="date"],
+.compat-field input[type="time"],
+.compat-field select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.7rem 0.9rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--tf-border, #e8e2d6);
+  background: var(--tf-surface, #fff);
+  font: inherit;
+  font-size: var(--tf-type-body-sm, 0.9375rem);
+  line-height: 1.45;
+  color: var(--tf-ink);
+}
+
+.compat-field-check {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.compat-inline-error {
+  margin: 0;
+  color: var(--tf-danger, #8c2f2f);
+  background: color-mix(in srgb, var(--tf-danger, #d27b5d) 12%, transparent);
+  border-radius: 14px;
+  padding: 0.8rem 0.95rem;
+  font-size: var(--tf-type-body-sm, 0.9rem);
+  line-height: 1.5;
+}
+
+.compat-section-kicker {
+  margin: 0 0 0.55rem;
+  font-size: var(--tf-type-caption, 0.72rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tf-caption);
+}
+
+.compat-section-lead {
+  margin: 0 0 0.75rem;
+  color: var(--compat-muted, var(--tf-caption));
+  font-size: var(--tf-type-body-sm, 0.9rem);
+  line-height: 1.65;
+}
+
+.compat-sign-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7.25rem, 1fr));
+  gap: 0.65rem;
+}
+
+.compat-sign-tile {
+  min-height: 6.5rem;
+  padding: 0.85rem 0.75rem;
+  border-radius: 18px;
+  border: 1px solid var(--compat-border, var(--tf-border));
+  background: var(--day-surface-tint, var(--tf-surface));
+  cursor: pointer;
+  text-align: center;
+  font: inherit;
+  color: var(--tf-ink);
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.compat-sign-tile.is-active {
+  border-color: color-mix(in srgb, var(--tf-accent-gold) 70%, transparent);
+  background: color-mix(in srgb, var(--day-accent-soft, var(--tf-accent-gold)) 22%, var(--tf-surface));
+}
+
+.compat-sign-glyph {
+  width: 2.2rem;
+  height: 2.2rem;
+  margin: 0 auto 0.45rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.84rem;
+  background: color-mix(in srgb, var(--tf-ink) 6%, transparent);
+  color: var(--tf-ink);
+}
+
+.compat-sign-tile.is-active .compat-sign-glyph {
+  background: color-mix(in srgb, var(--tf-accent-gold) 18%, transparent);
+}
+
+@media (min-width: 48rem) {
+  .compat-form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

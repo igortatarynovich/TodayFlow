@@ -44,13 +44,11 @@ function PersonCard({
 }) {
   return (
     <section className="compat-desktop-card" style={{ display: "grid", gap: "0.85rem" }}>
-      <div>
-        <p className="orbit-body-xs" style={{ margin: 0, color: "#8b7355", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-          {title}
-        </p>
-      </div>
+      <p className="compat-section-kicker" style={{ marginBottom: 0 }}>
+        {title}
+      </p>
 
-      <label style={{ display: "grid", gap: "0.35rem" }}>
+      <label className="compat-field">
         <span className="orbit-body-sm">Имя или подпись</span>
         <input
           type="text"
@@ -60,7 +58,7 @@ function PersonCard({
         />
       </label>
 
-      <label style={{ display: "grid", gap: "0.35rem" }}>
+      <label className="compat-field">
         <span className="orbit-body-sm">Дата рождения</span>
         <input
           type="date"
@@ -71,7 +69,7 @@ function PersonCard({
       </label>
 
       <div style={{ display: "grid", gap: "0.6rem" }}>
-        <label style={{ display: "grid", gap: "0.35rem" }}>
+        <label className="compat-field">
           <span className="orbit-body-sm">Время рождения</span>
           <input
             type="time"
@@ -80,7 +78,7 @@ function PersonCard({
             disabled={form.timeUnknown}
           />
         </label>
-        <label style={{ display: "flex", alignItems: "center", gap: "0.55rem" }}>
+        <label className="compat-field-check">
           <input
             type="checkbox"
             checked={form.timeUnknown}
@@ -96,7 +94,7 @@ function PersonCard({
         </label>
       </div>
 
-      <div style={{ display: "grid", gap: "0.35rem" }}>
+      <div className="compat-field">
         <span className="orbit-body-sm">Город рождения</span>
         <CityAutocompleteInput
           value={form.location}
@@ -124,32 +122,26 @@ function PairReadiness({
   ];
 
   return (
-    <div className="compat-desktop-card" style={{ display: "grid", gap: "0.8rem" }}>
-      <div style={{ display: "flex", gap: "0.7rem", flexWrap: "wrap" }}>
+    <div className="compat-readiness">
+      <div className="compat-readiness-row">
         {people.map((person) => (
           <div
             key={person.title}
-            style={{
-              minWidth: "148px",
-              padding: "0.7rem 0.8rem",
-              borderRadius: "18px",
-              background: person.date ? "rgba(255,248,237,0.96)" : "rgba(247,242,234,0.72)",
-              border: person.date ? "1px solid rgba(195, 167, 114, 0.22)" : "1px dashed rgba(195, 167, 114, 0.3)",
-            }}
+            className={person.date ? "compat-readiness-chip" : "compat-readiness-chip is-empty"}
           >
-            <p className="orbit-body-xs" style={{ margin: 0, color: "#8b7355", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+            <p className="compat-section-kicker" style={{ marginBottom: 0 }}>
               {person.title}
             </p>
-            <p className="orbit-body-sm" style={{ margin: "0.18rem 0 0", color: "#0f172a", fontWeight: 700 }}>
+            <p className="orbit-body-sm" style={{ margin: "0.18rem 0 0", fontWeight: 700, color: "var(--tf-ink)" }}>
               {person.label}
             </p>
-            <p className="orbit-body-xs" style={{ margin: "0.22rem 0 0", color: "#64748b" }}>
+            <p className="orbit-body-xs" style={{ margin: "0.22rem 0 0", color: "var(--tf-caption)" }}>
               {person.date || "Дата не выбрана"}
             </p>
           </div>
         ))}
       </div>
-      <p className="orbit-body-sm" style={{ margin: 0, color: "#5f4930", lineHeight: 1.7 }}>
+      <p className="compat-section-lead" style={{ marginBottom: 0 }}>
         {precisionNote}
       </p>
     </div>
@@ -217,12 +209,13 @@ export default function CompatibilityBirthdatesPage() {
     <ProductPageScreen
       testId="compat-birthdates-page"
       title="Совместимость по датам"
-      hideHeader
+      subtitle="Две даты — тон пары и зоны напряжения. Время и город уточняют слой."
+      quietHeader
       mainWide
-      contentClassName={`${pl.content} ${pl.legacyHost}`}
+      contentClassName={pl.content}
     >
       {limitBlocked ? (
-        <section className="compat-flow-section" style={{ paddingTop: "2rem", paddingBottom: "4.5rem" }}>
+        <section className="compat-flow-section">
           <GuestAccessLimitGate
             title={GUEST_ACCESS_COPY.compatLimitTitle}
             body={GUEST_ACCESS_COPY.compatLimitBody}
@@ -232,30 +225,8 @@ export default function CompatibilityBirthdatesPage() {
           />
         </section>
       ) : (
-      <section className="compat-flow-section" style={{ paddingTop: "2rem", paddingBottom: "4.5rem" }}>
-        <form
-          onSubmit={handleSubmit}
-          className="tf-surface"
-          style={{
-            position: "relative",
-            overflow: "hidden",
-            display: "grid",
-            gap: "1rem",
-            padding: "clamp(1.2rem, 4vw, 2.2rem)",
-          }}
-        >
-          <div
-            aria-hidden="true"
-            style={{
-              position: "absolute",
-              inset: 0,
-              background:
-                "radial-gradient(circle at top left, rgba(246, 233, 206, 0.44), transparent 32%), radial-gradient(circle at bottom right, rgba(221, 234, 219, 0.3), transparent 28%), linear-gradient(180deg, rgba(255,250,244,0.72), rgba(255,255,255,0.94))",
-              pointerEvents: "none",
-            }}
-          />
-
-          <div className="compat-desktop-shell compat-desktop-stack" style={{ position: "relative", zIndex: 1 }}>
+        <section className="compat-flow-section">
+          <form onSubmit={handleSubmit} className="compat-desktop-shell compat-desktop-stack">
             <div className="compat-analyze-topbar">
               <Link href="/compatibility" className="compat-analyze-back">
                 ← Все уровни
@@ -270,141 +241,62 @@ export default function CompatibilityBirthdatesPage() {
               </div>
             </div>
 
+            <PairReadiness form1={form1} form2={form2} precisionNote={precisionNote} />
+
             {compatRemaining < 4 ? (
-              <p className="orbit-body-sm" style={{ margin: 0, color: "var(--orbit-color-muted, #6b6560)" }}>
+              <p className="compat-section-lead" style={{ marginBottom: 0 }}>
                 {GUEST_ACCESS_COPY.remainingCompat(compatRemaining)}
               </p>
             ) : null}
 
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "minmax(0, 1.45fr) minmax(280px, 0.85fr)",
-                gap: "1rem",
-                alignItems: "start",
-              }}
-              className="compat-signs-hero-grid"
-            >
-              <div>
-                <p className="compat-hero-eyebrow">Совместимость · по датам</p>
-                <h1 className="orbit-display" style={{ margin: "0.35rem 0 0" }}>
-                  Разобрать совместимость
-                </h1>
-                <p className="orbit-body compat-desktop-muted" style={{ margin: "0.85rem 0 0", maxWidth: "34rem" }}>
-                  Две даты рождения — точнее, чем только знаки. Время и город по желанию для следующего слоя.
-                </p>
-              </div>
-
-              <div className="compat-desktop-card">
-                <p className="orbit-body-xs" style={{ margin: 0, color: "#8b7355", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                  Минимум
-                </p>
-                <div style={{ marginTop: "0.7rem", display: "grid", gap: "0.45rem" }}>
-                  <p className="orbit-body-sm" style={{ margin: 0 }}>
-                    1. Две даты рождения.
-                  </p>
-                  <p className="orbit-body-sm" style={{ margin: 0 }}>
-                    2. Остальное по желанию.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <PairReadiness form1={form1} form2={form2} precisionNote={precisionNote} />
-
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(290px, 1fr))",
-                gap: "1rem",
-              }}
-            >
+            <div className="compat-form-grid">
               <PersonCard title="Твои данные" form={form1} setForm={setForm1} />
               <PersonCard title="Данные партнёра" form={form2} setForm={setForm2} />
             </div>
 
-            <section className="compat-desktop-card">
-            <p className="orbit-body-xs" style={{ margin: "0 0 0.65rem", color: "#8b7355", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-              Что сейчас между вами?
-            </p>
-            <p className="orbit-body-sm" style={{ margin: "0 0 0.75rem", color: "var(--orbit-color-muted)", lineHeight: 1.65 }}>
-              Необязательно, но сильно улучшает персонализацию разбора и советов.
-            </p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-              {RELATIONSHIP_CONTEXT_OPTIONS.map((opt) => {
-                const active = relationshipContext === opt.id;
-                return (
-                  <button
-                    key={opt.id}
-                    type="button"
-                    className="compat-chip"
-                    onClick={() => setRelationshipContext(active ? "" : opt.id)}
-                    style={{
-                      borderColor: active ? "rgba(167, 123, 55, 0.88)" : undefined,
-                      background: active ? "rgba(242, 220, 181, 0.32)" : undefined,
-                      textAlign: "left",
-                    }}
-                  >
-                    {opt.label}
-                  </button>
-                );
-              })}
-            </div>
+            <section className="compat-desktop-section">
+              <p className="compat-section-kicker">Что сейчас между вами?</p>
+              <p className="compat-section-lead">
+                Необязательно, но сильно улучшает персонализацию разбора и советов.
+              </p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                {RELATIONSHIP_CONTEXT_OPTIONS.map((opt) => {
+                  const active = relationshipContext === opt.id;
+                  return (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      className={active ? "compat-chip is-active" : "compat-chip"}
+                      onClick={() => setRelationshipContext(active ? "" : opt.id)}
+                      style={{ textAlign: "left" }}
+                    >
+                      {opt.label}
+                    </button>
+                  );
+                })}
+              </div>
             </section>
 
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "minmax(0, 1.1fr) minmax(280px, 0.9fr)",
-                gap: "1rem",
-                alignItems: "start",
-              }}
-              className="compat-signs-footer-grid"
-            >
-              <div className="compat-desktop-card">
-                <p className="orbit-body-xs" style={{ margin: 0, color: "#8b7355", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                  Что получишь
-                </p>
-                <p className="orbit-body-sm" style={{ margin: "0.55rem 0 0", color: "var(--orbit-color-muted)", lineHeight: 1.65 }}>
-                  Тон пары и зоны напряжения — в результате.
-                </p>
-              </div>
-
-              <div className="compat-desktop-card" style={{ display: "grid", gap: "0.8rem" }}>
-                <DsButton
-                  type="submit"
-                  variant="primary"
-                  size="block"
-                  disabled={!canContinue || loading}
-                  style={{ opacity: canContinue && !loading ? 1 : 0.56 }}
-                >
-                  {loading ? <LoadingSpinner size="sm" /> : canContinue ? "Разбор" : "Две даты"}
-                </DsButton>
-                <DsButton href="/compatibility" variant="secondary">
-                  Совместимость по профилям
-                </DsButton>
-                <Link href="/compatibility/signs" className="compat-analyze-back" style={{ textAlign: "center" }}>
-                  К знакам
-                </Link>
-                {error ? (
-                  <p
-                    className="orbit-body-sm"
-                    style={{
-                      margin: 0,
-                      color: "#8c2f2f",
-                      background: "rgba(210, 123, 93, 0.1)",
-                      borderRadius: "14px",
-                      padding: "0.8rem 0.95rem",
-                    }}
-                  >
-                    {error}
-                  </p>
-                ) : null}
-              </div>
+            <div className="compat-actions-stack">
+              <DsButton
+                type="submit"
+                variant="primary"
+                size="block"
+                disabled={!canContinue || loading}
+                style={{ opacity: canContinue && !loading ? 1 : 0.56 }}
+              >
+                {loading ? <LoadingSpinner size="sm" /> : canContinue ? "Разбор" : "Две даты"}
+              </DsButton>
+              <DsButton href="/compatibility" variant="secondary">
+                Совместимость по профилям
+              </DsButton>
+              <Link href="/compatibility/signs" className="compat-analyze-back" style={{ textAlign: "center" }}>
+                К знакам
+              </Link>
+              {error ? <p className="compat-inline-error">{error}</p> : null}
             </div>
-          </div>
-        </form>
-      </section>
+          </form>
+        </section>
       )}
     </ProductPageScreen>
   );
