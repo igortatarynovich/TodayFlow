@@ -38,16 +38,16 @@
 }
 
 /* Per-block photo background (not Day Atmosphere theme).
- * Shell fills the ScreenFlow step; art is pinned; content scrolls in .immersiveContent. */
+ * Fill the ScreenFlow step in-flow (not absolute) so the step keeps height and
+ * greeting CTA cannot collapse onto the headline. */
 .immersive {
-  position: absolute;
-  inset: 0;
+  position: relative;
   z-index: 1;
   isolation: isolate;
   display: flex;
   flex-direction: column;
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 100%;
   min-height: 100%;
   margin: 0;
   padding: 0;
@@ -101,8 +101,7 @@
 }
 
 .frameGrow.immersive {
-  position: absolute;
-  inset: 0;
+  position: relative;
   height: auto;
   min-height: 100%;
   overflow: hidden;
@@ -157,20 +156,27 @@
 .storyPane {
   box-sizing: border-box;
   flex: none;
-  min-height: 100cqh;
-  height: 100cqh;
-  max-height: 100cqh;
+  min-height: 100%;
+  height: 100%;
   width: 100%;
   scroll-snap-align: start;
   scroll-snap-stop: always;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  align-items: stretch;
+  justify-items: center;
   text-align: center;
-  gap: 0;
+  gap: 0.75rem;
   padding: calc(var(--sf-chrome-h, 3.25rem) + 0.35rem) 1.35rem 1.65rem;
   position: relative;
+}
+
+@supports (height: 100cqh) {
+  .storyPane {
+    min-height: 100cqh;
+    height: 100cqh;
+    max-height: 100cqh;
+  }
 }
 
 .storyPaneBody {
@@ -181,14 +187,15 @@
   gap: 0.75rem;
   width: 100%;
   max-width: 22rem;
-  flex: 1 1 auto;
   min-height: 0;
+  overflow: auto;
   padding-top: 0.35rem;
+  grid-row: 1;
 }
 
 /* Greeting / Energy: copy sits in the upper-middle band, not under the dots. */
 .storyPaneLift .storyPaneBody {
-  padding-top: clamp(3.25rem, 14cqh, 6.5rem);
+  padding-top: clamp(2.5rem, 12cqh, 5.5rem);
   justify-content: flex-start;
 }
 
@@ -220,9 +227,14 @@
 .storyPane .blockCue,
 .storyPane .nextAnchor,
 .storyPane .startCta,
-.storyPane .practiceCta {
-  margin-top: auto;
+.storyPane .practiceCta,
+.storyPane .storyPaneFooter {
+  margin-top: 0;
   flex-shrink: 0;
+  grid-row: 2;
+  align-self: center;
+  width: 100%;
+  max-width: 26rem;
 }
 
 .immersiveContent.storyScroll {
@@ -383,10 +395,11 @@
 }
 
 .startCta {
-  margin-top: auto;
+  margin-top: 0;
   display: inline-flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   gap: 0.75rem;
   padding: 0.35rem 0.25rem;
   border: 0;

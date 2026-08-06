@@ -1950,8 +1950,10 @@ export function TodayCompositionSurface(props: Props) {
           </div>
         ) : null}
 
-        {/* Depth/sky: hide from main scroll when Act 3 chapters already carry the day (Wave 1). */}
-        {!useProductPersonalized &&
+        {/* Depth/sky/context live on the legacy non-foundation path only.
+            Product ScreenFlow owns the full surface — do not stack under greeting. */}
+        {!useProductFoundation &&
+        !useProductPersonalized &&
         !isDayNotReady(props.contract) &&
         props.contract.depth_layer &&
         Array.isArray(props.contract.depth_layer.menu) &&
@@ -1963,7 +1965,7 @@ export function TodayCompositionSurface(props: Props) {
           />
         ) : null}
 
-        {!useProductPersonalized && showSkyCards ? (
+        {!useProductFoundation && !useProductPersonalized && showSkyCards ? (
           <section className={styles.skySection} data-testid="today-zone-sky-influences">
             <h2 className={styles.sectionTitle}>{copy.astroContextTitle}</h2>
             <TodaySkyStoryCards cards={story.skyCards} />
@@ -1976,11 +1978,11 @@ export function TodayCompositionSurface(props: Props) {
           </p>
         ) : null}
 
-        {!useProductPersonalized && showColorGuide && story.colorGuide ? (
+        {!useProductFoundation && !useProductPersonalized && showColorGuide && story.colorGuide ? (
           <TodayDayColorGuideSection guide={story.colorGuide} />
         ) : null}
 
-        {!useProductPersonalized && showContextPanel ? (
+        {!useProductFoundation && !useProductPersonalized && showContextPanel ? (
           <section className={styles.contextPanel} data-testid="today-zone-context">
             <span className={styles.sectionEyebrow}>Сферы дня</span>
             <h2 className={styles.contextPanelTitle}>{copy.contextPanelTitle}</h2>
@@ -2010,7 +2012,7 @@ export function TodayCompositionSurface(props: Props) {
           </section>
         ) : null}
 
-        {!useProductPersonalized && zones.strengthen && strengthenTools.length > 0 ? (
+        {!useProductFoundation && !useProductPersonalized && zones.strengthen && strengthenTools.length > 0 ? (
           <section
             data-testid="today-zone-strengthen"
             className={story.personalizedReady ? undefined : styles.strengthenPreview}
@@ -2075,7 +2077,7 @@ export function TodayCompositionSurface(props: Props) {
           </section>
         ) : null}
 
-        {!useProductPersonalized && story.personalizedReady ? (
+        {!useProductFoundation && !useProductPersonalized && story.personalizedReady ? (
         <div className={styles.personalSection} data-testid="today-zone-personal">
 
         {zones.whyStory && story.whyStory.length > 0 ? (
@@ -2227,7 +2229,7 @@ export function TodayCompositionSurface(props: Props) {
           </div>
         ) : null}
 
-        {!useProductPersonalized && story.isEveningSurface && zones.evening ? (
+        {!useProductFoundation && !useProductPersonalized && story.isEveningSurface && zones.evening ? (
           <section className={styles.eveningRecap} data-testid="today-zone-evening-recap">
             <h2 className={styles.sectionTitle}>{copy.eveningRecapTitle}</h2>
             {story.eveningReflectionPrompt ? (
@@ -2254,7 +2256,7 @@ export function TodayCompositionSurface(props: Props) {
           </section>
         ) : null}
 
-        {!useProductPersonalized && zones.evening ? (
+        {!useProductFoundation && !useProductPersonalized && zones.evening ? (
           <div className={styles.eveningZone} data-testid="today-zone-evening-entry">
             <p className={styles.eveningHint}>{story.isEveningSurface ? copy.eveningRecapTitle : copy.eveningHint}</p>
             <DsButton
