@@ -15,6 +15,7 @@ if _db_url.startswith("sqlite"):
         _engine_kwargs["poolclass"] = StaticPool
 else:
     # Prewarm/LLM must not starve interactive requests (auth/me, practices).
+    # Cap kept modest: ops scripts must use NullPool (see force_rebuild_*_ops).
     _engine_kwargs.update(
         {
             "pool_size": 12,
@@ -22,6 +23,7 @@ else:
             "pool_timeout": 8,
             "pool_pre_ping": True,
             "pool_recycle": 1800,
+            "pool_use_lifo": True,
         }
     )
 

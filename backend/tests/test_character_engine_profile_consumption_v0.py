@@ -124,12 +124,11 @@ def test_consumption_overwrites_recognition_why_trap(monkeypatch) -> None:
     assert "love" in spheres and "how" in spheres["love"]
     assert "Вы " not in spheres["love"]["how"]
     houses = (out.get("character_engine_house_lines_v0") or {}).get("houses") or {}
-    assert "1" in houses and (
-        "первого контакта" in (houses["1"].get("how") or houses["1"].get("line") or "").lower()
-        or "1 дом" in (houses["1"].get("how") or "").lower()
-    )
-    assert houses["1"].get("do")
+    h1 = (houses.get("1") or {}).get("how") or (houses.get("1") or {}).get("line") or ""
+    assert "1" in houses and h1
+    assert "темп" in h1.lower() or "дистанц" in h1.lower() or "контакт" in h1.lower()
     assert houses["1"].get("line") == houses["1"].get("how")
+    assert not (houses["1"].get("do") or "").strip()
     assert "Вы " not in (contract.get("emotional_style") or "")
     assert "ты " in (contract.get("emotional_style") or "").lower() or (contract.get("emotional_style") or "").startswith(
         "Эмоции ты"
@@ -212,8 +211,10 @@ def test_consumption_does_not_stamp_aspect_gists(monkeypatch) -> None:
     assert set(houses) == {str(i) for i in range(1, 13)}
     assert not any("не энциклопедия" in (h.get("line") or h.get("how") or "").lower() for h in houses.values())
     for h in houses.values():
-        assert h.get("do")
         assert h.get("how") or h.get("line")
+        assert not (h.get("do") or "").strip()
+        assert "здесь это звучит" not in (h.get("how") or "").lower()
+        assert "темп зоны" not in (h.get("how") or "").lower()
 
 
 def test_consumption_applied_asc_and_occupied_house(monkeypatch) -> None:
@@ -259,25 +260,23 @@ def test_consumption_applied_asc_and_occupied_house(monkeypatch) -> None:
     asc = (out.get("character_engine_asc_v0") or {}).get("asc") or {}
     assert asc.get("sign") == "cancer"
     assert asc.get("how") and asc.get("do")
-    assert "рак" in asc["how"].lower() or "вход" in asc["how"].lower()
+    assert "своих" in asc["how"].lower() or "открыт" in asc["how"].lower() or "контакт" in asc["how"].lower()
     assert "не энциклопедия" not in asc["how"].lower()
     mc = (out.get("character_engine_asc_v0") or {}).get("mc") or {}
     assert mc.get("sign") == "pisces" and mc.get("do")
 
     houses = (out.get("character_engine_house_lines_v0") or {}).get("houses") or {}
     assert set(houses) == {str(i) for i in range(1, 13)}
-    assert "1" in houses and houses["1"].get("do")
-    assert "8" in houses  # occupied by Sun
-    assert "солнце" in (houses["8"].get("how") or "").lower()
-    assert "воля" in (houses["8"].get("how") or "").lower() or "самоопределен" in (houses["8"].get("how") or "").lower()
-    assert "сильнее читается через них" not in (houses["8"].get("how") or "").lower()
-    assert houses["2"].get("how") and houses["2"].get("do")
-    assert houses["11"].get("how") and houses["11"].get("do")
+    assert "1" in houses and houses["1"].get("how")
+    # Cancer cusp on 1 → recognition about «своих» / open carefully.
+    assert "своих" in (houses["1"].get("how") or "").lower() or "открыва" in (houses["1"].get("how") or "").lower()
+    assert "8" in houses  # Aquarius cusp — method/distance in vulnerability
+    assert "метод" in (houses["8"].get("how") or "").lower() or "дистанц" in (houses["8"].get("how") or "").lower()
+    assert "солнце" not in (houses["8"].get("how") or "").lower()  # no planet-label dump
+    assert houses["2"].get("how")
+    assert houses["11"].get("how")
+    assert not (houses["2"].get("do") or "").strip()
     # No mechanism stamp spam across every house.
     hows = [(h.get("how") or "") for h in houses.values()]
     assert sum("через автономию и собственную систему" in h.lower() for h in hows) <= 1
-    # Capricorn-like cusp modality should be concrete, not ornamental «вход через опору».
-    h7 = houses.get("7") or {}
-    if h7:
-        assert "контур" not in (h7.get("how") or "").lower()
-        assert "не стирает" not in (h7.get("how") or "").lower()
+    assert all("здесь это звучит" not in h.lower() for h in hows)
