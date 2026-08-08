@@ -48,7 +48,7 @@ def aspect_class_why_short(aspect: str, domain: str | None = None) -> str:
     return "Сигнал есть — без лишнего шума"
 
 
-# Body tone for Glance labels — experiential, no planet names in output.
+# Body tone → activity-lane fill-empty for glance (Kimi is SoT for title/detail).
 _BODY_TONE_RU = {
     "sun": "ясность",
     "moon": "настроение",
@@ -62,15 +62,15 @@ _BODY_TONE_RU = {
     "pluto": "глубина",
 }
 
-# Opportunity / minor harmonics — actionable «для чего» (not opaque «Окно: …»).
+# Activity windows — fill-empty only when Kimi cache miss.
 _WINDOW_FOR_RU = {
     "ясность": "Ясность — решения",
-    "настроение": "Настроение — пауза",
+    "настроение": "Отдых и пауза",
     "слова": "Диалоги и письма",
     "контакт": "Живой контакт",
     "импульс": "Короткие задачи",
     "размах": "Крупный шаг",
-    "границы": "Границы и стоп",
+    "границы": "Порядок и стоп",
     "сдвиг": "Смена курса",
     "туман": "Без жёстких решений",
     "глубина": "Глубокая тема",
@@ -78,55 +78,15 @@ _WINDOW_FOR_RU = {
 
 
 def aspect_class_label_short(aspect: str, planet: str | None = None) -> str:
-    """GlanceTimeline `label_short` — ≤ ~4 words RU; distinct by body+aspect class."""
+    """GlanceTimeline bank fill-empty — activity lane by body; valence carries soft/hard."""
     asp = _norm(aspect)
     tone = _BODY_TONE_RU.get(_norm(planet or ""), "")
-    if aspect_is_harmonious(asp):
-        if tone == "контакт":
-            return "Контакт мягче"
-        if tone == "импульс":
-            return "Ход легче"
-        if tone == "настроение":
-            return "Настроение ровнее"
-        if tone == "слова":
-            return "Слова легче"
-        if tone:
-            return f"{tone.capitalize()} в опоре"
-        return "Есть опора"
-    if aspect_is_challenging(asp):
-        if tone == "импульс":
-            return "Импульс острее"
-        if tone == "контакт":
-            return "Контакт жёстче"
-        if tone == "настроение":
-            return "Настроение вразнос"
-        if tone == "слова":
-            return "Слова режут"
-        if tone == "границы":
-            return "Границы давят"
-        # Avoid «X в трении» noun-pair labels — name the lived pressure.
-        if tone == "ясность":
-            return "Ясность с усилием"
-        if tone == "размах":
-            return "Размах встречает упор"
-        if tone == "глубина":
-            return "Глубина давит"
-        if tone == "туман":
-            return "Туман гуще"
-        if tone == "сдвиг":
-            return "Сдвиг через упор"
-        if tone:
-            return f"{tone.capitalize()} требует меры"
-        return "Короче шаг"
-    if asp == "conjunction":
-        if tone == "импульс":
-            return "Импульс сгущается"
-        if tone == "слова":
-            return "Слова сгущаются"
-        if tone:
-            return f"{tone.capitalize()} сгущается"
-        return "Тема сгущается"
-    # Quintile / biquintile / unknown — name the lived window, not «Окно: …».
     if tone:
         return _WINDOW_FOR_RU.get(tone, f"Тема: {tone}")
+    if aspect_is_harmonious(asp):
+        return "Есть опора"
+    if aspect_is_challenging(asp):
+        return "Короче шаг"
+    if asp == "conjunction":
+        return "Тема сгущается"
     return "Сигнал дня"

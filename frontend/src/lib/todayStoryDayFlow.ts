@@ -1,9 +1,8 @@
 /**
  * Story-deck «Поток дня» — pure render of `glance_timeline`.
  *
- * SoT: docs/today/TODAY_WAVE2_CONTRACT_V1.md §1/§4 + tracker
- * «Поток дня ← real glance_timeline (no invented phase copy)».
- * No invented Утро/День/Вечер/Ночь bodies. Empty windows → [].
+ * SoT: clocks from geometry; label_short/detail from Kimi (bank fill-empty).
+ * Row = clock + valence chrome + title; expand = detail.
  */
 
 import type { GlanceTimelineItem } from "@/lib/todayGlanceTimeline";
@@ -15,17 +14,15 @@ export type StoryDayFlowPoint = {
   id: string;
   /** Left rail: clock from glance_timeline. */
   phase: string;
-  /** label_short from API — no FE prose invent. */
+  /** label_short — activity window title. */
   body: string;
+  /** Expand трактовка (Kimi detail). */
+  detail: string | null;
   valence: StoryDayFlowValence;
-  /** Cue from valence only (chrome, not product plot). */
-  cue: string;
-  /** Always true for glance rows. */
   timed?: boolean;
 };
 
 export type BuildStoryDayFlowInput = {
-  /** Real exact-time windows from day_facts.glance_timeline. */
   glanceWindows?: GlanceTimelineItem[] | null;
 };
 
@@ -45,25 +42,31 @@ function timedPoints(windows: GlanceTimelineItem[]): StoryDayFlowPoint[] {
   const sorted = [...windows].sort((a, b) =>
     formatGlanceClock(a.time_local).localeCompare(formatGlanceClock(b.time_local)),
   );
-  return sorted.slice(0, MAX_TIMED_WINDOWS).map((row, i) => {
-    const valence = asValence(String(row.valence || ""));
-    const label = clean(row.label_short);
-    return {
-      id: `window-${row.driver_id || i}`,
-      phase: formatGlanceClock(row.time_local),
-      cue: valence === "favorable" ? "Благоприятно" : valence === "caution" ? "Осторожнее" : "Окно",
-      valence,
-      body: label,
-      timed: true,
-    };
-  }).filter((p) => p.body);
+  return sorted
+    .slice(0, MAX_TIMED_WINDOWS)
+    .map((row, i) => {
+      const label = clean(row.label_short);
+      const detail = clean(row.detail || "") || null;
+      return {
+        id: `window-${row.driver_id || i}`,
+        phase: formatGlanceClock(row.time_local),
+        valence: asValence(String(row.valence || "")),
+        body: label,
+        detail,
+        timed: true,
+      };
+    })
+    .filter((p) => p.body);
 }
 
-/**
- * Поток дня = only timed glance rows. No phase framing invent.
- */
 export function buildStoryDayFlow(input: BuildStoryDayFlowInput = {}): StoryDayFlowPoint[] {
   const windows = (input.glanceWindows || []).filter((w) => clean(w.time_local));
   if (windows.length === 0) return [];
   return timedPoints(windows);
+}
+
+export function valenceChromeLabel(valence: StoryDayFlowValence): string {
+  if (valence === "favorable") return "Благоприятно";
+  if (valence === "caution") return "Осторожнее";
+  return "";
 }

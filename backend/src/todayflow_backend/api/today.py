@@ -1861,6 +1861,8 @@ class GlanceTimelineItem(BaseModel):
     label_short: str
     valence: str
     driver_id: str
+    detail: str | None = None
+    copy_source: str | None = None
 
 
 class DayFactsProvenance(BaseModel):

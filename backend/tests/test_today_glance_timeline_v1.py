@@ -58,16 +58,60 @@ def test_build_glance_timed_rows_sorted_by_time_max_three():
             },
         ]
     )
-    # Rank 4 fills when timed — same pool, strength walk, ≤3 by clock.
+    # Rank 4 fills when timed — same pool, strength walk, ≤5 by clock.
     assert len(rows) == 3
     assert [r["driver_id"] for r in rows] == ["a3", "a4", "a1"]
     assert rows[0]["valence"] == "favorable"
     assert rows[2]["valence"] == "caution"
+    assert rows[0]["label_short"] == "Отдых и пауза"
+    assert rows[2]["label_short"] == "Короткие задачи"
+
+
+def test_build_glance_dedupes_same_civil_minute():
+    rows = glance.build_glance_timeline_rows(
+        [
+            {
+                "id": "pt-moon-trine-north_node",
+                "rank": 8,
+                "transiting_planet": "Moon",
+                "aspect": "trine",
+                "natal_point": "North Node",
+                "exact_time_local": "2026-08-08T12:33+03:00",
+            },
+            {
+                "id": "pt-moon-sextile-south_node",
+                "rank": 9,
+                "transiting_planet": "Moon",
+                "aspect": "sextile",
+                "natal_point": "South Node",
+                "exact_time_local": "2026-08-08T12:33+03:00",
+            },
+            {
+                "id": "pt-venus-trine-mercury",
+                "rank": 6,
+                "transiting_planet": "Venus",
+                "aspect": "trine",
+                "natal_point": "Mercury",
+                "exact_time_local": "2026-08-08T17:45+03:00",
+            },
+        ]
+    )
+    assert len(rows) == 2
+    assert [r["driver_id"] for r in rows] == [
+        "pt-moon-trine-north_node",
+        "pt-venus-trine-mercury",
+    ]
+    assert rows[0]["label_short"] == "Отдых и пауза"
+    assert rows[1]["label_short"] == "Живой контакт"
 
 
 def test_biquintile_has_aspect_angle():
     assert glance.aspect_angle("biquintile") == 144.0
     assert glance.aspect_angle("quintile") == 72.0
+    assert glance.aspect_angle("semisquare") == 45.0
+    assert glance.aspect_angle("sesquiquadrate") == 135.0
+    assert glance.glance_valence("semisquare", "Venus") == "caution"
+    assert glance.glance_valence("sesquiquadrate", "Venus") == "caution"
 
 
 

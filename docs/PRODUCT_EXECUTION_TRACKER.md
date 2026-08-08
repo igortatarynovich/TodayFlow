@@ -4,6 +4,17 @@ Last updated: 2026-08-08
 Owner: Product + Engineering
 Status: Active working document
 
+**DONE (CODE, 2026-08-08):** **Поток дня = Kimi activity windows** — clocks/valence from exact-time geometry (+semisquare/sesquiquadrate); `label_short`/`detail` from Kimi `day_flow_windows_v1` in prewarm (no conflict in prompt); bank fill-empty only; FE time + valence chrome + expand detail; Утро/Вечер chrome without invented body. Canon: WAVE2 §4.
+
+## Architecture impact — Поток дня Kimi activity windows (2026-08-08)
+
+- **SoT before:** `label_short` = bank `today_activation_copy_v1`; pure glance clocks.
+- **SoT after:** clocks+valence+driver_id = geometry; **title/detail = Kimi `day_flow_windows_v1`**; bank = fill-empty only.
+- **Public contract changed?** yes — additive `detail`, `copy_source`; `label_short` = activity window (Kimi).
+- **Migration required?** no — next prewarm; old clients ignore `detail`.
+- **Canon updated?** yes — `docs/today/TODAY_WAVE2_CONTRACT_V1.md` §1/§4 + tracker.
+- **Backward compatible?** yes — bank titles if no Kimi cache.
+
 **DONE (CODE, 2026-08-08):** **Stop day invent hardcodes** — FE Поток дня = pure `glance_timeline` only (no Утро/Вечер/Ночь bank); BE `_SCENE_BEATS` retired from runtime (scenes = native LLM only); projector no filler do/avoid/evening; unavailable/not_ready shells = honest «Не удалось загрузить.» / lifecycle status, not DOMAIN_FALLBACKS calm invent. Canon: WAVE2 §4 · B5 · AGENTS transport rule.
 
 ## Architecture impact — stop day invent hardcodes (2026-08-08)

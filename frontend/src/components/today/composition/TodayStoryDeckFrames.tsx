@@ -17,7 +17,11 @@ import type { TapResponseCode } from "@/lib/todayTapWidget";
 import { TODAY_NO_SHARP_FOCUS_COPY } from "@/lib/todayGlanceTexture";
 import { fetchDayFacts, clearDayFactsCache } from "@/lib/todayDayFacts";
 import type { GlanceTimelineItem } from "@/lib/todayGlanceTimeline";
-import { buildStoryDayFlow, type StoryDayFlowPoint } from "@/lib/todayStoryDayFlow";
+import {
+  buildStoryDayFlow,
+  valenceChromeLabel,
+  type StoryDayFlowPoint,
+} from "@/lib/todayStoryDayFlow";
 import {
   resolveTodayStoryFrameArt,
   type TodayStoryArtRole,
@@ -346,29 +350,86 @@ function TodayStoryDayFlowPane({ dateISO }: { dateISO: string }) {
 }
 
 function StoryDayFlowList({ points }: { points: StoryDayFlowPoint[] }) {
+  const [openId, setOpenId] = useState<string | null>(null);
+
   return (
     <ol className={styles.dayFlow} data-testid="today-story-day-flow">
-      {points.map((point, index) => (
-        <li
-          key={point.id}
-          className={styles.dayFlowItem}
-          data-valence={point.valence}
-          data-timed={point.timed ? "true" : "false"}
-          data-testid={`today-day-flow-${point.id}`}
-        >
-          <div className={styles.dayFlowRail} aria-hidden>
-            <span className={styles.dayFlowDot} />
-            {index < points.length - 1 ? <span className={styles.dayFlowLine} /> : null}
+      <li className={styles.dayFlowItem} data-bookend="morning" data-testid="today-day-flow-morning">
+        <div className={styles.dayFlowRail} aria-hidden>
+          <span className={styles.dayFlowDot} data-muted="true" />
+          <span className={styles.dayFlowLine} />
+        </div>
+        <div className={styles.dayFlowCopy}>
+          <div className={styles.dayFlowHeadRow}>
+            <p className={styles.dayFlowPhase}>Утро</p>
+            <span className={styles.dayFlowCue}>Старт</span>
           </div>
-          <div className={styles.dayFlowCopy}>
-            <p className={styles.dayFlowPhase}>{point.phase}</p>
-            <p className={styles.dayFlowCue} data-valence={point.valence}>
-              {point.cue}
-            </p>
-            <p className={styles.dayFlowBody}>{point.body}</p>
+        </div>
+      </li>
+      {points.map((point) => {
+        const chrome = valenceChromeLabel(point.valence);
+        const expandable = Boolean(point.detail);
+        const open = openId === point.id;
+        return (
+          <li
+            key={point.id}
+            className={styles.dayFlowItem}
+            data-valence={point.valence}
+            data-timed={point.timed ? "true" : "false"}
+            data-expanded={open ? "true" : "false"}
+            data-testid={`today-day-flow-${point.id}`}
+          >
+            <div className={styles.dayFlowRail} aria-hidden>
+              <span className={styles.dayFlowDot} />
+              <span className={styles.dayFlowLine} />
+            </div>
+            <div className={styles.dayFlowCopy}>
+              <button
+                type="button"
+                className={styles.dayFlowToggle}
+                data-expandable={expandable ? "true" : "false"}
+                aria-expanded={expandable ? open : undefined}
+                disabled={!expandable}
+                onClick={() => {
+                  if (!expandable) return;
+                  setOpenId((cur) => (cur === point.id ? null : point.id));
+                }}
+              >
+                <div className={styles.dayFlowHeadRow}>
+                  <p className={styles.dayFlowPhase}>{point.phase}</p>
+                  {chrome ? (
+                    <span className={styles.dayFlowCue} data-valence={point.valence}>
+                      {chrome}
+                    </span>
+                  ) : null}
+                  {expandable ? (
+                    <span className={styles.dayFlowChevron} aria-hidden>
+                      {open ? "▾" : "▸"}
+                    </span>
+                  ) : null}
+                </div>
+                <p className={styles.dayFlowBody}>{point.body}</p>
+              </button>
+              {open && point.detail ? (
+                <p className={styles.dayFlowDetail} data-testid={`today-day-flow-detail-${point.id}`}>
+                  {point.detail}
+                </p>
+              ) : null}
+            </div>
+          </li>
+        );
+      })}
+      <li className={styles.dayFlowItem} data-bookend="evening" data-testid="today-day-flow-evening">
+        <div className={styles.dayFlowRail} aria-hidden>
+          <span className={styles.dayFlowDot} data-muted="true" />
+        </div>
+        <div className={styles.dayFlowCopy}>
+          <div className={styles.dayFlowHeadRow}>
+            <p className={styles.dayFlowPhase}>Вечер</p>
+            <span className={styles.dayFlowCue}>итог</span>
           </div>
-        </li>
-      ))}
+        </div>
+      </li>
     </ol>
   );
 }

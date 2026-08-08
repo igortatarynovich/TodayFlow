@@ -364,8 +364,6 @@ export function TodayGlanceTimelineSlot({
             </div>
           );
         }
-        const favorable = row.valence === "favorable";
-        const caution = row.valence === "caution";
         return (
           <div
             key={`${row.driver_id}-${row.time_local}`}
@@ -377,13 +375,7 @@ export function TodayGlanceTimelineSlot({
           >
             <span className={styles.glanceStoryTime}>{formatGlanceClock(row.time_local)}</span>
             <div className={styles.glanceStoryCopy}>
-              <span className={styles.glanceStoryValence} data-valence={row.valence}>
-                {favorable
-                  ? copy.journey.glanceFavorable
-                  : caution
-                    ? copy.journey.glanceCaution
-                    : copy.journey.glanceWindow}
-              </span>
+              {/* Valence = data-valence / row color — no «Благоприятно» prose (WAVE2 lived-use). */}
               <span className={styles.glanceStoryLabel}>{row.label_short}</span>
             </div>
             {live ? (

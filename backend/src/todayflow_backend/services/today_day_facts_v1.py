@@ -158,6 +158,23 @@ async def assemble_day_facts_v1(
         glance_rows = []
         enriched = activations
 
+    # Kimi activity-window titles/details from prewarm cache; bank fill-empty on miss.
+    try:
+        from todayflow_backend.services import day_flow_windows_kimi_v1 as flow_win
+
+        glance_rows = flow_win.apply_cached_or_bank(
+            db,
+            user_id=user_id,
+            local_date=local_date,
+            glance_rows=glance_rows,
+        )
+    except Exception:
+        logger.exception(
+            "day_facts_flow_windows_merge_failed user=%s date=%s",
+            user_id,
+            local_date.isoformat(),
+        )
+
     timeline_ids = [str(r.get("driver_id") or "") for r in glance_rows if r.get("driver_id")]
 
     conflict = None

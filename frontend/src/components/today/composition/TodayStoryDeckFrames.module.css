@@ -662,6 +662,51 @@
   flex-shrink: 0;
 }
 
+.dayFlowDot[data-muted="true"] {
+  background: rgba(255, 248, 240, 0.35);
+  box-shadow: none;
+}
+
+.dayFlowHeadRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.45rem 0.65rem;
+  width: 100%;
+}
+
+.dayFlowToggle {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dayFlowToggle:disabled {
+  cursor: default;
+}
+
+.dayFlowChevron {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: rgba(255, 248, 240, 0.55);
+}
+
+.dayFlowDetail {
+  margin: 0.55rem 0 0;
+  padding-top: 0.55rem;
+  border-top: 1px solid color-mix(in srgb, #fff 14%, transparent);
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: rgba(255, 248, 240, 0.78);
+}
+
 .dayFlowItem[data-valence="caution"] .dayFlowDot {
   background: color-mix(in srgb, #e0a88a 88%, #fff);
   box-shadow: 0 0 0 3px color-mix(in srgb, #e0a88a 22%, transparent);
