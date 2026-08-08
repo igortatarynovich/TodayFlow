@@ -4,7 +4,7 @@
 **Версия:** 1.0 (2026-07-30)  
 **Контракт:** Discrete product steps via transform — **viewport lock** + **swipe** + **keyboard** + **a11y**
 
-Канон для полноэкранного (one-act-at-a-time) продуктового потока шагов — **Today ScreenFlow** (Glance → Plot → Symbols → Reading → Move → Response) и будущих product flows.
+Канон для полноэкранного (one-act-at-a-time) продуктового потока шагов — **Today ScreenFlow** story deck (**Greeting → Energy+Flow → [Symbols] → Attributes → Practice → Insight → Close**; content jobs: [TODAY_SCREEN_SCENARIO_V3](../today/TODAY_SCREEN_SCENARIO_V3.md)) и будущих product flows.
 
 **Визуальный родитель:** [TODAYFLOW_FOUNDATION_UI.md](../TODAYFLOW_FOUNDATION_UI.md) — surface/motion/radius/gap.
 

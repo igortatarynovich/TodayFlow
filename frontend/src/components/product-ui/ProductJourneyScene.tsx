@@ -34,12 +34,18 @@ type ProductJourneySceneProps = {
    * (ScreenFlow product path).
    */
   chrome?: boolean;
+  /**
+   * Hub pages (Compatibility / Tarot): title + body without ActShell card,
+   * min-height, or nested plate — matches Practices flat stack.
+   */
+  variant?: "act" | "flat";
   slotBefore?: ReactNode;
   slotAfter?: ReactNode;
 };
 
 /**
- * Product journey chrome — ActShell by default; ScreenFlow uses chrome={false}.
+ * Product journey chrome — ActShell by default; ScreenFlow uses chrome={false};
+ * Compatibility/Tarot hubs use variant="flat".
  */
 export function ProductJourneyScene({
   step,
@@ -53,6 +59,7 @@ export function ProductJourneyScene({
   className = "",
   accent = "default",
   chrome = true,
+  variant = "act",
   slotBefore = null,
   slotAfter = null,
 }: ProductJourneySceneProps) {
@@ -70,6 +77,33 @@ export function ProductJourneyScene({
         {children}
         {slotAfter}
       </div>
+    );
+  }
+
+  if (variant === "flat") {
+    const stepLabel = step != null && String(step).trim() !== "" ? String(step).trim() : null;
+    return (
+      <section
+        ref={motion.ref}
+        className={[styles.journeyFlat, motion.className, className].filter(Boolean).join(" ")}
+        style={motion.style}
+        data-testid={testId}
+      >
+        {slotBefore}
+        {title || stepLabel || lead ? (
+          <header className={styles.journeyFlatHeader}>
+            {stepLabel || title ? (
+              <p className={styles.journeyFlatIndex}>
+                {stepLabel ? <span className={styles.journeyFlatBadge}>{stepLabel}</span> : null}
+                {title ? <span>{title}</span> : null}
+              </p>
+            ) : null}
+            {lead ? <p className={styles.journeyFlatLead}>{lead}</p> : null}
+          </header>
+        ) : null}
+        <div className={styles.journeyFlatBody}>{children}</div>
+        {slotAfter}
+      </section>
     );
   }
 

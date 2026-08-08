@@ -25,11 +25,12 @@ from typing import Any
 
 from todayflow_backend.core.config import settings
 
-PROJECTION_VERSION = "character_engine_profile_consumption_v0.8"
-_MAX_RECOGNITION = 160
-_MAX_CORE = 420
-_MAX_TRAP = 220
-_MAX_ESSAY = 360
+PROJECTION_VERSION = "character_engine_profile_consumption_v0.9"
+# Soft ceilings only — clip_prose prefers sentence end; never mid-word stumps for UI.
+_MAX_RECOGNITION = 900
+_MAX_CORE = 900
+_MAX_TRAP = 900
+_MAX_ESSAY = 480
 
 # Deterministic trap lines — editorial SoT for this slice (Architecture impact: overwrite trap).
 _TRAP_BY_IDENTITY_THESIS: dict[str, str] = {
@@ -460,19 +461,19 @@ _ESSAYS_BY_IDENTITY: dict[str, dict[str, Any]] = {
 }
 
 _CLAIM_WHY_LABEL: dict[str, str] = {
-    "autonomy_high": "Автономия — главный механизм ядра",
-    "analysis_before_action": "Сначала анализ, потом шаг — рабочий механизм ядра",
-    "direction_through_air_mind": "Путь через идеи и связи задаёт направление ядра",
-    "stability_through_earth": "Опора на осязаемое и прочное держит ядро",
-    "care_through_water_sun": "Забота и проницаемость — способ строить мир",
-    "emotional_sensitivity_high": "Эмоциональная глубина окрашивает ядро",
-    "anchor_through_earth_moon": "Земная луна якорит ритм и даёт устойчивость",
-    "freedom_vs_stability": "Напряжение свободы и опоры — ось характера",
-    "drive_through_fire_mars": "Огненный марс усиливает импульс действия",
-    "presence_through_air_asc": "Воздушный ASC задаёт способ первого контакта",
-    "presence_through_fire_asc": "Огненный ASC задаёт способ первого контакта",
-    "presence_through_earth_asc": "Земной ASC задаёт способ первого контакта",
-    "presence_through_water_asc": "Водный ASC задаёт способ первого контакта",
+    "autonomy_high": "Автономия",
+    "analysis_before_action": "Сначала понять — потом шаг",
+    "direction_through_air_mind": "Путь через идеи и связи",
+    "stability_through_earth": "Опора на осязаемое и прочное",
+    "care_through_water_sun": "Забота и проницаемость",
+    "emotional_sensitivity_high": "Эмоциональная глубина",
+    "anchor_through_earth_moon": "Земной якорь ритма",
+    "freedom_vs_stability": "Свобода и опора рядом",
+    "drive_through_fire_mars": "Огненный импульс действия",
+    "presence_through_air_asc": "Первый контакт через вопросы, разговор и лёгкую дистанцию",
+    "presence_through_fire_asc": "Первый контакт через прямой заход и тепло",
+    "presence_through_earth_asc": "Первый контакт через плотный спокойный темп",
+    "presence_through_water_asc": "Первый контакт через чуткость поля",
 }
 
 _RECOGNITION_LABEL: dict[str, str] = {
@@ -497,10 +498,10 @@ def character_engine_profile_consumption_enabled() -> bool:
 
 
 def _clip(text: str, limit: int) -> str:
+    from todayflow_backend.services.prose_clip_v1 import clip_prose
+
     t = re.sub(r"\s+", " ", str(text or "").strip())
-    if len(t) <= limit:
-        return t
-    return t[: max(0, limit - 1)].rstrip() + "…"
+    return clip_prose(t, limit)
 
 
 def _scrub_machine_thesis(text: str, identity_thesis: str | None = None) -> str:
@@ -691,12 +692,12 @@ def _essays_for(identity_thesis: str) -> dict[str, Any]:
     # Generic fallback — still CE-owned, still «ты».
     return {
         "strengths": [
-            "Ты держишь ясный внутренний механизм — это опора характера.",
+            "Ты держишь ясный внутренний контур — это опора характера.",
             "Способность видеть свою линию среди чужих ожиданий.",
         ],
         "growth_zones": [
             "Переводить ядро характера в явный выбор, а не только в понимание.",
-            "Замечать, где сила механизма становится отсрочкой жизни.",
+            "Замечать, где сила контура становится отсрочкой жизни.",
         ],
         "helps": [
             "Сделай один шаг из ядра — маленький, но названный.",
@@ -705,7 +706,7 @@ def _essays_for(identity_thesis: str) -> dict[str, Any]:
             "Ты решаешь из своего ядра характера: сначала внутренняя ясность, потом внешняя форма."
         ),
         "relationship_style": (
-            "В близости тебе важно, чтобы связь не стирала твой основной механизм — "
+            "В близости тебе важно, чтобы связь не стирала твой основной способ быть — "
             "а давала ему место рядом с другим."
         ),
         "money_style": (
@@ -746,7 +747,8 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
     if not surface or not identity_thesis:
         return payload
 
-    recognition = _clip(surface, _MAX_RECOGNITION)
+    # One person story — recognition_line matches full identity_core (no short duplicate).
+    recognition = surface
     stage3 = _stage3_internal(payload)
     stage4 = _stage4_life(payload)
     stage5 = _stage5_assembly(payload)
@@ -937,13 +939,8 @@ def apply_character_engine_profile_consumption_v0(payload: dict[str, Any]) -> di
 
     payload["portrait_why_v0"] = {
         "projection_version": f"{PROJECTION_VERSION}.why",
-        "title": "Почему портрет звучит именно так",
         "selected_by": selected_by[:1],
         "portrait_influenced_by": influenced_by[:5],
-        "honesty_line": (
-            "Портрет держится на одном ядре характера и фактах, которые его "
-            "подтверждают — не на списке ярлыков и не на ритме дня."
-        ),
         "source": "character_engine_stage2",
     }
 

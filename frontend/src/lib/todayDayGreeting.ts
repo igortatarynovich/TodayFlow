@@ -1,3 +1,5 @@
+import { dayPhaseFromHour } from "@/lib/dayPhaseAtmosphere";
+
 export type TodayDayPhase = "morning" | "day" | "evening" | "night";
 
 export type TodayDayGreeting = {
@@ -5,11 +7,49 @@ export type TodayDayGreeting = {
   line: string;
 };
 
+/** Warm openers — never day theme / thesis / plot. Stable per date+phase, varies across days. */
+const WARM_LINES: Record<TodayDayPhase, readonly string[]> = {
+  morning: [
+    "Мягкое начало — день ещё открыт, без спешки.",
+    "Хорошее утро начинается с одного спокойного вдоха.",
+    "Сегодня можно войти в день тихо и по-своему.",
+    "Пусть утро будет бережным — темп подстроится.",
+    "День только начинается: достаточно одного ясного шага.",
+    "Сначала тепло к себе — потом дела.",
+  ],
+  day: [
+    "Середина дня — хороший момент свериться с собой.",
+    "День уже идёт. Можно чуть замедлиться и выбрать, что важно.",
+    "Сейчас важнее ясность, чем скорость.",
+    "Держись своего ритма — день ещё многое покажет.",
+    "Есть пространство сделать один спокойный ход.",
+    "Пусть день держит тебя, а не наоборот.",
+  ],
+  evening: [
+    "Вечер — время собрать день без оценки.",
+    "Можно мягко закрыть день и оставить лишнее.",
+    "День почти прожит. Сейчас важнее тепло, чем итог.",
+    "Пусть вечер будет тихим — день уже сделал своё.",
+    "Хороший вечер начинается с короткой паузы.",
+    "Сейчас можно отпустить темп и просто быть.",
+  ],
+  night: [
+    "Ночь для отдыха. Завтра можно начать заново.",
+    "Пора беречь силы — день уже позади.",
+    "Тишина ночи — хорошее место, чтобы отпустить день.",
+    "Пусть ночь будет спокойной: всё важное подождёт утра.",
+  ],
+};
+
+const FIRST_TODAY_LINES = [
+  "Мы только что сверили первые линии карты — теперь посмотрим, как звучит твой день.",
+  "Карта уже рядом. Дальше — мягко, без спешки, шаг за шагом.",
+  "Первый день вместе: начнём спокойно и посмотрим, что откликается.",
+] as const;
+
+/** Single clock → phase SoT (aligned with `dayPhaseAtmosphere`). */
 export function resolveTodayDayPhase(hour = new Date().getHours()): TodayDayPhase {
-  if (hour >= 5 && hour < 11) return "morning";
-  if (hour >= 11 && hour < 17) return "day";
-  if (hour >= 17 && hour < 22) return "evening";
-  return "night";
+  return dayPhaseFromHour(hour);
 }
 
 function formatName(name: string | null | undefined): string | null {
@@ -32,62 +72,71 @@ function salutationForPhase(phase: TodayDayPhase, name: string | null): string {
   }
 }
 
+function hashSeed(key: string): number {
+  let h = 0;
+  for (let i = 0; i < key.length; i++) {
+    h = (Math.imul(31, h) + key.charCodeAt(i)) | 0;
+  }
+  return Math.abs(h);
+}
+
+export function pickWarmGreetingLine(
+  phase: TodayDayPhase,
+  seedKey: string,
+  pool: readonly string[] = WARM_LINES[phase],
+): string {
+  if (pool.length === 0) return "Сегодня — твой день.";
+  return pool[hashSeed(seedKey) % pool.length]!;
+}
+
+/**
+ * Greeting = salutation by clock phase + warm rotating line.
+ * Does **not** use day theme / thesis / tagline (those live in Опора).
+ */
 export function buildTodayDayGreeting(input: {
   phase: TodayDayPhase;
   userName?: string | null;
-  tagline: string;
-  yesterdayClosed: boolean;
-  todayOpened: boolean;
+  /** Calendar day for stable rotation within the phase. */
+  dateISO?: string | null;
+  yesterdayClosed?: boolean;
+  todayOpened?: boolean;
   isEveningSurface?: boolean;
   isFirstToday?: boolean;
+  /** @deprecated Ignored — theme/thesis must not become the greeting. */
+  tagline?: string;
 }): TodayDayGreeting {
   const name = formatName(input.userName);
   const salutation = salutationForPhase(input.phase, name);
-
-  if (input.isEveningSurface) {
-    return {
-      salutation,
-      line: input.todayOpened
-        ? "Сегодняшний день почти завершён. Осталось понять, что стоит забрать с собой в завтра."
-        : "День подходит к концу. Несколько минут — и ты увидишь, что он уже рассказал о тебе.",
-    };
-  }
+  const seedBase = `${input.dateISO || "day"}|${input.phase}`;
 
   if (input.isFirstToday && !input.todayOpened) {
     return {
       salutation,
-      line: "Мы только что сверили первые линии карты — теперь посмотрим, как звучит твой день.",
+      line: pickWarmGreetingLine(input.phase, `${seedBase}|first`, FIRST_TODAY_LINES),
     };
   }
 
-  if (input.phase === "morning" && !input.todayOpened) {
-    if (input.yesterdayClosed) {
-      return {
-        salutation,
-        line: "Вчерашний день закрыт — сегодня можно начать с ясного темпа. " + softenTagline(input.tagline),
-      };
-    }
+  if (input.isEveningSurface || input.phase === "evening" || input.phase === "night") {
+    const eveningPhase: TodayDayPhase = input.phase === "night" ? "night" : "evening";
     return {
       salutation,
-      line: "Сегодня многое будет зависеть от того, насколько спокойно ты задашь темп самому себе.",
+      line: pickWarmGreetingLine(eveningPhase, `${seedBase}|close`),
     };
   }
 
-  if (input.phase === "morning" || input.phase === "day") {
+  if (input.phase === "morning" && input.yesterdayClosed && !input.todayOpened) {
     return {
       salutation,
-      line: input.todayOpened ? softenTagline(input.tagline) : "Начни с одной главной мысли — остальное подстроится под неё.",
+      line: pickWarmGreetingLine("morning", `${seedBase}|after-close`, [
+        "Вчерашний день закрыт — сегодня можно начать с ясного и тёплого темпа.",
+        "Вчера уже собрано. Сегодня — новое мягкое начало.",
+        "Закрытое вчера даёт спокойный вход в сегодня.",
+      ]),
     };
   }
 
   return {
     salutation,
-    line: "Сегодняшний день уже многое показал. Сейчас важнее не ускоряться, а собрать итог.",
+    line: pickWarmGreetingLine(input.phase, seedBase),
   };
-}
-
-function softenTagline(tagline: string): string {
-  const t = tagline.replace(/[.!?]+$/, "").trim();
-  if (!t) return "Сегодня лучше двигаться последовательно, чем быстро.";
-  return t.charAt(0).toUpperCase() + t.slice(1) + ".";
 }

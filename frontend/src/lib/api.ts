@@ -97,6 +97,33 @@ function abortWithTimeout(controller: AbortController) {
   }
 }
 
+/** Extract raw JWT from an Authorization header value. */
+export function bearerTokenFromAuthorization(header: string | null | undefined): string | null {
+  if (!header) return null;
+  const match = /^Bearer\s+(\S+)/i.exec(header.trim());
+  return match?.[1] ?? null;
+}
+
+/**
+ * Only clear the client session when /auth/me 401 proves the *current* JWT is dead.
+ * A stale in-flight /auth/me (old token) must not wipe a token set by a newer login.
+ */
+export function shouldClearAuthSessionOn401(
+  path: string,
+  requestBearer: string | null,
+  currentBearer: string | null,
+): boolean {
+  const isCredentialChallenge =
+    path.includes("/auth/login") ||
+    path.includes("/auth/email-signup") ||
+    path.includes("/auth/signup") ||
+    path.includes("/auth/magic");
+  const isAuthMeProbe = path === "/auth/me" || path.startsWith("/auth/me?");
+  if (isCredentialChallenge || !isAuthMeProbe) return false;
+  if (!requestBearer || !currentBearer) return false;
+  return requestBearer === currentBearer;
+}
+
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const headers = new Headers(options?.headers || {});
   headers.set("Content-Type", "application/json");
@@ -156,13 +183,14 @@ export function getStoredAccessToken(): string | null {
 }
 
 async function performRequest<T>(path: string, options: RequestInit | undefined, headers: Headers): Promise<T> {
-  const AUTH_ME_TIMEOUT_MS = 10_000;
+  const AUTH_ME_TIMEOUT_MS = 5_000;
   const needsAuthMeTimeout = path === "/auth/me" || path.startsWith("/auth/me?");
   const timeoutController = needsAuthMeTimeout && !options?.signal ? new AbortController() : null;
   const timeoutId =
     timeoutController != null
       ? setTimeout(() => abortWithTimeout(timeoutController), AUTH_ME_TIMEOUT_MS)
       : null;
+  const requestBearer = bearerTokenFromAuthorization(headers.get("Authorization"));
 
   try {
     const res = await fetch(`${API_BASE}${path}`, {
@@ -204,17 +232,13 @@ async function performRequest<T>(path: string, options: RequestInit | undefined,
 
       // Handle specific error cases
       if (res.status === 401) {
-        // Login/signup failures must keep the API `detail` (localized invalid credentials).
-        const isCredentialChallenge =
-          path.includes("/auth/login") ||
-          path.includes("/auth/email-signup") ||
-          path.includes("/auth/signup") ||
-          path.includes("/auth/magic");
-        // Only /auth/me proves the JWT is dead. Other 401s (guest claim, optional
-        // endpoints, race conditions) must not wipe a still-usable session —
-        // especially on mobile refresh when the DB pool is under load.
-        const isAuthMeProbe = path === "/auth/me" || path.startsWith("/auth/me?");
-        const shouldClearSession = !isCredentialChallenge && isAuthMeProbe;
+        // Only /auth/me with the *current* bearer proves the JWT is dead.
+        // Stale in-flight /auth/me (old token after login) must not wipe the new session.
+        const shouldClearSession = shouldClearAuthSessionOn401(
+          path,
+          requestBearer,
+          getStoredAccessToken(),
+        );
         if (shouldClearSession && typeof window !== "undefined") {
           const { clearAuthSession, notifyAuthSessionChanged } = await import("@/lib/authSession");
           clearAuthSession();

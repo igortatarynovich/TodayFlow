@@ -257,13 +257,10 @@ describe("ProfileV2SystemScreen journey rewire", () => {
     expect(screen.getByTestId("profile-v2-detail-cultural_catalog")).toBeInTheDocument();
   });
 
-  it("keeps identity_core behind kitchen toggle on Act 1 (not share-core)", async () => {
-    const user = userEvent.setup();
+  it("shows full identity_core as the only Act 1 body (no collapse / no dupe)", () => {
     renderJourney();
-    expect(screen.getByTestId("profile-v2-identity-core")).toBeInTheDocument();
-    expect(screen.queryByText(/ясный фокус/i)).not.toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: /полнее/i }));
-    expect(screen.getByText(/ясный фокус/i)).toBeInTheDocument();
+    expect(screen.queryByTestId("profile-v2-identity-core")).not.toBeInTheDocument();
+    expect(screen.getByTestId("profile-v2-recognition-line")).toHaveTextContent(/ясный фокус/i);
   });
 
   it("surfaces relationship and money styles on character scroll", () => {

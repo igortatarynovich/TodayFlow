@@ -68,6 +68,9 @@ export function hasUsableCoreProfileBase(coreProfile: {
   return typeof birth === "string" && Boolean(birth.trim());
 }
 
+const POST_AUTH_CORE_TIMEOUT_MS = 4_000;
+const CORE_PROFILE_TIMEOUT = Symbol("core-profile-timeout");
+
 export async function resolvePostAuthTarget(explicitRedirect?: string | null): Promise<string> {
   const safeRedirect = getSafeRedirectTarget(explicitRedirect);
   if (safeRedirect !== "/profile" && safeRedirect !== ONBOARDING_CORE_PATH) {
@@ -75,7 +78,14 @@ export async function resolvePostAuthTarget(explicitRedirect?: string | null): P
   }
 
   try {
-    const coreProfile = await fetchCoreProfileCached();
+    // Never hold the login spinner on a hung core-profile — fall through to First Today / profile.
+    const coreProfile = await Promise.race([
+      fetchCoreProfileCached(),
+      new Promise<typeof CORE_PROFILE_TIMEOUT>((resolve) => {
+        setTimeout(() => resolve(CORE_PROFILE_TIMEOUT), POST_AUTH_CORE_TIMEOUT_MS);
+      }),
+    ]);
+    if (coreProfile === CORE_PROFILE_TIMEOUT) return resolvePostCoreAuthTarget();
     if (!hasUsableCoreProfileBase(coreProfile)) return ONBOARDING_CORE_PATH;
     return resolvePostCoreAuthTarget();
   } catch {

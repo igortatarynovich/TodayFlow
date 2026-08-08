@@ -5,11 +5,13 @@
 }
 
 .shell {
-  max-width: var(--product-content-max);
-  margin: 0 auto;
-  padding: 1.5rem var(--orbit-space-xl) 3rem;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 1.5rem 0 3rem;
   display: grid;
   gap: 1rem;
+  box-sizing: border-box;
 }
 
 .header {
@@ -30,7 +32,7 @@
 .title {
   margin: 0.25rem 0 0;
   font-family: var(--orbit-font-display, Georgia, serif);
-  font-size: clamp(1.45rem, 4vw, 1.85rem);
+  font-size: var(--tf-type-hero-size);
   font-weight: 600;
   color: var(--section-text);
 }
@@ -64,7 +66,7 @@
   margin-top: 0.35rem;
   border-radius: 999px;
   padding: 0.78rem 1.45rem;
-  font-size: 0.92rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 600;
   text-decoration: none;
   color: #1a1410;

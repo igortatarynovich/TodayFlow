@@ -1,32 +1,34 @@
+/* Glance story frame — typography-first on Day Atmosphere (FOUNDATION_UI §16). */
+
 .root {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: var(--tf-ds-space-5, 1.25rem);
   width: 100%;
-  min-height: min(72dvh, 640px);
+  min-height: 100%;
+  height: 100%;
   position: relative;
   z-index: 1;
-}
-
-@media (min-width: 640px) {
-  .root {
-    gap: var(--tf-ds-space-6, 1.5rem);
-  }
+  box-sizing: border-box;
+  padding-block: 0.25rem 0.5rem;
 }
 
 .chrome {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
-  padding-inline: 0.15rem;
+  align-items: center;
+  gap: 0.2rem;
+  text-align: center;
+  flex: 0 0 auto;
 }
 
 .todayWord {
   margin: 0;
   font-family: var(--tf-font-display, Georgia, serif);
-  font-size: clamp(1.55rem, 5vw, 1.85rem);
+  font-size: clamp(1.65rem, 5.5vw, 2.1rem);
   font-weight: 650;
-  line-height: 1.15;
+  line-height: 1.1;
   letter-spacing: -0.02em;
   color: var(--tf-ink, #2a2520);
 }
@@ -38,39 +40,33 @@
   color: var(--tf-ink-muted, #7a7168);
 }
 
-/* Layout only — pad/radius/glass surface come from DsCard size="compact" (§16.3) */
-.block,
-.blockTeaser {
+.stage {
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  align-items: center;
+  justify-content: center;
+  gap: 1.35rem;
+  text-align: center;
+  min-height: 0;
+  padding-inline: 0.35rem;
+}
+
+.themeBlock,
+.energyBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
   width: 100%;
-  margin: 0;
-  text-align: left;
-}
-
-.block {
-  align-items: stretch;
-}
-
-.blockTeaser {
-  align-items: flex-start;
-  cursor: pointer;
-  font: inherit;
-  color: inherit;
-  text-align: left;
-}
-
-.blockTeaser:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--day-decor-color, #5b6472) 55%, transparent);
-  outline-offset: 2px;
+  max-width: 28rem;
 }
 
 .eyebrow {
   margin: 0;
   font-size: 0.72rem;
   font-weight: 560;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   line-height: 1.35;
   text-transform: uppercase;
   color: var(--tf-ink-muted, #7a7168);
@@ -78,16 +74,57 @@
 
 .primary {
   margin: 0;
-  max-width: 28ch;
+  max-width: 22ch;
   font-family: var(--tf-font-display, Georgia, serif);
-  font-size: clamp(1.2rem, 3.8vw, 1.55rem);
+  font-size: clamp(1.45rem, 5vw, 2rem);
   font-weight: 600;
-  line-height: 1.28;
-  letter-spacing: -0.01em;
+  line-height: 1.22;
+  letter-spacing: -0.015em;
   color: var(--tf-ink, #2a2520);
 }
 
-.primaryCompact {
+.energyText {
+  margin: 0;
+  max-width: 28ch;
+  font-family: var(--tf-font-display, Georgia, serif);
+  font-size: clamp(1.05rem, 3.2vw, 1.3rem);
+  font-weight: 560;
+  line-height: 1.35;
+  color: var(--tf-ink, #2a2520);
+}
+
+.detail {
+  margin: 0;
+  max-width: 34ch;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--tf-ink-muted, #7a7168);
+}
+
+.loading {
+  margin: 0;
+  color: var(--tf-ink-muted, #5c534a);
+}
+
+.footer {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+  max-width: 28rem;
+  margin-inline: auto;
+}
+
+.focusBlock,
+.metaBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  text-align: left;
+}
+
+.focusTitle {
   margin: 0;
   font-weight: 600;
   font-size: 1rem;
@@ -95,16 +132,34 @@
   color: var(--tf-ink, #2a2520);
 }
 
-.detail {
+.focusList {
+  list-style: none;
   margin: 0;
-  font-size: 0.82rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.focusItem {
+  margin: 0;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--tf-surface-insight-radius, 28px);
+  background: color-mix(in srgb, var(--day-surface-tint, rgba(255, 255, 255, 0.55)) 70%, transparent);
+  border: 1px solid color-mix(in srgb, var(--day-decor-color, #8f6b3a) 12%, transparent);
+  font-size: 0.88rem;
   line-height: 1.4;
   color: var(--tf-ink-muted, #7a7168);
 }
 
-.loading {
-  margin: 0;
-  color: var(--tf-ink-muted, #5c534a);
+.focusDirectionLabel {
+  display: block;
+  margin-bottom: 0.15rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--tf-ink, #2a2520);
 }
 
 .nearestSlot {
@@ -117,9 +172,9 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.4rem 0.65rem;
+  gap: 0.35rem 0.55rem;
   font-family: var(--tf-font-display, Georgia, serif);
-  font-size: clamp(1.05rem, 3vw, 1.25rem);
+  font-size: clamp(1rem, 2.8vw, 1.15rem);
   font-weight: 600;
   line-height: 1.3;
   color: var(--tf-ink, #2a2520);
@@ -127,18 +182,17 @@
 
 .nearestPrimaryButton {
   width: 100%;
-  padding: 0;
-  border: 0;
-  background: transparent;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--day-decor-color, #8f6b3a) 14%, transparent);
+  border-radius: var(--tf-surface-insight-radius, 28px);
+  background: color-mix(in srgb, var(--day-surface-tint, rgba(255, 255, 255, 0.55)) 70%, transparent);
   text-align: left;
   cursor: pointer;
-  font: inherit;
 }
 
 .nearestPrimaryButton:focus-visible {
   outline: 2px solid color-mix(in srgb, var(--day-decor-color, #5b6472) 55%, transparent);
-  outline-offset: 3px;
-  border-radius: 0.35rem;
+  outline-offset: 2px;
 }
 
 .nearestPracticeHint {
@@ -172,26 +226,61 @@
 }
 
 .nearestSkeleton {
-  height: 0.95rem;
+  display: block;
+  height: 1.1rem;
   width: min(70%, 16rem);
   border-radius: 0.4rem;
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.25),
-    rgba(255, 255, 255, 0.55),
-    rgba(255, 255, 255, 0.25)
+    color-mix(in srgb, var(--tf-ink-muted, #7a7168) 12%, transparent),
+    color-mix(in srgb, var(--tf-ink-muted, #7a7168) 28%, transparent),
+    color-mix(in srgb, var(--tf-ink-muted, #7a7168) 12%, transparent)
   );
   background-size: 200% 100%;
+  animation: nearestSkeletonPulse 1.2s ease-in-out infinite;
 }
 
-.focusDirection {
-  margin: 0;
-  font-size: 0.82rem;
-  line-height: 1.45;
-  color: var(--tf-ink-muted, #7a7168);
+@keyframes nearestSkeletonPulse {
+  0% {
+    background-position: 100% 0;
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    background-position: -100% 0;
+    opacity: 0.55;
+  }
 }
 
-.focusDirectionLabel {
+.teaserCta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  width: 100%;
+  margin: 0.15rem 0 0;
+  text-align: center;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.teaserCta:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--day-decor-color, #5b6472) 55%, transparent);
+  outline-offset: 2px;
+}
+
+.teaserLabel {
   font-weight: 600;
+  font-size: 0.98rem;
+  line-height: 1.3;
   color: var(--tf-ink, #2a2520);
+}
+
+.teaserHook {
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: var(--tf-ink-muted, #7a7168);
 }

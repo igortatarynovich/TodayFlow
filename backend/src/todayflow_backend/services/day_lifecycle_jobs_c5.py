@@ -58,8 +58,8 @@ def _minimal_morning(target_date: date, *, celestial_events: dict[str, Any] | No
         energy_level=5,
         focus_areas=[],
         daily_recommendations={
-            "what_to_do": "Выбери один ясный результат к вечеру и сделай по нему первый короткий шаг.",
-            "what_to_avoid": "Не отдавай маршрут дня чужой срочности.",
+            "what_to_do": "",
+            "what_to_avoid": "",
             "key_focus": "general",
         },
         ritual_completed=False,
@@ -150,51 +150,97 @@ def prewarm_assemble_user_day(
             sym_exc,
         )
 
+    story_status = "pending"
     if day_story_is_product_ready(db, user_id=int(user.id), local_date=local_date):
-        return "skipped_ready"
+        story_status = "skipped_ready"
+    else:
+        from todayflow_backend.services.core_profile import get_core_profile_service
+        from todayflow_backend.services.day_story_refresh_v1 import refresh_day_story_for_user
+        from todayflow_backend.services.day_story_wire_v1 import build_day_story_record_for_refresh
 
-    from todayflow_backend.services.core_profile import get_core_profile_service
-    from todayflow_backend.services.day_story_refresh_v1 import refresh_day_story_for_user
-    from todayflow_backend.services.day_story_wire_v1 import build_day_story_record_for_refresh
+        celestial = _build_prewarm_celestial(local_date, locale)
+        morning = _minimal_morning(local_date, celestial_events=celestial)
+        core_profile = get_core_profile_service().build_cached_or_baseline(db, user)
+        fusion_dump = _fusion_dump_for_user(db, user=user, local_date=local_date)
 
-    celestial = _build_prewarm_celestial(local_date, locale)
-    morning = _minimal_morning(local_date, celestial_events=celestial)
-    core_profile = get_core_profile_service().build_cached_or_baseline(db, user)
-    fusion_dump = _fusion_dump_for_user(db, user=user, local_date=local_date)
+        def _build(db_sess, **kwargs):
+            return build_day_story_record_for_refresh(
+                db_sess,
+                user=kwargs["user"],
+                target_date=kwargs["target_date"],
+                locale=kwargs["locale"],
+                morning=morning,
+                fusion_dump=fusion_dump,
+                core_profile=core_profile if isinstance(core_profile, dict) else {},
+                force_rebuild=kwargs.get("force_rebuild", True),
+                expected_fingerprint=kwargs.get("expected_fingerprint"),
+                fingerprint_payload=kwargs.get("fingerprint_payload"),
+                timezone_name=timezone_name,
+            )
 
-    def _build(db_sess, **kwargs):
-        return build_day_story_record_for_refresh(
-            db_sess,
-            user=kwargs["user"],
-            target_date=kwargs["target_date"],
-            locale=kwargs["locale"],
-            morning=morning,
-            fusion_dump=fusion_dump,
-            core_profile=core_profile if isinstance(core_profile, dict) else {},
-            force_rebuild=kwargs.get("force_rebuild", True),
-            expected_fingerprint=kwargs.get("expected_fingerprint"),
-            fingerprint_payload=kwargs.get("fingerprint_payload"),
-            timezone_name=timezone_name,
-        )
+        try:
+            result = refresh_day_story_for_user(
+                db,
+                user=user,
+                local_date=local_date,
+                timezone_name=timezone_name,
+                locale=locale,
+                build_fn=_build,
+                force=True,
+            )
+            if result.get("rebuilt"):
+                story_status = "rebuilt"
+            elif day_story_is_product_ready(db, user_id=int(user.id), local_date=local_date):
+                story_status = "skipped_ready"
+            else:
+                story_status = "unchanged"
+        except Exception as exc:
+            logger.warning("prewarm_assemble failed user=%s date=%s: %s", user.id, local_date, exc)
+            story_status = "error"
+
+    # Activity-window copy for Поток дня (Kimi) — own short-lived session so the
+    # job transaction is not held across Nebius (~15s) and GET /day-facts stays fast.
+    try:
+        db.commit()
+    except Exception:
+        try:
+            db.rollback()
+        except Exception:
+            pass
 
     try:
-        result = refresh_day_story_for_user(
-            db,
-            user=user,
-            local_date=local_date,
-            timezone_name=timezone_name,
-            locale=locale,
-            build_fn=_build,
-            force=True,
+        from todayflow_backend.db.session import SessionLocal
+        from todayflow_backend.services.day_flow_windows_kimi_v1 import (
+            ensure_day_flow_windows_for_user,
         )
-        if result.get("rebuilt"):
-            return "rebuilt"
-        if day_story_is_product_ready(db, user_id=int(user.id), local_date=local_date):
-            return "skipped_ready"
-        return "unchanged"
-    except Exception as exc:
-        logger.warning("prewarm_assemble failed user=%s date=%s: %s", user.id, local_date, exc)
-        return "error"
+
+        flow_db = SessionLocal()
+        try:
+            flow_user = flow_db.query(User).filter(User.id == int(user.id)).one()
+            flow_status = ensure_day_flow_windows_for_user(
+                flow_db,
+                user=flow_user,
+                local_date=local_date,
+                timezone_name=timezone_name,
+                locale=locale,
+            )
+            logger.info(
+                "prewarm day_flow_windows user=%s date=%s status=%s",
+                user.id,
+                local_date,
+                flow_status,
+            )
+        finally:
+            flow_db.close()
+    except Exception as flow_exc:
+        logger.warning(
+            "prewarm day_flow_windows failed user=%s date=%s: %s",
+            user.id,
+            local_date,
+            flow_exc,
+        )
+
+    return story_status
 
 
 def system_close_user_day(db: Session, *, user_id: int, local_date: date) -> str:

@@ -3,14 +3,11 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { useMemo } from "react";
-import { DsBody, DsButton } from "@/design-system";
+import { DsBody, DsButton, DsCallout, DsQuote } from "@/design-system";
 import type { FlowPracticesChromeLocale } from "@/components/today/flowPracticesMainTabChrome";
 import { TarotCardImage } from "@/components/product-ui/TarotCardImage";
 import { tarotReadingStoryChromeBundle } from "@/components/guidance/tarotReadingStoryChrome";
-import {
-  ProductJourneyScene,
-  ProductNarrativeBlock,
-} from "@/components/product-ui/ProductJourneyScene";
+import { ProductJourneyScene } from "@/components/product-ui/ProductJourneyScene";
 import journeyStyles from "@/components/product-ui/ProductJourneyScene.module.css";
 import type { TarotReadingStoryModel } from "@/lib/buildTarotReadingStoryModel";
 import { guestSignupHref } from "@/lib/guestAccessStore";
@@ -129,8 +126,6 @@ export function TarotWebResult({
 
   const pathALabel = loc === "ru" ? "Путь A" : "Path A";
   const pathBLabel = loc === "ru" ? "Путь B" : "Path B";
-  const givesLabel = loc === "ru" ? "даёт" : "gives";
-  const costsLabel = loc === "ru" ? "стоит" : "costs";
 
   return (
     <div className={s.tarotWebLayout} data-testid="tarot-web-result">
@@ -180,23 +175,25 @@ export function TarotWebResult({
         {hasStory ? (
           <div className={s.tarotResultNarrativeStack}>
             {answerParas.length ? (
-              <ProductNarrativeBlock
-                id="answer"
-                kicker={chrome.mainAnswerKicker}
-                lead={answerParas[0]}
-                paragraphs={answerParas.slice(1)}
-                accent="support"
-                collapseAfter={answerParas.length > 2 ? 1 : undefined}
+              <DsCallout
+                tone="insight"
+                label="main"
+                icon="spark"
+                title={answerParas[0]}
                 testId="tarot-narrative-answer"
-              />
+              >
+                {answerParas.length > 1
+                  ? answerParas.slice(1).map((para) => <p key={para.slice(0, 48)}>{para}</p>)
+                  : null}
+              </DsCallout>
             ) : null}
 
             {model.todaySuggestion?.trim() ? (
-              <ProductNarrativeBlock
-                id="today"
-                kicker={chrome.todayEyebrow}
-                paragraphs={[ensurePeriod(model.todaySuggestion)]}
-                accent="support"
+              <DsCallout
+                tone="practice"
+                label="next_step"
+                icon="arrowDown"
+                title={ensurePeriod(model.todaySuggestion)}
                 testId="tarot-narrative-today"
               />
             ) : null}
@@ -206,43 +203,55 @@ export function TarotWebResult({
                 <p className={s.tarotChoiceCompareKicker}>{chrome.choiceCompareKicker}</p>
                 <div className={s.tarotChoiceCompareGrid}>
                   {choiceALines.length ? (
-                    <article className={s.tarotChoicePath} data-testid="tarot-choice-a">
+                    <div className={s.tarotChoicePath} data-testid="tarot-choice-a">
                       <p className={s.tarotChoicePathTitle}>{pathALabel}</p>
-                      <ul className={s.tarotChoicePathLines}>
-                        {choiceALines.map((line, idx) => (
-                          <li key={`a-${idx}`}>
-                            <span className={s.tarotChoicePathCue}>
-                              {idx === 0 ? givesLabel : costsLabel}
-                            </span>{" "}
-                            {line}
-                          </li>
-                        ))}
-                      </ul>
-                    </article>
+                      <DsCallout
+                        tone="help"
+                        label="help"
+                        icon="sun"
+                        title={choiceALines[0]}
+                        testId="tarot-choice-a-help"
+                      />
+                      {choiceALines[1] ? (
+                        <DsCallout
+                          tone="avoid"
+                          label="attention"
+                          icon="flag"
+                          title={choiceALines[1]}
+                          testId="tarot-choice-a-risk"
+                        />
+                      ) : null}
+                    </div>
                   ) : null}
                   {choiceBLines.length ? (
-                    <article className={s.tarotChoicePath} data-testid="tarot-choice-b">
+                    <div className={s.tarotChoicePath} data-testid="tarot-choice-b">
                       <p className={s.tarotChoicePathTitle}>{pathBLabel}</p>
-                      <ul className={s.tarotChoicePathLines}>
-                        {choiceBLines.map((line, idx) => (
-                          <li key={`b-${idx}`}>
-                            <span className={s.tarotChoicePathCue}>
-                              {idx === 0 ? givesLabel : costsLabel}
-                            </span>{" "}
-                            {line}
-                          </li>
-                        ))}
-                      </ul>
-                    </article>
+                      <DsCallout
+                        tone="help"
+                        label="help"
+                        icon="sun"
+                        title={choiceBLines[0]}
+                        testId="tarot-choice-b-help"
+                      />
+                      {choiceBLines[1] ? (
+                        <DsCallout
+                          tone="avoid"
+                          label="attention"
+                          icon="flag"
+                          title={choiceBLines[1]}
+                          testId="tarot-choice-b-risk"
+                        />
+                      ) : null}
+                    </div>
                   ) : null}
                 </div>
               </div>
             ) : null}
 
             {confidenceNote ? (
-              <p className={s.tarotConfidenceNote} data-testid="tarot-confidence-note">
+              <DsQuote kicker={loc === "ru" ? "Оговорка" : "Caveat"} testId="tarot-confidence-note">
                 {ensurePeriod(confidenceNote)}
-              </p>
+              </DsQuote>
             ) : null}
 
             {hasWhy ? (
@@ -250,26 +259,28 @@ export function TarotWebResult({
                 <summary className={s.tarotWhySummary}>{chrome.whyDetailsSummary}</summary>
                 <div className={s.tarotWhyBody}>
                   {symbolsParas.length ? (
-                    <ProductNarrativeBlock
-                      id="symbols"
-                      kicker={chrome.symbolsKicker}
-                      lead={symbolsParas[0]}
-                      paragraphs={symbolsParas.slice(1)}
-                      accent="sky"
-                      collapseAfter={symbolsParas.length > 3 ? 2 : undefined}
-                      testId="tarot-narrative-symbols"
-                    />
+                    <>
+                      <DsQuote kicker={chrome.symbolsKicker} testId="tarot-narrative-symbols">
+                        {symbolsParas[0]}
+                      </DsQuote>
+                      {symbolsParas.slice(1).map((para) => (
+                        <DsBody key={para.slice(0, 48)} size="sm" tone="secondary">
+                          {para}
+                        </DsBody>
+                      ))}
+                    </>
                   ) : null}
                   {storyParas.length ? (
-                    <ProductNarrativeBlock
-                      id="story"
-                      kicker={chrome.storyKicker}
-                      lead={storyParas[0]}
-                      paragraphs={storyParas.slice(1)}
-                      accent="default"
-                      collapseAfter={storyParas.length > 3 ? 2 : undefined}
-                      testId="tarot-narrative-why"
-                    />
+                    <>
+                      <DsQuote kicker={chrome.storyKicker} testId="tarot-narrative-why">
+                        {storyParas[0]}
+                      </DsQuote>
+                      {storyParas.slice(1).map((para) => (
+                        <DsBody key={para.slice(0, 48)} size="sm" tone="secondary">
+                          {para}
+                        </DsBody>
+                      ))}
+                    </>
                   ) : null}
                 </div>
               </details>

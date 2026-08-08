@@ -161,6 +161,8 @@ describe("buildScenarioStoryChapters", () => {
     expect(chapters!.map((c) => c.id)).toEqual(["sphere-relationships", "sphere-work_decisions"]);
     const primary = chapters!.find((c) => c.id === "sphere-relationships")!;
     expect(primary.kicker).toBe("Отношения");
+    const work = chapters!.find((c) => c.id === "sphere-work_decisions")!;
+    expect(work.kicker).toBe("Работа и решения");
     expect(primary.dual?.strengthen.join(" ")).toMatch(/короткое сообщение/i);
     expect(primary.dual?.soften.join(" ")).toMatch(/согласиться/i);
     const blob = chapters!.map((c) => [c.lead, ...c.paragraphs].join(" ")).join("\n");

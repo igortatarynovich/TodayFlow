@@ -19,7 +19,7 @@
 }
 
 .profileRouteContainerWide {
-  max-width: 760px;
+  max-width: var(--tf-shell-max, 52rem);
 }
 
 .profileRouteStack {
@@ -40,7 +40,7 @@
   font-size: var(--tf-type-body-size, 0.9375rem);
   line-height: 1.55;
   color: var(--tf-ink-soft, var(--tf-caption));
-  max-width: 42rem;
+  max-width: var(--tf-shell-readable, 36rem);
 }
 
 .loadingStatus {

@@ -38,6 +38,8 @@ import { useAuth } from "@/lib/useAuth";
 import styles from "@/app/practices/PracticesPage.module.css";
 
 const RECOMMEND_IMAGE = "/images/praktiki_banner.png";
+/** Hub only needs a few unique recent practices for «Мои». */
+const HISTORY_LIMIT = 20;
 
 function toCard(practice: PracticeCatalogItem, imageUrl?: string | null): StateCyclePracticeCard {
   const cardTitle = practiceCardTitle(practice);
@@ -74,6 +76,13 @@ function pickPoolForNeed(
   return rankPracticesForNeed(list, need);
 }
 
+function sortCatalog(pool: PracticeCatalogItem[], sortLocale: string): PracticeCatalogItem[] {
+  return [...pool].sort((a, b) => {
+    if (a.is_personalized !== b.is_personalized) return a.is_personalized ? -1 : 1;
+    return a.title.localeCompare(b.title, sortLocale);
+  });
+}
+
 export default function PracticesPage() {
   const { isAuthenticated, isLoading: authLoading } = useAuth();
   const locale: FlowPracticesChromeLocale = getLocale() === "ru" ? "ru" : "en";
@@ -82,19 +91,34 @@ export default function PracticesPage() {
   const sortLocale = locale === "ru" ? "ru" : "en";
 
   const [loading, setLoading] = useState(true);
-  const [practices, setPractices] = useState<PracticeCatalogItem[]>([]);
+  const [catalogRaw, setCatalogRaw] = useState<PracticeCatalogItem[]>([]);
   const [currentPractice, setCurrentPractice] = useState<PracticeCatalogItem | null>(null);
   const [coreProfile, setCoreProfile] = useState<CoreProfile | null>(null);
   const [progress, setProgress] = useState<PracticeProgressResponse | null>(null);
   const [history, setHistory] = useState<PracticeHistoryResponse | null>(null);
   const [limits, setLimits] = useState<PracticeLimitsSnapshot | null>(null);
-  const [shortAlternatives, setShortAlternatives] = useState<PracticeCatalogItem[]>([]);
+  const [shortAlternativesRaw, setShortAlternativesRaw] = useState<PracticeCatalogItem[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [catalogStatus, setCatalogStatus] = useState<"loaded" | "empty" | "failed">("loaded");
   const [activeNeed, setActiveNeed] = useState<PracticeNeedId>("calm");
   const [activeFormat, setActiveFormat] = useState<PracticeFormatId | null>(null);
   const [todayRail, setTodayRail] = useState<StateCycleTodayRail | null>(null);
   const [continueSession, setContinueSession] = useState<StateCycleContinue | null>(null);
+
+  const practices = useMemo(() => {
+    const pool = isAuthenticated
+      ? catalogRaw
+      : catalogRaw.filter((practice) => isGuestPracticeAllowed(practice));
+    return sortCatalog(pool, sortLocale);
+  }, [catalogRaw, isAuthenticated, sortLocale]);
+
+  const shortAlternatives = useMemo(
+    () =>
+      isAuthenticated
+        ? shortAlternativesRaw
+        : shortAlternativesRaw.filter((practice) => isGuestPracticeAllowed(practice)),
+    [shortAlternativesRaw, isAuthenticated],
+  );
 
   useEffect(() => {
     const syncDraft = () => {
@@ -117,19 +141,18 @@ export default function PracticesPage() {
     return () => window.removeEventListener("focus", syncDraft);
   }, [loading]);
 
-  const loadPractices = useCallback(async () => {
+  /** Catalog shell — parallel; does not wait on authLoading (Bearer from storage if present). */
+  const loadCatalogShell = useCallback(async () => {
+    setLoading(true);
+    setError(null);
     try {
-      setLoading(true);
-      setError(null);
-
-      const catalogResult = await getJson<PracticeCatalogItem[]>(`/practices/`)
-        .then((data) => ({ ok: true as const, data }))
-        .catch((err) => {
-          console.error("Practices catalog failed", err);
-          return { ok: false as const, data: [] as PracticeCatalogItem[] };
-        });
-
-      const [currentResult, shortAltResult] = await Promise.all([
+      const [catalogResult, currentResult, shortAltResult] = await Promise.all([
+        getJson<PracticeCatalogItem[]>(`/practices/`)
+          .then((data) => ({ ok: true as const, data }))
+          .catch((err) => {
+            console.error("Practices catalog failed", err);
+            return { ok: false as const, data: [] as PracticeCatalogItem[] };
+          }),
         getJson<PracticeCatalogItem>("/practices/current")
           .then((data) => ({ ok: true as const, data }))
           .catch((err) => {
@@ -146,54 +169,16 @@ export default function PracticesPage() {
 
       if (!catalogResult.ok) {
         setCatalogStatus("failed");
-        setPractices([]);
+        setCatalogRaw([]);
         setCurrentPractice(null);
         setError(copy.catalogFailed);
       } else {
-        const catalogPool = isAuthenticated
-          ? catalogResult.data
-          : catalogResult.data.filter((practice) => isGuestPracticeAllowed(practice));
-
-        const sorted = [...catalogPool].sort((a, b) => {
-          if (a.is_personalized !== b.is_personalized) return a.is_personalized ? -1 : 1;
-          return a.title.localeCompare(b.title, sortLocale);
-        });
-
-        setPractices(sorted);
-        setCatalogStatus(sorted.length === 0 ? "empty" : "loaded");
+        setCatalogRaw(catalogResult.data);
+        setCatalogStatus(catalogResult.data.length === 0 ? "empty" : "loaded");
         setCurrentPractice(currentResult.data);
         setError(null);
       }
-
-      setShortAlternatives(
-        isAuthenticated
-          ? shortAltResult.data
-          : shortAltResult.data.filter((practice) => isGuestPracticeAllowed(practice)),
-      );
-
-      if (isAuthenticated) {
-        const [progressResp, historyResp, limitsResp] = await Promise.all([
-          getJson<PracticeProgressResponse>("/practices/progress").catch((err) => {
-            console.error("Practices progress failed", err);
-            return null;
-          }),
-          getJson<PracticeHistoryResponse>("/practices/history?limit=100").catch((err) => {
-            console.error("Practices history failed", err);
-            return null;
-          }),
-          getJson<PracticeLimitsSnapshot>("/practices/limits").catch((err) => {
-            console.error("Practices limits failed", err);
-            return null;
-          }),
-        ]);
-        setProgress(progressResp);
-        setHistory(historyResp);
-        setLimits(limitsResp);
-      } else {
-        setProgress(null);
-        setHistory(null);
-        setLimits(null);
-      }
+      setShortAlternativesRaw(shortAltResult.data);
     } catch (err) {
       console.error("Error loading practices:", err);
       setCatalogStatus("failed");
@@ -201,12 +186,49 @@ export default function PracticesPage() {
     } finally {
       setLoading(false);
     }
-  }, [isAuthenticated, sortLocale, pc.practicesCatalogLoadError, copy.catalogFailed]);
+  }, [pc.practicesCatalogLoadError, copy.catalogFailed]);
+
+  const loadAuthExtras = useCallback(async () => {
+    const [progressResp, historyResp, limitsResp] = await Promise.all([
+      getJson<PracticeProgressResponse>("/practices/progress").catch((err) => {
+        console.error("Practices progress failed", err);
+        return null;
+      }),
+      getJson<PracticeHistoryResponse>(`/practices/history?limit=${HISTORY_LIMIT}`).catch((err) => {
+        console.error("Practices history failed", err);
+        return null;
+      }),
+      getJson<PracticeLimitsSnapshot>("/practices/limits").catch((err) => {
+        console.error("Practices limits failed", err);
+        return null;
+      }),
+    ]);
+    setProgress(progressResp);
+    setHistory(historyResp);
+    setLimits(limitsResp);
+  }, []);
 
   useEffect(() => {
+    void loadCatalogShell();
+  }, [loadCatalogShell]);
+
+  // Auth extras after session settles — never hold the full-page spinner.
+  useEffect(() => {
     if (authLoading) return;
-    void loadPractices();
-  }, [authLoading, loadPractices]);
+    if (!isAuthenticated) {
+      setProgress(null);
+      setHistory(null);
+      setLimits(null);
+      return;
+    }
+    let cancelled = false;
+    void loadAuthExtras().then(() => {
+      if (cancelled) return;
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [authLoading, isAuthenticated, loadAuthExtras]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -259,7 +281,6 @@ export default function PracticesPage() {
       return toCard(currentPractice, RECOMMEND_IMAGE);
     }
     if (currentPractice && !activeFormat) {
-      // Prefer current when format filter off — still honest "recommended now"
       return toCard(currentPractice, RECOMMEND_IMAGE);
     }
     const first = filteredPool[0] ?? practices[0];
@@ -322,7 +343,14 @@ export default function PracticesPage() {
 
   const displayName = productWebDisplayName(coreProfile, null);
 
-  if (authLoading || loading) {
+  const retryAll = useCallback(() => {
+    void loadCatalogShell().then(() => {
+      if (isAuthenticated) void loadAuthExtras();
+    });
+  }, [loadCatalogShell, loadAuthExtras, isAuthenticated]);
+
+  // Do not gate on authLoading — that alone caused multi-second blank spinners.
+  if (loading) {
     return (
       <PracticesWebScreen
         variant="v2"
@@ -371,7 +399,7 @@ export default function PracticesPage() {
         myItems={myItems}
         todayRail={todayRail}
         catalogFailed={catalogStatus === "failed"}
-        onRetryCatalog={() => void loadPractices()}
+        onRetryCatalog={retryAll}
       />
     </PracticesWebScreen>
   );

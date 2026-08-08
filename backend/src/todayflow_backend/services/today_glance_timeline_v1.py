@@ -21,9 +21,11 @@ logger = logging.getLogger(__name__)
 
 ASPECT_ANGLE: dict[str, float] = {
     "conjunction": 0.0,
+    "semisquare": 45.0,
     "sextile": 60.0,
     "square": 90.0,
     "trine": 120.0,
+    "sesquiquadrate": 135.0,
     "opposition": 180.0,
     # Harmonics — same strength pool as activations; needed so exact-time
     # can resolve when top ranks are quintile/biquintile (else Glance stays empty).
@@ -35,8 +37,8 @@ ASPECT_ANGLE: dict[str, float] = {
 # Coarse shared samples; bisect refines toward ≤5 min (contract C.1).
 SAMPLE_STEP_MINUTES = 30
 BISECT_MAX_ITER = 16
-MAX_GLANCE_ROWS = 3
-# Search strength order beyond 1–3 when top ranks lack exact (minors/slow/no chart hit).
+MAX_GLANCE_ROWS = 5
+# Search strength order beyond top ranks when they lack exact (minors/slow/no chart hit).
 # Still one pool / one ranker — no second ranking.
 GLANCE_SEARCH_MAX_RANK = 12
 
@@ -54,8 +56,8 @@ _PLANET_RU = {
 }
 
 # Soft / hard for glance valence (favorable | caution) — not VerdictStrip dictionary.
-_SOFT = frozenset({"trine", "sextile"})
-_HARD = frozenset({"square", "opposition", "quincunx"})
+_SOFT = frozenset({"trine", "sextile", "quintile", "biquintile"})
+_HARD = frozenset({"square", "opposition", "quincunx", "semisquare", "sesquiquadrate"})
 
 
 def _norm(name: str | None) -> str:
@@ -253,10 +255,21 @@ async def find_exact_time_for_activation(
     return None
 
 
+def clock_minute_key(time_local: str | datetime) -> str:
+    """Civil HH:MM key so two aspects exact in the same minute collapse to one row."""
+    if isinstance(time_local, datetime):
+        return time_local.strftime("%Y-%m-%dT%H:%M")
+    s = str(time_local or "").strip()
+    if "T" in s:
+        date_part, rest = s.split("T", 1)
+        return f"{date_part}T{rest[:5]}"
+    return s
+
+
 def build_glance_timeline_rows(
     activations: list[dict[str, Any]],
 ) -> list[dict[str, Any]]:
-    """Pure: activations with exact_time_local set → ≤3 glance rows sorted by time."""
+    """Pure: activations with exact_time_local → ≤5 glance rows, one per civil minute."""
     timed: list[dict[str, Any]] = []
     for act in activations:
         if not isinstance(act, dict):
@@ -291,14 +304,28 @@ def build_glance_timeline_rows(
             }
         )
     timed.sort(key=lambda r: (str(r.get("time_local") or ""), int(r.get("rank") or 99)))
+    # Same civil minute → keep strongest (lowest rank); kills moon node pair duplicates.
+    best_by_minute: dict[str, dict[str, Any]] = {}
+    minute_order: list[str] = []
+    for row in timed:
+        key = clock_minute_key(str(row.get("time_local") or ""))
+        prev = best_by_minute.get(key)
+        if prev is None:
+            best_by_minute[key] = row
+            minute_order.append(key)
+        elif int(row.get("rank") or 99) < int(prev.get("rank") or 99):
+            best_by_minute[key] = row
+    deduped = [best_by_minute[k] for k in minute_order][:MAX_GLANCE_ROWS]
     return [
         {
             "time_local": r["time_local"],
             "label_short": r["label_short"],
+            "detail": None,
             "valence": r["valence"],
             "driver_id": r["driver_id"],
+            "copy_source": "bank_fill",
         }
-        for r in timed[:MAX_GLANCE_ROWS]
+        for r in deduped
     ]
 
 

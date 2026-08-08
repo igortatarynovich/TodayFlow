@@ -10,12 +10,12 @@ import { TodayDayContinuityEveningClose } from "@/components/today/experience/To
 import { TodayEveningProductClose } from "@/components/today/composition/TodayEveningProductClose";
 import { TodayPersonalizedProductSection } from "@/components/today/composition/TodayPersonalizedProductSection";
 import { TodayScreenBlock, TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
-import { TodayProductScreenFlow, todayScreenFlowReadingIndex, todayScreenFlowStepCount } from "@/components/today/composition/TodayProductScreenFlow";
+import { TodayProductScreenFlow, todayScreenFlowAttributesIndex, todayScreenFlowPracticeIndex, todayScreenFlowStepCount, todayScreenFlowCloseIndex } from "@/components/today/composition/TodayProductScreenFlow";
+import { pickMoveIfThenFromContract } from "@/lib/todayMoveIfThen";
 import {
   resolveScreenFlowEntryIndex,
   type ScreenFlowChangeReason,
 } from "@/design-system/primitives/ScreenFlow";
-import { TodayGlanceTimelineSlot } from "@/components/today/composition/TodayWave2Slots";
 import { TarotPicture } from "@/components/tarot/TarotPicture";
 import { LoadingSpinner } from "@/components/orbit";
 import { HeroMedium } from "@/components/foundation/HeroMedium";
@@ -82,6 +82,7 @@ import { TodayInterpretationConfirm } from "@/components/today/composition/Today
 import { TodaySkyStoryCards } from "@/components/today/composition/TodaySkyStoryCards";
 import { TodayDayColorGuideSection } from "@/components/today/composition/TodayDayColorGuideSection";
 import { TodayHookRevealShell } from "@/components/today/composition/TodayHookRevealShell";
+import { StoryBlockCue, StoryNextAnchor } from "@/components/today/composition/TodayStoryDeckFrames";
 import { isDayScenarioReadyForChapters } from "@/lib/todayScenarioChapters";
 import { buildGlanceDayTexture, buildGlanceThemeEyebrow } from "@/lib/todayGlanceTexture";
 import { buildGlanceDailyFocus } from "@/lib/todayDailyFocus";
@@ -483,10 +484,59 @@ export function TodayCompositionSurface(props: Props) {
     () => strengthenTools.find((tool) => tool.id === "practice") ?? null,
     [strengthenTools],
   );
+  const affirmationTool = useMemo(
+    () => strengthenTools.find((tool) => tool.id === "affirmation") ?? null,
+    [strengthenTools],
+  );
   const supportTools = useMemo(
     () => strengthenTools.filter((tool) => tool.id !== "practice"),
     [strengthenTools],
   );
+
+  const practiceRec = props.contract.day_story?.practice_recommendation;
+  const preferAffirmationSlot = useMemo(() => {
+    const key = dateISO || "0";
+    let h = 0;
+    for (let i = 0; i < key.length; i += 1) h = (h * 31 + key.charCodeAt(i)) >>> 0;
+    return h % 2 === 1;
+  }, [dateISO]);
+  const showAffirmationSupport = Boolean(
+    (practiceRec?.kind === "affirmation" && practiceRec.text) || affirmationTool,
+  );
+  const showPracticeSupport = Boolean(practiceTool || (practiceRec?.kind === "practice" && practiceRec.text));
+  const supportSlot: "affirmation" | "practice" | null =
+    showAffirmationSupport && showPracticeSupport
+      ? preferAffirmationSlot
+        ? "affirmation"
+        : "practice"
+      : showAffirmationSupport
+        ? "affirmation"
+        : showPracticeSupport
+          ? "practice"
+          : null;
+
+  const practiceFrameTitle =
+    supportSlot === "affirmation"
+      ? (practiceRec?.kind === "affirmation" && practiceRec.text) || affirmationTool?.title || null
+      : supportSlot === "practice"
+        ? practiceTool?.title || (practiceRec?.kind === "practice" ? practiceRec.text : null) || null
+        : null;
+  const practiceFrameMeta =
+    supportSlot === "practice"
+      ? practiceTool?.duration || (practiceRec?.kind === "practice" ? practiceRec.reason : null) || null
+      : supportSlot === "affirmation"
+        ? (practiceRec?.kind === "affirmation" ? practiceRec.reason : null) || null
+        : null;
+  const practiceFrameCompleted =
+    supportSlot === "affirmation" ? engagement.affirmationRead : engagement.practiceCompleted;
+  const practiceFrameActionLabel =
+    supportSlot === "affirmation"
+      ? copy.markAffirmationDone
+      : engagement.practiceStarted
+        ? copy.practiceComplete
+        : copy.practiceStart;
+
+  const moveIfThen = useMemo(() => pickMoveIfThenFromContract(props.contract), [props.contract]);
 
   const prevContinuity = useMemo(() => {
     if (!hydrated) return null;
@@ -991,8 +1041,8 @@ export function TodayCompositionSurface(props: Props) {
         return;
       }
       if (useProductPersonalized) {
-        const moveIndex = todayScreenFlowReadingIndex(showSymbolsAct) + 1;
-        setScreenFlowIndex(moveIndex);
+        const practiceIndex = todayScreenFlowPracticeIndex(showSymbolsAct);
+        setScreenFlowIndex(practiceIndex);
       }
     },
     [
@@ -1286,11 +1336,22 @@ export function TodayCompositionSurface(props: Props) {
   const glanceEyebrow =
     buildGlanceThemeEyebrow(props.contract) || heroTheme || story.hero.centralThought || copy.themeLabel;
 
+  const insightHeroText =
+    plotBeats.find((b) => b.role === "turn")?.body ||
+    plotNarrative?.why ||
+    dayTexture ||
+    null;
+
+  const plotBeatsForStory = insightHeroText
+    ? plotBeats.filter((b) => b.body !== insightHeroText)
+    : plotBeats;
+
   const plotNarrativeSection =
-    plotBeats.length > 0 ? (
-      <TodayScreenBlock eyebrow={copy.conflictLabel} testId="today-zone-plot-narrative">
+    plotBeatsForStory.length > 0 ? (
+      <section className={styles.plotStory} data-testid="today-zone-plot-narrative">
+        <p className={styles.plotNarrativeEyebrow}>{copy.conflictLabel}</p>
         <div className={styles.plotBeats} data-testid="today-plot-beats">
-          {plotBeats.map((beat) => (
+          {plotBeatsForStory.map((beat) => (
             <article
               key={beat.id}
               className={styles.plotBeat}
@@ -1307,9 +1368,10 @@ export function TodayCompositionSurface(props: Props) {
             {plotNarrative.personal}
           </p>
         ) : null}
-      </TodayScreenBlock>
-    ) : plotNarrative ? (
-      <TodayScreenBlock eyebrow={copy.conflictLabel} testId="today-zone-plot-narrative">
+      </section>
+    ) : plotNarrative && plotNarrative.why !== insightHeroText ? (
+      <section className={styles.plotStory} data-testid="today-zone-plot-narrative">
+        <p className={styles.plotNarrativeEyebrow}>{copy.conflictLabel}</p>
         {plotNarrative.tension ? (
           <p className={styles.plotNarrativeTension} data-testid="today-plot-tension">
             {plotNarrative.tension}
@@ -1325,12 +1387,18 @@ export function TodayCompositionSurface(props: Props) {
             {plotNarrative.personal}
           </p>
         ) : null}
-      </TodayScreenBlock>
+      </section>
+    ) : plotNarrative?.personal ? (
+      <section className={styles.plotStory} data-testid="today-zone-plot-narrative">
+        <p className={styles.plotNarrativePersonal} data-testid="today-plot-personal">
+          {plotNarrative.personal}
+        </p>
+      </section>
     ) : null;
 
   const heroSection = zones.hero ? (
     useProductFoundation ? (
-      <TodayScreenBlock testId="today-zone-hero">
+      <section className={styles.plotHero} data-testid="today-zone-hero">
         {themeLoading ? (
           <p className={styles.themeDarkLoading}>{copy.loadingDay}</p>
         ) : plotNarrative ? (
@@ -1342,6 +1410,9 @@ export function TodayCompositionSurface(props: Props) {
             <p className={styles.plotNarrativeEyebrow} id="today-day-theme-title">
               {copy.journey.actNavPlot}
             </p>
+            <span className={styles.plotQuoteMark} aria-hidden>
+              “
+            </span>
           </>
         ) : (
           <>
@@ -1359,7 +1430,7 @@ export function TodayCompositionSurface(props: Props) {
             {heroSubline ? <p className={styles.themeDarkSubline}>{heroSubline}</p> : null}
           </>
         )}
-      </TodayScreenBlock>
+      </section>
     ) : (
       <div className={styles.dayAnchorHero} data-testid="today-zone-hero">
         {!themeLoading ? (
@@ -1554,23 +1625,24 @@ export function TodayCompositionSurface(props: Props) {
   ) : (
     <TodayProductScreenFlow
       dateISO={dateISO}
-      themeTitle={glanceEyebrow}
-      themeThesis={heroSubline}
+      dateLabel={props.displayDate}
+      greetingSalutation={story.greeting.salutation}
+      greetingHeadline={story.greeting.line}
+      themeTitle={copy.journey.glanceThemeLabel}
       dayTexture={dayTexture}
       dailyFocus={glanceDailyFocus}
       energyLine={energyLineDisplay}
       energyCause={energyCauseDisplay}
-      onNearestSelect={onNearestSelect}
       themeLoading={themeLoading}
-      heroSection={heroSection}
-      plotNarrativeSection={plotNarrativeSection}
-      pulseSection={pulseSection}
-      glanceSection={useProductFoundation ? null : glanceSection}
+      colorGuide={story.colorGuide}
+      moveDo={moveIfThen?.do ?? null}
+      moveAvoid={moveIfThen?.avoid ?? null}
+      plotSlot={plotNarrativeSection}
+      insightHeroText={insightHeroText}
       morningDialogue={morningDialogue}
-      dayReadingReady={dayReadingReady}
       showSymbols={showSymbolsAct}
       symbolsBody={
-        <TodayScreenBlockStack testId="today-zone-symbols-stack">
+        <TodayScreenBlockStack testId="today-zone-symbols-stack" className={styles.symbolsStackBleed}>
           {props.networkDegraded ? (
             <TodayScreenBlock testId="today-symbols-fallback">
               <p
@@ -1583,144 +1655,117 @@ export function TodayCompositionSurface(props: Props) {
               </p>
             </TodayScreenBlock>
           ) : null}
-          {!props.networkDegraded && showRitualAsComplement ? ritualGateSection : null}
-          {!props.networkDegraded && showRitualAsComplement ? ritualTarotImpactStage : null}
-          {/* v3: show day card open when already revealed / available — no extra click */}
-          {!props.networkDegraded && !showRitualAsComplement && (props.cardName || story.tarotImpact || props.numerologyValue || story.numberImpact) ? (
-            <div data-testid="today-zone-symbol-impacts">
+          {/* Keep card/number from already-loaded props when session is degraded — do not blank the pane. */}
+          {showRitualAsComplement && !props.networkDegraded ? ritualGateSection : null}
+          {showRitualAsComplement && !props.networkDegraded ? ritualTarotImpactStage : null}
+          {!showRitualAsComplement && (props.cardName || story.tarotImpact || props.numerologyValue || story.numberImpact) ? (
+            <div className={styles.symbolsRevealStack} data-testid="today-zone-symbol-impacts">
               {story.tarotImpact || props.cardName || symbolHooksView?.card?.hook_reveal ? (
-                <TodayHookRevealShell
-                  variant="tarot"
-                  kindLabel="Карта дня · открыта"
-                  title={
-                    symbolHooksView?.card?.name ||
-                    story.tarotImpact?.title ||
-                    props.cardName ||
-                    "Карта дня"
-                  }
-                  subtitle={story.tarotImpact?.headline || null}
-                  hook={symbolHooksView?.card?.hook_reveal || null}
-                  fallbackBody={
-                    symbolHooksView?.card?.meaning ||
-                    story.tarotImpact?.body ||
-                    props.cardMeaning ||
-                    null
-                  }
-                  testId="today-zone-tarot-impact"
-                />
+                <section className={styles.symbolCardHero} data-story-block="symbols-card" data-story-pane="">
+                  <TodayHookRevealShell
+                    variant="tarot"
+                    kindLabel="Карта дня · открыта"
+                    title={
+                      symbolHooksView?.card?.name ||
+                      story.tarotImpact?.title ||
+                      props.cardName ||
+                      "Карта дня"
+                    }
+                    subtitle={story.tarotImpact?.headline || null}
+                    hook={symbolHooksView?.card?.hook_reveal || null}
+                    fallbackBody={
+                      symbolHooksView?.card?.meaning ||
+                      story.tarotImpact?.body ||
+                      props.cardMeaning ||
+                      null
+                    }
+                    visual={
+                      tarotPickedId != null && tarotCardFaceSrc(tarotPickedId) ? (
+                        <TarotPicture
+                          sources={tarotCardFacePicture(tarotPickedId)!}
+                          alt={
+                            symbolHooksView?.card?.name ||
+                            story.tarotImpact?.title ||
+                            props.cardName ||
+                            "Карта дня"
+                          }
+                          sizes="(max-width: 40rem) 48vw, 200px"
+                        />
+                      ) : null
+                    }
+                    testId="today-zone-tarot-impact"
+                  />
+                  {(story.numberImpact || props.numerologyValue || symbolHooksView?.number?.hook_reveal) ? (
+                    <StoryBlockCue targetId="symbols-number" label={copy.storyNext.scrollMore} />
+                  ) : useProductPersonalized ? (
+                    <StoryNextAnchor
+                      title={copy.storyNext.attributes}
+                      hint={copy.storyNext.attributesHint}
+                      onNext={() =>
+                        onScreenFlowIndexChange(todayScreenFlowAttributesIndex(true), { reason: "select" })
+                      }
+                    />
+                  ) : null}
+                </section>
               ) : null}
-              {/* v3.1: color house = Move only — never render color shell on Symbols */}
               {story.numberImpact || props.numerologyValue || symbolHooksView?.number?.hook_reveal ? (
-                <TodayHookRevealShell
-                  variant="numerology"
-                  kindLabel="Число дня · открыто"
-                  title={
-                    String(
-                      symbolHooksView?.number?.reduced_value ??
-                        symbolHooksView?.number?.value ??
-                        story.numberImpact?.title ??
-                        props.numerologyValue ??
-                        "",
-                    )
-                  }
-                  subtitle={
-                    symbolHooksView?.number?.title || story.numberImpact?.headline || null
-                  }
-                  hook={symbolHooksView?.number?.hook_reveal || null}
-                  fallbackBody={
-                    symbolHooksView?.number?.summary ||
-                    story.numberImpact?.body ||
-                    props.numerologyMeaning ||
-                    null
-                  }
-                  testId="today-zone-number-impact"
-                />
-              ) : null}
-              {props.contract.day_story?.interpretive_chorus?.astrology_lead ||
-              props.contract.day_story?.interpretive_chorus?.astrology_meaning ? (
-                <TodayScreenBlock eyebrow="Небо сегодня" testId="today-zone-sky-events">
-                  {props.contract.day_story?.interpretive_chorus?.astrology_lead ? (
-                    <p className={styles.ritualRevealTitle}>
-                      {props.contract.day_story.interpretive_chorus.astrology_lead}
-                    </p>
+                <section className={styles.symbolNumberMoment} data-story-block="symbols-number" data-story-pane="">
+                  <TodayHookRevealShell
+                    variant="numerology"
+                    kindLabel="Число дня · открыто"
+                    title={
+                      String(
+                        symbolHooksView?.number?.reduced_value ??
+                          symbolHooksView?.number?.value ??
+                          story.numberImpact?.title ??
+                          props.numerologyValue ??
+                          "",
+                      )
+                    }
+                    subtitle={
+                      symbolHooksView?.number?.title || story.numberImpact?.headline || null
+                    }
+                    hook={symbolHooksView?.number?.hook_reveal || null}
+                    fallbackBody={
+                      symbolHooksView?.number?.summary ||
+                      story.numberImpact?.body ||
+                      props.numerologyMeaning ||
+                      null
+                    }
+                    testId="today-zone-number-impact"
+                  />
+                  {useProductPersonalized ? (
+                    <StoryNextAnchor
+                      title={copy.storyNext.attributes}
+                      hint={copy.storyNext.attributesHint}
+                      onNext={() =>
+                        onScreenFlowIndexChange(todayScreenFlowAttributesIndex(true), { reason: "select" })
+                      }
+                    />
                   ) : null}
-                  {props.contract.day_story?.interpretive_chorus?.astrology_meaning ? (
-                    <p className={styles.ritualRevealBody}>
-                      {props.contract.day_story.interpretive_chorus.astrology_meaning}
-                    </p>
-                  ) : null}
-                </TodayScreenBlock>
+                </section>
               ) : null}
             </div>
           ) : null}
-          {!props.networkDegraded ? <TodayGlanceTimelineSlot dateISO={dateISO} /> : null}
         </TodayScreenBlockStack>
       }
       showPersonalized={useProductPersonalized}
-      personalizedProps={{
-        embeddedInWebDashboard,
-        story,
-        contract: props.contract,
-        strengthenTools,
-        promiseSuggestions,
-        dayGoal: engagement.dayGoal,
-        practiceCompleted: engagement.practiceCompleted,
-        practiceStarted: engagement.practiceStarted,
-        affirmationRead: engagement.affirmationRead,
-        practiceCompleting,
-        activeHabit,
-        activeAscetic,
-        habitMarked:
-          engagement.habitMarkedId != null &&
-          activeHabit != null &&
-          engagement.habitMarkedId === activeHabit.id,
-        asceticMarked:
-          engagement.asceticMarkedId != null &&
-          activeAscetic != null &&
-          engagement.asceticMarkedId === activeAscetic.id,
-        habitMarking,
-        asceticMarking,
-        goalDraftOpen,
-        goalDraft,
-        coreProfile: props.coreProfile,
-        skyCards: story.skyCards,
-        colorGuide: story.colorGuide,
-        morningRitualData: props.morningRitualData,
-        dateISO,
-        focusSphere: null,
-        contentFailure: props.networkDegraded
-          ? ("no_connection" as const)
-          : props.guideNarrativeRequestFailed
-            ? ("unavailable" as const)
-            : null,
-        tapResponse: engagement.tapResponse,
-        onTapRecorded: (response) => persistEngagement({ tapResponse: response }),
-        tarotDeepenHref:
-          engagement.tarotPickedId != null
-            ? buildTarotDeepenHref({
-                cardId: engagement.tarotPickedId,
-                orientation: engagement.tarotOrientation ?? "upright",
-                source: "today",
-              })
-            : null,
-        onPickPromise: (text) => {
-          persistEngagement({ dayGoal: text });
-          trackMeaningEvent({
-            event_type: "action_option_selected",
-            event_source: "today",
-            local_date: dateISO,
-            payload: { action: "day_promise_set", promise_text: text.slice(0, 200), surface: "today_day_story_v3" },
-            refreshRings: false,
-          });
-        },
-        onOpenGoalDraft: () => setGoalDraftOpen(true),
-        onGoalDraftChange: setGoalDraft,
-        onSaveGoal,
-        onPracticeAction: () => void onPracticeAction(),
-        onAffirmationDone,
-        onHabitMark: () => void onHabitMark(),
-        onAsceticMark: () => void onAsceticMark(),
+      practiceTitle={practiceFrameTitle}
+      practiceMeta={practiceFrameMeta}
+      practiceActionLabel={practiceFrameActionLabel}
+      practiceCompleted={practiceFrameCompleted}
+      practiceCompleting={practiceCompleting}
+      onPracticeAction={() => {
+        if (supportSlot === "affirmation") {
+          onAffirmationDone();
+          return;
+        }
+        void onPracticeAction();
       }}
+      contract={props.contract}
+      tapResponse={engagement.tapResponse}
+      onTapRecorded={(response) => persistEngagement({ tapResponse: response })}
+      onOpenEvening={onOpenEvening}
       activeIndex={screenFlowIndex}
       onIndexChange={onScreenFlowIndexChange}
       embeddedInWebDashboard={embeddedInWebDashboard}
@@ -1905,8 +1950,10 @@ export function TodayCompositionSurface(props: Props) {
           </div>
         ) : null}
 
-        {/* Depth/sky: hide from main scroll when Act 3 chapters already carry the day (Wave 1). */}
-        {!useProductPersonalized &&
+        {/* Depth/sky/context live on the legacy non-foundation path only.
+            Product ScreenFlow owns the full surface — do not stack under greeting. */}
+        {!useProductFoundation &&
+        !useProductPersonalized &&
         !isDayNotReady(props.contract) &&
         props.contract.depth_layer &&
         Array.isArray(props.contract.depth_layer.menu) &&
@@ -1918,24 +1965,24 @@ export function TodayCompositionSurface(props: Props) {
           />
         ) : null}
 
-        {!useProductPersonalized && showSkyCards ? (
+        {!useProductFoundation && !useProductPersonalized && showSkyCards ? (
           <section className={styles.skySection} data-testid="today-zone-sky-influences">
             <h2 className={styles.sectionTitle}>{copy.astroContextTitle}</h2>
             <TodaySkyStoryCards cards={story.skyCards} />
           </section>
         ) : null}
 
-        {story.ritualTransformBanner ? (
+        {!useProductFoundation && story.ritualTransformBanner ? (
           <p className={styles.ritualTransformBanner} data-testid="today-ritual-transform">
             {story.ritualTransformBanner}
           </p>
         ) : null}
 
-        {!useProductPersonalized && showColorGuide && story.colorGuide ? (
+        {!useProductFoundation && !useProductPersonalized && showColorGuide && story.colorGuide ? (
           <TodayDayColorGuideSection guide={story.colorGuide} />
         ) : null}
 
-        {!useProductPersonalized && showContextPanel ? (
+        {!useProductFoundation && !useProductPersonalized && showContextPanel ? (
           <section className={styles.contextPanel} data-testid="today-zone-context">
             <span className={styles.sectionEyebrow}>Сферы дня</span>
             <h2 className={styles.contextPanelTitle}>{copy.contextPanelTitle}</h2>
@@ -1965,7 +2012,7 @@ export function TodayCompositionSurface(props: Props) {
           </section>
         ) : null}
 
-        {!useProductPersonalized && zones.strengthen && strengthenTools.length > 0 ? (
+        {!useProductFoundation && !useProductPersonalized && zones.strengthen && strengthenTools.length > 0 ? (
           <section
             data-testid="today-zone-strengthen"
             className={story.personalizedReady ? undefined : styles.strengthenPreview}
@@ -2030,7 +2077,7 @@ export function TodayCompositionSurface(props: Props) {
           </section>
         ) : null}
 
-        {!useProductPersonalized && story.personalizedReady ? (
+        {!useProductFoundation && !useProductPersonalized && story.personalizedReady ? (
         <div className={styles.personalSection} data-testid="today-zone-personal">
 
         {zones.whyStory && story.whyStory.length > 0 ? (
@@ -2167,14 +2214,14 @@ export function TodayCompositionSurface(props: Props) {
 
         {useProductPersonalized &&
         zones.evening &&
-        screenFlowIndex >= todayScreenFlowReadingIndex(showSymbolsAct) + 2 ? (
+        screenFlowIndex >= todayScreenFlowCloseIndex(showSymbolsAct) ? (
           <div className={styles.eveningZone} data-testid="today-zone-evening-entry">
             <p className={styles.eveningHint}>{copy.eveningHint}</p>
             <DsButton
               type="button"
               variant="primary"
               className={styles.eveningButton}
-              data-testid="today-evening-open"
+              data-testid="today-evening-open-footer"
               onClick={onOpenEvening}
             >
               {copy.eveningCta}
@@ -2182,7 +2229,7 @@ export function TodayCompositionSurface(props: Props) {
           </div>
         ) : null}
 
-        {!useProductPersonalized && story.isEveningSurface && zones.evening ? (
+        {!useProductFoundation && !useProductPersonalized && story.isEveningSurface && zones.evening ? (
           <section className={styles.eveningRecap} data-testid="today-zone-evening-recap">
             <h2 className={styles.sectionTitle}>{copy.eveningRecapTitle}</h2>
             {story.eveningReflectionPrompt ? (
@@ -2209,7 +2256,7 @@ export function TodayCompositionSurface(props: Props) {
           </section>
         ) : null}
 
-        {!useProductPersonalized && zones.evening ? (
+        {!useProductFoundation && !useProductPersonalized && zones.evening ? (
           <div className={styles.eveningZone} data-testid="today-zone-evening-entry">
             <p className={styles.eveningHint}>{story.isEveningSurface ? copy.eveningRecapTitle : copy.eveningHint}</p>
             <DsButton

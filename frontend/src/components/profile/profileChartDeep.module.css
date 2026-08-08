@@ -23,21 +23,21 @@
 
 .chartReadingMethod {
   margin: 0;
-  font-size: 0.78rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.45;
   color: rgba(95, 73, 48, 0.78);
 }
 
 .chartReadingBody {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.55;
   color: #2d241c;
 }
 
 .chartReadingUnavailable {
   margin: 0;
-  font-size: 0.82rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.45;
   color: rgba(95, 73, 48, 0.72);
 }
@@ -122,7 +122,7 @@
   color: #1a1510;
   font-family: var(--tf-font-display, "Playfair Display", Georgia, serif);
   font-weight: 600;
-  font-size: 1rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.25;
 }
 
@@ -441,7 +441,7 @@
   margin: 0;
   padding: 0.2rem 0.5rem;
   border-radius: 999px;
-  font-size: 0.625rem;
+  font-size: var(--tf-type-caption-size);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -489,7 +489,7 @@
   border-radius: 999px;
   background: rgba(154, 132, 104, 0.1);
   color: #5b4630;
-  font-size: 0.625rem;
+  font-size: var(--tf-type-caption-size);
   font-weight: 600;
 }
 

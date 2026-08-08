@@ -210,8 +210,10 @@ function buildRitualTransformBanner(input: {
   numberConfirmed: boolean;
   personalizedReady: boolean;
 }): string | null {
+  // Story-deck composition: no floating status pill under ScreenFlow.
+  // Legacy first-today path may still surface progress hints below.
   if (input.personalizedReady) {
-    return "Символы на месте: карта и число дополняют уже собранный день.";
+    return null;
   }
   if (input.numberConfirmed) {
     return "Число открыто — карта и практики остаются рядом с рассказом дня.";
@@ -298,7 +300,7 @@ export function buildTodayDayStoryViewModel(input: {
   const greeting = buildTodayDayGreeting({
     phase,
     userName: input.userName,
-    tagline: spine.thesis,
+    dateISO: input.dateISO,
     yesterdayClosed: input.yesterdayClosed,
     todayOpened: input.todayOpened,
     isEveningSurface,

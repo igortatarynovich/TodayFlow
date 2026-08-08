@@ -142,10 +142,12 @@
 .tap {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  align-items: center;
+  gap: 0.85rem;
   width: 100%;
-  padding: 0.85rem 0 0.25rem;
-  border-top: 1px solid rgba(212, 184, 150, 0.2);
+  padding: 0.35rem 0 0.25rem;
+  border-top: none;
+  text-align: center;
 }
 
 .tapAttention {
@@ -209,15 +211,18 @@
 
 .tapPrompt {
   margin: 0;
-  max-width: 42ch;
-  font-size: 0.95rem;
-  line-height: 1.45;
+  max-width: 22ch;
+  font-family: var(--tf-font-display, Georgia, serif);
+  font-size: clamp(1.25rem, 4vw, 1.55rem);
+  font-weight: 600;
+  line-height: 1.3;
   color: var(--tf-ink, #2a2520);
 }
 
 .tapRow {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.65rem;
 }
 
@@ -286,6 +291,88 @@
   width: 100%;
   margin: 0.25rem 0 0.1rem;
   padding: 0.2rem 0 0.1rem;
+}
+
+.glanceStory {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  width: 100%;
+  margin: 0.15rem 0 0;
+  padding: 0;
+}
+
+.glanceStoryEmpty {
+  margin: 0;
+  padding: 0.85rem 0.25rem;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  text-align: center;
+  color: rgba(255, 248, 240, 0.72);
+}
+
+.glanceStoryRow {
+  display: grid;
+  grid-template-columns: 3.6rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+  padding: 0.85rem 0.9rem;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, #fff 16%, transparent);
+  background: color-mix(in srgb, #0a0e18 28%, transparent);
+}
+
+.glanceStoryRow[data-valence="favorable"] {
+  border-color: color-mix(in srgb, #c9a96e 42%, transparent);
+}
+
+.glanceStoryRow[data-valence="caution"] {
+  border-color: color-mix(in srgb, #c48a6a 38%, transparent);
+}
+
+.glanceStoryRow[data-live="true"] {
+  box-shadow: inset 3px 0 0 color-mix(in srgb, #c9a96e 80%, transparent);
+}
+
+.glanceStoryTime {
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(255, 248, 240, 0.92);
+  padding-top: 0.1rem;
+}
+
+.glanceStoryCopy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.28rem;
+  min-width: 0;
+  text-align: left;
+}
+
+.glanceStoryValence {
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 248, 240, 0.55);
+}
+
+.glanceStoryValence[data-valence="favorable"] {
+  color: color-mix(in srgb, #e6c98a 88%, #fff);
+}
+
+.glanceStoryValence[data-valence="caution"] {
+  color: color-mix(in srgb, #e0a88a 88%, #fff);
+}
+
+.glanceStoryLabel {
+  font-size: 1.05rem;
+  font-weight: 560;
+  line-height: 1.35;
+  color: rgba(255, 248, 240, 0.94);
 }
 
 .glanceRow {

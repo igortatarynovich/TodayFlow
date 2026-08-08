@@ -28,10 +28,10 @@ export const PROFILE_V2_COPY = {
     },
     why: {
       title: "Главное, что формирует тебя",
-      lead: "Откуда берётся имя портрета и чем он расширяется — с пользой, не списком ярлыков.",
-      selectedLabel: "Выбрало имя",
+      lead: "",
+      selectedLabel: "Опора имени",
       influencedLabel: "Расширяет портрет",
-      selectedSection: "Выбрало имя",
+      selectedSection: "Опора имени",
       influencedSection: "Расширяет портрет",
       honestyFallbackTitle: "На чём держится",
     },

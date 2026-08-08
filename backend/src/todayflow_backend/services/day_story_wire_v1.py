@@ -654,8 +654,11 @@ def _build_day_story_record(
                     used_fallback = True
                     generation_source = "unavailable_after_llm"
             else:
-                story = _project_scenario(_facts_shell())
-                generation_source = "deterministic_no_llm"
+                # GET / no-LLM path: never invent B5 sphere-bank meaning.
+                story = _project_scenario(
+                    _facts_shell(), allow_deterministic_rebuild=False
+                )
+                generation_source = "facts_only_no_llm"
         except Exception:
             logger.exception("day_scenario exclusive projection failed; keeping unprojected story")
             if story is None:
@@ -693,10 +696,11 @@ def _build_day_story_record(
                 story = _facts_shell()
                 used_fallback = True
                 try:
-                    story = _project_scenario(story, allow_deterministic_rebuild=True)
+                    # Still no invent after validation fail without LLM.
+                    story = _project_scenario(story, allow_deterministic_rebuild=False)
                 except Exception:
                     logger.exception("day_scenario projection failed after fallback")
-                generation_source = "deterministic_no_llm"
+                generation_source = "facts_only_no_llm"
 
         if capture is not None:
             try:
@@ -995,7 +999,6 @@ def build_day_story_v1_wire(
             has_native_generation_marker,
         )
         from todayflow_backend.services.day_scenario_project_v1 import (
-            build_and_project_day_scenario_v1,
             project_day_scenario_onto_day_story_v1,
         )
 
@@ -1012,26 +1015,8 @@ def build_day_story_v1_wire(
                     story, stored, person_name=person_name
                 )
             else:
-                trace = story.get("trace") if isinstance(story.get("trace"), dict) else {}
-                domains_map = story.get("domains") if isinstance(story.get("domains"), dict) else {}
-                story = build_and_project_day_scenario_v1(
-                    story=story,
-                    interpretation={
-                        "day_thesis": story.get("day_thesis"),
-                        "day_events_pack": trace.get("day_events_pack"),
-                        "day_foundation": story.get("day_foundation") or trace.get("day_foundation"),
-                        "day_personal": story.get("day_personal") or trace.get("day_personal"),
-                        "domains_present": trace.get("domains_present") or list(domains_map.keys()),
-                        "derived_claims": trace.get("derived_claims") or [],
-                        "evidence": trace.get("evidence") or [],
-                    },
-                    ritual_context=ritual_norm,
-                    celestial_events=ce or None,
-                    day_thesis=story.get("day_thesis")
-                    if isinstance(story.get("day_thesis"), dict)
-                    else None,
-                    person_name=person_name,
-                )
+                # No native scenes → facts_only_unavailable (never invent sphere-bank scenes).
+                story = project_day_scenario_onto_day_story_v1(story, None)
     except Exception:
         logger.exception("day_scenario exclusive projection on wire serve failed")
 

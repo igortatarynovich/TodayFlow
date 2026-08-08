@@ -504,7 +504,9 @@
   color: rgba(253, 251, 247, 0.62);
 }
 
-/* Day Atmosphere product chrome — one sidebar ink everywhere. */
+/* Day Atmosphere product chrome — one sidebar ink everywhere.
+   Use solid muted tokens (not ink×transparent): alpha compositing over
+   frosted glass washed nav/meta to near-invisible on light day surfaces. */
 :global(html[data-day-mode]) .sidebar {
   background: var(--tf-ds-glass);
   border-right-color: var(--tf-ds-border-ink);
@@ -512,7 +514,7 @@
 }
 
 :global(html[data-day-mode]) .navItem {
-  color: color-mix(in srgb, var(--tf-ink) 62%, transparent);
+  color: var(--tf-ink-soft, #5c5348);
 }
 
 :global(html[data-day-mode]) .navItem:hover {
@@ -527,7 +529,7 @@
 
 :global(html[data-day-mode]) .profileMeta,
 :global(html[data-day-mode]) .settingsLink {
-  color: color-mix(in srgb, var(--tf-ink) 58%, transparent);
+  color: var(--tf-caption, #7a7168);
 }
 
 :global(html[data-day-mode]) .logoText,

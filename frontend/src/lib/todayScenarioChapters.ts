@@ -140,9 +140,11 @@ export function buildScenarioStoryChapters(input: {
 
     const sphereKey = clean(sc.sphere) || "sphere";
     const domainId = mapSphereToDomain(sphereKey) as TodayContractDomainId;
+    // Prefer API sphere_label_ru — fixed-4 domain labels coarsen (e.g. work_decisions → «Работа»).
+    const domainLabel = TODAY_CONTRACT_DOMAIN_LABEL_RU[domainId as TodayContractDomainId];
     const label =
-      TODAY_CONTRACT_DOMAIN_LABEL_RU[domainId] ||
       clean(sc.sphere_label_ru) ||
+      domainLabel ||
       clean(sc.sphere) ||
       "Сфера дня";
     const what = clean(sc.what_happens);

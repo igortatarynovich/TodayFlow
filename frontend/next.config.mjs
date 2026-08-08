@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Docker image build has no API; fail soft rather than 60s×3 SSG worker kills.
+  staticPageGenerationTimeout: 180,
   async redirects() {
     return [
       {

@@ -252,6 +252,40 @@ export function IconHash({ className }: IconProps) {
   );
 }
 
+/** Linear flag — callout / attention (FOUNDATION_UI §5.1). */
+export function IconFlag({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M5 21V4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M5 4h11l-2 4 2 4H5" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+/** Linear hourglass — tempo / wait (FOUNDATION_UI §5.1). */
+export function IconHourglass({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M6 3h12M6 21h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path
+        d="M7 3c0 5 5 5 5 9s-5 4-5 9M17 3c0 5-5 5-5 9s5 4 5 9"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+/** Linear down arrow — sequence / next (FOUNDATION_UI §5.1). */
+export function IconArrowDown({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M12 4v14M6 14l6 6 6-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 const FEATURE_ICONS = {
   compass: IconCompass,
   circle: IconCircleX,

@@ -6,19 +6,29 @@
  */
 
 :root {
-  /* —— Colors (§6) —— */
+  /* —— Colors (§6) + ink quintet (§5.1) —— */
   /* Product UI (Figma TodayFlow – Product UI) */
   --tf-page: #fdfbf7;
   --tf-page-cream: #f7f4ee;
   --tf-cream-300: #ede8de;
   --tf-cream-400: #e2d9c8;
   --tf-cream-border: #e8e2d6;
-  --tf-ink: #2a2520;
-  --tf-ink-muted: #4a4540;
-  --tf-ink-soft: #9a9490;
+
+  /* Text colors — exactly five roles (FOUNDATION_UI §5.1) */
+  --tf-accent-numerology: #4a3270;
+  --tf-ink: #2a211b;
+  --tf-ink-secondary: rgba(42, 33, 27, 0.68);
+  --tf-ink-quiet: rgba(42, 33, 27, 0.42);
+  --tf-ink-accent: #a57a3d;
+  --tf-ink-action: var(--tf-accent-numerology);
+
+  /* Legacy aliases → ink quintet (do not invent a sixth ink) */
+  --tf-ink-muted: var(--tf-ink-quiet);
+  --tf-ink-soft: var(--tf-ink-quiet);
   --tf-ink-100: #e8e2d6;
-  --tf-body: #5c534c;
-  --tf-caption: #9a9490;
+  --tf-body: var(--tf-ink-secondary);
+  --tf-caption: var(--tf-ink-quiet);
+
   --tf-accent-gold: #c9a96e;
   --tf-accent-gold-soft: #e8d0a5;
   --tf-accent-gold-200: #d4b896;
@@ -40,38 +50,51 @@
   --tf-semantic-success: #4f6647;
   --tf-semantic-alert: #d4964b;
   --tf-semantic-error: #a65a4f;
-  --tf-accent-numerology: #4a3270;
   --tf-accent-action: #8f6b3a;
   --tf-on-dark: #faf8f5;
   --tf-on-hero: var(--tf-ink);
 
-  /* —— Typography (§5) —— */
+  /* Callout rails + soft washes (§5.1) — tone axis */
+  --tf-callout-rail-insight: var(--tf-ink-accent);
+  --tf-callout-rail-practice: var(--tf-accent-numerology);
+  --tf-callout-rail-help: var(--tf-semantic-gift);
+  --tf-callout-rail-avoid: var(--tf-semantic-trap);
+  --tf-callout-wash-insight: var(--tf-surface);
+  --tf-callout-wash-practice: rgba(245, 240, 232, 0.72);
+  --tf-callout-wash-help: rgba(79, 102, 71, 0.06);
+  --tf-callout-wash-avoid: rgba(212, 150, 75, 0.1);
+  --tf-callout-wash-example: rgba(42, 33, 27, 0.04);
+  --tf-callout-capsule-bg: var(--tf-surface);
+  --tf-type-quote-size: clamp(var(--tf-type-hero-size), 4vw, var(--tf-type-display-l-size));
+
+  /* —— Typography (§5 Task 2.9 ladder) —— */
   --tf-font-display: var(--font-instrument-serif), var(--font-playfair-display), var(--font-cormorant-garamond), Georgia, serif;
   --tf-font-body: var(--font-manrope), var(--font-inter), system-ui, sans-serif;
 
-  --tf-type-display-size: 2.5rem;
-  --tf-type-display-line: 1.15;
+  --tf-type-display-size: 3rem; /* 48px base; clamp to 60 in components */
+  --tf-type-display-line: 1.1;
   --tf-type-display-weight: 600;
 
-  --tf-type-hero-size: 2.0625rem; /* 33px */
+  --tf-type-hero-size: 2.125rem; /* 34px — card title / large takeaway */
   --tf-type-hero-line: 1.08;
   --tf-type-hero-weight: 700;
 
-  --tf-type-section-size: 1.25rem; /* 20px */
+  --tf-type-section-size: 1.5rem; /* 24px */
   --tf-type-section-line: 1.2;
   --tf-type-section-weight: 600;
 
-  --tf-type-portal-title-size: 1.625rem; /* 26px */
-  --tf-type-body-size: 0.9375rem; /* 15px */
+  --tf-type-portal-title-size: 1.625rem; /* 26px — portal exception */
+  --tf-type-body-size: 1rem; /* 16px */
   --tf-type-body-line: 1.55;
-  --tf-type-caption-size: 0.625rem; /* 10px */
-  --tf-type-caption-lg-size: 0.6875rem; /* 11px */
+  --tf-type-comment-size: 0.875rem; /* 14px */
+  --tf-type-caption-size: 0.75rem; /* 12px — unified with label */
+  --tf-type-caption-lg-size: 0.75rem; /* 12px — was 11; ladder unifies labels at 12 */
   --tf-type-label-size: 0.75rem; /* 12px */
-  --tf-type-h3-size: 1.125rem; /* 18px */
-  --tf-type-h2-size: 1.25rem; /* 20px */
-  --tf-type-h1-size: 1.625rem; /* 26px */
+  --tf-type-h3-size: 1.125rem; /* 18px — subtitle */
+  --tf-type-h2-size: 1.5rem; /* 24px — align with section */
+  --tf-type-h1-size: 2.125rem; /* 34px — align with hero/card title */
   --tf-type-display-l-size: 3rem; /* 48px */
-  --tf-type-display-xl-size: 3.5rem; /* 56px */
+  --tf-type-display-xl-size: 3.75rem; /* 60px */
 
   /* —— Hero heights (§1) —— */
   --tf-hero-large-min-h: 88dvh;
@@ -176,8 +199,11 @@
   --tf-ds-mobile-max: 24.375rem;
 }
 
-/* Dark product theme — Profile Journey / product web shell */
-[data-theme="dark"] {
+/* Dark product theme — Profile Journey / product web shell.
+   Gated: Day Atmosphere owns chrome ink (FOUNDATION_UI §11.1); do not let
+   appearance-dark reopen light --tf-ink on light --day-* surfaces. */
+html:not([data-day-mode]) [data-theme="dark"],
+html:not([data-day-mode])[data-theme="dark"] {
   color-scheme: dark;
   --tf-page: #121018;
   --tf-page-cream: #1a1620;

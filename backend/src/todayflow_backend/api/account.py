@@ -564,23 +564,19 @@ def get_natal_decode_offer(
     db: Session = Depends(get_session),
     core_profile_service: CoreProfileService = Depends(get_core_profile_service),
 ) -> dict:
-    """Offer/CTA for Natal Decode Depth — no LLM. Generate via POST only."""
-    from todayflow_backend.services.natal_decode_depth_v0 import (
-        build_offer_payload,
-        extract_identity_core_for_decode,
-    )
+    """Ready decode when persisted for fingerprint; else one-shot offer — no LLM."""
+    from todayflow_backend.services.natal_decode_depth_v0 import resolve_natal_decode_get
 
     core = core_profile_service.build_cached_or_baseline(db, user)
     payload = core if isinstance(core, dict) else {}
-    identity = extract_identity_core_for_decode(payload)
-    natal = payload.get("natal_summary") if isinstance(payload.get("natal_summary"), dict) else {}
-    natal_available = bool(
-        natal.get("available")
-        or natal.get("luminaries")
-        or natal.get("personal_planets")
-        or natal.get("angles")
+    return resolve_natal_decode_get(
+        db,
+        user_id=int(user.id),
+        core_profile_payload=payload,
+        natal_summary=payload.get("natal_summary")
+        if isinstance(payload.get("natal_summary"), dict)
+        else None,
     )
-    return build_offer_payload(identity_core=identity, natal_available=natal_available)
 
 
 @router.post("/profile/natal-decode")

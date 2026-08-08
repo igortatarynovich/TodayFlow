@@ -21,6 +21,12 @@ describe("todayDomainSignal", () => {
     expect(mapSphereToDomain("family")).toBe("relationships");
   });
 
+  it("does not coerce unknown spheres to work", () => {
+    expect(mapSphereToDomain("travel_focus")).toBe("travel_focus");
+    expect(mapSphereToDomain("")).toBe("energy");
+    expect(mapSphereToDomain(null)).toBe("energy");
+  });
+
   it("boosts primary role", () => {
     const support = sceneMagnitudeScore({
       sphere: "work",

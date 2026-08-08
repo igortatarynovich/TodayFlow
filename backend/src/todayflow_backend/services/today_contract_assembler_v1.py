@@ -632,6 +632,16 @@ def validate_today_contract_v1(contract: dict[str, Any]) -> list[str]:
     if forbidden:
         errors.append(f"legacy keys in output: {forbidden}")
 
-    errors.extend(validate_today_contract_text_quality_v1(contract))
+    day_story = contract.get("day_story") if isinstance(contract.get("day_story"), dict) else {}
+    progress = contract.get("progress") if isinstance(contract.get("progress"), dict) else {}
+    shell_status = str(progress.get("story_status") or "")
+    interpretation_unavailable = (
+        str(day_story.get("interpretation_status") or "") == "unavailable"
+        or str(progress.get("interpretation_status") or "") == "unavailable"
+        or shell_status in {"not_ready", "assembling"}
+    )
+    # Unavailable / lifecycle shells: honest status copy only — skip literary quality invent rules.
+    if not interpretation_unavailable:
+        errors.extend(validate_today_contract_text_quality_v1(contract))
 
     return errors

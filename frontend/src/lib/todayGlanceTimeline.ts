@@ -11,6 +11,9 @@ export type GlanceTimelineItem = {
   label_short: string;
   valence: GlanceValence | string;
   driver_id: string;
+  /** Kimi expand body — activity window трактовка. */
+  detail?: string | null;
+  copy_source?: "kimi_v1" | "bank_fill" | string | null;
 };
 
 export type GlanceTimelineResponse = {

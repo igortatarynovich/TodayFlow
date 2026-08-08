@@ -314,8 +314,9 @@ def validate_day_story_v1(payload: dict[str, Any]) -> list[str]:
             errors.append("missing or empty: story")
         for key in ("do", "avoid"):
             items = payload.get(key)
-            if not isinstance(items, list) or len(items) < 2:
-                errors.append(f"{key} must be list with >=2 items")
+            # Scenario may yield a single real do/avoid — never invent a second filler line.
+            if not isinstance(items, list) or len(items) < 1:
+                errors.append(f"{key} must be list with >=1 items")
 
     domains = payload.get("domains")
     if not isinstance(domains, dict):
@@ -1014,16 +1015,13 @@ def day_story_to_today_contract_v1(
     if unavailable:
         progress_out["interpretation_status"] = "unavailable"
 
-    meta_fb = DOMAIN_FALLBACKS_V1.get("_meta", {})
-    # Navigational shell must remain valid even when day_story meaning is unavailable
-    # (otherwise GET /today/contract 500 → FE offline fallback “нет связи с сервером”).
+    # Honest unavailable shell — no calm DOMAIN_FALLBACKS invent (AGENTS transport rule).
+    UNAVAILABLE_SHELL_RU = "Не удалось загрузить."
     period_shell = (
         (story.get("global_period") or story.get("theme") or "")
         if not unavailable
-        else (story.get("theme") or meta_fb.get("period") or "")
+        else UNAVAILABLE_SHELL_RU
     )
-    if unavailable and not str(period_shell).strip():
-        period_shell = str(meta_fb.get("period") or "")
     growth_shell = (
         ""
         if unavailable
@@ -1035,8 +1033,8 @@ def day_story_to_today_contract_v1(
         else (story.get("primary_action") or story.get("today_move") or "")
     )
     if unavailable:
-        growth_shell = str(meta_fb.get("development_point") or "")
-        primary_shell = str(meta_fb.get("primary_action") or "")
+        growth_shell = UNAVAILABLE_SHELL_RU
+        primary_shell = UNAVAILABLE_SHELL_RU
 
     contract: dict[str, Any] = {
         "contract_version": TODAY_CONTRACT_V1_CONTRACT,
@@ -1057,13 +1055,8 @@ def day_story_to_today_contract_v1(
         if atmosphere is not None:
             contract["day_atmosphere"] = atmosphere
     if unavailable:
-        # Shell only — do not invent domain meaning over facts_only_unavailable.
-        # Still run quality normalize so meta fallbacks pass contract validate.
-        return apply_text_quality_gate_to_contract(
-            contract,
-            DOMAIN_FALLBACKS_V1,
-            skip_absent_domains=True,
-        )
+        # Shell only — do not invent domain meaning; skip quality-gate fallback fill.
+        return contract
     return apply_text_quality_gate_to_contract(
         contract,
         DOMAIN_FALLBACKS_V1,
@@ -1140,9 +1133,9 @@ def day_story_to_legacy_narrative(story: dict[str, Any], *, generation_id: str |
     }
 
     evening = {
-        "panel_intro": story.get("evening_closure") or "Коротко закрой день: что получилось, что отпустить.",
+        "panel_intro": story.get("evening_closure") or "",
         "outlook_preamble": story.get("story"),
-        "closure_invitation": story.get("evening_closure") or "Одна строка — чем день запомнился.",
+        "closure_invitation": story.get("evening_closure") or "",
     }
 
     return {

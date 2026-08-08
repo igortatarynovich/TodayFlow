@@ -127,6 +127,9 @@ function AuthPageContent() {
       const target = await resolveTargetAfterAuthSession(fallbackTarget);
       setPostAuthTarget(target);
       setSuccessMessage(t("auth.toast.loginNext", "Вход выполнен. Открываем следующий шаг."));
+      // Navigate immediately — do not wait for useAuth /auth/me to flip isAuthenticated
+      // (that path can show a full-page spinner for the whole probe timeout).
+      router.replace(target);
     } catch (err) {
       const mapped = mapLoginFailure(err);
       setErrors(mapped);

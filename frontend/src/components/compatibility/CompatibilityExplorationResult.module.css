@@ -1,8 +1,8 @@
 .root {
   --ce-ring-accent: var(--tf-accent-gold);
-  --ce-ring-glow: rgba(212, 176, 105, 0.35);
-  --ce-card-bg: rgba(255, 253, 249, 0.98);
-  --ce-border: rgba(191, 151, 95, 0.22);
+  --ce-ring-glow: var(--tf-accent-gold-wash, var(--tf-accent-gold));
+  --ce-card-bg: var(--day-surface-tint, var(--tf-surface-insight-bg, var(--tf-surface)));
+  --ce-border: var(--tf-ds-border-gold, var(--tf-border));
   display: flex;
   flex-direction: column;
   gap: 1.75rem;
@@ -17,13 +17,13 @@
   padding: 1.5rem 1.4rem;
   border-radius: 22px;
   border: 1px solid var(--ce-border);
-  background: linear-gradient(165deg, rgba(255, 253, 249, 0.99) 0%, rgba(252, 247, 238, 0.97) 100%);
-  box-shadow: 0 12px 36px rgba(55, 42, 28, 0.07);
+  background: var(--day-surface-tint, var(--tf-surface-insight-bg, var(--tf-surface)));
+  box-shadow: var(--tf-surface-insight-shadow, var(--tf-shadow-card));
 }
 
 .pairLine {
   margin: 0;
-  font-size: 0.82rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -44,7 +44,7 @@
 
 .mainThoughtLabel {
   margin: 0;
-  font-size: 0.72rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -53,7 +53,7 @@
 
 .mainThought {
   margin: 0.45rem 0 0;
-  font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+  font-size: var(--tf-type-section-size);
   font-weight: 650;
   line-height: 1.45;
   color: var(--tf-ink);
@@ -61,7 +61,7 @@
 
 .heroEcho {
   margin-top: 0.75rem;
-  max-width: 28rem;
+  max-width: var(--tf-shell-readable, 36rem);
 }
 
 .rebuildRow {
@@ -72,15 +72,15 @@
 
 .rebuildHint {
   margin: 0;
-  font-size: 0.74rem;
+  font-size: var(--tf-type-caption-lg-size);
   color: var(--tf-caption);
   line-height: 1.5;
-  max-width: 34rem;
+  max-width: var(--tf-shell-readable, 36rem);
 }
 
 .scoreLabel {
   margin: 0.65rem 0 0;
-  font-size: 0.85rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 600;
   color: var(--tf-caption);
 }
@@ -114,13 +114,13 @@
   height: 78%;
   border-radius: 50%;
   background: linear-gradient(165deg, var(--tf-surface)dfb 0%, var(--tf-surface-warm, var(--tf-surface)) 100%);
-  border: 1px solid rgba(191, 151, 95, 0.2);
+  border: 1px solid var(--tf-ds-border-gold, var(--tf-border));
   display: grid;
   place-items: center;
 }
 
 .ringValue {
-  font-size: clamp(1.75rem, 5vw, 2.35rem);
+  font-size: var(--tf-type-hero-size);
   font-weight: 800;
   letter-spacing: -0.03em;
   color: var(--tf-ink);
@@ -147,19 +147,19 @@
 }
 
 .dimensionEmoji {
-  font-size: 1.15rem;
+  font-size: var(--tf-type-h3-size);
   line-height: 1;
 }
 
 .dimensionLabel {
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 700;
   color: var(--tf-ink);
 }
 
 .dimensionScore {
   margin: 0.55rem 0 0.45rem;
-  font-size: 1.65rem;
+  font-size: var(--tf-type-portal-title-size);
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--tf-ink);
@@ -183,7 +183,7 @@
 
 .blockTitle {
   margin: 0 0 0.75rem;
-  font-size: 1.05rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 700;
   color: var(--tf-ink);
 }
@@ -197,7 +197,7 @@
 
 .narrativeP {
   margin: 0 0 0.65rem;
-  font-size: 0.92rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.72;
   color: var(--tf-ink);
 }
@@ -216,24 +216,24 @@
   padding: 1.1rem 1.15rem;
   border-radius: 18px;
   border: 1px solid rgba(34, 197, 94, 0.25);
-  background: linear-gradient(180deg, rgba(240, 253, 244, 0.95) 0%, rgba(255, 255, 255, 0.96) 100%);
+  background: linear-gradient(180deg, rgba(240, 253, 244, 0.95) 0%, var(--day-surface-tint, var(--tf-surface-insight-bg, var(--tf-surface))) 100%);
 }
 
 .insightCardRisk {
   border-color: rgba(251, 146, 60, 0.35);
-  background: linear-gradient(180deg, rgba(255, 251, 235, 0.95) 0%, rgba(255, 255, 255, 0.96) 100%);
+  background: linear-gradient(180deg, rgba(255, 251, 235, 0.95) 0%, var(--day-surface-tint, var(--tf-surface-insight-bg, var(--tf-surface))) 100%);
 }
 
 .insightLabel {
   margin: 0;
-  font-size: 0.78rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 700;
   color: var(--tf-caption);
 }
 
 .insightBody {
   margin: 0.5rem 0 0;
-  font-size: 0.9rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.65;
   color: var(--tf-ink);
 }
@@ -250,14 +250,14 @@
   padding-left: 1.15rem;
   color: var(--tf-ink);
   line-height: 1.7;
-  font-size: 0.9rem;
+  font-size: var(--tf-type-body-size);
 }
 
 .personalized {
   padding: 1rem 1.15rem;
   border-radius: 16px;
-  border: 1px dashed rgba(201, 168, 115, 0.45);
-  background: rgba(255, 251, 245, 0.92);
+  border: 1px dashed var(--tf-ds-border-gold, var(--tf-border));
+  background: var(--day-surface-tint, var(--tf-surface-insight-bg, var(--tf-surface)));
 }
 
 .deepOpenWrap {
@@ -270,7 +270,7 @@
 
 .deepOpenHint {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   color: var(--tf-caption);
 }
 
@@ -290,14 +290,14 @@
 .deepSection {
   border-radius: 14px;
   border: 1px solid rgba(198, 166, 119, 0.2);
-  background: rgba(255, 255, 255, 0.85);
+  background: var(--day-surface-tint, var(--tf-surface-insight-bg, var(--tf-surface)));
   padding: 0.15rem 0.85rem;
 }
 
 .deepSummary {
   cursor: pointer;
   font-weight: 700;
-  font-size: 0.9375rem;
+  font-size: var(--tf-type-body-size);
   color: var(--tf-ink);
   padding: 0.75rem 0;
   list-style: none;
@@ -311,7 +311,7 @@
   display: block;
   margin-top: 0.2rem;
   font-weight: 500;
-  font-size: 0.78rem;
+  font-size: var(--tf-type-label-size);
   color: var(--tf-caption);
 }
 
@@ -323,7 +323,7 @@
 
 .deepTakeaway {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 600;
   line-height: 1.65;
   color: var(--tf-ink);
@@ -331,13 +331,13 @@
 
 .deepDetail {
   margin: 0;
-  font-size: 0.88rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.7;
   color: var(--tf-caption);
 }
 
 .deepRisk {
-  font-size: 0.85rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.6;
   color: var(--tf-accent-gold-600, var(--tf-accent-gold));
   padding: 0.55rem 0.65rem;
@@ -346,7 +346,7 @@
 }
 
 .deepAction {
-  font-size: 0.85rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.6;
   color: var(--day-decor-color, var(--tf-accent-action));
   padding: 0.55rem 0.65rem;
@@ -365,12 +365,12 @@
   padding: 0.85rem 1rem;
   border-radius: 14px;
   border: 1px solid rgba(198, 166, 119, 0.18);
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--day-surface-tint, var(--tf-surface-insight-bg, var(--tf-surface)));
 }
 
 .roleTitle {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 700;
   color: var(--tf-ink);
 }
@@ -378,7 +378,7 @@
 .roleCard ul {
   margin: 0.45rem 0 0;
   padding-left: 1.1rem;
-  font-size: 0.85rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.65;
   color: var(--tf-caption);
 }
@@ -387,12 +387,12 @@
   padding: 1.35rem 1.25rem;
   border-radius: 22px;
   border: 1px solid var(--ce-border);
-  background: linear-gradient(180deg, rgba(255, 251, 245, 0.98) 0%, rgba(255, 255, 255, 0.96) 100%);
+  background: linear-gradient(180deg, var(--day-surface-tint, var(--tf-surface-insight-bg, var(--tf-surface))) 0%, var(--day-surface-tint, var(--tf-surface-insight-bg, var(--tf-surface))) 100%);
 }
 
 .continuationLead {
   margin: -0.35rem 0 1rem;
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   color: var(--tf-caption);
 }
 
@@ -408,8 +408,8 @@
   gap: 0.25rem;
   padding: 0.95rem 1rem;
   border-radius: 16px;
-  border: 1px solid rgba(201, 168, 115, 0.3);
-  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--tf-ds-border-gold, var(--tf-border));
+  background: var(--day-surface-tint, var(--tf-surface-insight-bg, var(--tf-surface)));
   text-decoration: none;
   color: inherit;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -417,21 +417,21 @@
 
 .continuationCard:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(91, 67, 35, 0.1);
+  box-shadow: var(--tf-surface-insight-shadow, var(--tf-shadow-card));
 }
 
 .continuationEmoji {
-  font-size: 1.25rem;
+  font-size: var(--tf-type-section-size);
 }
 
 .continuationTitle {
-  font-size: 0.9rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 700;
   color: var(--tf-ink);
 }
 
 .continuationHook {
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.5;
   color: var(--tf-caption);
 }
@@ -481,7 +481,7 @@
 
 .cont_playful {
   border-color: rgba(251, 191, 36, 0.45);
-  background: linear-gradient(180deg, rgba(255, 251, 235, 0.98) 0%, rgba(255, 255, 255, 0.96) 100%);
+  background: linear-gradient(180deg, rgba(255, 251, 235, 0.98) 0%, var(--day-surface-tint, var(--tf-surface-insight-bg, var(--tf-surface))) 100%);
 }
 
 .cont_dramatic {
@@ -494,7 +494,7 @@
 
 .playfulDisclaimer {
   margin: 0.65rem 0 0;
-  font-size: 0.78rem;
+  font-size: var(--tf-type-label-size);
   color: var(--tf-accent-gold-600, var(--tf-accent-gold));
   font-weight: 600;
 }
@@ -510,13 +510,13 @@
 }
 
 .dimensionCardPlayful {
-  background: linear-gradient(180deg, rgba(255, 251, 235, 0.95) 0%, rgba(255, 255, 255, 0.92) 100%);
+  background: linear-gradient(180deg, rgba(255, 251, 235, 0.95) 0%, var(--day-surface-tint, var(--tf-surface-insight-bg, var(--tf-surface))) 100%);
   border: 1px solid rgba(251, 191, 36, 0.35);
 }
 
 .dimensionQuip {
   margin: 0.45rem 0 0;
-  font-size: 0.76rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.45;
   color: var(--tf-accent-gold-600, var(--tf-accent-gold));
 }
@@ -530,7 +530,7 @@
 
 .playfulPunchlineText {
   margin: 0;
-  font-size: 0.92rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.55;
   color: var(--tf-accent-gold-600, var(--tf-accent-gold));
   font-weight: 600;
@@ -568,15 +568,15 @@
   margin: 0;
   padding: 14px 16px;
   border-radius: 16px;
-  border: 1px solid rgba(167, 123, 55, 0.28);
-  background: rgba(255, 253, 249, 0.92);
+  border: 1px solid var(--tf-ds-border-gold, var(--tf-border));
+  background: var(--day-surface-tint, var(--tf-surface-insight-bg, var(--tf-surface)));
   display: grid;
   gap: 0.55rem;
 }
 
 .attachmentLensEyebrow {
   margin: 0;
-  font-size: 0.68rem;
+  font-size: var(--tf-type-caption-size);
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -585,14 +585,14 @@
 
 .attachmentLensTitle {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 700;
   color: var(--tf-caption);
 }
 
 .attachmentLensSummary {
   margin: 0 0 0.35rem;
-  font-size: 0.82rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.45;
   color: var(--tf-caption);
 }

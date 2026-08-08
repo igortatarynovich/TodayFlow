@@ -22,8 +22,8 @@ describe("ProfileNatalDecodePanel", () => {
     getJson.mockResolvedValue({
       access: "offer",
       can_generate: true,
-      cta: "Открыть расшифровку натальной карты — как структура карты объясняет твоё ядро.",
-      note: "Генерируется только по явному запросу. Не второй портрет.",
+      cta: "Открыть расшифровку натальной карты — целостная история из планет, углов и чисел.",
+      note: "Собирается один раз. Повторно не генерируется, пока не изменятся данные карты.",
     });
     render(<ProfileNatalDecodePanel />);
     await waitFor(() => {
@@ -33,7 +33,32 @@ describe("ProfileNatalDecodePanel", () => {
       "data-motion",
       "attention-breathe",
     );
-    expect(screen.getByText(/Не второй портрет/i)).toBeInTheDocument();
+    expect(screen.getByText(/один раз/i)).toBeInTheDocument();
+  });
+
+  it("hydrates ready decode from GET without generate CTA", async () => {
+    getJson.mockResolvedValue({
+      access: "ready",
+      can_generate: false,
+      status: "grounded",
+      pattern_thesis: "Готовая история карты.",
+      sections: [
+        {
+          id: "mind",
+          title: "Ум",
+          thesis: "Тезис",
+          because_core: "Связь с ядром",
+        },
+      ],
+      note: "Карта уже расшифрована — это готовая история, не кнопка «ещё раз».",
+    });
+    render(<ProfileNatalDecodePanel />);
+    await waitFor(() => {
+      expect(screen.getByTestId("profile-natal-decode-result")).toBeInTheDocument();
+    });
+    expect(screen.queryByTestId("profile-natal-decode-generate")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("profile-natal-decode-refresh")).not.toBeInTheDocument();
+    expect(screen.getByText(/готовая история/i)).toBeInTheDocument();
   });
 
   it("plays pattern one-shot when grounded and stops CTA breathe", async () => {
@@ -42,7 +67,7 @@ describe("ProfileNatalDecodePanel", () => {
     postJson.mockResolvedValue({
       status: "grounded",
       pattern_thesis: "Главный узор — стеллиум в рабочем секторе.",
-      sections: [{ id: "work", title: "Дело", thesis: "Тезис" }],
+      sections: [{ id: "mind", title: "Дело", thesis: "Тезис", because_core: "Ядро" }],
     });
     render(<ProfileNatalDecodePanel />);
     await waitFor(() => {
@@ -57,6 +82,7 @@ describe("ProfileNatalDecodePanel", () => {
       "pattern-sweep",
     );
     expect(screen.queryByTestId("profile-natal-decode-generate")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("profile-natal-decode-refresh")).not.toBeInTheDocument();
   });
 
   it("does not re-fire pattern-sweep after profileMotionOnce is consumed", async () => {
@@ -65,7 +91,7 @@ describe("ProfileNatalDecodePanel", () => {
     postJson.mockResolvedValue({
       status: "grounded",
       pattern_thesis: "Узор один.",
-      sections: [{ id: "work", title: "Дело", thesis: "Тезис" }],
+      sections: [{ id: "mind", title: "Дело", thesis: "Тезис", because_core: "Ядро" }],
     });
     const { unmount } = render(<ProfileNatalDecodePanel />);
     await waitFor(() => {
@@ -80,16 +106,19 @@ describe("ProfileNatalDecodePanel", () => {
     });
     unmount();
 
-    // Second mount with already-grounded result path: offer still can_generate but
-    // generate again after remount — once key stays consumed.
-    render(<ProfileNatalDecodePanel />);
-    await waitFor(() => {
-      expect(screen.getByTestId("profile-natal-decode-generate")).toBeInTheDocument();
+    // Second mount: GET already ready — no generate CTA, pattern once already consumed.
+    getJson.mockResolvedValue({
+      access: "ready",
+      can_generate: false,
+      status: "grounded",
+      pattern_thesis: "Узор один.",
+      sections: [{ id: "mind", title: "Дело", thesis: "Тезис", because_core: "Ядро" }],
     });
-    await user.click(screen.getByTestId("profile-natal-decode-generate"));
+    render(<ProfileNatalDecodePanel />);
     await waitFor(() => {
       expect(screen.getByTestId("profile-natal-decode-pattern")).toBeInTheDocument();
     });
+    expect(screen.queryByTestId("profile-natal-decode-generate")).not.toBeInTheDocument();
     expect(screen.getByTestId("profile-natal-decode-pattern")).not.toHaveAttribute(
       "data-motion",
       "pattern-sweep",

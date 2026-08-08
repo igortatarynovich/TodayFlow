@@ -214,45 +214,89 @@
 
 ## 5. Typography Hierarchy
 
-**Пять ролей** — жёсткие px на 390 viewport. Один шрифт display, один body.
+**Семь ролей** — жёсткие px на 390 viewport. Один шрифт display, один body.  
+*(Task 2.9, 2026-08-05 — заменяет шкалу Display 40 / Hero 33 / Section 20 / Body 15 / Caption 10–11. Параллельной второй шкалы нет.)*
 
 | Role | Font | Size | Line | Weight | Use |
 |------|------|------|------|--------|-----|
-| **Display** | Playfair Display | **40px** | 1.15 | 600 | marketing · empty states |
-| **Hero** | Playfair Display | **33px** | 1.08 | 700 | Hero Large name |
-| **Section** | Playfair Display | **20px** | 1.2 | 600 | card titles · Portal title 26px* |
-| **Body** | Inter | **15px** | 1.55 | 400 | digest · insight values |
-| **Caption** | Inter | **10–11px** | 1.35 | 600 | labels · pillars · caps |
+| **Display** | Playfair Display | **48–60px** | 1.1 | 400–600 | marketing · empty states · pull-quotes |
+| **Hero** *(card title)* | Playfair Display | **34px** | 1.08 | 700 | Hero Large name · крупный вывод карточки |
+| **Section** | Playfair Display | **24px** | 1.2 | 600 | название раздела · card section |
+| **Subtitle** | Manrope / Inter | **18px** | 1.3 | 600 | подзаголовок |
+| **Body** | Manrope / Inter | **16px** | 1.55 | 400 | основной текст |
+| **Comment** | Manrope / Inter | **14px** | 1.5 | 400 | пояснение · secondary body |
+| **Label** | Manrope / Inter | **12px** | 1.35 | 600 | метки · caps · нумерация · даты |
 
-*Portal title = Section + 6px (26px) — исключение, зафиксировать одним токеном `--tf-type-portal-title`.*
+*Portal title* — исключение: `--tf-type-portal-title` (≈26px), не отдельная продуктовая роль.
 
-**Запрещено:** всё Body 15px · три serif на одном экране · Inter для Hero name.
+**Запрещено:** плоский «всё одного размера» · три serif на одном экране · Inter для Hero name · жирнить целые предложения (макс. **2–3 слова**).
 
 **Figma page:** `Typography / Scale` — specimen RU + EN.
 
 **Свести с кодом:** `--orbit-text-*` → aliases на `--tf-type-*` в `globals.css` (DS-10); новый код — только `--tf-type-*`.
 
+### 5.1 Semantic layers *(смысловые слои, не «раскрашенный текст»)*
+
+Цвет и композиция — **язык интерфейса**, не декор. Цель: глаз сразу видит заголовок → большой вывод → расшифровку; длинные трактовки — как ритм остановок, не полотно.
+
+#### Пять цветов текста *(ровно пять)*
+
+| Role | Token | Value | Use |
+|------|-------|-------|-----|
+| **Primary** | `--tf-ink` | `#2A211B` | почти весь основной текст |
+| **Secondary** | `--tf-ink-secondary` | `rgba(42,33,27,.68)` | пояснения · подписи · контекст |
+| **Quiet** | `--tf-ink-quiet` | `rgba(42,33,27,.42)` | метки · нумерация · даты · навигация |
+| **Accent** | `--tf-ink-accent` | `#A57A3D` | только короткие: ключевые слова · названия · номера этапов · важные цифры — **не** длинные предложения |
+| **Action** | `--tf-ink-action` | `var(--tf-accent-numerology)` `#4a3270` | текстовые ссылки · интерактивный текст · text CTA — **не** fill primary `DsButton` (кнопка остаётся золотой) |
+
+Legacy aliases: `--tf-body` → secondary · `--tf-caption` / `--tf-ink-muted` / `--tf-ink-soft` → quiet (или soft visual only). Не вводить шестой ink.
+
+#### Смысловая иерархия блока
+
+1. **Label / eyebrow** (Label 12 · quiet или capsule) — что это за блок  
+2. **Takeaway** (Hero/Section) — один крупный вывод, не абзац  
+3. **Body** — расшифровка  
+
+#### `DsCallout` — две независимые оси
+
+| Axis | Values | Visual |
+|------|--------|--------|
+| **tone** *(тип вывода)* | `insight` · `practice` · `help` · `avoid` | вертикальная линия золотая / сиреневая / зелёная / красная + мягкий wash фона |
+| **label** *(тема жизни)* | `main` · `attention` · `help` · `practice` · `relations` · `money` · `thought` · `emotions` · `next_step` | капсула: ГЛАВНОЕ · НА ЧТО ОБРАТИТЬ ВНИМАНИЕ · … |
+
+Линия — основной акцент; цветной фон карточки целиком — нет. Иконки у блоков — маленькие **линейные SVG** (`DsIcons`), без эмодзи.
+
+Также: `DsQuote` (крупная цитата), `DsCapsule` (standalone лейбл). Повторяющиеся паттерны одни и те же на Today / Tarot / Compatibility / Profile / Practices.
+
+#### Ритм чтения *(длинные трактовки)*
+
+Каждые 2–3 абзаца — смена ритма: крупная цитата · callout с выводом · список 3–5 · горизонтальный разделитель с подписью · мини-таблица «Риск / Возможность» · блок «Что делать сегодня».
+
+**PR1 (Task 2.9 foundation):** канон + токены + примитивы + каталог + один пилот. **Не** закрывает зоны. Task **2.9b+** по зоне — тот же 6-axis DoD, что Task 2.7 / 3.
+
 ---
 
 ## 6. Colors
 
-**Минимальный набор** — не расширять до 40 swatches.
+**Минимальный набор** — не расширять до 40 swatches. Ink-квинтет — §5.1 (единственный SoT для цвета текста).
 
-| Token | Hex | Role |
-|-------|-----|------|
+| Token | Hex / value | Role |
+|-------|-------------|------|
 | `--tf-page` | `#f3efe8` | Profile page *(warm parchment)* |
 | `--tf-page-cream` | `#fff9f5` | Today default |
-| `--tf-ink` | `#1a1510` | primary text |
-| `--tf-ink-soft` | `#5b4630` | symbols |
-| `--tf-body` | `#475569` | secondary text |
-| `--tf-caption` | `#9a8468` | labels |
-| `--tf-accent-numerology` | `#4a3270` | LP digit |
+| `--tf-ink` | `#2A211B` | primary text (§5.1) |
+| `--tf-ink-secondary` | `rgba(42,33,27,.68)` | secondary text |
+| `--tf-ink-quiet` | `rgba(42,33,27,.42)` | quiet / meta |
+| `--tf-ink-accent` | `#A57A3D` | short accent words only |
+| `--tf-ink-action` | `#4a3270` | interactive text (= numerology) |
+| `--tf-accent-gold` | `#c9a96e` | CTA / chrome gold *(не text accent)* |
+| `--tf-accent-numerology` | `#4a3270` | LP digit · action text base |
 | `--tf-accent-action` | `#8f6b3a` | Action bar |
 | `--tf-on-dark` | `#faf8f5` | Portal |
 | `--tf-insight-love-bg` | blush gradient | Surface B variant |
 | `--tf-insight-money-grid` | `#6b5344` @ 4% | Surface B variant |
 
-**Figma page:** `Colors / Core` — 10 chips + on-surface pairs.
+**Figma page:** `Colors / Core` — 10 chips + on-surface pairs + ink quintet.
 
 ---
 
@@ -266,6 +310,7 @@
 | `--tf-shell-gutter` | `clamp(1.25rem, 4vw, 2rem)` | боковые поля |
 | `--tf-shell-gap` | `clamp(2rem, 5vw, 2.75rem)` | между секциями |
 | `--tf-shell-readable` | **36rem** | длинный текст внутри shell |
+| `--tf-ds-page-max` | **90rem** | marketing / catalog canvas **only** — not in-app hubs |
 | `--tf-breakpoint-lg` | **56.25rem (900px)** | 2 колонки (Numbers+Name · Love+Money) |
 
 | Viewport | Поведение |
@@ -274,7 +319,9 @@
 | **≥ 900px** | shell до 832px по центру · 2-col bands где уместно |
 | **Native** | те же токены в Swift/Kotlin · не отдельный «десктоп-дизайн» |
 
-**Запрещено:** `max-width: 26rem` на product screens · случайные `820px` / `760px` в компонентах.
+**Product chrome (`data-product-web-shell`):** outer `.tf-shell` is intentionally full-bleed (sidebar + main track). That does **not** waive the content column — every primary reading/CTA stack inside main uses `max-width: var(--tf-shell-max)` (+ gutter). Long prose / leads use `var(--tf-shell-readable)`. `--tf-ds-page-max` stays on landing/catalog sections only.
+
+**Запрещено:** `max-width: 26rem` на product screens · случайные `820px` / `760px` / `880px` / `22–28rem` как колонка страницы · хаб на `90rem` вместо shell-max.
 
 **Продукт ведёт пользователя:** секция = вопрос → визуальный якорь → **полный** ответ → CTA раскрытия. Не список label+число без meaning.
 
@@ -640,7 +687,8 @@ interface DayAtmosphereContract {
 |----------|---------|----------|---------|
 | **Button** | `DsButton` (`design-system/primitives/DsButton.tsx`) | `primary · secondary · ghost · destructive · icon` × `size: sm · md · block` | Единственный способ сделать CTA/кнопку. Новый `.actionButton`/`.submitButton`-класс в `.module.css` — запрещён (см. §17c) |
 | **Card / Surface** | `DsCard` (+ `DsStatusBadge`) | `standard · glass · orbital · feature · dark · insight · elevated · outline · card` × `size: default · compact` — соответствуют Surface A–N §4 и `card--*` в Figma-карте (`figmaMap.ts`). **`compact`** = Surface B pad/radius (§16.3) для Today Block-панелей | Контентная/интерактивная карточка — только через `DsCard`, не `<div className={styles.card}>` с собственным CSS. Today Block: `variant="glass" size="compact"` — без `!important`-override в потребителе |
-| **Typography** | `DsTypography` (`DsDisplayTitle`/`DsHeadline`/`DsTitle`/`DsSubtitle`/`DsBody`/`DsCaption`/…) | соответствует ролям §5 | Новый `font-size` вне `--tf-type-*` — запрещён |
+| **Typography** | `DsTypography` (`DsDisplayTitle`/`DsHeadline`/`DsTitle`/`DsSubtitle`/`DsBody`/`DsCaption`/`DsEmph`/…) | соответствует ролям §5 | Новый `font-size` вне `--tf-type-*` — запрещён; ink — только квинтет §5.1 |
+| **Callout / Quote** | `DsCallout` · `DsQuote` · `DsCapsule` | tone × label (§5.1) | Смысловые блоки длинного текста — только отсюда; ad-hoc `border-left` + emoji-лейбл — запрещены в новом коде |
 | **Form** | `DsForm` (`DsTextField`/`DsSearchField`/`DsCheckbox`/`DsChipField`/`DsClassifier`) | — | Инпуты — только отсюда |
 | **Banner** | — **нет примитива** | — | Гэп, не входит в этот проход. Существующие реализации (§14) остаются как есть до отдельного контракта — не изобретаем форму без опоры на реальные кейсы (backlog, см. §15.5) |
 
@@ -680,44 +728,54 @@ interface DayAtmosphereContract {
 
 ---
 
-## 16. Today Screen — Block Composition
+## 16. Today Screen — Story Frame Composition
 
-**Статус:** канон реализован (Glance…Response Block + domain icons §16.6). Отвечает на запрос «подача должна быть красиво разбита на блоки, легко читаться» — независимо от точного контента экрана. Не заменяет и не меняет [TODAY_SCREEN_SCENARIO_V3](today/TODAY_SCREEN_SCENARIO_V3.md) (SoT содержания каждого из 6 шагов ScreenFlow) — этот раздел только про то, **как** любой из шести шагов визуально организован. Навигационный chrome (свайп/цифры) — не здесь, см. [SCREEN_FLOW_V1 §1.5](foundation/SCREEN_FLOW_V1.md).
+**Статус:** канон обновлён (2026-08-05) — story-frame presentation. Jobs смысла по-прежнему [TODAY_SCREEN_SCENARIO_V3](today/TODAY_SCREEN_SCENARIO_V3.md). Навигационный chrome — [SCREEN_FLOW_V1 §1.5](foundation/SCREEN_FLOW_V1.md).
 
-### 16.1 Проблема, зафиксированная в коде
+### 16.1 Единица подачи — Story Frame
 
-`TodayGlanceAct.tsx` (шаг 0) сейчас — непрерывный вертикальный поток: один `themeBlock` (эйброу + заголовок + абзац), затем `metaRow` как инлайн-строка текста через точку («14:20 · Label», без карточки), затем плоский `<ul>` тизеров с «·» вместо иконок. Нет визуальной группировки, нет панелей, нет единой сетки отступов между смысловыми блоками.
+Один акт ScreenFlow = **один full-bleed кадр**:
 
-### 16.2 Паттерн «Block» — единица подачи
+1. **Экран ≠ блок.** Экран отвечает на один вопрос / держит одного героя. Внутри экрана — сценарий блоков со скроллом (`StoryBlockCue`). Swipe / `StoryNextAnchor` — смена экрана.
+2. **Photo frames** (Greeting · Energy+Flow · Practice/affirmation): immersive full-bleed из непересекающихся пулов (`todayStoryFrameArt`). Wash overlay для читаемости.
+3. **Theme frames** (Symbols · Attributes · Insight · Close): Day Atmosphere `--day-bg-art` / `--day-*`.
+4. **`StoryBlockCue`** — только внутри шага (scroll контейнера `data-story-scroll=step` + `scroll-margin-top`). Не после последнего внутреннего блока.
+5. **`StoryNextAnchor`** — только foreshadow → следующий шаг (нет на Close).
+6. **Primary typography** — eyebrow → display/serif primary → body detail.
+7. **Glass Block** — только interactive clusters.
 
-Один блок = **закрытая единица информации**, всегда в одном порядке:
+Вертикальный scroll внутри шага — когда второй блок / раскрытие требует места. Hero первого viewport виден без предварительного скролла.
 
-1. **Eyebrow** — маленький, приглушённый лейбл, что это за блок (уже есть как стиль в `TodayGlanceAct.module.css` `.eyebrow` — формализуется здесь, не переизобретается).
-2. **Primary** — одно главное значение блока, крупно (роль **Section** или **Hero**, §5) — короткая фраза, время, статус-слово. Не абзац.
-3. **Detail** *(опционально)* — одна строка/абзац пояснения, приглушённый тон (роль **Body**/**Caption**, §5).
+### 16.2 Паттерн «Block» внутри cluster
 
-Блок — это `DsCard` (`variant="glass"` **`size="compact"`**, `--tf-ds-glass`/`--tf-ds-glass-on-dark` + Day Atmosphere tint) поверх Day Atmosphere фона (§11–§13): полупрозрачная поверхность, а не сплошная заливка — атмосфера дня должна читаться сквозь панель, не исчезать под ней. Плотность Surface B (pad/radius) живёт в примитиве (`dsPrimitives.module.css` `.cardSizeCompact`), не в consumer `!important`.
+Когда cluster нужен, единица внутри него:
+
+1. **Eyebrow** — маленький приглушённый лейбл.
+2. **Primary** — одно главное значение, крупно (роль **Section** / **Hero**, §5).
+3. **Detail** *(опционально)* — одна строка пояснения.
+
+Плотность Surface B (pad/radius) — через `DsCard size="compact"`, не consumer `!important`.
 
 ### 16.3 Сетка и ритм
 
-- Отступ **между** блоками — единый токен, не «на глаз»: `--tf-ds-space-5` (1.25rem) как база, `--tf-ds-space-6` (1.5rem) на широких экранах — те же токены, что уже в foundation (§15.4), новых не создаём.
-- Внутренний padding блока — `--tf-ds-space-4`–`--tf-ds-space-5` (соответствует Surface B §4: 22×21) — через `DsCard size="compact"`, не локальный override.
-- Radius блока — `--tf-surface-insight-radius` (28px) через тот же `compact`, не хардкод.
-- **2×2 сетка** (как «Статус по сферам» на референсе) — это частный случай Block: eyebrow на уровне секции, дальше N мини-блоков без вложенного padding друг в друга (иконка + label + Primary-значение, без Detail).
+- Между элементами кадра — `--tf-ds-space-5` (база) / `--tf-ds-space-6` на широких экранах.
+- Max readable column внутри кадра ≈ `28rem` / `~34ch` для body.
+- Progress chrome = ScreenFlow dots + swipe (+ keyboard); без ряда названий актов в hero.
 
 ### 16.3.1 Решение: `size="compact"` вместо consumer overrides
 
-При first pass Glance временно перебивал pad/radius/фон `glass` через `!important` в `TodayGlanceAct.module.css`. Это закрыто: `DsCard` принимает `size="compact"`; комбинация `.cardGlass.cardSizeCompact` задаёт Surface B + `--tf-ds-glass` (+ `--day-surface-tint` если задан). Дальнейшие шаги ScreenFlow (§16.4) используют тот же API — без копирования override в пять файлов.
+`DsCard` принимает `size="compact"`; комбинация `.cardGlass.cardSizeCompact` задаёт Surface B + `--tf-ds-glass` (+ `--day-surface-tint`). Story-frame consumers не копируют override в пять файлов.
 
-### 16.4 Применимость — все 6 шагов, не только Glance
+### 16.4 Применимость — все 6 шагов
 
-Паттерн Block — общая визуальная грамматика для Glance / Plot / Symbols / Reading / Move / Response. Контент каждого шага (что именно показывается) не меняется — меняется только то, что любой фрагмент контента заворачивается в Block вместо голого абзаца/инлайн-строки. Это делает шаги визуально семьёй, даже когда состав полей на каждом разный (см. TODAY_SCREEN_SCENARIO_V3 §0.2 «один дом на сущность»).
+Story frame — общая визуальная грамматика для Glance / Plot / Symbols / Reading / Move / Response. Контент каждого шага (что именно показывается) не меняется — меняется только подача: кадр + typography-first + glass только на interactive clusters. Дома сущностей (цвет = Move, карта/число = Symbols, ловушка = Response) — без изменений.
 
 ### 16.5 Явно не меняется
 
 - Состав и honest-omit правила контента (TODAY_SCREEN_SCENARIO_V3 — не трогается).
 - Цвета CTA/error/success/warning (§0/§4).
 - Навигационная механика (свайп/keyboard/analytics) — SCREEN_FLOW_V1 §1.1–§1.4, §1.7–§1.9 без изменений.
+- Product bottom tab bar (`DsMobileTabBar`) всегда доступен; ScreenFlow высота = `100dvh − nav`.
 
 ### 16.6 Domain icons (закрыто)
 
@@ -734,7 +792,8 @@ interface DayAtmosphereContract {
 
 ### 16.7 Решённые ранее
 
-- `metaRow`/nearest vs тизеры — **Glance:** nearest = отдельный Block («Ближайшее окно»); texture Block eyebrow = «Тема дня».
+- Glance house labels: «Тема дня» + «Ближайшее окно» + Daily Focus.
+- **2026-08-05:** Block-stack → Story Frame (typography-first; glass только interactive). Composition `TodayWebDashboard layout=composition` без page header / context rail — ScreenFlow владеет viewport.
 
 ---
 

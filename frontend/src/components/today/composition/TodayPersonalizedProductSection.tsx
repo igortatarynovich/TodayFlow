@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
-import { DsButton } from "@/design-system";
+import { DsButton, DsCallout, DsQuote } from "@/design-system";
 import {
   profileMotionStaggerDelay,
   profileMotionStyles,
@@ -28,6 +28,7 @@ import { TodayDayColorGuideSection } from "@/components/today/composition/TodayD
 import { TodayScreenBlock, TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
 import { TodayTapWidget } from "@/components/today/composition/TodayWave2Slots";
 import { domainIconForChapterId } from "@/lib/todayReadingDomainIcon";
+import { calloutLabelForChapterId } from "@/lib/todayReadingCallout";
 import { pickMoveIfThenFromContract } from "@/lib/todayMoveIfThen";
 import { TODAY_NO_SHARP_FOCUS_COPY } from "@/lib/todayGlanceTexture";
 import {
@@ -262,6 +263,7 @@ export function TodayPersonalizedProductSection({
         motif="today"
         accent="sky"
         chrome={!asScreenFlowSteps}
+        className={asScreenFlowSteps ? styles.storyAct : undefined}
         testId="today-zone-reading"
       >
         {contentFailure ? (
@@ -375,14 +377,17 @@ export function TodayPersonalizedProductSection({
                   testId={`today-narrative-block-${chapter.id}`}
                 >
                   {sphereWhy ? (
-                    <p
-                      className={`${journeyStyles.narrativeBlockBody} ${styles.narrativeWhy}`}
-                      data-testid={`today-reading-sphere-why-${chapter.id}`}
+                    <DsCallout
+                      tone="insight"
+                      label={calloutLabelForChapterId(chapter.id)}
+                      icon="spark"
+                      className={styles.narrativeWhy}
+                      testId={`today-reading-sphere-why-${chapter.id}`}
                     >
-                      <span className={styles.softWhyLabel}>{copy.journey.readingSphereWhyLabel}</span>
-                      {sphereWhy}
-                    </p>
+                      <p>{sphereWhy}</p>
+                    </DsCallout>
                   ) : null}
+                  {/* Sphere lead/body stay at Body size — DsQuote is pull-quote only (vibe). */}
                   {isSphereChapter && showNarrative && chapter.lead ? (
                     <p className={journeyStyles.narrativeBlockLead}>{chapter.lead}</p>
                   ) : null}
@@ -394,10 +399,9 @@ export function TodayPersonalizedProductSection({
                       ))
                     : null}
                   {softWhyInBody && narrative.softWhy ? (
-                    <p className={`${journeyStyles.narrativeBlockBody} ${styles.narrativeWhy}`} data-testid="today-soft-why">
-                      <span className={styles.softWhyLabel}>Почему это важно сегодня</span>
-                      {narrative.softWhy}
-                    </p>
+                    <DsCallout tone="insight" label="attention" icon="flag" testId="today-soft-why">
+                      <p>{narrative.softWhy}</p>
+                    </DsCallout>
                   ) : null}
                   {chapter.id === "personal" && chapter.signals?.length ? (
                     <dl className={styles.personalSignals} data-testid="today-personal-signals">
@@ -446,38 +450,36 @@ export function TodayPersonalizedProductSection({
                   {dualExpanded &&
                   chapter.dual &&
                   (chapter.dual.strengthen.length || chapter.dual.soften.length) ? (
-                    <div className={journeyStyles.dualPanels}>
+                    <div className={journeyStyles.dualPanels} data-testid={`today-reading-dual-${chapter.id}`}>
                       {chapter.dual.strengthen.length ? (
-                        <div className={journeyStyles.dualPanel}>
-                          <p className={journeyStyles.dualPanelTitle}>
-                            {chapter.id === "force"
-                              ? copy.expectLabel
-                              : chapter.id === "scenes" || chapter.id.startsWith("sphere-")
-                                ? copy.journey.sceneOpportunityLabel
-                                : "Сильнее"}
-                          </p>
+                        <DsCallout
+                          tone={chapter.id === "force" ? "insight" : "help"}
+                          label={
+                            chapter.id === "force"
+                              ? "main"
+                              : chapter.id.startsWith("sphere-")
+                                ? calloutLabelForChapterId(chapter.id)
+                                : "help"
+                          }
+                          icon={chapter.id === "force" ? "spark" : "sun"}
+                          testId={`today-reading-dual-strengthen-${chapter.id}`}
+                        >
                           {chapter.dual.strengthen.map((line) => (
-                            <p key={line.slice(0, 40)} className={journeyStyles.dualPanelBody}>
-                              {line}
-                            </p>
+                            <p key={line.slice(0, 40)}>{line}</p>
                           ))}
-                        </div>
+                        </DsCallout>
                       ) : null}
                       {chapter.dual.soften.length ? (
-                        <div className={journeyStyles.dualPanel}>
-                          <p className={journeyStyles.dualPanelTitle}>
-                            {chapter.id === "force"
-                              ? copy.trapLabel
-                              : chapter.id === "scenes" || chapter.id.startsWith("sphere-")
-                                ? copy.journey.sceneTrapLabel
-                                : "Мягче / не дожимать"}
-                          </p>
+                        <DsCallout
+                          tone="avoid"
+                          label="attention"
+                          icon="flag"
+                          testId={`today-reading-dual-soften-${chapter.id}`}
+                        >
                           {chapter.dual.soften.map((line) => (
-                            <p key={line.slice(0, 40)} className={journeyStyles.dualPanelBody}>
-                              {line}
-                            </p>
+                            <p key={line.slice(0, 40)}>{line}</p>
                           ))}
-                        </div>
+                        </DsCallout>
                       ) : null}
                     </div>
                   ) : null}
@@ -488,9 +490,9 @@ export function TodayPersonalizedProductSection({
           })}
 
           {narrative.vibeClosing && !narrative.chapters.some((c) => c.id === "vibe") ? (
-            <p className={styles.vibeClosing} data-testid="today-vibe-closing">
+            <DsQuote kicker="Сегодня" testId="today-vibe-closing">
               {narrative.vibeClosing}
-            </p>
+            </DsQuote>
           ) : null}
         </TodayScreenBlockStack>
         ) : null}
@@ -505,6 +507,7 @@ export function TodayPersonalizedProductSection({
         motif="effort"
         accent="support"
         chrome={!asScreenFlowSteps}
+        className={asScreenFlowSteps ? styles.storyAct : undefined}
         testId="today-zone-move"
       >
         {contentFailure ? (
@@ -519,27 +522,34 @@ export function TodayPersonalizedProductSection({
             </p>
           </TodayScreenBlock>
         ) : (
-          <TodayScreenBlockStack>
+          <TodayScreenBlockStack className={styles.moveStack}>
         {colorGuide ? (
-          <TodayScreenBlock testId="today-zone-color-guide">
+          <div className={styles.moveColorAnchor}>
             <TodayDayColorGuideSection guide={colorGuide} />
-          </TodayScreenBlock>
+          </div>
         ) : null}
         {moveIfThen && (moveIfThen.do || moveIfThen.avoid) ? (
-          <TodayScreenBlock eyebrow={copy.journey.moveIfThenEyebrow} testId="today-zone-move-if-then">
+          <div className={styles.moveDirections} data-testid="today-zone-move-if-then">
+            <p className={styles.moveEyebrow}>{copy.journey.moveIfThenEyebrow}</p>
             {moveIfThen.do ? (
-              <div className={styles.moveIfThenRow} data-testid="today-move-do">
-                <p className={styles.moveIfThenLabel}>{copy.journey.moveDoLabel}</p>
-                <p className={styles.readingParagraph}>{moveIfThen.do}</p>
-              </div>
+              <DsCallout
+                tone="practice"
+                label="next_step"
+                icon="arrowDown"
+                title={moveIfThen.do}
+                testId="today-move-do"
+              />
             ) : null}
             {moveIfThen.avoid ? (
-              <div className={styles.moveIfThenRow} data-testid="today-move-avoid">
-                <p className={styles.moveIfThenLabel}>{copy.journey.moveAvoidLabel}</p>
-                <p className={styles.readingParagraph}>{moveIfThen.avoid}</p>
-              </div>
+              <DsCallout
+                tone="avoid"
+                label="attention"
+                icon="flag"
+                title={moveIfThen.avoid}
+                testId="today-move-avoid"
+              />
             ) : null}
-          </TodayScreenBlock>
+          </div>
         ) : null}
         <TodayScreenBlock eyebrow="Цель на сегодня" testId="today-zone-promise">
           {dayGoal && !goalDraftOpen ? (
@@ -588,7 +598,7 @@ export function TodayPersonalizedProductSection({
         </TodayScreenBlock>
 
         {strengthenTools.length > 0 || practiceRec?.text || activeHabit || activeAscetic ? (
-          <TodayScreenBlock testId="today-zone-strengthen">
+          <TodayScreenBlock testId="today-zone-strengthen" className={styles.practiceCluster}>
             <div className={styles.practicesHeader}>
               <p className={styles.eyebrowInline}>Практики и опоры</p>
               {totalTools > 1 ? (
@@ -769,6 +779,7 @@ export function TodayPersonalizedProductSection({
         accent="action"
         bridge
         chrome={!asScreenFlowSteps}
+        className={asScreenFlowSteps ? styles.storyActResponse : undefined}
         testId="today-zone-bridges-wrap"
       >
         {contentFailure ? (
@@ -783,14 +794,14 @@ export function TodayPersonalizedProductSection({
             </p>
           </TodayScreenBlock>
         ) : (
-          <TodayScreenBlock testId="today-slot-tap-wrap">
+          <div className={styles.responseStage} data-testid="today-slot-tap-wrap">
             <TodayTapWidget
               contract={contract}
               dateISO={dateISO || ""}
               initialResponse={tapResponse}
               onRecorded={onTapRecorded}
             />
-          </TodayScreenBlock>
+          </div>
         )}
       </ProductJourneyScene>
   );

@@ -30,11 +30,13 @@
 .shell {
   position: relative;
   z-index: 1;
-  max-width: 520px;
-  margin: 0 auto;
-  padding: 2rem var(--orbit-space-xl) 4rem;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 1.25rem 0 3rem;
   display: grid;
   gap: 1.5rem;
+  box-sizing: border-box;
 }
 
 /* —— Progress —— */
@@ -59,7 +61,7 @@
 
 .progressFraction {
   margin: 0;
-  font-size: 0.68rem;
+  font-size: var(--tf-type-caption-size);
   color: rgba(201, 169, 98, 0.8);
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.08em;
@@ -194,7 +196,7 @@
 .title {
   margin: 0.85rem 0 0;
   font-family: var(--orbit-font-display, Georgia, serif);
-  font-size: clamp(1.85rem, 5.5vw, 2.35rem);
+  font-size: var(--tf-type-display-size);
   line-height: 1.12;
   font-weight: 500;
   color: #faf7f2;
@@ -204,9 +206,9 @@
 .body {
   margin: 1rem 0 0;
   line-height: 1.72;
-  font-size: 0.94rem;
+  font-size: var(--tf-type-body-size);
   color: rgba(200, 194, 182, 0.78);
-  max-width: 28rem;
+  max-width: var(--tf-shell-readable, 36rem);
 }
 
 .focusHint {
@@ -247,7 +249,7 @@
 .panelTitle {
   margin: 0.55rem 0 0;
   font-family: var(--orbit-font-display, Georgia, serif);
-  font-size: clamp(1.5rem, 4.2vw, 1.85rem);
+  font-size: var(--tf-type-hero-size);
   line-height: 1.2;
   font-weight: 500;
   color: #f8f5ef;
@@ -326,7 +328,7 @@
 .chipLabel {
   display: block;
   font-weight: 600;
-  font-size: 0.92rem;
+  font-size: var(--tf-type-body-size);
   color: #f2ede6;
   letter-spacing: 0.01em;
 }
@@ -334,7 +336,7 @@
 .chipHint {
   display: block;
   margin-top: 0.18rem;
-  font-size: 0.74rem;
+  font-size: var(--tf-type-caption-lg-size);
   color: rgba(175, 168, 155, 0.68);
   line-height: 1.4;
 }
@@ -365,7 +367,7 @@
   resize: vertical;
   outline: none;
   line-height: 1.62;
-  font-size: 0.94rem;
+  font-size: var(--tf-type-body-size);
   font-family: inherit;
   transition: border-color 200ms ease, box-shadow 200ms ease;
 }
@@ -423,7 +425,7 @@
 }
 
 .spreadSubtitle {
-  font-size: 0.72rem;
+  font-size: var(--tf-type-caption-lg-size);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: rgba(185, 175, 155, 0.58);
@@ -456,7 +458,7 @@
   background: rgba(0, 0, 0, 0.22);
   border-left: 2px solid rgba(201, 169, 98, 0.5);
   font-family: var(--orbit-font-display, Georgia, serif);
-  font-size: 0.95rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.62;
   font-style: italic;
   color: rgba(235, 228, 215, 0.92);
@@ -481,7 +483,7 @@
   border: none;
   border-radius: 999px;
   padding: 0.9rem 1.85rem;
-  font-size: 0.88rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 600;
   font-family: inherit;
   letter-spacing: 0.05em;
@@ -536,7 +538,7 @@
 }
 
 .utilLink {
-  font-size: 0.8rem;
+  font-size: var(--tf-type-label-size);
   letter-spacing: 0.04em;
   color: rgba(175, 168, 155, 0.72);
   text-decoration: none;
@@ -556,7 +558,7 @@
   background: none;
   border: none;
   padding: 0;
-  font-size: 0.76rem;
+  font-size: var(--tf-type-label-size);
   letter-spacing: 0.04em;
   color: rgba(155, 148, 135, 0.55);
   cursor: pointer;

@@ -15,12 +15,50 @@ Status: Active working document
 - **Canon updated?** yes — FOUNDATION_UI §13 / §13.4.
 - **Backward compatible?** yes for API; clients hardcoding `.png` paths break (only internal FE used them).
 
+**DONE (CODE, 2026-08-08):** **Restore Today story-deck to main/prod** — merge `cursor/ds-task-2.9-semantic-layers` (Greeting→…→Close swipe) which was never on `main`; prod had been serving pre-deck Glance stack.
+
+**DONE (CODE, 2026-08-08):** **Поток дня = Kimi activity windows** — clocks/valence from exact-time geometry (+semisquare/sesquiquadrate); `label_short`/`detail` from Kimi `day_flow_windows_v1` in prewarm (no conflict in prompt); bank fill-empty only; FE time + valence chrome + expand detail; Утро/Вечер chrome without invented body. Canon: WAVE2 §4.
+
+## Architecture impact — Поток дня Kimi activity windows (2026-08-08)
+
+- **SoT before:** `label_short` = bank `today_activation_copy_v1`; pure glance clocks.
+- **SoT after:** clocks+valence+driver_id = geometry; **title/detail = Kimi `day_flow_windows_v1`**; bank = fill-empty only.
+- **Public contract changed?** yes — additive `detail`, `copy_source`; `label_short` = activity window (Kimi).
+- **Migration required?** no — next prewarm; old clients ignore `detail`.
+- **Canon updated?** yes — `docs/today/TODAY_WAVE2_CONTRACT_V1.md` §1/§4 + tracker.
+- **Backward compatible?** yes — bank titles if no Kimi cache.
+
+**DONE (CODE, 2026-08-08):** **Stop day invent hardcodes** — FE Поток дня = pure `glance_timeline` only (no Утро/Вечер/Ночь bank); BE `_SCENE_BEATS` retired from runtime (scenes = native LLM only); projector no filler do/avoid/evening; unavailable/not_ready shells = honest «Не удалось загрузить.» / lifecycle status, not DOMAIN_FALLBACKS calm invent. Canon: WAVE2 §4 · B5 · AGENTS transport rule.
+
+## Architecture impact — stop day invent hardcodes (2026-08-08)
+
+- **SoT before:** FE `todayStoryDayFlow` invented morning/day/evening/night; BE `_SCENE_BEATS` + heal filled expect/trap/do/avoid on deterministic/serve; projector appended filler do/avoid/evening; unavailable contract used DOMAIN_FALLBACKS calm prose.
+- **SoT after:** Поток дня = glance_timeline rows only; meaning scenes = native LLM C1 only; no scenes → facts_only_unavailable; unavailable shell = «Не удалось загрузить.»; not_ready domains absent.
+- **Public contract changed?** semantics — empty meaning / honest unavailable instead of invented calm; do/avoid may be length 1
+- **Migration required?** no version bump; next prewarm/native rebuild; old bank caches heal clears templates without refill
+- **Canon updated?** tracker + aligns WAVE2 §4 / B5 (no invent)
+- **Backward compatible?** yes for field presence; clients that expected always-filled arc/domains see honest empty/unavailable
+
+**DONE (LIVE, 2026-08-05):** **Profile UX pack** — full identity body (no dupe/collapse); drop portrait_why honesty; unclipped tension; house person-theses; natal decode = one-shot holistic story (persist by fingerprint, no re-generate CTA); canary users 1/2 `trialing`. Canon: PROFILE_NATAL_DECODE_DEPTH_V1 one-shot.
+
+**DONE (CODE, 2026-08-05):** **Поток дня ← real glance_timeline** — story pane uses timed `day_facts.glance_timeline` again (no invented phase copy); labels name lived use (not «Окно: …»); max rows 3→5; symbols keep card/number when `networkDegraded`. Canon: TODAY_WAVE2_CONTRACT_V1 §4.
+**DONE (CODE, 2026-08-05):** **Today story anchors polish** — distinct art pools; `StoryBlockCue` (in-step scroll) + `StoryNextAnchor` (foreshadow); block orders Energy/Symbols/Attributes/Insight/Close. Canon: FOUNDATION_UI §16.1 · SCENARIO_V3. Presentation only.
+**DONE (CODE, 2026-08-05):** **Today Story Deck art + ↓ cues** — Greeting/Energy/Practice immersive photos (existing ritual-entry/cosmic/bg); other frames = Day Atmosphere theme; ↓ between multi-block sections. Canon: FOUNDATION_UI §16.1 · SCENARIO_V3 changelog.
+**DONE (CODE, 2026-08-05):** **Today Story Deck v3.2** — ScreenFlow cuts Greeting→Energy+Flow→Symbols→Attributes→Practice→Insight→Close; color presentation→Attributes; card face kept on Symbols; overlap fix via one-job frames. Canon: SCENARIO_V3 + FOUNDATION_UI §16. Architecture impact: composition pipeline presentation.
+**DONE (CODE, 2026-08-05):** **Today Story Frames** — composition presentation: ScreenFlow acts as full-bleed story frames (typography-first; glass only on interactive clusters); `layout=composition` strips dashboard header/rail; Glance scrollable=false. Jobs/houses unchanged (SCENARIO_V3). Canon: FOUNDATION_UI §16. Zone still open under 6-axis DoD (screenshot review).
+**IN PROGRESS (2026-08-05):** **Task 2.9b Compatibility result** — exploration / funnel / analyze·signs personalized → `DsCallout`/`DsQuote`. Zone still open under 6-axis DoD.
+**DONE (CODE, 2026-08-05):** **Task 2.9b Tarot result** — answer / next_step / A·B / confidence / why → `DsCallout`/`DsQuote`. Zone still open under 6-axis DoD.
+**DONE (CODE, 2026-08-05):** **Task 2.9b Today Reading** — dual/opportunity·trap · soft-why · move if/then · vibe quote → `DsCallout`/`DsQuote`. Zone still open under 6-axis DoD.
+**DONE (CODE, 2026-08-05):** **Task 2.9 foundation (PR1)** — semantic meaning layers: §5 type ladder + 5 ink colors + `DsCallout`/`DsQuote`/`DsCapsule` + catalog + `TodayDayLogicCallout` pilot. **Does not close Today or any zone.** Zone rollout = Task **2.9b+** under the same 6-axis DoD as Task 2.7 / 3.
+**IN PROGRESS (2026-08-05):** **DS unification** — Practices / Profile / Compatibility still **IN PROGRESS** (not DONE). Wave 1+2 code live. Live column check @1920: Practices/Profile/Compatibility/Tarot content = **832px** (`--tf-shell-max`). Owner screenshot parity still required before zone DONE / Onboarding.
+**layout DoD ✅ (2026-08-05):** Task 2.7 — hub wrappers → `--tf-shell-max`; Practices/Profile/Compatibility/Tarot column literals tokenized; width rule in `check_ds_style_gate.py`. Zones still **IN PROGRESS**.
+**Wave 2 code ✅ (2026-08-05):** Task 2.6 rgba/color-mix gate + Compatibility local cards → `--day-*`/`--tf-*`; Task 2.6b ~382 font-size → `--tf-type-*` on three zones + Tarot. Baseline rewritten (v2). Screenshot review still required for zone DONE.
 **DONE (2026-08-04):** DS Task 2 — Weekly + Challenges DsCard pilot + `--day-*` decorative (Task 1.5 folded). PR #9 merged. Screenshots: `docs/audits/ds-task2-screenshots/`.  
-**DONE (2026-08-04):** DS Task 3 — Today composition wave (`DsButton` CTAs + day-tint). PR #10 merged.  
-**DONE (2026-08-04):** DS Task 3 — Practices wave (`DsButton` · kill lavender · `--day-*`). PR #11 merged.  
-**DONE (2026-08-04):** DS Task 3 — Profile wave (`DsButton` hub/setup CTAs · `profileV2System` → `--tf-*`/`--day-*`). PR #12 merged + frontend rebuild.
+**PARTIAL (2026-08-04):** DS Task 3 — Today composition wave (`DsButton` CTAs + day-tint). PR #10 merged — color/CTA only; layout+type still open under DS unification.  
+**IN PROGRESS (reopened):** DS Task 3 — Practices wave — PR #11 color/CTA landed; layout / rgba honesty / typography / screenshots pending.  
+**IN PROGRESS (reopened):** DS Task 3 — Profile wave — PR #12 color/CTA landed; same reopen.  
+**IN PROGRESS (reopened):** DS Task 3 — Compatibility wave — PR #13 color/CTA landed; rgba local cards still present; same reopen.
 **DONE (2026-08-04):** Day shell chrome — day-mode on all product routes; evening phase no longer recolors shell; sidebar stretch fix. PR #14 merged + frontend rebuild.
-**DONE (2026-08-04):** DS Task 3 — Compatibility wave (`DsButton` · chips/layer cards · tokenize exploration CSS). PR #13 merged + frontend rebuild.  
 **DONE (2026-08-04):** DS Task 1 — style gate merged PR #8 (`scripts/check_ds_style_gate.py` · Jest in `npm test` · PR checklist). Separate CI workflow job **not** required.  
 **DONE (2026-08-04):** DS Task 0 — `design/profile-journey-premium` promoted → `main` (FF, PR #7). Deploy SoT: `docker compose -f docker-compose.prod.yml up -d --build` on this host.  
 **DONE (2026-08-04):** Today Screen fix pack — Daily Focus · nearest→practice · chorus energy · plot beats · seasonal color · trap≠avoid · hook variants.  
@@ -29,6 +67,46 @@ Status: Active working document
 **IN PROGRESS:** **Reading why-step** — `scene.why` / `domain_verdicts.why_short` before narrative; progressive expand for scene+dual. Glance/Plot/clip slice shipped. Soft-heal canary + v3.1b concreteness continue.  
 **ALSO IN PROGRESS:** **Soft-heal one-field gates** — `healed:<rule>` for conflict_link / incomplete forces / broken props / scenes_too_many; seed-kill + structural + scenes_too_few stay hard.  
 Prior: card_base_v1 cutover live · editorial polish minors ongoing.
+
+### DS zone Definition of Done (6 axes — 2026-08-05)
+
+A product zone is **DONE** only when **all** are true:
+
+1. **Color / hex+CTA** — existing DS style gate clean for the zone  
+2. **Color / rgba honesty** — no hardcoded `rgba()`/`color-mix()` paints under zone-local vars; surfaces → `--tf-*` / `--day-*` (Task 2.6)  
+3. **Typography** — Foundation roles Display / Hero / Section / Subtitle / Body / Comment / Label (+ portal-title); no private `font-size` scale (Task 2.6b); ink quintet + semantic blocks when Task 2.9b applies  
+4. **Day Atmosphere** — product route under day-mode; phase clock does not recolor shell when mode pinned  
+5. **Shell / layout** — `--tf-shell-max` / `--tf-shell-readable`; no phone-column / random px; no double-shell (Task 2.7)  
+6. **Screenshot parity** — side-by-side reads as one system (owner review)
+
+**Process:** After Wave 1 alone → `layout DoD ✅`, zones stay **IN PROGRESS**. Real DONE only after Wave 1 + Wave 2 + screenshot review. Onboarding after that. Task 3.5 Atmosphere picker on `/design-system` = between later waves, non-blocking. **Task 2.9 foundation ≠ zone DONE**; Task **2.9b+** (Today / Tarot / Compatibility / Profile / Practices) uses this same 6-axis DoD.
+
+## Architecture impact — Profile UX pack (identity / trap / houses / natal decode one-shot) (2026-08-05)
+
+- **SoT before:** CE portrait + mid-word clips (`_MAX_CORE`/`_MAX_TRAP`); recognition_line = short duplicate; portrait_why honesty meta; houses = encyclopedia tags; natal decode re-POST LLM each click/reload.
+- **SoT after:** CE unchanged as personality SoT; full identity body; unclipped trap/insight (prose_clip); houses = person theses; natal decode = richer CE-grounded life story (planets + numerology), **persisted one-shot** per fingerprint.
+- **Public contract changed?** yes (additive/soft) — GET natal-decode may return ready artifact; POST idempotent when cached; portrait_why drops title/honesty.
+- **Migration required?** no — re-publish canary + one ops decode; trial ops for users 1/2.
+- **Canon updated?** yes — PROFILE_NATAL_DECODE_DEPTH_V1 one-shot + fingerprint invalidation.
+- **Backward compatible?** yes — old clients re-POST get cached body.
+
+## Architecture impact — Glance timeline max 5 + actionable labels (2026-08-05)
+
+- **SoT before:** `glance_timeline` ≤3; minor harmonics often rendered as opaque «Окно: импульс/слова»; story Поток дня briefly used invented phase copy.
+- **SoT after:** `glance_timeline` ≤5 from same natal activation pool + exact-time; labels name lived use (tasks/dialogues/…); story Поток дня = pure render of glance_timeline; symbols keep local card/number under networkDegraded.
+- **Public contract changed?** yes — max glance rows 3→5; `label_short` bank wording (still no planet/aspect jargon)
+- **Migration required?** no — regenerates on next day_facts assemble (clear activation TTL / hard refresh)
+- **Canon updated?** yes — `docs/today/TODAY_WAVE2_CONTRACT_V1.md` §1 / §4
+- **Backward compatible?** yes for old caches with ≤3 rows; FE tolerant
+
+## Architecture impact — Task 2.9 semantic meaning layers (2026-08-05)
+
+- **SoT before:** FOUNDATION_UI §5 at Display 40 / Hero 33 / Section 20 / Body 15 / Caption 10–11; ink via scattered `--tf-ink` / `--tf-body` / `--tf-caption`; meaning blocks ad-hoc (inline styles, local `border-left`, freeform labels).
+- **SoT after:** §5 ladder **48–60 / 34 / 24 / 18 / 16 / 14 / 12**; **exactly 5 text colors** (§5.1); `DsCallout` (tone × label) / `DsQuote` / `DsCapsule` as shared semantic blocks; vertical rail primary accent. Primary CTA fill remains gold; action *text* = `--tf-accent-numerology`.
+- **Public contract changed?** no
+- **Migration required?** no (visual/token only); zone rollouts = Task 2.9b+ under 6-axis DoD
+- **Canon updated?** yes — `docs/TODAYFLOW_FOUNDATION_UI.md` §5 / §5.1 / §6 / §15.2
+- **Backward compatible?** yes for JSON; visual type sizes jump via `--tf-type-*`
 
 ## Architecture impact — Glance Daily Focus replaces sphere chips (2026-08-04)
 
@@ -742,7 +820,17 @@ Status: `IN_PROGRESS`
 - [x] Lock color tokens, typography scale, spacing grid.
 - [x] Standardize button/card/input variants.
 - [x] Unify icon style and tarot cover style.
-- [ ] Audit all key screens for visual/system consistency.
+- [x] **Task 2.7 Wave 1** — Shell/layout unification (`--tf-shell-max` / readable; kill phone columns). Practices/Profile/Compatibility + Tarot hub. Exit: `layout DoD ✅`, zones still IN PROGRESS.
+- [x] **Task 2.6 Wave 2** — Expand DS gate for `rgba()` / `color-mix()`; rewrite Compatibility local rgba cards to `--tf-*`/`--day-*`.
+- [x] **Task 2.6b Wave 2** — Typography on same three zones + Tarot hub → Foundation `--tf-type-*` roles.
+- [x] **Task 2.9 foundation (PR1)** — Semantic meaning layers: rewrite §5 ladder (48–60/34/24/18/16/14/12) · 5 ink colors · `DsCallout` (tone × label) · `DsQuote` · `DsCapsule` · linear icons · `/design-system` specimen · pilot `TodayDayLogicCallout`. **Exit: foundation only — zones stay open.**
+- [x] **Task 2.9b Today Reading** — dual opportunity/trap · soft-why · move if/then · vibe → `DsCallout`/`DsQuote` (`TodayPersonalizedProductSection`). Zone still needs full 6-axis DoD + screenshots.
+- [x] **Task 2.9b Tarot result** — answer / next_step / A·B / confidence / why → `DsCallout`/`DsQuote` (`TarotWebResult`). Zone still needs full 6-axis DoD + screenshots.
+- [ ] **Task 2.9b Compatibility result** — exploration main/duals/tips/deep · funnel confidence/today/risk · analyze·signs personalized → `DsCallout`/`DsQuote`. Zone still needs full 6-axis DoD + screenshots.
+- [ ] **Task 2.9b+ remaining zones** — Profile editorial · Practices session; each under 6-axis DoD.
+- [ ] **Screenshot parity** — owner side-by-side review closes Practices/Profile/Compatibility (6-axis DoD).
+- [ ] **Task 3.5** — Day Atmosphere mode picker on `/design-system` (after Onboarding; non-blocking).
+- [ ] Audit all key screens for visual/system consistency (screenshot parity = zone close).
 - [ ] Mobile + desktop QA pass for primary flows.
 - [ ] Normalize Profile and Today into the canonical 2-surface mental model.
 
@@ -1389,9 +1477,15 @@ Historical note:
 - these entries describe what was implemented at that time and do not override the current question-first product canon.
 
 - 2026-08-04 | Design System | **Day shell chrome fix** | **DONE (LIVE)** | PR #14 merged · frontend rebuild. Day-mode = shell routes; evening phase gated; sidebar stretch.
-- 2026-08-04 | Design System | **Task 3 Compatibility wave** | **DONE (LIVE)** | PR #13 merged · frontend rebuild. Hub/analyze/signs/birthdates → `DsButton`; baseline 495→447. Orphan Encyclopedia/DesktopWireframe deferred.
-- 2026-08-04 | Design System | **Task 3 Profile wave** | **DONE (LIVE)** | PR #12 merged (`eb4e281`) · frontend rebuild. Hub/setup CTAs → `DsButton`; `profileV2System` tokenized; baseline 567→495. v0/editorial/quickMap deferred.
-- 2026-08-04 | Design System | **Task 3 Practices wave** | **DONE** | PR #11 merged. Hub/session/detail CTAs → `DsButton`; lavender zone killed.
+- 2026-08-05 | Design System | **Task 2.9b Compatibility result** | **IN PROGRESS (code)** | Exploration main/duals/tips/deep + funnel confidence/today/risk + analyze/signs personalized → `DsCallout`/`DsQuote`. Not zone DONE — 6-axis DoD + screenshots remain.
+- 2026-08-05 | Design System | **Task 2.9b Tarot result** | **DONE (CODE)** | `TarotWebResult` answer/next_step/A·B/confidence/why → `DsCallout`/`DsQuote`. Not zone DONE — 6-axis DoD + screenshots remain.
+- 2026-08-05 | Design System | **Task 2.9b Today Reading** | **DONE (CODE)** | Reading duals / soft-why / move if-then / vibe → `DsCallout`/`DsQuote` in `TodayPersonalizedProductSection`. Not zone DONE — 6-axis DoD + screenshots remain.
+- 2026-08-05 | Design System | **Task 2.9 foundation (PR1)** | **DONE (CODE)** | Semantic layers SoT: FOUNDATION_UI §5/§5.1; ink quintet; `DsCallout` tone×label; `DsQuote`/`DsCapsule`; type ladder 48–60/34/24/18/16/14/12. Pilot `TodayDayLogicCallout`. Gate fix `ProductJourneyScene` caption hex. Does **not** close zones — 2.9b+ under 6-axis DoD.
+- 2026-08-05 | Design System | **Task 2.7 + 2.6 + 2.6b Wave 1–2** | **CODE (layout DoD ✅; zones IN PROGRESS)** | Shell wrappers → `--tf-shell-max`; zone columns tokenized; gate v2 (rgba/color-mix/font-size/max-width); Compatibility cards → `--day-*`/`--tf-*`; ~382 type literals → `--tf-type-*`. Baseline 1964 keys. Screenshot parity still required before zone DONE / Onboarding.
+- 2026-08-05 | Design System | **DS unification reopen** | **IN PROGRESS** | Practices/Profile/Compatibility not DONE on color-only gate. 6-axis DoD. Wave 1 = Task 2.7 layout; Wave 2 = Task 2.6 rgba gate + 2.6b type; then screenshots; then Onboarding.
+- 2026-08-04 | Design System | **Task 3 Compatibility wave** | **REOPENED (color partial)** | PR #13 merged · Hub/analyze/signs/birthdates → `DsButton`; baseline 495→447. Layout/rgba/type/screenshots pending under DS unification.
+- 2026-08-04 | Design System | **Task 3 Profile wave** | **REOPENED (color partial)** | PR #12 merged (`eb4e281`) · Hub/setup CTAs → `DsButton`; `profileV2System` tokenized. Layout/type/screenshots pending.
+- 2026-08-04 | Design System | **Task 3 Practices wave** | **REOPENED (color partial)** | PR #11 merged. Hub/session/detail CTAs → `DsButton`; lavender zone killed. Layout/type/screenshots pending.
 - 2026-08-04 | Design System | **Task 3 Today wave** | **DONE** | PR #10 merged (`de9dfed`). Composition ScreenFlow CTAs → `DsButton`; pick sheet `--day-surface-tint`.
 - 2026-08-03 | Profile / Ops | **Force-publish profile via Kimi-K3** | **LIVE canary** | `force_rebuild_profile_ops.py` users 1/2 · CE publish_portrait · contract+ce `ready` · identity rewritten (Kimi stream). Stage 3–5 still diagnostics-only on this cutover; Stage 2 LLM path used.
 - 2026-08-03 | Today / Ops | **Kimi-K3 force_rebuild (stream idle 300s)** | **LIVE canary** | Redeploy env K3 + read=300, no DeepSeek. gen489 user1 / gen490 user2 → `native_llm_c1` model=`moonshotai/Kimi-K3` (~23m / ~2m). Streaming held connection; first attempt via docker exec OOM/137 — used compose run job.

@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import styles from "@/components/today/composition/TodayHookRevealShell.module.css";
 import { DsCard } from "@/design-system/primitives/DsCard";
 import { asTrimmedText, formatColorWhereToUse } from "@/lib/hookRevealText";
@@ -33,6 +34,8 @@ type Props = {
   testId: string;
   /** Visual differentiation — tarot image accent vs numerology digit. */
   variant?: "tarot" | "numerology" | "default";
+  /** Optional dominate visual (e.g. tarot face kept after pick). */
+  visual?: ReactNode;
 };
 
 /**
@@ -48,6 +51,7 @@ export function TodayHookRevealShell({
   fallbackBody = null,
   testId,
   variant = "default",
+  visual = null,
 }: Props) {
   const baseMeaning = asTrimmedText(hook?.base?.meaning);
   const bridgeText = asTrimmedText(hook?.bridge_to_day);
@@ -77,6 +81,7 @@ export function TodayHookRevealShell({
     >
       <div data-hook-kind={hook?.kind || undefined} data-hook-variant={variant !== "default" ? variant : undefined}>
         <p className={styles.kind}>{kindLabel}</p>
+        {visual ? <div className={styles.visual}>{visual}</div> : null}
         <h2 className={styles.title}>
           {title}
           {orientation ? <span className={styles.orient}> · {orientation}</span> : null}

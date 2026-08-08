@@ -1,6 +1,6 @@
 "use client";
 
-import { DsButton } from "@/design-system";
+import { DsButton, DsCallout } from "@/design-system";
 
 import Link from "next/link";
 import { Suspense, useEffect, useMemo, useState } from "react";
@@ -132,7 +132,7 @@ function ResultContent() {
         mainWide
         contentClassName={`${pl.content} ${pl.legacyHost}`}
       >
-        <section className="tf-shell" style={{ paddingTop: "2rem", paddingBottom: "4.5rem" }}>
+        <section className="compat-flow-section" style={{ paddingTop: "2rem", paddingBottom: "4.5rem" }}>
           <GuestAccessLimitGate
             title={GUEST_ACCESS_COPY.compatLimitTitle}
             body={GUEST_ACCESS_COPY.compatLimitBody}
@@ -154,7 +154,7 @@ function ResultContent() {
         mainWide
         contentClassName={`${pl.content} ${pl.legacyHost}`}
       >
-        <section className="tf-shell" style={{ paddingTop: "2rem", paddingBottom: "3rem" }}>
+        <section className="compat-flow-section" style={{ paddingTop: "2rem", paddingBottom: "3rem" }}>
           <div className="compat-desktop-shell compat-desktop-stack">
             <div className="compat-analyze-topbar">
               <Link href="/compatibility/signs" className="compat-analyze-back">
@@ -219,22 +219,20 @@ function ResultContent() {
                 gap: "0.75rem",
               }}
             >
-              <div className="compat-callout-go">
-                <p className="orbit-body-xs" style={{ margin: 0, color: "#166534", fontWeight: 700 }}>
-                  Опора
-                </p>
-                <p className="orbit-body-sm" style={{ margin: "0.35rem 0 0", color: "#14532d", lineHeight: 1.55 }}>
-                  {personalStrongestText}
-                </p>
-              </div>
-              <div className="compat-callout-warn">
-                <p className="orbit-body-xs" style={{ margin: 0, color: "#92400e", fontWeight: 700 }}>
-                  Риск
-                </p>
-                <p className="orbit-body-sm" style={{ margin: "0.35rem 0 0", color: "#78350f", lineHeight: 1.55 }}>
-                  {personalFrictionText}
-                </p>
-              </div>
+              <DsCallout
+                tone="help"
+                label="relations"
+                icon="heart"
+                title={personalStrongestText}
+                testId="compat-signs-do"
+              />
+              <DsCallout
+                tone="avoid"
+                label="attention"
+                icon="flag"
+                title={personalFrictionText}
+                testId="compat-signs-avoid"
+              />
             </div>
           </>
         ) : null}
@@ -262,7 +260,7 @@ function ResultContent() {
       mainWide
       contentClassName={`${pl.content} ${pl.legacyHost}`}
     >
-      <section className="tf-shell" style={{ paddingTop: "2rem", paddingBottom: "4.5rem" }}>
+      <section className="compat-flow-section" style={{ paddingTop: "2rem", paddingBottom: "4.5rem" }}>
         <div
           className="tf-surface"
           style={{

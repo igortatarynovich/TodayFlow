@@ -146,7 +146,7 @@ export function ProfileWhyScene({
     setSelectedOnce(true);
   }, [motion.className, selected.length]);
 
-  if (!selected.length && !influenced.length && !why.honesty && !why.title) return null;
+  if (!selected.length && !influenced.length) return null;
 
   const copy = PROFILE_V2_COPY.zones.why;
 
@@ -192,14 +192,6 @@ export function ProfileWhyScene({
         </div>
       ) : null}
 
-      {why.title && why.title !== copy.title ? (
-        <p className={styles.whySynthesis}>{why.title}</p>
-      ) : null}
-      {why.honesty ? (
-        <p className={styles.zoneLead} data-testid="profile-v2-why-honesty">
-          {why.honesty}
-        </p>
-      ) : null}
     </section>
   );
 }

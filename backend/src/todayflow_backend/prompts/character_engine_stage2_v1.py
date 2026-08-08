@@ -30,7 +30,8 @@ not career/love/money roots, not advice, not scenes, not Compass.
 What counts as identity core:
 - one dominant way this person builds their world / decides / holds tension
 - a **mechanism**, not an epithet («sensitive and creative» = reject)
-- a single story line, not a catalogue of qualities
+- a single person-story line, not a catalogue of traits or astro facts
+- surface_text reads as a short plot («you/a person who…»), no «Sun/house/ASC/number» dumps
 - specificity «they saw me», not a generic compliment
 - grounded in Evidence Graph claims; resolve contradictions by weighing edges, not by inventing facts
 
@@ -95,7 +96,8 @@ HARD RULES:
 Что такое identity core:
 - один доминирующий способ, которым человек строит мир / решает / держит напряжение
 - **механизм**, не эпитет («чувствительный и креативный» = reject)
-- одна линия истории, не каталог черт
+- одна линия истории человека, не каталог черт и не набор астрофактов
+- surface_text читается как короткий сюжет («ты/человек, который…»), без «Солнце/дом/ASC/число»
 - специфичность «меня увидели», не общий комплимент «мне польстили»
 - опора только на Evidence Graph; противоречия разрешай через edges, не выдумывая факты
 

@@ -72,7 +72,7 @@ function formatGlanceDateRu(dateISO: string): string {
 }
 
 /**
- * Glance / Сводка — Day Atmosphere + Block Composition (FOUNDATION_UI §16).
+ * Glance / Сводка — story frame (FOUNDATION_UI §16 story-frame grammar).
  * Progress = ScreenFlow chrome (SCREEN_FLOW §1.5) — no in-hero gauge.
  * Jobs of meaning: TODAY_SCREEN_SCENARIO_V3.
  */
@@ -156,11 +156,11 @@ export function TodayGlanceAct({
         </p>
       </header>
 
-      <DsCard variant="glass" size="compact" className={styles.block} testId="today-glance-glass">
+      <div className={styles.stage}>
         {themeLoading ? (
           <p className={styles.loading}>{copy.loadingDay}</p>
         ) : (
-          <>
+          <div className={styles.themeBlock} data-testid="today-glance-glass">
             <p className={styles.eyebrow} data-testid="today-glance-theme-label">
               {copy.journey.glanceThemeLabel}
             </p>
@@ -178,140 +178,149 @@ export function TodayGlanceAct({
                 {detailLine}
               </p>
             ) : null}
-          </>
+          </div>
         )}
-      </DsCard>
 
-      {energyText ? (
-        <DsCard variant="glass" size="compact" className={styles.block} testId="today-glance-energy">
-          <p className={styles.eyebrow}>{copy.pulseLabel}</p>
-          <p className={styles.primaryCompact} data-testid="today-glance-energy-text">
-            {energyText}
-          </p>
-          {energyCauseText ? (
-            <p className={styles.detail} data-testid="today-glance-energy-cause">
-              {energyCauseText}
+        {energyText ? (
+          <div className={styles.energyBlock} data-testid="today-glance-energy">
+            <p className={styles.eyebrow}>{copy.pulseLabel}</p>
+            <p className={styles.energyText} data-testid="today-glance-energy-text">
+              {energyText}
             </p>
-          ) : null}
-        </DsCard>
-      ) : null}
-
-      <DsCard variant="glass" size="compact" className={styles.block} testId="today-glance-daily-focus">
-        <p className={styles.eyebrow}>{copy.journey.glanceFocusLabel}</p>
-        {hasFocus ? (
-          <>
-            {focusTitle ? (
-              <p
-                className={styles.primaryCompact}
-                data-testid="today-glance-focus-title"
-                data-daily-focus-id={dailyFocus?.dailyFocusId}
-              >
-                {focusTitle}
+            {energyCauseText ? (
+              <p className={styles.detail} data-testid="today-glance-energy-cause">
+                {energyCauseText}
               </p>
             ) : null}
-            {prioritize ? (
-              <p className={styles.focusDirection} data-testid="today-glance-focus-prioritize">
-                <span className={styles.focusDirectionLabel}>{copy.journey.glanceFocusPrioritize}</span>
-                {prioritize}
-              </p>
-            ) : null}
-            {avoid ? (
-              <p className={styles.focusDirection} data-testid="today-glance-focus-avoid">
-                <span className={styles.focusDirectionLabel}>{copy.journey.glanceFocusAvoid}</span>
-                {avoid}
-              </p>
-            ) : null}
-          </>
-        ) : (
-          <p className={styles.detail} data-testid="today-glance-focus-empty">
-            {TODAY_NO_SHARP_FOCUS_COPY}
-          </p>
-        )}
-      </DsCard>
-
-      <DsCard variant="glass" size="compact" className={styles.block} testId="today-glance-meta">
-        <p className={styles.eyebrow}>{copy.journey.glanceNearestLabel}</p>
-
-        {loaded && loadFailure ? (
-          <p
-            className={styles.detail}
-            role="status"
-            data-testid="today-glance-meta-fallback"
-            data-fallback="true"
-            data-failure={loadFailure}
-          >
-            {todaySlotFailureCopy(loadFailure)}
-          </p>
+          </div>
         ) : null}
+      </div>
 
-        <div
-          className={styles.nearestSlot}
-          data-testid="today-slot-glance-nearest"
-          data-wave2-slot="glance-nearest"
-          data-fallback={loadFailure ? "true" : "false"}
-          data-failure={loadFailure || undefined}
-        >
-          {!loaded ? <div className={styles.nearestSkeleton} data-loading="true" aria-busy="true" /> : null}
-          {loaded && !loadFailure && nearest ? (
-            onNearestSelect ? (
-              <button
-                type="button"
-                className={styles.nearestPrimaryButton}
-                data-valence={nearest.valence}
-                data-live={live ? "true" : "false"}
-                data-testid={`today-glance-nearest-${nearest.driver_id}`}
-                onClick={() => onNearestSelect(nearest)}
-              >
-                <span className={styles.nearestTime}>{formatGlanceClock(nearest.time_local)}</span>
-                <span className={styles.nearestLabel}>{nearest.label_short}</span>
-                {live ? (
-                  <span className={styles.nearestNow} data-testid="today-glance-now">
-                    {copy.journey.glanceNow}
-                  </span>
-                ) : null}
-                <span className={styles.nearestPracticeHint}>{copy.journey.glanceNearestPracticeHint}</span>
-              </button>
-            ) : (
-              <p
-                className={styles.nearestPrimary}
-                data-valence={nearest.valence}
-                data-live={live ? "true" : "false"}
-                data-testid={`today-glance-nearest-${nearest.driver_id}`}
-              >
-                <span className={styles.nearestTime}>{formatGlanceClock(nearest.time_local)}</span>
-                <span className={styles.nearestLabel}>{nearest.label_short}</span>
-                {live ? (
-                  <span className={styles.nearestNow} data-testid="today-glance-now">
-                    {copy.journey.glanceNow}
-                  </span>
-                ) : null}
-              </p>
-            )
-          ) : null}
-          {loaded && !loadFailure && !nearest ? (
-            <p className={styles.detail} data-empty="true" data-testid="today-glance-nearest-empty">
-              {copy.journey.glanceNearestEmpty}
+      <div className={styles.footer}>
+        <div className={styles.focusBlock} data-testid="today-glance-daily-focus">
+          <p className={styles.eyebrow}>{copy.journey.glanceFocusLabel}</p>
+          {hasFocus ? (
+            <>
+              {focusTitle ? (
+                <p
+                  className={styles.focusTitle}
+                  data-testid="today-glance-focus-title"
+                  data-daily-focus-id={dailyFocus?.dailyFocusId}
+                >
+                  {focusTitle}
+                </p>
+              ) : null}
+              {(prioritize || avoid) && (
+                <ul className={styles.focusList}>
+                  {prioritize ? (
+                    <li className={styles.focusItem} data-testid="today-glance-focus-prioritize">
+                      <span className={styles.focusDirectionLabel}>{copy.journey.glanceFocusPrioritize}</span>
+                      {prioritize}
+                    </li>
+                  ) : null}
+                  {avoid ? (
+                    <li className={styles.focusItem} data-testid="today-glance-focus-avoid">
+                      <span className={styles.focusDirectionLabel}>{copy.journey.glanceFocusAvoid}</span>
+                      {avoid}
+                    </li>
+                  ) : null}
+                </ul>
+              )}
+            </>
+          ) : (
+            <p className={styles.detail} data-testid="today-glance-focus-empty">
+              {TODAY_NO_SHARP_FOCUS_COPY}
+            </p>
+          )}
+        </div>
+
+        <div className={styles.metaBlock} data-testid="today-glance-meta">
+          <p className={styles.eyebrow}>{copy.journey.glanceNearestLabel}</p>
+
+          {loaded && loadFailure ? (
+            <p
+              className={styles.detail}
+              role="status"
+              data-testid="today-glance-meta-fallback"
+              data-fallback="true"
+              data-failure={loadFailure}
+            >
+              {todaySlotFailureCopy(loadFailure)}
             </p>
           ) : null}
-        </div>
-      </DsCard>
 
-      {primaryTeaser ? (
-        <div data-testid="today-glance-teasers">
-          <DsCard
-            variant="glass"
-            size="compact"
-            as="button"
-            className={styles.blockTeaser}
-            testId={`today-glance-teaser-${primaryTeaser.id}`}
-            onClick={primaryTeaser.onSelect}
+          <div
+            className={styles.nearestSlot}
+            data-testid="today-slot-glance-nearest"
+            data-wave2-slot="glance-nearest"
+            data-fallback={loadFailure ? "true" : "false"}
+            data-failure={loadFailure || undefined}
           >
-            <p className={styles.eyebrow}>{copy.journey.glanceTeasersLabel}</p>
-            <span className={styles.primaryCompact}>{primaryTeaser.label}</span>
-            {primaryTeaser.hook ? <span className={styles.detail}>{primaryTeaser.hook}</span> : null}
-          </DsCard>
+            {!loaded ? (
+              <p className={styles.detail} data-loading="true" aria-busy="true">
+                <span className={styles.nearestSkeleton} />
+              </p>
+            ) : null}
+            {loaded && !loadFailure && nearest ? (
+              onNearestSelect ? (
+                <button
+                  type="button"
+                  className={styles.nearestPrimaryButton}
+                  data-valence={nearest.valence}
+                  data-live={live ? "true" : "false"}
+                  data-testid={`today-glance-nearest-${nearest.driver_id}`}
+                  onClick={() => onNearestSelect(nearest)}
+                >
+                  <span className={styles.nearestTime}>{formatGlanceClock(nearest.time_local)}</span>
+                  <span className={styles.nearestLabel}>{nearest.label_short}</span>
+                  {live ? (
+                    <span className={styles.nearestNow} data-testid="today-glance-now">
+                      {copy.journey.glanceNow}
+                    </span>
+                  ) : null}
+                  <span className={styles.nearestPracticeHint}>{copy.journey.glanceNearestPracticeHint}</span>
+                </button>
+              ) : (
+                <p
+                  className={styles.nearestPrimary}
+                  data-valence={nearest.valence}
+                  data-live={live ? "true" : "false"}
+                  data-testid={`today-glance-nearest-${nearest.driver_id}`}
+                >
+                  <span className={styles.nearestTime}>{formatGlanceClock(nearest.time_local)}</span>
+                  <span className={styles.nearestLabel}>{nearest.label_short}</span>
+                  {live ? (
+                    <span className={styles.nearestNow} data-testid="today-glance-now">
+                      {copy.journey.glanceNow}
+                    </span>
+                  ) : null}
+                </p>
+              )
+            ) : null}
+            {loaded && !loadFailure && !nearest ? (
+              <p className={styles.detail} data-empty="true" data-testid="today-glance-nearest-empty">
+                {copy.journey.glanceNearestEmpty}
+              </p>
+            ) : null}
+          </div>
         </div>
-      ) : null}
+
+        {primaryTeaser ? (
+          <div data-testid="today-glance-teasers">
+            <DsCard
+              variant="glass"
+              size="compact"
+              as="button"
+              className={styles.teaserCta}
+              testId={`today-glance-teaser-${primaryTeaser.id}`}
+              onClick={primaryTeaser.onSelect}
+            >
+              <span className={styles.teaserLabel}>{primaryTeaser.label}</span>
+              {primaryTeaser.hook ? <span className={styles.teaserHook}>{primaryTeaser.hook}</span> : null}
+            </DsCard>
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }

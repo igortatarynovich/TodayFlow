@@ -72,7 +72,8 @@ def test_scenario_builds_one_conflict_from_drivers_not_card_alone():
     )
     assert scenario["contract_version"] == DAY_SCENARIO_V1_CONTRACT
     assert scenario["runtime_sot"] is True
-    assert validate_day_scenario_v1(scenario) == []
+    # Deterministic build has no meaning scenes until native LLM (B5).
+    assert "scenes_empty" in validate_day_scenario_v1(scenario)
 
     conflict = scenario["conflict"]
     assert conflict["short_name"]
@@ -211,23 +212,12 @@ def test_scenes_are_relevant_and_serve_conflict():
         day_thesis=thesis,
         ritual_context=ritual,
     )
-    scenes = scenario["scenes"]
-    assert 1 <= len(scenes) <= 4
-    labels = {s["serves_conflict"] for s in scenes}
-    assert labels == {"тон дня"}
+    # Deterministic bank retired — no invented scene meaning without native LLM.
+    assert scenario["scenes"] == []
+    assert "scenes_empty" in validate_day_scenario_v1(scenario)
     short = scenario["conflict"]["short_name"]
     assert "меркурий" not in short.lower()
     assert "разворач" not in short.lower()
-    spheres = {s["sphere"] for s in scenes}
-    # relationships topic should pull relationship/communication spheres
-    assert spheres & {"relationships", "communication", "work_decisions"}
-    for s in scenes:
-        assert s["scene_id"].startswith("scene.")
-        assert s["opportunity"]
-        assert s["trap"]
-        assert s["chorus_references"]
-        assert "Темп:" not in (s.get("recommended_action") or "")
-        assert short not in (s.get("what_happens") or "")
 
 
 def test_props_from_scenes_have_origin_and_conflict_link():
@@ -257,6 +247,34 @@ def test_props_from_scenes_have_origin_and_conflict_link():
         day_thesis=thesis,
         ritual_context=ritual,
     )
+    from todayflow_backend.services.day_scenario_v1 import build_scenario_props_v1
+
+    scenes = [
+        {
+            "scene_id": "scene.relationships",
+            "sphere": "relationships",
+            "sphere_label_ru": "Отношения",
+            "role_in_story": "primary",
+            "what_happens": "В близком контакте сегодня важна одна честная фраза.",
+            "why": "",
+            "opportunity": "Одна фраза вслух — без сглаживания.",
+            "trap": "Снова сгладить ради тишины.",
+            "recommended_action": "Назови одну вещь прямо.",
+            "do_not": "Не делай вид, что всё нормально.",
+            "domestic_example": "Короткий разговор.",
+            "evidence_references": list(scenario["conflict"].get("driver_ids") or []),
+            "chorus_references": ["conflict"],
+            "confidence": 0.7,
+            "serves_conflict": "тон дня",
+        }
+    ]
+    scenario["scenes"] = scenes
+    scenario["props"] = build_scenario_props_v1(
+        conflict=scenario["conflict"],
+        scenes=scenes,
+        chorus=scenario["chorus"],
+        day_favorable=False,
+    )
     assert validate_day_scenario_v1(scenario) == []
     props = scenario["props"]
     assert props["status"] == "ok"
@@ -271,7 +289,6 @@ def test_props_from_scenes_have_origin_and_conflict_link():
     assert props["affirmations"][0]["origin_scene_id"]
     assert props["affirmations"][0]["universal_formula"] is False
     assert props["strong_spheres"]
-    # v3.1: color why must not paste opposing_forces seed
     force_a = (scenario["conflict"].get("opposing_forces") or {}).get("a") or ""
     force_b = (scenario["conflict"].get("opposing_forces") or {}).get("b") or ""
     link = color["link_to_conflict"].lower()
@@ -279,7 +296,6 @@ def test_props_from_scenes_have_origin_and_conflict_link():
         assert force_a.lower() not in link
     if force_b:
         assert force_b.lower() not in link
-    # v3.1b: link is catalog symbolic_property once — lived tip, not «опора ясности» mash.
     assert isinstance(color["link_to_conflict"], str) and len(color["link_to_conflict"].strip()) > 8
     effect = str(color.get("expected_effect_today") or "")
     assert effect and color["link_to_conflict"] not in effect
@@ -320,25 +336,9 @@ def test_scene_copy_varies_by_sphere_and_uses_name():
         ritual_context=ritual,
         person_name="Игорь",
     )
-    scenes = scenario["scenes"]
-    assert scenes
-    whats = [s["what_happens"] for s in scenes]
-    opps = [s["opportunity"] for s in scenes]
-    assert any(w.startswith("Игорь,") for w in whats)
-    assert not any("тот же выбор — «" in w for w in whats)
-    assert not any("день упирается в выбор: «" in w for w in whats)
-    assert not any(o.startswith("Шанс выбрать «") for o in opps)
-    assert len(set(opps)) == len(opps) or len(opps) == 1
-    # v3.1: no force-quote spam (forces often empty; when present still ≤1)
-    force_a = (scenario["conflict"].get("opposing_forces") or {}).get("a") or ""
-    force_b = (scenario["conflict"].get("opposing_forces") or {}).get("b") or ""
-    joined = " ".join(
-        f"{s.get('what_happens')} {s.get('opportunity')} {s.get('trap')}" for s in scenes
-    )
-    if force_a:
-        assert joined.count(f"«{force_a}»") <= 1
-    if force_b:
-        assert joined.count(f"«{force_b}»") <= 1
+    # Deterministic path does not invent sphere beat copy (native LLM only).
+    assert scenario["scenes"] == []
+    assert "scenes_empty" in validate_day_scenario_v1(scenario)
 
 
 def test_chorus_and_scenes_do_not_paste_short_name_seed():
@@ -418,13 +418,8 @@ def test_chorus_and_scenes_do_not_paste_short_name_seed():
         interpretation=interp,
         person_name="Игорь",
     )
-    assert scenes
-    for sc in scenes:
-        assert sc.get("why") == ""
-        assert sc.get("serves_conflict") == "тон дня"
-        assert seed not in str(sc.get("what_happens") or "")
-        assert seed not in str(sc.get("opportunity") or "")
-        assert seed not in str(sc.get("trap") or "")
+    # Runtime: deterministic scene bank retired — empty until native LLM attaches scenes.
+    assert scenes == []
 
     scenario = build_day_scenario_v1(
         interpretation=interp,
@@ -440,7 +435,8 @@ def test_chorus_and_scenes_do_not_paste_short_name_seed():
     assert "тащить старое" not in short.lower()
     assert "меркурий" not in short.lower()
     assert find_verbatim_seed_leaks_v1(scenario) == []
-    assert validate_day_scenario_v1(scenario) == []
+    # Empty scenes are structurally invalid for meaning SoT (B5 unavailable).
+    assert "scenes_empty" in validate_day_scenario_v1(scenario)
 
 
 def test_chorus_bridges_are_lived_not_generation_meta():

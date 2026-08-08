@@ -1,46 +1,59 @@
 "use client";
 
-import type { ComponentProps, ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
+import Link from "next/link";
 import { ScreenFlow, ScreenFlowStep, TODAY_SCREEN_FLOW_AXIS } from "@/design-system/primitives/ScreenFlow";
-import { TodayGlanceAct } from "@/components/today/composition/TodayGlanceAct";
-import { TodayPersonalizedProductSection } from "@/components/today/composition/TodayPersonalizedProductSection";
-import { TodayScreenBlockStack } from "@/components/today/composition/TodayScreenBlock";
+import { joinClass } from "@/design-system/utils/joinClass";
 import { TODAY_COMPOSITION_COPY as copy } from "@/components/today/composition/todayCompositionCopy";
-import { MotionReveal } from "@/design-system/motion/MotionReveal";
-import { MOTION } from "@/design-system/motion/tokens";
+import flowStyles from "@/components/today/composition/TodayProductScreenFlow.module.css";
+import sfStyles from "@/design-system/primitives/ScreenFlow/ScreenFlow.module.css";
+import {
+  TodayAttributesFrame,
+  TodayCloseFrame,
+  TodayEnergyFlowFrame,
+  TodayGreetingFrame,
+  TodayInsightFrame,
+  TodayPracticeFrame,
+} from "@/components/today/composition/TodayStoryDeckFrames";
 import type { ScreenFlowChangeReason } from "@/design-system/primitives/ScreenFlow";
 import type { GlanceDailyFocusModel } from "@/lib/todayDailyFocus";
-import type { GlanceTimelineItem } from "@/lib/todayGlanceTimeline";
-
-type PersonalizedProps = ComponentProps<typeof TodayPersonalizedProductSection>;
+import type { TodayDayColorGuide } from "@/lib/todayDayColorGuide";
+import type { TodayContractV1 } from "@/lib/todayContract";
+import type { TapResponseCode } from "@/lib/todayTapWidget";
+import { fetchDayFacts } from "@/lib/todayDayFacts";
 
 export type TodayProductScreenFlowProps = {
   dateISO: string;
+  dateLabel: string;
+  greetingSalutation: string;
+  greetingHeadline: string | null;
   themeTitle: string;
-  themeThesis?: string | null;
-  /** Conflict why_arose texture for Glance hero (v3) */
   dayTexture?: string | null;
   themeLoading?: boolean;
-  /** Glance Daily Focus (canon R15–R17 — replaces sphere chips) */
   dailyFocus?: GlanceDailyFocusModel | null;
-  /** Pulse text for Glance «Энергия дня» */
   energyLine?: string | null;
-  /** Cause under energy effect */
   energyCause?: string | null;
-  /** Glance nearest timed window → practice */
-  onNearestSelect?: (item: GlanceTimelineItem) => void;
-  heroSection: ReactNode;
-  /** Conflict narrative under photo — Plot Screen 1 (v3) */
-  plotNarrativeSection?: ReactNode;
-  /** @deprecated Pulse moved to Glance `energyLine`; kept for call-site compat. */
-  pulseSection?: ReactNode;
-  glanceSection: ReactNode;
-  morningDialogue: ReactNode;
-  dayReadingReady: boolean;
+  colorGuide?: TodayDayColorGuide | null;
+  moveDo?: string | null;
+  moveAvoid?: string | null;
+  /** Full «Главный сюжет» node for the theme+plot pane (not a short substitute). */
+  plotSlot?: ReactNode;
+  insightHeroText?: string | null;
+  /** Extra insight body (dialogue); plot lives in Attributes now. */
+  morningDialogue?: ReactNode;
   showSymbols: boolean;
   symbolsBody: ReactNode;
   showPersonalized: boolean;
-  personalizedProps: Omit<PersonalizedProps, "asScreenFlowSteps" | "actFilter">;
+  practiceTitle?: string | null;
+  practiceMeta?: string | null;
+  practiceActionLabel?: string;
+  practiceCompleted?: boolean;
+  practiceCompleting?: boolean;
+  onPracticeAction?: () => void;
+  contract: TodayContractV1;
+  tapResponse?: TapResponseCode | null;
+  onTapRecorded?: (response: TapResponseCode) => void;
+  onOpenEvening: () => void;
   activeIndex: number;
   onIndexChange: (index: number, meta: { reason: ScreenFlowChangeReason }) => void;
   embeddedInWebDashboard?: boolean;
@@ -48,77 +61,98 @@ export type TodayProductScreenFlowProps = {
   greetingSection?: ReactNode;
 };
 
-/** Phase 2b indices: Glance → Plot → [Symbols?] → Reading → Move → Response */
+/**
+ * Mockup story deck:
+ * Greeting → Energy+Flow → [Symbols] → Attributes → Practice → Insight → Close
+ */
 export function todayScreenFlowStepCount(opts: {
   showSymbols: boolean;
   showPersonalized: boolean;
 }): number {
-  return 2 + (opts.showSymbols ? 1 : 0) + (opts.showPersonalized ? 3 : 0);
+  if (!opts.showPersonalized) {
+    return 1 + (opts.showSymbols ? 1 : 0);
+  }
+  return 6 + (opts.showSymbols ? 1 : 0);
 }
 
+/** @deprecated use todayScreenFlowAttributesIndex */
 export function todayScreenFlowReadingIndex(showSymbols: boolean): number {
+  return todayScreenFlowAttributesIndex(showSymbols);
+}
+
+export function todayScreenFlowSymbolsIndex(): number {
+  return 2;
+}
+
+export function todayScreenFlowAttributesIndex(showSymbols: boolean): number {
   return showSymbols ? 3 : 2;
+}
+
+export function todayScreenFlowPracticeIndex(showSymbols: boolean): number {
+  return showSymbols ? 4 : 3;
+}
+
+export function todayScreenFlowInsightIndex(showSymbols: boolean): number {
+  return showSymbols ? 5 : 4;
+}
+
+export function todayScreenFlowCloseIndex(showSymbols: boolean): number {
+  return showSymbols ? 6 : 5;
 }
 
 export function TodayProductScreenFlow({
   dateISO,
+  dateLabel,
+  greetingSalutation,
+  greetingHeadline,
   themeTitle,
-  themeThesis = null,
   dayTexture = null,
   themeLoading = false,
   dailyFocus = null,
   energyLine = null,
   energyCause = null,
-  onNearestSelect,
-  heroSection,
-  plotNarrativeSection = null,
-  pulseSection: _pulseSection = null,
-  glanceSection,
-  morningDialogue,
-  dayReadingReady,
+  colorGuide = null,
+  moveDo = null,
+  moveAvoid = null,
+  plotSlot = null,
+  insightHeroText = null,
+  morningDialogue = null,
   showSymbols,
   symbolsBody,
   showPersonalized,
-  personalizedProps,
+  practiceTitle = null,
+  practiceMeta = null,
+  practiceActionLabel = copy.practiceStart,
+  practiceCompleted = false,
+  practiceCompleting = false,
+  onPracticeAction,
+  contract,
+  tapResponse = null,
+  onTapRecorded,
+  onOpenEvening,
   activeIndex,
   onIndexChange,
   embeddedInWebDashboard = false,
   topRowSection = null,
   greetingSection = null,
 }: TodayProductScreenFlowProps) {
-  const readingIndex = todayScreenFlowReadingIndex(showSymbols);
+  const themeText = (dayTexture || "").trim() || null;
+  const go = (index: number) => onIndexChange(index, { reason: "select" });
 
-  const teasers = [
-    {
-      id: "plot",
-      label: copy.journey.actNavPlot,
-      hook: copy.journey.teaserPlotHook,
-      onSelect: () => onIndexChange(1, { reason: "select" as const }),
-    },
-    ...(showSymbols
-      ? [
-          {
-            id: "symbols",
-            label: copy.journey.actNavSymbols,
-            hook: copy.journey.teaserSymbolsHook,
-            onSelect: () => onIndexChange(2, { reason: "select" as const }),
-          },
-        ]
-      : []),
-    ...(showPersonalized
-      ? [
-          {
-            id: "reading",
-            label: copy.journey.actNavReading,
-            hook: copy.journey.teaserReadingHook,
-            onSelect: () => onIndexChange(readingIndex, { reason: "select" as const }),
-          },
-        ]
-      : []),
-  ];
+  // Warm day-facts as soon as the date is known (not only when Energy mounts).
+  useEffect(() => {
+    if (!dateISO) return;
+    void fetchDayFacts(dateISO).catch(() => {
+      /* pane owns failure UI */
+    });
+  }, [dateISO]);
+
+  const energyNextIndex = showSymbols ? todayScreenFlowSymbolsIndex() : todayScreenFlowAttributesIndex(false);
+  const energyNextTitle = showSymbols ? copy.storyNext.symbols : copy.storyNext.attributes;
+  const energyNextHint = showSymbols ? copy.storyNext.symbolsHint : copy.storyNext.attributesHint;
 
   return (
-    <div data-testid="today-zone-foundation">
+    <div data-testid="today-zone-foundation" className={flowStyles.foundation}>
       {!embeddedInWebDashboard ? topRowSection : null}
       {!embeddedInWebDashboard ? greetingSection : null}
 
@@ -127,65 +161,93 @@ export function TodayProductScreenFlow({
         onIndexChange={onIndexChange}
         axis={TODAY_SCREEN_FLOW_AXIS}
         showChrome
+        className={joinClass(flowStyles.screenFlowStory, sfStyles.storyBleed)}
         testId="today-screen-flow"
       >
-        <ScreenFlowStep id="glance" label={copy.journey.glanceTitle} scrollable>
-          <TodayGlanceAct
-            dateISO={dateISO}
-            title={themeTitle}
-            dayTexture={dayTexture}
-            thesis={themeThesis}
-            themeLoading={themeLoading}
-            dailyFocus={dailyFocus}
-            energyLine={energyLine}
-            energyCause={energyCause}
-            onNearestSelect={onNearestSelect}
-            teasers={teasers}
+        <ScreenFlowStep id="greeting" label="Приветствие" scrollable={false}>
+          <TodayGreetingFrame
+            salutation={greetingSalutation}
+            dateLabel={dateLabel}
+            headline={greetingHeadline}
+            loading={themeLoading}
+            onStart={() => go(1)}
           />
         </ScreenFlowStep>
 
-        <ScreenFlowStep id="plot" label={copy.journey.dayTitle} scrollable>
-          <TodayScreenBlockStack testId="today-zone-act-plot">
-            <MotionReveal>{heroSection}</MotionReveal>
-            {plotNarrativeSection ? <MotionReveal delayMs={MOTION.staggerMs}>{plotNarrativeSection}</MotionReveal> : null}
-            {dayReadingReady ? (
-              <>
-                <MotionReveal delayMs={MOTION.staggerMs * 2}>{glanceSection}</MotionReveal>
-                {morningDialogue}
-              </>
-            ) : (
-              morningDialogue
-            )}
-          </TodayScreenBlockStack>
-        </ScreenFlowStep>
+        {showPersonalized ? (
+          <ScreenFlowStep id="energy_flow" label={copy.pulseLabel} scrollable={false}>
+            <TodayEnergyFlowFrame
+              energyLine={energyLine}
+              energyCause={energyCause}
+              dateISO={dateISO}
+              onGoNext={() => go(energyNextIndex)}
+              nextTitle={energyNextTitle}
+              nextHint={energyNextHint}
+            />
+          </ScreenFlowStep>
+        ) : null}
 
         {showSymbols ? (
-          <ScreenFlowStep id="symbols" label={copy.journey.openTitle} scrollable>
-            <div data-testid="today-zone-open-day">{symbolsBody}</div>
+          <ScreenFlowStep id="symbols" label={copy.journey.openTitle} scrollable={false}>
+            <div
+              className={flowStyles.storyFrame}
+              data-testid="today-zone-open-day"
+              data-story-scroll="pane"
+            >
+              {symbolsBody}
+            </div>
           </ScreenFlowStep>
         ) : null}
 
         {showPersonalized ? (
           <>
-            <ScreenFlowStep id="reading" label={copy.journey.actNavReading} scrollable>
-              <TodayPersonalizedProductSection
-                {...personalizedProps}
-                actFilter="reading"
-                asScreenFlowSteps
+            <ScreenFlowStep id="attributes" label="Опора дня" scrollable={false}>
+              <TodayAttributesFrame
+                themeLabel={themeTitle || copy.journey.glanceThemeLabel}
+                themeText={themeText}
+                plotSlot={plotSlot}
+                dailyFocus={dailyFocus}
+                colorGuide={colorGuide}
+                moveDo={moveDo}
+                moveAvoid={moveAvoid}
+                onGoNext={() => go(todayScreenFlowPracticeIndex(showSymbols))}
               />
             </ScreenFlowStep>
-            <ScreenFlowStep id="move" label={copy.journey.actNavMove} scrollable>
-              <TodayPersonalizedProductSection
-                {...personalizedProps}
-                actFilter="move"
-                asScreenFlowSteps
+
+            <ScreenFlowStep id="practice" label="Практика дня" scrollable={false}>
+              <TodayPracticeFrame
+                title={practiceTitle}
+                meta={practiceMeta}
+                actionLabel={practiceActionLabel}
+                completed={practiceCompleted}
+                completing={practiceCompleting}
+                onAction={() => onPracticeAction?.()}
+                onGoNext={() => go(todayScreenFlowInsightIndex(showSymbols))}
+                linkSlot={
+                  <p className={flowStyles.practiceLink}>
+                    <Link href="/practices" data-testid="today-setup-practices-link">
+                      {copy.setupPracticesLink} →
+                    </Link>
+                  </p>
+                }
               />
             </ScreenFlowStep>
-            <ScreenFlowStep id="response" label={copy.journey.actNavBridge} scrollable>
-              <TodayPersonalizedProductSection
-                {...personalizedProps}
-                actFilter="response"
-                asScreenFlowSteps
+
+            <ScreenFlowStep id="insight" label="Инсайт дня" scrollable={false}>
+              <TodayInsightFrame
+                heroText={insightHeroText}
+                dialogue={morningDialogue}
+                onGoNext={() => go(todayScreenFlowCloseIndex(showSymbols))}
+              />
+            </ScreenFlowStep>
+
+            <ScreenFlowStep id="close" label="Вечер" scrollable={false}>
+              <TodayCloseFrame
+                contract={contract}
+                dateISO={dateISO}
+                tapResponse={tapResponse}
+                onTapRecorded={onTapRecorded}
+                onOpenEvening={onOpenEvening}
               />
             </ScreenFlowStep>
           </>

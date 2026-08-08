@@ -12,6 +12,70 @@
   margin: 0 0 1rem;
 }
 
+/* Compatibility / Tarot hubs — no card frame, no min-height act (phone-first). */
+.journeyFlat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  margin: 0;
+  padding: 0.35rem 0 1.35rem;
+  border: none;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.journeyFlatHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.journeyFlatIndex {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0;
+  font-family: var(--tf-font-mono, ui-monospace, monospace);
+  font-size: var(--tf-type-caption-lg-size, 0.6875rem);
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tf-caption);
+}
+
+.journeyFlatBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  padding: 0 0.3rem;
+  border-radius: 999px;
+  font-size: var(--tf-type-caption-size, 0.625rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--tf-ink, #2a2520);
+  background: var(--tf-accent-gold-wash, var(--tf-surface-muted));
+  border: 1px solid var(--tf-ds-border-gold, var(--tf-border));
+}
+
+.journeyFlatLead {
+  margin: 0;
+  max-width: var(--tf-shell-readable, 36rem);
+  font-size: var(--tf-type-body-size, 0.9375rem);
+  line-height: 1.5;
+  color: var(--tf-ink-soft, var(--tf-body));
+}
+
+.journeyFlatBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+  min-width: 0;
+}
+
 .journeySceneHeader {
   display: flex;
   flex-direction: column;

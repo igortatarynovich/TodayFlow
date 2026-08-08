@@ -221,9 +221,12 @@ export function TodayVerdictStripSlot({ dateISO, dayFacts = null }: VerdictStrip
 export function TodayGlanceTimelineSlot({
   dateISO,
   dayFacts = null,
+  variant = "default",
 }: {
   dateISO: string;
   dayFacts?: DayFactsSlotSlice | null;
+  /** Story-deck pane: fuller hour cards with valence. */
+  variant?: "default" | "story";
 }) {
   const fromParent = dayFacts != null;
   const [rows, setRows] = useState<GlanceTimelineItem[]>(() =>
@@ -313,37 +316,68 @@ export function TodayGlanceTimelineSlot({
   if (rows.length === 0) {
     return (
       <div
-        className={styles.slot}
+        className={variant === "story" ? styles.glanceStory : styles.slot}
         data-testid="today-slot-glance-timeline"
         data-wave2-slot="glance"
         data-empty="true"
-        aria-hidden={true}
-      />
+        role={variant === "story" ? "status" : undefined}
+        aria-hidden={variant === "story" ? undefined : true}
+      >
+        {variant === "story" ? (
+          <p className={styles.glanceStoryEmpty} data-testid="today-glance-empty">
+            {copy.journey.glanceNearestEmpty}
+          </p>
+        ) : null}
+      </div>
     );
   }
 
   return (
     <div
-      className={styles.glance}
+      className={variant === "story" ? styles.glanceStory : styles.glance}
       data-testid="today-slot-glance-timeline"
       data-wave2-slot="glance"
       data-fallback="false"
+      data-variant={variant}
       role="list"
       aria-label={copy.journey.glanceStripLabel}
     >
       {rows.map((row) => {
         const live = isGlanceLiveNow(row.time_local, nowTick);
+        if (variant !== "story") {
+          return (
+            <div
+              key={`${row.driver_id}-${row.time_local}`}
+              className={styles.glanceRow}
+              role="listitem"
+              data-valence={row.valence}
+              data-live={live ? "true" : "false"}
+              data-testid={`today-glance-${row.driver_id}`}
+            >
+              <span className={styles.glanceTime}>{formatGlanceClock(row.time_local)}</span>
+              <span className={styles.glanceLabel}>{row.label_short}</span>
+              {live ? (
+                <span className={styles.glanceNow} data-testid="today-glance-now">
+                  {copy.journey.glanceNow}
+                </span>
+              ) : null}
+            </div>
+          );
+        }
         return (
           <div
             key={`${row.driver_id}-${row.time_local}`}
-            className={styles.glanceRow}
+            className={styles.glanceStoryRow}
             role="listitem"
             data-valence={row.valence}
             data-live={live ? "true" : "false"}
             data-testid={`today-glance-${row.driver_id}`}
           >
-            <span className={styles.glanceTime}>{formatGlanceClock(row.time_local)}</span>
-            <span className={styles.glanceLabel}>{row.label_short}</span>
+            <span className={styles.glanceStoryTime}>{formatGlanceClock(row.time_local)}</span>
+            <div className={styles.glanceStoryCopy}>
+              {/* Valence = data-valence / row color — no «Благоприятно» prose (WAVE2 lived-use). */}
+              <span className={styles.glanceStoryLabel}>{row.label_short}</span>
+            </div>
             {live ? (
               <span className={styles.glanceNow} data-testid="today-glance-now">
                 {copy.journey.glanceNow}

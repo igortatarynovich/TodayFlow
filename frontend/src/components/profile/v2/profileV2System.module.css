@@ -31,7 +31,7 @@
 
 .railDepthEyebrow {
   margin: 0;
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -79,7 +79,7 @@
   border: 1px solid var(--tf-accent-gold);
   background: var(--tf-surface);
   font-family: var(--tf-font-mono, ui-monospace, monospace);
-  font-size: 0.625rem;
+  font-size: var(--tf-type-caption-size);
   font-weight: 600;
   color: var(--tf-accent-gold-600, var(--tf-accent-gold));
   transition:
@@ -102,14 +102,14 @@
 }
 
 .railDepthTitle {
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 600;
   line-height: 1.3;
   color: var(--tf-ink);
 }
 
 .railDepthHint {
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   line-height: 1.4;
   color: var(--tf-caption);
 }
@@ -142,7 +142,7 @@
   border-radius: 999px;
   border: 1px solid var(--tf-border);
   background: var(--tf-surface);
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 600;
   color: var(--tf-caption);
   text-decoration: none;
@@ -182,7 +182,7 @@
 .heroEyebrow {
   margin: 0 0 1rem;
   font-family: var(--tf-font-mono, ui-monospace, monospace);
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 600;
   letter-spacing: 0.11em;
   text-transform: uppercase;
@@ -224,7 +224,7 @@
   border-radius: 999px;
   border: 1px solid var(--tf-border);
   background: var(--tf-surface-warm, var(--tf-surface));
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 600;
   color: var(--tf-caption);
 }
@@ -260,7 +260,7 @@
   border-radius: 50%;
   background: var(--tf-surface);
   font-family: var(--tf-font-mono, ui-monospace, monospace);
-  font-size: 1.125rem;
+  font-size: var(--tf-type-h3-size);
   font-weight: 600;
   color: var(--tf-ink);
 }
@@ -268,7 +268,7 @@
 .sideEyebrow {
   margin: 0;
   font-family: var(--tf-font-mono, ui-monospace, monospace);
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 600;
   letter-spacing: 0.11em;
   text-transform: uppercase;
@@ -277,7 +277,7 @@
 
 .sideBody {
   margin: 0.5rem 0 0;
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.45;
   color: var(--tf-caption);
 }
@@ -291,14 +291,14 @@
 
 .anchorTitle {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 700;
   color: var(--tf-ink);
 }
 
 .anchorBody {
   margin: 0.25rem 0 0;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.5;
   color: var(--tf-caption);
 }
@@ -326,7 +326,7 @@
 
 .zoneLabel {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -335,7 +335,7 @@
 
 .zoneLead {
   margin: 0.35rem 0 0;
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.5;
   color: var(--tf-caption);
   max-width: 40rem;
@@ -351,7 +351,7 @@
   border: 1px solid var(--tf-border);
   background: var(--tf-border);
   font-family: var(--tf-font-mono, ui-monospace, monospace);
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   color: var(--tf-caption);
   white-space: nowrap;
 }
@@ -381,7 +381,7 @@
 .factLabel {
   margin: 0;
   font-family: var(--tf-font-mono, ui-monospace, monospace);
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -391,14 +391,14 @@
 .factValue {
   margin: 0.75rem 0 0;
   font-family: var(--tf-font-display);
-  font-size: 1.125rem;
+  font-size: var(--tf-type-h3-size);
   line-height: 1.3;
   color: var(--tf-ink);
 }
 
 .factHint {
   margin: 0.75rem 0 0;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.45;
   color: var(--tf-caption);
 }
@@ -447,7 +447,7 @@
 
 .characterPanelTitle {
   margin: 0 0 0.75rem;
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 700;
   color: var(--tf-ink);
 }
@@ -464,7 +464,7 @@
 .bulletItem {
   display: flex;
   gap: 0.5rem;
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.45;
   color: var(--tf-caption);
 }
@@ -495,7 +495,7 @@
 
 .missionText {
   margin: 0.5rem 0 0;
-  font-size: 1rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.45;
   color: var(--tf-ink);
 }
@@ -536,21 +536,21 @@
 
 .sphereChevron {
   color: var(--tf-accent-gold-600, var(--tf-accent-gold));
-  font-size: 1.125rem;
+  font-size: var(--tf-type-h3-size);
   line-height: 1;
   margin-top: 0.125rem;
 }
 
 .sphereTitle {
   margin: 0;
-  font-size: 0.9375rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 700;
   color: var(--tf-ink);
 }
 
 .sphereNeedLine {
   margin: 0.5rem 0 0;
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.45;
   color: var(--tf-caption);
 }
@@ -577,7 +577,7 @@
 
 .sphereDetailLabel {
   margin: 0.75rem 0 0.25rem;
-  font-size: 0.625rem;
+  font-size: var(--tf-type-caption-size);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -590,14 +590,14 @@
 
 .sphereBody {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.5;
   color: var(--tf-ink);
 }
 
 .sphereMeta {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.45;
   color: var(--tf-caption);
 }
@@ -620,7 +620,7 @@
 .myDaysPanelEyebrow {
   margin: 0;
   font-family: var(--tf-font-mono, "IBM Plex Mono", monospace);
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -649,14 +649,14 @@
 .myDaysWeekLabel {
   margin: 0;
   font-family: var(--tf-font-mono, "IBM Plex Mono", monospace);
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 700;
   color: var(--tf-ink);
 }
 
 .myDaysWeekMark {
   margin: 0.75rem 0 0;
-  font-size: 1.125rem;
+  font-size: var(--tf-type-h3-size);
   line-height: 1;
 }
 
@@ -756,7 +756,7 @@
 
 .constellationEyebrow {
   margin: 0 0 1rem;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -854,7 +854,7 @@
 
 .constellationLabel {
   font-family: var(--tf-font-display);
-  font-size: 0.95rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.25;
   letter-spacing: -0.01em;
   color: var(--tf-ink);
@@ -862,7 +862,7 @@
 }
 
 .constellationHint {
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.4;
   color: var(--tf-caption);
   overflow-wrap: anywhere;
@@ -884,7 +884,7 @@
 
 .constellationBornFrom {
   margin: 0;
-  font-size: 0.7rem;
+  font-size: var(--tf-type-caption-lg-size);
   letter-spacing: 0.04em;
   text-transform: lowercase;
   color: var(--tf-accent-gold-600, var(--tf-accent-gold));
@@ -902,7 +902,7 @@
 
 .constellationFootnote {
   margin: 1.15rem 0 0;
-  font-size: 0.8rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.45;
   color: var(--tf-caption);
 }
@@ -965,7 +965,7 @@
   border: 1px solid rgba(212, 184, 150, 0.3);
   background: rgba(253, 251, 247, 0.06);
   font-family: var(--tf-font-mono, "IBM Plex Mono", monospace);
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   color: var(--tf-surface);
 }
 
@@ -1024,14 +1024,14 @@
 
 .skyAspectTitle {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 700;
   color: var(--tf-surface);
 }
 
 .skyAspectBody {
   margin: 0.5rem 0 0;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.5;
   color: var(--tf-border);
 }
@@ -1051,14 +1051,14 @@
 
 .skyHouseRoman {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 700;
   color: var(--tf-surface);
 }
 
 .skyHouseKeyword {
   margin: 0.5rem 0 0;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.5;
   color: var(--tf-border);
 }
@@ -1068,7 +1068,7 @@
   padding: 1rem;
   border-radius: 1.25rem;
   border: 1px dashed rgba(212, 184, 150, 0.36);
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.55;
   color: var(--tf-border);
 }
@@ -1085,7 +1085,7 @@
 
 .skyError {
   margin: 0.75rem 0 0;
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   color: var(--tf-danger, var(--tf-accent-action));
 }
 
@@ -1101,7 +1101,7 @@
   margin-left: auto;
   border: none;
   background: transparent;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 600;
   color: var(--tf-accent-gold-600, var(--tf-accent-gold));
   cursor: pointer;
@@ -1293,7 +1293,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.65rem;
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1310,7 +1310,7 @@
   border: 1px solid var(--tf-accent-gold, var(--tf-accent-gold));
   background: color-mix(in srgb, var(--tf-accent-gold-wash, var(--profile-day-soft, var(--tf-surface-warm, var(--tf-surface)))) 80%, var(--tf-surface));
   font-family: var(--tf-font-display);
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 600;
   letter-spacing: 0;
   color: var(--tf-accent-gold-600, var(--tf-accent-gold));
@@ -1327,7 +1327,7 @@
 .journeyHeroTitle {
   margin: 0;
   font-family: var(--tf-font-display);
-  font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+  font-size: var(--tf-type-hero-size);
   line-height: 1.1;
   letter-spacing: -0.02em;
   color: var(--tf-ink);
@@ -1354,7 +1354,7 @@
   border: 0;
   background: transparent;
   padding: 0;
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 650;
   color: var(--tf-accent-gold-600, var(--tf-accent-gold));
   cursor: pointer;
@@ -1367,7 +1367,7 @@
 
 .recognitionDeeperBody {
   margin: 0.65rem 0 0;
-  font-size: 0.95rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.55;
   color: var(--tf-ink-soft, var(--tf-caption));
 }
@@ -1379,7 +1379,7 @@
 
 .essenceFoundationLabel {
   margin: 0 0 0.65rem;
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1405,7 +1405,7 @@
 
 .essenceFoundationKind {
   margin: 0;
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -1415,14 +1415,14 @@
 .essenceFoundationFact {
   margin: 0.35rem 0 0;
   font-family: var(--tf-font-display);
-  font-size: 1.05rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.25;
   color: var(--tf-ink);
 }
 
 .essenceFoundationMeaning {
   margin: 0.4rem 0 0;
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.4;
   color: var(--tf-ink-soft, var(--tf-caption));
 }
@@ -1433,7 +1433,7 @@
 
 .whyBlockLabel {
   margin: 0 0 0.5rem;
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1454,7 +1454,7 @@
   margin: 0;
   padding: 0.75rem 1rem;
   border-radius: 0.875rem;
-  font-size: 0.9375rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.4;
   color: var(--tf-ink);
 }
@@ -1480,7 +1480,7 @@
 
 .insightKind {
   margin: 0 0 0.65rem;
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -1499,7 +1499,7 @@
 .insightBody {
   margin: 0.85rem 0 0;
   max-width: 36rem;
-  font-size: 1.05rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.55;
   color: var(--tf-ink-soft, var(--tf-caption));
 }
@@ -1512,7 +1512,7 @@
 
 .livingNote {
   margin: 0 0 0.5rem;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.4;
   color: var(--tf-caption);
 }
@@ -1532,7 +1532,7 @@
 
 .livingQuote {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.45;
   font-style: italic;
   color: var(--tf-caption);
@@ -1568,7 +1568,7 @@
 .traitLabel {
   margin: 0;
   font-family: var(--tf-font-mono, ui-monospace, monospace);
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1577,7 +1577,7 @@
 
 .traitLine {
   margin: 0;
-  font-size: 0.9375rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.45;
   color: var(--tf-ink);
 }
@@ -1593,7 +1593,7 @@
 
 .bridgeLine {
   margin: 0 0 1.25rem;
-  font-size: 1rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.5;
   color: var(--tf-caption);
 }
@@ -1619,7 +1619,7 @@
 
 .characterMoreSummary {
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 600;
   color: var(--tf-ink-soft, var(--tf-caption));
   list-style: none;
@@ -1762,7 +1762,7 @@
 
 .whyProofExpandHint {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.35;
   color: var(--tf-accent-gold-600, var(--tf-accent-gold));
 }
@@ -1800,7 +1800,7 @@
   margin: 0;
   max-width: 7.5rem;
   text-align: right;
-  font-size: 0.625rem;
+  font-size: var(--tf-type-caption-size);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -1822,7 +1822,7 @@
 .whyProofTitle {
   margin: 0;
   font-family: var(--tf-font-display);
-  font-size: 1.0625rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 500;
   line-height: 1.3;
   color: var(--tf-ink);
@@ -1831,7 +1831,7 @@
 
 .whyProofDetail {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.4;
   color: var(--tf-ink-soft, var(--tf-caption));
   overflow-wrap: anywhere;
@@ -1839,7 +1839,7 @@
 
 .whyProofMeaning {
   margin: 0.55rem 0 0;
-  font-size: 0.9rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.45;
   color: var(--tf-ink);
 }
@@ -1856,7 +1856,7 @@
 
 .whyFormationLabel {
   margin: 0 0 0.65rem;
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1902,14 +1902,14 @@
 }
 
 .whySecondaryTitle {
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 600;
   line-height: 1.3;
   color: var(--tf-ink);
 }
 
 .whySecondaryDetail {
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   line-height: 1.35;
   color: var(--tf-ink-soft, var(--tf-caption));
 }
@@ -2111,7 +2111,7 @@
 
 .insightChainLabel {
   margin: 0 0 0.5rem;
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -2133,7 +2133,7 @@
   border: none;
   border-radius: 0;
   background: transparent;
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.4;
   color: var(--tf-ink-soft, var(--tf-caption));
 }
@@ -2151,7 +2151,7 @@
 
 .insightLivingList li {
   font-family: var(--tf-font-display);
-  font-size: 1.05rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.4;
   font-style: italic;
   color: var(--tf-ink);
@@ -2162,7 +2162,7 @@
 
 .insightHelp {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.5;
   color: var(--tf-ink);
 }
@@ -2181,7 +2181,7 @@
   top: 0.35rem;
   left: 0.85rem;
   font-family: var(--tf-font-display);
-  font-size: 2.5rem;
+  font-size: var(--tf-type-display-size);
   line-height: 1;
   color: var(--tf-accent-gold, var(--tf-accent-gold));
   opacity: 0.7;
@@ -2212,7 +2212,7 @@
 
 .effortFocusLabel {
   margin: 0;
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -2252,7 +2252,7 @@
   background: transparent;
   color: var(--tf-ink, var(--tf-ink));
   font-family: var(--tf-font-display);
-  font-size: clamp(1.35rem, 2.8vw, 1.85rem);
+  font-size: var(--tf-type-section-size);
   line-height: 1.28;
   letter-spacing: -0.015em;
   width: 100%;
@@ -2267,7 +2267,7 @@
 
 .effortSpheresLabel {
   margin: 0;
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -2276,7 +2276,7 @@
 
 .effortSpheresLine {
   margin: 0.5rem 0 0;
-  font-size: 0.9375rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.45;
   color: var(--tf-ink-soft, var(--tf-caption));
 }
@@ -2366,7 +2366,7 @@
 
 .effortSphereTeaser {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.45;
   color: var(--tf-ink-soft, var(--tf-caption));
   display: -webkit-box;
@@ -2377,7 +2377,7 @@
 
 .effortSphereExpandHint {
   margin: auto 0 0;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.35;
   color: var(--tf-accent-gold-600, var(--tf-accent-gold));
 }
@@ -2436,7 +2436,7 @@
 .effortSphereTitle {
   margin: 0;
   font-family: var(--tf-font-display);
-  font-size: 1.05rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 500;
   line-height: 1.25;
   color: var(--tf-ink);
@@ -2461,7 +2461,7 @@
 }
 
 .effortSphereNeed {
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   line-height: 1.35;
   color: var(--tf-ink-soft, var(--tf-caption));
   display: -webkit-box;
@@ -2494,7 +2494,7 @@
 .effortSphereNeedFull,
 .effortSphereRisk {
   margin: 0.55rem 0 0;
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.5;
   color: var(--tf-ink-soft, var(--tf-caption));
 }
@@ -2502,7 +2502,7 @@
 .effortSphereMetaLabel {
   display: block;
   margin-bottom: 0.2rem;
-  font-size: 0.6875rem;
+  font-size: var(--tf-type-caption-lg-size);
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -2519,7 +2519,7 @@
   display: grid;
   gap: 0.35rem;
   color: var(--tf-ink, var(--tf-ink));
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.45;
 }
 
@@ -2542,13 +2542,13 @@
   margin: 0;
   font-weight: 700;
   color: var(--tf-ink, var(--tf-ink));
-  font-size: 1rem;
+  font-size: var(--tf-type-body-size);
 }
 
 .deepThemesLead {
   margin: 0.4rem 0 0;
   color: var(--tf-ink-soft, var(--tf-caption));
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.5;
 }
 
@@ -2565,7 +2565,7 @@
   color: var(--tf-ink, var(--tf-ink));
   border-radius: 999px;
   padding: 0.4rem 0.85rem;
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 600;
   cursor: pointer;
 }
@@ -2592,7 +2592,7 @@
 .deepThemesHint {
   margin: 0.65rem 0 0;
   color: var(--tf-ink-soft, var(--tf-caption));
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.45;
 }
 
@@ -2605,27 +2605,44 @@
 
 .deepThemesSaved {
   color: var(--tf-accent-gold, var(--tf-accent-gold-600, var(--tf-accent-gold)));
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 600;
 }
 
 .deepThemesError {
   margin: 0.55rem 0 0;
   color: var(--tf-danger, var(--tf-accent-action));
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
 }
 
 .deepThemesTipsPack {
   margin-top: 0.85rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--tf-border, var(--tf-border));
+  padding: 0.85rem 0.9rem 0.95rem;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(40, 32, 24, 0.12);
+  background: #fffdf9;
+  color: #1a1510;
 }
 
 .deepThemesTipsTitle {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 700;
-  color: var(--tf-ink, var(--tf-ink));
+  color: #1a1510;
+}
+
+.deepThemesTipsList {
+  margin: 0.45rem 0 0;
+  padding-left: 1.15rem;
+  display: grid;
+  gap: 0.45rem;
+  color: #1a1510;
+  font-size: var(--tf-type-body-size);
+  line-height: 1.5;
+}
+
+.deepThemesTipsList li {
+  color: #1a1510;
 }
 
 .natalDecodeBody {
@@ -2636,7 +2653,7 @@
 
 .natalDecodePattern {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 600;
   line-height: 1.45;
   color: var(--tf-ink, var(--tf-ink));
@@ -2650,20 +2667,20 @@
 
 .natalDecodeSectionTitle {
   margin: 0 0 0.35rem;
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   font-weight: 700;
 }
 
 .natalDecodeThesis {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.5;
   color: var(--tf-ink-muted, var(--tf-caption));
 }
 
 .natalDecodeBecause {
   margin: 0.4rem 0 0;
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.45;
   color: var(--tf-ink-muted, var(--tf-caption));
 }
@@ -2681,21 +2698,21 @@
 
 .natalDecodeHooksTitle {
   margin: 0 0 0.35rem;
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 700;
 }
 
 .natalDecodeHooks ul {
   margin: 0;
   padding-left: 1.1rem;
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.45;
   color: var(--tf-ink-muted, var(--tf-caption));
 }
 
 .natalDecodeLimits {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: var(--tf-type-label-size);
   line-height: 1.4;
   color: var(--tf-ink-muted, var(--tf-caption));
 }
@@ -2761,7 +2778,7 @@
 .bridgeHeadline {
   margin: 0;
   font-family: var(--tf-font-display);
-  font-size: clamp(1.5rem, 3.2vw, 2rem);
+  font-size: var(--tf-type-hero-size);
   line-height: 1.2;
   letter-spacing: -0.02em;
   color: var(--tf-ink);
@@ -2769,7 +2786,7 @@
 }
 
 .bridgeSceneModePortal .bridgeHeadline {
-  font-size: clamp(1.35rem, 2.8vw, 1.75rem);
+  font-size: var(--tf-type-section-size);
   line-height: 1.35;
   font-weight: 500;
   color: var(--tf-ink-soft, var(--tf-caption));
@@ -2842,7 +2859,7 @@
   border: 1px solid rgba(184, 144, 88, 0.32);
   background: rgba(255, 255, 255, 0.72);
   color: var(--tf-caption);
-  font-size: 0.8125rem;
+  font-size: var(--tf-type-label-size);
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
@@ -2933,7 +2950,7 @@
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
-  font-size: 0.9rem;
+  font-size: var(--tf-type-body-size);
   line-height: 1.4;
   color: var(--tf-ink-soft, var(--tf-caption));
 }

@@ -299,11 +299,17 @@
   padding-right: 0;
 }
 
-/* Сетка карточек «слоёв» (совместимость и т. п.) */
+/* Сетка карточек «слоёв» (совместимость и т. п.) — phone-first single column */
 .todayflow-layer-grid {
   display: grid;
-  gap: var(--todayflow-space-2);
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--todayflow-space-2, 0.75rem);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 36rem) {
+  .todayflow-layer-grid {
+    grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr));
+  }
 }
 
 .todayflow-spread {

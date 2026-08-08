@@ -14,12 +14,17 @@ import styles from "@/components/profile/v2/profileV2System.module.css";
 export type NatalDecodeOffer = {
   layer?: string;
   version?: string;
-  access?: "offer" | "blocked" | string;
+  access?: "offer" | "blocked" | "ready" | string;
   reason?: string | null;
-  cta?: string;
+  cta?: string | null;
   can_generate?: boolean;
   identity_thesis?: string;
   note?: string;
+  status?: string;
+  pattern_thesis?: string | null;
+  sections?: NatalDecodeSection[];
+  day_hooks?: string[];
+  limits?: string | null;
 };
 
 export type NatalDecodeSection = {
@@ -42,11 +47,22 @@ export type NatalDecodeResult = {
   identity_core?: { thesis_key?: string; surface_text?: string };
   sot_role?: string;
   writes_character_engine?: boolean;
+  access?: string;
+  can_generate?: boolean;
 };
 
+function isGroundedResult(res: NatalDecodeResult | NatalDecodeOffer | null | undefined): boolean {
+  return Boolean(
+    res &&
+      res.status === "grounded" &&
+      Array.isArray(res.sections) &&
+      res.sections.length > 0,
+  );
+}
+
 /**
- * Opt-in Natal Decode Depth — explicit request only.
- * Not a second portrait; cites Character Engine Identity Core.
+ * Natal Decode Depth — one-shot story.
+ * First explicit POST generates; thereafter GET serves ready artifact (no re-generate CTA).
  */
 export function ProfileNatalDecodePanel() {
   const [offer, setOffer] = useState<NatalDecodeOffer | null>(null);
@@ -59,7 +75,11 @@ export function ProfileNatalDecodePanel() {
     let cancelled = false;
     getJson<NatalDecodeOffer>("/account/profile/natal-decode")
       .then((res) => {
-        if (!cancelled && res) setOffer(res);
+        if (cancelled || !res) return;
+        setOffer(res);
+        if (isGroundedResult(res)) {
+          setResult(res as NatalDecodeResult);
+        }
       })
       .catch(() => {
         if (!cancelled) {
@@ -75,8 +95,7 @@ export function ProfileNatalDecodePanel() {
     };
   }, []);
 
-  const grounded =
-    result?.status === "grounded" && Array.isArray(result.sections) && result.sections.length > 0;
+  const grounded = isGroundedResult(result);
 
   useEffect(() => {
     if (!grounded) return;
@@ -90,7 +109,7 @@ export function ProfileNatalDecodePanel() {
   }, [grounded]);
 
   const generate = useCallback(async () => {
-    if (!offer?.can_generate || busy) return;
+    if (!offer?.can_generate || busy || grounded) return;
     setBusy(true);
     setError(null);
     try {
@@ -98,7 +117,14 @@ export function ProfileNatalDecodePanel() {
         force_refresh: false,
       });
       setResult(res);
-      if (res.status === "blocked" || res.status === "unavailable") {
+      if (isGroundedResult(res)) {
+        setOffer((prev) => ({
+          ...(prev || {}),
+          access: "ready",
+          can_generate: false,
+          note: "Карта уже расшифрована — это готовая история, не кнопка «ещё раз».",
+        }));
+      } else if (res.status === "blocked" || res.status === "unavailable") {
         setError(res.cta || res.reason || "Сейчас расшифровку открыть не удалось.");
       }
     } catch (e) {
@@ -106,13 +132,14 @@ export function ProfileNatalDecodePanel() {
     } finally {
       setBusy(false);
     }
-  }, [busy, offer?.can_generate]);
+  }, [busy, offer?.can_generate, grounded]);
 
   const showBreathe = Boolean(offer?.can_generate && !grounded && !busy);
-  const leadDefault =
-    "Ещё один слой глубины: как структура карты объясняет уже известное ядро характера — не второй портрет.";
-  // Offer CTA may educate in the lead; blocked CTA belongs only in the status slot (no dupe).
-  const lead = offer?.can_generate && offer.cta ? offer.cta : leadDefault;
+  const leadDefault = grounded
+    ? "Целостная история карты — планеты, углы и числа вокруг твоего ядра характера."
+    : "Один раз собираем целостную историю карты вокруг твоего ядра — не второй портрет и не кнопка «ещё раз».";
+  const lead =
+    !grounded && offer?.can_generate && offer.cta ? offer.cta : leadDefault;
 
   return (
     <div className={styles.deepThemesBlock} data-testid="profile-natal-decode">
@@ -125,7 +152,10 @@ export function ProfileNatalDecodePanel() {
           {offer?.can_generate ? (
             <DsButton
               variant="primary"
-              className={joinClass(styles.natalDecodeAction, showBreathe ? profileMotionStyles.attentionBreathe : null)}
+              className={joinClass(
+                styles.natalDecodeAction,
+                showBreathe ? profileMotionStyles.attentionBreathe : null,
+              )}
               onClick={() => void generate()}
               disabled={busy}
               data-testid="profile-natal-decode-generate"
@@ -189,15 +219,6 @@ export function ProfileNatalDecodePanel() {
             </div>
           ) : null}
           {result?.limits ? <p className={styles.natalDecodeLimits}>{result.limits}</p> : null}
-          <DsButton
-            variant="secondary"
-            className={styles.natalDecodeAction}
-            onClick={() => void generate()}
-            disabled={busy}
-            data-testid="profile-natal-decode-refresh"
-          >
-            {busy ? "Обновляем…" : "Собрать ещё раз"}
-          </DsButton>
         </div>
       ) : null}
     </div>

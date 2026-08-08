@@ -936,92 +936,8 @@ def _vocative_prefix(person_name: str | None) -> str:
     return f"{first}, " if first else ""
 
 
-# Lived beats per sphere. Conflict axis is already named in opening —
-# do **not** paste force_a/force_b quotes into every scene line.
-_SCENE_BEATS: dict[str, dict[str, str]] = {
-    "work_decisions": {
-        "why": "Сегодня рабочие решения задают основной контур дня.",
-        "what": "{who}в работе сегодня решающий жест — остаться в привычном контуре или сделать поворот.",
-        "opportunity": "Одно письмо или решение без ожидания чужого одобрения.",
-        "trap": "Снова отложить «на потом» и сделать вид, будто выбора нет.",
-        "do": "Сделай один короткий шаг в сторону поворота — по делу, без оправданий.",
-        "avoid": "Не соглашайся автоматом, лишь бы снять напряжение.",
-        "domestic": "Письмо или звонок, который ты откладывал(а) из‑за чужой реакции.",
-    },
-    "relationships": {
-        "why": "Сегодня близкий контакт сильнее обычного тянет внимание.",
-        "what": "{who}в близких отношениях сегодня важнее не сохранить видимый мир, а сказать коротко и честно.",
-        "opportunity": "Одна фраза вслух — без сглаживания и без разгона в спор.",
-        "trap": "Снова сгладить ради тишины и потом нести тяжесть недосказанного.",
-        "do": "Назови одну вещь прямо — коротко, без обвинения.",
-        "avoid": "Не делай вид, что «всё нормально», если внутри уже нет.",
-        "domestic": "Разговор, где важно не сгладить то, что лучше проговорить.",
-    },
-    "communication": {
-        "why": "Сегодня переписка и ответы — главный канал трения дня.",
-        "what": "{who}в сообщениях сегодня скорость ответа спорит с ясностью смысла.",
-        "opportunity": "Сначала смысл — потом кнопка «отправить».",
-        "trap": "Ответить быстро, чтобы закрыть тему, и потерять суть.",
-        "do": "Перечитай одно сообщение и убери лишнее до отправки.",
-        "avoid": "Не ускоряй ответ ради чужого спокойствия.",
-        "domestic": "Сообщение: сначала смысл, потом скорость ответа.",
-    },
-    "money": {
-        "why": "Сегодня ресурсные решения заметнее обычного.",
-        "what": "{who}в деньгах сегодня легко купить спокойствие импульсом — или выдержать паузу.",
-        "opportunity": "Одна трата или отказ: решение по смыслу, не по нерву.",
-        "trap": "Потратить «чтобы стало легче» и усилить дыру.",
-        "do": "Перед тратой спроси себя: это нужно или это анестезия?",
-        "avoid": "Не покупай облегчение на автопилоте.",
-        "domestic": "Трата или отказ: не покупать спокойствие импульсом.",
-    },
-    "energy_body": {
-        "why": "Сегодня тело и темп первыми показывают, где день давит.",
-        "what": "{who}тело сегодня первым чувствует, где ты держишь лишнее напряжение.",
-        "opportunity": "Пауза до усталости — вода, прогулка, сон без «ещё час».",
-        "trap": "Дожать себя «ещё чуть‑чуть» и к вечеру остаться без ресурса.",
-        "do": "Сделай одну короткую паузу до того, как тело потребует её криком.",
-        "avoid": "Не откладывай отдых до полного выгорания.",
-        "domestic": "Пауза до усталости — вода, прогулка, сон без «ещё один час».",
-    },
-    "creativity": {
-        "why": "Сегодня творческий жест может сдвинуть тон дня.",
-        "what": "{who}в творчестве сегодня важнее живой черновик, чем идеальная форма.",
-        "opportunity": "Набросок без требования шедевра — один конкретный жест.",
-        "trap": "Ждать идеальных условий и так ничего не начать.",
-        "do": "Сделай черновик на десять минут — без оценки.",
-        "avoid": "Не требуй от первого шага законченного результата.",
-        "domestic": "Набросок без требования шедевра.",
-    },
-    "home": {
-        "why": "Сегодня дом и быт сильнее обычного держат внимание.",
-        "what": "{who}дома сегодня один бытовой контур важнее «навести порядок везде».",
-        "opportunity": "Один небольшой контур — стол, угол, список — доведённый до конца.",
-        "trap": "Разбросаться на весь дом и закончить ничем.",
-        "do": "Выбери один бытовой жест и закрой его сегодня.",
-        "avoid": "Не начинай пять дел сразу «чтобы стало легче».",
-        "domestic": "Один бытовой контур — не весь дом сразу.",
-    },
-    "rest_travel": {
-        "why": "Сегодня отдых и смена места — зона, где день легко сорвётся.",
-        "what": "{who}в отдыхе и поездках сегодня важно отличи побег от настоящей смены воздуха.",
-        "opportunity": "Смена обстановки на час — если тянет «всё бросить».",
-        "trap": "Сидеть на месте из упрямства и называть это стабильностью.",
-        "do": "Выйди из привычной обстановки хотя бы на час — без большого плана.",
-        "avoid": "Не путай привычный контур с заботой о себе.",
-        "domestic": "Смена обстановки на час, если тянет «всё бросить».",
-    },
-}
-
-_DEFAULT_SCENE_BEAT: dict[str, str] = {
-    "why": "Сегодня эта сфера реально тянет внимание дня.",
-    "what": "{who}сегодня конфликт дня проявляется в одной живой сцене — не в общей теме.",
-    "opportunity": "Один конкретный жест в пользу поворота.",
-    "trap": "Сделать вид, что выбора не было, и остаться в автопилоте.",
-    "do": "Сделай один шаг — маленький, но сегодняшний.",
-    "avoid": "Не усиливай автопилот согласием «ради спокойствия».",
-    "domestic": "Одна бытовая сцена, где конфликт становится видимым.",
-}
+# Runtime scene meaning SoT = native LLM only (B5 + AGENTS: no product invent).
+# Former sphere beat bank retired from runtime — do not refill expect/trap/do from templates.
 
 _TEMPLATE_OPP_RE = re.compile(r"^Шанс выбрать «.+» именно здесь")
 _TEMPLATE_WHAT_MARKERS = ("тот же выбор — «", "день упирается в выбор: «")
@@ -1131,71 +1047,14 @@ def build_scenario_scenes_v1(
     max_scenes: int = 4,
     person_name: str | None = None,
 ) -> list[dict[str, Any]]:
-    """Only spheres where the conflict actually shows.
+    """Deterministic scene builder — **no product invent**.
 
-    Copy rule: conflict axis is named once on Plot. Scene lines paraphrase
-    into lived sphere language — no force_a/force_b or short_name quote spam.
-    Prefer name. v3.1: do not paste why_arose into every sphere.
+    Runtime meaning scenes come only from native LLM (C1). Returning [] forces
+    B5 facts_only_unavailable when no native scenes are attached — never a
+    sphere-bank expect/trap/do fill.
     """
-    interp = _as_dict(interpretation)
-    family = str((_as_dict(conflict.get("thesis")).get("family")) or "momentum")
-    label = str(conflict.get("short_name") or "сюжет дня")
-    serves = _day_tone_anchor(label)
-    domains_present = [str(d) for d in _as_list(interp.get("domains_present"))]
-    sphere_ids = _select_sphere_ids(family=family, domains_present=domains_present, max_scenes=max_scenes)
-
-    who = _vocative_prefix(person_name)
-    driver_ids = list(conflict.get("driver_ids") or [])
-    number_voice = _as_dict(chorus.get("day_number"))
-    card_voice = _as_dict(chorus.get("day_card"))
-
-    scenes: list[dict[str, Any]] = []
-    for idx, sid in enumerate(sphere_ids):
-        scene_id = f"scene.{sid}"
-        sphere_label = _SPHERE_LABEL_RU.get(sid, sid)
-        role = _scene_role(sid, idx)
-        beat = _SCENE_BEATS.get(sid) or _DEFAULT_SCENE_BEAT
-        what = beat["what"].format(who=who)
-        # Plot owns why_arose / sky facts — do not paste lead_fact into scene what.
-        why = str(beat.get("why") or "").strip()
-        opportunity = beat["opportunity"]
-        trap = beat["trap"]
-        do = beat["do"]
-        avoid = beat["avoid"]
-        domestic = beat["domestic"]
-
-        chorus_refs: list[str] = ["conflict"]
-        if driver_ids:
-            chorus_refs.append(f"astrology:{driver_ids[0]}")
-        if card_voice:
-            chorus_refs.append("day_card")
-        if number_voice:
-            chorus_refs.append("day_number")
-        if _as_list(chorus.get("natal")):
-            chorus_refs.append("natal")
-
-        # Number tempo lives in chorus.day_number only — never append to every do.
-        scenes.append(
-            {
-                "scene_id": scene_id,
-                "sphere": sid,
-                "sphere_label_ru": sphere_label,
-                "role_in_story": role,
-                "what_happens": what,
-                # Reading step 1 — why this sphere (not Plot why_arose).
-                "why": why,
-                "opportunity": opportunity,
-                "trap": trap,
-                "recommended_action": do,
-                "do_not": avoid,
-                "domestic_example": domestic,
-                "evidence_references": list(driver_ids),
-                "chorus_references": chorus_refs,
-                "confidence": float(conflict.get("confidence") or 0.5),
-                "serves_conflict": serves,
-            }
-        )
-    return scenes
+    _ = (conflict, chorus, foundation, interpretation, max_scenes, person_name)
+    return []
 
 
 def empty_props_v1() -> dict[str, Any]:

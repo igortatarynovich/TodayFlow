@@ -436,6 +436,18 @@
   padding-inline: clamp(1.25rem, 4vw, 6rem);
 }
 
+/* Phone-first: appMain already supplies gutters — don't stack a second horizontal pad. */
+@media (max-width: 48rem) {
+  .appMain {
+    padding: clamp(0.85rem, 3.5vw, 1.25rem);
+  }
+
+  .productWebMainProfileV2,
+  .productWebMainV2 {
+    padding-inline: 0;
+  }
+}
+
 .mobileTabBarWrap {
   display: block;
   position: sticky;
@@ -444,25 +456,73 @@
 }
 
 .profileWebContent,
-.compatWebContent {
-  width: 100%;
-  max-width: 47rem;
-}
+.compatWebContent,
 .practicesWebContent {
   width: 100%;
+  max-width: var(--tf-shell-max, 52rem);
+  margin-inline: auto;
 }
 
-/** Shared v2 main column canvas (profile is reference). */
+/** Shared v2 main content column (Foundation §7 — not marketing page-max). */
 .profileWebContentV2,
 .practicesWebContentV2,
 .productWebContentV2 {
   width: 100%;
-  max-width: min(var(--tf-ds-page-max, 90rem), 100%);
+  max-width: var(--tf-shell-max, 52rem);
   margin-inline: auto;
 }
 
-.compatWebContent {
-  max-width: var(--tf-ds-main-max-wide, 52rem);
+/** Today composition story frames — bleed to shell edges; ScreenFlow owns height. */
+.productWebContentStory {
+  max-width: none;
+  width: 100%;
+  height: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0;
+}
+
+/*
+ * Story deck: fill the entire main pane.
+ * Immersive photos are the block background — Day Atmosphere must not show as a
+ * padded “mat” around a centered card (appMain + V2 gutters were the culprit).
+ */
+.appBody:has(.productWebContentStory) {
+  min-height: 100%;
+  height: 100%;
+  align-self: stretch;
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.appMain:has(.productWebContentStory) {
+  padding: 0;
+  gap: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.productWebMain:has(.productWebContentStory),
+.productWebMainProfileV2:has(.productWebContentStory),
+.productWebMainV2:has(.productWebContentStory) {
+  padding: 0;
+  gap: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+@media (max-width: 63.99rem) {
+  /* Tab bar clearance is owned by ScreenFlow --tf-ds-nav-h, not appMain padding. */
+  .appMain:has(.productWebContentStory) {
+    padding: 0;
+  }
 }
 
 .compatWebResultContent {

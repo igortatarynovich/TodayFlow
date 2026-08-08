@@ -1,5 +1,6 @@
 "use client";
 
+import { DsCallout, DsQuote } from "@/design-system";
 import { funnelSectionTitle } from "@/lib/compatibilityScenarioMetrics";
 import { t } from "@/lib/i18n";
 
@@ -90,9 +91,9 @@ function FunnelDomainRow({ row }: { row: CompatibilityFunnelArtifact["domain_sco
           ↓ {row.lowers.join(" ")}
         </p>
       ) : null}
-      <p className="orbit-body-xs" style={{ margin: "0.35rem 0 0", color: "#334155", lineHeight: 1.55 }}>
-        Как улучшить: {row.improve.join(" ")}
-      </p>
+      {row.improve.length ? (
+        <DsCallout tone="practice" label="next_step" icon="arrowDown" title={row.improve.join(" ")} />
+      ) : null}
     </div>
   );
 }
@@ -113,35 +114,49 @@ export function CompatibilityFunnelSection({ artifact, omitTopMargin }: Props) {
       <p className="orbit-body-sm compat-desktop-muted" style={{ margin: "0 0 0.65rem", lineHeight: 1.65 }}>
         {artifact.score_semantics}
       </p>
-      <p className="orbit-body-xs" style={{ margin: "0 0 1rem", color: "#64748b", lineHeight: 1.55 }}>
-        {artifact.confidence_note}
-      </p>
+      {artifact.confidence_note ? (
+        <DsQuote kicker="Оговорка" testId="compat-funnel-confidence">
+          {artifact.confidence_note}
+        </DsQuote>
+      ) : null}
 
       {artifact.today_alignment &&
       (artifact.today_alignment.do_echo || artifact.today_alignment.avoid_echo || artifact.today_alignment.focus_label) ? (
-        <div className="compat-callout-go" style={{ marginBottom: "1rem", borderColor: "rgba(22, 101, 52, 0.25)" }}>
-          <p className="orbit-body-xs" style={{ margin: 0, color: "#166534", fontWeight: 700 }}>
+        <div style={{ marginBottom: "1rem", display: "grid", gap: "0.65rem" }} data-testid="compat-funnel-today">
+          <p className="orbit-body-xs" style={{ margin: 0, color: "#8b7355", fontWeight: 700 }}>
             {t("compat.funnel.today_layer.title")}
           </p>
           {artifact.today_alignment.sync_note ? (
-            <p className="orbit-body-xs" style={{ margin: "0.35rem 0 0", color: "#334155", lineHeight: 1.55 }}>
+            <p className="orbit-body-xs" style={{ margin: 0, color: "#334155", lineHeight: 1.55 }}>
               {artifact.today_alignment.sync_note}
             </p>
           ) : null}
           {artifact.today_alignment.focus_label ? (
-            <p className="orbit-body-sm" style={{ margin: "0.45rem 0 0", color: "#0f172a", lineHeight: 1.6 }}>
-              <strong>{t("compat.funnel.today_layer.focus_label")}:</strong> {artifact.today_alignment.focus_label}
-            </p>
+            <DsCallout
+              tone="insight"
+              label="main"
+              icon="spark"
+              title={artifact.today_alignment.focus_label}
+              testId="compat-funnel-today-focus"
+            />
           ) : null}
           {artifact.today_alignment.do_echo ? (
-            <p className="orbit-body-sm" style={{ margin: "0.35rem 0 0", color: "#14532d", lineHeight: 1.6 }}>
-              <strong>{t("compat.funnel.today_layer.do_echo")}:</strong> {artifact.today_alignment.do_echo}
-            </p>
+            <DsCallout
+              tone="help"
+              label="help"
+              icon="sun"
+              title={artifact.today_alignment.do_echo}
+              testId="compat-funnel-today-do"
+            />
           ) : null}
           {artifact.today_alignment.avoid_echo ? (
-            <p className="orbit-body-sm" style={{ margin: "0.35rem 0 0", color: "#9a3412", lineHeight: 1.6 }}>
-              <strong>{t("compat.funnel.today_layer.avoid_echo")}:</strong> {artifact.today_alignment.avoid_echo}
-            </p>
+            <DsCallout
+              tone="avoid"
+              label="attention"
+              icon="flag"
+              title={artifact.today_alignment.avoid_echo}
+              testId="compat-funnel-today-avoid"
+            />
           ) : null}
         </div>
       ) : null}
@@ -177,9 +192,15 @@ export function CompatibilityFunnelSection({ artifact, omitTopMargin }: Props) {
             </p>
           ) : null}
           {artifact.llm_base_model.aligned_actions_hint ? (
-            <p className="orbit-body-sm" style={{ margin: "0.35rem 0 0", color: "#0f172a", lineHeight: 1.65 }}>
-              <strong>{t("compat.funnel.llm_base.actions")}:</strong> {artifact.llm_base_model.aligned_actions_hint}
-            </p>
+            <div style={{ marginTop: "0.55rem" }}>
+              <DsCallout
+                tone="practice"
+                label="next_step"
+                icon="arrowDown"
+                title={artifact.llm_base_model.aligned_actions_hint}
+                testId="compat-funnel-llm-actions"
+              />
+            </div>
           ) : null}
         </div>
       ) : null}
@@ -222,13 +243,13 @@ export function CompatibilityFunnelSection({ artifact, omitTopMargin }: Props) {
         Время
       </h3>
       <div style={{ display: "grid", gap: "0.45rem" }}>
-        {artifact.timeline.map((t) => (
-          <details key={t.phase_id} className="compat-accordion">
+        {artifact.timeline.map((row) => (
+          <details key={row.phase_id} className="compat-accordion">
             <summary className="orbit-body-sm" style={{ fontWeight: 700, color: "#0f172a" }}>
-              {t.headline}
+              {row.headline}
             </summary>
             <p className="orbit-body-sm" style={{ margin: "0.5rem 0 0", color: "#334155", lineHeight: 1.7 }}>
-              {t.body}
+              {row.body}
             </p>
           </details>
         ))}
@@ -237,22 +258,20 @@ export function CompatibilityFunnelSection({ artifact, omitTopMargin }: Props) {
       <h3 className="orbit-heading-3" style={{ margin: "1.25rem 0 0.5rem", color: "#5f4323", fontSize: "1rem" }}>
         Пороги риска
       </h3>
-      <div style={{ display: "grid", gap: "0.65rem" }}>
+      <div style={{ display: "grid", gap: "0.65rem" }} data-testid="compat-funnel-risk-bands">
         {artifact.risk_bands.map((b) => (
-          <div key={b.level} className="compat-callout-warn" style={{ borderColor: b.level === "critical" ? "#fecaca" : undefined }}>
-            <p className="orbit-body-xs" style={{ margin: 0, color: "#92400e", fontWeight: 700 }}>
-              {b.headline}
-            </p>
-            <p className="orbit-body-xs" style={{ margin: "0.35rem 0 0", color: "#78350f", lineHeight: 1.55 }}>
-              Ок: {b.when_ok}
-            </p>
-            <p className="orbit-body-xs" style={{ margin: "0.25rem 0 0", color: "#78350f", lineHeight: 1.55 }}>
-              Сдвиг: {b.when_shifts}
-            </p>
-            <p className="orbit-body-xs" style={{ margin: "0.25rem 0 0", color: "#78350f", lineHeight: 1.55 }}>
-              Ломается: {b.when_breaks}
-            </p>
-          </div>
+          <DsCallout
+            key={b.level}
+            tone="avoid"
+            label="attention"
+            icon="flag"
+            title={b.headline}
+            testId={`compat-funnel-risk-${b.level}`}
+          >
+            <p>Ок: {b.when_ok}</p>
+            <p>Сдвиг: {b.when_shifts}</p>
+            <p>Ломается: {b.when_breaks}</p>
+          </DsCallout>
         ))}
       </div>
     </div>

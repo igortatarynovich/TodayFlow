@@ -5,9 +5,10 @@
 }
 
 .shell {
-  max-width: var(--product-content-wide, 1080px);
-  margin: 0 auto;
-  padding: 1.5rem var(--orbit-space-xl) var(--orbit-space-3xl);
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 1.5rem 0 3rem;
   display: grid;
   gap: 1rem;
   box-sizing: border-box;

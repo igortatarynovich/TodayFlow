@@ -19,6 +19,8 @@ export type CompatibilityWebScreenProps = {
   /** Real context rail only — omit when empty (PR-2). */
   rail?: ReactNode;
   hideHeader?: boolean;
+  /** Flat header without glass card — default true for Compatibility hubs. */
+  quietHeader?: boolean;
   contentClassName?: string;
   children: ReactNode;
 };
@@ -32,6 +34,7 @@ export function CompatibilityWebScreen({
   subtitle,
   rail,
   hideHeader = false,
+  quietHeader = true,
   contentClassName,
   children,
 }: CompatibilityWebScreenProps) {
@@ -52,6 +55,7 @@ export function CompatibilityWebScreen({
       locale={resolvedLocale}
       rail={rail}
       hideHeader={hideHeader}
+      quietHeader={quietHeader}
       contentClassName={contentClassName ?? pl.content}
     >
       {children}

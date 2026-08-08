@@ -34,6 +34,19 @@ export {
   DsTag,
   DsTitle,
 } from "@/design-system/primitives/DsTypography";
+export type { DsInkTone } from "@/design-system/primitives/DsTypography";
+export {
+  DsCallout,
+  DsCapsule,
+  DsEmph,
+  DsQuote,
+  DS_CALLOUT_LABEL_COPY,
+} from "@/design-system/primitives/DsCallout";
+export type {
+  DsCalloutIcon,
+  DsCalloutLabel,
+  DsCalloutTone,
+} from "@/design-system/primitives/DsCallout";
 
 export { DsOrbitalViz, DsThemePanel, DsThemeViz } from "@/design-system/patterns/DsThemePanel";
 export type { DsOrbitalNode } from "@/design-system/patterns/DsThemePanel";

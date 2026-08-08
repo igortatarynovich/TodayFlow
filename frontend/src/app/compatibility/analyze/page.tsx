@@ -1,6 +1,6 @@
 "use client";
 
-import { DsButton } from "@/design-system";
+import { DsButton, DsCallout } from "@/design-system";
 
 import Link from "next/link";
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -407,14 +407,20 @@ function CompatibilityAnalyzeContent() {
               {p.headline}
             </p>
             {p.do_focus ? (
-              <p className="orbit-body-xs" style={{ margin: "0.55rem 0 0", color: "#166534", lineHeight: 1.55 }}>
-                Усилить: {p.do_focus}
-              </p>
+              <div style={{ marginTop: "0.55rem" }}>
+                <DsCallout tone="help" label="help" icon="sun" title={p.do_focus} testId="compat-analyze-do" />
+              </div>
             ) : null}
             {p.avoid_focus ? (
-              <p className="orbit-body-xs" style={{ margin: "0.35rem 0 0", color: "#9a3412", lineHeight: 1.55 }}>
-                Осторожнее с: {p.avoid_focus}
-              </p>
+              <div style={{ marginTop: "0.35rem" }}>
+                <DsCallout
+                  tone="avoid"
+                  label="attention"
+                  icon="flag"
+                  title={p.avoid_focus}
+                  testId="compat-analyze-avoid"
+                />
+              </div>
             ) : null}
           </>
         ) : null}
@@ -444,7 +450,7 @@ function CompatibilityAnalyzeContent() {
       contentClassName={`${pl.content} ${pl.legacyHost}`}
     >
       {limitBlocked ? (
-        <section className="tf-shell" style={{ paddingTop: "1.75rem", paddingBottom: "3rem" }}>
+        <section className="compat-flow-section" style={{ paddingTop: "1.75rem", paddingBottom: "3rem" }}>
           <GuestAccessLimitGate
             title={GUEST_ACCESS_COPY.compatLimitTitle}
             body={GUEST_ACCESS_COPY.compatLimitBody}
@@ -454,7 +460,7 @@ function CompatibilityAnalyzeContent() {
           />
         </section>
       ) : (
-      <section className="tf-shell" style={{ paddingTop: "1.75rem", paddingBottom: "3rem" }}>
+      <section className="compat-flow-section" style={{ paddingTop: "1.75rem", paddingBottom: "3rem" }}>
         <div className="compat-desktop-shell compat-desktop-stack">
           <div className="compat-analyze-topbar">
             <Link href="/compatibility" className="compat-analyze-back">

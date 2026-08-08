@@ -1,6 +1,6 @@
 /**
- * Journey anti-dupe (#6): Act 1 = recognition only; Act 2 = mechanism.
- * Strip or rewrite Act-2 meaning that paraphrases Act-1 recognition text.
+ * Journey anti-dupe: Act 1 = recognition; Act 2 = other facts/meanings.
+ * Never invent mechanism-explaining fallbacks («как устроено имя/ASC»).
  */
 
 function normalize(text: string): string {
@@ -34,21 +34,22 @@ export function textOverlapRatio(a: string, b: string): number {
   return union ? inter / union : 0;
 }
 
-const MECHANISM_FALLBACK: Record<string, string> = {
-  archetype_from_life_path:
-    "Имя портрета берётся только из числа пути — не из Солнца и не из стихии.",
-  sun: "Механизм проявления силы в портрете — не повтор узнавания.",
-  moon: "Механизм внутренней реакции в портрете — не повтор узнавания.",
-  asc: "Механизм первого контакта — как считывают снаружи.",
-  rising: "Механизм первого контакта — как считывают снаружи.",
-  mc: "Механизм публичной роли — след результата.",
-  element: "Фон темперамента в портрете; имя архетипа не выбирает.",
-  rhythm: "Способ стартовать и держать темп — рядом с именем, не вместо него.",
+/** Person-facing fact lines only — no product/engine how-it-works copy. */
+const FACT_FALLBACK: Record<string, string> = {
+  archetype_from_life_path: "Число пути — опора имени в портрете.",
+  life_path: "Число пути — опора имени в портрете.",
+  sun: "Солнце окрашивает, как ты проявляешь силу в мире.",
+  moon: "Луна окрашивает, как ты чувствуешь и восстанавливаешься.",
+  asc: "В первом контакте тебя считывают по темпу и дистанции.",
+  rising: "В первом контакте тебя считывают по темпу и дистанции.",
+  mc: "Публичная роль — след, по которому судят о результате.",
+  element: "Стихия Солнца окрашивает темперамент.",
+  rhythm: "Ритм развития — как ты стартуешь и держишь темп.",
 };
 
 /**
- * If Act-2 meaning overlaps Act-1 recognition (or identity kitchen text),
- * replace with a short mechanism-only line so the fact stays once.
+ * If Act-2 meaning overlaps Act-1 recognition, replace with a short fact line
+ * so the same story is not printed twice.
  */
 export function applyAct2AntiDupeMeaning(input: {
   meaning: string;
@@ -58,19 +59,17 @@ export function applyAct2AntiDupeMeaning(input: {
   overlapThreshold?: number;
 }): string {
   const meaning = input.meaning.trim();
-  if (!meaning) return MECHANISM_FALLBACK[input.anchorId] || MECHANISM_FALLBACK.sun;
+  const id = input.anchorId.toLowerCase();
+  const fallback = FACT_FALLBACK[id] || FACT_FALLBACK.sun;
+  if (!meaning) return fallback;
   const threshold = input.overlapThreshold ?? 0.42;
   const banned = [input.recognitionLine, input.identityCore]
     .map((s) => String(s || "").trim())
     .filter((s) => s.length > 12);
 
   for (const ban of banned) {
-    if (normalize(meaning) === normalize(ban)) {
-      return MECHANISM_FALLBACK[input.anchorId] || MECHANISM_FALLBACK.sun;
-    }
-    if (textOverlapRatio(meaning, ban) >= threshold) {
-      return MECHANISM_FALLBACK[input.anchorId] || MECHANISM_FALLBACK.sun;
-    }
+    if (normalize(meaning) === normalize(ban)) return fallback;
+    if (textOverlapRatio(meaning, ban) >= threshold) return fallback;
   }
   return meaning;
 }

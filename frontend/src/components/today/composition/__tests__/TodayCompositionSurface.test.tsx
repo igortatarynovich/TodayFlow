@@ -125,31 +125,26 @@ describe("TodayCompositionSurface", () => {
   it("renders day story greeting and foundation before ritual", () => {
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
 
-    expect(screen.getByTestId("today-zone-greeting")).toBeInTheDocument();
-    expect(screen.getByTestId("today-zone-hero")).toBeInTheDocument();
-    expect(screen.getByTestId("today-entity-daily-theme")).toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-greeting")).toBeInTheDocument();
+    expect(screen.getByTestId("today-greeting-start")).toBeInTheDocument();
     expect(screen.getByTestId("today-zone-ritual-gates")).toBeInTheDocument();
     expect(screen.getByTestId("today-ritual-tarot-gate")).toBeInTheDocument();
     expect(screen.queryByTestId("today-zone-why-story")).not.toBeInTheDocument();
-    // PR-3: no strengthen invent without practice_recommendation
-    expect(screen.queryByTestId("today-zone-strengthen")).not.toBeInTheDocument();
-    // Number/card are ritual layer — not in hero before pick
-    expect(screen.getByTestId("today-zone-hero").textContent).not.toMatch(/число дня/i);
+    expect(screen.queryByTestId("today-frame-practice")).not.toBeInTheDocument();
   });
 
-  it("keeps day hero when embedded in web dashboard without leaking number before ritual", () => {
+  it("keeps greeting deck when embedded in web dashboard without leaking number before ritual", () => {
     render(<TodayCompositionSurface {...baseProps} variant="default" embeddedInWebDashboard />);
 
     expect(screen.queryByTestId("today-zone-greeting")).not.toBeInTheDocument();
-    expect(screen.getByTestId("today-zone-hero")).toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-greeting")).toBeInTheDocument();
     expect(screen.queryByTestId("today-zone-pulse")).not.toBeInTheDocument();
     expect(screen.getByTestId("today-zone-ritual-gates")).toBeInTheDocument();
-    expect(screen.getByTestId("today-zone-glance-act")).toBeInTheDocument();
     expect(screen.getByTestId("today-screen-flow")).toBeInTheDocument();
-    expect(screen.getByTestId("today-zone-hero").textContent).not.toMatch(/число дня\s*[—-]?\s*4/i);
+    expect(screen.getByTestId("today-zone-open-day").textContent || "").not.toMatch(/число дня\s*[—-]?\s*4/i);
   });
 
-  it("ScreenFlow Glance-first hosts steps with verdict on glance", () => {
+  it("ScreenFlow greeting-first hosts story-deck steps", () => {
     const contractWithScenario: TodayContractV1 = {
       ...sampleContract,
       day_story: {
@@ -189,10 +184,8 @@ describe("TodayCompositionSurface", () => {
 
     expect(screen.getByTestId("today-zone-foundation")).toBeInTheDocument();
     expect(screen.getByTestId("today-screen-flow")).toBeInTheDocument();
-    expect(screen.getByTestId("today-zone-glance-act")).toBeInTheDocument();
-    // Glance hero is day overview — not four-sphere VerdictStrip (2026-08-01).
+    expect(screen.getByTestId("today-frame-greeting")).toBeInTheDocument();
     expect(screen.queryByTestId("today-slot-verdict-strip")).not.toBeInTheDocument();
-    expect(screen.getByTestId("today-slot-glance-nearest")).toBeInTheDocument();
     expect(screen.getByTestId("today-composition-surface").querySelectorAll("[data-screen-flow-step]").length).toBeGreaterThanOrEqual(3);
   });
 
@@ -282,17 +275,17 @@ describe("TodayCompositionSurface", () => {
     );
 
     expect(screen.getByTestId("today-screen-flow")).toBeInTheDocument();
-    // Personal acts live on a later ScreenFlow step — still in DOM
-    expect(screen.getByTestId("today-entity-synthesis")).toBeInTheDocument();
+    // Story deck: greeting + energy + symbols(+ritual) + attributes… while scenario ready
+    expect(screen.getByTestId("today-frame-greeting")).toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-energy-flow")).toBeInTheDocument();
     expect(screen.getByTestId("today-zone-ritual-gates")).toBeInTheDocument();
-    // Plot owns conflict narrative as scene beats — not a duplicate short_name in the hero chrome
     expect(screen.getByTestId("today-zone-plot-narrative")).toBeInTheDocument();
     expect(screen.getByTestId("today-plot-beats")).toBeInTheDocument();
     expect(screen.getByTestId("today-plot-beat-setup").textContent).toMatch(/решающий жест/i);
     expect(screen.getByTestId("today-plot-beat-tension").textContent).toMatch(/Отложить/i);
-    expect(screen.getByTestId("today-plot-beat-turn").textContent).toMatch(/письмо/i);
-    const hero = screen.getByTestId("today-zone-hero").textContent || "";
-    expect(hero).not.toMatch(/Ломать работающее или беречь ровный ритм/);
+    // Turn beat is Insight hero (вывод), not repeated in plot story stack.
+    expect(screen.getByTestId("today-insight-hero").textContent).toMatch(/письмо/i);
+    expect(screen.queryByTestId("today-plot-beat-turn")).not.toBeInTheDocument();
   });
 
   it("shows opened card and number interpretation after ritual", () => {
@@ -335,17 +328,16 @@ describe("TodayCompositionSurface", () => {
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
 
     expect(screen.queryByTestId("today-zone-ritual-gates")).not.toBeInTheDocument();
-    expect(screen.getByTestId("today-zone-reading")).toBeInTheDocument();
-    expect(screen.getByTestId("today-zone-move")).toBeInTheDocument();
-    expect(screen.getByTestId("today-zone-bridges-wrap")).toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-greeting")).toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-energy-flow")).toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-attributes")).toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-practice")).toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-insight")).toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-close")).toBeInTheDocument();
     expect(screen.queryByTestId("today-zone-personal")).not.toBeInTheDocument();
-    expect(screen.queryByTestId("today-zone-strengthen")).not.toBeInTheDocument();
-    expect(screen.queryByTestId("today-soft-why")).not.toBeInTheDocument();
-    expect(screen.getByTestId("today-entity-synthesis")).toBeInTheDocument();
-    // «Энергия дня» may appear on Glance when pulse is present — not a Plot-only label anymore.
   });
 
-  it("shows strengthen and soft why when day_story supplies recommendation and claims", () => {
+  it("shows practice frame when day_story supplies recommendation", () => {
     window.localStorage.setItem(
       "todayflow.day_engagement.v1.2026-06-23",
       JSON.stringify({
@@ -382,12 +374,12 @@ describe("TodayCompositionSurface", () => {
       <TodayCompositionSurface {...baseProps} contract={contractWithStory} variant="default" />,
     );
 
-    expect(screen.getByTestId("today-zone-strengthen")).toBeInTheDocument();
+    expect(screen.getByTestId("today-frame-practice")).toBeInTheDocument();
+    expect(screen.getByTestId("today-practice-title")).toHaveTextContent(/Закрыть одну задачу/i);
     expect(screen.getByTestId("today-tool-practice")).toBeInTheDocument();
-    expect(screen.getByTestId("today-soft-why")).toHaveTextContent(/ясной линии/i);
   });
 
-  it("opens promise form when ritual complete", async () => {
+  it("shows practice CTA when ritual complete", async () => {
     window.localStorage.setItem(
       "todayflow.day_engagement.v1.2026-06-23",
       JSON.stringify({
@@ -405,16 +397,24 @@ describe("TodayCompositionSurface", () => {
     );
     const user = userEvent.setup();
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
-    // Phase 2b: promise lives on Move — jump via ScreenFlow dots (no labeled ActNav)
-    const moveDot =
-      screen.queryByTestId("screen-flow-dot-4") ||
-      screen.queryByTestId("screen-flow-dot-3");
-    if (moveDot) await user.click(moveDot);
-    await user.click(screen.getByTestId("today-zone-promise-open"));
-    expect(screen.getByTestId("today-entity-daily-goal")).toBeInTheDocument();
+    const practiceDot = screen.queryByTestId("screen-flow-dot-4");
+    if (practiceDot) await user.click(practiceDot);
+    expect(screen.getByTestId("today-frame-practice")).toBeInTheDocument();
   });
 
-  it("shows morning dialogue when mood missing", () => {
+  it("shows morning dialogue on insight when mood missing after ritual", () => {
+    window.localStorage.setItem(
+      "todayflow.day_engagement.v1.2026-06-23",
+      JSON.stringify({
+        tarotPickedName: "Сила",
+        tarotPickedId: 8,
+        numberConfirmed: true,
+        dayGoal: null,
+        practiceStarted: false,
+        affirmationRead: false,
+        todayOpened: true,
+      }),
+    );
     render(<TodayCompositionSurface {...baseProps} variant="default" />);
     expect(screen.getByTestId("today-zone-dialogue-morning")).toBeInTheDocument();
   });

@@ -1,22 +1,42 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  align-items: center;
+  gap: 0.75rem;
   width: 100%;
-  max-width: 40rem;
+  max-width: 28rem;
+  margin-inline: auto;
+  text-align: center;
 }
 
 .root > div {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.65rem;
+  width: 100%;
+}
+
+.visual {
+  display: flex;
+  justify-content: center;
+  width: min(100%, 11rem);
+  margin: 0.15rem 0 0.35rem;
+}
+
+.visual img,
+.visual picture {
+  width: 100%;
+  height: auto;
+  border-radius: 0.65rem;
+  box-shadow: 0 12px 28px rgba(42, 37, 32, 0.14);
 }
 
 .kind {
   margin: 0;
   font-size: 0.72rem;
   font-weight: 560;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--tf-ink-muted, #7a7168);
 }
@@ -24,9 +44,9 @@
 .title {
   margin: 0;
   font-family: var(--tf-font-display, Georgia, serif);
-  font-size: clamp(1.25rem, 3.6vw, 1.55rem);
+  font-size: clamp(1.35rem, 4vw, 1.75rem);
   font-weight: 600;
-  line-height: 1.25;
+  line-height: 1.22;
   color: var(--tf-ink, #2a2520);
 }
 
@@ -38,16 +58,19 @@
 
 .subtitle {
   margin: 0;
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   line-height: 1.4;
   color: var(--tf-ink-soft, #5c5348);
+  max-width: 28ch;
 }
 
 .layer {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.25rem;
-  padding-top: 0.15rem;
+  padding-top: 0.25rem;
+  width: 100%;
 }
 
 .layerLabel {
@@ -64,7 +87,7 @@
   font-size: 0.95rem;
   line-height: 1.45;
   color: var(--tf-ink, #2a2520);
-  max-width: 42ch;
+  max-width: 34ch;
 }
 
 .fail {
@@ -72,11 +95,7 @@
   font-size: 0.9rem;
   line-height: 1.4;
   color: var(--tf-ink-soft, #5c5348);
-  max-width: 42ch;
-}
-
-.variantTarot {
-  border-left: 3px solid color-mix(in srgb, #8b6b4a 55%, transparent);
+  max-width: 34ch;
 }
 
 .variantTarot .kind {
@@ -88,18 +107,14 @@
   letter-spacing: -0.015em;
 }
 
-.variantNumerology {
-  border-left: 3px solid color-mix(in srgb, #3d5a6c 55%, transparent);
-}
-
 .variantNumerology .kind {
   color: #3d5a6c;
 }
 
 .variantNumerology .title {
   font-style: normal;
-  font-variant-numeric: tabular-nums;
-  font-size: clamp(1.85rem, 6vw, 2.45rem);
+  font-size: clamp(3.5rem, 16vw, 5.5rem);
+  font-weight: 650;
+  line-height: 1;
   letter-spacing: -0.03em;
-  line-height: 1.1;
 }

@@ -1,10 +1,11 @@
-"""Natal Decode Depth v0 — opt-in chart decode over fixed Character Engine Identity Core.
+"""Natal Decode Depth v0 — one-shot chart story over fixed Character Engine Identity Core.
 
 Canon: docs/profile/PROFILE_NATAL_DECODE_DEPTH_V1.md
 
 Rules:
-- Explicit request only (API POST). Never on core-profile GET / publish.
-- Does NOT write character_engine_v1 or overwrite portrait Snapshot.
+- First explicit POST generates; thereafter GET/POST serve persisted artifact for fingerprint.
+- Never on core-profile GET / publish auto-path.
+- Does NOT write character_engine_v1 as personality SoT.
 - Not a personality SoT for Today / Compat / Tarot.
 """
 
@@ -24,26 +25,23 @@ from todayflow_backend.core.llm_openai_compatible import (
     is_llm_chat_configured,
     resolve_default_chat_model,
 )
+from todayflow_backend.db import models
 from todayflow_backend.prompts.registry_v1 import get_prompt
+from todayflow_backend.services.prose_clip_v1 import clip_prose
 
 logger = logging.getLogger(__name__)
 
-DECODE_VERSION = "natal_decode_depth_v0"
+DECODE_VERSION = "natal_decode_depth_v0.2"
 PROMPT_ID = "profile.natal_decode_depth.v1"
 LAYER_KIND = "natal_decode_depth"
 _ALLOWED_SECTION_IDS = frozenset({"mind", "feelings", "will", "growth", "presence", "structure"})
 _MAX_SECTIONS = 5
 _MAX_HOOKS = 4
-_MAX_TEXT = 480
+_MAX_TEXT = 900
 
 
 def _clip(value: Any, limit: int = _MAX_TEXT) -> str:
-    text = " ".join(str(value or "").split()).strip()
-    if not text:
-        return ""
-    if len(text) > limit:
-        return text[: limit - 1].rstrip() + "…"
-    return text
+    return clip_prose(" ".join(str(value or "").split()).strip(), limit)
 
 
 def _stage2_from_payload(payload: dict[str, Any] | None) -> dict[str, Any] | None:
@@ -58,6 +56,10 @@ def _stage2_from_payload(payload: dict[str, Any] | None) -> dict[str, Any] | Non
         if art.get("identity_core"):
             return art
     ce = payload.get("character_engine_v1") if isinstance(payload.get("character_engine_v1"), dict) else {}
+    cascade = ce.get("cascade") if isinstance(ce.get("cascade"), dict) else {}
+    identity = cascade.get("identity_core") if isinstance(cascade.get("identity_core"), dict) else None
+    if isinstance(identity, dict) and identity.get("surface_text"):
+        return {"status": "grounded", "identity_core": identity}
     identity = ce.get("identity_core") if isinstance(ce.get("identity_core"), dict) else None
     if isinstance(identity, dict) and identity.get("surface_text"):
         return {"status": "grounded", "identity_core": identity}
@@ -73,10 +75,9 @@ def extract_identity_core_for_decode(payload: dict[str, Any] | None) -> dict[str
     core = stage2.get("identity_core") if isinstance(stage2.get("identity_core"), dict) else None
     if not isinstance(core, dict):
         return None
-    # CE nest path may omit stage2.status — treat present surface+thesis as grounded.
     if status and status != "grounded":
         return None
-    surface = _clip(core.get("surface_text"), 280)
+    surface = _clip(core.get("surface_text"), 900)
     thesis = str(core.get("thesis_key") or "").strip()
     if not surface or not thesis:
         return None
@@ -92,22 +93,71 @@ def extract_primary_tension_surface(payload: dict[str, Any] | None) -> str | Non
         return None
     diagnostics = payload.get("diagnostics") if isinstance(payload.get("diagnostics"), dict) else {}
     stage3 = diagnostics.get("character_engine_stage3")
-    if not isinstance(stage3, dict):
-        return None
-    eng = stage3.get("internal_engine") if isinstance(stage3.get("internal_engine"), dict) else stage3
-    pt = eng.get("primary_tension") if isinstance(eng, dict) else None
+    if isinstance(stage3, dict):
+        nested = stage3.get("stage3") if isinstance(stage3.get("stage3"), dict) else stage3
+        pt = nested.get("primary_tension") if isinstance(nested, dict) else None
+        if isinstance(pt, dict):
+            text = _clip(pt.get("surface_text"), 400)
+            if text:
+                return text
+    ce = payload.get("character_engine_v1") if isinstance(payload.get("character_engine_v1"), dict) else {}
+    cascade = ce.get("cascade") if isinstance(ce.get("cascade"), dict) else {}
+    pt = cascade.get("primary_tension") if isinstance(cascade.get("primary_tension"), dict) else None
     if isinstance(pt, dict):
-        text = _clip(pt.get("surface_text"), 280)
+        text = _clip(pt.get("surface_text"), 400)
         return text or None
     return None
+
+
+def _compact_numerology_pack(payload: dict[str, Any] | None) -> dict[str, Any]:
+    if not isinstance(payload, dict):
+        return {}
+    num = payload.get("numerology") if isinstance(payload.get("numerology"), dict) else {}
+    pack: dict[str, Any] = {}
+    for key in (
+        "life_path",
+        "expression",
+        "soul_urge",
+        "personality",
+        "birthday",
+        "maturity",
+        "life_path_number",
+        "expression_number",
+    ):
+        if num.get(key) is not None:
+            pack[key] = num.get(key)
+    # Flatten common nested shapes
+    for bucket in ("numbers", "core", "summary"):
+        nested = num.get(bucket) if isinstance(num.get(bucket), dict) else None
+        if not nested:
+            continue
+        for k, v in nested.items():
+            if v is not None and k not in pack:
+                pack[k] = v
+    return pack
 
 
 def build_offer_payload(
     *,
     identity_core: dict[str, Any] | None,
     natal_available: bool,
+    cached: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """GET-safe offer — no LLM."""
+    """GET-safe: ready artifact when cached, else one-shot offer — no LLM."""
+    if isinstance(cached, dict) and str(cached.get("status") or "") == "grounded":
+        out = dict(cached)
+        out.update(
+            {
+                "layer": LAYER_KIND,
+                "version": DECODE_VERSION,
+                "access": "ready",
+                "can_generate": False,
+                "reason": None,
+                "cta": None,
+                "note": "Карта уже расшифрована — это готовая история, не кнопка «ещё раз».",
+            }
+        )
+        return out
     if not identity_core:
         return {
             "layer": LAYER_KIND,
@@ -132,10 +182,10 @@ def build_offer_payload(
         "version": DECODE_VERSION,
         "access": "offer",
         "reason": None,
-        "cta": "Открыть расшифровку натальной карты — как структура карты объясняет твоё ядро.",
+        "cta": "Открыть расшифровку натальной карты — целостная история из планет, углов и чисел.",
         "can_generate": True,
         "identity_thesis": identity_core.get("thesis_key"),
-        "note": "Генерируется только по явному запросу. Не второй портрет.",
+        "note": "Собирается один раз. Повторно не генерируется, пока не изменятся данные карты.",
     }
 
 
@@ -170,25 +220,69 @@ def _compact_natal_pack(natal_summary: dict[str, Any] | None) -> dict[str, Any]:
     houses = natal_summary.get("houses")
     if isinstance(houses, list):
         pack["houses"] = [
-            {"house": h.get("house") if isinstance(h, dict) else None, "sign": h.get("sign") if isinstance(h, dict) else h}
+            {
+                "house": h.get("house") if isinstance(h, dict) else None,
+                "sign": h.get("sign") if isinstance(h, dict) else h,
+            }
             for h in houses[:12]
             if h is not None
         ]
     return pack
 
 
-def _fingerprint(identity_core: dict[str, Any], natal_pack: dict[str, Any]) -> str:
+def _fingerprint(
+    identity_core: dict[str, Any],
+    natal_pack: dict[str, Any],
+    numerology_pack: dict[str, Any] | None = None,
+) -> str:
     raw = json.dumps(
         {
             "thesis": identity_core.get("thesis_key"),
             "surface": identity_core.get("surface_text"),
             "natal": natal_pack,
+            "numerology": numerology_pack or {},
+            "decode_version": DECODE_VERSION,
         },
         ensure_ascii=False,
         sort_keys=True,
         default=str,
     )
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:24]
+
+
+def load_cached_natal_decode(
+    db: Session,
+    *,
+    user_id: int,
+    fingerprint: str,
+) -> dict[str, Any] | None:
+    """Return grounded decode for fingerprint from generation_logs, if any."""
+    rows = (
+        db.query(models.GenerationLog)
+        .filter(
+            models.GenerationLog.user_id == int(user_id),
+            models.GenerationLog.module == "profile",
+            models.GenerationLog.surface == LAYER_KIND,
+            models.GenerationLog.status == "success",
+        )
+        .order_by(models.GenerationLog.id.desc())
+        .limit(20)
+        .all()
+    )
+    for row in rows:
+        inp = row.input_payload if isinstance(row.input_payload, dict) else {}
+        if str(inp.get("fingerprint") or "") != fingerprint:
+            continue
+        body = row.normalized_response if isinstance(row.normalized_response, dict) else None
+        if not body:
+            continue
+        if str(body.get("status") or "") != "grounded":
+            continue
+        sections = body.get("sections")
+        if not isinstance(sections, list) or not sections:
+            continue
+        return dict(body)
+    return None
 
 
 def _parse_decode_json(raw: str) -> dict[str, Any] | None:
@@ -253,9 +347,11 @@ def _normalize_decode(
             "pattern_thesis": None,
             "sections": [],
             "day_hooks": [],
-            "limits": _clip(parsed.get("limits"), 240) or None,
+            "limits": _clip(parsed.get("limits"), 360) or None,
             "sot_role": "depth_projection",
             "writes_character_engine": False,
+            "access": "insufficient",
+            "can_generate": False,
         }
     return {
         "layer": LAYER_KIND,
@@ -266,13 +362,57 @@ def _normalize_decode(
             "surface_text": identity_core["surface_text"],
         },
         "fingerprint": fingerprint,
-        "pattern_thesis": _clip(parsed.get("pattern_thesis"), 220) or None,
+        "pattern_thesis": _clip(parsed.get("pattern_thesis"), 360) or None,
         "sections": sections,
         "day_hooks": hooks,
-        "limits": _clip(parsed.get("limits"), 240) or None,
+        "limits": _clip(parsed.get("limits"), 360) or None,
         "sot_role": "depth_projection",
         "writes_character_engine": False,
+        "access": "ready",
+        "can_generate": False,
     }
+
+
+def _inputs_for_payload(
+    core_profile_payload: dict[str, Any] | None,
+    natal_summary: dict[str, Any] | None,
+) -> tuple[dict[str, Any] | None, dict[str, Any], dict[str, Any], bool, str | None]:
+    identity = extract_identity_core_for_decode(core_profile_payload)
+    natal_pack = _compact_natal_pack(
+        natal_summary
+        if isinstance(natal_summary, dict)
+        else (
+            (core_profile_payload or {}).get("natal_summary")
+            if isinstance(core_profile_payload, dict)
+            else None
+        )
+    )
+    numerology_pack = _compact_numerology_pack(core_profile_payload)
+    natal_available = bool(natal_pack.get("planets") or natal_pack.get("angles"))
+    fingerprint = None
+    if identity:
+        fingerprint = _fingerprint(identity, natal_pack, numerology_pack)
+    return identity, natal_pack, numerology_pack, natal_available, fingerprint
+
+
+def resolve_natal_decode_get(
+    db: Session,
+    *,
+    user_id: int,
+    core_profile_payload: dict[str, Any] | None,
+    natal_summary: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    identity, natal_pack, numerology_pack, natal_available, fingerprint = _inputs_for_payload(
+        core_profile_payload, natal_summary
+    )
+    cached = None
+    if identity and fingerprint:
+        cached = load_cached_natal_decode(db, user_id=user_id, fingerprint=fingerprint)
+    return build_offer_payload(
+        identity_core=identity,
+        natal_available=natal_available,
+        cached=cached,
+    )
 
 
 def generate_natal_decode_depth_v0(
@@ -284,19 +424,14 @@ def generate_natal_decode_depth_v0(
     locale: str = "ru",
     force_refresh: bool = False,
 ) -> dict[str, Any]:
-    """Generate decode on explicit request. Never mutates CE Snapshot."""
-    del force_refresh  # reserved: reuse cache later via generation_logs
-    identity = extract_identity_core_for_decode(core_profile_payload)
-    natal_pack = _compact_natal_pack(
-        natal_summary
-        if isinstance(natal_summary, dict)
-        else (
-            (core_profile_payload or {}).get("natal_summary")
-            if isinstance(core_profile_payload, dict)
-            else None
-        )
+    """Generate once per fingerprint. Client force_refresh is ignored (ops-only path uses ops_force)."""
+    # Product rule: not a spam button. Client cannot force re-LLM.
+    del force_refresh
+
+    identity, natal_pack, numerology_pack, natal_available, fingerprint = _inputs_for_payload(
+        core_profile_payload, natal_summary
     )
-    natal_available = bool(natal_pack.get("planets") or natal_pack.get("angles"))
+    tension = extract_primary_tension_surface(core_profile_payload)
 
     if not identity:
         return {
@@ -307,8 +442,9 @@ def generate_natal_decode_depth_v0(
             "cta": "Сначала нужен устойчивый портрет характера — расшифровка карты опирается на него.",
             "sot_role": "depth_projection",
             "writes_character_engine": False,
+            "can_generate": False,
         }
-    if not natal_available:
+    if not natal_available or not fingerprint:
         return {
             "layer": LAYER_KIND,
             "version": DECODE_VERSION,
@@ -321,10 +457,17 @@ def generate_natal_decode_depth_v0(
             },
             "sot_role": "depth_projection",
             "writes_character_engine": False,
+            "can_generate": False,
         }
 
-    fingerprint = _fingerprint(identity, natal_pack)
-    tension = extract_primary_tension_surface(core_profile_payload)
+    cached = load_cached_natal_decode(db, user_id=user_id, fingerprint=fingerprint)
+    if cached:
+        out = dict(cached)
+        out["access"] = "ready"
+        out["can_generate"] = False
+        out["writes_character_engine"] = False
+        out["sot_role"] = "depth_projection"
+        return out
 
     if not is_llm_chat_configured():
         return {
@@ -339,6 +482,7 @@ def generate_natal_decode_depth_v0(
             "fingerprint": fingerprint,
             "sot_role": "depth_projection",
             "writes_character_engine": False,
+            "can_generate": True,
         }
 
     system, prompt_version = get_prompt(PROMPT_ID, locale=locale)
@@ -346,8 +490,9 @@ def generate_natal_decode_depth_v0(
 
     system = with_practitioner_persona(system, locale=locale)
     user_msg = (
-        "Собери Natal Decode Depth. Identity Core фиксирован — не переписывай.\n"
-        f"Данные:\n{json.dumps({'identity_core': identity, 'primary_tension_surface': tension, 'natal_pack': natal_pack}, ensure_ascii=False)}"
+        "Собери Natal Decode Depth — целостную историю человека. "
+        "Identity Core фиксирован — не переписывай.\n"
+        f"Данные:\n{json.dumps({'identity_core': identity, 'primary_tension_surface': tension, 'natal_pack': natal_pack, 'numerology_pack': numerology_pack}, ensure_ascii=False)}"
     )
 
     try:
@@ -359,8 +504,8 @@ def generate_natal_decode_depth_v0(
                 {"role": "system", "content": system},
                 {"role": "user", "content": user_msg},
             ],
-            temperature=0.4,
-            max_tokens=1400,
+            temperature=0.45,
+            max_tokens=2800,
             json_object=True,
         )
     except Exception:
@@ -377,6 +522,7 @@ def generate_natal_decode_depth_v0(
             "fingerprint": fingerprint,
             "sot_role": "depth_projection",
             "writes_character_engine": False,
+            "can_generate": True,
         }
 
     parsed = _parse_decode_json(raw or "")
@@ -393,6 +539,7 @@ def generate_natal_decode_depth_v0(
             "fingerprint": fingerprint,
             "sot_role": "depth_projection",
             "writes_character_engine": False,
+            "can_generate": True,
         }
 
     result = _normalize_decode(parsed, identity_core=identity, fingerprint=fingerprint)
@@ -416,18 +563,14 @@ def generate_natal_decode_depth_v0(
                 "prompt_id": PROMPT_ID,
                 "prompt_version": prompt_version,
                 "writes_character_engine": False,
+                "decode_version": DECODE_VERSION,
             },
-            normalized_response={
-                "status": result.get("status"),
-                "pattern_thesis": result.get("pattern_thesis"),
-                "section_count": len(result.get("sections") or []),
-            },
+            normalized_response=result,
             status="success" if result.get("status") == "grounded" else "partial",
         )
     except Exception:
         logger.debug("natal_decode_depth log_generation failed", exc_info=True)
 
-    # Explicit invariant for callers / tests.
     result["writes_character_engine"] = False
     result["sot_role"] = "depth_projection"
     return result

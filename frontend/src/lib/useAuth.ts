@@ -222,6 +222,24 @@ export function useAuth() {
   }, []);
 
   useEffect(() => {
+    // Optimistic paint from last validated snapshot so page navigations are not
+    // blocked on /auth/me (many screens gate on authLoading).
+    const token = getStoredAccessToken();
+    if (token) {
+      const stored = loadStoredSnapshot(token);
+      if (stored) {
+        setIsAuthenticated(true);
+        setProfile(stored.profile);
+        setStatus({
+          networkDegraded: false,
+          warningMessage: null,
+          lastValidatedAt: readTimestamp(AUTH_LAST_VALIDATED_AT_KEY),
+          lastSnapshotSavedAt: stored.savedAt,
+        });
+        setIsLoading(false);
+      }
+    }
+
     checkAuth();
 
     // Слушаем изменения localStorage для синхронизации между вкладками

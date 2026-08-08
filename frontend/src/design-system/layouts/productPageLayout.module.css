@@ -11,6 +11,17 @@
   gap: 0.75rem;
 }
 
+/** No glass card — title sits on the shell background (Practices-like). */
+.pageHeaderFlat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
 .pageHeaderQuiet {
   gap: 0.35rem;
   padding-block: 0.15rem 0.35rem;
@@ -359,6 +370,31 @@
   gap: 1.75rem;
   width: 100%;
   min-width: 0;
+}
+
+/** Story-frame Today: ScreenFlow fills the column; no dashboard gap/header. */
+.pageRootStory {
+  gap: 0;
+  min-height: 0;
+  flex: 1 1 auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.compositionSlotStory {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  min-width: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 0;
 }
 
 /* —— Compatibility hub —— */
