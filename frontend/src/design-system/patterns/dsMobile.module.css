@@ -215,8 +215,8 @@
   min-height: 5.5rem;
   padding: 0.5625rem var(--tf-ds-space-6) env(safe-area-inset-bottom, 0.75rem);
   border-top: 1px solid var(--tf-ds-border-ink);
-  background: rgba(253, 251, 247, 0.96);
-  backdrop-filter: blur(12px);
+  /* Opaque fill — avoid live backdrop-filter over Day Atmosphere wash on phones. */
+  background: color-mix(in srgb, var(--day-surface-tint, rgba(253, 251, 247, 0.96)) 96%, #ffffff);
 }
 
 .tabItem {

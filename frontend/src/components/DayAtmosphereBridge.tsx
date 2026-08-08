@@ -45,6 +45,14 @@ function prefersReducedMotion(): boolean {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
 }
 
+/** Phones / touch-first — no ambient atmosphere motion (GPU heat). */
+function prefersLiteAtmosphere(): boolean {
+  return (
+    window.matchMedia?.("(max-width: 48rem)")?.matches === true ||
+    window.matchMedia?.("(pointer: coarse)")?.matches === true
+  );
+}
+
 function engineFromWire(
   nest: DayAtmosphereContractWire | null | undefined,
 ): ResolveDayAtmosphereInput {
@@ -81,7 +89,10 @@ export function DayAtmosphereBridge() {
         return;
       }
 
-      const reduced = prefersReducedMotion();
+      const reduced =
+        prefersReducedMotion() ||
+        prefersLiteAtmosphere() ||
+        document.visibilityState === "hidden";
       const contract = resolveDayAtmosphere({
         ...engineFromWire(engineRef.current),
         pinnedMode: readDayModePin(),
@@ -103,16 +114,25 @@ export function DayAtmosphereBridge() {
       engineRef.current = detail ?? null;
       apply();
     };
-    const mq = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+    const mqReduce = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+    const mqNarrow = window.matchMedia?.("(max-width: 48rem)");
+    const mqCoarse = window.matchMedia?.("(pointer: coarse)");
     const onMotionPref = () => apply();
-    mq?.addEventListener?.("change", onMotionPref);
+    const onVisibility = () => apply();
+    mqReduce?.addEventListener?.("change", onMotionPref);
+    mqNarrow?.addEventListener?.("change", onMotionPref);
+    mqCoarse?.addEventListener?.("change", onMotionPref);
+    document.addEventListener("visibilitychange", onVisibility);
     window.addEventListener("storage", onStorage);
     window.addEventListener(DAY_ATMOSPHERE_ENGINE_EVENT, onEngine);
 
     return () => {
       window.removeEventListener("storage", onStorage);
       window.removeEventListener(DAY_ATMOSPHERE_ENGINE_EVENT, onEngine);
-      mq?.removeEventListener?.("change", onMotionPref);
+      document.removeEventListener("visibilitychange", onVisibility);
+      mqReduce?.removeEventListener?.("change", onMotionPref);
+      mqNarrow?.removeEventListener?.("change", onMotionPref);
+      mqCoarse?.removeEventListener?.("change", onMotionPref);
       // Do not clearDayAtmosphere here: pathname cleanup would flash non-day chrome
       // between product routes. `apply()` clears when leaving product shell; true
       // unmount leaves attrs until next mount apply (acceptable).

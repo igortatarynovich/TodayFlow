@@ -1,8 +1,19 @@
 # TodayFlow Product Execution Tracker
 
-Last updated: 2026-08-04
+Last updated: 2026-08-08
 Owner: Product + Engineering
 Status: Active working document
+
+**DONE (CODE, 2026-08-08):** **Day Atmosphere mobile lite** — photo wash WebP desktop+`-m` mobile (~12–55 KB vs ~1.5–2.2 MB PNG); PNG seeds → `art-seeds/`; single-paint (frame only); decor = CSS geometry × 16 `data-day-decor`; no ambient drift on mobile/coarse + pause when hidden; tab bar opaque (no backdrop-filter). Canon: FOUNDATION_UI §13.
+
+## Architecture impact — Day Atmosphere mobile lite (2026-08-08)
+
+- **SoT before:** `--day-bg-art` = `public/images/backgrounds/{1–5}.png` (~9 MB total); frame + decor both painted the PNG; decor ignored geometric variants when art present.
+- **SoT after:** runtime wash = WebP (`{n}.webp` / `{n}-m.webp`); decor = CSS geometry keyed by `data-day-decor`; PNG = art-seed only (`frontend/art-seeds/day-atmosphere/`).
+- **Public contract changed?** no — `day_atmosphere` nest unchanged; delivery of `--day-bg-art` assets only.
+- **Migration required?** no — next frontend rebuild; caches of old PNG URLs 404 unless CDN keeps them (URLs changed to `.webp`).
+- **Canon updated?** yes — FOUNDATION_UI §13 / §13.4.
+- **Backward compatible?** yes for API; clients hardcoding `.png` paths break (only internal FE used them).
 
 **DONE (2026-08-04):** DS Task 2 — Weekly + Challenges DsCard pilot + `--day-*` decorative (Task 1.5 folded). PR #9 merged. Screenshots: `docs/audits/ds-task2-screenshots/`.  
 **DONE (2026-08-04):** DS Task 3 — Today composition wave (`DsButton` CTAs + day-tint). PR #10 merged.  

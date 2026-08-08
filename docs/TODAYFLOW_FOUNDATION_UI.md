@@ -507,7 +507,7 @@ interface DayAtmosphereContract {
 
 ## 13. Day Atmosphere — Implementation
 
-**Статус:** visible product pass — BE nest `day_atmosphere` из сюжета дня · bridge потребляет nest · shell/`--day-*` фон · decor layer · Glance glass-hero IA. Dark-appearance палитры и полный набор 16 polished SVG — backlog (§13.4).
+**Статус:** visible product pass — BE nest `day_atmosphere` из сюжета дня · bridge потребляет nest · shell/`--day-*` фон · decor layer · Glance glass-hero IA. Dark-appearance палитры — backlog (§13.4). Photo wash = WebP (desktop + mobile `-m`); decor = CSS geometry по `data-day-decor` (single-paint).
 
 ### 13.1 Код
 
@@ -516,7 +516,7 @@ interface DayAtmosphereContract {
 | `frontend/src/styles/day-atmosphere.css` | Статическая light-палитра на 8 `html[data-day-mode="…"]`, значения = `DAY_MODE_BASE_TOKENS` из §12.3. `:root` — нейтральный fallback до гидратации. `prefers-reduced-motion` зануляет motion-токены через `!important` — побеждает даже инлайн-стили от моста. Product shell читает `--day-bg-*` / decor. |
 | `frontend/src/components/DayAtmosphereBridge.tsx` | Мост: `data-day-mode` + инлайн `--day-*` на `documentElement`. Читает pin + `day_atmosphere` из Today payload; pin побеждает. Скоуп — `isAppProductRoute`. |
 | `backend/.../day_atmosphere_v1.py` | Детерминированный mapper `thesis.mode` → closed `DayAtmosphereContract` (без LLM-цветов); nest на today wire. |
-| `frontend/src/components/DayAtmosphereDecor.tsx` | Decor layer по `decor_variant` / `data-day-mode`. |
+| `frontend/src/components/DayAtmosphereDecor.tsx` | Decor layer — CSS geometry by `data-day-decor` (no photo). |
 | `frontend/src/components/__tests__/DayAtmosphereBridge.test.tsx` | Bridge + engine nest + pin. |
 
 **Wiring** (`frontend/src/app/layout.tsx`): импорт `@/styles/day-atmosphere.css` рядом с `section-atmosphere.css`; `<DayAtmosphereBridge />` рядом с `<SectionAtmosphereBridge />` в том же `<Suspense>`.
@@ -534,7 +534,8 @@ interface DayAtmosphereContract {
 ### 13.4 Backlog
 
 - Dark-appearance значения палитры (`data-theme="dark"` × `data-day-mode`) — day-mode пока не имеет полной dark-пары; `color-scheme` для Tension/Depth не выставляется при светлом `data-theme`.
-- Decor-ассеты: полный набор 16 polished SVG (`DAY_MODE_DECOR_VARIANTS`) — сейчас art seed = `public/images/backgrounds/{1–5}.png` mapped to 8 `visual_mode` via `--day-bg-art` (tension/renewal/depth reuse nearest seed until dedicated assets).
+- Decor polish: текущие 16 вариантов (`DAY_MODE_DECOR_VARIANTS`) — CSS geometry keyed by `html[data-day-decor]`; дальнейшая художественная доводка / optional inline SVG assets без возврата к double-paint PNG.
+- Photo wash runtime: `public/images/backgrounds/{1–5}.webp` + `{1–5}-m.webp` (mobile / coarse). PNG seeds → `frontend/art-seeds/day-atmosphere/` (не в public).
 - Plot photo-wash vs day-mode — дальнейшее подчинение phase-hero day-токенам (избежать тройной атмосферы).
 
 ---

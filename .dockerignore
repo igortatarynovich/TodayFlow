@@ -1,5 +1,6 @@
 # Keep Docker build context lean (masters are ~250MB+ and must never ship in the image).
 assets-source/
+frontend/art-seeds/
 .git/
 **/.git/
 **/node_modules/

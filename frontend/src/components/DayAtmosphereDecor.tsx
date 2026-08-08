@@ -2,8 +2,8 @@
 
 /**
  * Decorative layer for Day Atmosphere (FOUNDATION_UI §11.4 / §13).
- * Art is CSS-only closed variants keyed by html[data-day-mode] / [data-day-decor].
- * Mockup PNGs are art direction seed — not raw SoT backgrounds.
+ * Geometry is CSS-only, keyed by `html[data-day-decor]` (DAY_MODE_DECOR_VARIANTS).
+ * Photo wash paints once on the product frame via `--day-bg-art` — not here.
  */
 export function DayAtmosphereDecor() {
   return (
